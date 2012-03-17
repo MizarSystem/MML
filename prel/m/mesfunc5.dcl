@@ -13,7 +13,6 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
@@ -31,7 +30,6 @@
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="XXREAL_3"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="FINSUB_1"/>
@@ -44,44 +42,52 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14" value="false"/>
+<Adjective nr="17" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="4"/>
-<Adjective nr="83"/>
+<Adjective nr="6"/>
+<Adjective nr="87"/>
 </Cluster>
-<Typ kind="M" nr="5">
+<Typ kind="M" nr="2">
 <Cluster/>
+<Func kind="K" nr="30">
+<Func kind="K" nr="31">
 <LocusVar nr="1"/>
-<Func kind="K" nr="49"/>
+<Func kind="K" nr="50"/>
+</Func>
+</Func>
 </Typ>
 <Cluster>
-<Adjective nr="4"/>
-<Adjective nr="91"/>
+<Adjective nr="6"/>
+<Adjective nr="95"/>
 </Cluster>
 </CCluster>
 <CCluster aid="MESFUNC5" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14" value="false"/>
+<Adjective nr="17" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="4"/>
-<Adjective nr="90"/>
+<Adjective nr="6"/>
+<Adjective nr="94"/>
 </Cluster>
-<Typ kind="M" nr="5">
+<Typ kind="M" nr="2">
 <Cluster/>
+<Func kind="K" nr="30">
+<Func kind="K" nr="31">
 <LocusVar nr="1"/>
-<Func kind="K" nr="49"/>
+<Func kind="K" nr="50"/>
+</Func>
+</Func>
 </Typ>
 <Cluster>
-<Adjective nr="4"/>
-<Adjective nr="92"/>
+<Adjective nr="6"/>
+<Adjective nr="96"/>
 </Cluster>
 </CCluster>
 </Registrations>

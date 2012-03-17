@@ -14,14 +14,15 @@ environ
       PARTFUN1, FUNCT_2, STRUCT_0, MCART_1, FINSEQ_1, MULTOP_1, PROB_2, CARD_3,
       TREES_2, TREES_3, TREES_4, LANG1, DTCONSTR, PBOOLE, MSUALG_1, MSAFREE,
       MSUALG_3;
- constructors MULTOP_1, PROB_2, MSUALG_3, MSAFREE;
- registrations XBOOLE_0, FUNCT_1, RELSET_1, FRAENKEL, FINSEQ_1, PBOOLE,
-      TREES_3, STRUCT_0, DTCONSTR, MSUALG_1, MSUALG_3, MSAFREE, ORDINAL1;
+ constructors MULTOP_1, PROB_2, MSUALG_3, MSAFREE, RELSET_1, CAT_3;
+ registrations XBOOLE_0, FUNCT_1, RELSET_1, FRAENKEL, FINSEQ_1, RELAT_1,
+      TREES_3, STRUCT_0, DTCONSTR, MSUALG_1, MSUALG_3, MSAFREE, ORDINAL1,
+      PBOOLE;
  requirements BOOLE, SUBSET;
  definitions TARSKI, MSUALG_1, PBOOLE, PROB_2;
  theorems MSAFREE, MSUALG_3, LANG1, FINSEQ_1, CARD_3, PBOOLE, FUNCT_1, FUNCT_2,
       DTCONSTR, TARSKI, CAT_3, ZFMISC_1, PROB_2, CARD_5, RELAT_1, DOMAIN_1,
-      MCART_1, RELSET_1, XBOOLE_0, XBOOLE_1, PARTFUN1;
+      MCART_1, XBOOLE_0, XBOOLE_1, PARTFUN1;
  schemes DTCONSTR, FUNCT_2, MULTOP_1, PBOOLE;
 
 begin
@@ -39,7 +40,7 @@ A2: dom g = dom f by CARD_3:18;
   then consider x being set such that
 A3: x in dom g & y = g.x by FUNCT_1:def 5;
   y in f.x by A1,A2,A3,CARD_3:18;
-  hence y in Union f by A2,A3,CARD_5:10;
+  hence thesis by A2,A3,CARD_5:10;
 end;
 
 scheme DTConstrUniq{DT()->non empty DTConstrStr, D()->non empty set,
@@ -88,7 +89,7 @@ A10: rng ts c= dom f1() by FUNCT_2:def 1;
       .= Seg len ts by FINSEQ_1:def 3;
     then reconsider ntv1 = f1() * ts as FinSequence by FINSEQ_1:def 2;
 A11: dom (f1() * ts) = dom ts by A10,RELAT_1:46;
-    rng ntv1 c= D() by RELSET_1:12;
+    rng ntv1 c= D() by RELAT_1:def 19;
     then reconsider ntv1 as FinSequence of D() by FINSEQ_1:def 4;
     rng ts c= dom f2() by A9,FUNCT_2:def 1;
     then
@@ -143,8 +144,7 @@ A1: [o,b] in REL(X);
   by A1,ZFMISC_1:106;
 A2: [o',b'] in REL(X) by A1;
   hence o in [:the carrier' of S,{the carrier of S}:] by MSAFREE:def 9;
-  thus b in
-  ([:the carrier' of S,{the carrier of S}:] \/ Union coprod X)* by A2;
+  thus thesis by A2;
 end;
 
 theorem  :: MSAFREE:5
@@ -185,10 +185,7 @@ end;
 registration
   let I be non empty set, M be ManySortedSet of I;
   cluster rng M -> non empty;
-  coherence
-  proof dom M = I by PBOOLE:def 3;
-    hence thesis by RELAT_1:65;
-  end;
+  coherence;
 end;
 
 registration
@@ -240,16 +237,16 @@ A1: for x be set st x in Union X ex y be set st y in Union D & P[x,y]
       assume e in Union X;
       then consider i being set such that
 A2:   i in dom X & e in X.i by CARD_5:10;
-      reconsider i as Element of I by A2,PBOOLE:def 3;
+      reconsider i as Element of I by A2,PARTFUN1:def 4;
       take u = F.i.e;
 A3:   F.i.e in D.i by A2,FUNCT_2:7;
       i in I;
-      then i in dom D by PBOOLE:def 3;
+      then i in dom D by PARTFUN1:def 4;
       hence u in Union D by A3,CARD_5:10;
       let i' be Element of I;
       assume e in X.i';
       then X.i' meets X.i by A2,XBOOLE_0:3;
-      hence u = F.i'.e by PROB_2:def 3;
+      hence thesis by PROB_2:def 3;
     end;
     consider f being Function of Union X, Union D such that
 A4: for e being set st e in Union X holds P[e,f.e] from FUNCT_2:sch 1(A1);
@@ -258,9 +255,9 @@ A4: for e being set st e in Union X holds P[e,f.e] from FUNCT_2:sch 1(A1);
     assume
 A5: x in X.i;
     i in I;
-    then i in dom X by PBOOLE:def 3;
+    then i in dom X by PARTFUN1:def 4;
     then x in Union X by A5,CARD_5:10;
-    hence f.x = F.i.x by A4,A5;
+    hence thesis by A4,A5;
   end;
   correctness
   proof
@@ -272,7 +269,7 @@ A7: for i being Element of I, x being set st x in X.i holds F2.x = F.i.x;
       assume x in Union X;
       then consider i being set such that
 A8:   i in dom X & x in X.i by CARD_5:10;
-      reconsider i as Element of I by A8,PBOOLE:def 3;
+      reconsider i as Element of I by A8,PARTFUN1:def 4;
       thus F1.x = F.i.x by A6,A8
         .= F2.x by A7,A8;
     end;
@@ -306,7 +303,7 @@ A3:   x in X.i;
     end;
     hence F1.i = F2.i by FUNCT_2:18;
   end;
-  hence F1 = F2 by PBOOLE:3;
+  hence thesis by PBOOLE:3;
 end;
 
 definition
@@ -391,7 +388,7 @@ A1: x <> y;
   per cases;
   suppose
 A2: x in dom F & y in dom F;
-    dom F = the carrier of S by PBOOLE:def 3;
+    dom F = the carrier of S by PARTFUN1:def 4;
     then
 A3: F.x = {x} & F.y = {y} by A2,Def3;
     assume F.x meets F.y;
@@ -438,8 +435,8 @@ proof
   A2 be non-empty MSAlgebra over S, f be ManySortedFunction of A1,A2,
   a be Element of Args(o,A1);
 A1: dom(the Arity of S) = the carrier' of S by FUNCT_2:def 1;
-A2: dom the Sorts of A1 = the carrier of S by PBOOLE:def 3;
-A3: dom the Sorts of A2 = the carrier of S by PBOOLE:def 3;
+A2: dom the Sorts of A1 = the carrier of S by PARTFUN1:def 4;
+A3: dom the Sorts of A2 = the carrier of S by PARTFUN1:def 4;
   set s = the_arity_of o;
 A4: rng s c= the carrier of S by FINSEQ_1:def 4;
   a in ((the Sorts of A1)# * the Arity of S).o;
@@ -491,7 +488,7 @@ A17: a.n in (the Sorts of A1).((the_arity_of o)/.n)
     thus x.n =(Flatten f).(a.n) by A15,FUNCT_1:23
       .= (f.((the_arity_of o)/.n)).(a.n) by A17,Def1;
   end;
-  hence (Flatten f)*a = f#a by MSUALG_3:def 8;
+  hence thesis by MSUALG_3:def 8;
 end;
 
 registration
@@ -504,16 +501,17 @@ registration
     let x,y be set;
     per cases;
     suppose x in dom F & y in dom F;
-      then reconsider s1=x, s2=y as SortSymbol of S by PBOOLE:def 3;
+      then reconsider s1=x, s2=y as SortSymbol of S by PARTFUN1:def 4
+;
       assume x <> y;
       then F.s1 misses F.s2 by MSAFREE:13;
-      hence F.x misses F.y;
+      hence thesis;
     end;
     suppose
 A1:   not (x in dom F & y in dom F);
       assume x <> y;
       F.x = {} or F.y = {} by A1,FUNCT_1:def 4;
-      hence F.x misses F.y by XBOOLE_1:65;
+      hence thesis by XBOOLE_1:65;
     end;
   end;
 end;
@@ -544,7 +542,7 @@ A5: DTConMSA X() =
 A6: Terminals DTConMSA X() = Union coprod X() by MSAFREE:6;
 A7: TS DTConMSA X() = union rng FreeSort X() by MSAFREE:12
     .= Union FreeSort X() by CARD_3:def 4;
-A8: dom X() = the carrier of S() by PBOOLE:def 3;
+A8: dom X() = the carrier of S() by PARTFUN1:def 4;
   deffunc F(Element of DTConMSA(X())) =G(root-tree $1);
   consider G being
   Function of the carrier of DTConMSA(X()), Union D() such that
@@ -697,13 +695,14 @@ A6: for x be set st x in Union FreeGen X()
     assume e in Union FreeGen X();
     then consider s being set such that
 A7: s in dom FreeGen X() & e in (FreeGen X()).s by CARD_5:10;
-    reconsider s as SortSymbol of S() by A7,PBOOLE:def 3;
+    reconsider s as SortSymbol of S() by A7,PARTFUN1:def 4;
     take u = IT1().s.e;
 A8: e in FreeGen(s,X()) by A7,MSAFREE:def 18;
     f1.s is Function of (FreeSort X()).s,(the Sorts of MSA()).s;
     then
 A9: u in (the Sorts of MSA()).s by A8,FUNCT_2:7;
-    dom(the Sorts of MSA()) = the carrier of S() by PBOOLE:def 3;
+    dom(the Sorts of MSA()) = the carrier of S() by PARTFUN1:def 4
+;
     hence u in Union the Sorts of MSA() by A9,CARD_5:10;
     let s' be SortSymbol of S();
     assume
@@ -711,7 +710,7 @@ A10: e in FreeGen(s',X());
     then (FreeSort X()).s' /\ (FreeSort X()).s <> {} by A8,XBOOLE_0:def 4;
     then (FreeSort X()).s' meets (FreeSort X()).s by XBOOLE_0:def 7;
     then s = s' by MSAFREE:13;
-    hence P[s',u,e] by A2,A10;
+    hence thesis by A2,A10;
   end;
   consider G being Function of Union FreeGen X(),
   Union the Sorts of MSA() such that
@@ -741,7 +740,7 @@ A14: e = [o,a] by A12;
     let o' be OperSymbol of S(), x' be Element of Args(o',MSA());
     assume e = [o',x'];
     then o = o' & a = x' by A14,ZFMISC_1:33;
-    hence u = Den(o',MSA()).x';
+    hence thesis;
   end;
   consider H being Function of R, Union the Sorts of MSA() such that
 A15: for e being set st e in R holds P[e,H.e] from FUNCT_2:sch 1(A13);
@@ -777,7 +776,7 @@ A20: for s be SortSymbol of S(), y be set st y in FreeGen(s,X())
 A21: y in FreeGen(s,X());
     then
 A22: y in (FreeGen X()).s by MSAFREE:def 18;
-    dom(FreeGen X()) = the carrier of S() by PBOOLE:def 3;
+    dom(FreeGen X()) = the carrier of S() by PARTFUN1:def 4;
     then
 A23: y in Union FreeGen X() by A22,CARD_5:10;
     then P[s,G.y,y] by A11,A21;
@@ -809,7 +808,7 @@ A28: for s be SortSymbol of S(),y be set st y in FreeGen(s,X())
 A29: y in FreeGen(s,X());
     then
 A30: y in (FreeGen X()).s by MSAFREE:def 18;
-    dom(FreeGen X()) = the carrier of S() by PBOOLE:def 3;
+    dom(FreeGen X()) = the carrier of S() by PARTFUN1:def 4;
     then
 A31: y in Union FreeGen X() by A30,CARD_5:10;
     then P[s,G.y,y] by A11,A29;
@@ -817,6 +816,6 @@ A31: y in Union FreeGen X() by A30,CARD_5:10;
       .= G/.y by A31,CAT_3:def 1;
   end;
   f1 = f2 from FreeSortUniq(A16,A20,A24,A28);
-  hence IT1() = IT2();
+  hence thesis;
 end;
 

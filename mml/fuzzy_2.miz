@@ -12,13 +12,13 @@ environ
       REAL_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, INTEGRA1, SEQ_1, RCOMP_1,
       SEQ_4, PSCOMP_1, FUZZY_1;
  constructors REAL_1, SQUARE_1, RFUNCT_1, PSCOMP_1, INTEGRA1, FUZZY_1, SEQ_1,
-      SEQ_4;
+      SEQ_4, RELSET_1;
  registrations RELSET_1, NUMBERS, MEMBERED, INTEGRA1, XBOOLE_0, SUBSET_1,
-      VALUED_0;
+      VALUED_0, FUZZY_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions FUZZY_1, XCMPLX_0;
  theorems TARSKI, FUNCT_1, PARTFUN1, INTEGRA1, INTEGRA2, FUZZY_1, XBOOLE_0,
-      XREAL_1, XXREAL_0, FUNCT_3, FUNCT_2;
+      XREAL_1, XXREAL_0, FUNCT_3, FUNCT_2, RELAT_1;
  schemes PARTFUN1;
 
 begin :: Basic Properties of Membership Function and Difference Set
@@ -336,7 +336,7 @@ A1: f\g = EMF(C);
 A2: min(f.c,(1_minus g).c) = (EMF(C)).c by A1,FUZZY_1:6;
   per cases by A2,XXREAL_0:15;
   suppose f.c = (EMF(C)).c;
-    hence f.c <= g.c by FUZZY_1:17;
+    hence thesis by FUZZY_1:17;
   end;
   suppose
 A3: (1_minus g).c = (EMF(C)).c;
@@ -359,7 +359,7 @@ proof
 A1: min(f,g) = EMF(C);
   min(f,1_minus g) = f
   proof
-A2: C = dom min(f,1_minus g) & C = dom f by FUZZY_1:def 1;
+A2: C = dom min(f,1_minus g) & C = dom f by FUNCT_2:def 1;
     for x being Element of C st x in C holds min(f,1_minus g).x = f.x
     proof
       let x be Element of C;
@@ -431,7 +431,7 @@ A6:         x in C;
       end;
       rng IT c= [.0,1.]
       proof
-A7:     rng h c= [.0,1.] & rng g c= [.0,1.] by FUZZY_1:def 1;
+A7:     rng h c= [.0,1.] & rng g c= [.0,1.] by RELAT_1:def 19;
         for y being set st y in rng IT holds y in [.0,1.]
         proof
           let y be set;
@@ -444,7 +444,7 @@ reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
           then
 A9:       0=lower_bound A & 1=upper_bound A by INTEGRA1:6;
           x in C;
-          then x in dom h & x in dom g by FUZZY_1:def 1;
+          then x in dom h & x in dom g by FUNCT_2:def 1;
           then h.x in rng h & g.x in rng g by FUNCT_1:def 5;
           then 0 <= h.x & h.x <= 1 & 0 <= g.x & g.x <= 1 by A7,A9,INTEGRA2:1;
           then 0 <= (h.x)*(g.x) & (h.x)*(g.x) <= 1 by XREAL_1:129,162;
@@ -455,8 +455,9 @@ A9:       0=lower_bound A & 1=upper_bound A by INTEGRA1:6;
       end;
       hence thesis by A5;
     end;
+    then IT is Function of C,REAL by FUNCT_2:def 1;
     then
-A10: IT is Membership_Func of C by FUZZY_1:def 1;
+A10: IT is Membership_Func of C by RELAT_1:def 19,A4;
     for c being Element of C holds IT.c = (h.c)*(g.c) by A3,A4;
     hence thesis by A10;
   end;
@@ -466,7 +467,7 @@ A10: IT is Membership_Func of C by FUZZY_1:def 1;
     assume that
 A11: for c being Element of C holds F.c = (h.c)*(g.c) and
 A12: for c being Element of C holds G.c = (h.c)*(g.c);
-A13: C = dom F & C = dom G by FUZZY_1:def 1;
+A13: C = dom F & C = dom G by FUNCT_2:def 1;
     for c being Element of C st c in C holds F.c = G.c
     proof
       let c be Element of C;
@@ -542,8 +543,9 @@ XREAL_1:12;
       end;
       hence thesis by A5;
     end;
+    then IT is Function of C,REAL by FUNCT_2:def 1;
     then
-A9: IT is Membership_Func of C by FUZZY_1:def 1;
+A9: IT is Membership_Func of C by RELAT_1:def 19,A4;
     for c being Element of C holds IT.c = h.c + g.c -(h.c)*(g.c) by A3,A4;
     hence thesis by A9;
   end;
@@ -553,7 +555,7 @@ A9: IT is Membership_Func of C by FUZZY_1:def 1;
     assume that
 A10: for c being Element of C holds F.c = h.c + g.c -(h.c)*(g.c) and
 A11: for c being Element of C holds G.c = h.c + g.c -(h.c)*(g.c);
-A12: C = dom F & C = dom G by FUZZY_1:def 1;
+A12: C = dom F & C = dom G by FUNCT_2:def 1;
     for c being Element of C st c in C holds F.c = G.c
     proof
       let c be Element of C;
@@ -587,7 +589,7 @@ end;
 theorem Th34:
   (f*g)*h = f*(g*h)
 proof
-A1: C = dom ((f*g)*h) & C = dom (f*(g*h)) by FUZZY_1:def 1;
+A1: C = dom ((f*g)*h) & C = dom (f*(g*h)) by FUNCT_2:def 1;
   for c being Element of C st c in C holds ((f*g)*h).c = (f*(g*h)).c
   proof
     let c;
@@ -603,7 +605,8 @@ end;
 theorem
   (f ++ g) ++ h = f ++ (g ++ h)
 proof
-A1: C = dom((f ++ g) ++ h) & C = dom(f ++ (g ++ h)) by FUZZY_1:def 1;
+A1: C = dom((f ++ g) ++ h) & C = dom(f ++ (g ++ h))
+ by FUNCT_2:def 1;
   for c being Element of C st c in C holds
   ((f ++ g) ++ h).c = (f ++ (g ++ h)).c
   proof
@@ -699,7 +702,7 @@ theorem
   1_minus (f*g) = (1_minus f) ++ (1_minus g)
 proof
 A1: C = dom 1_minus (f*g) &
-  C = dom ((1_minus f) ++ (1_minus g)) by FUZZY_1:def 1;
+  C = dom ((1_minus f) ++ (1_minus g)) by FUNCT_2:def 1;
   for c being Element of C st c in C holds
   (1_minus (f*g)).c = ((1_minus f) ++ (1_minus g)).c
   proof
@@ -722,7 +725,7 @@ theorem
   1_minus(f ++ g) = (1_minus f)*(1_minus g)
 proof
 A1: C = dom 1_minus(f ++ g) &
-  C = dom ((1_minus f)*(1_minus g)) by FUZZY_1:def 1;
+  C = dom ((1_minus f)*(1_minus g)) by FUNCT_2:def 1;
   for c being Element of C st c in C holds
   (1_minus(f ++ g)).c = ((1_minus f)*(1_minus g)).c
   proof
@@ -741,7 +744,7 @@ theorem Th41:
   f ++ g = 1_minus((1_minus f)*(1_minus g))
 proof
 A1: C = dom (f ++ g) &
-  C = dom 1_minus((1_minus f)*(1_minus g)) by FUZZY_1:def 1;
+  C = dom 1_minus((1_minus f)*(1_minus g)) by FUNCT_2:def 1;
   for c being Element of C st c in C holds
   (f ++ g).c = (1_minus((1_minus f)*(1_minus g))).c
   proof
@@ -762,7 +765,7 @@ theorem
 proof
 A1: f*(EMF C) = EMF C
   proof
-A2: C = dom EMF(C) & C = dom (f*EMF(C)) by FUZZY_1:def 1;
+A2: C = dom EMF(C) & C = dom (f*EMF(C)) by FUNCT_2:def 1;
     for c being Element of C st c in C holds (f*(EMF C)).c = (EMF C).c
     proof
       let c;
@@ -774,7 +777,7 @@ A2: C = dom EMF(C) & C = dom (f*EMF(C)) by FUZZY_1:def 1;
   end;
   f*(UMF(C)) = f
   proof
-A3: C = dom f & C = dom (f*UMF C) by FUZZY_1:def 1;
+A3: C = dom f & C = dom (f*UMF C) by FUNCT_2:def 1;
     for c being Element of C st c in C holds (f*(UMF(C))).c = f.c
     proof
       let c;
@@ -792,7 +795,7 @@ theorem
 proof
 A1: f ++ EMF(C) = f
   proof
-A2: C = dom f & C = dom (f ++ EMF(C)) by FUZZY_1:def 1;
+A2: C = dom f & C = dom (f ++ EMF(C)) by FUNCT_2:def 1;
     for c being Element of C st c in C holds (f ++ EMF(C)).c = f.c
     proof
       let c;
@@ -805,7 +808,7 @@ A2: C = dom f & C = dom (f ++ EMF(C)) by FUZZY_1:def 1;
   end;
   f ++ UMF(C) = UMF(C)
   proof
-A3: C = dom UMF(C) & C = dom (f ++ UMF(C)) by FUZZY_1:def 1;
+A3: C = dom UMF(C) & C = dom (f ++ UMF(C)) by FUNCT_2:def 1;
     for c being Element of C st c in C holds (f ++ UMF(C)).c = (UMF(C)).c
     proof
       let c;
@@ -1000,7 +1003,7 @@ end;
 theorem
   f*max(g,h) = max(f*g,f*h)
 proof
-A1: C = dom (f*max(g,h)) & C = dom max(f*g,f*h) by FUZZY_1:def 1;
+A1: C = dom (f*max(g,h)) & C = dom max(f*g,f*h) by FUNCT_2:def 1;
   for c being Element of C st c in C holds (f*max(g,h)).c = max(f*g,f*h).c
   proof
     let c;
@@ -1018,7 +1021,7 @@ end;
 theorem
   f*min(g,h) = min(f*g,f*h)
 proof
-A1: C = dom (f*min(g,h)) & C = dom min(f*g,f*h) by FUZZY_1:def 1;
+A1: C = dom (f*min(g,h)) & C = dom min(f*g,f*h) by FUNCT_2:def 1;
   for c being Element of C st c in C holds (f*min(g,h)).c = min(f*g,f*h).c
   proof
     let c;
@@ -1036,7 +1039,8 @@ end;
 theorem
   f ++ max(g,h) = max((f ++ g),(f ++ h))
 proof
-A1: C = dom (f ++ max(g,h)) & C = dom max((f ++ g),(f ++ h)) by FUZZY_1:def 1;
+A1: C = dom (f ++ max(g,h)) & C = dom max((f ++ g),(f ++ h))
+ by FUNCT_2:def 1;
   for c being Element of C st c in C holds
   (f ++ max(g,h)).c = (max((f ++ g),(f ++ h))).c
   proof
@@ -1091,7 +1095,8 @@ end;
 theorem
   f ++ min(g,h) = min((f ++ g),(f ++ h))
 proof
-A1: C = dom (f ++ min(g,h)) & C = dom min((f ++ g),(f ++ h)) by FUZZY_1:def 1;
+A1: C = dom (f ++ min(g,h)) & C = dom min((f ++ g),(f ++ h))
+ by FUNCT_2:def 1;
   for c being Element of C st c in C holds
   (f ++ min(g,h)).c = (min((f ++ g),(f ++ h))).c
   proof
@@ -1518,12 +1523,7 @@ reserve C1,C2 for non empty set;
 registration
   let C be non empty set;
   cluster -> quasi_total Membership_Func of C;
-  coherence
-  proof
-    let f be Membership_Func of C;
-    dom f = C by FUZZY_1:def 1;
-    hence thesis by FUNCT_2:def 1;
-  end;
+  coherence;
 end;
 
 definition

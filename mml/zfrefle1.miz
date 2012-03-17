@@ -14,11 +14,12 @@ environ
       ZF_MODEL, WELLORD2, ORDINAL2, CARD_3, FUNCT_5, ORDINAL3, CLASSES1,
       CLASSES2, ORDINAL4, ZF_LANG1, ZF_REFLE;
  constructors ENUMSET1, WELLORD2, BINOP_1, ORDINAL3, XXREAL_0, XREAL_0, NAT_1,
-      FUNCT_5, CLASSES1, ZF_MODEL, ZF_LANG1, ZF_REFLE;
+      FUNCT_5, CLASSES1, ZF_MODEL, ZF_LANG1, ZF_REFLE, ORDINAL4, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, ORDINAL2,
-      XREAL_0, CARD_1, CLASSES2, ZF_LANG, ZF_LANG1, CLASSES1;
+      XREAL_0, CARD_1, CLASSES2, ZF_LANG, ZF_LANG1, CLASSES1, ORDINAL4;
  requirements NUMERALS, BOOLE, SUBSET;
- definitions TARSKI, ORDINAL2, ZF_MODEL, ORDINAL1, XBOOLE_0, BINOP_1;
+ definitions TARSKI, ORDINAL2, ZF_MODEL, ORDINAL1, XBOOLE_0, BINOP_1,
+      ORDINAL4;
  theorems TARSKI, NAT_1, ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_5, ORDINAL1,
       ORDINAL2, ORDINAL3, ORDINAL4, CARD_1, CARD_2, CLASSES1, CLASSES2,
       ZF_LANG, CARD_3, ZF_MODEL, ZFMODEL1, ZF_LANG1, ZF_REFLE, RELAT_1,
@@ -121,7 +122,7 @@ proof
 A1: F1 c= F2 & M |= F2;
   let H;
   assume H in F1;
-  hence M |= H by A1,Def1;
+  hence thesis by A1,Def1;
 end;
 
 theorem
@@ -174,7 +175,7 @@ A2: M is epsilon-transitive;
 A3: the_axiom_of_substitution_for H in WFF by ZF_LANG:14;
   assume {x.0,x.1,x.2} misses Free H;
   then the_axiom_of_substitution_for H in ZF-axioms by A3,Def4;
-  hence M |= the_axiom_of_substitution_for H by A1;
+  hence thesis by A1;
 end;
 
 theorem Th6:
@@ -258,7 +259,7 @@ A3:   Free S = {} & for M holds M |= S iff M |= H by Th6;
       then M1 |= H by A2;
       then M1 |= S by A3;
       then M2 |= S by A1,A3;
-      hence M2 |= H by A3;
+      hence thesis by A3;
     end;
     assume
 A4: H in F implies M2 |= H;
@@ -269,7 +270,7 @@ A5: Free S = {} & for M holds M |= S iff M |= H by Th6;
     then M2 |= H by A4;
     then M2 |= S by A5;
     then M1 |= S by A1,A5;
-    hence M1 |= H by A5;
+    hence thesis by A5;
   end;
   assume
 A6: M1 |= F iff M2 |= F;
@@ -307,13 +308,13 @@ A3: M1,v1 |= H;
     consider v1;
     M1,v1 |= H by A3;
     then M2,M2!v1 |= H & for x st x in Free H holds v2.x = (M2!v1).x by A1,A2;
-    hence M2,v2 |= H by ZF_LANG1:84;
+    hence thesis by ZF_LANG1:84;
   end;
   assume
 A4: M2,v2 |= H;
   let v1;
   M2,M2!v1 |= H by A4;
-  hence M1,v1 |= H by A1;
+  hence thesis by A1;
 end;
 
 theorem Th10:
@@ -369,11 +370,8 @@ A2: dom L = On W & ({} in On W implies L.{} = {}) and
 A3: for A st succ A in On W holds L.succ A = C(A,L.A) and
 A4: for A st A in On W & A <> {} & A is limit_ordinal holds L.A = D(A,L|A)
   from ORDINAL2:sch 11;
-A5: 0-element_of W = {} by ORDINAL4:35;
   defpred P[Ordinal] means L.$1 in On W;
-A6: {} in W by CLASSES2:62;
-  then
-A7: P[0-element_of W] by A2,A5,ORDINAL1:def 10;
+A7: P[0-element_of W] by A2,ORDINAL1:def 10;
 A8: for a st P[a] holds P[succ a]
   proof
     let a;
@@ -386,7 +384,7 @@ A9: L.succ a = sup ({b} \/ (uncurry Phi).:[:D,{succ a}:]) by A3;
     then card ((uncurry Phi).:[:D,{succ a}:]) c= card D by CARD_2:2;
     then
 A10: card ((uncurry Phi).:[:D,{succ a}:]) in card W by A1,ORDINAL1:22;
-    rng Phi c= Funcs(On W, On W) by RELSET_1:12;
+    rng Phi c= Funcs(On W, On W) by RELAT_1:def 19;
     then rng uncurry Phi c= On W &
     (uncurry Phi).:[:D,{succ a}:] c= rng uncurry Phi
     by FUNCT_5:48,RELAT_1:144;
@@ -394,9 +392,7 @@ A10: card ((uncurry Phi).:[:D,{succ a}:]) in card W by A1,ORDINAL1:22;
     by ORDINAL2:9,XBOOLE_1:1;
     then
 A11: (uncurry Phi).:[:D,{succ a}:] c= W by XBOOLE_1:1;
-    b in W by ORDINAL4:def 2;
-    then {b} in W & (uncurry Phi).:[:D,{succ a}:] in W
-    by A10,A11,CLASSES1:2,CLASSES2:63;
+    {b} in W & (uncurry Phi).:[:D,{succ a}:] in W by A10,A11,CLASSES1:2;
     then {b} \/ (uncurry Phi).:[:D,{succ a}:] in W by CLASSES2:66;
     then L.succ a in W by A9,ZF_REFLE:28;
     hence thesis by ORDINAL1:def 10;
@@ -409,8 +405,7 @@ A13: a <> 0-element_of W & a is limit_ordinal and
 A14: for b st b in a holds L.b in On W;
 A15: a in On W by ZF_REFLE:8;
     then
-A16: L.a = sup (L|a) & a in W & dom (L|a) c= a
-    by A4,A5,A13,ORDINAL1:def 10,RELAT_1:87;
+A16: L.a = sup (L|a) & a in W & dom (L|a) c= a by A4,A13,RELAT_1:87;
     then
 A17: L.a = sup rng (L|a) & dom (L|a) in W by CLASSES1:def 1;
     rng (L|a) c= W
@@ -424,7 +419,7 @@ A18:  u in dom (L|a) & e = (L|a).u by FUNCT_1:def 5;
       then reconsider u as Ordinal of W by ZF_REFLE:8;
       e = L.u by A18,FUNCT_1:70;
       then e in On W by A14,A16,A18;
-      hence e in W by ORDINAL1:def 10;
+      hence thesis by ORDINAL1:def 10;
     end;
     then L.a in W by A17,Th12,ZF_REFLE:28;
     hence thesis by ORDINAL1:def 10;
@@ -440,7 +435,8 @@ A19: u in dom L & e = L.u by FUNCT_1:def 5;
     then L.u in On W;
     hence thesis by A19;
   end;
-  then reconsider phi = L as Ordinal-Sequence of W by A2,ORDINAL4:def 3;
+  then reconsider phi = L as Ordinal-Sequence of W
+   by A2,FUNCT_2:def 1,RELSET_1:11;
   take phi; thus
 A20: phi is increasing
   proof
@@ -450,7 +446,7 @@ A21: A in B & B in dom phi;
     then A in dom phi by ORDINAL1:19;
     then reconsider a = A, b = B as Ordinal of W by A2,A21,ZF_REFLE:8;
     defpred Q[Ordinal] means a in $1 implies phi.a in phi.$1;
-A22: Q[0-element_of W] by ORDINAL4:35;
+A22: Q[0-element_of W];
 A23: for b st Q[b] holds Q[succ b]
     proof
       let b such that
@@ -486,9 +482,9 @@ A29: A in dom phi & A <> {} & A is limit_ordinal & B = phi.A;
     then A c= dom phi by ORDINAL1:def 2;
     then dom (phi|A) = A & phi|A is increasing & B = sup (phi|A)
     by A2,A4,A20,A29,ORDINAL4:15,RELAT_1:91;
-    hence B is_limes_of phi|A by A29,ORDINAL4:8;
+    hence thesis by A29,ORDINAL4:8;
   end;
-  thus phi.0-element_of W = 0-element_of W by A2,A5,A6,ORDINAL1:def 10;
+  thus phi.0-element_of W = 0-element_of W by A2,ORDINAL1:def 10;
   thus for a holds phi.succ a = sup ({phi.a} \/ (uncurry Phi).:[:D,{succ a}:]
   )
   proof
@@ -498,7 +494,7 @@ A29: A in dom phi & A <> {} & A is limit_ordinal & B = phi.A;
   end;
   let a;
   a in On W by ZF_REFLE:8;
-  hence thesis by A4,A5;
+  hence thesis by A4;
 end;
 
 theorem Th15:
@@ -608,7 +604,7 @@ A1: dom psi <> {} & dom psi is limit_ordinal & psi is increasing &
   A is_limes_of psi;
   take psi; thus dom psi = dom psi;
   sup psi = lim psi & A = lim psi by A1,ORDINAL2:def 14,ORDINAL4:8;
-  hence rng psi c= A & psi is increasing & A = sup psi by A1,ORDINAL2:67;
+  hence thesis by A1,ORDINAL2:67;
 end;
 
 theorem
@@ -653,7 +649,7 @@ proof
   given psi such that
 A1: dom psi = a & rng psi c= On W & psi is increasing & On W = sup psi;
   On W c= W by ORDINAL2:9;
-  then dom psi in W & rng psi c= W by A1,ORDINAL4:def 2,XBOOLE_1:1;
+  then dom psi in W & rng psi c= W by A1,XBOOLE_1:1;
   then sup rng psi in W by Th12,ZF_REFLE:28;
   then sup psi in On W by ORDINAL1:def 10;
   hence contradiction by A1;
@@ -668,7 +664,7 @@ A1: omega in W & phi is increasing & phi is continuous;
   deffunc F(Ordinal of W) = (succ a)+^phi.$1;
   consider xi such that
 A2: xi.b = F(b) from ORDINAL4:sch 2;
-A3: dom phi = On W & dom xi = On W by ORDINAL4:def 3;
+A3: dom phi = On W & dom xi = On W by FUNCT_2:def 1;
   for A st A in dom phi holds xi.A = (succ a)+^(phi.A)
   proof
     let A;
@@ -686,7 +682,7 @@ A4: A in dom xi & xi.A = A by A1,ORDINAL4:38;
   succ a c= (succ a)+^phi.b & a in succ a & b = (succ a)+^phi.b &
   b c= phi.b & phi.b c= (succ a)+^phi.b
   by A1,A2,A3,A4,ORDINAL1:10,ORDINAL3:27,ORDINAL4:10;
-  hence a in b & phi.b = b by XBOOLE_0:def 10;
+  hence thesis by XBOOLE_0:def 10;
 end;
 
 theorem Th31:
@@ -704,18 +700,19 @@ A3: for a holds nu.succ a = C(a,nu.a) and
   from ZF_REFLE:sch 3;
   set xi = nu|omega;
   set a = sup xi;
-A4: omega in On W & dom nu = On W by A1,ORDINAL1:def 10,ORDINAL4:def 3;
+A4: omega in On W & dom nu = On W
+ by A1,FUNCT_2:def 1,ORDINAL1:def 10;
   then
 A5: omega c= dom nu;
   then
 A6: dom xi = omega & a = sup rng xi by RELAT_1:91;
-  rng xi c= rng nu & rng nu c= On W by ORDINAL4:def 3,RELAT_1:99;
+  rng xi c= rng nu & rng nu c= On W by RELAT_1:def 19;
   then rng xi c= On W & On W c= W by ORDINAL2:9,XBOOLE_1:1;
   then rng xi c= W by XBOOLE_1:1;
   then a in W by A1,A6,Th12,ZF_REFLE:28;
-  then reconsider a as Ordinal of W by ORDINAL4:def 2;
+  then reconsider a as Ordinal of W;
   take a;
-  0-element_of W = {} & 0-element_of W in dom nu by ORDINAL4:35,36;
+  0-element_of W = {} & 0-element_of W in dom nu by ORDINAL4:36;
   then
 A7: b in rng xi by A2,Lm1,FUNCT_1:73;
   hence b in a by ORDINAL2:27;
@@ -810,7 +807,7 @@ A31: u in omega & C = xi.u by A6,A30,FUNCT_1:def 5;
     reconsider u as Ordinal by A31;
     u c= omega by A31,ORDINAL1:def 2;
     then u in W by A1,CLASSES1:def 1;
-    then reconsider u as Ordinal of W by ORDINAL4:def 2;
+    then reconsider u as Ordinal of W;
 A32: C in a by A30,ORDINAL2:27;
     e c< C iff e c= C & e <> C by XBOOLE_0:def 8;
     then e = C or e in C & C in dom phi by A25,A30,A32,ORDINAL1:21;
@@ -825,7 +822,7 @@ A34: xi.succ u = nu.succ u & C = nu.u & nu.u in dom phi &
     phi.C in succ (phi.(nu.u)) by A3,A33,ORDINAL1:10,def 2;
     then B in nu.succ u & nu.succ u in a by A34,ORDINAL1:22,ORDINAL2:27;
     then B in a by ORDINAL1:19;
-    hence A in a by A28,ORDINAL1:22;
+    hence thesis by A28,ORDINAL1:22;
   end;
   thus a c= phi.a by A1,A24,ORDINAL4:10;
   take xi;
@@ -856,7 +853,7 @@ A5: phi is increasing & phi is continuous & for a st phi.a = a & {} <> a
     by A1,A2,A3,ZF_REFLE:29;
     reconsider u = phi as set;
     take u;
-    dom phi = On W & rng phi c= On W by ORDINAL4:def 3;
+    dom phi = On W & rng phi c= On W by FUNCT_2:def 1,RELAT_1:def 19;
     hence u in Funcs(On W, On W) by FUNCT_2:def 2;
     take H,phi; thus thesis by A5;
   end;
@@ -894,7 +891,7 @@ A13: H = H1 & Phi.H = xi & xi is increasing & xi is continuous &
   for va holds M,M!va |= H1 iff L.a,va |= H1 by A7;
 A14: a in dom xi by ORDINAL4:36;
   defpred P[Ordinal] means $1 <> {} implies xi.$1 c= phi.$1;
-A15: P[0-element_of W] by ORDINAL4:35;
+A15: P[0-element_of W];
 A16: for a st P[a] holds P[succ a]
   proof
     let a;
@@ -915,7 +912,7 @@ A17: for a st a <> 0-element_of W & a is limit_ordinal &
     let a such that
 A18: a <> 0-element_of W & a is limit_ordinal and
 A19: for b st b in a holds b <> {} implies xi.b c= phi.b and
-A20: a <> {};
+ a <> {};
 A21: phi.a = sup (phi|a) by A10,A18
       .= sup rng (phi|a);
     let A such that
@@ -923,10 +920,10 @@ A22: A in xi.a;
     a in dom xi by ORDINAL4:36;
     then
 A23: xi.a is_limes_of xi|a & xi|a is increasing & a c= dom xi
-    by A13,A18,A20,ORDINAL1:def 2,ORDINAL2:def 17,ORDINAL4:15;
+    by A13,A18,ORDINAL1:def 2,ORDINAL2:def 17,ORDINAL4:15;
     then
 A24: dom (xi|a) = a & xi.a = lim (xi|a) by ORDINAL2:def 14,RELAT_1:91;
-    then xi.a = sup (xi|a) by A18,A20,A23,ORDINAL4:8
+    then xi.a = sup (xi|a) by A18,A23,ORDINAL4:8
       .= sup rng (xi|a);
     then consider B such that
 A25: B in rng (xi|a) & A c= B by A22,ORDINAL2:29;
@@ -947,7 +944,7 @@ A26: e in dom (xi|a) & B = (xi|a).e by A25,FUNCT_1:def 5;
   for a holds P[a] from ZF_REFLE:sch 4(A15,A16,A17);
   then a c= xi.a & xi.a c= a by A11,A13,A14,ORDINAL4:10;
   then xi.a = a by XBOOLE_0:def 10;
-  hence L.a,va |= H iff M,M!va |= H by A11,A13;
+  hence thesis by A11,A13;
 end;
 
 theorem Th33:
@@ -980,7 +977,7 @@ A2: dom L = On W & ({} in On W implies L.{} = Rank 1-element_of W) and
 A3: for A st succ A in On W holds L.(succ A) = C(A,L.A) and
 A4: for A st A in On W & A <> {} & A is limit_ordinal
   holds L.A = D(A,L|A) from ORDINAL2:sch 5;
-A5: 0-element_of W in On W & {} = 0-element_of W by ORDINAL4:35,ZF_REFLE:8;
+A5: 0-element_of W in On W & {} = 0-element_of W by ZF_REFLE:8;
 A6: L.succ a = Rank succ a
   proof succ a in On W & L.a = L.a by ZF_REFLE:8;
     hence thesis by A3;
@@ -1013,13 +1010,13 @@ A11: u in On W & e = L.u by A2,FUNCT_1:def 5;
     Rank 1-element_of W in W & Rank u in W by Th33;
     hence thesis by A2,A8,A11;
   end;
-  then reconsider L as T-Sequence of W by ORDINAL1:def 8;
+  then reconsider L as T-Sequence of W by RELAT_1:def 19;
   now
     assume {} in rng L;
     then consider e such that
 A12: e in On W & {} = L.e by A2,FUNCT_1:def 5;
     reconsider e as Ordinal of W by A12,ZF_REFLE:8;
-    e = {} & 1-element_of W = {{}} or e <> {} by ORDINAL3:18,ORDINAL4:35;
+    e = {} & 1-element_of W = {{}} or e <> {} by ORDINAL3:18;
     then L.e = Rank 1-element_of W & 1-element_of W <> {} or e <> {} &
     L.e = Rank e by A2,A8,ZF_REFLE:8;
     hence contradiction by A12,Th34;
@@ -1035,8 +1032,8 @@ A14: a in b;
 A15: Rank a in Rank b & b <> {} & succ a c= b by CLASSES1:42,ORDINAL1:33;
 A16: L.b = Rank b by A8,A14;
     L.a = Rank a or a = 0-element_of W & L.a = Rank 1-element_of W &
-    1-element_of W = succ 0-element_of W by A2,A5,A8,ORDINAL4:35;
-    hence thesis by A15,A16,ORDINAL1:def 2,CLASSES1:43;
+    1-element_of W = succ 0-element_of W by A2,A5,A8;
+    hence thesis by A15,A16,CLASSES1:43,ORDINAL1:def 2;
   end;
   for a st a <> {} & a is limit_ordinal holds L.a = Union (L|a)
   proof
@@ -1102,7 +1099,7 @@ A28: A in On W & e in Rank A by CLASSES1:35;
   assume
 A29: phi.a = a & {} <> a & M = Rank a;
   then M = L.a by A8;
-  hence M is_elementary_subsystem_of W by A25,A26,A29;
+  hence thesis by A25,A26,A29;
 end;
 
 theorem Th36:

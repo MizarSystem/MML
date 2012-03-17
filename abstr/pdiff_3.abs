@@ -1,6 +1,6 @@
 :: Second-order Partial Differentiation of Real Binary Functions
 ::  by Bing Xie , Xiquan Liang and Xiuzhuan Shen
-:: 
+::
 :: Received December 16, 2008
 :: Copyright (c) 2008 Association of Mizar Users
 
@@ -9,12 +9,13 @@ environ
  vocabularies FUNCT_1, ARYTM, ARYTM_1, FINSEQ_1, RELAT_1, ORDINAL2, SEQ_1,
       SEQ_2, RCOMP_1, PARTFUN1, FDIFF_1, PDIFF_1, BORSUK_1, PDIFF_2, ARYTM_3,
       SEQM_3, FCONT_1, ANPROJ_1, PDIFF_3, OPPCAT_1;
- notations TARSKI, SUBSET_1, FUNCT_1, FUNCT_2, RELSET_1, PARTFUN1, RFUNCT_2,
-      XXREAL_0, XCMPLX_0, XREAL_0, NAT_1, ORDINAL1, NUMBERS, REAL_1, VALUED_0,
-      VALUED_1, SEQ_1, SEQ_2, FINSEQ_1, RCOMP_1, EUCLID, FDIFF_1, FCONT_1,
-      PDIFF_1, PDIFF_2, PARTFUN2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_1, FUNCT_2, RELSET_1, PARTFUN1,
+      RFUNCT_2, XXREAL_0, XCMPLX_0, XREAL_0, NAT_1, ORDINAL1, NUMBERS, REAL_1,
+      VALUED_0, VALUED_1, SEQ_1, SEQ_2, FINSEQ_1, RCOMP_1, EUCLID, FDIFF_1,
+      FCONT_1, PARTFUN2, PDIFF_1, PDIFF_2;
  constructors REAL_1, SEQ_2, PARTFUN1, RFUNCT_2, RCOMP_1, FDIFF_1, SEQ_1,
-      NAT_1, FCONT_1, PDIFF_1, PARTFUN2, PDIFF_2, SEQM_3, FUNCT_2, COMPLEX1;
+      NAT_1, FCONT_1, PDIFF_1, PARTFUN2, PDIFF_2, SEQM_3, FUNCT_2, COMPLEX1,
+      RELSET_1;
  registrations RELSET_1, XREAL_0, MEMBERED, FDIFF_1, FUNCT_2, NAT_1, NUMBERS,
       XBOOLE_0, XXREAL_0, VALUED_0, VALUED_1, ORDINAL1, SEQ_4;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
@@ -38,47 +39,44 @@ registration
 end;
 
 definition
-  let f be PartFunc of REAL 2,REAL;
-  let z be Element of REAL 2;
-  func pdiff1(f,z) -> Function of REAL 2, REAL means
+  let i be Element of NAT;
+  let n be non empty Element of NAT;
+  let f be PartFunc of REAL n,REAL;
+  func pdiff1(f,i) -> Function of REAL n, REAL means
 :: PDIFF_3:def 1
-  for z st z in REAL 2 holds it.z = partdiff1(f,z);
-
-  func pdiff2(f,z) -> Function of REAL 2, REAL means
-:: PDIFF_3:def 2
-  for z st z in REAL 2 holds it.z = partdiff2(f,z);
+  for z being Element of REAL n holds it.z = partdiff(f,z,i);
 end;
 
 definition
   let f be PartFunc of REAL 2,REAL;
   let z be Element of REAL 2;
   pred f is_hpartial_differentiable`11_in z means
-:: PDIFF_3:def 3
+:: PDIFF_3:def 2
   ex x0,y0 being Real st z = <*x0,y0*> &
-  ex N being Neighbourhood of x0 st N c= dom SVF1(pdiff1(f,z),z) &
+  ex N being Neighbourhood of x0 st N c= dom SVF1(1,pdiff1(f,1),z) &
   ex L,R st for x st x in N holds
-  SVF1(pdiff1(f,z),z).x - SVF1(pdiff1(f,z),z).x0 = L.(x-x0) + R.(x-x0);
+  SVF1(1,pdiff1(f,1),z).x - SVF1(1,pdiff1(f,1),z).x0 = L.(x-x0) + R.(x-x0);
 
   pred f is_hpartial_differentiable`12_in z means
-:: PDIFF_3:def 4
+:: PDIFF_3:def 3
   ex x0,y0 being Real st z = <*x0,y0*> &
-  ex N being Neighbourhood of y0 st N c= dom SVF2(pdiff1(f,z),z) &
+  ex N being Neighbourhood of y0 st N c= dom SVF1(2,pdiff1(f,1),z) &
   ex L,R st for y st y in N holds
-  SVF2(pdiff1(f,z),z).y - SVF2(pdiff1(f,z),z).y0 = L.(y-y0) + R.(y-y0);
+  SVF1(2,pdiff1(f,1),z).y - SVF1(2,pdiff1(f,1),z).y0 = L.(y-y0) + R.(y-y0);
 
   pred f is_hpartial_differentiable`21_in z means
-:: PDIFF_3:def 5
+:: PDIFF_3:def 4
   ex x0,y0 being Real st z = <*x0,y0*> &
-  ex N being Neighbourhood of x0 st N c= dom SVF1(pdiff2(f,z),z) &
+  ex N being Neighbourhood of x0 st N c= dom SVF1(1,pdiff1(f,2),z) &
   ex L,R st for x st x in N holds
-  SVF1(pdiff2(f,z),z).x - SVF1(pdiff2(f,z),z).x0 = L.(x-x0) + R.(x-x0);
+  SVF1(1,pdiff1(f,2),z).x - SVF1(1,pdiff1(f,2),z).x0 = L.(x-x0) + R.(x-x0);
 
   pred f is_hpartial_differentiable`22_in z means
-:: PDIFF_3:def 6
+:: PDIFF_3:def 5
   ex x0,y0 being Real st z = <*x0,y0*> &
-  ex N being Neighbourhood of y0 st N c= dom SVF2(pdiff2(f,z),z) &
+  ex N being Neighbourhood of y0 st N c= dom SVF1(2,pdiff1(f,2),z) &
   ex L,R st for y st y in N holds
-  SVF2(pdiff2(f,z),z).y - SVF2(pdiff2(f,z),z).y0 = L.(y-y0) + R.(y-y0);
+  SVF1(2,pdiff1(f,2),z).y - SVF1(2,pdiff1(f,2),z).y0 = L.(y-y0) + R.(y-y0);
 end;
 
 definition
@@ -86,11 +84,11 @@ definition
   let z be Element of REAL 2;
   assume  f is_hpartial_differentiable`11_in z;
   func hpartdiff11(f,z) -> Real means
-:: PDIFF_3:def 7
+:: PDIFF_3:def 6
   ex x0,y0 being Real st z = <*x0,y0*> &
-  ex N being Neighbourhood of x0 st N c= dom SVF1(pdiff1(f,z),z) &
+  ex N being Neighbourhood of x0 st N c= dom SVF1(1,pdiff1(f,1),z) &
   ex L,R st it = L.1 & for x st x in N holds
-  SVF1(pdiff1(f,z),z).x - SVF1(pdiff1(f,z),z).x0 = L.(x-x0) + R.(x-x0);
+  SVF1(1,pdiff1(f,1),z).x - SVF1(1,pdiff1(f,1),z).x0 = L.(x-x0) + R.(x-x0);
 end;
 
 definition
@@ -98,11 +96,11 @@ definition
   let z be Element of REAL 2;
   assume  f is_hpartial_differentiable`12_in z;
   func hpartdiff12(f,z) -> Real means
-:: PDIFF_3:def 8
+:: PDIFF_3:def 7
   ex x0,y0 being Real st z = <*x0,y0*> &
-  ex N being Neighbourhood of y0 st N c= dom SVF2(pdiff1(f,z),z) &
+  ex N being Neighbourhood of y0 st N c= dom SVF1(2,pdiff1(f,1),z) &
   ex L,R st it = L.1 & for y st y in N holds
-  SVF2(pdiff1(f,z),z).y - SVF2(pdiff1(f,z),z).y0 = L.(y-y0) + R.(y-y0);
+  SVF1(2,pdiff1(f,1),z).y - SVF1(2,pdiff1(f,1),z).y0 = L.(y-y0) + R.(y-y0);
 end;
 
 definition
@@ -110,11 +108,11 @@ definition
   let z be Element of REAL 2;
   assume  f is_hpartial_differentiable`21_in z;
   func hpartdiff21(f,z) -> Real means
-:: PDIFF_3:def 9
+:: PDIFF_3:def 8
   ex x0,y0 being Real st z = <*x0,y0*> &
-  ex N being Neighbourhood of x0 st N c= dom SVF1(pdiff2(f,z),z) &
+  ex N being Neighbourhood of x0 st N c= dom SVF1(1,pdiff1(f,2),z) &
   ex L,R st it = L.1 & for x st x in N holds
-  SVF1(pdiff2(f,z),z).x - SVF1(pdiff2(f,z),z).x0 = L.(x-x0) + R.(x-x0);
+  SVF1(1,pdiff1(f,2),z).x - SVF1(1,pdiff1(f,2),z).x0 = L.(x-x0) + R.(x-x0);
 end;
 
 definition
@@ -122,65 +120,65 @@ definition
   let z be Element of REAL 2;
   assume  f is_hpartial_differentiable`22_in z;
   func hpartdiff22(f,z) -> Real means
-:: PDIFF_3:def 10
+:: PDIFF_3:def 9
   ex x0,y0 being Real st z = <*x0,y0*> &
-  ex N being Neighbourhood of y0 st N c= dom SVF2(pdiff2(f,z),z) &
+  ex N being Neighbourhood of y0 st N c= dom SVF1(2,pdiff1(f,2),z) &
   ex L,R st it = L.1 & for y st y in N holds
-  SVF2(pdiff2(f,z),z).y - SVF2(pdiff2(f,z),z).y0 = L.(y-y0) + R.(y-y0);
+  SVF1(2,pdiff1(f,2),z).y - SVF1(2,pdiff1(f,2),z).y0 = L.(y-y0) + R.(y-y0);
 end;
 
 theorem :: PDIFF_3:1
   z = <*x0,y0*> & f is_hpartial_differentiable`11_in z implies
-  SVF1(pdiff1(f,z),z) is_differentiable_in x0;
+  SVF1(1,pdiff1(f,1),z) is_differentiable_in x0;
 
 theorem :: PDIFF_3:2
   z = <*x0,y0*> & f is_hpartial_differentiable`12_in z implies
-  SVF2(pdiff1(f,z),z) is_differentiable_in y0;
+  SVF1(2,pdiff1(f,1),z) is_differentiable_in y0;
 
 theorem :: PDIFF_3:3
   z = <*x0,y0*> & f is_hpartial_differentiable`21_in z implies
-  SVF1(pdiff2(f,z),z) is_differentiable_in x0;
+  SVF1(1,pdiff1(f,2),z) is_differentiable_in x0;
 
 theorem :: PDIFF_3:4
   z = <*x0,y0*> & f is_hpartial_differentiable`22_in z implies
-  SVF2(pdiff2(f,z),z) is_differentiable_in y0;
+  SVF1(2,pdiff1(f,2),z) is_differentiable_in y0;
 
 theorem :: PDIFF_3:5
   z = <*x0,y0*> & f is_hpartial_differentiable`11_in z implies
-  hpartdiff11(f,z) = diff(SVF1(pdiff1(f,z),z),x0);
+  hpartdiff11(f,z) = diff(SVF1(1,pdiff1(f,1),z),x0);
 
 theorem :: PDIFF_3:6
   z = <*x0,y0*> & f is_hpartial_differentiable`12_in z implies
-  hpartdiff12(f,z) = diff(SVF2(pdiff1(f,z),z),y0);
+  hpartdiff12(f,z) = diff(SVF1(2,pdiff1(f,1),z),y0);
 
 theorem :: PDIFF_3:7
   z = <*x0,y0*> & f is_hpartial_differentiable`21_in z implies
-  hpartdiff21(f,z) = diff(SVF1(pdiff2(f,z),z),x0);
+  hpartdiff21(f,z) = diff(SVF1(1,pdiff1(f,2),z),x0);
 
 theorem :: PDIFF_3:8
   z = <*x0,y0*> & f is_hpartial_differentiable`22_in z implies
-  hpartdiff22(f,z) = diff(SVF2(pdiff2(f,z),z),y0);
+  hpartdiff22(f,z) = diff(SVF1(2,pdiff1(f,2),z),y0);
 
 definition
   let f be PartFunc of REAL 2,REAL;
   let Z be set;
   pred f is_hpartial_differentiable`11_on Z means
-:: PDIFF_3:def 11
+:: PDIFF_3:def 10
   Z c= dom f & for z be Element of REAL 2 st z in Z holds
   f|Z is_hpartial_differentiable`11_in z;
 
   pred f is_hpartial_differentiable`12_on Z means
-:: PDIFF_3:def 12
+:: PDIFF_3:def 11
   Z c= dom f & for z be Element of REAL 2 st z in Z holds
   f|Z is_hpartial_differentiable`12_in z;
 
   pred f is_hpartial_differentiable`21_on Z means
-:: PDIFF_3:def 13
+:: PDIFF_3:def 12
   Z c= dom f & for z be Element of REAL 2 st z in Z holds
   f|Z is_hpartial_differentiable`21_in z;
 
   pred f is_hpartial_differentiable`22_on Z means
-:: PDIFF_3:def 14
+:: PDIFF_3:def 13
   Z c= dom f & for z be Element of REAL 2 st z in Z holds
   f|Z is_hpartial_differentiable`22_in z;
 end;
@@ -190,7 +188,7 @@ definition
   let Z be set;
   assume  f is_hpartial_differentiable`11_on Z;
   func f`hpartial11|Z -> PartFunc of REAL 2,REAL means
-:: PDIFF_3:def 15
+:: PDIFF_3:def 14
   dom it = Z & for z be Element of REAL 2 st z in Z holds
   it.z = hpartdiff11(f,z);
 end;
@@ -200,7 +198,7 @@ definition
   let Z be set;
   assume  f is_hpartial_differentiable`12_on Z;
   func f`hpartial12|Z -> PartFunc of REAL 2,REAL means
-:: PDIFF_3:def 16
+:: PDIFF_3:def 15
   dom it = Z & for z be Element of REAL 2 st z in Z holds
   it.z = hpartdiff12(f,z);
 end;
@@ -210,7 +208,7 @@ definition
   let Z be set;
   assume  f is_hpartial_differentiable`21_on Z;
   func f`hpartial21|Z -> PartFunc of REAL 2,REAL means
-:: PDIFF_3:def 17
+:: PDIFF_3:def 16
   dom it = Z & for z be Element of REAL 2 st z in Z holds
   it.z = hpartdiff21(f,z);
 end;
@@ -220,7 +218,7 @@ definition
   let Z be set;
   assume  f is_hpartial_differentiable`22_on Z;
   func f`hpartial22|Z -> PartFunc of REAL 2,REAL means
-:: PDIFF_3:def 18
+:: PDIFF_3:def 17
   dom it = Z & for z be Element of REAL 2 st z in Z holds
   it.z = hpartdiff22(f,z);
 end;
@@ -229,224 +227,212 @@ begin :: Main Properties of Second-order Partial Derivatives
 
 theorem :: PDIFF_3:9
   f is_hpartial_differentiable`11_in z iff
-  pdiff1(f,z) is_partial_differentiable`1_in z;
+  pdiff1(f,1) is_partial_differentiable_in z,1;
 
 theorem :: PDIFF_3:10
   f is_hpartial_differentiable`12_in z iff
-  pdiff1(f,z) is_partial_differentiable`2_in z;
+  pdiff1(f,1) is_partial_differentiable_in z,2;
 
 theorem :: PDIFF_3:11
   f is_hpartial_differentiable`21_in z iff
-  pdiff2(f,z) is_partial_differentiable`1_in z;
+  pdiff1(f,2) is_partial_differentiable_in z,1;
 
 theorem :: PDIFF_3:12
   f is_hpartial_differentiable`22_in z iff
-  pdiff2(f,z) is_partial_differentiable`2_in z;
+  pdiff1(f,2) is_partial_differentiable_in z,2;
 
 theorem :: PDIFF_3:13
-  f is_hpartial_differentiable`11_in z iff
-  pdiff1(f,z) is_partial_differentiable_in z,1;
+  f is_hpartial_differentiable`11_in z implies
+  hpartdiff11(f,z) = partdiff(pdiff1(f,1),z,1);
 
 theorem :: PDIFF_3:14
-  f is_hpartial_differentiable`12_in z iff
-  pdiff1(f,z) is_partial_differentiable_in z,2;
+  f is_hpartial_differentiable`12_in z implies
+  hpartdiff12(f,z) = partdiff(pdiff1(f,1),z,2);
 
 theorem :: PDIFF_3:15
-  f is_hpartial_differentiable`21_in z iff
-  pdiff2(f,z) is_partial_differentiable_in z,1;
+  f is_hpartial_differentiable`21_in z implies
+  hpartdiff21(f,z) = partdiff(pdiff1(f,2),z,1);
 
 theorem :: PDIFF_3:16
-  f is_hpartial_differentiable`22_in z iff
-  pdiff2(f,z) is_partial_differentiable_in z,2;
+  f is_hpartial_differentiable`22_in z implies
+  hpartdiff22(f,z) = partdiff(pdiff1(f,2),z,2);
 
 theorem :: PDIFF_3:17
-  f is_hpartial_differentiable`11_in z implies
-  hpartdiff11(f,z) = partdiff1(pdiff1(f,z),z);
-
-theorem :: PDIFF_3:18
-  f is_hpartial_differentiable`12_in z implies
-  hpartdiff12(f,z) = partdiff2(pdiff1(f,z),z);
-
-theorem :: PDIFF_3:19
-  f is_hpartial_differentiable`21_in z implies
-  hpartdiff21(f,z) = partdiff1(pdiff2(f,z),z);
-
-theorem :: PDIFF_3:20
-  f is_hpartial_differentiable`22_in z implies
-  hpartdiff22(f,z) = partdiff2(pdiff2(f,z),z);
-
-theorem :: PDIFF_3:21
   for z0 being Element of REAL 2
   for N being Neighbourhood of proj(1,2).z0 st
-  f is_hpartial_differentiable`11_in z0 & N c= dom SVF1(pdiff1(f,z0),z0) holds
+  f is_hpartial_differentiable`11_in z0 &
+  N c= dom SVF1(1,pdiff1(f,1),z0) holds
   for h be convergent_to_0 Real_Sequence, c be constant Real_Sequence
   st rng c = {proj(1,2).z0} & rng (h+c) c= N holds
-  h"(#)(SVF1(pdiff1(f,z0),z0)/*(h+c) - SVF1(pdiff1(f,z0),z0)/*c)
+  h"(#)(SVF1(1,pdiff1(f,1),z0)/*(h+c) - SVF1(1,pdiff1(f,1),z0)/*c)
     is convergent &
   hpartdiff11(f,z0)
-  = lim (h"(#)(SVF1(pdiff1(f,z0),z0)/*(h+c) - SVF1(pdiff1(f,z0),z0)/*c));
+  = lim (h"(#)(SVF1(1,pdiff1(f,1),z0)/*(h+c) - SVF1(1,pdiff1(f,1),z0)/*c));
 
-theorem :: PDIFF_3:22
+theorem :: PDIFF_3:18
   for z0 being Element of REAL 2
   for N being Neighbourhood of proj(2,2).z0 st
-  f is_hpartial_differentiable`12_in z0 & N c= dom SVF2(pdiff1(f,z0),z0) holds
+  f is_hpartial_differentiable`12_in z0 &
+  N c= dom SVF1(2,pdiff1(f,1),z0) holds
   for h be convergent_to_0 Real_Sequence, c be constant Real_Sequence
   st rng c = {proj(2,2).z0} & rng (h+c) c= N holds
-  h"(#)(SVF2(pdiff1(f,z0),z0)/*(h+c) - SVF2(pdiff1(f,z0),z0)/*c)
+  h"(#)(SVF1(2,pdiff1(f,1),z0)/*(h+c) - SVF1(2,pdiff1(f,1),z0)/*c)
     is convergent &
   hpartdiff12(f,z0)
-  = lim (h"(#)(SVF2(pdiff1(f,z0),z0)/*(h+c) - SVF2(pdiff1(f,z0),z0)/*c));
+  = lim (h"(#)(SVF1(2,pdiff1(f,1),z0)/*(h+c) - SVF1(2,pdiff1(f,1),z0)/*c));
 
-theorem :: PDIFF_3:23
+theorem :: PDIFF_3:19
   for z0 being Element of REAL 2
   for N being Neighbourhood of proj(1,2).z0 st
-  f is_hpartial_differentiable`21_in z0 & N c= dom SVF1(pdiff2(f,z0),z0) holds
+  f is_hpartial_differentiable`21_in z0 &
+  N c= dom SVF1(1,pdiff1(f,2),z0) holds
   for h be convergent_to_0 Real_Sequence, c be constant Real_Sequence
   st rng c = {proj(1,2).z0} & rng (h+c) c= N holds
-  h"(#)(SVF1(pdiff2(f,z0),z0)/*(h+c) - SVF1(pdiff2(f,z0),z0)/*c)
+  h"(#)(SVF1(1,pdiff1(f,2),z0)/*(h+c) - SVF1(1,pdiff1(f,2),z0)/*c)
     is convergent &
   hpartdiff21(f,z0)
-  = lim (h"(#)(SVF1(pdiff2(f,z0),z0)/*(h+c) - SVF1(pdiff2(f,z0),z0)/*c));
+  = lim (h"(#)(SVF1(1,pdiff1(f,2),z0)/*(h+c) - SVF1(1,pdiff1(f,2),z0)/*c));
 
-theorem :: PDIFF_3:24
+theorem :: PDIFF_3:20
   for z0 being Element of REAL 2
   for N being Neighbourhood of proj(2,2).z0 st
-  f is_hpartial_differentiable`22_in z0 & N c= dom SVF2(pdiff2(f,z0),z0) holds
+  f is_hpartial_differentiable`22_in z0 &
+  N c= dom SVF1(2,pdiff1(f,2),z0) holds
   for h be convergent_to_0 Real_Sequence, c be constant Real_Sequence
   st rng c = {proj(2,2).z0} & rng (h+c) c= N holds
-  h"(#)(SVF2(pdiff2(f,z0),z0)/*(h+c) - SVF2(pdiff2(f,z0),z0)/*c)
+  h"(#)(SVF1(2,pdiff1(f,2),z0)/*(h+c) - SVF1(2,pdiff1(f,2),z0)/*c)
     is convergent &
   hpartdiff22(f,z0)
-  = lim (h"(#)(SVF2(pdiff2(f,z0),z0)/*(h+c) - SVF2(pdiff2(f,z0),z0)/*c));
+  = lim (h"(#)(SVF1(2,pdiff1(f,2),z0)/*(h+c) - SVF1(2,pdiff1(f,2),z0)/*c));
+
+theorem :: PDIFF_3:21
+  f1 is_hpartial_differentiable`11_in z0 &
+  f2 is_hpartial_differentiable`11_in z0 implies
+  pdiff1(f1,1)+pdiff1(f2,1) is_partial_differentiable_in z0,1 &
+  partdiff(pdiff1(f1,1)+pdiff1(f2,1),z0,1)
+  = hpartdiff11(f1,z0) + hpartdiff11(f2,z0);
+
+theorem :: PDIFF_3:22
+  f1 is_hpartial_differentiable`12_in z0 &
+  f2 is_hpartial_differentiable`12_in z0 implies
+  pdiff1(f1,1)+pdiff1(f2,1) is_partial_differentiable_in z0,2 &
+  partdiff(pdiff1(f1,1)+pdiff1(f2,1),z0,2)
+  = hpartdiff12(f1,z0) + hpartdiff12(f2,z0);
+
+theorem :: PDIFF_3:23
+  f1 is_hpartial_differentiable`21_in z0 &
+  f2 is_hpartial_differentiable`21_in z0 implies
+  pdiff1(f1,2)+pdiff1(f2,2) is_partial_differentiable_in z0,1 &
+  partdiff(pdiff1(f1,2)+pdiff1(f2,2),z0,1)
+  = hpartdiff21(f1,z0) + hpartdiff21(f2,z0);
+
+theorem :: PDIFF_3:24
+  f1 is_hpartial_differentiable`22_in z0 &
+  f2 is_hpartial_differentiable`22_in z0 implies
+  pdiff1(f1,2)+pdiff1(f2,2) is_partial_differentiable_in z0,2 &
+  partdiff(pdiff1(f1,2)+pdiff1(f2,2),z0,2)
+  = hpartdiff22(f1,z0) + hpartdiff22(f2,z0);
 
 theorem :: PDIFF_3:25
   f1 is_hpartial_differentiable`11_in z0 &
   f2 is_hpartial_differentiable`11_in z0 implies
-  pdiff1(f1,z0)+pdiff1(f2,z0) is_partial_differentiable`1_in z0 &
-  partdiff1(pdiff1(f1,z0)+pdiff1(f2,z0),z0)
-  = hpartdiff11(f1,z0) + hpartdiff11(f2,z0);
+  pdiff1(f1,1)-pdiff1(f2,1) is_partial_differentiable_in z0,1 &
+  partdiff(pdiff1(f1,1)-pdiff1(f2,1),z0,1)
+  = hpartdiff11(f1,z0) - hpartdiff11(f2,z0);
 
 theorem :: PDIFF_3:26
   f1 is_hpartial_differentiable`12_in z0 &
   f2 is_hpartial_differentiable`12_in z0 implies
-  pdiff1(f1,z0)+pdiff1(f2,z0) is_partial_differentiable`2_in z0 &
-  partdiff2(pdiff1(f1,z0)+pdiff1(f2,z0),z0)
-  = hpartdiff12(f1,z0) + hpartdiff12(f2,z0);
+  pdiff1(f1,1)-pdiff1(f2,1) is_partial_differentiable_in z0,2 &
+  partdiff(pdiff1(f1,1)-pdiff1(f2,1),z0,2)
+  = hpartdiff12(f1,z0) - hpartdiff12(f2,z0);
 
 theorem :: PDIFF_3:27
   f1 is_hpartial_differentiable`21_in z0 &
   f2 is_hpartial_differentiable`21_in z0 implies
-  pdiff2(f1,z0)+pdiff2(f2,z0) is_partial_differentiable`1_in z0 &
-  partdiff1(pdiff2(f1,z0)+pdiff2(f2,z0),z0)
-  = hpartdiff21(f1,z0) + hpartdiff21(f2,z0);
+  pdiff1(f1,2)-pdiff1(f2,2) is_partial_differentiable_in z0,1 &
+  partdiff(pdiff1(f1,2)-pdiff1(f2,2),z0,1)
+  = hpartdiff21(f1,z0) - hpartdiff21(f2,z0);
 
 theorem :: PDIFF_3:28
   f1 is_hpartial_differentiable`22_in z0 &
   f2 is_hpartial_differentiable`22_in z0 implies
-  pdiff2(f1,z0)+pdiff2(f2,z0) is_partial_differentiable`2_in z0 &
-  partdiff2(pdiff2(f1,z0)+pdiff2(f2,z0),z0)
-  = hpartdiff22(f1,z0) + hpartdiff22(f2,z0);
-
-theorem :: PDIFF_3:29
-  f1 is_hpartial_differentiable`11_in z0 &
-  f2 is_hpartial_differentiable`11_in z0 implies
-  pdiff1(f1,z0)-pdiff1(f2,z0) is_partial_differentiable`1_in z0 &
-  partdiff1(pdiff1(f1,z0)-pdiff1(f2,z0),z0)
-  = hpartdiff11(f1,z0) - hpartdiff11(f2,z0);
-
-theorem :: PDIFF_3:30
-  f1 is_hpartial_differentiable`12_in z0 &
-  f2 is_hpartial_differentiable`12_in z0 implies
-  pdiff1(f1,z0)-pdiff1(f2,z0) is_partial_differentiable`2_in z0 &
-  partdiff2(pdiff1(f1,z0)-pdiff1(f2,z0),z0)
-  = hpartdiff12(f1,z0) - hpartdiff12(f2,z0);
-
-theorem :: PDIFF_3:31
-  f1 is_hpartial_differentiable`21_in z0 &
-  f2 is_hpartial_differentiable`21_in z0 implies
-  pdiff2(f1,z0)-pdiff2(f2,z0) is_partial_differentiable`1_in z0 &
-  partdiff1(pdiff2(f1,z0)-pdiff2(f2,z0),z0)
-  = hpartdiff21(f1,z0) - hpartdiff21(f2,z0);
-
-theorem :: PDIFF_3:32
-  f1 is_hpartial_differentiable`22_in z0 &
-  f2 is_hpartial_differentiable`22_in z0 implies
-  pdiff2(f1,z0)-pdiff2(f2,z0) is_partial_differentiable`2_in z0 &
-  partdiff2(pdiff2(f1,z0)-pdiff2(f2,z0),z0)
+  pdiff1(f1,2)-pdiff1(f2,2) is_partial_differentiable_in z0,2 &
+  partdiff(pdiff1(f1,2)-pdiff1(f2,2),z0,2)
   = hpartdiff22(f1,z0) - hpartdiff22(f2,z0);
 
-theorem :: PDIFF_3:33
+theorem :: PDIFF_3:29
   f is_hpartial_differentiable`11_in z0 implies
-  r(#)pdiff1(f,z0) is_partial_differentiable`1_in z0 &
-  partdiff1((r(#)pdiff1(f,z0)),z0) = r*hpartdiff11(f,z0);
+  r(#)pdiff1(f,1) is_partial_differentiable_in z0,1 &
+  partdiff((r(#)pdiff1(f,1)),z0,1) = r*hpartdiff11(f,z0);
 
-theorem :: PDIFF_3:34
+theorem :: PDIFF_3:30
   f is_hpartial_differentiable`12_in z0 implies
-  r(#)pdiff1(f,z0) is_partial_differentiable`2_in z0 &
-  partdiff2((r(#)pdiff1(f,z0)),z0) = r*hpartdiff12(f,z0);
+  r(#)pdiff1(f,1) is_partial_differentiable_in z0,2 &
+  partdiff((r(#)pdiff1(f,1)),z0,2) = r*hpartdiff12(f,z0);
 
-theorem :: PDIFF_3:35
+theorem :: PDIFF_3:31
   f is_hpartial_differentiable`21_in z0 implies
-  r(#)pdiff2(f,z0) is_partial_differentiable`1_in z0 &
-  partdiff1((r(#)pdiff2(f,z0)),z0) = r*hpartdiff21(f,z0);
+  r(#)pdiff1(f,2) is_partial_differentiable_in z0,1 &
+  partdiff((r(#)pdiff1(f,2)),z0,1) = r*hpartdiff21(f,z0);
 
-theorem :: PDIFF_3:36
+theorem :: PDIFF_3:32
   f is_hpartial_differentiable`22_in z0 implies
-  r(#)pdiff2(f,z0) is_partial_differentiable`2_in z0 &
-  partdiff2((r(#)pdiff2(f,z0)),z0) = r*hpartdiff22(f,z0);
+  r(#)pdiff1(f,2) is_partial_differentiable_in z0,2 &
+  partdiff((r(#)pdiff1(f,2)),z0,2) = r*hpartdiff22(f,z0);
 
-theorem :: PDIFF_3:37
+theorem :: PDIFF_3:33
   f1 is_hpartial_differentiable`11_in z0 &
   f2 is_hpartial_differentiable`11_in z0 implies
-  pdiff1(f1,z0)(#)pdiff1(f2,z0) is_partial_differentiable`1_in z0;
+  pdiff1(f1,1)(#)pdiff1(f2,1) is_partial_differentiable_in z0,1;
 
-theorem :: PDIFF_3:38
+theorem :: PDIFF_3:34
   f1 is_hpartial_differentiable`12_in z0 &
   f2 is_hpartial_differentiable`12_in z0 implies
-  pdiff1(f1,z0)(#)pdiff1(f2,z0) is_partial_differentiable`2_in z0;
+  pdiff1(f1,1)(#)pdiff1(f2,1) is_partial_differentiable_in z0,2;
 
-theorem :: PDIFF_3:39
+theorem :: PDIFF_3:35
   f1 is_hpartial_differentiable`21_in z0 &
   f2 is_hpartial_differentiable`21_in z0 implies
-  pdiff2(f1,z0)(#)pdiff2(f2,z0) is_partial_differentiable`1_in z0;
+  pdiff1(f1,2)(#)pdiff1(f2,2) is_partial_differentiable_in z0,1;
 
-theorem :: PDIFF_3:40
+theorem :: PDIFF_3:36
   f1 is_hpartial_differentiable`22_in z0 &
   f2 is_hpartial_differentiable`22_in z0 implies
-  pdiff2(f1,z0)(#)pdiff2(f2,z0) is_partial_differentiable`2_in z0;
+  pdiff1(f1,2)(#)pdiff1(f2,2) is_partial_differentiable_in z0,2;
 
-theorem :: PDIFF_3:41
+theorem :: PDIFF_3:37
   for z0 being Element of REAL 2 holds
   f is_hpartial_differentiable`11_in z0
-  implies SVF1(pdiff1(f,z0),z0) is_continuous_in proj(1,2).z0;
+  implies SVF1(1,pdiff1(f,1),z0) is_continuous_in proj(1,2).z0;
 
-theorem :: PDIFF_3:42
+theorem :: PDIFF_3:38
   for z0 being Element of REAL 2 holds
   f is_hpartial_differentiable`12_in z0
-  implies SVF2(pdiff1(f,z0),z0) is_continuous_in proj(2,2).z0;
+  implies SVF1(2,pdiff1(f,1),z0) is_continuous_in proj(2,2).z0;
 
-theorem :: PDIFF_3:43
+theorem :: PDIFF_3:39
   for z0 being Element of REAL 2 holds
   f is_hpartial_differentiable`21_in z0
-  implies SVF1(pdiff2(f,z0),z0) is_continuous_in proj(1,2).z0;
+  implies SVF1(1,pdiff1(f,2),z0) is_continuous_in proj(1,2).z0;
 
-theorem :: PDIFF_3:44
+theorem :: PDIFF_3:40
   for z0 being Element of REAL 2 holds
   f is_hpartial_differentiable`22_in z0
-  implies SVF2(pdiff2(f,z0),z0) is_continuous_in proj(2,2).z0;
+  implies SVF1(2,pdiff1(f,2),z0) is_continuous_in proj(2,2).z0;
 
-theorem :: PDIFF_3:45
+theorem :: PDIFF_3:41
   f is_hpartial_differentiable`11_in z0 implies
   ex R st R.0 = 0 & R is_continuous_in 0;
 
-theorem :: PDIFF_3:46
+theorem :: PDIFF_3:42
   f is_hpartial_differentiable`12_in z0 implies
   ex R st R.0 = 0 & R is_continuous_in 0;
 
-theorem :: PDIFF_3:47
+theorem :: PDIFF_3:43
   f is_hpartial_differentiable`21_in z0 implies
   ex R st R.0 = 0 & R is_continuous_in 0;
 
-theorem :: PDIFF_3:48
+theorem :: PDIFF_3:44
   f is_hpartial_differentiable`22_in z0 implies
   ex R st R.0 = 0 & R is_continuous_in 0;

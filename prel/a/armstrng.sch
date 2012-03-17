@@ -10,10 +10,8 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -22,7 +20,7 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
-<ArticleID name="PBOOLE"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="ARMSTRNG"/>
 </Signature>
 <Scheme>
@@ -129,7 +127,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -157,7 +155,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="28">
+<Pred kind="R" nr="20">
 <Var nr="1"/>
 <Func kind="F" nr="1"/>
 </Pred>

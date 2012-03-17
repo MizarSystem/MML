@@ -9,7 +9,6 @@
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCT_4"/>
@@ -20,7 +19,6 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCT_7"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="GRAPH_1"/>
@@ -41,8 +39,8 @@
 </Typ>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="69">
+<Adjective nr="43" value="false"/>
+<Adjective nr="73">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Adjective>
@@ -57,9 +55,9 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="24">
+<Pred kind="V" nr="27">
 <Fraenkel>
-<Typ kind="M" nr="26">
+<Typ kind="M" nr="22">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -74,7 +72,7 @@
 </Pred>
 </Fraenkel>
 </Pred>
-<Pred kind="V" nr="24">
+<Pred kind="V" nr="27">
 <Func kind="F" nr="4"/>
 </Pred>
 </Scheme>
@@ -93,8 +91,8 @@
 </Typ>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="69">
+<Adjective nr="43" value="false"/>
+<Adjective nr="73">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Adjective>
@@ -105,7 +103,7 @@
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
-<Typ kind="M" nr="26">
+<Typ kind="M" nr="22">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -123,7 +121,7 @@
 </Func>
 <Not>
 <For>
-<Typ kind="M" nr="26">
+<Typ kind="M" nr="22">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>

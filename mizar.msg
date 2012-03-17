@@ -94,7 +94,7 @@ Unexpected proof
 # 64
 Invalid exemplification in a diffuse statement
 # 65
-"thesis" is allowed only inside a proof
+"thesis" is only allowed inside a proof
 # 68
 Nongeneralizable variable in the skeleton of a reasoning
 # 69
@@ -116,11 +116,11 @@ Types of arguments must be equal
 # 80
 Cannot be used in a permissive definition
 # 81
-It is meaningful for binary predicates only
+It is only meaningful for binary predicates
 # 82
-It is meaningful for binary functors only
+It is only meaningful for binary functors
 # 83
-It is meaningful for unary functors only
+It is only meaningful for unary functors
 # 84
 The result type is not invariant under swapping the arguments
 # 85
@@ -168,7 +168,7 @@ Invalid list of arguments of redefined constructor
 # 109
 Invalid order of arguments of redefined constructor
 # 110
-Only nullary prefixes allowed
+Only nullary prefixes are allowed
 # 111
 Non registered attribute cluster
 # 112
@@ -319,6 +319,8 @@ Accessible mode format has empty list of arguments
 Accessible structure format has empty list of arguments
 # 185
 Unknown structured mode format
+# 186
+"equals" is only allowed for functors
 # 189
 Left and right pattern must have the same number of arguments
 # 190
@@ -365,6 +367,8 @@ No pairing "end" for this word
 Unexpected "end"
 # 217
 ";" missing
+# 218
+Unexpected "(" - parenthesizing attributes is not allowed
 # 219
 Unexpected "proof"
 # 220
@@ -390,9 +394,9 @@ Directives are not allowed in the text proper
 # 242
 "reserve", "struct", "scheme" and "theorem" not allowed in a definition block
 # 250
-"$1",...,"$10" are allowed only inside the definiens of a private constructor
+"$1",...,"$10" are only allowed inside the definiens of a private constructor
 # 251
-"it" is allowed only inside the definiens of a public functor or mode
+"it" is only allowed inside the definiens of a public functor or mode
 # 253
 "means" or "equals" expected
 # 255
@@ -438,7 +442,7 @@ Selector or structure symbol expected
 # 321
 Predicate symbol or "is" expected
 # 329
-Selector without argument is allowed only inside a structure pattern
+Selector without arguments is only allowed inside a structure pattern
 # 330
 Unexpected end of an item (perhaps ";" missing)
 # 336
@@ -467,6 +471,18 @@ Associative notation must not be used for "iff" and "implies"
 "}" expected
 # 373
 "#)" expected
+# 374
+Incorrect order of arguments in an attribute definition
+# 375
+Wrong beginning of a cluster registration
+# 376
+Incorrect functorial registration - addjectives expected
+# 377
+Incorrect conditional registration - type expected
+# 378
+Parenthesizing adjective clusters is not allowed
+# 379
+Term list is not allowed here
 # 380
 "=" expected
 # 381

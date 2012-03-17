@@ -9,22 +9,20 @@ environ
  vocabularies SUPINF_1, ARYTM_1, RLVECT_1, BOOLE, ORDINAL2, SEQ_2, FUNCT_1,
       RELAT_1, LATTICES, CARD_4, FUNCT_4, FUNCOP_1, SUPINF_2, FUNCT_3,
       PARTFUN1, ARYTM, VALUED_0, XXREAL_2, MEMBERED;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS,
-      MEMBERED, XXREAL_0, XREAL_0,
-      XXREAL_3, XCMPLX_0,
-      REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, FUNCOP_1,
-      VALUED_0, FUNCT_4, NAT_1, CARD_3, XXREAL_2, SUPINF_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, MEMBERED, XXREAL_0,
+      XREAL_0, XXREAL_3, XCMPLX_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1,
+      PARTFUN1, FUNCT_2, FUNCT_3, FUNCOP_1, VALUED_0, FUNCT_4, NAT_1, CARD_3,
+      XXREAL_2, SUPINF_1;
  constructors FUNCT_3, FUNCOP_1, FUNCT_4, FINSET_1, REAL_1, NAT_1, SUPINF_1,
-      VALUED_1, XXREAL_2, XXREAL_3, CARD_3;
+      VALUED_1, XXREAL_2, XXREAL_3, CARD_3, RELSET_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2, FINSET_1,
-      NUMBERS, XREAL_0, MEMBERED, VALUED_0, XXREAL_3;
+      NUMBERS, XREAL_0, MEMBERED, VALUED_0, XXREAL_3, RELSET_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, SUPINF_1, XBOOLE_0, XCMPLX_0, XXREAL_0, XXREAL_3;
- theorems TARSKI, SUPINF_1, FUNCT_1, FUNCT_2, NAT_1, RELSET_1, CARD_4,
-      SUBSET_1, FUNCT_4, FUNCOP_1, RELAT_1, ZFMISC_1, XBOOLE_0, XBOOLE_1,
-      XREAL_1, XXREAL_0, XREAL_0, ORDINAL1, NUMBERS, XXREAL_2, XXREAL_3,
-      CARD_3;
- schemes SUPINF_1, FUNCT_2, RECDEF_1, NAT_1;
+ definitions TARSKI, XBOOLE_0, XCMPLX_0, XXREAL_0, XXREAL_3;
+ theorems TARSKI, FUNCT_1, FUNCT_2, NAT_1, RELSET_1, CARD_4, SUBSET_1, FUNCT_4,
+      FUNCOP_1, RELAT_1, ZFMISC_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0,
+      ORDINAL1, NUMBERS, XXREAL_2, XXREAL_3, CARD_3;
+ schemes SUBSET_1, FUNCT_2, RECDEF_1, NAT_1;
 
 begin :: operations " + "," - " in R_eal numbers
 
@@ -40,110 +38,35 @@ end;
 
 definition
   let x,y be R_eal;
-  redefine func x + y -> R_eal means
-  :Def2:
-  ex a,b being Real st x = a & y = b & it = a + b if x in REAL & y in REAL,
-  it = +infty if x = +infty & y <> -infty or y = +infty & x <> -infty,
-  it = -infty if x = -infty & y <> +infty or y = -infty & x <> +infty
-  otherwise it = 0.;
+  redefine func x + y -> R_eal;
  coherence by XXREAL_0:def 1;
- compatibility
-  proof let z be R_eal;
-   thus x in REAL & y in REAL implies
-    (z = x+y iff ex a,b being Real st x = a & y = b & z = a + b)
-    proof assume
-Z:    x in REAL & y in REAL;
-     thus z = x+y implies ex a,b being Real st x = a & y = b & z = a + b
-      proof assume
-ZZ:     z = x+y;
-       reconsider x,y as Real by Z;
-      take x,y;
-      thus thesis by ZZ,XXREAL_3:def 1;
-     end;
-     thus thesis by XXREAL_3:def 1;
-    end;
-   thus x = +infty & y <> -infty or y = +infty & x <> -infty implies
-    (z = x+y iff z = +infty) by XXREAL_3:def 1;
-   thus x = -infty & y <> +infty or y = -infty & x <> +infty implies
-    (z = x+y iff z = -infty) by XXREAL_3:def 1;
-   assume not(x in REAL & y in REAL) &
-     not ( x = +infty & y <> -infty or y = +infty & x <> -infty) &
-     not (x = -infty & y <> +infty or y = -infty & x <> +infty);
-     then x = +infty & y = -infty or y = +infty & x = -infty
-                           by XXREAL_0:14;
-   hence (z = x+y iff z = 0) by XXREAL_3:def 1;
-  end;
- correctness;
 end;
 
 theorem Th1:
   for x,y being R_eal, a,b being Real st x = a & y = b holds x + y = a + b
-proof
-  let x,y be R_eal, a,b be Real;
-  assume
-A1: x = a & y = b;
-  then ex a,b being Real st x = a & y = b & x + y = a + b by Def2;
-  hence thesis by A1;
-end;
+    by XXREAL_3:def 2;
 
 definition
   let x be R_eal;
-  redefine func - x -> R_eal means
-  :Def3:
-  ex a being Real st x = a & it = - a if x in REAL, it = -infty if x = +infty
-  otherwise it = +infty;
-  coherence by XXREAL_0:def 1;
-  compatibility
-   proof let y be R_eal;
-    thus x in REAL implies (y = -x iff ex a being Real st x = a & y = - a)
-     proof assume
-Z:     x in REAL;
-       thus y = -x implies ex a being Real st x = a & y = - a
-        proof assume
-ZZ:       y = -x;
-          reconsider x as Real by Z;
-         take x;
-         thus thesis by ZZ,XXREAL_3:def 3;
-        end;
-       thus thesis by XXREAL_3:def 3;
-     end;
-    thus x = +infty implies (y = -x iff y = -infty) by XXREAL_3:def 3;
-    assume that
-Z1:  not x in REAL and
-Z2:  x <> +infty;
-      x is not real by Z1,XREAL_0:def 1;
-     hence y = -x iff y = +infty by Z2,XXREAL_3:def 3;
-   end;
-  correctness;
+  redefine func - x -> R_eal;
+ coherence by XXREAL_0:def 1;
 end;
 
 definition
   let x,y be R_eal;
-  redefine func x - y -> R_eal equals
-
-  x + -y;
+  redefine func x - y -> R_eal;
   coherence by XXREAL_0:def 1;
-  correctness;
 end;
 
 canceled;
 
 theorem Th3:
   for x being R_eal, a being Real st x = a holds - x = - a
-proof
-  let x be R_eal, a be Real;
-  assume
-A1: x = a;
-  then ex a being Real st x = a & - x = - a by Def3;
-  hence thesis by A1;
-end;
+          by XXREAL_3:def 3;
 
-Lm1: not +infty in REAL & not -infty in REAL;
+canceled;
 
-theorem Th4:
-  --infty = +infty by Def3,Lm1;
-
-theorem Th5:
+theorem
   for x,y being R_eal, a,b being Real st x = a & y = b holds x - y = a - b
 proof
   let x,y be R_eal, a,b be Real;
@@ -151,388 +74,17 @@ proof
 A1: x = a;
   assume y = b;
   then -y = -b by Th3;
-  hence x - y = a - b by A1,Th1;
+  hence thesis by A1,Th1;
 end;
 
-theorem Th6:
-  for x being R_eal st x <> +infty holds
-  +infty - x = +infty & x - +infty = -infty
-proof
-  let x be R_eal;
-  assume
-A1: x <> +infty;
-  then -x <> -infty by Th4;
-  hence +infty - x = +infty by Def2;
-  - +infty = -infty by Def3;
-  hence x - +infty = -infty by A1,Def2;
-end;
-
-theorem Th7:
-  for x being R_eal st x <> -infty holds
-  -infty - x = -infty & x - -infty = +infty
-proof
-  let x be R_eal;
-  assume
-A1: x <> -infty;
-  now
-    assume -x = +infty;
-    then --x = -infty by Def3;
-    hence contradiction by A1;
-  end;
-  hence -infty - x = -infty by Def2;
-  thus x - -infty = +infty by A1,Def2,Th4;
-end;
-
-theorem Th8:
-  for x,s being R_eal st x + s = +infty holds x = +infty or s = +infty
-proof
-  let x,s be R_eal;
-  assume
-A1: x + s = +infty;
-  assume
-A2: not (x = +infty or s = +infty);
-  (x in REAL or x in {-infty,+infty}) & (s in REAL or s in {-infty,+infty
-  }) by XBOOLE_0:def 3;
-  then
-A3: (x in REAL & s in REAL) or (x in REAL & s = -infty) or
-  (x = -infty & s in REAL) or (x = -infty & s = -infty) by A2,TARSKI:def 2;
-  not(x in REAL & s in REAL)
-  proof
-    assume x in REAL & s in REAL;
-    then reconsider a = x, b = s as Real;
-    x + s = a + b by Th1;
-    hence thesis by A1;
-  end;
-  hence thesis by A1,A3,Def2;
-end;
-
-theorem Th9:
-  for x,s being R_eal st x + s = -infty holds (x = -infty or s = -infty)
-proof
-  let x,s be R_eal;
-  assume
-A1: x + s = -infty;
-  assume
-A2: not (x = -infty or s = -infty);
-  (x in REAL or x in {-infty,+infty}) & (s in REAL or s in {-infty,+infty
-  }) by XBOOLE_0:def 3;
-  then
-A3: (x in REAL & s in REAL) or (x in REAL & s = +infty) or
-  (x = +infty & s in REAL) or (x = +infty & s = +infty) by A2,TARSKI:def 2;
-  not(x in REAL & s in REAL)
-  proof
-    assume x in REAL & s in REAL;
-    then reconsider a = x, b = s as Real;
-    x + s = a + b by Th1;
-    hence thesis by A1;
-  end;
-  hence thesis by A1,A3,Def2;
-end;
-
-theorem
-  for x,s being R_eal st x - s = +infty holds (x = +infty or s = -infty)
-proof
-  let x,s be R_eal;
-  assume
-A1: x - s = +infty;
-  assume
-A2: not (x = +infty or s = -infty);
-  (x in REAL or x in {-infty,+infty}) & (s in REAL or s in {-infty,+infty
-  }) by XBOOLE_0:def 3;
-  then
-A3: (x in REAL & s in REAL) or (x in REAL & s = +infty) or
-  (x = -infty & s in REAL) or (x = -infty & s = +infty) by A2,TARSKI:def 2;
-  not (x in REAL & s in REAL)
-  proof
-    assume x in REAL & s in REAL;
-    then reconsider a = x, b = s as Real;
-    x - s = a - b by Th5;
-    hence thesis by A1;
-  end;
-  hence thesis by A1,A3,Th6,Th7;
-end;
-
-theorem Th11:
-  for x,s being R_eal st x - s = -infty holds (x = -infty or s = +infty)
-proof
-  let x,s be R_eal;
-  assume
-A1: x - s = -infty;
-  assume
-A2: not (x = -infty or s = +infty);
-  (x in REAL or x in {-infty,+infty}) & (s in REAL or s in {-infty,+infty
-  }) by XBOOLE_0:def 3;
-  then
-A3: (x in REAL & s in REAL) or (x in REAL & s = -infty) or
-  (x = +infty & s in REAL) or (x = +infty & s = -infty) by A2,TARSKI:def 2;
-  not(x in REAL & s in REAL)
-  proof
-    assume x in REAL & s in REAL;
-    then reconsider a = x, b = s as Real;
-    x - s = a - b by Th5;
-    hence thesis by A1;
-  end;
-  hence thesis by A1,A3,Th6,Th7;
-end;
-
-theorem Th12:
-  for x,s being R_eal holds
-  (not ((x = +infty & s = -infty) or (x = -infty & s = +infty)) &
-  x + s in REAL) implies x in REAL & s in REAL
-proof
-  let x,s be R_eal;
-  assume
-A1: (not ((x = +infty & s = -infty) or (x = -infty & s = +infty
-  )) & x + s in REAL);
-  assume
-A2: not (x in REAL & s in REAL);
-  (x in REAL or x in {-infty,+infty}) & (s in REAL or s in {-infty,+infty
-  }) by XBOOLE_0:def 3;
-  then (x in REAL or x = -infty or x = +infty) &
-  (s in REAL or s = -infty or s = +infty) by TARSKI:def 2;
-  hence thesis by A1,A2,Def2;
-end;
-
-theorem Th13:
-  for x,s being R_eal holds
-  (not ((x = +infty & s = +infty) or (x = -infty & s = -infty)) &
-  x - s in REAL) implies (x in REAL & s in REAL)
-proof
-  let x,s be R_eal;
-  assume
-A1: (not ((x = +infty & s = +infty) or (x = -infty & s = -infty
-  )) & x - s in REAL);
-  assume
-A2: not (x in REAL & s in REAL);
-  (x in REAL or x in {-infty,+infty}) & (s in REAL or s in {-infty,+infty
-  }) by XBOOLE_0:def 3;
-  then (x in REAL or x = -infty or x = +infty) &
-  (s in REAL or s = -infty or s = +infty) by TARSKI:def 2;
-  hence thesis by A1,A2,Th6,Th7;
-end;
-
-theorem Th14:
-  for x,y,s,t being R_eal holds
-  x <= y & s <= t implies x + s <= y + t
-proof
-  let x,y,s,t be R_eal;
-  assume
-A1: x <= y & s <= t;
-  per cases;
-  suppose
-S: x = +infty & s = -infty;
-    then
-A:   y = +infty by A1,XXREAL_0:4;
-    t <> -infty implies +infty + t = +infty by Def2;
-   hence thesis by A,S,XXREAL_0:3;
-  end;
-  suppose
-S: x = -infty & s = +infty;
-    then
-A:   t = +infty by A1,XXREAL_0:4;
-    y <> -infty implies +infty + y = +infty by Def2;
-   hence thesis by A,S,XXREAL_0:3;
-  end;
-  suppose
-S: y = +infty & t = -infty;
-    then
-A:   s = -infty by A1,XXREAL_0:6;
-    x <> +infty implies -infty + x = -infty by Def2;
-   hence thesis by A,S,XXREAL_0:5;
-  end;
-  suppose
-S: y = -infty & t = +infty;
-    then
-A:   x = -infty by A1,XXREAL_0:6;
-    s <> +infty implies -infty + s = -infty by Def2;
-   hence thesis by A,S,XXREAL_0:5;
-  end;
-  suppose
-S: not ((x = +infty & s = -infty) or (x = -infty & s = +infty)) &
-   not ((y = +infty & t = -infty) or (y = -infty & t = +infty));
-  reconsider a = x + s, b = y + t as R_eal;
-  (a in REAL or a in {-infty,+infty}) & (b in REAL or b in {-infty,+infty
-  }) by XBOOLE_0:def 3;
-  then
-A2: (a in REAL & b in REAL) or (a in REAL & b = +infty) or
-  (a in REAL & b = -infty) or
-  (a = +infty & b in REAL) or (a = +infty & b = +infty) or (a = +infty & b =
-  -infty) or
-  (a = -infty & b in REAL) or (a = -infty & b = +infty) or (a = -infty & b =
-  -infty) by TARSKI:def 2;
-A3: (a in REAL & b in REAL) implies a <= b
-  proof
-    assume a in REAL & b in REAL;
-    then x is Real & y is Real & s is Real & t is Real by Th12,S;
-    then consider Ox,Oy,Os,Ot being Real such that
-A4: Ox = x & Oy = y & Os = s & Ot = t & Ox <= Oy & Os <= Ot by A1;
-A5: Ox + Os <= Os + Oy by A4,XREAL_1:8;
-A6: Os + Oy <= Ot + Oy by A4,XREAL_1:8;
-    x + s = Ox + Os & y + t = Oy + Ot by A4,Th1;
-    hence thesis by A5,A6,XXREAL_0:2;
-  end;
-A7: a in REAL & b = -infty implies a <= b
-  proof
-    assume a in REAL & b = -infty;
-    then y = -infty or t = -infty by Th9;
-    then x = -infty or s = -infty by A1,XXREAL_0:6;
-    then a = -infty by Def2,S;
-    hence thesis by XXREAL_0:5;
-  end;
-A8: (a = +infty & b in REAL) implies a <= b
-  proof
-    assume a = +infty & b in REAL;
-    then x = +infty or s = +infty by Th8;
-    then y = +infty or t = +infty by A1,XXREAL_0:4;
-    then b = +infty by Def2,S;
-    hence thesis by XXREAL_0:4;
-  end;
-  not(a = +infty & b = -infty)
-  proof
-    assume
-A9: a = +infty & b = -infty;
-    then
-A10: y = -infty or t = -infty by Th9;
-    x = +infty or s = +infty by A9,Th8;
-    hence thesis by A1,A10,S,XXREAL_0:4;
-  end;
-  hence thesis by A2,A3,A7,A8,XXREAL_0:4,5;
- end;
-end;
-
-Lm2: for x being R_eal holds -x in REAL iff x in REAL
-proof
-  let x be R_eal;
-  hereby
-    assume -x in REAL;
-    then reconsider a = -x as Real;
-    -a in REAL;
-    then --x in REAL by Th3;
-    hence x in REAL;
-  end;
-  assume x in REAL;
-  then reconsider a = x as Real;
-  -x = -a by Th3;
-  hence thesis;
-end;
-
-Lm3: for x,y being R_eal st x <= y holds - y <= - x
-proof
-  let x,y be R_eal;
-  assume
-A1: x <= y;
-  per cases;
-  case that
-A2: -y in REAL and
-A3: -x in REAL;
-    y in REAL by A2,Lm2;
-    then consider b being Real such that
-A4: y = b and
-A5: -y = - b by Def3;
-    x in REAL by A3,Lm2;
-    then consider a being Real such that
-A6: x = a and
-A7: -x = - a by Def3;
-    take -b,-a;
-    thus -b = -y & -a = -x by A5,A7;
-    thus -b <= -a by A1,A4,A6,XREAL_1:26;
-  end;
-  case not(-y in REAL & -x in REAL);
-    then not(y in REAL & x in REAL) by Lm2;
-    then x = -infty or y = +infty by A1,SUPINF_1:def 7;
-    hence -y = -infty or -x = +infty by Def3,Lm1;
-  end;
-end;
-
-theorem
-  for x,y,s,t being R_eal holds x <= y & s <= t implies x - t <= y - s
-proof
-  let x,y,s,t be R_eal;
-  assume
-A1: x <= y & s <= t;
-   then -t <= -s by Lm3;
-  hence thesis by A1,Th14;
-end;
-
-theorem Th16:
-  for x,y being R_eal holds x <= y iff - y <= - x
-proof
-  let x,y be R_eal;
-  thus x <= y implies - y <= - x by Lm3;
-  - y <= - x implies --x <= --y by Lm3;
-  hence thesis;
-end;
-
-theorem
-  for x,y being R_eal holds x < y iff - y < - x by Th16;
-
-theorem Th18:
-  for x being R_eal holds x + 0. = x & 0. + x = x
-proof
-  let x be R_eal;
-A1: x in REAL or x = -infty or x = +infty by XXREAL_0:14;
-  x in REAL implies x + 0. =x & 0. + x = x
-  proof
-    assume x in REAL;
-    then reconsider a = x as Real;
-    x + 0. = a + 0 by Def2
-      .= x;
-    hence thesis;
-  end;
-  hence thesis by A1,Def2;
-end;
-
-theorem
-  -infty <0. & 0. <+infty
-proof
-  -infty <= 0. & 0. <= +infty by XXREAL_0:4,5;
-  hence thesis by XXREAL_0:1;
-end;
-
-theorem Th20:
-  for x,y,z being R_eal st 0. <= z & 0. <= x & y = x + z holds x <= y
-proof
-  let x,y,z be R_eal;
-  assume
-A1: 0. <= z & 0. <= x & y = x + z;
-  then
-A2: z <> -infty & x <> -infty by XXREAL_0:6;
-A3: (x in REAL or x in {-infty,+infty}) & (z in REAL or
-  z in {-infty,+infty}) by XBOOLE_0:def 3;
-A4: z in REAL implies x <= y
-  proof
-    assume
-A5: z in REAL;
-A6: x in REAL implies x <= y
-    proof
-      assume
-A7:   x in REAL;
-      consider c,b being Real such that
-A8:   c = 0. & b = z & c <= b by A1,A5;
-      reconsider a = x as Real by A7;
-A9:   y = a + b by A1,A8,Th1;
-      then reconsider d = y as Real;
-      -b <= -0 by A8,XREAL_1:26;
-      then d + (-b) <= 0 + d by XREAL_1:8;
-      hence thesis by A9;
-    end;
-    x = +infty implies x <= y by A1,A2,Def2;
-    hence thesis by A2,A3,A6,TARSKI:def 2;
-  end;
-  z = +infty implies x <= y
-  proof
-    assume z = +infty;
-    then y = +infty by A1,A2,Def2;
-    hence thesis by XXREAL_0:4;
-  end;
-  hence thesis by A2,A3,A4,TARSKI:def 2;
-end;
+canceled 15;
 
 ::
 ::       operations " + "," - " in a subset of ExtREAL
 ::
 
 definition
+ canceled 3;
   let X,Y be non empty Subset of ExtREAL;
   func X + Y -> Subset of ExtREAL means
   :Def5:
@@ -542,7 +94,7 @@ definition
   proof
     defpred P[R_eal] means ex x,y being R_eal st x in X & y in Y & $1 = x + y;
     consider Z being Subset of ExtREAL such that
-A1: for z being R_eal holds z in Z iff P[z] from SUPINF_1:sch 1;
+A1: for z being R_eal holds z in Z iff P[z] from SUBSET_1:sch 3;
     consider x being Element of X;
     consider y being Element of Y;
     x + y = x + y;
@@ -600,7 +152,7 @@ definition
   proof
     defpred P[R_eal] means ex x being R_eal st x in X & $1 = - x;
     consider Z being Subset of ExtREAL such that
-A1: for z being R_eal holds z in Z iff P[z] from SUPINF_1:sch 1;
+A1: for z being R_eal holds z in Z iff P[z] from SUBSET_1:sch 3;
     consider x being Element of X;
     -x = -x;
     then reconsider Z as non empty Subset of ExtREAL by A1;
@@ -727,8 +279,8 @@ A1: for z being R_eal holds z in REAL implies - z in REAL
 A2: z in REAL;
     - z in REAL or - z in {-infty,+infty} by XBOOLE_0:def 3;
     then - z in REAL or - z = -infty or - z = +infty by TARSKI:def 2;
-    then - z in REAL or --z = +infty or --z = -infty by Def3;
-    hence - z in REAL by A2;
+    then - z in REAL or --z = +infty or --z = -infty by XXREAL_3:def 3;
+    hence thesis by A2;
   end;
   - z in REAL implies z in REAL
   proof
@@ -760,7 +312,7 @@ proof
     then consider x,y being R_eal such that
 A2: x in X & y in Y & z = x + y by Def5;
     x <= sup X & y <= sup Y by A2,XXREAL_2:4;
-    hence thesis by A2,Th14;
+    hence thesis by A2,XXREAL_3:38;
   end;
   then sup X + sup Y is UpperBound of X + Y by XXREAL_2:def 1;
   hence thesis by XXREAL_2:def 3;
@@ -778,7 +330,7 @@ proof
     then consider x,y being R_eal such that
 A2: x in X & y in Y & z = x + y by Def5;
     inf X <= x & inf Y <= y by A2,XXREAL_2:3;
-    hence thesis by A2,Th14;
+    hence thesis by A2,XXREAL_3:38;
   end;
   then inf X + inf Y is LowerBound of X + Y by XXREAL_2:def 2;
   hence thesis by XXREAL_2:def 4;
@@ -814,7 +366,7 @@ A2:     x in - X;
         - x in --X by A2,Th23;
         then - x in X by Th22;
         then - x <= a by A1,XXREAL_2:def 1;
-        then - a <= --x by Th16;
+        then - a <= --x by XXREAL_3:40;
         hence thesis;
       end;
       hence thesis by XXREAL_2:def 2;
@@ -831,7 +383,7 @@ A4: x in X;
     reconsider x as Element of ExtREAL by XXREAL_0:def 1;
     - x in - X by A4,Th23;
     then - a <= - x by A3,XXREAL_2:def 2;
-    hence thesis by Th16;
+    hence thesis by XXREAL_3:40;
   end;
   hence thesis by XXREAL_2:def 1;
 end;
@@ -856,7 +408,7 @@ A2:     x in - X;
         - x in - (- X) by A2,Th23;
         then - x in X by Th22;
         then a <= - x by A1,XXREAL_2:def 2;
-        then - (- x) <= - a by Th16;
+        then - (- x) <= - a by XXREAL_3:40;
         hence thesis;
       end;
       hence thesis by XXREAL_2:def 1;
@@ -873,7 +425,7 @@ A4: x in X;
     reconsider x as Element of ExtREAL by XXREAL_0:def 1;
     - x in - X by A4,Th23;
     then - x <= - a by A3,XXREAL_2:def 1;
-    hence thesis by Th16;
+    hence thesis by XXREAL_3:40;
   end;
   hence thesis by XXREAL_2:def 2;
 end;
@@ -893,7 +445,7 @@ A3: a <= - b
     - a is UpperBound of -(-X) by A1,Th31;
     then - a is UpperBound of X by Th22;
     then b <= - a by XXREAL_2:def 3;
-    then - (- a) <= - b by Th16;
+    then - (- a) <= - b by XXREAL_3:40;
     hence thesis;
   end;
   - b <= a
@@ -924,7 +476,7 @@ A3: a <= - b
     - a is LowerBound of - (- X) by A1,Th30;
     then - a is LowerBound of X by Th22;
     then - a <= b by XXREAL_2:def 4;
-    then - b <= - (-a) by Th16;
+    then - b <= - (-a) by XXREAL_3:40;
     hence thesis;
   end;
   hence thesis by A3,XXREAL_0:1;
@@ -1031,7 +583,7 @@ A3:   a in rng F by FUNCT_2:6;
     end;
     hence thesis by A1,FUNCT_2:5;
   end;
-  hence thesis by RELSET_1:12;
+  hence thesis by RELAT_1:def 19;
 end;
 
 theorem Th35:
@@ -1114,7 +666,7 @@ proof
     assume
 A1: y in rng(- F);
 A2: dom F = X by FUNCT_2:def 1;
-A3: dom(- F) = X & rng(- F) c= - Y by FUNCT_2:def 1,RELSET_1:12;
+A3: dom(- F) = X & rng(- F) c= - Y by FUNCT_2:def 1,RELAT_1:def 19;
     reconsider y as R_eal by A1;
     consider a being set such that
 A4: a in X & y = (- F).a by A1,A3,FUNCT_1:def 5;
@@ -1130,7 +682,7 @@ A4: a in X & y = (- F).a by A1,A3,FUNCT_1:def 5;
     assume
 A5: y in - rng F;
 A6: dom (- F) = X by FUNCT_2:def 1;
-A7: dom F = X & rng F c= Y by FUNCT_2:def 1,RELSET_1:12;
+A7: dom F = X & rng F c= Y by FUNCT_2:def 1,RELAT_1:def 19;
     reconsider y as R_eal by A5;
     - y in - (- rng F) by A5,Th23;
     then - y in rng F by Th22;
@@ -1212,16 +764,16 @@ proof
     assume F is bounded_above;
     then sup F <+infty by Def11;
     then
-A1: - (+infty) <- sup F by Th16;
-    - (+infty) = -infty by Def3;
+A1: - (+infty) <- sup F by XXREAL_3:40;
+    - (+infty) = -infty by XXREAL_3:def 3;
     then -infty <inf(- F) by A1,Th38;
     hence - F is bounded_below by Def12;
   end;
   assume - F is bounded_below;
   then -infty <inf(- F) by Def12;
-  then - inf(- F) <- (-infty) by Th16;
+  then - inf(- F) <- (-infty) by XXREAL_3:40;
   then - (- sup F) <- (-infty) by Th38;
-  hence thesis by Def11,Th4;
+  hence thesis by Def11,XXREAL_3:5;
 end;
 
 theorem Th41:
@@ -1233,16 +785,16 @@ proof
   hereby
     assume F is bounded_below;
     then -infty <inf F by Def12;
-    then - inf F <- (-infty) by Th16;
-    then sup(- F) <+infty by Th4,Th38;
+    then - inf F <- (-infty) by XXREAL_3:40;
+    then sup(- F) <+infty by Th38,XXREAL_3:5;
     hence - F is bounded_above by Def11;
   end;
   assume - F is bounded_above;
   then sup(- F) <+infty by Def11;
   then - inf F <+infty by Th38;
   then
-A1: - (+infty) <- (- inf F) by Th16;
-  - (+infty) = -infty & - (- inf F) = inf F by Def3;
+A1: - (+infty) <- (- inf F) by XXREAL_3:40;
+  - (+infty) = -infty & - (- inf F) = inf F by XXREAL_3:def 3;
   hence thesis by A1,Def12;
 end;
 
@@ -1287,7 +839,7 @@ theorem Th45:
 proof
   let X be non empty set, Y be non empty Subset of ExtREAL,
   F be Function of X,Y, x be Element of X;
-  X = dom F & rng F c= Y by FUNCT_2:def 1,RELSET_1:12;
+  X = dom F & rng F c= Y by FUNCT_2:def 1,RELAT_1:def 19;
   then F.x in rng F by FUNCT_1:def 5;
   hence thesis by XXREAL_2:3,4;
 end;
@@ -1306,7 +858,7 @@ A1: Y c= REAL;
     then
 A2: sup F <+infty by Def11;
     consider x being Element of X;
-A3: X = dom F & rng F c= Y by FUNCT_2:def 1,RELSET_1:12;
+A3: X = dom F & rng F c= Y by FUNCT_2:def 1,RELAT_1:def 19;
     then F.x in rng F by FUNCT_1:def 5;
     then
 A4: F.x in Y by A3;
@@ -1334,7 +886,7 @@ A1: Y c= REAL;
     then
 A2: -infty <inf F by Def12;
     consider x being Element of X;
-A3: X = dom F & rng F c= Y by FUNCT_2:def 1,RELSET_1:12;
+A3: X = dom F & rng F c= Y by FUNCT_2:def 1,RELAT_1:def 19;
     then F.x in rng F by FUNCT_1:def 5;
     then
 A4: F.x in Y by A3;
@@ -1385,16 +937,16 @@ A6: sup F1 in REAL & sup F2 in REAL;
     hence thesis by XXREAL_0:9;
   end;
 A7: sup F1 in REAL & sup F2 = -infty implies sup F1 + sup F2 <+infty
-  by Def2,XXREAL_0:7;
+  by XXREAL_0:7,XXREAL_3:def 2;
 A8: sup F1 = -infty & sup F2 in REAL implies sup F1 + sup F2 <+infty
-  by Def2,XXREAL_0:7;
+  by XXREAL_0:7,XXREAL_3:def 2;
 A9: sup F1 = -infty & sup F2 = -infty implies sup F1 + sup F2 <+infty
-  by Def2,XXREAL_0:7;
+  by XXREAL_0:7,XXREAL_3:def 2;
   sup(F1 + F2) <+infty
   proof
     assume not sup(F1 + F2) <+infty;
     then not(sup(F1 + F2) <= +infty) or sup(F1 + F2) = +infty by XXREAL_0:1;
-    hence thesis by A4,A5,A7,A8,A9,Th35,SUPINF_1:def 7,XXREAL_0:4;
+    hence thesis by A4,A5,A7,A8,A9,Th35,XXREAL_0:4,XXREAL_3:def 1;
   end;
   hence thesis by Def11;
 end;
@@ -1422,16 +974,16 @@ A6: inf F1 in REAL & inf F2 in REAL;
     hence thesis by XXREAL_0:12;
   end;
 A7: inf F1 in REAL & inf F2 = +infty implies -infty <inf F1 + inf F2
-  by Def2,XXREAL_0:7;
+  by XXREAL_0:7,XXREAL_3:def 2;
 A8: inf F1 = +infty & inf F2 in REAL implies -infty <inf F1 + inf F2
-  by Def2,XXREAL_0:7;
+  by XXREAL_0:7,XXREAL_3:def 2;
 A9: inf F1 = +infty & inf F2 = +infty implies -infty <inf F1 + inf F2
-  by Def2,XXREAL_0:7;
+  by XXREAL_0:7,XXREAL_3:def 2;
   -infty <inf(F1 + F2)
   proof
     assume inf(F1 + F2) <= -infty;
     then not(-infty <= inf(F1 + F2)) or inf(F1 + F2) = -infty by XXREAL_0:1;
-    hence thesis by A4,A5,A7,A8,A9,Th36,SUPINF_1:def 7,XXREAL_0:6;
+    hence thesis by A4,A5,A7,A8,A9,Th36,XXREAL_0:6,XXREAL_3:def 1;
   end;
   hence thesis by Def12;
 end;
@@ -1510,16 +1062,16 @@ A8:     dom(f|(f"IT)) = NAT /\ (f"IT) by A3,RELAT_1:90;
 A9:       NAT = f"IT;
           then
 A10:      NAT \ f"IT = {} by XBOOLE_1:37;
-          then dom(NAT \ f"IT --> x) = {} by FUNCOP_1:16;
+          then dom(NAT \ f"IT --> x) = {};
           then dom(f|(f"IT)) /\ dom(NAT \ f"IT --> x) = {};
           then dom(f|(f"IT)) misses dom(NAT \ f"IT --> x) by XBOOLE_0:def 7;
           then F = (f|(f"IT)) \/ (NAT \ f"IT --> x) by FUNCT_4:32;
           hence rng F = rng(f|(f"IT)) \/ rng(NAT \ f"IT --> x) by RELAT_1:26
-            .= rng(f|(f"IT)) \/ {} by A10,FUNCOP_1:16
+            .= rng(f|(f"IT)) \/ {} by A10
             .= f.:(f"IT) by RELAT_1:148
             .= IT by A4,FUNCT_1:147;
           thus dom F = dom(f|(f"IT)) \/ dom(NAT \ f"IT --> x) by FUNCT_4:def 1
-            .= dom(f|(f"IT)) \/ {} by A10,FUNCOP_1:16
+            .= dom(f|(f"IT)) \/ {} by A10
             .= NAT by A8,A9;
         end;
         suppose
@@ -1544,7 +1096,7 @@ A12:      now
       end;
       then reconsider F as Function of NAT, D by FUNCT_2:def 1,RELSET_1:11;
       take F;
-      thus IT = rng F by A6;
+      thus thesis by A6;
     end;
     assume
 A13: IT is empty or ex F being Function of NAT,D st IT = rng F;
@@ -1556,7 +1108,7 @@ A13: IT is empty or ex F being Function of NAT,D st IT = rng F;
       then consider F being Function of NAT,D such that
 A14:  IT = rng F by A13;
       dom F = NAT by FUNCT_2:def 1;
-      hence IT is countable by A14,CARD_3:127;
+      hence thesis by A14,CARD_3:127;
     end;
   end;
 end;
@@ -1703,7 +1255,7 @@ A2: P[0]
 A3: F.(0 + 1) = F.0 + N.(1) by Def17;
 A4: 0. <= F.0 by A1,Th54;
     0. <= N.(1) by Th54;
-    hence thesis by A3,A4,Th20;
+    hence thesis by A3,A4,XXREAL_3:42;
   end;
 A5: for k being Element of NAT st P[k] holds P[k + 1]
   proof
@@ -1713,7 +1265,7 @@ A6: F.k <= F.(k + 1) & 0. <= F.k;
 A7: F.((k+1) + 1) = F.(k + 1) + N.((k+1) + 1) by Def17;
 A8: 0. <= N.((k+1) + 1) by Th54;
     0. <= F.(k+1) by A6,XXREAL_0:2;
-    hence thesis by A7,A8,Th20;
+    hence thesis by A7,A8,XXREAL_3:42;
   end;
   for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A5);
   hence thesis;
@@ -1909,7 +1461,7 @@ A8: Ser(F1).k <= Ser(F2).k;
 A9: Ser(F1).(k+1) = Ser(F1).k + F1.(k+1) by A3,Def17;
 A10: Ser(F2).(k+1) = Ser(F2).k + F2.(k+1) by A4,Def17;
      F1.(k+1) <= F2.(k+1) by A2;
-    hence thesis by A8,A9,A10,Th14;
+    hence thesis by A8,A9,A10,XXREAL_3:38;
   end;
   for n being Element of NAT holds P[n] from NAT_1:sch 1(A5,A7);
   hence thesis;
@@ -1978,7 +1530,7 @@ A6: Ser(F).k <> -infty by A1,Th59,XXREAL_0:6;
     reconsider y = Ser(F).k as R_eal;
 A7: Ser(F).(k + 1) = y + F.(k + 1) by Th63;
     reconsider x = Ser(F).(k + 1) as R_eal;
-A8: x = +infty by A2,A5,A6,A7,Def2;
+A8: x = +infty by A2,A5,A6,A7,XXREAL_3:def 2;
     then x is UpperBound of rng Ser(F) by XXREAL_2:41;
     hence thesis by A8,FUNCT_2:6,XXREAL_2:55;
   end;
@@ -2060,7 +1612,7 @@ A9:     Ser(F).(n' + (s' + 1)) = y + F.(n' + (s' + 1)) by A8,Th63;
         0 <= s+1 by NAT_1:2;
         then n + 0 <= n + (s+1) by XREAL_1:9;
         then F.(n' + (s'+1)) = 0. by A2;
-        hence thesis by A7,A9,Th18;
+        hence thesis by A7,A9,XXREAL_3:4;
       end;
       thus for m being Nat holds P[m] from NAT_1:sch 2(A5,A6);
     end;
@@ -2203,208 +1755,5 @@ A1: for n being set st n in dom F holds 0. <= F.n;
 A2: x in dom F and
 A3: y = F.x by FUNCT_1:def 5;
   thus thesis by A1,A2,A3;
-end;
-
-:: missing, 2008.06.08, A.T.
-
-reserve x,y for R_eal;
-
-theorem
- x <= y implies y-x >= 0
- proof
-  assume
-Z: x <= y;
-  per cases;
-  suppose
-S:  -x in REAL & y in REAL;
-    then consider a,b being Real such that
-W1:  -x = a and
-W2:  y = b and
-W3:  y-x = a + b by Def2;
-    ex a being Real st -x = a & --x = -a by Def3,S;
-    then b--a >=0 by W2,Z,W1,XREAL_1:50;
-   hence thesis by W3;
-  end;
-  suppose -x = +infty & y <> -infty or y = +infty & -x <> -infty;
-    then y-x = +infty by Def2;
-   hence thesis by XXREAL_0:3;
-  end;
-  suppose -x = -infty & y <> +infty;
-   hence thesis by Z,Th4,XXREAL_0:4;
-  end;
-  suppose y = -infty & -x <> +infty;
-   hence thesis by Th4,Z,XXREAL_0:6;
-  end;
-  suppose
-   not(-x in REAL & y in REAL) &
-   not(-x = +infty & y <> -infty or y = +infty & -x <> -infty) &
-   not(-x = -infty & y <> +infty or y = -infty & -x <> +infty);
-   hence thesis by Def2;
-  end;
- end;
-
-theorem Th73:
-  x - x = 0
-proof
-  per cases by XXREAL_0:14;
-  suppose x in REAL;
-    then consider a being Real such that
-A1: x = a & -x = -a by Def3;
-    x + -x = a + -a & -x + x = -a + a by A1,Th1;
-    hence thesis;
-  end;
-  suppose x = -infty;
-    hence thesis by Th4,Def2,SUPINF_1:6;
-  end;
-  suppose x = +infty;
-    hence thesis by Th4,Def2,SUPINF_1:6;
-  end;
-end;
-
-reserve x,y,w,z for R_eal;
-
-theorem
-  (z = -infty & y = +infty implies x <= 0) &
-  (z = +infty & y = -infty implies x <= 0) implies
-  (x - y <= z implies x <= z + y)
-proof assume that
-Z1: z = -infty & y = +infty implies x <= 0 and
-Z2: z = +infty & y = -infty implies x <= 0 and
-Z3: x - y <= z;
- per cases by XXREAL_0:14;
- suppose
-S:  z = -infty;
-   per cases by S,Th11,Z3,XXREAL_0:6;
-   suppose x = -infty;
-   hence x <= z + y by XXREAL_0:5;
-   end;
-   suppose
-SS:  y = +infty;
-    then z + y = +infty - +infty by S,Def3
-          .= 0 by Th73;
-   hence x <= z + y by Z1,S,SS;
-   end;
- end;
- suppose
-S:  z = +infty;
-  per cases;
-  suppose
-SS:  y = -infty;
-    then z + y = +infty - +infty by S,Def3
-          .= 0 by Th73;
-   hence x <= z + y by Z2,S,SS;
-  end;
-  suppose y <> -infty;
-    then z + y = +infty by S,Def2;
-   hence x <= z + y by XXREAL_0:3;
-  end;
- end;
- suppose
-S: z in REAL;
-  per cases by Z3,S,XXREAL_0:13;
-  suppose
-SS:  x-y in REAL;
-   per cases by SS,Th13;
-   suppose y = +infty;
-    then z + y = +infty by S,Def2;
-   hence x <= z + y by XXREAL_0:3;
-   end;
-   suppose x = -infty;
-   hence x <= z + y by XXREAL_0:5;
-   end;
-   suppose that
-S1: x in REAL and
-S2: y in REAL;
-    reconsider a = x, b = y, c = z as Real by S,S1,S2;
-    a - b <= c by Z3,Th5;
-    then a <= b + c by XREAL_1:22;
-   hence x <= z + y by Th1;
-   end;
-  end;
-  suppose
-SS:  x-y = -infty;
-   per cases by SS,Th11;
-   suppose x = -infty;
-   hence x <= z + y by XXREAL_0:5;
-   end;
-   suppose y = +infty;
-    then z + y = +infty by S,Def2;
-   hence x <= z + y by XXREAL_0:3;
-   end;
-  end;
- end;
-end;
-
-theorem
-  (x = +infty & y = +infty implies 0 <= z) &
-  (x = -infty & y = -infty implies 0 <= z) implies
-  (x <= z + y implies x - y <= z)
-proof assume that
-Z1: x = +infty & y = +infty implies 0 <= z and
-Z2: x = -infty & y = -infty implies 0 <= z and
-Z3: x <= z + y;
- per cases by XXREAL_0:14;
- suppose
-S:  x = +infty;
-  then
-X: z + y = +infty by Z3,XXREAL_0:4;
-   per cases by X,Th8;
-   suppose z = +infty;
-   hence x - y <= z by XXREAL_0:3;
-   end;
-   suppose
-SS:  y = +infty;
-    then x - y = 0 by S,Th73;
-   hence x - y <= z by Z1,S,SS;
-   end;
- end;
- suppose
-S:  x = -infty;
-  per cases;
-  suppose
-SS:  y = -infty;
-    then x - y = 0 by S,Th73;
-   hence x - y <= z by Z2,S,SS;
-  end;
-  suppose --y <> -infty;
-    then -y <> +infty by Def3;
-    then x - y = -infty by S,Def2;
-   hence x - y <= z by XXREAL_0:5;
-  end;
- end;
- suppose
-S: x in REAL;
-  per cases by Z3,S,XXREAL_0:10;
-  suppose
-SS:  z + y in REAL;
-   per cases by SS,Th12;
-   suppose y = +infty;
-    then x - y = -infty by S,Def2,Th4;
-   hence x - y <= z by XXREAL_0:5;
-   end;
-   suppose z = +infty;
-   hence x - y <= z by XXREAL_0:3;
-   end;
-   suppose that
-S1: z in REAL and
-S2: y in REAL;
-    reconsider a = x, b = y, c = z as Real by S,S1,S2;
-    a <= b + c by Z3,Th1;
-    then a - b <= c by XREAL_1:22;
-   hence x - y <= z by Th5;
-   end;
-  end;
-  suppose
-SS:  z + y = +infty;
-   per cases by SS,Th8;
-   suppose z = +infty;
-   hence x - y <= z by XXREAL_0:3;
-   end;
-   suppose y = +infty;
-    then x - y = -infty by S,Def2,Th4;
-   hence x - y <= z by XXREAL_0:5;
-   end;
-  end;
- end;
 end;
 

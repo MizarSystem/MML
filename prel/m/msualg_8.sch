@@ -8,7 +8,6 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
@@ -19,7 +18,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="58"/>
+<Func kind="K" nr="48"/>
 </Typ>
 </ArgTypes>
 <Not>
@@ -27,30 +26,30 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="7"/>
-<Adjective nr="22"/>
+<Adjective nr="9"/>
+<Adjective nr="26"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="71">
+<Func kind="K" nr="61">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="69">
+<Func kind="K" nr="59">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="58"/>
+<Func kind="K" nr="48"/>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="69">
+<Func kind="K" nr="59">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -73,13 +72,13 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="58"/>
+<Func kind="K" nr="48"/>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="69">
+<Func kind="K" nr="59">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

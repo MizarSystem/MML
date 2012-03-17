@@ -17,14 +17,14 @@ environ
       RLVECT_1, MCART_1, TRIANG_1, VECTSP_1, VECTSP_2, RELAT_2, POLYNOM1,
       NAT_D, WELLORD1, POLYNOM7;
  constructors XXREAL_0, VECTSP_2, ALGSTR_1, TRIANG_1, POLYNOM7, BAGORDER,
-      SEQ_1, RECDEF_1, WELLORD2;
+      SEQ_1, RECDEF_1, WELLORD2, RELSET_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FINSET_1, XXREAL_0, XREAL_0,
       NAT_1, CARD_1, FINSEQ_1, STRUCT_0, VECTSP_1, ALGSTR_1, POLYNOM1,
       POLYNOM2, POLYNOM7, BAGORDER, VALUED_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- theorems TARSKI, FINSEQ_1, FUNCT_1, FUNCT_2, RELAT_1, POLYNOM1, PBOOLE, NAT_1,
-      BINOM, TRIANG_1, RLVECT_1, VECTSP_2, POLYNOM7, POLYNOM2, NAT_2, RELAT_2,
-      CARD_1, CARD_2, MATRLIN, XBOOLE_0, XBOOLE_1, ORDERS_1, MCART_1, BAGORDER,
+ theorems TARSKI, FINSEQ_1, FUNCT_1, FUNCT_2, RELAT_1, POLYNOM1, NAT_1, BINOM,
+      TRIANG_1, RLVECT_1, VECTSP_2, POLYNOM7, POLYNOM2, NAT_2, RELAT_2, CARD_1,
+      CARD_2, MATRLIN, XBOOLE_0, XBOOLE_1, ORDERS_1, MCART_1, BAGORDER,
       WELLORD1, VECTSP_1, XREAL_1, ORDINAL1, PARTFUN1, VALUED_0, STRUCT_0,
       XREAL_0;
  schemes NAT_1;
@@ -127,7 +127,8 @@ A11:      [x,y] = [k,b2.k -' b1.k] by A10;
         end;
         then
 A12:    dom b = n' by A9,TARSKI:2;
-        then reconsider b as ManySortedSet of n' by PBOOLE:def 3;
+        then reconsider b as ManySortedSet of n' by PARTFUN1:def 4
+,RELAT_1:def 18;
         now
           let x be set;
           assume x in rng b;
@@ -219,7 +220,7 @@ A3:   s/.k = Z.b1*p.b2 by A2;
     then Sum s = 0.L by MATRLIN:15;
     hence (Z*'p).b = Z.b by A1,POLYNOM1:81;
   end;
-  hence 0_(n,L)*'p = 0_(n,L) by FUNCT_2:113;
+  hence thesis by FUNCT_2:113;
 end;
 
 registration
@@ -653,9 +654,7 @@ registration
   end;
 end;
 
-registration
-
-::: theorem 5.5 (ii), p. 190
+registration :: theorem 5.5 (ii), p. 190
   let n be Nat;
   cluster -> well_founded (admissible TermOrder of n);
   coherence
@@ -857,7 +856,7 @@ proof
 A1: min(b1,b2,T) <> b1;
   now per cases by A1,Def4;
     case not(b1 <= b2,T);
-      hence min(b1,b2,T) = b2 by Def4;
+      hence thesis by Def4;
     end;
     case b1 = b2;
       then b1 <= b2,T by Lm2;
@@ -876,7 +875,7 @@ proof
 A1: max(b1,b2,T) <> b1;
   now per cases by A1,Def5;
     case not(b2 <= b1,T);
-      hence max(b1,b2,T) = b2 by Def5;
+      hence thesis by Def5;
     end;
     case b1 = b2;
       then b2 <= b1,T by Lm2;
@@ -891,7 +890,7 @@ holds min(b,b,T) = b & max(b,b,T) = b
 proof
   let n being Ordinal, T being TermOrder of n, b being bag of n;
   thus min(b,b,T) = b by Def4;
-  thus max(b,b,T) = b by Def5;
+  thus thesis by Def5;
 end;
 
 theorem
@@ -1009,13 +1008,13 @@ A6:       b2 <= b1,T;
               hence max(b2,b1,T) = max(b1,b2,T) by A5,Def5;
             end;
           end;
-          hence max(b1,b2,T) = max(b2,b1,T);
+          hence thesis;
         end;
         case b1 = b2;
           hence max(b2,b1,T) = max(b1,b2,T);
         end;
       end;
-      hence max(b1,b2,T) = max(b2,b1,T);
+      hence thesis;
     end;
     case
 A7:   max(b1,b2,T) <> b1;
@@ -1034,7 +1033,7 @@ A7:   max(b1,b2,T) <> b1;
       hence max(b2,b1,T) = max(b1,b2,T);
     end;
   end;
-  hence max(b1,b2,T) = max(b2,b1,T);
+  hence thesis;
 end;
 
 theorem
@@ -1075,9 +1074,7 @@ end;
 
 begin :: Headterms, Headmonomials and Headcoefficients
 
-definition
-
-::: definition 5.15, p. 194
+definition :: definition 5.15, p. 194
   let n be Ordinal, T be connected TermOrder of n, L be non empty ZeroStr,
   p be Polynomial of n,L;
   func HT(p,T) -> Element of Bags n means
@@ -1114,8 +1111,7 @@ A5:     b in B by A4,TARSKI:def 1;
           then b' = b by A4,TARSKI:def 1;
           hence [b',b] in O by ORDERS_1:12;
         end;
-        hence ex b' being bag of n st b' in B &
-        for b being bag of n st b in B holds [b,b'] in O by A5;
+        hence thesis by A5;
       end;
 A6:   for k being Nat st 1 <= k holds P[k] implies P[k+1]
       proof
@@ -1297,20 +1293,15 @@ A32: (Support p = {} & b2 = EmptyBag n) or (b2 in Support p &
   end;
 end;
 
-definition
-
-::: definition 5.15, p. 194
+definition :: definition 5.15, p. 194
   let n be Ordinal, T be connected TermOrder of n, L be non empty ZeroStr,
   p be Polynomial of n,L;
   func HC(p,T) -> Element of L equals
-
   p.(HT(p,T));
   correctness;
 end;
 
-definition
-
-::: definition 5.15, p. 194
+definition :: definition 5.15, p. 194
   let n be Ordinal, T be connected TermOrder of n, L be non empty ZeroStr,
   p be Polynomial of n,L;
   func HM(p,T) -> Monomial of n,L equals
@@ -1440,7 +1431,7 @@ A1: Support m = {};
 A2: term(m) = EmptyBag n by POLYNOM7:def 6
       .= HT(m,O) by A1,Def6;
     hence HC(m,O) = coefficient(m) by POLYNOM7:def 7;
-    hence HM(m,O) = m by A2,POLYNOM7:11;
+    hence thesis by A2,POLYNOM7:11;
   end;
   suppose
 A3: ex b being bag of n st Support m = {b};
@@ -1454,7 +1445,7 @@ A5: m.b <> 0.L by POLYNOM1:def 9;
 A6: HT(m,O) = b by A4,TARSKI:def 1
       .= term(m) by A5,POLYNOM7:def 6;
     hence HC(m,O) = coefficient(m) by POLYNOM7:def 7;
-    hence HM(m,O) = m by A6,POLYNOM7:11;
+    hence thesis by A6,POLYNOM7:11;
   end;
 end;
 
@@ -1491,12 +1482,12 @@ A3: b1 is Element of Bags n & b is Element of Bags n by POLYNOM1:def 14;
         then HT(p,O) in {b1} by A2,Lm9;
         then b1 <> b by A1,TARSKI:def 1;
         then not(b in {b1}) by TARSKI:def 1;
-        hence HM(p,O).b = 0.L by A2,A3,POLYNOM1:def 9;
+        hence thesis by A2,A3,POLYNOM1:def 9;
       end;
       case HC(p,O) = 0.L;
         then Support(HM(p,O)) = {} by Lm10;
         then HM(p,O) = 0_(n,L) by POLYNOM7:1;
-        hence HM(p,O).b = 0.L by POLYNOM1:81;
+        hence thesis by POLYNOM1:81;
       end;
     end;
     hence thesis;
@@ -1876,10 +1867,10 @@ A9:         k in dom s;
 A10:        (decomp b)/.k = <*b1, b2*> & s/.k = p.b1*q.b2 by A4;
             now per cases by A5,A7,A9,A10;
               case p.b1 = 0.L;
-                hence 0.L = s/.k by A10,BINOM:1;
+                hence thesis by A10,BINOM:1;
               end;
               case q.b2 = 0.L;
-                hence 0.L = s/.k by A10,BINOM:2;
+                hence thesis by A10,BINOM:2;
               end;
             end;
             hence thesis;
@@ -1923,9 +1914,7 @@ A16: s in Support p & t in Support q & u' = s+t by A1,A15;
   hence thesis by TARSKI:def 3;
 end;
 
-theorem Th31:
-
-::: lemma 5.17 (i), p. 195
+theorem Th31: :: lemma 5.17 (i), p. 195
   for n being Ordinal, T being admissible connected TermOrder of n,
   L being add-associative right_complementable right_zeroed
   well-unital distributive domRing-like (non trivial doubleLoopStr),
@@ -1960,9 +1949,7 @@ A6: [s + t,HT(p,O) + t] in O by A4,BAGORDER:def 7;
   hence thesis by A2,A3,A5,ORDERS_1:13;
 end;
 
-theorem Th32:
-
-::: lemma 5.17 (iii), p. 195
+theorem Th32: :: lemma 5.17 (iii), p. 195
   for n being Ordinal, T being admissible connected TermOrder of n,
   L being add-associative right_complementable right_zeroed
   well-unital distributive domRing-like (non trivial doubleLoopStr),
@@ -1976,9 +1963,7 @@ proof
     .= HC(p,O) * HC(q,O) by Lm14;
 end;
 
-theorem
-
-::: lemma 5.17 (ii), p. 195
+theorem :: lemma 5.17 (ii), p. 195
   for n being Ordinal, T being admissible connected TermOrder of n,
   L being add-associative right_complementable right_zeroed
   well-unital distributive domRing-like (non trivial doubleLoopStr),
@@ -1993,9 +1978,7 @@ proof
     .= HM(p,O) *' HM(q,O) by Th3;
 end;
 
-theorem
-
-::: lemma 5.17 (iv), p. 195
+theorem :: lemma 5.17 (iv), p. 195
   for n being Ordinal, T being admissible connected TermOrder of n,
   L being right_zeroed (non empty addLoopStr), p,q being Polynomial of n,L
   holds HT(p+q,T) <= max(HT(p,T),HT(q,T),T), T
@@ -2051,9 +2034,7 @@ end;
 
 begin :: Reductum
 
-definition
-
-::: definition 5.15, p. 194
+definition :: definition 5.15, p. 194
   let n be Ordinal, T be connected TermOrder of n,
   L be add-associative right_complementable right_zeroed
   (non empty addLoopStr), p be Polynomial of n,L;

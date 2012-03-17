@@ -10,8 +10,8 @@ environ
       RELAT_1, SETWISEO, FINSEQOP, ARYTM_3, CARD_1, FINSET_1, RLVECT_1,
       GROUP_1, ENDALG, ARYTM, ALGSTR_0;
  notations TARSKI, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, XXREAL_0,
-      RELAT_1, FUNCT_1, REAL_1, FUNCT_2, BINOP_2, SEQ_1, STRUCT_0, ALGSTR_0,
-      RLVECT_1, INT_1, NAT_1, FINSEQOP, SETWISEO, BINOP_1, INT_2;
+      RELAT_1, FUNCT_1, REAL_1, FUNCT_2, BINOP_2, SEQ_1, BINOP_1, STRUCT_0,
+      ALGSTR_0, RLVECT_1, INT_1, NAT_1, FINSEQOP, SETWISEO, INT_2;
  constructors BINOP_1, SETWISEO, XXREAL_0, REAL_1, NAT_1, NAT_D, BINOP_2,
       FINSEQOP, RLVECT_1, SEQ_1;
  registrations ORDINAL1, RELSET_1, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
@@ -21,13 +21,13 @@ environ
 
 begin
 
-reserve n for Element of NAT;
+reserve m,n for Nat;
 reserve i,j for Integer;
 reserve S for non empty multMagma;
 reserve r,r1,r2,s,s1,s2,t,t1,t2 for Element of S;
 
 definition
-  let IT be non empty multMagma;
+  let IT be multMagma;
   canceled;
   attr IT is unital means
 :: GROUP_1:def 2
@@ -47,15 +47,15 @@ definition
 end;
 
 registration
-  cluster Group-like -> unital (non empty multMagma);
+  cluster Group-like -> unital multMagma;
 end;
 
 registration
-  cluster strict Group-like associative (non empty multMagma);
+  cluster strict Group-like associative non empty multMagma;
 end;
 
 definition
-  mode Group is Group-like associative (non empty multMagma);
+  mode Group is Group-like associative non empty multMagma;
 end;
 
 canceled 4;
@@ -73,11 +73,11 @@ theorem :: GROUP_1:6
 theorem :: GROUP_1:7
   multMagma (# REAL, addreal #) is associative Group-like;
 
-reserve G for Group-like (non empty multMagma);
+reserve G for Group-like non empty multMagma;
 reserve e,h for Element of G;
 
 definition
-  let G be non empty multMagma such that
+  let G be multMagma such that
  G is unital;
   func 1_G -> Element of G means
 :: GROUP_1:def 5
@@ -99,6 +99,7 @@ definition
 :: GROUP_1:def 6
 
   h * it = 1_G & it * h = 1_G;
+  involutiveness;
 end;
 
 canceled;
@@ -153,11 +154,11 @@ theorem :: GROUP_1:27
 theorem :: GROUP_1:28
   g * h = h * g iff g * h" = h" * g;
 
-reserve u for UnOp of the carrier of G;
+reserve u for UnOp of G;
 
 definition
   let G;
-  func inverse_op(G) -> UnOp of the carrier of G means
+  func inverse_op(G) -> UnOp of G means
 :: GROUP_1:def 7
 
   it.h = h";
@@ -166,19 +167,19 @@ end;
 canceled 2;
 
 theorem :: GROUP_1:31
-  for G being associative (non empty multMagma)
+  for G being associative non empty multMagma
   holds the multF of G is associative;
 
 theorem :: GROUP_1:32
-  for G being unital (non empty multMagma)
+  for G being unital non empty multMagma
   holds 1_G is_a_unity_wrt the multF of G;
 
 theorem :: GROUP_1:33
-  for G being unital (non empty multMagma)
+  for G being unital non empty multMagma
   holds the_unity_wrt the multF of G = 1_G;
 
 theorem :: GROUP_1:34
-  for G being unital (non empty multMagma)
+  for G being unital non empty multMagma
    holds the multF of G is having_a_unity;
 
 theorem :: GROUP_1:35
@@ -195,8 +196,8 @@ definition
   func power G -> Function of [:the carrier of G,NAT:], the carrier of G means
 :: GROUP_1:def 8
 
-  for h being Element of G
-  holds it.(h,0) = 1_G & for n holds it.(h,n + 1) = it.(h,n) * h;
+  for h being Element of G holds it.(h,0) = 1_G &
+  for n being Element of NAT holds it.(h,n + 1) = it.(h,n) * h;
 end;
 
 definition
@@ -215,12 +216,7 @@ definition
   power(G).(h,n);
 end;
 
-reserve m,n for Nat;
-
-canceled 4;
-
-theorem :: GROUP_1:42
-  (1_G) |^ n = 1_G;
+canceled 5;
 
 theorem :: GROUP_1:43
   h |^ 0 = 1_G;
@@ -237,37 +233,7 @@ theorem :: GROUP_1:46
 theorem :: GROUP_1:47
   h |^ 2 = 1_G iff h" = h;
 
-theorem :: GROUP_1:48
-  h |^ (n + m) = h |^ n * (h |^ m);
-
-theorem :: GROUP_1:49
-  h |^ (n + 1) = h |^ n * h & h |^ (n + 1) = h * (h |^ n);
-
-theorem :: GROUP_1:50
-  h |^ (n * m) = h |^ n |^ m;
-
-theorem :: GROUP_1:51
-  h" |^ n = (h |^ n)";
-
-theorem :: GROUP_1:52
-  g * h = h * g implies g * (h |^ n) = h |^ n * g;
-
-theorem :: GROUP_1:53
-  g * h = h * g implies g |^ n * (h |^ m) = h |^ m * (g |^ n);
-
-theorem :: GROUP_1:54
-  g * h = h * g implies (g * h) |^ n = g |^ n * (h |^ n);
-
-theorem :: GROUP_1:55
-  0 <= i implies h |^ i = h |^ abs(i);
-
-theorem :: GROUP_1:56
-  0 > i implies h |^ i = (h |^ abs(i))";
-
-canceled 2;
-
-theorem :: GROUP_1:59
-  h |^ 0 = 1_G;
+canceled 12;
 
 theorem :: GROUP_1:60
   i <= 0 implies h |^ i = (h |^ abs(i))";
@@ -276,34 +242,25 @@ theorem :: GROUP_1:61
   (1_G) |^ i = 1_G;
 
 theorem :: GROUP_1:62
-  h |^ (- 1) = h";
+  h |^ (-1) = h";
 
 theorem :: GROUP_1:63
-  h |^ (i + j) = h |^ i * (h |^ j);
+  h |^ (i + j) = (h |^ i) * (h |^ j);
 
-theorem :: GROUP_1:64
-  h |^ (n + j) = h |^ n * (h |^ j);
-
-theorem :: GROUP_1:65
-  h |^ (i + m) = h |^ i * (h |^ m);
+canceled 2;
 
 theorem :: GROUP_1:66
-  h |^ (j + 1) = h |^ j * h & h |^ (j + 1) = h * (h |^ j);
+  h |^ (i + 1) = h |^ i * h & h |^ (i + 1) = h * (h |^ i);
 
 theorem :: GROUP_1:67
   h |^ (i * j) = h |^ i |^ j;
 
-theorem :: GROUP_1:68
-  h |^ (n * j) = h |^ n |^ j;
-
-theorem :: GROUP_1:69
-  h |^ (i * m) = h |^ i |^ m;
+canceled 2;
 
 theorem :: GROUP_1:70
-  h |^ (- i) = (h |^ i)";
+  h |^ -i = (h |^ i)";
 
-theorem :: GROUP_1:71
-  h |^ (- n) = (h |^ n)";
+canceled;
 
 theorem :: GROUP_1:72
   h" |^ i = (h |^ i)";
@@ -314,10 +271,7 @@ theorem :: GROUP_1:73
 theorem :: GROUP_1:74
   g * h = h * g implies g |^ i * (h |^ j) = h |^ j * (g |^ i);
 
-theorem :: GROUP_1:75
-  g * h = h * g implies g |^ n * (h |^ j) = h |^ j * (g |^ n);
-
-canceled;
+canceled 2;
 
 theorem :: GROUP_1:77
   g * h = h * g implies g * (h |^ i) = h |^ i * g;
@@ -373,11 +327,11 @@ theorem :: GROUP_1:90
 
 definition
  canceled 2;
-  let IT be non empty multMagma;
+  let IT be multMagma;
   attr IT is commutative means
 :: GROUP_1:def 16
 
-  for x,y being Element of IT holds x*y = y*x;
+  for x, y being Element of IT holds x*y = y*x;
 end;
 
 registration
@@ -385,7 +339,7 @@ registration
 end;
 
 definition
-  let FS be commutative (non empty multMagma);
+  let FS be commutative non empty multMagma;
   let x,y be Element of FS;
   redefine func x*y;
   commutativity;
@@ -404,8 +358,7 @@ canceled;
 theorem :: GROUP_1:94
   (a * b)" = a" * b";
 
-theorem :: GROUP_1:95
-  (a * b) |^ n = a |^ n * (b |^ n);
+canceled;
 
 theorem :: GROUP_1:96
   (a * b) |^ i = a |^ i * (b |^ i);
@@ -419,26 +372,25 @@ begin :: Addenda
 :: from COMPTRIG, 2006.08.12, A.T.
 
 theorem :: GROUP_1:98
-  for L be unital (non empty multMagma) for x be Element of L holds
+  for L be unital non empty multMagma for x be Element of L holds
   (power L).(x,1) = x;
 
 theorem :: GROUP_1:99
-  for L be unital (non empty multMagma) for x be Element of L holds
+  for L be unital non empty multMagma for x be Element of L holds
   (power L).(x,2) = x*x;
 
 theorem :: GROUP_1:100
-  for L be associative commutative unital (non empty multMagma)
+  for L be associative commutative unital non empty multMagma
   for x,y be Element of L for n be Element of NAT holds
   (power L).(x*y,n) = (power L).(x,n) * (power L).(y,n);
 
 :: Moved from ENDALG, 17.01_2006, AK
 
 definition
-  let G,H be non empty multMagma;
+  let G,H be multMagma;
   let IT be Function of G,H;
   attr IT is unity-preserving means
 :: GROUP_1:def 17
-
   IT.1_G = 1_H;
 end;
 

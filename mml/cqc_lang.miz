@@ -13,14 +13,14 @@ environ
       FUNCT_2, BINOP_1, PARTFUN1, FUNCOP_1, FUNCT_4, FINSEQ_1, FINSEQ_2,
       QC_LANG1, QC_LANG2, QC_LANG3, XXREAL_0, NAT_1;
  constructors ENUMSET1, PARTFUN1, BINOP_1, FUNCOP_1, FUNCT_4, XXREAL_0,
-      MEMBERED, QC_LANG2, QC_LANG3, FINSEQ_2;
+      MEMBERED, QC_LANG2, QC_LANG3, FINSEQ_2, RELSET_1;
  registrations XBOOLE_0, RELSET_1, FUNCOP_1, FUNCT_4, MEMBERED, QC_LANG1,
-      XXREAL_0;
+      XXREAL_0, FINSEQ_2;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions TARSKI, FUNCOP_1, FINSEQ_2;
+ definitions TARSKI, FUNCOP_1, FINSEQ_2, RELAT_1;
  theorems TARSKI, ENUMSET1, ZFMISC_1, FUNCT_1, FUNCT_2, FINSEQ_1, PARTFUN1,
       FUNCOP_1, QC_LANG1, QC_LANG2, QC_LANG3, FINSEQ_2, RELSET_1, FINSEQ_3,
-      FUNCT_4, ORDINAL1;
+      FUNCT_4, ORDINAL1, RELAT_1;
  schemes FINSEQ_1, QC_LANG1, QC_LANG3;
 
 begin
@@ -152,8 +152,8 @@ definition
   let f;
   redefine func Subst(l,f) -> QC-variable_list of k;
   coherence
-  proof len Subst(l,f) = len l & len l = k by Def3,QC_LANG1:def 8;
-    hence thesis by QC_LANG1:def 8;
+  proof len Subst(l,f) = len l & len l = k by Def3,FINSEQ_1:def 18;
+    hence thesis by FINSEQ_1:def 18;
   end;
 end;
 
@@ -193,7 +193,7 @@ A2: l.k = a;
   assume l.k <> a;
   then not l.k in { a } by TARSKI:def 1;
   then not l.k in dom(f') by FUNCOP_1:19;
-  hence ll.k = l.k by A1,Def3;
+  hence thesis by A1,Def3;
 end;
 
 definition
@@ -240,21 +240,12 @@ proof
   hence thesis;
 end;
 
-definition
-  let k;
-  let IT be QC-variable_list of k;
-  attr IT is CQC-variable_list-like means
-  :Def5:
-  rng IT c= bound_QC-variables;
-end;
-
 registration
   let k;
-  cluster CQC-variable_list-like QC-variable_list of k;
+  cluster bound_QC-variables-valued QC-variable_list of k;
   existence
   proof
     set l = k |-> x.0;
-A1: len l = k by FINSEQ_2:69;
 B2: dom l = Seg k by FUNCOP_1:19;
     rng l c= QC-variables
     proof
@@ -265,10 +256,9 @@ A3:   x in dom l and
 A4:   l.x = y by FUNCT_1:def 5;
       reconsider x as Element of NAT by A3;
       y = x.0 by B2,A4,A3,FINSEQ_2:71;
-      hence y in QC-variables;
+      hence thesis;
     end;
-    then l is FinSequence of QC-variables by FINSEQ_1:def 4;
-    then reconsider l as QC-variable_list of k by A1,QC_LANG1:def 8;
+    then reconsider l as QC-variable_list of k by FINSEQ_1:def 4;
     take l;
     let x be set;
     assume x in rng l;
@@ -277,13 +267,14 @@ A5: i in dom l and
 A6: x = l.i by FUNCT_1:def 5;
     reconsider i as Element of NAT by A5;
     l.i = x.0 by B2,A5,FINSEQ_2:71;
-    hence x in bound_QC-variables by A6;
+    hence thesis by A6;
   end;
 end;
 
 definition
   let k;
-  mode CQC-variable_list of k is CQC-variable_list-like QC-variable_list of k;
+  mode CQC-variable_list of k
+   is bound_QC-variables-valued QC-variable_list of k;
 end;
 
 canceled;
@@ -308,7 +299,7 @@ A1:   FR <> {};
       then consider i such that x = l.i and
 A2:   1 <= i & i <= len l and
 A3:   l.i in free_QC-variables;
-A4:   rng l c= bound_QC-variables by Def5;
+A4:   rng l c= bound_QC-variables by RELAT_1:def 19;
       i in dom l by A2,FINSEQ_3:27;
       then l.i in rng l by FUNCT_1:def 5;
       hence contradiction by A3,A4,QC_LANG3:42;
@@ -322,17 +313,17 @@ A5:   FI <> {};
       then consider i such that x = l.i and
 A6:   1 <= i & i <= len l and
 A7:   l.i in fixed_QC-variables;
-A8:   rng l c= bound_QC-variables by Def5;
+A8:   rng l c= bound_QC-variables by RELAT_1:def 19;
       i in dom l by A6,FINSEQ_3:27;
       then l.i in rng l by FUNCT_1:def 5;
       hence contradiction by A7,A8,QC_LANG3:41;
     end;
-    hence FI = {};
+    hence thesis;
   end;
   assume that
 A9: FR = {} and
 A10: FI = {};
-  l is CQC-variable_list-like
+  l is bound_QC-variables-valued
   proof
     let x be set;
     assume x in rng l;
@@ -352,7 +343,7 @@ A15: now
       then x in FR by A12,A14;
       hence contradiction by A9;
     end;
-    hence x in bound_QC-variables by A12,A13,A15,Th7;
+    hence thesis by A12,A13,A15,Th7;
   end;
   hence thesis;
 end;
@@ -377,6 +368,7 @@ proof
 end;
 
 definition
+ canceled;
   let k;
   let P be QC-pred_symbol of k;
   let l be CQC-variable_list of k;
@@ -479,7 +471,7 @@ proof
     assume All(x,p) is Element of CQC-WFF;
     then Free All(x,p) = {} & Fixed All(x,p) = {} by Th13;
     then Free p = {} & Fixed p = {} by QC_LANG3:70,81;
-    hence p is Element of CQC-WFF by Th13;
+    hence thesis by Th13;
   end;
   assume p is Element of CQC-WFF;
   then Free p = {} & Fixed p = {} by Th13;
@@ -1174,7 +1166,7 @@ A5:     1 <= i & i <= len l and
 A6:     l.i in fixed_QC-variables;
         l.i <> a.0 by A6,QC_LANG3:40;
         then ll.i = l.i by A5,Th11;
-        hence y in F2 by A3,A4,A5,A6;
+        hence thesis by A3,A4,A5,A6;
       end;
       assume y in F2;
       then consider i such that

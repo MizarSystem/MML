@@ -4,10 +4,10 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="TARSKI"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -16,7 +16,7 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="7" value="false"/>
+<Adjective nr="10" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -31,7 +31,7 @@
 <Var nr="1"/>
 </Pred>
 </Fraenkel>
-<Func kind="K" nr="15">
+<Func kind="K" nr="35">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -53,12 +53,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="7" value="false"/>
+<Adjective nr="10" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="7" value="false"/>
+<Adjective nr="10" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -68,7 +68,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="4"/>
+<Adjective nr="6"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -104,7 +104,7 @@
 </Pred>
 </Fraenkel>
 </Pred>
-<Pred kind="R" nr="3">
+<Pred kind="R" nr="13">
 <Func kind="F" nr="2"/>
 <Func kind="K" nr="1">
 <Func kind="F" nr="4"/>

@@ -8,13 +8,14 @@ environ
 
  vocabularies BOOLE, REALSET1, FUNCT_1, RELAT_1, BINOP_1, RLVECT_1, QC_LANG1,
       VECTSP_1, REALSET2, FUNCT_4, CAT_1, FUNCT_7, GROUP_1, LATTICES, ORDINAL2,
-      ARYTM_1, VECTSP_2, ARYTM, ALGSTR_0;
+      ARYTM_1, VECTSP_2, ARYTM, ALGSTR_0, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
       NUMBERS, REALSET1, FUNCOP_1, FUNCT_2, BINOP_1, FUNCT_4, FUNCT_7,
       ORDINAL1, STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1;
- constructors RLVECT_1, BINOP_1, FUNCT_4, REALSET1, FUNCT_7, VECTSP_1;
+ constructors RLVECT_1, BINOP_1, FUNCT_4, REALSET1, FUNCT_7, VECTSP_1,
+      RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, REALSET1, STRUCT_0, RLVECT_1,
-      VECTSP_1, ORDINAL1, ALGSTR_0;
+      VECTSP_1, ORDINAL1, ALGSTR_0, ZFMISC_1;
  requirements SUBSET, BOOLE, NUMERALS;
  definitions RLVECT_1, TARSKI, REALSET1, BINOP_1, STRUCT_0, FUNCOP_1, VECTSP_1,
       GROUP_1, ALGSTR_0;
@@ -270,18 +271,18 @@ A2: b = x or b = y by Lm2,CARD_1:88,TARSKI:def 2;
 A3: d = x or d = y by Lm2,CARD_1:88,TARSKI:def 2;
   per cases by Lm2,CARD_1:88,TARSKI:def 2;
   suppose a = x;
-    hence add_2.(add_2.(a,b),d) = add_2.(a,add_2.(b,d))
+    hence thesis
     by A2,A3,Lm6,Lm7,Lm8,Lm9;
   end;
   suppose b = x;
-    hence add_2.(add_2.(a,b),d) = add_2.(a,add_2.(b,d)) by A1,A3,Lm6,Lm7,Lm8;
+    hence thesis by A1,A3,Lm6,Lm7,Lm8;
   end;
   suppose d = x;
-    hence add_2.(add_2.(a,b),d) = add_2.(a,add_2.(b,d))
+    hence thesis
     by A1,A2,Lm6,Lm7,Lm8,Lm9;
   end;
   suppose a = y & b = y & d = y;
-    hence add_2.(add_2.(a,b),d) = add_2.(a,add_2.(b,d)) by Lm7,Lm8,Lm9;
+    hence thesis by Lm7,Lm8,Lm9;
   end;
 end;
 reconsider dL=doubleLoopStr(#A,od0,om0,nm,nd#) as non empty doubleLoopStr;
@@ -349,7 +350,7 @@ A1: (a=x & b=x & d=x) or (a=x & b=x & d=y) or
   (a=y & b=x & d=x) or (a=y & b=x & d=y) or
   (a=y & b=y & d=x) or (a=y & b=y & d=y) by Lm2,CARD_1:88,TARSKI:def 2;
   hence a*(b+d) = a*b+a*d by Lm6,Lm7,Lm8,Lm9,Lm13,Lm14,Lm15,Lm16;
-  thus (b+d)*a = b*a+d*a by A1,Lm6,Lm7,Lm8,Lm9,Lm13,Lm14,Lm15,Lm16;
+  thus thesis by A1,Lm6,Lm7,Lm8,Lm9,Lm13,Lm14,Lm15,Lm16;
 end;
 
 definition
@@ -388,7 +389,7 @@ A1:   (a=x & b=x & d=x) or (a=x & b=x & d=y) or
       (a=y & b=x & d=x) or (a=y & b=x & d=y) or
       (a=y & b=y & d=x) or (a=y & b=y & d=y) by Lm2,CARD_1:88,TARSKI:def 2;
       hence a*(b+d) = a*b+a*d by Lm6,Lm7,Lm8,Lm9,Lm13,Lm14,Lm15,Lm16;
-      thus (b+d)*a = b*a+d*a by A1,Lm6,Lm7,Lm8,Lm9,Lm13,Lm14,Lm15,Lm16;
+      thus thesis by A1,Lm6,Lm7,Lm8,Lm9,Lm13,Lm14,Lm15,Lm16;
     end;
   end;
 end;
@@ -428,8 +429,8 @@ definition
   :Def11:
   the multF of L is DnT of 0.L,the carrier of L &
   (for B being non empty set, P being BinOp of B, e being Element of B holds
-  B = (the carrier of L)\{0.L} & e = 1.L &
-  P = (the multF of L)||((the carrier of L)\{0.L})
+  B = NonZero L & e = 1.L &
+  P = (the multF of L)||NonZero L
   implies addLoopStr(#B,P,e#) is AbGroup);
 end;
 
@@ -441,21 +442,19 @@ registration
 end;
 
 registration
-  cluster non trivial -> non empty doubleLoopStr;
-  coherence;
-end;
-
-registration
   cluster strict Field-like Abelian distributive add-associative
     right_zeroed right_complementable (non degenerated doubleLoopStr);
   existence
   proof
     set L = doubleLoopStr(#A,od0,om0,nm,nd#);
 A1: 0.L = nd;
-A2: 1.L = nm;
+ 1.L = nm;
 
 then reconsider L as non degenerated doubleLoopStr by A1,Lm2,STRUCT_0:def 8;
     take L;
+    thus L is strict;
+    thus the multF of L is DnT of 0.L,the carrier of L
+      by Lm24;
     L is right_complementable
     proof
       let a be Element of L;
@@ -463,7 +462,7 @@ then reconsider L as non degenerated doubleLoopStr by A1,Lm2,STRUCT_0:def 8;
       a=x or a=y by Lm2,CARD_1:88,TARSKI:def 2;
       hence thesis by Lm6,Lm9;
     end;
-    hence thesis by A2,Def11,Lm21,Lm22,Lm23,Lm24,Lm25,RLVECT_1:def 5,def 6
+    hence thesis by Lm21,Lm22,Lm23,Lm24,Lm25,RLVECT_1:def 5,def 6
 ,def 7,VECTSP_1:def 18;
   end;
 end;
@@ -479,7 +478,7 @@ registration
 A1: L is add-associative right_zeroed right_complementable
     Abelian commutative associative well-unital distributive
     almost_left_invertible;
-    set B = (the carrier of L)\{0.L};
+    set B = NonZero L;
 A3: for y being set st y in [:B,B:] holds (the multF of L).y in B
     proof
       let z be set;
@@ -492,15 +491,15 @@ A5:   z = [x,y] by ZFMISC_1:103;
       then x <> 0.L & y <> 0.L by TARSKI:def 1;
       then x*y <> 0.L by A1,VECTSP_1:44;
       then not x*y in {0.L} by TARSKI:def 1;
-      hence (the multF of L).z in B by A5,XBOOLE_0:def 5;
+      hence thesis by A5,XBOOLE_0:def 5;
     end;
     hence the multF of L is DnT of 0.L,the carrier of L by REALSET1:def 8;
     reconsider om = the multF of L as DnT of 0.L,the carrier of L by A3,
 REALSET1:def 8;
     let B be non empty set, P be BinOp of B, e be Element of B such that
-A6: B = (the carrier of L)\{0.L} and
+A6: B = NonZero L and
 A7: e = 1.L and
-A8: P = (the multF of L)||((the carrier of L)\{0.L});
+A8: P = (the multF of L)||NonZero L;
     set K = addLoopStr(#B,P,e#);
 A9: K is Abelian
     proof
@@ -552,19 +551,12 @@ A19:  a*b = 1.L by A1,A18,GROUP_1:def 16;
       then reconsider w=b as Element of K by A6,XBOOLE_0:def 5;
       take w;
       [v,w] in [:B,B:];
-      hence v + w = 0.K by A6,A7,A8,A19,FUNCT_1:72;
+      hence thesis by A6,A7,A8,A19,FUNCT_1:72;
     end;
-    hence addLoopStr(#B,P,e#) is AbGroup by A9,A12,A17;
+    hence thesis by A9,A12,A17;
   end;
 end;
 
-Lm26: for F being non degenerated doubleLoopStr holds
-1.F is Element of (the carrier of F)\{0.F}
-proof
-  let F be non degenerated doubleLoopStr;
-  not 1.F in {0.F} by TARSKI:def 1;
-  hence 1.F is Element of (the carrier of F)\{0.F} by XBOOLE_0:def 5;
-end;
 deffunc suppf1(Field-like Abelian distributive add-associative
 right_zeroed right_complementable (non degenerated doubleLoopStr))
 = the carrier of $1;
@@ -615,7 +607,7 @@ A3: L is right_zeroed
 A4: a + b = 0.F by ALGSTR_0:def 11;
     reconsider w=b as Element of L;
     take w;
-    thus v + w = 0.L by A4;
+    thus thesis by A4;
   end;
   hence thesis by A1,A2,A3;
 end;
@@ -635,21 +627,22 @@ proof
 A1: a+b = 0.F by ALGSTR_0:def 11;
   take b;
   thus a+b = 0.F by A1;
-  thus b+a = 0.F by A1;
+  thus thesis by A1;
 end;
 
 theorem Th8:
   for F being Field-like Abelian distributive add-associative
   right_zeroed right_complementable (non degenerated doubleLoopStr),
-  a,b,c being Element of (the carrier of F)\{0.F} holds (a*b)*c = a*(b*c)
+  a,b,c being Element of NonZero F holds (a*b)*c = a*(b*c)
 proof
   let F be Field-like Abelian distributive add-associative
   right_zeroed right_complementable (non degenerated doubleLoopStr),
-  a,b,c be Element of suppf1(F)\{0.F};
+  a,b,c be Element of NonZero F;
   set B = suppf1(F)\{0.F};
   set P = omf(F)!(suppf1(F),0.F);
-  reconsider e = 1.F as Element of B by Lm26;
-  reconsider D = addLoopStr(#B,P,e#) as strict AbGroup by Def11;
+X: B = NonZero F;
+  then reconsider e = 1.F as Element of B by STRUCT_0:2;
+  reconsider D = addLoopStr(#B,P,e#) as strict AbGroup by Def11,X;
   reconsider a,b,c as Element of D;
 A1: omf(F)||(suppf1(F)\{0.F})
   is Function of [:suppf1(F)\{0.F},suppf1(F)\{0.F}:],
@@ -698,15 +691,16 @@ end;
 theorem Th9:
   for F being Field-like Abelian distributive add-associative
   right_zeroed right_complementable (non degenerated doubleLoopStr),
-  a,b being Element of (the carrier of F)\{0.F} holds a*b = b*a
+  a,b being Element of NonZero F holds a*b = b*a
 proof
   let F be Field-like Abelian distributive add-associative
   right_zeroed right_complementable (non degenerated doubleLoopStr),
-  a,b be Element of suppf1(F)\{0.F};
+  a,b be Element of NonZero F;
   set B = suppf1(F)\{0.F};
   set P = omf(F)!(suppf1(F),0.F);
-  reconsider e = 1.F as Element of B by Lm26;
-  reconsider D = addLoopStr(#B,P,e#) as strict AbGroup by Def11;
+X: B = NonZero F;
+  then reconsider e = 1.F as Element of B by STRUCT_0:2;
+  reconsider D = addLoopStr(#B,P,e#) as strict AbGroup by Def11,X;
   reconsider a,b as Element of D;
   omf(F)||(suppf1(F)\{0.F})
   is Function of [:suppf1(F)\{0.F},suppf1(F)\{0.F}:],
@@ -731,15 +725,16 @@ end;
 theorem Th10:
   for F being Field-like Abelian distributive add-associative
   right_zeroed right_complementable (non degenerated doubleLoopStr),
-  a being Element of (the carrier of F)\{0.F} holds a*1.F = a & 1.F*a = a
+  a being Element of NonZero F holds a*1.F = a & 1.F*a = a
 proof
   let F be Field-like Abelian distributive add-associative
   right_zeroed right_complementable (non degenerated doubleLoopStr),
-  a be Element of suppf1(F)\{0.F};
+  a be Element of NonZero F;
   set B = suppf1(F)\{0.F};
   set P = omf(F)!(suppf1(F),0.F);
-  reconsider e = 1.F as Element of B by Lm26;
-  reconsider D = addLoopStr(#B,P,e#) as strict AbGroup by Def11;
+X: B = NonZero F;
+  then reconsider e = 1.F as Element of B by STRUCT_0:2;
+  reconsider D = addLoopStr(#B,P,e#) as strict AbGroup by Def11,X;
   reconsider a as Element of D;
   omf(F)||(suppf1(F)\{0.F})
   is Function of [:suppf1(F)\{0.F},suppf1(F)\{0.F}:],
@@ -765,16 +760,17 @@ end;
 theorem Th11:
   for F being Field-like Abelian distributive add-associative
   right_zeroed right_complementable (non degenerated doubleLoopStr),
-  a being Element of (the carrier of F)\{0.F}
-  ex b being Element of (the carrier of F)\{0.F} st a*b = 1.F & b*a = 1.F
+  a being Element of NonZero F
+  ex b being Element of NonZero F st a*b = 1.F & b*a = 1.F
 proof
   let F be Field-like Abelian distributive add-associative
   right_zeroed right_complementable (non degenerated doubleLoopStr),
-  a be Element of suppf1(F)\{0.F};
+  a be Element of NonZero F;
   set B = suppf1(F)\{0.F};
   set P = omf(F)!(suppf1(F),0.F);
-  reconsider e = 1.F as Element of B by Lm26;
-  addLoopStr(#B,P,e#) is AbGroup by Def11;
+X: B = NonZero F;
+  then reconsider e = 1.F as Element of B by STRUCT_0:2;
+  addLoopStr(#B,P,e#) is AbGroup by Def11,X;
   then consider D being strict AbGroup such that
 A1: D = addLoopStr(#B,P,e#);
   reconsider a as Element of D by A1;
@@ -793,7 +789,7 @@ A4: for x,y being Element of suppf1(F)\{0.F} holds
     [x,y] in [:suppf1(F)\{0.F},suppf1(F)\{0.F}:];
     hence thesis by A1,A3,FUNCT_1:70;
   end;
-  reconsider b as Element of suppf1(F)\{0.F} by A1;
+  reconsider b as Element of NonZero F by A1;
   take b;
   thus thesis by A1,A2,A4;
 end;
@@ -859,9 +855,9 @@ proof
   let F be Field-like Abelian distributive add-associative
   right_zeroed right_complementable (non degenerated doubleLoopStr),
   a,b,c be Element of suppf1(F);
-A1: a = 0.F or b = 0.F or c = 0.F or (a is Element of suppf1(F)\{0.F} &
-  b is Element of suppf1(F)\{0.F} &
-  c is Element of suppf1(F)\{0.F}) by ZFMISC_1:64;
+A1: a = 0.F or b = 0.F or c = 0.F or (a is Element of NonZero F &
+  b is Element of NonZero F &
+  c is Element of NonZero F) by ZFMISC_1:64;
 A2: a = 0.F implies (a*b)*c = a*(b*c)
   proof
     assume
@@ -898,8 +894,8 @@ proof
   let F be Field-like Abelian distributive add-associative
   right_zeroed right_complementable (non degenerated doubleLoopStr),
   a,b be Element of suppf1(F);
-A1: a = 0.F or b = 0.F or (a is Element of suppf1(F)\{0.F} &
-  b is Element of suppf1(F)\{0.F}) by ZFMISC_1:64;
+A1: a = 0.F or b = 0.F or (a is Element of NonZero F &
+  b is Element of NonZero F) by ZFMISC_1:64;
 A2: a = 0.F implies a*b = b*a
   proof
     assume
@@ -931,9 +927,9 @@ proof
   suppose
 A1: a = 0.F;
     hence a*1.F = a by VECTSP_1:39;
-    thus 1.F*a = a by A1,VECTSP_1:36;
+    thus thesis by A1,VECTSP_1:36;
   end;
-  suppose a is Element of suppf1(F)\{0.F};
+  suppose a is Element of NonZero F;
     hence thesis by Th10;
   end;
 end;
@@ -941,9 +937,9 @@ end;
 definition
   let F be Field;
   canceled 2;
-  func revf(F) -> UnOp of (the carrier of F)\{0.F} means
+  func revf(F) -> UnOp of NonZero F means
   :Def18:
-  for x being Element of (the carrier of F)\{0.F} holds omf(F).(x,it.x) = 1.F;
+  for x being Element of NonZero F holds omf(F).(x,it.x) = 1.F;
   existence
   proof
     defpred Z[set,set] means omf(F).($1,$2) = 1.F;
@@ -952,7 +948,7 @@ A1: for x being set st x in suppf1(F)\{0.F} ex y being set st
     proof
       let x be set;
       assume x in suppf1(F)\{0.F};
-      then reconsider x as Element of suppf1(F)\{0.F};
+      then reconsider x as Element of NonZero F;
       consider y being Element of suppf1(F)\{0.F} such that
 A2:   x*y = 1.F & y*x = 1.F by Th11;
       reconsider y as set;
@@ -962,7 +958,7 @@ A2:   x*y = 1.F & y*x = 1.F by Th11;
     ex C being Function of suppf1(F)\{0.F},suppf1(F)\{0.F} st
     for x being set st x in suppf1(F)\{0.F} holds Z[x,C.x] from FUNCT_2:sch 1
     (A1);
-    then consider C being Function of suppf1(F)\{0.F},suppf1(F)\{0.F}
+    then consider C being UnOp of NonZero F
     such that
 A3: for x being set st x in suppf1(F)\{0.F} holds omf(F).(x,C.x) = 1.F;
     take C;
@@ -970,18 +966,18 @@ A3: for x being set st x in suppf1(F)\{0.F} holds omf(F).(x,C.x) = 1.F;
   end;
   uniqueness
   proof
-    let C1,C2 be Function of suppf1(F)\{0.F},suppf1(F)\{0.F} such that
-A4: for x being Element of suppf1(F)\{0.F} holds omf(F).(x,C1.x) = 1.F and
-A5: for x being Element of suppf1(F)\{0.F} holds omf(F).(x,C2.x) = 1.F;
+    let C1,C2 be UnOp of NonZero F such that
+A4: for x being Element of NonZero F holds omf(F).(x,C1.x) = 1.F and
+A5: for x being Element of NonZero F holds omf(F).(x,C2.x) = 1.F;
     for x being set st x in suppf1(F)\{0.F} holds C1.x = C2.x
     proof
       let x be set;
       assume
 A6:   x in suppf1(F)\{0.F};
       then
-A7:   C1.x is Element of suppf1(F)\{0.F} by FUNCT_2:7;
+A7:   C1.x is Element of NonZero F by FUNCT_2:7;
       then reconsider a=x, C1a = C1.x as Element of F by A6;
-A8:   C2.x is Element of suppf1(F)\{0.F} by A6,FUNCT_2:7;
+A8:   C2.x is Element of NonZero F by A6,FUNCT_2:7;
       then reconsider C2a = C2.x as Element of F;
       C1.x = (C1a)*1.F by A7,Th10
         .= C1a*(a*C2a) by A5,A6
@@ -995,10 +991,10 @@ A8:   C2.x is Element of suppf1(F)\{0.F} by A6,FUNCT_2:7;
 end;
 
 theorem
-  for F being Field, x,y being Element of (the carrier of F)\{0.F} holds
+  for F being Field, x,y being Element of NonZero F holds
   x*y = 1.F implies y = revf(F).x
 proof
-  let F be Field, x,y be Element of suppf1(F)\{0.F};
+  let F be Field, x,y be Element of NonZero F;
   assume
 A1: x*y = 1.F;
   reconsider rx = revf(F).x as Element of F by XBOOLE_0:def 5;
@@ -1011,10 +1007,10 @@ A1: x*y = 1.F;
 end;
 
 theorem
-  for F being Field, x being Element of (the carrier of F)\{0.F} holds
+  for F being Field, x being Element of NonZero F holds
   x =revf(F).(revf(F).x)
 proof
-  let F be Field, x be Element of suppf1(F)\{0.F};
+  let F be Field, x be Element of NonZero F;
   reconsider rx = revf(F).x as Element of F by XBOOLE_0:def 5;
   reconsider rrx = revf(F).(revf(F).x) as Element of F by XBOOLE_0:def 5;
   x =x*1.F by Th10
@@ -1028,12 +1024,12 @@ proof
 end;
 
 theorem
-  for F being Field, a,b being Element of (the carrier of F)\{0.F} holds
-  omf(F).(a,b) is Element of (the carrier of F)\{0.F} &
-  revf(F).a is Element of (the carrier of F)\{0.F}
+  for F being Field, a,b being Element of NonZero F holds
+  omf(F).(a,b) is Element of NonZero F &
+  revf(F).a is Element of NonZero F
 proof
-  let F be Field, a,b be Element of suppf1(F)\{0.F};
-  [a,b] in [:suppf1(F)\{0.F},suppf1(F)\{0.F}:];
+  let F be Field, a,b be Element of NonZero F;
+  [a,b] in [:NonZero F,NonZero F:];
   hence thesis by REALSET1:def 8;
 end;
 
@@ -1042,10 +1038,10 @@ theorem
   a+b = a+c implies b = c by RLVECT_1:21;
 
 theorem
-  for F being Field, a being Element of (the carrier of F)\{0.F},
+  for F being Field, a being Element of NonZero F,
   b,c being Element of (the carrier of F)holds a*b = a*c implies b = c
 proof
-  let F be Field, a be Element of suppf1(F)\{0.F},
+  let F be Field, a be Element of NonZero F,
   b,c be Element of suppf1(F);
   reconsider x=a as Element of F;
   assume
@@ -1087,15 +1083,10 @@ A1: L is Field-like Abelian distributive add-associative
     let x being Element of L;
     assume x <> 0.L;
     then not x in {0.L} by TARSKI:def 1;
-    then reconsider x as Element of (the carrier of L)\{0.L} by XBOOLE_0:def 5;
-    consider y being Element of (the carrier of L)\{0.L} such that
+    then reconsider x as Element of NonZero L by XBOOLE_0:def 5;
+    consider y being Element of NonZero L such that
 A2: x*y = 1.L & y*x = 1.L by A1,Th11;
     take y;
     thus thesis by A2;
   end;
 end;
-
-theorem
-  for F being non degenerated doubleLoopStr holds
-  1.F is Element of (the carrier of F)\{0.F} by Lm26;
-

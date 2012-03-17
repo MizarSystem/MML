@@ -9,7 +9,6 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDINAL1"/>
@@ -24,13 +23,13 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="29" value="false"/>
+<Adjective nr="33" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="61"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="65"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -45,8 +44,8 @@
 <For>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="61"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="65"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -78,7 +77,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="71">
+<Func kind="K" nr="61">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>

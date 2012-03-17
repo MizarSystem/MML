@@ -13,14 +13,15 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, SETFAM_1,
       BINOP_1, CARD_3, MBOOLEAN, PBOOLE, STRUCT_0, LATTICES, MSUALG_1,
       ORDERS_2, MSUALG_2, OSALG_1;
- constructors SETFAM_1, CARD_3, MBOOLEAN, MSUALG_2, ORDERS_3, OSALG_1;
+ constructors SETFAM_1, CARD_3, MBOOLEAN, MSUALG_2, ORDERS_3, OSALG_1,
+      RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, LATTICES, MSUALG_1,
-      MSUALG_2, MSAFREE, ORDERS_3, OSALG_1;
+      MSUALG_2, MSAFREE, ORDERS_3, OSALG_1, FUNCT_1, RELAT_1, PBOOLE, FINSEQ_1;
  requirements BOOLE, SUBSET;
  definitions TARSKI, PBOOLE, LATTICES, OSALG_1, MSUALG_2;
- theorems TARSKI, XBOOLE_0, XBOOLE_1, FUNCT_1, RELSET_1, PBOOLE, CARD_3,
-      MSUALG_1, FUNCT_2, ZFMISC_1, SETFAM_1, BINOP_1, LATTICES, RELAT_1,
-      OSALG_1, ORDERS_2, MSUALG_2, MBOOLEAN;
+ theorems TARSKI, XBOOLE_0, XBOOLE_1, FUNCT_1, PBOOLE, CARD_3, MSUALG_1,
+      FUNCT_2, ZFMISC_1, SETFAM_1, BINOP_1, LATTICES, RELAT_1, OSALG_1,
+      ORDERS_2, MSUALG_2, MBOOLEAN, PARTFUN1;
  schemes XBOOLE_0, BINOP_1, FUNCT_1;
 
 begin :: Auxiliary facts about Order Sorted Sets.
@@ -107,7 +108,7 @@ definition
   proof
     reconsider B = the Sorts of U0 as MSSubset of U0 by PBOOLE:def 23;
     take B;
-    thus B is OrderSortedSet of S by OSALG_1:17;
+    thus thesis by OSALG_1:17;
   end;
 end;
 
@@ -151,7 +152,7 @@ A1: (the Arity of S0).o = {} & (the ResultSort of S0).o = s1
   o is Element of the carrier' of OSSign S0 &
   (the Arity of OSSign S0).o = {} &
   (the ResultSort of OSSign S0).o = s1 by A1,OSALG_1:def 6;
-  hence s is with_const_op by MSUALG_2:def 2;
+  hence thesis by MSUALG_2:def 2;
 end;
 
 registration
@@ -177,7 +178,7 @@ proof
   let S be OrderSortedSign, U0 be OSAlgebra of S;
   set U1 = MSAlgebra (#the Sorts of U0,the Charact of U0#);
   the Sorts of U0 is OrderSortedSet of S by OSALG_1:17;
-  hence U1 is order-sorted by OSALG_1:17;
+  hence thesis by OSALG_1:17;
 end;
 
 registration
@@ -315,7 +316,8 @@ definition
     consider f be Function such that
 A1: dom f = the carrier of S1 &
     for d be Element of S1 holds f.d = F(d) from FUNCT_1:sch 4;
-    reconsider f as ManySortedSet of the carrier of S1 by A1,PBOOLE:def 3;
+    reconsider f as ManySortedSet of the carrier of S1 by A1,PARTFUN1:def 4
+,RELAT_1:def 18;
     reconsider f1=f as ManySortedSet of S1;
     f1 is order-sorted
     proof
@@ -332,7 +334,7 @@ A5:   y = M.s3 & s3 <= r1 by A4;
       s3 <= r2 by A2,A5,ORDERS_2:26;
       then y in {M.s2: s2 <= r2} by A5;
       then x in union {M.s2: s2 <= r2} by A4,TARSKI:def 4;
-      hence x in f1.r2 by A1;
+      hence thesis by A1;
     end;
     then reconsider f2 = f1 as OrderSortedSet of S1;
     take f2;
@@ -420,7 +422,8 @@ definition
     consider f be Function such that
 A1: dom f = the carrier of S1 & for d be Element of S1 holds
     f.d = F(d) from FUNCT_1:sch 4;
-    reconsider f as ManySortedSet of the carrier of S1 by A1,PBOOLE:def 3;
+    reconsider f as ManySortedSet of the carrier of S1 by A1,PARTFUN1:def 4
+,RELAT_1:def 18;
     f c= the Sorts of OU0
     proof
       let s be set;
@@ -447,10 +450,10 @@ A5:   y = Constants(OU0,s3) & s3 <= r1 by A4;
       s3 <= r2 by A2,A5,ORDERS_2:26;
       then y in {Constants(OU0,s2): s2 <= r2} by A5;
       then x in union {Constants(OU0,s2): s2 <= r2} by A4,TARSKI:def 4;
-      hence x in f1.r2 by A1;
+      hence thesis by A1;
     end;
     hence f is OSSubset of OU0 by Def2;
-    thus for s being SortSymbol of S1 holds f.s = OSConstants(OU0,s) by A1;
+    thus thesis by A1;
   end;
   uniqueness
   proof
@@ -537,7 +540,7 @@ A1:     x = (Constants(OU0)).s1 & s1 <= s;
       then consider s1 such that
 A2:   x = Constants(OU0,s1) & s1 <= s;
       x = (Constants(OU0)).s1 & s1 <= s by A2,MSUALG_2:def 5;
-      hence x in c1;
+      hence thesis;
     end;
     then
 A3: c1 = c2 by TARSKI:2;
@@ -576,7 +579,7 @@ A4:   for s2,s3 st s2 <= s3 holds (Constants(OU0)).s2 c= (the Sorts of OU1).s3
         then
 A5:     (the Sorts of OU1).s2 c= (the Sorts of OU1).s3 by OSALG_1:def 19;
         (Constants(OU0)).s2 c= (the Sorts of OU1).s2 by A3,PBOOLE:def 5;
-        hence (Constants(OU0)).s2 c= (the Sorts of OU1).s3 by A5,XBOOLE_1:1;
+        hence thesis by A5,XBOOLE_1:1;
       end;
 A6:   for X being set st X in {Constants(OU0,s1): s1 <= s} holds
       X c= (the Sorts of OU1).s
@@ -590,7 +593,7 @@ A7:     X = Constants(OU0,s4) & s4 <= s;
       end;
       (OSConstants(OU0)).i = OSConstants(OU0,s) by Def5
         .= union {Constants(OU0,s1): s1 <= s};
-      hence (OSConstants(OU0)).i c= (the Sorts of OU1).i by A6,ZFMISC_1:94;
+      hence thesis by A6,ZFMISC_1:94;
     end;
     hence thesis by PBOOLE:def 23;
   end;
@@ -624,12 +627,12 @@ proof
   let I be set;
   let M be ManySortedSet of I;
   let x be set;
-A1: I = dom bool M by PBOOLE:def 3;
+A1: I = dom bool M by PARTFUN1:def 4;
   hereby
     assume x is ManySortedSubset of M;
     then reconsider x1 = x as ManySortedSubset of M;
-A2: dom x1 = I by PBOOLE:def 3
-      .= dom bool M by PBOOLE:def 3;
+A2: dom x1 = I by PARTFUN1:def 4
+      .= dom bool M by PARTFUN1:def 4;
     for i being set st i in dom bool M holds x1.i in (bool M).i
     proof
       let i be set such that
@@ -637,7 +640,7 @@ A3:   i in dom bool M;
       x1 c= M by PBOOLE:def 23;
       then x1.i c= M.i by A1,A3,PBOOLE:def 5;
       then x1.i in bool (M.i);
-      hence x1.i in (bool M).i by A1,A3,MBOOLEAN:def 1;
+      hence thesis by A1,A3,MBOOLEAN:def 1;
     end;
     hence x in product bool M by A2,CARD_3:def 5;
   end;
@@ -645,14 +648,16 @@ A3:   i in dom bool M;
   then consider x1 being Function such that
 A4: x = x1 & dom x1 = dom bool M &
   for i being set st i in dom bool M holds x1.i in (bool M).i by CARD_3:def 5;
-  reconsider x2 = x1 as ManySortedSet of I by A4,PBOOLE:def 3;
+  dom x1 = I by A4,PARTFUN1:def 4;
+  then reconsider x2 = x1 as ManySortedSet of I
+  by PARTFUN1:def 4,RELAT_1:def 18;
   x2 c= M
   proof
     let i be set such that
 A5: i in I;
     x2.i in (bool M).i by A1,A4,A5;
     then x2.i in bool (M.i) by A5,MBOOLEAN:def 1;
-    hence x2.i c= M.i;
+    hence thesis;
   end;
   hence thesis by A4,PBOOLE:def 23;
 end;
@@ -814,7 +819,7 @@ A3: B1 = B & B1 is OrderSortedSet of S1;
     thus thesis by A3,MSUALG_2:15;
   end;
   assume B is opers_closed;
-  hence B in OSSubSort(OU0) by A1,A2;
+  hence thesis by A1,A2;
 end;
 
 :: slices of members of OSsubsort
@@ -843,7 +848,7 @@ A3: for x be set holds
       given B be OSSubset of OU0 such that
 A4:   B in OSSubSort(A) & x = B.s;
       dom (the Sorts of OU0) = the carrier of S1 &
-      dom B = the carrier of S1 by PBOOLE:def 3;
+      dom B = the carrier of S1 by PARTFUN1:def 4;
       then (the Sorts of OU0).s in rng (the Sorts of OU0) by FUNCT_1:def 5;
       then
 A5:   (the Sorts of OU0).s c= union( rng (the Sorts of OU0)) by ZFMISC_1:92;
@@ -930,7 +935,8 @@ definition
     consider f be Function such that
 A1: dom f = the carrier of S1 & for s be Element of S1
     holds f.s = F(s) from FUNCT_1:sch 4;
-    reconsider f as ManySortedSet of (the carrier of S1) by A1,PBOOLE:def 3;
+    reconsider f as ManySortedSet of (the carrier of S1) by A1,PARTFUN1:def 4
+,RELAT_1:def 18;
     f c= the Sorts of OU0
     proof
       let x be set;
@@ -955,7 +961,7 @@ A3:   u0 is OSSubset of OU0 by Def2;
 A4:   s1 <= s2;
 A5:   meet OSSubSort(A,s1) c= meet OSSubSort(A,s2) by A4,Th26,SETFAM_1:19;
       f1.s1 = meet OSSubSort(A,s1) by A1;
-      hence f1.s1 c= f1.s2 by A1,A5;
+      hence thesis by A1,A5;
     end;
     then f is OrderSortedSet of S1 by OSALG_1:def 18;
     hence thesis by A1,Def2;
@@ -1026,7 +1032,7 @@ A1: OSConstants(OU0) \/ A is non-empty;
     let i be set;
     assume i in the carrier of S1;
     then reconsider s = i as SortSymbol of S1;
-A2: (OSConstants(OU0) \/ A).s is non empty by A1,PBOOLE:def 16;
+A2: (OSConstants(OU0) \/ A).s is non empty by A1;
     for Z be set st Z in OSSubSort(A,s) holds (OSConstants(OU0) \/ A).s c= Z
     proof
       let Z be set;
@@ -1102,7 +1108,8 @@ A2: not x in ((OSMSubSort A) * (the ResultSort of S1)).o;
   set r = the_result_sort_of o;
 A3: r = (the ResultSort of S1).o by MSUALG_1:def 7;
 A4: dom (the ResultSort of S1) = the carrier' of S1 &
-  rng (the ResultSort of S1) c= the carrier of S1 by FUNCT_2:def 1,RELSET_1:12;
+  rng (the ResultSort of S1) c= the carrier of S1 by FUNCT_2:def 1
+,RELAT_1:def 19;
   then ((OSMSubSort A) * (the ResultSort of S1)).o = (OSMSubSort A).r
   by A3,FUNCT_1:23
     .= meet OSSubSort(A,r) by Def11;
@@ -1167,7 +1174,7 @@ registration
     M2 = (the Sorts of OU2) as OrderSortedSet of S1 by OSALG_1:17;
     M1 /\ M2 is OrderSortedSet of S1 by Th1;
     then the Sorts of (OU1 /\ OU2) is OrderSortedSet of S1 by MSUALG_2:def 17;
-    hence OU1 /\ OU2 is order-sorted by OSALG_1:17;
+    hence thesis by OSALG_1:17;
   end;
 end;
 
@@ -1214,7 +1221,7 @@ A7:   (the Sorts of u1).s = meet OSSubSort(A,s) by A3,Def11;
       B.s in OSSubSort(A,s) by A6,Def10;
       hence thesis by A7,SETFAM_1:4;
     end;
-    hence u1 is OSSubAlgebra of U2 by MSUALG_2:9;
+    hence thesis by MSUALG_2:9;
   end;
   uniqueness
   proof
@@ -1270,7 +1277,7 @@ A8:   (the Sorts of u1).s = meet OSSubSort(A,s) by A3,Def11;
       B.s in OSSubSort(A,s) by A7,Def10;
       hence thesis by A8,SETFAM_1:4;
     end;
-    hence u1 is OSSubAlgebra of U2 by MSUALG_2:9;
+    hence thesis by MSUALG_2:9;
   end;
   hence GenOSAlg(A) = OU0|a by Def13;
   thus thesis by A3,A4,Def13;
@@ -1314,7 +1321,7 @@ A7:   (the Sorts of u1).s = meet SubSort(A,s) by A2,MSUALG_2:def 15;
       B.s in SubSort(A,s) by A6,MSUALG_2:def 14;
       hence thesis by A7,SETFAM_1:4;
     end;
-    hence u1 is MSSubAlgebra of U2 by MSUALG_2:9;
+    hence thesis by MSUALG_2:9;
   end;
   hence GenMSAlg(A) = U0|a by MSUALG_2:def 18;
   thus thesis by A2,A3,MSUALG_2:def 18;
@@ -1333,7 +1340,7 @@ A1: the Sorts of GM = MSSubSort(A) &
   then reconsider s = i as SortSymbol of S1;
 A2: (the Sorts of GO).s = meet OSSubSort(A,s) by A1,Def11;
   (the Sorts of GM).s = meet SubSort(A,s) by A1,MSUALG_2:def 15;
-  hence (the Sorts of GM).i c= (the Sorts of GO).i by A2,Th27,SETFAM_1:7;
+  hence thesis by A2,Th27,SETFAM_1:7;
 end;
 
 theorem
@@ -1615,7 +1622,7 @@ A1:   x = GenOSAlg(@A);
     A is opers_closed by Th5;
     then reconsider h = A as Element of OSSubSort(OU0) by Th25;
     a = GenOSAlg(@h) by Th40;
-    hence x in X;
+    hence thesis;
   end;
   uniqueness
   proof
@@ -1893,13 +1900,13 @@ A1: for a,b being Element of L holds (a "\/" b) = (b "\/" a)
     proof
       let a,b be Element of L;
       OSAlg_join(U0) is commutative by Th49;
-      hence a"\/" b =b"\/" a by BINOP_1:def 2;
+      hence thesis by BINOP_1:def 2;
     end;
 A2: for a,b,c being Element of L holds a"\/" (b"\/" c) = (a"\/" b)"\/" c
     proof
       let a,b,c be Element of L;
       OSAlg_join(U0) is associative by Th50;
-      hence a"\/" (b"\/" c) =(a"\/" b)"\/" c by BINOP_1:def 3;
+      hence thesis by BINOP_1:def 3;
     end;
 A3: for a,b being Element of L holds (a"/\"b)"\/" b = b
     proof
@@ -1913,19 +1920,19 @@ A3: for a,b being Element of L holds (a"/\"b)"\/" b = b
         = ((U1 /\ U2)"\/"_os U2) by Def16
           .=y by Th46;
       end;
-      hence (a"/\"b)"\/" b = b;
+      hence thesis;
     end;
 A4: for a,b being Element of L holds a"/\"b = b"/\"a
     proof
       let a,b be Element of L;
       OSAlg_meet(U0) is commutative by Th51;
-      hence a"/\"b =b"/\"a by BINOP_1:def 2;
+      hence thesis by BINOP_1:def 2;
     end;
 A5: for a,b,c being Element of L holds a"/\"(b"/\"c) = (a"/\"b)"/\"c
     proof
       let a,b,c be Element of L;
       OSAlg_meet(U0) is associative by Th52;
-      hence a"/\"(b"/\"c) =(a"/\"b)"/\"c by BINOP_1:def 3;
+      hence thesis by BINOP_1:def 3;
     end;
     for a,b being Element of L holds a"/\"(a"\/" b)=a
     proof
@@ -1939,12 +1946,12 @@ A5: for a,b,c being Element of L holds a"/\"(b"/\"c) = (a"/\"b)"/\"c
         = (U1 /\( U1"\/"_os U2)) by Def17
           .=x by Th45;
       end;
-      hence a"/\"(a"\/" b) = a;
+      hence thesis;
     end;
     then L is strict join-commutative join-associative meet-absorbing
     meet-commutative meet-associative join-absorbing
     by A1,A2,A3,A4,A5,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
-    hence L is strict Lattice;
+    hence thesis;
   end;
 end;
 

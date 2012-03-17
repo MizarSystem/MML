@@ -9,7 +9,6 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
@@ -34,7 +33,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="127">
+<Func kind="K" nr="119">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -48,16 +47,16 @@
 </For>
 <Pred kind="P" nr="1">
 <Func kind="G" nr="6">
-<Func kind="K" nr="24"/>
-<Func kind="K" nr="33">
-<Func kind="K" nr="126">
-<Func kind="K" nr="24"/>
+<Func kind="K" nr="25"/>
+<Func kind="K" nr="34">
+<Func kind="K" nr="118">
+<Func kind="K" nr="25"/>
 </Func>
 </Func>
 </Func>
 </Pred>
 <For>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="10">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -69,7 +68,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="127">
+<Func kind="K" nr="119">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -91,7 +90,7 @@
 <Not>
 <Pred kind="P" nr="1">
 <Func kind="G" nr="6">
-<Func kind="K" nr="25">
+<Func kind="K" nr="26">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -99,9 +98,9 @@
 <Var nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="33">
-<Func kind="K" nr="126">
-<Func kind="K" nr="25">
+<Func kind="K" nr="34">
+<Func kind="K" nr="118">
+<Func kind="K" nr="26">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -119,7 +118,7 @@
 </For>
 </For>
 <For>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="10">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -134,7 +133,7 @@
 </Pred>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="126">
+<Func kind="K" nr="118">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -149,10 +148,10 @@
 </Pred>
 </Not>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="29">
-<Func kind="K" nr="126">
+<Func kind="K" nr="30">
+<Func kind="K" nr="118">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -163,7 +162,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Var nr="3"/>
-<Func kind="K" nr="25">
+<Func kind="K" nr="26">
 <Func kind="U" nr="5">
 <Var nr="1"/>
 </Func>

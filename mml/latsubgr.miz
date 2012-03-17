@@ -14,11 +14,11 @@ environ
       GROUP_1, GROUP_2, GROUP_3, GROUP_4, GROUP_6, LATTICE3, LATTICE4,
       VECTSP_8;
  constructors SETFAM_1, BINOP_1, REALSET1, GROUP_4, GROUP_6, LATTICE3,
-      LATTICE4, VECTSP_8;
+      LATTICE4, VECTSP_8, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, STRUCT_0,
       LATTICES, GROUP_3, GROUP_4;
  requirements BOOLE, SUBSET;
- definitions TARSKI, LATTICE3, VECTSP_8, XBOOLE_0, RELAT_1;
+ definitions TARSKI, LATTICE3, VECTSP_8, XBOOLE_0, RELAT_1, GROUP_4;
  theorems TARSKI, FUNCT_1, SUBSET_1, SETFAM_1, FUNCT_2, LATTICES, GROUP_2,
       GROUP_3, GROUP_4, GROUP_6, LATTICE3, VECTSP_8, RELAT_1, XBOOLE_0,
       XBOOLE_1, STRUCT_0;
@@ -50,8 +50,7 @@ proof
     then h is strict Subgroup of G by GROUP_3:def 1;
     hence thesis;
   end;
-  thus (ex H being strict Subgroup of G st h = H) implies h in Subgroups G
-  by GROUP_3:def 1;
+  thus thesis by GROUP_3:def 1;
 end;
 
 theorem Th3:
@@ -75,8 +74,7 @@ proof
   let A be Subset of G such that
 A1: A = (the carrier of H1) \/ the carrier of H2;
   the carrier of H2 = carr H2 by GROUP_2:def 9;
-  then A = carr H1 \/ carr H2 by A1,GROUP_2:def 9;
-  hence thesis by GROUP_4:def 10;
+  hence thesis by A1,GROUP_2:def 9;
 end;
 
 theorem Th5:
@@ -538,10 +536,12 @@ proof
   let G be Group;
   let H1, H2 be Subgroup of G;
   let h1, h2 be Element of lattice G;
-A1: lattice G = LattStr (# Subgroups G, SubJoin G, SubMeet G #)
-  by GROUP_4:def 13;
-  then h1 "\/" h2 = SubJoin G.(h1,h2) by LATTICES:def 1;
-  hence thesis by A1,GROUP_4:def 11;
+  assume
+A0: h1 = H1 & h2 = H2;
+    then
+A2: H1 is strict & H2 is strict by GROUP_3:def 1;
+  h1 "\/" h2 = SubJoin G.(h1,h2) by LATTICES:def 1;
+  hence thesis by A0,A2,GROUP_4:def 11;
 end;
 
 theorem Th28:
@@ -552,10 +552,12 @@ proof
   let G be Group;
   let H1, H2 be Subgroup of G;
   let h1, h2 be Element of lattice G;
-A1: lattice G = LattStr (# Subgroups G, SubJoin G, SubMeet G #)
-  by GROUP_4:def 13;
-  then h1 "/\" h2 = SubMeet G.(h1,h2) by LATTICES:def 2;
-  hence thesis by A1,GROUP_4:def 12;
+  assume
+A0: h1 = H1 & h2 = H2;
+  then
+A2: H1 is strict & H2 is strict by GROUP_3:def 1;
+  h1 "/\" h2 = SubMeet G.(h1,h2) by LATTICES:def 2;
+  hence thesis by A0,A2,GROUP_4:def 12;
 end;
 
 theorem Th29:
@@ -566,8 +568,8 @@ proof
   let p be Element of lattice G;
   let H be Subgroup of G such that
 A1: p = H;
-  the carrier of lattice G = Subgroups G by GROUP_4:92;
-  then reconsider h = p as strict Subgroup of G by GROUP_3:def 1;
+  the carrier of lattice G = Subgroups G;
+  reconsider h = p as strict Subgroup of G by GROUP_3:def 1;
   h = H by A1;
   hence thesis;
 end;
@@ -581,8 +583,6 @@ proof
   let H1, H2 be Subgroup of G;
   let p, q be Element of lattice G such that
 A1: p = H1 & q = H2;
-A2: lattice G = LattStr (# Subgroups G, SubJoin G, SubMeet G #) by
-GROUP_4:def 13;
 A3: H1 is strict Subgroup of G & H2 is strict Subgroup of G by A1,Th29;
   thus p [= q implies the carrier of H1 c= the carrier of H2
   proof
@@ -590,7 +590,7 @@ A3: H1 is strict Subgroup of G & H2 is strict Subgroup of G by A1,Th29;
     then
 A4: p "/\" q = p by LATTICES:21;
     p "/\" q = (the L_meet of lattice G).(p,q) by LATTICES:def 2
-      .= H1 /\ H2 by A1,A2,GROUP_4:def 12;
+      .= H1 /\ H2 by A1,A3,GROUP_4:def 12;
     then (the carrier of H1) /\ the carrier of H2 = the carrier of H1
     by A1,A4,Th1;
     hence thesis by XBOOLE_1:17;
@@ -601,7 +601,7 @@ A4: p "/\" q = p by LATTICES:21;
     then H1 is Subgroup of H2 by GROUP_2:66;
     then
 A5: H1 /\ H2 = H1 by A3,GROUP_2:107;
-    H1 /\ H2 = (the L_meet of lattice G).(p,q) by A1,A2,GROUP_4:def 12
+    H1 /\ H2 = (the L_meet of lattice G).(p,q) by A1,A3,GROUP_4:def 12
       .= p "/\" q by LATTICES:def 2;
     hence thesis by A1,A5,LATTICES:21;
   end;
@@ -630,9 +630,7 @@ A2: H1 is strict Subgroup of G & H2 is strict Subgroup of G by Th29;
     assume H1 is Subgroup of H2;
     then
 A3: H1 /\ H2 = H1 by A2,GROUP_2:107;
-    lattice G = LattStr (# Subgroups G, SubJoin G, SubMeet G #)
-    by GROUP_4:def 13;
-    then H1 /\ H2 = (the L_meet of lattice G).(p,q) by A1,GROUP_4:def 12
+    H1 /\ H2 = (the L_meet of lattice G).(p,q) by A1,A2,GROUP_4:def 12
       .= p "/\" q by LATTICES:def 2;
     hence thesis by A1,A3,LATTICES:21;
   end;
@@ -642,8 +640,6 @@ theorem
   for G being Group holds lattice G is complete
 proof
   let G be Group;
-A1: lattice G = LattStr (# Subgroups G, SubJoin G, SubMeet G #) by
-GROUP_4:def 13;
   let Y be Subset of lattice G;
   per cases;
   suppose
@@ -659,14 +655,14 @@ A2: Y = {};
     thus thesis by LATTICES:45;
   end;
   suppose Y <> {};
-    then reconsider X = Y as non empty Subset of Subgroups G by A1;
-    reconsider p = meet X as Element of lattice G by A1,GROUP_3:def 1;
+    then reconsider X = Y as non empty Subset of Subgroups G;
+    reconsider p = meet X as Element of lattice G by GROUP_3:def 1;
     take p;
     thus p is_less_than Y
     proof
       let q be Element of lattice G;
-      reconsider H = q as strict Subgroup of G by A1,GROUP_3:def 1;
-      reconsider h = q as Element of Subgroups G by A1;
+      reconsider H = q as strict Subgroup of G by GROUP_3:def 1;
+      reconsider h = q as Element of Subgroups G;
 A3:   carr G.h = the carrier of H by Def1;
       assume q in Y;
       then meet (carr G.:X) c= the carrier of H by A3,FUNCT_2:43,SETFAM_1:4;
@@ -676,7 +672,7 @@ A3:   carr G.h = the carrier of H by Def1;
     let r be Element of lattice G;
     assume
 A4: r is_less_than Y;
-    reconsider H = r as Subgroup of G by A1,GROUP_3:def 1;
+    reconsider H = r as Subgroup of G by GROUP_3:def 1;
     consider x being Element of X;
 A5: carr G.x in carr G.:X by FUNCT_2:43;
     for Z1 being set st Z1 in carr G.:X holds the carrier of H c= Z1
@@ -687,7 +683,7 @@ A6:   Z1 in carr G.:X;
       then reconsider Z2 = Z1 as Subset of G;
       consider z1 being Element of Subgroups G such that
 A7:   z1 in X & Z2 = carr G.z1 by A6,FUNCT_2:116;
-      reconsider z1 as Element of lattice G by A1;
+      reconsider z1 as Element of lattice G;
       reconsider z3 = z1 as strict Subgroup of G by GROUP_3:def 1;
 A8:   Z1 = the carrier of z3 by A7,Def1;
       r [= z1 by A4,A7,LATTICE3:def 16;
@@ -717,11 +713,10 @@ A1: for e being set st e in the carrier of lattice G1
     proof
       let e be set;
       assume e in the carrier of lattice G1;
-      then e in Subgroups G1 by GROUP_4:92;
       then reconsider E = e as strict Subgroup of G1 by GROUP_3:def 1;
       reconsider u = gr (f.:the carrier of E) as strict Subgroup of G2;
-      the carrier of lattice G2 = Subgroups G2 by GROUP_4:92;
-      then reconsider u as Element of lattice G2 by GROUP_3:def 1;
+      the carrier of lattice G2 = Subgroups G2;
+      reconsider u as Element of lattice G2 by GROUP_3:def 1;
       take u;
       thus thesis;
     end;
@@ -734,8 +729,8 @@ A2: for e being set st e in the carrier of lattice G1 holds
     let A be Subset of G2;
     assume
 A3: A = f.:the carrier of H;
-    Subgroups G1 = the carrier of lattice G1 by GROUP_4:92;
-    then H in the carrier of lattice G1 by GROUP_3:def 1;
+    Subgroups G1 = the carrier of lattice G1;
+    H in the carrier of lattice G1 by GROUP_3:def 1;
     hence thesis by A2,A3;
   end;
   uniqueness
@@ -750,7 +745,6 @@ A5: for H being strict Subgroup of G1,
     proof
       let h be set;
       assume h in the carrier of lattice G1;
-      then h is Element of Subgroups G1 by GROUP_4:92;
       then reconsider H = h as strict Subgroup of G1 by GROUP_3:def 1;
       thus f1.h = gr (f.:the carrier of H) by A4
         .= f2.h by A5;
@@ -770,7 +764,6 @@ A1: dom FuncLatt f = the carrier of lattice G by FUNCT_2:def 1;
   proof
     let x be set;
     assume x in the carrier of lattice G;
-    then x in Subgroups G by GROUP_4:92;
     then reconsider x as strict Subgroup of G by GROUP_3:def 1;
 A2: f.:the carrier of x = the carrier of x
     proof
@@ -817,11 +810,7 @@ A1: f is one-to-one;
     assume
 A2: x1 in dom FuncLatt f & x2 in dom FuncLatt f &
     (FuncLatt f).x1 = (FuncLatt f).x2;
-    then x1 in the carrier of lattice G1 & x2 in the carrier of lattice G1;
-    then
-A3: x1 in Subgroups G1 & x2 in Subgroups G1 by GROUP_4:92;
-    then reconsider x1 as strict Subgroup of G1 by GROUP_3:def 1;
-    reconsider x2 as strict Subgroup of G1 by A3,GROUP_3:def 1;
+    then reconsider x1, x2 as strict Subgroup of G1 by GROUP_3:def 1;
     reconsider A1 = f.:the carrier of x1, A2 = f.:the carrier of x2
     as Subset of G2;
 A4: (FuncLatt f).x1 = gr A1 & (FuncLatt f).x2 = gr A2 by Def3;
@@ -943,7 +932,7 @@ A5:   y in {1_G1} & x = f.y by A2,A4,FUNCT_2:116;
       y = 1_G1 by A5,TARSKI:def 1;
       hence thesis by A5,GROUP_6:40;
     end;
-    thus x = 1_G2 implies x in A by A2,A3,FUNCT_2:43;
+    thus thesis by A2,A3,FUNCT_2:43;
   end;
   then A = {1_G2} by TARSKI:def 1;
   then gr A = (1).G2 by Th14;
@@ -962,12 +951,10 @@ A1: f is one-to-one;
   (FuncLatt f).(a "/\" b) = (FuncLatt f).a "/\" (FuncLatt f).b
   proof
     let a, b be Element of lattice G1;
-A2: lattice G1 = LattStr (# Subgroups G1, SubJoin G1, SubMeet G1 #)
-    by GROUP_4:def 13;
-    then consider A1 being strict Subgroup of G1 such that
+    consider A1 being strict Subgroup of G1 such that
 A3: A1 = a by Th2;
     consider B1 being strict Subgroup of G1 such that
-A4: B1 = b by A2,Th2;
+A4: B1 = b by Th2;
     thus thesis
     proof
 A5:   (FuncLatt f).a = gr (f.:the carrier of A1) by A3,Def3;
@@ -1173,12 +1160,10 @@ proof
   (FuncLatt f).(a "\/" b) = (FuncLatt f).a "\/" (FuncLatt f).b
   proof
     let a, b be Element of lattice G1;
-A1: lattice G1 = LattStr (# Subgroups G1, SubJoin G1, SubMeet G1 #)
-    by GROUP_4:def 13;
-    then consider A1 being strict Subgroup of G1 such that
+    consider A1 being strict Subgroup of G1 such that
 A2: A1 = a by Th2;
     consider B1 being strict Subgroup of G1 such that
-A3: B1 = b by A1,Th2;
+A3: B1 = b by Th2;
     thus thesis
     proof
 A4:   (FuncLatt f).a = gr (f.:the carrier of A1) by A2,Def3;
@@ -1440,7 +1425,7 @@ A66:      y in the carrier of C1 & x = f.y by A65,FUNCT_2:116;
         end;
         f.:f"the carrier of A3 "\/" B3 c= the carrier of A3 "\/" B3
         by FUNCT_1:145;
-        hence the carrier of C3 c= the carrier of A3 "\/" B3
+        hence thesis
         by A45,A64,XBOOLE_1:1;
       end;
       then gr (f.:the carrier of A1 "\/" B1) = A3 "\/" B3 by A33,A45,Th3

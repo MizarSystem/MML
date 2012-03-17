@@ -14,16 +14,15 @@ environ
       FUNCT_2, MCART_1, BINOP_1, REALSET1, MULTOP_1, PBOOLE, STRUCT_0, FUNCT_4,
       PARTFUN1, FUNCOP_1, MSUALG_3, FUNCT_3, ALTCAT_1, ALTCAT_2, FUNCTOR0,
       FUNCTOR3, YELLOW18;
- constructors REALSET1, MSUALG_3, FUNCTOR3, YELLOW18;
+ constructors REALSET1, MSUALG_3, FUNCTOR3, YELLOW18, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCOP_1, PBOOLE,
       STRUCT_0, ALTCAT_2, FUNCTOR0, FUNCTOR2, ALTCAT_4, YELLOW18, RELSET_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, RELAT_1, PARTFUN1, PBOOLE, MSUALG_3, ALTCAT_1, ALTCAT_2,
       FUNCTOR0, FUNCT_2, XBOOLE_0, BINOP_1, REALSET1;
- theorems ZFMISC_1, RELAT_1, FUNCT_1, PBOOLE, MCART_1, GRFUNC_1, FUNCT_2,
-      FUNCT_3, FUNCT_4, ALTCAT_1, ALTCAT_2, FUNCTOR3, ALTCAT_4, FUNCTOR0,
-      FUNCTOR1, FUNCTOR2, RELSET_1, PARTFUN1, MULTOP_1, MSUALG_3, YELLOW18,
-      XBOOLE_0, XBOOLE_1;
+ theorems ZFMISC_1, RELAT_1, FUNCT_1, PBOOLE, MCART_1, FUNCT_2, FUNCT_3,
+      FUNCT_4, ALTCAT_1, ALTCAT_2, FUNCTOR3, ALTCAT_4, FUNCTOR0, FUNCTOR1,
+      FUNCTOR2, PARTFUN1, MULTOP_1, MSUALG_3, YELLOW18, XBOOLE_0, XBOOLE_1;
  schemes FUNCT_1, YELLOW18;
 
 begin :: Reverse functors
@@ -121,7 +120,7 @@ A2: F * G = id B;
   F"*F = id A by A1,FUNCTOR1:22;
   then (id A)*G = FF * id B by A2,FUNCTOR0:33
     .= F" by FUNCTOR3:5;
-  hence the FunctorStr of G = F" by FUNCTOR3:4;
+  hence thesis by FUNCTOR3:4;
 end;
 
 theorem Th5:
@@ -137,7 +136,7 @@ A2: G * F = id A;
   F*FF = id B by A1,FUNCTOR1:21;
   then (id A)*FF = G * id B by A2,FUNCTOR0:33
     .= the FunctorStr of G by FUNCTOR3:5;
-  hence the FunctorStr of G = F" by FUNCTOR3:4;
+  hence thesis by FUNCTOR3:4;
 end;
 
 theorem
@@ -369,7 +368,7 @@ A10: x in dom ((the Comp of A).[a1,a2,a3]) &
   then
 A11: [a1,a2,a3] in [:the carrier of A, the carrier of A, the carrier of A :] &
   [a1,a2,a3] in [:the carrier of B, the carrier of B, the carrier of B:]
-  by PBOOLE:def 3;
+  by PARTFUN1:def 4;
   then reconsider a1,a2,a3 as object of A by MCART_1:73;
   reconsider b1 = a1, b2 = a2, b3 = a3 as object of B by A11,MCART_1:73;
 A12: (the Comp of A).(a1,a2,a3) = (the Comp of A).[a1,a2,a3] &
@@ -455,9 +454,10 @@ theorem
   for I being set, A,B being ManySortedSet of I holds Intersect(A, B) = A /\ B
 proof
   let I be set, A,B be ManySortedSet of I;
-A1: dom A = I & dom B = I by PBOOLE:def 3;
+A1: dom A = I & dom B = I by PARTFUN1:def 4;
   then dom Intersect(A,B) = I /\ I by Def2;
-  then reconsider AB = Intersect(A,B) as ManySortedSet of I by PBOOLE:def 3;
+  then reconsider AB = Intersect(A,B) as ManySortedSet of I by PARTFUN1:def 4
+,RELAT_1:def 18;
   I /\ I = I;
   then for i being set st i in I holds AB.i = A.i /\ B.i by A1,Def2;
   hence thesis by PBOOLE:def 8;
@@ -468,8 +468,9 @@ theorem Th14:
   holds Intersect(A, B) is ManySortedSet of I /\ J
 proof
   let I,J be set, A be ManySortedSet of I, B be ManySortedSet of J;
-  dom A = I & dom B = J by PBOOLE:def 3;
-  hence dom Intersect(A,B) = I /\ J by Def2;
+  dom A = I & dom B = J by PARTFUN1:def 4;
+  then dom Intersect(A,B) = I /\ J by Def2;
+  hence thesis by PARTFUN1:def 4,RELAT_1:def 18;
 end;
 
 theorem Th15:
@@ -479,7 +480,7 @@ proof
   let I,J be set, A be ManySortedSet of I, B be Function;
   let C be ManySortedSet of J such that
 A1: C = Intersect(A, B);
-A2: dom A = I & dom C = J by PBOOLE:def 3;
+A2: dom A = I & dom C = J by PARTFUN1:def 4;
   then
 A3: J = I /\ dom B by A1,Def2;
   hence J c= I by XBOOLE_1:17;
@@ -489,66 +490,7 @@ A3: J = I /\ dom B by A1,Def2;
   hence thesis by XBOOLE_1:17;
 end;
 
-theorem Th16:
-  for A1,A2, B1,B2 being set
-  for f being Function of A1,A2, g being Function of B1,B2 st f tolerates g
-  holds f /\ g is Function of A1 /\ B1, A2 /\ B2
-proof
-  let A1,A2, B1,B2 be set;
-  let f be Function of A1,A2, g be Function of B1,B2 such that
-A1: f tolerates g;
-  (A1 = {} or A1 <> {}) & (A2 = {} or A2 <> {});
-  then
-A2: f = {} & (A1 = {} or A2 = {}) or
-  dom f = A1 & A1 <> {} & A2 <> {} by FUNCT_2:def 1;
-  (B1 = {} or B1 <> {}) & (B2 = {} or B2 <> {});
-  then
-A3: g = {} & (B1 = {} or B2 = {}) or
-  dom g = B1 & B1 <> {} & B2 <> {} by FUNCT_2:def 1;
-A4: dom f c= A1 & rng f c= A2 & dom g c= B1 & rng g c= B2 by RELSET_1:12;
-  then
-A5: dom (f/\g) c= dom f /\ dom g & rng (f/\g) c= rng f /\ rng g &
-  dom f /\ dom g c= A1/\B1 & rng f /\ rng g c= A2/\B2
-  by RELAT_1:14,27,XBOOLE_1:27;
-  then
-A6: dom (f/\g) c= A1/\B1 & rng (f/\g) c= A2/\B2 by XBOOLE_1:1;
-  then
-A7: f /\ g is PartFunc of A1 /\ B1, A2 /\ B2 by GRFUNC_1:27,RELSET_1:11;
-A8: now
-    assume
-A9: dom f = A1 & A1 <> {} & dom g = B1 & B1 <> {};
-    consider a being Element of A1 /\ B1;
-    hereby
-      assume A1 /\ B1 <> {};
-
-then f.a = g.a & a in A1 & a in B1 by A1,A9,PARTFUN1:def 6,XBOOLE_0:def 4;
-      then f.a in rng f & f.a in rng g by A9,FUNCT_1:def 5;
-      hence A2 /\ B2 <> {} by A4,XBOOLE_0:def 4;
-    end;
-    thus dom (f /\ g) = A1 /\ B1
-    proof thus dom (f /\ g) c= A1 /\ B1 by A5,XBOOLE_1:1;
-      let a be set;
-      assume a in A1 /\ B1;
-      then f.a = g.a & a in A1 & a in B1
-      by A1,A9,PARTFUN1:def 6,XBOOLE_0:def 4;
-      then [a,f.a] in f & [a,f.a] in g by A9,FUNCT_1:def 4;
-      then [a,f.a] in f /\ g by XBOOLE_0:def 4;
-      hence thesis by RELAT_1:def 4;
-    end;
-  end;
-  now per cases;
-    case A2 /\ B2 <> {};
-      hence dom (f /\ g) = A1 /\ B1 by A2,A3,A8;
-    end;
-    case A1 /\ B1 = {};
-      hence dom (f /\ g) = A1 /\ B1 by A7;
-    end;
-    case A2 /\ B2 = {} & A1 /\ B1 <> {};
-      hence f /\ g = {} by A2,A3,A8;
-    end;
-  end;
-  hence thesis by A6,FUNCT_2:def 1,GRFUNC_1:27,RELSET_1:11;
-end;
+canceled;
 
 theorem Th17:
   for I1,I2 being set for A1,B1 being ManySortedSet of I1
@@ -569,7 +511,7 @@ A1: A = Intersect(A1, A2) & B = Intersect(B1, B2);
 A2: for x being set st x in dom F & x in dom G holds F.x tolerates G.x;
   reconsider H = Intersect(F, G) as ManySortedSet of I1 /\ I2 by Th14;
 A3: dom F = I1 & dom G = I2 & dom A1 = I1 & dom A2 = I2 & dom A = I1 /\ I2 &
-  dom B1 = I1 & dom B2 = I2 & dom B = I1 /\ I2 by PBOOLE:def 3;
+  dom B1 = I1 & dom B2 = I2 & dom B = I1 /\ I2 by PARTFUN1:def 4;
   H is ManySortedFunction of A, B
   proof
     let i be set;
@@ -579,7 +521,7 @@ A4: i in I1 & i in I2 & A.i = (A1.i)/\(A2.i) &
     B.i = (B1.i)/\(B2.i) & H.i = (F.i)/\(G.i) by A1,A3,Def2,XBOOLE_0:def 4;
     then F.i is Function of A1.i, B1.i & G.i is Function of A2.i, B2.i &
     F.i tolerates G.i by A2,A3,PBOOLE:def 18;
-    hence H.i is Function of A.i, B.i by A4,Th16;
+    hence thesis by A4,FUNCT_2:197;
   end;
   hence thesis;
 end;
@@ -599,7 +541,7 @@ then reconsider H = Intersect(F, G) as ManySortedSet of [:I/\J,I/\J:] by Th14;
   take H; thus H = Intersect(F, G);
 A2: dom F = [:I,I:] & dom G = [:J,J:] & dom H = [:I/\J,I/\J:] &
   dom {|F|} = [:I,I,I:] & dom {|G|} = [:J,J,J:] & dom {|H|} = [:I/\J,I/\J,I/\
-  J:] by PBOOLE:def 3;
+  J:] by PARTFUN1:def 4;
   [:I,I,I:] = [:[:I,I:],I:] & [:J,J,J:] = [:[:J,J:],J:] by ZFMISC_1:def 3;
   then
 A3: [:I,I,I:]/\[:J,J,J:] = [:[:I/\J,I/\J:],I/\J:] by A1,ZFMISC_1:123
@@ -643,7 +585,7 @@ A1: [:I/\J,I/\J:] = [:I,I:]/\[:J,J:] by ZFMISC_1:123;
 A2: dom F1 = [:I,I:] & dom G1 = [:J,J:] & dom H1 = [:I/\J,I/\J:] &
   dom F2 = [:I,I:] & dom G2 = [:J,J:] & dom H2 = [:I/\J,I/\J:] &
   dom {|F1, F2|} = [:I,I,I:] & dom {|G1, G2|} = [:J,J,J:] &
-  dom {|H1, H2|} = [:I/\J,I/\J,I/\J:] by PBOOLE:def 3;
+  dom {|H1, H2|} = [:I/\J,I/\J,I/\J:] by PARTFUN1:def 4;
   [:I,I,I:] = [:[:I,I:],I:] & [:J,J,J:] = [:[:J,J:],J:] by ZFMISC_1:def 3;
   then
 A3: [:I,I,I:]/\[:J,J,J:] = [:[:I/\J,I/\J:],I/\J:] by A1,ZFMISC_1:123
@@ -707,7 +649,8 @@ A7: [:the carrier of A, the carrier of A, the carrier of A:] /\
 A8: dom the Comp of A =
     [:the carrier of A, the carrier of A, the carrier of A:] &
     dom the Comp of B =
-    [:the carrier of B, the carrier of B, the carrier of B:] by PBOOLE:def 3;
+    [:the carrier of B, the carrier of B, the carrier of B:] by PARTFUN1:def 4
+;
     now
       let x be set;
       assume x in dom the Comp of A;
@@ -778,7 +721,7 @@ A5: dom the Arrows of A = [:the carrier of A, the carrier of A:] &
   dom the Arrows of B = [:the carrier of B, the carrier of B:] &
   dom the Arrows of Intersect(A,B) =
   [:the carrier of Intersect(A, B), the carrier of Intersect(A, B):]
-  by PBOOLE:def 3;
+  by PARTFUN1:def 4;
 A6: now
     assume the carrier of A <> {} & the carrier of B <> {};
     then [a1,a2] in [:the carrier of A, the carrier of A:] &
@@ -797,7 +740,7 @@ A6: now
     hence (the Arrows of A).[a1,a2] /\ (the Arrows of B).[b1,b2] = {} &
     (the Arrows of Intersect(A,B)).[o1,o2] = {} by A5,FUNCT_1:def 4;
   end;
-  hence <^o1,o2^> = <^a1,a2^> /\ <^b1,b2^> by A2,A3,A4,A5,A6,Def2;
+  hence thesis by A2,A3,A4,A5,A6,Def2;
 end;
 
 theorem Th23:
@@ -815,7 +758,7 @@ A2: the carrier of AB = (the carrier of A) /\ (the carrier of B) &
   let o1,o2,o3 be object of AB such that
 A3: <^o1,o2^> <> {} & <^o2,o3^> <> {};
 A4: dom the Arrows of AB = [:the carrier of AB, the carrier of AB:]
-  by PBOOLE:def 3;
+  by PARTFUN1:def 4;
   [o1,o2] in dom the Arrows of AB & [o2,o3] in dom the Arrows of AB
   by A3,FUNCT_1:def 4;
   then
@@ -841,7 +784,7 @@ A8: f in <^a1,a2^> & f in <^b1,b2^> & g in <^a2,a3^> & g in <^b2,b3^>
   reconsider g1 = g as Morphism of a2,a3 by A3,A6,XBOOLE_0:def 4;
   reconsider g2 = g as Morphism of b2,b3 by A3,A6,XBOOLE_0:def 4;
   g1 * f1 = g2 * f2 by A1,A8,Th11;
-  hence <^o1,o3^> <> {} by A6,A7,XBOOLE_0:def 4;
+  hence thesis by A6,A7,XBOOLE_0:def 4;
 end;
 
 theorem Th24:
@@ -931,7 +874,7 @@ A8: x in the carrier of B2();
     reconsider a as object of A() by A5,A8;
     P[a] by A3;
     then a is object of B1() by A1;
-    hence x in the carrier of B1();
+    hence thesis;
   end;
   now
     let a,b be Element of B1();
@@ -985,7 +928,7 @@ A3: [:the carrier of A, the carrier of A:] /\
   = [:the carrier of B, the carrier of B:] by XBOOLE_1:28,ZFMISC_1:119;
 A4: dom the Arrows of A = [:the carrier of A, the carrier of A:] &
   dom the Arrows of B = [:the carrier of B, the carrier of B:]
-  by PBOOLE:def 3;
+  by PARTFUN1:def 4;
   now
     let x be set;
     assume x in dom the Arrows of B;
@@ -1114,7 +1057,7 @@ A2: <^o1,o2^> <> {} & <^o2,o3^> <> {};
     then (incl C).o1 = o1 & (incl C).o2 = o2 & (incl C).o3 = o3 &
     (incl C).g = g & (incl C).f = f & (incl C).(g*f) = g*f
     by A2,Th28,FUNCTOR0:28;
-    hence (incl C).(g*f) = ((incl C).g)*((incl C).f) by A2,ALTCAT_2:33;
+    hence thesis by A2,ALTCAT_2:33;
   end;
 end;
 
@@ -1165,7 +1108,7 @@ proof
   let a be object of C;
   assume a = b;
   then (incl C).a = b by FUNCTOR0:28;
-  hence (F|C).a = F.b by FUNCTOR0:34;
+  hence thesis by FUNCTOR0:34;
 end;
 
 theorem Th30:
@@ -1188,7 +1131,7 @@ A2: (incl C).c = a & (incl C).d = b by FUNCTOR0:28;
   let g be Morphism of c,d;
   assume g = f;
   then (incl C).g = f by A1,Th28;
-  hence (F|C).g = F.f by A1,A2,FUNCTOR3:6;
+  hence thesis by A1,A2,FUNCTOR3:6;
 end;
 
 theorem Th31:
@@ -1211,7 +1154,7 @@ A2: (incl C).c = a & (incl C).d = b by FUNCTOR0:28;
   let g be Morphism of c,d;
   assume g = f;
   then (incl C).g = f by A1,Th28;
-  hence (F|C).g = F.f by A1,A2,FUNCTOR3:8;
+  hence thesis by A1,A2,FUNCTOR3:8;
 end;
 
 theorem Th32:
@@ -1253,7 +1196,7 @@ A3: <^F.a, F.b^> <> {} by A2,FUNCTOR0:def 19;
 A4: F.f = Morph-Map(F,a,b).f & F.g = Morph-Map(F,a,b).g by A2,FUNCTOR0:def 16;
   dom the MorphMap of F = [:the carrier of A, the carrier of A:] &
   [a,b] in [:the carrier of A, the carrier of A:]
-  by PBOOLE:def 3,ZFMISC_1:def 2;
+  by PARTFUN1:def 4,ZFMISC_1:def 2;
   then Morph-Map(F,a,b) is one-to-one & f in <^a,b^> & g in <^a,b^> by A1,A2;
   hence thesis by A3,A4,FUNCT_2:25;
 end;
@@ -1302,7 +1245,7 @@ A8: (the ObjectMap of F).(c,d) = [F.c,F.d] by A7,FUNCT_3:96;
 A9: g in dom Morph-Map(F,c,d) & f = Morph-Map(F,c,d).g by A4,FUNCT_1:def 5;
   reconsider g as Morphism of c,d by A9;
   take g; thus a = F.c & b = F.d & <^c,d^> <> {} by A5,A6,A8,A9,ZFMISC_1:33;
-  thus f = F.g by A4,A5,A6,A8,A9,FUNCTOR0:def 16;
+  thus thesis by A4,A5,A6,A8,A9,FUNCTOR0:def 16;
 end;
 
 theorem Th35:
@@ -1352,7 +1295,7 @@ A3: <^F.b, F.a^> <> {} by A2,FUNCTOR0:def 20;
 A4: F.f = Morph-Map(F,a,b).f & F.g = Morph-Map(F,a,b).g by A2,FUNCTOR0:def 17;
   dom the MorphMap of F = [:the carrier of A, the carrier of A:] &
   [a,b] in [:the carrier of A, the carrier of A:]
-  by PBOOLE:def 3,ZFMISC_1:def 2;
+  by PARTFUN1:def 4,ZFMISC_1:def 2;
   then Morph-Map(F,a,b) is one-to-one & f in <^a,b^> & g in <^a,b^> by A1,A2;
   hence thesis by A3,A4,FUNCT_2:25;
 end;
@@ -1409,7 +1352,7 @@ A10: (the ObjectMap of F).(d,c) = [:g,g:].(c,d) by A7,A8,FUNCT_4:44
 A11: g in dom Morph-Map(F,d,c) & f = Morph-Map(F,d,c).g by A4,FUNCT_1:def 5;
   reconsider g as Morphism of d,c by A11;
   take g; thus b = F.d & a = F.c & <^d,c^> <> {} by A5,A6,A10,A11,ZFMISC_1:33;
-  thus f = F.g by A4,A5,A6,A10,A11,FUNCTOR0:def 17;
+  thus thesis by A4,A5,A6,A10,A11,FUNCTOR0:def 17;
 end;
 
 begin :: Isomorphisms under arbitrary functor
@@ -1941,7 +1884,7 @@ A2: for x st x in [:I,I:] holds A.x c= B.x;
   then consider x1,x2 being set such that
 A3: x1 in I & x2 in I & x = [x1,x2] by ZFMISC_1:def 2;
 A4: [x2,x1] in [:I,I:] by A3,ZFMISC_1:def 2;
-  dom A = [:I,I:] & dom B = [:J,J:] by PBOOLE:def 3;
+  dom A = [:I,I:] & dom B = [:J,J:] by PARTFUN1:def 4;
   then ~A.(x1,x2) = A.(x2,x1) & ~B.(x1,x2) = B.(x2,x1) by A1,A4,FUNCT_4:def 2;
   hence thesis by A2,A3,A4;
 end;
@@ -1991,7 +1934,7 @@ A8: (the Comp of B opp).(a',b',c') = (the Comp of B opp).x &
   (the Comp of A).(c1,b1,a1) = (the Comp of A).[c1,b1,a1] by MULTOP_1:def 1;
   then (the Comp of B).(c,b,a) c= (the Comp of A).(c1,b1,a1)
   by A1,A7,ALTCAT_2:def 2;
-  hence (the Comp of B opp).x c= (the Comp of A opp).x by A5,A6,A8,Th45;
+  hence thesis by A5,A6,A8,Th45;
 end;
 
 theorem Th49:
@@ -2010,7 +1953,7 @@ A1: BB, B are_opposite & A opp, A are_opposite by YELLOW18:def 4;
       assume o = o';
       then idm a' in <^a,a^> by ALTCAT_2:def 14;
       then idm o' in <^a,a^> by A1,YELLOW18:10;
-      hence idm o' in <^o,o^> by A1,YELLOW18:7;
+      hence thesis by A1,YELLOW18:7;
     end;
     case BB is empty; thus thesis;
     end;

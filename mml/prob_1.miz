@@ -13,9 +13,9 @@ environ
       REAL_1, FUNCT_2, FUNCOP_1, FUNCT_7, ORDINAL1, CARD_3, NUMBERS, VALUED_0,
       XREAL_0, COMPLEX1, NAT_1, SEQ_1, SEQ_2, SETFAM_1, XXREAL_0, XXREAL_1;
  constructors SETFAM_1, FINSUB_1, XXREAL_1, COMPLEX1, REAL_1, SEQ_2, CARD_3,
-      MEMBERED, SEQ_1, FUNCT_7;
+      MEMBERED, SEQ_1, FUNCT_7, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, NUMBERS, XXREAL_0,
-      XREAL_0, MEMBERED, XXREAL_1, RELAT_1, VALUED_0;
+      XREAL_0, MEMBERED, XXREAL_1, RELAT_1, VALUED_0, RELSET_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FINSUB_1, TARSKI, SUBSET_1, MEMBERED, CARD_3, FUNCT_2, VALUED_0;
  theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, ABSVALUE, SEQ_2, SETFAM_1,
@@ -241,19 +241,17 @@ end;
 
 canceled;
 
-theorem
-  (for p st p in [:NAT,{X}:] ex x,y st [x,y]=p) &
+theorem   :: uogolnic na trywialne zbiory !!!
+          :: wlaciwie to refestracja faktu, ze
+          :: [:X,Y:], jezeli Y is trivial, jest function-like
+          :: i rowna sie X --> the Element of Y jak Y jest niepusty
   (for x,y,z st [x,y] in [:NAT,{X}:] & [x,z] in [:NAT,{X}:] holds y=z)
 proof
-  for x,y,z st [x,y] in [:NAT,{X}:] & [x,z] in [:NAT,{X}:] holds y=z
-  proof
     let x,y,z;
     assume [x,y] in [:NAT,{X}:] & [x,z] in [:NAT,{X}:];
     then y in {X} & z in {X} by ZFMISC_1:106;
     then y = X & z = X by TARSKI:def 1;
     hence thesis;
-  end;
-  hence thesis by RELAT_1:def 1;
 end;
 
 definition
@@ -484,7 +482,7 @@ registration
     thus (for A being Subset of X st A in F holds A` in F) &
     for A1 being SetSequence of X st rng A1 c= F
     holds Intersection A1 in F;
-    thus F is non empty;
+    thus thesis;
   end;
 end;
 
@@ -519,7 +517,7 @@ A2: A in Y & B in Y;
 A5: Intersection A1 = A /\ B by Th30;
     rng A1 = {A',B'} by FUNCT_7:128;
     then rng A1 c= Y by A2,ZFMISC_1:38;
-    hence A /\ B in Y by A1,A5,Def8;
+    hence thesis by A1,A5,Def8;
   end;
   hence thesis by A1;
 end;
@@ -561,11 +559,9 @@ theorem
 :: introduced; then some previous theorems are reformulated in language of
 :: these notions.
 
-definition
+registration
   let X be set, Si be SigmaField of X;
-  mode SetSequence of Si -> SetSequence of X means
-    :Def9:
-    rng it c= Si;
+ cluster Si-valued SetSequence of X;
   existence
   proof
     set A1 = NAT --> X;
@@ -574,8 +570,14 @@ definition
     take A1;
 X:   X in Si by Th11;
      rng A1 = {X} by FUNCOP_1:14;
-    hence rng A1 c= Si by X,ZFMISC_1:37;
+    then rng A1 c= Si by X,ZFMISC_1:37;
+    hence thesis by RELAT_1:def 19;
   end;
+end;
+
+definition
+  let X be set, Si be SigmaField of X;
+  mode SetSequence of Si is Si-valued SetSequence of X;
 end;
 
 canceled;
@@ -610,7 +612,7 @@ A5: for A1 st rng A1 c= Si holds Union A1 in Si
     hence thesis;
   end;
     let ASeq be SetSequence of Si;
-     rng ASeq c= Si by Def9;
+     rng ASeq c= Si by RELAT_1:def 19;
     hence thesis by A5;
 end;
 
@@ -625,7 +627,7 @@ definition
   coherence
   proof let E be Event of F;
     E in F;
-   hence E is Subset of X;
+   hence thesis;
   end;
 end;
 
@@ -665,6 +667,7 @@ registration
 end;
 
 definition
+ canceled;
   let X,Si;
 canceled;
   func [#] Si -> Event of Si equals
@@ -691,8 +694,9 @@ theorem
 proof
  thus ASeq is SetSequence of Sigma implies for n holds ASeq.n is Event of Sigma
   proof
-    assume
-A2: rng ASeq c= Sigma;
+    assume ASeq is SetSequence of Sigma;
+    then
+A2: rng ASeq c= Sigma by RELAT_1:def 19;
     for n holds ASeq.n is Event of Sigma
     proof
       let n;
@@ -711,7 +715,7 @@ A3: for n holds ASeq.n is Event of Sigma;
       hence thesis;
     end;
     then rng ASeq c= Sigma by NAT_1:53;
-    hence thesis by Def9;
+    hence thesis by RELAT_1:def 19;
 end;
 
 theorem
@@ -775,16 +779,12 @@ canceled;
 theorem Th62:
   P * ASeq is Real_Sequence
 proof
-  rng ASeq c= Sigma by Def9;
+  rng ASeq c= Sigma by RELAT_1:def 19;
   then rng ASeq c= dom P by FUNCT_2:def 1;
   then
 A1: dom (P * ASeq) = dom ASeq by RELAT_1:46
        .= NAT by FUNCT_2:def 1;
-  rng (P * ASeq) c= REAL
-  proof
-    rng (P * ASeq) c= rng P & rng P c= REAL by RELAT_1:45,RELSET_1:12;
-    hence thesis by XBOOLE_1:1;
-  end;
+  rng (P * ASeq) c= REAL by RELAT_1:def 19;
   hence thesis by A1,FUNCT_2:def 1,RELSET_1:11;
 end;
 
@@ -849,7 +849,7 @@ A15:    for n holds p in ASeq.n;
         for n holds (P * ASeq).n = 1
         proof
           let n;
-X:        rng ASeq c= Sigma by Def9;
+X:        rng ASeq c= Sigma by RELAT_1:def 19;
 B16:      ASeq.n in rng ASeq by NAT_1:52;
           p in ASeq.n by A15;
           then P.(ASeq.n) = 1 by A1,B16,X;
@@ -871,7 +871,7 @@ A18:    not p in ASeq.m;
           then ASeq.n c= ASeq.m by A12,Def6;
           then
 A19:      not p in ASeq.n by A18;
-X:        rng ASeq c= Sigma by Def9;
+X:        rng ASeq c= Sigma by RELAT_1:def 19;
           ASeq.n in rng ASeq by NAT_1:52;
           then P.(ASeq.n) = 0 by A1,A19,X;
           hence thesis by A13;
@@ -898,7 +898,7 @@ A23:  (for n holds p in ASeq.n) implies
 A24:    for n holds p in ASeq.n;
         then
 A25:    p in Intersection ASeq by Th29;
-        rng ASeq c= Sigma by Def9;
+        rng ASeq c= Sigma by RELAT_1:def 19;
         then Intersection ASeq in Sigma by Def8;
         hence thesis by A1,A14,A20,A24,A25;
       end;
@@ -909,7 +909,7 @@ A25:    p in Intersection ASeq by Th29;
 A26:    not (for n holds p in ASeq.n);
         then
 A27:    not p in Intersection ASeq by Th29;
-        rng ASeq c= Sigma by Def9;
+        rng ASeq c= Sigma by RELAT_1:def 19;
         then Intersection ASeq in Sigma by Def8;
         hence thesis by A1,A17,A22,A26,A27;
       end;
@@ -1067,7 +1067,7 @@ A6:   ex S st Z = S & X c= S & S is SigmaField of Omega;
       now
         let n be Nat;
         BSeq.n in rng BSeq by NAT_1:52;
-        hence BSeq.n in Z by A5,SETFAM_1:def 1,A4;
+        hence BSeq.n in Z by A5,A4,SETFAM_1:def 1;
       end;
       then rng BSeq c= Z by NAT_1:53;
       hence Intersection BSeq in Z by A6,Def8;

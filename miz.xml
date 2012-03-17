@@ -7,7 +7,7 @@
 <!-- provided the included .xsl files are available in the same directory -->
 <xsl:stylesheet version="1.0" extension-element-prefixes="dc" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="html"/>
-  <!-- $Revision: 1.69 $ -->
+  <!-- $Revision: 1.8 $ -->
   <!--  -->
   <!-- File: mhtml_main.xsltxt - html-ization of Mizar XML, main file -->
   <!--  -->
@@ -6046,8 +6046,10 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="IdentifyWithExp">
-    <xsl:variable name="nr1" select="1 + count(preceding::IdentifyWithExp)"/>
+  <xsl:template match="IdentifyWithExp|Identify">
+    <xsl:variable name="iname" select="name()"/>
+    <!-- to deal with both versions -->
+    <xsl:variable name="nr1" select="1 + count(preceding::*[name() = $iname])"/>
     <xsl:choose>
       <xsl:when test="$generate_items&gt;0">
         <xsl:document href="proofhtml/idreg/{$anamelc}.{$nr1}" format="html"> 
@@ -6062,12 +6064,14 @@
   </xsl:template>
 
   <xsl:template name="iy">
+    <xsl:variable name="iname" select="name()"/>
+    <!-- to deal with both versions -->
     <xsl:if test="($mml=&quot;1&quot;) or ($generate_items&gt;0)">
       <xsl:call-template name="argtypes">
         <xsl:with-param name="el" select="Typ"/>
       </xsl:call-template>
     </xsl:if>
-    <xsl:variable name="nr1" select="1 + count(preceding::IdentifyWithExp)"/>
+    <xsl:variable name="nr1" select="1 + count(preceding::*[name() = $iname])"/>
     <xsl:element name="a">
       <xsl:attribute name="NAME">
         <xsl:value-of select="concat(&quot;IY&quot;,$nr1)"/>
@@ -6083,11 +6087,22 @@
       <xsl:otherwise>
         <xsl:choose>
           <xsl:when test="($mml=&quot;1&quot;) or ($generate_items&gt;0)">
-            <xsl:apply-templates select="*[position() = last() - 1]"/>
-            <xsl:element name="b">
-              <xsl:text> with </xsl:text>
-            </xsl:element>
-            <xsl:apply-templates select="*[position() = last()]"/>
+            <xsl:choose>
+              <xsl:when test="$iname = &apos;Identify&apos;">
+                <xsl:apply-templates select="Func[1]"/>
+                <xsl:element name="b">
+                  <xsl:text> with </xsl:text>
+                </xsl:element>
+                <xsl:apply-templates select="Func[2]"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:apply-templates select="*[position() = last() - 1]"/>
+                <xsl:element name="b">
+                  <xsl:text> with </xsl:text>
+                </xsl:element>
+                <xsl:apply-templates select="*[position() = last()]"/>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:when>
           <xsl:otherwise>
             <xsl:for-each select="following-sibling::*[1]/Proposition/*[1]">

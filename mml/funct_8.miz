@@ -1,0 +1,2611 @@
+:: Basic properties of even and odd functions
+::  by Bo Li and Yanhong Men
+:: 
+:: Received May 25, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM, ARYTM_1, RELAT_1, ABSVALUE, SQUARE_1, MEMBERED, EUCLID,
+      FUNCT_8, FUNCT_1, PARTFUN1, BOOLE, SIN_COS, SIN_COS2, RCOMP_1, ARYTM_3,
+      SIN_COS4, SIN_COS9, SEQ_1, SUBSET_1, COMPLEX1, XCMPLX_0, FINSEQ_4,
+      MATRIX_2, MATRIX_6;
+ notations COMPLEX1, XCMPLX_0, SIN_COS4, ORDINAL1, NUMBERS, XREAL_0, XXREAL_0,
+      REAL_1, MEMBERED, ABSVALUE, PARTFUN1, TARSKI, XBOOLE_0, SUBSET_1, EUCLID,
+      RELAT_1, FUNCT_1, FUNCT_2, SIN_COS2, SIN_COS, VALUED_0, VALUED_1, NAT_1,
+      RCOMP_1, SQUARE_1, SIN_COS9, RELSET_1, FINSEQ_4, PARTFUN2, FDIFF_9,
+      RFUNCT_1, SEQ_1, LIMFUNC1;
+ constructors REAL_1, SUPINF_1, RCOMP_1, SEQ_1, EUCLID, SQUARE_1, LIMFUNC1,
+      ABSVALUE, SIN_COS2, RFUNCT_1, RELSET_1, NUMBERS, MESFUNC1, SIN_COS9,
+      BINOP_2, SIN_COS, COMPLEX1, FINSEQ_4, PARTFUN2, PARTFUN1, FDIFF_9,
+      FDIFF_1, VALUED_1;
+ registrations XXREAL_0, XREAL_0, REAL_1, XBOOLE_0, MEMBERED, XCMPLX_0,
+      NUMBERS, VALUED_0, FUNCT_1, RELAT_1, COMPLEX1, RFUNCT_1, RFUNCT_2,
+      FDIFF_1, VALUED_1, PARTFUN1, FUNCT_2, RELSET_1;
+ requirements REAL, NUMERALS, SUBSET, ARITHM, BOOLE;
+ definitions COMPLEX1, SIN_COS4, XREAL_0, ABSVALUE, INT_1, FUNCT_1, RELSET_1,
+      RFUNCT_2, PROB_1, XBOOLE_0, EUCLID, RCOMP_1, TARSKI, PBOOLE, VALUED_1,
+      MESFUNC1, SIN_COS, SIN_COS2, RFUNCT_1, NUMBERS, SIN_COS9, FINSEQ_4,
+      XCMPLX_0, LIMFUNC1, SQUARE_1, SUBSET_1, RELAT_1, MEMBERED, PARTFUN2,
+      PARTFUN1, FDIFF_9, FDIFF_1, VALUED_0, SEQM_3;
+ theorems SIN_COS4, XREAL_0, ABSVALUE, FUNCT_2, COMPLEX1, XBOOLE_0, EUCLID,
+      XCMPLX_1, SIN_COS9, XXREAL_1, VALUED_1, XBOOLE_1, SIN_COS, SIN_COS2,
+      RFUNCT_1, XCMPLX_0, RELAT_1, PARTFUN2, FUNCT_1, TARSKI, PARTFUN1,
+      NUMBERS;
+ schemes FUNCT_2;
+
+begin :: Even and odd functions
+
+reserve x, r for Real;
+
+definition let A be set;
+  attr A is symmetrical means :Def1:
+  for x being complex number st x in A holds -x in A;
+end;
+
+registration
+  cluster symmetrical Subset of COMPLEX;
+  existence
+   proof
+   take [#]COMPLEX;
+   let x be complex number;
+   thus thesis by XCMPLX_0:def 2;
+  end;
+end;
+
+registration
+  cluster symmetrical Subset of REAL;
+  existence
+   proof
+   take [#]REAL;
+   let x be complex number;
+A1:for x st x in REAL holds -x in REAL;
+   thus thesis by A1;
+  end;
+end;
+
+reserve A for symmetrical Subset of COMPLEX;
+
+definition
+  let R be Relation;
+  attr R is with_symmetrical_domain means :Def2:
+  dom R is symmetrical;
+end;
+
+registration
+  cluster empty -> with_symmetrical_domain Relation;
+  coherence
+  proof
+B1:dom {} = {};
+  {} is symmetrical
+  proof
+  assume not {} is symmetrical;
+  then consider x being complex number such that
+A1:(x in {}) and (not -x in {}) by Def1;
+   thus contradiction by A1;
+  end;
+  hence thesis by Def2,B1;
+  end;
+ end;
+
+registration
+  let R be with_symmetrical_domain Relation;
+  cluster dom R -> symmetrical;
+  coherence by Def2;
+end;
+
+definition
+  let X,Y be complex-membered set;
+  let F be PartFunc of X, Y;
+  attr F is quasi_even means :Def3:
+  for x st x in dom F & -x in dom F holds F.(-x)=F.x;
+end;
+
+definition
+  let X,Y be complex-membered set;
+  let F be PartFunc of X, Y;
+  attr F is even means :Def4:
+  F is with_symmetrical_domain quasi_even;
+end;
+
+registration
+  let X,Y be complex-membered set;
+  cluster with_symmetrical_domain quasi_even -> even PartFunc of X, Y;
+  coherence by Def4;
+  cluster even -> with_symmetrical_domain quasi_even PartFunc of X, Y;
+  coherence by Def4;
+end;
+
+definition
+  let A be set;
+  let X,Y be complex-membered set;
+  let F be PartFunc of X, Y;
+  pred F is_even_on A means :Def5:
+  A c= dom F & F|A is even;
+end;
+
+definition
+  let X,Y be complex-membered set;
+  let F be PartFunc of X, Y;
+  attr F is quasi_odd means :Def6:
+  for x st x in dom F & -x in dom F holds F.(-x)=-F.x;
+end;
+
+definition
+  let X,Y be complex-membered set;
+  let F be PartFunc of X, Y;
+  attr F is odd means  :Def7:
+  F is with_symmetrical_domain quasi_odd;
+end;
+
+registration
+  let X,Y be complex-membered set;
+  cluster with_symmetrical_domain quasi_odd -> odd PartFunc of X, Y;
+  coherence by Def7;
+  cluster odd -> with_symmetrical_domain quasi_odd  PartFunc of X, Y;
+  coherence by Def7;
+end;
+
+definition
+  let A be set;
+  let X,Y be complex-membered set;
+  let F be PartFunc of X, Y;
+  pred F is_odd_on A means :Def8:
+  A c= dom F & F|A is odd;
+end;
+
+reserve F,G for PartFunc of REAL, REAL;
+
+theorem
+  F is_odd_on A iff (A c= dom F & for x st x in A holds F.x+F.(-x)=0)
+proof
+B1: F is_odd_on A implies
+(A c= dom F & for x st x in A holds F.x+F.(-x)=0)
+   proof
+   assume
+A1:F is_odd_on A; then
+A2:A c= dom F & F|A is odd by Def8;
+   for x st x in A holds F.x+F.(-x)=0
+     proof
+        let x;
+        assume
+A5: x in A; then
+A4:x in A & -x in A by Def1; then
+A6: x in dom(F|A) & -x in dom(F|A) by RELAT_1:91,A2;
+    F.x+F.(-x)=F/.x+F.(-x) by A2,A5,PARTFUN1:def 8
+                  .=F/.x+F/.(-x) by A2,A4,PARTFUN1:def 8
+                   .=F|A/.x+F/.(-x) by PARTFUN2:35,A2,A5
+                   .=F|A/.x+F|A/.(-x) by PARTFUN2:35,A2,A4
+                   .=F|A/.x+F|A.(-x) by PARTFUN1:def 8,A6
+                   .=F|A.x+F|A.(-x) by PARTFUN1:def 8,A6
+                   .=F|A.x+(-F|A.x) by A2,A6,Def6
+                   .=0;
+     hence thesis;
+     end;
+     hence thesis by A1,Def8;
+   end;
+ (A c= dom F & for x st x in A holds F.x+F.(-x)=0)
+ implies F is_odd_on A
+proof
+    assume
+A7:A c= dom F & for x st x in A holds F.x+F.(-x)=0;
+B1:for x st x in A holds F.(-x)=-F.x
+   proof
+    let x;
+    assume x in A;
+    then F.x+F.(-x)=0 by A7;
+    hence thesis;
+   end;
+A8:dom(F|A) = A by RELAT_1:91,A7;
+for x st x in dom(F|A) & -x in dom(F|A) holds F|A.(-x)=-F|A.x
+      proof
+       let x;
+        assume
+A9:x in dom(F|A) & -x in dom(F|A);
+             F|A.(-x)=F|A/.(-x) by PARTFUN1:def 8,A9
+                    .=F/.(-x) by PARTFUN2:35,A9,A8,A7
+                    .=F.(-x) by PARTFUN1:def 8,A9,A8,A7
+                    .=-F.x by A9,A8,B1
+                    .=-F/.x by PARTFUN1:def 8,A9,A8,A7
+                    .=-F|A/.x by PARTFUN2:35,A9,A8,A7
+                    .=-F|A.x by PARTFUN1:def 8,A9;
+        hence thesis;
+      end;
+   then F|A is with_symmetrical_domain quasi_odd by Def6,A8,Def2;
+   hence thesis by A7,Def8;
+  end;
+ hence thesis by B1;
+end;
+
+theorem
+  F is_even_on A iff (A c= dom F & for x st x in A holds F.x-F.(-x)=0)
+proof
+B1: F is_even_on A implies
+   (A c= dom F & for x st x in A holds F.x-F.(-x)=0)
+   proof
+   assume
+A1:F is_even_on A; then
+A2:A c= dom F & F|A is even by Def5;
+   for x st x in A holds F.x-F.(-x)=0
+   proof
+     let x;
+     assume
+A5:  x in A; then
+A4:  x in A & -x in A by Def1; then
+A6:  x in dom(F|A) & -x in dom(F|A) by RELAT_1:91,A2;
+     F.x-F.(-x)=F/.x-F.(-x) by A2,A5,PARTFUN1:def 8
+                  .=F/.x-F/.(-x) by A2,A4,PARTFUN1:def 8
+                   .=F|A/.x-F/.(-x) by PARTFUN2:35,A2,A5
+                   .=F|A/.x-F|A/.(-x) by PARTFUN2:35,A2,A4
+                   .=F|A.x-F|A/.(-x) by PARTFUN1:def 8,A6
+                   .=F|A.x-F|A.(-x) by PARTFUN1:def 8,A6
+                   .=F|A.x-F|A.x by A2,A6,Def3
+                   .=0;
+     hence thesis;
+     end;
+     hence thesis by A1,Def5;
+   end;
+ (A c= dom F & for x st x in A holds F.x-F.(-x)=0)
+ implies F is_even_on A
+proof
+    assume
+A7:A c= dom F & for x st x in A holds F.x-F.(-x)=0;
+B1:for x st x in A holds F.(-x)=F.x
+   proof
+    let x;
+    assume x in A;
+    then F.x-F.(-x)=0 by A7;
+    hence thesis;
+   end;
+A8:dom(F|A) = A by RELAT_1:91,A7;
+for x st x in dom(F|A) & -x in dom(F|A) holds F|A.(-x)=F|A.x
+      proof
+       let x;
+        assume
+A9:x in dom(F|A) & -x in dom(F|A);
+             F|A.(-x)=F|A/.(-x) by PARTFUN1:def 8,A9
+                    .=F/.(-x) by PARTFUN2:35,A9,A8,A7
+                    .=F.(-x) by PARTFUN1:def 8,A9,A8,A7
+                    .=F.x by A9,A8,B1
+                    .=F/.x by PARTFUN1:def 8,A9,A8,A7
+                    .=F|A/.x by PARTFUN2:35,A9,A8,A7
+                    .=F|A.x by PARTFUN1:def 8,A9;
+        hence thesis;
+      end;
+   then F|A is with_symmetrical_domain quasi_even by Def3,A8,Def2;
+   hence thesis by A7,Def5;
+  end;
+ hence thesis by B1;
+end;
+
+theorem
+  (F is_odd_on A & for x st x in A holds F.x<>0) implies
+  (A c= dom F & for x st x in A holds F.x / F.(-x)=-1)
+proof
+   assume
+A1:F is_odd_on A & for x st x in A holds F.x<>0; then
+A2:A c= dom F & F|A is odd by Def8;
+   for x st x in A holds F.x / F.(-x)=-1
+   proof
+     let x;
+     assume
+A5:  x in A; then
+A4:  x in A & -x in A by Def1; then
+A6:  x in dom(F|A) & -x in dom(F|A) by RELAT_1:91,A2;
+A7:  F.x=F/.x by A2,A5,PARTFUN1:def 8
+      .=F|A/.x by PARTFUN2:35,A2,A5
+      .=F|A.x by PARTFUN1:def 8,A6;
+     F.x / F.(-x)=F/.x / F.(-x) by A2,A5,PARTFUN1:def 8
+                  .=F/.x / F/.(-x) by A2,A4,PARTFUN1:def 8
+                   .=F|A/.x / F/.(-x) by PARTFUN2:35,A2,A5
+                   .=F|A/.x / F|A/.(-x) by PARTFUN2:35,A2,A4
+                   .=F|A.x / F|A/.(-x) by PARTFUN1:def 8,A6
+                   .=F|A.x / F|A.(-x) by PARTFUN1:def 8,A6
+                   .=F|A.x / (-F|A.x) by A2,A6,Def6
+                   .=-(F|A.x / F|A.x) by XCMPLX_1:189
+                   .=-1 by XCMPLX_1:60,A1,A5,A7;
+     hence thesis;
+     end;
+     hence thesis by A1,Def8;
+   end;
+
+theorem
+  (A c= dom F & for x st x in A holds F.x / F.(-x)=-1)
+  implies F is_odd_on A
+proof
+    assume
+A3:A c= dom F & for x st x in A holds F.x / F.(-x)=-1;
+B1:for x st x in A holds F.(-x)=-F.x
+   proof
+    let x;
+    assume x in A;
+    then F.x / F.(-x)=-1 by A3;
+    hence thesis by XCMPLX_1:196;
+   end;
+A8:dom(F|A) = A by RELAT_1:91,A3;
+for x st x in dom(F|A) & -x in dom(F|A) holds F|A.(-x)=-F|A.x
+      proof
+       let x;
+        assume
+A9:x in dom(F|A) & -x in dom(F|A);
+             F|A.(-x)=F|A/.(-x) by PARTFUN1:def 8,A9
+                    .=F/.(-x) by PARTFUN2:35,A9,A8,A3
+                    .=F.(-x) by PARTFUN1:def 8,A9,A8,A3
+                    .=-F.x by A9,A8,B1
+                    .=-F/.x by PARTFUN1:def 8,A9,A8,A3
+                    .=-F|A/.x by PARTFUN2:35,A9,A8,A3
+                    .=-F|A.x by PARTFUN1:def 8,A9;
+        hence thesis;
+      end;
+   then F|A is with_symmetrical_domain quasi_odd by Def6,A8,Def2;
+   hence thesis by A3,Def8;
+  end;
+
+theorem
+  (F is_even_on A & for x st x in A holds F.x<>0 ) implies
+  (A c= dom F & for x st x in A holds F.x / F.(-x)=1)
+proof
+     assume
+A1:  F is_even_on A & for x st x in A holds F.x<>0; then
+A2:  A c= dom F & F|A is even by Def5;
+     for x st x in A holds F.x / F.(-x)=1
+     proof
+        let x;
+        assume
+A5:     x in A; then
+A4:x in A & -x in A by Def1; then
+A6: x in dom(F|A) & -x in dom(F|A) by RELAT_1:91,A2;
+A7: F.x=F/.x by A2,A5,PARTFUN1:def 8
+      .=F|A/.x by PARTFUN2:35,A2,A5
+      .=F|A.x by PARTFUN1:def 8,A6;
+    F.x / F.(-x)=F/.x / F.(-x) by A2,A5,PARTFUN1:def 8
+                  .=F/.x / F/.(-x) by A2,A4,PARTFUN1:def 8
+                   .=F|A/.x / F/.(-x) by PARTFUN2:35,A2,A5
+                   .=F|A/.x / F|A/.(-x) by PARTFUN2:35,A2,A4
+                   .=F|A.x / F|A/.(-x) by PARTFUN1:def 8,A6
+                   .=F|A.x / F|A.(-x) by PARTFUN1:def 8,A6
+                   .=F|A.x / F|A.x by A2,A6,Def3
+                   .=1 by XCMPLX_1:60,A1,A5,A7;
+     hence thesis;
+     end;
+     hence thesis by A1,Def5;
+   end;
+
+theorem
+  (A c= dom F & for x st x in A holds F.x / F.(-x)=1)
+  implies F is_even_on A
+proof
+    assume
+A3:A c= dom F & for x st x in A holds F.x / F.(-x)=1;
+B1:for x st x in A holds F.(-x)=F.x
+   proof
+    let x;
+    assume x in A;
+    then F.x / F.(-x)=1 by A3;
+    hence thesis by XCMPLX_1:58;
+   end;
+A8:dom(F|A) = A by RELAT_1:91,A3;
+for x st x in dom(F|A) & -x in dom(F|A) holds F|A.(-x)=F|A.x
+      proof
+       let x;
+        assume
+A9:x in dom(F|A) & -x in dom(F|A);
+             F|A.(-x)=F|A/.(-x) by PARTFUN1:def 8,A9
+                    .=F/.(-x) by PARTFUN2:35,A9,A8,A3
+                    .=F.(-x) by PARTFUN1:def 8,A9,A8,A3
+                    .=F.x by A9,A8,B1
+                    .=F/.x by PARTFUN1:def 8,A9,A8,A3
+                    .=F|A/.x by PARTFUN2:35,A9,A8,A3
+                    .=F|A.x by PARTFUN1:def 8,A9;
+        hence thesis;
+      end;
+   then F|A is with_symmetrical_domain quasi_even by Def3,A8,Def2;
+   hence thesis by A3,Def5;
+  end;
+
+theorem
+  F is_even_on A & F is_odd_on A implies for x st x in A holds F.x=0
+proof
+   assume that
+A1:F is_even_on A and
+A2:F is_odd_on A;
+B2:A c= dom F & F|A is even by Def5,A1;
+B3:A c= dom F & F|A is odd by Def8,A2;
+     let x;
+     assume
+A3:  x in A;
+     then x in A & -x in A by Def1; then
+A5: x in dom(F|A) & -x in dom(F|A) by RELAT_1:91,B2;
+        F.x=F/.x by B2,A3,PARTFUN1:def 8
+              .=F|A/.x by PARTFUN2:35,B2,A3
+              .=F|A.x by PARTFUN1:def 8,A5
+              .=F|A.(-x) by B2,Def3,A5
+              .=-F|A.x by B3,Def6,A5
+              .=-F|A/.x by PARTFUN1:def 8,A5
+              .=-F/.x by PARTFUN2:35,B2,A3
+              .=-F.x by B2,A3,PARTFUN1:def 8;
+       hence thesis;
+end;
+
+theorem
+  F is_even_on A implies for x st x in A holds F.x = F.(abs x)
+proof
+   assume F is_even_on A; then
+A1:A c= dom F & F|A is even by Def5;
+ let x such that
+A2:    x in A;
+A4:x in A & -x in A by Def1,A2; then
+A5: x in dom(F|A) & -x in dom(F|A) by RELAT_1:91,A1;
+   per cases;
+  suppose x < 0;
+ then F.(abs x)=F.(-x) by ABSVALUE:def 1
+              .=F/.(-x) by A1,A4,PARTFUN1:def 8
+              .=F|A/.(-x) by PARTFUN2:35,A1,A4
+              .=F|A.(-x) by PARTFUN1:def 8,A5
+              .=F|A.x by A1,Def3,A5
+              .=F|A/.x by PARTFUN1:def 8,A5
+              .=F/.x by PARTFUN2:35,A1,A2
+              .=F.x by A1,A2,PARTFUN1:def 8;
+   hence thesis;
+  end;
+  suppose 0 < x;
+   hence thesis by ABSVALUE:def 1;
+  end;
+ suppose x = 0;
+    hence thesis by ABSVALUE:def 1;
+  end;
+ end;
+
+theorem
+  (A c= dom F & for x st x in A holds F.x = F.(abs x)) implies
+  F is_even_on A
+proof
+   assume that
+A1: A c= dom F and
+B1:for x st x in A holds F.x = F.(abs x);
+B2: for x st x in A holds -x in A by Def1;
+B3: for x st x in A holds F.(-x) = F.(x)
+   proof
+      let x;
+      assume
+A2:  x in A;
+     per cases;
+  suppose x < 0;
+   then F.(-x)=F.(abs x) by ABSVALUE:def 1
+    .=F.x by B1,A2;
+    hence thesis;
+  end;
+  suppose 0 < x;
+   then abs -x=-(-x) by ABSVALUE:def 1
+        .=x;
+   hence thesis by B1,B2,A2;
+  end;
+ suppose x = 0;
+   hence thesis;
+   end;
+   end;
+A8:dom(F|A) = A by RELAT_1:91,A1;
+for x st x in dom(F|A) & -x in dom(F|A) holds F|A.(-x)=F|A.x
+      proof
+       let x;
+        assume
+A9:x in dom(F|A) & -x in dom(F|A);
+             F|A.(-x)=F|A/.(-x) by PARTFUN1:def 8,A9
+                    .=F/.(-x) by PARTFUN2:35,A9,A8,A1
+                    .=F.(-x) by PARTFUN1:def 8,A9,A8,A1
+                    .=F.x by A9,A8,B3
+                    .=F/.x by PARTFUN1:def 8,A9,A8,A1
+                    .=F|A/.x by PARTFUN2:35,A9,A8,A1
+                    .=F|A.x by PARTFUN1:def 8,A9;
+        hence thesis;
+      end;
+   then F|A is with_symmetrical_domain quasi_even by Def3,A8,Def2;
+   hence thesis by A1,Def5;
+  end;
+
+theorem
+  F is_odd_on A & G is_odd_on A implies
+  F + G is_odd_on A
+proof
+    assume that
+A1:  F is_odd_on A and
+A2: G is_odd_on A;
+B1: A c= dom F & F|A is odd by Def8,A1;
+B2: A c= dom G & G|A is odd by Def8,A2;
+B3: A c= dom F /\ dom G by XBOOLE_1:19,B1,B2;
+A7: dom F /\ dom G=dom (F + G) by VALUED_1:def 1;
+A8:dom((F + G)|A) = A by RELAT_1:91,A7,XBOOLE_1:19,B1,B2;
+for x st x in dom((F + G)|A) & -x in dom((F + G)|A) holds
+ (F + G)|A.(-x)=-(F + G)|A.x
+      proof
+       let x;
+       assume
+A9:x in dom((F + G)|A) & -x in dom((F + G)|A); then
+A10:x in dom(F|A) & -x in dom(F|A) & x in dom(G|A) & -x in dom(G|A)
+    by RELAT_1:91,B1,B2,A8;
+   (F + G)|A.(-x)=(F + G)|A/.(-x) by PARTFUN1:def 8,A9
+                .=(F + G)/.(-x) by PARTFUN2:35,A9,A8,B3,A7
+                .=(F + G).(-x) by PARTFUN1:def 8,A9,A8,B3,A7
+                .=F.(-x) + G.(-x) by B3,VALUED_1:def 1,A7,A9,A8
+                .=F/.(-x) + G.(-x) by PARTFUN1:def 8,B1,A9,A8
+                .=F/.(-x) + G/.(-x) by PARTFUN1:def 8,B2,A9,A8
+                .=F|A/.(-x) + G/.(-x) by PARTFUN2:35,A9,B1,A8
+                .=F|A/.(-x) + G|A/.(-x) by PARTFUN2:35,A9,B2,A8
+                .=F|A.(-x) + G|A/.(-x) by PARTFUN1:def 8,A10
+                .=F|A.(-x) + G|A.(-x) by PARTFUN1:def 8,A10
+                .=(-F|A.x) + G|A.(-x) by B1,Def6,A10
+                .=(-F|A.x) + (-G|A.x) by B2,Def6,A10
+                .=-(F|A.x + G|A.x)
+                .=-(F|A/.x + G|A.x) by PARTFUN1:def 8,A10
+                .=-(F|A/.x + G|A/.x) by PARTFUN1:def 8,A10
+                .=-(F/.x + G|A/.x) by PARTFUN2:35,B1,A9,A8
+                .=-(F/.x + G/.x) by PARTFUN2:35,B2,A9,A8
+                .=-(F.x + G/.x) by PARTFUN1:def 8,B1,A9,A8
+                .=-(F.x + G.x) by PARTFUN1:def 8,B2,A9,A8
+                .=-(F + G).x by B3,VALUED_1:def 1,A7,A9,A8
+                .=-(F + G)/.x by PARTFUN1:def 8,A9,A8,B3,A7
+                .=-(F + G)|A/.x by PARTFUN2:35,A9,A8,B3,A7
+                .=-(F + G)|A.x by PARTFUN1:def 8,A9;
+        hence thesis;
+      end;
+   then (F + G)|A is with_symmetrical_domain quasi_odd by Def6,A8,Def2;
+   hence thesis by A7,B3,Def8;
+  end;
+
+theorem
+  F is_even_on A & G is_even_on A implies
+  F + G is_even_on A
+proof
+    assume that
+A1:  F is_even_on A and
+A2: G is_even_on A;
+B1: A c= dom F & F|A is even by Def5,A1;
+B2: A c= dom G & G|A is even by Def5,A2;
+B3: A c= dom F /\ dom G by XBOOLE_1:19,B1,B2;
+A7: dom F /\ dom G=dom (F + G) by VALUED_1:def 1;
+A8:dom((F + G)|A) = A by RELAT_1:91,A7,XBOOLE_1:19,B1,B2;
+for x st x in dom((F + G)|A) & -x in dom((F + G)|A) holds
+ (F + G)|A.(-x)=(F + G)|A.x
+      proof
+       let x;
+       assume
+A9:x in dom((F + G)|A) & -x in dom((F + G)|A); then
+A10:x in dom(F|A) & -x in dom(F|A) & x in dom(G|A) & -x in dom(G|A)
+    by RELAT_1:91,B1,B2,A8;
+   (F + G)|A.(-x)=(F + G)|A/.(-x) by PARTFUN1:def 8,A9
+                .=(F + G)/.(-x) by PARTFUN2:35,A9,A8,B3,A7
+                .=(F + G).(-x) by PARTFUN1:def 8,A9,A8,B3,A7
+                .=F.(-x) + G.(-x) by B3,VALUED_1:def 1,A7,A9,A8
+                .=F/.(-x) + G.(-x) by PARTFUN1:def 8,B1,A9,A8
+                .=F/.(-x) + G/.(-x) by PARTFUN1:def 8,B2,A9,A8
+                .=F|A/.(-x) + G/.(-x) by PARTFUN2:35,A9,B1,A8
+                .=F|A/.(-x) + G|A/.(-x) by PARTFUN2:35,A9,B2,A8
+                .=F|A.(-x) + G|A/.(-x) by PARTFUN1:def 8,A10
+                .=F|A.(-x) + G|A.(-x) by PARTFUN1:def 8,A10
+                .=F|A.x + G|A.(-x) by B1,Def3,A10
+                .=F|A.x + G|A.x by B2,Def3,A10
+                .=F|A/.x + G|A.x by PARTFUN1:def 8,A10
+                .=F|A/.x + G|A/.x by PARTFUN1:def 8,A10
+                .=F/.x + G|A/.x by PARTFUN2:35,B1,A9,A8
+                 .=F/.x + G/.x by PARTFUN2:35,B2,A9,A8
+                 .=F.x + G/.x by PARTFUN1:def 8,B1,A9,A8
+                 .=F.x + G.x by PARTFUN1:def 8,B2,A9,A8
+                 .=(F + G).x by B3,VALUED_1:def 1,A7,A9,A8
+                 .=(F + G)/.x by PARTFUN1:def 8,A9,A8,B3,A7
+                 .=(F + G)|A/.x by PARTFUN2:35,A9,A8,B3,A7
+                 .=(F + G)|A.x by PARTFUN1:def 8,A9;
+        hence thesis;
+      end;
+   then (F + G)|A is with_symmetrical_domain quasi_even by Def3,A8,Def2;
+   hence thesis by A7,B3,Def5;
+  end;
+
+theorem
+  F is_odd_on A & G is_odd_on A implies
+  F - G is_odd_on A
+proof
+    assume that
+A1:  F is_odd_on A and
+A2: G is_odd_on A;
+B1: A c= dom F & F|A is odd by Def8,A1;
+B2: A c= dom G & G|A is odd by Def8,A2;
+B3: A c= dom F /\ dom G by XBOOLE_1:19,B1,B2;
+A7: dom F /\ dom G=dom (F - G) by VALUED_1:12;
+A8:dom((F - G)|A) = A by RELAT_1:91,A7,XBOOLE_1:19,B1,B2;
+for x st x in dom((F - G)|A) & -x in dom((F - G)|A) holds
+ (F - G)|A.(-x)=-(F - G)|A.x
+      proof
+       let x;
+       assume
+A9:x in dom((F - G)|A) & -x in dom((F - G)|A); then
+A10:x in dom(F|A) & -x in dom(F|A) & x in dom(G|A) & -x in dom(G|A)
+    by RELAT_1:91,B1,B2,A8;
+   (F - G)|A.(-x)=(F - G)|A/.(-x) by PARTFUN1:def 8,A9
+                .=(F - G)/.(-x) by PARTFUN2:35,A9,A8,B3,A7
+                .=(F - G).(-x) by PARTFUN1:def 8,A9,A8,B3,A7
+                .=F.(-x) - G.(-x) by B3,VALUED_1:13,A7,A9,A8
+                .=F/.(-x) - G.(-x) by PARTFUN1:def 8,B1,A9,A8
+                .=F/.(-x) - G/.(-x) by PARTFUN1:def 8,B2,A9,A8
+                .=F|A/.(-x) - G/.(-x) by PARTFUN2:35,A9,B1,A8
+                .=F|A/.(-x) - G|A/.(-x) by PARTFUN2:35,A9,B2,A8
+                .=F|A.(-x) - G|A/.(-x) by PARTFUN1:def 8,A10
+                .=F|A.(-x) - G|A.(-x) by PARTFUN1:def 8,A10
+                .=(-F|A.x) - G|A.(-x) by B1,Def6,A10
+                .=(-F|A.x) - (-G|A.x) by B2,Def6,A10
+                .=-(F|A.x - G|A.x)
+                .=-(F|A/.x - G|A.x) by PARTFUN1:def 8,A10
+                .=-(F|A/.x - G|A/.x) by PARTFUN1:def 8,A10
+                .=-(F/.x - G|A/.x) by PARTFUN2:35,B1,A9,A8
+                .=-(F/.x - G/.x) by PARTFUN2:35,B2,A9,A8
+                .=-(F.x - G/.x) by PARTFUN1:def 8,B1,A9,A8
+                .=-(F.x - G.x) by PARTFUN1:def 8,B2,A9,A8
+                .=-(F - G).x by B3,VALUED_1:13,A7,A9,A8
+                .=-(F - G)/.x by PARTFUN1:def 8,A9,A8,B3,A7
+                .=-(F - G)|A/.x by PARTFUN2:35,A9,A8,B3,A7
+                .=-(F - G)|A.x by PARTFUN1:def 8,A9;
+        hence thesis;
+      end;
+   then (F - G)|A is with_symmetrical_domain quasi_odd by Def6,A8,Def2;
+   hence thesis by A7,B3,Def8;
+  end;
+
+theorem
+  F is_even_on A & G is_even_on A implies
+  F - G is_even_on A
+proof
+    assume that
+A1:  F is_even_on A and
+A2: G is_even_on A;
+B1: A c= dom F & F|A is even by Def5,A1;
+B2: A c= dom G & G|A is even by Def5,A2;
+B3: A c= dom F /\ dom G by XBOOLE_1:19,B1,B2;
+A7: dom F /\ dom G=dom (F - G) by VALUED_1:12;
+A8:dom((F - G)|A) = A by RELAT_1:91,A7,XBOOLE_1:19,B1,B2;
+for x st x in dom((F - G)|A) & -x in dom((F - G)|A) holds
+ (F - G)|A.(-x)=(F - G)|A.x
+      proof
+       let x;
+       assume
+A9:x in dom((F - G)|A) & -x in dom((F - G)|A); then
+A10:x in dom(F|A) & -x in dom(F|A) & x in dom(G|A) & -x in dom(G|A)
+    by RELAT_1:91,B1,B2,A8;
+   (F - G)|A.(-x)=(F - G)|A/.(-x) by PARTFUN1:def 8,A9
+                .=(F - G)/.(-x) by PARTFUN2:35,A9,A8,B3,A7
+                .=(F - G).(-x) by PARTFUN1:def 8,A9,A8,B3,A7
+                .=F.(-x) - G.(-x) by B3,VALUED_1:13,A7,A9,A8
+                .=F/.(-x) - G.(-x) by PARTFUN1:def 8,B1,A9,A8
+                .=F/.(-x) - G/.(-x) by PARTFUN1:def 8,B2,A9,A8
+                .=F|A/.(-x) - G/.(-x) by PARTFUN2:35,A9,B1,A8
+                .=F|A/.(-x) - G|A/.(-x) by PARTFUN2:35,A9,B2,A8
+                .=F|A.(-x) - G|A/.(-x) by PARTFUN1:def 8,A10
+                .=F|A.(-x) - G|A.(-x) by PARTFUN1:def 8,A10
+                .=F|A.x - G|A.(-x) by B1,Def3,A10
+                .=F|A.x - G|A.x by B2,Def3,A10
+                .=F|A/.x - G|A.x by PARTFUN1:def 8,A10
+                .=F|A/.x - G|A/.x by PARTFUN1:def 8,A10
+                .=F/.x - G|A/.x by PARTFUN2:35,B1,A9,A8
+                 .=F/.x - G/.x by PARTFUN2:35,B2,A9,A8
+                 .=F.x - G/.x by PARTFUN1:def 8,B1,A9,A8
+                 .=F.x - G.x by PARTFUN1:def 8,B2,A9,A8
+                 .=(F - G).x by B3,VALUED_1:13,A7,A9,A8
+                 .=(F - G)/.x by PARTFUN1:def 8,A9,A8,B3,A7
+                 .=(F - G)|A/.x by PARTFUN2:35,A9,A8,B3,A7
+                 .=(F - G)|A.x by PARTFUN1:def 8,A9;
+        hence thesis;
+      end;
+   then (F - G)|A is with_symmetrical_domain quasi_even by Def3,A8,Def2;
+   hence thesis by A7,B3,Def5;
+  end;
+
+theorem
+  F is_odd_on A implies r (#) F is_odd_on A
+ proof
+   assume F is_odd_on A; then
+A1:A c= dom F & F|A is odd by Def8;
+A2:A c= dom (r (#) F) by A1,VALUED_1:def 5;
+A3:dom((r (#) F)|A) = A by RELAT_1:91,A2;
+for x st x in dom((r (#) F)|A) & -x in dom((r (#) F)|A) holds
+ (r (#) F)|A.(-x)=-(r (#) F)|A.x
+   proof
+       let x;
+       assume
+A5:x in dom((r (#) F)|A) & -x in dom((r (#) F)|A); then
+A6:x in dom(F|A) & -x in dom(F|A) by RELAT_1:91,A1,A3;
+       (r (#) F)|A.(-x)=(r (#) F)|A/.(-x) by PARTFUN1:def 8,A5
+                .=(r (#) F)/.(-x) by PARTFUN2:35,A2,A3,A5
+                .=(r (#) F).(-x) by PARTFUN1:def 8,A2,A3,A5
+                .=r * F.(-x) by VALUED_1:def 5,A2,A3,A5
+                .=r * F/.(-x) by PARTFUN1:def 8,A3,A1,A5
+                .=r * F|A/.(-x) by PARTFUN2:35,A1,A3,A5
+                .=r * F|A.(-x) by PARTFUN1:def 8,A6
+                .=r * (-F|A.x) by A1,Def6,A6
+                .=-(r * F|A.x)
+                .=-(r * F|A/.x) by PARTFUN1:def 8,A6
+                .=-(r * F/.x) by PARTFUN2:35,A1,A3,A5
+                .=-(r * F.x) by PARTFUN1:def 8,A1,A3,A5
+                .=-(r (#) F).x by VALUED_1:def 5,A2,A3,A5
+                .=-(r (#) F)/.x by PARTFUN1:def 8,A2,A3,A5
+                .=-(r (#) F)|A/.x by PARTFUN2:35,A2,A3,A5
+                .=-(r (#) F)|A.x by PARTFUN1:def 8,A5;
+           hence thesis;
+          end;
+   then (r (#) F)|A is with_symmetrical_domain quasi_odd by Def6,A3,Def2;
+   hence thesis by A2,Def8;
+  end;
+
+theorem
+  F is_even_on A implies r (#) F is_even_on A
+    proof
+   assume F is_even_on A; then
+A1:A c= dom F & F|A is even by Def5;
+A2:A c= dom (r (#) F) by A1,VALUED_1:def 5;
+A3:dom((r (#) F)|A) = A by RELAT_1:91,A2;
+for x st x in dom((r (#) F)|A) & -x in dom((r (#) F)|A) holds
+ (r (#) F)|A.(-x)=(r (#) F)|A.x
+   proof
+       let x;
+       assume
+A5:x in dom((r (#) F)|A) & -x in dom((r (#) F)|A); then
+A6:x in dom(F|A) & -x in dom(F|A) by RELAT_1:91,A1,A3;
+       (r (#) F)|A.(-x)=(r (#) F)|A/.(-x) by PARTFUN1:def 8,A5
+                .=(r (#) F)/.(-x) by PARTFUN2:35,A2,A3,A5
+                .=(r (#) F).(-x) by PARTFUN1:def 8,A2,A3,A5
+                .=r * F.(-x) by VALUED_1:def 5,A2,A3,A5
+                .=r * F/.(-x) by PARTFUN1:def 8,A3,A1,A5
+                .=r * F|A/.(-x) by PARTFUN2:35,A1,A3,A5
+                .=r * F|A.(-x) by PARTFUN1:def 8,A6
+                .=r * F|A.x by A1,Def3,A6
+                .=r * F|A/.x by PARTFUN1:def 8,A6
+                .=r * F/.x by PARTFUN2:35,A1,A3,A5
+                .=r * F.x by PARTFUN1:def 8,A1,A3,A5
+                .=(r (#) F).x by VALUED_1:def 5,A2,A3,A5
+                .=(r (#) F)/.x by PARTFUN1:def 8,A2,A3,A5
+                .=(r (#) F)|A/.x by PARTFUN2:35,A2,A3,A5
+                .=(r (#) F)|A.x by PARTFUN1:def 8,A5;
+           hence thesis;
+          end;
+   then (r (#) F)|A is with_symmetrical_domain quasi_even by Def3,A3,Def2;
+   hence thesis by A2,Def5;
+  end;
+
+theorem Th12:
+  F is_odd_on A implies -F is_odd_on A
+ proof
+    assume F is_odd_on A; then
+A1:A c= dom F & F|A is odd by Def8;
+A2:A c= dom (-F) by A1,VALUED_1:8;
+A3:dom((-F)|A) = A by RELAT_1:91,A2;
+for x st x in dom((-F)|A) & -x in dom((-F)|A) holds
+ (-F)|A.(-x)=-(-F)|A.x
+   proof
+       let x;
+       assume
+A5:x in dom((-F)|A) & -x in dom((-F)|A); then
+A6:x in dom(F|A) & -x in dom(F|A) by RELAT_1:91,A1,A3;
+       (-F)|A.(-x)=(-F)|A/.(-x) by PARTFUN1:def 8,A5
+                .=(-F)/.(-x) by PARTFUN2:35,A2,A3,A5
+                .=(-F).(-x) by PARTFUN1:def 8,A2,A3,A5
+                .=-F.(-x) by VALUED_1:8
+                .=-F/.(-x) by PARTFUN1:def 8,A3,A1,A5
+                .=-F|A/.(-x) by PARTFUN2:35,A1,A3,A5
+                .=-F|A.(-x) by PARTFUN1:def 8,A6
+                .=-(-F|A.x) by A1,Def6,A6
+                .=-(-F|A/.x) by PARTFUN1:def 8,A6
+                .=-(-F/.x) by PARTFUN2:35,A1,A3,A5
+                .=-(-F.x) by PARTFUN1:def 8,A1,A3,A5
+                .=-(-F).x by VALUED_1:8
+                .=-(-F)/.x by PARTFUN1:def 8,A2,A3,A5
+                .=-(-F)|A/.x by PARTFUN2:35,A2,A3,A5
+                .=-(-F)|A.x by PARTFUN1:def 8,A5;
+           hence thesis;
+          end;
+   then (-F)|A is with_symmetrical_domain quasi_odd by Def6,A3,Def2;
+   hence thesis by A2,Def8;
+  end;
+
+theorem Th13:
+  F is_even_on A implies -F is_even_on A
+proof
+   assume F is_even_on A; then
+A1:A c= dom F & F|A is even by Def5;
+A2:A c= dom (-F) by A1,VALUED_1:8;
+A3:dom((-F)|A) = A by RELAT_1:91,A2;
+   for x st x in dom((-F)|A) & -x in dom((-F)|A) holds
+     (-F)|A.(-x)=(-F)|A.x
+   proof
+     let x;
+     assume
+A5:  x in dom((-F)|A) & -x in dom((-F)|A); then
+A6:  x in dom(F|A) & -x in dom(F|A) by RELAT_1:91,A1,A3;
+     (-F)|A.(-x)=(-F)|A/.(-x) by PARTFUN1:def 8,A5
+                .=(-F)/.(-x) by PARTFUN2:35,A2,A3,A5
+                .=(-F).(-x) by PARTFUN1:def 8,A2,A3,A5
+                .=-F.(-x) by VALUED_1:8
+                .=-F/.(-x) by PARTFUN1:def 8,A3,A1,A5
+                .=-F|A/.(-x) by PARTFUN2:35,A1,A3,A5
+                .=-F|A.(-x) by PARTFUN1:def 8,A6
+                .=-F|A.x by A1,Def3,A6
+                .=-F|A/.x by PARTFUN1:def 8,A6
+                .=-F/.x by PARTFUN2:35,A1,A3,A5
+                .=-F.x by PARTFUN1:def 8,A1,A3,A5
+                .=(-F).x by VALUED_1:8
+                .=(-F)/.x by PARTFUN1:def 8,A2,A3,A5
+                .=(-F)|A/.x by PARTFUN2:35,A2,A3,A5
+                .=(-F)|A.x by PARTFUN1:def 8,A5;
+       hence thesis;
+     end;
+     then (-F)|A is with_symmetrical_domain quasi_even by Def3,A3,Def2;
+     hence thesis by A2,Def5;
+  end;
+
+theorem Th14:
+  F is_odd_on A implies F" is_odd_on A
+proof
+   assume F is_odd_on A; then
+A1:A c= dom F & F|A is odd by Def8;
+A2:A c= dom (F") by A1,VALUED_1:def 7;
+A3:dom((F")|A) = A by RELAT_1:91,A2;
+   for x st x in dom((F")|A) & -x in dom((F")|A) holds
+     (F")|A.(-x)=-(F")|A.x
+   proof
+     let x;
+     assume
+A5:  x in dom((F")|A) & -x in dom((F")|A); then
+A6:  x in dom(F|A) & -x in dom(F|A) by RELAT_1:91,A1,A3;
+     (F")|A.(-x)=(F")|A/.(-x) by PARTFUN1:def 8,A5
+                .=(F")/.(-x) by PARTFUN2:35,A2,A3,A5
+                .=(F").(-x) by PARTFUN1:def 8,A2,A3,A5
+                .=(F.(-x))" by VALUED_1:def 7,A2,A3,A5
+                .=(F/.(-x))" by PARTFUN1:def 8,A3,A1,A5
+                .=(F|A/.(-x))" by PARTFUN2:35,A1,A3,A5
+                .=(F|A.(-x))" by PARTFUN1:def 8,A6
+                .=(-F|A.x)" by A1,Def6,A6
+                .=(-F|A/.x)" by PARTFUN1:def 8,A6
+                .=(-F/.x)" by PARTFUN2:35,A1,A3,A5
+                .=(-F.x)" by PARTFUN1:def 8,A1,A3,A5
+                .=-(F.x)" by XCMPLX_1:224
+                .=-(F").x by VALUED_1:def 7,A2,A3,A5
+                .=-(F")/.x by PARTFUN1:def 8,A2,A3,A5
+                .=-(F")|A/.x by PARTFUN2:35,A2,A3,A5
+                .=-(F")|A.x by PARTFUN1:def 8,A5;
+      hence thesis;
+    end;
+    then (F")|A is with_symmetrical_domain quasi_odd by Def6,A3,Def2;
+    hence thesis by A2,Def8;
+  end;
+
+theorem Th15:
+  F is_even_on A implies F" is_even_on A
+proof
+    assume F is_even_on A; then
+A1:A c= dom F & F|A is even by Def5;
+A2:A c= dom (F") by A1,VALUED_1:def 7;
+A3:dom((F")|A) = A by RELAT_1:91,A2;
+for x st x in dom((F")|A) & -x in dom((F")|A) holds
+ (F")|A.(-x)=(F")|A.x
+   proof
+       let x;
+       assume
+A5:x in dom((F")|A) & -x in dom((F")|A); then
+A6:x in dom(F|A) & -x in dom(F|A) by RELAT_1:91,A1,A3;
+       (F")|A.(-x)=(F")|A/.(-x) by PARTFUN1:def 8,A5
+                .=(F")/.(-x) by PARTFUN2:35,A2,A3,A5
+                .=(F").(-x) by PARTFUN1:def 8,A2,A3,A5
+                .=(F.(-x))" by VALUED_1:def 7,A2,A3,A5
+                .=(F/.(-x))" by PARTFUN1:def 8,A3,A1,A5
+                .=(F|A/.(-x))" by PARTFUN2:35,A1,A3,A5
+                .=(F|A.(-x))" by PARTFUN1:def 8,A6
+                .=(F|A.x)" by A1,Def3,A6
+                .=(F|A/.x)" by PARTFUN1:def 8,A6
+                .=(F/.x)" by PARTFUN2:35,A1,A3,A5
+                .=(F.x)" by PARTFUN1:def 8,A1,A3,A5
+                .=(F").x by VALUED_1:def 7,A2,A3,A5
+                .=(F")/.x by PARTFUN1:def 8,A2,A3,A5
+                .=(F")|A/.x by PARTFUN2:35,A2,A3,A5
+                .=(F")|A.x by PARTFUN1:def 8,A5;
+           hence thesis;
+          end;
+   then (F")|A is with_symmetrical_domain quasi_even by Def3,A3,Def2;
+   hence thesis by A2,Def5;
+  end;
+
+theorem Th16:
+  F is_odd_on A implies |. F .| is_even_on A
+proof
+    assume F is_odd_on A; then
+A1:A c= dom F & F|A is odd by Def8;
+A2:A c= dom (|. F .|) by A1,VALUED_1:def 11;
+A3:dom((|. F .|)|A) = A by RELAT_1:91,A2;
+for x st x in dom((|. F .|)|A) & -x in dom((|. F .|)|A) holds
+ (|. F .|)|A.(-x)=(|. F .|)|A.x
+   proof
+       let x;
+       assume
+A5:x in dom((|. F .|)|A) & -x in dom((|. F .|)|A); then
+A6:x in dom(F|A) & -x in dom(F|A) by RELAT_1:91,A1,A3;
+       (|. F .|)|A.(-x)=(|. F .|)|A/.(-x) by PARTFUN1:def 8,A5
+                .=(|. F .|)/.(-x) by PARTFUN2:35,A2,A3,A5
+                .=(|. F .|).(-x) by PARTFUN1:def 8,A2,A3,A5
+                .=|. F.(-x) .| by VALUED_1:def 11,A2,A3,A5
+                .=|. F/.(-x) .| by PARTFUN1:def 8,A3,A1,A5
+                .=|. F|A/.(-x) .| by PARTFUN2:35,A1,A3,A5
+                .=|. F|A.(-x) .| by PARTFUN1:def 8,A6
+                .=|. -F|A.x .| by A1,Def6,A6
+                .=|. -F|A/.x .| by PARTFUN1:def 8,A6
+                .=|. -F/.x .| by PARTFUN2:35,A1,A3,A5
+                .=|. -F.x .| by PARTFUN1:def 8,A1,A3,A5
+                .=|. F.x .| by COMPLEX1:138
+                .=(|. F .|).x by VALUED_1:def 11,A2,A3,A5
+                .=(|. F .|)/.x by PARTFUN1:def 8,A2,A3,A5
+                .=(|. F .|)|A/.x by PARTFUN2:35,A2,A3,A5
+                .=(|. F .|)|A.x by PARTFUN1:def 8,A5;
+           hence thesis;
+          end;
+   then (|. F .|)|A is with_symmetrical_domain quasi_even by Def3,A3,Def2;
+   hence thesis by A2,Def5;
+  end;
+
+theorem Th17:
+  F is_even_on A implies |. F .| is_even_on A
+proof
+    assume F is_even_on A; then
+A1:A c= dom F & F|A is even by Def5;
+A2:A c= dom (|. F .|) by A1,VALUED_1:def 11;
+A3:dom((|. F .|)|A) = A by RELAT_1:91,A2;
+for x st x in dom((|. F .|)|A) & -x in dom((|. F .|)|A) holds
+ (|. F .|)|A.(-x)=(|. F .|)|A.x
+   proof
+       let x;
+       assume
+A5:x in dom((|. F .|)|A) & -x in dom((|. F .|)|A); then
+A6:x in dom(F|A) & -x in dom(F|A) by RELAT_1:91,A1,A3;
+       (|. F .|)|A.(-x)=(|. F .|)|A/.(-x) by PARTFUN1:def 8,A5
+                .=(|. F .|)/.(-x) by PARTFUN2:35,A2,A3,A5
+                .=(|. F .|).(-x) by PARTFUN1:def 8,A2,A3,A5
+                .=|. F.(-x) .| by VALUED_1:def 11,A2,A3,A5
+                .=|. F/.(-x) .| by PARTFUN1:def 8,A3,A1,A5
+                .=|. F|A/.(-x) .| by PARTFUN2:35,A1,A3,A5
+                .=|. F|A.(-x) .| by PARTFUN1:def 8,A6
+                .=|. F|A.x .| by A1,Def3,A6
+                .=|. F|A/.x .| by PARTFUN1:def 8,A6
+                .=|. F/.x .| by PARTFUN2:35,A1,A3,A5
+                .=|. F.x .| by PARTFUN1:def 8,A1,A3,A5
+                .=(|. F .|).x by VALUED_1:def 11,A2,A3,A5
+                .=(|. F .|)/.x by PARTFUN1:def 8,A2,A3,A5
+                .=(|. F .|)|A/.x by PARTFUN2:35,A2,A3,A5
+                .=(|. F .|)|A.x by PARTFUN1:def 8,A5;
+           hence thesis;
+          end;
+   then (|. F .|)|A is with_symmetrical_domain quasi_even by Def3,A3,Def2;
+   hence thesis by A2,Def5;
+  end;
+
+theorem an1:
+  F is_odd_on A & G is_odd_on A implies
+  F (#) G is_even_on A
+ proof
+    assume that
+A1:  F is_odd_on A and
+A2: G is_odd_on A;
+B1: A c= dom F & F|A is odd by Def8,A1;
+B2: A c= dom G & G|A is odd by Def8,A2;
+B3: A c= dom F /\ dom G by XBOOLE_1:19,B1,B2;
+A7: dom F /\ dom G=dom (F (#) G) by VALUED_1:def 4;
+A8:dom((F (#) G)|A) = A by RELAT_1:91,A7,XBOOLE_1:19,B1,B2;
+for x st x in dom((F (#) G)|A) & -x in dom((F (#) G)|A) holds
+ (F (#) G)|A.(-x)=(F (#) G)|A.x
+      proof
+       let x;
+       assume
+A9:x in dom((F (#) G)|A) & -x in dom((F (#) G)|A); then
+A10:x in dom(F|A) & -x in dom(F|A) & x in dom(G|A) & -x in dom(G|A)
+    by RELAT_1:91,B1,B2,A8;
+   (F (#) G)|A.(-x)=(F (#) G)|A/.(-x) by PARTFUN1:def 8,A9
+                .=(F (#) G)/.(-x) by PARTFUN2:35,A9,A8,B3,A7
+                .=(F (#) G).(-x) by PARTFUN1:def 8,A9,A8,B3,A7
+                .=F.(-x) * G.(-x) by B3,VALUED_1:def 4,A7,A9,A8
+                .=F/.(-x) * G.(-x) by PARTFUN1:def 8,B1,A9,A8
+                .=F/.(-x) * G/.(-x) by PARTFUN1:def 8,B2,A9,A8
+                .=F|A/.(-x) * G/.(-x) by PARTFUN2:35,A9,B1,A8
+                .=F|A/.(-x) * G|A/.(-x) by PARTFUN2:35,A9,B2,A8
+                .=F|A.(-x) * G|A/.(-x) by PARTFUN1:def 8,A10
+                .=F|A.(-x) * G|A.(-x) by PARTFUN1:def 8,A10
+                .=(-F|A.x) * G|A.(-x) by B1,Def6,A10
+                .=(-F|A.x) * (-G|A.x) by B2,Def6,A10
+                .=F|A.x * G|A.x
+                .=F|A/.x * G|A.x by PARTFUN1:def 8,A10
+                .=F|A/.x * G|A/.x by PARTFUN1:def 8,A10
+                .=F/.x * G|A/.x by PARTFUN2:35,B1,A9,A8
+                .=F/.x * G/.x by PARTFUN2:35,B2,A9,A8
+                .=F.x * G/.x by PARTFUN1:def 8,B1,A9,A8
+                .=F.x * G.x by PARTFUN1:def 8,B2,A9,A8
+                .=(F (#) G).x by B3,VALUED_1:def 4,A7,A9,A8
+                .=(F (#) G)/.x by PARTFUN1:def 8,A9,A8,B3,A7
+                .=(F (#) G)|A/.x by PARTFUN2:35,A9,A8,B3,A7
+                .=(F (#) G)|A.x by PARTFUN1:def 8,A9;
+        hence thesis;
+      end;
+   then (F (#) G)|A is with_symmetrical_domain quasi_even by Def3,A8,Def2;
+   hence thesis by A7,B3,Def5;
+  end;
+
+theorem an0:
+  F is_even_on A & G is_even_on A implies
+  F (#) G is_even_on A
+ proof
+    assume that
+A1:  F is_even_on A and
+A2: G is_even_on A;
+B1: A c= dom F & F|A is even by Def5,A1;
+B2: A c= dom G & G|A is even by Def5,A2;
+B3: A c= dom F /\ dom G by XBOOLE_1:19,B1,B2;
+A7: dom F /\ dom G=dom (F (#) G) by VALUED_1:def 4;
+A8:dom((F (#) G)|A) = A by RELAT_1:91,A7,XBOOLE_1:19,B1,B2;
+for x st x in dom((F (#) G)|A) & -x in dom((F (#) G)|A) holds
+ (F (#) G)|A.(-x)=(F (#) G)|A.x
+      proof
+       let x;
+       assume
+A9:x in dom((F (#) G)|A) & -x in dom((F (#) G)|A); then
+A10:x in dom(F|A) & -x in dom(F|A) & x in dom(G|A) & -x in dom(G|A)
+    by RELAT_1:91,B1,B2,A8;
+   (F (#) G)|A.(-x)=(F (#) G)|A/.(-x) by PARTFUN1:def 8,A9
+                .=(F (#) G)/.(-x) by PARTFUN2:35,A9,A8,B3,A7
+                .=(F (#) G).(-x) by PARTFUN1:def 8,A9,A8,B3,A7
+                .=F.(-x) * G.(-x) by B3,VALUED_1:def 4,A7,A9,A8
+                .=F/.(-x) * G.(-x) by PARTFUN1:def 8,B1,A9,A8
+                .=F/.(-x) * G/.(-x) by PARTFUN1:def 8,B2,A9,A8
+                .=F|A/.(-x) * G/.(-x) by PARTFUN2:35,A9,B1,A8
+                .=F|A/.(-x) * G|A/.(-x) by PARTFUN2:35,A9,B2,A8
+                .=F|A.(-x) * G|A/.(-x) by PARTFUN1:def 8,A10
+                .=F|A.(-x) * G|A.(-x) by PARTFUN1:def 8,A10
+                .=F|A.x * G|A.(-x) by B1,Def3,A10
+                .=F|A.x * G|A.x by B2,Def3,A10
+                .=F|A/.x * G|A.x by PARTFUN1:def 8,A10
+                .=F|A/.x * G|A/.x by PARTFUN1:def 8,A10
+                .=F/.x * G|A/.x by PARTFUN2:35,B1,A9,A8
+                .=F/.x * G/.x by PARTFUN2:35,B2,A9,A8
+                .=F.x * G/.x by PARTFUN1:def 8,B1,A9,A8
+                .=F.x * G.x by PARTFUN1:def 8,B2,A9,A8
+                .=(F (#) G).x by B3,VALUED_1:def 4,A7,A9,A8
+                .=(F (#) G)/.x by PARTFUN1:def 8,A9,A8,B3,A7
+                .=(F (#) G)|A/.x by PARTFUN2:35,A9,A8,B3,A7
+                .=(F (#) G)|A.x by PARTFUN1:def 8,A9;
+        hence thesis;
+      end;
+   then (F (#) G)|A is with_symmetrical_domain quasi_even by Def3,A8,Def2;
+   hence thesis by A7,B3,Def5;
+  end;
+
+theorem
+  F is_even_on A & G is_odd_on A implies
+  F (#) G is_odd_on A
+ proof
+    assume that
+A1:  F is_even_on A and
+A2: G is_odd_on A;
+B1: A c= dom F & F|A is even by Def5,A1;
+B2: A c= dom G & G|A is odd by Def8,A2;
+B3: A c= dom F /\ dom G by XBOOLE_1:19,B1,B2;
+A7: dom F /\ dom G=dom (F (#) G) by VALUED_1:def 4;
+A8:dom((F (#) G)|A) = A by RELAT_1:91,A7,XBOOLE_1:19,B1,B2;
+for x st x in dom((F (#) G)|A) & -x in dom((F (#) G)|A) holds
+ (F (#) G)|A.(-x)=-(F (#) G)|A.x
+      proof
+       let x;
+       assume
+A9:x in dom((F (#) G)|A) & -x in dom((F (#) G)|A); then
+A10:x in dom(F|A) & -x in dom(F|A) & x in dom(G|A) & -x in dom(G|A)
+    by RELAT_1:91,B1,B2,A8;
+   (F (#) G)|A.(-x)=(F (#) G)|A/.(-x) by PARTFUN1:def 8,A9
+                .=(F (#) G)/.(-x) by PARTFUN2:35,A9,A8,B3,A7
+                .=(F (#) G).(-x) by PARTFUN1:def 8,A9,A8,B3,A7
+                .=F.(-x) * G.(-x) by B3,VALUED_1:def 4,A7,A9,A8
+                .=F/.(-x) * G.(-x) by PARTFUN1:def 8,B1,A9,A8
+                .=F/.(-x) * G/.(-x) by PARTFUN1:def 8,B2,A9,A8
+                .=F|A/.(-x) * G/.(-x) by PARTFUN2:35,A9,B1,A8
+                .=F|A/.(-x) * G|A/.(-x) by PARTFUN2:35,A9,B2,A8
+                .=F|A.(-x) * G|A/.(-x) by PARTFUN1:def 8,A10
+                .=F|A.(-x) * G|A.(-x) by PARTFUN1:def 8,A10
+                .=F|A.x * G|A.(-x) by B1,Def3,A10
+                .=F|A.x * (-G|A.x) by B2,Def6,A10
+                .=-(F|A.x * G|A.x)
+                .=-(F|A/.x * G|A.x) by PARTFUN1:def 8,A10
+                .=-(F|A/.x * G|A/.x) by PARTFUN1:def 8,A10
+                .=-(F/.x * G|A/.x) by PARTFUN2:35,B1,A9,A8
+                .=-(F/.x * G/.x) by PARTFUN2:35,B2,A9,A8
+                .=-(F.x * G/.x) by PARTFUN1:def 8,B1,A9,A8
+                .=-(F.x * G.x) by PARTFUN1:def 8,B2,A9,A8
+                .=-(F (#) G).x by B3,VALUED_1:def 4,A7,A9,A8
+                .=-(F (#) G)/.x by PARTFUN1:def 8,A9,A8,B3,A7
+                .=-(F (#) G)|A/.x by PARTFUN2:35,A9,A8,B3,A7
+                .=-(F (#) G)|A.x by PARTFUN1:def 8,A9;
+        hence thesis;
+      end;
+   then (F (#) G)|A is with_symmetrical_domain quasi_odd by Def6,A8,Def2;
+   hence thesis by A7,B3,Def8;
+  end;
+
+theorem
+  F is_even_on A implies r+F is_even_on A
+ proof
+   assume F is_even_on A; then
+A1:A c= dom F & F|A is even by Def5;
+A2:A c= dom (r+F) by A1,VALUED_1:def 2;
+A3:dom((r+F)|A) = A by RELAT_1:91,A2;
+for x st x in dom((r+F)|A) & -x in dom((r+F)|A) holds
+ (r+F)|A.(-x)=(r+F)|A.x
+   proof
+       let x;
+       assume
+A5:    x in dom((r+F)|A) & -x in dom((r+F)|A); then
+A6:    x in dom(F|A) & -x in dom(F|A) by RELAT_1:91,A1,A3;
+       (r+F)|A.(-x)=(r+F)|A/.(-x) by PARTFUN1:def 8,A5
+                .=(r+F)/.(-x) by PARTFUN2:35,A2,A3,A5
+                .=(r+F).(-x) by PARTFUN1:def 8,A2,A3,A5
+                .=r + F.(-x) by VALUED_1:def 2,A2,A3,A5
+                .=r + F/.(-x) by PARTFUN1:def 8,A3,A1,A5
+                .=r + F|A/.(-x) by PARTFUN2:35,A1,A3,A5
+                .=r + F|A.(-x) by PARTFUN1:def 8,A6
+                .=r + F|A.x by A1,Def3,A6
+                .=r + F|A/.x by PARTFUN1:def 8,A6
+                .=r + F/.x by PARTFUN2:35,A1,A3,A5
+                .=r + F.x by PARTFUN1:def 8,A1,A3,A5
+                .=(r+F).x by VALUED_1:def 2,A2,A3,A5
+                .=(r+F)/.x by PARTFUN1:def 8,A2,A3,A5
+                .=(r+F)|A/.x by PARTFUN2:35,A2,A3,A5
+                .=(r+F)|A.x by PARTFUN1:def 8,A5;
+           hence thesis;
+          end;
+   then (r+F)|A is with_symmetrical_domain quasi_even by Def3,A3,Def2;
+   hence thesis by A2,Def5;
+  end;
+
+theorem
+  F is_even_on A implies F-r is_even_on A
+proof
+   assume F is_even_on A; then
+A1:A c= dom F & F|A is even by Def5;
+A2:A c= dom (F-r) by A1,VALUED_1:3;
+A3:dom((F-r)|A) = A by RELAT_1:91,A2;
+for x st x in dom((F-r)|A) & -x in dom((F-r)|A) holds
+ (F-r)|A.(-x)=(F-r)|A.x
+   proof
+       let x;
+       assume
+A5:x in dom((F-r)|A) & -x in dom((F-r)|A); then
+A6:x in dom(F|A) & -x in dom(F|A) by RELAT_1:91,A1,A3;
+       (F-r)|A.(-x)=(F-r)|A/.(-x) by PARTFUN1:def 8,A5
+                .=(F-r)/.(-x) by PARTFUN2:35,A2,A3,A5
+                .=(F-r).(-x) by PARTFUN1:def 8,A2,A3,A5
+                .=F.(-x)-r by VALUED_1:3,A1,A3,A5
+                .=F/.(-x)-r by PARTFUN1:def 8,A3,A1,A5
+                .=F|A/.(-x)-r by PARTFUN2:35,A1,A3,A5
+                .=F|A.(-x)-r by PARTFUN1:def 8,A6
+                .=F|A.x-r by A1,Def3,A6
+                .=F|A/.x-r by PARTFUN1:def 8,A6
+                .=F/.x-r by PARTFUN2:35,A1,A3,A5
+                .=F.x-r by PARTFUN1:def 8,A1,A3,A5
+                .=(F-r).x by VALUED_1:3,A1,A3,A5
+                .=(F-r)/.x by PARTFUN1:def 8,A2,A3,A5
+                .=(F-r)|A/.x by PARTFUN2:35,A2,A3,A5
+                .=(F-r)|A.x by PARTFUN1:def 8,A5;
+           hence thesis;
+          end;
+   then (F-r)|A is with_symmetrical_domain quasi_even by Def3,A3,Def2;
+   hence thesis by A2,Def5;
+  end;
+
+theorem
+  F is_even_on A implies F^2 is_even_on A by an0;
+
+theorem
+  F is_odd_on A implies F^2 is_even_on A by an1;
+
+theorem
+  F is_odd_on A & G is_odd_on A implies
+  F /" G is_even_on A
+  proof
+    assume that
+A1:  F is_odd_on A and
+A2: G is_odd_on A;
+B1: A c= dom F & F|A is odd by Def8,A1;
+B2: A c= dom G & G|A is odd by Def8,A2;
+B3: A c= dom F /\ dom G by XBOOLE_1:19,B1,B2;
+A7: dom F /\ dom G=dom (F /" G) by VALUED_1:16;
+A8:dom((F /" G)|A) = A by RELAT_1:91,A7,XBOOLE_1:19,B1,B2;
+for x st x in dom((F /" G)|A) & -x in dom((F /" G)|A) holds
+ (F /" G)|A.(-x)=(F /" G)|A.x
+      proof
+       let x;
+       assume
+A9:    x in dom((F /" G)|A) & -x in dom((F /" G)|A); then
+A10:   x in dom(F|A) & -x in dom(F|A) & x in dom(G|A) & -x in dom(G|A)
+         by RELAT_1:91,B1,B2,A8;
+   (F /" G)|A.(-x)=(F /" G)|A/.(-x) by PARTFUN1:def 8,A9
+                .=(F /" G)/.(-x) by PARTFUN2:35,A9,A8,B3,A7
+                .=(F /" G).(-x) by PARTFUN1:def 8,A9,A8,B3,A7
+                .=F.(-x) / G.(-x) by VALUED_1:17
+                .=F/.(-x) / G.(-x) by PARTFUN1:def 8,B1,A9,A8
+                .=F/.(-x) / G/.(-x) by PARTFUN1:def 8,B2,A9,A8
+                .=F|A/.(-x) / G/.(-x) by PARTFUN2:35,A9,B1,A8
+                .=F|A/.(-x) / G|A/.(-x) by PARTFUN2:35,A9,B2,A8
+                .=F|A.(-x) / G|A/.(-x) by PARTFUN1:def 8,A10
+                .=F|A.(-x) / G|A.(-x) by PARTFUN1:def 8,A10
+                .=(-F|A.x) / G|A.(-x) by B1,Def6,A10
+                .=(-F|A.x) / (-G|A.x) by B2,Def6,A10
+                .=F|A.x / G|A.x by XCMPLX_1:192
+                .=F|A/.x / G|A.x by PARTFUN1:def 8,A10
+                .=F|A/.x / G|A/.x by PARTFUN1:def 8,A10
+                .=F/.x / G|A/.x by PARTFUN2:35,B1,A9,A8
+                .=F/.x / G/.x by PARTFUN2:35,B2,A9,A8
+                .=F.x / G/.x by PARTFUN1:def 8,B1,A9,A8
+                .=F.x / G.x by PARTFUN1:def 8,B2,A9,A8
+                .=(F /" G).x by VALUED_1:17
+                .=(F /" G)/.x by PARTFUN1:def 8,A9,A8,B3,A7
+                .=(F /" G)|A/.x by PARTFUN2:35,A9,A8,B3,A7
+                .=(F /" G)|A.x by PARTFUN1:def 8,A9;
+        hence thesis;
+      end;
+   then (F /" G)|A is with_symmetrical_domain quasi_even by Def3,A8,Def2;
+   hence thesis by A7,B3,Def5;
+  end;
+
+theorem
+  F is_even_on A & G is_even_on A implies
+  F /" G is_even_on A
+ proof
+    assume that
+A1:  F is_even_on A and
+A2: G is_even_on A;
+B1: A c= dom F & F|A is even by Def5,A1;
+B2: A c= dom G & G|A is even by Def5,A2;
+B3: A c= dom F /\ dom G by XBOOLE_1:19,B1,B2;
+A7: dom F /\ dom G=dom (F /" G) by VALUED_1:16;
+A8:dom((F /" G)|A) = A by RELAT_1:91,A7,XBOOLE_1:19,B1,B2;
+for x st x in dom((F /" G)|A) & -x in dom((F /" G)|A) holds
+ (F /" G)|A.(-x)=(F /" G)|A.x
+      proof
+       let x;
+       assume
+A9:x in dom((F /" G)|A) & -x in dom((F /" G)|A); then
+A10:x in dom(F|A) & -x in dom(F|A) & x in dom(G|A) & -x in dom(G|A)
+    by RELAT_1:91,B1,B2,A8;
+   (F /" G)|A.(-x)=(F /" G)|A/.(-x) by PARTFUN1:def 8,A9
+                .=(F /" G)/.(-x) by PARTFUN2:35,A9,A8,B3,A7
+                .=(F /" G).(-x) by PARTFUN1:def 8,A9,A8,B3,A7
+                .=F.(-x) / G.(-x) by VALUED_1:17
+                .=F/.(-x) / G.(-x) by PARTFUN1:def 8,B1,A9,A8
+                .=F/.(-x) / G/.(-x) by PARTFUN1:def 8,B2,A9,A8
+                .=F|A/.(-x) / G/.(-x) by PARTFUN2:35,A9,B1,A8
+                .=F|A/.(-x) / G|A/.(-x) by PARTFUN2:35,A9,B2,A8
+                .=F|A.(-x) / G|A/.(-x) by PARTFUN1:def 8,A10
+                .=F|A.(-x) / G|A.(-x) by PARTFUN1:def 8,A10
+                .=F|A.x / G|A.(-x) by B1,Def3,A10
+                .=F|A.x / G|A.x by B2,Def3,A10
+                .=F|A/.x / G|A.x by PARTFUN1:def 8,A10
+                .=F|A/.x / G|A/.x by PARTFUN1:def 8,A10
+                .=F/.x / G|A/.x by PARTFUN2:35,B1,A9,A8
+                .=F/.x / G/.x by PARTFUN2:35,B2,A9,A8
+                .=F.x / G/.x by PARTFUN1:def 8,B1,A9,A8
+                .=F.x / G.x by PARTFUN1:def 8,B2,A9,A8
+                .=(F /" G).x by VALUED_1:17
+                .=(F /" G)/.x by PARTFUN1:def 8,A9,A8,B3,A7
+                .=(F /" G)|A/.x by PARTFUN2:35,A9,A8,B3,A7
+                .=(F /" G)|A.x by PARTFUN1:def 8,A9;
+        hence thesis;
+      end;
+   then (F /" G)|A is with_symmetrical_domain quasi_even by Def3,A8,Def2;
+   hence thesis by A7,B3,Def5;
+  end;
+
+theorem
+  F is_odd_on A & G is_even_on A implies
+  F /" G is_odd_on A
+proof
+    assume that
+A1:  F is_odd_on A and
+A2: G is_even_on A;
+B1: A c= dom F & F|A is odd by Def8,A1;
+B2: A c= dom G & G|A is even by Def5,A2;
+B3: A c= dom F /\ dom G by XBOOLE_1:19,B1,B2;
+A7: dom F /\ dom G=dom (F /" G) by VALUED_1:16;
+A8:dom((F /" G)|A) = A by RELAT_1:91,A7,XBOOLE_1:19,B1,B2;
+for x st x in dom((F /" G)|A) & -x in dom((F /" G)|A) holds
+ (F /" G)|A.(-x)=-(F /" G)|A.x
+      proof
+       let x;
+       assume
+A9:x in dom((F /" G)|A) & -x in dom((F /" G)|A); then
+A10:x in dom(F|A) & -x in dom(F|A) & x in dom(G|A) & -x in dom(G|A)
+    by RELAT_1:91,B1,B2,A8;
+   (F /" G)|A.(-x)=(F /" G)|A/.(-x) by PARTFUN1:def 8,A9
+                .=(F /" G)/.(-x) by PARTFUN2:35,A9,A8,B3,A7
+                .=(F /" G).(-x) by PARTFUN1:def 8,A9,A8,B3,A7
+                .=F.(-x) / G.(-x) by VALUED_1:17
+                .=F/.(-x) / G.(-x) by PARTFUN1:def 8,B1,A9,A8
+                .=F/.(-x) / G/.(-x) by PARTFUN1:def 8,B2,A9,A8
+                .=F|A/.(-x) / G/.(-x) by PARTFUN2:35,A9,B1,A8
+                .=F|A/.(-x) / G|A/.(-x) by PARTFUN2:35,A9,B2,A8
+                .=F|A.(-x) / G|A/.(-x) by PARTFUN1:def 8,A10
+                .=F|A.(-x) / G|A.(-x) by PARTFUN1:def 8,A10
+                .=(-F|A.x) / G|A.(-x) by B1,Def6,A10
+                .=(-F|A.x) / G|A.x by B2,Def3,A10
+                .=-(F|A.x / G|A.x)
+                .=-(F|A/.x / G|A.x) by PARTFUN1:def 8,A10
+                .=-(F|A/.x / G|A/.x) by PARTFUN1:def 8,A10
+                .=-(F/.x / G|A/.x) by PARTFUN2:35,B1,A9,A8
+                .=-(F/.x / G/.x) by PARTFUN2:35,B2,A9,A8
+                .=-(F.x / G/.x) by PARTFUN1:def 8,B1,A9,A8
+                .=-(F.x / G.x) by PARTFUN1:def 8,B2,A9,A8
+                .=-(F /" G).x by VALUED_1:17
+                .=-(F /" G)/.x by PARTFUN1:def 8,A9,A8,B3,A7
+                .=-(F /" G)|A/.x by PARTFUN2:35,A9,A8,B3,A7
+                .=-(F /" G)|A.x by PARTFUN1:def 8,A9;
+        hence thesis;
+      end;
+   then (F /" G)|A is with_symmetrical_domain quasi_odd by Def6,A8,Def2;
+   hence thesis by A7,B3,Def8;
+  end;
+
+theorem
+  F is_even_on A & G is_odd_on A implies
+  F /" G is_odd_on A
+ proof
+    assume that
+A1:  F is_even_on A and
+A2: G is_odd_on A;
+B1: A c= dom F & F|A is even by Def5,A1;
+B2: A c= dom G & G|A is odd by Def8,A2;
+B3: A c= dom F /\ dom G by XBOOLE_1:19,B1,B2;
+A7: dom F /\ dom G=dom (F /" G) by VALUED_1:16;
+A8:dom((F /" G)|A) = A by RELAT_1:91,A7,XBOOLE_1:19,B1,B2;
+for x st x in dom((F /" G)|A) & -x in dom((F /" G)|A) holds
+ (F /" G)|A.(-x)=-(F /" G)|A.x
+      proof
+       let x;
+       assume
+A9:x in dom((F /" G)|A) & -x in dom((F /" G)|A); then
+A10:x in dom(F|A) & -x in dom(F|A) & x in dom(G|A) & -x in dom(G|A)
+    by RELAT_1:91,B1,B2,A8;
+   (F /" G)|A.(-x)=(F /" G)|A/.(-x) by PARTFUN1:def 8,A9
+                .=(F /" G)/.(-x) by PARTFUN2:35,A9,A8,B3,A7
+                .=(F /" G).(-x) by PARTFUN1:def 8,A9,A8,B3,A7
+                .=F.(-x) / G.(-x) by VALUED_1:17
+                .=F/.(-x) / G.(-x) by PARTFUN1:def 8,B1,A9,A8
+                .=F/.(-x) / G/.(-x) by PARTFUN1:def 8,B2,A9,A8
+                .=F|A/.(-x) / G/.(-x) by PARTFUN2:35,A9,B1,A8
+                .=F|A/.(-x) / G|A/.(-x) by PARTFUN2:35,A9,B2,A8
+                .=F|A.(-x) / G|A/.(-x) by PARTFUN1:def 8,A10
+                .=F|A.(-x) / G|A.(-x) by PARTFUN1:def 8,A10
+                .=F|A.x / G|A.(-x) by B1,Def3,A10
+                .=F|A.x / (-G|A.x) by B2,Def6,A10
+                .=-(F|A.x / G|A.x) by XCMPLX_1:189
+                .=-(F|A/.x / G|A.x) by PARTFUN1:def 8,A10
+                .=-(F|A/.x / G|A/.x) by PARTFUN1:def 8,A10
+                .=-(F/.x / G|A/.x) by PARTFUN2:35,B1,A9,A8
+                .=-(F/.x / G/.x) by PARTFUN2:35,B2,A9,A8
+                .=-(F.x / G/.x) by PARTFUN1:def 8,B1,A9,A8
+                .=-(F.x / G.x) by PARTFUN1:def 8,B2,A9,A8
+                .=-(F /" G).x by VALUED_1:17
+                .=-(F /" G)/.x by PARTFUN1:def 8,A9,A8,B3,A7
+                .=-(F /" G)|A/.x by PARTFUN2:35,A9,A8,B3,A7
+                .=-(F /" G)|A.x by PARTFUN1:def 8,A9;
+        hence thesis;
+      end;
+   then (F /" G)|A is with_symmetrical_domain quasi_odd by Def6,A8,Def2;
+   hence thesis by A7,B3,Def8;
+  end;
+
+theorem
+  F is odd implies -F is odd
+proof
+    assume
+A1: F is odd;
+A2: dom F=dom(-F) by VALUED_1:8;
+for x st x in dom(-F) & -x in dom(-F) holds
+ (-F).(-x)=-(-F).x
+      proof
+       let x;
+       assume
+A3:x in dom(-F) & -x in dom(-F);
+     (-F).(-x)=-F.(-x) by VALUED_1:8
+                .=-(-F.x) by A1,Def6,A2,A3
+                .=-(-F).x by VALUED_1:8;
+        hence thesis;
+      end;
+   then -F is with_symmetrical_domain quasi_odd by Def6,A1,A2,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is even implies -F is even
+proof
+    assume
+A1: F is even;
+A2: dom F=dom(-F) by VALUED_1:8;
+for x st x in dom(-F) & -x in dom(-F) holds
+ (-F).(-x)=(-F).x
+      proof
+       let x;
+       assume
+A3:x in dom(-F) & -x in dom(-F);
+     (-F).(-x)=-F.(-x) by VALUED_1:8
+                .=-F.x by A1,Def3,A2,A3
+                .=(-F).x by VALUED_1:8;
+        hence thesis;
+      end;
+   then -F is with_symmetrical_domain quasi_even by Def3,A1,A2,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is odd implies F" is odd
+proof
+    assume
+A1: F is odd;
+A2: dom F=dom(F") by VALUED_1:def 7;
+for x st x in dom(F") & -x in dom(F") holds
+ (F").(-x)=-(F").x
+      proof
+       let x;
+       assume
+A3:x in dom(F") & -x in dom(F");
+        (F").(-x)=(F.(-x))" by A3,VALUED_1:def 7
+                .=(-F.x)" by A1,Def6,A2,A3
+                .=-(F.x)" by XCMPLX_1:224
+                .=-(F").x by A3,VALUED_1:def 7;
+        hence thesis;
+      end;
+   then F" is with_symmetrical_domain quasi_odd by Def6,A1,A2,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is even implies F" is even
+proof
+    assume
+A1: F is even;
+A2: dom F=dom(F") by VALUED_1:def 7;
+for x st x in dom(F") & -x in dom(F") holds
+ (F").(-x)=(F").x
+      proof
+       let x;
+       assume
+A3:x in dom(F") & -x in dom(F");
+        (F").(-x)=(F.(-x))" by A3,VALUED_1:def 7
+                .=(F.x)" by A1,Def3,A2,A3
+                .=(F").x by A3,VALUED_1:def 7;
+        hence thesis;
+      end;
+   then F" is with_symmetrical_domain quasi_even by Def3,A1,A2,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is odd implies |. F .| is even
+proof
+    assume
+A1: F is odd;
+A2: dom F=dom(|. F .|) by VALUED_1:def 11;
+for x st x in dom(|. F .|) & -x in dom(|. F .|) holds
+ (|. F .|).(-x)=(|. F .|).x
+      proof
+       let x;
+       assume
+A3:x in dom(|. F .|) & -x in dom(|. F .|);
+        (|. F .|).(-x)=|. F.(-x) .| by A3,VALUED_1:def 11
+                .=|. -F.x .| by A1,Def6,A2,A3
+                .=|. F.x .| by COMPLEX1:138
+                .=(|. F .|).x by A3,VALUED_1:def 11;
+        hence thesis;
+      end;
+   then |. F .| is with_symmetrical_domain quasi_even by Def3,A1,A2,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is even implies |. F .| is even
+proof
+    assume
+A1: F is even;
+A2: dom F=dom(|. F .|) by VALUED_1:def 11;
+for x st x in dom(|. F .|) & -x in dom(|. F .|) holds
+ (|. F .|).(-x)=(|. F .|).x
+      proof
+       let x;
+       assume
+A3:x in dom(|. F .|) & -x in dom(|. F .|);
+        (|. F .|).(-x)=|. F.(-x) .| by A3,VALUED_1:def 11
+                .=|. F.x .| by A1,Def3,A2,A3
+                .=(|. F .|).x by A3,VALUED_1:def 11;
+        hence thesis;
+      end;
+   then |. F .| is with_symmetrical_domain quasi_even by Def3,A1,A2,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is odd implies F^2 is even
+proof
+    assume
+A1: F is odd;
+A2: dom F=dom(F^2) by VALUED_1:11;
+for x st x in dom(F^2) & -x in dom(F^2) holds
+ (F^2).(-x)=(F^2).x
+      proof
+       let x;
+       assume
+A3:x in dom(F^2) & -x in dom(F^2);
+        (F^2).(-x)=(F.(-x))^2 by VALUED_1:11
+                .=(-F.x)^2 by A1,Def6,A2,A3
+                .=(F.x)^2
+                .=(F^2).x by VALUED_1:11;
+        hence thesis;
+      end;
+   then F^2 is with_symmetrical_domain quasi_even by Def3,A1,A2,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is even implies F^2 is even
+proof
+    assume
+A1: F is even;
+A2: dom F=dom(F^2) by VALUED_1:11;
+for x st x in dom(F^2) & -x in dom(F^2) holds
+ (F^2).(-x)=(F^2).x
+      proof
+       let x;
+       assume
+A3:x in dom(F^2) & -x in dom(F^2);
+        (F^2).(-x)=(F.(-x))^2 by VALUED_1:11
+                .=(F.x)^2 by A1,Def3,A2,A3
+                .=(F^2).x by VALUED_1:11;
+        hence thesis;
+      end;
+   then F^2 is with_symmetrical_domain quasi_even by Def3,A1,A2,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is even implies r+F is even
+proof
+    assume
+A1: F is even;
+A2: dom F=dom(r+F ) by VALUED_1:def 2;
+for x st x in dom(r+F) & -x in dom(r+F) holds
+ (r+F).(-x)=(r+F).x
+      proof
+       let x;
+       assume
+A3:x in dom(r+F) & -x in dom(r+F);
+        (r+F).(-x)=r+F.(-x) by A3,VALUED_1:def 2
+                .=r+F.x by A1,Def3,A2,A3
+                .=(r+F).x by A3,VALUED_1:def 2;
+        hence thesis;
+      end;
+   then r+F is with_symmetrical_domain quasi_even by Def3,A1,A2,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is even implies F-r is even
+proof
+    assume
+A1: F is even;
+A2: dom F=dom(F-r ) by VALUED_1:3;
+for x st x in dom(F-r) & -x in dom(F-r) holds
+ (F-r).(-x)=(F-r).x
+      proof
+       let x;
+       assume
+A3:x in dom(F-r) & -x in dom(F-r);
+       then
+A4:x in dom F & -x in dom F by VALUED_1:3;
+        (F-r).(-x)=F.(-x)-r by A4,VALUED_1:3
+                .=F.x -r by A1,Def3,A2,A3
+                .=(F-r).x by A4,VALUED_1:3;
+        hence thesis;
+      end;
+   then F-r is with_symmetrical_domain quasi_even by Def3,A1,A2,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is odd implies r (#) F is odd
+proof
+    assume
+A1: F is odd;
+A2: dom F=dom( r (#) F) by VALUED_1:def 5;
+for x st x in dom( r (#) F) & -x in dom( r (#) F) holds
+ ( r (#) F).(-x)=-( r (#) F).x
+      proof
+       let x;
+       assume
+A3:x in dom( r (#) F) & -x in dom( r (#) F);
+     ( r (#) F).(-x)=r * F.(-x) by A3,VALUED_1:def 5
+                .=r * (-F.x) by A1,Def6,A2,A3
+                .=-(r * F.x)
+                .=-(r (#) F).x by A3,VALUED_1:def 5;
+        hence thesis;
+      end;
+   then  r (#) F is with_symmetrical_domain quasi_odd by Def6,A1,A2,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is even implies r (#) F is even
+proof
+    assume
+A1: F is even;
+A2: dom F=dom(r (#) F) by VALUED_1:def 5;
+for x st x in dom(r (#) F) & -x in dom(r (#) F) holds
+ (r (#) F).(-x)=(r (#) F).x
+      proof
+       let x;
+       assume
+A3:x in dom(r (#) F) & -x in dom(r (#) F);
+     (r (#) F).(-x)=r * F.(-x) by A3,VALUED_1:def 5
+                .=r * F.x  by A1,Def3,A2,A3
+                .=( r (#) F).x by A3,VALUED_1:def 5;
+        hence thesis;
+      end;
+   then  r (#) F is with_symmetrical_domain quasi_even by Def3,A1,A2,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is odd & G is odd & dom F /\ dom G is symmetrical implies
+  F + G is odd
+proof
+    assume that
+A1: F is odd and
+A2: G is odd and
+A3: dom F /\ dom G is symmetrical;
+A7: dom F /\ dom G=dom (F + G) by VALUED_1:def 1;
+then
+A8:dom (F + G) c= dom F & dom (F + G) c= dom G by XBOOLE_1:17;
+for x st x in dom(F + G) & -x in dom(F + G) holds
+ (F + G).(-x)=-(F + G).x
+      proof
+       let x;
+       assume
+A9:x in dom(F + G) & -x in dom(F + G);
+     (F + G).(-x)=F.(-x) + G.(-x) by VALUED_1:def 1,A9
+                .=(-F.x) + G.(-x) by A1,Def6,A8,A9
+                .=(-F.x) + (-G.x) by A2,Def6,A8,A9
+                .=-(F.x + G.x)
+                .=-(F + G).x by VALUED_1:def 1,A9;
+        hence thesis;
+      end;
+   then (F + G) is with_symmetrical_domain quasi_odd by Def6,A3,A7,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is even & G is even & dom F /\ dom G is symmetrical implies
+  F + G is even
+proof
+    assume that
+A1: F is even and
+A2: G is even and
+A3: dom F /\ dom G is symmetrical;
+A7: dom F /\ dom G=dom (F + G) by VALUED_1:def 1;
+then
+A8:dom (F + G) c= dom F & dom (F + G) c= dom G by XBOOLE_1:17;
+for x st x in dom(F + G) & -x in dom(F + G) holds
+ (F + G).(-x)=(F + G).x
+      proof
+       let x;
+       assume
+A9:x in dom(F + G) & -x in dom(F + G);
+     (F + G).(-x)=F.(-x) + G.(-x) by VALUED_1:def 1,A9
+                .=F.x + G.(-x) by A1,Def3,A8,A9
+                .=F.x + G.x by A2,Def3,A8,A9
+                .=(F + G).x by VALUED_1:def 1,A9;
+        hence thesis;
+      end;
+   then (F + G) is with_symmetrical_domain quasi_even by Def3,A3,A7,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is odd & G is odd & dom F /\ dom G is symmetrical implies
+  F - G is odd
+proof
+    assume that
+A1: F is odd and
+A2: G is odd and
+A3: dom F /\ dom G is symmetrical;
+A7: dom F /\ dom G=dom (F - G) by VALUED_1:12; then
+A8:dom (F - G) c= dom F & dom (F - G) c= dom G by XBOOLE_1:17;
+for x st x in dom(F - G) & -x in dom(F - G) holds
+ (F - G).(-x)=-(F - G).x
+      proof
+       let x;
+       assume
+A9:x in dom(F - G) & -x in dom(F - G);
+     (F - G).(-x)=F.(-x) - G.(-x) by VALUED_1:13,A9
+                .=(-F.x) - G.(-x) by A1,Def6,A8,A9
+                .=(-F.x) - (-G.x) by A2,Def6,A8,A9
+                .=-(F.x - G.x)
+                .=-(F - G).x by VALUED_1:13,A9;
+        hence thesis;
+      end;
+   then (F - G) is with_symmetrical_domain quasi_odd by Def6,A3,A7,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is even & G is even & dom F /\ dom G is symmetrical implies
+  F - G is even
+proof
+    assume that
+A1: F is even and
+A2: G is even and
+A3: dom F /\ dom G is symmetrical;
+A7: dom F /\ dom G=dom (F - G) by VALUED_1:12;
+then
+A8:dom (F - G) c= dom F & dom (F - G) c= dom G by XBOOLE_1:17;
+for x st x in dom(F - G) & -x in dom(F - G) holds
+ (F - G).(-x)=(F - G).x
+      proof
+       let x;
+       assume
+A9:x in dom(F - G) & -x in dom(F - G);
+     (F - G).(-x)=F.(-x) - G.(-x) by VALUED_1:13,A9
+                .=F.x - G.(-x) by A1,Def3,A8,A9
+                .=F.x - G.x by A2,Def3,A8,A9
+                .=(F - G).x by VALUED_1:13,A9;
+        hence thesis;
+      end;
+   then (F - G) is with_symmetrical_domain quasi_even by Def3,A3,A7,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is odd & G is odd & dom F /\ dom G is symmetrical implies
+  F (#) G is even
+proof
+    assume that
+A1: F is odd and
+A2: G is odd and
+A3: dom F /\ dom G is symmetrical;
+A7: dom F /\ dom G=dom (F (#) G) by VALUED_1:def 4;
+then
+A8:dom (F (#) G) c= dom F & dom (F (#) G) c= dom G by XBOOLE_1:17;
+for x st x in dom(F (#) G) & -x in dom(F (#) G) holds
+ (F (#) G).(-x)=(F (#) G).x
+      proof
+       let x;
+       assume
+A9:x in dom(F (#) G) & -x in dom(F (#) G);
+     (F (#) G).(-x)=F.(-x) * G.(-x) by VALUED_1:def 4,A9
+                .=(-F.x) * G.(-x) by A1,Def6,A8,A9
+                .=(-F.x) * (-G.x) by A2,Def6,A8,A9
+                .=(F.x * G.x)
+                .=(F (#) G).x by VALUED_1:def 4,A9;
+        hence thesis;
+      end;
+   then (F (#) G) is with_symmetrical_domain quasi_even by Def3,A3,A7,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is even & G is even & dom F /\ dom G is symmetrical implies
+  F (#) G is even
+proof
+    assume that
+A1: F is even and
+A2: G is even and
+A3: dom F /\ dom G is symmetrical;
+A7: dom F /\ dom G=dom (F (#) G) by VALUED_1:def 4;
+then
+A8:dom (F (#) G) c= dom F & dom (F (#) G) c= dom G by XBOOLE_1:17;
+for x st x in dom(F (#) G) & -x in dom(F (#) G) holds
+ (F (#) G).(-x)=(F (#) G).x
+      proof
+       let x;
+       assume
+A9:x in dom(F (#) G) & -x in dom(F (#) G);
+     (F (#) G).(-x)=F.(-x) * G.(-x) by VALUED_1:def 4,A9
+                .=(F.x) * G.(-x) by A1,Def3,A8,A9
+                .=(F.x * G.x) by A2,Def3,A8,A9
+                .=(F (#) G).x by VALUED_1:def 4,A9;
+        hence thesis;
+      end;
+   then (F (#) G) is with_symmetrical_domain quasi_even by Def3,A3,A7,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is even & G is odd & dom F /\ dom G is symmetrical implies
+  F (#) G is odd
+proof
+    assume that
+A1: F is even and
+A2: G is odd and
+A3: dom F /\ dom G is symmetrical;
+A7: dom F /\ dom G=dom (F (#) G) by VALUED_1:def 4;
+then
+A8:dom (F (#) G) c= dom F & dom (F (#) G) c= dom G by XBOOLE_1:17;
+for x st x in dom(F (#) G) & -x in dom(F (#) G) holds
+ (F (#) G).(-x)=-(F (#) G).x
+      proof
+       let x;
+       assume
+A9:x in dom(F (#) G) & -x in dom(F (#) G);
+     (F (#) G).(-x)=F.(-x) * G.(-x) by VALUED_1:def 4,A9
+                .=F.x * G.(-x) by A1,Def3,A8,A9
+                .=F.x * (-G.x) by A2,Def6,A8,A9
+                .=-(F.x * G.x)
+                .=-(F (#) G).x by VALUED_1:def 4,A9;
+        hence thesis;
+      end;
+   then (F (#) G) is with_symmetrical_domain quasi_odd by Def6,A3,A7,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is odd & G is odd & dom F /\ dom G is symmetrical implies
+  F /" G is even
+proof
+    assume that
+A1: F is odd and
+A2: G is odd and
+A3: dom F /\ dom G is symmetrical;
+A7: dom F /\ dom G=dom (F /" G) by VALUED_1:16;
+then
+A8:dom (F /" G) c= dom F & dom (F /" G) c= dom G by XBOOLE_1:17;
+for x st x in dom(F /" G) & -x in dom(F /" G) holds
+ (F /" G).(-x)=(F /" G).x
+      proof
+       let x;
+       assume
+A9:x in dom(F /" G) & -x in dom(F /" G);
+     (F /" G).(-x)=F.(-x) / G.(-x) by VALUED_1:17
+                .=(-F.x) / G.(-x) by A1,Def6,A8,A9
+                .=(-F.x) / (-G.x) by A2,Def6,A8,A9
+                .=(F.x / G.x) by XCMPLX_1:192
+                .=(F /" G).x by VALUED_1:17;
+        hence thesis;
+      end;
+   then (F /" G) is with_symmetrical_domain quasi_even by Def3,A3,A7,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is even & G is even & dom F /\ dom G is symmetrical implies
+  F /" G is even
+proof
+    assume that
+A1: F is even and
+A2: G is even and
+A3: dom F /\ dom G is symmetrical;
+A7: dom F /\ dom G=dom (F /" G) by VALUED_1:16;
+then
+A8:dom (F /" G) c= dom F & dom (F /" G) c= dom G by XBOOLE_1:17;
+for x st x in dom(F /" G) & -x in dom(F /" G) holds
+ (F /" G).(-x)=(F /" G).x
+      proof
+       let x;
+       assume
+A9:x in dom(F /" G) & -x in dom(F /" G);
+     (F /" G).(-x)=F.(-x) / G.(-x) by VALUED_1:17
+                .=(F.x) / G.(-x) by A1,Def3,A8,A9
+                .=(F.x / G.x) by A2,Def3,A8,A9
+                .=(F /" G).x by VALUED_1:17;
+        hence thesis;
+      end;
+   then (F /" G) is with_symmetrical_domain quasi_even by Def3,A3,A7,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is odd & G is even & dom F /\ dom G is symmetrical implies
+  F /" G is odd
+proof
+    assume that
+A1: F is odd and
+A2: G is even and
+A3: dom F /\ dom G is symmetrical;
+A7: dom F /\ dom G=dom (F /" G) by VALUED_1:16;
+then
+A8:dom (F /" G) c= dom F & dom (F /" G) c= dom G by XBOOLE_1:17;
+for x st x in dom(F /" G) & -x in dom(F /" G) holds
+ (F /" G).(-x)=-(F /" G).x
+      proof
+       let x;
+       assume
+A9:x in dom(F /" G) & -x in dom(F /" G);
+     (F /" G).(-x)=F.(-x) / G.(-x) by VALUED_1:17
+                .=(-F.x) / G.(-x) by A1,Def6,A8,A9
+                .=(-F.x) / G.x by A2,Def3,A8,A9
+                .=-(F.x / G.x)
+                .=-(F /" G).x by VALUED_1:17;
+        hence thesis;
+      end;
+   then (F /" G) is with_symmetrical_domain quasi_odd by Def6,A3,A7,Def2;
+   hence thesis;
+  end;
+
+theorem
+  F is even & G is odd & dom F /\ dom G is symmetrical implies
+  F /" G is odd
+proof
+    assume that
+A1: F is even and
+A2: G is odd and
+A3: dom F /\ dom G is symmetrical;
+A7: dom F /\ dom G=dom (F /" G) by VALUED_1:16;
+then
+A8:dom (F /" G) c= dom F & dom (F /" G) c= dom G by XBOOLE_1:17;
+for x st x in dom(F /" G) & -x in dom(F /" G) holds
+ (F /" G).(-x)=-(F /" G).x
+      proof
+       let x;
+       assume
+A9:x in dom(F /" G) & -x in dom(F /" G);
+     (F /" G).(-x)=F.(-x) / G.(-x) by VALUED_1:17
+                .=F.x / G.(-x) by A1,Def3,A8,A9
+                .=F.x / (-G.x) by A2,Def6,A8,A9
+                .=-(F.x / G.x) by XCMPLX_1:189
+                .=-(F /" G).x by VALUED_1:17;
+        hence thesis;
+      end;
+   then (F /" G) is with_symmetrical_domain quasi_odd by Def6,A3,A7,Def2;
+   hence thesis;
+  end;
+
+begin :: Examples
+
+definition
+  func signum -> Function of REAL, REAL means :Def4:
+  for x being Real holds it.x = sgn x;
+  existence
+   proof
+    deffunc U(Element of REAL) = sgn$1;
+    consider f being Function of REAL, REAL such that
+A1: for x being Real holds f.x = U(x) from FUNCT_2:sch 4;
+    take f;
+    thus thesis by A1;
+  end;
+  uniqueness
+  proof
+    let f1,f2 be Function of REAL, REAL;
+    assume
+A6: for x being Real holds f1.x=sgn x;
+    assume
+A7: for x being Real holds f2.x=sgn x;
+    for x being Real holds f1.x = f2.x
+    proof
+      let x be Real;
+      thus f1.x=sgn x by A6
+        .=f2.x by A7;
+    end;
+    hence f1=f2 by FUNCT_2:113;
+  end;
+end;
+
+registration
+  let x be real number;
+  cluster signum.x -> real;
+  coherence;
+end;
+
+theorem Th43:
+  for x being real number st x > 0 holds signum.x = 1
+ proof
+    let x be real number;
+    assume
+A1: 0 < x;
+    x in REAL by XREAL_0:def 1;
+   then signum.x = sgn x by Def4
+           .= 1 by ABSVALUE:def 2,A1;
+   hence thesis;
+end;
+
+theorem Th44:
+  for x being real number st x < 0 holds signum.x = -1
+ proof
+    let x be real number;
+    assume
+A1: 0 > x;
+    x in REAL by XREAL_0:def 1;
+   then signum.x = sgn x by Def4
+           .= -1 by ABSVALUE:def 2,A1;
+   hence thesis;
+end;
+
+theorem Th45:
+  signum.0 = 0
+proof
+  signum.0 = sgn 0 by Def4
+           .= 0 by ABSVALUE:def 2;
+  hence thesis;
+end;
+
+theorem Th46:
+  for x being real number holds signum.(-x) = -signum.x
+  proof
+   let x be real number;
+   per cases;
+  suppose
+A1: x < 0; then
+    signum.x = -1 by Th44;
+    hence thesis by Th43,A1;
+  end;
+  suppose
+A2: 0 < x; then
+   signum.x = 1 by Th43;
+    hence thesis by Th44,A2;
+  end;
+ suppose x = 0;
+    hence thesis by Th45;
+  end;
+end;
+
+theorem
+  for A being symmetrical Subset of REAL holds signum is_odd_on A
+proof
+ let A be symmetrical Subset of REAL;
+ A1:dom signum = REAL by FUNCT_2:def 1;
+ A2:dom(signum|A) = A by RELAT_1:91,A1;
+for x st x in dom(signum|A) & -x in dom(signum|A) holds
+signum|A.(-x)=-signum|A.x
+      proof
+       let x;
+        assume
+A3:     x in dom(signum|A) & -x in dom(signum|A);
+        signum|A.(-x)=signum|A/.(-x) by PARTFUN1:def 8,A3
+                    .=signum/.(-x) by PARTFUN2:35,A2,A3,A1
+                    .=-signum/.x by Th46
+                    .=-signum|A/.x by PARTFUN2:35,A2,A3,A1
+                    .=-signum|A.x by PARTFUN1:def 8,A3;
+        hence thesis;
+      end;
+   then signum|A is with_symmetrical_domain quasi_odd by Def6,A2,Def2;
+   hence thesis by A1,Def8;
+  end;
+
+theorem Th49:
+  for x being real number st x >= 0 holds absreal.x = x
+ proof
+    let x be real number;
+    assume
+A1: 0 <= x;
+   absreal.x = abs x by EUCLID:def 2
+           .= x by ABSVALUE:def 1,A1;
+   hence thesis;
+end;
+
+theorem Th50:
+  for x being real number st x < 0 holds absreal.x = -x
+proof
+    let x be real number;
+    assume
+A1: 0 > x;
+    absreal.x = abs x by EUCLID:def 2
+           .= -x by ABSVALUE:def 1,A1;
+    hence thesis;
+end;
+
+theorem Th52:
+  for x being real number holds absreal.(-x) = absreal.x
+  proof
+   let x be real number;
+   per cases;
+  suppose
+A1: x < 0; then
+   absreal.(-x) = -x by Th49;
+   hence thesis by A1,Th50;
+ end;
+  suppose
+A2: 0 < x; then
+    absreal.(-x) = -(-x) by Th50
+                .=x;
+    hence thesis by A2,Th49;
+  end;
+  suppose x = 0;
+   hence thesis;
+  end;
+ end;
+
+theorem
+  for A being symmetrical Subset of REAL holds absreal is_even_on A
+proof
+ let A be symmetrical Subset of REAL;
+ A1:dom absreal = REAL by FUNCT_2:def 1;
+ A2:dom(absreal|A) = A by RELAT_1:91,A1;
+for x st x in dom(absreal|A) & -x in dom(absreal|A) holds
+absreal|A.(-x)=absreal|A.x
+      proof
+       let x;
+        assume
+A3:x in dom(absreal|A) & -x in dom(absreal|A);
+             absreal|A.(-x)=absreal|A/.(-x) by PARTFUN1:def 8,A3
+                    .=absreal/.(-x) by PARTFUN2:35,A2,A3,A1
+                    .=absreal/.x by Th52
+                    .=absreal|A/.x by PARTFUN2:35,A2,A3,A1
+                    .=absreal|A.x by PARTFUN1:def 8,A3;
+        hence thesis;
+      end;
+   then absreal|A is with_symmetrical_domain quasi_even by Def3,A2,Def2;
+   hence thesis by A1,Def5;
+  end;
+
+theorem Th54:
+  for A being symmetrical Subset of REAL holds sin is_odd_on A
+proof
+ let A be symmetrical Subset of REAL;
+ A2:dom(sin|A) = A by RELAT_1:91,SIN_COS:27;
+for x st x in dom(sin|A) & -x in dom(sin|A) holds
+sin|A.(-x)=-sin|A.x
+      proof
+       let x;
+        assume
+A3:     x in dom(sin|A) & -x in dom(sin|A);
+        sin|A.(-x)=sin|A/.(-x) by PARTFUN1:def 8,A3
+                    .=sin/.(-x) by PARTFUN2:35,A2,A3,SIN_COS:27
+                    .=-sin/.x by SIN_COS:33
+                    .=-sin|A/.x by PARTFUN2:35,A2,A3,SIN_COS:27
+                    .=-sin|A.x by PARTFUN1:def 8,A3;
+        hence thesis;
+      end;
+   then sin|A is with_symmetrical_domain quasi_odd by Def6,A2,Def2;
+   hence thesis by SIN_COS:27,Def8;
+  end;
+
+theorem Th55:
+  for A being symmetrical Subset of REAL holds cos is_even_on A
+proof
+ let A be symmetrical Subset of REAL;
+ A2:dom(cos|A) = A by RELAT_1:91,SIN_COS:27;
+for x st x in dom(cos|A) & -x in dom(cos|A) holds
+cos|A.(-x)=cos|A.x
+      proof
+       let x;
+        assume
+A3:     x in dom(cos|A) & -x in dom(cos|A);
+        cos|A.(-x)=cos|A/.(-x) by PARTFUN1:def 8,A3
+                    .=cos/.(-x) by PARTFUN2:35,A2,A3,SIN_COS:27
+                    .=cos/.x by SIN_COS:33
+                    .=cos|A/.x by PARTFUN2:35,A2,A3,SIN_COS:27
+                    .=cos|A.x by PARTFUN1:def 8,A3;
+        hence thesis;
+      end;
+   then cos|A is with_symmetrical_domain quasi_even by Def3,A2,Def2;
+   hence thesis by SIN_COS:27,Def5;
+ end;
+
+registration
+  cluster sin -> odd;
+  coherence
+  proof
+ A1:for x st x in dom sin & -x in dom sin holds
+   sin.(-x)=-sin.x by SIN_COS:33;
+   for x being complex number st x in REAL holds -x in REAL by XREAL_0:def 1;
+   then REAL is symmetrical by Def1;
+   then sin is with_symmetrical_domain quasi_odd
+   by A1,Def2,SIN_COS:27,Def6;
+   hence thesis;
+  end;
+end;
+
+registration
+  cluster cos -> even;
+  coherence
+proof
+ A1:for x st x in dom cos & -x in dom cos holds
+   cos.(-x)=cos.x by SIN_COS:33;
+   cos is with_symmetrical_domain quasi_even by A1,Def2,SIN_COS:27,Def3;
+   hence thesis;
+  end;
+end;
+
+theorem
+  for A being symmetrical Subset of REAL holds sinh is_odd_on A
+proof
+ let A be symmetrical Subset of REAL;
+ A1:dom sinh = REAL by FUNCT_2:def 1;
+ A2:dom(sinh|A) = A by RELAT_1:91,A1;
+for x st x in dom(sinh|A) & -x in dom(sinh|A) holds
+sinh|A.(-x)=-sinh|A.x
+      proof
+       let x;
+        assume
+A3:x in dom(sinh|A) & -x in dom(sinh|A);
+        sinh|A.(-x)=sinh|A/.(-x) by PARTFUN1:def 8,A3
+                .=sinh/.(-x) by PARTFUN2:35,A2,A3,A1
+                .=-sinh/.x by SIN_COS2:19
+                .=-sinh|A/.x by PARTFUN2:35,A2,A3,A1
+                .=-sinh|A.x by PARTFUN1:def 8,A3;
+        hence thesis;
+      end;
+   then sinh|A is with_symmetrical_domain quasi_odd by Def6,A2,Def2;
+   hence thesis by A1,Def8;
+  end;
+
+theorem
+  for A being symmetrical Subset of REAL holds cosh is_even_on A
+proof
+ let A be symmetrical Subset of REAL;
+ A1:dom cosh = REAL by FUNCT_2:def 1;
+ A2:dom(cosh|A) = A by RELAT_1:91,A1;
+for x st x in dom(cosh|A) & -x in dom(cosh|A) holds cosh|A.(-x)=cosh|A.x
+    proof
+      let x;
+      assume
+A3:   x in dom(cosh|A) & -x in dom(cosh|A);
+      cosh|A.(-x)=cosh|A/.(-x) by PARTFUN1:def 8,A3
+                .=cosh/.(-x) by PARTFUN2:35,A2,A3,A1
+                .=cosh/.x by SIN_COS2:19
+                .=cosh|A/.x by PARTFUN2:35,A2,A3,A1
+                .=cosh|A.x by PARTFUN1:def 8,A3;
+      hence thesis;
+    end;
+   then cosh|A is with_symmetrical_domain quasi_even by Def3,A2,Def2;
+   hence thesis by A1,Def5;
+ end;
+
+registration
+  cluster sinh -> odd;
+  coherence
+  proof
+ A1:for x st x in dom sinh & -x in dom sinh holds
+   sinh.(-x)=-sinh.x by SIN_COS2:19;
+A2:dom (sinh)= REAL by FUNCT_2:def 1;
+   for x being complex number st x in REAL holds -x in REAL by XREAL_0:def 1;
+   then REAL is symmetrical by Def1;
+   then sinh is with_symmetrical_domain quasi_odd by A1,Def2,A2,Def6;
+   hence thesis;
+  end;
+end;
+
+registration
+  cluster cosh -> even;
+  coherence
+proof
+ A1:for x st x in dom cosh & -x in dom cosh holds
+   cosh.(-x)=cosh.x by SIN_COS2:19;
+A2:dom (cosh)= REAL by FUNCT_2:def 1;
+   for x being complex number st x in REAL holds -x in REAL by XREAL_0:def 1;
+   then REAL is symmetrical by Def1;
+   then cosh is with_symmetrical_domain quasi_even by A1,Def2,A2,Def3;
+   hence thesis;
+  end;
+end;
+
+theorem
+  A c= ].-PI/2,PI/2.[ implies tan is_odd_on A
+proof
+assume
+A0: A c= ].-PI/2,PI/2.[;
+A1:A c= dom (tan) by XBOOLE_1:1,A0,SIN_COS9:1;
+B1:for x st x in A holds tan.(-x) = -tan.x
+proof
+   let x;
+   assume
+A4: x in A;
+   -x in A by A4,Def1;
+   then tan.(-x)=tan (-x) by A0,SIN_COS9:13
+              .= -tan x by SIN_COS4:2
+              .= -tan.x by SIN_COS9:13,A0,A4;
+        hence thesis;
+end;
+A2:dom(tan|A) = A by RELAT_1:91,XBOOLE_1:1,A0,SIN_COS9:1;
+for x st x in dom(tan|A) & -x in dom(tan|A) holds
+tan|A.(-x)=-tan|A.x
+      proof
+       let x;
+        assume
+A3:x in dom(tan|A) & -x in dom(tan|A);
+             tan|A.(-x)=tan|A/.(-x) by PARTFUN1:def 8,A3
+                    .=tan/.(-x) by PARTFUN2:35,A2,A3,A1
+                    .=tan.(-x) by PARTFUN1:def 8,A1,A2,A3
+                    .=-tan.x by B1,A2,A3
+                    .=-tan/.x by PARTFUN1:def 8,A1,A2,A3
+                    .=-tan|A/.x by PARTFUN2:35,A2,A3,A1
+                    .=-tan|A.x by PARTFUN1:def 8,A3;
+        hence thesis;
+      end;
+   then tan|A is with_symmetrical_domain quasi_odd by Def6,A2,Def2;
+   hence thesis by A1,Def8;
+  end;
+
+theorem
+  (A c= dom (tan) & for x st x in A holds cos.x <> 0) implies
+  tan is_odd_on A
+proof
+assume that
+A1: A c= dom (tan) and
+A2: for x st x in A holds cos.x <> 0;
+B1:for x st x in A holds tan.(-x) = -tan.x
+proof
+   let x;
+   assume
+A4: x in A;
+   then -x in A by Def1;
+   then tan.(-x)= tan (-x) by A2,SIN_COS9:15
+                .=-tan x by SIN_COS4:2
+                .=-tan.x by A2,A4,SIN_COS9:15;
+  hence thesis;
+  end;
+B2:dom(tan|A) = A by RELAT_1:91,A1;
+for x st x in dom(tan|A) & -x in dom(tan|A) holds tan|A.(-x)=-tan|A.x
+      proof
+       let x;
+        assume
+A3:     x in dom(tan|A) & -x in dom(tan|A);
+        tan|A.(-x)=tan|A/.(-x) by PARTFUN1:def 8,A3
+                    .=tan/.(-x) by PARTFUN2:35,B2,A3,A1
+                    .=tan.(-x) by PARTFUN1:def 8,A1,B2,A3
+                    .=-tan.x by B1,B2,A3
+                    .=-tan/.x by PARTFUN1:def 8,A1,B2,A3
+                    .=-tan|A/.x by PARTFUN2:35,B2,A3,A1
+                    .=-tan|A.x by PARTFUN1:def 8,A3;
+        hence thesis;
+      end;
+   then tan|A is with_symmetrical_domain quasi_odd by Def6,B2,Def2;
+   hence thesis by A1,Def8;
+end;
+
+theorem
+  (A c= dom (cot) & for x st x in A holds sin.x <> 0) implies
+    cot is_odd_on A
+proof
+  assume that
+A1: A c= dom (cot) and
+A2: for x st x in A holds sin.x <> 0;
+B1:for x st x in A holds cot.(-x) = -cot.x
+  proof
+   let x;
+   assume
+A4: x in A;
+   then -x in A by Def1;
+   then cot.(-x)= cot (-x) by A2,SIN_COS9:16
+                .=-cot x by SIN_COS4:4
+                .=-cot.x by A2,A4,SIN_COS9:16;
+  hence thesis;
+  end;
+B2:dom(cot|A) = A by RELAT_1:91,A1;
+   for x st x in dom(cot|A) & -x in dom(cot|A) holds cot|A.(-x)=-cot|A.x
+      proof
+       let x;
+        assume
+A3:x in dom(cot|A) & -x in dom(cot|A);
+        cot|A.(-x)=cot|A/.(-x) by PARTFUN1:def 8,A3
+                    .=cot/.(-x) by PARTFUN2:35,B2,A3,A1
+                    .=cot.(-x) by PARTFUN1:def 8,A1,B2,A3
+                    .=-cot.x by B1,B2,A3
+                    .=-cot/.x by PARTFUN1:def 8,A1,B2,A3
+                    .=-cot|A/.x by PARTFUN2:35,B2,A3,A1
+                    .=-cot|A.x by PARTFUN1:def 8,A3;
+        hence thesis;
+      end;
+   then cot|A is with_symmetrical_domain quasi_odd by Def6,B2,Def2;
+   hence thesis by A1,Def8;
+end;
+
+theorem
+  A c= [.-1,1.] implies arctan is_odd_on A
+proof
+assume
+A0: A c= [.-1,1.]; then
+A1:A c= dom arctan by SIN_COS9:23,XBOOLE_1:1;
+B1:for x st x in A holds arctan.(-x) = -arctan.x
+  proof
+    let x;
+    assume x in A;
+    then -1 <= x & x <= 1 by XXREAL_1:1, A0;
+    then arctan x = -arctan (-x) by SIN_COS9:67;
+    hence thesis;
+   end;
+A2:dom(arctan|A) = A by RELAT_1:91,A0,SIN_COS9:23,XBOOLE_1:1;
+for x st x in dom(arctan|A) & -x in dom(arctan|A) holds
+arctan|A.(-x)=-arctan|A.x
+      proof
+       let x;
+        assume
+A3:     x in dom(arctan|A) & -x in dom(arctan|A);
+        arctan|A.(-x)=arctan|A/.(-x) by PARTFUN1:def 8,A3
+                    .=arctan/.(-x) by PARTFUN2:35,A2,A3,A1
+                    .=arctan.(-x) by PARTFUN1:def 8,A1,A2,A3
+                    .=-arctan.x by B1,A2,A3
+                    .=-arctan/.x by PARTFUN1:def 8,A1,A2,A3
+                    .=-arctan|A/.x by PARTFUN2:35,A2,A3,A1
+                    .=-arctan|A.x by PARTFUN1:def 8,A3;
+        hence thesis;
+      end;
+   then arctan|A is with_symmetrical_domain quasi_odd by Def6,A2,Def2;
+   hence thesis by A1,Def8;
+  end;
+
+theorem
+  for A being symmetrical Subset of REAL holds
+  |. sin .| is_even_on A
+proof
+  let A be symmetrical Subset of REAL;
+  A is symmetrical Subset of COMPLEX by XBOOLE_1:1,NUMBERS:11;
+ hence thesis by Th16,Th54;
+end;
+
+theorem
+  for A being symmetrical Subset of REAL holds
+  |. cos .| is_even_on A
+proof
+  let A be symmetrical Subset of REAL;
+  A is symmetrical Subset of COMPLEX by XBOOLE_1:1,NUMBERS:11;
+ hence thesis by Th17,Th55;
+end;
+
+theorem
+  for A being symmetrical Subset of REAL holds
+    sin" is_odd_on A
+proof
+  let A be symmetrical Subset of REAL;
+  A is symmetrical Subset of COMPLEX by XBOOLE_1:1,NUMBERS:11;
+ hence thesis by Th14,Th54;
+end;
+
+theorem
+  for A being symmetrical Subset of REAL holds
+  cos" is_even_on A
+proof
+  let A be symmetrical Subset of REAL;
+  A is symmetrical Subset of COMPLEX by XBOOLE_1:1,NUMBERS:11;
+ hence thesis by Th15,Th55;
+end;
+
+theorem
+  for A being symmetrical Subset of REAL holds
+    -sin is_odd_on A
+proof
+  let A be symmetrical Subset of REAL;
+  A is symmetrical Subset of COMPLEX by XBOOLE_1:1,NUMBERS:11;
+ hence thesis by Th12,Th54;
+end;
+
+theorem
+  for A being symmetrical Subset of REAL holds
+  -cos is_even_on A
+proof
+  let A be symmetrical Subset of REAL;
+  A is symmetrical Subset of COMPLEX by XBOOLE_1:1,NUMBERS:11;
+ hence thesis by Th13,Th55;
+end;
+
+theorem
+  for A being symmetrical Subset of REAL holds
+  sin^2 is_even_on A
+proof
+  let A be symmetrical Subset of REAL;
+a: A is symmetrical Subset of COMPLEX by XBOOLE_1:1,NUMBERS:11;
+  sin is_odd_on A by Th54;
+ hence thesis by an1,a;
+end;
+
+theorem
+  for A being symmetrical Subset of REAL holds
+  cos^2 is_even_on A
+proof
+  let A be symmetrical Subset of REAL;
+a: A is symmetrical Subset of COMPLEX by XBOOLE_1:1,NUMBERS:11;
+  cos is_even_on A by Th55;
+ hence thesis by an0,a;
+end;
+
+reserve B for symmetrical Subset of REAL;
+
+theorem Th70:
+  B c= dom (sec) implies sec is_even_on B
+proof
+  assume
+A1:B c= dom (sec);
+B1:for x st x in B holds sec.(-x) = sec.x
+  proof
+   let x;
+   assume
+A2:x in B; then
+A3:-x in B by Def1;
+ sec.(-x)=(cos.(-x))" by A1,A3,RFUNCT_1:def 8
+        .=(cos.x)" by SIN_COS:33
+        .= sec.x by A1,A2,RFUNCT_1:def 8;
+  hence thesis;
+  end;
+B2:dom(sec|B) = B by RELAT_1:91,A1;
+  for x st x in dom(sec|B) & -x in dom(sec|B) holds sec|B.(-x)=sec|B.x
+      proof
+       let x;
+       assume
+A4:    x in dom(sec|B) & -x in dom(sec|B);
+       sec|B.(-x)=sec|B/.(-x) by PARTFUN1:def 8,A4
+                    .=sec/.(-x) by PARTFUN2:35,B2,A4,A1
+                    .=sec.(-x) by PARTFUN1:def 8,A1,B2,A4
+                    .=sec.x by B1,B2,A4
+                    .=sec/.x by PARTFUN1:def 8,A1,B2,A4
+                    .=sec|B/.x by PARTFUN2:35,B2,A4,A1
+                    .=sec|B.x by PARTFUN1:def 8,A4;
+       hence thesis;
+     end;
+   then sec|B is with_symmetrical_domain quasi_even by Def3,B2,Def2;
+   hence thesis by A1,Def5;
+end;
+
+theorem
+  (for x being real number st x in B holds cos.x<>0)
+  implies sec is_even_on B
+proof
+ assume
+A1:for x being real number st x in B holds cos.x<>0;
+   B c= dom (sec)
+   proof
+     let x be real number;
+     assume
+A3: x in B;
+     then cos.x<>0 by A1;
+     then not cos.x in {0} by TARSKI:def 1;
+     then x in dom cos & not x in cos"{0} by FUNCT_1:def 13,SIN_COS:27,A3;
+     then x in dom cos \ cos"{0} by XBOOLE_0:def 5;
+     hence thesis by RFUNCT_1:def 8;
+   end;
+  hence thesis by Th70;
+end;
+
+theorem Th72:
+  B c= dom (cosec) implies cosec is_odd_on B
+proof
+ assume
+A1:B c= dom (cosec);
+B1:for x st x in B holds cosec.(-x) = -cosec.x
+  proof
+   let x;
+   assume
+A2:x in B; then
+A3:-x in B by Def1;
+ cosec.(-x)=(sin.(-x))" by A1,A3,RFUNCT_1:def 8
+        .=(-sin.x)" by SIN_COS:33
+        .=-(sin.x)" by XCMPLX_1:224
+        .=-cosec.x by A1,A2,RFUNCT_1:def 8;
+  hence thesis;
+  end;
+B2:dom(cosec|B) = B by RELAT_1:91,A1;
+for x st x in dom(cosec|B) & -x in dom(cosec|B) holds
+cosec|B.(-x)=-cosec|B.x
+      proof
+       let x;
+        assume
+A4:x in dom(cosec|B) & -x in dom(cosec|B);
+             cosec|B.(-x)=cosec|B/.(-x) by PARTFUN1:def 8,A4
+                    .=cosec/.(-x) by PARTFUN2:35,B2,A4,A1
+                    .=cosec.(-x) by PARTFUN1:def 8,A1,B2,A4
+                    .=-cosec.x by B1,B2,A4
+                    .=-cosec/.x by PARTFUN1:def 8,A1,B2,A4
+                    .=-cosec|B/.x by PARTFUN2:35,B2,A4,A1
+                    .=-cosec|B.x by PARTFUN1:def 8,A4;
+        hence thesis;
+      end;
+   then cosec|B is with_symmetrical_domain quasi_odd by Def6,B2,Def2;
+   hence thesis by A1,Def8;
+end;
+
+theorem
+  (for x being real number st x in B holds sin.x<>0)
+  implies cosec is_odd_on B
+proof
+   assume
+A1:for x being real number st x in B holds sin.x<>0;
+   B c= dom cosec
+   proof
+     let x be real number;
+     assume
+A3:  x in B;
+     then sin.x<>0 by A1;
+     then not sin.x in {0} by TARSKI:def 1;
+     then x in dom sin & not x in sin"{0} by FUNCT_1:def 13,SIN_COS:27,A3;
+     then x in dom sin \ sin"{0} by XBOOLE_0:def 5;
+     hence thesis by RFUNCT_1:def 8;
+   end;
+  hence thesis by Th72;
+end;

@@ -13,7 +13,7 @@ environ
       XREAL_0, COMPLEX1, MEMBERED, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
       FUNCT_3, PARTFUN2, VALUED_0, VALUED_1, SEQ_1, SEQ_2, REAL_1;
  constructors PARTFUN1, FUNCT_3, XXREAL_0, REAL_1, COMPLEX1, VALUED_1,
-      PARTFUN2, SEQ_2, SEQ_1;
+      PARTFUN2, SEQ_2, SEQ_1, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, NUMBERS, XREAL_0, MEMBERED,
       VALUED_0, VALUED_1, XCMPLX_0, SEQ_2, XXREAL_0, RELAT_1, FUNCOP_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
@@ -66,7 +66,7 @@ A5:   x in dom f;
       hence f.x = f1.x * (f2.x)" by A2
         .= g.x by A1,A3,A4,A5;
     end;
-    hence f = g by A1,A3,FUNCT_1:9;
+    hence thesis by A1,A3,FUNCT_1:9;
   end;
 end;
 
@@ -151,7 +151,7 @@ A5:   x in dom h;
       hence h.x = (f.x)" by A2
         .= g.x by A1,A3,A4,A5;
     end;
-    hence h = g by A1,A3,FUNCT_1:9;
+    hence thesis by A1,A3,FUNCT_1:9;
   end;
 end;
 
@@ -236,7 +236,7 @@ A1: x in dom (f1(#)f2) & not x in (f1(#)f2)"{0} by XBOOLE_0:def 5;
     then x in dom f1 \ (f1)"{0} & x in dom f2 & not x in (f2)"{0}
     by FUNCT_1:def 13,XBOOLE_0:def 5;
     then x in dom f1 \ (f1)"{0} & x in dom f2 \ (f2)"{0} by XBOOLE_0:def 5;
-    hence x in (dom f1 \ (f1)"{0}) /\ (dom f2 \ (f2)"{0}) by XBOOLE_0:def 4;
+    hence thesis by XBOOLE_0:def 4;
   end;
   thus (dom f1 \ (f1)"{0}) /\
   (dom f2 \ (f2)"{0}) c= dom (f1(#)f2) \ (f1(#)f2)"{0}
@@ -261,7 +261,7 @@ A6: x in dom (f1(#)f2) by VALUED_1:def 4;
     (f1(#)f2).x <> 0 by A5,VALUED_1:5;
     then not (f1(#)f2).x in {0} by TARSKI:def 1;
     then not x in (f1(#)f2)"{0} by FUNCT_1:def 13;
-    hence x in dom (f1(#)f2) \ (f1(#)f2)"{0}by A6,XBOOLE_0:def 5;
+    hence thesis by A6,XBOOLE_0:def 5;
   end;
 end;
 
@@ -1100,7 +1100,7 @@ A9: c in dom ((f1(#)g + g1(#)f)/(f(#)g)) by Th47;
       .= (f1(#)g + g1(#)f).c *((f(#)g).c)" by A8,VALUED_1:def 1
       .= ((f1(#)g + g1(#)f)/(f(#)g)).c by A9,Def4;
   end;
-  hence f1/f + g1/g = (f1(#)g + g1(#)f)/(f(#)g) by A1,FUNCT_1:9;
+  hence thesis by A1,FUNCT_1:9;
 end;
 
 theorem
@@ -1526,7 +1526,7 @@ proof
 A1: f1 is total & f2"{0} = {} & f2 is total;
     then f2^ is total by Th70;
     then f1(#)(f2^) is total by A1,Th66;
-    hence f1/f2 is total by Th47;
+    hence thesis by Th47;
   end;
   assume f1/f2 is total;
   then
@@ -1548,7 +1548,7 @@ A1: f1 is total & f2 is total;
   f1-f2 is total by A1,Th66;
   then dom (f1-f2) = C by PARTFUN1:def 4;
   hence (f1-f2).c = f1.c - f2.c by VALUED_1:13;
-  thus (f1(#)f2).c = f1.c * f2.c by VALUED_1:5;
+  thus thesis by VALUED_1:5;
 end;
 
 theorem
@@ -1557,7 +1557,7 @@ proof
   assume f is total;
   then r(#)f is total by Th67;
   then dom (r(#)f) = C by PARTFUN1:def 4;
-  hence (r(#)f).c = r * (f.c) by VALUED_1:def 5;
+  hence thesis by VALUED_1:def 5;
 end;
 
 theorem
@@ -1569,7 +1569,7 @@ theorem
 proof
   assume f^ is total;
   then dom (f^) = C by PARTFUN1:def 4;
-  hence (f^).c = (f.c)" by Def8;
+  hence thesis by Def8;
 end;
 
 theorem
@@ -1603,6 +1603,16 @@ A1: dom chi(X,C) =C by FUNCT_3:def 3;
   end;
 end;
 
+registration
+  let X,C be set;
+  cluster chi(X,C) -> total PartFunc of C,REAL;
+  coherence
+   proof
+     dom chi(X,C) =C by FUNCT_3:def 3;
+    hence thesis by PARTFUN1:def 4;
+   end;
+end;
+
 theorem Th77:
   f= chi(X,C) iff ( dom f = C &
   for c holds (c in X implies f.c = 1) & (not c in X implies f.c = 0))
@@ -1619,10 +1629,7 @@ A1: dom f = C &
 end;
 
 theorem
-  chi(X,C) is total
-proof dom chi(X,C) = C by Th77;
-  hence thesis by PARTFUN1:def 4;
-end;
+  chi(X,C) is total;
 
 theorem
   c in X iff chi(X,C).c = 1 by Th77;
@@ -1783,7 +1790,7 @@ G:  for p being set st p in dom(f|Y) holds (f|Y).p<r;
     then
 Z:   c in dom(f|Y) by RELAT_1:90;
     then (f|Y).c < r by G;
-   hence f.c <= r by Z,FUNCT_1:70;
+   hence thesis by Z,FUNCT_1:70;
   end;
   given r such that
 G:  for c being set st c in Y /\ dom f holds f.c <= r;
@@ -1796,7 +1803,7 @@ Z:  p in dom(f|Y);
    then p in Y /\ dom f by RELAT_1:90;
    then f.p <= r by G;
    then (f|Y).p <= r by Z,FUNCT_1:70;
-  hence (f|Y).p<r1 by A,XXREAL_0:2;
+  hence thesis by A,XXREAL_0:2;
  end;
 
 theorem Def10:
@@ -1814,7 +1821,7 @@ G:  for p being set st p in dom(f|Y) holds r < (f|Y).p;
     then
 Z:   c in dom(f|Y) by RELAT_1:90;
     then r < (f|Y).c by G;
-   hence r <= f.c by Z,FUNCT_1:70;
+   hence thesis by Z,FUNCT_1:70;
   end;
   given r such that
 G:  for c being set st c in Y /\ dom f holds r <= f.c;
@@ -1827,7 +1834,7 @@ Z:  p in dom(f|Y);
    then p in Y /\ dom f by RELAT_1:90;
    then r <= f.p by G;
    then r <= (f|Y).p by Z,FUNCT_1:70;
-  hence r1 < (f|Y).p by A,XXREAL_0:2;
+  hence thesis by A,XXREAL_0:2;
  end;
 
 theorem Th89:
@@ -1857,7 +1864,7 @@ A9: -abs(r2) <= r2 by ABSVALUE:11;
     then
 A11: -abs(r1)+-abs(r2) <= 0 + f.c by A5,XREAL_1:9;
     -abs(r1)+-abs(r2) = -g;
-    hence abs(f.c) <= g by A8,A11,ABSVALUE:12;
+    hence thesis by A8,A11,ABSVALUE:12;
   end;
   given r such that
 A12: for c being set st c in dom f holds abs(f.c) <= r;
@@ -1869,7 +1876,7 @@ A12: for c being set st c in dom f holds abs(f.c) <= r;
     then
 A13: abs(f.c) < r+1 by A12,XREAL_1:41;
     f.c <= abs(f.c) by ABSVALUE:11;
-    hence f.c < r+1 by A13,XXREAL_0:2;
+    hence thesis by A13,XXREAL_0:2;
   end;
   take -(r+1);
     let c be set;
@@ -1878,7 +1885,7 @@ A13: abs(f.c) < r+1 by A12,XREAL_1:41;
     then
 A15: -(r+1) < -abs(f.c) by XREAL_1:26;
     -abs(f.c) <= f.c by ABSVALUE:11;
-    hence -(r+1) < f.c by A15,XXREAL_0:2;
+    hence thesis by A15,XXREAL_0:2;
 end;
 
 theorem
@@ -1910,7 +1917,7 @@ A9: -abs(r2) <= r2 by ABSVALUE:11;
     then
 A11: -abs(r1)+-abs(r2) <= 0 + f.c by A5,XREAL_1:9;
     -abs(r1)+-abs(r2) = -g;
-    hence abs(f.c) <= g by A8,A11,ABSVALUE:12;
+    hence thesis by A8,A11,ABSVALUE:12;
   end;
   given r such that
 A12: for c being set st c in Y /\ dom f holds abs(f.c) <= r;
@@ -2238,12 +2245,12 @@ A1:  f|Y is bounded;
     suppose
 A2:   0 <= r;
       hence (r(#)f)|Y is bounded_above by A1,Th95;
-      thus (r(#)f)|Y is bounded_below by A1,A2,Th96;
+      thus thesis by A1,A2,Th96;
     end;
     suppose
 A3:   r <= 0;
       hence (r(#)f)|Y is bounded_above by A1,Th96;
-      thus (r(#)f)|Y is bounded_below by A1,A3,Th95;
+      thus thesis by A1,A3,Th95;
     end;
 end;
 
@@ -2496,7 +2503,7 @@ proof
   assume
 A1: f|X is bounded & f|Y is bounded;
   thus f|(X \/ Y) is bounded_above by A1,Th102;
-  thus f|(X \/ Y) is bounded_below by A1,Th103;
+  thus thesis by A1,Th103;
 end;
 
 reserve f,f1,f2 for PartFunc of C,REAL;

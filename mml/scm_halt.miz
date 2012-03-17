@@ -17,7 +17,7 @@ environ
       SCMFSA_3, SCMFSA6C, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, PARTFUN1, SCM_1, SCMFSA_3,
       SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B,
-      SCMFSA8C, SCMNORM, SCMFSA_4, NAT_D;
+      SCMFSA8C, SCMNORM, SCMFSA_4, NAT_D, RELSET_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1, FRAENKEL,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, SCMFSA_2, SCMFSA6A,
       SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8C, SCMFSA_9,
@@ -28,7 +28,7 @@ environ
  theorems SF_MASTR, FUNCT_1, FUNCT_7, FUNCOP_1, RELAT_1, AMI_1, SCMFSA6A,
       FUNCT_4, ENUMSET1, AMI_3, NAT_1, TARSKI, INT_1, GRFUNC_1, SCMFSA_2,
       SCMFSA6B, SCMFSA7B, SCMFSA8B, SCMFSA8A, SCMFSA8C, SCMFSA_4, SCMFSA_5,
-      LATTICE2, SCMFSA_3, SCMFSA6C, PRE_CIRC, FSM_1, XBOOLE_0, XBOOLE_1,
+      LATTICE2, SCMFSA_3, SCMFSA6C, CARD_1, FSM_1, XBOOLE_0, XBOOLE_1,
       XREAL_1, ORDINAL1, XXREAL_0, VALUED_1, SCMNORM, CARD_3, XREAL_0;
  schemes NAT_1, SCMFSA6A;
 
@@ -81,7 +81,7 @@ proof
   then consider x being set such that
 A1: x in dom I /\ dom iS by XBOOLE_0:def 1;
 A2: x in dom I & x in dom iS by A1,XBOOLE_0:def 4;
-  dom I c= NAT by AMI_1:def 40;
+  dom I c= NAT by RELAT_1:def 18;
   then reconsider x as Instruction-Location of SCM+FSA by A2,AMI_1:def 4;
   per cases by A2,Th1;
   suppose x = intloc i;
@@ -139,7 +139,7 @@ proof
   assume
 A1: Initialized I c= s;
   Initialized I is halting by Def2;
-  hence s is halting by A1,AMI_1:def 26;
+  hence thesis by A1,AMI_1:def 26;
 end;
 
 theorem Th6:  ::TM007
@@ -252,7 +252,7 @@ A18: I is keepInt0_1;
     let s be State of SCM+FSA, n be Element of NAT;
     assume
 A19: Initialized I c= s;
-A20: dom I c= NAT by AMI_1:def 40;
+A20: dom I c= NAT by RELAT_1:def 18;
     defpred X[Nat] means not IC Computation(s,$1) in dom I;
     assume not IC Computation(s,n) in dom I;
     then
@@ -341,7 +341,7 @@ A43:  s0.IC s2 = s00.IC s2 by FUNCT_7:34
         .= intloc 0 := FI by A42,FUNCT_7:33;
       Computation(s0,k) = Following s02 by AMI_1:14
         .= Exec(intloc 0 := FI, s02) by A40,A43,AMI_1:54;
-      hence (Computation(s0,k)).intloc 0 <> 1 by A41,SCMFSA_2:89;
+      hence thesis by A41,SCMFSA_2:89;
     end;
     hence contradiction by A18;
   end;
@@ -527,15 +527,15 @@ proof
   dom I is non empty by Th10;
   then consider x being set such that
 A1: x in dom I by XBOOLE_0:def 1;
-  dom I c= NAT by AMI_1:def 40;
+  dom I c= NAT by RELAT_1:def 18;
   then reconsider x as Instruction-Location of SCM+FSA by A1,AMI_1:def 4;
   reconsider n = x as Element of NAT by ORDINAL1:def 13;
   per cases;
   suppose n = 0;
-    hence insloc 0 in dom I by A1;
+    hence thesis by A1;
   end;
   suppose 0 < n;
-    hence insloc 0 in dom I by A1,SCMNORM:def 1;
+    hence thesis by A1,SCMNORM:def 1;
   end;
 end;
 
@@ -608,7 +608,7 @@ A17: IC Computation(s1,k+1) + n = IC Computation(s2,k+1)
     reconsider j = CurInstr Computation(s1,k+1) as Instruction of SCM+FSA;
     reconsider l = IC Computation(s1,k+1) as Element of NAT by ORDINAL1:def 13;
 A19: IC Computation(s1,k+1) in dom J by A1,Def1;
-    dom ProgramPart J = dom J /\ NAT by FUNCT_1:68;
+    dom ProgramPart J = dom J /\ NAT by RELAT_1:90;
     then
 A20: l in dom ProgramPart J by A19,XBOOLE_0:def 4;
 A21: j = s1.IC Computation(s1,k+1) by AMI_1:54
@@ -619,14 +619,14 @@ A22: IC Computation(s2,k+1) in NAT by AMI_1:def 4;
     then IC Computation(s2,k+1) in dom Relocated(J,n) /\ NAT
      by A22,XBOOLE_0:def 4;
     then
-A23: IC Computation(s2,k+1) in dom ProgramPart Relocated(J,n) by FUNCT_1:68;
+A23: IC Computation(s2,k+1) in dom ProgramPart Relocated(J,n) by RELAT_1:90;
     thus IncAddr(CurInstr Computation(s1,k+1),n)
     = Relocated(J,n).(l + n) by A20,A21,SCMFSA_5:7
       .= (ProgramPart Relocated(J,n)).(IC Computation(s2,k+1))
        by A17,FUNCT_1:72
       .= s2.IC Computation(s2,k+1) by A2,A23,GRFUNC_1:8
       .= CurInstr Computation(s2,k+1) by AMI_1:54;
-    thus DataPart Computation(s1,k+1) = DataPart Computation(s2,k+1)
+    thus thesis
        by A14,A15,A16,SCMFSA6A:41;
   end;
   for k being Element of NAT holds P[k] from NAT_1:sch 1(A7,A13);
@@ -701,7 +701,7 @@ A7: CurInstr Computation(s2,LifeSpan s1)
   then
 A8: Result s2 = Computation(s2,LifeSpan s1) by A2,Th5,AMI_1:122;
   Result s1 = Computation(s1,LifeSpan s1) by A1,Th5,AMI_1:122;
-  hence Result s1, Result s2 equal_outside NAT by A1,A2,A3,A8,Th14;
+  hence thesis by A1,A2,A3,A8,Th14;
 end;
 
 registration
@@ -795,8 +795,7 @@ A15: CurInstr(Computation(s,m)) = I.IC(Computation(s,m)) by A11,A12,GRFUNC_1:8;
     then CurInstr(Computation(s,m)) = (I ';' J).IC(Computation(s,m))
     by A11,A15,SCMFSA6A:54
       .= CurInstr(Computation(sx,m)) by A10,A11,A13,A14,GRFUNC_1:8;
-    hence  Computation( s,m+1), Computation((s+*(I ';' J)),m+1)
-    equal_outside NAT by A5,A6,A8,A9,NAT_1:13,SCMFSA6A:32;
+    hence  thesis by A5,A6,A8,A9,NAT_1:13,SCMFSA6A:32;
   end;
   thus for m holds X[m] from NAT_1:sch 1(A3,A4);
 end;
@@ -905,8 +904,7 @@ A23:   Computation( s1,n + 1) = Following  Computation( s1,n) by AMI_1:14
         .= Exec(CurInstr  Computation( s1,n), Computation( s1,n));
        Computation( s2,n + 1) = Following  Computation( s2,n) by AMI_1:14
         .= Exec(CurInstr  Computation( s2,n), Computation( s2,n));
-      hence  Computation( s1,n + 1),  Computation( s2,n + 1)
-      equal_outside A by A15,A16,A17,A19,A21,A22,A23,SCMFSA6A:32,XXREAL_0:2;
+      hence  thesis by A15,A16,A17,A19,A21,A22,A23,SCMFSA6A:32,XXREAL_0:2;
     end;
     for n being Element of NAT holds X[n] from NAT_1:sch 1(A11,A12);
     then Computation(s1,k), Computation(s2,k) equal_outside A;
@@ -936,7 +934,7 @@ A31: s2.l1 = (Directed I).l1 by A25,A26,FUNCT_4:14
    Computation( s2,m + 1) = Following Computation(s2,m) by AMI_1:14
     .= Exec(goto insloc card I,Computation(s2,m)) by A26,A31,AMI_1:54;
   then IC  Computation( s2,m + 1) = insloc card I by SCMFSA_2:95;
-  hence IC  Computation( s,LifeSpan (s+*I) + 1) = insloc card I
+  hence thesis
   by A3,A6,Th20;
 end;
 
@@ -1005,8 +1003,7 @@ A23:   Computation( s1,n + 1) = Following  Computation( s1,n) by AMI_1:14
         .= Exec(CurInstr  Computation( s1,n), Computation( s1,n));
        Computation( s2,n + 1) = Following  Computation( s2,n) by AMI_1:14
         .= Exec(CurInstr  Computation( s2,n), Computation( s2,n));
-      hence  Computation( s1,n + 1),  Computation( s2,n + 1)
-      equal_outside A by A15,A16,A17,A19,A21,A22,A23,SCMFSA6A:32,XXREAL_0:2;
+      hence  thesis by A15,A16,A17,A19,A21,A22,A23,SCMFSA6A:32,XXREAL_0:2;
     end;
     for n being Element of NAT holds X[n] from NAT_1:sch 1(A11,A12);
     then Computation(s1,k), Computation(s2,k) equal_outside A;
@@ -1039,8 +1036,7 @@ A31: s2.l1 = (Directed I).l1 by A25,A26,FUNCT_4:14
    Computation( s2,m + 1).a = Computation(s2,m).a) &
   for f being FinSeq-Location holds
    Computation( s2,m + 1).f = Computation(s2,m).f by SCMFSA_2:95;
-  hence DataPart Computation( s,LifeSpan (s +*I)) =
-   DataPart Computation( s,LifeSpan (s +*I) + 1)
+  hence thesis
   by A5,A6,SCMFSA6A:38;
 end;
 
@@ -1101,8 +1097,7 @@ A19:   Computation( s1,n + 1) = Following  Computation( s1,n) by AMI_1:14
         .= Exec(CurInstr  Computation( s1,n), Computation( s1,n));
        Computation( s2,n + 1) = Following  Computation( s2,n) by AMI_1:14
         .= Exec(CurInstr  Computation( s2,n), Computation( s2,n));
-      hence  Computation( s1,n + 1),  Computation( s2,n + 1)
-      equal_outside A by A11,A12,A13,A15,A17,A18,A19,SCMFSA6A:32,XXREAL_0:2;
+      hence  thesis by A11,A12,A13,A15,A17,A18,A19,SCMFSA6A:32,XXREAL_0:2;
     end;
     for n being Element of NAT holds X[n] from NAT_1:sch 1(A7,A8);
     then Computation(s1,k), Computation(s2,k) equal_outside A;
@@ -1187,8 +1182,7 @@ A20: CurInstr(Computation(s1,m)) = I.IC(Computation(s1,m))
     then CurInstr(Computation(s1,m)) = (I ';' J).IC(Computation(s1,m))
     by A16,A20,SCMFSA6A:54
       .= CurInstr(Computation(sx,m)) by A15,A16,A18,A19,GRFUNC_1:8;
-    hence  Computation( s1,m+1), Computation((s2),m+1)
-    equal_outside NAT by A10,A11,A13,A14,NAT_1:13,SCMFSA6A:32;
+    hence  thesis by A10,A11,A13,A14,NAT_1:13,SCMFSA6A:32;
   end;
   thus for k being Element of NAT holds X[k] from NAT_1:sch 1(A8, A9);
 end;
@@ -1236,13 +1230,13 @@ A9: now
     let x be set;
     assume x in dom DataPart Initialized J;
     then
-A10: x in dom (Initialized J) /\ D by FUNCT_1:68,SCMFSA_2:127;
+A10: x in dom (Initialized J) /\ D by RELAT_1:90,SCMFSA_2:127;
     then
 A11: x in dom Initialized J & x in D by XBOOLE_0:def 4;
     per cases by A11,SCMFSA6A:44;
     suppose
 A12:  x in dom J;
-      dom J c= NAT by AMI_1:def 40;
+      dom J c= NAT by RELAT_1:def 18;
       then reconsider l=x as Instruction-Location of SCM+FSA
       by A12,AMI_1:def 4;
       (DataPart Initialized J).l =  (DataPart Computation(s1,m1)).l
@@ -1413,13 +1407,13 @@ A10: now
       let x be set;
       assume x in dom DataPart JAt;
       then
-A11:  x in dom (JAt) /\ D by FUNCT_1:68,SCMFSA_2:127;
+A11:  x in dom (JAt) /\ D by RELAT_1:90,SCMFSA_2:127;
       then
 A12:  x in dom JAt & x in D by XBOOLE_0:def 4;
       per cases by A12,SCMFSA6A:44;
       suppose
 A13:    x in dom J;
-        dom J c= NAT by AMI_1:def 40;
+        dom J c= NAT by RELAT_1:def 18;
         then reconsider l=x as Instruction-Location of SCM+FSA
         by A13,AMI_1:def 4;
         (DataPart JAt).l =  (DataPart Computation(s1,m1)).l by A12,SCMFSA6A:37;
@@ -1662,16 +1656,10 @@ A35: now
       by SCMFSA_3:12
         .= CIJk1.f by A32,A33,SCMFSA6A:31;
     end;
-    hence  Computation(RIJ,k1) +* Start-At (IC  Computation( RIJ,k1) + card I),
-     Computation( sIJSA0,LifeSpan sISA0+1+k1)
-    equal_outside NAT by A34,A35,SCMFSA6A:28;
+    hence  thesis by A34,A35,SCMFSA6A:28;
   end;
   for k being Element of NAT holds X[k] from NAT_1:sch 1(A20, A21);
-  hence for k being Element of NAT
-  holds  Computation( (Result(s +*I) +* Initialized J),k) +* Start-At (IC
-   Computation( (Result(s +*I) +* Initialized J),k) + card I),
-   Computation( (s +* (I ';' J)),LifeSpan (s +* I)+1+k)
-  equal_outside NAT by A11,A13;
+  hence thesis by A11,A13;
 end;
 
 theorem Th27:   ::Keep1
@@ -1729,8 +1717,7 @@ A18: CurInstr(Computation(s1,m)) = I.IC(Computation(s1,m))
     then CurInstr(Computation(s1,m)) = (I ';' J).IC(Computation(s1,m))
     by A14,A18,SCMFSA6A:54
       .= CurInstr(Computation(sx,m)) by A13,A14,A16,A17,GRFUNC_1:8;
-    hence  Computation( s1,m+1), Computation((s2),m+1)
-    equal_outside NAT by A10,A11,A12,SCMFSA6A:32;
+    hence  thesis by A10,A11,A12,SCMFSA6A:32;
   end;
   thus for k being Element of NAT holds X[k] from NAT_1:sch 1(A8, A9);
 end;
@@ -1765,8 +1752,7 @@ A7: inJ c= Result (s +* inIJ +* I) +* inJ by FUNCT_4:26;
 A8: inJ c= Result (s +* inI) +* inJ by FUNCT_4:26;
   Result (s +* inIJ +* I) +* inJ, Result (s +* inI) +* inJ
   equal_outside NAT by A6,FUNCT_7:106;
-  hence LifeSpan (s +* inIJ)
-  = LifeSpan (s +* inI) + 1 + LifeSpan (Result (s +* inI) +* inJ)
+  hence thesis
   by A1,A5,A7,A8,Th15;
 end;
 
@@ -2003,7 +1989,7 @@ A8:   s +* Initialized I=s +* (I +* iS) by FUNCT_4:15
         suppose
 A9:       k <= LifeSpan(s +* Initialized I);
            Computation( (s +* Initialized I),k).intloc 0 = 1 by A6,Def3;
-          hence  Computation(s,k).intloc 0 = 1 by A2,A7,A9,Th24,SCMFSA6A:30;
+          hence  thesis by A2,A7,A9,Th24,SCMFSA6A:30;
         end;
         suppose
 A10:      k > LifeSpan(s +* Initialized I);
@@ -2028,7 +2014,7 @@ A14:      (Rr +* Sr).intloc 0 = Rr.intloc 0 by FUNCT_4:12;
           Rr +* Sr,  Computation( (s +* (I ';' J)),LS+1+r) equal_outside NAT
           by A1,A7,A8,Th26;
 
-hence  Computation(s,k).intloc 0 = 1 by A5,A11,A12,A13,A14,SCMFSA6A:30;
+hence  thesis by A5,A11,A12,A13,A14,SCMFSA6A:30;
         end;
       end;
     end;
@@ -2037,7 +2023,7 @@ A15:  not s +* Initialized I is halting;
       let k be Element of NAT;
       Initialized I c= s +* Initialized I by FUNCT_4:26;
       then  Computation( (s +* Initialized I),k).intloc 0 = 1 by Def3;
-      hence  Computation(s,k).intloc 0 = 1 by A2,A15,Th27,SCMFSA6A:30;
+      hence  thesis by A2,A15,Th27,SCMFSA6A:30;
     end;
   end;
 end;
@@ -2079,7 +2065,7 @@ proof
 A1: IExec(I ';' J,s) = IExec(J,IExec(I,s)) +*
   Start-At (IC IExec(J,IExec(I,s)) + card I) by Th29;
   not a in dom Start-At (IC IExec(J,IExec(I,s)) + card I) by SCMFSA6B:9;
-  hence IExec(I ';' J, s).a = IExec(J,IExec(I,s)).a by A1,FUNCT_4:12;
+  hence thesis by A1,FUNCT_4:12;
 end;
 
 theorem Th31:  ::TM050
@@ -2092,7 +2078,7 @@ proof
 A1: IExec(I ';' J,s) = IExec(J,IExec(I,s)) +*
   Start-At (IC IExec(J,IExec(I,s)) + card I) by Th29;
   not f in dom Start-At (IC IExec(J,IExec(I,s)) + card I) by SCMFSA6B:10;
-  hence IExec(I ';' J, s).f = IExec(J,IExec(I,s)).f by A1,FUNCT_4:12;
+  hence thesis by A1,FUNCT_4:12;
 end;
 
 theorem Th32:
@@ -2144,7 +2130,7 @@ A6:       x' = intloc 0 by SF_MASTR:def 5;
         .= IE.x by SCMFSA6C:3;
     end;
   end;
-  hence DataPart Initialize IE = DataPart IE by FUNCT_1:68,SCMFSA_2:127;
+  hence thesis by FUNCT_1:68,SCMFSA_2:127;
 end;
 
 theorem Th33:  ::TM051=miI:
@@ -2231,7 +2217,7 @@ A2: for s being State of SCM+FSA holds I is_closed_onInit s;
     then I is_closed_onInit s & s = s +* Initialized I by A2,FUNCT_4:79;
     hence IC Computation(s,k) in dom I by Def4;
   end;
-  hence I is InitClosed by Def1;
+  hence thesis by Def1;
 end;
 
 theorem Th36:  ::TM054=*TQ6'
@@ -2257,7 +2243,7 @@ A3: for s being State of SCM+FSA holds I is_halting_onInit s;
     hence s is halting by Def5;
   end;
   then Initialized I is halting by AMI_1:def 26;
-  hence I is InitHalting by Def2;
+  hence thesis by Def2;
 end;
 
 theorem Th37:  ::TM055=TQ9''(SCMFSA7B)
@@ -2326,7 +2312,7 @@ A3:   Initialized I c= s;
       hence Computation(s,k).intloc 0 = s.intloc 0 by A2,A3,Th37
         .=1 by A3,Th7;
     end;
-    hence I is keepInt0_1 by Def3;
+    hence thesis by Def3;
   end;
 end;
 
@@ -2580,7 +2566,7 @@ A2: IExec(if=0(a,I,J),s) = IExec(J,s) +* Start-At insloc (card I + card J + 3)
   end;
   let f be FinSeq-Location;
   not f in dom Start-At insloc (card I + card J + 3) by SCMFSA6B:10;
-  hence IExec(if=0(a,I,J),s).f = IExec(J,s).f by A2,FUNCT_4:12;
+  hence thesis by A2,FUNCT_4:12;
 end;
 
 theorem Th49: ::ThIFg0_1'
@@ -2762,7 +2748,7 @@ A2: IExec(if>0(a,I,J),s) = IExec(J,s) +* Start-At insloc (card I + card J + 3)
   end;
   let f be FinSeq-Location;
   not f in dom Start-At insloc (card I + card J + 3) by SCMFSA6B:10;
-  hence IExec(if>0(a,I,J),s).f = IExec(J,s).f by A2,FUNCT_4:12;
+  hence thesis by A2,FUNCT_4:12;
 end;
 
 theorem Th55: ::ThIFl0_1
@@ -2893,7 +2879,7 @@ A2: for s being State of SCM+FSA holds I is_halting_on Initialize s;
     I is_halting_on Initialize s by A2;
     hence I is_halting_onInit s by Th41;
   end;
-  hence I is InitHalting by Th36;
+  hence thesis by Th36;
 end;
 
 theorem Th60:  ::TM204
@@ -2916,7 +2902,7 @@ A2: for s being State of SCM+FSA holds I is_closed_on Initialize s;
     I is_closed_on Initialize s by A2;
     hence I is_closed_onInit s by Th40;
   end;
-  hence I is InitClosed by Th35;
+  hence thesis by Th35;
 end;
 
 theorem Th61: ::TM206=T200724
@@ -3034,8 +3020,7 @@ A15: CurInstr(Computation(s,m)) = I.IC(Computation(s,m)) by A11,A12,GRFUNC_1:8;
     then CurInstr(Computation(s,m)) = (loop I).IC(Computation(s,m))
     by A15,FUNCT_4:111
       .= CurInstr(Computation(sx,m)) by A10,A13,A14,GRFUNC_1:8;
-    hence  Computation( s,m+1), Computation((s+*loop I),m+1)
-    equal_outside NAT by A5,A6,A8,A9,NAT_1:13,SCMFSA6A:32;
+    hence  thesis by A5,A6,A8,A9,NAT_1:13,SCMFSA6A:32;
   end;
   thus for m being Element of NAT holds X[m] from NAT_1:sch 1(A3,A4);
 end;
@@ -3106,7 +3091,7 @@ A4: s +* I,s equal_outside A by AMI_1:120,FUNCT_7:28;
     then s +* (I +* iS),s2 equal_outside A by FUNCT_4:15;
     then s1,s2 equal_outside A by FUNCT_4:15;
     then s1, Computation( s2,0) equal_outside A by AMI_1:13;
-    hence  Computation( s1,0), Computation( s2,0) equal_outside A by AMI_1:13;
+    hence  thesis by AMI_1:13;
   end;
 A5: s1 is halting by A2,Def5;
 A6: for m being Element of NAT st X[m] holds X[m+1]
@@ -3135,7 +3120,7 @@ A17: CurInstr Computation(s1,m) = I.IC Computation(s1,m) by A13,A15,GRFUNC_1:8;
      by FUNCT_4:111;
     then CurInstr Computation(s1,m) = CurInstr Computation(s2,m)
      by A12,A14,A16,A17,GRFUNC_1:8;
-    hence Computation(s1,m+1),Computation(s2,m+1) equal_outside A
+    hence thesis
      by A7,A8,A10,A11,NAT_1:13,SCMFSA6A:32;
   end;
   thus for m being Element of NAT holds X[m] from NAT_1:sch 1(A3,A6);
@@ -3168,7 +3153,7 @@ A8: s1 is halting by A1,Def5;
 A9: CurInstr Computation(s1,m) = I.IC Computation(s1,m) by A4,A6,GRFUNC_1:8;
   then I.IC Computation(s1,m) <> halt SCM+FSA by A2,A8,AMI_1:def 46;
   then I.IC Computation(s1,m) = (loop I).IC Computation(s1,m) by FUNCT_4:111;
-  hence CurInstr Computation(s1,m) = CurInstr Computation(s2,m)
+  hence thesis
    by A3,A5,A7,A9,GRFUNC_1:8;
 end;
 
@@ -3234,10 +3219,10 @@ A12: m <= LifeSpan s1;
   suppose
 A13: m < LifeSpan s1;
     then CurInstr Computation(s1,m) <> halt SCM+FSA by A2,AMI_1:def 46;
-    hence CurInstr Computation(s2,m) <> halt SCM+FSA by A1,A13,Th69;
+    hence thesis by A1,A13,Th69;
   end;
   suppose m = LifeSpan s1;
-    hence CurInstr Computation(s2,m) <> halt SCM+FSA by A11,SCMFSA_2:47,124;
+    hence thesis by A11,SCMFSA_2:47,124;
   end;
 end;
 
@@ -3290,9 +3275,9 @@ A9: ss.a > 0;
     set s2 = ss +* Initialized (loop P );
     set s3 = Computation(s2,LifeSpan s1+1);
 A10: now
-A11:  now thus card loop P = card dom loop P by PRE_CIRC:21
+A11:  now thus card loop P = card dom loop P by CARD_1:104
           .= card dom P by FUNCT_4:105
-          .= card P by PRE_CIRC:21;
+          .= card P by CARD_1:104;
         thus card P = card Goto insloc 2 + card I1 + 4 by SCMFSA8B:14
           .= card I1 + 1 + 4 by SCMFSA8A:29
           .= card I1 + 3 + 2;
@@ -3338,9 +3323,9 @@ A14:  P is_closed_onInit ss & P is_halting_onInit ss by A9,Th45;
       hence IC Computation(s2,LifeSpan s1+1)= insloc 0 by SCMFSA_2:95;
     end;
 A15: now
-A16:  now thus card loop P = card dom loop P by PRE_CIRC:21
+A16:  now thus card loop P = card dom loop P by CARD_1:104
           .= card dom P by FUNCT_4:105
-          .= card P by PRE_CIRC:21;
+          .= card P by CARD_1:104;
         thus card P = card Goto insloc 2 + card I1 + 4 by SCMFSA8B:14
           .= card I1 + 1 + 4 by SCMFSA8A:29
           .= card I1 + 3 + 2;
@@ -3529,8 +3514,7 @@ A51: ex k being Element of NAT st
   IC  Computation( (s +* Initialized(loop P)),n) in dom loop P by A2,A3;
   s +* Initialized(loop P)= s +* (loop P +* Start-At insloc 0)
   by A2,SCMFSA8C:18;
-  hence loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0))
-  is_pseudo-closed_on s by A51,SCMFSA8A:def 3;
+  hence thesis by A51,SCMFSA8A:def 3;
 end;
 
 theorem
@@ -3549,8 +3533,7 @@ A2: s.a > 0;
   (Initialize s).a = s.a & (Initialize s).intloc 0 = 1 by SCMFSA6C:3;
   then loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0))
   is_pseudo-closed_on Initialize s by A1,A2,Th73;
-  hence Initialized loop if=0(a,Goto insloc 2,I ';'
-  SubFrom(a,intloc 0)) is_pseudo-closed_on s by SCMFSA8C:47;
+  hence thesis by SCMFSA8C:47;
 end;
 
 theorem
@@ -3573,14 +3556,14 @@ A4: s.a > 0;
     loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0)) by SCMFSA6A:63;
     then Directed loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0))
     is_pseudo-closed_on s by A1,A2,A4,Th73;
-    hence Times(a,I) is_closed_on s & Times(a,I) is_halting_on s
+    hence thesis
     by A4,SCMFSA8C:68;
   end;
   suppose
 A5: s.a <= 0;
     Stop SCM+FSA is_closed_on s & Stop SCM+FSA is_halting_on s
     by SCMFSA7B:24,25;
-    hence Times(a,I) is_closed_on s & Times(a,I) is_halting_on s
+    hence thesis
     by A5,SCMFSA8B:24;
   end;
 end;
@@ -3616,7 +3599,7 @@ A4:   (Initialize s).a <= 0 by SCMFSA6C:3;
       hence Initialized Times(a,I) is_halting_on s by SCMFSA8C:22;
     end;
   end;
-  hence Initialized Times(a,I) is halting by SCMFSA8C:24;
+  hence thesis by SCMFSA8C:24;
 end;
 
 registration
@@ -3758,9 +3741,9 @@ A19:  IC Computation(s2,n) = IC Computation(s1,n) by SCMFSA8A:6;
     end;
     suppose
 A20:  n = LifeSpan s1 + 1;
-A21:  card loop P = card dom loop P by PRE_CIRC:21
+A21:  card loop P = card dom loop P by CARD_1:104
         .= card dom P by FUNCT_4:105
-        .= card P by PRE_CIRC:21;
+        .= card P by CARD_1:104;
       card P = card Goto insloc 2 + card I1 + 4 by SCMFSA8B:14
         .= card I1 + 1 + 4 by SCMFSA8A:29
         .= card I1 + 3 + 2;
@@ -3928,9 +3911,9 @@ A33: IC Computation(s2,k+1) = insloc (card I1 + 3) by A28,A29,A31,SCMFSA_2:96;
 A34: card I1 + (3 + 2) = card I1 + 1 + 4
       .= card Goto insloc 2 + card I1 + 4 by SCMFSA8A:29
       .= card P by SCMFSA8B:14
-      .= card dom P by PRE_CIRC:21
+      .= card dom P by CARD_1:104
       .= card dom loop P by FUNCT_4:105
-      .= card loop P by PRE_CIRC:21;
+      .= card loop P by CARD_1:104;
     then card I1 + 3 + 0 < card loop P by XREAL_1:8;
     then
 A35: insloc (card I1 + 3) in dom loop P by SCMFSA6A:15;
@@ -4044,8 +4027,7 @@ A54:  Computation( s21,k),s31 equal_outside A by A49,SCMFSA6A:28;
     by SCMFSA8A:13
       .= DataPart IExec(loop P ';' Stop SCM+FSA,IExec(I1,s)) by SCMFSA6B:def 1
       .= DataPart IExec(Times(a,I),IExec(I1,s)) by A1,A14,A46,Th73,SCMFSA8C:69;
-    hence DataPart IExec(Times(a,I),s) =
-          DataPart IExec(Times(a,I),IExec(I ';' SubFrom(a,intloc 0),s))
+    hence thesis
  by A16,SCMFSA8C:17;
   end;
 end;

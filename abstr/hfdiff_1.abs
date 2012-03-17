@@ -9,14 +9,14 @@ environ
  vocabularies PRE_TOPC, BOOLE, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3, RELAT_1,
       ABSVALUE, QC_LANG1, PARTFUN1, SEQ_1, TAYLOR_2, RCOMP_1, SIN_COS, GROUP_1,
       TAYLOR_1, MATRIX_2, SQUARE_1, FDIFF_1, PREPOWER, FINSEQ_1, NEWTON,
-      SIN_COS4;
+      SIN_COS4, FUNCOP_1;
  notations SUBSET_1, PARTFUN1, RCOMP_1, XXREAL_0, NUMBERS, COMPLEX1, FUNCT_2,
-      REAL_1, NAT_1, NAT_D, VALUED_1, SEQ_1, TAYLOR_2, FDIFF_1, SEQFUNC,
-      NEWTON, SIN_COS, TAYLOR_1, ABIAN, XBOOLE_0, TARSKI, PREPOWER, BINARITH,
-      RFUNCT_1, SQUARE_1, RELSET_1;
+      FUNCOP_1, REAL_1, NAT_1, NAT_D, VALUED_1, SEQ_1, TAYLOR_2, FDIFF_1,
+      SEQFUNC, NEWTON, SIN_COS, TAYLOR_1, ABIAN, XBOOLE_0, TARSKI, PREPOWER,
+      BINARITH, RFUNCT_1, SQUARE_1, RELSET_1;
  constructors REAL_1, NAT_1, RCOMP_1, LIMFUNC1, TAYLOR_2, FDIFF_1, SIN_COS,
       ABIAN, TAYLOR_1, RFUNCT_1, SQUARE_1, PREPOWER, BINARITH, PARTFUN2, SEQ_1,
-      VALUED_1, BINOP_2, NAT_D, SEQFUNC;
+      VALUED_1, BINOP_2, NAT_D, SEQFUNC, RELSET_1;
  registrations RELSET_1, NUMBERS, XXREAL_0, NAT_1, MEMBERED, VALUED_0, RCOMP_1,
       XBOOLE_0, FUNCT_1, INT_1, ORDINAL1, FUNCT_2;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
@@ -38,7 +38,7 @@ theorem :: HFDIFF_1:2
   (-f1)(#)(-f2)=f1(#)f2;
 
 theorem :: HFDIFF_1:3
-  n>=1 implies dom(( #Z n)^)=REAL\{0} & ( #Z n)"{0}={0};
+  n>=1 implies dom(( #Z n)^) = REAL\{0} & ( #Z n)"{0}={0};
 
 theorem :: HFDIFF_1:4
   (r*p)(#)(( #Z n)^)=r(#)(p(#)(( #Z n)^));
@@ -162,8 +162,8 @@ theorem :: HFDIFF_1:38
   #Z n is_differentiable_on n,Z;
 
 theorem :: HFDIFF_1:39
-  x in Z & n>m implies (diff(a(#) #Z n,Z).m).x
-                                 = a*(n choose m)*(m!)*x #Z (n-m);
+  x in Z & n>m implies
+    (diff(a(#) #Z n,Z).m).x = a*(n choose m)*(m!)*x #Z (n-m);
 
 theorem :: HFDIFF_1:40
   x in Z implies (diff(a(#) #Z n,Z).n).x = a*(n!);
@@ -179,56 +179,54 @@ theorem :: HFDIFF_1:42
            Maclaurin( #Z n,].-r,r.[,x).n = x|^ n;
 
 theorem :: HFDIFF_1:43
-  ( #Z n)^ is_differentiable_on ].0,r.[;
+  not 0 in Z implies ( #Z n)^ is_differentiable_on Z;
 
 theorem :: HFDIFF_1:44
-  x0 in ].0,r.[ implies
-    ((( #Z n)^)`|].0,r.[).x0 =- n/( #Z (n+1)).x0;
+  not 0 in Z & x0 in Z implies
+    ((( #Z n)^)`|Z).x0 =- n/( #Z (n+1)).x0;
 
-theorem :: HFDIFF_1:45
-  x <>0 implies ( #Z 1)^ is_differentiable_in x &
-     diff(( #Z 1)^,x) = -1/(x #Z 1)^2;
+theorem :: HFDIFF_1:45  :: FDIFF_4:14
+  x <> 0 implies (id REAL)^ is_differentiable_in x &
+    diff((id REAL)^,x) = -1/x^2;
 
 theorem :: HFDIFF_1:46
-  ].0,r.[ c= dom((( #Z 2)^)) implies
-    (( #Z 1)^)`|].0,r.[ = ((-1)(#)(( #Z 2)^))|].0,r.[;
+  not 0 in Z implies ((id REAL)^)`|Z = ((-1)(#)(( #Z 2)^))|Z;
 
 theorem :: HFDIFF_1:47
   x <> 0 implies ( #Z 2)^ is_differentiable_in x &
-    diff(( #Z 2)^,x) = -(2 * x #Z 1)/(x #Z 2)^2;
+    diff(( #Z 2)^,x) = -(2 * x)/(x #Z 2)^2;
 
 theorem :: HFDIFF_1:48
-  ].0,r.[ c= dom((( #Z 3)^)) implies
-    (( #Z 2)^)`|].0,r.[ = ((-2)(#)(( #Z 3)^))|].0,r.[;
+  not 0 in Z implies (( #Z 2)^)`|Z = ((-2)(#)(( #Z 3)^))|Z;
 
 theorem :: HFDIFF_1:49
-  n>=1 implies (( #Z n)^)`|].0,r.[ = ((-n)(#)(( #Z (n+1))^))|].0,r.[;
+  not 0 in Z & n>=1 implies
+    (( #Z n)^)`|Z = ((-n)(#)(( #Z (n+1))^))|Z;
 
 theorem :: HFDIFF_1:50
   f1 is_differentiable_on 2,Z & f2 is_differentiable_on 2,Z implies
      diff(f1(#)f2,Z).2 =
-       (diff(f1,Z).2)(#)f2 + 2(#)((f1`|Z)(#)(f2`|Z))+ f1(#)(diff(f2,Z).2);
+       (diff(f1,Z).2)(#)f2 + 2(#)((f1`|Z)(#)(f2`|Z)) + f1(#)(diff(f2,Z).2);
 
 theorem :: HFDIFF_1:51
-  Z c= dom ln & Z c= dom((( #Z 1)^))
-    implies ln`| Z = (( #Z 1)^)| Z;
+  Z c= dom ln & Z c= dom((id REAL)^) implies ln`| Z = ((id REAL)^)| Z;
 
 theorem :: HFDIFF_1:52
-  n>=1 & x0 in ].0,r.[
-    implies (diff((( #Z n)^),].0,r.[).2).x0 = n*(n+1)*((( #Z (n+2))^).x0);
+  n>=1 & x0 in Z & not 0 in Z
+    implies (diff((( #Z n)^),Z).2).x0 = n*(n+1)*((( #Z (n+2))^).x0);
 
 theorem :: HFDIFF_1:53
-  diff(sin(#)sin,Z).2 = 2(#)((cos(#)cos)|Z) +(-2)(#)((sin(#) sin)|Z);
+  diff(sin^2,Z).2 = 2(#)((cos^2)|Z) +(-2)(#)((sin^2)|Z);
 
 theorem :: HFDIFF_1:54
-  diff(cos(#)cos,Z).2 =2(#)((sin(#) sin)|Z) +(-2)(#)((cos(#)cos)|Z);
+  diff(cos^2,Z).2 = 2(#)((sin^2)|Z) +(-2)(#)((cos^2)|Z);
 
 theorem :: HFDIFF_1:55
   diff(sin(#)cos,Z).2 = 4(#)((-sin)(#)cos)|Z;
 
 theorem :: HFDIFF_1:56
   Z c= dom tan implies tan is_differentiable_on Z &
-    tan`|Z = ((cos^)(#)(cos^))|Z;
+    tan`|Z = ((cos^)^2)|Z;
 
 theorem :: HFDIFF_1:57
   Z c= dom tan implies cos^ is_differentiable_on Z &
@@ -239,7 +237,7 @@ theorem :: HFDIFF_1:58
 
 theorem :: HFDIFF_1:59
   Z c= dom cot implies cot is_differentiable_on Z &
-    cot`|Z = ((-1)(#)((sin^)(#)(sin^)))|Z;
+    cot`|Z = ((-1)(#)((sin^)^2))|Z;
 
 theorem :: HFDIFF_1:60
   Z c= dom cot implies sin^ is_differentiable_on Z &
@@ -261,15 +259,15 @@ theorem :: HFDIFF_1:64
       +3(#)((f1`|Z)(#)diff(f2,Z).2))+ f1(#)(diff(f2,Z).3);
 
 theorem :: HFDIFF_1:65
-  diff(sin(#)sin,Z).3=(-8)(#)((cos(#)sin)|Z);
+  diff(sin^2,Z).3=(-8)(#)((cos(#)sin)|Z);
 
 theorem :: HFDIFF_1:66
   f is_differentiable_on 2,Z implies
-    diff(f(#)f,Z).2=2(#)(f(#)(diff(f,Z).2))+2(#)((f`|Z)(#)(f`|Z));
+    diff(f^2,Z).2=2(#)(f(#)(diff(f,Z).2))+2(#)((f`|Z)^2);
 
 theorem :: HFDIFF_1:67
   f is_differentiable_on 2,Z & (for x0 st x0 in Z holds f.x0 <> 0)
-    implies diff(f^,Z).2=(f/f)(#)((2(#)(f`|Z)(#)(f`|Z)-diff(f,Z).2(#)f)
+    implies diff(f^,Z).2=((2(#)(f`|Z)(#)(f`|Z)-diff(f,Z).2(#)f)
               /(f(#)(f(#)f)));
 
 theorem :: HFDIFF_1:68

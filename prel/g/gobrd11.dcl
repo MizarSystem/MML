@@ -12,7 +12,6 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
@@ -26,13 +25,14 @@
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="EUCLID"/>
-<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="RLTOPSP1"/>
+<ArticleID name="EUCLID"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="FINSEQ_6"/>
 <ArticleID name="TOPREAL1"/>
@@ -40,24 +40,24 @@
 </Signature>
 <FCluster aid="GOBRD11" nr="1">
 <ArgTypes>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="9" value="false"/>
-<Adjective nr="134">
+<Adjective nr="11" value="false"/>
+<Adjective nr="148">
 <Func kind="U" nr="1">
-<Func kind="K" nr="251">
+<Func kind="K" nr="266">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="135"/>
-<Adjective nr="136"/>
-<Adjective nr="140"/>
-<Adjective nr="141"/>
+<Adjective nr="149"/>
+<Adjective nr="150"/>
+<Adjective nr="154"/>
+<Adjective nr="155"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="251">
+<Func kind="K" nr="266">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -65,11 +65,11 @@
 </ArgTypes>
 <Func kind="K" nr="16">
 <Func kind="U" nr="1">
-<Func kind="K" nr="251">
+<Func kind="K" nr="266">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="299">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>

@@ -10,20 +10,22 @@ environ
       FUNCT_1, BOOLE, ORDINAL2, SUBSET_1, METRIC_1, PCOMPS_1, RCOMP_1, ARYTM_1,
       CONNSP_2, TOPS_1, ARYTM_3, TOPMETR, COMPLEX1, ABSVALUE, BORSUK_2,
       GRAPH_1, PARTFUN1, TMAP_1, FCONT_1, SQUARE_1, SEQ_4, LATTICES, SEQ_2,
-      FINSEQ_4, ARYTM, BORSUK_6, SEQM_3;
+      FINSEQ_4, ARYTM, BORSUK_6, SEQM_3, RLVECT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
       XREAL_0, COMPLEX1, XXREAL_2, REAL_1, RELAT_1, FUNCT_1, RELSET_1,
       PARTFUN1, FUNCT_2, SQUARE_1, FCONT_1, RFUNCT_2, TOPMETR, BINOP_1,
       RCOMP_1, TOPS_1, SEQ_4, METRIC_1, CONNSP_2, STRUCT_0, TOPREAL1, PRE_TOPC,
-      TOPS_2, COMPTS_1, EUCLID, TMAP_1, PCOMPS_1, WEIERSTR, BORSUK_2;
+      TOPS_2, COMPTS_1, RLVECT_1,
+      RLTOPSP1, EUCLID, TMAP_1, PCOMPS_1, WEIERSTR, BORSUK_2;
  constructors REAL_1, SQUARE_1, COMPLEX1, SEQ_4, RCOMP_1, RFUNCT_2, FCONT_1,
       TOPS_1, TOPS_2, COMPTS_1, TMAP_1, TOPREAL1, WEIERSTR, BORSUK_2, SEQ_1,
-      XXREAL_2, RVSUM_1;
+      XXREAL_2, RVSUM_1, FUNCSDOM, CONVEX1;
  registrations XBOOLE_0, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED,
       RCOMP_1, STRUCT_0, PRE_TOPC, METRIC_1, BORSUK_1, EUCLID, TOPMETR,
-      TOPREAL1, PSCOMP_1, BORSUK_2, WAYBEL_9, VALUED_0, COMPTS_1, XXREAL_2;
+      TOPREAL1, PSCOMP_1, BORSUK_2, WAYBEL_9, VALUED_0, COMPTS_1, XXREAL_2,
+      RLTOPSP1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, BORSUK_2, XBOOLE_0, STRUCT_0;
+ definitions TARSKI, BORSUK_2, XBOOLE_0, STRUCT_0, RLTOPSP1;
  theorems BORSUK_1, BORSUK_2, COMPTS_1, CONNSP_2, EUCLID, FCONT_1, FCONT_2,
       FUNCT_1, FUNCT_2, GOBOARD7, GOBOARD9, METRIC_1, PARTFUN2, PCOMPS_1,
       PRE_TOPC, RCOMP_1, RELAT_1, RFUNCT_2, SEQ_4, TARSKI, TBSP_1, TMAP_1,
@@ -60,9 +62,8 @@ Lm1: for n being Element of NAT holds
 the carrier of Euclid n = REAL n & the carrier of TOP-REAL n = REAL n
 proof
   let n be Element of NAT;
-  Euclid n = MetrStruct(#REAL n, Pitag_dist n#) &
-  TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 7,def 8;
-  hence thesis by TOPMETR:16;
+  Euclid n = MetrStruct(#REAL n, Pitag_dist n#) by EUCLID:def 7;
+ hence thesis by EUCLID:71;
 end;
 
 canceled;
@@ -87,9 +88,9 @@ A3: (r2-r1)*p1+r1*p2 = r2*p1-r1*p1+r1*p2 by EUCLID:54
     .= r2*p1+(-r1*p1+r1*p2) by EUCLID:30
     .= r2*p1+(-r2*p1+r2*p2) by A2,GOBOARD7:4
     .= r2*p1+-r2*p1+r2*p2 by EUCLID:30
-    .= 0.REAL n + r2*p2 by EUCLID:40
+    .= 0.TOP-REAL n + r2*p2 by EUCLID:40
     .= r2*p2 by EUCLID:31;
-  (r2-r1)*p1 = (r2-r1)*p1 + 0.REAL n by EUCLID:31
+  (r2-r1)*p1 = (r2-r1)*p1 + 0.TOP-REAL n by EUCLID:31
     .= (r2-r1)*p1+(r1*p2 - r1*p2) by EUCLID:46
     .= r2*p2 - r1*p2 by A3,EUCLID:49
     .= (r2-r1)*p2 by EUCLID:54;
@@ -132,9 +133,9 @@ A5: x in dom f & y = f.x by FUNCT_1:def 5;
 A6: r = x & 0 <= r & r <= 1;
     y = (1-r)*p1 + r*p2 by A3,A4,A5,A6;
     then y in { (1-l)*p1 + l*p2 where l is Real : 0 <= l & l <= 1 } by A6;
-    then y in P by TOPREAL1:def 3;
+    then y in P;
     then y in [#]((TOP-REAL n)|P) by PRE_TOPC:def 10;
-    hence y in the carrier of (TOP-REAL n)|P;
+    hence thesis;
   end;
   then reconsider f as Function of I[01], (TOP-REAL n)|P by A3,BORSUK_1:83
 ,FUNCT_2:def 1,RELSET_1:11;
@@ -143,15 +144,14 @@ A7: [#]((TOP-REAL n)|P) c= rng f
     let a be set;
     assume a in [#]((TOP-REAL n)|P);
     then a in P by PRE_TOPC:def 10;
-    then a in { (1-l)*p1 + l*p2 where l is Real : 0 <= l & l <= 1 }
-    by TOPREAL1:def 3;
+    then a in { (1-l)*p1 + l*p2 where l is Real : 0 <= l & l <= 1 };
     then consider lambda be Real such that
 A8: a = (1-lambda)*p1 + lambda*p2 & 0 <= lambda & lambda <= 1;
     lambda in { r where r is Real : 0 <= r & r <= 1} by A8;
     then
 A9: lambda in dom f by A3,RCOMP_1:def 1;
     then a = f.lambda by A3,A4,A8;
-    hence a in rng f by A9,FUNCT_1:def 5;
+    hence thesis by A9,FUNCT_1:def 5;
   end;
 A10: [#]I[01] = [.0,1.] by BORSUK_1:83;
 A11: rng f = [#]((TOP-REAL n)|P) by A7,XBOOLE_0:def 10;
@@ -200,7 +200,7 @@ A20: (Pitag_dist n).(p1',p2') = dist(p11,p22) by METRIC_1:def 1;
 A21: dist(p11,p22) >= 0 & dist(p11,p22) <> 0 by A1,METRIC_1:2,5;
     then
 A22: delta > 0 by A18,A20,XREAL_1:141;
-    then W in H by TBSP_1:16;
+    W in H by TBSP_1:16,A18,A20,XREAL_1:141,A21;
     then W in Int H by A19,TOPS_1:55;
     then reconsider H as a_neighborhood of W by CONNSP_2:def 1;
     take H;
@@ -227,7 +227,10 @@ A23:  u in dom f & u in H & a = f.u by FUNCT_1:def 12;
       reconsider aa1 = aa' as Element of REAL n by Lm1;
       reconsider WW1 = WW' as Element of REAL n by Lm1;
 A24:  f.W = (1-W1)*p1 + W1*p2 by A4,BORSUK_1:83;
-      WW1 - aa1 = (1-W1)*p1 + W1*p2 - ((1-u1)*p1 + u1*p2) by A3,A4,A23,A24
+X:    p1 - p2 = p1' - p2' by EUCLID:73;
+Z:    aa1 = ((1-u1)*p1 + u1*p2) by A3,A4,A23;
+      WW1 - aa1
+         = (1-W1)*p1 + W1*p2 - ((1-u1)*p1 + u1*p2) by A24,Z,EUCLID:73
         .= W1*p2 + (1-W1)*p1 - (1-u1)*p1 - u1*p2 by EUCLID:50
         .= W1*p2 + ((1-W1)*p1 - (1-u1)*p1) - u1*p2 by EUCLID:49
         .= W1*p2 + ((1-W1)-(1-u1))*p1 - u1*p2 by EUCLID:54
@@ -236,7 +239,8 @@ A24:  f.W = (1-W1)*p1 + W1*p2 by A4,BORSUK_1:83;
         .= (u1-W1)*p1 + (-(u1-W1))*p2
         .= (u1-W1)*p1 + -(u1-W1)*p2 by EUCLID:44
         .= (u1-W1)*p1 - (u1-W1)*p2 by EUCLID:45
-        .= (u1-W1)*(p1' - p2') by EUCLID:53;
+        .= (u1-W1)*(p1 - p2) by EUCLID:53
+        .= (u1-W1)*(p1' - p2') by X,EUCLID:69;
       then
 A25:  |. WW1 -aa1 .| = abs(u1-W1)*|.p1' - p2'.| by EUCLID:14;
 A26:  dist(W',u') < delta by A23,METRIC_1:12;
@@ -261,10 +265,10 @@ A30:  Euclid n = MetrStruct(#REAL n,Pitag_dist n#) by EUCLID:def 7;
       then (the distance of Euclid n).(WW',aa') < r by A30,EUCLID:def 6;
       then (the distance of (Euclid n)|PP).(Y,aa) < r by TOPMETR:def 1;
       then dist(Y,aa) < r by METRIC_1:def 1;
-      hence a in Ball(Y,r) by METRIC_1:12;
+      hence thesis by METRIC_1:12;
     end;
     then f.:H c= Q by A18,XBOOLE_1:1;
-    hence f.:H c= G by A17,XBOOLE_1:1;
+    hence thesis by A17,XBOOLE_1:1;
   end;
   then
 A31: f is continuous by BORSUK_1:def 3;
@@ -274,11 +278,11 @@ A31: f is continuous by BORSUK_1:def 3;
   0 in [.0,1.] by XXREAL_1:1;
   hence f.0 = (1-0)*p1 + 0 * p2 by A4
     .= p1 + 0 * p2 by EUCLID:33
-    .= p1 + 0.REAL n by EUCLID:33
+    .= p1 + 0.TOP-REAL n by EUCLID:33
     .= p1 by EUCLID:31;
   1 in [.0,1.] by XXREAL_1:1;
   hence f.1 = (1-1)*p1 + 1*p2 by A4
-    .= 0.REAL n + 1*p2 by EUCLID:33
+    .= 0.TOP-REAL n + 1*p2 by EUCLID:33
     .= 1*p2 by EUCLID:31
     .= p2 by EUCLID:33;
 end;
@@ -530,7 +534,7 @@ A3: f is_continuous_at x1 by TMAP_1:49;
     then f = g|REAL by A2,RELAT_1:97;
     hence thesis by A3,Th7;
   end;
-  hence g|REAL is continuous by FCONT_1:def 2;
+  hence thesis by FCONT_1:def 2;
 end;
 
 Lm5: for f being continuous one-to-one Function of R^1, R^1,
@@ -544,11 +548,8 @@ Z: [.0,1.] c= dom f;
   assume
 A1: f = g;
   then g|REAL is continuous by Th8;
-  then g| [.0,1.] is continuous
-  by FCONT_1:17;
-  then g| [.0,1.] is increasing or g| [.0,1.] is decreasing
-  by A1,Z,FCONT_2:18;
-  hence thesis;
+  then g| [.0,1.] is continuous by FCONT_1:17;
+  hence thesis by A1,Z,FCONT_2:18;
 end;
 
 theorem
@@ -562,8 +563,7 @@ proof
 A1: [.0,1.] /\ dom f = [.0,1.] /\ the carrier of R^1 by FUNCT_2:def 1
     .= [.0,1.] by BORSUK_1:35,83,TOPMETR:27,XBOOLE_1:28;
   reconsider g = f as PartFunc of REAL, REAL by TOPMETR:24;
-X: [.0,1.] c= dom g by A1,XBOOLE_1:18;
-  per cases by Lm5,X;
+  per cases by Lm5,A1,XBOOLE_1:18;
   suppose g| [.0,1.] is increasing;
     hence thesis by A1,BORSUK_1:83,RFUNCT_2:43;
   end;
@@ -759,9 +759,7 @@ A2: a in X or b in X;
     then consider g be real number such that
 A3: 0<g & ].a-g,a+g.[ c= X by RCOMP_1:40;
 A4: g/2 <> 0 by A3;
-    g/2 >= 0 by A3;
-    then
-A5: a - g/2 < a-0 by A4,XREAL_1:17;
+A5: a - g/2 < a-0 by A3,A4,XREAL_1:17;
 A6: a+0 < a+g by A3,XREAL_1:10;
 A7: ].a-g,a+g.[ c= [.a,b.] by A1,A3,XBOOLE_1:1;
     g > g/2 by A3,XREAL_1:218;
@@ -778,9 +776,7 @@ A8: l = a-g/2 & a <= l & l <= b;
     then consider g be real number such that
 A9: 0 < g & ].b-g,b+g.[ c= X by RCOMP_1:40;
 A10: g/2 <> 0 by A9;
-    g/2 >= 0 by A9;
-    then
-A11: b+g/2 > b+0 by A10,XREAL_1:8;
+A11: b+g/2 > b+0 by A9,A10,XREAL_1:8;
 A12: ].b-g,b+g.[ c= [.a,b.] by A1,A9,XBOOLE_1:1;
 A13: g > g/2 by A9,XREAL_1:218;
 A14: b-g < b-0 by A9,XREAL_1:17;
@@ -1178,9 +1174,9 @@ A1: f is continuous one-to-one & a < b & c < d & f = g & f.a = c & f.b = d;
 TOPMETR:25;
 A3: f is_continuous_at x1 by A1,TMAP_1:49;
     x0 is Real by XREAL_0:def 1;
-    hence g| [.a,b.] is_continuous_in x0 by A1,A3,Th14;
+    hence thesis by A1,A3,Th14;
   end;
-  hence g| [.a,b.] is continuous by FCONT_1:def 2;
+  hence thesis by FCONT_1:def 2;
 end;
 
 begin
@@ -1213,8 +1209,7 @@ A4: [.a,b.] /\ dom f = [.a,b.] /\ the carrier of Closed-Interval-TSpace(a,b)
 ;
   reconsider g as PartFunc of REAL, REAL by A2,A3,RELSET_1:13;
 A5: g| [.a,b.] is continuous by A1,Th15;
-B5: [.a,b.] c= dom f by A4,XBOOLE_1:18;
-  per cases by A1,A5,B5,FCONT_2:18;
+  per cases by A1,A5,A4,XBOOLE_1:18,FCONT_2:18;
   suppose
 A6: g| [.a,b.] is increasing;
     for x, y be Point of Closed-Interval-TSpace(a,b),
@@ -1277,9 +1272,9 @@ A3: the carrier of Closed-Interval-TSpace(c,d) c= the carrier of R^1 &
 A4: [#]PP c= the carrier of Closed-Interval-TSpace(a,b) by A1,WEIERSTR:def 3;
 A5: [#]Closed-Interval-TSpace(a,b) = the carrier of Closed-Interval-TSpace(a,b)
   ;
-  [#]PP is bounded by A1,WEIERSTR:17;
+B6: [#]PP is bounded by A1,WEIERSTR:17;
   then
-A6: [#]PP <> {} & [#]PP is closed & [#]PP is bounded_below
+    [#]PP <> {} & [#]PP is closed & [#]PP is bounded_below
   by A1,WEIERSTR:18,def 3;
   then
 A7: lower_bound [#]PP in [#]PP by RCOMP_1:31;
@@ -1295,9 +1290,8 @@ A11: IT in QQ by A1,A9,FUNCT_1:def 12;
   then for P1 being Subset of Closed-Interval-TSpace(c,d)
   st P1=QQ holds P1 is compact by A1,WEIERSTR:14;
   then QQ is compact by A1,A2,COMPTS_1:11;
-  then [#]QQ is bounded by WEIERSTR:17;
   then
-A12: [#]QQ is bounded_below;
+B12: [#]QQ is bounded by WEIERSTR:17;
 A13: IT in [#]QQ by A11,WEIERSTR:def 3;
 A14: for r be real number st r in [#]QQ holds IT<=r
   proof
@@ -1315,7 +1309,7 @@ A15: x in dom f & x in [#]PP & r = f.x by FUNCT_1:def 12;
     f.x1 in the carrier of Closed-Interval-TSpace(c,d)
     & f.x2 in the carrier of Closed-Interval-TSpace(c,d);
     then reconsider fr = f.x2, fx = f.x1 as Real by A3,TOPMETR:24;
-A16: r2 <= r1 by A6,A15,SEQ_4:def 5;
+A16: r2 <= r1 by B6,A15,SEQ_4:def 5,WEIERSTR:def 3;
     per cases;
     suppose r2 <> r1;
       then r2 < r1 by A16,XXREAL_0:1;
@@ -1334,7 +1328,7 @@ A17: 0<s & not ex r be real number st r in [#]QQ & r<IT+s;
     IT + 0 < IT + s by A17,XREAL_1:10;
     hence thesis by A13,A17;
   end;
-  hence thesis by A12,A13,A14,SEQ_4:def 5;
+  hence thesis by B12,A13,A14,SEQ_4:def 5;
 end;
 
 theorem
@@ -1368,9 +1362,9 @@ A3: the carrier of Closed-Interval-TSpace(c,d) c= the carrier of R^1 &
 A4: [#]PP c= the carrier of Closed-Interval-TSpace(a,b) by A1,WEIERSTR:def 3;
 A5: [#]Closed-Interval-TSpace(a,b) = the carrier of Closed-Interval-TSpace(a,b)
   ;
-  [#]PP is bounded by A1,WEIERSTR:17;
+B6: [#]PP is bounded by A1,WEIERSTR:17;
   then
-A6: [#]PP <> {} & [#]PP is closed & [#]PP is bounded_above
+    [#]PP <> {} & [#]PP is closed & [#]PP is bounded_above
   by A1,WEIERSTR:18,def 3;
   then
 A7: upper_bound [#]PP in [#]PP by RCOMP_1:30;
@@ -1386,9 +1380,8 @@ A11: IT in QQ by A1,A9,FUNCT_1:def 12;
   then for P1 being Subset of Closed-Interval-TSpace(c,d)
   st P1=QQ holds P1 is compact by A1,WEIERSTR:14;
   then QQ is compact by A1,A2,COMPTS_1:11;
-  then [#]QQ is bounded by WEIERSTR:17;
   then
-A12: [#]QQ is bounded_above;
+B12: [#]QQ is bounded by WEIERSTR:17;
 A13: IT in [#]QQ by A11,WEIERSTR:def 3;
 A14: for r be real number st r in [#]QQ holds IT>=r
   proof
@@ -1406,7 +1399,7 @@ A15: x in dom f & x in [#]PP & r = f.x by FUNCT_1:def 12;
     f.x1 in the carrier of Closed-Interval-TSpace(c,d)
     & f.x2 in the carrier of Closed-Interval-TSpace(c,d);
     then reconsider fr = f.x2, fx = f.x1 as Real by A3,TOPMETR:24;
-A16: r2 >= r1 by A6,A15,SEQ_4:def 4;
+A16: r2 >= r1 by B6,A15,SEQ_4:def 4,WEIERSTR:def 3;
     per cases;
     suppose r2 <> r1;
       then r2 > r1 by A16,XXREAL_0:1;
@@ -1425,7 +1418,7 @@ A17: 0<s & not ex r be real number st r in [#]QQ & r>IT-s;
     IT-s<IT-0 by A17,XREAL_1:17;
     hence thesis by A13,A17;
   end;
-  hence thesis by A12,A13,A14,SEQ_4:def 4;
+  hence thesis by B12,A13,A14,SEQ_4:def 4;
 end;
 
 theorem
@@ -1670,9 +1663,7 @@ A9: P /\ Q <> {}(TOP-REAL 2) & PQ <> {}((TOP-REAL 2)|P) by A1,XBOOLE_0:def 7;
   by A1,XBOOLE_0:def 7;
   reconsider PQ1 = P /\ Q as non empty Subset of (TOP-REAL 2)|P1 by A9;
 A10: (TOP-REAL 2)|(P1 /\ Q1) = (TOP-REAL 2)|P1|PQ1 by GOBOARD9:4;
-  (TOP-REAL 2)|(P /\ Q) is compact by A4,A9;
-  then
-A11: PQ is compact by A10,COMPTS_1:12;
+A11: PQ is compact by A4,A10,COMPTS_1:12;
 A12: [#](I[01]) c= [#](R^1) by PRE_TOPC:def 9;
 A13: g.:PQ c= [#] (I[01]);
   reconsider GPQ = g.:PQ as Subset of R^1 by A12,XBOOLE_1:1;
@@ -1681,8 +1672,6 @@ A13: g.:PQ c= [#] (I[01]);
   then GPQ is compact by A13,COMPTS_1:11;
   then
 A14: [#](GPQ) is bounded & [#](GPQ) is closed by WEIERSTR:17,18;
-  then
-A15: [#](GPQ) is bounded_below;
   consider OO be set such that
 A16: OO in PQ by XBOOLE_0:def 1;
   dom g = the carrier of (TOP-REAL 2)|P by FUNCT_2:def 1;
@@ -1726,7 +1715,7 @@ A28: g.(f.t) in GPQ by A19,FUNCT_1:def 12;
     g = f1" by A7,TOPS_2:def 4;
     then g.(f.t) = t by A7,A26,FUNCT_1:56;
     then t in [#]GPQ by A28,WEIERSTR:def 3;
-    hence thesis by A15,A23,SEQ_4:def 5;
+    hence thesis by A14,A23,SEQ_4:def 5;
   end;
   hence thesis by A20,A21,A22,FUNCT_1:56;
 end;
@@ -1768,9 +1757,7 @@ A9: P /\ Q <> {}(TOP-REAL 2) & PQ <> {}((TOP-REAL 2)|P) by A1,XBOOLE_0:def 7;
   by A1,XBOOLE_0:def 7;
   reconsider PQ1 = P /\ Q as non empty Subset of (TOP-REAL 2)|P1 by A9;
 A10: (TOP-REAL 2)|(P1 /\ Q1) = (TOP-REAL 2)|P1|PQ1 by GOBOARD9:4;
-  (TOP-REAL 2)|(P /\ Q) is compact by A4,A9;
-  then
-A11: PQ is compact by A10,COMPTS_1:12;
+A11: PQ is compact by A4,A10,COMPTS_1:12;
 A12: [#](I[01]) c= [#](R^1) by PRE_TOPC:def 9;
 A13: g.:PQ c= [#] (I[01]);
   reconsider GPQ = g.:PQ as Subset of R^1 by A12,XBOOLE_1:1;
@@ -1779,8 +1766,6 @@ A13: g.:PQ c= [#] (I[01]);
   then GPQ is compact by A13,COMPTS_1:11;
   then
 A14: [#](GPQ) is bounded & [#](GPQ) is closed by WEIERSTR:17,18;
-  then
-A15: [#](GPQ) is bounded_above;
   consider OO be set such that
 A16: OO in PQ by XBOOLE_0:def 1;
   dom g = the carrier of (TOP-REAL 2)|P by FUNCT_2:def 1;
@@ -1822,7 +1807,7 @@ A27: g.(f.t) in GPQ by A19,FUNCT_1:def 12;
     g = f1" by A7,TOPS_2:def 4;
     then g.(f.t) = t by A7,A25,FUNCT_1:56;
     then t in [#](GPQ) by A27,WEIERSTR:def 3;
-    hence thesis by A15,A23,SEQ_4:def 4;
+    hence thesis by A14,A23,SEQ_4:def 4;
   end;
   hence thesis by A20,A21,A22,FUNCT_1:56;
 end;

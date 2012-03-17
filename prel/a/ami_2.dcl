@@ -13,32 +13,30 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="AMI_2"/>
 </Signature>
 <FCluster aid="AMI_2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="135"/>
+<Func kind="K" nr="125"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AMI_2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="134"/>
+<Func kind="K" nr="124"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AMI_2" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="138"/>
+<Func kind="K" nr="128"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
@@ -47,13 +45,13 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="125">
-<Func kind="K" nr="139"/>
+<Func kind="K" nr="115">
+<Func kind="K" nr="129"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="136"/>
+<Func kind="K" nr="126"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="36">
@@ -61,7 +59,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="18"/>
+<Adjective nr="21"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -8,11 +8,12 @@ environ
 
  vocabularies RELAT_1, BOOLE, FUNCT_1, PARTFUN1, FUNCT_2, SGRAPH1, RELAT_2,
       FUNCT_3, MCART_1, SUBSET_1, COMPLEX1, FINSEQ_4, SETFAM_1, TARSKI,
-      OPPCAT_1, SEQM_3;
+      OPPCAT_1, SEQM_3, FRAENKEL;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MCART_1, RELAT_1,
       RELAT_2, FUNCT_1, RELSET_1, PARTFUN1;
- constructors RELAT_2, PARTFUN1, MCART_1, SETFAM_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, RELSET_1;
+ constructors RELAT_2, PARTFUN1, MCART_1, SETFAM_1, RELSET_1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, RELSET_1,
+      GRFUNC_1;
  requirements SUBSET, BOOLE;
 
 
@@ -329,8 +330,8 @@ canceled 5;
 :: Permutation of a set
 
 definition
-  let X, Y be set;
-  let f be Relation of X, Y;
+  let Y be set;
+  let f be Y-valued Relation;
   attr f is onto means
 :: FUNCT_2:def 3
 
@@ -758,7 +759,7 @@ definition
 :: FUNCT_2:def 11
 
   for A being Subset of S holds
-  A in it iff ex B being Subset of T st (B in G & A = f.:B);
+  A in it iff ex B being Subset of T st B in G & A = f.:B;
 end;
 
 theorem :: FUNCT_2:180
@@ -829,7 +830,7 @@ theorem :: FUNCT_2:189
 :: missing, 2008.09.14, A.T.
 
 theorem :: FUNCT_2:190
-  for A,B being non empty set, f being Function of A,B st y in rng f
+  for A,B being set, f being Function of A,B st y in rng f
    ex x being Element of A st y = f.x;
 
 :: from RFUNCT_2, 2008.09.14, A.T.
@@ -857,3 +858,52 @@ theorem :: FUNCT_2:194
 theorem :: FUNCT_2:195
  rng f c= dom (g|S) & S c= T implies (g|S)/*f = (g|T)/*f;
 
+:: missing, 2009.01.09, A.T.
+
+theorem :: FUNCT_2:196
+  for H being Function of D, [:A,B:], d being Element of D
+  holds H.d = [pr1 H.d,pr2 H.d];
+
+:: from YELLOW20, 2009.01.21, A.T.
+
+theorem :: FUNCT_2:197
+  for A1,A2, B1,B2 being set
+  for f being Function of A1,A2, g being Function of B1,B2 st f tolerates g
+  holds f /\ g is Function of A1 /\ B1, A2 /\ B2;
+
+:: from FRAENKEL, 2009.05.06, A.K.
+
+registration
+  let A, B be set;
+  cluster Funcs(A,B) -> functional;
+end;
+
+definition
+  let A, B be set;
+  mode FUNCTION_DOMAIN of A,B -> non empty set means
+:: FUNCT_2:def 13
+
+  for x being Element of it holds x is Function of A,B;
+end;
+
+registration
+  let A, B be set;
+  cluster -> functional FUNCTION_DOMAIN of A,B;
+end;
+
+theorem :: FUNCT_2:198
+  for f being Function of P,Q holds { f } is FUNCTION_DOMAIN of P,Q;
+
+theorem :: FUNCT_2:199
+  Funcs(P,B) is FUNCTION_DOMAIN of P,B;
+
+definition
+  let A be set, B be non empty set;
+  redefine func Funcs(A,B) -> FUNCTION_DOMAIN of A,B;
+  let F be FUNCTION_DOMAIN of A,B;
+  redefine mode Element of F -> Function of A,B;
+end;
+
+registration let I be set;
+  cluster id I -> total (I-defined Function);
+end;

@@ -20,12 +20,12 @@ environ
       RVSUM_1, ABIAN, ORDINAL1, POLYNOM1, UPROOTS, FINSET_1, NAT_1, FUNCOP_1,
       FUNCT_4, GLIB_000, GLIB_001, GLIB_002, GLIB_003, RFUNCT_3;
  constructors DOMAIN_1, BINOP_2, FINSOP_1, RVSUM_1, GRAPH_2, RFUNCT_3, UPROOTS,
-      GLIB_002, GLIB_003, SEQ_1, RECDEF_1, XXREAL_2;
+      GLIB_002, GLIB_003, SEQ_1, RECDEF_1, XXREAL_2, RELSET_1, PBOOLE;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, PARTFUN1, FRAENKEL, FUNCT_1,
       ORDINAL1, FUNCOP_1, FINSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, CARD_1, UPROOTS,
       MEMBERED, GLIB_000, ABIAN, POLYNOM1, GLIB_001, GLIB_002, GLIB_003,
-      VALUED_0, FUNCT_2;
+      VALUED_0, FUNCT_2, RELSET_1;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
  definitions TARSKI, GLIB_000, GLIB_003, RVSUM_1, FUNCOP_1;
  theorems BAGORDER, CARD_1, CARD_2, FUNCOP_1, ENUMSET1, FINSEQ_1, FINSEQ_2,
@@ -54,9 +54,9 @@ proof
 A: z in dom (F+*(x.-->y)) and
 B: not z in dom F;
    dom (x.-->y) = {x} by FUNCOP_1:19;
-   then z in dom F \/ {x} by A, FUNCT_4:def 1;
-   then z in {x} by B, XBOOLE_0:def 3;
-  hence x = z by TARSKI:def 1;
+   then z in dom F \/ {x} by A,FUNCT_4:def 1;
+   then z in {x} by B,XBOOLE_0:def 3;
+  hence thesis by TARSKI:def 1;
 end;
 
 theorem Th1: ::tSUPPORT01
@@ -87,12 +87,12 @@ A1: (f +* (x.-->y)).a <> 0 by POLYNOM1:def 7;
   per cases;
   suppose a = x;
     then a in {x} by TARSKI:def 1;
-    hence a in support f \/ {x} by XBOOLE_0:def 3;
+    hence thesis by XBOOLE_0:def 3;
   end;
   suppose a <> x;
     then (f +* (x.-->y)).a = f.a by FUNCT_4:88;
     then a in support f by A1,POLYNOM1:def 7;
-    hence a in support f \/ {x} by XBOOLE_0:def 3;
+    hence thesis by XBOOLE_0:def 3;
   end;
 end;
 
@@ -109,20 +109,22 @@ A1: b = b1 +* b2;
 A2a: support B1 c= (support EmptyBag A) \/ support b1 by Th1;
   dom b = dom b1 \/ dom b2 by A1,FUNCT_4:def 1;
   then dom b1 c= dom b by XBOOLE_1:7;
-  then B c= dom b by PBOOLE:def 3;
+  then B c= dom b by PARTFUN1:def 4;
   then
-A3: B c= A by PBOOLE:def 3;
+A3: B c= A by PARTFUN1:def 4;
   dom B1 = (dom EmptyBag A) \/ dom b1 by FUNCT_4:def 1
-    .= A \/ dom b1 by PBOOLE:def 3
-    .= A \/ B by PBOOLE:def 3
+    .= A \/ dom b1 by PARTFUN1:def 4
+    .= A \/ B by PARTFUN1:def 4
     .= A by A3,XBOOLE_1:12;
-  then reconsider B1 as Rbag of A by A2a,PBOOLE:def 3,POLYNOM1:def 8;
+  then reconsider B1 as Rbag of A by A2a,PARTFUN1:def 4,POLYNOM1:def 8
+,RELAT_1:def 18;
 A4a: support B2 c= (support EmptyBag A) \/ support b2 by Th1;
   dom B2 = (dom EmptyBag A) \/ dom b2 by FUNCT_4:def 1
-    .= A \/ dom b2 by PBOOLE:def 3
-    .= A \/ (A\B) by PBOOLE:def 3
+    .= A \/ dom b2 by PARTFUN1:def 4
+    .= A \/ (A\B) by PARTFUN1:def 4
     .= A by XBOOLE_1:12;
-  then reconsider B2 as Rbag of A by A4a,PBOOLE:def 3,POLYNOM1:def 8;
+  then reconsider B2 as Rbag of A by A4a,PARTFUN1:def 4,POLYNOM1:def 8
+,RELAT_1:def 18;
   consider f1 being FinSequence of REAL such that
 A5: Sum b1 = Sum f1 and
 A6: f1 = b1*canFS(support b1) by UPROOTS:def 3;
@@ -227,13 +229,13 @@ A39: (canFS(support b2)).k in rng canFS(support b2) by A30,A38,FUNCT_1:12;
       .= F2.k by A27,A30,A37,A38,FUNCT_1:23;
   end;
   then
-A40: Sum B2 = Sum b2 by A24,A26,A32,A37,FINSEQ_1:17,A25,A28,A29,RELAT_1:46;
+A40: Sum B2 = Sum b2 by A24,A26,A32,A37,A25,A28,A29,FINSEQ_1:17,RELAT_1:46;
   now
     let x be set;
     assume
 A41: x in A;
-A42: dom b1 = B by PBOOLE:def 3;
-A43: dom b2 = A\B by PBOOLE:def 3;
+A42: dom b1 = B by PARTFUN1:def 4;
+A43: dom b2 = A\B by PARTFUN1:def 4;
     per cases;
     suppose
 A44:  x in B;
@@ -256,7 +258,7 @@ A49:  x in dom b2 by A41,A43,A47,XBOOLE_0:def 5;
         .= (B1 + B2).x by POLYNOM1:def 5;
     end;
   end;
-  hence Sum b = Sum b1 + Sum b2 by A23,A40,UPROOTS:17, PBOOLE:3;
+  hence thesis by A23,A40,PBOOLE:3,UPROOTS:17;
 end;
 
 theorem Th4: ::tRBAGSUM02
@@ -267,13 +269,13 @@ proof
 A1: dom b = {x};
   then
 A2: support b c= {x} by POLYNOM1:41;
-  {x} c= X by A1,PBOOLE:def 3;
+  {x} c= X by A1,PARTFUN1:def 4;
   then consider f being FinSequence of REAL such that
 A3: f = b*canFS({x}) & Sum b = Sum f by A2,UPROOTS:16;
 A4: f = b*<*x*> by A3,UPROOTS:6;
   x in dom b by A1,TARSKI:def 1;
   then f = <*b.x*> by A4,BAGORDER:3;
-  hence Sum b = b.x by A3,FINSOP_1:12;
+  hence thesis by A3,FINSOP_1:12;
 end;
 
 theorem Th5: ::tRBAGSUM03
@@ -283,15 +285,15 @@ proof
   let A be set, b1,b2 be Rbag of A such that
 A1: for x being set st x in A holds b1.x <= b2.x;
   set S = support b1 \/ support b2;
-A2: dom b1 = A & dom b2 = A by PBOOLE:def 3;
+A2: dom b1 = A & dom b2 = A by PARTFUN1:def 4;
   then support b1 c= A & support b2 c= A by POLYNOM1:41;
   then reconsider S as finite Subset of A by XBOOLE_1:8;
   consider f1 being FinSequence of REAL such that
 A3: f1 = b1*canFS(S) and
-A4: Sum b1 = Sum f1 by UPROOTS:16, XBOOLE_1:7;
+A4: Sum b1 = Sum f1 by UPROOTS:16,XBOOLE_1:7;
   consider f2 being FinSequence of REAL such that
 A5: f2 = b2*canFS(S) and
-A6: Sum b2 = Sum f2 by UPROOTS:16, XBOOLE_1:7;
+A6: Sum b2 = Sum f2 by UPROOTS:16,XBOOLE_1:7;
 A7: rng canFS(S) = S by FUNCT_2:def 3;
   then
 A8: dom f1 = dom canFS(S) & dom f2 = dom canFS(S) by A2,A3,A5,RELAT_1:46;
@@ -310,7 +312,7 @@ A13: f1.j = b1.((canFS(S)).j) & f2.j = b2.((canFS(S)).j)
     (canFS(S)).j in S by A7,A8,A12,FUNCT_1:12;
     hence f1.j <= f2.j by A1,A13;
   end;
-  hence Sum b1 <= Sum b2 by A4,A6,A9,A10,A11,RVSUM_1:112;
+  hence thesis by A4,A6,A9,A10,A11,RVSUM_1:112;
 end;
 
 theorem ::tRBAGSUM04
@@ -338,7 +340,7 @@ proof
 A1: Sum b1 = Sum f1 & f1 = b2*canFS(support b2) by UPROOTS:def 3;
   consider f2 being FinSequence of REAL such that
 A2: Sum b2 = Sum f2 & f2 = b2*canFS(support b2) by UPROOTS:def 3;
-  thus Sum b1 = Sum b2 by A1,A2;
+  thus thesis by A1,A2;
 end;
 
 theorem Th8: ::tRBAGSUM06
@@ -351,10 +353,10 @@ A2: dom (x.-->y) = {x} by FUNCOP_1:19;
   dom b = dom EmptyBag X \/ dom (x.-->y) by A1,FUNCT_4:def 1;
   then
 A3: {x} c= dom b by A2,XBOOLE_1:7;
-  then {x} c= X by PBOOLE:def 3;
+  then {x} c= X by PARTFUN1:def 4;
   then
 A4: x in X by ZFMISC_1:37;
-  reconsider S = {x} as finite Subset of X by A3,PBOOLE:def 3;
+  reconsider S = {x} as finite Subset of X by A3,PARTFUN1:def 4;
   support b c= S
   proof
     let a be set;
@@ -370,7 +372,7 @@ A5: b.a <> 0 by POLYNOM1:def 7;
 A6: f = b*canFS(S) and
 A7: Sum b = Sum f by UPROOTS:16;
 A8: canFS(S) = <*x*> by UPROOTS:6;
-  x in dom b by A4,PBOOLE:def 3;
+  x in dom b by A4,PARTFUN1:def 4;
   then f = <*b.x*> by A6,A8,BAGORDER:3;
   hence Sum b = b.x by A7,FINSOP_1:12
     .= y by A1,FUNCT_7:96;
@@ -385,30 +387,33 @@ A1: b2 = b1 +* (x.-->y);
 A2: dom (x.-->y) = {x} by FUNCOP_1:19;
   dom b2 = dom b1 \/ dom (x.-->y) by A1,FUNCT_4:def 1;
   then {x} c= dom b2 by A2,XBOOLE_1:7;
-  then {x} c= X by PBOOLE:def 3;
+  then {x} c= X by PARTFUN1:def 4;
   then
 A3: x in X by ZFMISC_1:37;
   set a = b1 +* (x.-->0);
 A4a: support a c= support b1 \/ {x} by Th2;
   dom a = dom b1 \/ dom (x.-->0) by FUNCT_4:def 1
-    .= X \/ dom (x.-->0) by PBOOLE:def 3
+    .= X \/ dom (x.-->0) by PARTFUN1:def 4
     .= X \/ {x} by FUNCOP_1:19
     .= X by A3,ZFMISC_1:46;
-  then reconsider a as Rbag of X by A4a,PBOOLE:def 3,POLYNOM1:def 8;
+  then reconsider a as Rbag of X by A4a,PARTFUN1:def 4,POLYNOM1:def 8
+,RELAT_1:def 18;
   set b = (EmptyBag X) +* (x .--> b1.x);
 A5a: support b c= (support EmptyBag X) \/ {x} by Th2;
   dom b = (dom EmptyBag X) \/ dom (x.-->b1.x) by FUNCT_4:def 1
-    .= X \/ dom (x.-->b1.x) by PBOOLE:def 3
+    .= X \/ dom (x.-->b1.x) by PARTFUN1:def 4
     .= X \/ {x} by FUNCOP_1:19
     .= X by A3,ZFMISC_1:46;
-  then reconsider b as Rbag of X by A5a,PBOOLE:def 3,POLYNOM1:def 8;
+  then reconsider b as Rbag of X by A5a,PARTFUN1:def 4,POLYNOM1:def 8
+,RELAT_1:def 18;
   set c = (EmptyBag X) +* (x.-->y);
 A6a: support c c= (support EmptyBag X) \/ {x} by Th2;
   dom c = (dom EmptyBag X) \/ dom (x.-->y) by FUNCT_4:def 1
-    .= X \/ dom (x.-->y) by PBOOLE:def 3
+    .= X \/ dom (x.-->y) by PARTFUN1:def 4
     .= X \/ {x} by FUNCOP_1:19
     .= X by A3,ZFMISC_1:46;
-  then reconsider c as Rbag of X by A6a,PBOOLE:def 3,POLYNOM1:def 8;
+  then reconsider c as Rbag of X by A6a,PARTFUN1:def 4,POLYNOM1:def 8
+,RELAT_1:def 18;
   now
     let i be set;
     assume i in X;
@@ -429,7 +434,7 @@ A9:   i <> x;
     end;
   end;
   then
-A10: Sum b1 - Sum b = Sum a + Sum b - Sum b by UPROOTS:17,PBOOLE:3;
+A10: Sum b1 - Sum b = Sum a + Sum b - Sum b by PBOOLE:3,UPROOTS:17;
 A11: Sum c = y by Th8;
 A12: Sum b = b1.x by Th8;
   now
@@ -453,7 +458,7 @@ A16:  c.i = 0 by A13,FUNCT_4:88;
         .= (a+c).i by POLYNOM1:def 5;
     end;
   end;
-  hence Sum b2 = Sum b1 - Sum b + Sum c by A10,UPROOTS:17, PBOOLE:3
+  hence Sum b2 = Sum b1 - Sum b + Sum c by A10,PBOOLE:3,UPROOTS:17
     .= Sum b1 + y - b1.x by A11,A12;
 end;
 
@@ -589,7 +594,7 @@ A6: the_Target_of G2 = the_Target_of G by A2,FUNCT_1:72;
     G2.WeightSelector = G.WeightSelector by A2,FUNCT_1:72;
     then G2.WeightSelector is ManySortedSet of the_Edges_of G2
     by A4,GLIB_003:def 4;
-    hence G2 is [Weighted] by A1,A2,GLIB_003:def 4;
+    hence thesis by A1,A2,GLIB_003:def 4;
   end;
 end;
 
@@ -607,7 +612,7 @@ A3: the_Edges_of G2 = the_Edges_of G by A1,FUNCT_1:72;
 A4: the_Source_of G2 = the_Source_of G by A1,FUNCT_1:72;
   the_Target_of G2 = the_Target_of G by A1,FUNCT_1:72;
   hence G == G2 by A2,A3,A4,GLIB_000:def 36;
-  thus the_Weight_of G2 = the_Weight_of G by A1,FUNCT_1:72;
+  thus thesis by A1,FUNCT_1:72;
 end;
 
 Lm3: for G being WGraph holds
@@ -635,7 +640,7 @@ A1: for x being set holds x in IT iff x in X & P[x] from SUBSET_1:sch 1;
     set G' = G.strict(WGraphSelectors);
 A2: G == G' & the_Weight_of G = the_Weight_of G' by Lm2;
     then reconsider G' as [Weighted] Subgraph of G by GLIB_000:90;
-    dom the_Weight_of G = the_Edges_of G' by A2,PBOOLE:def 3;
+    dom the_Weight_of G = the_Edges_of G' by A2,PARTFUN1:def 4;
     then the_Weight_of G' = (the_Weight_of G) | the_Edges_of G'
     by A2,RELAT_1:98;
     then reconsider G' as WSubgraph of G by GLIB_003:def 10;
@@ -710,7 +715,7 @@ A13:  f = x & dom f = WGraphSelectors & rng f c= Y by A12,FUNCT_2:def 2;
 A14: G2 = x & dom G2 = WGraphSelectors;
     rng G2 c= Y by A4,A14;
     then x in X by A14,FUNCT_2:def 2;
-    hence x in IT by A1,A14;
+    hence thesis by A1,A14;
   end;
   uniqueness
   proof
@@ -725,7 +730,7 @@ A16: for x being set holds x in IT2 iff
       st x = G2 & dom G2 = WGraphSelectors by A15;
       hence x in IT1 iff x in IT2 by A16;
     end;
-    hence IT1 = IT2 by TARSKI:2;
+    hence thesis by TARSKI:2;
   end;
 end;
 
@@ -833,19 +838,19 @@ A3: the_Weight_of G2 = (the_Weight_of G1) | (EG2) by GLIB_003:def 10;
 A4: dom b2 = {e} & rng b2 = {(the_Weight_of G1).e} by FUNCOP_1:14,19;
   EG1 \ EG2 = EG1 /\ {e} by A2,XBOOLE_1:48
     .= {e} by A1,ZFMISC_1:52;
-  then reconsider b2 as ManySortedSet of EG1 \ EG2 by A4,PBOOLE:def 3;
+  then reconsider b2 as ManySortedSet of EG1 \ EG2;
   reconsider b2 as Rbag of EG1 \ EG2;
 A5: dom (the_Weight_of G2 +* b2) = dom the_Weight_of G2 \/ {e}
   by A4,FUNCT_4:def 1
-    .= (EG1 \ {e}) \/ {e} by A2,PBOOLE:def 3
+    .= (EG1 \ {e}) \/ {e} by A2,PARTFUN1:def 4
     .= EG1 \/ {e} by XBOOLE_1:39
     .= EG1 by A1,ZFMISC_1:46;
-A6: dom the_Weight_of G1 = EG1 by PBOOLE:def 3;
+A6: dom the_Weight_of G1 = EG1 by PARTFUN1:def 4;
   now
     let x be set;
     assume x in dom the_Weight_of G1;
     then
-A7: x in EG1 by PBOOLE:def 3;
+A7: x in EG1 by PARTFUN1:def 4;
     now per cases;
       suppose
 A8:     x in {e};
@@ -857,7 +862,7 @@ A9:     x = e by TARSKI:def 1;
       suppose
 A10:    not x in {e};
         then
-A11:    (the_Weight_of G2 +* b2).x = (the_Weight_of G2).x by A4, FUNCT_4:12;
+A11:    (the_Weight_of G2 +* b2).x = (the_Weight_of G2).x by A4,FUNCT_4:12;
         x in EG1 \ {e} by A7,A10,XBOOLE_0:def 5;
         hence (the_Weight_of G2 +* b2).x = (the_Weight_of G1).x
         by A2,A3,A11,FUNCT_1:72;
@@ -865,7 +870,7 @@ A11:    (the_Weight_of G2 +* b2).x = (the_Weight_of G2).x by A4, FUNCT_4:12;
     end;
     hence (the_Weight_of G1).x = (the_Weight_of G2 +* b2).x;
   end;
-  hence G1.cost() = G2.cost() + Sum b2 by Th3, A5,A6,FUNCT_1:9
+  hence G1.cost() = G2.cost() + Sum b2 by Th3,A5,A6,FUNCT_1:9
     .= G2.cost() + b2.e by A4,Th4
     .= G2.cost() + (the_Weight_of G1).e by FUNCOP_1:87;
 end;
@@ -890,24 +895,24 @@ A2: the_Vertices_of G1 = V1 & the_Edges_of G1 = E1 by GLIB_000:def 39;
   {e} c= G.edgesBetween(V1) by A1,ZFMISC_1:37;
   then (E1 \/ {e}) c= G.edgesBetween(V1) by XBOOLE_1:8;
   then
-A3: the_Vertices_of G2 = V1 & the_Edges_of G2 = E1 \/ {e} by GLIB_000: def 39;
+A3: the_Vertices_of G2 = V1 & the_Edges_of G2 = E1 \/ {e} by GLIB_000:def 39;
   set W2 = (e .--> (the_Weight_of G).e);
 A4: the_Edges_of G2 \ the_Edges_of G1 = {e} \ E1 by A2,A3,XBOOLE_1:40
     .= {e} by A1,ZFMISC_1:67;
 A5: dom W2 = {e} by FUNCOP_1:19;
-  then reconsider W2 as ManySortedSet of (the_Edges_of G2 \ the_Edges_of G1)
-  by A4,PBOOLE:def 3;
+  reconsider W2 as ManySortedSet of (the_Edges_of G2 \ the_Edges_of G1)
+  by A4;
   reconsider W2 as Rbag of (the_Edges_of G2 \ the_Edges_of G1);
-A6: dom the_Weight_of G2 = E1 \/ {e} by A3,PBOOLE:def 3;
+A6: dom the_Weight_of G2 = E1 \/ {e} by A3,PARTFUN1:def 4;
 A7: dom ((the_Weight_of G1) +* W2) = dom the_Weight_of G1 \/ dom W2
   by FUNCT_4:def 1
-    .= E1 \/ {e} by A2,A5,PBOOLE:def 3;
+    .= E1 \/ {e} by A2,A5,PARTFUN1:def 4;
 A8: the_Weight_of G1 = (the_Weight_of G) | E1 by A2,GLIB_003:def 10;
 A8a: now
     let x be set;
     assume x in dom the_Weight_of G2;
     then
-A9: x in E1 \/ {e} by A3,PBOOLE:def 3;
+A9: x in E1 \/ {e} by A3,PARTFUN1:def 4;
     the_Weight_of G2 = (the_Weight_of G) | (E1 \/ {e}) by A3,GLIB_003:def 10;
     then
 A10: (the_Weight_of G2).x = (the_Weight_of G).x by A9,FUNCT_1:72;
@@ -935,7 +940,7 @@ A14:    x = e by A5,TARSKI:def 1;
   dom W2 = {e} by FUNCOP_1:19;
   then Sum W2 = W2.e by Th4
     .= (the_Weight_of G).e by FUNCOP_1:87;
-  hence G1.cost() + (the_Weight_of G).e = G2.cost()
+  hence thesis
     by Th3,A8a,A6,A7,FUNCT_1:9;
 end;
 
@@ -993,7 +998,7 @@ A18:    W1.last() = W2.first() by A5,A6,A10,A16,GLIB_001:38;
 A19:    WA.cost() = W1.cost() + W2.cost() by GLIB_003:31;
         W3.first() = W2.last() by A5,A16,GLIB_001:38
           .= WA.last() by A18,GLIB_001:31;
-        then WB.cost() = W1.cost() + W2.cost() + W3.cost() by A19, GLIB_003:31
+        then WB.cost() = W1.cost() + W2.cost() + W3.cost() by A19,GLIB_003:31
           .= W2.cost() + (W1.cost() + W3.cost());
         then
 A20:    WB.cost() < W.cost() by A11,A14,XREAL_1:10;
@@ -1131,7 +1136,7 @@ A4: for y being set holds y in IT2 iff P[y];
       then P[x] by A4;
       hence x in IT1 by A3;
     end;
-    hence IT1 = IT2 by TARSKI:2;
+    hence thesis by TARSKI:2;
   end;
 end;
 
@@ -1160,14 +1165,14 @@ definition
   A2: {t'} c= V;
       dom (L`1+*(t .--> val)) = dom L`1 \/ {t} by Tw0;
       then
-  D1: dom (L`1+*(t .--> val)) c= V by A2, XBOOLE_1:8;
+  D1: dom (L`1+*(t .--> val)) c= V by A2,XBOOLE_1:8;
       rng (L`1+*(t .--> val)) c= REAL;
       then
-  A: L`1+*(t .--> val) in PFuncs(V, REAL) by D1, PARTFUN1:def 5;
+  A: L`1+*(t .--> val) in PFuncs(V, REAL) by D1,PARTFUN1:def 5;
   E1a: L`2 in bool E by MCART_1:10;
-      {e'} c= E by AAa, ZFMISC_1:37;
-     then nE c= E by E1a, XBOOLE_1:8;
-   hence [ L`1+*(t .--> val), nE ] is DIJK:Labeling of G by A, ZFMISC_1:def 2;
+      {e'} c= E by AAa,ZFMISC_1:37;
+     then nE c= E by E1a,XBOOLE_1:8;
+   hence [ L`1+*(t .--> val), nE ] is DIJK:Labeling of G by A,ZFMISC_1:def 2;
   end;
   hence thesis;
   end;
@@ -1180,11 +1185,11 @@ definition
    [src .--> 0, {}];
   coherence proof
        set f = src .--> 0;
-       dom f = {src} & rng f = {0} by FUNCOP_1:14, FUNCOP_1:19;
+       dom f = {src} & rng f = {0} by FUNCOP_1:14,19;
        then
    B1: f in PFuncs(the_Vertices_of G, REAL) by PARTFUN1:def 5;
        {} c= the_Edges_of G by XBOOLE_1:2;
-   hence [f, {}] is DIJK:Labeling of G by B1, ZFMISC_1:def 2;
+   hence thesis by B1,ZFMISC_1:def 2;
   end;
 end;
 
@@ -1201,14 +1206,14 @@ A: now let i be set; assume
        then
    B1: {} in PFuncs(the_Vertices_of G, REAL) by PARTFUN1:119;
        {} c= the_Edges_of G by XBOOLE_1:2;
-    hence P[i,r] by B1, ZFMISC_1:def 2;
+    hence P[i,r] by B1,ZFMISC_1:def 2;
    end;
     consider s being ManySortedSet of NAT such that
 Z:  for i being set st i in NAT holds P[i,s.i] from PBOOLE:sch 3(A);
     take s;
     let i be Nat;
      i in NAT by ORDINAL1:def 13;
-    hence s.i is DIJK:Labeling of G by Z;
+    hence thesis by Z;
   end;
 end;
 
@@ -1249,7 +1254,7 @@ A1: for n being Element of NAT for x being set ex y being set st P[n,x,y];
 A3: dom IT = NAT & IT.0 = DIJK:Init(src) &
     for n being Element of NAT holds P[n,IT.n,IT.(n+1)]
     from RECDEF_1:sch 1(A1);
-    reconsider IT as ManySortedSet of NAT by A3,PBOOLE:def 3;
+    reconsider IT as ManySortedSet of NAT by A3,PARTFUN1:def 4,RELAT_1:def 18;
     defpred P2[Nat] means IT.$1 is DIJK:Labeling of G;
 A4: P2[0] by A3;
 A5: now
@@ -1269,7 +1274,7 @@ A7:   IT.n = Gn & IT.(n+1) = Gn1 & Gn1 = DIJK:Step(Gn) by A3,A6;
     reconsider n'= n as Element of NAT by ORDINAL1:def 13;
     consider Gn,Gn1 being DIJK:Labeling of G such that
 A9: IT.n' = Gn & IT.(n+1) = Gn1 & Gn1 = DIJK:Step(Gn) by A3;
-    thus IT.(n+1) = DIJK:Step(IT.n) by A9;
+    thus thesis by A9;
   end;
   uniqueness
   proof
@@ -1328,7 +1333,7 @@ A1: card dom nL`1 = card dom L`1;
 A2:   BestEdges <> {};
       then
 A3:   e in BestEdges;
-      nL = [L`1+*(target .--> val), nextEG] by A2, Def5;
+      nL = [L`1+*(target .--> val), nextEG] by A2,Def5;
      then nL`1 = L`1+*(target .--> val) by MCART_1:7;
      then
 AAd: dom nL`1 = dom L`1 \/ {target} by Tw0;
@@ -1336,7 +1341,7 @@ AAd: dom nL`1 = dom L`1 \/ {target} by Tw0;
       e DSJoins dom L`1,the_Vertices_of G \ dom L`1, G by A2,Def4;
       then target in the_Vertices_of G \ dom L`1 by GLIB_000:def 18;
       then not target in dom L`1 by XBOOLE_0:def 5;
-      then card dom nL`1 = card dom L`1 + 1 by AAd, CARD_2:54;
+      then card dom nL`1 = card dom L`1 + 1 by AAd,CARD_2:54;
       hence contradiction by A1;
     end;
     hence BestEdges = {};
@@ -1356,7 +1361,7 @@ A6: card dom nL`1 = card dom L`1 + 1;
 A7: BestEdges <> {};
   then
 A8: e in BestEdges;
-    nL = [L`1+*(target .--> val), nextEG] by A7, Def5;
+    nL = [L`1+*(target .--> val), nextEG] by A7,Def5;
     then nL`1 = L`1+*(target .--> val) by MCART_1:7;
      then
 AAd: dom nL`1 = dom L`1 \/ {target} by Tw0;
@@ -1364,7 +1369,7 @@ AAd: dom nL`1 = dom L`1 \/ {target} by Tw0;
   e DSJoins dom L`1,the_Vertices_of G \ dom L`1, G by A7,Def4;
   then target in the_Vertices_of G \ dom L`1 by GLIB_000:def 18;
   then not target in dom L`1 by XBOOLE_0:def 5;
-  hence thesis by AAd, CARD_2:54;
+  hence thesis by AAd,CARD_2:54;
 end;
 
 theorem Th14: ::tDSTEP02
@@ -1378,7 +1383,7 @@ proof
   set val = (L`1).((the_Source_of G).e) + (the_Weight_of G).e;
   now per cases;
     suppose BestEdges = {};
-      hence dom L`1 c= dom nL`1 & L`2 c= nL`2 by Def5;
+      hence thesis by Def5;
     end;
     suppose
 A1:   BestEdges <> {};
@@ -1448,7 +1453,7 @@ A4: dDCS c= dom (DCS.(i+k))`1 & eDCS c= (DCS.(i+k))`2;
   then
 A5: for k being Nat st P[k] holds P[k+1];
   for k being Nat holds P[k] from NAT_1:sch 2(A3,A5);
-  hence dDCS c= dom (DCS.j)`1 & eDCS c= (DCS.j)`2 by A1;
+  hence thesis by A1;
 end;
 
 theorem Th18: ::tDCS03
@@ -1503,7 +1508,7 @@ A8:       v1 in dom Gk`1 by GLIB_000:def 18;
                 e in BestEdges by A6;
                 hence e in the_Edges_of G;
                 thus (the_Source_of G).e = v1;
-                thus (the_Target_of G).e = xx by A5,A7,S1, Tw3;
+                thus (the_Target_of G).e = xx by A5,A7,S1,Tw3;
               end;
               then e DJoins v1',xx,G by GLIB_000:def 16;
               hence xx in G.reachableDFrom(src) by A3,A8,GLIB_002:19;
@@ -1636,7 +1641,7 @@ A22: card dom Gn1a`1 = card RFS + 1 by A1,A21,Th13;
     then card RFS + 1 <= card RFS + 0 by A22,NAT_1:40;
     hence contradiction by XREAL_1:8;
   end;
-  hence BestEdges = {};
+  hence thesis;
 end;
 
 theorem Th20: ::tDCS06
@@ -1747,7 +1752,7 @@ A6:   dom Dn`1 c= dom Dn1`1 & Dn`2 c= Dn1`2 by Th16;
 A7:       BE <> {};
           then
 AAa:      Dn1 = [Dn`1+*(target .--> val),DnE] by A3,Def5;
-A8:       Dn1`1 = Dn`1+*(target .--> val) by AAa, MCART_1:7;
+A8:       Dn1`1 = Dn`1+*(target .--> val) by AAa,MCART_1:7;
 A9:       e in BE by A7;
 A11a:     Dn1`2 = DnE by AAa,MCART_1:7;
 A13:      dom Dn1`1 = dom Dn`1 \/ {target} by Tw0,A8;
@@ -1757,7 +1762,7 @@ A13:      dom Dn1`1 = dom Dn`1 \/ {target} by Tw0,A8;
               x in Dn`2 &
               (the_Source_of G).x in dom Dn`1 &
               (the_Target_of G).x in dom Dn`1 by S1,A2,GLIB_000:34;
-              hence x in G.edgesBetween(dom Dn1`1) by A6, B1a,GLIB_000:34;
+              hence x in G.edgesBetween(dom Dn1`1) by A6,B1a,GLIB_000:34;
             end;
             suppose x in {e};
               then
@@ -1808,7 +1813,7 @@ A1: D0 = DIJK:Init(src) by Def7;
 A2: D0`1 = src .--> 0 by MCART_1:7;
   then
 A3: dom D0`1 = {src} by FUNCOP_1:19;
-A4: D0`2 = {} by A1, MCART_1:7;
+A4: D0`2 = {} by A1,MCART_1:7;
   now
     let D0W be inducedWSubgraph of G,dom D0`1,D0`2;
     {} c= G.edgesBetween(dom D0`1) by XBOOLE_1:2;
@@ -1891,14 +1896,14 @@ A30: DnW is Tree-like by Def1;
 A32:    BE <> {};
         then
 A33:    e in BE & Dn1 = [Dn`1+*(target .--> (pc+ec)), DnE] by A17,Def5;
-        Dn1`1 = Dn`1+*(target .--> (pc+ec)) by A33, MCART_1:7;
+        Dn1`1 = Dn`1+*(target .--> (pc+ec)) by A33,MCART_1:7;
         then
 A35:    Dn1`2 = DnE &
-        dom Dn1`1 = dom Dn`1 \/ {target} by A33, Tw0, MCART_1:7;
+        dom Dn1`1 = dom Dn`1 \/ {target} by A33,Tw0,MCART_1:7;
         Dn1`2 c= G.edgesBetween(dom Dn1`1) by Th21;
         then
 A40:    the_Vertices_of Dn1W = dom Dn`1 \/ {target} &
-        the_Edges_of Dn1W =(Dn`2 \/ {e}) by A35, GLIB_000:def 39;
+        the_Edges_of Dn1W =(Dn`2 \/ {e}) by A35,GLIB_000:def 39;
 A41:    e DSJoins dom Dn`1, the_Vertices_of G \ dom Dn`1, G
         by A32,Def4;
         then
@@ -1911,7 +1916,7 @@ A44:    card (dom Dn`1 \/ {target}) = card dom Dn`1 + 1
 A45:    not e in Dn`2 by A25,A43,GLIB_000:34;
         then Dn1W.size() = DnW.size() + 1 by A28,A40,CARD_2:54;
         then
-A46:    Dn1W.order() = Dn1W.size() + 1 by A28,A30,A40,A44,GLIB_002 :47;
+A46:    Dn1W.order() = Dn1W.size() + 1 by A28,A30,A40,A44,GLIB_002:47;
 A48:    now thus the_Vertices_of DnW c= the_Vertices_of Dn1W &
           the_Edges_of DnW c= the_Edges_of Dn1W by A27,A40,XBOOLE_1:7;
           let e be set;
@@ -1933,17 +1938,18 @@ A53:    the_Weight_of DnW' = (the_Weight_of G)| the_Edges_of DnW
         by GLIB_003:def 10;
 A54:    the_Weight_of Dn1W = (the_Weight_of G)| the_Edges_of Dn1W
         by GLIB_003:def 10;
-        dom the_Weight_of Dn1W = the_Edges_of Dn1W by PBOOLE:def 3;
+        dom the_Weight_of Dn1W = the_Edges_of Dn1W by PARTFUN1:def 4
+;
         then dom (the_Weight_of Dn1W)/\the_Edges_of DnW = the_Edges_of DnW
         by A48,XBOOLE_1:28;
         then
 A55:    dom the_Weight_of DnW'=dom (the_Weight_of Dn1W)/\ the_Edges_of DnW
-        by PBOOLE:def 3;
+        by PARTFUN1:def 4;
         now
           let y be set;
           assume y in dom the_Weight_of DnW';
           then
-A56:      y in the_Edges_of DnW by PBOOLE:def 3;
+A56:      y in the_Edges_of DnW by PARTFUN1:def 4;
           hence (the_Weight_of DnW').y = (the_Weight_of G).y by A53,FUNCT_1:72
             .= (the_Weight_of Dn1W).y by A48,A54,A56,FUNCT_1:72;
         end;
@@ -2033,7 +2039,7 @@ A74:          WT' is non trivial;
             hence WT' is trivial or WT' is open;
             WT'.vertices() = WT.vertices() by GLIB_001:99;
             then
-A76:        not target in WT'.vertices() by A27,A42, XBOOLE_0:def 5;
+A76:        not target in WT'.vertices() by A27,A42,XBOOLE_0:def 5;
             let n be odd Element of NAT;
             assume 1 < n & n <= len WT';
             hence WT'.n <> target by A76,GLIB_001:88;
@@ -2082,8 +2088,8 @@ A88:      WB is_Walk_from src,target & for WA being DPath of G
           then
           consider lenWB2h being odd Element of NAT such that
 A89:      lenWB2h = len WB - 2 &
-          WB.cut(1,lenWB2h).addEdge(WB.(lenWB2h+1)) = WB by GLIB_001:134,
-          A86,GLIB_001:128;
+          WB.cut(1,lenWB2h).addEdge(WB.(lenWB2h+1)) = WB by A86,GLIB_001:128
+,134;
           set WA = WB.cut(1,lenWB2h);
           set sa = WB.lenWB2h, ea = WB.(lenWB2h+1);
 A90:      1 <= lenWB2h & 1 is odd by HEYTING3:1,JORDAN12:3;
@@ -2102,7 +2108,7 @@ A94a: ea DJoins sa, WB.last(), G by A89,GLIB_001:def 7;
           then
 A95:      ea in WA.last().edgesInOut() by A90,A91,GLIB_001:38;
           then
-A96:      mc = WA.cost() + (the_Weight_of G).ea by A87,A89, GLIB_003:32;
+A96:      mc = WA.cost() + (the_Weight_of G).ea by A87,A89,GLIB_003:32;
 
           reconsider WA as DPath of G;
 A97:      WA.first() = src & WA.last() = sa by A90,A91,A92,GLIB_001:38;
@@ -2152,7 +2158,7 @@ A109:         ek DJoins sk,tk,G by A107,GLIB_001:123;
               then
 A110:         ek in the_Edges_of G & (the_Source_of G).ek = sk &
               (the_Target_of G).ek = tk by GLIB_000:def 16;
-A111:         WK1.first() = WA.1 & WK1.last() = sk by A107, GLIB_001:38;
+A111:         WK1.first() = WA.1 & WK1.last() = sk by A107,GLIB_001:38;
               then WK1 is_mincost_DPath_from WA.1, sk by A98,Th10;
               then WK1 is_mincost_DPath_from WA.first(),sk by GLIB_001:def 6;
               then G.min_DPath_cost(src,sk) = WK1.cost() by A97,Th12;
@@ -2171,16 +2177,16 @@ A114:         WK1.addEdge(ek) = WKA by A107,GLIB_001:42;
               (the_Target_of G).ek = tk by A109,GLIB_000:def 16;
               then ek in sk.edgesInOut() by GLIB_000:64;
               then
-A115:         pc+ec <= WKA.cost() by A111,A113,A114, GLIB_003:32;
+A115:         pc+ec <= WKA.cost() by A111,A113,A114,GLIB_003:32;
 A116:         1 <= k & k <= len WA by A105,HEYTING3:1;
               then
-A117:         WKA.append(WKB) = WA.cut(1,len WA) by GLIB_001 :39,JORDAN12:3
+A117:         WKA.append(WKB) = WA.cut(1,len WA) by GLIB_001:39,JORDAN12:3
                 .= WA by GLIB_001:40;
               WKB.first() = WA.k by A105,GLIB_001:38
                 .= WKA.last()
               by A116,GLIB_001:38,JORDAN12:3;
               then
-A118:         WA.cost() = WKA.cost() + WKB.cost() by A117, GLIB_003:31;
+A118:         WA.cost() = WKA.cost() + WKB.cost() by A117,GLIB_003:31;
               0 <= WKB.cost() by GLIB_003:36;
               then 0 qua Nat + WKA.cost() <= WA.cost() by A118,XREAL_1:9;
               then
@@ -2208,7 +2214,7 @@ A122:   G.min_DPath_cost(src,target) = pc+ec by XXREAL_0:1;
           now per cases by A40,XBOOLE_0:def 3;
             suppose x in dom Dn`1;
               then reconsider x'=x as Vertex of DnW
-              by A26, GLIB_000:def 39;
+              by A26,GLIB_000:def 39;
               DnW is_mincost_DTree_rooted_at src by A16;
               then consider W2 being DPath of DnW such that
 A123:         W2 is_Walk_from src,x' &
@@ -2359,7 +2365,7 @@ A9:   card dom Gn1`1 = min(n+1+1, card RFS) by Th20;
     end;
     hence k <= n;
   end;
-  hence DIJK:CompSeq(src).Lifespan() + 1 = card RFS by A1,A5,GLIB_000:def 57;
+  hence thesis by A1,A5,GLIB_000:def 57;
 end;
 
 theorem Th25: ::tDIJK03
@@ -2450,7 +2456,7 @@ A1: for e1 being set holds e1 in IT iff e1 in the_Edges_of G & P[e1]
     assume
 A2: P[e1];
     then e1 in the_Edges_of G by GLIB_000:def 17;
-    hence e1 in IT by A1,A2;
+    hence thesis by A1,A2;
   end;
   uniqueness
   proof
@@ -2481,7 +2487,7 @@ A4: for e1 being set holds e1 in IT2 iff
       then P[e1] by A4;
       hence e1 in IT1 by A3;
     end;
-    hence IT1 = IT2 by TARSKI:2;
+    hence thesis by TARSKI:2;
   end;
 end;
 
@@ -2490,8 +2496,8 @@ definition
   func PRIM:Init(G) -> PRIM:Labeling of G equals  ::dPRIMINIT
   [ {choose the_Vertices_of G}, {} ];
   coherence proof
-     {} c= the_Edges_of G by  XBOOLE_1:2;
-   hence thesis by  ZFMISC_1:def 2;
+     {} c= the_Edges_of G by XBOOLE_1:2;
+   hence thesis by ZFMISC_1:def 2;
   end;
 end;
 
@@ -2514,7 +2520,7 @@ definition
   A1: now
         assume S1: BE <> {} & (the_Source_of G).e in L`1;
       AAa: e in BE & BE c= E by S1;
-          reconsider t' = t as Element of V by AAa, FUNCT_2:7;
+          reconsider t' = t as Element of V by AAa,FUNCT_2:7;
       B0: L`1 in bool V by MCART_1:10;
       B1: L`2 in bool E by MCART_1:10;
           {e} c= E proof
@@ -2522,9 +2528,9 @@ definition
             assume x in {e};
             then x = e by TARSKI:def 1;
             then x in BE by S1;
-            hence x in E;
+            hence thesis;
           end;
-          then L`1 \/ {t'} c= V & L`2 \/ {e} c= E by B0, B1, XBOOLE_1:8;
+          then L`1 \/ {t'} c= V & L`2 \/ {e} c= E by B0,B1,XBOOLE_1:8;
        hence [L`1 \/ {t}, L`2 \/ {e}] is PRIM:Labeling of G by ZFMISC_1:def 2;
       end;
       now
@@ -2532,7 +2538,7 @@ definition
           e in BE by S1;
           then reconsider e' = e as Element of E;
       AAa: e in BE & BE c= E by S1;
-          reconsider s' = s as Element of V by AAa, FUNCT_2:7;
+          reconsider s' = s as Element of V by AAa,FUNCT_2:7;
       B0: L`1 in bool V by MCART_1:10;
       B1: L`2 in bool E by MCART_1:10;
           {e} c= E proof
@@ -2540,9 +2546,9 @@ definition
             assume x in {e};
             then x = e by TARSKI:def 1;
             then x in BE by S1;
-            hence x in E;
+            hence thesis;
           end;
-          then L`1 \/ {s'} c= V & L`2 \/ {e} c= E by B0, B1, XBOOLE_1:8;
+          then L`1 \/ {s'} c= V & L`2 \/ {e} c= E by B0,B1,XBOOLE_1:8;
        hence [L`1 \/ {s}, L`2 \/ {e}] is PRIM:Labeling of G by ZFMISC_1:def 2;
       end;
      hence thesis by A1;
@@ -2567,7 +2573,7 @@ Z:  for i being set st i in NAT holds P[i,s.i] from PBOOLE:sch 3(A);
     take s;
     let i be Nat;
      i in NAT by ORDINAL1:def 13;
-    hence s.i is PRIM:Labeling of G by Z;
+    hence thesis by Z;
   end;
 end;
 
@@ -2608,7 +2614,7 @@ A1: for n being Element of NAT for x being set ex y being set st P[n,x,y];
 A3: dom IT = NAT & IT.0 = PRIM:Init(G) &
     for n being Element of NAT holds P[n,IT.n,IT.(n+1)]
     from RECDEF_1:sch 1(A1);
-    reconsider IT as ManySortedSet of NAT by A3,PBOOLE:def 3;
+    reconsider IT as ManySortedSet of NAT by A3,PARTFUN1:def 4,RELAT_1:def 18;
     defpred P2[Nat] means IT.$1 is PRIM:Labeling of G;
 A4: P2[0] by A3;
 A5: now
@@ -2627,7 +2633,7 @@ A7:   IT.n' = Gn & IT.(n+1) = Gn1 & Gn1 = PRIM:Step(Gn) by A3;
        reconsider n' = n as Element of NAT by ORDINAL1:def 13;
     consider Gn,Gn1 being PRIM:Labeling of G such that
 A9: IT.n' = Gn & IT.(n+1) = Gn1 & Gn1 = PRIM:Step(Gn) by A3;
-    thus IT.(n+1) = PRIM:Step(IT.n) by A9;
+    thus thesis by A9;
   end;
   uniqueness
   proof
@@ -2713,7 +2719,7 @@ proof
     suppose Next <> {};
       then consider v being Vertex of G such that
 A2:   not v in L`1 & G2 = [L`1 \/ {v}, L`2 \/ {e}] by Lm6;
-      G2`1 = L`1 \/ {v} by A2, MCART_1:7;
+      G2`1 = L`1 \/ {v} by A2,MCART_1:7;
       hence L`1 c= G2`1 by XBOOLE_1:7;
       G2`2 = L`2 \/ {e} by A2,MCART_1:7;
       hence L`2 c= G2`2 by XBOOLE_1:7;
@@ -2777,13 +2783,13 @@ A14:          x in Gn1`1;
                 end;
                 suppose x in {tar};
                   then x = tar by TARSKI:def 1;
-                  hence x in the_Vertices_of G by A5, FUNCT_2:7;
+                  hence x in the_Vertices_of G by A5,FUNCT_2:7;
                 end;
               end;
               hence x in the_Vertices_of G;
             end;
             hence Gn1`1 is non empty Subset of the_Vertices_of G
-            by A11,MCART_1:7, TARSKI:def 3;
+            by A11,MCART_1:7,TARSKI:def 3;
 A15:        Gn`1 c= Gn1`1 by A12,XBOOLE_1:7;
 A16:        G.edgesBetween(Gn`1) c=
             G.edgesBetween(Gn1`1) by A12,GLIB_000:39,XBOOLE_1:7;
@@ -2827,7 +2833,7 @@ A23:          x in Gn1`1;
                 end;
                 suppose x in {src};
                   then x = src by TARSKI:def 1;
-                  hence x in the_Vertices_of G by A5, FUNCT_2:7;
+                  hence x in the_Vertices_of G by A5,FUNCT_2:7;
                 end;
               end;
               hence x in the_Vertices_of G;
@@ -2921,7 +2927,7 @@ A6:       Gn1 = [Gn`1 \/ {v1}, Gn`2 \/ {e} ] by A3,Def14;
 A7:       e in PRIM:NextBestEdges(Gn) by A5;
           then reconsider v1 as Vertex of G1 by FUNCT_2:7;
 A8:       Gn1`1 = Gn`1 \/ {v1} by A6,MCART_1:7;
-A9:       Gn1`2 = Gn`2 \/ {e} by A6, MCART_1:7;
+A9:       Gn1`2 = Gn`2 \/ {e} by A6,MCART_1:7;
           consider Gns being inducedSubgraph of
           G1,Gn`1,Gn`2;
 A10:      Gns is connected by A2;
@@ -2950,7 +2956,7 @@ A16:            x = v1;
 A17:            W is_Walk_from src,v2' by A10,GLIB_002:def 1;
                 reconsider W as Walk of Gn1s by GLIB_001:168;
                 W is_Walk_from src',v2 by A17,GLIB_001:20;
-                then W.addEdge(e) is_Walk_from src',x by A15,A16, GLIB_001:67;
+                then W.addEdge(e) is_Walk_from src',x by A15,A16,GLIB_001:67;
                 hence ex W being Walk of Gn1s st W is_Walk_from src',x;
               end;
               suppose x <> v1;
@@ -2975,9 +2981,9 @@ A20:      Gn1 = [Gn`1 \/ {v2}, Gn`2 \/ {e}] by A3,Def14;
           e SJoins Gn`1,the_Vertices_of G1\Gn`1,G1
           by A19,Def12;
           then
-A21:      e in the_Edges_of G1 & v1 in Gn`1 by A19, GLIB_000:def 17;
+A21:      e in the_Edges_of G1 & v1 in Gn`1 by A19,GLIB_000:def 17;
           then reconsider v2 as Vertex of G1 by FUNCT_2:7;
-A22:      Gn1`1 = Gn`1 \/ {v2} by A20, MCART_1:7;
+A22:      Gn1`1 = Gn`1 \/ {v2} by A20,MCART_1:7;
 A23:      Gn1`2 = Gn`2 \/ {e} by A20,MCART_1:7;
           consider Gns being inducedSubgraph of G1,Gn`1,Gn`2;
 A24:      Gns is connected by A2;
@@ -3006,7 +3012,7 @@ A30:            x = v2;
 A31:            W is_Walk_from src,v1' by A24,GLIB_002:def 1;
                 reconsider W as Walk of Gn1s by GLIB_001:168;
                 W is_Walk_from src',v1 by A31,GLIB_001:20;
-                then W.addEdge(e) is_Walk_from src',x by A29,A30, GLIB_001:67;
+                then W.addEdge(e) is_Walk_from src',x by A29,A30,GLIB_001:67;
                 hence ex W being Walk of Gn1s st W is_Walk_from src',x;
               end;
               suppose x <> v2;
@@ -3053,7 +3059,7 @@ A2: the_Vertices_of G2 = V & the_Edges_of G2 = G1.edgesBetween(V)
   then reconsider G3 as Subgraph of G2 by A1,GLIB_000:47;
 A3: G3 is connected by Lm10;
   G3 is spanning by A1,A2,GLIB_000:def 35;
-  hence G2 is connected by A3,GLIB_002:23;
+  hence thesis by A3,GLIB_002:23;
 end;
 
 registration
@@ -3130,7 +3136,7 @@ A15:    e SJoins Gn`1, the_Vertices_of G \ Gn`1, G
         then
 A16:    tar in Gn`1 by A13,GLIB_000:def 17;
 A17:    e in the_Edges_of G by A15,GLIB_000:def 17;
-A19:    Gn1`1 = Gn`1 \/ {sc} by A14, MCART_1:7;
+A19:    Gn1`1 = Gn`1 \/ {sc} by A14,MCART_1:7;
         now
           let v be set;
           assume
@@ -3184,7 +3190,7 @@ A4: vPCS c= (PCS.(i+k))`1 & ePCS c= (PCS.(i+k))`2;
   then
 A5: for k being Nat st P[k] holds P[k+1];
   for k being Nat holds P[k] from NAT_1:sch 2(A3,A5);
-  hence vPCS c= (PCS.j)`1 & ePCS c= (PCS.j)`2 by A1;
+  hence thesis by A1;
 end;
 
 theorem Lm14:
@@ -3307,7 +3313,7 @@ A30:    not (the_Source_of G).e in GnV by XBOOLE_0:def 5;
     end;
     hence contradiction;
   end;
-  hence Next = {};
+  hence thesis;
 end;
 
 theorem Lm15:
@@ -3353,15 +3359,15 @@ A9:     PRIM:NextBestEdges(Gn) <> {};
         then consider v being Vertex of G such that
 A10:    not v in Gn`1 &
         Gn1 =  [Gn`1 \/ {v}, Gn`2 \/ {e}] by A5,Lm6;
-A12:    card Gn1`1 = card (Gn`1 \/ {v}) by A10, MCART_1:7
-          .= card Gn`1 + 1 by A10, CARD_2:54;
+A12:    card Gn1`1 = card (Gn`1 \/ {v}) by A10,MCART_1:7
+          .= card Gn`1 + 1 by A10,CARD_2:54;
 A13:    Gn`1 <> G.reachableFrom(src) by A9,Lm14;
 A14:    Gn`1 c= G.reachableFrom(src) by Lm12;
 A15:    card Gn`1 <= card G.reachableFrom(src) by Lm12,NAT_1:44;
 A16:    now
           assume
 A17:      card Gn`1 = card G.reachableFrom(src);
-          Gn`1 c< G.reachableFrom(src) by A13,A14, XBOOLE_0:def 8;
+          Gn`1 c< G.reachableFrom(src) by A13,A14,XBOOLE_0:def 8;
           hence contradiction by A17,CARD_2:67;
         end;
         then
@@ -3409,7 +3415,7 @@ A7: now
     then consider v being Vertex of G such that
 A8: not v in Gn`1 &
     Gn1 = [Gn`1 \/ {v}, Gn`2 \/ {e}] by A5,Lm6;
-A9: Gn1`1 = Gn`1 \/ {v} by A8, MCART_1:7;
+A9: Gn1`1 = Gn`1 \/ {v} by A8,MCART_1:7;
     v in {v} by TARSKI:def 1;
     hence contradiction by A7,A8,A9,XBOOLE_0:def 3;
   end;
@@ -3438,7 +3444,7 @@ A16:  m+1+1 <= card RFS by A14,NAT_1:13;
     end;
     hence n <= m;
   end;
-  hence PCS.Lifespan() + 1 = card RFS by A1,A10,A11,GLIB_000:def 57;
+  hence thesis by A1,A10,A11,GLIB_000:def 57;
 end;
 
 theorem Lm17:
@@ -3498,9 +3504,9 @@ A14a:     now
             not (the_Target_of G1).e in GnVg by XBOOLE_0:def 5;
             hence contradiction by A13,GLIB_000:def 17;
           end;
-A15:      card Gn1`2 = card (Gn`2 \/ {e}) by A12, MCART_1:7
+A15:      card Gn1`2 = card (Gn`2 \/ {e}) by A12,MCART_1:7
                     .= card Gn`2 + 1 by A14a,CARD_2:54;
-          card Gn1`1 = card (Gn`1 \/ {v}) by A12, MCART_1:7
+          card Gn1`1 = card (Gn`1 \/ {v}) by A12,MCART_1:7
                     .= card Gn`1 + 1 by A12,CARD_2:54;
           then G2.order() = G2.size() + 1 by A7,A9,A10,A15;
           hence G2 is Tree-like by GLIB_002:47;
@@ -3550,7 +3556,7 @@ A1: the_Vertices_of IT = (PCS.n)`1 by GLIB_000:def 39;
     PRIM:MST(G) = PCS.n;
     then (PCS.n)`1 = the_Vertices_of G by Lm18;
     hence IT is spanning by A1,GLIB_000:def 35;
-    thus IT is Tree-like by Lm17;
+    thus thesis by Lm17;
   end;
 end;
 
@@ -3611,7 +3617,7 @@ A5:   G3 == GT & the_Weight_of G3 = the_Weight_of GT by Lm2;
       then x.cost() <= G3.cost() by A3;
       hence x.cost() <= GT.cost() by A5,GLIB_000:def 36;
     end;
-    hence x is min-cost by Def17;
+    hence thesis by Def17;
   end;
 end;
 
@@ -3637,8 +3643,7 @@ A1: G3 is minimumSpanningTree of G1 &
   reconsider G3' as Tree-like WSubgraph of G2 by A1,GLIB_003:17;
   the_Vertices_of G3 = the_Vertices_of G1 by A1,GLIB_000:def 35
     .= the_Vertices_of G2 by A1,GLIB_000:def 36;
-  then reconsider G3' as spanning Tree-like WSubgraph of G2 by
-  GLIB_000:def 35;
+  then reconsider G3' as spanning Tree-like WSubgraph of G2 by GLIB_000:def 35;
   now
     let G be spanning Tree-like WSubgraph of G2;
     reconsider G'=G as Tree-like WSubgraph of G1 by A1,GLIB_003:17;
@@ -3728,7 +3733,7 @@ A2: PMST`1 = VG1 by Lm18;
     PMST`2 in bool EG1 by MCART_1:10;
     then PMST`2 c= EG1;
     then
-A3: PMST`2 c= G1.edgesBetween(PMST`1) by A2,GLIB_000: 37;
+A3: PMST`2 c= G1.edgesBetween(PMST`1) by A2,GLIB_000:37;
   PMST`1 c= VG1 by Lm18;
   then
 A4: the_Vertices_of G2 = VG1 &
@@ -3788,7 +3793,7 @@ A12:    the_Edges_of G2 = the_Edges_of G';
         assume the_Edges_of G2 c= the_Edges_of G';
         then the_Edges_of G2 c< the_Edges_of G' by A11,XBOOLE_0:def 8;
 ::        then G2.size() < card the_Edges_of G' by CARD_2:67;
-        then G2.size() + 1 < G'.size() + 1 by XREAL_1:10,CARD_2:67;
+        then G2.size() + 1 < G'.size() + 1 by CARD_2:67,XREAL_1:10;
         then
 A13:    G2.order() < G'.size() + 1 by A5,GLIB_002:46;
         G2.order() = G'.order() by A4,GLIB_000:def 35;
@@ -3801,7 +3806,7 @@ A15:  P4[k3] & for n being Nat st P4[n] holds k3 <= n from NAT_1:sch 5(A14);
       now
         assume k3 = 0;
         then
-A16:    not (PRIM:Init(G1))`2 c= the_Edges_of G' by A15, Def15;
+A16:    not (PRIM:Init(G1))`2 c= the_Edges_of G' by A15,Def15;
         (PRIM:Init(G1))`2 = {} by MCART_1:7;
         hence contradiction by A16,XBOOLE_1:2;
       end;
@@ -3958,7 +3963,7 @@ A43:  the_Edges_of G2 = the_Edges_of M;
       assume the_Edges_of G2 c= the_Edges_of M;
       then the_Edges_of G2 c< the_Edges_of M by A42,XBOOLE_0:def 8;
 ::      then G2.size() < card the_Edges_of M by CARD_2:67;
-      then G2.size() + 1 < M.size() + 1 by XREAL_1:10,CARD_2:67;
+      then G2.size() + 1 < M.size() + 1 by CARD_2:67,XREAL_1:10;
       then
 A44:  G2.order() < M.size() + 1 by A5,GLIB_002:46;
       G2.order() = M.order() by A4,GLIB_000:def 35;
@@ -3988,7 +3993,7 @@ A51: Next <> {} by A46,A49,A50,Def14;
 A52: ep in Next;
     consider v being Vertex of G1 such that
 A53: not v in Gk1b`1 & Gk = [ Gk1b`1 \/ {v}, Gk1b`2 \/ {ep} ] by A49,A51,Lm6;
-A54: Gk`2 = Gk1b`2 \/ {ep} by A53, MCART_1:7;
+A54: Gk`2 = Gk1b`2 \/ {ep} by A53,MCART_1:7;
     then
 A55: not {ep} c= the_Edges_of M by A46,A50,XBOOLE_1:8;
     then
@@ -3999,7 +4004,7 @@ A58: VG1 = the_Vertices_of M by GLIB_000:def 35;
     consider Mep being inducedWSubgraph of G1,VG1,
     the_Edges_of M \/ {ep};
     set v1 = (the_Source_of Mep).ep, v2 = (the_Target_of Mep).ep;
-    {ep} c= EG1 & the_Edges_of M c= EG1 by A52, ZFMISC_1:37;
+    {ep} c= EG1 & the_Edges_of M c= EG1 by A52,ZFMISC_1:37;
     then the_Edges_of M \/ {ep} c= EG1 by XBOOLE_1:8;
     then VG1 c= VG1 & the_Edges_of M \/ {ep} c= G1.edgesBetween(VG1)
         by GLIB_000:37;
@@ -4079,7 +4084,7 @@ A82:    v1 in Gk1b`1 & v2 in VG1\Gk1b`1;
 A83:    ex n being Nat st P3[n] by A81,A82;
         consider m being Nat such that
 A84:    P3[m] & for n being Nat st P3[n] holds m <= n from NAT_1:sch 5(A83);
-        reconsider m as odd Element of NAT by A84, ORDINAL1:def 13;
+        reconsider m as odd Element of NAT by A84,ORDINAL1:def 13;
 A85:    1 <= m & m <= len P by A84,HEYTING3:1;
         m <> 1 by A81,A82,A84,XBOOLE_0:def 5;
         then 1 < m by A85,XXREAL_0:1;
@@ -4120,7 +4125,7 @@ A98:    v2 in Gk1b`1 & v1 in VG1\Gk1b `1;
 A99:    ex n being Nat st P3[n] by A81,A98;
         consider m being Nat such that
 A100:   P3[m] & for n being Nat st P3[n] holds m <= n from NAT_1:sch 5(A99);
-        reconsider m as odd Element of NAT by A100, ORDINAL1:def 13;
+        reconsider m as odd Element of NAT by A100,ORDINAL1:def 13;
 A101:   1 <= m & m <= len P by A100,HEYTING3:1;
         m <> 1 by A81,A98,A100,XBOOLE_0:def 5;
         then 1 < m by A101,XXREAL_0:1;
@@ -4178,7 +4183,7 @@ A118: the_Edges_of M2 = the_Edges_of M \/ {ep} \{em} by A59,GLIB_000:54;
     now
       {em} c= the_Edges_of M \/ {ep} by A59,A114,ZFMISC_1:37;
       then
-A119: M2.size() = card (the_Edges_of M \/{ep})-card {em} by A118, CARD_2:63
+A119: M2.size() = card (the_Edges_of M \/{ep})-card {em} by A118,CARD_2:63
         .= card (the_Edges_of M \/ {ep}) - 1 by CARD_1:50
         .= card the_Edges_of M + 1 - 1 by A56,CARD_2:54
         .= M.size();
@@ -4191,8 +4196,7 @@ A120: M2 is Tree-like by A117,GLIB_002:47;
     set M2' = M2.strict(WGraphSelectors);
 A121: M2' == M2 & the_Weight_of M2' = the_Weight_of M2 by Lm2;
     then
-A122: the_Edges_of M2' = the_Edges_of M \/ {ep} \ {em} by A118,
-    GLIB_000:def 36;
+A122: the_Edges_of M2' = the_Edges_of M \/ {ep} \ {em} by A118,GLIB_000:def 36;
     reconsider M2' as WSubgraph of G1 by A121,GLIB_003:15;
     now thus M2' is Tree-like by A120,Lm2,GLIB_002:48;
       the_Vertices_of M2' = the_Vertices_of M2 by A121,GLIB_000:def 36

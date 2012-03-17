@@ -10,11 +10,11 @@ environ
       QC_LANG1, FUNCOP_1, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0,
       MCART_1, NAT_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCOP_1, FINSEQ_1;
- constructors ENUMSET1, FUNCOP_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
+ constructors ENUMSET1, FUNCOP_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, XREAL_0,
       FINSEQ_1, CARD_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, FINSEQ_1;
  theorems ZFMISC_1, SUBSET_1, TARSKI, ENUMSET1, FINSEQ_1, MCART_1, NAT_1,
       FUNCT_1, FUNCT_2, RELSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1, XXREAL_0,
       ORDINAL1;
@@ -30,7 +30,7 @@ theorem
 proof
   let D1 be non empty set, D2 be set, k be Element of D1;
   {k} is Subset of D1 by SUBSET_1:63;
-  hence [: {k}, D2 :] c= [: D1, D2 :] by ZFMISC_1:118;
+  hence thesis by ZFMISC_1:118;
 end;
 
 theorem Th2:
@@ -40,7 +40,7 @@ for D1 being non empty set, D2 being set, k1, k2, k3 being Element of D1 holds
 proof
   let D1 be non empty set, D2 be set, k1, k2, k3 be Element of D1;
   {k1, k2, k3} is Subset of D1 by SUBSET_1:57;
-  hence [: {k1, k2, k3}, D2 :] c= [: D1, D2 :] by ZFMISC_1:118;
+  hence thesis by ZFMISC_1:118;
 end;
 
 reserve k, l, m, n for Element of NAT;
@@ -166,7 +166,7 @@ A2:   x`1 = 7+k & x`2 in NAT by MCART_1:12;
       reconsider x1 = x`1, x2 = x`2 as Element of NAT by A1,MCART_1:12;
       7 <= x1 by A2,NAT_1:12;
       then [x1, x2] in { [m, n] : 7 <= m };
-      hence x in QC-pred_symbols by A1,MCART_1:23;
+      hence thesis by A1,MCART_1:23;
     end;
     then reconsider X = [: Y, NAT :] as Subset of QC-pred_symbols;
     X = { P : the_arity_of P = k }
@@ -180,7 +180,7 @@ A3:     x in X;
         x`1 in Y by A3,MCART_1:10;
         then x`1 = 7+k by TARSKI:def 1;
         then the_arity_of Q = k by Def6;
-        hence x in { P : the_arity_of P = k };
+        hence thesis;
       end;
       let x be set;
       assume x in { P : the_arity_of P = k };
@@ -191,7 +191,7 @@ A6:   P in [: NAT, NAT :] by Th10,TARSKI:def 3;
       P`1 = 7+k by A5,Def6;
       then P`1 in Y & P`2 in NAT by A6,MCART_1:10,TARSKI:def 1;
       then [P`1, P`2] in X by ZFMISC_1:106;
-      hence x in X by A4,A6,MCART_1:23;
+      hence thesis by A4,A6,MCART_1:23;
     end;
     hence thesis;
   end;
@@ -213,7 +213,7 @@ A2:   x`1 = 7+k & x`2 in NAT by MCART_1:12;
       reconsider x1 = x`1, x2 = x`2 as Element of NAT by A1,MCART_1:12;
       7 <= x1 by A2,NAT_1:12;
       then [x1, x2] in { [m, n] : 7 <= m };
-      hence x in QC-pred_symbols by A1,MCART_1:23;
+      hence thesis by A1,MCART_1:23;
     end;
     then reconsider X = [: Y, NAT :] as non empty Subset of QC-pred_symbols;
     X = { P : the_arity_of P = k }
@@ -227,7 +227,7 @@ A3:     x in X;
         x`1 in Y by A3,MCART_1:10;
         then x`1 = 7+k by TARSKI:def 1;
         then the_arity_of Q = k by Def6;
-        hence x in { P : the_arity_of P = k };
+        hence thesis;
       end;
       let x be set;
       assume x in { P : the_arity_of P = k };
@@ -238,7 +238,7 @@ A6:   P in [: NAT, NAT :] by Th10,TARSKI:def 3;
       P`1 = 7+k by A5,Def6;
       then P`1 in Y & P`2 in NAT by A6,MCART_1:10,TARSKI:def 1;
       then [P`1, P`2] in X by ZFMISC_1:106;
-      hence x in X by A4,A6,MCART_1:23;
+      hence thesis by A4,A6,MCART_1:23;
     end;
     hence thesis;
   end;
@@ -252,16 +252,26 @@ definition
   mode QC-pred_symbol of k is Element of k-ary_QC-pred_symbols;
 end;
 
+registration
+  let k be Element of NAT;
+  cluster k-long FinSequence of QC-variables;
+  existence
+   proof
+    consider p being FinSequence of QC-variables such that
+W:   len p = k by FINSEQ_1:24;
+    take p;
+    thus len p = k by W;
+   end;
+end;
+
 definition
   let k be Element of NAT;
-  mode QC-variable_list of k -> FinSequence of QC-variables means
-    :Def8:
-    len it = k;
-  existence by FINSEQ_1:24;
+  mode QC-variable_list of k is k-long FinSequence of QC-variables;
 end;
 
 definition
   let D be set;
+  canceled;
   attr D is QC-closed means
   :Def9:
   D is Subset of [:NAT, NAT:]* &
@@ -288,7 +298,7 @@ proof
   [k, l] in [:NAT, NAT:] by ZFMISC_1:def 2;
   then rng <*[k, l]*> = {[k, l]} & {[k, l]} c= [:NAT, NAT:]
   by FINSEQ_1:56,ZFMISC_1:37;
-  hence <*[k, l]*> is FinSequence of [:NAT, NAT:] by FINSEQ_1:def 4;
+  hence thesis by FINSEQ_1:def 4;
 end;
 
 Lm2: for k being Element of NAT, p being (QC-pred_symbol of k),
@@ -301,7 +311,7 @@ proof
   then rng <*p*> c= [:NAT,NAT:] & rng ll c= [:NAT,NAT:] by XBOOLE_1:1;
   then rng <*p*> \/ rng ll c= [:NAT,NAT:] by XBOOLE_1:8;
   then rng (<*p*>^ll) c= [:NAT,NAT:] by FINSEQ_1:44;
-  hence <*p*>^ll is FinSequence of [:NAT,NAT:] by FINSEQ_1:def 4;
+  hence thesis by FINSEQ_1:def 4;
 end;
 
 Lm3: for x being bound_QC-variable, p being FinSequence of [:NAT, NAT:]
@@ -351,7 +361,7 @@ A3: for D being non empty set st D is QC-closed holds <*[0, 0]*> in D by Def9;
       then <*p*>^ll in [:NAT, NAT:]* &
       for D being non empty set st D is QC-closed holds <*p*>^ll in D
       by Def9,FINSEQ_1:def 11;
-      hence <*p*>^ll in D0 by A1;
+      hence thesis by A1;
     end;
     thus <*[0, 0]*> in D0 by A1,A2,A3;
     thus for p being FinSequence of [:NAT, NAT:] st p in D0
@@ -391,7 +401,7 @@ A9:     D is QC-closed;
         then p in D & q in D by A1,A7;
         hence thesis by A9,Def9;
       end;
-      hence <*[2, 0]*>^p^q in D0 by A1,A8;
+      hence thesis by A1,A8;
     end;
     thus for x being bound_QC-variable, p being FinSequence of [:NAT, NAT:]
     st p in D0 holds <*[3, 0]*>^<*x*>^p in D0
@@ -427,7 +437,7 @@ A14: D1 is QC-closed & for D being non empty set
 A15: D2 is QC-closed & for D being non empty set
     st D is QC-closed holds D2 c= D;
     D1 c= D2 & D2 c= D1 by A14,A15;
-    hence D1 = D2 by XBOOLE_0:def 10;
+    hence thesis by XBOOLE_0:def 10;
   end;
 end;
 
@@ -453,7 +463,7 @@ A1: the_arity_of P = len l;
     set QCP = {Q where Q is QC-pred_symbol: the_arity_of Q = k };
     QCP = k-ary_QC-pred_symbols & P in QCP by A1;
     then reconsider P as QC-pred_symbol of k;
-    reconsider l as QC-variable_list of k by Def8;
+    reconsider l as QC-variable_list of k by FINSEQ_1:def 18;
     reconsider X = <*P*>^l as FinSequence of [:NAT,NAT:] by Lm2;
     X is QC-formula by Def9,Th21;
     hence thesis;
@@ -471,7 +481,7 @@ proof
   set QCP = {Q where Q is QC-pred_symbol: the_arity_of Q = k };
   p in QCP;
   then ex Q being QC-pred_symbol st p = Q & the_arity_of Q = k;
-  then len ll = k & the_arity_of p = k by Def8;
+  then len ll = k & the_arity_of p = k by FINSEQ_1:def 18;
   hence thesis by Def11;
 end;
 
@@ -593,7 +603,7 @@ A11: QC-WFF c= X by Def10;
   let F' be Element of QC-WFF;
   F' in X by A11,TARSKI:def 3;
   then ex F'' being Element of QC-WFF st F' = F'' & Prop[F''];
-  hence Prop[F'];
+  hence thesis;
 end;
 
 definition
@@ -787,10 +797,10 @@ A12:    G = P'!ll' by Def17;
 A13:    @G = <*P'*>^ll' by A12,Th23;
         then
 A14:    @G.1 = P' by FINSEQ_1:58;
-A15:    len ll' = k' by Def8
+A15:    len ll' = k' by FINSEQ_1:def 18
           .= the_arity_of P by A11,A14,Th35
           .= k by Th35
-          .= len ll by Def8;
+          .= len ll by FINSEQ_1:def 18;
         <*P*>^ll = <*P*>^(ll'^s) by A4,A10,A11,A13,A14,FINSEQ_1:45;
         then ll = ll'^s by FINSEQ_1:46;
         then len ll + 0 = len ll' + len s by FINSEQ_1:35;
@@ -948,7 +958,7 @@ A4: ll2 = ll2' & F = P2!ll2';
 A5: F = <*P1*>^ll1' & F = <*P2*>^ll2' by A3,A4,Th23;
     P1 = the_pred_symbol_of F by A1,A3,Def21
       .= P2 by A1,A4,Def21;
-    hence ll1 = ll2 by A3,A4,A5,FINSEQ_1:46;
+    hence thesis by A3,A4,A5,FINSEQ_1:46;
   end;
 end;
 
@@ -986,7 +996,7 @@ A5: a = @p1 & b = @p2 or a = @p2 & b = @p1 and
 A6: len a <= len b and
 A7: a^c = b^d by A4;
     ex t being FinSequence st a^t = b by A6,A7,FINSEQ_1:64;
-    hence p1 = p2 by A5,Th37;
+    hence thesis by A5,Th37;
   end;
 end;
 
@@ -1014,7 +1024,7 @@ A3: F = p2 '&' q2;
 A4: @p1^@q1 = @p2^@q2 by FINSEQ_1:46;
     p1 = the_left_argument_of F by A1,A2,Def24
       .= p2 by A1,A3,Def24;
-    hence q1 = q2 by A4,FINSEQ_1:46;
+    hence thesis by A4,FINSEQ_1:46;
   end;
 end;
 
@@ -1061,7 +1071,7 @@ A6: F = All(x2, p2);
 A7: <*x1*>^@p1 = <*x2*>^@p2 by FINSEQ_1:46;
     x1 = (<*x1*>^@p1).1 by FINSEQ_1:58
       .= x2 by A7,FINSEQ_1:58;
-    hence p1 = p2 by A7,FINSEQ_1:46;
+    hence thesis by A7,FINSEQ_1:46;
   end;
 end;
 
@@ -1167,7 +1177,7 @@ proof
   let k be Element of NAT, P be QC-pred_symbol of k;
   reconsider P' = P as QC-pred_symbol;
   P'`1 = 7+the_arity_of P' by Def6;
-  hence P`1 <> 0 & P`1 <> 1 & P`1 <> 2 & P`1 <> 3 by NAT_1:11;
+  hence thesis by NAT_1:11;
 end;
 
 theorem Th49:
@@ -1188,7 +1198,7 @@ proof
 A1: F = P!ll by Def17;
     @F = <*P*>^ll by A1,Th23;
     then @F.1 = P by FINSEQ_1:58;
-    hence ex k being Element of NAT st @F.1 is QC-pred_symbol of k;
+    hence thesis;
   end;
   thus F is negative implies (@F.1)`1 = 1
   proof
@@ -1196,7 +1206,7 @@ A1: F = P!ll by Def17;
     then consider p being Element of QC-WFF such that
 A2: F = 'not' p by Def18;
     @F.1 = [1, 0] by A2,FINSEQ_1:58;
-    hence (@F.1)`1 = 1 by MCART_1:7;
+    hence thesis by MCART_1:7;
   end;
   thus F is conjunctive implies (@F.1)`1 = 2
   proof
@@ -1205,7 +1215,7 @@ A2: F = 'not' p by Def18;
 A3: F = p '&' q by Def19;
     @F = <*[2, 0]*>^(@p^@q) by A3,FINSEQ_1:45;
     then @F.1 = [2, 0] by FINSEQ_1:58;
-    hence (@F.1)`1 = 2 by MCART_1:7;
+    hence thesis by MCART_1:7;
   end;
   thus F is universal implies (@F.1)`1 = 3
   proof
@@ -1215,7 +1225,7 @@ A3: F = p '&' q by Def19;
 A4: F = All(x, p) by Def20;
     @F = <*[3, 0]*>^(<*x*>^@p) by A4,FINSEQ_1:45;
     then @F.1 = [3, 0] by FINSEQ_1:58;
-    hence (@F.1)`1 = 3 by MCART_1:7;
+    hence thesis by MCART_1:7;
   end;
 end;
 
@@ -1325,8 +1335,7 @@ A10:      len @p = n+1 & p is universal;
           thus Pfgp[y, F, p] by A10,Th51;
         end;
       end;
-      hence ex y being Element of D() st (len @p <> n+1 implies y = F.p) &
-      (len @p = n+1 implies Pfgp[y, F, p]);
+      hence thesis;
     end;
     consider G being Function of QC-WFF, D() such that
 A11: for p being Element of QC-WFF holds R[p,G.p] from FUNCT_2:sch 3 (A5);
@@ -1494,7 +1503,7 @@ A51:    len @p <= len @x';
       end;
     end;
     for p being Element of QC-WFF holds Prop[p] from QCInd2 (A38);
-    hence F.x = G.x';
+    hence thesis;
   end;
   consider F being Function such that
 A52: dom F = QC-WFF and
@@ -1513,7 +1522,7 @@ A56: for g being Function of QC-WFF, D() st
     consider G being Function of QC-WFF, D() such that
 A57: Pfn[G, len @p qua Element of NAT] by A28;
     y = G.p by A56,A57;
-    hence y in D();
+    hence thesis;
   end;
 
 then reconsider F as Function of QC-WFF, D() by A52,FUNCT_2:def 1,RELSET_1:11;

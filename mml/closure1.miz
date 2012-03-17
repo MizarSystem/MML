@@ -8,21 +8,22 @@
 environ
 
  vocabularies PBOOLE, FUNCT_1, PRALG_1, ZF_REFLE, RELAT_1, FUNCT_4, CAT_1,
-      FINSEQ_4, BOOLE, FUNCT_6, MSUALG_3, MATRIX_1, PRE_CIRC, CAT_4, RELAT_2,
-      MSAFREE2, BINOP_1, FUNCOP_1, FINSET_1, MSUALG_1, MSSUBFAM, GRCAT_1,
-      COHSP_1, MSUALG_2, SETFAM_1, CANTOR_1, CLOSURE1;
+      FINSEQ_4, BOOLE, FUNCT_6, MSUALG_3, MATRIX_1, CARD_FIN, CAT_4, RELAT_2,
+      MSAFREE2, BINOP_1, FUNCOP_1, MSUALG_1, MSSUBFAM, GRCAT_1, COHSP_1,
+      MSUALG_2, SETFAM_1, CANTOR_1, CLOSURE1, PARTFUN1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, SETFAM_1, RELAT_1,
-      FUNCT_1, FUNCT_2, FUNCOP_1, FINSET_1, FUNCT_4, PBOOLE, MSUALG_1,
-      MSUALG_3, PRALG_1, PRE_CIRC, MSSUBFAM;
- constructors SETFAM_1, PRE_CIRC, PZFMISC1, MSSUBFAM, PRALG_1, MSUALG_3;
+      FUNCT_1, FINSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, FUNCT_4, PBOOLE, FUNCT_6,
+      MSUALG_1, MSUALG_3, PRALG_1, MSSUBFAM;
+ constructors SETFAM_1, PZFMISC1, MSSUBFAM, PRALG_1, MSUALG_3,
+      RELSET_1, FUNCT_4, FUNCT_6;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FUNCOP_1, FINSET_1,
-      PBOOLE, MSSUBFAM, MSUALG_1, RELAT_1;
+      PBOOLE, MSSUBFAM, MSUALG_1, RELAT_1, PRE_CIRC, PRALG_1;
  requirements SUBSET, BOOLE;
- definitions XBOOLE_0, FUNCT_1, MSSUBFAM, MSUALG_1, MSUALG_3, PBOOLE, PRE_CIRC,
+ definitions XBOOLE_0, FUNCT_1, MSSUBFAM, MSUALG_1, MSUALG_3, PBOOLE, FINSET_1,
       TARSKI, FUNCOP_1;
  theorems FUNCOP_1, FUNCT_1, FUNCT_2, FUNCT_4, MBOOLEAN, MSSUBFAM, MSUALG_1,
       MSUALG_3, PBOOLE, PZFMISC1, TARSKI, ZFMISC_1, PRALG_1, XBOOLE_0,
-      XBOOLE_1;
+      XBOOLE_1, PARTFUN1, RELAT_1;
  schemes MSSUBFAM, PBOOLE, XBOOLE_0;
 
 begin  :: Preliminaries
@@ -46,7 +47,8 @@ A3: i in I();
   let x such that
 A4: x in A().i;
   dom (K +* (i .--> x)) = I() by A3,PZFMISC1:1;
-  then reconsider X = K +* (i .--> x) as ManySortedSet of I() by PBOOLE:def 3;
+  then reconsider X = K +* (i .--> x) as ManySortedSet of I() by PARTFUN1:def 4
+,RELAT_1:def 18;
 A5: dom (i .--> x) = {i} by FUNCOP_1:19;
   i in {i} by TARSKI:def 1;
   then
@@ -58,16 +60,16 @@ A6: X.i = (i .--> x).i by A5,FUNCT_4:14
 A7: s in I();
     per cases;
     suppose s = i;
-      hence X.s in A().s by A4,A6;
+      hence thesis by A4,A6;
     end;
     suppose s <> i;
       then not s in dom (i .--> x) by A5,TARSKI:def 1;
       then X.s = K.s by FUNCT_4:12;
-      hence X.s in A().s by A2,A7,PBOOLE:def 4;
+      hence thesis by A2,A7,PBOOLE:def 4;
     end;
   end;
   then X in B() by A1;
-  hence x in B().i by A3,A6,PBOOLE:def 4;
+  hence thesis by A3,A6,PBOOLE:def 4;
 end;
 
 theorem Th1:
@@ -82,7 +84,7 @@ A1: x c= y;
   then consider b be Element of X such that
 A2: b = a & y c= b;
   x c= a by A1,A2,XBOOLE_1:1;
-  hence a in { z where z is Element of X : x c= z } by A2;
+  hence thesis by A2;
 end;
 
 theorem
@@ -95,14 +97,10 @@ A1: A in M;
   hence thesis by A1,PBOOLE:def 4;
 end;
 
-definition
+registration
   let I, F, A;
-  redefine func F..A -> ManySortedSet of I;
-  coherence
-  proof
-    dom (F..A) = I by PBOOLE:def 3;
-    hence thesis;
-  end;
+  cluster F..A -> total (I-defined Function);
+  coherence;
 end;
 
 Lm1: now
@@ -114,14 +112,14 @@ Lm1: now
   proof
     let i such that
 A1: i in I;
-A2: dom F = I by PBOOLE:def 3;
+A2: dom F = I by PARTFUN1:def 4;
     reconsider g = F.i as Function;
 A3: g is Function of A.i, B.i by A1,PBOOLE:def 18;
 A4: A.i <> {} by A1;
 A5: B.i <> {} by A1;
     X.i is Element of A.i by A1,PBOOLE:def 17;
     then g.(X.i) in B.i by A3,A4,A5,FUNCT_2:7;
-    hence (F..X).i is Element of B.i by A1,A2,PRALG_1:def 17;
+    hence thesis by A1,A2,PRALG_1:def 17;
   end;
 end;
 
@@ -144,13 +142,13 @@ proof
 A1: X in A;
   let i be set such that
 A2: i in I;
-A3: dom F = I by PBOOLE:def 3;
+A3: dom F = I by PARTFUN1:def 4;
   reconsider g = F.i as Function;
 A4: g is Function of A.i, B.i by A2,PBOOLE:def 18;
 A5: B.i <> {} by A2;
   X.i in A.i by A1,A2,PBOOLE:def 4;
   then g.(X.i) in B.i by A4,A5,FUNCT_2:7;
-  hence (F..X).i in B.i by A2,A3,PRALG_1:def 17;
+  hence thesis by A2,A3,PRALG_1:def 17;
 end;
 
 theorem Th4:
@@ -160,10 +158,10 @@ proof
   let F, G be ManySortedFunction of I;
   let A be ManySortedSet of I such that
 A1: A in doms G;
-A2: dom F = I by PBOOLE:def 3;
-A3: dom G = I by PBOOLE:def 3;
+A2: dom F = I by PARTFUN1:def 4;
+A3: dom G = I by PARTFUN1:def 4;
   reconsider FG = F ** G as ManySortedFunction of I by MSSUBFAM:15;
-A4: dom FG = I by PBOOLE:def 3;
+A4: dom FG = I by PARTFUN1:def 4;
 A5: FG..A is ManySortedSet of I;
   now
     let i;
@@ -197,7 +195,7 @@ A3: F..A = F..B;
   now
     let i such that
 A4: i in I;
-A5: dom F = I by PBOOLE:def 3;
+A5: dom F = I by PARTFUN1:def 4;
     reconsider f = F.i as Function;
 A6: f is one-to-one by A1,A4,MSUALG_3:1;
     dom f = (doms F).i by A4,MSSUBFAM:14;
@@ -227,16 +225,18 @@ A5: F.i = f;
   let x1, x2 be set such that
 A6: x1 in dom f & x2 in dom f and
 A7: f.x1 = f.x2;
-A8: dom F = I by PBOOLE:def 3;
+A8: dom F = I by PARTFUN1:def 4;
   then dom (K +* (i .--> x1)) = I by A4,PZFMISC1:1;
-  then reconsider X1 = K +* (i .--> x1) as ManySortedSet of I by PBOOLE:def 3;
+  then reconsider X1 = K +* (i .--> x1) as ManySortedSet of I by PARTFUN1:def 4
+,RELAT_1:def 18;
 A9: dom (i .--> x1) = {i} by FUNCOP_1:19;
   i in {i} by TARSKI:def 1;
   then
 A10: X1.i = (i .--> x1).i by A9,FUNCT_4:14
     .= x1 by FUNCOP_1:87;
   dom (K +* (i .--> x2)) = I by A4,A8,PZFMISC1:1;
-  then reconsider X2 = K +* (i .--> x2) as ManySortedSet of I by PBOOLE:def 3;
+  then reconsider X2 = K +* (i .--> x2) as ManySortedSet of I by PARTFUN1:def 4
+,RELAT_1:def 18;
 A11: dom (i .--> x2) = {i} by FUNCOP_1:19;
   i in {i} by TARSKI:def 1;
   then
@@ -248,12 +248,12 @@ A13: X1 in doms F
 A14: s in I;
     per cases;
     suppose s = i;
-      hence X1.s in (doms F).s by A5,A6,A10,A14,MSSUBFAM:14;
+      hence thesis by A5,A6,A10,A14,MSSUBFAM:14;
     end;
     suppose s <> i;
       then not s in dom (i .--> x1) by A9,TARSKI:def 1;
       then X1.s = K.s by FUNCT_4:12;
-      hence X1.s in (doms F).s by A3,A14,PBOOLE:def 4;
+      hence thesis by A3,A14,PBOOLE:def 4;
     end;
   end;
 A15: X2 in doms F
@@ -262,12 +262,12 @@ A15: X2 in doms F
 A16: s in I;
     per cases;
     suppose s = i;
-      hence X2.s in (doms F).s by A5,A6,A12,A16,MSSUBFAM:14;
+      hence thesis by A5,A6,A12,A16,MSSUBFAM:14;
     end;
     suppose s <> i;
       then not s in dom (i .--> x2) by A11,TARSKI:def 1;
       then X2.s = K.s by FUNCT_4:12;
-      hence X2.s in (doms F).s by A3,A16,PBOOLE:def 4;
+      hence thesis by A3,A16,PBOOLE:def 4;
     end;
   end;
   now
@@ -293,7 +293,7 @@ A21:  X2.s = K.s by FUNCT_4:12;
     end;
   end;
   then F..X1 = F..X2 by PBOOLE:3;
-  hence x1 = x2 by A2,A10,A12,A13,A15;
+  hence thesis by A2,A10,A12,A13,A15;
 end;
 
 theorem Th7:     :: FUNCT_2:18
@@ -318,7 +318,8 @@ A3:   x in A.i;
 A4:   K in A by PBOOLE:146;
       dom (K +* (i .--> x)) = I by A2,PZFMISC1:1;
 
-then reconsider X = K +* (i .--> x) as ManySortedSet of I by PBOOLE:def 3;
+then reconsider X = K +* (i .--> x) as ManySortedSet of I by PARTFUN1:def 4
+,RELAT_1:def 18;
 A5:   dom (i .--> x) = {i} by FUNCOP_1:19;
       i in {i} by TARSKI:def 1;
       then
@@ -330,18 +331,18 @@ A6:   X.i = (i .--> x).i by A5,FUNCT_4:14
 A7:     s in I;
         per cases;
         suppose s = i;
-          hence X.s in A.s by A3,A6;
+          hence thesis by A3,A6;
         end;
         suppose s <> i;
           then not s in dom (i .--> x) by A5,TARSKI:def 1;
           then X.s = K.s by FUNCT_4:12;
-          hence X.s in A.s by A4,A7,PBOOLE:def 4;
+          hence thesis by A4,A7,PBOOLE:def 4;
         end;
       end;
       then
 A8:   F..X = G..X by A1;
-A9:   dom F = I by PBOOLE:def 3;
-A10:  dom G = I by PBOOLE:def 3;
+A9:   dom F = I by PARTFUN1:def 4;
+A10:  dom G = I by PARTFUN1:def 4;
       thus f.x = (F..X).i by A2,A6,A9,PRALG_1:def 17
         .= g.x by A2,A6,A8,A10,PRALG_1:def 17;
     end;
@@ -352,7 +353,7 @@ end;
 
 registration
   let I, M;
-  cluster empty-yielding locally-finite Element of bool M;
+  cluster empty-yielding finite-yielding Element of bool M;
   existence
   proof
     [0]I c= M by MBOOLEAN:5;
@@ -403,7 +404,7 @@ proof
   let M be non-empty ManySortedSet of I;
   let X be Element of M;
   set F = id M;
-A1: dom F = I by PBOOLE:def 3;
+A1: dom F = I by PARTFUN1:def 4;
   now
     let i;
     assume
@@ -447,7 +448,7 @@ end;
 theorem
   for X being Element of bool M
   for i, x being set st i in I & x in ((id (bool M))..X).i
-  ex Y being locally-finite Element of bool M st
+  ex Y being finite-yielding Element of bool M st
   Y c= X & x in ((id (bool M))..Y).i
 proof
   let X be Element of bool M, i, x be set such that
@@ -461,7 +462,7 @@ A4: X.i c= M.i by A1,PBOOLE:def 5;
 A5: dom (i .--> {x}) = {i} by FUNCOP_1:19;
   set Y = (I --> {}) +* (i.-->{x});
   dom Y = I by A1,PZFMISC1:1;
-  then reconsider Y as ManySortedSet of I by PBOOLE:def 3;
+  then reconsider Y as ManySortedSet of I by PARTFUN1:def 4,RELAT_1:def 18;
   i in {i} by TARSKI:def 1;
   then
 A6: Y.i = (i .--> {x}).i by A5,FUNCT_4:14
@@ -474,36 +475,36 @@ A7: j in I;
       case
 A8:     j = i;
         then {x} c= M.j by A3,A4,ZFMISC_1:37;
-        hence Y.j is Element of (bool M).j by A6,A7,A8,MBOOLEAN:def 1;
+        hence thesis by A6,A7,A8,MBOOLEAN:def 1;
       end;
       case j <> i;
         then not j in dom (i .--> {x}) by A5,TARSKI:def 1;
         then Y.j = (I --> {}).j by FUNCT_4:12;
         then Y.j = {} by A7,FUNCOP_1:13;
         then Y.j c= M.j by XBOOLE_1:2;
-        hence Y.j is Element of (bool M).j by A7,MBOOLEAN:def 1;
+        hence thesis by A7,MBOOLEAN:def 1;
       end;
     end;
-    hence Y.j is Element of (bool M).j;
+    hence thesis;
   end;
   then reconsider Y as Element of bool M;
-  Y is locally-finite
+  Y is finite-yielding
   proof
     let j be set such that
 A9: j in I;
     now per cases;
       case j = i;
-        hence Y.j is finite by A6;
+        hence thesis by A6;
       end;
       case j <> i;
         then not j in dom (i .--> {x}) by A5,TARSKI:def 1;
         then Y.j = (I --> {}).j by FUNCT_4:12;
-        hence Y.j is finite by A9,FUNCOP_1:13;
+        hence thesis by A9,FUNCOP_1:13;
       end;
     end;
-    hence Y.j is finite;
+    hence thesis;
   end;
-  then reconsider Y as locally-finite Element of bool M;
+  then reconsider Y as finite-yielding Element of bool M;
   take Y;
   thus Y c= X
   proof
@@ -511,19 +512,19 @@ A9: j in I;
 A10: j in I;
     now per cases;
       case j = i;
-        hence Y.j c= X.j by A3,A6,ZFMISC_1:37;
+        hence thesis by A3,A6,ZFMISC_1:37;
       end;
       case j <> i;
         then not j in dom (i .--> {x}) by A5,TARSKI:def 1;
         then Y.j = (I --> {}).j by FUNCT_4:12;
         then Y.j = {} by A10,FUNCOP_1:13;
-        hence Y.j c= X.j by XBOOLE_1:2;
+        hence thesis by XBOOLE_1:2;
       end;
     end;
-    hence Y.j c= X.j;
+    hence thesis;
   end;
   x in Y.i by A6,TARSKI:def 1;
-  hence x in ((id (bool M))..Y).i by Th8;
+  hence thesis by Th8;
 end;
 
 registration
@@ -627,7 +628,7 @@ A1: E = M;
   assume P is reflexive;
   hence E c= P..E by Def2;
   P..E in bool E by A1,MSSUBFAM:12;
-  hence P..E c= E by MBOOLEAN:19;
+  hence thesis by MBOOLEAN:19;
 end;
 
 theorem
@@ -639,7 +640,7 @@ A1: P is reflexive and
 A2: for X being Element of bool M holds P..X c= X;
   let X be Element of bool M;
   thus P..X c= P..(P..X) by A1,Def2;
-  thus P..(P..X) c= P..X by A2;
+  thus thesis by A2;
 end;
 
 theorem
@@ -658,7 +659,7 @@ A2: E /\ T is Element of bool M by MSSUBFAM:11;
 A3: P..(E /\ T) c= P..E by A1,A2,Def3;
   E /\ T c= T by PBOOLE:17;
   then P..(E /\ T) c= P..T by A1,A2,Def3;
-  hence P..(E /\ T) c= P..E /\ P..T by A3,PBOOLE:19;
+  hence thesis by A3,PBOOLE:19;
 end;
 
 registration
@@ -672,7 +673,7 @@ A1: P is topological;
 A2: X c= Y;
     P..X \/ P..Y = P..(X \/ Y) by A1,Def5
       .= P..Y by A2,PBOOLE:24;
-    hence P..X c= P..Y by PBOOLE:28;
+    hence thesis by PBOOLE:28;
   end;
 end;
 
@@ -719,7 +720,7 @@ A3: doms R = bool M by MSSUBFAM:17;
 A4: X c= R..X by A2,Def2;
   R..X c= P..(R..X) by A1,Def2;
   then X c= P..(R..X) by A4,PBOOLE:15;
-  hence X c= (P**R)..X by A3,Th4,MSSUBFAM:12;
+  hence thesis by A3,Th4,MSSUBFAM:12;
 end;
 
 theorem
@@ -734,7 +735,7 @@ A4: doms R = bool M by MSSUBFAM:17;
   R..X c= R..Y by A2,A3,Def3;
   then P..(R..X) c= P..(R..Y) by A1,Def3;
   then P..(R..X) c= (P**R)..Y by A4,Th4,MSSUBFAM:12;
-  hence (P**R)..X c= (P**R)..Y by A4,Th4,MSSUBFAM:12;
+  hence thesis by A4,Th4,MSSUBFAM:12;
 end;
 
 theorem
@@ -795,15 +796,15 @@ A5: a.i = (i .--> b).i by A1,A3,FUNCT_4:14
       case
 A6:     j = i;
         then b in bool (M.j);
-        hence a.j in (bool M).j by A4,A5,A6,MBOOLEAN:def 1;
+        hence thesis by A4,A5,A6,MBOOLEAN:def 1;
       end;
       case j <> i;
         then not j in dom (i .--> b) by A3,TARSKI:def 1;
         then a.j = [0]I.j by A1,FUNCT_4:12;
-        hence a.j in (bool M).j by A2,A4,PBOOLE:def 4;
+        hence thesis by A2,A4,PBOOLE:def 4;
       end;
     end;
-    hence a.j in (bool M).j;
+    hence thesis;
   end;
 end;
 
@@ -817,17 +818,18 @@ A2: i in I and
 A3: f = P.i;
   let x be Element of bool (M.i);
   dom ([0]I +* (i .--> x)) = I by A2,PZFMISC1:1;
-  then reconsider X = [0]I +* (i .--> x) as ManySortedSet of I by PBOOLE:def 3;
+  then reconsider X = [0]I +* (i .--> x) as ManySortedSet of I by
+PARTFUN1:def 4,RELAT_1:def 18;
 A4: dom (i .--> x) = {i} by FUNCOP_1:19;
   i in {i} by TARSKI:def 1;
   then
 A5: X.i = (i .--> x).i by A4,FUNCT_4:14
     .= x by FUNCOP_1:87;
 A6: X is Element of bool M by A2,Lm2,MSSUBFAM:11;
-A7: i in dom P by A2,PBOOLE:def 3;
+A7: i in dom P by A2,PARTFUN1:def 4;
   X c= P..X by A1,A6,Def2;
   then X.i c= (P..X).i by A2,PBOOLE:def 5;
-  hence x c= f.x by A3,A5,A7,PRALG_1:def 17;
+  hence thesis by A3,A5,A7,PRALG_1:def 17;
 end;
 
 theorem Th25:
@@ -841,9 +843,11 @@ A3: f = P.i;
   let x, y be Element of bool (M.i) such that
 A4: x c= y;
   dom ([0]I +* (i .--> x)) = I by A2,PZFMISC1:1;
-  then reconsider X = [0]I +* (i .--> x) as ManySortedSet of I by PBOOLE:def 3;
+  then reconsider X = [0]I +* (i .--> x) as ManySortedSet of I by
+PARTFUN1:def 4,RELAT_1:def 18;
   dom ([0]I +* (i .--> y)) = I by A2,PZFMISC1:1;
-  then reconsider Y = [0]I +* (i .--> y) as ManySortedSet of I by PBOOLE:def 3;
+  then reconsider Y = [0]I +* (i .--> y) as ManySortedSet of I by
+PARTFUN1:def 4,RELAT_1:def 18;
 A5: dom (i .--> x) = {i} by FUNCOP_1:19;
 A6: i in {i} by TARSKI:def 1;
   then
@@ -854,13 +858,13 @@ A8: dom (i .--> y) = {i} by FUNCOP_1:19;
 A9: Y.i = (i .--> y).i by A6,FUNCT_4:14
     .= y by FUNCOP_1:87;
 A10: X is Element of bool M & Y is Element of bool M by A2,Lm2,MSSUBFAM:11;
-A11: i in dom P by A2,PBOOLE:def 3;
+A11: i in dom P by A2,PARTFUN1:def 4;
   X c= Y
   proof
     let s be set such that s in I;
     per cases;
     suppose s = i;
-      hence X.s c= Y.s by A4,A7,A9;
+      hence thesis by A4,A7,A9;
     end;
     suppose
 A12:  s <> i;
@@ -868,13 +872,13 @@ A12:  s <> i;
       then
 A13:  X.s = [0]I.s by FUNCT_4:12;
       not s in dom (i .--> y) by A8,A12,TARSKI:def 1;
-      hence X.s c= Y.s by A13,FUNCT_4:12;
+      hence thesis by A13,FUNCT_4:12;
     end;
   end;
   then P..X c= P..Y by A1,A10,Def3;
   then (P..X).i c= (P..Y).i by A2,PBOOLE:def 5;
   then f.(X.i) c= (P..Y).i by A3,A11,PRALG_1:def 17;
-  hence f.x c= f.y by A3,A7,A9,A11,PRALG_1:def 17;
+  hence thesis by A3,A7,A9,A11,PRALG_1:def 17;
 end;
 
 theorem Th26:
@@ -887,14 +891,15 @@ A2: i in I and
 A3: f = P.i;
   let x be Element of bool (M.i);
   dom ([0]I +* (i .--> x)) = I by A2,PZFMISC1:1;
-  then reconsider X = [0]I +* (i .--> x) as ManySortedSet of I by PBOOLE:def 3;
+  then reconsider X = [0]I +* (i .--> x) as ManySortedSet of I by
+PARTFUN1:def 4,RELAT_1:def 18;
 A4: dom (i .--> x) = {i} by FUNCOP_1:19;
   i in {i} by TARSKI:def 1;
   then
 A5: X.i = (i .--> x).i by A4,FUNCT_4:14
     .= x by FUNCOP_1:87;
 A6: X is Element of bool M by A2,Lm2,MSSUBFAM:11;
-A7: i in dom P by A2,PBOOLE:def 3;
+A7: i in dom P by A2,PARTFUN1:def 4;
   hence f.x = (P..X).i by A3,A5,PRALG_1:def 17
     .= (P..(P..X)).i by A1,A6,Def4
     .= f.((P..X).i) by A3,A7,PRALG_1:def 17
@@ -911,9 +916,11 @@ A2: i in I and
 A3: f = P.i;
   let x, y be Element of bool (M.i);
   dom ([0]I +* (i .--> x)) = I by A2,PZFMISC1:1;
-  then reconsider X = [0]I +* (i .--> x) as ManySortedSet of I by PBOOLE:def 3;
+  then reconsider X = [0]I +* (i .--> x) as ManySortedSet of I by
+PARTFUN1:def 4,RELAT_1:def 18;
   dom ([0]I +* (i .--> y)) = I by A2,PZFMISC1:1;
-  then reconsider Y = [0]I +* (i .--> y) as ManySortedSet of I by PBOOLE:def 3;
+  then reconsider Y = [0]I +* (i .--> y) as ManySortedSet of I by
+PARTFUN1:def 4,RELAT_1:def 18;
 A4: dom (i .--> x) = {i} by FUNCOP_1:19;
 A5: i in {i} by TARSKI:def 1;
   then
@@ -924,7 +931,7 @@ A6: X.i = (i .--> x).i by A4,FUNCT_4:14
 A7: Y.i = (i .--> y).i by A5,FUNCT_4:14
     .= y by FUNCOP_1:87;
 A8: X is Element of bool M & Y is Element of bool M by A2,Lm2,MSSUBFAM:11;
-A9: i in dom P by A2,PBOOLE:def 3;
+A9: i in dom P by A2,PARTFUN1:def 4;
   thus f.(x \/ y) = f.((X \/ Y).i) by A2,A6,A7,PBOOLE:def 7
     .= (P..(X \/ Y)).i by A3,A9,PRALG_1:def 17
     .= ((P..X) \/ (P..Y)).i by A1,A8,Def5
@@ -1198,7 +1205,7 @@ A3: for i st i in I holds P[i,A.i] from PBOOLE:sch 3(A1);
 A4:   i in I;
       let x;
       assume x in A.i;
-      hence x in M.i by A3,A4;
+      hence thesis by A3,A4;
     end;
     then reconsider A as ManySortedSubset of M;
     take A;
@@ -1214,7 +1221,7 @@ A5:   i in I;
 A6:   f = F.i & x in dom f & f.x = x;
       doms F = M by MSSUBFAM:17;
       then dom f = M.i by A5,A6,MSSUBFAM:14;
-      hence x in A.i by A3,A5,A6;
+      hence thesis by A3,A5,A6;
     end;
   end;
   uniqueness
@@ -1234,12 +1241,12 @@ A9:   i in I;
           let x;
           assume x in A.i;
           then ex f being Function st f = F.i & x in dom f & f.x = x by A7,A9;
-          hence x in B.i by A8,A9;
+          hence thesis by A8,A9;
         end;
         let x;
         assume x in B.i;
         then ex f being Function st f = F.i & x in dom f & f.x = x by A8,A9;
-        hence x in A.i by A7,A9;
+        hence thesis by A7,A9;
       end;
     end;
     hence A = B by PBOOLE:3;
@@ -1284,9 +1291,9 @@ A3: i in I;
     then M.i = dom f by A3,MSSUBFAM:14;
     then
 A4: A.i in dom f by A1,A3,PBOOLE:def 4;
-    i in dom F by A3,PBOOLE:def 3;
+    i in dom F by A3,PARTFUN1:def 4;
     then f.(A.i) = A.i by A2,PRALG_1:def 17;
-    hence A.i in (MSFixPoints F).i by A3,A4,Def13;
+    hence thesis by A3,A4,Def13;
   end;
   assume
 A5: A in MSFixPoints F;
@@ -1299,7 +1306,7 @@ A6: i in I;
     then consider f being Function such that
 A7: f = F.i & A.i in dom f & f.(A.i) = A.i by A6,Def13;
     M = doms F by MSSUBFAM:17;
-    hence A.i in M.i by A6,A7,MSSUBFAM:14;
+    hence thesis by A6,A7,MSSUBFAM:14;
   end;
   now
     let i;
@@ -1308,7 +1315,7 @@ A8: i in I;
     then A.i in (MSFixPoints F).i by A5,PBOOLE:def 4;
     then consider f being Function such that
 A9: f = F.i & A.i in dom f & f.(A.i) = A.i by A8,Def13;
-    i in dom F by A8,PBOOLE:def 3;
+    i in dom F by A8,PARTFUN1:def 4;
     hence (F..A).i = A.i by A9,PRALG_1:def 17;
   end;
   hence thesis by PBOOLE:3;
@@ -1329,7 +1336,7 @@ A1: i in I;
         then consider f being Function such that
 A2:     f = (id A).i & x in dom f & f.x = x by A1,Def13;
         f is Function of A.i, A.i by A1,A2,PBOOLE:def 18;
-        hence x in A.i by A2,FUNCT_2:67;
+        hence thesis by A2,FUNCT_2:67;
       end;
       let x be set such that
 A3:   x in A.i;
@@ -1373,7 +1380,7 @@ A4:       i in the carrier of S;
           by PBOOLE:def 18;
           consider Q being Subset-Family of A.i such that
 A5:       Q = F.i & (meet F).i = Intersect Q by A4,MSSUBFAM:def 2;
-A6:       i in dom J by A4,PBOOLE:def 3;
+A6:       i in dom J by A4,PARTFUN1:def 4;
           (bool A).i = bool (A.i) by A4,MBOOLEAN:def 1;
           then
 A7:       j.(Intersect Q) in bool (A.i) by FUNCT_2:7;
@@ -1386,12 +1393,12 @@ A9:         jj = J.i & x in dom jj & jj.x = x by A1,A4,A8,Def13;
             thus j.(Intersect Q) c= x by A4,A8,A9,Th25,MSSUBFAM:2;
           end;
           then j.(Intersect Q) c= Intersect Q by A7,MSSUBFAM:4;
-          hence (J..(meet F)).i c= (meet F).i by A5,A6,PRALG_1:def 17;
+          hence thesis by A5,A6,PRALG_1:def 17;
         end;
         meet F is Element of bool A by A3,MSSUBFAM:11;
-        hence meet F c= J..(meet F) by Def2;
+        hence thesis by Def2;
       end;
-      hence meet F in D by A1,A3,Th28;
+      hence thesis by A1,A3,Th28;
     end;
     hence the Family of CS is absolutely-multiplicative;
   end;
@@ -1424,7 +1431,7 @@ A4: D.i c= bool (M.i) by A3,MBOOLEAN:def 1;
         let x;
         assume x in SF.i;
         then x in D.i by A2,A3;
-        hence x in bool (M.i) by A4;
+        hence thesis by A4;
       end;
       hence thesis by A3,MBOOLEAN:def 1;
     end;
@@ -1441,7 +1448,7 @@ A5: i in I;
 A6: X.i c= M.i by A5,PBOOLE:def 5;
     M in D by MSSUBFAM:def 7;
     then M.i in D.i by A5,PBOOLE:def 4;
-    hence SF.i is non empty by A2,A5,A6;
+    hence thesis by A2,A5,A6;
   end;
   then reconsider SF as non-empty MSSubsetFamily of M;
   take SF;
@@ -1496,7 +1503,8 @@ A4: x in SF.i;
     consider K be ManySortedSet of I such that
 A5: K in SF by PBOOLE:146;
     dom (K +* (i .--> x)) = I by A2,PZFMISC1:1;
-    then reconsider L = K +* (i .--> x) as ManySortedSet of I by PBOOLE:def 3;
+    then reconsider L = K +* (i .--> x) as ManySortedSet of I by PARTFUN1:def 4
+,RELAT_1:def 18;
 A6: dom (i .--> x) = {i} by FUNCOP_1:19;
     i in {i} by TARSKI:def 1;
     then
@@ -1508,12 +1516,12 @@ A7: L.i = (i .--> x).i by A6,FUNCT_4:14
 A8:   s in I;
       per cases;
       suppose s = i;
-        hence L.s in SF.s by A4,A7;
+        hence thesis by A4,A7;
       end;
       suppose s <> i;
         then not s in dom (i .--> x) by A6,TARSKI:def 1;
         then L.s = K.s by FUNCT_4:12;
-        hence L.s in SF.s by A5,A8,PBOOLE:def 4;
+        hence thesis by A5,A8,PBOOLE:def 4;
       end;
     end;
     then L in D & X c= L by A1;
@@ -1526,7 +1534,8 @@ A8:   s in I;
 A9: g = x & X.i c= g;
 A10: M in D by MSSUBFAM:def 7;
   dom (M +* (i .--> g)) = I by A2,PZFMISC1:1;
-  then reconsider L1 = M +* (i .--> g) as ManySortedSet of I by PBOOLE:def 3;
+  then reconsider L1 = M +* (i .--> g) as ManySortedSet of I by PARTFUN1:def 4
+,RELAT_1:def 18;
 A11: dom (i .--> g) = {i} by FUNCOP_1:19;
   i in {i} by TARSKI:def 1;
   then
@@ -1538,12 +1547,12 @@ A13: L1 in D
 A14: s in I;
     per cases;
     suppose s = i;
-      hence L1.s in D.s by A3,A12;
+      hence thesis by A3,A12;
     end;
     suppose s <> i;
       then not s in dom (i .--> g) by A11,TARSKI:def 1;
       then L1.s = M.s by FUNCT_4:12;
-      hence L1.s in D.s by A10,A14,PBOOLE:def 4;
+      hence thesis by A10,A14,PBOOLE:def 4;
     end;
   end;
   X c= L1
@@ -1552,7 +1561,7 @@ A14: s in I;
 A15: s in I;
     per cases;
     suppose s = i;
-      hence X.s c= L1.s by A9,A12;
+      hence thesis by A9,A12;
     end;
     suppose s <> i;
       then not s in dom (i .--> g) by A11,TARSKI:def 1;
@@ -1560,11 +1569,11 @@ A15: s in I;
 A16:  L1.s = M.s by FUNCT_4:12;
       X in bool M by MSSUBFAM:12;
       then X c= M by MBOOLEAN:19;
-      hence X.s c= L1.s by A15,A16,PBOOLE:def 5;
+      hence thesis by A15,A16,PBOOLE:def 5;
     end;
   end;
   then L1 in SF by A1,A13;
-  hence x in SF.i by A2,A9,A12,PBOOLE:def 4;
+  hence thesis by A2,A9,A12,PBOOLE:def 4;
 end;
 
 theorem Th33:
@@ -1587,7 +1596,8 @@ A3: x in G.i;
     consider K being ManySortedSet of I such that
 A4: K in G by PBOOLE:146;
     dom (K +* (i .--> x)) = I by A2,PZFMISC1:1;
-    then reconsider X = K +* (i .--> x) as ManySortedSet of I by PBOOLE:def 3;
+    then reconsider X = K +* (i .--> x) as ManySortedSet of I by PARTFUN1:def 4
+,RELAT_1:def 18;
 A5: dom (i .--> x) = {i} by FUNCOP_1:19;
     i in {i} by TARSKI:def 1;
     then
@@ -1599,12 +1609,12 @@ A7: X is Element of bool M
 A8:   s in I;
       per cases;
       suppose s = i;
-        hence X.s is Element of (bool M).s by A3,A6;
+        hence thesis by A3,A6;
       end;
       suppose s <> i;
         then not s in dom (i .--> x) by A5,TARSKI:def 1;
         then X.s = K.s by FUNCT_4:12;
-        hence X.s is Element of (bool M).s by A4,A8,PBOOLE:def 4;
+        hence thesis by A4,A8,PBOOLE:def 4;
       end;
     end;
     then consider SF being non-empty MSSubsetFamily of M such that
@@ -1612,7 +1622,7 @@ A9: for Y being ManySortedSet of I holds Y in SF iff Y in D & X c= Y by Th31;
     reconsider sf = SF.i as Subset-Family of M.i by A2,MSSUBFAM:32;
     reconsider b = (bool M).i as non empty set by A2;
     reconsider q = Intersect sf as Element of b by A2,MBOOLEAN:def 1;
-    reconsider s = b --> q as Function of b, b by FUNCOP_1:57;
+    reconsider s = b --> q as Function of b, b;
     take y = s.x;
     Intersect sf in bool (M.i);
     then Intersect sf in b by A2,MBOOLEAN:def 1;
@@ -1623,7 +1633,7 @@ A9: for Y being ManySortedSet of I holds Y in SF iff Y in D & X c= Y by Th31;
 A10:  Fi = D.i & sf1 = { z where z is Element of Fi : x c= z };
       reconsider Di = D.i as non empty set by A2;
       SF.i = { z where z is Element of Di : X.i c= z } by A2,A7,A9,Th32;
-      hence y = Intersect sf1 by A3,A6,A10,FUNCOP_1:13;
+      hence thesis by A3,A6,A10,FUNCOP_1:13;
     end;
   end;
   consider J being ManySortedFunction of G, G such that
@@ -1648,11 +1658,11 @@ A18: Q = { z where z is Element of Fi : X.i c= z } by A12,A13,A16,Th32;
     X in G by MSSUBFAM:12;
     then
 A19: X.i in G.i by A13,PBOOLE:def 4;
-    dom J = I by PBOOLE:def 3;
+    dom J = I by PARTFUN1:def 4;
     hence (J..X).i = f.(X.i) by A13,A14,PRALG_1:def 17
       .= (meet SF).i by A15,A17,A18,A19;
   end;
-  hence J..X = meet SF by PBOOLE:3;
+  hence thesis by PBOOLE:3;
 end;
 
 theorem Th34:
@@ -1678,7 +1688,7 @@ A3: for Y being ManySortedSet of I holds Y in SF iff Y in D & A c= Y by Th31;
     hence J..A c= A by A2,A3;
 A4: J..A = meet SF by A2,A3;
     for Z1 being ManySortedSet of I st Z1 in SF holds A c= Z1 by A3;
-    hence A c= J..A by A4,MSSUBFAM:45;
+    hence thesis by A4,MSSUBFAM:45;
   end;
 end;
 
@@ -1727,7 +1737,7 @@ A1: for X being Element of bool M
 A2: for Y being ManySortedSet of I holds Y in SF iff Y in D & X c= Y by Th31;
 A3: J..X = meet SF by A1,A2;
     for Z1 being ManySortedSet of I st Z1 in SF holds X c= Z1 by A2;
-    hence X c= J..X by A3,MSSUBFAM:45;
+    hence thesis by A3,MSSUBFAM:45;
   end;
   thus J is monotonic
   proof
@@ -1750,10 +1760,10 @@ A9:   x.i c= y.i by A4,PBOOLE:def 5;
 A10:  Fi = D.i;
 A11:  SFx.i = { t where t is Element of Fi : x.i c= t } by A5,A8,A10,Th32;
       SFy.i = { z where z is Element of Fi : y.i c= z } by A7,A8,A10,Th32;
-      hence SFy.i c= SFx.i by A9,A11,Th1;
+      hence thesis by A9,A11,Th1;
     end;
     then meet SFx c= meet SFy by MSSUBFAM:46;
-    hence J..x c= J..y by A1,A6,A7;
+    hence thesis by A1,A6,A7;
   end;
 end;
 
@@ -1909,7 +1919,7 @@ A5: for Y being ManySortedSet of I holds
     now
       let i such that
 A6:   i in I;
-A7:   dom J = I by PBOOLE:def 3;
+A7:   dom J = I by PARTFUN1:def 4;
       reconsider f = J.i as Function of (bool A).i, (bool A).i
       by A6,PBOOLE:def 18;
       (bool A).i = bool (A.i) by A6,MBOOLEAN:def 1;
@@ -1949,14 +1959,14 @@ A17:      x1 is Element of bool (A.i) by TARSKI:def 3;
 A18:      g = J.i & x1 in dom g & g.x1 = x1 by A6,Def13;
           thus f.(X.i) c= x by A6,A11,A16,A17,A18,Th25;
         end;
-        hence f.(X.i) c= Intersect Q by A15,MSSUBFAM:5;
+        hence thesis by A15,MSSUBFAM:5;
       end;
       hence (j..X).i = f.(X.i) by A1,A2,A4,A5,A9,Def15
         .= (J..X).i by A6,A7,PRALG_1:def 17;
     end;
     hence thesis by PBOOLE:3;
   end;
-  hence ClSys->ClOp (ClOp->ClSys J) = J by A2,Th7;
+  hence thesis by A2,Th7;
 end;
 
 theorem
@@ -1980,7 +1990,7 @@ A4:   i in I;
 A5:   x in F.i;
       dom (X1 +* (i .--> x)) = I by A4,PZFMISC1:1;
       then reconsider X = X1 +* (i .--> x) as ManySortedSet of I by
-      PBOOLE:def 3;
+PARTFUN1:def 4,RELAT_1:def 18;
 A6:   dom (i .--> x) = {i} by FUNCOP_1:19;
       i in {i} by TARSKI:def 1;
       then
@@ -1997,12 +2007,12 @@ A9:   x in (bool M).i by A5;
 A10:    s in I;
         per cases;
         suppose s = i;
-          hence X.s is Element of (bool M).s by A5,A7,A8;
+          hence thesis by A5,A7,A8;
         end;
         suppose s <> i;
           then not s in dom (i .--> x) by A6,TARSKI:def 1;
           then X.s = X1.s by FUNCT_4:12;
-          hence X.s is Element of (bool M).s by A3,A10,PBOOLE:def 4;
+          hence thesis by A3,A10,PBOOLE:def 4;
         end;
       end;
       then reconsider X as Element of bool M;
@@ -2032,9 +2042,9 @@ A18:      q = Z1 & X.i c= q by A12,A15;
         hence thesis by A17,MSSUBFAM:5;
       end;
 A19:  (ClSys->ClOp D)..X = meet SF by A11,Def15;
-      dom ClSys->ClOp D = I by PBOOLE:def 3;
+      dom ClSys->ClOp D = I by PARTFUN1:def 4;
       then f.x = x by A4,A7,A13,A16,A19,PRALG_1:def 17;
-      hence x in (MSFixPoints (ClSys->ClOp D)).i by A4,A14,Def13;
+      hence thesis by A4,A14,Def13;
     end;
     let i such that
 A20: i in I;
@@ -2044,7 +2054,8 @@ A21: x in (MSFixPoints (ClSys->ClOp D)).i;
     then consider f being Function such that
 A22: f = (ClSys->ClOp D).i & x in dom f & f.x = x by A20,Def13;
     dom (X1 +* (i .--> x)) = I by A20,PZFMISC1:1;
-    then reconsider X = X1 +* (i .--> x) as ManySortedSet of I by PBOOLE:def 3;
+    then reconsider X = X1 +* (i .--> x) as ManySortedSet of I by
+PARTFUN1:def 4,RELAT_1:def 18;
 A23: dom (i .--> x) = {i} by FUNCOP_1:19;
     i in {i} by TARSKI:def 1;
     then
@@ -2059,25 +2070,25 @@ A25: (MSFixPoints (ClSys->ClOp D)).i c= (bool M).i by A20,PBOOLE:def 5;
 A26:  s in I;
       per cases;
       suppose s = i;
-        hence X.s is Element of (bool M).s by A21,A24,A25;
+        hence thesis by A21,A24,A25;
       end;
       suppose s <> i;
         then not s in dom (i .--> x) by A23,TARSKI:def 1;
         then X.s = X1.s by FUNCT_4:12;
-        hence X.s is Element of (bool M).s by A3,A26,PBOOLE:def 4;
+        hence thesis by A3,A26,PBOOLE:def 4;
       end;
     end;
     then reconsider X as Element of bool M;
     consider SF being non-empty MSSubsetFamily of M such that
 A27: for Y being ManySortedSet of I holds Y in SF iff Y in F & X c= Y by Th31;
-A28: dom ClSys->ClOp D = I by PBOOLE:def 3;
+A28: dom ClSys->ClOp D = I by PARTFUN1:def 4;
 A29: (meet SF).i = ((ClSys->ClOp D)..X).i by A27,Def15
       .= x by A20,A22,A24,A28,PRALG_1:def 17;
     defpred P[ManySortedSet of I] means X c= $1;
     (for Y being ManySortedSet of I holds Y in SF iff Y in F & P[Y])
     implies SF c= F from MSSUBSET;
     then meet SF in F by A27,MSSUBFAM:def 6;
-    hence x in F.i by A20,A29,PBOOLE:def 4;
+    hence thesis by A20,A29,PBOOLE:def 4;
   end;
   hence thesis by A1,A2;
 end;

@@ -10,13 +10,14 @@ environ
       BOOLE, ZFMODEL1, RELAT_1, CARD_1, ORDINAL4, PROB_1, CLASSES1, QC_LANG1,
       FUNCT_2, ARYTM_3, ZF_REFLE, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, NAT_1,
-      RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FRAENKEL, ZF_MODEL, ZFMODEL1,
+      RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, ZF_MODEL, ZFMODEL1,
       ORDINAL1, ORDINAL2, CARD_3, CLASSES1, CLASSES2, ZF_LANG, ORDINAL4,
       ZF_LANG1, XXREAL_0;
  constructors ENUMSET1, WELLORD2, XXREAL_0, XREAL_0, NAT_1, CLASSES1, CARD_3,
-      ORDINAL4, ZF_MODEL, ZFMODEL1, ZF_LANG1;
+      ORDINAL4, ZF_MODEL, ZFMODEL1, ZF_LANG1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, ORDINAL2,
-      XREAL_0, CARD_1, CLASSES2, ZF_LANG, ZF_LANG1, CLASSES1;
+      XREAL_0, CARD_1, CLASSES2, ZF_LANG, ZF_LANG1, CLASSES1, ORDINAL4,
+      FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, FUNCT_1, ZF_LANG, ZF_MODEL, WELLORD2, ORDINAL2, RELAT_1,
       XBOOLE_0, ORDINAL1;
@@ -147,19 +148,14 @@ A5: for d being Element of D() ex A st A = F.d & P[d,A] &
 A6: A = F.d & P[d,A] & for B st P[d,B] holds A c= B by A5;
   consider a being Ordinal of W() such that
 A7: P[d,a] by A1;
-  A c= a & a in W() by A6,A7,ORDINAL4:def 2;
+  A c= a & a in W() by A6,A7;
   then A in W() by CLASSES1:def 1;
-  then reconsider a = A as Ordinal of W() by ORDINAL4:def 2;
+  then reconsider a = A as Ordinal of W();
   take a; thus thesis by A6;
 end;
 
 theorem Th8:
-  x is Ordinal of W iff x in On W
-proof
-  (x is Ordinal of W iff x is Ordinal & x in W) &
-  (x in On W iff x is Ordinal & x in W) by ORDINAL1:def 10,ORDINAL4:def 2;
-  hence thesis;
-end;
+  x is Ordinal of W iff x in On W by ORDINAL1:def 10;
 
 reserve psi for Ordinal-Sequence;
 
@@ -167,7 +163,7 @@ scheme OrdSeqOfUnivEx { W()->Universe, P[set,set] }:
   ex phi being Ordinal-Sequence of W() st
   for a being Ordinal of W() holds P[a,phi.a]
 provided
-A1: for a,b1,b2 being Ordinal of W() st P[a,b1] & P[a,b2] holds b1 = b2
+ for a,b1,b2 being Ordinal of W() st P[a,b1] & P[a,b2] holds b1 = b2
 and
 A2: for a being Ordinal of W() ex b being Ordinal of W() st P[a,b]
 proof
@@ -192,16 +188,15 @@ A8: rng phi c= On W()
     assume x in rng phi;
     then ex y st y in dom phi & x = phi.y by FUNCT_1:def 5;
     then reconsider x as Ordinal of W() by A7;
-    x in W() by ORDINAL4:def 2;
+    x in W();
     hence thesis by ORDINAL1:def 10;
   end;
   then reconsider phi as Ordinal-Sequence by ORDINAL2:def 8;
-  reconsider phi as Ordinal-Sequence of W() by A7,A8,ORDINAL4:def 3;
+  reconsider phi as Ordinal-Sequence of W() by A7,A8,RELSET_1:11,FUNCT_2:def 1;
   take phi;
   let a be Ordinal of W();
-  a in W() by ORDINAL4:def 2;
-  then a in On W() by ORDINAL1:def 10;
-  hence P[a,phi.a] by A7;
+  a in On W() by ORDINAL1:def 10;
+  hence thesis by A7;
 end;
 
 scheme UOSExist { W()->Universe, a()->Ordinal of W(),
@@ -242,7 +237,8 @@ A8:   y is limit_ordinal by ORDINAL1:42;
     end;
     hence thesis by A2,A5,A6,Th8;
   end;
-  then reconsider phi as Ordinal-Sequence of W() by A1,ORDINAL4:def 3;
+  then reconsider phi as Ordinal-Sequence of W()
+   by A1,RELSET_1:11,FUNCT_2:def 1;
   take phi;
   0-element_of W() in dom phi by ORDINAL4:36;
   hence phi.0-element_of W() = a() by A1,A2,ORDINAL4:35;
@@ -250,7 +246,7 @@ A8:   y is limit_ordinal by ORDINAL1:42;
   by A1,A3,ORDINAL4:36;
   let a be Ordinal of W();
   a in dom phi & {} = 0-element_of W() by ORDINAL4:35,36;
-  hence thesis by A1,A4;
+  hence thesis by A4;
 end;
 
 scheme UniverseInd { W()->Universe, P[Ordinal] }:
@@ -286,7 +282,7 @@ A10: for B st B in A holds B is Ordinal of W() implies P[B];
     then reconsider a = A as Ordinal of W();
     {} = 0-element_of W() & for b be Ordinal of W() st b in a holds P[b ]
     by A10,ORDINAL4:35;
-    hence P[A] by A3,A9;
+    hence thesis by A3,A9;
   end;
   Q[A] from ORDINAL2:sch 1(A4,A5,A8);
   hence thesis;
@@ -368,7 +364,7 @@ A1: x in On Rank A;
 A2: x is Ordinal & x in Rank A by ORDINAL1:def 10;
     reconsider B = x as Ordinal by A1,ORDINAL1:def 10;
     the_rank_of B in A by A2,CLASSES1:74;
-    hence x in A by CLASSES1:81;
+    hence thesis by CLASSES1:81;
   end;
   On A c= On Rank A by CLASSES1:44,ORDINAL2:11;
   hence thesis by ORDINAL2:10;
@@ -384,7 +380,7 @@ A1: (psi|Rank A)|A = psi|A & dom (psi|Rank A) c= Rank A &
   then On dom (psi|Rank A) c= On Rank A & On dom (psi|Rank A) = dom (psi|
   Rank A) by ORDINAL2:11,ORDINAL3:8;
   then dom (psi|Rank A) c= A by Th14;
-  hence psi|Rank A = psi|A by A1,RELAT_1:97;
+  hence thesis by A1,RELAT_1:97;
 end;
 
 definition
@@ -405,7 +401,7 @@ A1: a in On W & W is Tarski & rng (W|K) c= W & dom (W|K) c= dom K
     then rng (W|K) in W & union rng (W|K) = Union (W|K)
     by A1,CARD_3:def 4,CLASSES1:2;
     then A in W & A = union (phi,a) by CLASSES2:65;
-    hence thesis by ORDINAL4:def 2;
+    hence thesis;
   end;
 end;
 
@@ -416,7 +412,7 @@ theorem Th17:
   union(phi,a) = Union (phi|a) & union(phi|a,a) = Union (phi|a)
 proof
   let phi be Ordinal-Sequence of W;
-  rng phi c= On W & On W c= W by ORDINAL2:9,ORDINAL4:def 3;
+  rng phi c= On W & On W c= W by ORDINAL2:9;
   then rng (phi|Rank a) c= rng phi & rng (phi|a) c= rng phi &
   rng phi c= W by RELAT_1:99,XBOOLE_1:1;
   then rng (phi|Rank a) c= W & rng (phi|a) c= W & a c= Rank a
@@ -481,7 +477,7 @@ A2:   y in dom L & x = L.y by FUNCT_1:def 5;
       then x = D by A1,A2;
       hence thesis;
     end;
-    then reconsider L as T-Sequence of W by ORDINAL1:def 8;
+    then reconsider L as T-Sequence of W by RELAT_1:def 19;
     take L; thus dom L = On W by A1;
     assume {} in rng L;
     then consider x such that
@@ -502,12 +498,11 @@ definition
   let L be DOMAIN-Sequence of W;
   redefine func Union L -> Subclass of W;
   coherence
-  proof rng L c= W & Union L = union rng L by CARD_3:def 4,ORDINAL1:def 8;
+  proof rng L c= W & Union L = union rng L by CARD_3:def 4,RELAT_1:def 19;
     then
 A1: Union L c= union W by ZFMISC_1:95;
     consider a;
-    a in W by ORDINAL4:def 2;
-    then a in On W by ORDINAL1:def 10;
+    a in On W by ORDINAL1:def 10;
     then a in dom L by Def5;
     then L.a in rng L & L.a = L.a by FUNCT_1:def 5;
     then L.a c= union rng L & L.a <> {} by RELAT_1:def 9,ZFMISC_1:92;
@@ -527,10 +522,10 @@ A2:   x in X & X in W by A1,TARSKI:def 4;
   let a;
   func L.a -> non empty Element of W;
   coherence
-  proof a in W by ORDINAL4:def 2;
-    then a in On W by ORDINAL1:def 10;
+  proof
+    a in On W by ORDINAL1:def 10;
     then a in dom L by Def5;
-    then L.a in rng L & rng L c= W by FUNCT_1:def 5,ORDINAL1:def 8;
+    then L.a in rng L & rng L c= W by FUNCT_1:def 5,RELAT_1:def 19;
     hence thesis by RELAT_1:def 9;
   end;
 end;
@@ -543,8 +538,8 @@ canceled 5;
 
 theorem Th23:
   a in dom L
-proof a in W by ORDINAL4:def 2;
-  then a in On W by ORDINAL1:def 10;
+proof
+  a in On W by ORDINAL1:def 10;
   hence thesis by Def5;
 end;
 
@@ -615,8 +610,8 @@ A1: X in W;
   On X c= X by ORDINAL2:9;
   then On X in W by A1,CLASSES1:def 1;
   then a in W by CLASSES2:65;
-  then reconsider a as Ordinal of W by ORDINAL4:def 2;
-  sup X c= succ a & succ a in W by ORDINAL3:85,ORDINAL4:def 2;
+  then reconsider a as Ordinal of W;
+  sup X c= succ a & succ a in W by ORDINAL3:85;
   hence thesis by CLASSES1:def 1;
 end;
 
@@ -645,14 +640,14 @@ A5: H is being_equality or H is being_membership;
 A6: dom id On W = On W & rng id On W = On W by RELAT_1:71;
     then reconsider phi = id On W as T-Sequence by ORDINAL1:def 7;
     reconsider phi as Ordinal-Sequence by A6,ORDINAL2:def 8;
-    reconsider phi as Ordinal-Sequence of W by A6,ORDINAL4:def 3;
+    reconsider phi as Ordinal-Sequence of W by A6,RELSET_1:11,FUNCT_2:def 1;
     take phi; thus
 A7: phi is increasing
     proof
       let A,B;
       assume
 A8:   A in B & B in dom phi;
-      then phi.A = A & phi.B = B by A6,FUNCT_1:35,ORDINAL1:19;
+      then phi.A = A & phi.B = B by FUNCT_1:35,ORDINAL1:19;
       hence thesis by A8;
     end;
     thus phi is continuous
@@ -661,7 +656,7 @@ A8:   A in B & B in dom phi;
       assume
 A9:   A in dom phi & A <> {} & A is limit_ordinal & B = phi.A;
       then
-A10:  phi.A = A & A c= dom phi by A6,FUNCT_1:35,ORDINAL1:def 2;
+A10:  phi.A = A & A c= dom phi by FUNCT_1:35,ORDINAL1:def 2;
       phi|A = phi*(id A) by RELAT_1:94
         .= id((dom phi) /\ A) by A6,FUNCT_1:43
         .= id A by A10,XBOOLE_1:28;
@@ -711,7 +706,7 @@ A21:  H = (Var1 H) 'in' (Var2 H) by ZF_LANG:54;
       then f.Var1 H in f.Var2 H by A17,ZF_MODEL:13;
       hence thesis by A18,A21,ZF_MODEL:13;
     end;
-    hence M,M!f |= H by A5,A19;
+    hence thesis by A5,A19;
   end;
 A22: for H st H is negative & RT[the_argument_of H] holds RT[H]
   proof
@@ -825,14 +820,14 @@ A49:      M,M!f |= H;
           for k st (M!f).k <> (M!f).k holds x0 = k;
           then M,M!f |= H' by A43,A49,ZF_MODEL:16;
           then L.a,f |= H' by A45,A48;
-          hence L.a,f |= H by A43,A47,ZFMODEL1:10;
+          hence thesis by A43,A47,ZFMODEL1:10;
         end;
         assume
 A50:    L.a,f |= H;
         for k st f.k <> f.k holds x0 = k;
         then L.a,f |= H' by A43,A50,ZF_MODEL:16;
         then M,M!f |= H' by A45,A48;
-        hence M,M!f |= H by A43,A47,ZFMODEL1:10;
+        hence thesis by A43,A47,ZFMODEL1:10;
       end;
     end;
     defpred P[set,set] means ex f being Function of VAR,M st $1 = f &
@@ -843,7 +838,7 @@ A51: for h being Element of Funcs(VAR,M) qua non empty set ex a st P[h,a]
     proof
       let h be Element of Funcs(VAR,M) qua non empty set;
       reconsider f = h as Element of Funcs(VAR,M);
-      reconsider f as Function of VAR,M;
+      reconsider f as Function of VAR,M by FUNCT_2:121;
       now per cases;
         suppose for m being Element of M holds not M,f/(x0,m) |= 'not' H';
           hence thesis;
@@ -859,7 +854,7 @@ A54:        m in X & X in rng L by A3,TARSKI:def 4;
 A55:        x in dom L & X = L.x by A54,FUNCT_1:def 5;
             reconsider x as Ordinal by A55;
             x in W by A2,A55,ORDINAL1:def 10;
-            then reconsider b = x as Ordinal of W by ORDINAL4:def 2;
+            then reconsider b = x as Ordinal of W;
             take b, f; thus thesis by A53,A54,A55;
           end;
         end;
@@ -895,7 +890,7 @@ A61:    h in dom rho & h in Funcs(VAR,L.a) & x = rho.h by FUNCT_1:def 12;
         & M,f/(x0,m) |= 'not'
         H') or b = 0-element_of W & not ex m being Element of M
         st M,f/(x0,m) |= 'not' H') holds a c= b by A57;
-        hence x in W by A61,ORDINAL4:def 2;
+        hence thesis by A61;
       end;
       L.a in W & card VAR = card omega & card(L.a) = card(L.a)
       by Th25,CARD_1:21;
@@ -906,7 +901,7 @@ A61:    h in dom rho & h in Funcs(VAR,L.a) & x = rho.h by FUNCT_1:def 12;
       then card X in card W & W is Tarski by ORDINAL1:22;
       then X in W by A60,CLASSES1:2;
       then sup X in W by Th28;
-      then reconsider b = sup X as Ordinal of W by ORDINAL4:def 2;
+      then reconsider b = sup X as Ordinal of W;
       take b; thus thesis;
     end;
     consider si being Ordinal-Sequence of W such that
@@ -918,7 +913,6 @@ A63: ksi.0-element_of W = si.0-element_of W and
 A64: for a holds ksi.(succ a) = C(a,ksi.a) and
 A65: for a st a <> 0-element_of W & a is limit_ordinal
     holds ksi.a = D(a,ksi|a) from UOSExist;
-A66: dom ksi = On W by ORDINAL4:def 3;
 A67: 0-element_of W = {} by ORDINAL4:35;
 A68: ksi is increasing
     proof
@@ -926,7 +920,7 @@ A68: ksi is increasing
       assume
 A69:  A in B & B in dom ksi;
       then A in dom ksi by ORDINAL1:19;
-      then reconsider a = A, b = B as Ordinal of W by A66,A69,Th8;
+      then reconsider a = A, b = B as Ordinal of W by A69,Th8;
       defpred Theta[Ordinal of W] means a in $1 implies ksi.a in ksi.$1;
 A70:  Theta[0-element_of W] by ORDINAL4:35;
 A71:  Theta[c] implies Theta[succ c]
@@ -1076,7 +1070,7 @@ A105:   y in dom v & x = v.y by FUNCT_1:def 5;
         reconsider y as Variable by A103,A105;
         y in Free 'not' H' or not y in Free 'not' H';
         then x = f.y & f.y in L.c or x = e by A102,A103,A105;
-        hence x in L.c;
+        hence thesis;
       end;
       then reconsider v as Function of VAR,L.c by A103,FUNCT_2:def 1
 ,RELSET_1:11;
@@ -1178,7 +1172,7 @@ A124:   x in a & a in On W by A122,Th8;
         then x in On W by ORDINAL1:19;
         then reconsider x as Ordinal of W by Th8;
         si.x = B & si.x c= ksi.x & dom ksi = On W
-        by A119,A122,A123,FUNCT_1:70,ORDINAL4:def 3;
+        by A119,A122,A123,FUNCT_1:70,FUNCT_2:def 1;
         then A c= ksi.x & ksi.x in ksi.a
         by A68,A121,A124,ORDINAL2:def 16,XBOOLE_1:1;
         hence thesis by ORDINAL1:22;
@@ -1190,7 +1184,7 @@ A126: ksi is continuous
       let A,B;
       assume
 A127: A in dom ksi & A <> {} & A is limit_ordinal & B = ksi.A;
-      then reconsider a = A as Ordinal of W by A66,Th8;
+      then reconsider a = A as Ordinal of W by Th8;
       A c= dom ksi by A127,ORDINAL1:def 2;
       then
 A128: dom (ksi|A) = A & ksi|A is increasing by A68,ORDINAL4:15,RELAT_1:91;
@@ -1210,7 +1204,7 @@ A132:   C in X & X in rng (ksi|A) by A130,TARSKI:def 4;
 A133:   rng (ksi|A) c= A1 by ORDINAL2:def 8;
         reconsider X as Ordinal by A132,A133;
         X in sup (ksi|A) by A132,ORDINAL2:27;
-        hence C in sup (ksi|A) by A132,ORDINAL1:19;
+        hence thesis by A132,ORDINAL1:19;
       end;
       sup (ksi|A) c= B
       proof

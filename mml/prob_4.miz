@@ -17,17 +17,18 @@ environ
       PROB_1, PROB_3, MEASURE1, FUNCOP_1, SEQM_3, SERIES_1, RINFSUP1, ZFMISC_1,
       MEASURE6, PROB_2;
  constructors PARTFUN1, DOMAIN_1, REAL_1, NAT_1, SEQM_3, SERIES_1, MEASURE3,
-      MEASURE6, PARTFUN3, KURATO_2, RINFSUP1, PROB_3, SEQ_1, SUPINF_1, FUNCT_7;
+      MEASURE6, PARTFUN3, KURATO_2, RINFSUP1, PROB_3, SEQ_1, SUPINF_1, FUNCT_7,
+      RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, MEMBERED, MEASURE1, MEASURE3, VALUED_0, SEQ_2,
-      SEQ_4, FUNCT_7, PROB_1, PROB_3;
+      SEQ_4, FUNCT_7, PROB_1, PROB_3, RELSET_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, SERIES_1, SUBSET_1, PROB_3;
  theorems FUNCT_1, FUNCT_2, SEQ_1, SEQ_2, XREAL_1, SUPINF_1, NAT_1, TARSKI,
       XBOOLE_0, XBOOLE_1, PROB_2, RINFSUP1, SUPINF_2, SEQM_3, CARD_3, SETLIM_1,
       PROB_1, SERIES_1, PROB_3, MEASURE1, MEASURE3, MEASURE6, ZFMISC_1,
-      XXREAL_0, ORDINAL1, NUMBERS, XXREAL_2, RELSET_1, FUNCT_7, DYNKIN,
-      VALUED_0, FUNCOP_1;
+      XXREAL_0, ORDINAL1, NUMBERS, XXREAL_2, FUNCT_7, DYNKIN, VALUED_0,
+      FUNCOP_1, RELAT_1;
  schemes FUNCT_2, NAT_1, XBOOLE_0;
 
 begin
@@ -73,7 +74,7 @@ definition
   coherence
    proof
 X:   XSeq.n in rng XSeq by NAT_1:52;
-     rng XSeq c= Si by PROB_1:def 9;
+     rng XSeq c= Si by RELAT_1:def 19;
     hence XSeq.n is Element of Si by X;
    end;
 end;
@@ -104,9 +105,9 @@ A1: rng f c= Si by Th1;
   assume
 A2: f is Function of NAT,Si;
   then
-A3: rng f c= Si by RELSET_1:12;
+A3: rng f c= Si by RELAT_1:def 19;
   reconsider f as SetSequence of X by A2,FUNCT_2:9;
-  f is SetSequence of Si by A3,PROB_1:def 9;
+  f is SetSequence of Si by A3,RELAT_1:def 19;
   hence thesis;
 end;
 
@@ -125,7 +126,7 @@ A1: for n holds f.n = F(n);
     hence thesis;
   end;
   then rng f c= Si() by NAT_1:53;
-  then reconsider f as SetSequence of Si() by PROB_1:def 9;
+  then reconsider f as SetSequence of Si() by RELAT_1:def 19;
   take f;
   thus thesis by A1;
 end;
@@ -211,7 +212,7 @@ A8:     n + 1 > 1 or n < 1 + 1 by NAT_1:13;
 A9:     m <> 0 & m <> 1;
         then m >= 1 by NAT_1:14;
         then m +1 > 1 by NAT_1:13;
-        then A1.m = {} by FUNCT_7:126,A9,NAT_1:22;
+        then A1.m = {} by A9,FUNCT_7:126,NAT_1:22;
         hence thesis by XBOOLE_1:65;
       end;
   end;
@@ -237,7 +238,7 @@ proof
     proof
       let A1 be SetSequence of X such that
 A1:   rng A1 c= S;
-      reconsider A1 as SetSequence of S by A1,PROB_1:def 9;
+      reconsider A1 as SetSequence of S by A1,RELAT_1:def 19;
       Union A1 in S by PROB_1:46;
       hence thesis;
     end;
@@ -734,7 +735,7 @@ theorem Th21:
 theorem Th22:
   XSeq is non-descending implies
   for n holds (@Partial_Diff_Union XSeq).(n+1) misses XSeq.n
-            by  Th19;
+            by Th19;
 
 definition
   let Omega,Sigma,P;
@@ -795,7 +796,7 @@ theorem Th25:
   {} is thin of P
 proof
   {} c= {} & P.{} = 0 & {} in Sigma by PROB_1:42,VALUED_0:def 19;
-  hence {} is thin of P by Def4;
+  hence thesis by Def4;
 end;
 
 theorem Th26:
@@ -842,7 +843,7 @@ A2: D c= bool Omega
     proof
       let x be set;
       assume x in D;
-      hence x in bool Omega by A1;
+      hence thesis by A1;
     end;
 A3: for A being set holds (A in D iff
     (ex B being set st (B in Sigma & ex C being thin of P st A = B \/ C)))
@@ -1110,16 +1111,8 @@ A1: for t being Element of NAT ex A being Element of Sigma st P[t,A]
 A2: for t being Element of NAT holds
   for n being Element of NAT for y being set holds
   (n = t & y = G.t implies y in ProbPart(F.n));
-   for n being Nat holds G.n in Sigma
-    proof let n be Nat;
-     reconsider n as Element of NAT by ORDINAL1:def 13;
-     G.n in Sigma;
-     hence thesis;
-    end;
-   then
-A3: rng G c= Sigma by NAT_1:53;
   reconsider BSeq = G as SetSequence of Omega by FUNCT_2:9;
-  reconsider BSeq as SetSequence of Sigma by A3,PROB_1:def 9;
+  reconsider BSeq as SetSequence of Sigma;
   take BSeq;
   thus thesis by A2;
 end;
@@ -1179,16 +1172,8 @@ A3: A in Sigma & BSeq.t c= A & P.A = 0 by Def4;
 A4: for t being Element of NAT holds
   for n being Element of NAT for y being set holds
   (n = t & y = G.t implies y in Sigma & BSeq.n c= y & P.y = 0);
-   for n being Nat holds G.n in Sigma
-    proof let n be Nat;
-     reconsider n as Element of NAT by ORDINAL1:def 13;
-     G.n in Sigma;
-     hence thesis;
-    end;
-   then
-A5: rng G c= Sigma by NAT_1:53;
   reconsider CSeq = G as SetSequence of Omega by FUNCT_2:9;
-  reconsider CSeq as SetSequence of Sigma by A5,PROB_1:def 9;
+  reconsider CSeq as SetSequence of Sigma;
   take CSeq;
   thus thesis by A4;
 end;
@@ -1540,7 +1525,7 @@ A13: for BSeq being SetSequence of COM(Sigma,P) st BSeq is disjoint_valued
 A14:  BSeq is disjoint_valued;
       reconsider F = BSeq as Function of NAT,bool Omega;
 A15:  dom BSeq = NAT by FUNCT_2:def 1;
-      rng F c= COM(Sigma,P) by PROB_1:def 9;
+      rng F c= COM(Sigma,P) by RELAT_1:def 19;
       then reconsider F as Function of NAT,COM(Sigma,P) by FUNCT_2:8;
       consider CSeq being SetSequence of Sigma such that
 A16:  for n holds CSeq.n in ProbPart(F.n) by Th32;
@@ -1754,8 +1739,8 @@ A54:      n + 1 > 1 by NAT_1:13;
         end;
       end;
       then rng BSeq c= COM(Sigma,P) by NAT_1:53;
-      then reconsider BSeq as SetSequence of COM(Sigma,P) by PROB_1:def 9;
-A55:  BSeq is disjoint_valued & Union BSeq = A \/ B by A52,DYNKIN:6,Th3;
+      then reconsider BSeq as SetSequence of COM(Sigma,P) by RELAT_1:def 19;
+A55:  BSeq is disjoint_valued & Union BSeq = A \/ B by A52,Th3,DYNKIN:6;
       for m st 2<=m holds Partial_Sums(comP * BSeq).m = comP.A + comP.B
       proof
 A56:    Partial_Sums(comP * BSeq).0 = (comP * BSeq).0 by SERIES_1:def 1
@@ -1871,7 +1856,7 @@ A76:  BSeq is non-descending;
       hence
 K:     comP * BSeq is bounded_above by SEQ_2:def 3;
        comP * BSeq is non-decreasing by A71,A76;
-      hence comP * BSeq is convergent by K;
+      hence thesis by K;
     end;
     for BSeq being SetSequence of COM(Sigma,P) st BSeq is non-descending
     holds (comP * BSeq is convergent & lim (comP * BSeq) = comP.Union BSeq)

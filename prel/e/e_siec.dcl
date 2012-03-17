@@ -4,11 +4,10 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELSET_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
@@ -23,7 +22,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="38"/>
+<Adjective nr="42"/>
 </Cluster>
 </RCluster>
 <RCluster aid="E_SIEC" nr="2">
@@ -32,7 +31,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="39"/>
+<Adjective nr="43"/>
 </Cluster>
 </RCluster>
 <RCluster aid="E_SIEC" nr="3">
@@ -41,7 +40,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="40"/>
+<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 <RCluster aid="E_SIEC" nr="4">
@@ -50,9 +49,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="38"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
+<Adjective nr="42"/>
+<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -1,0 +1,421 @@
+:: Riemann Integral of Functions $\mathbbbR$ into $\mathbbbR^n$
+::  by Keiichi Miyajima and Yasunari Shidama
+:: 
+:: Received May 5, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies INTEGRA1, INTEGRA2, FINSEQ_1, RCOMP_1, NORMSP_1, REAL_NS1, SEQ_1,
+      SEQ_2, LATTICES, BORSUK_1, ORDINAL2, ARYTM, ARYTM_1, RELAT_1, FUNCT_1,
+      MEASURE5, PARTFUN1, RLVECT_1, BOOLE, FUNCT_3, INTEGR15, FINSEQ_4,
+      FINSEQ_2, SQUARE_1, SEQ_4, REALSET1, ABSVALUE, PRE_TOPC, ARYTM_3;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, COMPLEX1,
+      RELAT_1, NAT_1, FUNCT_1, FUNCT_2, STRUCT_0, REAL_1, RCOMP_1, VALUED_1,
+      RELSET_1, PARTFUN1, SEQ_1, SEQ_2, SEQ_4, FINSEQ_1, FINSEQ_2, FINSEQOP,
+      RVSUM_1, PRE_TOPC, XXREAL_0, EUCLID, PDIFF_1, INTEGRA1, INTEGRA2,
+      INTEGRA5, NORMSP_1, REAL_NS1;
+ constructors REAL_1, FINSEQOP, MONOID_0, SEQ_4, PSCOMP_1, NAT_D, VFUNCT_1,
+      PDIFF_1, BINOP_2, SEQ_1, INTEGRA2, INTEGRA5, RELSET_1;
+ registrations NUMBERS, XREAL_0, FINSEQ_2, SEQ_2, INTEGRA1, FUNCT_2, NAT_1,
+      MEMBERED, RELAT_1, XXREAL_0, ORDINAL1, VALUED_0, VALUED_1, REAL_NS1,
+      RELSET_1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+definition
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,REAL;
+  let D be Division of A;
+  mode middle_volume of f,D -> FinSequence of REAL means
+:: INTEGR15:def 1
+  len it = len D &
+  for i be Nat st i in dom D holds
+  ex r be Element of REAL st r in rng (f|divset(D,i)) &
+  it.i=r*vol divset(D,i);
+end;
+
+definition
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,REAL;
+  let D be Division of A;
+  let F be middle_volume of f,D;
+  func middle_sum(f,F) -> Real equals
+:: INTEGR15:def 2
+    Sum(F);
+end;
+
+theorem :: INTEGR15:1
+for A be closed-interval Subset of REAL,
+    f be Function of A,REAL,
+    D be Division of A,
+    F be middle_volume of f,D
+ st f|A is bounded_below
+   holds
+    lower_sum (f,D) <= middle_sum(f,F);
+
+theorem :: INTEGR15:2
+for A be closed-interval Subset of REAL,
+    f be Function of A,REAL,
+    D be Division of A,
+    F be middle_volume of f,D
+ st f|A is bounded_above holds
+    middle_sum(f,F) <= upper_sum (f,D);
+
+theorem :: INTEGR15:3
+for A be closed-interval Subset of REAL,
+    f be Function of A,REAL,
+    D be Division of A,
+    e be Real st
+    f|A is bounded_below & 0 < e holds
+    ex F be middle_volume of f,D st
+       middle_sum(f,F) <= lower_sum (f,D) + e;
+
+theorem :: INTEGR15:4
+for A be closed-interval Subset of REAL,
+    f be Function of A,REAL,
+    D be Division of A,
+    e be Real st
+    f|A is bounded_above & 0 < e holds
+    ex F be middle_volume of f,D st
+    upper_sum (f,D) - e <= middle_sum(f,F);
+
+definition
+let A be closed-interval Subset of REAL,
+    f be Function of A,REAL,
+    T be DivSequence of A;
+mode middle_volume_Sequence of f,T -> Function of NAT, (REAL)* means
+:: INTEGR15:def 3
+  for k be Element of NAT holds
+   it.k is middle_volume of f,T.k;
+end;
+
+definition
+let A be closed-interval Subset of REAL,
+    f be Function of A,REAL,
+    T be DivSequence of A,
+    S be middle_volume_Sequence of f,T,
+    k be Element of NAT;
+redefine func S.k -> middle_volume of f,T.k;
+end;
+
+definition
+let A be closed-interval Subset of REAL,
+    f be Function of A,REAL,
+    T be DivSequence of A,
+    S be middle_volume_Sequence of f,T;
+    func middle_sum(f,S) -> Real_Sequence means
+:: INTEGR15:def 4
+ for i be Element of NAT
+   holds it.i = middle_sum(f,S.i);
+end;
+
+theorem :: INTEGR15:5
+for A be closed-interval Subset of REAL,
+    f being Function of A,REAL,
+    T being DivSequence of A,
+    S be middle_volume_Sequence of f,T,
+    i be Element of NAT
+ st f|A is bounded_below holds
+    (lower_sum(f,T)).i <= (middle_sum(f,S)).i;
+
+theorem :: INTEGR15:6
+for A be closed-interval Subset of REAL,
+    f being Function of A,REAL,
+    T being DivSequence of A,
+    S be middle_volume_Sequence of f,T,
+    i be Element of NAT
+ st f|A is bounded_above holds
+    (middle_sum(f,S)).i <= (upper_sum(f,T)).i;
+
+theorem :: INTEGR15:7
+for A be closed-interval Subset of REAL,
+    f being Function of A,REAL,
+    T being DivSequence of A,
+    e be Element of REAL
+ st 0 < e & f|A is bounded_below holds
+    ex S be middle_volume_Sequence of f,T
+    st for i be Element of NAT holds
+       (middle_sum(f,S)).i <= (lower_sum(f,T)).i + e;
+
+theorem :: INTEGR15:8
+for A be closed-interval Subset of REAL,
+    f being Function of A,REAL,
+    T being DivSequence of A,
+    e be Element of REAL
+ st 0 < e & f|A is bounded_above holds
+    ex S be middle_volume_Sequence of f,T st
+     for i be Element of NAT
+       holds
+     (upper_sum(f,T)).i - e <= (middle_sum(f,S)).i;
+
+theorem :: INTEGR15:9
+for A be closed-interval Subset of REAL,
+    f being Function of A,REAL,
+    T being DivSequence of A,
+    S be middle_volume_Sequence of f,T
+ st f is bounded
+  & f is integrable
+  & delta(T) is convergent & lim delta(T)=0
+  holds
+    middle_sum(f,S) is convergent
+  & lim (middle_sum(f,S))=integral(f);
+
+theorem :: INTEGR15:10
+for A be closed-interval Subset of REAL,
+    f being Function of A,REAL st f is bounded
+  holds
+    f is integrable iff
+    ex I be Real st
+     for T being DivSequence of A,
+         S be middle_volume_Sequence of f,T
+      st delta(T) is convergent & lim delta(T)=0 holds
+         middle_sum(f,S) is convergent & lim (middle_sum(f,S))=I;
+
+definition let n be Element of NAT;
+let A be closed-interval Subset of REAL;
+let f be Function of A,REAL n;
+let D be Division of A;
+mode middle_volume of f,D -> FinSequence of (REAL n) means
+:: INTEGR15:def 5
+   len it = len D &
+   for i be Nat st i in dom D holds
+    ex r be Element of (REAL n) st
+       r in rng (f|divset(D,i)) & it.i=vol divset(D,i)*r;
+end;
+
+definition
+let n be Element of NAT;
+let A be closed-interval Subset of REAL;
+let f be Function of A,REAL n;
+let D be Division of A;
+let F be middle_volume of f,D;
+  func middle_sum(f,F) -> Element of (REAL n) means
+:: INTEGR15:def 6
+   for i be Element of NAT st i in Seg n holds
+    ex Fi be FinSequence of REAL st Fi=proj(i,n)*F &
+        it.i = Sum(Fi);
+end;
+
+definition
+let n be Element of NAT;
+let A be closed-interval Subset of REAL;
+let f be Function of A,REAL n;
+let T be DivSequence of A;
+  mode middle_volume_Sequence of f,T -> Function of NAT, (REAL n)*
+   means
+:: INTEGR15:def 7
+   for k be Element of NAT holds
+    it.k is middle_volume of f,T.k;
+end;
+
+definition
+  let n be Element of NAT;
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,REAL n;
+  let T be DivSequence of A;
+  let S be middle_volume_Sequence of f,T;
+  let k be Element of NAT;
+  redefine func S.k -> middle_volume of f,T.k;
+end;
+
+definition
+let n be Element of NAT;
+let A be closed-interval Subset of REAL;
+let f be Function of A,REAL n;
+let T be DivSequence of A;
+let S be middle_volume_Sequence of f,T;
+  func middle_sum(f,S) -> sequence of (REAL-NS n) means
+:: INTEGR15:def 8
+  for i be Element of NAT
+    holds it.i = middle_sum(f,S.i);
+end;
+
+definition let n be Element of NAT;
+let Z be non empty set;
+let f,g be PartFunc of Z,REAL n;
+  func f+g -> PartFunc of Z, REAL n means
+:: INTEGR15:def 9
+    dom it = dom f /\ dom g &
+    for c be Element of Z st c in dom it holds
+    it/.c = (f/.c) + (g/.c);
+func f-g -> PartFunc of Z, REAL n means
+:: INTEGR15:def 10
+  dom it = dom f /\ dom g &
+  for c be Element of Z st c in dom it holds
+  it/.c = (f/.c) - (g/.c);
+end;
+
+definition let n be Element of NAT;
+let r be real number;
+let Z be non empty set;
+let f be PartFunc of Z,REAL n;
+func r(#)f -> PartFunc of Z, REAL n means
+:: INTEGR15:def 11
+  dom it = dom f &
+  for c be Element of Z st c in dom it holds
+  it/.c = r * (f/.c);
+end;
+
+begin :: Definition of Riemann Integral on Functions REAL to REAL n
+
+definition let n be Element of NAT;
+let A be closed-interval Subset of REAL;
+let f be Function of A,REAL n;
+ attr f is bounded means
+:: INTEGR15:def 12
+     for i be Element of NAT st i in Seg n holds (proj(i,n)*f) is bounded;
+end;
+
+definition let n be Element of NAT;
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,REAL n;
+  attr f is integrable means
+:: INTEGR15:def 13
+    for i be Element of NAT
+     st i in Seg n holds
+        (proj(i,n)*f) is integrable;
+end;
+
+definition let n be Element of NAT;
+let A be closed-interval Subset of REAL;
+let f be Function of A,REAL n;
+ func integral(f) -> Element of REAL n means
+:: INTEGR15:def 14
+   dom it = Seg n &
+   for i be Element of NAT st i in Seg n holds
+      it.i = integral((proj(i,n)*f));
+end;
+
+theorem :: INTEGR15:11
+for n be Element of NAT,
+    A be closed-interval Subset of REAL,
+    f being Function of A,REAL n,
+    T being DivSequence of A,
+    S be middle_volume_Sequence of f,T
+ st f is bounded
+  & f is integrable
+  & delta(T) is convergent & lim delta(T)=0
+ holds middle_sum(f,S) is convergent
+     & lim (middle_sum(f,S))=integral(f);
+
+theorem :: INTEGR15:12
+for n be Element of NAT,
+    A be closed-interval Subset of REAL,
+    f being Function of A,REAL n st f is bounded
+ holds
+   f is integrable
+    iff
+   ex I be Element of REAL n st
+    for T being DivSequence of A,
+        S be middle_volume_Sequence of f,T
+          st delta(T) is convergent & lim delta(T)=0
+     holds middle_sum(f,S) is convergent & lim (middle_sum(f,S))=I;
+
+definition let n be Element of NAT;
+  let f be PartFunc of REAL,REAL n;
+  attr f is bounded means
+:: INTEGR15:def 15
+     for i be Element of NAT st i in Seg n holds
+       (proj(i,n)*f) is bounded;
+end;
+
+definition let n be Element of NAT;
+  let A be closed-interval Subset of REAL;
+  let f be PartFunc of REAL,REAL n;
+  pred f is_integrable_on A means
+:: INTEGR15:def 16
+     for i be Element of NAT st i in Seg n holds
+        (proj(i,n)*f) is_integrable_on A;
+end;
+
+definition let n be Element of NAT;
+let A be closed-interval Subset of REAL;
+let f be PartFunc of REAL,REAL n;
+func integral(f,A) -> Element of REAL n means
+:: INTEGR15:def 17
+  dom it = Seg n &
+  for i be Element of NAT st i in Seg n holds
+     it.i = integral( (proj(i,n)*f), A);
+end;
+
+theorem :: INTEGR15:13
+for n be Element of NAT,
+    A be closed-interval Subset of REAL,
+    f be PartFunc of REAL,REAL n,
+    g be Function of A,REAL n
+     st f|A = g
+  holds f is_integrable_on A
+        iff
+        g is integrable;
+
+theorem :: INTEGR15:14
+for n be Element of NAT,
+    A be closed-interval Subset of REAL,
+    f be PartFunc of REAL,REAL n,
+    g be Function of A,REAL n
+     st f|A = g
+  holds integral(f,A) = integral(g);
+
+definition let a,b be real number;
+let n be Element of NAT;
+let f be PartFunc of REAL, REAL n;
+func integral(f,a,b) -> Element of REAL n means
+:: INTEGR15:def 18
+  dom it = Seg n &
+  for i be Element of NAT st i in Seg n
+  holds
+    it.i = integral( (proj(i,n)*f) ,a,b);
+end;
+
+begin :: Linearity of the Integration Operator
+
+theorem :: INTEGR15:15
+for n be Element of NAT,
+    f1,f2 be PartFunc of REAL, REAL n,
+    i be Element of NAT st i in Seg n
+holds proj(i,n)*(f1+f2) = proj(i,n)*f1 + proj(i,n)*f2
+    & proj(i,n)*(f1-f2) = proj(i,n)*f1 - proj(i,n)*f2;
+
+theorem :: INTEGR15:16
+for n be Element of NAT,
+    r be Real,
+    f be PartFunc of REAL, REAL n,
+    i be Element of NAT st i in Seg n
+holds proj(i,n)*(r(#)f) = r(#)(proj(i,n)*f);
+
+theorem :: INTEGR15:17
+for n be Element of NAT
+for A be closed-interval Subset of REAL
+for f1,f2 be PartFunc of REAL, REAL n
+            st f1 is_integrable_on A & f2 is_integrable_on A
+             & A c= dom f1 & A c= dom f2
+             & (f1|A) is bounded & (f2|A) is bounded
+holds f1+f2 is_integrable_on A &
+      f1-f2 is_integrable_on A
+       & integral(f1+f2,A)=integral(f1,A)+integral(f2,A)
+       & integral(f1-f2,A)=integral(f1,A)-integral(f2,A);
+
+theorem :: INTEGR15:18
+for n be Element of NAT
+for r be Real
+for A be closed-interval Subset of REAL
+for f be PartFunc of REAL, REAL n
+ st A c= dom f & f is_integrable_on A & f|A is bounded
+holds r(#)f is_integrable_on A
+      & integral( (r(#)f) ,A) = r*integral(f,A);
+
+theorem :: INTEGR15:19
+for n be Element of NAT
+for f being PartFunc of REAL,REAL n,
+    A being closed-interval Subset of REAL,
+  a,b be Real st A=[.a,b.]
+ holds integral(f,A)=integral(f,a,b);
+
+theorem :: INTEGR15:20
+for n be Element of NAT
+for f being PartFunc of REAL,REAL n,
+    A being closed-interval Subset of REAL,
+  a,b be Real st A=[.b,a.] holds -integral(f,A)=integral(f,a,b);

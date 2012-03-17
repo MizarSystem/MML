@@ -8,16 +8,21 @@ environ
 
  vocabularies FUNCT_1, PRE_TOPC, EUCLID, SEQ_1, RELAT_1, ANPROJ_1, BOOLE,
       ARYTM_1, COMPLEX1, ABSVALUE, LATTICES, SEQ_2, ORDINAL2, ARYTM_3,
-      NORMSP_1, ARYTM;
- notations TARSKI, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, COMPLEX1, REAL_1,
-      NAT_1, VALUED_1, SEQ_1, STRUCT_0, EUCLID, PRE_TOPC, XXREAL_0;
- constructors XXREAL_0, REAL_1, NAT_1, COMPLEX1, MONOID_0, EUCLID, SEQ_1;
+      NORMSP_1, ARYTM, FINSEQ_1, VALUED_0, RLVECT_1, STRUCT_0;
+ notations TARSKI, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
+      ORDINAL1, FINSEQ_1, VALUED_0, VALUED_1, XREAL_0,
+      XCMPLX_0, COMPLEX1, REAL_1, PRE_TOPC, XXREAL_0,
+      NAT_1, SEQ_1, STRUCT_0, RLVECT_1, EUCLID;
+ constructors XXREAL_0, REAL_1, NAT_1, COMPLEX1, MONOID_0, EUCLID, SEQ_1,
+      RELSET_1, VALUED_0;
  registrations ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0,
-      MONOID_0, EUCLID, XBOOLE_0, VALUED_1, FUNCT_2, NUMBERS;
+      MONOID_0, EUCLID, XBOOLE_0, VALUED_1, FUNCT_2, NUMBERS,
+      FINSEQ_1, RVSUM_1, VALUED_0;
+ definitions STRUCT_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems FUNCT_1, FUNCT_2, TARSKI, EUCLID, SEQ_1, NAT_1, XBOOLE_0, NORMSP_1,
       XCMPLX_0, XREAL_1, COMPLEX1, XXREAL_0;
- schemes SEQ_1, NAT_1, CLASSES1;
+ schemes SEQ_1, NAT_1, CLASSES1, FUNCT_2;
 
 begin
 
@@ -53,26 +58,26 @@ definition
   let IT be Real_Sequence of N;
   attr IT is non-zero means
   :Def1:
-  rng IT c= (the carrier of TOP-REAL N) \ {0.REAL N};
+  rng IT c= NonZero TOP-REAL N;
 end;
 
 theorem Th3:
-  seq is non-zero iff for x st x in NAT holds seq.x<>0.REAL N
+  seq is non-zero iff for x st x in NAT holds seq.x<>0.TOP-REAL N
 proof
-  thus seq is non-zero implies for x st x in NAT holds seq.x<>0.REAL N
+  thus seq is non-zero implies for x st x in NAT holds seq.x<>0.TOP-REAL N
   proof
     assume seq is non-zero;
     then
-A1: rng seq c= (the carrier of TOP-REAL N) \ {0.REAL N} by Def1;
+A1: rng seq c= NonZero TOP-REAL N by Def1;
     let x;
     assume x in NAT;
     then x in dom seq by Th2;
     then seq.x in rng seq by FUNCT_1:def 5;
-    then not seq.x in {0.REAL N} by A1,XBOOLE_0:def 5;
-    hence seq.x<>0.REAL N by TARSKI:def 1;
+    then not seq.x in {0.TOP-REAL N} by A1,XBOOLE_0:def 5;
+    hence thesis by TARSKI:def 1;
   end;
   assume
-A2: for x st x in NAT holds seq.x<>0.REAL N;
+A2: for x st x in NAT holds seq.x<>0.TOP-REAL N;
   now
     let y;
     assume y in rng seq;
@@ -82,51 +87,22 @@ A4: seq.x=y by FUNCT_1:def 5;
 A5: x in NAT by A3,NORMSP_1:17;
     then
 A6: y is Point of TOP-REAL N by A4,NORMSP_1:17;
-    y<>0.REAL N by A2,A4,A5;
-    then not y in {0.REAL N} by TARSKI:def 1;
-    hence y in (the carrier of TOP-REAL N) \ {0.REAL N} by A6,XBOOLE_0:def 5;
+    y<>0.TOP-REAL N by A2,A4,A5;
+    then not y in {0.TOP-REAL N} by TARSKI:def 1;
+    hence y in NonZero TOP-REAL N
+     by A6,XBOOLE_0:def 5;
   end;
-  then rng seq c= (the carrier of TOP-REAL N) \ {0.REAL N} by TARSKI:def 3;
+  then rng seq c= NonZero TOP-REAL N by TARSKI:def 3;
   hence thesis by Def1;
 end;
 
 theorem Th4:
-  seq is non-zero iff for n holds seq.n<>0.REAL N
+  seq is non-zero iff for n holds seq.n<>0.TOP-REAL N
 proof
-  thus seq is non-zero implies for n holds seq.n<>0.REAL N by Th3;
-  assume for n holds seq.n<>0.REAL N;
-  then for x holds x in NAT implies seq.x<>0.REAL N;
+  thus seq is non-zero implies for n holds seq.n<>0.TOP-REAL N by Th3;
+  assume for n holds seq.n<>0.TOP-REAL N;
+  then for x holds x in NAT implies seq.x<>0.TOP-REAL N;
   hence thesis by Th3;
-end;
-
-scheme ExTopRealNSeq{N()->Element of NAT,
-  F(Element of NAT)->Point of TOP-REAL N()}:
-  ex seq being Real_Sequence of N() st for n holds seq.n=F(n)
-proof
-  defpred P[set,set] means ex n st n=$1 & $2=F(n);
-A1: now
-    let x;
-    assume x in NAT;
-    then consider n such that
-A2: n=x;
-    reconsider r2=F(n) as set;
-    take y=r2;
-    thus P[x,y] by A2;
-  end;
-  consider f being Function such that
-A3: dom f=NAT and
-A4: for x st x in NAT holds P[x,f.x] from CLASSES1:sch 1(A1);
-  now
-    let x;
-    assume x in NAT;
-    then ex n st n=x & f.x=F(n) by A4;
-    hence f.x is Point of TOP-REAL N();
-  end;
-  then reconsider f as Real_Sequence of N() by A3,NORMSP_1:17;
-  take seq=f;
-  let n;
-  ex k st k=n & seq.n=F(k) by A4;
-  hence seq.n=F(n);
 end;
 
 definition
@@ -138,7 +114,7 @@ definition
   proof
     deffunc U(Element of NAT) = seq1.$1 + seq2.$1;
     thus ex s being Real_Sequence of N st
-    for n holds s.n = U(n) from ExTopRealNSeq;
+    for n holds s.n = U(n) from FUNCT_2:sch 4;
   end;
   uniqueness
   proof
@@ -150,7 +126,7 @@ A2: for n holds seq'.n=seq1.n+seq2.n;
       seq.n=seq1.n+seq2.n & seq'.n=seq1.n+seq2.n by A1,A2;
       hence seq.n=seq'.n;
     end;
-    hence seq=seq' by FUNCT_2:113;
+    hence thesis by FUNCT_2:113;
   end;
 end;
 
@@ -163,7 +139,7 @@ definition
   proof
     deffunc U(Element of NAT) = r * seq.$1;
     thus ex s being Real_Sequence of N st
-    for n holds s.n = U(n) from ExTopRealNSeq;
+    for n holds s.n = U(n) from FUNCT_2:sch 4;
   end;
   uniqueness
   proof
@@ -175,7 +151,7 @@ A2: for n holds seq2.n=r*seq.n;
       seq1.n=r*seq.n & seq2.n=r*seq.n by A1,A2;
       hence seq1.n=seq2.n;
     end;
-    hence seq1=seq2 by FUNCT_2:113;
+    hence thesis by FUNCT_2:113;
   end;
 end;
 
@@ -201,7 +177,7 @@ A2: for n holds seq2.n=-seq.n;
       seq1.n=-seq.n & seq2.n=-seq.n by A1,A2;
       hence seq1.n=seq2.n;
     end;
-    hence seq1=seq2 by FUNCT_2:113;
+    hence thesis by FUNCT_2:113;
   end;
 end;
 
@@ -234,14 +210,19 @@ A2: for n holds seq9.n=|.seq.n.|;
       seq9.n=|.seq.n.| by A2;
       hence seq8.n=seq9.n by A1;
     end;
-    hence seq8=seq9 by FUNCT_2:113;
+    hence thesis by FUNCT_2:113;
   end;
 end;
 
 canceled 3;
 
-theorem
-  abs(r)*|.w.| = |.r*w.| by EUCLID:14;
+theorem Th8:
+  abs(r)*|.w.| = |.r*w.|
+  proof
+    reconsider w2=w as Element of REAL N by EUCLID:25;
+  thus abs(r)*|.w.| = |.r*w2.| by EUCLID:14
+     .= |.r*w.| by EUCLID:69;
+  end;
 
 theorem
   |.r*seq.| = abs(r)(#)|.seq.|
@@ -250,7 +231,7 @@ proof
     let n;
     thus |.r*seq.|.n=|.(r*seq).n.| by Def7
       .=|.r*(seq.n).| by Def3
-      .=abs(r)*|.seq.n.| by EUCLID:14
+      .=abs(r)*|.seq.n.| by Th8
       .=abs(r)*(|.seq.|).n by Def7
       .=(abs(r)(#)|.seq.|).n by SEQ_1:13;
   end;
@@ -387,9 +368,9 @@ A1: r<>0 and
 A2: seq is non-zero and
 A3: not r*seq is non-zero;
   consider n1 such that
-A4: (r*seq).n1=0.REAL N by A3,Th4;
-A5: r*seq.n1=0.REAL N by A4,Def3;
-  seq.n1 <> 0.REAL N by A2,Th4;
+A4: (r*seq).n1=0.TOP-REAL N by A3,Th4;
+A5: r*seq.n1=0.TOP-REAL N by A4,Def3;
+  seq.n1 <> 0.TOP-REAL N by A2,Th4;
   hence contradiction by A1,A5,EUCLID:35;
 end;
 
@@ -401,15 +382,20 @@ proof
   hence thesis by Th12;
 end;
 
-theorem
-  |.0.REAL N.| = 0 by EUCLID:10;
+theorem Th24:
+  |.0.TOP-REAL N.| = 0
+ proof
+  thus |.0.TOP-REAL N.| = |.0*N.| by EUCLID:74
+      .= 0 by EUCLID:10;
+ end;
 
 theorem Th25:
-  |.w.| = 0 implies w = 0.REAL N
+  |.w.| = 0 implies w = 0.TOP-REAL N
 proof
   reconsider s = w as Element of REAL N by EUCLID:25;
   assume |.w.| = 0;
-  then s = 0.REAL N by EUCLID:11;
+  then s = 0*N by EUCLID:11
+    .= 0.TOP-REAL N by EUCLID:74;
   hence thesis;
 end;
 
@@ -417,27 +403,27 @@ theorem
   |.w.| >= 0;
 
 theorem
-  |.-w.| = |.w.| by EUCLID:13;
+  |.-w.| = |.w.| by EUCLID:75;
 
 theorem Th28:
   |.w1 - w2.| = |.w2 - w1.|
 proof
-  thus |.w1 - w2.| = |.-(w1 - w2).| by EUCLID:13
+  thus |.w1 - w2.| = |.-(w1 - w2).| by EUCLID:75
     .= |.w2 - w1.| by EUCLID:48;
 end;
 
 Lm1: |.w1 - w2.| = 0 implies w1 = w2
 proof
   assume |.w1 - w2.| = 0;
-  then w1 - w2 = 0.REAL N by Th25;
-  hence w1 = w2 by EUCLID:47;
+  then w1 - w2 = 0.TOP-REAL N by Th25;
+  hence thesis by EUCLID:47;
 end;
 
 Lm2: w1 = w2 implies |.w1 - w2.| = 0
 proof
   assume w1 = w2;
-  then |.w1 - w2.| = |.0.REAL N.| by EUCLID:46
-    .= 0 by EUCLID:10;
+  then |.w1 - w2.| = |.0.TOP-REAL N.| by EUCLID:46
+    .= 0 by Th24;
   hence thesis;
 end;
 
@@ -448,46 +434,46 @@ theorem Th30:
   |.w1 + w2.| <= |.w1.| + |.w2.|
 proof
   reconsider s1 = w1, s2 = w2 as Element of REAL N by EUCLID:25;
-  w1 + w2 = s1 + s2;
-  hence |.w1 + w2.| <= |.w1.| + |.w2.| by EUCLID:15;
+  w1 + w2 = s1 + s2 by EUCLID:68;
+  hence thesis by EUCLID:15;
 end;
 
 theorem
   |.w1 - w2.| <= |.w1.| + |.w2.|
 proof
   reconsider s1 = w1, s2 = w2 as Element of REAL N by EUCLID:25;
-  w1 - w2 = s1 - s2;
-  hence |.w1 - w2.| <= |.w1.| + |.w2.| by EUCLID:16;
+  w1 - w2 = s1 - s2 by EUCLID:73;
+  hence thesis by EUCLID:16;
 end;
 
 theorem
   |.w1.| - |.w2.| <= |.w1 + w2.|
 proof
   reconsider s1 = w1, s2 = w2 as Element of REAL N by EUCLID:25;
-  w1 + w2 = s1 + s2;
-  hence |.w1.| - |.w2.| <= |.w1 + w2.| by EUCLID:17;
+  w1 + w2 = s1 + s2 by EUCLID:68;
+  hence thesis by EUCLID:17;
 end;
 
 theorem Th33:
   |.w1.| - |.w2.| <= |.w1 - w2.|
 proof
   reconsider s1 = w1, s2 = w2 as Element of REAL N by EUCLID:25;
-  w1 - w2 = s1 - s2;
-  hence |.w1.| - |.w2.| <= |.w1 - w2.| by EUCLID:18;
+  w1 - w2 = s1 - s2 by EUCLID:73;
+  hence thesis by EUCLID:18;
 end;
 
 theorem
   w1 <> w2 implies |.w1 - w2.| > 0
 proof
   reconsider s1 = w1, s2 = w2 as Element of REAL N by EUCLID:25;
-  s1 - s2 = w1 - w2;
+  s1 - s2 = w1 - w2 by EUCLID:73;
   hence thesis by EUCLID:20;
 end;
 
 theorem
   |.w1 - w2.| <= |.w1 - w.| + |.w - w2.|
 proof
-  0.REAL N = w - w by EUCLID:46
+  0.TOP-REAL N = w - w by EUCLID:46
     .= -w + w by EUCLID:45;
   then |.w1 - w2.| = |.w1 + ((-w) + w) - w2.| by EUCLID:31
     .= |.w1 + (-w) + w - w2.| by EUCLID:30
@@ -513,13 +499,13 @@ proof
   for m st m<=$1 holds |.seq.m.|<r1;
 A1: X[0]
   proof
-    take r=|.seq.0.|+1;
+    take r=|.seq.0 .|+1;
     thus 0<r;
     let m such that
 A2: m<=0;
     0=m by A2,NAT_1:2;
     then |.seq.m.|+0<r by XREAL_1:10;
-    hence |.seq.m.|<r;
+    hence thesis;
   end;
 A3: for n st X[n] holds X[n+1]
   proof
@@ -571,7 +557,7 @@ A14:  now
       end;
       hence |.seq.m.|<r by A13,A14,NAT_1:8;
     end;
-    hence ex r st (0<r & for m st m<=n+1 holds |.seq.m.|<r) by A6;
+    hence thesis by A6;
   end;
   thus for n holds X[n] from NAT_1:sch 1(A1,A3);
 end;
@@ -600,13 +586,13 @@ A3: for r st 0<r ex n st for m st n<=m holds |.seq.m-g2.|<r and
 A4: g1<>g2;
 A5: now
       assume |.g1-g2.|=0;
-      then 0.REAL N+g2=g1-g2+g2 by Th25;
+      then 0.TOP-REAL N+g2=g1-g2+g2 by Th25;
       then g2=g1-g2+g2 by EUCLID:31
         .=g1-(g2-g2) by EUCLID:51
-        .=g1-0.REAL N by EUCLID:46
-        .=g1+ -0.REAL N by EUCLID:45
-        .=g1+(-1)*0.REAL N by EUCLID:43
-        .=g1+0.REAL N by EUCLID:32
+        .=g1-0.TOP-REAL N by EUCLID:46
+        .=g1+ -0.TOP-REAL N by EUCLID:45
+        .=g1+(-1)*0.TOP-REAL N by EUCLID:43
+        .=g1+0.TOP-REAL N by EUCLID:32
         .=g1 by EUCLID:31;
       hence contradiction by A4;
     end;
@@ -620,10 +606,10 @@ A10: |.seq.(n1+n2)-g1.|<|.g1-g2.|/4 by A8,NAT_1:12;
     then
 A11: |.seq.(n1+n2)-g2.|+|.seq.(n1+n2)-g1.|<|.g1-g2.|/4+|.g1-g2.|/4
     by A10,XREAL_1:10;
-    |.g1-g2.|=|.g1-g2+0.REAL N.| by EUCLID:31
-      .=|.g1-g2+(-1)*0.REAL N.| by EUCLID:32
-      .= |.g1-g2+-0.REAL N.| by EUCLID:43
-      .= |.g1-g2-0.REAL N.| by EUCLID:45
+    |.g1-g2.|=|.g1-g2+0.TOP-REAL N.| by EUCLID:31
+      .=|.g1-g2+(-1)*0.TOP-REAL N.| by EUCLID:32
+      .= |.g1-g2+-0.TOP-REAL N.| by EUCLID:43
+      .= |.g1-g2-0.TOP-REAL N.| by EUCLID:45
       .=|.g1-g2-(seq.(n1+n2)-seq.(n1+n2)).| by EUCLID:46
       .=|.g1-g2-seq.(n1+n2)+seq.(n1+n2).| by EUCLID:51
       .=|.g1-(seq.(n1+n2)+g2)+seq.(n1+n2).| by EUCLID:50
@@ -634,7 +620,7 @@ A11: |.seq.(n1+n2)-g2.|+|.seq.(n1+n2)-g1.|<|.g1-g2.|/4+|.g1-g2.|/4
       .=|.-(seq.(n1+n2)-g1)+(seq.(n1+n2)-g2).| by EUCLID:48;
     then |.g1-g2.|<=|.-(seq.(n1+n2)-g1).|+|.seq.(n1+n2)-g2.| by Th30;
     then
-A12: |.g1-g2.|<=|.seq.(n1+n2)-g1.|+|.seq.(n1+n2)-g2.| by EUCLID:13;
+A12: |.g1-g2.|<=|.seq.(n1+n2)-g1.|+|.seq.(n1+n2)-g2.| by EUCLID:75;
     |.g1-g2.|/2 <|.g1-g2.| by A5,XREAL_1:218;
     hence contradiction by A11,A12,XXREAL_0:2;
   end;
@@ -684,7 +670,7 @@ A11: |.(seq+seq').m-g.|=|.seq.m+seq'.m-(g1+g2).| by Def2
     .=|.seq.m-g1+(seq'.m+-g2).| by EUCLID:30
     .=|.seq.m-g1+(seq'.m-g2).| by EUCLID:45;
   |.seq.m-g1+(seq'.m-g2).|<=|.seq.m-g1.|+|.seq'.m-g2.| by Th30;
-  hence |.(seq+seq').m -g.|<r by A10,A11,XXREAL_0:2;
+  hence thesis by A10,A11,XXREAL_0:2;
 end;
 
 theorem Th42:
@@ -745,14 +731,14 @@ A3: r=0;
 A4: 0<q;
     take k=0;
     let m such that k<=m;
-    |.((r*seq).m)-g.|=|.((0 *seq).m)-0.REAL N.| by A3,EUCLID:33
-      .=|.0.REAL N-((0 * seq).m).| by Th28
-      .=|.0.REAL N+-((0 * seq).m).| by EUCLID:45
+    |.((r*seq).m)-g.|=|.((0 *seq).m)-0.TOP-REAL N.| by A3,EUCLID:33
+      .=|.0.TOP-REAL N-((0 * seq).m).| by Th28
+      .=|.0.TOP-REAL N+-((0 * seq).m).| by EUCLID:45
       .=|.-((0 * seq).m).| by EUCLID:31
-      .=|.(0 * seq).m.| by EUCLID:13
+      .=|.(0 * seq).m.| by EUCLID:75
       .=|.0 * seq.m.| by Def3
-      .=|.0.REAL N.| by EUCLID:33
-      .=0 by EUCLID:10;
+      .=|.0.TOP-REAL N.| by EUCLID:33
+      .=0 by Th24;
     hence |.((r*seq).m)-g.|<q by A4;
   end;
   now
@@ -774,7 +760,7 @@ A9: for m st n1<=m holds |.seq.m-g1.|<q/abs(r) by A1;
 A10: |.seq.m-g1.|<q/abs(r) by A9;
 A11: |.((r*seq).m)-g.|=|.r*seq.m-r*g1.| by Def3
       .=|.r*(seq.m-g1).| by EUCLID:53
-      .=abs(r)*|.seq.m-g1.| by EUCLID:14;
+      .=abs(r)*|.seq.m-g1.| by Th8;
     abs(r)*(q/abs(r))=abs(r)*(abs(r)"*q) by XCMPLX_0:def 9
       .=abs(r)*abs(r)"*q
       .=1*q by A8,XCMPLX_0:def 7
@@ -795,18 +781,18 @@ A3: now
     assume
 A4: r=0;
     then
-A5: r*(lim seq)=0.REAL N by EUCLID:33;
+A5: r*(lim seq)=0.TOP-REAL N by EUCLID:33;
     let q such that
 A6: 0<q;
     take k=0;
     let m such that k<=m;
-    |.((r*seq).m)-r*(lim seq).|=|.0 * seq.m-0.REAL N.| by A4,A5,Def3
-      .=|.0.REAL N-0 * seq.m.| by Th28
-      .=|.0.REAL N+-0 * seq.m.| by EUCLID:45
+    |.((r*seq).m)-r*(lim seq).|=|.0 * seq.m-0.TOP-REAL N.| by A4,A5,Def3
+      .=|.0.TOP-REAL N-0 * seq.m.| by Th28
+      .=|.0.TOP-REAL N+-0 * seq.m.| by EUCLID:45
       .=|.-0 * seq.m.| by EUCLID:31
-      .=|.0 * seq.m.| by EUCLID:13
-      .=|.0.REAL N.| by EUCLID:33
-      .=0 by EUCLID:10;
+      .=|.0 * seq.m.| by EUCLID:75
+      .=|.0.TOP-REAL N.| by EUCLID:33
+      .=0 by Th24;
     hence |.((r*seq).m)-r*(lim seq).|<q by A6;
   end;
   now
@@ -828,7 +814,7 @@ A11: for m st n1<=m holds |.seq.m-(lim seq).|<q/abs(r) by A1,Def10;
 A12: |.seq.m-(lim seq).|<q/abs(r) by A11;
 A13: |.((r*seq).m)-r*(lim seq).|=|.r*seq.m-r*(lim seq).| by Def3
       .=|.r*(seq.m-(lim seq)).| by EUCLID:53
-      .=abs(r)*|.seq.m-(lim seq).| by EUCLID:14;
+      .=abs(r)*|.seq.m-(lim seq).| by Th8;
     abs(r)*(q/abs(r))=abs(r)*(abs(r)"*q) by XCMPLX_0:def 9
       .=abs(r)*abs(r)"*q
       .=1*q by A10,XCMPLX_0:def 7
@@ -930,12 +916,12 @@ A12: now
 end;
 
 theorem
-  seq is convergent implies ((lim seq) <> 0.REAL N implies
+  seq is convergent implies ((lim seq) <> 0.TOP-REAL N implies
   ex n st for m st n<=m holds |.(lim seq).|/2 < |.seq.m.|)
 proof
   assume that
 A1: seq is convergent and
-A2: (lim seq)<>0.REAL N;
+A2: (lim seq)<>0.TOP-REAL N;
   0 <> |.(lim seq).| by A2,Th25;
   then 0<|.(lim seq).|/2 by XREAL_1:217;
   then consider n1 such that
@@ -951,6 +937,6 @@ A6: |.(lim seq).|-|.seq.m.|<=|.(lim seq)-seq.m.| by Th33;
 A7: |.(lim seq).|-|.seq.m.|<|.(lim seq).|/2 by A5,A6,XXREAL_0:2;
 A8: |.(lim seq).|/2+(|.seq.m.|-|.(lim seq).|/2) =|.seq.m.|;
   |.(lim seq).|-|.seq.m.|+(|.seq.m.|-|.(lim seq).|/2) =|.(lim seq).|/2;
-  hence |.(lim seq).|/2<|.seq.m.| by A7,A8,XREAL_1:8;
+  hence thesis by A7,A8,XREAL_1:8;
 end;
 

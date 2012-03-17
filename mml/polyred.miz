@@ -11,7 +11,7 @@ environ
       CAT_3, GROUP_1, BINOP_1, ARYTM_3, TERMORD, FINSEQ_4, WELLORD1, IDEAL_1,
       TARSKI, ORDERS_1, ORDERS_2, RELAT_2, DICKSON, BAGORDER, FINSUB_1,
       TRIANG_1, MCART_1, REWRITE1, INT_1, FINSEQ_1, WAYBEL_4, FINSET_1,
-      ALGSTR_2, ALGSEQ_1, CARD_1, POLYRED, ARYTM, ALGSTR_0, XREAL_0;
+      ALGSTR_2, ALGSEQ_1, CARD_1, POLYRED, ARYTM, ALGSTR_0, XREAL_0, STRUCT_0;
  notations CARD_1, NUMBERS, XCMPLX_0, TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1,
       RELAT_1, RELAT_2, RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1,
       XXREAL_0, STRUCT_0, ALGSTR_0, ORDINAL1, NAT_1, ALGSTR_1, WAYBEL_0,
@@ -19,19 +19,19 @@ environ
       TRIANG_1, GROUP_1, VECTSP_2, VECTSP_1, POLYNOM7, WELLORD1, WELLFND1,
       IDEAL_1, ORDERS_2, POLYNOM1, BAGORDER, TERMORD;
  constructors REWRITE1, VECTSP_2, TRIANG_1, WAYBEL_4, WELLFND1, IDEAL_1,
-      BAGORDER, TERMORD, SEQ_1, RECDEF_1, DOMAIN_1;
+      BAGORDER, TERMORD, SEQ_1, RECDEF_1, DOMAIN_1, RELSET_1;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FINSET_1, FINSUB_1, XXREAL_0,
       XREAL_0, NAT_1, CARD_1, FINSEQ_1, REWRITE1, STRUCT_0, VECTSP_1, ORDERS_2,
       ALGSTR_1, GCD_1, POLYNOM1, POLYNOM2, POLYNOM4, IDEAL_1, POLYNOM7,
       BAGORDER, TERMORD, VALUED_0, ALGSTR_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE;
+ definitions STRUCT_0, POLYNOM7;
  theorems TARSKI, RELSET_1, FINSEQ_1, FUNCT_1, FUNCT_2, RELAT_1, ZFMISC_1,
-      VECTSP_1, POLYNOM1, BINOM, TRIANG_1, RLVECT_1, VECTSP_2,
-      FINSET_1, NAT_1, POLYNOM2, ALGSTR_1, RELAT_2, CARD_1, CARD_2, WAYBEL_0,
-      ORDERS_2, ORDERS_1, MCART_1, POLYNOM7, FINSUB_1, WELLORD1, WELLFND1,
-      REWRITE1, WAYBEL_4, XBOOLE_0, XBOOLE_1, MATRLIN, IDEAL_1, BAGORDER,
-      TERMORD, XCMPLX_1, REALSET1, GROUP_1, XREAL_1, XXREAL_0, ORDINAL1,
-      PARTFUN1, STRUCT_0;
+      VECTSP_1, POLYNOM1, BINOM, TRIANG_1, RLVECT_1, VECTSP_2, FINSET_1, NAT_1,
+      POLYNOM2, ALGSTR_1, RELAT_2, CARD_1, CARD_2, WAYBEL_0, ORDERS_2,
+      ORDERS_1, MCART_1, POLYNOM7, FINSUB_1, WELLORD1, WELLFND1, REWRITE1,
+      WAYBEL_4, XBOOLE_0, XBOOLE_1, MATRLIN, IDEAL_1, BAGORDER, TERMORD,
+      XCMPLX_1, GROUP_1, XREAL_1, XXREAL_0, ORDINAL1, PARTFUN1, STRUCT_0;
  schemes NAT_1, RELSET_1;
 
 begin :: Preliminaries
@@ -41,21 +41,14 @@ registration
   cluster non-zero Monomial of n,R;
   existence
   proof
-    consider a being Element of (the carrier of R)\{0.R};
-A1: (the carrier of R)\{0.R} is non empty by REALSET1:4;
-    then
-A2: a in the carrier of R & not(a in {0.R}) by XBOOLE_0:def 5;
-    reconsider a as Element of R by A1,XBOOLE_0:def 5;
-    set q = a |(n,R);
-A3: a <> 0.R by A2,TARSKI:def 1;
-    take q;
-    now
+    consider a being Element of NonZero R;
+    reconsider a as Element of R;
+A3: a <> 0.R by ZFMISC_1:64;
+    take q = a |(n,R);
       assume
 A4:   q = 0_(n,R);
       0_(n,R) = 0.R |(n,R) by POLYNOM7:19;
       hence contradiction by A3,A4,POLYNOM7:21;
-    end;
-    hence thesis by POLYNOM7:def 2;
   end;
 end;
 
@@ -186,8 +179,7 @@ A5: b in B by A4,TARSKI:def 1;
     then reconsider b as Element of Bags n;
     reconsider b as bag of n;
     for b' being bag of n st b' in B holds b' <=' b by A4,TARSKI:def 1;
-    hence ex b being bag of n st b in B &
-    for b' being bag of n st b' in B holds b' <=' b by A5;
+    hence thesis by A5;
   end;
 A6: for k being Nat st 1 <= k holds P[k] implies P[k+1]
   proof
@@ -350,7 +342,7 @@ A9:     len g + 1 <= i by A1,A2,FINSEQ_1:21;
         then
 A10:    i in dom g by A1,A2,FINSEQ_1:21;
         then p.i = g.i by FINSEQ_1:def 7;
-        hence p.i = f.i by A1,A10,FUNCT_1:68;
+        hence p.i = f.i by A1,A10,FUNCT_1:70;
       end;
     end;
     hence f.u = p.u by A7;
@@ -516,7 +508,7 @@ proof
       .= 0.L + p'.b by POLYNOM1:81
       .= p'.b by ALGSTR_1:def 5;
   end;
-  hence 0_(n,L) + p = p by FUNCT_2:113;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem Th3:
@@ -594,7 +586,7 @@ A3:   s/.k = Z.b1*p.b2 by A2;
     then Sum s = 0.L by MATRLIN:15;
     hence (Z*'p).b = Z.b by A1,POLYNOM1:81;
   end;
-  hence 0_(n,L)*'p = 0_(n,L) by FUNCT_2:113;
+  hence thesis by FUNCT_2:113;
 end;
 
 Lm7: for n being Ordinal,
@@ -616,7 +608,7 @@ A1: p = q;
   x + q = -p + p by A1,POLYNOM1:def 27
     .= 0_(n,L) by Th3
     .= 0.R by POLYNOM1:def 27;
-  hence -p = -q by RLVECT_1:19;
+  hence thesis by RLVECT_1:19;
 end;
 
 theorem Th6:
@@ -915,7 +907,7 @@ A3:       u = [b',0.L] & not(b divides b');
       hence u in [:Bags n,the carrier of L:];
     end;
     then M c= [:Bags n,the carrier of L:] by TARSKI:def 3;
-    then reconsider M as Relation of Bags n,the carrier of L by RELSET_1:def 1;
+    then reconsider M as Relation of Bags n,the carrier of L ;
 A4: now
       let x,y1,y2 be set;
       assume
@@ -1547,7 +1539,7 @@ A17:        s -' h1 = h2 by A15,POLYNOM1:52;
             hence t/.i' = 0.L by A14,BINOM:1;
           end;
           then Sum t = m.b * p.(s-'b) by A4,A8,A9,A10,A11,A12,POLYNOM2:5
-            .= coefficient(m) * p.(s-'b) by A3,POLYNOM7:def 7
+            .= coefficient(m) * p.(s-'b) by A3
             .= a * p.(s-'b) by POLYNOM7:9;
           hence q.s = q'.s by A2,A7;
         end;
@@ -1616,7 +1608,7 @@ A29: dom m = Bags n by FUNCT_2:def 1
         case
 A30:      u' = term(m);
           then u' = EmptyBag n & coefficient(m) = 0.L by A26,POLYNOM7:8;
-          then m.u' = 0.L by A30,POLYNOM7:def 7;
+          then m.u' = 0.L by A30;
           hence m.u = (0_(n,L)).u by POLYNOM1:81;
         end;
         case u' <> term(m);
@@ -1766,9 +1758,7 @@ definition
   coherence by Lm11;
 end;
 
-theorem Th24:
-
-::: according to definition 5.15, p. 194
+theorem Th24: :: according to definition 5.15, p. 194
   for n being Ordinal, T being connected TermOrder of n,
   L being non trivial ZeroStr, p being non-zero Polynomial of n,L
   holds PosetMax(Support(p,T)) = HT(p,T)
@@ -1827,7 +1817,7 @@ A2: [sp0,sp] in (FinOrd-Approx R).0 by BAGORDER:def 16;
   then (FinOrd-Approx R).0 in rng FinOrd-Approx R by FUNCT_1:12;
   then [sp0,sp] in union rng FinOrd-Approx R by A2,TARSKI:def 4;
   then [sp0,sp] in FinOrd R by BAGORDER:def 17;
-  hence 0_(n,L) <= p,T by Def2;
+  hence thesis by Def2;
 end;
 
 theorem Th26:
@@ -1877,9 +1867,7 @@ A1: [Support p, Support q] in O & [Support q, Support r] in O by Def2;
   hence thesis by Def2;
 end;
 
-theorem Th28:
-
-::: theorem 5.12, p. 193
+theorem Th28: :: theorem 5.12, p. 193
   for n being Ordinal, T being connected TermOrder of n,
   L being non empty addLoopStr, p,q being Polynomial of n,L
   holds p <= q,T or q <= p,T
@@ -1895,7 +1883,7 @@ A1: O is connected by BAGORDER:def 18;
   sp <= sq or sq <= sp by A1,WAYBEL_0:def 29;
   then [Support p, Support q] in FinOrd R or
   [Support q, Support p] in FinOrd R by ORDERS_2:def 9;
-  hence p <= q,T or q <= p,T by Def2;
+  hence thesis by Def2;
 end;
 
 theorem Th29:
@@ -2315,18 +2303,14 @@ A7: sq in P' by A6;
   hence thesis by A5;
 end;
 
-theorem
-
-::: according to p. 193
+theorem :: according to p. 193
   for n being Ordinal, T being connected admissible TermOrder of n,
   L being add-associative right_complementable right_zeroed
   (non trivial addLoopStr), p,q being Polynomial of n,L holds p < q,T iff
   (p = 0_(n,L) & q <> 0_(n,L) or HT(p,T) < HT(q,T),T or
   HT(p,T) = HT(q,T) & Red(p,T) < Red(q,T),T) by Lm15;
 
-theorem Th33:
-
-::: exercise 5.16, p. 194
+theorem Th33: :: exercise 5.16, p. 194
   for n being Ordinal, T being connected admissible TermOrder of n,
   L being add-associative right_complementable right_zeroed
   (non trivial addLoopStr), p being non-zero Polynomial of n,L
@@ -2381,9 +2365,7 @@ A6: HT(red,T) <= htp,T by A5,TERMORD:def 6;
   end;
 end;
 
-theorem Th34:
-
-::: exercise 5.16, p. 194
+theorem Th34: :: exercise 5.16, p. 194
   for n being Ordinal, T being connected TermOrder of n,
   L being add-associative right_complementable right_zeroed
   (non trivial addLoopStr), p being Polynomial of n,L holds HM(p,T) <= p,T
@@ -2472,9 +2454,7 @@ end;
 
 begin :: Polynomial Reduction
 
-definition
-
-::: definition 5.18 (i), p. 195
+definition :: definition 5.18 (i), p. 195
   let n be Ordinal, T be connected TermOrder of n,
   L be add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -2487,9 +2467,7 @@ definition
   st s + HT(p,T) = b & g = f - (f.b/HC(p,T)) * (s *' p);
 end;
 
-definition
-
-::: definition 5.18 (ii), p. 195
+definition :: definition 5.18 (ii), p. 195
   let n be Ordinal, T be connected TermOrder of n,
   L be add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -2500,9 +2478,7 @@ definition
   ex b being bag of n st f reduces_to g,p,b,T;
 end;
 
-definition
-
-::: definition 5.18 (iii), p. 196
+definition :: definition 5.18 (iii), p. 196
   let n be Ordinal, T be connected TermOrder of n,
   L be add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -2513,9 +2489,7 @@ definition
   ex p being Polynomial of n,L st p in P & f reduces_to g,p,T;
 end;
 
-definition
-
-::: definition 5.18 (iv), p. 196
+definition :: definition 5.18 (iv), p. 196
   let n be Ordinal, T be connected TermOrder of n,
   L be add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -2526,9 +2500,7 @@ definition
   ex g being Polynomial of n,L st f reduces_to g,p,T;
 end;
 
-notation
-
-::: definition 5.18 (iv), p. 196
+notation :: definition 5.18 (iv), p. 196
   let n be Ordinal, T be connected TermOrder of n,
   L be add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -2538,9 +2510,7 @@ notation
   f is_in_normalform_wrt p,T for f is_reducible_wrt p,T;
 end;
 
-definition
-
-::: definition 5.18 (v), p. 196
+definition :: definition 5.18 (v), p. 196
   let n be Ordinal, T be connected TermOrder of n,
   L be add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -2550,9 +2520,7 @@ definition
   ex g being Polynomial of n,L st f reduces_to g,P,T;
 end;
 
-notation
-
-::: definition 5.18 (v), p. 196
+notation :: definition 5.18 (v), p. 196
   let n be Ordinal, T be connected TermOrder of n,
   L be add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -2562,9 +2530,7 @@ notation
   f is_in_normalform_wrt P,T for f is_reducible_wrt P,T;
 end;
 
-definition
-
-::: following definition 5.18, p. 196
+definition :: following definition 5.18, p. 196
   let n be Ordinal, T be connected TermOrder of n,
   L be add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -2575,9 +2541,7 @@ definition
   f reduces_to g,p,HT(f,T),T;
 end;
 
-definition
-
-::: following definition 5.18, p. 196
+definition :: following definition 5.18, p. 196
   let n be Ordinal, T be connected TermOrder of n,
   L be add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -2587,9 +2551,7 @@ definition
   ex g being Polynomial of n,L st f top_reduces_to g,p,T;
 end;
 
-definition
-
-::: following definition 5.18, p. 196
+definition :: following definition 5.18, p. 196
   let n be Ordinal, T be connected TermOrder of n,
   L be add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -2601,9 +2563,7 @@ definition
   st p in P & f is_top_reducible_wrt p,T;
 end;
 
-theorem
-
-::: lemma 5.20 (i), p. 197
+theorem :: lemma 5.20 (i), p. 197
   for n being Ordinal, T being connected TermOrder of n,
   L being add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -2698,9 +2658,7 @@ A2: 0_(n,L) reduces_to g,p,b,T by A1,Def6;
   thus thesis by A2,Def5;
 end;
 
-theorem
-
-::: lemma 5.20 (ii), p. 197
+theorem :: lemma 5.20 (ii), p. 197
   for n being Ordinal, T being admissible connected TermOrder of n,
   L being add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -2761,9 +2719,7 @@ A8: p is non-zero by A5,POLYNOM7:def 2;
   hence thesis by A1,Def5;
 end;
 
-theorem
-
-::: lemma 5.20 (iii), p. 197
+theorem :: lemma 5.20 (iii), p. 197
   for n being Ordinal, T being connected TermOrder of n,
   L being add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -2771,9 +2727,7 @@ theorem
   f,p,g being Polynomial of n,L, b being bag of n
   holds f reduces_to g,p,b,T implies not(b in Support g) by Lm17;
 
-theorem Th40:
-
-::: lemma 5.20 (iii), p. 197
+theorem Th40: :: lemma 5.20 (iii), p. 197
   for n being Ordinal, T being connected admissible TermOrder of n,
   L being add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -2929,9 +2883,7 @@ A6:     [u,b] in T or [b,u] in T by A3,A5,RELAT_2:def 6;
   hence thesis;
 end;
 
-theorem Th43:
-
-::: lemma 5.20 (iv), p. 197
+theorem Th43: :: lemma 5.20 (iv), p. 197
   for n being Ordinal, T being connected admissible TermOrder of n,
   L being Abelian add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -2963,7 +2915,7 @@ A5: card(Support f) = 0 & f reduces_to g,p,T;
     then Support f = {} by CARD_1:46;
     then f = 0_(n,L) by POLYNOM7:1;
     then f is_irreducible_wrt p,T by Th37;
-    hence [Support g,Support f] in FinOrd R by A5,Def8;
+    hence thesis by A5,Def8;
   end;
 A6: for k be Nat st P[k] holds P[k+1]
   proof
@@ -3089,9 +3041,7 @@ then [Support Red(g,T),Support rf] in FinOrd R by A7,A25,XCMPLX_1:2;
       end;
       hence [Support g,Support f] in FinOrd R;
     end;
-    hence for f,p,g being Polynomial of n,L
-    holds card(Support f) = k+1 & f reduces_to g,p,T
-    implies [Support g,Support f] in FinOrd R;
+    hence thesis;
   end;
 A27: for k being Nat holds P[k] from NAT_1:sch 2(A4,A6);
   consider k being Nat such that
@@ -3110,13 +3060,12 @@ definition
   almost_left_invertible (non trivial doubleLoopStr),
   P be Subset of Polynom-Ring(n,L);
   func PolyRedRel(P,T) ->
-  Relation of (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)},
-  the carrier of Polynom-Ring(n,L) means
+  Relation of NonZero Polynom-Ring(n,L), the carrier of Polynom-Ring(n,L) means
   :Def13:
   for p,q being Polynomial of n,L holds [p,q] in it iff p reduces_to q,P,T;
   existence
   proof
-    set A = (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)},
+    set A = NonZero Polynom-Ring(n,L),
     B = the carrier of Polynom-Ring(n,L);
     defpred P[set,set] means ex p,q being Polynomial of n,L
     st p = $1 & q = $2 & p reduces_to q,P,T;
@@ -3138,11 +3087,12 @@ A3:     p reduces_to q,P,T;
 A4:     pp in P & p reduces_to q,pp,T by Def7;
         consider b being bag of n such that
 A5:     p reduces_to q,pp,b,T by A4,Def6;
+X:      0_(n,L) = 0.Polynom-Ring(n,L) by POLYNOM1:def 27;
         p <> 0_(n,L) by A5,Def5;
         then
 A6:     not(p in {0_(n,L)}) by TARSKI:def 1;
         p in the carrier of Polynom-Ring(n,L) by POLYNOM1:def 27;
-        then p in A & q in B by A6,POLYNOM1:def 27,XBOOLE_0:def 5;
+        then p in A & q in B by A6,X,POLYNOM1:def 27,XBOOLE_0:def 5;
         hence [p,q] in R by A1,A3;
       end;
       hence [p,q] in R iff p reduces_to q,P,T by A2;
@@ -3151,23 +3101,24 @@ A6:     not(p in {0_(n,L)}) by TARSKI:def 1;
   end;
   uniqueness
   proof
-    let R1,R2 be Relation of (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)},
+    let R1,R2 be Relation of NonZero Polynom-Ring(n,L),
     the carrier of Polynom-Ring(n,L) such that
 A7: for p,q being Polynomial of n,L
     holds [p,q] in R1 iff p reduces_to q,P,T and
 A8: for p,q being Polynomial of n,L holds [p,q] in R2 iff p reduces_to q,P,T;
-    set A = (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)},
+    set A = NonZero Polynom-Ring(n,L),
     B = the carrier of Polynom-Ring(n,L);
     for p,q being set holds [p,q] in R1 iff [p,q] in R2
     proof
       let p,q be set;
+X:      0_(n,L) = 0.Polynom-Ring(n,L) by POLYNOM1:def 27;
 A9:   now
         assume
 A10:    [p,q] in R1;
         then consider p',q' being set such that
 A11:    [p,q] = [p',q'] & p' in A & q' in B by RELSET_1:6;
         reconsider p',q' as Polynomial of n,L by A11,POLYNOM1:def 27;
-        not(p' in {0_(n,L)}) by A11,XBOOLE_0:def 5;
+        not(p' in {0_(n,L)}) by A11,X,XBOOLE_0:def 5;
         then p' <> 0_(n,L) by TARSKI:def 1;
         then reconsider p' as non-zero Polynomial of n,L by POLYNOM7:def 2;
 A12:    p' reduces_to q',P,T by A7,A10,A11;
@@ -3183,7 +3134,7 @@ A14:    [p,q] in R2;
         then consider p',q' being set such that
 A15:    [p,q] = [p',q'] & p' in A & q' in B by RELSET_1:6;
         reconsider p',q' as Polynomial of n,L by A15,POLYNOM1:def 27;
-        not(p' in {0_(n,L)}) by A15,XBOOLE_0:def 5;
+        not(p' in {0_(n,L)}) by A15,X,XBOOLE_0:def 5;
         then p' <> 0_(n,L) by TARSKI:def 1;
         then reconsider p' as non-zero Polynomial of n,L by POLYNOM7:def 2;
 A16:    p' reduces_to q',P,T by A8,A14,A15;
@@ -3217,9 +3168,7 @@ A1: f reduces_to g,p,b,T by Def6;
   thus thesis by A1,Def5;
 end;
 
-theorem
-
-::: lemma 5.20 (v), p. 197
+theorem :: lemma 5.20 (v), p. 197
   for n being Ordinal, T being connected admissible TermOrder of n,
   L being Abelian add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -3270,14 +3219,15 @@ A11:    len q = k by A6,A8,FINSEQ_1:21;
 A12:    dom q = Seg k by A6,A8,FINSEQ_1:21;
         then k in dom q by A4,FINSEQ_1:3;
         then
-A13:    [h,g] in R by A6,A10,A11,FUNCT_1:68;
+A13:    [h,g] in R by A6,A10,A11,FUNCT_1:70;
         then consider h',g' being set such that
 A14:    [h,g] = [h',g'] &
-        h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+        h' in NonZero Polynom-Ring(n,L) &
         g' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
 A15:    h = [h',g']`1 by A14,MCART_1:def 1
           .= h' by MCART_1:def 1;
-        not(h' in {0_(n,L)}) by A14,XBOOLE_0:def 5;
+        0_(n,L) = 0.Polynom-Ring(n,L) by POLYNOM1:def 27;
+        then not(h' in {0_(n,L)}) by A14,XBOOLE_0:def 5;
         then h' <> 0_(n,L) by TARSKI:def 1;
         then reconsider h as non-zero Polynomial of n,L
         by A14,A15,POLYNOM1:def 27,POLYNOM7:def 2;
@@ -3294,13 +3244,13 @@ A19:      i in dom p by A7,A17,FINSEQ_1:3;
           i+1 in dom p by A7,A17,A18,FINSEQ_1:3;
           then
 A20:      [p.i, p.(i+1)] in R by A19,REWRITE1:def 2;
-          p.i = q.i by A16,FUNCT_1:68;
-          hence [q.i, q.(i+1)] in R by A16,A20,FUNCT_1:68;
+          p.i = q.i by A16,FUNCT_1:70;
+          hence [q.i, q.(i+1)] in R by A16,A20,FUNCT_1:70;
         end;
         then reconsider q as RedSequence of R by A4,A11,REWRITE1:def 2;
         1 in dom q by A4,A12,FINSEQ_1:3;
         then
-A21:    q.1 = f by A6,FUNCT_1:68;
+A21:    q.1 = f by A6,FUNCT_1:70;
         then PolyRedRel(P,T) reduces f,h by REWRITE1:def 3;
         then
 A22:    h <= f,T by A5,A11,A21;
@@ -3358,9 +3308,7 @@ A32:    HT(f,T) < HT(g,T),T by A30,TERMORD:def 3;
   hence thesis;
 end;
 
-registration
-
-::: theorem 5.21, p. 198
+registration :: theorem 5.21, p. 198
   let n be Nat, T be connected admissible TermOrder of n,
   L be Abelian add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -3370,6 +3318,7 @@ registration
   coherence
   proof
     set R = PolyRedRel(P,T);
+X:      0_(n,L) = 0.Polynom-Ring(n,L) by POLYNOM1:def 27;
     now
       let x be set;
       assume x in field R;
@@ -3391,7 +3340,7 @@ A2:   x in dom R \/ rng R by RELAT_1:def 6;
         assume
 A3:     [x,x] in R;
         then consider x1,y1 being set such that
-A4:     [x,x] = [x1,y1] & x1 in A & y1 in B by RELSET_1:6;
+A4:     [x,x] = [x1,y1] & x1 in A & y1 in B by X,RELSET_1:6;
         x = [x1,y1]`1 by A4,MCART_1:def 1
           .= x1 by MCART_1:def 1;
         then not(x' in {0_(n,L)}) by A4,XBOOLE_0:def 5;
@@ -3463,11 +3412,11 @@ A14:    b in (R~)-Seg p & b in Y by A13,XBOOLE_0:def 4;
 A15:    [p,b] in R by RELAT_1:def 7;
         then consider h',g' being set such that
 A16:    [p,b] = [h',g'] &
-        h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+        h' in NonZero Polynom-Ring(n,L) &
         g' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
 A17:    p = [h',g']`1 by A16,MCART_1:def 1
           .= h' by MCART_1:def 1;
-        not(h' in {0_(n,L)}) by A16,XBOOLE_0:def 5;
+        not(h' in {0_(n,L)}) by A16,X,XBOOLE_0:def 5;
         then h' <> 0_(n,L) by TARSKI:def 1;
         then reconsider p as non-zero Polynomial of n,L by A17,POLYNOM7:def 2;
         b = [h',g']`2 by A16,MCART_1:def 2
@@ -3499,9 +3448,7 @@ A22:    (Support b') in X-Seg (Support p) by A20,WELLORD1:def 1;
   end;
 end;
 
-theorem Th45:
-
-::: lemma 5.24 (i), p. 200
+theorem Th45: :: lemma 5.24 (i), p. 200
   for n being Nat, T being admissible connected TermOrder of n,
   L being add-associative right_complementable left_zeroed right_zeroed
   commutative associative well-unital distributive Abelian
@@ -3608,9 +3555,7 @@ A13:      m = u & not(PolyRedRel(P,T) reduces u*'f,0_(n,L)) by A4;
   end;
 end;
 
-theorem Th46:
-
-::: lemma 5.24 (ii), p. 200
+theorem Th46: :: lemma 5.24 (ii), p. 200
   for n being Ordinal, T being connected admissible TermOrder of n,
   L being Abelian add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -3672,7 +3617,6 @@ A11: (m*'f).b' = (m*'f).(term(m)+b) by TERMORD:23
     .= (m*'f) - (f.b/HC(p,T)) * (Monom(m.(term(m)),HT(m,T)) *'(s *' p))
   by Th22
     .= (m*'f) - (f.b/HC(p,T)) * (Monom(coefficient(m),HT(m,T)) *'(s *' p))
-  by POLYNOM7:def 7
     .= (m*'f) - (f.b/HC(p,T)) * (Monom(coefficient(m),term(m)) *'(s *' p))
   by TERMORD:23
     .= (m*'f) - (f.b/HC(p,T) * (m *'(s *' p))) by POLYNOM7:11
@@ -3684,9 +3628,7 @@ A11: (m*'f).b' = (m*'f).(term(m)+b) by TERMORD:23
   hence thesis by A1,A4,A10,Def7;
 end;
 
-theorem Th47:
-
-::: lemma 5.24 (iii), p. 200
+theorem Th47: :: lemma 5.24 (iii), p. 200
   for n being Ordinal, T being connected admissible TermOrder of n,
   L being Abelian add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -3747,14 +3689,15 @@ A12:      len q = k by A7,A9,FINSEQ_1:21;
 A13:      dom q = Seg k by A7,A9,FINSEQ_1:21;
           then k in dom q by A5,FINSEQ_1:3;
           then
-A14:      [h,g] in R by A7,A11,A12,FUNCT_1:68;
+A14:      [h,g] in R by A7,A11,A12,FUNCT_1:70;
           then consider h',g' being set such that
 A15:      [h,g] = [h',g'] &
-          h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+          h' in NonZero Polynom-Ring(n,L) &
           g' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
 A16:      h = [h',g']`1 by A15,MCART_1:def 1
             .= h' by MCART_1:def 1;
-          not(h' in {0_(n,L)}) by A15,XBOOLE_0:def 5;
+          0_(n,L) = 0.Polynom-Ring(n,L) by POLYNOM1:def 27;
+          then not(h' in {0_(n,L)}) by A15,XBOOLE_0:def 5;
           then h' <> 0_(n,L) by TARSKI:def 1;
           then reconsider h as non-zero Polynomial of n,L
           by A15,A16,POLYNOM1:def 27,POLYNOM7:def 2;
@@ -3771,13 +3714,13 @@ A20:        i in dom p by A8,A18,FINSEQ_1:3;
             i+1 in dom p by A8,A18,A19,FINSEQ_1:3;
             then
 A21:        [p.i, p.(i+1)] in R by A20,REWRITE1:def 2;
-            p.i = q.i by A17,FUNCT_1:68;
-            hence [q.i, q.(i+1)] in R by A17,A21,FUNCT_1:68;
+            p.i = q.i by A17,FUNCT_1:70;
+            hence [q.i, q.(i+1)] in R by A17,A21,FUNCT_1:70;
           end;
           then reconsider q as RedSequence of R by A5,A12,REWRITE1:def 2;
           1 in dom q by A5,A13,FINSEQ_1:3;
           then
-A22:      q.1 = f by A7,FUNCT_1:68;
+A22:      q.1 = f by A7,FUNCT_1:70;
           then PolyRedRel(P,T) reduces f,h by REWRITE1:def 3;
           then
 A23:      PolyRedRel(P,T) reduces m*'f,m*'h by A6,A12,A22;
@@ -3804,9 +3747,7 @@ A27: len p = k;
   end;
 end;
 
-theorem
-
-::: lemma 5.24 (iii), p. 200
+theorem :: lemma 5.24 (iii), p. 200
   for n being Ordinal, T being connected admissible TermOrder of n,
   L being Abelian add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -3826,9 +3767,7 @@ proof
   hence thesis by POLYNOM1:87;
 end;
 
-theorem Th49:
-
-::: lemma 5.25 (i), p. 200
+theorem Th49: :: lemma 5.25 (i), p. 200
   for n being Ordinal, T being connected TermOrder of n,
   L being add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -3888,13 +3827,14 @@ A11:  k + 1 in dom r by A10,FINSEQ_1:3;
       then
 A12:  [r.k,r.(k+1)] in PolyRedRel(P,T) by A11,REWRITE1:def 2;
       then consider x,y being set such that
-A13:  x in ((the carrier of Polynom-Ring(n,L)) \ {0_(n,L)}) &
+A13:  x in NonZero Polynom-Ring(n,L) &
       y in the carrier of Polynom-Ring(n,L) &
       [r.k,r.(k+1)] = [x,y] by ZFMISC_1:def 2;
 A14:  r.k = [x,y]`1 by A13,MCART_1:def 1
         .= x by MCART_1:def 1;
       then reconsider h2 as Polynomial of n,L by A13,POLYNOM1:def 27;
-      not(r.k in {0_(n,L)}) by A13,A14,XBOOLE_0:def 5;
+      0_(n,L) = 0.Polynom-Ring(n,L) by POLYNOM1:def 27;
+      then not(r.k in {0_(n,L)}) by A13,A14,XBOOLE_0:def 5;
       then r.k <> 0_(n,L) by TARSKI:def 1;
       then reconsider h2 as non-zero Polynomial of n,L by POLYNOM7:def 2;
       set q = r|(Seg k);
@@ -3917,8 +3857,9 @@ A22:    i in dom r by A15,A20,FINSEQ_1:3;
         i+1 in dom r by A15,A20,A21,FINSEQ_1:3;
         then
 A23:    [r.i, r.(i+1)] in PolyRedRel(P,T) by A22,REWRITE1:def 2;
-        r.i = q.i by A19,FUNCT_1:68;
-        hence [q.i, q.(i+1)] in PolyRedRel(P,T) by A19,A23,FUNCT_1:68;
+        r.i = q.i by A19,FUNCT_1:70;
+        hence [q.i, q.(i+1)] in PolyRedRel(P,T) by A19,A23,FUNCT_1:70
+;
       end;
       then reconsider q as RedSequence of PolyRedRel(P,T) by A6,A17,
 REWRITE1:def 2;
@@ -4023,8 +3964,7 @@ A36:      b in Support g2;
           hence PolyRedRel(P,T) reduces g,g1 by A26,REWRITE1:17;
         end;
       end;
-      hence ex f1,g1 being Polynomial of n,L st f1 - g1 = h1 &
-      PolyRedRel(P,T) reduces f,f1 & PolyRedRel(P,T) reduces g,g1 by A31,A32;
+      hence thesis by A31,A32;
     end;
   end;
 A37: for k being Nat st 1 <= k holds P[k] from NAT_1:sch 8(A2,A5);
@@ -4037,9 +3977,7 @@ A39: len p = k;
   hence thesis by A1,A37,A38,A39;
 end;
 
-theorem Th50:
-
-::: lemma 5.25 (ii), p. 200
+theorem Th50: :: lemma 5.25 (ii), p. 200
   for n being Ordinal, T being connected TermOrder of n,
   L being add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -4065,9 +4003,7 @@ A1: f1 - g1 = 0_(n,L) &
   hence thesis by A1,REWRITE1:def 7;
 end;
 
-theorem Th51:
-
-::: lemma 5.25 (ii), p. 200
+theorem Th51: :: lemma 5.25 (ii), p. 200
   for n being Ordinal, T being connected TermOrder of n,
   L being add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -4110,7 +4046,7 @@ proof
   I be right-ideal (non empty Subset of R), a be Element of R;
 A1: a - a = 0.R by RLVECT_1:28;
   0.R in I by IDEAL_1:3;
-  hence a,a are_congruent_mod I by A1,Def14;
+  hence thesis by A1,Def14;
 end;
 
 theorem Th53:
@@ -4302,9 +4238,7 @@ A11: -g' = -g by RLVECT_1:19;
   hence thesis by A5,A10,Def14;
 end;
 
-theorem Th57:
-
-::: lemma 5.26, p. 202
+theorem Th57: :: lemma 5.26, p. 202
   for n being Ordinal, T being connected TermOrder of n,
   L being Abelian add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -4319,6 +4253,7 @@ proof
   almost_left_invertible (non trivial doubleLoopStr),
   P be Subset of Polynom-Ring(n,L), f,g be Element of Polynom-Ring(n,L);
   set R = PolyRedRel(P,T), PR = Polynom-Ring(n,L);
+X:  0_(n,L) = 0.Polynom-Ring(n,L) by POLYNOM1:def 27;
   assume
 A1: f,g are_convertible_wrt PolyRedRel(P,T);
   defpred P[Nat] means
@@ -4334,7 +4269,7 @@ A2: P[1]
     then
 A3: f - g = 0.PR by RLVECT_1:28;
     0.PR in P-Ideal by IDEAL_1:3;
-    hence f,g are_congruent_mod P-Ideal by A3,Def14;
+    hence thesis by A3,Def14;
   end;
 A4: now
     let k be Nat;
@@ -4364,25 +4299,25 @@ A11:    [p.k,p.(k+1)] in R \/ R~ by A10,REWRITE1:def 2;
 A12:    len q = k by A7,A9,FINSEQ_1:21;
 A13:    dom q = Seg k by A7,A9,FINSEQ_1:21;
         then k in dom q by A5,FINSEQ_1:3;
-        then [h,g] in R \/ R~ by A7,A11,A12,FUNCT_1:68;
+        then [h,g] in R \/ R~ by A7,A11,A12,FUNCT_1:70;
         then
 A14:    [h,g] in R or [h,g] in R~ by XBOOLE_0:def 3;
         now per cases by A14,RELAT_1:def 7;
           case [h,g] in R;
             then consider h',g' being set such that
 A15:        [h,g] = [h',g'] &
-            h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+            h' in NonZero Polynom-Ring(n,L) &
             g' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
             h = [h',g']`1 by A15,MCART_1:def 1
               .= h' by MCART_1:def 1;
             hence h in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
             h in (the carrier of Polynom-Ring(n,L)) &
-            g in (the carrier of Polynom-Ring(n,L)) by A15;
+            g in (the carrier of Polynom-Ring(n,L)) by A15,X;
           end;
           case [g,h] in R;
             then consider h',g' being set such that
 A16:        [g,h] = [h',g'] &
-            h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+            h' in NonZero Polynom-Ring(n,L) &
             g' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
 A17:        g = [h',g']`1 by A16,MCART_1:def 1
               .= h' by MCART_1:def 1;
@@ -4390,7 +4325,7 @@ A17:        g = [h',g']`1 by A16,MCART_1:def 1
               .= g' by MCART_1:def 2;
             hence g in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
             g in (the carrier of Polynom-Ring(n,L)) &
-            h in (the carrier of Polynom-Ring(n,L)) by A16,A17;
+            h in (the carrier of Polynom-Ring(n,L)) by A16,A17,X;
           end;
         end;
         then reconsider h as Polynomial of n,L by POLYNOM1:def 27;
@@ -4409,13 +4344,13 @@ A21:      i in dom p by A8,A19,FINSEQ_1:3;
           i+1 in dom p by A8,A19,A20,FINSEQ_1:3;
           then
 A22:      [p.i, p.(i+1)] in R \/ R~ by A21,REWRITE1:def 2;
-          p.i = q.i by A18,FUNCT_1:68;
-          hence [q.i, q.(i+1)] in R \/ R~ by A18,A22,FUNCT_1:68;
+          p.i = q.i by A18,FUNCT_1:70;
+          hence [q.i, q.(i+1)] in R \/ R~ by A18,A22,FUNCT_1:70;
         end;
         then reconsider q as RedSequence of R \/ R~ by A5,A12,REWRITE1:def 2;
         1 in dom q by A5,A13,FINSEQ_1:3;
         then
-A23:    q.1 = f by A7,FUNCT_1:68;
+A23:    q.1 = f by A7,FUNCT_1:70;
         then R \/ R~ reduces f,h by REWRITE1:def 3;
         then
 A24:    f,h' are_congruent_mod P-Ideal by A6,A12,A23;
@@ -4424,13 +4359,13 @@ A24:    f,h' are_congruent_mod P-Ideal by A6,A12,A23;
 A25:        [h,g] in R;
             then consider h',g' being set such that
 A26:        [h,g] = [h',g'] &
-            h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+            h' in NonZero Polynom-Ring(n,L) &
             g' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
 A27:        h = [h',g']`1 by A26,MCART_1:def 1
               .= h' by MCART_1:def 1;
 A28:        g = [h',g']`2 by A26,MCART_1:def 2
               .= g' by MCART_1:def 2;
-            not(h' in {0_(n,L)}) by A26,XBOOLE_0:def 5;
+            not(h' in {0_(n,L)}) by A26,X,XBOOLE_0:def 5;
             then h' <> 0_(n,L) by TARSKI:def 1;
 
 then reconsider h as non-zero Polynomial of n,L by A27,POLYNOM7:def 2;
@@ -4447,13 +4382,13 @@ then reconsider h as non-zero Polynomial of n,L by A27,POLYNOM7:def 2;
 A29:        [g,h] in R;
             then consider g',h' being set such that
 A30:        [g,h] = [g',h'] &
-            g' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+            g' in NonZero Polynom-Ring(n,L) &
             h' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
 A31:        g = [g',h']`1 by A30,MCART_1:def 1
               .= g' by MCART_1:def 1;
 A32:        h = [g',h']`2 by A30,MCART_1:def 2
               .= h' by MCART_1:def 2;
-            not(g' in {0_(n,L)}) by A30,XBOOLE_0:def 5;
+            not(g' in {0_(n,L)}) by A30,X,XBOOLE_0:def 5;
             then g' <> 0_(n,L) by TARSKI:def 1;
             then reconsider g' = g as non-zero Polynomial of n,L
             by A31,POLYNOM1:def 27,POLYNOM7:def 2;
@@ -4481,7 +4416,7 @@ A35: p.1 = f & p.len p = g by REWRITE1:def 3;
 A36: len p = k;
   k > 0 by A36;
   then 1 <= k by NAT_1:14;
-  hence f,g are_congruent_mod P-Ideal by A33,A34,A35,A36;
+  hence thesis by A33,A34,A35,A36;
 end;
 
 Lm20: for n being Nat, T being admissible connected TermOrder of n,
@@ -4580,9 +4515,7 @@ A11:      mh'*'p',0_(n,L) are_convertible_wrt PolyRedRel(P,T) by REWRITE1:26;
   hence thesis;
 end;
 
-theorem
-
-::: lemma 5.26, p. 202
+theorem :: lemma 5.26, p. 202
   for n being Nat, T being admissible connected TermOrder of n,
   L being Abelian add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -4615,7 +4548,7 @@ A3: Sum p = g - f & len p = 0;
     then p = <*>(the carrier of PR);
     then Sum p = 0.PR by RLVECT_1:60;
     then f = g by A3,RLVECT_1:35;
-    hence f,g are_convertible_wrt PolyRedRel(P,T) by REWRITE1:27;
+    hence thesis by REWRITE1:27;
   end;
   now
     let k be Nat;
@@ -4689,12 +4622,10 @@ A14: for k being Nat holds P[k] from NAT_1:sch 2(A2,A13);
 A15: Sum p = g - f by A1,IDEAL_1:61;
   consider k being Nat such that
 A16: len p = k;
-  thus f,g are_convertible_wrt PolyRedRel(P,T) by A14,A15,A16;
+  thus thesis by A14,A15,A16;
 end;
 
-theorem Th59:
-
-::: lemma 5.26, p. 202
+theorem Th59: :: lemma 5.26, p. 202
   for n being Ordinal, T being connected TermOrder of n,
   L being Abelian add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -4728,9 +4659,7 @@ A3: -g' = -g by RLVECT_1:19;
   hence thesis by A2,Def14;
 end;
 
-theorem
-
-::: lemma 5.26, p. 202
+theorem :: lemma 5.26, p. 202
   for n being Ordinal, T being connected TermOrder of n,
   L being Abelian add-associative right_complementable right_zeroed
   commutative associative well-unital distributive

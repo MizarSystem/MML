@@ -14,14 +14,15 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, CARD_1, NUMBERS, XCMPLX_0,
       REAL_1, NAT_1, NAT_D, ABIAN, INT_1, GRAPH_2, RELAT_1, FINSET_1, FUNCT_1,
       PARTFUN1, FINSEQ_1, MATRIX_1, STRUCT_0, REALSET1, PRE_TOPC, TOPS_1,
-      CONNSP_1, EUCLID, TOPREAL1, SPPOL_1, JORDAN1, GOBOARD1, GOBOARD2,
+      CONNSP_1,
+      RLTOPSP1, EUCLID, TOPREAL1, SPPOL_1, JORDAN1, GOBOARD1, GOBOARD2,
       GOBOARD5, GOBOARD9, GOBRD13, XXREAL_0;
  constructors SETFAM_1, XXREAL_0, NAT_1, REALSET1, NAT_D, ABIAN, TOPS_1,
       CONNSP_1, COMPTS_1, GOBOARD2, SPPOL_1, JORDAN1, GRAPH_2, GOBOARD9,
-      GOBRD13, XXREAL_2;
+      GOBRD13, XXREAL_2, RELSET_1, CONVEX1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, XREAL_0, INT_1, MEMBERED,
       REALSET1, ABIAN, GOBOARD2, SPPOL_2, GOBOARD5, GOBOARD9, JORDAN10,
-      FUNCT_1;
+      FUNCT_1, RELAT_1, ZFMISC_1, EUCLID;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions XBOOLE_0, TARSKI, GOBOARD5, TOPREAL1, JORDAN1, SUBSET_1;
  theorems SPPOL_1, XBOOLE_0, TOPREAL1, JORDAN4, TARSKI, SPPOL_2, FUNCT_1,
@@ -31,7 +32,7 @@ environ
       GOBOARD7, TOPS_1, NAT_2, JORDAN1G, SPRECT_3, JORDAN1J, FINSEQ_5, GOBRD11,
       TOPREAL6, GOBOARD2, REALSET1, TOPREAL8, GRAPH_2, FINSEQ_3, JORDAN5B,
       XREAL_1, XXREAL_0, PARTFUN1, ORDINAL1, MATRIX_1, XREAL_0, NAT_D,
-      ZFMISC_1;
+      ZFMISC_1, RLTOPSP1;
  schemes FRAENKEL, NAT_1;
 
 begin
@@ -39,25 +40,6 @@ begin
 reserve i,j,k,n for Element of NAT,
   X,Y,a,b,c,x for set,
   r,s for Real;
-
-Lm1: for R be Relation st R is trivial holds dom R is trivial
-proof
-  let R be Relation;
-  assume
-A1: R is trivial;
-  per cases by A1,REALSET1:def 4;
-  suppose R is empty;
-    hence thesis by RELAT_1:60;
-  end;
-  suppose ex x being set st R = {x};
-    then consider x being set such that
-A2: R = {x};
-    x in R by A2,TARSKI:def 1;
-    then consider y being set such that
-A3: ex z be set st x=[y,z] by RELAT_1:def 1;
-    thus thesis by A2,A3,RELAT_1:23;
-  end;
-end;
 
 Lm2: for f being FinSequence st dom f is trivial holds len f is trivial
 proof
@@ -67,7 +49,7 @@ A1: dom f is trivial;
 A2: Seg len f = dom f by FINSEQ_1:def 3;
   per cases by A1,REALSET1:def 4;
   suppose dom f is empty;
-    then f = {} by RELAT_1:64;
+    then f = {};
     hence thesis by CARD_1:47;
   end;
   suppose ex x being set st dom f = {x};
@@ -79,7 +61,7 @@ Lm3: for f be FinSequence st f is trivial holds len f is trivial
 proof
   let f be FinSequence;
   assume f is trivial;
-  then dom f is trivial by Lm1;
+  then dom f is trivial;
   hence thesis by Lm2;
 end;
 
@@ -90,7 +72,7 @@ proof
 A1: 1 < i;
 A2: 1-1=0;
   1-'1<i-'1 by A1,NAT_D:56;
-  hence 0 < i-'1 by A2,XREAL_0:def 2;
+  hence thesis by A2,XREAL_0:def 2;
 end;
 
 canceled;
@@ -99,7 +81,7 @@ theorem Th3:
   1 is odd
 proof
   1=2*0+1;
-  hence 1 is odd;
+  hence thesis;
 end;
 
 theorem Th4:
@@ -116,7 +98,7 @@ A3: i in dom f by A1,GOBOARD2:3;
   then f.i in rng f by FUNCT_1:12;
   hence f/.i in rng f by A3,PARTFUN1:def 8;
   f.(i+1) in rng f by A2,FUNCT_1:12;
-  hence f/.(i+1) in rng f by A2,PARTFUN1:def 8;
+  hence thesis by A2,PARTFUN1:def 8;
 end;
 
 registration
@@ -136,9 +118,7 @@ proof
   let f,g be FinSequence of TOP-REAL 2 such that
 A1: f ^' g is unfolded s.c.c. and
 A2: len g >= 2;
-  len g > 0 by A2,XXREAL_0:2;
-  then
-A3: g <> {} by CARD_1:47;
+A3: g <> {} by A2,CARD_1:47;
 A4: now
     assume not f is s.n.c.;
     then consider i,j being Nat such that
@@ -198,7 +178,7 @@ A21: LSeg(f^'g,i) = LSeg(f,i) by A20,TOPREAL8:28;
     LSeg(f^'g,i+1) = LSeg(f,i+1)by A14,TOPREAL8:28;
     hence contradiction by A1,A13,A17,A19,A21,TOPREAL1:def 8;
   end;
-  hence f is unfolded s.n.c. by A4;
+  hence thesis by A4;
 end;
 
 theorem Th6:
@@ -217,7 +197,7 @@ A4: a = LSeg(g1^'g2,j) by A3,TOPREAL8:28;
   len g1 <= len (g1^'g2) by TOPREAL8:7;
   then j+1 <= len (g1^'g2) by A3,XXREAL_0:2;
   then a in { LSeg(g1^'g2,i) : 1 <= i & i+1 <= len (g1^'g2) } by A3,A4;
-  hence x in L~(g1^'g2) by A2,TARSKI:def 4;
+  hence thesis by A2,TARSKI:def 4;
 end;
 
 begin
@@ -278,17 +258,16 @@ A15: i < len f2 by A12,NAT_1:13;
   then
 A16: f1 is_in_general_position_wrt f by A7,Def1;
 A17: L~f2 misses rng f1 by A3,Def1;
-A18: L~f c= L~f2 by A5,TOPREAL3:27;
 A19: L~f misses rng f1 by A5,A17,TOPREAL3:27,XBOOLE_1:63;
   now
     let i such that
 A20: 1<=i & i < len f1;
 X:   L~f2 /\ LSeg(f1,i) is trivial by A3,A20,Def1;
-     L~f /\ LSeg(f1,i) c=  L~f2 /\ LSeg(f1,i) by A18,XBOOLE_1:26;
+     L~f /\ LSeg(f1,i) c=  L~f2 /\ LSeg(f1,i) by A5,TOPREAL3:27,XBOOLE_1:26;
     hence L~f /\ LSeg(f1,i) is trivial by X;
   end;
   then f is_in_general_position_wrt f1 by A19,Def1;
-  hence f1,f are_in_general_position by A16,Def2;
+  hence thesis by A16,Def2;
 end;
 
 theorem Th8:
@@ -309,9 +288,9 @@ A4: L~g1 misses rng (f1^'f2) by Th6,XBOOLE_1:63;
 A5: now
     let i such that
 A6: 1<=i & i < len (f1^'f2);
-A7: L~g1 c= L~(g1^'g2) by Th6;
 X:    L~(g1^'g2) /\ LSeg(f1^'f2,i) is trivial by A2,A6,Def1;
-     L~g1 /\ LSeg(f1^'f2,i) c=  L~(g1^'g2) /\ LSeg(f1^'f2,i) by A7,XBOOLE_1:26;
+     L~g1 /\ LSeg(f1^'f2,i) c=  L~(g1^'g2) /\ LSeg(f1^'f2,i)
+      by Th6,XBOOLE_1:26;
     hence L~g1 /\ LSeg(f1^'f2,i) is trivial by X;
   end;
   now
@@ -325,7 +304,7 @@ A8: 1<=i & i < len g1;
 
 then f1^'f2 is_in_general_position_wrt g1 & g1 is_in_general_position_wrt f1^'
   f2 by A3,A4,A5,Def1;
-  hence f1^'f2,g1 are_in_general_position by Def2;
+  hence thesis by Def2;
 end;
 
 reserve f,g for FinSequence of TOP-REAL 2;
@@ -359,7 +338,7 @@ A9: g.(k+1) in rng g by A6,FUNCT_1:12;
     then g.(k+1) in (L~f)`` by A8,A9,XBOOLE_0:def 5;
     hence contradiction by A3,A9,XBOOLE_0:3;
   end;
-  hence g.(k+1) in (L~f)`;
+  hence thesis;
 end;
 
 theorem Th10:
@@ -392,16 +371,16 @@ A11: a1 in B2 by A2,A8,TOPREAL1:def 5;
 A12: a2 in B1 by A7,A9,XBOOLE_0:def 4;
 A13: a1 in LSeg(f1/.i,a2) \/ LSeg(a2,f1/.(i+1)) by A8,A9,TOPREAL1:11;
 A14: a1 in LSeg(f2/.j,a2) \/ LSeg(a2,f2/.(j+1)) by A10,A11,TOPREAL1:11;
-    f2/.j in B2 by TOPREAL1:6;
+    f2/.j in B2 by RLTOPSP1:69;
     then
 A15: LSeg(a2, f2/.j) c= B2 by A10,TOPREAL1:12;
-    f1/.i in B1 by TOPREAL1:6;
+    f1/.i in B1 by RLTOPSP1:69;
     then
 A16: LSeg(a2, f1/.i) c= B1 by A12,TOPREAL1:12;
-    f1/.(i+1) in B1 by TOPREAL1:6;
+    f1/.(i+1) in B1 by RLTOPSP1:69;
     then
 A17: LSeg(a2,f1/.(i+1)) c= B1 by A12,TOPREAL1:12;
-    f2/.(j+1) in B2 by TOPREAL1:6;
+    f2/.(j+1) in B2 by RLTOPSP1:69;
     then
 A18: LSeg(a2,f2/.(j+1)) c= B2 by A10,TOPREAL1:12;
 A19: f1/.i in rng f1 by A2,Th4;
@@ -490,7 +469,7 @@ A28:      f1/.(i+1) in B2 or f2/.(j+1) in B1 by A17,A18;
       hence contradiction;
     end;
   end;
-  hence LSeg(f1,i) /\ LSeg(f2,j) is trivial;
+  hence thesis;
 end;
 
 theorem Th11:
@@ -515,7 +494,7 @@ A3: IN is finite from FRAENKEL:sch 22(A1,A2);
 A4:   a in IN;
       consider X,Y be Subset of TOP-REAL 2 such that
 A5:   a = X /\ Y & X in AL & Y in BL by A4;
-      thus a in C by A5,SETFAM_1:def 5;
+      thus thesis by A5,SETFAM_1:def 5;
     end;
     thus C c= IN
     proof
@@ -529,7 +508,7 @@ A7:   X = LSeg(f,i) & 1 <= i & i+1 <= len f by A6;
 A8:   Y = LSeg(g,j) & 1 <= j & j+1 <= len g by A6;
       reconsider X,Y as Subset of TOP-REAL 2 by A7,A8;
       X /\ Y in IN by A6;
-      hence a in IN by A6;
+      hence thesis by A6;
     end;
   end;
   hence thesis by A3;
@@ -549,14 +528,11 @@ A3: INTERSECTION(AL,BL) is finite by Th11;
 A4: Z in INTERSECTION(AL,BL);
     consider X,Y be set such that
 A5: X in AL & Y in BL & Z = X /\ Y by A4,SETFAM_1:def 5;
-    consider i be Element of NAT such that
-A6: X = LSeg(f,i) & 1 <= i & i+1 <= len f by A5;
-    consider j be Element of NAT such that
-A7: Y = LSeg(g,j) & 1 <= j & j+1 <= len g by A5;
-    Z is trivial set by A1,A5,A6,A7,Th10;
-    hence Z is finite;
+A6: ex i be Element of NAT st X = LSeg(f,i) & 1 <= i & i+1 <= len f by A5;
+    ex j be Element of NAT st Y = LSeg(g,j) & 1 <= j & j+1 <= len g by A5;
+   hence Z is finite by A1,A5,A6,Th10;
   end;
-  hence L~f /\ L~g is finite by A2,A3,FINSET_1:25;
+  hence thesis by A2,A3,FINSET_1:25;
 end;
 
 theorem Th13:
@@ -569,7 +545,7 @@ A1: f,g are_in_general_position;
 A2: L~f /\ L~g is finite by A1,Th12;
   L~f /\ L~g /\ LSeg(g,k) = L~f /\ (L~g /\ LSeg(g,k)) by XBOOLE_1:16
     .= L~f /\ LSeg(g,k) by TOPREAL3:26,XBOOLE_1:28;
-  hence L~f /\ LSeg(g,k) is finite by A2,FINSET_1:15;
+  hence thesis by A2,FINSET_1:15;
 end;
 
 begin
@@ -586,8 +562,8 @@ proof
   assume
 A1: LSeg(p1,p2) misses L~f;
 A2: LSeg(p1,p2) is connected by GOBOARD9:8;
-A3: p1 in LSeg(p1,p2) by TOPREAL1:6;
-A4: p2 in LSeg(p1,p2) by TOPREAL1:6;
+A3: p1 in LSeg(p1,p2) by RLTOPSP1:69;
+A4: p2 in LSeg(p1,p2) by RLTOPSP1:69;
   then
 A5: not (p2 in RightComp f & p1 in LeftComp f) by A1,A2,A3,JORDAN1J:36;
 A6: LeftComp f is_a_component_of (L~f)` by GOBOARD9:def 1;
@@ -600,20 +576,17 @@ A10:  not p1 in RightComp f;
       then
 A11:  p1 in LeftComp f by A8,GOBRD14:27;
       p2 in LeftComp f by A5,A8,A9,A10,GOBRD14:27;
-      hence (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-      & p1 in C & p2 in C)) by A6,A11;
+      hence thesis by A6,A11;
     end;
     suppose
 A12:  not p2 in LeftComp f;
       then
 A13:  p2 in RightComp f by A9,GOBRD14:28;
       p1 in RightComp f by A5,A8,A9,A12,GOBRD14:28;
-      hence (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-      & p1 in C & p2 in C)) by A7,A13;
+      hence thesis by A7,A13;
     end;
   end;
-  hence (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-  & p1 in C & p2 in C));
+  hence thesis;
 end;
 
 theorem Th15:
@@ -626,10 +599,7 @@ A2: RightComp f is_a_component_of (L~f)` by GOBOARD9:def 2;
   thus (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)` &
   a in C & b in C)) implies ((a in RightComp f & b in RightComp f) or
   (a in LeftComp f & b in LeftComp f)) by JORDAN1H:30;
-  thus ((a in RightComp f & b in RightComp f) or
-  (a in LeftComp f & b in LeftComp f)) implies
-  (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)` &
-  a in C & b in C)) by A1,A2;
+  thus thesis by A1,A2;
 end;
 
 theorem Th16:
@@ -656,31 +626,25 @@ A6: b in LeftComp f \/ RightComp f by A3,GOBRD12:11;
 A7:   a in LeftComp f;
       now per cases by A6,XBOOLE_0:def 3;
         suppose b in LeftComp f;
-          hence (a in LeftComp f & b in RightComp f) or
-          (a in RightComp f & b in LeftComp f) by A1,A4,A7;
+          hence thesis by A1,A4,A7;
         end;
         suppose b in RightComp f;
-          hence (a in LeftComp f & b in RightComp f) or
-          (a in RightComp f & b in LeftComp f) by A7;
+          hence thesis by A7;
         end;
       end;
-      hence (a in LeftComp f & b in RightComp f) or
-      (a in RightComp f & b in LeftComp f);
+      hence thesis;
     end;
     suppose
 A8:   a in RightComp f;
       now per cases by A6,XBOOLE_0:def 3;
         suppose b in RightComp f;
-          hence (a in LeftComp f & b in RightComp f) or
-          (a in RightComp f & b in LeftComp f) by A2,A4,A8;
+          hence thesis by A2,A4,A8;
         end;
         suppose b in LeftComp f;
-          hence (a in LeftComp f & b in RightComp f) or
-          (a in RightComp f & b in LeftComp f) by A8;
+          hence thesis by A8;
         end;
       end;
-      hence (a in LeftComp f & b in RightComp f) or
-      (a in RightComp f & b in LeftComp f);
+      hence thesis;
     end;
   end;
   thus ((a in LeftComp f & b in RightComp f) or
@@ -710,9 +674,7 @@ A12:  RightComp f c= (L~f)` by A10,GOBRD12:11;
     (C is_a_component_of (L~f)` & a in C & b in C))
     proof
       now
-        assume ex C be Subset of TOP-REAL 2 st
-        (C is_a_component_of (L~f)` & a in C & b in C);
-        then consider C be Subset of TOP-REAL 2 such that
+        given C be Subset of TOP-REAL 2 such that
 A13:    (C is_a_component_of (L~f)` & a in C & b in C);
         now per cases by A9;
           suppose
@@ -769,17 +731,14 @@ A3: (a in RightComp f & b in RightComp f);
       suppose
 A4:     (b in RightComp f & c in RightComp f);
         RightComp f is_a_component_of (L~f)` by GOBOARD9:def 2;
-        hence ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & a in C & c in C) by A3,A4;
+        hence thesis by A3,A4;
       end;
       suppose b in LeftComp f & c in LeftComp f;
         then LeftComp f meets RightComp f by A3,XBOOLE_0:3;
-        hence ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & a in C & c in C) by GOBRD14:24;
+        hence thesis by GOBRD14:24;
       end;
     end;
-    hence ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-    & a in C & c in C);
+    hence thesis;
   end;
   suppose
 A5: a in LeftComp f & b in LeftComp f;
@@ -787,13 +746,11 @@ A5: a in LeftComp f & b in LeftComp f;
       suppose
 A6:     b in LeftComp f & c in LeftComp f;
         LeftComp f is_a_component_of (L~f)` by GOBOARD9:def 1;
-        hence ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & a in C & c in C) by A5,A6;
+        hence thesis by A5,A6;
       end;
       suppose b in RightComp f & c in RightComp f;
         then LeftComp f meets RightComp f by A5,XBOOLE_0:3;
-        hence ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & a in C & c in C) by GOBRD14:24;
+        hence thesis by GOBRD14:24;
       end;
     end;
     hence thesis;
@@ -823,32 +780,26 @@ A6: a in LeftComp f & b in RightComp f;
     now per cases by A1,A3,Th16;
       suppose b in LeftComp f & c in RightComp f;
         then LeftComp f meets RightComp f by A6,XBOOLE_0:3;
-        hence ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & a in C & c in C) by GOBRD14:24;
+        hence thesis by GOBRD14:24;
       end;
       suppose b in RightComp f & c in LeftComp f;
-        hence ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & a in C & c in C) by A4,A6;
+        hence thesis by A4,A6;
       end;
     end;
-    hence ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-    & a in C & c in C);
+    hence thesis;
   end;
   suppose
 A7: a in RightComp f & b in LeftComp f;
     now per cases by A1,A3,Th16;
       suppose b in RightComp f & c in LeftComp f;
         then LeftComp f meets RightComp f by A7,XBOOLE_0:3;
-        hence ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & a in C & c in C) by GOBRD14:24;
+        hence thesis by GOBRD14:24;
       end;
       suppose b in LeftComp f & c in RightComp f;
-        hence ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & a in C & c in C) by A5,A7;
+        hence thesis by A5,A7;
       end;
     end;
-    hence ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-    & a in C & c in C);
+    hence thesis;
   end;
 end;
 
@@ -877,7 +828,7 @@ A7:   v_strip(G,i) = { |[r,s]| : r <= G*(1,1)`1 } by GOBRD11:18;
 A8:   w2 = |[r1,s1]| & r1 <= G*(1,1)`1 by A2;
       w2`1 <= G*(1,1)`1 by A8,EUCLID:56;
       then p`1 <= G*(1,1)`1 by A6,XXREAL_0:2;
-      hence x in v_strip(G,i) by A5,A7;
+      hence thesis by A5,A7;
     end;
     suppose i = len G;
       then
@@ -886,7 +837,7 @@ A9:   v_strip(G,i) = { |[r,s]| : G*(len G,1)`1 <= r } by GOBRD11:19;
 A10:  w1 = |[r1,s1]| & G*(len G,1)`1 <= r1 by A2;
       G*(len G,1)`1 <= w1`1 by A10,EUCLID:56;
       then G*(len G,1)`1 <= p`1 by A6,XXREAL_0:2;
-      hence x in v_strip(G,i) by A5,A9;
+      hence thesis by A5,A9;
     end;
     suppose 1 <= i & i < len G;
       then
@@ -901,7 +852,7 @@ A13:  G*(i,1)`1 <= p`1 by A6,XXREAL_0:2;
 A14:  w2 = |[r2,s2]| & G*(i,1)`1 <= r2 & r2 <= G*(i+1,1)`1 by A2,A11;
       G*(i,1)`1 <= w2`1 & w2`1 <= G*(i+1,1)`1 by A14,EUCLID:56;
       then p`1 <= G*(i+1,1)`1 by A6,XXREAL_0:2;
-      hence x in v_strip(G,i) by A5,A11,A13;
+      hence thesis by A5,A11,A13;
     end;
   end;
 end;
@@ -916,7 +867,7 @@ A1: i<= len G;
   assume
 A2: w1 in P & w2 in P;
   w1`1 <= w2`1 or w2`1 <= w1`1;
-  hence LSeg(w1,w2) c= P by A1,A2,Lm4;
+  hence thesis by A1,A2,Lm4;
 end;
 
 Lm5: now
@@ -941,7 +892,7 @@ A7:   h_strip(G,j) = { |[r,s]| : s <= G*(1,1)`2 } by GOBRD11:21;
 A8:   w2 = |[r1,s1]| & s1 <= G*(1,1)`2 by A2;
       w2`2 <= G*(1,1)`2 by A8,EUCLID:56;
       then p`2 <= G*(1,1)`2 by A6,XXREAL_0:2;
-      hence x in h_strip(G,j) by A5,A7;
+      hence thesis by A5,A7;
     end;
     suppose j = width G;
       then
@@ -950,7 +901,7 @@ A9:   h_strip(G,j) = { |[r,s]| : G*(1,width G)`2 <= s } by GOBRD11:22;
 A10:  w1 = |[r1,s1]| & G*(1,width G)`2 <= s1 by A2;
       G*(1,width G)`2 <= w1`2 by A10,EUCLID:56;
       then G*(1,width G)`2 <= p`2 by A6,XXREAL_0:2;
-      hence x in h_strip(G,j) by A5,A9;
+      hence thesis by A5,A9;
     end;
     suppose 1 <= j & j < width G;
       then
@@ -965,7 +916,7 @@ A13:  G*(1,j)`2 <= p`2 by A6,XXREAL_0:2;
 A14:  w2 = |[r2,s2]| & G*(1,j)`2 <= s2 & s2 <= G*(1,j+1)`2 by A2,A11;
       G*(1,j)`2 <= w2`2 & w2`2 <= G*(1,j+1)`2 by A14,EUCLID:56;
       then p`2 <= G*(1,j+1)`2 by A6,XXREAL_0:2;
-      hence x in h_strip(G,j) by A5,A11,A13;
+      hence thesis by A5,A11,A13;
     end;
   end;
 end;
@@ -979,7 +930,7 @@ A1: j<= width G;
   let w1,w2 be Point of TOP-REAL 2 such that
 A2: w1 in P & w2 in P;
   w1`2 <= w2`2 or w2`2 <= w1`2;
-  hence LSeg(w1,w2) c= P by A1,A2,Lm5;
+  hence thesis by A1,A2,Lm5;
 end;
 
 theorem Th21:
@@ -987,7 +938,7 @@ theorem Th21:
 proof
   assume i <= len G & j <= width G;
   then v_strip(G,i) is convex & h_strip(G,j) is convex by Th19,Th20;
-  hence cell(G,i,j) is convex by GOBOARD9:9;
+  hence thesis by GOBOARD9:9;
 end;
 
 theorem Th22:
@@ -998,7 +949,7 @@ A1: 1<=k & k+1<=len f;
   consider i,j such that
 A2: i <= len GoB f & j <= width GoB f &
   cell(GoB f,i,j) = left_cell(f,k) by A1,GOBOARD9:14;
-  thus left_cell(f,k) is convex by A2,Th21;
+  thus thesis by A2,Th21;
 end;
 
 theorem Th23:
@@ -1019,7 +970,7 @@ A5: len f-'k >= 1 by A1,A3,XREAL_1:8;
   then
 A6: left_cell(Rev f,len f-'k) is convex by A2,A4,Th22;
   right_cell(f,k) = left_cell(Rev f,len f-'k) by A1,A3,A5,GOBOARD9:13;
-  hence right_cell(f,k,GoB f) is convex by A1,A6,JORDAN1H:29;
+  hence thesis by A1,A6,JORDAN1H:29;
 end;
 
 begin
@@ -1040,10 +991,10 @@ A5: p in {p} by TARSKI:def 1;
   then
 A6: p in LSeg(p1,p2) by A4,XBOOLE_0:def 4;
   reconsider p as Point of TOP-REAL 2 by A4,A5;
-  p1 in LSeg(p1,p2) by TOPREAL1:6;
+  p1 in LSeg(p1,p2) by RLTOPSP1:69;
   then
 A7: LSeg(p1,r) c= LSeg(p1,p2) by A1,TOPREAL1:12;
-  p2 in LSeg(p1,p2) by TOPREAL1:6;
+  p2 in LSeg(p1,p2) by RLTOPSP1:69;
   then
 A8: LSeg(p2,r) c= LSeg(p1,p2) by A1,TOPREAL1:12;
 A9: now
@@ -1068,7 +1019,7 @@ A12:  LSeg(p1,r) /\ LSeg(r,p) = {r};
 A13:  x in L~f & x in LSeg(p1,r) by A11,XBOOLE_0:3;
       x in L~f /\ LSeg(p1,p2) by A7,A13,XBOOLE_0:def 4;
       then x = p by A4,TARSKI:def 1;
-      then x in LSeg(r,p) by TOPREAL1:6;
+      then x in LSeg(r,p) by RLTOPSP1:69;
       then x in LSeg(p1,r) /\ LSeg(r,p) by A13,XBOOLE_0:def 4;
       hence contradiction by A3,A12,A13,TARSKI:def 1;
     end;
@@ -1078,12 +1029,12 @@ A14:  LSeg(p,r) /\ LSeg(r,p2) = {r};
 A15:  x in L~f & x in LSeg(r,p2) by A11,XBOOLE_0:3;
       x in L~f /\ LSeg(p1,p2) by A8,A15,XBOOLE_0:def 4;
       then x = p by A4,TARSKI:def 1;
-      then x in LSeg(p,r) by TOPREAL1:6;
+      then x in LSeg(p,r) by RLTOPSP1:69;
       then x in LSeg(p,r) /\ LSeg(r,p2) by A15,XBOOLE_0:def 4;
       hence contradiction by A3,A14,A15,TARSKI:def 1;
     end;
   end;
-  hence L~f misses LSeg(p1,r) or L~f misses LSeg(r,p2);
+  hence thesis;
 end;
 
 Lm6: now
@@ -1138,25 +1089,25 @@ A2: p1`2 = p2`2 & p2`2 = p`2;
 A3: p1`1 <= p2`1;
     now per cases by A1,A2,GOBOARD7:9;
       suppose p`1<p1`1;
-        hence p1 in LSeg(p,p2) or p2 in LSeg(p,p1) by A2,A3,GOBOARD7:9;
+        hence thesis by A2,A3,GOBOARD7:9;
       end;
       suppose p2`1<p`1;
-        hence p1 in LSeg(p,p2) or p2 in LSeg(p,p1) by A2,A3,GOBOARD7:9;
+        hence thesis by A2,A3,GOBOARD7:9;
       end;
     end;
-    hence p1 in LSeg(p,p2) or p2 in LSeg(p,p1);
+    hence thesis;
   end;
   suppose
 A4: p2`1 <= p1`1;
     now per cases by A1,A2,GOBOARD7:9;
       suppose p`1<p2`1;
-        hence p1 in LSeg(p,p2) or p2 in LSeg(p,p1) by A2,A4,GOBOARD7:9;
+        hence thesis by A2,A4,GOBOARD7:9;
       end;
       suppose p1`1<p`1;
-        hence p1 in LSeg(p,p2) or p2 in LSeg(p,p1) by A2,A4,GOBOARD7:9;
+        hence thesis by A2,A4,GOBOARD7:9;
       end;
     end;
-    hence p1 in LSeg(p,p2) or p2 in LSeg(p,p1);
+    hence thesis;
   end;
 end;
 
@@ -1172,25 +1123,25 @@ A2: p1`1 = p2`1 & p2`1 = p`1;
 A3: p1`2 <= p2`2;
     now per cases by A1,A2,GOBOARD7:8;
       suppose p`2<p1`2;
-        hence p1 in LSeg(p,p2) or p2 in LSeg(p,p1) by A2,A3,GOBOARD7:8;
+        hence thesis by A2,A3,GOBOARD7:8;
       end;
       suppose p2`2<p`2;
-        hence p1 in LSeg(p,p2) or p2 in LSeg(p,p1) by A2,A3,GOBOARD7:8;
+        hence thesis by A2,A3,GOBOARD7:8;
       end;
     end;
-    hence p1 in LSeg(p,p2) or p2 in LSeg(p,p1);
+    hence thesis;
   end;
   suppose
 A4: p2`2 <= p1`2;
     now per cases by A1,A2,GOBOARD7:8;
       suppose p`2<p2`2;
-        hence p1 in LSeg(p,p2) or p2 in LSeg(p,p1) by A2,A4,GOBOARD7:8;
+        hence thesis by A2,A4,GOBOARD7:8;
       end;
       suppose p1`2<p`2;
-        hence p1 in LSeg(p,p2) or p2 in LSeg(p,p1) by A2,A4,GOBOARD7:8;
+        hence thesis by A2,A4,GOBOARD7:8;
       end;
     end;
-    hence p1 in LSeg(p,p2) or p2 in LSeg(p,p1);
+    hence thesis;
   end;
 end;
 
@@ -1208,7 +1159,7 @@ A3: LSeg(p,p1) \/ LSeg(p1,p2) = LSeg(p,p2) by TOPREAL1:11;
     LSeg(p,p1) \/ LSeg(p1,p2) = LSeg(p1,p2) by A2,XBOOLE_1:7,12;
     hence contradiction by A1,A3,SPPOL_1:25;
   end;
-  hence not p1 in LSeg(p,p2);
+  hence thesis;
 end;
 
 theorem Th29:
@@ -1231,7 +1182,7 @@ A7: p1 in LSeg(q,p2);
 A8: LSeg(q,p1) \/ LSeg(p1,p2) = LSeg(q,p2) by TOPREAL1:11;
     p in LSeg(q,p1) \/ LSeg(p1,p2) by A2,XBOOLE_0:def 3;
     then LSeg(q,p) \/ LSeg(p,p2) = LSeg(q,p2) by A8,TOPREAL1:11;
-    hence p1 in LSeg(q,p) or p2 in LSeg(q,p) by A5,A7,XBOOLE_0:def 3;
+    hence thesis by A5,A7,XBOOLE_0:def 3;
   end;
   suppose
 A9: p2 in LSeg(q,p1);
@@ -1239,7 +1190,7 @@ A9: p2 in LSeg(q,p1);
 A10: LSeg(q,p2) \/ LSeg(p1,p2) = LSeg(q,p1) by TOPREAL1:11;
     p in LSeg(q,p2) \/ LSeg(p1,p2) by A2,XBOOLE_0:def 3;
     then LSeg(q,p) \/ LSeg(p,p1) = LSeg(q,p1) by A10,TOPREAL1:11;
-    hence p1 in LSeg(q,p) or p2 in LSeg(q,p) by A6,A9,XBOOLE_0:def 3;
+    hence thesis by A6,A9,XBOOLE_0:def 3;
   end;
 end;
 
@@ -1258,9 +1209,9 @@ A4: LSeg(p1,p2) meets LSeg(p3,p4) by XBOOLE_0:4;
   then LSeg(p3,p) \/ LSeg(p,p4) = LSeg(p3,p4) by TOPREAL1:11;
   then
 A5: LSeg(p3,p) c= LSeg(p3,p4) by XBOOLE_1:7;
-A6: p1 in LSeg(p1,p2) by TOPREAL1:6;
-A7: p2 in LSeg(p1,p2) by TOPREAL1:6;
-A8: p3 in LSeg(p3,p4) by TOPREAL1:6;
+A6: p1 in LSeg(p1,p2) by RLTOPSP1:69;
+A7: p2 in LSeg(p1,p2) by RLTOPSP1:69;
+A8: p3 in LSeg(p3,p4) by RLTOPSP1:69;
 A9: now
     assume p1`1 = p2`1 & p3`1 = p4`1;
     then LSeg(p1,p2) is vertical & LSeg(p3,p4) is vertical by SPPOL_1:37;
@@ -1292,7 +1243,7 @@ A13: now
     end;
     hence contradiction;
   end;
-  hence p=p1 or p=p2 or p=p3;
+  hence thesis;
 end;
 
 begin
@@ -1379,43 +1330,25 @@ A27: p2 in LSeg(r,p) & r in left_cell(f,i,GoB f);
 A28: p1 in LSeg(r,p);
     now per cases by A8;
       suppose r in right_cell(f,i,GoB f);
-        hence (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & r in C & p1 in C)) or
-        (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & r in C & p2 in C)) by A20,A28;
+        hence thesis by A20,A28;
       end;
       suppose r in left_cell(f,i,GoB f);
-        hence (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & r in C & p1 in C)) or
-        (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & r in C & p2 in C)) by A22,A28;
+        hence thesis by A22,A28;
       end;
     end;
-    hence (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-    & r in C & p1 in C)) or
-    (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-    & r in C & p2 in C));
+    hence thesis;
   end;
   suppose
 A29: p2 in LSeg(r,p);
     now per cases by A8;
       suppose r in right_cell(f,i,GoB f);
-        hence (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & r in C & p1 in C)) or
-        (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & r in C & p2 in C)) by A24,A29;
+        hence thesis by A24,A29;
       end;
       suppose r in left_cell(f,i,GoB f);
-        hence (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & r in C & p1 in C)) or
-        (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & r in C & p2 in C)) by A26,A29;
+        hence thesis by A26,A29;
       end;
     end;
-    hence (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-    & r in C & p1 in C)) or
-    (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-    & r in C & p2 in C));
+    hence thesis;
   end;
 end;
 
@@ -1512,32 +1445,26 @@ A25:  p1 in LeftComp f;
       now per cases by A21,A24;
         suppose p1 in RightComp f;
           then LeftComp f meets RightComp f by A25,XBOOLE_0:3;
-          hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-          & p1 in C & p2 in C) by GOBRD14:24;
+          hence thesis by GOBRD14:24;
         end;
         suppose p2 in RightComp f;
-          hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-          & p1 in C & p2 in C) by A25,Th16;
+          hence thesis by A25,Th16;
         end;
       end;
-      hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-      & p1 in C & p2 in C);
+      hence thesis;
     end;
     suppose
 A26:  p2 in LeftComp f;
       now per cases by A21,A24;
         suppose p1 in RightComp f;
-          hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-          & p1 in C & p2 in C) by A26,Th16;
+          hence thesis by A26,Th16;
         end;
         suppose p2 in RightComp f;
           then LeftComp f meets RightComp f by A26,XBOOLE_0:3;
-          hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-          & p1 in C & p2 in C) by GOBRD14:24;
+          hence thesis by GOBRD14:24;
         end;
       end;
-      hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-      & p1 in C & p2 in C);
+      hence thesis;
     end;
   end;
 A27: now
@@ -1549,32 +1476,26 @@ A29:  p1 in LeftComp f;
       now per cases by A17,A28;
         suppose p1 in RightComp f;
           then LeftComp f meets RightComp f by A29,XBOOLE_0:3;
-          hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-          & p1 in C & p2 in C) by GOBRD14:24;
+          hence thesis by GOBRD14:24;
         end;
         suppose p2 in RightComp f;
-          hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-          & p1 in C & p2 in C) by A29,Th16;
+          hence thesis by A29,Th16;
         end;
       end;
-      hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-      & p1 in C & p2 in C);
+      hence thesis;
     end;
     suppose
 A30:  p2 in LeftComp f;
       now per cases by A17,A28;
         suppose p1 in RightComp f;
-          hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-          & p1 in C & p2 in C) by A30,Th16;
+          hence thesis by A30,Th16;
         end;
         suppose p2 in RightComp f;
           then LeftComp f meets RightComp f by A30,XBOOLE_0:3;
-          hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-          & p1 in C & p2 in C) by GOBRD14:24;
+          hence thesis by GOBRD14:24;
         end;
       end;
-      hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-      & p1 in C & p2 in C);
+      hence thesis;
     end;
   end;
 A31: now
@@ -1586,32 +1507,26 @@ A33:  p1 in LeftComp f;
       now per cases by A21,A32;
         suppose p1 in RightComp f;
           then LeftComp f meets RightComp f by A33,XBOOLE_0:3;
-          hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-          & p1 in C & p2 in C) by GOBRD14:24;
+          hence thesis by GOBRD14:24;
         end;
         suppose p2 in RightComp f;
-          hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-          & p1 in C & p2 in C) by A33,Th16;
+          hence thesis by A33,Th16;
         end;
       end;
-      hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-      & p1 in C & p2 in C);
+      hence thesis;
     end;
     suppose
 A34:  p2 in LeftComp f;
       now per cases by A21,A32;
         suppose p1 in RightComp f;
-          hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-          & p1 in C & p2 in C) by A34,Th16;
+          hence thesis by A34,Th16;
         end;
         suppose p2 in RightComp f;
           then LeftComp f meets RightComp f by A34,XBOOLE_0:3;
-          hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-          & p1 in C & p2 in C) by GOBRD14:24;
+          hence thesis by GOBRD14:24;
         end;
       end;
-      hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-      & p1 in C & p2 in C);
+      hence thesis;
     end;
   end;
 A35: now
@@ -1623,32 +1538,26 @@ A37:  p1 in LeftComp f;
       now per cases by A17,A36;
         suppose p1 in RightComp f;
           then LeftComp f meets RightComp f by A37,XBOOLE_0:3;
-          hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-          & p1 in C & p2 in C) by GOBRD14:24;
+          hence thesis by GOBRD14:24;
         end;
         suppose p2 in RightComp f;
-          hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-          & p1 in C & p2 in C) by A37,Th16;
+          hence thesis by A37,Th16;
         end;
       end;
-      hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-      & p1 in C & p2 in C);
+      hence thesis;
     end;
     suppose
 A38:  p2 in LeftComp f;
       now per cases by A17,A36;
         suppose p1 in RightComp f;
-          hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-          & p1 in C & p2 in C) by A38,Th16;
+          hence thesis by A38,Th16;
         end;
         suppose p2 in RightComp f;
           then LeftComp f meets RightComp f by A38,XBOOLE_0:3;
-          hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-          & p1 in C & p2 in C) by GOBRD14:24;
+          hence thesis by GOBRD14:24;
         end;
       end;
-      hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-      & p1 in C & p2 in C);
+      hence thesis;
     end;
   end;
   per cases;
@@ -1656,31 +1565,25 @@ A38:  p2 in LeftComp f;
 A39: rl in LSeg(p1,p2);
     now per cases;
       suppose rp in LSeg(p1,p2);
-        hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & p1 in C & p2 in C) by A27,A39;
+        hence thesis by A27,A39;
       end;
       suppose not rp in LSeg(p1,p2);
-        hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & p1 in C & p2 in C) by A31,A39;
+        hence thesis by A31,A39;
       end;
     end;
-    hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-    & p1 in C & p2 in C);
+    hence thesis;
   end;
   suppose
 A40: not rl in LSeg(p1,p2);
     now per cases;
       suppose rp in LSeg(p1,p2);
-        hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & p1 in C & p2 in C) by A35,A40;
+        hence thesis by A35,A40;
       end;
       suppose not rp in LSeg(p1,p2);
-        hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & p1 in C & p2 in C) by A23,A40;
+        hence thesis by A23,A40;
       end;
     end;
-    hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-    & p1 in C & p2 in C);
+    hence thesis;
   end;
 end;
 
@@ -2041,8 +1944,7 @@ A103:   rl in left_cell(f,k,GoB f) by A13,A101;
 A104:   rp in right_cell(f,k,GoB f) by A11,A102;
 A105:   not rl in L~f by A13,A101;
         not rp in L~f by A11,A102;
-        hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & p1 in C & p2 in C)
+        hence thesis
         by A1,A3,A9,A10,A78,A79,A81,A83,A103,A104,A105,Th32;
       end;
       suppose
@@ -2071,13 +1973,10 @@ A109:   rl in left_cell(f,k,GoB f) by A13,A107;
 A110:   rp in right_cell(f,k,GoB f) by A11,A108;
 A111:   not rl in L~f by A13,A107;
         not rp in L~f by A11,A108;
-        hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & p1 in C & p2 in C) by A1,A3,A9,A10,A78,A79,A81,A83,A109,A110,A111
-,Th32;
+        hence thesis by A1,A3,A9,A10,A78,A79,A81,A83,A109,A110,A111,Th32;
       end;
     end;
-    hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-    & p1 in C & p2 in C);
+    hence thesis;
   end;
   suppose
 A112: p1`1=p2`1;
@@ -2212,8 +2111,7 @@ A137:   rl in left_cell(f,k,GoB f) by A13,A135;
 A138:   rp in right_cell(f,k,GoB f) by A11,A136;
 A139:   not rl in L~f by A13,A135;
         not rp in L~f by A11,A136;
-        hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & p1 in C & p2 in C)
+        hence thesis
         by A1,A3,A9,A10,A112,A113,A115,A117,A137,A138,A139,Th32;
       end;
       suppose
@@ -2243,13 +2141,11 @@ A143:   rl in left_cell(f,k,GoB f) by A13;
 A144:   rp in right_cell(f,k,GoB f) by A11,A141;
 A145:   not rl in L~f by A13,A142;
         not rp in L~f by A11,A141;
-        hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & p1 in C & p2 in C)
+        hence thesis
         by A1,A3,A9,A10,A112,A113,A115,A117,A143,A144,A145,Th32;
       end;
     end;
-    hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-    & p1 in C & p2 in C);
+    hence thesis;
   end;
 end;
 
@@ -2322,9 +2218,7 @@ A29:  not (not p1 in L~f & not p2 in L~f);
     end;
     rng f misses L~g by A6,Def1;
     then rng f misses LSeg(p1,p2) by A21,TOPREAL3:26,XBOOLE_1:63;
-    hence card (L~f /\ LSeg(g,k)) is even Element of NAT iff
-    ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-    & g.k in C & g.(k+1) in C) by A22,A24,A25,A26,A28,Th3,Th33,CARD_1:50;
+    hence thesis by A22,A24,A25,A26,A28,Th3,Th33,CARD_1:50;
   end;
   suppose
 A30: m = {};
@@ -2456,7 +2350,7 @@ A36:  b.(len b) = b.k by A24,FINSEQ_1:21
       then
 A37:  s = s1 \/ s2 by XBOOLE_1:23;
 A38:  g1|(k+1) = a by A23,FINSEQ_1:def 15;
-A39:  dom a = dom g1 /\ Seg(k+1) by A23,FUNCT_1:68;
+A39:  dom a = dom g1 /\ Seg(k+1) by A23,RELAT_1:90;
 A40:  k <=k+1 by NAT_1:13;
       then k in Seg (k+1) by A20,FINSEQ_1:3;
       then
@@ -2470,10 +2364,10 @@ A44:  k+1 in dom a by A6,A25,A27,A39,XBOOLE_0:def 4;
       then
 A45:  1<k by NAT_1:13;
 A46:  a/.k = a.k by A41,PARTFUN1:def 8
-        .= g1.k by A23,A41,FUNCT_1:68
+        .= g1.k by A23,A41,FUNCT_1:70
         .= g1/.k by A26,PARTFUN1:def 8;
 A47:  a/.(k+1) = a.(k+1) by A44,PARTFUN1:def 8
-        .= g1.(k+1) by A23,A44,FUNCT_1:68
+        .= g1.(k+1) by A23,A44,FUNCT_1:70
         .= g1/.(k+1) by A6,A25,PARTFUN1:def 8;
       L~(a|k) /\ LSeg(a,k) = {a/.k} by A19,A32,A38,A45,GOBOARD2:9;
       then L~(a|k) /\ LSeg(a/.k,a/.(k+1)) = {a/.k} by A20,A32,TOPREAL1:def 5;

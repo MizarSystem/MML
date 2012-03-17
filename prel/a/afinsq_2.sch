@@ -9,7 +9,6 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
@@ -28,31 +27,36 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14" value="false"/>
+<Adjective nr="17" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="F" nr="2"/>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="28"/>
-</Cluster>
+<Adjective nr="1"/>
+<Adjective nr="5">
 <Func kind="F" nr="2"/>
+</Adjective>
+<Adjective nr="6"/>
+<Adjective nr="14"/>
+<Adjective nr="31"/>
+</Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="191">
+<Func kind="K" nr="182">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -60,7 +64,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 <Not>

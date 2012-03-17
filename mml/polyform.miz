@@ -9,18 +9,16 @@ environ
  vocabularies FINSET_1, FUNCT_1, FUNCT_2, CARD_1, SUBSET_1, TARSKI, BOOLE,
       RELAT_1, ORDINAL2, VECTSP_1, VECTSP_9, INT_1, RLVECT_1, GROUP_1, ARYTM_1,
       FINSEQ_1, FINSEQ_2, QC_LANG1, RLSUB_1, BSPACE, RANKNULL, RLVECT_3,
-      MATRLIN, FINSEQ_4, POLYFORM, VECTSP10, PRALG_1, MATRIX_2, POWER,
-      FUNCOP_1, ARYTM, VALUED_0;
+      MATRLIN, POLYFORM, VECTSP10, PRALG_1, MATRIX_2, POWER, FUNCOP_1, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, CARD_1, NUMBERS, FUNCOP_1,
-      FINSET_1, XCMPLX_0, XXREAL_0, NAT_1, INT_1, CARD_2,
-      VALUED_0, FINSEQ_1,
+      FINSET_1, XCMPLX_0, XXREAL_0, NAT_1, INT_1, CARD_2, VALUED_0, FINSEQ_1,
       FINSEQ_2, POWER, RVSUM_1, NEWTON, ABIAN, STRUCT_0, RLVECT_1, GROUP_1,
       VECTSP_1, VECTSP_4, VECTSP_5, VECTSP_7, FVSUM_1, GR_CY_1, MATRLIN,
       VECTSP_9, RANKNULL, BSPACE;
  constructors NAT_1, VECTSP_9, BINOP_1, REALSET1, FINSOP_1, XXREAL_0, FVSUM_1,
       WELLORD2, BSPACE, REAL_1, BINOP_2, RANKNULL, VECTSP_7, VECTSP_5, NEWTON,
-      GR_CY_1, ABIAN, POWER, CARD_2, CARD_3;
+      GR_CY_1, ABIAN, POWER, CARD_2, CARD_3, RELSET_1;
  registrations FRAENKEL, FINSET_1, XBOOLE_0, FUNCT_1, FUNCT_2, RELAT_1,
       SUBSET_1, NAT_1, INT_1, VECTSP_1, STRUCT_0, FINSEQ_1, FINSEQ_2, CARD_1,
       MATRLIN, BSPACE, ORDINAL1, NEWTON, RVSUM_1, FUNCOP_1, POLYNOM1, ABIAN,
@@ -34,7 +32,7 @@ environ
       FINSOP_1, VECTSP_4, BSPACE, RANKNULL, VECTSP_9, ORDINAL1, NEWTON,
       RVSUM_1, GR_CY_1, FUNCOP_1, XREAL_1, XXREAL_0, INT_1, JORDAN16, POWER,
       FIB_NUM2, NUMBERS, CARD_2, PRE_CIRC, FINSEQ_3, SUBSET_1, MOD_2, MATRIX_3,
-      CALCUL_1, PARTFUN1, VALUED_0, RELSET_1;
+      CALCUL_1, RELSET_1;
  schemes FUNCT_2, FINSEQ_1, FINSEQ_2;
 
 begin
@@ -230,17 +228,7 @@ begin :: Preliminaries on Finite Sequences
 registration
   let f be FinSequence of INT, k be Nat;
   cluster f.k -> integer;
-  coherence
-  proof
-    per cases;
-    suppose k in dom f;
-      then f.k = f/.k by PARTFUN1:def 8;
-      hence thesis;
-    end;
-    suppose not k in dom f;
-      hence thesis by FUNCT_1:def 4;
-    end;
-  end;
+  coherence;
 end;
 
 :: A theorem on telescoping sequences of integers.
@@ -279,9 +267,8 @@ A13: Sum t = (Sum p) + x by GR_CY_1:20;
     per cases;
     suppose
 A14:  len p = 0;
-      then p = {};
       then
-A15:  Sum p = 0 by GR_CY_1:22;
+B15:  p = {};
 A16:  t = <*x*>
       proof
         p = {} by A14;
@@ -292,7 +279,7 @@ A17:  len t = 1 by FINSEQ_1:56;
       reconsider egy = 1 as Nat;
       egy <= len t by A16,FINSEQ_1:56;
       then t.egy = a.egy + b.egy by A11;
-      hence thesis by A13,A15,A16,A17,FINSEQ_1:57;
+      hence thesis by A13,B15,A16,A17,FINSEQ_1:57,GR_CY_1:22;
     end;
     suppose
 A18:  len p > 0;
@@ -494,16 +481,7 @@ definition
   coherence by FINSEQ_1:96;
 end;
 
-theorem Th20:
-  for p,q being FinSequence of INT holds Sum (p ^ q) = (Sum p) + (Sum q)
-proof
-  let p,q be FinSequence of INT;
-A1: rng p c= REAL by NUMBERS:15,XBOOLE_1:1;
-  rng q c= REAL by NUMBERS:15,XBOOLE_1:1;
-  then reconsider p,q as real-valued FinSequence by A1,VALUED_0:def 3;
-  Sum (p ^ q) = (Sum p) + (Sum q) by RVSUM_1:105;
-  hence thesis;
-end;
+canceled;
 
 theorem Th21:
   for k being Integer, p being FinSequence of INT
@@ -511,8 +489,8 @@ theorem Th21:
 proof
   let k be Integer, p be FinSequence of INT;
   reconsider k as Element of INT by INT_1:def 2;
-  Sum (<*k*> ^ p) = (Sum p) + (Sum <*k*>) by Th20
-    .= Sum (p ^ <*k*>) by Th20
+  Sum (<*k*> ^ p) = (Sum p) + (Sum <*k*>) by RVSUM_1:105
+    .= Sum (p ^ <*k*>) by RVSUM_1:105
     .= k + (Sum p) by GR_CY_1:20;
   hence thesis;
 end;
@@ -522,8 +500,8 @@ theorem Th22:
   holds Sum (p ^ q ^ r) = (Sum p) + (Sum q) + (Sum r)
 proof
   let p,q,r be FinSequence of INT;
-  Sum (p ^ q ^ r) = (Sum (p ^ q)) + (Sum r) by Th20
-    .= ((Sum p) + (Sum q)) + Sum r by Th20;
+  Sum (p ^ q ^ r) = (Sum (p ^ q)) + (Sum r) by RVSUM_1:105
+    .= ((Sum p) + (Sum q)) + Sum r by RVSUM_1:105;
   hence thesis;
 end;
 
@@ -1056,7 +1034,7 @@ A10:  k-polytopes(p) = rng (F.(k+1)) by A8,Def5;
       1 <= n & n <= dim(p) by A8,Th25;
       then Fn is one-to-one by Def3;
       then num-polytopes(p,k) = card (dom Fn) by A10,Th2;
-      then len Fn = num-polytopes(p,k) by PRE_CIRC:21;
+      then len Fn = num-polytopes(p,k) by CARD_1:104;
       hence thesis by A9,FINSEQ_1:def 3;
     end;
     suppose
@@ -1211,7 +1189,6 @@ A17: k + 1 <= dim(p) by A12,INT_1:20;
 A18: 0 qua Nat + 1 <= k + 1 by A16,INT_1:20;
     reconsider k' = k + 1 as Element of NAT by A16,INT_1:16;
     F.k' is non empty by A17,A18,Def3;
-    then rng (F.k') is non empty;
     then consider m being set such that
 A19: m in dom (F.k') and
 A20: (F.k').m = x by A13,FUNCT_1:def 5;
@@ -1465,7 +1442,7 @@ A7:   len isd = n by A4,Def16;
       reconsider isd as Element of n-tuples_on the carrier of Z_2
       by A7,FINSEQ_2:110;
       reconsider s = isc + isd as Element of n-tuples_on the carrier of Z_2;
-      len s = n by FINSEQ_2:109;
+      len s = n by FINSEQ_1:def 18;
       hence thesis by A4,Def16;
     end;
     for n being Nat st 1 <= n & n <= len l holds l.n = r.n
@@ -1597,7 +1574,7 @@ A3: len l = n & len r = n
       by FINSEQ_2:110;
       set r = a*isc;
       reconsider r as Element of n-tuples_on the carrier of Z_2;
-      len r = n by FINSEQ_2:109;
+      len r = n by FINSEQ_1:def 18;
       hence thesis by A2,Def16;
     end;
     for m being Nat st 1 <= m & m <= len l holds l.m = r.m
@@ -1708,7 +1685,7 @@ A6:   P[y] and
 A7:   y in k()-polytopes(p());
       thus thesis by A5,A6,A7;
     end;
-    thus (P[x] & x in k()-polytopes(p())) implies x in c;
+    thus thesis;
   end;
   take c;
   thus thesis by A4;
@@ -3128,8 +3105,8 @@ A15:  n <= len apcs;
 A16:  apcs.n = ((-1)|^(n+1))*(dim ((n-2)-bounding-chain-space(p)))
       + ((-1)|^(n+1))*(dim ((n-1)-circuit-space(p))) by A14,A15,Th52;
       reconsider n' = n as Element of NAT by ORDINAL1:def 13;
-A17:  n' in dom b by A14,A15,FINSEQ_3:27,A5;
-      n' in dom a by A14,A15,FINSEQ_3:27,A3;
+A17:  n' in dom b by A14,A15,A5,FINSEQ_3:27;
+      n' in dom a by A14,A15,A3,FINSEQ_3:27;
       then a.n' = ((-1)|^(n'+1))*(dim ((n'-2)-bounding-chain-space(p))) by A4;
       hence thesis by A6,A16,A17;
     end;
@@ -3142,12 +3119,12 @@ A17:  n' in dom b by A14,A15,FINSEQ_3:27,A5;
       let n be Nat such that
 A18:  1 <= n and
 A19:  n < len apcs;
-A20:  n in dom b by A18,A19,FINSEQ_3:27,A5;
+A20:  n in dom b by A18,A19,A5,FINSEQ_3:27;
       reconsider n as Element of NAT by ORDINAL1:def 13;
 A21:  b.n = ((-1)|^(n+1))*(dim ((n-1)-circuit-space(p))) by A6,A20;
 A22:  n + 1 <= len apcs by A19,INT_1:20;
       1 <= n + 1 by NAT_1:11;
-      then n + 1 in dom a by A22,FINSEQ_3:27,A3;
+      then n + 1 in dom a by A22,A3,FINSEQ_3:27;
       then a.(n+1) = A(n+1) by A4
         .= (((-1)|^(n+1))*((-1)|^1))*(dim ((n-1)-bounding-chain-space(p)))
       by NEWTON:13
@@ -3164,7 +3141,7 @@ A24: a.1 = 1
       reconsider egy = 1 as Element of NAT;
       1 <= 0 qua Nat + 1;
       then egy <= len apcs by A2,NAT_1:13;
-      then egy in dom a by FINSEQ_3:27,A3;
+      then egy in dom a by A3,FINSEQ_3:27;
       then a.egy = ((-1)|^(1+1))*(dim ((egy-2)-bounding-chain-space(p))) by A4
         .= 1*(dim ((egy-2)-bounding-chain-space(p))) by Th5,Th8
         .= 1 by Th63;
@@ -3176,7 +3153,7 @@ A24: a.1 = 1
 A25:  n = dim(p) by Def27;
       0 qua Nat + 1 = 1;
       then 1 <= len apcs by A2,NAT_1:13;
-      then n in dom b by FINSEQ_3:27,A5;
+      then n in dom b by A5,FINSEQ_3:27;
       then b.n = B(n) by A6
         .= ((-1)|^(n+1))*1 by A1,A25,Th80
         .= (-1)|^(n+1);

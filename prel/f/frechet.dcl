@@ -8,7 +8,6 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
@@ -28,6 +27,7 @@
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PCOMPS_1"/>
+<ArticleID name="RELSET_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
 <ArticleID name="YELLOW_8"/>
@@ -37,17 +37,17 @@
 <ArgTypes/>
 <Func kind="K" nr="203"/>
 <Cluster>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="86"/>
+<Adjective nr="43"/>
+<Adjective nr="44"/>
+<Adjective nr="90"/>
 </Cluster>
 </FCluster>
 <CCluster aid="FRECHET" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="40"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -58,7 +58,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="12">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -70,33 +70,33 @@
 <CCluster aid="FRECHET" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="40"/>
-<Adjective nr="86"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="44"/>
+<Adjective nr="90"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="40"/>
-<Adjective nr="88"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="44"/>
+<Adjective nr="92"/>
 </Cluster>
 </CCluster>
 <CCluster aid="FRECHET" nr="3">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="40"/>
-<Adjective nr="88"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="44"/>
+<Adjective nr="92"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="40"/>
-<Adjective nr="89"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="44"/>
+<Adjective nr="93"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -9,21 +9,23 @@
 environ
 
  vocabularies FUNCT_1, SUPINF_1, RLVECT_1, SUPINF_2, ORDINAL2, RELAT_1, TARSKI,
-      MEASURE5, FUNCT_2, BOOLE, COMPLEX1, FUNCT_3, MCART_1, MEASURE4, MEASURE1,
+      MEASURE5, FUNCT_2, BOOLE, COMPLEX1, FUNCT_3, MEASURE4, MEASURE1,
       MEASURE7, FUNCOP_1, PROB_1, ARYTM, XXREAL_2, TBSP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MCART_1, DOMAIN_1,
-      ORDINAL1, NUMBERS, XXREAL_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1,
-      PARTFUN1, FUNCT_2, FUNCOP_1, NAT_1, PROB_1, XXREAL_2, SUPINF_1, SUPINF_2,
-      MEASURE1, MEASURE4, MEASURE5, RECDEF_1;
+      ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, XXREAL_3, REAL_1, RELAT_1, FUNCT_1,
+      RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, NAT_1, PROB_1, XXREAL_2, SUPINF_1,
+      SUPINF_2, MEASURE1, MEASURE4, MEASURE5, RECDEF_1;
  constructors PARTFUN1, DOMAIN_1, FUNCOP_1, NAT_1, MEASURE4, MEASURE5,
-      RECDEF_1, SUPINF_1, XREAL_0;
+      RECDEF_1, SUPINF_1, XREAL_0, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, FRAENKEL,
-      NUMBERS, XREAL_0, MEMBERED, MEASURE1, MEASURE4, VALUED_0, XXREAL_2;
+      NUMBERS, XREAL_0, MEMBERED, MEASURE1, MEASURE4, VALUED_0, XXREAL_2,
+      XXREAL_3, FUNCT_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, SUPINF_1, MEASURE4, XBOOLE_0, XXREAL_2, VALUED_0;
- theorems TARSKI, SUPINF_2, MEASURE1, FUNCT_1, MEASURE4, MEASURE5, MEASURE6,
-      ZFMISC_1, FUNCT_2, NAT_1, MCART_1, XBOOLE_0, XBOOLE_1, FUNCOP_1,
-      XXREAL_0, ORDINAL1, XXREAL_2;
+ definitions TARSKI, SUPINF_1, MEASURE4, XBOOLE_0, XXREAL_2, VALUED_0,
+      XXREAL_3;
+ theorems TARSKI, SUPINF_2, MEASURE1, FUNCT_1, MEASURE5, MEASURE6, ZFMISC_1,
+      FUNCT_2, NAT_1, XBOOLE_0, XBOOLE_1, FUNCOP_1, XXREAL_0, ORDINAL1,
+      XXREAL_2, XXREAL_3;
  schemes FUNCT_2, NAT_1, BINOP_2, SUBSET_1, XBOOLE_0;
 
 begin :: Some theorems about series of R_eal numbers
@@ -45,7 +47,7 @@ A4: for t being Element of NAT st P[t] holds P[t+1]
     let t be Element of NAT;
     assume Ser(F).t = 0.;
     hence Ser(F).(t+1) = 0. + F.(t+1) by SUPINF_2:63
-      .= F.(t+1) by SUPINF_2:18
+      .= F.(t+1) by XXREAL_3:4
       .= 0. by A1;
   end;
 A5: for s being Element of NAT holds P[s] from NAT_1:sch 1(A3,A4);
@@ -89,11 +91,8 @@ A2: n = k + 1 by NAT_1:6;
     reconsider k as Element of NAT by ORDINAL1:def 13;
 A3: Ser(F).n = Ser(F).k + F.n by A2,SUPINF_2:63;
     0. <= Ser(F).k & F.n <= F.n & 0. <= F.n by A1,SUPINF_2:58,59;
-    then not ((0. = +infty & F.n = -infty) or (0. = -infty & F.n = +infty )) &
-    not ((Ser(F).k = +infty & F.n = -infty) or (Ser(F).k = -infty & F.n =
-    +infty)) & 0 <= Ser(F).k & F.n <= F.n by XXREAL_0:12;
-    then 0. + F.n <= Ser(F).n by A3,SUPINF_2:14;
-    hence thesis by SUPINF_2:18;
+    then 0. + F.n <= Ser(F).n by A3,XXREAL_3:38;
+    hence thesis by XXREAL_3:4;
   end;
 end;
 
@@ -122,16 +121,15 @@ A7: Ser(G).(k + 1) = Ser(G).k + G.(k + 1) &
     Ser(H).(k + 1) = Ser(H).k + H.(k + 1) by SUPINF_2:63;
     set n = k+1;
     0. <= G.n & 0. <= H.n by A1,SUPINF_2:58;
-    then 0. + 0. <= G.n + H.n by MEASURE1:4;
-    then 0. <= G.n + H.n by SUPINF_2:18;
+    then 0. + 0. <= G.n + H.n by XXREAL_3:38;
     then
 A8: 0. <= F.(k+1) by A2;
 A9: 0. <= (Ser G).k & 0. <= (Ser H).k & 0. <= (Ser G).(k+1) by A1,SUPINF_2:59;
 A10: 0. <= H.(k+1) & 0. <= G.(k+1) by A1,SUPINF_2:58;
     (Ser G).k + (Ser H).k + F.(k + 1)
-    = ((Ser G).k + F.(k+1)) + (Ser H).k by A8,A9,MEASURE4:1
-      .= (((Ser G).k + G.(k+1)) + H.(k+1)) + (Ser H).k by A6,A9,A10,MEASURE4:1
-      .= (Ser G).(k+1) + (Ser H).(k+1) by A7,A9,A10,MEASURE4:1;
+    = ((Ser G).k + F.(k+1)) + (Ser H).k by A8,A9,XXREAL_3:48
+      .= (((Ser G).k + G.(k+1)) + H.(k+1)) + (Ser H).k by A6,A9,A10,XXREAL_3:48
+      .= (Ser G).(k+1) + (Ser H).(k+1) by A7,A9,A10,XXREAL_3:48;
     hence thesis by A5,SUPINF_2:63;
   end;
   thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A3,A4);
@@ -161,17 +159,16 @@ A5: Ser(F).k = Ser(G).k + Ser(H).k;
 A6: Ser(F).(k+1) = Ser(F).k + F.(k+1) & Ser(G).(k+1) = Ser(G).k + G.(k+1) &
     Ser(H).(k+1) = Ser(H).k + H.(k+1) by SUPINF_2:63;
     0. <= G.(k+1) & 0. <= H.(k+1) by A2,SUPINF_2:58;
-    then 0. + 0. <= G.(k+1) + H.(k+1) by MEASURE1:4;
-    then 0. <= G.(k+1) + H.(k+1) by SUPINF_2:18;
+    then 0. + 0. <= G.(k+1) + H.(k+1) by XXREAL_3:38;
     then
 A7: 0. <= F.(k+1) by A1;
 A8: 0. <= Ser(G).k & 0. <= G.(k+1) &
     0. <= Ser(H).k & 0. <= H.(k+1) & 0. <= Ser(H).(k+1) by A2,SUPINF_2:58,59;
     hence Ser(F).(k+1) = Ser(G).k + (Ser(H).k + F.(k+1))
-    by A5,A6,A7,MEASURE4:1
+    by A5,A6,A7,XXREAL_3:48
       .= Ser(G).k + (Ser(H).k + (G.(k+1) + H.(k+1))) by A1
-      .= Ser(G).k + ((Ser(H).k + H.(k+1)) + G.(k+1)) by A8,MEASURE4:1
-      .= Ser(G).(k+1) + Ser(H).(k+1) by A6,A8,MEASURE4:1;
+      .= Ser(G).k + ((Ser(H).k + H.(k+1)) + G.(k+1)) by A8,XXREAL_3:48
+      .= Ser(G).(k+1) + Ser(H).(k+1) by A6,A8,XXREAL_3:48;
   end;
 A9: for n being Element of NAT holds P[n] from NAT_1:sch 1(A3,A4);
   SUM(G) + SUM(H) is UpperBound of rng Ser(F)
@@ -187,8 +184,7 @@ A11: n in NAT & x = Ser(F).n by A10,FUNCT_1:def 5;
     by FUNCT_2:6,XXREAL_2:4;
     then
 A12: Ser(G).n <= SUM(G) & Ser(H).n <= SUM(H) by SUPINF_2:def 23;
-    0. <= Ser(G).n & 0. <= Ser(H).n by A2,SUPINF_2:59;
-    then Ser(G).n + Ser(H).n <= SUM(G) + SUM(H) by A12,MEASURE1:4;
+    Ser(G).n + Ser(H).n <= SUM(G) + SUM(H) by A12,XXREAL_3:38;
     hence thesis by A9,A11;
   end;
   then sup(rng Ser(F)) <= SUM(G) + SUM(H) by XXREAL_2:def 3;
@@ -361,7 +357,7 @@ A5: n+1 < k;
 A6: n <= n+1 by NAT_1:11;
 A7: F.(n+1) = 0. by A1,A5;
     Ser(F).(n+1) = Ser(F).n + F.(n+1) by SUPINF_2:63
-      .= 0. by A4,A5,A6,A7,SUPINF_2:18,XXREAL_0:2;
+      .= 0. by A4,A5,A6,A7,XXREAL_0:2,XXREAL_3:4;
     hence thesis;
   end;
 A8: for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
@@ -387,7 +383,7 @@ A13:  k <= n;
       then
 A14:  F.(n+1) = 0. by A1;
       Ser(F).(n+1) = Ser(F).n + F.(n+1) by SUPINF_2:63
-        .= F.k by A11,A13,A14,SUPINF_2:18;
+        .= F.k by A11,A13,A14,XXREAL_3:4;
       hence thesis;
     end;
     suppose
@@ -396,7 +392,7 @@ A15:  k = n + 1;
       then
 A16:  Ser(F).n = 0. by A8;
       Ser(F).(n+1) = Ser(F).n + F.(n+1) by SUPINF_2:63
-        .= F.k by A15,A16,SUPINF_2:18;
+        .= F.k by A15,A16,XXREAL_3:4;
       hence thesis;
     end;
   end;
@@ -588,7 +584,7 @@ A36:  for n being Element of NAT holds On(F*H).n = GG0.n + GG1.n
 A37:      n = k+1;
           then On(F*H).n = (F*H).n by A12,Def1
             .= F.(H.n) by A12,A37,FUNCT_2:21
-            .= GG0.n + GG1.n by A26,A32,A37,SUPINF_2:18;
+            .= GG0.n + GG1.n by A26,A32,A37,XXREAL_3:4;
           hence thesis;
         end;
         suppose
@@ -601,7 +597,7 @@ A40:          GG0.n = 0. by A27,A38;
 A41:          GG1.n = F.(H.n) by A33,A38,A39;
               On(F*H).n = (F*H).n by A39,Def1
                 .= F.(H.n) by A39,FUNCT_2:21
-                .= GG0.n + GG1.n by A40,A41,SUPINF_2:18;
+                .= GG0.n + GG1.n by A40,A41,XXREAL_3:4;
               hence thesis;
             end;
             suppose
@@ -609,7 +605,7 @@ A42:          not n in S;
 A43:          GG0.n = 0. by A27,A38;
 A44:          GG1.n = 0. by A42,Def1;
               On(F*H).n = 0. by A42,Def1
-                .= GG0.n + GG1.n by A43,A44,SUPINF_2:18;
+                .= GG0.n + GG1.n by A43,A44,XXREAL_3:4;
               hence thesis;
             end;
           end;
@@ -621,12 +617,11 @@ A46:  (Ser G0).m = G0.(H.(k+1)) by A13,A18,Th10;
       set v = H.n;
 A47:  G0.v = F.v by A18;
 A48:  (Ser GG1).(k+1) = (Ser GG1).k + GG1.(k+1) by SUPINF_2:63
-        .= (Ser On(G1*H)).k by A32,SUPINF_2:18;
+        .= (Ser On(G1*H)).k by A32,XXREAL_3:4;
 A49:  (Ser On(G1*H)).k <= Ser(G1).m0 by A11,A24;
       Ser(G1).m0 <= Ser(G1).m by A24,Th9,NAT_1:11;
       then
 A50:  (Ser GG1).(k+1) <= (Ser G1).m by A48,A49,XXREAL_0:2;
-A51:  0. <= (Ser GG0).(k+1) & 0. <= (Ser GG1).(k+1) by A25,A31,SUPINF_2:59;
       for m being Element of NAT holds F.m = G0.m + G1.m
       proof
         let m be Element of NAT;
@@ -636,19 +631,19 @@ A52:      m = H.(k+1);
           then
 A53:      G0.m = F.m by A18;
           G1.m = 0.by A23,A52;
-          hence thesis by A53,SUPINF_2:18;
+          hence thesis by A53,XXREAL_3:4;
         end;
         suppose
 A54:      m <> H.(k+1);
           then
 A55:      G0.m = 0. by A18;
           G1.m = F.m by A23,A54;
-          hence thesis by A55,SUPINF_2:18;
+          hence thesis by A55,XXREAL_3:4;
         end;
       end;
       then (Ser On(F*H)).(k+1) = (Ser GG0).(k+1) + (Ser GG1).(k+1) &
       (Ser F).m = (Ser G0).m + (Ser G1).m by A19,A24,A25,A31,A36,Th3;
-      hence thesis by A45,A46,A47,A50,A51,MEASURE1:4;
+      hence thesis by A45,A46,A47,A50,XXREAL_3:38;
     end;
     suppose
 A56:  not k+1 in S;
@@ -658,7 +653,7 @@ A56:  not k+1 in S;
 A57:  F is nonnegative;
 A58:  On(F*H).(k+1) = 0. by A56,Def1;
       Ser(On(F*H)).(k+1) = Ser(On(F*H)).k + (On(F*H)).(k+1) by SUPINF_2:63
-        .= Ser(On(F*H)).k by A58,SUPINF_2:18;
+        .= Ser(On(F*H)).k by A58,XXREAL_3:4;
       hence thesis by A11,A57;
     end;
   end;
@@ -725,8 +720,7 @@ Lm4: for n being Element of NAT holds G0.n is Interval
 proof
   let n be Element of NAT;
   G0.n in {REAL} by Lm2,FUNCT_2:6;
-  then G0.n = REAL by TARSKI:def 1;
-  hence thesis;
+  hence thesis by TARSKI:def 1;
 end;
 
 definition
@@ -826,8 +820,7 @@ definition
   for n being Element of NAT holds it.n = (G.n) vol;
   existence
   proof
-
-defpred P[Element of NAT,Element of Funcs(NAT,ExtREAL)] means $2 = (G.$1) vol;
+    defpred P[Element of NAT,set] means $2 = (G.$1) vol;
 A1: for n being Element of NAT holds
     ex y being Element of Funcs(NAT,ExtREAL) st P[n,y]
     proof
@@ -984,82 +977,7 @@ A2: for A being Subset of REAL holds G.A = inf(Svc(A))
 end;
 
 definition
-  let H be Function of NAT,[:NAT,NAT:];
-  redefine func pr1(H) -> Function of NAT,NAT means
-  for n being Element of NAT holds
-  ex s being Element of NAT st H.n = [it.n,s];
-  coherence
-  proof
-    thus pr1 H is Function of NAT,NAT;
-  end;
-  compatibility
-  proof
-    let IT be Function of NAT,NAT;
-A1: dom pr1 H = dom H by MCART_1:def 12;
-A2: dom pr1 H = NAT by FUNCT_2:def 1;
-    hereby
-      assume
-A3:   IT = pr1 H;
-      let n be Element of NAT;
-A4:   IT.n = (H.n)`1 by A1,A2,A3,MCART_1:def 12;
-      reconsider s = (H.n)`2 as Element of NAT;
-      take s;
-      thus H.n = [IT.n,s] by A4,MCART_1:24;
-    end;
-    assume
-A5: for n being Element of NAT holds
-    ex s being Element of NAT st H.n = [IT.n,s];
-A6: for x being set st x in dom H holds IT.x = (H.x)`1
-    proof
-      let x be set;
-      assume x in dom H;
-      then reconsider n = x as Element of NAT;
-      ex s being Element of NAT st H.n = [IT.n,s] by A5;
-      hence IT.x = (H.x)`1 by MCART_1:7;
-    end;
-    dom IT = dom H by A1,A2,FUNCT_2:def 1;
-    hence IT = pr1 H by A6,MCART_1:def 12;
-  end;
-end;
-
-definition
-  let H be Function of NAT,[:NAT,NAT:];
-  redefine func pr2(H) -> Function of NAT,NAT means
-  :Def12:
-  for n being Element of NAT holds H.n = [pr1(H).n,it.n];
-  coherence
-  proof
-    thus pr2 H is Function of NAT,NAT;
-  end;
-  compatibility
-  proof
-    let IT be Function of NAT,NAT;
-A1: dom pr2 H = dom H by MCART_1:def 13;
-A2: dom pr2 H = NAT by FUNCT_2:def 1;
-    hereby
-      assume
-A3:   IT = pr2 H;
-      let n be Element of NAT;
-A4:   IT.n = (H.n)`2 by A1,A2,A3,MCART_1:def 13;
-      (pr1 H).n = (H.n)`1 by A1,A2,MCART_1:def 12;
-      hence H.n = [(pr1 H).n,IT.n] by A4,MCART_1:24;
-    end;
-    assume
-A5: for n being Element of NAT holds H.n = [(pr1 H).n,IT.n];
-A6: for x being set st x in dom H holds IT.x = (H.x)`2
-    proof
-      let x be set;
-      assume x in dom H;
-      then reconsider n = x as Element of NAT;
-      H.n = [(pr1 H).n,IT.n] by A5;
-      hence IT.x = (H.x)`2 by MCART_1:7;
-    end;
-    dom IT = dom H by A1,A2,FUNCT_2:def 1;
-    hence IT = pr2 H by A6,MCART_1:def 13;
-  end;
-end;
-
-definition
+ canceled 2;
   let F be Function of NAT,bool REAL;
   let G be Interval_Covering of F;
   let H be Function of NAT,[:NAT,NAT:] such that
@@ -1094,7 +1012,7 @@ A8:     n2 in dom(G.n1) & AA = (G.n1).n2 by A7,FUNCT_1:def 5;
         consider n being set such that
 A9:     n in dom(H) & [n1,n2] = H.n by A1,FUNCT_1:def 5;
         reconsider n as Element of NAT by A9;
-        [pr1(H).n,pr2(H).n] = [n1,n2] by A9,Def12;
+        [pr1(H).n,pr2(H).n] = [n1,n2] by A9,FUNCT_2:196;
         then pr1(H).n = n1 & pr2(H).n = n2 by ZFMISC_1:33;
         then x in GG.n & GG.n in rng GG by A3,A7,A8,FUNCT_2:6;
         hence thesis by TARSKI:def 4;
@@ -1175,7 +1093,7 @@ A7: for F being Function of NAT,bool REAL holds
     take m = m0 + pr1(H).(k+1);
     let F be Function of NAT,bool REAL;
     let G be Interval_Covering of F;
-    defpred QQ0[Element of NAT,Element of Funcs(NAT,bool REAL)] means
+    defpred QQ0[Element of NAT,Function] means
     (($1 = pr1(H).(k+1) implies
     for m being Element of NAT holds $2.m = (G.$1).m) &
     ($1 <> pr1(H).(k+1) implies for m being Element of NAT holds $2.m = {}));
@@ -1198,7 +1116,7 @@ A10:    n <> pr1(H).(k+1);
     end;
     consider G0 being Function of NAT,Funcs(NAT,bool REAL) such that
 A11: for n being Element of NAT holds QQ0[n,G0.n] from FUNCT_2:sch 3(A8);
-    defpred QQ1[Element of NAT,Element of Funcs(NAT,bool REAL)] means
+    defpred QQ1[Element of NAT,Function] means
     (($1 <> pr1(H).(k+1) implies
     for m being Element of NAT holds $2.m = (G.$1).m) &
     ($1 = pr1(H).(k+1) implies for m being Element of NAT holds $2.m = {}));
@@ -1315,7 +1233,7 @@ A25:        SUM((G0.n) vol) <= SUM((G.n) vol) by SUPINF_2:62;
             end;
             then SUM((G.n) vol) <= SUM((G0.n) vol) by SUPINF_2:62;
             then SUM((G.n) vol) = SUM((G0.n) vol) by A25,XXREAL_0:1;
-            hence thesis by A24,SUPINF_2:18;
+            hence thesis by A24,XXREAL_3:4;
           end;
           hence thesis;
         end;
@@ -1345,7 +1263,7 @@ A31:        SUM((G1.n) vol) <= SUM((G.n) vol) by SUPINF_2:62;
             ((G.n) vol).s <= ((G1.n) vol).s by A27;
             then SUM((G.n) vol) <= SUM((G1.n) vol) by SUPINF_2:62;
             then SUM((G.n) vol) = SUM((G1.n) vol) by A31,XXREAL_0:1;
-            hence thesis by A30,SUPINF_2:18;
+            hence thesis by A30,XXREAL_3:4;
           end;
           hence thesis;
         end;
@@ -1381,7 +1299,8 @@ A40:  s11 = s1 & pr1(H).(k+1) = pr1(H).s11 by A39;
       consider s22 being Element of NAT such that
 A41:  s22 = s2 & pr1(H).(k+1) = pr1(H).s22 by A39;
 A42:  SOS.s1 = pr2(H).s1 & SOS.s2 = pr2(H).s2 by A38,A39;
-      H.s1 = [pr1(H).s1,pr2(H).s1] & H.s2 = [pr1(H).s2,pr2(H).s2] by Def12;
+      H.s1 = [pr1(H).s1,pr2(H).s1] & H.s2 = [pr1(H).s2,pr2(H).s2]
+             by FUNCT_2:196;
       hence thesis by A1,A39,A40,A41,A42,FUNCT_2:25;
     end;
     then
@@ -1435,15 +1354,12 @@ A55: (GG1 vol).(k+1) = 0. by Def4,MEASURE5:60;
     (Ser (GG1 vol)).(k+1) = (Ser (GG1 vol)).k + (GG1 vol).(k+1)
     by SUPINF_2:63;
     then
-A56: (Ser (GG1 vol)).(k+1) = (Ser (GG1 vol)).k by A55,SUPINF_2:18;
+A56: (Ser (GG1 vol)).(k+1) = (Ser (GG1 vol)).k by A55,XXREAL_3:4;
     for s being Element of NAT holds 0. <= (vol(G1)).s by Th14;
     then vol(G1) is nonnegative by SUPINF_2:58;
     then (Ser vol(G1)).m0 <= (Ser vol(G1)).m by SUPINF_2:60;
     then
 A57: (Ser (GG1 vol)).(k+1) <= (Ser vol(G1)).m by A54,A56,XXREAL_0:2;
-    GG0 vol is nonnegative & GG1 vol is nonnegative by Th13;
-    then
-A58: 0. <= (Ser (GG0 vol)).(k+1) & 0. <= (Ser (GG1 vol)).(k+1) by SUPINF_2:59;
     for s being Element of NAT holds 0. <= (vol(G0)).s by Th14;
     then
 A59: vol(G0) is nonnegative by SUPINF_2:58;
@@ -1467,7 +1383,7 @@ A64:    GG0.n = (G0.(pr1(H).n)).(pr2(H).n) by A2,Def13
           .= (G.(pr1(H).n)).(pr2(H).n) by A11,A63;
         GG1.n = (G1.(pr1(H).n)).(pr2(H).n) by A2,Def13
           .= {} by A15,A63;
-        hence thesis by A61,A62,A64,MEASURE5:60,SUPINF_2:18;
+        hence thesis by A61,A62,A64,MEASURE5:60,XXREAL_3:4;
       end;
       suppose
 A65:    pr1(H).n <> pr1(H).(k+1);
@@ -1475,12 +1391,12 @@ A66:    GG1.n = (G1.(pr1(H).n)).(pr2(H).n) by A2,Def13
           .= (G.(pr1(H).n)).(pr2(H).n) by A15,A65;
         GG0.n = (G0.(pr1(H).n)).(pr2(H).n) by A2,Def13
           .= {} by A11,A65;
-        hence thesis by A61,A62,A66,MEASURE5:60,SUPINF_2:18;
+        hence thesis by A61,A62,A66,MEASURE5:60,XXREAL_3:4;
       end;
     end;
     then (Ser (On(G,H) vol)).(k+1) =
     (Ser (GG0 vol)).(k+1) + (Ser (GG1 vol)).(k+1) by A32,A33,Th3;
-    hence thesis by A53,A57,A58,A60,MEASURE1:4;
+    hence thesis by A53,A57,A60,XXREAL_3:38;
   end;
   thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A3,A6);
 end;
@@ -1549,8 +1465,8 @@ A4:   x = vol(F) by Def8;
 A5:   F vol is nonnegative by A1;
 A6:   SUM(F vol) = sup(rng Ser(F vol)) by SUPINF_2:def 23;
       set y = Ser(F vol).0;
-      y in rng Ser(F vol) & 0. <= y by A5,FUNCT_2:6,SUPINF_2:59;
-      then 0. <= y & y <= sup(rng Ser(F vol)) by XXREAL_2:4;
+      0. <= y & y <= sup(rng Ser(F vol))
+       by A5,FUNCT_2:6,SUPINF_2:59,XXREAL_2:4;
       hence thesis by A4,A6,XXREAL_0:2;
     end;
     hence thesis by A3,XXREAL_2:def 4;
@@ -1560,14 +1476,13 @@ A6:   SUM(F vol) = sup(rng Ser(F vol)) by SUPINF_2:def 23;
 A7: {} c= union(rng G) by XBOOLE_1:2;
   for n being Element of NAT holds G.n is Interval by FUNCOP_1:13;
   then reconsider G as Interval_Covering of {}REAL by A7,Def2;
-A8: G vol is nonnegative by A1;
 A9: for r being Element of NAT holds 0 <= r implies (G vol).r = 0.
   proof
     let n be Element of NAT;
     diameter(G.n) = diameter({}) by FUNCOP_1:13;
     hence thesis by Def4,MEASURE5:60;
   end;
-  then vol(G) = Ser(G vol).0 by A8,SUPINF_2:67
+  then vol(G) = Ser(G vol).0 by A1,SUPINF_2:67
     .= (G vol).0 by SUPINF_2:63
     .= 0. by A9;
   then
@@ -1645,12 +1560,13 @@ A24:  not inf Svc(union rng F) <= sup(rng Ser(OS_Meas*F));
 A25:  0. <= Ser(OS_Meas*F).0 by SUPINF_2:63;
       Ser(OS_Meas*F).0 <= x by FUNCT_2:6,XXREAL_2:4;
       then 0. <= x by A25,XXREAL_0:2;
-      then consider eps being R_eal such that
-A26:  0. < eps & x + eps < y & eps in REAL by A24,MEASURE6:25;
+      then consider eps being real number such that
+A26:  0. < eps & x + eps < y by A24,XXREAL_3:55;
+      reconsider eps as Element of ExtREAL by XXREAL_0:def 1;
       consider E being Function of NAT,ExtREAL such that
 A27:  (for n being Element of NAT holds 0. < E.n) & SUM(E) < eps
       by A26,MEASURE6:31;
-      defpred P[Element of NAT,Element of Funcs(NAT,bool REAL)] means
+      defpred P[Element of NAT,set] means
       ex F0 being Interval_Covering of F.$1 st
       ($2 = F0 & (vol(F0) < inf Svc(F.$1) + E.$1));
 A28:  for n being Element of NAT holds
@@ -1710,8 +1626,7 @@ A42:    F0 = FF.n & vol(F0) < inf Svc(F.n) + E.n by A35;
         hence thesis by A39;
       end;
 A43:  SUM(vol(FF)) <= SUM(G0) by A41,SUPINF_2:62;
-      0. <= SUM(OS_Meas*F) & 0. <= SUM(E) by A23,A37,MEASURE6:2;
-      then SUM(OS_Meas*F) + SUM(E) <= SUM(OS_Meas*F) + eps by A27,MEASURE1:4;
+      SUM(OS_Meas*F) + SUM(E) <= SUM(OS_Meas*F) + eps by A27,XXREAL_3:38;
       then SUM(G0) <= SUM(OS_Meas*F) + eps by A40,XXREAL_0:2;
       then
 A44:  SUM (vol(FF)) <= SUM (OS_Meas*F) + eps by A43,XXREAL_0:2;

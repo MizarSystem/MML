@@ -14,7 +14,7 @@ environ
       PARTFUN1, BINOP_2, SETWISEO, FUNCT_2, BINOP_1, FUNCOP_1, FINSEQ_1,
       FINSEQ_2, FINSEQ_4, VALUED_1, SEQ_1, FINSOP_1, FINSEQOP, SETWOP_2;
  constructors PARTFUN1, BINOP_1, SETWISEO, SQUARE_1, NAT_1, BINOP_2, VALUED_1,
-      SEQ_1, FINSEQOP, FINSEQ_4, FINSOP_1, SETWOP_2;
+      SEQ_1, FINSEQOP, FINSEQ_4, FINSOP_1, SETWOP_2, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, FUNCOP_1,
       NUMBERS, XCMPLX_0, XREAL_0, SQUARE_1, NAT_1, BINOP_2, MEMBERED, FINSEQ_1,
       FINSEQ_2, VALUED_0, VALUED_1, RELAT_1;
@@ -72,7 +72,7 @@ A1: dom F1 = Seg n1 by FINSEQ_1:def 2;
     take n1;
 A2: dom F = REAL by FUNCT_2:def 1;
     rng F1 c= REAL;
-    hence dom(F*F1) = Seg n1 by A1,A2,RELAT_1:46;
+    hence thesis by A1,A2,RELAT_1:46;
   end;
 end;
 
@@ -173,7 +173,7 @@ A1: for x being Element of REAL holds G.x = F(x) from FUNCT_2:sch 4;
     take G;
     let r;
     r in REAL by XREAL_0:def 1;
-    hence G.r = (r)^2 by A1;
+    hence thesis by A1;
   end;
   uniqueness
   proof
@@ -502,8 +502,10 @@ theorem
 canceled;
 
 theorem
-  -R1 = -R2 implies R1 = R2
+  for R1, R2 being complex-valued Function st
+  -R1 = -R2 holds R1 = R2
 proof
+  let R1, R2 be complex-valued Function;
   assume -R1 = -R2;
   hence R1 = --R2
     .= R2;
@@ -517,7 +519,7 @@ proof
   then R1 + (R + -R)= R2 + (R + -R) & R + -R = (i|->0)
   by Th22,Th23,BINOP_2:2,FINSEQOP:29,77;
   then R1 = R2 + (i|->(0 qua Real)) by BINOP_2:2,FINSEQOP:57;
-  hence R1 = R2 by BINOP_2:2,FINSEQOP:57;
+  hence thesis by BINOP_2:2,FINSEQOP:57;
 end;
 
 theorem Th45:
@@ -830,7 +832,7 @@ theorem
   r*(R1+R2) = r*R1 + r*R2
 proof
   r in REAL by XREAL_0:def 1;
-  hence r*(R1+R2) = r*R1 + r*R2 by Th16,FINSEQOP:52,55;
+  hence thesis by Th16,FINSEQOP:52,55;
 end;
 
 theorem
@@ -854,7 +856,7 @@ theorem Th76:
   (-1)*R = -R
 proof
   compreal.1 = -1 by BINOP_2:def 7;
-  hence (-1)*R = -R by Th16,Th22,Th23,BINOP_2:7,FINSEQOP:72;
+  hence thesis by Th16,Th22,Th23,BINOP_2:7,FINSEQOP:72;
 end;
 
 notation
@@ -1012,7 +1014,7 @@ A9:   z in dom(multreal.:(F2,F1));
         .= F1z * F2z by BINOP_2:def 11
         .= multreal.(F2.z,F1.z) by BINOP_2:def 11;
     end;
-    hence F = multreal.:(F2,F1) by A5,A8,FUNCOP_1:27;
+    hence thesis by A5,A8,FUNCOP_1:27;
   end;
 end;
 
@@ -1100,7 +1102,7 @@ theorem
 theorem Th97:
   sqr(R) = mlt(R,R)
 proof
-A1: len R = i by FINSEQ_2:109;
+A1: len R = i by FINSEQ_1:def 18;
   then
 A2: len(sqrreal*R) = i by FINSEQ_2:37;
 A3: len(multreal.:(R,R)) = i by A1,FINSEQ_2:86;
@@ -1111,14 +1113,14 @@ X: dom (sqrreal*R) = Seg i by A2,FINSEQ_1:def 3;
 A4: j in dom (sqrreal*R);
     then
 A5: j in dom(sqrreal*R);
-A6: j in dom(multreal.:(R,R)) by A3,A4,FINSEQ_1:def 3,X;
+A6: j in dom(multreal.:(R,R)) by A3,A4,X,FINSEQ_1:def 3;
     set r = R.j;
     thus (sqrreal*R).j = sqrreal.r by A5,FUNCT_1:22
       .= r^2 by Def2
       .= multreal.(r,r) by BINOP_2:def 11
       .= (multreal.:(R,R)).j by A6,FUNCOP_1:28;
   end;
-  hence sqr R = mlt(R,R) by A2,A3,FINSEQ_2:10;
+  hence thesis by A2,A3,FINSEQ_2:10;
 end;
 
 theorem Th98:
@@ -1435,14 +1437,14 @@ A7: x1 <= x2 by A4;
       let j such that
 A8:   j in Seg i;
       Seg len R1' = dom R1' & Seg len R2' = dom R2' &
-      len R1' = i & len R2' = i by FINSEQ_1:def 3,FINSEQ_2:109;
+      len R1' = i & len R2' = i by FINSEQ_1:def 3,def 18;
       then j in Seg n & R1'.j = R1.j & R2'.j = R2.j
       by A5,A6,A8,FINSEQ_1:def 7,FINSEQ_2:9;
       hence thesis by A4;
     end;
     then Sum R1' <= Sum R2' & Sum R1 = Sum R1' + x1 & Sum R2 = Sum R2' + x2
     by A3,A5,A6,Th104;
-    hence Sum R1 <= Sum R2 by A7,XREAL_1:9;
+    hence thesis by A7,XREAL_1:9;
   end;
   for i holds P[i] from NAT_1:sch 2(A1,A2);
   hence thesis;
@@ -1476,7 +1478,7 @@ A9:   for j st j in Seg i holds R1'.j <= R2'.j
         let j such that
 A10:    j in Seg i;
         Seg len R1' = dom R1' & Seg len R2' = dom R2' &
-        len R1' = i & len R2' = i by FINSEQ_1:def 3,FINSEQ_2:109;
+        len R1' = i & len R2' = i by FINSEQ_1:def 3,def 18;
         then j in Seg (i+1) & R1'.j = R1.j & R2'.j = R2.j
         by A6,A7,A10,FINSEQ_1:def 7,FINSEQ_2:9;
         hence thesis by A4;
@@ -1485,7 +1487,7 @@ A10:    j in Seg i;
         suppose
 A11:      j in Seg i;
           Seg len R1' = dom R1' & Seg len R2' = dom R2' &
-          len R1' = i & len R2' = i by FINSEQ_1:def 3,FINSEQ_2:109;
+          len R1' = i & len R2' = i by FINSEQ_1:def 3,def 18;
           then R1'.j = R1.j & R2'.j = R2.j by A6,A7,A11,FINSEQ_1:def 7;
           then Sum R1' < Sum R2' & Sum R1 = Sum R1' + x1 &
           Sum R2 = Sum R2' + x2 & x1 <= x2 by A3,A4,A5,A6,A7,A8,A9,A11,Th104;
@@ -1605,8 +1607,8 @@ theorem
 proof
   assume
 A1: Sum sqr R = 0;
-A2: len R = i by FINSEQ_2:109;
-A3: len(i |-> 0) = i by FINSEQ_2:109;
+A2: len R = i by FINSEQ_1:def 18;
+A3: len(i |-> 0) = i by FINSEQ_1:def 18;
   assume R <> i |-> 0;
   then consider j such that
 A5: j in dom R and
@@ -1687,7 +1689,7 @@ A11: Sum sqr(x1*R2')+Sum sqr(x2*R1') + -2*Sum(mlt(x1*R2',x2*R1'))
       reconsider s=r as Element of REAL by XREAL_0:def 1;
       sqr(R^<*s*>) = (sqrreal*R)^<*sqrreal.s*> by FINSEQOP:9
         .= (sqr R)^<*r^2*> by Def2;
-      hence Sum sqr (R^<*r*>) = Sum sqr R + r^2 by Th104;
+      hence thesis by Th104;
     end;
     then (Sum sqr R1' + x1^2) = Sum sqr R1 &
     (Sum sqr R2' + x2^2) = Sum sqr R2 by A4,A5;
@@ -1705,7 +1707,7 @@ A12: (Sum sqr R1)*(Sum sqr R2) - (Sum mlt(R1,R2))^2
     mlt(R1,R2))^2 by A6,A12,XREAL_1:9;
     then (Sum mlt(R1,R2))^2 + (0 qua Element of NAT)
      <= (Sum sqr R1)*(Sum sqr R2) by XREAL_1:21;
-    hence (Sum mlt(R1,R2))^2 <= (Sum sqr R1)*(Sum sqr R2);
+    hence thesis;
   end;
   for i holds P[i] from NAT_1:sch 2(A1,A2);
   hence thesis;
@@ -2141,7 +2143,7 @@ definition
     then consider y be set such that
     y in dom (i |-> z) and
 A2: x = (i |-> z).y by FUNCT_1:def 5;
-    thus x in COMPLEX by A2,XCMPLX_0:def 2;
+    thus thesis by A2,XCMPLX_0:def 2;
   end;
 end;
 

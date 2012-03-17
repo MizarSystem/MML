@@ -9,17 +9,19 @@ environ
  vocabularies ORDINAL2, ARYTM, PRE_TOPC, EUCLID, TOPREAL1, BOOLE, TOPREAL2,
       INCPROJ, ARYTM_1, MCART_1, FUNCT_5, RELAT_1, JORDAN1A, JORDAN2C, JORDAN3,
       TOPS_2, SUBSET_1, SEQ_2, FUNCT_1, JORDAN6, COMPTS_1, LATTICES, METRIC_1,
-      ABSVALUE, SQUARE_1, JORDAN18, SPPOL_1;
+      ABSVALUE, SQUARE_1, JORDAN18, SPPOL_1, PCOMPS_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, RELSET_1, ORDINAL1,
       NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, SQUARE_1, SEQ_4, XXREAL_2,
-      STRUCT_0,
-      COMPLEX1, PRE_TOPC, TOPS_2, RCOMP_1, COMPTS_1, METRIC_1, SPPOL_1, EUCLID,
+      STRUCT_0, PCOMPS_1,
+      COMPLEX1, PRE_TOPC, TOPS_2, RCOMP_1, COMPTS_1, METRIC_1, SPPOL_1,
+      RLTOPSP1, EUCLID,
       TOPREAL1, PSCOMP_1, TOPREAL2, JORDAN5C, JORDAN2C, TOPREAL6, JORDAN6;
  constructors REAL_1, SQUARE_1, COMPLEX1, RCOMP_1, CONNSP_1, TOPS_2, COMPTS_1,
       TOPREAL1, SPPOL_1, PSCOMP_1, JORDAN5C, JORDAN6, JORDAN2C, TOPREAL6,
-      SEQ_1, XXREAL_2, SEQ_4;
+      SEQ_1, XXREAL_2, SEQ_4, RELSET_1, FUNCSDOM;
  registrations XBOOLE_0, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, SQUARE_1,
-      MEMBERED, COMPTS_1, EUCLID, TOPREAL1, BORSUK_2;
+      MEMBERED, COMPTS_1, EUCLID, TOPREAL1, BORSUK_2, STRUCT_0,
+      TOPS_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, ZFMISC_1, SEQ_4, SQUARE_1, EUCLID, PCOMPS_1,
       SUBSET_1;
@@ -27,7 +29,7 @@ environ
       XBOOLE_1, SEQ_4, RELAT_1, PSCOMP_1, FUNCT_2, TOPREAL3, JORDAN1A,
       COMPTS_1, ZFMISC_1, JORDAN5C, TOPREAL2, JORDAN2C, TOPS_1, SQUARE_1,
       RCOMP_1, TOPMETR, METRIC_1, JORDAN16, SPPOL_1, COMPLEX1, XREAL_1,
-      TOPREAL6, XXREAL_0, JCT_MISC, XXREAL_2;
+      TOPREAL6, XXREAL_0, JCT_MISC, XXREAL_2, PRE_TOPC, RLTOPSP1;
 
 begin  :: Preliminaries
 
@@ -61,7 +63,7 @@ A2: A is compact;
   then
 A3: f".:A is compact by A2,COMPTS_1:24;
   rng f = [#]T & f is one-to-one by A1,TOPS_2:def 5;
-  hence f"A is compact by A3,TOPS_2:68;
+  hence thesis by A3,TOPS_2:68;
 end;
 
 theorem Th4:
@@ -76,7 +78,7 @@ A2: x in north_halfline a and
 A3: r = proj2.x by FUNCT_2:115;
   reconsider x as Point of TOP-REAL 2 by A1;
   r = x`2 by A3,PSCOMP_1:def 29;
-  hence a`2 <= r by A2,TOPREAL1:def 12;
+  hence thesis by A2,TOPREAL1:def 12;
 end;
 
 theorem Th5:
@@ -91,7 +93,7 @@ A2: x in south_halfline a and
 A3: r = proj2.x by FUNCT_2:115;
   reconsider x as Point of TOP-REAL 2 by A1;
   r = x`2 by A3,PSCOMP_1:def 29;
-  hence r <= a`2 by A2,TOPREAL1:def 14;
+  hence thesis by A2,TOPREAL1:def 14;
 end;
 
 theorem Th6:
@@ -106,7 +108,7 @@ A2: x in west_halfline a and
 A3: r = proj1.x by FUNCT_2:115;
   reconsider x as Point of TOP-REAL 2 by A1;
   r = x`1 by A3,PSCOMP_1:def 28;
-  hence r <= a`1 by A2,TOPREAL1:def 15;
+  hence thesis by A2,TOPREAL1:def 15;
 end;
 
 theorem Th7:
@@ -121,7 +123,7 @@ A2: x in east_halfline a and
 A3: r = proj1.x by FUNCT_2:115;
   reconsider x as Point of TOP-REAL 2 by A1;
   r = x`1 by A3,PSCOMP_1:def 28;
-  hence a`1 <= r by A2,TOPREAL1:def 13;
+  hence thesis by A2,TOPREAL1:def 13;
 end;
 
 registration
@@ -252,19 +254,23 @@ A6: 0 < s;
   hence thesis by A1,A2,SEQ_4:def 5;
 end;
 
+XX: the TopStruct of TOP-REAL 2 = TopSpaceMetr Euclid 2 by EUCLID:def 8;
+
 registration
   let a;
   cluster north_halfline a -> closed;
   coherence
   proof
     set X = north_halfline a;
+    reconsider XX = X` as Subset of TOP-REAL 2;
+    reconsider OO = XX as Subset of TopSpaceMetr Euclid 2 by XX;
     for p being Point of Euclid 2 st p in X`
     ex r being real number st r>0 & Ball(p,r) c= X`
     proof
       let p be Point of Euclid 2;
       assume
 A1:   p in X`;
-      reconsider x = p as Point of TOP-REAL 2;
+      reconsider x = p as Point of TOP-REAL 2 by EUCLID:71;
 A2:   not p in X by A1,XBOOLE_0:def 5;
       per cases by A2,TOPREAL1:def 12;
       suppose
@@ -275,9 +281,10 @@ A3:     x`1 <> a`1;
         let b be set;
         assume
 A4:     b in Ball(p,r);
-        then reconsider b as Point of Euclid 2;
-        reconsider c = b as Point of TOP-REAL 2;
-        dist(p,b) < r by A4,METRIC_1:12;
+        then reconsider bb=b as Point of Euclid 2;
+        reconsider c = bb as Point of TOP-REAL 2 by EUCLID:71;
+N:      c in the carrier of TOP-REAL 2;
+        dist(p,bb) < r by A4,METRIC_1:12;
         then
 A5:     dist(x,c) < r by TOPREAL6:def 1;
         now
@@ -299,7 +306,8 @@ then (x`1-c`1)^2 + (x`2-c`2)^2 < (x`1-c`1)^2 + 0 by A8,SQUARE_1:def 4;
           hence contradiction by A7,XREAL_1:9;
         end;
         then not c in X by TOPREAL1:def 12;
-        hence thesis by XBOOLE_0:def 5;
+        then c in X` by N,XBOOLE_0:def 5;
+        hence b in X` by XBOOLE_0:def 5;
       end;
       suppose
 A10:    x`2 < a`2;
@@ -309,7 +317,7 @@ A10:    x`2 < a`2;
         assume
 A11:    b in Ball(p,r);
         then reconsider b as Point of Euclid 2;
-        reconsider c = b as Point of TOP-REAL 2;
+        reconsider c = b as Point of TOP-REAL 2 by EUCLID:71;
         dist(p,b) < r by A11,METRIC_1:12;
         then
 A12:    dist(x,c) < r by TOPREAL6:def 1;
@@ -338,20 +346,24 @@ A19:      (a`2-x`2)^2 <= (c`2-x`2)^2 by A18,SQUARE_1:77;
         hence thesis by XBOOLE_0:def 5;
       end;
     end;
-    then X` is open by TOPMETR:22;
-    hence thesis by TOPS_1:29;
+    then OO is open by TOPMETR:22;
+    then XX is open by XX,PRE_TOPC:60;
+    then XX` is closed by XX,PRE_TOPC:60;
+    hence thesis by XX,PRE_TOPC:61;
   end;
   cluster south_halfline a -> closed;
   coherence
   proof
     set X = south_halfline a;
+    reconsider XX = X` as Subset of TOP-REAL 2;
+    reconsider OO = XX as Subset of TopSpaceMetr Euclid 2 by XX;
     for p being Point of Euclid 2 st p in X`
     ex r being real number st r>0 & Ball(p,r) c= X`
     proof
       let p be Point of Euclid 2;
       assume
 A20:  p in X`;
-      reconsider x = p as Point of TOP-REAL 2;
+      reconsider x = p as Point of TOP-REAL 2 by EUCLID:71;
 A21:  not p in X by A20,XBOOLE_0:def 5;
       per cases by A21,TOPREAL1:def 14;
       suppose
@@ -363,7 +375,7 @@ A22:    x`1 <> a`1;
         assume
 A23:    b in Ball(p,r);
         then reconsider b as Point of Euclid 2;
-        reconsider c = b as Point of TOP-REAL 2;
+        reconsider c = b as Point of TOP-REAL 2 by EUCLID:71;
         dist(p,b) < r by A23,METRIC_1:12;
         then
 A24:    dist(x,c) < r by TOPREAL6:def 1;
@@ -396,7 +408,7 @@ A29:    x`2 > a`2;
         assume
 A30:    b in Ball(p,r);
         then reconsider b as Point of Euclid 2;
-        reconsider c = b as Point of TOP-REAL 2;
+        reconsider c = b as Point of TOP-REAL 2 by EUCLID:71;
         dist(p,b) < r by A30,METRIC_1:12;
         then
 A31:    dist(x,c) < r by TOPREAL6:def 1;
@@ -425,20 +437,24 @@ A38:      (x`2-a`2)^2 <= (x`2-c`2)^2 by A37,SQUARE_1:77;
         hence thesis by XBOOLE_0:def 5;
       end;
     end;
-    then X` is open by TOPMETR:22;
-    hence thesis by TOPS_1:29;
+    then OO is open by TOPMETR:22;
+    then XX is open by XX,PRE_TOPC:60;
+    then XX` is closed by XX,PRE_TOPC:60;
+    hence thesis by XX,PRE_TOPC:61;
   end;
   cluster east_halfline a -> closed;
   coherence
   proof
     set X = east_halfline a;
+    reconsider XX = X` as Subset of TOP-REAL 2;
+    reconsider OO = XX as Subset of TopSpaceMetr Euclid 2 by XX;
     for p being Point of Euclid 2 st p in X`
     ex r being real number st r>0 & Ball(p,r) c= X`
     proof
       let p be Point of Euclid 2;
       assume
 A39:  p in X`;
-      reconsider x = p as Point of TOP-REAL 2;
+      reconsider x = p as Point of TOP-REAL 2 by EUCLID:71;
 A40:  not p in X by A39,XBOOLE_0:def 5;
       per cases by A40,TOPREAL1:def 13;
       suppose
@@ -450,7 +466,7 @@ A41:    x`2 <> a`2;
         assume
 A42:    b in Ball(p,r);
         then reconsider b as Point of Euclid 2;
-        reconsider c = b as Point of TOP-REAL 2;
+        reconsider c = b as Point of TOP-REAL 2 by EUCLID:71;
         dist(p,b) < r by A42,METRIC_1:12;
         then
 A43:    dist(x,c) < r by TOPREAL6:def 1;
@@ -483,7 +499,7 @@ A48:    x`1 < a`1;
         assume
 A49:    b in Ball(p,r);
         then reconsider b as Point of Euclid 2;
-        reconsider c = b as Point of TOP-REAL 2;
+        reconsider c = b as Point of TOP-REAL 2 by EUCLID:71;
         dist(p,b) < r by A49,METRIC_1:12;
         then
 A50:    dist(x,c) < r by TOPREAL6:def 1;
@@ -512,20 +528,24 @@ A57:      (a`1-x`1)^2 <= (c`1-x`1)^2 by A56,SQUARE_1:77;
         hence thesis by XBOOLE_0:def 5;
       end;
     end;
-    then X` is open by TOPMETR:22;
-    hence thesis by TOPS_1:29;
+    then OO is open by TOPMETR:22;
+    then XX is open by XX,PRE_TOPC:60;
+    then XX` is closed by XX,PRE_TOPC:60;
+    hence thesis by XX,PRE_TOPC:61;
   end;
   cluster west_halfline a -> closed;
   coherence
   proof
     set X = west_halfline a;
+    reconsider XX = X` as Subset of TOP-REAL 2;
+    reconsider OO = XX as Subset of TopSpaceMetr Euclid 2 by XX;
     for p being Point of Euclid 2 st p in X`
     ex r being real number st r>0 & Ball(p,r) c= X`
     proof
       let p be Point of Euclid 2;
       assume
 A58:  p in X`;
-      reconsider x = p as Point of TOP-REAL 2;
+      reconsider x = p as Point of TOP-REAL 2 by EUCLID:71;
 A59:  not p in X by A58,XBOOLE_0:def 5;
       per cases by A59,TOPREAL1:def 15;
       suppose
@@ -537,7 +557,7 @@ A60:    x`2 <> a`2;
         assume
 A61:    b in Ball(p,r);
         then reconsider b as Point of Euclid 2;
-        reconsider c = b as Point of TOP-REAL 2;
+        reconsider c = b as Point of TOP-REAL 2 by EUCLID:71;
         dist(p,b) < r by A61,METRIC_1:12;
         then
 A62:    dist(x,c) < r by TOPREAL6:def 1;
@@ -570,7 +590,7 @@ A67:    x`1 > a`1;
         assume
 A68:    b in Ball(p,r);
         then reconsider b as Point of Euclid 2;
-        reconsider c = b as Point of TOP-REAL 2;
+        reconsider c = b as Point of TOP-REAL 2 by EUCLID:71;
         dist(p,b) < r by A68,METRIC_1:12;
         then
 A69:    dist(x,c) < r by TOPREAL6:def 1;
@@ -599,8 +619,10 @@ A76:      (x`1-a`1)^2 <= (x`1-c`1)^2 by A75,SQUARE_1:77;
         hence thesis by XBOOLE_0:def 5;
       end;
     end;
-    then X` is open by TOPMETR:22;
-    hence thesis by TOPS_1:29;
+    then OO is open by TOPMETR:22;
+    then XX is open by XX,PRE_TOPC:60;
+    then XX` is closed by XX,PRE_TOPC:60;
+    hence thesis by XX,PRE_TOPC:61;
   end;
 end;
 
@@ -611,7 +633,7 @@ proof
 A1: a in BDD P;
 A2: BDD P misses UBD P by JORDAN2C:28;
   a in north_halfline a by TOPREAL1:45;
-  hence not north_halfline a c= UBD P by A1,A2,XBOOLE_0:3;
+  hence thesis by A1,A2,XBOOLE_0:3;
 end;
 
 theorem Th13:
@@ -621,7 +643,7 @@ proof
 A1: a in BDD P;
 A2: BDD P misses UBD P by JORDAN2C:28;
   a in south_halfline a by TOPREAL1:45;
-  hence not south_halfline a c= UBD P by A1,A2,XBOOLE_0:3;
+  hence thesis by A1,A2,XBOOLE_0:3;
 end;
 
 theorem
@@ -631,7 +653,7 @@ proof
 A1: a in BDD P;
 A2: BDD P misses UBD P by JORDAN2C:28;
   a in east_halfline a by TOPREAL1:45;
-  hence not east_halfline a c= UBD P by A1,A2,XBOOLE_0:3;
+  hence thesis by A1,A2,XBOOLE_0:3;
 end;
 
 theorem
@@ -641,7 +663,7 @@ proof
 A1: a in BDD P;
 A2: BDD P misses UBD P by JORDAN2C:28;
   a in west_halfline a by TOPREAL1:45;
-  hence not west_halfline a c= UBD P by A1,A2,XBOOLE_0:3;
+  hence thesis by A1,A2,XBOOLE_0:3;
 end;
 
 canceled 2;
@@ -676,13 +698,13 @@ A9: P1 = P2;
   suppose
 A10: P = P1;
     take P2;
-    thus P2 is_an_arc_of p1,p2 & P \/ P2 = C & P /\ P2 = {p1,p2}
+    thus thesis
     by A4,A5,A6,A10;
   end;
   suppose
 A11: P = P2;
     take P1;
-    thus P1 is_an_arc_of p1,p2 & P \/ P1 = C & P /\ P1 = {p1,p2}
+    thus thesis
     by A3,A5,A6,A11;
   end;
 end;
@@ -767,8 +789,7 @@ A18: x`1 = p`1 by TOPREAL1:def 14
   x`2 = sup (proj2.:X) by A17,PSCOMP_1:def 29
     .= South-Bound(p,C)`2 by EUCLID:56;
   then x = South-Bound(p,C) by A18,TOPREAL3:11;
-  hence South-Bound(p,C) in C &
-  South-Bound(p,C) in south_halfline p by A16,XBOOLE_0:def 4;
+  hence thesis by A16,XBOOLE_0:def 4;
 end;
 
 theorem Th23:
@@ -819,7 +840,7 @@ A15: North-Bound(p,C)`2 = p`2;
     then p in C by A1,Th22;
     hence contradiction by A1,A8,XBOOLE_0:3;
   end;
-  hence p`2 < North-Bound(p,C)`2 by A12,A13,A14,XXREAL_0:1;
+  hence thesis by A12,A13,A14,XXREAL_0:1;
 end;
 
 theorem Th24:
@@ -877,7 +898,7 @@ A4: North-Bound(p,C)`1 = p`1 by EUCLID:56;
 A5: South-Bound(p,C)`2 = sup(proj2.:(C /\ south_halfline p)) by EUCLID:56;
 A6: North-Bound(p,C)`2 = inf(proj2.:(C /\ north_halfline p)) by EUCLID:56;
 A7: L is vertical by Th26;
-A8: South-Bound(p,C) in L by TOPREAL1:6;
+A8: South-Bound(p,C) in L by RLTOPSP1:69;
 A9: x in C by A2,XBOOLE_0:def 4;
 A10: x in L by A2,XBOOLE_0:def 4;
     then
@@ -924,7 +945,7 @@ A18:  y`2 = proj2.y by PSCOMP_1:def 29;
   then
 A19: x = North-Bound(p,C) or x = South-Bound(p,C) by TARSKI:def 2;
 A20: North-Bound(p,C) in C & South-Bound(p,C) in C by A1,Th22;
-  x in L by A19,TOPREAL1:6;
+  x in L by A19,RLTOPSP1:69;
   hence thesis by A19,A20,XBOOLE_0:def 4;
 end;
 
@@ -983,7 +1004,7 @@ A1: for A being Subset of TOP-REAL n st
   let A be Subset of TOP-REAL n such that
 A2: A is_an_arc_of s2,s1 and
 A3: A c= V;
-  thus A meets {t1,t2} by A1,A2,A3,JORDAN5B:14;
+  thus thesis by A1,A2,A3,JORDAN5B:14;
 end;
 
 theorem
@@ -1002,7 +1023,7 @@ proof
   let A be Subset of TOP-REAL n such that
 A1: A is_an_arc_of s,t1 and A c= V;
   s in A & s in {s,t2} by A1,TARSKI:def 2,TOPREAL1:4;
-  hence A meets {s,t2} by XBOOLE_0:3;
+  hence thesis by XBOOLE_0:3;
 end;
 
 theorem Th33:
@@ -1011,7 +1032,7 @@ proof
   let A be Subset of TOP-REAL n such that
 A1: A is_an_arc_of t1,s and A c= V;
   s in A & s in {s,t2} by A1,TARSKI:def 2,TOPREAL1:4;
-  hence A meets {t2,s} by XBOOLE_0:3;
+  hence thesis by XBOOLE_0:3;
 end;
 
 theorem Th34:
@@ -1020,7 +1041,7 @@ proof
   let A be Subset of TOP-REAL n such that
 A1: A is_an_arc_of t1,s and A c= V;
   s in A & s in {s,t2} by A1,TARSKI:def 2,TOPREAL1:4;
-  hence A meets {s,t2} by XBOOLE_0:3;
+  hence thesis by XBOOLE_0:3;
 end;
 
 theorem Th35:
@@ -1029,7 +1050,7 @@ proof
   let A be Subset of TOP-REAL n such that
 A1: A is_an_arc_of s,t1 and A c= V;
   s in A & s in {s,t2} by A1,TARSKI:def 2,TOPREAL1:4;
-  hence A meets {t2,s} by XBOOLE_0:3;
+  hence thesis by XBOOLE_0:3;
 end;
 
 theorem
@@ -1078,16 +1099,16 @@ A3: p2 in C and
 A4: p1,p2, C-separate q1,q2;
   per cases;
   suppose q1 = p1;
-    hence q1,q2, C-separate p1,p2 by Th32;
+    hence thesis by Th32;
   end;
   suppose q2 = p2;
-    hence q1,q2, C-separate p1,p2 by Th33;
+    hence thesis by Th33;
   end;
   suppose q1 = p2;
-    hence q1,q2, C-separate p1,p2 by Th35;
+    hence thesis by Th35;
   end;
   suppose p1 = q2;
-    hence q1,q2, C-separate p1,p2 by Th34;
+    hence thesis by Th34;
   end;
   suppose that
 A5: q1 <> p1 and
@@ -1161,7 +1182,7 @@ A21:    p2 in A;
       not q2 in A by A18,A19;
       hence A misses {p2,q2} by A20,ZFMISC_1:57;
     end;
-    hence p1,q1 are_neighbours_wrt p2,q2, C by Def3;
+    hence thesis by Def3;
   end;
   suppose that
 A22: q2 in P and
@@ -1189,7 +1210,7 @@ A26:    p2 in A;
       end;
       hence A misses {p2,q2} by A25,ZFMISC_1:57;
     end;
-    hence p1,q1 are_neighbours_wrt p2,q2, C by Def3;
+    hence thesis by Def3;
   end;
   suppose that
 A27: q1 in P and

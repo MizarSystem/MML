@@ -18,32 +18,32 @@
 </Signature>
 <FCluster aid="FIB_NUM3" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="76"/>
+<Func kind="K" nr="77"/>
 <Cluster>
-<Adjective nr="18"/>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FIB_NUM3" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="77"/>
+<Func kind="K" nr="78"/>
 <Cluster>
-<Adjective nr="19"/>
-<Adjective nr="20"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FIB_NUM3" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="68"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="78">
+<Func kind="K" nr="79">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="18"/>
+<Adjective nr="21"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -8,16 +8,16 @@ environ
 
  vocabularies FINSEQ_1, ARYTM_1, INTEGRA1, MEASURE5, RELAT_1, ORDINAL2, BOOLE,
       FUNCT_1, CARD_1, FUNCT_3, SQUARE_1, ABSVALUE, RLVECT_1, SEQ_2, LATTICES,
-      JORDAN3, RCOMP_1, PARTFUN1, RFINSEQ, INTEGRA2, FDIFF_1, ARYTM_3, PROB_1,
-      FINSEQ_4, ARYTM, ANPROJ_1, SEQ_4;
+      JORDAN3, RCOMP_1, RFINSEQ, INTEGRA2, FDIFF_1, ARYTM_3, PROB_1, FINSEQ_4,
+      ARYTM, ANPROJ_1, SEQ_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XXREAL_0,
       XREAL_0, COMPLEX1, REAL_1, NAT_1, NAT_D, RELAT_1, FUNCT_1, FUNCT_2,
       XXREAL_2, SEQM_3, SEQ_4, VALUED_0, PARTFUN1, PSCOMP_1, FINSEQ_1,
-      RFUNCT_1, RVSUM_1, INTEGRA1, SEQ_1, SEQ_2, JORDAN3, PRE_CIRC, RCOMP_1,
-      FDIFF_1, SQUARE_1, CLASSES1, RFINSEQ, BINARITH, INTEGRA2;
+      RFUNCT_1, RVSUM_1, INTEGRA1, SEQ_1, SEQ_2, JORDAN3, RCOMP_1, FDIFF_1,
+      SQUARE_1, CLASSES1, RFINSEQ, BINARITH, INTEGRA2;
  constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, FINSOP_1, RFUNCT_1,
-      FDIFF_1, RFINSEQ, BINARITH, PRE_CIRC, PSCOMP_1, JORDAN3, INTEGRA2, SEQ_1,
-      BINOP_2, XXREAL_2, NAT_D, RVSUM_1, CLASSES1, SEQ_4;
+      FDIFF_1, RFINSEQ, BINARITH, PSCOMP_1, JORDAN3, INTEGRA2, SEQ_1, BINOP_2,
+      XXREAL_2, NAT_D, RVSUM_1, CLASSES1, SEQ_4, RELSET_1;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       MEMBERED, FINSEQ_1, GOBOARD1, INTEGRA1, INTEGRA2, VALUED_0, FUNCT_2,
       FINSET_1, XXREAL_2, CARD_1, SEQ_2;
@@ -26,95 +26,83 @@ environ
 
 begin :: Lemmas of Division
 
-reserve a,b,e,x,y for Real,
+reserve a,b,e,r,x,y for Real,
   i,j,k,n,m for Element of NAT,
   x1 for set,
-  p,q for FinSequence of REAL;
+  p,q for FinSequence of REAL,
+  A for closed-interval Subset of REAL,
+  D,D1,D2 for Division of A,
+  f,g for Function of A,REAL,
+  T for DivSequence of A;
 
 theorem :: INTEGRA3:1
-  for A be closed-interval Subset of REAL, D be Element of divs A
-  st vol(A) <> 0 holds ex i st i in dom D & vol(divset(D,i)) > 0;
+  vol(A) <> 0 implies ex i st i in dom D & vol(divset(D,i)) > 0;
 
 theorem :: INTEGRA3:2
-  for A be closed-interval Subset of REAL,
-  D be Element of divs A st x in A holds ex j st j in dom D & x in divset(D,j);
+  x in A implies ex j st j in dom D & x in divset(D,j);
 
 theorem :: INTEGRA3:3
-  for A be closed-interval Subset of REAL, D1,D2 be Element of divs A holds
-  ex D be Element of divs A st D1 <= D & D2 <= D & rng D = rng D1 \/ rng D2;
+  ex D st D1 <= D & D2 <= D & rng D = rng D1 \/ rng D2;
 
 theorem :: INTEGRA3:4
-  for A be closed-interval Subset of REAL, D,D1 be Element of divs A
-  st delta(D1)<min rng upper_volume(chi(A,A),D)
-  holds (for x,y,i st i in dom D1 & x in rng D /\ divset(D1,i)
-  & y in rng D /\ divset(D1,i) holds x=y);
+  delta(D1) < min rng upper_volume(chi(A,A),D)
+  implies for x,y,i st i in dom D1 & x in rng D /\ divset(D1,i)
+  & y in rng D /\ divset(D1,i) holds x=y;
 
 theorem :: INTEGRA3:5
   for p,q st rng p = rng q & p is increasing & q is increasing holds p = q;
 
 theorem :: INTEGRA3:6
-  for A be closed-interval Subset of REAL, D,D1 be Element of divs A st
-  D <= D1 & i in dom D & j in dom D & i <= j holds
+  D <= D1 & i in dom D & j in dom D & i <= j implies
   indx(D1,D,i) <= indx(D1,D,j) & indx(D1,D,i) in dom D1;
 
 theorem :: INTEGRA3:7
-  for A be closed-interval Subset of REAL, D,D1 be Element of divs A
-  st D <= D1 & i in dom D & j in dom D & i < j holds
+  D <= D1 & i in dom D & j in dom D & i < j implies
   indx(D1,D,i) < indx(D1,D,j);
 
 theorem :: INTEGRA3:8
-  for A be closed-interval Subset of REAL,
-  D be Element of divs A holds delta(D) >= 0;
+  delta(D) >= 0;
 
 theorem :: INTEGRA3:9
-  for A be closed-interval Subset of REAL, g be Function of A,REAL,
-  D1,D2 be Element of divs A st x in divset(D1,len D1) & len D1 >= 2
-  & D1<=D2 & rng D2 = rng D1 \/ {x} & g|A is bounded
-  holds Sum lower_volume(g,D2)-Sum
-  lower_volume(g,D1)<=(upper_bound rng g-lower_bound rng g)*delta(D1);
+  x in divset(D1,len D1) & len D1 >= 2
+  & D1<=D2 & rng D2 = rng D1 \/ {x} & g|A is bounded implies
+  Sum lower_volume(g,D2) - Sum lower_volume(g,D1)
+  <= (upper_bound rng g-lower_bound rng g)*delta(D1);
 
 theorem :: INTEGRA3:10
-  for A be closed-interval Subset of REAL, g be Function of A,REAL,
-  D1,D2 be Element of divs A st x in divset(D1,len D1) & len D1 >= 2
+  x in divset(D1,len D1) & len D1 >= 2
   & D1<=D2 & rng D2 = rng D1 \/ {x} & g|A is bounded
-  holds Sum upper_volume(g,D1)-Sum
-  upper_volume(g,D2)<=(upper_bound rng g-lower_bound rng g)*delta(D1);
+  implies Sum upper_volume(g,D1) - Sum upper_volume(g,D2)
+  <= (upper_bound rng g-lower_bound rng g)*delta(D1);
 
 theorem :: INTEGRA3:11
-  for A be closed-interval Subset of REAL, D be Element of divs A,
-  r be Real, i,j be Element of NAT
-  st i in dom D & j in dom D & i<=j & r < mid(D,i,j).1
-  holds ex B be closed-interval Subset of REAL
+  i in dom D & j in dom D & i<=j & r < mid(D,i,j).1
+  implies ex B be closed-interval Subset of REAL
   st r=lower_bound B & upper_bound B=mid(D,i,j).(len mid(D,i,j))
-  & len mid(D,i,j)=j-i+1 & mid(D,i,j) is DivisionPoint of B;
+  & len mid(D,i,j)=j-i+1 & mid(D,i,j) is Division of B;
 
 theorem :: INTEGRA3:12
-  for A be closed-interval Subset of REAL, f be Function of A,REAL,
-  D1,D2 be Element of divs A st x in divset(D1,len D1) & vol(A)<>0
+  x in divset(D1,len D1) & vol(A)<>0
   & D1<=D2 & rng D2 = rng D1 \/ {x} & f|A is bounded & x > lower_bound A
-  holds Sum lower_volume(f,D2)-Sum
+  implies Sum lower_volume(f,D2)-Sum
   lower_volume(f,D1)<=(upper_bound rng f-lower_bound rng f)*delta(D1);
 
 theorem :: INTEGRA3:13
-  for A be closed-interval Subset of REAL, f be Function of A,REAL,
-  D1,D2 be Element of divs A st x in divset(D1,len D1) & vol(A)<>0
+  x in divset(D1,len D1) & vol(A)<>0
   & D1<=D2 & rng D2 = rng D1 \/ {x} & f|A is bounded & x > lower_bound A
-  holds Sum upper_volume(f,D1)-Sum
+  implies Sum upper_volume(f,D1)-Sum
   upper_volume(f,D2)<=(upper_bound rng f-lower_bound rng f)*delta(D1);
 
 theorem :: INTEGRA3:14
-  for A be closed-interval Subset of REAL, D1,D2 be Element of divs A,
-
-r be Real, i,j be Element of NAT st i in dom D1 & j in dom D1 & i<=j & D1 <= D2
+  i in dom D1 & j in dom D1 & i<=j & D1 <= D2
   & r < mid(D2,indx(D2,D1,i),indx(D2,D1,j)).1
-  holds ex B be closed-interval Subset of REAL, MD1,MD2 be Element of divs B
+  implies ex B be closed-interval Subset of REAL, MD1,MD2 be Division of B
   st r=lower_bound B & upper_bound B=MD2.(len MD2) &
   upper_bound B=MD1.(len MD1) & MD1 <= MD2
   & MD1=mid(D1,i,j) & MD2=mid(D2,indx(D2,D1,i),indx(D2,D1,j));
 
 theorem :: INTEGRA3:15
-  for A be closed-interval Subset of REAL, D be Element of divs A
-  st x in rng D holds D.1 <= x & x <= D.(len D);
+  x in rng D implies D.1 <= x & x <= D.(len D);
 
 theorem :: INTEGRA3:16
   for p be FinSequence of REAL, i,j,k st p is increasing & i in dom p
@@ -122,26 +110,22 @@ theorem :: INTEGRA3:16
   p.k in rng mid(p,i,j);
 
 theorem :: INTEGRA3:17
-  for A be closed-interval Subset of REAL, f be Function of A,REAL,
-  D be Element of divs A st f|A is bounded & i in dom D
-  holds lower_bound rng(f|divset(D,i)) <= upper_bound rng f;
+  f|A is bounded & i in dom D
+  implies lower_bound rng(f|divset(D,i)) <= upper_bound rng f;
 
 theorem :: INTEGRA3:18
-  for A be closed-interval Subset of REAL, f be Function of A,REAL,
-  D be Element of divs A st f|A is bounded & i in dom D
-  holds upper_bound rng(f|divset(D,i)) >= lower_bound rng f;
+  f|A is bounded & i in dom D
+  implies upper_bound rng(f|divset(D,i)) >= lower_bound rng f;
 
 begin :: Darboux's Theorem
 
 theorem :: INTEGRA3:19
-  for A be closed-interval Subset of REAL, f be Function of A,REAL,
-  T be DivSequence of A
-  st f|A is bounded & delta(T) is convergent_to_0 & vol(A)<>0
-  holds lower_sum(f,T) is convergent & lim lower_sum(f,T) = lower_integral(f);
+  f|A is bounded & delta(T) is convergent_to_0 & vol(A)<>0
+  implies lower_sum(f,T) is convergent & lim lower_sum(f,T) = lower_integral(f)
+;
 
 theorem :: INTEGRA3:20
-  for A be closed-interval Subset of REAL, f be Function of A,REAL,
-  T be DivSequence of A
-  st f|A is bounded & delta(T) is convergent_to_0 & vol(A)<>0
-  holds upper_sum(f,T) is convergent & lim upper_sum(f,T) = upper_integral(f);
+  f|A is bounded & delta(T) is convergent_to_0 & vol(A)<>0
+  implies upper_sum(f,T) is convergent & lim upper_sum(f,T) = upper_integral(f)
+;
 

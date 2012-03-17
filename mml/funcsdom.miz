@@ -10,18 +10,19 @@ environ
       RLVECT_1, ARYTM_1, LATTICES, FUNCSDOM, GROUP_1, VECTSP_2, STRUCT_0,
       ARYTM, ALGSTR_0, BOOLE;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
-      FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, BINOP_2, STRUCT_0, ALGSTR_0,
-      RLVECT_1, REAL_1, GROUP_1, VECTSP_1, FRAENKEL;
- constructors BINOP_1, DOMAIN_1, FUNCOP_1, FRAENKEL, REAL_1, BINOP_2, VECTSP_1,
-      RLVECT_1, FUNCT_3;
+      FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, BINOP_2,
+      ORDINAL1, XCMPLX_0, XREAL_0, STRUCT_0, ALGSTR_0,
+      RLVECT_1, REAL_1, GROUP_1, VECTSP_1;
+ constructors BINOP_1, DOMAIN_1, FUNCOP_1, REAL_1, BINOP_2, VECTSP_1,
+      RLVECT_1, FUNCT_3, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, RLVECT_1, VECTSP_1,
-      ALGSTR_0, BINOP_2, FUNCOP_1, FUNCT_3;
+      ALGSTR_0, BINOP_2, FUNCOP_1, FUNCT_3, REAL_1, XREAL_0, ORDINAL1;
  registrations RELAT_1, FUNCT_1, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions RLVECT_1, STRUCT_0, GROUP_1, BINOP_1, VECTSP_1, ALGSTR_0,
       FUNCOP_1;
  theorems FUNCT_2, BINOP_1, FUNCOP_1, RLVECT_1, VECTSP_1, TARSKI, BINOP_2,
-      GROUP_1, STRUCT_0;
+      GROUP_1, STRUCT_0, XREAL_0;
  schemes BINOP_1, FUNCT_2;
 
 begin
@@ -92,7 +93,7 @@ A1: for x,y being Element of Funcs(A,REAL) holds
     F.(x,y) = F(x,y) from BINOP_1:sch 4;
     take F;
     let f,g be Element of Funcs(A,REAL);
-    thus F.(f,g) =(addreal.:(f,g)) by A1;
+    thus thesis by A1;
   end;
   uniqueness
   proof
@@ -123,7 +124,7 @@ A1: for x,y being Element of Funcs(A,REAL) holds
     F.(x,y) = F(x,y) from BINOP_1:sch 4;
     take F;
     let f,g;
-    thus F.(f,g) =(multreal.:(f,g)) by A1;
+    thus thesis by A1;
   end;
   uniqueness
   proof
@@ -157,7 +158,7 @@ A1: for a being Element of REAL, f being Element of Funcs(A,REAL)
     holds F.(a,f) = F(a,f) from BINOP_1:sch 4;
     take F;
     let a be Real, f be Element of Funcs(A,REAL);
-    thus F.(a,f) = multreal[;](a,f) by A1;
+    thus thesis by A1;
   end;
   uniqueness
   proof
@@ -179,7 +180,11 @@ definition
   let A be set;
   func RealFuncZero(A) -> Element of Funcs(A,REAL) equals
   A --> 0;
-  coherence by FUNCT_2:11;
+  coherence
+   proof
+     A --> 0 is Function of A,REAL by FUNCOP_1:57;
+    hence thesis by FUNCT_2:11;
+   end;
 end;
 
 definition
@@ -187,14 +192,18 @@ definition
   func RealFuncUnit(A) -> Element of Funcs(A,REAL) equals
 
   A --> 1;
-  coherence by FUNCT_2:11;
+  coherence
+   proof
+     A --> 1 is Function of A,REAL by FUNCOP_1:57;
+    hence thesis by FUNCT_2:11;
+   end;
 end;
 
 Lm1: for x being (Element of A), f being Function of A,B holds x in dom f
 proof
   let x be (Element of A),f be Function of A,B;
   x in A;
-  hence x in dom f by FUNCT_2:def 1;
+  hence thesis by FUNCT_2:def 1;
 end;
 
 canceled 9;
@@ -430,9 +439,10 @@ A:  f = {};
  suppose A <> {};
   then reconsider A as non empty set;
   reconsider f as Element of Funcs(A,REAL);
+  reconsider g = (RealFuncExtMult A).(1,f) as Element of Funcs(A,REAL);
   now
     let x be Element of A;
-    thus ((RealFuncExtMult A).[1,f]).x = 1*(f.x) by Th15
+    thus g.x = 1*(f.x) by Th15
       .= f.x;
   end;
   hence thesis by FUNCT_2:113;
@@ -620,7 +630,7 @@ A6: 0 = ((RealFuncAdd A).
     .= a*(f.x2) + (((RealFuncExtMult A).[b,g]).x2) by Th15
     .=0 + b*1 by A4,Th15
     .= b;
-  hence a=0 & b=0 by A6;
+  hence thesis by A6;
 end;
 
 theorem
@@ -726,11 +736,11 @@ definition
        (RealFuncZero(A)),RealFuncAdd(A),RealFuncExtMult(A)#);
 X1:  S is Abelian
       proof let u,v be Element of S;
-       thus u+v = v+u by Th16;
+       thus thesis by Th16;
       end;
 X2:  S is add-associative
       proof let u,v,w be Element of S;
-       thus (u+v)+w = u+(v+w) by Th17;
+       thus thesis by Th17;
       end;
 X4:  S is right_zeroed
     proof let u be Element of S;
@@ -744,16 +754,34 @@ X5:  S is right_complementable
       reconsider u' = u as Element of Funcs(A,REAL);
       reconsider w = (RealFuncExtMult A).[-1,u'] as VECTOR of S;
       take w;
-      thus u+w = 0.S by Th22;
+      thus thesis by Th22;
     end;
      S is RealLinearSpace-like
       proof
-       thus for a for v,w being Element of S
+       thus for a being real number for v,w being Element of S
+        holds a * (v + w) = a * v + a * w
+       proof let a be real number;
+         reconsider a as Real by XREAL_0:def 1;
+        for v,w being Element of S
         holds a * (v + w) = a * v + a * w by Lm2;
-       thus for a,b for v being Element of S
+        hence thesis;
+       end;
+       thus for a,b being real number for v being Element of S
+        holds (a + b) * v = a * v + b * v
+       proof let a,b be real number;
+         reconsider a,b as Real by XREAL_0:def 1;
+         for v being Element of S
         holds (a + b) * v = a * v + b * v by Th25;
-       thus for a,b for v being Element of S
+        hence thesis;
+       end;
+       thus for a,b being real number for v being Element of S
+        holds (a * b) * v = a * (b * v)
+       proof let a,b be real number;
+         reconsider a,b as Real by XREAL_0:def 1;
+         for v being Element of S
         holds (a * b) * v = a * (b * v) by Th24;
+        hence thesis;
+       end;
        let v being Element of S;
        thus 1 * v = v by Th23;
       end;
@@ -850,7 +878,7 @@ proof
     set h = (RealFuncExtMult A).[-1,f];
     reconsider t=h as Element of IT;
     take t;
-    thus x+t = 0.IT by Th22;
+    thus thesis by Th22;
   end;
   thus x*y = y*x by Th18;
   thus (x*y)*z = x*(y*z) by Th19;
@@ -1044,7 +1072,7 @@ proof
   thus a*(x*y) = (a*x)*y by Th27;
   thus a*(x+y) = (a*x) + (a*y) by Lm2;
   thus (a+b)*x = (a*x) + (b*x) by Th25;
-  thus (a*b)*x = a*(b*x) by Th24;
+  thus thesis by Th24;
 end;
 
 definition
@@ -1064,7 +1092,7 @@ proof
   set h = (RealFuncExtMult A).[-1,f];
   reconsider t=h as Element of RAlgebra A;
   take t;
-  thus x+t = 0.RAlgebra A by Th22;
+  thus thesis by Th22;
 end;
 
 registration

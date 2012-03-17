@@ -15,34 +15,34 @@
 <Scheme>
 <ArgTypes/>
 <For>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="14" value="false"/>
+<Adjective nr="17" value="false"/>
 </Cluster>
-<Func kind="K" nr="43"/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="44"/>
+<Func kind="K" nr="48"/>
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="1"/>
 </Pred>
 </For>
 <For>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="14" value="false"/>
+<Adjective nr="17" value="false"/>
 </Cluster>
-<Func kind="K" nr="43"/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="44"/>
+<Func kind="K" nr="48"/>
 </Typ>
 <Not>
 <And>
 <For>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="14" value="false"/>
+<Adjective nr="17" value="false"/>
 </Cluster>
-<Func kind="K" nr="43"/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="44"/>
+<Func kind="K" nr="48"/>
 </Typ>
 <Not>
 <And>

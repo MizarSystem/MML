@@ -14,12 +14,12 @@ environ
       NUMBERS, VALUED_1, XXREAL_0, XCMPLX_0, XREAL_0, NAT_1, NAT_D, STRUCT_0,
       AMI_1;
  constructors NAT_1, NAT_D, AMI_1, VALUED_1, XXREAL_0, AFINSQ_1, FUNCT_4,
-      DOMAIN_1, PARTFUN1, WELLORD2;
+      DOMAIN_1, PARTFUN1, WELLORD2, RELSET_1;
  registrations ORDINAL1, XREAL_0, CARD_3, FRAENKEL, AMI_1, RELSET_1, XBOOLE_0,
       SETFAM_1, RFUNCT_3, VALUED_1, FUNCT_4, RELAT_1, FINSET_1, STRUCT_0,
       AFINSQ_1, FUNCT_1, FUNCOP_1, FINSEQ_1, CARD_1;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM;
- definitions NAT_1, TARSKI, XBOOLE_0, AMI_1, FUNCOP_1;
+ definitions NAT_1, TARSKI, XBOOLE_0, AMI_1, FUNCOP_1, RELAT_1;
  theorems AMI_1, XBOOLE_1, FUNCT_2, GRFUNC_1, CARD_3, VALUED_1, RELSET_1,
       FUNCT_4, RELAT_1, NAT_1, ORDINAL1, AFINSQ_1, CARD_1, ZFMISC_1, PRE_CIRC,
       TARSKI, PARTFUN1, FUNCT_1, FUNCOP_1, XBOOLE_0;
@@ -75,7 +75,7 @@ A5: A c= NAT
       let x be set;
       assume x in A;
       then ex m st x = m+k & m in dom p;
-      hence x in NAT;
+      hence thesis;
     end;
     NAT c= the carrier of S by AMI_1:def 3;
     then A c= the carrier of S by A5,XBOOLE_1:1;
@@ -101,7 +101,7 @@ A12:  m+k = j+k and
 A13:  j in dom p by A3,A7,A8;
       reconsider m as Instruction-Location of S by AMI_1:def 4;
       s.m in the Instructions of S;
-      hence f.x in (the Object-Kind of S).x by A9,A10,A11,A12,A13,GRFUNC_1:8;
+      hence thesis by A9,A10,A11,A12,A13,GRFUNC_1:8;
     end;
     thus thesis by A6,X,CARD_3:def 9;
   end;
@@ -110,19 +110,19 @@ end;
 registration
  let N be with_non-empty_elements set,
  S be definite (stored-program non empty AMI-Struct over NAT,N);
-  let p be programmed FinPartState of S , k be Element of NAT;
-  cluster Shift(p,k) -> programmed FinPartState of S;
+  let p be NAT-defined FinPartState of S , k be Element of NAT;
+  cluster Shift(p,k) -> NAT-defined FinPartState of S;
   coherence
   proof
 A3: dom Shift(p,k) = { m+k:m in dom p } by VALUED_1:def 12;
-    Shift(p,k) is programmed
+    Shift(p,k) is NAT-defined
     proof
       let x be set;
       assume x in dom Shift(p,k);
       then ex m st x = m+k & m in dom p by A3;
-      hence x in NAT;
+      hence thesis;
     end;
-    hence Shift(p,k) is programmed FinPartState of S;
+    hence thesis;
   end;
 end;
 
@@ -134,17 +134,18 @@ definition
   coherence
   proof
 A:  dom Shift(p,k) c= NAT by VALUED_1:20;
-    dom p c= NAT by RELSET_1:12;
+    dom p c= NAT by RELAT_1:def 18;
     then rng Shift(p,k) = rng p by VALUED_1:27;
-   hence Shift(p,k) is finite PartFunc of NAT, the Instructions of S
-     by A,RELSET_1:11,12;
+    then rng Shift(p,k) c= the Instructions of S by RELAT_1:def 19;
+   hence thesis
+     by A,RELSET_1:11;
   end;
 end;
 
 definition
   let IL,N be set;
   let S be AMI-Struct over IL,N;
-  mode preProgram of S is programmed FinPartState of S;
+  mode preProgram of S is IL-defined FinPartState of S;
 end;
 
 definition let F be Function;
@@ -176,7 +177,7 @@ end;
 registration
   let IL,N be set;
   let S be AMI-Struct over IL,N;
-  cluster empty -> programmed FinPartState of S;
+  cluster empty -> IL-defined FinPartState of S;
   coherence
    proof let p be FinPartState of S;
     assume p is empty;
@@ -249,7 +250,7 @@ C:  0 in dom the Object-Kind of S by FUNCT_2:def 1;
 A:  dom s = 1 by AFINSQ_1:def 5;
     0 in NAT;
     then dom s c= NAT by A,CARD_1:87,ZFMISC_1:37;
-   hence thesis by AMI_1:def 40;
+   hence thesis by RELAT_1:def 18;
   end;
 end;
 
@@ -263,7 +264,7 @@ end;
 registration
   let N be non empty with_non-empty_elements set;
   let S be halting definite (non empty stored-program AMI-Struct over NAT,N);
-  cluster initial programmed non empty FinPartState of S;
+  cluster initial NAT-defined non empty FinPartState of S;
   existence
   proof
     take Stop S; thus thesis;
@@ -282,7 +283,7 @@ theorem
 theorem
   card Stop S = 1
 proof
-  thus card Stop S = card dom Stop S by PRE_CIRC:21
+  thus card Stop S = card dom Stop S by CARD_1:104
     .= dom Stop S by CARD_1:def 5
     .= 1 by AFINSQ_1:36;
 end;
@@ -295,7 +296,7 @@ definition
  coherence
   proof
 B:  NAT c= the carrier of S by AMI_1:def 3;
-C:  dom p c= NAT by RELSET_1:12;
+C:  dom p c= NAT by RELAT_1:def 18;
     dom the Object-Kind of S = the carrier of S by FUNCT_2:def 1;
     then
 A:  dom p c= dom the Object-Kind of S by B,C,XBOOLE_1:1;
@@ -309,8 +310,8 @@ Z:     x in dom p;
       hence thesis;
      end;
     then reconsider p as FinPartState of S by A,CARD_3:def 9;
-    dom p c= NAT by RELSET_1:12;
-   hence thesis by AMI_1:def 40;
+    dom p c= NAT by RELAT_1:def 18;
+   hence thesis by RELAT_1:def 18;
   end;
 end;
 
@@ -334,7 +335,7 @@ W3:      p c= s by CARD_3:97;
         dom ProgramPart p c= dom p by RELAT_1:89;
         then p.y = s.y by W1,W3,GRFUNC_1:8;
         then p.y in the Instructions of S;
-       hence x in the Instructions of S by W2,W1,FUNCT_1:70;
+       hence thesis by W2,W1,FUNCT_1:70;
       end;
     hence ProgramPart p is finite PartFunc of IL, the Instructions of S
                             by A,RELSET_1:11;
@@ -360,7 +361,7 @@ B:  m is Instruction-Location of S by AMI_1:def 4;
     ProgramPart I c= I by RELAT_1:88;
     then dom ProgramPart I c= dom I by RELAT_1:25;
     then m in dom I by A1,A2,Def1;
-    hence  m in dom ProgramPart I by B,AMI_1:106;
+    hence  thesis by B,AMI_1:106;
     end;
     hence thesis;
   end;
@@ -459,7 +460,7 @@ theorem
    ex f being Function of NAT, product the Object-Kind of S st
    Comput(p,s,0) = f.0 & f.0 = s & for i being Nat holds
     f.(i+1) = Following(p,f.i) by Def6;
-  hence Comput(p,s,0) = s;
+  hence thesis;
  end;
 
 theorem Tx1:
@@ -480,7 +481,7 @@ V1:  Comput(p,s,k) = g.k and
 V2: g.0 = s and
 V3: for i being Nat holds g.(i+1) = F(i,g.i) by Def6;
    f = g from NAT_1:sch 16(W2,W3,V2,V3);
-  hence Comput(p,s,k+1) = Following(p,Comput(p,s,k)) by V1,V3,W1;
+  hence thesis by V1,V3,W1;
  end;
 
 theorem
@@ -540,7 +541,7 @@ A6: P[k];
     hence P[k+1];
   end;
   for k being Element of NAT holds P[k] from NAT_1:sch 1(A4,A5);
-  hence  Comput(f,s,j) =  Comput(f,s,i) by A2;
+  hence  thesis by A2;
 end;
 
 definition
@@ -560,7 +561,7 @@ A2: s1 =   Comput(f,s,k1) & CurInstr(f,s1) = halt S;
     given k2 being Element of NAT such that
 A3: s2 =  Comput(f,s,k2) & CurInstr(f,s2) = halt S;
     k1 <= k2 or k2 <= k1;
-    hence s1 = s2 by A2,A3,Th7;
+    hence thesis by A2,A3,Th7;
   end;
   correctness
   proof
@@ -599,14 +600,14 @@ A6: Result(f,p') =  Comput(f,p',k2) &
     now per cases;
       suppose k1 <= k2;
         then Result(f,h) =  Comput(f,h,k2) by A5,Th7;
-        hence R = (Result(f,p'))|dom p by A10,A4,A6,Def7;
+        hence thesis by A10,A4,A6,Def7;
       end;
       suppose k1 >= k2;
         then Result(f,p') =  Comput(f,p',k1) by A6,Th7;
-        hence R = (Result(f,p'))|dom p by A10,A4,A5,Def7;
+        hence thesis by A10,A4,A5,Def7;
       end;
     end;
-    hence R = (Result(f,p'))|dom p;
+    hence thesis;
   end;
   correctness
   proof
@@ -648,7 +649,7 @@ A0: IC Comput(f,s,k) in dom f;
    then
 A2: CurInstr(f,Comput(f,s,k)) = halt S by A0,Def4;
    then f halts_on s by A0,Def8;
-  hence Result(f,s) =  Comput(f,s,k) by A2,Def10;
+  hence thesis by A2,Def10;
 end;
 
 :: from RELOC, SCMFSA_4, SCMPDS_3, 2008.04.12, A.T. (generalized)
@@ -675,7 +676,7 @@ A1: Start-At(l1 + k) = Start-At(l2 + k);
   then {[IC S, l1]} = Start-At l2 by FUNCT_4:87;
   then {[IC S, l1]} = {[IC S, l2]} by FUNCT_4:87;
   then [IC S, l1] = [IC S, l2] by ZFMISC_1:6;
-  hence Start-At(l1 + k) = Start-At(l2 + k) by ZFMISC_1:33;
+  hence thesis by ZFMISC_1:33;
 end;
 
 theorem
@@ -687,7 +688,7 @@ proof
   then {[IC S, l1]} = Start-At l2 by FUNCT_4:87;
   then {[IC S, l1]} = {[IC S, l2]} by FUNCT_4:87;
   then [IC S, l1] = [IC S, l2] by ZFMISC_1:6;
-  hence Start-At(l1 -' k) = Start-At(l2 -' k) by ZFMISC_1:33;
+  hence thesis by ZFMISC_1:33;
 end;
 
 definition let N,S;
@@ -732,7 +733,7 @@ theorem
  dom DataPart s = Data-Locations S
   proof
     Data-Locations S c= dom s by Th13;
-   hence dom DataPart s = Data-Locations S by RELAT_1:91;
+   hence thesis by RELAT_1:91;
   end;
 
   reserve N for non empty with_non-empty_elements set,
@@ -746,7 +747,7 @@ theorem Th15:
   NAT misses Data-Locations S
 proof
   Data-Locations S misses {IC S} \/ NAT by XBOOLE_1:79;
- hence NAT misses Data-Locations S by XBOOLE_1:70;
+ hence thesis by XBOOLE_1:70;
 end;
 
 theorem
@@ -754,7 +755,7 @@ theorem
   holds DataPart [f] = {}
 proof let f be finite PartFunc of NAT, the Instructions of S;
   NAT misses Data-Locations S by Th15;
- hence DataPart [f] = {} by RELSET_1:55;
+ hence thesis by RELSET_1:55;
 end;
 
 theorem Th17:
@@ -804,7 +805,7 @@ theorem Th22:
 proof let d be data-only FinPartState of S;
 X: dom d c= Data-Locations S by AMI_1:139;
   not IC S in Data-Locations S by Th21;
- hence not IC S in dom d by X;
+ hence thesis by X;
 end;
 
 theorem Th23:
@@ -827,7 +828,7 @@ proof
  let d be data-only FinPartState of S;
   dom Start-At l = {IC S} by FUNCOP_1:19;
   then dom d misses dom Start-At l by Th22,ZFMISC_1:56;
- hence d tolerates Start-At l by PARTFUN1:138;
+ hence thesis by PARTFUN1:138;
 end;
 
 theorem
@@ -851,11 +852,11 @@ theorem
 proof
   let d be data-only FinPartState of S,
       f be finite PartFunc of NAT, the Instructions of S;
-A: dom f c= NAT by RELSET_1:12;
+A: dom f c= NAT by RELAT_1:def 18;
 B: dom d c= Data-Locations S by AMI_1:139;
   NAT misses Data-Locations S by Th15;
   then dom d misses dom f by A,B,XBOOLE_1:64;
- hence d tolerates f by PARTFUN1:138;
+ hence thesis by PARTFUN1:138;
 end;
 
 theorem

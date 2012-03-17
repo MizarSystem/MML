@@ -14,7 +14,7 @@ environ
       WELLORD2, BINOP_1, SETWISEO, DOMAIN_1, RELAT_1, FUNCT_1, RELSET_1, NAT_1,
       NAT_D, MCART_1;
  constructors SETFAM_1, PARTFUN1, WELLORD2, BINOP_1, SETWISEO, XXREAL_0, NAT_1,
-      NAT_D, MEMBERED, REALSET1, GROUP_1;
+      NAT_D, MEMBERED, REALSET1, GROUP_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, FINSUB_1, MEMBERED,
       REALSET1, STRUCT_0, GROUP_1, ALGSTR_0, CARD_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
@@ -32,7 +32,7 @@ theorem :: GROUP_2:3
   G is finite implies A is finite;
 
 reserve y,y1,y2,Y,Z for set;
-reserve k for Element of NAT;
+reserve k for Nat;
 reserve G for Group;
 reserve a,g,h for Element of G;
 reserve A for Subset of G;
@@ -41,8 +41,8 @@ definition
   let G,A;
   func A" -> Subset of G equals
 :: GROUP_2:def 1
-
   {g" : g in A};
+  involutiveness;
 end;
 
 canceled;
@@ -65,9 +65,18 @@ theorem :: GROUP_2:9
 theorem :: GROUP_2:10
   A <> {} iff A" <> {};
 
-reserve G for non empty multMagma,
-  A,B,C for Subset of G;
+registration
+  let G; let A be empty Subset of G;
+  cluster A" -> empty;
+ end;
 
+registration
+  let G; let A be non empty Subset of G;
+  cluster A" -> non empty;
+end;
+
+reserve G for non empty multMagma,
+        A,B,C for Subset of G;
 reserve a,b,g,g1,g2,h,h1,h2 for Element of G;
 
 definition
@@ -75,8 +84,14 @@ definition
   let A,B;
   func A * B -> Subset of G equals
 :: GROUP_2:def 2
-
   {g * h : g in A & h in B};
+end;
+
+definition
+  let G be commutative non empty multMagma;
+  let A,B be Subset of G;
+  redefine func A * B;
+  commutativity;
 end;
 
 canceled;
@@ -185,7 +200,7 @@ theorem :: GROUP_2:40
 theorem :: GROUP_2:41
   {}(the carrier of G) * a = {} & a * {}(the carrier of G) = {};
 
-reserve G for Group-like (non empty multMagma);
+reserve G for Group-like non empty multMagma;
 reserve h,g,g1,g2 for Element of G;
 reserve A for Subset of G;
 
@@ -201,7 +216,7 @@ theorem :: GROUP_2:44
   G is commutative Group implies g * A = A * g;
 
 definition
-  let G be Group-like (non empty multMagma);
+  let G be Group-like non empty multMagma;
   mode Subgroup of G -> Group-like (non empty multMagma) means
 :: GROUP_2:def 5
 

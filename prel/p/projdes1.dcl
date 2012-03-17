@@ -11,7 +11,7 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="RELSET_1"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -25,26 +25,26 @@
 <CCluster aid="PROJDES1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="83"/>
-<Adjective nr="84"/>
-<Adjective nr="85"/>
-<Adjective nr="87"/>
-<Adjective nr="88"/>
-<Adjective nr="92" value="false"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
+<Adjective nr="91"/>
+<Adjective nr="93"/>
+<Adjective nr="94"/>
+<Adjective nr="98" value="false"/>
 </Cluster>
 <Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="83"/>
-<Adjective nr="84"/>
-<Adjective nr="85"/>
-<Adjective nr="87"/>
-<Adjective nr="88"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="89"/>
 <Adjective nr="90"/>
-<Adjective nr="92" value="false"/>
+<Adjective nr="91"/>
+<Adjective nr="93"/>
+<Adjective nr="94"/>
+<Adjective nr="96"/>
+<Adjective nr="98" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

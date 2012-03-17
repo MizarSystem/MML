@@ -13,11 +13,12 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, RVSUM_1, FUNCT_1, PARTFUN1, RELSET_1, FINSEQ_1,
       FUNCT_2, BINOP_1, RFINSEQ, FINSEQ_2, NAT_D, STRUCT_0, TOPS_2, SQUARE_1,
-      FUNCT_7, TOPMETR, PRE_TOPC, METRIC_1, EUCLID, PSCOMP_1, PCOMPS_1,
+      FUNCT_7, TOPMETR, PRE_TOPC, METRIC_1, RLVECT_1, EUCLID, PSCOMP_1,
+      PCOMPS_1,
       FINSEQOP, XXREAL_0;
  constructors REAL_1, SQUARE_1, COMPLEX1, FINSEQOP, FINSEQ_4, FINSOP_1,
       RFINSEQ, NAT_D, FUNCT_7, TOPS_2, TOPMETR, PSCOMP_1, SEQ_1, BINOP_2,
-      NAT_1, FRAENKEL, RVSUM_1;
+      NAT_1, RVSUM_1, FUNCSDOM;
  registrations XBOOLE_0, RELAT_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, MEMBERED,
       FINSEQ_2, FUNCT_7, STRUCT_0, METRIC_1, PCOMPS_1, EUCLID, TOPMETR,
       VALUED_0, FINSEQ_1;
@@ -27,7 +28,7 @@ environ
       RELAT_1, TBSP_1, NAT_1, FINSEQ_3, FINSEQ_1, ABSVALUE, SQUARE_1, FINSEQ_2,
       TOPS_2, RVSUM_1, TOPREAL3, FUNCOP_1, FINSEQ_4, FUNCT_7, SEQ_2, JORDAN3,
       PSCOMP_1, XREAL_0, XBOOLE_0, COMPLEX1, XREAL_1, XXREAL_0, FINSOP_1,
-      PARTFUN1, NAT_D, VALUED_1;
+      PARTFUN1, NAT_D, VALUED_1, PRE_TOPC;
  schemes FUNCT_2;
 
 begin :: 1. PROJECTIONS
@@ -97,8 +98,7 @@ A1: for x st x in REAL n ex y st y in REAL & P[x,y]
     consider q being Real,g being FinSequence of REAL such that
 A2: g=px & q=g/.i by Lm1;
     for p being Element of TOP-REAL n st x=p holds g/.i=Proj(p,i) by A2,Def1;
-    hence ex y st y in REAL & ( for p being Element of TOP-REAL n st x=p
-    holds y=Proj(p,i));
+    hence thesis;
   end;
   ex f being Function of REAL n,REAL st
   for x st x in REAL n holds P[x,f.x] from FUNCT_2:sch 1(A1);
@@ -120,15 +120,16 @@ end;
 canceled;
 
 theorem
-  for i st i in Seg n holds Proj(0.REAL n,i)=0
+  for i st i in Seg n holds Proj(0.TOP-REAL n,i)=0
 proof
   let i;
   assume
 A1: i in Seg n;
-  len (0*n)=n by FINSEQ_2:109;
+  len (0*n)=n by FINSEQ_1:def 18;
   then
 A2: i in dom (0*n) by A1,FINSEQ_1:def 3;
-  Proj(0.REAL n,i)=(0*n)/.i by Def1
+  0.TOP-REAL n  = 0*n by EUCLID:74;
+  then Proj(0.TOP-REAL n,i)=(0*n)/.i by Def1
     .=(0*n).i by A2,PARTFUN1:def 8
     .=0 by A1,FUNCOP_1:13;
   hence thesis;
@@ -143,16 +144,18 @@ A1: i in Seg n;
   reconsider w1=p as Element of REAL n by EUCLID:25;
   reconsider w3=w1 as Element of n-tuples_on REAL;
   reconsider w=r*p as Element of REAL n by EUCLID:25;
-  i in Seg len w1 by A1,FINSEQ_2:109;
+  i in Seg len w1 by A1,FINSEQ_1:def 18;
   then
 A2: i in dom w1 by FINSEQ_1:def 3;
 A3: Proj(p,i)=w1/.i by Def1
     .=w3.i by A2,PARTFUN1:def 8;
-  len w=n by FINSEQ_2:109;
+  len w=n by FINSEQ_1:def 18;
   then
 A4: i in dom w by A1,FINSEQ_1:def 3;
   Proj(r*p,i)=w/.i by Def1
     .= w.i by A4,PARTFUN1:def 8
+    .= (r*w3).i by A3,EUCLID:69
+    .= r*w3.i by A3,RVSUM_1:67
     .= r*Proj(p,i) by A3,RVSUM_1:67;
   hence thesis;
 end;
@@ -166,16 +169,17 @@ A1: i in Seg n;
   reconsider w1=p as Element of REAL n by EUCLID:25;
   reconsider w3=w1 as Element of n-tuples_on REAL;
   reconsider w=-p as Element of REAL n by EUCLID:25;
-  len w1=n by FINSEQ_2:109;
+  len w1=n by FINSEQ_1:def 18;
   then
 A2: i in dom w1 by A1,FINSEQ_1:def 3;
 A3: Proj(p,i)=w1/.i by Def1
     .=w3.i by A2,PARTFUN1:def 8;
-  len w=n by FINSEQ_2:109;
+  len w=n by FINSEQ_1:def 18;
   then
 A4: i in dom w by A1,FINSEQ_1:def 3;
   Proj(-p,i)=w/.i by Def1
-    .=(-w3).i by A4,PARTFUN1:def 8
+    .= w.i by A4,PARTFUN1:def 8
+    .=(-w3).i by A4,EUCLID:72
     .= (-1)*Proj(p,i) by A3,RVSUM_1:67
     .=-Proj(p,i);
   hence thesis;
@@ -192,22 +196,24 @@ A1: i in Seg n;
   reconsider w5=p2 as Element of REAL n by EUCLID:25;
   reconsider w7=w5 as Element of n-tuples_on REAL;
   reconsider w=p1+p2 as Element of REAL n by EUCLID:25;
-  len w1=n by FINSEQ_2:109;
+  len w1=n by FINSEQ_1:def 18;
   then
 A2: i in dom w1 by A1,FINSEQ_1:def 3;
-  len w5=n by FINSEQ_2:109;
+  len w5=n by FINSEQ_1:def 18;
   then
 A3: i in dom w5 by A1,FINSEQ_1:def 3;
 A4: Proj(p1,i)=w1/.i by Def1
     .=w3.i by A2,PARTFUN1:def 8;
 A5: Proj(p2,i)=w5/.i by Def1
     .=w7.i by A3,PARTFUN1:def 8;
-  i in Seg len w by A1,FINSEQ_2:109;
+  i in Seg len w by A1,FINSEQ_1:def 18;
   then
 A6: i in dom w by FINSEQ_1:def 3;
   Proj(p1+p2,i)=w/.i by Def1
     .= w.i by A6,PARTFUN1:def 8
-    .=Proj(p1,i)+Proj(p2,i) by A4,A5,RVSUM_1:27;
+    .= (w3 + w7).i by A4,A5,EUCLID:68
+    .= w3.i + w7.i by A4,A5,RVSUM_1:27
+    .=Proj(p1,i)+Proj(p2,i) by A4,A5,EUCLID:68;
   hence thesis;
 end;
 
@@ -222,22 +228,24 @@ A1: i in Seg n;
   reconsider w5=p2 as Element of REAL n by EUCLID:25;
   reconsider w7=w5 as Element of n-tuples_on REAL;
   reconsider w=p1-p2 as Element of REAL n by EUCLID:25;
-  len w1=n by FINSEQ_2:109;
+  len w1=n by FINSEQ_1:def 18;
   then
 A2: i in dom w1 by A1,FINSEQ_1:def 3;
-  i in Seg len w5 by A1,FINSEQ_2:109;
+  i in Seg len w5 by A1,FINSEQ_1:def 18;
   then
 A3: i in dom w5 by FINSEQ_1:def 3;
 A4: Proj(p1,i)=w1/.i by Def1
     .=w3.i by A2,PARTFUN1:def 8;
 A5: Proj(p2,i)=w5/.i by Def1
     .=w7.i by A3,PARTFUN1:def 8;
-  len w=n by FINSEQ_2:109;
+  len w=n by FINSEQ_1:def 18;
   then
 A6: i in dom w by A1,FINSEQ_1:def 3;
   Proj(p1-p2,i)=w/.i by Def1
     .= w.i by A6,PARTFUN1:def 8
-    .=Proj(p1,i)-Proj(p2,i) by A4,A5,RVSUM_1:48;
+    .= (w3 - w7).i by A4,A5,EUCLID:73
+    .= w3.i - w7.i by A4,A5,RVSUM_1:48
+    .=Proj(p1,i)-Proj(p2,i) by A4,A5,EUCLID:68;
   hence thesis;
 end;
 
@@ -248,10 +256,10 @@ theorem Th9:
 proof
   assume
 A1: i<=n;
-  then i<=len (0*n) by FINSEQ_2:109;
+  then i<=len (0*n) by FINSEQ_1:def 18;
   then
 A2: len ((0*n)|i)=i by FINSEQ_1:80;
-A3: i=len (0*i) by FINSEQ_2:109;
+A3: i=len (0*i) by FINSEQ_1:def 18;
   for j be Nat st 1<=j & j<=i holds ((0*n)|i).j=(0*i).j
   proof
     let j be Nat;
@@ -264,7 +272,7 @@ A5: j in Seg i by FINSEQ_1:3;
 A6: j in Seg n by A4,FINSEQ_1:3;
     ((0*n)|i).j=(n|->0).j by A4,FINSEQ_3:121
       .=0 by A6,FUNCOP_1:13;
-    hence ((0*n)|i).j=(0*i).j by A5,FUNCOP_1:13;
+    hence thesis by A5,FUNCOP_1:13;
   end;
   hence thesis by A2,A3,FINSEQ_1:18;
 end;
@@ -272,10 +280,10 @@ end;
 theorem Th10:
   (0*n)/^i=0*(n-'i)
 proof
-A1: n=len (0*n) by FINSEQ_2:109;
+A1: n=len (0*n) by FINSEQ_1:def 18;
 A2: len ((0*n)/^i) = len (0*n)-'i by JORDAN3:19
-    .=n-'i by FINSEQ_2:109;
-A3: n-'i=len (0*(n-'i)) by FINSEQ_2:109;
+    .=n-'i by FINSEQ_1:def 18;
+A3: n-'i=len (0*(n-'i)) by FINSEQ_1:def 18;
   for j be Nat st 1<=j & j<=n-'i holds ((0*n)/^i).j=(0*(n-'i)).j
   proof
     let j be Nat;
@@ -308,10 +316,10 @@ A9:     i>len (0*n);
         then
 A10:    n-'i=0 by XREAL_0:def 2;
         ((0*n)/^i).j = (<*>REAL).j by A9,RFINSEQ:def 2;
-        hence ((0*n)/^i).j=(0*(n-'i)).j by A10,FINSEQ_2:72;
+        hence thesis by A10,FINSEQ_2:72;
       end;
     end;
-    hence ((0*n)/^i).j=(0*(n-'i)).j;
+    hence thesis;
   end;
   hence thesis by A2,A3,FINSEQ_1:18;
 end;
@@ -338,7 +346,7 @@ proof
   assume i in Seg n;
   then
 A1: 1<=i & i<=n by FINSEQ_1:3;
-  len(0*n) = n by FINSEQ_2:109;
+  len(0*n) = n by FINSEQ_1:def 18;
   then
 A2: i in dom (0*n) by A1,FINSEQ_3:27;
   reconsider w=0*n as FinSequence of REAL;
@@ -364,12 +372,12 @@ A2: Sum sqr q>=0 by RVSUM_1:116;
   then
 A3: |.q.|^2=Sum sqr q by SQUARE_1:def 4;
 A4: 0<=|.q.|;
-A5: len q=n by FINSEQ_2:109;
-  len (0*n)=n by FINSEQ_2:109;
+A5: len q=n by FINSEQ_1:def 18;
+  len (0*n)=n by FINSEQ_1:def 18;
   then len ((0*n)+*(i,(Proj(p,i))^2))=n by FUNCT_7:99;
   then reconsider w1= (0*n)+*(i,(Proj(p,i))^2) as Element of n-tuples_on REAL
   by FINSEQ_2:110;
-A6: len w1=n by FINSEQ_2:109;
+A6: len w1=n by FINSEQ_1:def 18;
   reconsider w2=sqr q as Element of n-tuples_on REAL;
 A7: for j be Nat st j in Seg n holds w1.j<=w2.j
   proof
@@ -381,19 +389,19 @@ A8: j in Seg n;
 A9:   j=i;
 A10:  i in dom w1 by A1,A6,FINSEQ_1:def 3;
 A11:  dom 0*n=Seg len 0*n by FINSEQ_1:def 3
-        .=Seg n by FINSEQ_2:109;
+        .=Seg n by FINSEQ_1:def 18;
 A12:  r1=w1/.i by A9,A10,PARTFUN1:def 8
         .=(Proj(p,i))^2 by A1,A11,FUNCT_7:38
         .=(q/.i)^2 by A1,Def1;
       j in dom q by A1,A5,A9,FINSEQ_1:def 3;
       then q/.j=q.j by PARTFUN1:def 8;
-      hence r1<=r2 by A9,A12,VALUED_1:11;
+      hence thesis by A9,A12,VALUED_1:11;
     end;
     suppose
 A13:  j<>i;
 A14:  j in dom w1 by A6,A8,FINSEQ_1:def 3;
 A15:  dom 0*n=Seg len 0*n by FINSEQ_1:def 3
-        .=Seg n by FINSEQ_2:109;
+        .=Seg n by FINSEQ_1:def 18;
 A16:  r1=w1/.j by A14,PARTFUN1:def 8
         .=(0*n)/.j by A8,A13,A15,FUNCT_7:39
         .=(n|->0).j by A8,A15,PARTFUN1:def 8
@@ -401,7 +409,7 @@ A16:  r1=w1/.j by A14,PARTFUN1:def 8
       dom q=Seg n by A5,FINSEQ_1:def 3;
       then q/.j=q.j by A8,PARTFUN1:def 8;
       then r2=(q/.j)^2 by VALUED_1:11;
-      hence r1<=r2 by A16,XREAL_1:65;
+      hence thesis by A16,XREAL_1:65;
     end;
   end;
   then
@@ -425,6 +433,8 @@ theorem Th16:
 proof
   let s1,P,i such that
 A1: P= { p:s1>Proj(p,i) } & i in Seg n;
+XX: the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+  then reconsider PP=P as Subset of TopSpaceMetr Euclid n;
   reconsider s1 as Real by XREAL_0:def 1;
   for pe being Point of Euclid n st pe in P ex r be real number st r>0 &
   Ball(pe,r) c= P
@@ -451,7 +461,9 @@ A5:   dist(pe,q)<r;
       (Pitag_dist n).(q,pe)=dist(q,pe) by METRIC_1:def 1;
       then
 A6:   |.pqn-pen.|<r by A5,EUCLID:def 6;
-      (Proj(pq-ppe,i)) <= |.pqn-pen.| by A1,Th15;
+      reconsider q = pq-ppe as Element of REAL n by EUCLID:25;
+      (Proj(pq-ppe,i)) <= |.q.| by A1,Th15;
+      then (Proj(pq-ppe,i)) <= |.pqn-pen.| by A1,EUCLID:73;
       then (Proj(pq-ppe,i)) <r by A6,XXREAL_0:2;
       then Proj(pq,i)-Proj(ppe,i) < r by A1,Th7;
       then
@@ -463,7 +475,8 @@ A7:   Proj(p,i)+(s1-Proj(p,i))/2 > Proj(pq,i) by A2,XREAL_1:21;
     end;
     hence thesis by A3;
   end;
-  hence thesis by TOPMETR:22;
+  then PP is open by TOPMETR:22;
+  hence thesis by PRE_TOPC:60,XX;
 end;
 
 theorem Th17:
@@ -471,6 +484,8 @@ theorem Th17:
 proof
   let s1,P,i such that
 A1: P= { p:s1<Proj(p,i) } & i in Seg n;
+XX: the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+  then reconsider PP=P as Subset of TopSpaceMetr Euclid n;
   reconsider s1 as Real by XREAL_0:def 1;
   for pe being Point of Euclid n st pe in P
   ex r be real number st r>0 & Ball(pe,r) c= P
@@ -497,7 +512,10 @@ A5:   dist(pe,q)<r;
       (Pitag_dist n).(pe,q)=dist(pe,q) by METRIC_1:def 1;
       then
 A6:   |.pen-pqn.|<r by A5,EUCLID:def 6;
-      Proj(ppe-pq,i) <= |.pen-pqn.| by A1,Th15;
+      reconsider qq = ppe-pq as Element of REAL n by EUCLID:25;
+X:    ppe-pq= pen-pqn by A1,EUCLID:73;
+      Proj(ppe-pq,i) <= |.qq.| by A1,Th15;
+      then Proj(ppe-pq,i) <= |.pen-pqn.| by A1,EUCLID:73,X;
       then Proj(ppe-pq,i) <r by A6,XXREAL_0:2;
       then Proj(ppe,i)-Proj(pq,i) < r by A1,Th7;
       then Proj(ppe,i)-Proj(pq,i)+Proj(pq,i) < r+Proj(pq,i) by XREAL_1:8;
@@ -510,7 +528,8 @@ A7:   Proj(ppe,i)-r < Proj(pq,i)+r-r by XREAL_1:11;
     end;
     hence thesis by A3;
   end;
-  hence thesis by TOPMETR:22;
+  then PP is open by TOPMETR:22;
+  hence thesis by PRE_TOPC:60,XX;
 end;
 
 theorem Th18:
@@ -531,7 +550,7 @@ A3: P c= { p1 :a<Proj(p1,i)} /\ {p2:Proj(p2,i)<b }
       then consider p3 such that
 A4:   p3=x &(a<Proj(p3,i) & Proj(p3,i)<b) by A1;
       x in { p1 :a<Proj(p1,i)} & x in {p2:Proj(p2,i)<b } by A4;
-      hence x in { p1 :a<Proj(p1,i)} /\ {p2:Proj(p2,i)<b } by XBOOLE_0:def 4;
+      hence thesis by XBOOLE_0:def 4;
     end;
     { p1 :a<Proj(p1,i)} /\ {p2:Proj(p2,i)<b } c= P
     proof
@@ -543,7 +562,7 @@ A5:   x in { p1 :a<Proj(p1,i)} & x in {p2:Proj(p2,i)<b } by XBOOLE_0:def 4;
 A6:   x=p1 & a<Proj(p1,i);
       consider p2 such that
 A7:   x=p2 & Proj(p2,i)<b by A5;
-      thus x in P by A1,A6,A7;
+      thus thesis by A1,A6,A7;
     end;
     hence thesis by A3,XBOOLE_0:def 10;
   end;
@@ -553,7 +572,7 @@ A7:   x=p2 & Proj(p2,i)<b by A5;
     assume x in { p:a<Proj(p,i)};
     then consider p such that
 A8: x= p & a<Proj(p,i);
-    thus x in the carrier of TOP-REAL n by A8;
+    thus thesis by A8;
   end;
   then reconsider P1={ p:a<Proj(p,i)} as Subset of TOP-REAL n;
   { p:Proj(p,i)<b} c= the carrier of TOP-REAL n
@@ -562,12 +581,12 @@ A8: x= p & a<Proj(p,i);
     assume x in { p:Proj(p,i)<b};
     then consider p such that
 A9: x= p & Proj(p,i)<b;
-    thus x in the carrier of TOP-REAL n by A9;
+    thus thesis by A9;
   end;
   then reconsider P2={ p:Proj(p,i)<b} as Subset of TOP-REAL n;
 A10: P1 is open by A1,Th17;
   P2 is open by A1,Th16;
-  hence P is open by A2,A10,TOPS_1:38;
+  hence thesis by A2,A10,TOPS_1:38;
 end;
 
 theorem Th19:
@@ -594,8 +613,7 @@ A4:   x in f"({s:a<s & s<b});
 A5:   s=f.x & a<s & s<b;
       reconsider px=x as Element of (TOP-REAL n) by A4;
       f.px=Proj(px,i) by A1;
-      hence x in {p where p is Element of TOP-REAL n:
-      a<Proj(p,i) & Proj(p,i)<b} by A5;
+      hence thesis by A5;
     end;
     {p where p is Element of TOP-REAL n: a<Proj(p,i) & Proj(p,i)<b}
     c= f"({s:a<s & s<b})
@@ -607,7 +625,7 @@ A5:   s=f.x & a<s & s<b;
 A6:   x=p & (a<Proj(p,i) & Proj(p,i)<b);
       f.x=Proj(p,i) by A1,A6;
       then f.x in {s:a<s & s<b} by A6;
-      hence x in f"({s:a<s & s<b}) by A2,A6,FUNCT_1:def 13;
+      hence thesis by A2,A6,FUNCT_1:def 13;
     end;
     hence thesis by A3,XBOOLE_0:def 10;
   end;
@@ -648,12 +666,11 @@ A6:     f"PB c= f"P1 by A5,RELAT_1:178;
         hence ex Q being Subset of X st Q is open & Q c= f"P1 & x in Q
         by A1,A5,A6;
       end;
-      hence x in f"P1 iff
-      ex Q being Subset of X st Q is open & Q c= f"P1 & x in Q;
+      hence thesis;
     end;
-    hence f"P1 is open by TOPS_1:57;
+    hence thesis by TOPS_1:57;
   end;
-  hence f is continuous by A2,TOPS_2:55;
+  hence thesis by A2,TOPS_2:55;
 end;
 
 theorem Th21:
@@ -679,7 +696,7 @@ A4:   u1-s<s+r-s by XREAL_1:11;
       then s+-r-s<u1-s by XREAL_1:11;
       then abs( u1-s ) < r by A4,SEQ_2:9;
       then dist(u,q1)<r by A1,TOPMETR:15;
-      hence x in {q where q is Element of RealSpace: dist(u,q)<r} by A3;
+      hence thesis by A3;
     end;
     {q where q is Element of RealSpace: dist(u,q)<r} c= {s:u1-r<s & s<u1+r}
     proof
@@ -696,7 +713,7 @@ A6:   -r < u1-s1 & u1-s1 < r by SEQ_2:9;
 A7:   s1-r+r < u1+r by XREAL_1:8;
       u1-s1+s1<r+s1 by A6,XREAL_1:8;
       then u1-r<r+s1-r by XREAL_1:11;
-      hence x in {s:u1-r<s & s<u1+r} by A5,A7;
+      hence thesis by A5,A7;
     end;
     hence thesis by A2,XBOOLE_0:def 10;
   end;
@@ -727,7 +744,7 @@ A2: r>0 & P=Ball(u,r);
     u1-r<Proj(p,i) & Proj(p,i)<u1+r} by A1,Th19;
     hence thesis by A1,A2,Th18;
   end;
-  hence f is continuous by Th20,TOPMETR:def 7;
+  hence thesis by Th20,TOPMETR:def 7;
 end;
 
 begin ::3.   1-DIMENSIONAL AND 2-DIMENSIONAL CASES
@@ -744,7 +761,7 @@ proof
     then
 A1: x=s by TARSKI:def 1;
     dom absreal =REAL by FUNCT_2:def 1;
-    hence x in dom absreal by A1;
+    hence thesis by A1;
   end;
   then dom <*s*>=dom (absreal*<*s*>) by RELAT_1:46;
   then Seg 1=dom (abs <*s*>) by FINSEQ_1:def 8;
@@ -762,7 +779,7 @@ A5: <*abs(s)*>.j =abs(s) by FINSEQ_1:57;
 A6: <*s*>.1=s by FINSEQ_1:57;
     <*s*> in  1-tuples_on REAL by FINSEQ_2:118;
     then <*s*> is Element of REAL 1;
-    hence <*abs(s)*>.j=(abs <*s*>).j by A4,A5,A6,EUCLID:6;
+    hence thesis by A4,A5,A6,EUCLID:6;
   end;
   hence thesis by A2,A3,FINSEQ_1:18;
 end;
@@ -771,7 +788,8 @@ theorem Th24:
   for p being Element of TOP-REAL 1 ex r being Real st p=<*r*>
 proof
   let p be Element of TOP-REAL 1;
-  reconsider p'=p as Element of 1-tuples_on REAL by EUCLID:25;
+  1-tuples_on REAL = REAL 1;
+  then reconsider p'=p as Element of 1-tuples_on REAL by EUCLID:25;
   ex r be Real st p'=<*r*> by FINSEQ_2:117;
   hence thesis;
 end;
@@ -795,10 +813,23 @@ end;
 canceled;
 
 theorem
-  s*|[ r ]|=|[ s*r ]| by RVSUM_1:69;
+  s*|[ r ]|=|[ s*r ]|
+ proof
+   reconsider r as Real by XREAL_0:def 1;
+   reconsider rr = |[ r ]| as Element of REAL 1 by EUCLID:25;
+   s*|[ r ]| = s*rr by EUCLID:69
+     .= <*s*r*> by RVSUM_1:69;
+  hence thesis by EUCLID:69;
+ end;
 
 theorem
-  |[ r1+r2 ]|=|[ r1 ]|+|[ r2 ]| by RVSUM_1:29;
+  |[ r1+r2 ]|=|[ r1 ]|+|[ r2 ]|
+ proof
+   reconsider r1,r2 as Real by XREAL_0:def 1;
+   reconsider rr1 = |[ r1 ]|, rr2 = |[ r2 ]| as Element of REAL 1 by EUCLID:25;
+   |[ r1+r2 ]| = rr1+rr2 by RVSUM_1:29;
+  hence thesis  by EUCLID:68;
+ end;
 
 canceled;
 
@@ -841,7 +872,7 @@ A4:   x in Ball(c,r);
     end;
     hence thesis by A3,TARSKI:def 3,XREAL_1:52;
   end;
-  hence P is open by TOPMETR:22,def 7;
+  hence thesis by TOPMETR:22,def 7;
 end;
 
 theorem Th31:
@@ -880,7 +911,7 @@ A4:   x in Ball(c,r);
     end;
     hence thesis by A3,TARSKI:def 3,XREAL_1:52;
   end;
-  hence P is open by TOPMETR:22,def 7;
+  hence thesis by TOPMETR:22,def 7;
 end;
 
 theorem Th32:
@@ -899,7 +930,7 @@ A3: P c= {w1: a<w1} /\ {w2: w2<b }
       then consider s such that
 A4:   s=x &(a<s & s<b) by A1;
       x in { w1 :a<w1} & x in {w2:w2<b } by A4;
-      hence x in { w1 :a<w1} /\ {w2:w2<b } by XBOOLE_0:def 4;
+      hence thesis by XBOOLE_0:def 4;
     end;
     { w1 :a<w1} /\ {w2:w2<b } c= P
     proof
@@ -912,7 +943,7 @@ A6:   x=r1 & a<r1;
       ex r2 be Real st x=r2 & r2<b by A5;
       then consider r2 such that
 A7:   x=r2 & r2<b;
-      thus x in P by A1,A6,A7;
+      thus thesis by A1,A6,A7;
     end;
     hence thesis by A3,XBOOLE_0:def 10;
   end;
@@ -922,7 +953,7 @@ A7:   x=r2 & r2<b;
     assume x in { w1:a<w1};
     then consider r1 be Real such that
 A8: x= r1 & a<r1;
-    thus x in the carrier of R^1 by A8,TOPMETR:24;
+    thus thesis by A8,TOPMETR:24;
   end;
   then reconsider P1={w1:a<w1} as Subset of R^1;
   {w2:w2<b} c= the carrier of R^1
@@ -931,12 +962,12 @@ A8: x= r1 & a<r1;
     assume x in {w2:w2<b};
     then consider r2 be Real such that
 A9: x= r2 & r2<b;
-    thus x in the carrier of R^1 by A9,TOPMETR:24;
+    thus thesis by A9,TOPMETR:24;
   end;
   then reconsider P2={w2:w2<b} as Subset of R^1;
 A10: P1 is open by Th31;
   P2 is open by Th30;
-  hence P is open by A2,A10,TOPS_1:38;
+  hence thesis by A2,A10,TOPS_1:38;
 end;
 
 theorem Th33:
@@ -972,7 +1003,7 @@ A6:   |.<*u1*>-<*s*>.| < r by A5,COMPLEX1:158;
       reconsider es=<*s*> as Element of REAL 1 by FINSEQ_2:118;
 A7:   (the distance of Euclid 1).(u,q1)=dist(u,q1) by METRIC_1:def 1;
       (Pitag_dist 1).(eu1,es)<r by A6,EUCLID:def 6;
-      hence x in {q where q is Element of Euclid 1: dist(u,q)<r} by A1,A3,A7;
+      hence thesis by A1,A3,A7;
     end;
     {q where q is Element of Euclid 1: dist(u,q)<r} c= {<*s*>:u1-r<s & s<u1+r}
     proof
@@ -997,7 +1028,7 @@ A11:  -r < u1-s1 & u1-s1 < r by A10,SEQ_2:9;
 A12:  s1-r+r < u1+r by XREAL_1:8;
       u1-s1+s1<r+s1 by A11,XREAL_1:8;
       then u1-r<r+s1-r by XREAL_1:11;
-      hence x in {<*s*>:u1-r<s & s<u1+r} by A8,A9,A12;
+      hence thesis by A8,A9,A12;
     end;
     hence thesis by A2,XBOOLE_0:def 10;
   end;
@@ -1026,7 +1057,7 @@ A5: 1<=1 & 1<=len <*r*> by FINSEQ_1:57;
       .=<*r*>/.1 by Def1
       .=<*r*>.1 by A5,FINSEQ_4:24
       .=x by FINSEQ_1:57;
-    hence x in rng f by A4,FUNCT_1:def 5;
+    hence thesis by A4,FUNCT_1:def 5;
   end;
   then
 A6: rng f=[#](R^1) by TOPMETR:24,XBOOLE_0:def 10;
@@ -1052,10 +1083,12 @@ A13:  f.(p1)=Proj(p1,1) by A1
         .=<*r2*>/.1 by A10,Def1
         .=<*r2*>.1 by A12,FINSEQ_4:24
         .=r2 by FINSEQ_1:57;
-      hence x1 = x2 by A8,A9,A10,A13;
+      hence thesis by A8,A9,A10,A13;
     end;
     hence thesis by FUNCT_1:def 8;
   end;
+XX: the TopStruct of TOP-REAL 1 =TopSpaceMetr Euclid 1 by EUCLID:def 8;
+  then reconsider ff = f/" as Function of R^1,TopSpaceMetr Euclid 1;
   f/" is continuous
   proof
     the carrier of R^1 c= rng f
@@ -1064,15 +1097,17 @@ A13:  f.(p1)=Proj(p1,1) by A1
       assume z1 in the carrier of R^1;
       then reconsider r1=z1 as Real by TOPMETR:24;
       <*r1*> in 1-tuples_on REAL by FINSEQ_2:118;
+      then <*r1*> in REAL 1 by FINSEQ_2:118;
       then reconsider q=<*r1*> as Element of TOP-REAL 1 by EUCLID:25;
       f.q=Proj(q,1) by A1
         .=<*r1*>/.1 by Def1
         .=z1 by FINSEQ_4:25;
-      hence z1 in rng f by A4,FUNCT_1:def 5;
+      hence thesis by A4,FUNCT_1:def 5;
     end;
     then
 A14: rng f= the carrier of R^1 by XBOOLE_0:def 10;
-    reconsider g=f/" as Function of R^1,TopSpaceMetr(Euclid 1);
+    the TopStruct of TOP-REAL 1 =TopSpaceMetr(Euclid 1) by EUCLID:def 8;
+    then reconsider g=f/" as Function of R^1,TopSpaceMetr(Euclid 1);
     reconsider g1=g as Function of the carrier of R^1,
     the carrier of TOP-REAL 1;
     for r being real number,u being Element of
@@ -1105,13 +1140,14 @@ A21:      x1 in dom f1 & x1 in Ball(u,r) & z=f1.x1 by FUNCT_1:def 12;
           consider s such that
 A22:      <*s*>=x1 & (s1-r<s & s<s1+r) by A19,A21;
           <*s*> in 1-tuples_on REAL by FINSEQ_2:118;
+          then <*s*> in REAL 1 by FINSEQ_2:118;
           then reconsider q=<*s*> as Element of TOP-REAL 1 by EUCLID:25;
 A23:      len <*s*>=1 by FINSEQ_1:57;
           z=Proj(q,1) by A1,A21,A22
             .=<*s*>/.1 by Def1
             .=<*s*>.1 by A23,FINSEQ_4:24
             .=s by FINSEQ_1:57;
-          hence z in {w1:s1-r<w1 & w1<s1+r} by A22;
+          hence thesis by A22;
         end;
         {w1:s1-r<w1 & w1<s1+r} c= f1.:(Ball(u,r))
         proof
@@ -1120,6 +1156,7 @@ A23:      len <*s*>=1 by FINSEQ_1:57;
           then consider r1 be Real such that
 A24:      z=r1 &(s1-r<r1 & r1<s1+r);
           <*r1*> in 1-tuples_on REAL by FINSEQ_2:118;
+          then <*r1*> in REAL 1 by FINSEQ_2:118;
           then reconsider q=<*r1*> as Element of TOP-REAL 1 by EUCLID:25;
           Ball(u,r)={<*s*>:s1-r<s & s<s1+r} by A15,A16,Th33;
           then
@@ -1127,14 +1164,15 @@ A25:      <*r1*> in Ball(u,r) by A24;
           z=<*r1*>/.1 by A24,FINSEQ_4:25
             .=Proj(q,1) by Def1
             .=f1.<*r1*> by A1;
-          hence z in f1.:(Ball(u,r)) by A17,A25,FUNCT_1:def 12;
+          hence thesis by A17,A25,FUNCT_1:def 12;
         end;
         hence thesis by A20,XBOOLE_0:def 10;
       end;
       then g1"(Ball(u,r))={w1:s1-r<w1 & w1<s1+r} by A7,A18,FUNCT_1:154;
-      hence g"P is open by A15,Th32;
+      hence thesis by A15,Th32;
     end;
-    hence f/" is continuous by Th20;
+    then ff is continuous by Th20;
+    hence f/" is continuous by XX,PRE_TOPC:63;
   end;
   hence thesis by A2,A3,A4,A6,A7,TOPS_2:def 5;
 end;

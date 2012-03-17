@@ -123,7 +123,7 @@ A1: for p being set holds p in B iff p in [:A(),B():] & Q[p]
     then reconsider B as Relation by Def1;
     take B;
     let p be set;
-    thus p in B iff p in [:A(),B():] & ex x,y st p=[x,y] & P[x,y] by A1;
+    thus thesis by A1;
   end;
   then consider R being Relation such that
 A2: for p being set holds
@@ -194,17 +194,27 @@ A4:       x in R;
 end;
 
 registration
-  let P,R;
-  cluster P /\ R -> Relation-like;
+  let P,X;
+  cluster P /\ X -> Relation-like;
   coherence
   proof
     now
       let x;
-      x in P & x in R implies ex y,z st x = [y,z] by Def1;
-      hence x in P /\ R implies ex y,z st x = [y,z] by XBOOLE_0:def 4;
+      x in P implies ex y,z st x = [y,z] by Def1;
+      hence x in P /\ X implies ex y,z st x = [y,z] by XBOOLE_0:def 4;
     end;
-    hence P /\ R is Relation-like by Def1;
+    hence thesis by Def1;
   end;
+  cluster P \ X -> Relation-like;
+  coherence
+  proof
+    for x holds x in P \ X implies ex y,z st x = [y,z] by Def1;
+    hence thesis by Def1;
+  end;
+end;
+
+registration
+  let P,R;
   cluster P \/ R -> Relation-like;
   coherence
   proof
@@ -214,13 +224,7 @@ A1:   x in P implies ex y,z st x = [y,z] by Def1;
       x in R implies ex y,z st x = [y,z] by Def1;
       hence x in P \/ R implies ex y,z st x = [y,z] by A1,XBOOLE_0:def 3;
     end;
-    hence P \/ R is Relation-like by Def1;
-  end;
-  cluster P \ R -> Relation-like;
-  coherence
-  proof
-    for x holds x in P \ R implies ex y,z st x = [y,z] by Def1;
-    hence P \ R is Relation-like by Def1;
+    hence thesis by Def1;
   end;
 end;
 
@@ -246,18 +250,10 @@ A1:   for a,b holds [a,b] in P implies [a,b] in A;
       assume
 A2:   x in P;
       then ex y,z st x = [y,z] by Def1;
-      hence x in A by A1,A2;
+      hence thesis by A1,A2;
     end;
   end;
 end;
-
-canceled 2;
-
-theorem
-  X /\ R is Relation by Th3,XBOOLE_1:17;
-
-theorem
-  R \ X is Relation by Th3;
 
 ::             DOMAIN OF RELATION
 ::             __________________
@@ -289,7 +285,7 @@ A2: (for x holds x in X1 iff ex y st [x,y] in R) &
       (x in X2 iff ex y st [x,y] in R) by A2;
       hence x in X1 iff x in X2;
     end;
-    hence X1=X2 by TARSKI:2;
+    hence thesis by TARSKI:2;
   end;
 end;
 
@@ -298,7 +294,7 @@ notation
   synonym dom R for proj1 R;
 end;
 
-canceled 2;
+canceled 6;
 
 theorem Th13:
   dom(P \/ R) = dom P \/ dom R
@@ -346,7 +342,7 @@ proof
 A1: [x,y] in P /\ R by Def4;
   [x,y] in P & [x,y] in R by A1,XBOOLE_0:def 4;
   then x in dom P & x in dom R by Def4;
-  hence x in dom P /\ dom R by XBOOLE_0:def 4;
+  hence thesis by XBOOLE_0:def 4;
 end;
 
 theorem
@@ -361,7 +357,7 @@ A2: x in dom P & not x in dom R by XBOOLE_0:def 5;
 A3: [x,y] in P by A1,Def4;
   not [x,y] in R by A2,Def4;
   then [x,y] in P \ R by A3,XBOOLE_0:def 5;
-  hence x in dom (P \ R) by Def4;
+  hence thesis by Def4;
 end;
 
 ::            CODOMAIN OF RELATION
@@ -394,7 +390,7 @@ A2: (for y holds y in Y1 iff ex x st [x,y] in R) &
       (y in Y2 iff ex x st [x,y] in R) by A2;
       hence y in Y1 iff y in Y2;
     end;
-    hence Y1=Y2 by TARSKI:2;
+    hence thesis by TARSKI:2;
   end;
 end;
 
@@ -434,7 +430,7 @@ proof
   let y,z;
   assume [y,z] in R;
   then y in dom R & z in rng R by Def4,Def5;
-  hence [y,z] in [:dom R, rng R:] by ZFMISC_1:106;
+  hence thesis by ZFMISC_1:106;
 end;
 
 theorem
@@ -454,7 +450,7 @@ A1: R = {[x,y]};
 A2:   [z,b] in R by Def4;
       [z,b] = [x,y] by A1,A2,TARSKI:def 1;
       then z=x by ZFMISC_1:33;
-      hence z in {x} by TARSKI:def 1;
+      hence thesis by TARSKI:def 1;
     end;
     assume z in {x};
     then z=x by TARSKI:def 1;
@@ -471,7 +467,7 @@ A2:   [z,b] in R by Def4;
 A3:   [a,z] in R by Def5;
       [a,z] = [x,y] by A1,A3,TARSKI:def 1;
       then z = y by ZFMISC_1:33;
-      hence z in {y} by TARSKI:def 1;
+      hence thesis by TARSKI:def 1;
     end;
     assume z in {y};
     then z = y by TARSKI:def 1;
@@ -495,19 +491,19 @@ A1: R = {[a,b],[x,y]};
 A2:   [z,c] in R by Def4;
       [z,c] = [a,b] or [z,c] = [x,y] by A1,A2,TARSKI:def 2;
       then z=a or z=x by ZFMISC_1:33;
-      hence z in {a,x} by TARSKI:def 2;
+      hence thesis by TARSKI:def 2;
     end;
     assume
 A3: z in {a,x};
 A4: now
       assume z=a;
       then [z,b] in R by A1,TARSKI:def 2;
-      hence z in dom R by Def4;
+      hence thesis by Def4;
     end;
     now
       assume z=x;
       then [z,y] in R by A1,TARSKI:def 2;
-      hence z in dom R by Def4;
+      hence thesis by Def4;
     end;
     hence thesis by A3,A4,TARSKI:def 2;
   end;
@@ -521,19 +517,19 @@ A4: now
 A5:   [d,z] in R by Def5;
       [d,z] = [a,b] or [d,z] = [x,y] by A1,A5,TARSKI:def 2;
       then z=b or z=y by ZFMISC_1:33;
-      hence z in {b,y} by TARSKI:def 2;
+      hence thesis by TARSKI:def 2;
     end;
     assume
 A6: z in {b,y};
 A7: now
       assume z=b;
       then [a,z] in R by A1,TARSKI:def 2;
-      hence z in rng R by Def5;
+      hence thesis by Def5;
     end;
     now
       assume z=y;
       then [x,z] in R by A1,TARSKI:def 2;
-      hence z in rng R by Def5;
+      hence thesis by Def5;
     end;
     hence thesis by A6,A7,TARSKI:def 2;
   end;
@@ -551,7 +547,7 @@ A1: P c= R;
     assume x in dom P;
     then consider y such that
 A2: [x,y] in P by Def4;
-    thus x in dom R by A1,A2,Def4;
+    thus thesis by A1,A2,Def4;
   end;
   let y;
   assume y in rng P;
@@ -606,7 +602,7 @@ proof
 A1: [x,y] in P /\ R by Def5;
   [x,y] in P & [x,y] in R by A1,XBOOLE_0:def 4;
   then y in rng P & y in rng R by Def5;
-  hence y in rng P /\ rng R by XBOOLE_0:def 4;
+  hence thesis by XBOOLE_0:def 4;
 end;
 
 theorem
@@ -621,7 +617,7 @@ A2: y in rng P & not y in rng R by XBOOLE_0:def 5;
 A3: [x,y] in P by A1,Def5;
   not [x,y] in R by A2,Def5;
   then [x,y] in P \ R by A3,XBOOLE_0:def 5;
-  hence y in rng (P \ R) by Def5;
+  hence thesis by Def5;
 end;
 
 ::                  FIELD OF RELATION
@@ -645,7 +641,7 @@ A1: [a,b] in R;
   then a in dom R by Def4;
   hence a in field R by XBOOLE_0:def 3;
   b in rng R by A1,Def5;
-  hence b in field R by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem
@@ -687,7 +683,7 @@ A3: rng(P /\ R) c= rng P /\ rng R by Th27;
   (x in dom P or x in rng P) & (x in dom R or x in rng R) by XBOOLE_0:def 4;
   then x in dom P /\ dom R or x in rng P /\ rng R implies
   x in dom P \/ rng P & x in dom R \/ rng R by XBOOLE_0:def 3;
-  hence x in field P /\ field R by A1,A2,A3,XBOOLE_0:def 4;
+  hence thesis by A1,A2,A3,XBOOLE_0:def 4;
 end;
 
 ::                  CONVERSE RELATION
@@ -720,7 +716,7 @@ A3: [x,y] in P2 iff [y,x] in R;
       [x,y] in P1 iff [y,x] in R by A2;
       hence [x,y] in P1 iff [x,y] in P2 by A3;
     end;
-    hence P1=P2 by Def2;
+    hence thesis by Def2;
   end;
   involutiveness;
 end;
@@ -737,7 +733,7 @@ proof
     then consider x such that
 A1: [x,u] in R by Def5;
     [u,x] in R~ by A1,Def7;
-    hence u in dom(R~) by Def4;
+    hence thesis by Def4;
   end;
   thus dom(R~) c= rng R
   proof
@@ -746,7 +742,7 @@ A1: [x,u] in R by Def5;
     then consider x such that
 A2: [u,x] in R~ by Def4;
     [x,u] in R by A2,Def7;
-    hence u in rng R by Def5;
+    hence thesis by Def5;
   end;
   thus dom R c= rng(R~)
   proof
@@ -755,14 +751,14 @@ A2: [u,x] in R~ by Def4;
     then consider x such that
 A3: [u,x] in R by Def4;
     [x,u] in R~ by A3,Def7;
-    hence u in rng(R~) by Def5;
+    hence thesis by Def5;
   end;
   let u be set;
   assume u in rng(R~);
   then consider x such that
 A4: [x,u] in R~ by Def5;
   [u,x] in R by A4,Def7;
-  hence u in dom R by Def4;
+  hence thesis by Def4;
 end;
 
 theorem
@@ -780,7 +776,7 @@ proof
     [x,y] in (P /\ R)~ iff [y,x] in P /\ R by Def7;
     then [x,y] in (P /\ R)~ iff [y,x] in P & [y,x] in R by XBOOLE_0:def 4;
     then [x,y] in (P /\ R)~ iff [x,y] in P~ & [x,y] in R~ by Def7;
-    hence [x,y] in (P /\ R)~ iff [x,y] in P~ /\ R~ by XBOOLE_0:def 4;
+    hence thesis by XBOOLE_0:def 4;
   end;
   hence thesis by Def2;
 end;
@@ -793,7 +789,7 @@ proof
     [x,y] in (P \/ R)~ iff [y,x] in P \/ R by Def7;
     then [x,y] in (P \/ R)~ iff [y,x] in P or [y,x] in R by XBOOLE_0:def 3;
     then [x,y] in (P \/ R)~ iff [x,y] in P~ or [x,y] in R~ by Def7;
-    hence [x,y] in (P \/ R)~ iff [x,y] in P~ \/ R~ by XBOOLE_0:def 3;
+    hence thesis by XBOOLE_0:def 3;
   end;
   hence thesis by Def2;
 end;
@@ -806,7 +802,7 @@ proof
     [x,y] in (P \ R)~ iff [y,x] in P \ R by Def7;
     then [x,y] in (P \ R)~ iff [y,x] in P & not [y,x] in R by XBOOLE_0:def 5;
     then [x,y] in (P \ R)~ iff [x,y] in P~ & not [x,y] in R~ by Def7;
-    hence [x,y] in (P \ R)~ iff [x,y] in P~ \ R~ by XBOOLE_0:def 5;
+    hence thesis by XBOOLE_0:def 5;
   end;
   hence thesis by Def2;
 end;
@@ -831,7 +827,7 @@ A1: for x,y holds [x,y] in Q iff x in dom P & y in rng R &
     given z such that
 A2: [x,z] in P & [z,y] in R;
     x in dom P & y in rng R by A2,Def4,Def5;
-    hence [x,y] in Q by A1,A2;
+    hence thesis by A1,A2;
   end;
   uniqueness
   proof
@@ -844,7 +840,7 @@ A4: [x,y] in P2 iff ex z st [x,z] in P & [z,y] in R;
       [x,y] in P1 iff ex z st [x,z] in P & [z,y] in R by A3;
       hence [x,y] in P1 iff [x,y] in P2 by A4;
     end;
-    hence P1=P2 by Def2;
+    hence thesis by Def2;
   end;
 end;
 
@@ -858,7 +854,7 @@ proof
   then consider y such that
 A1: [x,y] in P*R by Def4;
   ex z st [x,z] in P & [z,y] in R by A1,Def8;
-  hence x in dom P by Def4;
+  hence thesis by Def4;
 end;
 
 theorem Th45:
@@ -869,7 +865,7 @@ proof
   then consider x such that
 A1: [x,y] in P*R by Def5;
   ex z st [x,z] in P & [z,y] in R by A1,Def8;
-  hence y in rng R by Def5;
+  hence thesis by Def5;
 end;
 
 theorem
@@ -887,7 +883,7 @@ A2: [x,y] in R by Def4;
   then consider z such that
 A3: [y,z] in P by Def4;
   [x,z] in R*P by A2,A3,Def8;
-  hence x in dom(R*P) by Def4;
+  hence thesis by Def4;
 end;
 
 theorem
@@ -905,7 +901,7 @@ A2: [y,z] in P by Def5;
   then consider x such that
 A3: [x,y] in R by Def5;
   [x,z] in R*P by A2,A3,Def8;
-  hence z in rng(R*P) by Def5;
+  hence thesis by Def5;
 end;
 
 theorem Th48:
@@ -1146,7 +1142,7 @@ proof
       end;
       hence x in dom {} iff x in {};
     end;
-    hence dom {} = {} by TARSKI:2;
+    hence thesis by TARSKI:2;
   end;
   thus rng {} = {}
   proof
@@ -1159,7 +1155,7 @@ proof
       end;
       hence y in rng({}) iff y in {};
     end;
-    hence rng({}) = {} by TARSKI:2;
+    hence thesis by TARSKI:2;
   end;
 end;
 
@@ -1295,7 +1291,7 @@ A3: [x,y] in P2 iff x in X & x=y;
       [x,y] in P1 iff x in X & x=y by A2;
       hence [x,y] in P1 iff [x,y] in P2 by A3;
     end;
-    hence P1=P2 by Def2;
+    hence thesis by Def2;
   end;
 end;
 
@@ -1337,7 +1333,7 @@ A2:     [y,x] in id X by Def5;
       [x,x] in id X iff x in X by Def10;
       hence thesis by Def5;
     end;
-    hence rng id X = X by TARSKI:2;
+    hence thesis by TARSKI:2;
   end;
 end;
 
@@ -1412,13 +1408,13 @@ proof
   proof
     assume [x,y] in R*id X;
     then ex z st [x,z] in R & [z,y] in id X by Def8;
-    hence [x,y] in R by Def10;
+    hence thesis by Def10;
   end;
   thus [x,y] in (id X)*R implies [x,y] in R
   proof
     assume [x,y] in (id X)*R;
     then ex z st [x,z] in id X & [z,y] in R by Def8;
-    hence [x,y] in R by Def10;
+    hence thesis by Def10;
   end;
 end;
 
@@ -1509,7 +1505,7 @@ A3: [x,y] in P2 iff x in X & [x,y] in R;
       [x,y] in P1 iff x in X & [x,y] in R by A2;
       hence [x,y] in P1 iff [x,y] in P2 by A3;
     end;
-    hence P1=P2 by Def2;
+    hence thesis by Def2;
   end;
 end;
 
@@ -1544,7 +1540,7 @@ A3: [x,y] in R by Def4;
   hence thesis by Def4;
 end;
 
-theorem
+theorem Th87:
   dom(R|X) c= X
 proof
   let x; thus thesis by Th86;
@@ -1556,7 +1552,7 @@ proof [x,y] in R|X implies [x,y] in R by Def11;
   hence thesis by Def3;
 end;
 
-theorem
+theorem Th89:
   dom(R|X) c= dom R
 proof
   let x; thus thesis by Th86;
@@ -1631,7 +1627,7 @@ A4:   x in X & [x,y] in R by Def11;
     end;
     hence [x,y] in R|X iff [x,y] in {};
   end;
-  hence R|X = {} by Def2;
+  hence thesis by Def2;
 end;
 
 theorem Th96:
@@ -1666,7 +1662,7 @@ proof
   then R c= [:dom R,rng R:] & [:dom R,rng R:] c= [:X,rng R:]
   by Th21,ZFMISC_1:118;
   then R c= [:X,rng R:] & R|X = R /\ [:X,rng R:] by Th96,XBOOLE_1:1;
-  hence R|X = R by XBOOLE_1:28;
+  hence thesis by XBOOLE_1:28;
 end;
 
 theorem
@@ -1906,7 +1902,7 @@ A3: [x,y] in P2 iff y in Y & [x,y] in R;
       [x,y] in P1 iff y in Y & [x,y] in R by A2;
       hence [x,y] in P1 iff [x,y] in P2 by A3;
     end;
-    hence P1 = P2 by Def2;
+    hence thesis by Def2;
   end;
 end;
 
@@ -2036,7 +2032,7 @@ proof
   then R c= [:dom R,rng R:] & [:dom R,rng R:] c= [:dom R,Y:]
   by Th21,ZFMISC_1:118;
   then R c= [:dom R,Y:] & Y|R = R /\ [:dom R,Y:] by Th124,XBOOLE_1:1;
-  hence Y|R = R by XBOOLE_1:28;
+  hence thesis by XBOOLE_1:28;
 end;
 
 theorem
@@ -2225,7 +2221,7 @@ A1: for y holds y in Y iff y in rng R & Z[y] from XBOOLE_0:sch 1;
     given x such that
 A2: [x,y] in R & x in X;
     y in rng R by A2,Def5;
-    hence y in Y by A1,A2;
+    hence thesis by A1,A2;
   end;
   uniqueness
   proof
@@ -2238,7 +2234,7 @@ A4: y in Y2 iff ex x st [x,y] in R & x in X;
       y in Y1 iff ex x st [x,y] in R & x in X by A3;
       hence y in Y1 iff y in Y2 by A4;
     end;
-    hence Y1=Y2 by TARSKI:2;
+    hence thesis by TARSKI:2;
   end;
 end;
 
@@ -2257,7 +2253,7 @@ A1: [x,y] in R & x in X by Def13;
   end;
   given x such that
 A2: x in dom R & [x,y] in R & x in X;
-  thus y in R.:X by A2,Def13;
+  thus thesis by A2,Def13;
 end;
 
 theorem Th144:
@@ -2437,7 +2433,7 @@ proof
 A1: [x,y] in R & x in X /\ Y by Def13;
   x in X & x in Y & [x,y] in R by A1,XBOOLE_0:def 4;
   then y in R.:X & y in R.:Y by Def13;
-  hence y in R.:X /\ R.:Y by XBOOLE_0:def 4;
+  hence thesis by XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2452,7 +2448,7 @@ A2: y in R.:X & not y in R.:Y by XBOOLE_0:def 5;
 A3: [x,y] in R & x in X by A1,Def13;
   not x in Y or not [x,y] in R by A2,Def13;
   then x in X \ Y & [x,y] in R by A3,XBOOLE_0:def 5;
-  hence y in R.:(X \ Y) by Def13;
+  hence thesis by Def13;
 end;
 
 theorem Th156:
@@ -2464,7 +2460,7 @@ A1: X c= Y;
   assume y in R.:X;
   then consider x such that
 A2: [x,y] in R & x in X by Def13;
-  thus y in R.:Y by A1,A2,Def13;
+  thus thesis by A1,A2,Def13;
 end;
 
 theorem Th157:
@@ -2530,7 +2526,7 @@ A1:   [x,z] in P*R by Def5;
       consider y such that
 A2:   [x,y] in P & [y,z] in R by A1,Def8;
       y in rng P by A2,Def5;
-      hence z in R.:(rng P) by A2,Def13;
+      hence thesis by A2,Def13;
     end;
     assume z in R.:(rng P);
     then consider y such that
@@ -2539,7 +2535,7 @@ A4: y in rng P by Def13;
     consider x such that
 A5: [x,y] in P by A4,Def5;
     [x,z] in P*R by A3,A5,Def8;
-    hence z in rng(P*R) by Def5;
+    hence thesis by Def5;
   end;
   hence thesis by TARSKI:2;
 end;
@@ -2564,7 +2560,7 @@ A3: x1 in X by Def13;
     thus [x,y] in R|Y by A1,A2,A3,Def11;
     thus thesis by A3;
   end;
-  hence y in (R|Y).:X by Def13;
+  hence thesis by Def13;
 end;
 
 theorem
@@ -2578,7 +2574,7 @@ A1: x in dom R & x in X by XBOOLE_0:def 4;
 A2: [x,y] in R by Def4;
 A3: y in R.:X by A1,A2,Def13;
   [y,x] in R~ by A2,Def7;
-  hence x in (R~).:(R.:X) by A3,Def13;
+  hence thesis by A3,Def13;
 end;
 
 ::          INVERSE IMAGE OF SET IN RELATION
@@ -2600,7 +2596,7 @@ A1: for x holds x in X iff x in dom R & Z[x] from XBOOLE_0:sch 1;
     given y such that
 A2: [x,y] in R & y in Y;
     x in dom R by A2,Def4;
-    hence x in X by A1,A2;
+    hence thesis by A1,A2;
   end;
   uniqueness
   proof
@@ -2613,7 +2609,7 @@ A4: x in X2 iff ex y st [x,y] in R & y in Y;
       x in X1 iff ex y st [x,y] in R & y in Y by A3;
       hence x in X1 iff x in X2 by A4;
     end;
-    hence X1=X2 by TARSKI:2;
+    hence thesis by TARSKI:2;
   end;
 end;
 
@@ -2632,7 +2628,7 @@ A1: [x,y] in R & y in Y by Def14;
   end;
   given y such that
 A2: y in rng R & [x,y] in R & y in Y;
-  thus x in R"Y by A2,Def14;
+  thus thesis by A2,Def14;
 end;
 
 theorem Th167:
@@ -2783,7 +2779,7 @@ proof
 A1: [x,y] in R & y in X /\ Y by Def14;
   y in X & y in Y & [x,y] in R by A1,XBOOLE_0:def 4;
   then x in R"X & x in R"Y by Def14;
-  hence x in R"X /\ R"Y by XBOOLE_0:def 4;
+  hence thesis by XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2798,7 +2794,7 @@ A2: x in R"X & not x in R"Y by XBOOLE_0:def 5;
 A3: [x,y] in R & y in X by A1,Def14;
   not y in Y or not [x,y] in R by A2,Def14;
   then y in X \ Y & [x,y] in R by A3,XBOOLE_0:def 5;
-  hence x in R"(X \ Y) by Def14;
+  hence thesis by Def14;
 end;
 
 theorem Th178:
@@ -2809,7 +2805,7 @@ A1: X c= Y;
   let x;
   assume x in R"X;
   then ex y st [x,y] in R & y in X by Def14;
-  hence x in R"Y by A1,Def14;
+  hence thesis by A1,Def14;
 end;
 
 theorem Th179:
@@ -2873,7 +2869,7 @@ A1:   [z,x] in P*R by Def4;
       consider y such that
 A2:   [z,y] in P & [y,x] in R by A1,Def8;
       y in dom R by A2,Def4;
-      hence z in P"(dom R) by A2,Def14;
+      hence thesis by A2,Def14;
     end;
     assume z in P"(dom R);
     then consider y such that
@@ -2882,7 +2878,7 @@ A4: y in dom R by Def14;
     consider x such that
 A5: [y,x] in R by A4,Def4;
     [z,x] in P*R by A3,A5,Def8;
-    hence z in dom(P*R) by Def4;
+    hence thesis by Def4;
   end;
   hence thesis by TARSKI:2;
 end;
@@ -2898,7 +2894,7 @@ A1: y in rng R & y in Y by XBOOLE_0:def 4;
 A2: [x,y] in R by Def5;
 A3: x in R"Y by A1,A2,Def14;
   [y,x] in R~ by A2,Def7;
-  hence y in (R~)"(R"Y) by A3,Def14;
+  hence thesis by A3,Def14;
 end;
 
 begin :: Addenda
@@ -2944,7 +2940,7 @@ proof
   let X be set, f,g be Relation;
   assume dom g c= X & g c= f;
   then g|dom g c= f|X by Th106;
-  hence g c= f|X by Th97;
+  hence thesis by Th97;
 end;
 
 theorem
@@ -3042,7 +3038,7 @@ proof
   end;
   assume [y,z] in B();
   then P[y,z] by A2;
-  hence [y,z] in A() by A1;
+  hence thesis by A1;
 end;
 
 :: from SCMFSA6A, 2007.07.23, A.T.
@@ -3074,7 +3070,7 @@ proof
   let x;
   assume x in dom [:X,Y:];
   then ex y st [x,y] in [:X,Y:] by Def4;
-  hence x in X by ZFMISC_1:106;
+  hence thesis by ZFMISC_1:106;
 end;
 
 theorem
@@ -3083,7 +3079,7 @@ proof
   let x;
   assume x in rng [:X,Y:];
   then ex y st [y,x] in [:X,Y:] by Def5;
-  hence x in Y by ZFMISC_1:106;
+  hence thesis by ZFMISC_1:106;
 end;
 
 :: from FUNCOP_1, 2008.02.19, A.T.
@@ -3110,7 +3106,7 @@ A: now let y;
     hence ex x st [x,y] in [:X,Y:];
    end;
   (ex x st [x,y] in [:X,Y:]) implies y in Y by ZFMISC_1:106;
-  hence rng[:X,Y:] = Y by Def5,A;
+  hence thesis by Def5,A;
 end;
 
 theorem
@@ -3118,7 +3114,7 @@ theorem
 proof
   assume dom R = {} & dom Q = {};
    then R = {} & Q = {};
-  hence R = Q;
+  hence thesis;
 end;
 
 theorem
@@ -3126,7 +3122,7 @@ theorem
 proof
   assume rng R = {} & rng Q = {};
    then R = {} & Q = {};
-  hence R = Q;
+  hence thesis;
 end;
 
 theorem
@@ -3207,7 +3203,7 @@ W2: [c,b] in S by Def8;
   c in rng R by W1,Def5;
   then c in X by A1,Th86;
   then [c,b] in S|X by W2,Def11;
- hence [a,b] in R*(S|X) by W1,Def8;
+ hence thesis by W1,Def8;
 end;
 
 :: from LATTICE2, 2008.09.14, A.T.
@@ -3218,5 +3214,87 @@ proof
   assume Q|A = R|A;
   hence Q.:A = (R|A).:A by Th162
     .= R.:A by Th162;
+end;
+
+:: new, 2009.01.21, A.T
+
+definition let X,R;
+  attr R is X-defined means
+:Def18: dom R c= X;
+  attr R is X-valued means
+:Def19: rng R c= X;
+end;
+
+registration let X,Y;
+ cluster X-defined Y-valued Relation;
+ existence
+  proof
+   take {};
+   thus dom{} c= X & rng{} c= Y by XBOOLE_1:2;
+  end;
+end;
+
+:: from QC_LANG4, 2009.01.23, A.T
+
+theorem
+  for D being set, R being D-valued Relation
+  for y being set st y in rng R holds y in D
+proof
+  let D be set, R be D-valued Relation;
+   rng R c= D by Def19;
+  hence thesis;
+end;
+
+:: new, 2009.02.07, A.T.
+
+registration let X,A; let R be A-valued Relation;
+ cluster R|X -> A-valued;
+ coherence
+  proof
+A:  rng(R|X) c= rng R by Th99;
+    rng R c= A by Def19;
+   hence rng(R|X) c= A by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let X,A; let R be A-defined Relation;
+ cluster R|X -> A-defined X-defined;
+ coherence
+  proof
+A:  dom(R|X) c= dom R by Th89;
+    dom R c= A by Def18;
+   hence dom(R|X) c= A by A,XBOOLE_1:1;
+   thus dom(R|X) c= X by Th87;
+  end;
+end;
+
+registration let X;
+ cluster id X -> X-defined X-valued;
+ coherence
+  proof
+   thus dom id X c= X & rng id X c= X by Th71;
+  end;
+end;
+
+:: 2009.02.16, A.T.
+
+registration let A be set; let R be A-valued Relation, S be Relation;
+ cluster S*R -> A-valued;
+ coherence
+  proof
+A:  rng R c= A by Def19;
+    rng(S*R) c= rng R by Th45;
+   hence rng(S*R) c= A by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let A be set; let R be A-defined Relation, S be Relation;
+ cluster R*S -> A-defined;
+ coherence
+  proof
+A:  dom R c= A by Def18;
+    dom(R*S) c= dom R by Th44;
+   hence dom(R*S) c= A by A,XBOOLE_1:1;
+  end;
 end;
 

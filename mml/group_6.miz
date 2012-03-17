@@ -15,16 +15,16 @@ environ
       FINSET_1, BINOP_1, INT_1, STRUCT_0, ALGSTR_0, GROUP_1, GROUP_2, GROUP_3,
       NAT_1, GROUP_4, GROUP_5, INT_2;
  constructors RELAT_2, PARTFUN1, BINOP_1, FUNCOP_1, FINSUB_1, XXREAL_0, NAT_1,
-      INT_2, REALSET2, GROUP_4, GROUP_5;
+      REAL_1, INT_2, REALSET2, GROUP_4, GROUP_5, RELSET_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1,
       XREAL_0, INT_1, STRUCT_0, GROUP_1, GROUP_2, GROUP_3, ORDINAL1, ALGSTR_0,
-      CARD_1;
+      CARD_1, RELSET_1;
  requirements NUMERALS, SUBSET, BOOLE;
  definitions XBOOLE_0, FUNCT_1, GROUP_1, GROUP_2, TARSKI, BINOP_1, REALSET1,
       GROUP_4, ALGSTR_0, FUNCT_2, STRUCT_0;
  theorems BINOP_1, CARD_1, CARD_2, FINSET_1, FUNCT_1, FUNCT_2, GROUP_1,
       GROUP_2, GROUP_3, GROUP_4, GROUP_5, TARSKI, ZFMISC_1, RELAT_1, RELSET_1,
-      XBOOLE_0, XBOOLE_1, FUNCOP_1, STRUCT_0, NAT_1;
+      XBOOLE_0, XBOOLE_1, FUNCOP_1, STRUCT_0, NAT_1, ABSVALUE;
  schemes BINOP_1, FUNCT_2, DOMAIN_1, NAT_1, CLASSES1;
 
 begin
@@ -138,7 +138,7 @@ end;
 theorem Th4:
   a * b * a" = b |^ a" & a * (b * a") = b |^ a"
 proof
-  thus a * b * a" = a"" * b * a" by GROUP_1:19
+  thus a * b * a" = a"" * b * a"
     .= b |^ a" by GROUP_3:def 2;
   hence thesis by GROUP_1:def 4;
 end;
@@ -384,7 +384,7 @@ proof
   let G be strict trivial Group;
   card G = 1 by Th12;
   then card G = card (1).G by GROUP_2:81;
-  hence G = (1).G by GROUP_2:85;
+  hence thesis by GROUP_2:85;
 end;
 
 notation
@@ -739,7 +739,7 @@ A13: f.x = f.(V1,V2) by A6
     hence g.x = f.x by A10,A11,A13,Th2;
   end;
   then g = f||the carrier of I by A4,FUNCT_1:68;
-  hence B./.(B,M)`*` is Subgroup of G./.M by A2,GROUP_2:def 5;
+  hence thesis by A2,GROUP_2:def 5;
 end;
 
 theorem
@@ -793,7 +793,7 @@ A9:   @S = S & @T = T & c * I = d * M & M * d = I * c & M * e = I * f &
         .= M * (e * (M * a)) by GROUP_2:128
         .= M * e * (M * a) by GROUP_3:13
         .= V * S by A5,A9,Def4;
-      hence x in J * S by A8,GROUP_2:126;
+      hence thesis by A8,GROUP_2:126;
     end;
   end;
   hence thesis by GROUP_3:141;
@@ -991,9 +991,9 @@ A2: for n st Q[n] holds Q[n + 1]
     let n;
     assume
 A3: Q[n];
-    thus g.(a |^ (n + 1)) = g.(a |^ n * a) by GROUP_1:49
+    thus g.(a |^ (n + 1)) = g.(a |^ n * a) by GROUP_1:66
       .= (g.a) |^ n * g.a by A3,Def7
-      .= (g.a) |^ (n + 1) by GROUP_1:49;
+      .= (g.a) |^ (n + 1) by GROUP_1:66;
   end;
   for n holds Q[n] from NAT_1:sch 1(A1,A2);
   hence thesis;
@@ -1005,16 +1005,16 @@ proof
   per cases;
   suppose
 A1: i >= 0;
-    hence g.(a |^ i) = g.(a |^ abs( i )) by GROUP_1:55
-      .= (g.a) |^ abs( i ) by Th45
-      .= (g.a) |^ i by A1,GROUP_1:55;
+    hence g.(a |^ i) = g.(a |^ abs(i)) by ABSVALUE:def 1
+      .= (g.a) |^ abs(i) by Th45
+      .= (g.a) |^ i by A1,ABSVALUE:def 1;
   end;
   suppose
 A2: i < 0;
-    hence g.(a |^ i) = g.(a |^ abs( i ))" by GROUP_1:56
-      .= (g.(a |^ abs( i )))" by Th41
-      .= ((g.a) |^ abs( i ))" by Th45
-      .= (g.a) |^ i by A2,GROUP_1:56;
+    hence g.(a |^ i) = g.(a |^ abs(i))" by GROUP_1:60
+      .= (g.(a |^ abs(i)))" by Th41
+      .= ((g.a) |^ abs(i))" by Th45
+      .= (g.a) |^ i by A2,GROUP_1:60;
   end;
 end;
 
@@ -1107,7 +1107,7 @@ definition
   existence
   proof
     defpred P[set,set] means ex a st $1 = a & $2 = a * N;
-A2: for x st x in the carrier of G ex y st P[x,y]
+A1: for x st x in the carrier of G ex y st P[x,y]
     proof
       let x;
       assume x in the carrier of G;
@@ -1118,51 +1118,51 @@ A2: for x st x in the carrier of G ex y st P[x,y]
       thus thesis;
     end;
     consider f being Function such that
-A3: dom f = the carrier of G and
-A4: for x st x in the carrier of G holds P[x,f.x] from CLASSES1:sch 1(A2);
+A2: dom f = the carrier of G and
+A3: for x st x in the carrier of G holds P[x,f.x] from CLASSES1:sch 1(A1);
     rng f c= the carrier of G./.N
     proof
       let x;
       assume x in rng f;
       then consider y such that
-A5:   y in dom f and
-A6:   f.y = x by FUNCT_1:def 5;
+A4:   y in dom f and
+A5:   f.y = x by FUNCT_1:def 5;
       consider a such that
-A7:   y = a & f.y = a * N by A3,A4,A5;
+A6:   y = a & f.y = a * N by A2,A3,A4;
       a * N = N * a by GROUP_3:140;
-      then x in G./.N by A6,A7,Th28;
+      then x in G./.N by A5,A6,Th28;
       hence thesis by STRUCT_0:def 5;
     end;
-    then reconsider f as Function of G, G./.N by A3,FUNCT_2:def 1,RELSET_1:11;
+    then reconsider f as Function of G, G./.N by A2,FUNCT_2:def 1,RELSET_1:11;
     now
       let a,b;
       consider a1 such that
-A8:   a = a1 & f.a = a1 * N by A4;
+A7:   a = a1 & f.a = a1 * N by A3;
       consider b1 such that
-A9:   b = b1 & f.b = b1 * N by A4;
-A10:  ex c being Element of G st c = a * b & f.(a * b) = c * N by A4;
+A8:   b = b1 & f.b = b1 * N by A3;
+A9:  ex c being Element of G st c = a * b & f.(a * b) = c * N by A3;
       thus f.a * f.b = @(f.a) * @(f.b) by Def4
-        .= (a1 * N) * b1 * N by A8,A9,GROUP_3:10
+        .= (a1 * N) * b1 * N by A7,A8,GROUP_3:10
         .= a1 * (N * b1) * N by GROUP_2:128
         .= a1 * (b1 * N) * N by GROUP_3:140
         .= a1 * ((b1 * N) * N) by GROUP_2:116
         .= a1 * (b1 * N) by Th6
-        .= f.(a * b) by A8,A9,A10,GROUP_2:127;
+        .= f.(a * b) by A7,A8,A9,GROUP_2:127;
     end;
     then reconsider f as Homomorphism of G,G./.N by Def7;
     take f;
     let a;
-    ex b st a = b & f.a = b * N by A4;
+    ex b st a = b & f.a = b * N by A3;
     hence thesis;
   end;
   uniqueness
   proof
     let n1,n2 be Homomorphism of G,G./.N such that
-A11: for a holds n1.a = a * N and
-A12: for a holds n2.a = a * N;
+A10: for a holds n1.a = a * N and
+A11: for a holds n2.a = a * N;
     now
       let a;
-      n1.a = a * N & n2.a = a * N by A11,A12;
+      n1.a = a * N & n2.a = a * N by A10,A11;
       hence n1.a = n2.a;
     end;
     hence thesis by FUNCT_2:113;
@@ -1301,7 +1301,7 @@ proof
     assume a in Ker nat_hom N;
     then (nat_hom N).a = 1_(G./.N) & (nat_hom N).a = a * N &
     1_(G./.N) = carr N by Def9,Th29,Th50;
-    hence a in N by GROUP_2:136;
+    hence thesis by GROUP_2:136;
   end;
   assume a in N;
   then a * N = carr N & (nat_hom N).a = a * N &
@@ -1320,9 +1320,7 @@ definition
     then reconsider X = the carrier of G as Subset of G;
     set S = g .: X;
 A1: dom g = the carrier of G & X /\ X = X & X <> {} by FUNCT_2:def 1;
-    then X meets X by XBOOLE_0:def 7;
-    then
-A2: S <> {} by A1,RELAT_1:151;
+A2: S <> {} by A1;
 A3: now
       let c,d;
       assume that
@@ -1436,7 +1434,7 @@ proof
   proof
 A1: rng h = the carrier of Image h by Th53;
     dom h = the carrier of G by FUNCT_2:def 1;
-    hence thesis by A1,FUNCT_2:def 1,RELSET_1:11;
+    hence thesis by A1,RELSET_1:11;
   end;
   then reconsider f' = h as Function of G, Image h;
   now
@@ -1728,7 +1726,7 @@ proof
   set g = nat_hom (1).G;
   Ker g = (1).G by Th52;
   then g is one-to-one & g is onto by Th66,Th69;
-  hence nat_hom (1).G is bijective;
+  hence thesis;
 end;
 
 definition
@@ -1838,7 +1836,7 @@ theorem
 proof
   let G be strict Group;
   nat_hom (1).G is bijective by Th75;
-  hence G,G./.(1).G are_isomorphic by Def15;
+  hence thesis by Def15;
 end;
 
 theorem
@@ -1951,7 +1949,7 @@ A2: S = a * Ker g & S = Ker g * a by Th15;
       .= g.(a") * g.b by Def7
       .= (g.a)" * g.b by Th41;
     then g.b = (g.a)"" by GROUP_1:20;
-    hence thesis by GROUP_1:19;
+    hence thesis;
   end;
   consider f being Function of I,J such that
 A3: for S being Element of I holds P[S,f.S] from FUNCT_2:sch 3(A1);
@@ -2024,7 +2022,7 @@ A16:  x in dom g;
       (nat_hom Ker g).x in rng nat_hom Ker g &
       rng nat_hom Ker g c= the carrier of I &
       dom f = the carrier of I by A14,A16,FUNCT_1:def 5,FUNCT_2:def 1;
-      hence (nat_hom Ker g).x in dom f;
+      hence thesis;
     end;
     assume x in dom nat_hom Ker g & (nat_hom Ker g).x in dom f;
     hence x in dom g by A14;
@@ -2155,7 +2153,7 @@ proof
 A1: B is Subgroup of B "\/" N by GROUP_4:78;
 A2: dom g = dom f /\ (the carrier of B) & dom f = the carrier of G &
   the carrier of B c= the carrier of G by FUNCT_2:def 1,GROUP_2:def 5
-  ,RELAT_1:90;
+,RELAT_1:90;
   then
 A3: dom g = the carrier of B by XBOOLE_1:28;
 A4: N is Subgroup of B "\/" N by GROUP_4:78;

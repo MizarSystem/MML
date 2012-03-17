@@ -22,7 +22,8 @@ environ
       XXREAL_0, XXREAL_2, SEQ_4;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, XXREAL_0, XREAL_0,
       INT_1, RAT_1, MEMBERED, STRUCT_0, PRE_TOPC, TOPS_1, METRIC_1, BORSUK_1,
-      TOPMETR, BORSUK_2, JORDAN6, YELLOW13, TOPREAL6, INTEGRA1, FCONT_3;
+      TOPMETR, BORSUK_2, JORDAN6, YELLOW13, TOPREAL6, INTEGRA1, FCONT_3,
+      XXREAL_1, RCOMP_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions XBOOLE_0, TARSKI, BORSUK_2, TOPS_2, SUBSET_1, STRUCT_0, LIMFUNC1,
       PROB_1;
@@ -419,8 +420,8 @@ A1: A = RAT;
         let r be real number;
         assume
 A2:     r > 0;
-        reconsider pr = p + r as Element of RealSpace by METRIC_1:def 14
-,XREAL_0:def 1;
+        reconsider pr = p + r as Element of RealSpace
+        by METRIC_1:def 14,XREAL_0:def 1;
         p < pr by A2,XREAL_1:31;
         then consider Q being rational number such that
 A3:     p < Q & Q < pr by RAT_1:22;
@@ -1234,24 +1235,10 @@ A1: A = B;
   hence thesis by JORDAN5A:6;
 end;
 
-Lm6: for a being real number holds ]. a,+infty .[ is open
-proof
-  let a be real number;
-  ]. a,+infty .[ = right_open_halfline a;
-  hence thesis;
-end;
-
 Lm7: for a being real number holds ]. -infty,a.] is closed
 proof
   let a be real number;
   ]. -infty,a.] = left_closed_halfline a;
-  hence thesis;
-end;
-
-Lm8: for a being real number holds ]. -infty,a.[ is open
-proof
-  let a be real number;
-  ]. -infty,a.[ = left_open_halfline a;
   hence thesis;
 end;
 
@@ -1262,27 +1249,74 @@ proof
   hence thesis;
 end;
 
-theorem Th63:
-  for A being Subset of R^1, a being real number st
-  A = ]. a,+infty .[ holds A is open
-proof
-  let A be Subset of R^1, a be real number;
-  assume
-A1: A = ]. a,+infty .[;
-  ]. a,+infty .[ is open by Lm6;
-  hence thesis by A1,Th62;
+registration
+  let A, B be open Subset of REAL;
+  reconsider A1 = A, B1 = B as Subset of R^1 by TOPMETR:24;
+  cluster A /\ B -> open Subset of REAL;
+  coherence
+  proof
+    A1 is open & B1 is open by Th62;
+    then A1 /\ B1 is open by TOPS_1:38;
+    hence thesis by Th62;
+  end;
+  cluster A \/ B -> open Subset of REAL;
+  coherence
+  proof
+    A1 is open & B1 is open by Th62;
+    then 
+    A1 \/ B1 is open by TOPS_1:37;
+    hence thesis by Th62;
+  end;
 end;
 
-theorem Th64:
-  for A being Subset of R^1, a being real number st
-  A = ]. -infty,a .[ holds A is open
+Lm6: for a,b being ext-real number holds ]. a,b .[ is open
 proof
-  let A be Subset of R^1, a be real number;
-  assume
-A1: A = ]. -infty,a .[;
-  ]. -infty,a .[ is open by Lm8;
-  hence thesis by A1,Th62;
+  let a,b be ext-real number;
+  set A = ]. a,b .[;
+  per cases by XXREAL_0:14;
+  suppose a in REAL & b in REAL;
+    then reconsider a, b as real number;
+    A = ].-infty,b.[ /\ ].a,+infty.[ by XXREAL_1:269;
+    hence thesis;
+  end;
+  suppose a = +infty;
+    then A = {} by XXREAL_1:214;
+    hence thesis;
+  end;
+  suppose that
+a2: a = -infty and
+a3: b in REAL;
+    reconsider b as real number by a3;
+    A = left_open_halfline b by a2;
+    hence thesis;
+  end;
+  suppose that
+a4: a in REAL and
+a5: b = +infty;
+    reconsider a as real number by a4;
+    A = right_open_halfline a by a5;
+    hence thesis;
+  end;
+  suppose b = -infty;
+    then A = {} by XXREAL_1:210;
+    hence thesis;
+  end;
+  suppose a = -infty & b = +infty;
+    then A = [#]REAL by XXREAL_1:224;
+    hence thesis;
+  end;
 end;
+
+theorem Th63:
+  for A being Subset of R^1, a,b being ext-real number st
+  A = ]. a,b .[ holds A is open
+proof
+  let A be Subset of R^1, a,b be ext-real number;
+  ]. a,b .[ is open by Lm6;
+  hence thesis by Th62;
+end;
+
+canceled;
 
 theorem Th65:
   for A being Subset of R^1, a being real number st
@@ -1464,7 +1498,7 @@ proof
   assume
 A1: A = ]. -infty, a .[;
   then
-A2: A' is open by Th64;
+A2: A' is open by Th63;
   reconsider C = ]. -infty, a .] as Subset of R^1 by TOPMETR:24;
 A3: C is closed by Th65;
 A4: C = A' \/ {a} by A1,Th68;
@@ -1548,7 +1582,7 @@ A1: a < b & b < c;
   then Cl A = Cl B \/ Cl C by PRE_TOPC:50;
   then Cl A = Cl B \/ [. b,+infty .[ by A1,Th81;
   then Cl A = [. a, b .] \/ [. b,+infty .[ by A1,Th54;
-  hence Cl A = [. a,+infty .[ by A1,Th28;
+  hence thesis by A1,Th28;
 end;
 
 canceled;

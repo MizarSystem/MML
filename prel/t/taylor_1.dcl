@@ -4,11 +4,10 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELSET_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
@@ -29,23 +28,23 @@
 </Signature>
 <FCluster aid="TAYLOR_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="207"/>
+<Func kind="K" nr="198"/>
 <Cluster>
-<Adjective nr="4"/>
-<Adjective nr="5"/>
-<Adjective nr="19">
-<Func kind="K" nr="54"/>
-<Func kind="K" nr="54"/>
+<Adjective nr="6"/>
+<Adjective nr="7"/>
+<Adjective nr="22">
+<Func kind="K" nr="44"/>
+<Func kind="K" nr="44"/>
 </Adjective>
 </Cluster>
 </FCluster>
 <FCluster aid="TAYLOR_1" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="105">
-<Func kind="K" nr="59"/>
+<Func kind="K" nr="96">
+<Func kind="K" nr="49"/>
 </Func>
 <Cluster>
-<Adjective nr="7" value="false"/>
+<Adjective nr="10" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

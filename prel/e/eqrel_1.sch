@@ -9,7 +9,6 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="PARTFUN1"/>
 </Signature>
 <Scheme>
@@ -20,17 +19,20 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="5">
+<Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="9"/>
-<Adjective nr="14"/>
-<Adjective nr="18">
-<Func kind="F" nr="1"/>
+<Adjective nr="11"/>
+<Adjective nr="16"/>
+<Adjective nr="21">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
+<Func kind="K" nr="10">
+<Func kind="K" nr="11">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
+</Func>
+</Func>
 </Typ>
 <Not>
 <For>

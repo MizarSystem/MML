@@ -8,40 +8,59 @@ environ
 
  vocabularies PBOOLE, SETFAM_1, PRALG_1, FUNCT_1, BOOLE, CANTOR_1, TARSKI,
       ZF_REFLE, FUNCT_6, RELAT_1, MSUALG_3, CAT_4, NATTRA_1, MATRIX_1,
-      PRE_CIRC, FINSET_1, MSUALG_2, PRALG_2, CAT_1, FUNCT_4, AUTALG_1, FUNCT_2,
-      GRCAT_1, COHSP_1, MSSUBFAM, HAHNBAN, FUNCOP_1;
+      CARD_FIN, FINSET_1, MSUALG_2, PRALG_2, CAT_1, FUNCT_4, AUTALG_1, FUNCT_2,
+      GRCAT_1, COHSP_1, MSSUBFAM, HAHNBAN, FUNCOP_1, PARTFUN1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
-      ORDINAL1, FUNCT_2, FUNCOP_1, FINSET_1, FUNCT_4, FUNCT_6, PBOOLE,
-      PRE_CIRC, MBOOLEAN, PZFMISC1;
- constructors SETFAM_1, FUNCT_4, FUNCT_6, PRE_CIRC, MBOOLEAN, PZFMISC1,
-      PARTFUN1;
+      ORDINAL1, PARTFUN1, FUNCT_2, FUNCOP_1, FINSET_1, FUNCT_4, FUNCT_6,
+      PBOOLE, MBOOLEAN, PZFMISC1;
+ constructors SETFAM_1, FUNCT_4, FUNCT_6, MBOOLEAN, PZFMISC1,
+      PARTFUN1, RELSET_1, ORDINAL1, PBOOLE;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1, PBOOLE,
-      PRE_CIRC, MBOOLEAN, PZFMISC1, FUNCT_2, PARTFUN1, CARD_1;
+      PRE_CIRC, MBOOLEAN, PZFMISC1, FUNCT_2, PARTFUN1, CARD_1, RELSET_1;
  requirements SUBSET, BOOLE;
- definitions XBOOLE_0, PBOOLE, PRE_CIRC, ORDINAL1, FUNCOP_1;
+ definitions XBOOLE_0, PBOOLE, FINSET_1, ORDINAL1, FUNCOP_1;
  theorems FUNCOP_1, FINSET_1, ORDERS_1, FRAENKEL, FUNCT_2, FUNCT_4, FUNCT_6,
-      MBOOLEAN, PBOOLE, PRE_CIRC, PZFMISC1, SETFAM_1, TARSKI, RELSET_1,
-      XBOOLE_0, XBOOLE_1;
+      MBOOLEAN, PBOOLE, FUNCT_1, PZFMISC1, SETFAM_1, TARSKI, RELSET_1,
+      XBOOLE_0, XBOOLE_1, RELAT_1, PARTFUN1;
  schemes FUNCT_2, PBOOLE;
 
 begin :: Preliminaries
 
-definition
+registration
   let I be set;
   let F be ManySortedFunction of I;
-  redefine func doms F -> ManySortedSet of I;
+  cluster doms F -> I-defined;
   coherence
   proof
     dom doms F = dom F by FUNCT_6:89
-      .= I by PBOOLE:def 3;
-    hence doms F is ManySortedSet of I by PBOOLE:def 3;
+      .= I by PARTFUN1:def 4;
+    hence thesis by RELAT_1:def 18;
   end;
-  redefine func rngs F -> ManySortedSet of I;
+  cluster rngs F -> I-defined;
   coherence
   proof
     dom rngs F = dom F by FUNCT_6:90
-      .= I by PBOOLE:def 3;
-    hence rngs F is ManySortedSet of I by PBOOLE:def 3;
+      .= I by PARTFUN1:def 4;
+    hence thesis by RELAT_1:def 18;
+  end;
+end;
+
+registration
+  let I be set;
+  let F be ManySortedFunction of I;
+  cluster doms F -> total (I-defined Function);
+  coherence
+  proof
+    dom doms F = dom F by FUNCT_6:89
+      .= I by PARTFUN1:def 4;
+    hence thesis by PARTFUN1:def 4;
+  end;
+  cluster rngs F -> total (I-defined Function);
+  coherence
+  proof
+    dom rngs F = dom F by FUNCT_6:90
+      .= I by PARTFUN1:def 4;
+    hence thesis by PARTFUN1:def 4;
   end;
 end;
 
@@ -50,6 +69,15 @@ reserve I, G, H, i, x for set,
   sf, sg, sh for Subset-Family of I,
   v, w for Subset of I,
   F for ManySortedFunction of I;
+
+LL1: for A being finite-yielding ManySortedSet of I st i in I holds
+  A.i is finite
+proof
+  let A be finite-yielding ManySortedSet of I; assume i in I; then
+  i in dom A by PARTFUN1:def 4; then
+  A.i in rng A by FUNCT_1:12;
+  hence thesis by FINSET_1:def 2;
+end;
 
 scheme MSFExFunc { I() -> set, A, B() -> ManySortedSet of I(),
   P[set,set,set] } : ex F be ManySortedFunction of A(), B() st
@@ -91,7 +119,7 @@ A7:   now
       proof
         take fff;
         thus fff = j;
-        thus for e be set st e in A().i holds P[fff.e,e,i] by A7;
+        thus thesis by A7;
       end;
     end;
   end;
@@ -103,7 +131,7 @@ A8: for i be set st i in I() holds Q[i,F.i] from PBOOLE:sch 3(A2);
     assume i in I();
     then consider f be Function of A().i, B().i such that
 A9: f = F.i and for x be set st x in A().i holds P[f.x,x,i] by A8;
-    thus F.i is Function of A().i, B().i by A9;
+    thus thesis by A9;
   end;
   then reconsider F as ManySortedFunction of A(), B();
   take F;
@@ -146,11 +174,11 @@ A1: (for Z1 be set st Z1 in sf holds Z c= Z1);
   suppose
 A2: sf <> {};
     then Intersect sf = meet sf by SETFAM_1:def 10;
-    hence Z c= Intersect sf by A1,A2,SETFAM_1:6;
+    hence thesis by A1,A2,SETFAM_1:6;
   end;
   suppose sf = {};
     then Intersect sf = I by SETFAM_1:def 10;
-    hence Z c= Intersect sf;
+    hence thesis;
   end;
 end;
 
@@ -241,7 +269,7 @@ proof
 A1: A in B;
   let i;
   assume i in I;
-  hence A.i is Element of B.i by A1,PBOOLE:def 4;
+  hence thesis by A1,PBOOLE:def 4;
 end;
 
 theorem
@@ -256,7 +284,7 @@ A2: i in I;
   then
 A3: A.i is Element of B.i by A1,PBOOLE:def 17;
   B.i <> {} by A2;
-  hence A.i in B.i by A3;
+  hence thesis by A3;
 end;
 
 theorem Th13:
@@ -264,8 +292,8 @@ theorem Th13:
 proof
   let f be Function such that
 A1: i in I & f = F.i;
-  dom F = I by PBOOLE:def 3;
-  hence (rngs F).i = rng f by A1,FUNCT_6:31;
+  dom F = I by PARTFUN1:def 4;
+  hence thesis by A1,FUNCT_6:31;
 end;
 
 theorem Th14:
@@ -273,8 +301,8 @@ theorem Th14:
 proof
   let f be Function such that
 A1: i in I & f = F.i;
-  dom F = I by PBOOLE:def 3;
-  hence (doms F).i = dom f by A1,FUNCT_6:31;
+  dom F = I by PARTFUN1:def 4;
+  hence thesis by A1,FUNCT_6:31;
 end;
 
 theorem
@@ -282,10 +310,10 @@ theorem
 proof
   let F, G be ManySortedFunction of I;
   dom (G ** F) = (dom F) /\ (dom G) by PBOOLE:def 24
-    .= I /\ (dom G) by PBOOLE:def 3
-    .= I /\ I by PBOOLE:def 3
+    .= I /\ (dom G) by PARTFUN1:def 4
+    .= I /\ I by PARTFUN1:def 4
     .= I;
-  hence thesis by PBOOLE:def 3;
+  hence thesis by PARTFUN1:def 4,RELAT_1:def 18;
 end;
 
 theorem
@@ -297,14 +325,13 @@ proof
   now
     let i;
     assume
-A1: i in I;
+ i in I;
     then reconsider f = F.i as Function of A.i, [0]I.i by PBOOLE:def 18;
-A2: A.i <> {} by A1;
     [0]I.i = {} by PBOOLE:5;
-    then f = {} by A2,FUNCT_2:def 1;
+    then f = {};
     hence F.i = [0]I.i by PBOOLE:5;
   end;
-  hence F = [0]I by PBOOLE:3;
+  hence thesis by PBOOLE:3;
 end;
 
 theorem
@@ -328,15 +355,15 @@ A4: B.i = {} implies A.i = {} by A1,A3,PZFMISC1:def 3;
   assume
 A5: i in I;
   then reconsider f = F.i as Function of A.i, B.i by A2,PBOOLE:def 18;
-  rng f c= B.i by RELSET_1:12;
-  hence (rngs F).i c= B.i by A5,Th13;
+  rng f c= B.i by RELAT_1:def 19;
+  hence thesis by A5,Th13;
 end;
 
 begin :: Finite Many Sorted Sets
 
 registration
   let I;
-  cluster empty-yielding -> locally-finite ManySortedSet of I;
+  cluster empty-yielding -> finite-yielding ManySortedSet of I;
   coherence
   proof
     let A be ManySortedSet of I such that
@@ -345,19 +372,19 @@ A1: A is empty-yielding;
     assume i in I;
     then reconsider B = A.i as empty set by A1,PBOOLE:def 15;
     B is finite;
-    hence A.i is finite;
+    hence thesis;
   end;
 end;
 
 registration
   let I;
-  cluster [0]I -> empty-yielding locally-finite;
+  cluster [0]I -> empty-yielding finite-yielding;
   coherence;
 end;
 
 registration
   let I, A;
-  cluster empty-yielding locally-finite ManySortedSubset of A;
+  cluster empty-yielding finite-yielding ManySortedSubset of A;
   existence
   proof
     set x = [0]I;
@@ -369,186 +396,186 @@ registration
 end;
 
 theorem Th18:     :: FINSET_1:13
-  A c= B & B is locally-finite implies A is locally-finite
+  A c= B & B is finite-yielding implies A is finite-yielding
 proof
   assume that
 A1: A c= B and
-A2: B is locally-finite;
+A2: B is finite-yielding;
   let i;
   assume
 A3: i in I;
   then
 A4: A.i c= B.i by A1,PBOOLE:def 5;
-  B.i is finite by A2,A3,PRE_CIRC:def 3;
+  B.i is finite by A2,A3,LL1;
   hence thesis by A4;
 end;
 
 registration
   let I;
-  let A be locally-finite ManySortedSet of I;
-  cluster -> locally-finite ManySortedSubset of A;
+  let A be finite-yielding ManySortedSet of I;
+  cluster -> finite-yielding ManySortedSubset of A;
   coherence
   proof
     let x be ManySortedSubset of A;
     reconsider x' = x as ManySortedSet of I;
     x' c= A by PBOOLE:def 23;
-    hence x is locally-finite by Th18;
+    hence thesis by Th18;
   end;
 end;
 
 registration
   let I;
-  let A, B be locally-finite ManySortedSet of I;
-  cluster A \/ B -> locally-finite;
+  let A, B be finite-yielding ManySortedSet of I;
+  cluster A \/ B -> finite-yielding;
   coherence
   proof
     let i;
     assume
 A1: i in I;
-    then A.i is finite & B.i is finite by PRE_CIRC:def 3;
+    then A.i is finite & B.i is finite by LL1;
     then A.i \/ B.i is finite;
-    hence (A \/ B).i is finite by A1,PBOOLE:def 7;
+    hence thesis by A1,PBOOLE:def 7;
   end;
 end;
 
 registration
   let I, A;
-  let B be locally-finite ManySortedSet of I;
-  cluster A /\ B -> locally-finite;
+  let B be finite-yielding ManySortedSet of I;
+  cluster A /\ B -> finite-yielding;
   coherence
   proof
     let i;
     assume
 A1: i in I;
-    then B.i is finite by PRE_CIRC:def 3;
+    then B.i is finite by LL1;
     then A.i /\ B.i is finite;
-    hence (A /\ B).i is finite by A1,PBOOLE:def 8;
+    hence thesis by A1,PBOOLE:def 8;
   end;
 end;
 
 registration
   let I, B;
-  let A be locally-finite ManySortedSet of I;
-  cluster A /\ B -> locally-finite;
+  let A be finite-yielding ManySortedSet of I;
+  cluster A /\ B -> finite-yielding;
   coherence;
 end;
 
 registration
   let I, B;
-  let A be locally-finite ManySortedSet of I;
-  cluster A \ B -> locally-finite;
+  let A be finite-yielding ManySortedSet of I;
+  cluster A \ B -> finite-yielding;
   coherence
   proof
     let i;
     assume
 A1: i in I;
-    then A.i is finite by PRE_CIRC:def 3;
+    then A.i is finite by LL1;
     then A.i \ B.i is finite;
-    hence (A \ B).i is finite by A1,PBOOLE:def 9;
+    hence thesis by A1,PBOOLE:def 9;
   end;
 end;
 
 registration
   let I, F;
-  let A be locally-finite ManySortedSet of I;
-  cluster F.:.:A -> locally-finite;
+  let A be finite-yielding ManySortedSet of I;
+  cluster F.:.:A -> finite-yielding;
   coherence
   proof
     let i such that
 A1: i in I;
     reconsider f = F.i as Function;
-    A.i is finite by A1,PRE_CIRC:def 3;
+    A.i is finite by A1,LL1;
     then f.:(A.i) is finite;
-    hence (F.:.:A).i is finite by A1,PBOOLE:def 25;
+    hence thesis by A1,PBOOLE:def 25;
   end;
 end;
 
 registration
   let I;
-  let A, B be locally-finite ManySortedSet of I;
-  cluster [|A,B|] -> locally-finite;
+  let A, B be finite-yielding ManySortedSet of I;
+  cluster [|A,B|] -> finite-yielding;
   coherence
   proof
     let i;
     assume
 A1: i in I;
-    then A.i is finite & B.i is finite by PRE_CIRC:def 3;
+    then A.i is finite & B.i is finite by LL1;
     then [:A.i,B.i:] is finite;
-    hence [|A,B|].i is finite by A1,PBOOLE:def 21;
+    hence thesis by A1,PBOOLE:def 21;
   end;
 end;
 
 theorem     :: FINSET_1:22
-  B is non-empty & [|A,B|] is locally-finite implies A is locally-finite
+  B is non-empty & [|A,B|] is finite-yielding implies A is finite-yielding
 proof
   assume
-A1: B is non-empty & [|A,B|] is locally-finite;
+A1: B is non-empty & [|A,B|] is finite-yielding;
   let i;
   assume
 A2: i in I;
-  then [|A,B|].i is finite by A1,PRE_CIRC:def 3;
+  then [|A,B|].i is finite by A1,LL1;
   then B.i <> {} & [:A.i,B.i:] is finite by A1,A2,PBOOLE:def 21;
-  hence A.i is finite;
+  hence thesis;
 end;
 
 theorem     :: FINSET_1:23
-  A is non-empty & [|A,B|] is locally-finite implies B is locally-finite
+  A is non-empty & [|A,B|] is finite-yielding implies B is finite-yielding
 proof
   assume
-A1: A is non-empty & [|A,B|] is locally-finite;
+A1: A is non-empty & [|A,B|] is finite-yielding;
   let i;
   assume
 A2: i in I;
-  then [|A,B|].i is finite by A1,PRE_CIRC:def 3;
+  then [|A,B|].i is finite by A1,LL1;
   then A.i <> {} & [:A.i,B.i:] is finite by A1,A2,PBOOLE:def 21;
-  hence B.i is finite;
+  hence thesis;
 end;
 
 theorem Th21:
-  A is locally-finite iff bool A is locally-finite
+  A is finite-yielding iff bool A is finite-yielding
 proof
-  thus A is locally-finite implies bool A is locally-finite
+  thus A is finite-yielding implies bool A is finite-yielding
   proof
     assume
-A1: A is locally-finite;
+A1: A is finite-yielding;
     let i;
     assume
 A2: i in I;
-    then A.i is finite by A1,PRE_CIRC:def 3;
+    then A.i is finite by A1,LL1;
     then bool (A.i) is finite;
-    hence (bool A).i is finite by A2,MBOOLEAN:def 1;
+    hence thesis by A2,MBOOLEAN:def 1;
   end;
   assume
-A3: bool A is locally-finite;
+A3: bool A is finite-yielding;
   let i;
   assume
 A4: i in I;
-  then (bool A).i is finite by A3,PRE_CIRC:def 3;
+  then (bool A).i is finite by A3,LL1;
   then bool (A.i) is finite by A4,MBOOLEAN:def 1;
-  hence A.i is finite;
+  hence thesis;
 end;
 
 registration
   let I;
-  let M be locally-finite ManySortedSet of I;
-  cluster bool M -> locally-finite;
+  let M be finite-yielding ManySortedSet of I;
+  cluster bool M -> finite-yielding;
   coherence by Th21;
 end;
 
 theorem     :: FINSET_1:25 a
-  for A be non-empty ManySortedSet of I holds A is locally-finite &
-  (for M be ManySortedSet of I st M in A holds M is locally-finite)
-  implies union A is locally-finite
+  for A be non-empty ManySortedSet of I holds A is finite-yielding &
+  (for M be ManySortedSet of I st M in A holds M is finite-yielding)
+  implies union A is finite-yielding
 proof
   let A be non-empty ManySortedSet of I;
   assume that
-A1: A is locally-finite and
-A2: (for M be ManySortedSet of I st M in A holds M is locally-finite);
+A1: A is finite-yielding and
+A2: (for M be ManySortedSet of I st M in A holds M is finite-yielding);
   let i;
   assume
 A3: i in I;
   then
-A4: A.i is finite by A1,PRE_CIRC:def 3;
+A4: A.i is finite by A1,LL1;
   for X' be set st X' in A.i holds X' is finite
   proof
     let X' be set such that
@@ -557,7 +584,8 @@ A5: X' in A.i;
 A6: M in A by PBOOLE:146;
 A7: dom (i .--> X') = {i} by FUNCOP_1:19;
     dom (M +* (i .--> X')) = I by A3,PZFMISC1:1;
-    then reconsider K = M +* (i .--> X') as ManySortedSet of I by PBOOLE:def 3;
+    then reconsider K = M +* (i .--> X') as ManySortedSet of I by
+PARTFUN1:def 4,RELAT_1:def 18;
     i in {i} by TARSKI:def 1;
     then
 A8: K.i = (i .--> X').i by A7,FUNCT_4:14
@@ -568,67 +596,67 @@ A8: K.i = (i .--> X').i by A7,FUNCT_4:14
 A9:   j in I;
       now per cases;
         case j = i;
-          hence K.j in A.j by A5,A8;
+          hence thesis by A5,A8;
         end;
         case j <> i;
           then not j in dom (i .--> X') by A7,TARSKI:def 1;
           then K.j = M.j by FUNCT_4:12;
-          hence K.j in A.j by A6,A9,PBOOLE:def 4;
+          hence thesis by A6,A9,PBOOLE:def 4;
         end;
       end;
-      hence K.j in A.j;
+      hence thesis;
     end;
-    then K is locally-finite by A2;
-    hence X' is finite by A3,A8,PRE_CIRC:def 3;
+    then K is finite-yielding by A2;
+    hence thesis by A3,A8,LL1;
   end;
   then union (A.i) is finite by A4,FINSET_1:25;
   hence thesis by A3,MBOOLEAN:def 2;
 end;
 
 theorem     :: FINSET_1:25 b
-  union A is locally-finite implies
-  A is locally-finite & for M st M in A holds M is locally-finite
+  union A is finite-yielding implies
+  A is finite-yielding & for M st M in A holds M is finite-yielding
 proof
   assume
-A1: union A is locally-finite;
-  thus A is locally-finite
+A1: union A is finite-yielding;
+  thus A is finite-yielding
   proof
     let i;
     assume
 A2: i in I;
-    then (union A).i is finite by A1,PRE_CIRC:def 3;
+    then (union A).i is finite by A1,LL1;
     then union (A.i) is finite by A2,MBOOLEAN:def 2;
-    hence A.i is finite by FINSET_1:25;
+    hence thesis by FINSET_1:25;
   end;
   let M such that
 A3: M in A;
   let i;
   assume
 A4: i in I;
-  then (union A).i is finite by A1,PRE_CIRC:def 3;
+  then (union A).i is finite by A1,LL1;
   then
 A5: union (A.i) is finite by A4,MBOOLEAN:def 2;
   M.i in A.i by A3,A4,PBOOLE:def 4;
-  hence M.i is finite by A5,FINSET_1:25;
+  hence thesis by A5,FINSET_1:25;
 end;
 
 theorem     :: FINSET_1:26
-  doms F is locally-finite implies rngs F is locally-finite
+  doms F is finite-yielding implies rngs F is finite-yielding
 proof
   assume
-A1: doms F is locally-finite;
+A1: doms F is finite-yielding;
   let i such that
 A2: i in I;
   reconsider f = F.i as Function;
-  (doms F).i is finite by A1,A2,PRE_CIRC:def 3;
+  (doms F).i is finite by A1,A2,LL1;
   then dom f is finite by A2,Th14;
   then rng f is finite by FINSET_1:26;
-  hence (rngs F).i is finite by A2,Th13;
+  hence thesis by A2,Th13;
 end;
 
 theorem     :: FINSET_1:27
   (A c= rngs F & for i be set for f be Function st i in I & f = F.i
-  holds f"(A.i) is finite) implies A is locally-finite
+  holds f"(A.i) is finite) implies A is finite-yielding
 proof
   assume that
 A1: A c= rngs F and
@@ -641,13 +669,13 @@ A3: i in I;
   then
 A4: A.i c= rng f by A1,A3,PBOOLE:def 5;
   f"(A.i) is finite by A2,A3;
-  hence A.i is finite by A4,FINSET_1:27;
+  hence thesis by A4,FINSET_1:27;
 end;
 
 registration
   let I;
-  let A, B be locally-finite ManySortedSet of I;
-  cluster MSFuncs(A,B) -> locally-finite;
+  let A, B be finite-yielding ManySortedSet of I;
+  cluster MSFuncs(A,B) -> finite-yielding;
   coherence
   proof
     let i;
@@ -655,27 +683,27 @@ registration
 A1: i in I;
     then
 A2: MSFuncs(A,B).i = Funcs(A.i, B.i) by PBOOLE:def 22;
-    A.i is finite & B.i is finite by A1,PRE_CIRC:def 3;
-    hence MSFuncs(A,B).i is finite by A2,FRAENKEL:16;
+    A.i is finite & B.i is finite by A1,LL1;
+    hence thesis by A2,FRAENKEL:16;
   end;
 end;
 
 registration
   let I;
-  let A, B be locally-finite ManySortedSet of I;
-  cluster A \+\ B -> locally-finite;
+  let A, B be finite-yielding ManySortedSet of I;
+  cluster A \+\ B -> finite-yielding;
   coherence;
 end;
 
 reserve X, Y, Z for ManySortedSet of I;
 
 theorem     :: CQC_THE1:13
-  X is locally-finite & X c= [|Y,Z|] implies
-  ex A, B st A is locally-finite & A c= Y & B is locally-finite & B c= Z &
+  X is finite-yielding & X c= [|Y,Z|] implies
+  ex A, B st A is finite-yielding & A c= Y & B is finite-yielding & B c= Z &
   X c= [|A,B|]
 proof
   assume that
-A1: X is locally-finite and
+A1: X is finite-yielding and
 A2: X c= [|Y,Z|];
   defpred Q[set,set] means ex b be set st
   $2 is finite & $2 c= Y.$1 & b is finite & b c= Z.$1 & X.$1 c= [:$2,b:];
@@ -685,14 +713,13 @@ A3: for i st i in I ex j be set st Q[i,j]
     assume
 A4: i in I;
     then
-A5: X.i is finite by A1,PRE_CIRC:def 3;
+A5: X.i is finite by A1,LL1;
     X.i c= [|Y,Z|].i by A2,A4,PBOOLE:def 5;
     then X.i c= [:Y.i,Z.i:] by A4,PBOOLE:def 21;
     then consider a, b be set such that
 A6: a is finite & a c= Y.i & b is finite & b c= Z.i & X.i c= [:a,b:]
     by A5,FINSET_1:32;
-    thus ex a, b be set st a is finite & a c= Y.i & b is finite &
-    b c= Z.i & X.i c= [:a,b:] by A6;
+    thus thesis by A6;
   end;
   consider A be ManySortedSet of I such that
 A7: for i st i in I holds Q[i,A.i] from PBOOLE:sch 3(A3);
@@ -702,7 +729,7 @@ A8: for i st i in I ex j be set st P[i,j] by A7;
   consider B be ManySortedSet of I such that
 A9: for i st i in I holds P[i,B.i] from PBOOLE:sch 3(A8);
   take A, B;
-  thus A is locally-finite
+  thus A is finite-yielding
   proof
     let i;
     assume i in I;
@@ -714,7 +741,7 @@ A9: for i st i in I holds P[i,B.i] from PBOOLE:sch 3(A8);
     assume i in I;
     hence thesis by A9;
   end;
-  thus B is locally-finite
+  thus B is finite-yielding
   proof
     let i;
     assume i in I;
@@ -737,12 +764,12 @@ A10: i in I;
 end;
 
 theorem     :: CQC_THE1:14
-  X is locally-finite & Z is locally-finite & X c= [|Y,Z|] implies
-  ex A st A is locally-finite & A c= Y & X c= [|A,Z|]
+  X is finite-yielding & Z is finite-yielding & X c= [|Y,Z|] implies
+  ex A st A is finite-yielding & A c= Y & X c= [|A,Z|]
 proof
   assume that
-A1: X is locally-finite and
-A2: Z is locally-finite and
+A1: X is finite-yielding and
+A2: Z is finite-yielding and
 A3: X c= [|Y,Z|];
   defpred P[set,set] means $2 is finite & $2 c= Y.$1 & X.$1 c= [:$2,Z.$1:];
 A4: for i st i in I ex j be set st P[i,j]
@@ -751,29 +778,29 @@ A4: for i st i in I ex j be set st P[i,j]
     assume
 A5: i in I;
     then
-A6: X.i is finite by A1,PRE_CIRC:def 3;
-A7: Z.i is finite by A2,A5,PRE_CIRC:def 3;
+A6: X.i is finite by A1,LL1;
+A7: Z.i is finite by A2,A5,LL1;
     X.i c= [|Y,Z|].i by A3,A5,PBOOLE:def 5;
     then X.i c= [:Y.i, Z.i:] by A5,PBOOLE:def 21;
     then consider A' be set such that
 A8: A' is finite & A' c= Y.i & X.i c= [:A',Z.i:] by A6,A7,FINSET_1:33;
     take A';
-    thus A' is finite & A' c= Y.i & X.i c= [:A',Z.i:] by A8;
+    thus thesis by A8;
   end;
   consider A such that
 A9: for i st i in I holds P[i,A.i] from PBOOLE:sch 3(A4);
   take A;
-  thus A is locally-finite
+  thus A is finite-yielding
   proof
     let i;
     assume i in I;
-    hence A.i is finite by A9;
+    hence thesis by A9;
   end;
   thus A c= Y
   proof
     let i;
     assume i in I;
-    hence A.i c= Y.i by A9;
+    hence thesis by A9;
   end;
   thus X c= [|A,Z|]
   proof
@@ -781,17 +808,17 @@ A9: for i st i in I holds P[i,A.i] from PBOOLE:sch 3(A4);
     assume
 A10: i in I;
     then X.i c= [:A.i,Z.i:] by A9;
-    hence X.i c= [|A,Z|].i by A10,PBOOLE:def 21;
+    hence thesis by A10,PBOOLE:def 21;
   end;
 end;
 
 theorem     :: ALI2:1
-  for M be non-empty locally-finite ManySortedSet of I st
+  for M be non-empty finite-yielding ManySortedSet of I st
   for A, B be ManySortedSet of I st A in M & B in M holds A c= B or B c= A
   ex m be ManySortedSet of I st m in M & for K be ManySortedSet of I st K in M
   holds m c= K
 proof
-  let M be non-empty locally-finite ManySortedSet of I such that
+  let M be non-empty finite-yielding ManySortedSet of I such that
 A1: for A, B be ManySortedSet of I st A in M & B in M holds A c= B or B c= A;
   defpred Q[set,set] means $2 in M.$1 & for D' be set st D' in M.$1
   holds $2 c= D';
@@ -801,7 +828,7 @@ A2: for i st i in I ex j be set st Q[i,j]
     assume
 A3: i in I;
     then
-A4: M.i is finite by PRE_CIRC:def 3;
+A4: M.i is finite by LL1;
 A5: M.i <> {} by A3;
     M.i is c=-linear
     proof
@@ -816,9 +843,11 @@ A9:   c' in M by PBOOLE:146;
       set qb = b' +* (i.-->B');
       set qc = c' +* (i.-->C');
       dom qb = I by A3,PZFMISC1:1;
-      then reconsider qb as ManySortedSet of I by PBOOLE:def 3;
+      then reconsider qb as ManySortedSet of I by PARTFUN1:def 4,RELAT_1:def 18
+;
       dom qc = I by A3,PZFMISC1:1;
-      then reconsider qc as ManySortedSet of I by PBOOLE:def 3;
+      then reconsider qc as ManySortedSet of I by PARTFUN1:def 4,RELAT_1:def 18
+;
 A10:  dom (i .--> B') = {i} by FUNCOP_1:19;
       i in {i} by TARSKI:def 1;
       then
@@ -835,15 +864,15 @@ A14:  qb in M
 A15:    j in I;
         now per cases;
           case j = i;
-            hence qb.j in M.j by A6,A11;
+            hence thesis by A6,A11;
           end;
           case j <> i;
             then not j in dom (i .--> B') by A10,TARSKI:def 1;
             then qb.j = b'.j by FUNCT_4:12;
-            hence qb.j in M.j by A8,A15,PBOOLE:def 4;
+            hence thesis by A8,A15,PBOOLE:def 4;
           end;
         end;
-        hence qb.j in M.j;
+        hence thesis;
       end;
       qc in M
       proof
@@ -851,15 +880,15 @@ A15:    j in I;
 A16:    j in I;
         now per cases;
           case j = i;
-            hence qc.j in M.j by A6,A13;
+            hence thesis by A6,A13;
           end;
           case j <> i;
             then not j in dom (i .--> C') by A12,TARSKI:def 1;
             then qc.j = c'.j by FUNCT_4:12;
-            hence qc.j in M.j by A9,A16,PBOOLE:def 4;
+            hence thesis by A9,A16,PBOOLE:def 4;
           end;
         end;
-        hence qc.j in M.j;
+        hence thesis;
       end;
       then qb c= qc or qc c= qb by A1,A14;
       hence thesis by A3,A7,A11,A13,PBOOLE:def 5;
@@ -868,7 +897,7 @@ A16:    j in I;
 A17: m' in M.i & for D' be set st D' in M.i holds m' c= D'
     by A4,A5,FINSET_1:30;
     take m';
-    thus m' in M.i & for D' be set st D' in M.i holds m' c= D' by A17;
+    thus thesis by A17;
   end;
   consider m be ManySortedSet of I such that
 A18: for i st i in I holds Q[i,m.i] from PBOOLE:sch 3(A2);
@@ -877,7 +906,7 @@ A18: for i st i in I holds Q[i,m.i] from PBOOLE:sch 3(A2);
   proof
     let i;
     assume i in I;
-    hence m.i in M.i by A18;
+    hence thesis by A18;
   end;
   thus for C be ManySortedSet of I st C in M holds m c= C
   proof
@@ -887,17 +916,17 @@ A19: C in M;
     assume
 A20: i in I;
     then C.i in M.i by A19,PBOOLE:def 4;
-    hence m.i c= C.i by A18,A20;
+    hence thesis by A18,A20;
   end;
 end;
 
 theorem     :: FIN_TOPO:3
-  for M be non-empty locally-finite ManySortedSet of I st
+  for M be non-empty finite-yielding ManySortedSet of I st
   for A, B be ManySortedSet of I st A in M & B in M holds A c= B or B c= A
   ex m be ManySortedSet of I st m in M & for K be ManySortedSet of I st K in M
   holds K c= m
 proof
-  let M be non-empty locally-finite ManySortedSet of I such that
+  let M be non-empty finite-yielding ManySortedSet of I such that
 A1: for A, B be ManySortedSet of I st A in M & B in M holds A c= B or B c= A;
   defpred Z[set,set] means $2 in M.$1 & for D' be set st D' in M.$1
   holds D' c= $2;
@@ -907,7 +936,7 @@ A2: for i st i in I ex j be set st Z[i,j]
     assume
 A3: i in I;
     then
-A4: M.i is finite by PRE_CIRC:def 3;
+A4: M.i is finite by LL1;
 A5: M.i <> {} by A3;
     M.i is c=-linear
     proof
@@ -922,9 +951,11 @@ A9:   c' in M by PBOOLE:146;
       set qb = b' +* (i.-->B');
       set qc = c' +* (i.-->C');
       dom qb = I by A3,PZFMISC1:1;
-      then reconsider qb as ManySortedSet of I by PBOOLE:def 3;
+      then reconsider qb as ManySortedSet of I by PARTFUN1:def 4,RELAT_1:def 18
+;
       dom qc = I by A3,PZFMISC1:1;
-      then reconsider qc as ManySortedSet of I by PBOOLE:def 3;
+      then reconsider qc as ManySortedSet of I by PARTFUN1:def 4,RELAT_1:def 18
+;
 A10:  dom (i .--> B') = {i} by FUNCOP_1:19;
       i in {i} by TARSKI:def 1;
       then
@@ -941,15 +972,15 @@ A14:  qb in M
 A15:    j in I;
         now per cases;
           case j = i;
-            hence qb.j in M.j by A6,A11;
+            hence thesis by A6,A11;
           end;
           case j <> i;
             then not j in dom (i .--> B') by A10,TARSKI:def 1;
             then qb.j = b'.j by FUNCT_4:12;
-            hence qb.j in M.j by A8,A15,PBOOLE:def 4;
+            hence thesis by A8,A15,PBOOLE:def 4;
           end;
         end;
-        hence qb.j in M.j;
+        hence thesis;
       end;
       qc in M
       proof
@@ -957,15 +988,15 @@ A15:    j in I;
 A16:    j in I;
         now per cases;
           case j = i;
-            hence qc.j in M.j by A6,A13;
+            hence thesis by A6,A13;
           end;
           case j <> i;
             then not j in dom (i .--> C') by A12,TARSKI:def 1;
             then qc.j = c'.j by FUNCT_4:12;
-            hence qc.j in M.j by A9,A16,PBOOLE:def 4;
+            hence thesis by A9,A16,PBOOLE:def 4;
           end;
         end;
-        hence qc.j in M.j;
+        hence thesis;
       end;
       then qb c= qc or qc c= qb by A1,A14;
       hence thesis by A3,A7,A11,A13,PBOOLE:def 5;
@@ -974,7 +1005,7 @@ A16:    j in I;
 A17: m' in M.i & for D' be set st D' in M.i holds D' c= m'
     by A4,A5,FINSET_1:31;
     take m';
-    thus m' in M.i & for D' be set st D' in M.i holds D' c= m' by A17;
+    thus thesis by A17;
   end;
   consider m be ManySortedSet of I such that
 A18: for i st i in I holds Z[i,m.i] from PBOOLE:sch 3(A2);
@@ -983,7 +1014,7 @@ A18: for i st i in I holds Z[i,m.i] from PBOOLE:sch 3(A2);
   proof
     let i;
     assume i in I;
-    hence m.i in M.i by A18;
+    hence thesis by A18;
   end;
   thus for K be ManySortedSet of I st K in M holds K c= m
   proof
@@ -993,16 +1024,16 @@ A19: K in M;
     assume
 A20: i in I;
     then K.i in M.i by A19,PBOOLE:def 4;
-    hence K.i c= m.i by A18,A20;
+    hence thesis by A18,A20;
   end;
 end;
 
 theorem     :: COMPTS_1:1
-  Z is locally-finite & Z c= rngs F implies
-  ex Y st Y c= doms F & Y is locally-finite & F.:.:Y = Z
+  Z is finite-yielding & Z c= rngs F implies
+  ex Y st Y c= doms F & Y is finite-yielding & F.:.:Y = Z
 proof
   assume that
-A1: Z is locally-finite and
+A1: Z is finite-yielding and
 A2: Z c= rngs F;
   defpred P[set,set] means ex f be Function st f = F.$1 &
   $2 c= (doms F).$1 & $2 is finite & f.:($2) = Z.$1;
@@ -1012,7 +1043,7 @@ A3: for i st i in I ex j be set st P[i,j]
     assume
 A4: i in I;
     then
-A5: Z.i is finite by A1,PRE_CIRC:def 3;
+A5: Z.i is finite by A1,LL1;
     reconsider f = F.i as Function;
     rng f = (rngs F).i by A4,Th13;
     then Z.i c= rng f by A2,A4,PBOOLE:def 5;
@@ -1020,7 +1051,7 @@ A5: Z.i is finite by A1,PRE_CIRC:def 3;
 A6: y c= dom f & y is finite & f.:y = Z.i by A5,ORDERS_1:195;
     take y, f;
     thus f = F.i;
-    thus y c= (doms F).i & y is finite & f.:y = Z.i by A4,A6,Th14;
+    thus thesis by A4,A6,Th14;
   end;
   consider Y be ManySortedSet of I such that
 A7: for i st i in I holds P[i,Y.i] from PBOOLE:sch 3(A3);
@@ -1031,15 +1062,15 @@ A7: for i st i in I holds P[i,Y.i] from PBOOLE:sch 3(A3);
     assume i in I;
     then consider f be Function such that
 A8: f = F.i & Y.i c= (doms F).i & Y.i is finite & f.:(Y.i) = Z.i by A7;
-    thus Y.i c= (doms F).i by A8;
+    thus thesis by A8;
   end;
-  thus Y is locally-finite
+  thus Y is finite-yielding
   proof
     let i;
     assume i in I;
     then consider f be Function such that
 A9: f = F.i & Y.i c= (doms F).i & Y.i is finite & f.:(Y.i) = Z.i by A7;
-    thus Y.i is finite by A9;
+    thus thesis by A9;
   end;
   now
     let i;
@@ -1049,7 +1080,7 @@ A10: i in I;
 A11: f = F.i & Y.i c= (doms F).i & Y.i is finite & f.:(Y.i) = Z.i by A7;
     thus (F.:.:Y).i = Z.i by A10,A11,PBOOLE:def 25;
   end;
-  hence F.:.:Y = Z by PBOOLE:3;
+  hence thesis by PBOOLE:3;
 end;
 
 begin :: A Family of Subsets of Many Sorted Sets
@@ -1077,7 +1108,7 @@ end;
 
 registration
   let I, M;
-  cluster empty-yielding locally-finite MSSubsetFamily of M;
+  cluster empty-yielding finite-yielding MSSubsetFamily of M;
   existence
   proof
     [0]I c= bool M by PBOOLE:49;
@@ -1087,7 +1118,7 @@ registration
 end;
 
 theorem
-  [0]I is empty-yielding locally-finite MSSubsetFamily of M
+  [0]I is empty-yielding finite-yielding MSSubsetFamily of M
 proof
   [0]I c= bool M by PBOOLE:49;
   hence thesis by PBOOLE:def 23;
@@ -1095,8 +1126,8 @@ end;
 
 registration
   let I;
-  let M be locally-finite ManySortedSet of I;
-  cluster non-empty locally-finite MSSubsetFamily of M;
+  let M be finite-yielding ManySortedSet of I;
+  cluster non-empty finite-yielding MSSubsetFamily of M;
   existence
   proof
     bool M is MSSubsetFamily of M;
@@ -1184,7 +1215,7 @@ theorem
   SF \+\ SG is MSSubsetFamily of M
 proof
   SF \ SG is MSSubsetFamily of M & SG \ SF is MSSubsetFamily of M by Th36;
-  hence SF \+\ SG is MSSubsetFamily of M by Th34;
+  hence thesis by Th34;
 end;
 
 theorem Th38:
@@ -1239,7 +1270,7 @@ A2:   i in I;
       reconsider a = I --> Intersect Q as ManySortedSet of I;
       take j = a.i;
       take Q;
-      thus Q = SF.i & j = Intersect Q by A2,FUNCOP_1:13;
+      thus thesis by A2,FUNCOP_1:13;
     end;
     consider X be ManySortedSet of I such that
 A3: for i be set st i in I holds Z[i,X.i] from PBOOLE:sch 3(A1);
@@ -1275,7 +1306,7 @@ definition
     assume i in I;
     then consider Q be Subset-Family of (M.i) such that
 A1: Q = SF.i & (meet SF).i = Intersect Q by Def2;
-    thus (meet SF).i c= M.i by A1;
+    thus thesis by A1;
   end;
 end;
 
@@ -1308,7 +1339,7 @@ A3: (meet SFe).i = Intersect Q by Def2;
 A4: meet Q c= union Q by SETFAM_1:3;
   Q <> {} by A1,A2;
   then Intersect Q = meet Q by SETFAM_1:def 10;
-  hence (meet SFe).i c= (union SFe).i by A1,A2,A3,A4,MBOOLEAN:def 2;
+  hence thesis by A1,A2,A3,A4,MBOOLEAN:def 2;
 end;
 
 theorem     :: SETFAM_1:4
@@ -1324,7 +1355,7 @@ A3: Q = SF.i and
 A4: (meet SF).i = Intersect Q by Def2;
 A5: A.i in SF.i by A1,A2,PBOOLE:def 4;
   then Intersect Q = meet Q by A3,SETFAM_1:def 10;
-  hence (meet SF).i c= A.i by A3,A4,A5,SETFAM_1:4;
+  hence thesis by A3,A4,A5,SETFAM_1:4;
 end;
 
 theorem     :: SETFAM_1:5
@@ -1374,7 +1405,8 @@ A7: T in SF by PBOOLE:146;
 A8: Z' in Q;
 A9: dom (i .--> Z') = {i} by FUNCOP_1:19;
     dom (T +* (i .--> Z')) = I by A2,PZFMISC1:1;
-    then reconsider K = T +* (i .--> Z') as ManySortedSet of I by PBOOLE:def 3;
+    then reconsider K = T +* (i .--> Z') as ManySortedSet of I by
+PARTFUN1:def 4,RELAT_1:def 18;
     i in {i} by TARSKI:def 1;
     then
 A10: K.i = (i .--> Z').i by A9,FUNCT_4:14
@@ -1385,18 +1417,18 @@ A10: K.i = (i .--> Z').i by A9,FUNCT_4:14
 A11:  q in I;
       per cases;
       suppose q = i;
-        hence K.q in SF.q by A3,A8,A10;
+        hence thesis by A3,A8,A10;
       end;
       suppose q <> i;
         then not q in dom (i .--> Z') by A9,TARSKI:def 1;
         then K.q = T.q by FUNCT_4:12;
-        hence K.q in SF.q by A7,A11,PBOOLE:def 4;
+        hence thesis by A7,A11,PBOOLE:def 4;
       end;
     end;
     then Z c= K by A1;
-    hence Z.i c= Z' by A2,A10,PBOOLE:def 5;
+    hence thesis by A2,A10,PBOOLE:def 5;
   end;
-  hence Z.i c= (meet SF).i by A4,A5,A6,SETFAM_1:6;
+  hence thesis by A4,A5,A6,SETFAM_1:6;
 end;
 
 theorem     :: SETFAM_1:7 :: SETFAM_1:59
@@ -1414,7 +1446,7 @@ A4: (meet SF).i = Intersect Qf by Def2;
 A5: Qg = SG.i and
 A6: (meet SG).i = Intersect Qg by A2,Def2;
   Qf c= Qg by A1,A2,A3,A5,PBOOLE:def 5;
-  hence (meet SG).i c= (meet SF).i by A4,A6,SETFAM_1:59;
+  hence thesis by A4,A6,SETFAM_1:59;
 end;
 
 theorem     :: SETFAM_1:8
@@ -1433,7 +1465,7 @@ A6: A.i in SF.i by A1,A3,PBOOLE:def 4;
   then
 A7: Intersect Q = meet Q by A4,SETFAM_1:def 10;
   A.i c= B.i by A2,A3,PBOOLE:def 5;
-  hence (meet SF).i c= B.i by A4,A5,A6,A7,SETFAM_1:8;
+  hence thesis by A4,A5,A6,A7,SETFAM_1:8;
 end;
 
 theorem     :: SETFAM_1:9
@@ -1460,7 +1492,7 @@ A7: Intersect Q = meet Q by A4,SETFAM_1:def 10;
     then meet Q /\ B.i = [0]I.i by PBOOLE:5;
     hence (meet SF /\ B).i = [0]I.i by A3,A5,A7,PBOOLE:def 8;
   end;
-  hence meet SF /\ B = [0]I by PBOOLE:3;
+  hence thesis by PBOOLE:3;
 end;
 
 theorem     :: SETFAM_1:10
@@ -1570,7 +1602,7 @@ A4: Q = SF.i and
 A5: (meet SF).i = Intersect Q by Def2;
 A6: A.i in (meet SF).i by A1,A3,PBOOLE:def 4;
   B.i in SF.i by A2,A3,PBOOLE:def 4;
-  hence A.i in B.i by A4,A5,A6,SETFAM_1:58;
+  hence thesis by A4,A5,A6,SETFAM_1:58;
 end;
 
 theorem     :: SETFAM_1:58 b
@@ -1597,7 +1629,8 @@ A7: T in SF by PBOOLE:146;
 A8: B' in Q;
 A9: dom (i .--> B') = {i} by FUNCOP_1:19;
     dom (T +* (i .--> B')) = I by A3,PZFMISC1:1;
-    then reconsider K = T +* (i .--> B') as ManySortedSet of I by PBOOLE:def 3;
+    then reconsider K = T +* (i .--> B') as ManySortedSet of I by
+PARTFUN1:def 4,RELAT_1:def 18;
     i in {i} by TARSKI:def 1;
     then
 A10: K.i = (i .--> B').i by A9,FUNCT_4:14
@@ -1608,18 +1641,18 @@ A10: K.i = (i .--> B').i by A9,FUNCT_4:14
 A11:  q in I;
       per cases;
       suppose q = i;
-        hence K.q in SF.q by A4,A8,A10;
+        hence thesis by A4,A8,A10;
       end;
       suppose q <> i;
         then not q in dom (i .--> B') by A9,TARSKI:def 1;
         then K.q = T.q by FUNCT_4:12;
-        hence K.q in SF.q by A7,A11,PBOOLE:def 4;
+        hence thesis by A7,A11,PBOOLE:def 4;
       end;
     end;
     then A in K by A2;
-    hence A.i in B' by A3,A10,PBOOLE:def 4;
+    hence thesis by A3,A10,PBOOLE:def 4;
   end;
-  hence A.i in (meet SF).i by A5,A6,SETFAM_1:58;
+  hence thesis by A5,A6,SETFAM_1:58;
 end;
 
 definition
@@ -1653,13 +1686,13 @@ proof
     assume A in bool M & B in bool M;
     then A c= M & B c= M by MBOOLEAN:1;
     then A \/ B c= M by PBOOLE:18;
-    hence A \/ B in bool M by MBOOLEAN:1;
+    hence thesis by MBOOLEAN:1;
   end;
   thus bool M is absolutely-additive
   proof
     let F be MSSubsetFamily of M such that F c= bool M;
     union F c= M by Th40;
-    hence union F in bool M by MBOOLEAN:19;
+    hence thesis by MBOOLEAN:19;
   end;
   thus bool M is multiplicative
   proof
@@ -1667,13 +1700,13 @@ proof
     assume A in bool M & B in bool M;
     then A c= M & B c= M by MBOOLEAN:1;
     then A /\ B c= M by MBOOLEAN:15;
-    hence A /\ B in bool M by MBOOLEAN:1;
+    hence thesis by MBOOLEAN:1;
   end;
   thus bool M is absolutely-multiplicative
   proof
     let F be MSSubsetFamily of M such that F c= bool M;
     meet F c= M by PBOOLE:def 23;
-    hence meet F in bool M by MBOOLEAN:19;
+    hence thesis by MBOOLEAN:19;
   end;
   thus bool M is properly-upper-bound
   proof
@@ -1724,7 +1757,7 @@ A3: {A,B} is MSSubsetFamily of M by Th39;
     then {A} \/ {B} c= SF by PBOOLE:18;
     then {A,B} c= SF by PZFMISC1:11;
     then union {A,B} in SF by A1,A3,Def4;
-    hence A \/ B in SF by PZFMISC1:35;
+    hence thesis by PZFMISC1:35;
   end;
 end;
 
@@ -1746,7 +1779,7 @@ A3: A is ManySortedSubset of M & B is ManySortedSubset of M by Th33;
     then {A} \/ {B} c= SF by PBOOLE:18;
     then {A,B} c= SF by PZFMISC1:11;
     then meet ab in SF by A1,Def6;
-    hence A /\ B in SF by A3,Th51;
+    hence thesis by A3,Th51;
   end;
 end;
 

@@ -12,10 +12,10 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ARYTM_3, NUMBERS, RELAT_1,
       FUNCT_1, FUNCT_2, FUNCT_4, ENUMSET1, COMPLEX1, ARYTM_0, ZFMISC_1,
       ARYTM_2, XCMPLX_0, XREAL_0, REAL_1, SQUARE_1, XXREAL_0, RELSET_1, SEQ_1;
- constructors ENUMSET1, FUNCT_4, ARYTM_1, FRAENKEL, ARYTM_0, REAL_1, SQUARE_1,
-      COMPLEX1, SEQ_1, VALUED_1;
+ constructors ENUMSET1, FUNCT_4, ARYTM_1, ARYTM_0, REAL_1, SQUARE_1,
+      COMPLEX1, SEQ_1, VALUED_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, FUNCT_4,
-      FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, SQUARE_1, MEMBERED, VALUED_0;
+      NUMBERS, XXREAL_0, XREAL_0, SQUARE_1, MEMBERED, VALUED_0, FUNCT_1;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
  definitions SQUARE_1, TARSKI, COMPLEX1, ARYTM_3, XCMPLX_0;
  theorems FUNCT_2, XBOOLE_0, TARSKI, NUMBERS, ENUMSET1, FUNCT_4, XBOOLE_1,
@@ -159,7 +159,7 @@ definition
       rng f \/ rng g c= A & rng h c= rng f \/ rng g by FUNCT_4:18;
       hence rng h c= A by XBOOLE_1:1;
     end;
-    hence h is Function of {x,y,w,z},A by FUNCT_2:def 1,RELSET_1:11;
+    hence thesis by FUNCT_2:def 1,RELSET_1:11;
   end;
 end;
 
@@ -229,30 +229,59 @@ registration
 end;
 
 definition
-  let x,y,w,z be Element of REAL;
-  func [*x,y,w,z*] -> Element of QUATERNION equals
-  :Def6:
-  [*x,y*] if w=0 & z=0
-  otherwise (0,1,2,3) --> (x,y,w,z);
+  let x,y,w,z be real number;
+  func [*x,y,w,z*] -> Element of QUATERNION means :Def6:
+  (ex x', y' being Element of REAL st
+    x' = x & y' = y & it = [*x',y'*]) if w=0 & z=0
+  otherwise it = (0,1,2,3) --> (x,y,w,z);
   consistency;
-  coherence
+  existence
   proof
-    thus w = 0 & z=0 implies [*x,y*] is Element of QUATERNION
-    by XBOOLE_0:def 3;
-    set e = (0,1,2,3) --> (x,y,w,z);
-    assume
-A1: w <> 0 or z<>0;
-A2: e in Funcs(4,REAL) by CARD_1:90,FUNCT_2:11;
-    now
-      assume e in {r where r is Element of Funcs(4,REAL): r.2=0 & r.3=0};
-      then ex r being Element of Funcs(4,REAL) st e = r & r.2=0 & r.3=0;
-      hence contradiction by A1,Lm1,Th3;
+    reconsider x' = x, y' = y, w' = w, z' = z as Element of REAL
+      by XREAL_0:def 1;
+    thus w = 0 & z = 0 implies
+    ex t being Element of QUATERNION st
+    ex x', y' being Element of REAL st
+    x' = x & y' = y & t = [*x',y'*]
+    proof
+      assume w = 0 & z = 0;
+      set t = [*x',y'*];
+      t in COMPLEX; then
+      reconsider t as Element of QUATERNION by XBOOLE_0:def 3;
+      take t;
+      take x', y';
+      thus thesis;
     end;
-    then e in Funcs(4,REAL)
-    \ { r where r is Element of Funcs(4,REAL): r.2=0 & r.3 = 0}
-    by A2,XBOOLE_0:def 5;
-    hence thesis by XBOOLE_0:def 3;
+    set e = (0,1,2,3) --> (x',y',w',z');
+    thus w <> 0 or z <> 0 implies
+    ex t being Element of QUATERNION st t = (0,1,2,3) --> (x,y,w,z)
+    proof
+      assume
+A1:   w <> 0 or z <> 0; then
+A2:   e in Funcs(4,REAL) by CARD_1:90,FUNCT_2:11;
+      now
+        assume e in {r where r is Element of Funcs(4,REAL): r.2=0 & r.3=0};
+        then ex r being Element of Funcs(4,REAL) st e = r & r.2=0 & r.3=0;
+        hence contradiction by A1,Lm1,Th3;
+      end;
+      then e in Funcs(4,REAL)
+        \ { r where r is Element of Funcs(4,REAL): r.2=0 & r.3 = 0}
+          by A2,XBOOLE_0:def 5; then
+      reconsider e as Element of QUATERNION by XBOOLE_0:def 3;
+      take e;
+      thus thesis by XBOOLE_0:def 3;
+    end;
+    hence thesis;
   end;
+  uniqueness;
+end;
+
+Def6': for x,y being Element of REAL holds [*x,y,0,0*] = [*x,y*]
+proof
+  let x,y be Element of REAL;
+  consider x', y' being Element of REAL such that
+A1: x' = x & y' = y & [*x,y,0,0*] = [*x',y'*] by Def6;
+  thus thesis by A1;
 end;
 
 theorem Th6:
@@ -264,7 +293,7 @@ proof
   let h be Function such that
 A1: a<>b & c <>d & dom h = {a,b,c,d} & h.a = e & h.b = i & h.c = j & h.d=k;
   set f = (a,b) --> (e,i);
-  set g = (c,d) -->(j,k);
+  set g = (c,d) --> (j,k);
 A2: dom f = {a,b} & dom g = {c,d} by FUNCT_4:65;
   then
 A3: dom h = dom f \/ dom g by A1,ENUMSET1:45;
@@ -297,7 +326,7 @@ A6:   x in dom f by A4,XBOOLE_0:def 3;
       end;
     end;
   end;
-  hence h = (a,b,c,d) --> (e,i,j,k) by A3,FUNCT_4:def 1;
+  hence thesis by A3,FUNCT_4:def 1;
 end;
 
 theorem Th7:
@@ -310,7 +339,7 @@ proof
     then consider r,s being Element of REAL such that
 A1: g = [*r,s*] by ARYTM_0:11;
     take r,s,0,0;
-    thus g=[*r,s,0,0*] by A1,Def6;
+    thus thesis by A1,Def6;
   end;
   suppose not g in COMPLEX;
     then
@@ -334,7 +363,7 @@ A6: g = (0,1,2,3)-->(r,s,t,u) by A3,A4,Th6,CARD_1:90;
       x.2=0 & x.3=0} by A2,A6;
       hence contradiction by A2,XBOOLE_0:def 5;
     end;
-    hence g = [*r,s,t,u*] by A6,Def6;
+    hence thesis by A6,Def6;
   end;
 end;
 
@@ -368,7 +397,7 @@ A1: {x,y} in {z} & {x} in {z} by TARSKI:def 2;
   hence
 A2: z = {x} by TARSKI:def 1;
   {x,y} = z by A1,TARSKI:def 1;
-  hence x = y by A2,ZFMISC_1:9;
+  hence thesis by A2,ZFMISC_1:9;
 end;
 
 theorem Th9:
@@ -674,13 +703,13 @@ A1: [*x1,x2,x3,x4*] = [*y1,y2,y3,y4*];
   suppose
 A2: x3=0 & x4=0;
     then
-A3: [*x1,x2,x3,x4*] = [*x1,x2*] by Def6;
+A3: [*x1,x2,x3,x4*] = [*x1,x2*] by Def6';
 A4: now
       assume y3<>0 or y4<>0;
       then [*x1,x2*] = (0,1,2,3) --> (y1,y2,y3,y4) by A1,A3,Def6;
       hence contradiction by Th10;
     end;
-    then [*y1,y2,y3,y4*] = [*y1,y2*] by Def6;
+    then [*y1,y2,y3,y4*] = [*y1,y2*] by Def6';
     hence thesis by A1,A2,A3,A4,ARYTM_0:12;
   end;
   suppose x3<>0 or x4<>0;
@@ -688,11 +717,11 @@ A4: now
 A5: [*y1,y2,y3,y4*] = (0,1,2,3) --> (x1,x2,x3,x4) by A1,Def6;
     now
       assume y3=0 & y4=0;
-      then [*y1,y2,y3,y4*] = [*y1,y2*] by Def6;
+      then [*y1,y2,y3,y4*] = [*y1,y2*] by Def6';
       hence contradiction by A5,Th10;
     end;
     then [*y1,y2,y3,y4*] = (0,1,2,3) --> (y1,y2,y3,y4) by Def6;
-    hence x1 = y1 & x2 = y2 & x3=y3 & x4=y4 by A5,Lm1,Th11;
+    hence thesis by A5,Lm1,Th11;
   end;
 end;
 
@@ -727,15 +756,18 @@ A7: y = [*y1',y2',y3',y4'*] and
 A8: c2 = [*x1'+y1',x2'+y2',x3'+y3',x4'+y4'*];
     x1 = x1' & x2 = x2' & x3=x3' & x4=x4' & y1 = y1' & y2 = y2' &
     y3=y3' & y4=y4' by A3,A4,A6,A7,Th12;
-    hence c1 = c2 by A5,A8;
+    hence thesis by A5,A8;
   end;
   commutativity;
 end;
 
 Lm5: 0 = [*0,0,0,0*]
 proof
-  0 = [*0,0*] by ARYTM_0:def 7;
-  hence thesis by Def6;
+A: 0 in REAL;
+C: 0 = [*0,0*] by ARYTM_0:def 7;
+  consider x', y' being Element of REAL such that
+B:  x' = 0 & y' = 0 & [*0,0,0,0*] = [*x',y'*] by Def6;
+  thus thesis by B,A,C,Def6;
 end;
 
 definition
@@ -775,7 +807,7 @@ A15: x3+y3 = 0 by A6,Lm5,Th12;
 A16: x3+y3' = 0 by A9,A10,Lm5,Th12;
 A17: x4+y4 = 0 by A6,Lm5,Th12;
     x4+y4' = 0 by A9,A10,Lm5,Th12;
-    hence c1 = c2 by A5,A8,A11,A12,A13,A14,A15,A16,A17;
+    hence thesis by A5,A8,A11,A12,A13,A14,A15,A16,A17;
   end;
   involutiveness;
 end;
@@ -823,7 +855,7 @@ A8: c2 = [* x1'*y1'-x2'*y2'-x3'*y3'-x4'*y4', x1'*y2'+x2'*y1'+x3'*y4'-x4'*y3',
     x1'*y3'+y1'*x3'+y2'*x4'-y4'*x2', x1'*y4'+x4'*y1'+x2'*y3'-x3'*y2' *];
     x1 = x1' & x2 = x2' & x3 = x3' & x4 = x4' & y1 = y1' & y2 = y2' &
     y3 = y3' & y4 = y4' by A3,A4,A6,A7,Th12;
-    hence c1 = c2 by A5,A8;
+    hence thesis by A5,A8;
   end;
 end;
 
@@ -864,13 +896,12 @@ end;
 theorem
   <i> * <i> = -1
 proof
-  <i> = [*0,1,0,0*] by Def6,Lmx;
-  then
+  <i> = [*0,1,0,0*] by Def6',Lmx; then
 A1: <i> * <i> = [* 0*0-1*1-0*0-0*0, 0*1+1*0+0*0-0*0,
   0*0+0*0+1*0-0*1, 0*0+0*0+1*0-0*1 *] by Def10
     .= [*-1,0,0,0*];
   -1 = [*-1,0*] by ARYTM_0:def 7;
-  hence thesis by A1,Def6;
+  hence thesis by A1,Def6';
 end;
 
 theorem
@@ -879,7 +910,7 @@ proof
 A1: <j> * <j> = [* 0*0-0*0-1*1-0*0, 0*0+0*0+0*0-0*1,
   0*1+0*1+0*0-0*0, 0*0+0*0+0*1-1*0 *] by Def10
     .= [*-1,0,0,0*];
-  [*-1,0,0,0*] = [*-1,0*] by Def6;
+  [*-1,0,0,0*] = [*-1,0*] by Def6';
   hence thesis by A1,ARYTM_0:def 7;
 end;
 
@@ -890,13 +921,13 @@ A1: <k> * <k> = [* 0*0-0*0-0*0-1*1, 0*0+0*0+0*1-1*0,
   0*0+0*0+0*1-1*0, 0*1+1*0+0*0-0*0 *] by Def10
     .= [*-1,0,0,0*];
   -1 = [*-1,0*] by ARYTM_0:def 7;
-  hence thesis by A1,Def6;
+  hence thesis by A1,Def6';
 end;
 
 theorem
   <i> * <j> = <k>
 proof
-  <i> = [*0,1,0,0*] by Def6,Lmx;
+  <i> = [*0,1,0,0*] by Def6',Lmx;
   then <i> * <j> = [* 0*0-1*0-0*1-0*0, 0*0+1*0+0*0-0*1,
   0*1+0*0+0*0-0*1, 0*0+0*0+1*1-0*0 *] by Def10
     .= [*0,0,0,1*];
@@ -909,13 +940,13 @@ proof
   <j> * <k> = [* 0*0-0*0-1*0-0*1, 0*0+0*0+1*1-0*0,
   0*0+0*1+0*0-1*0, 0*1+0*0+0*0-1*0 *] by Def10
     .= [*0,1,0,0*];
-  hence thesis by Def6,Lmx;
+  hence thesis by Def6',Lmx;
 end;
 
 theorem
   <k> * <i> = <j>
 proof
-  <i> = [*0,1,0,0*] by Def6,Lmx;
+  <i> = [*0,1,0,0*] by Def6',Lmx;
   then <k> * <i> = [* 0*0-0*1-0*0-1*0, 0*1+0*0+0*0-1*0,
   0*0+0*0+1*1-0*0, 0*0+1*0+0*0-0*1 *] by Def10
     .= [*0,0,1,0*];
@@ -925,7 +956,7 @@ end;
 theorem
   <i> * <j> = - <j> * <i>
 proof
-A1: <i> = [*0,1,0,0*] by Def6,Lmx;
+A1: <i> = [*0,1,0,0*] by Def6',Lmx;
   then
 A2: <i> * <j> = [* 0*0-1*0-0*1-0*0, 0*0+1*0+0*0-0*1,
   0*1+0*0+0*0-0*1, 0*0+0*0+1*1-0*0 *] by Def10
@@ -955,7 +986,7 @@ end;
 theorem
   <k> * <i> = - <i> * <k>
 proof
-A1: <i> = [*0,1,0,0*] by Def6,Lmx;
+A1: <i> = [*0,1,0,0*] by Def6',Lmx;
   then
 A2: <k> * <i> = [* 0*0-0*1-0*0-1*0, 0*1+0*0+0*0-1*0,
   0*0+0*0+1*1-0*0, 0*0+1*0+0*0-0*1 *] by Def10
@@ -1141,7 +1172,7 @@ proof
   reconsider a = f.0, b = f.1, c = f.2, d = f.3 as Element of REAL;
   take a,b,c,d;
   dom f = {0,1,2,3} by CARD_1:90,FUNCT_2:def 1;
-  hence f = (0,1,2,3)-->(a,b,c,d) by Th6;
+  hence thesis by Th6;
 end;
 
 Lm6: Re [*a,b*] = a & Im [*a,b*] = b
@@ -1209,7 +1240,7 @@ A11: not z in { x where x is Element of Funcs(2,REAL): x.1 = 0}
     reconsider f = z as Element of Funcs(2,REAL) by A8,CARD_1:88,FUNCT_2:11;
     f.1 <> 0 by A11;
     then b <> 0 by A8,FUNCT_4:66;
-    hence [*Re z, Im z*] = z by A8,A9,A10,ARYTM_0:def 7;
+    hence thesis by A8,A9,A10,ARYTM_0:def 7;
   end;
 end;
 
@@ -1223,7 +1254,7 @@ proof
     per cases;
     suppose c = 0 & d=0;
       then
-A1:   [*a,b,c,d*] = [*a,b*] by Def6;
+A1:   [*a,b,c,d*] = [*a,b*] by Def6';
       Re [*a,b*] =a by Lm6;
       hence thesis by A1,Def13;
     end;
@@ -1241,7 +1272,7 @@ A3:   not [*a,b,c,d*] in COMPLEX by A2,Th10;
     per cases;
     suppose c = 0 & d = 0;
       then
-A4:   [*a,b,c,d*] = [*a,b*] by Def6;
+A4:   [*a,b,c,d*] = [*a,b*] by Def6';
       Im [*a,b*] = b by Lm6;
       hence thesis by A4,Def14;
     end;
@@ -1259,7 +1290,7 @@ A6:   not [*a,b,c,d*] in COMPLEX by A5,Th10;
     per cases;
     suppose
 A7:   c = 0 & d = 0;
-      then [*a,b,c,d*] = [*a,b*] by Def6;
+      then [*a,b,c,d*] = [*a,b*] by Def6';
       hence thesis by A7,Def15;
     end;
     suppose c <> 0 or d <> 0;
@@ -1274,7 +1305,7 @@ A9:   not [*a,b,c,d*] in COMPLEX by A8,Th10;
   per cases;
   suppose
 A10: c = 0 & d = 0;
-    then [*a,b,c,d*] = [*a,b*] by Def6;
+    then [*a,b,c,d*] = [*a,b*] by Def6';
     hence thesis by A10,Def16;
   end;
   suppose c <> 0 or d <> 0;
@@ -1305,7 +1336,7 @@ A5: Rea z = Re z' by A2,Def13;
 A6: z = z' and
 A7: Im1 z = Im z' by A2,Def14;
     [*Rea z, Im1 z*] = z' by A4,A5,A6,A7,Lm7;
-    hence thesis by A3,A6,Def6;
+    hence thesis by A3,A6,Def6';
   end;
   suppose
 A8: not z in COMPLEX;
@@ -1335,7 +1366,7 @@ A22: not z in { x where x is Element of Funcs(4,REAL):
     reconsider f = z as Element of Funcs(4,REAL) by A17,CARD_1:90,FUNCT_2:11;
     f.2 <> 0 or f.3 <> 0 by A22;
     then c <> 0 or d <> 0 by A17,Lm1,Th3;
-    hence [*Rea z, Im1 z, Im2 z, Im3 z*] = z by A17,A18,A19,A20,A21,Def6;
+    hence thesis by A17,A18,A19,A20,A21,Def6;
   end;
 end;
 
@@ -1359,7 +1390,7 @@ definition
   1;
   coherence
   proof
-    [*1,0,0,0*] = [*1,0*] by Def6;
+    [*1,0,0,0*] = [*1,0*] by Def6';
     hence thesis by ARYTM_0:def 7;
   end;
 end;
@@ -1431,7 +1462,7 @@ end;
 
 Lm9: [*1,0,0,0*] = 1
 proof
-  [*1,0,0,0*] = [*1,0*] by Def6;
+  [*1,0,0,0*] = [*1,0*] by Def6';
   hence thesis by ARYTM_0:def 7;
 end;
 
@@ -1441,7 +1472,7 @@ theorem
 theorem Th30:
   Rea <i> = 0 & Im1 <i> = 1 & Im2 <i> = 0 & Im3 <i> = 0
 proof
-  [*0,1*] = [*0,1,0,0*] by Def6;
+  [*0,1*] = [*0,1,0,0*] by Def6';
   hence thesis by Th23,Lmx;
 end;
 
@@ -1608,7 +1639,7 @@ proof
   assume
 A1: z = x;
 A2: x = [*x,0*] by ARYTM_0:def 7;
-  [*x,0*] = [*x,0,0,0*] by Def6;
+  [*x,0*] = [*x,0,0,0*] by Def6';
   hence thesis by A1,A2,Th23;
 end;
 
@@ -1687,7 +1718,7 @@ A3: c1 = [*x+y1,y2,y3,y4*];
 A4: y = [*y1',y2',y3',y4'*] and
 A5: c2 = [*x+y1',y2',y3',y4'*];
     y1 = y1' & y2 = y2' & y3 = y3' & y4 = y4' by A2,A4,Th12;
-    hence c1 = c2 by A3,A5;
+    hence thesis by A3,A5;
   end;
 end;
 
@@ -1723,7 +1754,7 @@ A3: c1 = [*x*y1,x*y2,x*y3,x*y4*];
 A4: y = [*y1',y2',y3',y4'*] and
 A5: c2 = [*x*y1',x*y2',x*y3',x*y4'*];
     y1 = y1' & y2 = y2' & y3 = y3' & y4 = y4' by A2,A4,Th12;
-    hence c1 = c2 by A3,A5;
+    hence thesis by A3,A5;
   end;
 end;
 
@@ -1750,7 +1781,7 @@ end;
 Lm18: for x,y,z,w being Real holds [*x,y,z,w*] = x + y*<i> + z*<j> + w*<k>
 proof
   let x,y,z,w be Real;
-  <i> = [*0,1,0,0*] by Def6,Lmx;
+  <i> = [*0,1,0,0*] by Def6',Lmx;
   then
 A1: y*<i> = [*y*0,y*1,y*0,y*0*] by Def21
     .= [*0,y,0,0*];
@@ -1912,7 +1943,7 @@ end;
 theorem Th43:
   z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*]
 proof
-  <i> = [*0,1,0,0*] by Def6,Lmx;
+  <i> = [*0,1,0,0*] by Def6',Lmx;
   then z*'= Rea z + [*(-Im1 z)*0,(-Im1 z) *1,(-Im1 z) *0,(-Im1 z) *0 *]
   + (-Im2 z)*<j> + (-Im3 z)*<k> by Def21
     .= Rea z + [*0,-Im1 z,0,0 *] +
@@ -1958,7 +1989,7 @@ end;
 theorem
   1q*' = 1q
 proof
-  [*1,0*] = [*1,0,0,0*] by Def6;
+  [*1,0*] = [*1,0,0,0*] by Def6';
   then
 A1: 1q = [*1,0,0,0*] by ARYTM_0:def 7;
   Rea [*1,0,0,0*] = 1 & Im1 [*1,0,0,0*] = 0 &
@@ -2153,10 +2184,10 @@ proof
 A1: Im1 z = 0 & Im2 z = 0 & Im3 z = 0;
   then
 A2: z = [*Rea z,0,0,0*] by Th24
-    .= [*Rea z,0*] by Def6
+    .= [*Rea z,0*] by Def6'
     .=Rea z by ARYTM_0:def 7;
   z*' = [*Rea z, 0,0,0*] by A1,Th43
-    .= [*Rea z, 0*] by Def6
+    .= [*Rea z, 0*] by Def6'
     .= Rea z by ARYTM_0:def 7;
   hence thesis by A2;
 end;
@@ -2545,7 +2576,7 @@ theorem Th80:
   |.z1 - z2.| <= |.z1.| + |.z2.|
 proof
   |.z1 - z2.| <= |.z1.| + |.-z2.| by Th79;
-  hence |.z1 - z2.| <= |.z1.| + |.z2.| by Th72;
+  hence thesis by Th72;
 end;
 
 Lm31: z1 = z1+z2-z2
@@ -2721,3 +2752,5 @@ theorem
     hence thesis;
   end;
 
+theorem
+  for x,y being Element of REAL holds [*x,y,0,0*] = [*x,y*] by Def6';

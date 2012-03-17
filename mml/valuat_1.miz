@@ -10,11 +10,11 @@ environ
       ZF_LANG, CQC_LANG, FINSEQ_1, ARYTM_3, FUNCOP_1, ZF_MODEL, QC_LANG3,
       CAT_1, VALUAT_1, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, FUNCT_2,
-      NAT_1, FINSEQ_1, FRAENKEL, QC_LANG1, QC_LANG3, CQC_LANG, MARGREL1,
+      NAT_1, FINSEQ_1, QC_LANG1, QC_LANG3, CQC_LANG, MARGREL1,
       XXREAL_0;
- constructors XXREAL_0, MEMBERED, MARGREL1, QC_LANG3, CQC_LANG;
+ constructors XXREAL_0, MEMBERED, MARGREL1, QC_LANG3, CQC_LANG, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, MEMBERED, MARGREL1, QC_LANG1,
-      CQC_LANG, XXREAL_0;
+      CQC_LANG, XXREAL_0, FRAENKEL, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE;
  definitions XBOOLEAN;
  theorems TARSKI, FINSEQ_1, FUNCT_1, FUNCT_2, FUNCOP_1, FRAENKEL, QC_LANG1,
@@ -65,8 +65,7 @@ definition
   proof
     for x be Element of Valuations_in A holds
     x is Function of bound_QC-variables ,A by Th2;
-    hence Valuations_in A is FUNCTION_DOMAIN of bound_QC-variables, A
-    by FRAENKEL:def 2;
+    hence thesis by FUNCT_2:def 13;
   end;
 end;
 
@@ -88,7 +87,7 @@ definition
     for y st x <> y holds v'.y = $1.y};
     consider f being Function of Valuations_in A, BOOLEAN such that
 A1: for v holds f.v = F(v) from FUNCT_2:sch 4;
-    dom f = Valuations_in A & rng f c= BOOLEAN by FUNCT_2:def 1,RELSET_1:12;
+    dom f = Valuations_in A & rng f c= BOOLEAN by FUNCT_2:def 1,RELAT_1:def 19;
     then reconsider f as Element of Funcs(Valuations_in A,BOOLEAN) by
 FUNCT_2:def 2;
     take f;
@@ -160,7 +159,7 @@ A2: not FALSE in {p.v'' where v'' is Element of Valuations_in A:
       let v1;
       assume for y st x <> y holds v1.y = v.y;
       then not p.v1 = FALSE by A2;
-      hence (p.v1 = TRUE) by XBOOLEAN:def 3;
+      hence thesis by XBOOLEAN:def 3;
     end;
   end;
   now
@@ -192,24 +191,24 @@ definition
   proof
     dom v = bound_QC-variables by FUNCT_2:def 1;
     then
-A1: rng ll c= dom v by CQC_LANG:def 5;
-A2: len ll = k by QC_LANG1:def 8;
+A1: rng ll c= dom v by RELAT_1:def 19;
+A2: len ll = k by FINSEQ_1:def 18;
     dom(v*ll) = dom ll by A1,RELAT_1:46
       .= Seg k by A2,FINSEQ_1:def 3;
     then
 A3: v*ll is FinSequence-like by FINSEQ_1:def 2;
-A4: rng v c= A by RELSET_1:12;
+A4: rng v c= A by RELAT_1:def 19;
     rng(v*ll) c= rng v by RELAT_1:45;
     then rng( v*ll) c= A by A4,XBOOLE_1:1;
-    hence v*ll is FinSequence of A by A3,FINSEQ_1:def 4;
+    hence thesis by A3,FINSEQ_1:def 4;
   end;
   compatibility
   proof
     let IT be FinSequence of A;
     dom v = bound_QC-variables by FUNCT_2:def 1;
     then
-A5: rng ll c= dom v by CQC_LANG:def 5;
-A6: len ll = k by QC_LANG1:def 8;
+A5: rng ll c= dom v by RELAT_1:def 19;
+A6: len ll = k by FINSEQ_1:def 18;
     thus IT = v*ll implies
     len IT = k & for i be Nat st 1 <= i & i <= k holds IT.i = v.(ll.i)
     proof
@@ -221,7 +220,7 @@ A8:   dom ll = dom IT by A5,RELAT_1:46;
       let i be Nat;
       assume 1 <= i & i <= k;
       then i in dom IT by A6,A8,FINSEQ_3:27;
-      hence IT.i = v.(ll.i) by A7,FUNCT_1:22;
+      hence thesis by A7,FUNCT_1:22;
     end;
     assume that
 A9: len IT = k and
@@ -234,10 +233,10 @@ A11: for x being set holds x in dom IT iff x in dom ll & ll.x in dom v
         assume x in dom IT;
         hence x in dom ll by A6,A9,FINSEQ_3:31;
         then ll.x in rng ll by FUNCT_1:def 5;
-        hence ll.x in dom v by A5;
+        hence thesis by A5;
       end;
       assume x in dom ll & ll.x in dom v;
-      hence x in dom IT by A6,A9,FINSEQ_3:31;
+      hence thesis by A6,A9,FINSEQ_3:31;
     end;
     for x being set st x in dom IT holds IT.x = v.(ll.x)
     proof
@@ -246,9 +245,9 @@ A11: for x being set holds x in dom IT iff x in dom ll & ll.x in dom v
 A12:  x in dom IT;
       then reconsider i = x as Element of NAT;
       1 <= i & i <= k by A9,A12,FINSEQ_3:27;
-      hence IT.x = v.(ll.x) by A10;
+      hence thesis by A10;
     end;
-    hence IT = v*ll by A11,FUNCT_1:20;
+    hence thesis by A11,FUNCT_1:20;
   end;
 end;
 
@@ -270,7 +269,7 @@ A1: for x being set st x in Valuations_in A holds
     consider f being Function of Valuations_in A, BOOLEAN such that
 A2: for x being set st x in Valuations_in A holds (C[x] implies f.x = T(x)) &
     (not C[x] implies f.x = F(x)) from FUNCT_2:sch 5(A1);
-    dom f = Valuations_in A & rng f c= BOOLEAN by FUNCT_2:def 1,RELSET_1:12;
+    dom f = Valuations_in A & rng f c= BOOLEAN by FUNCT_2:def 1,RELAT_1:def 19;
     then reconsider f as Element of Funcs(Valuations_in A,BOOLEAN) by
 FUNCT_2:def 2;
     take f;
@@ -435,7 +434,7 @@ theorem Th14:
   Valid(VERUM,J).v = TRUE
 proof
   (Valuations_in A --> TRUE).v = TRUE by FUNCOP_1:13;
-  hence Valid(VERUM,J).v = TRUE by Lm1;
+  hence thesis by Lm1;
 end;
 
 theorem
@@ -486,7 +485,7 @@ theorem Th20:
   Valid('not' p,J).v = 'not'(Valid(p,J).v)
 proof
   Valid('not' p,J).v = ('not' Valid(p,J)).v by Lm1;
-  hence Valid('not' p,J).v = 'not' (Valid(p,J).v) by MARGREL1:def 20;
+  hence thesis by MARGREL1:def 20;
 end;
 
 theorem
@@ -496,7 +495,7 @@ theorem Th22:
   Valid(p '&'q,J).v = (Valid(p,J).v) '&' (Valid(q,J).v)
 proof
   Valid(p '&'q,J).v = (Valid(p,J) '&' Valid(q,J)).v by Lm1;
-  hence Valid(p '&'q,J).v = (Valid(p,J).v) '&' (Valid(q,J).v)
+  hence thesis
   by MARGREL1:def 21;
 end;
 
@@ -515,7 +514,7 @@ A2: now
   end;
   Valid(p,J).v = FALSE implies (Valid(p,J).v) '&' 'not' (Valid(p,J).v) = FALSE
   by MARGREL1:45;
-  hence Valid(p '&' 'not' p,J).v = FALSE by A1,A2,XBOOLEAN:def 3;
+  hence thesis by A1,A2,XBOOLEAN:def 3;
 end;
 
 theorem
@@ -624,7 +623,7 @@ proof
   end;
   assume for v1 st for y st x <> y holds v1.y = v.y holds Valid(p,J).v1 = TRUE;
   then FOR_ALL(x,Valid(p,J)).v = TRUE by Th8;
-  hence J,v |= All(x,p) by Th30;
+  hence thesis by Th30;
 end;
 
 theorem
@@ -636,7 +635,7 @@ proof
       .= 'not'('not'(Valid(p,J).v)) by Th20
       .= Valid(p,J).v;
   end;
-  hence Valid('not' 'not' p,J) = Valid(p,J) by FUNCT_2:113;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem Th33:
@@ -647,7 +646,7 @@ proof
     thus Valid(p '&' p,J).v = (Valid(p,J).v) '&' (Valid(p,J).v) by Th22
       .= Valid(p,J).v;
   end;
-  hence Valid(p '&' p,J) = Valid(p,J) by FUNCT_2:113;
+  hence thesis by FUNCT_2:113;
 end;
 
 canceled;
@@ -708,7 +707,7 @@ proof
   assume J,v |= p implies J,v |= q;
   then Valid(p, J).v = TRUE implies Valid(q, J).v = TRUE by Def12;
   then Valid(p, J).v = FALSE or Valid(q, J).v = TRUE by XBOOLEAN:def 3;
-  hence J,v |= p => q by Th35;
+  hence thesis by Th35;
 end;
 
 theorem Th37:
@@ -784,7 +783,7 @@ A1: for x being set st x in bound_QC-variables holds
 A2: for x being set st x in bound_QC-variables holds
   (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x))
   from FUNCT_2:sch 5(A1);
-  dom f = bound_QC-variables & rng f c= A() by FUNCT_2:def 1,RELSET_1:12;
+  dom f = bound_QC-variables & rng f c= A() by FUNCT_2:def 1,RELAT_1:def 19;
   then reconsider f as Element of Valuations_in A() by FUNCT_2:def 2;
   take f;
   now
@@ -812,7 +811,7 @@ proof
   Valid($1,J).v = Valid($1,J).w;
 A1: now
     let s,t,y,k,ll,P;
-A2: rng ll c= bound_QC-variables by CQC_LANG:def 5;
+A2: rng ll c= bound_QC-variables by RELAT_1:def 19;
     thus PP[VERUM]
     proof
       assume not x in still_not-bound_in VERUM;
@@ -821,7 +820,7 @@ A2: rng ll c= bound_QC-variables by CQC_LANG:def 5;
       proof
         let v,w such that for y st x <> y holds w.y = v.y;
         Valid(VERUM,J).v = TRUE & Valid(VERUM,J).w = TRUE by Th14;
-        hence Valid(VERUM,J).v = Valid(VERUM,J).w;
+        hence thesis;
       end;
     end;
     thus PP[P!ll]
@@ -847,12 +846,12 @@ A9:         1 <= i & i <= len (v*'ll);
             then
 A10:        (v*'ll).i = v.(ll.i) by A8,Def8;
 A11:        i in NAT by ORDINAL1:def 13;
-A12:        len (v*'ll) = len ll by A8,QC_LANG1:def 8;
+A12:        len (v*'ll) = len ll by A8,FINSEQ_1:def 18;
 A13:        ll.i in bound_QC-variables
             proof
               i in dom ll by A9,A12,FINSEQ_3:27;
               then ll.i in rng ll by FUNCT_1:def 5;
-              hence ll.i in bound_QC-variables by A2;
+              hence thesis by A2;
             end;
 A14:        ll.i <> x
             proof
@@ -861,7 +860,7 @@ A14:        ll.i <> x
               then not x in variables_in(ll,bound_QC-variables) by QC_LANG3:6;
               then not x in {ll.i2 where i2 is Element of NAT : 1 <= i2 & i2
               <= len ll & ll.i2 in bound_QC-variables} by QC_LANG3:def 2;
-              hence ll.i <> x by A9,A11,A12;
+              hence thesis by A9,A11,A12;
             end;
             reconsider z = ll.i as bound_QC-variable by A13;
             w.z = v.z by A4,A14;
@@ -884,12 +883,12 @@ A17:      len (v*'ll) = k & len (w*'ll) = k by Def8;
 A18:        1 <= i & i <= len (v*'ll);
             then
 A19:        (v*'ll).i = v.(ll.i) by A17,Def8;
-A20:        len (v*'ll) = len ll by A17,QC_LANG1:def 8;
+A20:        len (v*'ll) = len ll by A17,FINSEQ_1:def 18;
 A21:        ll.i in bound_QC-variables
             proof
               i in dom ll by A18,A20,FINSEQ_3:27;
               then ll.i in rng ll by FUNCT_1:def 5;
-              hence ll.i in bound_QC-variables by A2;
+              hence thesis by A2;
             end;
 A22:        ll.i <> x
             proof
@@ -900,7 +899,7 @@ A23:          i in NAT by ORDINAL1:def 13;
               then not
               x in {ll.i2 where i2 is Element of NAT : 1 <= i2 & i2 <=
               len ll & ll.i2 in bound_QC-variables} by QC_LANG3:def 2;
-              hence ll.i <> x by A18,A20,A23;
+              hence thesis by A18,A20,A23;
             end;
             reconsider z = ll.i as bound_QC-variable by A21;
             w.z = v.z by A4,A22;
@@ -1036,7 +1035,7 @@ A53:              z <> y;
                 hence thesis by A50;
               end;
               Valid(s,J).v2 = TRUE by A46,A50,Th8;
-              hence Valid(s,J).v1 = TRUE by A40,A49,A51;
+              hence thesis by A40,A49,A51;
             end;
             now
               assume x in {y};
@@ -1050,9 +1049,9 @@ A55:            y <> z;
                 hence v.z = w.z by A43,A54
                   .= v1.z by A47,A55;
               end;
-              hence Valid(s,J).v1 = TRUE by A46,Th8;
+              hence thesis by A46,Th8;
             end;
-            hence Valid(s,J).v1 = TRUE by A42,A48,XBOOLE_0:def 5;
+            hence thesis by A42,A48,XBOOLE_0:def 5;
           end;
           then FOR_ALL(y,Valid(s,J)).w = TRUE by Th8;
           hence thesis by A45,Lm1;
@@ -1105,8 +1104,7 @@ A66:            x <> z by A64,TARSKI:def 1;
               end;
               hence for z st y <> z holds v2.z = w.z;
             end;
-            hence ex v2 st Valid(s,J).v2 = FALSE &
-            for z st y<>z holds v2.z = w.z by A42,A59,XBOOLE_0:def 5;
+            hence thesis by A42,A59,XBOOLE_0:def 5;
           end;
           then FOR_ALL(y,Valid(s,J)).w = FALSE by Th7;
           hence thesis by A56,Lm1;
@@ -1156,7 +1154,7 @@ A3: for w st for y st x<>y holds w.y = v.y holds J,w |= p;
       let w;
       assume for y st x<>y holds w.y = v.y;
       then J,w |= p by A3;
-      hence Valid(p,J).w = TRUE by Def12;
+      hence thesis by Def12;
     end;
     hence J,v |= All(x,p) by Th31;
   end;
@@ -1210,7 +1208,7 @@ A10:    v*'lx = v*'ly
             assume
 A11:        1 <= i & i <= len (v*'lx);
             then
-A12:        1 <= i & i <= len l by A8,QC_LANG1:def 8;
+A12:        1 <= i & i <= len l by A8,FINSEQ_1:def 18;
 A13:        i in NAT by ORDINAL1:def 13;
 A14:        now
               assume l.i <> a.0;
@@ -1393,7 +1391,7 @@ A50:            for y st (bound_in s) <> y holds v1.y = v.y;
                 then
 A51:            v1.x = v.x & v1.y = v.y by A42,A45;
                 Valid(ps,J).v1 = TRUE by A43,A47,A49,A50,Th8;
-                hence Valid(qs,J).v1 = TRUE by A36,A40,A51;
+                hence thesis by A36,A40,A51;
               end;
               hence Valid(q,J).v = TRUE by A46,A47,Th8;
             end;
@@ -1465,13 +1463,13 @@ A6:     s.y is atomic & the_arguments_of s.y = ll
           l2 being QC-variable_list of k such that
 A7:       s = p!l2 by A2,QC_LANG1:def 17;
           l2 = l by A2,A7,QC_LANG1:def 22;
-          then len l = k by QC_LANG1:def 8;
+          then len l = k by FINSEQ_1:def 18;
           then len (Subst(l,a.0 .-->y)) = k by CQC_LANG:def 3;
           then reconsider l3 = Subst(l,a.0 .-->y)
-          as QC-variable_list of k by QC_LANG1:def 8;
+          as QC-variable_list of k by FINSEQ_1:def 18;
 A8:       s.y = p!l3 by A2,A5,A7,QC_LANG1:def 21;
           hence s.y is atomic by QC_LANG1:def 17;
-          hence ll = the_arguments_of s.y by A8,QC_LANG1:def 22;
+          hence thesis by A8,QC_LANG1:def 22;
         end;
         then
 A9:     still_not-bound_in the_arguments_of s.y =
@@ -1487,8 +1485,7 @@ A9:     still_not-bound_in the_arguments_of s.y =
 A10:      x = ll.k & 1 <= k & k <= len ll & ll.k in bound_QC-variables;
 A11:      1 <= k & k <= len l by A10,CQC_LANG:def 3;
           then x = l.k & l.k in bound_QC-variables by A3,A10,CQC_LANG:11;
-          hence x in {l.i : 1 <= i & i <=
-          len l & l.i in bound_QC-variables} by A11;
+          hence thesis by A11;
         end;
         hence thesis by A3,A4,A6,A9,QC_LANG3:8;
       end;
@@ -1504,7 +1501,7 @@ A14:  x <> y & not x in still_not-bound_in s;
       not x in
 
 still_not-bound_in 'not'((the_argument_of s).y) by A12,A13,A14,QC_LANG3:10,11;
-      hence not x in still_not-bound_in (s.y) by A12,CQC_LANG:31;
+      hence thesis by A12,CQC_LANG:31;
     end;
     thus (s is conjunctive & PP[the_left_argument_of s] &
     PP[the_right_argument_of s]) implies PP[s]
@@ -1523,7 +1520,7 @@ A18:  x <> y & not x in still_not-bound_in s;
 XBOOLE_0:def 3;
       then not x in (still_not-bound_in ((the_left_argument_of s).y) '&'
       ((the_right_argument_of s).y)) by QC_LANG3:14;
-      hence not x in still_not-bound_in (s.y) by A15,CQC_LANG:33;
+      hence thesis by A15,CQC_LANG:33;
     end;
     thus s is universal & PP[the_scope_of s] implies PP[s]
     proof
@@ -1553,7 +1550,7 @@ A24:      x = bound_in s by TARSKI:def 1;
           then not x in still_not-bound_in All(x,(the_scope_of s).y) iff
           not x in still_not-bound_in ((the_scope_of s).y) or x in {x}
           by XBOOLE_0:def 5;
-          hence not x in still_not-bound_in (s.y)
+          hence thesis
           by A19,A21,A24,CQC_LANG:36,TARSKI:def 1;
         end;
         hence thesis by A21,A22,A23,XBOOLE_0:def 5;
@@ -1569,7 +1566,7 @@ theorem Th44:
 proof
   (Valuations_in A --> TRUE).v = TRUE by FUNCOP_1:13;
   then (Valid(VERUM,J)).v = TRUE by Lm1;
-  hence J,v |= VERUM by Def12;
+  hence thesis by Def12;
 end;
 
 theorem Th45:
@@ -1647,7 +1644,7 @@ A2: Valid(p => ('not' p => q), J).v =
     by A1,MARGREL1:52
       .= 'not'(FALSE '&' 'not'(Valid(q, J).v)) by XBOOLEAN:138;
     FALSE '&' 'not'(Valid(q, J).v) = FALSE by MARGREL1:49;
-    hence Valid(p => ('not' p => q), J).v = TRUE by A2,MARGREL1:41;
+    hence thesis by A2,MARGREL1:41;
   end;
 end;
 
@@ -1688,8 +1685,7 @@ A3: Valid('not'(p '&' 'not' q), J).v = 'not'(Valid(p '&' 'not' q, J).v)
     (Valid(p '&' t, J).v) by Th22
       .= 'not'((Valid(q,J).v) '&' (Valid(t,J).v)) '&'
     ((Valid(p,J).v) '&' (Valid(t,J).v)) by Th22;
-    hence Valid((p => q) => ('not'(q '&' t) => 'not'
-    (p '&' t)), J).v =TRUE by A2,A3,Lm2;
+    hence thesis by A2,A3,Lm2;
   end;
 end;
 
@@ -1766,7 +1762,7 @@ A2: J |= p => q;
     J,v |= p & J,v |= p => q by A1,A2,Def13;
     hence J,v |= q by Th36;
   end;
-  hence J |= q by Def13;
+  hence thesis by Def13;
 end;
 
 theorem
@@ -1796,7 +1792,7 @@ A4:   J,w |= p by A2,A3,Th40;
     end;
     hence J,u |= All(x,q) by Th41;
   end;
-  hence J,u |= p => All(x,q) by Th36;
+  hence thesis by Th36;
 end;
 
 theorem
@@ -1830,7 +1826,7 @@ A8:   Valid(p,J).w = TRUE by Def12;
       Valid(q,J).v = TRUE by A5;
       hence J,v |= q by Def12;
     end;
-    hence J |= q by Def13;
+    hence thesis by Def13;
   end;
   hence thesis by A1,A3;
 end;

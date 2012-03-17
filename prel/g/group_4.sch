@@ -4,11 +4,10 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELSET_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -28,17 +27,17 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="80"/>
-<Adjective nr="81"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="84"/>
+<Adjective nr="85"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="57"/>
+<Adjective nr="61"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -47,11 +46,11 @@
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="49">
+<Func kind="K" nr="39">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="24">
+<Func kind="K" nr="21">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -60,9 +59,9 @@
 <Var nr="2"/>
 <Not>
 <For>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="57"/>
+<Adjective nr="61"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -89,9 +88,9 @@
 </Not>
 <Not>
 <For>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="57"/>
+<Adjective nr="61"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -107,9 +106,9 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="80"/>
-<Adjective nr="81"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="84"/>
+<Adjective nr="85"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -120,16 +119,16 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="3">
+<Pred kind="R" nr="13">
 <Var nr="1"/>
-<Func kind="K" nr="155">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
 <For>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="57"/>
+<Adjective nr="61"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>

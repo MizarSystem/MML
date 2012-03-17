@@ -14,7 +14,7 @@ environ
       COMPTS_1, TBSP_1, TOPMETR, METRIC_1, PCOMPS_1, EUCLID, PSCOMP_1,
       WEIERSTR, SEQ_4;
  constructors REAL_1, SQUARE_1, SEQ_4, CONNSP_1, COMPTS_1, TBSP_1, EUCLID,
-      WEIERSTR, XXREAL_2;
+      WEIERSTR, XXREAL_2, FUNCSDOM;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, XREAL_0, MEMBERED,
       STRUCT_0, PRE_TOPC, METRIC_1, PCOMPS_1, EUCLID, TOPMETR, BORSUK_2,
       WAYBEL_2;
@@ -22,7 +22,7 @@ environ
  definitions XBOOLE_0, TARSKI, SEQ_4, EUCLID, STRUCT_0;
  theorems METRIC_1, TOPMETR, GOBOARD6, PRE_TOPC, FUNCT_2, XBOOLE_0, FUNCT_1,
       TARSKI, WEIERSTR, SEQ_4, TBSP_1, JORDAN1K, COMPTS_1, PCOMPS_1, XREAL_1,
-      XXREAL_0, XXREAL_2;
+      XXREAL_0, XXREAL_2, EUCLID;
 
 begin :: Preliminaries
 
@@ -241,7 +241,7 @@ proof
   let M be non empty MetrSpace,
   P be non empty closed Subset of TopSpaceMetr M, x be Point of M;
   P = Cl P by PRE_TOPC:52;
-  hence x in P iff (dist_min P) . x = 0 by Th10;
+  hence thesis by Th10;
 end;
 
 theorem Th12:
@@ -318,7 +318,7 @@ A2: X = (dist x).:P & lower_bound ((dist x).:P) = inf X by Th12;
 A3: y in dom dist x & y in P & (dist x).y = p by A2,FUNCT_1:def 12;
     reconsider y as Point of M by A3,TOPMETR:16;
     p = dist (x, y) by A3,WEIERSTR:def 6;
-    hence p >= r by A1,A3;
+    hence thesis by A1,A3;
   end;
   then inf X >= r by SEQ_4:60;
   hence thesis by A2,WEIERSTR:def 8;
@@ -385,7 +385,7 @@ A4: dist(x0,y0) <= r0 by A1,A2,A3;
 A5: (the distance of (M|B)).(x0,y0) =
     (the distance of M).(x,y) by TOPMETR:def 1;
     (the distance of (M|B)).(x0,y0) = dist(x0,y0) by METRIC_1:def 1;
-    hence dist(x,y) <= r0 by A4,A5,METRIC_1:def 1;
+    hence thesis by A4,A5,METRIC_1:def 1;
   end;
   hence thesis by A2,TBSP_1:def 9;
 end;
@@ -437,7 +437,7 @@ A1: w in P by XBOOLE_0:def 1;
   reconsider w as Point of M by A1,TOPMETR:16;
   take w;
   thus w in P by A1;
-  thus (dist_min P) . z <= dist (w, z) by A1,Th15;
+  thus thesis by A1,Th15;
 end;
 
 registration
@@ -504,7 +504,7 @@ A2: w in P by XBOOLE_0:def 1;
   reconsider w as Point of M by A2,TOPMETR:16;
   take w;
   thus w in P by A2;
-  thus (dist_max P) . z >= dist (w, z) by A1,A2,Th22;
+  thus thesis by A1,A2,Th22;
 end;
 
 theorem Th24:
@@ -918,7 +918,8 @@ definition
   P = P' & Q = Q' & it = max_dist_min (P', Q');
   existence
   proof
-    reconsider P' = P, Q' = Q as Subset of TopSpaceMetr Euclid n;
+    the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+    then reconsider P' = P, Q' = Q as Subset of TopSpaceMetr Euclid n;
     take max_dist_min(P',Q'), P', Q';
     thus thesis;
   end;
@@ -934,7 +935,8 @@ definition
   P = P' & Q = Q' & it = HausDist (P', Q');
   existence
   proof
-    reconsider P' = P, Q' = Q as Subset of TopSpaceMetr Euclid n;
+    the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+    then reconsider P' = P, Q' = Q as Subset of TopSpaceMetr Euclid n;
     take HausDist (P', Q'), P', Q';
     thus thesis;
   end;
@@ -951,8 +953,10 @@ proof
   let P, Q be non empty Subset of TOP-REAL n;
   assume
 A1: P is compact & Q is compact;
-  reconsider P1 = P, Q1 = Q as non empty Subset of TopSpaceMetr Euclid n;
-  HausDist (P1, Q1) >= 0 by A1,Th37;
+X:  the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+   then reconsider P1 = P, Q1 = Q as non empty Subset of TopSpaceMetr Euclid n;
+  P1 is compact & Q1 is compact by A1,COMPTS_1:33,X;
+  then HausDist (P1, Q1) >= 0 by A1,Th37;
   hence thesis by Def3;
 end;
 
@@ -960,7 +964,8 @@ theorem
   for P being non empty Subset of TOP-REAL n holds HausDist (P, P) = 0
 proof
   let P be non empty Subset of TOP-REAL n;
-  reconsider P1 = P as non empty Subset of TopSpaceMetr Euclid n;
+   the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+   then reconsider P1 = P as non empty Subset of TopSpaceMetr Euclid n;
   HausDist (P1, P1) = 0 by Th31;
   hence thesis by Def3;
 end;
@@ -973,9 +978,11 @@ proof
   assume that
 A1: P is compact & Q is compact and
 A2: HausDist (P, Q) = 0;
-  reconsider P1 = P, Q1 = Q as non empty Subset of TopSpaceMetr Euclid n;
+X: the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+   then reconsider P1 = P, Q1 = Q as non empty Subset of TopSpaceMetr Euclid n;
+Y:  P1 is compact & Q1 is compact by A1,X,COMPTS_1:33;
   HausDist (P1, Q1) = 0 by A2,Def3;
-  hence thesis by A1,Th39;
+  hence thesis by A1,Th39,Y,X;
 end;
 
 theorem
@@ -986,10 +993,12 @@ proof
   let P, Q, R be non empty Subset of TOP-REAL n;
   assume
 A1: P is compact & Q is compact & R is compact;
-  reconsider P1 = P, Q1 = Q, R1 = R as non empty Subset of
+X: the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+    then reconsider P1 = P, Q1 = Q, R1 = R as non empty Subset of
   TopSpaceMetr Euclid n;
+Y: P1 is compact & Q1 is compact & R1 is compact by A1,COMPTS_1:33,X;
   HausDist (P1, R1) = HausDist (P, R) & HausDist (P1, Q1) = HausDist (P, Q) &
   HausDist (Q1, R1) = HausDist (Q, R) by Def3;
-  hence thesis by A1,Th40;
+  hence thesis by A1,Th40,Y;
 end;
 

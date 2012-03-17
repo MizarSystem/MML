@@ -11,10 +11,10 @@ environ
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
       INT_1, NAT_1, NAT_D, FUNCOP_1, INT_2, STRUCT_0, PARTFUN1, AMI_1, SCMNORM,
       AMI_3, XXREAL_0;
- constructors ENUMSET1, XXREAL_0, NAT_1, NAT_D, AMI_3;
+ constructors ENUMSET1, XXREAL_0, NAT_1, NAT_D, AMI_3, RELSET_1;
  registrations SETFAM_1, ORDINAL1, RELSET_1, FRAENKEL, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, CARD_3, STRUCT_0, AMI_3, AMI_1, XBOOLE_0,
-      FINSEQ_1, FINSET_1;
+      FINSEQ_1, FINSET_1, FUNCT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions FUNCOP_1, AMI_1, TARSKI, AMI_3;
  theorems AMI_1, INT_1, ABSVALUE, INT_2, TARSKI, ENUMSET1, NAT_1, FUNCOP_1,
@@ -33,17 +33,17 @@ Lm1: a <> b & b <> c & c <> a by AMI_3:52;
 begin :: Euclide algorithm
 
 definition let i be Nat, I be Instruction of SCM;
- redefine func i .--> I -> programmed FinPartState of SCM;
+ redefine func i .--> I -> NAT-defined FinPartState of SCM;
  correctness
   proof i in NAT by ORDINAL1:def 13;
    then reconsider i as Instruction-Location of SCM by AMI_1:def 4;
-    i .--> I is programmed FinPartState of SCM;
+    i .--> I is NAT-defined FinPartState of SCM;
    hence thesis;
   end;
 end;
 
 definition
-  func Euclide-Algorithm -> programmed FinPartState of SCM equals
+  func Euclide-Algorithm -> NAT-defined FinPartState of SCM equals
   (0 .--> (dl.2 := dl.1)) +* ((1 .--> Divide(dl.0,dl.1)) +*
   ((2 .--> (dl.0 := dl.2)) +* ((3 .--> (dl.1 >0_goto il.0)) +*
   (4 .--> halt SCM))));
@@ -159,7 +159,7 @@ A3:  Computation(s,k+1)
     .= 1;
   thus  Computation(s,k+1).a =  Computation(s,k).a &
    Computation(s,k+1).b =  Computation(s,k).b by A3,AMI_3:8,52;
-  thus  Computation(s,k+1).c =  Computation(s,k).b by A3,AMI_3:8;
+  thus  thesis by A3,AMI_3:8;
 end;
 
 theorem Th6:
@@ -181,9 +181,7 @@ A3:  Computation(s,k+1)
   hence IC  Computation(s,k+1) = Next IC  Computation(s,k) by AMI_3:12
     .= 1+1 by A2
     .= 2; thus
-   Computation(s,k+1).a =  Computation(s,k).a div  Computation(s,k).b &
-   Computation(s,k+1).b =  Computation(s,k).a mod  Computation(s,k).b &
-   Computation(s,k+1).c =  Computation(s,k).c by A3,Lm1,AMI_3:12;
+   thesis by A3,Lm1,AMI_3:12;
 end;
 
 theorem Th7:
@@ -205,8 +203,7 @@ A3:  Computation(s,k+1)
     .= (2+1) by A2
     .= 3;
   thus  Computation(s,k+1).a =  Computation(s,k).c by A3,AMI_3:8;
-  thus  Computation(s,k+1).b =  Computation(s,k).b
-  &  Computation(s,k+1).c =  Computation(s,k).c by A3,AMI_3:8,52;
+  thus  thesis by A3,AMI_3:8,52;
 end;
 
 theorem Th8:
@@ -234,8 +231,7 @@ A3:  Computation(s,k+1)
       .= (3+1) by A2
       .= 4;
   end;
-  thus  Computation(s,k+1).a =  Computation(s,k).a
-  &  Computation(s,k+1).b =  Computation(s,k).b by A3,AMI_3:15;
+  thus  thesis by A3,AMI_3:15;
 end;
 
 theorem Th9:
@@ -248,7 +244,7 @@ A1: Euclide-Algorithm c= s;
   let k,i;
   assume IC  Computation(s,k) = 4;
   then s halts_at IC  Computation(s,k) by A1,Lm2;
-  hence  Computation(s,k+i) =  Computation(s,k) by AMI_1:89,NAT_1:11;
+  hence  thesis by AMI_1:89,NAT_1:11;
 end;
 
 Lm3: for s being State of SCM st s starts_at 0 & Euclide-Algorithm c= s
@@ -296,7 +292,7 @@ A14:    IC c7 = 3 & c7.a = c6.c & c7.b = c6.b & c7.c = c6.c by A2,A7,Th7;
         hence c8.a > 0 & c8.b = 0 & IC c8 = 4 by A2,A9,A10,Th9;
       end;
     end;
-    hence P[k+1];
+    hence thesis;
   end;
   for k holds P[k] from NAT_1:sch 1(A4,A5);
   hence thesis;
@@ -327,8 +323,7 @@ A9: IC c6 = 2 & c6.b = c5.a mod c5.b & c6.c = c5.c by A2,A5,Th6;
 A10: IC c7 = 3 & c7.a = c6.c & c7.b = c6.b & c7.c = c6.c by A2,A6,Th7;
 
 hence  Computation(s,4*(k+1)).a =  Computation(s,4*k).b by A2,A7,A8,A9,Th8;
-  thus  Computation(s,4*(k+1)).b =
-   Computation(s,4*k).a mod  Computation(s,4*k).b by A2,A7,A8,A9,A10,Th8;
+  thus  thesis by A2,A7,A8,A9,A10,Th8;
 end;
 
 Lm5: for s being State of SCM st s starts_at 0 & Euclide-Algorithm c= s
@@ -393,7 +388,7 @@ A6: y > 0;
 A7: abs y = y by A6,ABSVALUE:def 1;
   now per cases by XXREAL_0:1;
     case x > y;
-      hence (Result s).a = x gcd y by A1,A2,A3,A4,A6,Lm5;
+      hence thesis by A1,A2,A3,A4,A6,Lm5;
     end;
     case
 A8:   x = y;
@@ -428,10 +423,10 @@ A17:  s' halts_at IC  Computation(s',k0) by A5,A11,A14,A15,Lm5;
       then
 A18:  s halts_at IC  Computation(s,k0+4) by A17,AMI_1:91;
       (Result s').a = x gcd y by A5,A11,A14,A15,A16,Lm5;
-      hence (Result s).a = x gcd y by A18,AMI_1:90;
+      hence thesis by A18,AMI_1:90;
     end;
   end;
-  hence (Result s).a = x gcd y;
+  hence thesis;
 end;
 
 definition
@@ -455,7 +450,7 @@ A4:   x1 = ((a,b) --> (x1,y1)).a by AMI_3:52,FUNCT_4:66
         .= x2 by A2,A3,AMI_3:52,FUNCT_4:66;
       y1 = ((a,b) --> (x1,y1)).b by FUNCT_4:66
         .= y2 by A2,A3,FUNCT_4:66;
-      hence q1 = q2 by A2,A3,A4;
+      hence thesis by A2,A3,A4;
     end;
     consider f being Function such that
 A5: for p,q being set holds [p,q] in f iff p in FinPartSt SCM & P[p,q]
@@ -465,7 +460,7 @@ A6: dom f c= FinPartSt SCM
       let e be set;
       assume e in dom f;
       then [e,f.e] in f by FUNCT_1:8;
-      hence e in FinPartSt SCM by A5;
+      hence thesis by A5;
     end;
     rng f c= FinPartSt SCM
     proof
@@ -475,7 +470,7 @@ A6: dom f c= FinPartSt SCM
 A7:   [p,q] in f by RELAT_1:def 5;
       ex x,y being Integer st
       x > 0 & y > 0 &p = (a,b) --> (x,y) & q = a .--> (x gcd y) by A5,A7;
-      hence q in FinPartSt SCM;
+      hence thesis;
     end;
     then reconsider f as PartFunc of FinPartSt SCM, FinPartSt SCM
     by A6,RELSET_1:11;
@@ -486,7 +481,7 @@ A7:   [p,q] in f by RELAT_1:def 5;
     given x,y being Integer such that
 A8: x > 0 & y > 0 & p = (a,b) --> (x,y) & q = a .--> (x gcd y);
     p in FinPartSt SCM;
-    hence [p,q] in f by A5,A8;
+    hence thesis by A5,A8;
   end;
   uniqueness
   proof
@@ -532,7 +527,7 @@ proof
   let p be set;
 A1: p in dom Euclide-Function iff [p,Euclide-Function.p] in Euclide-Function
   by FUNCT_1:8;
-A2: dom Euclide-Function c= FinPartSt SCM by RELSET_1:12;
+A2: dom Euclide-Function c= FinPartSt SCM by RELAT_1:def 18;
   hereby
     assume
 A3: p in dom Euclide-Function;
@@ -557,7 +552,7 @@ proof
   let i,j be Integer;
   assume i > 0 & j > 0;
   then [((a,b) --> (i,j)),a .--> (i gcd j)] in Euclide-Function by Def2;
-  hence Euclide-Function.((a,b) --> (i,j)) = a .--> (i gcd j) by FUNCT_1:8;
+  hence thesis by FUNCT_1:8;
 end;
 
 theorem
@@ -659,8 +654,7 @@ A32:   Computation(s1,0) = s1 &  Computation(s2,0) = s2 by AMI_1:13;
         .= 0 by A22,AMI_1:def 41
         .= IC s2 by A24,AMI_1:def 41
         .= ( Computation(s2,0)).IC SCM by AMI_1:13;
-      thus ( Computation(s1,0)).a = ( Computation(s2,0)).a &
-       ( Computation(s1,0)).b = ( Computation(s2,0)).b by A16,A20,A26,A32;
+      thus thesis by A16,A20,A26,A32;
     end;
 A33: for i,j being Nat st P[4*i] & j<>0 & j<=4 holds P[4*i+j]
     proof
@@ -725,8 +719,7 @@ A57:    ( Computation(s1,4*i+4)).b = ( Computation(s1,4*i+3)).b
         =  Computation(s2,4*i+j).IC SCM by A37,A44,A48,A52,A55;
         thus  Computation(s1,4*i+j).a
         =  Computation(s2,4*i+j).a by A37,A45,A49,A53,A56;
-        thus  Computation(s1,4*i+j).b
-        =  Computation(s2,4*i+j).b by A37,A46,A50,A54,A57;
+        thus  thesis by A37,A46,A50,A54,A57;
       end;
       suppose IC  Computation(s2,4*i) = 4;
         then
@@ -737,15 +730,13 @@ X:         s1 halts_at  IC Computation(s1,4*i) &
         then  Computation(s1,4*i+j) =  Computation(s1,4*i) &
          Computation(s2,4*i+j) =  Computation(s2,4*i)
          by X,AMI_1:89;
-        hence  Computation(s1,4*i+j).IC SCM =  Computation(s2,4*i+j).IC SCM &
-         Computation(s1,4*i+j).a =  Computation(s2,4*i+j).a &
-         Computation(s1,4*i+j).b =  Computation(s2,4*i+j).b by A34,A35,A36;
+        hence  thesis by A34,A35,A36;
       end;
     end;
 A58: 4 > 0;
     P[k] from NAT_D:sch 2(A31,A58,A33);
     then ( Computation(s1,k))|A = ( Computation(s2,k))|A by A30,GRFUNC_1:92;
-    hence  Computation(s1,k)|dom(p +* s) =  Computation(s2,k)|dom(p +* s)
+    hence  thesis
     by A27,A29,RELAT_1:185;
   end;
 A59: p +* s is halting
@@ -819,7 +810,6 @@ A83: dom s c= dom(p +* s) by A77,RELAT_1:25;
   then
 A84: dom(a .--> (i1 gcd i2)) c= dom(p +* s) by A83,XBOOLE_1:1;
   Result(p +* s) = (Result t)|dom(p +* s) by A19,A59,A74,AMI_1:def 28;
-  hence Euclide-Function.s c= Result(p +* s) by A73,A81,A82,A84,FUNCT_4:90
-,RELAT_1:186;
+  hence thesis by A73,A81,A82,A84,FUNCT_4:90,RELAT_1:186;
 end;
 

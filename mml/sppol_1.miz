@@ -9,26 +9,27 @@ environ
  vocabularies FINSET_1, REALSET1, ARYTM, ARYTM_1, FINSEQ_1, ARYTM_3, SQUARE_1,
       RELAT_1, COMPLEX1, PRE_TOPC, EUCLID, METRIC_1, FUNCT_1, TOPREAL1, SEQ_2,
       SEQ_4, BOOLE, SUBSET_1, PCOMPS_1, ABSVALUE, COMPTS_1, TEX_2, BORSUK_1,
-      TOPS_2, ORDINAL2, MCART_1, FINSEQ_4, SETFAM_1, TARSKI, SPPOL_1;
+      TOPS_2, ORDINAL2, MCART_1, FINSEQ_4, SETFAM_1, TARSKI, SPPOL_1, RLVECT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, SQUARE_1, SEQ_4, FUNCT_1,
       PARTFUN1, PRE_TOPC, BORSUK_1, FINSET_1, FINSEQ_1, DOMAIN_1, STRUCT_0,
-      METRIC_1, PCOMPS_1, TOPS_2, REALSET1, COMPTS_1, FINSEQ_4, EUCLID, TEX_2,
+      METRIC_1, PCOMPS_1, TOPS_2, REALSET1, COMPTS_1, FINSEQ_4, RLVECT_1,
+      RLTOPSP1, EUCLID, TEX_2,
       TOPREAL1;
  constructors SETFAM_1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, SEQ_4, FINSEQ_4,
       TOPS_2, COMPTS_1, REALSET2, TDLAT_3, TEX_2, MONOID_0, TOPMETR, TOPREAL1,
-      XXREAL_2;
+      XXREAL_2, FUNCSDOM, CONVEX1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, INT_1, MEMBERED, FINSEQ_1, STRUCT_0, PRE_TOPC, TEX_2, MONOID_0,
-      EUCLID, TOPREAL1, FINSET_1, VALUED_0;
+      EUCLID, TOPREAL1, FINSET_1, VALUED_0, RLVECT_1, RLTOPSP1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, TOPREAL1, SEQ_4, EUCLID, COMPTS_1, SUBSET_1, VALUED_1,
-      STRUCT_0;
+      STRUCT_0, ALGSTR_0, RLTOPSP1;
  theorems TARSKI, NAT_1, INT_1, ABSVALUE, SUBSET_1, FINSET_1, FINSEQ_1,
       PRE_TOPC, METRIC_1, TOPS_1, TOPS_2, SEQ_4, EUCLID, TOPMETR, TOPREAL1,
       TOPREAL3, PCOMPS_1, COMPTS_1, TEX_2, GOBOARD2, FINSEQ_3, REALSET1, HEINE,
       TDLAT_3, PARTFUN2, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1,
-      COMPLEX1, XXREAL_0;
+      COMPLEX1, XXREAL_0, RLTOPSP1;
  schemes FRAENKEL;
 
 begin :: Preliminaires
@@ -45,7 +46,7 @@ proof
   assume n<k;
   then n+1<=k by NAT_1:13;
   then n+1-1<=k-1 by XREAL_1:11;
-  hence n<=k-1;
+  hence thesis;
 end;
 
 theorem
@@ -89,7 +90,7 @@ A1: F c= F'
 A2: x = F(f(),i) and
 A3: 1<=i & i<=len f() and P[i];
     i in dom f() by A3,FINSEQ_3:27;
-    hence x in F' by A2;
+    hence thesis by A2;
   end;
 A4: dom f() is finite;
   F' is finite from FRAENKEL:sch 21(A4);
@@ -140,17 +141,7 @@ proof
     .= |.v1-v2.| by EUCLID:def 6;
 end;
 
-theorem Th21:
-  for p,p1,p2 st p in LSeg(p1,p2) ex r st 0<=r & r<=1 & p = (1-r)*p1+r*p2
-proof
-  let p,p1,p2;
-  assume p in LSeg(p1,p2);
-  then ex r st p = (1-r)*p1+r*p2 & 0<=r & r<=1;
-  hence thesis;
-end;
-
-theorem
-  for p1,p2,r st 0<=r & r<=1 holds (1-r)*p1+r*p2 in LSeg(p1,p2);
+canceled 2;
 
 theorem
   for P being non empty Subset of TOP-REAL n st P is closed & P c= LSeg(p1,p2)
@@ -167,7 +158,7 @@ A2: P c= LSeg(p1,p2);
     let x be set;
     assume x in W;
     then ex r st r=x & 0<=r & r<=1 & (1-r)*p1+r*p2 in P;
-    hence x in REAL;
+    hence thesis;
   end;
   then reconsider W as Subset of REAL;
 A3: W is bounded_below
@@ -176,7 +167,7 @@ A3: W is bounded_below
     let r be real number;
     assume r in W;
     then ex s st s = r & 0<=s & s<=1 & (1-s)*p1+s*p2 in P;
-    hence 0<=r;
+    hence thesis;
   end;
   take r2 = lower_bound W;
   hereby
@@ -187,10 +178,12 @@ A4: not p in P;
 A5: p in (the carrier of TOP-REAL n)\P by XBOOLE_0:def 5;
     reconsider u = p as Point of Euclid n by EUCLID:25;
 A6: P` is open by A1,TOPS_1:29;
-    reconsider Q = P` as Subset of TopSpaceMetr(Euclid n);
-    consider r0 being real number such that
+X:  the TopStruct of TOP-REAL n = TopSpaceMetr(Euclid n) by EUCLID:def 8;
+    then reconsider Q = P` as Subset of TopSpaceMetr(Euclid n);
+    Q is open by X,A6,PRE_TOPC:60;
+    then consider r0 being real number such that
 A7: r0>0 and
-A8: Ball(u,r0) c= Q by A5,A6,TOPMETR:22;
+A8: Ball(u,r0) c= Q by A5,TOPMETR:22;
 A9: ex r0 being Real st r0 in W
     proof
       consider v being Element of TOP-REAL n such that
@@ -219,8 +212,9 @@ A16:  r4-r2<r0/|.v2-v1.|-0 by XREAL_1:23;
       then
 A17:  r4-r2>=0 by XREAL_1:50;
       set p3=(1-r4)*p1+r4*p2;
+V:    p2 -p1 = v2 - v1 by EUCLID:73;
       reconsider u3 = p3 as Point of Euclid n by EUCLID:25;
-      p3-p = (1-r4)*p1+r4*p2+ (-((1-r2)*p1)+-(r2*p2)) by EUCLID:42
+U:    p3-p = (1-r4)*p1+r4*p2+ (-((1-r2)*p1)-(r2*p2)) by EUCLID:42
         .= (1-r4)*p1+r4*p2+ -((1-r2)*p1)+-(r2*p2) by EUCLID:30
         .= r4*p2+((1-r4)*p1+ -((1-r2)*p1))+-(r2*p2) by EUCLID:30
         .= ((1-r4)*p1+ -((1-r2)*p1))+r4*p2+(-r2)*p2 by EUCLID:44
@@ -230,8 +224,12 @@ A17:  r4-r2>=0 by XREAL_1:50;
         .= ((1-r4)+ -(1-r2))*p1+(r4-r2)*p2 by EUCLID:37
         .= (-(r4-r2))*p1+(r4-r2)*p2
         .= (r4-r2)*p2-((r4-r2)*p1) by EUCLID:44
-        .= (r4-r2)*(p2 -p1) by EUCLID:53;
-      then dist(u3,u)=|.(r4-r2)*(v2-v1).| by Th20
+        .= (r4-r2)*(p2 -p1) by EUCLID:53
+        .= (r4-r2)*(v2 -v1) by V,EUCLID:69;
+      reconsider v3=p3, v4=p as Element of REAL n by EUCLID:25;
+      dist(u3,u) = |.v3-v4.| by Th20
+        .= |.p3-p.| by EUCLID:73
+        .=|.(r4-r2)*(v2-v1).| by U
         .=abs(r4-r2)*|.v2-v1.| by EUCLID:14
         .=(r4-r2)*|.v2-v1.| by A17,ABSVALUE:def 1;
       then dist(u3,u)<(r0/|.v2-v1.|)*|.v2-v1.| by A13,A16,XREAL_1:70;
@@ -247,7 +245,7 @@ A19:  p1=p2;
       then
 A20:  p = (1-r2+r2)*p1 by EUCLID:37
         .= p1 by EUCLID:33;
-A21:  LSeg(p1,p2)={p1} by A19,TOPREAL1:7;
+A21:  LSeg(p1,p2)={p1} by A19,RLTOPSP1:71;
       consider q1 being Point of TOP-REAL n such that
 A22:  q1 in P by SUBSET_1:10;
       thus contradiction by A2,A4,A20,A21,A22,TARSKI:def 1;
@@ -256,7 +254,7 @@ A22:  q1 in P by SUBSET_1:10;
   let r;
   assume 0<=r & r<=1 & (1-r)*p1+r*p2 in P;
   then r in W;
-  hence r2 <= r by A3,SEQ_4:def 5;
+  hence thesis by A3,SEQ_4:def 5;
 end;
 
 theorem Th24:
@@ -268,12 +266,14 @@ proof
 A1: LSeg(q1,q2) c= LSeg(p1,p2);
   assume p1 in LSeg(q1,q2);
   then consider r1 such that
-A2: 0<=r1 & r1<=1 & p1=(1-r1)*q1+r1*q2 by Th21;
-A3: q1 in LSeg(q1,q2) & q2 in LSeg(q1,q2) by TOPREAL1:6;
+A2: p1=(1-r1)*q1+r1*q2 & 0<=r1 & r1<=1;
+A3: q1 in LSeg(q1,q2) & q2 in LSeg(q1,q2) by RLTOPSP1:69;
+  then q1 in LSeg(p1,p2) by A1;
   then consider s1 such that
-A4: 0<=s1 & s1<=1 & q1=(1-s1)*p1+s1*p2 by A1,Th21;
-  consider s2 such that
-A5: 0<=s2 & s2<=1 & q2=(1-s2)*p1+s2*p2 by A1,A3,Th21;
+A4: q1=(1-s1)*p1+s1*p2 & 0<=s1 & s1<=1;
+  q2 in LSeg(p1,p2) by A1,A3;
+  then consider s2 such that
+A5:  q2=(1-s2)*p1+s2*p2 & 0<=s2 & s2<=1;
   p1 = (1-r1)*((1-s1)*p1+s1*p2)+(r1*((1-s2)*p1)+r1*(s2*p2))
   by A2,A4,A5,EUCLID:36
     .= (1-r1)*((1-s1)*p1)+(1-r1)*(s1*p2)+(r1*((1-s2)*p1)+r1*(s2*p2))
@@ -288,11 +288,12 @@ A5: 0<=s2 & s2<=1 & q2=(1-s2)*p1+s2*p2 by A1,A3,Th21;
     .=((r1*s2) + (1-r1)*s1)*p2+(1-r1)*(1-s1)*p1+r1*(1-s2)*p1 by EUCLID:37
     .=((r1*s2) + (1-r1)*s1)*p2+((1-r1)*(1-s1)*p1+r1*(1-s2)*p1) by EUCLID:30
     .=(r1*s2+(1-r1)*s1)*p2+((1-r1)*(1-s1)+r1*(1-s2))*p1 by EUCLID:37;
-  then 0.REAL n
+  then 0.TOP-REAL n
   = (r1*s2+(1-r1)*s1)*p2+((1-r1)*(1-s1)+r1*(1-s2))*p1-p1 by EUCLID:46
     .= (r1*s2+(1-r1)*s1)*p2+(((1-r1)*(1-s1)+r1*(1-s2))*p1-p1) by EUCLID:49
     .= (r1*s2+(1-r1)*s1)*p2+(((1-r1)*(1-s1)+r1*(1-s2))*p1-1*p1) by EUCLID:33
-    .= (((1-r1)*(1-s1)+r1*(1-s2))-1)*p1--((r1*s2+(1-r1)*s1)*p2) by EUCLID:54;
+    .= (((1-r1)*(1-s1)+r1*(1-s2))-1)*p1+((r1*s2+(1-r1)*s1)*p2) by EUCLID:54
+    .= (((1-r1)*(1-s1)+r1*(1-s2))-1)*p1--((r1*s2+(1-r1)*s1)*p2) by EUCLID:39;
   then (((1-r1)*(1-s1)+r1*(1-s2))-1)*p1 = -((r1*s2+(1-r1)*s1)*p2) by EUCLID:47;
   then (((1-r1)*(1-s1)+r1*(1-s2))-1)*p1 = (-(r1*s2+(1-r1)*s1))*p2 by EUCLID:44;
   then
@@ -302,29 +303,29 @@ A6: -(r1*s2+(1-r1)*s1)=-0 or p1=p2 by EUCLID:38;
 A7: r1*s2+(1-r1)*s1=0;
     now per cases by A2,A4,A5,A7,XREAL_1:172;
       suppose r1=0 & s1=0;
-        then p1 = 1*q1+0.REAL n by A2,EUCLID:33
-          .= q1+0.REAL n by EUCLID:33
+        then p1 = 1*q1+0.TOP-REAL n by A2,EUCLID:33
+          .= q1+0.TOP-REAL n by EUCLID:33
           .= q1 by EUCLID:31;
-        hence p1=q1 or p1=q2;
+        hence thesis;
       end;
       suppose r1=1 & s2=0;
-        then p1 = 0.REAL n +1*q2 by A2,EUCLID:33
+        then p1 = 0.TOP-REAL n +1*q2 by A2,EUCLID:33
           .= 1*q2 by EUCLID:31
           .= q2 by EUCLID:33;
-        hence p1=q1 or p1=q2;
+        hence thesis;
       end;
       suppose s2=0 & s1=0;
-        then q1 = 1*p1+0.REAL n by A4,EUCLID:33
-          .= p1+0.REAL n by EUCLID:33
+        then q1 = 1*p1+0.TOP-REAL n by A4,EUCLID:33
+          .= p1+0.TOP-REAL n by EUCLID:33
           .= p1 by EUCLID:31;
-        hence p1=q1 or p1=q2;
+        hence thesis;
       end;
     end;
-    hence p1=q1 or p1=q2;
+    hence thesis;
   end;
   suppose p1=p2;
-    then LSeg(q1,q2) c={p1} by A1,TOPREAL1:7;
-    hence p1=q1 or p1=q2 by A3,TARSKI:def 1;
+    then LSeg(q1,q2) c={p1} by A1,RLTOPSP1:71;
+    hence thesis by A3,TARSKI:def 1;
   end;
 end;
 
@@ -335,17 +336,17 @@ proof
   let p1,p2,q1,q2;
   assume
 A1: LSeg(p1,p2)=LSeg(q1,q2);
-A2: q1 in LSeg(q1,q2) & q2 in LSeg(q1,q2) by TOPREAL1:6;
-A3: p1 in LSeg(p1,p2) & p2 in LSeg(p1,p2) by TOPREAL1:6;
+A2: q1 in LSeg(q1,q2) & q2 in LSeg(q1,q2) by RLTOPSP1:69;
+A3: p1 in LSeg(p1,p2) & p2 in LSeg(p1,p2) by RLTOPSP1:69;
   per cases by A1,A3,Th24;
   suppose
 A4: p1=q1 & p2=q1;
-    then LSeg(p1,p2) = {q1} by TOPREAL1:7;
+    then LSeg(p1,p2) = {q1} by RLTOPSP1:71;
     hence thesis by A1,A2,A4,TARSKI:def 1;
   end;
   suppose
 A5: p1=q2 & p2=q2;
-    then LSeg(p1,p2) = {q2} by TOPREAL1:7;
+    then LSeg(p1,p2) = {q2} by RLTOPSP1:71;
     hence thesis by A1,A2,A5,TARSKI:def 1;
   end;
   suppose p1=q1 & p2=q2 or p1=q2 & p2=q1;
@@ -364,7 +365,7 @@ proof
   set P = LSeg(p1,p2), T = (TOP-REAL n)|P;
   now per cases;
     suppose p1 = p2;
-      then P = {p1} by TOPREAL1:7;
+      then P = {p1} by RLTOPSP1:71;
       then
 A1:   { p1 } = [#](T) by PRE_TOPC:def 10
         .= the carrier of T;
@@ -421,13 +422,13 @@ proof thus p in {p} by TARSKI:def 1;
   let p1,p2;
   assume
 A1: p in LSeg(p1,p2) & LSeg(p1,p2) c= {p};
-  p2 in LSeg(p1,p2) by TOPREAL1:6;
+  p2 in LSeg(p1,p2) by RLTOPSP1:69;
   hence thesis by A1,TARSKI:def 1;
 end;
 
 theorem Th32:
   p1 is_extremal_in LSeg(p1,p2)
-proof thus p1 in LSeg(p1,p2) by TOPREAL1:6;
+proof thus p1 in LSeg(p1,p2) by RLTOPSP1:69;
   let q1,q2;
   thus thesis by Th24;
 end;
@@ -541,9 +542,9 @@ A1: p`2=q`2;
 A2: p`2 = p1`2 by XXREAL_0:1;
     assume p2 in P;
     then p`2 <= p2`2 & p2`2 <= p`2 by A1,TOPREAL1:10;
-    hence p1`2 = p2`2 by A2,XXREAL_0:1;
+    hence thesis by A2,XXREAL_0:1;
   end;
-  p in P & q in P by TOPREAL1:6;
+  p in P & q in P by RLTOPSP1:69;
   hence thesis by Def2;
 end;
 
@@ -562,9 +563,9 @@ A1: p`1=q`1;
 A2: p`1 = p1`1 by XXREAL_0:1;
     assume p2 in P;
     then p`1 <= p2`1 & p2`1 <= p`1 by A1,TOPREAL1:9;
-    hence p1`1 = p2`1 by A2,XXREAL_0:1;
+    hence thesis by A2,XXREAL_0:1;
   end;
-  p in P & q in P by TOPREAL1:6;
+  p in P & q in P by RLTOPSP1:69;
   hence thesis by Def3;
 end;
 
@@ -573,11 +574,11 @@ theorem
   implies LSeg(p,q) is horizontal
 proof
   assume p1 in LSeg(p,q);
-  then consider r1 such that 0<=r1 & r1<=1 and
-A1: p1 = (1-r1)*p+r1*q by Th21;
+  then consider r1 such that
+A1: p1 = (1-r1)*p+r1*q and 0<=r1 & r1<=1;
   assume p2 in LSeg(p,q);
-  then consider r2 such that 0<=r2 & r2<=1 and
-A2: p2 = (1-r2)*p+r2*q by Th21;
+  then consider r2 such that
+A2: p2 = (1-r2)*p+r2*q and 0<=r2 & r2<=1;
   assume that
 A3: p1`1 <> p2`1 and
 A4: p1`2 = p2`2;
@@ -601,11 +602,11 @@ theorem
   implies LSeg(p,q) is vertical
 proof
   assume p1 in LSeg(p,q);
-  then consider r1 such that 0<=r1 & r1<=1 and
-A1: p1 = (1-r1)*p+r1*q by Th21;
+  then consider r1 such that
+A1: p1 = (1-r1)*p+r1*q and 0<=r1 & r1<=1;
   assume p2 in LSeg(p,q);
-  then consider r2 such that 0<=r2 & r2<=1 and
-A2: p2 = (1-r2)*p+r2*q by Th21;
+  then consider r2 such that
+A2: p2 = (1-r2)*p+r2*q and 0<=r2 & r2<=1;
   assume that
 A3: p1`2 <> p2`2 and
 A4: p1`1 = p2`1;
@@ -674,7 +675,7 @@ A3: i in dom f & i+1 in dom f by GOBOARD2:3;
   then
 A4: f/.i<>f/.(i+1) by A1,A3,PARTFUN2:17;
 A5: f/.i in LSeg(f/.i,f/.(i+1)) & f/.(i+1) in LSeg(f/.i,f/.(i+1))
-  by TOPREAL1:6;
+  by RLTOPSP1:69;
   LSeg(f/.i,f/.(i+1)) = LSeg(f,i) by A2,TOPREAL1:def 5;
   hence thesis by A4,A5,REALSET1:15;
 end;
@@ -699,11 +700,11 @@ A1: X is finite from FinSeqFam';
     proof
       assume e in X;
       then ex i st e = U(f,i) & 1<=i & i<=len f & X[i];
-      hence e in Y;
+      hence thesis;
     end;
     assume e in Y;
     then ex i st e = LSeg(f,i) & 1<=i & i<=len f;
-    hence e in X;
+    hence thesis;
   end;
   hence thesis by A1,TARSKI:2;
 end;
@@ -740,7 +741,7 @@ proof
     then ex i st LSeg(f,i) = x & 1<=i & i+1<=len f & i<>k & i<>k+1;
     hence thesis;
   end;
-  hence F is finite by Th45,FINSET_1:13;
+  hence thesis by Th45,FINSET_1:13;
 end;
 
 theorem
@@ -755,7 +756,7 @@ proof
     then consider i such that
 A1: LSeg(f,i)=x and 1<=i & i<=len f;
     x is Subset of REAL 2 by A1,EUCLID:25;
-    hence x in bool (REAL 2);
+    hence thesis;
   end;
   hence thesis by EUCLID:25;
 end;
@@ -772,7 +773,7 @@ proof
     then consider i such that
 A1: LSeg(f,i)=x and 1<=i & i+1<=len f;
     x is Subset of REAL 2 by A1,EUCLID:25;
-    hence x in bool (REAL 2);
+    hence thesis;
   end;
   hence thesis by EUCLID:25;
 end;
@@ -789,7 +790,7 @@ proof
     then consider i such that
 A1: LSeg(f,i)=x and 1<=i & i+1<=len f & i<>k & i<>k+1;
     x is Subset of REAL 2 by A1,EUCLID:25;
-    hence x in bool (REAL 2);
+    hence thesis;
   end;
   hence thesis by EUCLID:25;
 end;
@@ -945,13 +946,13 @@ A10: LSeg(p1,p2)c= LSeg(f,i) \/ LSeg(f,i+1);
   suppose
 A11: p in LSeg(p1,p0);
 A12: LSeg(p1,p0) is vertical or LSeg(p1,p0) is horizontal by A1,A7,Th41;
-    p1 in LSeg(p1,p0) by TOPREAL1:6;
+    p1 in LSeg(p1,p0) by RLTOPSP1:69;
     hence contradiction by A6,A11,A12,Def2,Def3;
   end;
   suppose
 A13: p in LSeg(p0,p2);
 A14: LSeg(p0,p2) is vertical or LSeg(p0,p2) is horizontal by A1,A9,Th41;
-    p2 in LSeg(p0,p2) by TOPREAL1:6;
+    p2 in LSeg(p0,p2) by RLTOPSP1:69;
     hence contradiction by A6,A13,A14,Def2,Def3;
   end;
 end;
@@ -973,7 +974,7 @@ A6: 1 <= i+1 & i+1+1 = i+(1+1) by NAT_1:11;
   then (f/.i)`1 = (f/.(i+1))`1 by A5,Th37;
   then (f/.(i+1))`2 = (f/.(i+2))`2 by A1,A2,A3,A4,Th50;
   then LSeg(f/.(i+1),f/.(i+2)) is horizontal by Th36;
-  hence LSeg(f,i+1) is horizontal by A4,A6,TOPREAL1:def 5;
+  hence thesis by A4,A6,TOPREAL1:def 5;
 end;
 
 theorem Th56:
@@ -993,7 +994,7 @@ A6: 1 <= i+1 & i+1+1 = i+(1+1) by NAT_1:11;
   then (f/.i)`2 = (f/.(i+1))`2 by A5,Th36;
   then (f/.(i+1))`1 = (f/.(i+2))`1 by A1,A2,A3,A4,Th51;
   then LSeg(f/.(i+1),f/.(i+2)) is vertical by Th37;
-  hence LSeg(f,i+1) is vertical by A4,A6,TOPREAL1:def 5;
+  hence thesis by A4,A6,TOPREAL1:def 5;
 end;
 
 theorem
@@ -1028,20 +1029,20 @@ A7: 1 <= i+1 by NAT_1:11;
   set p1=f/.i, p0=f/.(i+1), p2=f/.(i+2);
   assume
 A8: p0 in LSeg(p,q) & LSeg(p,q)c=LSeg(f,i) \/ LSeg(f,i+1);
-A9: p in LSeg(p,q)& q in LSeg(p,q) by TOPREAL1:6;
+A9: p in LSeg(p,q)& q in LSeg(p,q) by RLTOPSP1:69;
   now per cases by A8,A9,XBOOLE_0:def 3;
     case p in LSeg(f,i)& q in LSeg(f,i);
       then p in LSeg(p1,p0) & q in LSeg(p1,p0) by A3,A6,TOPREAL1:def 5;
       then
 A10:  LSeg(p,q)c=LSeg(p1,p0) by TOPREAL1:12;
       p0 is_extremal_in LSeg(p1,p0) by Th32;
-      hence p0=p or p0=q by A8,A10,Def1;
+      hence thesis by A8,A10,Def1;
     end;
     case
 A11:  p in LSeg(f,i)& q in LSeg(f,i+1);
       then p in LSeg(p1,p0) by A3,A6,TOPREAL1:def 5;
-      then consider s such that 0<=s & s<=1 and
-A12:  p=(1-s)*p1+s*p0 by Th21;
+      then consider s such that
+A12:  p=(1-s)*p1+s*p0 and 0<=s & s<=1;
 A13:  p`1=((1-s)*p1)`1+(s*p0)`1 by A12,TOPREAL3:7
         .=(1-s)*(p1`1)+(s*p0)`1 by TOPREAL3:9
         .=(1-s)*(p1`1)+s*(p0`1) by TOPREAL3:9;
@@ -1049,8 +1050,8 @@ A14:  p`2=((1-s)*p1)`2+(s*p0)`2 by A12,TOPREAL3:7
         .=(1-s)*(p1`2)+(s*p0)`2 by TOPREAL3:9
         .=(1-s)*(p1`2)+s*(p0`2) by TOPREAL3:9;
       q in LSeg(p0,p2) by A4,A5,A7,A11,TOPREAL1:def 5;
-      then consider s1 such that 0<=s1 & s1<=1 and
-A15:  q=(1-s1)*p0+s1*p2 by Th21;
+      then consider s1 such that
+A15:  q=(1-s1)*p0+s1*p2 and 0<=s1 & s1<=1;
 A16:  q`1=((1-s1)*p0)`1+(s1*p2)`1 by A15,TOPREAL3:7
         .=(1-s1)*(p0`1)+(s1*p2)`1 by TOPREAL3:9
         .=(1-s1)*(p0`1)+s1*(p2`1) by TOPREAL3:9;
@@ -1062,8 +1063,8 @@ A18:    f/.(i+2)=f/.(i+2) & f/.i=f/.i;
         per cases by A1,A2,A3,A4,A18,Th52;
         case
 A19:      p1`1=p0`1 & p2`1<>p0`1;
-          consider r such that 0<=r & r<=1 and
-A20:      p0=(1-r)*p+r*q by A8,Th21;
+          consider r such that
+A20:      p0=(1-r)*p+r*q and 0<=r & r<=1 by A8;
           p0`1=((1-r)*p)`1+(r*q)`1 by A20,TOPREAL3:7
             .=(1-r)*(p`1)+(r*q)`1 by TOPREAL3:9
             .=(1-r)*(p0`1)+r*(q`1) by A13,A19,TOPREAL3:9;
@@ -1072,10 +1073,10 @@ A20:      p0=(1-r)*p+r*q by A8,Th21;
 A21:      r=0 or p0`1-q`1=0 by XCMPLX_1:6;
           now per cases by A21;
             case r=0;
-              then p0=(1-0)*p+0.REAL 2 by A20,EUCLID:33
+              then p0=(1-0)*p+0.TOP-REAL 2 by A20,EUCLID:33
                 .=1*p by EUCLID:31
                 .=p by EUCLID:33;
-              hence p0=p or p0=q;
+              hence thesis;
             end;
             case p0`1=q`1;
               then s1*(p0`1-p2`1)=0 by A16;
@@ -1083,24 +1084,24 @@ A21:      r=0 or p0`1-q`1=0 by XCMPLX_1:6;
 A22:          s1=0 or p0`1-p2`1=0 by XCMPLX_1:6;
               now per cases by A22;
                 case s1=0;
-                  then q=(1-0)*p0+0.REAL 2 by A15,EUCLID:33
+                  then q=(1-0)*p0+0.TOP-REAL 2 by A15,EUCLID:33
                     .=1*p0 by EUCLID:31
                     .=p0 by EUCLID:33;
-                  hence p0=p or p0=q;
+                  hence thesis;
                 end;
                 case p0`1=p2`1;
                   hence contradiction by A19;
                 end;
               end;
-              hence p0=p or p0=q;
+              hence thesis;
             end;
           end;
-          hence p0=p or p0=q;
+          hence thesis;
         end;
         case
 A23:      p1`2=p0`2 & p2`2<>p0`2;
-          consider r such that 0<=r & r<=1 and
-A24:      p0=(1-r)*p+r*q by A8,Th21;
+          consider r such that
+A24:      p0=(1-r)*p+r*q and 0<=r & r<=1 by A8;
           p0`2=((1-r)*p)`2+(r*q)`2 by A24,TOPREAL3:7
             .=(1-r)*(p`2)+(r*q)`2 by TOPREAL3:9
             .=(1-r)*(p0`2)+r*(q`2) by A14,A23,TOPREAL3:9;
@@ -1109,10 +1110,10 @@ A24:      p0=(1-r)*p+r*q by A8,Th21;
 A25:      r=0 or p0`2-q`2=0 by XCMPLX_1:6;
           now per cases by A25;
             case r=0;
-              then p0=(1-0)*p+0.REAL 2 by A24,EUCLID:33
+              then p0=(1-0)*p+0.TOP-REAL 2 by A24,EUCLID:33
                 .=1*p by EUCLID:31
                 .=p by EUCLID:33;
-              hence p0=p or p0=q;
+              hence thesis;
             end;
             case p0`2=q`2;
               then s1*(p0`2-p2`2)=0 by A17;
@@ -1120,28 +1121,28 @@ A25:      r=0 or p0`2-q`2=0 by XCMPLX_1:6;
 A26:          s1=0 or p0`2-p2`2=0 by XCMPLX_1:6;
               now per cases by A26;
                 case s1=0;
-                  then q=(1-0)*p0+0.REAL 2 by A15,EUCLID:33
+                  then q=(1-0)*p0+0.TOP-REAL 2 by A15,EUCLID:33
                     .=1*p0 by EUCLID:31
                     .=p0 by EUCLID:33;
-                  hence p0=p or p0=q;
+                  hence thesis;
                 end;
                 case p0`2=p2`2;
                   hence contradiction by A23;
                 end;
               end;
-              hence p0=p or p0=q;
+              hence thesis;
             end;
           end;
-          hence p0=p or p0=q;
+          hence thesis;
         end;
       end;
-      hence p0=p or p0=q;
+      hence thesis;
     end;
     case
 A27:  p in LSeg(f,i+1)& q in LSeg(f,i);
       then q in LSeg(p1,p0) by A3,A6,TOPREAL1:def 5;
-      then consider s such that 0<=s & s<=1 and
-A28:  q=(1-s)*p1+s*p0 by Th21;
+      then consider s such that
+A28:  q=(1-s)*p1+s*p0 and 0<=s & s<=1;
 A29:  q`1=((1-s)*p1)`1+(s*p0)`1 by A28,TOPREAL3:7
         .=(1-s)*(p1`1)+(s*p0)`1 by TOPREAL3:9
         .=(1-s)*(p1`1)+s*(p0`1) by TOPREAL3:9;
@@ -1149,8 +1150,8 @@ A30:  q`2=((1-s)*p1)`2+(s*p0)`2 by A28,TOPREAL3:7
         .=(1-s)*(p1`2)+(s*p0)`2 by TOPREAL3:9
         .=(1-s)*(p1`2)+s*(p0`2) by TOPREAL3:9;
       p in LSeg(p0,p2) by A4,A5,A7,A27,TOPREAL1:def 5;
-      then consider s1 such that 0<=s1 & s1<=1 and
-A31:  p=(1-s1)*p0+s1*p2 by Th21;
+      then consider s1 such that
+A31:  p=(1-s1)*p0+s1*p2 and 0<=s1 & s1<=1;
 A32:  p`1=((1-s1)*p0)`1+(s1*p2)`1 by A31,TOPREAL3:7
         .=(1-s1)*(p0`1)+(s1*p2)`1 by TOPREAL3:9
         .=(1-s1)*(p0`1)+s1*(p2`1) by TOPREAL3:9;
@@ -1162,8 +1163,9 @@ A34:    f/.(i+2)=f/.(i+2) & f/.i=f/.i;
         per cases by A1,A2,A3,A4,A34,Th52;
         case
 A35:      p1`1=p0`1 & p2`1<>p0`1;
-          consider r such that 0<=r & r<=1 and
-A36:      p0=(1-r)*q+r*p by A8,Th21;
+          p0 in LSeg(q,p) by A8;
+          then consider r such that
+A36:      p0=(1-r)*q+r*p and 0<=r & r<=1;
           p0`1=((1-r)*q)`1+(r*p)`1 by A36,TOPREAL3:7
             .=(1-r)*(q`1)+(r*p)`1 by TOPREAL3:9
             .=(1-r)*(p0`1)+r*(p`1) by A29,A35,TOPREAL3:9;
@@ -1172,10 +1174,10 @@ A36:      p0=(1-r)*q+r*p by A8,Th21;
 A37:      r=0 or p0`1-p`1=0 by XCMPLX_1:6;
           now per cases by A37;
             case r=0;
-              then p0=(1-0)*q+0.REAL 2 by A36,EUCLID:33
+              then p0=(1-0)*q+0.TOP-REAL 2 by A36,EUCLID:33
                 .=1*q by EUCLID:31
                 .=q by EUCLID:33;
-              hence p0=p or p0=q;
+              hence thesis;
             end;
             case p0`1=p`1;
               then s1*(p0`1-p2`1)=0 by A32;
@@ -1183,24 +1185,25 @@ A37:      r=0 or p0`1-p`1=0 by XCMPLX_1:6;
 A38:          s1=0 or p0`1-p2`1=0 by XCMPLX_1:6;
               now per cases by A38;
                 case s1=0;
-                  then p=(1-0)*p0+0.REAL 2 by A31,EUCLID:33
+                  then p=(1-0)*p0+0.TOP-REAL 2 by A31,EUCLID:33
                     .=1*p0 by EUCLID:31
                     .=p0 by EUCLID:33;
-                  hence p0=p or p0=q;
+                  hence thesis;
                 end;
                 case p0`1=p2`1;
                   hence contradiction by A35;
                 end;
               end;
-              hence p0=p or p0=q;
+              hence thesis;
             end;
           end;
-          hence p0=p or p0=q;
+          hence thesis;
         end;
         case
 A39:      p1`2=p0`2 & p2`2<>p0`2;
-          consider r such that 0<=r & r<=1 and
-A40:      p0=(1-r)*q+r*p by A8,Th21;
+          p0 in LSeg(q,p) by A8;
+          then consider r such that
+A40:      p0=(1-r)*q+r*p and 0<=r & r<=1;
           p0`2=((1-r)*q)`2+(r*p)`2 by A40,TOPREAL3:7
             .=(1-r)*(q`2)+(r*p)`2 by TOPREAL3:9
             .=(1-r)*(p0`2)+r*(p`2) by A30,A39,TOPREAL3:9;
@@ -1209,10 +1212,10 @@ A40:      p0=(1-r)*q+r*p by A8,Th21;
 A41:      r=0 or p0`2-p`2=0 by XCMPLX_1:6;
           now per cases by A41;
             case r=0;
-              then p0=(1-0)*q+0.REAL 2 by A40,EUCLID:33
+              then p0=(1-0)*q+0.TOP-REAL 2 by A40,EUCLID:33
                 .=1*q by EUCLID:31
                 .=q by EUCLID:33;
-              hence p0=p or p0=q;
+              hence thesis;
             end;
             case p0`2=p`2;
               then s1*(p0`2-p2`2)=0 by A33;
@@ -1220,29 +1223,29 @@ A41:      r=0 or p0`2-p`2=0 by XCMPLX_1:6;
 A42:          s1=0 or p0`2-p2`2=0 by XCMPLX_1:6;
               now per cases by A42;
                 case s1=0;
-                  then p=(1-0)*p0+0.REAL 2 by A31,EUCLID:33
+                  then p=(1-0)*p0+0.TOP-REAL 2 by A31,EUCLID:33
                     .=1*p0 by EUCLID:31
                     .=p0 by EUCLID:33;
-                  hence p0=p or p0=q;
+                  hence thesis;
                 end;
                 case p0`2=p2`2;
                   hence contradiction by A39;
                 end;
               end;
-              hence p0=p or p0=q;
+              hence thesis;
             end;
           end;
-          hence p0=p or p0=q;
+          hence thesis;
         end;
       end;
-      hence p0=p or p0=q;
+      hence thesis;
     end;
     case p in LSeg(f,i+1)& q in LSeg(f,i+1);
       then p in LSeg(p0,p2) & q in LSeg(p0,p2) by A4,A5,A7,TOPREAL1:def 5;
       then
 A43:  LSeg(p,q)c=LSeg(p0,p2) by TOPREAL1:12;
       p0 is_extremal_in LSeg(p0,p2) by Th32;
-      hence p0=p or p0=q by A8,A43,Def1;
+      hence thesis by A8,A43,Def1;
     end;
   end;
   hence thesis;
@@ -1264,7 +1267,7 @@ A5: i+1 <= len f by A4,XXREAL_0:2;
 A6: for p,q st p2 in LSeg(p,q) & LSeg(p,q) c= LSeg(f,i) \/ LSeg(f,i+1)
   holds p2=p or p2=q by A1,A2,A3,A4,Th58;
   LSeg(f,i)=LSeg(f/.i,p2) by A3,A5,TOPREAL1:def 5;
-  then p2 in LSeg(f,i) by TOPREAL1:6;
+  then p2 in LSeg(f,i) by RLTOPSP1:69;
   then p2 in LSeg(f,i) \/ LSeg(f,i+1) by XBOOLE_0:def 3;
   hence thesis by A6,Def1;
 end;
@@ -1291,13 +1294,13 @@ A8: 1 <= i+1 by NAT_1:11;
   LSeg(f,i)=LSeg(f/.i,p0) & LSeg(f,i+1)=LSeg(p0,f/.(i+2))
   by A3,A6,A7,A8,TOPREAL1:def 5;
   then
-A9: p0 in LSeg(f,i) & p0 in LSeg(f,i+1) by TOPREAL1:6;
+A9: p0 in LSeg(f,i) & p0 in LSeg(f,i+1) by RLTOPSP1:69;
   let s;
   assume
 A10: s>0;
   per cases;
   suppose p = q;
-    then f/.(i+1) in {p} by A4,TOPREAL1:7;
+    then f/.(i+1) in {p} by A4,RLTOPSP1:71;
     then p in LSeg(f,i) by A9,TARSKI:def 1;
     hence thesis by A5,XBOOLE_0:def 3;
   end;
@@ -1314,7 +1317,7 @@ A14: r0/|.v2-v1.|>0 by A12,XREAL_1:141;
     then
 A15: -(r0/|.v2-v1.|)< -0 by XREAL_1:26;
     consider s0 being Real such that
-A16: 0<=s0 & s0<=1 & p0=(1-s0)*p+s0*q by A4,Th21;
+A16: p0=(1-s0)*p+s0*q & 0<=s0 & s0<=1 by A4;
     set r3 = min(s0+r0/|.v2-v1.|,1), r4=max(s0+(-r0)/|.v2-v1.|,0);
 A17: |.v2-v1.|<>0 by A11,EUCLID:20;
 A18: (-r0)/|.v2-v1.|<0 by A15,XCMPLX_1:188;
@@ -1325,7 +1328,8 @@ A20: s0<=s0+r0/|.v2-v1.| by A14,XREAL_1:31;
     then 0<=r3 & r3<=1 by A16,XXREAL_0:20,22;
     then
 A21: p3 in LSeg(p,q);
-A22: p3-p0 =(1-r3)*p+r3*q+ (-((1-s0)*p)+-(s0*q)) by A16,EUCLID:42
+V:   q-p = v2- v1 by EUCLID:73;
+A22: p3-p0 =(1-r3)*p+r3*q+ (-((1-s0)*p)-(s0*q)) by A16,EUCLID:42
       .=(1-r3)*p+r3*q+ -((1-s0)*p)+-(s0*q) by EUCLID:30
       .=r3*q+((1-r3)*p+ -((1-s0)*p))+-(s0*q) by EUCLID:30
       .=((1-r3)*p+ -((1-s0)*p))+r3*q+(-s0)*q by EUCLID:44
@@ -1335,7 +1339,8 @@ A22: p3-p0 =(1-r3)*p+r3*q+ (-((1-s0)*p)+-(s0*q)) by A16,EUCLID:42
       .=((1-r3)+ -(1-s0))*p+(r3-s0)*q by EUCLID:37
       .=(-(r3-s0))*p+(r3-s0)*q
       .=(r3-s0)*q -((r3-s0)*p) by EUCLID:44
-      .=(r3-s0)*(q-p) by EUCLID:53;
+      .=(r3-s0)*(q-p) by EUCLID:53
+      .=(r3-s0)*(v2-v1) by V,EUCLID:69;
     now per cases;
       suppose 1<=s0+r0/|.v2-v1.|;
         then
@@ -1347,8 +1352,11 @@ A24:    r3+-s0<=s0+r0/|.v2-v1.|+-s0 by XREAL_1:8;
         then abs(r3-s0)<=r0/|.v2-v1.| by A24,ABSVALUE:def 1;
         then
 A25:    abs(r3-s0)*|.v2 -v1.|<=(r0/|.v2-v1.|)*|.v2 -v1.| by XREAL_1:66;
-        dist(u3,u0) = |.(r3-s0)*(v2 -v1).| by A22,Th20
-          .= abs(r3-s0)*|.(v2 -v1).| by EUCLID:14;
+      reconsider v3=p3, v4=p0 as Element of REAL 2 by EUCLID:25;
+        dist(u3,u0) = |.v3-v4.| by Th20
+        .= |.p3-p0.| by EUCLID:73
+        .= |.(r3-s0)*(v2 -v1).| by A22
+        .= abs(r3-s0)*|.(v2 -v1).| by EUCLID:14;
         then
 A26:    dist(u3,u0)<= r0 by A17,A25,XCMPLX_1:88;
         r0+r0 = s;
@@ -1356,11 +1364,15 @@ A26:    dist(u3,u0)<= r0 by A17,A25,XCMPLX_1:88;
         hence dist(u3,u0)<s by A26,XXREAL_0:2;
       end;
       suppose not 1<=s0+r0/|.v2-v1.|;
-        then p3-p0 = (s0+r0/|.v2-v1.|-s0)*(q-p) by A22,XXREAL_0:def 9
-          .= (r0/|.v2-v1.|)*(q-p);
         then
-A27:    dist(u3,u0) = |.(r0/|.v2-v1.|)*(v2-v1).| by Th20
-          .= abs(r0/|.v2-v1.|)*|.v2-v1.| by EUCLID:14
+U:     p3-p0 = (s0+r0/|.v2-v1.|-s0)*(v2-v1) by A22,XXREAL_0:def 9
+          .= (s0+r0/|.v2-v1.|-s0)*(q-p) by V,EUCLID:69
+          .= (r0/|.v2-v1.|)*(q-p)
+          .= (r0/|.v2-v1.|)*(v2-v1) by V,EUCLID:69;
+      reconsider v3=p3, v4=p0 as Element of REAL 2 by EUCLID:25;
+A27:      dist(u3,u0) = |.v3-v4.| by Th20
+          .= |.p3-p0.| by EUCLID:73
+          .= abs(r0/|.v2-v1.|)*|.v2-v1.| by U,EUCLID:14
           .= (abs(r0)/abs(|.v2-v1.|))*|.v2-v1.| by COMPLEX1:153
           .= (abs(r0)/|.v2-v1.|)*|.v2-v1.| by ABSVALUE:def 1
           .= abs r0 by A13,XCMPLX_1:88
@@ -1380,7 +1392,7 @@ A30: s0+(-r0)/|.v2-v1.|<=1 by A16,XXREAL_0:2;
     then 0<=r4 & r4<=1 by XXREAL_0:28,30;
     then
 A31: p4 in LSeg(p,q);
-A32: p4-p0 = (1-r4)*p+r4*q+ (-((1-s0)*p)+-(s0*q)) by A16,EUCLID:42
+A32: p4-p0 = (1-r4)*p+r4*q+ (-((1-s0)*p)-(s0*q)) by A16,EUCLID:42
       .= (1-r4)*p+r4*q+ -((1-s0)*p)+-(s0*q) by EUCLID:30
       .= r4*q+((1-r4)*p+ -((1-s0)*p))+-(s0*q) by EUCLID:30
       .= ((1-r4)*p+ -((1-s0)*p))+r4*q+(-s0)*q by EUCLID:44
@@ -1390,7 +1402,8 @@ A32: p4-p0 = (1-r4)*p+r4*q+ (-((1-s0)*p)+-(s0*q)) by A16,EUCLID:42
       .= ((1-r4)+ -(1-s0))*p+(r4-s0)*q by EUCLID:37
       .= (-(r4-s0))*p+(r4-s0)*q
       .= (r4-s0)*q -((r4-s0)*p) by EUCLID:44
-      .= (r4-s0)*(q -p) by EUCLID:53;
+      .= (r4-s0)*(q -p) by EUCLID:53
+      .= (r4-s0)*(v2 -v1) by V,EUCLID:69;
     now per cases;
       suppose s0+(-r0)/|.v2-v1.|<=0;
         then
@@ -1406,8 +1419,10 @@ A35:    -((-r0)/|.v2-v1.|) = ((--r0)/|.v2-v1.|) by XCMPLX_1:188
         then
 A36:    abs(r4-s0)*|.v2 -v1.|<=(r0/|.v2-v1.|)*|.v2 -v1.|
         by A33,A34,A35,XREAL_1:66;
-        dist(u4,u0) = |.(r4-s0)*(v2 -v1).| by A32,Th20
-          .= abs(r4-s0)*|.(v2 -v1).| by EUCLID:14;
+      reconsider v3=p4, v4=p0 as Element of REAL 2 by EUCLID:25;
+      dist(u4,u0) = |.v3-v4.| by Th20
+        .= |.p4-p0.| by EUCLID:73
+          .= abs(r4-s0)*|.(v2 -v1).| by A32,EUCLID:14;
         then
 A37:    dist(u4,u0)<= r0 by A17,A36,XCMPLX_1:88;
         r0+r0 = s;
@@ -1415,11 +1430,16 @@ A37:    dist(u4,u0)<= r0 by A17,A36,XCMPLX_1:88;
         hence dist(u4,u0)<s by A37,XXREAL_0:2;
       end;
       suppose not s0+(-r0)/|.v2-v1.|<=0;
-        then p4-p0 = (s0+(-r0)/|.v2-v1.|-s0)*(q-p) by A32,XXREAL_0:def 10
-          .= ((-r0)/|.v2-v1.|)*(q-p);
         then
-A38:    dist(u4,u0) = |.((-r0)/|.v2-v1.|)*(v2-v1).| by Th20
-          .= abs((-r0)/|.v2-v1.|)*|.v2-v1.| by EUCLID:14
+U:       p4-p0 = (s0+(-r0)/|.v2-v1.|-s0)*(v2-v1) by A32,XXREAL_0:def 10
+          .= (s0+(-r0)/|.v2-v1.|-s0)*(q-p) by V,EUCLID:69
+          .= ((-r0)/|.v2-v1.|)*(q-p)
+          .= ((-r0)/|.v2-v1.|)*(v2-v1) by V,EUCLID:69;
+      reconsider v3=p4, v4=p0 as Element of REAL 2 by EUCLID:25;
+A38:
+      dist(u4,u0) = |.v3-v4.| by Th20
+        .= |.p4-p0.| by EUCLID:73
+          .= abs((-r0)/|.v2-v1.|)*|.v2-v1.| by U,EUCLID:14
           .= (abs(-r0)/abs(|.v2-v1.|))*|.v2-v1.| by COMPLEX1:153
           .= (abs(-r0)/|.v2-v1.|)*|.v2-v1.| by ABSVALUE:def 1
           .= abs(-r0) by A13,XCMPLX_1:88
@@ -1504,7 +1524,7 @@ A48:  p0 is_extremal_in LSeg(f,i) \/ LSeg(f,i+1) by A1,A2,A3,Th59;
 A49:    p0=p3;
         now per cases;
           suppose s0 = 1;
-            then p0 = 0.REAL 2+1*q by A16,EUCLID:33
+            then p0 = 0.TOP-REAL 2+1*q by A16,EUCLID:33
               .= 1*q by EUCLID:31
               .= q by EUCLID:33;
             hence contradiction by A4;
@@ -1512,18 +1532,20 @@ A49:    p0=p3;
           suppose s0<>1;
             then
 A50:        1>s0 by A16,XXREAL_0:1;
-            0.REAL 2 = (1-s0)*p+s0*q-((1-r3)*p+r3*q) by A16,A49,EUCLID:46
-              .= (1-s0)*p+s0*q+(-((1-r3)*p)+-(r3*q)) by EUCLID:42
+            0.TOP-REAL 2 = (1-s0)*p+s0*q-((1-r3)*p+r3*q) by A16,A49,EUCLID:46
+              .= (1-s0)*p+s0*q+(-((1-r3)*p)-(r3*q)) by EUCLID:42
               .= (1-s0)*p+s0*q+-(r3*q)+-((1-r3)*p) by EUCLID:30
               .= -((1-r3)*p)+((1-s0)*p+(s0*q+-(r3*q))) by EUCLID:30
               .= -((1-r3)*p)+(1-s0)*p+(s0*q+-(r3*q)) by EUCLID:30
               .= (-(1-r3))*p+(1-s0)*p+(s0*q+-(r3*q)) by EUCLID:44
               .= (-(1-r3)+(1-s0))*p+(s0*q+-(r3*q)) by EUCLID:37
               .= (-(1-r3)+(1-s0))*p+(s0*q+(-r3)*q) by EUCLID:44
-              .= ((-1)*(s0+-r3))*p+(s0+-r3)*q by EUCLID:37
-              .= (s0+-r3)*q+-((s0+-r3)*p) by EUCLID:34;
-            then (s0+-r3)*q = --((s0+-r3)*p) by EUCLID:41
-              .= (s0+-r3)*p;
+              .= ((-1)*(s0-r3))*p+(s0+-r3)*q by EUCLID:37
+              .= (-(s0-r3))*p+(s0+-r3)*q
+              .= -(s0-r3)*p+(s0+-r3)*q by EUCLID:44
+              .= (s0-r3)*q-((s0-r3)*p);
+            then (s0-r3)*q = --((s0-r3)*p) by EUCLID:41
+              .= (s0-r3)*p by EUCLID:39;
             then s0+-r3=0 by A11,EUCLID:38;
             hence contradiction by A19,A50,XXREAL_0:21;
           end;
@@ -1534,25 +1556,29 @@ A50:        1>s0 by A16,XXREAL_0:1;
 A51:    p0=p4;
         now per cases;
           suppose s0 = 0;
-            then p0 = 1*p+0.REAL 2 by A16,EUCLID:33
+            then p0 = 1*p+0.TOP-REAL 2 by A16,EUCLID:33
               .= 1*p by EUCLID:31
               .= p by EUCLID:33;
             hence contradiction by A5,A9,XBOOLE_0:def 3;
           end;
           suppose
 A52:        s0<>0;
-            0.REAL 2 = (1-s0)*p+s0*q-((1-r4)*p+r4*q) by A16,A51,EUCLID:46
-              .= (1-s0)*p+s0*q+(-((1-r4)*p)+-(r4*q)) by EUCLID:42
+            0.TOP-REAL 2 = (1-s0)*p+s0*q-((1-r4)*p+r4*q) by A16,A51,EUCLID:46
+              .= (1-s0)*p+s0*q+(-((1-r4)*p)-(r4*q)) by EUCLID:42
               .= (1-s0)*p+s0*q+-(r4*q)+-((1-r4)*p) by EUCLID:30
               .= -((1-r4)*p)+((1-s0)*p+(s0*q+-(r4*q))) by EUCLID:30
               .= -((1-r4)*p)+(1-s0)*p+(s0*q+-(r4*q)) by EUCLID:30
               .= (-(1-r4))*p+(1-s0)*p+(s0*q+-(r4*q)) by EUCLID:44
               .= (-(1-r4)+(1-s0))*p+(s0*q+-(r4*q)) by EUCLID:37
               .= (-(1-r4)+(1-s0))*p+(s0*q+(-r4)*q) by EUCLID:44
-              .= ((-1)*(s0+-r4))*p+(s0+-r4)*q by EUCLID:37
-              .= (s0+-r4)*q+-((s0+-r4)*p) by EUCLID:34;
-            then (s0+-r4)*q = --((s0+-r4)*p) by EUCLID:41
-              .= (s0+-r4)*p;
+              .= ((-1)*(s0-r4))*p+(s0+-r4)*q by EUCLID:37
+              .= (-(s0-r4))*p+(s0-r4)*q
+              .= -(s0-r4)*p+(s0-r4)*q by EUCLID:44
+              .= -((s0-r4)*p)+(s0-r4)*q
+              .= (s0-r4)*q+-((s0-r4)*p)
+              .= (s0-r4)*q-((s0-r4)*p);
+            then (s0-r4)*q = --((s0-r4)*p) by EUCLID:41
+              .= (s0-r4)*p by EUCLID:39;
             then s0+-r4=0 by A11,EUCLID:38;
             hence contradiction by A16,A29,A52,XXREAL_0:29;
           end;
@@ -1615,7 +1641,7 @@ A11: Q` is open by TOPS_1:29;
 A12: LSeg(f1,j)=LSeg(f1/.j,p0) & LSeg(f1,i)=LSeg(p0,f1/.(i+1))
   by A2,A5,A6,A7,TOPREAL1:def 5;
 A13: f1 is one-to-one & len f1 >= 1+1 by A4,TOPREAL1:def 10;
-A14: p0 in LSeg(f1,j) & p0 in LSeg(f1,i) by A12,TOPREAL1:6;
+A14: p0 in LSeg(f1,j) & p0 in LSeg(f1,i) by A12,RLTOPSP1:69;
 A15: LSeg(f1,i) in F1 by A5;
   then
 A16: p0 in PP by A14,TARSKI:def 4;
@@ -1732,9 +1758,12 @@ A37:  i in dom f1 by FINSEQ_1:def 3;
     end;
   end;
   reconsider u0 = p0 as Point of Euclid 2 by EUCLID:25;
+X: the TopStruct of TOP-REAL 2 = TopSpaceMetr Euclid 2 by EUCLID:def 8;
+  then reconsider QQ = Q` as Subset of TopSpaceMetr Euclid 2;
+Y: QQ is open by X,A11,PRE_TOPC:60;
   u0 in Q` by A28,SUBSET_1:50;
   then consider r0 being real number such that
-A38: r0>0 & Ball(u0,r0)c=Q` by A11,TOPMETR:22;
+A38: r0>0 & Ball(u0,r0)c=Q` by Y,TOPMETR:22;
   reconsider r0 as Real by XREAL_0:def 1;
 A39: now
     let p,q;
@@ -1805,7 +1834,13 @@ end;
 
 theorem
   for p, q being Point of TOP-REAL n, p', q' being Point of Euclid n st
-  p = p' & q = q' holds dist (p', q') = |. p - q .| by Th20;
+  p = p' & q = q' holds dist (p', q') = |. p - q .|
+  proof let p, q be Point of TOP-REAL n, p', q' be Point of Euclid n such that
+Z:   p = p' & q = q';
+    reconsider pp = p, qq=q as Element of REAL n by EUCLID:25;
+    dist(p', q') = |. pp - qq .| by Th20,Z;
+   hence thesis by EUCLID:73;
+  end;
 
 :: Moved from SPRECT_3, AK, 22.02.2006
 
@@ -1818,8 +1853,8 @@ proof
   then
 A1: p`2 = q`2 by Th36;
   assume r in LSeg(p,q);
-  then consider t being Real such that 0 <= t & t <= 1 and
-A2: r = (1-t)*p+t*q by Th21;
+  then consider t being Real such that
+A2: r = (1-t)*p+t*q and 0 <= t & t <= 1;
   thus p`2 = (1-t)*p`2+t*p`2
     .= ((1-t)*p)`2+t*q`2 by A1,TOPREAL3:9
     .= ((1-t)*p)`2+(t*q)`2 by TOPREAL3:9
@@ -1835,8 +1870,8 @@ proof
   then
 A1: p`1 = q`1 by Th37;
   assume r in LSeg(p,q);
-  then consider t being Real such that 0 <= t & t <= 1 and
-A2: r = (1-t)*p+t*q by Th21;
+  then consider t being Real such that
+A2: r = (1-t)*p+t*q and 0 <= t & t <= 1;
   thus p`1 = (1-t)*p`1+t*p`1
     .= ((1-t)*p)`1+t*q`1 by A1,TOPREAL3:9
     .= ((1-t)*p)`1+(t*q)`1 by TOPREAL3:9

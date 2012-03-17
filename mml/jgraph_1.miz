@@ -19,24 +19,26 @@ environ
       NAT_D, SEQ_1, SEQM_3, GRAPH_1, STRUCT_0, GRAPH_2, GRAPH_4, TOPREAL1,
       GOBOARD5, PRE_TOPC, GOBOARD1, GOBOARD4, TOPMETR, PCOMPS_1, COMPTS_1,
       WEIERSTR, TOPS_2, METRIC_1, TBSP_1, RCOMP_1, SQUARE_1, PSCOMP_1, RVSUM_1,
-      EUCLID, FUNCT_3;
+      RLVECT_1, RLTOPSP1, EUCLID, FUNCT_3;
  constructors FUNCT_3, REAL_1, SQUARE_1, NAT_1, NAT_D, RCOMP_1, BINARITH,
       TOPS_2, COMPTS_1, TBSP_1, MONOID_0, GOBOARD1, GOBOARD4, GOBOARD5,
-      PSCOMP_1, GRAPH_2, WEIERSTR, GRAPH_4, SEQ_1, SEQM_3, XXREAL_2;
+      PSCOMP_1, GRAPH_2, WEIERSTR, GRAPH_4, SEQ_1, SEQM_3, XXREAL_2,
+      FUNCSDOM;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       MEMBERED, FINSEQ_1, STRUCT_0, PRE_TOPC, METRIC_1, BORSUK_1, MONOID_0,
-      EUCLID, GRAPH_2, GRAPH_4, FINSET_1, VALUED_0, FUNCT_2, CARD_1, XXREAL_2;
+      EUCLID, GRAPH_2, GRAPH_4, FINSET_1, VALUED_0, FUNCT_2, CARD_1, XXREAL_2,
+      FINSEQ_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, FUNCT_1, EUCLID, SQUARE_1, BINOP_1, VALUED_1,
-      STRUCT_0;
+      STRUCT_0, ALGSTR_0, RLTOPSP1;
  theorems TARSKI, FUNCT_1, FINSEQ_1, NAT_1, ZFMISC_1, SPPOL_1, FINSEQ_4,
       GRAPH_1, FUNCT_3, RELAT_1, GRAPH_4, FINSEQ_3, TOPREAL1, GOBOARD1,
       GOBOARD5, GOBOARD4, TOPREAL3, SQUARE_1, EUCLID, JORDAN7, UNIFORM1,
       WEIERSTR, JORDAN5A, TOPS_2, PRE_TOPC, TBSP_1, HEINE, COMPTS_1, TOPMETR,
-      PSCOMP_1, BORSUK_1, ABSVALUE, METRIC_1, RVSUM_1, FINSEQ_2, FUNCT_2,
-      JORDAN6, XBOOLE_0, XBOOLE_1, TOPRNS_1, XCMPLX_0, COMPLEX1, XREAL_1,
-      XXREAL_0, ORDINAL1, NAT_D, PARTFUN1, XXREAL_1, XXREAL_2, SEQM_3, XREAL_0,
-      VALUED_1;
+      PSCOMP_1, BORSUK_1, ABSVALUE, METRIC_1, RVSUM_1, FUNCT_2, JORDAN6,
+      XBOOLE_0, XBOOLE_1, TOPRNS_1, XCMPLX_0, COMPLEX1, XREAL_1, XXREAL_0,
+      ORDINAL1, NAT_D, PARTFUN1, XXREAL_1, XXREAL_2, SEQM_3, XREAL_0, VALUED_1,
+      RLTOPSP1;
  schemes FINSEQ_1;
 
 begin :: GRAPHS BY CARTESIAN PRODUCT
@@ -198,7 +200,7 @@ A9: 1<n+1 by A3,NAT_1:13;
     n+1<=len f by A6,NAT_1:13;
     then n+1 in dom f by A9,FINSEQ_3:27;
     then f.(n+1) in rng f by FUNCT_1:def 5;
-    hence y in [:X,X:] by A1,A7,A8,ZFMISC_1:def 2;
+    hence thesis by A1,A7,A8,ZFMISC_1:def 2;
   end;
   hence thesis by FINSEQ_1:def 4;
 end;
@@ -301,7 +303,7 @@ A12:  len f=0;
       then len f-'1=0 by A12,XREAL_0:def 2;
       then len PairF(f)=0 by Def2;
       then PairF(f)= {};
-      hence PairF(f) is oriented Chain of PGraph(X) by GRAPH_1:14;
+      hence thesis by GRAPH_1:14;
     end;
   end;
   for n st 1 <= n & n < len PairF(f) holds
@@ -932,10 +934,10 @@ proof
 A1: x<>p2 & x in LSeg(p1,p2)/\ LSeg(p2,p3);
 A2: x in LSeg(p1,p2) & x in LSeg(p2,p3) by A1,XBOOLE_0:def 4;
   reconsider p=x as Point of TOP-REAL n by A1;
-  p in { (1-r1)*p1 + r1*p2 : 0 <= r1 & r1 <= 1 } by A2,TOPREAL1:def 3;
+  p in { (1-r1)*p1 + r1*p2 : 0 <= r1 & r1 <= 1 } by A2;
   then consider r1 such that
 A3: p=(1-r1)*p1 + r1*p2 &( 0 <= r1 & r1 <= 1 );
-  p in { (1-r2)*p2 + r2*p3 : 0 <= r2 & r2 <= 1 } by A2,TOPREAL1:def 3;
+  p in { (1-r2)*p2 + r2*p3 : 0 <= r2 & r2 <= 1 } by A2;
   then consider r2 such that
 A4: p=(1-r2)*p2 + r2*p3 &( 0 <= r2 & r2 <= 1 );
   per cases;
@@ -967,12 +969,12 @@ A11:    0<=r2"*(r1-(1-r2)) by A9;
         then r1-1+r2<=0 qua Nat+r2 by XREAL_1:8;
         then r2"*(r1-(1-r2))<=r2"*r2 by A10,XREAL_1:66;
         then p3 in {(1-r)*p1+r*p2:0<=r & r<=1} by A7,A8,A11;
-        hence p1 in LSeg(p2,p3) or p3 in LSeg(p1,p2) by TOPREAL1:def 3;
+        hence thesis;
       end;
       case r2=0;
-        then p=1*p2+0.REAL n by A4,EUCLID:33;
-        then p=p2+0.REAL n by EUCLID:33;
-        hence p1 in LSeg(p2,p3) or p3 in LSeg(p1,p2) by A1,EUCLID:31;
+        then p=1*p2+0.TOP-REAL n by A4,EUCLID:33;
+        then p=p2+0.TOP-REAL n by EUCLID:33;
+        hence thesis by A1,EUCLID:31;
       end;
     end;
     hence thesis;
@@ -1011,12 +1013,12 @@ A20:    0<=s2"*(s1-(1-s2)) by A18;
         then s1-1+s2<=0 qua Nat+s2 by XREAL_1:8;
         then s2"*(s1-(1-s2))<=s2"*s2 by A19,XREAL_1:66;
         then p1 in {(1-r)*p3+r*p2:0<=r & r<=1} by A16,A17,A20;
-        hence p1 in LSeg(p2,p3) or p3 in LSeg(p1,p2) by TOPREAL1:def 3;
+        hence thesis by RLTOPSP1:def 2;
       end;
       case s2=0;
-        then p=1*p2+0.REAL n by A3,EUCLID:33;
-        then p=p2+0.REAL n by EUCLID:33;
-        hence p1 in LSeg(p2,p3) or p3 in LSeg(p1,p2) by A1,EUCLID:31;
+        then p=1*p2+0.TOP-REAL n by A3,EUCLID:33;
+        then p=p2+0.TOP-REAL n by EUCLID:33;
+        hence thesis by A1,EUCLID:31;
       end;
     end;
     hence thesis;
@@ -1046,8 +1048,8 @@ A6: i<len f by NAT_1:13;
 A7: 1<i+1+1 by A4,NAT_1:13;
 A8: LSeg(f,i)=LSeg(f/.i,f/.(i+1)) by A2,A5,TOPREAL1:def 5;
 A9: LSeg(f,i+1)=LSeg(f/.(i+1),f/.(i+1+1)) by A2,A4,TOPREAL1:def 5;
-A10: f/.(i+1) in LSeg(f/.i,f/.(i+1)) by TOPREAL1:6;
-    f/.(i+1) in LSeg(f/.(i+1),f/.(i+1+1)) by TOPREAL1:6;
+A10: f/.(i+1) in LSeg(f/.i,f/.(i+1)) by RLTOPSP1:69;
+    f/.(i+1) in LSeg(f/.(i+1),f/.(i+1+1)) by RLTOPSP1:69;
     then f/.(i+1) in LSeg(f,i) /\ LSeg(f,i+1) by A8,A9,A10,XBOOLE_0:def 4;
     then
 A11: {f/.(i+1)} c= LSeg(f,i) /\ LSeg(f,i+1) by ZFMISC_1:37;
@@ -1063,7 +1065,7 @@ A13:      i+2=len f;
           then
 A14:      len f-2=len f-'2 by A2,NAT_D:39;
           len f-1=len f-'1 by A4,A13,NAT_D:39;
-          hence LSeg(f,i) /\ LSeg(f,i+1) = {f/.(i+1)}
+          hence thesis
           by A1,A11,A13,A14,XBOOLE_0:def 10;
         end;
         case i+2<>len f;
@@ -1077,8 +1079,8 @@ A16:      1+1-1<=i-1 by XREAL_1:11;
           now
             assume
 A17:        LSeg(f,i) /\ LSeg(f,i+1)<>{f/.(i+1)};
-A18:        f/.(i+1) in LSeg(f,i+1) by A9,TOPREAL1:6;
-            f/.(i+1) in LSeg(f,i) by A8,TOPREAL1:6;
+A18:        f/.(i+1) in LSeg(f,i+1) by A9,RLTOPSP1:69;
+            f/.(i+1) in LSeg(f,i) by A8,RLTOPSP1:69;
             then f/.(i+1) in LSeg(f,i) /\ LSeg(f,i+1) by A18,XBOOLE_0:def 4;
             then {f/.(i+1)} c= LSeg(f,i) /\ LSeg(f,i+1) by ZFMISC_1:37;
             then not LSeg(f,i) /\ LSeg(f,i+1) c= {f/.(i+1)}
@@ -1099,7 +1101,7 @@ A23:            i-'1=i-1 by A2,XREAL_1:235;
 A24:            LSeg(f,i-'1)/\ LSeg(f,i+1)={} by XBOOLE_0:def 7;
                 LSeg(f,i-'1)=LSeg(f/.(i-'1),f/.(i-'1+1))
                 by A6,A16,A23,TOPREAL1:def 5;
-                then f/.i in LSeg(f,i-'1) by A23,TOPREAL1:6;
+                then f/.i in LSeg(f,i-'1) by A23,RLTOPSP1:69;
                 hence contradiction by A9,A22,A24,XBOOLE_0:def 4;
               end;
               case
@@ -1108,13 +1110,13 @@ A25:            f/.(i+1+1) in LSeg(f/.i,f/.(i+1));
                 then LSeg(f,i) misses LSeg(f,i+1+1) by A1,TOPREAL1:def 9;
                 then
 A26:            LSeg(f,i)/\ LSeg(f,i+1+1)={} by XBOOLE_0:def 7;
-                f/.(i+1+1) in LSeg(f,i+1+1) by A21,TOPREAL1:6;
+                f/.(i+1+1) in LSeg(f,i+1+1) by A21,RLTOPSP1:69;
                 hence contradiction by A8,A25,A26,XBOOLE_0:def 4;
               end;
             end;
             hence contradiction;
           end;
-          hence LSeg(f,i) /\ LSeg(f,i+1) = {f/.(i+1)};
+          hence thesis;
         end;
       end;
       hence thesis;
@@ -1425,7 +1427,7 @@ A5: 1<=k1 & k1+1<=len f & f/.k1=g/.i
     & f/.(k1+1)=g/.(i+1) & f.k1=g.i & f.(k1+1)=g.(i+1) by A1,A4,Th25;
     k1<len f by A5,NAT_1:13;
     then k1 in dom f by A5,FINSEQ_3:27;
-    hence x in rng f by A2,A5,FUNCT_1:def 5;
+    hence thesis by A2,A5,FUNCT_1:def 5;
   end;
   suppose i>=len g;
     then
@@ -1444,7 +1446,7 @@ A10:    1<=k1 & k1+1<=len f & f/.k1=g/.(i-'1)
         & f.(k1+1)=g.(i-'1+1) by A1,A4,A8,Th25;
         1<k1+1 by A10,NAT_1:13;
         then k1+1 in dom f by A10,FINSEQ_3:27;
-        hence x in rng f by A2,A9,A10,FUNCT_1:def 5;
+        hence thesis by A2,A9,A10,FUNCT_1:def 5;
       end;
       case 1>=i;
         then
@@ -1452,7 +1454,7 @@ A11:    i=1 by A4,XXREAL_0:1;
 A12:    f.1=g.1 by A1,Def3;
         len g<=len f by A1,Th12;
         then 1 in dom f by A6,A11,FINSEQ_3:27;
-        hence x in rng f by A2,A11,A12,FUNCT_1:def 5;
+        hence thesis by A2,A11,A12,FUNCT_1:def 5;
       end;
     end;
     hence thesis;
@@ -1886,7 +1888,9 @@ proof
   assume
 A1: x1=p1 & x2=p2;
   reconsider x1'=x1,x2'=x2 as Element of REAL n;
-  (Pitag_dist n).(x1',x2')=|.p1-p2.| by A1,EUCLID:def 6;
+X: p1 - p2 = x1' - x2' by A1,EUCLID:73;
+  (Pitag_dist n).(x1',x2') = |.x1'-x2'.| by A1,EUCLID:def 6
+        .=|.p1-p2.| by A1,X,EUCLID:68;
   hence thesis by METRIC_1:def 1;
 end;
 
@@ -1898,7 +1902,7 @@ proof
   0 <= Sum sqr w by RVSUM_1:116;
   then
 A1: |.p.|^2=Sum sqr w by SQUARE_1:def 4;
-A2: len sqr w =2 by FINSEQ_2:109;
+A2: len sqr w =2 by FINSEQ_1:def 18;
 A3: (sqr w).1=(p`1)^2 by VALUED_1:11;
   (sqr w).2=(p`2)^2 by VALUED_1:11;
   then sqr w=<*(p`1)^2,(p`2)^2*> by A2,A3,FINSEQ_1:61;
@@ -1952,7 +1956,7 @@ theorem Th52:
   p in LSeg(p1,p2) implies ex r st 0<=r & r<=1 & p=(1-r)*p1+r*p2
 proof
   assume p in LSeg(p1,p2);
-  then p in { (1-r)*p1 + r*p2 : 0 <= r & r <= 1 } by TOPREAL1:def 3;
+  then p in { (1-r)*p1 + r*p2 : 0 <= r & r <= 1 };
   then consider r1 such that
 A1: p=(1-r1)*p1 + r1*p2 &( 0 <= r1 & r1 <= 1);
   thus thesis by A1;
@@ -1965,7 +1969,7 @@ proof
 A1: p in LSeg(p1,p2);
   then consider r such that
 A2: 0<=r & r<=1 & p=(1-r)*p1+r*p2 by Th52;
-  p-p1= (1-r)*p1+-p1+r*p2 by A2,EUCLID:30
+  p-p1= (1-r)*p1-p1+r*p2 by A2,EUCLID:30
     .=(1-r)*p1-1*p1+r*p2 by EUCLID:33
     .=(1+-r-1)*p1+r*p2 by EUCLID:54
     .=r*p2+-r*p1 by EUCLID:44
@@ -2415,7 +2419,7 @@ A107: i=2*j+ (i mod 2) & i mod 2<2 by NAT_D:def 2;
       2*(j+1)-'1 =2*(j+1)-1 by A94,A106,A107,NAT_D:39;
       then g1.i=f/.(j+1) by A24,A92,A106,A107;
       then
-A108: |.g1/.i-f/.(j+1).|=|.0.REAL 2.| by A95,EUCLID:46
+A108: |.g1/.i-f/.(j+1).|=|.0.TOP-REAL 2.| by A95,EUCLID:46
         .=0 by TOPRNS_1:24;
       2*j+1+1<=2*(len f)-1+1 by A25,A49,A94,A106,A107,XREAL_1:8;
       then 2*j+1<2*(len f) by NAT_1:13;
@@ -2884,7 +2888,7 @@ A105: i=2*j+ (i mod 2) & (i mod 2)<2 by NAT_D:def 2;
       2*(j+1)-'1 =2*(j+1)-1 by A92,A104,A105,NAT_D:39;
       then g1/.i=f/.(j+1) by A24,A91,A93,A104,A105;
       then
-A106: |.g1/.i-f/.(j+1).|=|.0.REAL 2.| by EUCLID:46
+A106: |.g1/.i-f/.(j+1).|=|.0.TOP-REAL 2.| by EUCLID:46
         .=0 by TOPRNS_1:24;
       2*j+1+1<=2*(len f)-1+1 by A25,A48,A92,A104,A105,XREAL_1:8;
       then 2*j+1<2*(len f) by NAT_1:13;
@@ -3075,12 +3079,15 @@ A9: g is being_homeomorphism & g.0 = q1 & g.1 = q2 by A1,TOPREAL1:def 2;
 A10: f=f1 & f1 is continuous & f1 is one-to-one by A8,JORDAN7:15;
   consider g1 being Function of I[01],TOP-REAL 2 such that
 A11: g=g1 & g1 is continuous & g1 is one-to-one by A9,JORDAN7:15;
-  reconsider P'=P,Q'=Q as Subset of TopSpaceMetr(Euclid 2);
-A12: P' <> {} & P' is compact & Q' <> {} & Q' is compact by A1,JORDAN5A:1;
+Y: P is compact & Q is compact by A1,JORDAN5A:1;
+X: the TopStruct of TOP-REAL 2 = TopSpaceMetr(Euclid 2) by EUCLID:def 8;
+  then reconsider P'=P,Q'=Q as Subset of TopSpaceMetr(Euclid 2);
+A12: P' <> {} & P' is compact & Q' <> {} & Q' is compact
+          by Y,X,COMPTS_1:33;
   assume P /\ Q= {};
   then P misses Q by XBOOLE_0:def 7;
   then
-A13: min_dist_min(P',Q')>0 by A12,Th55;
+A13: min_dist_min(P',Q')>0 by A12,Th55,X;
   set e=min_dist_min(P',Q')/5;
 A14: e>0/5 by A13,XREAL_1:76;
   then consider h being FinSequence of REAL such that

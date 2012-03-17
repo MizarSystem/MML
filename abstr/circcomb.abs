@@ -8,16 +8,17 @@ environ
 
  vocabularies MSUALG_1, FUNCT_1, FUNCOP_1, PRALG_1, RELAT_1, CARD_3, FINSEQ_1,
       FINSEQ_2, AMI_1, ZF_REFLE, FUNCT_4, BOOLE, PBOOLE, PARTFUN1, TDGROUP,
-      MSAFREE2, FINSET_1, QC_LANG1, PRE_CIRC, CIRCUIT1, CLASSES1, MCART_1,
-      MARGREL1, LATTICES, CIRCCOMB, CAT_1, ARYTM, STRUCT_0;
+      MSAFREE2, FINSET_1, QC_LANG1, CARD_FIN, CIRCUIT1, MCART_1, MARGREL1,
+      LATTICES, CIRCCOMB, CAT_1, ARYTM, STRUCT_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, MCART_1, RELAT_1,
       FUNCT_1, FINSEQ_1, FINSEQ_2, FINSET_1, FUNCT_2, FUNCOP_1, PARTFUN1,
-      FUNCT_4, CARD_3, CLASSES1, MARGREL1, PBOOLE, STRUCT_0, MSUALG_1,
-      PRE_CIRC, MSAFREE2, CIRCUIT1, CIRCUIT2;
- constructors CLASSES1, MARGREL1, CIRCUIT1, CIRCUIT2;
+      FUNCT_4, CARD_3, MARGREL1, PBOOLE, STRUCT_0, MSUALG_1, MSAFREE2,
+      CIRCUIT1, CIRCUIT2;
+ constructors MARGREL1, CIRCUIT1, CIRCUIT2, RELSET_1, XCMPLX_0;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1,
-      FRAENKEL, MARGREL1, FINSEQ_2, CARD_3, PBOOLE, STRUCT_0, MSUALG_1,
-      MSUALG_2, MSAFREE2, FUNCT_7, CARD_1;
+      FINSEQ_1, FRAENKEL, MARGREL1, FINSEQ_2, CARD_3, PBOOLE, STRUCT_0,
+      MSUALG_1, MSUALG_2, MSAFREE2, FUNCT_7, CARD_1, FUNCT_4, RELSET_1,
+      CIRCUIT1, PRE_CIRC;
  requirements NUMERALS, BOOLE, SUBSET;
 
 
@@ -28,22 +29,28 @@ definition
   mode Gate of S is Element of the carrier' of S;
 end;
 
-
 registration
-  let f,g be non-empty Function;
-  cluster f+*g -> non-empty;
-end;
-
-definition
   let A,B be set;
   let f be ManySortedSet of A;
   let g be ManySortedSet of B;
-  redefine func f+*g -> ManySortedSet of A \/ B;
+  cluster f+*g -> A \/ B-defined;
 end;
 
-definition
+registration
   let A,B be set;
- redefine func A .--> B -> ManySortedSet of {A};
+  let f be ManySortedSet of A;
+  let g be ManySortedSet of B;
+  cluster f+*g -> total (A \/ B-defined Function);
+end;
+
+registration
+  let A,B be set;
+ cluster A .--> B -> {A}-defined;
+end;
+
+registration
+  let A,B be set;
+ cluster A .--> B -> total ({A}-defined Function);
 end;
 
 registration
@@ -257,21 +264,11 @@ theorem :: CIRCCOMB:27
 
 theorem :: CIRCCOMB:28
   for S1,S2 being non empty ManySortedSign
-  for A1 being locally-finite non-empty MSAlgebra over S1
-  for A2 being locally-finite non-empty MSAlgebra over S2 st
-  the Sorts of A1 tolerates the Sorts of A2 holds A1+*A2 is locally-finite;
+  for A1 being finite-yielding non-empty MSAlgebra over S1
+  for A2 being finite-yielding non-empty MSAlgebra over S2 st
+  the Sorts of A1 tolerates the Sorts of A2 holds A1+*A2 is finite-yielding;
 
-theorem :: CIRCCOMB:29
-  for f,g being non-empty Function, x being Element of product f,
-  y being Element of product g holds x+*y in product (f+*g);
-
-theorem :: CIRCCOMB:30
-  for f,g being non-empty Function
-  for x being Element of product (f+*g) holds x|dom g in product g;
-
-theorem :: CIRCCOMB:31
-  for f,g being non-empty Function st f tolerates g
-  for x being Element of product (f+*g) holds x|dom f in product f;
+canceled 3;
 
 theorem :: CIRCCOMB:32
   for S1,S2 being non empty ManySortedSign
@@ -446,9 +443,7 @@ theorem :: CIRCCOMB:49
   InputVertices 1GateCircStr(p,f) = rng p &
   InnerVertices 1GateCircStr(p,f) = {[p,f]};
 
-theorem :: CIRCCOMB:50
-  for f being set, p being FinSequence
-  for x being set st x in rng p holds the_rank_of x in the_rank_of [p,f];
+canceled;
 
 theorem :: CIRCCOMB:51
   for f being set, p,q being FinSequence holds
@@ -576,10 +571,7 @@ begin :: One Gate Circuit
 
 definition
   let n be Nat;
-  mode FinSeqLen of n -> FinSequence means
-:: CIRCCOMB:def 12
-
-    len it = n;
+  mode FinSeqLen of n is n-long FinSequence;
 end;
 
 registration
@@ -587,6 +579,7 @@ registration
 end;
 
 definition
+ canceled;
   let n be Nat;
   let X,Y be non empty set;
   let f be Function of n-tuples_on X, Y;
@@ -659,7 +652,7 @@ registration
   let X be non empty finite set;
   let f be Function of n-tuples_on X, X;
   let p be FinSeqLen of n;
-  cluster 1GateCircuit(p,f) -> locally-finite;
+  cluster 1GateCircuit(p,f) -> finite-yielding;
 end;
 
 theorem :: CIRCCOMB:63
@@ -693,7 +686,7 @@ theorem :: CIRCCOMB:65
 
 registration
   let S be non empty ManySortedSign;
-  cluster Boolean -> non-empty locally-finite MSAlgebra over S;
+  cluster Boolean -> non-empty finite-yielding MSAlgebra over S;
 end;
 
 theorem :: CIRCCOMB:66

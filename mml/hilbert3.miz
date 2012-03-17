@@ -11,21 +11,23 @@ environ
       SUBSET_1, CARD_3, PARTFUN1, FINSEQ_4, FUNCT_5, ZF_LANG, ZF_REFLE, PBOOLE,
       QC_LANG1, HILBERT2, FUNCT_4, CAT_1, HILBERT3, SGRAPH1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, INT_1,
-      RELAT_1, FUNCT_1, REALSET1, CARD_3, ABIAN, PARTFUN1, FUNCT_2, BINOP_1,
-      FUNCT_3, FRAENKEL, FUNCOP_1, FUNCT_4, FUNCT_5, FUNCT_6, PRALG_1, PRALG_2,
-      PBOOLE, MSSUBFAM, PRE_CIRC, MSUALG_3, HILBERT1, HILBERT2, XXREAL_0;
- constructors XXREAL_0, NAT_D, REALSET1, PRE_CIRC, MSSUBFAM, ABIAN, CAT_2,
-      PRALG_1, PRALG_2, MSUALG_3, HILBERT2;
+      RELAT_1, FUNCT_1, PBOOLE, REALSET1, CARD_3, ABIAN, PARTFUN1, FUNCT_2,
+      BINOP_1,
+      FUNCT_3, FUNCOP_1, FUNCT_4, FUNCT_5, FUNCT_6, PRALG_1, PRALG_2,
+      MSSUBFAM, MSUALG_3, HILBERT1, HILBERT2, XXREAL_0;
+ constructors XXREAL_0, NAT_D, REALSET1, MSSUBFAM, ABIAN, CAT_2,
+      PRALG_1, PRALG_2, MSUALG_3, HILBERT2, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
       FUNCT_2, FUNCOP_1, FUNCT_4, FRAENKEL, NUMBERS, XREAL_0, INT_1, PBOOLE,
-      REALSET1, ABIAN, HILBERT1, FUNCT_7;
+      REALSET1, ABIAN, HILBERT1, FUNCT_7, RELSET_1, ZFMISC_1, MSSUBFAM;
  requirements NUMERALS, BOOLE, SUBSET;
- definitions PBOOLE, FUNCT_1, FUNCT_2, TARSKI, HILBERT1, FRAENKEL, ABIAN,
+ definitions PBOOLE, FUNCT_1, FUNCT_2, TARSKI, HILBERT1, ABIAN,
       FUNCOP_1, RELAT_1, XBOOLE_0, BINOP_1, SUBSET_1;
  theorems PBOOLE, ZFMISC_1, MSUALG_3, FUNCT_2, RELAT_1, RELSET_1, FUNCT_1,
       FUNCT_3, TARSKI, FUNCOP_1, PARTFUN2, PRALG_2, REALSET1, CARD_3, FUNCT_6,
       MSSUBFAM, FUNCT_5, FUNCTOR0, CAT_2, HILBERT1, FUNCT_4, INT_1, TOPREAL6,
-      PRALG_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, ABIAN, XREAL_1, XXREAL_0, CARD_1;
+      PRALG_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, ABIAN, XREAL_1, XXREAL_0, CARD_1,
+      PARTFUN1;
  schemes HILBERT2, FUNCT_2;
 
 begin :: Preliminaries
@@ -49,7 +51,7 @@ A2: X = {y} by REALSET1:def 4;
   thus x in dom f by A1,FUNCT_2:67;
   then
 A3: f.x in rng f by FUNCT_1:def 5;
-A4: rng f c= X by RELSET_1:12;
+A4: rng f c= X by RELAT_1:def 19;
   thus x = y by A1,A2,TARSKI:def 1
     .= f.x by A2,A3,A4,TARSKI:def 1;
 end;
@@ -64,8 +66,8 @@ registration
     assume x in dom f;
     then
 A1: f.x in rng f by FUNCT_1:def 5;
-    rng f c= Funcs(B,C) by RELSET_1:12;
-    hence f.x is Function by A1;
+    rng f c= Funcs(B,C) by RELAT_1:def 19;
+    hence thesis by A1;
   end;
 end;
 
@@ -78,10 +80,10 @@ proof
     let x be set;
     assume x in rng f;
     then ex y being set st y in dom f & x = f.y by FUNCT_1:def 5;
-    hence x is Function;
+    hence thesis;
   end;
   then for x being set holds x in rng f iff x in rng f & x is Function;
-  hence SubFuncs rng f = rng f by FUNCT_6:def 1;
+  hence thesis by FUNCT_6:def 1;
 end;
 
 theorem Th5:
@@ -95,7 +97,7 @@ A2: f in Funcs(A,B);
   then
 A3: B = {} implies A = {};
   f is Function of A,B by A2,FUNCT_2:121;
-  hence f.x in B by A1,A3,FUNCT_2:7;
+  hence thesis by A1,A3,FUNCT_2:7;
 end;
 
 theorem Th6:
@@ -107,7 +109,8 @@ A1: C = {} implies B = {} or A = {};
   let f be Function of A, Funcs(B,C);
 A2: Funcs(B,C) = {} implies A = {} by A1,FUNCT_2:11;
   then dom f = A by FUNCT_2:def 1;
-  then reconsider g = f as ManySortedFunction of A by PBOOLE:def 3;
+  then reconsider g = f as ManySortedFunction of A by PARTFUN1:def 4
+;
   now
     let i be set;
     assume
@@ -118,7 +121,7 @@ A4: g.i in Funcs(B,C) by A2,FUNCT_2:7;
       .= B by A4,FUNCT_2:169
       .= (A-->B).i by A3,FUNCOP_1:13;
   end;
-  hence doms f = A --> B by PBOOLE:3;
+  hence thesis by PBOOLE:3;
 end;
 
 reserve n for Element of NAT,
@@ -141,8 +144,8 @@ registration
     assume x in dom f;
     then
 A1: f.x in rng f by FUNCT_1:def 5;
-    rng f c= B by RELSET_1:12;
-    hence f.x is Function by A1;
+    rng f c= B by RELAT_1:def 19;
+    hence thesis by A1;
   end;
 end;
 
@@ -169,15 +172,15 @@ A4: x in X;
       then not x in A by XBOOLE_0:def 5;
       then chi(A,X).x = 0 by A4,FUNCT_3:def 3;
       then f.x = ((0,1) --> (1,0)).0 by A2,A4,FUNCT_1:23;
-      hence f.x = 1 by FUNCT_4:66;
+      hence thesis by FUNCT_4:66;
     end;
     assume not x in A`;
     then x in A by A4,XBOOLE_0:def 5;
     then chi(A,X).x = 1 by FUNCT_3:def 3;
     then f.x = ((0,1) --> (1,0)).1 by A2,A4,FUNCT_1:23;
-    hence f.x = 0 by FUNCT_4:66;
+    hence thesis by FUNCT_4:66;
   end;
-  hence f = chi(A`,X) by A3,FUNCT_3:def 3;
+  hence thesis by A3,FUNCT_3:def 3;
 end;
 
 theorem Th9:
@@ -213,7 +216,7 @@ A2: x in X & y in Y;
   then product((a,b) --> ({x},{y})) c= product((a,b) --> (X,Y))
   by TOPREAL6:29;
   then {(a,b) -->(x,y)} c= product((a,b) --> (X,Y)) by A1,CARD_3:63;
-  hence (a,b) --> (x,y) in product((a,b) --> (X,Y)) by ZFMISC_1:37;
+  hence thesis by ZFMISC_1:37;
 end;
 
 theorem Th12:
@@ -226,7 +229,7 @@ proof
   then reconsider d1 = f.0, d2 = f.1 as Element of D by FUNCT_2:7;
   take d1,d2;
   dom f = {0,1} by CARD_1:88,FUNCT_2:def 1;
-  hence f = (0,1) --> (d1,d2) by FUNCT_4:69;
+  hence thesis by FUNCT_4:69;
 end;
 
 theorem Th13:
@@ -272,7 +275,7 @@ A5: (f*((a,b) --> (c,d))).b = f.(((a,b) --> (c,d)).b) by FUNCT_1:23
 A6: {c,d} c= dom f by A2,ZFMISC_1:38;
   rng((a,b) --> (c,d)) c= {c,d} by FUNCT_4:65;
   then dom(f*((a,b) --> (c,d))) = {a,b} by A3,A6,RELAT_1:46,XBOOLE_1:1;
-  hence f*((a,b) --> (c,d)) = (a,b) --> (f.c,f.d) by A4,A5,FUNCT_4:69;
+  hence thesis by A4,A5,FUNCT_4:69;
 end;
 
 begin :: the Cartesian product of functions and the Frege function
@@ -296,7 +299,7 @@ A7: y = [y1,y2] by A1,A3,ZFMISC_1:def 2;
     by A4,A6,FUNCT_3:def 9;
     then f.x1 = f.y1 & g.x2 = g.y2 by A2,A5,A7,ZFMISC_1:33;
     then x1 = y1 & x2 = y2 by A4,A6,FUNCT_1:def 8;
-    hence x = y by A5,A7;
+    hence thesis by A5,A7;
   end;
 end;
 
@@ -309,9 +312,9 @@ proof
   let f be Function of C,A, g be Function of D,B;
 
 :: powinny wystarczyc klastry z BORSUK_3
-  C = {} implies A = {} or [:C,D:] = {} by ZFMISC_1:113;
+  C = {} implies A = {} or [:C,D:] = {};
   then reconsider F = f*pr1(C,D) as Function of [:C,D:], A;
-  D = {} implies A = {} or [:C,D:] = {} by ZFMISC_1:113;
+  D = {} implies A = {} or [:C,D:] = {};
   then reconsider G = g*pr2(C,D) as Function of [:C,D:], B;
   thus pr1(A,B)*[:f,g:] = pr1(A,B)*<:F,G:> by FUNCT_3:98
     .= f*pr1(C,D) by FUNCT_3:82;
@@ -326,9 +329,9 @@ proof
   let f be Function of C,A, g be Function of D,B;
 
 :: powinny wystarczyc klastry z BORSUK_3
-  C = {} implies A = {} or [:C,D:] = {} by ZFMISC_1:113;
+  C = {} implies A = {} or [:C,D:] = {};
   then reconsider F = f*pr1(C,D) as Function of [:C,D:], A;
-  D = {} implies A = {} or [:C,D:] = {} by ZFMISC_1:113;
+  D = {} implies A = {} or [:C,D:] = {};
   then reconsider G = g*pr2(C,D) as Function of [:C,D:], B;
   thus pr2(A,B)*[:f,g:] = pr2(A,B)*<:F,G:> by FUNCT_3:98
     .= g*pr2(C,D) by FUNCT_3:82;
@@ -340,7 +343,7 @@ proof
   let g be Function;
   dom {} = {};
   then dom(({})..g) = {} by PRALG_1:def 17;
-  hence ({})..g = {};
+  hence thesis;
 end;
 
 theorem Th18:
@@ -364,7 +367,7 @@ A4: h.x in dom f by A2,FUNCT_1:21;
       .= ((f*h).x).(g.(h.x)) by A3,FUNCT_1:23
       .= (f*h).x .((g*h).x) by A3,FUNCT_1:23;
   end;
-  hence (f..g)*h = (f*h)..(g*h) by A1,PRALG_1:def 17;
+  hence thesis by A1,PRALG_1:def 17;
 end;
 
 theorem
@@ -385,10 +388,10 @@ A4: y in dom(f..g) and
 A5: (f..g).y = x by FUNCT_1:def 5;
 A6: x = (f.y).(g.y) by A2,A4,A5,PRALG_1:def 17;
 A7: f.y in rng f by A2,A4,FUNCT_1:def 5;
-    rng f c= Funcs({} qua set,C) by RELSET_1:12;
+    rng f c= Funcs({} qua set,C) by RELAT_1:def 19;
     then f.y = {} by A1,A7,TARSKI:def 1;
     then x = {} by A6,Th7;
-    hence x in {{}} by TARSKI:def 1;
+    hence thesis by TARSKI:def 1;
   end;
   consider a being Element of A;
 A8: dom f = A by A1,FUNCT_2:def 1;
@@ -413,18 +416,14 @@ A1: B = {} implies A = {};
 A2: y in dom(f..g) and
 A3: (f..g).y = x by FUNCT_1:def 5;
 A4: dom(f..g) = dom f by PRALG_1:def 17;
-  then
-A5: rng f <> {} by A2,RELAT_1:60,64;
-  rng f c= Funcs(B,C) by RELSET_1:12;
-  then
-A6: Funcs(B,C) <> {} by A5;
+A6: Funcs(B,C) <> {} by A4,A2;
   then
 A7: dom f = A by FUNCT_2:def 1;
   then reconsider fy = f.y as Function of B,C by A2,A4,A6,FUNCT_2:7,121;
-A8: C <> {} by A1,A2,A6,A7,PRALG_1:def 17;
+A8: C <> {} by A1,A2,A7,PRALG_1:def 17;
   g.y in B by A1,A2,A4,A7,FUNCT_2:7;
   then fy.(g.y) in C by A8,FUNCT_2:7;
-  hence x in C by A2,A3,A4,PRALG_1:def 17;
+  hence thesis by A2,A3,A4,PRALG_1:def 17;
 end;
 
 theorem Th21:
@@ -434,7 +433,7 @@ proof
   let A,B,C be set such that
 A1: C = {} implies B = {} or A = {};
   let f be Function of A, Funcs(B,C);
-  thus dom Frege f = product doms f by PBOOLE:def 3
+  thus dom Frege f = product doms f by PARTFUN1:def 4
     .= product(A --> B) by A1,Th6
     .= Funcs(A,B) by CARD_3:20;
 end;
@@ -465,11 +464,11 @@ A8: f.x in Funcs(B,C) by A2,A5,A7,FUNCT_2:7;
     (rngs f).x = proj2(f.x) by A3,A4,A7,FUNCT_6:def 3
       .= rng(f.x);
     then (rngs f).x c= C by A8,FUNCT_2:169;
-    hence (rngs f).x c= (A-->C).x by A5,A7,FUNCOP_1:13;
+    hence thesis by A5,A7,FUNCOP_1:13;
   end;
   then product rngs f c= product(A --> C) by A6,CARD_3:38;
   then product rngs f c= Funcs(A,C) by CARD_3:20;
-  hence rng Frege f c= Funcs(A,C) by FUNCT_6:58;
+  hence thesis by FUNCT_6:58;
 end;
 
 theorem Th24:
@@ -484,7 +483,7 @@ A1: C = {} implies B = {} or A = {};
 A2: Funcs(A,C) = {} implies Funcs(A,B) = {} by FUNCT_2:11;
   let f be Function of A, Funcs(B,C);
   dom Frege f = Funcs(A,B) & rng Frege f c= Funcs(A,C) by A1,Th21,Th23;
-  hence Frege f is Function of Funcs(A,B), Funcs(A,C)
+  hence thesis
   by A2,FUNCT_2:def 1,RELSET_1:11;
 end;
 
@@ -516,7 +515,7 @@ A2: for f being Element of Funcs(A,B) holds F.f = F1(f)
     take F;
     let f be Function of A,B;
     f in Funcs(A,B) by FUNCT_2:11;
-    hence F.f = Q*f*P" by A2;
+    hence thesis by A2;
   end;
   uniqueness
   proof
@@ -562,7 +561,7 @@ A2:   Q*f1 = Q*f1*id A by FUNCT_2:23
         .= f2 by FUNCT_2:23;
       hence thesis;
     end;
-    thus rng(P => Q) c= Funcs(A,B) by RELSET_1:12;
+    thus rng(P => Q) c= Funcs(A,B) by RELAT_1:def 19;
     let x be set;
     assume x in Funcs(A,B);
     then x is Element of Funcs(A,B);
@@ -605,7 +604,7 @@ A2: g in Funcs(A,B) by FUNCT_2:11;
     .= Q*(Q"*f*P)*P" by RELAT_1:55
     .= (P => Q).g by Def1
     .= (P => Q)"".(Q"*f*P) by FUNCT_1:65;
-  hence (P => Q)".f = Q"*f*P by A1,A2,FUNCT_2:25;
+  hence thesis by A1,A2,FUNCT_2:25;
 end;
 
 theorem Th27:
@@ -621,7 +620,7 @@ proof
       .= Q"*f*P"" by FUNCT_1:65
       .= (P" => (Q")).f by Def1;
   end;
-  hence (P => Q)" = P" => (Q") by FUNCT_2:113;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem Th28:
@@ -662,7 +661,7 @@ A8: (P*g).x in dom(P") by FUNCT_2:def 1;
       .= ((P => Q).fx).((P*g).x) by Def1
       .= (((P => Q)*f).x).((P*g).x) by A5,A6,FUNCT_2:21;
   end;
-  hence ((P => Q)*f)..(P*g) = Q*(f..g) by A4,A5,PRALG_1:def 17;
+  hence thesis by A4,A5,PRALG_1:def 17;
 end;
 
 begin ::  set valuations
@@ -744,7 +743,7 @@ A2: for n holds P[prop n]
     proof
       let n;
       (SetVal V).prop n = V.n by Def2;
-      hence (SetVal V).prop n is non empty;
+      hence thesis;
     end;
 A3: for r,s st P[r] & P[s] holds P[r '&' s] & P[r => s]
     proof
@@ -754,10 +753,10 @@ A5:   (SetVal V).s is non empty;
       (SetVal V).(r '&' s) = [:(SetVal V).r,(SetVal V).s:] by Def2;
       hence (SetVal V).(r '&' s) is non empty by A4,A5;
       (SetVal V).(r => s) = Funcs((SetVal V).r,(SetVal V).s) by Def2;
-      hence (SetVal V).(r => s) is non empty by A5;
+      hence thesis by A5;
     end;
     for r holds P[r] from HILBERT2:sch 2(A1,A2,A3);
-    hence SetVal(V,p) is non empty;
+    hence thesis;
   end;
 end;
 
@@ -781,7 +780,7 @@ registration
     let x be set;
     assume x in SetVal(V,p => q);
     then x in Funcs(SetVal(V,p),SetVal(V,q)) by Def2;
-    hence x is Function;
+    hence thesis;
   end;
 end;
 
@@ -798,8 +797,7 @@ A1: x in dom e;
 A2: e is Function of SetVal(V,p),SetVal(V,q => r) by FUNCT_2:121;
     then x in SetVal(V,p) by A1,FUNCT_2:def 1;
     then e.x in SetVal(V,q => r) by A2,FUNCT_2:7;
-    then e.x in Funcs(SetVal(V,q),SetVal(V,r)) by Def2;
-    hence e.x is Function;
+    hence thesis;
   end;
 end;
 
@@ -830,7 +828,7 @@ definition
   existence
   proof
     take id V;
-    thus dom id V = NAT by PBOOLE:def 3;
+    thus dom id V = NAT by PARTFUN1:def 4;
     let n;
     (id V).n = id (V.n) by MSUALG_3:def 1;
     hence thesis;
@@ -934,7 +932,7 @@ A17:  p' = M.r & q' = M.s & M.(r '&' s) = [:p',q':] by A11,A15,A16;
       q' being Permutation of SetVal(V,s) such that
 A18:  p' = M.r & q' = M.s & M.(r => s) = p' => q' by A11,A15,A16;
       (SetVal V).(r => s) = Funcs(SetVal(V,r),SetVal(V,s)) by Def2;
-      hence M.(r => s) is Permutation of (SetVal V).(r => s) by A18;
+      hence thesis by A18;
     end;
 A19: for p holds P[p] from HILBERT2:sch 2(A12,A13,A14);
     thus M is ManySortedFunction of SetVal V, SetVal V
@@ -993,7 +991,7 @@ A35:  p' = M2.r & q' = M2.s and
 A36:  M2.(r '&' s) = [:p',q':] and
 A37:  M2.(r => s) = p' => q' by A27;
       thus M1.(r '&' s) = M2.(r '&' s) by A31,A32,A33,A35,A36;
-      thus M1.(r => s) = M2.(r => s) by A31,A32,A34,A35,A37;
+      thus thesis by A31,A32,A34,A35,A37;
     end;
     for r holds P[r] from HILBERT2:sch 2(A28,A29,A30);
     then for r being set st r in HP-WFF holds M1.r=M2.r;
@@ -1026,7 +1024,7 @@ proof
   q' being Permutation of SetVal(V,q) such that
 A1: p' = (Perm P).p & q' = (Perm P).q and
 A2: (Perm P).(p '&' q) = [:p',q':] and (Perm P).(p => q) = p' => q' by Def5;
-  thus Perm(P,p '&' q) = [:Perm(P,p),Perm(P,q):] by A1,A2;
+  thus thesis by A1,A2;
 end;
 
 theorem Th36:
@@ -1039,7 +1037,7 @@ A1: p' = Perm(P,p) & q' = Perm(P,q);
   ex p' being Permutation of SetVal(V,p),
   q' being Permutation of SetVal(V,q) st p' = (Perm P).p & q' = (Perm P).q &
   (Perm P).(p '&' q) = [:p',q':] & (Perm P).(p => q) = p' => q' by Def5;
-  hence Perm(P,p => q) = p' => q' by A1;
+  hence thesis by A1;
 end;
 
 registration
@@ -1070,7 +1068,7 @@ A6:   SetVal(V,r => s) = Funcs(SetVal(V,r),SetVal(V,s)) by Def2;
       Perm(P,r '&' s) = [:r',s':] by Th35;
       hence Perm(P,r '&' s) is bijective by A5,Th25;
       Perm(P,r => s) = r' => s' by Th36;
-      hence Perm(P,r => s) is bijective by A6;
+      hence thesis by A6;
     end;
     for p holds P[p] from HILBERT2:sch 2(A1,A2,A4);
     hence thesis;
@@ -1161,7 +1159,7 @@ registration
     let P be Permutation of V;
 A1: SetVal(V,VERUM) = 1 by Def2;
     0 in 1 by CARD_1:87,TARSKI:def 1;
-    hence 0 is_a_fixpoint_of Perm(P,VERUM) by A1,Th3,CARD_1:87;
+    hence thesis by A1,Th3,CARD_1:87;
   end;
 end;
 
@@ -1173,9 +1171,8 @@ proof
 A1: for x being Element of SetVal(V,p) holds F(x) in SetVal(V,q => p)
   proof
     let x be Element of SetVal(V,p);
-    SetVal(V,q) --> x is Function of SetVal(V,q),SetVal(V,p) by FUNCOP_1:57;
-    then SetVal(V,q) --> x in Funcs(SetVal(V,q),SetVal(V,p)) by FUNCT_2:11;
-    hence SetVal(V,q) --> x in SetVal(V,q => p) by Def2;
+    SetVal(V,q) --> x in Funcs(SetVal(V,q),SetVal(V,p)) by FUNCT_2:11;
+    hence thesis by Def2;
   end;
   consider f being Function of SetVal(V,p), SetVal(V,q => p) such that
 A2: for x being Element of SetVal(V,p) holds
@@ -1192,7 +1189,7 @@ A2: for x being Element of SetVal(V,p) holds
     then
 A3: Perm(P,p)".x in dom Perm(P,p) by PARTFUN2:79;
     reconsider g = SetVal(V,q)-->(Perm(P,p)".x)
-    as Function of SetVal(V,q), SetVal(V,p) by FUNCOP_1:57;
+    as Function of SetVal(V,q), SetVal(V,p);
     thus f.x = SetVal(V,q) --> x by A2
       .= (SetVal(V,q)-->(id SetVal(V,p)).x) by FUNCT_1:34
       .= (SetVal(V,q)-->((Perm(P,p)*Perm(P,p)").x)) by FUNCT_2:88
@@ -1259,9 +1256,8 @@ A6: product doms ff = SetVal(V,p => q) by Def2;
     as Function-yielding Function of SetVal(V,p => q),SetVal(V,p => r)
     by A1,A4,Th24;
     set M = Perm(P,p => r)*h*Perm(P,p => q)";
-    dom M = SetVal(V,p => q) by FUNCT_2:def 1;
-    then reconsider M as ManySortedFunction of product doms f
-    by A6,PBOOLE:def 3;
+    reconsider M as ManySortedFunction of product doms f
+    by A6;
 A7: for g be Function st g in product doms f holds M.g = f..g
     proof
       let g be Function such that
@@ -1269,7 +1265,7 @@ A8:   g in product doms f;
       reconsider G = g as Function of SetVal(V,p),SetVal(V,q)
       by A5,A8,FUNCT_2:121;
       reconsider FF = ff
-      as Function of SetVal(V,p),Funcs(SetVal(V,q),SetVal(V,r)) by A4;
+      as Function of SetVal(V,p),Funcs(SetVal(V,q),SetVal(V,r)) by Def2;
       dom FF = SetVal(V,p) by FUNCT_2:def 1;
       then
 A9:   dom(FF..G) = SetVal(V,p) by PRALG_1:def 17;
@@ -1450,7 +1446,7 @@ A5: f is_a_fixpoint_of Perm(P,p => q) by A4;
   let P be Permutation of V;
 A6: x is_a_fixpoint_of Perm(P,p) by A3;
   f is_a_fixpoint_of Perm(P,p => q) by A4;
-  hence f.x is_a_fixpoint_of Perm(P,q) by A6,Th40;
+  hence thesis by A6,Th40;
 end;
 
 theorem
@@ -1486,7 +1482,7 @@ A2: ex s st s = p & s is canonical;
     assume p => q in X;
     then ex s st s = p => q & s is canonical;
     then q is canonical by A2,Th46;
-    hence q in X;
+    hence thesis;
   end;
   then HP_TAUT c= X by HILBERT1:13;
   then p in X by A1;
@@ -1525,7 +1521,7 @@ A1: p is canonical;
 A2: for P being Permutation of V holds x is_a_fixpoint_of Perm(P,p) by A1,Def7;
     let P be Permutation of V;
     take x;
-    thus x is_a_fixpoint_of Perm(P,p) by A2;
+    thus thesis by A2;
   end;
 end;
 
@@ -1585,7 +1581,7 @@ A4: f is_a_fixpoint_of Perm(P,p => q) by A2,Def8;
   then f in Funcs(SetVal(V,p),SetVal(V,q)) by A4,ABIAN:def 3;
   then reconsider f as Function of SetVal(V,p), SetVal(V,q) by FUNCT_2:121;
   take f.x;
-  thus f.x is_a_fixpoint_of Perm(P,q) by A3,A4,Th40;
+  thus thesis by A3,A4,Th40;
 end;
 
 theorem Th54:
@@ -1606,7 +1602,6 @@ A2: for x being set holds not x is_a_fixpoint_of Perm(P,q);
 A3: f is_a_fixpoint_of Perm(P,p => q) by Def8;
   f in dom Perm(P,p => q) by A3,ABIAN:def 3;
   then f in SetVal(V,p => q) by FUNCT_2:def 1;
-  then f in Funcs(SetVal(V,p),SetVal(V,q)) by Def2;
   then reconsider f as Function;
   f.x is_a_fixpoint_of Perm(P,q) by A1,A3,Th40;
   hence contradiction by A2;
@@ -1636,7 +1631,7 @@ A5: I1 = i1 & p0.I1 = i1 + 1 by A2;
     consider i2 being Integer such that
 A6: I2 = i2 & p0.I2 = i2 + 1 by A2;
     assume p0.x1 = p0.x2;
-    hence x1 = x2 by A5,A6,XCMPLX_1:2;
+    hence thesis by A5,A6,XCMPLX_1:2;
   end;
   for y being set holds y in INT iff ex x being set st x in dom p0 & y = p0.x
   proof
@@ -1654,7 +1649,7 @@ A6: I2 = i2 & p0.I2 = i2 + 1 by A2;
 A7: x in dom p0 and
 A8: y = p0.x;
     ex i being Integer st x = i & p0.x = i + 1 by A2,A3,A7;
-    hence y in INT by A8,INT_1:def 2;
+    hence thesis by A8,INT_1:def 2;
   end;
   then
 A9: rng p0 = INT by FUNCT_1:def 5;
@@ -1677,17 +1672,8 @@ A11: (x1 = 0 or x1 = 1) & (x2 = 0 or x2 = 1) by A10,CARD_1:88,TARSKI:def 2;
     .= dom(NAT --> INT) \/ {0} by FUNCOP_1:19
     .= NAT \/ {0} by FUNCOP_1:19
     .= NAT by ZFMISC_1:46;
-  then reconsider V as ManySortedSet of NAT by PBOOLE:def 3;
-  V is non-empty
-  proof
-    rng(NAT --> INT) = { INT } & rng(0 .--> 2) = { 2 } by FUNCOP_1:14;
-    then
-A12: rng V c= { INT } \/ { 2 } by FUNCT_4:18;
-    assume {} in rng V;
-    then {} in { INT } or 0 in { 2 } by A12,XBOOLE_0:def 3;
-    hence contradiction by TARSKI:def 1;
-  end;
-  then reconsider V as SetValuation;
+  then reconsider V as ManySortedSet of NAT by PARTFUN1:def 4,RELAT_1:def 18;
+  reconsider V as SetValuation;
   set P = (NAT --> p0) +* (0 .--> p1);
 A13: dom P = dom(NAT --> p0) \/ dom(0 .--> p1) by FUNCT_4:def 1
     .= dom(NAT --> p0) \/ {0} by FUNCOP_1:19
@@ -1706,7 +1692,7 @@ A16:  P.n = (0 .--> p1).0 by A14,FUNCT_4:14
       n in dom(0 .--> 2) by A14,FUNCOP_1:89;
       then V.n = (0 .--> 2).0 by A14,FUNCT_4:14
         .= 2 by FUNCOP_1:87;
-      hence P.n is Permutation of V.n by A16;
+      hence thesis by A16;
     end;
     suppose
 S:   n <> 0;
@@ -1717,7 +1703,7 @@ A18:  P.n = (NAT --> p0).n by FUNCT_4:12
       not n in dom(0 .--> 2) by S,FUNCOP_1:90;
       then V.n = (NAT --> INT).n by FUNCT_4:12
         .= INT by FUNCOP_1:13;
-      hence P.n is Permutation of V.n by A18;
+      hence thesis by A18;
     end;
   end;
   then reconsider P as Permutation of V by A13,Def4;
@@ -1842,7 +1828,6 @@ A52:    j0-1 is Element of INT & i0-1 is Element of INT by INT_1:def 2;
             hence (0,1) --> (j0-1,i0-1) in A by A52;
           end;
           suppose i0 = j0 & i0 is odd;
-            then i0-1 = j0-1 & j0-1 is even;
             hence (0,1) --> (j0-1,i0-1) in A by A52;
           end;
         end;

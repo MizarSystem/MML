@@ -8,19 +8,20 @@ environ
 
  vocabularies SUPINF_1, MEASURE1, RLVECT_1, ARYTM_1, SETFAM_1, FUNCT_1, BOOLE,
       TARSKI, RELAT_1, SUPINF_2, PROB_1, MEASURE3, MEASURE4, ARYTM,
-      REALSET1;
+      REALSET1, FUNCOP_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1,
-      RELSET_1, PARTFUN1, FUNCT_2, XXREAL_0, VALUED_0,
+      RELSET_1, PARTFUN1, FUNCT_2, XXREAL_0, XREAL_0, VALUED_0, FUNCOP_1,
       REAL_1, NAT_1, SETFAM_1, PROB_1, SUPINF_1,
       SUPINF_2, MEASURE1, MEASURE3;
- constructors ENUMSET1, PARTFUN1, REAL_1, NAT_1, PROB_2, MEASURE3, SUPINF_1;
+ constructors ENUMSET1, PARTFUN1, REAL_1, NAT_1, PROB_2, MEASURE3, SUPINF_1,
+      FUNCOP_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
-      XXREAL_0, XREAL_0, NAT_1, MEASURE1, VALUED_0, MEMBERED;
+      XXREAL_0, XREAL_0, NAT_1, MEASURE1, VALUED_0, MEMBERED, XXREAL_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, MEASURE3, XBOOLE_0;
  theorems TARSKI, ENUMSET1, FUNCT_1, FUNCT_2, ZFMISC_1, NAT_1, SUPINF_2,
       MEASURE1, MEASURE2, MEASURE3, XBOOLE_0, XBOOLE_1, XXREAL_0, PROB_1,
-      ORDINAL1, VALUED_0;
+      ORDINAL1, VALUED_0, XXREAL_3, FUNCOP_1;
  schemes NAT_1, FUNCT_2, XBOOLE_0;
 
 begin :: Some theorems about R_eal numbers
@@ -29,131 +30,7 @@ reserve x,y,z for R_eal,
   A,B,X for set,
   S for SigmaField of X;
 
-theorem Th1:
-  0.<= x & 0.<= y & 0.<= z implies (x + y) + z = x + (y + z)
-proof
-  assume
-A1: 0.<= x & 0.<= y & 0.<= z;
-A2: (x in REAL or x in {-infty,+infty}) &
-  (y in REAL or y in {-infty,+infty}) &
-  (z in REAL or z in {-infty,+infty}) by XBOOLE_0:def 3,XXREAL_0:def 4;
-  per cases by A1,A2,TARSKI:def 2;
-  suppose
-A3: x is Real & y is Real & z is Real;
-    x + y is Real & y + z is Real
-    proof
-      not x + y = -infty & not x + y = +infty &
-      not y + z = -infty & not y + z = +infty by A3,SUPINF_2:8,9;
-      hence thesis by MEASURE3:2;
-    end;
-    then consider a,b,c,d,e being Real such that
-A4: x = a & y = b & z = c & x + y = d & y + z = e by A3;
-    (x + y) + z = d + c by A4,SUPINF_2:1
-      .= (a + b) + c by A4,SUPINF_2:1
-      .= a + (b + c)
-      .= a + e by A4,SUPINF_2:1
-      .= x + (y + z) by A4,SUPINF_2:1;
-    hence thesis;
-  end;
-  suppose
-A5: x = +infty;
-A6: not (y + z) = -infty by A1,SUPINF_2:9;
-    (x + y) + z = +infty + z by A1,A5,SUPINF_2:def 2
-      .= +infty by A1,SUPINF_2:def 2
-      .= +infty + (y + z) by A6,SUPINF_2:def 2;
-    hence thesis by A5;
-  end;
-  suppose
-A7: y = +infty;
-    then (x + y) + z = +infty + z by A1,SUPINF_2:def 2
-      .= +infty by A1,SUPINF_2:def 2
-      .= x + (+infty) by A1,SUPINF_2:def 2
-      .= x + (+infty + z) by A1,SUPINF_2:def 2;
-    hence thesis by A7;
-  end;
-  suppose
-A8: z = +infty;
-    not (x + y) = -infty by A1,SUPINF_2:9;
-    then (x + y) + z = +infty by A8,SUPINF_2:def 2
-      .= x + (+infty) by A1,SUPINF_2:def 2
-      .= x + (y + (+infty)) by A1,SUPINF_2:def 2;
-    hence thesis by A8;
-  end;
-end;
-
-theorem Th2:
-  (not x = -infty & not x = +infty) implies (y + x <= z iff y <= z - x)
-proof
-  assume
-A1: not x = -infty & not x = +infty;
-A2: (x in REAL or x in {-infty,+infty}) & (y in REAL or y in {-infty,+infty}) &
-  (z in REAL or z in {-infty,+infty}) by XBOOLE_0:def 3,XXREAL_0:def 4;
-  hereby
-    assume
-A3: y + x <= z;
-    (y + x) - x = y
-    proof
-      per cases by A2,TARSKI:def 2;
-      suppose y in REAL;
-        then consider a,b being Real such that
-A4:     a = x & b = y by A1,A2,TARSKI:def 2;
-        y + x = b + a by A4,SUPINF_2:1;
-        then consider c being Real such that
-A5:     c = y + x;
-        (y + x) - x = c - a by A4,A5,SUPINF_2:5
-          .= (b + a) - a by A4,A5,SUPINF_2:1
-          .= y by A4;
-        hence thesis;
-      end;
-      suppose
-A6:     y = -infty or y = +infty;
-        now per cases by A6;
-          suppose
-A7:         y = -infty;
-            hence (y + x) - x = -infty - x by A1,SUPINF_2:def 2
-              .= y by A1,A7,SUPINF_2:7;
-          end;
-          suppose
-A8:         y = +infty;
-            hence (y + x) - x = +infty - x by A1,SUPINF_2:def 2
-              .= y by A1,A8,SUPINF_2:6;
-          end;
-        end;
-        hence thesis;
-      end;
-    end;
-    hence y <= z - x by A3,SUPINF_2:15;
-  end;
-  assume
-A9: y <= z - x;
-  (z - x) + x = z
-  proof
-    per cases by A2,TARSKI:def 2;
-    suppose z in REAL;
-      then consider a,b being Real such that
-A10:  a = x & b = z by A1,A2,TARSKI:def 2;
-      z - x = b - a by A10,SUPINF_2:5;
-      then consider c being Real such that
-A11:  c = z - x;
-      thus (z - x) + x = c + a by A10,A11,SUPINF_2:1
-        .= (b - a) + a by A10,A11,SUPINF_2:5
-        .= z by A10;
-    end;
-    suppose
-A12:  z = -infty;
-      hence (z - x) + x = -infty + x by A1,SUPINF_2:7
-        .= z by A1,A12,SUPINF_2:def 2;
-    end;
-    suppose
-A13:  z = +infty;
-      hence (z - x) + x = +infty + x by A1,SUPINF_2:6
-        .= z by A1,A13,SUPINF_2:def 2;
-    end;
-  end;
-  hence thesis by A9,SUPINF_2:14;
-end;
-
-canceled;
+canceled 3;
 
 theorem Th4:
   for S being non empty Subset-Family of X, F, G being Function of NAT,S,
@@ -250,9 +127,7 @@ A11: s in dom F & E = F.s by A10,FUNCT_1:def 5;
     ex s1 being Element of NAT st r in H.s1
     proof
       defpred P[Nat] means r in F.$1;
-      ex k being Element of NAT st P[k] by A10,A11;
-      then
-A12:  ex k being Nat st P[k];
+A12:  ex k being Nat st P[k] by A10,A11;
       ex k being Nat st P[k] &
       for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A12);
       then consider k being Nat such that
@@ -298,40 +173,7 @@ A2: for M being N_Sub_set_fam of X st M c= bool X holds union M in bool X;
   hence thesis;
 end;
 
-theorem Th7:
-  for a,b being R_eal holds ex M being Function of bool X,ExtREAL st
-  for A being Subset of X holds
-  ((A = {} implies M.A = a) & (A <> {} implies M.A = b))
-proof
-  let a,b be R_eal;
-  defpred P[set,set] means (($1 = {} implies $2 = a) &
-  ($1 <> {} implies $2 = b));
-A1: for x being set st x in bool X ex y being set st y in ExtREAL & P[x,y]
-  proof
-    let x be set;
-    x <> {} implies ex y being set st y in ExtREAL & P[x,y];
-    hence thesis;
-  end;
-  ex F being Function of bool X,ExtREAL st
-  for x being set st x in bool X holds P[x,F.x] from FUNCT_2:sch 1(A1);
-  then consider M being Function of bool X,ExtREAL such that
-A2: for x being set st x in bool X holds P[x,M.x];
-  take M;
-  thus thesis by A2;
-end;
-
-theorem Th8:
-  ex M being Function of bool X,ExtREAL st
-  for A being Subset of X holds M.A = 0.
-proof
-  consider M being Function of bool X,ExtREAL such that
-A1: for A being Subset of X holds
-  (A = {} implies M.A = 0.) & (A <> {} implies M.A = 0.) by Th7;
-  take M;
-  thus thesis by A1;
-end;
-
-canceled 3;
+canceled 5;
 
 definition
   let X be set;
@@ -343,40 +185,30 @@ definition
     for F being Function of NAT,bool X holds it.(union rng F) <= SUM(it*F);
   existence
 proof
-  consider M being Function of bool X,ExtREAL such that
-A1: for A being Subset of X holds M.A = 0.by Th8;
-A2: for A being Subset of X holds 0.<= M.A by A1;
+  set M = bool X --> 0.;
+A2: for A being Subset of X holds 0.<= M.A;
   then
 A3: M is nonnegative by MEASURE1:def 4;
 A4: {} c= X by XBOOLE_1:2;
 A5: for F being Function of NAT,bool X holds M.(union rng F) <= SUM(M*F)
   proof
     let F be Function of NAT,bool X;
-A6: M.(union rng F) = 0.by A1;
+A6: M.(union rng F) = 0.by FUNCOP_1:13;
 A7: M*F is nonnegative by A3,MEASURE1:54;
-A8: for r being Element of NAT st 0 <= r holds (M*F).r = 0.
+B9: for r being Element of NAT st 0 <= r holds (M*F).r = 0.
     proof
       let r be Element of NAT;
       dom (M*F) = NAT by FUNCT_2:def 1;
       then (M*F).r = M.(F.r) by FUNCT_1:22;
-      hence thesis by A1;
+      hence thesis by FUNCOP_1:13;
     end;
-    then
-A9: SUM(M*F) = Ser(M*F).0 by A7,SUPINF_2:67;
     Ser(M*F).0 = (M*F).0 by SUPINF_2:63;
-    hence thesis by A6,A8,A9;
+    hence thesis by A6,B9,A7,SUPINF_2:67;
   end;
   take M;
-   M.{} = 0. by A1,A4;
-   then
-X: M is zeroed by VALUED_0:def 19;
-  for A,B being Subset of X holds M.A <= M.B
-  proof
-    let A,B be Subset of X;
-    M.A = 0. & M.B = 0. by A1;
-    hence thesis;
-  end;
-  hence thesis by A2,A5,MEASURE1:def 4,X;
+Y: M.{} = 0. by A4,FUNCOP_1:13;
+  for A,B being Subset of X holds M.A <= M.B by FUNCOP_1:13;
+  hence thesis by A2,A5,Y,MEASURE1:def 4,VALUED_0:def 19;
 end;
 end;
 
@@ -413,8 +245,8 @@ X:    C is zeroed by Def2;
       assume W c= A & Z c= X \ A;
       then
 A3:   W = {};
-      then C.W = 0 by X, VALUED_0:def 19;
-      hence C.W + C.Z <= C.(W \/ Z) by A3,SUPINF_2:18;
+      then C.W = 0 by X,VALUED_0:def 19;
+      hence C.W + C.Z <= C.(W \/ Z) by A3,XXREAL_3:4;
     end;
     then D <> {} & for A being set holds A in D implies A in bool X by A2;
     then reconsider D as non empty Subset-Family of X by TARSKI:def 3;
@@ -497,7 +329,7 @@ X:    C is zeroed by Def2;
     then 1 + 1 <= r;
     then 1 < r by NAT_1:13;
     then F.r = {} by A1;
-    then C.(F.r) = 0. by X, VALUED_0:def 19;
+    then C.(F.r) = 0. by X,VALUED_0:def 19;
     hence thesis by FUNCT_2:21;
   end;
   F.0 = W & F.1 = Z & F.2 = P by A1;
@@ -508,8 +340,8 @@ A9: (C*F).2 = C.P & (C*F).1 = C.Z & (C*F).0 = C.W by FUNCT_2:21;
 A10: y1 = Ser(G).1 & y2 = Ser(G).0;
 X:    C is zeroed by Def2;
   Ser(G).2 = y1 + G.(1 + 1) by A10,SUPINF_2:63
-    .= Ser(G).1 + 0. by A9,A10,X, VALUED_0:def 19
-    .= Ser(G).1 by SUPINF_2:18
+    .= Ser(G).1 + 0. by A9,A10,X,VALUED_0:def 19
+    .= Ser(G).1 by XXREAL_3:4
     .= y2 + G.(0 + 1) by A10,SUPINF_2:63
     .= C.W + C.Z by A9,A10,SUPINF_2:63;
   then SUM(C*F) = C.W + C.Z by A7,A8,SUPINF_2:67;
@@ -587,12 +419,13 @@ A2: W c= D & Z c= X \ D;
 A3: W \ A c= X \ A by XBOOLE_1:33;
     set W2 = W \ A;
     (X \ A) /\ (X \ B) c= X \ A by XBOOLE_1:17;
-    then X \ (A \/ B) c= X \ A by XBOOLE_1:53;
+    then
+B4:  X \ (A \/ B) c= X \ A by XBOOLE_1:53;
     then
 A4: W1 c= A & Z c= X \ A by A2,XBOOLE_1:1,17;
 A5: W2 \/ Z c= X \ A \/ Z by A3,XBOOLE_1:9;
     set Z1 = W2 \/ Z;
-A6: Z1 c= X \ A by A4,A5,XBOOLE_1:12;
+A6: Z1 c= X \ A by B4,A5,A2,XBOOLE_1:1,12;
 A7: W = W1 \/ W2 by XBOOLE_1:51;
 A8: C.(W \/ Z) = C.((W1 \/ W2) \/ Z) by XBOOLE_1:51
       .= C.(W1 \/ Z1) by XBOOLE_1:4
@@ -609,20 +442,14 @@ A10: C.W2 + C.Z <= C.Z1 by A1,A9,Def3;
     C is nonnegative by Def2;
     then
 A11: 0.<= C.W2 & 0.<= C.Z by MEASURE1:def 4;
-    then 0. + 0. <= C.W2 + C.Z by MEASURE1:4;
-    then
-A12: 0. <= C.W2 + C.Z by SUPINF_2:18;
     C is nonnegative by Def2;
     then
 A13: 0. <= C.W1 by MEASURE1:def 4;
-    then C.W1 + (C.W2 + C.Z) <= C.(W \/ Z) by A8,A10,A12,MEASURE1:4;
+    C.W1 + (C.W2 + C.Z) <= C.(W \/ Z) by A8,A10,XXREAL_3:38;
     then
-A14: (C.W1 + C.W2) + C.Z <= C.(W \/ Z) by A11,A13,Th1;
-    C is nonnegative by Def2;
-    then
-A15: 0.<= C.W & 0.<= C.Z & C.Z <= C.Z by MEASURE1:def 4;
+A14: (C.W1 + C.W2) + C.Z <= C.(W \/ Z) by A11,A13,XXREAL_3:48;
     C.W <= C.W1 + C.W2 by A7,Th12;
-    then C.W + C.Z <= (C.W1 + C.W2) + C.Z by A15,MEASURE1:4;
+    then C.W + C.Z <= (C.W1 + C.W2) + C.Z by XXREAL_3:38;
     then
 A16: C.W + C.Z <= C.(W \/ Z) by A14,XXREAL_0:2;
     C.(W \/ Z) <= C.W + C.Z by Th12;
@@ -801,7 +628,7 @@ A35:        W /\ (F.(n+1) \ G.n) c= W /\ F.(n+1) by XBOOLE_1:26,36;
             W /\ F.(n+1) c= F.(n+1) by XBOOLE_1:17;
             then W /\ (F.(n+1) \ G.n) c= F.(n+1) by A35,XBOOLE_1:1;
             then QQ.(n+1) c= F.(n+1) \/ G.n by A33,A34,XBOOLE_1:13;
-            hence QQ.(n+1) c= G.(n+1) by A7;
+            hence thesis by A7;
           end;
 A36:      for n being Element of NAT holds P[n] from NAT_1:sch 1(A31,A32);
           G.n misses (F.(n+1) \ G.n) by XBOOLE_1:79;
@@ -827,7 +654,7 @@ A40:    0. <= C.Z & 0. <= Ser(C*Q).k & 0. <= (C*Q).(k+1)
           .= C.(Z \/ QQ.(k+1)) by A26,XBOOLE_1:4;
         then C.(Z \/ QQ.(k+1)) = (C.Z + Ser(C*Q).k) + (C*Q).(k+1) by A25,
 FUNCT_2:21
-          .= C.Z + (Ser(C*Q).k + (C*Q).(k+1)) by A40,Th1
+          .= C.Z + (Ser(C*Q).k + (C*Q).(k+1)) by A40,XXREAL_3:48
           .= C.Z + Ser(C*Q).(k+1) by SUPINF_2:63;
         hence thesis;
       end;
@@ -849,32 +676,27 @@ A45:    QQ.(n+1) = Q.(n+1) \/ QQ.n by A17
       end;
 A46:  for n being Element of NAT holds Q[n] from NAT_1:sch 1(A42,A43);
 A47:  union rng Q = W by A4,A5,A14,A16,XBOOLE_1:28;
-A48:  for n being Element of NAT holds Ser(C*Q).n + C.Z <= C.(Z \/ W)
-      proof
-        let n be Element of NAT;
-A49:    Ser(C*Q).n + C.Z = C.(Z \/ QQ.n) by A41;
-        Z \/ QQ.n c= Z \/ W by A46,XBOOLE_1:9;
-        hence thesis by A49,Def2;
-      end;
 A50:  C.Z = +infty implies C.W + C.Z <= C.(W \/ Z)
       proof
         assume
 A51:    C.Z = +infty;
         0. <= C.W by A2,MEASURE1:def 4;
         then
-A52:    C.W + C.Z = +infty by A51,SUPINF_2:def 2;
+A52:    C.W + C.Z = +infty by A51,XXREAL_3:def 2;
         Z c= W \/ Z by XBOOLE_1:7;
         hence thesis by A51,A52,Def2;
       end;
-      (not C.Z = -infty & not C.Z = +infty) implies C.W + C.Z <= C.(W \/ Z )
+X:    C.Z is real implies C.W + C.Z <= C.(W \/ Z )
       proof
         assume
-A53:    not C.Z = -infty & not C.Z = +infty;
+A53:    C.Z is real;
 A54:    for n being Element of NAT holds Ser(C*Q).n <= C.(Z \/ W) - C.Z
         proof
           let n be Element of NAT;
-          Ser(C*Q).n + C.Z <= C.(Z \/ W) by A48;
-          hence thesis by A53,Th2;
+A49:      Ser(C*Q).n + C.Z = C.(Z \/ QQ.n) by A41;
+          Z \/ QQ.n c= Z \/ W by A46,XBOOLE_1:9;
+          then Ser(C*Q).n + C.Z <= C.(Z \/ W) by A49,Def2;
+          hence thesis by A53,XXREAL_3:49;
         end;
         defpred P[set,set] means ($1 = 0 implies
         $2 = C.(Z \/ W) - C.Z ) & ($1 <> 0 implies $2 = 0.);
@@ -896,7 +718,7 @@ A56:    for x being set st x in NAT holds P[x,R.x] from FUNCT_2:sch 1(A55);
             Z c= Z \/ W by XBOOLE_1:7;
             then C.Z <= C.(Z \/ W) by Def2;
             then
-A57:        C.Z - C.Z <= C.(Z \/ W) - C.Z by SUPINF_2:15;
+A57:        C.Z - C.Z <= C.(Z \/ W) - C.Z by XXREAL_3:39;
             C.Z in REAL or C.Z in {-infty,+infty}
             by XBOOLE_0:def 3,XXREAL_0:def 4;
             then consider y being Real such that
@@ -925,7 +747,7 @@ A63:        Ser(R).k = C.(Z \/ W) - C.Z;
             set y = Ser(R).k;
             thus Ser(R).(k+1) = y + R.(k+1) by SUPINF_2:63
               .= y + 0. by A56
-              .= C.(Z \/ W) - C.Z by A63,SUPINF_2:18;
+              .= C.(Z \/ W) - C.Z by A63,XXREAL_3:4;
           end;
           for k being Element of NAT holds P[k] from NAT_1:sch 1(A61,A62);
           then Ser(R).n = C.(Z \/ W) - C.Z;
@@ -940,14 +762,16 @@ A64:    SUM(R) = Ser(R).1 by A59,SUPINF_2:67;
 A65:    y = C.(Z \/ W) - C.Z by A56;
         Ser(R).1 = y + R.(0+1) by SUPINF_2:63
           .= y + 0. by A56
-          .= C.(Z \/ W) - C.Z by A65,SUPINF_2:18;
+          .= C.(Z \/ W) - C.Z by A65,XXREAL_3:4;
         then
 A66:    SUM(C*Q) <= C.(Z \/ W) - C.Z by A60,A64,MEASURE3:3;
         C.W <= SUM(C*Q) by A47,Def2;
         then C.W <= C.(Z \/ W) - C.Z by A66,XXREAL_0:2;
-        hence thesis by A53,Th2;
+        hence thesis by A53,XXREAL_3:49;
       end;
-      hence thesis by A2,A50,MEASURE1:def 4;
+       0 <= C.Z by A2,MEASURE1:def 4;
+       then C.Z is Element of REAL or C.Z = +infty by XXREAL_0:14;
+      hence thesis by A50,X;
     end;
     hence thesis by Def3;
   end;
@@ -1036,7 +860,7 @@ X:    C is zeroed by Def2;
   then (sigma_Meas(C)).{} = C.{} by Def4;
   then
 A3: sigma_Meas(C) is nonnegative & (sigma_Meas(C)).{} = 0.
-  by A1,X,MEASURE1:def 4, VALUED_0:def 19;
+  by A1,X,MEASURE1:def 4,VALUED_0:def 19;
   now
     let A,B be Element of sigma_Field(C);
     assume
@@ -1107,7 +931,7 @@ A2: W c= A & Z c= X \ A;
 A3: C.W = 0.;
     Z c= W \/ Z by XBOOLE_1:7;
     then C.Z <= C.(W \/ Z) by Def2;
-    hence C.W + C.Z <= C.(W \/ Z) by A3,SUPINF_2:18;
+    hence C.W + C.Z <= C.(W \/ Z) by A3,XXREAL_3:4;
   end;
   hence thesis by Def3;
 end;

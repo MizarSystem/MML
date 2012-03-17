@@ -7,24 +7,25 @@
 environ
 
  vocabularies BINOP_1, FUNCT_1, ARYTM_1, RELAT_1, FINSEQ_1, BOOLE, RLVECT_1,
-      ORDINAL2, ARYTM, CLVECT_1, ARYTM_3, SQUARE_1, ABSVALUE, COMPLEX1, SEQ_1,
-      CFUNCT_1, RLSUB_1, NORMSP_1, PRE_TOPC, SEQ_2, XCMPLX_0, FUNCOP_1,
-      REALSET1, STRUCT_0, ALGSTR_0, MIDSP_1, VECTSP_2, FUNCT_3;
+      ORDINAL2, ARYTM, CLVECT_1, ARYTM_3, ABSVALUE, COMPLEX1, SEQ_1, CFUNCT_1,
+      RLSUB_1, NORMSP_1, PRE_TOPC, SEQ_2, XCMPLX_0, FUNCOP_1, REALSET1,
+      STRUCT_0, ALGSTR_0, MIDSP_1, VECTSP_2, FUNCT_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0,
       XCMPLX_0, XXREAL_0, XREAL_0, DOMAIN_1, COMPLEX1, REAL_1, RELAT_1,
-      FUNCT_1, FUNCT_2,
-      FUNCOP_1, BINOP_1, REALSET1, FINSEQ_1, NAT_1, FUNCT_3, FUNCT_5, STRUCT_0,
-      ALGSTR_0, PRE_TOPC, RLVECT_1, SQUARE_1, PARTFUN1, SEQ_1, SEQ_2,
-      NORMSP_1, CFUNCT_1;
+      FUNCT_1, FUNCT_2, FUNCOP_1, BINOP_1, REALSET1, FINSEQ_1, NAT_1, FUNCT_3,
+      FUNCT_5, STRUCT_0, ALGSTR_0, PRE_TOPC, RLVECT_1, PARTFUN1,
+      SEQ_1, SEQ_2, NORMSP_1, CFUNCT_1;
  constructors PARTFUN1, BINOP_1, FUNCOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
-      COMPLEX1, SEQ_2, REALSET1, NORMSP_1, SEQ_1, FUNCT_3, FUNCT_5, VALUED_1;
+      COMPLEX1, SEQ_2, REALSET1, NORMSP_1, SEQ_1, FUNCT_3, FUNCT_5, VALUED_1,
+      RELSET_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0,
-      XXREAL_0, XREAL_0, MEMBERED, REALSET1, STRUCT_0, ALGSTR_0, FINSEQ_1;
+      XXREAL_0, XREAL_0, MEMBERED, REALSET1, STRUCT_0, ALGSTR_0, FINSEQ_1,
+      ZFMISC_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions STRUCT_0, RLVECT_1, TARSKI, XBOOLE_0, BINOP_1, REALSET1, ALGSTR_0,
       SQUARE_1, COMPLEX1;
- theorems STRUCT_0, TARSKI, RLVECT_1, COMPLEX1, XCMPLX_0, SQUARE_1, FINSEQ_1,
-      NAT_1, FUNCT_1, XBOOLE_0, FUNCT_2, RELAT_1, XBOOLE_1, ZFMISC_1, RELSET_1,
+ theorems STRUCT_0, TARSKI, RLVECT_1, COMPLEX1, XCMPLX_0, FINSEQ_1, NAT_1,
+      FUNCT_1, XBOOLE_0, FUNCT_2, RELAT_1, XBOOLE_1, ZFMISC_1, RELSET_1,
       ABSVALUE, SEQ_2, XREAL_0, FUNCOP_1, XREAL_1, XXREAL_0, NORMSP_1,
       ALGSTR_0, CARD_1;
  schemes FUNCT_2, NAT_1, XBOOLE_0, SEQ_1;
@@ -128,7 +129,7 @@ registration
     by STRUCT_0:def 10;
     thus for a,b for v being VECTOR of S holds (a * b) * v = a * (b * v)
     by STRUCT_0:def 10;
-    thus for v being VECTOR of S holds 1r * v = v by STRUCT_0:def 10;
+    thus thesis by STRUCT_0:def 10;
   end;
 end;
 
@@ -159,14 +160,14 @@ A2:   z = 0c;
         .= (1r + 0c) * v by Def2
         .= v by Def2
         .= v + 0.V by RLVECT_1:10;
-      hence z * v = 0.V by A2,RLVECT_1:21;
+      hence thesis by A2,RLVECT_1:21;
     end;
     suppose
 A3:   v = 0.V;
       z * 0.V + z * 0.V = z * (0.V + 0.V) by Def2
         .= z * 0.V by RLVECT_1:10
         .= z * 0.V + 0.V by RLVECT_1:10;
-      hence z * v = 0.V by A3,RLVECT_1:21;
+      hence thesis by A3,RLVECT_1:21;
     end;
   end;
   hence thesis;
@@ -362,8 +363,9 @@ A14:    H.k = z * v by A7,A11,A12,A13;
         hence p.k = z * v by A9,A11,A14,FUNCT_1:70;
       end;
       n + 1 in Seg(n + 1) by FINSEQ_1:6;
+      then n +1 in dom H & n +1 in dom I by A5,A6,FINSEQ_1:def 3;
       then reconsider v1 = H.(n + 1),v2 = I.(n + 1) as VECTOR of V
-      by A5,A6,RLVECT_1:54;
+      by FUNCT_1:172;
 A15:  v1 = z * v2 by A6,A7,FINSEQ_1:6;
 A16:  dom q = Seg len q by FINSEQ_1:def 3;
       dom p = Seg len p by FINSEQ_1:def 3;
@@ -424,7 +426,6 @@ theorem
   Sum<* v,v,v *> = (1r+1r+1r) * v
 proof
   reconsider 2r = 2+0*<i> as Element of COMPLEX by XCMPLX_0:def 2;
-A1: 2r + 1r = 3+0*<i>;
   thus Sum<* v,v,v *> = Sum<* v,v *> + v by RLVECT_1:84
     .= (1r+1r) * v + v by Th18
     .= (1r+1r) * v + 1r * v by Def2
@@ -511,7 +512,7 @@ A1: the carrier of V = V1;
   hence for v,u being VECTOR of V st v in V1 & u in V1 holds v + u in V1;
   let z be Complex, v be VECTOR of V;
   assume v in V1;
-  thus z * v in V1 by A1;
+  thus thesis by A1;
 end;
 
 theorem
@@ -546,7 +547,7 @@ A10: v = v1 + v2 and
 A11: v1 in V1 & v2 in V2 by A2;
 A12: z * v1 in V1 & z * v2 in V2 by A1,A11,Def4;
   z * v = z * v1 + z * v2 by A10,Def2;
-  hence z * v in V3 by A2,A12;
+  hence thesis by A2,A12;
 end;
 
 theorem
@@ -583,7 +584,7 @@ definition
     the carrier of V c= the carrier of V &
     the addF of V = (the addF of V)||the carrier of V &
     the Mult of V = (the Mult of V) | [:COMPLEX, the carrier of V:]
-    by FUNCT_2:40;
+    by RELSET_1:34;
     hence thesis;
   end;
 end;
@@ -679,14 +680,14 @@ A1: the carrier of W = V1;
     then reconsider vv = v, uu = u as VECTOR of WW by A1;
     reconsider vw = vv + uu as Element of VW;
     vw in V1 by A1;
-    hence v + u in V1 by Th33;
+    hence thesis by Th33;
   end;
   let z,v;
   assume v in V1;
   then reconsider vv = v as VECTOR of WW by A1;
   reconsider vw = z * vv as Element of VW;
   vw in V1 by A1;
-  hence z * v in V1 by Th34;
+  hence thesis by Th34;
 end;
 
 theorem Th37:
@@ -808,7 +809,7 @@ A7:   x1 + v = 0.V by ALGSTR_0:def 11;
         .= (- 1r) * x by A1,A4,FUNCT_1:72;
       then reconsider y = v as VECTOR of W;
       take y;
-      thus x + y = 0.W by A2,A6,A7;
+      thus thesis by A2,A6,A7;
     end;
     thus for z for x,y being VECTOR of W holds z * (x + y) = z * x + z * y
     proof
@@ -856,7 +857,7 @@ theorem Th45:
   V is Subspace of V
 proof
   thus the carrier of V c= the carrier of V & 0.V = 0.V;
-  thus thesis by FUNCT_2:40;
+  thus thesis by RELSET_1:34;
 end;
 
 theorem Th46:
@@ -971,7 +972,7 @@ registration
     the carrier of V is Subset of V iff the carrier of V c= the carrier of V;
     then reconsider V1 = the carrier of V as Subset of V;
     0.V = 0.V & the addF of V = (the addF of V)||V1 &
-    the Mult of V = (the Mult of V) | [:COMPLEX,V1:] by FUNCT_2:40;
+    the Mult of V = (the Mult of V) | [:COMPLEX,V1:] by RELSET_1:34;
     then CLSStruct(#the carrier of V,0.V,the addF of V,the Mult of V #)
     is Subspace of V by Th44;
     hence thesis;
@@ -1185,7 +1186,7 @@ A1:   for z for v,w be VECTOR of W, v',w' be VECTOR of V st v=v' & w=w'
 A2:     v' + w' = 0.V by ALGSTR_0:def 11;
         reconsider w=w' as VECTOR of W;
         take w;
-        thus v + w = 0.W by A2;
+        thus thesis by A2;
       end;
       thus for z for v,w being VECTOR of W holds z * (v + w) = z * v + z * w
       proof
@@ -1227,7 +1228,7 @@ A2:     v' + w' = 0.V by ALGSTR_0:def 11;
     W is Subspace of V
     proof
       thus the carrier of W c= the carrier of V & 0.W = 0.V;
-      thus thesis by FUNCT_2:40;
+      thus thesis by RELSET_1:34;
     end;
     hence thesis;
   end;
@@ -1290,7 +1291,7 @@ A1: for x being set holds x in X iff x in the carrier of V &
     proof
       let x be set;
       assume x in X;
-      hence x in the carrier of V by A1;
+      hence thesis by A1;
     end;
     then reconsider X as Subset of V;
     set Y = {v + u : u in W};
@@ -2274,7 +2275,7 @@ A1: for x,y be VECTOR of X for x',y' be VECTOR of (0).V st x = x' & y = y'
 A2:   v' + w' = 0.(0).V by ALGSTR_0:def 11;
       reconsider w = w' as VECTOR of X;
       take w;
-      thus v + w = 0.X by A2;
+      thus thesis by A2;
     end;
     thus thesis;
   end;
@@ -2466,7 +2467,7 @@ A11: ||.(S1 + S2).n - g.|| = ||.-(g1+g2) + ((S1.n) + (S2.n)).||
     .= ||.(S1.n) - g1 + ((S2.n) - g2).|| by RLVECT_1:def 6;
   ||.(S1.n) - g1 + ((S2.n) - g2).|| <=
   ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by Def11;
-  hence ||.(S1 + S2).n - g.|| < r by A10,A11,XXREAL_0:2;
+  hence thesis by A10,A11,XXREAL_0:2;
 end;
 
 theorem Th116:
@@ -2510,7 +2511,7 @@ A11: ||.(S1 - S2).n - g.|| = ||.((S1.n) - (S2.n)) - (g1 - g2).||
     .= ||. ((S1.n) - g1 ) - ((S2.n) - g2).|| by RLVECT_1:43;
   ||.((S1.n) - g1) - ((S2.n) - g2).|| <=
   ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by Th105;
-  hence ||.(S1 - S2).n - g.|| < r by A10,A11,XXREAL_0:2;
+  hence thesis by A10,A11,XXREAL_0:2;
 end;
 
 theorem Th117:
@@ -2534,7 +2535,7 @@ A3: ||.(S.n) - g.|| < r by A2;
     .= ||.(((S.n) - x) + x) - g.|| by RLVECT_1:43
     .= ||.((S.n) - x) + ((-g) + x).|| by RLVECT_1:def 6
     .= ||.((S.n) - x) - h.|| by RLVECT_1:47;
-  hence ||.(S - x).n - h.|| < r by A3,NORMSP_1:def 7;
+  hence thesis by A3,NORMSP_1:def 7;
 end;
 
 theorem Th118:

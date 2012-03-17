@@ -10,17 +10,16 @@ environ
       COMMACAT, GRCAT_1, RELAT_1, BOOLE, FUNCOP_1, PRALG_1, FRAENKEL, PARTFUN1,
       OPPCAT_1, GROUP_6, CAT_2, FUNCT_3, INDEX_1, GRAPH_1, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
-      FUNCT_2, BINOP_1, PARTFUN1, PBOOLE, FRAENKEL, FUNCOP_1,
-      STRUCT_0, GRAPH_1, CAT_1,
-      CAT_2, OPPCAT_1, PRE_CIRC, CAT_5;
- constructors PARTFUN1, DOMAIN_1, PRE_CIRC, OPPCAT_1, CAT_5;
+      FUNCT_2, BINOP_1, PARTFUN1, PBOOLE, FUNCOP_1, STRUCT_0,
+      GRAPH_1, CAT_1, CAT_2, OPPCAT_1, CAT_5;
+ constructors PARTFUN1, DOMAIN_1, OPPCAT_1, CAT_5, RELSET_1, PBOOLE;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCOP_1, PBOOLE, CAT_2, CAT_5,
-      CIRCCOMB, CAT_1, STRUCT_0;
+      CIRCCOMB, CAT_1, STRUCT_0, RELSET_1, PRE_CIRC;
  requirements SUBSET, BOOLE;
- definitions TARSKI, FRAENKEL, FUNCT_1, PBOOLE, CAT_5, FUNCOP_1, CAT_1,
+ definitions TARSKI, FUNCT_1, PBOOLE, CAT_5, FUNCOP_1, CAT_1,
       BINOP_1, GRAPH_1;
  theorems MCART_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, PARTFUN1, FUNCT_4,
-      CAT_1, CAT_2, OPPCAT_1, CAT_5, PBOOLE, RELSET_1;
+      CAT_1, CAT_2, OPPCAT_1, CAT_5, RELSET_1;
  schemes CLASSES1, PBOOLE, CAT_5;
 
 begin :: Category Yielding Functions
@@ -32,7 +31,7 @@ registration
   proof consider f being non-empty ManySortedSet of A;
     take f;
     consider a being Element of A;
-    take a; thus a in A & f.a is not empty;
+    take a; thus thesis;
   end;
 end;
 
@@ -76,7 +75,7 @@ proof
   let G be Functor of C,E such that
 A1: F = G;
 A2: dom Obj F = the carrier of C & dom Obj G = the carrier of C by
-  FUNCT_2:def 1;
+FUNCT_2:def 1;
   now
     let x be set;
     assume x in the carrier of C;
@@ -87,7 +86,7 @@ A3: a = dom id a by CAT_1:44;
       .= dom (G.(id a qua Morphism of C)) by A1,CAT_5:13
       .= (Obj G).x by A3,CAT_1:105;
   end;
-  hence Obj F = Obj G by A2,FUNCT_1:9;
+  hence thesis by A2,FUNCT_1:9;
 end;
 
 definition
@@ -158,7 +157,7 @@ registration
     let x be set;
     assume x in rng f;
     then ex y being set st y in dom f & x = f.y by FUNCT_1:def 5;
-    hence x is Category by Def1;
+    hence thesis by Def1;
   end;
 end;
 
@@ -168,7 +167,7 @@ definition
   let x be Element of X;
   redefine func f.x -> Category;
   coherence
-  proof dom f = X by PBOOLE:def 3;
+  proof dom f = X by PARTFUN1:def 4;
     hence thesis by Def1;
   end;
 end;
@@ -182,7 +181,7 @@ registration
     let x be set;
     assume x in dom (g*f);
     then (g*f).x = g.(f.x) & f.x in dom g by FUNCT_1:21,22;
-    hence (g*f).x is Category by Def1;
+    hence thesis by Def1;
   end;
 end;
 
@@ -299,14 +298,14 @@ definition
   func Objs F -> non-empty ManySortedSet of A;
   coherence
   proof dom Objs F = dom F by Def2
-      .= A by PBOOLE:def 3;
-    hence thesis by PBOOLE:def 3;
+      .= A by PARTFUN1:def 4;
+    hence thesis by PARTFUN1:def 4,RELAT_1:def 18;
   end;
   func Mphs F -> non-empty ManySortedSet of A;
   coherence
   proof dom Mphs F = dom F by Def3
-      .= A by PBOOLE:def 3;
-    hence thesis by PBOOLE:def 3;
+      .= A by PARTFUN1:def 4;
+    hence thesis by PARTFUN1:def 4,RELAT_1:def 18;
   end;
 end;
 
@@ -361,18 +360,58 @@ definition
   end;
 end;
 
-definition
+registration
   let A, B be set;
   let X be ManySortedSet of A,B;
-  redefine
-  func X`1 -> ManySortedSet of A;
+  cluster X`1 -> Function-like Relation-like;
   coherence
-  proof consider f being (ManySortedSet of A), g being ManySortedSet of B
+  proof
+   consider f being (ManySortedSet of A), g being ManySortedSet of B
     such that
 A1: X = [f,g] by Def4;
     thus thesis by A1,MCART_1:7;
   end;
-  func X`2 -> ManySortedSet of B;
+  cluster X`2 ->  Function-like Relation-like;
+  coherence
+  proof consider f being (ManySortedSet of A), g being ManySortedSet of B
+    such that
+A2: X = [f,g] by Def4;
+    thus thesis by A2,MCART_1:7;
+  end;
+end;
+
+registration
+  let A, B be set;
+  let X be ManySortedSet of A,B;
+  cluster X`1 -> A-defined;
+  coherence
+  proof
+   consider f being (ManySortedSet of A), g being ManySortedSet of B
+    such that
+A1: X = [f,g] by Def4;
+    thus thesis by A1,MCART_1:7;
+  end;
+  cluster X`2 -> B-defined;
+  coherence
+  proof consider f being (ManySortedSet of A), g being ManySortedSet of B
+    such that
+A2: X = [f,g] by Def4;
+    thus thesis by A2,MCART_1:7;
+  end;
+end;
+
+registration
+  let A, B be set;
+  let X be ManySortedSet of A,B;
+  cluster X`1 -> total (A-defined Function);
+  coherence
+  proof
+   consider f being (ManySortedSet of A), g being ManySortedSet of B
+    such that
+A1: X = [f,g] by Def4;
+    thus thesis by A1,MCART_1:7;
+  end;
+  cluster X`2 -> total (B-defined Function);
   coherence
   proof consider f being (ManySortedSet of A), g being ManySortedSet of B
     such that
@@ -401,7 +440,7 @@ registration
     consider g being ManySortedFunction of B;
     reconsider X = [f,g] as ManySortedSet of A,B;
     take X; thus X`1 is Category-yielding & X`2 is Function-yielding by
-    MCART_1:7;
+MCART_1:7;
   end;
 end;
 
@@ -427,7 +466,7 @@ registration
     let x be set;
     assume x in rng f;
     then ex y being set st y in dom f & x = f.y by FUNCT_1:def 5;
-    hence x is Function;
+    hence thesis;
   end;
 end;
 
@@ -474,7 +513,8 @@ A2: dom f = A & for a being set st a in A
       a = a' & f.a = t by A2;
       hence thesis;
     end;
-    then reconsider f as ManySortedFunction of A by A2,PBOOLE:def 3;
+    then reconsider f as ManySortedFunction of A by A2,PARTFUN1:def 4
+,RELAT_1:def 18;
     take f;
     let a be Element of A;
     ex a' being Element of A, t being Functor of F.a', G.a' st
@@ -496,7 +536,7 @@ A2: for a being set st a in A() holds f.a = F(a) from PBOOLE:sch 4;
   proof
     let a be set;
     assume a in dom f;
-    then reconsider a as Element of A() by PBOOLE:def 3;
+    then reconsider a as Element of A() by PARTFUN1:def 4;
     f.a = F(a) by A2;
     hence thesis by A1;
   end;
@@ -548,9 +588,9 @@ proof
   let m be Element of B;
   reconsider H = I`2 as ManySortedFunctor of I`1*F, I`1*G by Def8;
 A1: H.m is Functor of (I`1*F).m, (I`1*G).m;
-  dom (I`1*F) = B & dom (I`1*G) = B by PBOOLE:def 3;
+  dom (I`1*F) = B & dom (I`1*G) = B by PARTFUN1:def 4;
   then (I`1*F).m = I`1.(F.m) & (I`1*G).m = I`1.(G.m) by FUNCT_1:22;
-  hence I`2.m is Functor of I`1.(F.m), I`1.(G.m) by A1;
+  hence thesis by A1;
 end;
 
 theorem
@@ -570,7 +610,7 @@ Lm1: now
   let A,B be non empty set;
   let F,G be Function of B,A;
   let I be Indexing of F,G;
-A1: dom I`1 = A by PBOOLE:def 3;
+A1: dom I`1 = A by PARTFUN1:def 4;
   consider C being full (strict Categorial Category) such that
 A2: the carrier of C = rng I`1 by CAT_5:20;
   take C;
@@ -640,7 +680,7 @@ A2: [I1,I2]`1 = I1 & [I1,I2]`2 = I2 by MCART_1:7;
     proof
       let a be Element of B;
       I1.(F.a) = C & I1.(G.a) = C & dom (I1*F) = B & dom (I1*G) = B
-      by FUNCOP_1:13,PBOOLE:def 3;
+      by FUNCOP_1:13,PARTFUN1:def 4;
       then I2.a = id C & (I1*F).a = C & (I1*G).a = C
       by FUNCOP_1:13,FUNCT_1:22;
       hence thesis;
@@ -656,7 +696,7 @@ A2: [I1,I2]`1 = I1 & [I1,I2]`2 = I2 by MCART_1:7;
     assume F.m2 = G.m1;
     then [m2,m1] in dom c by A1,CAT_1:def 8;
     then I`2.(c.[m2,m1]) = id C & I`2.m1 = id C & I`2.m2 = id C by A2,
-    FUNCOP_1:13,PARTFUN1:27;
+FUNCOP_1:13,PARTFUN1:27;
     hence thesis by FUNCT_2:23;
   end;
 end;
@@ -785,11 +825,11 @@ A1: Hom(c1,c2) is non empty;
   let m be Morphism of c1,c2;
   dom (I`1*(the Source of C)) = the carrier' of C &
   dom (I`1*(the Target of C)) = the carrier' of C &
-  dom m = c1 & cod m = c2 by A1,CAT_1:23,PBOOLE:def 3;
+  dom m = c1 & cod m = c2 by A1,CAT_1:23,PARTFUN1:def 4;
   then (I`1*(the Source of C)).m = I`1.((the Source of C).m) &
   (I`1*(the Target of C)).m = I`1.((the Target of C).m) &
   (the Source of C).m = c1 & (the Target of C).m = c2 by FUNCT_1:22;
-  hence I`2.m is Functor of I`1.c1, I`1.c2;
+  hence thesis;
 end;
 
 theorem
@@ -803,11 +843,11 @@ A1: Hom(c1,c2) is non empty;
   let m be Morphism of c1,c2;
   dom (I`1*(the Source of C)) = the carrier' of C &
   dom (I`1*(the Target of C)) = the carrier' of C &
-  dom m = c1 & cod m = c2 by A1,CAT_1:23,PBOOLE:def 3;
+  dom m = c1 & cod m = c2 by A1,CAT_1:23,PARTFUN1:def 4;
   then (I`1*(the Source of C)).m = I`1.((the Source of C).m) &
   (I`1*(the Target of C)).m = I`1.((the Target of C).m) &
   (the Source of C).m = c1 & (the Target of C).m = c2 by FUNCT_1:22;
-  hence I`2.m is Functor of I`1.c2, I`1.c1;
+  hence thesis;
 end;
 
 definition
@@ -820,14 +860,14 @@ definition
   f being Morphism of C holds it.f = [[I`1.dom f, I`1.cod f], I`2.f];
   existence
   proof
-A1: dom I`1 = the carrier of C by PBOOLE:def 3;
+A1: dom I`1 = the carrier of C by PARTFUN1:def 4;
     rng I`1 c= the carrier of T
     proof
       let x be set;
       assume x in rng I`1;
       then consider a being set such that
 A2:   a in dom I`1 & x = I`1.a by FUNCT_1:def 5;
-      reconsider a as Object of C by A2,PBOOLE:def 3;
+      reconsider a as Object of C by A2,PARTFUN1:def 4;
       I`1.a is Object of T by Def9;
       hence thesis by A2;
     end;
@@ -887,7 +927,7 @@ proof
   let C be Category, I be Indexing of C;
   let T be TargetCat of I;
 A1: dom Obj (I-functor(C,T)) = the carrier of C &
-  dom I`1 = the carrier of C by FUNCT_2:def 1,PBOOLE:def 3;
+  dom I`1 = the carrier of C by FUNCT_2:def 1,PARTFUN1:def 4;
   now
     let x be set;
     assume x in the carrier of C;
@@ -899,7 +939,7 @@ A2: dom id a = a & cod id a = a by CAT_1:44;
       .= [[I`1.a, I`1.a], I`2.id a]`11 by A2,Def11;
     hence (Obj (I-functor(C,T))).x = I`1.x by MCART_1:89;
   end;
-  hence Obj (I-functor(C,T)) = I`1 by A1,FUNCT_1:9;
+  hence thesis by A1,FUNCT_1:9;
 end;
 
 theorem Th11:
@@ -962,14 +1002,13 @@ A2: for T being TargetCat of I holds T2 = Image (I-functor(C,T));
     T is TargetCat of I
     proof the carrier of T = rng Obj (I-functor(C,S)) by CAT_5:def 3;
       then the carrier of T = rng I`1 & dom I`1 = the carrier of C
-      by Lm2,PBOOLE:def 3;
+      by Lm2,PARTFUN1:def 4;
       hence for a being Object of C holds I`1.a is Object of T
       by FUNCT_1:def 5;
       let b be Morphism of C;
       F.b = [[I`1.dom b, I`1.cod b], I`2.b] & dom b = (the Source of C).b &
       cod b = (the Target of C).b by Def11;
-      hence [[I`1.((the Source of C).b),I`1.((the Target of C).b)],I`2.b]
-      is Morphism of T;
+      hence thesis;
     end;
     then reconsider T as strict TargetCat of I;
     take T;
@@ -999,8 +1038,7 @@ A1: rng I is Subcategory of D;
       let b be Morphism of C;
       [[I`1.((the Source of C).b),I`1.((the Target of C).b)],I`2.b]
       is Morphism of rng I by Def9;
-      hence [[I`1.((the Source of C).b),I`1.((the Target of C).b)],I`2.b]
-      is Morphism of D by A1,CAT_2:14;
+      hence thesis by A1,CAT_2:14;
     end;
   end;
   assume D is TargetCat of I;
@@ -1019,7 +1057,8 @@ definition
   coherence
   proof
     dom (I`1*(the Source of C)) = the carrier' of C &
-    dom (I`1*(the Target of C)) = the carrier' of C by PBOOLE:def 3;
+    dom (I`1*(the Target of C)) = the carrier' of C by PARTFUN1:def 4
+;
     then (I`1*(the Source of C)).m = I`1.((the Source of C).m) &
     (I`1*(the Target of C)).m = I`1.((the Target of C).m) by FUNCT_1:22;
     hence thesis;
@@ -1036,7 +1075,8 @@ definition
   coherence
   proof
     dom (I`1*(the Source of C)) = the carrier' of C &
-    dom (I`1*(the Target of C)) = the carrier' of C by PBOOLE:def 3;
+    dom (I`1*(the Target of C)) = the carrier' of C by PARTFUN1:def 4
+;
     then (I`1*(the Source of C)).m = I`1.((the Source of C).m) &
     (I`1*(the Target of C)).m = I`1.((the Target of C).m) by FUNCT_1:22;
     hence thesis;
@@ -1048,12 +1088,14 @@ Lm3: now
   set F = (the carrier of C) --> D, G = (the carrier' of C) --> id D;
   set H = [F,G];
   let m be Morphism of C;
-  dom (H`1*(the Source of C)) = the carrier' of C by PBOOLE:def 3;
+  dom (H`1*(the Source of C)) = the carrier' of C by PARTFUN1:def 4
+;
   then
 A1: (H`1*(the Source of C)).m = H`1.((the Source of C).m) by FUNCT_1:22
     .= F.((the Source of C).m) by MCART_1:7
     .= D by FUNCOP_1:13;
-  dom (H`1*(the Target of C)) = the carrier' of C by PBOOLE:def 3;
+  dom (H`1*(the Target of C)) = the carrier' of C by PARTFUN1:def 4
+;
   then
 A2: (H`1*(the Target of C)).m = H`1.((the Target of C).m) by FUNCT_1:22
     .= F.((the Target of C).m) by MCART_1:7
@@ -1070,12 +1112,14 @@ Lm4: now
   set F = (the carrier of C) --> D, G = (the carrier' of C) --> id D;
   set H = [F,G];
   let m be Morphism of C;
-  dom (H`1*(the Source of C)) = the carrier' of C by PBOOLE:def 3;
+  dom (H`1*(the Source of C)) = the carrier' of C by PARTFUN1:def 4
+;
   then
 A1: (H`1*(the Source of C)).m = H`1.((the Source of C).m) by FUNCT_1:22
     .= F.((the Source of C).m) by MCART_1:7
     .= D by FUNCOP_1:13;
-  dom (H`1*(the Target of C)) = the carrier' of C by PBOOLE:def 3;
+  dom (H`1*(the Target of C)) = the carrier' of C by PARTFUN1:def 4
+;
   then
 A2: (H`1*(the Target of C)).m = H`1.((the Target of C).m) by FUNCT_1:22
     .= F.((the Target of C).m) by MCART_1:7
@@ -1147,7 +1191,7 @@ registration
   cluster Obj F -> Category-yielding;
   coherence
   proof
-A1: rng Obj F c= the carrier of D by RELSET_1:12;
+A1: rng Obj F c= the carrier of D by RELAT_1:def 19;
     let x be set;
     assume x in dom Obj F;
     then (Obj F).x in rng Obj F by FUNCT_1:def 5;
@@ -1164,10 +1208,11 @@ proof
 A1: I`1 = Obj F & I`2 = pr2 F by MCART_1:7;
   dom Obj F = the carrier of C by FUNCT_2:def 1;
   then
-A2: Obj F is ManySortedSet of the carrier of C by PBOOLE:def 3;
+A2: Obj F is ManySortedSet of the carrier of C by PARTFUN1:def 4;
 A3: dom pr2 F = dom F & dom F = the carrier' of C
   by FUNCT_2:def 1,MCART_1:def 13;
-  then pr2 F is ManySortedSet of the carrier' of C by PBOOLE:def 3;
+  then pr2 F is ManySortedSet of the carrier' of C by PARTFUN1:def 4
+,RELAT_1:def 18;
   then reconsider I as ManySortedSet of the carrier of C, the carrier' of C
   by A2,Def4;
   I`1 is Category-yielding by MCART_1:7;
@@ -1183,7 +1228,7 @@ A3: dom pr2 F = dom F & dom F = the carrier' of C
     hence thesis;
   end;
   then reconsider FF = pr2 F as ManySortedFunction of the carrier' of C
-  by A3,PBOOLE:def 3;
+  by A3,PARTFUN1:def 4,RELAT_1:def 18;
   FF is ManySortedFunctor of I`1*the Source of C, I`1*the Target of C
   proof
     let m be Morphism of C;
@@ -1307,7 +1352,7 @@ proof
   let T be TargetCat of I;
 A1: dom pr2 (I-functor(C,T)) = dom (I-functor(C,T)) by MCART_1:def 13;
 A2: dom (I-functor(C,T)) = the carrier' of C by FUNCT_2:def 1;
-A3: dom I`2 = the carrier' of C by PBOOLE:def 3;
+A3: dom I`2 = the carrier' of C by PARTFUN1:def 4;
   now
     let x be set;
     assume x in the carrier' of C;
@@ -1391,7 +1436,7 @@ A1: Image F is Subcategory of E & Image G is Subcategory of E & F = G;
   reconsider F', G' as Functor of C,E by A1,Lm5;
   I*F = (I-functor(E,rng I)*F')-indexing_of C &
   I*G = (I-functor(E,rng I)*G')-indexing_of C by A1,Def16;
-  hence I*F = I*G by A1;
+  hence thesis by A1;
 end;
 
 theorem Th23:
@@ -1592,7 +1637,7 @@ proof
 A1: Image (I1-functor(C,D')) = rng I1 & Image (I1-functor(C,T)) = rng I1 &
   Image (I1-functor(C,rng I1)) = rng I1 by Def12;
   I1-functor(C,rng I1) = I1-functor(C,T) by Th11;
-  hence I2*I1 = I2*(I1-functor(C,T)) by A1,Th22;
+  hence thesis by A1,Th22;
 end;
 
 theorem

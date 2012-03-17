@@ -12,23 +12,24 @@ environ
       VECTSP_1, SEQ_1, REALSET1, BHSP_3, SUBSET_1, BOOLE, SETFAM_1, FINSEQ_4,
       XREAL_0, ORDINAL2, REAL_NS1, ALGSTR_0, MATRIXR2, RLSUB_1, PARTFUN1,
       CQC_LANG, CARD_1, MATRIX_7, RFINSEQ, MATRLIN, VECTSP_9, SGRAPH1,
-      RFINSEQ2, FINSEQ_7, MONOID_0, EUCLID_7, SUPINF_1, FUNCOP_1;
+      RFINSEQ2, FINSEQ_7, MONOID_0, EUCLID_7, SUPINF_1, FUNCOP_1, FUNCSDOM;
  notations XBOOLE_0, TARSKI, RELAT_1, FUNCT_1, RVSUM_1, RELSET_1, PARTFUN1,
       CARD_1, CARD_3, FUNCT_2, FUNCT_3, ORDINAL1, CLASSES1, NUMBERS, XCMPLX_0,
-      XREAL_0, SUBSET_1, STRUCT_0, MONOID_0, COMPLEX1, FINSEQ_1, FINSEQ_2,
-      VALUED_0, VALUED_1, SEQ_1, FINSET_1, BINOP_1, PRE_TOPC, BINOP_2, EUCLID,
-      SQUARE_1, XXREAL_0, EUCLID_2, SETFAM_1, RLSUB_1, RLVECT_2, RLVECT_3,
-      REAL_1, NAT_1, NAT_D, MATRIXR2, ZFMISC_1, ALGSTR_0, RLVECT_5, REALSET1,
-      RLVECT_1, MATRIX_7, RFINSEQ, RFINSEQ2, FINSEQ_7, RUSUB_3, REAL_NS1,
-      DOMAIN_1, RUSUB_4, FUNCOP_1, FINSOP_1;
+      XREAL_0, SUBSET_1, COMPLEX1, FINSEQ_1, FINSEQ_2, VALUED_0, VALUED_1,
+      SEQ_1, FINSET_1, BINOP_1, STRUCT_0, ALGSTR_0, FUNCSDOM, MONOID_0,
+      PRE_TOPC, BINOP_2, RLVECT_1, RLTOPSP1, EUCLID, SQUARE_1, XXREAL_0,
+      EUCLID_2, SETFAM_1, RLSUB_1, RLVECT_2, RLVECT_3, REAL_1, NAT_1, NAT_D,
+      MATRIXR2, ZFMISC_1, RLVECT_5, REALSET1, MATRIX_7, RFINSEQ, RFINSEQ2,
+      FINSEQ_7, RUSUB_3, REAL_NS1, DOMAIN_1, RUSUB_4, FUNCOP_1, FINSOP_1;
  constructors REAL_1, SQUARE_1, BINOP_2, MONOID_0, SEQ_1, EUCLID_2, SETFAM_1,
       RLVECT_2, RLVECT_3, REAL_NS1, NAT_1, FUNCT_3, REALSET1, MATRIXR2,
       RLVECT_5, FINSOP_1, MATRIX_7, RFINSEQ, RFINSEQ2, SETWISEO, FINSEQ_7,
-      RUSUB_3, RUSUB_4, NAT_D, CARD_1, CARD_3, CLASSES1;
+      RUSUB_3, RUSUB_4, NAT_D, CARD_1, CARD_3, CLASSES1, FUNCSDOM, RELSET_1;
  registrations REALSET1, FUNCT_1, MONOID_0, RELSET_1, NUMBERS, XREAL_0,
       STRUCT_0, FRAENKEL, FINSET_1, XXREAL_0, CARD_1, NAT_1, VALUED_1,
       MEMBERED, FINSEQ_2, RVSUM_1, EUCLID, VALUED_0, FUNCT_2, SUBSET_1,
-      XBOOLE_0, RLVECT_1, REAL_NS1, FINSEQ_1, RELAT_1, ORDINAL1, FUNCOP_1;
+      XBOOLE_0, RLVECT_1, REAL_NS1, FINSEQ_1, RELAT_1, ORDINAL1, FUNCOP_1,
+      RLTOPSP1;
  requirements REAL, SUBSET, NUMERALS, ARITHM, BOOLE;
 
 
@@ -405,101 +406,90 @@ end;
 theorem :: EUCLID_7:35
   for n being Element of NAT, x,y being Element of REAL n,
   u,v being Point of REAL-US n st x=u & y=v holds
-  (Euclid_scalar n).[u,v] = |(x,y)|;
+  (Euclid_scalar n).(u,v) = |(x,y)|;
 
 theorem :: EUCLID_7:36
   for n,j being Element of NAT,
-  F being FinSequence of the carrier of (REAL-US n),
+  F being FinSequence of the carrier of REAL-US n,
   Bn being Subset of REAL-US n,
   v0 being Element of REAL-US n,l being Linear_Combination of Bn
   st F is one-to-one & Bn is R-orthogonal & rng F = Carrier l &
   v0 in Bn & j in dom (l (#) F) & v0=F.j
-  holds (Euclid_scalar n).[v0,Sum (l(#)F)]
-  = (Euclid_scalar n).[v0,(l.(F/.j))*v0];
+  holds (Euclid_scalar n).(v0,Sum (l(#)F))
+  = (Euclid_scalar n).(v0,(l.(F/.j))*v0);
 
 theorem :: EUCLID_7:37
   for n being Element of NAT, f being FinSequence of REAL n,
   g being FinSequence of the carrier of (REAL-US n) st f=g
   holds Sum f=Sum g;
 
-definition let n be Nat;
-  func REAL-L n -> RLSStruct equals
-:: EUCLID_7:def 14
-  RLSStruct(# REAL(n),0*(n),Euclid_add(n),Euclid_mult(n) #);
+registration let A be set;
+  cluster RealVectSpace(A) -> constituted-Functions;
 end;
 
 registration let n;
-  cluster REAL-L n -> constituted-FinSeqs;
+  cluster RealVectSpace(Seg n) -> constituted-FinSeqs;
 end;
 
-registration let n;
-  cluster -> real-valued Element of REAL-L n;
+registration let A be set;
+  cluster -> real-valued Element of RealVectSpace(A);
 end;
-
-registration let n;
-  cluster REAL-L n -> strict non empty;
-end;
-
-registration let n;
-  cluster REAL-L n -> Abelian add-associative right_zeroed
-  right_complementable RealLinearSpace-like;
- end;
 
 registration
-  let n;
-  let x, y be VECTOR of REAL-L n, a, b be real-valued Function;
+  let A be set;
+  let x, y be VECTOR of RealVectSpace(A), a, b be real-valued Function;
   identify x+y with a+b when x = a, y = b;
 end;
 
 registration
-  let n; let x be VECTOR of REAL-L n,
+  let A be set; let x be VECTOR of RealVectSpace(A),
   y be real-valued Function, a, b be Element of REAL;
   identify a*x with b(#)y when x = y, a = b;
 end;
 
 registration
-  let n; let x be VECTOR of REAL-L n, a be real-valued Function;
+  let A be set; let x be VECTOR of RealVectSpace(A), a be real-valued Function;
   identify -x with -a when x = a;
 end;
 
 registration
-  let n; let x, y be VECTOR of REAL-L n, a, b be real-valued Function;
+  let A be set;
+  let x, y be VECTOR of RealVectSpace(A), a, b be real-valued Function;
   identify x-y with a-b when x = a, y = b;
 end;
 
 theorem :: EUCLID_7:38
-  for X being Subspace of REAL-L n,
+  for X being Subspace of RealVectSpace(Seg n),
   x being Element of REAL n, a being Real st x in the carrier of X holds
   a*x in the carrier of X;
 
 theorem :: EUCLID_7:39
-  for X being Subspace of REAL-L n,
+  for X being Subspace of RealVectSpace(Seg n),
   x,y being Element of REAL n st x in the carrier of X & y in the carrier of X
   holds x+y in the carrier of X;
 
 theorem :: EUCLID_7:40
-  for X being Subspace of REAL-L n,
+  for X being Subspace of RealVectSpace(Seg n),
   x,y being Element of REAL n,a,b being Real st
   x in the carrier of X & y in the carrier of X holds
   a*x+b*y in the carrier of X;
 
 theorem :: EUCLID_7:41
-  for x,y being Element of REAL n,
-  u,v being Point of REAL-L n st x=u & y=v holds
-  (Euclid_scalar n).[u,v]= |(x,y)|;
+  for u,v being Element of REAL n holds
+  (Euclid_scalar n).(u,v) = |(u,v)|;
 
 theorem :: EUCLID_7:42
-  for F being FinSequence of the carrier of REAL-L n,
-      Bn being Subset of REAL-L n,
-  v0 being Element of REAL-L n,l being Linear_Combination of Bn
+  for F being FinSequence of the carrier of RealVectSpace(Seg n),
+      Bn being Subset of RealVectSpace(Seg n),
+  v0 being Element of RealVectSpace(Seg n),l being Linear_Combination of Bn
   st F is one-to-one & Bn is R-orthogonal & rng F = Carrier l &
   v0 in Bn & j in dom (l (#) F) & v0=F.j
-  holds (Euclid_scalar n).[v0,Sum (l(#)F)] =
-  (Euclid_scalar n).[v0,(l.(F/.j))*v0];
+  holds (Euclid_scalar n).(v0,Sum (l(#)F)) =
+  (Euclid_scalar n).(v0,(l.(F/.j))*v0);
 
 registration
   let n;
-  cluster R-orthonormal -> linearly-independent Subset of REAL-L n;
+  cluster R-orthonormal -> linearly-independent Subset of RealVectSpace(Seg n);
 end;
 
 registration
@@ -508,7 +498,7 @@ registration
 end;
 
 theorem :: EUCLID_7:43
-  for Bn being Subset of REAL-L n,
+  for Bn being Subset of RealVectSpace(Seg n),
   x,y being Element of REAL n,a being Real st
   Bn is linearly-independent & x in Bn & y in Bn & y=a*x holds x=y;
 
@@ -524,12 +514,12 @@ theorem :: EUCLID_7:44
 
 theorem :: EUCLID_7:45
   for f being FinSequence of REAL n,
-  g being FinSequence of the carrier of REAL-L n st f=g
+  g being FinSequence of the carrier of RealVectSpace(Seg n) st f=g
   holds Sum f=Sum g;
 
 theorem :: EUCLID_7:46
-  for x0 being Element of REAL-L n,
-  B being Subset of REAL-L n st B=RN_Base n holds
+  for x0 being Element of RealVectSpace(Seg n),
+  B being Subset of RealVectSpace(Seg n) st B=RN_Base n holds
   ex l being Linear_Combination of B st x0=Sum l;
 
 theorem :: EUCLID_7:47
@@ -538,28 +528,29 @@ theorem :: EUCLID_7:47
   ex l being Linear_Combination of B st x0=Sum l;
 
 theorem :: EUCLID_7:48
-  for B being Subset of REAL-L n st B=RN_Base n holds
-  B is Basis of REAL-L n;
+  for B being Subset of RealVectSpace(Seg n) st B=RN_Base n holds
+  B is Basis of RealVectSpace(Seg n);
 
 registration
   let n;
-  cluster REAL-L n -> finite-dimensional;
+  cluster RealVectSpace(Seg n) -> finite-dimensional;
 end;
 
 theorem :: EUCLID_7:49
-  dim (REAL-L n) = n;
+  dim (RealVectSpace(Seg n)) = n;
 
 theorem :: EUCLID_7:50
-  for B being Subset of REAL-L n st B is Basis of REAL-L n holds card B = n;
+  for B being Subset of RealVectSpace(Seg n) st
+  B is Basis of RealVectSpace(Seg n) holds card B = n;
 
 theorem :: EUCLID_7:51
-  {} is Basis of REAL-L 0;
+  {} is Basis of RealVectSpace(Seg 0);
 
 theorem :: EUCLID_7:52
   for n being Element of NAT holds RN_Base n is Basis of REAL-US n;
 
 theorem :: EUCLID_7:53
-  for D being Orthogonal_Basis of n holds D is Basis of REAL-L n;
+  for D being Orthogonal_Basis of n holds D is Basis of RealVectSpace(Seg n);
 
 registration
   let n be Element of NAT;

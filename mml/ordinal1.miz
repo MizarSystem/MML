@@ -172,7 +172,7 @@ theorem Th10:
   X in succ X
 proof
   X in { X } by TARSKI:def 1;
-  hence X in succ X by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 canceled;
@@ -278,7 +278,7 @@ proof
   assume
 A1: A in B & B in C;
   then B c= C by Def2;
-  hence A in C by A1;
+  hence thesis by A1;
 end;
 
 canceled;
@@ -541,12 +541,12 @@ A1: for x st x in X holds x is Ordinal & x c= X;
   proof
     let x;
     assume x in X;
-    hence x c= X by A1;
+    hence thesis by A1;
   end;
   let x,y;
   assume x in X & y in X;
   then x is Ordinal & y is Ordinal by A1;
-  hence x in y or x = y or y in x by Th24;
+  hence thesis by Th24;
 end;
 
 theorem Th32:
@@ -567,7 +567,7 @@ A3: C = Y;
   assume B in X;
   then not B in C by A2,A3;
   then B = C or C in B by Th24;
-  hence C c= B by Def2;
+  hence thesis by Def2;
 end;
 
 theorem Th33:
@@ -706,7 +706,7 @@ A2: x in Y & Y in X by TARSKI:def 4;
 A3: x c= Y by A2,Def2;
     let a;
     assume a in x;
-    hence a in union X by A2,A3,TARSKI:def 4;
+    hence thesis by A2,A3,TARSKI:def 4;
   end;
   let x,y;
   assume
@@ -765,8 +765,7 @@ A3: x is Ordinal by A1;
     then x is Ordinal & y is Ordinal by A1;
     hence thesis by Th24;
   end;
-  then X is Ordinal by A2;
-  then X in X by A1;
+  then X in X by A1,A2;
   hence contradiction;
 end;
 
@@ -905,7 +904,7 @@ A2: A <> succ B;
 A3: A = succ B;
 A4: B in A by A3,Th10;
   not succ B in A by A3;
-  hence not A is limit_ordinal by A4,Th41;
+  hence thesis by A4,Th41;
 end;
 
 reserve F,G for Function;
@@ -935,11 +934,9 @@ definition
   mode T-Sequence is T-Sequence-like Function;
 end;
 
-definition
+registration
   let Z;
-  mode T-Sequence of Z -> T-Sequence means
-    :Def8:
-    rng it c= Z;
+  cluster Z-valued T-Sequence;
   existence
   proof
     reconsider L = {} as T-Sequence;
@@ -949,27 +946,26 @@ definition
   end;
 end;
 
+definition
+  let Z;
+  mode T-Sequence of Z is Z-valued T-Sequence;
+end;
+
 canceled 2;
 
 theorem
   {} is T-Sequence of Z
 proof
-  reconsider F = {} as Function;
-  reconsider L = F as T-Sequence;
+  reconsider L = {} as T-Sequence;
   rng L = {};
   then rng L c= Z by XBOOLE_1:2;
-  hence {} is T-Sequence of Z by Def8;
+  hence thesis by RELAT_1:def 19;
 end;
 
 reserve L,L1 for T-Sequence;
 
 theorem
-  dom F is Ordinal implies F is T-Sequence of rng F
-proof
-  assume dom F is Ordinal;
-  then F is T-Sequence by Def7;
-  hence thesis by Def8;
-end;
+  dom F is Ordinal implies F is T-Sequence of rng F by RELAT_1:def 19,Def7;
 
 registration
   let L;
@@ -977,34 +973,30 @@ registration
   coherence by Def7;
 end;
 
-theorem Th47:
+theorem
   X c= Y implies for L being T-Sequence of X holds L is T-Sequence of Y
 proof
   assume
 A1: X c= Y;
   let L be T-Sequence of X;
-  rng L c= X by Def8;
-  hence rng L c= Y by A1,XBOOLE_1:1;
+  rng L c= X by RELAT_1:def 19;
+  then rng L c= Y by A1,XBOOLE_1:1;
+  hence thesis by RELAT_1:def 19;
 end;
 
 definition
+ canceled;
   let L,A;
   redefine func L|A -> T-Sequence of rng L;
   coherence
   proof A c= dom L implies dom(L|A) = A by RELAT_1:91;
     then L|A is T-Sequence & rng(L|A) c= rng L by Def7,RELAT_1:97,99;
-    hence thesis by Def8;
+    hence thesis by RELAT_1:def 19;
   end;
 end;
 
 theorem
-  for L being T-Sequence of X for A holds L|A is T-Sequence of X
-proof
-  let L be T-Sequence of X;
-  let A;
-  rng L c= X by Def8;
-  hence L|A is T-Sequence of X by Th47;
-end;
+  for L being T-Sequence of X for A holds L|A is T-Sequence of X;
 
 definition
   let IT be set;
@@ -1029,7 +1021,7 @@ A2: X is c=-linear;
 A3:   a in x & x in X by TARSKI:def 4;
       reconsider x as T-Sequence by A1,A3;
       x = x & for a st a in x holds ex b,c st [b,c] = a by RELAT_1:def 1;
-      hence ex b,c st [b,c] = a by A3;
+      hence thesis by A3;
     end;
     let a,b,c;
     assume
@@ -1042,7 +1034,7 @@ A6: [a,c] in y & y in X by A4,TARSKI:def 4;
     reconsider y as T-Sequence by A1,A6;
     x,y are_c=-comparable by A2,A5,A6,Def9;
     then x c= y or y c= x by XBOOLE_0:def 9;
-    hence b = c by A5,A6,FUNCT_1:def 1;
+    hence thesis by A5,A6,FUNCT_1:def 1;
   end;
   then reconsider F = union X as Function;
   defpred P[set,set] means $1 in X & for L st L = $1 holds dom L = $2;
@@ -1054,7 +1046,7 @@ A8: ( a in X & for L st L = a holds dom L = b ) &
     a in X & for L st L = a holds dom L = c;
     then reconsider a as T-Sequence by A1;
     dom a = b & dom a = c by A8;
-    hence b = c;
+    hence thesis;
   end;
   consider G such that
 A9: [a,b] in G iff a in X & P[a,b] from FUNCT_1:sch 1(A7);
@@ -1065,7 +1057,7 @@ A11: [a,b] in G;
     then a in X & for L st L = a holds dom L = b by A9;
     then reconsider a as T-Sequence by A1;
     dom a = b by A9,A11;
-    hence b is Ordinal;
+    hence thesis;
   end;
   a in rng G implies a is Ordinal
   proof
@@ -1101,7 +1093,7 @@ A18:    a in dom x by A17,RELAT_1:def 4;
         then x in dom G & dom x = G.x by FUNCT_1:8;
         then dom x in rng G by FUNCT_1:def 5;
         then dom x c= A by A15;
-        hence a in A by A18;
+        hence thesis by A18;
       end;
       let a;
       assume
@@ -1132,7 +1124,7 @@ A24:  L in X & a in dom L;
 A25:  L c= F by A24,ZFMISC_1:92;
       consider b such that
 A26:  [a,b] in L by A24,RELAT_1:def 4;
-      thus a in dom F by A25,A26,RELAT_1:def 4;
+      thus thesis by A25,A26,RELAT_1:def 4;
     end;
     hence dom F is ordinal;
   end;
@@ -1223,7 +1215,7 @@ A8: dom G = B
       proof
         assume a in dom G;
         then ex b st [a,b] in G by RELAT_1:def 4;
-        hence a in B by A7;
+        hence thesis by A7;
       end;
       let a;
       assume
@@ -1234,7 +1226,7 @@ A10:  dom L = a' & for D st D in a' holds L.D = H(L|D) by A2,A9;
       for A holds for K be T-Sequence holds A = a' & K = L
       implies dom K = A & for B holds B in A implies K.B = H(K|B) by A10;
       then [a',L] in G by A7,A9;
-      hence a in dom G by RELAT_1:def 4;
+      hence thesis by RELAT_1:def 4;
     end;
     defpred R[set,set] means ex L st L = G.$1 & $2 = H(L);
 A11: for a,b,c st a in B & R[a,b] & R[a,c] holds b = c;
@@ -1247,7 +1239,7 @@ A13:  [a,c] in G by A8,RELAT_1:def 4;
       reconsider L = c as T-Sequence by A7,A13;
       take b = H(L), L;
       thus L = G.a by A13,FUNCT_1:8;
-      thus b = H(L);
+      thus thesis;
     end;
     consider F such that
 A14: dom F = B & for a being set st a in B holds R[a,F.a]
@@ -1294,12 +1286,11 @@ A26:    B in A;
 A27:  a in D;
       then reconsider A = a as Ordinal by Th23;
 A28:  G.A = K|A by A20,A27;
-A29:  A in B by A15,A27,Th19;
 A30:  L|D.A = L.A by A27,FUNCT_1:72;
-      ex J being T-Sequence st J = G.A & F.A = H(J) by A14,A29;
+      ex J being T-Sequence st J = G.A & F.A = H(J) by A14,A15,A27,Th19;
       hence L|D.a = K.a by A7,A18,A27,A28,A30;
     end;
-    hence L.D = H(L|D) by A16,A17,A19,FUNCT_1:9;
+    hence thesis by A16,A17,A19,FUNCT_1:9;
   end;
   for A holds S[A] from TransfiniteInd(A1);
   then consider L such that
@@ -1436,7 +1427,7 @@ A4: bool A in Field by A1;
       assume x in succ A;
       then x in A or x = A by Th13;
       then x c= A by Def2;
-      hence x in bool A;
+      hence thesis;
     end;
     then succ A in Field by A1,A4;
     hence thesis by Def10;
@@ -1551,7 +1542,7 @@ A7: Q[A] & for B st Q[B] holds A c= B from OrdinalMin(A6);
 A8: dom F = D() & for x st x in D() holds Q[x,F.x] from FUNCT_1:sch 2(A2,A5);
   take F; thus dom F = D() by A8;
   let d be Element of D();
-  thus Q[d,F.d] by A8;
+  thus thesis by A8;
 end;
 
 :: from CARD_4, 2007.08.06, A.T.

@@ -2,13 +2,11 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 </Signature>
@@ -58,28 +56,36 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="5">
+<Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="7"/>
-<Adjective nr="10">
+<Adjective nr="9"/>
+<Adjective nr="13">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Adjective>
 </Cluster>
+<Func kind="K" nr="6">
+<Func kind="K" nr="7">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
+</Func>
+</Func>
 </Typ>
 <For>
-<Typ kind="M" nr="5">
+<Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="7"/>
-<Adjective nr="10">
+<Adjective nr="9"/>
+<Adjective nr="13">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 </Adjective>
 </Cluster>
+<Func kind="K" nr="6">
+<Func kind="K" nr="7">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
+</Func>
+</Func>
 </Typ>
 <Not>
 <For>
@@ -89,13 +95,13 @@
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="3"/>
-<Func kind="K" nr="71">
+<Func kind="K" nr="57">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="71">
+<Func kind="K" nr="57">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 <Var nr="2"/>

@@ -12,21 +12,23 @@ environ
       CAT_3, BINOP_1, ARYTM_3, TERMORD, RELAT_2, DICKSON, FINSEQ_1, REWRITE1,
       TARSKI, FINSET_1, POLYRED, BAGORDER, ORDERS_1, WAYBEL_4, CARD_1, FUNCT_4,
       ALGSEQ_1, ALGSTR_1, GROEB_1, GROEB_2, FUNCOP_1, MCART_1, GROEB_3,
-      CONNSP_3, FUNCT_7, QC_LANG1, ARYTM, ALGSTR_0, XREAL_0;
+      CONNSP_3, FUNCT_7, QC_LANG1, ARYTM, ALGSTR_0, XREAL_0, STRUCT_0;
  notations TARSKI, SUBSET_1, RELAT_1, XBOOLE_0, RELAT_2, CARD_1, ORDINAL1,
       NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCT_4,
-      PRE_CIRC, STRUCT_0, ALGSTR_0, GROUP_1, ALGSTR_1, RLVECT_1, FINSET_1,
+      FUNCOP_1,
+      STRUCT_0, ALGSTR_0, GROUP_1, ALGSTR_1, RLVECT_1, FINSET_1,
       MCART_1, FINSEQ_1, VECTSP_2, VECTSP_1, POLYNOM2, POLYNOM7, ORDERS_2,
       FUNCT_7, REWRITE1, BAGORDER, TERMORD, GROEB_1, POLYRED, GROEB_2,
       WAYBEL_4, POLYNOM1;
- constructors XXREAL_0, PRE_CIRC, REWRITE1, VECTSP_2, WAYBEL_4, POLYNOM2,
-      BAGORDER, TERMORD, POLYRED, GROEB_1, GROEB_2;
+ constructors XXREAL_0, REWRITE1, VECTSP_2, WAYBEL_4, POLYNOM2,
+      BAGORDER, TERMORD, POLYRED, GROEB_1, GROEB_2, RELSET_1, PBOOLE,
+      FUNCT_7;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FINSET_1, XXREAL_0,
       XREAL_0, NAT_1, INT_1, CARD_1, REWRITE1, STRUCT_0, VECTSP_1, ORDERS_2,
       ALGSTR_1, POLYNOM1, POLYNOM2, POLYNOM4, POLYNOM7, TERMORD, POLYRED,
       ORDINAL1, VALUED_0, ALGSTR_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI;
+ definitions TARSKI, STRUCT_0;
  theorems TARSKI, VECTSP_1, POLYNOM1, RLVECT_1, NAT_1, INT_1, POLYNOM7,
       REWRITE1, XBOOLE_0, TERMORD, CARD_1, FUNCT_1, XBOOLE_1, POLYRED, FUNCT_2,
       RELAT_1, BAGORDER, ALGSTR_1, CARD_2, GROEB_1, FUNCT_4, FUNCOP_1,
@@ -274,7 +276,7 @@ A4: x in Support p;
 A5: x' = In(x',Bags n) by FUNCT_7:def 1
       .= In(x',Bags n)@ by POLYNOM2:def 3;
     term(m) + x' in Support(m*'p) by A4,Th8;
-    hence ex y being set st y in Support(m*'p) & P[x,y] by A5;
+    hence thesis by A5;
   end;
   consider T be admissible connected TermOrder of n;
   consider f being Function of Support(p),Support(m*'p) such that
@@ -364,11 +366,11 @@ A4: l + 1 in dom p by FINSEQ_3:27;
     then l in dom p by FINSEQ_3:27;
     then [h,g] in R by A1,A4,REWRITE1:def 2;
     then consider h',g' being set such that
-A5: [h,g] = [h',g'] & h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+A5: [h,g] = [h',g'] & h' in NonZero Polynom-Ring(n,L) &
     g' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
     g = [h',g']`2 by A5,MCART_1:def 2
       .= g' by MCART_1:def 2;
-    hence g is Polynomial of n,L by A5,POLYNOM1:def 27;
+    hence thesis by A5,POLYNOM1:def 27;
   end;
 end;
 
@@ -512,7 +514,7 @@ definition
     set m = (Support s \ Y) --> 0.L;
     set r = s +* m;
 A1: dom s = Bags X by FUNCT_2:def 1;
-A2: dom m = Support s \ Y by FUNCOP_1:19;
+ dom m = Support s \ Y by FUNCOP_1:19;
     then
 A3: dom r = Bags X \/ (Support s \ Y) by A1,FUNCT_4:def 1;
     now
@@ -532,7 +534,7 @@ A4: dom r = Bags X by A3,XBOOLE_1:12;
         case
 A5:       x' in dom m;
           then r.x' = m.x' by FUNCT_4:14
-            .= 0.L by A2,A5,FUNCOP_1:13;
+            .= 0.L by A5,FUNCOP_1:13;
           hence r.x in the carrier of L;
         end;
         case not(x in dom m);
@@ -554,7 +556,6 @@ proof
   s be Series of X,L, Y be Subset of Bags X;
   set m = (Support s \ Y) --> 0.L;
   set r = s +* m;
-A1: dom m = Support s \ Y by FUNCOP_1:19;
   let u be set;
   assume
 A2: u in Support(s|Y);
@@ -562,13 +563,13 @@ A2: u in Support(s|Y);
 A3: r.u' <> 0.L by A2,POLYNOM1:def 9;
   now per cases;
     case u' in dom m;
-      hence u' in Support s by A1,XBOOLE_0:def 5;
+      hence u' in Support s by XBOOLE_0:def 5;
     end;
     case not u' in dom m;
       hence s.u' <> 0.L by A3,FUNCT_4:12;
     end;
   end;
-  hence u in Support s by POLYNOM1:def 9;
+  hence thesis by POLYNOM1:def 9;
 end;
 
 registration
@@ -615,7 +616,7 @@ A7: now
       assume
 A8:   u' in dom m;
       then r.u' = m.u' by FUNCT_4:14
-        .= 0.L by A6,A8,FUNCOP_1:13;
+        .= 0.L by A8,FUNCOP_1:13;
       hence contradiction by A4,POLYNOM1:def 9;
     end;
     then s.u' <> 0.L by A5,FUNCT_4:12;
@@ -630,7 +631,7 @@ A10: Support s|Y = Support s /\ Y by A2,TARSKI:2;
     let b be bag of X;
     assume b in Support s|Y;
     then b in Support s & b in Y by A10,XBOOLE_0:def 4;
-    then not(b in dom m) by A1,XBOOLE_0:def 5;
+    then not(b in dom m) by XBOOLE_0:def 5;
     hence (s|Y).b = s.b by FUNCT_4:12;
   end;
   hence thesis;
@@ -647,7 +648,7 @@ proof
   let X be set, L be non empty ZeroStr, s be Series of X,L;
   set r = s|(Support s);
 A1: r = s +* ({} --> 0.L) by XBOOLE_1:37;
-  dom({} --> 0.L) = {} by FUNCOP_1:16;
+  dom({} --> 0.L) = {};
   hence r = s +* {} by A1,RELAT_1:64
     .= s by FUNCT_4:22;
   set e = s|({} Bags X);
@@ -821,9 +822,7 @@ A16:              b1 < b2,T by A14,TERMORD:def 3;
           end;
           hence b2 in M;
         end;
-        hence ex M being finite Subset of Bags n
-        st M c= Support p & card M = k + 1 & for b,b' being bag of n
-        st b in M & b' in Support p & b <= b',T holds b' in M by A12,A13;
+        hence thesis by A12,A13;
       end;
       hence P[k+1];
     end;
@@ -957,7 +956,7 @@ proof
   then card u = 0 by Def2;
   then u,0 are_equipotent by CARD_1:def 5;
   hence u = {} by CARD_1:46;
-  hence l = Support p;
+  hence thesis;
 end;
 
 theorem Th22:
@@ -974,7 +973,7 @@ proof
   l = Lower_Support(p,T,card(Support p));
   u c= Support p & card u = card(Support p) by Def2;
   hence u = Support p by TRIANG_1:3;
-  hence l = {} by XBOOLE_1:37;
+  hence thesis by XBOOLE_1:37;
 end;
 
 theorem Th23:
@@ -1003,7 +1002,7 @@ A4: x in u;
   then
 A5: HT(p,T) in Support p by TERMORD:def 6;
   x' <= HT(p,T),T by A2,A4,TERMORD:def 6;
-  hence HT(p,T) in u by A1,A3,A5,Def2;
+  hence thesis by A1,A3,A5,Def2;
 end;
 
 theorem Th24:
@@ -1075,7 +1074,7 @@ A2: Support pu = (Support p) /\ u by Th16;
   hence Support pu = u by A2,XBOOLE_1:28;
   set l = Lower_Support(p,T,i), pl = p|(Lower_Support(p,T,i));
   Support pl = (Support p) /\ l by Th16;
-  hence Support pl = l by XBOOLE_1:28,36;
+  hence thesis by XBOOLE_1:28,36;
 end;
 
 theorem
@@ -1872,7 +1871,7 @@ A47:  bb in dom f & bb in Support Up(m*'p,T,i) & f.bb = b by FUNCT_1:def 12;
     hence b in Support Low(p,T,i) by A1,A32,A33,Th28;
   end;
 
-hence term(m) + b in Support Low(m*'p,T,i) iff b in Support Low(p,T,i) by A12;
+hence thesis by A12;
 end;
 
 theorem Th41:
@@ -2213,7 +2212,7 @@ A2: i in dom R by FINSEQ_3:27;
       then [R.i,R.(i+1)] in PolyRedRel(P,T) by A2,REWRITE1:def 2;
       then R.i in dom PolyRedRel(P,T) by RELAT_1:def 4;
       then R.i in the carrier of Polynom-Ring(n,L) by XBOOLE_0:def 5;
-      hence R.i is Polynomial of n,L by POLYNOM1:def 27;
+      hence thesis by POLYNOM1:def 27;
     end;
     case
 A3:   i = len R;
@@ -2227,7 +2226,7 @@ A6:   i - 1 in dom R by A4,A5,FINSEQ_3:27;
       i = (i - 1) + 1;
       then [R.(i-1),R.i] in PolyRedRel(P,T) by A2,A6,REWRITE1:def 2;
       then R.i in rng PolyRedRel(P,T) by RELAT_1:def 5;
-      hence R.i is Polynomial of n,L by POLYNOM1:def 27;
+      hence thesis by POLYNOM1:def 27;
     end;
   end;
   hence thesis;
@@ -2270,7 +2269,7 @@ A4: now
   then -f <> 0_(n,L) & p <> 0_(n,L) & b in Support -f & ex s being bag of n
   st s+HT(p,T) = b & -g = -f-((-f).b/HC(p,T))*(s*'p) by A2,A3,A4,GROEB_1:5;
   then -f reduces_to -g,p,b,T by POLYRED:def 5;
-  hence -f reduces_to -g,p,T by POLYRED:def 6;
+  hence thesis by POLYRED:def 6;
 end;
 
 Lm5: for n being Ordinal, T being connected admissible TermOrder of n,
@@ -2920,7 +2919,7 @@ A21:      t < HT(p2,T),T
                 then
 A22:            m' < card(Support p2) by A11,XXREAL_0:1;
                 t <= HT(Low(p2,T,m'),T),T by A20,TERMORD:def 6;
-                hence t < HT(p2,T),T by A22,Th3,Th39;
+                hence thesis by A22,Th3,Th39;
               end;
             end;
             hence thesis;
@@ -3299,7 +3298,7 @@ A103:   HT(p1,T) = HT(HM(p1,T),T) by TERMORD:26
             .= HC(p1,T) * (p2.s + -(Low(p2,T,m').s)) by POLYNOM1:def 22
             .= HC(p1,T) * (p2.s + 0.L) by A63,RLVECT_1:25
             .= HC(p1,T) * p2.s by RLVECT_1:def 7;
-          hence f.b = -HC(p1,T) * p2.s by A77;
+          hence thesis by A77;
         end;
         then (f.b/HC(p1,T)) * (s *' p1)
         = ((HC(p1,T) * (-p2.s))/HC(p1,T)) * (s *' p1) by VECTSP_1:41
@@ -3392,8 +3391,7 @@ A106: card(Support Low(p2,T,1)) = j' by A3,Th36;
 end;
 
 theorem Th56:
-
-::: theorem 5.66, p. 222 (Buchberger's first criterium)
+:: theorem 5.66, p. 222 (Buchberger's first criterium)
   for n being Ordinal, T being connected admissible TermOrder of n,
   L being add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -3516,8 +3514,7 @@ A13:              PolyRedRel({p1,p2},T) reduces
 end;
 
 theorem
-
-::: theorem 5.68 (i) ==> (ii), p. 223
+:: theorem 5.68 (i) ==> (ii), p. 223
   for n being Element of NAT, T being connected admissible TermOrder of n,
   L being add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -3540,8 +3537,7 @@ proof
 end;
 
 theorem
-
-::: theorem 5.68 (ii) ==> (iii), p. 223
+:: theorem 5.68 (ii) ==> (iii), p. 223
   for n being Element of NAT, T being connected admissible TermOrder of n,
   L being add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -3590,11 +3586,11 @@ A5:       u in {g1,g2};
           hence u in G;
         end;
         then {g1,g2} c= G by TARSKI:def 3;
-        hence PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L) by A4,GROEB_1:4
+        hence thesis by A4,GROEB_1:4
 ,REWRITE1:23;
       end;
       case not(HT(g1,T),HT(g2,T) are_disjoint);
-        hence PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L) by A2,A3;
+        hence thesis by A2,A3;
       end;
     end;
     hence thesis;
@@ -3604,8 +3600,7 @@ A5:       u in {g1,g2};
 end;
 
 theorem
-
-::: theorem 5.68 (iii) ==> (i), p. 223
+:: theorem 5.68 (iii) ==> (i), p. 223
   for n being Element of NAT, T being connected admissible TermOrder of n,
   L being add-associative right_complementable right_zeroed
   commutative associative well-unital distributive
@@ -3652,7 +3647,7 @@ A5:       u in {g1,g2};
           hence u in G;
         end;
         then {g1,g2} c= G by TARSKI:def 3;
-        hence PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L) by A4,GROEB_1:4
+        hence thesis by A4,GROEB_1:4
 ,REWRITE1:23;
       end;
       case
@@ -3676,7 +3671,7 @@ A7:     h is_a_normal_form_of S-Poly(g1,g2,T),PolyRedRel(G,T)
         then reconsider h as Polynomial of n,L by Lm1;
         h = 0_(n,L) by A2,A3,A6,A7;
 
-hence PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L) by A7,REWRITE1:def 6;
+hence thesis by A7,REWRITE1:def 6;
       end;
     end;
     hence thesis;

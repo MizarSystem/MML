@@ -6,6 +6,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="FINSUB_1"/>
 </Signature>
@@ -16,9 +17,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="10"/>
-<Adjective nr="11"/>
-<Adjective nr="12"/>
+<Adjective nr="17"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FINSUB_1" nr="1">
@@ -31,7 +32,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FINSUB_1" nr="2">
@@ -40,38 +41,38 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="36">
+<Func kind="K" nr="39">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="13"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 <CCluster aid="FINSUB_1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="20"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="10"/>
-<Adjective nr="12"/>
+<Adjective nr="17"/>
+<Adjective nr="19"/>
 </Cluster>
 </CCluster>
 <CCluster aid="FINSUB_1" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="10"/>
-<Adjective nr="12"/>
+<Adjective nr="17"/>
+<Adjective nr="19"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="20"/>
 </Cluster>
 </CCluster>
 <CCluster aid="FINSUB_1" nr="3">
@@ -83,12 +84,12 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="36">
+<Func kind="K" nr="39">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="7"/>
+<Adjective nr="13"/>
 </Cluster>
 </CCluster>
 </Registrations>

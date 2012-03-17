@@ -7,7 +7,7 @@
 environ
 
  vocabularies RELAT_1, BOOLE, FUNCT_1, MATRIX_1, ZF_REFLE, AMI_1, SEQM_3,
-      COMPLEX1, REALSET1;
+      COMPLEX1, REALSET1, YELLOW_6, FRAENKEL;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, SETFAM_1;
  constructors SETFAM_1, RELAT_1;
  registrations XBOOLE_0, RELAT_1, ZFMISC_1;
@@ -313,7 +313,8 @@ registration
 end;
 
 theorem :: FUNCT_1:68
-  g = f|X iff dom g = dom f /\ X & for x st x in dom g holds g.x = f.x;
+  dom g = dom f /\ X & (for x st x in dom g holds g.x = f.x)
+   implies g = f|X;
 
 canceled;
 
@@ -661,3 +662,58 @@ theorem :: FUNCT_1:170
 theorem :: FUNCT_1:171
   for F,G be Function,X holds X c= dom (G*F) iff X c= dom F & F.:X c= dom G;
 
+:: from YELLOW_6, 2008.12.26, A.T.
+
+definition
+  let f be Function;
+  assume
+ f is non empty constant;
+  func the_value_of f means
+:: FUNCT_1:def 18
+  ex x being set st x in dom f & it = f.x;
+end;
+
+:: from QC_LANG4, 2009.01.23, A.T
+
+registration let X,Y;
+ cluster X-defined Y-valued Function;
+end;
+
+theorem :: FUNCT_1:172
+  for X being set, f being X-valued Function
+  for x being set st x in dom f holds f.x in X;
+
+:: from FRAENKEL, 2009.05.06, A.K.
+
+definition
+  let IT be set;
+  attr IT is functional means
+:: FUNCT_1:def 19
+
+  for x being set st x in IT holds x is Function;
+end;
+
+registration
+  cluster empty -> functional set;
+  let f be Function;
+  cluster { f } -> functional;
+  let g be Function;
+  cluster { f,g } -> functional;
+end;
+
+registration
+  cluster non empty functional set;
+end;
+
+registration
+  let P be functional set;
+  cluster -> Function-like Relation-like Element of P;
+end;
+
+theorem :: FUNCT_1:173
+  for F being functional set, B being set st B c= F holds B is functional;
+
+registration
+  let A be functional set;
+  cluster -> functional Subset of A;
+end;

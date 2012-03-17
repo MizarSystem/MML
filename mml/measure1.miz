@@ -13,15 +13,15 @@ environ
       REAL_1, RELAT_1, FINSUB_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, NAT_1,
       SETFAM_1, FUNCOP_1, PROB_1, PROB_2, VALUED_0, SUPINF_1, SUPINF_2;
  constructors ENUMSET1, PARTFUN1, FUNCOP_1, FINSUB_1, REAL_1, NAT_1, PROB_2,
-      SUPINF_2, SUPINF_1;
+      SUPINF_2, SUPINF_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
-      MEMBERED, PROB_1, FUNCT_1, VALUED_0;
+      MEMBERED, PROB_1, FUNCT_1, VALUED_0, XXREAL_3;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions SUPINF_2, TARSKI, FINSUB_1, PROB_2, PROB_1, XBOOLE_0, SUBSET_1,
-      FUNCT_1, RELAT_1;
+      FUNCT_1, RELAT_1, XXREAL_3;
  theorems TARSKI, FUNCT_1, FUNCT_2, ENUMSET1, ZFMISC_1, NAT_1, SETFAM_1,
-      SUPINF_2, RELAT_1, RELSET_1, FUNCOP_1, FINSUB_1, PROB_2, PROB_1,
-      SUBSET_1, XBOOLE_0, XBOOLE_1, XXREAL_0, CARD_3, ORDINAL1, VALUED_0;
+      SUPINF_2, RELAT_1, FUNCOP_1, FINSUB_1, PROB_2, PROB_1, SUBSET_1,
+      XBOOLE_0, XBOOLE_1, XXREAL_0, CARD_3, ORDINAL1, VALUED_0, XXREAL_3;
  schemes FUNCT_2, XBOOLE_0;
 
 begin :: Some useful theorems about sets and R_eal numbers
@@ -38,50 +38,7 @@ proof
     .= union {X,Y};
 end;
 
-canceled 2;
-
-theorem Th4:
-  for x,y,s,t being R_eal holds 0.<= x & 0.<= s & x <= y & s <= t implies
-  x + s <= y + t by SUPINF_2:14;
-
-theorem Th5:
-  for x,y,z being R_eal holds
-  0.<= y & 0.<= z & x = y + z & y < +infty implies z = x - y
-proof
-  let x,y,z be R_eal;
-  assume
-A1: 0. <= y & 0.<= z & x = y + z & y < +infty;
-  then 0. + 0. <= y + z by Th4;
-  then
-A2: 0 <= x by A1,SUPINF_2:18;
-  (y + z) - y = z
-  proof
-A3: not x = -infty & not y = -infty & not z = -infty by A1,A2,XXREAL_0:12;
-A4: (x in REAL or x in {-infty,+infty}) & (y in REAL or
-    y in {-infty,+infty}) by XBOOLE_0:def 3,XXREAL_0:def 4;
-A5: (x in REAL & y in REAL) implies (y + z) - y = z
-    proof
-      assume x in REAL & y in REAL;
-      then reconsider a = y, b = z as Real by A1,A3,SUPINF_2:12;
-      y + z = a + b by SUPINF_2:1;
-      then (y + z) - y = (a + b) - a by SUPINF_2:5
-        .= z;
-      hence thesis;
-    end;
-    (x = +infty & y in REAL) implies (y + z) - y = z
-    proof
-      assume
-A6:   x = +infty & y in REAL;
-      then (y + z) - y = +infty by A1,SUPINF_2:6
-        .= z by A1,A6,SUPINF_2:8;
-      hence thesis;
-    end;
-    hence thesis by A1,A3,A4,A5,TARSKI:def 2;
-  end;
-  hence thesis by A1;
-end;
-
-canceled;
+canceled 5;
 
 theorem
   for A,B being Subset of X holds {A,B} is Subset-Family of X
@@ -143,7 +100,7 @@ A4:   B in X;
       hence thesis by A4;
     end;
     assume B c= A() & P[B];
-    hence B in X by A2;
+    hence thesis by A2;
   end;
   hence thesis;
 end;
@@ -373,13 +330,13 @@ A3: S is cup-closed
   proof
     let A, B be set;
     assume A in S & B in S;
-    hence A \/ B in S by A2;
+    hence thesis by A2;
   end;
   S is compl-closed
   proof
     let A be set;
     assume A in S;
-    hence X\A in S by A2;
+    hence thesis by A2;
   end;
   hence thesis by A2,A3;
 end;
@@ -487,7 +444,7 @@ A4: M.A = 0.& M.B = 0.by FUNCOP_1:13;
     reconsider A,B as set;
 A5: A \/ B is Element of S by FINSUB_1:def 1;
     reconsider A,B as Element of S;
-    0.= M.A + M.B by A4,SUPINF_2:18;
+    0.= M.A + M.B by A4,XXREAL_3:4;
     hence thesis by A5,FUNCOP_1:13;
   end;
   take M;
@@ -516,7 +473,7 @@ A1: A c= B;
   then
 A2: M.B = M.A + M.C by A1,XBOOLE_1:45;
   0.<= M.A & 0.<= M.C by Def4;
-  hence thesis by A2,SUPINF_2:20;
+  hence thesis by A2,XXREAL_3:42;
 end;
 
 theorem Th26:
@@ -533,7 +490,7 @@ A1: A c= B & M.A < +infty;
   then
 A2: M.B = M.A + M.C by A1,XBOOLE_1:45;
   0.<= M.A & 0.<= M.C & M.A < +infty by A1,Def4;
-  hence thesis by A2,Th5;
+  hence thesis by A2,XXREAL_3:29;
 end;
 
 registration
@@ -573,7 +530,7 @@ A2: M.(A \/ B) = M.(A \/ C) by XBOOLE_1:39
     .= M.A + M.C by A1,Def5;
 A3: C c= B by XBOOLE_1:36;
   0.<= M.A & 0.<= M.C & M.A <= M.A & M.C <= M.B by A3,Def4,Th25;
-  hence thesis by A2,Th4;
+  hence thesis by A2,XXREAL_3:38;
 end;
 
 canceled;
@@ -625,7 +582,7 @@ proof
 A1: M.A = 0.& M.B = 0.by Def7;
 A2: 0.<= M.(A \/ B) & 0.<= M.(A /\ B) & 0.<= M.(A \ B) by Def4;
   M.(A \/ B) <= 0.+ 0.by A1,Th27;
-  then M.(A \/ B) <= 0.by SUPINF_2:18;
+  then M.(A \/ B) <= 0.by XXREAL_3:4;
   then
 A3: M.(A \/ B) = 0.by A2,XXREAL_0:1;
   M.(A /\ B) <= 0.by A1,Th25,XBOOLE_1:17;
@@ -647,7 +604,7 @@ A1: M.B = 0.by Def7;
 A2: 0.<= M.(A \/ B) & 0.<= M.(A /\ B) & 0.<= M.(A \ B) by Def4;
   M.(A \/ B) <= M.A + 0.by A1,Th27;
   then
-A3: M.(A \/ B) <= M.A by SUPINF_2:18;
+A3: M.(A \/ B) <= M.A by XXREAL_3:4;
 A4: M.A <= M.(A \/ B) by Th25,XBOOLE_1:7;
 A5: M.(A /\ B) <= 0.by A1,Th25,XBOOLE_1:17;
   then
@@ -655,7 +612,7 @@ A6: M.(A /\ B) = 0.by A2,XXREAL_0:1;
 A7: M.(A \ B) <= M.A by Th25,XBOOLE_1:36;
   M.A = M.((A /\ B) \/ (A \ B)) by XBOOLE_1:51;
   then M.A <= 0.+ M.(A \ B) by A6,Th27;
-  then M.A <= M.(A \ B) by SUPINF_2:18;
+  then M.A <= M.(A \ B) by XXREAL_3:4;
   hence thesis by A2,A3,A4,A5,A7,XXREAL_0:1;
 end;
 
@@ -1073,7 +1030,7 @@ A6:   f.n in M by A4,FUNCT_2:6;
     end;
     then rng Complement f c= F by NAT_1:53;
     then Intersection Complement f in F by A2,PROB_1:def 8;
-    hence union M in F by A1,A5,PROB_1:def 1;
+    hence thesis by A1,A5,PROB_1:def 1;
   end;
   cluster compl-closed sigma-additive ->
     sigma-multiplicative Subset-Family of X;
@@ -1102,7 +1059,7 @@ A13:  e = (f.n)` by A12,PROB_1:def 4;
       hence thesis by A7,A13,PROB_1:def 1;
     end;
     then union M in F by A8,Def9;
-    hence Intersection f in F by A7,A10,PROB_1:def 1;
+    hence thesis by A7,A10,PROB_1:def 1;
   end;
 end;
 
@@ -1249,7 +1206,7 @@ theorem Th53:
 proof
   let S be SigmaField of X, F be Function of NAT,S;
 A1: rng F is N_Sub_set_fam of X by Th52;
-  rng F c= S by RELSET_1:12;
+  rng F c= S by RELAT_1:def 19;
   hence thesis by A1,Def9;
 end;
 
@@ -1494,7 +1451,7 @@ A18: 0 + 1 = 0 + 1;
     reconsider A,B as Element of S;
     Ser H.n2 = y1 + H.n2 by SUPINF_2:63;
     then Ser H.n2 = y1 + 0.by A15
-      .= Ser H.1 by SUPINF_2:18
+      .= Ser H.1 by XXREAL_3:4
       .= Ser H.0 + H.1 by A18,SUPINF_2:63
       .= M.A + M.B by A15,SUPINF_2:63;
     then SUM(M*F) = M.A + M.B by A15,A17,SUPINF_2:67;
@@ -1619,7 +1576,7 @@ proof
 A1: M.A = 0.& M.B = 0.by Def13;
 A2: 0.<= M.(A \/ B) & 0.<= M.(A /\ B) & 0.<= M.(A \ B) by Def4;
   M.(A \/ B) <= 0.+ 0.by A1,Th64;
-  then M.(A \/ B) <= 0.by SUPINF_2:18;
+  then M.(A \/ B) <= 0.by XXREAL_3:4;
   then
 A3: M.(A \/ B) = 0.by A2,XXREAL_0:1;
   M.(A /\ B) <= 0.by A1,Th62,XBOOLE_1:17;
@@ -1641,7 +1598,7 @@ A1: M.B = 0.by Def13;
 A2: 0.<= M.(A \/ B) & 0.<= M.(A /\ B) & 0.<= M.(A \ B) by Def4;
   M.(A \/ B) <= M.A + 0.by A1,Th64;
   then
-A3: M.(A \/ B) <= M.A by SUPINF_2:18;
+A3: M.(A \/ B) <= M.A by XXREAL_3:4;
 A4: M.A <= M.(A \/ B) by Th62,XBOOLE_1:7;
 A5: M.(A /\ B) <= 0.by A1,Th62,XBOOLE_1:17;
   then
@@ -1649,7 +1606,7 @@ A6: M.(A /\ B) = 0.by A2,XXREAL_0:1;
 A7: M.(A \ B) <= M.A by Th62,XBOOLE_1:36;
   M.A = M.((A /\ B) \/ (A \ B)) by XBOOLE_1:51;
   then M.A <= 0.+ M.(A \ B) by A6,Th64;
-  then M.A <= M.(A \ B) by SUPINF_2:18;
+  then M.A <= M.(A \ B) by XXREAL_3:4;
   hence thesis by A2,A3,A4,A5,A7,XXREAL_0:1;
 end;
 

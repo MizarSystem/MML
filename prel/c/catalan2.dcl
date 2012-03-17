@@ -12,7 +12,6 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="DOMAIN_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
@@ -28,68 +27,71 @@
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="AFINSQ_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="CATALAN2"/>
 </Signature>
 <RCluster aid="CATALAN2" nr="1">
 <ArgTypes/>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="1">
 <Cluster/>
-<Func kind="K" nr="111"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="11"/>
+<Adjective nr="5">
+<Func kind="K" nr="102"/>
+</Adjective>
+<Adjective nr="6"/>
 <Adjective nr="14"/>
-<Adjective nr="21"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
+<Adjective nr="17"/>
+<Adjective nr="24"/>
 <Adjective nr="42"/>
-<Adjective nr="50"/>
+<Adjective nr="43"/>
+<Adjective nr="44"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
+<Adjective nr="47"/>
+<Adjective nr="54"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CATALAN2" nr="2">
 <ArgTypes/>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="1">
 <Cluster/>
-<Func kind="K" nr="111"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="11"/>
-<Adjective nr="14" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
+<Adjective nr="5">
+<Func kind="K" nr="102"/>
+</Adjective>
+<Adjective nr="6"/>
+<Adjective nr="14"/>
+<Adjective nr="17" value="false"/>
+<Adjective nr="24"/>
 <Adjective nr="42"/>
-<Adjective nr="50"/>
+<Adjective nr="43"/>
+<Adjective nr="44"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
+<Adjective nr="47"/>
+<Adjective nr="54"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CATALAN2" nr="1">
 <ArgTypes>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="111"/>
+<Func kind="K" nr="102"/>
 </Typ>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="111"/>
+<Func kind="K" nr="102"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="245">
+<Func kind="K" nr="235">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="24"/>
 </Cluster>
 </FCluster>
 </Registrations>

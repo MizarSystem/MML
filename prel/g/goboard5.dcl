@@ -4,11 +4,10 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELSET_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
@@ -34,38 +33,49 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
+<ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL1"/>
 <ArticleID name="GOBOARD5"/>
 </Signature>
 <RCluster aid="GOBOARD5" nr="1">
 <ArgTypes/>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="6">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="286">
+<Func kind="K" nr="282">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="6" value="false"/>
-<Adjective nr="7" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="26"/>
-<Adjective nr="30">
+<Adjective nr="4">
+<Func kind="K" nr="48"/>
+</Adjective>
+<Adjective nr="5">
 <Func kind="U" nr="1">
-<Func kind="K" nr="286">
+<Func kind="K" nr="282">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="135"/>
-<Adjective nr="136"/>
-<Adjective nr="140"/>
-<Adjective nr="141"/>
+<Adjective nr="6"/>
+<Adjective nr="8" value="false"/>
+<Adjective nr="10" value="false"/>
+<Adjective nr="24"/>
+<Adjective nr="30"/>
+<Adjective nr="35">
+<Func kind="U" nr="1">
+<Func kind="K" nr="282">
+<Num nr="2"/>
+</Func>
+</Func>
+</Adjective>
+<Adjective nr="149"/>
+<Adjective nr="150"/>
+<Adjective nr="154"/>
+<Adjective nr="155"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -4,11 +4,10 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELSET_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
@@ -22,8 +21,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="8"/>
+<Adjective nr="6"/>
+<Adjective nr="11"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TOPREAL8" nr="2">
@@ -33,10 +32,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="6" value="false"/>
-<Adjective nr="17"/>
-<Adjective nr="22"/>
+<Adjective nr="6"/>
+<Adjective nr="8" value="false"/>
+<Adjective nr="20"/>
+<Adjective nr="26"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -9,15 +9,16 @@ environ
  vocabularies FUNCT_1, MATRIX_1, RELAT_1, BOOLE, ZF_REFLE, AMI_1, FUNCOP_1,
       CAT_4, LATTICES, CQC_LANG, PBOOLE, MSUALG_1, PRALG_1, CARD_3, TDGROUP,
       FINSEQ_1, FINSEQ_2, FUNCT_2, PRALG_2, AUTALG_1, MSUALG_2, MSUALG_3,
-      CAT_1;
+      CAT_1, PARTFUN1;
  notations TARSKI, ZFMISC_1, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
-      FUNCT_2, FUNCOP_1, FINSEQ_1, FINSEQ_2, CARD_3, NUMBERS;
- constructors SETFAM_1, FUNCOP_1, FINSEQ_2, CARD_3;
+      PARTFUN1, FUNCT_2, FUNCOP_1, FINSEQ_1, FINSEQ_2, CARD_3,
+      NUMBERS;
+ constructors SETFAM_1, FUNCOP_1, FINSEQ_2, CARD_3, RELSET_1, PARTFUN1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1;
  requirements BOOLE, SUBSET;
  definitions TARSKI, XBOOLE_0, FUNCT_1, SETFAM_1, FUNCOP_1, FINSEQ_2;
  theorems TARSKI, FUNCOP_1, FUNCT_1, RELAT_1, CARD_3, XBOOLE_0, XBOOLE_1,
-      FUNCT_2, RELSET_1, FINSEQ_1, FINSEQ_2;
+      FUNCT_2, FINSEQ_1, FINSEQ_2, PARTFUN1;
  schemes FUNCT_1, CLASSES1, XBOOLE_0, FUNCT_2;
 
 begin
@@ -51,7 +52,7 @@ A3:   dom f <> {} by A2,RELAT_1:64;
 A4:   f.e is empty by A1,A3,FUNCT_1:def 14;
       assume i in { {} };
       then i = {} by TARSKI:def 1;
-      hence i in rng f by A3,A4,FUNCT_1:def 5;
+      hence thesis by A3,A4,FUNCT_1:def 5;
     end;
   end;
   assume
@@ -65,23 +66,27 @@ A6: rng f = { {} };
     let i;
     assume i in dom f;
     then f.i in rng f by FUNCT_1:def 5;
-    hence f.i is empty by A6,TARSKI:def 1;
+    hence thesis by A6,TARSKI:def 1;
   end;
 end;
 
 reserve I for set; :: of indices
 
-definition
+registration
   let I;
-  canceled 2;
-  mode ManySortedSet of I -> Function means
-    :Def3:
-    dom it = I;
+  cluster total (I-defined Function);
   existence
   proof
     take I --> {};
-    thus thesis by FUNCOP_1:19;
+     dom(I --> {}) = I by FUNCOP_1:19;
+    hence thesis by PARTFUN1:def 4;
   end;
+end;
+
+definition
+  let I;
+  canceled 3;
+  mode ManySortedSet of I is total (I-defined Function);
 end;
 
 reserve x,X,Y,Z,V for ManySortedSet of I;
@@ -105,7 +110,7 @@ A3: F(e) <> {} by A1;
   consider f being Function such that
 A4: dom f = A() and
 A5: for e st e in A() holds P[e,f.e] from CLASSES1:sch 1(A2);
-  reconsider f as ManySortedSet of A() by A4,Def3;
+  reconsider f as ManySortedSet of A() by A4,PARTFUN1:def 4,RELAT_1:def 18;
   take f; thus thesis by A5;
 end;
 
@@ -155,13 +160,13 @@ A1: now
   consider f being Function such that
 A2: dom f = I() and
 A3: for i st i in I() holds R[i,f.i] from CLASSES1:sch 1(A1);
-  f is ManySortedSet of I() by A2,Def3;
+  f is ManySortedSet of I() by A2,PARTFUN1:def 4,RELAT_1:def 18;
   hence thesis by A3;
 end;
 
 theorem Th3:
   (for i st i in I holds X.i = Y.i) implies X = Y
-proof dom X = I & dom Y = I by Def3;
+proof dom X = I & dom Y = I by PARTFUN1:def 4;
   hence thesis by FUNCT_1:9;
 end;
 
@@ -173,7 +178,7 @@ definition
   coherence
   proof
     dom(I --> {}) = I by FUNCOP_1:19;
-    hence thesis by Def3;
+    hence thesis by PARTFUN1:def 4;
   end;
   correctness;
   let X,Y;
@@ -186,7 +191,7 @@ definition
     consider f being Function such that
 A1: dom f = I and
 A2: for i st i in I holds f.i = F(i) from FUNCT_1:sch 3;
-    f is ManySortedSet of I by A1,Def3;
+    f is ManySortedSet of I by A1,PARTFUN1:def 4,RELAT_1:def 18;
     hence thesis by A2;
   end;
   uniqueness
@@ -201,7 +206,7 @@ A5:   i in I;
       hence A1.i = X.i \/ Y.i by A3
         .= A2.i by A4,A5;
     end;
-    hence A1 = A2 by Th3;
+    hence thesis by Th3;
   end;
   commutativity;
   idempotence;
@@ -214,7 +219,7 @@ A5:   i in I;
     consider f being Function such that
 A6: dom f = I and
 A7: for i st i in I holds f.i = F(i) from FUNCT_1:sch 3;
-    f is ManySortedSet of I by A6,Def3;
+    f is ManySortedSet of I by A6,PARTFUN1:def 4,RELAT_1:def 18;
     hence thesis by A7;
   end;
   uniqueness
@@ -229,7 +234,7 @@ A10:  i in I;
       hence A1.i = X.i /\ Y.i by A8
         .= A2.i by A9,A10;
     end;
-    hence A1 = A2 by Th3;
+    hence thesis by Th3;
   end;
   commutativity;
   idempotence;
@@ -242,7 +247,7 @@ A10:  i in I;
     consider f being Function such that
 A11: dom f = I and
 A12: for i st i in I holds f.i = F(i) from FUNCT_1:sch 3;
-    f is ManySortedSet of I by A11,Def3;
+    f is ManySortedSet of I by A11,PARTFUN1:def 4,RELAT_1:def 18;
     hence thesis by A12;
   end;
   uniqueness
@@ -257,7 +262,7 @@ A15:  i in I;
       hence A1.i = X.i \ Y.i by A13
         .= A2.i by A14,A15;
     end;
-    hence A1 = A2 by Th3;
+    hence thesis by Th3;
   end;
   pred X overlaps Y means
   :Def10:
@@ -300,7 +305,7 @@ theorem Th5:
 proof
   per cases;
   suppose i in I;
-    hence [0]I.i = {} by FUNCOP_1:13;
+    hence thesis by FUNCOP_1:13;
   end;
   suppose not i in I;
     then not i in dom [0]I by FUNCOP_1:19;
@@ -319,7 +324,7 @@ A1: for i st i in I holds X.i = {};
     hence X.i = {} by A1
       .= [0]I.i by Th5;
   end;
-  hence X = [0]I by Th3;
+  hence thesis by Th3;
 end;
 
 theorem Th7:
@@ -332,7 +337,7 @@ A1: x in X or x in Y;
 A2: i in I;
   then x.i in X.i or x.i in Y.i by A1,Def4;
   then x.i in X.i \/ Y.i by XBOOLE_0:def 3;
-  hence x.i in (X \/ Y).i by A2,Def7;
+  hence thesis by A2,Def7;
 end;
 
 theorem Th8:
@@ -348,7 +353,7 @@ A1: x in X /\ Y;
 A2:   i in I;
       then x.i in (X /\ Y).i by A1,Def4;
       then x.i in X.i /\ Y.i by A2,Def8;
-      hence x.i in X.i by XBOOLE_0:def 4;
+      hence thesis by XBOOLE_0:def 4;
     end;
     thus x in Y
     proof
@@ -357,7 +362,7 @@ A2:   i in I;
 A3:   i in I;
       then x.i in (X /\ Y).i by A1,Def4;
       then x.i in X.i /\ Y.i by A3,Def8;
-      hence x.i in Y.i by XBOOLE_0:def 4;
+      hence thesis by XBOOLE_0:def 4;
     end;
   end;
   assume
@@ -367,7 +372,7 @@ A4: x in X & x in Y;
 A5: i in I;
   then x.i in X.i & x.i in Y.i by A4,Def4;
   then x.i in X.i /\ Y.i by XBOOLE_0:def 4;
-  hence x.i in (X /\ Y).i by A5,Def8;
+  hence thesis by A5,Def8;
 end;
 
 theorem Th9:
@@ -389,7 +394,7 @@ A1: x in X & x in Y;
   let i;
   assume i in I;
   then x.i in X.i & x.i in Y.i by A1,Def4;
-  hence X.i meets Y.i by XBOOLE_0:3;
+  hence thesis by XBOOLE_0:3;
 end;
 
 theorem Th11:
@@ -435,7 +440,7 @@ A1: x in X \ Y;
 A2: i in I;
     then x.i in (X \ Y).i by A1,Def4;
     then x.i in X.i \ Y.i by A2,Def9;
-    hence x.i in X.i;
+    hence thesis;
   end;
 end;
 
@@ -577,7 +582,7 @@ A1: X c= Y and
 A2: Z c= V;
   Y c= Y \/ V & V c= Y \/ V by Th16;
   then X c= Y \/ V & Z c= Y \/ V by A1,A2,Th15;
-  hence X \/ Z c= Y \/ V by Th18;
+  hence thesis by Th18;
 end;
 
 theorem
@@ -588,7 +593,7 @@ A1: X c= Y and
 A2: Z c= V;
   X /\ Z c= X & X /\ Z c= Z by Th17;
   then X /\ Z c= Y & X /\ Z c= V by A1,A2,Th15;
-  hence X /\ Z c= Y /\ V by Th19;
+  hence thesis by Th19;
 end;
 
 theorem Th24:
@@ -599,7 +604,7 @@ A1: X c= Y;
   hence X \/ Y c= Y by Th18;
   thus Y c= X \/ Y by Th16;
   thus Y \/ X c= Y by A1,Th18;
-  thus Y c= Y \/ X by Th16;
+  thus thesis by Th16;
 end;
 
 theorem Th25:
@@ -610,7 +615,7 @@ A1: X c= Y;
   thus X /\ Y c= X by Th17;
   thus X c= X /\ Y by A1,Th19;
   thus Y /\ X c= X by Th17;
-  thus X c= Y /\ X by A1,Th19;
+  thus thesis by A1,Th19;
 end;
 
 theorem
@@ -651,7 +656,7 @@ A2: Z c= X and
 A3: Y c= V & Z c= V implies X c= V;
   Y c= Y \/ Z & Z c= Y \/ Z by Th16;
   hence X c= Y \/ Z by A3;
-  thus Y \/ Z c= X by A1,A2,Th18;
+  thus thesis by A1,A2,Th18;
 end;
 
 theorem
@@ -665,7 +670,7 @@ A2: X c= Z and
 A3: V c= Y & V c= Z implies V c= X;
   thus X c= Y /\ Z by A1,A2,Th19;
   Y /\ Z c= Y & Y /\ Z c= Z implies Y /\ Z c= X by A3;
-  hence Y /\ Z c= X by Th17;
+  hence thesis by Th17;
 end;
 
 canceled 4;
@@ -683,7 +688,7 @@ A1: i in I;
       .= X.i \/ (Y \/ Z).i by A1,Def7
       .= (X \/ (Y \/ Z)).i by A1,Def7;
   end;
-  hence (X \/ Y) \/ Z = X \/ (Y \/ Z) by Th3;
+  hence thesis by Th3;
 end;
 
 theorem Th35:
@@ -699,7 +704,7 @@ A1: i in I;
       .= X.i /\ (Y /\ Z).i by A1,Def8
       .= (X /\ (Y /\ Z)).i by A1,Def8;
   end;
-  hence (X /\ Y) /\ Z = X /\ (Y /\ Z) by Th3;
+  hence thesis by Th3;
 end;
 
 theorem Th36:
@@ -708,10 +713,10 @@ proof thus
 A1: X /\ (X \/ Y) = X
   proof thus X /\ (X \/ Y) c= X by Th17;
     X c= X & X c= X \/ Y by Th16;
-    hence X c= X /\ (X \/ Y) by Th19;
+    hence thesis by Th19;
   end;
   hence (X \/ Y) /\ X = X;
-  thus X /\ (Y \/ X) = X & (Y \/ X) /\ X = X by A1;
+  thus thesis by A1;
 end;
 
 theorem Th37:
@@ -720,10 +725,10 @@ proof thus
 A1: X \/ (X /\ Y) = X
   proof X c= X & X /\ Y c= X by Th17;
     hence X \/ (X /\ Y) c= X by Th18;
-    thus X c= X \/ (X /\ Y) by Th16;
+    thus thesis by Th16;
   end;
   hence (X /\ Y) \/ X = X;
-  thus X \/ (Y /\ X) = X & (Y /\ X) \/ X = X by A1;
+  thus thesis by A1;
 end;
 
 theorem Th38:
@@ -762,7 +767,7 @@ theorem
 proof
   assume (X /\ Y) \/ (X /\ Z) = X;
   then X = X /\ (Y \/ Z) by Th38;
-  hence X c= Y \/ Z by Th17;
+  hence thesis by Th17;
 end;
 
 theorem
@@ -795,7 +800,7 @@ proof
   assume
 A1: X \/ Y c= Z;
   X c= X \/ Y & Y c= X \/ Y by Th16;
-  hence X c= Z & Y c= Z by A1,Th15;
+  hence thesis by A1,Th15;
 end;
 
 theorem :: SYSREL:4
@@ -804,7 +809,7 @@ proof
   assume
 A1: X c= Y /\ Z;
   Y /\ Z c= Y & Y /\ Z c= Z by Th17;
-  hence X c= Y & X c= Z by A1,Th15;
+  hence thesis by A1,Th15;
 end;
 
 theorem :: SYSREL:2
@@ -890,7 +895,7 @@ theorem
 proof
   assume X \/ Y = [0]I;
   then X c= [0]I & Y c= [0]I by Th16;
-  hence X = [0]I & Y = [0]I by Th50;
+  hence thesis by Th50;
 end;
 
 theorem
@@ -1107,7 +1112,7 @@ proof
 A1: X c= Y;
   thus Y = (Y \ X) \/ Y /\ X by Th71
     .= X \/ (Y \ X) by A1,Th25;
-  hence Y = (Y \ X) \/ X;
+  hence thesis;
 end;
 
 theorem Th73:
@@ -1116,7 +1121,7 @@ proof
   thus X \/ (Y \ X) = X \/ Y /\ X \/ (Y \ X) by Th37
     .= X \/ (Y /\ X \/ (Y \ X)) by Th34
     .= X \/ Y by Th71;
-  hence (Y \ X) \/ X = Y \/ X;
+  hence thesis;
 end;
 
 theorem Th74:
@@ -1150,7 +1155,7 @@ proof
   thus X \ X /\ Y = (X \ X) \/ (X \ Y) by Th75
     .= [0]I \/ (X \ Y) by Th58
     .= X \ Y by Th53;
-  hence X \ Y /\ X = X \ Y;
+  hence thesis;
 end;
 
 theorem
@@ -1236,7 +1241,7 @@ A2: X \ Y c= Z \ Y by Th81;
   then
 A3: X \ Z c= Y \ Z by Th81;
   Y \ Z c= Y by Th62;
-  hence X \ Z c= Y by A3,Th15;
+  hence thesis by A3,Th15;
 end;
 
 theorem Th83:
@@ -1278,7 +1283,7 @@ A1: X /\ Y c= X by Th17;
   X /\ Y \ X /\ Z = ((X /\ Y) \ X) \/ ((X /\ Y) \ Z) by Th75
     .= [0]I \/ ((X /\ Y) \ Z) by A1,Th58
     .= (X /\ Y) \ Z by Th53;
-  hence X /\ (Y \ Z) = X /\ Y \ X /\ Z by Th68;
+  hence thesis by Th68;
 end;
 
 theorem :: NORMFORM:2
@@ -1288,7 +1293,7 @@ proof
 A1: X \ Y c= Z;
   X /\ Y c= Y by Th17;
   then X /\ Y \/ (X \ Y) c= Y \/ Z by A1,Th22;
-  hence X c= Y \/ Z by Th71;
+  hence thesis by Th71;
 end;
 
 theorem
@@ -1483,7 +1488,7 @@ A1: X c= Y and
 A2: Z c= V;
   assume X overlaps Z;
   then Y overlaps Z by A1,Th109;
-  hence Y overlaps V by A2,Th108;
+  hence thesis by A2,Th108;
 end;
 
 theorem
@@ -1518,7 +1523,7 @@ proof
   assume
 A1: Y does_not_overlap Z;
   X /\ Y c= Y & X /\ Z c= Z by Th17;
-  hence X /\ Y does_not_overlap X /\ Z by A1,Th110;
+  hence thesis by A1,Th110;
 end;
 
 theorem :: AMI_2:1
@@ -1532,7 +1537,7 @@ A2: i in I;
   then X.i meets (Y \ Z).i by A1,Def10;
   then X.i meets Y.i \ Z.i by A2,Def9;
   then Y.i meets X.i \ Z.i by XBOOLE_1:81;
-  hence Y.i meets (X \ Z).i by A2,Def9;
+  hence thesis by A2,Def9;
 end;
 
 theorem Th116:
@@ -1668,7 +1673,7 @@ A1: X \ Y = X;
   let i;
   assume i in I;
   then X.i \ Y.i = X.i by A1,Def9;
-  hence X.i misses Y.i by XBOOLE_1:83;
+  hence thesis by XBOOLE_1:83;
 end;
 
 theorem :: RLVECT_2:102
@@ -1677,7 +1682,7 @@ proof
   let i;
   assume i in I;
   then (X \ Y).i = X.i \ Y.i & (Y \ X).i = Y.i \ X.i by Def9;
-  hence (X \ Y).i misses (Y \ X).i by XBOOLE_1:82;
+  hence thesis by XBOOLE_1:82;
 end;
 
 begin :: Roughly speaking
@@ -1700,7 +1705,7 @@ A2: x in X;
   let i;
   assume i in I;
   then x.i in X.i & X.i c= Y.i by A1,A2,Def4,Def5;
-  hence x.i in Y.i;
+  hence thesis;
 end;
 
 canceled;
@@ -1714,7 +1719,7 @@ A2: Y [= Z;
   let x;
   assume x in X;
   then x in Y by A1,Def14;
-  hence x in Z by A2,Def14;
+  hence thesis by A2,Def14;
 end;
 
 begin :: Non empty set of sorts
@@ -1729,8 +1734,8 @@ theorem
   for X being ManySortedSet of {} holds X = {}
 proof
   let X be ManySortedSet of {};
-  dom X = {} by Def3;
-  hence X = {} by RELAT_1:64;
+  dom X = {} by PARTFUN1:def 4;
+  hence thesis by RELAT_1:64;
 end;
 
 reserve I for non empty set,
@@ -1742,7 +1747,7 @@ proof
   consider i being Element of I;
   assume X overlaps Y;
   then X.i meets Y.i by Def10;
-  hence X meets Y by Def11;
+  hence thesis by Def11;
 end;
 
 theorem Th136:
@@ -1759,7 +1764,7 @@ theorem
 proof
   assume x in X & x in Y;
   then x in X /\ Y by Th8;
-  hence X /\ Y <> [0]I by Th136;
+  hence thesis by Th136;
 end;
 
 theorem
@@ -1801,7 +1806,7 @@ definition
   for i st i in I holds X.i is empty;
   compatibility
   proof
-    dom X = I by Def3;
+    dom X = I by PARTFUN1:def 4;
     hence thesis by FUNCT_1:def 14;
   end;
   attr X is non-empty means
@@ -1809,7 +1814,7 @@ definition
   for i st i in I holds X.i is non empty;
   compatibility
   proof
-    dom X = I by Def3;
+    dom X = I by PARTFUN1:def 4;
     hence thesis by FUNCT_1:def 15;
   end;
 end;
@@ -1822,13 +1827,13 @@ registration
     take [0]I;
     let i;
     assume i in I;
-    thus [0]I.i is empty by Th5;
+    thus thesis by Th5;
   end;
   cluster non-empty ManySortedSet of I;
   existence
   proof consider e;
     dom(I --> {e}) = I by FUNCOP_1:19;
-    then reconsider M = I --> {e} as ManySortedSet of I by Def3;
+    then reconsider M = I --> {e} as ManySortedSet of I by PARTFUN1:def 4;
     take M;
     let i;
     assume i in I;
@@ -1846,7 +1851,7 @@ registration
 A1: M is non-empty;
     consider i being Element of I;
     take i; thus i in I;
-    thus M.i is non empty by A1,Def16;
+    thus thesis by A1,Def16;
   end;
   cluster empty-yielding -> non non-empty ManySortedSet of I;
   coherence;
@@ -1864,7 +1869,7 @@ proof
 A1: X = [0]I;
   let i;
   assume i in I;
-  thus X.i is empty by A1,Th5;
+  thus thesis by A1,Th5;
 end;
 
 theorem
@@ -1879,7 +1884,7 @@ A3: i in I;
   then
 A4: X.i c= Y.i by A2,Def5;
   Y.i is empty by A1,A3,Def15;
-  hence X.i is empty by A4,XBOOLE_1:3;
+  hence thesis by A4,XBOOLE_1:3;
 end;
 
 theorem Th143:
@@ -1894,7 +1899,7 @@ A3: i in I;
   then
 A4: X.i c= Y.i by A2,Def5;
   X.i is non empty by A1,A3,Def16;
-  hence Y.i is non empty by A4,XBOOLE_1:3;
+  hence thesis by A4,XBOOLE_1:3;
 end;
 
 theorem Th144:
@@ -1914,7 +1919,7 @@ A5: i in I;
   consider g being Function such that
 A6: dom g = I and
 A7: for u st u in I holds g.u = G(u) from FUNCT_1:sch 3;
-  reconsider g as ManySortedSet of I by A6,Def3;
+  reconsider g as ManySortedSet of I by A6,PARTFUN1:def 4,RELAT_1:def 18;
 A8: g.i = IFEQ(i,i,e,f.i) by A5,A7
     .= e by FUNCOP_1:def 8;
   assume
@@ -1925,17 +1930,17 @@ A9: e in X.i;
 A10: u in I;
     per cases;
     suppose u = i;
-      hence g.u in X.u by A8,A9;
+      hence thesis by A8,A9;
     end;
     suppose
 A11:  u <> i;
       g.u = IFEQ(i,u,e,f.u) by A7,A10
         .= f.u by A11,FUNCOP_1:def 8;
-      hence g.u in X.u by A4,A10;
+      hence thesis by A4,A10;
     end;
   end;
   then g in Y by A2,Def14;
-  hence e in Y.i by A5,A8,Def4;
+  hence thesis by A5,A8,Def4;
 end;
 
 theorem
@@ -1945,7 +1950,7 @@ proof
 A1: X is non-empty;
   assume X [= Y;
   then X c= Y by A1,Th144;
-  hence Y is non-empty by A1,Th143;
+  hence thesis by A1,Th143;
 end;
 
 reserve X for non-empty ManySortedSet of I;
@@ -1979,7 +1984,7 @@ A4: i in I;
       consider g being Function such that
 A5:   dom g = I and
 A6:   for u st u in I holds g.u = G(u) from FUNCT_1:sch 3;
-      reconsider g as ManySortedSet of I by A5,Def3;
+      reconsider g as ManySortedSet of I by A5,PARTFUN1:def 4,RELAT_1:def 18;
 A7:   g.i = IFEQ(i,i,e,f.i) by A4,A6
         .= e by FUNCOP_1:def 8;
       hereby
@@ -1991,13 +1996,13 @@ A8:     e in X.i;
 A9:       u in I;
           per cases;
           suppose u = i;
-            hence g.u in X.u by A7,A8;
+            hence thesis by A7,A8;
           end;
           suppose
 A10:        u <> i;
             g.u = IFEQ(i,u,e,f.u) by A6,A9
               .= f.u by A10,FUNCOP_1:def 8;
-            hence g.u in X.u by A3,A9;
+            hence thesis by A3,A9;
           end;
         end;
         then g in Y by A1;
@@ -2011,7 +2016,7 @@ A11:  e in Y.i;
 A12:    u in I;
         per cases;
         suppose u = i;
-          hence g.u in Y.u by A7,A11;
+          hence thesis by A7,A11;
         end;
         suppose
 A13:      u <> i;
@@ -2020,7 +2025,7 @@ A13:      u <> i;
 A14:      f in Y by A1;
           g.u = IFEQ(i,u,e,f.u) by A6,A12
             .= f.u by A13,FUNCOP_1:def 8;
-          hence g.u in Y.u by A12,A14,Def4;
+          hence thesis by A12,A14,Def4;
         end;
       end;
       then g in X by A1;
@@ -2028,7 +2033,7 @@ A14:      f in Y by A1;
     end;
     hence X.i = Y.i by TARSKI:2;
   end;
-  hence X = Y by Th3;
+  hence thesis by Th3;
 end;
 
 theorem
@@ -2063,7 +2068,7 @@ A2: for i st i in I() ex j st P[i,j] by A1;
   consider f being Function such that
 A3: dom f = I() and
 A4: for i st i in I() holds P[i,f.i] from CLASSES1:sch 1(A2);
-  reconsider f as ManySortedSet of I() by A3,Def3;
+  reconsider f as ManySortedSet of I() by A3,PARTFUN1:def 4,RELAT_1:def 18;
   take f; thus thesis by A4;
 end;
 
@@ -2073,7 +2078,7 @@ proof
   consider f being Function such that
 A1: dom f = I() and
 A2: for i st i in I() holds f.i = F(i) from FUNCT_1:sch 3;
-  reconsider f as ManySortedSet of I() by A1,Def3;
+  reconsider f as ManySortedSet of I() by A1,PARTFUN1:def 4,RELAT_1:def 18;
   take f; thus thesis by A2;
 end;
 
@@ -2085,7 +2090,7 @@ registration
   existence
   proof consider f being Function;
  dom (I --> f) = I by FUNCOP_1:19;
-    then reconsider F = I --> f as ManySortedSet of I by Def3;
+    then reconsider F = I --> f as ManySortedSet of I by PARTFUN1:def 4;
     take F;
     let x be set;
     assume x in dom F;
@@ -2108,7 +2113,7 @@ proof
   let M be non-empty ManySortedSet of I;
   assume
 A1: {} in rng M;
-  dom M = I by Def3;
+  dom M = I by PARTFUN1:def 4;
   then ex i st i in I & M.i = {} by A1,FUNCT_1:def 5;
   hence contradiction by Def16;
 end;
@@ -2126,16 +2131,16 @@ theorem
 proof
   let I be non empty set;
   let M be ManySortedSet of I, A be Component of M;
-A1: dom M = I by Def3;
+A1: dom M = I by PARTFUN1:def 4;
   then rng M <> {} by RELAT_1:65;
-  hence ex i st i in I & A = M.i by A1,FUNCT_1:def 5;
+  hence thesis by A1,FUNCT_1:def 5;
 end;
 
 theorem
   for M being ManySortedSet of I, i st i in I holds M.i is Component of M
 proof
   let M be ManySortedSet of I, i;
-A1: dom M = I by Def3;
+A1: dom M = I by PARTFUN1:def 4;
   assume i in I;
   hence thesis by A1,FUNCT_1:def 5;
 end;
@@ -2153,7 +2158,7 @@ A1: for i st i in I ex j st Q[i,j]
       let i such that i in I;
       consider j being Element of B.i;
       reconsider j as set;
-      take j; thus j is Element of B.i;
+      take j; thus thesis;
     end;
     thus ex f being ManySortedSet of I st
     for i st i in I holds Q[i,f.i] from MSSEx(A1);
@@ -2176,7 +2181,7 @@ A1: for i st i in I ex j st P[i,j]
       let i such that i in I;
       consider j being Function of A.i,B.i;
       reconsider j as set;
-      take j; thus j is Function of A.i,B.i;
+      take j; thus thesis;
     end;
     consider f being ManySortedSet of I such that
 A2: for i st i in I holds P[i,f.i] from MSSEx(A1);
@@ -2184,14 +2189,14 @@ A2: for i st i in I holds P[i,f.i] from MSSEx(A1);
     proof
       let i;
       assume i in dom f;
-      then i in I by Def3;
-      hence f.i is Function by A2;
+      then i in I by PARTFUN1:def 4;
+      hence thesis by A2;
     end;
     then reconsider f as ManySortedFunction of I;
     take f;
     let i;
     assume i in I;
-    hence f.i is Function of A.i,B.i by A2;
+    hence thesis by A2;
   end;
 end;
 
@@ -2204,8 +2209,8 @@ registration
     let f be ManySortedFunction of A,B;
     let i be set;
     assume i in dom f;
-    then i in I by Def3;
-    hence f.i is Function by Def18;
+    then i in I by PARTFUN1:def 4;
+    hence thesis by Def18;
   end;
 end;
 
@@ -2226,7 +2231,7 @@ A1: for i st i in I* ex j st P[i,j]
       then reconsider j = i as Element of I*;
       reconsider e = product(M*j) as set;
       take e,j;
-      thus j = i & e = product(M*j);
+      thus thesis;
     end;
     consider f being ManySortedSet of I* such that
 A2: for i st i in I* holds P[i,f.i] from MSSEx(A1);
@@ -2265,22 +2270,24 @@ registration
       not {} in rng M by Th149;
       then not {} in rng(M*f) by FUNCT_1:25;
       then product(M*f) <> {} by CARD_3:37;
-      hence M#.i is non empty by Def19;
+      hence thesis by Def19;
     end;
     hence thesis;
   end;
 end;
 
-definition
-  let I;
+registration
+  let I be set;
   let J be non empty set;
   let O be Function of I,J;
   let F be ManySortedSet of J;
-  redefine func F*O -> ManySortedSet of I;
+  cluster F*O -> total (I-defined Function);
   coherence
   proof
-    rng O c= J & dom O = I & dom F = J by Def3,FUNCT_2:def 1,RELSET_1:12;
-    hence dom(F*O) = I by RELAT_1:46;
+    rng O c= J & dom O = I & dom F = J
+     by PARTFUN1:def 4,FUNCT_2:def 1,RELAT_1:def 19;
+    then dom(F*O) = I by RELAT_1:46;
+   hence thesis by PARTFUN1:def 4;
   end;
 end;
 
@@ -2299,7 +2306,7 @@ A1: for x being Element of NAT ex y being Element of {a}* st P[x,y]
       then n |-> a is FinSequence of {a} by FINSEQ_2:77;
       then reconsider u = n |-> a as Element of {a}* by FINSEQ_1:def 11;
       take u;
-      thus u = n |-> a;
+      thus thesis;
     end;
     ex f being Function of NAT, {a}* st for x being Element of NAT
     holds P[x,f.x] from FUNCT_2:sch 3(A1);
@@ -2352,7 +2359,7 @@ A6: a in {a} by TARSKI:def 1;
       .= (a .--> b).a by A6,FUNCOP_1:13
       .= (a .--> b).((n|->a).x) by A5,FUNCOP_1:13;
   end;
-  hence (a .--> b)*(n|->a) = n |-> b by A1,FUNCT_1:20;
+  hence thesis by A1,FUNCT_1:20;
 end;
 
 theorem
@@ -2382,7 +2389,7 @@ proof
   consider f be Function such that
 A1: dom f = D() and
 A2: for d be Element of D() holds f.d = F(d) from FUNCT_1:sch 4;
-  f is ManySortedSet of D() by A1,Def3;
+  f is ManySortedSet of D() by A1,PARTFUN1:def 4,RELAT_1:def 18;
   hence thesis by A2;
 end;
 
@@ -2408,7 +2415,7 @@ definition
     deffunc F(set) = [:X.$1,Y.$1:];
     consider f be Function such that
 A1: dom f = I & for i st i in I holds f.i = F(i) from FUNCT_1:sch 3;
-    reconsider f as ManySortedSet of I by A1,Def3;
+    reconsider f as ManySortedSet of I by A1,PARTFUN1:def 4,RELAT_1:def 18;
     take f;
     thus thesis by A1;
   end;
@@ -2538,7 +2545,7 @@ definition
 A1: for i be set st i in I ex u be set st P[i,u];
     consider g being Function such that
 A2: dom g = I & for i be set st i in I holds P[i,g.i] from CLASSES1:sch 1(A1);
-    reconsider g as ManySortedSet of I by A2,Def3;
+    reconsider g as ManySortedSet of I by A2,PARTFUN1:def 4,RELAT_1:def 18;
     take g;
     thus thesis by A2;
   end;
@@ -2603,9 +2610,9 @@ registration
   proof
     let f be ManySortedSet of X;
     consider x be Element of X;
-    dom f = X by Def3;
+    dom f = X by PARTFUN1:def 4;
     then [x,f.x] in f by FUNCT_1:def 4;
-    hence f is non empty;
+    hence thesis;
   end;
 end;
 

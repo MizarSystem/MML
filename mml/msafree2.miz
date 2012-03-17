@@ -8,19 +8,19 @@ environ
 
  vocabularies MSUALG_1, UNIALG_2, AMI_1, BOOLE, RELAT_1, FUNCT_1, FUNCOP_1,
       ZF_REFLE, PBOOLE, CARD_3, FINSEQ_1, QC_LANG1, FINSEQ_4, TDGROUP, PRELAMB,
-      MSAFREE, FREEALG, PRALG_1, ALG_1, TREES_4, REALSET1, MSUALG_2, PRE_CIRC,
+      MSAFREE, FREEALG, PRALG_1, ALG_1, TREES_4, REALSET1, MSUALG_2, CARD_FIN,
       FINSET_1, CAT_1, TREES_2, DTCONSTR, TREES_3, CARD_1, LANG1, PROB_1,
       TREES_1, MSAFREE2, ARYTM, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, CARD_1, RELAT_1,
       FUNCT_1, PARTFUN1, FINSET_1, FINSEQ_1, FUNCT_2, CARD_3, TREES_1, TREES_2,
       TREES_3, TREES_4, PBOOLE, STRUCT_0, MSUALG_1, FINSEQ_2, MSAFREE,
-      MSUALG_2, FUNCOP_1, DTCONSTR, LANG1, RELSET_1, MSUALG_3, PRE_CIRC;
- constructors XXREAL_0, NAT_1, PRE_CIRC, MSUALG_3, MSAFREE, SEQ_4;
+      MSUALG_2, FUNCOP_1, DTCONSTR, LANG1, RELSET_1, MSUALG_3;
+ constructors XXREAL_0, NAT_1, MSUALG_3, MSAFREE, SEQ_4, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCOP_1, FINSET_1, FRAENKEL,
-      TREES_1, CARD_3, PBOOLE, TREES_2, TREES_3, PRE_CIRC, STRUCT_0, DTCONSTR,
-      MSUALG_1, MSUALG_2, MSAFREE, ORDINAL1;
+      TREES_1, CARD_3, TREES_2, TREES_3, PRE_CIRC, STRUCT_0, DTCONSTR, RELAT_1,
+      MSUALG_1, MSUALG_2, MSAFREE, ORDINAL1, PBOOLE;
  requirements BOOLE, SUBSET;
- definitions TARSKI, MSUALG_1, MSUALG_2, PRE_CIRC, FUNCT_1, STRUCT_0, PBOOLE,
+ definitions TARSKI, MSUALG_1, FINSET_1, MSUALG_2, FUNCT_1, STRUCT_0, PBOOLE,
       FUNCOP_1;
  theorems TARSKI, ZFMISC_1, FINSEQ_1, FINSEQ_3, FUNCT_1, FUNCT_2, TREES_3,
       TREES_4, SUBSET_1, CARD_3, FUNCOP_1, PBOOLE, MSUALG_1, MSUALG_2, MSAFREE,
@@ -74,14 +74,7 @@ end;
 
 theorem
   for G being void non empty ManySortedSign
-  holds InputVertices G = the carrier of G
-proof
-  let G be void non empty ManySortedSign;
-  dom the ResultSort of G = the carrier' of G by FUNCT_2:def 1
-    .= {};
-  then rng the ResultSort of G = {} by RELAT_1:65;
-  hence InputVertices G = the carrier of G;
-end;
+  holds InputVertices G = the carrier of G;
 
 theorem Th2:
   for G being non void non empty ManySortedSign, v being Vertex of G
@@ -123,7 +116,7 @@ A3: SortsWithConstants G = {v where v is SortSymbol of G:v is
 A4: x'=x & x' is with_const_op by A3;
     consider o being OperSymbol of G such that (the Arity of G).o = {} and
 A5: (the ResultSort of G).o = x' by A4,MSUALG_2:def 2;
-    thus x in InnerVertices G by A2,A4,A5,FUNCT_2:6;
+    thus thesis by A2,A4,A5,FUNCT_2:6;
   end;
 end;
 
@@ -134,7 +127,7 @@ proof
   let G be non empty ManySortedSign;
   InputVertices G misses InnerVertices G
   & SortsWithConstants G c= InnerVertices G by Th5,XBOOLE_1:79;
-  hence InputVertices G misses SortsWithConstants G by XBOOLE_1:63;
+  hence thesis by XBOOLE_1:63;
 end;
 
 definition
@@ -194,18 +187,19 @@ definition
     consider e being Element of product(the Sorts of MSA);
     set p = e | InputVertices S;
 A1: dom the Sorts of MSA = the carrier of S
-    & e in product(the Sorts of MSA) by PBOOLE:def 3;
+    & e in product(the Sorts of MSA) by PARTFUN1:def 4;
     consider g being Function such that
 A2: e = g & dom g = dom the Sorts of MSA and
 A3: for x being set st x in dom the Sorts of MSA
     holds g.x in (the Sorts of MSA).x by CARD_3:def 5;
     dom p = InputVertices S by A1,A2,RELAT_1:91;
-    then reconsider p as ManySortedSet of InputVertices S by PBOOLE:def 3;
+    then reconsider p as ManySortedSet of InputVertices S by PARTFUN1:def 4
+,RELAT_1:def 18;
     take p;
     let v be Vertex of S;
     assume v in InputVertices S;
     then p.v = e.v by FUNCT_1:72;
-    hence p.v in (the Sorts of MSA).v by A1,A2,A3;
+    hence thesis by A1,A2,A3;
   end;
 end;
 
@@ -237,8 +231,7 @@ registration
   proof
     {} in {{}}* by FINSEQ_1:66;
     then reconsider f = {{}}-->{} as Function of {{}},{{}}* by FUNCOP_1:58;
-    {} in {{}} by TARSKI:def 1;
-    then reconsider g = {{}}-->{} as Function of {{}},{{}} by FUNCOP_1:58;
+    reconsider g = {{}}-->{} as Function of {{}},{{}};
     take c = ManySortedSign(#{{}},{{}},f,g#);
     c is Circuit-like
     proof
@@ -268,7 +261,7 @@ A2: x in dom the ResultSort of IIG & (the ResultSort of IIG).x = v
     by A1,FUNCT_1:def 5;
     reconsider x as OperSymbol of IIG by A2;
     take x;
-    thus the_result_sort_of x = v by A2;
+    thus thesis by A2;
   end;
   uniqueness by Def6;
 end;
@@ -293,7 +286,7 @@ A2: for k being Nat st k in dom p
   set D = (the Sorts of A) * the_arity_of o;
   rng the_arity_of o c= the carrier of S;
   then
-A3: rng the_arity_of o c= dom the Sorts of A by PBOOLE:def 3;
+A3: rng the_arity_of o c= dom the Sorts of A by PARTFUN1:def 4;
 A4: dom p = dom the_arity_of o by A1,FINSEQ_3:31;
   then
 A5: dom p = dom D by A3,RELAT_1:46;
@@ -310,7 +303,7 @@ A7: x in dom D;
   then ((the Sorts of A)# * the Arity of S).o
   = (the Sorts of A)#.(the_arity_of o) by FUNCT_1:23
     .= product ((the Sorts of A) * the_arity_of o) by PBOOLE:def 19;
-  hence p in Args (o, A) by A5,A6,CARD_3:def 5;
+  hence thesis by A5,A6,CARD_3:def 5;
 end;
 
 definition
@@ -348,8 +341,7 @@ A2:   for e being set st e in A.s ex u being set st u in (the Sorts of MSA).s
         let e be set;
         assume e in A.s;
         then e in FreeGen(s,the Sorts of MSA) by MSAFREE:def 18;
-        hence ex u being set st u in (the Sorts of MSA).s &
-        e = root-tree[u, s] by MSAFREE:def 17;
+        hence thesis by MSAFREE:def 17;
       end;
       consider j being Function such that
 A3:   dom j = A.s & rng j c= (the Sorts of MSA).s
@@ -364,7 +356,7 @@ A4:   y in A.s and
 A5:   y = root-tree [x, s] and x in (the Sorts of MSA).s;
       y = root-tree[j.y, s] by A3,A4;
       then [x, s] = [j.y, s] by A5,TREES_4:4;
-      hence f.y = x by ZFMISC_1:33;
+      hence thesis by ZFMISC_1:33;
     end;
     consider f being ManySortedSet of the carrier of S such that
 A6: for i being set st i in the carrier of S
@@ -372,7 +364,7 @@ A6: for i being set st i in the carrier of S
     now
       let x be set;
       assume x in dom f;
-      then x in the carrier of S by PBOOLE:def 3;
+      then x in the carrier of S by PARTFUN1:def 4;
       then P[x,f.x] by A6;
       hence f.x is Function;
     end;
@@ -435,7 +427,7 @@ A19:  y = root-tree [a,s] by A16,MSAFREE:def 17;
       assume y = root-tree [x, s];
       then [x,s] = [a,s] by A19,TREES_4:4;
       then x = a by ZFMISC_1:33;
-      hence IT1'.s.y = x by A14,A17,A18,A19;
+      hence thesis by A14,A17,A18,A19;
     end;
     assume IT2 is_homomorphism FreeEnv MSA, MSA;
     then
@@ -460,7 +452,7 @@ A26:  y = root-tree [a,s] by A23,MSAFREE:def 17;
       assume y = root-tree [x, s];
       then [x,s] = [a,s] by A26,TREES_4:4;
       then x = a by ZFMISC_1:33;
-      hence IT2'.s.y = x by A21,A24,A25,A26;
+      hence thesis by A21,A24,A25,A26;
     end;
     IT1' = IT2' from MSAFREE1:sch 3(A13,A15,A20,A22);
     hence thesis;
@@ -550,7 +542,7 @@ A18:    Den (o, A) = Den (o, the MSAlgebra of A);
   end;
   then GenMSAlg AA = GenMSAlg BB by A9,MSUALG_2:def 18;
   then the Sorts of GenMSAlg BB = the Sorts of A by MSUALG_2:22;
-  hence the Sorts of A is GeneratorSet of A by MSAFREE:def 4;
+  hence thesis by MSAFREE:def 4;
 end;
 
 definition
@@ -560,27 +552,27 @@ definition
   :Def10:
   for S' being non void non empty ManySortedSign st S' = S
   for A being MSAlgebra over S' st A = IT
-  ex G being GeneratorSet of A st G is locally-finite if S is not void
-  otherwise the Sorts of IT is locally-finite;
+  ex G being GeneratorSet of A st G is finite-yielding if S is not void
+  otherwise the Sorts of IT is finite-yielding;
   consistency;
 end;
 
 definition
   let S be non empty ManySortedSign;
   let IT be MSAlgebra over S;
-  attr IT is locally-finite means
+  attr IT is finite-yielding means
   :Def11:
-  the Sorts of IT is locally-finite;
+  the Sorts of IT is finite-yielding;
 end;
 
 registration
   let S be non empty ManySortedSign;
-  cluster locally-finite -> finitely-generated (non-empty MSAlgebra over S);
+  cluster finite-yielding -> finitely-generated (non-empty MSAlgebra over S);
   coherence
   proof
     let A be non-empty MSAlgebra over S;
     assume
-A1: A is locally-finite;
+A1: A is finite-yielding;
     per cases;
     case S is non void;
       let S' be non void non empty ManySortedSign such that
@@ -589,10 +581,10 @@ A2:   S' = S;
       assume A' = A;
       then reconsider G = the Sorts of A as GeneratorSet of A' by A2,Th9;
       take G;
-      thus G is locally-finite by A1,Def11;
+      thus thesis by A1,Def11;
     end;
     case S is void;
-      thus the Sorts of A is locally-finite by A1,Def11;
+      thus thesis by A1,Def11;
     end;
   end;
 end;
@@ -644,18 +636,18 @@ end;
 
 registration
   let S be non empty ManySortedSign;
-  cluster locally-finite non-empty strict MSAlgebra over S;
+  cluster finite-yielding non-empty strict MSAlgebra over S;
   existence
   proof
     take T = Trivial_Algebra S;
 A1: the Sorts of T = (the carrier of S) --> {0} by Def12;
-    thus T is locally-finite
+    thus T is finite-yielding
     proof
-      thus the Sorts of T is locally-finite
+      thus the Sorts of T is finite-yielding
       proof
         let i be set;
         assume i in the carrier of S;
-        hence (the Sorts of T).i is finite by A1,FUNCOP_1:13;
+        hence thesis by A1,FUNCOP_1:13;
       end;
     end;
     thus T is non-empty
@@ -670,7 +662,7 @@ definition
   let IT be non empty ManySortedSign;
   attr IT is monotonic means
   for A being finitely-generated (non-empty MSAlgebra over IT)
-  holds A is locally-finite;
+  holds A is finite-yielding;
 end;
 
 registration
@@ -680,9 +672,8 @@ registration
     {} in {{}}* by FINSEQ_1:66;
     then reconsider f = {[{},{{}}]}-->{} as Function of {[{},{{}}]},{{}}*
     by FUNCOP_1:58;
-    {} in {{}} by TARSKI:def 1;
-    then reconsider g = {[{},{{}}]}-->{} as Function of
-    {[{},{{}}]},{{}} by FUNCOP_1:58;
+    reconsider g = {[{},{{}}]}-->{} as Function of
+    {[{},{{}}]},{{}};
     take S = ManySortedSign (# {{}}, {[{},{{}}]}, f, g #); thus
     S is non void;
     thus S is finite;
@@ -692,7 +683,7 @@ registration
       reconsider S' = S as non void non empty ManySortedSign;
       reconsider A' = A as non-empty MSAlgebra over S';
       consider G being GeneratorSet of A' such that
-A1:   G is locally-finite by Def10;
+A1:   G is finite-yielding by Def10;
       consider s being SortSymbol of S';
 A2:   s = {} by TARSKI:def 1;
       consider o being OperSymbol of S';
@@ -707,11 +698,11 @@ A6:   Result(o,A') = (the Sorts of A').((the ResultSort of S).o) by FUNCT_2:21
       set T = s .--> (G.s \/ { Den(o,A').{} });
       dom T = the carrier of S by A2,FUNCOP_1:19;
       then reconsider T as non-empty ManySortedSet
-      of the carrier of S by PBOOLE:def 3;
+      of the carrier of S by PARTFUN1:def 4,RELAT_1:def 18;
       set O = (o .--> Den(o,A'));
       dom O = the carrier' of S by A3,FUNCOP_1:19;
       then
-A7:   O is ManySortedSet of the carrier' of S by PBOOLE:def 3;
+A7:   O is ManySortedSet of the carrier' of S by PARTFUN1:def 4,RELAT_1:def 18;
       now
         let i be set;
         assume
@@ -754,7 +745,7 @@ A14:    G.s c= (the Sorts of A').i by A2,A12,PBOOLE:def 5;
         then {} in dom Den(o,A') by A4,TARSKI:def 1;
         then Den(o,A').{} in rng Den(o,A') by FUNCT_1:def 5;
         then { Den(o,A').{} } c= (the Sorts of A').i by A6,A12,ZFMISC_1:37;
-        hence T'.i c= (the Sorts of A').i by A13,A14,XBOOLE_1:8;
+        hence thesis by A13,A14,XBOOLE_1:8;
       end;
       then
 A15:  the Sorts of MSAlgebra (# T, O #) is MSSubset of A' by PBOOLE:def 23;
@@ -784,7 +775,7 @@ A24:      B.s = (G.s \/ { Den(o,A').{} }) by A16,FUNCOP_1:87;
 A25:      x in B.s by A24,XBOOLE_0:def 3;
 A26:      dom the ResultSort of S' = {[{},{{}}]} by FUNCOP_1:19;
           (the ResultSort of S').o = s by A2,FUNCOP_1:13;
-          hence x in (B * the ResultSort of S').o' by A18,A25,A26,FUNCT_1:23;
+          hence thesis by A18,A25,A26,FUNCT_1:23;
         end;
         now
           let o' be OperSymbol of S';
@@ -857,12 +848,12 @@ A38:      X =(the Sorts of A').s &
 A39:  s.--> (G.s \/ { Den(o, A').{} }) = the Sorts of
       GenMSAlg(G) by A30,MSUALG_2:def 18
         .= the Sorts of A' by MSAFREE:def 4;
-      reconsider Gs = G.s as finite set by A1,PRE_CIRC:def 3;
+      reconsider Gs = G.s as finite set by A1,FINSET_1:def 4;
       let i be set;
       assume i in the carrier of S;
       then i = s by A2,TARSKI:def 1;
       then (the Sorts of A).i = Gs \/ { Den(o,A').{} } by A39,FUNCOP_1:87;
-      hence (the Sorts of A).i is finite;
+      hence thesis;
     end;
     thus S is Circuit-like
     proof
@@ -872,7 +863,7 @@ A40:  S' = S;
       let o1, o2 be OperSymbol of S' such that
       the_result_sort_of o1 = the_result_sort_of o2;
       o1 = [{},{{}}] by A40,TARSKI:def 1;
-      hence o1 = o2 by A40,TARSKI:def 1;
+      hence thesis by A40,TARSKI:def 1;
     end;
   end;
 end;
@@ -892,16 +883,16 @@ proof
 A1: e in TS(DTConMSA(X)) by TARSKI:def 3;
   reconsider e' = e as DecoratedTree by A1,TREES_3:def 6;
   dom e' is finite by A1;
-  hence e is finite DecoratedTree by FINSET_1:29;
+  hence thesis by FINSET_1:29;
 end;
 
 theorem
   for S being non void non empty ManySortedSign,
-  X being non-empty locally-finite ManySortedSet of the carrier of S
+  X being non-empty finite-yielding ManySortedSet of the carrier of S
   holds FreeMSA X is finitely-generated
 proof
   let S be non void non empty ManySortedSign,
-  X be non-empty locally-finite ManySortedSet of the carrier of S;
+  X be non-empty finite-yielding ManySortedSet of the carrier of S;
   per cases;
   case S is non void;
     let S' be non void non empty ManySortedSign such that
@@ -911,13 +902,13 @@ A2: A = FreeMSA X;
     reconsider G = FreeGen X as GeneratorSet of FreeMSA X;
     reconsider G as GeneratorSet of A by A1,A2;
     take G;
-    thus G is locally-finite
+    thus G is finite-yielding
     proof
       let i be set;
       assume i in the carrier of S';
       then reconsider iS = i as SortSymbol of S by A1;
       reconsider Gi = G.i as set;
-      reconsider Xi = X.iS as non empty finite set by PRE_CIRC:def 3;
+      reconsider Xi = X.iS as non empty finite set by FINSET_1:def 4;
       now
         defpred P[set,set] means $1 = root-tree [$2,i];
 A3:     for e being set st e in Gi ex u being set st u in Xi & P[e,u]
@@ -947,7 +938,7 @@ A9:       x1 in dom f & x2 in dom f & f.x1 = f.x2;
         & dom f = Gi & rng f c= Xi by A6,A7;
       end;
       then card Gi c= card Xi or card Gi in card Xi by CARD_1:26;
-      hence G.i is finite by CARD_2:68;
+      hence thesis by CARD_2:68;
     end;
   end;
   case S is void;
@@ -1044,7 +1035,7 @@ A6: len roots ts = len (the_arity_of o) by MSAFREE:def 9;
   reconsider ts as DTree-yielding FinSequence;
 A7: ts = p by A2,A3,TREES_4:15;
   dom roots ts = dom ts by TREES_3:def 18;
-  hence len p = len the_arity_of o by A6,A7,FINSEQ_3:31;
+  hence thesis by A6,A7,FINSEQ_3:31;
 end;
 
 theorem Th14:
@@ -1119,7 +1110,7 @@ registration
     thus e is finite by Th10;
     reconsider e' = e as DecoratedTree by Th10;
     dom e' is Tree;
-    hence e is non empty by RELAT_1:60;
+    hence e is non empty;
     thus thesis by Th10;
   end;
 end;

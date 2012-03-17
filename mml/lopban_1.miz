@@ -13,18 +13,19 @@ environ
       SEQ_4;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, FUNCT_3, PRE_TOPC, DOMAIN_1, FUNCOP_1, BINOP_1, XXREAL_0,
-      COMPLEX1,
+      XCMPLX_0, COMPLEX1,
       REAL_1, NAT_1, STRUCT_0, ALGSTR_0, XREAL_0, ORDINAL1, NUMBERS, MONOID_0,
-      PSCOMP_1, RLVECT_1, FRAENKEL, RLSUB_1, NORMSP_1, RSSPACE,
+      PSCOMP_1, RLVECT_1, RLSUB_1, NORMSP_1, RSSPACE,
       RSSPACE3, VALUED_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, FUNCSDOM;
  constructors DOMAIN_1, FUNCT_3, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQM_3,
       RLSUB_1, FUNCSDOM, MONOID_0, PSCOMP_1, RSSPACE3, SEQ_1, XXREAL_2,
-      NORMSP_1, SEQ_4;
+      NORMSP_1, SEQ_4, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
       XXREAL_0, XREAL_0, MEMBERED, SEQM_3, STRUCT_0, RLVECT_1, NORMSP_1,
-      MONOID_0, RSSPACE3, VALUED_1, VALUED_0, FUNCOP_1, SEQ_4;
+      MONOID_0, RSSPACE3, VALUED_1, VALUED_0, FUNCOP_1, SEQ_4, FRAENKEL,
+      FUNCT_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions RLVECT_1, SEQ_4, FRAENKEL, BINOP_1, STRUCT_0, ALGSTR_0;
+ definitions RLVECT_1, SEQ_4, FUNCT_1, BINOP_1, STRUCT_0, ALGSTR_0;
  theorems XBOOLE_0, TARSKI, ABSVALUE, RLVECT_1, BINOP_1, FUNCOP_1, XREAL_0,
       XCMPLX_0, SEQ_1, SEQ_2, FUNCT_1, NAT_1, FUNCT_2, RLSUB_1, NORMSP_1,
       SEQ_4, FUNCT_3, RSSPACE, RSSPACE3, MONOID_0, XREAL_1, COMPLEX1, XXREAL_0;
@@ -85,7 +86,7 @@ A1: for a be Real, f being Element of Funcs(X,the carrier of Y)
   let a be Real,f be Element of Funcs(X,the carrier of Y), x be Element of X;
 A2: dom (F.[a,f]) = X by FUNCT_2:169;
   F.(a,f) = ((the Mult of Y)[;](a,f)) by A1;
-  hence (F.[a,f]).x = a*(f.x) by A2,FUNCOP_1:42;
+  hence thesis by A2,FUNCOP_1:42;
 end;
 
 definition
@@ -161,7 +162,7 @@ proof
   let A,B be non empty set;
   let x be Element of A, f be Function of A,B;
   x in A;
-  hence x in dom f by FUNCT_2:def 1;
+  hence thesis by FUNCT_2:def 1;
 end;
 
 theorem Th3:
@@ -358,12 +359,27 @@ proof
       reconsider u' = u as Element of Funcs(X,the carrier of Y);
       reconsider w = (FuncExtMult(X,Y)).[-1,u'] as VECTOR of IT;
       take w;
-      thus u+w = 0.IT by Th9;
+      thus thesis by Th9;
     end;
-    thus a*(u+v) = a*u + a *v by Lm2;
-    thus (a+b)*v = a*v + b*v by Th12;
-    thus (a*b)*v = a*(b*v) by Th11;
-    thus 1*v = v by Th10;
+    thus for a being real number,u,v holds a*(u+v) = a*u + a *v
+     proof let a be real number;
+       reconsider a as Real by XREAL_0:def 1;
+       for u,v holds a*(u+v) = a*u + a *v by Lm2;
+      hence thesis;
+     end;
+    thus for a,b being real number,v holds (a+b)*v = a*v + b*v
+     proof let a,b be real number;
+       reconsider a,b as Real by XREAL_0:def 1;
+       for v holds (a+b)*v = a*v + b*v by Th12;
+      hence thesis;
+     end;
+    thus for a,b being real number,v holds (a*b)*v = a*(b*v)
+     proof let a,b be real number;
+       reconsider a,b as Real by XREAL_0:def 1;
+       for v holds (a*b)*v = a*(b*v) by Th11;
+      hence thesis;
+     end;
+    thus thesis by Th10;
   end;
   hence thesis;
 end;
@@ -604,7 +620,7 @@ A7:       v' is LinearOperator of X,Y by A2,Def7;
       end;
       hence thesis;
     end;
-    hence v+u in W by Def7;
+    hence thesis by Def7;
   end;
   for a be Real for v be VECTOR of RealVectSpace(the carrier of X,Y)
   st v in W holds a * v in W
@@ -1054,7 +1070,7 @@ registration
   let X,Y be RealNormSpace;
   cluster -> Function-like Relation-like Element of
     R_VectorSpace_of_BoundedLinearOperators(X,Y);
-  coherence by Def10;
+  coherence;
 end;
 
 definition
@@ -1096,7 +1112,7 @@ A2: h = f+g;
   end;
   assume for x be Element of X holds h.x=f.x+g.x;
   then h1=f1+g1 by Th20;
-  hence h =f+g by A1,RLSUB_1:21;
+  hence thesis by A1,RLSUB_1:21;
 end;
 
 theorem Th30:
@@ -1122,7 +1138,7 @@ A2: h = a*f;
   end;
   assume for x be Element of X holds h.x=a*f.x;
   then h1=a*f1 by Th21;
-  hence h =a*f by A1,RLSUB_1:22;
+  hence thesis by A1,RLSUB_1:22;
 end;
 
 theorem Th31:
@@ -1483,7 +1499,7 @@ registration
   let X,Y be RealNormSpace;
   cluster -> Function-like Relation-like
     Element of R_NormSpace_of_BoundedLinearOperators(X,Y);
-  coherence by Def10;
+  coherence;
 end;
 
 definition
@@ -1703,7 +1719,7 @@ A49:  r=||.h1.t.|| & ||.t.|| <= 1 by A48;
 A50: ( for s be real number st s in PreNorms(h1) holds s <= ||.f.|| + ||.g.||)
     implies sup PreNorms(h1) <= ||.f.|| + ||.g.|| by SEQ_4:62;
     BoundedLinearOperatorsNorm(X,Y).(f+g) = sup PreNorms(h1) by Th36;
-    hence ||.f+g.|| <=||.f.|| + ||.g.|| by A47,A50,NORMSP_1:def 1;
+    hence thesis by A47,A50,NORMSP_1:def 1;
   end;
   hence thesis by A1,A3,A12;
 end;
@@ -1775,7 +1791,7 @@ A2: for x be VECTOR of X holds h.x = f.x - g.x;
   then f=h+g by Th41;
   then f-g=h+(g-g) by RLVECT_1:def 6;
   then f-g=h+0.R_NormSpace_of_BoundedLinearOperators(X,Y) by RLVECT_1:28;
-  hence f-g=h by RLVECT_1:10;
+  hence thesis by RLVECT_1:10;
 end;
 
 begin :: Real Banach Space of Bounded Linear Operators
@@ -1890,7 +1906,7 @@ A10:    ||.vseq.m.||= ||.vseq.||.m by NORMSP_1:def 10;
       thus for m be Element of NAT st m >= k holds
       abs(||.vseq.||.m - ||.vseq.||.k ) < e1 by A6;
     end;
-    hence ||.vseq.|| is convergent by SEQ_4:58;
+    hence thesis by SEQ_4:58;
   end;
   defpred P[set, set] means ex xseq be sequence of Y st
   (for n be Element of NAT holds xseq.n=modetrans((vseq.n),X,Y).$1)
@@ -1944,7 +1960,7 @@ A20:            xseq.n=modetrans((vseq.n),X,Y).x by A12
                   .=0.Y by RLVECT_1:23;
                 then ||.xseq.n -xseq.m.|| = ||.0.Y.|| by A20,RLVECT_1:26
                   .=0;
-                hence ||.xseq.n -xseq.m.|| < e by A18;
+                hence thesis by A18;
               end;
             end;
             case x <>0.X;
@@ -1972,7 +1988,7 @@ A26:            ||.(vseq.n) - (vseq.m).|| * ||.x.||
                   .= e*(||.x.||"* ||.x.||)
                   .= e*1 by A21,XCMPLX_0:def 7
                   .=e;
-                hence ||.xseq.n-xseq.m.|| < e by A25,A26,XXREAL_0:2;
+                hence thesis by A25,A26,XXREAL_0:2;
               end;
             end;
           end;

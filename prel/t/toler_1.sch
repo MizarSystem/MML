@@ -9,7 +9,6 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_2"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="PARTFUN1"/>
 </Signature>
 <Scheme>
@@ -20,17 +19,20 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="5">
+<Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="10"/>
-<Adjective nr="12"/>
-<Adjective nr="18">
-<Func kind="F" nr="1"/>
+<Adjective nr="13"/>
+<Adjective nr="15"/>
+<Adjective nr="21">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
+<Func kind="K" nr="25">
+<Func kind="K" nr="26">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
+</Func>
+</Func>
 </Typ>
 <Not>
 <For>

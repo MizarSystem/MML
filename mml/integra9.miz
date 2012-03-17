@@ -10,25 +10,29 @@ environ
  vocabularies INTEGRA9, ARYTM, PRE_TOPC, RELAT_1, FUNCT_1, ARYTM_1, JGRAPH_2,
       PARTFUN1, SEQ_1, SIN_COS, INTEGRA1, FDIFF_1, REALSET1, BOOLE, SQUARE_1,
       ARYTM_3, ORDINAL2, RCOMP_1, PREPOWER, LATTICES, FINSEQ_1, TAYLOR_1,
-      SIN_COS4, SUBSET_1;
- notations SEQ_1, SIN_COS, TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, VALUED_1,
+      SIN_COS4, SUBSET_1, GROUP_1, SEQ_4;
+ notations FUNCT_1,
+      SEQ_1, SIN_COS, TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, VALUED_0,
+      VALUED_1, MEMBERED, XREAL_0, SEQ_4,
       REAL_1, RELSET_1, PARTFUN1, RFUNCT_1, RCOMP_1, PSCOMP_1, INTEGRA1,
-      FCONT_1, SINCOS10, FDIFF_9, SQUARE_1, INTEGRA5, XXREAL_0, PARTFUN2,
-      PREPOWER, TAYLOR_1, FDIFF_1, JORDAN16, SEQ_2;
+      XXREAL_0, XXREAL_2,
+      FCONT_1, SINCOS10, FDIFF_9, SQUARE_1, INTEGRA5, PARTFUN2,
+      NEWTON, PREPOWER, TAYLOR_1, FDIFF_1, JORDAN16, SEQ_2;
  constructors SIN_COS, TAYLOR_1, SEQ_1, REAL_1, FDIFF_1, FCONT_1, PSCOMP_1,
       NAT_1, BINOP_2, SQUARE_1, PREPOWER, INTEGRA5, PARTFUN2, LIMFUNC1,
-      JORDAN16, SEQ_4, RFUNCT_1, FDIFF_9, SINCOS10;
+      JORDAN16, SEQ_4, RFUNCT_1, FDIFF_9, SINCOS10, POWER, RELSET_1;
  registrations VALUED_1, NAT_1, XBOOLE_0, NUMBERS, MEMBERED, VALUED_0,
       INTEGRA1, RCOMP_1, INT_1, RELAT_1, ORDINAL1, FUNCT_2, FDIFF_1, COMPLEX1,
       RFUNCT_1, XREAL_0, RELSET_1, FINSEQ_2, ORDINAL2, NEWTON, SEQM_3,
       XXREAL_0, FINSEQ_1, SIN_COS, SQUARE_1, XREAL_1, FUNCOP_1, PARTFUN1,
-      TAYLOR_1, JORDAN16, FCONT_3;
+      TAYLOR_1, JORDAN16, FCONT_3, XXREAL_2;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions SIN_COS, INTEGRA5, VALUED_1, SUBSET_1, TARSKI, FDIFF_9, SQUARE_1;
  theorems PARTFUN1, INTEGRA1, RFUNCT_1, FUNCT_1, FDIFF_1, INTEGRA2, FUNCT_2,
       XBOOLE_0, XBOOLE_1, SQUARE_1, XCMPLX_1, INTEGRA5, INTEGRA8, INTEGRA6,
       SIN_COS, XREAL_1, FDIFF_4, TAYLOR_1, FDIFF_6, VALUED_1, FCONT_1,
-      JORDAN16, RELAT_1, FDIFF_2, FDIFF_5, FDIFF_8, FDIFF_9;
+      JORDAN16, RELAT_1, FDIFF_2, FDIFF_5, FDIFF_8, FDIFF_9,
+      PREPOWER;
 
 begin
 
@@ -42,7 +46,7 @@ begin
 Lm1: dom (-(exp_R*(AffineMap(-1,0)))) = [#]REAL by FUNCT_2:def 1;
 
 :: f.x = -exp_R.(-x)
-theorem Th1:
+theorem
   -(exp_R*(AffineMap(-1,0))) is_differentiable_on REAL
   & for x holds ((-(exp_R*(AffineMap(-1,0))))`|REAL).x = exp_R(-x)
 proof
@@ -58,7 +62,7 @@ A4: (AffineMap(-1,0)) is_differentiable_on REAL & for x st x in [#]REAL
       let x;
    assume x in REAL;
     (AffineMap(-1,0)) is_differentiable_in x by A4,FDIFF_1:16;
- hence exp_R*(AffineMap(-1,0)) is_differentiable_in x by TAYLOR_1:19;
+    hence thesis by TAYLOR_1:19;
     end; then
 A5: exp_R*(AffineMap(-1,0)) is_differentiable_on REAL
          by A1,FDIFF_1:16;
@@ -83,122 +87,17 @@ A6:  (AffineMap(-1,0)) is_differentiable_in x by A4,FDIFF_1:16;
     hence thesis by A5,Lm1,FDIFF_1:28;
 end;
 
-::  f.x = exp_R.(-x)
-theorem
- integral(exp_R*(AffineMap(-1,0)),A) = (-(exp_R*(AffineMap(-1,0)))).(sup A)
-        -(-(exp_R*(AffineMap(-1,0)))).(inf A)
-proof
-A1: dom (exp_R*(AffineMap(-1,0))) = REAL by FUNCT_2:def 1;
-A2: [#]REAL = dom (AffineMap(-1,0)) by FUNCT_2:def 1;
-A3: for x st x in REAL holds
-    AffineMap(-1,0).x=(-1)*x + 0 by JORDAN16:def 3;
-    AffineMap(-1,0)|REAL is continuous
-      by A2,A3,FDIFF_1:31,FDIFF_1:33;then
-A4: AffineMap(-1,0)|A is continuous by FCONT_1:17;
-B1: exp_R|REAL is continuous by SIN_COS:71,FDIFF_1:33;
-    exp_R|((AffineMap(-1,0)).:A) is continuous by B1,FCONT_1:17;then
-    (exp_R*AffineMap(-1,0))|A is continuous by A4,FCONT_1:26; then
-A5: (exp_R*AffineMap(-1,0)) is_integrable_on A
-     & (exp_R*AffineMap(-1,0))|A is bounded by A1,INTEGRA5:10,11;
-A6: for x st x in dom ((-(exp_R*(AffineMap(-1,0))))`|REAL) holds
-    ((-(exp_R*(AffineMap(-1,0))))`|REAL).x = (exp_R*(AffineMap(-1,0))).x
-    proof
-      let x;
-      assume x in dom ((-(exp_R*(AffineMap(-1,0))))`|REAL);
-      ((-(exp_R*(AffineMap(-1,0))))`|REAL).x = exp_R(-x) by Th1
-      .= exp_R((-1)*x + 0)
-      .= exp_R.(AffineMap(-1,0).x) by JORDAN16:def 3
-      .= (exp_R*AffineMap(-1,0)).x by A1,FUNCT_1:22;
-      hence thesis;
-    end;
-    dom ((-(exp_R*AffineMap(-1,0)))`|REAL)
-     = dom (exp_R*AffineMap(-1,0)) by A1,Th1,FDIFF_1:def 8;then
-     ((-(exp_R*AffineMap(-1,0)))`|REAL)
-     = exp_R*AffineMap(-1,0) by A6,PARTFUN1:34;
-    hence thesis by A5,Th1,INTEGRA5:13;
-end;
-
-Lm2: dom ((1/2)(#)(exp_R*(AffineMap(2,0)))) = [#]REAL by FUNCT_2:def 1;
-
-:: f.x = (1/2)*exp_R.(2*x)
-theorem Th3:
-  (1/2)(#)(exp_R*(AffineMap(2,0))) is_differentiable_on REAL
-  & for x holds (((1/2)(#)(exp_R*(AffineMap(2,0))))`|REAL).x
-         = (exp_R*(AffineMap(2,0))).x
-proof
-A1: [#]REAL = dom (exp_R*(AffineMap(2,0))) by FUNCT_2:def 1;
-A2: [#]REAL = dom (AffineMap(2,0)) by FUNCT_2:def 1;
-A3: for x st x in REAL holds
- AffineMap(2,0).x=2*x + 0 by JORDAN16:def 3;then
-A4: (AffineMap(2,0)) is_differentiable_on REAL
-   & for x st x in [#]REAL holds
-  ((AffineMap(2,0))`|REAL).x = 2 by A2,FDIFF_1:31;
-for x st x in REAL holds exp_R*(AffineMap(2,0)) is_differentiable_in x
-    proof
-      let x;
-      assume x in REAL;
-      (AffineMap(2,0)) is_differentiable_in x by A4,FDIFF_1:16;
-      hence exp_R*(AffineMap(2,0)) is_differentiable_in x by TAYLOR_1:19;
-    end; then
-A5: exp_R*(AffineMap(2,0)) is_differentiable_on REAL
-         by A1,FDIFF_1:16;
-    for x st x in REAL holds
-    (((1/2)(#)(exp_R*(AffineMap(2,0))))`|REAL).x
-      = (exp_R*(AffineMap(2,0))).x
-    proof
-      let x;
-      assume x in REAL;
-A6:  (AffineMap(2,0)) is_differentiable_in x by A4,FDIFF_1:16;
-       (((1/2)(#)(exp_R*(AffineMap(2,0))))`|REAL).x
-     = (1/2)*diff(exp_R*(AffineMap(2,0)),x) by Lm2,A5,FDIFF_1:28
-    .= (1/2)*(exp_R.((AffineMap(2,0)).x)
-        *diff((AffineMap(2,0)),x)) by A6,TAYLOR_1:19
-    .= (1/2)*(exp_R.((AffineMap(2,0)).x)
-        *(AffineMap(2,0)`|REAL).x) by A4,FDIFF_1:def 8
-    .= (1/2)*(exp_R.((AffineMap(2,0)).x)*2)
-           by A2,A3,FDIFF_1:31
-    .= (exp_R*(AffineMap(2,0))).x by A1,FUNCT_1:22;
-      hence thesis;
-    end;
-    hence thesis by A5,Lm2,FDIFF_1:28;
-end;
-
-::  f.x = exp_R.(2*x)
-theorem
-   integral(exp_R*(AffineMap(2,0)),A)
-   = ((1/2)(#)(exp_R*(AffineMap(2,0)))).(sup A)
-    -((1/2)(#)(exp_R*(AffineMap(2,0)))).(inf A)
-proof
-A1: dom (exp_R*(AffineMap(2,0))) = REAL by FUNCT_2:def 1;
-A2: [#]REAL = dom (AffineMap(2,0)) by FUNCT_2:def 1;
-A3: for x st x in REAL holds
-    AffineMap(2,0).x=2*x + 0 by JORDAN16:def 3;
-  AffineMap(2,0)|REAL is continuous
-  by A2,A3,FDIFF_1:31,FDIFF_1:33;then
-A4: AffineMap(2,0)|A is continuous by FCONT_1:17;
-B1:exp_R|REAL is continuous by SIN_COS:71,FDIFF_1:33;
-exp_R|((AffineMap(2,0)).:A) is continuous by B1,FCONT_1:17;then
- (exp_R*AffineMap(2,0))|A is continuous by A4,FCONT_1:26; then
-A5:(exp_R*AffineMap(2,0)) is_integrable_on A
- & (exp_R*AffineMap(2,0))|A is bounded by A1,INTEGRA5:10,11;
-A6:for x st x in dom (((1/2)(#)(exp_R*(AffineMap(2,0))))`|REAL)
-  holds (((1/2)(#)(exp_R*(AffineMap(2,0))))`|REAL).x
-   = (exp_R*(AffineMap(2,0))).x by Th3;
-     dom (((1/2)(#)(exp_R*(AffineMap(2,0))))`|REAL)
-  = dom (exp_R*(AffineMap(2,0))) by A1,Th3,FDIFF_1:def 8;then
-     (((1/2)(#)(exp_R*(AffineMap(2,0))))`|REAL)
-  = exp_R*(AffineMap(2,0)) by A6,PARTFUN1:34;
-   hence thesis by A5,Th3,INTEGRA5:13;
-end;
+canceled 3;
 
 :: f.x = (1/r)*exp_R.(r*x)
 theorem Th5:
-  r<>0 implies (1/r)(#)(exp_R*(AffineMap(r,0)))
-  is_differentiable_on REAL & for x holds
- (((1/r)(#)(exp_R*(AffineMap(r,0))))`|REAL).x=(exp_R*(AffineMap(r,0))).x
+  r<>0 implies
+  (1/r)(#)(exp_R*(AffineMap(r,0))) is_differentiable_on REAL &
+  for x holds
+  (((1/r)(#)(exp_R*(AffineMap(r,0))))`|REAL).x=(exp_R*(AffineMap(r,0))).x
 proof
  assume B: r<>0;
-A: [#]REAL= dom ((1/r)(#)(exp_R*(AffineMap(r,0)))) by FUNCT_2:def 1;
+A:  [#]REAL= dom ((1/r)(#)(exp_R*(AffineMap(r,0)))) by FUNCT_2:def 1;
 A1: [#]REAL = dom (exp_R*(AffineMap(r,0))) by FUNCT_2:def 1;
 A2: [#]REAL = dom (AffineMap(r,0)) by FUNCT_2:def 1;
 A3: for x st x in REAL holds
@@ -212,7 +111,7 @@ A4: (AffineMap(r,0)) is_differentiable_on REAL
       assume x in REAL;
       (AffineMap(r,0)) is_differentiable_in x
          by A4,FDIFF_1:16;
-      hence exp_R*(AffineMap(r,0)) is_differentiable_in x by TAYLOR_1:19;
+      hence thesis by TAYLOR_1:19;
     end; then
 A5: exp_R*(AffineMap(r,0)) is_differentiable_on REAL
          by A1,FDIFF_1:16;
@@ -241,8 +140,8 @@ end;
 ::  f.x = exp_R.(r*x)
 theorem
   r<>0 implies integral(exp_R*(AffineMap(r,0)),A)
-   = ((1/r)(#)(exp_R*(AffineMap(r,0)))).(sup A)
-    -((1/r)(#)(exp_R*(AffineMap(r,0)))).(inf A)
+   = ((1/r)(#)(exp_R*(AffineMap(r,0)))).(upper_bound A)
+    -((1/r)(#)(exp_R*(AffineMap(r,0)))).(lower_bound A)
 proof
    assume B:r<>0;
 A1: dom (exp_R*(AffineMap(r,0))) = REAL by FUNCT_2:def 1;
@@ -250,9 +149,9 @@ A2: [#]REAL = dom (AffineMap(r,0)) by FUNCT_2:def 1;
 A3: for x st x in REAL holds
     AffineMap(r,0).x=r*x + 0 by JORDAN16:def 3;
     AffineMap(r,0)|REAL is continuous
-      by A2,A3,FDIFF_1:31,FDIFF_1:33;then
+      by A2,A3,FDIFF_1:31,33;then
 A4: AffineMap(r,0)|A is continuous by FCONT_1:17;
-B1: exp_R|REAL is continuous by SIN_COS:71,FDIFF_1:33;
+B1: exp_R|REAL is continuous by FDIFF_1:33,SIN_COS:71;
     exp_R|((AffineMap(r,0)).:A) is continuous by B1,FCONT_1:17;then
     (exp_R*AffineMap(r,0))|A is continuous by A4,FCONT_1:26; then
 A5: (exp_R*AffineMap(r,0)) is_integrable_on A
@@ -269,53 +168,7 @@ A6:for x st x in dom (((1/r)(#)(exp_R*(AffineMap(r,0))))`|REAL) holds
    hence thesis by B,A5,Th5,INTEGRA5:13;
 end;
 
-Lm3: dom ((-1/2)(#)(cos*(AffineMap(2,0)))) = [#]REAL by FUNCT_2:def 1;
-
-::  f.x=sin(2*x)
-theorem
-   integral(sin*(AffineMap(2,0)),A)
- = ((-1/2)(#)(cos*(AffineMap(2,0)))).(sup A)
-  -((-1/2)(#)(cos*(AffineMap(2,0)))).(inf A)
-proof
-A1: [#]REAL = dom (sin*(AffineMap(2,0))) by FUNCT_2:def 1;
-A2: [#]REAL = dom (AffineMap(2,0)) by FUNCT_2:def 1;
-  for x st x in REAL holds
-    AffineMap(2,0).x=2*x + 0 by JORDAN16:def 3; then
-  AffineMap(2,0)|REAL is continuous
-  by A2,FDIFF_1:31,FDIFF_1:33;then
-A3: AffineMap(2,0)|A is continuous by FCONT_1:17;
-B1: sin|REAL is continuous by SIN_COS:73,FDIFF_1:33;
- sin|((AffineMap(2,0)).:A) is continuous by B1,FCONT_1:17;then
- (sin*AffineMap(2,0))|A is continuous by A3,FCONT_1:26; then
-A4:(sin*AffineMap(2,0)) is_integrable_on A
- & (sin*AffineMap(2,0))|A is bounded by A1,INTEGRA5:10,11;
-A5: for x st x in REAL holds AffineMap(2,0).x=2*x
-  proof
-    let x;
-   assume x in REAL;
-    (AffineMap(2,0)).x = 2*x + 0 by JORDAN16:def 3
-      .=2*x;
-    hence thesis;
-  end;
-A6: (-1/2)(#)(cos*(AffineMap(2,0)))
-  is_differentiable_on REAL by Lm3,A5,FDIFF_6:38;
-A7:for x st x in dom (((-1/2)(#)(cos*(AffineMap(2,0))))`|REAL) holds
-   (((-1/2)(#)(cos*(AffineMap(2,0))))`|REAL).x = (sin*(AffineMap(2,0))).x
-   proof
-     let x;
-     assume x in dom (((-1/2)(#)(cos*(AffineMap(2,0))))`|REAL);
-      (((-1/2)(#)(cos*(AffineMap(2,0))))`|REAL).x
-    = sin(2*x) by Lm3,A5,FDIFF_6:38
-   .= sin.((AffineMap(2,0)).x) by A5
-   .= (sin*(AffineMap(2,0))).x by A1,FUNCT_1:22;
-     hence thesis;
-   end;
-   dom (((-1/2)(#)(cos*(AffineMap(2,0))))`|REAL)
-  = dom (sin*(AffineMap(2,0))) by A1,A6,FDIFF_1:def 8;then
-     (((-1/2)(#)(cos*(AffineMap(2,0))))`|REAL)
-    = sin*(AffineMap(2,0)) by A7,PARTFUN1:34;
-   hence thesis by Lm3,A4,A5,FDIFF_6:38,INTEGRA5:13;
-end;
+canceled;
 
 ::  f.x=(-1/n)*cos(n*x)
 theorem Th8:
@@ -351,17 +204,17 @@ then A4:cos*(AffineMap(n,0)) is_differentiable_on REAL &
 ::  f.x=sin(n*x)
 theorem
   n<>0 implies integral(sin*(AffineMap(n,0)),A)
- = ((-1/n)(#)(cos*(AffineMap(n,0)))).(sup A)
-  -((-1/n)(#)(cos*(AffineMap(n,0)))).(inf A)
+ = ((-1/n)(#)(cos*(AffineMap(n,0)))).(upper_bound A)
+  -((-1/n)(#)(cos*(AffineMap(n,0)))).(lower_bound A)
 proof
   assume B: n<>0;
 A1: [#]REAL = dom (sin*(AffineMap(n,0))) by FUNCT_2:def 1;
 A2: [#]REAL = dom (AffineMap(n,0)) by FUNCT_2:def 1;
   for x st x in REAL holds
     AffineMap(n,0).x=n*x + 0 by JORDAN16:def 3; then
-  AffineMap(n,0)|REAL is continuous by A2,FDIFF_1:31,FDIFF_1:33;then
+  AffineMap(n,0)|REAL is continuous by A2,FDIFF_1:31,33;then
 A3: AffineMap(n,0)|A is continuous by FCONT_1:17;
-B1: sin|REAL is continuous by SIN_COS:73,FDIFF_1:33;
+B1: sin|REAL is continuous by FDIFF_1:33,SIN_COS:73;
  sin|((AffineMap(n,0)).:A) is continuous by B1,FCONT_1:17;then
  (sin*AffineMap(n,0))|A is continuous by A3,FCONT_1:26; then
 A4:(sin*AffineMap(n,0)) is_integrable_on A
@@ -394,78 +247,7 @@ A7:for x st x in dom (((-1/n)(#)(cos*(AffineMap(n,0))))`|REAL) holds
    hence thesis by B,A4,Th8,INTEGRA5:13;
 end;
 
-Lm4: dom ((1/2)(#)(sin*(AffineMap(2,0)))) = [#]REAL by FUNCT_2:def 1;
-
-::  f.x=(1/2)*sin(2*x)
-theorem Th10:
-  (1/2)(#)(sin*(AffineMap(2,0))) is_differentiable_on REAL &
-  for x holds (((1/2)(#)(sin*(AffineMap(2,0))))`|REAL).x =cos(2*x)
-proof
-A1: [#]REAL = dom (sin*(AffineMap(2,0))) by FUNCT_2:def 1;
-A2: for x st x in REAL holds
-   AffineMap(2,0).x=2*x + 0 by JORDAN16:def 3;
-  then
-A3:sin*(AffineMap(2,0)) is_differentiable_on REAL &
-    for x st x in REAL holds ((sin*(AffineMap(2,0)))`|REAL).x
-     = 2* cos.(2*x+0) by A1,FDIFF_4:37;
-  for x st x in REAL holds
-  (((1/2)(#)(sin*(AffineMap(2,0))))`|REAL).x =cos(2*x)
-    proof
-      let x;
-      assume x in REAL;
-      (((1/2)(#)(sin*(AffineMap(2,0))))`|REAL).x
-     =(1/2)*diff((sin*(AffineMap(2,0))),x) by Lm4,A3,FDIFF_1:28
-    .=(1/2)*((sin*(AffineMap(2,0)))`|REAL).x by A3,FDIFF_1:def 8
-    .=(1/2)*(2* cos.(2*x+0)) by A1,A2,FDIFF_4:37
-    .=cos(2*x);
-      hence thesis;
-    end;
-    hence thesis by Lm4,A3,FDIFF_1:28;
-  end;
-
-::  f.x=cos(2*x)
-theorem
-   integral(cos*(AffineMap(2,0)),A)
- = ((1/2)(#)(sin*(AffineMap(2,0)))).(sup A)
-  -((1/2)(#)(sin*(AffineMap(2,0)))).(inf A)
-proof
-A1: [#]REAL = dom (cos*(AffineMap(2,0))) by FUNCT_2:def 1;
-A2: [#]REAL = dom (AffineMap(2,0)) by FUNCT_2:def 1;
-  for x st x in REAL holds
-    AffineMap(2,0).x=2*x + 0 by JORDAN16:def 3;then
-  AffineMap(2,0)|REAL is continuous
-  by A2,FDIFF_1:31,FDIFF_1:33;then
-A3: AffineMap(2,0)|A is continuous by FCONT_1:17;
-B1: cos|REAL is continuous by SIN_COS:72,FDIFF_1:33;
- cos|((AffineMap(2,0)).:A) is continuous by B1,FCONT_1:17;then
- (cos*AffineMap(2,0))|A is continuous by A3,FCONT_1:26; then
-A4:(cos*AffineMap(2,0)) is_integrable_on A
- & (cos*AffineMap(2,0))|A is bounded by A1,INTEGRA5:10,11;
-A5: for x st x in REAL holds AffineMap(2,0).x=2*x
-  proof
-    let x;
-   assume x in REAL;
-    (AffineMap(2,0)).x = 2*x + 0 by JORDAN16:def 3
-      .=2*x;
-    hence thesis;
-  end;
-A6:for x st x in dom (((1/2)(#)(sin*(AffineMap(2,0))))`|REAL) holds
-   (((1/2)(#)(sin*(AffineMap(2,0))))`|REAL).x = (cos*(AffineMap(2,0))).x
-   proof
-     let x;
-     assume x in dom (((1/2)(#)(sin*(AffineMap(2,0))))`|REAL);
-      (((1/2)(#)(sin*(AffineMap(2,0))))`|REAL).x
-    = cos(2*x) by Th10
-   .= cos.((AffineMap(2,0)).x) by A5
-   .= (cos*(AffineMap(2,0))).x by A1,FUNCT_1:22;
-     hence thesis;
-   end;
-   dom (((1/2)(#)(sin*(AffineMap(2,0))))`|REAL)
-  = dom (cos*(AffineMap(2,0))) by A1,Th10,FDIFF_1:def 8;then
-     (((1/2)(#)(sin*(AffineMap(2,0))))`|REAL)
-    = cos*(AffineMap(2,0)) by A6,PARTFUN1:34;
-   hence thesis by A4,Th10,INTEGRA5:13;
-end;
+canceled 2;
 
 ::  f.x=(1/n)*sin(n*x)
 theorem Th12:
@@ -502,16 +284,16 @@ A3: for x st x in REAL holds
 ::  f.x=cos(n*x)
 theorem
   n<>0 implies integral(cos*(AffineMap(n,0)),A)
-  = ((1/n)(#)(sin*(AffineMap(n,0)))).(sup A)
-    -((1/n)(#)(sin*(AffineMap(n,0)))).(inf A)
+  = ((1/n)(#)(sin*(AffineMap(n,0)))).(upper_bound A)
+    -((1/n)(#)(sin*(AffineMap(n,0)))).(lower_bound A)
 proof
   assume B:n<>0;
 A1: [#]REAL = dom (cos*(AffineMap(n,0))) by FUNCT_2:def 1;
 A2: [#]REAL = dom (AffineMap(n,0)) by FUNCT_2:def 1;
   for x st x in REAL holds AffineMap(n,0).x=n*x + 0 by JORDAN16:def 3; then
-  AffineMap(n,0)|REAL is continuous by A2,FDIFF_1:31,FDIFF_1:33;then
+  AffineMap(n,0)|REAL is continuous by A2,FDIFF_1:31,33;then
 A3: AffineMap(n,0)|A is continuous by FCONT_1:17;
-B1: cos|REAL is continuous by SIN_COS:72,FDIFF_1:33;
+B1: cos|REAL is continuous by FDIFF_1:33,SIN_COS:72;
  cos|((AffineMap(n,0)).:A) is continuous by B1,FCONT_1:17;then
  (cos*AffineMap(n,0))|A is continuous by A3,FCONT_1:26;
    then
@@ -548,16 +330,16 @@ end;
 ::  f.x=x*sin.x
 theorem
   A c= Z implies integral((id Z)(#)sin,A)
- = ((-id Z)(#)cos+sin).(sup A)-((-id Z)(#)cos+sin).(inf A)
+    = ((-id Z)(#)cos+sin).(upper_bound A)-((-id Z)(#)cos+sin).(lower_bound A)
 proof
  assume A1: A c= Z;
 D1: dom ((-id Z)(#)cos+sin) = Z
   proof
   A2: dom (-id Z) = dom id Z by VALUED_1:8;
     dom ((-id Z)(#)cos+sin)
-   = dom ((-id Z)(#)cos) /\ REAL by VALUED_1:def 1,SIN_COS:27
+   = dom ((-id Z)(#)cos) /\ REAL by SIN_COS:27,VALUED_1:def 1
   .= dom ((-id Z)(#)cos) by XBOOLE_1:28
-  .= dom (-id Z) /\ REAL by VALUED_1:def 4,SIN_COS:27
+  .= dom (-id Z) /\ REAL by SIN_COS:27,VALUED_1:def 4
   .= dom (-id Z) by XBOOLE_1:28
   .= Z by A2,RELAT_1:71;
     hence thesis;
@@ -565,12 +347,12 @@ D1: dom ((-id Z)(#)cos+sin) = Z
 D2: Z = dom ((id Z)(#)sin)
   proof
      dom ((id Z)(#)sin)
-   = dom (id Z) /\ REAL by VALUED_1:def 4,SIN_COS:27
+   = dom (id Z) /\ REAL by SIN_COS:27,VALUED_1:def 4
   .= dom (id Z) by XBOOLE_1:28
   .= Z by RELAT_1:71;
   hence thesis;
   end;
- ((id Z)(#)sin)|Z is continuous by D2,FDIFF_4:45,FDIFF_1:33;then
+ ((id Z)(#)sin)|Z is continuous by D2,FDIFF_1:33,FDIFF_4:45;then
  ((id Z)(#)sin)|A is continuous by A1,FCONT_1:17; then
 A3: (id Z)(#)sin is_integrable_on A
     & ((id Z)(#)sin)|A is bounded by A1,D2,INTEGRA5:10,11;
@@ -580,7 +362,7 @@ B: for x st x in Z holds ((id Z)(#)sin).x = x*sin.x
     let x;
     assume C:x in Z;
     ((id Z)(#)sin).x = ((id Z).x)*(sin.x) by VALUED_1:5
-       .= x*sin.x by FUNCT_1:35,C;
+       .= x*sin.x by C,FUNCT_1:35;
     hence thesis;
   end;
 A5: for x st x in dom (((-id Z)(#)cos+sin)`|Z) holds
@@ -602,22 +384,22 @@ end;
 ::  f.x=x*cos.x
 theorem
   A c= Z implies integral((id Z)(#)cos,A)
-  = ((id Z)(#)sin+cos).(sup A)-((id Z)(#)sin+cos).(inf A)
+  = ((id Z)(#)sin+cos).(upper_bound A)-((id Z)(#)sin+cos).(lower_bound A)
 proof
   assume A1: A c= Z;
 D1: dom ((id Z)(#)sin+cos) = Z
   proof
      dom ((id Z)(#)sin+cos)
-   = dom ((id Z)(#)sin) /\ REAL by VALUED_1:def 1,SIN_COS:27
+   = dom ((id Z)(#)sin) /\ REAL by SIN_COS:27,VALUED_1:def 1
   .= dom ((id Z)(#)sin) by XBOOLE_1:28
-  .= dom (id Z) /\ REAL by VALUED_1:def 4,SIN_COS:27
+  .= dom (id Z) /\ REAL by SIN_COS:27,VALUED_1:def 4
   .= dom (id Z) by XBOOLE_1:28;
     hence thesis by RELAT_1:71;
   end;
 D2: Z = dom ((id Z)(#)cos)
   proof
      dom ((id Z)(#)cos)
-   = dom (id Z) /\ REAL by VALUED_1:def 4,SIN_COS:27
+   = dom (id Z) /\ REAL by SIN_COS:27,VALUED_1:def 4
   .= dom (id Z) by XBOOLE_1:28
   .= Z by RELAT_1:71;
   hence thesis;
@@ -630,12 +412,12 @@ B: for x st x in Z holds ((id Z)(#)cos).x = x*cos.x
     let x;
     assume C:x in Z;
     ((id Z)(#)cos).x = ((id Z).x)*(cos.x) by VALUED_1:5
-      .= x*cos.x by FUNCT_1:35,C;
+      .= x*cos.x by C,FUNCT_1:35;
     hence thesis;
   end;
 C:  id Z is_differentiable_on Z by AA,A3,FDIFF_1:31;
  cos is_differentiable_on Z by FDIFF_1:34,SIN_COS:72; then
- ((id Z)(#)cos)|Z is continuous by D2,C,FDIFF_1:29,FDIFF_1:33; then
+ ((id Z)(#)cos)|Z is continuous by D2,C,FDIFF_1:29,33; then
   ((id Z)(#)cos)|A is continuous by A1,FCONT_1:17; then
 A4: (id Z)(#)cos is_integrable_on A
     & ((id Z)(#)cos)|A is bounded by A1,D2,INTEGRA5:10,11;
@@ -663,7 +445,7 @@ theorem Th16:
 proof
 A1: Z = dom ((id Z)(#)cos)
  proof
-   dom ((id Z)(#)cos) = dom (id Z) /\ REAL by VALUED_1:def 4,SIN_COS:27
+   dom ((id Z)(#)cos) = dom (id Z) /\ REAL by SIN_COS:27,VALUED_1:def 4
      .= dom (id Z) by XBOOLE_1:28
      .= Z by RELAT_1:71;
    hence thesis;
@@ -684,7 +466,7 @@ A6: x in Z;
       .=(cos.x)*((id Z)`|Z).x + ((id Z).x)*diff(cos,x) by A4,A6,FDIFF_1:def 8
       .=(cos.x)*1+ ((id Z).x)*diff(cos,x) by A2,A3,A6,FDIFF_1:31
       .=(cos.x)*1+((id Z).x)*(-sin.x) by SIN_COS:68
-      .=cos.x+x*(-sin.x) by FUNCT_1:35,A6
+      .=cos.x+x*(-sin.x) by A6,FUNCT_1:35
       .=cos.x-x*sin.x;
   end;
   hence thesis by A1,A4,A5,FDIFF_1:29;
@@ -707,9 +489,9 @@ A1: Z = dom (-sin+(id Z)(#)cos)
  proof
    dom (-sin+(id Z)(#)cos)
  = dom (-sin) /\ dom((id Z)(#)cos) by VALUED_1:def 1
-.= REAL /\ dom((id Z)(#)cos) by VALUED_1:8,SIN_COS:27
+.= REAL /\ dom((id Z)(#)cos) by SIN_COS:27,VALUED_1:8
 .= dom((id Z)(#)cos) by XBOOLE_1:28
-.= dom (id Z) /\ REAL by VALUED_1:def 4,SIN_COS:27
+.= dom (id Z) /\ REAL by SIN_COS:27,VALUED_1:def 4
 .= dom (id Z) by XBOOLE_1:28;
   hence thesis by RELAT_1:71;
   end;
@@ -733,12 +515,12 @@ end;
 ::  f.x=-x*sin.x
 theorem
   A c= Z implies integral((-id Z)(#)sin,A)
-   = (-sin+(id Z)(#)cos).(sup A)-(-sin+(id Z)(#)cos).(inf A)
+   = (-sin+(id Z)(#)cos).(upper_bound A)-(-sin+(id Z)(#)cos).(lower_bound A)
 proof
   assume A1: A c= Z;
 A2: Z = dom ((-id Z)(#)sin)
  proof
-   dom ((-id Z)(#)sin) = dom (-id Z) /\ REAL by VALUED_1:def 4,SIN_COS:27
+   dom ((-id Z)(#)sin) = dom (-id Z) /\ REAL by SIN_COS:27,VALUED_1:def 4
      .= dom (-id Z) by XBOOLE_1:28
      .= dom (id Z) by VALUED_1:8;
    hence thesis by RELAT_1:71;
@@ -758,7 +540,7 @@ B3: x in Z;
 B4: -id Z is_differentiable_on Z by B1,FDIFF_1:31;
 A3: sin is_differentiable_on Z by FDIFF_1:34,SIN_COS:73;
   ((-id Z)(#)sin)|Z is continuous
-  by A2,B4,A3,FDIFF_1:29,FDIFF_1:33;then
+  by A2,B4,A3,FDIFF_1:29,33;then
  ((-id Z)(#)sin)|A is continuous by A1,FCONT_1:17; then
 A4: (-id Z)(#)sin is_integrable_on A
     & ((-id Z)(#)sin)|A is bounded by A1,A2,INTEGRA5:10,11;
@@ -796,9 +578,9 @@ proof
 A1: Z = dom (-cos-(id Z)(#)sin)
  proof
    dom (-cos-(id Z)(#)sin) = dom (-cos) /\ dom ((id Z)(#)sin) by VALUED_1:12
-.= REAL /\ dom ((id Z)(#)sin) by VALUED_1:8,SIN_COS:27
+.= REAL /\ dom ((id Z)(#)sin) by SIN_COS:27,VALUED_1:8
 .= dom((id Z)(#)sin) by XBOOLE_1:28
-.= dom (id Z) /\ REAL by VALUED_1:def 4,SIN_COS:27
+.= dom (id Z) /\ REAL by SIN_COS:27,VALUED_1:def 4
 .= dom (id Z) by XBOOLE_1:28;
   hence thesis by RELAT_1:71;
   end;
@@ -825,12 +607,12 @@ end;
 :: f.x = -x*cos.x
 theorem
   A c= Z implies integral((-id Z)(#)cos,A)
-  = (-cos-(id Z)(#)sin).(sup A)-(-cos-(id Z)(#)sin).(inf A)
+  = (-cos-(id Z)(#)sin).(upper_bound A)-(-cos-(id Z)(#)sin).(lower_bound A)
 proof
   assume A1: A c= Z;
 A2: Z = dom ((-id Z)(#)cos)
  proof
-   dom ((-id Z)(#)cos) = dom (-id Z) /\ REAL by VALUED_1:def 4,SIN_COS:27
+   dom ((-id Z)(#)cos) = dom (-id Z) /\ REAL by SIN_COS:27,VALUED_1:def 4
     .= dom (-id Z) by XBOOLE_1:28
     .= dom (id Z) by VALUED_1:8;
    hence thesis by RELAT_1:71;
@@ -858,7 +640,7 @@ B: for x st x in Z holds ((-id Z)(#)cos).x = -x*cos.x
   end;
 C:  -id Z is_differentiable_on Z by AA,A3,FDIFF_1:31;
  cos is_differentiable_on Z by FDIFF_1:34,SIN_COS:72; then
-  ((-id Z)(#)cos)|Z is continuous by A2,C,FDIFF_1:29,FDIFF_1:33;then
+  ((-id Z)(#)cos)|Z is continuous by A2,C,FDIFF_1:29,33;then
  ((-id Z)(#)cos)|A is continuous by A1,FCONT_1:17; then
 A4: (-id Z)(#)cos is_integrable_on A
     & ((-id Z)(#)cos)|A is bounded by A1,A2,INTEGRA5:10,11;
@@ -882,12 +664,12 @@ end;
 :: f.x=sin.x+x*cos.x
 theorem
   A c= Z implies integral(sin+(id Z)(#)cos,A)
-  = ((id Z)(#)sin).(sup A)-((id Z)(#)sin).(inf A)
+  = ((id Z)(#)sin).(upper_bound A)-((id Z)(#)sin).(lower_bound A)
 proof
   assume A: A c= Z;
 A1: dom ((id Z)(#)sin) = Z
  proof
-   dom ((id Z)(#)sin) = dom (id Z) /\ REAL by VALUED_1:def 4,SIN_COS:27
+   dom ((id Z)(#)sin) = dom (id Z) /\ REAL by SIN_COS:27,VALUED_1:def 4
    .= dom (id Z) by XBOOLE_1:28
    .= Z by RELAT_1:71;
    hence thesis;
@@ -895,9 +677,9 @@ A1: dom ((id Z)(#)sin) = Z
 A2: Z = dom (sin+(id Z)(#)cos)
  proof
      dom (sin+(id Z)(#)cos)
-   = REAL /\ dom ((id Z)(#)cos) by VALUED_1:def 1,SIN_COS:27
+   = REAL /\ dom ((id Z)(#)cos) by SIN_COS:27,VALUED_1:def 1
   .= dom ((id Z)(#)cos) by XBOOLE_1:28
-  .= dom (id Z) /\ REAL by VALUED_1:def 4,SIN_COS:27
+  .= dom (id Z) /\ REAL by SIN_COS:27,VALUED_1:def 4
   .= dom (id Z) by XBOOLE_1:28;
     hence thesis by RELAT_1:71;
   end;
@@ -914,14 +696,14 @@ B: for x st x in Z holds (sin+(id Z)(#)cos).x = sin.x+x*cos.x
     assume C:x in Z;then
     (sin+(id Z)(#)cos).x = sin.x+((id Z)(#)cos).x by A2,VALUED_1:def 1
    .= sin.x+((id Z).x)*(cos.x) by VALUED_1:5
-   .= sin.x+x*cos.x by FUNCT_1:35,C;
+   .= sin.x+x*cos.x by C,FUNCT_1:35;
     hence thesis;
   end;
 C1: id Z is_differentiable_on Z by AA,AB,FDIFF_1:31;
 C2: sin is_differentiable_on Z by FDIFF_1:34,SIN_COS:73;
  cos is_differentiable_on Z by FDIFF_1:34,SIN_COS:72; then
  (id Z)(#)cos is_differentiable_on Z by D,C1,FDIFF_1:29; then
-  (sin+(id Z)(#)cos)|Z is continuous by A2,C2,FDIFF_1:26,FDIFF_1:33;then
+  (sin+(id Z)(#)cos)|Z is continuous by A2,C2,FDIFF_1:26,33;then
  (sin+(id Z)(#)cos)|A is continuous by A,FCONT_1:17;then
 A3: sin+(id Z)(#)cos is_integrable_on A
     & (sin+(id Z)(#)cos)|A is bounded by A,A2,INTEGRA5:10,11;
@@ -945,13 +727,13 @@ end;
 :: f.x=-cos.x+x*sin.x
 theorem
   A c= Z implies integral(-cos+(id Z)(#)sin,A)
-  = ((-id Z)(#)cos).(sup A)-((-id Z)(#)cos).(inf A)
+  = ((-id Z)(#)cos).(upper_bound A)-((-id Z)(#)cos).(lower_bound A)
 proof
   assume A: A c= Z;
 A1: dom ((-id Z)(#)cos) = Z
  proof
    dom ((-id Z)(#)cos)
- = dom (-id Z) /\ REAL by VALUED_1:def 4,SIN_COS:27
+ = dom (-id Z) /\ REAL by SIN_COS:27,VALUED_1:def 4
 .= dom (-id Z) by XBOOLE_1:28
 .= dom (id Z) by VALUED_1:8;
   hence thesis by RELAT_1:71;
@@ -960,9 +742,9 @@ A2: Z = dom (-cos+(id Z)(#)sin)
  proof
    dom (-cos+(id Z)(#)sin)
  = dom (-cos) /\ dom((id Z)(#)sin) by VALUED_1:def 1
-.= REAL /\ dom((id Z)(#)sin) by VALUED_1:8,SIN_COS:27
+.= REAL /\ dom((id Z)(#)sin) by SIN_COS:27,VALUED_1:8
 .= dom((id Z)(#)sin) by XBOOLE_1:28
-.= dom (id Z) /\ REAL by VALUED_1:def 4,SIN_COS:27
+.= dom (id Z) /\ REAL by SIN_COS:27,VALUED_1:def 4
 .= dom (id Z) by XBOOLE_1:28;
   hence thesis by RELAT_1:71;
   end;
@@ -978,17 +760,16 @@ B: for x st x in Z holds (-cos+(id Z)(#)sin).x = -cos.x+x*sin.x
       (-cos+(id Z)(#)sin).x
     = (-cos).x+((id Z)(#)sin).x by A2,VALUED_1:def 1
    .= (-cos).x+((id Z).x)*(sin.x) by VALUED_1:5
-   .= (-cos).x+x*sin.x by FUNCT_1:35,C
+   .= (-cos).x+x*sin.x by C,FUNCT_1:35
    .= -cos.x+x*sin.x by VALUED_1:8;
     hence thesis;
   end;
 C1: id Z is_differentiable_on Z by AA,AB,FDIFF_1:31;
- sin is_differentiable_on Z by FDIFF_1:34,SIN_COS:73;
-then
+ sin is_differentiable_on Z by FDIFF_1:34,SIN_COS:73; then
 C2: (id Z)(#)sin is_differentiable_on Z by D,C1,FDIFF_1:29;
  -cos is_differentiable_on Z by FDIFF_1:34,INTEGRA8:26; then
   (-cos+(id Z)(#)sin)|Z is continuous
-   by A2,C2,FDIFF_1:26,FDIFF_1:33;then
+   by A2,C2,FDIFF_1:26,33;then
  (-cos+(id Z)(#)sin)|A is continuous by A,FCONT_1:17; then
 A3: -cos+(id Z)(#)sin is_integrable_on A
     & (-cos+(id Z)(#)sin)|A is bounded by A,A2,INTEGRA5:10,11;
@@ -1011,9 +792,9 @@ end;
 
 :: f.x = x*(exp_R.x)
 theorem
-   integral((AffineMap(1,0))(#)exp_R,A)
- = (exp_R(#)(AffineMap(1,-1))).(sup A)
-  -(exp_R(#)(AffineMap(1,-1))).(inf A)
+  integral((AffineMap(1,0))(#)exp_R,A)
+   = (exp_R(#)(AffineMap(1,-1))).(upper_bound A)
+    -(exp_R(#)(AffineMap(1,-1))).(lower_bound A)
 proof
 A1: dom (exp_R(#)(AffineMap(1,-1))) = [#]REAL by FUNCT_2:def 1;
 A2: dom (AffineMap(1,0)) = [#]REAL by FUNCT_2:def 1;
@@ -1030,7 +811,7 @@ A4: for x st x in REAL holds
    (AffineMap(1,0)).x = 1*x+0 by JORDAN16:def 3;
 C1: AffineMap(1,0) is_differentiable_on REAL by A2,A4,FDIFF_1:31;
     (AffineMap(1,0))(#)exp_R is_differentiable_on REAL
-         by TAYLOR_1:16,B1,C1,FDIFF_1:29;then
+         by B1,C1,FDIFF_1:29,TAYLOR_1:16;then
  ((AffineMap(1,0))(#)exp_R)|REAL is continuous by FDIFF_1:33;then
  ((AffineMap(1,0))(#)exp_R)|A is continuous by FCONT_1:17;
 then A5: (AffineMap(1,0))(#)exp_R is_integrable_on A
@@ -1052,9 +833,9 @@ A7:for x st x in dom ((exp_R(#)AffineMap(1,-1))`|REAL) holds
    proof
      let x;
      assume x in dom ((exp_R(#)AffineMap(1,-1))`|REAL);
-       ((exp_R(#)AffineMap(1,-1))`|REAL).x
-     = x*(exp_R.x) by A1,A3,FDIFF_4:55
-    .= ((AffineMap(1,0))(#)exp_R).x by B;
+     ((exp_R(#)AffineMap(1,-1))`|REAL).x
+       = x*(exp_R.x) by A1,A3,FDIFF_4:55
+      .= ((AffineMap(1,0))(#)exp_R).x by B;
      hence thesis;
    end;
    dom ((exp_R(#)AffineMap(1,-1))`|REAL)
@@ -1074,15 +855,15 @@ A1: [#]REAL = dom ( #Z (n+1)) &
 A2: ( #Z (n+1)) is_differentiable_on REAL
  proof
   for x st x in REAL holds ( #Z (n+1)) is_differentiable_in x by TAYLOR_1:2;
-   hence ( #Z (n+1)) is_differentiable_on REAL by A1,FDIFF_1:16;
+   hence thesis by A1,FDIFF_1:16;
   end;
 A3: for x st x in REAL holds (( #Z (n+1))`|REAL).x=(n+1) * x #Z n
   proof
     let x;
     assume x in REAL;
-   set m=n+1;
-  diff(( #Z m),x) =m * x #Z (m-1) by TAYLOR_1:2;
-    hence (( #Z (n+1))`|REAL).x =(n+1) * x #Z n by A2,FDIFF_1:def 8;
+    set m=n+1;
+    diff(( #Z m),x) = m * x #Z (m-1) by TAYLOR_1:2;
+    hence thesis by A2,FDIFF_1:def 8;
   end;
  for x st x in REAL holds (((1/(n+1))(#)( #Z (n+1)))`|REAL).x=x #Z n
   proof
@@ -1102,22 +883,22 @@ end;
 
 ::  f.x = x^n
 theorem
-  integral(( #Z n),A)
-  = ((1/(n+1))(#)( #Z (n+1))).(sup A)
-   -((1/(n+1))(#)( #Z (n+1))).(inf A)
+  integral( #Z n,A) =
+    ((1/(n+1))*((upper_bound A) |^ (n+1))) -
+      ((1/(n+1))*((lower_bound A) |^ (n+1)))
 proof
 A1: dom ( #Z n) = [#]REAL & dom ( #Z (n+1)) = [#]REAL
  & [#]REAL = dom ((1/(n+1))(#)( #Z (n+1))) by FUNCT_2:def 1;
 A2: ( #Z n) is_differentiable_on REAL
  proof
   for x st x in REAL holds ( #Z n) is_differentiable_in x by TAYLOR_1:2;
-   hence ( #Z n) is_differentiable_on REAL by A1,FDIFF_1:16;
+   hence thesis by A1,FDIFF_1:16;
   end;
 B1: ( #Z (n+1)) is_differentiable_on REAL
- proof
-  for x st x in REAL holds ( #Z (n+1))
-      is_differentiable_in x by TAYLOR_1:2;
- hence ( #Z (n+1)) is_differentiable_on REAL by A1,FDIFF_1:16;
+   proof
+     for x st x in REAL holds ( #Z (n+1))
+       is_differentiable_in x by TAYLOR_1:2;
+     hence thesis by A1,FDIFF_1:16;
   end;
 B2: (1/(n+1))(#)( #Z (n+1)) is_differentiable_on REAL
    by A1,B1,FDIFF_1:28;
@@ -1130,14 +911,26 @@ A4:for x st x in dom (((1/(n+1))(#)( #Z (n+1)))`|REAL) holds
    proof
      let x;
      assume x in dom (((1/(n+1))(#)( #Z (n+1)))`|REAL);
-   (((1/(n+1))(#)( #Z (n+1)))`|REAL).x =x #Z n by Th24
-   .= ( #Z n).x by TAYLOR_1:def 1;
-  hence thesis;
+     (((1/(n+1))(#)( #Z (n+1)))`|REAL).x =x #Z n by Th24
+       .= ( #Z n).x by TAYLOR_1:def 1;
+     hence thesis;
    end;
+X2:( #Z (n+1)).(upper_bound A) = (upper_bound A) #Z (n+1) by TAYLOR_1:def 1
+     .= (upper_bound A) |^ (n+1) by PREPOWER:46;
+X1:( #Z (n+1)).(lower_bound A) = (lower_bound A) #Z (n+1) by TAYLOR_1:def 1
+     .= (lower_bound A) |^ (n+1) by PREPOWER:46;
    dom (((1/(n+1))(#)( #Z (n+1)))`|REAL)
- = dom ( #Z n) by A1,B2,FDIFF_1:def 8; then
+     = dom ( #Z n) by A1,B2,FDIFF_1:def 8; then
    (((1/(n+1))(#)( #Z (n+1)))`|REAL) = ( #Z n) by A4,PARTFUN1:34;
-   hence thesis by A3,Th24,INTEGRA5:13;
+   then integral( #Z n,A) = ((1/(n+1))(#)( #Z (n+1))).(upper_bound A)
+   -((1/(n+1))(#)( #Z (n+1))).(lower_bound A) by A3,Th24,INTEGRA5:13
+     .= ((1/(n+1))*( #Z (n+1)).(upper_bound A))
+       -((1/(n+1))(#)( #Z (n+1))).(lower_bound A) by VALUED_1:6
+     .= (1/(n+1))*( #Z (n+1)).(upper_bound A)
+       -(1/(n+1))*( #Z (n+1)).(lower_bound A) by VALUED_1:6
+     .= (1/(n+1))*((upper_bound A) |^ (n+1))
+       -(1/(n+1))*((lower_bound A) |^ (n+1)) by X1,X2;
+   hence thesis;
 end;
 
 begin
@@ -1149,11 +942,11 @@ holds (f-g)||C = f||C - g||C
 proof
    let f,g be PartFunc of REAL,REAL;
    let C be non empty Subset of REAL;
-A1: dom ((f-g)||C) = dom (f-g) /\ C by FUNCT_1:68
+A1: dom ((f-g)||C) = dom (f-g) /\ C by RELAT_1:90
    .= dom f /\ dom g /\ C by VALUED_1:12;
 a1:dom (f||C-g||C) = dom (f|C) /\ dom (g|C) by VALUED_1:12
-   .= (dom f /\ C) /\ dom (g|C) by FUNCT_1:68
-   .= (dom f /\ C) /\ (dom g /\ C) by FUNCT_1:68
+   .= (dom f /\ C) /\ dom (g|C) by RELAT_1:90
+   .= (dom f /\ C) /\ (dom g /\ C) by RELAT_1:90
    .= dom f /\ (C /\ (dom g /\ C)) by XBOOLE_1:16
    .= dom f /\ (dom g /\ (C /\ C)) by XBOOLE_1:16
    .= dom f /\ (dom g /\ C);
@@ -1163,17 +956,17 @@ then A2:dom ((f-g)||C) = dom (f||C - g||C) by A1,XBOOLE_1:16;
    proof
     let c be Element of C;
     assume A3:c in dom((f-g)||C);
-    then c in dom(f-g) /\ C by FUNCT_1:68;
+    then c in dom(f-g) /\ C by RELAT_1:90;
 then A4: c in dom(f-g) by XBOOLE_0:def 4;
-A5:    (f-g)||C.c = (f-g).c by A3,FUNCT_1:68
+A5:    (f-g)||C.c = (f-g).c by A3,FUNCT_1:70
     .= f.c - g.c by A4,VALUED_1:13;
         c in dom(f||C) /\ dom(g||C) by A2,A3,VALUED_1:12;
   then A6: c in dom(f|C) & c in dom(g|C) by XBOOLE_0:def 4;
        (f||C-g||C).c = f||C.c - g||C.c by A2,A3,VALUED_1:13
-    .= f.c - g|C.c by A6,FUNCT_1:68;
-    hence thesis by A5,A6,FUNCT_1:68;
+    .= f.c - g|C.c by A6,FUNCT_1:70;
+    hence thesis by A5,A6,FUNCT_1:70;
    end;
-   hence thesis by A1,PARTFUN1:34,a1,XBOOLE_1:16;
+   hence thesis by A1,a1,PARTFUN1:34,XBOOLE_1:16;
 end;
 
 theorem Th27:
@@ -1185,14 +978,14 @@ proof
  let C be non empty Subset of REAL;
 A1:  dom (((f1+f2)||C)(#)(g||C))
    = dom ((f1+f2)||C) /\ dom (g||C) by VALUED_1:def 4
-  .= (dom (f1+f2) /\ C) /\ dom (g|C) by FUNCT_1:68
-  .= (dom (f1+f2) /\ C) /\ (dom g /\ C) by FUNCT_1:68
+  .= (dom (f1+f2) /\ C) /\ dom (g|C) by RELAT_1:90
+  .= (dom (f1+f2) /\ C) /\ (dom g /\ C) by RELAT_1:90
   .= (dom f1 /\ dom f2 /\ C) /\ (dom g /\ C) by VALUED_1:def 1
   .= (dom f1 /\ dom f2) /\ (C /\ dom g /\ C) by XBOOLE_1:16
   .= (dom f1 /\ dom f2) /\ (dom g /\ (C /\ C)) by XBOOLE_1:16
   .= (dom f1 /\ dom f2 /\ dom g) /\ C by XBOOLE_1:16;
 A2:    dom ((f1(#)g+f2(#)g)||C)
-     = dom (f1(#)g+f2(#)g) /\ C by FUNCT_1:68
+     = dom (f1(#)g+f2(#)g) /\ C by RELAT_1:90
     .= (dom (f1(#)g) /\ dom (f2(#)g))/\ C by VALUED_1:def 1
     .= (dom f1 /\ dom g) /\ dom (f2(#)g) /\ C by VALUED_1:def 4
     .= dom f1 /\ dom g /\ (dom f2 /\ dom g) /\ C by VALUED_1:def 4
@@ -1206,23 +999,23 @@ proof
   assume A3:c in dom(((f1+f2)||C)(#)(g||C));
   then c in dom((f1+f2)||C) /\ dom (g||C) by VALUED_1:def 4;
 then A4: c in dom ((f1+f2)|C) & c in dom (g|C) by XBOOLE_0:def 4;
-  then c in dom(f1+f2) /\ C & c in dom (g|C) by FUNCT_1:68;
+  then c in dom(f1+f2) /\ C & c in dom (g|C) by RELAT_1:90;
 then A5: c in dom(f1+f2) & c in dom (g|C) by XBOOLE_0:def 4;
 A6:  (((f1+f2)||C)(#)(g||C)).c
    = ((f1+f2)||C).c * (g||C).c by A3,VALUED_1:def 4
-  .= (f1+f2).c * (g|C).c by A4,FUNCT_1:68
+  .= (f1+f2).c * (g|C).c by A4,FUNCT_1:70
   .= (f1.c + f2.c) * (g|C).c by A5,VALUED_1:def 1;
-    c in dom (f1(#)g+f2(#)g) /\ C by A1,A2,A3,FUNCT_1:68;
+    c in dom (f1(#)g+f2(#)g) /\ C by A1,A2,A3,RELAT_1:90;
 then A7: c in dom (f1(#)g+f2(#)g) by XBOOLE_0:def 4;
 then c in dom (f1(#)g) /\ dom(f2(#)g) by VALUED_1:def 1;
 then A8: c in dom (f1(#)g) & c in dom(f2(#)g) by XBOOLE_0:def 4;
         ((f1(#)g)+(f2(#)g))||C.c
-      = (f1(#)g+f2(#)g).c by A1,A2,A3,FUNCT_1:68
+      = (f1(#)g+f2(#)g).c by A1,A2,A3,FUNCT_1:70
      .= (f1(#)g).c+(f2(#)g).c by A7,VALUED_1:def 1
      .= f1.c * g.c+(f2(#)g).c by A8,VALUED_1:def 4
      .= f1.c * g.c+f2.c * g.c by A8,VALUED_1:def 4
      .= (f1.c+f2.c) * g.c;
-hence thesis by A4,A6,FUNCT_1:68;
+hence thesis by A4,A6,FUNCT_1:70;
   end;
   hence thesis by A1,A2,PARTFUN1:34;
 end;
@@ -1236,14 +1029,14 @@ proof
  let C be non empty Subset of REAL;
 A1:  dom (((f1-f2)||C)(#)(g||C))
    = dom ((f1-f2)|C) /\ dom (g|C) by VALUED_1:def 4
-  .= (dom (f1-f2) /\ C) /\ dom (g|C) by FUNCT_1:68
-  .= (dom (f1-f2) /\ C) /\ (dom g /\ C) by FUNCT_1:68
+  .= (dom (f1-f2) /\ C) /\ dom (g|C) by RELAT_1:90
+  .= (dom (f1-f2) /\ C) /\ (dom g /\ C) by RELAT_1:90
   .= (dom f1 /\ dom f2 /\ C) /\ (dom g /\ C) by VALUED_1:12
   .= (dom f1 /\ dom f2) /\ (C /\ dom g /\ C) by XBOOLE_1:16
   .= (dom f1 /\ dom f2) /\ (dom g /\ (C /\ C)) by XBOOLE_1:16
   .= (dom f1 /\ dom f2 /\ dom g) /\ C by XBOOLE_1:16;
 A2:   dom ((f1(#)g-f2(#)g)||C)
-     = dom (f1(#)g-f2(#)g) /\ C by FUNCT_1:68
+     = dom (f1(#)g-f2(#)g) /\ C by RELAT_1:90
     .= (dom (f1(#)g) /\ dom (f2(#)g))/\ C by VALUED_1:12
     .= (dom f1 /\ dom g) /\ dom (f2(#)g) /\ C by VALUED_1:def 4
     .= dom f1 /\ dom g /\ (dom f2 /\ dom g) /\ C by VALUED_1:def 4
@@ -1257,22 +1050,23 @@ proof
   assume A3:c in dom(((f1-f2)||C)(#)(g||C));
   then c in dom((f1-f2)||C) /\ dom (g||C) by VALUED_1:def 4;
 then A4: c in dom ((f1-f2)|C) & c in dom (g|C) by XBOOLE_0:def 4;
-  then c in dom(f1-f2) /\ C & c in dom (g|C) by FUNCT_1:68;
+  then c in dom(f1-f2) /\ C & c in dom (g|C) by RELAT_1:90;
 then A5: c in dom(f1-f2) & c in dom (g|C) by XBOOLE_0:def 4;
 A6:  (((f1-f2)||C)(#)(g||C)).c
    =((f1-f2)|C).c * (g|C).c by A3,VALUED_1:def 4
-  .= (f1-f2).c * (g|C).c by A4,FUNCT_1:68
+  .= (f1-f2).c * (g|C).c by A4,FUNCT_1:70
   .= (f1.c - f2.c) * (g|C).c by A5,VALUED_1:13;
-     c in dom (f1(#)g-f2(#)g) /\ C by A1,A2,A3,FUNCT_1:68;
+     c in dom (f1(#)g-f2(#)g) /\ C by A1,A2,A3,RELAT_1:90;
 then A7: c in dom (f1(#)g-f2(#)g) by XBOOLE_0:def 4;
 then c in dom (f1(#)g) /\ dom(f2(#)g) by VALUED_1:12;
 then A8: c in dom (f1(#)g) & c in dom(f2(#)g) by XBOOLE_0:def 4;
-        ((f1(#)g)-(f2(#)g))||C.c = (f1(#)g-f2(#)g).c by A1,A2,A3,FUNCT_1:68
+        ((f1(#)g)-(f2(#)g))||C.c = (f1(#)g-f2(#)g).c by A1,A2,A3,FUNCT_1:70
+
      .= (f1(#)g).c-(f2(#)g).c by A7,VALUED_1:13
      .= f1.c * g.c-(f2(#)g).c by A8,VALUED_1:def 4
      .= f1.c * g.c-f2.c * g.c by A8,VALUED_1:def 4
      .= (f1.c-f2.c) * g.c;
-hence thesis by A4,A6,FUNCT_1:68;
+hence thesis by A4,A6,FUNCT_1:70;
   end;
   hence thesis by A1,A2,PARTFUN1:34;
 end;
@@ -1484,7 +1278,7 @@ theorem
 A = [.0,PI.] implies sin is_orthogonal_with cos,A
 proof
  assume A1: A = [.0,PI.];
- |||(sin,cos,A)||| = 0 by INTEGRA8:92,A1;
+ |||(sin,cos,A)||| = 0 by A1,INTEGRA8:92;
  hence thesis by Def2;
 end;
 
@@ -1492,7 +1286,7 @@ theorem
 A = [.0,PI*2.] implies sin is_orthogonal_with cos,A
 proof
  assume A1: A = [.0,PI*2.];
- |||(sin,cos,A)||| = 0 by INTEGRA8:94,A1;
+ |||(sin,cos,A)||| = 0 by A1,INTEGRA8:94;
  hence thesis by Def2;
 end;
 
@@ -1500,7 +1294,7 @@ theorem
 A = [.2*n*PI,(2*n+1)*PI.] implies sin is_orthogonal_with cos,A
 proof
  assume A1: A = [.2*n*PI,(2*n+1)*PI.];
- |||(sin,cos,A)||| = 0 by INTEGRA8:95,A1;
+ |||(sin,cos,A)||| = 0 by A1,INTEGRA8:95;
  hence thesis by Def2;
 end;
 
@@ -1508,7 +1302,7 @@ theorem
 A = [.x+2*n*PI,x+(2*n+1)*PI.] implies sin is_orthogonal_with cos,A
 proof
   assume A1: A = [.x+2*n*PI,x+(2*n+1)*PI.];
-  |||(sin,cos,A)||| = 0 by INTEGRA8:96,A1;
+  |||(sin,cos,A)||| = 0 by A1,INTEGRA8:96;
   hence thesis by Def2;
 end;
 
@@ -1516,9 +1310,9 @@ theorem
 A = [.-PI,PI.] implies sin is_orthogonal_with cos,A
 proof
   assume A = [.-PI,PI.];then
-   A1: sup A = PI & inf A = -PI by INTEGRA8:37;
-  |||(sin,cos,A)||| = 1/2*(cos.(inf A)*cos.(inf A)
-        -cos.(sup A)*cos.(sup A)) by INTEGRA8:90
+   A1: upper_bound A = PI & lower_bound A = -PI by INTEGRA8:37;
+  |||(sin,cos,A)||| = 1/2*(cos.(lower_bound A)*cos.(lower_bound A)
+        -cos.(upper_bound A)*cos.(upper_bound A)) by INTEGRA8:90
    .= 1/2*(cos.(PI)*cos.(-PI)-cos.PI*cos.PI) by A1,SIN_COS:33
    .= 1/2*(cos.(PI)*cos.(PI)-cos.PI*cos.PI) by SIN_COS:33;
    hence thesis by Def2;
@@ -1528,9 +1322,9 @@ theorem
 A = [.-PI/2,PI/2.] implies sin is_orthogonal_with cos,A
 proof
   assume A = [.-PI/2,PI/2.];then
-   A1: sup A = PI/2 & inf A = -PI/2 by INTEGRA8:37;
-      |||(sin,cos,A)||| = 1/2*(cos.(inf A)*cos.(inf A)
-        -cos.(sup A)*cos.(sup A)) by INTEGRA8:90
+   A1: upper_bound A = PI/2 & lower_bound A = -PI/2 by INTEGRA8:37;
+      |||(sin,cos,A)||| = 1/2*(cos.(lower_bound A)*cos.(lower_bound A)
+        -cos.(upper_bound A)*cos.(upper_bound A)) by INTEGRA8:90
    .= 1/2*(cos.(PI/2)*cos.(-PI/2)
             -cos.(PI/2)*cos.(PI/2)) by A1,SIN_COS:33
    .= 1/2*(cos.(PI/2)*cos.(PI/2)
@@ -1542,11 +1336,11 @@ theorem
 A = [.-2*PI,2*PI.] implies sin is_orthogonal_with cos,A
 proof
   assume A = [.-2*PI,2*PI.];then
-   A1: sup A = 2*PI & inf A = -2*PI by INTEGRA8:37;
-      |||(sin,cos,A)||| = 1/2*(cos.(inf A)*cos.(inf A)
-        -cos.(sup A)*cos.(sup A)) by INTEGRA8:90
+   A1: upper_bound A = 2*PI & lower_bound A = -2*PI by INTEGRA8:37;
+      |||(sin,cos,A)||| = 1/2*(cos.(lower_bound A)*cos.(lower_bound A)
+        -cos.(upper_bound A)*cos.(upper_bound A)) by INTEGRA8:90
    .= 1/2*(cos.(2*PI)*cos.(-2*PI)
-          -cos.(2*PI)*cos.(2*PI)) by A1, SIN_COS:33
+          -cos.(2*PI)*cos.(2*PI)) by A1,SIN_COS:33
    .= 1/2*(cos.(2*PI)*cos.(2*PI)
            -cos.(2*PI)*cos.(2*PI)) by SIN_COS:33;
    hence thesis by Def2;
@@ -1556,9 +1350,9 @@ theorem
 A = [.-2*n*PI,2*n*PI.] implies sin is_orthogonal_with cos,A
 proof
   assume A = [.-2*n*PI,2*n*PI.];then
-   A1: sup A = 2*n*PI & inf A = -2*n*PI by INTEGRA8:37;
-      |||(sin,cos,A)||| = 1/2*(cos.(inf A)*cos.(inf A)
-        -cos.(sup A)*cos.(sup A)) by INTEGRA8:90
+   A1: upper_bound A = 2*n*PI & lower_bound A = -2*n*PI by INTEGRA8:37;
+      |||(sin,cos,A)||| = 1/2*(cos.(lower_bound A)*cos.(lower_bound A)
+        -cos.(upper_bound A)*cos.(upper_bound A)) by INTEGRA8:90
    .= 1/2*(cos.(2*n*PI)*cos.(-2*n*PI)
           -cos.(2*n*PI)*cos.(2*n*PI)) by A1,SIN_COS:33
    .= 1/2*(cos.(2*n*PI)*cos.(2*n*PI)
@@ -1570,9 +1364,9 @@ theorem
 A = [.x-2*n*PI,x+2*n*PI.] implies sin is_orthogonal_with cos,A
 proof
   assume A = [.x-2*n*PI,x+2*n*PI.];then
-   A1: sup A = x+2*n*PI & inf A = x-2*n*PI by INTEGRA8:37;
-      |||(sin,cos,A)||| = 1/2*(cos.(inf A)*cos.(inf A)
-        -cos.(sup A)*cos.(sup A)) by INTEGRA8:90
+   A1: upper_bound A = x+2*n*PI & lower_bound A = x-2*n*PI by INTEGRA8:37;
+      |||(sin,cos,A)||| = 1/2*(cos.(lower_bound A)*cos.(lower_bound A)
+        -cos.(upper_bound A)*cos.(upper_bound A)) by INTEGRA8:90
    .= 1/2*(cos.(2*n*PI-x)*cos.(-(2*n*PI-x))
        -cos.(x+2*n*PI)*cos.(x+2*n*PI)) by A1,SIN_COS:33
    .= 1/2*(cos.(-x+2*n*PI)*cos.(-x+2*n*PI)
@@ -1673,7 +1467,7 @@ AA: not -a in A;
     set i2 = g2^;
 A3: dom g2 = [#]REAL by FUNCT_2:def 1;
     g2|dom g2 is continuous by RELAT_1:98; then
-A2: g2|A is continuous by FCONT_1:17,A3;
+A2: g2|A is continuous by A3,FCONT_1:17;
     not 0 in rng (g2|A)
     proof
       set h2 = g2|A;
@@ -1696,7 +1490,7 @@ theorem
   A c= Z & (for x st x in Z holds f.x = a+x & f.x<>0) & Z = dom f
   & dom f = dom f2 & (for x st x in Z holds f2.x = -1/(a+x)^2 ) &
   f2|A is continuous implies
-  integral(f2,A) = f^.(sup A)-f^.(inf A)
+  integral(f2,A) = f^.(upper_bound A)-f^.(lower_bound A)
 proof
    assume
 A1:A c= Z & (for x st x in Z holds f.x = a+x & f.x<>0) & Z = dom f
@@ -1724,7 +1518,7 @@ theorem
   A c= Z & (for x st x in Z holds f.x = a+x & f.x<>0) & dom((-1)(#)(f^))=Z
   & dom((-1)(#)(f^))=dom f2 & (for x st x in Z holds f2.x = 1/(a+x)^2 ) &
   f2|A is continuous implies
-  integral(f2,A) = ((-1)(#)(f^)).(sup A)-((-1)(#)(f^)).(inf A)
+  integral(f2,A) = ((-1)(#)(f^)).(upper_bound A)-((-1)(#)(f^)).(lower_bound A)
 proof
    assume
 A1:A c= Z & (for x st x in Z holds f.x = a+x & f.x<>0) & dom((-1)(#)(f^))=Z
@@ -1752,7 +1546,7 @@ theorem
   A c= Z & (for x st x in Z holds f.x = a-x & f.x<>0) & dom f = Z
   & dom f = dom f2 & (for x st x in Z holds f2.x = 1/(a-x)^2 ) &
   f2|A is continuous implies
-  integral(f2,A) = f^.(sup A)-f^.(inf A)
+  integral(f2,A) = f^.(upper_bound A)-f^.(lower_bound A)
 proof
    assume
 A1:A c= Z & (for x st x in Z holds f.x = a-x & f.x<>0) & dom f = Z
@@ -1779,7 +1573,7 @@ theorem
   A c= Z & (for x st x in Z holds f.x = a+x & f.x > 0) & dom (ln*f) = Z
   & dom (ln*f) = dom f2 & (for x st x in Z holds f2.x = 1/(a+x) ) &
   f2|A is continuous implies
-  integral(f2,A) = (ln*f).(sup A)-(ln*f).(inf A)
+  integral(f2,A) = (ln*f).(upper_bound A)-(ln*f).(lower_bound A)
 proof
    assume
 A1:A c= Z & (for x st x in Z holds f.x = a+x & f.x > 0) & dom (ln*f) = Z
@@ -1807,7 +1601,7 @@ theorem
   A c= Z & (for x st x in Z holds f.x = x-a & f.x > 0) & dom (ln*f) = Z
   & dom (ln*f) = dom f2 & (for x st x in Z holds f2.x = 1/(x-a) ) &
   f2|A is continuous implies
-  integral(f2,A) = (ln*f).(sup A)-(ln*f).(inf A)
+  integral(f2,A) = (ln*f).(upper_bound A)-(ln*f).(lower_bound A)
 proof
    assume
 A1:A c= Z & (for x st x in Z holds f.x = x-a & f.x > 0) & dom (ln*f) = Z
@@ -1835,7 +1629,7 @@ theorem
   A c= Z & (for x st x in Z holds f.x = a-x & f.x > 0) & dom (-(ln*f)) = Z
   & dom (-(ln*f)) = dom f2 & (for x st x in Z holds f2.x = 1/(a-x) ) &
   f2|A is continuous implies
-  integral(f2,A) = (-(ln*f)).(sup A)-(-(ln*f)).(inf A)
+  integral(f2,A) = (-(ln*f)).(upper_bound A)-(-(ln*f)).(lower_bound A)
 proof
    assume
 A1:A c= Z & (for x st x in Z holds f.x = a-x & f.x > 0) & dom (-(ln*f)) = Z
@@ -1864,7 +1658,8 @@ theorem
   (for x st x in Z holds f1.x=a+x & f1.x>0) & dom (id Z - a(#)f) = Z
   & Z = dom f2 & (for x st x in Z holds f2.x = x/(a+x) ) &
   f2|A is continuous implies
-  integral(f2,A) = (id Z - a(#)f).(sup A)-(id Z - a(#)f).(inf A)
+  integral(f2,A) =
+    (id Z - a(#)f).(upper_bound A)-(id Z - a(#)f).(lower_bound A)
 proof
    assume
 A1:A c= Z & f = ln*f1 &
@@ -1894,7 +1689,8 @@ theorem
   (for x st x in Z holds f1.x=a+x & f1.x>0) & dom ((2*a)(#)f - id Z) = Z
   & Z = dom f2 & (for x st x in Z holds f2.x = (a-x)/(a+x)) &
   f2|A is continuous implies
-  integral(f2,A) = ((2*a)(#)f - id Z).(sup A)-((2*a)(#)f - id Z).(inf A)
+  integral(f2,A) =
+    ((2*a)(#)f - id Z).(upper_bound A)-((2*a)(#)f - id Z).(lower_bound A)
 proof
    assume
 A1:A c= Z & f = ln*f1 &
@@ -1924,7 +1720,8 @@ theorem
   (for x st x in Z holds f1.x=x+a & f1.x>0) & dom (id Z -(2*a)(#)f) = Z
   & Z = dom f2 & (for x st x in Z holds f2.x = (x-a)/(x+a)) &
   f2|A is continuous implies
-  integral(f2,A) = (id Z -(2*a)(#)f).(sup A)-(id Z -(2*a)(#)f).(inf A)
+  integral(f2,A) =
+    (id Z -(2*a)(#)f).(upper_bound A)-(id Z -(2*a)(#)f).(lower_bound A)
 proof
    assume
 A1:A c= Z & f = ln*f1 &
@@ -1954,7 +1751,8 @@ theorem
   (for x st x in Z holds f1.x=x-a & f1.x>0) & dom (id Z + (2*a)(#)f) = Z
   & Z = dom f2 & (for x st x in Z holds f2.x = (x+a)/(x-a)) &
   f2|A is continuous implies
-  integral(f2,A) = (id Z + (2*a)(#)f).(sup A)-(id Z + (2*a)(#)f).(inf A)
+  integral(f2,A) =
+    (id Z + (2*a)(#)f).(upper_bound A)-(id Z + (2*a)(#)f).(lower_bound A)
 proof
    assume
 A1:A c= Z & f = ln*f1 &
@@ -1984,7 +1782,8 @@ theorem
   (for x st x in Z holds f1.x=x+b & f1.x>0) & dom (id Z + (a-b)(#)f) = Z
   & Z = dom f2 & (for x st x in Z holds f2.x = (x+a)/(x+b)) &
   f2|A is continuous implies
-  integral(f2,A) = (id Z + (a-b)(#)f).(sup A)-(id Z + (a-b)(#)f).(inf A)
+  integral(f2,A) =
+    (id Z + (a-b)(#)f).(upper_bound A)-(id Z + (a-b)(#)f).(lower_bound A)
 proof
    assume
    A1:A c= Z & f = ln*f1 &
@@ -2014,7 +1813,8 @@ theorem
   (for x st x in Z holds f1.x=x-b & f1.x>0) & dom (id Z + (a+b)(#)f) = Z
   & Z = dom f2 & (for x st x in Z holds f2.x = (x+a)/(x-b)) &
   f2|A is continuous implies
-  integral(f2,A) = (id Z + (a+b)(#)f).(sup A)-(id Z + (a+b)(#)f).(inf A)
+  integral(f2,A) =
+    (id Z + (a+b)(#)f).(upper_bound A)-(id Z + (a+b)(#)f).(lower_bound A)
 proof
    assume
 A1:A c= Z & f = ln*f1 &
@@ -2044,7 +1844,8 @@ theorem
   (for x st x in Z holds f1.x=x+b & f1.x>0) & dom (id Z - (a+b)(#)f) = Z
   & Z = dom f2 & (for x st x in Z holds f2.x = (x-a)/(x+b)) &
   f2|A is continuous implies
-  integral(f2,A) = (id Z - (a+b)(#)f).(sup A)-(id Z - (a+b)(#)f).(inf A)
+  integral(f2,A) =
+    (id Z - (a+b)(#)f).(upper_bound A)-(id Z - (a+b)(#)f).(lower_bound A)
 proof
    assume
 A1:A c= Z & f = ln*f1 &
@@ -2074,7 +1875,8 @@ theorem
   (for x st x in Z holds f1.x=x-b & f1.x>0) & dom (id Z + (b-a)(#)f) = Z
   & Z = dom f2 & (for x st x in Z holds f2.x = (x-a)/(x-b)) &
   f2|A is continuous implies
-  integral(f2,A) = (id Z + (b-a)(#)f).(sup A)-(id Z + (b-a)(#)f).(inf A)
+  integral(f2,A) =
+    (id Z + (b-a)(#)f).(upper_bound A)-(id Z + (b-a)(#)f).(lower_bound A)
 proof
    assume
 A1:A c= Z & f = ln*f1 &
@@ -2100,29 +1902,29 @@ end;
 
 :: f.x=1/x
 theorem
-  A c= Z & (for x st x in Z holds f.x = x & f.x > 0) & dom (ln*f) = Z
-  & dom (ln*f) = dom f2 & (for x st x in Z holds f2.x = 1/x) &
-  f2|A is continuous implies
-  integral(f2,A) = (ln*f).(sup A)-(ln*f).(inf A)
+  A c= Z & (for x st x in Z holds x > 0) & dom ln = Z &
+  Z = dom ((id Z)^) & (id Z)^|A is continuous implies
+  integral((id Z)^,A) = ln.(upper_bound A)-ln.(lower_bound A)
 proof
+   set f2 = (id Z)^;
    assume
-A1:A c= Z & (for x st x in Z holds f.x = x & f.x > 0) & dom (ln*f) = Z
-  & dom (ln*f) = dom f2 & (for x st x in Z holds f2.x = 1/x) &
-  f2|A is continuous;then
+A1:A c= Z & (for x st x in Z holds x > 0) & dom ln = Z
+   & Z = dom ((id Z)^) & ((id Z)^)|A is continuous; then
 A2:f2 is_integrable_on A & f2|A is bounded by INTEGRA5:10,11;
-A3:ln*f is_differentiable_on Z by A1,FDIFF_5:19;
-A4:for x st x in dom ((ln*f)`|Z) holds
-   ((ln*f)`|Z).x = f2.x
+A3:ln is_differentiable_on Z by A1,FDIFF_5:19;
+A4:for x st x in dom (ln`|Z) holds (ln`|Z).x = f2.x
    proof
      let x;
-     assume x in dom ((ln*f)`|Z); then
+     assume x in dom (ln`|Z); then
      A5: x in Z by A3,FDIFF_1:def 8; then
-     ((ln*f)`|Z).x = 1/x by A1,FDIFF_5:19
-      .= f2.x by A1,A5;
+     (ln`|Z).x = 1/x by A1,FDIFF_5:19
+      .= x" by XCMPLX_1:217
+      .= ((id Z).x)" by A5,FUNCT_1:35
+      .= f2.x by A1,A5,RFUNCT_1:def 8;
      hence thesis;
    end;
-   dom ((ln*f)`|Z) = dom f2 by A1,A3,FDIFF_1:def 8;then
-   ((ln*f)`|Z) = f2 by A4,PARTFUN1:34;
+   dom (ln`|Z) = dom f2 by A1,A3,FDIFF_1:def 8;then
+   (ln`|Z) = f2 by A4,PARTFUN1:34;
    hence thesis by A1,A2,A3,INTEGRA5:13;
 end;
 
@@ -2131,7 +1933,7 @@ theorem
   A c= Z & (for x st x in Z holds x > 0) & dom (ln*( #Z n)) = Z
   & dom (ln*( #Z n)) = dom f2 & (for x st x in Z holds f2.x = n/x ) &
   f2|A is continuous implies
-  integral(f2,A) = (ln*( #Z n)).(sup A)-(ln*( #Z n)).(inf A)
+  integral(f2,A) = (ln*( #Z n)).(upper_bound A)-(ln*( #Z n)).(lower_bound A)
 proof
    assume
 A1:A c= Z & (for x st x in Z holds x > 0) & dom (ln*( #Z n)) = Z
@@ -2156,13 +1958,15 @@ end;
 
 :: f.x=-1/x
 theorem
-  A c= Z & (for x st x in Z holds f.x = x) & dom (ln*(f^)) = Z
-  & dom (ln*(f^)) = dom f2 & (for x st x in Z holds f2.x = -1/x) &
+  not 0 in Z & A c= Z & dom (ln*((id Z)^)) = Z
+  & dom (ln*((id Z)^)) = dom f2 & (for x st x in Z holds f2.x = -1/x) &
   f2|A is continuous implies
-  integral(f2,A) = (ln*(f^)).(sup A)-(ln*(f^)).(inf A)
+  integral(f2,A) =
+    (ln*((id Z)^)).(upper_bound A)-(ln*((id Z)^)).(lower_bound A)
 proof
+   set f = id Z;
    assume
-A1:A c= Z & (for x st x in Z holds f.x = x) & dom (ln*(f^)) = Z
+A1:not 0 in Z & A c= Z & dom (ln*(f^)) = Z
   & dom (ln*(f^)) = dom f2 & (for x st x in Z holds f2.x = -1/x) &
   f2|A is continuous;then
 A2:f2 is_integrable_on A & f2|A is bounded by INTEGRA5:10,11;
@@ -2190,8 +1994,8 @@ theorem
   & dom ((2/3)(#)(( #R (3/2))*f)) = dom f2
   & (for x st x in Z holds f2.x = (a+x) #R (1/2)) &
   f2|A is continuous implies
-  integral(f2,A) = ((2/3)(#)(( #R (3/2))*f)).(sup A)
-            -((2/3)(#)(( #R (3/2))*f)).(inf A)
+  integral(f2,A) = ((2/3)(#)(( #R (3/2))*f)).(upper_bound A)
+            -((2/3)(#)(( #R (3/2))*f)).(lower_bound A)
 proof
    assume
  A1:A c= Z & (for x st x in Z holds f.x=a+x & f.x>0)
@@ -2224,8 +2028,8 @@ theorem
   & dom ((-2/3)(#)(( #R (3/2))*f)) = dom f2
   & (for x st x in Z holds f2.x = (a-x) #R (1/2)) &
   f2|A is continuous implies
-  integral(f2,A) = ((-2/3)(#)(( #R (3/2))*f)).(sup A)
-            -((-2/3)(#)(( #R (3/2))*f)).(inf A)
+  integral(f2,A) = ((-2/3)(#)(( #R (3/2))*f)).(upper_bound A)
+            -((-2/3)(#)(( #R (3/2))*f)).(lower_bound A)
 proof
    assume
  A1:A c= Z & (for x st x in Z holds f.x=a-x & f.x>0)
@@ -2258,8 +2062,8 @@ theorem
   & dom (2(#)(( #R (1/2))*f)) = dom f2
   & (for x st x in Z holds f2.x = (a+x) #R (-1/2)) &
   f2|A is continuous implies
-  integral(f2,A) = (2(#)(( #R (1/2))*f)).(sup A)
-            -(2(#)(( #R (1/2))*f)).(inf A)
+  integral(f2,A) = (2(#)(( #R (1/2))*f)).(upper_bound A)
+            -(2(#)(( #R (1/2))*f)).(lower_bound A)
 proof
    assume
  A1:A c= Z & (for x st x in Z holds f.x=a+x & f.x>0)
@@ -2292,8 +2096,8 @@ theorem
   & dom ((-2)(#)(( #R (1/2))*f)) = dom f2
   & (for x st x in Z holds f2.x = (a-x) #R (-1/2)) &
   f2|A is continuous implies
-  integral(f2,A) = ((-2)(#)(( #R (1/2))*f)).(sup A)
-            -((-2)(#)(( #R (1/2))*f)).(inf A)
+  integral(f2,A) = ((-2)(#)(( #R (1/2))*f)).(upper_bound A)
+            -((-2)(#)(( #R (1/2))*f)).(lower_bound A)
 proof
    assume
  A1:A c= Z & (for x st x in Z holds f.x=a-x & f.x>0)
@@ -2324,7 +2128,8 @@ theorem
   A c= Z & dom ((-id Z)(#)cos+sin) = Z
   & (for x st x in Z holds f.x =x*sin.x) & Z = dom f &
   f|A is continuous implies
-  integral(f,A) = ((-id Z)(#)cos+sin).(sup A)-((-id Z)(#)cos+sin).(inf A)
+  integral(f,A) =
+    ((-id Z)(#)cos+sin).(upper_bound A)-((-id Z)(#)cos+sin).(lower_bound A)
 proof
 assume A1: A c= Z & dom ((-id Z)(#)cos+sin) = Z
   & (for x st x in Z holds f.x =x*sin.x) & Z = dom f &
@@ -2351,7 +2156,7 @@ theorem
   A c= Z & dom sec = Z
   & (for x st x in Z holds f.x =sin.x/(cos.x)^2) & Z = dom f &
   f|A is continuous implies
-  integral(f,A) = sec.(sup A)-sec.(inf A)
+  integral(f,A) = sec.(upper_bound A)-sec.(lower_bound A)
 proof
   assume A1: A c= Z & dom sec = Z
   & (for x st x in Z holds f.x =sin.x/(cos.x)^2)
@@ -2404,7 +2209,7 @@ theorem
   A c= Z & dom (-cosec) = Z
   & (for x st x in Z holds f.x =cos.x/(sin.x)^2) & Z = dom f &
   f|A is continuous implies
-  integral(f,A) = (-cosec).(sup A)-(-cosec).(inf A)
+  integral(f,A) = (-cosec).(upper_bound A)-(-cosec).(lower_bound A)
 proof
 assume A1: A c= Z & dom (-cosec) = Z
   & (for x st x in Z holds f.x =cos.x/(sin.x)^2)

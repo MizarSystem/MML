@@ -751,7 +751,7 @@ A3: x in NAT;
       .= s.l by AMI_1:def 13
       .= (s | NAT).x by A3,FUNCT_1:72;
   end;
-  hence Exec (i, s) | NAT = s | NAT by A1,A2,FUNCT_1:9;
+  hence thesis by A1,A2,FUNCT_1:9;
 end;
 
 begin :: Finite partial states of SCMPDS
@@ -765,7 +765,7 @@ theorem
 proof
   let i be Instruction of SCMPDS, s be State of SCMPDS,
   p be preProgram of SCMPDS;
-A1: dom p c= NAT by AMI_1:def 40;
+A1: dom p c= NAT by RELAT_1:def 18;
   now
     assume {IC SCMPDS } meets NAT;
     then consider x being set such that
@@ -813,7 +813,7 @@ A1: dom (Start-At iloc) = {IC SCMPDS } by FUNCOP_1:19;
 A2: a in dom s \/ dom (Start-At iloc) by XBOOLE_0:def 3;
   a <> IC SCMPDS by SCMPDS_2:52;
   then not a in {IC SCMPDS } by TARSKI:def 1;
-  hence s.a = (s +* Start-At iloc).a by A1,A2,FUNCT_4:def 1;
+  hence thesis by A1,A2,FUNCT_4:def 1;
 end;
 
 theorem
@@ -824,7 +824,7 @@ proof
 A1: product the Object-Kind of SCMPDS c= sproduct the Object-Kind of SCMPDS
   by CARD_3:67;
   t in product the Object-Kind of SCMPDS;
-  hence s +* t|(SCM-Data-Loc ) is State of SCMPDS by A1,CARD_3:69,81;
+  hence thesis by A1,CARD_3:69,81;
 end;
 
 begin :: Autonomic finite partial states of SCMPDS and its computation
@@ -970,14 +970,13 @@ A30: s2.il = p2.il by A6,GRFUNC_1:8
     = (Following Computation(s2,0)).d1 by AMI_1:14
       .= (Following s2).d1 by AMI_1:13
       .= 1 by A26,A30,SCMPDS_2:57;
-    hence Computation(s1,1)|dom p <> Computation(s2,1)|dom p by A3,A9,A21,A22,
-FUNCT_1:70;
+    hence thesis by A3,A9,A21,A22,FUNCT_1:70;
   end;
   hence contradiction;
 end;
 
 registration
-  cluster autonomic non programmed FinPartState of SCMPDS;
+  cluster autonomic non NAT-defined FinPartState of SCMPDS;
   existence
   proof
     reconsider il=2 as Instruction-Location of SCMPDS by AMI_1:def 4;
@@ -998,16 +997,16 @@ A2:   IC SCMPDS in dom P by TARSKI:def 2;
       l=IC SCMPDS;
       hence contradiction by AMI_1:48;
     end;
-    hence P is non programmed by AMI_1:def 40;
+    hence thesis by RELAT_1:def 18;
   end;
 end;
 
 theorem Th17:
-  for p being autonomic non programmed FinPartState of SCMPDS
+  for p being autonomic non NAT-defined FinPartState of SCMPDS
   holds IC SCMPDS in dom p
 proof
-  let p be autonomic non programmed FinPartState of SCMPDS;
-A1: not dom p c= NAT by AMI_1:def 40;
+  let p be autonomic non NAT-defined FinPartState of SCMPDS;
+A1: not dom p c= NAT by RELAT_1:def 18;
   dom p = dom p /\ the carrier of SCMPDS by AMI_1:80,XBOOLE_1:28
     .= dom p /\
   (SCM-Data-Loc \/ {IC SCMPDS }) \/ dom p /\ NAT by AMI_3:4,XBOOLE_1:23;
@@ -1017,12 +1016,12 @@ A2: dom p /\ {IC SCMPDS } \/ dom p /\ (SCM-Data-Loc ) <> {} by XBOOLE_1:23;
   per cases by A2;
   suppose dom p /\ {IC SCMPDS } <> {};
     then dom p meets {IC SCMPDS } by XBOOLE_0:def 7;
-    hence IC SCMPDS in dom p by ZFMISC_1:56;
+    hence thesis by ZFMISC_1:56;
   end;
   suppose
 A3: dom p /\ (SCM-Data-Loc ) <> {};
     DataPart p <> {} by A3,RELAT_1:60,90,SCMPDS_2:100;
-    hence IC SCMPDS in dom p by Th16;
+    hence thesis by Th16;
   end;
 end;
 
@@ -1140,11 +1139,11 @@ A16: ICplusConst(s1,0) = ((Following(s1))|dom p).IC SCMPDS by A1,A12,FUNCT_1:72
 end;
 
 theorem Th22:
-  for p being autonomic non programmed FinPartState of SCMPDS ,
+  for p being autonomic non NAT-defined FinPartState of SCMPDS ,
   s being State of SCMPDS st p c= s for i being Element of NAT
   holds IC Computation(s,i) in dom ProgramPart(p)
 proof
-  let p be autonomic non programmed FinPartState of SCMPDS,
+  let p be autonomic non NAT-defined FinPartState of SCMPDS,
   s be State of SCMPDS such that
 A1: p c= s;
   let i be Element of NAT;
@@ -1153,7 +1152,7 @@ A1: p c= s;
   assume
 A2: not IC Computation(s,i) in dom ProgramPart(p);
 A3: loc in NAT by AMI_1:def 4;
-  loc in dom ProgramPart p iff loc in dom p /\ NAT by FUNCT_1:68;
+  loc in dom ProgramPart p iff loc in dom p /\ NAT by RELAT_1:90;
   then
 A4: not loc in dom p by A2,A3,XBOOLE_0:def 4;
   set p1 = p +* (loc .--> goto 0 );
@@ -1227,18 +1226,18 @@ A23: Cs1k.IC SCMPDS = ICplusConst(Cs1i,0) &
 A24: IC Cs1i = IC Cs2i by A21,A22,Th17,FUNCT_1:72;
     (Cs1k|dom p).IC SCMPDS = Cs1k.IC SCMPDS &
     (Cs2k|dom p).IC SCMPDS = Cs2k.IC SCMPDS by Th17,FUNCT_1:72;
-    hence Cs1k|dom p <> Cs2k|dom p by A23,A24,Th19;
+    hence thesis by A23,A24,Th19;
   end;
   hence contradiction;
 end;
 
 theorem Th23:
-  for p being autonomic non programmed FinPartState of SCMPDS ,
+  for p being autonomic non NAT-defined FinPartState of SCMPDS ,
   s1, s2 being State of SCMPDS st p c= s1 & p c= s2 for i being Element of NAT
   holds IC Computation(s1,i) = IC Computation(s2,i) &
   CurInstr (Computation(s1,i)) = CurInstr (Computation(s2,i))
 proof
-  let p be autonomic non programmed FinPartState of SCMPDS ,
+  let p be autonomic non NAT-defined FinPartState of SCMPDS ,
   s1, s2 be State of SCMPDS such that
 A1: p c= s1 & p c= s2;
   let i be Element of NAT;
@@ -1267,7 +1266,7 @@ A5: IC Cs1i in dom ProgramPart p & IC Cs2i in dom ProgramPart p by A1,Th22;
 end;
 
 theorem
-  for p being autonomic non programmed FinPartState of SCMPDS,
+  for p being autonomic non NAT-defined FinPartState of SCMPDS,
   s1, s2 being State of SCMPDS st p c= s1 & p c= s2
   for i being Element of NAT,k1,k2 be Integer,a,b be Int_position
   st CurInstr (Computation(s1,i)) = (a,k1) := (b,k2) &
@@ -1275,7 +1274,7 @@ theorem
   holds Computation(s1,i).DataLoc(Computation(s1,i).b,k2) =
   Computation(s2,i).DataLoc(Computation(s2,i).b,k2)
 proof
-  let p be autonomic non programmed FinPartState of SCMPDS,
+  let p be autonomic non NAT-defined FinPartState of SCMPDS,
   s1, s2 be State of SCMPDS such that
 A1: p c= s1 & p c= s2;
   let i be Element of NAT,k1,k2 be Integer,a,b be Int_position;
@@ -1305,7 +1304,7 @@ A8: Cs1i.a=Cs2i.a by A1,A6,AMI_1:def 25;
 end;
 
 theorem
-  for p being autonomic non programmed FinPartState of SCMPDS,
+  for p being autonomic non NAT-defined FinPartState of SCMPDS,
   s1, s2 being State of SCMPDS st p c= s1 & p c= s2
   for i being Element of NAT,k1,k2 be Integer,a,b be Int_position
   st CurInstr (Computation(s1,i)) = AddTo(a,k1,b,k2) &
@@ -1313,7 +1312,7 @@ theorem
   holds Computation(s1,i).DataLoc(Computation(s1,i).b,k2)
   = Computation(s2,i).DataLoc(Computation(s2,i).b,k2)
 proof
-  let p be autonomic non programmed FinPartState of SCMPDS,
+  let p be autonomic non NAT-defined FinPartState of SCMPDS,
   s1, s2 be State of SCMPDS such that
 A1: p c= s1 & p c= s2;
   let i be Element of NAT,k1,k2 be Integer,a,b be Int_position;
@@ -1349,7 +1348,7 @@ A11: D11 = D21 by A1,A5,A8,A9,AMI_1:def 25;
 end;
 
 theorem
-  for p being autonomic non programmed FinPartState of SCMPDS,
+  for p being autonomic non NAT-defined FinPartState of SCMPDS,
   s1, s2 being State of SCMPDS st p c= s1 & p c= s2
   for i being Element of NAT,k1,k2 be Integer,a,b be Int_position
   st CurInstr (Computation(s1,i)) = SubFrom(a,k1,b,k2) &
@@ -1357,7 +1356,7 @@ theorem
   holds Computation(s1,i).DataLoc(Computation(s1,i).b,k2)
   = Computation(s2,i).DataLoc(Computation(s2,i).b,k2)
 proof
-  let p be autonomic non programmed FinPartState of SCMPDS,
+  let p be autonomic non NAT-defined FinPartState of SCMPDS,
   s1, s2 be State of SCMPDS such that
 A1: p c= s1 & p c= s2;
   let i be Element of NAT,k1,k2 be Integer,a,b be Int_position;
@@ -1393,7 +1392,7 @@ A11: D11 = D21 by A1,A5,A8,A9,AMI_1:def 25;
 end;
 
 theorem
-  for p being autonomic non programmed FinPartState of SCMPDS,
+  for p being autonomic non NAT-defined FinPartState of SCMPDS,
   s1, s2 being State of SCMPDS st p c= s1 & p c= s2
   for i being Element of NAT,k1,k2 be Integer,a,b be Int_position
   st CurInstr (Computation(s1,i)) = MultBy(a,k1,b,k2) &
@@ -1403,7 +1402,7 @@ theorem
   = Computation(s2,i).DataLoc(Computation(s2,i).a,k1)
   * Computation(s2,i).DataLoc(Computation(s2,i).b,k2)
 proof
-  let p be autonomic non programmed FinPartState of SCMPDS,
+  let p be autonomic non NAT-defined FinPartState of SCMPDS,
   s1, s2 be State of SCMPDS such that
 A1: p c= s1 & p c= s2;
   let i be Element of NAT,k1,k2 be Integer,a,b be Int_position;
@@ -1433,7 +1432,7 @@ A8: Cs1i.a=Cs2i.a by A1,A6,A7,AMI_1:def 25;
 end;
 
 theorem
-  for p being autonomic non programmed FinPartState of SCMPDS,
+  for p being autonomic non NAT-defined FinPartState of SCMPDS,
   s1, s2 being State of SCMPDS st p c= s1 & p c= s2
   for i,m being Element of NAT,a being Int_position,k1,k2 be Integer
   st CurInstr (Computation(s1,i)) = (a,k1)<>0_goto k2 &
@@ -1441,7 +1440,7 @@ theorem
   holds (Computation(s1,i).DataLoc(Computation(s1,i).a,k1) = 0 iff
   Computation(s2,i).DataLoc(Computation(s2,i).a,k1) = 0 )
 proof
-  let p be autonomic non programmed FinPartState of SCMPDS,
+  let p be autonomic non NAT-defined FinPartState of SCMPDS,
   s1, s2 be State of SCMPDS such that
 A1: p c= s1 & p c= s2;
   let i,m be Element of NAT,a be Int_position,k1,k2 be Integer;
@@ -1482,12 +1481,11 @@ A14: Cs2i1.IC SCMPDS = Next IC Cs2i by A3,A5,A8,SCMPDS_2:67
     Cs1i1.IC SCMPDS = ICplusConst(Cs1i,k2) by A4,A8,A13,SCMPDS_2:67;
     hence contradiction by A2,A6,A7,A8,A9,A14,Th18;
   end;
-  hence Computation(s1,i).DataLoc(Cs1i.a,k1) = 0 iff
-  Computation(s2,i).DataLoc(Cs2i.a,k1) = 0 by A10;
+  hence thesis by A10;
 end;
 
 theorem
-  for p being autonomic non programmed FinPartState of SCMPDS,
+  for p being autonomic non NAT-defined FinPartState of SCMPDS,
   s1, s2 being State of SCMPDS st p c= s1 & p c= s2
   for i,m being Element of NAT,a being Int_position,k1,k2 be Integer
   st CurInstr (Computation(s1,i)) = (a,k1)<=0_goto k2 &
@@ -1495,7 +1493,7 @@ theorem
   holds (Computation(s1,i).DataLoc(Computation(s1,i).a,k1) > 0 iff
   Computation(s2,i).DataLoc(Computation(s2,i).a,k1) > 0 )
 proof
-  let p be autonomic non programmed FinPartState of SCMPDS,
+  let p be autonomic non NAT-defined FinPartState of SCMPDS,
   s1, s2 be State of SCMPDS such that
 A1: p c= s1 & p c= s2;
   let i,m be Element of NAT,a be Int_position,k1,k2 be Integer;
@@ -1536,12 +1534,11 @@ A14: Cs2i1.IC SCMPDS = Next IC Cs2i by A3,A5,A8,SCMPDS_2:68
     Cs1i1.IC SCMPDS = ICplusConst(Cs1i,k2) by A4,A8,A13,SCMPDS_2:68;
     hence contradiction by A2,A6,A7,A8,A9,A14,Th18;
   end;
-  hence Computation(s1,i).DataLoc(Cs1i.a,k1) > 0 iff
-  Computation(s2,i).DataLoc(Cs2i.a,k1) > 0 by A10;
+  hence thesis by A10;
 end;
 
 theorem
-  for p being autonomic non programmed FinPartState of SCMPDS,
+  for p being autonomic non NAT-defined FinPartState of SCMPDS,
   s1, s2 being State of SCMPDS st p c= s1 & p c= s2
   for i,m being Element of NAT,a being Int_position,k1,k2 be Integer
   st CurInstr (Computation(s1,i)) = (a,k1)>=0_goto k2 &
@@ -1549,7 +1546,7 @@ theorem
   holds (Computation(s1,i).DataLoc(Computation(s1,i).a,k1) < 0 iff
   Computation(s2,i).DataLoc(Computation(s2,i).a,k1) < 0 )
 proof
-  let p be autonomic non programmed FinPartState of SCMPDS,
+  let p be autonomic non NAT-defined FinPartState of SCMPDS,
   s1, s2 be State of SCMPDS such that
 A1: p c= s1 & p c= s2;
   let i,m be Element of NAT,a be Int_position,k1,k2 be Integer;
@@ -1590,8 +1587,7 @@ A14: Cs2i1.IC SCMPDS = Next IC Cs2i by A3,A5,A8,SCMPDS_2:69
     Cs1i1.IC SCMPDS = ICplusConst(Cs1i,k2) by A4,A8,A13,SCMPDS_2:69;
     hence contradiction by A2,A6,A7,A8,A9,A14,Th18;
   end;
-  hence Computation(s1,i).DataLoc(Cs1i.a,k1) < 0 iff
-  Computation(s2,i).DataLoc(Cs2i.a,k1) < 0 by A10;
+  hence thesis by A10;
 end;
 
 begin :: Program Shift in the SCMPDS Computer

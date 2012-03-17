@@ -9,19 +9,20 @@ environ
  vocabularies RLVECT_1, BINOP_1, FUNCT_1, PRE_TOPC, RLSUB_1, ABSVALUE, ARYTM_1,
       ARYTM_3, RELAT_1, SEQ_2, SEQ_1, ORDINAL2, NORMSP_1, ARYTM, FUNCOP_1,
       XREAL_0, STRUCT_0, ALGSTR_0;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS,
+      XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, FUNCT_1, FUNCOP_1, FUNCT_2, BINOP_1, RELAT_1,
       SEQ_1, SEQ_2, DOMAIN_1, STRUCT_0, ALGSTR_0, PRE_TOPC, RLVECT_1, RLSUB_1,
       XXREAL_0;
  constructors BINOP_1, DOMAIN_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1,
-      SEQ_2, RLSUB_1, SEQ_1, VALUED_1;
+      SEQ_2, RLSUB_1, SEQ_1, VALUED_1, RELSET_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
       MEMBERED, STRUCT_0, RLVECT_1, ALGSTR_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions RLVECT_1, STRUCT_0, FUNCT_1, ALGSTR_0;
  theorems TARSKI, NAT_1, FUNCT_1, SEQ_2, ABSVALUE, RLVECT_1, RLSUB_1, FUNCT_2,
       RELSET_1, XREAL_0, XBOOLE_0, XCMPLX_0, FUNCOP_1, XREAL_1, COMPLEX1,
-      XXREAL_0, ORDINAL1, ALGSTR_0;
+      XXREAL_0, ORDINAL1, ALGSTR_0, RELAT_1;
  schemes FUNCT_2, SEQ_1, NAT_1;
 
 begin
@@ -122,27 +123,30 @@ A1: for x,y be VECTOR of X for x',y' be VECTOR of (0).V st x = x' & y = y'
     holds x + y= x' + y' & for a holds a * x = a * x';
     thus X is RealLinearSpace-like
     proof
-      thus for a for v,w being VECTOR of X holds a * (v + w) = a * v + a * w
+      thus for a being real number
+       for v,w being VECTOR of X holds a * (v + w) = a * v + a * w
       proof
-        let a;
+        let a be real number;
         let v,w be VECTOR of X;
         reconsider v'= v, w' = w as VECTOR of (0).V;
         thus a * (v + w) = a *( v' + w')
           .= a * v' + a * w' by RLVECT_1:def 9
           .= a * v + a * w;
       end;
-      thus for a,b for v being VECTOR of X holds (a + b) * v = a * v + b * v
+      thus for a,b being real number
+      for v being VECTOR of X holds (a + b) * v = a * v + b * v
       proof
-        let a,b;
+        let a,b be real number;
         let v be VECTOR of X;
         reconsider v'= v as VECTOR of (0).V;
         thus (a + b) * v = (a + b) * v'
           .= a * v' + b * v' by RLVECT_1:def 9
           .= a * v + b * v;
       end;
-      thus for a,b for v being VECTOR of X holds (a * b) * v = a * (b * v)
+      thus for a,b being real number
+      for v being VECTOR of X holds (a * b) * v = a * (b * v)
       proof
-        let a,b;
+        let a,b be real number;
         let v be VECTOR of X;
         reconsider v'= v as VECTOR of (0).V;
         thus (a * b) * v = (a * b) * v'
@@ -184,7 +188,7 @@ A1: for x,y be VECTOR of X for x',y' be VECTOR of (0).V st x = x' & y = y'
 A2:   v' + w' = 0.(0).V by ALGSTR_0:def 11;
       reconsider w = w' as VECTOR of X;
       take w;
-      thus v + w = 0.X by A2;
+      thus thesis by A2;
     end;
     thus thesis;
   end;
@@ -318,7 +322,7 @@ proof
 A1: f is sequence of RNS;
     then
 A2: dom f = NAT by FUNCT_2:def 1;
-A3: rng f c= the carrier of RNS by A1,RELSET_1:12;
+A3: rng f c= the carrier of RNS by A1,RELAT_1:def 19;
     for d st d in NAT holds f.d is Element of RNS
     proof
       let d;
@@ -461,7 +465,7 @@ A2: now
 A3: m = n + k by NAT_1:10;
     reconsider k as Element of NAT by ORDINAL1:def 13;
     m=n+k by A3;
-    hence S.n = S.m by A1;
+    hence thesis by A1;
   end;
   now
     assume m <= n;
@@ -469,7 +473,7 @@ A3: m = n + k by NAT_1:10;
 A4: n = m + k by NAT_1:10;
     reconsider k as Element of NAT by ORDINAL1:def 13;
     n=m+k by A4;
-    hence S.n = S.m by A1;
+    hence thesis by A1;
   end;
   hence thesis by A2;
 end;
@@ -674,7 +678,7 @@ A11: ||.(S1 + S2).n - g.|| = ||.-(g1+g2) + ((S1.n) + (S2.n)).|| by Def5
     .= ||.(S1.n) - g1 + ((S2.n) - g2).|| by RLVECT_1:def 6;
   ||.(S1.n) - g1 + ((S2.n) - g2).|| <=
   ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by Def2;
-  hence ||.(S1 + S2).n - g.|| < r by A10,A11,XXREAL_0:2;
+  hence thesis by A10,A11,XXREAL_0:2;
 end;
 
 theorem Th35:
@@ -717,7 +721,7 @@ A11: ||.(S1 - S2).n - g.|| = ||.((S1.n) - (S2.n)) - (g1 - g2).|| by Def6
     .= ||. ((S1.n) - g1 ) - ((S2.n) - g2).|| by RLVECT_1:43;
   ||.((S1.n) - g1) - ((S2.n) - g2).|| <=
   ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by Th7;
-  hence ||.(S1 - S2).n - g.|| < r by A10,A11,XXREAL_0:2;
+  hence thesis by A10,A11,XXREAL_0:2;
 end;
 
 theorem Th36:
@@ -741,7 +745,7 @@ A3: ||.(S.n) - g.|| < r by A2;
     .= ||.(((S.n) - x) + x) - g.|| by RLVECT_1:43
     .= ||.((S.n) - x) + ((-g) + x).|| by RLVECT_1:def 6
     .= ||.((S.n) - x) - h.|| by RLVECT_1:47;
-  hence ||.(S - x).n - h.|| < r by A3,Def7;
+  hence thesis by A3,Def7;
 end;
 
 theorem Th37:

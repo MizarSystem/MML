@@ -8,12 +8,12 @@ environ
 
  vocabularies RLVECT_1, BINOP_1, ARYTM_1, FUNCT_1, LATTICES, RELAT_1, ARYTM_3,
       VECTSP_1, ALGSTR_2, REALSET1, GROUP_1, ARYTM, VECTSP_2, STRUCT_0,
-      ALGSTR_0, BOOLE;
+      ALGSTR_0;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, FUNCT_2, BINOP_1,
       ORDINAL1, XCMPLX_0, XXREAL_0, XREAL_0, NAT_D, BINARITH, BINOP_2,
       STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1;
  constructors BINOP_1, XXREAL_0, NAT_1, BINARITH, RLVECT_1, GROUP_1, BINOP_2,
-      NAT_D;
+      NAT_D, RELSET_1;
  registrations ORDINAL1, RELSET_1, NUMBERS, XREAL_0, STRUCT_0, GROUP_1,
       ALGSTR_0;
  requirements NUMERALS, SUBSET, ARITHM, BOOLE;
@@ -22,11 +22,7 @@ environ
       XREAL_0, ALGSTR_0;
  schemes FUNCT_2;
 
-begin
-
-::
-::                         1_ GROUP STRUCTURE
-::
+begin :: 1. GROUP STRUCTURE
 
 reserve GS for non empty addLoopStr;
 
@@ -65,7 +61,7 @@ registration
     reconsider x'=x as Element of REAL;
     reconsider y = -x' as Element of G_Real;
     take y;
-    thus x+ y = 0.G_Real;
+    thus thesis;
   end;
 end;
 
@@ -106,9 +102,7 @@ definition
   mode AbGroup is Abelian AddGroup;
 end;
 
-::
 ::                         4. FIELD STRUCTURE
-::
 
 definition
   let IT be non empty doubleLoopStr;
@@ -169,7 +163,7 @@ proof
   let L being non empty multLoopStr such that
 A1: L is well-unital;
   take 1.L;
-  thus for h being Element of L holds h * 1.L = h & 1.L * h = h by A1,Def16;
+  thus thesis by A1,Def16;
 end;
 
 Lm2: for L being non empty multLoopStr st L is well-unital holds 1.L = 1_L
@@ -180,7 +174,7 @@ A1: L is well-unital;
   then
 A2: for h being Element of L holds h * 1.L = h & 1.L * h = h by Def16;
   L is unital by A1,Lm1;
-  hence 1.L = 1_L by A2,GROUP_1:def 5;
+  hence thesis by A2,GROUP_1:def 5;
 end;
 
 registration
@@ -233,7 +227,7 @@ A1:   IT is almost_left_invertible;
       let x be Element of IT;
       assume x <> 0.IT;
       then x is left_invertible by A1,ALGSTR_0:def 39;
-      hence ex y be Element of IT st y*x = 1.IT by ALGSTR_0:def 27;
+      hence thesis by ALGSTR_0:def 27;
     end;
     assume
 A2: for x being Element of IT st x <> 0.IT
@@ -269,7 +263,7 @@ registration
       reconsider x'=x as Element of REAL;
       reconsider y=-x' as Element of F_Real;
       take y' = y;
-      thus x+ y' = 0.F_Real;
+      thus thesis;
     end;
     thus for x,y being Element of F_Real holds x+y = y+x;
     thus for x,y being Element of F_Real holds x*y = y*x;
@@ -406,9 +400,7 @@ theorem
   FS is distributive almost_left_invertible (non empty doubleLoopStr)
   by Def18,Def20;
 
-::
 ::                        6. AXIOMS OF FIELD
-::
 
 canceled 10;
 
@@ -485,7 +477,7 @@ proof
   x*(0.F)+(0.F) = x*((0.F)+(0.F))+(0.F) by RLVECT_1:10
     .= x*((0.F)+(0.F)) by RLVECT_1:10
     .= x*(0.F)+x*(0.F) by Def11;
-  hence x*(0.F) = 0.F by RLVECT_1:21;
+  hence thesis by RLVECT_1:21;
 end;
 
 canceled 2;
@@ -501,7 +493,7 @@ proof
   (0.F)*x+(0.F) = ((0.F)+(0.F))*x+(0.F) by RLVECT_1:10
     .= ((0.F)+(0.F))*x by RLVECT_1:10
     .= (0.F)*x+(0.F)*x by Def12;
-  hence 0.F = (0.F)*x by RLVECT_1:21;
+  hence thesis by RLVECT_1:21;
 end;
 
 theorem Th40:
@@ -514,7 +506,7 @@ proof
   x*y +x*(-y) = x*(y+(-y)) by Def11
     .= x*(0.F) by RLVECT_1:def 11
     .= 0.F by Th36;
-  hence x*(-y) = -x*y by RLVECT_1:def 11;
+  hence thesis by RLVECT_1:def 11;
 end;
 
 theorem Th41:
@@ -527,7 +519,7 @@ proof
   x*y +(-x)*y = (x+(-x))*y by Def12
     .= (0.F)*y by RLVECT_1:def 11
     .= 0.F by Th39;
-  hence (-x)*y = -x*y by RLVECT_1:def 11;
+  hence thesis by RLVECT_1:def 11;
 end;
 
 theorem Th42:
@@ -589,24 +581,13 @@ proof
     .= y*x -z*x by Th41;
 end;
 
-::
 ::                      8. VECTOR SPACE STRUCTURE
-::
 
 definition
   let F be 1-sorted;
   struct(addLoopStr) VectSpStr over F (# carrier -> set,
     addF -> BinOp of the carrier, ZeroF -> Element of the carrier,
     lmult -> Function of [:the carrier of F,the carrier:], the carrier #);
-end;
-
-registration
-  let F be 1-sorted, V be VectSpStr over F;
-  cluster empty Subset of V;
-  existence
-   proof take {}V;
-    thus thesis;
-   end;
 end;
 
 registration
@@ -714,7 +695,7 @@ Lm4: now
 A1: x' + t = 0.F by ALGSTR_0:def 11;
     reconsider t' = t as Element of GF;
     take t';
-    thus x + t' = 0.GF by A1;
+    thus thesis by A1;
   end;
 end;
 
@@ -780,15 +761,6 @@ reserve F for Field,
   V for VectSp of F,
   v for Element of V;
 
-registration let F,V;
- cluster empty Subset of V;
- existence
-  proof
-   take {}V;
-   thus thesis;
-  end;
-end;
-
 canceled 13;
 
 theorem Th59:
@@ -840,9 +812,7 @@ A2: x<>(0.F);
   hence thesis by Th59;
 end;
 
-::
 ::                          13. APPENDIX
-::
 
 canceled 2;
 
@@ -958,7 +928,7 @@ A1: F is commutative left_unital;
     for F be commutative (non empty multMagma),
     x,y being Element of F holds x*y = y*x;
     then x*(1.F) = (1.F)*x by A1;
-    hence x*(1.F) = x by A1,Def19;
+    hence thesis by A1,Def19;
   end;
 end;
 
@@ -1068,7 +1038,7 @@ registration
 A1: a + a = 0.F;
     a = 1.F * a by Def19;
     then a + a = (1.F + 1.F) * a by Def18;
-    hence a = 0.F by A1,Th44,Th78;
+    hence thesis by A1,Th44,Th78;
   end;
 end;
 
@@ -1088,7 +1058,7 @@ A1: 1.F+1.F<>0.F;
 A2: a + a = 0.F;
     a = 1.F * a by Def19;
     then a + a = (1.F + 1.F) * a by Def18;
-    hence a = 0.F by A1,A2,Th44;
+    hence thesis by A1,A2,Th44;
   end;
 end;
 
@@ -1146,7 +1116,7 @@ A2: a <> 0.F;
     then a"*(a*c) = b*a" by RLVECT_1:35;
     then (a"*a)*c = b*a" & a"*a = 1.F & c*(1.F) =(1.F)*c
     by A2,Def22,GROUP_1:def 4;
-    hence c = b*a" by Def16;
+    hence thesis by Def16;
   end;
   assume
 A3: a <> 0.F;

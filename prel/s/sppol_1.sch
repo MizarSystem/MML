@@ -11,7 +11,6 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XXREAL_0"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -23,7 +22,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="5">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -31,12 +30,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="20">
+<Pred kind="V" nr="23">
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="43"/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="44"/>
+<Func kind="K" nr="48"/>
 </Typ>
 <Func kind="F" nr="3">
 <Func kind="F" nr="2"/>
@@ -45,7 +44,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="76">
+<Func kind="K" nr="66">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>
@@ -63,7 +62,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="5">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -71,12 +70,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="20">
+<Pred kind="V" nr="23">
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="43"/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="44"/>
+<Func kind="K" nr="48"/>
 </Typ>
 <Func kind="F" nr="3">
 <Func kind="F" nr="2"/>
@@ -89,7 +88,7 @@
 </Pred>
 <Pred kind="R" nr="16">
 <Var nr="1"/>
-<Func kind="K" nr="75">
+<Func kind="K" nr="65">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>

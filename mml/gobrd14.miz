@@ -18,18 +18,19 @@ environ
       COMPLEX1, REAL_1, XXREAL_0, SQUARE_1, NAT_1,
       INT_1, INT_2, NEWTON, POWER, MATRIX_1, NAT_D, FUNCT_4, SEQ_4,
       METRIC_1, TBSP_1, FINSEQ_1, CARD_3, FINSEQ_4, FINSEQ_6, STRUCT_0,
-      RCOMP_1, PRE_TOPC, TOPS_1, CONNSP_1, COMPTS_1, EUCLID, TOPREAL1,
+      RCOMP_1, PRE_TOPC, TOPS_1, CONNSP_1, COMPTS_1,
+      RLTOPSP1, EUCLID, TOPREAL1,
       GOBOARD1, GOBOARD2, GOBOARD5, GOBOARD9, PSCOMP_1, SPPOL_1, SPRECT_1,
       SPRECT_2, JORDAN2C, JORDAN8, TOPREAL6;
  constructors FUNCT_4, REAL_1, SQUARE_1, NAT_1, CARD_3, RCOMP_1, FINSEQ_4,
       NEWTON, POWER, NAT_D, TOPS_1, CONNSP_1, COMPTS_1, REALSET2, TBSP_1,
       MONOID_0, TOPREAL4, GOBOARD2, SPPOL_1, JORDAN1, PSCOMP_1, GOBOARD9,
       SPRECT_1, SPRECT_2, JORDAN2C, TOPREAL6, JORDAN8, SEQ_1, XXREAL_2,
-      GOBOARD1, SEQ_4;
+      GOBOARD1, SEQ_4, RELSET_1, CONVEX1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       INT_1, MEMBERED, REALSET1, FINSEQ_6, STRUCT_0, PRE_TOPC, TOPS_1,
       MONOID_0, EUCLID, GOBOARD2, PSCOMP_1, GOBRD11, SPRECT_1, SPRECT_3,
-      JORDAN2C, REVROT_1, TOPREAL6, FUNCT_1;
+      JORDAN2C, REVROT_1, TOPREAL6, FUNCT_1, RLTOPSP1, FINSEQ_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, JORDAN2C, SPRECT_1, XBOOLE_0, SQUARE_1, SUBSET_1, EUCLID,
       PCOMPS_1;
@@ -40,7 +41,7 @@ environ
       SPRECT_4, SQUARE_1, SPPOL_2, SUBSET_1, TARSKI, TBSP_1, TDLAT_1, TOPREAL1,
       TOPREAL3, TOPREAL6, TOPS_1, SPRECT_2, REVROT_1, FINSEQ_6, XBOOLE_0,
       XBOOLE_1, XREAL_0, XCMPLX_1, COMPLEX1, XREAL_1, NEWTON, XXREAL_0,
-      FINSEQ_2, MATRIX_1, XXREAL_1, NAT_D;
+      FINSEQ_2, MATRIX_1, XXREAL_1, NAT_D, RLTOPSP1;
 
 begin  :: Components
 
@@ -53,6 +54,8 @@ reserve i, j, n for Element of NAT,
   G for Go-board;
 
 canceled 6;
+
+XX:the carrier of TOP-REAL 2 = REAL 2 by EUCLID:25;
 
 theorem
   for p being Point of Euclid 2 st
@@ -81,7 +84,7 @@ A7: dist(p,c) + dist(c,z) <= dist(p,c) + r by XREAL_1:9;
 A8: dist(p,z) <= dist(p,c) + r by A7,XXREAL_0:2;
     dist(p,c) + r + 0 < dist(p,c) + r + 1 by XREAL_1:8;
     then dist(p,z) < dist(p,c) + r + 1 by A8,XXREAL_0:2;
-    hence x in Ball(p,rr) by METRIC_1:12;
+    hence thesis by METRIC_1:12;
   end;
   take rr;
   dist(p,c)+r+0 < rr by XREAL_1:10;
@@ -91,7 +94,7 @@ A9: 0 < rr by A3,METRIC_1:5,XREAL_1:10;
   assume
 A10: x in Ball(p,rr)`;
   then reconsider y = x as Point of Euclid 2;
-  reconsider z = y as Point of TOP-REAL 2;
+  reconsider z = y as Point of TOP-REAL 2 by XX;
   UBD L~f is_outside_component_of L~f by JORDAN2C:76;
   then
 A11: P = UBD L~f by A2,JORDAN2C:127;
@@ -100,10 +103,10 @@ A11: P = UBD L~f by A2,JORDAN2C:127;
   then for a being Point of TOP-REAL 2 holds a <> |[0,rr]| or |.a.| >= rr
   by TOPREAL6:31;
   then not |[0,rr]| in {a where a is Point of TOP-REAL 2: |.a.| < rr};
-  then reconsider L as non empty Subset of TOP-REAL 2 by XBOOLE_0:def 5;
+  then reconsider L as non empty Subset of TOP-REAL 2 by XX,XBOOLE_0:def 5;
 A12: z in REAL 2;
 A13: not x in Ball(p,rr) by A10,XBOOLE_0:def 5;
-  dist(p,y) = |.z.| by A1,TOPREAL6:33;
+  dist(p,y) = |.z.| by A1,XX,TOPREAL6:33;
   then for k being Point of TOP-REAL 2 holds k <> z or |.k.| >= rr
   by A13,METRIC_1:12;
   then not x in {a where a is Point of TOP-REAL 2: |.a.| < rr};
@@ -118,14 +121,14 @@ A16: l in L;
     then
 A17: not l in {a where a is Point of TOP-REAL 2: |.a.| < rr} by XBOOLE_0:def 5;
     reconsider j = l as Point of TOP-REAL 2 by A16;
-    reconsider t = j as Point of Euclid 2;
+    reconsider t = j as Point of Euclid 2 by XX;
 A18: |.j.| >= rr by A17;
     now
       assume l in L~f;
       then dist(t,p) < rr by A5,METRIC_1:12;
-      hence contradiction by A1,A18,TOPREAL6:33;
+      hence contradiction by A1,A18,XX,TOPREAL6:33;
     end;
-    hence l in (L~f)` by A16,SUBSET_1:50;
+    hence thesis by A16,SUBSET_1:50;
   end;
   then consider M being Subset of TOP-REAL 2 such that
 A19: M is_a_component_of (L~f)` and
@@ -136,11 +139,11 @@ A20: L c= M by A15,GOBOARD9:5;
     reconsider W = L as Subset of Euclid 2;
     W is not bounded by JORDAN2C:70;
     then L is not Bounded by JORDAN2C:def 2;
-    hence not M is Bounded by A20,JORDAN2C:16;
+    hence thesis by A20,JORDAN2C:16;
   end;
   then M in {W where W is Subset of TOP-REAL 2: W is_outside_component_of L~
   f};
-  hence x in P by A11,A14,A20,TARSKI:def 4;
+  hence thesis by A11,A14,A20,TARSKI:def 4;
 end;
 
 begin  :: Go-boards
@@ -245,7 +248,7 @@ A1: [i,j] in Indices G & [i+n,j] in Indices G;
   set x = G*(i,j), y = G*(i+n,j);
   per cases;
   suppose n = 0;
-    hence dist(G*(i,j),G*(i+n,j)) = G*(i+n,j)`1 - G*(i,j)`1 by TOPREAL6:102;
+    hence thesis by TOPREAL6:102;
   end;
   suppose
 A2: n <> 0;
@@ -276,7 +279,7 @@ A1: [i,j] in Indices G & [i,j+n] in Indices G;
   set x = G*(i,j), y = G*(i,j+n);
   per cases;
   suppose n = 0;
-    hence dist(G*(i,j),G*(i,j+n)) = G*(i,j+n)`2 - G*(i,j)`2 by TOPREAL6:102;
+    hence thesis by TOPREAL6:102;
   end;
   suppose
 A2: n <> 0;
@@ -536,7 +539,7 @@ A8: the carrier of (TOP-REAL 2)|(L~f)` = (L~f)` by PRE_TOPC:29;
   (L~f)` = LeftComp f \/ RightComp f by GOBRD12:11;
   then a in LeftComp f or a in RightComp f by A8,XBOOLE_0:def 3;
   then P meets LeftComp f by A4,A6,A7,XBOOLE_0:3;
-  hence P = LeftComp f by A1,A3,CONNSP_1:37;
+  hence thesis by A1,A3,CONNSP_1:37;
 end;
 
 theorem
@@ -685,7 +688,7 @@ A19:      right_cell(f,i) = cell(GoB f,z,j2) by A2,A7,A18,GOBOARD5:31;
         end;
       end;
       then O meets Int right_cell(f,i) by A4,A5,PRE_TOPC:def 13;
-      hence RightComp f meets O by A2,GOBOARD9:28,XBOOLE_1:63;
+      hence thesis by A2,GOBOARD9:28,XBOOLE_1:63;
     end;
     then
 A20: p in Cl RightComp f by PRE_TOPC:def 13;
@@ -775,7 +778,7 @@ A19:      left_cell(f,i) = cell(GoB f,z+1,j2) by A2,A7,A18,GOBOARD5:31;
         end;
       end;
       then O meets Int left_cell(f,i) by A4,A5,PRE_TOPC:def 13;
-      hence LeftComp f meets O by A2,GOBOARD9:24,XBOOLE_1:63;
+      hence thesis by A2,GOBOARD9:24,XBOOLE_1:63;
     end;
     then
 A20: p in Cl LeftComp f by PRE_TOPC:def 13;
@@ -871,7 +874,7 @@ A1: L~f = L~g by REVROT_1:33;
   N-min L~f in rng f by SPRECT_2:43;
   then
 A2: g/.1 = N-min L~g by A1,FINSEQ_6:98;
-  reconsider u = p as Point of Euclid 2;
+  reconsider u = p as Point of Euclid 2 by XX;
   assume p in RightComp f;
   then p in RightComp g by REVROT_1:37;
   then u in Int RightComp g by TOPS_1:55;
@@ -883,7 +886,7 @@ A5: W-bound L~SpStSeq L~g = W-bound L~g by SPRECT_1:66;
 A6: W-bound L~SpStSeq L~g = lower_bound(proj1.:L~SpStSeq L~g) by SPRECT_1:48;
 A7: proj1.:L~SpStSeq L~g is bounded_below by SPRECT_1:46;
   set x = |[p`1-r/2,N-bound L~SpStSeq L~g]|;
-  reconsider k = |[p`1-r/2,p`2]| as Point of Euclid 2;
+  reconsider k = |[p`1-r/2,p`2]| as Point of Euclid 2 by XX;
 A8: r/2 > 0 by A3,XREAL_1:141;
   dist(u,k) = (Pitag_dist 2).(u,k) by METRIC_1:def 1
     .= sqrt ((p`1 - |[p`1-r/2,p`2]|`1)^2 + (p`2 - |[p`1-r/2,p`2]|`2)^2)
@@ -931,7 +934,7 @@ A1: L~f = L~g by REVROT_1:33;
   N-min L~f in rng f by SPRECT_2:43;
   then
 A2: g/.1 = N-min L~g by A1,FINSEQ_6:98;
-  reconsider u = p as Point of Euclid 2;
+  reconsider u = p as Point of Euclid 2 by XX;
   assume p in RightComp f;
   then p in RightComp g by REVROT_1:37;
   then u in Int RightComp g by TOPS_1:55;
@@ -943,7 +946,7 @@ A5: E-bound L~SpStSeq L~g = E-bound L~g by SPRECT_1:69;
 A6: E-bound L~SpStSeq L~g = sup(proj1.:L~SpStSeq L~g) by SPRECT_1:51;
 A7: proj1.:L~SpStSeq L~g is bounded_above by SPRECT_1:47;
   set x = |[p`1+r/2,N-bound L~SpStSeq L~g]|;
-  reconsider k = |[p`1+r/2,p`2]| as Point of Euclid 2;
+  reconsider k = |[p`1+r/2,p`2]| as Point of Euclid 2 by XX;
 A8: r/2 > 0 by A3,XREAL_1:141;
   dist(u,k) = (Pitag_dist 2).(u,k) by METRIC_1:def 1
     .= sqrt ((p`1 - |[p`1+r/2,p`2]|`1)^2 + (p`2 - |[p`1+r/2,p`2]|`2)^2)
@@ -992,7 +995,7 @@ A1: L~f = L~g by REVROT_1:33;
   N-min L~f in rng f by SPRECT_2:43;
   then
 A2: g/.1 = N-min L~g by A1,FINSEQ_6:98;
-  reconsider u = p as Point of Euclid 2;
+  reconsider u = p as Point of Euclid 2 by XX;
   assume p in RightComp f;
   then p in RightComp g by REVROT_1:37;
   then u in Int RightComp g by TOPS_1:55;
@@ -1004,7 +1007,7 @@ A5: N-bound L~SpStSeq L~g = N-bound L~g by SPRECT_1:68;
 A6: N-bound L~SpStSeq L~g = sup(proj2.:L~SpStSeq L~g) by SPRECT_1:50;
 A7: proj2.:L~SpStSeq L~g is bounded_above by SPRECT_1:47;
   set x = |[E-bound L~SpStSeq L~g,p`2+r/2]|;
-  reconsider k = |[p`1,p`2+r/2]| as Point of Euclid 2;
+  reconsider k = |[p`1,p`2+r/2]| as Point of Euclid 2 by XX;
 A8: r/2 > 0 by A3,XREAL_1:141;
   dist(u,k) = (Pitag_dist 2).(u,k) by METRIC_1:def 1
     .= sqrt ((p`1 - |[p`1,p`2+r/2]|`1)^2 + (p`2 - |[p`1,p`2+r/2]|`2)^2)
@@ -1053,7 +1056,7 @@ A1: L~f = L~g by REVROT_1:33;
   N-min L~f in rng f by SPRECT_2:43;
   then
 A2: g/.1 = N-min L~g by A1,FINSEQ_6:98;
-  reconsider u = p as Point of Euclid 2;
+  reconsider u = p as Point of Euclid 2 by XX;
   assume p in RightComp f;
   then p in RightComp g by REVROT_1:37;
   then u in Int RightComp g by TOPS_1:55;
@@ -1065,7 +1068,7 @@ A5: S-bound L~SpStSeq L~g = S-bound L~g by SPRECT_1:67;
 A6: S-bound L~SpStSeq L~g = lower_bound(proj2.:L~SpStSeq L~g) by SPRECT_1:49;
 A7: proj2.:L~SpStSeq L~g is bounded_below by SPRECT_1:46;
   set x = |[E-bound L~SpStSeq L~g,p`2-r/2]|;
-  reconsider k = |[p`1,p`2-r/2]| as Point of Euclid 2;
+  reconsider k = |[p`1,p`2-r/2]| as Point of Euclid 2 by XX;
 A8: r/2 > 0 by A3,XREAL_1:141;
   dist(u,k) = (Pitag_dist 2).(u,k) by METRIC_1:def 1
     .= sqrt ((p`1 - |[p`1,p`2-r/2]|`1)^2 + (p`2 - |[p`1,p`2-r/2]|`2)^2)
@@ -1123,7 +1126,7 @@ A4: R is_a_component_of (TOP-REAL 2)|(L~f)` by CONNSP_1:def 6;
   then consider L being Subset of (TOP-REAL 2)|(L~f)` such that
 A5: L = LeftComp f and
 A6: L is_a_component_of (TOP-REAL 2)|(L~f)` by CONNSP_1:def 6;
-  p in A & q in A by TOPREAL1:6;
+  p in A & q in A by RLTOPSP1:69;
   then R meets A & L meets A by A1,A3,A5,XBOOLE_0:3;
   hence contradiction by A2,A3,A4,A5,A6,JORDAN2C:100,SPRECT_4:7;
 end;
@@ -1142,7 +1145,7 @@ A2: dom g = {1,2} by FUNCT_4:65;
     assume
 A3: a in Cl RightComp SpStSeq C;
     then consider r, s being Real such that
-A4: a = <*r,s*> by FINSEQ_2:120;
+A4: a = <*r,s*> by XX,FINSEQ_2:120;
     reconsider b = a as Point of TOP-REAL 2 by A3;
     reconsider h = a as FinSequence by A4;
 A5: dom h = {1,2} by A4,FINSEQ_1:4,FINSEQ_3:29;
@@ -1159,15 +1162,15 @@ A8:     g.x = [.W-bound L~SpStSeq C,E-bound L~SpStSeq C.] by FUNCT_4:66;
           case a in RightComp SpStSeq C;
             then W-bound L~SpStSeq C < b`1 & E-bound L~SpStSeq C > b`1
             by Th33,Th34;
-            hence h.x in g.x by A7,A8,XXREAL_1:1;
+            hence thesis by A7,A8,XXREAL_1:1;
           end;
           case a in L~SpStSeq C;
             then W-bound L~SpStSeq C <= b`1 & b`1 <= E-bound L~SpStSeq C
             by PSCOMP_1:71;
-            hence h.x in g.x by A7,A8,XXREAL_1:1;
+            hence thesis by A7,A8,XXREAL_1:1;
           end;
         end;
-        hence h.x in g.x;
+        hence thesis;
       end;
       suppose
 A9:     x = 2;
@@ -1177,15 +1180,15 @@ A10:    g.x = [.S-bound L~SpStSeq C,N-bound L~SpStSeq C.] by FUNCT_4:66;
           case a in RightComp SpStSeq C;
             then S-bound L~SpStSeq C < b`2 & N-bound L~SpStSeq C > b`2
             by Th35,Th36;
-            hence h.x in g.x by A9,A10,XXREAL_1:1;
+            hence thesis by A9,A10,XXREAL_1:1;
           end;
           case a in L~SpStSeq C;
             then S-bound L~SpStSeq C <= b`2 & b`2 <= N-bound L~SpStSeq C
             by PSCOMP_1:71;
-            hence h.x in g.x by A9,A10,XXREAL_1:1;
+            hence thesis by A9,A10,XXREAL_1:1;
           end;
         end;
-        hence h.x in g.x;
+        hence thesis;
       end;
     end;
     hence a in product g by A2,A5,CARD_3:18;
@@ -1274,10 +1277,10 @@ A10:  b`1 = x`1 by EUCLID:56;
       proj1.c = c`1 by PSCOMP_1:def 28
         .= x`1 by A9,A10,GOBOARD7:5
         .= a by A6,PSCOMP_1:def 28;
-      hence a in proj1.:(L~f) by A9,FUNCT_2:43;
+      hence thesis by A9,FUNCT_2:43;
     end;
     suppose x in L~f;
-      hence a in proj1.:(L~f) by A6,FUNCT_2:43;
+      hence thesis by A6,FUNCT_2:43;
     end;
   end;
   thus thesis by A3,RELAT_1:156,XBOOLE_1:36;
@@ -1318,10 +1321,10 @@ A10:  b`2 = x`2 by EUCLID:56;
       proj2.c = c`2 by PSCOMP_1:def 29
         .= x`2 by A9,A10,GOBOARD7:6
         .= a by A6,PSCOMP_1:def 29;
-      hence a in proj2.:(L~f) by A9,FUNCT_2:43;
+      hence thesis by A9,FUNCT_2:43;
     end;
     suppose x in L~f;
-      hence a in proj2.:(L~f) by A6,FUNCT_2:43;
+      hence thesis by A6,FUNCT_2:43;
     end;
   end;
   thus thesis by A3,RELAT_1:156,XBOOLE_1:36;
@@ -1343,7 +1346,7 @@ A2: p`1 > W-bound L~SpStSeq L~g & p`1 < E-bound L~SpStSeq L~g &
   RightComp SpStSeq L~g =
   {q : W-bound L~SpStSeq L~g < q`1 & q`1 < E-bound L~SpStSeq L~g &
   S-bound L~SpStSeq L~g < q`2 & q`2 < N-bound L~SpStSeq L~g} by SPRECT_3:54;
-  hence a in RightComp SpStSeq L~g by A2;
+  hence thesis by A2;
 end;
 
 theorem Th42:
@@ -1373,7 +1376,7 @@ theorem Th44:
   LeftComp g is_outside_component_of L~g
 proof
   thus LeftComp g is_a_component_of (L~g)` by GOBOARD9:def 1;
-  thus not LeftComp g is Bounded by Th43;
+  thus thesis by Th43;
 end;
 
 theorem
@@ -1382,7 +1385,7 @@ proof
   thus RightComp g is_a_component_of (L~g)` by GOBOARD9:def 2;
 A1: RightComp g c= Cl RightComp g by PRE_TOPC:48;
   Cl RightComp g is compact by Th42;
-  hence RightComp g is Bounded by A1,JORDAN2C:16;
+  hence thesis by A1,JORDAN2C:16;
 end;
 
 theorem Th46:

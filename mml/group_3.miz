@@ -13,7 +13,7 @@ environ
       FUNCT_1, FUNCT_2, FINSET_1, CARD_1, STRUCT_0, ALGSTR_0, GROUP_1, GROUP_2,
       DOMAIN_1, XXREAL_0, INT_1, INT_2;
  constructors SETFAM_1, WELLORD2, BINOP_1, XXREAL_0, NAT_1, INT_2, REALSET1,
-      GROUP_2;
+      REAL_1, GROUP_2, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FINSET_1, XREAL_0, INT_1,
       STRUCT_0, GROUP_1, GROUP_2, ORDINAL1;
  requirements NUMERALS, SUBSET, BOOLE;
@@ -70,7 +70,7 @@ A2: the multF of G is commutative;
   G is commutative
   proof
     let a,b;
-    thus a * b = b * a by A2,BINOP_1:def 2;
+    thus thesis by A2,BINOP_1:def 2;
   end;
   hence thesis;
 end;
@@ -82,7 +82,7 @@ proof
   a in the carrier of (1).G & b in the carrier of (1).G;
   then a in {1_G} & b in {1_G} by GROUP_2:def 7;
   then a = 1_G & b = 1_G by TARSKI:def 1;
-  hence a * b = b * a;
+  hence thesis;
 end;
 
 theorem Th4:
@@ -253,7 +253,7 @@ proof
   ex H being strict Subgroup of G st $1 = H & $2 = the carrier of H;
   assume
 A1: G is finite;
-A3: for x st x in Subgroups G ex y st P[x,y]
+A2: for x st x in Subgroups G ex y st P[x,y]
   proof
     let x;
     assume x in Subgroups G;
@@ -264,37 +264,37 @@ A3: for x st x in Subgroups G ex y st P[x,y]
     thus thesis;
   end;
   consider f being Function such that
-A4: dom f = Subgroups G and
-A5: for x st x in Subgroups G holds P[x,f.x] from CLASSES1:sch 1(A3);
-A6: rng f c= bool the carrier of G
+A3: dom f = Subgroups G and
+A4: for x st x in Subgroups G holds P[x,f.x] from CLASSES1:sch 1(A2);
+A5: rng f c= bool the carrier of G
   proof
     let x;
     assume x in rng f;
     then consider y such that
-A7: y in dom f & f.y = x by FUNCT_1:def 5;
+A6: y in dom f & f.y = x by FUNCT_1:def 5;
     consider H being strict Subgroup of G such that
-A8: y = H & x = the carrier of H by A4,A5,A7;
+A7: y = H & x = the carrier of H by A3,A4,A6;
     the carrier of H c= the carrier of G by GROUP_2:def 5;
-    hence thesis by A8;
+    hence thesis by A7;
   end;
   f is one-to-one
   proof
     let x,y;
     assume that
-A9: x in dom f and
-A10: y in dom f and
-A11: f.x = f.y;
-A12: ex H1 being strict Subgroup of G st
-    x = H1 & f.x = the carrier of H1 by A4,A5,A9;
+A8: x in dom f and
+A9: y in dom f and
+A10: f.x = f.y;
+A11: ex H1 being strict Subgroup of G st
+    x = H1 & f.x = the carrier of H1 by A3,A4,A8;
     ex H2 being strict Subgroup of G st
-    y = H2 & f.y = the carrier of H2 by A4,A5,A10;
-    hence thesis by A11,A12,GROUP_2:68;
+    y = H2 & f.y = the carrier of H2 by A3,A4,A9;
+    hence thesis by A10,A11,GROUP_2:68;
   end;
   then
-A13: card Subgroups G c= card bool the carrier of G by A4,A6,CARD_1:26;
+A12: card Subgroups G c= card bool the carrier of G by A3,A5,CARD_1:26;
   the carrier of G is finite by A1;
   then bool the carrier of G is finite;
-  hence thesis by A13,CARD_2:68;
+  hence thesis by A12,CARD_2:68;
 end;
 
 definition
@@ -346,12 +346,7 @@ proof
 end;
 
 theorem Th26:
-  a |^ a" = a & a" |^ a = a"
-proof
-  thus a |^ a" = a * a * a" by GROUP_1:19
-    .= a by Th1;
-  thus a" |^ a = a" by Th1;
-end;
+  a |^ a" = a & a" |^ a = a" by Th1;
 
 theorem Th27:
   a |^ b = a iff a * b = b * a
@@ -405,7 +400,7 @@ theorem Th32:
   a" |^ b = (a |^ b)"
 proof
   thus a" |^ b = (a * b)" * b by GROUP_1:25
-    .= (a * b)" * b"" by GROUP_1:19
+    .= (a * b)" * b""
     .= (b" * (a * b))" by GROUP_1:25
     .= (a |^ b)" by GROUP_1:def 4;
 end;
@@ -422,10 +417,10 @@ Lm3: now
   assume
 A1: for G,a,b holds a |^ n |^ b = (a |^ b) |^ n;
   let G,a,b;
-  thus a |^ (n + 1) |^ b = (a |^ n * a) |^ b by GROUP_1:49
+  thus a |^ (n + 1) |^ b = (a |^ n * a) |^ b by GROUP_1:66
     .= (a |^ n |^ b) * (a |^ b) by Th28
     .= ((a |^ b) |^ n) * (a |^ b) by A1
-    .= (a |^ b) |^ (n + 1) by GROUP_1:49;
+    .= (a |^ b) |^ (n + 1) by GROUP_1:66;
 end;
 
 Lm4: for n,G,a,b holds a |^ n |^ b = (a |^ b) |^ n
@@ -446,14 +441,14 @@ proof
   per cases;
   suppose i >= 0;
     then i = abs i by ABSVALUE:def 1;
-    hence a |^ i |^ b =(a |^ b) |^ i by Lm4;
+    hence thesis by Lm4;
   end;
   suppose
 A1: i < 0;
-    hence a |^ i |^ b = (a |^ abs i)" |^ b by GROUP_1:56
+    hence a |^ i |^ b = (a |^ abs i)" |^ b by GROUP_1:60
       .= (a |^ abs (i) |^ b)" by Th32
       .= ((a |^ b) |^ abs i)" by Lm4
-      .= (a |^ b) |^ i by A1,GROUP_1:56;
+      .= (a |^ b) |^ i by A1,GROUP_1:60;
   end;
 end;
 
@@ -488,7 +483,7 @@ definition
       let x;
       assume x in X;
       then ex g,h st x = g |^ h & g in A & h in B;
-      hence x in the carrier of G;
+      hence thesis;
     end;
     hence thesis;
   end;
@@ -889,7 +884,7 @@ definition
   existence
   proof consider H1 being strict Subgroup of G such that
 A1: the carrier of H1 = a" * H * a"" by GROUP_2:150;
-    the carrier of H1 = a" * carr H * a by A1,GROUP_1:19
+    the carrier of H1 = a" * carr H * a by A1
       .= carr(H) |^ a by Th59;
     hence thesis;
   end;
@@ -1089,7 +1084,7 @@ A1: (h |^ a") |^ a = h |^ (a" * a) by Th29
     .= h |^ 1_G by GROUP_1:def 6
     .= h by Th24;
   h |^ a" in the multMagma of G by STRUCT_0:def 5;
-  hence h in (Omega).G |^ a iff h in (Omega).G by A1,Th70,STRUCT_0:def 5;
+  hence thesis by A1,Th70,STRUCT_0:def 5;
 end;
 
 theorem
@@ -1200,7 +1195,7 @@ A22: (c" * b) |^ a = d |^ a & d in H by A21,Th70;
   end;
   then Left_Cosets H,Left_Cosets(H |^ a) are_equipotent
   by A6,A8,WELLORD2:def 4;
-  hence Index H = Index(H |^ a) by CARD_1:21;
+  hence thesis by CARD_1:21;
 end;
 
 theorem
@@ -1468,7 +1463,7 @@ A1: x = b * c & b in con_class a & c in A;
     then consider g such that
 A2: b = a |^ g by Def7;
     reconsider h = x as Element of G by A1;
-    h |^ c" = c * ((a |^ g) * c) * c" by A1,A2,GROUP_1:19
+    h |^ c" = c * ((a |^ g) * c) * c" by A1,A2
       .= c * (((a |^ g) * c) * c") by GROUP_1:def 4
       .= c * (a |^ g) by Th1;
     then
@@ -2130,7 +2125,7 @@ A3: H is Subgroup of H |^ a" by A2;
       .= a"" * H * (a" * a) by GROUP_2:40
       .= a"" * H * 1_G by GROUP_1:def 6
       .= a"" * H by GROUP_2:43
-      .= a * H by GROUP_1:19;
+      .= a * H;
     hence H * a c= a * H by A3,Th6;
   end;
   hence thesis by Th142;
@@ -2158,7 +2153,7 @@ A3: H |^ a" is Subgroup of H by A2;
       .= a"" * H * (a" * a) by GROUP_2:40
       .= a"" * H * 1_G by GROUP_1:def 6
       .= a"" * H by GROUP_2:43
-      .= a * H by GROUP_1:19;
+      .= a * H;
     hence a * H c= H * a by A3,Th6;
   end;
   hence thesis by Th141;
@@ -2242,7 +2237,7 @@ A6:     b = c |^ a & c in H by Th70;
       then b |^ a" |^ a in H |^ a by Th70;
       hence thesis by Th30;
     end;
-    hence H |^ a = the multMagma of H;
+    hence thesis;
   end;
   hence thesis;
 end;
@@ -2560,7 +2555,7 @@ A4: B = Left_Cosets Normalizator A & index Normalizator A = card B
   reconsider C = con_class A as finite set by A1,A3,CARD_1:68;
   take C;
   thus C = con_class A;
-  thus card C = index Normalizator A by A2,A4;
+  thus thesis by A2,A4;
 end;
 
 theorem Th157:
@@ -2623,7 +2618,7 @@ A4: B = Left_Cosets Normalizator {a} & index Normalizator {a} = card B
   reconsider C = con_class a as finite set by A1,A3,CARD_1:68;
   take C;
   thus C = con_class a;
-  thus card C = index Normalizator {a} by A2,A4;
+  thus thesis by A2,A4;
 end;
 
 definition
@@ -2663,7 +2658,7 @@ proof
   let H be strict Subgroup of G;
   defpred P[set,set] means
   ex H1 being strict Subgroup of G st $1 = H1 & $2 = carr H1;
-A2: for x st x in con_class H ex y st P[x,y]
+A1: for x st x in con_class H ex y st P[x,y]
   proof
     let x;
     assume x in con_class H;
@@ -2674,49 +2669,49 @@ A2: for x st x in con_class H ex y st P[x,y]
     thus thesis;
   end;
   consider f being Function such that
-A3: dom f = con_class H and
-A4: for x st x in con_class H holds P[x,f.x] from CLASSES1:sch 1(A2);
-A5: rng f = con_class carr H
+A2: dom f = con_class H and
+A3: for x st x in con_class H holds P[x,f.x] from CLASSES1:sch 1(A1);
+A4: rng f = con_class carr H
   proof
     thus rng f c= con_class carr H
     proof
       let x;
       assume x in rng f;
       then consider y such that
-A6:   y in dom f & f.y = x by FUNCT_1:def 5;
+A5:   y in dom f & f.y = x by FUNCT_1:def 5;
       consider H1 being strict Subgroup of G such that
-A7:   y = H1 & x = carr H1 by A3,A4,A6;
-      H1,H are_conjugated by A3,A6,A7,Th128;
+A6:   y = H1 & x = carr H1 by A2,A3,A5;
+      H1,H are_conjugated by A2,A5,A6,Th128;
       then carr H1,carr H are_conjugated by Th134;
-      hence thesis by A7;
+      hence thesis by A6;
     end;
     let x;
     assume x in con_class carr H;
     then consider B such that
-A8: B = x & carr H,B are_conjugated;
+A7: B = x & carr H,B are_conjugated;
     consider H1 being strict Subgroup of G such that
-A9: the carrier of H1 = B by A8,Th109;
-    B = carr H1 by A9;
-    then H1,H are_conjugated by A8,Th134;
+A8: the carrier of H1 = B by A7,Th109;
+    B = carr H1 by A8;
+    then H1,H are_conjugated by A7,Th134;
     then
-A10: H1 in con_class H by Th128;
-    then ex H2 being strict Subgroup of G st H1 = H2 & f.H1 = carr H2 by A4;
-    hence thesis by A3,A8,A9,A10,FUNCT_1:def 5;
+A9: H1 in con_class H by Th128;
+    then ex H2 being strict Subgroup of G st H1 = H2 & f.H1 = carr H2 by A3;
+    hence thesis by A2,A7,A8,A9,FUNCT_1:def 5;
   end;
   f is one-to-one
   proof
     let x,y;
     assume that
-A11: x in dom f and
-A12: y in dom f and
-A13: f.x = f.y;
+A10: x in dom f and
+A11: y in dom f and
+A12: f.x = f.y;
     consider H1 being strict Subgroup of G such that
-A14: x = H1 & f.x = carr H1 by A3,A4,A11;
+A13: x = H1 & f.x = carr H1 by A2,A3,A10;
     consider H2 being strict Subgroup of G such that
-A15: y = H2 & f.y = carr H2 by A3,A4,A12;
-    thus thesis by A13,A14,A15,GROUP_2:68;
+A14: y = H2 & f.y = carr H2 by A2,A3,A11;
+    thus thesis by A12,A13,A14,GROUP_2:68;
   end;
-  then con_class H,con_class carr H are_equipotent by A3,A5,WELLORD2:def 4;
+  then con_class H,con_class carr H are_equipotent by A2,A4,WELLORD2:def 4;
   hence card con_class H = card con_class carr H by CARD_1:21
     .= Index Normalizator H by Th155;
 end;
@@ -2741,7 +2736,7 @@ A4: B = Left_Cosets Normalizator H & index Normalizator H = card B
   reconsider C = con_class H as finite set by A1,A3,CARD_1:68;
   take C;
   thus C = con_class H;
-  thus card C = index Normalizator H by A2,A4;
+  thus thesis by A2,A4;
 end;
 
 theorem Th163:
@@ -2767,7 +2762,7 @@ A2: Normalizator H = G;
     let a be Element of G;
     a in Normalizator H by A2,STRUCT_0:def 5;
     then ex b being Element of G st b = a & H |^ b = H by Th160;
-    hence H |^ a = the multMagma of H;
+    hence thesis;
   end;
   hence thesis;
 end;

@@ -74,10 +74,14 @@ definition
 end;
 
 registration
+  let P,X;
+  cluster P /\ X -> Relation-like;
+  cluster P \ X -> Relation-like;
+end;
+
+registration
   let P,R;
-  cluster P /\ R -> Relation-like;
   cluster P \/ R -> Relation-like;
-  cluster P \ R -> Relation-like;
 end;
 
 registration
@@ -92,14 +96,6 @@ definition
 
   for a,b holds [a,b] in P implies [a,b] in A;
 end;
-
-canceled 2;
-
-theorem :: RELAT_1:9
-  X /\ R is Relation;
-
-theorem :: RELAT_1:10
-  R \ X is Relation;
 
 ::             DOMAIN OF RELATION
 ::             __________________
@@ -117,7 +113,7 @@ notation
   synonym dom R for proj1 R;
 end;
 
-canceled 2;
+canceled 6;
 
 theorem :: RELAT_1:13
   dom(P \/ R) = dom P \/ dom R;
@@ -882,4 +878,49 @@ theorem :: RELAT_1:200
 
 theorem :: RELAT_1:201
   Q|A = R|A implies Q.:A = R.:A;
+
+:: new, 2009.01.21, A.T
+
+definition let X,R;
+  attr R is X-defined means
+:: RELAT_1:def 18
+ dom R c= X;
+  attr R is X-valued means
+:: RELAT_1:def 19
+ rng R c= X;
+end;
+
+registration let X,Y;
+ cluster X-defined Y-valued Relation;
+end;
+
+:: from QC_LANG4, 2009.01.23, A.T
+
+theorem :: RELAT_1:202
+  for D being set, R being D-valued Relation
+  for y being set st y in rng R holds y in D;
+
+:: new, 2009.02.07, A.T.
+
+registration let X,A; let R be A-valued Relation;
+ cluster R|X -> A-valued;
+end;
+
+registration let X,A; let R be A-defined Relation;
+ cluster R|X -> A-defined X-defined;
+end;
+
+registration let X;
+ cluster id X -> X-defined X-valued;
+end;
+
+:: 2009.02.16, A.T.
+
+registration let A be set; let R be A-valued Relation, S be Relation;
+ cluster S*R -> A-valued;
+end;
+
+registration let A be set; let R be A-defined Relation, S be Relation;
+ cluster R*S -> A-defined;
+end;
 

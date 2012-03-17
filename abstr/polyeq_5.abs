@@ -1,0 +1,292 @@
+:: Solution of Cubic and Quartic Equations
+::  by Marco Riccardi
+:: 
+:: Received March 3, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies COMPLEX1, ARYTM_3, ARYTM_1, SQUARE_1, FUNCT_3, POWER, GROUP_1,
+      PREPOWER, SIN_COS, COMPTRIG, XCMPLX_0, ARYTM, ORDINAL2, POLYEQ_5,
+      XREAL_0;
+ notations SUBSET_1, NUMBERS, XBOOLE_0, ORDINAL1, XCMPLX_0, XXREAL_0, XREAL_0,
+      REAL_1, COMPLEX1, SQUARE_1, NEWTON, QUIN_1, POWER, NAT_1, NAT_D, SIN_COS,
+      PREPOWER, COMPTRIG, POLYEQ_3;
+ constructors REAL_1, SQUARE_1, NAT_1, QUIN_1, PREPOWER, POWER, POLYEQ_1,
+      SIN_COS, COMPTRIG, NAT_D, XREAL_0, POLYEQ_3, NUMBERS, XCMPLX_0, XXREAL_0;
+ registrations ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, SQUARE_1, NAT_1,
+      MEMBERED, NEWTON, POLYEQ_1, XBOOLE_0, VALUED_0, POWER, SIN_COS, SUBSET_1,
+      REAL_1, QUIN_1;
+ requirements ARITHM, SUBSET, REAL, BOOLE, NUMERALS;
+
+
+begin :: Preliminaries
+
+reserve a,b for complex number;
+
+theorem :: POLYEQ_5:1
+  a*a = a|^2;
+
+theorem :: POLYEQ_5:2
+  a*a*a = a|^3;
+
+theorem :: POLYEQ_5:3
+  a*a*a*a = a|^4;
+
+theorem :: POLYEQ_5:4
+  (a - b)|^2 = a|^2 -2*a*b +b|^2;
+
+:: like SERIES_4:5
+theorem :: POLYEQ_5:5
+  (a - b)|^3 = a|^3 -3*a|^2*b +3*b|^2*a -b|^3;
+
+theorem :: POLYEQ_5:6
+  (a - b)|^4 = a|^4 -4*a|^3*b +6*a|^2*b|^2 -4*b|^3*a +b|^4;
+
+notation
+  let n be natural number;
+  let r be real number;
+  synonym n -real-root r for n -root r;
+end;
+
+:: principal root
+definition
+  let n be non zero natural number;
+  let z be complex number;
+  func n -root z -> complex number equals
+:: POLYEQ_5:def 1
+  (n -real-root |.z.|)*(cos((Arg z)/n) + sin((Arg z)/n)*<i>);
+end;
+
+reserve z for complex number;
+reserve n0 for non zero natural number;
+
+theorem :: POLYEQ_5:7
+  (n0-root z)|^n0 = z;
+
+theorem :: POLYEQ_5:8
+  for r being real number st r >= 0 holds n0-root r = n0-real-root r;
+
+theorem :: POLYEQ_5:9
+  for r being real number st r > 0 holds n0-root(z/r) = n0-root z/n0-root r;
+
+theorem :: POLYEQ_5:10
+  z|^2 = a iff z = 2-root a or z = -2-root a;
+
+begin :: Solution of Quadratic Equations
+
+reserve a0,a1,a2,x,q,r,s,s1,s2 for complex number;
+
+theorem :: POLYEQ_5:11
+  a1 = -(s1+s2) & a0 = s1*s2 implies
+  (z|^2 + a1*z + a0 = 0 iff z = s1 or z = s2);
+
+theorem :: POLYEQ_5:12
+  a2<>0 implies (a2*z|^2+a1*z+a0 = 0 iff
+     z = -a1/(2*a2)+2-root(delta(a0,a1,a2))/(2*a2) or
+     z = -a1/(2*a2)-2-root(delta(a0,a1,a2))/(2*a2));
+
+begin :: Solution of Cubic Equations
+
+reserve a3,x,q,r,s,s3 for complex number;
+
+theorem :: POLYEQ_5:13
+  z = x - a2/3 & q = (3*a1 - a2|^2)/9 & r = (9*a2*a1 - 2*a2|^3 - 27*a0)/54
+  implies
+  (z|^3+a2*z|^2+a1*z+a0 = 0 iff x|^3+3*q*x-2*r = 0);
+
+theorem :: POLYEQ_5:14
+  a2 = -(s1+s2+s3) & a1 = s1*s2+s1*s3+s2*s3 & a0 = -s1*s2*s3 implies
+  (z|^3 + a2*z|^2 + a1*z + a0 = 0 iff z = s1 or z = s2 or z = s3);
+
+:: Cardan's Solution
+:: Mathematical Handbook for Scientists and Engineers (Korn) p.23
+:: roots of cubic (I)
+theorem :: POLYEQ_5:15
+  q = (3*a1 - a2|^2)/9 & q <> 0 &
+  r = (9*a2*a1 - 2*a2|^3 - 27*a0)/54 &
+  s = 2-root(q|^3+r|^2) & s1 = 3-root(r+s) & s2 = -q/s1
+  implies
+  ( z|^3+a2*z|^2+a1*z+a0 = 0 iff z = s1+s2-a2/3 or
+    z = -(s1+s2)/2-a2/3+(s1-s2)*(2-root 3)*<i>/2 or
+    z = -(s1+s2)/2-a2/3-(s1-s2)*(2-root 3)*<i>/2);
+
+:: roots of cubic (II)
+theorem :: POLYEQ_5:16
+  q = (3*a1 - a2|^2)/9 & q = 0 &
+  r = (9*a2*a1 - 2*a2|^3 - 27*a0)/54 & s1 = 3-root(2*r)
+  implies
+  ( z|^3+a2*z|^2+a1*z+a0 = 0 iff z = s1-a2/3 or
+    z = -s1/2-a2/3+s1*(2-root 3)*<i>/2 or
+    z = -s1/2-a2/3-s1*(2-root 3)*<i>/2);
+
+definition
+  let a0,a1,a2 be complex number;
+  func 1_root_of_cubic(a0,a1,a2) -> complex number means
+:: POLYEQ_5:def 2
+  ex r,s1 st r = (9*a2*a1 - 2*a2|^3 - 27*a0)/54 & s1 = 3-root(2*r) &
+  it = s1-a2/3 if 3*a1 - a2|^2 = 0
+  otherwise ex q,r,s,s1,s2 st q = (3*a1 - a2|^2)/9 &
+  r = (9*a2*a1 - 2*a2|^3 - 27*a0)/54 & s = 2-root(q|^3+r|^2) &
+  s1 = 3-root(r+s) & s2 = -q/s1 & it = s1+s2-a2/3;
+  func 2_root_of_cubic(a0,a1,a2) -> complex number means
+:: POLYEQ_5:def 3
+  ex r,s1 st r = (9*a2*a1 - 2*a2|^3 - 27*a0)/54 & s1 = 3-root(2*r) &
+  it = -s1/2-a2/3+s1*(2-root 3)*<i>/2 if 3*a1 - a2|^2 = 0
+  otherwise ex q,r,s,s1,s2 st q = (3*a1 - a2|^2)/9 &
+  r = (9*a2*a1 - 2*a2|^3 - 27*a0)/54 & s = 2-root(q|^3+r|^2) &
+  s1 = 3-root(r+s) & s2 = -q/s1 &
+  it = -(s1+s2)/2-a2/3+(s1-s2)*(2-root 3)*<i>/2;
+  func 3_root_of_cubic(a0,a1,a2) -> complex number means
+:: POLYEQ_5:def 4
+  ex r,s1 st r = (9*a2*a1 - 2*a2|^3 - 27*a0)/54 & s1 = 3-root(2*r) &
+  it = -s1/2-a2/3-s1*(2-root 3)*<i>/2 if 3*a1 - a2|^2 = 0
+  otherwise ex q,r,s,s1,s2 st q = (3*a1 - a2|^2)/9 &
+  r = (9*a2*a1 - 2*a2|^3 - 27*a0)/54 & s = 2-root(q|^3+r|^2) &
+  s1 = 3-root(r+s) & s2 = -q/s1 &
+  it = -(s1+s2)/2-a2/3-(s1-s2)*(2-root 3)*<i>/2;
+end;
+
+theorem :: POLYEQ_5:17
+  1_root_of_cubic(a0,a1,a2)+2_root_of_cubic(a0,a1,a2)+
+  3_root_of_cubic(a0,a1,a2) = -a2;
+
+theorem :: POLYEQ_5:18
+  1_root_of_cubic(a0,a1,a2) * 2_root_of_cubic(a0,a1,a2) +
+  1_root_of_cubic(a0,a1,a2) * 3_root_of_cubic(a0,a1,a2) +
+  2_root_of_cubic(a0,a1,a2) * 3_root_of_cubic(a0,a1,a2) = a1;
+
+theorem :: POLYEQ_5:19
+  1_root_of_cubic(a0,a1,a2) * 2_root_of_cubic(a0,a1,a2) *
+  3_root_of_cubic(a0,a1,a2) = -a0;
+
+theorem :: POLYEQ_5:20
+  a3 <> 0 implies (a3*z|^3 + a2*z|^2 + a1*z + a0 = 0
+    iff z = 1_root_of_cubic(a0/a3,a1/a3,a2/a3) or
+        z = 2_root_of_cubic(a0/a3,a1/a3,a2/a3) or
+        z = 3_root_of_cubic(a0/a3,a1/a3,a2/a3));
+
+begin :: Solution of Quartic Equations
+
+reserve a4,p,s4,x1,x2 for complex number;
+
+theorem :: POLYEQ_5:21
+  z = x - a3/4 & p = (8*a2-3*a3|^2)/32 & q = (8*a1 -4*a2*a3 + a3|^3)/64 &
+  r = (256*a0 -64*a3*a1 +16*a3|^2*a2 -3*a3|^4)/1024
+  implies
+  (z|^4+a3*z|^3+a2*z|^2+a1*z+a0 = 0 iff x|^4+4*p*x|^2+8*q*x+4*r = 0);
+
+theorem :: POLYEQ_5:22
+  a3 = -(s1+s2+s3+s4) & a2 = s1*s2+s1*s3+s1*s4+s2*s3+s2*s4+s3*s4
+  & a1 = -(s1*s2*s3+s1*s2*s4+s1*s3*s4+s2*s3*s4) & a0=s1*s2*s3*s4 implies
+  (z|^4 + a3*z|^3 + a2*z|^2 + a1*z + a0 = 0 iff
+   z = s1 or z = s2 or z = s3 or z = s4);
+
+:: Descartes-Euler Solution
+:: Mathematical Handbook for Scientists and Engineers (Korn) p.24
+theorem :: POLYEQ_5:23
+  q <> 0 & s1 = 2-root(1_root_of_cubic(-q|^2,p|^2-r,2*p)) &
+  s2 = 2-root(2_root_of_cubic(-q|^2,p|^2-r,2*p)) & s3 = -q/(s1*s2)
+  implies
+  (z|^4+4*p*z|^2+8*q*z+4*r = 0 iff
+   z = s1+s2+s3 or z = s1-s2-s3 or z = -s1+s2-s3 or z = -s1-s2+s3);
+
+:: roots of quartic (I)
+theorem :: POLYEQ_5:24
+  p = (8*a2-3*a3|^2)/32 & q = (8*a1 -4*a2*a3 + a3|^3)/64 & q <> 0 &
+  r = (256*a0 -64*a3*a1 +16*a3|^2*a2 -3*a3|^4)/1024 &
+  s1 = 2-root(1_root_of_cubic(-q|^2,p|^2-r,2*p)) &
+  s2 = 2-root(2_root_of_cubic(-q|^2,p|^2-r,2*p)) & s3 = -q/(s1*s2)
+  implies
+  ( z|^4+a3*z|^3+a2*z|^2+a1*z+a0 = 0 iff z = s1+s2+s3-a3/4 or
+   z = s1-s2-s3-a3/4 or z = -s1+s2-s3-a3/4 or z = -s1-s2+s3-a3/4);
+
+:: roots of quartic (II)
+theorem :: POLYEQ_5:25
+  p = (8*a2-3*a3|^2)/32 & q = (8*a1 -4*a2*a3 + a3|^3)/64 & q = 0 &
+  r = (256*a0 -64*a3*a1 +16*a3|^2*a2 -3*a3|^4)/1024 & s1 = 2-root(p|^2-r)
+  implies
+  ( z|^4+a3*z|^3+a2*z|^2+a1*z+a0 = 0 iff
+  z = 2-root(-2*(p-s1))-a3/4 or z = -2-root(-2*(p-s1))-a3/4 or
+  z = 2-root(-2*(p+s1))-a3/4 or z = -2-root(-2*(p+s1))-a3/4);
+
+definition
+  let a0,a1,a2,a3 be complex number;
+  func 1_root_of_quartic(a0,a1,a2,a3) -> complex number means
+:: POLYEQ_5:def 5
+  ex p,r,s1 st p = (8*a2-3*a3|^2)/32 &
+  r = (256*a0 -64*a3*a1 +16*a3|^2*a2 -3*a3|^4)/1024 & s1 = 2-root(p|^2-r) &
+  it = 2-root(-2*(p-s1))-a3/4 if 8*a1 -4*a2*a3 + a3|^3 = 0
+  otherwise ex p,q,r,s1,s2,s3 st p = (8*a2-3*a3|^2)/32 &
+  q = (8*a1 -4*a2*a3 + a3|^3)/64 &
+  r = (256*a0 -64*a3*a1 +16*a3|^2*a2 -3*a3|^4)/1024 &
+  s1 = 2-root(1_root_of_cubic(-q|^2,p|^2-r,2*p)) &
+  s2 = 2-root(2_root_of_cubic(-q|^2,p|^2-r,2*p)) & s3 = -q/(s1*s2) &
+  it = s1+s2+s3-a3/4;
+  func 2_root_of_quartic(a0,a1,a2,a3) -> complex number means
+:: POLYEQ_5:def 6
+  ex p,r,s1 st p = (8*a2-3*a3|^2)/32 &
+  r = (256*a0 -64*a3*a1 +16*a3|^2*a2 -3*a3|^4)/1024 & s1 = 2-root(p|^2-r) &
+  it = -2-root(-2*(p-s1))-a3/4 if 8*a1 -4*a2*a3 + a3|^3 = 0
+  otherwise ex p,q,r,s1,s2,s3 st p = (8*a2-3*a3|^2)/32 &
+  q = (8*a1 -4*a2*a3 + a3|^3)/64 &
+  r = (256*a0 -64*a3*a1 +16*a3|^2*a2 -3*a3|^4)/1024 &
+  s1 = 2-root(1_root_of_cubic(-q|^2,p|^2-r,2*p)) &
+  s2 = 2-root(2_root_of_cubic(-q|^2,p|^2-r,2*p)) & s3 = -q/(s1*s2) &
+  it = -s1-s2+s3-a3/4;
+  func 3_root_of_quartic(a0,a1,a2,a3) -> complex number means
+:: POLYEQ_5:def 7
+  ex p,r,s1 st p = (8*a2-3*a3|^2)/32 &
+  r = (256*a0 -64*a3*a1 +16*a3|^2*a2 -3*a3|^4)/1024 & s1 = 2-root(p|^2-r) &
+  it = 2-root(-2*(p+s1))-a3/4 if 8*a1 -4*a2*a3 + a3|^3 = 0
+  otherwise ex p,q,r,s1,s2,s3 st p = (8*a2-3*a3|^2)/32 &
+  q = (8*a1 -4*a2*a3 + a3|^3)/64 &
+  r = (256*a0 -64*a3*a1 +16*a3|^2*a2 -3*a3|^4)/1024 &
+  s1 = 2-root(1_root_of_cubic(-q|^2,p|^2-r,2*p)) &
+  s2 = 2-root(2_root_of_cubic(-q|^2,p|^2-r,2*p)) & s3 = -q/(s1*s2) &
+  it = -s1+s2-s3-a3/4;
+  func 4_root_of_quartic(a0,a1,a2,a3) -> complex number means
+:: POLYEQ_5:def 8
+  ex p,r,s1 st p = (8*a2-3*a3|^2)/32 &
+  r = (256*a0 -64*a3*a1 +16*a3|^2*a2 -3*a3|^4)/1024 & s1 = 2-root(p|^2-r) &
+  it = -2-root(-2*(p+s1))-a3/4 if 8*a1 -4*a2*a3 + a3|^3 = 0
+  otherwise ex p,q,r,s1,s2,s3 st p = (8*a2-3*a3|^2)/32 &
+  q = (8*a1 -4*a2*a3 + a3|^3)/64 &
+  r = (256*a0 -64*a3*a1 +16*a3|^2*a2 -3*a3|^4)/1024 &
+  s1 = 2-root(1_root_of_cubic(-q|^2,p|^2-r,2*p)) &
+  s2 = 2-root(2_root_of_cubic(-q|^2,p|^2-r,2*p)) & s3 = -q/(s1*s2) &
+  it = s1-s2-s3-a3/4;
+end;
+
+theorem :: POLYEQ_5:26
+  1_root_of_quartic(a0,a1,a2,a3)+2_root_of_quartic(a0,a1,a2,a3)+
+  3_root_of_quartic(a0,a1,a2,a3)+4_root_of_quartic(a0,a1,a2,a3) = -a3;
+
+theorem :: POLYEQ_5:27
+  (1_root_of_quartic(a0,a1,a2,a3)*2_root_of_quartic(a0,a1,a2,a3)+
+  1_root_of_quartic(a0,a1,a2,a3)*3_root_of_quartic(a0,a1,a2,a3)+
+  1_root_of_quartic(a0,a1,a2,a3)*4_root_of_quartic(a0,a1,a2,a3))+
+  2_root_of_quartic(a0,a1,a2,a3)*3_root_of_quartic(a0,a1,a2,a3)+
+  2_root_of_quartic(a0,a1,a2,a3)*4_root_of_quartic(a0,a1,a2,a3)+
+  3_root_of_quartic(a0,a1,a2,a3)*4_root_of_quartic(a0,a1,a2,a3) = a2;
+
+theorem :: POLYEQ_5:28
+  (1_root_of_quartic(a0,a1,a2,a3)*2_root_of_quartic(a0,a1,a2,a3)*
+  3_root_of_quartic(a0,a1,a2,a3)+
+  1_root_of_quartic(a0,a1,a2,a3)*2_root_of_quartic(a0,a1,a2,a3)*
+  4_root_of_quartic(a0,a1,a2,a3))+
+  1_root_of_quartic(a0,a1,a2,a3)*3_root_of_quartic(a0,a1,a2,a3)*
+  4_root_of_quartic(a0,a1,a2,a3)+
+  2_root_of_quartic(a0,a1,a2,a3)*3_root_of_quartic(a0,a1,a2,a3)*
+  4_root_of_quartic(a0,a1,a2,a3) = -a1;
+
+theorem :: POLYEQ_5:29
+  1_root_of_quartic(a0,a1,a2,a3)*2_root_of_quartic(a0,a1,a2,a3)*
+  3_root_of_quartic(a0,a1,a2,a3)*4_root_of_quartic(a0,a1,a2,a3) = a0;
+
+theorem :: POLYEQ_5:30
+  a4 <> 0 implies (a4*z|^4 + a3*z|^3 + a2*z|^2 + a1*z + a0 = 0
+    iff z = 1_root_of_quartic(a0/a4,a1/a4,a2/a4,a3/a4) or
+        z = 2_root_of_quartic(a0/a4,a1/a4,a2/a4,a3/a4) or
+        z = 3_root_of_quartic(a0/a4,a1/a4,a2/a4,a3/a4) or
+        z = 4_root_of_quartic(a0/a4,a1/a4,a2/a4,a3/a4));

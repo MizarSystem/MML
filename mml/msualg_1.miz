@@ -12,9 +12,10 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, RELAT_1, FUNCT_1,
       FUNCT_2, FINSEQ_1, STRUCT_0, PARTFUN1, FINSEQ_2, CARD_3, FUNCOP_1,
       PBOOLE, UNIALG_1;
- constructors CARD_3, PBOOLE, REALSET2, UNIALG_1;
+ constructors CARD_3, PBOOLE, REALSET2, UNIALG_1, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, FINSEQ_2,
-      PBOOLE, STRUCT_0, TEX_2, UNIALG_1, FUNCT_2, CARD_1, REALSET1;
+      RELAT_1,
+      PBOOLE, STRUCT_0, TEX_2, UNIALG_1, FUNCT_2, CARD_1, REALSET1, ZFMISC_1;
  requirements BOOLE, SUBSET;
  definitions TARSKI, FINSEQ_1, FUNCT_1, PBOOLE, STRUCT_0, XBOOLE_0, UNIALG_1,
       FUNCOP_1;
@@ -39,8 +40,7 @@ registration
   cluster void strict non empty ManySortedSign;
   existence
   proof
-    {} in {{}}* by FINSEQ_1:66;
-    then reconsider f = {}-->{} as Function of {},{{}}* by FUNCOP_1:58;
+    reconsider f = {}-->{} as Function of {},{{}}*;
     reconsider g = {}-->{} as Function of {},{{}};
     take ManySortedSign(#{{}},{},f,g#);
     thus thesis;
@@ -105,9 +105,8 @@ registration
   cluster strict non-empty MSAlgebra over S;
   existence
   proof
-    dom((the carrier of S) --> {0}) = the carrier of S by FUNCOP_1:19;
-    then reconsider s = (the carrier of S) --> {0}
-    as ManySortedSet of the carrier of S by PBOOLE:def 3;
+    reconsider s = (the carrier of S) --> {0}
+    as ManySortedSet of the carrier of S;
     consider o being ManySortedFunction of
     s# * the Arity of S, s * the ResultSort of S;
     take MSAlgebra(#s,o#);
@@ -123,9 +122,8 @@ registration
   cluster strict non-empty many-sorted over S;
   existence
   proof
-    dom ((the carrier of S) --> {0}) = the carrier of S by FUNCOP_1:19;
-    then reconsider s = (the carrier of S) --> {0}
-    as ManySortedSet of the carrier of S by PBOOLE:def 3;
+    reconsider s = (the carrier of S) --> {0}
+    as ManySortedSet of the carrier of S;
     take many-sorted(#s#);
     thus many-sorted (#s#) is strict;
     let i be set;
@@ -169,7 +167,8 @@ definition
   coherence
   proof
     o in the carrier' of S;
-    then o in dom((the Sorts of A)# * the Arity of S) by PBOOLE:def 3;
+    then o in dom((the Sorts of A)# * the Arity of S) by PARTFUN1:def 4
+;
     then ((the Sorts of A)# * the Arity of S).o
     in rng((the Sorts of A)# * the Arity of S) by FUNCT_1:def 5;
     hence thesis by FUNCT_1:25;
@@ -180,7 +179,8 @@ definition
   coherence
   proof
     o in the carrier' of S;
-    then o in dom((the Sorts of A) * the ResultSort of S) by PBOOLE:def 3;
+    then o in dom((the Sorts of A) * the ResultSort of S) by PARTFUN1:def 4
+;
     then ((the Sorts of A) * the ResultSort of S).o
     in rng((the Sorts of A) * the ResultSort of S) by FUNCT_1:def 5;
     hence thesis by FUNCT_1:25;
@@ -212,7 +212,7 @@ Lm1: for h being homogeneous quasi_total non empty PartFunc of D*,D
 holds dom h = (arity h)-tuples_on D
 proof
   let h be homogeneous quasi_total non empty PartFunc of D*,D;
-A1: dom h c= D* by RELSET_1:12;
+A1: dom h c= D* by RELAT_1:def 18;
   thus dom h c= (arity h)-tuples_on D
   proof
     let x be set;
@@ -221,18 +221,17 @@ A2: x in dom h;
     then reconsider f = x as FinSequence of D by A1,FINSEQ_1:def 11;
 A3: len f = arity h by A2,UNIALG_1:def 10;
     f is Element of (len f)-tuples_on D by FINSEQ_2:110;
-    hence x in (arity h)-tuples_on D by A3;
+    hence thesis by A3;
   end;
   let x be set;
   assume x in (arity h)-tuples_on D;
   then reconsider f = x as Element of (arity h)-tuples_on D;
   consider x0 being Element of dom h;
-A4: dom h <> {} by RELAT_1:64;
-  then x0 in dom h;
+  x0 in dom h;
   then reconsider x0 as FinSequence of D by A1,FINSEQ_1:def 11;
-  len x0 = arity h by A4,UNIALG_1:def 10
-    .= len f by FINSEQ_2:109;
-  hence x in dom h by A4,UNIALG_1:def 2;
+  len x0 = arity h by UNIALG_1:def 10
+    .= len f by FINSEQ_1:def 18;
+  hence thesis by UNIALG_1:def 2;
 end;
 
 theorem Th7:
@@ -245,11 +244,11 @@ proof
   let F be PartFunc of C,A;
   let G be Function of A,B;
   now dom G = A by FUNCT_2:def 1;
-    then rng F c= dom G by RELSET_1:12;
+    then rng F c= dom G by RELAT_1:def 19;
     hence dom(G*F) = dom F by RELAT_1:46;
-    thus rng(G*F) c= B by RELSET_1:12;
+    thus rng(G*F) c= B by RELAT_1:def 19;
   end;
-  hence G*F is Function of dom F,B by FUNCT_2:def 1,RELSET_1:11;
+  hence thesis by FUNCT_2:def 1,RELSET_1:11;
 end;
 
 theorem Th8:
@@ -267,7 +266,7 @@ proof
   let A be Universal_Algebra;
   len(the charact of A) <> 0;
   then len(signature A) <> 0 by UNIALG_1:def 11;
-  hence signature A is non empty;
+  hence thesis;
 end;
 
 begin :: Relationship to one sorted algebras
@@ -299,7 +298,7 @@ A3: c1 = (the Sorts of A).i1 by PBOOLE:150;
   consider i2 being set such that
 A4: i2 in the carrier of S and
 A5: c2 = (the Sorts of A).i2 by PBOOLE:150;
-  thus c1 = c2 by A1,A2,A3,A4,A5,STRUCT_0:def 10;
+  thus thesis by A1,A2,A3,A4,A5,STRUCT_0:def 10;
 end;
 reconsider z = 0 as Element of {0} by TARSKI:def 1;
 
@@ -314,11 +313,11 @@ proof
   thus the carrier of S is non empty;
   signature A <> {} by Th9;
   then
-A1: the carrier' of S <> {} by RELAT_1:64;
+A1: the carrier' of S <> {};
   S is segmental
   proof
     take len signature(A);
-    thus the carrier' of S = Seg len signature(A) by FINSEQ_1:def 3;
+    thus thesis by FINSEQ_1:def 3;
   end;
   hence thesis by A1;
 end;
@@ -371,7 +370,7 @@ A1: the carrier of MSSign A = {0} &
     set M = {0}-->the carrier of A;
     dom M = the carrier of MSSign A by A1,FUNCOP_1:19;
     then reconsider M as ManySortedSet of the carrier of MSSign A
-    by PBOOLE:def 3;
+    by PARTFUN1:def 4,RELAT_1:def 18;
     M is non-empty;
     hence thesis;
   end;
@@ -396,7 +395,7 @@ A1: the carrier of MSSign A = {0} &
     then
 A2: dom the charact of A = OS by A1,FINSEQ_3:31;
     then reconsider O = the charact of A as ManySortedSet of OS
-    by PBOOLE:def 3;
+    by PARTFUN1:def 4,RELAT_1:def 18;
     reconsider O as ManySortedFunction of OS;
     reconsider DO = (MSSorts A)# * the Arity of MSSign A,
     RO = (MSSorts A)* the ResultSort of MSSign A as ManySortedSet of OS;
@@ -410,8 +409,7 @@ A3:   i in OS;
       set D = the carrier of A;
       reconsider h = O.n as homogeneous quasi_total non empty PartFunc of D*,D
       by A2,A3,UNIALG_1:5,def 5;
-      dom(0.-->D) = {0} by FUNCOP_1:19;
-      then reconsider M = 0.-->D as ManySortedSet of {0} by PBOOLE:def 3;
+      reconsider M = 0.-->D as ManySortedSet of {0};
 A4:   n in dom(dom signature(A)-->0) by A1,A3,FUNCOP_1:19;
 A5:   0 in {0} by TARSKI:def 1;
 A6:   DO.i = ((MSSorts A)#*(*-->0)*signature A).n by A1,RELAT_1:55
@@ -419,11 +417,11 @@ A6:   DO.i = ((MSSorts A)#*(*-->0)*signature A).n by A1,RELAT_1:55
         .= (M#*(*-->0)).arity h by A1,A3,UNIALG_1:def 11
         .= Funcs(Seg arity h,D) by PBOOLE:153
         .= dom(O.o) by Th8;
-A7:   RO.i = (MSSorts A).((dom signature(A)-->0).n) by A1,A4,FUNCT_1:23
+   RO.i = (MSSorts A).((dom signature(A)-->0).n) by A1,A4,FUNCT_1:23
         .= ({0}-->the carrier of A).0 by A1,A3,FUNCOP_1:13
         .= the carrier of A by A5,FUNCOP_1:13;
-      then rng h c= RO.i by RELSET_1:12;
-      hence O.i is Function of DO.i,RO.i by A6,A7,FUNCT_2:def 1,RELSET_1:11;
+      then rng h c= RO.i by RELAT_1:def 19;
+      hence thesis by A6,FUNCT_2:def 1,RELSET_1:11;
     end;
     hence thesis;
   end;
@@ -487,7 +485,8 @@ A2: Args(i,A) = (the Sorts of A)# .((the Arity of MS).i) by FUNCT_1:23
   consider n being Nat such that
 A3: dom the_arity_of i = Seg n by FINSEQ_1:def 2;
 A4: rng the_arity_of i c= the carrier of MS by FINSEQ_1:def 4;
-  then rng the_arity_of i c= dom the Sorts of A by PBOOLE:def 3;
+  then rng the_arity_of i c= dom the Sorts of A by PARTFUN1:def 4
+;
   then
 A5: dom((the Sorts of A)*the_arity_of i) = dom the_arity_of i by RELAT_1:46;
   thus Args(i,A) c= m-tuples_on the_sort_of A
@@ -513,13 +512,13 @@ A11:  g.u in (the Sorts of A).((the_arity_of i).u) by A5,A7,A9,FUNCT_1:23;
       (the_arity_of i).u in rng the_arity_of i by A5,A7,A9,FUNCT_1:def 5;
       then (the Sorts of A).((the_arity_of i).u) is
       Component of the Sorts of A by A4,PBOOLE:151;
-      hence j in the_sort_of A by A10,A11,Def17;
+      hence thesis by A10,A11,Def17;
     end;
     then
 A12: p is FinSequence of the_sort_of A by FINSEQ_1:def 4;
     len p = m by A5,A7,FINSEQ_3:31;
     then x is Element of m-tuples_on the_sort_of A by A6,A12,FINSEQ_2:110;
-    hence x in m-tuples_on the_sort_of A;
+    hence thesis;
   end;
   let x be set;
   assume x in m-tuples_on the_sort_of A;
@@ -542,7 +541,7 @@ A18: g.x in the_sort_of A by A15;
     then g.x in (the Sorts of A).((the_arity_of i).x) by A18,Def17;
     hence g.x in ((the Sorts of A)*the_arity_of i).x by A5,A17,FUNCT_1:23;
   end;
-  hence x in Args(i,A) by A2,A13,A16,CARD_3:18;
+  hence thesis by A2,A13,A16,CARD_3:18;
 end;
 
 theorem Th12:
@@ -551,7 +550,7 @@ proof
   let A be non empty set, n;
   defpred P[Element of A*] means len $1 = n;
   { s where s is Element of A*: P[s] } c= A* from FRAENKEL:sch 10;
-  hence n-tuples_on A c= A* by FINSEQ_2:def 4;
+  hence thesis by FINSEQ_2:def 4;
 end;
 
 theorem Th13:
@@ -562,7 +561,7 @@ proof
   let MS be segmental trivial non void non empty ManySortedSign,
   i be OperSymbol of MS, A be non-empty MSAlgebra over MS;
   Args(i,A) = (len the_arity_of i)-tuples_on the_sort_of A by Th11;
-  hence Args(i,A) c= (the_sort_of A)* by Th12;
+  hence thesis by Th12;
 end;
 
 theorem Th14:
@@ -572,7 +571,7 @@ theorem Th14:
 proof
   let MS be segmental trivial non void non empty ManySortedSign,
   A be non-empty MSAlgebra over MS;
-A1: dom the Charact of A = the carrier' of MS by PBOOLE:def 3;
+A1: dom the Charact of A = the carrier' of MS by PARTFUN1:def 4;
   ex n being Element of NAT st the carrier' of MS = Seg n
   proof
     consider n such that
@@ -598,7 +597,7 @@ X:  Args(i,A) c= (the_sort_of A)* by Th13;
       .= the_sort_of A by A6,Def17;
     then x is Function of Args(i,A),the_sort_of A by A4,PBOOLE:def 18;
     then x is PartFunc of (the_sort_of A)*,the_sort_of A by X,RELSET_1:17;
-    hence x in PFuncs((the_sort_of A)*,the_sort_of A) by PARTFUN1:119;
+    hence thesis by PARTFUN1:119;
   end;
   hence thesis;
 end;
@@ -630,22 +629,16 @@ A3:   h = (the_charact_of A).n;
       let x,y such that
 A4:   len x = len y and
 A5:   x in dom h;
-      reconsider o = n as OperSymbol of MS by A2,PBOOLE:def 3;
-A7:   dom(the ResultSort of MS) = the carrier' of MS by FUNCT_2:def 1;
+      reconsider o = n as OperSymbol of MS by A2,PARTFUN1:def 4;
 A8:   ((the Sorts of A)# * the Arity of MS).o = Args(o,A);
-A9:   (the Sorts of A).((the ResultSort of MS).o)
-      is Component of the Sorts of A by PBOOLE:151;
-A10:  ((the Sorts of A)*the ResultSort of MS).o
-      = (the Sorts of A).((the ResultSort of MS).o) by A7,FUNCT_1:23
-        .= the_sort_of A by A9,Def17;
       h is Function of ((the Sorts of A)# * the Arity of MS).o,
       ((the Sorts of A) * the ResultSort of MS).o by A3,PBOOLE:def 18;
       then
-A11:  dom h = ((the Sorts of A)# * the Arity of MS).o by A10,FUNCT_2:def 1
+A11:  dom h = ((the Sorts of A)# * the Arity of MS).o by FUNCT_2:def 1
         .= (len the_arity_of o)-tuples_on the_sort_of A by A8,Th11;
-      then len y = len the_arity_of o by A4,A5,FINSEQ_2:109;
+      then len y = len the_arity_of o by A4,A5,FINSEQ_1:def 18;
       then y is Element of dom h by A11,FINSEQ_2:110;
-      hence y in dom h by A5;
+      hence thesis by A5;
     end;
 A12: the_charact_of A is homogeneous
     proof
@@ -654,30 +647,24 @@ A13:  n in dom(the_charact_of A) and
 A14:  h = (the_charact_of A).n;
       let x,y being FinSequence such that
 A15:  x in dom h & y in dom h;
-      reconsider o = n as OperSymbol of MS by A13,PBOOLE:def 3;
-A17:  dom(the ResultSort of MS) = the carrier' of MS by FUNCT_2:def 1;
+      reconsider o = n as OperSymbol of MS by A13,PARTFUN1:def 4;
 A18:  ((the Sorts of A)# * the Arity of MS).o = Args(o,A);
-A19:  (the Sorts of A).((the ResultSort of MS).o)
-      is Component of the Sorts of A by PBOOLE:151;
-A20:  ((the Sorts of A)*the ResultSort of MS).o
-      = (the Sorts of A).((the ResultSort of MS).o) by A17,FUNCT_1:23
-        .= the_sort_of A by A19,Def17;
       h is Function of ((the Sorts of A)# * the Arity of MS).o,
       ((the Sorts of A) * the ResultSort of MS).o by A14,PBOOLE:def 18;
       then
-A21:  dom h = ((the Sorts of A)# * the Arity of MS).o by A20,FUNCT_2:def 1
+A21:  dom h = ((the Sorts of A)# * the Arity of MS).o by FUNCT_2:def 1
         .= (len the_arity_of o)-tuples_on the_sort_of A by A18,Th11;
-      hence len x = len the_arity_of o by A15,FINSEQ_2:109
-        .= len y by A15,A21,FINSEQ_2:109;
+      hence len x = len the_arity_of o by A15,FINSEQ_1:def 18
+        .= len y by A15,A21,FINSEQ_1:def 18;
     end;
     the_charact_of A is non-empty
     proof
       let n be set such that
 A23:  n in dom the_charact_of A;
       set h = (the_charact_of A).n;
-      reconsider o = n as OperSymbol of MS by A23,PBOOLE:def 3;
+      reconsider o = n as OperSymbol of MS by A23,PARTFUN1:def 4;
       h = Den(o,A);
-      hence h is non empty;
+      hence thesis;
     end;
     hence thesis by A1,A12,UNIALG_1:def 7,def 8,def 9;
   end;
@@ -690,7 +677,7 @@ proof
   let A be strict Universal_Algebra;
   the carrier of A in {the carrier of A} by TARSKI:def 1;
   then the carrier of A in rng the Sorts of MSAlg A by FUNCOP_1:14;
-  hence A = 1-Alg MSAlg A by Def17;
+  hence thesis by Def17;
 end;
 
 theorem

@@ -9,12 +9,14 @@ environ
  vocabularies RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, RELAT_1, ABSVALUE, ORDINAL2,
       BINOP_1, SQUARE_1, PROB_1, FUNCT_2, RLSUB_1, SEQ_1, SEQ_2, SERIES_1,
       BHSP_1, SUPINF_2, RSSPACE, FUNCOP_1, REALSET1, ALGSTR_0;
- notations TARSKI, SUBSET_1, XBOOLE_0, ZFMISC_1, ORDINAL1, NUMBERS, XXREAL_0,
+ notations TARSKI, SUBSET_1, XBOOLE_0, ZFMISC_1, ORDINAL1, NUMBERS,
+      XCMPLX_0, XXREAL_0,
       XREAL_0, COMPLEX1, STRUCT_0, ALGSTR_0, REAL_1, NAT_1, RELAT_1, FUNCT_1,
       PARTFUN1, FUNCT_2, REALSET1, FUNCOP_1, RLVECT_1, RLSUB_1, BHSP_1,
       SQUARE_1, VALUED_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, BINOP_1;
  constructors PARTFUN1, BINOP_1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, NAT_D,
-      SEQ_2, SEQM_3, SERIES_1, REALSET1, RLSUB_1, BHSP_1, SEQ_1, VALUED_1;
+      SEQ_2, SEQM_3, SERIES_1, REALSET1, RLSUB_1, BHSP_1, SEQ_1, VALUED_1,
+      RELSET_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
       MEMBERED, REALSET1, STRUCT_0, RLVECT_1, BHSP_1, ALGSTR_0, VALUED_1,
       FUNCT_2, VALUED_0;
@@ -23,7 +25,7 @@ environ
       ALGSTR_0;
  theorems XBOOLE_0, RELAT_1, TARSKI, ABSVALUE, ZFMISC_1, SEQ_1, SEQ_2, SEQM_3,
       SERIES_1, COMSEQ_3, INT_1, FUNCT_1, NAT_1, FUNCT_2, RLVECT_1, RLSUB_1,
-      SEQ_4, BINOP_1, FUNCOP_1, XREAL_1, ORDINAL1, ALGSTR_0;
+      SEQ_4, BINOP_1, FUNCOP_1, XREAL_1, ORDINAL1, ALGSTR_0, XREAL_0;
  schemes NAT_1, BINOP_1, XBOOLE_0, BINOP_2;
 
 begin
@@ -248,7 +250,7 @@ proof
   let x be Real_Sequence;
   reconsider x1=x as set;
   x1 in the_set_of_RealSequences by Def1;
-  hence seq_id(x) = x by Def2;
+  hence thesis by Def2;
 end;
 
 theorem
@@ -392,7 +394,7 @@ A2:   s in NAT;
         .= (a(#)seq_id(v)).s+(b(#)seq_id(v)).s by A2,SEQ_1:13;
       hence thesis by A2,SEQ_1:11;
     end;
-    hence (a+b)(#)seq_id(v)=a(#)seq_id(v)+b(#)seq_id(v) by FUNCT_2:18;
+    hence thesis by FUNCT_2:18;
   end;
   a*v + b*v = seq_id(a*v)+seq_id(b*v) by Def4
     .=seq_id(a(#)seq_id(v)) + seq_id(b*v) by Th5
@@ -450,26 +452,41 @@ registration
     thus S is add-associative
     proof
       let u,v,w be Element of S;
-      thus (u + v) + w = u + (v + w) by Th6;
+      thus thesis by Th6;
     end;
     thus S is right_zeroed
     proof
       let v be Element of S;
-      thus v + 0.S = v by Th7;
+      thus thesis by Th7;
     end;
     thus S is right_complementable
     proof
       let v be Element of S;
       thus ex w being VECTOR of S st v + w = 0.S by Th8;
     end;
-    thus for a being Real
-    for v,w being VECTOR of S holds a * (v + w) = a * v + a * w by Th9;
-    thus for a,b being Real
+    thus for a being real number
+    for v,w being VECTOR of S holds a * (v + w) = a * v + a * w
+     proof let a be real number;
+      reconsider a as Real by XREAL_0:def 1;
+       for v,w being VECTOR of S holds a * (v + w) = a * v + a * w by Th9;
+      hence thesis;
+     end;
+    thus for a,b being real number
+    for v being VECTOR of S holds (a + b) * v = a * v + b * v
+     proof let a,b be real number;
+      reconsider a,b as Real by XREAL_0:def 1;
     for v being VECTOR of S holds (a + b) * v = a * v + b * v by Th10;
-    thus for a,b being Real
+      hence thesis;
+     end;
+    thus for a,b being real number
+    for v being VECTOR of S holds (a * b) * v = a * (b * v)
+     proof let a,b be real number;
+      reconsider a,b as Real by XREAL_0:def 1;
     for v being VECTOR of S holds (a * b) * v = a * (b * v) by Th11;
+      hence thesis;
+     end;
     let v be VECTOR of S;
-    thus 1 * v = v by Th12;
+    thus thesis by Th12;
   end;
 end;
 
@@ -654,7 +671,7 @@ A10:      (2(#)p+2(#)q).n=(2(#)p).n +(2(#)q).n by SEQ_1:11
         end;
         hence thesis by A6,A7,SERIES_1:24;
       end;
-      hence v+u in W by Def11;
+      hence thesis by Def11;
     end;
 A11: W is non empty
     proof
@@ -690,7 +707,7 @@ A13:    (seq_id(v))(#)(seq_id(v)) is summable by A12,Def11;
           .=(a*a)(#)(seq_id(v)(#)seq_id(v)) by SEQ_1:31;
         hence thesis by A13,SERIES_1:13;
       end;
-      hence a*v in W by Def11;
+      hence thesis by Def11;
     end;
     hence thesis by A1,A11,RLSUB_1:def 1;
   end;
@@ -828,20 +845,20 @@ A6: v1 + w1 = 0.l0 by ALGSTR_0:def 11;
   end;
   l is RealLinearSpace-like
   proof
-    thus for a be Real for v,w being VECTOR of l holds
+    thus for a be real number for v,w being VECTOR of l holds
     a * (v + w) = a * v + a * w
     proof
-      let a be Real;
+      let a be real number;
       let v,w be VECTOR of l;
       reconsider v1=v, w1=w as VECTOR of l0;
       thus a*(v+w) =a*(v1+w1)
         .=a*v1+a*w1 by RLVECT_1:def 9
         .= a*v +a*w;
     end;
-    thus for a,b be Real for v being VECTOR of l
+    thus for a,b be real number for v being VECTOR of l
     holds (a + b) * v = a * v + b * v
     proof
-      let a,b be Real;
+      let a,b be real number;
       let v be VECTOR of l;
       reconsider v1=v as VECTOR of l0;
       thus (a+b)*v =(a+b)*v1
@@ -849,9 +866,10 @@ A6: v1 + w1 = 0.l0 by ALGSTR_0:def 11;
         .= a*v +b*v;
     end;
 
-thus for a,b be Real for v being VECTOR of l holds (a * b) * v = a * (b * v)
+thus for a,b be real number
+ for v being VECTOR of l holds (a * b) * v = a * (b * v)
     proof
-      let a,b be Real;
+      let a,b be real number;
       let v be VECTOR of l;
       reconsider v1=v as VECTOR of l0;
       thus (a*b)*v =(a*b)*v1
@@ -903,7 +921,7 @@ A7:   0<p;
       let m be Element of NAT such that 0<=m;
       abs((Partial_Sums rseq).m-0) = abs(0-0) by A2
         .= 0 by ABSVALUE:def 1;
-      hence abs((Partial_Sums rseq).m-0)<p by A7;
+      hence thesis by A7;
     end;
     then
 A8: Partial_Sums rseq is convergent by SEQ_2:def 6;
@@ -929,7 +947,7 @@ A6: for n be Nat holds (Partial_Sums rseq).n <= Sum rseq
     let n be Nat;
     n in NAT by ORDINAL1:def 13;
     then (Partial_Sums(rseq)).n <= lim Partial_Sums rseq by A4,A5,SEQ_4:54;
-    hence (Partial_Sums(rseq)).n <=Sum rseq by SERIES_1:def 3;
+    hence thesis by SERIES_1:def 3;
   end;
   now
     given n1 be Element of NAT such that
@@ -940,7 +958,7 @@ A8: for n be Element of NAT holds 0 <= Partial_Sums(rseq).n
 A9:   n=n+0;
 A10:  Partial_Sums(rseq).0 = rseq.0 by SERIES_1:def 1;
       0 <=rseq.0 by A1;
-      hence 0 <=Partial_Sums(rseq).n by A4,A9,A10,SEQM_3:11;
+      hence thesis by A4,A9,A10,SEQM_3:11;
     end;
     Partial_Sums(rseq).n1 >0
     proof
@@ -948,7 +966,7 @@ A10:  Partial_Sums(rseq).0 = rseq.0 by SERIES_1:def 1;
         case
 A11:      n1=0;
           then Partial_Sums(rseq).n1=rseq.0 by SERIES_1:def 1;
-          hence Partial_Sums(rseq).n1 > 0 by A1,A7,A11;
+          hence thesis by A1,A7,A11;
         end;
         case
 A12:      n1<>0;
@@ -961,10 +979,10 @@ A15:      nn+1 =n1;
 A16:      0 <= rseq.n1 by A1;
           0 <= Partial_Sums(rseq).nn by A8,A14;
           then rseq.(n1)+0 <= rseq.(n1)+Partial_Sums(rseq).nn by XREAL_1:9;
-          hence Partial_Sums(rseq).n1 > 0 by A7,A14,A15,A16,SERIES_1:def 1;
+          hence thesis by A7,A14,A15,A16,SERIES_1:def 1;
         end;
       end;
-      hence Partial_Sums(rseq).n1 > 0;
+      hence thesis;
     end;
     hence contradiction by A3,A6;
   end;

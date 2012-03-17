@@ -10,13 +10,13 @@ environ
       RVSUM_1, ARYTM_1, RELAT_1, FUNCT_1, MCART_1, EUCLID_5, VECTSP_1;
  notations SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, REAL_1, FUNCT_1, BINOP_1,
       BINOP_2, FINSEQ_1, FINSEQ_2, FINSEQ_4, SEQ_1, FINSEQOP, PRE_TOPC,
-      RVSUM_1, EUCLID, STRUCT_0, EUCLID_2;
+      RVSUM_1, RLVECT_1, EUCLID, STRUCT_0, EUCLID_2;
  constructors XXREAL_0, REAL_1, BINOP_2, FINSEQOP, FINSEQ_4, MONOID_0,
       EUCLID_2, SEQ_1, EUCLID;
  registrations RELSET_1, NUMBERS, XREAL_0, MEMBERED, MONOID_0, EUCLID,
       VALUED_0;
  requirements REAL, SUBSET, NUMERALS, ARITHM, BOOLE;
- definitions VALUED_1;
+ definitions VALUED_1, ALGSTR_0;
  theorems EUCLID, RVSUM_1, FINSEQ_2, FINSEQ_1, EUCLID_2, BINOP_2, XREAL_0,
       VALUED_1;
 
@@ -83,11 +83,12 @@ A2: p`1 = x by A1,FINSEQ_1:62;
 end;
 
 theorem Th4:
-  0.REAL 3 = |[ 0,0,0 ]|
+  0.TOP-REAL 3 = |[ 0,0,0 ]|
 proof
-  0.REAL 3 = 3 |-> 0 by EUCLID:def 4
+  0.TOP-REAL 3 = 0*3 by EUCLID:74
+    .= 3 |-> 0 by EUCLID:def 4
     .= <* 0, 0, 0 *> by FINSEQ_2:76;
-  hence |[0,0,0]| = 0.REAL 3;
+  hence thesis;
 end;
 
 reserve p1,p2,p3,p4 for Point of TOP-REAL 3,
@@ -97,18 +98,24 @@ theorem Th5:
   p1 + p2 = |[ p1`1 + p2`1, p1`2 + p2`2, p1`3 + p2`3]|
 proof
   reconsider p1'=p1, p2'=p2 as Element of REAL 3 by EUCLID:25;
-  p1 + p2 = p1' + p2';
-  then len(p1'+p2') = 3 by EUCLID:28;
+X1:  p1 + p2 = p1' + p2' by EUCLID:68;
+  then len(p1'+p2') = 3 by FINSEQ_1:def 18;
   then
 A1: dom(p1'+p2') = Seg 3 by FINSEQ_1:def 3;
   then
 A2: 1 in dom(p1'+p2') by FINSEQ_1:3;
 A3: 2 in dom(p1'+p2') by A1,FINSEQ_1:3;
 A4: 3 in dom(p1'+p2') by A1,FINSEQ_1:3;
-A5: (p1+p2)`1 = p1`1 + p2`1 by A2,VALUED_1:def 1;
-A6: (p1+p2)`2 = p1`2 + p2`2 by A3,VALUED_1:def 1;
-  (p1+p2)`3 = p1`3 + p2`3 by A4,VALUED_1:def 1;
-  hence p1 + p2 = |[ p1`1 + p2`1, p1`2 + p2`2, p1`3 + p2`3]| by A5,A6,Th3;
+   (p1'+p2').1 = p1'.1 + p2'.1 by A2,VALUED_1:def 1;
+   then
+A5: (p1+p2)`1 = p1`1 + p2`1 by A2,EUCLID:68,X1;
+   (p1'+p2').2 = p1'.2 + p2'.2 by A3,VALUED_1:def 1;
+   then
+A6: (p1+p2)`2 = p1`2 + p2`2 by EUCLID:68,X1;
+   (p1'+p2').3 = p1'.3 + p2'.3 by A4,VALUED_1:def 1;
+   then
+  (p1+p2)`3 = p1`3 + p2`3 by EUCLID:68,X1;
+  hence thesis by A5,A6,Th3;
 end;
 
 theorem Th6:
@@ -123,10 +130,17 @@ end;
 theorem Th7:
   x*p = |[ x*p`1, x*p`2, x*p`3]|
 proof
-A1: (x*p)`1 = x*(p`1) by RVSUM_1:66;
-A2: (x*p)`2 = x*(p`2) by RVSUM_1:66;
-  (x*p)`3 = x*(p`3) by RVSUM_1:66;
-  hence x*p = |[ x*p`1, x*p`2, x*p`3]| by A1,A2,Th3;
+  reconsider q = p as Element of REAL 3 by EUCLID:25;
+    (x*q).1 = x*(q.1) by RVSUM_1:66;
+    then
+A1: (x*p)`1 = x*(p`1) by EUCLID:69;
+    (x*q).2 = x*(q.2) by RVSUM_1:66;
+    then
+A2: (x*p)`2 = x*(p`2) by EUCLID:69;
+    (x*q).3 = x*(q.3) by RVSUM_1:66;
+    then
+  (x*p)`3 = x*(p`3) by EUCLID:69;
+  hence thesis by A1,A2,Th3;
 end;
 
 theorem Th8:
@@ -149,7 +163,8 @@ end;
 theorem Th10:
   -p = |[ -p`1, -p`2, -p`3]|
 proof thus
-  -p = |[ (-1)*p`1, (-1)*p`2, (-1)*p`3]| by Th7
+  -p = (-1)*p by EUCLID:43
+    .= |[ (-1)*p`1, (-1)*p`2, (-1)*p`3]| by Th7
     .= |[ -p`1, -p`2, -p`3]|;
 end;
 
@@ -229,7 +244,8 @@ end;
 theorem Th17:
   p1<X>p2 = - p2<X>p1
 proof
-  - p2 <X> p1 = |[ (-1) * ( (p2`2 * p1`3) - (p2`3 * p1`2) ),
+  - p2 <X> p1 = (-1)*(p2 <X> p1) by EUCLID:43
+   .= |[ (-1) * ( (p2`2 * p1`3) - (p2`3 * p1`2) ),
   (-1) * ( (p2`3 * p1`1) - (p2`1 * p1`3) ),
   (-1) * ( (p2`1 * p1`2) - (p2`2 * p1`1) ) ]| by Th8
     .= p1 <X> p2;
@@ -252,7 +268,7 @@ proof
 end;
 
 theorem
-  |[0, 0, 0]| <X> |[x, y, z]| = 0.REAL 3
+  |[0, 0, 0]| <X> |[x, y, z]| = 0.TOP-REAL 3
 proof
   |[0, 0, 0]| <X> |[x, y, z]| = |[ (0 * z) - (0 * y) , (0 * x) - (0 * z) ,
   (0 * y) - (0 * x) ]| by Th15
@@ -263,38 +279,38 @@ proof
 end;
 
 theorem
-  |[x1, 0, 0]| <X> |[x2, 0, 0]| = 0.REAL 3
+  |[x1, 0, 0]| <X> |[x2, 0, 0]| = 0.TOP-REAL 3
 proof
   |[x1, 0, 0]| <X> |[x2, 0, 0]| = |[ (0 * 0) - (0 * 0) , (0 * x2) - (x1 * 0) ,
   (x1 * 0) - (0 * x2) ]| by Th15
     .= |[ 0 * (0 - 0), 0 * (x2 - x1),
   0 * (x1 - x2) ]|
     .= 0 * |[ (0 - 0), (x2 - x1), (x1 - x2) ]| by Th8
-    .= 0.REAL 3 by EUCLID:33;
+    .= 0.TOP-REAL 3 by EUCLID:33;
   hence thesis;
 end;
 
 theorem
-  |[0, y1, 0]| <X> |[0, y2, 0]| = 0.REAL 3
+  |[0, y1, 0]| <X> |[0, y2, 0]| = 0.TOP-REAL 3
 proof
   |[0, y1, 0]| <X> |[0, y2, 0]| = |[ (y1 * 0) - (0 * y2), (0 * 0) - (0 * 0 ),
   (0 * y2) - (y1 * 0) ]| by Th15
     .= |[ 0 * (y1 - y2), 0 * (0 - 0),
   0 * (y2 - y1) ]|
     .= 0 * |[ (y1 - y2), (0 - 0), (y2 - y1) ]| by Th8
-    .= 0.REAL 3 by EUCLID:33;
+    .= 0.TOP-REAL 3 by EUCLID:33;
   hence thesis;
 end;
 
 theorem
-  |[0, 0, z1]| <X> |[0, 0, z2]| = 0.REAL 3
+  |[0, 0, z1]| <X> |[0, 0, z2]| = 0.TOP-REAL 3
 proof
   |[0, 0, z1]| <X> |[0, 0, z2]| = |[ (0 * z2) - (z1 * 0), (z1 * 0) - (0 * z2),
   (0 * 0) - (0 * 0) ]| by Th15
     .= |[ 0 * (z2 - z1), 0 * (z1 - z2),
   0 * (0 * 0) ]|
     .= 0 * |[ (z2 - z1), (z1 - z2), (0 - 0) ]| by Th8
-    .= 0.REAL 3 by EUCLID:33;
+    .= 0.TOP-REAL 3 by EUCLID:33;
   hence thesis;
 end;
 
@@ -327,7 +343,7 @@ proof
 end;
 
 theorem
-  p1 <X> p1 = 0.REAL 3 by Th4;
+  p1 <X> p1 = 0.TOP-REAL 3 by Th4;
 
 theorem
   (p1+p2) <X> (p3+p4) = p1<X>p3 + p1<X>p4 + p2<X>p3 + p2<X>p4

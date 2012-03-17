@@ -1,0 +1,295 @@
+:: Probability on Finite and Discrete Set and Uniform Distribution
+::  by Hiroyuki Okazaki
+:: 
+:: Received May 5, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies DIST_1, FINSEQ_1, RELAT_1, SETFAM_1, FINSEQ_4, FUNCT_1, RPR_1,
+      CARD_1, SEQ_1, BOOLE, ARYTM, TARSKI, ARYTM_3, RLVECT_1, PROB_1, PROB_2,
+      FINSET_1, UPROOTS, MATRPROB, SEQM_3;
+ notations TARSKI, XBOOLE_0, SUBSET_1, FINSET_1, CARD_1, ORDINAL1, NUMBERS,
+      DOMAIN_1, XCMPLX_0, XXREAL_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1,
+      PARTFUN1, FINSEQ_1, FINSEQ_2, VALUED_1, FUNCT_2, BINOP_2, NAT_1,
+      SETFAM_1, SEQ_1, RPR_1, PROB_2, RVSUM_1, UPROOTS, MATRPROB;
+ constructors DOMAIN_1, RPR_1, RVSUM_1, SEQ_1, BINOP_2, SETWOP_2, PARTFUN3,
+      INTEGRA2, PROB_2, VALUED_1, UPROOTS, MATRPROB, RELSET_1;
+ registrations FUNCT_1, SUBSET_1, NAT_1, XREAL_0, XXREAL_0, MEMBERED, ORDINAL1,
+      UPROOTS, ALGSTR_0, FINSEQ_1, FUNCT_2, RELAT_1, XBOOLE_0, FINSET_1,
+      NUMBERS, VALUED_0, VALUED_1, ASYMPT_0, CARD_1, MATRPROB, ENTROPY1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Probability on Finite and Discrete Set
+
+notation
+  let S be non empty finite set, s be FinSequence of S;
+  synonym whole_event (s) for dom s;
+end;
+
+definition
+  let S be non empty finite set, s be non empty FinSequence of S;
+  redefine func whole_event (s) -> non empty finite set;
+end;
+
+theorem :: DIST_1:1
+  for S be non empty finite set, s be FinSequence of S
+  holds whole_event (s) = s"S;
+
+notation let S be non empty finite set,
+  s be FinSequence of S,
+  x be set;
+  synonym event_pick (x,s) for Coim(s,x);
+end;
+
+definition let S be non empty finite set, s be FinSequence of S, x be set;
+  redefine func event_pick (x,s) -> Event of whole_event(s);
+end;
+
+definition
+  let S be non empty finite set, s be FinSequence of S, x be set;
+  func frequency(x,s) -> Nat equals
+:: DIST_1:def 1
+    card (event_pick(x,s));
+end;
+
+theorem :: DIST_1:2
+  for S be non empty finite set,
+  s be FinSequence of S, e be set st e in whole_event(s)
+  ex x be Element of S st e in event_pick(x,s);
+
+theorem :: DIST_1:3
+  for S be non empty finite set,
+  s be FinSequence of S holds card whole_event(s) = len s;
+
+definition let S be non empty finite set,
+  s be FinSequence of S, x be set;
+  func FDprobability (x,s) -> Real equals
+:: DIST_1:def 2
+  frequency(x,s) / (len s);
+end;
+
+theorem :: DIST_1:4
+  for S be non empty finite set,
+  s be FinSequence of S, x be set holds
+  frequency(x,s)=(len s)* FDprobability (x,s);
+
+definition let S be non empty finite set, s be FinSequence of S;
+  func FDprobSEQ (s) -> FinSequence of REAL means
+:: DIST_1:def 3
+
+  dom it= Seg (card (S)) & for n be Nat st n in dom it
+  holds it.n=FDprobability((canFS(S)).n,s);
+end;
+
+theorem :: DIST_1:5
+  for S be non empty finite set,
+  s be non empty FinSequence of S, x be set holds
+  FDprobability(x,s)=prob(event_pick(x,s));
+
+definition let S be non empty finite set,
+  s,t be FinSequence of S;
+  pred s,t -are_prob_equivalent means
+:: DIST_1:def 4
+  for x be set holds FDprobability (x,s)=FDprobability (x,t);
+  reflexivity;
+  symmetry;
+end;
+
+theorem :: DIST_1:6
+  for S be non empty finite set, s,t,u be FinSequence of S st
+  s,t -are_prob_equivalent & t,u -are_prob_equivalent holds
+  s,u -are_prob_equivalent;
+
+definition let S be non empty finite set, s be FinSequence of S;
+  func Finseq-EQclass(s) -> non empty Subset of S* equals
+:: DIST_1:def 5
+    {t where t is FinSequence of S: s,t -are_prob_equivalent};
+end;
+
+theorem :: DIST_1:7
+  for S be non empty finite set, s,t be FinSequence of S holds
+  (s,t -are_prob_equivalent iff t in Finseq-EQclass(s));
+
+theorem :: DIST_1:8
+  for S be non empty finite set,
+  s be FinSequence of S holds s in Finseq-EQclass(s);
+
+theorem :: DIST_1:9
+  for S be non empty finite set,
+  s,t be FinSequence of S holds
+  s,t -are_prob_equivalent iff Finseq-EQclass(s) = Finseq-EQclass(t);
+
+definition
+  let S be non empty finite set;
+  func distribution_family(S) -> non empty Subset-Family of S* means
+:: DIST_1:def 6
+
+  for A being Subset of S* holds
+  A in it iff ex s being FinSequence of S st A = Finseq-EQclass(s);
+end;
+
+theorem :: DIST_1:10
+  for S be non empty finite set,
+  s,t be FinSequence of S holds
+  s,t -are_prob_equivalent iff FDprobSEQ(s) = FDprobSEQ(t);
+
+theorem :: DIST_1:11
+  for S be non empty finite set,
+  s,t be FinSequence of S st t in Finseq-EQclass(s)
+  holds FDprobSEQ(s)=FDprobSEQ(t);
+
+definition let S be non empty finite set;
+  func GenProbSEQ (S) -> Function of distribution_family(S),REAL* means
+:: DIST_1:def 7
+
+  for x be Element of distribution_family(S) holds
+  ex s be FinSequence of S st s in x & it.x=FDprobSEQ (s);
+end;
+
+theorem :: DIST_1:12
+  for S be non empty finite set, s be FinSequence of S holds
+  (GenProbSEQ (S)).(Finseq-EQclass(s)) = FDprobSEQ (s);
+
+registration let S be non empty finite set;
+  cluster GenProbSEQ S -> one-to-one;
+end;
+
+definition
+  let S be non empty finite set,
+  p be ProbFinS FinSequence of REAL;
+  assume  len p=card S &
+  ex s be FinSequence of S st FDprobSEQ (s)=p;
+  func distribution( p,S ) -> Element of distribution_family(S) means
+:: DIST_1:def 8
+
+  (GenProbSEQ S).it = p;
+end;
+
+definition let S be non empty finite set,
+  s be FinSequence of S;
+  func freqSEQ (s) -> FinSequence of NAT means
+:: DIST_1:def 9
+  dom it= Seg (card S) & for n be Nat st n in dom it
+  holds it.n=(len s) * (FDprobSEQ(s)).n;
+end;
+
+theorem :: DIST_1:13
+  for S be non empty finite set,
+  s be non empty FinSequence of S, n be Nat st n in Seg (card S)
+  ex x be Element of S st (freqSEQ(s)).n=frequency(x,s)& x=(canFS(S)).n;
+
+theorem :: DIST_1:14
+  for S be non empty finite set, s be FinSequence of S holds
+  freqSEQ (s) =(len s)* ((FDprobSEQ(s)));
+
+theorem :: DIST_1:15
+  for S be non empty finite set,
+  s be FinSequence of S holds
+  Sum ( freqSEQ (s))=(len s)* Sum(FDprobSEQ(s));
+
+theorem :: DIST_1:16
+  for S be non empty finite set,
+  s be non empty FinSequence of S, n be Nat st n in dom s
+  ex m be Nat st (freqSEQ(s)).m = frequency(s.n,s) & s.n=(canFS(S)).m;
+
+theorem :: DIST_1:17
+  for n be Nat, S be Function,L be FinSequence of NAT
+  st S is disjoint_valued & dom S = dom L & n=len L
+  & for i be Nat st i in dom S holds
+  S.i is finite & L.i = card (S.i)
+  holds union rng S is finite &
+  card (union rng S) = Sum L;
+
+theorem :: DIST_1:18
+  for S be Function,L be FinSequence of NAT
+  st S is disjoint_valued & dom S = dom L
+  & for i be Nat st i in dom S holds
+  S.i is finite & L.i = card (S.i)
+  holds union rng S is finite
+  & card (union rng S ) = Sum L;
+
+theorem :: DIST_1:19
+  for S be non empty finite set,
+  s be non empty FinSequence of S holds
+  Sum freqSEQ (s) = len s;
+
+theorem :: DIST_1:20
+  for S be non empty finite set,
+  s be non empty FinSequence of S holds Sum FDprobSEQ (s) = 1;
+
+theorem :: DIST_1:21
+  for S be non empty finite set,
+  s be non empty FinSequence of S holds FDprobSEQ (s) is ProbFinS;
+
+definition
+  let S be non empty finite set;
+  mode distProbFinS of S -> ProbFinS FinSequence of REAL means
+:: DIST_1:def 10
+
+  len it=card S & ex s be FinSequence of S st FDprobSEQ (s)=it;
+end;
+
+theorem :: DIST_1:22
+  for S be non empty finite set,
+  p be distProbFinS of S holds
+  p is ProbFinS FinSequence of REAL
+  & len p=card S & (ex s be FinSequence of S st FDprobSEQ (s)=p)
+  & distribution( p,S ) is Element of distribution_family(S)
+  & (GenProbSEQ (S)).distribution( p,S ) = p;
+
+begin :: uniform distribution
+
+definition let S be non empty finite set, s be FinSequence of S;
+  pred s is_uniformly_distributed means
+:: DIST_1:def 11
+
+  for n be Nat st n in dom FDprobSEQ (s) holds
+  (FDprobSEQ (s)).n=1/(card S);
+end;
+
+theorem :: DIST_1:23
+  for S be non empty finite set,
+  s be FinSequence of S st s is_uniformly_distributed
+  holds FDprobSEQ (s) is constant;
+
+theorem :: DIST_1:24
+  for S be non empty finite set,
+  s,t be FinSequence of S
+  st s is_uniformly_distributed &
+  s,t -are_prob_equivalent holds
+  t is_uniformly_distributed;
+
+theorem :: DIST_1:25
+  for S be non empty finite set,
+  s,t be FinSequence of S st s is_uniformly_distributed &
+  t is_uniformly_distributed holds
+  s,t -are_prob_equivalent;
+
+theorem :: DIST_1:26
+  for S be non empty finite set holds
+  canFS(S) is_uniformly_distributed;
+
+definition let S be non empty finite set;
+  func uniform_distribution(S) -> Element of distribution_family(S) means
+:: DIST_1:def 12
+
+  for s be FinSequence of S holds s in it iff s is_uniformly_distributed;
+end;
+
+registration
+  let S be non empty finite set;
+  cluster constant distProbFinS of S;
+end;
+
+definition
+  let S be non empty finite set;
+  func Uniform_FDprobSEQ(S) -> constant distProbFinS of S equals
+:: DIST_1:def 13
+    FDprobSEQ (canFS(S));
+end;
+
+theorem :: DIST_1:27
+  for S be non empty finite set holds
+  uniform_distribution(S)=distribution(Uniform_FDprobSEQ(S),S);

@@ -8,21 +8,22 @@ environ
 
  vocabularies PRE_TOPC, EUCLID, GOBOARD1, MCART_1, ARYTM_1, METRIC_1, PCOMPS_1,
       TOPS_1, SQUARE_1, FUNCT_1, FINSEQ_1, TREES_1, GOBOARD5, ARYTM_3,
-      ABSVALUE, BOOLE, TOPREAL1, ARYTM, CONNSP_2;
+      ABSVALUE, BOOLE, TOPREAL1, ARYTM, CONNSP_2, RLVECT_1;
  notations TARSKI, XBOOLE_0, ORDINAL1, SUBSET_1, NUMBERS, XXREAL_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, SQUARE_1, NAT_D, BINOP_1, FINSEQ_1, MATRIX_1,
-      STRUCT_0, METRIC_1, PRE_TOPC, TOPS_1, CONNSP_2, PCOMPS_1, EUCLID,
+      STRUCT_0, METRIC_1, PRE_TOPC, TOPS_1, CONNSP_2, PCOMPS_1, RLVECT_1,
+      RLTOPSP1, EUCLID,
       TOPREAL1, GOBOARD1, GOBOARD5;
  constructors REAL_1, SQUARE_1, NAT_1, COMPLEX1, NAT_D, TOPS_1, CONNSP_2,
-      PCOMPS_1, GOBOARD1, GOBOARD5;
+      PCOMPS_1, GOBOARD1, GOBOARD5, FUNCSDOM;
  registrations RELSET_1, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0, METRIC_1,
-      PCOMPS_1, EUCLID, XBOOLE_0;
+      PCOMPS_1, EUCLID, XBOOLE_0, TOPS_1, PRE_TOPC;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0, EUCLID, SQUARE_1, XCMPLX_0;
+ definitions TARSKI, XBOOLE_0, EUCLID, SQUARE_1, XCMPLX_0, RLTOPSP1;
  theorems GOBOARD5, TOPS_1, SPPOL_2, TOPMETR, METRIC_1, PCOMPS_1, PRE_TOPC,
       EUCLID, GOBOARD1, TOPREAL3, SQUARE_1, ABSVALUE, TARSKI, SPPOL_1,
       TOPREAL1, NAT_1, XBOOLE_0, XBOOLE_1, XREAL_0, XCMPLX_1, COMPLEX1,
-      XREAL_1, CONNSP_2, XXREAL_0;
+      XREAL_1, CONNSP_2, XXREAL_0, RLTOPSP1;
 
 begin
 
@@ -62,7 +63,7 @@ A1: Ball(u,r) = {q where q is Point of M:dist(u,q)<r} by METRIC_1:18;
   assume
 A2: r > 0;
   dist(u,u) = 0 by METRIC_1:1;
-  hence u in Ball(u,r) by A1,A2;
+  hence thesis by A1,A2;
 end;
 
 Lm4: for
@@ -76,8 +77,10 @@ A1: TopSpaceMetr M = TopStruct (#the carrier of M,Family_open_set M#)
   assume
 A2: B = Ball(u,r);
   Ball(u,r) in Family_open_set M by PCOMPS_1:33;
-  hence B is open by A1,A2,PRE_TOPC:def 5;
+  hence thesis by A1,A2,PRE_TOPC:def 5;
 end;
+
+XX: the TopStruct of TOP-REAL 2 = TopSpaceMetr Euclid 2 by EUCLID:def 8;
 
 theorem Th5:
   for p being Point of Euclid n, q being Point of TOP-REAL n,
@@ -86,14 +89,27 @@ theorem Th5:
 proof
   let p be Point of Euclid n, q be Point of TOP-REAL n, r be real number;
   reconsider A = Ball (p, r) as Subset of TOP-REAL n by TOPREAL3:13;
-  assume p = q & r > 0;
-  then q in A by Th4;
-  hence thesis by CONNSP_2:5,TOPMETR:21;
+  assume
+Z: p = q & r > 0;
+  then
+X:  q in A by Th4;
+XX: the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+   then reconsider AA = A as Subset of TopSpaceMetr Euclid n;
+   AA is open by TOPMETR:21;
+   then A is open by XX,PRE_TOPC:60;
+  hence thesis by Th4,Z,CONNSP_2:5;
 end;
 
-theorem
+theorem Th6:
   for B being Subset of TOP-REAL n, u being Point of Euclid n
-  st B = Ball(u,r) holds B is open by Lm4;
+  st B = Ball(u,r) holds B is open
+  proof let B be Subset of TOP-REAL n, u be Point of Euclid n;
+XX: the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+   then reconsider BB = B as Subset of TopSpaceMetr Euclid n;
+  assume B = Ball(u,r);
+   then BB is open by Lm4;
+   hence thesis by XX,PRE_TOPC:60;
+  end;
 
 theorem Th7:
   for M being non empty MetrSpace, u being Point of M,
@@ -102,12 +118,12 @@ theorem Th7:
 proof
   let M be non empty MetrSpace, u be Point of M,
   P be Subset of TopSpaceMetr(M);
-A1: Int P is open by TOPS_1:51;
+A1: Int P is open;
   hereby
     assume u in Int P;
     then consider r be real number such that
 A2: r > 0 and
-A3: Ball(u,r) c= Int P by A1,TOPMETR:22;
+A3: Ball(u,r) c= Int P by TOPMETR:22;
     take r;
     thus r > 0 by A2;
     Int P c= P by TOPS_1:44;
@@ -121,12 +137,35 @@ A6: u in Ball(u,r) by A4,Th4;
   by PCOMPS_1:def 6;
   then reconsider B = Ball(u,r) as Subset of TopSpaceMetr(M);
   B is open by Lm4;
-  hence u in Int P by A5,A6,TOPS_1:54;
+  hence thesis by A5,A6,TOPS_1:54;
 end;
 
-theorem
+LmX:
+ for T being TopSpace, A being Subset of T,
+     B being Subset of the TopStruct of T st A = B
+ holds Int A = Int B
+  proof let T be TopSpace, A be Subset of T,
+     B be Subset of the TopStruct of T such that
+Z:  A = B;
+    reconsider AA = Int A as Subset of the TopStruct of T;
+    AA is open by PRE_TOPC:60;
+   hence Int A c= Int B by Z,TOPS_1:44,56;
+    reconsider BB = Int B as Subset of T;
+    Int B is open;
+    then BB is open by XX,PRE_TOPC:60;
+   hence Int B c= Int A by Z,TOPS_1:44,56;
+  end;
+
+theorem Th8:
   for u being Point of Euclid n, P being Subset of TOP-REAL n
-  holds u in Int P iff ex r being real number st r > 0 & Ball(u,r) c= P by Th7;
+  holds u in Int P iff ex r being real number st r > 0 & Ball(u,r) c= P
+proof let u be Point of Euclid n, P be Subset of TOP-REAL n;
+XX: the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+   then reconsider PP = P as Subset of TopSpaceMetr Euclid n;
+  u in Int PP iff ex r being real number st r > 0 & Ball(u,r) c= PP by Th7;
+ hence thesis by XX,LmX;
+end;
+
 
 theorem Th9: :: TOPREAL3:12
   for u,v being Point of Euclid 2 st u = |[r1,s1]| & v = |[r2,s2]| holds
@@ -153,7 +192,7 @@ A3: r2 < r1;
   dist(u,v) = sqrt ((r - (r+r2))^2 + (s - s)^2) by A1,Th9
     .= sqrt ((-(r - (r+r2)))^2)
     .= r2 by A2,SQUARE_1:89;
-  hence |[r+r2,s]| in Ball(u,r1) by A3,METRIC_1:12;
+  hence thesis by A3,METRIC_1:12;
 end;
 
 theorem Th11:
@@ -168,7 +207,7 @@ A3: s2 < s1;
   dist(u,v) = sqrt ((r - r)^2 + (s - (s+s2))^2) by A1,Th9
     .= sqrt ((-(s - (s+s2)))^2)
     .= s2 by A2,SQUARE_1:89;
-  hence |[r,s+s2]| in Ball(u,s1) by A3,METRIC_1:12;
+  hence thesis by A3,METRIC_1:12;
 end;
 
 theorem Th12:
@@ -182,7 +221,7 @@ A3: r2 < r1;
   reconsider v = |[r-r2,s]| as Point of Euclid 2 by TOPREAL3:13;
   dist(u,v) = sqrt ((r - (r-r2))^2 + (s - s)^2) by A1,Th9
     .= r2 by A2,SQUARE_1:89;
-  hence |[r-r2,s]| in Ball(u,r1) by A3,METRIC_1:12;
+  hence thesis by A3,METRIC_1:12;
 end;
 
 theorem Th13:
@@ -196,7 +235,7 @@ A3: s2 < s1;
   reconsider v = |[r,s-s2]| as Point of Euclid 2 by TOPREAL3:13;
   dist(u,v) = sqrt ((s - (s-s2))^2 + (r - r)^2) by A1,Th9
     .= s2 by A2,SQUARE_1:89;
-  hence |[r,s-s2]| in Ball(u,s1) by A3,METRIC_1:12;
+  hence thesis by A3,METRIC_1:12;
 end;
 
 theorem Th14:
@@ -225,8 +264,8 @@ A9: G*(i+1,j+1)`2 = G*(1,j+1)`2 by A3,A4,GOBOARD5:2
     .= G*(i,j+1)+G*(i+1,j) by EUCLID:57;
 end;
 
-Lm5: TOP-REAL 2 =
-TopStruct (#the carrier of Euclid 2,Family_open_set Euclid 2#)
+Lm5: the TopStruct of TOP-REAL 2 = TopSpaceMetr Euclid 2 by EUCLID:def 8
+.= TopStruct (#the carrier of Euclid 2,Family_open_set Euclid 2#)
 by PCOMPS_1:def 6;
 
 theorem Th15:
@@ -244,7 +283,7 @@ A2: x in Int v_strip(G,0);
     then reconsider u = x as Point of Euclid 2 by Lm5;
     consider r1 being real number such that
 A3: r1 > 0 and
-A4: Ball(u,r1) c= v_strip(G,0) by A2,Th7;
+A4: Ball(u,r1) c= v_strip(G,0) by A2,Th8;
     reconsider r1 as Real by XREAL_0:def 1;
     reconsider p = u as Point of TOP-REAL 2 by Lm5;
     set q = |[p`1+r1/2,p`2+0]|;
@@ -257,7 +296,7 @@ A6: r1/2 > 0 & r1/2 < r1 by A3,XREAL_1:217,218;
 A7: p`1+r1/2 <= G*(1,1)`1 by SPPOL_2:1;
     p`1 < p`1 + r1/2 by A6,XREAL_1:31;
     then p`1 < G*(1,1)`1 by A7,XXREAL_0:2;
-    hence x in {|[r,s]| : r < G*(1,1)`1} by A5;
+    hence thesis by A5;
   end;
   let x;
   assume x in { |[r,s]| : r < G*(1,1)`1 };
@@ -293,16 +332,16 @@ A19:  q`1-r >= 0 by XREAL_1:50;
       abs(r-q`1) = abs(-(r-q`1)) by COMPLEX1:138
         .= q`1 - r by A19,ABSVALUE:def 1;
       then q`1 <= G*(1,1)`1 by A18,XREAL_1:11;
-      hence y in v_strip(G,0) by A1,A13,A15;
+      hence thesis by A1,A13,A15;
     end;
     suppose r >= q`1;
       then q`1 <= G*(1,1)`1 by A9,XXREAL_0:2;
-      hence y in v_strip(G,0) by A1,A13,A15;
+      hence thesis by A1,A13,A15;
     end;
   end;
   reconsider B = Ball(u,G*(1,1)`1-r) as Subset of TOP-REAL2 by TOPREAL3:13;
-  B is open by Lm4;
-  hence x in Int v_strip(G,0) by A8,A10,A11,TOPS_1:54;
+  B is open by Th6;
+  hence thesis by A8,A10,A11,TOPS_1:54;
 end;
 
 theorem Th16:
@@ -320,7 +359,7 @@ A2: x in Int v_strip(G,len G);
     then reconsider u = x as Point of Euclid 2 by Lm5;
     consider r1 being real number such that
 A3: r1 > 0 and
-A4: Ball(u,r1) c= v_strip(G,len G) by A2,Th7;
+A4: Ball(u,r1) c= v_strip(G,len G) by A2,Th8;
     reconsider r1 as Real by XREAL_0:def 1;
     reconsider p = u as Point of TOP-REAL 2 by Lm5;
     set q = |[p`1-r1/2,p`2+0]|;
@@ -334,7 +373,7 @@ A6: r1/2 > 0 & r1/2 < r1 by A3,XREAL_1:217,218;
 A7: G*(len G,1)`1+r1/2 <= p`1 by XREAL_1:21;
     G*(len G,1)`1 < G*(len G,1)`1 + r1/2 by A6,XREAL_1:31;
     then G*(len G,1)`1 < p`1 by A7,XXREAL_0:2;
-    hence x in {|[r,s]| : G*(len G,1)`1 < r } by A5;
+    hence thesis by A5;
   end;
   let x;
   assume x in { |[r,s]| : G*(len G,1)`1 < r };
@@ -369,17 +408,17 @@ A18: abs(r-q`1) <= r-G*(len G,1)`1 by COMPLEX1:158;
       then r-q`1 >= 0 by XREAL_1:50;
       then abs(r-q`1) = r - q`1 by ABSVALUE:def 1;
       then G*(len G,1)`1 <= q`1 by A18,XREAL_1:12;
-      hence y in v_strip(G,len G) by A1,A13,A15;
+      hence thesis by A1,A13,A15;
     end;
     suppose r <= q`1;
       then G*(len G,1)`1 <= q`1 by A9,XXREAL_0:2;
-      hence y in v_strip(G,len G) by A1,A13,A15;
+      hence thesis by A1,A13,A15;
     end;
   end;
   reconsider B = Ball(u,r-G*(len G,1)`1) as Subset of TOP-REAL2
   by TOPREAL3:13;
-  B is open by Lm4;
-  hence x in Int v_strip(G,len G) by A8,A10,A11,TOPS_1:54;
+  B is open by Th6;
+  hence thesis by A8,A10,A11,TOPS_1:54;
 end;
 
 theorem Th17:
@@ -401,7 +440,7 @@ A3: x in Int v_strip(G,i);
     then reconsider u = x as Point of Euclid 2 by Lm5;
     consider r1 being real number such that
 A4: r1 > 0 and
-A5: Ball(u,r1) c= v_strip(G,i) by A3,Th7;
+A5: Ball(u,r1) c= v_strip(G,i) by A3,Th8;
     reconsider r1 as Real by XREAL_0:def 1;
     reconsider p = u as Point of TOP-REAL 2 by Lm5;
     set q1 = |[p`1+r1/2,p`2+0]|;
@@ -426,7 +465,7 @@ A9: p`1 < G*(i+1,1)`1 by A8,XXREAL_0:2;
 A10: G*(i,1)`1+r1/2 <= p`1 by XREAL_1:21;
     G*(i,1)`1 < G*(i,1)`1 + r1/2 by A7,XREAL_1:31;
     then G*(i,1)`1 < p`1 by A10,XXREAL_0:2;
-    hence x in {|[r,s]| : G*(i,1)`1 < r & r < G*(i+1,1)`1} by A6,A9;
+    hence thesis by A6,A9;
   end;
   let x;
   assume x in { |[r,s]| : G*(i,1)`1 < r & r < G*(i+1,1)`1 };
@@ -475,7 +514,7 @@ A25:  q`1-r >= 0 by XREAL_1:50;
       then
 A26:  q`1 <= G*(i+1,1)`1 by A23,XREAL_1:11;
       G*(i,1)`1 <= q`1 by A12,A24,XXREAL_0:2;
-      hence y in v_strip(G,i) by A2,A18,A20,A26;
+      hence thesis by A2,A18,A20,A26;
     end;
     suppose
 A27:  r >= q`1;
@@ -484,13 +523,13 @@ A27:  r >= q`1;
       then
 A28:  G*(i,1)`1 <= q`1 by A23,XREAL_1:12;
       q`1 <= G*(i+1,1)`1 by A13,A27,XXREAL_0:2;
-      hence y in v_strip(G,i) by A2,A18,A20,A28;
+      hence thesis by A2,A18,A20,A28;
     end;
   end;
   reconsider B = Ball(u,min(r-G*(i,1)`1,G*(i+1,1)`1-r))
   as Subset of TOP-REAL2 by TOPREAL3:13;
-  B is open by Lm4;
-  hence x in Int v_strip(G,i) by A11,A15,A16,TOPS_1:54;
+  B is open by Th6;
+  hence thesis by A11,A15,A16,TOPS_1:54;
 end;
 
 theorem Th18:
@@ -508,7 +547,7 @@ A2: x in Int h_strip(G,0);
     then reconsider u = x as Point of Euclid 2 by Lm5;
     consider s1 being real number such that
 A3: s1 > 0 and
-A4: Ball(u,s1) c= h_strip(G,0) by A2,Th7;
+A4: Ball(u,s1) c= h_strip(G,0) by A2,Th8;
     reconsider s1 as Real by XREAL_0:def 1;
     reconsider p = u as Point of TOP-REAL 2 by Lm5;
     set q = |[p`1+0,p`2+s1/2]|;
@@ -521,7 +560,7 @@ A6: s1/2 > 0 & s1/2 < s1 by A3,XREAL_1:217,218;
 A7: p`2+s1/2 <= G*(1,1)`2 by SPPOL_2:1;
     p`2 < p`2 + s1/2 by A6,XREAL_1:31;
     then p`2 < G*(1,1)`2 by A7,XXREAL_0:2;
-    hence x in {|[r,s]| : s < G*(1,1)`2} by A5;
+    hence thesis by A5;
   end;
   let x;
   assume x in { |[r,s]| : s < G*(1,1)`2 };
@@ -557,16 +596,16 @@ A19:  q`2-s >= 0 by XREAL_1:50;
       abs(s-q`2) = abs(-(s-q`2)) by COMPLEX1:138
         .= q`2 - s by A19,ABSVALUE:def 1;
       then q`2 <= G*(1,1)`2 by A18,XREAL_1:11;
-      hence y in h_strip(G,0) by A1,A13,A15;
+      hence thesis by A1,A13,A15;
     end;
     suppose s >= q`2;
       then q`2 <= G*(1,1)`2 by A9,XXREAL_0:2;
-      hence y in h_strip(G,0) by A1,A13,A15;
+      hence thesis by A1,A13,A15;
     end;
   end;
   reconsider B = Ball(u,G*(1,1)`2-s) as Subset of TOP-REAL2 by TOPREAL3:13;
-  B is open by Lm4;
-  hence x in Int h_strip(G,0) by A8,A10,A11,TOPS_1:54;
+  B is open by Th6;
+  hence thesis by A8,A10,A11,TOPS_1:54;
 end;
 
 theorem Th19:
@@ -584,7 +623,7 @@ A2: x in Int h_strip(G,width G);
     then reconsider u = x as Point of Euclid 2 by Lm5;
     consider s1 being real number such that
 A3: s1 > 0 and
-A4: Ball(u,s1) c= h_strip(G,width G) by A2,Th7;
+A4: Ball(u,s1) c= h_strip(G,width G) by A2,Th8;
     reconsider s1 as Real by XREAL_0:def 1;
     reconsider p = u as Point of TOP-REAL 2 by Lm5;
     set q = |[p`1+0,p`2-s1/2]|;
@@ -598,7 +637,7 @@ A6: s1/2 > 0 & s1/2 < s1 by A3,XREAL_1:217,218;
 A7: G*(1,width G)`2+s1/2 <= p`2 by XREAL_1:21;
     G*(1,width G)`2 < G*(1,width G)`2 + s1/2 by A6,XREAL_1:31;
     then G*(1,width G)`2 < p`2 by A7,XXREAL_0:2;
-    hence x in {|[r,s]| : G*(1,width G)`2 < s } by A5;
+    hence thesis by A5;
   end;
   let x;
   assume x in { |[r,s]| : G*(1,width G)`2 < s };
@@ -633,17 +672,17 @@ A18: abs(s-q`2) <= s-G*(1,width G)`2 by COMPLEX1:158;
       then s-q`2 >= 0 by XREAL_1:50;
       then abs(s-q`2) = s - q`2 by ABSVALUE:def 1;
       then G*(1,width G)`2 <= q`2 by A18,XREAL_1:12;
-      hence y in h_strip(G,width G) by A1,A13,A15;
+      hence thesis by A1,A13,A15;
     end;
     suppose s <= q`2;
       then G*(1,width G)`2 <= q`2 by A9,XXREAL_0:2;
-      hence y in h_strip(G,width G) by A1,A13,A15;
+      hence thesis by A1,A13,A15;
     end;
   end;
   reconsider B = Ball(u,s-G*(1,width G)`2)
   as Subset of TOP-REAL2 by TOPREAL3:13;
-  B is open by Lm4;
-  hence x in Int h_strip(G,width G) by A8,A10,A11,TOPS_1:54;
+  B is open by Th6;
+  hence thesis by A8,A10,A11,TOPS_1:54;
 end;
 
 theorem Th20:
@@ -665,7 +704,7 @@ A3: x in Int h_strip(G,j);
     then reconsider u = x as Point of Euclid 2 by Lm5;
     consider s1 being real number such that
 A4: s1 > 0 and
-A5: Ball(u,s1) c= h_strip(G,j) by A3,Th7;
+A5: Ball(u,s1) c= h_strip(G,j) by A3,Th8;
     reconsider s1 as Real by XREAL_0:def 1;
     reconsider p = u as Point of TOP-REAL 2 by Lm5;
     set q1 = |[p`1+0,p`2+s1/2]|;
@@ -690,7 +729,7 @@ A9: p`2 < G*(1,j+1)`2 by A8,XXREAL_0:2;
 A10: G*(1,j)`2+s1/2 <= p`2 by XREAL_1:21;
     G*(1,j)`2 < G*(1,j)`2 + s1/2 by A7,XREAL_1:31;
     then G*(1,j)`2 < p`2 by A10,XXREAL_0:2;
-    hence x in {|[r,s]| : G*(1,j)`2 < s & s < G*(1,j+1)`2} by A6,A9;
+    hence thesis by A6,A9;
   end;
   let x;
   assume x in { |[r,s]| : G*(1,j)`2 < s & s < G*(1,j+1)`2 };
@@ -739,7 +778,7 @@ A25:  q`2-s >= 0 by XREAL_1:50;
       then
 A26:  q`2 <= G*(1,j+1)`2 by A23,XREAL_1:11;
       G*(1,j)`2 <= q`2 by A12,A24,XXREAL_0:2;
-      hence y in h_strip(G,j) by A2,A18,A20,A26;
+      hence thesis by A2,A18,A20,A26;
     end;
     suppose
 A27:  s >= q`2;
@@ -748,13 +787,13 @@ A27:  s >= q`2;
       then
 A28:  G*(1,j)`2 <= q`2 by A23,XREAL_1:12;
       q`2 <= G*(1,j+1)`2 by A13,A27,XXREAL_0:2;
-      hence y in h_strip(G,j) by A2,A18,A20,A28;
+      hence thesis by A2,A18,A20,A28;
     end;
   end;
   reconsider B = Ball(u,min(s-G*(1,j)`2,G*(1,j+1)`2-s))
   as Subset of TOP-REAL2 by TOPREAL3:13;
-  B is open by Lm4;
-  hence x in Int h_strip(G,j) by A11,A15,A16,TOPS_1:54;
+  B is open by Th6;
+  hence thesis by A11,A15,A16,TOPS_1:54;
 end;
 
 theorem Th21:
@@ -789,7 +828,8 @@ end;
 
 theorem Th22:
   Int cell(G,0,width G) = { |[r,s]| : r < G*(1,1)`1 & G*(1,width G)`2 < s }
-proof cell(G,0,width G) = v_strip(G,0) /\ h_strip(G,width G) by GOBOARD5:def 3;
+proof
+ cell(G,0,width G) = v_strip(G,0) /\ h_strip(G,width G) by GOBOARD5:def 3;
   then
 A1: Int cell(G,0,width G) = Int v_strip(G,0) /\ Int h_strip(G,width G)
   by TOPS_1:46;
@@ -1090,7 +1130,7 @@ A2: p in Int h_strip(G,j);
     then consider r,s such that
 A3: p = |[r,s]| and
 A4: G*(1,j)`2 < s by A2;
-    thus p`2 > G*(1,j)`2 by A3,A4,EUCLID:56;
+    thus thesis by A3,A4,EUCLID:56;
   end;
   suppose j < width G;
     then Int h_strip(G,j) = { |[r,s]| : G*(1,j)`2 < s & s < G*(1,j+1)`2 }
@@ -1098,7 +1138,7 @@ A4: G*(1,j)`2 < s by A2;
     then consider r,s such that
 A5: p = |[r,s]| and
 A6: G*(1,j)`2 < s and s < G*(1,j+1)`2 by A2;
-    thus p`2 > G*(1,j)`2 by A5,A6,EUCLID:56;
+    thus thesis by A5,A6,EUCLID:56;
   end;
 end;
 
@@ -1114,7 +1154,7 @@ A2: p in Int h_strip(G,j);
     then consider r,s such that
 A3: p = |[r,s]| and
 A4: G*(1,j+1)`2 > s by A2;
-    thus p`2 < G*(1,j+1)`2 by A3,A4,EUCLID:56;
+    thus thesis by A3,A4,EUCLID:56;
   end;
   suppose j >= 1;
     then Int h_strip(G,j) = { |[r,s]| : G*(1,j)`2 < s & s < G*(1,j+1)`2 }
@@ -1122,7 +1162,7 @@ A4: G*(1,j+1)`2 > s by A2;
     then consider r,s such that
 A5: p = |[r,s]| and G*(1,j)`2 < s and
 A6: s < G*(1,j+1)`2 by A2;
-    thus p`2 < G*(1,j+1)`2 by A5,A6,EUCLID:56;
+    thus thesis by A5,A6,EUCLID:56;
   end;
 end;
 
@@ -1138,7 +1178,7 @@ A2: p in Int v_strip(G,i);
     then consider r,s such that
 A3: p = |[r,s]| and
 A4: G*(i,1)`1 < r by A2;
-    thus p`1 > G*(i,1)`1 by A3,A4,EUCLID:56;
+    thus thesis by A3,A4,EUCLID:56;
   end;
   suppose i < len G;
     then Int v_strip(G,i) = { |[r,s]| : G*(i,1)`1 < r & r < G*(i+1,1)`1 }
@@ -1146,7 +1186,7 @@ A4: G*(i,1)`1 < r by A2;
     then consider r,s such that
 A5: p = |[r,s]| and
 A6: G*(i,1)`1 < r and r < G*(i+1,1)`1 by A2;
-    thus p`1 > G*(i,1)`1 by A5,A6,EUCLID:56;
+    thus thesis by A5,A6,EUCLID:56;
   end;
 end;
 
@@ -1162,7 +1202,7 @@ A2: p in Int v_strip(G,i);
     then consider r,s such that
 A3: p = |[r,s]| and
 A4: G*(i+1,1)`1 > r by A2;
-    thus p`1 < G*(i+1,1)`1 by A3,A4,EUCLID:56;
+    thus thesis by A3,A4,EUCLID:56;
   end;
   suppose i >= 1;
     then Int v_strip(G,i) = { |[r,s]| : G*(i,1)`1 < r & r < G*(i+1,1)`1 }
@@ -1170,7 +1210,7 @@ A4: G*(i+1,1)`1 > r by A2;
     then consider r,s such that
 A5: p = |[r,s]| and G*(i,1)`1 < r and
 A6: r < G*(i+1,1)`1 by A2;
-    thus p`1 < G*(i+1,1)`1 by A5,A6,EUCLID:56;
+    thus thesis by A5,A6,EUCLID:56;
   end;
 end;
 
@@ -1220,7 +1260,7 @@ A17: 1 <= i & i < len G by A1,NAT_1:13;
   1 <= j & j < width G by A2,NAT_1:13;
   then Int cell(G,i,j) = { |[r,s]| : G*(i,1)`1 < r & r < G*(i+1,1)`1 &
   G*(1,j)`2 < s & s < G*(1,j+1)`2 } by A17,Th29;
-  hence 1/2*(G*(i,j)+G*(i+1,j+1)) in Int cell(G,i,j) by A4,A7,A12,A13,A15,A16;
+  hence thesis by A4,A7,A12,A13,A15,A16;
 end;
 
 theorem Th35:
@@ -1262,7 +1302,7 @@ A12: G*(1,width G)`2 < s1+1 by A6,XREAL_1:31;
   then Int cell(G,i,width G) =
   { |[r,s]| : G*(i,1)`1 < r & r < G*(i+1,1)`1 & G*
   (1,width G)`2 < s } by Th28;
-  hence 1/2*(G*(i,width G)+G*(i+1,width G))+|[0,1]| in Int cell(G,i,width G)
+  hence thesis
   by A7,A8,A10,A11,A12;
 end;
 
@@ -1303,7 +1343,7 @@ A11: s1-1 < G*(1,1)`2 by XREAL_1:21;
   1 <= i & i < len G by A1,NAT_1:13;
   then Int cell(G,i,0) =
   { |[r,s]| : G*(i,1)`1 < r & r < G*(i+1,1)`1 & s < G*(1,1)`2 } by Th27;
-  hence 1/2*(G*(i,1)+G*(i+1,1))-|[0,1]| in Int cell(G,i,0) by A7,A9,A10,A11;
+  hence thesis by A7,A9,A10,A11;
 end;
 
 theorem Th37:
@@ -1343,7 +1383,7 @@ A12: G*(len G,1)`1 < r1+1 by A6,XREAL_1:31;
   1 <= j & j < width G by A1,NAT_1:13;
   then Int cell(G,len G,j) =
   { |[r,s]| : G*(len G,1)`1 < r & G*(1,j)`2 < s & s < G* (1,j+1)`2 } by Th26;
-  hence 1/2*(G*(len G,j)+G*(len G,j+1))+|[1,0]| in Int cell(G,len G,j)
+  hence thesis
   by A7,A8,A10,A11,A12;
 end;
 
@@ -1384,7 +1424,7 @@ A11: r1-1 < G*(1,1)`1 by XREAL_1:21;
   1 <= j & j < width G by A1,NAT_1:13;
   then Int cell(G,0,j) =
   { |[r,s]| : r < G*(1,1)`1 & G*(1,j)`2 < s & s < G*(1,j+1)`2 } by Th23;
-  hence 1/2*(G*(1,j)+G*(1,j+1))-|[1,0]| in Int cell(G,0,j) by A7,A9,A10,A11;
+  hence thesis by A7,A9,A10,A11;
 end;
 
 theorem Th39:
@@ -1401,7 +1441,7 @@ A2: s1-1 < G*(1,1)`2 by XREAL_1:21;
   then
 A3: r1-1 < G*(1,1)`1 by XREAL_1:21;
   Int cell(G,0,0) = { |[r,s]| : r < G*(1,1)`1 & s < G*(1,1)`2 } by Th21;
-  hence G*(1,1)-|[1,1]| in Int cell(G,0,0) by A1,A2,A3;
+  hence thesis by A1,A2,A3;
 end;
 
 theorem Th40:
@@ -1424,7 +1464,7 @@ A6: s1+1 > G*(1,width G)`2 by A4,XREAL_1:31;
 A7: r1+1 > G*(len G,1)`1 by A3,XREAL_1:31;
   Int cell(G,len G,width G) =
   { |[r,s]| : G*(len G,1)`1 < r & G*(1,width G)`2 < s } by Th25;
-  hence G*(len G,width G)+|[1,1]| in Int cell(G,len G,width G) by A5,A6,A7;
+  hence thesis by A5,A6,A7;
 end;
 
 theorem Th41:
@@ -1448,7 +1488,7 @@ A4: s1+1 > G*(1,width G)`2 by XREAL_1:31;
 A5: r1-1 < G*(1,1)`1 by XREAL_1:21;
   Int cell(G,0,width G) = { |[r,s]| : r < G*(1,1)`1 & G*(1,width G)`2 < s }
   by Th22;
-  hence G*(1,width G)+|[-1,1]| in Int cell(G,0,width G) by A3,A4,A5;
+  hence thesis by A3,A4,A5;
 end;
 
 theorem Th42:
@@ -1472,7 +1512,7 @@ A4: s1-1 < G*(1,1)`2 by XREAL_1:21;
 A5: r1+1 > G*(len G,1)`1 by XREAL_1:31;
   Int cell(G,len G,0) = { |[r,s]| : G*(len G,1)`1 < r & s < G*
   (1,1)`2 } by Th24;
-  hence G*(len G,1)+|[1,-1]| in Int cell(G,len G,0) by A3,A4,A5;
+  hence thesis by A3,A4,A5;
 end;
 
 theorem Th43:
@@ -1487,12 +1527,11 @@ A1: 1 <= i & i < len G & 1 <= j & j < width G;
 A2: x in LSeg(1/2*(G*(i,j)+G*(i+1,j+1)),1/2*(G*(i,j)+G*(i,j+1)));
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A3: 0<=r & r<=1 and
-A4: p = (1-r)*(1/2*(G*(i,j)+G*(i+1,j+1)))+r*(1/2*(G*(i,j)+G*(i,j+1)))
-  by A2,SPPOL_1:21;
+A4: p = (1-r)*(1/2*(G*(i,j)+G*(i+1,j+1)))+r*(1/2*(G*(i,j)+G*(i,j+1))) and
+A3: 0<=r & r<=1 by A2;
   now per cases by A3,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(1/2*(G*(i,j)+G*(i,j+1))) by A4,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(1/2*(G*(i,j)+G*(i,j+1))) by A4,EUCLID:33
         .= 1*(1/2*(G*(i,j)+G*(i,j+1))) by EUCLID:31
         .= 1/2*(G*(i,j)+G*(i,j+1)) by EUCLID:33;
       hence p in { 1/2*(G*(i,j)+G*(i,j+1)) } by TARSKI:def 1;
@@ -1570,7 +1609,7 @@ A30:  r3*(s1+s2)+s3*(s1+s2) < s2 by A28,A29,XREAL_1:10;
       hence p in Int cell(G,i,j) by A11,A18,A22,A26,A30;
     end;
   end;
-  hence x in Int cell(G,i,j) \/ { 1/2*(G*(i,j)+G*(i,j+1)) } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th44:
@@ -1585,12 +1624,11 @@ A1: 1 <= i & i < len G & 1 <= j & j < width G;
 A2: x in LSeg(1/2*(G*(i,j)+G*(i+1,j+1)),1/2*(G*(i,j+1)+G*(i+1,j+1)));
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A3: 0<=r & r<=1 and
-A4: p = (1-r)*(1/2*(G*(i,j)+G*(i+1,j+1)))+r*(1/2*(G*(i,j+1)+G*(i+1,j+1)))
-  by A2,SPPOL_1:21;
+A4: p = (1-r)*(1/2*(G*(i,j)+G*(i+1,j+1)))+r*(1/2*(G*(i,j+1)+G*(i+1,j+1))) and
+A3: 0<=r & r<=1 by A2;
   now per cases by A3,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(1/2*(G*(i,j+1)+G*(i+1,j+1))) by A4,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(1/2*(G*(i,j+1)+G*(i+1,j+1))) by A4,EUCLID:33
         .= 1*(1/2*(G*(i,j+1)+G*(i+1,j+1))) by EUCLID:31
         .= 1/2*(G*(i,j+1)+G*(i+1,j+1)) by EUCLID:33;
       hence p in { 1/2*(G*(i,j+1)+G*(i+1,j+1)) } by TARSKI:def 1;
@@ -1673,8 +1711,7 @@ A30:  r3*(s1+s2)+s3*(s2+s2) < s2 by A29,XREAL_1:10;
       hence p in Int cell(G,i,j) by A11,A21,A24,A28,A30;
     end;
   end;
-  hence x in Int cell(G,i,j) \/ { 1/2*(G*(i,j+1)+G*
-  (i+1,j+1)) } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th45:
@@ -1689,12 +1726,11 @@ A1: 1 <= i & i < len G & 1 <= j & j < width G;
 A2: x in LSeg(1/2*(G*(i,j)+G*(i+1,j+1)),1/2*(G*(i+1,j)+G*(i+1,j+1)));
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A3: 0<=r & r<=1 and
-A4: p = (1-r)*(1/2*(G*(i,j)+G*(i+1,j+1)))+r*(1/2*(G*(i+1,j)+G*(i+1,j+1)))
-  by A2,SPPOL_1:21;
+A4: p = (1-r)*(1/2*(G*(i,j)+G*(i+1,j+1)))+r*(1/2*(G*(i+1,j)+G*(i+1,j+1))) and
+A3: 0<=r & r<=1 by A2;
   now per cases by A3,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(1/2*(G*(i+1,j)+G*(i+1,j+1))) by A4,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(1/2*(G*(i+1,j)+G*(i+1,j+1))) by A4,EUCLID:33
         .= 1*(1/2*(G*(i+1,j)+G*(i+1,j+1))) by EUCLID:31
         .= 1/2*(G*(i+1,j)+G*(i+1,j+1)) by EUCLID:33;
       hence p in { 1/2*(G*(i+1,j)+G*(i+1,j+1)) } by TARSKI:def 1;
@@ -1774,8 +1810,7 @@ A31:  r3*(s1+s2)+s3*(s1+s2) < s2 by A29,A30,XREAL_1:10;
       hence p in Int cell(G,i,j) by A11,A21,A23,A27,A31;
     end;
   end;
-  hence x in Int cell(G,i,j) \/ { 1/2*(G*(i+1,j)+G*
-  (i+1,j+1)) } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th46:
@@ -1790,12 +1825,11 @@ A1: 1 <= i & i < len G & 1 <= j & j < width G;
 A2: x in LSeg(1/2*(G*(i,j)+G*(i+1,j+1)),1/2*(G*(i,j)+G*(i+1,j)));
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A3: 0<=r & r<=1 and
-A4: p = (1-r)*(1/2*(G*(i,j)+G*(i+1,j+1)))+r*(1/2*(G*(i,j)+G*(i+1,j)))
-  by A2,SPPOL_1:21;
+A4: p = (1-r)*(1/2*(G*(i,j)+G*(i+1,j+1)))+r*(1/2*(G*(i,j)+G*(i+1,j))) and
+A3: 0<=r & r<=1 by A2;
   now per cases by A3,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(1/2*(G*(i,j)+G*(i+1,j))) by A4,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(1/2*(G*(i,j)+G*(i+1,j))) by A4,EUCLID:33
         .= 1*(1/2*(G*(i,j)+G*(i+1,j))) by EUCLID:31
         .= 1/2*(G*(i,j)+G*(i+1,j)) by EUCLID:33;
       hence p in { 1/2*(G*(i,j)+G*(i+1,j)) } by TARSKI:def 1;
@@ -1878,7 +1912,7 @@ A30:  r3*(s1+s2)+s3*(s1+s1) < s2 by A28,A29,XREAL_1:10;
       hence p in Int cell(G,i,j) by A11,A21,A24,A27,A30;
     end;
   end;
-  hence x in Int cell(G,i,j) \/ { 1/2*(G*(i,j)+G*(i+1,j)) } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th47:
@@ -1893,12 +1927,12 @@ A1: 1 <= j & j < width G;
 A2: x in LSeg(1/2*(G*(1,j)+G*(1,j+1))-|[1,0]|,1/2*(G*(1,j)+G*(1,j+1)));
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A3: 0<=r & r<=1 and
 A4: p = (1-r)*(1/2*(G*(1,j)+G*(1,j+1))-|[1,0]|)+r*(1/2*(G*(1,j)+G* (1,j+1)))
-  by A2,SPPOL_1:21;
+  and
+A3: 0<=r & r<=1 by A2;
   now per cases by A3,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(1/2*(G*(1,j)+G*(1,j+1))) by A4,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(1/2*(G*(1,j)+G*(1,j+1))) by A4,EUCLID:33
         .= 1*(1/2*(G*(1,j)+G*(1,j+1))) by EUCLID:31
         .= 1/2*(G*(1,j)+G*(1,j+1)) by EUCLID:33;
       hence p in { 1/2*(G*(1,j)+G*(1,j+1)) } by TARSKI:def 1;
@@ -1962,7 +1996,7 @@ A23:  r3*(s1+s2)+s3*(s1+s2) < s2 by A21,A22,XREAL_1:10;
       hence p in Int cell(G,0,j) by A10,A15,A19,A23;
     end;
   end;
-  hence x in Int cell(G,0,j) \/ { 1/2*(G*(1,j)+G*(1,j+1)) } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th48:
@@ -1978,12 +2012,13 @@ A2: x in LSeg(1/2*(G*(len G,j)+G*(len G,j+1))+|[1,0]|,
   1/2*(G*(len G,j)+G*(len G,j+1)));
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A3: 0<=r & r<=1 and
 A4: p = (1-r)*(1/2*(G*(len G,j)+G*(len G,j+1))+|[1,0]|)
-  +r*(1/2*(G*(len G,j)+G*(len G,j+1))) by A2,SPPOL_1:21;
+  +r*(1/2*(G*(len G,j)+G*(len G,j+1))) and
+A3: 0<=r & r<=1 by A2;
   now per cases by A3,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(1/2*(G*(len G,j)+G*(len G,j+1))) by A4,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(1/2*(G*(len G,j)+G*(len G,j+1)))
+       by A4,EUCLID:33
         .= 1*(1/2*(G*(len G,j)+G*(len G,j+1))) by EUCLID:31
         .= 1/2*(G*(len G,j)+G*(len G,j+1)) by EUCLID:33;
       hence p in { 1/2*(G*(len G,j)+G*(len G,j+1)) } by TARSKI:def 1;
@@ -2046,8 +2081,7 @@ A23:  r3*(s1+s2)+s3*(s1+s2) < s2 by A21,A22,XREAL_1:10;
       hence p in Int cell(G,len G,j) by A10,A15,A19,A23;
     end;
   end;
-  hence x in Int cell(G,len G,j) \/ { 1/2*(G*(len G,j)+G*(len G,j+1)) } by
-XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th49:
@@ -2062,12 +2096,12 @@ A1: 1 <= i & i < len G;
 A2: x in LSeg(1/2*(G*(i,1)+G*(i+1,1))-|[0,1]|,1/2*(G*(i,1)+G*(i+1,1)));
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A3: 0<=r & r<=1 and
 A4: p = (1-r)*(1/2*(G*(i,1)+G*(i+1,1))-|[0,1]|)+r*(1/2*(G*(i,1)+G* (i+1,1)))
-  by A2,SPPOL_1:21;
+ and
+A3: 0<=r & r<=1 by A2;
   now per cases by A3,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(1/2*(G*(i,1)+G*(i+1,1))) by A4,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(1/2*(G*(i,1)+G*(i+1,1))) by A4,EUCLID:33
         .= 1*(1/2*(G*(i,1)+G*(i+1,1))) by EUCLID:31
         .= 1/2*(G*(i,1)+G*(i+1,1)) by EUCLID:33;
       hence p in { 1/2*(G*(i,1)+G*(i+1,1)) } by TARSKI:def 1;
@@ -2131,7 +2165,7 @@ A23:  r3*(r1+r2)+s3*(r1+r2) < r2 by A21,A22,XREAL_1:10;
       hence p in Int cell(G,i,0) by A10,A15,A19,A23;
     end;
   end;
-  hence x in Int cell(G,i,0) \/ { 1/2*(G*(i,1)+G*(i+1,1)) } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th50:
@@ -2148,12 +2182,12 @@ A2: x in LSeg(1/2*(G*(i,width G)+G*(i+1,width G))+|[0,1]|,
   1/2*(G*(i,width G)+G*(i+1,width G)));
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A3: 0<=r & r<=1 and
 A4: p = (1-r)*(1/2*(G*(i,width G)+G*(i+1,width G))+|[0,1]|)
-  +r*(1/2*(G*(i,width G)+G*(i+1,width G))) by A2,SPPOL_1:21;
+  +r*(1/2*(G*(i,width G)+G*(i+1,width G))) and
+A3: 0<=r & r<=1 by A2;
   now per cases by A3,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(1/2*(G*(i,width G)+G*(i+1,width G))) by A4,
+      then p = 0.TOP-REAL 2 + 1*(1/2*(G*(i,width G)+G*(i+1,width G))) by A4,
 EUCLID:33
         .= 1*(1/2*(G*(i,width G)+G*(i+1,width G))) by EUCLID:31
         .= 1/2*(G*(i,width G)+G*(i+1,width G)) by EUCLID:33;
@@ -2217,7 +2251,7 @@ A23:  r3*(r1+r2)+s3*(r1+r2) < r2 by A21,A22,XREAL_1:10;
       hence p in Int cell(G,i,width G) by A10,A15,A19,A23;
     end;
   end;
-  hence x in Int cell(G,i,width G) \/ { 1/2*(G*(i,width G)+G*(i+1,width G)) }
+  hence thesis
   by XBOOLE_0:def 3;
 end;
 
@@ -2233,12 +2267,11 @@ A1: 1 <= j & j < width G;
 A2: x in LSeg(1/2*(G*(1,j)+G*(1,j+1))-|[1,0]|,G*(1,j) - |[1,0]|);
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A3: 0<=r & r<=1 and
-A4: p = (1-r)*(1/2*(G*(1,j)+G*(1,j+1))-|[1,0]|)+r*(G*(1,j) - |[1,0]|)
-  by A2,SPPOL_1:21;
+A4: p = (1-r)*(1/2*(G*(1,j)+G*(1,j+1))-|[1,0]|)+r*(G*(1,j) - |[1,0]|) and
+A3: 0<=r & r<=1 by A2;
   now per cases by A3,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(G*(1,j) - |[1,0]|) by A4,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(G*(1,j) - |[1,0]|) by A4,EUCLID:33
         .= 1*(G*(1,j) - |[1,0]|) by EUCLID:31
         .= (G*(1,j) - |[1,0]|) by EUCLID:33;
       hence p in { G*(1,j) - |[1,0]| } by TARSKI:def 1;
@@ -2300,7 +2333,7 @@ A18:  r3*(s1+s2)+r*s1 < s2 by A16,A17,XREAL_1:10;
       hence p in Int cell(G,0,j) by A10,A13,A15,A18;
     end;
   end;
-  hence x in Int cell(G,0,j) \/ { G*(1,j) - |[1,0]| } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th52:
@@ -2315,12 +2348,11 @@ A1: 1 <= j & j < width G;
 A2: x in LSeg(1/2*(G*(1,j)+G*(1,j+1))-|[1,0]|,G*(1,j+1) - |[1,0]|);
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A3: 0<=r & r<=1 and
-A4: p = (1-r)*(1/2*(G*(1,j)+G*(1,j+1))-|[1,0]|)+r*(G*(1,j+1) - |[1,0]|)
-  by A2,SPPOL_1:21;
+A4: p = (1-r)*(1/2*(G*(1,j)+G*(1,j+1))-|[1,0]|)+r*(G*(1,j+1) - |[1,0]|) and
+A3: 0<=r & r<=1 by A2;
   now per cases by A3,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(G*(1,j+1) - |[1,0]|) by A4,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(G*(1,j+1) - |[1,0]|) by A4,EUCLID:33
         .= 1*(G*(1,j+1) - |[1,0]|) by EUCLID:31
         .= (G*(1,j+1) - |[1,0]|) by EUCLID:33;
       hence p in { G*(1,j+1) - |[1,0]| } by TARSKI:def 1;
@@ -2382,7 +2414,7 @@ A18:  r3*(s1+s2)+r*s2 < s2 by A17,XREAL_1:10;
       hence p in Int cell(G,0,j) by A10,A13,A16,A18;
     end;
   end;
-  hence x in Int cell(G,0,j) \/ { G*(1,j+1) - |[1,0]| } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th53:
@@ -2397,12 +2429,12 @@ A1: 1 <= j & j < width G;
 A2: x in LSeg(1/2*(G*(len G,j)+G*(len G,j+1))+|[1,0]|,G* (len G,j) + |[1,0]|);
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A3: 0<=r & r<=1 and
 A4: p = (1-r)*(1/2*(G*(len G,j)+G*(len G,j+1))+|[1,0]|)+
-  r*(G*(len G,j) + |[1,0]|) by A2,SPPOL_1:21;
+  r*(G*(len G,j) + |[1,0]|) and
+A3: 0<=r & r<=1 by A2;
   now per cases by A3,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(G*(len G,j) + |[1,0]|) by A4,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(G*(len G,j) + |[1,0]|) by A4,EUCLID:33
         .= 1*(G*(len G,j) + |[1,0]|) by EUCLID:31
         .= (G*(len G,j) + |[1,0]|) by EUCLID:33;
       hence p in { G*(len G,j) + |[1,0]| } by TARSKI:def 1;
@@ -2465,7 +2497,7 @@ A18:  r3*(s1+s2)+r*s1 < s2 by A16,A17,XREAL_1:10;
     end;
   end;
 
-hence x in Int cell(G,len G,j) \/ { G*(len G,j) + |[1,0]| } by XBOOLE_0:def 3;
+hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th54:
@@ -2481,12 +2513,12 @@ A2: x in LSeg(1/2*(G*(len G,j)+G*(len G,j+1))+|[1,0]|,G*
   (len G,j+1) + |[1,0]|);
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A3: 0<=r & r<=1 and
 A4: p = (1-r)*(1/2*(G*(len G,j)+G*(len G,j+1))+|[1,0]|)+
-  r*(G*(len G,j+1) + |[1,0]|) by A2,SPPOL_1:21;
+  r*(G*(len G,j+1) + |[1,0]|) and
+A3: 0<=r & r<=1 by A2;
   now per cases by A3,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(G*(len G,j+1) + |[1,0]|) by A4,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(G*(len G,j+1) + |[1,0]|) by A4,EUCLID:33
         .= 1*(G*(len G,j+1) + |[1,0]|) by EUCLID:31
         .= (G*(len G,j+1) + |[1,0]|) by EUCLID:33;
       hence p in { G*(len G,j+1) + |[1,0]| } by TARSKI:def 1;
@@ -2548,8 +2580,7 @@ A18:  r3*(s1+s2)+r*s2 < s2 by A17,XREAL_1:10;
       hence p in Int cell(G,len G,j) by A10,A13,A16,A18;
     end;
   end;
-  hence x in Int cell(G,len G,j) \/ { G*(len G,j+1) + |[1,0]| } by
-XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th55:
@@ -2564,12 +2595,11 @@ A1: 1 <= i & i < len G;
 A2: x in LSeg(1/2*(G*(i,1)+G*(i+1,1))-|[0,1]|,G*(i,1) - |[0,1]|);
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A3: 0<=r & r<=1 and
-A4: p = (1-r)*(1/2*(G*(i,1)+G*(i+1,1))-|[0,1]|)+r*(G*(i,1) - |[0,1]|)
-  by A2,SPPOL_1:21;
+A4: p = (1-r)*(1/2*(G*(i,1)+G*(i+1,1))-|[0,1]|)+r*(G*(i,1) - |[0,1]|) and
+A3: 0<=r & r<=1 by A2;
   now per cases by A3,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(G*(i,1) - |[0,1]|) by A4,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(G*(i,1) - |[0,1]|) by A4,EUCLID:33
         .= 1*(G*(i,1) - |[0,1]|) by EUCLID:31
         .= (G*(i,1) - |[0,1]|) by EUCLID:33;
       hence p in { G*(i,1) - |[0,1]| } by TARSKI:def 1;
@@ -2631,7 +2661,7 @@ A18:  r3*(r1+r2)+r*r1 < r2 by A16,A17,XREAL_1:10;
       hence p in Int cell(G,i,0) by A10,A13,A15,A18;
     end;
   end;
-  hence x in Int cell(G,i,0) \/ { G*(i,1) - |[0,1]| } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th56:
@@ -2646,12 +2676,11 @@ A1: 1 <= i & i < len G;
 A2: x in LSeg(1/2*(G*(i,1)+G*(i+1,1))-|[0,1]|,G*(i+1,1) - |[0,1]|);
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A3: 0<=r & r<=1 and
-A4: p = (1-r)*(1/2*(G*(i,1)+G*(i+1,1))-|[0,1]|)+r*(G*(i+1,1) - |[0,1]|)
-  by A2,SPPOL_1:21;
+A4: p = (1-r)*(1/2*(G*(i,1)+G*(i+1,1))-|[0,1]|)+r*(G*(i+1,1) - |[0,1]|) and
+A3: 0<=r & r<=1 by A2;
   now per cases by A3,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(G*(i+1,1) - |[0,1]|) by A4,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(G*(i+1,1) - |[0,1]|) by A4,EUCLID:33
         .= 1*(G*(i+1,1) - |[0,1]|) by EUCLID:31
         .= (G*(i+1,1) - |[0,1]|) by EUCLID:33;
       hence p in { G*(i+1,1) - |[0,1]| } by TARSKI:def 1;
@@ -2713,7 +2742,7 @@ A18:  r3*(r1+r2)+r*r2 < r2 by A17,XREAL_1:10;
       hence p in Int cell(G,i,0) by A10,A13,A16,A18;
     end;
   end;
-  hence x in Int cell(G,i,0) \/ { G*(i+1,1) - |[0,1]| } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th57:
@@ -2730,12 +2759,12 @@ A2: x in LSeg(1/2*(G*(i,width G)+G*(i+1,width G))+|[0,1]|,
   G*(i,width G) + |[0,1]|);
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A3: 0<=r & r<=1 and
 A4: p = (1-r)*(1/2*(G*(i,width G)+G*(i+1,width G))+|[0,1]|)+
-  r*(G*(i,width G) + |[0,1]|) by A2,SPPOL_1:21;
+  r*(G*(i,width G) + |[0,1]|) and
+A3: 0<=r & r<=1 by A2;
   now per cases by A3,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(G*(i,width G) + |[0,1]|) by A4,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(G*(i,width G) + |[0,1]|) by A4,EUCLID:33
         .= 1*(G*(i,width G) + |[0,1]|) by EUCLID:31
         .= (G*(i,width G) + |[0,1]|) by EUCLID:33;
       hence p in { G*(i,width G) + |[0,1]| } by TARSKI:def 1;
@@ -2797,8 +2826,7 @@ A18:  r3*(r1+r2)+r*r1 < r2 by A16,A17,XREAL_1:10;
       hence p in Int cell(G,i,width G) by A10,A13,A15,A18;
     end;
   end;
-  hence x in Int cell(G,i,width G) \/
-  { G*(i,width G) + |[0,1]| } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th58:
@@ -2815,12 +2843,12 @@ A2: x in LSeg(1/2*(G*(i,width G)+G*(i+1,width G))+|[0,1]|,
   G*(i+1,width G) + |[0,1]|);
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A3: 0<=r & r<=1 and
 A4: p = (1-r)*(1/2*(G*(i,width G)+G*(i+1,width G))+|[0,1]|)+
-  r*(G*(i+1,width G) + |[0,1]|) by A2,SPPOL_1:21;
+  r*(G*(i+1,width G) + |[0,1]|) and
+A3: 0<=r & r<=1 by A2;
   now per cases by A3,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(G*(i+1,width G) + |[0,1]|) by A4,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(G*(i+1,width G) + |[0,1]|) by A4,EUCLID:33
         .= 1*(G*(i+1,width G) + |[0,1]|) by EUCLID:31
         .= (G*(i+1,width G) + |[0,1]|) by EUCLID:33;
       hence p in { G*(i+1,width G) + |[0,1]| } by TARSKI:def 1;
@@ -2882,8 +2910,7 @@ A18:  r3*(r1+r2)+r*r2 < r2 by A17,XREAL_1:10;
       hence p in Int cell(G,i,width G) by A10,A13,A16,A18;
     end;
   end;
-  hence x in
-  Int cell(G,i,width G) \/ { G*(i+1,width G) + |[0,1]| } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th59:
@@ -2895,12 +2922,12 @@ proof
 A1: x in LSeg(G*(1,1)-|[1,1]|,G*(1,1) - |[1,0]|);
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A2: 0<=r & r<=1 and
-A3: p = (1-r)*(G*(1,1)-|[1,1]|)+r*(G*(1,1) - |[1,0]|) by A1,SPPOL_1:21;
+A3: p = (1-r)*(G*(1,1)-|[1,1]|)+r*(G*(1,1) - |[1,0]|) and
+A2: 0<=r & r<=1 by A1;
   set r1 = G*(1,1)`1, s1 = G*(1,1)`2;
   now per cases by A2,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(G*(1,1) - |[1,0]|) by A3,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(G*(1,1) - |[1,0]|) by A3,EUCLID:33
         .= 1*(G*(1,1) - |[1,0]|) by EUCLID:31
         .= G*(1,1) - |[1,0]| by EUCLID:33;
       hence p in { G*(1,1) - |[1,0]| } by TARSKI:def 1;
@@ -2931,7 +2958,7 @@ A7:   r1-1 < r1 by XREAL_1:21;
       hence p in Int cell(G,0,0) by A4,A6,A7;
     end;
   end;
-  hence x in Int cell(G,0,0) \/ { G*(1,1) - |[1,0]| } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th60:
@@ -2943,13 +2970,12 @@ proof
 A1: x in LSeg(G*(len G,1)+|[1,-1]|,G*(len G,1) + |[1,0]|);
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A2: 0<=r & r<=1 and
-A3: p = (1-r)*(G*(len G,1)+|[1,-1]|)+r*(G*(len G,1) + |[1,0]|)
-  by A1,SPPOL_1:21;
+A3: p = (1-r)*(G*(len G,1)+|[1,-1]|)+r*(G*(len G,1) + |[1,0]|) and
+A2: 0<=r & r<=1 by A1;
   set r1 = G*(len G,1)`1, s1 = G*(1,1)`2;
   now per cases by A2,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(G*(len G,1) + |[1,0]|) by A3,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(G*(len G,1) + |[1,0]|) by A3,EUCLID:33
         .= 1*(G*(len G,1) + |[1,0]|) by EUCLID:31
         .= G*(len G,1) + |[1,0]| by EUCLID:33;
       hence p in { G*(len G,1) + |[1,0]| } by TARSKI:def 1;
@@ -2992,7 +3018,7 @@ A10:  r1 < r1+1 by XREAL_1:31;
     end;
   end;
 
-hence x in Int cell(G,len G,0) \/ { G*(len G,1) + |[1,0]| } by XBOOLE_0:def 3;
+hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th61:
@@ -3004,13 +3030,12 @@ proof
 A1: x in LSeg(G*(1,width G)+|[-1,1]|,G*(1,width G) - |[1,0]|);
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A2: 0<=r & r<=1 and
-A3: p = (1-r)*(G*(1,width G)+|[-1,1]|)+r*(G*(1,width G) - |[1,0]|)
-  by A1,SPPOL_1:21;
+A3: p = (1-r)*(G*(1,width G)+|[-1,1]|)+r*(G*(1,width G) - |[1,0]|) and
+A2: 0<=r & r<=1 by A1;
   set r1 = G*(1,1)`1, s1 = G*(1,width G)`2;
   now per cases by A2,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(G*(1,width G) - |[1,0]|) by A3,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(G*(1,width G) - |[1,0]|) by A3,EUCLID:33
         .= 1*(G*(1,width G) - |[1,0]|) by EUCLID:31
         .= G*(1,width G) - |[1,0]| by EUCLID:33;
       hence p in { G*(1,width G) - |[1,0]| } by TARSKI:def 1;
@@ -3050,8 +3075,7 @@ A9:   r1-1 < r1 by XREAL_1:21;
       hence p in Int cell(G,0,width G) by A4,A8,A9;
     end;
   end;
-  hence x in Int cell(G,0,width G) \/
-  { G*(1,width G) - |[1,0]| } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th62:
@@ -3063,13 +3087,12 @@ proof
 A1: x in LSeg(G*(len G,width G)+|[1,1]|,G*(len G,width G) + |[1,0]|);
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A2: 0<=r & r<=1 and
-A3: p = (1-r)*(G*(len G,width G)+|[1,1]|)+r*(G*(len G,width G) + |[1,0]|)
-  by A1,SPPOL_1:21;
+A3: p = (1-r)*(G*(len G,width G)+|[1,1]|)+r*(G*(len G,width G) + |[1,0]|) and
+A2: 0<=r & r<=1 by A1;
   set r1 = G*(len G,1)`1, s1 = G*(1,width G)`2;
   now per cases by A2,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(G*(len G,width G) + |[1,0]|) by A3,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(G*(len G,width G) + |[1,0]|) by A3,EUCLID:33
         .= 1*(G*(len G,width G) + |[1,0]|) by EUCLID:31
         .= G*(len G,width G) + |[1,0]| by EUCLID:33;
       hence p in { G*(len G,width G) + |[1,0]| } by TARSKI:def 1;
@@ -3110,7 +3133,7 @@ A9:   r1 < r1+1 by XREAL_1:31;
       hence p in Int cell(G,len G,width G) by A4,A8,A9;
     end;
   end;
-  hence x in Int cell(G,len G,width G) \/ { G*(len G,width G) + |[1,0]| }
+  hence thesis
   by XBOOLE_0:def 3;
 end;
 
@@ -3123,12 +3146,12 @@ proof
 A1: x in LSeg(G*(1,1)-|[1,1]|,G*(1,1) - |[0,1]|);
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A2: 0<=r & r<=1 and
-A3: p = (1-r)*(G*(1,1)-|[1,1]|)+r*(G*(1,1) - |[0,1]|) by A1,SPPOL_1:21;
+A3: p = (1-r)*(G*(1,1)-|[1,1]|)+r*(G*(1,1) - |[0,1]|) and
+A2: 0<=r & r<=1 by A1;
   set r1 = G*(1,1)`1, s1 = G*(1,1)`2;
   now per cases by A2,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(G*(1,1) - |[0,1]|) by A3,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(G*(1,1) - |[0,1]|) by A3,EUCLID:33
         .= 1*(G*(1,1) - |[0,1]|) by EUCLID:31
         .= G*(1,1) - |[0,1]| by EUCLID:33;
       hence p in { G*(1,1) - |[0,1]| } by TARSKI:def 1;
@@ -3160,7 +3183,7 @@ A8:   r1-(1-r) < r1 by XREAL_1:21;
       hence p in Int cell(G,0,0) by A5,A7,A8;
     end;
   end;
-  hence x in Int cell(G,0,0) \/ { G*(1,1) - |[0,1]| } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th64:
@@ -3172,13 +3195,12 @@ proof
 A1: x in LSeg(G*(len G,1)+|[1,-1]|,G*(len G,1) - |[0,1]|);
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A2: 0<=r & r<=1 and
-A3: p = (1-r)*(G*(len G,1)+|[1,-1]|)+r*(G*(len G,1) - |[0,1]|)
-  by A1,SPPOL_1:21;
+A3: p = (1-r)*(G*(len G,1)+|[1,-1]|)+r*(G*(len G,1) - |[0,1]|) and
+A2: 0<=r & r<=1 by A1;
   set r1 = G*(len G,1)`1, s1 = G*(1,1)`2;
   now per cases by A2,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(G*(len G,1) - |[0,1]|) by A3,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(G*(len G,1) - |[0,1]|) by A3,EUCLID:33
         .= 1*(G*(len G,1) - |[0,1]|) by EUCLID:31
         .= G*(len G,1) - |[0,1]| by EUCLID:33;
       hence p in { G*(len G,1) - |[0,1]| } by TARSKI:def 1;
@@ -3220,7 +3242,7 @@ A10:  r1 < r1+(1-r) by A4,XREAL_1:31;
     end;
   end;
 
-hence x in Int cell(G,len G,0) \/ { G*(len G,1) - |[0,1]| } by XBOOLE_0:def 3;
+hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th65:
@@ -3232,13 +3254,12 @@ proof
 A1: x in LSeg(G*(1,width G)+|[-1,1]|,G*(1,width G) + |[0,1]|);
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A2: 0<=r & r<=1 and
-A3: p = (1-r)*(G*(1,width G)+|[-1,1]|)+r*(G*(1,width G) + |[0,1]|)
-  by A1,SPPOL_1:21;
+A3: p = (1-r)*(G*(1,width G)+|[-1,1]|)+r*(G*(1,width G) + |[0,1]|) and
+A2: 0<=r & r<=1 by A1;
   set r1 = G*(1,1)`1, s1 = G*(1,width G)`2;
   now per cases by A2,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(G*(1,width G) + |[0,1]|) by A3,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(G*(1,width G) + |[0,1]|) by A3,EUCLID:33
         .= 1*(G*(1,width G) + |[0,1]|) by EUCLID:31
         .= G*(1,width G) + |[0,1]| by EUCLID:33;
       hence p in { G*(1,width G) + |[0,1]| } by TARSKI:def 1;
@@ -3278,8 +3299,7 @@ A10:  r1-(1-r) < r1 by XREAL_1:21;
       hence p in Int cell(G,0,width G) by A5,A9,A10;
     end;
   end;
-  hence x in Int cell(G,0,width G) \/
-  { G*(1,width G) + |[0,1]| } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th66:
@@ -3291,13 +3311,12 @@ proof
 A1: x in LSeg(G*(len G,width G)+|[1,1]|,G*(len G,width G) + |[0,1]|);
   then reconsider p = x as Point of TOP-REAL 2;
   consider r such that
-A2: 0<=r & r<=1 and
-A3: p = (1-r)*(G*(len G,width G)+|[1,1]|)+r*(G*(len G,width G) + |[0,1]|)
-  by A1,SPPOL_1:21;
+A3: p = (1-r)*(G*(len G,width G)+|[1,1]|)+r*(G*(len G,width G) + |[0,1]|) and
+A2: 0<=r & r<=1 by A1;
   set r1 = G*(len G,1)`1, s1 = G*(1,width G)`2;
   now per cases by A2,XXREAL_0:1;
     case r = 1;
-      then p = 0.REAL 2 + 1*(G*(len G,width G) + |[0,1]|) by A3,EUCLID:33
+      then p = 0.TOP-REAL 2 + 1*(G*(len G,width G) + |[0,1]|) by A3,EUCLID:33
         .= 1*(G*(len G,width G) + |[0,1]|) by EUCLID:31
         .= G*(len G,width G) + |[0,1]| by EUCLID:33;
       hence p in { G*(len G,width G) + |[0,1]| } by TARSKI:def 1;
@@ -3400,10 +3419,11 @@ A17: (p2+q2)`1 = (1-r)*(p1`1+q2`1)+r*(p2`1+q3`1) by A4,A10,Lm1
     .= (1-r)*(1/2*(p1+q2))+1/2*(r*(p2+q3)) by EUCLID:34
     .= (1-r)*(1/2*(p1+q2))+1/2*r*(p2+q3) by EUCLID:34
     .= (1-r)*((1/2)*(p1+q2))+r*((1/2)*(p2+q3)) by EUCLID:34;
+  then 1/2*(p2+q2) in LSeg(1/2*(p1+q2),1/2*(p2+q3)) by A14,A15;
   then
 A18: LSeg(1/2*(p1+q2),1/2*(p2+q3)) =
   LSeg(1/2*(p1+q2),1/2*(p2+q2)) \/ LSeg(1/2*(p2+q2),1/2*(p2+q3))
-  by A14,A15,SPPOL_1:22,TOPREAL1:11;
+  by A14,A15,TOPREAL1:11;
   set I1 = Int cell(G,i,j), I2 = Int cell(G,i,j+1);
 A19: LSeg(1/2*(p1+q2),1/2*(p2+q2)) c= I1 \/ { 1/2*(p2+q2) } by A1,A3,Th44;
 A20: LSeg(1/2*(p2+q2),1/2*(p2+q3)) c= I2 \/ { 1/2*(p2+q2) } by A1,A2,A6,Th46;
@@ -3473,10 +3493,11 @@ A17: (p2+q2)`2 = (1-r)*(p1`2+q2`2)+r*(p2`2+q3`2) by A4,A10,Lm1
     .= (1-r)*(1/2*(p1+q2))+1/2*(r*(p2+q3)) by EUCLID:34
     .= (1-r)*(1/2*(p1+q2))+1/2*r*(p2+q3) by EUCLID:34
     .= (1-r)*((1/2)*(p1+q2))+r*((1/2)*(p2+q3)) by EUCLID:34;
+  then 1/2*(p2+q2) in LSeg(1/2*(p1+q2),1/2*(p2+q3)) by A14,A15;
   then
 A18: LSeg(1/2*(p1+q2),1/2*(p2+q3)) =
   LSeg(1/2*(p1+q2),1/2*(p2+q2)) \/ LSeg(1/2*(p2+q2),1/2*(p2+q3))
-  by A14,A15,SPPOL_1:22,TOPREAL1:11;
+  by A14,A15,TOPREAL1:11;
   set I1 = Int cell(G,i,j), I2 = Int cell(G,i+1,j);
 A19: LSeg(1/2*(p1+q2),1/2*(p2+q2)) c= I1 \/ { 1/2*(p2+q2) } by A1,A3,Th45;
 A20: LSeg(1/2*(p2+q2),1/2*(p2+q3)) c= I2 \/ { 1/2*(p2+q2) } by A1,A2,A6,Th43;
@@ -3484,7 +3505,7 @@ A20: LSeg(1/2*(p2+q2),1/2*(p2+q3)) c= I2 \/ { 1/2*(p2+q2) } by A1,A2,A6,Th43;
   = I1 \/ (I2 \/ ({ 1/2*(p2+q2) } \/ { 1/2*(p2+q2) })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { 1/2*(p2+q2) } \/ { 1/2*(p2+q2) }) by XBOOLE_1:4
     .= I1 \/ { 1/2*(p2+q2) } \/ (I2 \/ { 1/2*(p2+q2) }) by XBOOLE_1:4;
-  hence LSeg(1/2*(p1+q2),1/2*(p2+q3)) c= I1 \/ I2 \/ { 1/2*(p2+q2) }
+  hence thesis
   by A18,A19,A20,XBOOLE_1:13;
 end;
 
@@ -3559,10 +3580,11 @@ A15: (1-r)*((1/2)*p1)+r*((1/2)*p1)+(1-r)*((1/2)*q2)+r*((1/2)*q3)
     .= (1-r)*((1/2)*(p1+q2))-((1-r)*|[0,1]|-r*((1/2)*(p1+q3))) by EUCLID:45
     .= (1-r)*((1/2)*(p1+q2))-(1-r)*|[0,1]|+r*((1/2)*(p1+q3)) by EUCLID:51
     .= (1-r)*((1/2)*(p1+q2)-|[0,1]|)+r*((1/2)*(p1+q3)) by EUCLID:53;
+  then 1/2*(p1+q2) in LSeg(1/2*(p1+q2)-|[0,1]|,1/2*(p1+q3)) by A10,A11;
   then
 A16: LSeg(1/2*(p1+q2)-|[0,1]|,1/2*(p1+q3)) =
   LSeg(1/2*(p1+q2)-|[0,1]|,1/2*(p1+q2)) \/ LSeg(1/2*(p1+q2),1/2*(p1+q3))
-  by A10,A11,SPPOL_1:22,TOPREAL1:11;
+  by A10,A11,TOPREAL1:11;
   set I1 = Int cell(G,i,0), I2 = Int cell(G,i,1);
 A17: LSeg(1/2*(p1+q2)-|[0,1]|,1/2*(p1+q2)) c= I1 \/ { 1/2*(p1+q2) }
   by A1,Th49;
@@ -3571,7 +3593,7 @@ A18: LSeg(1/2*(p1+q2),1/2*(p1+q3)) c= I2 \/ { 1/2*(p1+q2) } by A1,A3,Th46;
   = I1 \/ (I2 \/ ({ 1/2*(p1+q2) } \/ { 1/2*(p1+q2) })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { 1/2*(p1+q2) } \/ { 1/2*(p1+q2) }) by XBOOLE_1:4
     .= I1 \/ { 1/2*(p1+q2) } \/ (I2 \/ { 1/2*(p1+q2) }) by XBOOLE_1:4;
-  hence LSeg(1/2*(p1+q2)-|[0,1]|,1/2*(p1+q3)) c= I1 \/ I2 \/ { 1/2*(p1+q2) }
+  hence thesis
   by A16,A17,A18,XBOOLE_1:13;
 end;
 
@@ -3651,10 +3673,11 @@ A16: (1-r)*((1/2)*p1)+r*((1/2)*p1)+(1-r)*((1/2)*q2)+r*((1/2)*q3)
   (1-r)*((1/2)*q2)+r*((1/2)*q3)+(1-r)*|[0,1]| by EUCLID:30
     .= (1-r)*((1/2)*(p1+q2))+(1-r)*|[0,1]|+r*((1/2)*(p1+q3)) by A16,EUCLID:30
     .= (1-r)*((1/2)*(p1+q2)+|[0,1]|)+r*((1/2)*(p1+q3)) by EUCLID:36;
+  then 1/2*(p1+q2) in LSeg(1/2*(p1+q2)+|[0,1]|,1/2*(p1+q3)) by A11,A12;
   then
 A17: LSeg(1/2*(p1+q2)+|[0,1]|,1/2*(p1+q3)) =
   LSeg(1/2*(p1+q2)+|[0,1]|,1/2*(p1+q2)) \/ LSeg(1/2*(p1+q2),1/2*(p1+q3))
-  by A11,A12,SPPOL_1:22,TOPREAL1:11;
+  by A11,A12,TOPREAL1:11;
   set I1 = Int cell(G,i,width G -'1), I2 = Int cell(G,i,width G);
 A18: LSeg(1/2*(p1+q2)+|[0,1]|,1/2*(p1+q2)) c= I2 \/ { 1/2*(p1+q2) } by A1,Th50;
 A19: LSeg(1/2*(p1+q2),1/2*(p1+q3)) c= I1 \/ { 1/2*(p1+q2) }
@@ -3663,7 +3686,7 @@ A19: LSeg(1/2*(p1+q2),1/2*(p1+q3)) c= I1 \/ { 1/2*(p1+q2) }
   = I1 \/ (I2 \/ ({ 1/2*(p1+q2) } \/ { 1/2*(p1+q2) })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { 1/2*(p1+q2) } \/ { 1/2*(p1+q2) }) by XBOOLE_1:4
     .= I1 \/ { 1/2*(p1+q2) } \/ (I2 \/ { 1/2*(p1+q2) }) by XBOOLE_1:4;
-  hence LSeg(1/2*(p1+q2)+|[0,1]|,1/2*(p1+q3)) c= I1 \/ I2 \/ { 1/2*(p1+q2) }
+  hence thesis
   by A17,A18,A19,XBOOLE_1:13;
 end;
 
@@ -3738,10 +3761,11 @@ A15: (1-r)*((1/2)*p1)+r*((1/2)*p1)+(1-r)*((1/2)*q2)+r*((1/2)*q3)
     .= (1-r)*((1/2)*(p1+q2))-((1-r)*|[1,0]|-r*((1/2)*(p1+q3))) by EUCLID:45
     .= (1-r)*((1/2)*(p1+q2))-(1-r)*|[1,0]|+r*((1/2)*(p1+q3)) by EUCLID:51
     .= (1-r)*((1/2)*(p1+q2)-|[1,0]|)+r*((1/2)*(p1+q3)) by EUCLID:53;
+  then 1/2*(p1+q2) in LSeg(1/2*(p1+q2)-|[1,0]|,1/2*(p1+q3)) by A10,A11;
   then
 A16: LSeg(1/2*(p1+q2)-|[1,0]|,1/2*(p1+q3)) =
   LSeg(1/2*(p1+q2)-|[1,0]|,1/2*(p1+q2)) \/ LSeg(1/2*(p1+q2),1/2*(p1+q3))
-  by A10,A11,SPPOL_1:22,TOPREAL1:11;
+  by A10,A11,TOPREAL1:11;
   set I1 = Int cell(G,0,j), I2 = Int cell(G,1,j);
 A17: LSeg(1/2*(p1+q2)-|[1,0]|,1/2*(p1+q2)) c= I1 \/ { 1/2*(p1+q2) }
   by A1,Th47;
@@ -3750,7 +3774,7 @@ A18: LSeg(1/2*(p1+q2),1/2*(p1+q3)) c= I2 \/ { 1/2*(p1+q2) } by A1,A3,Th43;
   = I1 \/ (I2 \/ ({ 1/2*(p1+q2) } \/ { 1/2*(p1+q2) })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { 1/2*(p1+q2) } \/ { 1/2*(p1+q2) }) by XBOOLE_1:4
     .= I1 \/ { 1/2*(p1+q2) } \/ (I2 \/ { 1/2*(p1+q2) }) by XBOOLE_1:4;
-  hence LSeg(1/2*(p1+q2)-|[1,0]|,1/2*(p1+q3)) c= I1 \/ I2 \/ { 1/2*(p1+q2) }
+  hence thesis
   by A16,A17,A18,XBOOLE_1:13;
 end;
 
@@ -3830,10 +3854,11 @@ A16: (1-r)*((1/2)*p1)+r*((1/2)*p1)+(1-r)*((1/2)*q2)+r*((1/2)*q3)
   (1-r)*((1/2)*q2)+r*((1/2)*q3)+(1-r)*|[1,0]| by EUCLID:30
     .= (1-r)*((1/2)*(p1+q2))+(1-r)*|[1,0]|+r*((1/2)*(p1+q3)) by A16,EUCLID:30
     .= (1-r)*((1/2)*(p1+q2)+|[1,0]|)+r*((1/2)*(p1+q3)) by EUCLID:36;
+  then 1/2*(p1+q2) in LSeg(1/2*(p1+q2)+|[1,0]|,1/2*(p1+q3)) by A11,A12;
   then
 A17: LSeg(1/2*(p1+q2)+|[1,0]|,1/2*(p1+q3)) =
   LSeg(1/2*(p1+q2)+|[1,0]|,1/2*(p1+q2)) \/ LSeg(1/2*(p1+q2),1/2*(p1+q3))
-  by A11,A12,SPPOL_1:22,TOPREAL1:11;
+  by A11,A12,TOPREAL1:11;
   set I1 = Int cell(G,len G -' 1,j), I2 = Int cell(G,len G,j);
 A18: LSeg(1/2*(p1+q2)+|[1,0]|,1/2*(p1+q2)) c= I2 \/ { 1/2*(p1+q2) } by A1,Th48;
 A19: LSeg(1/2*(p1+q2),1/2*(p1+q3)) c= I1 \/ { 1/2*(p1+q2) }
@@ -3842,7 +3867,7 @@ A19: LSeg(1/2*(p1+q2),1/2*(p1+q3)) c= I1 \/ { 1/2*(p1+q2) }
   = I1 \/ (I2 \/ ({ 1/2*(p1+q2) } \/ { 1/2*(p1+q2) })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { 1/2*(p1+q2) } \/ { 1/2*(p1+q2) }) by XBOOLE_1:4
     .= I1 \/ { 1/2*(p1+q2) } \/ (I2 \/ { 1/2*(p1+q2) }) by XBOOLE_1:4;
-  hence LSeg(1/2*(p1+q2)+|[1,0]|,1/2*(p1+q3)) c= I1 \/ I2 \/ { 1/2*(p1+q2) }
+  hence thesis
   by A17,A18,A19,XBOOLE_1:13;
 end;
 
@@ -3926,10 +3951,11 @@ EUCLID:49
   by EUCLID:50
     .= r*(1/2*(p2+q3))+(1-r)*(1/2*(p1+p2))-((1-r)+r)*|[1,0]| by EUCLID:37
     .= p2-|[1,0]| by A16,EUCLID:33;
+  then p2-|[1,0]| in LSeg(1/2*(p1+p2)-|[1,0]|,1/2*(p2+q3)-|[1,0]|) by A11,A12;
   then
 A17: LSeg(1/2*(p1+p2)-|[1,0]|,1/2*(p2+q3)-|[1,0]|) =
   LSeg(1/2*(p1+p2)-|[1,0]|,p2-|[1,0]|) \/
-  LSeg(p2-|[1,0]|,1/2*(p2+q3)-|[1,0]|) by A11,A12,SPPOL_1:22,TOPREAL1:11;
+  LSeg(p2-|[1,0]|,1/2*(p2+q3)-|[1,0]|) by A11,A12,TOPREAL1:11;
   set I1 = Int cell(G,0,j), I2 = Int cell(G,0,j+1);
 A18: LSeg(1/2*(p1+p2)-|[1,0]|,p2-|[1,0]|) c= I1 \/
   { p2-|[1,0]| } by A1,A3,Th52;
@@ -3939,8 +3965,7 @@ A19: LSeg(1/2*(p2+q3)-|[1,0]|,p2-|[1,0]|) c= I2 \/ { p2-|[1,0]| }
   = I1 \/ (I2 \/ ({ p2-|[1,0]| } \/ { p2-|[1,0]| })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { p2-|[1,0]| } \/ { p2-|[1,0]| }) by XBOOLE_1:4
     .= I1 \/ { p2-|[1,0]| } \/ (I2 \/ { p2-|[1,0]| }) by XBOOLE_1:4;
-  hence LSeg(1/2*(p1+p2)-|[1,0]|,1/2*(p2+q3)-|[1,0]|)
-  c= I1 \/ I2 \/ { p2-|[1,0]| } by A17,A18,A19,XBOOLE_1:13;
+  hence thesis by A17,A18,A19,XBOOLE_1:13;
 end;
 
 theorem
@@ -4022,10 +4047,11 @@ EUCLID:30
   by EUCLID:30
     .= r*(1/2*(p2+q3))+(1-r)*(1/2*(p1+p2))+((1-r)+r)*|[1,0]| by EUCLID:37
     .= p2+|[1,0]| by A16,EUCLID:33;
+  then p2+|[1,0]| in LSeg(1/2*(p1+p2)+|[1,0]|,1/2*(p2+q3)+|[1,0]|) by A11,A12;
   then
 A17: LSeg(1/2*(p1+p2)+|[1,0]|,1/2*(p2+q3)+|[1,0]|) =
   LSeg(1/2*(p1+p2)+|[1,0]|,p2+|[1,0]|) \/
-  LSeg(p2+|[1,0]|,1/2*(p2+q3)+|[1,0]|) by A11,A12,SPPOL_1:22,TOPREAL1:11;
+  LSeg(p2+|[1,0]|,1/2*(p2+q3)+|[1,0]|) by A11,A12,TOPREAL1:11;
   set I1 = Int cell(G,len G,j), I2 = Int cell(G,len G,j+1);
 A18: LSeg(1/2*(p1+p2)+|[1,0]|,p2+|[1,0]|) c= I1 \/
   { p2+|[1,0]| } by A1,A3,Th54;
@@ -4035,8 +4061,7 @@ A19: LSeg(1/2*(p2+q3)+|[1,0]|,p2+|[1,0]|) c= I2 \/ { p2+|[1,0]| }
   = I1 \/ (I2 \/ ({ p2+|[1,0]| } \/ { p2+|[1,0]| })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { p2+|[1,0]| } \/ { p2+|[1,0]| }) by XBOOLE_1:4
     .= I1 \/ { p2+|[1,0]| } \/ (I2 \/ { p2+|[1,0]| }) by XBOOLE_1:4;
-  hence LSeg(1/2*(p1+p2)+|[1,0]|,1/2*(p2+q3)+|[1,0]|)
-  c= I1 \/ I2 \/ { p2+|[1,0]| } by A17,A18,A19,XBOOLE_1:13;
+  hence thesis by A17,A18,A19,XBOOLE_1:13;
 end;
 
 theorem
@@ -4117,10 +4142,11 @@ EUCLID:49
   by EUCLID:50
     .= r*(1/2*(p2+q3))+(1-r)*(1/2*(p1+p2))-((1-r)+r)*|[0,1]| by EUCLID:37
     .= p2-|[0,1]| by A16,EUCLID:33;
+  then p2-|[0,1]| in LSeg(1/2*(p1+p2)-|[0,1]|,1/2*(p2+q3)-|[0,1]|) by A11,A12;
   then
 A17: LSeg(1/2*(p1+p2)-|[0,1]|,1/2*(p2+q3)-|[0,1]|) =
   LSeg(1/2*(p1+p2)-|[0,1]|,p2-|[0,1]|) \/
-  LSeg(p2-|[0,1]|,1/2*(p2+q3)-|[0,1]|) by A11,A12,SPPOL_1:22,TOPREAL1:11;
+  LSeg(p2-|[0,1]|,1/2*(p2+q3)-|[0,1]|) by A11,A12,TOPREAL1:11;
   set I1 = Int cell(G,i,0), I2 = Int cell(G,i+1,0);
 A18: LSeg(1/2*(p1+p2)-|[0,1]|,p2-|[0,1]|) c= I1 \/
   { p2-|[0,1]| } by A1,A3,Th56;
@@ -4130,8 +4156,7 @@ A19: LSeg(1/2*(p2+q3)-|[0,1]|,p2-|[0,1]|) c= I2 \/ { p2-|[0,1]| }
   = I1 \/ (I2 \/ ({ p2-|[0,1]| } \/ { p2-|[0,1]| })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { p2-|[0,1]| } \/ { p2-|[0,1]| }) by XBOOLE_1:4
     .= I1 \/ { p2-|[0,1]| } \/ (I2 \/ { p2-|[0,1]| }) by XBOOLE_1:4;
-  hence LSeg(1/2*(p1+p2)-|[0,1]|,1/2*(p2+q3)-|[0,1]|)
-  c= I1 \/ I2 \/ { p2-|[0,1]| } by A17,A18,A19,XBOOLE_1:13;
+  hence thesis by A17,A18,A19,XBOOLE_1:13;
 end;
 
 theorem
@@ -4214,10 +4239,11 @@ EUCLID:30
   by EUCLID:30
     .= r*(1/2*(p2+q3))+(1-r)*(1/2*(p1+p2))+((1-r)+r)*|[0,1]| by EUCLID:37
     .= p2+|[0,1]| by A16,EUCLID:33;
+  then p2+|[0,1]| in LSeg(1/2*(p1+p2)+|[0,1]|,1/2*(p2+q3)+|[0,1]|) by A11,A12;
   then
 A17: LSeg(1/2*(p1+p2)+|[0,1]|,1/2*(p2+q3)+|[0,1]|) =
   LSeg(1/2*(p1+p2)+|[0,1]|,p2+|[0,1]|) \/
-  LSeg(p2+|[0,1]|,1/2*(p2+q3)+|[0,1]|) by A11,A12,SPPOL_1:22,TOPREAL1:11;
+  LSeg(p2+|[0,1]|,1/2*(p2+q3)+|[0,1]|) by A11,A12,TOPREAL1:11;
   set I1 = Int cell(G,i,width G), I2 = Int cell(G,i+1,width G);
 A18: LSeg(1/2*(p1+p2)+|[0,1]|,p2+|[0,1]|) c= I1 \/
   { p2+|[0,1]| } by A1,A3,Th58;
@@ -4227,8 +4253,7 @@ A19: LSeg(1/2*(p2+q3)+|[0,1]|,p2+|[0,1]|) c= I2 \/ { p2+|[0,1]| }
   = I1 \/ (I2 \/ ({ p2+|[0,1]| } \/ { p2+|[0,1]| })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { p2+|[0,1]| } \/ { p2+|[0,1]| }) by XBOOLE_1:4
     .= I1 \/ { p2+|[0,1]| } \/ (I2 \/ { p2+|[0,1]| }) by XBOOLE_1:4;
-  hence LSeg(1/2*(p1+p2)+|[0,1]|,1/2*(p2+q3)+|[0,1]|)
-  c= I1 \/ I2 \/ { p2+|[0,1]| } by A17,A18,A19,XBOOLE_1:13;
+  hence thesis by A17,A18,A19,XBOOLE_1:13;
 end;
 
 theorem
@@ -4285,10 +4310,11 @@ A10: ((1-r)*(q2-|[1,1]|)+r*(1/2*(q2+q3)-|[1,0]|))`2
   then (1-r)*(q2-|[1,1]|)+r*(1/2*(q2+q3)-|[1,0]|)
   = |[(q2-|[1,0]|)`1,(q2-|[1,0]|)`2]| by A10,EUCLID:57
     .= q2-|[1,0]| by EUCLID:57;
+  then q2-|[1,0]| in LSeg(q2-|[1,1]|,1/2*(q2+q3)-|[1,0]|) by A7,A8;
   then
 A11: LSeg(q2-|[1,1]|,1/2*(q2+q3)-|[1,0]|) =
   LSeg(q2-|[1,1]|,q2-|[1,0]|) \/ LSeg(q2-|[1,0]|,1/2*(q2+q3)-|[1,0]|)
-  by A7,A8,SPPOL_1:22,TOPREAL1:11;
+  by A7,A8,TOPREAL1:11;
   set I1 = Int cell(G,0,0), I2 = Int cell(G,0,1);
 A12: LSeg(q2-|[1,1]|,q2-|[1,0]|) c= I1 \/ { q2-|[1,0]| } by Th59;
 A13: LSeg(q2-|[1,0]|,1/2*(q2+q3)-|[1,0]|) c= I2 \/
@@ -4297,7 +4323,7 @@ A13: LSeg(q2-|[1,0]|,1/2*(q2+q3)-|[1,0]|) c= I2 \/
   = I1 \/ (I2 \/ ({ q2-|[1,0]| } \/ { q2-|[1,0]| })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { q2-|[1,0]| } \/ { q2-|[1,0]| }) by XBOOLE_1:4
     .= I1 \/ { q2-|[1,0]| } \/ (I2 \/ { q2-|[1,0]| }) by XBOOLE_1:4;
-  hence LSeg(q2-|[1,1]|,1/2*(q2+q3)-|[1,0]|) c= I1 \/ I2 \/ { q2-|[1,0]| }
+  hence thesis
   by A11,A12,A13,XBOOLE_1:13;
 end;
 
@@ -4355,10 +4381,11 @@ A10: ((1-r)*(q2+|[1,-1]|)+r*(1/2*(q2+q3)+|[1,0]|))`2
   then (1-r)*(q2+|[1,-1]|)+r*(1/2*(q2+q3)+|[1,0]|)
   = |[(q2+|[1,0]|)`1,(q2+|[1,0]|)`2]| by A10,EUCLID:57
     .= q2+|[1,0]| by EUCLID:57;
+  then q2+|[1,0]| in LSeg(q2+|[1,-1]|,1/2*(q2+q3)+|[1,0]|) by A7,A8;
   then
 A11: LSeg(q2+|[1,-1]|,1/2*(q2+q3)+|[1,0]|) =
   LSeg(q2+|[1,-1]|,q2+|[1,0]|) \/ LSeg(q2+|[1,0]|,1/2*(q2+q3)+|[1,0]|)
-  by A7,A8,SPPOL_1:22,TOPREAL1:11;
+  by A7,A8,TOPREAL1:11;
   set I1 = Int cell(G,len G,0), I2 = Int cell(G,len G,1);
 A12: LSeg(q2+|[1,-1]|,q2+|[1,0]|) c= I1 \/ { q2+|[1,0]| } by Th60;
 A13: LSeg(q2+|[1,0]|,1/2*(q2+q3)+|[1,0]|) c= I2 \/
@@ -4367,7 +4394,7 @@ A13: LSeg(q2+|[1,0]|,1/2*(q2+q3)+|[1,0]|) c= I2 \/
   = I1 \/ (I2 \/ ({ q2+|[1,0]| } \/ { q2+|[1,0]| })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { q2+|[1,0]| } \/ { q2+|[1,0]| }) by XBOOLE_1:4
     .= I1 \/ { q2+|[1,0]| } \/ (I2 \/ { q2+|[1,0]| }) by XBOOLE_1:4;
-  hence LSeg(q2+|[1,-1]|,1/2*(q2+q3)+|[1,0]|) c= I1 \/ I2 \/ { q2+|[1,0]| }
+  hence thesis
   by A11,A12,A13,XBOOLE_1:13;
 end;
 
@@ -4429,10 +4456,11 @@ A11: ((1-r)*(q2+|[-1,1]|)+r*(1/2*(q2+q3)-|[1,0]|))`2
   then (1-r)*(q2+|[-1,1]|)+r*(1/2*(q2+q3)-|[1,0]|)
   = |[(q2-|[1,0]|)`1,(q2-|[1,0]|)`2]| by A11,EUCLID:57
     .= q2-|[1,0]| by EUCLID:57;
+  then q2-|[1,0]| in LSeg(q2+|[-1,1]|,1/2*(q2+q3)-|[1,0]|) by A8,A9;
   then
 A12: LSeg(q2+|[-1,1]|,1/2*(q2+q3)-|[1,0]|) =
   LSeg(q2+|[-1,1]|,q2-|[1,0]|) \/ LSeg(q2-|[1,0]|,1/2*(q2+q3)-|[1,0]|)
-  by A8,A9,SPPOL_1:22,TOPREAL1:11;
+  by A8,A9,TOPREAL1:11;
   set I1 = Int cell(G,0,width G), I2 = Int cell(G,0,width G -' 1);
 A13: LSeg(q2+|[-1,1]|,q2-|[1,0]|) c= I1 \/ { q2-|[1,0]| } by Th61;
 A14: LSeg(q2-|[1,0]|,1/2*(q2+q3)-|[1,0]|) c= I2 \/ { q2-|[1,0]| }
@@ -4441,7 +4469,7 @@ A14: LSeg(q2-|[1,0]|,1/2*(q2+q3)-|[1,0]|) c= I2 \/ { q2-|[1,0]| }
   = I1 \/ (I2 \/ ({ q2-|[1,0]| } \/ { q2-|[1,0]| })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { q2-|[1,0]| } \/ { q2-|[1,0]| }) by XBOOLE_1:4
     .= I1 \/ { q2-|[1,0]| } \/ (I2 \/ { q2-|[1,0]| }) by XBOOLE_1:4;
-  hence LSeg(q2+|[-1,1]|,1/2*(q2+q3)-|[1,0]|) c= I1 \/ I2 \/ { q2-|[1,0]| }
+  hence thesis
   by A12,A13,A14,XBOOLE_1:13;
 end;
 
@@ -4503,10 +4531,11 @@ A11: ((1-r)*(q2+|[1,1]|)+r*(1/2*(q2+q3)+|[1,0]|))`2
   then (1-r)*(q2+|[1,1]|)+r*(1/2*(q2+q3)+|[1,0]|)
   = |[(q2+|[1,0]|)`1,(q2+|[1,0]|)`2]| by A11,EUCLID:57
     .= q2+|[1,0]| by EUCLID:57;
+  then q2+|[1,0]| in LSeg(q2+|[1,1]|,1/2*(q2+q3)+|[1,0]|) by A8,A9;
   then
 A12: LSeg(q2+|[1,1]|,1/2*(q2+q3)+|[1,0]|) =
   LSeg(q2+|[1,1]|,q2+|[1,0]|) \/ LSeg(q2+|[1,0]|,1/2*(q2+q3)+|[1,0]|)
-  by A8,A9,SPPOL_1:22,TOPREAL1:11;
+  by A8,A9,TOPREAL1:11;
   set I1 = Int cell(G,len G,width G), I2 = Int cell(G,len G,width G -' 1);
 A13: LSeg(q2+|[1,1]|,q2+|[1,0]|) c= I1 \/ { q2+|[1,0]| } by Th62;
 A14: LSeg(q2+|[1,0]|,1/2*(q2+q3)+|[1,0]|) c= I2 \/ { q2+|[1,0]| }
@@ -4515,7 +4544,7 @@ A14: LSeg(q2+|[1,0]|,1/2*(q2+q3)+|[1,0]|) c= I2 \/ { q2+|[1,0]| }
   = I1 \/ (I2 \/ ({ q2+|[1,0]| } \/ { q2+|[1,0]| })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { q2+|[1,0]| } \/ { q2+|[1,0]| }) by XBOOLE_1:4
     .= I1 \/ { q2+|[1,0]| } \/ (I2 \/ { q2+|[1,0]| }) by XBOOLE_1:4;
-  hence LSeg(q2+|[1,1]|,1/2*(q2+q3)+|[1,0]|) c= I1 \/ I2 \/ { q2+|[1,0]| }
+  hence thesis
   by A12,A13,A14,XBOOLE_1:13;
 end;
 
@@ -4573,10 +4602,11 @@ A10: ((1-r)*(q2-|[1,1]|)+r*(1/2*(q2+q3)-|[0,1]|))`1
   then (1-r)*(q2-|[1,1]|)+r*(1/2*(q2+q3)-|[0,1]|)
   = |[(q2-|[0,1]|)`1,(q2-|[0,1]|)`2]| by A10,EUCLID:57
     .= q2-|[0,1]| by EUCLID:57;
+  then q2-|[0,1]| in LSeg(q2-|[1,1]|,1/2*(q2+q3)-|[0,1]|) by A7,A8;
   then
 A11: LSeg(q2-|[1,1]|,1/2*(q2+q3)-|[0,1]|) =
   LSeg(q2-|[1,1]|,q2-|[0,1]|) \/ LSeg(q2-|[0,1]|,1/2*(q2+q3)-|[0,1]|)
-  by A7,A8,SPPOL_1:22,TOPREAL1:11;
+  by A7,A8,TOPREAL1:11;
   set I1 = Int cell(G,0,0), I2 = Int cell(G,1,0);
 A12: LSeg(q2-|[1,1]|,q2-|[0,1]|) c= I1 \/ { q2-|[0,1]| } by Th63;
 A13: LSeg(q2-|[0,1]|,1/2*(q2+q3)-|[0,1]|) c= I2 \/
@@ -4585,7 +4615,7 @@ A13: LSeg(q2-|[0,1]|,1/2*(q2+q3)-|[0,1]|) c= I2 \/
   = I1 \/ (I2 \/ ({ q2-|[0,1]| } \/ { q2-|[0,1]| })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { q2-|[0,1]| } \/ { q2-|[0,1]| }) by XBOOLE_1:4
     .= I1 \/ { q2-|[0,1]| } \/ (I2 \/ { q2-|[0,1]| }) by XBOOLE_1:4;
-  hence LSeg(q2-|[1,1]|,1/2*(q2+q3)-|[0,1]|) c= I1 \/ I2 \/ { q2-|[0,1]| }
+  hence thesis
   by A11,A12,A13,XBOOLE_1:13;
 end;
 
@@ -4644,10 +4674,11 @@ A10: ((1-r)*(q2+|[-1,1]|)+r*(1/2*(q2+q3)+|[0,1]|))`1
   then (1-r)*(q2+|[-1,1]|)+r*(1/2*(q2+q3)+|[0,1]|)
   = |[(q2+|[0,1]|)`1,(q2+|[0,1]|)`2]| by A10,EUCLID:57
     .= q2+|[0,1]| by EUCLID:57;
+  then q2+|[0,1]| in LSeg(q2+|[-1,1]|,1/2*(q2+q3)+|[0,1]|) by A7,A8;
   then
 A11: LSeg(q2+|[-1,1]|,1/2*(q2+q3)+|[0,1]|) =
   LSeg(q2+|[-1,1]|,q2+|[0,1]|) \/ LSeg(q2+|[0,1]|,1/2*(q2+q3)+|[0,1]|)
-  by A7,A8,SPPOL_1:22,TOPREAL1:11;
+  by A7,A8,TOPREAL1:11;
   set I1 = Int cell(G,0,width G), I2 = Int cell(G,1,width G);
 A12: LSeg(q2+|[-1,1]|,q2+|[0,1]|) c= I1 \/ { q2+|[0,1]| } by Th65;
 A13: LSeg(q2+|[0,1]|,1/2*(q2+q3)+|[0,1]|) c= I2 \/
@@ -4656,7 +4687,7 @@ A13: LSeg(q2+|[0,1]|,1/2*(q2+q3)+|[0,1]|) c= I2 \/
   = I1 \/ (I2 \/ ({ q2+|[0,1]| } \/ { q2+|[0,1]| })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { q2+|[0,1]| } \/ { q2+|[0,1]| }) by XBOOLE_1:4
     .= I1 \/ { q2+|[0,1]| } \/ (I2 \/ { q2+|[0,1]| }) by XBOOLE_1:4;
-  hence LSeg(q2+|[-1,1]|,1/2*(q2+q3)+|[0,1]|) c= I1 \/ I2 \/ { q2+|[0,1]| }
+  hence thesis
   by A11,A12,A13,XBOOLE_1:13;
 end;
 
@@ -4716,10 +4747,11 @@ A11: ((1-r)*(q2+|[1,-1]|)+r*(1/2*(q2+q3)-|[0,1]|))`1
   then (1-r)*(q2+|[1,-1]|)+r*(1/2*(q2+q3)-|[0,1]|)
   = |[(q2-|[0,1]|)`1,(q2-|[0,1]|)`2]| by A11,EUCLID:57
     .= q2-|[0,1]| by EUCLID:57;
+  then q2-|[0,1]| in LSeg(q2+|[1,-1]|,1/2*(q2+q3)-|[0,1]|) by A8,A9;
   then
 A12: LSeg(q2+|[1,-1]|,1/2*(q2+q3)-|[0,1]|) =
   LSeg(q2+|[1,-1]|,q2-|[0,1]|) \/ LSeg(q2-|[0,1]|,1/2*(q2+q3)-|[0,1]|)
-  by A8,A9,SPPOL_1:22,TOPREAL1:11;
+  by A8,A9,TOPREAL1:11;
   set I1 = Int cell(G,len G,0), I2 = Int cell(G,len G -' 1,0);
 A13: LSeg(q2+|[1,-1]|,q2-|[0,1]|) c= I1 \/ { q2-|[0,1]| } by Th64;
 A14: LSeg(q2-|[0,1]|,1/2*(q2+q3)-|[0,1]|) c= I2 \/ { q2-|[0,1]| }
@@ -4728,7 +4760,7 @@ A14: LSeg(q2-|[0,1]|,1/2*(q2+q3)-|[0,1]|) c= I2 \/ { q2-|[0,1]| }
   = I1 \/ (I2 \/ ({ q2-|[0,1]| } \/ { q2-|[0,1]| })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { q2-|[0,1]| } \/ { q2-|[0,1]| }) by XBOOLE_1:4
     .= I1 \/ { q2-|[0,1]| } \/ (I2 \/ { q2-|[0,1]| }) by XBOOLE_1:4;
-  hence LSeg(q2+|[1,-1]|,1/2*(q2+q3)-|[0,1]|) c= I1 \/ I2 \/ { q2-|[0,1]| }
+  hence thesis
   by A12,A13,A14,XBOOLE_1:13;
 end;
 
@@ -4790,10 +4822,11 @@ A11: ((1-r)*(q2+|[1,1]|)+r*(1/2*(q2+q3)+|[0,1]|))`1
   then (1-r)*(q2+|[1,1]|)+r*(1/2*(q2+q3)+|[0,1]|)
   = |[(q2+|[0,1]|)`1,(q2+|[0,1]|)`2]| by A11,EUCLID:57
     .= q2+|[0,1]| by EUCLID:57;
+  then q2+|[0,1]| in LSeg(q2+|[1,1]|,1/2*(q2+q3)+|[0,1]|) by A8,A9;
   then
 A12: LSeg(q2+|[1,1]|,1/2*(q2+q3)+|[0,1]|) =
   LSeg(q2+|[1,1]|,q2+|[0,1]|) \/ LSeg(q2+|[0,1]|,1/2*(q2+q3)+|[0,1]|)
-  by A8,A9,SPPOL_1:22,TOPREAL1:11;
+  by A8,A9,TOPREAL1:11;
   set I1 = Int cell(G,len G,width G), I2 = Int cell(G,len G -' 1,width G);
 A13: LSeg(q2+|[1,1]|,q2+|[0,1]|) c= I1 \/ { q2+|[0,1]| } by Th66;
 A14: LSeg(q2+|[0,1]|,1/2*(q2+q3)+|[0,1]|) c= I2 \/ { q2+|[0,1]| }
@@ -4802,7 +4835,7 @@ A14: LSeg(q2+|[0,1]|,1/2*(q2+q3)+|[0,1]|) c= I2 \/ { q2+|[0,1]| }
   = I1 \/ (I2 \/ ({ q2+|[0,1]| } \/ { q2+|[0,1]| })) by XBOOLE_1:4
     .= I1 \/ (I2 \/ { q2+|[0,1]| } \/ { q2+|[0,1]| }) by XBOOLE_1:4
     .= I1 \/ { q2+|[0,1]| } \/ (I2 \/ { q2+|[0,1]| }) by XBOOLE_1:4;
-  hence LSeg(q2+|[1,1]|,1/2*(q2+q3)+|[0,1]|) c= I1 \/ I2 \/ { q2+|[0,1]| }
+  hence thesis
   by A12,A13,A14,XBOOLE_1:13;
 end;
 
@@ -4815,7 +4848,7 @@ A1: 1 <= i & i+1 <= len G and
 A2: 1 <= j & j+1 <= width G;
   now
     take a = 1/2*(G*(i,j)+G*(i+1,j+1));
-    thus a in LSeg(1/2*(G*(i,j)+G*(i+1,j+1)),p) by TOPREAL1:6;
+    thus a in LSeg(1/2*(G*(i,j)+G*(i+1,j+1)),p) by RLTOPSP1:69;
     thus a in Int cell(G,i,j) by A1,A2,Th34;
   end;
   hence thesis by XBOOLE_0:3;
@@ -4831,7 +4864,7 @@ A1: 1 <= i & i+1 <= len G;
   now
     take a = 1/2*(G*(i,width G)+G*(i+1,width G))+|[0,1]|;
     thus a in
-    LSeg(p,1/2*(G*(i,width G)+G*(i+1,width G))+|[0,1]|) by TOPREAL1:6;
+    LSeg(p,1/2*(G*(i,width G)+G*(i+1,width G))+|[0,1]|) by RLTOPSP1:69;
     thus a in Int cell(G,i,width G) by A1,Th35;
   end;
   hence thesis by XBOOLE_0:3;
@@ -4845,7 +4878,7 @@ proof
 A1: 1 <= i & i+1 <= len G;
   now
     take a = 1/2*(G*(i,1)+G*(i+1,1))-|[0,1]|;
-    thus a in LSeg(1/2*(G*(i,1)+G*(i+1,1))-|[0,1]|,p) by TOPREAL1:6;
+    thus a in LSeg(1/2*(G*(i,1)+G*(i+1,1))-|[0,1]|,p) by RLTOPSP1:69;
     thus a in Int cell(G,i,0) by A1,Th36;
   end;
   hence thesis by XBOOLE_0:3;
@@ -4859,7 +4892,7 @@ proof
 A1: 1 <= j & j+1 <= width G;
   now
     take a = 1/2*(G*(1,j)+G*(1,j+1))-|[1,0]|;
-    thus a in LSeg(1/2*(G*(1,j)+G*(1,j+1))-|[1,0]|,p) by TOPREAL1:6;
+    thus a in LSeg(1/2*(G*(1,j)+G*(1,j+1))-|[1,0]|,p) by RLTOPSP1:69;
     thus a in Int cell(G,0,j) by A1,Th38;
   end;
   hence thesis by XBOOLE_0:3;
@@ -4873,7 +4906,7 @@ proof
 A1: 1 <= j & j+1 <= width G;
   now
     take a = 1/2*(G*(len G,j)+G*(len G,j+1))+|[1,0]|;
-    thus a in LSeg(p,1/2*(G*(len G,j)+G*(len G,j+1))+|[1,0]|) by TOPREAL1:6;
+    thus a in LSeg(p,1/2*(G*(len G,j)+G*(len G,j+1))+|[1,0]|) by RLTOPSP1:69;
     thus a in Int cell(G,len G,j) by A1,Th37;
   end;
   hence thesis by XBOOLE_0:3;
@@ -4883,7 +4916,7 @@ theorem
   LSeg(p,G*(1,1)-|[1,1]|) meets Int cell(G,0,0)
 proof now
     take a = G*(1,1)-|[1,1]|;
-    thus a in LSeg(p,G*(1,1)-|[1,1]|) by TOPREAL1:6;
+    thus a in LSeg(p,G*(1,1)-|[1,1]|) by RLTOPSP1:69;
     thus a in Int cell(G,0,0) by Th39;
   end;
   hence thesis by XBOOLE_0:3;
@@ -4893,7 +4926,7 @@ theorem
   LSeg(p,G*(len G,width G)+|[1,1]|) meets Int cell(G,len G,width G)
 proof now
     take a = G*(len G,width G)+|[1,1]|;
-    thus a in LSeg(p,G*(len G,width G)+|[1,1]|) by TOPREAL1:6;
+    thus a in LSeg(p,G*(len G,width G)+|[1,1]|) by RLTOPSP1:69;
     thus a in Int cell(G,len G,width G) by Th40;
   end;
   hence thesis by XBOOLE_0:3;
@@ -4903,7 +4936,7 @@ theorem
   LSeg(p,G*(1,width G)+|[-1,1]|) meets Int cell(G,0,width G)
 proof now
     take a = G*(1,width G)+|[-1,1]|;
-    thus a in LSeg(p,G*(1,width G)+|[-1,1]|) by TOPREAL1:6;
+    thus a in LSeg(p,G*(1,width G)+|[-1,1]|) by RLTOPSP1:69;
     thus a in Int cell(G,0,width G) by Th41;
   end;
   hence thesis by XBOOLE_0:3;
@@ -4913,7 +4946,7 @@ theorem
   LSeg(p,G*(len G,1)+|[1,-1]|) meets Int cell(G,len G,0)
 proof now
     take a = G*(len G,1)+|[1,-1]|;
-    thus a in LSeg(p,G*(len G,1)+|[1,-1]|) by TOPREAL1:6;
+    thus a in LSeg(p,G*(len G,1)+|[1,-1]|) by RLTOPSP1:69;
     thus a in Int cell(G,len G,0) by Th42;
   end;
   hence thesis by XBOOLE_0:3;
@@ -4997,7 +5030,7 @@ A5: for r be real number st 0 < r & r < s holds Ball (p',r) meets A;
     let G be a_neighborhood of p;
     p in Int G by CONNSP_2:def 1;
     then consider r' be real number such that
-A6: r' > 0 & Ball (p',r') c= G by A1,Th7;
+A6: r' > 0 & Ball (p',r') c= G by A1,Th8;
     set r = min(r',s1/2);
     reconsider rr = r, rr' = r' as Real by XREAL_0:def 1;
 A7: s1/2 < s1 by A2,XREAL_1:218;

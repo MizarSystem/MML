@@ -1,0 +1,1447 @@
+:: Equivalence of Epsilon, Nondeterministic [Finite] Automata and Deterministic 
+:: [Finite] Automata
+::  by Micha{\l} Trybulec
+:: 
+:: Received May 25, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, FUNCT_1, FINSEQ_1, RELAT_1, ALGSEQ_1, AFINSQ_1, LANG1,
+      FSM_1, FSM_2, FINSET_1, PRELAMB, REWRITE1, REWRITE2, FLANG_1, CARD_1,
+      ARYTM, MCART_1, REWRITE3, FSM_3;
+ notations REWRITE2, CARD_1, TARSKI, XBOOLE_0, ZFMISC_1, XCMPLX_0, NAT_1,
+      DOMAIN_1, FUNCT_1, RELSET_1, FUNCT_2, XXREAL_0, FINSET_1, RELAT_1,
+      CARD_FIN, AFINSQ_1, SUBSET_1, REWRITE1, CATALAN2, FLANG_1, STRUCT_0,
+      NUMBERS, ORDINAL1, XREAL_0, REAL_1, MCART_1, FINSEQ_1, REWRITE3;
+ constructors CARD_1, XXREAL_0, NAT_1, FSM_1, MEMBERED, CARD_FIN, SUBSET_1,
+      REWRITE2, REWRITE1, RELAT_1, FUNCT_1, FLANG_1, NUMBERS, XCMPLX_0,
+      XREAL_0, WELLORD2, MCART_1, FINSEQ_1, REWRITE3, RELSET_1;
+ registrations CARD_1, RELSET_1, NAT_1, XREAL_0, XBOOLE_0, MEMBERED, XXREAL_0,
+      REWRITE2, STRUCT_0, SUBSET_1, REWRITE1, AFINSQ_1, RELAT_1, FUNCT_1,
+      ORDINAL1, NUMBERS, REAL_1, FINSET_1, FINSEQ_1, REWRITE3;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, STRUCT_0;
+ theorems AFINSQ_1, CARD_1, FLANG_1, FUNCT_1, NAT_1, ORDINAL1, RELAT_1,
+      RELSET_1, REWRITE1, STRUCT_0, SUBSET_1, TARSKI, XBOOLE_0, XBOOLE_1,
+      XREAL_1, XXREAL_0, ZFMISC_1, FINSEQ_1, FINSEQ_3, FINSEQ_5, MCART_1,
+      REWRITE3;
+ schemes FINSEQ_1, FRAENKEL, NAT_1, RELSET_1;
+
+begin
+
+reserve x, x1, x2, y, y1, y2, z, z1, z2, X, X1, X2, Y, Z for set;
+reserve E for non empty set;
+reserve e for Element of E;
+reserve u, u', u1, u2, v, v1, v2, w, w', w1, w2 for Element of E^omega;
+reserve F, F1, F2 for Subset of E^omega;
+reserve i, j, k, l, n for Nat;
+reserve TS for non empty transition-system over F;
+reserve s, s', s1, s2, t, t', t1, t2 for Element of TS;
+reserve S, T for Subset of TS;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Preliminaries - Natural Numbers
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem LmNat1:
+  i >= k + l implies i >= k
+  proof
+    assume i >= k + l;
+    then i + l >= k + l + 0 by XREAL_1:9;
+    hence thesis by XREAL_1:8;
+  end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Preliminaries - Sequences
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem
+  for a, b being FinSequence holds
+    a ^ b = a or b ^ a = a implies b = {}
+proof
+  let a, b be FinSequence such that
+A1: a ^ b = a or b ^ a = a;
+  per cases by A1;
+  suppose a ^ b = a;
+    then len(a ^ b) = len(a) + len(b) & len(a ^ b) = len(a) by FINSEQ_1:35;
+    hence thesis;
+  end;
+  suppose b ^ a = a;
+    then len(b ^ a) = len(b) + len(a) & len(b ^ a) = len(a) by FINSEQ_1:35;
+    hence thesis;
+  end;
+end;
+
+theorem ThTS3i:
+  for p, q being FinSequence st
+    k in dom p & len p + 1 = len q holds k + 1 in dom q
+  proof
+    let p, q be FinSequence such that
+A:    k in dom p & len p + 1 = len q;
+    1 <= k & k <= len p by A, FINSEQ_3:27;
+    then 1 + 0 <= k + 1 & k + 1 <= len p + 1 by XREAL_1:9;
+    hence thesis by A, FINSEQ_3:27;
+  end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Preliminaries - XFinSequences and Words in E^omega
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem LmXSeq10:
+  len u = 1 implies ex e st <%e%> = u & e = u.0
+  proof
+    assume len u = 1;
+    then len u = 0 + 1;
+    then consider v, e such that
+B:    len v = 0 & u = v^<%e%> by FLANG_1:7;
+    take e;
+    v = <%>E by B;
+    then u = <%e%> by B, AFINSQ_1:32;
+    hence thesis by AFINSQ_1:38;
+  end;
+
+theorem LmXSeq20:
+  k <> 0 & len u <= k + 1 implies
+    ex v1, v2 st len v1 <= k & len v2 <= k & u = v1^v2
+  proof
+    assume
+A:    k <> 0 & len u <= k + 1;
+    per cases;
+    suppose len u = k + 1;
+      then consider v1, e such that
+B:      len v1 = k & u = v1 ^ <%e%> by FLANG_1:7;
+      reconsider v2 = <%e%> as Element of E^omega;
+      take v1, v2;
+      thus len v1 <= k by B;
+      thus len v2 <= k
+      proof
+        0 + 1 <= k by A, NAT_1:13;
+        hence thesis by AFINSQ_1:38;
+      end;
+      thus u = v1^v2 by B;
+    end;
+    suppose
+B:    len u <> k + 1;
+      reconsider v2 = <%>E as Element of E^omega;
+      take u, v2;
+      thus len u <= k by A, B, NAT_1:8;
+      thus len v2 <= k;
+      thus u = u^v2 by AFINSQ_1:32;
+    end;
+  end;
+
+theorem LmSeq30:
+  for p, q being XFinSequence st <%x%>^p = <%y%>^q holds x = y & p = q
+  proof
+    let p, q be XFinSequence such that
+A:    <%x%>^p = <%y%>^q;
+    (<%x%>^p).0 = x by AFINSQ_1:39;
+    then x = y by A, AFINSQ_1:39;
+    hence thesis by A, AFINSQ_1:31;
+  end;
+
+theorem ThTS3j:
+  len u > 0 implies ex e, u1 st u = <%e%>^u1
+  proof
+    assume len u > 0;
+    then consider k such that
+B:    len u = k + 1 by NAT_1:6;
+    ex u1, e st len u1 = k & u = <%e%>^u1 by B, FLANG_1:9;
+    hence thesis;
+  end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Preliminaries - Lex
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+registration
+  let E;
+  cluster Lex(E) -> non empty;
+  coherence
+  proof
+    <%e%> in Lex(E) by FLANG_1:def 4;
+    hence thesis;
+  end;
+end;
+
+theorem ThLex10:
+  not <%>E in Lex(E)
+  proof
+    assume <%>E in Lex(E);
+    then consider e such that
+A:    e in E & <%>E = <%e%> by FLANG_1:def 4;
+    thus contradiction by A;
+  end;
+
+theorem ThLex20:
+  u in Lex(E) iff len u = 1
+  proof
+    thus u in Lex(E) implies len u = 1
+    proof
+      assume u in Lex(E);
+      then consider e such that
+A:      e in E & u = <%e%> by FLANG_1:def 4;
+      thus thesis by A, AFINSQ_1:def 5;
+    end;
+    assume len u = 1;
+    then consider e such that
+B:    <%e%> = u & e = u.0 by LmXSeq10;
+    thus thesis by B, FLANG_1:def 4;
+  end;
+
+theorem ThLex30:
+  u <> v & u in Lex(E) & v in Lex(E) implies
+    not ex w st u^w = v or w^u = v
+  proof
+    assume
+A:    u <> v & u in Lex(E) & v in Lex(E);
+A1: len u = 1 & len v = 1 by A, ThLex20;
+    given w such that
+B:    u^w = v or w^u = v;
+    per cases by B;
+    suppose
+C:    u^w = v;
+      len (u^w) = 1 + len w by A1, AFINSQ_1:20;
+      then w = <%>E by A1, C;
+      hence contradiction by A, C, AFINSQ_1:32;
+    end;
+    suppose
+C:    w^u = v;
+      len (w^u) = 1 + len w by A1, AFINSQ_1:20;
+      then w = <%>E by A1, C;
+      hence contradiction by A, C, AFINSQ_1:32;
+    end;
+  end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Transition Systems over Lex(E)
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem ThTS10:
+  for TS being transition-system over Lex(E) holds
+    not <%>E in rng dom (the Tran of TS)
+  proof
+    let TS be transition-system over Lex(E);
+    dom (the Tran of TS) c= [: the carrier of TS, Lex(E) :]
+      by RELAT_1:def 18;
+    then rng dom the Tran of TS c= Lex(E) by RELAT_1:def 19;
+    hence thesis by ThLex10;
+  end;
+
+theorem ThDet20:
+  for TS being transition-system over Lex(E) holds
+    (the Tran of TS) is Function implies TS is deterministic
+  proof
+    let TS be transition-system over Lex(E) such that
+A:    (the Tran of TS) is Function;
+E:  dom (the Tran of TS) c= [: the carrier of TS, Lex(E) :]
+      by RELAT_1:def 18;
+B:  not <%>E in rng dom (the Tran of TS) by ThTS10;
+    now
+      let p be Element of TS, u, v such that
+C1:     u <> v and
+C2:     [p, u] in dom (the Tran of TS) &
+        [p, v] in dom (the Tran of TS);
+      u in Lex(E) & v in Lex(E) by C2, E, ZFMISC_1:106;
+      hence not ex w st u^w = v or v^w = u by C1, ThLex30;
+    end;
+    hence thesis by A, B, REWRITE3:def 1;
+  end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Powerset Construction for Transition Systems
+:: This is a construction that limits new transitions to single character ones.
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let E, F, TS;
+  func _bool TS -> strict transition-system over Lex(E) means
+:DefBool:
+    the carrier of it = bool (the carrier of TS) &
+    for S, w, T holds
+      [[S, w], T] in the Tran of it iff len w = 1 & T = w-succ_of (S, TS);
+  existence
+  proof
+    set cTS = bool (the carrier of TS);
+    defpred P[set, set] means
+      for c being Element of cTS,
+          i being Element of E^omega st $1 = [c, i] holds
+        len i = 1 & $2 = i-succ_of (c, TS);
+    consider tTS being Relation of [: cTS, Lex(E) :], cTS such that
+A:    for x being Element of [: cTS, Lex(E) :],
+          y being Element of cTS holds
+        [x, y] in tTS iff P[x, y] from RELSET_1:sch 2;
+    set bTS = transition-system(# cTS, tTS #);
+    reconsider bTS as strict transition-system over Lex(E);
+    take bTS;
+    thus the carrier of bTS = bool (the carrier of TS);
+    let S, w, T;
+    thus [[S, w], T] in the Tran of bTS implies
+      len w = 1 & T = w-succ_of (S, TS)
+    proof
+      assume
+D:      [[S, w], T] in the Tran of bTS;
+      then reconsider xc = [S, w] as Element of [: cTS, Lex(E) :]
+        by ZFMISC_1:106;
+      [xc, T] in tTS by D;
+      hence thesis by A;
+    end;
+    assume
+B:    len w = 1 & T = w-succ_of (S, TS);
+    set x = [S, w];
+D:  now
+      let xc be Element of cTS,
+          xi be Element of E^omega such that
+C:      x = [xc, xi];
+      xc = S & xi = w by C, ZFMISC_1:33;
+      hence len xi = 1 & T = xi-succ_of (xc, TS) by B;
+    end;
+    w in Lex(E) by B, ThLex20;
+    then reconsider x as Element of [: cTS, Lex(E) :] by ZFMISC_1:106;
+    [x, T] in tTS by A, D;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    set cTS = bool (the carrier of TS);
+    let bTS1, bTS2 be strict transition-system over Lex(E) such that
+A1: the carrier of bTS1 = cTS &
+    for S, w, T holds
+      [[S, w], T] in the Tran of bTS1 iff len w = 1 & T = w-succ_of (S, TS)
+    and
+A2: the carrier of bTS2 = cTS &
+    for S, w, T holds
+      [[S, w], T] in the Tran of bTS2 iff len w = 1 & T = w-succ_of (S, TS);
+C:  x in the Tran of bTS1 implies x in the Tran of bTS2
+    proof
+      assume
+D:      x in the Tran of bTS1;
+      consider xbi, xc being set such that
+E:      x = [xbi, xc] & xbi in [: cTS, Lex(E) :] & xc in cTS
+          by A1, D, RELSET_1:6;
+      [: cTS, Lex(E) :] c= [:cTS, Lex(E):]; then
+      consider xb, xi being set such that
+F:      xbi = [xb, xi] & xb in cTS & xi in Lex(E) by E, RELSET_1:6;
+      reconsider xi as Element of Lex(E) by F;
+      reconsider xe = xi as Element of E^omega;
+      reconsider xb as Element of cTS by F;
+      reconsider xc as Element of cTS by E;
+G:    xc = xi-succ_of (xb, TS) by F, E, D, A1;
+      len xe = 1 by ThLex20;
+      hence thesis by A2, E, F, G;
+    end;
+    x in the Tran of bTS2 implies x in the Tran of bTS1
+    proof
+      assume
+D:      x in the Tran of bTS2;
+      consider xbi, xc being set such that
+E:      x = [xbi, xc] & xbi in [: cTS, Lex(E) :] & xc in cTS
+          by A2, D, RELSET_1:6;
+      [: cTS, Lex(E) :] c= [:cTS, Lex(E):]; then
+      consider xb, xi being set such that
+F:      xbi = [xb, xi] & xb in cTS & xi in Lex(E) by E, RELSET_1:6;
+      reconsider xi as Element of Lex(E) by F;
+      reconsider xe = xi as Element of E^omega;
+      reconsider xb as Element of cTS by F;
+      reconsider xc as Element of cTS by E;
+G:    xc = xi-succ_of (xb, TS) by F, E, D, A2;
+      len xe = 1 by ThLex20;
+      hence thesis by A1, E, F, G;
+    end;
+    hence thesis by A1, A2, C, TARSKI:2;
+  end;
+end;
+
+registration
+  let E, F, TS;
+  cluster _bool TS -> non empty deterministic;
+  coherence
+  proof
+    set bTS = _bool TS;
+    set cTS = bool (the carrier of TS);
+    set wTS = the carrier of bTS;
+    set tTS = the Tran of bTS;
+X:  bTS is deterministic
+    proof
+      for x, y1, y2 being set st [x, y1] in tTS & [x, y2] in tTS holds y1 = y2
+      proof
+        let x, y1, y2 be set such that
+B:      [x, y1] in tTS & [x, y2] in tTS;
+U:      the carrier of bTS = bool (the carrier of TS) by DefBool;
+        reconsider x as Element of [: wTS, Lex(E) :] by B, ZFMISC_1:106;
+        reconsider y1, y2 as Element of wTS by B, ZFMISC_1:106;
+        consider xc, xi being set such that
+C:      xc in wTS & xi in Lex(E) & x = [xc, xi] by U, ZFMISC_1:def 2;
+        reconsider xi as Element of Lex(E) by C;
+        reconsider xc as Element of wTS by C;
+        reconsider xi as Element of E^omega;
+        reconsider xc, y1, y2 as Subset of TS by DefBool;
+        y1 = xi-succ_of (xc, TS) & y2 = xi-succ_of (xc, TS)
+          by B, C, DefBool;
+        hence thesis;
+      end;
+      then the Tran of bTS is Function by FUNCT_1:def 1;
+      hence thesis by ThDet20;
+    end;
+    the carrier of bTS = bool (the carrier of TS) by DefBool;
+    hence thesis by X;
+  end;
+end;
+
+registration
+  let E, F;
+  let TS be finite non empty transition-system over F;
+  cluster _bool TS -> finite;
+  coherence
+  proof
+    bool the carrier of TS is finite;
+    hence thesis by DefBool;
+  end;
+end;
+
+theorem ThBool5:
+  x, <%e%> ==>* y, <%>E, _bool TS implies x, <%e%> ==>. y, <%>E, _bool TS
+  proof
+    not <%>E in rng dom (the Tran of _bool TS) by REWRITE3:def 1;
+    hence thesis by REWRITE3:92;
+  end;
+
+theorem ThBool10:
+  len w = 1 implies (X = w-succ_of (S, TS) iff S, w ==>* X, _bool TS)
+  proof
+    assume
+A:    len w = 1;
+    then consider e such that
+B:    w = <%e%> & w.0 = e by LmXSeq10;
+    thus X = w-succ_of (S, TS) implies S, w ==>* X, _bool TS
+    proof
+      assume X = w-succ_of (S, TS);
+      then [[S, w], X] in the Tran of _bool TS by A, DefBool;
+      then S, w -->. X, _bool TS by REWRITE3:def 2;
+      then S, w ==>. X, <%>E, _bool TS by REWRITE3:23;
+      then S, w ==>* X, <%>E, _bool TS by REWRITE3:87;
+      hence thesis by REWRITE3:def 7;
+    end;
+    assume S, w ==>* X, _bool TS;
+    then S, w ==>* X, <%>E, _bool TS by REWRITE3:def 7;
+    then S, w ==>. X, <%>E, _bool TS by B, ThBool5;
+    then S, w^<%>E ==>. X, <%>E, _bool TS by AFINSQ_1:32;
+    then
+C:    S, w -->. X, _bool TS by REWRITE3:24;
+    then X in _bool TS by REWRITE3:15;
+    then X in the carrier of _bool TS by STRUCT_0:def 5;
+    then reconsider X' = X as Subset of TS by DefBool;
+    [[S, w], X'] in the Tran of _bool TS by C, REWRITE3:def 2;
+    hence thesis by DefBool;
+  end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Semiautomata
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let E, F;
+  struct (transition-system over F) semiautomaton over F
+  (#
+    carrier -> set,
+    Tran -> Relation of [: the carrier, F :], the carrier,
+    InitS -> Subset of the carrier
+  #);
+end;
+
+definition
+  let E, F;
+  let SA be semiautomaton over F;
+  attr SA is deterministic means
+:defDetSA:
+    (the transition-system of SA) is deterministic &
+    card (the InitS of SA) = 1;
+end;
+
+registration
+  let E, F;
+  cluster strict non empty finite deterministic semiautomaton over F;
+  existence
+  proof
+    consider X being non empty finite set;
+    reconsider T = {} as Relation of [: X, F :], X by RELSET_1:25;
+    consider x being Element of X;
+    reconsider I = { x } as Subset of X;
+    take SA = semiautomaton (# X, T, I #);
+    thus SA is strict;
+    thus SA is non empty;
+    thus the carrier of SA is finite;
+    thus (the transition-system of SA) is deterministic
+      by RELAT_1:60, REWRITE3:14;
+    thus card (the InitS of SA) = 1 by CARD_1:50;
+  end;
+end;
+
+reserve SA for non empty semiautomaton over F;
+
+registration
+  let E, F, SA;
+  cluster the transition-system of SA -> non empty;
+  coherence;
+end;
+
+definition
+  let E, F, SA;
+  func _bool SA -> strict semiautomaton over Lex(E) means :DefBoolSA:
+    the transition-system of it = _bool the transition-system of SA &
+    the InitS of it = { <%>E-succ_of (the InitS of SA, SA) };
+  existence
+  proof
+    reconsider TS = the transition-system of SA as
+      non empty transition-system over F;
+    set cSA = the carrier of _bool TS;
+    reconsider tSA = (the Tran of _bool TS) as
+      Relation of [: cSA, Lex(E) :], cSA;
+    reconsider iSA = { <%>E-succ_of (the InitS of SA, SA) } as Subset of cSA
+      by DefBool;
+    set bSA = semiautomaton(# cSA, tSA, iSA #);
+    card iSA = 1 by CARD_1:50;
+    then reconsider bSA as
+      strict non empty deterministic semiautomaton over Lex(E) by defDetSA;
+    take bSA;
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+registration
+  let E, F, SA;
+  cluster _bool SA -> non empty deterministic;
+  coherence
+  proof
+    set TS = _bool SA;
+X:  the transition-system of TS = _bool the transition-system of SA
+      by DefBoolSA;
+    the InitS of TS = { <%>E-succ_of (the InitS of SA, SA) } by DefBoolSA;
+    then card the InitS of TS = 1 by CARD_1:50;
+    hence thesis by defDetSA, X;
+  end;
+end;
+
+theorem ThSA10:
+the carrier of _bool SA = bool the carrier of SA
+proof
+  the transition-system of _bool SA = _bool the transition-system of SA
+    by DefBoolSA;
+  hence thesis by DefBool;
+end;
+
+registration
+  let E, F;
+  let SA be finite non empty semiautomaton over F;
+  cluster _bool SA -> finite;
+  coherence
+  proof
+    bool the carrier of SA is finite;
+    hence thesis by ThSA10;
+  end;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Left-languages
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let E, F, SA;
+  let Q be Subset of SA;
+  func left-Lang(Q) -> Subset of E^omega equals
+    { w : Q meets w-succ_of (the InitS of SA, SA) };
+  coherence
+  proof
+    defpred P[Element of E^omega] means
+      Q meets $1-succ_of (the InitS of SA, SA);
+    { w : P[w] } c= E^omega from FRAENKEL:sch 10;
+    hence thesis;
+  end;
+end;
+
+theorem ThLeft10:
+  for Q being Subset of SA holds
+    w in left-Lang(Q) iff Q meets w-succ_of (the InitS of SA, SA)
+  proof
+    let Q be Subset of SA;
+    thus w in left-Lang(Q) implies Q meets w-succ_of (the InitS of SA, SA)
+    proof
+      assume w in left-Lang(Q);
+      then ex w' st w' = w & Q meets w'-succ_of (the InitS of SA, SA);
+      hence thesis;
+    end;
+    thus thesis;
+  end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Automata
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let E, F;
+  struct (semiautomaton over F) automaton over F
+  (#
+    carrier -> set,
+    Tran -> Relation of [: the carrier, F :], the carrier,
+    InitS -> Subset of the carrier,
+    FinalS -> Subset of the carrier
+  #);
+end;
+
+definition
+  let E, F;
+  let A be automaton over F;
+  attr A is deterministic means :defDetA:
+    (the semiautomaton of A) is deterministic;
+end;
+
+registration
+  let E, F;
+  cluster strict non empty finite deterministic automaton over F;
+  existence
+  proof
+    consider X being non empty finite set;
+    reconsider T = {} as Relation of [: X, F :], X by RELSET_1:25;
+    consider x being Element of X;
+    reconsider I = { x } as Subset of X;
+    take A = automaton (# X, T, I, I #);
+    thus A is strict;
+    thus A is non empty;
+    thus the carrier of A is finite;
+B:  (the transition-system of A) is deterministic by RELAT_1:60, REWRITE3:14;
+    card (the InitS of A) = 1 by CARD_1:50;
+    then the semiautomaton of A is deterministic by B, defDetSA;
+    hence A is deterministic by defDetA;
+  end;
+end;
+
+reserve A for non empty automaton over F;
+reserve p, q for Element of A;
+reserve P, Q for Subset of A;
+
+registration
+  let E, F, A;
+  cluster the transition-system of A -> non empty;
+  coherence;
+  cluster the semiautomaton of A -> non empty;
+  coherence;
+end;
+
+definition
+  let E, F, A;
+  func _bool A -> strict automaton over Lex(E) means :defBoolA:
+    the semiautomaton of it = _bool the semiautomaton of A &
+    the FinalS of it =
+      { Q where Q is Element of it : Q meets (the FinalS of A) };
+  existence
+  proof
+    reconsider SA = the semiautomaton of A as non empty semiautomaton over F;
+    set cA = the carrier of _bool SA;
+    reconsider tA = (the Tran of _bool SA) as Relation of [: cA, Lex(E) :], cA;
+    set iA = the InitS of _bool SA;
+    { Q where Q is Element of _bool SA : Q meets (the FinalS of A) }
+      is Subset of cA
+    proof
+      defpred P[set] means $1 meets (the FinalS of A);
+      { Q where Q is Element of the carrier of _bool SA : P[Q] } c=
+        the carrier of _bool SA from FRAENKEL:sch 10;
+      hence thesis;
+    end;
+    then reconsider fA =
+      { Q where Q is Element of _bool SA : Q meets (the FinalS of A) }
+        as Subset of cA;
+    set bA = automaton(# cA, tA, iA, fA #);
+    reconsider bA as strict non empty deterministic automaton over Lex(E)
+      by defDetA;
+    take bA;
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+registration
+  let E, F, A;
+  cluster _bool A -> non empty deterministic;
+  coherence
+  proof
+    set XX = _bool A;
+    the semiautomaton of XX = _bool the semiautomaton of A by defBoolA;
+    hence thesis by defDetA;
+  end;
+end;
+
+theorem ThA10:
+  the carrier of _bool A = bool the carrier of A
+  proof
+    the semiautomaton of _bool A = _bool the semiautomaton of A
+      by defBoolA;
+    hence thesis by ThSA10;
+  end;
+
+registration
+  let E, F;
+  let A be finite non empty automaton over F;
+  cluster _bool A -> finite;
+  coherence
+  proof
+    bool the carrier of A is finite;
+    hence thesis by ThA10;
+  end;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Languages Accepted by Automata
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let E, F, A;
+  let Q be Subset of A;
+  func right-Lang(Q) -> Subset of E^omega equals
+    { w : w-succ_of (Q, A) meets (the FinalS of A) };
+  coherence
+  proof
+    defpred P[Element of E^omega] means
+      $1-succ_of (Q, A) meets (the FinalS of A);
+    { w : P[w] } c= E^omega from FRAENKEL:sch 10;
+    hence thesis;
+  end;
+end;
+
+theorem ThRight10:
+  for Q being Subset of A holds
+    w in right-Lang(Q) iff w-succ_of (Q, A) meets (the FinalS of A)
+  proof
+    let Q be Subset of A;
+    thus w in right-Lang(Q) implies w-succ_of (Q, A) meets (the FinalS of A)
+    proof
+      assume w in right-Lang(Q);
+      then ex w' st w = w' & w'-succ_of (Q, A) meets (the FinalS of A);
+      hence thesis;
+    end;
+    thus thesis;
+  end;
+
+definition
+  let E, F, A;
+  func Lang(A) -> Subset of E^omega equals
+    { u : ex p, q st
+            p in the InitS of A & q in the FinalS of A & p, u ==>* q, A };
+  coherence
+  proof
+    defpred P[Element of E^omega] means
+      ex p, q st p in the InitS of A & q in the FinalS of A & p, $1 ==>* q, A;
+    { w : P[w] } c= E^omega from FRAENKEL:sch 10;
+    hence thesis;
+  end;
+end;
+
+theorem ThLang5:
+  w in Lang(A) iff
+    ex p, q st p in the InitS of A & q in the FinalS of A & p, w ==>* q, A
+  proof
+    thus w in Lang(A) implies
+      ex p, q st p in the InitS of A & q in the FinalS of A & p, w ==>* q, A
+    proof
+      assume w in Lang(A);
+      then ex u st w = u & ex p, q st
+              p in the InitS of A & q in the FinalS of A & p, u ==>* q, A;
+      hence thesis;
+    end;
+    thus thesis;
+  end;
+
+theorem ThLang10:
+  w in Lang(A) iff w-succ_of (the InitS of A, A) meets (the FinalS of A)
+  proof
+    thus w in Lang(A) implies
+      w-succ_of (the InitS of A, A) meets (the FinalS of A)
+    proof
+      assume w in Lang(A);
+      then consider p, q such that
+A1:      p in the InitS of A and
+A2:      q in the FinalS of A and
+A3:      p, w ==>* q, A by ThLang5;
+      q in w-succ_of (the InitS of A, A) by A1, A3, REWRITE3:103;
+      hence thesis by A2, XBOOLE_0:3;
+    end;
+    assume w-succ_of (the InitS of A, A) meets (the FinalS of A);
+    then consider x such that
+A1:   x in w-succ_of (the InitS of A, A) and
+A2:   x in (the FinalS of A) by XBOOLE_0:3;
+    reconsider x as Element of A by A1;
+    consider p such that
+B:    p in the InitS of A & p, w ==>* x, A by A1, REWRITE3:103;
+    thus thesis by A2, B;
+  end;
+
+theorem
+  Lang(A) = left-Lang(the FinalS of A)
+  proof
+A:  w in Lang(A) implies w in left-Lang(the FinalS of A)
+    proof
+      assume w in Lang(A);
+      then w-succ_of (the InitS of A, A) meets (the FinalS of A) by ThLang10;
+      hence thesis;
+    end;
+    w in left-Lang(the FinalS of A) implies w in Lang(A)
+    proof
+      assume w in left-Lang(the FinalS of A);
+      then the FinalS of A meets w-succ_of (the InitS of A, A) by ThLeft10;
+      hence thesis by ThLang10;
+    end;
+    hence thesis by A, SUBSET_1:8;
+  end;
+
+theorem
+  Lang(A) = right-Lang(the InitS of A)
+  proof
+A:  w in Lang(A) implies w in right-Lang(the InitS of A)
+    proof
+      assume w in Lang(A);
+      then w-succ_of (the InitS of A, A) meets (the FinalS of A) by ThLang10;
+      hence thesis;
+    end;
+    w in right-Lang(the InitS of A) implies w in Lang(A)
+    proof
+      assume w in right-Lang(the InitS of A);
+      then w-succ_of (the InitS of A, A) meets (the FinalS of A) by ThRight10;
+      hence thesis by ThLang10;
+    end;
+    hence thesis by A, SUBSET_1:8;
+  end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Equivalence (with respect to the accepted languages)
+:: of nondeterministic [finite] automata and deterministic [finite] automata.
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+reserve TS for non empty transition-system over Lex(E) \/ {<%>E};
+
+theorem ThTS3h:
+  for R being RedSequence of ==>.-relation(TS) st
+    (R.1)`2 = <%e%>^u & (R.len R)`2 = <%>E holds
+      (R.2)`2 = <%e%>^u or (R.2)`2 = u
+  proof
+    let R be RedSequence of ==>.-relation(TS) such that
+A:    (R.1)`2 = <%e%>^u & (R.len R)`2 = <%>E;
+A1: rng R <> {};
+    (R.1)`2 <> (R.len R)`2 by A, AFINSQ_1:33;
+    then len R >= 1 + 1 & 2 >= 1 by NAT_1:8, 26;
+    then 1 + 1 in dom R by FINSEQ_3:27;
+    then
+B:    [R.1, R.2] in ==>.-relation(TS) by A1, FINSEQ_3:34, REWRITE1:def 2;
+    consider p being Element of TS, v being Element of E^omega,
+             q being Element of TS, w such that
+C1:   R.1 = [p, v] and
+C2:   R.2 = [q, w] by B, REWRITE3:31;
+    p, v ==>. q, w, TS by B, C1, C2, REWRITE3:def 4;
+    then consider u1 such that
+D:    p, u1 -->. q, TS & v = u1^w by REWRITE3:22;
+E:  u1 in Lex(E) \/ {<%>E} by D, REWRITE3:15;
+    per cases by E, XBOOLE_0:def 3;
+    suppose u1 in Lex(E);
+      then len u1 = 1 by ThLex20;
+      then consider f being Element of E such that
+F:      u1 = <%f%> & u1.0 = f by LmXSeq10;
+      (R.1)`2 = <%f%>^w by C1, D, F, MCART_1:7;
+      then e = f & u = w by A, LmSeq30;
+      hence thesis by C2, MCART_1:7;
+    end;
+    suppose u1 in {<%>E};
+      then
+F:      u1 = <%>E by TARSKI:def 1;
+      v = (R.1)`2 & w = (R.2)`2 by C1, C2, MCART_1:7;
+      hence thesis by A, D, F, AFINSQ_1:32;
+    end;
+  end;
+
+theorem ThTS3g:
+  for R being RedSequence of ==>.-relation(TS) st
+    (R.1)`2 = u & (R.len R)`2 = <%>E holds len R > len u
+  proof
+    defpred P[Nat] means
+      for R being RedSequence of ==>.-relation(TS), u st
+        len R = $1 & (R.1)`2 = u & (R.len R)`2 = <%>E holds
+          len R > len u;
+A:  P[0];
+B:  now
+      let k;
+      assume
+B1:     P[k];
+      now
+        let R be RedSequence of ==>.-relation(TS), u such that
+C:        len R = k + 1 & (R.1)`2 = u & (R.len R)`2 = <%>E;
+        per cases;
+        suppose len u = 0;
+          hence len R > len u;
+        end;
+        suppose
+D2:       len u > 0;
+          then consider e, u1 such that
+D:          u = <%e%>^u1 by ThTS3j;
+          len R <> 1 by C, D2;
+          then consider R' being RedSequence of ==>.-relation(TS) such that
+E:          <*R.1*>^R' = R & len R' + 1 = len R by REWRITE3:5, NAT_1:26;
+I:        len R' + 0 < k + 1 by C, E, XREAL_1:8;
+          rng R' <> {} & len R' >= 0 + 1 by NAT_1:8;
+          then
+K:          1 in dom R' & len R' in dom R' by FINSEQ_3:27;
+          then
+F:          (<*R.1*>^R').(1 + 1) = R'.1 by REWRITE3:1;
+H:        (R'.len R')`2 = <%>E by C, E, K, REWRITE3:1;
+          per cases by C, D, ThTS3h;
+          suppose (R.2)`2 = <%e%>^u1;
+            hence len R > len u by C, D, E, F, H, B1, I, XXREAL_0:2;
+          end;
+          suppose (R.2)`2 = u1;
+            then len R' > len u1 by C, E, F, H, B1;
+            then len R > 1 + len u1 by E, XREAL_1:8;
+            then len R > len <%e%> + len u1 by AFINSQ_1:def 5;
+            hence len R > len u by D, AFINSQ_1:20;
+          end;
+        end;
+      end;
+      hence P[k + 1];
+    end;
+    for k holds P[k] from NAT_1:sch 2(A, B);
+    hence thesis;
+  end;
+
+theorem ThTS3e:
+  for R being RedSequence of ==>.-relation(TS) st
+    (R.1)`2 = u^v & (R.len R)`2 = <%>E
+      ex l st l in dom R & (R.l)`2 = v
+  proof
+    defpred P[Nat] means
+      for R being RedSequence of ==>.-relation(TS), u st
+        len R = $1 & (R.1)`2 = u^v & (R.len R)`2 = <%>E
+          ex l st l in dom R & (R.l)`2 = v;
+A:  P[0];
+B:  now
+      let i;
+      assume
+C:      P[i];
+      thus P[i + 1]
+      proof
+        let R be RedSequence of ==>.-relation(TS), u such that
+D:        len R = i + 1 & (R.1)`2 = u^v & (R.len R)`2 = <%>E;
+        per cases;
+        suppose len u = 0;
+          then
+E:          u = {};
+          set j = 1;
+          take j;
+          rng R <> {};
+          hence j in dom R by FINSEQ_3:34;
+          thus (R.j)`2 = v by D, E, AFINSQ_1:32;
+        end;
+        suppose
+D3:       len u > 0;
+          then len u >= 0 + 1 by NAT_1:13;
+          then len u + len v >= 1 + len v by XREAL_1:8;
+          then len(u^v) >= 1 + len v by AFINSQ_1:20;
+          then len(u^v) >= 1 by LmNat1;
+          then len R + len(u^v) > len(u^v) + 1 by D, ThTS3g, XREAL_1:10;
+          then len R > 1 by XREAL_1:8;
+          then consider R' being RedSequence of ==>.-relation(TS) such that
+F:          len R' + 1 = len R &
+            for k st k in dom R' holds R'.k = R.(k + 1) by REWRITE3:7;
+G0:       rng R' <> {};
+          then
+G1:         1 in dom R' by FINSEQ_3:34;
+H:        (R'.1)`2 = (R.(1 + 1))`2 by F, G0, FINSEQ_3:34;
+          1 <= len R' by G1, FINSEQ_3:27;
+          then len R' in dom R' by FINSEQ_3:27;
+          then
+H':         (R'.len R')`2 = <%>E by D, F;
+          consider e, u1 such that
+H2:         u = <%e%>^u1 by D3, ThTS3j;
+Z:        (R.1)`2 = <%e%>^(u1^v) by D, H2, AFINSQ_1:30;
+          thus ex k st k in dom R & (R.k)`2 = v
+          proof
+            per cases by D, ThTS3h, Z;
+            suppose (R.2)`2 = u^v;
+              then consider l such that
+I:              l in dom R' & (R'.l)`2 = v by C, D, F, H, H';
+              set k = l + 1;
+              take k;
+              thus k in dom R by I, F, ThTS3i;
+              thus (R.k)`2 = v by F, I;
+            end;
+            suppose (R.2)`2 = u1^v;
+              then consider l such that
+I:              l in dom R' & (R'.l)`2 = v by C, D, F, H, H';
+              set k = l + 1;
+              take k;
+              thus k in dom R by I, F, ThTS3i;
+              thus (R.k)`2 = v by F, I;
+            end;
+          end;
+        end;
+      end;
+    end;
+    for k holds P[k] from NAT_1:sch 2(A, B);
+    hence thesis;
+  end;
+
+definition
+  let E, u, v;
+  func chop(u, v) -> Element of E^omega means
+:defCut:
+    for w st w^v = u holds it = w if ex w st w^v = u otherwise it = u;
+  existence
+  proof
+    thus (ex w st w^v = u) implies ex w1 st (for w st w^v = u holds w1 = w)
+    proof
+      given w1 such that
+A:      w1^v = u;
+      take w1;
+      let w such that
+B:      w^v = u;
+      thus w1 = w by A, B, AFINSQ_1:31;
+    end;
+    thus thesis;
+  end;
+  uniqueness
+  proof
+    let w1, w2;
+    hereby
+      given w such that
+A:      w^v = u;
+      assume that
+B1:     for w st w^v = u holds w1 = w and
+B2:     for w st w^v = u holds w2 = w;
+      w1 = w & w2 = w by A, B1, B2;
+      hence w1 = w2;
+    end;
+    thus thesis;
+  end;
+  consistency;
+end;
+
+theorem ThTS3k'b:
+  for p being RedSequence of ==>.-relation(TS) st
+    p.1 = [x, u^w] & p.len p = [y, v^w]
+      ex q being RedSequence of ==>.-relation(TS) st
+        q.1 = [x, u] & q.len q = [y, v]
+  proof
+    let p be RedSequence of ==>.-relation(TS) such that
+A:    p.1 = [x, u^w] & p.len p = [y, v^w];
+    deffunc F(set) = [(p.$1)`1, chop(dim2(p.$1, E), w)];
+    consider q being FinSequence such that
+B1:   len q = len p and
+B2:   for k st k in dom q holds q.k = F(k) from FINSEQ_1:sch 2;
+    for k being Element of NAT st k in dom q & k + 1 in dom q holds
+      [q.k, q.(k + 1)] in ==>.-relation(TS)
+    proof
+      let k be Element of NAT such that
+C1:     k in dom q & k + 1 in dom q;
+      1 <= k & k <= len q & 1 <= k + 1 & k + 1 <= len q by C1, FINSEQ_3:27;
+      then
+C2:     k in dom p & k + 1 in dom p by B1, FINSEQ_3:27;
+      consider v1 such that
+D1:     (p.k)`2 = v1^(v^w) by A, C2, REWRITE3:52;
+      consider v2 such that
+D2:     (p.(k + 1))`2 = v2^(v^w) by A, C2, REWRITE3:52;
+D3:   [p.k, p.(k + 1)] in ==>.-relation(TS) by C2, REWRITE1:def 2;
+      then
+D4:     ex r1 being Element of TS, w1 being Element of E^omega,
+           r2 being Element of TS, w2 st
+          p.k = [r1, w1] & p.(k + 1) = [r2, w2] by REWRITE3:31;
+D5:   dim2(p.k, E) = v1^(v^w) by D1, D4, REWRITE3:def 5;
+D6:   dim2(p.(k + 1), E) = v2^(v^w) by D2, D4, REWRITE3:def 5;
+      [p.k, [(p.(k + 1))`1, v2^(v^w)]] in ==>.-relation(TS)
+        by C2, D2, D3, REWRITE3:48;
+      then [[(p.k)`1, v1^(v^w)], [(p.(k + 1))`1, v2^(v^w)]]
+             in ==>.-relation(TS)
+        by C2, D1, REWRITE3:48;
+      then (p.k)`1, v1^(v^w) ==>. (p.(k + 1))`1, v2^(v^w), TS
+        by REWRITE3:def 4;
+      then consider u1 such that
+E:      (p.k)`1, u1 -->. (p.(k + 1))`1, TS & v1^(v^w) = u1^(v2^(v^w))
+          by REWRITE3:22;
+      v1^v^w = u1^(v2^(v^w)) by E, AFINSQ_1:30
+            .= u1^v2^(v^w) by AFINSQ_1:30
+            .= u1^v2^v^w by AFINSQ_1:30;
+      then v1^v = u1^v2^v by AFINSQ_1:31
+               .= u1^(v2^v) by AFINSQ_1:30;
+      then
+F:      (p.k)`1, v1^v ==>. (p.(k + 1))`1, v2^v, TS by E, REWRITE3:def 3;
+G1:   q.k = [(p.k)`1, chop(v1^(v^w), w)] by B2, C1, D5
+         .= [(p.k)`1, chop(v1^v^w, w)] by AFINSQ_1:30
+         .= [(p.k)`1, v1^v] by defCut;
+      q.(k + 1) = [(p.(k + 1))`1, chop(v2^(v^w), w)] by B2, C1, D6
+               .= [(p.(k + 1))`1, chop(v2^v^w, w)] by AFINSQ_1:30
+               .= [(p.(k + 1))`1, v2^v] by defCut;
+      hence thesis by F, G1, REWRITE3:def 4;
+    end;
+    then reconsider q as RedSequence of ==>.-relation(TS)
+      by B1, REWRITE1:def 2;
+H3: len p >= 0 + 1 by NAT_1:13;
+    then
+H4:   1 in dom p & len p in dom p by FINSEQ_3:27;
+H0: 1 in dom q & len p in dom q by B1, H3, FINSEQ_3:27;
+H1: dim2(p.1, E) = (p.1)`2 by A, H4, REWRITE3:51
+                .= u^w by A, MCART_1:7;
+H2: dim2(p.len p, E) = (p.len p)`2 by A, H4, REWRITE3:51
+                    .= v^w by A, MCART_1:7;
+I1: q.1 = [(p.1)`1, chop(dim2(p.1, E), w)] by B2, H0
+       .= [x, chop(u^w, w)] by A, H1, MCART_1:7
+       .= [x, u] by defCut;
+    q.len q = [(p.len p)`1, chop(dim2(p.len p, E), w)] by B1, B2, H0
+           .= [y, chop(v^w, w)] by A, H2, MCART_1:7
+           .= [y, v] by defCut;
+    hence thesis by I1;
+ end;
+
+theorem ThTS3k'a:
+  ==>.-relation(TS) reduces [x, u^w], [y, v^w] implies
+    ==>.-relation(TS) reduces [x, u], [y, v]
+  proof
+    assume ==>.-relation(TS) reduces [x, u^w], [y, v^w];
+    then consider p being RedSequence of ==>.-relation(TS) such that
+A:    p.1 = [x, u^w] & p.len p = [y, v^w] by REWRITE1:def 3;
+    consider q being RedSequence of ==>.-relation(TS) such that
+B:    q.1 = [x, u] & q.len q = [y, v] by A, ThTS3k'b;
+    thus thesis by B, REWRITE1:def 3;
+  end;
+
+theorem ThTS3k:
+  x, u^w ==>* y, v^w, TS implies x, u ==>* y, v, TS
+  proof
+    assume x, u^w ==>* y, v^w, TS;
+    then ==>.-relation(TS) reduces [x, u^w], [y, v^w] by REWRITE3:def 6;
+    then ==>.-relation(TS) reduces [x, u], [y, v] by ThTS3k'a;
+    hence thesis by REWRITE3:def 6;
+  end;
+
+theorem ThTS3:
+  for p, q being Element of TS st p, u^v ==>* q, TS holds
+    ex r being Element of TS st p, u ==>* r, TS & r, v ==>* q, TS
+  proof
+    let p, q be Element of TS;
+    assume
+A:    p, u^v ==>* q, TS;
+    then p, u^v ==>* q, <%>E, TS by REWRITE3:def 7;
+    then ==>.-relation(TS) reduces [p, u^v], [q, <%>E] by REWRITE3:def 6;
+    then consider R being RedSequence of ==>.-relation(TS) such that
+B:    R.1 = [p, u^v] & R.len R = [q, <%>E] by REWRITE1:def 3;
+C:  (R.1)`2 = u^v & (R.len R)`2 = <%>E by B, MCART_1:7;
+    consider l such that
+D1:   l in dom R and
+D2:   (R.l)`2 = v by C, ThTS3e;
+    per cases;
+    suppose
+E2:   l + 1 in dom R;
+      then (R.l)`1 in TS by D1, REWRITE3:49;
+      then reconsider r = (R.l)`1 as Element of TS by STRUCT_0:def 5;
+D3:   R.l = [r, v] by D1, D2, E2, REWRITE3:48;
+D4:   1 in dom R by FINSEQ_5:6;
+D5:   1 <= l by D1, FINSEQ_3:27;
+      0 + 1 <= len R by NAT_1:13;
+      then
+D6:     len R in dom R by FINSEQ_3:27;
+D7:   l <= len R by D1, FINSEQ_3:27;
+      reconsider l as Element of NAT by ORDINAL1:def 13;
+      take r;
+      thus p, u ==>* r, TS
+      proof
+        ==>.-relation(TS) reduces R.1, R.l by D5, D4, D1, REWRITE1:18;
+        then p, u^v ==>* r, v, TS by B, D3, REWRITE3:def 6;
+        then p, u^v ==>* r, <%>E^v, TS by AFINSQ_1:32;
+        then p, u ==>* r, <%>E, TS by ThTS3k;
+        hence thesis by REWRITE3:def 7;
+      end;
+      thus r, v ==>* q, TS
+      proof
+        ==>.-relation(TS) reduces R.l, R.len R by D7, D6, D1, REWRITE1:18;
+        then r, v ==>* q, <%>E, TS by B, D3, REWRITE3:def 6;
+        hence thesis by REWRITE3:def 7;
+      end;
+    end;
+    suppose not l + 1 in dom R;
+      then v = <%>E by C, D1, D2, REWRITE3:3;
+      then p, u ==>* q, TS & q, v ==>* q, TS by A, REWRITE3:95, AFINSQ_1:32;
+      hence thesis;
+    end;
+  end;
+
+theorem ThSucc19:
+  w^v-succ_of (X, TS) = v-succ_of (w-succ_of (X, TS), TS)
+  proof
+C1: now
+      let x;
+      assume
+D0:     x in v-succ_of (w-succ_of (X, TS), TS);
+      then reconsider r = x as Element of TS;
+      consider p being Element of TS such that
+D1:     p in w-succ_of (X, TS) & p, v ==>* r, TS by D0, REWRITE3:103;
+      consider q being Element of TS such that
+D2:     q in X & q, w ==>* p, TS by D1, REWRITE3:103;
+      q, w^v ==>* r, TS by D1, D2, REWRITE3:99;
+      hence x in w^v-succ_of (X, TS) by D2, REWRITE3:103;
+    end;
+    now
+      let x;
+      assume
+D0:     x in w^v-succ_of (X, TS);
+      then reconsider r = x as Element of TS;
+      consider q being Element of TS such that
+D1:     q in X & q, w^v ==>* r, TS by D0, REWRITE3:103;
+      consider p being Element of TS such that
+D2:     q, w ==>* p, TS & p, v ==>* r, TS by D1, ThTS3;
+      p in w-succ_of (X, TS) & p, v ==>* r, TS by D1, D2, REWRITE3:103;
+      hence x in v-succ_of (w-succ_of (X, TS), TS) by REWRITE3:103;
+    end;
+    hence thesis by C1, TARSKI:2;
+  end;
+
+theorem ThTS38:
+  _bool TS is non empty transition-system over Lex(E) \/ {<%>E}
+  proof
+A:  dom the Tran of _bool TS c= [: the carrier of _bool TS, Lex(E) :]
+       by RELAT_1:def 18;
+    Lex(E) c= Lex(E) \/ {<%>E} by XBOOLE_1:7;
+    then [: the carrier of _bool TS, Lex(E) :] c=
+           [: the carrier of _bool TS, Lex(E) \/ {<%>E} :] by ZFMISC_1:118;
+    hence thesis by A, RELSET_1:13, XBOOLE_1:1;
+  end;
+
+theorem ThTS39:
+  w-succ_of ({ v-succ_of (X, TS) }, _bool TS) = { v^w-succ_of (X, TS) }
+  proof
+    defpred P[Nat] means
+      len u <= $1 implies
+        for v holds
+          u-succ_of({ v-succ_of (X, TS) }, _bool TS) = { v^u-succ_of (X, TS) };
+Z:  not <%>E in rng dom (the Tran of _bool TS) by ThTS10;
+A:  P[0]
+    proof
+      let u;
+      assume len u <= 0;
+      then
+A1:     u = <%>E;
+      let v;
+      reconsider vso = { v-succ_of (X, TS) } as Subset of _bool TS
+        by DefBool;
+      u-succ_of (vso, _bool TS) = vso by Z, A1, REWRITE3:104;
+      hence thesis by A1, AFINSQ_1:32;
+    end;
+B:  now
+      let k;
+      assume
+B1:     P[k];
+      now
+        let u;
+        assume
+Y:        len u <= k + 1;
+        let v;
+        per cases;
+        suppose
+Y1:       k = 0;
+          per cases by Y, Y1, NAT_1:26;
+          suppose len u = 0;
+            hence u-succ_of ({ v-succ_of (X, TS) }, _bool TS) =
+              { v^u-succ_of (X, TS) } by A;
+          end;
+          suppose
+Y2:         len u = 1;
+C1:         now
+              let x;
+              assume
+D1:             x in u-succ_of ({ v-succ_of (X, TS) }, _bool TS);
+              reconsider P = x as Element of _bool TS by D1;
+              consider Q being Element of _bool TS such that
+D2:             Q in { v-succ_of (X, TS) } & Q, u ==>* P, _bool TS
+                  by D1, REWRITE3:103;
+D3:           Q = v-succ_of (X, TS) by D2, TARSKI:def 1;
+              P = u-succ_of (Q, TS) by D2, Y2, ThBool10;
+              then P = v^u-succ_of (X, TS) by D3, ThSucc19;
+              hence x in { v^u-succ_of (X, TS) } by TARSKI:def 1;
+            end;
+            now
+              let x;
+              assume
+D:              x in { v^u-succ_of (X, TS) };
+              then
+D0:             x = v^u-succ_of (X, TS) by TARSKI:def 1;
+              reconsider P = x as Element of _bool TS by D, DefBool;
+              x = u-succ_of (v-succ_of (X, TS), TS) by D0, ThSucc19;
+              then
+D1:             v-succ_of (X, TS), u ==>* x, _bool TS by Y2, ThBool10;
+D2:           v-succ_of (X, TS) is Element of _bool TS by DefBool;
+              v-succ_of (X, TS) in { v-succ_of (X, TS) } by TARSKI:def 1;
+              then P in u-succ_of ( { v-succ_of (X, TS) }, _bool TS)
+                      by D1, D2, REWRITE3:103;
+              hence x in u-succ_of ( { v-succ_of (X, TS) }, _bool TS);
+            end;
+            hence u-succ_of ({ v-succ_of (X, TS) }, _bool TS) =
+              { v^u-succ_of (X, TS) } by C1, TARSKI:2;
+          end;
+        end;
+        suppose k <> 0;
+          then consider v1, v2 such that
+B2:         len v1 <= k & len v2 <= k & u = v1^v2 by LmXSeq20, Y;
+C1:       v1-succ_of({ v-succ_of(X, TS) }, _bool TS) = { v^v1-succ_of (X, TS) }
+            by B1, B2;
+          reconsider bTS = _bool TS as
+            non empty transition-system over Lex(E) \/ {<%>E} by ThTS38;
+C2:       the carrier of bTS = the carrier of _bool TS &
+            the Tran of bTS = the Tran of _bool TS;
+          v1^v2-succ_of ({ v-succ_of (X, TS) }, _bool TS)
+            = v1^v2-succ_of ({ v-succ_of (X, TS) }, bTS) by C2, REWRITE3:105
+           .= v2-succ_of (v1-succ_of ({ v-succ_of (X, TS) }, bTS), bTS)
+                by ThSucc19
+           .= v2-succ_of (v1-succ_of ({ v-succ_of (X, TS) }, _bool TS), bTS)
+                by C2, REWRITE3:105
+           .= v2-succ_of(v1-succ_of({ v-succ_of (X, TS) }, _bool TS), _bool TS)
+                by C2, REWRITE3:105
+           .= { v^v1^v2-succ_of (X, TS) } by C1, B1, B2
+           .= { v^(v1^v2)-succ_of (X, TS) } by AFINSQ_1:30;
+          hence u-succ_of ({ v-succ_of (X, TS) }, _bool TS) =
+            { v^u-succ_of (X, TS) } by B2;
+        end;
+      end;
+      hence P[k + 1];
+    end;
+    for k holds P[k] from NAT_1:sch 2(A, B);
+    then len w <= len w implies
+      w-succ_of ({ v-succ_of (X, TS) }, _bool TS) = { v^w-succ_of (X, TS) };
+    hence thesis;
+  end;
+
+reserve SA for non empty semiautomaton over Lex(E) \/ {<%>E};
+
+theorem ThSA39:
+  w-succ_of ({ <%>E-succ_of (X, SA) }, _bool SA) = { w-succ_of (X, SA) }
+  proof
+    set TS = the transition-system of SA;
+    set Es = <%>E-succ_of (X, SA);
+    the transition-system of _bool SA = _bool TS by DefBoolSA;
+    hence w-succ_of ({ Es }, _bool SA)
+            = w-succ_of ({ Es }, _bool TS) by REWRITE3:105
+           .= w-succ_of ({ <%>E-succ_of (X, TS) }, _bool TS) by REWRITE3:105
+           .= { <%>E^w-succ_of (X, TS) } by ThTS39
+           .= { w-succ_of (X, TS) } by AFINSQ_1:32
+           .= { w-succ_of (X, SA) } by REWRITE3:105;
+  end;
+
+reserve A for non empty automaton over Lex(E) \/ {<%>E};
+reserve P for Subset of A;
+
+theorem ThA20:
+  x in the FinalS of A & x in P implies P in the FinalS of _bool A
+  proof
+    assume x in the FinalS of A & x in P;
+    then
+A:    P meets the FinalS of A by XBOOLE_0:3;
+    P is Element of _bool A by ThA10;
+    then P in { Q where Q is Element of _bool A : Q meets (the FinalS of A) }
+      by A;
+    hence thesis by defBoolA;
+  end;
+
+theorem ThA30:
+  X in the FinalS of _bool A implies X meets the FinalS of A
+  proof
+    assume
+A:    X in the FinalS of _bool A;
+    the FinalS of _bool A =
+      { Q where Q is Element of _bool A : Q meets (the FinalS of A) }
+        by defBoolA;
+    then consider Q being Element of _bool A such that
+B:    X = Q & Q meets (the FinalS of A) by A;
+    thus thesis by B;
+  end;
+
+theorem ThA38:
+  the InitS of _bool A = { <%>E-succ_of (the InitS of A, A) }
+  proof
+    the InitS of _bool A
+      = the InitS of the semiautomaton of _bool A
+     .= the InitS of _bool the semiautomaton of A by defBoolA
+     .= { <%>E-succ_of (the InitS of the semiautomaton of A,
+                          the semiautomaton of A) } by DefBoolSA;
+    hence thesis by REWRITE3:105;
+  end;
+
+theorem ThA39:
+  w-succ_of ({ <%>E-succ_of (X, A) }, _bool A) = { w-succ_of (X, A) }
+  proof
+    set SA = the semiautomaton of A;
+    set Es = <%>E-succ_of (X, A);
+    the semiautomaton of _bool A = _bool SA by defBoolA;
+    hence w-succ_of ({ Es }, _bool A)
+            = w-succ_of ({ Es }, _bool SA) by REWRITE3:105
+           .= w-succ_of ({ <%>E-succ_of (X, SA) }, _bool SA) by REWRITE3:105
+           .= { w-succ_of (X, SA) } by ThSA39
+           .= { w-succ_of (X, A) } by REWRITE3:105;
+  end;
+
+theorem ThA40:
+  w-succ_of (the InitS of _bool A, _bool A) = { w-succ_of (the InitS of A, A) }
+  proof
+    set Es = <%>E-succ_of (the InitS of A, A);
+    the InitS of _bool A = { Es } by ThA38;
+    hence thesis by ThA39;
+  end;
+
+theorem ThLang20:
+  Lang(A) = Lang(_bool A)
+  proof
+    set DA = _bool A;
+A:  w in Lang(A) implies w in Lang(DA)
+    proof
+      assume w in Lang(A);
+      then w-succ_of (the InitS of A, A) meets the FinalS of A by ThLang10;
+      then consider x such that
+B:      x in w-succ_of (the InitS of A, A) & x in the FinalS of A
+          by XBOOLE_0:3;
+C:    w-succ_of (the InitS of A, A) in the FinalS of DA by B, ThA20;
+      w-succ_of (the InitS of DA, DA) = { w-succ_of (the InitS of A, A) }
+        by ThA40;
+      then w-succ_of (the InitS of A, A) in w-succ_of (the InitS of DA, DA)
+        by TARSKI:def 1;
+      then w-succ_of (the InitS of DA, DA) meets the FinalS of DA
+        by C, XBOOLE_0:3;
+      hence thesis by ThLang10;
+    end;
+    w in Lang(DA) implies w in Lang(A)
+    proof
+      assume w in Lang(DA);
+      then w-succ_of (the InitS of DA, DA) meets the FinalS of DA by ThLang10;
+      then consider x such that
+B:      x in w-succ_of (the InitS of DA, DA) & x in the FinalS of DA
+          by XBOOLE_0:3;
+      w-succ_of (the InitS of _bool A, _bool A) =
+        { w-succ_of (the InitS of A, A) } by ThA40;
+      then x = w-succ_of (the InitS of A, A) by B, TARSKI:def 1;
+      then w-succ_of (the InitS of A, A) meets the FinalS of A by B, ThA30;
+      hence thesis by ThLang10;
+    end;
+    hence thesis by A, SUBSET_1:8;
+  end;
+
+theorem
+  for A being non empty automaton over Lex(E) \/ {<%>E}
+    ex DA being non empty deterministic automaton over Lex(E) st
+      Lang(A) = Lang(DA)
+  proof
+    let A be non empty automaton over Lex(E) \/ {<%>E};
+    set DA = _bool A;
+    take DA;
+    thus thesis by ThLang20;
+  end;
+
+theorem
+  for FA being non empty finite automaton over Lex(E) \/ {<%>E}
+    ex DFA being non empty deterministic finite automaton over Lex(E) st
+      Lang(FA) = Lang(DFA)
+  proof
+    let FA be non empty finite automaton over Lex(E) \/ {<%>E};
+    set bNFA = _bool FA;
+    Lang(FA) = Lang(bNFA) by ThLang20;
+    hence thesis;
+  end;

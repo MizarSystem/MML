@@ -11,19 +11,14 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="RELAT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="PBOOLE"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="WELLORD2"/>
@@ -42,11 +37,11 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="54"/>
-<Adjective nr="55"/>
 <Adjective nr="56"/>
+<Adjective nr="57"/>
+<Adjective nr="58"/>
+<Adjective nr="126"/>
 <Adjective nr="127"/>
-<Adjective nr="128"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -60,7 +55,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="57">
+<Adjective nr="59">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -71,20 +66,20 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="43"/>
-<Adjective nr="53"/>
-<Adjective nr="54"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="45"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
-<Adjective nr="96"/>
+<Adjective nr="57"/>
+<Adjective nr="58"/>
+<Adjective nr="95"/>
+<Adjective nr="126"/>
 <Adjective nr="127"/>
-<Adjective nr="128"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICE7" nr="3">
 <ArgTypes/>
-<Typ kind="M" nr="25">
+<Typ kind="M" nr="16">
 <Cluster/>
 </Typ>
 <Cluster>
@@ -93,20 +88,20 @@
 </RCluster>
 <FCluster aid="LATTICE7" nr="1">
 <ArgTypes>
-<Typ kind="M" nr="25">
+<Typ kind="M" nr="16">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="187">
+<Func kind="K" nr="127">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="52"/>
-<Adjective nr="96"/>
+<Adjective nr="54"/>
+<Adjective nr="95"/>
+<Adjective nr="126"/>
 <Adjective nr="127"/>
-<Adjective nr="128"/>
 </Cluster>
 </FCluster>
 </Registrations>

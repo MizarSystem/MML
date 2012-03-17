@@ -8,16 +8,16 @@ environ
 
  vocabularies FINSEQ_1, ARYTM_1, INTEGRA1, MEASURE5, RELAT_1, ORDINAL2, BOOLE,
       FUNCT_1, CARD_1, FUNCT_3, SQUARE_1, ABSVALUE, RLVECT_1, SEQ_2, LATTICES,
-      JORDAN3, RCOMP_1, PARTFUN1, RFINSEQ, INTEGRA2, FDIFF_1, ARYTM_3, PROB_1,
+      JORDAN3, RCOMP_1, RFINSEQ, INTEGRA2, FDIFF_1, ARYTM_3, PROB_1,
       FINSEQ_4, ARYTM, ANPROJ_1, SEQ_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XXREAL_0,
       XREAL_0, COMPLEX1, REAL_1, NAT_1, NAT_D, RELAT_1, FUNCT_1, FUNCT_2,
       XXREAL_2, SEQM_3, SEQ_4, VALUED_0, PARTFUN1, PSCOMP_1, FINSEQ_1,
-      RFUNCT_1, RVSUM_1, INTEGRA1, SEQ_1, SEQ_2, JORDAN3, PRE_CIRC, RCOMP_1,
+      RFUNCT_1, RVSUM_1, INTEGRA1, SEQ_1, SEQ_2, JORDAN3, RCOMP_1,
       FDIFF_1, SQUARE_1, CLASSES1, RFINSEQ, BINARITH, INTEGRA2;
  constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, FINSOP_1, RFUNCT_1,
-      FDIFF_1, RFINSEQ, BINARITH, PRE_CIRC, PSCOMP_1, JORDAN3, INTEGRA2, SEQ_1,
-      BINOP_2, XXREAL_2, NAT_D, RVSUM_1, CLASSES1, SEQ_4;
+      FDIFF_1, RFINSEQ, BINARITH, PSCOMP_1, JORDAN3, INTEGRA2, SEQ_1,
+      BINOP_2, XXREAL_2, NAT_D, RVSUM_1, CLASSES1, SEQ_4, RELSET_1;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       MEMBERED, FINSEQ_1, GOBOARD1, INTEGRA1, INTEGRA2, VALUED_0, FUNCT_2,
       FINSET_1, XXREAL_2, CARD_1, SEQ_2;
@@ -32,10 +32,14 @@ environ
 
 begin :: Lemmas of Division
 
-reserve a,b,e,x,y for Real,
+reserve a,b,e,r,x,y for Real,
   i,j,k,n,m for Element of NAT,
   x1 for set,
-  p,q for FinSequence of REAL;
+  p,q for FinSequence of REAL,
+  A for closed-interval Subset of REAL,
+  D,D1,D2 for Division of A,
+  f,g for Function of A,REAL,
+  T for DivSequence of A;
 
 Lm1: a in dom p implies 1<=a & a<=len p by FINSEQ_3:27;
 
@@ -62,11 +66,8 @@ A1: 1<=n & n<=2;
 end;
 
 theorem Th1:
-  for A be closed-interval Subset of REAL, D be Element of divs A
-  st vol(A) <> 0 holds ex i st i in dom D & vol(divset(D,i)) > 0
+  vol(A) <> 0 implies ex i st i in dom D & vol(divset(D,i)) > 0
 proof
-  let A be closed-interval Subset of REAL;
-  let D be Element of divs A;
   assume
 A1: vol(A) <>0;
   assume
@@ -112,11 +113,8 @@ A8: len D-1 in dom D & len D-1 in NAT by A5,A6,INTEGRA1:9;
 end;
 
 theorem Th2:
-  for A be closed-interval Subset of REAL,
-  D be Element of divs A st x in A holds ex j st j in dom D & x in divset(D,j)
+  x in A implies ex j st j in dom D & x in divset(D,j)
 proof
-  let A be closed-interval Subset of REAL;
-  let D be Element of divs A;
   assume x in A;
   then
 A1: lower_bound A <= x & x <= upper_bound A by INTEGRA2:1;
@@ -251,11 +249,8 @@ A26:        1 <= j & k <= len D by A13,A16,FINSEQ_3:27;
 end;
 
 theorem Th3:
-  for A be closed-interval Subset of REAL, D1,D2 be Element of divs A holds
-  ex D be Element of divs A st D1 <= D & D2 <= D & rng D = rng D1 \/ rng D2
+  ex D st D1 <= D & D2 <= D & rng D = rng D1 \/ rng D2
 proof
-  let A be closed-interval Subset of REAL;
-  let D1,D2 be Element of divs A;
   consider D being FinSequence of REAL such that
 A1: rng D = rng(D1^D2) & len D = card rng(D1^D2) & D is increasing
   by GOBOARD2:21;
@@ -284,8 +279,7 @@ A10: k in dom D & D1.len D1=D.k by A1,A4,PARTFUN1:26;
     k > len D by A7,A8,A9,A10,GOBOARD2:18;
     hence contradiction by A10,FINSEQ_3:27;
   end;
-  then D is DivisionPoint of A by A3,INTEGRA1:def 2;
-  then reconsider D as Element of divs A by INTEGRA1:def 3;
+  then reconsider D as Division of A by A3,INTEGRA1:def 2;
   take D;
 A11: card rng D1 <= len D by A1,A2,NAT_1:44,XBOOLE_1:7;
   D1 is one-to-one by JORDAN7:17;
@@ -299,13 +293,10 @@ A12: card rng D2 <= len D by A1,A2,NAT_1:44,XBOOLE_1:7;
 end;
 
 theorem Th4:
-  for A be closed-interval Subset of REAL, D,D1 be Element of divs A
-  st delta(D1)<min rng upper_volume(chi(A,A),D)
-  holds (for x,y,i st i in dom D1 & x in rng D /\ divset(D1,i)
-  & y in rng D /\ divset(D1,i) holds x=y)
+  delta(D1) < min rng upper_volume(chi(A,A),D)
+  implies for x,y,i st i in dom D1 & x in rng D /\ divset(D1,i)
+  & y in rng D /\ divset(D1,i) holds x=y
 proof
-  let A be closed-interval Subset of REAL;
-  let D,D1 be Element of divs A;
   assume
 A1: delta(D1)<min rng upper_volume(chi(A,A),D);
   let x,y,i;
@@ -472,12 +463,9 @@ A2: p is increasing & q is increasing;
 end;
 
 theorem Th6:
-  for A be closed-interval Subset of REAL, D,D1 be Element of divs A st
-  D <= D1 & i in dom D & j in dom D & i <= j holds
+  D <= D1 & i in dom D & j in dom D & i <= j implies
   indx(D1,D,i) <= indx(D1,D,j) & indx(D1,D,i) in dom D1
 proof
-  let A be closed-interval Subset of REAL;
-  let D,D1 be Element of divs A;
   assume
 A1: D <= D1 & i in dom D & j in dom D & i <= j;
   then
@@ -488,12 +476,9 @@ A3: D.j = D1.indx(D1,D,j) & indx(D1,D,j) in dom D1 by A1,INTEGRA1:def 21;
 end;
 
 theorem Th7:
-  for A be closed-interval Subset of REAL, D,D1 be Element of divs A
-  st D <= D1 & i in dom D & j in dom D & i < j holds
+  D <= D1 & i in dom D & j in dom D & i < j implies
   indx(D1,D,i) < indx(D1,D,j)
 proof
-  let A be closed-interval Subset of REAL;
-  let D,D1 be Element of divs A;
   assume
 A1: D <= D1 & i in dom D & j in dom D & i < j;
   then
@@ -504,11 +489,8 @@ A3: D.j = D1.indx(D1,D,j) & indx(D1,D,j) in dom D1 by A1,INTEGRA1:def 21;
 end;
 
 theorem Th8:
-  for A be closed-interval Subset of REAL,
-  D be Element of divs A holds delta(D) >= 0
+  delta(D) >= 0
 proof
-  let A be closed-interval Subset of REAL;
-  let D be Element of divs A;
   consider y such that
 A1: y in rng D by SUBSET_1:10;
   consider n such that
@@ -573,10 +555,8 @@ A10: lower_bound rng(f|B) <= upper_bound rng(f|B) by A9,XXREAL_0:2;
   hence thesis by A10,XXREAL_0:2;
 end;
 
-Lm6: for A be closed-interval Subset of REAL,
-D1 be Element of divs A st j in dom D1 holds vol(divset(D1,j)) <= delta D1
+Lm6: j in dom D1 implies vol(divset(D1,j)) <= delta D1
 proof
-  let A be closed-interval Subset of REAL, D1 be Element of divs A;
   assume
 Z: j in dom D1;
   then j in Seg len D1 by FINSEQ_1:def 3;
@@ -590,13 +570,11 @@ Z: j in dom D1;
   hence thesis by INTEGRA1:def 19;
 end;
 
-Lm7: for A be closed-interval Subset of REAL, j1 be Element of NAT,
-D1,D2 be Element of divs A st
+Lm7: for j1 be Element of NAT st
 j1 = len D1 - 1 & x in divset(D1,len D1) & len D1 >= 2 &
 D1 <= D2 & rng D2 = rng D1 \/ {x} holds rng (D2|indx(D2,D1,j1)) = rng (D1|j1)
 proof
-  let A be closed-interval Subset of REAL, j1 be Element of NAT,
-  D1,D2 be Element of divs A;
+  let j1 be Element of NAT;
   assume
 A1: j1 = len D1 - 1 & x in divset(D1,len D1) & len D1 >= 2;
   assume
@@ -704,23 +682,19 @@ A32: D2.n = (D2|indx(D2,D1,j1)).n by A7,RFINSEQ:19;
 end;
 
 theorem Th9:
-  for A be closed-interval Subset of REAL, g be Function of A,REAL,
-  D1,D2 be Element of divs A st x in divset(D1,len D1) & len D1 >= 2
-  & D1<=D2 & rng D2 = rng D1 \/ {x} & g|A is bounded
-  holds Sum lower_volume(g,D2)-Sum
-  lower_volume(g,D1)<=(upper_bound rng g-lower_bound rng g)*delta(D1)
+  x in divset(D1,len D1) & len D1 >= 2
+  & D1<=D2 & rng D2 = rng D1 \/ {x} & g|A is bounded implies
+  Sum lower_volume(g,D2) - Sum lower_volume(g,D1)
+  <= (upper_bound rng g-lower_bound rng g)*delta(D1)
 proof
-  let A be closed-interval Subset of REAL;
-  let g be Function of A,REAL;
-  let D1,D2 be Element of divs A;
   assume
 A1: x in divset(D1,len D1) & len D1 >= 2;
   assume
 A2: D1<=D2 & rng D2 = rng D1 \/ {x};
   assume
 A3: g|A is bounded;
-  deffunc PLg(Element of divs A,Nat) = (PartSums(lower_volume(g,$1))).$2;
-  deffunc LVg(Element of divs A) = lower_volume(g,$1);
+  deffunc PLg(Division of A,Nat) = (PartSums(lower_volume(g,$1))).$2;
+  deffunc LVg(Division of A) = lower_volume(g,$1);
   set j = len D1;
 A5: len D1 in Seg len D1 & len D2 in Seg len D2 by FINSEQ_1:5;
 A6: len D1 in dom D1 & len D2 in dom D2 by FINSEQ_5:6;
@@ -1094,9 +1068,7 @@ A101:   delta(D1) >= 0 by Th8;
         upper_bound rng g - lower_bound rng g >= 0 by A3,Lm4,XREAL_1:50;
 
 then (upper_bound rng g - lower_bound rng g)*delta(D1) >= 0*delta(D1) by A101;
-        hence Sum mid(lower_volume(g,D2),(indx(D2,D1,j1)+1),indx(D2,D1,j))
-        -Sum mid(lower_volume(g,D1),j,j) <=
-        (upper_bound rng g-lower_bound rng g)*delta(D1)
+        hence thesis
         by A100;
       end;
       suppose
@@ -1328,23 +1300,19 @@ A139: PLg(D2,indx(D2,D1,j))=Sum(lower_volume(g,D2)|indx(D2,D1,j))
 end;
 
 theorem Th10:
-  for A be closed-interval Subset of REAL, g be Function of A,REAL,
-  D1,D2 be Element of divs A st x in divset(D1,len D1) & len D1 >= 2
+  x in divset(D1,len D1) & len D1 >= 2
   & D1<=D2 & rng D2 = rng D1 \/ {x} & g|A is bounded
-  holds Sum upper_volume(g,D1)-Sum
-  upper_volume(g,D2)<=(upper_bound rng g-lower_bound rng g)*delta(D1)
+  implies Sum upper_volume(g,D1) - Sum upper_volume(g,D2)
+  <= (upper_bound rng g-lower_bound rng g)*delta(D1)
 proof
-  let A be closed-interval Subset of REAL;
-  let g be Function of A,REAL;
-  let D1,D2 be Element of divs A;
   assume
 A1: x in divset(D1,len D1) & len D1 >= 2;
   assume
 A2: D1<=D2 & rng D2 = rng D1 \/ {x};
   assume
 A3: g|A is bounded;
-  deffunc PUg(Element of divs A,Nat) = (PartSums(upper_volume(g,$1))).$2;
-  deffunc UVg(Element of divs A) = upper_volume(g,$1);
+  deffunc PUg(Division of A,Nat) = (PartSums(upper_volume(g,$1))).$2;
+  deffunc UVg(Division of A) = upper_volume(g,$1);
   set j = len D1;
 A4: len D1 in Seg len D1 & len D2 in Seg len D2 by FINSEQ_1:5;
   then
@@ -1726,9 +1694,7 @@ A99:    delta(D1) >= 0 by Th8;
         upper_bound rng g - lower_bound rng g >= 0 by A3,Lm4,XREAL_1:50;
 
 then (upper_bound rng g - lower_bound rng g)*delta(D1) >= 0*delta(D1) by A99;
-        hence Sum mid(upper_volume(g,D1),j,j)-
-        Sum mid(upper_volume(g,D2),(indx(D2,D1,j1)+1),indx(D2,D1,j))
-        <= (upper_bound rng g-lower_bound rng g)*delta(D1) by A98;
+        hence thesis by A98;
       end;
       suppose
 A100:   len mid(upper_volume(g,D2),(indx(D2,D1,j1)+1),indx(D2,D1,j))=2;
@@ -1952,17 +1918,16 @@ A136: PUg(D2,indx(D2,D1,j))=Sum(upper_volume(g,D2)|indx(D2,D1,j))
   hence thesis by A66,A68,A126,A132,A136;
 end;
 
-Lm8: for A be closed-interval Subset of REAL, f be PartFunc of A,REAL
-st vol(A)<>0 & y in rng lower_sum_set(f) holds ex D being Element of divs A st
+Lm8: 
+ vol(A)<>0 & y in rng lower_sum_set(f) implies ex D being Division of A st
 D in dom lower_sum_set(f) & y=(lower_sum_set(f)).D & D.1 > lower_bound A
 proof
-  let A be closed-interval Subset of REAL;
-  let f be PartFunc of A,REAL;
   assume
 A1: vol(A)<>0;
   assume y in rng lower_sum_set(f);
   then consider D3 being Element of divs A such that
 A2: D3 in dom lower_sum_set(f) & y=(lower_sum_set(f)).D3 by PARTFUN1:26;
+    reconsider D3 as Division of A by INTEGRA1:def 3;
 A3: len D3 in Seg len D3 by FINSEQ_1:5;
   rng D3 <> {};
   then
@@ -1973,12 +1938,11 @@ A6:   D3.1 <> lower_bound A;
       D3.1 in A by A5,INTEGRA1:8;
       then lower_bound A <= D3.1 by INTEGRA2:1;
       then D3.1 > lower_bound A by A6,XXREAL_0:1;
-      hence ex D being Element of divs A st D in dom lower_sum_set(f) &
-      y=(lower_sum_set(f)).D & D.1 > lower_bound A by A2;
+      hence thesis by A2;
     end;
     suppose
 A7:   D3.1 = lower_bound A;
-      ex D being Element of divs A st D in dom lower_sum_set(f) &
+      ex D being Division of A st D in dom lower_sum_set(f) &
       y=(lower_sum_set(f)).D & D.1 > lower_bound A
       proof
 A8:     D3.(len D3) = upper_bound A by INTEGRA1:def 2;
@@ -2001,9 +1965,8 @@ A13:    rng D c= A by XBOOLE_1:1;
 A14:    len D+1=len D3 by A12;
         len D in dom D by FINSEQ_5:6;
         then D.(len D)=upper_bound A by A8,A11,A14,RFINSEQ:def 2;
-        then D is DivisionPoint of A by A13,INTEGRA1:def 2;
-        then reconsider D as Element of divs A by INTEGRA1:def 4;
-        D in divs A;
+        then reconsider D as Division of A by A13,INTEGRA1:def 2;
+        D in divs A by INTEGRA1:def 3;
         then
 A15:    D in dom lower_sum_set(f) by INTEGRA1:def 12;
 A16:    y=(lower_sum_set(f)).D
@@ -2141,17 +2104,11 @@ A44:    D.1=D3.(1+1) by A11,RFINSEQ:def 2
 end;
 
 theorem Th11:
-  for A be closed-interval Subset of REAL, D be Element of divs A,
-  r be Real, i,j be Element of NAT
-  st i in dom D & j in dom D & i<=j & r < mid(D,i,j).1
-  holds ex B be closed-interval Subset of REAL
+  i in dom D & j in dom D & i<=j & r < mid(D,i,j).1
+  implies ex B be closed-interval Subset of REAL
   st r=lower_bound B & upper_bound B=mid(D,i,j).(len mid(D,i,j))
-  & len mid(D,i,j)=j-i+1 & mid(D,i,j) is DivisionPoint of B
+  & len mid(D,i,j)=j-i+1 & mid(D,i,j) is Division of B
 proof
-  let A be closed-interval Subset of REAL;
-  let D be Element of divs A;
-  let r be Real;
-  let i,j be Element of NAT;
   assume
 A1: i in dom D;
   assume
@@ -2162,7 +2119,7 @@ A3: i <= j;
 A4: r < mid(D,i,j).1;
   consider C being closed-interval Subset of REAL such that
 A5: lower_bound C=mid(D,i,j).1 & upper_bound C=mid(D,i,j).(len mid(D,i,j))
-  & len mid(D,i,j)=j-i+1 & mid(D,i,j) is DivisionPoint of C
+  & len mid(D,i,j)=j-i+1 & mid(D,i,j) is Division of C
   by A1,A2,A3,INTEGRA1:38;
   consider a,b such that
 A6: a <= b & a = lower_bound C & b = upper_bound C by INTEGRA1:4;
@@ -2184,15 +2141,13 @@ by A5,INTEGRA1:def 2;
   end;
   then C c= B by SUBSET_1:7;
   then rng mid(D,i,j) c= B by A8,XBOOLE_1:1;
-  then MD is DivisionPoint of B by A5,A7,INTEGRA1:def 2;
+  then MD is Division of B by A5,A7,INTEGRA1:def 2;
   hence thesis by A5,A7;
 end;
 
-Lm9: for A be closed-interval Subset of REAL,
-D1 be Element of divs A st vol(A)<>0 & len D1 = 1 holds
+Lm9: vol(A)<>0 & len D1 = 1 implies
 <*lower_bound A*>^D1 is non empty increasing FinSequence of REAL
 proof
-  let A be closed-interval Subset of REAL, D1 be Element of divs A;
   assume
 A1: vol(A)<>0;
   assume len D1 = 1;
@@ -2255,7 +2210,7 @@ A16:    1 <= k & k <= len D1 by A15,FINSEQ_3:27;
 A17:    D1.1 <= MD1.m by A15,A16,GOBOARD2:18;
         MD1.n = <*lower_bound A*>.n by A13,FINSEQ_1:def 7
           .= lower_bound A by A14,FINSEQ_1:def 8;
-        hence MD1.n < MD1.m by A3,A17,XXREAL_0:2;
+        hence thesis by A3,A17,XXREAL_0:2;
       end;
       suppose ex i be Nat st i in dom D1 & n = len <*lower_bound A*> + i;
         then consider i such that
@@ -2273,11 +2228,9 @@ A21:    D1.i=MD1.n by A18,FINSEQ_1:def 7;
   hence thesis by SEQM_3:def 1;
 end;
 
-Lm10: for A be closed-interval Subset of REAL,
-D2 be Element of divs A st lower_bound A < D2.1 holds
+Lm10: lower_bound A < D2.1 implies
 <*lower_bound A*>^D2 is non empty increasing FinSequence of REAL
 proof
-  let A be closed-interval Subset of REAL, D2 be Element of divs A;
   assume
 A1: lower_bound A < D2.1;
   set MD2=<*lower_bound A*>^D2;
@@ -2334,7 +2287,7 @@ A14:    1 <= k & k <= len D2 by FINSEQ_1:3;
 A15:    D2.1 <= MD2.m by A13,A14,GOBOARD2:18;
         MD2.n = <*lower_bound A*>.n by A11,FINSEQ_1:def 7
           .= lower_bound A by A12,FINSEQ_1:def 8;
-        hence MD2.n < MD2.m by A1,A15,XXREAL_0:2;
+        hence thesis by A1,A15,XXREAL_0:2;
       end;
       suppose ex i be Nat st i in dom D2 & n = len <*lower_bound A*> + i;
         then consider i such that
@@ -2352,14 +2305,12 @@ A19:    D2.i=MD2.n by A16,FINSEQ_1:def 7;
   hence thesis by SEQM_3:def 1;
 end;
 
-Lm11: for A be closed-interval Subset of REAL, f being PartFunc of A,REAL,
-D1, MD1 being Element of divs A st MD1 = <*lower_bound A*>^D1 holds
+Lm11: for MD1 be Division of A holds MD1 = <*lower_bound A*>^D1 implies
 (for i st i in Seg len D1 holds divset(MD1,i+1)=divset(D1,i)) &
 upper_volume(f,D1)=upper_volume(f,MD1)/^1 &
 lower_volume(f,D1)=lower_volume(f,MD1)/^1
 proof
-  let A be closed-interval Subset of REAL, f being PartFunc of A,REAL,
-  D1, MD1 being Element of divs A;
+  let MD1 be Division of A;
   assume
 A1: MD1 = <*lower_bound A*>^D1;
   then
@@ -2514,10 +2465,10 @@ RFINSEQ:def 2
   hence thesis by A25,FINSEQ_1:18;
 end;
 
-Lm12: for A be closed-interval Subset of REAL, D2, MD2 being Element of divs A
+Lm12: for MD2 being Division of A
 st MD2 = <*lower_bound A*>^D2 holds vol(divset(MD2,1))=0
 proof
-  let A be closed-interval Subset of REAL, D2,MD2 be Element of divs A;
+  let MD2 be Division of A;
   assume
 A1: MD2 = <*lower_bound A*>^D2;
   rng MD2 <> {};
@@ -2530,12 +2481,10 @@ A1: MD2 = <*lower_bound A*>^D2;
   hence thesis;
 end;
 
-Lm13: for A be closed-interval Subset of REAL, f be Function of A,REAL,
-D1,MD1 be Element of divs A st MD1 = <*lower_bound A*>^D1
-holds delta(MD1)=delta(D1)
+Lm13: for MD1 be Division of A holds
+      MD1 = <*lower_bound A*>^D1 implies delta(MD1)=delta(D1)
 proof
-  let A be closed-interval Subset of REAL, f be Function of A,REAL,
-  D1,MD1 be Element of divs A;
+  let MD1 be Division of A;
   assume
 A1: MD1 = <*lower_bound A*>^D1;
   then
@@ -2620,15 +2569,11 @@ A17:  delta(MD1)=upper_volume(chi(A,A),D1).k by B16,INTEGRA1:def 7;
 end;
 
 theorem Th12:
-  for A be closed-interval Subset of REAL, f be Function of A,REAL,
-  D1,D2 be Element of divs A st x in divset(D1,len D1) & vol(A)<>0
+  x in divset(D1,len D1) & vol(A)<>0
   & D1<=D2 & rng D2 = rng D1 \/ {x} & f|A is bounded & x > lower_bound A
-  holds Sum lower_volume(f,D2)-Sum
+  implies Sum lower_volume(f,D2)-Sum
   lower_volume(f,D1)<=(upper_bound rng f-lower_bound rng f)*delta(D1)
 proof
-  let A be closed-interval Subset of REAL;
-  let f be Function of A,REAL;
-  let D1,D2 be Element of divs A;
   assume that
 A1: x in divset(D1,len D1) and
 A2: vol(A)<>0 and
@@ -2653,7 +2598,7 @@ A10:  D1.1=upper_bound A by INTEGRA1:def 2;
 A11:  lower_bound A < D1.1 by XREAL_1:49;
       reconsider MD1 = <*lower_bound A*>^D1
       as non empty increasing FinSequence of REAL by A2,A9,Lm9;
-      MD1 is DivisionPoint of A
+      MD1 is Division of A
       proof
         y in rng MD1 implies y in A
         proof
@@ -2689,7 +2634,7 @@ A17:      len MD1 = len <*lower_bound A*> + len D1 by FINSEQ_1:35;
         end;
         hence thesis by A16,INTEGRA1:def 2;
       end;
-      then reconsider MD1 as Element of divs A by INTEGRA1:def 4;
+      then reconsider MD1 as Division of A by INTEGRA1:def 3;
       rng D2 <> {};
       then
 A18:  1 in dom D2 by FINSEQ_3:34;
@@ -2714,7 +2659,7 @@ A23:      1 <= k & k <= len D1 by A22,FINSEQ_3:27;
       end;
       set MD2=<*lower_bound A*>^D2;
       reconsider MD2 as non empty increasing FinSequence of REAL by A21,Lm10;
-      MD2 is DivisionPoint of A
+      MD2 is Division of A
       proof
         y in rng MD2 implies y in A
         proof
@@ -2750,7 +2695,7 @@ A29:      len MD2 = len <*lower_bound A*> + len D2 by FINSEQ_1:35;
         end;
         hence thesis by A28,INTEGRA1:def 2;
       end;
-      then reconsider MD2 as Element of divs A by INTEGRA1:def 4;
+      then reconsider MD2 as Division of A by INTEGRA1:def 2;
 A30:  len MD1=len <*lower_bound A*> + len D1 by FINSEQ_1:35
         .= 1+len D1 by FINSEQ_1:56;
 A31:  1+len D1 >= 1+1 by A7,XREAL_1:8;
@@ -2836,8 +2781,7 @@ vol(divset( MD2,1))
       1 in Seg len lower_volume(f,MD2) by A49,INTEGRA1:def 8;
       then 1 in dom lower_volume(f,MD2) by FINSEQ_1:def 3;
       then lower_volume(f,MD2)/.1 = 0 by A47,A50,PARTFUN1:def 8;
-      hence Sum lower_volume(f,D2)-Sum lower_volume(f,D1)<=
-      (upper_bound rng f-lower_bound rng f)*delta(D1) by A41,A43,A46,A48,Lm13;
+      hence thesis by A41,A43,A46,A48,Lm13;
     end;
     suppose len D1 >= 2;
       hence thesis by A1,A3,A4,A5,Th9;
@@ -2847,15 +2791,11 @@ vol(divset( MD2,1))
 end;
 
 theorem Th13:
-  for A be closed-interval Subset of REAL, f be Function of A,REAL,
-  D1,D2 be Element of divs A st x in divset(D1,len D1) & vol(A)<>0
+  x in divset(D1,len D1) & vol(A)<>0
   & D1<=D2 & rng D2 = rng D1 \/ {x} & f|A is bounded & x > lower_bound A
-  holds Sum upper_volume(f,D1)-Sum
+  implies Sum upper_volume(f,D1)-Sum
   upper_volume(f,D2)<=(upper_bound rng f-lower_bound rng f)*delta(D1)
 proof
-  let A be closed-interval Subset of REAL;
-  let f be Function of A,REAL;
-  let D1,D2 be Element of divs A;
   assume that
 A1: x in divset(D1,len D1) and
 A2: vol(A)<>0 and
@@ -2881,7 +2821,7 @@ A11:  lower_bound A < D1.1 by XREAL_1:49;
       reconsider MD1 = <*lower_bound A*>^D1 as
        non empty increasing FinSequence of REAL
       by A2,A9,Lm9;
-      MD1 is DivisionPoint of A
+      MD1 is Division of A
       proof
         y in rng MD1 implies y in A
         proof
@@ -2917,7 +2857,7 @@ A17:      len MD1 = len <*lower_bound A*> + len D1 by FINSEQ_1:35;
         end;
         hence thesis by A16,INTEGRA1:def 2;
       end;
-      then reconsider MD1 as Element of divs A by INTEGRA1:def 4;
+      then reconsider MD1 as Division of A by INTEGRA1:def 2;
       rng D2 <> {};
       then
 A18:  1 in dom D2 by FINSEQ_3:34;
@@ -2942,7 +2882,7 @@ A23:      1 <= k & k <= len D1 by A22,FINSEQ_3:27;
       end;
       set MD2=<*lower_bound A*>^D2;
       reconsider MD2 as non empty increasing FinSequence of REAL by A21,Lm10;
-      MD2 is DivisionPoint of A
+      MD2 is Division of A
       proof
         y in rng MD2 implies y in A
         proof
@@ -2978,7 +2918,7 @@ A29:      len MD2 = len <*lower_bound A*> + len D2 by FINSEQ_1:35;
         end;
         hence thesis by A28,INTEGRA1:def 2;
       end;
-      then reconsider MD2 as Element of divs A by INTEGRA1:def 4;
+      then reconsider MD2 as Division of A by INTEGRA1:def 2;
 A30:  len MD1=len <*lower_bound A*> + len D1 by FINSEQ_1:35
         .= 1+len D1 by FINSEQ_1:56;
 A31:  1+len D1 >= 1+1 by A7,XREAL_1:8;
@@ -3067,8 +3007,7 @@ vol(divset( MD2,1))
       1 in Seg len upper_volume(f,MD2) by A49,INTEGRA1:def 7;
       then 1 in dom upper_volume(f,MD2) by FINSEQ_1:def 3;
       then upper_volume(f,MD2)/.1 = 0 by A47,A50,PARTFUN1:def 8;
-      hence Sum upper_volume(f,D1)-Sum upper_volume(f,D2)<=
-      (upper_bound rng f-lower_bound rng f)*delta(D1) by A41,A43,A46,A48,Lm13;
+      hence thesis by A41,A43,A46,A48,Lm13;
     end;
     suppose len D1 >= 2;
       hence thesis by A1,A3,A4,A5,Th10;
@@ -3078,19 +3017,13 @@ vol(divset( MD2,1))
 end;
 
 theorem Th14:
-  for A be closed-interval Subset of REAL, D1,D2 be Element of divs A,
-
-r be Real, i,j be Element of NAT st i in dom D1 & j in dom D1 & i<=j & D1 <= D2
+  i in dom D1 & j in dom D1 & i<=j & D1 <= D2
   & r < mid(D2,indx(D2,D1,i),indx(D2,D1,j)).1
-  holds ex B be closed-interval Subset of REAL, MD1,MD2 be Element of divs B
+  implies ex B be closed-interval Subset of REAL, MD1,MD2 be Division of B
   st r=lower_bound B & upper_bound B=MD2.(len MD2) &
   upper_bound B=MD1.(len MD1) & MD1 <= MD2
   & MD1=mid(D1,i,j) & MD2=mid(D2,indx(D2,D1,i),indx(D2,D1,j))
 proof
-  let A be closed-interval Subset of REAL;
-  let D1,D2 be Element of divs A;
-  let r be Real;
-  let i,j;
   assume
 A1: i in dom D1;
   assume
@@ -3110,9 +3043,9 @@ A7: indx(D2,D1,j) in dom D2 & D2.indx(D2,D1,j)=D1.j by A2,A4,INTEGRA1:def 21;
 A8: indx(D2,D1,i) <= indx(D2,D1,j) by A6,A7,SEQM_3:def 1;
   then consider B being closed-interval Subset of REAL such that
 A9: r = lower_bound B & upper_bound B=MD2.(len MD2) &
-len MD2=indx(D2,D1,j)-indx(D2,D1,i)+1
-  &MD2 is DivisionPoint of B by A5,A6,A7,Th11;
-  reconsider MD2 as Element of divs B by A9,INTEGRA1:def 3;
+    len MD2=indx(D2,D1,j)-indx(D2,D1,i)+1
+    & MD2 is Division of B by A5,A6,A7,Th11;
+  reconsider MD2 as Division of B by A9,INTEGRA1:def 3;
   indx(D2,D1,j)-indx(D2,D1,i) >= 0 by A8,XREAL_1:50;
   then
 A10: indx(D2,D1,j)-indx(D2,D1,i)+1 >= 0+1 by XREAL_1:8;
@@ -3129,7 +3062,7 @@ A15: MD1.1 = D1.(1+i-1) by A3,A13,JORDAN3:31
     .= D1.i;
   then consider C being closed-interval Subset of REAL such that
 A16: r = lower_bound C & upper_bound C=MD1.(len MD1) & len MD1=j-i+1
-  &MD1 is DivisionPoint of C by A1,A2,A3,A5,A12,Th11;
+  &MD1 is Division of C by A1,A2,A3,A5,A12,Th11;
 A17: MD1.(len MD1)=D1.(j-i+1-1+i) by A3,A13,A14,A16,JORDAN3:31
     .=D1.j;
 A18: MD2.(len MD2)=D2.(indx(D2,D1,j)-indx(D2,D1,i)+1-1+indx(D2,D1,i))
@@ -3137,7 +3070,7 @@ A18: MD2.(len MD2)=D2.(indx(D2,D1,j)-indx(D2,D1,i)+1-1+indx(D2,D1,i))
     .= D1.j by A2,A4,INTEGRA1:def 21;
 A19: B=[.lower_bound B,upper_bound B.] by INTEGRA1:5
     .=C by A9,A16,A17,A18,INTEGRA1:5;
-  then reconsider MD1 as Element of divs B by A16,INTEGRA1:def 3;
+  then reconsider MD1 as Division of B by A16,INTEGRA1:def 3;
 A20: rng MD1 c= rng MD2
   proof
 A21: rng MD1 c= rng D1 by JORDAN3:28;
@@ -3184,11 +3117,8 @@ A31: MD2.k3 = D2.(k3+indx(D2,D1,i)-1) by A8,A11,A29,A30,JORDAN3:31;
 end;
 
 theorem Th15:
-  for A be closed-interval Subset of REAL, D be Element of divs A
-  st x in rng D holds D.1 <= x & x <= D.(len D)
+  x in rng D implies D.1 <= x & x <= D.(len D)
 proof
-  let A be closed-interval Subset of REAL;
-  let D be Element of divs A;
   assume x in rng D;
   then consider i such that
 A1: i in dom D & x=D.i by PARTFUN1:26;
@@ -3239,13 +3169,9 @@ A16: n in dom mid(p,i,j) by A12,A13,A14,FINSEQ_3:27;
 end;
 
 theorem Th17:
-  for A be closed-interval Subset of REAL, f be Function of A,REAL,
-  D be Element of divs A st f|A is bounded & i in dom D
-  holds lower_bound rng(f|divset(D,i)) <= upper_bound rng f
+  f|A is bounded & i in dom D
+  implies lower_bound rng(f|divset(D,i)) <= upper_bound rng f
 proof
-  let A be closed-interval Subset of REAL;
-  let f be Function of A,REAL;
-  let D be Element of divs A;
   assume
 A1: f|A is bounded;
   assume i in dom D;
@@ -3254,13 +3180,9 @@ A1: f|A is bounded;
 end;
 
 theorem Th18:
-  for A be closed-interval Subset of REAL, f be Function of A,REAL,
-  D be Element of divs A st f|A is bounded & i in dom D
-  holds upper_bound rng(f|divset(D,i)) >= lower_bound rng f
+  f|A is bounded & i in dom D
+  implies upper_bound rng(f|divset(D,i)) >= lower_bound rng f
 proof
-  let A be closed-interval Subset of REAL;
-  let f be Function of A,REAL;
-  let D be Element of divs A;
   assume
 A1: f|A is bounded;
   assume i in dom D;
@@ -3271,14 +3193,9 @@ end;
 begin :: Darboux's Theorem
 
 theorem
-  for A be closed-interval Subset of REAL, f be Function of A,REAL,
-  T be DivSequence of A
-  st f|A is bounded & delta(T) is convergent_to_0 & vol(A)<>0
-  holds lower_sum(f,T) is convergent & lim lower_sum(f,T) = lower_integral(f)
+  f|A is bounded & delta(T) is convergent_to_0 & vol(A)<>0
+  implies lower_sum(f,T) is convergent & lim lower_sum(f,T) = lower_integral(f)
 proof
-  let A be closed-interval Subset of REAL;
-  let f be Function of A,REAL;
-  let T be DivSequence of A;
   assume that
 A1: f|A is bounded and
 A2: delta(T) is convergent_to_0 and
@@ -3309,8 +3226,8 @@ A10:  (delta(T)).m = delta(T.m) by INTEGRA2:def 3;
 A11:  i in dom upper_volume(chi(A,A),T.m) &
       delta(T.m)=upper_volume(chi(A,A),T.m).i by PARTFUN1:26;
 A12:  i in Seg len upper_volume(chi(A,A),T.m) by A11,FINSEQ_1:def 3;
-      consider D being Element of divs A such that
-A13:  D = T.m;
+      consider D being Division of A such that
+A13:  D = T.m by INTEGRA1:def 3;
       i in Seg len D by A12,A13,INTEGRA1:def 7;
   then i in dom D by FINSEQ_1:def 3;
       then delta(T.m)=vol(divset(T.m,i)) by A11,A13,INTEGRA1:22;
@@ -3318,13 +3235,12 @@ A13:  D = T.m;
     end;
     hence thesis;
   end;
-A14: for D,D1 be Element of divs A holds ex D2 be Element of divs A st
-  D<=D2 & D1<=D2 & rng D2=rng D1 \/
+A14: for D,D1 ex D2 st D<=D2 & D1<=D2 & rng D2=rng D1 \/
   rng D & 0<=lower_sum(f,D2)-lower_sum(f,D) &
   0<=lower_sum(f,D2)-lower_sum(f,D1)
   proof
-    let D,D1 be Element of divs A;
-    consider D2 be Element of divs A such that
+    let D,D1;
+    consider D2 such that
 A15: D<=D2 & D1<=D2 & rng D2=rng D1 \/ rng D by Th3;
 A16: f|A is bounded_below by A1;
     then
@@ -3332,29 +3248,27 @@ A17: lower_sum(f,D2)-lower_sum(f,D)>=0 by A15,INTEGRA1:48,XREAL_1:50;
     lower_sum(f,D2)-lower_sum(f,D1)>=0 by A15,A16,INTEGRA1:48,XREAL_1:50;
     hence thesis by A15,A17;
   end;
-A18: for
-  D,D1 be Element of divs A st delta(D1)<min rng upper_volume(chi(A,A),D)
-  holds ex D2 be Element of divs A st D<=D2 & D1<=D2 & rng D2=rng D1 \/ rng D
+A18: for D,D1 st delta(D1)<min rng upper_volume(chi(A,A),D)
+     ex D2 st D<=D2 & D1<=D2 & rng D2=rng D1 \/ rng D
   & lower_sum(f,D2)-lower_sum(f,D1) <=
   (len D)*(upper_bound(rng f)-lower_bound(rng f))*delta(D1)
   proof
-    let D,D1 be Element of divs A;
+    let D,D1;
     assume
 A19: delta(D1)<min rng upper_volume(chi(A,A),D);
-    ex D2 be Element of divs A st D<=D2 & D1<=D2 & rng D2=rng D1 \/ rng D
-
+    ex D2 st D<=D2 & D1<=D2 & rng D2=rng D1 \/ rng D
 & lower_sum(f,D2)-lower_sum(f,D1)<=(len D)*(upper_bound(rng f)-
 lower_bound(rng f))*delta(D1)
     proof
-      consider D2 be Element of divs A such that
+      consider D2 such that
 A20:  D<=D2 & D1<=D2 & rng D2=rng D1 \/
       rng D & 0<=lower_sum(f,D2)-lower_sum(f,D)
       & 0<=lower_sum(f,D2)-lower_sum(f,D1) by A14;
       lower_sum(f,D2)-lower_sum(f,D1) <=
       (len D)*(upper_bound(rng f)-lower_bound(rng f))*delta(D1)
       proof
-        deffunc PLf(Element of divs A,Nat) = (PartSums(lower_volume(f,$1))).$2;
-        deffunc LVf(Element of divs A) = lower_volume(f,$1);
+        deffunc PLf(Division of A,Nat) = (PartSums(lower_volume(f,$1))).$2;
+        deffunc LVf(Division of A) = lower_volume(f,$1);
 A21:    for i st i in dom D holds ex j st j in dom D1 & D.i in divset(D1,j)
         & PLf(D2,indx(D2,D1,j))-PLf(D1,j)<=i*(upper_bound(rng f)-
         lower_bound(rng f))*delta(D1)
@@ -3463,9 +3377,8 @@ XXREAL_2:def 7;
           end;
           defpred P[non empty Nat] means
           $1 in dom D implies ex j st j in dom D1 & D.$1 in divset(D1,j)
-
-& PLf(D2,indx(D2,D1,j))-PLf(D1,j)<=
-$1*(upper_bound rng f-lower_bound rng f)*delta(D1);
+          & PLf(D2,indx(D2,D1,j))-PLf(D1,j)<=
+          $1*(upper_bound rng f-lower_bound rng f)*delta(D1);
 A42:      P[1]
           proof
             len D in Seg len D by FINSEQ_1:5;
@@ -4005,10 +3918,7 @@ A156:               delta(D1) >= 0 by Th8;
 
 then (upper_bound rng f - lower_bound rng f)*delta(D1) >= 0*delta(D1) by A156;
 
-hence Sum mid(lower_volume(f,D2),(indx(D2,D1,j1)+1),indx(D2,D1,j))
-
--Sum mid(lower_volume(f,D1),j,j) <=
- (upper_bound rng f-lower_bound rng f)*delta(D1) by A155;
+hence thesis by A155;
                   end;
                   suppose
 A157:               len
@@ -4751,9 +4661,7 @@ delta(D1)=max rng upper_volume(chi(A,A),D1) by INTEGRA1:def 19;
                     vol(divset(D1,n1+1))
                     <=(upper_bound rng f-lower_bound rng f)*delta(D1)
                     by A287,XREAL_1:66;
-                    hence Sum mid(LVf(D2),indx(D2,D1,n1)+1,indx(D2,D1,j))
-                    -Sum mid(LVf(D1),n1+1,j) <= (upper_bound rng f-
-                    lower_bound rng f)*delta(D1)
+                    hence thesis
                     by A286,XXREAL_0:2;
                   end;
                   suppose
@@ -4762,13 +4670,12 @@ A292:               n1 < n1+1 by NAT_1:13;
                     then
 A293:               D1.n1 < D1.(n1+1) by A202,A222,SEQM_3:def 1;
                     then consider B being closed-interval Subset of REAL,
-                    MD1,MD2 being Element of divs B such that
-A294:               D1
-
-.n1=lower_bound B & upper_bound B=MD2.(len MD2) & upper_bound B=MD1.(len MD1)
- & MD1 <= MD2
-
-& MD1=mid(D1,n1+1,j) & MD2=mid(D2,indx(D2,D1,n1+1),indx(D2,D1,j))
+                    MD1,MD2 being Division of B such that
+A294:               D1.n1=lower_bound B & upper_bound B=MD2.(len MD2) &
+                    upper_bound B=MD1.(len MD1)
+                    & MD1 <= MD2
+                    & MD1=mid(D1,n1+1,j)
+                    & MD2=mid(D2,indx(D2,D1,n1+1),indx(D2,D1,j))
                     by A20,A198,A217,A222,A229,Th14;
 A295:               len MD1 = j-'(n1+1)+1 by A217,A220,A221,A294,JORDAN3:27;
                     j-'(n1+1) = j-(n1+1) by A217,XREAL_1:235;
@@ -4815,10 +4722,10 @@ A306:                 for x being set st x in A /\ dom f holds a<=f.x
                         then
 A307:                   x in dom g by XBOOLE_0:def 4;
                         then
-A308:                   x in dom f /\ B by FUNCT_1:68;
+A308:                   x in dom f /\ B by RELAT_1:90;
                         dom f /\ B c= dom f /\ A by A299,XBOOLE_1:26;
                         then a <= f.x by A306,A308;
-                        hence thesis by A307,FUNCT_1:68;
+                        hence thesis by A307,FUNCT_1:70;
                       end;
                       then
 A309:                 g|B is bounded_below by RFUNCT_1:88;
@@ -4832,10 +4739,10 @@ A310:                 for x being set st x in A /\ dom f holds f.x<=a
                         then
 A311:                   x in dom g by XBOOLE_0:def 4;
                         then
-A312:                   x in dom f /\ B by FUNCT_1:68;
+A312:                   x in dom f /\ B by RELAT_1:90;
                         dom f /\ B c= dom f /\ A by A299,XBOOLE_1:26;
                         then a >= f.x by A310,A312;
-                        hence thesis by A311,FUNCT_1:68;
+                        hence thesis by A311,FUNCT_1:70;
                       end;
                       then g|B is bounded_above by RFUNCT_1:87;
                       hence thesis by A309;
@@ -5535,9 +5442,7 @@ by A217,A220,A221,A294,A435,A439,A440,A456,A457,A458,JORDAN3:31;
                       end;
                       hence thesis;
                     end;
-                    hence Sum mid(LVf(D2),indx(D2,D1,n1)+1,indx(D2,D1,j)) -Sum
-
-mid(LVf(D1),n1+1,j) <= (upper_bound rng f-lower_bound rng f)*delta(D1)
+                    hence thesis
 by A373,A390,A410,XXREAL_0:2;
                   end;
                 end;
@@ -5667,7 +5572,7 @@ A480: rng lower_sum_set(f) is bounded_above by A1,INTEGRA2:36;
     then consider y be real number such that
 A481: y in rng lower_sum_set(f) & lower_integral(f)-e/2<y
     by A478,A479,A480,SEQ_4:def 4;
-    consider D being Element of divs A such that
+    consider D being Division of A such that
 A482: D in dom lower_sum_set(f) & y=(lower_sum_set(f)).D & D.1>lower_bound A
     by A3,A481,Lm8;
 A483: y=lower_sum(f,D) by A482,INTEGRA1:def 12;
@@ -5724,8 +5629,8 @@ A495: for m st n<=m holds abs((lower_sum(f,T)).m-lower_integral(f))<e
 A496: n<=m;
       then
 A497: 0 < (delta(T)).m & (delta(T)).m < min(v1.k,e/(2*p*(H-h+1))) by A494;
-      reconsider D1 = T.m as Element of divs A;
-      consider D2 being Element of divs A such that
+      reconsider D1 = T.m as Division of A;
+      consider D2 being Division of A such that
 A498: D <= D2 & D1 <= D2 & rng D2 = rng D1 \/ rng D &
       0 <= lower_sum(f,D2)-lower_sum(f,D) &
       0 <= lower_sum(f,D2)-lower_sum(f,D1) by A14;
@@ -5841,7 +5746,7 @@ A530:   v1.k = upper_volume(chi(A,A),D).k2 by B529,INTEGRA1:22;
         then v1.k >= min rng upper_volume(chi(A,A),D) by XXREAL_2:def 7;
         hence thesis by A515,A527,XXREAL_0:1;
       end;
-      then consider D3 being Element of divs A such that
+      then consider D3 being Division of A such that
 A531: D<=D3 & D1<=D3 & rng D3=rng D1 \/
       rng D & lower_sum(f,D3)-lower_sum(f,D1)
       <=(len D)*(upper_bound rng f-lower_bound rng f)*delta(D1) by A18,A502;
@@ -5876,7 +5781,7 @@ A536: s-sD1 < sD+e/2-sD1 by XREAL_1:22;
       then s-sD1 < e by A536,XXREAL_0:2;
       then
 A537: lower_integral(f)-(lower_sum(f,T)).m < e by INTEGRA2:def 5;
-      T.m in divs A;
+      T.m in divs A by INTEGRA1:def 3;
       then
 A538: T.m in dom lower_sum_set(f) by INTEGRA1:def 12;
       (lower_sum(f,T)).m = lower_sum(f,T.m) by INTEGRA2:def 5;
@@ -5887,8 +5792,8 @@ INTEGRA1:def 12;
       by A480,SEQ_4:def 4;
       then lower_integral(f)>=(lower_sum(f,T)).m by INTEGRA1:def 16;
       then lower_integral(f)-(lower_sum(f,T)).m >= 0 by XREAL_1:50;
-      then abs(lower_integral(f)-(lower_sum(f,T)).m) < e by A537,ABSVALUE:def 1
-;
+      then abs(lower_integral(f)-(lower_sum(f,T)).m) < e
+      by A537,ABSVALUE:def 1;
       then abs(-(lower_integral(f)-(lower_sum(f,T)).m)) < e by COMPLEX1:138;
       hence thesis;
     end;
@@ -5900,14 +5805,9 @@ INTEGRA1:def 12;
 end;
 
 theorem
-  for A be closed-interval Subset of REAL, f be Function of A,REAL,
-  T be DivSequence of A
-  st f|A is bounded & delta(T) is convergent_to_0 & vol(A)<>0
-  holds upper_sum(f,T) is convergent & lim upper_sum(f,T) = upper_integral(f)
+  f|A is bounded & delta(T) is convergent_to_0 & vol(A)<>0
+  implies upper_sum(f,T) is convergent & lim upper_sum(f,T) = upper_integral(f)
 proof
-  let A be closed-interval Subset of REAL;
-  let f be Function of A,REAL;
-  let T be DivSequence of A;
   assume
 A1: f|A is bounded;
   assume
@@ -5939,19 +5839,18 @@ A10: (delta(T)).m = delta(T.m) by INTEGRA2:def 3;
 A11: i in dom upper_volume(chi(A,A),T.m) &
     delta(T.m)=upper_volume(chi(A,A),T.m).i by PARTFUN1:26;
 A12: i in Seg len upper_volume(chi(A,A),T.m) by A11,FINSEQ_1:def 3;
-    reconsider D = T.m as Element of divs A;
+    reconsider D = T.m as Division of A;
     i in Seg len D by A12,INTEGRA1:def 7;
   then i in dom D by FINSEQ_1:def 3;
     then delta(T.m)=vol(divset(T.m,i)) by A11,INTEGRA1:22;
     hence thesis by A8,A9,A10,INTEGRA1:11,XREAL_1:8;
   end;
-A13: for D,D1 be Element of divs A holds ex D2 be Element of divs A st
-  D<=D2 & D1<=D2 & rng D2=rng D1 \/
+A13: for D,D1 ex D2 st D<=D2 & D1<=D2 & rng D2=rng D1 \/
   rng D & 0<=upper_sum(f,D)-upper_sum(f,D2) &
   0<=upper_sum(f,D1)-upper_sum(f,D2)
   proof
-    let D,D1 be Element of divs A;
-    consider D2 be Element of divs A such that
+    let D,D1;
+    consider D2 such that
 A14: D<=D2 & D1<=D2 & rng D2=rng D1 \/ rng D by Th3;
 A15: f|A is bounded_above by A1;
     then
@@ -5959,29 +5858,28 @@ A16: upper_sum(f,D)-upper_sum(f,D2)>=0 by A14,INTEGRA1:47,XREAL_1:50;
     upper_sum(f,D1)-upper_sum(f,D2)>=0 by A14,A15,INTEGRA1:47,XREAL_1:50;
     hence thesis by A14,A16;
   end;
-A17: for
-  D,D1 be Element of divs A st delta(D1)<min rng upper_volume(chi(A,A),D)
-  holds ex D2 be Element of divs A st D<=D2 & D1<=D2 & rng D2=rng D1 \/ rng D
+A17: for D,D1 st delta(D1)<min rng upper_volume(chi(A,A),D)
+  holds ex D2 st D<=D2 & D1<=D2 & rng D2=rng D1 \/ rng D
   & upper_sum(f,D1)-upper_sum(f,D2) <=
   (len D)*(upper_bound(rng f)-lower_bound(rng f))*delta(D1)
   proof
-    let D,D1 be Element of divs A;
+    let D,D1;
     assume
 A18: delta(D1)<min rng upper_volume(chi(A,A),D);
-    ex D2 be Element of divs A st D<=D2 & D1<=D2 & rng D2=rng D1 \/ rng D
+    ex D2 st D<=D2 & D1<=D2 & rng D2=rng D1 \/ rng D
 
 & upper_sum(f,D1)-upper_sum(f,D2)<=(len D)*(upper_bound(rng f)-
 lower_bound(rng f))*delta(D1)
     proof
-      consider D2 be Element of divs A such that
+      consider D2 be Division of A such that
 A19:  D<=D2 & D1<=D2 & rng D2=rng D1 \/
       rng D & 0<=upper_sum(f,D)-upper_sum(f,D2)
       & 0<=upper_sum(f,D1)-upper_sum(f,D2) by A13;
       upper_sum(f,D1)-upper_sum(f,D2) <=
       (len D)*(upper_bound(rng f)-lower_bound(rng f))*delta(D1)
       proof
-        deffunc PUf(Element of divs A,Nat) = (PartSums(upper_volume(f,$1))).$2;
-        deffunc UVf(Element of divs A) = upper_volume(f,$1);
+        deffunc PUf(Division of A,Nat) = (PartSums(upper_volume(f,$1))).$2;
+        deffunc UVf(Division of A) = upper_volume(f,$1);
 A20:    for i st i in dom D holds ex j st j in dom D1 & D.i in divset(D1,j)
         & PUf(D1,j)-PUf(D2,indx(D2,D1,j))<=i*(upper_bound(rng f)-
         lower_bound(rng f))*delta(D1)
@@ -6633,10 +6531,7 @@ A158:               delta(D1) >= 0 by Th8;
                     by A1,Lm4,XREAL_1:50;
 
 then (upper_bound rng f - lower_bound rng f)*delta(D1) >= 0*delta(D1) by A158;
-                    hence Sum mid(upper_volume(f,D1),j,j)
-
--Sum mid(upper_volume(f,D2),(indx(D2,D1,j1)+1),indx(D2,D1,j))
-                    <= (upper_bound rng f-lower_bound rng f)*delta(D1) by A157;
+                    hence thesis by A157;
                   end;
                   suppose
 A159:               len
@@ -7242,8 +7137,7 @@ by A1,A226,A265,A267,A268,Th18,XREAL_1:66;
                         mid(UVf(D2),indx(D2,D1,n1)+1,indx(D2,D1,j))
 
 =<*UVf(D2).(indx(D2,D1,n1)+1)*> by A246,A265,A266,FINSEQ_1:57;
-                        hence Sum mid(UVf(D2),indx(D2,D1,n1)+1,indx(D2,D1,j))
-                        >=(lower_bound rng f)*vol(divset(D1,n1+1))
+                        hence thesis
                         by A271,FINSOP_1:12;
                       end;
                       suppose
@@ -7340,8 +7234,7 @@ lower_bound divset(D1,n1+1)=D1.(n1+1-1) & upper_bound divset(D1,n1+1)=D1.(n1+1)
 then vol(divset(D1,n1+1))=D1.(n1+1)-D1.n1 by INTEGRA1:def 6;
                           hence thesis by A233,A287,A288;
                         end;
-                        hence Sum mid(UVf(D2),indx(D2,D1,n1)+1,indx(D2,D1,j))
-                        >=(lower_bound rng f)*vol(divset(D1,n1+1)) by A284;
+                        hence thesis by A284;
                       end;
                     end;
                     hence thesis;
@@ -7385,7 +7278,7 @@ A295:             n1 < n1+1 by NAT_1:13;
                   then
 A296:             D1.n1 < D1.(n1+1) by A204,A224,SEQM_3:def 1;
                   then consider B being closed-interval Subset of REAL,
-                  MD1,MD2 being Element of divs B such that
+                  MD1,MD2 being Division of B such that
 A297:             D1
 
 .n1=lower_bound B & upper_bound B=MD2.(len MD2) & upper_bound B=MD1.(len MD1)
@@ -7433,10 +7326,10 @@ A310:               for x being set st x in A /\ dom f holds a<=f.x
                       then
 A311:                 x in dom g by XBOOLE_0:def 4;
                       then
-A312:                 x in dom f /\ B by FUNCT_1:68;
+A312:                 x in dom f /\ B by RELAT_1:90;
                       dom f /\ B c= dom f /\ A by A303,XBOOLE_1:26;
                       then a <= f.x by A310,A312;
-                      hence thesis by A311,FUNCT_1:68;
+                      hence thesis by A311,FUNCT_1:70;
                     end;
                     then
 A313:               g|B is bounded_below by RFUNCT_1:88;
@@ -7450,10 +7343,10 @@ A314:               for x being set st x in A /\ dom f holds f.x<=a
                       then
 A315:                 x in dom g by XBOOLE_0:def 4;
                       then
-A316:                 x in dom f /\ B by FUNCT_1:68;
+A316:                 x in dom f /\ B by RELAT_1:90;
                       dom f /\ B c= dom f /\ A by A303,XBOOLE_1:26;
                       then a >= f.x by A314,A316;
-                      hence thesis by A315,FUNCT_1:68;
+                      hence thesis by A315,FUNCT_1:70;
                     end;
                     then g|B is bounded_above by RFUNCT_1:87;
                     hence thesis by A313;
@@ -7999,10 +7892,7 @@ by A227,A229,A297,A401,A405,A420,A424,A438,JORDAN3:31
 lower_bound divset(D2,k+k2)=D2.(1+k2-1) &
 upper_bound divset(D2,k+k2)=D2.(1+ k2 )
                             by A435,A437,A438,INTEGRA1:def 5;
-                            hence lower_bound divset(MD2,k)=
-                            lower_bound divset(D2,k+k2)
-                            & upper_bound divset(MD2,k)=
-                            upper_bound divset(D2,k+k2)
+                            hence thesis
 
 by A19,A204,A224,A297,A405,A432,A439,A440,INTEGRA1:def 21;
                           end;
@@ -8024,10 +7914,7 @@ then lower_bound divset(MD2,k)=D2.(k-1+(indx(D2,D1,n1)+1)-1)
                             D2.(k+(indx(D2,D1,n1)+1)-1)
 
 by A227,A229,A297,A401,A405,A420,A424,A425,A442,A443,A444,JORDAN3:31;
-                            hence lower_bound divset(MD2,k)=
-                            lower_bound divset(D2,k+k2)
-
-& upper_bound divset(MD2,k)=upper_bound divset(D2,k+k2)
+                            hence thesis
 by A432,A435,A437,INTEGRA1:def 5;
                           end;
                         end;
@@ -8272,11 +8159,12 @@ A492: rng upper_sum_set(f) is bounded_below by A1,INTEGRA2:35;
     then consider y be real number such that
 A493: y in rng upper_sum_set(f) & upper_integral(f)+e/2>y
     by A490,A491,A492,SEQ_4:def 5;
-    ex D being Element of divs A st D in dom upper_sum_set(f) &
+    ex D being Division of A st D in dom upper_sum_set(f) &
     y=(upper_sum_set(f)).D & D.1 > lower_bound A
     proof
       consider D3 being Element of divs A such that
 A494: D3 in dom upper_sum_set(f) & y=(upper_sum_set(f)).D3 by A493,PARTFUN1:26;
+      reconsider D3 as Division of A by INTEGRA1:def 3;
 A495: len D3 in Seg len D3 by FINSEQ_1:5;
       then 1 <= len D3 by FINSEQ_1:3;
       then
@@ -8291,12 +8179,11 @@ A498:   D3.1 <> lower_bound A;
         D3.1 in A by A497,INTEGRA1:8;
         then lower_bound A <= D3.1 by INTEGRA2:1;
         then D3.1 > lower_bound A by A498,XXREAL_0:1;
-        hence ex D being Element of divs A st D in dom upper_sum_set(f) &
-        y=(upper_sum_set(f)).D & D.1 > lower_bound A by A494;
+        hence thesis by A494;
       end;
       suppose
 A499:   D3.1 = lower_bound A;
-        ex D being Element of divs A st D in dom upper_sum_set(f) &
+        ex D being Division of A st D in dom upper_sum_set(f) &
         y=(upper_sum_set(f)).D & D.1 > lower_bound A
         proof
 A500:     D3.(len D3) = upper_bound A by INTEGRA1:def 2;
@@ -8322,9 +8209,8 @@ A507:     len D+1=len D3 by A504;
 A508:     len D in Seg len D by FINSEQ_1:5;
           len D in dom D by FINSEQ_5:6;
           then D.(len D)=upper_bound A by A500,A503,A507,RFINSEQ:def 2;
-          then D is DivisionPoint of A by A506,INTEGRA1:def 2;
-          then reconsider D as Element of divs A by INTEGRA1:def 4;
-          D in divs A;
+          then reconsider D as Division of A by A506,INTEGRA1:def 2;
+          D in divs A by INTEGRA1:def 3;
           then
 A509:     D in dom upper_sum_set(f) by INTEGRA1:def 11;
 A510:     y=(upper_sum_set(f)).D
@@ -8415,7 +8301,7 @@ upper_bound divset (D,i)=D.i
                     by A532,INTEGRA1:def 5;
 
 divset(D3,i+1)=[.lower_bound A, D.i.] by A499,A531,A533,A534,INTEGRA1:5;
-                    hence divset(D3,i+1)=divset(D,i) by A535,INTEGRA1:5;
+                    hence thesis by A535,INTEGRA1:5;
                   end;
                   suppose
 A536:               i<>1;
@@ -8456,7 +8342,7 @@ A538:     D.1=D3.(1+1) by A503,RFINSEQ:def 2
         hence thesis;
       end;
     end;
-    then consider D being Element of divs A such that
+    then consider D being Division of A such that
 A539: D in dom upper_sum_set(f) & y=(upper_sum_set(f)).D & D.1>lower_bound A;
 A540: y=upper_sum(f,D) by A539,INTEGRA1:def 11;
     set p=len D, H=upper_bound rng f, h=lower_bound rng f;
@@ -8510,8 +8396,8 @@ A552: for m st n<=m holds abs((upper_sum(f,T)).m-upper_integral(f))<e
 A553: n<=m;
       then
 A554: 0 < (delta(T)).m & (delta(T)).m < min(v1.k,e/(2*p*(H-h+1))) by A551;
-      reconsider D1 = T.m as Element of divs A;
-      consider D2 being Element of divs A such that
+      reconsider D1 = T.m as Division of A;
+      consider D2 being Division of A such that
 A555: D <= D2 & D1 <= D2 & rng D2 = rng D1 \/ rng D &
       0 <= upper_sum(f,D)-upper_sum(f,D2) &
       0 <= upper_sum(f,D1)-upper_sum(f,D2) by A13;
@@ -8628,7 +8514,7 @@ A586:     v1.k = upper_volume(chi(A,A),D).k2 by B585,INTEGRA1:22;
         then v1.k >= min rng upper_volume(chi(A,A),D) by XXREAL_2:def 7;
         hence thesis by A571,A583,XXREAL_0:1;
       end;
-      then consider D3 being Element of divs A such that
+      then consider D3 being Division of A such that
 A587: D<=D3 & D1<=D3 & rng D3=rng D1 \/
       rng D & upper_sum(f,D1)-upper_sum(f,D3)
       <=(len D)*(upper_bound rng f-lower_bound rng f)*delta(D1) by A17,A558;
@@ -8662,7 +8548,7 @@ A592: sD1-s < sD1+e/2-sD by XREAL_1:22;
       then sD1-s < e by A592,XXREAL_0:2;
       then
 A593: (upper_sum(f,T)).m-upper_integral(f) < e by INTEGRA2:def 4;
-      T.m in divs A;
+      T.m in divs A by INTEGRA1:def 3;
       then
 A594: T.m in dom upper_sum_set(f) by INTEGRA1:def 11;
       (upper_sum(f,T)).m = upper_sum(f,T.m) by INTEGRA2:def 4;

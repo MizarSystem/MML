@@ -4,8 +4,8 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="XXREAL_0"/>
 </Signature>
@@ -18,8 +18,8 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="7" value="false"/>
-<Adjective nr="14"/>
+<Adjective nr="10" value="false"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 <Not>
@@ -32,8 +32,8 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="7" value="false"/>
-<Adjective nr="14"/>
+<Adjective nr="10" value="false"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 <Not>
@@ -50,8 +50,8 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="7" value="false"/>
-<Adjective nr="14"/>
+<Adjective nr="10" value="false"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 <Not>

@@ -8,13 +8,14 @@ environ
 
  vocabularies BOOLE, REALSET1, FUNCT_1, RELAT_1, BINOP_1, RLVECT_1, QC_LANG1,
       VECTSP_1, REALSET2, FUNCT_4, CAT_1, FUNCT_7, GROUP_1, LATTICES, ORDINAL2,
-      ARYTM_1, VECTSP_2, ARYTM, ALGSTR_0;
+      ARYTM_1, VECTSP_2, ARYTM, ALGSTR_0, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
       NUMBERS, REALSET1, FUNCOP_1, FUNCT_2, BINOP_1, FUNCT_4, FUNCT_7,
       ORDINAL1, STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1;
- constructors RLVECT_1, BINOP_1, FUNCT_4, REALSET1, FUNCT_7, VECTSP_1;
+ constructors RLVECT_1, BINOP_1, FUNCT_4, REALSET1, FUNCT_7, VECTSP_1,
+      RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, REALSET1, STRUCT_0, RLVECT_1,
-      VECTSP_1, ORDINAL1, ALGSTR_0;
+      VECTSP_1, ORDINAL1, ALGSTR_0, ZFMISC_1;
  requirements SUBSET, BOOLE, NUMERALS;
 
 
@@ -66,8 +67,8 @@ definition
 
   the multF of L is DnT of 0.L,the carrier of L &
   (for B being non empty set, P being BinOp of B, e being Element of B holds
-  B = (the carrier of L)\{0.L} & e = 1.L &
-  P = (the multF of L)||((the carrier of L)\{0.L})
+  B = NonZero L & e = 1.L &
+  P = (the multF of L)||NonZero L
   implies addLoopStr(#B,P,e#) is AbGroup);
 end;
 
@@ -75,10 +76,6 @@ registration
   let A be non trivial set, od be BinOp of A, nd be Element of A,
   om be BinOp of A, nm be Element of A;
   cluster doubleLoopStr(#A,od,om,nm,nd#) -> non empty;
-end;
-
-registration
-  cluster non trivial -> non empty doubleLoopStr;
 end;
 
 registration
@@ -118,23 +115,23 @@ theorem :: REALSET2:7
 theorem :: REALSET2:8
   for F being Field-like Abelian distributive add-associative
   right_zeroed right_complementable (non degenerated doubleLoopStr),
-  a,b,c being Element of (the carrier of F)\{0.F} holds (a*b)*c = a*(b*c);
+  a,b,c being Element of NonZero F holds (a*b)*c = a*(b*c);
 
 theorem :: REALSET2:9
   for F being Field-like Abelian distributive add-associative
   right_zeroed right_complementable (non degenerated doubleLoopStr),
-  a,b being Element of (the carrier of F)\{0.F} holds a*b = b*a;
+  a,b being Element of NonZero F holds a*b = b*a;
 
 theorem :: REALSET2:10
   for F being Field-like Abelian distributive add-associative
   right_zeroed right_complementable (non degenerated doubleLoopStr),
-  a being Element of (the carrier of F)\{0.F} holds a*1.F = a & 1.F*a = a;
+  a being Element of NonZero F holds a*1.F = a & 1.F*a = a;
 
 theorem :: REALSET2:11
   for F being Field-like Abelian distributive add-associative
   right_zeroed right_complementable (non degenerated doubleLoopStr),
-  a being Element of (the carrier of F)\{0.F}
-  ex b being Element of (the carrier of F)\{0.F} st a*b = 1.F & b*a = 1.F;
+  a being Element of NonZero F
+  ex b being Element of NonZero F st a*b = 1.F & b*a = 1.F;
 
 theorem :: REALSET2:12
   for F being Field, x,y being Element of F holds
@@ -195,31 +192,31 @@ theorem :: REALSET2:25
 definition
   let F be Field;
   canceled 2;
-  func revf(F) -> UnOp of (the carrier of F)\{0.F} means
+  func revf(F) -> UnOp of NonZero F means
 :: REALSET2:def 18
 
-  for x being Element of (the carrier of F)\{0.F} holds omf(F).(x,it.x) = 1.F;
+  for x being Element of NonZero F holds omf(F).(x,it.x) = 1.F;
 end;
 
 theorem :: REALSET2:26
-  for F being Field, x,y being Element of (the carrier of F)\{0.F} holds
+  for F being Field, x,y being Element of NonZero F holds
   x*y = 1.F implies y = revf(F).x;
 
 theorem :: REALSET2:27
-  for F being Field, x being Element of (the carrier of F)\{0.F} holds
+  for F being Field, x being Element of NonZero F holds
   x =revf(F).(revf(F).x);
 
 theorem :: REALSET2:28
-  for F being Field, a,b being Element of (the carrier of F)\{0.F} holds
-  omf(F).(a,b) is Element of (the carrier of F)\{0.F} &
-  revf(F).a is Element of (the carrier of F)\{0.F};
+  for F being Field, a,b being Element of NonZero F holds
+  omf(F).(a,b) is Element of NonZero F &
+  revf(F).a is Element of NonZero F;
 
 theorem :: REALSET2:29
   for F being Field, a,b,c being Element of F holds
   a+b = a+c implies b = c;
 
 theorem :: REALSET2:30
-  for F being Field, a being Element of (the carrier of F)\{0.F},
+  for F being Field, a being Element of NonZero F,
   b,c being Element of (the carrier of F)holds a*b = a*c implies b = c;
 
 registration
@@ -227,8 +224,3 @@ registration
     right_zeroed right_complementable -> commutative associative well-unital
     almost_left_invertible (non degenerated doubleLoopStr);
 end;
-
-theorem :: REALSET2:31
-  for F being non degenerated doubleLoopStr holds
-  1.F is Element of (the carrier of F)\{0.F};
-

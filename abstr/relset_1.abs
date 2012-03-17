@@ -18,20 +18,12 @@ begin
 reserve A,B,X,X1,Y,Y1,Y2,Z,a,x,y,z for set;
 
 ::
-::   RELATION AS A SUBSET OF CARTESIAN PRODUCT OF A TWO SETS
-::   _______________________________________________________
+::   RELATION AS A SUBSET OF CARTESIAN PRODUCT OF TWO SETS
+::   _____________________________________________________
 
 definition
   let X,Y;
-  mode Relation of X,Y means
-:: RELSET_1:def 1
-
-    it c= [:X,Y:];
-end;
-
-definition
-  let X,Y;
-  redefine mode Relation of X,Y -> Subset of [:X,Y:];
+  mode Relation of X,Y is Subset of [:X,Y:];
 end;
 
 registration
@@ -39,11 +31,17 @@ registration
   cluster -> Relation-like Subset of [:X,Y:];
 end;
 
+registration
+  let X,Y;
+  cluster -> X-defined Y-valued Relation of X,Y;
+end;
+
 reserve P,R for Relation of X,Y;
 
 canceled 3;
 
 definition
+ canceled;
   let X,Y,R,Z;
   redefine pred R c= Z means
 :: RELSET_1:def 2
@@ -79,8 +77,7 @@ canceled 2;
 theorem :: RELSET_1:11
   for R being Relation st dom R c= X & rng R c= Y holds R is Relation of X,Y;
 
-theorem :: RELSET_1:12
-  dom R c= X & rng R c= Y;
+canceled;
 
 theorem :: RELSET_1:13
   dom R c= X1 implies R is Relation of X1,Y;
@@ -93,11 +90,22 @@ canceled 2;
 theorem :: RELSET_1:17
   X c= X1 & Y c= Y1 implies R is Relation of X1,Y1;
 
-definition
-  let X,Y,P,R;
-  redefine func P \/ R -> Relation of X,Y;
-  redefine func P /\ R -> Relation of X,Y;
-  redefine func P \ R -> Relation of X,Y;
+registration let X; let R,S be X-defined Relation;
+ cluster R \/ S -> X-defined;
+end;
+
+registration let X; let R be X-defined Relation, S be Relation;
+ cluster R /\ S -> X-defined;
+ cluster R \ S -> X-defined;
+end;
+
+registration let X; let R,S be X-valued Relation;
+ cluster R \/ S -> X-valued;
+end;
+
+registration let X; let R be X-valued Relation, S be Relation;
+ cluster R /\ S -> X-valued;
+ cluster R \ S -> X-valued;
 end;
 
 definition

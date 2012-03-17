@@ -14,17 +14,17 @@ environ
       FINSEQ_1, FINSEQ_3, FINSEQ_4, CLASSES1, RFINSEQ, RLVECT_1, VECTSP_1,
       VECTSP_4, VECTSP_6, VECTSP_5, VECTSP_7, MATRLIN, XXREAL_0;
  constructors FINSEQ_4, XXREAL_0, NAT_1, REALSET1, RFINSEQ, VECTSP_5, VECTSP_6,
-      VECTSP_7, CLASSES1, MATRLIN;
+      VECTSP_7, CLASSES1, MATRLIN, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FINSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, STRUCT_0, VECTSP_1,
-      VECTSP_7, MATRLIN, CARD_1;
+      VECTSP_7, MATRLIN, CARD_1, RELSET_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI;
+ definitions TARSKI, SUBSET_1, STRUCT_0;
  theorems TARSKI, ENUMSET1, SUBSET_1, NAT_1, CARD_1, CARD_2, FUNCT_1, FUNCT_2,
       FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSET_1, RFINSEQ, RLVECT_1,
-      VECTSP_1, VECTSP_4, VECTSP_5, VECTSP_6, VECTSP_7, MATRLIN, RELSET_1,
-      XBOOLE_0, XBOOLE_1, RLVECT_2, VECTSP_2, ZFMISC_1, XREAL_1, XXREAL_0,
-      STRUCT_0, PARTFUN1;
+      VECTSP_1, VECTSP_4, VECTSP_5, VECTSP_6, VECTSP_7, MATRLIN, XBOOLE_0,
+      XBOOLE_1, RLVECT_2, VECTSP_2, ZFMISC_1, XREAL_1, XXREAL_0, STRUCT_0,
+      PARTFUN1, RELAT_1;
  schemes NAT_1, FINSEQ_1, FUNCT_2, XBOOLE_0;
 
 begin
@@ -108,7 +108,7 @@ A10: l in dom F by A5,A7,A9,FUNCT_1:def 5;
     hence q.k = r.k;
   end;
   then q = r by A5,A8,FINSEQ_1:17;
-  hence Sum(p) = Sum(q) by A2,RLVECT_2:9;
+  hence thesis by A2,RLVECT_2:9;
 end;
 
 theorem Th6:
@@ -128,7 +128,7 @@ A2: P[{}]
 A3: G = {};
     assume Carrier(L) misses rng G;
     L (#) G = <*>(the carrier of V) by A3,VECTSP_6:33;
-    hence Sum(L (#) G) = 0.V by RLVECT_1:60;
+    hence thesis by RLVECT_1:60;
   end;
 A4: for p being FinSequence, x st P[p] holds P[p^<*x*>]
   proof
@@ -166,10 +166,10 @@ A9: L.x = 0.GF by VECTSP_6:20;
       .= Sum(<* L.x * x *>) by RLVECT_1:10
       .= 0.GF * x by A9,RLVECT_1:61
       .= 0.V by VECTSP_1:60;
-    hence Sum(L (#) G) = 0.V;
+    hence thesis;
   end;
   for p being FinSequence holds P[p] from FINSEQ_1:sch 3(A2, A4);
-  hence Sum(L (#) F) = 0.V by A1;
+  hence thesis by A1;
 end;
 
 theorem Th7:
@@ -487,7 +487,7 @@ A29: Sum(q) = f.(len q) and
 A30: f.0 = 0.W and
 A31: for i being Element of NAT, w being Vector of W st
   i < len q & w = q.(i + 1) holds f.(i + 1) = f.i + w by RLVECT_1:def 13;
-  dom f = NAT & rng f c= the carrier of W by FUNCT_2:def 1,RELSET_1:12;
+  dom f = NAT & rng f c= the carrier of W by FUNCT_2:def 1,RELAT_1:def 19;
   then reconsider f'= f as Function of NAT, the carrier of V by A3,FUNCT_2:4
 ,XBOOLE_1:1;
 A32: f'.0 = 0.V by A30,VECTSP_4:19;
@@ -501,7 +501,7 @@ A34: i < len q' & v = q'.(i + 1);
     then i + 1 in dom q by FINSEQ_3:27;
     then reconsider v'= v as Vector of W by A34,FINSEQ_2:13;
     f.(i + 1) = f.i + v' by A31,A34;
-    hence f'.(i + 1) = f'.i + v by VECTSP_4:21;
+    hence thesis by VECTSP_4:21;
   end;
   f'.len q' is Element of V;
   hence thesis by A7,A11,A15,A18,A27,A28,A29,A32,A33,RLVECT_1:def 13
@@ -601,14 +601,23 @@ A3: now
   thus thesis by A1,Th11;
 end;
 
-:: More On Linear Independance & Basis
+:: More On Linear Independence & Basis
 
 theorem Th14:
   for I being Basis of V, v being Vector of V holds v in Lin(I)
 proof
   let I be Basis of V, v be Vector of V;
   v in the VectSpStr of V by STRUCT_0:def 5;
-  hence v in Lin(I) by VECTSP_7:def 3;
+  hence thesis by VECTSP_7:def 3;
+end;
+
+registration let GF, V;
+  cluster linearly-independent Subset of V;
+  existence
+  proof
+    take {}V;
+    thus thesis;
+  end;
 end;
 
 theorem Th15:
@@ -712,7 +721,7 @@ A14: for x being Vector of V holds x in Carrier(L) implies K.x = 0.GF
     let x be Vector of V;
     assume x in Carrier(L);
     then not x in Carrier(K) by A3,A11,XBOOLE_0:def 5;
-    hence K.x = 0.GF by VECTSP_6:20;
+    hence thesis by VECTSP_6:20;
   end;
   now
     let x be set such that
@@ -774,7 +783,7 @@ A3: Carrier(K) = Carrier(L) & Sum(L) = Sum(K) by Th13;
     thus w in the carrier of W by A2,A3;
   end;
   then the carrier of Lin(A) c= the carrier of W by TARSKI:def 3;
-  hence Lin(A) is Subspace of W by VECTSP_4:35;
+  hence thesis by VECTSP_4:35;
 end;
 
 theorem Th21:
@@ -818,7 +827,7 @@ A6: Carrier(L) = Carrier(K) & Sum(L) = Sum(K) by Th12;
 A7: the carrier of Lin(A) = the carrier of Lin(B) by A4,XBOOLE_0:def 10;
   reconsider B'= Lin(B), V'= V as VectSp of GF;
   B' is Subspace of V' by VECTSP_4:34;
-  hence Lin(A) = Lin(B) by A7,VECTSP_4:37;
+  hence thesis by A7,VECTSP_4:37;
 end;
 
 begin
@@ -1065,7 +1074,7 @@ A5: R in Car by TARSKI:def 4;
     consider L being Linear_Combination of B such that
 A6: R = Carrier(L) and ex i st i in dom p & Sum(L) = p.i by A5;
     R c= B by A6,VECTSP_6:def 7;
-    hence x in B by A4;
+    hence thesis by A4;
   end;
   then reconsider C as Subset of V by XBOOLE_1:1;
 A7: B is linearly-independent by VECTSP_7:def 3;
@@ -1106,11 +1115,11 @@ A15:    Carrier(LB) in Car by A12;
         proof
           let x be set;
           assume x in Carrier(LB);
-          hence x in C by A15,TARSKI:def 4;
+          hence thesis by A15,TARSKI:def 4;
         end;
         then LB is Linear_Combination of C by VECTSP_6:def 7;
         then w in Lin(C) by A12,VECTSP_7:12;
-        hence w in the carrier of Lin(C) by STRUCT_0:def 5;
+        hence thesis by STRUCT_0:def 5;
       end;
       then consider LC being Linear_Combination of C such that
 A16:  Sum(LA) = Sum(LC) by Th10;
@@ -1157,7 +1166,7 @@ A25: Sum(L1) = p.i by A22;
 A26: y2 = Carrier(L2) and
 A27: Sum(L2) = p.i by A23;
     Carrier(L1) c= B & Carrier(L2) c= B by VECTSP_6:def 7;
-    hence y1 = y2 by A7,A24,A25,A26,A27,MATRLIN:9;
+    hence thesis by A7,A24,A25,A26,A27,MATRLIN:9;
   end;
 A28: for i being Nat st i in Seg len p ex x st P[i, x]
   proof
@@ -1198,9 +1207,9 @@ A40: Car is finite;
     assume R in Car;
     then consider L being Linear_Combination of B such that
 A41: R = Carrier(L) and ex i st i in dom p & Sum(L) = p.i;
-    thus R is finite by A41;
+    thus thesis by A41;
   end;
-  hence B is finite by A20,A40,FINSET_1:25;
+  hence thesis by A20,A40,FINSET_1:25;
 end;
 
 theorem
@@ -1214,7 +1223,7 @@ A1: V is finite-dimensional;
   then consider B being Basis of V such that
 A2: A c= B by VECTSP_7:27;
   B is finite by A1,Th24;
-  hence A is finite by A2;
+  hence thesis by A2;
 end;
 
 theorem Th26:
@@ -1232,7 +1241,7 @@ A3: card B' <= card A' by A2,Th23;
 A4: the VectSpStr of V = Lin(B) by VECTSP_7:def 3;
   A' is linearly-independent by VECTSP_7:def 3;
   then card A' <= card B' by A4,Th23;
-  hence card A = card B by A3,XXREAL_0:1;
+  hence thesis by A3,XXREAL_0:1;
 end;
 
 theorem Th27:
@@ -1321,7 +1330,7 @@ A5: for I being Basis of V holds card I = m;
     consider A being finite Subset of V such that
 A6: A is Basis of V by A1,MATRLIN:def 3;
     card A = n & card A = m by A4,A5,A6;
-    hence n = m;
+    hence thesis;
   end;
 end;
 
@@ -1343,7 +1352,7 @@ A1: Lin(I) = the VectSpStr of V' by VECTSP_7:def 3;
   reconsider A'= B as finite Subset of V by Th24;
 A2: dim W = card A by Def2;
   card A' <= card I by A1,Th23;
-  hence dim W <= dim V by A2,Def2;
+  hence thesis by A2,Def2;
 end;
 
 theorem Th30:
@@ -1364,7 +1373,7 @@ TARSKI:def 3;
   W = Lin(B) by Th21;
   then reconsider B as Basis of W by VECTSP_7:def 3;
   card B = dim W by Def2;
-  hence card A = dim Lin A;
+  hence thesis;
 end;
 
 theorem Th31:
@@ -1427,7 +1436,7 @@ A10: Lin(A) = the VectSpStr of W by A5,A6,VECTSP_7:def 3
     .= dim Lin(B) by A8,A10,Th30
     .= card B by A9,Th30
     .= dim W by A7,Def2;
-  hence dim V = dim W;
+  hence thesis;
 end;
 
 theorem Th33:
@@ -1459,7 +1468,7 @@ A6: I = {} or I = {0.V} by VECTSP_7:15;
     then I is linearly-dependent by VECTSP_7:5;
     hence contradiction by A5,VECTSP_7:def 3;
   end;
-  hence dim V = 0 by A5,A6,Def2,CARD_1:47;
+  hence thesis by A5,A6,Def2,CARD_1:47;
 end;
 
 theorem
@@ -1485,7 +1494,7 @@ A4: (Omega).V = Lin{v};
   {v} is linearly-independent & Lin{v} = the VectSpStr of V
   by A3,A4,VECTSP_4:def 4,VECTSP_7:5;
   then {v} is Basis of V & card {v} = 1 by CARD_1:50,VECTSP_7:def 3;
-  hence dim V = 1 by Def2;
+  hence thesis by Def2;
 end;
 
 theorem
@@ -1541,7 +1550,7 @@ A13: (Omega).V = Lin{u, v};
   Lin{u, v} = the VectSpStr of V by A13,VECTSP_4:def 4;
   then {u, v} is Basis of V & card {u, v} = 2 by A11,A12,CARD_2:76
 ,VECTSP_7:def 3;
-  hence dim V = 2 by Def2;
+  hence thesis by Def2;
 end;
 
 theorem Th36:
@@ -1795,7 +1804,7 @@ A70:    x = v & L2.v <> 0.GF by VECTSP_6:19;
         hence contradiction by A66,A70,RLVECT_1:10;
       end;
     end;
-    hence Carrier(L) = {} by A60;
+    hence thesis by A60;
   end;
   then A is linearly-independent by VECTSP_7:def 1;
   then A is Basis of W1 + W2 by A29,VECTSP_7:def 3;
@@ -1827,7 +1836,7 @@ A1: the VectSpStr of V = W1 + W2 & W1 /\ W2 = (0).V by VECTSP_5:def 4;
   then dim W1 + dim W2 = dim(W1 + W2) + 0 by Th36
     .= dim (Omega).V by A1,VECTSP_4:def 4
     .= dim V by Th31;
-  hence dim V = dim W1 + dim W2;
+  hence thesis;
 end;
 
 ::
@@ -1885,7 +1894,7 @@ A7:   A is Basis of W by MATRLIN:def 3;
 A8:   x = Lin(A) by A5,A7,VECTSP_7:def 3
         .= Lin(B) by Th21;
       then card B = n by A5,A6,Th30;
-      hence x in S by A8;
+      hence thesis by A8;
     end;
     take S;
     thus thesis by A1;
@@ -1906,7 +1915,7 @@ proof
   assume n <= dim V;
   then consider W being strict Subspace of V such that
 A1: dim W = n by Lm2;
-  thus n Subspaces_of V is non empty by A1,Def3;
+  thus thesis by A1,Def3;
 end;
 
 theorem
@@ -1932,6 +1941,6 @@ A1: W1 = x and
 A2: dim W1 = n by Def3;
   reconsider W1 as strict Subspace of V by VECTSP_4:34;
   W1 in n Subspaces_of V by A2,Def3;
-  hence x in n Subspaces_of V by A1;
+  hence thesis by A1;
 end;
 

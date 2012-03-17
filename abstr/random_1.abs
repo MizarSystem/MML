@@ -1,0 +1,422 @@
+:: Probability on Finite Set and Real Valued Random Variables
+::  by Hiroyuki Okazaki and Yasunari Shidama
+:: 
+:: Received March 17, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies RANDOM_1, PARTFUN1, MEASURE1, FINSEQ_1, RELAT_1, ABSVALUE,
+      FUNCT_1, ORDINAL2, LATTICES, RPR_1, SUBSET_1, CARD_1, COMPLEX1, SEQ_1,
+      SEQ_2, MEASURE6, BOOLE, ARYTM, ARYTM_1, POWER, MESFUNC1, TARSKI, ARYTM_3,
+      RLVECT_1, GROUP_1, PROB_1, INTEGRA1, MESFUNC2, MESFUNC3, MESFUNC5,
+      SUPINF_1, SUPINF_2, FUNCT_3, RFUNCT_3, VALUED_0, PROB_4, FINSET_1,
+      UPROOTS;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, FINSET_1, CARD_1,
+      NUMBERS, XREAL_0, XXREAL_0, REAL_1, COMPLEX1, XXREAL_2, FUNCT_1,
+      RELSET_1, PARTFUN1, VALUED_1, FINSEQ_1, RFUNCT_3, FUNCT_2, NAT_1,
+      SUPINF_2, SEQ_1, SEQ_2, RPR_1, PROB_1, PROB_4, MEASURE1, EXTREAL1,
+      MESFUNC1, MESFUNC3, CONVFUN1, MEASURE6, MESFUNC5, MESFUNC6, MESFUNC2,
+      RVSUM_1, UPROOTS, MESFUN6C;
+ constructors REAL_1, RPR_1, NAT_3, EXTREAL1, SEQ_1, POWER, RVSUM_1, MESFUNC6,
+      MESFUNC3, MESFUNC5, MEASURE6, MESFUNC2, CONVFUN1, BINOP_2, PARTFUN3,
+      INTEGRA2, PROB_4, SUPINF_1, UPROOTS, MESFUN6C, MESFUNC1, DOMAIN_1,
+      RELSET_1;
+ registrations SUBSET_1, NAT_1, XREAL_0, XXREAL_0, TOPREAL6, MEMBERED,
+      ORDINAL1, FINSEQ_1, MEASURE1, FUNCT_2, RELAT_1, SEQ_4, FINSET_1, NUMBERS,
+      XCMPLX_0, VALUED_0, VALUED_1, UPROOTS;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+theorem :: RANDOM_1:1
+  for X be non empty set,
+  S be SigmaField of X,
+  M be sigma_Measure of S,
+  f be PartFunc of X,ExtREAL,
+  E be Element of S,
+  a be Real
+  st f is_integrable_on M & E c= dom f & M.E < +infty &
+  (for x be Element of X st x in E holds a <= f.x) holds
+  (R_EAL a)*(M.E) <= Integral(M,f|E);
+
+theorem :: RANDOM_1:2
+  for X be non empty set,
+  S be SigmaField of X,
+  M be sigma_Measure of S,
+  f be PartFunc of X,REAL,
+  E be Element of S,
+  a be Real
+  st f is_integrable_on M & E c= dom f & M.E < +infty &
+  (for x be Element of X st x in E holds a <= f.x)
+  holds
+  (R_EAL a)*M.E <= Integral(M,f|E);
+
+theorem :: RANDOM_1:3
+  for X be non empty set,
+  S be SigmaField of X,
+  M be sigma_Measure of S,
+  f be PartFunc of X,ExtREAL,
+  E be Element of S,
+  a be Real
+  st f is_integrable_on M & E c= dom f & M.E < +infty &
+  (for x be Element of X st x in E holds f.x <= a) holds
+  Integral(M,f|E) <= (R_EAL a)*M.E;
+
+theorem :: RANDOM_1:4
+  for X be non empty set,
+  S be SigmaField of X,
+  M be sigma_Measure of S,
+  f be PartFunc of X,REAL,
+  E be Element of S,
+  a be Real
+  st f is_integrable_on M & E c= dom f & M.E < +infty &
+  (for x be Element of X st x in E holds f.x <= a)
+  holds
+  Integral(M,f|E) <=(R_EAL a)*M.E;
+
+begin :: Trivial SigmaField and Probability on Finite set
+
+reserve Omega for non empty set;
+reserve m,n,k for Element of NAT;
+reserve x,y for set;
+reserve r,r1,r2,r3 for Real;
+reserve seq,seq1 for Real_Sequence;
+reserve Sigma for SigmaField of Omega;
+reserve ASeq,BSeq for SetSequence of Sigma;
+reserve P,P1,P2 for Probability of Sigma;
+reserve A,B,C,A1,A2,A3 for Event of Sigma;
+reserve E for finite non empty set;
+
+notation
+  let E be non empty set;
+  synonym Trivial-SigmaField (E) for bool E;
+end;
+
+definition let E be non empty set;
+  redefine func Trivial-SigmaField (E) -> SigmaField of E;
+end;
+
+theorem :: RANDOM_1:5
+  for Omega be non empty finite set,
+  f be PartFunc of Omega,REAL holds
+  ex F be Finite_Sep_Sequence of Trivial-SigmaField (Omega),
+  s being FinSequence of (dom f) st
+  dom f = union (rng F) &
+  dom F = dom (s) &
+  s is one-to-one &
+  rng s = dom f &
+  len s = card (dom f) &
+  (for k be Nat st k in dom F holds F.k={s.k} )
+  & for n being Nat for x,y being Element of Omega
+  st n in dom F & x in F.n & y in F.n holds
+  f.x = f.y;
+
+theorem :: RANDOM_1:6
+  for Omega be non empty finite set,
+  f be PartFunc of Omega,REAL holds
+  f is_simple_func_in Trivial-SigmaField (Omega)
+  & dom f is Element of Trivial-SigmaField (Omega);
+
+theorem :: RANDOM_1:7
+  for Omega be non empty finite set,
+  M being sigma_Measure of Trivial-SigmaField (Omega),
+  f be PartFunc of Omega,REAL
+  st dom f <> {} & M.(dom f) < +infty
+  holds f is_integrable_on M;
+
+theorem :: RANDOM_1:8
+  for Omega be non empty finite set,
+  f be PartFunc of Omega,REAL
+  ex X be Element of Trivial-SigmaField (Omega) st dom f = X &
+  f is_measurable_on X;
+
+theorem :: RANDOM_1:9
+  for Omega be non empty finite set,
+  M being sigma_Measure of Trivial-SigmaField (Omega),
+  f be Function of Omega,REAL,
+  x being FinSequence of ExtREAL,
+  s being FinSequence of (Omega) st
+  M.Omega < +infty
+  & s is one-to-one
+  & rng s = Omega
+  & len s = card (Omega)
+  ex F be Finite_Sep_Sequence of Trivial-SigmaField (Omega),
+  a being FinSequence of REAL st
+  dom f = union (rng F) &
+  dom a = dom s &
+  dom F = dom s &
+  (for k be Nat st k in dom F holds F.k={s.k} )
+  & for n being Nat for x,y being Element of Omega
+  st n in dom F & x in F.n & y in F.n holds f.x = f.y;
+
+theorem :: RANDOM_1:10
+  for Omega be non empty finite set,
+  M being sigma_Measure of Trivial-SigmaField (Omega),
+  f be Function of Omega,REAL,
+  x being FinSequence of ExtREAL,
+  s being FinSequence of (Omega)
+  st M.Omega < +infty
+  & len x = card (Omega)
+  & s is one-to-one
+  & rng s = Omega
+  & len s = card (Omega)
+  & (for n being Nat st n in dom x holds x.n = R_EAL (f.(s.n)) * M.{s.n})
+  holds
+  Integral(M,f) =Sum x;
+
+theorem :: RANDOM_1:11
+  for Omega be non empty finite set,
+  M being sigma_Measure of Trivial-SigmaField (Omega),
+  f be Function of Omega,REAL
+  st M.Omega < +infty holds
+  ex x being FinSequence of ExtREAL,
+  s being FinSequence of (Omega)
+  st len x = card (Omega)
+  & s is one-to-one
+  & rng s = Omega
+  & len s = card (Omega)
+  & (for n being Nat st n in dom x
+  holds x.n = R_EAL (f.(s.n)) * M.{s.n})
+  & Integral(M,f) = Sum x;
+
+theorem :: RANDOM_1:12
+  for Omega be non empty finite set,
+  P be Probability of Trivial-SigmaField (Omega),
+  f be Function of Omega,REAL,
+  x be FinSequence of REAL,
+  s be FinSequence of Omega st
+  len x = card (Omega)
+  & s is one-to-one & rng s = Omega & len s = card (Omega)
+  & (for n being Nat st n in dom x holds x.n = f.(s.n) * P.{s.n}) holds
+  Integral(P2M(P),f) =Sum x;
+
+theorem :: RANDOM_1:13
+  for Omega be non empty finite set,
+  P be Probability of Trivial-SigmaField (Omega),
+  f be Function of Omega,REAL
+  holds
+  ex F being FinSequence of REAL,
+  s being FinSequence of Omega
+  st len F = card (Omega)
+  & s is one-to-one
+  & rng s = Omega
+  & len s = card (Omega)
+  & (for n being Nat st n in dom F holds F.n = f.(s.n) * P.{s.n})
+  & Integral(P2M(P),f) = Sum F;
+
+theorem :: RANDOM_1:14
+  for E be finite non empty set,
+  ASeq being SetSequence of E
+  st ASeq is non-ascending holds
+  ex N be Element of NAT st for m be Element of NAT
+  st N<=m holds
+  ASeq.N = ASeq.m;
+
+theorem :: RANDOM_1:15
+  for E be finite non empty set,
+  ASeq being SetSequence of E
+  st ASeq is non-ascending holds
+  ex N be Element of NAT st for m be Element of NAT
+  st N<=m holds
+  Intersection ASeq = ASeq.m;
+
+theorem :: RANDOM_1:16
+  for E be finite non empty set,
+  ASeq being SetSequence of E
+  st ASeq is non-descending holds
+  ex N be Element of NAT st for m be Element of NAT
+  st N <= m holds
+  ASeq.N = ASeq.m;
+
+theorem :: RANDOM_1:17
+  for E be finite non empty set,
+  ASeq being SetSequence of E
+  st ASeq is non-descending holds
+  ex N be Nat st for m be Nat st N<=m holds
+  Union ASeq = ASeq.m;
+
+definition let E;
+  func Trivial-Probability (E) -> Probability of Trivial-SigmaField (E)
+  means
+:: RANDOM_1:def 1
+  for A be Event of E holds it.A = prob(A);
+end;
+
+:: Real-Valued-Random-Variable
+
+definition let Omega,Sigma;
+  mode Real-Valued-Random-Variable of Sigma
+  -> Function of Omega,REAL means
+:: RANDOM_1:def 2
+  ex X be Element of Sigma st X = Omega & it is_measurable_on X;
+end;
+
+reserve f,g,h for Real-Valued-Random-Variable of Sigma;
+
+theorem :: RANDOM_1:18
+  f+g is Real-Valued-Random-Variable of Sigma;
+
+definition
+  let Omega,Sigma,f,g;
+  redefine func f+ g -> Real-Valued-Random-Variable of Sigma;
+end;
+
+theorem :: RANDOM_1:19
+  f-g is Real-Valued-Random-Variable of Sigma;
+
+definition
+  let Omega,Sigma,f,g;
+  redefine func f-g -> Real-Valued-Random-Variable of Sigma;
+end;
+
+theorem :: RANDOM_1:20
+  for r be Real
+  holds r(#)f is Real-Valued-Random-Variable of Sigma;
+
+definition
+  let Omega,Sigma,f;
+  let r be Real;
+  redefine func r(#)f -> Real-Valued-Random-Variable of Sigma;
+end;
+
+theorem :: RANDOM_1:21
+  for f,g be PartFunc of Omega,REAL holds (R_EAL f)(#)(R_EAL g) = R_EAL (f(#)g)
+;
+
+theorem :: RANDOM_1:22
+  f(#)g is Real-Valued-Random-Variable of Sigma;
+
+definition
+  let Omega,Sigma,f,g;
+  redefine func f(#)g -> Real-Valued-Random-Variable of Sigma;
+end;
+
+theorem :: RANDOM_1:23
+  for r be real number st 0 <= r & f is nonnegative
+  holds (f to_power r) is Real-Valued-Random-Variable of Sigma;
+
+theorem :: RANDOM_1:24
+  abs f is Real-Valued-Random-Variable of Sigma;
+
+definition
+  let Omega,Sigma,f;
+  redefine func abs f -> Real-Valued-Random-Variable of Sigma;
+end;
+
+theorem :: RANDOM_1:25
+  for r be real number st 0 <= r
+  holds (abs(f) to_power r) is Real-Valued-Random-Variable of Sigma;
+
+:: Definition of the Expectations
+
+definition
+  let Omega,Sigma,f,P;
+  pred f is_integrable_on P means
+:: RANDOM_1:def 3
+  f is_integrable_on P2M(P);
+end;
+
+definition let Omega,Sigma,P;
+  let f be Real-Valued-Random-Variable of Sigma;
+  assume  f is_integrable_on P;
+  func expect (f,P) -> Element of REAL equals
+:: RANDOM_1:def 4
+  Integral(P2M(P),f);
+end;
+
+theorem :: RANDOM_1:26
+  f is_integrable_on P & g is_integrable_on P implies
+  expect (f+g,P) = expect (f,P) + expect (g,P);
+
+theorem :: RANDOM_1:27
+  f is_integrable_on P implies
+  expect (r(#)f,P) = r* expect (f,P);
+
+theorem :: RANDOM_1:28
+  f is_integrable_on P & g is_integrable_on P implies
+  expect (f-g,P) = expect (f,P) - expect (g,P);
+
+theorem :: RANDOM_1:29
+  for Omega be non empty finite set,
+  f be Function of Omega,REAL
+  holds f is Real-Valued-Random-Variable of Trivial-SigmaField (Omega);
+
+theorem :: RANDOM_1:30
+  for Omega be non empty finite set,
+  P be Probability of Trivial-SigmaField (Omega),
+  X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega)
+  holds X is_integrable_on P;
+
+theorem :: RANDOM_1:31
+  for Omega be non empty finite set,
+  P be Probability of Trivial-SigmaField (Omega),
+  X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega),
+  F being FinSequence of REAL,
+  s being FinSequence of Omega
+  st len F = card (Omega)
+  & s is one-to-one
+  & rng s = Omega
+  & len s = card (Omega)
+  & (for n being Nat st n in dom F holds F.n = X.(s.n) * P.{s.n})
+  holds expect(X,P) = Sum F;
+
+theorem :: RANDOM_1:32
+  for Omega be non empty finite set,
+  P be Probability of Trivial-SigmaField (Omega),
+  X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega)
+  ex F being FinSequence of REAL,
+  s being FinSequence of Omega
+  st len F = card (Omega)
+  & s is one-to-one
+  & rng s = Omega
+  & len s = card (Omega)
+  & (for n being Nat st n in dom F holds F.n = X.(s.n) * P.{s.n})
+  & expect(X,P) = Sum F;
+
+theorem :: RANDOM_1:33
+  for Omega be non empty finite set,
+  P be Probability of Trivial-SigmaField (Omega),
+  X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega)
+  ex F being FinSequence of REAL,
+  s being FinSequence of Omega
+  st len F = card (Omega)
+  & s is one-to-one
+  & rng s = Omega
+  & len s = card (Omega)
+  & (for n being Nat st n in dom F holds F.n = X.(s.n) * P.{s.n})
+  & expect(X,P) = Sum F;
+
+theorem :: RANDOM_1:34
+  for Omega be non empty finite set,
+  X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega),
+  G being FinSequence of REAL,
+  s being FinSequence of Omega
+  st len G = card (Omega)
+  & s is one-to-one
+  & rng s = Omega
+  & len s = card (Omega)
+  & (for n being Nat st n in dom G holds G.n = X.(s.n) )
+  holds
+  expect(X,Trivial-Probability (Omega)) = (Sum G) / card (Omega);
+
+theorem :: RANDOM_1:35
+  for Omega be non empty finite set,
+  X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega) holds
+  ex G being FinSequence of REAL,
+  s being FinSequence of Omega
+  st len G = card (Omega)
+  & s is one-to-one
+  & rng s = Omega
+  & len s = card (Omega)
+  & (for n being Nat st n in dom G holds G.n = X.(s.n) )
+  & expect(X,Trivial-Probability (Omega))
+  = (Sum G) / card (Omega);
+
+:: Markov's Theorem
+
+theorem :: RANDOM_1:36
+  for X be Real-Valued-Random-Variable of Sigma st 0 < r &
+  X is nonnegative & X is_integrable_on P holds
+  P.({t where t is Element of Omega : r <= X.t }) <= expect (X,P)/r;

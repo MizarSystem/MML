@@ -11,7 +11,6 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
@@ -19,7 +18,6 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCT_4"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="SETFAM_1"/>
@@ -37,34 +35,30 @@
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="192">
+<Func kind="K" nr="183">
 <Func kind="U" nr="9">
-<Func kind="K" nr="264"/>
+<Func kind="K" nr="255"/>
 <Func kind="K" nr="1">
-<Func kind="K" nr="66"/>
+<Func kind="K" nr="67"/>
 </Func>
-<Func kind="K" nr="277"/>
+<Func kind="K" nr="268"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="7"/>
-<Adjective nr="22"/>
-<Adjective nr="60"/>
-<Adjective nr="79">
-<Func kind="K" nr="264"/>
-<Func kind="K" nr="1">
-<Func kind="K" nr="66"/>
-</Func>
-<Func kind="K" nr="277"/>
+<Adjective nr="7" value="false">
+<Func kind="K" nr="255"/>
 </Adjective>
-<Adjective nr="84" value="false">
-<Func kind="K" nr="264"/>
+<Adjective nr="9"/>
+<Adjective nr="25"/>
+<Adjective nr="64"/>
+<Adjective nr="83">
+<Func kind="K" nr="255"/>
 <Func kind="K" nr="1">
-<Func kind="K" nr="66"/>
+<Func kind="K" nr="67"/>
 </Func>
-<Func kind="K" nr="277"/>
+<Func kind="K" nr="268"/>
 </Adjective>
 </Cluster>
 </RCluster>

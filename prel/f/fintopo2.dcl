@@ -9,10 +9,8 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XBOOLEAN"/>
@@ -31,7 +29,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="64"/>
+<Adjective nr="67"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FINTOPO2" nr="2">
@@ -40,8 +38,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="64"/>
+<Adjective nr="34" value="false"/>
+<Adjective nr="67"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -16,7 +16,7 @@ environ
       FINSET_1, NAT_1, FUNCOP_1, FUNCT_4, GLIB_000, GLIB_001, GLIB_002,
       RECDEF_1;
  constructors DOMAIN_1, XXREAL_0, NAT_1, BINOP_2, FINSOP_1, RVSUM_1, FINSEQ_5,
-      GRAPH_5, GLIB_001, GLIB_002, SEQ_1, RECDEF_1;
+      GRAPH_5, GLIB_001, GLIB_002, SEQ_1, RECDEF_1, RELSET_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1,
       NUMBERS, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, GLIB_000, GRAPH_2, POLYNOM1,
       GLIB_002, INT_1, VALUED_0, CARD_1, FUNCT_2, PARTFUN1, RELSET_1;
@@ -24,9 +24,9 @@ environ
  definitions GLIB_000, FUNCOP_1, RVSUM_1;
  theorems CARD_1, CARD_2, FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_5,
       FINSET_1, FUNCT_1, FUNCT_2, FUNCT_4, GLIB_000, GLIB_001, GLIB_002,
-      GRAPH_2, GRAPH_5, INT_1, NAT_1, PBOOLE, POLYNOM3, RELAT_1, RELSET_1,
-      RVSUM_1, TARSKI, XBOOLE_0, XBOOLE_1, XREAL_0, ZFMISC_1, PRE_CIRC,
-      XREAL_1, XXREAL_0, ENUMSET1, ORDERS_1, ORDINAL1, FINSOP_1, VALUED_0;
+      GRAPH_2, GRAPH_5, INT_1, NAT_1, POLYNOM3, RELAT_1, RELSET_1, RVSUM_1,
+      TARSKI, XBOOLE_0, XBOOLE_1, XREAL_0, ZFMISC_1, PRE_CIRC, XREAL_1,
+      XXREAL_0, ENUMSET1, ORDERS_1, ORDINAL1, FINSOP_1, VALUED_0, PARTFUN1;
  schemes NAT_1, FINSEQ_1, FUNCT_1;
 
 begin :: Preliminaries
@@ -269,7 +269,7 @@ A61:  (Seq fssq).n = fssq.x2 by A60,FUNCT_1:22;
       consider lk being Nat such that
 A62:  dom fssq c= Seg lk by FINSEQ_1:def 12;
       len Sgm (dom fssq) = card dom fssq by A62,FINSEQ_3:44
-        .= k by A55,PRE_CIRC:21;
+        .= k by A55,CARD_1:104;
       then
 A63:  n in dom Sgm(dom fssq) by A25,A56,FINSEQ_3:27;
       then x2 in rng Sgm(dom fssq) by FUNCT_1:def 5;
@@ -351,7 +351,7 @@ A77:  Seq fss = (fss * Sgm(dom fss)) by FINSEQ_1:def 14;
 A78:  fss.(Sgm(dom fss).(len Seq fss)) = z by A76,A77,FUNCT_1:22;
       set g = Sgm(dom fss);
 A79:  len Seq fss = card fss by GLIB_001:5
-        .= card dom fss by PRE_CIRC:21
+        .= card dom fss by CARD_1:104
         .= len Sgm(dom fss) by A6,FINSEQ_3:44;
       now
         assume
@@ -388,7 +388,7 @@ A87: for k being Element of NAT holds P[k] from NAT_1:sch 1(A3,A86);
   assume
 A88: for i being Element of NAT st i in dom fs holds 0 <= fs.i;
   len Seq fss = len Seq fss;
-  hence Sum (Seq fss) <= Sum fs by A87,A88;
+  hence thesis by A87,A88;
 end;
 
 begin :: Definitions
@@ -434,7 +434,7 @@ registration
 A1: len G = 7 & G.1 = V5 & G.2 = E3 & G.3 = S1 & G.4 = S1 & G.5 = W1 &
     G.6 = EL8 & G.7 = VL6 by FINSEQ_1:90;
     then dom G = Seg 7 by FINSEQ_1:def 3;
-    then reconsider G as GraphStruct by GLIB_000:def 1;
+    then reconsider G as GraphStruct by RELAT_1:def 18;
     take G;
     dom G = Seg 7 by A1,FINSEQ_1:def 3;
     then
@@ -550,7 +550,7 @@ proof
   then the_Vertices_of G2 = the_Vertices_of G &
   the_Edges_of G2 = the_Edges_of G & the_Source_of G2 = the_Source_of G &
   the_Target_of G2 = the_Target_of G by GLIB_000:13;
-  hence G2 == G by GLIB_000:def 36;
+  hence thesis by GLIB_000:def 36;
 end;
 
 registration
@@ -739,8 +739,12 @@ A1: dom G c= dom G1 by FUNCT_4:11;
     WeightSelector in dom G by Def4;
     hence WeightSelector in dom G1 by A1;
 A2: G == G1 by Lm3;
+X:  the_Vertices_of G1 = the_Vertices_of G &
+  the_Edges_of G1 = the_Edges_of G & the_Source_of G1 = the_Source_of G &
+  the_Target_of G1 = the_Target_of G by A2,GLIB_000:def 36;
+
     G1.WeightSelector = the_Weight_of G by GLIB_000:12;
-    hence thesis by A2,GLIB_000:def 36;
+    hence thesis by X;
   end;
   cluster G.set(VLabelSelector, X) -> [Weighted];
   coherence
@@ -750,8 +754,12 @@ A3: dom G c= dom G1 by FUNCT_4:11;
     WeightSelector in dom G by Def4;
     hence WeightSelector in dom G1 by A3;
 A4: G == G1 by Lm3;
+X:  the_Vertices_of G1 = the_Vertices_of G &
+  the_Edges_of G1 = the_Edges_of G & the_Source_of G1 = the_Source_of G &
+  the_Target_of G1 = the_Target_of G by A4,GLIB_000:def 36;
+
     G1.WeightSelector = the_Weight_of G by GLIB_000:12;
-    hence thesis by A4,GLIB_000:def 36;
+    hence thesis by X;
   end;
 end;
 
@@ -773,13 +781,7 @@ end;
 registration
   let G be _Graph, WL be non empty set, W be Function of the_Edges_of G, WL;
   cluster G.set(WeightSelector, W) -> [Weighted];
-  coherence
-  proof
-    dom W = the_Edges_of G by FUNCT_2:def 1;
-    then reconsider W'=W as ManySortedSet of the_Edges_of G by PBOOLE:def 3;
-    G.set(WeightSelector,W') is [Weighted];
-    hence thesis;
-  end;
+  coherence;
 end;
 
 registration
@@ -843,7 +845,7 @@ A1: dom G1 = dom G \/ {ELabelSelector} by GLIB_000:9;
     G == G1 by Lm3;
     then
 A2: the_Edges_of G = the_Edges_of G1 by GLIB_000:def 36;
-    dom X = the_Edges_of G by PBOOLE:def 3;
+    dom X = the_Edges_of G by PARTFUN1:def 4;
     hence thesis by A2,GLIB_000:11;
   end;
 end;
@@ -909,7 +911,7 @@ A1: dom G1 = dom G \/ {VLabelSelector} by GLIB_000:9;
     G == G1 by Lm3;
     then
 A2: the_Vertices_of G = the_Vertices_of G1 by GLIB_000:def 36;
-    dom X = the_Vertices_of G by PBOOLE:def 3;
+    dom X = the_Vertices_of G by PARTFUN1:def 4;
     hence thesis by A2,GLIB_000:11;
   end;
 end;
@@ -981,7 +983,7 @@ registration
   proof
     reconsider GG = G as [Weighted] Subgraph of G by GLIB_000:43;
     take GG;
-    dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3;
+    dom the_Weight_of G = the_Edges_of G by PARTFUN1:def 4;
     then the_Weight_of G = (the_Weight_of G) | the_Edges_of G by RELAT_1:98;
     hence thesis by Def10;
   end;
@@ -1022,7 +1024,7 @@ registration
   proof
     reconsider GG = G as [Weighted] [ELabeled] Subgraph of G by GLIB_000:43;
     take GG;
-    dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3;
+    dom the_Weight_of G = the_Edges_of G by PARTFUN1:def 4;
     then the_Weight_of G = (the_Weight_of G) | the_Edges_of G by RELAT_1:98;
     hence GG is weight-inheriting by Def10;
     dom the_ELabel_of G c= the_Edges_of G by Lm1;
@@ -1039,7 +1041,7 @@ registration
   proof
     reconsider GG = G as [Weighted] [VLabeled] Subgraph of G by GLIB_000:43;
     take GG;
-    dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3;
+    dom the_Weight_of G = the_Edges_of G by PARTFUN1:def 4;
     then the_Weight_of G = (the_Weight_of G) | the_Edges_of G by RELAT_1:98;
     hence GG is weight-inheriting by Def10;
     dom the_VLabel_of G c= the_Vertices_of G by Lm2;
@@ -1076,7 +1078,7 @@ registration
     reconsider GG = G as [Weighted] [ELabeled] [VLabeled] Subgraph of G
     by GLIB_000:43;
     take GG;
-    dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3;
+    dom the_Weight_of G = the_Edges_of G by PARTFUN1:def 4;
     then the_Weight_of G = (the_Weight_of G) | the_Edges_of G by RELAT_1:98;
     hence GG is weight-inheriting by Def10;
     dom the_ELabel_of G c= the_Edges_of G by Lm1;
@@ -1186,9 +1188,9 @@ registration
 A1:     V is non empty Subset of the_Vertices_of G & E c= G.edgesBetween(V);
         consider X being [Weighted] inducedSubgraph of G,V,E;
         set W = (the_Weight_of G) | the_Edges_of X;
-        dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3;
+        dom the_Weight_of G = the_Edges_of G by PARTFUN1:def 4;
         then dom W = the_Edges_of X by RELAT_1:91;
-        then reconsider W as ManySortedSet of the_Edges_of X by PBOOLE:def 3;
+        then reconsider W as ManySortedSet of the_Edges_of X by PARTFUN1:def 4;
         set GG = X.set(WeightSelector, W);
 A2:     GG == X by Lm3;
         then GG is Subgraph of X by GLIB_000:90;
@@ -1211,7 +1213,7 @@ A4:     not (V is non empty Subset of the_Vertices_of G &
         reconsider GG as [Weighted] inducedSubgraph of G,V,E
         by A4,GLIB_000:def 39;
         take GG;
-        dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3;
+        dom the_Weight_of G = the_Edges_of G by PARTFUN1:def 4;
         then the_Weight_of G = (the_Weight_of G) | the_Edges_of G by RELAT_1:98
 ;
         hence GG is weight-inheriting by Def10;
@@ -1232,8 +1234,8 @@ A1:     V is non empty Subset of the_Vertices_of G & E c= G.edgesBetween(V);
         consider X being [ELabeled] inducedSubgraph of G,V,E;
         set EL = (the_ELabel_of G) | the_Edges_of X;
         reconsider EL'=EL as PartFunc of dom EL, rng EL by RELSET_1:11;
-        reconsider EL' as PartFunc of the_Edges_of X, rng EL by RELSET_1:13
-,RELAT_1:87;
+        reconsider EL' as PartFunc of the_Edges_of X, rng EL by RELAT_1:87
+,RELSET_1:13;
         set GG = X.set(ELabelSelector, EL');
 A2:     GG == X by Lm3;
         then GG is Subgraph of X by GLIB_000:90;
@@ -1277,8 +1279,8 @@ A1:     V is non empty Subset of the_Vertices_of G & E c= G.edgesBetween(V);
         consider X being [VLabeled] inducedSubgraph of G,V,E;
         set VL = (the_VLabel_of G) | the_Vertices_of X;
         reconsider VL'=VL as PartFunc of dom VL, rng VL by RELSET_1:11;
-        reconsider VL' as PartFunc of the_Vertices_of X, rng VL by RELSET_1:13
-,RELAT_1:87;
+        reconsider VL' as PartFunc of the_Vertices_of X, rng VL by RELAT_1:87
+,RELSET_1:13;
         set GG = X.set(VLabelSelector, VL');
 A2:     GG == X by Lm3;
         then GG is Subgraph of X by GLIB_000:90;
@@ -1322,15 +1324,15 @@ registration
 A1:     V is non empty Subset of the_Vertices_of G & E c= G.edgesBetween(V);
         consider X being [Weighted] [ELabeled] inducedSubgraph of G,V,E;
         set W = (the_Weight_of G) | the_Edges_of X;
-        dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3;
+        dom the_Weight_of G = the_Edges_of G by PARTFUN1:def 4;
         then dom W = the_Edges_of X by RELAT_1:91;
-        then reconsider W as ManySortedSet of the_Edges_of X by PBOOLE:def 3;
+        then reconsider W as ManySortedSet of the_Edges_of X by PARTFUN1:def 4;
         set G1 = X.set(WeightSelector, W);
 A2:     X == G1 by Lm3;
         set EL = (the_ELabel_of G) | the_Edges_of G1;
         reconsider EL'=EL as PartFunc of dom EL, rng EL by RELSET_1:11;
-        reconsider EL' as PartFunc of the_Edges_of G1, rng EL by RELSET_1:13
-,RELAT_1:87;
+        reconsider EL' as PartFunc of the_Edges_of G1, rng EL by RELAT_1:87
+,RELSET_1:13;
         set G2 = G1.set(ELabelSelector, EL');
 A3:     G2 == G1 by Lm3;
         then
@@ -1360,7 +1362,7 @@ A6:     not (V is non empty Subset of the_Vertices_of G &
         reconsider GG as [Weighted] [ELabeled] inducedSubgraph of G,V,E
         by A6,GLIB_000:def 39;
         take GG;
-        dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3;
+        dom the_Weight_of G = the_Edges_of G by PARTFUN1:def 4;
         then the_Weight_of G = (the_Weight_of G) | the_Edges_of G by RELAT_1:98
 ;
         hence GG is weight-inheriting by Def10;
@@ -1385,15 +1387,15 @@ registration
 A1:     V is non empty Subset of the_Vertices_of G & E c= G.edgesBetween(V);
         consider X being [Weighted] [VLabeled] inducedSubgraph of G,V,E;
         set W = (the_Weight_of G) | the_Edges_of X;
-        dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3;
+        dom the_Weight_of G = the_Edges_of G by PARTFUN1:def 4;
         then dom W = the_Edges_of X by RELAT_1:91;
-        then reconsider W as ManySortedSet of the_Edges_of X by PBOOLE:def 3;
+        then reconsider W as ManySortedSet of the_Edges_of X by PARTFUN1:def 4;
         set G1 = X.set(WeightSelector, W);
 A2:     X == G1 by Lm3;
         set VL = (the_VLabel_of G) | the_Vertices_of G1;
         reconsider VL'=VL as PartFunc of dom VL, rng VL by RELSET_1:11;
         reconsider VL' as PartFunc of the_Vertices_of G1, rng VL
-        by RELSET_1:13,RELAT_1:87;
+        by RELAT_1:87,RELSET_1:13;
         set G2 = G1.set(VLabelSelector, VL');
 A3:     G2 == G1 by Lm3;
         then
@@ -1423,7 +1425,7 @@ A6:     not (V is non empty Subset of the_Vertices_of G &
         reconsider GG as [Weighted] [VLabeled] inducedSubgraph of G,V,E
         by A6,GLIB_000:def 39;
         take GG;
-        dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3;
+        dom the_Weight_of G = the_Edges_of G by PARTFUN1:def 4;
         then the_Weight_of G = (the_Weight_of G) | the_Edges_of G by RELAT_1:98
 ;
         hence GG is weight-inheriting by Def10;
@@ -1449,14 +1451,14 @@ A1:     V is non empty Subset of the_Vertices_of G & E c= G.edgesBetween(V);
         consider X being [ELabeled] [VLabeled] inducedSubgraph of G,V,E;
         set EL = (the_ELabel_of G) | the_Edges_of X;
         reconsider EL'=EL as PartFunc of dom EL, rng EL by RELSET_1:11;
-        reconsider EL' as PartFunc of the_Edges_of X, rng EL by RELSET_1:13
-,RELAT_1:87;
+        reconsider EL' as PartFunc of the_Edges_of X, rng EL by RELAT_1:87
+,RELSET_1:13;
         set G1 = X.set(ELabelSelector, EL');
 A2:     X == G1 by Lm3;
         set VL = (the_VLabel_of G) | the_Vertices_of G1;
         reconsider VL'=VL as PartFunc of dom VL, rng VL by RELSET_1:11;
         reconsider VL' as PartFunc of the_Vertices_of G1, rng VL
-        by RELSET_1:13,RELAT_1:87;
+        by RELAT_1:87,RELSET_1:13;
         set G2 = G1.set(VLabelSelector, VL');
 A3:     G2 == G1 by Lm3;
         then
@@ -1512,15 +1514,15 @@ A1:     V is non empty Subset of the_Vertices_of G & E c= G.edgesBetween(V);
         consider X being [Weighted] [ELabeled] [VLabeled]
         inducedSubgraph of G,V,E;
         set W = (the_Weight_of G) | the_Edges_of X;
-        dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3;
+        dom the_Weight_of G = the_Edges_of G by PARTFUN1:def 4;
         then dom W = the_Edges_of X by RELAT_1:91;
-        then reconsider W as ManySortedSet of the_Edges_of X by PBOOLE:def 3;
+        then reconsider W as ManySortedSet of the_Edges_of X by PARTFUN1:def 4;
         set G1 = X.set(WeightSelector, W);
 A2:     X == G1 by Lm3;
         set EL = (the_ELabel_of G) | the_Edges_of G1;
         reconsider EL'=EL as PartFunc of dom EL, rng EL by RELSET_1:11;
-        reconsider EL' as PartFunc of the_Edges_of G1, rng EL by RELSET_1:13
-,RELAT_1:87;
+        reconsider EL' as PartFunc of the_Edges_of G1, rng EL by RELAT_1:87
+,RELSET_1:13;
         set G2 = G1.set(ELabelSelector, EL');
 A3:     G2 == G1 by Lm3;
         then
@@ -1528,7 +1530,7 @@ A4:     G2 == X by A2,GLIB_000:88;
         set VL = (the_VLabel_of G) | the_Vertices_of G2;
         reconsider VL'=VL as PartFunc of dom VL, rng VL by RELSET_1:11;
         reconsider VL' as PartFunc of the_Vertices_of G2, rng VL
-        by RELSET_1:13,RELAT_1:87;
+        by RELAT_1:87,RELSET_1:13;
         set G3 = G2.set(VLabelSelector, VL');
 A5:     G3 == G2 by Lm3;
         then
@@ -1564,7 +1566,7 @@ A9:     not (V is non empty Subset of the_Vertices_of G &
         reconsider GG as [Weighted] [ELabeled] [VLabeled]
         inducedSubgraph of G,V,E by A9,GLIB_000:def 39;
         take GG;
-        dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3;
+        dom the_Weight_of G = the_Edges_of G by PARTFUN1:def 4;
         then the_Weight_of G = (the_Weight_of G) | the_Edges_of G by RELAT_1:98
 ;
         hence GG is weight-inheriting by Def10;
@@ -1849,7 +1851,7 @@ A3: G4 is real-elabeled by Def15;
     then rng (the_Weight_of G4) = {} by A1;
     then rng (the_Weight_of G4) c= Real>=0 by XBOOLE_1:2;
     hence G4 is nonnegative-weighted by Def14;
-    thus G4 is real-WEV by A2,A3;
+    thus thesis by A2,A3;
   end;
   cluster finite non trivial Tree-like nonnegative-weighted real-WEV WEVGraph;
   existence
@@ -1883,7 +1885,7 @@ A7: G4 is real-elabeled by Def15;
     then {0} c= Real>=0 by TARSKI:def 3;
     then rng W c= Real>=0 by A4,XBOOLE_1:1;
     hence G4 is nonnegative-weighted by A5,Def14;
-    thus G4 is real-WEV by A6,A7;
+    thus thesis by A6,A7;
   end;
 end;
 
@@ -1892,7 +1894,7 @@ registration
   cluster the_Weight_of G -> finite;
   coherence
   proof
-A1: dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3;
+A1: dom the_Weight_of G = the_Edges_of G by PARTFUN1:def 4;
     then rng the_Weight_of G is finite by FINSET_1:26;
     hence thesis by A1,ORDERS_1:197;
   end;
@@ -2033,7 +2035,7 @@ A1: len IT =len W.edgeSeq() & for k being Nat st k in dom IT
     let n be Nat;
     assume 1 <= n & n <= len IT;
     then n in dom IT by FINSEQ_3:27;
-    hence IT.n = (the_Weight_of G).(W.edgeSeq().n) by A1;
+    hence thesis by A1;
   end;
   uniqueness
   proof
@@ -2049,7 +2051,7 @@ A4:   1 <= n & n <= len IT1;
       hence IT1.n = (the_Weight_of G).(W.edgeSeq().n) by A2
         .= IT2.n by A2,A3,A4;
     end;
-    hence IT1 = IT2 by A2,A3,FINSEQ_1:18;
+    hence thesis by A2,A3,FINSEQ_1:18;
   end;
 end;
 
@@ -2121,7 +2123,7 @@ A4: z in dom f \/ dom (x.-->y) by FUNCT_4:def 1;
     hence z in X;
   end;
   then dom F1 c= X by TARSKI:def 3;
-  hence F is PartFunc of X,Y by RELSET_1:17;
+  hence thesis by RELSET_1:17;
 end;
 
 definition
@@ -2852,7 +2854,7 @@ registration
     real-WEV nonnegative-weighted WEVGraph;
     set F = NAT --> G;
 A1: dom F = NAT by FUNCOP_1:19;
-    then reconsider F as ManySortedSet of NAT by PBOOLE:def 3;
+    reconsider F as ManySortedSet of NAT;
     now
       let x be Nat;
       x in NAT by ORDINAL1:def 13;
@@ -2870,7 +2872,7 @@ A1: dom F = NAT by FUNCOP_1:19;
       hence F.x is [Weighted] & F.x is [ELabeled] & F.x is [VLabeled] by
 TARSKI:def 1;
     end;
-    hence F is [Weighted] & F is [ELabeled] & F is [VLabeled]
+    hence thesis
     by Def24,Def25,Def26;
   end;
 end;
@@ -2961,7 +2963,7 @@ A1: for x being Nat holds GSq.x is real-WEV;
       G is real-WEV;
       hence GSq.x is real-vlabeled;
     end;
-    hence GSq is real-vlabeled by Def30;
+    hence thesis by Def30;
   end;
   cluster real-weighted real-elabeled real-vlabeled -> real-WEV WEVGraphSeq;
   coherence
@@ -2973,7 +2975,7 @@ A2: GSq is real-weighted & GSq is real-elabeled & GSq is real-vlabeled;
     reconsider G = GSq.x as real-weighted real-elabeled real-vlabeled
     WEVGraph by A2,Def27,Def29,Def30;
     G is real-WEV;
-    hence GSq.x is real-WEV;
+    hence thesis;
   end;
 end;
 
@@ -2986,7 +2988,7 @@ registration
     real-WEV acyclic connected Tree-like nonnegative-weighted WEVGraph;
     set F = NAT --> G;
 A1: dom F = NAT by FUNCOP_1:19;
-    then reconsider F as ManySortedSet of NAT by PBOOLE:def 3;
+    reconsider F as ManySortedSet of NAT;
     now
       let x be Nat;
       x in NAT by ORDINAL1:def 13;
@@ -3088,7 +3090,7 @@ A1: G1 == G2 & the_Weight_of G1 = the_Weight_of G2 & G1 is WSubgraph of G3;
   the_Edges_of G1 = the_Edges_of G2 by A1,GLIB_000:def 36;
   then the_Weight_of G2 = (the_Weight_of G3)|the_Edges_of G2 by A1,Def10;
   then G2' is weight-inheriting by Def10;
-  hence G2 is WSubgraph of G3;
+  hence thesis;
 end;
 
 theorem  ::tWSUBGRAPH02
@@ -3127,8 +3129,8 @@ proof
 A1: the_Weight_of G2 = (the_Weight_of G1) | the_Edges_of G2 by Def10;
   let x be set;
   assume x in the_Edges_of G2;
-  then x in dom the_Weight_of G2 by PBOOLE:def 3;
-  hence (the_Weight_of G2).x = (the_Weight_of G1).x by A1,FUNCT_1:68;
+  then x in dom the_Weight_of G2 by PARTFUN1:def 4;
+  hence thesis by A1,FUNCT_1:70;
 end;
 
 :: Theorems regarding W.weightSeq()
@@ -3142,7 +3144,7 @@ proof
   then W.length() = 0 by GLIB_001:def 26;
   then len W.edgeSeq() = 0 by GLIB_001:def 18;
   then len W.weightSeq() = 0 by Def18;
-  hence W.weightSeq() = {};
+  hence thesis;
 end;
 
 theorem  ::tWWSEQ02
@@ -3328,8 +3330,8 @@ A12: y = (the_Weight_of G).(es.x) by A2,A6;
   then reconsider ws as Subset of W1.weightSeq() by TARSKI:def 3;
   take ws;
 A13: len Seq es = card es by GLIB_001:5
-    .= card dom ws by A2,PRE_CIRC:21
-    .= card ws by PRE_CIRC:21
+    .= card dom ws by A2,CARD_1:104
+    .= card ws by CARD_1:104
     .= len Seq ws by GLIB_001:5;
   then
 A14: len W2.weightSeq() = len Seq ws by A1,Def18;
@@ -3350,7 +3352,7 @@ A21: n in dom Seq es by A13,A14,A15,FINSEQ_3:27;
       .= (the_Weight_of G).((Seq es).n) by A17,A21,FUNCT_1:22;
     hence W2.weightSeq().n = (Seq ws).n by A1,A15,Def18;
   end;
-  hence W2.weightSeq() = Seq ws by A14,FINSEQ_1:18;
+  hence thesis by A14,FINSEQ_1:18;
 end;
 
 theorem Th26: ::tWWSEQ08
@@ -3375,7 +3377,7 @@ A4: 1 <= x & x <= len WS1 & x <= len WS2 by A3,FINSEQ_3:27;
       .= (the_Weight_of G1).(W1.edgeSeq().x) by A1,GLIB_001:87
       .= WS1.x by A4,Def18;
   end;
-  hence W1.weightSeq() = W2.weightSeq() by FINSEQ_2:10;
+  hence thesis by FINSEQ_2:10;
 end;
 
 theorem Th27: ::tWWSEQ09
@@ -3403,7 +3405,7 @@ A4: x in dom W2.edgeSeq() by A3,FINSEQ_3:27;
       .= (the_Weight_of G1).(W1.edgeSeq().x) by A1,A4,FUNCT_1:72,GLIB_001:80
       .= WS1.x by A3,Def18;
   end;
-  hence W1.weightSeq() = W2.weightSeq() by FINSEQ_2:10;
+  hence thesis by FINSEQ_2:10;
 end;
 
 :: Theorems regarding W.cost()
@@ -3420,7 +3422,7 @@ proof
   set W = G.walkOf(v1,e,v2);
   assume e Joins v1,v2,G;
   then W.weightSeq() = <* (the_Weight_of G).e *> by Th21;
-  hence W.cost() = (the_Weight_of G).e by FINSOP_1:12;
+  hence thesis by FINSOP_1:12;
 end;
 
 theorem  ::tWCOST03
@@ -3440,7 +3442,7 @@ proof
   set W3 = W1.append(W2);
   assume W1.last() = W2.first();
   then W3.weightSeq() = W1.weightSeq() ^ W2.weightSeq() by Th23;
-  hence W3.cost() = W1.cost() + W2.cost() by RVSUM_1:105;
+  hence thesis by RVSUM_1:105;
 end;
 
 theorem  ::tWCOST05
@@ -3481,7 +3483,7 @@ proof
 A1: 1 <= n & n <= len WS by FINSEQ_3:27;
   then
 A2: WS.n = (the_Weight_of G).(W.edgeSeq().n) by Def18;
-A3: dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3;
+A3: dom the_Weight_of G = the_Edges_of G by PARTFUN1:def 4;
   1 <= n & n <= len W.edgeSeq() by A1,Def18;
   then n in dom W.edgeSeq() by FINSEQ_3:27;
   then (W.edgeSeq().n) in dom the_Weight_of G by A3,GLIB_001:80;
@@ -3491,7 +3493,7 @@ A4: WS.n in rng (the_Weight_of G) by A2,FUNCT_1:def 5;
   then WS.n in Real>=0 by A4;
   then consider r being Real such that
 A5: r = WS.n & r >= 0 by GRAPH_5:def 12;
-  thus 0 <= WS.n by A5;
+  thus thesis by A5;
 end;
 
 theorem
@@ -3501,7 +3503,7 @@ proof
   let G be nonnegative-weighted WGraph, W be Walk of G;
   for i being Nat st i in dom W.weightSeq()
   holds 0 <= (W.weightSeq()).i by Th35;
-  hence 0 <= W.cost() by RVSUM_1:114;
+  hence thesis by RVSUM_1:114;
 end;
 
 theorem
@@ -3513,7 +3515,7 @@ proof
 A1: W2.weightSeq() = Seq ws by Th25;
   for i being Element of NAT st i in dom W1.weightSeq()
   holds 0 <= (W1.weightSeq()).i by Th35;
-  hence W2.cost() <= W1.cost() by A1,Th2;
+  hence thesis by A1,Th2;
 end;
 
 theorem  ::tWNNWEIGHT04
@@ -3522,7 +3524,7 @@ theorem  ::tWNNWEIGHT04
 proof
   let G be nonnegative-weighted WGraph, e be set;
   assume e in the_Edges_of G;
-  then e in dom the_Weight_of G by PBOOLE:def 3;
+  then e in dom the_Weight_of G by PARTFUN1:def 4;
   then
 A1: (the_Weight_of G).e in rng (the_Weight_of G) by FUNCT_1:12;
   rng (the_Weight_of G) c= Real>=0 by Def14;
@@ -3593,7 +3595,7 @@ proof
   now per cases;
     suppose e in the_Edges_of G;
       then G2 = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) by Def21;
-      hence the_Weight_of G = the_Weight_of G2 by GLIB_000:12;
+      hence thesis by GLIB_000:12;
     end;
     suppose not e in the_Edges_of G;
       hence thesis by Def21;
@@ -3611,7 +3613,7 @@ proof
   now per cases;
     suppose e in the_Edges_of G;
       then G2 = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) by Def21;
-      hence the_VLabel_of G = the_VLabel_of G2 by GLIB_000:12;
+      hence thesis by GLIB_000:12;
     end;
     suppose not e in the_Edges_of G;
       hence thesis by Def21;
@@ -3704,7 +3706,7 @@ proof
   now per cases;
     suppose e in the_Vertices_of G;
       then G2 = G.set(VLabelSelector, the_VLabel_of G +* (e.-->x)) by Def22;
-      hence the_Weight_of G = the_Weight_of G2 by GLIB_000:12;
+      hence thesis by GLIB_000:12;
     end;
     suppose not e in the_Vertices_of G;
       hence thesis by Def22;
@@ -3722,7 +3724,7 @@ proof
   now per cases;
     suppose e in the_Vertices_of G;
       then G2 = G.set(VLabelSelector, the_VLabel_of G +* (e.-->x)) by Def22;
-      hence the_ELabel_of G = the_ELabel_of G2 by GLIB_000:12;
+      hence thesis by GLIB_000:12;
     end;
     suppose not e in the_Vertices_of G;
       hence thesis by Def22;
@@ -3769,7 +3771,7 @@ proof
   assume e in the_Edges_of G;
   then EG2 = EG +* (e.--> val) by Th39;
   then dom EG2 = dom EG \/ dom (e.-->val) by FUNCT_4:def 1;
-  hence G2.labeledE() = G.labeledE() \/ {e} by FUNCOP_1:19;
+  hence thesis by FUNCOP_1:19;
 end;
 
 theorem  ::tGLABELE03
@@ -3796,7 +3798,7 @@ A1: e in the_Edges_of G & not e in G.labeledE();
 A2: card (dom ECurr \/ {e}) = card (dom ECurr) + 1 by CARD_2:54;
 A3: ENext = ECurr +* (e .--> val) by A1,Th39;
   dom (e.-->val) = {e} by FUNCOP_1:19;
-  hence card G2.labeledE() = card G.labeledE() + 1 by A2,A3,FUNCT_4:def 1;
+  hence thesis by A2,A3,FUNCT_4:def 1;
 end;
 
 theorem  ::tGLABELE05
@@ -3848,7 +3850,7 @@ proof
   assume e in the_Vertices_of G;
   then EG2 = EG +* (e.--> val) by Th45;
   then dom EG2 = dom EG \/ dom (e.-->val) by FUNCT_4:def 1;
-  hence G2.labeledV() = G.labeledV() \/ {e} by FUNCOP_1:19;
+  hence thesis by FUNCOP_1:19;
 end;
 
 theorem  ::tGLABELV03
@@ -3875,7 +3877,7 @@ A1: e in the_Vertices_of G & not e in G.labeledV();
 A2: card (dom ECurr \/ {e}) = card (dom ECurr) + 1 by CARD_2:54;
 A3: ENext = ECurr +* (e .--> val) by A1,Th45;
   dom (e.-->val) = {e} by FUNCOP_1:19;
-  hence card G2.labeledV() = card G.labeledV() + 1 by A2,A3,FUNCT_4:def 1;
+  hence thesis by A2,A3,FUNCT_4:def 1;
 end;
 
 theorem  ::tGLABELV05

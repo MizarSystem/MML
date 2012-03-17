@@ -13,12 +13,12 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1, RELAT_1, FUNCT_1,
       QC_LANG1, CARD_1, NUMBERS, ORDINAL1, FINSEQ_2, XXREAL_0, NAT_1, FUNCOP_1,
       CQC_LANG, FINSET_1, VALUAT_1, CQC_THE1, RELSET_1, PARTFUN1, FUNCT_2,
-      FRAENKEL, DOMAIN_1, MCART_1, SUBSTUT1, SUBSTUT2, SUBLEMMA;
+      DOMAIN_1, MCART_1, SUBSTUT1, SUBSTUT2, SUBLEMMA;
  constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2,
-      CQC_THE1, SUBSTUT2;
+      CQC_THE1, SUBSTUT2, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
       FINSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, CARD_5, QC_LANG1, CQC_LANG,
-      CARD_1;
+      CARD_1, FINSEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0, FINSEQ_2, FUNCOP_1;
  theorems TARSKI, FUNCT_1, MCART_1, XBOOLE_0, XBOOLE_1, QC_LANG1, ZFMISC_1,
@@ -165,7 +165,7 @@ proof
 A1: len f = i+1 by NAT_1:6;
   reconsider i as Element of NAT by ORDINAL1:def 13;
   Ant(f) = f|(Seg i) by A1,Def1;
-  then dom Ant(f) = dom f /\ Seg i by FUNCT_1:68;
+  then dom Ant(f) = dom f /\ Seg i by RELAT_1:90;
   then Seg (len Ant(f)) = dom f /\ Seg i by FINSEQ_1:def 3;
   then
 A2: Seg (len Ant(f)) = Seg (len f) /\ Seg i by FINSEQ_1:def 3;
@@ -442,7 +442,7 @@ A29:  i = n+1;
       then f.i = f.(len f) by A1,Th2;
       then
 A30:  f.i = Suc(f) by A1,Def2;
-      len idseq n = n by FINSEQ_2:55;
+      len idseq n = n by FINSEQ_1:def 18;
       then
 A31:  Sgm (dom f2).i = n+(m+1) by A18,A29,FINSEQ_1:59;
 A32:  i in dom Sgm (dom f2) by A3,A4,A13,FUNCT_1:8;
@@ -500,8 +500,7 @@ A1: for a holds a in X iff a in bound_QC-variables & P[a] from XBOOLE_0:sch 1;
     take X;
     for a st a in X holds a in bound_QC-variables by A1;
     hence X is Subset of bound_QC-variables by TARSKI:def 3;
-    thus a in X iff ex i,p st i in dom f & p = f.i &
-    a in still_not-bound_in p by A1;
+    thus thesis by A1;
   end;
   uniqueness
   proof
@@ -519,7 +518,7 @@ A2: (for a holds a in X iff ex i,p st i in dom f & p = f.i &
       a in still_not-bound_in p) by A2;
       hence a in X iff a in Y;
     end;
-    hence X = Y by TARSKI:2;
+    hence thesis by TARSKI:2;
   end;
 end;
 
@@ -534,7 +533,7 @@ definition
 A1: for a holds a in X iff a in bool [:NAT,CQC-WFF:] & P[a]
     from XBOOLE_0:sch 1;
     take X;
-    thus a in X iff P[a] by A1;
+    thus thesis by A1;
   end;
   uniqueness
   proof
@@ -731,7 +730,7 @@ A3: J,v |= Ant(Ant(f));
 A4: now
     assume J,v |= Suc(Ant(f));
     then J,v |= Ant(f) by A2,A3,Th17;
-    hence J,v |= Suc(f) by A1,Def15;
+    hence thesis by A1,Def15;
   end;
   now
     assume not J,v |= Suc(Ant(f));
@@ -765,7 +764,7 @@ A5: J,v |= Ant(f);
     then J,v |= Ant(f) by A2,A3,Th17;
     hence contradiction by A4;
   end;
-  hence J,v |= p by A1,VALUAT_1:28;
+  hence thesis by A1,VALUAT_1:28;
 end;
 
 theorem Th20:
@@ -860,8 +859,8 @@ A3: b in dom f1;
     x <> b by A1,A3,SUBLEMMA:64;
     then
 A4: v.(x|a).b = v.b by SUBLEMMA:49;
-    v.(x|a).b = f1.b by A3,FUNCT_1:68;
-    hence f1.b = f2.b by A2,A3,A4,FUNCT_1:68;
+    v.(x|a).b = f1.b by A3,FUNCT_1:70;
+    hence f1.b = f2.b by A2,A3,A4,FUNCT_1:70;
   end;
   hence thesis by A2,FUNCT_1:9;
 end;
@@ -930,7 +929,7 @@ A3: v.(y|a).y = a1 & J,v.(y|a).(x|a1) |= p by Th24;
 A4: J,v.(y|a).(x|a) |= p by A3,SUBLEMMA:50;
     v.(y|a).(x|a)|still_not-bound_in p = v.(x|a)|still_not-bound_in p
     by A1,Th28;
-    hence J,v.(x|a) |= p by A4,SUBLEMMA:70;
+    hence thesis by A4,SUBLEMMA:70;
   end;
   hence thesis by SUBLEMMA:51;
 end;
@@ -2919,7 +2918,6 @@ theorem Th63:
   still_not-bound_in f is finite
 proof
   defpred P[set,set] means ex p st $2 = still_not-bound_in p & p = f.$1;
-A1: for a,b1,b2 being set st a in dom f & P[a,b1] & P[a,b2] holds b1 = b2;
 A2: for a being set st a in dom f ex b st P[a,b]
   proof
     let a be set such that

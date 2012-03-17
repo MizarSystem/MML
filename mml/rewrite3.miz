@@ -1,0 +1,2142 @@
+:: Labelled State Transition Systems
+::  by Micha{\l} Trybulec
+::
+:: Received May 5, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, FUNCT_1, FINSEQ_1, RELAT_1, ALGSEQ_1, AFINSQ_1, FSM_1,
+      FINSET_1, PRELAMB, REWRITE1, REWRITE2, ARYTM, MCART_1, ARYTM_1, REWRITE3;
+ notations REWRITE2, CARD_1, TARSKI, XBOOLE_0, ZFMISC_1, XCMPLX_0, NAT_1,
+      DOMAIN_1, FUNCT_1, RELSET_1, FUNCT_2, XXREAL_0, FINSET_1, RELAT_1,
+      CARD_FIN, AFINSQ_1, SUBSET_1, REWRITE1, CATALAN2, FLANG_1, STRUCT_0,
+      NUMBERS, ORDINAL1, XREAL_0, REAL_1, MCART_1, FINSEQ_1;
+ constructors CARD_1, XXREAL_0, NAT_1, FSM_1, MEMBERED, CARD_FIN, SUBSET_1,
+      REWRITE2, REWRITE1, RELAT_1, FUNCT_1, FLANG_1, NUMBERS, XCMPLX_0,
+      XREAL_0, WELLORD2, MCART_1, FINSEQ_1, RELSET_1;
+ registrations CARD_1, RELSET_1, NAT_1, XREAL_0, XBOOLE_0, MEMBERED, XXREAL_0,
+      REWRITE2, STRUCT_0, SUBSET_1, REWRITE1, AFINSQ_1, RELAT_1, FUNCT_1,
+      ORDINAL1, NUMBERS, REAL_1, FINSET_1, FINSEQ_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, STRUCT_0;
+ theorems AFINSQ_1, CALCUL_1, FLANG_1, FLANG_2, FUNCT_1, NAT_1, RELAT_1,
+      RELSET_1, REWRITE1, STRUCT_0, TARSKI, XREAL_1, XXREAL_0, ZFMISC_1,
+      FINSEQ_1, FINSEQ_2, FINSEQ_3, MCART_1, REWRITE2;
+ schemes FINSEQ_1, NAT_1, RELSET_1;
+
+begin :: Preliminaries - FinSequences
+
+reserve x, x1, x2, y, y1, y2, z, z1, z2, X, X1, X2, Y, Z for set;
+reserve E for non empty set;
+reserve e for Element of E;
+reserve u, u', u1, u2, v, v1, v2, w, w', w1, w2 for Element of E^omega;
+reserve F, F1, F2 for Subset of E^omega;
+reserve i, j, k, l, n for Nat;
+
+theorem LmSeq10:
+  for p being FinSequence st k in dom p holds (<*x*>^p).(k + 1) = p.k
+  proof
+    let p be FinSequence such that
+A:    k in dom p;
+    len <*x*> + k in dom(<*x*>^p) by A, FINSEQ_1:41;
+    then k + 1 in dom(<*x*>^p) by FINSEQ_1:56;
+    then
+B:    k + 1 <= len(<*x*>^p) by FINSEQ_3:27;
+    k >= 1 by A, FINSEQ_3:27;
+    then k >= len <*x*> by FINSEQ_1:56;
+    then
+C:    len <*x*> + 0 < k + 1 by XREAL_1:10;
+    (<*x*>^p).(k + 1) = p.(k + 1 - len <*x*>) by B, C, FINSEQ_1:37
+                     .= p.(k + 1 - 1) by FINSEQ_1:56
+                     .= p.(k + (1 - 1));
+    hence thesis;
+  end;
+
+theorem LmSeq20:
+  for p being FinSequence holds
+    p <> {} implies ex q being FinSequence, x st
+      p = q^<*x*> & len p = len q + 1
+  proof
+    let p be FinSequence such that
+A:    p <> {};
+    consider q being FinSequence, x such that
+B:    p = q^<*x*> by A, FINSEQ_1:63;
+    take q, x;
+    len p = len q + len <*x*> by B, FINSEQ_1:35
+         .= len q + 1 by FINSEQ_1:57;
+    hence thesis by B;
+  end;
+
+theorem LmSeq40:
+  for p being FinSequence st k in dom p & not k + 1 in dom p holds len p = k
+  proof
+    let p be FinSequence such that
+A:    k in dom p & not k + 1 in dom p;
+B:  1 <= k & k <= len p by A, FINSEQ_3:27;
+C:  1 > k + 1 or k + 1 > len p by A, FINSEQ_3:27;
+    1 + 0 <= k + 1 by XREAL_1:9;
+    hence thesis by B, C, NAT_1:22;
+  end;
+
+begin :: Preliminaries - RedSequences
+
+theorem LmRed5:
+  for R being Relation, P being RedSequence of R, q1, q2 being FinSequence st
+    P = q1^q2 & len q1 > 0 & len q2 > 0 holds
+      q1 is RedSequence of R & q2 is RedSequence of R
+  proof
+    let R be Relation, P be RedSequence of R, q1, q2 be FinSequence such that
+A1:   P = q1^q2 and
+A2:   len q1 > 0 & len q2 > 0;
+    now
+      let i be Element of NAT;
+      assume i in dom q1 & i + 1 in dom q1; then
+B:      1 <= i & i <= len q1 & 1 <= i + 1 & i + 1 <= len q1 by FINSEQ_3:27;
+      then
+C:      q1.i = (q1^q2).i & q1.(i + 1) = (q1^q2).(i + 1) by FINSEQ_1:85;
+      len q1 <= len P by A1, CALCUL_1:6;
+      then i <= len P & i + 1 <= len P by B, XXREAL_0:2;
+      then i in dom P & i + 1 in dom P by B, FINSEQ_3:27;
+      hence [q1.i, q1.(i + 1)] in R by A1, C, REWRITE1:def 2;
+    end;
+    hence q1 is RedSequence of R by A2, REWRITE1:def 2;
+    now
+      let i be Element of NAT;
+      assume i in dom q2 & i + 1 in dom q2;
+      then
+B:      1 <= i & i <= len q2 & 1 <= i + 1 & i + 1 <= len q2 by FINSEQ_3:27;
+      then
+C:      q2.i = (q1^q2).(len q1 + i) &
+        q2.(i + 1) = (q1^q2).(len q1 + (i + 1)) by FINSEQ_1:86;
+      len q1 + len q2 = len P by A1, FINSEQ_1:35;
+      then
+D:      len q1 + i <= len P - len q2 + len q2 &
+          len q1 + (i + 1) <= len P - len q2 + len q2 by B, XREAL_1:9;
+      1 <= i + len q1 & 1 <= (i + 1) + len q1 by B, NAT_1:12;
+      then (len q1 + i) in dom P & (len q1 + i + 1) in dom P by D, FINSEQ_3:27;
+      hence [q2.i, q2.(i + 1)] in R by A1, C, REWRITE1:def 2;
+    end;
+    hence q2 is RedSequence of R by A2, REWRITE1:def 2;
+  end;
+
+theorem LmRed10:
+  for R being Relation, P being RedSequence of R st len P > 1 holds
+    ex Q being RedSequence of R st <*P.1*>^Q = P & len Q + 1 = len P
+  proof
+    let R be Relation, P be RedSequence of R such that
+A:    len P > 1;
+    consider x being set, Q being FinSequence such that
+B:    P = <*x*>^Q & len P = len Q + 1 by REWRITE1:5;
+C:  P.1 = x by B, FINSEQ_1:58;
+D:  len <*x*> = 1 by FINSEQ_1:56;
+    1 + len Q > 1 + 0 by A, B;
+    then len Q > 0;
+    then Q is RedSequence of R by B, D, LmRed5;
+    hence thesis by B, C;
+  end;
+
+theorem
+  for R being Relation, P being RedSequence of R st len P > 1 holds
+    ex Q being RedSequence of R st Q^<*P.len P*> = P & len Q + 1 = len P
+  proof
+    let R be Relation, P be RedSequence of R such that
+A:    len P > 1;
+    consider Q being FinSequence, x such that
+B:    P = Q^<*x*> & len Q + 1 = len P by LmSeq20;
+C:  P.len P = x by B, FINSEQ_1:59;
+D:  len <*x*> = 1 by FINSEQ_1:56;
+    1 + len Q > 1 + 0 by A, B;
+    then len Q > 0;
+    then Q is RedSequence of R by B, D, LmRed5;
+    hence thesis by B, C;
+  end;
+
+theorem
+  for R being Relation, P being RedSequence of R st len P > 1 holds
+    ex Q being RedSequence of R st
+      len Q + 1 = len P &
+      for k st k in dom Q holds Q.k = P.(k + 1)
+  proof
+    let R be Relation, P be RedSequence of R such that
+A:    len P > 1;
+    consider Q being RedSequence of R such that
+B:    P = <*P.1*>^Q & len Q + 1 = len P by A, LmRed10;
+    take Q;
+    thus thesis by B, LmSeq10;
+  end;
+
+theorem LmRed40:
+  for R being Relation holds
+     <*x, y*> is RedSequence of R implies [x, y] in R
+  proof
+    let R be Relation;
+    assume
+A:    <*x, y*> is RedSequence of R;
+    set P = <*x, y*>;
+B:  len P = 2 & P.1 = x & P.2 = y by FINSEQ_1:61;
+    then 1 in dom P & 1 + 1 in dom P by FINSEQ_3:27;
+    hence thesis by A, B, REWRITE1:def 2;
+  end;
+
+begin :: Preliminaries - XFinSequences
+
+theorem LmXSeq50:
+  w = u^v implies len u <= len w & len v <= len w
+  proof
+    assume w = u^v;
+    then len w = len u + len v by AFINSQ_1:20;
+    then len w + len u >= len u + len v + 0 &
+         len w + len v >= len u + len v + 0 by XREAL_1:9;
+    hence thesis by XREAL_1:8;
+  end;
+
+theorem LmXSeq60:
+  w = u^v & u <> <%>E & v <> <%>E implies len u < len w & len v < len w
+  proof
+    assume that
+A1:   w = u^v and
+A2:   u <> <%>E & v <> <%>E;
+    len w = len u + len v by A1, AFINSQ_1:20;
+    then len w + len u > len u + len v + 0 &
+         len w + len v > len u + len v + 0 by A2, XREAL_1:10;
+    hence thesis by XREAL_1:8;
+  end;
+
+theorem
+  w1^v1 = w2^v2 & ((len w1 = len w2) or (len v1 = len v2)) implies
+    w1 = w2 & v1 = v2
+  proof
+    assume that
+A1:   w1^v1 = w2^v2 and
+A2:   (len w1 = len w2) or (len v1 = len v2);
+B:  len w1 + len v1 = len (w2^v2) by A1, AFINSQ_1:20
+                   .= len w2 + len v2 by AFINSQ_1:20;
+    now
+      let k be Element of NAT;
+      assume
+C:      k in dom w1;
+      hence w1.k = (w2^v2).k by A1, AFINSQ_1:def 4
+               .= w2.k by A2, B, C, AFINSQ_1:def 4;
+    end;
+    hence w1 = w2 by A2, B, AFINSQ_1:10;
+    hence thesis by A1, AFINSQ_1:31;
+  end;
+
+theorem LmXSeq66:
+  w1^v1 = w2^v2 & ((len w1 <= len w2) or (len v1 >= len v2)) implies
+    ex u st w1^u = w2 & v1 = u^v2
+  proof
+    assume that
+A1:   w1^v1 = w2^v2 and
+A2:   (len w1 <= len w2) or (len v1 >= len v2);
+A3: len w1 + len v1 = len (w2^v2) by A1, AFINSQ_1:20
+                   .= len w2 + len v2 by AFINSQ_1:20;
+    len v1 >= len v2 implies
+      len w1 + len v1 - len v1 <= len w2 + len v2 - len v2 by A3, XREAL_1:15;
+    then consider u' being XFinSequence such that
+B:    w1^u' = w2 by A1, A2, AFINSQ_1:45;
+    reconsider u = u' as Element of E^omega by B, FLANG_1:5;
+    take u;
+    thus w1^u = w2 by B;
+    w2^v2 = w1^(u^v2) by B, AFINSQ_1:30;
+    hence thesis by A1, AFINSQ_1:31;
+  end;
+
+theorem LmXSeq70:
+  w1^v1 = w2^v2 implies
+    (ex u st w1^u = w2 & v1 = u^v2) or (ex u st w2^u = w1 & v2 = u^v1)
+  proof
+    assume
+A:    w1^v1 = w2^v2;
+    len w1 < len w2 or len w1 >= len w2;
+    hence thesis by A, LmXSeq66;
+  end;
+
+begin :: Labelled State Transition Systems
+
+definition
+  let X;
+  struct (1-sorted) transition-system over X
+  (#
+    carrier -> set,
+    Tran -> Relation of [: the carrier, X :], the carrier
+  #);
+end;
+
+:: Transition Systems over Subsets of E^omega
+:: Deterministic Transition Systems
+
+definition
+  let E, F;
+  let TS be transition-system over F;
+  attr TS is deterministic means
+:DefDetTS:
+    (the Tran of TS) is Function &
+    not <%>E in rng dom (the Tran of TS) &
+    for s being Element of TS, u, v st
+      u <> v &
+      [s, u] in dom (the Tran of TS) &
+      [s, v] in dom (the Tran of TS) holds
+        not ex w st u^w = v or v^w = u;
+end;
+
+theorem ThDet10:
+  for TS being transition-system over F holds
+    dom (the Tran of TS) = {} implies TS is deterministic
+  proof
+    let TS be transition-system over F;
+    assume
+A:    dom (the Tran of TS) = {};
+    then
+B:    (the Tran of TS) = {};
+    for s being Element of TS, u, v st
+      u <> v &
+      [s, u] in dom (the Tran of TS) &
+      [s, v] in dom (the Tran of TS) holds
+        not ex w st u^w = v or v^w = u by A;
+    hence thesis by DefDetTS, B, RELAT_1:60;
+  end;
+
+registration
+  let E, F;
+  cluster strict non empty finite deterministic transition-system over F;
+  existence
+  proof
+    set X = the non empty finite set;
+    reconsider T = {} as Relation of [: X, F :], X by RELSET_1:25;
+    take TS = transition-system (# X, T #);
+    thus TS is strict;
+    thus TS is non empty;
+    thus the carrier of TS is finite;
+    thus TS is deterministic by RELAT_1:60, ThDet10;
+  end;
+end;
+
+begin :: Productions
+
+definition
+  let X;
+  let TS be transition-system over X;
+  let x, y, z;
+  pred x, y -->. z, TS means
+:DefProd:
+    [[x, y], z] in the Tran of TS;
+end;
+
+theorem ThProd30:
+  for TS being transition-system over X holds
+    x, y -->. z, TS implies
+      x in TS & y in X & z in TS &
+      x in dom dom (the Tran of TS) & y in rng dom (the Tran of TS) &
+      z in rng (the Tran of TS)
+  proof
+    let TS be transition-system over X;
+    assume x, y -->. z, TS;
+    then
+A:    [[x, y], z] in the Tran of TS by DefProd;
+    then [x, y] in [: the carrier of TS, X :] by ZFMISC_1:106;
+    hence x in the carrier of TS & y in X & z in the carrier of TS
+      by A, ZFMISC_1:106;
+    [x, y] in dom (the Tran of TS) by A, RELAT_1:20;
+    hence x in dom dom (the Tran of TS) &
+          y in rng dom (the Tran of TS) by RELAT_1:20;
+    thus z in rng (the Tran of TS) by A, RELAT_1:20;
+  end;
+
+theorem ThProd40:
+  for TS1 being transition-system over X1,
+      TS2 being transition-system over X2 st
+    the Tran of TS1 = the Tran of TS2 holds
+      x, y -->. z, TS1 implies x, y -->. z, TS2
+  proof
+    let TS1 be transition-system over X1,
+        TS2 be transition-system over X2 such that
+A1:   the Tran of TS1 = the Tran of TS2;
+    assume
+A2:   x, y -->. z, TS1;
+    [[x, y], z] in the Tran of TS1 by A2, DefProd;
+    hence thesis by A1, DefProd;
+  end;
+
+theorem ThProd50:
+  for TS being transition-system over F st
+    the Tran of TS is Function holds
+      x, y -->. z1, TS & x, y -->. z2, TS implies z1 = z2
+  proof
+    let TS be transition-system over F such that
+A:    the Tran of TS is Function;
+    assume
+B:    x, y -->. z1, TS & x, y -->. z2, TS;
+    [[x, y], z1] in the Tran of TS & [[x, y], z2] in the Tran of TS
+      by B, DefProd;
+    hence thesis by A, FUNCT_1:def 1;
+  end;
+
+theorem
+  for TS being transition-system over F st
+    not <%>E in rng dom (the Tran of TS) holds
+      not x, <%>E -->. y, TS
+  proof
+    let TS be transition-system over F such that
+A:    not <%>E in rng dom (the Tran of TS);
+    assume x, <%>E -->. y, TS;
+    then [[x, <%>E], y] in the Tran of TS by DefProd;
+    then [x, <%>E] in dom (the Tran of TS) by RELAT_1:20;
+    hence contradiction by A, RELAT_1:20;
+  end;
+
+theorem ThProd70:
+  for TS being deterministic transition-system over F holds
+    u <> v & x, u -->. z1, TS & x, v -->. z2, TS implies
+      not ex w st u^w = v or v^w = u
+  proof
+    let TS be deterministic transition-system over F;
+    assume that
+A1:   u <> v and
+A2:   x, u -->. z1, TS & x, v -->. z2, TS;
+    x in TS by A2, ThProd30;
+    then reconsider x as Element of TS by STRUCT_0:def 5;
+    [[x, u], z1] in the Tran of TS & [[x, v], z2] in the Tran of TS
+      by A2, DefProd;
+    then [x, u] in dom the Tran of TS & [x, v] in dom the Tran of TS
+      by RELAT_1:20;
+    hence thesis by A1, DefDetTS;
+  end;
+
+begin :: Direct Transitions
+
+definition
+  let E, F;
+  let TS be transition-system over F;
+  let x1, x2, y1, y2;
+  pred x1, x2 ==>. y1, y2, TS means
+:DefDir:
+    ex v, w st v = y2 & x1, w -->. y1, TS & x2 = w^v;
+end;
+
+theorem ThDir10:
+  for TS being transition-system over F holds
+    x1, x2 ==>. y1, y2, TS implies
+      x1 in TS & y1 in TS & x2 in E^omega & y2 in E^omega &
+      x1 in dom dom (the Tran of TS) & y1 in rng (the Tran of TS)
+  proof
+    let TS be transition-system over F;
+    assume x1, x2 ==>. y1, y2, TS;
+    then ex v, w st
+    v = y2 & x1, w -->. y1, TS & x2 = w^v by DefDir;
+    hence thesis by ThProd30;
+  end;
+
+theorem ThDir15:
+  for TS1 being transition-system over F1,
+      TS2 being transition-system over F2 st
+    the Tran of TS1 = the Tran of TS2 &
+    x1, x2 ==>. y1, y2, TS1 holds x1, x2 ==>. y1, y2, TS2
+  proof
+    let TS1 be transition-system over F1,
+        TS2 be transition-system over F2 such that
+A2:   the Tran of TS1 = the Tran of TS2 and
+A3:   x1, x2 ==>. y1, y2, TS1;
+    consider v, w such that
+B:    v = y2 & x1, w -->. y1, TS1 & x2 = w^v by A3, DefDir;
+    take v, w;
+    thus thesis by A2, B, ThProd40;
+  end;
+
+theorem ThDir25:
+  for TS being transition-system over F holds
+    x, u ==>. y, v, TS implies
+      ex w st x, w -->. y, TS & u = w^v
+  proof
+    let TS be transition-system over F;
+    assume x, u ==>. y, v, TS;
+    then consider v1, w such that
+A:     v1 = v & x, w -->. y, TS & u = w^v1 by DefDir;
+    take w;
+    thus thesis by A;
+  end;
+
+theorem ThDir20:
+  for TS being transition-system over F holds
+    x, y -->. z, TS iff x, y ==>. z, <%>E, TS
+  proof
+    let TS be transition-system over F;
+    thus x, y -->. z, TS implies x, y ==>. z, <%>E, TS
+    proof
+      assume
+A:      x, y -->. z, TS;
+      y in F by A, ThProd30;
+      then reconsider w = y as Element of E^omega;
+      w = w^(<%>E) by AFINSQ_1:32;
+      hence thesis by A, DefDir;
+    end;
+    assume x, y ==>. z, <%>E, TS;
+    then ex v, w st v = <%>E & x, w -->. z, TS & y = w^v by DefDir;
+    hence thesis by AFINSQ_1:32;
+  end;
+
+theorem ThDir26:
+  for TS being transition-system over F holds
+    x, v -->. y, TS iff x, v^w ==>. y, w, TS
+  proof
+    let TS be transition-system over F;
+    thus x, v -->. y, TS implies x, v^w ==>. y, w, TS by DefDir;
+    assume x, v^w ==>. y, w, TS;
+    then ex u st x, u -->. y, TS & v^w = u^w by ThDir25;
+    hence thesis by AFINSQ_1:31;
+  end;
+
+theorem ThDir30:
+  for TS being transition-system over F holds
+    x, u ==>. y, v, TS implies x, u^w ==>. y, v^w, TS
+  proof
+    let TS be transition-system over F;
+    assume x, u ==>. y, v, TS;
+    then consider u1 such that
+A:    x, u1 -->. y, TS & u = u1^v by ThDir25;
+    u^w = u1^(v^w) by A, AFINSQ_1:30;
+    hence thesis by A, DefDir;
+  end;
+
+theorem ThDir35:
+  for TS being transition-system over F holds
+    x, u ==>. y, v, TS implies len u >= len v
+  proof
+    let TS be transition-system over F;
+    assume
+A:    x, u ==>. y, v, TS;
+    ex w st x, w -->. y, TS & u = w^v by A, ThDir25;
+    hence thesis by LmXSeq50;
+  end;
+
+theorem ThDir40:
+  for TS being transition-system over F st
+    the Tran of TS is Function holds
+      x1, x2 ==>. y1, z, TS & x1, x2 ==>. y2, z, TS implies y1 = y2
+  proof
+    let TS be transition-system over F such that
+A:    the Tran of TS is Function;
+    assume
+B:    x1, x2 ==>. y1, z, TS & x1, x2 ==>. y2, z, TS;
+    consider v1, w1 such that
+C1:   v1 = z & x1, w1 -->. y1, TS & x2 = w1^v1 by B, DefDir;
+    consider v2, w2 such that
+C2:   v2 = z & x1, w2 -->. y2, TS & x2 = w2^v2 by B, DefDir;
+     w1 = w2 by C1, C2, AFINSQ_1:31;
+     hence thesis by A, C1, C2, ThProd50;
+  end;
+
+theorem ThDir60:
+  for TS being transition-system over F st
+    not <%>E in rng dom (the Tran of TS) holds not x, z ==>. y, z, TS
+  proof
+    let TS be transition-system over F such that
+A:    not <%>E in rng dom (the Tran of TS);
+    assume x, z ==>. y, z, TS;
+    then consider v, w such that
+C:    v = z & x, w -->. y, TS & z = w^v by DefDir;
+    [[x, w], y] in the Tran of TS by C, DefProd;
+    then
+D:    [x, w] in dom (the Tran of TS) by RELAT_1:20;
+    w = <%>E by C, FLANG_2:4;
+    hence contradiction by A, D, RELAT_1:20;
+  end;
+
+theorem ThDir50:
+  for TS being transition-system over F st
+    not <%>E in rng dom (the Tran of TS) holds
+      x, u ==>. y, v, TS implies len u > len v
+  proof
+    let TS be transition-system over F such that
+A:    not <%>E in rng dom (the Tran of TS);
+    assume
+B:    x, u ==>. y, v, TS;
+    consider w such that
+C:    x, w -->. y, TS & u = w^v by B, ThDir25;
+D:  w in rng dom (the Tran of TS) by C, ThProd30;
+    per cases;
+    suppose
+E:    v = <%>E;
+      then u <> <%>E by A, B, ThDir60;
+      then len u > 0;
+      hence thesis by E;
+    end;
+    suppose v <> <%>E;
+      hence thesis by A, C, D, LmXSeq60;
+    end;
+  end;
+
+theorem ThDir70:
+  for TS being deterministic transition-system over F holds
+    x1, x2 ==>. y1, z1, TS & x1, x2 ==>. y2, z2, TS implies
+      y1 = y2 & z1 = z2
+  proof
+    let TS be deterministic transition-system over F;
+    assume
+A:    x1, x2 ==>. y1, z1, TS & x1, x2 ==>. y2, z2, TS;
+    consider v1, w1 such that
+B1:   v1 = z1 & x1, w1 -->. y1, TS & x2 = w1^v1 by A, DefDir;
+    consider v2, w2 such that
+B2:   v2 = z2 & x1, w2 -->. y2, TS & x2 = w2^v2 by A, DefDir;
+   (ex u' st w1^u' = w2 & v1 = u'^v2) or (ex u' st w2^u' = w1 & v2 = u'^v1)
+      by B1, B2, LmXSeq70;
+    then w1 = w2 by B1, B2, ThProd70;
+    then
+C:    v1 = v2 by B1, B2, AFINSQ_1:31;
+    the Tran of TS is Function by DefDetTS;
+    hence thesis by A, B1, B2, C, ThDir40;
+  end;
+
+begin :: ==>.-relation is introduced to define transitions
+:: using reduction relations from REWRITE1
+
+reserve TS for non empty transition-system over F;
+reserve s, s', s1, s2, t, t', t1, t2 for Element of TS;
+reserve S, T for Subset of TS;
+
+definition
+  let E, F, TS;
+  func ==>.-relation(TS) -> Relation of [: the carrier of TS, E^omega :] means
+:DefRel:
+    [[x1, x2], [y1, y2]] in it iff x1, x2 ==>. y1, y2, TS;
+  existence
+  proof
+    defpred P[Element of [: the carrier of TS, E^omega :],
+              Element of [: the carrier of TS, E^omega :]] means
+      ex x1, x2, y1, y2 st
+        [x1, x2] = $1 & [y1, y2] = $2 & x1, x2 ==>. y1, y2, TS;
+    consider R being Relation of [: the carrier of TS, E^omega :] such that
+A1:   for s, t being Element of [: the carrier of TS, E^omega :] holds
+        [s, t] in R iff P[s, t] from RELSET_1:sch 2;
+    take R;
+    now
+      let x1, x2, y1, y2;
+      set s = [x1, x2];
+      set t = [y1, y2];
+      thus x1, x2 ==>. y1, y2, TS implies [[x1, x2], [y1, y2]] in R
+      proof
+        assume
+A2:       x1, x2 ==>. y1, y2, TS;
+        then
+A3:       x1 in TS & y1 in TS & x2 in E^omega & y2 in E^omega by ThDir10;
+        then x1 in the carrier of TS & y1 in the carrier of TS
+          by STRUCT_0:def 5;
+        then s in [: the carrier of TS, E^omega :] &
+               t in [: the carrier of TS, E^omega :] by A3, ZFMISC_1:def 2;
+        hence thesis by A1, A2;
+      end;
+      assume
+A2:     [[x1, x2], [y1, y2]] in R;
+A3:   [x1, x2] in dom R & [y1, y2] in rng R by A2, RELAT_1:20;
+      dom R c= [: the carrier of TS, E^omega :] &
+        rng R c= [: the carrier of TS, E^omega :] by RELAT_1:def 18,def 19;
+      then consider x1', x2', y1', y2' being set such that
+A4:     [x1', x2'] = s & [y1', y2'] = t & x1', x2' ==>. y1', y2', TS
+          by A1, A2, A3;
+      x1 = x1' & x2 = x2' & y1 = y1' & y2 = y2' by A4, ZFMISC_1:33;
+      hence x1, x2 ==>. y1, y2, TS by A4;
+    end;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let R1, R2 be Relation of [: the carrier of TS, E^omega :] such that
+A2:   [[x1, x2], [y1, y2]] in R1 iff x1, x2 ==>. y1, y2, TS and
+A3:   [[x1, x2], [y1, y2]] in R2 iff x1, x2 ==>. y1, y2, TS;
+    now
+      let s, t be Element of [: the carrier of TS, E^omega :];
+      consider x, u being set such that
+B2:   x in the carrier of TS & u in E^omega & s = [x, u] by ZFMISC_1:def 2;
+      reconsider x as Element of the carrier of TS by B2;
+      reconsider u as Element of E^omega by B2;
+      consider y, v being set such that
+B3:   y in the carrier of TS & v in E^omega & t = [y, v] by ZFMISC_1:def 2;
+      reconsider y as Element of the carrier of TS by B3;
+      reconsider v as Element of E^omega by B3;
+      [s, t] in R1 iff x, u ==>. y, v, TS by A2, B2, B3;
+      hence [s, t] in R1 iff [s, t] in R2 by A3, B2, B3;
+    end;
+    hence thesis by RELSET_1:def 3;
+  end;
+end;
+
+theorem ThRel10:
+  [x, y] in ==>.-relation(TS) implies
+    ex s, v, t, w st x = [s, v] & y = [t, w]
+  proof
+    assume [x, y] in ==>.-relation(TS);
+    then
+A:    x in [: the carrier of TS, E^omega :] &
+      y in [: the carrier of TS, E^omega :] by ZFMISC_1:106;
+    consider x1, x2 such that
+B1:   x1 in the carrier of TS & x2 in E^omega & x = [x1, x2]
+        by A, ZFMISC_1:def 2;
+    consider y1, y2 such that
+B2:   y1 in the carrier of TS & y2 in E^omega & y = [y1, y2]
+        by A, ZFMISC_1:def 2;
+    thus thesis by B1, B2;
+  end;
+
+theorem ThRel11:
+  [[x1, x2], [y1, y2]] in ==>.-relation(TS) implies
+    x1 in TS & y1 in TS & x2 in E^omega & y2 in E^omega &
+    x1 in dom dom (the Tran of TS) & y1 in rng (the Tran of TS)
+  proof
+    assume [[x1, x2], [y1, y2]] in ==>.-relation(TS);
+    then x1, x2 ==>. y1, y2, TS by DefRel;
+    hence thesis by ThDir10;
+  end;
+
+theorem ThRel9:
+  x in ==>.-relation(TS) implies
+    ex s, t, v, w st x = [[s, v], [t, w]]
+  proof
+    assume
+A:    x in ==>.-relation(TS);
+    then consider y, z such that
+B:    x = [y, z] by RELAT_1:def 1;
+    consider s, v, t, w such that
+C:    y = [s, v] & z = [t, w] by A, B, ThRel10;
+    thus thesis by B, C;
+  end;
+
+theorem ThRel20:
+  for TS1 being non empty transition-system over F1,
+      TS2 being non empty transition-system over F2 st
+    the carrier of TS1 = the carrier of TS2 &
+    the Tran of TS1 = the Tran of TS2 holds
+      ==>.-relation(TS1) = ==>.-relation(TS2)
+  proof
+    let TS1 be non empty transition-system over F1,
+        TS2 be non empty transition-system over F2 such that
+A1:   the carrier of TS1 = the carrier of TS2 and
+A2:   the Tran of TS1 = the Tran of TS2;
+B:  now
+      let x;
+      assume
+B0:     x in ==>.-relation(TS1);
+      then consider s, t being Element of TS1, v, w such that
+B1:     x = [[s, v], [t, w]] by ThRel9;
+      s, v ==>. t, w, TS1 by B0, B1, DefRel;
+      then
+B2:     s, v ==>. t, w, TS2 by A2, ThDir15;
+      reconsider s as Element of TS2 by A1;
+      reconsider t as Element of TS2 by A1;
+      thus x in ==>.-relation(TS2) by B1, B2, DefRel;
+    end;
+    now
+      let x;
+      assume
+B0:     x in ==>.-relation(TS2);
+      then consider s, t being Element of TS2, v, w such that
+B1:     x = [[s, v], [t, w]] by ThRel9;
+      s, v ==>. t, w, TS2 by B0, B1, DefRel;
+      then
+B2:     s, v ==>. t, w, TS1 by A2, ThDir15;
+      reconsider s, t as Element of TS1 by A1;
+      thus x in ==>.-relation(TS1) by B1, B2, DefRel;
+    end;
+    hence thesis by B, TARSKI:2;
+  end;
+
+theorem ThRel30:
+  [[x1, x2], [y1, y2]] in ==>.-relation(TS) implies
+    ex v, w st v = y2 & x1, w -->. y1, TS & x2 = w^v
+  proof
+    assume [[x1, x2], [y1, y2]] in ==>.-relation(TS);
+    then x1, x2 ==>. y1, y2, TS by DefRel;
+    hence thesis by DefDir;
+  end;
+
+theorem ThRel40:
+  [[x, u], [y, v]] in ==>.-relation(TS) implies
+    ex w st x, w -->. y, TS & u = w^v
+  proof
+    assume [[x, u], [y, v]] in ==>.-relation(TS);
+    then x, u ==>. y, v, TS by DefRel;
+    hence thesis by ThDir25;
+  end;
+
+theorem ThRel50:
+  x, y -->. z, TS iff [[x, y], [z, <%>E]] in ==>.-relation(TS)
+  proof
+    thus x, y -->. z, TS implies [[x, y], [z, <%>E]] in ==>.-relation(TS)
+    proof
+      assume x, y -->. z, TS;
+      then x, y ==>. z, <%>E, TS by ThDir20;
+      hence thesis by DefRel;
+    end;
+    assume [[x, y], [z, <%>E]] in ==>.-relation(TS);
+    then x, y ==>. z, <%>E, TS by DefRel;
+    hence thesis by ThDir20;
+  end;
+
+theorem ThRel60:
+  x, v -->. y, TS iff [[x, v^w], [y, w]] in ==>.-relation(TS)
+  proof
+    thus x, v -->. y, TS implies [[x, v^w], [y, w]] in ==>.-relation(TS)
+    proof
+      assume x, v -->. y, TS;
+      then x, v^w ==>. y, w, TS by ThDir26;
+      hence thesis by DefRel;
+    end;
+    assume [[x, v^w], [y, w]] in ==>.-relation(TS);
+    then x, v^w ==>. y, w, TS by DefRel;
+    hence thesis by ThDir26;
+  end;
+
+theorem
+  [[x, u], [y, v]] in ==>.-relation(TS) implies
+    [[x, u^w], [y, v^w]] in ==>.-relation(TS)
+  proof
+    assume [[x, u], [y, v]] in ==>.-relation(TS);
+    then x, u ==>. y, v, TS by DefRel;
+    then x, u^w ==>. y, v^w, TS by ThDir30;
+    hence thesis by DefRel;
+  end;
+
+theorem
+  [[x, u], [y, v]] in ==>.-relation(TS) implies len u >= len v
+  proof
+    assume [[x, u], [y, v]] in ==>.-relation(TS);
+    then x, u ==>. y, v, TS by DefRel;
+    hence thesis by ThDir35;
+  end;
+
+theorem
+  the Tran of TS is Function implies
+    ([x, [y1, z]] in ==>.-relation(TS) &
+     [x, [y2, z]] in ==>.-relation(TS) implies y1 = y2)
+  proof
+    assume
+A:    the Tran of TS is Function;
+    assume
+B:    [x, [y1, z]] in ==>.-relation(TS) & [x, [y2, z]] in ==>.-relation(TS);
+    then consider s, v, t, w such that
+C:     x = [s, v] & [y1, z] = [t, w] by ThRel10;
+    s, v ==>. y1, z, TS & s, v ==>. y2, z, TS by B, C, DefRel;
+    hence thesis by A, ThDir40;
+  end;
+
+theorem
+  not <%>E in rng dom (the Tran of TS) implies
+    ([[x, u], [y, v]] in ==>.-relation(TS) implies len u > len v)
+  proof
+    assume
+A:    not <%>E in rng dom (the Tran of TS);
+    assume [[x, u], [y, v]] in ==>.-relation(TS);
+    then x, u ==>. y, v, TS by DefRel;
+    hence thesis by A, ThDir50;
+  end;
+
+theorem ThRel110:
+  not <%>E in rng dom (the Tran of TS) implies
+    not [[x, z], [y, z]] in ==>.-relation(TS)
+  proof
+    assume not <%>E in rng dom (the Tran of TS);
+    then not x, z ==>. y, z, TS by ThDir60;
+    hence thesis by DefRel;
+  end;
+
+theorem ThRel120':
+  TS is deterministic implies
+    ([x, y1] in ==>.-relation(TS) &
+     [x, y2] in ==>.-relation(TS) implies y1 = y2)
+  proof
+    assume
+A:    TS is deterministic;
+    assume
+B:    [x, y1] in ==>.-relation(TS) & [x, y2] in ==>.-relation(TS);
+    consider s1, v1, t1, w1 such that
+C1:   x = [s1, v1] & y1 = [t1, w1] by B, ThRel10;
+    consider s2, v2, t2, w2 such that
+C2:   x = [s2, v2] & y2 = [t2, w2] by B, ThRel10;
+    s1, v1 ==>. t1, w1, TS & s1, v1 ==>. t2, w2, TS by B, C1, C2, DefRel;
+    then t1 = t2 & w1 = w2 by A, ThDir70;
+    hence thesis by C1, C2;
+  end;
+
+theorem
+  TS is deterministic implies
+    ([x, [y1, z1]] in ==>.-relation(TS) &
+     [x, [y2, z2]] in ==>.-relation(TS) implies y1 = y2 & z1 = z2)
+  proof
+    assume
+A:    TS is deterministic;
+    assume
+B:    [x, [y1, z1]] in ==>.-relation(TS) & [x, [y2, z2]] in ==>.-relation(TS);
+    [y1, z1] = [y2, z2] by A, B, ThRel120';
+    hence thesis by ZFMISC_1:33;
+  end;
+
+theorem
+  TS is deterministic implies ==>.-relation(TS) is Function-like
+  proof
+    assume TS is deterministic; then
+    for x, y, z st [x, y] in ==>.-relation(TS) & [x, z] in ==>.-relation(TS)
+      holds y = z by ThRel120';
+    hence thesis by FUNCT_1:def 1;
+  end;
+
+begin :: Reduction Sequences of ==>.-relation
+
+definition
+  let x, E;
+  func dim2(x, E) -> Element of E^omega equals
+:DefDim2:
+    x`2 if ex y, u st x = [y, u] otherwise {};
+  coherence
+  proof
+    thus (ex y, u st x = [y, u]) implies
+      x`2 is Element of E^omega by MCART_1:7;
+    {} = <%>E;
+    hence thesis;
+  end;
+  consistency;
+end;
+
+theorem ThRedSeq4:
+  for P being RedSequence of ==>.-relation(TS),
+    k st k in dom P & k + 1 in dom P holds
+      ex s, v, t, w st P.k = [s, v] & P.(k + 1) = [t, w]
+  proof
+    let P be RedSequence of ==>.-relation(TS), k such that
+A:    k in dom P & k + 1 in dom P;
+    [P.k, P.(k + 1)] in ==>.-relation(TS) by A, REWRITE1:def 2;
+    hence thesis by ThRel10;
+  end;
+
+theorem ThRedSeq5:
+  for P being RedSequence of ==>.-relation(TS),
+    k st k in dom P & k + 1 in dom P holds
+       P.k = [(P.k)`1, (P.k)`2] & P.(k + 1) = [(P.(k + 1))`1, (P.(k + 1))`2]
+  proof
+    let P be RedSequence of ==>.-relation(TS), k such that
+A:    k in dom P & k + 1 in dom P;
+    consider s, v, t, w such that
+B:    P.k = [s, v] & P.(k + 1) = [t, w] by A, ThRedSeq4;
+    thus thesis by B, MCART_1:8;
+  end;
+
+theorem ThRedSeq10:
+  for P being RedSequence of ==>.-relation(TS),
+    k st k in dom P & k + 1 in dom P holds
+      (P.k)`1 in TS & (P.k)`2 in E^omega &
+      (P.(k + 1))`1 in TS & (P.(k + 1))`2 in E^omega &
+      (P.k)`1 in dom dom (the Tran of TS) &
+      (P.(k + 1))`1 in rng (the Tran of TS)
+  proof
+    let P be RedSequence of ==>.-relation(TS), k such that
+A:    k in dom P & k + 1 in dom P;
+B:  [P.k, P.(k + 1)] in ==>.-relation(TS) by A, REWRITE1:def 2;
+    then consider s, v, t, w such that
+C:    P.k = [s, v] & P.(k + 1) = [t, w] by ThRel10;
+    s in TS & v in E^omega & t in TS & w in E^omega &
+      s in dom dom (the Tran of TS) & t in rng (the Tran of TS)
+        by B, C, ThRel11;
+    hence thesis by C, MCART_1:7;
+  end;
+
+theorem
+  for TS1 being non empty transition-system over F1,
+      TS2 being non empty transition-system over F2 st
+    the carrier of TS1 = the carrier of TS2 &
+    the Tran of TS1 = the Tran of TS2 holds
+    for P being RedSequence of ==>.-relation(TS1) holds
+      P is RedSequence of ==>.-relation(TS2)
+  proof
+    let TS1 be non empty transition-system over F1,
+        TS2 be non empty transition-system over F2 such that
+A1:   the carrier of TS1 = the carrier of TS2 and
+A2:   the Tran of TS1 = the Tran of TS2;
+    let P be RedSequence of ==>.-relation(TS1);
+A3: len P > 0;
+    now
+      let i be Element of NAT such that
+B:      i in dom P & i + 1 in dom P;
+      [P.i, P.(i + 1)] in ==>.-relation(TS1) by B, REWRITE1:def 2;
+      hence [P.i, P.(i + 1)] in ==>.-relation(TS2) by A1, A2, ThRel20;
+    end;
+    hence thesis by A3, REWRITE1:def 2;
+  end;
+
+theorem ThRedSeq30:
+  for P being RedSequence of ==>.-relation(TS) st ex x, u st P.1 = [x, u] holds
+    for k st k in dom P holds dim2(P.k, E) = (P.k)`2
+  proof
+    let P be RedSequence of ==>.-relation(TS);
+    given x, u such that
+A:    P.1 = [x, u];
+    let k such that
+B:    k in dom P;
+    per cases;
+    suppose
+H:    k > 1;
+      then consider l such that
+E:      k = l + 1 by NAT_1:6;
+F:    l >= 1 by E, H, NAT_1:19;
+G:    k <= len P by B, FINSEQ_3:27;
+      l <= k by E, NAT_1:11;
+      then l <= len P by G, XXREAL_0:2;
+      then l in dom P by F, FINSEQ_3:27;
+      then [P.l, P.k] in ==>.-relation(TS) by B, E, REWRITE1:def 2;
+      then
+C:      P.k in rng ==>.-relation(TS) by RELAT_1:20;
+      rng ==>.-relation(TS) c= [: the carrier of TS, E^omega :]
+        by RELAT_1:def 19;
+      then consider x1, y1 such that
+D:      x1 in the carrier of TS & y1 in E^omega & P.k = [x1, y1]
+          by C, ZFMISC_1:def 2;
+      thus thesis by D, DefDim2;
+    end;
+    suppose
+E:    k <= 1;
+      k >= 1 by B, FINSEQ_3:27;
+      then k = 1 by E, XXREAL_0:1;
+      hence thesis by A, DefDim2;
+    end;
+  end;
+
+theorem ThRedSeq50:
+  for P being RedSequence of ==>.-relation(TS) st P.len P = [y, w] holds
+    for k st k in dom P ex u st (P.k)`2 = u^w
+  proof
+    let P be RedSequence of ==>.-relation(TS) such that
+A:    P.len P = [y, w];
+    defpred P[Nat] means
+      len P - $1 in dom P implies ex u st (P.(len P - $1))`2 = u^w;
+B:  P[0]
+    proof
+      (P.len P)`2 = w by A, MCART_1:7;
+      then (P.len P)`2 = <%>E^w by AFINSQ_1:32;
+      hence thesis;
+    end;
+C:  now
+      let k;
+      assume
+C0:     P[k];
+      now
+        assume
+C1:       len P - (k + 1) in dom P;
+        set len1 = len P - (k + 1);
+        set len2 = len P - k;
+C2:     len1 + 1 = len2;
+        thus ex u st (P.(len P - (k + 1)))`2 = u^w
+        proof
+          per cases;
+          suppose
+D0:         len P - k in dom P;
+            then consider u1 such that
+D2:           (P.len2)`2 = u1^w by C0;
+D3:         [P.len1, P.len2] in ==>.-relation(TS)
+              by C1, C2, D0, REWRITE1:def 2;
+            then consider x being Element of TS, v1 being Element of E^omega,
+                          y being Element of TS, v2 such that
+D4:           P.len1 = [x, v1] & P.len2 = [y, v2] by ThRel10;
+            x, v1 ==>. y, v2, TS by D3, D4, DefRel;
+            then consider u2 such that
+D5:           x, u2 -->. y, TS & v1 = u2^v2 by ThDir25;
+D6:         (P.len1)`2 = u2^v2 by D4, D5, MCART_1:7
+                      .= u2^(u1^w) by D2, D4, MCART_1:7
+                      .= u2^u1^w by AFINSQ_1:30;
+            take u2^u1;
+            thus thesis by D6;
+          end;
+          suppose not len P - k in dom P;
+            then len1 = len P - 0 by C1, C2, LmSeq40;
+            hence thesis;
+          end;
+        end;
+      end;
+      hence P[k + 1];
+    end;
+E:  for k holds P[k] from NAT_1:sch 2(B, C);
+    hereby
+      let k such that
+F0:     k in dom P;
+      k <= len P by F0, FINSEQ_3:27;
+      then consider l such that
+F1:     k + l = len P by NAT_1:10;
+      k + l - l = len P - l by F1;
+      hence ex u st (P.k)`2 = u^w by F0, E;
+    end;
+  end;
+
+theorem ThRedSeq60:
+  for P being RedSequence of ==>.-relation(TS) st
+    P.1 = [x, v] & P.len P = [y, w] holds ex u st v = u^w
+  proof
+    let P be RedSequence of ==>.-relation(TS) such that
+A:    P.1 = [x, v] & P.len P = [y, w];
+    0 + 1 <= len P by NAT_1:8;
+    then 1 in dom P by FINSEQ_3:27;
+    then consider u such that
+B:    (P.1)`2 = u^w by A, ThRedSeq50;
+    take u;
+    thus thesis by A, B, MCART_1:7;
+  end;
+
+theorem ThRedSeq70:
+  for P being RedSequence of ==>.-relation(TS) st
+    P.1 = [x, u] & P.len P = [y, u] holds
+      (for k st k in dom P holds (P.k)`2 = u)
+  proof
+    defpred P[Nat] means
+      for P being RedSequence of ==>.-relation(TS), x, y st
+        P.1 = [x, u] & P.len P = [y, u] & len P = $1 holds
+          (for k st k in dom P holds (P.k)`2 = u);
+C:  P[0];
+D:  now
+      let k;
+      assume
+D0:     P[k];
+      now
+        let P be RedSequence of ==>.-relation(TS), x, y such that
+D1:       P.1 = [x, u] & P.len P = [y, u] and
+D2:       len P = k + 1;
+        per cases;
+        suppose
+D3:       k = 0;
+          hereby
+            let l;
+            assume l in dom P;
+            then l <= 1 & 1 <= l by D2, D3, FINSEQ_3:27;
+            then l = 1 by XXREAL_0:1;
+            hence (P.l)`2 = u by D1, MCART_1:7;
+          end;
+        end;
+        suppose k <> 0;
+          then
+D2'A:       k + 1 > 0 + 1 by XREAL_1:8;
+          then consider Q being RedSequence of ==>.-relation(TS) such that
+D3:         <*P.1*>^Q = P & len P = len Q + 1 by D2, LmRed10;
+D2':      len <*P.1*> = 1 by FINSEQ_1:57;
+D6':      len Q >= 0 + 1 by NAT_1:8;
+          then
+D6:         Q.len Q = [y, u] by D1, D2', D3, FINSEQ_1:86;
+          len P >= 1 + 1 by D2, D2'A, NAT_1:8;
+          then
+D6'A:       1 in dom P & 1 + 1 in dom P by D2, D2'A, FINSEQ_3:27;
+          then
+D6'C:       P.(1 + 1) = [(P.(1 + 1))`1, (P.(1 + 1))`2] by ThRedSeq5;
+          then
+D6'B:       Q.1 = [(P.(1 + 1))`1, (P.(1 + 1))`2] by D2', D3, D6', FINSEQ_1:86;
+          reconsider u1 = (P.(1 + 1))`2 as Element of E^omega
+            by D6'A, ThRedSeq10;
+          consider v such that
+E1:         u1 = v^u by D6, D6'B, ThRedSeq60;
+          ==>.-relation(TS) reduces P.1, P.(1 + 1) by D6'A, REWRITE1:18;
+          then consider P' being RedSequence of ==>.-relation(TS) such that
+E1':        P'.1 = P.1 & P'.len P' = P.(1 + 1) by REWRITE1:def 3;
+          consider w such that
+E2:         u = w^u1 by D1, D6'C, E1', ThRedSeq60;
+          u = w^v^u by E1, E2, AFINSQ_1:30;
+          then w^v = {} by FLANG_2:4;
+          then w = {} by AFINSQ_1:33;
+          then
+D5:         Q.1 = [(P.(1 + 1))`1, u] by D6'B, E2, AFINSQ_1:32;
+          hereby
+            let l;
+            assume l in dom P;
+            then
+D7'A:         1 <= l & l <= len P by FINSEQ_3:27;
+            then 1 + 1 <= l + 1 & l <= len P by XREAL_1:8;
+            then (1 + 1 = l + 1 or 1 + 1 <= l) & l <= len P by NAT_1:8;
+            then
+D7':          1 = l or (1 + 1 - 1 <= l - 1 & l - 1 <= len Q + 1 - 1)
+                by D3, XREAL_1:11;
+            reconsider l' = l - 1 as Element of NAT by D7'A, NAT_1:21;
+D7:         l = 1 or l' in dom Q by D7', FINSEQ_3:27;
+            per cases by D7;
+            suppose l = 1;
+              hence (P.l)`2 = u by D1, MCART_1:7;
+            end;
+            suppose
+D8:           (l - 1) in dom Q;
+              then
+D9:             (Q.(l - 1))`2 = u by D0, D2, D3, D5, D6;
+              1 <= l - 1 & l - 1 <= len Q by D8, FINSEQ_3:27;
+              then 1 + 0 < l - 1 + 1 & l - 1 + 1 <= len Q + 1 by XREAL_1:8;
+              hence (P.l)`2 = u by D2', D3, D9, FINSEQ_1:37;
+            end;
+          end;
+        end;
+      end;
+      hence P[k + 1];
+    end;
+    for k holds P[k] from NAT_1:sch 2(C, D);
+    hence thesis;
+  end;
+
+theorem
+  for P being RedSequence of ==>.-relation(TS), k st
+    k in dom P & k + 1 in dom P holds
+      ex v, w st
+        v = (P.(k + 1))`2 & (P.k)`1, w -->. (P.(k + 1))`1, TS & (P.k)`2 = w^v
+  proof
+    let P be RedSequence of ==>.-relation(TS), k such that
+A:    k in dom P & k + 1 in dom P;
+    consider s, u, t, v such that
+B:    P.k = [s, u] & P.(k + 1) = [t, v] by A, ThRedSeq4;
+    [[s, u], [t, v]] in ==>.-relation(TS) by A, B, REWRITE1:def 2;
+    then consider v1, w1 such that
+C:    v1 = v & s, w1 -->. t, TS & u = w1^v1 by ThRel30;
+    take v1, w1;
+    thus v1 = (P.(k + 1))`2 by B, C, MCART_1:7;
+    (P.k)`1, w1 -->. t, TS by B, C, MCART_1:7;
+    hence thesis by B, C, MCART_1:7;
+  end;
+
+theorem
+  for P being RedSequence of ==>.-relation(TS), k st
+    k in dom P & k + 1 in dom P & P.k = [x, u] & P.(k + 1) = [y, v] holds
+      ex w st x, w -->. y, TS & u = w^v
+  proof
+    let P be RedSequence of ==>.-relation(TS), k such that
+A1:   k in dom P & k + 1 in dom P and
+A2:   P.k = [x, u] & P.(k + 1) = [y, v];
+    [[x, u], [y, v]] in ==>.-relation(TS) by A1, A2, REWRITE1:def 2;
+    hence thesis by ThRel40;
+  end;
+
+theorem ThRedSeq77:
+  x, y -->. z, TS iff
+    <*[x, y], [z, <%>E]*> is RedSequence of ==>.-relation(TS)
+  proof
+    thus x, y -->. z, TS implies
+           <*[x, y], [z, <%>E]*> is RedSequence of ==>.-relation(TS)
+    proof
+      assume x, y -->. z, TS;
+      then [[x, y], [z, <%>E]] in ==>.-relation(TS) by ThRel50;
+      hence thesis by REWRITE1:8;
+    end;
+    assume <*[x, y], [z, <%>E]*> is RedSequence of ==>.-relation(TS);
+    then [[x, y], [z, <%>E]] in ==>.-relation(TS) by LmRed40;
+    hence thesis by ThRel50;
+  end;
+
+theorem ThRedSeq78:
+  x, v -->. y, TS iff
+    <*[x, v^w], [y, w]*> is RedSequence of ==>.-relation(TS)
+  proof
+    thus x, v -->. y, TS implies
+           <*[x, v^w], [y, w]*> is RedSequence of ==>.-relation(TS)
+    proof
+      assume x, v -->. y, TS;
+      then [[x, v^w], [y, w]] in ==>.-relation(TS) by ThRel60;
+      hence thesis by REWRITE1:8;
+    end;
+    assume <*[x, v^w], [y, w]*> is RedSequence of ==>.-relation(TS);
+    then [[x, v^w], [y, w]] in ==>.-relation(TS) by LmRed40;
+    hence thesis by ThRel60;
+  end;
+
+theorem ThRedSeq79:
+  for P being RedSequence of ==>.-relation(TS) st
+    P.1 = [x, v] & P.len P = [y, w] holds len v >= len w
+  proof
+    let P be RedSequence of ==>.-relation(TS) such that
+A:    P.1 = [x, v] & P.len P = [y, w];
+    consider u such that
+B:    v = u^w by A, ThRedSeq60;
+    thus thesis by B, LmXSeq50;
+  end;
+
+theorem ThRedSeq80:
+  not <%>E in rng dom (the Tran of TS) implies
+    for P being RedSequence of ==>.-relation(TS) st
+      P.1 = [x, u] & P.len P = [y, u] holds len P = 1 & x = y
+  proof
+    assume
+A:    not <%>E in rng dom (the Tran of TS);
+    defpred P[Nat] means
+      for P being RedSequence of ==>.-relation(TS), x, y st
+        P.1 = [x, u] & P.len P = [y, u] &
+        len P = $1 & $1 <> 1 holds contradiction;
+C:  P[0];
+D:  now
+      let k;
+      assume P[k];
+      now
+        let P be RedSequence of ==>.-relation(TS), x, y such that
+D1:       P.1 = [x, u] & P.len P = [y, u] and
+D2:       len P = k + 1 & k + 1 <> 1;
+D2'A:   len P > 1 by D2, NAT_1:26;
+        consider Q being RedSequence of ==>.-relation(TS) such that
+D3:       <*P.1*>^Q = P & len P = len Q + 1 by D2, LmRed10, NAT_1:26;
+D4'A:   len Q >= 0 + 1 by NAT_1:8;
+        len Q + 1 >= 1 + 1 by D4'A, XREAL_1:8;
+        then
+D5:       1 in dom P & 1 + 1 in dom P by D2'A, D3, FINSEQ_3:27;
+        then
+          P.(1 + 1) = [(P.(1 + 1))`1, (P.(1 + 1))`2] by ThRedSeq5
+                   .= [(P.(1 + 1))`1, u] by D1, D5, ThRedSeq70;
+        then [[x, u], [(P.(1 + 1))`1, u]] in ==>.-relation(TS)
+          by D1, D5, REWRITE1:def 2;
+        then x, u ==>. (P.(1 + 1))`1, u, TS by DefRel;
+        hence contradiction by A, ThDir60;
+      end;
+      hence P[k + 1];
+    end;
+E:  for k holds P[k] from NAT_1:sch 2(C, D);
+    let P be RedSequence of ==>.-relation(TS) such that
+F:    P.1 = [x, u] & P.len P = [y, u];
+    thus
+G:    len P = 1 by E, F;
+    thus thesis by F, G, ZFMISC_1:33;
+  end;
+
+theorem ThRedSeq81:
+  not <%>E in rng dom (the Tran of TS) implies
+    for P being RedSequence of ==>.-relation(TS) st
+      (P.1)`2 = (P.len P)`2 holds len P = 1
+  proof
+    assume
+A:    not <%>E in rng dom (the Tran of TS);
+    let P be RedSequence of ==>.-relation(TS) such that
+B:    (P.1)`2 = (P.len P)`2;
+    per cases;
+    suppose
+C:    len P <= 1;
+      len P >= 0 + 1 by NAT_1:13;
+      hence len P = 1 by C, XXREAL_0:1;
+    end;
+    suppose
+C:    len P > 1;
+      then reconsider p1 = len P - 1 as Nat by NAT_1:21;
+C1:   p1 + 1 = len P;
+      1 <= len P & 1 + 1 <= len P by C, NAT_1:13;
+      then 1 in dom P & 1 + 1 in dom P by FINSEQ_3:27;
+      then consider s1, v1, t1, w1 such that
+D1:     P.1 = [s1, v1] & P.(1 + 1) = [t1, w1] by ThRedSeq4;
+D1'a: p1 <= len P by C1, NAT_1:13;
+D1'b: 0 + 1 <= p1 + 1 by XREAL_1:8;
+      1 <= p1 by C, C1, NAT_1:13;
+      then p1 in dom P & p1 + 1 in dom P by D1'a, D1'b, FINSEQ_3:27;
+      then consider s2, v2, t2, w2 such that
+D2:     P.p1 = [s2, v2] & P.(p1 + 1) = [t2, w2] by ThRedSeq4;
+      (P.len P)`2 = w2 by D2, MCART_1:7;
+      then v1 = w2 by B, D1, MCART_1:7;
+      hence len P = 1 by A, D1, D2, ThRedSeq80;
+    end;
+  end;
+
+theorem ThRedSeq90:
+  not <%>E in rng dom (the Tran of TS) implies
+    for P being RedSequence of ==>.-relation(TS) st
+      P.1 = [x, u] & P.len P = [y, <%>E] holds len P <= len u + 1
+  proof
+    assume
+A:    not <%>E in rng dom (the Tran of TS);
+    defpred P[Nat] means
+      for P being RedSequence of ==>.-relation(TS), u, x st
+        len u = $1 & P.1 = [x, u] & P.len P = [y, <%>E] holds
+          len P <= len u + 1;
+C:  now
+      let k;
+      assume
+C1:     for n st n < k holds P[n];
+      now
+        let P be RedSequence of ==>.-relation(TS), u, x such that
+C2:       len u = k & P.1 = [x, u] & P.len P = [y, <%>E];
+        per cases;
+        suppose len u < 1;
+          then u = <%>E by NAT_1:26;
+          then len P = 1 by A, C2, ThRedSeq80;
+          hence len P <= len u + 1 by NAT_1:26;
+        end;
+        suppose
+C3:       len u >= 1;
+C4':      len P <> 1
+          proof
+            assume len P = 1;
+            then u = <%>E by C2, ZFMISC_1:33;
+            hence contradiction by C3;
+          end;
+          then
+C5:         len P > 1 by NAT_1:26;
+          consider P' being RedSequence of ==>.-relation(TS) such that
+D:          <*P.1*>^P' = P & len P' + 1 = len P by C4', LmRed10, NAT_1:26;
+          len P >= 1 & len P >= 1 + 1 by C5, NAT_1:13;
+          then
+D2:         1 in dom P & 1 + 1 in dom P by FINSEQ_3:27;
+          then
+D3:         P.(1 + 1) = [(P.(1 + 1))`1, (P.(1 + 1))`2] by ThRedSeq5;
+          then
+D4:          [[x, u], [(P.(1 + 1))`1, (P.(1 + 1))`2]] in ==>.-relation(TS)
+               by C2, D2, REWRITE1:def 2;
+          then reconsider u1 = (P.(1 + 1))`2 as Element of E^omega by ThRel11;
+          x, u ==>. (P.(1 + 1))`1, u1, TS by D4, DefRel;
+          then consider v such that
+D5:         x, v -->. (P.(1 + 1))`1, TS & u = v^u1 by ThDir25;
+D6:       v <> <%>E by A, D5, ThProd30;
+          len u = len u1 + len v by D5, AFINSQ_1:20;
+          then
+E0:         len u - 0 > len u1 + len v - len v by D6, XREAL_1:17;
+E2:       len <*P.1*> = 1 by FINSEQ_1:56;
+E3:       len P' >= 1 by NAT_1:26;
+E4:       P'.1 = [(P.(1 + 1))`1, u1] by D, D3, E2, E3, FINSEQ_1:86;
+          P'.len P' = [y, <%>E] by C2, D, E2, E3, FINSEQ_1:86;
+          then
+F:          len P' <= len u1 + 1 by E0, E4, C1, C2;
+          len u1 + 1 <= len u by E0, NAT_1:13;
+          then len P' <= len u by F, XXREAL_0:2;
+          hence len P <= len u + 1 by D, XREAL_1:8;
+        end;
+      end;
+      hence P[k];
+    end;
+    for k holds P[k] from NAT_1:sch 4(C);
+    hence thesis;
+  end;
+
+theorem ThRedSeq100:
+  not <%>E in rng dom (the Tran of TS) implies
+    for P being RedSequence of ==>.-relation(TS) st
+      P.1 = [x, <%e%>] & P.len P = [y, <%>E] holds len P = 2
+  proof
+    assume
+A:    not <%>E in rng dom (the Tran of TS);
+    let P be RedSequence of ==>.-relation(TS) such that
+B:    P.1 = [x, <%e%>] & P.len P = [y, <%>E];
+C:  len P <> 1 by B, ZFMISC_1:33;
+    len P <= len <%e%> + 1 by A, B, ThRedSeq90;
+    then len P <= 1 + 1 by AFINSQ_1:38;
+    hence thesis by C, NAT_1:27;
+  end;
+
+theorem ThRedSeq110:
+  not <%>E in rng dom (the Tran of TS) implies
+    for P being RedSequence of ==>.-relation(TS) st
+      P.1 = [x, v] & P.len P = [y, w] holds
+        len v > len w or (len P = 1 & x = y & v = w)
+  proof
+    assume
+A:    not <%>E in rng dom (the Tran of TS);
+    let P be RedSequence of ==>.-relation(TS) such that
+B:    P.1 = [x, v] & P.len P = [y, w];
+    consider u such that
+C:    v = u^w by B, ThRedSeq60;
+D:  len v >= len w by B, ThRedSeq79;
+    per cases;
+    suppose len v > len w;
+      hence thesis;
+    end;
+    suppose len v <= len w;
+      then
+D1:     len v = len w by D, XXREAL_0:1;
+      len v = len u + len w by C, AFINSQ_1:20;
+      then u = <%>E by D1;
+      then v = w by C, AFINSQ_1:32;
+      hence thesis by A, B, ThRedSeq80;
+    end;
+  end;
+
+theorem
+  not <%>E in rng dom (the Tran of TS) implies
+    for P being RedSequence of ==>.-relation(TS), k st
+      k in dom P & k + 1 in dom P holds (P.k)`2 <> (P.(k + 1))`2
+  proof
+    assume
+A:    not <%>E in rng dom (the Tran of TS);
+    let P be RedSequence of ==>.-relation(TS), k such that
+B:    k in dom P & k + 1 in dom P;
+    consider s, u, t, v such that
+C:    P.k = [s, u] & P.(k + 1) = [t, v] by B, ThRedSeq4;
+    [[s, u], [t, v]] in ==>.-relation(TS) by B, C, REWRITE1:def 2;
+    then u <> v by A, ThRel110;
+    then (P.k)`2 <> v by C, MCART_1:7;
+    hence thesis by C, MCART_1:7;
+  end;
+
+theorem ThRedSeq125:
+  not <%>E in rng dom (the Tran of TS) implies
+    for P being RedSequence of ==>.-relation(TS), k, l st
+      k in dom P & l in dom P & k < l holds (P.k)`2 <> (P.l)`2
+  proof
+    assume
+A:    not <%>E in rng dom (the Tran of TS);
+    defpred P[Nat] means
+      for P being RedSequence of ==>.-relation(TS), k, l st
+        len P = $1 & k in dom P & l in dom P & k < l holds (P.k)`2 <> (P.l)`2;
+B:  P[0];
+C:  now
+      let i;
+      assume
+D:      P[i];
+      now
+        let P be RedSequence of ==>.-relation(TS), k, l such that
+D1:       len P = i + 1 & k in dom P & l in dom P & k < l;
+D2:     i < len P by D1, NAT_1:13;
+D3:     1 <= k & k <= len P & 1 <= l & l <= len P by D1, FINSEQ_3:27;
+        per cases;
+        suppose
+          k = 1 & l = len P;
+          hence (P.k)`2 <> (P.l)`2 by A, D1, ThRedSeq81;
+        end;
+        suppose
+E:        k <> 1 & l = len P;
+          then
+E0'a:       k > 1 by D3, XXREAL_0:1;
+E0'b:       l > 1 by D3,D1,XXREAL_0:1;
+          then consider Q being RedSequence of ==>.-relation(TS) such that
+E0:         <*P.1*>^Q = P & len Q + 1 = len P by E, LmRed10;
+E0':      len <*P.1*> = 1 by FINSEQ_1:57;
+          reconsider k1 = k - 1 as Nat by D3, NAT_1:21;
+          reconsider l1 = l - 1 as Nat by D3, NAT_1:21;
+          k1 > 1 - 1 by E0'a, XREAL_1:11; then
+E2'a:       k1 >= 0 + 1 by NAT_1:13;
+          l1 > 1 - 1 by E0'b, XREAL_1:11; then
+E2'b:       l1 >= 0 + 1 by NAT_1:13;
+E2'c:     k1 <= len Q + 1 - 1 by D3, E0, XREAL_1:11;
+E2'd:     l1 <= len Q + 1 - 1 by D3, E0, XREAL_1:11;
+E3:       k1 in dom Q & l1 in dom Q by E2'a, E2'b, E2'c, E2'd, FINSEQ_3:27;
+E4:       k1 < l1 by D1, XREAL_1:11;
+          P.k = (Q.k1) & P.l = (Q.l1) by D3, E0, E0', E0'a, E0'b, FINSEQ_1:37;
+          hence (P.k)`2 <> (P.l)`2 by D, D1, E0, E3, E4;
+        end;
+        suppose l <> len P;
+          then l < i + 1 by D1, D3, XXREAL_0:1;
+          then k < i + 1 & l <= i by D1, NAT_1:13, XXREAL_0:2;
+          then
+E0:         k <= i & l <= i by NAT_1:13;
+          then reconsider Q = P | i as RedSequence of ==>.-relation(TS)
+            by D3, REWRITE2:3, XXREAL_0:2;
+E0'a:     k <= len Q & l <= len Q by D2, E0, FINSEQ_1:80;
+E1:       len Q = i by D2, FINSEQ_1:80;
+E2:       k in dom Q by D3, E0'a, FINSEQ_3:27;
+E3:       l in dom Q by D3, E0'a, FINSEQ_3:27;
+          P.k = Q.k & P.l = Q.l by E0, FINSEQ_3:121;
+          hence (P.k)`2 <> (P.l)`2 by D, D1, E1, E2, E3;
+        end;
+      end;
+      hence P[i + 1];
+    end;
+D:  for i holds P[i] from NAT_1:sch 2(B, C);
+    let P be RedSequence of ==>.-relation(TS), k, l such that
+E:    k in dom P & l in dom P & k < l;
+    len P = len P;
+    hence thesis by D, E;
+  end;
+
+theorem ThRedSeq130:
+  TS is deterministic implies
+    for P, Q being RedSequence of ==>.-relation(TS) st P.1 = Q.1 holds
+      for k st k in dom P & k in dom Q holds P.k = Q.k
+  proof
+    assume
+A:    TS is deterministic;
+    let P, Q be RedSequence of ==>.-relation(TS) such that
+B:    P.1 = Q.1;
+    defpred P[Nat] means
+      $1 in dom P & $1 in dom Q implies P.$1 = Q.$1;
+D:  P[0] by FINSEQ_3:27;
+E:  now
+      let k;
+      assume
+E1:     P[k];
+      now
+        assume
+F0:       k + 1 in dom P & k + 1 in dom Q;
+        per cases;
+        suppose
+F1:       k in dom P & k in dom Q;
+G1:       [P.k, P.(k + 1)] in ==>.-relation(TS) by F0, F1, REWRITE1:def 2;
+G2:       [Q.k, Q.(k + 1)] in ==>.-relation(TS) by F0, F1, REWRITE1:def 2;
+          thus P.(k + 1) = Q.(k + 1) by A, E1, F1, G1, G2, ThRel120';
+        end;
+        suppose not k in dom P or not k in dom Q;
+          then k = 0 by F0, REWRITE2:1;
+          hence P.(k + 1) = Q.(k + 1) by B;
+        end;
+      end;
+      hence P[k + 1];
+    end;
+    for k holds P[k] from NAT_1:sch 2(D, E);
+    hence thesis;
+  end;
+
+theorem ThRedSeq135:
+  TS is deterministic implies
+    for P, Q being RedSequence of ==>.-relation(TS) st
+      P.1 = Q.1 & len P = len Q holds P = Q
+  proof
+    assume
+A:    TS is deterministic;
+    let P, Q be RedSequence of ==>.-relation(TS) such that
+B1:   P.1 = Q.1 and
+B2:   len P = len Q;
+    now
+      let k;
+      assume
+C:      k in dom P;
+      then 1 <= k & k <= len P by FINSEQ_3:27;
+      then k in dom Q by B2, FINSEQ_3:27;
+      hence P.k = Q.k by A, B1, C, ThRedSeq130;
+    end;
+    hence thesis by B2, FINSEQ_2:10;
+  end;
+
+theorem ThRedSeq140:
+  TS is deterministic implies
+    for P, Q being RedSequence of ==>.-relation(TS) st
+      P.1 = Q.1 & (P.len P)`2 = (Q.len Q)`2 holds P = Q
+  proof
+    assume
+A:    TS is deterministic;
+    then
+A':   not <%>E in rng dom (the Tran of TS) by DefDetTS;
+    let P, Q be RedSequence of ==>.-relation(TS) such that
+B1:   P.1 = Q.1 and
+B2:   (P.len P)`2 = (Q.len Q)`2;
+    per cases by XXREAL_0:1;
+    suppose len P = len Q;
+      hence thesis by A, B1, ThRedSeq135;
+    end;
+    suppose
+C:    len P > len Q;
+      set k = len Q;
+      k >= 0 + 1 by NAT_1:13;
+      then
+D:      k in dom P & k in dom Q by C, FINSEQ_3:27;
+      then
+E:      (P.len Q)`2 = (P.len P)`2 by A, B1, B2, ThRedSeq130;
+      len P >= 0 + 1 by NAT_1:13;
+      then len P in dom P by FINSEQ_3:27;
+      hence thesis by A', C, D, E, ThRedSeq125;
+    end;
+    suppose
+C:    len P < len Q;
+      set k = len P;
+      k >= 0 + 1 by NAT_1:13; then
+D:      k in dom Q & k in dom P by C, FINSEQ_3:27; then
+E:      (Q.len P)`2 = (Q.len Q)`2 by A, B1, B2, ThRedSeq130;
+      len Q >= 0 + 1 by NAT_1:13;
+      then len Q in dom Q by FINSEQ_3:27;
+      hence thesis by A', C, D, E, ThRedSeq125;
+    end;
+  end;
+
+begin :: Reductions
+
+theorem ThRed60:
+  ==>.-relation(TS) reduces [x, v], [y, w] implies ex u st v = u^w
+  proof
+    assume ==>.-relation(TS) reduces [x, v], [y, w];
+    then consider P being RedSequence of ==>.-relation(TS) such that
+A:    P.1 = [x, v] & P.len P = [y, w] by REWRITE1:def 3;
+    thus thesis by A, ThRedSeq60;
+  end;
+
+theorem ThRed70:
+  ==>.-relation(TS) reduces [x, u], [y, v] implies
+    ==>.-relation(TS) reduces [x, u^w], [y, v^w]
+  proof
+    assume ==>.-relation(TS) reduces [x, u], [y, v];
+    then consider P being RedSequence of ==>.-relation(TS) such that
+A:    P.1 = [x, u] & P.len P = [y, v] by REWRITE1:def 3;
+    deffunc F(set) = [(P.$1)`1, dim2(P.$1, E)^w];
+    consider Q being FinSequence such that
+B1:   len Q = len P and
+B2:   for k st k in dom Q holds Q.k = F(k) from FINSEQ_1:sch 2;
+    for k being Element of NAT st k in dom Q & k + 1 in dom Q holds
+      [Q.k, Q.(k + 1)] in ==>.-relation(TS)
+    proof
+      let k be Element of NAT such that
+C1:     k in dom Q & k + 1 in dom Q;
+      1 <= k & k <= len Q & 1 <= k + 1 & k + 1 <= len Q by C1, FINSEQ_3:27;
+      then
+C2:     k in dom P & k + 1 in dom P by B1, FINSEQ_3:27;
+      [P.k, P.(k + 1)] in ==>.-relation(TS) by C2, REWRITE1:def 2;
+      then [[(P.k)`1, (P.k)`2], P.(k + 1)] in ==>.-relation(TS)
+        by C2, ThRedSeq5;
+      then [[(P.k)`1, (P.k)`2], [(P.(k + 1))`1, (P.(k + 1))`2]]
+             in ==>.-relation(TS) by C2, ThRedSeq5;
+      then [[(P.k)`1, dim2(P.k, E)], [(P.(k + 1))`1, (P.(k + 1))`2]]
+             in ==>.-relation(TS) by A, C2, ThRedSeq30;
+      then [[(P.k)`1, dim2(P.k, E)], [(P.(k + 1))`1, dim2(P.(k + 1), E)]]
+             in ==>.-relation(TS) by A, C2, ThRedSeq30;
+      then (P.k)`1, dim2(P.k, E) ==>. (P.(k + 1))`1, dim2(P.(k + 1), E), TS
+             by DefRel;
+      then (P.k)`1, dim2(P.k, E)^w ==>. (P.(k + 1))`1, dim2(P.(k + 1), E)^w, TS
+             by ThDir30;
+      then [[(P.k)`1, dim2(P.k, E)^w], [(P.(k + 1))`1, dim2(P.(k + 1), E)^w]]
+             in ==>.-relation(TS) by DefRel;
+      then [[(P.k)`1, dim2(P.k, E)^w], Q.(k + 1)] in ==>.-relation(TS)
+             by C1, B2;
+      hence thesis by C1, B2;
+    end;
+    then reconsider Q as RedSequence of ==>.-relation(TS)
+      by B1, REWRITE1:def 2;
+D3: len P >= 0 + 1 by NAT_1:13;
+    then 1 in dom P by FINSEQ_3:27;
+    then
+D1:   dim2(P.1, E) = (P.1)`2 by A, ThRedSeq30
+                  .= u by A, MCART_1:7;
+D0: len Q >= 0 + 1 by NAT_1:13;
+    then 1 in dom Q by FINSEQ_3:27;
+    then
+D:    Q.1 = [(P.1)`1, dim2(P.1, E)^w] by B2
+         .= [x, u^w] by A, D1, MCART_1:7;
+    len P in dom P by D3, FINSEQ_3:27;
+    then
+D2:   dim2(P.len P, E) = (P.len P)`2 by A, ThRedSeq30
+                      .= v by A, MCART_1:7;
+    len Q in dom Q by D0, FINSEQ_3:27;
+    then Q.len Q = [(P.len Q)`1, dim2(P.len Q, E)^w] by B2;
+    then Q.len Q = [y, v^w] by A, B1, D2, MCART_1:7;
+    hence thesis by D, REWRITE1:def 3;
+  end;
+
+theorem ThRed81:
+  x, y -->. z, TS implies ==>.-relation(TS) reduces [x, y], [z, <%>E]
+  proof
+    assume x, y -->. z, TS;
+    then <*[x, y], [z, <%>E]*> is RedSequence of ==>.-relation(TS)
+      by ThRedSeq77;
+    then [[x, y], [z, <%>E]] in ==>.-relation(TS) by LmRed40;
+    hence thesis by REWRITE1:16;
+  end;
+
+theorem ThRed82:
+  x, v -->. y, TS implies ==>.-relation(TS) reduces [x, v^w], [y, w]
+  proof
+    assume x, v -->. y, TS;
+    then <*[x, v^w], [y, w]*> is RedSequence of ==>.-relation(TS)
+      by ThRedSeq78;
+    then [[x, v^w], [y, w]] in ==>.-relation(TS) by LmRed40;
+    hence thesis by REWRITE1:16;
+  end;
+
+theorem ThRed83:
+  x1, x2 ==>. y1, y2, TS implies ==>.-relation(TS) reduces [x1, x2], [y1, y2]
+  proof
+    assume x1, x2 ==>. y1, y2, TS;
+    then [[x1, x2], [y1, y2]] in ==>.-relation(TS) by DefRel;
+    hence thesis by REWRITE1:16;
+  end;
+
+theorem ThRed84:
+  ==>.-relation(TS) reduces [x, v], [y, w] implies len v >= len w
+  proof
+    assume ==>.-relation(TS) reduces [x, v], [y, w];
+    then consider P being RedSequence of ==>.-relation(TS) such that
+A:    P.1 = [x, v] & P.len P = [y, w] by REWRITE1:def 3;
+    thus thesis by A, ThRedSeq79;
+  end;
+
+theorem
+  ==>.-relation(TS) reduces [x, w], [y, v^w] implies v = <%>E
+  proof
+    assume ==>.-relation(TS) reduces [x, w], [y, v^w];
+    then len w >= len(v^w) by ThRed84;
+    then len v + len w <= 0 + len w by AFINSQ_1:20;
+    hence thesis by XREAL_1:8;
+  end;
+
+theorem ThRed110:
+  not <%>E in rng dom (the Tran of TS) implies
+    (==>.-relation(TS) reduces [x, v], [y, w] implies
+      len v > len w or (x = y & v = w))
+  proof
+    assume
+A:    not <%>E in rng dom (the Tran of TS);
+    assume ==>.-relation(TS) reduces [x, v], [y, w];
+    then consider P being RedSequence of ==>.-relation(TS) such that
+B:    P.1 = [x, v] & P.len P = [y, w] by REWRITE1:def 3;
+    thus thesis by A, B, ThRedSeq110;
+  end;
+
+theorem
+  not <%>E in rng dom (the Tran of TS) implies
+    (==>.-relation(TS) reduces [x, u], [y, u] implies x = y)
+  proof
+    assume
+A:    not <%>E in rng dom (the Tran of TS);
+    assume ==>.-relation(TS) reduces [x, u], [y, u];
+    then len u > len u or (x = y) by A, ThRed110;
+    hence thesis;
+  end;
+
+theorem ThRed130:
+  not <%>E in rng dom (the Tran of TS) implies
+    (==>.-relation(TS) reduces [x, <%e%>], [y, <%>E] implies
+      [[x, <%e%>], [y, <%>E]] in ==>.-relation(TS))
+  proof
+    assume
+A:    not <%>E in rng dom (the Tran of TS);
+    assume ==>.-relation(TS) reduces [x, <%e%>], [y, <%>E];
+    then consider P being RedSequence of ==>.-relation(TS) such that
+B:    P.1 = [x, <%e%>] & P.len P = [y, <%>E] by REWRITE1:def 3;
+C:  len P = 1 + 1 by A, B, ThRedSeq100;
+    then 1 in dom P & 1 + 1 in dom P by FINSEQ_3:27;
+    hence thesis by B, C, REWRITE1:def 2;
+  end;
+
+theorem ThRed140:
+  TS is deterministic implies
+    (==>.-relation(TS) reduces x, [y1, z] &
+     ==>.-relation(TS) reduces x, [y2, z] implies y1 = y2)
+  proof
+    assume
+A:    TS is deterministic;
+    assume that
+B1:   ==>.-relation(TS) reduces x, [y1, z] and
+B2:   ==>.-relation(TS) reduces x, [y2, z];
+    consider P being RedSequence of ==>.-relation(TS) such that
+C1:   P.1 = x & P.len P = [y1, z] by B1, REWRITE1:def 3;
+    consider Q being RedSequence of ==>.-relation(TS) such that
+C2:   Q.1 = x & Q.len Q = [y2, z] by B2, REWRITE1:def 3;
+    (P.len P)`2 = z & (Q.len Q)`2 = z by C1, C2, MCART_1:7;
+    then P = Q by A, C1, C2, ThRedSeq140;
+    hence thesis by C1, C2, ZFMISC_1:33;
+  end;
+
+begin :: Transitions
+
+definition
+  let E, F, TS, x1, x2, y1, y2;
+  pred x1, x2 ==>* y1, y2, TS means :DefTran:
+    ==>.-relation(TS) reduces [x1, x2], [y1, y2];
+end;
+
+theorem ThTran5:
+  for TS1 being non empty transition-system over F1,
+      TS2 being non empty transition-system over F2 st
+    the carrier of TS1 = the carrier of TS2 &
+    the Tran of TS1 = the Tran of TS2 holds
+      x1, x2 ==>* y1, y2, TS1 implies x1, x2 ==>* y1, y2, TS2
+  proof
+    let TS1 be non empty transition-system over F1,
+        TS2 be non empty transition-system over F2 such that
+A1:   the carrier of TS1 = the carrier of TS2 and
+A2:   the Tran of TS1 = the Tran of TS2;
+    assume x1, x2 ==>* y1, y2, TS1;
+    then ==>.-relation(TS1) reduces [x1, x2], [y1, y2] by DefTran;
+    then ==>.-relation(TS2) reduces [x1, x2], [y1, y2] by A1, A2, ThRel20;
+    hence thesis by DefTran;
+  end;
+
+theorem ThTran10:
+  x, y ==>* x, y, TS
+  proof
+    ==>.-relation(TS) reduces [x, y], [x, y] by REWRITE1:13;
+    hence thesis by DefTran;
+  end;
+
+theorem ThTran20:
+  x1, x2 ==>* y1, y2, TS & y1, y2 ==>* z1, z2, TS implies
+    x1, x2 ==>* z1, z2, TS
+  proof
+    assume x1, x2 ==>* y1, y2, TS & y1, y2 ==>* z1, z2, TS;
+    then ==>.-relation(TS) reduces [x1, x2], [y1, y2] &
+         ==>.-relation(TS) reduces [y1, y2], [z1, z2] by DefTran;
+    then ==>.-relation(TS) reduces [x1, x2], [z1, z2] by REWRITE1:17;
+    hence thesis by DefTran;
+  end;
+
+theorem ThTran21:
+  x, y -->. z, TS implies x, y ==>* z, <%>E, TS
+  proof
+    assume x, y -->. z, TS;
+    then ==>.-relation(TS) reduces [x, y], [z, <%>E] by ThRed81;
+    hence thesis by DefTran;
+  end;
+
+theorem
+  x, v -->. y, TS implies x, v^w ==>* y, w, TS
+  proof
+    assume x, v -->. y, TS;
+    then ==>.-relation(TS) reduces [x, v^w], [y, w] by ThRed82;
+    hence thesis by DefTran;
+  end;
+
+theorem ThTran30:
+  x, u ==>* y, v, TS implies x, u^w ==>* y, v^w, TS
+  proof
+    assume x, u ==>* y, v, TS;
+    then ==>.-relation(TS) reduces [x, u], [y, v] by DefTran;
+    then ==>.-relation(TS) reduces [x, u^w], [y, v^w] by ThRed70;
+    hence thesis by DefTran;
+  end;
+
+theorem ThTran40:
+  x1, x2 ==>. y1, y2, TS implies x1, x2 ==>* y1, y2, TS
+  proof
+    assume x1, x2 ==>. y1, y2, TS;
+    then ==>.-relation(TS) reduces [x1, x2], [y1, y2] by ThRed83;
+    hence thesis by DefTran;
+  end;
+
+theorem ThTran50:
+  x, v ==>* y, w, TS implies ex u st v = u^w
+  proof
+    assume x, v ==>* y, w, TS;
+    then ==>.-relation(TS) reduces [x, v], [y, w] by DefTran;
+    hence thesis by ThRed60;
+  end;
+
+theorem ThTran60:
+  x, v ==>* y, w, TS implies len w <= len v
+  proof
+    assume x, v ==>* y, w, TS;
+    then consider u such that
+A:    v = u^w by ThTran50;
+    thus thesis by A, LmXSeq50;
+  end;
+
+theorem
+  x, w ==>* y, v^w, TS implies v = <%>E
+  proof
+    assume x, w ==>* y, v^w, TS;
+    then len(v^w) <= len w by ThTran60;
+    then len v + len w <= 0 + len w by AFINSQ_1:20;
+    hence thesis by XREAL_1:8;
+  end;
+
+theorem ThTran70:
+  not <%>E in rng dom (the Tran of TS) implies
+    (x, u ==>* y, u, TS iff x = y)
+  proof
+    assume
+A:    not <%>E in rng dom (the Tran of TS);
+    thus x, u ==>* y, u, TS implies x = y
+    proof
+      assume x, u ==>* y, u, TS;
+      then ==>.-relation(TS) reduces [x, u], [y, u] by DefTran;
+      then consider p being RedSequence of ==>.-relation(TS) such that
+B:      p.1 = [x, u] & p.len p = [y, u] by REWRITE1:def 3;
+      thus thesis by A, B, ThRedSeq80;
+    end;
+    assume x = y;
+    hence thesis by ThTran10;
+  end;
+
+theorem ThTran80:
+  not <%>E in rng dom (the Tran of TS) implies
+    (x, <%e%> ==>* y, <%>E, TS implies x, <%e%> ==>. y, <%>E, TS)
+  proof
+    assume
+A1:   not <%>E in rng dom (the Tran of TS);
+    assume x, <%e%> ==>* y, <%>E, TS;
+    then ==>.-relation(TS) reduces [x, <%e%>], [y, <%>E] by DefTran;
+    then [[x, <%e%>], [y, <%>E]] in ==>.-relation(TS) by A1, ThRed130;
+    hence thesis by DefRel;
+  end;
+
+theorem ThTran90:
+  TS is deterministic implies
+    ((x1, x2 ==>* y1, z, TS & x1, x2 ==>* y2, z, TS) implies y1 = y2)
+  proof
+    assume
+A:    TS is deterministic;
+    assume that
+B1:   x1, x2 ==>* y1, z, TS and
+B2:   x1, x2 ==>* y2, z, TS;
+C1: ==>.-relation(TS) reduces [x1, x2], [y1, z] by B1, DefTran;
+C2: ==>.-relation(TS) reduces [x1, x2], [y2, z] by B2, DefTran;
+    thus thesis by A, C1, C2, ThRed140;
+  end;
+
+begin :: Acceptance of Words
+
+definition
+  let E, F, TS, x1, x2, y;
+  pred x1, x2 ==>* y, TS means :DefAcc:
+    x1, x2 ==>* y, <%>E, TS;
+end;
+
+theorem ThAcc5:
+  for TS1 being non empty transition-system over F1,
+      TS2 being non empty transition-system over F2 st
+    the carrier of TS1 = the carrier of TS2 &
+    the Tran of TS1 = the Tran of TS2 holds
+      x, y ==>* z, TS1 implies x, y ==>* z, TS2
+  proof
+    let TS1 be non empty transition-system over F1,
+        TS2 be non empty transition-system over F2 such that
+A1:   the carrier of TS1 = the carrier of TS2 and
+A2:   the Tran of TS1 = the Tran of TS2;
+    assume x, y ==>* z, TS1;
+    then x, y ==>* z, <%>E, TS1 by DefAcc;
+    then x, y ==>* z, <%>E, TS2 by A1, A2, ThTran5;
+    hence thesis by DefAcc;
+  end;
+
+theorem ThAcc10:
+  x, <%>E ==>* x, TS
+  proof
+    x, <%>E ==>* x, <%>E, TS by ThTran10;
+    hence thesis by DefAcc;
+  end;
+
+theorem ThAcc20:
+  x, u ==>* y, TS implies x, u^v ==>* y, v, TS
+  proof
+    assume x, u ==>* y, TS;
+    then x, u ==>* y, <%>E, TS by DefAcc;
+    then x, u^v ==>* y, <%>E^v, TS by ThTran30;
+    hence thesis by AFINSQ_1:32;
+  end;
+
+theorem
+  x, y -->. z, TS implies x, y ==>* z, TS
+  proof
+    assume x, y -->. z, TS;
+    then x, y ==>* z, <%>E, TS by ThTran21;
+    hence thesis by DefAcc;
+  end;
+
+theorem
+  x1, x2 ==>. y, <%>E, TS implies x1, x2 ==>* y, TS
+  proof
+    assume x1, x2 ==>. y, <%>E, TS;
+    then x1, x2 ==>* y, <%>E, TS by ThTran40;
+    hence thesis by DefAcc;
+  end;
+
+theorem
+  x, u ==>* y, TS & y, v ==>* z, TS implies x, u^v ==>* z, TS
+  proof
+    assume x, u ==>* y, TS & y, v ==>* z, TS;
+    then x, u^v ==>* y, v, TS & y, v ==>* z, <%>E, TS
+      by ThAcc20, DefAcc;
+    then x, u^v^<%>E ==>* y, v, TS & y, v^<%>E ==>* z, <%>E, TS by AFINSQ_1:32;
+    then x, u^v^<%>E ==>* y, v^<%>E, TS & y, v^<%>E ==>* z, <%>E, TS
+      by AFINSQ_1:32;
+    then x, u^v^<%>E ==>* z, <%>E, TS by ThTran20;
+    then x, u^v ==>* z, <%>E, TS by AFINSQ_1:32;
+    hence thesis by DefAcc;
+  end;
+
+theorem ThAcc50:
+  not <%>E in rng dom (the Tran of TS) implies
+    (x, <%>E ==>* y, TS iff x = y)
+  proof
+    assume
+A:    not <%>E in rng dom (the Tran of TS);
+    thus x, <%>E ==>* y, TS implies x = y
+    proof
+      assume x, <%>E ==>* y, TS;
+      then x, <%>E ==>* y, <%>E, TS by DefAcc;
+      hence thesis by A, ThTran70;
+    end;
+    assume x = y;
+    hence thesis by ThAcc10;
+  end;
+
+theorem
+  not <%>E in rng dom (the Tran of TS) implies
+    (x, <%e%> ==>* y, TS implies x, <%e%> ==>. y, <%>E, TS)
+  proof
+    assume
+A:    not <%>E in rng dom (the Tran of TS);
+    assume x, <%e%> ==>* y, TS;
+    then x, <%e%> ==>* y, <%>E, TS by DefAcc;
+    hence thesis by A, ThTran80;
+  end;
+
+theorem
+  TS is deterministic implies
+    ((x1, x2 ==>* y1, TS & x1, x2 ==>* y2, TS) implies y1 = y2)
+  proof
+    assume
+A:    TS is deterministic;
+    assume x1, x2 ==>* y1, TS & x1, x2 ==>* y2, TS;
+    then x1, x2 ==>* y1, <%>E, TS & x1, x2 ==>* y2, <%>E, TS by DefAcc;
+    hence thesis by A, ThTran90;
+  end;
+
+begin :: Reachable States
+
+definition
+  let E, F, TS, x, X;
+  func x-succ_of (X, TS) -> Subset of TS equals
+    { s : ex t st t in X & t, x ==>* s, TS };
+  coherence
+  proof
+    set Y = { s : ex t st t in X & t, x ==>* s, TS };
+    Y c= the carrier of TS
+    proof
+      let y;
+      assume y in Y;
+      then ex s st s = y & ex t st t in X & t, x ==>* s, TS;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem ThSucc10:
+  s in x-succ_of (X, TS) iff ex t st t in X & t, x ==>* s, TS
+  proof
+    thus s in x-succ_of (X, TS) implies ex t st t in X & t, x ==>* s, TS
+    proof
+      assume s in x-succ_of (X, TS);
+      then ex s' st s' = s & (ex t st t in X & t, x ==>* s', TS);
+      hence thesis;
+    end;
+    thus thesis;
+  end;
+
+theorem
+  not <%>E in rng dom (the Tran of TS) implies <%>E-succ_of (S, TS) = S
+  proof
+    assume
+A:    not <%>E in rng dom (the Tran of TS);
+B:  now
+      let x;
+      assume x in <%>E-succ_of (S, TS);
+      then consider s such that
+C1:     s in S and
+C2:     s, <%>E ==>* x, TS by ThSucc10;
+      thus x in S by A, C1, C2, ThAcc50;
+    end;
+    now
+      let x;
+      assume
+C:      x in S;
+      x, <%>E ==>* x, TS by ThAcc10;
+      hence x in <%>E-succ_of (S, TS) by C;
+    end;
+    hence thesis by B, TARSKI:2;
+  end;
+
+theorem
+  for TS1 being non empty transition-system over F1,
+      TS2 being non empty transition-system over F2 st
+    the carrier of TS1 = the carrier of TS2 &
+    the Tran of TS1 = the Tran of TS2 holds
+      x-succ_of (X, TS1) = x-succ_of (X, TS2)
+  proof
+    let TS1 be non empty transition-system over F1,
+        TS2 be non empty transition-system over F2 such that
+A1:   the carrier of TS1 = the carrier of TS2 and
+A2:   the Tran of TS1 = the Tran of TS2;
+B:  now
+      let y;
+      assume
+C0:     y in x-succ_of (X, TS1);
+      then reconsider q = y as Element of TS1;
+      consider p being Element of TS1 such that
+C:      p in X & p, x ==>* q, TS1 by C0, ThSucc10;
+      reconsider p as Element of TS2 by A1;
+      reconsider q as Element of TS2 by A1;
+      p, x ==>* q, TS2 by C, A1, A2, ThAcc5;
+      hence y in x-succ_of (X, TS2) by C;
+    end;
+    now
+      let y;
+      assume
+C0:     y in x-succ_of (X, TS2);
+      then reconsider q = y as Element of TS2;
+      consider p being Element of TS2 such that
+C:      p in X & p, x ==>* q, TS2 by C0, ThSucc10;
+      reconsider p as Element of TS1 by A1;
+      reconsider q as Element of TS1 by A1;
+      p, x ==>* q, TS1 by C, A1, A2, ThAcc5;
+      hence y in x-succ_of (X, TS1) by C;
+    end;
+    hence thesis by B, TARSKI:2;
+  end;

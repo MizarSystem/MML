@@ -7,15 +7,15 @@
 environ
 
  vocabularies FUNCT_1, PBOOLE, RELAT_1, FUNCT_4, CAT_1, BOOLE, MATRIX_1,
-      ZF_REFLE, PRE_CIRC, FINSET_1, CAT_4, TARSKI, PRALG_2, NATTRA_1;
+      ZF_REFLE, CARD_FIN, FINSET_1, CAT_4, TARSKI, PRALG_2, NATTRA_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_4, FINSET_1,
-      FUNCOP_1, PBOOLE, PRE_CIRC, MBOOLEAN;
- constructors FUNCT_4, MBOOLEAN;
+      FUNCOP_1, PBOOLE, MBOOLEAN;
+ constructors FUNCT_4, MBOOLEAN, PBOOLE;
  registrations XBOOLE_0, FUNCOP_1, FINSET_1;
  requirements BOOLE;
- definitions PRE_CIRC, PBOOLE, FUNCOP_1;
+ definitions FINSET_1, PBOOLE, FUNCOP_1;
  theorems FUNCOP_1, ENUMSET1, FUNCT_4, MBOOLEAN, PBOOLE, SETWISEO, TARSKI,
-      ZFMISC_1, RELAT_1, XBOOLE_0;
+      ZFMISC_1, RELAT_1, XBOOLE_0, PARTFUN1;
  schemes PBOOLE;
 
 begin :: Preliminaries
@@ -31,13 +31,13 @@ proof
   let X be set, M be ManySortedSet of I such that
 A1: i in I;
   thus dom (M +* (i .--> X)) = dom M \/ dom (i .--> X) by FUNCT_4:def 1
-    .= I \/ dom (i .--> X) by PBOOLE:def 3
+    .= I \/ dom (i .--> X) by PARTFUN1:def 4
     .= I \/ {i} by FUNCOP_1:19
     .= I by A1,ZFMISC_1:46;
 end;
 
 theorem
-  f = {} implies f is ManySortedSet of {} by PBOOLE:def 3,RELAT_1:60;
+  f = {} implies f is ManySortedSet of {} by PARTFUN1:def 4,RELAT_1:60,def 18;
 
 theorem
   I is non empty implies not ex X st X is empty-yielding & X is non-empty
@@ -84,7 +84,7 @@ end;
 
 registration
   let I, A;
-  cluster {A} -> non-empty locally-finite;
+  cluster {A} -> non-empty finite-yielding;
   coherence
   proof
     thus {A} is non-empty
@@ -92,12 +92,12 @@ registration
       let i such that
 A1:   i in I;
       {A.i} <> {};
-      hence {A}.i is non empty by A1,Def1;
+      hence thesis by A1,Def1;
     end;
     let i such that
 A2: i in I;
     {A.i} is finite;
-    hence {A}.i is finite by A2,Def1;
+    hence thesis by A2,Def1;
   end;
 end;
 
@@ -131,7 +131,7 @@ end;
 
 registration
   let I, A, B;
-  cluster {A,B} -> non-empty locally-finite;
+  cluster {A,B} -> non-empty finite-yielding;
   coherence
   proof
     thus {A,B} is non-empty
@@ -139,12 +139,12 @@ registration
       let i such that
 A1:   i in I;
       {A.i,B.i} <> {};
-      hence {A,B}.i is non empty by A1,Def2;
+      hence thesis by A1,Def2;
     end;
     let i such that
 A2: i in I;
     {A.i,B.i} is finite;
-    hence {A,B}.i is finite by A2,Def2;
+    hence thesis by A2,Def2;
   end;
 end;
 
@@ -176,7 +176,7 @@ A5: x = y;
     let i;
     assume i in I;
     then X.i = {y.i} by A1,Def1;
-    hence x.i in X.i by A5,TARSKI:def 1;
+    hence thesis by A5,TARSKI:def 1;
   end;
   assume
 A6: for x holds x in X iff x = y;
@@ -196,7 +196,7 @@ A9:       a in X.i;
 A10:      dom (i .--> a) = {i} by FUNCOP_1:19;
           dom (y +* (i .--> a)) = I by A8,Th1;
           then reconsider x1 = y +* (i .--> a) as ManySortedSet of I
-          by PBOOLE:def 3;
+          by PARTFUN1:def 4,RELAT_1:def 18;
           i in {i} by TARSKI:def 1;
           then
 A11:      x1.i = (i .--> a).i by A10,FUNCT_4:14
@@ -207,18 +207,18 @@ A11:      x1.i = (i .--> a).i by A10,FUNCT_4:14
 A12:        q in I;
             per cases;
             suppose i = q;
-              hence x1.q in X.q by A9,A11;
+              hence thesis by A9,A11;
             end;
             suppose i <> q;
               then not q in dom (i .--> a) by A10,TARSKI:def 1;
               then x1.q = y.q by FUNCT_4:12;
-              hence x1.q in X.q by A7,A12,PBOOLE:def 4;
+              hence thesis by A7,A12,PBOOLE:def 4;
             end;
           end;
-          hence a = y.i by A6,A11;
+          hence thesis by A6,A11;
         end;
         assume a = y.i;
-        hence a in X.i by A7,A8,PBOOLE:def 4;
+        hence thesis by A7,A8,PBOOLE:def 4;
       end;
     end;
     then X.i = {y.i} by TARSKI:def 1;
@@ -250,7 +250,7 @@ A6:       a <> x1.i;
 A7:       dom (i .--> a) = {i} by FUNCOP_1:19;
           dom (x2 +* (i .--> a)) = I by A4,Th1;
           then reconsider k2 = x2 +* (i .--> a) as ManySortedSet of I
-          by PBOOLE:def 3;
+          by PARTFUN1:def 4,RELAT_1:def 18;
           i in {i} by TARSKI:def 1;
           then
 A8:       k2.i = (i .--> a).i by A7,FUNCT_4:14
@@ -261,24 +261,24 @@ A8:       k2.i = (i .--> a).i by A7,FUNCT_4:14
 A9:         q in I;
             per cases;
             suppose i = q;
-              hence k2.q in X.q by A5,A8;
+              hence thesis by A5,A8;
             end;
             suppose i <> q;
               then not q in dom (i .--> a) by A7,TARSKI:def 1;
               then k2.q = x2.q by FUNCT_4:12;
-              hence k2.q in X.q by A3,A9,PBOOLE:def 4;
+              hence thesis by A3,A9,PBOOLE:def 4;
             end;
           end;
-          hence a = x2.i by A1,A6,A8;
+          hence thesis by A1,A6,A8;
         end;
         assume
 A10:    a = x1.i or a = x2.i;
         per cases by A10;
         suppose a = x1.i;
-          hence a in X.i by A2,A4,PBOOLE:def 4;
+          hence thesis by A2,A4,PBOOLE:def 4;
         end;
         suppose a = x2.i;
-          hence a in X.i by A3,A4,PBOOLE:def 4;
+          hence thesis by A3,A4,PBOOLE:def 4;
         end;
       end;
     end;
@@ -302,10 +302,10 @@ A2: x = x1 or x = x2;
 A3: X.i = {x1.i,x2.i} by A1,Def2;
   per cases by A2;
   suppose x = x1;
-    hence x.i in X.i by A3,TARSKI:def 2;
+    hence thesis by A3,TARSKI:def 2;
   end;
   suppose x = x2;
-    hence x.i in X.i by A3,TARSKI:def 2;
+    hence thesis by A3,TARSKI:def 2;
   end;
 end;
 
@@ -333,7 +333,7 @@ proof
   let i such that
 A1: i in I;
   x.i in {x.i} by TARSKI:def 1;
-  hence x.i in {x}.i by A1,Def1;
+  hence thesis by A1,Def1;
 end;
 
 theorem     :: ENUMSET1:9
@@ -347,14 +347,14 @@ A2: x=A;
     let i such that
 A3: i in I;
     x.i in {A.i,B.i} by A2,TARSKI:def 2;
-    hence x.i in { A,B }.i by A3,Def2;
+    hence thesis by A3,Def2;
   end;
   suppose
 A4: x=B;
     let i such that
 A5: i in I;
     x.i in {A.i,B.i} by A4,TARSKI:def 2;
-    hence x.i in { A,B }.i by A5,Def2;
+    hence thesis by A5,Def2;
   end;
 end;
 
@@ -445,7 +445,7 @@ A3: i in I;
       .= {A.i,B.i} by A1,A3,Def2;
     hence x.i = B.i by ZFMISC_1:8;
   end;
-  hence x = B by PBOOLE:3;
+  hence thesis by PBOOLE:3;
 end;
 
 theorem     :: ZFMISC_1:9
@@ -461,7 +461,7 @@ A2: i in I;
       .= {A.i,B.i} by A1,A2,Def2;
     hence A.i = B.i by ZFMISC_1:9;
   end;
-  hence A = B by PBOOLE:3;
+  hence thesis by PBOOLE:3;
 end;
 
 theorem     :: ZFMISC_1:12
@@ -473,13 +473,13 @@ proof
 A1: i in I;
     {x.i} c= {x.i,y.i} by ZFMISC_1:12;
     then {x}.i c= {x.i,y.i} by A1,Def1;
-    hence {x}.i c= {x,y}.i by A1,Def2;
+    hence thesis by A1,Def2;
   end;
   let i such that
 A2: i in I;
   {y.i} c= {x.i,y.i} by ZFMISC_1:12;
   then {y}.i c= {x.i,y.i} by A2,Def1;
-  hence {y}.i c= {x,y}.i by A2,Def2;
+  hence thesis by A2,Def2;
 end;
 
 theorem     :: ZFMISC_1:13
@@ -778,7 +778,7 @@ proof
 A1: i in I;
   {A.i} c= bool (A.i) by ZFMISC_1:80;
   then {A}.i c= bool (A.i) by A1,Def1;
-  hence {A}.i c= (bool A).i by A1,MBOOLEAN:def 1;
+  hence thesis by A1,MBOOLEAN:def 1;
 end;
 
 theorem     :: ZFMISC_1:31
@@ -839,7 +839,7 @@ A1: {x} c= X;
 A2: i in I;
     then {x}.i c= X.i by A1,PBOOLE:def 5;
     then {x.i} c= X.i by A2,Def1;
-    hence x.i in X.i by ZFMISC_1:37;
+    hence thesis by ZFMISC_1:37;
   end;
   assume
 A3: x in X;
@@ -848,7 +848,7 @@ A3: x in X;
 A4: i in I;
   then x.i in X.i by A3,PBOOLE:def 4;
   then {x.i} c= X.i by ZFMISC_1:37;
-  hence {x}.i c= X.i by A4,Def1;
+  hence thesis by A4,Def1;
 end;
 
 theorem     :: ZFMISC_1:38
@@ -895,20 +895,20 @@ A2: i in I;
   suppose A = [0]I;
     then A.i = {} by PBOOLE:5;
     then A.i c= {x1.i,x2.i} by ZFMISC_1:42;
-    hence A.i c= {x1,x2}.i by A2,Def2;
+    hence thesis by A2,Def2;
   end;
   suppose A = {x1};
     then A.i = {x1.i} by A2,Def1;
     then A.i c= {x1.i,x2.i} by ZFMISC_1:42;
-    hence A.i c= {x1,x2}.i by A2,Def2;
+    hence thesis by A2,Def2;
   end;
   suppose A = {x2};
     then A.i = {x2.i} by A2,Def1;
     then A.i c= {x1.i,x2.i} by ZFMISC_1:42;
-    hence A.i c= {x1,x2}.i by A2,Def2;
+    hence thesis by A2,Def2;
   end;
   suppose A = {x1,x2};
-    hence A.i c= {x1,x2}.i;
+    hence thesis;
   end;
 end;
 
@@ -926,12 +926,12 @@ A2: i in I;
     then x.i in A.i by A2,PBOOLE:def 4;
     then x.i in A.i \/ {B.i} by SETWISEO:6;
     then x.i in A.i \/ {B}.i by A2,Def1;
-    hence x.i in (A \/ {B}).i by A2,PBOOLE:def 7;
+    hence thesis by A2,PBOOLE:def 7;
   end;
   suppose x = B;
     then x.i in A.i \/ {B.i} by SETWISEO:6;
     then x.i in A.i \/ {B}.i by A2,Def1;
-    hence x.i in (A \/ {B}).i by A2,PBOOLE:def 7;
+    hence thesis by A2,PBOOLE:def 7;
   end;
 end;
 
@@ -955,12 +955,12 @@ A3:   i in I;
       let i;
       assume i in I;
       then A.i \/ {x.i} c= B.i by A2;
-      hence x.i in B.i by SETWISEO:8;
+      hence thesis by SETWISEO:8;
     end;
     let i;
     assume i in I;
     then A.i \/ {x.i} c= B.i by A2;
-    hence A.i c= B.i by SETWISEO:8;
+    hence thesis by SETWISEO:8;
   end;
   assume
 A4: x in B & A c= B;
@@ -970,7 +970,7 @@ A5: i in I;
   then x.i in B.i & A.i c= B.i by A4,PBOOLE:def 4,def 5;
   then A.i \/ {x.i} c= B.i by SETWISEO:8;
   then A.i \/ {x}.i c= B.i by A5,Def1;
-  hence (A \/ {x}).i c= B.i by A5,PBOOLE:def 7;
+  hence thesis by A5,PBOOLE:def 7;
 end;
 
 theorem     :: ZFMISC_1:45
@@ -1018,14 +1018,14 @@ A1: {x,y} \/ A = A;
 A2:   i in I;
       then {x.i,y.i} \/ A.i = {x,y}.i \/ A.i by Def2
         .= A.i by A1,A2,PBOOLE:def 7;
-      hence x.i in A.i by ZFMISC_1:47;
+      hence thesis by ZFMISC_1:47;
     end;
     let i;
     assume
 A3: i in I;
     then {x.i,y.i} \/ A.i = {x,y}.i \/ A.i by Def2
       .= A.i by A1,A3,PBOOLE:def 7;
-    hence y.i in A.i by ZFMISC_1:47;
+    hence thesis by ZFMISC_1:47;
   end;
   assume
 A4: x in A & y in A;
@@ -1083,7 +1083,7 @@ A2: i in I;
   then X.i /\ {x.i} = X.i /\ {x}.i by Def1
     .= (X /\ {x}).i by A2,PBOOLE:def 8
     .= {x.i} by A1,A2,Def1;
-  hence x.i in X.i by ZFMISC_1:51;
+  hence thesis by ZFMISC_1:51;
 end;
 
 theorem     :: ZFMISC_1:52
@@ -1220,7 +1220,7 @@ A2: i in I;
   then y.i in (X \ {x}).i by A1,PBOOLE:def 4;
   then y.i in X.i \ {x}.i by A2,PBOOLE:def 9;
   then y.i in X.i \ {x.i} by A2,Def1;
-  hence y.i in X.i by ZFMISC_1:64;
+  hence thesis by ZFMISC_1:64;
 end;
 
 theorem     :: ZFMISC_1:64 b
@@ -1295,7 +1295,7 @@ A2: i in I;
     then {x.i} \ X.i = {x}.i \ X.i by Def1
       .= ({x} \ X).i by A2,PBOOLE:def 9
       .= {} by A1,PBOOLE:5;
-    hence x.i in X.i by ZFMISC_1:68;
+    hence thesis by ZFMISC_1:68;
   end;
   assume
 A3: x in X;
@@ -1375,7 +1375,7 @@ A2:   i in I;
       then {x.i,y.i} \ X.i = {x,y}.i \ X.i by Def2
         .= ({x,y} \ X).i by A2,PBOOLE:def 9
         .= {} by A1,PBOOLE:5;
-      hence x.i in X.i by ZFMISC_1:73;
+      hence thesis by ZFMISC_1:73;
     end;
     let i;
     assume
@@ -1383,7 +1383,7 @@ A3: i in I;
     then {x.i,y.i} \ X.i = {x,y}.i \ X.i by Def2
       .= ({x,y} \ X).i by A3,PBOOLE:def 9
       .= {} by A1,PBOOLE:5;
-    hence y.i in X.i by ZFMISC_1:73;
+    hence thesis by ZFMISC_1:73;
   end;
   assume
 A4: x in X & y in X;
@@ -1532,7 +1532,7 @@ A5: Z.i is non empty by A1,PBOOLE:def 16;
     [|X,Z|].i c= [|Y,Z|].i by A3,A4,PBOOLE:def 5;
     then [:X.i,Z.i:] c= [|Y,Z|].i by A4,PBOOLE:def 21;
     then [:X.i,Z.i:] c= [:Y.i,Z.i:] by A4,PBOOLE:def 21;
-    hence X.i c= Y.i by A5,ZFMISC_1:117;
+    hence thesis by A5,ZFMISC_1:117;
   end;
   suppose
 A6: [|Z,X|] c= [|Z,Y|];
@@ -1544,7 +1544,7 @@ A8: Z.i is non empty by A1,PBOOLE:def 16;
     [|Z,X|].i c= [|Z,Y|].i by A6,A7,PBOOLE:def 5;
     then [:Z.i,X.i:] c= [|Z,Y|].i by A7,PBOOLE:def 21;
     then [:Z.i,X.i:] c= [:Z.i,Y.i:] by A7,PBOOLE:def 21;
-    hence X.i c= Y.i by A8,ZFMISC_1:117;
+    hence thesis by A8,ZFMISC_1:117;
   end;
 end;
 
@@ -1561,7 +1561,7 @@ A2: i in I;
     then X.i c= Y.i by A1,PBOOLE:def 5;
     then [:X.i,Z.i:] c= [:Y.i,Z.i:] by ZFMISC_1:118;
     then [|X,Z|].i c= [:Y.i,Z.i:] by A2,PBOOLE:def 21;
-    hence [|X,Z|].i c= [|Y,Z|].i by A2,PBOOLE:def 21;
+    hence thesis by A2,PBOOLE:def 21;
   end;
   let i;
   assume
@@ -1569,7 +1569,7 @@ A3: i in I;
   then X.i c= Y.i by A1,PBOOLE:def 5;
   then [:Z.i,X.i:] c= [:Z.i,Y.i:] by ZFMISC_1:118;
   then [|Z,X|].i c= [:Z.i,Y.i:] by A3,PBOOLE:def 21;
-  hence [|Z,X|].i c= [|Z,Y|].i by A3,PBOOLE:def 21;
+  hence thesis by A3,PBOOLE:def 21;
 end;
 
 theorem     :: ZFMISC_1:119
@@ -1583,7 +1583,7 @@ A2: i in I;
   then x1.i c= A.i & x2.i c= B.i by A1,PBOOLE:def 5;
   then [:x1.i,x2.i:] c= [:A.i,B.i:] by ZFMISC_1:119;
   then [|x1,x2|].i c= [:A.i,B.i:] by A2,PBOOLE:def 21;
-  hence [|x1,x2|].i c= [|A,B|].i by A2,PBOOLE:def 21;
+  hence thesis by A2,PBOOLE:def 21;
 end;
 
 theorem     :: ZFMISC_1:120
@@ -1832,7 +1832,7 @@ A2: i in I;
     then X.i is non empty by A1,PBOOLE:def 16;
     then [:{x.i},X.i:] is non empty by ZFMISC_1:130;
     then [:{x}.i,X.i:] is non empty by A2,Def1;
-    hence [|{x},X|].i is non empty by A2,PBOOLE:def 21;
+    hence thesis by A2,PBOOLE:def 21;
   end;
   let i;
   assume
@@ -1840,7 +1840,7 @@ A3: i in I;
   then X.i is non empty by A1,PBOOLE:def 16;
   then [:X.i,{x.i}:] is non empty by ZFMISC_1:130;
   then [:X.i,{x}.i:] is non empty by A3,Def1;
-  hence [|X,{x}|].i is non empty by A3,PBOOLE:def 21;
+  hence thesis by A3,PBOOLE:def 21;
 end;
 
 theorem     :: ZFMISC_1:132
@@ -1980,7 +1980,7 @@ A3: i in I;
 A4: [:x.i,X.i:] c= [:y.i,Y.i:] by A3,PBOOLE:def 21;
     [|x,X|].i is non empty by A2,A3,PBOOLE:def 16;
     then [:x.i,X.i:] is non empty by A3,PBOOLE:def 21;
-    hence x.i c= y.i by A4,ZFMISC_1:138;
+    hence thesis by A4,ZFMISC_1:138;
   end;
   let i;
   assume
@@ -1991,7 +1991,7 @@ A5: i in I;
 A6: [:x.i,X.i:] c= [:y.i,Y.i:] by A5,PBOOLE:def 21;
   [|x,X|].i is non empty by A2,A5,PBOOLE:def 16;
   then [:x.i,X.i:] is non empty by A5,PBOOLE:def 21;
-  hence X.i c= Y.i by A6,ZFMISC_1:138;
+  hence thesis by A6,ZFMISC_1:138;
 end;
 
 theorem     :: REALSET1:4
@@ -2005,7 +2005,7 @@ A2: i in I;
   then A.i c= X.i by A1,PBOOLE:def 5;
   then [:A.i,A.i:] c= [:X.i,X.i:] by ZFMISC_1:119;
   then [|A,A|].i c= [:X.i,X.i:] by A2,PBOOLE:def 21;
-  hence [|A,A|].i c= [|X,X|].i by A2,PBOOLE:def 21;
+  hence thesis by A2,PBOOLE:def 21;
 end;
 
 theorem     :: SYSREL:17
@@ -2048,7 +2048,7 @@ A4: i in I;
     then
 A5: [:A.i,B.i:] c= [:X.i,Y.i:] by A4,PBOOLE:def 21;
     A.i is non empty by A1,A4,PBOOLE:def 16;
-    hence B.i c= Y.i by A5,ZFMISC_1:139;
+    hence thesis by A5,ZFMISC_1:139;
   end;
   suppose
 A6: [|B,A|] c= [|Y,X|];
@@ -2060,7 +2060,7 @@ A7: i in I;
     then
 A8: [:B.i,A.i:] c= [:Y.i,X.i:] by A7,PBOOLE:def 21;
     A.i is non empty by A1,A7,PBOOLE:def 16;
-    hence B.i c= Y.i by A8,ZFMISC_1:139;
+    hence thesis by A8,ZFMISC_1:139;
   end;
 end;
 

@@ -18,42 +18,42 @@
 </Signature>
 <RCluster aid="MEASURE6" nr="1">
 <ArgTypes/>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="29">
-<Func kind="K" nr="43"/>
+<Func kind="K" nr="30">
+<Func kind="K" nr="44"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="32"/>
+<Adjective nr="17" value="false"/>
+<Adjective nr="24"/>
+<Adjective nr="25"/>
+<Adjective nr="26"/>
+<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 <FCluster aid="MEASURE6" nr="1">
 <ArgTypes>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="32"/>
+<Adjective nr="35"/>
 </Cluster>
-<Func kind="K" nr="29">
-<Func kind="K" nr="43"/>
+<Func kind="K" nr="30">
+<Func kind="K" nr="44"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="61">
+<Func kind="K" nr="60">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="32"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 </Registrations>

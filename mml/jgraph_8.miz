@@ -16,24 +16,28 @@ environ
       COMPLEX1, REAL_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FINSEQ_1, NAT_1,
       NAT_D, SEQ_1, SEQM_3, STRUCT_0, BINARITH, TOPREAL1, PRE_TOPC, GOBOARD1,
       GOBOARD4, TOPMETR, PCOMPS_1, COMPTS_1, WEIERSTR, METRIC_1, TBSP_1,
-      RCOMP_1, UNIFORM1, INT_1, CONNSP_1, PSCOMP_1, EUCLID, BORSUK_1, BORSUK_2,
+      RCOMP_1, UNIFORM1, INT_1, CONNSP_1, PSCOMP_1, RLVECT_1,
+      RLTOPSP1, EUCLID, BORSUK_1,
+      BORSUK_2,
       JORDAN1, JGRAPH_6, TOPREALA, TOPALG_2;
  constructors REAL_1, NAT_1, COMPLEX1, RCOMP_1, BINARITH, CONNSP_1, COMPTS_1,
       TBSP_1, MONOID_0, TOPREAL1, GOBOARD1, GOBOARD4, JORDAN1, PSCOMP_1,
       WEIERSTR, UNIFORM1, JGRAPH_6, TOPALG_2, TOPREALA, SEQ_1, BORSUK_2,
-      SEQM_3, NAT_D, XXREAL_2;
+      SEQM_3, NAT_D, XXREAL_2, FUNCSDOM, CONVEX1, RLTOPSP1;
  registrations XBOOLE_0, RELAT_1, NUMBERS, XXREAL_0, XREAL_0, REAL_1, INT_1,
       FINSEQ_1, STRUCT_0, PRE_TOPC, BORSUK_1, MONOID_0, EUCLID, TOPREAL1,
-      BORSUK_2, JORDAN5A, TOPALG_2, MEMBERED, VALUED_0, FUNCT_2, XXREAL_2;
+      BORSUK_2, JORDAN5A, TOPALG_2, MEMBERED, VALUED_0, FUNCT_2, XXREAL_2,
+      RELSET_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, JORDAN1, TOPALG_2, EUCLID, TOPREALA, STRUCT_0;
+ definitions TARSKI, XBOOLE_0,
+      RLTOPSP1, JORDAN1, TOPALG_2, EUCLID, TOPREALA, STRUCT_0;
  theorems TARSKI, FUNCT_1, FINSEQ_1, NAT_1, SPPOL_1, FINSEQ_4, RELAT_1,
       FINSEQ_3, TOPREAL1, GOBOARD4, TOPREAL3, EUCLID, UNIFORM1, WEIERSTR,
       PRE_TOPC, TBSP_1, HEINE, COMPTS_1, TOPMETR, PSCOMP_1, BORSUK_1, RCOMP_1,
       FUNCT_2, XBOOLE_0, XBOOLE_1, TOPRNS_1, XCMPLX_1, JGRAPH_1, INT_1,
       XREAL_0, CONNSP_1, JORDAN2C, XREAL_1, BORSUK_2, TSEP_1, JGRAPH_6,
       JORDAN5B, FINSEQ_2, XXREAL_0, TOPS_2, PARTFUN1, XXREAL_1, XXREAL_2,
-      SEQM_3;
+      SEQM_3, RLTOPSP1;
  schemes FINSEQ_1, NAT_1;
 
 begin
@@ -100,7 +104,7 @@ A12:      i+(1+k)<len f by A8,XXREAL_0:2;
           then f/.(i+(1+k))<f/.(i+(1+(k+1))) by A1,A10,A12;
           hence f/.i<f/.(i+(1+(k+1))) by A7,A8,A11,XXREAL_0:2;
         end;
-        hence i+(1+(k+1))<=len f implies f/.i<f/.(i+(1+(k+1)));
+        hence thesis;
       end;
 A13:  for k being Element of NAT holds P[k] from NAT_1:sch 1(A5,A6);
       i+1<=j by A2,NAT_1:13;
@@ -133,7 +137,7 @@ A4: ex p3 being Point of TOP-REAL 2 st
 A5: ex p4 being Point of TOP-REAL 2 st
     p4 = w2 & a <= p4`1 & p4`1 <= b & c <= p4`2 & p4`2 <= d by A1,A2;
     x in {(1-l)*w1 + l*w2 where l is Real: 0 <= l & l <= 1}
-    by A3,TOPREAL1:def 3;
+    by A3;
     then consider l being Real such that
 A6: x = (1-l)*w1 + l*w2 & 0 <= l & l <= 1;
     set w = (1-l)*w1 + l*w2;
@@ -172,9 +176,9 @@ proof
   g be continuous Function of I[01],TOP-REAL n;
   reconsider e as positive Real by XREAL_0:def 1;
 A1: dom g=the carrier of I[01] by FUNCT_2:def 1;
-  consider f being Function of Closed-Interval-MSpace(0,1),Euclid n such that
-A2: f=g by UNIFORM1:11;
-A3: f is uniformly_continuous by A2,UNIFORM1:9;
+  reconsider f=g as Function of Closed-Interval-MSpace(0,1),Euclid n
+        by UNIFORM1:11;
+A3: f is uniformly_continuous by UNIFORM1:9;
 A4: e/2<e by XREAL_1:218;
 A5: e/2>0 by XREAL_1:217;
   then consider s1 being Real such that
@@ -194,7 +198,7 @@ A12: for u1,u2 being Element of (Closed-Interval-MSpace(0,1))
     let u1,u2 be Element of (Closed-Interval-MSpace(0,1));
     assume dist(u1,u2) < s;
     then dist(u1,u2) < s1 by A11,XXREAL_0:2;
-    hence dist((f/.u1),(f/.u2)) < e/2 by A7;
+    hence thesis by A7;
   end;
   s<=1/2 by XXREAL_0:17;
   then
@@ -293,12 +297,12 @@ A48:  nx<=len p by NAT_1:13;
       then
 A49:  p.nx=s/2*(nx-1) by A23;
       y=p.nx by A43,A45,A48,FINSEQ_1:85;
-      hence y in REAL by A49;
+      hence thesis by A49;
     end;
     suppose nx>=len p+1;
       then nx=len p+1 by A45,A46,XXREAL_0:1;
       then y=1 by A43,FINSEQ_1:59;
-      hence y in REAL;
+      hence thesis;
     end;
   end;
   then reconsider h1=p^<*1*> as FinSequence of REAL by FINSEQ_1:def 4;
@@ -322,7 +326,7 @@ A60: s/2>=0 by A8;
     nx-1>=1-1 by A57,XREAL_1:11;
     then ry>=0 by A58,A60;
     then y in {rs where rs is Real:0<=rs & rs<=1} by A55,A59;
-    hence y in [.0,1.] by RCOMP_1:def 1;
+    hence thesis by RCOMP_1:def 1;
   end;
 A61: rng <*1*> ={1} by FINSEQ_1:55;
   1 in {r where r is Real:0<=r & r<=1};
@@ -332,7 +336,7 @@ A62: 1 in [.0,1.] by RCOMP_1:def 1;
   proof
     let x be set;
     assume x in {1};
-    hence x in [.0,1.] by A62,TARSKI:def 1;
+    hence thesis by A62,TARSKI:def 1;
   end;
   then
 A63: [.0,1.] \/ {1} =[.0,1.] by XBOOLE_1:12;
@@ -362,7 +366,7 @@ A73:  h1.i=p.i by A67,A71,FINSEQ_1:85;
 A74:  i+1<=len p by A71,NAT_1:13;
 A75:  h1.(i+1)=h1/.(i+1) by A69,A70,FINSEQ_4:24;
       h1.(i+1)=p.(i+1) by A70,A74,FINSEQ_1:85;
-      hence h1/.i<h1/.(i+1) by A31,A67,A71,A72,A73,A75;
+      hence thesis by A31,A67,A71,A72,A73,A75;
     end;
     suppose i>=len p;
       then
@@ -371,7 +375,7 @@ A77:  h1/.(i+1)=h1.(i+1) by A69,A70,FINSEQ_4:24
         .=1 by A76,FINSEQ_1:59;
       h1/.i=h1.i by A67,FINSEQ_4:24
         .=p.i by A67,A68,FINSEQ_1:85;
-      hence h1/.i<h1/.(i+1) by A38,A67,A68,A77;
+      hence thesis by A38,A67,A68,A77;
     end;
   end;
   then
@@ -393,7 +397,7 @@ A86:  h1.i=p.i by A80,A84,FINSEQ_1:85;
 A87:  i+1<=len p by A84,NAT_1:13;
 A88:  h1.(i+1)=h1/.(i+1) by A82,A83,FINSEQ_4:24;
       h1.(i+1)=p.(i+1) by A83,A87,FINSEQ_1:85;
-      hence h1/.(i+1)-h1/.i<=s/2 by A31,A80,A84,A85,A86,A88;
+      hence thesis by A31,A80,A84,A85,A86,A88;
     end;
     suppose i>=len p;
       then
@@ -402,7 +406,7 @@ A90:  h1/.(i+1)=h1.(i+1) by A82,A83,FINSEQ_4:24
         .=1 by A89,FINSEQ_1:59;
       h1/.i=h1.i by A80,FINSEQ_4:24
         .=p.i by A80,A81,FINSEQ_1:85;
-      hence h1/.(i+1)-h1/.i<=s/2 by A41,A89,A90;
+      hence thesis by A41,A89,A90;
     end;
   end;
   for i being Element of NAT,Q being Subset of I[01],
@@ -443,11 +447,11 @@ A100: abs(r3-s3)<=h1/.(i+1)-h1/.i by A91,A96,A97,UNIFORM1:14;
 A101: dist(x3,y3)<=s/2 by HEINE:1;
       s/2<s by A8,A9,XREAL_1:218;
       then dist(x3,y3)<s by A101,XXREAL_0:2;
-      hence dist(x,y)<=e/2 by A2,A12,A96,A97,A98,A99;
+      hence thesis by A12,A96,A97,A98,A99;
     end;
     then W is bounded by A5,TBSP_1:def 9;
     then diameter(W)<=e/2 by A93,A94,TBSP_1:def 10;
-    hence diameter(W)<e by A4,XXREAL_0:2;
+    hence thesis by A4,XXREAL_0:2;
   end;
   hence thesis by A50,A51,A52,A53,A63,A64,A65,A78;
 end;
@@ -459,13 +463,13 @@ proof
   let P be Subset of TOP-REAL n;
   assume
 A1: P c= LSeg(p1,p2) & p1 in P & p2 in P & P is connected;
-  reconsider L=LSeg(p1,p2) as non empty Subset of TOP-REAL n;
+  then reconsider L=LSeg(p1,p2) as non empty Subset of TOP-REAL n;
   now
     assume not LSeg(p1,p2) c= P;
     then consider x0 being set such that
 A2: x0 in LSeg(p1,p2) & not x0 in P by TARSKI:def 3;
     reconsider p0=x0 as Point of TOP-REAL n by A2;
-A3: p1 in LSeg(p1,p2) by TOPREAL1:6;
+A3: p1 in LSeg(p1,p2) by RLTOPSP1:69;
     then
 A4: LSeg(p1,p0) c= L by A2,TOPREAL1:12;
 A5: LSeg(p1,p0)\{p0} c= LSeg(p1,p0) by XBOOLE_1:36;
@@ -473,7 +477,7 @@ A6: the carrier of ((TOP-REAL n)|L)=[#]((TOP-REAL n)|L)
       .= L by PRE_TOPC:def 10;
     then reconsider R1=LSeg(p1,p0)\{p0} as Subset of (TOP-REAL n)|L
     by A4,A5,XBOOLE_1:1;
-A7: p2 in LSeg(p1,p2) by TOPREAL1:6;
+A7: p2 in LSeg(p1,p2) by RLTOPSP1:69;
     then
 A8: LSeg(p0,p2) c= L by A2,TOPREAL1:12;
     LSeg(p0,p2)\{p0} c= LSeg(p0,p2) by XBOOLE_1:36;
@@ -518,14 +522,14 @@ A21: {p0} c= LSeg(p1,p0)
       let d be set;
       assume d in {p0};
       then d=p0 by TARSKI:def 1;
-      hence d in LSeg(p1,p0) by TOPREAL1:6;
+      hence thesis by RLTOPSP1:69;
     end;
 A22: {p0} c= LSeg(p0,p2)
     proof
       let d be set;
       assume d in {p0};
       then d=p0 by TARSKI:def 1;
-      hence d in LSeg(p0,p2) by TOPREAL1:6;
+      hence thesis by RLTOPSP1:69;
     end;
 A23: L=LSeg(p1,p0) \/ LSeg(p0,p2) by A2,TOPREAL1:11
       .=(LSeg(p1,p0)\{p0})\/{p0} \/ LSeg(p0,p2) by A21,XBOOLE_1:45
@@ -540,13 +544,13 @@ A24: P c= R1 \/ R2
 A25:  z in P;
       then z in R1 \/ {p0} or z in R2 by A1,A23,XBOOLE_0:def 3;
       then z in R1 or z in {p0} or z in R2 by XBOOLE_0:def 3;
-      hence z in R1 \/ R2 by A2,A25,TARSKI:def 1,XBOOLE_0:def 3;
+      hence thesis by A2,A25,TARSKI:def 1,XBOOLE_0:def 3;
     end;
 A26: now
       assume P c= R1;
       then
 A27:  p2 in R1 by A1;
-      p2 in PX2 by TOPREAL1:6;
+      p2 in PX2 by RLTOPSP1:69;
       then p2 in PX1 /\ PX2 by A13,A27,XBOOLE_0:def 4;
       hence contradiction by A1,A2,A19,TARSKI:def 1;
     end;
@@ -554,13 +558,13 @@ A27:  p2 in R1 by A1;
       assume P c= R2;
       then
 A28:  p1 in R2 by A1;
-      p1 in PX1 by TOPREAL1:6;
+      p1 in PX1 by RLTOPSP1:69;
       then p1 in PX1 /\ PX2 by A12,A28,XBOOLE_0:def 4;
       hence contradiction by A1,A2,A19,TARSKI:def 1;
     end;
     hence contradiction by A11,A20,A24,A26,CONNSP_1:17;
   end;
-  hence P=LSeg(p1,p2) by A1,XBOOLE_0:def 10;
+  hence thesis by A1,XBOOLE_0:def 10;
 end;
 
 theorem Th3:
@@ -590,11 +594,11 @@ A6: p2 in g.:([#]I[01]) by A2,FUNCT_1:def 12;
       assume y in g.:([#]I[01]);
       then ex x being set st
       x in dom g & x in [#]I[01] & y=g.x by FUNCT_1:def 12;
-      hence y in rng g by FUNCT_1:def 5;
+      hence thesis by FUNCT_1:def 5;
     end;
     hence contradiction by A1,A3,A4,A5,A6,Th2,XBOOLE_1:1;
   end;
-  hence rng g=LSeg(p1,p2) by A1,XBOOLE_0:def 10;
+  hence thesis by A1,XBOOLE_0:def 10;
 end;
 
 :: Goboard Theorem in continuous case
@@ -620,7 +624,8 @@ A5: for p being Point of TOP-REAL 2 st p in P holds q1`2<=p`2 & p`2<= q2`2 and
 A6: for p being Point of TOP-REAL 2 st p in Q holds q1`2<=p`2 & p`2<= q2`2;
 A7: f.0 = p1 & f.1 = p2 by BORSUK_2:def 4;
 A8: g.0 = q1 & g.1 = q2 by BORSUK_2:def 4;
-  reconsider P'=P,Q'=Q as Subset of TopSpaceMetr(Euclid 2);
+  TopSpaceMetr(Euclid 2) = the TopStruct of TOP-REAL 2 by EUCLID:def 8;
+  then reconsider P'=P,Q'=Q as Subset of TopSpaceMetr(Euclid 2);
 A9: [#](I[01]) is compact by COMPTS_1:10;
 A10: f.:(the carrier of I[01])=rng f by FUNCT_2:45;
 A11: g.:([#](I[01]))=rng g by FUNCT_2:45;
@@ -628,16 +633,23 @@ A12: 0 in the carrier of I[01] by BORSUK_1:86;
   then 0 in dom f by FUNCT_2:def 1;
   then
 A13: p1 in P' by A1,A7,FUNCT_1:def 5;
+X: the TopStruct of TOP-REAL 2 = TopSpaceMetr Euclid 2 by EUCLID:def 8;
   0 in dom g by A12,FUNCT_2:def 1;
   then
 A14: q1 in Q' by A2,A8,FUNCT_1:def 5;
-A15: P' <> {} & P' is compact & Q' <> {}
-  & Q' is compact by A1,A2,A9,A10,A11,WEIERSTR:14;
+  then
+A15: P' <> {} & Q' <> {} by A13;
+   Q is compact by A1,A2,A9,A10,A11,WEIERSTR:14;
+   then
+B15: Q' is compact by X,COMPTS_1:33;
+   P is compact by A1,A2,A9,A10,A11,WEIERSTR:14;
+   then
+C15: P' is compact by X,COMPTS_1:33;
   assume
 A16: P /\ Q= {};
   then P misses Q by XBOOLE_0:def 7;
   then
-A17: min_dist_min(P',Q')>0 by A15,JGRAPH_1:55;
+A17: min_dist_min(P',Q')>0 by C15,B15,A15,JGRAPH_1:55;
   set e=min_dist_min(P',Q')/5;
 A18: e>0/5 by A17,XREAL_1:76;
   then consider h being FinSequence of REAL such that
@@ -1135,7 +1147,7 @@ A178: for q being Point of TOP-REAL 2 st q in Q holds q`1=p1`1
         let q be Point of TOP-REAL 2;
         assume q in Q;
         then p1`1<=q`1 & q`1<= p2`1 by A4;
-        hence q`1=p1`1 by A177,XXREAL_0:1;
+        hence thesis by A177,XXREAL_0:1;
       end;
       0 in the carrier of I[01] by BORSUK_1:86;
       then
@@ -1211,7 +1223,7 @@ A199:   ((1-ln)*q1+ln*q2)`1= ((1-ln)*q1)`1+(ln*q2)`1 by TOPREAL3:7
         then (1-ln)*q1+ln*q2=qz by A199,TOPREAL3:11;
         then z in { (1-lambda)*q1 + lambda*q2 where lambda is Real
         : 0 <= lambda & lambda <= 1 } by A194,A195;
-        hence z in LSeg(q1,q2) by TOPREAL1:def 3;
+        hence thesis;
       end;
       p1 in LSeg(q1,q2)
       proof
@@ -1269,7 +1281,7 @@ A210:   ((1-ln)*q1+ln*q2)`1= ((1-ln)*q1)`1+(ln*q2)`1 by TOPREAL3:7
         then (1-ln)*q1+ln*q2=p1 by A210,TOPREAL3:11;
         then p1 in { (1-lambda)*q1 + lambda*q2 where lambda is Real
         : 0 <= lambda & lambda <= 1 } by A205,A206;
-        hence p1 in LSeg(q1,q2) by TOPREAL1:def 3;
+        hence thesis;
       end;
       then p1 in Q by A2,A186,Th3;
       hence contradiction by A13,A16,XBOOLE_0:def 4;
@@ -1285,7 +1297,7 @@ A214:   for p being Point of TOP-REAL 2 st p in P holds p`2=q1`2
           let p be Point of TOP-REAL 2;
           assume p in P;
           then q1`2<=p`2 & p`2<= q2`2 by A5;
-          hence p`2=q1`2 by A213,XXREAL_0:1;
+          hence thesis by A213,XXREAL_0:1;
         end;
         0 in the carrier of I[01] by BORSUK_1:86;
         then
@@ -1361,7 +1373,7 @@ A235:     ((1-ln)*p1+ln*p2)`2= ((1-ln)*p1)`2+(ln*p2)`2 by TOPREAL3:7
           then (1-ln)*p1+ln*p2=pz by A235,TOPREAL3:11;
           then z in { (1-lambda)*p1 + lambda*p2 where lambda is Real
           : 0 <= lambda & lambda <= 1 } by A230,A231;
-          hence z in LSeg(p1,p2) by TOPREAL1:def 3;
+          hence thesis;
         end;
         q1 in LSeg(p1,p2)
         proof
@@ -1417,7 +1429,7 @@ A246:     ((1-ln)*p1+ln*p2)`2= ((1-ln)*p1)`2+(ln*p2)`2 by TOPREAL3:7
           then (1-ln)*p1+ln*p2=q1 by A246,TOPREAL3:11;
           then q1 in { (1-lambda)*p1 + lambda*p2 where lambda is Real
           : 0 <= lambda & lambda <= 1 } by A241,A242;
-          hence q1 in LSeg(p1,p2) by TOPREAL1:def 3;
+          hence thesis;
         end;
         then q1 in P by A1,A222,Th3;
         hence contradiction by A14,A16,XBOOLE_0:def 4;
@@ -1499,7 +1511,7 @@ A274: Q<>{}(TOP-REAL 2) &
       h2/.k' in rng g & hb.k' in dom g by A64,A273,FUNCT_1:def 5;
       reconsider q11=h2/.k' as Point of TOP-REAL 2;
       reconsider x1=p11,x2=q11 as Point of Euclid 2 by EUCLID:25;
-      min_dist_min(P',Q')<=dist(x1,x2) by A2,A15,A263,A274,WEIERSTR:40;
+      min_dist_min(P',Q')<=dist(x1,x2) by A2,C15,B15,A15,A263,A274,WEIERSTR:40;
       then
 A275: |.(p11-q11).|<= |.(p11-ps).|+|.(ps-q11).|
       & min_dist_min(P',Q')<=|.(p11-q11).| by JGRAPH_1:45,TOPRNS_1:35;
@@ -1597,7 +1609,7 @@ A2: ar = Ar & br = Br & cr = Cr & dr = Dr;
     then
 A3: h = {} & v = {} by FUNCT_2:def 1;
     take 1[01], 1[01];
-    thus h.1[01] = v.1[01] by A3;
+    thus thesis by A3;
   end;
   suppose TR is non empty;
     then reconsider TR = Trectangle(a,b,c,d)

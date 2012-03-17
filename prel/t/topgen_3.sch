@@ -12,7 +12,6 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="ARYTM_3"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -30,8 +29,8 @@
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="41"/>
-<Adjective nr="42"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
 </Cluster>
 </Typ>
 <Not>
@@ -54,7 +53,7 @@
 <And>
 <Not>
 <And>
-<Pred kind="V" nr="44">
+<Pred kind="V" nr="48">
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>
@@ -71,7 +70,7 @@
 <Var nr="2"/>
 </Pred>
 <Not>
-<Pred kind="V" nr="44">
+<Pred kind="V" nr="48">
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>
@@ -86,7 +85,7 @@
 </Not>
 <And>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="82"/>
 </Pred>
 <Pred kind="P" nr="1">
 <Func kind="F" nr="1"/>
@@ -174,8 +173,8 @@
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="41"/>
-<Adjective nr="42"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
 </Cluster>
 </Typ>
 <Not>
@@ -196,7 +195,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="117">
+<Func kind="K" nr="109">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -211,9 +210,9 @@
 </Not>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="2">
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="82"/>
 </Func>
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="82"/>
 </Pred>
 <For>
 <Typ kind="M" nr="2">
@@ -302,8 +301,8 @@
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="41"/>
-<Adjective nr="42"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
 </Cluster>
 </Typ>
 <Not>
@@ -324,7 +323,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="118">
+<Func kind="K" nr="110">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

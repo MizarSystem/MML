@@ -11,12 +11,12 @@ environ
       PETRI, FRAENKEL, NET_1, MARGREL1, FUNCT_2, ARYTM_3, ARYTM_1, BOOLMARK,
       FINSEQ_4, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, RELAT_1,
-      FUNCT_1, PARTFUN1, FUNCT_2, DOMAIN_1, FRAENKEL, FUNCOP_1, FINSEQ_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, DOMAIN_1, FUNCOP_1, FINSEQ_1,
       FUNCT_4, MARGREL1, PETRI, XXREAL_0;
  constructors PARTFUN1, DOMAIN_1, FUNCT_4, XXREAL_0, XREAL_0, NAT_1, MARGREL1,
-      FINSEQ_4, PETRI;
+      FINSEQ_4, PETRI, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, XXREAL_0, XREAL_0,
-      FINSEQ_1, MARGREL1, ORDINAL1, CARD_1;
+      FINSEQ_1, MARGREL1, ORDINAL1, CARD_1, RELSET_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions PETRI, XBOOLE_0, XBOOLEAN, SUBSET_1;
  theorems SUBSET_1, TARSKI, ZFMISC_1, PETRI, FUNCT_1, FUNCOP_1, FUNCT_2,
@@ -39,7 +39,7 @@ A1: dom f = A by FUNCT_2:def 1;
 A2: dom(f +* (C-->v)) = (dom f) \/ dom(C-->v) by FUNCT_4:def 1
     .= [#]A \/ C by A1,FUNCOP_1:19
     .= A by SUBSET_1:28;
-A3: rng f c= B by RELSET_1:12;
+A3: rng f c= B by RELAT_1:def 19;
   rng(C-->v) c= {v} by FUNCOP_1:19;
   then
 A4: rng f \/ rng(C-->v) c= B \/ {v} by A3,XBOOLE_1:13;
@@ -243,7 +243,7 @@ A8:         len Q = len Q1 + len <*t*> by A5,FINSEQ_1:35
             hence M/.1 = Firing(Q/.1,M0) by FINSEQ_4:25;
             let i be Element of NAT;
             assume i < len Q & i > 0;
-            hence M/.(i+1) = Firing(Q/.(i+1),M/.i) by A8,NAT_1:13;
+            hence thesis by A8,NAT_1:13;
           end;
           suppose
 A9:         Q1<> {};
@@ -306,7 +306,7 @@ A30:            Q1/.(i+1)=Q/.(i+1) by A5,FINSEQ_4:83;
                 i + 1 <= len B + 1 by A29,NAT_1:12;
                 then i <= len B by XREAL_1:8;
                 then i in dom B by A27,FINSEQ_3:27;
-                hence M/.(i+1) = Firing(Q/.(i+1),M/.i)
+                hence thesis
                 by A26,A28,A30,FINSEQ_4:83;
               end;
               suppose i+1 in {len Q1 + 1};
@@ -316,7 +316,7 @@ A31:            i + 1 = len Q1 + 1 by TARSKI:def 1;
 A32:            M/.(i+1)=M2 by A10,FINSEQ_4:82;
 A33:            Q/.(i+1)=t by A5,A31,FINSEQ_4:82;
                 len B in dom B by A17,FINSEQ_3:27;
-                hence M/.(i+1) = Firing(Q/.(i+1),M/.i)
+                hence thesis
                 by A10,A11,A31,A32,A33,FINSEQ_4:83;
               end;
             end;
@@ -404,7 +404,7 @@ A1:   z in dom(f+*(A --> y)) & z in A & u = (f+*(A --> y)).z
       by FUNCT_1:def 12;
       z in dom(A --> y) by A1,FUNCOP_1:19;
       then u = (A --> y).z by A1,FUNCT_4:14;
-      hence u = y by A1,FUNCOP_1:13;
+      hence thesis by A1,FUNCOP_1:13;
     end;
     consider x being set such that
 A2: x in A by XBOOLE_0:def 1;
@@ -412,7 +412,7 @@ A2: x in A by XBOOLE_0:def 1;
     then x in dom(f+*(A --> y)) & y = (f+*(A --> y)).x by FUNCT_4:13,14;
     hence u = y implies u in (f+*(A --> y)).:A by A2,FUNCT_1:def 12;
   end;
-  hence (f+*(A --> y)).:A = {y} by TARSKI:def 1;
+  hence thesis by TARSKI:def 1;
 end;
 
 theorem Th6:
@@ -435,7 +435,7 @@ A4: dom M0 = the Places of PTN & dom (*'{t}-->FALSE) = (*'{t})
     .= (the Places of PTN) \/ ((*'{t}) \/ ({t}*')) by XBOOLE_1:4
     .= the Places of PTN by A3,SUBSET_1:28;
   then M.s in {TRUE} by A1,A2,FUNCT_1:def 12;
-  hence Firing(t,M0).s = TRUE by TARSKI:def 1;
+  hence thesis by TARSKI:def 1;
 end;
 
 Lm1: now
@@ -558,17 +558,17 @@ A1:   Q0 = {} & Q1 = {};
 A2:   Q0^Q1 = {} by FINSEQ_1:47;
       Firing(Q1,Firing(Q0,M0)) = Firing(Q1,M0) by A1,Def5
         .= M0 by A1,Def5;
-      hence Firing(Q0^Q1,M0) = Firing(Q1,Firing(Q0,M0)) by A2,Def5;
+      hence thesis by A2,Def5;
     end;
     case
 A3:   Q0 = {} & Q1 <> {};
       then Firing(Q0^Q1,M0) = Firing(Q1,M0) by FINSEQ_1:47;
-      hence Firing(Q0^Q1,M0) = Firing(Q1,Firing(Q0,M0)) by A3,Def5;
+      hence thesis by A3,Def5;
     end;
     case
 A4:   Q0 <> {} & Q1 = {};
       then Firing(Q0^Q1,M0) = Firing(Q0,M0) by FINSEQ_1:47;
-      hence Firing(Q0^Q1,M0) = Firing(Q1,Firing(Q0,M0)) by A4,Def5;
+      hence thesis by A4,Def5;
     end;
     case
 A5:   Q0 <> {} & Q1 <> {};
@@ -667,7 +667,7 @@ A43:  len M4 = k + 1 by A7,A16,NAT_1:6;
       M/.len M = M/.(len Q0 +(1+k)) by A8,A16,A43,FINSEQ_1:35
         .= M/.(len Q0 +1+k)
         .= M4/.len M4 by A16,A42,A43;
-      hence Firing(Q0^Q1,M0) = Firing(Q1,Firing(Q0,M0)) by A9,A17;
+      hence thesis by A9,A17;
     end;
   end;
   hence thesis;
@@ -685,7 +685,7 @@ proof
 A1: Q0^Q1 is_firable_on M0;
   now per cases;
     case Q0 = {} & Q1 = {};
-      hence Q1 is_firable_on Firing(Q0,M0) & Q0 is_firable_on M0 by Def4;
+      hence thesis by Def4;
     end;
     case
 A2:   Q0 = {} & Q1 <> {};
@@ -886,7 +886,7 @@ A6: <*t*>/.1 is_firable_on M0 and M/.1 = Firing(<*t*>/.1,M0)
   & for i being Element of NAT st i < len <*t*> & i > 0
   holds <*t*>/.(i+1) is_firable_on M/.i
   & M/.(i+1) = Firing(<*t*>/.(i+1),M/.i) by Def4;
-  thus t is_firable_on M0 by A6,FINSEQ_4:25;
+  thus thesis by A6,FINSEQ_4:25;
 end;
 
 theorem Th13:
@@ -906,7 +906,7 @@ A5: i < len <*t*> & i > 0;
     len <*t*> = 0 + 1 by FINSEQ_1:56;
     hence M/.(i+1) = Firing(<*t*>/.(i+1),M/.i) by A5,NAT_1:13;
   end;
-  hence Firing(t,M0) = Firing(<*t*>,M0) by A1,A2,A3,A4,Def5;
+  hence thesis by A1,A2,A3,A4,Def5;
 end;
 
 theorem

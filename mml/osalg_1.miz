@@ -13,9 +13,9 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1, RELSET_1,
       ORDERS_1, FUNCT_2, EQREL_1, SETFAM_1, PARTFUN1, FINSEQ_1, FUNCOP_1,
       FINSEQ_2, CARD_3, PBOOLE, ORDERS_2, STRUCT_0, MSUALG_1, ORDERS_3;
- constructors EQREL_1, CARD_3, MSUALG_1, ORDERS_3;
+ constructors EQREL_1, CARD_3, MSUALG_1, ORDERS_3, RELSET_1, MSAFREE;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, EQREL_1,
-      STRUCT_0, MSUALG_1, MSAFREE, ORDERS_3, ORDINAL1;
+      STRUCT_0, MSUALG_1, MSAFREE, ORDERS_3, ORDINAL1, RELAT_1, PBOOLE;
  requirements BOOLE, SUBSET;
  definitions TARSKI;
  theorems FUNCT_1, PARTFUN1, FINSEQ_1, FUNCOP_1, PBOOLE, FUNCT_2, CARD_3,
@@ -34,7 +34,7 @@ registration
   coherence
   proof
     rng p c= I;
-    then rng p c= dom f by PBOOLE:def 3;
+    then rng p c= dom f by PARTFUN1:def 4;
     then dom(f*p) = dom p by RELAT_1:46
       .= Seg len p by FINSEQ_1:def 3;
     hence thesis by FINSEQ_1:def 2;
@@ -47,7 +47,7 @@ proof
   let I be set, f be ManySortedSet of I, p be FinSequence of I;
   rng p c= I;
   then
-A1: rng p c= dom f by PBOOLE:def 3;
+A1: rng p c= dom f by PARTFUN1:def 4;
   reconsider q = f * p as FinSequence;
   len q = len p by A1,FINSEQ_2:33;
   hence thesis by FINSEQ_3:31;
@@ -70,7 +70,7 @@ definition
   coherence;
 end;
 
-:::::::::::::: Some structures :::::::::::::::::::
+:: Some structures
 :: overloaded MSALGEBRA is modelled using an Equivalence_Relation
 :: on carrier' ... partially hack enforced by previous articles,
 :: partially can give more general treatment than the usual definition
@@ -136,9 +136,7 @@ end;
 
 begin
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::   order-sorted, ~=, discernable,  op-discrete
-:::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 reserve S for OverloadedRSSign;
 
@@ -247,7 +245,7 @@ A1: S is op-discrete;
     assume x ~= y;
     then [x,y] in the Overloading of S by Def3;
     then [x,y] in d by A1,Def5;
-    hence x = y by RELAT_1:def 10;
+    hence thesis by RELAT_1:def 10;
   end;
   assume
 A2: for x,y be OperSymbol of S st x ~= y holds x = y;
@@ -262,7 +260,7 @@ A3:   [x,y] in ol;
 A4:   [x,y] = [x1,y1] & x1 in opss & y1 in opss by RELSET_1:6;
       reconsider x2 = x, y2 = y as OperSymbol of S by A4,ZFMISC_1:33;
       x2 ~= y2 by A3,Def3;
-      hence x in opss & x = y by A2;
+      hence thesis by A2;
     end;
     assume
 A5: x in opss & x = y;
@@ -284,9 +282,7 @@ end;
 
 begin
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: OSSign of ManySortedSign, OrderSortedSign
-::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 reserve S0 for non empty non void ManySortedSign;
 
@@ -365,9 +361,7 @@ definition
     order-sorted OverloadedRSSign);
 end;
 
-::::::::::::::::::::::::::::::::::::::::::::
 :: monotonicity of OrderSortedSign
-:::::::::::::::::::::::::::::::::::::::::::::
 :: monotone overloaded signature means monotonicity for equivalent
 :: operations
 :: a stronger property of the Overloading should be stated ...
@@ -407,9 +401,9 @@ A2: dom w1 = dom w2 by FINSEQ_3:31;
 A3: i in dom w1;
     reconsider s3 = w1.i, s4 = w2.i as Element of S by A2,A3,PARTFUN1:27;
     s3 <= s4 & s4 <= s3 by A1,A2,A3,Def7;
-    hence w1.i = w2.i by ORDERS_2:25;
+    hence thesis by ORDERS_2:25;
   end;
-  hence w1 = w2 by A2,FUNCT_1:9;
+  hence thesis by A2,FUNCT_1:9;
 end;
 
 theorem Th7:
@@ -429,9 +423,9 @@ A3: i in dom w1;
 A4: s3 <= s4 by A1,A3,Def7;
     reconsider s5 = s3, s6 = s4 as Element of S1;
     s5 = s6 by A4,ORDERS_3:1;
-    hence w1.i = w2.i;
+    hence thesis;
   end;
-  hence w1 = w2 by A2,FUNCT_1:9;
+  hence thesis by A2,FUNCT_1:9;
 end;
 
 reserve S for OrderSortedSign;
@@ -452,7 +446,7 @@ A2: o1 ~= o2 & (the_arity_of o1) <= (the_arity_of o2)
   as SortSymbol of S1;
 A3: s1 = s2 by A2,ORDERS_3:1;
   (the_arity_of o1) = (the_arity_of o2) by A1,A2,Th7;
-  hence o1 = o2 by A2,A3,Def4;
+  hence thesis by A2,A3,Def4;
 end;
 
 :: monotonicity of the signature
@@ -486,7 +480,7 @@ A1: ol = id the carrier' of S by Def5;
   let o2 be OperSymbol of S;
   assume o ~= o2 & (the_arity_of o) <= (the_arity_of o2);
   then [o,o2] in ol by Def3;
-  hence the_result_sort_of o <= the_result_sort_of o2 by A1,RELAT_1:def 10;
+  hence thesis by A1,RELAT_1:def 10;
 end;
 
 registration
@@ -534,10 +528,8 @@ A1: S is monotone & the_arity_of o1 = {} & o1 ~= o2 & the_arity_of o2 = {};
   hence thesis by A1,Def4;
 end;
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: least args,sort,rank,regularity for OperSymbol and
 :: monotone OrderSortedSign
-::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: least bound for arguments
 
 definition
@@ -602,7 +594,7 @@ A5:   o ~= o2 & w1 <= the_arity_of o2;
       then
 A6:   the_arity_of o1 <= the_arity_of o2 by A3,Def10;
       o1 ~= o2 by A4,A5,Th2;
-      hence the_result_sort_of o1 <= the_result_sort_of o2 by A6,Def8;
+      hence thesis by A6,Def8;
     end;
     hence o1 has_least_rank_for o,w1 by A3,Def12;
   end;
@@ -712,9 +704,7 @@ A2: o1 has_least_rank_for o,w1 by Th11;
   hence thesis by A1,A2,Def15;
 end;
 
-::::::::::::::::::::::::::::::::::::::::::::::::
 :: ConstOSSet of Poset, OrderSortedSets
-::::::::::::::::::::::::::::::::::::::::::::::::
 
 reserve R for non empty Poset;
 reserve z for non empty set;
@@ -728,7 +718,7 @@ definition
   correctness
   proof
     the carrier of R = dom ((the carrier of R) --> z) by FUNCT_2:def 1;
-    hence thesis by PBOOLE:def 3;
+    hence thesis by PARTFUN1:def 4;
   end;
 end;
 
@@ -777,11 +767,9 @@ registration
   end;
 end;
 
-::FIXME: functor clusters for redefined funcs do not work,
-
-definition
+registration
   let R,z;
-  redefine func ConstOSSet(R,z) -> order-sorted ManySortedSet of R;
+  cluster ConstOSSet(R,z) -> order-sorted;
   coherence by Th16;
 end;
 
@@ -802,9 +790,7 @@ registration
   end;
 end;
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: order-sorted MSAlgebra, OSAlgebra, ConstOSA, OSAlg of a MSAlgebra
-::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 reserve s1,s2 for SortSymbol of S,
   o,o1,o2,o3 for OperSymbol of S,
@@ -898,7 +884,7 @@ proof
   let S be discrete OrderSortedSign, M be MSAlgebra over S;
   let s1,s2 be SortSymbol of S;
   assume s1 <= s2;
-  hence (the Sorts of M).s1 c= (the Sorts of M).s2 by ORDERS_3:1;
+  hence thesis by ORDERS_3:1;
 end;
 
 registration
@@ -938,10 +924,10 @@ A9: iw1.y = (the Sorts of A).(w1.y) &
     reconsider s1 = w1.y, s2 = w2.y as SortSymbol of S by A7,PARTFUN1:27;
     s1 <= s2 by A1,A7,Def7;
     then (the Sorts of A).(w1.y) c= (the Sorts of A).(w2.y) by Def19;
-    hence g.y in iw2.y by A8,A9;
+    hence thesis by A8,A9;
   end;
   then g in product(iw2) by A4,A5,CARD_3:def 5;
-  hence x in (the Sorts of A)#.w2 by A4,PBOOLE:def 19;
+  hence thesis by A4,PBOOLE:def 19;
 end;
 
 reserve M for MSAlgebra over S0;
@@ -959,7 +945,9 @@ definition
 A1: the carrier of S0 = the carrier of S1 &
     the Arity of S0 = the Arity of S1 &
     the ResultSort of S1 = the ResultSort of S0 by Def6;
-    reconsider s1 = s0 as ManySortedSet of S1 by Def6;
+    then dom s0 = the carrier of S1 by PARTFUN1:def 4;
+    then reconsider s1 = s0 as ManySortedSet of S1
+    by PARTFUN1:def 4,RELAT_1:def 18;
     reconsider c1 = c0 as ManySortedFunction of s1# * the Arity of S1,
     s1 * the ResultSort of S1 by A1,Def6;
     MSAlgebra(# s1, c1 #) is order-sorted;
@@ -967,9 +955,7 @@ A1: the carrier of S0 = the carrier of S1 &
   end;
 end;
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: monotone OSAlgebra
-::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 reserve A for OSAlgebra of S;
 
@@ -999,7 +985,7 @@ A5: s1 = w1.i & s2 = w3.i;
     s3 <= s4 & s4 <= s5 by A1,A3,A4,Def7;
     hence thesis by A5,ORDERS_2:26;
   end;
-  hence w1 <= w3 by A2,Def7;
+  hence thesis by A2,Def7;
 end;
 
 definition
@@ -1023,7 +1009,7 @@ A2: o1 ~= o2 & (the_arity_of o1) <= (the_arity_of o2)
   & the_result_sort_of o2 <= the_result_sort_of o1 by A1,Def22;
   then the_arity_of o1 = the_arity_of o2 &
   the_result_sort_of o1 = the_result_sort_of o2 by A2,Th6,ORDERS_2:25;
-  hence o1 = o2 by A2,Def4;
+  hence thesis by A2,Def4;
 end;
 
 theorem
@@ -1038,7 +1024,7 @@ A3: o2 ~= o3 & (the_arity_of o2) <= (the_arity_of o3)
   & the_result_sort_of o2 <= the_result_sort_of o3 by A1,Def22;
   hence o1 ~= o3 by A2,Th2;
   thus (the_arity_of o1) <= (the_arity_of o3) by A2,A3,Th21;
-  thus the_result_sort_of o1 <= the_result_sort_of o3 by A2,A3,ORDERS_2:26;
+  thus thesis by A2,A3,ORDERS_2:26;
 end;
 
 theorem Th24:
@@ -1072,7 +1058,7 @@ A2: M#.(the_arity_of o1) = M#.((the Arity of S).o1) by MSUALG_1:def 6
   M#.(the_arity_of o2) = M#.((the Arity of S).o2) by MSUALG_1:def 6
     .= (M# * (the Arity of S)).o2 by FUNCT_2:21
     .= Args(o2,A) by MSUALG_1:def 9;
-  hence Args(o1,A) c= Args(o2,A) by A1,A2,Th20;
+  hence thesis by A1,A2,Th20;
 end;
 
 theorem
@@ -1138,7 +1124,7 @@ A2: o1 ~= o2 & (the_arity_of o1) <= (the_arity_of o2)
       hence thesis by A2,Th3;
     end;
   end;
-  hence thesis by FUNCT_2:40;
+  hence thesis by RELSET_1:34;
 end;
 
 :: TrivialOSA(S,z,z1) interprets all funcs as one constant
@@ -1163,7 +1149,8 @@ A1: dom ch2 = the carrier' of S &
     for x being Element of (the carrier' of S) holds
     ch2.x = ch1(x) from FUNCT_1:sch 4;
     reconsider ch4 = ch2
-    as ManySortedSet of (the carrier' of S) by A1,PBOOLE:def 3;
+    as ManySortedSet of (the carrier' of S) by A1,PARTFUN1:def 4,RELAT_1:def 18
+;
     for i being set st i in (the carrier' of S) holds ch4.i
     is Function of (ConstOSSet(S,z)# * the Arity of S).i,
     (ConstOSSet(S,z) * the ResultSort of S).i
@@ -1251,7 +1238,7 @@ A3: Args(o1,A) = ((the Sorts of A)# * the Arity of S).o1 by MSUALG_1:def 9
       .= (the Sorts of A)#.((the Arity of S).o2) by FUNCT_2:21
       .=
     (the Sorts of A)#.(the_arity_of o2) by MSUALG_1:def 6;
-    hence Den(o1,A1) c= Den(o2,A1) by A1,A2,A3,Th20,FUNCT_4:5;
+    hence thesis by A1,A2,A3,Th20,FUNCT_4:5;
   end;
   hence thesis by Th27;
 end;
@@ -1275,9 +1262,7 @@ registration
   coherence by Th29;
 end;
 
-:::::::::::::::::::::::::::::
 :: OperNames, OperName, Name
-:::::::::::::::::::::::::::::
 
 reserve op1,op2 for OperSymbol of S;
 
@@ -1344,7 +1329,7 @@ A1: x in the carrier' of S &
   end;
   given op1 such that
 A2: X = Name op1;
-  thus X is OperName of S by A2;
+  thus thesis by A2;
 end;
 
 definition
@@ -1373,7 +1358,7 @@ A2: on = Class(the Overloading of S,op2) by EQREL_1:def 5;
     hence Name op1 = on by A1,A2,EQREL_1:31;
   end;
   assume Name op1 = on;
-  hence op1 is Element of on by EQREL_1:28;
+  hence thesis by EQREL_1:28;
 end;
 
 theorem Th34:
@@ -1408,7 +1393,7 @@ A8: the_arity_of Lo1 = the_arity_of Lo2 by Th6;
   the_result_sort_of Lo1 <= the_result_sort_of Lo2
   & the_result_sort_of Lo2 <= the_result_sort_of Lo1 by A6,A7,Def8;
   then the_result_sort_of Lo1 = the_result_sort_of Lo2 by ORDERS_2:25;
-  hence LBound(op1,w) = LBound(op2,w) by A6,A8,Def4;
+  hence thesis by A6,A8,Def4;
 end;
 
 definition
@@ -1439,7 +1424,7 @@ A5: w <= the_arity_of op1;
     then
 A6: op1 ~= op by A3,A4,Th31;
     len w = len the_arity_of op1 & len w = len the_arity_of op by A2,A5,Def7;
-    hence Lo = LBound(op1,w) by A2,A5,A6,Th34;
+    hence thesis by A2,A5,A6,Th34;
   end;
   uniqueness
   proof
@@ -1468,6 +1453,6 @@ A1: w1 <= the_arity_of o;
   then lo has_least_args_for o,w1 & lo has_least_sort_for o,w1 by Def12;
   then o ~= lo & the_arity_of lo <= the_arity_of o
   & the_result_sort_of lo <= the_result_sort_of o by A1,Def10,Def11;
-  hence LBound(o,w1) <= o by Def22;
+  hence thesis by Def22;
 end;
 

@@ -11,13 +11,13 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
       BINOP_1, DOMAIN_1, FUNCOP_1, FUNCT_3, FINSET_1, CARD_1, XXREAL_0;
  constructors BINOP_1, DOMAIN_1, FUNCT_3, FUNCOP_1, XXREAL_0, CARD_1, MEMBERED,
-      NUMBERS;
+      NUMBERS, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, FINSET_1, MEMBERED, CARD_1,
       ZFMISC_1;
  requirements SUBSET, BOOLE, NUMERALS, REAL;
  definitions BINOP_1, ZFMISC_1;
- theorems TARSKI, FUNCT_1, FUNCT_2, FUNCT_3, ZFMISC_1, RELSET_1, XBOOLE_0,
-      XBOOLE_1, RELAT_1, CARD_2, NAT_1, CARD_1, FUNCT_4;
+ theorems TARSKI, FUNCT_1, FUNCT_2, FUNCT_3, ZFMISC_1, XBOOLE_0, XBOOLE_1,
+      RELAT_1, CARD_2, NAT_1, CARD_1, FUNCT_4, GRFUNC_1;
 
 begin
 
@@ -29,23 +29,12 @@ proof
   let F be Function of [:X,X:],X;
 A1: dom F = [:X,X:] & rng F c= X
   proof
-    X={} implies [:X,X:]={} by ZFMISC_1:113;
-    hence thesis by FUNCT_2:def 1,RELSET_1:12;
+    X={} implies [:X,X:]={};
+    hence thesis by FUNCT_2:def 1,RELAT_1:def 19;
   end;
   assume x in [:X,X:];
   then F.x in rng F by A1,FUNCT_1:def 5;
   hence thesis by A1;
-end;
-
-theorem Th2:
-  for X being set, F being BinOp of X ex A being Subset of X st
-  for x being set holds x in [:A,A:] implies F.x in A
-proof
-  let X be set, F be BinOp of X;
-  X c= X;
-  then reconsider Z = X as Subset of X;
-  take Z;
-  thus thesis by Th1;
 end;
 
 definition
@@ -63,7 +52,13 @@ definition
   mode Preserv of F -> Subset of X means
     :Def2:
     for x being set holds x in [:it,it:] implies F.x in it;
-  existence by Th2;
+  existence
+proof
+  X c= X;
+  then reconsider Z = X as Subset of X;
+  take Z;
+  thus thesis by Th1;
+end;
 end;
 
 definition
@@ -89,13 +84,15 @@ registration
   coherence;
 end;
 
+canceled;
+
 theorem Th3:
   for X being set, F being BinOp of X,
   A being Preserv of F holds F||A is BinOp of A
 proof
   let X be set, F be BinOp of X, A be Preserv of F;
-  X={} implies [:X,X:]={} by ZFMISC_1:113;
-  then dom F = [:X,X:] & rng F c= X by FUNCT_2:def 1,RELSET_1:12;
+  X={} implies [:X,X:]={};
+  then dom F = [:X,X:] & rng F c= X by FUNCT_2:def 1,RELAT_1:def 19;
   then
 A1: dom (F||A) = [:A,A:] by RELAT_1:91,ZFMISC_1:119;
   for x being set holds x in [:A,A:] implies F||A.x in A
@@ -133,7 +130,7 @@ Z:    IT is trivial;
 W:      x in IT by XBOOLE_0:def 1;
       take x;
        for y being set holds y in IT iff y = x by Z,W,ZFMISC_1:def 10;
-      hence IT = {x} by TARSKI:def 1;
+      hence thesis by TARSKI:def 1;
      end;
     assume
 Z:   IT is empty or ex x being set st IT = {x};
@@ -165,12 +162,6 @@ registration
     hence thesis by Def4;
   end;
   cluster non trivial -> non empty set;
-  coherence;
-end;
-
-registration
-  let y be set;
-  cluster {y} -> trivial;
   coherence;
 end;
 
@@ -288,8 +279,8 @@ proof
   let X be set;
   let A be Subset of X;
   let F be Presv of X,A;
-  X={} implies [:X,X:]={} by ZFMISC_1:113;
-  then dom F = [:X,X:] & rng F c= X by FUNCT_2:def 1,RELSET_1:12;
+  X={} implies [:X,X:]={};
+  then dom F = [:X,X:] & rng F c= X by FUNCT_2:def 1,RELAT_1:def 19;
   then
 A1: dom (F||A) = [:A,A:] by RELAT_1:91,ZFMISC_1:119;
   for x being set holds x in [:A,A:] implies F||A.x in A
@@ -331,7 +322,7 @@ proof
   let A be non trivial set;
   let x be Element of A;
   let F be DnT of x,A;
-  dom F = [:A,A:] & rng F c= A by FUNCT_2:def 1,RELSET_1:12;
+  dom F = [:A,A:] & rng F c= A by FUNCT_2:def 1,RELAT_1:def 19;
   then
 A1: dom(F||(A\{x})) = [:A\{x},A\{x}:] by RELAT_1:91,ZFMISC_1:119;
   for y being set holds y in [:A\{x},A\{x}:] implies F||(A\{x}).y in A\{x}
@@ -534,5 +525,27 @@ theorem
   assume
 Z:  x in X;
    then ex x being set st X = {x} by Def4;
-  hence X = {x} by Z,TARSKI:def 1;
+  hence thesis by Z,TARSKI:def 1;
  end;
+
+:: missing, 2009.01.24, A.T.
+
+registration let f be non trivial Function;
+ cluster dom f -> non trivial;
+ coherence
+  proof
+   assume
+Z:   dom f is trivial;
+   per cases by Z,Def4;
+   suppose dom f is empty;
+     then f is empty by RELAT_1:64;
+    hence thesis;
+   end;
+   suppose ex x being set st dom f = {x};
+    then consider x being set such that
+W:   dom f = {x};
+     f = {[x,f.x]} by W,GRFUNC_1:18;
+    hence thesis;
+   end;
+  end;
+end;

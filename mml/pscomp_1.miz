@@ -16,10 +16,11 @@ environ
       COMPLEX1, SETFAM_1, FINSET_1, REAL_1, NAT_1, INT_1, MEMBERED, RELAT_1,
       FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, STRUCT_0, PRE_TOPC,
       TOPS_2, VALUED_0, VALUED_1, SEQ_1, SEQ_2, SEQ_4, RCOMP_1, LIMFUNC1,
-      COMPTS_1, PCOMPS_1, EUCLID, TOPREAL1, MEASURE6, XXREAL_0, XXREAL_2;
+      COMPTS_1, PCOMPS_1,
+      RLTOPSP1, EUCLID, TOPREAL1, MEASURE6, XXREAL_0, XXREAL_2;
  constructors DOMAIN_1, REAL_1, NAT_1, COMPLEX1, SEQ_2, SEQ_4, RCOMP_1,
       FUNCOP_1, LIMFUNC1, MEASURE6, TOPS_2, COMPTS_1, PCOMPS_1, TSP_1,
-      TOPREAL1, SEQ_1, SUPINF_1, XXREAL_2, PARTFUN1;
+      TOPREAL1, SEQ_1, SUPINF_1, XXREAL_2, PARTFUN1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1, FUNCT_2,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, SEQ_2, SEQM_3,
       RCOMP_1, STRUCT_0, PRE_TOPC, COMPTS_1, EUCLID, SPPOL_2, VALUED_0,
@@ -31,7 +32,8 @@ environ
       RCOMP_1, FUNCOP_1, ABSVALUE, NAT_1, INT_1, EUCLID, SEQ_1, SEQ_2, TOPS_1,
       TSP_1, COMPTS_1, SETFAM_1, ZFMISC_1, TOPREAL1, JORDAN1, GOBOARD7,
       SPPOL_1, RELSET_1, XREAL_0, ORDINAL1, XBOOLE_0, XBOOLE_1, XCMPLX_1,
-      MEASURE6, XREAL_1, COMPLEX1, XXREAL_0, VALUED_1, XXREAL_2, XXREAL_1;
+      MEASURE6, XREAL_1, COMPLEX1, XXREAL_0, VALUED_1, XXREAL_2, XXREAL_1,
+      RLTOPSP1;
  schemes FINSET_1, FUNCT_2, DOMAIN_1, WELLORD2, BINOP_2;
 
 begin :: Preliminaries
@@ -64,7 +66,7 @@ registration
     set s = {1};
     take s;
     thus s is non empty;
-    thus s is without_zero;
+    thus thesis;
   end;
   cluster non empty with_zero set;
   existence by Def1;
@@ -77,7 +79,7 @@ registration
     set s = {1 qua Real};
     take s;
     thus s is non empty;
-    thus s is without_zero;
+    thus thesis;
   end;
   cluster non empty with_zero Subset of REAL;
   existence by Def1;
@@ -116,7 +118,7 @@ A12:    B is empty;
         take x' = x;
         thus x' in B \/ {x} by A12,TARSKI:def 1;
         let y be set;
-        thus y in B \/ {x} implies x' c= y by A12,TARSKI:def 1;
+        thus thesis by A12,TARSKI:def 1;
       end;
       suppose B is non empty;
         then consider z being set such that
@@ -185,7 +187,7 @@ A22: xe in x by XBOOLE_0:def 1;
     then x c= y by A21;
     hence xe in y by A22;
   end;
-  hence meet G <> {} by A4,SETFAM_1:def 1;
+  hence thesis by A4,SETFAM_1:def 1;
 end;
 
 registration
@@ -250,7 +252,7 @@ A4: ("f).SS = f"SS by Def2;
     then x in ("f).SS by A1,SETFAM_1:def 1;
     hence f.x in SS by A4,FUNCT_1:def 13;
   end;
-  hence f.x in meet S by A2,SETFAM_1:def 1;
+  hence thesis by A2,SETFAM_1:def 1;
 end;
 
 reserve r, s, t, g for real number;
@@ -264,7 +266,7 @@ A1: abs(r)+abs(s) = 0;
 A2: 0 <= aa & 0 <= ab by COMPLEX1:132;
   aa = -ab by A1;
   then aa = 0 by A2;
-  hence r = 0 by ABSVALUE:7;
+  hence thesis by ABSVALUE:7;
 end;
 
 theorem Th4:
@@ -278,13 +280,13 @@ A1: r < s & s < t;
 A2: -s = abs(s) & -r = abs(r) by A1,ABSVALUE:def 1;
     -s < -r by A1,XREAL_1:26;
     then -s+0 < -r+abs(t) by COMPLEX1:132,XREAL_1:10;
-    hence abs(s) < abs(r)+abs(t) by A2;
+    hence thesis by A2;
   end;
   suppose 0<=s;
     then
 A3: s = abs(s) & t = abs(t) by A1,ABSVALUE:def 1;
     s+0 < t+abs(r) by A1,COMPLEX1:132,XREAL_1:10;
-    hence abs(s) < abs(r)+abs(t) by A3;
+    hence thesis by A3;
   end;
 end;
 
@@ -358,14 +360,14 @@ A2: t is UpperBound of rng seq;
       let n be Element of NAT;
 A3:   seq.n <= t by A2,FUNCT_2:6,XXREAL_2:def 1;
       t < t+1 by XREAL_1:31;
-      hence seq.n < t+1 by A3,XXREAL_0:2;
+      hence thesis by A3,XXREAL_0:2;
     end;
     take s-1;
     let n be Element of NAT;
 A4: seq.n >= s by A1,FUNCT_2:6,XXREAL_2:def 2;
     s < s+1 by XREAL_1:31;
     then s-1 < s by XREAL_1:21;
-    hence s-1 < seq.n by A4,XXREAL_0:2;
+    hence thesis by A4,XXREAL_0:2;
   end;
   given t such that
 A5: for n being Element of NAT holds seq.n<t;
@@ -377,13 +379,13 @@ A6: for n being Element of NAT holds seq.n>s;
     let r be ext-real number;
     assume r in rng seq;
     then ex n being set st n in dom seq & seq.n = r by FUNCT_1:def 5;
-    hence s<=r by A6;
+    hence thesis by A6;
   end;
   take t;
   let r be ext-real number;
   assume r in rng seq;
   then ex n being set st n in dom seq & seq.n = r by FUNCT_1:def 5;
-  hence r<=t by A5;
+  hence thesis by A5;
 end;
 
 notation
@@ -448,7 +450,7 @@ A2:   e in X;
       then reconsider r0 = e as Element of REAL;
 A3:   e = --r0;
       -r0 in IT by A1,A2;
-      hence e in { -r3 : r3 in IT} by A3;
+      hence thesis by A3;
     end;
     let e be set;
     assume e in { -r3 : r3 in IT};
@@ -456,7 +458,7 @@ A3:   e = --r0;
 A4: -r0 = e and
 A5: r0 in IT;
     ex r1 being Element of REAL st -r1 = r0 & r1 in X by A1,A5;
-    hence e in X by A4;
+    hence thesis by A4;
   end;
 end;
 
@@ -469,7 +471,7 @@ proof
   assume -r in -X;
   then consider mr being Real such that
 A1: -r = -mr & mr in X;
-  thus r in X by A1;
+  thus thesis by A1;
 end;
 
 registration
@@ -494,7 +496,7 @@ A1: s is UpperBound of X;
   then consider r3 such that
 A2: t = -r3 & r3 in X;
   r3 <= s by A1,A2,XXREAL_2:def 1;
-  hence t >= -s by A2,XREAL_1:26;
+  hence thesis by A2,XREAL_1:26;
 end;
 
 Lm2: for X being Subset of REAL
@@ -509,19 +511,19 @@ A1: s is LowerBound of X;
   then consider r3 such that
 A2: t = -r3 & r3 in X;
   r3 >= s by A1,A2,XXREAL_2:def 2;
-  hence t <= -s by A2,XREAL_1:26;
+  hence thesis by A2,XREAL_1:26;
 end;
 
 theorem Th15:
   X is bounded_above iff -X is bounded_below
 proof X = --X;
-  hence X is bounded_above iff -X is bounded_below by Lm1,Lm2;
+  hence thesis by Lm1,Lm2;
 end;
 
 theorem
   X is bounded_below iff -X is bounded_above
 proof X = --X;
-  hence X is bounded_below iff -X is bounded_above by Th15;
+  hence thesis by Th15;
 end;
 
 theorem Th17:
@@ -555,7 +557,7 @@ A3: for s st s in X holds s >= t;
     then -r <= -t by SEQ_4:62;
     hence r >= t by XREAL_1:26;
   end;
-  hence inf X = - sup -X by A2,SEQ_4:61;
+  hence thesis by A2,SEQ_4:61;
 end;
 
 theorem Th18:
@@ -589,7 +591,7 @@ A3: for t st t in X holds t <= s;
     then -r >= -s by SEQ_4:60;
     hence r <= s by XREAL_1:26;
   end;
-  hence sup X = - inf -X by A2,SEQ_4:63;
+  hence thesis by A2,SEQ_4:63;
 end;
 
 Lm3: for X being Subset of REAL st X is closed holds -X is closed
@@ -613,13 +615,13 @@ A6: x = (-s1).n by FUNCT_1:def 5;
 A7: x = -(s1.n) by A6,SEQ_1:14;
     s1.n in rng s1 by FUNCT_2:6;
     then x in --X by A2,A7;
-    hence x in X;
+    hence thesis;
   end;
   then
 A8: lim -s1 in X by A1,A4,RCOMP_1:def 4;
   - lim s1 = lim -s1 by A3,SEQ_2:24;
   then --lim s1 in -X by A8;
-  hence lim s1 in -X;
+  hence thesis;
 end;
 
 theorem Th19:
@@ -672,7 +674,7 @@ A6:     y = p+r3 & r3 in X by A5;
 A7:   z in X & y = p + z;
       thus y in IT by A5,A7;
     end;
-    hence IT = p ++ X by MEASURE6:def 6;
+    hence thesis by MEASURE6:def 6;
   end;
 end;
 
@@ -682,7 +684,7 @@ proof
   thus r in X implies q3+r in q3++X;
   assume q3+r in q3++X;
   then ex mr being Real st q3+r = q3+mr & mr in X;
-  hence r in X;
+  hence thesis;
 end;
 
 registration
@@ -711,7 +713,7 @@ A1:   x in X;
 A2: x = 0+r3 & r3 in X;
     thus x in X by A2;
   end;
-  hence X = 0++X by TARSKI:2;
+  hence thesis by TARSKI:2;
 end;
 
 theorem Th22:
@@ -750,7 +752,7 @@ A1: s is UpperBound of X;
   then consider r3 such that
 A2: t = p+r3 & r3 in X;
   r3 <= s by A1,A2,XXREAL_2:def 1;
-  hence t <= p+s by A2,XREAL_1:8;
+  hence thesis by A2,XREAL_1:8;
 end;
 
 theorem
@@ -772,7 +774,7 @@ A1: s is LowerBound of X;
   then consider r3 such that
 A2: t = p+r3 & r3 in X;
   r3 >= s by A1,A2,XXREAL_2:def 2;
-  hence t >= p+s by A2,XREAL_1:8;
+  hence thesis by A2,XREAL_1:8;
 end;
 
 theorem
@@ -874,14 +876,14 @@ A8: x = s1.n + (-s0).n by A7,SEQ_1:11
       .= s1.n - q3;
     s1.n in rng s1 by FUNCT_2:6;
     then x'+q3 in q3++X by A2,A8;
-    hence x in X by Th20;
+    hence thesis by Th20;
   end;
   then
 A9: lim (s1-s0) in X by A1,A4,RCOMP_1:def 4;
   lim (s1-s0) = (lim s1) - s0.0 by A3,SEQ_4:59
     .= (lim s1) - q3 by FUNCOP_1:13;
   then q3+lim(s1-s0) = lim s1;
-  hence lim s1 in q3++X by A9;
+  hence thesis by A9;
 end;
 
 theorem Th27:
@@ -915,7 +917,7 @@ A2:   e in X;
       then reconsider r=e as Element of REAL;
 A3:   1/r in Y by A1,A2;
       1/(1/r) = r;
-      hence e in { 1/r3 : r3 in Y} by A3;
+      hence thesis by A3;
     end;
     let e be set;
     assume e in { 1/r3 : r3 in Y};
@@ -935,7 +937,7 @@ proof
   assume 1/r in Inv X;
   then consider mr being Real such that
 A1: 1/r = 1/mr & mr in X;
-  thus r in X by A1,XCMPLX_1:59;
+  thus thesis by A1,XCMPLX_1:59;
 end;
 
 registration
@@ -944,7 +946,7 @@ registration
   coherence
   proof consider x being Real such that
 A1: x in X by SUBSET_1:10;
-    thus Inv X is non empty by A1,Th28;
+    thus thesis by A1,Th28;
   end;
 end;
 
@@ -998,7 +1000,7 @@ A10:  x in dom (s1") & y = (s1").x by FUNCT_1:def 5;
 A11:  (s1").x = (s1.x)" by VALUED_1:10;
       s1.x in rng s1 by FUNCT_2:6;
       then 1/(s1.x) in Inv Inv X by A3;
-      hence y in X by A10,A11;
+      hence thesis by A10,A11;
     end;
     s1" is non bounded by A4,A6,A8,Th6;
     then rng (s1") is non bounded by Th7;
@@ -1017,14 +1019,14 @@ A14: x = (s1").n by FUNCT_1:def 5;
 A15: x = (s1.n)" by A14,VALUED_1:10;
     s1.n in rng s1 by FUNCT_2:6;
     then 1/(s1.n) in Inv Inv X by A3;
-    hence x in X by A15;
+    hence thesis by A15;
   end;
   then
 A16: lim s1" in X by A1,A12,RCOMP_1:def 4;
   (lim s1)" = lim s1" by A4,A6,A7,SEQ_2:36;
   then 1/lim s1 in X by A16;
   then 1/(1/lim s1) in Inv X;
-  hence lim s1 in Inv X;
+  hence thesis;
 end;
 
 theorem Th31:
@@ -1041,7 +1043,7 @@ A3: seq is convergent;
   per cases;
   suppose Z = {};
     then mZ = {} by SETFAM_1:def 1;
-    hence lim seq in mZ by A2;
+    hence thesis by A2;
   end;
   suppose
 A4: Z <> {};
@@ -1053,13 +1055,13 @@ A6:   rng seq c= X
       proof
         let x be set;
         assume x in rng seq;
-        hence x in X by A2,A5,SETFAM_1:def 1;
+        hence thesis by A2,A5,SETFAM_1:def 1;
       end;
       reconsider X' = X as Subset of REAL by A5;
       X' is closed by A1,A5,Def6;
       hence lim seq in X by A3,A6,RCOMP_1:def 4;
     end;
-    hence lim seq in mZ by A4,SETFAM_1:def 1;
+    hence thesis by A4,SETFAM_1:def 1;
   end;
 end;
 
@@ -1104,14 +1106,14 @@ A7:     A is closed;
           let Z be set;
           assume Z in ClX;
           then ex B being Subset of REAL st Z = B & X c= B & B is closed;
-          hence X c= Z;
+          hence thesis;
         end;
         then X c= IT by A1,A2,SETFAM_1:6;
         then X c= A by A6,XBOOLE_1:1;
         then A in ClX by A7;
-        hence e in Y by A1,A4,A5,SETFAM_1:def 1;
+        hence thesis by A1,A4,A5,SETFAM_1:def 1;
       end;
-      hence e in meet ClIT by A3,SETFAM_1:def 1;
+      hence thesis by A3,SETFAM_1:def 1;
     end;
     let e be set;
     assume
@@ -1126,9 +1128,9 @@ A10:  A = Y and X c= A and
 A11:  A is closed;
       IT c= A by A1,A9,A10,SETFAM_1:4;
       then A in ClIT by A11;
-      hence e in Y by A8,A10,SETFAM_1:def 1;
+      hence thesis by A8,A10,SETFAM_1:def 1;
     end;
-    hence e in IT by A1,A2,SETFAM_1:def 1;
+    hence thesis by A1,A2,SETFAM_1:def 1;
   end;
 end;
 
@@ -1146,7 +1148,7 @@ registration
       let Y be Subset of REAL;
       assume Y in Z;
       then ex A being Subset of REAL st Y = A & X c= A & A is closed;
-      hence Y is closed;
+      hence thesis;
     end;
     hence thesis by Th31;
   end;
@@ -1160,7 +1162,7 @@ proof
 A1: X c= Y;
   set ClX = { A where A is Subset of REAL : X c= A & A is closed };
   Y in ClX by A1;
-  hence Cl X c= Y by SETFAM_1:4;
+  hence thesis by SETFAM_1:4;
 end;
 
 theorem Th33:
@@ -1178,7 +1180,7 @@ A2: [#]REAL in ClX;
 A3: YY = Y & X c= YY & YY is closed;
     thus x in Y by A1,A3;
   end;
-  hence x in Cl X by A2,SETFAM_1:def 1;
+  hence thesis by A2,SETFAM_1:def 1;
 end;
 
 theorem Th34:
@@ -1212,7 +1214,7 @@ A1: X c= Y;
 A2: X c= Cl Y by A1,XBOOLE_1:1;
   set ClX = { A where A is Subset of REAL : X c= A & A is closed };
   Cl Y in ClX by A2;
-  hence Cl X c= Cl Y by SETFAM_1:4;
+  hence thesis by SETFAM_1:4;
 end;
 
 theorem Th38:
@@ -1244,7 +1246,7 @@ A8: X c= Cl X by Th33;
   then (Cl X)` /\ X c= Cl X & (Cl X)` /\ X c= (Cl X)` by A8,XBOOLE_1:1,17;
   then (Cl X)` /\ X is empty by SUBSET_1:40;
   then not r3 in (Cl X)` by A6,A7;
-  hence r3 in Cl X by SUBSET_1:50;
+  hence thesis by SUBSET_1:50;
 end;
 
 theorem Th39:
@@ -1291,7 +1293,7 @@ A9: r3 < r3+1/n1 by XREAL_1:31;
     then r3-1/n1 < r3 by XREAL_1:21;
     then r3 in oi by A9;
     then X/\oi is non empty by A1,Th38;
-    hence y in X by A7,A8,XBOOLE_0:def 4;
+    hence thesis by A7,A8,XBOOLE_0:def 4;
   end;
 A10: now
     let p be real number;
@@ -1332,7 +1334,7 @@ A21: 1/(n+1) < 1/n by A14,XREAL_1:90;
     hence abs(seq.m-r3)<p by A18,A19,XXREAL_0:2;
   end;
   hence seq is convergent by SEQ_2:def 6;
-  hence lim seq = r3 by A10,SEQ_2:def 7;
+  hence thesis by A10,SEQ_2:def 7;
 end;
 
 begin :: Functions into Reals
@@ -1355,7 +1357,7 @@ A2:   for y being set st y in dom f holds r<f.y;
       then consider x being set such that
 A3:   x in X and x in X and
 A4:   s = f.x by FUNCT_2:115;
-      thus r<=s by A1,A2,A3,A4;
+      thus thesis by A1,A2,A3,A4;
     end;
     given p being real number such that
 A5: p is LowerBound of f.:X;
@@ -1368,7 +1370,7 @@ A5: p is LowerBound of f.:X;
 A6: p <= f.y by A5,XXREAL_2:def 2;
     f.y < f.y + 1 by XREAL_1:31;
     then p < f.y + 1 by A6,XXREAL_0:2;
-    hence p-1 < f.y by XREAL_1:21;
+    hence thesis by XREAL_1:21;
   end;
   attr f is bounded_above means
   :Def12:
@@ -1386,7 +1388,7 @@ A8:   for y being set st y in dom f holds r>f.y;
       then consider x being set such that
 A9:   x in X and x in X and
 A10:  s = f.x by FUNCT_2:115;
-      thus r>=s by A7,A8,A9,A10;
+      thus thesis by A7,A8,A9,A10;
     end;
     given p being real number such that
 A11: p is UpperBound of f.:X;
@@ -1399,7 +1401,7 @@ A11: p is UpperBound of f.:X;
     then
 A12: p+1 >= f.y+1 by XREAL_1:8;
     f.y < f.y + 1 by XREAL_1:31;
-    hence p+1 > f.y by A12,XXREAL_0:2;
+    hence thesis by A12,XXREAL_0:2;
   end;
 end;
 
@@ -1436,7 +1438,7 @@ A4: x1 in X & x1 in A & r3 = f.x1 by A3,FUNCT_2:115;
     x = (-f).x1 by A3,A4,VALUED_1:8;
     hence x in (-f).:A by A4,FUNCT_2:43;
   end;
-  hence (-f).:A = -(f.:A) by TARSKI:2;
+  hence thesis by TARSKI:2;
 end;
 
 Lm7: for X being non empty set, f being Function of X, REAL
@@ -1452,7 +1454,7 @@ A4: (-f).:X is bounded_below by A1,Lm1;
 A5: - sup (f.:X) in -(f.:X) by A2;
   inf ((-f).:X) = - sup --(f.:X) by A3,A4,Th17
     .= - sup (f.:X);
-  hence inf ((-f).:X) in (-f).:X by A5,Th40;
+  hence thesis by A5,Th40;
 end;
 
 Lm8: for X being non empty set, f being Function of X, REAL
@@ -1468,7 +1470,7 @@ A4: (-f).:X is bounded_above by A1,Lm2;
 A5: - inf (f.:X) in -(f.:X) by A2;
   sup ((-f).:X) = - inf --(f.:X) by A3,A4,Th18
     .= - inf (f.:X);
-  hence sup ((-f).:X) in (-f).:X by A5,Th40;
+  hence thesis by A5,Th40;
 end;
 
 theorem Th41:
@@ -1513,7 +1515,7 @@ A4: x in X & f.x in -A by FUNCT_2:46;
     then (-f).x in --A by A4;
     hence x in (-f)"A by A3,FUNCT_2:46;
   end;
-  hence (-f)"A = f"(-A) by TARSKI:2;
+  hence thesis by TARSKI:2;
 end;
 
 theorem
@@ -1614,7 +1616,7 @@ A5: x in X & f.x in Inv A by FUNCT_2:46;
     then (Inv f).x in Inv Inv A by A1,A5;
     hence x in (Inv f)"A by A4,FUNCT_2:46;
   end;
-  hence (Inv f)"A = f"(Inv A) by TARSKI:2;
+  hence thesis by TARSKI:2;
 end;
 
 begin :: Real maps
@@ -1666,7 +1668,7 @@ A1: fc is bounded_below by Def11;
   set r = inf f;
   let p be Point of T;
   f.p in fc by FUNCT_2:43;
-  hence f.p >= r by A1,SEQ_4:def 5;
+  hence thesis by A1,SEQ_4:def 5;
 end;
 
 theorem
@@ -1687,7 +1689,7 @@ A1: for t being Point of T holds f.t >= s;
 A2: x in c & x in c & p1 = f.x by FUNCT_2:115;
     thus p1 >= s by A1,A2;
   end;
-  hence r >= s by SEQ_4:60;
+  hence thesis by SEQ_4:60;
 end;
 
 theorem
@@ -1714,7 +1716,7 @@ A4: x in c & x in c & s = f.x by FUNCT_2:115;
     then for s being Point of T holds f.s >= t by FUNCT_2:43;
     hence r >= t by A2;
   end;
-  hence r = inf f by A3,SEQ_4:61;
+  hence thesis by A3,SEQ_4:61;
 end;
 
 theorem Th50:
@@ -1727,7 +1729,7 @@ A1: fc is bounded_above by Def12;
   set r = sup f;
   let p be Point of T;
   f.p in fc by FUNCT_2:43;
-  hence f.p <= r by A1,SEQ_4:def 4;
+  hence thesis by A1,SEQ_4:def 4;
 end;
 
 theorem
@@ -1748,7 +1750,7 @@ A1: for p being Point of T holds f.p <= t;
 A2: x in c & x in c & s = f.x by FUNCT_2:115;
     thus s <= t by A1,A2;
   end;
-  hence r <= t by SEQ_4:62;
+  hence thesis by SEQ_4:62;
 end;
 
 theorem
@@ -1776,7 +1778,7 @@ A4: x in c & x in c & s = f.x by FUNCT_2:115;
     then for s being Point of T holds f.s <= t by FUNCT_2:43;
     hence r <= t by A2;
   end;
-  hence r = sup f by A3,SEQ_4:63;
+  hence thesis by A3,SEQ_4:63;
 end;
 
 theorem Th53:
@@ -1787,7 +1789,7 @@ proof
   f.:the carrier of T is bounded_below &
   f.:the carrier of T is bounded_above by Def11,Def12;
   then f.:the carrier of T is bounded;
-  hence inf f <= sup f by SEQ_4:24;
+  hence thesis by SEQ_4:24;
 end;
 
 definition
@@ -1817,7 +1819,7 @@ A3:   rng f c= Y by A2,ZFMISC_1:37;
       f"Y = f"(rng f /\ Y) by RELAT_1:168
         .= f"rng f by A3,XBOOLE_1:28
         .= [#]T by A1,RELAT_1:169;
-      hence f"Y is closed;
+      hence thesis;
     end;
     suppose not 0 in Y;
       then
@@ -1825,7 +1827,7 @@ A4:   rng f misses Y by A2,ZFMISC_1:56;
       f"Y = f"(rng f /\ Y) by RELAT_1:168
         .= f"{} by A4,XBOOLE_0:def 7
         .= {}T by RELAT_1:171;
-      hence f"Y is closed;
+      hence thesis;
     end;
   end;
 end;
@@ -1849,7 +1851,7 @@ A3:   rng f c= Y by A2,ZFMISC_1:37;
       f"Y = f"(rng f /\ Y) by RELAT_1:168
         .= f"rng f by A3,XBOOLE_1:28
         .= [#]S by A1,RELAT_1:169;
-      hence f"Y is closed;
+      hence thesis;
     end;
     suppose not 0 in Y;
       then
@@ -1857,7 +1859,7 @@ A4:   rng f misses Y by A2,ZFMISC_1:56;
       f"Y = f"(rng f /\ Y) by RELAT_1:168
         .= f"{} by A4,XBOOLE_0:def 7
         .= {}S by RELAT_1:171;
-      hence f"Y is closed;
+      hence thesis;
     end;
   end;
 end;
@@ -1892,7 +1894,7 @@ A4: Y is closed;
 A5: f"(Y`) is open by A3;
   f"(Y`) = (f"REAL) \ f"(Y) by FUNCT_1:138
     .= ([#]T) \ f"Y by FUNCT_2:48;
-  hence f"Y is closed by A5,PRE_TOPC:def 6;
+  hence thesis by A5,PRE_TOPC:def 6;
 end;
 
 theorem Th55:
@@ -1905,7 +1907,7 @@ A1: f is continuous;
   then
 A2: -X is closed by Th19;
   (-f)"X = f"(-X) by Th43;
-  hence (-f)"X is closed by A1,A2,Def25;
+  hence thesis by A1,A2,Def25;
 end;
 
 theorem Th56:
@@ -1918,7 +1920,7 @@ A1: f is continuous;
   then
 A2: -r3++X is closed by Th27;
   (r3+f)"X = f"(-r3++X) by Th45;
-  hence (r3+f)"X is closed by A1,A2,Def25;
+  hence thesis by A1,A2,Def25;
 end;
 
 theorem Th57:
@@ -1985,7 +1987,7 @@ A17:    n in dom (seq") & y = (seq").n by FUNCT_1:def 5;
 A18:    1/(1/seq.n) in X';
         (seq").n = (seq.n)" by VALUED_1:10
           .= 1/(seq.n);
-        hence y in X by A17,A18,Th28;
+        hence thesis by A17,A18,Th28;
       end;
       then rng (seq") c= X0 by A5,XBOOLE_1:1;
       then
@@ -2024,7 +2026,7 @@ A25:  x in the carrier of T & (Inv f).x in X0 by FUNCT_2:46;
     (Inv f)"X c= (Inv f)"X0 by RELAT_1:178,XBOOLE_1:36;
     hence x in (Inv f)"X implies x in (Inv f)"X0;
   end;
-  hence (Inv f)"X0 is closed by A21,A22,A23,TARSKI:2;
+  hence thesis by A21,A22,A23,TARSKI:2;
 end;
 
 theorem
@@ -2045,7 +2047,7 @@ A5: P = ("f).eR by FUNCT_2:115;
 A6: P = f"eR by A3,A5,Def2;
   reconsider eR as Subset of REAL by A3;
   eR is open by A2,A4,Def5;
-  hence P is open by A1,A6,Th54;
+  hence thesis by A1,A6,Th54;
 end;
 
 theorem Th59:
@@ -2066,7 +2068,7 @@ A5: P = ("f).eR by FUNCT_2:115;
 A6: P = f"eR by A3,A5,Def2;
   reconsider eR as Subset of REAL by A3;
   eR is closed by A2,A4,Def6;
-  hence P is closed by A1,A6,Def25;
+  hence thesis by A1,A6,Def25;
 end;
 
 definition
@@ -2128,7 +2130,7 @@ A2: for f being RealMap of T st f is continuous holds f is with_min;
 A3: -f is continuous by Th55;
   reconsider Xf = f as Function of the carrier of T, REAL;
   --Xf is with_max by A2,A3,Lm8;
-  hence f is with_max;
+  hence thesis;
 end;
 
 theorem Th61:
@@ -2235,7 +2237,7 @@ A21: f is continuous;
   f is with_min by A20,A21,Th60;
   then f.:(the carrier of T) is with_min by Def15;
   then f.:(the carrier of T) is bounded_below by Def4;
-  hence f is bounded_below by Def11;
+  hence thesis by Def11;
 end;
 
 definition
@@ -2318,7 +2320,7 @@ A27:  F is centered by A6,A17;
         let X be Subset of REAL;
         assume X in R;
         then ex r3 st X = right_closed_halfline(r3) & r3 >= f.p;
-        hence X is closed;
+        hence thesis;
       end;
       then F is closed by A2,Th59;
       then meet F <> {} by A1,A27,COMPTS_1:13;
@@ -2407,7 +2409,7 @@ A60: F is centered by A39,A50;
       let X be Subset of REAL;
       assume X in R;
       then ex r3 st X = left_closed_halfline(r3) & r3 <= f.p;
-      hence X is closed;
+      hence thesis;
     end;
     then F is closed by A2,Th59;
     then meet F <> {} by A1,A60,COMPTS_1:13;
@@ -2460,7 +2462,7 @@ A2: for f being RealMap of T st f is continuous holds f is bounded by Def27;
     then
 A3: for f being RealMap of T st f is continuous holds f is with_max by Th61;
     thus f is with_max by A1,A2,Th61;
-    thus f is with_min by A1,A3,Th60;
+    thus thesis by A1,A3,Th60;
   end;
 end;
 
@@ -2479,7 +2481,7 @@ A2: (f|Y).:the carrier of (T|Y) = (f|Y).:Y by PRE_TOPC:29
 A3: (f|X).:the carrier of (T|X) = (f|X).:X by PRE_TOPC:29
     .= f.:X by RELAT_1:162;
   (f|Y1).:the carrier of (T|Y1) is bounded_below by Def11;
-  hence inf (f|Y) <= inf (f|X) by A1,A2,A3,RELAT_1:156,SEQ_4:64;
+  hence thesis by A1,A2,A3,RELAT_1:156,SEQ_4:64;
 end;
 
 theorem Th63:
@@ -2497,7 +2499,7 @@ A2: (f|Y).:the carrier of (T|Y) = (f|Y).:Y by PRE_TOPC:29
 A3: (f|X).:the carrier of (T|X) = (f|X).:X by PRE_TOPC:29
     .= f.:X by RELAT_1:162;
   (f|Y1).:the carrier of (T|Y1) is bounded_above by Def12;
-  hence sup (f|X) <= sup (f|Y) by A1,A2,A3,RELAT_1:156,SEQ_4:65;
+  hence thesis by A1,A2,A3,RELAT_1:156,SEQ_4:65;
 end;
 
 begin :: Bounding boxes of compact sets in TOP-REAL 2
@@ -2508,7 +2510,7 @@ theorem Th64:
 proof
   let n be Element of NAT, X, Y be compact Subset of TOP-REAL n;
   TOP-REAL n is T_2 by SPPOL_1:26;
-  hence X/\Y is compact by COMPTS_1:20;
+  hence thesis by COMPTS_1:20;
 end;
 
 reserve p for Point of TOP-REAL 2,
@@ -2587,7 +2589,7 @@ A4: proj1.p = p`1 by Def28
     r1 in ].r,s.[ by A3;
     hence z in Q by A3,A4,FUNCT_2:46;
   end;
-  hence proj1"].r,s.[ = {|[ r1, r2 ]| : r < r1 & r1 < s} by TARSKI:2;
+  hence thesis by TARSKI:2;
 end;
 
 theorem Th66:
@@ -2626,7 +2628,7 @@ A8: x = |[ r1', r2' ]| & r1' < q3 by A6;
     hence x in P by A1,A7,A8;
   end;
   then P = Q1/\Q2 by TARSKI:2;
-  hence P is open by A3,A4,TOPS_1:38;
+  hence thesis by A3,A4,TOPS_1:38;
 end;
 
 theorem Th67:
@@ -2655,7 +2657,7 @@ A4: proj2.p = p`2 by Def29
     r2 in ].r,s.[ by A3;
     hence z in Q by A3,A4,FUNCT_2:46;
   end;
-  hence proj2"].r,s.[ = {|[ r1, r2 ]| : r < r2 & r2 < s} by TARSKI:2;
+  hence thesis by TARSKI:2;
 end;
 
 theorem Th68:
@@ -2694,7 +2696,7 @@ A8: x = |[ r1', r2' ]| & r2' < q3 by A6;
     hence x in P by A1,A7,A8;
   end;
   then P = Q1/\Q2 by TARSKI:2;
-  hence P is open by A3,A4,TOPS_1:38;
+  hence thesis by A3,A4,TOPS_1:38;
 end;
 
 registration
@@ -2828,7 +2830,7 @@ A2: ((proj1|X)).p' = p`1 by A1,Th69;
   thus p`1 <= sup (proj1|X) by A2,Th50;
 A3: ((proj2|X)).p' = p`2 by A1,Th70;
   hence inf (proj2|X) <= p`2 by Th47;
-  thus p`2 <= sup (proj2|X) by A3,Th50;
+  thus thesis by A3,Th50;
 end;
 
 theorem
@@ -3032,7 +3034,7 @@ A7: (W-max X)`2 <= (NW-corner X)`2 by A3,A4,Th63,XBOOLE_1:17;
   hence (SW-corner X)`2 <= (NW-corner X)`2 by A7,XXREAL_0:2;
   thus (W-min X)`2 <= (W-max X)`2 by A2,A3,Th53;
   thus (W-min X)`2 <= (NW-corner X)`2 by A6,A7,XXREAL_0:2;
-  thus (W-max X)`2 <= (NW-corner X)`2 by A3,A4,Th63,XBOOLE_1:17;
+  thus thesis by A3,A4,Th63,XBOOLE_1:17;
 end;
 
 theorem Th88:
@@ -3062,7 +3064,7 @@ A1: x in W-most X;
   then reconsider p = x as Point of TOP-REAL 2;
 A2: (W-min X)`1 = (W-max X)`1 by Th85;
   p`1 = (W-min X)`1 & (W-min X)`2 <= p`2 & p`2 <=(W-max X)`2 by A1,Th88;
-  hence x in LSeg(W-min X, W-max X) by A2,GOBOARD7:8;
+  hence thesis by A2,GOBOARD7:8;
 end;
 
 theorem
@@ -3101,7 +3103,7 @@ A6: p2W.p = p`2 by A1,A5,Th70;
 A7: p in LSeg(SW-corner X, NW-corner X) by A1,A5,XBOOLE_0:def 4;
   (SW-corner X)`1 = W-bound X & (NW-corner X)`1 = W-bound X by EUCLID:56;
   then p`1 = W-bound X by A7,GOBOARD7:5;
-  hence W-max X in W-most X by A1,A5,A6,EUCLID:57;
+  hence thesis by A1,A5,A6,EUCLID:57;
 end;
 
 theorem
@@ -3122,7 +3124,7 @@ A3:   p`1 = (W-min X)`1 by A2,GOBOARD7:5;
       (SW-corner X)`2 <= (W-min X)`2 by Th87;
       then
 A4:   p`2 <= (W-min X)`2 by A2,TOPREAL1:10;
-A5:   SW-corner X in LSeg(SW-corner X, NW-corner X) by TOPREAL1:6;
+A5:   SW-corner X in LSeg(SW-corner X, NW-corner X) by RLTOPSP1:69;
       W-min X in W-most X by Th91;
       then W-min X in LSeg(SW-corner X, NW-corner X) by XBOOLE_0:def 4;
       then LSeg(SW-corner X, W-min X) c= LSeg(SW-corner X, NW-corner X)
@@ -3139,7 +3141,7 @@ A7: x = W-min X;
     W-min X in W-most X by Th91;
     then
 A8: W-min X in X by XBOOLE_0:def 4;
-    W-min X in LSeg(SW-corner X, W-min X) by TOPREAL1:6;
+    W-min X in LSeg(SW-corner X, W-min X) by RLTOPSP1:69;
     hence x in LSeg(SW-corner X, W-min X)/\X by A7,A8,XBOOLE_0:def 4;
   end;
   hence LSeg(SW-corner X, W-min X)/\X = {W-min X} by TARSKI:def 1;
@@ -3157,7 +3159,7 @@ A11:  p`1 = (W-max X)`1 by A10,GOBOARD7:5;
       (W-max X)`2 <= (NW-corner X)`2 by Th87;
       then
 A12:  (W-max X)`2 <= p`2 by A10,TOPREAL1:10;
-A13:  NW-corner X in LSeg(SW-corner X, NW-corner X) by TOPREAL1:6;
+A13:  NW-corner X in LSeg(SW-corner X, NW-corner X) by RLTOPSP1:69;
       W-max X in W-most X by Th91;
       then W-max X in LSeg(SW-corner X, NW-corner X) by XBOOLE_0:def 4;
       then LSeg(W-max X, NW-corner X) c= LSeg(SW-corner X, NW-corner X)
@@ -3174,10 +3176,10 @@ A15: x = W-max X;
     W-max X in W-most X by Th91;
     then
 A16: W-max X in X by XBOOLE_0:def 4;
-    W-max X in LSeg(W-max X, NW-corner X) by TOPREAL1:6;
+    W-max X in LSeg(W-max X, NW-corner X) by RLTOPSP1:69;
     hence x in LSeg(W-max X, NW-corner X)/\X by A15,A16,XBOOLE_0:def 4;
   end;
-  hence LSeg(W-max X, NW-corner X)/\X = {W-max X} by TARSKI:def 1;
+  hence thesis by TARSKI:def 1;
 end;
 
 theorem
@@ -3185,8 +3187,8 @@ theorem
 proof
   assume W-min X = W-max X;
   then W-most X c= LSeg(W-min X, W-min X) by Th89;
-  then W-most X c= {W-min X} by TOPREAL1:7;
-  hence W-most X = {W-min X} by ZFMISC_1:39;
+  then W-most X c= {W-min X} by RLTOPSP1:71;
+  hence thesis by ZFMISC_1:39;
 end;
 
 canceled;
@@ -3220,7 +3222,7 @@ A7: (N-max X)`1 <= (NE-corner X)`1 by A3,A4,Th63,XBOOLE_1:17;
   hence (NW-corner X)`1 <= (NE-corner X)`1 by A7,XXREAL_0:2;
   thus (N-min X)`1 <= (N-max X)`1 by A2,A3,Th53;
   thus (N-min X)`1 <= (NE-corner X)`1 by A6,A7,XXREAL_0:2;
-  thus (N-max X)`1 <= (NE-corner X)`1 by A3,A4,Th63,XBOOLE_1:17;
+  thus thesis by A3,A4,Th63,XBOOLE_1:17;
 end;
 
 theorem Th98:
@@ -3250,7 +3252,7 @@ A1: x in N-most X;
   then reconsider p = x as Point of TOP-REAL 2;
 A2: (N-min X)`2 = (N-max X)`2 by Th95;
   p`2 = (N-min X)`2 & (N-min X)`1 <= p`1 & p`1 <=(N-max X)`1 by A1,Th98;
-  hence x in LSeg(N-min X, N-max X) by A2,GOBOARD7:9;
+  hence thesis by A2,GOBOARD7:9;
 end;
 
 theorem
@@ -3289,7 +3291,7 @@ A6: p2W.p = p`1 by A1,A5,Th69;
 A7: p in LSeg(NW-corner X, NE-corner X) by A1,A5,XBOOLE_0:def 4;
   (NW-corner X)`2 = N-bound X & (NE-corner X)`2 = N-bound X by EUCLID:56;
   then p`2 = N-bound X by A7,GOBOARD7:6;
-  hence N-max X in N-most X by A1,A5,A6,EUCLID:57;
+  hence thesis by A1,A5,A6,EUCLID:57;
 end;
 
 theorem
@@ -3310,7 +3312,7 @@ A3:   p`2 = (N-min X)`2 by A2,GOBOARD7:6;
       (NW-corner X)`1 <= (N-min X)`1 by Th97;
       then
 A4:   p`1 <= (N-min X)`1 by A2,TOPREAL1:9;
-A5:   NW-corner X in LSeg(NW-corner X, NE-corner X) by TOPREAL1:6;
+A5:   NW-corner X in LSeg(NW-corner X, NE-corner X) by RLTOPSP1:69;
       N-min X in N-most X by Th101;
       then N-min X in LSeg(NW-corner X, NE-corner X) by XBOOLE_0:def 4;
       then LSeg(NW-corner X, N-min X) c= LSeg(NW-corner X, NE-corner X)
@@ -3327,7 +3329,7 @@ A7: x = N-min X;
     N-min X in N-most X by Th101;
     then
 A8: N-min X in X by XBOOLE_0:def 4;
-    N-min X in LSeg(NW-corner X, N-min X) by TOPREAL1:6;
+    N-min X in LSeg(NW-corner X, N-min X) by RLTOPSP1:69;
     hence x in LSeg(NW-corner X, N-min X)/\X by A7,A8,XBOOLE_0:def 4;
   end;
   hence LSeg(NW-corner X, N-min X)/\X = {N-min X} by TARSKI:def 1;
@@ -3345,7 +3347,7 @@ A11:  p`2 = (N-max X)`2 by A10,GOBOARD7:6;
       (N-max X)`1 <= (NE-corner X)`1 by Th97;
       then
 A12:  (N-max X)`1 <= p`1 by A10,TOPREAL1:9;
-A13:  NE-corner X in LSeg(NW-corner X, NE-corner X) by TOPREAL1:6;
+A13:  NE-corner X in LSeg(NW-corner X, NE-corner X) by RLTOPSP1:69;
       N-max X in N-most X by Th101;
       then N-max X in LSeg(NW-corner X, NE-corner X) by XBOOLE_0:def 4;
       then LSeg(N-max X, NE-corner X) c= LSeg(NW-corner X, NE-corner X)
@@ -3362,10 +3364,10 @@ A15: x = N-max X;
     N-max X in N-most X by Th101;
     then
 A16: N-max X in X by XBOOLE_0:def 4;
-    N-max X in LSeg(N-max X, NE-corner X) by TOPREAL1:6;
+    N-max X in LSeg(N-max X, NE-corner X) by RLTOPSP1:69;
     hence x in LSeg(N-max X, NE-corner X)/\X by A15,A16,XBOOLE_0:def 4;
   end;
-  hence LSeg(N-max X, NE-corner X)/\X = {N-max X} by TARSKI:def 1;
+  hence thesis by TARSKI:def 1;
 end;
 
 theorem
@@ -3373,8 +3375,8 @@ theorem
 proof
   assume N-min X = N-max X;
   then N-most X c= LSeg(N-min X, N-min X) by Th99;
-  then N-most X c= {N-min X} by TOPREAL1:7;
-  hence N-most X = {N-min X} by ZFMISC_1:39;
+  then N-most X c= {N-min X} by RLTOPSP1:71;
+  hence thesis by ZFMISC_1:39;
 end;
 
 canceled;
@@ -3408,7 +3410,7 @@ A7: (E-max X)`2 <= (NE-corner X)`2 by A3,A4,Th63,XBOOLE_1:17;
   hence (SE-corner X)`2 <= (NE-corner X)`2 by A7,XXREAL_0:2;
   thus (E-min X)`2 <= (E-max X)`2 by A2,A3,Th53;
   thus (E-min X)`2 <= (NE-corner X)`2 by A6,A7,XXREAL_0:2;
-  thus (E-max X)`2 <= (NE-corner X)`2 by A3,A4,Th63,XBOOLE_1:17;
+  thus thesis by A3,A4,Th63,XBOOLE_1:17;
 end;
 
 theorem Th108:
@@ -3438,7 +3440,7 @@ A1: x in E-most X;
   then reconsider p = x as Point of TOP-REAL 2;
 A2: (E-min X)`1 = (E-max X)`1 by Th105;
   p`1 = (E-min X)`1 & (E-min X)`2 <= p`2 & p`2 <=(E-max X)`2 by A1,Th108;
-  hence x in LSeg(E-min X, E-max X) by A2,GOBOARD7:8;
+  hence thesis by A2,GOBOARD7:8;
 end;
 
 theorem
@@ -3477,7 +3479,7 @@ A6: p2W.p = p`2 by A1,A5,Th70;
 A7: p in LSeg(SE-corner X, NE-corner X) by A1,A5,XBOOLE_0:def 4;
   (SE-corner X)`1 = E-bound X & (NE-corner X)`1 = E-bound X by EUCLID:56;
   then p`1 = E-bound X by A7,GOBOARD7:5;
-  hence E-max X in E-most X by A1,A5,A6,EUCLID:57;
+  hence thesis by A1,A5,A6,EUCLID:57;
 end;
 
 theorem
@@ -3498,7 +3500,7 @@ A3:   p`1 = (E-min X)`1 by A2,GOBOARD7:5;
       (SE-corner X)`2 <= (E-min X)`2 by Th107;
       then
 A4:   p`2 <= (E-min X)`2 by A2,TOPREAL1:10;
-A5:   SE-corner X in LSeg(SE-corner X, NE-corner X) by TOPREAL1:6;
+A5:   SE-corner X in LSeg(SE-corner X, NE-corner X) by RLTOPSP1:69;
       E-min X in E-most X by Th111;
       then E-min X in LSeg(SE-corner X, NE-corner X) by XBOOLE_0:def 4;
       then LSeg(SE-corner X, E-min X) c= LSeg(SE-corner X, NE-corner X)
@@ -3515,7 +3517,7 @@ A7: x = E-min X;
     E-min X in E-most X by Th111;
     then
 A8: E-min X in X by XBOOLE_0:def 4;
-    E-min X in LSeg(SE-corner X, E-min X) by TOPREAL1:6;
+    E-min X in LSeg(SE-corner X, E-min X) by RLTOPSP1:69;
     hence x in LSeg(SE-corner X, E-min X)/\X by A7,A8,XBOOLE_0:def 4;
   end;
   hence LSeg(SE-corner X, E-min X)/\X = {E-min X} by TARSKI:def 1;
@@ -3533,7 +3535,7 @@ A11:  p`1 = (E-max X)`1 by A10,GOBOARD7:5;
       (E-max X)`2 <= (NE-corner X)`2 by Th107;
       then
 A12:  (E-max X)`2 <= p`2 by A10,TOPREAL1:10;
-A13:  NE-corner X in LSeg(SE-corner X, NE-corner X) by TOPREAL1:6;
+A13:  NE-corner X in LSeg(SE-corner X, NE-corner X) by RLTOPSP1:69;
       E-max X in E-most X by Th111;
       then E-max X in LSeg(SE-corner X, NE-corner X) by XBOOLE_0:def 4;
       then LSeg(E-max X, NE-corner X) c= LSeg(SE-corner X, NE-corner X)
@@ -3550,10 +3552,10 @@ A15: x = E-max X;
     E-max X in E-most X by Th111;
     then
 A16: E-max X in X by XBOOLE_0:def 4;
-    E-max X in LSeg(E-max X, NE-corner X) by TOPREAL1:6;
+    E-max X in LSeg(E-max X, NE-corner X) by RLTOPSP1:69;
     hence x in LSeg(E-max X, NE-corner X)/\X by A15,A16,XBOOLE_0:def 4;
   end;
-  hence LSeg(E-max X, NE-corner X)/\X = {E-max X} by TARSKI:def 1;
+  hence thesis by TARSKI:def 1;
 end;
 
 theorem
@@ -3561,8 +3563,8 @@ theorem
 proof
   assume E-min X = E-max X;
   then E-most X c= LSeg(E-min X, E-min X) by Th109;
-  then E-most X c= {E-min X} by TOPREAL1:7;
-  hence E-most X = {E-min X} by ZFMISC_1:39;
+  then E-most X c= {E-min X} by RLTOPSP1:71;
+  hence thesis by ZFMISC_1:39;
 end;
 
 canceled;
@@ -3596,7 +3598,7 @@ A7: (S-max X)`1 <= (SE-corner X)`1 by A3,A4,Th63,XBOOLE_1:17;
   hence (SW-corner X)`1 <= (SE-corner X)`1 by A7,XXREAL_0:2;
   thus (S-min X)`1 <= (S-max X)`1 by A2,A3,Th53;
   thus (S-min X)`1 <= (SE-corner X)`1 by A6,A7,XXREAL_0:2;
-  thus (S-max X)`1 <= (SE-corner X)`1 by A3,A4,Th63,XBOOLE_1:17;
+  thus thesis by A3,A4,Th63,XBOOLE_1:17;
 end;
 
 theorem Th118:
@@ -3626,7 +3628,7 @@ A1: x in S-most X;
   then reconsider p = x as Point of TOP-REAL 2;
 A2: (S-min X)`2 = (S-max X)`2 by Th115;
   p`2 = (S-min X)`2 & (S-min X)`1 <= p`1 & p`1 <=(S-max X)`1 by A1,Th118;
-  hence x in LSeg(S-min X, S-max X) by A2,GOBOARD7:9;
+  hence thesis by A2,GOBOARD7:9;
 end;
 
 theorem
@@ -3665,7 +3667,7 @@ A6: p2W.p = p`1 by A1,A5,Th69;
 A7: p in LSeg(SW-corner X, SE-corner X) by A1,A5,XBOOLE_0:def 4;
   (SW-corner X)`2 = S-bound X & (SE-corner X)`2 = S-bound X by EUCLID:56;
   then p`2 = S-bound X by A7,GOBOARD7:6;
-  hence S-max X in S-most X by A1,A5,A6,EUCLID:57;
+  hence thesis by A1,A5,A6,EUCLID:57;
 end;
 
 theorem
@@ -3686,7 +3688,7 @@ A3:   p`2 = (S-min X)`2 by A2,GOBOARD7:6;
       (SW-corner X)`1 <= (S-min X)`1 by Th117;
       then
 A4:   p`1 <= (S-min X)`1 by A2,TOPREAL1:9;
-A5:   SW-corner X in LSeg(SW-corner X, SE-corner X) by TOPREAL1:6;
+A5:   SW-corner X in LSeg(SW-corner X, SE-corner X) by RLTOPSP1:69;
       S-min X in S-most X by Th121;
       then S-min X in LSeg(SW-corner X, SE-corner X) by XBOOLE_0:def 4;
       then LSeg(SW-corner X, S-min X) c= LSeg(SW-corner X, SE-corner X)
@@ -3703,7 +3705,7 @@ A7: x = S-min X;
     S-min X in S-most X by Th121;
     then
 A8: S-min X in X by XBOOLE_0:def 4;
-    S-min X in LSeg(SW-corner X, S-min X) by TOPREAL1:6;
+    S-min X in LSeg(SW-corner X, S-min X) by RLTOPSP1:69;
     hence x in LSeg(SW-corner X, S-min X)/\X by A7,A8,XBOOLE_0:def 4;
   end;
   hence LSeg(SW-corner X, S-min X)/\X = {S-min X} by TARSKI:def 1;
@@ -3721,7 +3723,7 @@ A11:  p`2 = (S-max X)`2 by A10,GOBOARD7:6;
       (S-max X)`1 <= (SE-corner X)`1 by Th117;
       then
 A12:  (S-max X)`1 <= p`1 by A10,TOPREAL1:9;
-A13:  SE-corner X in LSeg(SW-corner X, SE-corner X) by TOPREAL1:6;
+A13:  SE-corner X in LSeg(SW-corner X, SE-corner X) by RLTOPSP1:69;
       S-max X in S-most X by Th121;
       then S-max X in LSeg(SW-corner X, SE-corner X) by XBOOLE_0:def 4;
       then LSeg(S-max X, SE-corner X) c= LSeg(SW-corner X, SE-corner X)
@@ -3738,10 +3740,10 @@ A15: x = S-max X;
     S-max X in S-most X by Th121;
     then
 A16: S-max X in X by XBOOLE_0:def 4;
-    S-max X in LSeg(S-max X, SE-corner X) by TOPREAL1:6;
+    S-max X in LSeg(S-max X, SE-corner X) by RLTOPSP1:69;
     hence x in LSeg(S-max X, SE-corner X)/\X by A15,A16,XBOOLE_0:def 4;
   end;
-  hence LSeg(S-max X, SE-corner X)/\X = {S-max X} by TARSKI:def 1;
+  hence thesis by TARSKI:def 1;
 end;
 
 theorem
@@ -3749,8 +3751,8 @@ theorem
 proof
   assume S-min X = S-max X;
   then S-most X c= LSeg(S-min X, S-min X) by Th119;
-  then S-most X c= {S-min X} by TOPREAL1:7;
-  hence S-most X = {S-min X} by ZFMISC_1:39;
+  then S-most X c= {S-min X} by RLTOPSP1:71;
+  hence thesis by ZFMISC_1:39;
 end;
 
 :: Degenerate cases
@@ -3762,7 +3764,7 @@ proof
 A1: W-max P = N-min P;
   (W-max P)`1 = W-bound P & (N-min P)`2 = N-bound P &
   (NW-corner P)`1 = W-bound P & (NW-corner P)`2 = N-bound P by EUCLID:56;
-  hence W-max P = NW-corner P by A1,EUCLID:57;
+  hence thesis by A1,EUCLID:57;
 end;
 
 theorem
@@ -3772,7 +3774,7 @@ proof
 A1: N-max P = E-max P;
   (N-max P)`2 = N-bound P & (E-max P)`1 = E-bound P &
   (NE-corner P)`1 = E-bound P & (NE-corner P)`2 = N-bound P by EUCLID:56;
-  hence N-max P = NE-corner P by A1,EUCLID:57;
+  hence thesis by A1,EUCLID:57;
 end;
 
 theorem
@@ -3782,7 +3784,7 @@ proof
 A1: E-min P = S-max P;
   (E-min P)`1 = E-bound P & (S-max P)`2 = S-bound P &
   (SE-corner P)`1 = E-bound P & (SE-corner P)`2 = S-bound P by EUCLID:56;
-  hence E-min P = SE-corner P by A1,EUCLID:57;
+  hence thesis by A1,EUCLID:57;
 end;
 
 theorem
@@ -3792,7 +3794,7 @@ proof
 A1: S-min P = W-min P;
   (S-min P)`2 = S-bound P & (W-min P)`1 = W-bound P &
   (SW-corner P)`1 = W-bound P & (SW-corner P)`2 = S-bound P by EUCLID:56;
-  hence S-min P = SW-corner P by A1,EUCLID:57;
+  hence thesis by A1,EUCLID:57;
 end;
 
 theorem

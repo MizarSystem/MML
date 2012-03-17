@@ -8,25 +8,32 @@ environ
 
  vocabularies PBOOLE, SETFAM_1, PRALG_1, FUNCT_1, BOOLE, CANTOR_1, TARSKI,
       ZF_REFLE, FUNCT_6, RELAT_1, MSUALG_3, CAT_4, NATTRA_1, MATRIX_1,
-      PRE_CIRC, FINSET_1, MSUALG_2, PRALG_2, CAT_1, FUNCT_4, AUTALG_1, FUNCT_2,
-      GRCAT_1, COHSP_1, MSSUBFAM, HAHNBAN, FUNCOP_1;
+      CARD_FIN, FINSET_1, MSUALG_2, PRALG_2, CAT_1, FUNCT_4, AUTALG_1, FUNCT_2,
+      GRCAT_1, COHSP_1, MSSUBFAM, HAHNBAN, FUNCOP_1, PARTFUN1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
-      ORDINAL1, FUNCT_2, FUNCOP_1, FINSET_1, FUNCT_4, FUNCT_6, PBOOLE,
-      PRE_CIRC, MBOOLEAN, PZFMISC1;
- constructors SETFAM_1, FUNCT_4, FUNCT_6, PRE_CIRC, MBOOLEAN, PZFMISC1,
-      PARTFUN1;
+      ORDINAL1, PARTFUN1, FUNCT_2, FUNCOP_1, FINSET_1, FUNCT_4, FUNCT_6,
+      PBOOLE, MBOOLEAN, PZFMISC1;
+ constructors SETFAM_1, FUNCT_4, FUNCT_6, MBOOLEAN, PZFMISC1, PARTFUN1,
+      RELSET_1, ORDINAL1, PBOOLE;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1, PBOOLE,
-      PRE_CIRC, MBOOLEAN, PZFMISC1, FUNCT_2, PARTFUN1, CARD_1;
+      PRE_CIRC, MBOOLEAN, PZFMISC1, FUNCT_2, PARTFUN1, CARD_1, RELSET_1;
  requirements SUBSET, BOOLE;
 
 
 begin :: Preliminaries
 
-definition
+registration
   let I be set;
   let F be ManySortedFunction of I;
-  redefine func doms F -> ManySortedSet of I;
-  redefine func rngs F -> ManySortedSet of I;
+  cluster doms F -> I-defined;
+  cluster rngs F -> I-defined;
+end;
+
+registration
+  let I be set;
+  let F be ManySortedFunction of I;
+  cluster doms F -> total (I-defined Function);
+  cluster rngs F -> total (I-defined Function);
 end;
 
 reserve I, G, H, i, x for set,
@@ -103,133 +110,133 @@ begin :: Finite Many Sorted Sets
 
 registration
   let I;
-  cluster empty-yielding -> locally-finite ManySortedSet of I;
+  cluster empty-yielding -> finite-yielding ManySortedSet of I;
 end;
 
 registration
   let I;
-  cluster [0]I -> empty-yielding locally-finite;
+  cluster [0]I -> empty-yielding finite-yielding;
 end;
 
 registration
   let I, A;
-  cluster empty-yielding locally-finite ManySortedSubset of A;
+  cluster empty-yielding finite-yielding ManySortedSubset of A;
 end;
 
 theorem :: MSSUBFAM:18      :: FINSET_1:13
-  A c= B & B is locally-finite implies A is locally-finite;
+  A c= B & B is finite-yielding implies A is finite-yielding;
 
 registration
   let I;
-  let A be locally-finite ManySortedSet of I;
-  cluster -> locally-finite ManySortedSubset of A;
+  let A be finite-yielding ManySortedSet of I;
+  cluster -> finite-yielding ManySortedSubset of A;
 end;
 
 registration
   let I;
-  let A, B be locally-finite ManySortedSet of I;
-  cluster A \/ B -> locally-finite;
+  let A, B be finite-yielding ManySortedSet of I;
+  cluster A \/ B -> finite-yielding;
 end;
 
 registration
   let I, A;
-  let B be locally-finite ManySortedSet of I;
-  cluster A /\ B -> locally-finite;
+  let B be finite-yielding ManySortedSet of I;
+  cluster A /\ B -> finite-yielding;
 end;
 
 registration
   let I, B;
-  let A be locally-finite ManySortedSet of I;
-  cluster A /\ B -> locally-finite;
+  let A be finite-yielding ManySortedSet of I;
+  cluster A /\ B -> finite-yielding;
 end;
 
 registration
   let I, B;
-  let A be locally-finite ManySortedSet of I;
-  cluster A \ B -> locally-finite;
+  let A be finite-yielding ManySortedSet of I;
+  cluster A \ B -> finite-yielding;
 end;
 
 registration
   let I, F;
-  let A be locally-finite ManySortedSet of I;
-  cluster F.:.:A -> locally-finite;
+  let A be finite-yielding ManySortedSet of I;
+  cluster F.:.:A -> finite-yielding;
 end;
 
 registration
   let I;
-  let A, B be locally-finite ManySortedSet of I;
-  cluster [|A,B|] -> locally-finite;
+  let A, B be finite-yielding ManySortedSet of I;
+  cluster [|A,B|] -> finite-yielding;
 end;
 
 theorem :: MSSUBFAM:19     :: FINSET_1:22
-  B is non-empty & [|A,B|] is locally-finite implies A is locally-finite;
+  B is non-empty & [|A,B|] is finite-yielding implies A is finite-yielding;
 
 theorem :: MSSUBFAM:20     :: FINSET_1:23
-  A is non-empty & [|A,B|] is locally-finite implies B is locally-finite;
+  A is non-empty & [|A,B|] is finite-yielding implies B is finite-yielding;
 
 theorem :: MSSUBFAM:21
-  A is locally-finite iff bool A is locally-finite;
+  A is finite-yielding iff bool A is finite-yielding;
 
 registration
   let I;
-  let M be locally-finite ManySortedSet of I;
-  cluster bool M -> locally-finite;
+  let M be finite-yielding ManySortedSet of I;
+  cluster bool M -> finite-yielding;
 end;
 
 theorem :: MSSUBFAM:22     :: FINSET_1:25 a
-  for A be non-empty ManySortedSet of I holds A is locally-finite &
-  (for M be ManySortedSet of I st M in A holds M is locally-finite)
-  implies union A is locally-finite;
+  for A be non-empty ManySortedSet of I holds A is finite-yielding &
+  (for M be ManySortedSet of I st M in A holds M is finite-yielding)
+  implies union A is finite-yielding;
 
 theorem :: MSSUBFAM:23     :: FINSET_1:25 b
-  union A is locally-finite implies
-  A is locally-finite & for M st M in A holds M is locally-finite;
+  union A is finite-yielding implies
+  A is finite-yielding & for M st M in A holds M is finite-yielding;
 
 theorem :: MSSUBFAM:24     :: FINSET_1:26
-  doms F is locally-finite implies rngs F is locally-finite;
+  doms F is finite-yielding implies rngs F is finite-yielding;
 
 theorem :: MSSUBFAM:25     :: FINSET_1:27
   (A c= rngs F & for i be set for f be Function st i in I & f = F.i
-  holds f"(A.i) is finite) implies A is locally-finite;
+  holds f"(A.i) is finite) implies A is finite-yielding;
 
 registration
   let I;
-  let A, B be locally-finite ManySortedSet of I;
-  cluster MSFuncs(A,B) -> locally-finite;
+  let A, B be finite-yielding ManySortedSet of I;
+  cluster MSFuncs(A,B) -> finite-yielding;
 end;
 
 registration
   let I;
-  let A, B be locally-finite ManySortedSet of I;
-  cluster A \+\ B -> locally-finite;
+  let A, B be finite-yielding ManySortedSet of I;
+  cluster A \+\ B -> finite-yielding;
 end;
 
 reserve X, Y, Z for ManySortedSet of I;
 
 theorem :: MSSUBFAM:26     :: CQC_THE1:13
-  X is locally-finite & X c= [|Y,Z|] implies
-  ex A, B st A is locally-finite & A c= Y & B is locally-finite & B c= Z &
+  X is finite-yielding & X c= [|Y,Z|] implies
+  ex A, B st A is finite-yielding & A c= Y & B is finite-yielding & B c= Z &
   X c= [|A,B|];
 
 theorem :: MSSUBFAM:27     :: CQC_THE1:14
-  X is locally-finite & Z is locally-finite & X c= [|Y,Z|] implies
-  ex A st A is locally-finite & A c= Y & X c= [|A,Z|];
+  X is finite-yielding & Z is finite-yielding & X c= [|Y,Z|] implies
+  ex A st A is finite-yielding & A c= Y & X c= [|A,Z|];
 
 theorem :: MSSUBFAM:28     :: ALI2:1
-  for M be non-empty locally-finite ManySortedSet of I st
+  for M be non-empty finite-yielding ManySortedSet of I st
   for A, B be ManySortedSet of I st A in M & B in M holds A c= B or B c= A
   ex m be ManySortedSet of I st m in M & for K be ManySortedSet of I st K in M
   holds m c= K;
 
 theorem :: MSSUBFAM:29     :: FIN_TOPO:3
-  for M be non-empty locally-finite ManySortedSet of I st
+  for M be non-empty finite-yielding ManySortedSet of I st
   for A, B be ManySortedSet of I st A in M & B in M holds A c= B or B c= A
   ex m be ManySortedSet of I st m in M & for K be ManySortedSet of I st K in M
   holds K c= m;
 
 theorem :: MSSUBFAM:30     :: COMPTS_1:1
-  Z is locally-finite & Z c= rngs F implies
-  ex Y st Y c= doms F & Y is locally-finite & F.:.:Y = Z;
+  Z is finite-yielding & Z c= rngs F implies
+  ex Y st Y c= doms F & Y is finite-yielding & F.:.:Y = Z;
 
 begin :: A Family of Subsets of Many Sorted Sets
 
@@ -250,16 +257,16 @@ end;
 
 registration
   let I, M;
-  cluster empty-yielding locally-finite MSSubsetFamily of M;
+  cluster empty-yielding finite-yielding MSSubsetFamily of M;
 end;
 
 theorem :: MSSUBFAM:31
-  [0]I is empty-yielding locally-finite MSSubsetFamily of M;
+  [0]I is empty-yielding finite-yielding MSSubsetFamily of M;
 
 registration
   let I;
-  let M be locally-finite ManySortedSet of I;
-  cluster non-empty locally-finite MSSubsetFamily of M;
+  let M be finite-yielding ManySortedSet of I;
+  cluster non-empty finite-yielding MSSubsetFamily of M;
 end;
 
 reserve SF, SG, SH for MSSubsetFamily of M,

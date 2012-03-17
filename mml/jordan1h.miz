@@ -20,21 +20,23 @@ environ
       NAT_1, INT_1, NAT_D, RELAT_1, RELAT_2, RELSET_1, PARTFUN1,
       NEWTON, FINSET_1, FINSEQ_1, SEQ_1, SEQM_3, RVSUM_1, STRUCT_0, FUNCT_6,
       CARD_3, FUNCOP_1, FINSEQ_2, FINSEQ_5, RFINSEQ, MATRIX_1, METRIC_1,
-      TRIANG_1, PRE_TOPC, TOPS_1, COMPTS_1, CONNSP_1, PCOMPS_1, EUCLID,
+      TRIANG_1, PRE_TOPC, TOPS_1, COMPTS_1, CONNSP_1, PCOMPS_1, RLVECT_1,
+      RLTOPSP1, EUCLID,
       SPRECT_2, TOPREAL1, GOBOARD1, GOBOARD2, JORDAN3, JORDAN2C, SPPOL_1,
       PSCOMP_1, GOBOARD9, JORDAN8, GOBRD13, JORDAN9;
  constructors SETFAM_1, REAL_1, SQUARE_1, CARD_3, NEWTON, RFINSEQ, NAT_D,
       WSIERP_1, TOPS_1, CONNSP_1, REALSET2, TOPREAL4, GOBOARD2, PSCOMP_1,
       MATRLIN, TRIANG_1, GOBOARD9, JORDAN3, SPRECT_1, JORDAN2C, JORDAN8,
-      GOBRD13, JORDAN9, SEQ_1, BINOP_2;
+      GOBRD13, JORDAN9, SEQ_1, BINOP_2, RELSET_1, FUNCSDOM, CONVEX1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1,
       FINSEQ_6, GENEALG1, FUNCT_7, STRUCT_0, COMPTS_1, EUCLID, TOPREAL1,
       GOBOARD1, GOBOARD2, SPPOL_2, GOBOARD9, WAYBEL_2, SPRECT_1, JORDAN7,
-      SPRECT_3, REVROT_1, TOPREAL6, JORDAN8, GOBRD13, POLYNOM1, VALUED_0;
+      SPRECT_3, REVROT_1, TOPREAL6, JORDAN8, GOBRD13, POLYNOM1, VALUED_0,
+      RELSET_1, RLTOPSP1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions GOBOARD1, TARSKI, RELSET_1, RELAT_2, ORDERS_1, RELAT_1, XBOOLE_0,
-      EUCLID, VALUED_1, SEQM_3;
+      EUCLID, VALUED_1, SEQM_3, RLTOPSP1;
  theorems JORDAN9, GOBOARD5, TOPREAL1, GOBOARD7, GOBOARD1, SPRECT_2, GOBOARD2,
       FINSEQ_4, TRIANG_1, ORDERS_1, PRE_CIRC, CARD_1, FINSEQ_3, FUNCT_2,
       GOBRD13, PSCOMP_1, FINSEQ_1, FUNCT_1, MATRIX_1, RELAT_1, EUCLID, NAT_1,
@@ -44,7 +46,8 @@ environ
       INT_1, NEWTON, JORDAN5B, JORDAN2C, TOPMETR, SUB_METR, RVSUM_1, ABSVALUE,
       METRIC_1, JORDAN1B, SPRECT_1, FINSEQ_2, JORDAN10, SPPOL_1, CONNSP_1,
       REVROT_1, XBOOLE_0, XBOOLE_1, XREAL_0, PARTIT_2, XCMPLX_1, PARTFUN1,
-      RELAT_2, SETFAM_1, XREAL_1, NAT_2, XXREAL_0, PREPOWER, ORDINAL1, NAT_D;
+      RELAT_2, SETFAM_1, XREAL_1, NAT_2, XXREAL_0, PREPOWER, ORDINAL1, NAT_D,
+      RLTOPSP1;
  schemes FINSEQ_1, FINSEQ_2, NAT_1;
 
 begin :: Preliminaries
@@ -113,9 +116,11 @@ A1: p <> q;
     let G be Subset of TOP-REAL 2 such that
 A2: G is open and
 A3: p in G;
-    reconsider P = G as Subset of TopSpaceMetr Euclid 2;
+X:  the TopStruct of TOP-REAL 2 = TopSpaceMetr Euclid 2 by EUCLID:def 8;
+    then reconsider P = G as Subset of TopSpaceMetr Euclid 2;
     reconsider x = p, y = q as Point of Euclid 2 by TOPREAL3:13;
-    consider r being real number such that
+    P is open by A2,X,PRE_TOPC:60;
+    then consider r being real number such that
 A4: r>0 and
 A5: Ball(x,r) c= P by A2,A3,TOPMETR:22;
     reconsider r as Real by XREAL_0:def 1;
@@ -135,7 +140,7 @@ A11: t < dist(x,y) by A10,XXREAL_0:2;
 A12: s < 1 by A8,XREAL_1:191;
     set pp = (1-s)*p+s*q;
     reconsider z = pp as Point of Euclid 2 by TOPREAL3:13;
-A13: pp in LSeg(p,q) by A9,A12,SPPOL_1:22;
+A13: pp in LSeg(p,q) by A9,A12;
 A14: (1-s)*p+s*p = (1-s+s)*p by EUCLID:37
       .= p by EUCLID:33;
 A15: now
@@ -159,8 +164,12 @@ A18: pp in LSeg(p,q) \ {p,q} by A13,XBOOLE_0:def 5;
     reconsider x' = x, y' = y, z' = z as Element of REAL 2;
     reconsider a = x', b = y' as Element of 2-tuples_on REAL;
     reconsider u = a-b as Element of REAL 2;
+Y:   (1-s)*p = (1-s)*a by EUCLID:69;
+     s*q = s*b by EUCLID:69;
+     then
+X:   z= (1-s)*a+s*b by Y,EUCLID:68;
     dist(x,z) = |.x'-z'.| by SPPOL_1:20
-      .= |.a-(1-s)*a-s*b.| by RVSUM_1:60
+      .= |.a-(1-s)*a-s*b.| by X,RVSUM_1:60
       .= |.1 *a-(1-s)*a-s*b.| by RVSUM_1:74
       .= |.1 *a +(-1)*(1-s)*a-s*b.| by RVSUM_1:71
       .= |.(1+ (-(1-s)))*a-s*b.| by RVSUM_1:72
@@ -178,9 +187,9 @@ A19: dist(x,z) <= r/2 by XXREAL_0:17;
     r/2 < r/1 by A4,XREAL_1:78;
     then dist(x,z) < r by A19,XXREAL_0:2;
     then z in Ball(x,r) by METRIC_1:12;
-    hence (LSeg(p,q) \ {p,q}) meets G by A5,A18,XBOOLE_0:3;
+    hence thesis by A5,A18,XBOOLE_0:3;
   end;
-  hence p in Cl(LSeg(p,q) \ {p,q}) by TOPS_1:39;
+  hence thesis by TOPS_1:39;
 end;
 
 theorem Th7:
@@ -194,7 +203,7 @@ A1: p <> q;
   let e be set;
   assume
 A2: e in LSeg(p,q);
-  p in LSeg(p,q) & q in LSeg(p,q) by TOPREAL1:6;
+  p in LSeg(p,q) & q in LSeg(p,q) by RLTOPSP1:69;
   then {p,q} c= LSeg(p,q) by ZFMISC_1:38;
   then LSeg(p,q) = LSeg(p,q) \ {p,q} \/ {p,q} by XBOOLE_1:45;
   then
@@ -203,7 +212,7 @@ A3: e in LSeg(p,q) \ {p,q} or e in {p,q} by A2,XBOOLE_0:def 3;
   suppose
 A4: e in LSeg(p,q) \ {p,q};
     LSeg(p,q) \ {p,q} c= Cl(LSeg(p,q) \ {p,q}) by PRE_TOPC:48;
-    hence e in Cl(LSeg(p,q) \ {p,q}) by A4;
+    hence thesis by A4;
   end;
   suppose e = p or e = q;
     hence thesis by A1,Th6;
@@ -230,10 +239,13 @@ definition
   coherence
   proof
     set R = {[r,s] : r <= s };
-    let x be set;
+    R c= [:REAL,REAL:]
+    proof let x be set;
     assume x in R;
     then ex r,s st x = [r,s] & r <= s;
-    hence x in [:REAL,REAL:] by ZFMISC_1:106;
+    hence thesis by ZFMISC_1:106;
+   end;
+   hence thesis;
   end;
 end;
 
@@ -294,7 +306,7 @@ theorem Th10:
 proof
   field RealOrd c= REAL \/ REAL by RELSET_1:19;
   hence field RealOrd c= REAL;
-  thus REAL c= field RealOrd by Lm1,PARTIT_2:8;
+  thus thesis by Lm1,PARTIT_2:8;
 end;
 
 registration
@@ -328,7 +340,7 @@ proof
   thus RealOrd is_reflexive_in REAL by Lm1;
   thus RealOrd is_transitive_in REAL by Lm3;
   thus RealOrd is_antisymmetric_in REAL by Lm2;
-  thus RealOrd is_connected_in REAL by Lm4;
+  thus thesis by Lm4;
 end;
 
 theorem Th12:
@@ -347,7 +359,7 @@ A5: IT.n <> IT.m by A1,A2,A3,FUNCT_1:def 8;
   IT/.n = IT.n & IT/.m = IT.m by A1,A2,PARTFUN1:def 8;
   then [IT.n,IT.m] in RealOrd by A1,A2,A3,A4,TRIANG_1:def 2;
   then IT.n <= IT.m by Th9;
-  hence IT.n < IT.m by A5,XXREAL_0:1;
+  hence thesis by A5,XXREAL_0:1;
 end;
 
 theorem Th13:
@@ -404,7 +416,7 @@ A6: f/.k = f.k by A3,A5,PARTFUN1:def 8;
       .= proj1.(f.k) by A6,PSCOMP_1:def 28
       .= pf.k by A3,A5,FUNCT_1:23;
   end;
-  hence X_axis f = proj1*f by A4,FINSEQ_1:17;
+  hence thesis by A4,FINSEQ_1:17;
 end;
 
 theorem Th17:
@@ -426,7 +438,7 @@ A6: f/.k = f.k by A3,A5,PARTFUN1:def 8;
       .= proj2.(f.k) by A6,PSCOMP_1:def 29
       .= pf.k by A3,A5,FUNCT_1:23;
   end;
-  hence Y_axis f = proj2*f by A4,FINSEQ_1:17;
+  hence thesis by A4,FINSEQ_1:17;
 end;
 
 definition
@@ -444,7 +456,7 @@ definition
       hence thesis;
     end;
     then union A c= D by ZFMISC_1:94;
-    hence Values M is Subset of D by GOBRD13:3;
+    hence thesis by GOBRD13:3;
   end;
 end;
 
@@ -484,7 +496,7 @@ A6: Col(M,k).u = M*(u,k) by A3,MATRIX_1:def 9;
 A7: 1 <= u & u <= len M by A3,A5,FINSEQ_3:27;
   1 <= k & k <= width M by A1,FINSEQ_1:3;
   then [u,k] in Indices M by A7,MATRIX_1:37;
-  hence e in Values M by A2,A4,A6;
+  hence thesis by A2,A4,A6;
 end;
 
 theorem Th19:
@@ -508,7 +520,7 @@ A6: Line(M,k).u = M*(k,u) by A3,MATRIX_1:def 8;
 A7: 1 <= k & k <= len M by A1,FINSEQ_3:27;
   1 <= u & u <= width M by A3,A5,FINSEQ_3:27;
   then [k,u] in Indices M by A7,MATRIX_1:37;
-  hence e in Values M by A2,A4,A6;
+  hence thesis by A2,A4,A6;
 end;
 
 theorem Th20:
@@ -528,7 +540,7 @@ A3: card rng L= len L by FINSEQ_4:77
     .= len Col(G,1) by GOBOARD1:def 3
     .= len G by MATRIX_1:def 9;
   rng Col(G,1) c= Values G by A1,Th18;
-  hence len G <= card(proj1.:Values G) by A2,A3,NAT_1:44,RELAT_1:156;
+  hence thesis by A2,A3,NAT_1:44,RELAT_1:156;
 end;
 
 theorem Th21:
@@ -566,7 +578,7 @@ A11: 1 <= j & j <= width G by A8,MATRIX_1:39;
   end;
   then card(proj1.:Values G) c= card dom G by A3,CARD_1:28;
   then card(proj1.:Values G) <= card dom G by NAT_1:40;
-  hence card(proj1.:Values G) <= len G by PRE_CIRC:21;
+  hence thesis by CARD_1:104;
 end;
 
 theorem Th22:
@@ -577,7 +589,7 @@ proof
   non empty-yielding Matrix of TOP-REAL 2;
 A1: len G <= card(proj1.:Values G) by Th20;
   card(proj1.:Values G) <= len G by Th21;
-  hence len G = card(proj1.:Values G) by A1,XXREAL_0:1;
+  hence thesis by A1,XXREAL_0:1;
 end;
 
 theorem Th23:
@@ -597,7 +609,7 @@ A3: card rng L= len L by FINSEQ_4:77
     .= len Line(G,1) by GOBOARD1:def 4
     .= width G by MATRIX_1:def 8;
   rng Line(G,1) c= Values G by A1,Th19;
-  hence width G <= card(proj2.:Values G) by A2,A3,NAT_1:44,RELAT_1:156;
+  hence thesis by A2,A3,NAT_1:44,RELAT_1:156;
 end;
 
 theorem Th24:
@@ -635,7 +647,7 @@ A11: 1 <= i & i <= len G by A8,MATRIX_1:39;
   end;
   then card(proj2.:Values G) c= card Seg width G by A3,CARD_1:28;
   then card(proj2.:Values G) <= card Seg width G by NAT_1:40;
-  hence card(proj2.:Values G) <= width G by FINSEQ_1:78;
+  hence thesis by FINSEQ_1:78;
 end;
 
 theorem Th25:
@@ -646,7 +658,7 @@ proof
   Matrix of TOP-REAL 2;
 A1: width G <= card(proj2.:Values G) by Th23;
   card(proj2.:Values G) <= width G by Th24;
-  hence width G = card(proj2.:Values G) by A1,XXREAL_0:1;
+  hence thesis by A1,XXREAL_0:1;
 end;
 
 begin :: On go boards
@@ -694,13 +706,13 @@ A17: i1-'1 < len G by A9,NAT_1:13;
     j1 < width G by A12,A15,NAT_1:13;
     then LSeg(f/.k,f/.(k+1)) c= cell(G,i1-'1,j1)
     by A6,A8,A10,A15,A16,A17,GOBOARD5:19;
-    hence LSeg(f,k) c= left_cell(f,k,G) by A2,A3,A13,A15,TOPREAL1:def 5;
+    hence thesis by A2,A3,A13,A15,TOPREAL1:def 5;
   end;
   suppose
 A18: i1+1 = i2 & j1 = j2;
     then i1 < len G by A11,NAT_1:13;
     then LSeg(f/.k,f/.(k+1)) c= cell(G,i1,j1) by A6,A8,A9,A10,A18,GOBOARD5:23;
-    hence LSeg(f,k) c= left_cell(f,k,G) by A2,A3,A13,A18,TOPREAL1:def 5;
+    hence thesis by A2,A3,A13,A18,TOPREAL1:def 5;
   end;
   suppose
 A19: i1 = i2+1 & j1 = j2;
@@ -710,14 +722,14 @@ A21: j2 -' 1 < width G by A12,NAT_1:13;
     i2 < len G by A9,A19,NAT_1:13;
     then LSeg(f/.k,f/.(k+1)) c= cell(G,i2,j2-'1)
     by A6,A8,A11,A19,A20,A21,GOBOARD5:22;
-    hence LSeg(f,k) c= left_cell(f,k,G) by A2,A3,A13,A19,TOPREAL1:def 5;
+    hence thesis by A2,A3,A13,A19,TOPREAL1:def 5;
   end;
   suppose
 A22: i1 = i2 & j1 = j2+1;
     then j2 < width G by A10,NAT_1:13;
     then LSeg(f/.k,f/.(k+1)) c= left_cell(f,k,G) by A6,A8,A9,A12,A13,A22,
 GOBOARD5:20;
-    hence LSeg(f,k) c= left_cell(f,k,G) by A2,A3,TOPREAL1:def 5;
+    hence thesis by A2,A3,TOPREAL1:def 5;
   end;
 end;
 
@@ -760,19 +772,19 @@ A9: k in dom f by A1,FINSEQ_3:27;
 A10: abs(i1-i2)=1 & j1=j2 or abs(j1-j2)=1 & i1=i2 by GOBOARD1:2;
     per cases by A10,GOBOARD1:1;
     case i1 = i2 & j1+1 = j2;
-      hence left_cell(f,k) = cell(G,i1-'1,j1) by A8;
+      hence thesis by A8;
     end;
     case i1+1 = i2 & j1 = j2;
-      hence left_cell(f,k) = cell(G,i1,j1) by A8;
+      hence thesis by A8;
     end;
     case i1 = i2+1 & j1 = j2;
-      hence left_cell(f,k) = cell(G,i2,j2-'1) by A8;
+      hence thesis by A8;
     end;
     case i1 = i2 & j1 = j2+1;
-      hence left_cell(f,k) = cell(G,i1,j2) by A8;
+      hence thesis by A8;
     end;
   end;
-  hence left_cell(f,k,GoB f) = left_cell(f,k) by A1,A2,A3,GOBRD13:def 3;
+  hence thesis by A1,A2,A3,GOBRD13:def 3;
 end;
 
 theorem Th28:
@@ -814,7 +826,7 @@ A14: abs(i1-i2)=1 & j1=j2 or abs(j1-j2)=1 & i1=i2 by GOBOARD1:2;
 A15: i1 = i2 & j1+1 = j2;
     then j1 < width G by A12,NAT_1:13;
     then LSeg(f/.k,f/.(k+1)) c= cell(G,i1,j1) by A6,A8,A9,A10,A15,GOBOARD5:20;
-    hence LSeg(f,k) c= right_cell(f,k,G) by A2,A3,A13,A15,TOPREAL1:def 5;
+    hence thesis by A2,A3,A13,A15,TOPREAL1:def 5;
   end;
   suppose
 A16: i1+1 = i2 & j1 = j2;
@@ -824,14 +836,14 @@ A18: j1-'1 < width G by A10,NAT_1:13;
     i1 < len G by A11,A16,NAT_1:13;
     then LSeg(f/.k,f/.(k+1)) c= cell(G,i1,j1-'1)
     by A6,A8,A9,A16,A17,A18,GOBOARD5:22;
-    hence LSeg(f,k) c= right_cell(f,k,G) by A2,A3,A13,A16,TOPREAL1:def 5;
+    hence thesis by A2,A3,A13,A16,TOPREAL1:def 5;
   end;
   suppose
 A19: i1 = i2+1 & j1 = j2;
     then i2 < len G by A9,NAT_1:13;
     then LSeg(f/.k,f/.(k+1)) c= cell(G,i2,j2)
     by A6,A8,A11,A12,A19,GOBOARD5:23;
-    hence LSeg(f,k) c= right_cell(f,k,G) by A2,A3,A13,A19,TOPREAL1:def 5;
+    hence thesis by A2,A3,A13,A19,TOPREAL1:def 5;
   end;
   suppose
 A20: i1 = i2 & j1 = j2+1;
@@ -841,7 +853,7 @@ A22: i1-'1 < len G by A9,NAT_1:13;
     j2 < width G by A10,A20,NAT_1:13;
     then LSeg(f/.k,f/.(k+1)) c= right_cell(f,k,G)
     by A6,A8,A12,A13,A20,A21,A22,GOBOARD5:19;
-    hence LSeg(f,k) c= right_cell(f,k,G) by A2,A3,TOPREAL1:def 5;
+    hence thesis by A2,A3,TOPREAL1:def 5;
   end;
 end;
 
@@ -885,19 +897,19 @@ A9: k in dom f by A1,FINSEQ_3:27;
 A10: abs(i1-i2)=1 & j1=j2 or abs(j1-j2)=1 & i1=i2 by GOBOARD1:2;
     per cases by A10,GOBOARD1:1;
     case i1 = i2 & j1+1 = j2;
-      hence right_cell(f,k) = cell(G,i1,j1) by A8;
+      hence thesis by A8;
     end;
     case i1+1 = i2 & j1 = j2;
-      hence right_cell(f,k) = cell(G,i1,j1-'1) by A8;
+      hence thesis by A8;
     end;
     case i1 = i2+1 & j1 = j2;
-      hence right_cell(f,k) = cell(G,i2,j2) by A8;
+      hence thesis by A8;
     end;
     case i1 = i2 & j1 = j2+1;
-      hence right_cell(f,k) = cell(G,i1-'1,j2) by A8;
+      hence thesis by A8;
     end;
   end;
-  hence right_cell(f,k,GoB f) = right_cell(f,k) by A1,A2,A3,GOBRD13:def 2;
+  hence thesis by A1,A2,A3,GOBRD13:def 2;
 end;
 
 theorem
@@ -910,7 +922,7 @@ proof
   assume P is_a_component_of (L~f)`;
   then ex B1 being Subset of (TOP-REAL 2)|(L~f)`
   st B1 = P & B1 is_a_component_of (TOP-REAL 2)|(L~f)` by CONNSP_1:def 6;
-  hence P = RightComp f or P = LeftComp f by GOBRD14:22;
+  hence thesis by GOBRD14:22;
 end;
 
 theorem
@@ -931,7 +943,7 @@ A3: Int right_cell(f,k,G) c= right_cell(f,k,G)\L~f by TOPS_1:44,XBOOLE_1:86;
   then
 A4: Int left_cell(f,k,G) c= left_cell(f,k,G)\L~f by TOPS_1:44,XBOOLE_1:86;
   left_cell(f,k,G)\L~f c= LeftComp f by A1,A2,JORDAN9:29;
-  hence Int left_cell(f,k,G) c= LeftComp f by A4,XBOOLE_1:1;
+  hence thesis by A4,XBOOLE_1:1;
 end;
 
 theorem Th32:
@@ -981,14 +993,14 @@ A1: f is_sequence_on M;
     then
 A2: mid(f,i1,i2) = (f/^(i1-'1))|(i2-'i1+1) by JORDAN3:def 1;
     f/^(i1-'1) is_sequence_on M by A1,JORDAN8:5;
-    hence mid(f,i1,i2) is_sequence_on M by A2,GOBOARD1:38;
+    hence thesis by A2,GOBOARD1:38;
   end;
   suppose i1 > i2;
     then
 A3: mid(f,i1,i2) = Rev ((f/^(i2-'1))|(i1-'i2+1)) by JORDAN3:def 1;
     f/^(i2-'1) is_sequence_on M by A1,JORDAN8:5;
     then (f/^(i2-'1))|(i1-'i2+1) is_sequence_on M by GOBOARD1:38;
-    hence mid(f,i1,i2) is_sequence_on M by A3,JORDAN9:7;
+    hence thesis by A3,JORDAN9:7;
   end;
 end;
 
@@ -1090,13 +1102,13 @@ A25: 1 <= n & m <= len G by A2,A21,A22,FINSEQ_3:27;
 A26: f.n' < f.m' by A5,A23,A24,GOBOARD5:4;
 A27: f/.n = f.n & f/.m = f.m by A21,A22,PARTFUN1:def 8;
     hence f/.n <> f/.m by A5,A23,A24,A25,GOBOARD5:4;
-    thus [f/.n, f/.m] in RealOrd by A26,A27;
+    thus thesis by A26,A27;
   end;
   then
 A28: f = SgmX(RealOrd, proj1.:Values G) by A6,TRIANG_1:4;
   i in dom G by A1,FINSEQ_3:27;
   then i in Seg len G by FINSEQ_1:def 3;
-  hence SgmX(RealOrd, proj1.:Values G).i = G*(i,1)`1 by A3,A28,A4;
+  hence thesis by A3,A28,A4;
 end;
 
 theorem Th35:
@@ -1170,12 +1182,12 @@ A25: 1 <= n & m <= width G by A2,A21,A22,FINSEQ_3:27;
 A26: f.n' < f.m' by A5,A23,A24,GOBOARD5:5;
 A27: f/.n = f.n & f/.m = f.m by A21,A22,PARTFUN1:def 8;
     hence f/.n <> f/.m by A5,A23,A24,A25,GOBOARD5:5;
-    thus [f/.n, f/.m] in RealOrd by A26,A27;
+    thus thesis by A26,A27;
   end;
   then
 A28: f = SgmX(RealOrd, proj2.:Values G) by A6,TRIANG_1:4;
   j in Seg width G by A1,FINSEQ_1:3;
-  hence SgmX(RealOrd, proj2.:Values G).j = G*(1,j)`2 by A3,A28,A4;
+  hence thesis by A3,A28,A4;
 end;
 
 theorem Th36:
@@ -1286,14 +1298,14 @@ A44:    abs(i1-i)=1 & j1=j or abs(j1-j)=1 & i1=i by GOBOARD1:2;
 A45:      i1 < i0 by A26,A27,A37,A39,A41,A42,NAT_1:14,XXREAL_0:2;
           per cases by A44,GOBOARD1:1;
           suppose i1 = i or i < i1;
-            hence i < i0 by A45,XXREAL_0:2;
+            hence thesis by A45,XXREAL_0:2;
           end;
           suppose i = i1 + 1;
             then i <= i0 by A45,NAT_1:13;
             hence thesis by A30,XXREAL_0:1;
           end;
         end;
-        hence i < i0;
+        hence thesis;
       end;
     end;
 A46: for n holds P[n] from NAT_1:sch 1(A24,A25);
@@ -1413,14 +1425,14 @@ A44:    abs(i1-i)=1 & j1=j or abs(j1-j)=1 & i1=i by GOBOARD1:2;
 A45:      j1 < j0 by A26,A27,A37,A39,A41,A42,NAT_1:14,XXREAL_0:2;
           per cases by A44,GOBOARD1:1;
           suppose j1 = j or j < j1;
-            hence j < j0 by A45,XXREAL_0:2;
+            hence thesis by A45,XXREAL_0:2;
           end;
           suppose j = j1 + 1;
             then j <= j0 by A45,NAT_1:13;
             hence thesis by A30,XXREAL_0:1;
           end;
         end;
-        hence j < j0;
+        hence thesis;
       end;
     end;
 A46: for n holds P[n] from NAT_1:sch 1(A24,A25);
@@ -1469,9 +1481,9 @@ A6: 1 <= m & m <= width G by A3,MATRIX_1:39;
     then
 A7: v2.m = G*(n,m)`2 by A4,A6,GOBOARD5:2;
     v1.n = G*(n,m)`1 by A4,A5,A6,GOBOARD5:3;
-    hence G*(n,m) = |[v1.n,v2.m]| by A7,EUCLID:57;
+    hence thesis by A7,EUCLID:57;
   end;
-  hence G = GoB(SgmX(RealOrd, proj1.:Values G), SgmX(RealOrd,proj2.:Values G))
+  hence thesis
   by A1,A2,GOBOARD2:def 1;
 end;
 
@@ -1542,7 +1554,7 @@ A6: (-1)/2|^(n-'m) <= (i-2)/2|^(n-'m) by XREAL_1:74;
   (-1)/1 <= (-1)/2|^(n-'m) by A5,XREAL_1:122;
   then -1 <= (i-2)/2|^(n-'m) by A6,XXREAL_0:2;
   then -1 + 1 <= (i-2)/2|^(n-'m) + 1 by XREAL_1:8;
-  hence i1 is Element of NAT by A2,INT_1:16;
+  hence thesis by A2,INT_1:16;
 end;
 
 theorem Th42:
@@ -1580,7 +1592,7 @@ A8: i1+1 <= (i-2)/2|^(n-'m)+2+1 by XREAL_1:8;
   then (i-2)/2|^(n-'m) <= 2|^m/1 by A5,XREAL_1:104;
   then (i-2)/2|^(n-'m) + 3 <= 2|^m + 3 by XREAL_1:8;
   then (i-2)/2|^(n-'m) + 3 <= len Gauge(C,m) by JORDAN8:def 1;
-  hence i1+1 <= len Gauge(C,m) by A8,XXREAL_0:2;
+  hence thesis by A8,XXREAL_0:2;
 end;
 
 theorem Th43:
@@ -1756,7 +1768,7 @@ A39: p`2 <= Gn*(i,j+1)`2 by A2,A3,A18,JORDAN9:19;
   <= (((N-bound C)-(S-bound C)))*((j1+1-2)/(2|^m)) by A27,XREAL_1:66;
   then Gn*(i,j+1)`2 <= Gm*(i1,j1+1)`2 by A37,A38,XREAL_1:8;
   then p`2 <= Gm*(i1,j1+1)`2 by A39,XXREAL_0:2;
-  hence e in cell(Gauge(C,m),i1,j1) by A11,A13,A15,A17,A29,A34,A36,JORDAN9:19;
+  hence thesis by A11,A13,A15,A17,A29,A34,A36,JORDAN9:19;
 end;
 
 theorem Th44:
@@ -1789,7 +1801,7 @@ proof
   let P be Subset of TOP-REAL2;
   assume P is Bounded;
   then UBD P is_outside_component_of P by JORDAN2C:76;
-  hence UBD P is not Bounded by JORDAN2C:def 4;
+  hence thesis by JORDAN2C:def 4;
 end;
 
 theorem Th48:
@@ -1841,7 +1853,7 @@ A2: Cl LeftComp f \/ RightComp f
 A3: L~f misses RightComp(f) by SPRECT_3:42;
   RightComp f misses LeftComp f by GOBRD14:24;
   then Cl LeftComp(f) misses RightComp(f) by A1,A3,XBOOLE_1:70;
-  hence RightComp(f) c= (Cl LeftComp(f))` by SUBSET_1:43;
+  hence thesis by SUBSET_1:43;
 end;
 
 theorem
@@ -1858,7 +1870,7 @@ A2: Cl RightComp f \/ LeftComp f
 A3: L~f misses LeftComp(f) by SPRECT_3:43;
   LeftComp f misses RightComp f by GOBRD14:24;
   then Cl RightComp(f) misses LeftComp(f) by A1,A3,XBOOLE_1:70;
-  hence LeftComp(f) c= (Cl RightComp(f))` by SUBSET_1:43;
+  hence thesis by SUBSET_1:43;
 end;
 
 theorem Th52:
@@ -1934,21 +1946,21 @@ A14: i1 = i & j1 = width Gauge(C,n) by A3,A7,A9,A11,GOBOARD1:21;
 A15: i2 = i+1 & j2 = width Gauge(C,n) by A4,A8,A10,A11,GOBOARD1:21;
     per cases by A3,A7,A9,A11,A13,A15,GOBOARD1:21;
     case i1 = i2 & j1+1 = j2;
-      hence cell(Gauge(C,n),i,width Gauge(C,n)-'1) = cell(GoB Cage(C,n),i1,j1)
+      hence thesis
       by A14,A15;
     end;
     case i1+1 = i2 & j1 = j2;
 
-thus cell(Gauge(C,n),i,width Gauge(C,n)-'1) = cell(GoB Cage(C,n),i1,j1-'1)
+thus thesis
       by A1,A14,Th52;
     end;
     case i1 = i2+1 & j1 = j2;
-      hence cell(Gauge(C,n),i,width Gauge(C,n)-'1) = cell(GoB Cage(C,n),i2,j2)
+      hence thesis
       by A14,A15;
     end;
     case i1 = i2 & j1 = j2+1;
 
-hence cell(Gauge(C,n),i,width Gauge(C,n)-'1) = cell(GoB Cage(C,n),i1-'1,j2)
+hence thesis
       by A14,A15;
     end;
   end;
@@ -2128,7 +2140,7 @@ A10: L~Cage(C,i) misses LeftComp(Cage(C,i)) by SPRECT_3:43;
 ;
   then L~Cage(C,j) misses LeftComp(Cage(C,i)) by A1,A2,Th54,XBOOLE_1:63;
   then LeftComp(Cage(C,i)) c= (L~Cage(C,j))` by SUBSET_1:43;
-  hence LeftComp(Cage(C,i)) c= LeftComp(Cage(C,j)) by A7,A8,GOBOARD9:6;
+  hence thesis by A7,A8,GOBOARD9:6;
 end;
 
 theorem
@@ -2141,7 +2153,7 @@ A2: i <= j;
 A3: Cl LeftComp(Cage(C,i)) c= Cl LeftComp(Cage(C,j)) by A1,A2,Th55,PRE_TOPC:49;
   (Cl LeftComp(Cage(C,i)))` = RightComp(Cage(C,i)) &
   (Cl LeftComp(Cage(C,j)))` = RightComp(Cage(C,j)) by Th50;
-  hence RightComp(Cage(C,j)) c= RightComp(Cage(C,i)) by A3,SUBSET_1:31;
+  hence thesis by A3,SUBSET_1:31;
 end;
 
 begin :: Preparing the Internal Approximation
@@ -2165,7 +2177,7 @@ proof
 A1: len Gauge(C,n) = 2|^n + 3 by JORDAN8:def 1;
   n-'1 <= n by NAT_D:44;
   then 2|^(n-'1) <= 2|^n by PREPOWER:107;
-  hence X-SpanStart(C,n) < len Gauge(C,n) by A1,XREAL_1:10;
+  hence thesis by A1,XREAL_1:10;
 end;
 
 theorem Th59:
@@ -2178,7 +2190,7 @@ A2: 1 < X-SpanStart(C,n) by XXREAL_0:2;
   hence 1 <= X-SpanStart(C,n)-'1 by A2,NAT_1:13;
 A3: X-SpanStart(C,n) < len Gauge(C,n) by Th58;
   X-SpanStart(C,n)-'1 <= X-SpanStart(C,n) by NAT_D:44;
-  hence X-SpanStart(C,n)-'1 < len Gauge(C,n) by A3,XXREAL_0:2;
+  hence thesis by A3,XXREAL_0:2;
 end;
 
 definition
@@ -2355,7 +2367,7 @@ A11: i1-'1 <= len G by A9,XXREAL_0:2;
     then cell(G,0,j1) meets C by XREAL_1:234;
     hence contradiction by A1,A9,JORDAN8:21;
   end;
-  hence [i1-'1,j1+1] in Indices G by A10,A11,MATRIX_1:37;
+  hence thesis by A10,A11,MATRIX_1:37;
 end;
 
 theorem
@@ -2391,7 +2403,7 @@ A11: 1 <= j1+1 by NAT_1:11;
     then cell(G,i1,len G) meets C by A1,A4,A5,A6,A7,A8,GOBRD13:24;
     hence contradiction by A9,JORDAN8:18;
   end;
-  hence [i1+1,j1+1] in Indices G by A3,A10,A11,MATRIX_1:37;
+  hence thesis by A3,A10,A11,MATRIX_1:37;
 end;
 
 theorem
@@ -2428,7 +2440,7 @@ A9: j1-'1 <= width G by A8,XXREAL_0:2;
     then cell(G,i2,0) meets C by XREAL_1:234;
     hence contradiction by A8,JORDAN8:20;
   end;
-  hence [i2,j1-'1] in Indices G by A8,A9,MATRIX_1:37;
+  hence thesis by A8,A9,MATRIX_1:37;
 end;
 
 theorem
@@ -2463,7 +2475,7 @@ A10: 1 <= i1+1 by NAT_1:11;
     then cell(G,len G,j2) meets C by A2,A4,A5,A6,A7,A8,GOBRD13:28;
     hence contradiction by A1,A9,JORDAN8:19;
   end;
-  hence [i1+1,j2] in Indices G by A9,A10,MATRIX_1:37;
+  hence thesis by A9,A10,MATRIX_1:37;
 end;
 
 theorem
@@ -2500,7 +2512,7 @@ A11: i1-'1 <= i1 by NAT_D:35;
     then cell(G,i1-'1,len G) meets C by A2,A4,A5,A6,A7,A8,GOBRD13:35;
     hence contradiction by A9,A11,JORDAN8:18,XXREAL_0:2;
   end;
-  hence [i1,j1+2] in Indices G by A1,A9,A10,MATRIX_1:37;
+  hence thesis by A1,A9,A10,MATRIX_1:37;
 end;
 
 theorem
@@ -2535,7 +2547,7 @@ A10: 1 <= i1+1+1 & 1 <= j1+1 by NAT_1:12;
     then cell(G,len G,j1) meets C by A2,A4,A5,A6,A7,A8,GOBRD13:37;
     hence contradiction by A1,A9,JORDAN8:19;
   end;
-  hence [i1+2,j1] in Indices G by A9,A10,MATRIX_1:37;
+  hence thesis by A9,A10,MATRIX_1:37;
 end;
 
 theorem
@@ -2572,7 +2584,7 @@ A10: i2-'1 <= len G & j1-'1 <= width G by NAT_D:44;
     then cell(G,0,j1-'1) meets C by XREAL_1:234;
     hence contradiction by A1,A9,JORDAN8:21,NAT_D:44;
   end;
-  hence [i2-'1,j1] in Indices G by A9,A10,MATRIX_1:37;
+  hence thesis by A9,A10,MATRIX_1:37;
 end;
 
 theorem
@@ -2609,7 +2621,7 @@ A10: i1-'1 <= len G & j2-'1 <= width G by NAT_D:44;
     then cell(G,i1,0) meets C by XREAL_1:234;
     hence contradiction by A8,JORDAN8:20;
   end;
-  hence [i1,j2-'1] in Indices G by A9,A10,MATRIX_1:37;
+  hence thesis by A9,A10,MATRIX_1:37;
 end;
 
 theorem
@@ -2644,7 +2656,7 @@ A10: 1 <= i1+1 by NAT_1:11;
     then cell(G,len G,j1+1) meets C by A2,A4,A5,A6,A7,A8,GOBRD13:36;
     hence contradiction by A1,A9,JORDAN8:19;
   end;
-  hence [i1+1,j1+1] in Indices G by A9,A10,MATRIX_1:37;
+  hence thesis by A9,A10,MATRIX_1:37;
 end;
 
 theorem
@@ -2681,7 +2693,7 @@ A9: j1-'1 <= width G by A8,XXREAL_0:2;
     then cell(G,i1+1,0) meets C by XREAL_1:234;
     hence contradiction by A8,JORDAN8:20;
   end;
-  hence [i1+1,j1-'1] in Indices G by A8,A9,MATRIX_1:37;
+  hence thesis by A8,A9,MATRIX_1:37;
 end;
 
 theorem
@@ -2716,7 +2728,7 @@ A10: len G = width G by JORDAN8:def 1;
     then cell(G,i2-'1,len G) meets C by A1,A3,A4,A5,A6,A7,GOBRD13:40;
     hence contradiction by A8,JORDAN8:18,NAT_D:44;
   end;
-  hence [i2,j1+1] in Indices G by A8,A9,A10,MATRIX_1:37;
+  hence thesis by A8,A9,A10,MATRIX_1:37;
 end;
 
 theorem
@@ -2753,6 +2765,6 @@ A10: i1-'1 <= len G & j2-'1 <= width G by NAT_D:44;
     then cell(G,0,j2-'1) meets C by XREAL_1:234;
     hence contradiction by A1,A9,JORDAN8:21,NAT_D:44;
   end;
-  hence [i1-'1,j2] in Indices G by A9,A10,MATRIX_1:37;
+  hence thesis by A9,A10,MATRIX_1:37;
 end;
 

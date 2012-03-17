@@ -13,15 +13,15 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, INT_1, XXREAL_2, VALUED_0, REALSET1, FUNCT_1,
       RELSET_1, FINSET_1, PSCOMP_1, FUNCT_2, FINSEQ_1, VALUED_1, SEQ_1,
-      PARTFUN2, RFUNCT_1, FINSEQ_2, SEQ_2, SEQM_3, SEQ_4, PRE_CIRC, RCOMP_1,
+      PARTFUN2, RFUNCT_1, FINSEQ_2, SEQ_2, SEQM_3, SEQ_4, RCOMP_1,
       FDIFF_1, GOBOARD1, SQUARE_1, RVSUM_1, INTEGRA1, INTEGRA2, RFUNCT_3,
       PARTFUN1, XXREAL_0;
  constructors REAL_1, SQUARE_1, NAT_1, BINOP_2, COMPLEX1, FINSEQOP, FINSOP_1,
-      PARTFUN2, FDIFF_1, REALSET1, RFUNCT_3, PRE_CIRC, PSCOMP_1, INTEGRA2,
-      SEQ_1, XXREAL_2, RVSUM_1, SEQ_4;
+      PARTFUN2, FDIFF_1, REALSET1, RFUNCT_3, PSCOMP_1, INTEGRA2,
+      SEQ_1, XXREAL_2, RVSUM_1, SEQ_4, RELSET_1;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FUNCT_2, FINSET_1, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, FINSEQ_2, GOBOARD1,
-      INTEGRA1, VALUED_0, VALUED_1, XXREAL_2, CARD_1, SEQ_2, SEQ_4;
+      INTEGRA1, VALUED_0, VALUED_1, XXREAL_2, CARD_1, SEQ_2, SEQ_4, RELSET_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SQUARE_1, RVSUM_1, FINSEQ_2, VALUED_1;
  theorems SEQ_4, SUBSET_1, PARTFUN1, INTEGRA1, RFUNCT_1, FUNCT_1, FINSEQ_1,
@@ -41,9 +41,9 @@ reserve C for non empty set;
 reserve X for set;
 
 theorem Th1:
-  for D being Element of divs A st vol(A)=0 holds len D=1
+  for D being Division of A st vol(A)=0 holds len D=1
 proof
-  let D be Element of divs A;
+  let D be Division of A;
   assume that
 A1: vol(A)=0 and
 A2: len D<>1;
@@ -76,10 +76,11 @@ A2: for D1 being Element of divs A st D1 in divs A /\
     assume D1 in divs A /\ dom upper_sum_set(chi(A,A));
     then
 A3: D1 in dom upper_sum_set(chi(A,A)) by XBOOLE_0:def 4;
-    then (upper_sum_set(chi(A,A)))/.D1=(upper_sum_set(chi(A,A))).D1
-    by PARTFUN1:def 8
-      .=upper_sum(chi(A,A),D1) by A3,INTEGRA1:def 11
-      .=Sum(upper_volume(chi(A,A),D1)) by INTEGRA1:def 9;
+    reconsider D2 = D1 as Division of A by INTEGRA1:def 3;
+    (upper_sum_set(chi(A,A)))/.D1=(upper_sum_set(chi(A,A))).D1
+    by A3,PARTFUN1:def 8
+      .=upper_sum(chi(A,A),D2) by A3,INTEGRA1:def 11
+      .=Sum(upper_volume(chi(A,A),D2)) by INTEGRA1:def 9;
     hence thesis by INTEGRA1:26;
   end;
   then (upper_sum_set chi(A,A))|divs A is constant  by PARTFUN2:54;
@@ -101,7 +102,7 @@ A7:   D1 in dom upper_sum_set(chi(A,A)) & (upper_sum_set(chi(A,A))).D1=x1
       then
 A8:   D1 in dom ((upper_sum_set(chi(A,A)))|(divs A)) by RELAT_1:90;
       then ((upper_sum_set(chi(A,A)))|(divs A)).D1=(upper_sum_set(chi(A,A))).
-      D1 by FUNCT_1:68;
+      D1 by FUNCT_1:70;
       hence thesis by A7,A8,FUNCT_1:def 5;
     end;
     hence thesis;
@@ -144,10 +145,11 @@ A16: for D1 being Element of divs A st
     assume D1 in divs A /\ dom lower_sum_set(chi(A,A));
     then
 A17: D1 in dom lower_sum_set(chi(A,A)) by XBOOLE_0:def 4;
-    then (lower_sum_set(chi(A,A)))/.D1=(lower_sum_set(chi(A,A))).D1
-    by PARTFUN1:def 8
-      .=lower_sum(chi(A,A),D1) by A17,INTEGRA1:def 12
-      .=Sum(lower_volume(chi(A,A),D1)) by INTEGRA1:def 10;
+    reconsider D2 = D1 as Division of A by INTEGRA1:def 3;
+    (lower_sum_set(chi(A,A)))/.D1=(lower_sum_set(chi(A,A))).D1
+    by A17,PARTFUN1:def 8
+      .=lower_sum(chi(A,A),D2) by A17,INTEGRA1:def 12
+      .=Sum(lower_volume(chi(A,A),D2)) by INTEGRA1:def 10;
     hence thesis by INTEGRA1:25;
   end;
   then (lower_sum_set chi(A,A))|divs A is constant  by PARTFUN2:54;
@@ -169,7 +171,7 @@ A21:  D1 in dom lower_sum_set(chi(A,A)) & (lower_sum_set(chi(A,A))).D1=x1
       then
 A22:  D1 in dom ((lower_sum_set(chi(A,A)))|(divs A)) by RELAT_1:90;
       then ((lower_sum_set(chi(A,A)))|(divs A)).D1=(lower_sum_set(chi(A,A))).
-      D1 by FUNCT_1:68;
+      D1 by FUNCT_1:70;
       hence thesis by A21,A22,FUNCT_1:def 5;
     end;
     hence thesis;
@@ -329,30 +331,30 @@ A3: for D1 being Element of divs A st D1 in divs A /\ dom upper_sum_set(f)
     assume D1 in divs A /\ dom upper_sum_set(f);
     then
 A4: D1 in dom upper_sum_set(f) by XBOOLE_0:def 4;
-    then
-A5: (upper_sum_set(f))/.D1=(upper_sum_set(f)).D1 by PARTFUN1:def 8
-      .=upper_sum(f,D1) by A4,INTEGRA1:def 11
-      .=Sum(upper_volume(f,D1)) by INTEGRA1:def 9;
-    upper_volume(f,D1)=<*(0 qua Real)*>
+    reconsider D2 = D1 as Division of A by INTEGRA1:def 3;
+A5: (upper_sum_set(f))/.D1=(upper_sum_set(f)).D1 by A4,PARTFUN1:def 8
+      .=upper_sum(f,D2) by A4,INTEGRA1:def 11
+      .=Sum(upper_volume(f,D2)) by INTEGRA1:def 9;
+    upper_volume(f,D2)=<*(0 qua Real)*>
     proof
-A6:   len upper_volume(f,D1)=len D1 by INTEGRA1:def 7
+A6:   len upper_volume(f,D2)=len D2 by INTEGRA1:def 7
         .= 1 by A1,Th1;
-      rng D1 <> {};
+      rng D2 <> {};
       then
-A7:   len D1 = 1 & 1 in dom D1 by A1,Th1,FINSEQ_3:34;
-A8:   divset(D1,1)=A
+A7:   len D2 = 1 & 1 in dom D2 by A1,Th1,FINSEQ_3:34;
+A8:   divset(D2,1)=A
       proof
-A9:     upper_bound divset(D1,len D1)=D1.len D1 by A7,INTEGRA1:def 5
+A9:     upper_bound divset(D2,len D2)=D2.len D2 by A7,INTEGRA1:def 5
           .= upper_bound A by INTEGRA1:def 2;
-        divset(D1,1)=[.lower_bound divset(D1,len D1),
-        upper_bound divset(D1,len D1).]
+        divset(D2,1)=[.lower_bound divset(D2,len D2),
+        upper_bound divset(D2,len D2).]
         by A7,INTEGRA1:5
           .=[.lower_bound A, upper_bound A.] by A7,A9,INTEGRA1:def 5;
         hence thesis by INTEGRA1:5;
       end;
       1 in Seg len D1 by A7,FINSEQ_1:3;
   then 1 in dom D1 by FINSEQ_1:def 3;
-      then upper_volume(f,D1).1=(upper_bound rng(f|divset(D1,1)))*vol(A) by A8,
+      then upper_volume(f,D2).1=(upper_bound rng(f|divset(D2,1)))*vol(A) by A8,
 INTEGRA1:def 7
         .=0 by A1;
       hence thesis by A6,FINSEQ_1:57;
@@ -376,7 +378,8 @@ A13:  D1 in dom upper_sum_set(f) & (upper_sum_set(f)).D1=x1 by PARTFUN1:26;
       then
 A14:  D1 in dom ((upper_sum_set(f))|(divs A)) by RELAT_1:90;
 
-then ((upper_sum_set(f))|(divs A)).D1=(upper_sum_set(f)).D1 by FUNCT_1:68;
+then ((upper_sum_set(f))|(divs A)).D1=(upper_sum_set(f)).D1 by FUNCT_1:70
+;
       hence thesis by A13,A14,FUNCT_1:def 5;
     end;
     hence thesis;
@@ -423,30 +426,30 @@ A3: for D1 being Element of divs A st D1 in divs A /\ dom lower_sum_set(f)
     assume D1 in divs A /\ dom lower_sum_set(f);
     then
 A4: D1 in dom lower_sum_set(f) by XBOOLE_0:def 4;
-    then
-A5: (lower_sum_set(f))/.D1=(lower_sum_set(f)).D1 by PARTFUN1:def 8
-      .=lower_sum(f,D1) by A4,INTEGRA1:def 12
-      .=Sum(lower_volume(f,D1)) by INTEGRA1:def 10;
-    lower_volume(f,D1)=<*(0 qua Real)*>
+    reconsider D2 = D1 as Division of A by INTEGRA1:def 3;
+A5: (lower_sum_set(f))/.D1=(lower_sum_set(f)).D1 by A4,PARTFUN1:def 8
+      .=lower_sum(f,D2) by A4,INTEGRA1:def 12
+      .=Sum(lower_volume(f,D2)) by INTEGRA1:def 10;
+    lower_volume(f,D2)=<*(0 qua Real)*>
     proof
-A6:   len lower_volume(f,D1)=len D1 by INTEGRA1:def 8
+A6:   len lower_volume(f,D2)=len D2 by INTEGRA1:def 8
         .= 1 by A1,Th1;
-      rng D1 <> {};
+      rng D2 <> {};
       then
-A7:   len D1 = 1 & 1 in dom D1 by A1,Th1,FINSEQ_3:34;
-A8:   divset(D1,1)=A
+A7:   len D2 = 1 & 1 in dom D2 by A1,Th1,FINSEQ_3:34;
+A8:   divset(D2,1)=A
       proof
-A9:     upper_bound divset(D1,len D1)=D1.len D1 by A7,INTEGRA1:def 5
+A9:     upper_bound divset(D2,len D2)=D2.len D2 by A7,INTEGRA1:def 5
           .= upper_bound A by INTEGRA1:def 2;
-        divset(D1,1)=[.lower_bound divset(D1,len D1),
-        upper_bound divset(D1,len D1).]
+        divset(D2,1)=[.lower_bound divset(D2,len D2),
+        upper_bound divset(D2,len D2).]
         by A7,INTEGRA1:5
           .=[.lower_bound A, upper_bound A.] by A7,A9,INTEGRA1:def 5;
         hence thesis by INTEGRA1:5;
       end;
-      1 in Seg len D1 by A7,FINSEQ_1:3;
-  then 1 in dom D1 by FINSEQ_1:def 3;
-      then lower_volume(f,D1).1=(lower_bound rng(f|divset(D1,1)))*vol(A) by A8,
+      1 in Seg len D2 by A7,FINSEQ_1:3;
+  then 1 in dom D2 by FINSEQ_1:def 3;
+      then lower_volume(f,D2).1=(lower_bound rng(f|divset(D2,1)))*vol(A) by A8,
 INTEGRA1:def 8
         .=0 by A1;
       hence thesis by A6,FINSEQ_1:57;
@@ -470,7 +473,8 @@ A13:  D1 in dom lower_sum_set(f) & (lower_sum_set(f)).D1=x1 by PARTFUN1:26;
       then
 A14:  D1 in dom ((lower_sum_set(f))|(divs A)) by RELAT_1:90;
 
-then ((lower_sum_set(f))|(divs A)).D1=(lower_sum_set(f)).D1 by FUNCT_1:68;
+then ((lower_sum_set(f))|(divs A)).D1=(lower_sum_set(f)).D1 by FUNCT_1:70
+;
       hence thesis by A13,A14,FUNCT_1:def 5;
     end;
     hence thesis;
@@ -580,8 +584,7 @@ A17:  (lower_bound rng f) <= integral(f)/vol(A) & integral(f)/vol(A) <=
       by A15,A16,XREAL_1:79,81;
       reconsider a=integral(f)/vol(A) as Real;
       integral(f)=a*vol(A) by A16,XCMPLX_1:88;
-      hence ex a st lower_bound rng f<=a & a<=upper_bound rng f &
-      integral(f)=a*vol(A) by A17;
+      hence thesis by A17;
     end;
     suppose vol(A)=0;
       then
@@ -594,8 +597,7 @@ A19:    x in dom f by SUBSET_1:10;
         lower_bound rng f <= f.x & f.x <= upper_bound rng f by A3,A19;
         hence thesis by XXREAL_0:2;
       end;
-      hence ex a st lower_bound rng f<=a & a<=upper_bound rng f &
-      integral(f)=a*vol(A) by A18;
+      hence thesis by A18;
     end;
   end;
   hence thesis;
@@ -629,7 +631,7 @@ A5:     (delta T).n=0;
         delta(T.n)=0 by A5,INTEGRA2:def 3;
         then
 A6:     max mm=0 by INTEGRA1:def 19;
-        reconsider D=T.n as Element of divs A;
+        reconsider D=T.n as Division of A;
 A7:     for k being Element of NAT st k in dom D holds vol(divset(D,k))=0
         proof
           let k be Element of NAT;
@@ -651,7 +653,7 @@ B8:  k in dom D by FINSEQ_1:def 3;
           len upper_volume(chi(A,A),D)=len D by INTEGRA1:def 7;
           then
 A9:       len upper_volume(chi(A,A),D)=len ((len D)|->(0 qua Real)) by
-FINSEQ_2:69;
+FINSEQ_1:def 18;
           for j be Nat holds 1 <= j & j <= len upper_volume(chi(A,A),D)
           implies (upper_volume(chi(A,A),D)).j=((len D)|->(0 qua Real)).j
           proof
@@ -674,7 +676,7 @@ A11:        upper_volume(chi(A,A),D).j=vol(divset(D,j)) by INTEGRA1:22;
       end;
       then delta(T) is non-zero by SEQ_1:7;
       then delta(T) is convergent_to_0 by A2,A3,FDIFF_1:def 1;
-      hence lower_sum(f,T) is convergent & lim lower_sum(f,T)=lower_integral(f)
+      hence thesis
       by A1,A4,INTEGRA3:19;
     end;
     suppose
@@ -683,7 +685,7 @@ A13:  for n being Nat holds lower_sum(f,T).n = 0
       proof
         let n be Nat;
         reconsider nn=n as Element of NAT by ORDINAL1:def 13;
-        reconsider D=T.nn as Element of divs A;
+        reconsider D=T.nn as Division of A;
         lower_sum(f,D)=0
         proof
           rng D <> {};
@@ -746,7 +748,7 @@ A4:   vol(A)<>0;
         then delta(T.n)=0 by INTEGRA2:def 3;
         then
 A5:     max rng upper_volume(chi(A,A),T.n)=0 by INTEGRA1:def 19;
-        reconsider D=T.n as Element of divs A;
+        reconsider D=T.n as Division of A;
 A6:     for k being Element of NAT st k in dom D holds vol(divset(D,k))=0
         proof
           let k be Element of NAT;
@@ -768,7 +770,7 @@ B7:  k in dom D by FINSEQ_1:def 3;
           len upper_volume(chi(A,A),D)=len D by INTEGRA1:def 7;
           then
 A8:       len upper_volume(chi(A,A),D)=len ((len D)|->(0 qua Real)) by
-FINSEQ_2:69;
+FINSEQ_1:def 18;
           for j be Nat holds 1 <= j & j <= len upper_volume(chi(A,A),D)
           implies (upper_volume(chi(A,A),D)).j=((len D)|->(0 qua Real)).j
           proof
@@ -791,7 +793,7 @@ A10:        upper_volume(chi(A,A),D).j=vol(divset(D,j)) by INTEGRA1:22;
       end;
       then delta(T) is non-zero by SEQ_1:7;
       then delta(T) is convergent_to_0 by A2,A3,FDIFF_1:def 1;
-      hence upper_sum(f,T) is convergent & lim upper_sum(f,T)=upper_integral(f)
+      hence thesis
       by A1,A4,INTEGRA3:20;
     end;
     suppose
@@ -800,7 +802,7 @@ A12:  for n being Nat holds upper_sum(f,T).n = 0
       proof
         let n be Nat;
         reconsider nn=n as Element of NAT by ORDINAL1:def 13;
-        reconsider D=T.nn as Element of divs A;
+        reconsider D=T.nn as Division of A;
         upper_sum(f,D)=0
         proof
           rng D <> {};
@@ -856,6 +858,7 @@ A2: f|A is bounded_above & f|A is bounded_below;
     assume r in rng upper_sum_set(f);
     then consider D being Element of divs A such that
 A3: D in dom upper_sum_set(f) & (upper_sum_set(f)).D=r by PARTFUN1:26;
+    reconsider D as Division of A by INTEGRA1:def 3;
     r = upper_sum(f,D) by A3,INTEGRA1:def 11;
     then
 A4: lower_sum(f,D) <= r by A1,INTEGRA1:30;
@@ -871,6 +874,7 @@ A4: lower_sum(f,D) <= r by A1,INTEGRA1:30;
     assume r in rng lower_sum_set(f);
     then consider D being Element of divs A such that
 A5: D in dom lower_sum_set(f) & (lower_sum_set(f)).D=r by PARTFUN1:26;
+    reconsider D as Division of A by INTEGRA1:def 3;
     r = lower_sum(f,D) by A5,INTEGRA1:def 12;
     then
 A6: upper_sum(f,D) >= r by A1,INTEGRA1:30;
@@ -882,7 +886,7 @@ A6: upper_sum(f,D) >= r by A1,INTEGRA1:30;
 end;
 
 definition
-  let A be closed-interval Subset of REAL, IT be Element of divs A, n;
+  let A be closed-interval Subset of REAL, IT be Division of A, n;
   pred IT divide_into_equal n means
   :Def1:
   len IT = n & for i st i in dom IT
@@ -890,7 +894,7 @@ definition
 end;
 
 Lm3: for
-n st n > 0 & vol(A)>0 holds ex D being Element of divs A st len D = n &
+n st n > 0 & vol(A)>0 holds ex D being Division of A st len D = n &
 for i st i in dom D holds D.i=lower_bound A + vol(A)/n*i
 proof
   let n;
@@ -933,7 +937,7 @@ A12:    1 <= i & i <= len D by A10,FINSEQ_3:27;
 A13:    vol(A)/n>0 by A1,A2,XREAL_1:141;
         hence vol(A)/n*i>0 by A12,XREAL_1:131;
         vol(A)/n*i <= vol(A)/n*n by A3,A12,A13,XREAL_1:66;
-        hence vol(A)/n*i <= vol(A) by A1,XCMPLX_1:88;
+        hence thesis by A1,XCMPLX_1:88;
       end;
       then
 A14:  lower_bound A <= lower_bound A + vol(A)/n*i &
@@ -954,8 +958,8 @@ A15: D.(len D)=lower_bound A + vol(A) by A1,XCMPLX_1:88;
     vol(A)=upper_bound A-lower_bound A by INTEGRA1:def 6;
     hence thesis by A15;
   end;
-  then D is DivisionPoint of A by A8,INTEGRA1:def 2;
-  then reconsider D as Element of divs A by INTEGRA1:def 3;
+  then D is Division of A by A8,INTEGRA1:def 2;
+  then reconsider D as Division of A by INTEGRA1:def 3;
   take D;
   thus thesis by A3;
 end;
@@ -966,16 +970,17 @@ proof
   assume
 A1: vol(A)>0;
   defpred P[set,set] means
-  ex n being Element of NAT, e being Element of divs A st
+  ex n being Element of NAT, e being Division of A st
   n = $1 & e = $2 & e divide_into_equal n+1;
 A2: for n ex D being Element of divs A st P[n,D]
   proof
     let n;
-    consider D being Element of divs A such that
+    consider D being Division of A such that
 A3: len D = n+1 & for i st i in dom D holds D.i=lower_bound A+vol(A)/(n+1)*i
     by A1,Lm3;
+a1: D is Element of divs A by INTEGRA1:def 3;
     D divide_into_equal n+1 by A3,Def1;
-    hence thesis;
+    hence thesis by a1;
   end;
   consider T being Function of NAT,divs A such that
 A4: for n holds P[n,T.n] from FUNCT_2:sch 3(A2);
@@ -1002,8 +1007,8 @@ A7: (delta(T)).i = max rng upper_volume(chi(A,A),(T.i)) by INTEGRA1:def 19;
         then consider k such that
 A8:     k in dom upper_volume(chi(A,A),(T.i))&
         (upper_volume(chi(A,A),(T.i))).k=x1 by PARTFUN1:26;
-        reconsider D = T.i as Element of divs A;
-A9:     ex n being Element of NAT, e being Element of divs A st n = i & e = D &
+        reconsider D = T.i as Division of A;
+A9:     ex n being Element of NAT, e being Division of A st n = i & e = D &
         e divide_into_equal n+1 by A4;
         k in Seg len upper_volume(chi(A,A),(T.i)) by A8,FINSEQ_1:def 3;
         then
@@ -1032,8 +1037,7 @@ A15:          lower_bound
               lower_bound A+vol(A)/(i+1)-lower_bound A
               by A13,A14,INTEGRA1:def 5
                 .=vol(A)/(i+1)-(lower_bound A-lower_bound A);
-              hence upper_bound divset(D,k)-lower_bound divset(D,k)=
-              vol(A)/(i+1);
+              hence thesis;
             end;
             suppose
 A16:          k>1;
@@ -1047,7 +1051,7 @@ then D.(k-1)=lower_bound A + vol(A)/(len D)*(k-1) & D.k =
 lower_bound A + vol(A)/( len D)* k
               by A9,A17,Def1;
 
-hence upper_bound divset(D,k)-lower_bound divset(D,k)=vol(A)/(i+1)
+hence thesis
 by A9,A18,Def1;
             end;
           end;
@@ -1064,7 +1068,7 @@ A19:  rng upper_volume(chi(A,A),(T.i)) c= {vol(A)/(i+1)} by TARSKI:def 3;
         assume x1 in {vol(A)/(i+1)};
         then
 A20:    x1 = vol(A)/(i+1) by TARSKI:def 1;
-        reconsider D = T.i as Element of divs A;
+        reconsider D = T.i as Division of A;
         rng D <> {};
         then
 A21:    1 in dom D by FINSEQ_3:34;
@@ -1082,7 +1086,7 @@ A25:    vol(divset(D,1))=upper_bound divset(D,1) - lower_bound divset(D,1)
 by INTEGRA1:def 6;
 A26:    upper_bound divset(D,1)=D.1 & lower_bound divset(D,1)=lower_bound A
 by A21,INTEGRA1:def 5;
-A27:    ex n being Element of NAT, e being Element of divs A st n = i & e = D &
+A27:    ex n being Element of NAT, e being Division of A st n = i & e = D &
         e divide_into_equal n+1 by A4;
         then upper_bound divset(D,1)=lower_bound A+vol(A)/(len D)*1
         by A21,A26,Def1;
@@ -1168,7 +1172,7 @@ A2: for i being Nat holds (delta(T)).i=0
   proof
     let i be Nat;
     reconsider ii=i as Element of NAT by ORDINAL1:def 13;
-    reconsider D = T.ii as Element of divs A;
+    reconsider D = T.ii as Division of A;
 A3: len D = 1
     proof
       assume
@@ -1262,12 +1266,10 @@ proof
     suppose
 A1:   vol(A)<>0;
       vol(A) >= 0 by INTEGRA1:11;
-      hence ex T being DivSequence of A st delta(T) is convergent
-      & lim delta(T)=0 by A1,Lm4;
+      hence thesis by A1,Lm4;
     end;
     suppose vol(A)=0;
-      hence ex T being DivSequence of A st delta(T) is convergent
-      & lim delta(T)=0 by Lm5;
+      hence thesis by Lm5;
     end;
   end;
   hence thesis;
@@ -1372,7 +1374,7 @@ A8:       c in X /\ dom f by RFUNCT_3:def 10;
           then
 A9:       max+(f.c) <= b by RFUNCT_3:def 1;
           c in dom f by A8,XBOOLE_0:def 4;
-          hence max+(f).c <= b by A2,A9,RFUNCT_3:def 10;
+          hence thesis by A2,A9,RFUNCT_3:def 10;
         end;
         then consider r be real number such that
 A10:    r = b & for c being set st c in X /\ dom max+(f) holds max+(f).c <= r;
@@ -1447,7 +1449,7 @@ A8:       c in X /\ dom f by RFUNCT_3:def 11;
           then
 A9:       max-(f.c) <= -b by RFUNCT_3:def 2;
           c in dom f by A8,XBOOLE_0:def 4;
-          hence max-(f).c <= -b by A2,A9,RFUNCT_3:def 11;
+          hence thesis by A2,A9,RFUNCT_3:def 11;
         end;
         then consider r be real number such that
 A10:    r = -b & for c being set st c in X /\ dom max-(f) holds max-(f).c <= r;
@@ -1539,7 +1541,7 @@ A13:  for m st n <= m holds abs( osc.m - 0 )<a by A10,A11,SEQ_2:def 7;
         assume n <= m;
         then
 A14:    abs( osc.m - 0 )<a by A13;
-        reconsider D=T.m as Element of divs A;
+        reconsider D=T.m as Division of A;
 A15:    osc.m=(upper_sum(f,T)).m+(-lower_sum(f,T)).m by SEQ_1:11
           .=(upper_sum(f,T)).m+-(lower_sum(f,T)).m by SEQ_1:14
           .=(upper_sum(f,T)).m-(lower_sum(f,T)).m
@@ -1634,7 +1636,7 @@ A27:      upper_bound rng (f|divset(D,j))-lower_bound rng (f|divset(D,j))
             set m=lower_bound rng (f|divset(D,j));
             set M1=upper_bound rng (max+(f)|divset(D,j));
             set m1=lower_bound rng (max+(f)|divset(D,j));
-A28:        dom (f|divset(D,j)) = dom f /\ divset(D,j) by FUNCT_1:68;
+A28:        dom (f|divset(D,j)) = dom f /\ divset(D,j) by RELAT_1:90;
 A29:        dom f = A by FUNCT_2:def 1;
 A30:        dom (f|divset(D,j)) = A /\ divset(D,j) by A28,FUNCT_2:def 1;
 A31:        j in dom D by A19,FINSEQ_1:def 3;
@@ -1648,7 +1650,7 @@ A34:        rng (f|divset(D,j)) is bounded_above
             & rng (f|divset(D,j)) is bounded_below by Th18,Th19;
             dom f = dom max+(f) by RFUNCT_3:def 10;
 
-then dom (max+(f)|divset(D,j)) = A /\ divset(D,j) by A29,FUNCT_1:68;
+then dom (max+(f)|divset(D,j)) = A /\ divset(D,j) by A29,RELAT_1:90;
 
 then dom (max+(f)|divset(D,j)) <> {} by A31,INTEGRA1:10,XBOOLE_1:28;
             then
@@ -1684,7 +1686,7 @@ A41:                  x in dom(max+(f|divset(D,j))) by A39,RFUNCT_3:47;
 A42:                  x in dom(f|divset(D,j)) by RFUNCT_3:def 10;
                       now per cases by A40,RFUNCT_3:40;
                         suppose r=0;
-                          hence r <= M by A37;
+                          hence thesis by A37;
                         end;
                         suppose
 A43:                      r>0;
@@ -1720,7 +1722,7 @@ then (max+(f|divset(D,j))).x=max+(r1) by A45,RFUNCT_3:def 10
                           .= r by A37,A46,XXREAL_0:def 10;
 
 then r in rng (max+(f|divset(D,j))) by A47,FUNCT_1:def 5;
-                        hence r in rng (max+(f)|divset(D,j)) by RFUNCT_3:47;
+                        hence thesis by RFUNCT_3:47;
                       end;
                       hence thesis by A44;
                     end;
@@ -1776,7 +1778,7 @@ then (max+(f|divset(D,j))).x=max+(r) by A53,RFUNCT_3:def 10
                           .= r by A37,A54,XXREAL_0:def 10;
 
 then r in rng (max+(f|divset(D,j))) by A55,FUNCT_1:def 5;
-                        hence r in rng (max+(f)|divset(D,j)) by RFUNCT_3:47;
+                        hence thesis by RFUNCT_3:47;
                       end;
                       hence thesis by A52;
                     end;
@@ -1784,7 +1786,7 @@ then r in rng (max+(f|divset(D,j))) by A55,FUNCT_1:def 5;
                   end;
                   hence thesis by A35,A36,SEQ_4:def 5;
                 end;
-                hence M-m >= M1-m1;
+                hence thesis;
               end;
               suppose
 A56:            M > 0 & m <= 0;
@@ -1809,7 +1811,7 @@ A60:                  x in dom(max+(f|divset(D,j))) by A58,RFUNCT_3:47;
 A61:                  x in dom(f|divset(D,j)) by RFUNCT_3:def 10;
                       now per cases by A59,RFUNCT_3:40;
                         suppose r=0;
-                          hence r <= M by A56;
+                          hence thesis by A56;
                         end;
                         suppose
 A62:                      r>0;
@@ -1919,7 +1921,7 @@ hence ex r st (r in rng (max+(f)|divset(D,j)) & r < 0+s);
                   end;
                   hence thesis by A35,A36,SEQ_4:def 5;
                 end;
-                hence M-m >= M1-m1 by A56,XREAL_1:15;
+                hence thesis by A56,XREAL_1:15;
               end;
               suppose
 A79:            M <= 0 & m <= 0;
@@ -2045,7 +2047,7 @@ A98:        j in dom F;
             set r = F.j;
             j in Seg len F by A98,FINSEQ_1:def 3;
             then
-A99:        j in Seg len D by FINSEQ_2:109;
+A99:        j in Seg len D by FINSEQ_1:def 18;
   then j in dom D by FINSEQ_1:def 3;
             then UV1.j=(upper_bound (rng (max+(f)|divset(D,j))))*
             vol(divset(D,j))
@@ -2270,7 +2272,7 @@ A11:    f.y <= upper_bound rng f - abs(f.x-f.y) by A9,XREAL_1:21;
         by A11,XXREAL_0:2;
         then lower_bound rng f + abs(f.x-f.y) <= upper_bound rng f
         by XREAL_1:21;
-        hence abs(f.x-f.y) <= upper_bound rng f - lower_bound rng f
+        hence thesis
         by XREAL_1:21;
       end;
       suppose f.x < f.y;
@@ -2288,7 +2290,7 @@ A14:    f.x <= upper_bound rng f - abs(f.x-f.y) by A12,XREAL_1:21;
         by A14,XXREAL_0:2;
         then lower_bound rng f + abs(f.x-f.y) <= upper_bound rng f
         by XREAL_1:21;
-        hence abs(f.x-f.y) <= upper_bound rng f - lower_bound rng f
+        hence thesis
         by XREAL_1:21;
       end;
     end;
@@ -2352,7 +2354,7 @@ A12:    f.y <= upper_bound rng f - abs(f.x-f.y) by A10,XREAL_1:21;
         by A12,XXREAL_0:2;
         then lower_bound rng f + abs(f.x-f.y) <= upper_bound rng f
         by XREAL_1:21;
-        hence abs(f.x-f.y) <= upper_bound rng f - lower_bound rng f
+        hence thesis
         by XREAL_1:21;
       end;
       suppose f.x < f.y;
@@ -2370,7 +2372,7 @@ A15:    f.x <= upper_bound rng f - abs(f.x-f.y) by A13,XREAL_1:21;
         by A15,XXREAL_0:2;
         then lower_bound rng f + abs(f.x-f.y) <= upper_bound rng f
         by XREAL_1:21;
-        hence abs(f.x-f.y) <= upper_bound rng f - lower_bound rng f
+        hence thesis
         by XREAL_1:21;
       end;
     end;
@@ -2401,7 +2403,7 @@ A22:    g.y <= upper_bound rng g - abs(g.x-g.y) by A20,XREAL_1:21;
         by A22,XXREAL_0:2;
         then lower_bound rng g + abs(g.x-g.y) <= upper_bound rng g
         by XREAL_1:21;
-        hence abs(g.x-g.y) <= upper_bound rng g - lower_bound rng g
+        hence thesis
         by XREAL_1:21;
       end;
       suppose g.x < g.y;
@@ -2419,7 +2421,7 @@ A25:    g.x <= upper_bound rng g - abs(g.x-g.y) by A23,XREAL_1:21;
         by A25,XXREAL_0:2;
         then lower_bound rng g + abs(g.x-g.y) <= upper_bound rng g
         by XREAL_1:21;
-        hence abs(g.x-g.y) <= upper_bound rng g - lower_bound rng g
+        hence thesis
         by XREAL_1:21;
       end;
     end;
@@ -2488,7 +2490,7 @@ A14:  for m st n <= m holds abs( osc.m - 0 )<b/a by A11,A12,SEQ_2:def 7;
         assume n <= m;
         then
 A15:    abs( osc.m - 0 )<b/a by A14;
-        reconsider D=T.m as Element of divs A;
+        reconsider D=T.m as Division of A;
 A16:    osc.m=(upper_sum(f,T)).m+(-lower_sum(f,T)).m by SEQ_1:11
           .=(upper_sum(f,T)).m+-(lower_sum(f,T)).m by SEQ_1:14
           .=(upper_sum(f,T)).m-(lower_sum(f,T)).m
@@ -2613,7 +2615,7 @@ A36:        j in dom F;
             set r = F.j;
             j in Seg len F by A36,FINSEQ_1:def 3;
             then
-A37:        j in Seg len D by FINSEQ_2:109;
+A37:        j in Seg len D by FINSEQ_1:def 18;
   then j in dom D by FINSEQ_1:def 3;
             then UV1.j=(upper_bound (rng (g|divset(D,j))))*vol(divset(D,j))
             & LV1.j=(lower_bound (rng (g|divset(D,j))))*vol(divset(D,j))
@@ -2738,7 +2740,7 @@ A23:  n1 <= n & n2 <= n;
         then n1<=m & n2<=m by A23,XXREAL_0:2;
         then
 A24:    abs( osc.m - 0 )<(b/a)/2 & abs( osc1.m - 0 )<(b/a)/2 by A21,A22;
-        reconsider D=T.m as Element of divs A;
+        reconsider D=T.m as Division of A;
 A25:    osc.m=(upper_sum(f,T)).m+(-lower_sum(f,T)).m by SEQ_1:11
           .=(upper_sum(f,T)).m+-(lower_sum(f,T)).m by SEQ_1:14
           .=(upper_sum(f,T)).m-(lower_sum(f,T)).m
@@ -2902,7 +2904,7 @@ A50:        j in dom F;
             set r = F.j;
             j in Seg len F by A50,FINSEQ_1:def 3;
             then
-A51:        j in Seg len D by FINSEQ_2:109;
+A51:        j in Seg len D by FINSEQ_1:def 18;
   then j in dom D by FINSEQ_1:def 3;
             then UV2.j=(upper_bound (rng (h|divset(D,j))))*vol(divset(D,j))
             & LV2.j=(lower_bound (rng (h|divset(D,j))))*vol(divset(D,j))
@@ -2958,7 +2960,7 @@ A58:        j in dom H;
             set r = H.j;
             j in Seg len H by A58,FINSEQ_1:def 3;
             then
-A59:        j in Seg len D by FINSEQ_2:109;
+A59:        j in Seg len D by FINSEQ_1:def 18;
   then j in dom D by FINSEQ_1:def 3;
             then UV.j=(upper_bound (rng (f|divset(D,j))))*vol(divset(D,j))
             & LV.j=(lower_bound (rng (f|divset(D,j))))*vol(divset(D,j))
@@ -3007,7 +3009,7 @@ A64:        j in dom G;
             set r = G.j;
             j in Seg len G by A64,FINSEQ_1:def 3;
             then
-A65:        j in Seg len D by FINSEQ_2:109;
+A65:        j in Seg len D by FINSEQ_1:def 18;
   then j in dom D by FINSEQ_1:def 3;
             then UV1.j=(upper_bound (rng (g|divset(D,j))))*vol(divset(D,j))
             & LV1.j=(lower_bound (rng (g|divset(D,j))))*vol(divset(D,j))
@@ -3136,7 +3138,7 @@ A21:  r=0;
         then abs((f(#)g).x-(f(#)g).y)<=r*(abs(g.x-g.y)+abs(f.x-f.y)) by A13;
         hence thesis by A21,COMPLEX1:132;
       end;
-      hence f(#)g is integrable by A1,A2,A7,Th27;
+      hence thesis by A1,A2,A7,Th27;
     end;
     suppose r>0;
       hence thesis by A1,A2,A3,A4,A7,A13,Th28;

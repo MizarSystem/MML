@@ -1,0 +1,399 @@
+:: Equivalence of Epsilon, Nondeterministic [Finite] Automata and Deterministic 
+:: [Finite] Automata
+::  by Micha{\l} Trybulec
+:: 
+:: Received May 25, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, FUNCT_1, FINSEQ_1, RELAT_1, ALGSEQ_1, AFINSQ_1, LANG1,
+      FSM_1, FSM_2, FINSET_1, PRELAMB, REWRITE1, REWRITE2, FLANG_1, CARD_1,
+      ARYTM, MCART_1, REWRITE3, FSM_3;
+ notations REWRITE2, CARD_1, TARSKI, XBOOLE_0, ZFMISC_1, XCMPLX_0, NAT_1,
+      DOMAIN_1, FUNCT_1, RELSET_1, FUNCT_2, XXREAL_0, FINSET_1, RELAT_1,
+      CARD_FIN, AFINSQ_1, SUBSET_1, REWRITE1, CATALAN2, FLANG_1, STRUCT_0,
+      NUMBERS, ORDINAL1, XREAL_0, REAL_1, MCART_1, FINSEQ_1, REWRITE3;
+ constructors CARD_1, XXREAL_0, NAT_1, FSM_1, MEMBERED, CARD_FIN, SUBSET_1,
+      REWRITE2, REWRITE1, RELAT_1, FUNCT_1, FLANG_1, NUMBERS, XCMPLX_0,
+      XREAL_0, WELLORD2, MCART_1, FINSEQ_1, REWRITE3, RELSET_1;
+ registrations CARD_1, RELSET_1, NAT_1, XREAL_0, XBOOLE_0, MEMBERED, XXREAL_0,
+      REWRITE2, STRUCT_0, SUBSET_1, REWRITE1, AFINSQ_1, RELAT_1, FUNCT_1,
+      ORDINAL1, NUMBERS, REAL_1, FINSET_1, FINSEQ_1, REWRITE3;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+reserve x, x1, x2, y, y1, y2, z, z1, z2, X, X1, X2, Y, Z for set;
+reserve E for non empty set;
+reserve e for Element of E;
+reserve u, u', u1, u2, v, v1, v2, w, w', w1, w2 for Element of E^omega;
+reserve F, F1, F2 for Subset of E^omega;
+reserve i, j, k, l, n for Nat;
+reserve TS for non empty transition-system over F;
+reserve s, s', s1, s2, t, t', t1, t2 for Element of TS;
+reserve S, T for Subset of TS;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Preliminaries - Natural Numbers
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem :: FSM_3:1
+  i >= k + l implies i >= k;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Preliminaries - Sequences
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem :: FSM_3:2
+  for a, b being FinSequence holds
+    a ^ b = a or b ^ a = a implies b = {};
+
+theorem :: FSM_3:3
+  for p, q being FinSequence st
+    k in dom p & len p + 1 = len q holds k + 1 in dom q;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Preliminaries - XFinSequences and Words in E^omega
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem :: FSM_3:4
+  len u = 1 implies ex e st <%e%> = u & e = u.0;
+
+theorem :: FSM_3:5
+  k <> 0 & len u <= k + 1 implies
+    ex v1, v2 st len v1 <= k & len v2 <= k & u = v1^v2;
+
+theorem :: FSM_3:6
+  for p, q being XFinSequence st <%x%>^p = <%y%>^q holds x = y & p = q;
+
+theorem :: FSM_3:7
+  len u > 0 implies ex e, u1 st u = <%e%>^u1;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Preliminaries - Lex
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+registration
+  let E;
+  cluster Lex(E) -> non empty;
+end;
+
+theorem :: FSM_3:8
+  not <%>E in Lex(E);
+
+theorem :: FSM_3:9
+  u in Lex(E) iff len u = 1;
+
+theorem :: FSM_3:10
+  u <> v & u in Lex(E) & v in Lex(E) implies
+    not ex w st u^w = v or w^u = v;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Transition Systems over Lex(E)
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem :: FSM_3:11
+  for TS being transition-system over Lex(E) holds
+    not <%>E in rng dom (the Tran of TS);
+
+theorem :: FSM_3:12
+  for TS being transition-system over Lex(E) holds
+    (the Tran of TS) is Function implies TS is deterministic;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Powerset Construction for Transition Systems
+:: This is a construction that limits new transitions to single character ones.
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let E, F, TS;
+  func _bool TS -> strict transition-system over Lex(E) means
+:: FSM_3:def 1
+
+    the carrier of it = bool (the carrier of TS) &
+    for S, w, T holds
+      [[S, w], T] in the Tran of it iff len w = 1 & T = w-succ_of (S, TS);
+end;
+
+registration
+  let E, F, TS;
+  cluster _bool TS -> non empty deterministic;
+end;
+
+registration
+  let E, F;
+  let TS be finite non empty transition-system over F;
+  cluster _bool TS -> finite;
+end;
+
+theorem :: FSM_3:13
+  x, <%e%> ==>* y, <%>E, _bool TS implies x, <%e%> ==>. y, <%>E, _bool TS;
+
+theorem :: FSM_3:14
+  len w = 1 implies (X = w-succ_of (S, TS) iff S, w ==>* X, _bool TS);
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Semiautomata
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let E, F;
+  struct (transition-system over F) semiautomaton over F
+  (#
+    carrier -> set,
+    Tran -> Relation of [: the carrier, F :], the carrier,
+    InitS -> Subset of the carrier
+  #);
+end;
+
+definition
+  let E, F;
+  let SA be semiautomaton over F;
+  attr SA is deterministic means
+:: FSM_3:def 2
+
+    (the transition-system of SA) is deterministic &
+    card (the InitS of SA) = 1;
+end;
+
+registration
+  let E, F;
+  cluster strict non empty finite deterministic semiautomaton over F;
+end;
+
+reserve SA for non empty semiautomaton over F;
+
+registration
+  let E, F, SA;
+  cluster the transition-system of SA -> non empty;
+end;
+
+definition
+  let E, F, SA;
+  func _bool SA -> strict semiautomaton over Lex(E) means
+:: FSM_3:def 3
+    the transition-system of it = _bool the transition-system of SA &
+    the InitS of it = { <%>E-succ_of (the InitS of SA, SA) };
+end;
+
+registration
+  let E, F, SA;
+  cluster _bool SA -> non empty deterministic;
+end;
+
+theorem :: FSM_3:15
+the carrier of _bool SA = bool the carrier of SA;
+
+registration
+  let E, F;
+  let SA be finite non empty semiautomaton over F;
+  cluster _bool SA -> finite;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Left-languages
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let E, F, SA;
+  let Q be Subset of SA;
+  func left-Lang(Q) -> Subset of E^omega equals
+:: FSM_3:def 4
+    { w : Q meets w-succ_of (the InitS of SA, SA) };
+end;
+
+theorem :: FSM_3:16
+  for Q being Subset of SA holds
+    w in left-Lang(Q) iff Q meets w-succ_of (the InitS of SA, SA);
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Automata
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let E, F;
+  struct (semiautomaton over F) automaton over F
+  (#
+    carrier -> set,
+    Tran -> Relation of [: the carrier, F :], the carrier,
+    InitS -> Subset of the carrier,
+    FinalS -> Subset of the carrier
+  #);
+end;
+
+definition
+  let E, F;
+  let A be automaton over F;
+  attr A is deterministic means
+:: FSM_3:def 5
+    (the semiautomaton of A) is deterministic;
+end;
+
+registration
+  let E, F;
+  cluster strict non empty finite deterministic automaton over F;
+end;
+
+reserve A for non empty automaton over F;
+reserve p, q for Element of A;
+reserve P, Q for Subset of A;
+
+registration
+  let E, F, A;
+  cluster the transition-system of A -> non empty;
+  cluster the semiautomaton of A -> non empty;
+end;
+
+definition
+  let E, F, A;
+  func _bool A -> strict automaton over Lex(E) means
+:: FSM_3:def 6
+    the semiautomaton of it = _bool the semiautomaton of A &
+    the FinalS of it =
+      { Q where Q is Element of it : Q meets (the FinalS of A) };
+end;
+
+registration
+  let E, F, A;
+  cluster _bool A -> non empty deterministic;
+end;
+
+theorem :: FSM_3:17
+  the carrier of _bool A = bool the carrier of A;
+
+registration
+  let E, F;
+  let A be finite non empty automaton over F;
+  cluster _bool A -> finite;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Languages Accepted by Automata
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let E, F, A;
+  let Q be Subset of A;
+  func right-Lang(Q) -> Subset of E^omega equals
+:: FSM_3:def 7
+    { w : w-succ_of (Q, A) meets (the FinalS of A) };
+end;
+
+theorem :: FSM_3:18
+  for Q being Subset of A holds
+    w in right-Lang(Q) iff w-succ_of (Q, A) meets (the FinalS of A);
+
+definition
+  let E, F, A;
+  func Lang(A) -> Subset of E^omega equals
+:: FSM_3:def 8
+    { u : ex p, q st
+            p in the InitS of A & q in the FinalS of A & p, u ==>* q, A };
+end;
+
+theorem :: FSM_3:19
+  w in Lang(A) iff
+    ex p, q st p in the InitS of A & q in the FinalS of A & p, w ==>* q, A;
+
+theorem :: FSM_3:20
+  w in Lang(A) iff w-succ_of (the InitS of A, A) meets (the FinalS of A);
+
+theorem :: FSM_3:21
+  Lang(A) = left-Lang(the FinalS of A);
+
+theorem :: FSM_3:22
+  Lang(A) = right-Lang(the InitS of A);
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Equivalence (with respect to the accepted languages)
+:: of nondeterministic [finite] automata and deterministic [finite] automata.
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+reserve TS for non empty transition-system over Lex(E) \/ {<%>E};
+
+theorem :: FSM_3:23
+  for R being RedSequence of ==>.-relation(TS) st
+    (R.1)`2 = <%e%>^u & (R.len R)`2 = <%>E holds
+      (R.2)`2 = <%e%>^u or (R.2)`2 = u;
+
+theorem :: FSM_3:24
+  for R being RedSequence of ==>.-relation(TS) st
+    (R.1)`2 = u & (R.len R)`2 = <%>E holds len R > len u;
+
+theorem :: FSM_3:25
+  for R being RedSequence of ==>.-relation(TS) st
+    (R.1)`2 = u^v & (R.len R)`2 = <%>E
+      ex l st l in dom R & (R.l)`2 = v;
+
+definition
+  let E, u, v;
+  func chop(u, v) -> Element of E^omega means
+:: FSM_3:def 9
+
+    for w st w^v = u holds it = w if ex w st w^v = u otherwise it = u;
+end;
+
+theorem :: FSM_3:26
+  for p being RedSequence of ==>.-relation(TS) st
+    p.1 = [x, u^w] & p.len p = [y, v^w]
+      ex q being RedSequence of ==>.-relation(TS) st
+        q.1 = [x, u] & q.len q = [y, v];
+
+theorem :: FSM_3:27
+  ==>.-relation(TS) reduces [x, u^w], [y, v^w] implies
+    ==>.-relation(TS) reduces [x, u], [y, v];
+
+theorem :: FSM_3:28
+  x, u^w ==>* y, v^w, TS implies x, u ==>* y, v, TS;
+
+theorem :: FSM_3:29
+  for p, q being Element of TS st p, u^v ==>* q, TS holds
+    ex r being Element of TS st p, u ==>* r, TS & r, v ==>* q, TS;
+
+theorem :: FSM_3:30
+  w^v-succ_of (X, TS) = v-succ_of (w-succ_of (X, TS), TS);
+
+theorem :: FSM_3:31
+  _bool TS is non empty transition-system over Lex(E) \/ {<%>E};
+
+theorem :: FSM_3:32
+  w-succ_of ({ v-succ_of (X, TS) }, _bool TS) = { v^w-succ_of (X, TS) };
+
+reserve SA for non empty semiautomaton over Lex(E) \/ {<%>E};
+
+theorem :: FSM_3:33
+  w-succ_of ({ <%>E-succ_of (X, SA) }, _bool SA) = { w-succ_of (X, SA) };
+
+reserve A for non empty automaton over Lex(E) \/ {<%>E};
+reserve P for Subset of A;
+
+theorem :: FSM_3:34
+  x in the FinalS of A & x in P implies P in the FinalS of _bool A;
+
+theorem :: FSM_3:35
+  X in the FinalS of _bool A implies X meets the FinalS of A;
+
+theorem :: FSM_3:36
+  the InitS of _bool A = { <%>E-succ_of (the InitS of A, A) };
+
+theorem :: FSM_3:37
+  w-succ_of ({ <%>E-succ_of (X, A) }, _bool A) = { w-succ_of (X, A) };
+
+theorem :: FSM_3:38
+  w-succ_of (the InitS of _bool A, _bool A) = { w-succ_of (the InitS of A, A) }
+;
+
+theorem :: FSM_3:39
+  Lang(A) = Lang(_bool A);
+
+theorem :: FSM_3:40
+  for A being non empty automaton over Lex(E) \/ {<%>E}
+    ex DA being non empty deterministic automaton over Lex(E) st
+      Lang(A) = Lang(DA);
+
+theorem :: FSM_3:41
+  for FA being non empty finite automaton over Lex(E) \/ {<%>E}
+    ex DFA being non empty deterministic finite automaton over Lex(E) st
+      Lang(FA) = Lang(DFA);

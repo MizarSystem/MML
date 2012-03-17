@@ -17,17 +17,17 @@ environ
       PBOOLE, MSSUBFAM, MSUALG_1, MSUALG_3, MSAFREE, MSATERM, PUA2MSS1,
       MSUALG_6, INSTALG1, GRAPH_1, CAT_1, XXREAL_0;
  constructors ENUMSET1, XXREAL_0, NAT_1, FINSEQ_4, MSSUBFAM, CAT_1, MSUALG_3,
-      MSATERM, MSAFREE1, PUA2MSS1, MSUALG_6, INSTALG1, XREAL_0;
+      MSATERM, MSAFREE1, PUA2MSS1, MSUALG_6, INSTALG1, XREAL_0, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
-      FUNCOP_1, XREAL_0, FINSEQ_1, FINSEQ_2, PBOOLE, STRUCT_0, MSUALG_1,
-      MSAFREE, INSTALG1, CAT_1, MSAFREE1;
+      FUNCOP_1, XREAL_0, FINSEQ_1, FINSEQ_2, STRUCT_0, MSUALG_1, RELSET_1,
+      MSAFREE, INSTALG1, CAT_1, MSAFREE1, MSSUBFAM, PBOOLE;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, STRUCT_0, MSUALG_1, MSUALG_3, PUA2MSS1, MSUALG_6,
       INSTALG1, PROB_2, MSAFREE1, XBOOLE_0, FUNCOP_1, PBOOLE;
  theorems TARSKI, ZFMISC_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1,
       FINSEQ_2, FINSEQ_3, FUNCT_3, MCART_1, ENUMSET1, FUNCT_6, FINSEQ_4,
       MONOID_1, CARD_3, PBOOLE, PRALG_2, MSUALG_3, INSTALG1, CAT_1, RELSET_1,
-      XBOOLE_0, XBOOLE_1, FUNCOP_1;
+      XBOOLE_0, XBOOLE_1, FUNCOP_1, PARTFUN1;
  schemes FUNCT_1, CLASSES1, PBOOLE, WELLORD2, XBOOLE_0;
 
 begin :: Preliminaries
@@ -47,7 +47,7 @@ A1: for i being set st i in I holds F.i = f(i) from PBOOLE:sch 4;
     proof
       let x be set;
       assume x in dom F;
-      then x in I by PBOOLE:def 3;
+      then x in I by PARTFUN1:def 4;
       then F.x = f|(A.x) by A1;
       hence thesis;
     end;
@@ -78,7 +78,7 @@ proof
     let i be set;
     assume
 A1: i in I;
-    then i in dom A by PBOOLE:def 3;
+    then i in dom A by PARTFUN1:def 4;
     then A.i in rng A & Union A = union rng A by CARD_3:def 4,FUNCT_1:def 5;
     then A.i c= Union A & F.i = f|(A.i) & (id A).i = id (A.i)
     by A1,Def1,MSUALG_3:def 1,ZFMISC_1:92;
@@ -96,7 +96,7 @@ proof
   let f,g be Function such that
 A1: rngs (f-MSF(I,A)) c= B;
 A2: dom ((g*f)-MSF(I,A)) = I & dom (g-MSF(I,B)) = I & dom (f-MSF(I,A)) = I &
-  I /\ I = I by PBOOLE:def 3;
+  I /\ I = I by PARTFUN1:def 4;
   then
 A3: dom ((g-MSF(I,B))**(f-MSF(I,A))) = I by PBOOLE:def 24;
   now
@@ -106,7 +106,7 @@ A4: i in I;
     then
 A5: ((g*f)-MSF(I,A)).i = (g*f)|(A.i) & (f-MSF(I,A)).i = f|(A.i) &
     (g-MSF(I,B)).i = g|(B.i) by Def1;
-    dom (f-MSF(I,A)) = I by PBOOLE:def 3;
+    dom (f-MSF(I,A)) = I by PARTFUN1:def 4;
     then (rngs (f-MSF(I,A))).i = rng (f|(A.i)) by A4,A5,FUNCT_6:31;
     then rng (f|(A.i)) c= B.i by A1,A4,PBOOLE:def 5;
     then (g*f)|(A.i) = g*(f|(A.i)) & (B.i)|(f|(A.i)) = f|(A.i)
@@ -338,7 +338,7 @@ registration
   cluster strict non-empty disjoint_valued MSAlgebra over S;
   existence
   proof consider X being non-empty ManySortedSet of the carrier of S;
-    take A = FreeMSA X; thus A is strict non-empty disjoint_valued;
+    take A = FreeMSA X; thus thesis;
   end;
 end;
 
@@ -399,8 +399,7 @@ A6:     s = <*y1*> by A5,FINSEQ_1:57;
         then y1 in {y1} & rng s = {y1} & rng s c= A
         by FINSEQ_1:56,TARSKI:def 1;
         hence y1 in A & y2 in A & y3 in A;
-        thus x = [1,<*y1*>] & y = {} or x = [2,<*y1,y2,y3*>] &
-        y = <*[0,<*y2,y3*>],[0,<*y1,y2*>]*> by A3,A4,A5,A6,MCART_1:23;
+        thus thesis by A3,A4,A5,A6,MCART_1:23;
       end;
       suppose
 A7:     x in [:{2},3-tuples_on A:];
@@ -426,8 +425,7 @@ A11:    y1 in {y1,y2,y3} & y2 in {y1,y2,y3} & y3 in {y1,y2,y3} &
         y = <*z1*>^<*z2*> by FINSEQ_1:def 9;
         hence y in [:{0},2-tuples_on A:]* by FINSEQ_1:def 11;
         take y1, y2, y3; thus y1 in A & y2 in A & y3 in A by A11;
-        thus x = [1,<*y1*>] & y = {} or x = [2,<*y1,y2,y3*>] &
-        y = <*[0,<*y2,y3*>],[0,<*y1,y2*>]*> by A7,A8,A9,A10,MCART_1:23;
+        thus thesis by A7,A8,A9,A10,MCART_1:23;
       end;
     end;
     consider Ar being Function such that
@@ -490,8 +488,7 @@ A26:    y1 in {y1,y2,y3} & y2 in {y1,y2,y3} & y3 in {y1,y2,y3} &
         then 0 in {0} & <*y1,y3*> in 2-tuples_on B by TARSKI:def 1;
         hence y in [:{0},2-tuples_on A:] by ZFMISC_1:106;
         take y1, y2, y3; thus y1 in A & y2 in A & y3 in A by A26;
-        thus x = [1,<*y1*>] & y = [0,<*y1,y1*>] or
-        x = [2,<*y1,y2,y3*>] & y = [0,<*y1,y3*>] by A22,A23,A24,A25,MCART_1:23;
+        thus thesis by A22,A23,A24,A25,MCART_1:23;
       end;
     end;
     consider R being Function such that
@@ -561,7 +558,7 @@ A38: [2,<*a,b,c*>] = [1,<*y1*>] & R.[2,<*a,b,c*>] = [0,<*y1,y1*>] or
     <*a,b,c*> = <*y1,y2,y3*> & R.[2,<*a,b,c*>] = [0,<*y1,y3*>] &
     <*a,b,c*>.1 = a & <*y1,y2,y3*>.1 = y1 & <*a,b,c*>.3 = c &
     <*y1,y2,y3*>.3 = y3 by A38,FINSEQ_1:62,ZFMISC_1:33;
-    hence (the ResultSort of S).[2,<*a,b,c*>] = [0,<*a,c*>];
+    hence thesis;
   end;
   correctness
   proof
@@ -783,7 +780,7 @@ A1: 2-tuples_on A1 c= 2-tuples_on A2 & 2-tuples_on A2 c= 2-tuples_on A1
   let x be set;
   assume x in A2;
   then <*x,x*> in 2-tuples_on A2 by Th10;
-  hence x in A1 by A1,Th11;
+  hence thesis by A1,Th11;
 end;
 
 registration
@@ -944,26 +941,22 @@ A1: for x be set st x in NAT ex y be set st y in NAT & P[x,y]
       suppose
 A2:     i = 0;
         take j = j0;
-        thus j in NAT & (i = 0 implies j = 2) & (i = 1 implies j = 1) &
-        (i = 2 implies j = 3) by A2;
+        thus thesis by A2;
       end;
       suppose
 A3:     i = 1;
         take j = j1;
-        thus j in NAT & (i = 0 implies j = 2) & (i = 1 implies j = 1) &
-        (i = 2 implies j = 3) by A3;
+        thus thesis by A3;
       end;
       suppose
 A4:     i = 2;
         take j = j2;
-        thus j in NAT & (i = 0 implies j = 2) & (i = 1 implies j = 1) &
-        (i = 2 implies j = 3) by A4;
+        thus thesis by A4;
       end;
       suppose
 A5:     i <> 0 & i <> 1 & i <> 2;
         take j = j0;
-        thus j in NAT & (i = 0 implies j = 2) & (i = 1 implies j = 1) &
-        (i = 2 implies j = 3) by A5;
+        thus thesis by A5;
       end;
     end;
     consider f being Function such that
@@ -1379,7 +1372,7 @@ proof
   [:{2},3-tuples_on A:] by XBOOLE_0:def 3;
   then o`1 in {1} & o`2 in 1-tuples_on A or
   o`1 in {2} & o`2 in 3-tuples_on A by MCART_1:10;
-  hence thesis by FINSEQ_2:109,TARSKI:def 1;
+  hence thesis by FINSEQ_1:def 18,TARSKI:def 1;
 end;
 
 theorem Th26:
@@ -1396,9 +1389,9 @@ A1: o`1 = 1 or len o`2 = 1;
 A2: o`1 in {1} & o`2 in 1-tuples_on A & o = [o`1,o`2] or
   o`1 in {2} & o`2 in 3-tuples_on A by MCART_1:10,23;
   then consider a being set such that
-A3: a in A & o`2 = <*a*> by A1,Th8,FINSEQ_2:109,TARSKI:def 1;
+A3: a in A & o`2 = <*a*> by A1,Th8,FINSEQ_1:def 18,TARSKI:def 1;
   reconsider a as Element of A by A3;
-  take a; thus thesis by A1,A2,A3,FINSEQ_2:109,TARSKI:def 1;
+  take a; thus thesis by A1,A2,A3,FINSEQ_1:def 18,TARSKI:def 1;
 end;
 
 theorem Th27:
@@ -1415,10 +1408,10 @@ A1: o`1 = 2 or len o`2 = 3;
 A2: o`1 in {1} & o`2 in 1-tuples_on A or
   o`1 in {2} & o`2 in 3-tuples_on A & o = [o`1,o`2] by MCART_1:10,23;
   then consider a,b,c being set such that
-A3: a in A & b in A & c in A & o`2 = <*a,b,c*> by A1,Th12,FINSEQ_2:109
+A3: a in A & b in A & c in A & o`2 = <*a,b,c*> by A1,Th12,FINSEQ_1:def 18
 ,TARSKI:def 1;
   reconsider a,b,c as Element of A by A3;
-  take a,b,c; thus thesis by A1,A2,A3,FINSEQ_2:109,TARSKI:def 1;
+  take a,b,c; thus thesis by A1,A2,A3,FINSEQ_1:def 18,TARSKI:def 1;
 end;
 
 theorem
@@ -1494,7 +1487,7 @@ A7:   dom ((Obj F)*<*a1,a2*>) = dom <*a1,a2*> by RELAT_1:46
       = [:{0},2-tuples_on the carrier of C2:] &
       p in 2-tuples_on the carrier of C2 by Def5;
       then [0,p] in the carrier of CatSign the carrier of C2 by ZFMISC_1:128;
-      hence x in the carrier of CatSign the carrier of C2 by A4,A5,A6;
+      hence thesis by A4,A5,A6;
     end;
     then Up is Function of the carrier of CatSign the carrier of C1,
     the carrier of CatSign the carrier of C2 by A3,FUNCT_2:def 1,RELSET_1:11;
@@ -1562,7 +1555,7 @@ A16:    dom ((Obj F)*<*a1*>) = dom <*a1*> by RELAT_1:46
         [1,p] in [:{1},1-tuples_on the carrier of C2:] by Def5,ZFMISC_1:128;
         then [1,p] in the carrier' of CatSign the carrier of C2
         by XBOOLE_0:def 3;
-        hence x in the carrier' of CatSign the carrier of C2
+        hence thesis
         by A11,A12,A14,A15;
       end;
       suppose a in [:{2},3-tuples_on the carrier of C1:];
@@ -1593,8 +1586,7 @@ then reconsider p = (Obj F)*<*a1,a2,a3*> as FinSequence by FINSEQ_1:def 2;
         [2,p] in [:{2},3-tuples_on the carrier of C2:] by Def5,ZFMISC_1:128;
         then [2,p] in the carrier' of CatSign the carrier of C2 by
 XBOOLE_0:def 3;
-        hence x in
-        the carrier' of CatSign the carrier of C2 by A11,A12,A17,A18;
+        hence thesis by A11,A12,A17,A18;
       end;
     end;
     then Up is Function of the carrier' of CatSign the carrier of C1,
@@ -1744,7 +1736,7 @@ proof
   assume
 A1: for a,b being Object of C holds (the Sorts of A).homsym(a,b) = Hom(a,b);
 A2: the carrier of CatSign the carrier of C = dom the Sorts of A
-  by PBOOLE:def 3;
+  by PARTFUN1:def 4;
   let a,b,c be Object of C;
   thus Args(compsym(a,b,c), A)
   = product ((the Sorts of A)*the_arity_of compsym(a,b,c)) by PRALG_2:10
@@ -1855,20 +1847,16 @@ A19:  f' in H(a,b) & g' in H(b,c) & <*g,f*> = <*g',f'*> &
       by A19,FINSEQ_1:61;
       hence F.<*g,f*> = R(a,b,c,g,f) by A19;
     end;
-    hence ex u being set st
-    (o`1 = 1 & ex a being Element of X() st o = idsym(a) &
-    ex F being Function of {{}}, H(a,a) st F = u & F.{} = I(a)) or
-    (o`1 = 2 & ex a,b,c being Element of X() st o = compsym(a,b,c) &
-    ex F being Function of product<*H(b,c),H(a,b)*>, H(a,c) st F = u &
-    for f,g being set st f in H(a,b) & g in H(b,c)
-    holds F.<*g,f*> = R(a,b,c,g,f)) by A10,A11;
+    hence thesis by A10,A11;
   end;
   consider O being Function such that
 A20: dom O = the carrier' of CS and
 A21: for o being set st o in the carrier' of CS holds Z[o,O.o]
   from CLASSES1:sch 1(A8);
-  reconsider S as ManySortedSet of the carrier of CS by A6,PBOOLE:def 3;
-  reconsider O as ManySortedSet of the carrier' of CS by A20,PBOOLE:def 3;
+  reconsider S as ManySortedSet of the carrier of CS by A6,PARTFUN1:def 4
+,RELAT_1:def 18;
+  reconsider O as ManySortedSet of the carrier' of CS by A20,PARTFUN1:def 4
+,RELAT_1:def 18;
   O is ManySortedFunction of S#*the Arity of CS, S*the ResultSort of CS
   proof
     let o be set;
@@ -1942,7 +1930,7 @@ A33: F = O.o & for f,g being set st f in H(a,b) & g in H(b,c)
   holds F.<*g,f*> = R(a,b,c,g,f) by A32;
   let f,g be Element of Y();
   assume f in H(a,b) & g in H(b,c);
-  hence Den(compsym(a,b,c),A).<*g,f*> = R(a,b,c,g,f) by A33;
+  hence thesis by A33;
 end;
 
 definition
@@ -2120,7 +2108,7 @@ A2:   z in (the Sorts of MSAlg C).x & z in (the Sorts of MSAlg C).y
       by XBOOLE_0:3;
       (the Sorts of MSAlg C).x <> {} & (the Sorts of MSAlg C).y <> {} &
       dom the Sorts of MSAlg C = the carrier of CatSign the carrier of C
-      by A2,PBOOLE:def 3;
+      by A2,PARTFUN1:def 4;
       then reconsider x,y as SortSymbol of CatSign the carrier of C
       by FUNCT_1:def 4;
       consider a,b being Object of C such that
@@ -2180,7 +2168,7 @@ A4: (the Sorts of A2).(f.s) = (the Sorts of B1).s &
   (the Sorts of A1).s = Hom(a,b) &
   (the Sorts of A2).(f.s) = Hom(F.a,F.b) by A1,A2,Def15,FUNCT_2:21;
   then H.s = hom(F,a,b) by A3,CAT_1:def 25;
-  hence H.i is Function of (the Sorts of A1).i, (the Sorts of B1).i by A4;
+  hence thesis by A4;
 end;
 
 theorem Th39:
@@ -2266,7 +2254,7 @@ A10: (H.homsym(a,b)).f = F.f & (H.homsym(b,c)).g = F.g by A1,FUNCT_1:72;
   then 1 in dom <*g,f*> & 2 in dom <*g,f*> by FINSEQ_1:4,TARSKI:def 2;
   then <*g',f'*>.2 = F.f & <*g',f'*>.1 = F.g & <*g',f'*>.1 = g' & <*g',f'*>.
   2 = f' by A2,A3,A4,A6,A7,A8,A9,A10,FINSEQ_1:61,MSUALG_3:24;
-  hence H#x = <*F.g,F.f*> by A8;
+  hence thesis by A8;
 end;
 
 canceled;

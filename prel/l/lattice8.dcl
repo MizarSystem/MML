@@ -10,10 +10,8 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -24,8 +22,6 @@
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_4"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="PBOOLE"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="WELLORD2"/>
@@ -47,50 +43,50 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="44"/>
-<Adjective nr="55"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="64"/>
-<Adjective nr="99"/>
-<Adjective nr="130"/>
-<Adjective nr="131"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="48"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="61"/>
+<Adjective nr="66"/>
+<Adjective nr="101"/>
+<Adjective nr="132"/>
+<Adjective nr="133"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICE8" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15" value="false"/>
+<Adjective nr="18" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="18">
+<Typ kind="M" nr="11">
 <Cluster/>
-<Func kind="K" nr="271">
+<Func kind="K" nr="229">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="43" value="false"/>
-<Adjective nr="67">
-<Func kind="K" nr="271">
-<LocusVar nr="1"/>
-</Func>
-</Adjective>
-<Adjective nr="68">
-<Func kind="K" nr="271">
-<LocusVar nr="1"/>
-</Func>
-</Adjective>
+<Adjective nr="42" value="false"/>
+<Adjective nr="47" value="false"/>
 <Adjective nr="69">
-<Func kind="K" nr="271">
+<Func kind="K" nr="229">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="141"/>
+<Adjective nr="70">
+<Func kind="K" nr="229">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="71">
+<Func kind="K" nr="229">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="143"/>
 </Cluster>
 </RCluster>
 <FCluster aid="LATTICE8" nr="1">
@@ -99,56 +95,56 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="291">
+<Func kind="K" nr="249">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="14" value="false"/>
+<Adjective nr="17" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LATTICE8" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14" value="false"/>
+<Adjective nr="17" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="9"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="293">
+<Func kind="K" nr="251">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="14" value="false"/>
+<Adjective nr="17" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LATTICE8" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14" value="false"/>
+<Adjective nr="17" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="55"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="64"/>
-<Adjective nr="130"/>
-<Adjective nr="131"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="61"/>
+<Adjective nr="66"/>
+<Adjective nr="132"/>
+<Adjective nr="133"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="5">
+<Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="4"/>
-<Adjective nr="17">
-<Func kind="K" nr="30">
+<Adjective nr="6"/>
+<Adjective nr="20">
+<Func kind="K" nr="31">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
@@ -158,21 +154,25 @@
 </Adjective>
 </Cluster>
 <Func kind="K" nr="30">
+<Func kind="K" nr="31">
+<Func kind="K" nr="31">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
 <Func kind="U" nr="1">
 <LocusVar nr="2"/>
 </Func>
+</Func>
+</Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="297">
+<Func kind="K" nr="255">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="14" value="false"/>
+<Adjective nr="17" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

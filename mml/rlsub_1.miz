@@ -8,16 +8,17 @@ environ
 
  vocabularies RLVECT_1, BOOLE, ARYTM_1, RELAT_1, FUNCT_1, BINOP_1, RLSUB_1,
       REALSET1, ARYTM, ALGSTR_0;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, REAL_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS,
+      ORDINAL1, XCMPLX_0, XREAL_0, NAT_1, REAL_1,
       MCART_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, REALSET1, DOMAIN_1,
       STRUCT_0, ALGSTR_0, RLVECT_1;
- constructors PARTFUN1, BINOP_1, REAL_1, NAT_1, REALSET1, RLVECT_1;
+ constructors PARTFUN1, BINOP_1, REAL_1, NAT_1, REALSET1, RLVECT_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, NUMBERS, REALSET1,
-      STRUCT_0, RLVECT_1, REAL_1, ORDINAL1, ALGSTR_0;
+      STRUCT_0, RLVECT_1, REAL_1, ORDINAL1, ALGSTR_0, XREAL_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions RLVECT_1, TARSKI, XBOOLE_0, REALSET1, BINOP_1, STRUCT_0, ALGSTR_0;
  theorems FUNCT_1, FUNCT_2, RLVECT_1, TARSKI, ZFMISC_1, RELAT_1, RELSET_1,
-      XBOOLE_0, XBOOLE_1, XCMPLX_0, STRUCT_0, ALGSTR_0;
+      XBOOLE_0, XBOOLE_1, XCMPLX_0, STRUCT_0, ALGSTR_0, XREAL_0;
  schemes XBOOLE_0;
 
 begin
@@ -106,7 +107,7 @@ A1: the carrier of V = V1;
   hence for v,u st v in V1 & u in V1 holds v + u in V1;
   let a,v;
   assume v in V1;
-  thus a * v in V1 by A1;
+  thus thesis by A1;
 end;
 
 theorem
@@ -141,7 +142,7 @@ A10: v = v1 + v2 and
 A11: v1 in V1 & v2 in V2 by A2;
 A12: a * v1 in V1 & a * v2 in V2 by A1,A11,Def1;
   a * v = a * v1 + a * v2 by A10,RLVECT_1:def 9;
-  hence a * v in V3 by A2,A12;
+  hence thesis by A2,A12;
 end;
 
 theorem
@@ -176,7 +177,8 @@ definition
   proof
     the carrier of V c= the carrier of V & 0.V = 0.V &
     the addF of V = (the addF of V)||the carrier of V &
-    the Mult of V = (the Mult of V) | [:REAL, the carrier of V:] by FUNCT_2:40;
+    the Mult of V = (the Mult of V) | [:REAL, the carrier of V:] by RELSET_1:34
+;
     hence thesis;
   end;
 end;
@@ -275,14 +277,14 @@ A1: the carrier of W = V1;
     then reconsider vv = v, uu = u as VECTOR of WW by A1;
     reconsider vw = vv + uu as Element of VW;
     vw in V1 by A1;
-    hence v + u in V1 by Th21;
+    hence thesis by Th21;
   end;
   let a,v;
   assume v in V1;
   then reconsider vv = v as VECTOR of WW by A1;
   reconsider vw = a * vv as Element of VW;
   vw in V1 by A1;
-  hence a * v in V1 by Th22;
+  hence thesis by Th22;
 end;
 
 theorem Th25:
@@ -413,40 +415,49 @@ A8:   x1 + v = 0.V by ALGSTR_0:def 11;
         .= (- 1) * x by A7;
       then reconsider y = v as VECTOR of W;
       take y;
-      thus x + y = 0.W by A2,A6,A8;
+      thus thesis by A2,A6,A8;
     end;
-    thus for a for x,y being VECTOR of W holds a * (x + y) = a * x + a * y
+    thus for a being real number
+     for x,y being VECTOR of W holds a * (x + y) = a * x + a * y
     proof
-      let a;
+      let a be real number;
+       reconsider a as Real by XREAL_0:def 1;
       let x,y be VECTOR of W;
       reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
-      thus a * (x + y) = MV.(a,x + y) by A7
+       a * (x + y) = MV.(a,x + y) by A7
         .= a * (x1 + y1) by A6
         .= a * x1 + a * y1 by RLVECT_1:def 9
         .= AV.(MV.(a,x1),a * y) by A7
         .= AV.(a * x, a * y) by A7
         .= a * x + a * y by A6;
+     hence thesis;
     end;
-    thus for a,b for x being VECTOR of W holds (a + b) * x = a * x + b * x
+    thus for a,b being real number
+     for x being VECTOR of W holds (a + b) * x = a * x + b * x
     proof
-      let a,b;
+      let a,b be real number;
+       reconsider a,b as Real by XREAL_0:def 1;
       let x be VECTOR of W;
       reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
-      thus (a + b) * x = (a + b) * y by A7
+       (a + b) * x = (a + b) * y by A7
         .= a * y + b * y by RLVECT_1:def 9
         .= AV.(MV.(a,y),b * x) by A7
         .= AV.(a * x,b * x) by A7
         .= a * x + b * x by A6;
+     hence thesis;
     end;
-    thus for a,b for x being VECTOR of W holds (a * b) * x = a * (b * x)
+    thus for a,b being real number
+     for x being VECTOR of W holds (a * b) * x = a * (b * x)
     proof
-      let a,b;
+      let a,b be real number;
+       reconsider a,b as Real by XREAL_0:def 1;
       let x be VECTOR of W;
       reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
-      thus (a * b) * x = (a * b) * y by A7
+       (a * b) * x = (a * b) * y by A7
         .= a * (b * y) by RLVECT_1:def 9
         .= MV.(a,b * x) by A7
         .= a * (b * x) by A7;
+     hence thesis;
     end;
     let x be VECTOR of W;
     reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
@@ -460,7 +471,7 @@ theorem Th33:
   V is Subspace of V
 proof
   thus the carrier of V c= the carrier of V & 0.V = 0.V;
-  thus thesis by FUNCT_2:40;
+  thus thesis by RELSET_1:34;
 end;
 
 theorem Th34:
@@ -573,7 +584,7 @@ registration
     the carrier of V is Subset of V iff the carrier of V c= the carrier of V;
     then reconsider V1 = the carrier of V as Subset of V;
     0.V = 0.V & the addF of V = (the addF of V)||V1 &
-    the Mult of V = (the Mult of V) | [:REAL,V1:] by FUNCT_2:40;
+    the Mult of V = (the Mult of V) | [:REAL,V1:] by RELSET_1:34;
     then RLSStruct(#the carrier of V,0.V,the addF of V,the Mult of V #)
     is Subspace of V by Th32;
     hence thesis;
@@ -786,29 +797,32 @@ A1:   for a for v,w be VECTOR of W, v',w' be VECTOR of V st v=v' & w=w'
 A2:     v' + w' = 0.V by ALGSTR_0:def 11;
         reconsider w=w' as VECTOR of W;
         take w;
-        thus v + w = 0.W by A2;
+        thus thesis by A2;
       end;
-      thus for a for v,w being VECTOR of W holds a * (v + w) = a * v + a * w
+      thus for a being real number
+       for v,w being VECTOR of W holds a * (v + w) = a * v + a * w
       proof
-        let a;
+        let a be real number;
         let v,w be VECTOR of W;
         reconsider v'=v,w'=w as VECTOR of V;
         thus a * (v + w) = a * (v' + w')
           .= a * v' + a * w' by RLVECT_1:def 9
           .= a * v + a * w;
       end;
-      thus for a,b for v being VECTOR of W holds (a + b) * v = a * v + b * v
+      thus for a,b being real number
+       for v being VECTOR of W holds (a + b) * v = a * v + b * v
       proof
-        let a,b;
+        let a,b be real number;
         let v be VECTOR of W;
         reconsider v'=v as VECTOR of V;
         thus (a + b) * v = (a + b) * v'
           .= a * v' + b * v' by RLVECT_1:def 9
           .= a * v + b * v;
       end;
-      thus for a,b for v being VECTOR of W holds (a * b) * v = a * (b * v)
+      thus for a,b being real number
+       for v being VECTOR of W holds (a * b) * v = a * (b * v)
       proof
-        let a,b;
+        let a,b be real number;
         let v be VECTOR of W;
         reconsider v'=v as VECTOR of V;
         thus (a * b) * v = (a * b) * v'
@@ -827,7 +841,7 @@ A2:     v' + w' = 0.V by ALGSTR_0:def 11;
     W is Subspace of V
     proof
       thus the carrier of W c= the carrier of V & 0.W = 0.V;
-      thus thesis by FUNCT_2:40;
+      thus thesis by RELSET_1:34;
     end;
     hence thesis;
   end;
@@ -894,7 +908,7 @@ A1: for x being set holds x in X iff x in the carrier of V &
     proof
       let x be set;
       assume x in X;
-      hence x in the carrier of V by A1;
+      hence thesis by A1;
     end;
     then reconsider X as Subset of V;
     set Y = {v + u : u in W};

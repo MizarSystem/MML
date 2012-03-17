@@ -9,7 +9,6 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="FINSUB_1"/>
@@ -31,7 +30,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="138">
+<Func kind="K" nr="130">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -45,12 +44,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="142">
+<Func kind="K" nr="134">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="53"/>
-<Adjective nr="70"/>
+<Adjective nr="57"/>
+<Adjective nr="74"/>
 </Cluster>
 </FCluster>
 </Registrations>

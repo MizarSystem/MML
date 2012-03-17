@@ -46,7 +46,7 @@ A3: (for x st x in dom f holds f.x = g.x);
   assume [x,y] in f;
   then y = f.x & x in dom f by FUNCT_1:8;
   then y = g.x & x in dom g by A2,A3;
-  hence [x,y] in g by FUNCT_1:def 4;
+  hence thesis by FUNCT_1:def 4;
 end;
 
 theorem
@@ -63,7 +63,7 @@ A3: [x,y] in g;
     then [x,f.x] in f by FUNCT_1:8;
     hence thesis by A2,A3,FUNCT_1:def 1;
   end;
-  hence f = g by RELAT_1:def 2;
+  hence thesis by RELAT_1:def 2;
 end;
 
 Lm1: rng f /\ rng h = {} & x in dom f & y in dom h implies f.x <> h.y
@@ -85,10 +85,7 @@ proof
   hence thesis by FUNCT_1:8;
 end;
 
-theorem
-  h c= f implies g*h c= g*f & h*g c= f*g by RELAT_1:48,49;
-
-canceled;
+canceled 2;
 
 theorem
   {[x,y]} is Function;
@@ -97,7 +94,7 @@ Lm2: [x,y] in {[x1,y1]} implies x = x1 & y = y1
 proof
   assume [x,y] in {[x1,y1]};
   then [x,y] = [x1,y1] by TARSKI:def 1;
-  hence x = x1 & y = y1 by ZFMISC_1:33;
+  hence thesis by ZFMISC_1:33;
 end;
 
 theorem
@@ -105,7 +102,7 @@ theorem
 proof
   assume f = {[x,y]};
   then [x,y] in f by TARSKI:def 1;
-  hence f.x = y by FUNCT_1:8;
+  hence thesis by FUNCT_1:8;
 end;
 
 canceled;
@@ -124,11 +121,11 @@ A1: dom f = {x};
       then y in {x} & z in rng f & rng f = {f.x}
       by A1,FUNCT_1:14,RELAT_1:def 4,def 5;
       then y = x & z = f.x by TARSKI:def 1;
-      hence [y,z] in g by TARSKI:def 1;
+      hence thesis by TARSKI:def 1;
     end;
     assume [y,z] in g;
     then y = x & z = f.x & x in dom f by A1,Lm2,TARSKI:def 1;
-    hence [y,z] in f by FUNCT_1:def 4;
+    hence thesis by FUNCT_1:def 4;
   end;
   hence thesis by RELAT_1:def 2;
 end;
@@ -203,31 +200,25 @@ A2: f is one-to-one;
   hence thesis by Th25;
 end;
 
-theorem
-  f /\ X is Function by Th6,XBOOLE_1:17;
+registration let f,X;
+ cluster f /\ X -> Function-like;
+ coherence by Th6,XBOOLE_1:17;
+end;
+
+canceled 2;
 
 theorem
-  h = f /\ g implies dom h c= dom f /\ dom g & rng h c= rng f /\ rng g
-  by RELAT_1:14,27;
-
-theorem
-  h = f /\ g & x in dom h implies h.x = f.x & h.x = g.x
+  x in dom(f /\ g) implies (f /\ g).x = f.x
 proof
-  assume
-A1: h = f /\ g;
-  set y = h.x;
-  assume x in dom h;
-  then [x,y] in h by FUNCT_1:def 4;
-  then [x,y] in f & [x,y] in g by A1,XBOOLE_0:def 4;
+  set y = (f /\ g).x;
+  assume x in dom(f /\ g);
+  then [x,y] in (f /\ g) by FUNCT_1:def 4;
+  then [x,y] in f by XBOOLE_0:def 4;
   hence thesis by FUNCT_1:8;
 end;
 
 theorem
-  (f is one-to-one or g is one-to-one) & h = f /\ g implies h is one-to-one
-proof
-  f /\ g c= f & f /\ g c= g & f /\ g is Function by Th6,XBOOLE_1:17;
-  hence thesis by Th26;
-end;
+   f is one-to-one implies f /\ g is one-to-one by Th26,XBOOLE_1:17;
 
 theorem
   dom f misses dom g implies f \/ g is Function
@@ -265,23 +256,12 @@ A1: h = f \/ g;
   assume x in dom f or x in dom g;
   then [x,f.x] in f or [x,g.x] in g by FUNCT_1:def 4;
   then [x,f.x] in h or [x,g.x] in h by A1,XBOOLE_0:def 3;
-  hence x in dom h by RELAT_1:def 4;
+  hence thesis by RELAT_1:def 4;
 end;
 
-theorem
-  h = f \/ g implies dom h = dom f \/ dom g & rng h = rng f \/ rng g
-  by RELAT_1:13,26;
+canceled 2;
 
-theorem Th34:
-  x in dom f & h = f \/ g implies h.x = f.x
-proof
-  assume x in dom f;
-  then [x,f.x] in f by FUNCT_1:def 4;
-  then h = f \/ g implies [x,f.x] in h by XBOOLE_0:def 3;
-  hence thesis by FUNCT_1:8;
-end;
-
-theorem
+theorem Th35:
   x in dom g & h = f \/ g implies h.x = g.x
 proof
   assume x in dom g;
@@ -313,19 +293,19 @@ A3: rng f /\ rng g = {};
 A4: x1 in dom h & x2 in dom h and
 A5: h.x1 = h.x2;
     (x1 in dom f & x2 in dom f implies h.x1 = f.x1 & h.x2 = f.x2) &
-    (x1 in dom g & x2 in dom g implies h.x1 = g.x1 & h.x2 = g.x2) by A2,Th34;
+    (x1 in dom g & x2 in dom g implies h.x1 = g.x1 & h.x2 = g.x2) by A2,Th35;
     then
 A6: x1 in dom f & x2 in dom f or x1 in dom g & x2 in dom g implies x1 = x2
     by A1,A5,FUNCT_1:def 8;
     now
       assume x1 in dom f & x2 in dom g or x1 in dom g & x2 in dom f;
       then h.x1 = f.x1 & h.x2 = g.x2 & f.x1 <> g.x2 or
-      h.x1 = g.x1 & h.x2 = f.x2 & f.x2 <> g.x1 by A2,A3,Lm1,Th34;
+      h.x1 = g.x1 & h.x2 = f.x2 & f.x2 <> g.x1 by A2,A3,Lm1,Th35;
       hence x1 = x2 by A5;
     end;
     hence x1 = x2 by A2,A4,A6,Lm3;
   end;
-  hence h is one-to-one by FUNCT_1:def 8;
+  hence thesis by FUNCT_1:def 8;
 end;
 
 theorem
@@ -500,7 +480,7 @@ A3: f.y = g.y;
 A4: f|{x} = g|{x} by A1,A2,Th90;
 A5: f|{y} = g|{y} by A1,A3,Th90;
   {x,y} = {x} \/ {y} by ENUMSET1:41;
-  hence f|{x,y} = g|{x,y} by A4,A5,RELAT_1:185;
+  hence thesis by A4,A5,RELAT_1:185;
 end;
 
 theorem
@@ -514,7 +494,7 @@ A3: f.z = g.z;
 A4: f|{x,y} = g|{x,y} by A1,A2,Th91;
 A5: f|{z} = g|{z} by A1,A3,Th90;
   {x,y,z} = {x,y} \/ {z} by ENUMSET1:43;
-  hence f|{x,y,z} = g|{x,y,z} by A4,A5,RELAT_1:185;
+  hence thesis by A4,A5,RELAT_1:185;
 end;
 
 :: from AMISTD_2, 2007.07.26, A.T.
@@ -527,7 +507,7 @@ registration
     let x,y1,y2;
     assume [x,y1] in f \ A & [x,y2] in f \ A;
     then [x,y1] in f & [x,y2] in f by XBOOLE_0:def 5;
-    hence y1 = y2 by FUNCT_1:def 1;
+    hence thesis by FUNCT_1:def 1;
   end;
 end;
 
@@ -538,7 +518,7 @@ proof
 A1: x in dom f \ dom g;
 A2: f \ g c= f by XBOOLE_1:36;
   dom f \ dom g c= dom (f \ g) by RELAT_1:15;
-  hence (f \ g).x = f.x by A1,A2,Th8;
+  hence thesis by A1,A2,Th8;
 end;
 
 :: missing, 2007.06.19, A.T.

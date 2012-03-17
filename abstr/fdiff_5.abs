@@ -8,14 +8,15 @@ environ
 
  vocabularies PRE_TOPC, BOOLE, FUNCT_1, ARYTM_1, ARYTM_3, RELAT_1, PARTFUN1,
       SEQ_1, SIN_COS, FDIFF_1, PREPOWER, GROUP_1, SQUARE_1, TAYLOR_1, FINSEQ_1,
-      ARYTM;
+      ARYTM, LIMFUNC1;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, PARTFUN1, PARTFUN2, NUMBERS,
-      RCOMP_1, REAL_1, VALUED_1, SEQ_1, FDIFF_1, NEWTON, PREPOWER, TAYLOR_1,
-      SIN_COS, RFUNCT_1, SQUARE_1, XXREAL_0;
+      XXREAL_0, RCOMP_1, REAL_1, VALUED_1, SEQ_1, FDIFF_1, NEWTON, PREPOWER,
+      TAYLOR_1, LIMFUNC1, SIN_COS, RFUNCT_1, SQUARE_1, XXREAL_2;
  constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, RCOMP_1, PARTFUN2, RFUNCT_1,
-      FDIFF_1, PREPOWER, SIN_COS, TAYLOR_1, SEQ_1, VALUED_1;
+      FDIFF_1, PREPOWER, SIN_COS, TAYLOR_1, SEQ_1, VALUED_1, LIMFUNC1,
+      XXREAL_2, RELSET_1;
  registrations ORDINAL1, RELSET_1, NUMBERS, NAT_1, INT_1, MEMBERED, RCOMP_1,
-      VALUED_0;
+      VALUED_0, XXREAL_0;
  requirements SUBSET, NUMERALS, ARITHM, BOOLE;
 
 
@@ -54,46 +55,44 @@ theorem :: FDIFF_5:3
 :: 4 f.x=1/x
 
 theorem :: FDIFF_5:4
-  Z c= dom f & (for x st x in Z holds f.x = x & f.x<>0) implies
-  f^ is_differentiable_on Z & for x st x in Z holds ((f^)`|Z).x= -1/x^2;
-
-:: 5 f.x=sin(1/x)
+  not 0 in Z implies
+  (id Z)^ is_differentiable_on Z &
+  for x st x in Z holds (((id Z)^)`|Z).x= -1/x^2;
 
 theorem :: FDIFF_5:5
-  Z c= dom (sin*(f^)) & (for x st x in Z holds f.x = x & f.x<>0) implies
-  sin*(f^) is_differentiable_on Z &
-  for x st x in Z holds ((sin*(f^))`|Z).x = -(1/x^2)*cos.(1/x);
+  not 0 in Z implies
+  sin*((id Z)^) is_differentiable_on Z &
+  for x st x in Z holds ((sin*((id Z)^))`|Z).x = -(1/x^2)*cos.(1/x);
 
 :: 6 f.x=cos(1/x)
 
 theorem :: FDIFF_5:6
-  Z c= dom (cos*(f^)) & (for x st x in Z holds f.x = x & f.x<>0) implies
-  cos*(f^) is_differentiable_on Z &
-  for x st x in Z holds ((cos*(f^))`|Z).x = 1/x^2*sin.(1/x);
+  not 0 in Z & Z c= dom (cos*((id Z)^)) implies
+  cos*((id Z)^) is_differentiable_on Z &
+  for x st x in Z holds ((cos*((id Z)^))`|Z).x = 1/x^2*sin.(1/x);
 
 :: 7 f.x=x*sin(1/x)
 
 theorem :: FDIFF_5:7
-  Z c= dom ((id Z)(#)(sin*(f^))) &
-  (for x st x in Z holds f.x = x & f.x<>0) implies
-  (id Z)(#)(sin*(f^)) is_differentiable_on Z & for x st x in Z holds
-  (((id Z)(#)(sin*(f^)))`|Z).x = sin.(1/x)-(1/x)*cos.(1/x);
+  Z c= dom ((id Z)(#)(sin*((id Z)^))) & not 0 in Z implies
+  (id Z)(#)(sin*((id Z)^)) is_differentiable_on Z & for x st x in Z holds
+  (((id Z)(#)(sin*((id Z)^)))`|Z).x = sin.(1/x)-(1/x)*cos.(1/x);
 
 :: 8 f.x=x*cos(1/x)
 
 theorem :: FDIFF_5:8
-  Z c= dom ((id Z)(#)(cos*(f^))) &
-  (for x st x in Z holds f.x = x & f.x<>0) implies
-  (id Z)(#)(cos*(f^)) is_differentiable_on Z & for x st x in Z holds
-  (((id Z)(#)(cos*(f^)))`|Z).x = cos.(1/x)+(1/x)*sin.(1/x);
+  Z c= dom ((id Z)(#)(cos*((id Z)^))) & not 0 in Z implies
+  (id Z)(#)(cos*((id Z)^)) is_differentiable_on Z & for x st x in Z holds
+  (((id Z)(#)(cos*((id Z)^)))`|Z).x = cos.(1/x)+(1/x)*sin.(1/x);
 
 :: 9 f.x=sin(1/x)*cos(1/x)
 
 theorem :: FDIFF_5:9
-  Z c= dom ((sin*(f^))(#)(cos*(f^))) &
-  (for x st x in Z holds f.x = x & f.x<>0) implies
-  (sin*(f^))(#)(cos*(f^)) is_differentiable_on Z & for x st x in Z holds
-  (((sin*(f^))(#)(cos*(f^)))`|Z).x =(1/x^2)*((sin.(1/x))^2-(cos.(1/x))^2);
+  Z c= dom ((sin*((id Z)^))(#)(cos*((id Z)^))) & not 0 in Z implies
+  (sin*((id Z)^))(#)(cos*((id Z)^)) is_differentiable_on Z &
+  for x st x in Z holds
+  (((sin*((id Z)^))(#)(cos*((id Z)^)))`|Z).x =
+    (1/x^2)*((sin.(1/x))^2-(cos.(1/x))^2);
 
 :: 10 f.x=sin(n*x)*(sin x #Z n)
 
@@ -130,61 +129,57 @@ theorem :: FDIFF_5:13
 :: 14 f.x=(1/x)*sin x
 
 theorem :: FDIFF_5:14
-  Z c= dom ((f^)(#)sin) & (for x st x in Z holds f.x = x & f.x<>0)
-  implies (f^)(#)sin is_differentiable_on Z &
-  for x st x in Z holds (((f^)(#)sin)`|Z).x =(1/x)*cos.x-(1/x^2)*sin.x;
+  not 0 in Z & Z c= dom (((id Z)^)(#)sin)
+  implies ((id Z)^)(#)sin is_differentiable_on Z &
+  for x st x in Z holds ((((id Z)^)(#)sin)`|Z).x =(1/x)*cos.x-(1/x^2)*sin.x;
 
 :: 15 f.x=(1/x)*cos x
 
 theorem :: FDIFF_5:15
-  Z c= dom ((f^)(#)cos) & (for x st x in Z holds f.x = x & f.x<>0)
-  implies (f^)(#)cos is_differentiable_on Z &
-  for x st x in Z holds (((f^)(#)cos)`|Z).x =-(1/x)*sin.x-(1/x^2)*cos.x;
+  not 0 in Z & Z c= dom (((id Z)^)(#)cos) implies
+  ((id Z)^)(#)cos is_differentiable_on Z &
+  for x st x in Z holds ((((id Z)^)(#)cos)`|Z).x =-(1/x)*sin.x-(1/x^2)*cos.x;
 
 :: 16 f.x=sin.x+x^(1/2)
 
 theorem :: FDIFF_5:16
-  Z c= dom (sin+( #R (1/2))*f) & (for x st x in Z holds f.x=x & f.x>0) implies
-  sin+( #R (1/2))*f is_differentiable_on Z & for x st x in Z holds
-  ((sin+( #R (1/2))*f)`|Z).x =cos.x+(1/2)* x #R (-1/2);
+  Z c= dom (sin+( #R (1/2))) implies
+  sin+( #R (1/2)) is_differentiable_on Z & for x st x in Z holds
+  ((sin+( #R (1/2)))`|Z).x =cos.x+(1/2)* x #R (-1/2);
 
 :: 17 f.x=x^2*sin(1/x)
 
 theorem :: FDIFF_5:17
-  Z c= dom (g(#)(sin*(f^))) & g=#Z 2 &
-  (for x st x in Z holds f.x = x & f.x<>0) implies
-  g(#)(sin*(f^)) is_differentiable_on Z &
-  for x st x in Z holds ((g(#)(sin*(f^)))`|Z).x = 2*x*sin.(1/x)-cos.(1/x);
+  not 0 in Z & Z c= dom (g(#)(sin*((id Z)^))) & g=#Z 2 implies
+  g(#)(sin*((id Z)^)) is_differentiable_on Z &
+  for x st x in Z holds ((g(#)(sin*((id Z)^)))`|Z).x =
+    2*x*sin.(1/x)-cos.(1/x);
 
 :: 18 f.x=x^2*cos(1/x)
 
 theorem :: FDIFF_5:18
-  Z c= dom (g(#)(cos*(f^))) & g=#Z 2 &
-  (for x st x in Z holds f.x = x & f.x<>0) implies
-  g(#)(cos*(f^)) is_differentiable_on Z & for x st x in Z holds
-  ((g(#)(cos*(f^)))`|Z).x = 2*x*cos.(1/x)+sin.(1/x);
-
-:: 19 f.x=ln(x)
+  not 0 in Z & Z c= dom (g(#)(cos*((id Z)^))) & g=#Z 2 implies
+  g(#)(cos*((id Z)^)) is_differentiable_on Z & for x st x in Z holds
+  ((g(#)(cos*((id Z)^)))`|Z).x = 2*x*cos.(1/x)+sin.(1/x);
 
 theorem :: FDIFF_5:19
-  Z c= dom (ln*f) & (for x st x in Z holds f.x = x & f.x > 0) implies
-  ln*f is_differentiable_on Z & for x st x in Z holds ((ln*f)`|Z).x = 1/x;
+  Z c= dom ln implies
+  ln is_differentiable_on Z & for x st x in Z holds (ln`|Z).x = 1/x;
 
 :: 20 f.x=x*ln(x)
 
 theorem :: FDIFF_5:20
-  Z c= dom ((id Z)(#)f) & f = ln*f1 &
-  (for x st x in Z holds f1.x=x & f1.x >0) implies
-  (id Z)(#)f is_differentiable_on Z &
-  for x st x in Z holds (((id Z)(#)f)`|Z).x = 1+ln.x;
+  Z c= dom ((id Z)(#)ln) implies
+  (id Z)(#)ln is_differentiable_on Z &
+  for x st x in Z holds (((id Z)(#)ln)`|Z).x = 1+ln.x;
 
 :: 21 f.x=x^2*ln(x)
 
 theorem :: FDIFF_5:21
-  Z c= dom (g(#)f) & g=#Z 2 & f = ln*f1 &
-  (for x st x in Z holds f1.x=x & f1.x>0) implies
-  g(#)f is_differentiable_on Z &
-  for x st x in Z holds ((g(#)f)`|Z).x = x+2*x*ln.x;
+  Z c= dom (g(#)ln) & g=#Z 2 &
+  (for x st x in Z holds x>0) implies
+  g(#)ln is_differentiable_on Z &
+  for x st x in Z holds ((g(#)ln)`|Z).x = x+2*x*ln.x;
 
 :: 22 f.x=(a+x^2)/(a-x^2)
 
@@ -206,15 +201,14 @@ theorem :: FDIFF_5:23
 :: 24 f.x=(1/x)*ln(x)
 
 theorem :: FDIFF_5:24
-  Z c= dom ((f^)(#)g) & (for x st x in Z holds f.x = x) &
-  g = ln*f1 & (for x st x in Z holds f1.x=x & f1.x >0)
-  implies (f^)(#)g is_differentiable_on Z &
-  for x st x in Z holds (((f^)(#)g)`|Z).x =(1/x^2)*(1-ln.x);
+  Z c= dom (((id Z)^)(#)ln) & (for x st x in Z holds x >0)
+  implies ((id Z)^)(#)ln is_differentiable_on Z &
+  for x st x in Z holds ((((id Z)^)(#)ln)`|Z).x = (1/x^2)*(1-ln.x);
 
 :: 25 f.x=1/ln(x)
 
 theorem :: FDIFF_5:25
-  Z c= dom (f^) & f = ln*f1 & (for x st x in Z holds f1.x=x & f1.x >0) &
-  (for x st x in Z holds f.x<>0) implies (f^) is_differentiable_on Z &
-  for x st x in Z holds ((f^)`|Z).x =-1/(x*(ln.x)^2);
+  Z c= dom (ln^) & (for x st x in Z holds x >0) &
+  (for x st x in Z holds ln.x<>0) implies (ln^) is_differentiable_on Z &
+  for x st x in Z holds ((ln^)`|Z).x =-1/(x*(ln.x)^2);
 

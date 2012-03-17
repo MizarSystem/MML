@@ -7,11 +7,11 @@
 environ
 
  vocabularies RLVECT_1, RELAT_1, ARYTM_1, EQREL_1, SETFAM_1, REALSET1, COLLSP,
-      ANPROJ_1, ARYTM, XREAL_0;
+      ANPROJ_1, ARYTM, XREAL_0, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REAL_1, EQREL_1, SETFAM_1,
       NUMBERS, STRUCT_0, COLLSP, RLVECT_1, MCART_1;
  constructors REAL_1, EQREL_1, REALSET2, COLLSP;
- registrations RELSET_1, STRUCT_0, RLVECT_1, COLLSP, REAL_1;
+ registrations RELSET_1, STRUCT_0, RLVECT_1, COLLSP, REAL_1, XREAL_0, ORDINAL1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -118,31 +118,19 @@ theorem :: ANPROJ_1:23
 reserve x,y,z for set;
 
 definition
-  let V;
-  func Proper_Vectors_of V means
-:: ANPROJ_1:def 4
-
-  for u being set holds (u in it iff u<>0.V & u is Element of V);
-end;
-
-canceled 2;
-
-theorem :: ANPROJ_1:26
-  for u holds (u in Proper_Vectors_of V iff u is not zero);
-
-definition
+ canceled;
   let V;
   func
-  Proportionality_as_EqRel_of V -> Equivalence_Relation of Proper_Vectors_of V
+  Proportionality_as_EqRel_of V -> Equivalence_Relation of NonZero V
   means
 :: ANPROJ_1:def 5
 
   for x,y holds [x,y] in it iff
-  (x in Proper_Vectors_of V & y in Proper_Vectors_of V
+  (x in NonZero V & y in NonZero V
   & ex u,v being Element of V st x=u & y=v & are_Prop u,v );
 end;
 
-canceled;
+canceled 4;
 
 theorem :: ANPROJ_1:28
   [x,y] in Proportionality_as_EqRel_of V implies
@@ -155,7 +143,7 @@ theorem :: ANPROJ_1:29
 definition
   let V;
   let v;
-  func Dir(v) -> Subset of Proper_Vectors_of V equals
+  func Dir(v) -> Subset of NonZero V equals
 :: ANPROJ_1:def 6
   Class(Proportionality_as_EqRel_of V,v);
 end;
@@ -165,16 +153,8 @@ definition
   func ProjectivePoints(V) means
 :: ANPROJ_1:def 7
 
-  ex Y being Subset-Family of Proper_Vectors_of V st
+  ex Y being Subset-Family of NonZero V st
   Y = Class Proportionality_as_EqRel_of V & it = Y;
-end;
-
-definition
-  let V be non empty ZeroStr;
-  redefine attr V is trivial means
-:: ANPROJ_1:def 8
-
-  for u being Element of V holds u = 0.V;
 end;
 
 registration
@@ -185,14 +165,13 @@ canceled 3;
 
 theorem :: ANPROJ_1:33
   for V being RealLinearSpace holds (V is non trivial RealLinearSpace iff
-  ex u being Element of V st u in Proper_Vectors_of V);
+  ex u being Element of V st u in NonZero V);
 
 reserve V for non trivial RealLinearSpace;
 reserve p,q,r,u,v,w for Element of V;
 
 registration
   let V;
-  cluster Proper_Vectors_of V -> non empty;
   cluster ProjectivePoints V -> non empty;
 end;
 
@@ -203,6 +182,7 @@ theorem :: ANPROJ_1:35
   p is not zero & q is not zero implies (Dir(p) = Dir(q) iff are_Prop p,q);
 
 definition
+ canceled;
   let V;
   func ProjectiveCollinearity(V) -> Relation3 of ProjectivePoints(V) means
 :: ANPROJ_1:def 9

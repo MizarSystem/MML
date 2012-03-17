@@ -11,7 +11,27 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="2"/>
-<Adjective nr="5"/>
+<Adjective nr="7"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="3">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="7"/>
+</Cluster>
+</FCluster>
+<FCluster aid="GRFUNC_1" nr="2">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="7"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -23,7 +43,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="5"/>
+<Adjective nr="7"/>
 </Cluster>
 </FCluster>
 </Registrations>

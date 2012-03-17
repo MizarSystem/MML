@@ -16,7 +16,7 @@ environ
       MARGREL1, BINARITH, CLASSES1, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2,
       CIRCCOMB, TWOSCOMP, FACIRC_1, FACIRC_2, FSCIRC_1, XXREAL_0;
  constructors ENUMSET1, XXREAL_0, CLASSES1, BINARITH, CIRCUIT1, CIRCUIT2,
-      TWOSCOMP, FSCIRC_1, FACIRC_2, NAT_1, XXREAL_2, XREAL_0;
+      TWOSCOMP, FSCIRC_1, FACIRC_2, NAT_1, XXREAL_2, XREAL_0, RELSET_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FRAENKEL, XXREAL_0,
       XREAL_0, NAT_1, FINSEQ_1, MARGREL1, FINSEQ_2, CARD_3, STRUCT_0, CIRCCOMB,
       FACIRC_1, CIRCCMB2, FACIRC_2, CARD_1;
@@ -25,7 +25,7 @@ environ
  theorems TARSKI, ZFMISC_1, ENUMSET1, MCART_1, NAT_1, RELAT_1, ORDINAL1,
       FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_6, PBOOLE, PRALG_1, CIRCUIT2,
       CIRCCOMB, FACIRC_1, CIRCCMB2, CIRCUIT1, TWOSCOMP, FSCIRC_1, FACIRC_2,
-      FUNCOP_1, XBOOLE_0, XBOOLE_1, FINSEQ_2, XREAL_1;
+      FUNCOP_1, XBOOLE_0, XBOOLE_1, FINSEQ_2, XREAL_1, CLASSES1, PARTFUN1;
  schemes NAT_1, CIRCCMB2, PBOOLE;
 
 begin
@@ -193,10 +193,10 @@ A1: o1 = h1.n & h1.0 = c & for n being Nat holds h1.(n+1)
 A2: o2 = h2.n & h2.0 = c & for n being Nat holds h2.(n+1)
     = BorrowOutput(x .(n+1), y.(n+1), h2.n);
     deffunc F(Nat,set) = BorrowOutput(x .($1+1), y.($1+1), $2);
-A3: dom h1 = NAT by PBOOLE:def 3;
+A3: dom h1 = NAT by PARTFUN1:def 4;
 B3: h1.0 = c by A1;
 C3: for n being Nat holds h1.(n+1) = F(n,h1.n) by A1;
-A4: dom h2 = NAT by PBOOLE:def 3;
+A4: dom h2 = NAT by PARTFUN1:def 4;
 B4:  h2.0 = c by A2;
 C4: for n being Nat holds h2.(n+1) = F(n,h2.n) by A2;
     h1 = h2 from NAT_1:sch 15(A3,B3,C3,A4,B4,C4);
@@ -317,7 +317,7 @@ A10: for n being Nat, S being non empty ManySortedSign,
 A11: f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) by A1;
 X:for n being Nat, z being set st z = h.n holds
   h.(n+1) = o(z,n) from CIRCCMB2:sch 3(A11,A10);
-A12: dom h = NAT by PBOOLE:def 3;
+A12: dom h = NAT by PARTFUN1:def 4;
 B12: h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] by A2;
 C12: for n being Nat holds h.(n+1) = F(n,h.n) by X;
   consider h1 being ManySortedSet of NAT such that
@@ -325,7 +325,7 @@ A13: n-BitBorrowOutput(x,y) = h1.n and
 A14: h1.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
   for n being Nat holds h1.(n+1)
   = BorrowOutput(x .(n+1), y.(n+1), h1.n) by Def3;
-A15: dom h1 = NAT by PBOOLE:def 3;
+A15: dom h1 = NAT by PARTFUN1:def 4;
 B15: h1.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] by A14;
 C15: for n being Nat holds h1.(n+1) = F(n,h1.n) by A14;
   h = h1 from NAT_1:sch 15(A12,B12,C12,A15,B15,C15);
@@ -446,7 +446,7 @@ A8: for i being Nat st L[i] holds L[i+1]
     let i be Nat such that
 A9: i <= n implies h1.i = h2.i & f1.i = f2.i & g1.i = g2.i and
 A10: i+1 <= n;
-    len p = n & len q = n by CIRCCOMB:def 12;
+    len p = n & len q = n by FINSEQ_1:def 18;
     then
 A11: dom p = Seg n & dom q = Seg n by FINSEQ_1:def 3;
     0+1 <= i+1 by XREAL_1:8;
@@ -520,7 +520,7 @@ A4: n-BitBorrowOutput(x^<*a*>, y^<*b*>) = h.n &
   (n+1)-BitSubtracterStr(x^<*a*>, y^<*b*>) = f.(n+1) &
   (n+1)-BitSubtracterCirc(x^<*a*>, y^<*b*>) = g.(n+1) &
   (n+1)-BitBorrowOutput(x^<*a*>, y^<*b*>) = h.(n+1) by A2,A3,Th1;
-  len x = n & len y = n by CIRCCOMB:def 12;
+  len x = n & len y = n by FINSEQ_1:def 18;
   then
 A5: p.(n+1) = a & q.(n+1) = b by FINSEQ_1:59;
   x^<*> = x & y^<*> = y by FINSEQ_1:47;
@@ -978,7 +978,7 @@ A6: 3 in dom <*xy, yc, xc*> by FINSEQ_1:3;
   then [3,xc] in <*xy, yc, xc*> by A6,FUNCT_1:8;
   then xc in rng <*xy, yc, xc*> by RELAT_1:def 5;
   then
-A7: the_rank_of xc in the_rank_of [<*xy, yc, xc*>, or3] by CIRCCOMB:50;
+A7: the_rank_of xc in the_rank_of [<*xy, yc, xc*>, or3] by CLASSES1:90;
   rng <*x,y*> = {x,y} by FINSEQ_2:147;
   then
 A8: y in rng <*x,y*> by TARSKI:def 2;
@@ -987,7 +987,7 @@ A9: 1 in dom <*xy, yc, xc*> by A5,FINSEQ_1:3;
   then [1,xy] in <*xy, yc, xc*> by A9,FUNCT_1:8;
   then xy in rng <*xy, yc, xc*> by RELAT_1:def 5;
   then
-A10: the_rank_of xy in the_rank_of [<*xy, yc, xc*>, or3] by CIRCCOMB:50;
+A10: the_rank_of xy in the_rank_of [<*xy, yc, xc*>, or3] by CLASSES1:90;
   rng <*y,c*> = {y,c} by FINSEQ_2:147;
   then
 A11: c in rng <*y,c*> by TARSKI:def 2;
@@ -996,7 +996,7 @@ A12: 2 in dom <*xy, yc, xc*> by A5,FINSEQ_1:3;
   then [2,yc] in <*xy, yc, xc*> by A12,FUNCT_1:8;
   then yc in rng <*xy, yc, xc*> by RELAT_1:def 5;
   then
-A13: the_rank_of yc in the_rank_of [<*xy, yc, xc*>, or3] by CIRCCOMB:50;
+A13: the_rank_of yc in the_rank_of [<*xy, yc, xc*>, or3] by CLASSES1:90;
 A14: {xy, yc, xc} \ {xy, yc, xc} = {} by XBOOLE_1:37;
 A15: {x, y, c} \ {[<*xy, yc, xc*>, or3]} = {x, y, c}
   proof
@@ -1005,7 +1005,7 @@ A15: {x, y, c} \ {[<*xy, yc, xc*>, or3]} = {x, y, c}
     assume
 A16: a in {x,y,c};
     then a = x or a = y or a = c by ENUMSET1:def 1;
-    then a <> [<*xy, yc, xc*>, or3] by A4,A7,A8,A10,A11,A13,CIRCCOMB:50;
+    then a <> [<*xy, yc, xc*>, or3] by A4,A7,A8,A10,A11,A13,CLASSES1:90;
     then not a in {[<*xy, yc, xc*>, or3]} by TARSKI:def 1;
     hence thesis by A16,XBOOLE_0:def 5;
   end;
@@ -1253,12 +1253,12 @@ A6: y = y'^<*z2*> by FACIRC_2:36;
 A7: 1 in Seg 1 by FINSEQ_1:3;
     then
 A8: 1 in dom <*z1*> by FINSEQ_1:def 8;
-    len x' = i by CIRCCOMB:def 12;
+    len x' = i by FINSEQ_1:def 18;
     then
 A9: x .(i+1) = <*z1*>.1 by A5,A8,FINSEQ_1:def 7
       .= z1 by FINSEQ_1:def 8;
 A10: 1 in dom <*z2*> by A7,FINSEQ_1:def 8;
-    len y' = i by CIRCCOMB:def 12;
+    len y' = i by FINSEQ_1:def 18;
     then
 A11: y .(i+1) = <*z2*>.1 by A6,A10,FINSEQ_1:def 7
       .= z2 by FINSEQ_1:def 8;
@@ -1482,8 +1482,7 @@ A6: InnerVertices S1 misses InputVertices S2 &
   (Following(s2,2)).BorrowOutput(x,y,c)
   = 'not' a1 '&' a2 'or' a2 '&' a3 'or' 'not' a1 '&' a3
   by A1,A6,Lm2,FACIRC_1:33;
-  hence (Following(s,2)).BorrowOutput(x,y,c)
-  = 'not' a1 '&' a2 'or' a2 '&' a3 'or' 'not' a1 '&' a3;
+  hence thesis;
 end;
 
 theorem Th25:

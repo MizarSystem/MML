@@ -10,18 +10,21 @@ environ
       RFINSEQ, BOOLE, ARYTM_1, FINSEQ_6, EUCLID, JORDAN2C, FINSEQ_2, GOBOARD1,
       MCART_1, PRE_TOPC, TOPREAL1, GOBOARD2, CARD_1, GOBOARD5, MATRIX_1,
       ABSVALUE, GOBOARD9, CONNSP_1, SUBSET_1, TOPS_1, PSCOMP_1, SPRECT_2,
-      COMPTS_1, JORDAN5D, TREES_1, ARYTM;
+      COMPTS_1, JORDAN5D, TREES_1, ARYTM, RLVECT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, COMPLEX1,
       NAT_D, CARD_1, FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_2, MATRIX_1, FINSEQ_4,
       RFINSEQ, FINSEQ_5, FINSEQ_6, REALSET1, DOMAIN_1, STRUCT_0, PRE_TOPC,
-      TOPS_1, CONNSP_1, COMPTS_1, EUCLID, TOPREAL1, GOBOARD1, GOBOARD2,
+      TOPS_1, CONNSP_1, COMPTS_1, EUCLID,
+      RLTOPSP1, TOPREAL1, GOBOARD1, GOBOARD2,
       GOBOARD5, GOBOARD9, PSCOMP_1, JORDAN5D, SPRECT_2, JORDAN2C, XXREAL_0;
  constructors PARTFUN1, XXREAL_0, NAT_1, COMPLEX1, FINSEQOP, FINSEQ_4, RFINSEQ,
       NAT_D, TOPS_1, CONNSP_1, COMPTS_1, REALSET2, GOBOARD2, PSCOMP_1,
-      GOBOARD9, SPRECT_2, JORDAN5D, JORDAN2C, SEQ_1, REAL_1, GOBOARD1;
+      GOBOARD9, SPRECT_2, JORDAN5D, JORDAN2C, SEQ_1, REAL_1, GOBOARD1,
+      RELSET_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, NUMBERS, XREAL_0, NAT_1,
       MEMBERED, FINSEQ_1, REALSET1, FINSEQ_5, FINSEQ_6, STRUCT_0, GOBOARD2,
-      PSCOMP_1, GOBOARD9, SPRECT_1, SPRECT_2, FINSET_1, CARD_1, COMPTS_1;
+      PSCOMP_1, GOBOARD9, SPRECT_1, SPRECT_2, FINSET_1, CARD_1, COMPTS_1,
+      EUCLID;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TOPREAL1, GOBOARD5, SPRECT_2, TARSKI, FINSEQ_6, GOBOARD1,
       XBOOLE_0, STRUCT_0;
@@ -80,7 +83,7 @@ A1: f just_once_values f/.len f;
   f/.len f..f + 1 = f/.len f..f + ((Rev f')/.1)..Rev f' by FINSEQ_6:47
     .= f/.len f..f + f/.len f..Rev f by FINSEQ_5:68
     .= len f + 1 by A1,FINSEQ_6:41;
-  hence f/.len f..f = len f;
+  hence thesis;
 end;
 
 theorem
@@ -131,7 +134,7 @@ A9:   z in dom f & z <> x;
       then f/.z <> y by A7;
       hence thesis by A9,PARTFUN1:def 8;
     end;
-    hence f just_once_values y by A5,A8,FINSEQ_4:9;
+    hence thesis by A5,A8,FINSEQ_4:9;
   end;
 end;
 
@@ -181,7 +184,7 @@ A1: p in rng f;
 A2: len (f:-p) - 1 = len f - p..f;
   1 <= p..f by A1,FINSEQ_4:31;
   then len f - 1 >= len f - p..f by XREAL_1:12;
-  hence len(f:-p) <= len f by A2,XREAL_1:11;
+  hence thesis by A2,XREAL_1:11;
 end;
 
 theorem
@@ -420,7 +423,7 @@ A15:  z <> len(f:-p);
       then i + 1 < len f - p..f + 1 by A2,A10,FINSEQ_5:53;
       then i < len f - p..f by XREAL_1:8;
       then i + p..f < len f by XREAL_1:22;
-      hence (f:-p)/.z <> f/.1 by A1,A10,A11,A14;
+      hence thesis by A1,A10,A11,A14;
     end;
 A16: f/.1 = (f-:p)/.1 by A2,FINSEQ_5:47;
     f/.1 in rng f by A2,FINSEQ_6:46,RELAT_1:60;
@@ -639,7 +642,7 @@ A1: 1.REAL n = 1*n by JORDAN2C:def 8
   1 <= n by NAT_1:14;
   then 1 in Seg n by FINSEQ_1:3;
   then (n |-> 0).1 = 0 & (n |-> 1).1 = 1 by FINSEQ_2:71;
-  hence 0.REAL n <> 1.REAL n by A1,EUCLID:def 4;
+  hence thesis by A1,EUCLID:def 4;
 end;
 
 registration
@@ -647,8 +650,11 @@ registration
   cluster TOP-REAL n -> non trivial;
   coherence
   proof
-    take 0.REAL n, 1.REAL n;
-    thus 0.REAL n <> 1.REAL n by Th19;
+     reconsider 1R = 1.REAL n as Element of TOP-REAL n
+               by EUCLID:71;
+    take 1R;
+     0.REAL n = 0.TOP-REAL n by EUCLID:70;
+    hence 1R <> 0.TOP-REAL n by Th19;
   end;
 end;
 
@@ -675,7 +681,7 @@ A8: g.z = f/.y by A1,FUNCT_1:def 5;
   reconsider z as Element of NAT by A7;
   g/.z = f/.y by A7,A8,PARTFUN1:def 8;
   then (X_axis g).z = (f/.y)`1 by A5,A7,GOBOARD1:def 3;
-  hence x in rng X_axis g by A3,A5,A6,A7,FUNCT_1:def 5;
+  hence thesis by A3,A5,A6,A7,FUNCT_1:def 5;
 end;
 
 theorem Th21:
@@ -706,7 +712,7 @@ A8: g.z = f/.y by A1,FUNCT_1:def 5;
   reconsider z as Element of NAT by A7;
   g/.z = f/.y by A7,A8,PARTFUN1:def 8;
   then (Y_axis g).z = (f/.y)`2 by A5,A7,GOBOARD1:def 4;
-  hence x in rng Y_axis g by A3,A5,A6,A7,FUNCT_1:def 5;
+  hence thesis by A3,A5,A6,A7,FUNCT_1:def 5;
 end;
 
 theorem Th23:
@@ -845,7 +851,7 @@ A4: 1 <= i -' p..f+1 by A2,NAT_D:38;
 A5: i -' p..f+1 < len(f:-p) by A1,FINSEQ_5:53;
   i -' p..f+1 -' 1 + p..f =i -' p..f + p..f by NAT_D:34
     .= i by A2,XREAL_1:237;
-  hence LSeg(f,i) = LSeg(Rotate(f,p),i -' p..f+1) by A1,A4,A5,Th24;
+  hence thesis by A1,A4,A5,Th24;
 end;
 
 theorem Th26:
@@ -938,7 +944,7 @@ A12:    p..f <= len f by A5,FINSEQ_4:31;
         then
 A13:    p..f < len f by A12,XXREAL_0:1;
         1 <= k by A9,FINSEQ_3:27;
-        hence f/.z <> p by A8,A11,A13,GOBOARD7:38;
+        hence thesis by A8,A11,A13,GOBOARD7:38;
       end;
       suppose
 A14:    k > p..f;
@@ -946,10 +952,10 @@ A14:    k > p..f;
         then
 A15:    p..f > 1 by A6,A8,XXREAL_0:1;
         k <= len f by A9,FINSEQ_3:27;
-        hence f/.z <> p by A8,A14,A15,GOBOARD7:39;
+        hence thesis by A8,A14,A15,GOBOARD7:39;
       end;
     end;
-    hence Rev Rotate(f,p) = Rotate(Rev f,p) by FINSEQ_6:112;
+    hence thesis by FINSEQ_6:112;
   end;
 end;
 
@@ -1017,7 +1023,7 @@ A19: x = f/.1 by TARSKI:def 1;
   then
 A20: x in LSeg(f,len f -' 1) by A4,A5,TOPREAL1:27;
   x in LSeg(f,1) by A3,A19,TOPREAL1:27;
-  hence x in LSeg(f,len f -' 1) /\ LSeg(f,1) by A20,XBOOLE_0:def 4;
+  hence thesis by A20,XBOOLE_0:def 4;
 end;
 
 theorem Th31:
@@ -1122,7 +1128,7 @@ A21:      i -' 1 + p..f + 1 = i -' 1 + 1 + p..f
 A22:      i -' 1 + p..f + 1 < j -' 1 + p..f by A21,XREAL_1:8;
           j -' 1 < len f -' p..f by A4,A6,A16,A18,NAT_D:54;
           then j -' 1 + p..f < len f by NAT_D:53;
-          hence LSeg(h,i) misses LSeg(h,j) by A14,A19,A20,A22,GOBOARD5:def 4;
+          hence thesis by A14,A19,A20,A22,GOBOARD5:def 4;
         end;
         suppose that
 A23:      i >= 1 and
@@ -1164,14 +1170,14 @@ A32:          1 < j + p..f -' len f by NAT_D:39;
               then i -' 1 < len f -' p..f by A23,NAT_D:54;
               then i -' 1 + p..f < len f by NAT_D:53;
 
-hence LSeg(h,i) misses LSeg(h,j) by A26,A27,A31,A32,GOBOARD5:def 4;
+hence thesis by A26,A27,A31,A32,GOBOARD5:def 4;
             end;
             suppose i+1 < len f - p..f + 1;
               then i < len f - p..f by XREAL_1:8;
               then i + p..f < len f by XREAL_1:22;
               then i -' 1 + 1 + p..f < len f by A23,XREAL_1:237;
               then i -' 1 + p..f + 1 < len f;
-              hence LSeg(h,i) misses LSeg(h,j) by A26,A27,A31,GOBOARD5:def 4;
+              hence thesis by A26,A27,A31,GOBOARD5:def 4;
             end;
           end;
           hence thesis;
@@ -1200,7 +1206,7 @@ A42:      i + p..f -' len f + 1 < j + p..f -' len f by A39,A41,NAT_D:57;
           then j + (1 + p..f) - len f < len f by XREAL_1:21;
           then j + p..f - len f + 1 < len f;
           then j + p..f -' len f + 1 < len f by A38,A40,XREAL_1:235,XXREAL_0:2;
-          hence LSeg(h,i) misses LSeg(h,j) by A35,A36,A42,GOBOARD5:def 4;
+          hence thesis by A35,A36,A42,GOBOARD5:def 4;
         end;
       end;
       hence thesis;
@@ -1337,7 +1343,7 @@ A8: i + len f -' p..f < len f by A6,NAT_D:54;
   i + len f -' p..f + p..f -' len f
   = i + len f -' len f by A4,A5,XREAL_1:237,XXREAL_0:2
     .= i by NAT_D:34;
-  hence LSeg(f,i) = LSeg(Rotate(f,p),i + len f -' p..f) by A1,A7,A8,Th31;
+  hence thesis by A1,A7,A8,Th31;
 end;
 
 theorem Th33:
@@ -1378,7 +1384,7 @@ A11:      1 <= i -' 1 + p..f by A5,NAT_D:38;
           then i -' 1 < len f -' p..f by A5,NAT_D:54;
           then i -' 1 + p..f < len f by NAT_D:53;
           then i -' 1 + p..f + 1 <= len f by NAT_1:13;
-          hence x in B by A4,A10,A11;
+          hence thesis by A4,A10,A11;
         end;
         suppose
 A12:      i >= len(f:-p);
@@ -1396,7 +1402,7 @@ A16:      len f <= len f + 1 by NAT_1:11;
           then i + p..f + 1 -' len f <= len f by NAT_D:53;
 
 then i + p..f -' len f + 1 <= len f by A14,A16,NAT_D:38,XXREAL_0:2;
-          hence x in B by A4,A13,A15;
+          hence thesis by A4,A13,A15;
         end;
       end;
       let x be set;
@@ -1423,7 +1429,7 @@ A24:    p..f <= i+1 by A21,XXREAL_0:2;
         then i + 1 -' p..f < len f by A24,NAT_D:54;
         then i -' p..f+1 < len f by A21,NAT_D:38;
         then i -' p..f+1 +1 <= len f by NAT_1:13;
-        hence x in A by A17,A22,A23;
+        hence thesis by A17,A22,A23;
       end;
       suppose
 A25:    i < p..f;
@@ -1438,10 +1444,10 @@ A29:    len f <= i + len f by NAT_1:11;
         then i + 1 + len f <= len f + p..f by XREAL_1:8;
         then i + len f + 1 -' p..f <= len f by NAT_D:53;
         then i + len f -' p..f + 1 <= len f by A28,A29,NAT_D:38,XXREAL_0:2;
-        hence x in A by A17,A26,A27;
+        hence thesis by A17,A26,A27;
       end;
     end;
-    hence L~Rotate(f,p) = L~f by A2;
+    hence thesis by A2;
   end;
 end;
 
@@ -1489,7 +1495,7 @@ A10:      [i,j] in Indices G and
 A11:      f/.(n + p..f -' len f) = G*(i,j) by A1,A6,GOBOARD1:def 11;
           take i,j;
           thus [i,j] in Indices G by A10;
-          thus (Rotate(f,p))/.n = G*(i,j) by A2,A3,A7,A8,A11,Th17;
+          thus thesis by A2,A3,A7,A8,A11,Th17;
         end;
         suppose
 A12:      len(f:-p) >= n;
@@ -1507,7 +1513,7 @@ A14:      [i,j] in Indices G and
 A15:      f/.(n -' 1 + p..f) = G*(i,j) by A1,A6,GOBOARD1:def 11;
           take i,j;
           thus [i,j] in Indices G by A14;
-          thus (Rotate(f,p))/.n = G*(i,j) by A3,A7,A12,A15,Th9;
+          thus thesis by A3,A7,A12,A15,Th9;
         end;
       end;
       let n such that
@@ -1552,7 +1558,7 @@ A30:      1 <= n+1 + p..f -' len f by NAT_D:55;
           then n+1 + p..f -' len f <= len f by NAT_D:53;
           then n+1 + p..f -' len f in dom f by A30,FINSEQ_3:27;
 
-hence abs(m-i)+abs(k-j) = 1 by A6,A18,A23,A24,A27,A29,GOBOARD1:def 11;
+hence thesis by A6,A18,A23,A24,A27,A29,GOBOARD1:def 11;
         end;
         suppose
 A31:      len(f:-p) > n;
@@ -1583,7 +1589,7 @@ A38:      1 <= n+1 -' 1 + p..f by A20,NAT_D:38;
           then n+1 -' 1 + p..f <= len f by A4,NAT_D:54;
           then n+1 -' 1 + p..f in dom f by A38,FINSEQ_3:27;
 
-hence abs(m-i)+abs(k-j) = 1 by A6,A18,A33,A34,A35,A37,GOBOARD1:def 11;
+hence thesis by A6,A18,A33,A34,A35,A37,GOBOARD1:def 11;
         end;
       end;
     end;
@@ -1610,7 +1616,7 @@ A43:    [i,j] in Indices G and
 A44:    (Rotate(f,p))/.(n + len f -' p..f) = G*(i,j) by A1,A39,GOBOARD1:def 11;
         take i,j;
         thus [i,j] in Indices G by A43;
-        thus f/.n = G*(i,j) by A3,A40,A41,A44,Th18;
+        thus thesis by A3,A40,A41,A44,Th18;
       end;
       suppose
 A45:    n >= p..f;
@@ -1625,7 +1631,7 @@ A47:    [i,j] in Indices G and
 A48:    (Rotate(f,p))/.(n + 1 -' p..f) = G*(i,j) by A1,A39,GOBOARD1:def 11;
         take i,j;
         thus [i,j] in Indices G by A47;
-        thus f/.n = G*(i,j) by A3,A40,A45,A48,Th10;
+        thus thesis by A3,A40,A45,A48,Th10;
       end;
     end;
     let n such that
@@ -1664,7 +1670,7 @@ A64:    1 <= n+1 + len f -' p..f by A4,NAT_D:38;
         n+1 + len f <= len f + p..f by A58,XREAL_1:8;
         then n+1 + len f -' p..f <= len f by NAT_D:53;
         then n+1 + len f -' p..f in dom f by A64,FINSEQ_3:27;
-        hence abs(m-i)+abs(k-j) = 1
+        hence thesis
         by A1,A39,A53,A54,A55,A56,A59,A60,A61,A63,GOBOARD1:def 11;
       end;
       suppose
@@ -1689,7 +1695,7 @@ A73:    1 <= n + 1 -' p..f by NAT_D:55;
         n + 1 <= len f + p..f by A5,A51,XREAL_1:9;
         then n + 1 -' p..f <= len f by NAT_D:53;
         then n + 1 -' p..f in dom f by A73,FINSEQ_3:27;
-        hence abs(m-i)+abs(k-j) = 1
+        hence thesis
         by A1,A39,A53,A54,A55,A56,A68,A69,A70,A72,GOBOARD1:def 11;
       end;
     end;
@@ -1765,19 +1771,19 @@ A21: i1 = i2 & j1+1 = j2 & left_cell(f,k) = cell(GoB f,i1-'1,j1) or
     by A2,A8,A13,A14,A17,A18,A19,GOBOARD5:def 7;
     per cases by A2,A8,A13,A14,A17,A18,A19,A20,GOBOARD5:def 7;
     case i1 = i2 & j1+1 = j2;
-      hence left_cell(f,k) = cell(GoB Rotate(f,p),i1-'1,j1) by A21,Th28;
+      hence thesis by A21,Th28;
     end;
     case i1+1 = i2 & j1 = j2;
-      hence left_cell(f,k) = cell(GoB Rotate(f,p),i1,j1) by A21,Th28;
+      hence thesis by A21,Th28;
     end;
     case i1 = i2+1 & j1 = j2;
-      hence left_cell(f,k) = cell(GoB Rotate(f,p),i2,j2-'1) by A21,Th28;
+      hence thesis by A21,Th28;
     end;
     case i1 = i2 & j1 = j2+1;
-      hence left_cell(f,k) = cell(GoB Rotate(f,p),i1,j2) by A21,Th28;
+      hence thesis by A21,Th28;
     end;
   end;
-  hence left_cell(f,k) = left_cell(Rotate(f,p),n) by A11,A12,GOBOARD5:def 7;
+  hence thesis by A11,A12,GOBOARD5:def 7;
 end;
 
 theorem Th36:
@@ -1791,7 +1797,7 @@ A1: LeftComp Rotate(f,p) is_a_component_of (L~f)` by Th33;
 A2: p in rng f implies p..f >= 1 by FINSEQ_4:31;
   per cases by A2,XXREAL_0:1;
   suppose not p in rng f;
-    hence LeftComp Rotate(f,p) = LeftComp f by FINSEQ_6:def 2;
+    hence thesis by FINSEQ_6:def 2;
   end;
   suppose that
 A3: p in rng f and
@@ -1799,7 +1805,7 @@ A4: p..f = 1;
 A5: 1 in dom f by FINSEQ_5:6;
     f.1 = p by A3,A4,FINSEQ_4:29;
     then f/.1 = p by A5,PARTFUN1:def 8;
-    hence LeftComp Rotate(f,p) = LeftComp f by FINSEQ_6:95;
+    hence thesis by FINSEQ_6:95;
   end;
   suppose that
 A6: p in rng f and
@@ -1817,7 +1823,7 @@ A11: 1 + len f -' p..f + 1 <= len Rotate(f,p) by Th14;
     left_cell(f,1) = left_cell(Rotate(f,p),1 + len f -' p..f) by A6,A7,Th35;
     then Int left_cell(f,1) c= LeftComp Rotate(f,p) by A9,A11,GOBOARD9:24
 ,NAT_D:55;
-    hence LeftComp Rotate(f,p) = LeftComp f by A1,GOBOARD9:def 1;
+    hence thesis by A1,GOBOARD9:def 1;
   end;
 end;
 
@@ -1829,7 +1835,7 @@ proof
 A1: RightComp Rotate(f,p) = LeftComp Rev Rotate(f,p) by GOBOARD9:26
     .= LeftComp Rotate(Rev f,p) by Th29;
   RightComp f = LeftComp Rev f by GOBOARD9:26;
-  hence RightComp Rotate(f,p) = RightComp f by A1,Th36;
+  hence thesis by A1,Th36;
 end;
 
 begin :: Clockwise oriented
@@ -1965,13 +1971,13 @@ A11:    z <> n_w_n f;
         suppose
 A12:      k < n_w_n f;
           1 <= k by A10,FINSEQ_3:27;
-          hence f/.z <> N-min L~f by A7,A9,A12,GOBOARD7:38;
+          hence thesis by A7,A9,A12,GOBOARD7:38;
         end;
         suppose
 A13:      k > n_w_n f;
 A14:      1 < n_w_n f by A4,A6,A9,XXREAL_0:1;
           k <= len f by A10,FINSEQ_3:27;
-          hence f/.z <> N-min L~f by A9,A13,A14,GOBOARD7:39;
+          hence thesis by A9,A13,A14,GOBOARD7:39;
         end;
       end;
       (Rotate(f,N-min L~f))/.2 in N-most L~f by SPRECT_2:def 4;
@@ -2006,7 +2012,7 @@ A4:   for i st 1 < i & i < len f holds f/.i <> f/.1 by GOBOARD7:38;
         then reconsider g as
         clockwise_oriented (non constant standard special_circular_sequence);
         f = Rotate(g,f/.1) by A4,Th16;
-        hence f is clockwise_oriented or Rev f is clockwise_oriented;
+        hence thesis;
       end;
       suppose Rev g is clockwise_oriented;
         then reconsider h = Rev g as
@@ -2034,7 +2040,7 @@ A14:        (f/.1)..g <= len g by A7,FINSEQ_4:31;
             then
 A15:        (f/.1)..g < len g by A14,XXREAL_0:1;
             1 <= k by A11,FINSEQ_3:27;
-            hence g/.z <> f/.1 by A10,A13,A15,GOBOARD7:38;
+            hence thesis by A10,A13,A15,GOBOARD7:38;
           end;
           suppose
 A16:        k > (f/.1)..g;
@@ -2042,12 +2048,12 @@ A16:        k > (f/.1)..g;
             then
 A17:        (f/.1)..g > 1 by A8,A10,XXREAL_0:1;
             k <= len g by A11,FINSEQ_3:27;
-            hence g/.z <> f/.1 by A10,A16,A17,GOBOARD7:39;
+            hence thesis by A10,A16,A17,GOBOARD7:39;
           end;
         end;
         Rev f = Rev Rotate(g,f/.1) by A4,Th16
           .= Rotate(h,f/.1) by A5,FINSEQ_6:112;
-        hence f is clockwise_oriented or Rev f is clockwise_oriented;
+        hence thesis;
       end;
     end;
   end;

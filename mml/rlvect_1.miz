@@ -9,18 +9,19 @@ environ
  vocabularies BINOP_1, FUNCT_1, ARYTM_1, RELAT_1, FINSEQ_1, BOOLE, RLVECT_1,
       FUNCOP_1, COMPLEX1, REALSET1, STRUCT_0, ARYTM, ALGSTR_0, VECTSP_2,
       MIDSP_1, FUNCT_3;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1,
+      ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
       RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FUNCOP_1, REAL_1, FINSEQ_1, NAT_1,
       FUNCT_3, FUNCT_5, STRUCT_0, ALGSTR_0;
  constructors BINOP_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, FINSEQ_1, FUNCT_3,
       FUNCT_5, ALGSTR_0, REALSET1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      STRUCT_0, REAL_1, ALGSTR_0, REALSET1, FINSEQ_1, CARD_1;
+      STRUCT_0, REAL_1, ALGSTR_0, REALSET1, FINSEQ_1, CARD_1, ZFMISC_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FUNCT_1, TARSKI, STRUCT_0, RELAT_1, ALGSTR_0;
  theorems FUNCT_1, NAT_1, TARSKI, RELAT_1, STRUCT_0, XBOOLE_0, XBOOLE_1,
       FINSEQ_1, XCMPLX_0, FUNCOP_1, XREAL_1, XXREAL_0, ORDINAL1, ALGSTR_0,
-      CARD_1;
+      CARD_1, FINSEQ_3, XREAL_0;
  schemes FINSEQ_1, FUNCT_2, NAT_1;
 
 begin
@@ -63,17 +64,22 @@ theorem
 ::
 
 reserve v for VECTOR of V;
-reserve a,b for Real;
+reserve a,b for real number;
 
 definition
   let V;
   let v;
-  let a;
+  let a be real number;
   canceled 3;
   func a * v -> Element of V equals
 
   (the Mult of V).(a,v);
-  coherence;
+  coherence
+   proof
+    reconsider a as Real by XREAL_0:def 1;
+     (the Mult of V).(a,v) is Element of V;
+    hence thesis;
+   end;
 end;
 
 ::
@@ -189,7 +195,7 @@ registration
     by STRUCT_0:def 10;
     thus for a,b for v being VECTOR of S holds (a * b) * v = a * (b * v)
     by STRUCT_0:def 10;
-    thus for v being VECTOR of S holds 1 * v = v by STRUCT_0:def 10;
+    thus thesis by STRUCT_0:def 10;
   end;
 end;
 
@@ -259,7 +265,7 @@ A1: v + 0.V = v by Def7;
   consider w being Element of V such that
 A2: v + w = 0.V by ALGSTR_0:def 11;
   w + v = 0.V by A2,Lm1;
-  hence 0.V + v = v by A1,A2,Def6;
+  hence thesis by A1,A2,Def6;
 end;
 
 ::
@@ -343,7 +349,7 @@ proof
   let V be add-associative right_zeroed
   right_complementable (non empty addLoopStr), v be Element of V;
   thus v + -v = 0.V by Def11;
-  hence -v + v = 0.V by Lm1;
+  hence thesis by Lm1;
 end;
 
 canceled 2;
@@ -421,14 +427,14 @@ A2:   a = 0;
         .= (1 + 0) * v by Def9
         .= v by Def9
         .= v + 0.V by Th10;
-      hence a * v = 0.V by A2,Th21;
+      hence thesis by A2,Th21;
     end;
     suppose
 A3:   v = 0.V;
       a * 0.V + a * 0.V = a * (0.V + 0.V) by Def9
         .= a * 0.V by Th10
         .= a * 0.V + 0.V by Th10;
-      hence a * v = 0.V by A3,Th21;
+      hence thesis by A3,Th21;
     end;
   end;
   hence thesis;
@@ -560,7 +566,7 @@ proof
   consider w being Element of V such that
 A1: v + w = u by Lm2;
   take z = - w;
-  thus v - z = u by A1,Th30;
+  thus thesis by A1,Th30;
 end;
 
 theorem
@@ -611,7 +617,7 @@ proof
     .= u + (0.V + -u) by Def11
     .= u + -u by Th10
     .= 0.V by Def11;
-  hence -(u + w) = -w + -u by Def11;
+  hence thesis by Def11;
 end;
 
 theorem Th41:
@@ -917,7 +923,7 @@ A33:    k + 1 <= len F;
       hence thesis;
     end;
     for k holds P[k] from NAT_1:sch 1(A30,A31);
-    hence v1 = v2 by A24,A27;
+    hence thesis by A24,A27;
   end;
 end;
 
@@ -936,17 +942,7 @@ proof
   hence thesis by Lm4;
 end;
 
-canceled 2;
-
-theorem Th54:
-  k in Seg n & len F = n implies F.k is Element of V
-proof
-  assume k in Seg n & len F = n;
-  then k in dom F by FINSEQ_1:def 3;
-
-then F.k in rng F & rng F c= the carrier of V by FINSEQ_1:def 4,FUNCT_1:def 5;
-  hence thesis;
-end;
+canceled 3;
 
 theorem Th55:
   len F = len G + 1 & G = F | (dom G) & v = F.(len F) implies
@@ -982,8 +978,8 @@ A15:  len H <= len G;
       reconsider p = H | (Seg k) as FinSequence of the carrier of V
       by FINSEQ_1:23;
       1 <= k + 1 & k + 1 <= len F by A1,A13,A15,NAT_1:12;
-      then k + 1 in Seg(len F) by FINSEQ_1:3;
-      then reconsider v = F.(k + 1) as Element of V by Th54;
+      then k + 1 in dom F by FINSEQ_3:27;
+      then reconsider v = F.(k + 1) as Element of V by FUNCT_1:172;
 A16:  k <= len H by A13,NAT_1:12;
       then
 A17:  len p = k by FINSEQ_1:21;
@@ -1067,9 +1063,10 @@ A14:    H.k = a * v by A7,A11,A12,A13;
         dom p = Seg n by A6,A8,FINSEQ_1:21;
         hence p.k = a * v by A9,A11,A14,FUNCT_1:70;
       end;
-      n + 1 in Seg(n + 1) by FINSEQ_1:6;
+      1 <= n + 1 by NAT_1:11;
+      then n + 1 in dom H & n + 1 in dom I by A5,A6,FINSEQ_3:27;
       then reconsider v1 = H.(n + 1),v2 = I.(n + 1) as VECTOR of V
-      by A5,A6,Th54;
+      by A5,A6,FUNCT_1:172;
 A15:  v1 = a * v2 by A6,A7,FINSEQ_1:6;
 A16:  dom q = Seg len q by FINSEQ_1:def 3;
       dom p = Seg len p by FINSEQ_1:def 3;
@@ -1143,9 +1140,10 @@ A14:    H.k = - v by A7,A11,A12,A13;
         dom p = Seg n by A6,A8,FINSEQ_1:21;
         hence p.k = - v by A9,A11,A14,FUNCT_1:70;
       end;
-      n + 1 in Seg(n + 1) by FINSEQ_1:6;
+      1 <= n + 1 by NAT_1:11;
+      then n + 1 in dom H & n + 1 in dom I by A5,A6,FINSEQ_3:27;
       then reconsider v1 = H.(n + 1),v2 = I.(n + 1) as Element of V
-      by A5,A6,Th54;
+      by A5,A6,FUNCT_1:172;
 A15:  v1 = - v2 by A6,A7,FINSEQ_1:6;
 A16:  dom q = Seg len q by FINSEQ_1:def 3;
       dom p = Seg len p by FINSEQ_1:def 3;
@@ -1266,7 +1264,7 @@ A23:    j in dom p by A4,A7,FINSEQ_1:21;
       hence (F ^ p).x = (F ^ H).x by A18;
     end;
     then
-A24: F ^ p = (F ^ H) | (Seg len (F ^ p)) by A16,FUNCT_1:68
+A24: F ^ p = (F ^ H) | (Seg len (F ^ p)) by A16,FUNCT_1:68,70,RELAT_1:90
       .= (F ^ H) | (dom (F ^ p)) by FINSEQ_1:def 3;
 A25: dom p = Seg len p by FINSEQ_1:def 3;
     v = (F ^ H).(len F + len H) by A4,A6,FINSEQ_1:def 7
@@ -1356,14 +1354,15 @@ A10:  len H = len I by A7,A8,A9,FINSEQ_1:65;
       reconsider p = H | (Seg k) as FinSequence of the carrier of V
       by FINSEQ_1:23;
 A11:  k + 1 in Seg(k + 1) by FINSEQ_1:6;
-      then k + 1 in dom H by A6,FINSEQ_1:def 3;
+      then
+B14:   k + 1 in dom H by A6,FINSEQ_1:def 3;
       then H.(k + 1) in rng I by A7,FUNCT_1:def 5;
       then consider x such that
 A12:  x in dom I and
 A13:  H.(k + 1) = I.x by FUNCT_1:def 5;
 A14:  x in Seg(k + 1) by A6,A10,A12,FINSEQ_1:def 3;
       reconsider n = x as Element of NAT by A12;
-      reconsider v = H.(k + 1) as Element of V by A6,A11,Th54;
+      reconsider v = H.(k + 1) as Element of V by B14,FUNCT_1:172;
 A15:  1 <= n by A14,FINSEQ_1:3;
       then consider m1 being Nat such that
 A16:  1 + m1 = n by NAT_1:10;
@@ -1392,8 +1391,8 @@ A24:    x = q2.y by FUNCT_1:def 5;
 A25:    1 <= n + y by XXREAL_0:2;
         y <= m2 by A21,A23,FINSEQ_1:3;
         then n + y <= len I by A6,A10,A18,XREAL_1:9;
-        then n + y in Seg(len I) by A25,FINSEQ_1:3;
-        then reconsider xx = I.(n + y) as Element of V by Th54;
+        then n + y in dom I by A25,FINSEQ_3:27;
+        then reconsider xx = I.(n + y) as Element of V by FUNCT_1:172;
         xx in the carrier of V;
         hence thesis by A21,A22,A23,A24;
       end;
@@ -1527,7 +1526,7 @@ A68:    now
           assume
 A69:      x1 in dom q1 & x2 in dom q1;
           then q1.x1 = q.x1 & q1.x2 = q.x2 by FINSEQ_1:def 7;
-          hence y1=y2 by A66,A67,A69,FUNCT_1:def 8;
+          hence thesis by A66,A67,A69,FUNCT_1:def 8;
         end;
 A70:    now
           assume
@@ -1554,7 +1553,7 @@ A78:      1 <= n + j by A15,NAT_1:12;
           then
 A79:      x1 in dom I & n + j in dom I by A6,A10,FINSEQ_1:def 3;
           x1 < n & n <= n + j by A39,A76,NAT_1:12,XXREAL_0:2;
-          hence y1 = y2 by A9,A75,A79,FUNCT_1:def 8;
+          hence thesis by A9,A75,A79,FUNCT_1:def 8;
         end;
 A80:    now
           assume
@@ -1581,7 +1580,7 @@ A88:      1 <= n + j by A15,NAT_1:12;
           then
 A89:      x2 in dom I & n + j in dom I by A6,A10,FINSEQ_1:def 3;
           x2 < n & n <= n + j by A39,A86,NAT_1:12,XXREAL_0:2;
-          hence y1 = y2 by A9,A85,A89,FUNCT_1:def 8;
+          hence thesis by A9,A85,A89,FUNCT_1:def 8;
         end;
         now
           given j1 being Nat such that
@@ -1601,7 +1600,7 @@ A96:      1 <= n + j1 & 1 <= n + j2 by A15,NAT_1:12;
           then n + j1 = n + j2 by A9,A94,A95,FUNCT_1:def 8;
           hence thesis by A91,A93;
         end;
-        hence y1=y2 by A64,A65,A68,A70,A80,FINSEQ_1:38;
+        hence thesis by A64,A65,A68,A70,A80,FINSEQ_1:38;
       end;
 A97:  len<* v *> = 1 by FINSEQ_1:56;
 A98:  for k be Nat st k in dom p holds H.k=p.k by FUNCT_1:70;
@@ -1762,7 +1761,7 @@ proof
 A1: v + - v = 0.V by Def11;
   hence Sum<* v,- v *> = 0.V by Th62;
   - v + v = 0.V by A1,Lm1;
-  hence Sum<* - v, v *> = 0.V by Th62;
+  hence thesis by Th62;
 end;
 
 theorem
@@ -1996,7 +1995,7 @@ registration
 A1: L is Abelian right_zeroed;
     let a be Element of L;
     thus a+0.L = a by A1,Def7;
-    hence 0.L+a = a by A1,Def5;
+    hence thesis by A1,Def5;
   end;
   cluster Abelian right_complementable ->
     left_complementable (non empty addLoopStr);
@@ -2014,3 +2013,14 @@ A3: a+w = 0.L by ALGSTR_0:def 11;
   end;
 end;
 
+:: missing, 2009.02.14, A.T.
+
+reserve V for RealLinearSpace;
+reserve v,w for VECTOR of V;
+
+theorem
+ (- a) * v = - a * v
+proof
+ thus (- a) * v = a * (- v) by Th38
+         .= - a * v by Th39;
+end;

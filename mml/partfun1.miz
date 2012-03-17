@@ -7,7 +7,7 @@
 environ
 
  vocabularies BOOLE, FUNCT_1, RELAT_1, PARTFUN1, RELAT_2, TARSKI, FINSEQ_4,
-      NEWTON;
+      NEWTON, FRAENKEL;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, RELSET_1,
       FUNCT_1;
  constructors FUNCT_1, RELAT_2, RELSET_1;
@@ -47,16 +47,16 @@ A7:   (x in dom f & f.x = y1 or x in dom g & g.x = y1) &
       per cases by A6,RELAT_1:def 4;
       suppose x in dom f & x in dom g;
         then x in dom f /\ dom g by XBOOLE_0:def 4;
-        hence y1 = y2 by A1,A7;
+        hence thesis by A1,A7;
       end;
       suppose x in dom f & not x in dom g;
-        hence y1 = y2 by A7;
+        hence thesis by A7;
       end;
       suppose not x in dom f & x in dom g;
-        hence y1 = y2 by A7;
+        hence thesis by A7;
       end;
     end;
-    hence y1 = y2;
+    hence thesis;
   end;
   consider h being Function such that
 A8: for x,y holds
@@ -70,9 +70,9 @@ A9: [x,y] in f \/ g;
     then [x,y] in f or [x,y] in g by XBOOLE_0:def 3;
     then x in dom f or x in dom g by RELAT_1:def 4;
     then x in dom f \/ dom g by XBOOLE_0:def 3;
-    hence [x,y] in h by A8,A9;
+    hence thesis by A8,A9;
   end;
-  thus [x,y] in h implies [x,y] in f \/ g by A8;
+  thus thesis by A8;
 end;
 
 theorem Th3:
@@ -84,7 +84,7 @@ A1: f \/ g = h;
   let x;
   assume x in dom f /\ dom g;
   then x in dom f & x in dom g by XBOOLE_0:def 4;
-  then h.x = f.x & h.x = g.x by A1,GRFUNC_1:34;
+  then h.x = f.x & h.x = g.x by A1,GRFUNC_1:35;
   hence thesis;
 end;
 
@@ -140,19 +140,17 @@ theorem
 proof
   let f be PartFunc of X,Y;
   assume y in rng f;
-  then consider x such that
-A1: x in dom f and
-A2: y = f.x by FUNCT_1:def 5;
-  thus thesis by A1,A2;
+  then ex x st x in dom f & y = f.x by FUNCT_1:def 5;
+  hence thesis;
 end;
 
 theorem Th27:
-  for f being PartFunc of X,Y st x in dom f holds f.x in Y
+  for f being Y-valued Function st x in dom f holds f.x in Y
 proof
-  let f be PartFunc of X,Y;
+  let f be Y-valued Function;
   assume x in dom f;
-  then f.x in rng f & rng f c= Y by FUNCT_1:def 5,RELSET_1:12;
-  hence f.x in Y;
+  then f.x in rng f & rng f c= Y by FUNCT_1:def 5,RELAT_1:def 19;
+  hence thesis;
 end;
 
 canceled 6;
@@ -184,13 +182,12 @@ A5: dom f c= X() and
 A6: rng f c= Y() by Lm2;
     reconsider f as PartFunc of X(),Y() by A5,A6,RELSET_1:11;
     take f;
-A7: rng f = {} by A4;
     thus for x holds x in dom f iff x in X() & ex y st P[x,y] by A1,A4;
-    thus for x st x in dom f holds P[x,f.x] by A7,RELAT_1:65;
+    thus for x st x in dom f holds P[x,f.x] by A4;
   end;
   now
     assume Y() <> {};
-    consider y1;
+    set y1 = the set;
     defpred Q[set,set] means ((ex y st P[$1,y]) implies P[$1,$2]) &
     ((for y holds not P[$1,y]) implies $2=y1);
 A8: for x st x in X() ex z st Q[x,z]
@@ -283,9 +280,9 @@ definition
   coherence
   proof
     dom f c= X & dom(g*f) c= dom f & rng g c= Z & rng(g*f) c= rng g
-    by RELAT_1:44,45,RELSET_1:12;
+    by RELAT_1:44,45,def 19;
     then dom(g*f) c= X & rng(g*f) c= Z by XBOOLE_1:1;
-    hence g*f is PartFunc of X,Z by RELSET_1:11;
+    hence thesis by RELSET_1:11;
   end;
 end;
 
@@ -324,7 +321,7 @@ theorem
 proof
   let f be PartFunc of X,Y such that
 A1: f is one-to-one;
-  dom f c= X & rng f c= Y by RELSET_1:12;
+  dom f c= X & rng f c= Y by RELAT_1:def 19;
   then dom(f") c= Y & rng(f") c= X by A1,FUNCT_1:55;
   hence thesis by RELSET_1:11;
 end;
@@ -336,7 +333,7 @@ theorem
 proof
   let f be PartFunc of X,Y;
 A1: dom(f|Z) c= Z by RELAT_1:87;
-  rng(f|Z) c= Y by RELSET_1:12;
+  rng(f|Z) c= Y by RELAT_1:def 19;
   hence thesis by A1,RELSET_1:11;
 end;
 
@@ -405,7 +402,7 @@ proof
   let x1,x2;
   assume x1 in dom f & x2 in dom f;
   then (dom f<>{} implies x1 = x & x2 = x) & dom f<>{} by TARSKI:def 1;
-  hence f.x1 = f.x2 implies x1 = x2;
+  hence thesis;
 end;
 
 theorem
@@ -450,7 +447,7 @@ A1: dom f1 = dom f2;
     then f1.x = y & f2.x = y by A1,Th73;
     hence thesis;
   end;
-  hence f1 = f2 by A1,FUNCT_1:9;
+  hence thesis by A1,FUNCT_1:9;
 end;
 
 :: Construction of a Partial Function from a Function
@@ -493,7 +490,7 @@ proof
     assume x in dom <:f,X,Y:>;
     then x in dom(Y|f) /\ X by RELAT_1:90;
     then x in X & x in dom(Y|f) by XBOOLE_0:def 4;
-    hence x in dom f & x in X & f.x in Y by FUNCT_1:86;
+    hence thesis by FUNCT_1:86;
   end;
   assume x in dom f & x in X & f.x in Y;
   then x in X & x in dom(Y|f) by FUNCT_1:86;
@@ -540,7 +537,7 @@ A4:   x in dom <:f,X,Y:>;
       by A1,A2,RELAT_1:25;
       then x in dom g & x in X & f.x in Y & f.x = g.x
       by A1,A4,Th78,GRFUNC_1:8;
-      hence x in dom <:g,X,Y:> by Th78;
+      hence thesis by Th78;
     end;
     let x;
     assume x in dom <:f,X,Y:>;
@@ -624,7 +621,7 @@ A4: x in dom f;
   then
 A5: dom f = dom <:f,X,Y:> by A3,XBOOLE_0:def 10;
   for x st x in dom f holds f.x = <:f,X,Y:>.x by A3,Th80;
-  hence f = <:f,X,Y:> by A5,FUNCT_1:9;
+  hence thesis by A5,FUNCT_1:9;
 end;
 
 theorem
@@ -634,7 +631,7 @@ theorem
   for f being PartFunc of X,Y holds <:f,X,Y:> = f
 proof
   let f be PartFunc of X,Y;
-  dom f c= X & rng f c= Y by RELSET_1:12;
+  dom f c= X & rng f c= Y by RELAT_1:def 19;
   hence thesis by Th85;
 end;
 
@@ -658,7 +655,7 @@ A1: dom (<:g,Y,Z:>*<:f,X,Y:>) c= dom <:g*f,X,Z:>
     then x in dom f & x in X & f.x in dom<:g,Y,Z:> by Th78,Th80;
     then x in dom f & x in X & f.x in dom g & g.(f.x) in Z by Th78;
     then x in dom (g*f) & x in X & (g*f).x in Z by FUNCT_1:21,23;
-    hence x in dom <:g*f,X,Z:> by Th78;
+    hence thesis by Th78;
   end;
   for x st x in dom (<:g,Y,Z:>*<:f,X,Y:>)
   holds (<:g,Y,Z:>*<:f,X,Y:>).x = <:g*f,X,Z:>.x
@@ -792,7 +789,7 @@ A13: x =(f").(f.x) by A1,A11,FUNCT_1:56;
     then x in dom<:f,X,Y:> by A11,Th78;
     then (<:f,X,Y:>").(<:f,X,Y:>.x) = x & <:f,X,Y:>.x = f.x
     by A2,Th80,FUNCT_1:56;
-    hence <:f",Y,X:>.y = (<:f,X,Y:>").y by A10,A12,A13,Th80;
+    hence thesis by A10,A12,A13,Th80;
   end;
   hence thesis by A9,FUNCT_1:9;
 end;
@@ -811,8 +808,8 @@ end;
 :: Total Function
 
 definition
-  let X,Y;
-  let f be Relation of X,Y;
+  let X;
+  let f be X-defined Relation;
   attr f is total means
   :Def4:
   dom f = X;
@@ -879,7 +876,7 @@ A1: dom <:f,X,Y:> = X;
   then consider x such that
 A2: x in dom f & x in X & y = f.x by FUNCT_1:def 12;
   <:f,X,Y:>.x = y & <:f,X,Y:>.x in rng <:f,X,Y:> & rng <:f,X,Y:> c= Y
-  by A1,A2,Th80,FUNCT_1:def 5,RELSET_1:12;
+  by A1,A2,Th80,FUNCT_1:def 5,RELAT_1:def 19;
   hence thesis;
 end;
 
@@ -929,9 +926,9 @@ A5:   [x,y] in f;
 A6:   x in dom f by RELAT_1:def 4;
       then y = f.x by A5,FUNCT_1:def 4;
       then y in rng f by A6,FUNCT_1:def 5;
-      hence [x,y] in [:X,Y:] by A3,A4,A6,ZFMISC_1:def 2;
+      hence thesis by A3,A4,A6,ZFMISC_1:def 2;
     end;
-    hence z in F by A1,A2,A3,A4;
+    hence thesis by A1,A2,A3,A4;
   end;
   uniqueness
   proof
@@ -963,7 +960,7 @@ theorem Th119:
   for f being PartFunc of X,Y holds f in PFuncs(X,Y)
 proof
   let f be PartFunc of X,Y;
-  dom f c= X & rng f c= Y by RELSET_1:12;
+  dom f c= X & rng f c= Y by RELAT_1:def 19;
   hence thesis by Def5;
 end;
 
@@ -973,7 +970,7 @@ proof
   let f be set;
   assume f in PFuncs(X,Y);
   then ex F being Function st f = F & dom F c= X & rng F c= Y by Def5;
-  hence f is PartFunc of X,Y by RELSET_1:11;
+  hence thesis by RELSET_1:11;
 end;
 
 theorem
@@ -1047,7 +1044,7 @@ proof
   let f,g be Function;
   (for x st x in dom f /\ dom g holds f.x = g.x) iff
   (ex h being Function st f \/ g = h) by Th2,Th3;
-  hence f tolerates g iff ex h being Function st f \/ g = h by Def6;
+  hence thesis by Def6;
 end;
 
 theorem Th131:
@@ -1124,7 +1121,7 @@ A2: g c= f;
   then x in dom g & x in dom h & dom g c= dom f
     by A2,RELAT_1:25,XBOOLE_0:def 4;
   then x in dom f /\ dom h & f.x = g.x by A2,GRFUNC_1:8,XBOOLE_0:def 4;
-  hence g.x = h.x by A1,Def6;
+  hence thesis by A1,Def6;
 end;
 
 theorem Th141:
@@ -1132,7 +1129,7 @@ theorem Th141:
 proof
   let f be Function;
   {} \/ f = f;
-  hence {} tolerates f by Th130;
+  hence thesis by Th130;
 end;
 
 theorem
@@ -1159,7 +1156,7 @@ theorem
 proof
   let f be Function;
   (f|X) c= f by RELAT_1:88;
-  hence f|X tolerates f by Th131;
+  hence thesis by Th131;
   thus thesis;
 end;
 
@@ -1168,7 +1165,7 @@ theorem
 proof
   let f be Function;
   (Y|f) c= f by RELAT_1:117;
-  hence Y|f tolerates f by Th131;
+  hence thesis by Th131;
 end;
 
 theorem Th146:
@@ -1177,7 +1174,7 @@ proof
   let f be Function;
   (Y|f|X) c= (Y|f) & (Y|f) c= f by RELAT_1:88,117;
   then (Y|f|X) c= f by XBOOLE_1:1;
-  hence Y|f|X tolerates f by Th131;
+  hence thesis by Th131;
 end;
 
 theorem
@@ -1223,8 +1220,7 @@ A2: f tolerates g;
     suppose Y = {};
       then <:{},X,Y:> is total & f tolerates <:{},X,Y:> &
       g tolerates <:{},X,Y:> by A1;
-      hence ex h being PartFunc of X,Y st h is total & f tolerates h &
-      g tolerates h;
+      hence thesis;
     end;
     suppose
 A3:   Y <> {};
@@ -1259,9 +1255,7 @@ A7:         not x in dom f & x in dom g;
             (not x in dom f & not x in dom g implies y' = y) by A7;
           end;
           suppose not x in dom f & not x in dom g;
-            hence ex y' st (x in dom f implies y' = f.x) &
-            (x in dom g implies y' = g.x) &
-            (not x in dom f & not x in dom g implies y' = y);
+            hence thesis;
           end;
         end;
         hence thesis;
@@ -1295,27 +1289,26 @@ A14:    z = h.x by FUNCT_1:def 5;
         suppose
 A15:      x in dom f & x in dom g;
           then z = f.x by A10,A14;
-          hence z in Y by A15,Th27;
+          hence thesis by A15,Th27;
         end;
         suppose
 A16:      x in dom f & not x in dom g;
           then z = f.x by A10,A14;
-          hence z in Y by A16,Th27;
+          hence thesis by A16,Th27;
         end;
         suppose
 A17:      not x in dom f & x in dom g;
           then z = g.x by A10,A14;
-          hence z in Y by A17,Th27;
+          hence thesis by A17,Th27;
         end;
         suppose not x in dom f & not x in dom g;
           then z = y by A9,A10,A13,A14;
-          hence z in Y by A3;
+          hence thesis by A3;
         end;
       end;
       then reconsider h' = h as PartFunc of X,Y by A9,RELSET_1:11;
       h' is total by A9,Def4;
-      hence ex h being PartFunc of X,Y st
-      h is total & f tolerates h & g tolerates h by A11,A12;
+      hence thesis by A11,A12;
     end;
   end;
   hence thesis;
@@ -1393,7 +1386,7 @@ proof
   assume g in TotFuncs(f);
   then ex g' being PartFunc of X,Y st g' = g & g' is total & f tolerates g'
   by Def7;
-  hence f tolerates g;
+  hence thesis;
 end;
 
 registration let X be non empty set, Y be empty set;
@@ -1500,7 +1493,7 @@ A3: rng R = X by A1,RELAT_1:71;
     let x,y;
     assume x in field R & y in field R;
     assume [x,y] in R;
-    hence [y,x] in R by A1,RELAT_1:def 10;
+    hence thesis by A1,RELAT_1:def 10;
   end;
   thus R is_antisymmetric_in field R
   proof
@@ -1546,7 +1539,7 @@ A4: [x,y] in R or [y,x] in R by RELAT_1:def 4,def 5;
     then
 A5: y in field R by XBOOLE_0:def 3;
     then [x,y] in R & [y,x] in R by A1,A3,A4,RELAT_2:def 3;
-    hence [x,x] in R by A2,A3,A5,RELAT_2:def 8;
+    hence thesis by A2,A3,A5,RELAT_2:def 8;
   end;
 end;
 
@@ -1588,11 +1581,11 @@ proof
 A1: h = f \/ g by Th130;
   assume [x,y] in f & [x,z] in g;
   then [x,y] in h & [x,z] in h by A1,XBOOLE_0:def 3;
-  hence y = z by FUNCT_1:def 1;
+  hence thesis by FUNCT_1:def 1;
 end;
 
 theorem
-  (for x st x in A holds x is Function) &
+  A is functional &
   (for f,g being Function st f in A & g in A holds f tolerates g)
   implies union A is Function
 proof
@@ -1620,13 +1613,13 @@ A7: [x,z] in q & q in A by A5,TARSKI:def 4;
     p tolerates q by A2,A6,A7;
     hence y = z by A6,A7,Th187;
   end;
-  hence union A is Function by A3,FUNCT_1:def 1,RELAT_1:def 1;
+  hence thesis by A3,FUNCT_1:def 1,RELAT_1:def 1;
 end;
 
 :: Moved from FINSEQ_4 by AK on 2007.10.09
 
 definition
-  let X,D be set, p be PartFunc of X,D, i be set;
+  let D be set, p be D-valued Function, i be set;
   assume
 A1: i in dom p;
   func p/.i -> Element of D equals
@@ -1644,5 +1637,19 @@ registration let X,Y be non empty set;
     reconsider p = {[choose X,choose Y]} as PartFunc of X,Y by RELSET_1:8;
    take p;
    thus thesis;
+  end;
+end;
+
+:: from FRAENKEL, 2009.05.06, A.K.
+
+registration
+  let A, B be set;
+  cluster PFuncs(A,B) -> functional;
+  coherence
+  proof
+    let x be set;
+    assume x in PFuncs(A,B);
+    then ex f being Function st x = f & dom f c= A & rng f c= B by Def5;
+    hence thesis;
   end;
 end;

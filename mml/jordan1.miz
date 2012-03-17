@@ -8,22 +8,24 @@ environ
 
  vocabularies PRE_TOPC, FUNCT_1, RELAT_1, SUBSET_1, RELAT_2, ORDINAL2, BOOLE,
       RCOMP_1, BORSUK_1, FUNCOP_1, CONNSP_1, EUCLID, TOPREAL1, TOPS_2, ARYTM_1,
-      MCART_1, ARYTM_3, SQUARE_1, METRIC_1, JORDAN1, ARYTM, JORDAN1A;
+      MCART_1, ARYTM_3, SQUARE_1, METRIC_1, JORDAN1, ARYTM, JORDAN1A,
+      PCOMPS_1, RLVECT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XXREAL_0, XREAL_0, REAL_1,
       FUNCT_1, RELSET_1, FUNCT_2, BINOP_1, NUMBERS, FUNCOP_1, PRE_TOPC, TOPS_2,
-      CONNSP_1, SQUARE_1, RCOMP_1, STRUCT_0, METRIC_1, BORSUK_1, TOPREAL1,
-      EUCLID;
+      CONNSP_1, SQUARE_1, RCOMP_1, STRUCT_0, METRIC_1,
+      PCOMPS_1, BORSUK_1, TOPREAL1,
+      RLVECT_1, RLTOPSP1, EUCLID;
  constructors REAL_1, SQUARE_1, RCOMP_1, CONNSP_1, TOPS_2, TOPMETR, TOPREAL1,
-      FUNCOP_1;
+      FUNCOP_1, FUNCSDOM, CONVEX1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, XREAL_0, MEMBERED, STRUCT_0,
-      PRE_TOPC, BORSUK_1, EUCLID, TOPREAL1;
+      PRE_TOPC, BORSUK_1, EUCLID, TOPREAL1, RLTOPSP1, RLVECT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, CONNSP_1, XBOOLE_0, EUCLID, SQUARE_1, SUBSET_1, STRUCT_0,
-      PCOMPS_1;
+      PCOMPS_1, RLTOPSP1;
  theorems TARSKI, FUNCOP_1, FUNCT_1, FUNCT_2, SUBSET_1, RCOMP_1, METRIC_1,
       PRE_TOPC, TOPS_1, TOPS_2, BORSUK_1, CONNSP_1, SQUARE_1, TOPMETR,
       TOPREAL1, EUCLID, TOPREAL3, TREAL_1, XBOOLE_0, XBOOLE_1, XREAL_0,
-      XREAL_1, ZFMISC_1, SPPOL_1, XXREAL_0;
+      XREAL_1, ZFMISC_1, SPPOL_1, XXREAL_0, RLTOPSP1;
 
 begin
 
@@ -117,7 +119,7 @@ A4:   xb in A & yb in A by PRE_TOPC:def 10;
     let A1, B1 be Subset of GX|A such that
  [#](GX|A) = A1 \/ B1 and A1,B1 are_separated;
     [#](GX|D) = D by PRE_TOPC:def 10;
-    hence A1 = {}(GX|A) or B1 = {}(GX|A);
+    hence thesis;
   end;
 end;
 
@@ -171,10 +173,11 @@ reserve P for Subset of TOP-REAL 2;
 reserve w1,w2 for Point of TOP-REAL 2;
 
 definition
-  let n be Element of NAT, P be Subset of TOP-REAL n;
-  attr P is convex means
-  for w1,w2 being Point of TOP-REAL n st w1 in P & w2 in P holds
+  let V be RealLinearSpace, P be Subset of V;
+  redefine attr P is convex means
+  for w1,w2 being Element of V st w1 in P & w2 in P holds
   LSeg(w1,w2) c= P;
+  compatibility by RLTOPSP1:23;
 end;
 
 theorem Th9:
@@ -205,7 +208,12 @@ A7: rng f c= P by A3,PRE_TOPC:def 10;
     by A6,PRE_TOPC:def 10;
     then
 A8: (TOP-REAL n)|LSeg(w1,w2) is SubSpace of (TOP-REAL n)|P by TOPMETR:4;
-    dom f=[.0,1.] by BORSUK_1:83,FUNCT_2:def 1;
+    LSeg(w1,w2) is not empty;
+    then (TOP-REAL n)|LSeg(w1,w2) is not empty;
+    then
+X:  the carrier of (TOP-REAL n)|LSeg(w1,w2) <> {};
+    the carrier of I[01] = [.0,1.] by BORSUK_1:83;
+    then dom f=[.0,1.] by FUNCT_2:def 1,X;
     then reconsider g=f as Function of [.0,1.],P by A7,FUNCT_2:4;
     the carrier of (TOP-REAL n)|P = [#]((TOP-REAL n)|P)
       .= P by PRE_TOPC:def 10;
@@ -227,6 +235,8 @@ reserve pa,pb for Point of TOP-REAL 2,
 
 reserve s1a,t1a,s2a,t2a,s3a,t3a,sb,tb,sc,tc for Real;
 
+XX: the carrier of TOP-REAL 2 = REAL 2 by EUCLID:25;
+
 Lm2: for s1 holds { |[ sb,tb ]|:sb<s1} is Subset of REAL 2
 proof
   let s1;
@@ -234,8 +244,11 @@ proof
   proof
     let y be set;
     assume y in { |[ sb,tb ]|:sb<s1};
-    then ex s7,t7 being Real st |[ s7,t7 ]|=y & s7<s1;
-    hence thesis;
+    then consider s7,t7 being Real such that
+W:   |[ s7,t7 ]|=y and s7<s1;
+     |[ s7,t7 ]| in the carrier of TOP-REAL 2;
+     then |[ s7,t7 ]| in REAL 2 by EUCLID:25;
+    hence thesis by W;
   end;
   hence thesis;
 end;
@@ -247,8 +260,11 @@ proof
   proof
     let y be set;
     assume y in { |[ sd,td ]|:td<t1};
-    then ex s7,t7 being Real st |[ s7,t7 ]|=y & t7<t1;
-    hence thesis;
+    then consider s7,t7 being Real such that
+W:   |[ s7,t7 ]|=y and t7<t1;
+     |[ s7,t7 ]| in the carrier of TOP-REAL 2;
+     then |[ s7,t7 ]| in REAL 2 by EUCLID:25;
+    hence thesis by W;
   end;
   hence thesis;
 end;
@@ -260,8 +276,11 @@ proof
   proof
     let y be set;
     assume y in { |[ sb,tb ]|:s2<sb};
-    then ex s7,t7 being Real st |[ s7,t7 ]|=y & s2<s7;
-    hence thesis;
+    then consider s7,t7 being Real such that
+W:   |[ s7,t7 ]|=y & s2<s7;
+     |[ s7,t7 ]| in the carrier of TOP-REAL 2;
+     then |[ s7,t7 ]| in REAL 2 by EUCLID:25;
+    hence thesis by W;
   end;
   hence thesis;
 end;
@@ -273,8 +292,11 @@ proof
   proof
     let y be set;
     assume y in { |[ sb,tb ]|:t2<tb};
-    then ex s7,t7 being Real st |[ s7,t7 ]|=y & t2<t7;
-    hence thesis;
+    then consider s7,t7 being Real such that
+W:   |[ s7,t7 ]|=y & t2<t7;
+     |[ s7,t7 ]| in the carrier of TOP-REAL 2;
+     then |[ s7,t7 ]| in REAL 2 by EUCLID:25;
+    hence thesis by W;
   end;
   hence thesis;
 end;
@@ -289,8 +311,11 @@ proof
     let y be set;
     assume y in { |[ sb,tb ]| where sb is Real,tb is Real:
     s1<sb & sb<s2 & t1<tb & tb<t2};
-    then ex s7,t7 being Real st |[ s7,t7 ]|=y & s1<s7 & s7<s2 & t1<t7 & t7<t2;
-    hence thesis;
+    then consider s7,t7 being Real such that
+W:     |[ s7,t7 ]|=y & s1<s7 & s7<s2 & t1<t7 & t7<t2;
+     |[ s7,t7 ]| in the carrier of TOP-REAL 2;
+     then |[ s7,t7 ]| in REAL 2 by EUCLID:25;
+    hence thesis by W;
   end;
   hence thesis;
 end;
@@ -305,9 +330,12 @@ proof
     let y be set;
     assume y in { |[ sb,tb ]| where sb is Real,tb is Real:
     not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2)};
-    then ex s7,t7 being Real st |[ s7,t7 ]|=y &
+    then consider s7,t7 being Real such that
+W:     |[ s7,t7 ]|=y &
     not (s1<=s7 & s7<=s2 & t1<=t7 & t7<=t2);
-    hence thesis;
+    |[ s7,t7 ]| in the carrier of TOP-REAL 2;
+     then |[ s7,t7 ]| in REAL 2 by EUCLID:25;
+    hence thesis by W;
   end;
   hence thesis;
 end;
@@ -427,7 +455,7 @@ A5: w1`1=s3 & w1`2=t3 by A4,EUCLID:56;
 A6: |[ s4,t4 ]|=w2 & (s1<s4 & s4<s2 & t1<t4 & t4<t2) by A1,A2;
 A7: w2`1=s4 & w2`2=t4 by A6,EUCLID:56;
   x in {(1-lambda)*w1 + lambda*w2: 0 <= lambda & lambda <=
-  1} by A3,TOPREAL1:def 3;
+  1} by A3;
   then consider l such that
 A8: x = (1-l)*w1 + l*w2 & 0 <= l & l <= 1;
   set w = (1-l)*w1 + l*w2;
@@ -463,7 +491,7 @@ A5: w1`1=s3 & w1`2=t3 by A4,EUCLID:56;
 A6: |[ s4,t4 ]|=w2 & s1<s4 by A1,A2;
 A7: w2`1=s4 & w2`2=t4 by A6,EUCLID:56;
   x in {(1-lambda)*w1 + lambda*w2: 0 <= lambda & lambda <=
-  1} by A3,TOPREAL1:def 3;
+  1} by A3;
   then consider l such that
 A8: x = (1-l)*w1 + l*w2& 0 <= l & l <= 1;
   set w = (1-l)*w1 + l*w2;
@@ -497,7 +525,7 @@ A5: w1`1=s3 & w1`2=t3 by A4,EUCLID:56;
 A6: |[ s4,t4 ]|=w2 & s4<s2 by A1,A2;
 A7: w2`1=s4 & w2`2=t4 by A6,EUCLID:56;
   x in {(1-lambda)*w1 + lambda*w2: 0 <= lambda & lambda <=
-  1} by A3,TOPREAL1:def 3;
+  1} by A3;
   then consider l such that
 A8: x = (1-l)*w1 + l*w2& 0 <= l & l <= 1;
   set w = (1-l)*w1 + l*w2;
@@ -531,7 +559,7 @@ A5: w1`1=s3 & w1`2=t3 by A4,EUCLID:56;
 A6: |[ s4,t4 ]|=w2 & t1<t4 by A1,A2;
 A7: w2`1=s4 & w2`2=t4 by A6,EUCLID:56;
   x in {(1-lambda)*w1 + lambda*w2: 0 <= lambda & lambda <=
-  1} by A3,TOPREAL1:def 3;
+  1} by A3;
   then consider l such that
 A8: x = (1-l)*w1 + l*w2& 0 <= l & l <= 1;
   set w = (1-l)*w1 + l*w2;
@@ -565,7 +593,7 @@ A5: w1`1=s3 & w1`2=t3 by A4,EUCLID:56;
 A6: |[ s4,t4 ]|=w2 & t4<t2 by A1,A2;
 A7: w2`1=s4 & w2`2=t4 by A6,EUCLID:56;
   x in {(1-lambda)*w1 + lambda*w2: 0 <= lambda & lambda <=
-  1} by A3,TOPREAL1:def 3;
+  1} by A3;
   then consider l such that
 A8: x = (1-l)*w1 + l*w2& 0 <= l & l <= 1;
   set w = (1-l)*w1 + l*w2;
@@ -593,7 +621,7 @@ A1: P={ |[ s3,t3 ]|:s3<s1} \/ {|[s4,t4]|:t4<t1}\/ {|[s5,t5]|:s2<s5}
   \/ {|[s6,t6]|:t2<t6} by Th13;
   reconsider A0={ |[ s,t ]|:s<s1}, A1={ |[ s,t ]|:t<t1},
   A2={ |[ s,t ]|:s2<s}, A3={ |[ s,t ]|:t2<t}
-  as Subset of TOP-REAL 2 by Lm2,Lm3,Lm4,Lm5;
+  as Subset of TOP-REAL 2 by Lm2,Lm3,Lm4,Lm5,XX;
 A2: s1-1<s1 by XREAL_1:46;
 A3: t1-1<t1 by XREAL_1:46;
 A4: |[s1-1,t1-1]| in A0 by A2;
@@ -620,6 +648,8 @@ A14: A2 is connected by Th9,Th16;
   hence thesis by A1,A5,A8,A11,A12,A13,A14,Th8;
 end;
 
+YY: the TopStruct of TOP-REAL 2 = TopSpaceMetr Euclid 2 by EUCLID:def 8;
+
 theorem Th25:
   for s1 for P being Subset of TOP-REAL 2 st P = { |[ s,t ]|:s1<s } holds
   P is open
@@ -627,6 +657,7 @@ proof
   let s1;
   let P be Subset of TOP-REAL 2 such that
 A1: P= { |[ s,t ]|:s1<s };
+  reconsider PP=P as Subset of TopSpaceMetr Euclid 2 by YY;
   for pe being Point of Euclid 2 st pe in P ex r being real number st r>0 &
   Ball(pe,r) c= P
   proof
@@ -647,7 +678,7 @@ A3: r>0 by XREAL_1:141;
       then consider q being Element of Euclid 2 such that
 A4:   q=x and
 A5:   dist(pe,q)<r;
-      reconsider ppe=pe, pq=q as Point of TOP-REAL 2;
+      reconsider ppe=pe, pq=q as Point of TOP-REAL 2 by XX;
       (Pitag_dist 2).(pe,q)=dist(pe,q) by METRIC_1:def 1;
       then
 A6:   sqrt ((ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2)<r by A5,TOPREAL3:12;
@@ -673,7 +704,8 @@ A10:  s-(s-s1)/2 < pq`1 by A2,EUCLID:56;
     end;
     hence thesis by A3;
   end;
-  hence thesis by TOPMETR:22;
+   then PP is open by TOPMETR:22;
+  hence thesis by YY,PRE_TOPC:60;
 end;
 
 theorem Th26:
@@ -683,6 +715,7 @@ proof
   let s1;
   let P be Subset of TOP-REAL 2 such that
 A1: P= { |[ s,t ]|:s1>s };
+  reconsider PP=P as Subset of TopSpaceMetr Euclid 2 by YY;
   for pe being Point of Euclid 2 st pe in P ex r being real number st
   r>0 & Ball(pe,r) c= P
   proof
@@ -703,7 +736,7 @@ A3: r>0 by XREAL_1:141;
       then consider q being Element of Euclid 2 such that
 A4:   q=x and
 A5:   dist(pe,q)<r;
-      reconsider ppe=pe, pq=q as Point of TOP-REAL 2;
+      reconsider ppe=pe, pq=q as Point of TOP-REAL 2 by XX;
       (Pitag_dist 2).(pe,q)=dist(pe,q) by METRIC_1:def 1;
       then
 A6:   sqrt ((ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2)<r by A5,TOPREAL3:12;
@@ -728,7 +761,8 @@ A10:  s+(s1-s)/2 > pq`1 by A2,EUCLID:56;
     end;
     hence thesis by A3;
   end;
-  hence thesis by TOPMETR:22;
+   then PP is open by TOPMETR:22;
+  hence thesis by YY,PRE_TOPC:60;
 end;
 
 theorem Th27:
@@ -738,6 +772,7 @@ proof
   let s1;
   let P be Subset of TOP-REAL 2 such that
 A1: P= { |[ s,t ]|:s1<t };
+  reconsider PP=P as Subset of TopSpaceMetr Euclid 2 by YY;
   for pe being Point of Euclid 2 st pe in P ex r being real number
   st r>0 & Ball(pe,r) c= P
   proof
@@ -758,7 +793,7 @@ A3: r>0 by XREAL_1:141;
       then consider q being Element of Euclid 2 such that
 A4:   q=x and
 A5:   dist(pe,q)<r;
-      reconsider ppe=pe, pq=q as Point of TOP-REAL 2;
+      reconsider ppe=pe, pq=q as Point of TOP-REAL 2 by XX;
       (Pitag_dist 2).(pe,q)=dist(pe,q) by METRIC_1:def 1;
       then
 A6:   sqrt ((ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2)<r by A5,TOPREAL3:12;
@@ -785,7 +820,8 @@ A10:  t-(t-s1)/2 < pq`2 by A2,EUCLID:56;
     end;
     hence thesis by A3;
   end;
-  hence thesis by TOPMETR:22;
+   then PP is open by TOPMETR:22;
+  hence thesis by YY,PRE_TOPC:60;
 end;
 
 theorem Th28:
@@ -795,6 +831,7 @@ proof
   let s1;
   let P be Subset of TOP-REAL 2 such that
 A1: P= { |[ s,t ]|:s1>t };
+  reconsider PP=P as Subset of TopSpaceMetr Euclid 2 by YY;
   for pe being Point of Euclid 2 st pe in P ex r being real number st r>0 &
   Ball(pe,r) c= P
   proof
@@ -815,7 +852,7 @@ A3: r>0 by XREAL_1:141;
       then consider q being Element of Euclid 2 such that
 A4:   q=x and
 A5:   dist(pe,q)<r;
-      reconsider ppe=pe, pq=q as Point of TOP-REAL 2;
+      reconsider ppe=pe, pq=q as Point of TOP-REAL 2 by XX;
       (Pitag_dist 2).(pe,q)=dist(pe,q) by METRIC_1:def 1;
       then
 A6:   sqrt ((ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2)<r by A5,TOPREAL3:12;
@@ -840,7 +877,8 @@ A10:  t+(s1-t)/2 > pq`2 by A2,EUCLID:56;
     end;
     hence thesis by A3;
   end;
-  hence thesis by TOPMETR:22;
+   then PP is open by TOPMETR:22;
+  hence thesis by YY,PRE_TOPC:60;
 end;
 
 theorem Th29:
@@ -851,10 +889,10 @@ proof
   let P be Subset of TOP-REAL 2;
   assume
 A1: P = { |[ s,t ]|:s1<s & s<s2 & t1<t & t<t2};
-  reconsider P1={|[s,t]|:s1<s} as Subset of TOP-REAL 2 by Lm4;
-  reconsider P2={|[s,t]|:s<s2} as Subset of TOP-REAL 2 by Lm2;
-  reconsider P3={|[s,t]|:t1<t} as Subset of TOP-REAL 2 by Lm5;
-  reconsider P4={|[s,t]|:t<t2} as Subset of TOP-REAL 2 by Lm3;
+  reconsider P1={|[s,t]|:s1<s} as Subset of TOP-REAL 2 by Lm4,XX;
+  reconsider P2={|[s,t]|:s<s2} as Subset of TOP-REAL 2 by Lm2,XX;
+  reconsider P3={|[s,t]|:t1<t} as Subset of TOP-REAL 2 by Lm5,XX;
+  reconsider P4={|[s,t]|:t<t2} as Subset of TOP-REAL 2 by Lm3,XX;
 A2: P=P1 /\ P2 /\ P3 /\ P4 by A1,Th12;
   P1 is open & P2 is open by Th25,Th26;
   then
@@ -874,10 +912,10 @@ proof
   then
 A1: P={ |[ s3,t3 ]|:s3<s1} \/ {|[s4,t4]|:t4<t1}\/ {|[s5,t5]|:s2<s5}
   \/ {|[s6,t6]|:t2<t6} by Th13;
-  reconsider A0={ |[ s,t ]|:s<s1} as Subset of TOP-REAL 2 by Lm2;
-  reconsider A1={ |[ s,t ]|:t<t1} as Subset of TOP-REAL 2 by Lm3;
-  reconsider A2={ |[ s,t ]|:s2<s} as Subset of TOP-REAL 2 by Lm4;
-  reconsider A3={ |[ s,t ]|:t2<t} as Subset of TOP-REAL 2 by Lm5;
+  reconsider A0={ |[ s,t ]|:s<s1} as Subset of TOP-REAL 2 by Lm2,XX;
+  reconsider A1={ |[ s,t ]|:t<t1} as Subset of TOP-REAL 2 by Lm3,XX;
+  reconsider A2={ |[ s,t ]|:s2<s} as Subset of TOP-REAL 2 by Lm4,XX;
+  reconsider A3={ |[ s,t ]|:t2<t} as Subset of TOP-REAL 2 by Lm5,XX;
   A0 is open & A1 is open by Th26,Th28;
   then
 A2: A0 \/ A1 is open by TOPS_1:37;
@@ -982,7 +1020,7 @@ theorem Th34:
 proof
   let s1,s2,t1,t2;
   { |[ sc,tc ]|: s1<sc & sc<s2 & t1<tc & tc<t2}
-  is Subset of TOP-REAL 2 by Lm6;
+  is Subset of TOP-REAL 2 by Lm6,XX;
   hence thesis by Th32;
 end;
 
@@ -992,7 +1030,7 @@ theorem Th35:
 proof
   let s1,s2,t1,t2;
   { |[ sb,tb ]|:not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2)}
-  is Subset of TOP-REAL 2 by Lm7;
+  is Subset of TOP-REAL 2 by Lm7,XX;
   hence thesis by Th33;
 end;
 
@@ -1171,10 +1209,10 @@ A19: P1A=P1 & P2B=P2;
 A20: P1A is connected by A19,CONNSP_1:24;
 A21: P2 is connected by A4,Th37;
 A22: P2={ |[ sa,ta ]|:not (s1<=sa & sa<=s2 & t1<=ta & ta<=t2)} by A4,Th33;
-    reconsider A0={ |[ s3a,t3a ]|:s3a<s1} as Subset of TOP-REAL 2 by Lm2;
-    reconsider A1={ |[ s4,t4 ]|:t4<t1} as Subset of TOP-REAL 2 by Lm3;
-    reconsider A2={ |[ s5,t5 ]|:s2<s5} as Subset of TOP-REAL 2 by Lm4;
-    reconsider A3={ |[ s6,t6 ]|:t2<t6} as Subset of TOP-REAL 2 by Lm5;
+    reconsider A0={ |[ s3a,t3a ]|:s3a<s1} as Subset of TOP-REAL 2 by Lm2,XX;
+    reconsider A1={ |[ s4,t4 ]|:t4<t1} as Subset of TOP-REAL 2 by Lm3,XX;
+    reconsider A2={ |[ s5,t5 ]|:s2<s5} as Subset of TOP-REAL 2 by Lm4,XX;
+    reconsider A3={ |[ s6,t6 ]|:t2<t6} as Subset of TOP-REAL 2 by Lm5,XX;
 A23: P2=A0 \/ A1 \/ A2 \/ A3 by A22,Th13;
     t2+1>t2 by XREAL_1:31;
     then |[s2+1,t2+1]| in A3;
@@ -1379,7 +1417,7 @@ A13: p=x and
 A14: p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
     p`1 <= s2 & p`1 >= s1 & p`2 = t1 or
     p`1 = s2 & p`2 <= t2 & p`2 >= t1 by A2;
-    reconsider q=p as Point of Euclid 2;
+    reconsider q=p as Point of Euclid 2 by XX;
     now per cases by A14;
       suppose
 A15:    p`1 = s1 & p`2 <= t2 & p`2 >= t1;
@@ -1393,7 +1431,9 @@ A16:        p`1 = s1 & p`2 < t2 & p`2 > t1;
               assume that
 A17:          Q is open and
 A18:          p in Q;
-              consider r be real number such that
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
+              QQ is open by A17,YY,PRE_TOPC:60;
+              then consider r be real number such that
 A19:          r>0 and
 A20:          Ball(q,r) c= Q by A17,A18,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
@@ -1419,7 +1459,7 @@ A28:          pa`1=p`1+r2 & pa`2=p`2 by EUCLID:56;
 XREAL_1:22,31;
               then
 A29:          pa in P1 by A2;
-              reconsider qa=pa as Point of Euclid 2;
+              reconsider qa=pa as Point of Euclid 2 by XX;
               0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
 A30:          0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
@@ -1446,7 +1486,9 @@ A32:        p`1 = s1 & p`2 = t1;
               assume that
 A33:          Q is open and
 A34:          p in Q;
-              consider r be real number such that
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
+              QQ is open by A33,YY,PRE_TOPC:60;
+              then consider r be real number such that
 A35:          r>0 and
 A36:          Ball(q,r) c= Q by A33,A34,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
@@ -1476,7 +1518,7 @@ A45:          pa`1<s2 by A42,XREAL_1:22;
               then pa`2<t2 by A42,XREAL_1:22;
               then
 A46:          pa in P1 by A2,A43,A44,A45;
-              reconsider qa=pa as Point of Euclid 2;
+              reconsider qa=pa as Point of Euclid 2 by XX;
               0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
 A47:          0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
@@ -1510,7 +1552,9 @@ A51:        p`1 = s1 & p`2 = t2;
               assume that
 A52:          Q is open and
 A53:          p in Q;
-              consider r be real number such that
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
+              QQ is open by A52,YY,PRE_TOPC:60;
+              then consider r be real number such that
 A54:          r>0 and
 A55:          Ball(q,r) c= Q by A52,A53,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
@@ -1540,7 +1584,7 @@ A64:          pa`1<s2 by A61,XREAL_1:22;
               then pa`2>t1 by A61,XREAL_1:14;
               then
 A65:          pa in P1 by A2,A62,A63,A64;
-              reconsider qa=pa as Point of Euclid 2;
+              reconsider qa=pa as Point of Euclid 2 by XX;
               0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
 A66:          0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
@@ -1564,7 +1608,7 @@ A69:          sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A54,SQUARE_1:77;
             hence p in Cl P1 by PRE_TOPC:def 13;
           end;
         end;
-        hence x in Cl P1 by A13;
+        hence thesis by A13;
       end;
       suppose
 A70:    p`1 <= s2 & p`1 >= s1 & p`2 = t2;
@@ -1578,7 +1622,9 @@ A71:        p`2 = t2 & p`1 < s2 & p`1 > s1;
               assume that
 A72:          Q is open and
 A73:          p in Q;
-              consider r be real number such that
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
+              QQ is open by A72,YY,PRE_TOPC:60;
+              then consider r be real number such that
 A74:          r>0 and
 A75:          Ball(q,r) c= Q by A72,A73,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
@@ -1604,7 +1650,7 @@ A83:          pa`1=p`1 & pa`2=p`2-r2 by EUCLID:56;
 XREAL_1:14,46;
               then
 A84:          pa in P1 by A2;
-              reconsider qa=pa as Point of Euclid 2;
+              reconsider qa=pa as Point of Euclid 2 by XX;
               0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
 A85:          0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
@@ -1630,7 +1676,9 @@ A87:        p`2 = t2 & p`1 = s1;
               assume that
 A88:          Q is open and
 A89:          p in Q;
-              consider r be real number such that
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
+              QQ is open by A88,YY,PRE_TOPC:60;
+              then consider r be real number such that
 A90:          r>0 and
 A91:          Ball(q,r) c= Q by A88,A89,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
@@ -1660,7 +1708,7 @@ A100:         pa`2>t1 by A97,XREAL_1:14;
               then pa`1<s2 by A97,XREAL_1:22;
               then
 A101:         pa in P1 by A2,A98,A99,A100;
-              reconsider qa=pa as Point of Euclid 2;
+              reconsider qa=pa as Point of Euclid 2 by XX;
               0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
 A102:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
@@ -1692,7 +1740,9 @@ A106:       p`2 = t2 & p`1 = s2;
               assume that
 A107:         Q is open and
 A108:         p in Q;
-              consider r be real number such that
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
+              QQ is open by A107,YY,PRE_TOPC:60;
+              then consider r be real number such that
 A109:         r>0 and
 A110:         Ball(q,r) c= Q by A107,A108,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
@@ -1722,7 +1772,7 @@ A119:         pa`1>s1 by A116,XREAL_1:14;
               then pa`2>t1 by A116,XREAL_1:14;
               then
 A120:         pa in P1 by A2,A117,A118,A119;
-              reconsider qa=pa as Point of Euclid 2;
+              reconsider qa=pa as Point of Euclid 2 by XX;
               0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
 A121:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
@@ -1746,7 +1796,7 @@ A124:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A109,SQUARE_1:77;
             hence p in Cl P1 by PRE_TOPC:def 13;
           end;
         end;
-        hence x in Cl P1 by A13;
+        hence thesis by A13;
       end;
       suppose
 A125:   p`1 <= s2 & p`1 >= s1 & p`2 = t1;
@@ -1760,7 +1810,9 @@ A126:       p`2 = t1 & p`1 < s2 & p`1 > s1;
               assume that
 A127:         Q is open and
 A128:         p in Q;
-              consider r be real number such that
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
+              QQ is open by A127,YY,PRE_TOPC:60;
+              then consider r be real number such that
 A129:         r>0 and
 A130:         Ball(q,r) c= Q by A127,A128,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
@@ -1786,7 +1838,7 @@ A138:         pa`2=p`2+r2 & pa`1=p`1 by EUCLID:56;
 XREAL_1:22,31;
               then
 A139:         pa in P1 by A2;
-              reconsider qa=pa as Point of Euclid 2;
+              reconsider qa=pa as Point of Euclid 2 by XX;
               0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
 A140:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
@@ -1813,7 +1865,9 @@ A142:       p`2 = t1 & p`1 = s1;
               assume that
 A143:         Q is open and
 A144:         p in Q;
-              consider r be real number such that
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
+              QQ is open by A143,YY,PRE_TOPC:60;
+              then consider r be real number such that
 A145:         r>0 and
 A146:         Ball(q,r) c= Q by A143,A144,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
@@ -1843,7 +1897,7 @@ A155:         pa`1<s2 by A152,XREAL_1:22;
               then pa`2<t2 by A152,XREAL_1:22;
               then
 A156:         pa in P1 by A2,A153,A154,A155;
-              reconsider qa=pa as Point of Euclid 2;
+              reconsider qa=pa as Point of Euclid 2 by XX;
               0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
 A157:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
@@ -1877,7 +1931,9 @@ A161:       p`2 = t1 & p`1 = s2;
               assume that
 A162:         Q is open and
 A163:         p in Q;
-              consider r be real number such that
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
+              QQ is open by A162,YY,PRE_TOPC:60;
+              then consider r be real number such that
 A164:         r>0 and
 A165:         Ball(q,r) c= Q by A162,A163,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
@@ -1907,7 +1963,7 @@ A174:         pa`2<t2 by A171,XREAL_1:22;
               then pa`1>s1 by A171,XREAL_1:14;
               then
 A175:         pa in P1 by A2,A172,A173,A174;
-              reconsider qa=pa as Point of Euclid 2;
+              reconsider qa=pa as Point of Euclid 2 by XX;
               0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
 A176:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
@@ -1931,7 +1987,7 @@ A179:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A164,SQUARE_1:77;
             hence p in Cl P1 by PRE_TOPC:def 13;
           end;
         end;
-        hence x in Cl P1 by A13;
+        hence thesis by A13;
       end;
       suppose
 A180:   p`1 = s2 & p`2 <= t2 & p`2 >= t1;
@@ -1945,7 +2001,9 @@ A181:       p`1 = s2 & p`2 < t2 & p`2 > t1;
               assume that
 A182:         Q is open and
 A183:         p in Q;
-              consider r being real number such that
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
+              QQ is open by A182,YY,PRE_TOPC:60;
+              then consider r being real number such that
 A184:         r>0 and
 A185:         Ball(q,r) c= Q by A182,A183,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
@@ -1971,7 +2029,7 @@ A193:         pa`2=p`2 & pa`1=p`1-r2 by EUCLID:56;
 XREAL_1:14,46;
               then
 A194:         pa in P1 by A2;
-              reconsider qa=pa as Point of Euclid 2;
+              reconsider qa=pa as Point of Euclid 2 by XX;
               0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
 A195:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
@@ -1997,7 +2055,9 @@ A197:       p`1 = s2 & p`2 = t1;
               assume that
 A198:         Q is open and
 A199:         p in Q;
-              consider r being real number such that
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
+              QQ is open by A198,YY,PRE_TOPC:60;
+              then consider r being real number such that
 A200:         r>0 and
 A201:         Ball(q,r) c= Q by A198,A199,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
@@ -2027,7 +2087,7 @@ A210:         pa`1>s1 by A207,XREAL_1:14;
               then pa`2<t2 by A207,XREAL_1:22;
               then
 A211:         pa in P1 by A2,A208,A209,A210;
-              reconsider qa=pa as Point of Euclid 2;
+              reconsider qa=pa as Point of Euclid 2 by XX;
               0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
 A212:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
@@ -2059,7 +2119,9 @@ A216:       p`1 = s2 & p`2 = t2;
               assume that
 A217:         Q is open and
 A218:         p in Q;
-              consider r being real number such that
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
+              QQ is open by A217,YY,PRE_TOPC:60;
+              then consider r being real number such that
 A219:         r>0 and
 A220:         Ball(q,r) c= Q by A217,A218,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
@@ -2089,7 +2151,7 @@ A229:         pa`1>s1 by A226,XREAL_1:14;
               then pa`2>t1 by A226,XREAL_1:14;
               then
 A230:         pa in P1 by A2,A227,A228,A229;
-              reconsider qa=pa as Point of Euclid 2;
+              reconsider qa=pa as Point of Euclid 2 by XX;
               0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
 A231:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
@@ -2113,10 +2175,10 @@ A234:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A219,SQUARE_1:77;
             hence p in Cl P1 by PRE_TOPC:def 13;
           end;
         end;
-        hence x in Cl P1 by A13;
+        hence thesis by A13;
       end;
     end;
-    hence x in Cl P1;
+    hence thesis;
   end;
   hence thesis by A3,XBOOLE_1:8;
 end;
@@ -2191,7 +2253,7 @@ A13: p=x and
 A14: p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
     p`1 <= s2 & p`1 >= s1 & p`2 = t1 or
     p`1 = s2 & p`2 <= t2 & p`2 >= t1 by A2;
-    reconsider q=p as Point of Euclid 2;
+    reconsider q=p as Point of Euclid 2 by XX;
     now per cases by A14;
       suppose
 A15:    p`1 = s1 & p`2 <= t2 & p`2 >= t1;
@@ -2202,7 +2264,9 @@ A15:    p`1 = s1 & p`2 <= t2 & p`2 >= t1;
           assume that
 A16:      Q is open and
 A17:      p in Q;
-          consider r be real number such that
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
+              QQ is open by A16,YY,PRE_TOPC:60;
+          then consider r be real number such that
 A18:      r>0 and
 A19:      Ball(q,r) c= Q by A16,A17,TOPMETR:22;
           reconsider r as Real by XREAL_0:def 1;
@@ -2213,7 +2277,7 @@ A21:      r/2>0 by A18,XREAL_1:217;
 XREAL_1:46;
           then
 A22:      pa in P2 by A2;
-          reconsider qa=pa as Point of Euclid 2;
+          reconsider qa=pa as Point of Euclid 2 by XX;
           0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
           then
 A23:      0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
@@ -2229,7 +2293,7 @@ A24:      sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A18,SQUARE_1:77;
           then P2 /\ Q <> {} by A19,A22,XBOOLE_0:def 4;
           hence thesis by XBOOLE_0:def 7;
         end;
-        hence x in Cl P2 by A13,PRE_TOPC:def 13;
+        hence thesis by A13,PRE_TOPC:def 13;
       end;
       suppose
 A25:    p`1 <= s2 & p`1 >= s1 & p`2 = t2;
@@ -2240,7 +2304,9 @@ A25:    p`1 <= s2 & p`1 >= s1 & p`2 = t2;
           assume that
 A26:      Q is open and
 A27:      p in Q;
-          consider r being real number such that
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
+              QQ is open by A26,YY,PRE_TOPC:60;
+          then consider r being real number such that
 A28:      r>0 and
 A29:      Ball(q,r) c= Q by A26,A27,TOPMETR:22;
           reconsider r as Real by XREAL_0:def 1;
@@ -2251,7 +2317,7 @@ A31:      r/2>0 by A28,XREAL_1:217;
 XREAL_1:31;
           then
 A32:      pa in P2 by A2;
-          reconsider qa=pa as Point of Euclid 2;
+          reconsider qa=pa as Point of Euclid 2 by XX;
           0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
           then
 A33:      0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
@@ -2269,7 +2335,7 @@ A35:      sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A28,SQUARE_1:77;
           then P2 /\ Q <> {} by A29,A32,XBOOLE_0:def 4;
           hence thesis by XBOOLE_0:def 7;
         end;
-        hence x in Cl P2 by A13,PRE_TOPC:def 13;
+        hence thesis by A13,PRE_TOPC:def 13;
       end;
       suppose
 A36:    p`1 <= s2 & p`1 >= s1 & p`2 = t1;
@@ -2280,7 +2346,9 @@ A36:    p`1 <= s2 & p`1 >= s1 & p`2 = t1;
           assume that
 A37:      Q is open and
 A38:      p in Q;
-          consider r being real number such that
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
+              QQ is open by A37,YY,PRE_TOPC:60;
+          then consider r being real number such that
 A39:      r>0 and
 A40:      Ball(q,r) c= Q by A37,A38,TOPMETR:22;
           reconsider r as Real by XREAL_0:def 1;
@@ -2291,7 +2359,7 @@ A42:      r/2>0 by A39,XREAL_1:217;
           by A36,A41,XREAL_1:46;
           then
 A43:      pa in P2 by A2;
-          reconsider qa=pa as Point of Euclid 2;
+          reconsider qa=pa as Point of Euclid 2 by XX;
           0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
           then
 A44:      0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
@@ -2306,7 +2374,7 @@ A45:      sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A39,SQUARE_1:77;
           then pa in Ball(q,r) by METRIC_1:12;
           hence thesis by A40,A43,XBOOLE_0:3;
         end;
-        hence x in Cl P2 by A13,PRE_TOPC:def 13;
+        hence thesis by A13,PRE_TOPC:def 13;
       end;
       suppose
 A46:    p`1 = s2 & p`2 <= t2 & p`2 >= t1;
@@ -2317,7 +2385,9 @@ A46:    p`1 = s2 & p`2 <= t2 & p`2 >= t1;
           assume that
 A47:      Q is open and
 A48:      p in Q;
-          consider r being real number such that
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
+              QQ is open by A47,YY,PRE_TOPC:60;
+          then consider r being real number such that
 A49:      r>0 and
 A50:      Ball(q,r) c= Q by A47,A48,TOPMETR:22;
           reconsider r as Real by XREAL_0:def 1;
@@ -2328,7 +2398,7 @@ A52:      r/2>0 by A49,XREAL_1:217;
           by A46,A51,XREAL_1:31;
           then
 A53:      pa in P2 by A2;
-          reconsider qa=pa as Point of Euclid 2;
+          reconsider qa=pa as Point of Euclid 2 by XX;
           0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
           then
 A54:      0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
@@ -2345,10 +2415,10 @@ A56:      sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A49,SQUARE_1:77;
           then pa in Ball(q,r) by METRIC_1:12;
           hence thesis by A50,A53,XBOOLE_0:3;
         end;
-        hence x in Cl P2 by A13,PRE_TOPC:def 13;
+        hence thesis by A13,PRE_TOPC:def 13;
       end;
     end;
-    hence x in Cl P2;
+    hence thesis;
   end;
   hence thesis by A3,XBOOLE_1:8;
 end;
@@ -2674,7 +2744,7 @@ A2: w1 in LSeg(p,q) & w2 in LSeg(p,q) by XBOOLE_0:def 5;
 
 then not p in LSeg(w1,w2) & not q in LSeg(w1,w2) by A2,SPPOL_1:24,TOPREAL1:12;
   then LSeg(w1,w2) misses {p,q} by ZFMISC_1:57;
-  hence LSeg(w1,w2) c= P by A2,TOPREAL1:12,XBOOLE_1:86;
+  hence thesis by A2,TOPREAL1:12,XBOOLE_1:86;
 end;
 
 theorem
@@ -2705,7 +2775,7 @@ A7: x2 <= x0 by A1,A3;
 A8: v in LSeg(w1,w2);
   then reconsider v1 = v as Point of TOP-REAL 2;
   v1 in { (1-l)*w1 + l*w2 where l is Real : 0 <= l & l <= 1 }
-  by A8,TOPREAL1:def 3;
+  by A8;
   then consider l being Real such that
 A9: v1 = (1-l)*w1 + l*w2 and
 A10: 0 <= l and
@@ -2715,7 +2785,7 @@ A12: v1 = |[ (1-l)*x1,(1-l)*y0 ]| + l*|[ x2,y0 ]| by A4,A6,A9,EUCLID:62
     .= |[ (1-l)*x1+l*x2,(1-l)*y0+l*y0 ]| by EUCLID:60
     .= |[ (1-l)*x1+l*x2,1 * y0 ]|;
   (1-l)*x1+l*x2 <= x0 by A5,A7,A10,A11,XREAL_1:176;
-  hence v in P by A1,A12;
+  hence thesis by A1,A12;
 end;
 
 Lm11: for x0,y0 being Real for P being Subset of TOP-REAL 2 st
@@ -2740,7 +2810,7 @@ A7: y2 <= y0 by A1,A3;
 A8: v in LSeg(w1,w2);
   then reconsider v1 = v as Point of TOP-REAL 2;
   v1 in { (1-l)*w1 + l*w2 where l is Real : 0 <= l & l <= 1 }
-  by A8,TOPREAL1:def 3;
+  by A8;
   then consider l being Real such that
 A9: v1 = (1-l)*w1 + l*w2 and
 A10: 0 <= l and
@@ -2750,7 +2820,7 @@ A12: v1 = |[ (1-l)*x0,(1-l)*y1 ]| + l*|[ x0,y2 ]| by A4,A6,A9,EUCLID:62
     .= |[ (1-l)*x0+l*x0,(1-l)*y1+l*y2 ]| by EUCLID:60
     .= |[ 1 * x0,(1-l)*y1+l*y2 ]|;
   (1-l)*y1+l*y2 <= y0 by A5,A7,A10,A11,XREAL_1:176;
-  hence v in P by A1,A12;
+  hence thesis by A1,A12;
 end;
 
 Lm12: for x0,y0 being Real for P being Subset of TOP-REAL 2 st
@@ -2775,7 +2845,7 @@ A7: x2 >= x0 by A1,A3;
 A8: v in LSeg(w1,w2);
   then reconsider v1 = v as Point of TOP-REAL 2;
   v1 in { (1-l)*w2 + l*w1 where l is Real : 0 <= l & l <= 1 }
-  by A8,TOPREAL1:def 3;
+  by A8, RLTOPSP1:def 2;
   then consider l being Real such that
 A9: v1 = (1-l)*w2 + l*w1 and
 A10: 0 <= l and
@@ -2785,7 +2855,7 @@ A12: v1 = |[ (1-l)*x2,(1-l)*y0 ]| + l*|[ x1,y0 ]| by A4,A6,A9,EUCLID:62
     .= |[ (1-l)*x2+l*x1,(1-l)*y0+l*y0 ]| by EUCLID:60
     .= |[ (1-l)*x2+l*x1,1 * y0 ]|;
   (1-l)*x2+l*x1 >= x0 by A5,A7,A10,A11,XREAL_1:175;
-  hence v in P by A1,A12;
+  hence thesis by A1,A12;
 end;
 
 Lm13: for x0,y0 being Real for P being Subset of TOP-REAL 2 st
@@ -2810,7 +2880,7 @@ A7: x2 >= y0 by A1,A3;
 A8: v in LSeg(w1,w2);
   then reconsider v1 = v as Point of TOP-REAL 2;
   v1 in { (1-l)*w2 + l*w1 where l is Real : 0 <= l & l <= 1 }
-  by A8,TOPREAL1:def 3;
+  by A8, RLTOPSP1:def 2;
   then consider l being Real such that
 A9: v1 = (1-l)*w2 + l*w1 and
 A10: 0 <= l and
@@ -2820,7 +2890,7 @@ A12: v1 = |[ (1-l)*x0,(1-l)*x2 ]| + l*|[ x0,x1 ]| by A4,A6,A9,EUCLID:62
     .= |[ (1-l)*x0+l*x0,(1-l)*x2+l*x1 ]| by EUCLID:60
     .= |[ 1 * x0,(1-l)*x2+l*x1]|;
   (1-l)*x2+l*x1 >= y0 by A5,A7,A10,A11,XREAL_1:175;
-  hence v in P by A1,A12;
+  hence thesis by A1,A12;
 end;
 
 registration

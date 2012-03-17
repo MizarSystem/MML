@@ -15,7 +15,7 @@ environ
       FINSEQ_2, FUNCT_4, MARGREL1, BINARITH, CARD_3, CLASSES1, PARTFUN1,
       MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, XXREAL_0, SEQ_1, NAT_1;
  constructors ENUMSET1, XXREAL_0, NAT_1, CLASSES1, BINARITH, CIRCUIT1,
-      CIRCUIT2, CIRCCOMB, SEQ_1;
+      CIRCUIT2, CIRCCOMB, SEQ_1, RELSET_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FRAENKEL, XXREAL_0,
       FINSEQ_1, FINSEQ_2, CARD_3, STRUCT_0, MSUALG_1, CIRCCOMB, NAT_1,
       XCMPLX_0;
@@ -23,7 +23,7 @@ environ
  definitions TARSKI, RELAT_1, MSAFREE2, CIRCUIT2, CIRCCOMB, XBOOLE_0;
  theorems TARSKI, AXIOMS, ENUMSET1, MCART_1, RELAT_1, FUNCT_1, FUNCT_2,
       FUNCT_4, ORDINAL1, FINSEQ_1, FINSEQ_2, MSUALG_1, MSAFREE2, CIRCUIT1,
-      CIRCUIT2, CIRCCOMB, XBOOLE_0, XBOOLE_1;
+      CIRCUIT2, CIRCCOMB, XBOOLE_0, XBOOLE_1, CLASSES1;
  schemes NAT_1, RECDEF_1, FUNCT_2;
 
 begin :: Pairs, Set Without Pairs, and Nonpair-yielding Functions
@@ -181,7 +181,7 @@ registration
     let a be set;
     assume a in {x};
     then a = x by TARSKI:def 1;
-    hence ex x,y being set st a = [x,y] by Def1;
+    hence thesis by Def1;
   end;
   let y be pair set;
   cluster {x,y} -> Relation-like;
@@ -190,7 +190,7 @@ registration
     let a be set;
     assume a in {x,y};
     then a = x or a = y by TARSKI:def 2;
-    hence ex x,y being set st a = [x,y] by Def1;
+    hence thesis by Def1;
   end;
   let z be pair set;
   cluster {x,y,z} -> Relation-like;
@@ -199,7 +199,7 @@ registration
     let a be set;
     assume a in {x,y,z};
     then a = x or a = y or a = z by ENUMSET1:def 1;
-    hence ex x,y being set st a = [x,y] by Def1;
+    hence thesis by Def1;
   end;
 end;
 
@@ -278,8 +278,8 @@ registration
   existence
   proof reconsider p = id Seg n as FinSequence by FINSEQ_2:52;
     len p = len idseq n by FINSEQ_2:def 1
-      .= n by FINSEQ_2:55;
-    then reconsider p as FinSeqLen of n by CIRCCOMB:def 12;
+      .= n by FINSEQ_1:def 18;
+    then reconsider p as FinSeqLen of n by FINSEQ_1:def 18;
     take p; thus p is one-to-one;
     let x be set;
     assume
@@ -377,7 +377,7 @@ XBOOLE_0:def 3;
   then (x in the carrier of S1 or x in the carrier of S2) & not x in rng R1 &
   not x in rng R2 by XBOOLE_0:def 5;
   then x in the carrier of S & not x in rng R by A4,A5,XBOOLE_0:def 3;
-  hence x in InputVertices (S1+*S2) by XBOOLE_0:def 5;
+  hence thesis by XBOOLE_0:def 5;
 end;
 
 theorem Th5:
@@ -486,7 +486,7 @@ A3: a = <*x,y*> by FINSEQ_2:120;
     thus f1.a = F(x,y) by A1,A3
       .= f2.a by A2,A3;
   end;
-  hence f1 = f2 by FUNCT_2:113;
+  hence thesis by FUNCT_2:113;
 end;
 
 scheme 2AryBooleDef {F(set,set) -> Element of BOOLEAN}:
@@ -517,7 +517,7 @@ A4: a = <*x,y*> by FINSEQ_2:120;
     thus f1.a = F(x,y) by A2,A4
       .= f2.a by A3,A4;
   end;
-  hence f1 = f2 by FUNCT_2:113;
+  hence thesis by FUNCT_2:113;
 end;
 
 scheme 3AryBooleEx {F(set,set,set) -> Element of BOOLEAN}:
@@ -554,7 +554,7 @@ A3: a = <*x,y,z*> by FINSEQ_2:123;
     thus f1.a = F(x,y,z) by A1,A3
       .= f2.a by A2,A3;
   end;
-  hence f1 = f2 by FUNCT_2:113;
+  hence thesis by FUNCT_2:113;
 end;
 
 scheme 3AryBooleDef {F(set,set,set) -> Element of BOOLEAN}:
@@ -587,7 +587,7 @@ A4: a = <*x,y,z*> by FINSEQ_2:123;
     thus f1.a = F(x,y,z) by A2,A4
       .= f2.a by A3,A4;
   end;
-  hence f1 = f2 by FUNCT_2:113;
+  hence thesis by FUNCT_2:113;
 end;
 
 definition
@@ -655,33 +655,16 @@ definition
 end;
 
 definition
-  let x be set;
-  redefine func <*x*> -> FinSeqLen of 1;
-  coherence
-  proof thus len <*x*> = 1 by FINSEQ_1:57;
-  end;
-  let y be set;
-  func <*x,y*> -> FinSeqLen of 2;
-  coherence
-  proof thus len <*x,y*> = 2 by FINSEQ_1:61;
-  end;
-  let z be set;
-  func <*x,y,z*> -> FinSeqLen of 3;
-  coherence
-  proof thus len <*x,y,z*> = 3 by FINSEQ_1:62;
-  end;
-end;
-
-definition
   let n,m be Nat;
   let p be FinSeqLen of n;
   let q be FinSeqLen of m;
   redefine func p^q -> FinSeqLen of n+m;
   coherence
   proof
-    thus len (p^q) = len p + len q by FINSEQ_1:35
-      .= n+len q by CIRCCOMB:def 12
-      .= n+m by CIRCCOMB:def 12;
+    len (p^q) = len p + len q by FINSEQ_1:35
+      .= n+len q by FINSEQ_1:def 18
+      .= n+m by FINSEQ_1:def 18;
+   hence thesis by FINSEQ_1:def 18;
   end;
 end;
 
@@ -919,8 +902,7 @@ proof
   the carrier of (S1+*S2) = (the carrier of S1) \/ the carrier of S2 &
   the carrier of (S2+*S1) = (the carrier of S2) \/ the carrier of S1
   by CIRCCOMB:def 2;
-  hence v in the carrier of S1+*S2 & v in
-  the carrier of S2+*S1 by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem Th21:
@@ -971,7 +953,7 @@ proof
   let A3 be Boolean Circuit of S3;
   the Sorts of A1 tolerates the Sorts of A2 & the Sorts of A2 tolerates
   the Sorts of A3 & the Sorts of A3 tolerates the Sorts of A1 by CIRCCOMB:67;
-  hence A1+*A2+*A3 = A1+*(A2+*A3) by CIRCCOMB:27;
+  hence thesis by CIRCCOMB:27;
 end;
 
 theorem Th26:
@@ -1021,7 +1003,7 @@ A2: s1 = s|the carrier of S1;
   A1 tolerates A2 by CIRCCOMB:68;
   then dom Following s1 = the carrier of S1 &
   Following s = (Following s2)+*Following s1 by A1,A2,CIRCCOMB:40,CIRCUIT1:4;
-  hence (Following s)|the carrier of S1 = Following s1 by FUNCT_4:24;
+  hence thesis by FUNCT_4:24;
 end;
 
 theorem Th29:
@@ -1045,7 +1027,7 @@ A2: s2 = s|the carrier of S2;
   A1 tolerates A2 by CIRCCOMB:68;
   then dom Following s2 = the carrier of S2 &
   Following s = (Following s1)+*Following s2 by A1,A2,CIRCCOMB:39,CIRCUIT1:4;
-  hence (Following s)|the carrier of S2 = Following s2 by FUNCT_4:24;
+  hence thesis by FUNCT_4:24;
 end;
 
 theorem Th30:
@@ -1228,7 +1210,7 @@ A3: g`1 = p & g`2 = f by MCART_1:7;
   the_result_sort_of g = (the ResultSort of S).g by MSUALG_1:def 7
     .= g
   by CIRCCOMB:52;
-  hence (Following s).[p,f] = f.(s*p) by A2,A3,Th34;
+  hence thesis by A2,A3,Th34;
 end;
 
 theorem
@@ -1343,7 +1325,7 @@ proof
   x in {x,y,z} & y in {x,y,z} & z in {x,y,z} by ENUMSET1:def 1;
   then A = rng p \/ {[p,f]} & x in rng p & y in rng p & z in rng p
   by CIRCCOMB:def 6,FINSEQ_2:148;
-  hence x in A & y in A & z in A by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem
@@ -1355,7 +1337,7 @@ proof
   let p be FinSequence;
   set A = the carrier of 1GateCircStr(p,f,x);
   A = rng p \/ {x} & x in {x} by CIRCCOMB:def 5,TARSKI:def 1;
-  hence x in A & for y being set st y in rng p holds y in A by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem
@@ -1389,7 +1371,7 @@ theorem Th47:
 proof
   let p be FinSequence, f be set;
   InnerVertices 1GateCircStr(p,f) = {[p,f]} by CIRCCOMB:49;
-  hence [p,f] in InnerVertices 1GateCircStr(p,f) by TARSKI:def 1;
+  hence thesis by TARSKI:def 1;
 end;
 
 definition
@@ -1628,10 +1610,10 @@ A10: z = x or z = y or z = c by ENUMSET1:def 1;
   then z in {x,y} & [<*x,y*>, f] in rng p or z in {c} by A6,TARSKI:def 1,def 2;
   then the_rank_of z in the_rank_of [<*x,y*>, f] &
   the_rank_of [<*x,y*>, f] in the_rank_of [p,f] or
-  z = c & c in rng p by A4,A6,CIRCCOMB:50,TARSKI:def 1,def 2;
+  z = c & c in rng p by A4,A6,CLASSES1:90,TARSKI:def 1,def 2;
   then
 A11: the_rank_of z in the_rank_of [p,f] & z <> [<*x,y*>, f]
-  by A1,CIRCCOMB:50,ORDINAL1:19;
+  by A1,CLASSES1:90,ORDINAL1:19;
   then z <> [p,f];
   then
 A12: not z in rng R by A3,A11,TARSKI:def 2;
@@ -2555,8 +2537,7 @@ A4: InnerVertices S1 misses InputVertices S2 &
   = (Following(s2,2)).MajorityOutput(x,y,c) &
   (Following(s2,2)).MajorityOutput(x,y,c)
   = a1 '&' a2 'or' a2 '&' a3 'or' a3 '&' a1 by A4,Lm4,Th33;
-  hence (Following(s,2)).MajorityOutput(x,y,c)
-  = a1 '&' a2 'or' a2 '&' a3 'or' a3 '&' a1;
+  hence thesis;
 end;
 
 theorem

@@ -10,20 +10,23 @@ environ
       SUBSET_1, BORSUK_1, TOPALG_1, GRAPH_1, ALGSTR_1, SEQM_3, BORSUK_2,
       EQREL_1, WAYBEL20, BORSUK_6, JORDAN1, TOPREAL1, TOPS_2, REALSET1,
       TOPMETR, ARYTM, FINSEQ_1, FINSEQ_4, RCOMP_1, MEMBERED, TREAL_1, SEQ_1,
-      ARYTM_3;
+      ARYTM_3, RLVECT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, EQREL_1, RELAT_1,
-      FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FINSEQ_1, NUMBERS, XCMPLX_0,
+      FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, NUMBERS, XCMPLX_0,
       XREAL_0, REAL_1, STRUCT_0, PRE_TOPC, BORSUK_1, TOPS_2, TOPREAL1, RCOMP_1,
-      TREAL_1, TOPMETR, EUCLID, JORDAN1, JORDAN2B, BORSUK_2, BORSUK_4,
-      BORSUK_6, TOPALG_1, XXREAL_0;
+      TREAL_1, TOPMETR, RLVECT_1, RLTOPSP1, EUCLID, JORDAN1, JORDAN2B,
+      BORSUK_2,
+      BORSUK_4,
+      BORSUK_6, TOPALG_1, XXREAL_0, FINSEQ_1;
  constructors REAL_1, RCOMP_1, BINARITH, TOPS_2, REALSET2, GRCAT_1,
       T_0TOPSP, TOPREAL1, TREAL_1, JORDAN1, JORDAN2B, BORSUK_4, BORSUK_6,
-      TOPALG_1, RVSUM_1;
+      TOPALG_1, RVSUM_1, CONVEX1;
  registrations XBOOLE_0, RELAT_1, FUNCT_2, NUMBERS, XREAL_0, REAL_1, STRUCT_0,
       PRE_TOPC, BORSUK_1, TEX_2, EUCLID, TOPMETR, TOPREAL1, BORSUK_2, JORDAN5A,
-      BORSUK_6, TOPALG_1, ORDINAL1, REALSET1;
+      BORSUK_6, TOPALG_1, ORDINAL1, REALSET1, ZFMISC_1, RLTOPSP1, FINSEQ_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
- definitions TARSKI, XBOOLE_0, BORSUK_2, BORSUK_6, BINOP_1, STRUCT_0, BORSUK_1;
+ definitions TARSKI, XBOOLE_0, BORSUK_2, BORSUK_6, BINOP_1, STRUCT_0, BORSUK_1,
+      RLTOPSP1;
  theorems XREAL_0, TARSKI, FUNCT_2, TSEP_1, PRE_TOPC, EUCLID, TOPS_2, BORSUK_1,
       TOPALG_1, EQREL_1, BORSUK_2, BINOP_1, TOPMETR, JORDAN2C, JORDAN1,
       TOPREAL1, FUNCT_3, BORSUK_6, JGRAPH_2, FUNCT_1, JORDAN2B, FINSEQ_4,
@@ -43,7 +46,7 @@ registration
   proof
     consider a, b being Point of TOP-REAL n;
     take LSeg(a,b);
-    thus thesis by BORSUK_4:8;
+    thus thesis;
   end;
 end;
 
@@ -82,7 +85,7 @@ A6:   the carrier of (TOP-REAL n)|LSeg(a1,b1) c= the carrier of T
       take f;
       (TOP-REAL n)|LSeg(a1,b1) is SubSpace of T by A6,TSEP_1:4;
       hence f is continuous by A5,PRE_TOPC:56;
-      thus f.0 = a & f.1 = b by A4;
+      thus thesis by A4;
     end;
     suppose a1 = b1;
       hence a,b are_connected;
@@ -95,10 +98,14 @@ registration
   cluster strict non empty convex SubSpace of TOP-REAL n;
   existence
   proof
-    reconsider T = TOP-REAL n as SubSpace of TOP-REAL n by TSEP_1:2;
+    the TopStruct of TOP-REAL n is SubSpace of the TopStruct of TOP-REAL n
+     by TSEP_1:2;
+    then reconsider T = the TopStruct of TOP-REAL n as SubSpace of TOP-REAL n
+     by PRE_TOPC:65;
     take T;
     thus T is strict non empty;
-    thus [#]T is convex Subset of TOP-REAL n by JORDAN2C:21;
+     [#]TOP-REAL n = [#]the TopStruct of TOP-REAL n;
+    hence [#]T is convex Subset of TOP-REAL n by JORDAN2C:21;
   end;
 end;
 
@@ -125,9 +132,9 @@ A3: f is continuous by A2,BORSUK_2:def 2;
       thus thesis by A1,A2,BORSUK_2:def 2;
     end;
     thus g is continuous by A3,PRE_TOPC:56;
-    thus g.0 = x1 & g.1 = x2 by A1,A2,BORSUK_2:def 2;
+    thus thesis by A1,A2,BORSUK_2:def 2;
   end;
-  hence f is Path of x1,x2;
+  hence thesis;
 end;
 set I = the carrier of I[01];
 
@@ -162,9 +169,6 @@ A2:   P.x in the carrier of T & Q.x in the carrier of T;
       set z = (1-y) * a1 + y * b1;
 A3:   y is Real by XREAL_0:def 1;
 A4:   0 <= y & y <= 1 by BORSUK_1:86;
-      LSeg(a1,b1) = { (1-l)*a1 + l*b1 where l is Real: 0 <= l & l <= 1 }
-      by TOPREAL1:def 3;
-      then
 A5:   z in LSeg(a1,b1) by A3,A4;
       [#]T is convex Subset of TOP-REAL n by Def1;
       then LSeg(a1,b1) c= [#]T by JORDAN1:def 1;
@@ -191,13 +195,13 @@ A8: for s, t being Element of I[01], a1, b1 being Point of TOP-REAL n st
       let s, t be Element of I;
       reconsider a1 = P.s, b1 = Q.s as Point of TOP-REAL n by PRE_TOPC:55;
       f.(s,t) = (1-t) * a1 + t * b1 by A7;
-      hence f.(s,t) = g.(s,t) by A8;
+      hence thesis by A8;
     end;
     hence f = g by Lm1,BINOP_1:2;
   end;
 end;
 
-Lm5: for T being non empty convex SubSpace of TOP-REAL n, 
+Lm5: for T being non empty convex SubSpace of TOP-REAL n,
 P, Q being continuous Function of I[01],T
 holds ConvexHomotopy(P,Q) is continuous
 proof
@@ -243,7 +247,7 @@ A12: (Pb*QI).p = Pb.(QI.(s,t)) by A7,FUNCT_2:21
       .= t * Q1.s by A4;
     reconsider a1 = P.s, b1 = Q.s as Point of TOP-REAL n by PRE_TOPC:55;
     F.(s,t) = (1-t) * a1 + t * b1 by Def2;
-    hence G.p = (Pa*P1I).p + (Pb*Q1I).p by A7,A11,A12;
+    hence thesis by A7,A11,A12;
   end;
   consider g being Function of [:I[01],I[01]:],TOP-REAL n such that
 A13: for r being Point of [:I[01],I[01]:] holds g.r = (Pa*P1I).r + (Pb*Q1I).r
@@ -256,7 +260,7 @@ A14: g is continuous by A5,JGRAPH_6:20;
       .= g.p by A13;
   end;
   then G = g by FUNCT_2:113;
-  hence F is continuous by A14,PRE_TOPC:57;
+  hence thesis by A14,PRE_TOPC:57;
 end;
 
 Lm6: for T being non empty convex SubSpace of TOP-REAL n,
@@ -274,11 +278,11 @@ proof
   reconsider a1 = P.s, b1 = Q.s as Point of TOP-REAL n by PRE_TOPC:55;
   F.(s,x0) = (1-x0) * a1 + x0 * b1 by Def2;
   hence F.(s,0) = a1 + 0 * b1 by EUCLID:33
-    .= a1 + 0.REAL n by EUCLID:33
+    .= a1 + 0.TOP-REAL n by EUCLID:33
     .= P.s by EUCLID:31;
   F.(s,x1) = (1-x1) * a1 + x1 * b1 by Def2;
-  hence F.(s,1) = 0.REAL n + 1 * b1 by EUCLID:33
-    .= 0.REAL n + b1 by EUCLID:33
+  hence F.(s,1) = 0.TOP-REAL n + 1 * b1 by EUCLID:33
+    .= 0.TOP-REAL n + b1 by EUCLID:33
     .= Q.s by EUCLID:31;
   let t be Point of I[01];
   reconsider a1 = P.x0, b1 = Q.x0 as Point of TOP-REAL n by PRE_TOPC:55;
@@ -316,7 +320,7 @@ registration
   proof
     let F be Homotopy of P,Q;
     P, Q are_homotopic by Th2;
-    hence F is continuous by BORSUK_6:def 13;
+    hence thesis by BORSUK_6:def 13;
   end;
 end;
 
@@ -412,7 +416,7 @@ A6: x = (1-l)*a+l*b and
 A7: 0 <= l and
 A8: l <= 1;
   a <= (1-l)*a+l*b & (1-l)*a+l*b <= b by A1,A7,A8,XREAL_1:174,175;
-  hence x in [.a,b.] by A6,XXREAL_1:1;
+  hence thesis by A6,XXREAL_1:1;
 end;
 
 theorem Th6:
@@ -454,12 +458,16 @@ A12: ff is one-to-one by A5,TOPS_2:def 5;
 A13: <*a*> = |[a]|;
     consider z being Real such that
 A14: (1-b)*f".a = <*z*> by JORDAN2B:24;
+B14: (1-b)*(f/".a) = <*z*> by A14,TOPS_2:def 4;
     reconsider w = <*a*> as Element of REAL 1 by A13,EUCLID:25;
+
     f.<*a*> = Proj(|[a]|,1) by A4
       .= a by Th4;
     then <*a*> = g.a by A9,A12,A13,FUNCT_1:54;
     then
-A15: <*z*> = (1-b)*w by A11,A12,A14,TOPS_2:def 4
+X:   w = f/".a by A11,A12,TOPS_2:def 4;
+A15: <*z*> = (1-b)*(f/".a) by A12,A14,TOPS_2:def 4,B14
+      .= (1-b)*w by A14,TOPS_2:def 4,B14,X,EUCLID:69
       .= <*(1-b)*a*> by RVSUM_1:69;
     thus (f*(G*[:f",id I[01]:])).x = f.((G*[:f",id I[01]:]).x) by FUNCT_2:21
       .= f.(G.([:f",id I[01]:].(a,b))) by A8,FUNCT_2:21
@@ -513,12 +521,15 @@ A12: ff is one-to-one by A5,TOPS_2:def 5;
 A13: <*a*> = |[a]|;
     consider z being Real such that
 A14: b*f".a = <*z*> by JORDAN2B:24;
+B14: b*(f/".a) = <*z*> by A14,TOPS_2:def 4;
     reconsider w = <*a*> as Element of REAL 1 by A13,EUCLID:25;
     f.<*a*> = Proj(|[a]|,1) by A4
       .= a by Th4;
     then <*a*> = g.a by A9,A12,A13,FUNCT_1:54;
     then
-A15: <*z*> = b*w by A11,A12,A14,TOPS_2:def 4
+X:   w = f/".a by A11,A12,TOPS_2:def 4,B14;
+A15: <*z*> = b*(f/".a) by A12,A14,TOPS_2:def 4,B14
+      .= b*w by A14,TOPS_2:def 4,B14,X,EUCLID:69
       .= <*b*a*> by RVSUM_1:69;
     thus (f*(G*[:f",id I[01]:])).x = f.((G*[:f",id I[01]:]).x) by FUNCT_2:21
       .= f.(G.([:f",id I[01]:].(a,b))) by A8,FUNCT_2:21
@@ -702,7 +713,7 @@ proof
   reconsider a1 = a, b1 = b as Point of R^1 by PRE_TOPC:55;
   [#]T is convex Subset of R^1 by Def4;
   then [. a1, b1 .] c= the carrier of T by Def3;
-  hence [. a, b .] c= the carrier of T;
+  hence thesis;
 end;
 
 registration
@@ -821,7 +832,7 @@ A7: for m, n being Element of I holds P[m,n,F.(m,n)] from BINOP_1:sch 3(A1);
     reconsider F as Function of [:I[01],I[01]:], T by Lm1;
     take F;
     let s, t be Element of I;
-    thus F.(s,t) = (1-t) * P.s + t * Q.s by A7;
+    thus thesis by A7;
   end;
   uniqueness
   proof
@@ -842,7 +853,7 @@ Lm8: for T being non empty convex SubSpace of R^1,
 P, Q being continuous Function of I[01],T holds R1Homotopy(P,Q) is continuous
 proof
   let T be non empty convex SubSpace of R^1,
-  P, Q be continuous Function of I[01],T; 
+  P, Q be continuous Function of I[01],T;
   set F = R1Homotopy(P,Q);
   set E = the carrier of R^1;
   set PI = [:P,id I[01]:];
@@ -897,7 +908,7 @@ A14: (Pb*QI).p = Pb.(QI.(s,t)) by A9,FUNCT_2:21
       .= t * Q.s by B3,A6;
     reconsider a1 = P.s, b1 = Q.s as Point of R^1 by PRE_TOPC:55;
     F.(s,t) = (1-t) * a1 + t * b1 by Def5;
-    hence G.p = (Pa*P1I).p + (Pb*Q1I).p by A9,A13,A14;
+    hence thesis by A9,A13,A14;
   end;
   consider g being Function of [:I[01],I[01]:],R^1 such that
 A15: for p being Point of [:I[01],I[01]:],r1,r2 being real number st
@@ -910,7 +921,7 @@ A16: g is continuous by A7,JGRAPH_2:29;
       .= g.p by A15;
   end;
   then G = g by FUNCT_2:113;
-  hence F is continuous by A16,PRE_TOPC:57;
+  hence thesis by A16,PRE_TOPC:57;
 end;
 
 Lm9: for T being non empty convex SubSpace of R^1, a, b being Point of T,
@@ -958,7 +969,7 @@ registration
   proof
     let F be Homotopy of P,Q;
     P, Q are_homotopic by Th16;
-    hence F is continuous by BORSUK_6:def 13;
+    hence thesis by BORSUK_6:def 13;
   end;
 end;
 

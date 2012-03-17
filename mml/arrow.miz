@@ -9,10 +9,10 @@ environ
  vocabularies ARROW, RELAT_1, FINSET_1, FUNCT_1, FUNCT_2, CARD_1, FINSEQ_1,
       ARYTM_1, BOOLE, ORDERS_1, RELAT_2, WELLORD1, ARYTM;
  notations ORDERS_1, RELAT_1, RELAT_2, RELSET_1, XBOOLE_0, SUBSET_1, TARSKI,
-      FINSET_1, FUNCT_1, FUNCT_2, CARD_1, XXREAL_0, FRAENKEL, ZFMISC_1, NAT_1,
+      FINSET_1, FUNCT_1, FUNCT_2, CARD_1, XXREAL_0, ZFMISC_1, NAT_1,
       NUMBERS, FINSEQ_1, XCMPLX_0, WELLORD1;
- constructors XXREAL_0, FRAENKEL, REAL_1, FINSEQ_1, INT_1, RELAT_2, PARTFUN1,
-      WELLORD1;
+ constructors XXREAL_0, FUNCT_2, REAL_1, FINSEQ_1, INT_1, RELAT_2, PARTFUN1,
+      WELLORD1, RELSET_1;
  registrations RELSET_1, FINSET_1, NAT_1, INT_1, XREAL_0, XBOOLE_0, ORDINAL1,
       CARD_1;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
@@ -119,7 +119,7 @@ A2: Q[it1] & Q[it2];
       R in it1 iff P[R] by A2;
       hence R in it1 iff R in it2 by A2;
     end;
-    hence it1 = it2 by TARSKI:2;
+    hence thesis by TARSKI:2;
   end;
 end;
 
@@ -128,7 +128,8 @@ registration
   cluster LinPreorders A -> non empty;
   coherence
   proof
-    reconsider R = [:A,A:] as Relation of A by RELSET_1:def 1;
+    [:A,A:] c= [:A,A:];
+    then reconsider R = [:A,A:] as Relation of A ;
     (for a holds [a,a] in R) & (for a,b holds [a,b] in R or [b,a] in R) &
     (for a,b,c st [a,b] in R & [b,c] in R holds [a,c] in R) by ZFMISC_1:106;
     hence thesis by Def1;
@@ -167,7 +168,7 @@ A2: Q[it1] & Q[it2];
       (R in it1 iff P[R]) & (R in it2 iff P[R]) by A2;
       hence R in it1 iff R in it2;
     end;
-    hence it1 = it2 by SUBSET_1:8;
+    hence thesis by SUBSET_1:8;
   end;
 end;
 
@@ -181,7 +182,7 @@ A1: R' well_orders A by WELLORD2:26;
     set R = R' |_2 A;
 A2: field R = A & R is well-ordering by A1,WELLORD2:25;
     R c= [:A,A:] by XBOOLE_1:17;
-    then reconsider R as Relation of A by RELSET_1:def 1;
+    then reconsider R as Relation of A ;
     now
       let a be set;
       assume
@@ -195,7 +196,7 @@ A3:   a in A;
     then dom R = A by XBOOLE_0:def 10;
     then reconsider R as Order of A by A2,PARTFUN1:def 4,WELLORD1:def 4;
     take R;
-    thus R is connected by A2,WELLORD1:def 4;
+    thus thesis by A2,WELLORD1:def 4;
   end;
 end;
 
@@ -279,7 +280,7 @@ A11: for R being set holds R in it0 iff R is connected Order of A;
       R in it0 iff R is connected Order of A by A11;
       hence R in it0 iff R in LinOrders A by A1,A8;
     end;
-    hence it0 = LinOrders A by TARSKI:2;
+    hence thesis by TARSKI:2;
   end;
 end;
 
@@ -700,9 +701,9 @@ A35:    k in dom t & i = t.k by A21,FUNCT_1:def 5;
         k <= len t by A35,FINSEQ_3:27;
         then k + 0 < kII' by XREAL_1:10;
         then p.i = oII by A33,A35;
-        hence a <_p.i, b by A23,A34;
+        hence thesis by A23,A34;
       end;
-      hence a <_f.p, b by A1;
+      hence thesis by A1;
     end;
     then
 A36: ex kII' being Nat st Q[kII'];
@@ -789,7 +790,7 @@ A52:  k in dom t & i = t.k by A21,FUNCT_1:def 5;
     pII.nb = oII by A38,A45,A46;
     hence for a st a <> b holds a <_pII.nb, b by A23;
     thus for a st a <> b holds b <_f.pI, a by A4,A47,A50;
-    thus for a st a <> b holds a <_f.pII, b by A37,A38;
+    thus thesis by A37,A38;
   end;
 A53: for b holds ex nb,pI,pII st (for i st i <> nb holds pI.i = pII.i) &
   (for i holds extreme[pI.i,b]) &
@@ -1071,7 +1072,7 @@ A17: R[q,p] & f.p = f'.q by A14;
       not O[q.i,b,a] by A16;
       hence a <_p.i, b by A17;
     end;
-    hence a <_f'.q, b by A1,A17;
+    hence thesis by A1,A17;
   end;
   now
     let q,q',a,b;
@@ -1094,7 +1095,7 @@ A21: for q,a,b st a <_q.n, b holds a <_f'.q, b by A3,A15,Th14;
   take n;
   let p;
   now
-    rng p c= LinOrders A by RELSET_1:12;
+    rng p c= LinOrders A by RELAT_1:def 19;
     then dom p = N & rng p c= LinPreorders A by FUNCT_2:def 1,XBOOLE_1:1;
 
 then reconsider q = p as Element of Funcs(N,LinPreorders A) by FUNCT_2:def 2;
@@ -1103,7 +1104,7 @@ A22: R[q,p]
       let i;
       let a,b;
       a <_p.i, b or a = b or a >_p.i, b by Th6;
-      hence O[q.i,a,b] iff a <=_p.i, b by Th4;
+      hence thesis by Th4;
     end;
     consider p' such that
 A23: R[q,p'] & f.p' = f'.q by A14;
@@ -1112,6 +1113,6 @@ A23: R[q,p'] & f.p' = f'.q by A14;
     then a <_f'.q, b & p = p' by A7,A21,A22,A23;
     hence a <_f.p, b by A23;
   end;
-  hence for a,b holds a <_p.n, b iff a <_f.p, b by Th13;
+  hence thesis by Th13;
 end;
 

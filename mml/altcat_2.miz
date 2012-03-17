@@ -8,19 +8,22 @@ environ
 
  vocabularies FUNCOP_1, RELAT_1, FUNCT_1, CAT_4, PRALG_1, BOOLE, PBOOLE,
       NATTRA_1, MSUALG_3, CAT_1, MCART_1, ALTCAT_1, BINOP_1, RELAT_2, ALTCAT_2,
-      REALSET1, AMI_1;
+      REALSET1, AMI_1, PARTFUN1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, MCART_1, FUNCT_1,
-      PZFMISC1, REALSET1, DOMAIN_1, STRUCT_0, FUNCT_2, BINOP_1, MULTOP_1,
+      PZFMISC1, REALSET1, DOMAIN_1, STRUCT_0,
+      PARTFUN1, FUNCT_2, BINOP_1, MULTOP_1,
       FUNCT_3, FUNCT_4, GRAPH_1, CAT_1, PBOOLE, FUNCOP_1, PRALG_1, ALTCAT_1;
- constructors FUNCT_3, REALSET1, PZFMISC1, CAT_1, PRALG_1, ALTCAT_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCOP_1, PBOOLE,
-      REALSET1, STRUCT_0, ALTCAT_1, CAT_1;
+ constructors FUNCT_3, REALSET1, PZFMISC1, CAT_1, PRALG_1, ALTCAT_1, RELSET_1,
+      FUNCT_4, MSSUBFAM;
+ registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELAT_1, PBOOLE, FUNCOP_1,
+      REALSET1, STRUCT_0, ALTCAT_1, CAT_1, PRALG_1, RELSET_1;
  requirements SUBSET, BOOLE;
  definitions STRUCT_0, ALTCAT_1, FUNCOP_1, FUNCT_1, RELAT_1, TARSKI, PBOOLE,
       BINOP_1, REALSET1;
  theorems MCART_1, ALTCAT_1, PBOOLE, TARSKI, GRFUNC_1, ZFMISC_1, MULTOP_1,
       RELAT_1, FUNCT_2, FUNCOP_1, FUNCT_4, FUNCT_1, FUNCT_3, DOMAIN_1,
-      MSSUBFAM, FUNCT_7, CAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, PZFMISC1;
+      MSSUBFAM, FUNCT_7, CAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, PZFMISC1,
+      PARTFUN1;
  schemes ALTCAT_1, FUNCT_1;
 
 begin :: Preliminaries
@@ -34,8 +37,8 @@ proof
   let X1,X2 be set, a1,a2 be set;
 A1: dom(X1 -->a1) = X1 & dom(X2-->a2) = X2 by FUNCOP_1:19;
   then
-A2: dom([:X1,X2:] --> [a1,a2]) = [:dom(X1 -->a1), dom(X2-->a2):] by
-  FUNCOP_1:19;
+A2: dom([:X1,X2:] --> [a1,a2]) = [:dom(X1 -->a1), dom(X2-->a2):] by FUNCOP_1:19
+;
   now
     let x,y be set;
     assume
@@ -47,7 +50,7 @@ A4: (X1-->a1).x = a1 & (X2-->a2).y = a2 by A1,FUNCOP_1:13;
     hence ([:X1,X2:] --> [a1,a2]).(x,y) = [(X1-->a1).x,(X2-->a2).y]
     by A4,FUNCOP_1:13;
   end;
-  hence [:X1 -->a1,X2-->a2:] = [:X1,X2:] --> [a1,a2] by A2,FUNCT_3:def 9;
+  hence thesis by A2,FUNCT_3:def 9;
 end;
 
 registration
@@ -96,7 +99,7 @@ A10: [z,y] in dom ~f by FUNCT_4:43;
       .= g.(f.(y,z)) by A10,FUNCT_4:44
       .= (g*f).(y,z) by A9,FUNCT_1:22;
   end;
-  hence ~(g*f) = g*~f by A1,FUNCT_4:def 2;
+  hence thesis by A1,FUNCT_4:def 2;
 end;
 
 theorem
@@ -160,7 +163,7 @@ A18: [g.y,h.z] in dom f by A17,FUNCT_3:def 9;
       .= f.([:g,h:].(y,z)) by A17,FUNCT_3:def 9
       .= (f*[:g,h:]).(y,z) by A16,FUNCT_1:22;
   end;
-  hence ~(f*[:g,h:]) = ~f*[:h,g:] by A1,FUNCT_4:def 2;
+  hence thesis by A1,FUNCT_4:def 2;
 end;
 
 registration
@@ -174,7 +177,7 @@ registration
 A1: x = [y,z] and
 A2: [z,y] in dom f by FUNCT_4:def 2;
     f.(z,y) = (~f).(y,z) by A2,FUNCT_4:def 2;
-    hence (~f).x is Function by A1;
+    hence thesis by A1;
   end;
 end;
 
@@ -196,27 +199,32 @@ A2: i in I;
 A3: B.i = {} implies A.i = {} by A1,PZFMISC1:def 3;
     reconsider Gi = G.i as Function of B.i,C.i by A2,PBOOLE:def 18;
     reconsider Fi = F.i as Function of A.i,B.i by A2,PBOOLE:def 18;
-    i in dom GF by A2,PBOOLE:def 3;
+    i in dom GF by A2,PARTFUN1:def 4;
     then (G**F).i = (Gi)*(Fi) by PBOOLE:def 24;
-    hence GF.i is Function of A.i,C.i by A3,FUNCT_2:19;
+    hence thesis by A3,FUNCT_2:19;
   end;
   hence thesis;
 end;
 
-definition
+registration
   let I be set;
   let A be ManySortedSet of [:I,I:];
-  redefine func ~A -> ManySortedSet of [:I,I:];
-  coherence
-  proof
-    thus dom(~A qua ManySortedSet of [:I,I:]) = [:I,I:] by PBOOLE:def 3;
-  end;
+  cluster ~A -> [:I,I:]-defined;
+  coherence;
+end;
+
+registration
+  let I be set;
+  let A be ManySortedSet of [:I,I:];
+  cluster ~A -> total ([:I,I:]-defined Function);
+  coherence;
 end;
 
 theorem
   for I1 being set, I2 being non empty set,
   f being Function of I1,I2, B,C being ManySortedSet of I2,
-  G being ManySortedFunction of B,C holds G*f is ManySortedFunction of B*f,C*f
+  G being ManySortedFunction of B,C holds
+   G*f is ManySortedFunction of B*f, C*f
 proof
   let I1 be set, I2 be non empty set,
   f be Function of I1,I2, B,C be ManySortedSet of I2,
@@ -228,8 +236,8 @@ A1: i in I1;
 A2: i in dom f by FUNCT_2:def 1;
   then
 A3: B.(f.i) = (B*f).i & C.(f.i) = (C*f).i by FUNCT_1:23;
-  G.(f.i) is Function of B.(f.i),C.(f.i) by PBOOLE:def 18,A1,FUNCT_2:7;
-  hence (G*f).i is Function of (B*f).i, (C*f).i by A2,A3,FUNCT_1:23;
+  G.(f.i) is Function of B.(f.i),C.(f.i) by A1,FUNCT_2:7,PBOOLE:def 18;
+  hence thesis by A2,A3,FUNCT_1:23;
 end;
 
 definition
@@ -248,13 +256,13 @@ definition
 A1:   i1 in I & i2 in I and
 A2:   ii = [i1,i2] by ZFMISC_1:103;
 A3:   [i2,i1] in [:I,I:] by A1,ZFMISC_1:106;
-      dom F = [:I,I:] by PBOOLE:def 3;
+      dom F = [:I,I:] by PARTFUN1:def 4;
       then
 A4:   F.(i2,i1) = G.(i1,i2) by A3,FUNCT_4:def 2;
-      dom A = [:I,I:] by PBOOLE:def 3;
+      dom A = [:I,I:] by PARTFUN1:def 4;
       then
 A5:   A.(i2,i1) = ~A.(i1,i2) by A3,FUNCT_4:def 2;
-      dom B = [:I,I:] by PBOOLE:def 3;
+      dom B = [:I,I:] by PARTFUN1:def 4;
       then B.(i2,i1) = ~B.(i1,i2) by A3,FUNCT_4:def 2;
       hence thesis by A2,A3,A4,A5,PBOOLE:def 18;
     end;
@@ -270,8 +278,8 @@ proof
   let I1,I2 be non empty set, M be ManySortedSet of [:I1,I2:],
   o1 be Element of I1, o2 be Element of I2;
   [o1,o2] in [:I1,I2:];
-  then [o1,o2] in dom M by PBOOLE:def 3;
-  hence (~M).(o2,o1) = M.(o1,o2) by FUNCT_4:def 2;
+  then [o1,o2] in dom M by PARTFUN1:def 4;
+  hence thesis by FUNCT_4:def 2;
 end;
 
 definition
@@ -279,10 +287,10 @@ definition
   redefine func g**f -> ManySortedFunction of I1;
   coherence
   proof
-A1: dom f = I1 & dom g = I1 by PBOOLE:def 3;
+A1: dom f = I1 & dom g = I1 by PARTFUN1:def 4;
     dom(g**f) = dom g /\ dom f by PBOOLE:def 24
       .= I1 by A1;
-    hence thesis by PBOOLE:def 3;
+    hence thesis by PARTFUN1:def 4,RELAT_1:def 18;
   end;
 end;
 
@@ -304,7 +312,7 @@ definition
   I c= J & for i being set st i in I holds A.i c= B.i;
   compatibility
   proof
-A1: dom A = I & dom B = J by PBOOLE:def 3;
+A1: dom A = I & dom B = J by PARTFUN1:def 4;
     hence A cc= B implies I c= J & for i being set st i in I holds A.i c= B.i
     by Def1;
     assume that
@@ -313,7 +321,7 @@ A3: for i being set st i in I holds A.i c= B.i;
     thus dom A c= dom B by A1,A2;
     let i be set;
     assume i in dom A;
-    hence A.i c= B.i by A1,A3;
+    hence thesis by A1,A3;
   end;
 end;
 
@@ -328,7 +336,8 @@ proof
 A1: A cc= B and
 A2: B cc= A;
 A3: I c= J & J c= I by A1,A2,Def2;
-  then reconsider B' = B as ManySortedSet of I by XBOOLE_0:def 10;
+  then I = J by XBOOLE_0:def 10;
+  then reconsider B' = B as ManySortedSet of I;
   now
     let i be set;
     assume i in I;
@@ -387,7 +396,7 @@ A1: f is Relation-like
     then consider o being Element of X() such that
 A2: x = [o,F(o)] and P[o];
     take o,F(o);
-    thus x = [o,F(o)] by A2;
+    thus thesis by A2;
   end;
   f is Function-like
   proof
@@ -399,9 +408,9 @@ A3: [x,y1] = [o1,F(o1)] and P[o1];
     then consider o2 being Element of X() such that
 A4: [x,y2] = [o2,F(o2)] and P[o2];
     o1 = x & o2 = x by A3,A4,ZFMISC_1:33;
-    hence y1 = y2 by A3,A4,ZFMISC_1:33;
+    hence thesis by A3,A4,ZFMISC_1:33;
   end;
-  hence f is Function by A1;
+  hence thesis by A1;
 end;
 
 scheme DomOnSingletons
@@ -429,7 +438,7 @@ A6: P[o] by A1,A4;
     x = o by A5,ZFMISC_1:33;
     hence x in A by A6;
   end;
-  hence dom f() = A by RELAT_1:def 4;
+  hence thesis by RELAT_1:def 4;
 end;
 
 scheme ValOnSingletons {X()-> non empty set,f()-> Function,
@@ -463,7 +472,7 @@ A2: e`1 in Hom(j,k) & e`2 in Hom(i,j) by MCART_1:10;
 A3: e = [y,x] by A1,MCART_1:23;
   dom y = j by A2,CAT_1:18
     .= cod x by A2,CAT_1:18;
-  hence e in dom the Comp of C by A3,CAT_1:40;
+  hence thesis by A3,CAT_1:40;
 end;
 
 theorem Th12:
@@ -483,7 +492,7 @@ A5: x = [y,z] by A2,MCART_1:23;
 A6: e = (the Comp of C).(y,z) by A2,A3,MCART_1:23;
   y is Morphism of j,k & z is Morphism of i,j by A4,CAT_1:def 7;
   then y*z in Hom(i,k) by A4,CAT_1:51;
-  hence e in Hom(i,k) by A1,A5,A6,CAT_1:def 4;
+  hence thesis by A1,A5,A6,CAT_1:def 4;
 end;
 
 definition
@@ -518,7 +527,7 @@ theorem Th13:
 proof
   let C be Category, i be Object of C;
   id i in Hom(i,i) by CAT_1:55;
-  hence id i in (the_hom_sets_of C).(i,i) by Def3;
+  hence thesis by Def3;
 end;
 
 definition
@@ -536,7 +545,7 @@ definition
     consider o being Function such that
 A1: dom o = Ob3 and
 A2: for e st e in Ob3 holds o.e = F(e) from FUNCT_1:sch 3;
-    reconsider o as ManySortedSet of Ob3 by A1,PBOOLE:def 3;
+    reconsider o as ManySortedSet of Ob3 by A1,PARTFUN1:def 4,RELAT_1:def 18;
     now
       let e;
       assume e in dom o;
@@ -578,7 +587,7 @@ A13:  dom f = {|G,G|}.e by A8,A9,A11,RELAT_1:91;
       (the Comp of C).:[:Hom(j,k),Hom(i,j):] c= Hom(i,k) by Th12;
       then rng f c= {|G|}.e by A8,A9,A10,RELAT_1:148;
       hence o.e is Function of {|G,G|}.e,{|G|}.e by A12,A13,FUNCT_2:def 1
-      ,RELSET_1:11;
+,RELSET_1:11;
     end;
     then reconsider o as BinComp of G by PBOOLE:def 18;
     take o;
@@ -739,7 +748,7 @@ A1: <^o1,o2^> <> {} & <^o2,o3^> <> {};
 A2: <^o1,o2^> = Hom(x1,x2) by Def3;
 A3: <^o2,o3^> = Hom(x2,x3) by Def3;
   <^o1,o3^> = Hom(x1,x3) by Def3;
-  hence <^o1,o3^> <> {} by A1,A2,A3,CAT_1:52;
+  hence thesis by A1,A2,A3,CAT_1:52;
 end;
 
 registration
@@ -782,7 +791,7 @@ A1: for o being object of C holds <^o,o^> <> {};
     assume x in the carrier of C;
     then reconsider o=x as object of C;
     (the Arrows of C).(x,x) = <^o,o^>;
-    hence (the Arrows of C).(x,x) <> {} by A1;
+    hence thesis by A1;
     thus thesis;
   end;
 end;
@@ -912,7 +921,7 @@ registration
     assume
 A1: C is with_units;
     let o be object of C;
-    thus <^o,o^> <> {} by A1,ALTCAT_1:21;
+    thus thesis by A1,ALTCAT_1:21;
   end;
 end;
 
@@ -953,7 +962,7 @@ A4: [:C2,C2,C2:] = {} by A1,MCART_1:35;
   [:C1,C1,C1:] = {} by A1,MCART_1:35;
   then the Comp of E1 = {} by PBOOLE:134
     .= the Comp of E2 by A4,PBOOLE:134;
-  hence E1 = E2 by A1,A3;
+  hence thesis by A1,A3;
 end;
 
 definition
@@ -1006,7 +1015,7 @@ theorem Th21:
   C is SubCatStr of C
 proof thus
   the carrier of C c= the carrier of C;
-  thus the Arrows of C cc= the Arrows of C & the Comp of C cc= the Comp of C;
+  thus thesis;
 end;
 
 theorem
@@ -1058,11 +1067,13 @@ definition
   proof
     set a = (o,o):-> <^o,o^>;
     dom a = [:{o},{o}:] by FUNCT_2:def 1;
-    then reconsider a as ManySortedSet of [:{o},{o}:] by PBOOLE:def 3;
+    then reconsider a as ManySortedSet of [:{o},{o}:] by PARTFUN1:def 4
+;
     set m = [o,o,o] .--> (the Comp of C).(o,o,o);
     dom m = {[o,o,o]} by FUNCOP_1:19
       .= [:{o},{o},{o}:] by MCART_1:39;
-    then reconsider m as ManySortedSet of [:{o},{o},{o}:] by PBOOLE:def 3;
+    then reconsider m as ManySortedSet of [:{o},{o},{o}:] by PARTFUN1:def 4
+,RELAT_1:def 18;
 A1: a.(o,o) = (the Arrows of C).(o,o) by ALTCAT_1:12;
     m is ManySortedFunction of {|a,a|},{|a|}
     proof
@@ -1077,7 +1088,7 @@ A4:   {|a,a|}.i = {|a,a|}.(o,o,o) by A2,MULTOP_1:def 1
       by A1,A3,ALTCAT_1:def 6;
       {|a|}.i = {|a|}.(o,o,o) by A2,MULTOP_1:def 1
         .= (the Arrows of C).(o,o) by A1,A3,ALTCAT_1:def 5;
-      hence m.i is Function of {|a,a|}.i, {|a|}.i by A2,A4,FUNCOP_1:87;
+      hence thesis by A2,A4,FUNCOP_1:87;
     end;
     then reconsider m as BinComp of a;
     set D = AltCatStr(#{o},a,m#);
@@ -1092,7 +1103,7 @@ A4:   {|a,a|}.i = {|a,a|}.(o,o,o) by A2,MULTOP_1:def 1
         assume i in [:the carrier of D,the carrier of D:];
         then i in {[o,o]} by ZFMISC_1:35;
         then i = [o,o] by TARSKI:def 1;
-        hence (the Arrows of D).i c= (the Arrows of C).i by A1;
+        hence thesis by A1;
       end;
       thus [:the carrier of D,the carrier of D,the carrier of D:]
       c= [:the carrier of C,the carrier of C,the carrier of C:];
@@ -1103,7 +1114,7 @@ A4:   {|a,a|}.i = {|a,a|}.(o,o,o) by A2,MULTOP_1:def 1
 A5:   i = [o,o,o] by TARSKI:def 1;
       then (the Comp of D).i = (the Comp of C).(o,o,o) by FUNCOP_1:87
         .= (the Comp of C).i by A5,MULTOP_1:def 1;
-      hence (the Comp of D).i c= (the Comp of C).i;
+      hence thesis;
     end;
     then reconsider D as strict SubCatStr of C;
     take D;
@@ -1120,7 +1131,7 @@ theorem Th24:
 proof
   let o' be object of ObCat o;
   the carrier of ObCat o = {o} by Def12;
-  hence o' = o by TARSKI:def 1;
+  hence thesis by TARSKI:def 1;
 end;
 
 registration
@@ -1134,7 +1145,7 @@ registration
       assume
 A1:   <^o1,o2^> <> {} & <^o2,o3^> <> {};
       o1 = o & o2 = o by Th24;
-      hence <^o1,o3^> <> {} by A1;
+      hence thesis by A1;
     end;
     the carrier of ObCat o = {o} by Def12;
     hence the carrier of ObCat o is non empty;
@@ -1215,7 +1226,7 @@ A17: the Comp of D1 cc= the Comp of C by Def11;
       .= c2.y by A10,A14,A16,GRFUNC_1:8;
   end;
   c1 = (the Comp of D1).x & c2 = (the Comp of D2).x by A5,MULTOP_1:def 1;
-  hence (the Comp of D1).x c= (the Comp of D2).x by A10,A11,GRFUNC_1:8;
+  hence thesis by A10,A11,GRFUNC_1:8;
 end;
 
 definition
@@ -1248,7 +1259,7 @@ registration
     then reconsider D as SubCatStr of C;
     take D;
     dom(the Arrows of C) =[:the carrier of D, the carrier of D:]
-    by PBOOLE:def 3;
+    by PARTFUN1:def 4;
     hence the Arrows of D = (the Arrows of C)||the carrier of D by RELAT_1:98;
     thus thesis;
   end;
@@ -1268,7 +1279,7 @@ registration
     then reconsider D as SubCatStr of C;
     take D;
     dom(the Arrows of C) =[:the carrier of D, the carrier of D:]
-    by PBOOLE:def 3;
+    by PARTFUN1:def 4;
     hence the Arrows of D = (the Arrows of C)||the carrier of D by RELAT_1:98;
     thus the carrier of D is non empty;
     thus thesis;
@@ -1328,11 +1339,11 @@ A5: <^o1,o2^> = <^p1,p2^> by A2;
 A6: <^o2,o3^> = <^p2,p3^> by A2;
 A7: <^o1,o3^> = <^p1,p3^> by A2;
     assume <^o1,o2^> <> {} & <^o2,o3^> <> {};
-    hence <^o1,o3^> <> {} by A5,A6,A7,ALTCAT_1:def 4;
+    hence thesis by A5,A6,A7,ALTCAT_1:def 4;
   end;
   C is SubCatStr of C by Th21;
   then C is SubCatStr of D by A1,A2,A3,A4,Th25;
-  hence the AltCatStr of D = the AltCatStr of C by Th23;
+  hence thesis by Th23;
 end;
 
 theorem Th27:
@@ -1346,7 +1357,7 @@ A1: the carrier of D1 = the carrier of D2 and
 A2: the Arrows of D1 = the Arrows of D2;
 A3: D1 is SubCatStr of D2 by A1,A2,Th25;
   D2 is SubCatStr of D1 by A1,A2,Th25;
-  hence the AltCatStr of D1 = the AltCatStr of D2 by A3,Th23;
+  hence thesis by A3,Th23;
 end;
 
 theorem
@@ -1356,10 +1367,10 @@ proof
   let D be full SubCatStr of C such that
 A1: the carrier of D = the carrier of C;
 A2: dom the Arrows of C = [:the carrier of C, the carrier of C:]
-  by PBOOLE:def 3;
+  by PARTFUN1:def 4;
   the Arrows of D = (the Arrows of C)||the carrier of D by Def13
     .= the Arrows of C by A1,A2,RELAT_1:98;
-  hence the AltCatStr of D = the AltCatStr of C by A1,Th26;
+  hence thesis by A1,Th26;
 end;
 
 theorem Th29:
@@ -1384,7 +1395,7 @@ proof
   let o be object of D;
 A1: o in the carrier of D;
   the carrier of D c= the carrier of C by Def11;
-  hence o is object of C by A1;
+  hence thesis by A1;
 end;
 
 registration
@@ -1400,7 +1411,7 @@ A2: <^o1,o2^> <> {} & <^o2,o3^> <> {};
     reconsider p1 = o1, p2 = o2, p3 = o3 as object of C by A1,Th30;
     <^p1,p2^> <> {} & <^p2,p3^> <> {} by A1,A2,Th29;
     then <^p1,p3^> <> {} by ALTCAT_1:def 4;
-    hence <^o1,o3^> <> {} by A1,Th29;
+    hence thesis by A1,Th29;
   end;
 end;
 
@@ -1414,7 +1425,7 @@ proof
 A1: the carrier of D1 = the carrier of D2;
   then the Arrows of D1 =(the Arrows of C)||the carrier of D2 by Def13
     .= the Arrows of D2 by Def13;
-  hence the AltCatStr of D1 = the AltCatStr of D2 by A1,Th27;
+  hence thesis by A1,Th27;
 end;
 
 theorem Th32:
@@ -1457,7 +1468,7 @@ A5: (the Comp of D).(p1,p2,p3) = (the Comp of D).[p1,p2,p3] &
   (the Comp of C).(o1,o2,o3) = (the Comp of C).[o1,o2,o3] by MULTOP_1:def 1;
   the Comp of D cc= the Comp of C by Def11;
   then
-A6: (the Comp of D).(p1,p2,p3) c= (the Comp of C).(o1,o2,o3) by A2,A5, Def2;
+A6: (the Comp of D).(p1,p2,p3) c= (the Comp of C).(o1,o2,o3) by A2,A5,Def2;
   <^o1,o2^> <> {} & <^o2,o3^> <> {} by A1,A2,Th32,XBOOLE_1:3;
   hence g*f = (the Comp of C).(o1,o2,o3).(g,f) by ALTCAT_1:def 10
     .= (the Comp of D).(p1,p2,p3).(gg,ff) by A3,A4,A6,GRFUNC_1:8
@@ -1521,7 +1532,7 @@ A2: <^p1,p2^> <> {};
   let n be Morphism of p1,p2;
 A3: n in <^p1,p2^> by A2;
   <^p1,p2^> c= <^o1,o2^> by A1,Th32;
-  hence n is Morphism of o1,o2 by A3;
+  hence thesis by A3;
 end;
 
 registration
@@ -1564,7 +1575,7 @@ registration
   existence
   proof consider o being object of C;
     take D = ObCat o;
-    thus D is id-inheriting transitive;
+    thus thesis;
   end;
 end;
 
@@ -1594,6 +1605,6 @@ A4: <^o',p'^> <> {} by A1,A3,Th32,XBOOLE_1:3;
     thus a*m = n*(idm o') by A1,A2,A3,Th33
       .= a by A4,ALTCAT_1:def 19;
   end;
-  hence idm o = idm o' by ALTCAT_1:def 19;
+  hence thesis by ALTCAT_1:def 19;
 end;
 

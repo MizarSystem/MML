@@ -1,0 +1,395 @@
+:: Lebesgue's Convergence Theorem of Complex-Valued Function
+::  by Keiko Narita , Noboru Endou and Yasunari Shidama
+:: 
+:: Received March 17, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies PARTFUN1, MEASURE1, RELAT_1, FUNCT_1, ORDINAL2, COMPLEX1, SEQ_1,
+      SEQ_2, MEASURE6, BOOLE, ARYTM, ARYTM_1, MESFUNC1, TARSKI, MESFUN10,
+      COMSEQ_1, PROB_1, INTEGRA1, MESFUNC2, MESFUNC5, SUPINF_1, SUPINF_2,
+      SEQFUNC, TDGROUP, SERIES_1, RLVECT_1, SETFAM_1, MESFUNC8, SEQM_3,
+      RINFSUP1, VALUED_0, XCMPLX_0, XXREAL_2, GRCAT_1, REALSET1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      COMPLEX1, REAL_1, XXREAL_0, VALUED_1, RELAT_1, FUNCT_1, RELSET_1,
+      FUNCT_2, PARTFUN1, NAT_1, PROB_1, SETFAM_1, SUPINF_2, MESFUNC9, SEQ_1,
+      SEQ_2, SEQFUNC, SERIES_1, MEASURE1, EXTREAL1, MESFUNC1, MEASURE6,
+      MESFUNC2, MESFUNC6, MESFUN6C, MESFUN10, MESFUNC8, MESFUN7C, MESFUNC5,
+      COMSEQ_1, COMSEQ_2, COMSEQ_3, RINFSUP2, XXREAL_2;
+ constructors REAL_1, EXTREAL1, SUPINF_1, MESFUNC9, SEQ_1, SEQ_2, MESFUN10,
+      SEQFUNC, COMSEQ_2, COMSEQ_3, SERIES_1, MESFUNC1, MEASURE6, MESFUNC2,
+      MESFUNC5, MESFUNC6, MESFUN6C, MESFUN7C, RINFSUP2, RELSET_1;
+ registrations XREAL_0, MEMBERED, ORDINAL1, PARTFUN1, COMSEQ_3, FUNCT_2,
+      RELAT_1, XBOOLE_0, NUMBERS, XXREAL_0, XCMPLX_0, MESFUNC8, VALUED_0,
+      MESFUN7C;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Partial Sums of Real-valued Functional Sequences
+
+reserve X for non empty set,
+        S for SigmaField of X,
+        M for sigma_Measure of S,
+        E for Element of S,
+        F,G for Functional_Sequence of X,REAL,
+        I for Real_Sequence,
+        f,g for PartFunc of X,REAL,
+        seq for Real_Sequence,
+        n,m for Nat,
+        x for Element of X,
+        z,D for set;
+
+definition
+  let X,Y be set, F be Functional_Sequence of X,Y;
+  let D be set;
+  func F||D -> Functional_Sequence of X,Y means
+:: MESFUN9C:def 1
+
+  for n being Nat holds it.n = (F.n)|D;
+end;
+
+theorem :: MESFUN9C:1
+  x in D & F#x is convergent implies (F||D)#x is convergent;
+
+theorem :: MESFUN9C:2
+for X,Y,D be set, F be Functional_Sequence of X,Y st
+ F is with_the_same_dom holds F||D is with_the_same_dom;
+
+theorem :: MESFUN9C:3
+D c= dom(F.0) &
+ (for x be Element of X st x in D holds F#x is convergent) implies
+  (lim F)|D = lim (F||D);
+
+theorem :: MESFUN9C:4
+F is with_the_same_dom & E c= dom(F.0) &
+(for m be Nat holds F.m is_measurable_on E)
+implies (F||E).n is_measurable_on E;
+
+reserve i for Element of NAT;
+
+theorem :: MESFUN9C:5
+  Partial_Sums R_EAL seq = R_EAL(Partial_Sums seq);
+
+theorem :: MESFUN9C:6
+(for x be Element of X st x in E holds F#x is summable)
+implies for x be Element of X st x in E holds (F||E)#x is summable;
+
+definition let X be non empty set, F be Functional_Sequence of X,REAL;
+ func Partial_Sums F -> Functional_Sequence of X,REAL means
+:: MESFUN9C:def 2
+ it.0 = F.0 & for n be Nat holds it.(n+1) = it.n + F.(n+1);
+end;
+
+theorem :: MESFUN9C:7
+  Partial_Sums R_EAL F = R_EAL(Partial_Sums F);
+
+theorem :: MESFUN9C:8
+z in dom((Partial_Sums F).n) & m <= n implies
+      z in dom((Partial_Sums F).m) & z in dom(F.m);
+
+theorem :: MESFUN9C:9
+  R_EAL F is additive;
+
+theorem :: MESFUN9C:10
+  dom((Partial_Sums F).n) = meet{dom(F.k) where k is Element of NAT : k <= n};
+
+theorem :: MESFUN9C:11
+F is with_the_same_dom implies
+  dom((Partial_Sums F).n) = dom(F.0);
+
+theorem :: MESFUN9C:12
+F is with_the_same_dom & D c= dom(F.0) & x in D implies
+  (Partial_Sums(F#x)).n = ((Partial_Sums F)#x).n;
+
+theorem :: MESFUN9C:13
+ F is with_the_same_dom & D c= dom(F.0) & x in D implies
+  ( Partial_Sums(F#x) is convergent iff (Partial_Sums F)#x is convergent );
+
+theorem :: MESFUN9C:14
+F is with_the_same_dom & dom f c= dom(F.0) &
+x in dom f & f.x = Sum(F#x) implies
+   f.x = lim((Partial_Sums F)#x);
+
+theorem :: MESFUN9C:15
+(for m be Nat holds F.m is_simple_func_in S) implies
+  (Partial_Sums F).n is_simple_func_in S;
+
+theorem :: MESFUN9C:16
+(for n be Nat holds F.n is_measurable_on E)
+implies
+(Partial_Sums F).m is_measurable_on E;
+
+theorem :: MESFUN9C:17
+for X be non empty set, F be Functional_Sequence of X,REAL st
+  F is with_the_same_dom holds
+  Partial_Sums F is with_the_same_dom;
+
+theorem :: MESFUN9C:18
+dom(F.0) = E & F is with_the_same_dom &
+(for n be Nat holds (Partial_Sums F).n is_measurable_on E) &
+(for x be Element of X st x in E holds F#x is summable)
+  implies lim(Partial_Sums F) is_measurable_on E;
+
+theorem :: MESFUN9C:19
+(for n be Nat holds F.n is_integrable_on M)
+implies
+ (for m be Nat holds (Partial_Sums F).m is_integrable_on M);
+
+begin :: Partial Sums of Complex-valued Functional Sequences
+
+reserve F,G for Functional_Sequence of X,COMPLEX,
+        f for PartFunc of X,COMPLEX,
+        A for set;
+
+theorem :: MESFUN9C:20
+(Re f)|A = Re(f|A) & (Im f)|A = Im(f|A);
+
+theorem :: MESFUN9C:21
+  Re (F||D) = (Re F)||D;
+
+theorem :: MESFUN9C:22
+  Im (F||D) = (Im F)||D;
+
+theorem :: MESFUN9C:23
+F is with_the_same_dom & D c= dom(F.0) & x in D implies
+(F#x is convergent implies (F||D)#x is convergent);
+
+theorem :: MESFUN9C:24
+ F is with_the_same_dom iff Re F is with_the_same_dom;
+
+theorem :: MESFUN9C:25
+Re F is with_the_same_dom iff Im F is with_the_same_dom;
+
+theorem :: MESFUN9C:26
+F is with_the_same_dom & D = dom(F.0) &
+(for x be Element of X st x in D holds F#x is convergent) implies
+  (lim F)|D = lim (F||D);
+
+theorem :: MESFUN9C:27
+F is with_the_same_dom & E c= dom(F.0) &
+(for m be Nat holds F.m is_measurable_on E)
+implies (F||E).n is_measurable_on E;
+
+theorem :: MESFUN9C:28
+E c= dom(F.0) & F is with_the_same_dom &
+(for x be Element of X st x in E holds F#x is summable)
+implies for x be Element of X st x in E holds (F||E)#x is summable;
+
+definition let X be non empty set, F be Functional_Sequence of X,COMPLEX;
+ func Partial_Sums F -> Functional_Sequence of X,COMPLEX means
+:: MESFUN9C:def 3
+ it.0 = F.0 & for n be Nat holds it.(n+1) = it.n + F.(n+1);
+end;
+
+theorem :: MESFUN9C:29
+  Partial_Sums Re F = Re Partial_Sums F &
+  Partial_Sums Im F = Im Partial_Sums F;
+
+theorem :: MESFUN9C:30
+z in dom((Partial_Sums F).n) & m <= n implies
+      z in dom((Partial_Sums F).m) & z in dom(F.m);
+
+theorem :: MESFUN9C:31
+  dom((Partial_Sums F).n) = meet{dom(F.k) where k is Element of NAT : k <= n};
+
+theorem :: MESFUN9C:32
+F is with_the_same_dom implies dom((Partial_Sums F).n) = dom(F.0);
+
+theorem :: MESFUN9C:33
+F is with_the_same_dom & D c= dom(F.0) & x in D implies
+  (Partial_Sums(F#x)).n = ((Partial_Sums F)#x).n;
+
+theorem :: MESFUN9C:34
+F is with_the_same_dom implies Partial_Sums F is with_the_same_dom;
+
+theorem :: MESFUN9C:35
+ F is with_the_same_dom & D c= dom(F.0) & x in D implies
+  ( Partial_Sums(F#x) is convergent iff (Partial_Sums F)#x is convergent );
+
+theorem :: MESFUN9C:36
+F is with_the_same_dom & dom f c= dom(F.0) &
+x in dom f & F#x is summable & f.x = Sum(F#x) implies
+   f.x = lim((Partial_Sums F)#x);
+
+theorem :: MESFUN9C:37
+(for m be Nat holds F.m is_simple_func_in S) implies
+  (Partial_Sums F).n is_simple_func_in S;
+
+theorem :: MESFUN9C:38
+(for n be Nat holds F.n is_measurable_on E) implies
+ (Partial_Sums F).m is_measurable_on E;
+
+theorem :: MESFUN9C:39
+dom(F.0) = E & F is with_the_same_dom &
+(for n be Nat holds (Partial_Sums F).n is_measurable_on E) &
+(for x be Element of X st x in E holds F#x is summable)
+  implies lim(Partial_Sums F) is_measurable_on E;
+
+theorem :: MESFUN9C:40
+(for n be Nat holds F.n is_integrable_on M)
+implies
+ (for m be Nat holds (Partial_Sums F).m is_integrable_on M);
+
+begin :: Selected Properties of Complex-valued Simple Functions
+
+reserve f,g for PartFunc of X,COMPLEX,
+        A for Element of S;
+
+theorem :: MESFUN9C:41
+  f is_simple_func_in S implies f is_measurable_on A;
+
+theorem :: MESFUN9C:42
+  f is_simple_func_in S implies f|A is_simple_func_in S;
+
+theorem :: MESFUN9C:43
+  f is_simple_func_in S implies dom f is Element of S;
+
+theorem :: MESFUN9C:44
+  f is_simple_func_in S & g is_simple_func_in S implies
+    f+g is_simple_func_in S;
+
+theorem :: MESFUN9C:45
+  for c be complex number st
+  f is_simple_func_in S holds c(#)f is_simple_func_in S;
+
+begin :: Lebesgue's Convergence theorem of Complex-valued Function
+
+reserve F for with_the_same_dom Functional_Sequence of X,ExtREAL,
+        f,P for PartFunc of X,ExtREAL;
+
+theorem :: MESFUN9C:46
+E = dom(F.0) & E = dom P & (for n be Nat holds F.n is_measurable_on E) &
+P is_integrable_on M &
+(for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x) &
+(for x be Element of X st x in E holds F#x is convergent)
+implies
+  lim F is_integrable_on M;
+
+reserve F for with_the_same_dom Functional_Sequence of X,REAL,
+        f,P for PartFunc of X,REAL;
+
+theorem :: MESFUN9C:47
+E = dom(F.0) & E = dom P & (for n be Nat holds F.n is_measurable_on E) &
+P is_integrable_on M &
+(for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x) &
+(for x be Element of X st x in E holds F#x is convergent)
+implies
+  lim F is_integrable_on M;
+
+:: Lebesgue's Convergence theorem
+theorem :: MESFUN9C:48
+E = dom(F.0) & E = dom P & (for n be Nat holds F.n is_measurable_on E) &
+P is_integrable_on M &
+(for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x)
+implies
+ ex I be Real_Sequence st
+  (for n be Nat holds I.n = Integral(M,F.n)) &
+  ( (for x be Element of X st x in E holds F#x is convergent)
+      implies I is convergent & lim I = Integral(M,lim F) );
+
+definition let X be set, F be Functional_Sequence of X,REAL;
+attr F is uniformly_bounded means
+:: MESFUN9C:def 4
+ ex K be real number st
+  for n be Nat, x be Element of X st x in dom(F.0) holds |. (F.n).x .| <= K;
+end;
+
+:: Lebesgue's Bounded Convergence Theorem
+theorem :: MESFUN9C:49
+M.E < +infty & E = dom(F.0) &
+(for n be Nat holds F.n is_measurable_on E) &
+F is uniformly_bounded &
+(for x be Element of X st x in E holds F#x is convergent)
+implies
+ (for n be Nat holds F.n is_integrable_on M) &
+ lim F is_integrable_on M &
+ ex I be ExtREAL_sequence st
+  (for n be Nat holds I.n = Integral(M,F.n)) &
+  I is convergent & lim I = Integral(M,lim F);
+
+definition let X be set, F be Functional_Sequence of X,REAL,
+  f be PartFunc of X,REAL;
+pred F is_uniformly_convergent_to f means
+:: MESFUN9C:def 5
+ F is with_the_same_dom &
+ dom(F.0) = dom f &
+ for e be real number st e>0
+  ex N be Nat st
+   for n be Nat, x be Element of X st n >= N & x in dom(F.0) holds
+    |. (F.n).x - f.x .| < e;
+end;
+
+theorem :: MESFUN9C:50
+M.E < +infty & E = dom(F.0) &
+(for n be Nat holds F.n is_integrable_on M) &
+F is_uniformly_convergent_to f
+implies
+ f is_integrable_on M &
+ ex I be ExtREAL_sequence st
+  (for n be Nat holds I.n = Integral(M,F.n)) &
+  I is convergent & lim I = Integral(M,f);
+
+reserve F for with_the_same_dom Functional_Sequence of X,COMPLEX,
+        f for PartFunc of X,COMPLEX;
+
+theorem :: MESFUN9C:51
+E = dom(F.0) & E = dom P & (for n be Nat holds F.n is_measurable_on E) &
+P is_integrable_on M &
+(for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x) &
+(for x be Element of X st x in E holds F#x is convergent)
+implies
+  lim F is_integrable_on M;
+
+:: Lebesgue's Convergence theorem
+theorem :: MESFUN9C:52
+E = dom(F.0) & E = dom P & (for n be Nat holds F.n is_measurable_on E) &
+P is_integrable_on M &
+(for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x)
+implies
+ ex I be Complex_Sequence st
+  (for n be Nat holds I.n = Integral(M,F.n)) &
+  ( (for x be Element of X st x in E holds F#x is convergent)
+      implies I is convergent & lim I = Integral(M,lim F) );
+
+definition let X be set, F be Functional_Sequence of X,COMPLEX;
+attr F is uniformly_bounded means
+:: MESFUN9C:def 6
+ ex K be real number st
+  for n be Nat, x be Element of X st x in dom(F.0) holds |. (F.n).x .| <= K;
+end;
+
+:: Lebesgue's Bounded Convergence Theorem
+theorem :: MESFUN9C:53
+M.E < +infty & E = dom(F.0) &
+(for n be Nat holds F.n is_measurable_on E) &
+F is uniformly_bounded &
+(for x be Element of X st x in E holds F#x is convergent)
+implies
+ (for n be Nat holds F.n is_integrable_on M) &
+ lim F is_integrable_on M &
+ ex I be Complex_Sequence st
+  (for n be Nat holds I.n = Integral(M,F.n)) &
+  I is convergent & lim I = Integral(M,lim F);
+
+definition let X be set, F be Functional_Sequence of X,COMPLEX,
+  f be PartFunc of X,COMPLEX;
+  pred F is_uniformly_convergent_to f means
+:: MESFUN9C:def 7
+  F is with_the_same_dom &
+  dom(F.0) = dom f &
+  for e be real number st e>0
+   ex N be Nat st
+    for n be Nat, x be Element of X st n >= N & x in dom(F.0) holds
+     |. (F.n).x - f.x .| < e;
+end;
+
+theorem :: MESFUN9C:54
+M.E < +infty & E = dom(F.0) &
+(for n be Nat holds F.n is_integrable_on M) &
+F is_uniformly_convergent_to f
+implies
+ f is_integrable_on M &
+ ex I be Complex_Sequence st
+  (for n be Nat holds I.n = Integral(M,F.n)) &
+  I is convergent & lim I = Integral(M,f);

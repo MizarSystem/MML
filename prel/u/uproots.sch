@@ -9,7 +9,6 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XXREAL_0"/>
@@ -21,23 +20,23 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <For>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="87"/>
-<Func kind="K" nr="91"/>
+<Func kind="K" nr="78"/>
+<Func kind="K" nr="82"/>
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="20">
+<Pred kind="R" nr="18">
 <Num nr="1"/>
 <Var nr="1"/>
 </Pred>
-<Pred kind="R" nr="20">
+<Pred kind="R" nr="18">
 <Var nr="1"/>
 <Func kind="F" nr="1"/>
 </Pred>
@@ -53,19 +52,19 @@
 <Num nr="1"/>
 </Pred>
 <For>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="87"/>
-<Func kind="K" nr="91"/>
+<Func kind="K" nr="78"/>
+<Func kind="K" nr="82"/>
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="20">
+<Pred kind="R" nr="18">
 <Num nr="1"/>
 <Var nr="1"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="20">
+<Pred kind="R" nr="18">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Pred>
@@ -75,7 +74,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="102">
+<Func kind="K" nr="93">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

@@ -4,11 +4,10 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELSET_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
@@ -22,19 +21,25 @@
 </Signature>
 <RCluster aid="RFINSEQ" nr="1">
 <ArgTypes/>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="6">
 <Cluster/>
-<Func kind="K" nr="54"/>
+<Func kind="K" nr="44"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="21"/>
-<Adjective nr="26"/>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
+<Adjective nr="4">
+<Func kind="K" nr="48"/>
+</Adjective>
+<Adjective nr="5">
+<Func kind="K" nr="44"/>
+</Adjective>
+<Adjective nr="6"/>
+<Adjective nr="24"/>
 <Adjective nr="30"/>
-<Adjective nr="37"/>
+<Adjective nr="33"/>
+<Adjective nr="34"/>
+<Adjective nr="35"/>
+<Adjective nr="42"/>
 </Cluster>
 </RCluster>
 <FCluster aid="RFINSEQ" nr="1">
@@ -42,8 +47,8 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="26"/>
+<Adjective nr="6"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -55,7 +60,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="24"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RFINSEQ" nr="2">
@@ -63,12 +68,12 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="4"/>
+<Adjective nr="6"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -78,7 +83,7 @@
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="21"/>
+<Adjective nr="24"/>
 </Cluster>
 </FCluster>
 </Registrations>

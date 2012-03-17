@@ -16,20 +16,21 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, EQREL_1, COMPLEX1,
       SQUARE_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCT_3,
       FUNCOP_1, PSCOMP_1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1,
-      RVSUM_1, RCOMP_1, STRUCT_0, PRE_TOPC, BORSUK_1, TOPS_2, EUCLID, JORDAN1,
+      RVSUM_1, RCOMP_1, STRUCT_0, PRE_TOPC, BORSUK_1, TOPS_2,
+      JORDAN1,
       QUIN_1, POLYEQ_1, BORSUK_2, TOPALG_1, TOPREAL9, TOPALG_2, TOPREALA,
-      TOPREALB, PARTFUN3, EUCLID_2, ABIAN, XXREAL_0;
+      TOPREALB, PARTFUN3, EUCLID_2, ABIAN, XXREAL_0, RLVECT_1, EUCLID;
  constructors SQUARE_1, BINOP_2, COMPLEX1, QUIN_1, POLYEQ_1, ABIAN, REALSET2,
       GRCAT_1, MONOID_0, JORDAN1, EUCLID_2, TOPALG_1, TOPREAL9, TOPREALA,
-      TOPREALB, PARTFUN3, SEQ_1, BORSUK_6;
+      TOPREALB, PARTFUN3, SEQ_1, BORSUK_6, RELSET_1, CONVEX1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, NUMBERS,
       XXREAL_0, XREAL_0, SQUARE_1, NAT_1, MEMBERED, QUIN_1, RCOMP_1, STRUCT_0,
       PRE_TOPC, TOPS_1, BORSUK_1, TEX_1, TEX_2, MONOID_0, EUCLID, TOPMETR,
       PSCOMP_1, BORSUK_2, TOPALG_1, TOPALG_2, TOPREAL9, TOPREALB, PARTFUN3,
-      TOPALG_5, VALUED_0, REALSET1;
+      TOPALG_5, VALUED_0, REALSET1, ZFMISC_1, RELSET_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, XBOOLE_0, BORSUK_1, BORSUK_2, TOPALG_2, PSCOMP_1, ABIAN,
-      SQUARE_1, BINOP_1, STRUCT_0, VALUED_1;
+      SQUARE_1, BINOP_1, STRUCT_0, VALUED_1, RLVECT_1;
  theorems TOPRNS_1, XREAL_0, TARSKI, FUNCT_2, TSEP_1, RFUNCT_1, PRE_TOPC,
       EUCLID, RELAT_1, FUNCT_1, ABIAN, ZFMISC_1, JGRAPH_2, XBOOLE_1, XBOOLE_0,
       TOPS_2, BORSUK_1, TOPALG_1, EQREL_1, BORSUK_2, FUNCOP_1, TOPMETR,
@@ -151,7 +152,7 @@ theorem Th3:
   the carrier of Tdisk(x,r) = cl_Ball(x,r)
 proof
   [#]Tdisk(x,r) = cl_Ball(x,r) by PRE_TOPC:def 10;
-  hence the carrier of Tdisk(x,r) = cl_Ball(x,r);
+  hence thesis;
 end;
 
 registration
@@ -260,23 +261,23 @@ A8: u in halfline(s,t) /\ Sphere(o,r) & u <> s;
 A9:   {s,f1} = halfline(s,t) /\ Sphere(o,r) by A2,A3,Th5;
       per cases by A7,A8,A9,TARSKI:def 2;
       suppose m = f1 & u = f1;
-        hence m = u;
+        hence thesis;
       end;
       suppose m = f1 & u = s;
-        hence m = u by A8;
+        hence thesis by A8;
       end;
       suppose m = s & u = f1;
-        hence m = u by A7;
+        hence thesis by A7;
       end;
       suppose m = s & u = s;
-        hence m = u;
+        hence thesis;
       end;
     end;
     suppose s is not Point of Tcircle(o,r);
       then consider e being Point of Tcircle(o,r) such that
 A10:  {e} = halfline(s,t) /\ Sphere(o,r) by A1,A3,Th4;
       m = e by A7,A10,TARSKI:def 1;
-      hence m = u by A8,A10,TARSKI:def 1;
+      hence thesis by A8,A10,TARSKI:def 1;
     end;
   end;
 end;
@@ -344,6 +345,8 @@ A16: |. T-S .|^2 = Sum sqr (T-S) by A15,SQUARE_1:def 4;
   Sum sqr (S-O) >= 0 by RVSUM_1:116;
   then
 A17: |. S-O .|^2 = Sum sqr (S-O) by A14,SQUARE_1:def 4;
+   |. S-O .| <= r by A1,A13,A14,EUCLID:73;
+   then
 A18: (sqrt Sum sqr (S-O))^2 <= r^2 by A1,A13,A14,SQUARE_1:77;
   then
 A19: C <= 0 by A14,A17,XREAL_1:49;
@@ -357,6 +360,7 @@ A21: B^2 - 4*A*C >= 0;
 A22: |. l*(t-s) .|^2 = (abs(l)*|. t-s .|)^2 by TOPRNS_1:8
     .= (abs(l))^2 * |. t-s .|^2
     .= l^2 * |. t-s .|^2 by COMPLEX1:161;
+X: s-o = S-O & t-s = T-S by A1,EUCLID:73;
   H in Sphere(o,r) by A6,XBOOLE_0:def 4;
   then r = |. (1-l)*s+l*t - o .| by A7,TOPREAL9:9
     .= |. 1 * s - l*s + l*t - o .| by EUCLID:54
@@ -366,9 +370,13 @@ A22: |. l*(t-s) .|^2 = (abs(l)*|. t-s .|)^2 by TOPRNS_1:8
     .= |. s-o +- l*(s-t) .| by EUCLID:53
     .= |. s-o + l*(-(s-t)) .| by EUCLID:44
     .= |. s-o + l*(t-s) .| by EUCLID:48;
-  then r^2 = |. s-o .|^2 + 2*|(l*(t-s),s-o)| + |. l*(t-s) .|^2 by EUCLID_2:67
+  then
+Y:  r^2 = |. s-o .|^2 + 2*|(l*(t-s),s-o)| + |. l*(t-s) .|^2 by EUCLID_2:67
     .= |. s-o .|^2 + 2*(l*|(t-s,s-o)|) + |. l*(t-s) .|^2 by EUCLID_2:41;
-  then A*l^2+B*l+C = 0 by A1,A16,A17,A22;
+  then A*l^2+B*l+C = A*l^2+2*|(t-s,s-o)|*l+(Sum sqr (S-O) - r^2)
+     .= |. T-S .|^2*l^2+2*|(t-s,s-o)|*l+(|. S-O .|^2 - r^2) by A16,A17
+     .= |. t-s .|^2*l^2+2*|(t-s,s-o)|*l+(|. s-o .|^2 - r^2) by X
+     .= 0 by A1,A16,A17,A22,X,Y;
   then
 A23: Polynom(A,B,C,l) = 0 by POLYEQ_1:def 2;
   A*C <= 0 by A11,A19;
@@ -403,10 +411,10 @@ A29: -D+D > D+D by XREAL_1:8;
   per cases by A14,A17,A18,XREAL_1:49;
   suppose C < 0;
     then C/A < 0 by A11,XREAL_1:143;
-    hence H = (1-a)*s+a*t by A7,A8,A24,A25,A26,A28;
+    hence thesis by A7,A8,A24,A25,A26,A28;
   end;
   suppose l1 = l2;
-    hence H = (1-a)*s+a*t by A7,A24,A25;
+    hence thesis by A7,A24,A25;
   end;
   suppose
 A30: C = 0;
@@ -415,7 +423,7 @@ A30: C = 0;
 A31:  l = l1;
 A32:  now
         assume l = 0;
-        then H = s+0.REAL n by A9,EUCLID:33
+        then H = s+0.TOP-REAL n by A9,EUCLID:33
           .= s by EUCLID:31;
         hence contradiction by A2,A3,A4,Def3;
       end;
@@ -433,7 +441,7 @@ A34:    (-2)*B < 0 by XREAL_1:134;
         hence contradiction by A31,A32;
       end;
     end;
-    hence H = (1-a)*s+a*t by A7,A24,A25;
+    hence thesis by A7,A24,A25;
   end;
 end;
 
@@ -542,11 +550,11 @@ A27: -D+D > D+D by XREAL_1:8;
   per cases by A20;
   suppose C < 0;
     then C/A < 0 by A15,XREAL_1:143;
-    hence H = |[ s`1+a*r1, s`2+a*r2 ]|
+    hence thesis
     by A4,A5,A11,A13,A14,A21,A23,A24,A26,EUCLID:57;
   end;
   suppose l1 = l2;
-    hence H = |[ s`1+a*r1, s`2+a*r2 ]| by A4,A5,A13,A14,A21,A23,EUCLID:57;
+    hence thesis by A4,A5,A13,A14,A21,A23,EUCLID:57;
   end;
   suppose
 A28: C = 0;
@@ -555,7 +563,7 @@ A28: C = 0;
 A29:  l = l1;
 A30:  now
         assume l = 0;
-        then H = s+0.REAL 2 by A12,EUCLID:33
+        then H = s+0.TOP-REAL 2 by A12,EUCLID:33
           .= s by EUCLID:31;
         hence contradiction by A1,A2,A3,Def3;
       end;
@@ -573,7 +581,7 @@ A32:    (-2)*B < 0 by XREAL_1:134;
         hence contradiction by A29,A30;
       end;
     end;
-    hence H = |[ s`1+a*r1, s`2+a*r2 ]| by A4,A5,A13,A14,A21,A23,EUCLID:57;
+    hence thesis by A4,A5,A13,A14,A21,A23,EUCLID:57;
   end;
 end;
 
@@ -612,7 +620,7 @@ A4: y = x & z = f.x & HC(x,f) = HC(z,y,o,r) by A1,Def4;
 A5: x in halfline(z,y) by A4,TOPREAL9:28;
   the carrier of Tcircle(o,r) = Sphere(o,r) by TOPREALB:9;
   then x in halfline(z,y) /\ Sphere(o,r) by A2,A5,XBOOLE_0:def 4;
-  hence HC(x,f) = x by A3,A4,Def3;
+  hence thesis by A3,A4,Def3;
 end;
 
 theorem Th10:
@@ -784,7 +792,7 @@ A3:   rng f c= Y by A2,ZFMISC_1:37;
       f"Y = f"(rng f /\ Y) by RELAT_1:168
         .= f"rng f by A3,XBOOLE_1:28
         .= [#]T by A1,RELAT_1:169;
-      hence f"Y is closed;
+      hence thesis;
     end;
     suppose not a in Y;
       then
@@ -792,7 +800,7 @@ A4:   rng f misses Y by A2,ZFMISC_1:56;
       f"Y = f"(rng f /\ Y) by RELAT_1:168
         .= f"{} by A4,XBOOLE_0:def 7
         .= {}T by RELAT_1:171;
-      hence f"Y is closed;
+      hence thesis;
     end;
   end;
 end;
@@ -814,7 +822,7 @@ A3: the carrier of D2 = cl_Ball(o,r) by Th3;
   then
 A4: s is Point of D2 by A1,A2,Th3;
 A5: s is Point of T2 by PRE_TOPC:55;
-A6: |. o-o .| = |. 0.REAL 2 .| by EUCLID:46
+A6: |. o-o .| = |. 0.TOP-REAL 2 .| by EUCLID:46
     .= 0 by TOPRNS_1:24;
   then o is Point of D2 by A3,TOPREAL9:8;
   then [o,s] in [:the carrier of D2,the carrier of D2:] by A4,ZFMISC_1:106;
@@ -963,7 +971,7 @@ A41: p2`1-g < x2 & x2 < p2`1+g;
     then p2`1 - g - o`1 < a2`1 - o`1 & a2`1 - o`1 < p2`1 + g - o`1
     by A41,XREAL_1:11;
     then a2`1 - o`1 in ].r-g,r+g.[ by XXREAL_1:4;
-    hence b in V by A34,A37,A39;
+    hence thesis by A34,A37,A39;
   end;
   then Xo is continuous by JGRAPH_2:20;
   then reconsider xo as continuous RealMap of [:T2,T2:] by TOPREAL6:83;
@@ -1016,7 +1024,7 @@ A54: p2`2-g < y2 & y2 < p2`2+g;
     then p2`2 - g - o`2 < a2`2 - o`2 & a2`2 - o`2 < p2`2 + g - o`2
     by A54,XREAL_1:11;
     then a2`2 - o`2 in ].r-g,r+g.[ by XXREAL_1:4;
-    hence b in V by A47,A50,A52;
+    hence thesis by A47,A50,A52;
   end;
   then Yo is continuous by JGRAPH_2:20;
   then reconsider yo as continuous RealMap of [:T2,T2:] by TOPREAL6:83;
@@ -1105,7 +1113,7 @@ A78: abs(p1`1-x1)+abs(p2`1-x2) < g/2+g/2 by A73,XREAL_1:10;
     then abs-(p1`1-x1-(p2`1-x2)) <= abs(p1`1-x1)+abs(p2`1-x2) by COMPLEX1:138;
     then abs(x1-x2-r) < g by A78,XXREAL_0:2;
     then a1`1 - a2`1 in ].r-g,r+g.[ by A72,A77,RCOMP_1:8;
-    hence b in V by A60,A66,A68;
+    hence thesis by A60,A66,A68;
   end;
   then Dx is continuous by JGRAPH_2:20;
   then reconsider dx as continuous RealMap of [:T2,T2:] by TOPREAL6:83;
@@ -1194,7 +1202,7 @@ A102: abs(p1`2-y1)+abs(p2`2-y2) < g/2+g/2 by A97,XREAL_1:10;
     then abs-(p1`2-y1-(p2`2-y2)) <= abs(p1`2-y1)+abs(p2`2-y2) by COMPLEX1:138;
     then abs(y1-y2-r) < g by A102,XXREAL_0:2;
     then a1`2 - a2`2 in ].r-g,r+g.[ by A96,A101,RCOMP_1:8;
-    hence b in V by A84,A90,A92;
+    hence thesis by A84,A90,A92;
   end;
   then Dy is continuous by JGRAPH_2:20;
   then reconsider dy as continuous RealMap of [:T2,T2:] by TOPREAL6:83;
@@ -1251,7 +1259,7 @@ A117: a2`1 = x1 by A114,EUCLID:56;
     then abs-(p2`1-x1) < g by COMPLEX1:138;
     then abs(x1-p2`1) < g;
     then a2`1 in ].p2`1-g,p2`1+g.[ by A117,RCOMP_1:8;
-    hence b in V by A108,A111,A113;
+    hence thesis by A108,A111,A113;
   end;
   then fX2 is continuous by JGRAPH_2:20;
   then reconsider fx2 as continuous RealMap of [:T2,T2:] by TOPREAL6:83;
@@ -1308,7 +1316,7 @@ A132: a2`2 = y1 by A129,EUCLID:56;
     then abs-(p2`2-y1) < g by COMPLEX1:138;
     then abs(y1-p2`2) < g;
     then a2`2 in ].p2`2-g,p2`2+g.[ by A132,RCOMP_1:8;
-    hence b in V by A123,A126,A128;
+    hence thesis by A123,A126,A128;
   end;
   then fY2 is continuous by JGRAPH_2:20;
   then reconsider fy2 as continuous RealMap of [:T2,T2:] by TOPREAL6:83;
@@ -1333,7 +1341,7 @@ A134: for y, z being Point of D2 st y <> z holds [y,z] in OK
 A135: y <> z;
     y is Point of T2 & z is Point of T2 by PRE_TOPC:55;
     then [y,z] in DiffElems(T2,T2) by A135;
-    hence [y,z] in OK by XBOOLE_0:def 4;
+    hence thesis by XBOOLE_0:def 4;
   end;
   now
     let b be real number;
@@ -1631,9 +1639,9 @@ A251: dom(R") = [#]T2 by A224,TOPS_2:62;
     then (R*F). [a1,fa] in R.:(R" .:V1) by A133,A248,FUNCT_2:21;
     then (R*F). [a1,fa] in V1 by A224,A250,A251,PARTFUN3:1;
     then g.a in V1 by A170;
-    hence b in V by A217,A246,XBOOLE_0:def 4;
+    hence thesis by A217,A246,XBOOLE_0:def 4;
   end;
-  hence g is continuous by JGRAPH_2:20;
+  hence thesis by JGRAPH_2:20;
 end;
 
 :: Brouwer Fixed Point Theorem
@@ -1664,7 +1672,7 @@ A6: g is continuous by A4,Th13;
       assume
 A7:   W in the carrier of Y;
       not W is_a_fixpoint_of f by A4,ABIAN:def 5;
-      hence g.W = W by A7,Th11;
+      hence thesis by A7,Th11;
     end;
     hence contradiction by A5,A6,BORSUK_1:def 20;
   end;
@@ -1675,7 +1683,7 @@ A8: cl_Ball(o,r) = {o} by Th2;
     dom f = the carrier of Tdisk(o,r) by FUNCT_2:def 1;
     hence o in dom f by A2,A8,TARSKI:def 1;
     then f.o in rng f by FUNCT_1:def 5;
-    hence o = f.o by A2,A8,TARSKI:def 1;
+    hence thesis by A2,A8,TARSKI:def 1;
   end;
 end;
 

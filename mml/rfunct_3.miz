@@ -9,15 +9,17 @@ environ
  vocabularies SQUARE_1, ARYTM, ARYTM_1, ABSVALUE, FINSEQ_1, RELAT_1, FUNCT_1,
       BOOLE, PARTFUN1, ARYTM_3, SEQ_1, RFINSEQ, CARD_1, FUNCOP_1, BINOP_1,
       SUBSET_1, SETWISEO, RLVECT_1, FUNCT_3, TDGROUP, LIMFUNC1, FINSET_1,
-      RCOMP_1, PROB_1, FINSEQ_2, RVSUM_1, RFUNCT_3, MEMBERED;
+      RCOMP_1, PROB_1, FINSEQ_2, RVSUM_1, RFUNCT_3, MEMBERED, VALUED_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0,
       XREAL_0, COMPLEX1, MEMBERED, RELAT_1, FUNCT_1, BINOP_1, REAL_1, NAT_1,
       FUNCOP_1, SETWISEO, FINSEQ_2, RELSET_1, PARTFUN1, FINSEQ_1, FINSEQOP,
+      VALUED_0,
       VALUED_1, SEQ_1, RFUNCT_1, FINSEQ_4, SETWOP_2, FINSET_1, RVSUM_1,
       RCOMP_1, PARTFUN2, LIMFUNC1, CLASSES1, RFINSEQ, XXREAL_0;
  constructors PARTFUN1, BINOP_1, SETWISEO, REAL_1, NAT_1, BINOP_2, COMPLEX1,
       SEQM_3, PROB_1, SEQ_4, FINSEQOP, RCOMP_1, FINSEQ_4, FINSOP_1, PARTFUN2,
-      RFUNCT_1, RVSUM_1, LIMFUNC1, RFINSEQ, SEQ_1, CLASSES1;
+      RFUNCT_1, RVSUM_1, LIMFUNC1, RFINSEQ, SEQ_1, CLASSES1, RELSET_1,
+      SETFAM_1, VALUED_0;
  registrations XBOOLE_0, RELSET_1, PARTFUN1, FINSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, MEMBERED, FINSEQ_1, FINSEQ_2, RFINSEQ, VALUED_0, FUNCT_1,
       CARD_1;
@@ -76,7 +78,7 @@ A2:   r<0;
 A3:   max+(r) = 0 by XXREAL_0:def 10;
       0<-r by A2,XREAL_1:60;
       then max-(r) = -r by XXREAL_0:def 10;
-      hence r = max+(r) - max-(r) by A3;
+      hence thesis by A3;
     end;
   end;
   hence thesis;
@@ -101,7 +103,7 @@ A3:   r<0;
 A4:   max+(r) = 0 by XXREAL_0:def 10;
       0<-r by A3,XREAL_1:60;
       then max-(r) = -r by XXREAL_0:def 10;
-      hence abs(r) = max+(r) + max-(r) by A3,A4,ABSVALUE:def 1;
+      hence thesis by A3,A4,ABSVALUE:def 1;
     end;
   end;
   hence thesis;
@@ -134,7 +136,7 @@ A3:   s<0;
       then
 A4:   max+ s= 0 by XXREAL_0:def 10;
       r*s<=0 by A1,A3;
-      hence max+(r*s) = r*(max+ s) by A4,XXREAL_0:def 10;
+      hence thesis by A4,XXREAL_0:def 10;
     end;
   end;
   hence thesis;
@@ -165,7 +167,7 @@ proof
 A1: len f<=n;
 A2: dom f = Seg len f & f|n = f|Seg n by FINSEQ_1:def 3,def 15;
   then dom f c= Seg n by A1,FINSEQ_1:7;
-  hence (f|n) = f by A2,RELAT_1:97;
+  hence thesis by A2,RELAT_1:97;
 end;
 
 Lm2: for f be Function,x be set st not x in rng f holds f"{x}={}
@@ -479,6 +481,14 @@ definition
   end;
 end;
 
+:: awaryjne, A.T.
+
+registration
+  let D be non empty set, E be real-membered set;
+  cluster -> real-valued Element of PFuncs(D,E);
+  coherence;
+end;
+
 definition
   let D be non empty set, E be real-membered set,
   F1,F2 be Element of PFuncs(D,E);
@@ -659,7 +669,7 @@ proof
   o is commutative & o is associative & the_unity_wrt o = o0
    & o is having_a_unity
   by Th16,Th17,Th19,Th20;
-  hence Sum f = o0 by FINSOP_1:11;
+  hence thesis by FINSOP_1:11;
 end;
 
 canceled;
@@ -794,7 +804,7 @@ A17: for n holds P[n] from NAT_1:sch 1(A1,A2);
   assume
 A18: f,g are_fiberwise_equipotent;
   len f = len f;
-  hence Sum f = Sum g by A17,A18;
+  hence thesis by A17,A18;
 end;
 
 definition
@@ -815,14 +825,14 @@ A2: for n be Nat st n in dom p holds p.n = F(n) from FINSEQ_1:sch 2;
       then consider n being Nat such that
 A4:   n in dom p & p.n = x by FINSEQ_2:11;
       x = chi(f.n,D) by A2,A4;
-      hence x in PFuncs(D,REAL) by PARTFUN1:119;
+      hence thesis by PARTFUN1:119;
     end;
     then reconsider p as FinSequence of PFuncs(D,REAL) by FINSEQ_1:def 4;
     take p;
     thus len p = len f by A1;
     let n;
     assume n in dom p;
-    hence p.n = chi(f.n,D) by A2;
+    hence thesis by A2;
   end;
   uniqueness
   proof
@@ -866,7 +876,7 @@ A3:   1<=n & n<=m by FINSEQ_1:3;
       reconsider r=R.n as Real;
       reconsider a= r(#)F as Element of PFuncs(D,REAL);
       take a;
-      thus P[n,a];
+      thus thesis;
     end;
     consider p be FinSequence of PFuncs(D,REAL) such that
 A4: dom p = Seg m & for n be Nat st n in Seg m holds P[n,p.n]
@@ -875,7 +885,7 @@ A4: dom p = Seg m & for n be Nat st n in Seg m holds P[n,p.n]
     thus len p = m by A4,FINSEQ_1:def 3;
     let n;
     assume n in dom p;
-    hence P[n,p.n] by A4;
+    hence thesis by A4;
   end;
   uniqueness
   proof
@@ -926,7 +936,7 @@ A1: for n be Nat st n in Seg len f ex x being Element of REAL st P[n,x]
       then n in dom f by FINSEQ_1:def 3;
       then reconsider G=f.n as Element of PFuncs(D,REAL) by FINSEQ_2:13;
       take x=G.d;
-      thus P[n,x];
+      thus thesis;
     end;
     consider p being FinSequence of REAL such that
 A2: dom p = Seg len f and
@@ -1090,7 +1100,7 @@ A14:      d is_common_for_dom f;
 A15:      d in dom Sum(fn) by A3,A9,A11;
           d in dom G by A12,A14,Def9;
           then d in dom(Sum(fn)) /\ dom G by A15,XBOOLE_0:def 4;
-          hence d in dom(Sum(f)) by A13,VALUED_1:def 1;
+          hence thesis by A13,VALUED_1:def 1;
         end;
         assume d in dom Sum(f);
         then
@@ -1153,7 +1163,7 @@ A5:   dom f = Seg len f & dom(f#d1) = Seg len(f#d1) &
       now per cases;
         case n=0;
           then (f#d1)|n = <*>REAL & (f|n)#d1 = <*>REAL by A1;
-          hence (f#d1)|n = (f|n)#d1;
+          hence thesis;
         end;
         case n<>0;
           then 0<n;
@@ -1192,7 +1202,7 @@ proof
   assume n in dom CHI(f,D) & CHI(f,D).n = G;
   then G = chi(f.n,D) by Def6;
   then dom G = D by RFUNCT_1:77;
-  hence d in dom G;
+  hence thesis;
 end;
 
 theorem Th34:
@@ -1220,7 +1230,7 @@ A5: n in dom R & n in dom f by A4,FINSEQ_3:27;
   reconsider F=f.n as Element of PFuncs(D,REAL) by A5,FINSEQ_2:13;
 A6: G=r(#)F by A2,Def7;
   d in dom F by A1,A5,Def9;
-  hence d in dom G by A6,VALUED_1:def 5;
+  hence thesis by A6,VALUED_1:def 5;
 end;
 
 theorem
@@ -1245,7 +1255,7 @@ A2: len f = 0 & d is_common_for_dom f;
 A3: (Sum(f)).d = ([#](D)-->(0 qua Real)).d by Th21
       .= 0 by FUNCOP_1:13;
     len(f#d)=0 by A2,Def8;
-    hence (Sum(f)).d = Sum(f#d) by A3,FINSEQ_1:32,RVSUM_1:102;
+    hence thesis by A3,FINSEQ_1:32,RVSUM_1:102;
   end;
 A4: for n st P[n] holds P[n+1]
   proof
@@ -1312,7 +1322,7 @@ A21: for n holds P[n] from NAT_1:sch 1(A1,A4);
   assume
 A22: d is_common_for_dom f;
   len f = len f;
-  hence (Sum(f)).d = Sum(f#d) by A21,A22;
+  hence thesis by A21,A22;
 end;
 
 definition
@@ -1808,9 +1818,9 @@ theorem Th47:
   holds (max+ F)|X = max+ (F|X)
 proof
   let D be non empty set, F be PartFunc of D,REAL, X be set;
-A1: dom((max+ F)|X) = dom(max+ F) /\ X by FUNCT_1:68;
+A1: dom((max+ F)|X) = dom(max+ F) /\ X by RELAT_1:90;
 A2: dom(max+ F) /\ X= dom F /\ X by Def10
-    .= dom(F|X) by FUNCT_1:68;
+    .= dom(F|X) by RELAT_1:90;
 A3: dom(F|X) = dom(max+ (F|X)) by Def10;
   now
     let d be Element of D;
@@ -1818,9 +1828,9 @@ A3: dom(F|X) = dom(max+ (F|X)) by Def10;
 A4: d in dom((max+ F)|X);
     then
 A5: d in dom(max+ F) by A1,XBOOLE_0:def 4;
-    thus ((max+ F)|X).d = (max+ F).d by A4,FUNCT_1:68
+    thus ((max+ F)|X).d = (max+ F).d by A4,FUNCT_1:70
       .=max+(F.d) by A5,Def10
-      .=max+((F|X).d) by A1,A2,A4,FUNCT_1:68
+      .=max+((F|X).d) by A1,A2,A4,FUNCT_1:70
       .=(max+ (F|X)).d by A1,A2,A3,A4,Def10;
   end;
   hence thesis by A1,A2,A3,PARTFUN1:34;
@@ -1831,9 +1841,9 @@ theorem
   holds (max- F)|X = max- (F|X)
 proof
   let D be non empty set, F be PartFunc of D,REAL, X be set;
-A1: dom((max- F)|X) = dom(max- F) /\ X by FUNCT_1:68;
+A1: dom((max- F)|X) = dom(max- F) /\ X by RELAT_1:90;
 A2: dom(max- F) /\ X= dom F /\ X by Def11
-    .= dom(F|X) by FUNCT_1:68;
+    .= dom(F|X) by RELAT_1:90;
 A3: dom(F|X) = dom(max- (F|X)) by Def11;
   now
     let d be Element of D;
@@ -1841,9 +1851,9 @@ A3: dom(F|X) = dom(max- (F|X)) by Def11;
 A4: d in dom((max- F)|X);
     then
 A5: d in dom(max- F) by A1,XBOOLE_0:def 4;
-    thus ((max- F)|X).d = (max- F).d by A4,FUNCT_1:68
+    thus ((max- F)|X).d = (max- F).d by A4,FUNCT_1:70
       .=max-(F.d) by A5,Def11
-      .=max-((F|X).d) by A1,A2,A4,FUNCT_1:68
+      .=max-((F|X).d) by A1,A2,A4,FUNCT_1:70
       .=(max- (F|X)).d by A1,A2,A3,A4,Def11;
   end;
   hence thesis by A1,A2,A3,PARTFUN1:34;
@@ -1912,9 +1922,9 @@ theorem
 proof
   let D be non empty set, F be PartFunc of D,REAL, r be Real, X be set;
 A1: dom ((F|X) - r) = dom (F|X) by VALUED_1:3;
-A2: dom (F|X) = dom F /\ X by FUNCT_1:68;
+A2: dom (F|X) = dom F /\ X by RELAT_1:90;
 A3: dom F /\ X = dom(F-r) /\ X by VALUED_1:3
-    .= dom((F-r)|X) by FUNCT_1:68;
+    .= dom((F-r)|X) by RELAT_1:90;
   now
     let d be Element of D;
     assume
@@ -1922,9 +1932,9 @@ A4: d in dom ((F|X) - r);
     then
 A5: d in dom F by A1,A2,XBOOLE_0:def 4;
     thus ((F|X) - r).d = (F|X).d - r by A1,A4,VALUED_1:3
-      .= F.d -r by A1,A4,FUNCT_1:68
+      .= F.d -r by A1,A4,FUNCT_1:70
       .= (F-r).d by A5,VALUED_1:3
-      .=((F-r)|X).d by A1,A2,A3,A4,FUNCT_1:68;
+      .=((F-r)|X).d by A1,A2,A3,A4,FUNCT_1:70;
   end;
   hence thesis by A2,A3,PARTFUN1:34,VALUED_1:3;
 end;
@@ -2111,7 +2121,7 @@ A12: (x1-x3)*((x1-x3)"*(x2-x3)*(f.x1-f.x2))=((x1-x3)*(x1-x3)")*u
     (x1-x3)*((x1-x3)"*(x1-x2)*(f.x2-f.x3))=((x1-x3)*(x1-x3)")*v
       .=1*v by A4,XCMPLX_0:def 7
       .=v;
-    hence (f.x1-f.x2)/(x1-x2)<=(f.x2-f.x3)/(x2-x3) by A3,A11,A12,XREAL_1:105;
+    hence thesis by A3,A11,A12,XREAL_1:105;
   end;
   assume that
 A13: [.a,b.] c= dom f and
@@ -2474,7 +2484,7 @@ A1: dom(F|X) is finite;
     set x = dom(F|X);
     consider b be FinSequence such that
 A2: F|x, b are_fiberwise_equipotent by A1,RFINSEQ:18;
-    x = dom F /\ X by FUNCT_1:68;
+    x = dom F /\ X by RELAT_1:90;
     then
 A3: F|x = (F|dom F)|X by RELAT_1:100
       .=F|X by RELAT_1:97;
@@ -2498,7 +2508,7 @@ proof
 A1: dom(F|X) is finite;
   then
 A2: FinS(F,X), F|X are_fiberwise_equipotent by Def14;
-  F|(dom(F|X)) = F|(dom F /\ X) by FUNCT_1:68
+  F|(dom(F|X)) = F|(dom F /\ X) by RELAT_1:90
     .= (F|dom F)|X by RELAT_1:100
     .= F|X by RELAT_1:97;
   hence thesis by A1,A2,Def14;
@@ -2545,7 +2555,7 @@ A1: x in dom(F|X);
     then
 A2: F|Y, FinS(F,Y) are_fiberwise_equipotent by Def14;
     set A = FinS(F,Y)^<* F.x *>;
-    x in dom F /\ X by A1,FUNCT_1:68;
+    x in dom F /\ X by A1,RELAT_1:90;
     then x in X & x in dom F by XBOOLE_0:def 4;
     then
 A3: {x} c= X & {x} c= dom F by ZFMISC_1:37;
@@ -2577,8 +2587,8 @@ A11:      (F|{x})"{y} c= {x} by A8,RELAT_1:167;
             assume
 A12:        z in {x};
             then z=x by TARSKI:def 1;
-            then y=(F|{x}).z & y in {y} by A8,A10,A12,FUNCT_1:68,TARSKI:def 1;
-            hence z in (F|{x})"{y} by A8,A12,FUNCT_1:def 13;
+            then y=(F|{x}).z & y in {y} by A8,A10,A12,FUNCT_1:70,TARSKI:def 1;
+            hence thesis by A8,A12,FUNCT_1:def 13;
           end;
           then (F|{x})"{y} = {x} by A11,XBOOLE_0:def 10;
           then
@@ -2591,7 +2601,7 @@ A14:      <*F.x*>"{y} c= {1} by A9,RELAT_1:167;
 A15:        z in {1};
             then z=1 by TARSKI:def 1;
             then y=<*F.x*>.z & y in {y} by A10,FINSEQ_1:57,TARSKI:def 1;
-            hence z in <*F.x*>"{y} by A9,A15,FUNCT_1:def 13;
+            hence thesis by A9,A15,FUNCT_1:def 13;
           end;
           then <*F.x*>"{y} = {1} by A14,XBOOLE_0:def 10;
           hence card((F|{x})"{y}) = card(<*F.x*>"{y}) by A13,CARD_1:50;
@@ -2604,7 +2614,7 @@ A18:        (F|{x})"{y} <> {};
             consider z be Element of (F|{x})"{y};
 A19:        z in {x} & (F|{x}).z in {y} by A8,A18,FUNCT_1:def 13;
             then z=x & (F|{x}).z=y by TARSKI:def 1;
-            hence contradiction by A8,A16,A19,FUNCT_1:68;
+            hence contradiction by A8,A16,A19,FUNCT_1:70;
           end;
           now
             assume
@@ -2637,11 +2647,12 @@ proof
   set dx = dom(F|X);
   assume
 A1: dx is finite & d in dx;
-A2: F|dx = F|(dom F /\ X) by FUNCT_1:68
+A2: F|dx = F|(dom F /\ X) by RELAT_1:90
     .=(F|dom F)|X by RELAT_1:100
     .=F|X by RELAT_1:97;
   set Y = X \ {d}, dy = dom(F|Y);
-A3: {d} c= dx & dy=dom F /\ Y & dx=dom F /\ X by A1,FUNCT_1:68,ZFMISC_1:37;
+A3: {d} c= dx & dy=dom F /\ Y & dx=dom F /\ X by A1,RELAT_1:90
+,ZFMISC_1:37;
 A4: dy = dx \ {d}
   proof
     thus dy c= dx \ {d}
@@ -2667,7 +2678,7 @@ A8: y in dom F & y in X by A3,XBOOLE_0:def 4;
   then
 A9: dy is finite by A1;
   FinS(F,dx\{d})^<*F.d*>, F|X are_fiberwise_equipotent by A1,A2,Th68;
-  hence FinS(F,X\{d})^<*F.d*>, F|X are_fiberwise_equipotent by A4,A9,Th66;
+  hence thesis by A4,A9,Th66;
 end;
 
 theorem Th70:
@@ -2691,7 +2702,7 @@ theorem Th71:
   for D be non empty set, F be PartFunc of D,REAL holds FinS(F,{}) = <*>REAL
 proof
   let D be non empty set, F be PartFunc of D,REAL;
-  dom(F|{}) = dom F /\ {} by FUNCT_1:68
+  dom(F|{}) = dom F /\ {} by RELAT_1:90
     .= {};
   then len FinS(F,{}) = 0 by Th70,CARD_1:47;
   hence thesis;
@@ -2706,7 +2717,7 @@ proof
   then {d} c= dom F by ZFMISC_1:37;
   then
 A1: {d} = dom F /\ {d} by XBOOLE_1:28
-    .= dom(F|{d}) by FUNCT_1:68;
+    .= dom(F|{d}) by RELAT_1:90;
   then
 A2: len FinS(F,{d}) = card {d} by Th70
     .= 1 by CARD_1:50;
@@ -2722,14 +2733,14 @@ A3: rng FinS(F,{d}) = rng(F|{d}) by CLASSES1:83;
       then consider e be Element of D such that
 A4:   e in dom(F|{d}) & (F|{d}).e = x by PARTFUN1:26;
       e=d by A1,A4,TARSKI:def 1;
-      then x=F.d by A4,FUNCT_1:68;
+      then x=F.d by A4,FUNCT_1:70;
       hence thesis by TARSKI:def 1;
     end;
     let x;
     assume x in {F.d};
     then
 A5: x=F.d & d in dom(F|{d}) by A1,TARSKI:def 1;
-    then x=(F|{d}).d by FUNCT_1:68;
+    then x=(F|{d}).d by FUNCT_1:70;
     hence thesis by A5,FUNCT_1:def 5;
   end;
   hence thesis by A2,A3,FINSEQ_1:56;
@@ -2783,7 +2794,7 @@ A1: Z = dom(F|Y);
 A2: dom(F|X) is finite & Y c= X & 0 = card Z & for d1,d2 be Element of D st
   d1 in dom(F|Y) & d2 in dom(F|(X\Y)) holds F.d1>=F.d2;
 A3: dom(F|X) = dom F /\ X & dom(F|Y) = dom F /\ Y & dom(F|(X\Y))=dom F /\(X\Y)
-  by FUNCT_1:68;
+  by RELAT_1:90;
 A4: dom(F|Y) = {} by A1,A2;
   then
 A5: FinS(F,Y) = FinS(F,{}) by Th66
@@ -2806,7 +2817,7 @@ A1: P[n];
   let dy be finite set such that
 A2: dy = dom(F|Y) & dom(F|X) is finite & Y c= X & n+1 = card dy &
   for d1,d2 be Element of D st d1 in dom(F|Y) & d2 in dxy holds F.d1>=F.d2;
-A3: dx = dom F /\ X & dy = dom F /\ Y & dxy = dom F /\ (X\Y) by A2,FUNCT_1:68;
+A3: dx = dom F /\ X & dy = dom F /\ Y & dxy = dom F /\ (X\Y) by A2,RELAT_1:90;
   then
 A4: dy is finite & dxy is finite by A2,FINSET_1:13,XBOOLE_1:26;
   then
@@ -2826,11 +2837,11 @@ A8: len fy in dom fy by FINSEQ_3:27;
   then fy.(len fy) in rng fy by FUNCT_1:def 5;
   then consider d be Element of D such that
 A9: d in dy & (F|Y).d = fy.(len fy) by A2,A6,PARTFUN1:26;
-A10: F.d = fy.(len fy) by A2,A9,FUNCT_1:68;
+A10: F.d = fy.(len fy) by A2,A9,FUNCT_1:70;
   set Yd = Y \ {d}, dyd = dom(F|Yd), xyd = dom(F|(X \ Yd));
 A11: {d} c= dy & dyd = dom F /\ Yd &
   xyd = dom F /\ (X \ Yd) & d in Y & d in dom F
-  by A3,A9,FUNCT_1:68,XBOOLE_0:def 4,ZFMISC_1:37;
+  by A3,A9,RELAT_1:90,XBOOLE_0:def 4,ZFMISC_1:37;
 A12: dyd = dy \ {d}
   proof
     thus dyd c= dy \ {d}
@@ -2877,13 +2888,13 @@ A24: d1 in dy & not d1 in {d} by A12,XBOOLE_0:def 5;
         then
 A25:    d2 = d & d1<>d by A24,TARSKI:def 1;
         (F|Y).d1 in rng(F|Y) by A2,A12,A23,FUNCT_1:def 5;
-        then F.d1 in rng(F|Y) by A2,A12,A23,FUNCT_1:68;
+        then F.d1 in rng(F|Y) by A2,A12,A23,FUNCT_1:70;
         then consider m being Nat such that
 A26:    m in dom fy & fy.m = F.d1 by A6,FINSEQ_2:11;
 A27:    1<=m & m<=len fy by A26,FINSEQ_3:27;
         now per cases;
           case m = len fy;
-            hence F.d1>=F.d2 by A2,A9,A25,A26,FUNCT_1:68;
+            hence F.d1>=F.d2 by A2,A9,A25,A26,FUNCT_1:70;
           end;
           case m<> len fy;
             then m<len fy by A27,XXREAL_0:1;
@@ -2934,7 +2945,7 @@ A39: xfy.(n+1) = fxy.(n+1-1) by A34,A35,FINSEQ_1:37
     fxy.(n1+1) in rng fxy by A38,FUNCT_1:def 5;
     then consider d1 be Element of D such that
 A40: d1 in dxy & (F|(X\Y)).d1 = fxy.(n1+1) by A6,PARTFUN1:26;
-A41: F.d1 = fxy.(n1+1) by A40,FUNCT_1:68;
+A41: F.d1 = fxy.(n1+1) by A40,FUNCT_1:70;
 A42: F.d>=F.d1 by A2,A9,A40;
     now per cases;
       suppose n = 1;
@@ -2996,9 +3007,9 @@ proof
 A1: dx is finite & d in dx;
   then reconsider dx as finite set;
 A2: dom(F-r) = dom F by VALUED_1:3;
-A3: drx = dom(F-r) /\ X by FUNCT_1:68
+A3: drx = dom(F-r) /\ X by RELAT_1:90
     .= dom F /\ X by VALUED_1:3
-    .= dx by FUNCT_1:68;
+    .= dx by RELAT_1:90;
   then
 A4: len frx = card dx & len fx = card dx by Th70;
 A5: dom frx = Seg len frx & dom fx = Seg len fx by FINSEQ_1:def 3;
@@ -3006,7 +3017,7 @@ A5: dom frx = Seg len frx & dom fx = Seg len fx by FINSEQ_1:def 3;
   by A3,Def14;
   then
 A6: rng fx = rng(F|X) & rng frx = rng((F-r)|X) by CLASSES1:83;
-A7: drx = dom(F-r) /\ X & dx = dom F /\ X by FUNCT_1:68;
+A7: drx = dom(F-r) /\ X & dx = dom F /\ X by RELAT_1:90;
   then
 A8: d in dom(F-r) by A1,A3,XBOOLE_0:def 4;
   then
@@ -3017,7 +3028,7 @@ A10: (F|X).d in rng(F|X) by A1,FUNCT_1:def 5;
   then 0+1<=len fx by NAT_1:13;
   then
 A11: len fx in dom fx by FINSEQ_3:27;
-  F.d in rng(F|X) by A1,A10,FUNCT_1:68;
+  F.d in rng(F|X) by A1,A10,FUNCT_1:70;
   then consider n being Nat such that
 A12: n in dom fx & fx.n = F.d by A6,FINSEQ_2:11;
 A13: 1<=n & n<=len fx by A12,FINSEQ_3:27;
@@ -3029,9 +3040,9 @@ A15: fx.(len fx) <> F.d;
     fx.(len fx) in rng fx by A11,FUNCT_1:def 5;
     then consider d1 be Element of D such that
 A16: d1 in dx & (F|X).d1 = fx.(len fx) by A6,PARTFUN1:26;
-A17: F.d1 = fx.(len fx) by A16,FUNCT_1:68;
+A17: F.d1 = fx.(len fx) by A16,FUNCT_1:70;
 A18: d1 in dom(F-r) by A3,A7,A16,XBOOLE_0:def 4;
-    ((F-r)|X).d1 = (F-r).d1 by A3,A16,FUNCT_1:68
+    ((F-r)|X).d1 = (F-r).d1 by A3,A16,FUNCT_1:70
       .= F.d1 - r by A2,A18,VALUED_1:3;
     then F.d1-r in rng((F-r)|X) by A3,A16,FUNCT_1:def 5;
     then consider m being Nat such that
@@ -3043,7 +3054,7 @@ A21: F.d>=F.d1 by A11,A12,A17,RFINSEQ:32;
     now per cases;
       case len frx = m;
         then F.d1+-r=F.d-r by A2,A8,A14,A19,VALUED_1:3;
-        hence contradiction by A15,A16,FUNCT_1:68;
+        hence contradiction by A15,A16,FUNCT_1:70;
       end;
       case len frx <>m;
         then m<len frx by A20,XXREAL_0:1;
@@ -3061,15 +3072,15 @@ A23: frx.(len frx) <> (F-r).d;
   then consider d1 be Element of D such that
 A24: d1 in drx & ((F-r)|X).d1 = frx.(len frx) by A6,PARTFUN1:26;
 A25: d1 in dom(F-r) by A7,A24,XBOOLE_0:def 4;
-A26: frx.(len frx) = (F-r).d1 by A24,FUNCT_1:68
+A26: frx.(len frx) = (F-r).d1 by A24,FUNCT_1:70
     .= F.d1 - r by A2,A25,VALUED_1:3;
-  (F|X).d1 = F.d1 by A3,A24,FUNCT_1:68;
+  (F|X).d1 = F.d1 by A3,A24,FUNCT_1:70;
   then F.d1 in rng(F|X) by A3,A24,FUNCT_1:def 5;
   then consider m being Nat such that
 A27: m in dom fx & fx.m = F.d1 by A6,FINSEQ_2:11;
 A28: 1<=m & m<=len fx by A27,FINSEQ_3:27;
   ((F-r)|X).d in rng((F-r)|X) by A1,A3,FUNCT_1:def 5;
-  then (F-r).d in rng((F-r)|X) by A1,A3,FUNCT_1:68;
+  then (F-r).d in rng((F-r)|X) by A1,A3,FUNCT_1:70;
   then consider n1 be Nat such that
 A29: n1 in dom frx & frx.n1 = F.d -r by A6,A9,FINSEQ_2:11;
   1<=n1 & n1<=len frx by A29,FINSEQ_3:27;
@@ -3114,9 +3125,9 @@ A4: dom(F|X) = {} by A3;
       .= <*>REAL by Th71;
     then
 A5: FinS(F,X) - (card(G)|->r) = <*>REAL by FINSEQ_2:87;
-    dom((F-r)|X) = dom(F-r) /\ X by FUNCT_1:68
+    dom((F-r)|X) = dom(F-r) /\ X by RELAT_1:90
       .=dom F /\ X by VALUED_1:3
-      .=dom(F|X) by FUNCT_1:68;
+      .=dom(F|X) by RELAT_1:90;
     hence FinS(F-r,X) = FinS(F-r,{}) by A4,Th66
       .= FinS(F,X) - (card(G)|->r) by A5,Th71;
   end;
@@ -3130,9 +3141,9 @@ A7: P[n];
 A8: G = dom(F|X);
     assume
 A9: n+1= card(G);
-A10: dom((F-r)|X) = dom(F-r) /\ X by FUNCT_1:68
+A10: dom((F-r)|X) = dom(F-r) /\ X by RELAT_1:90
       .=dom F /\ X by VALUED_1:3
-      .=dom(F|X) by FUNCT_1:68;
+      .=dom(F|X) by RELAT_1:90;
     then
 A11: FinS(F-r,X), (F-r)|X are_fiberwise_equipotent by A8,Def14;
     then
@@ -3144,7 +3155,7 @@ A14: len frx = card G & len fx = card G by A8,A10,Th70;
     then frx.(len frx) in rng frx by FUNCT_1:def 5;
     then consider d be Element of D such that
 A15: d in dom((F-r)|X) & ((F-r)|X).d = frx.(len frx) by A12,PARTFUN1:26;
-    (F-r).d = frx.(len frx) by A15,FUNCT_1:68;
+    (F-r).d = frx.(len frx) by A15,FUNCT_1:70;
     then
 A16: fx.(len fx) = F.d by A8,A10,A15,Th75;
     set Y = X \ {d}, dx = dom(F|X), dy = dom(F|Y), fry = FinS(F-r,Y),
@@ -3153,7 +3164,7 @@ A16: fx.(len fx) = F.d by A8,A10,A15,Th75;
     by A8,A9,A10,A14,A15,A16,Th73,RFINSEQ:20;
     then
 A17: fy = fx|n by FINSEQ_1:46;
-    (F-r).d = frx.(len frx) by A15,FUNCT_1:68;
+    (F-r).d = frx.(len frx) by A15,FUNCT_1:70;
     then
 A18: frx = frx|n ^ <*(F-r).d*> by A9,A14,RFINSEQ:20;
 A19: frx|n is non-increasing by RFINSEQ:33;
@@ -3163,7 +3174,7 @@ A19: frx|n is non-increasing by RFINSEQ:33;
     then
 A20: fry = frx|n by A19,RFINSEQ:36;
 A21: {d} c= dx & dy=dom F /\ Y & dx=dom F /\ X & dom((F-r)|X) = dom(F-r) /\ X
-    by A10,A15,FUNCT_1:68,ZFMISC_1:37;
+    by A10,A15,RELAT_1:90,ZFMISC_1:37;
 A22: dy = dx \ {d}
     proof
       thus dy c= dx \ {d}
@@ -3197,7 +3208,7 @@ A28: fry = fy - nr by A7;
     then (F-r).d = F.d - r by VALUED_1:3;
     then
 A29: <*(F-r).d*> = <*F.d*> - <*r*> by RVSUM_1:50;
-A30: len n1r = n+1 & len nr = n by FINSEQ_2:69;
+A30: len n1r = n+1 & len nr = n by FINSEQ_1:def 18;
 A31: len fx = n+1 & len fy = n by A8,A9,A27,Th70;
     then
 A32: len (fx - n1r) = n+1 by A30,FINSEQ_2:86;
@@ -3272,7 +3283,7 @@ A1: dom(F|X) is finite & for d be Element of D st d in dom(F|X) holds F.d>=0;
   now
     let d be Element of D;
     assume d in dom(F|X);
-    then F.d>=0 & (F|X).d=F.d by A1,FUNCT_1:68;
+    then F.d>=0 & (F|X).d=F.d by A1,FUNCT_1:70;
     hence (F|X).d>=0;
   end;
   then
@@ -3319,10 +3330,10 @@ A2: P[0]
     let Y be set, Z be finite set;
     assume
 A3: Z = dom(F|Y) & dom(F|(X \/ Y)) is finite & X /\ Y = {} & 0 = card Z;
-A4: dom(F|(X \/ Y)) = dom F /\ (X \/ Y) by FUNCT_1:68
+A4: dom(F|(X \/ Y)) = dom F /\ (X \/ Y) by RELAT_1:90
       .= dom F /\ X \/ dom F /\ Y by XBOOLE_1:23
-      .= dom(F|X) \/ dom F /\ Y by FUNCT_1:68
-      .= dom(F|X) \/ dom(F|Y) by FUNCT_1:68;
+      .= dom(F|X) \/ dom F /\ Y by RELAT_1:90
+      .= dom(F|X) \/ dom(F|Y) by RELAT_1:90;
     then
 A5: dom(F|X) is finite & dom(F|Y) is finite by A3,FINSET_1:13,XBOOLE_1:7;
 A6: dom(F|Y) = {} by A3;
@@ -3341,22 +3352,23 @@ A8: P[n];
     let Y be set, Z be finite set;
     assume
 A9: Z = dom(F|Y) & dom(F|(X \/ Y)) is finite & X /\ Y = {} & n+1 = card Z;
-A10: dom(F|(X \/ Y)) = dom F /\ (X \/ Y) by FUNCT_1:68
+A10: dom(F|(X \/ Y)) = dom F /\ (X \/ Y) by RELAT_1:90
       .= dom F /\ X \/ dom F /\ Y by XBOOLE_1:23
-      .= dom(F|X) \/ dom F /\ Y by FUNCT_1:68
-      .= dom(F|X) \/ dom(F|Y) by FUNCT_1:68;
+      .= dom(F|X) \/ dom F /\ Y by RELAT_1:90
+      .= dom(F|X) \/ dom(F|Y) by RELAT_1:90;
     consider x being Element of dom(F|Y);
     reconsider x as Element of D by A9,CARD_1:47,TARSKI:def 3;
     set y1 = Y\{x};
     X \/ y1 c= X \/ Y by XBOOLE_1:13;
     then dom F /\(X \/ y1) c= dom F /\ (X \/ Y) by XBOOLE_1:27;
-    then dom(F|(X \/ y1)) c= dom F /\ (X \/ Y) by FUNCT_1:68;
-    then dom(F|(X \/ y1)) c= dom(F|(X \/ Y)) by FUNCT_1:68;
+    then dom(F|(X \/ y1)) c= dom F /\ (X \/ Y) by RELAT_1:90;
+    then dom(F|(X \/ y1)) c= dom(F|(X \/ Y)) by RELAT_1:90;
     then
 A11: dom(F|(X \/ y1)) is finite by A9;
 A12: X /\ y1 c= X /\ Y by XBOOLE_1:27;
 A13: {x} c= dom(F|Y) by A9,CARD_1:47,ZFMISC_1:37;
-A14: dom(F|y1) = dom F /\ y1 & dom(F|Y)= dom F /\ Y by FUNCT_1:68;
+A14: dom(F|y1) = dom F /\ y1 & dom(F|Y)= dom F /\ Y by RELAT_1:90
+;
 A15: dom(F|y1) = dom(F|Y) \ {x}
     proof
       thus dom(F|y1) c= dom(F|Y) \ {x}
@@ -3453,7 +3465,7 @@ A1: dom(F|X) is finite;
   set x = dom(F|X);
   consider b be FinSequence such that
 A2: F|x, b are_fiberwise_equipotent by A1,RFINSEQ:18;
-  x = dom F /\ X by FUNCT_1:68;
+  x = dom F /\ X by RELAT_1:90;
   then
 A3: F|x = (F|dom F)|X by RELAT_1:100
     .=F|X by RELAT_1:97;
@@ -3463,9 +3475,9 @@ A3: F|x = (F|dom F)|X by RELAT_1:100
   F|X, FinS(F,X) are_fiberwise_equipotent by A1,Def14;
   then
 A4: Sum b = Sum(F,X) by A2,A3,CLASSES1:84,RFINSEQ:22;
-A5: dom((r(#)F)|X) = dom(r(#)F) /\ X by FUNCT_1:68
+A5: dom((r(#)F)|X) = dom(r(#)F) /\ X by RELAT_1:90
     .= dom F /\ X by VALUED_1:def 5
-    .= dom(F|X) by FUNCT_1:68;
+    .= dom(F|X) by RELAT_1:90;
 A6: rng(r*b) c=REAL & rng((r(#)F)|X) c= REAL &
   rng b c=REAL & rng(F|X) c= REAL;
 A7: rng b = rng(F|X) by A2,A3,CLASSES1:83;
@@ -3582,7 +3594,7 @@ A11: card(dx) = n+1 & dx = dom(F|X) & dom(F|X) = dom(G|X);
     reconsider x as Element of D by A11,CARD_1:47,TARSKI:def 3;
     set Y = X\{x}, dy = dom(F|Y), gy = dom(G|Y);
 A12: {x} c= dx & dy=dom F /\ Y & dx=dom F /\ X & gy= dom G /\ Y & gx=dom G
-    /\ X by A11,CARD_1:47,FUNCT_1:68,ZFMISC_1:37;
+    /\ X by A11,CARD_1:47,RELAT_1:90,ZFMISC_1:37;
     then
 A13: x in dom F & x in X & x in dom G by A11,CARD_1:47,XBOOLE_0:def 4;
     then {x} c= X & x in dom F /\ dom G by XBOOLE_0:def 4,ZFMISC_1:37;
@@ -3590,7 +3602,7 @@ A13: x in dom F & x in X & x in dom G by A11,CARD_1:47,XBOOLE_0:def 4;
 A14: x in dom(F+G) by VALUED_1:def 1;
     then x in dom(F+G) /\ X by A13,XBOOLE_0:def 4;
     then
-A15: x in dom ((F+G)|X) by FUNCT_1:68;
+A15: x in dom ((F+G)|X) by RELAT_1:90;
 A16: dom((F+G)|X) = dom(F|X + G|X) by RFUNCT_1:60
       .= dx /\ gx by A11,VALUED_1:def 1;
 A17: dy = dx \ {x}
@@ -3673,9 +3685,9 @@ proof
   let D be non empty set, F,G be PartFunc of D,REAL, X be set;
   assume
 A1: dom(F|X) is finite & dom(F|X) = dom(G|X);
-  dom(((-1)(#)G)|X) = dom((-1)(#)G) /\ X by FUNCT_1:68
+  dom(((-1)(#)G)|X) = dom((-1)(#)G) /\ X by RELAT_1:90
     .= dom G /\ X by VALUED_1:def 5
-    .= dom(G|X) by FUNCT_1:68;
+    .= dom(G|X) by RELAT_1:90;
   hence Sum(F-G,X) = Sum(F,X) + Sum((-1)(#)G,X) by A1,Th81
     .= Sum(F,X) +(-1)* Sum(G,X) by A1,Th80
     .= Sum(F,X) - Sum(G,X);
@@ -3692,7 +3704,7 @@ proof
 A1: Y = dom(F|X);
   set dr = card(Y) |-> r;
 A2: FinS(F-r,X) = fx - dr by A1,Th76;
-  len fx = card(Y) & len dr = card(Y) by A1,Th70,FINSEQ_2:69;
+  len fx = card(Y) & len dr = card(Y) by A1,Th70,FINSEQ_1:def 18;
   then reconsider xf = fx, rd = dr as Element of (card(Y))-tuples_on REAL
   by FINSEQ_2:110;
   thus Sum(F-r,X) = Sum xf - Sum rd by A2,RVSUM_1:120
@@ -3732,18 +3744,18 @@ proof
   let D be non empty set, F be PartFunc of D,REAL, X,Y be set;
   assume
 A1: dom(F|(X \/ Y)) is finite & dom(F|X) misses dom(F|Y);
-A2: dom(F|(X \/ Y)) = dom F /\ (X \/ Y) by FUNCT_1:68
+A2: dom(F|(X \/ Y)) = dom F /\ (X \/ Y) by RELAT_1:90
     .= dom F /\ X \/ dom F /\ Y by XBOOLE_1:23
-    .= dom(F|X) \/ dom F /\ Y by FUNCT_1:68
-    .= dom(F|X) \/ dom(F|Y) by FUNCT_1:68;
+    .= dom(F|X) \/ dom F /\ Y by RELAT_1:90
+    .= dom(F|X) \/ dom(F|Y) by RELAT_1:90;
   then dom(F|X) is finite & dom(F|Y) is finite by A1,FINSET_1:13,XBOOLE_1:7;
   then
 A3: FinS(F,X \/ Y) = FinS(F,dom(F|(X \/ Y))) & FinS(F,X) = FinS(F,dom(F| X)) &
   FinS(F,Y) = FinS(F,dom(F|Y)) by A1,Th66;
-  dom(F| dom(F|(X \/ Y))) = dom F /\ dom(F|(X \/ Y)) by FUNCT_1:68
-    .= dom F /\ (dom F /\ (X \/ Y)) by FUNCT_1:68
+  dom(F| dom(F|(X \/ Y))) = dom F /\ dom(F|(X \/ Y)) by RELAT_1:90
+    .= dom F /\ (dom F /\ (X \/ Y)) by RELAT_1:90
     .= dom F /\ dom F /\ (X \/ Y) by XBOOLE_1:16
-    .= dom(F|(X \/ Y)) by FUNCT_1:68;
+    .= dom(F|(X \/ Y)) by RELAT_1:90;
   hence Sum(F, X \/ Y) = Sum (FinS(F,X) ^ FinS(F,Y)) by A1,A2,A3,Th79,
 RFINSEQ:22
     .= Sum(F,X) + Sum(F,Y) by RVSUM_1:105;

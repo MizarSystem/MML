@@ -7,15 +7,15 @@
 environ
 
  vocabularies RLVECT_1, RELAT_1, ARYTM_1, EQREL_1, SETFAM_1, REALSET1, COLLSP,
-      ANPROJ_1, ARYTM, XREAL_0;
+      ANPROJ_1, ARYTM, XREAL_0, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REAL_1, EQREL_1, SETFAM_1,
       NUMBERS, STRUCT_0, COLLSP, RLVECT_1, MCART_1;
  constructors REAL_1, EQREL_1, REALSET2, COLLSP;
- registrations RELSET_1, STRUCT_0, RLVECT_1, COLLSP, REAL_1;
+ registrations RELSET_1, STRUCT_0, RLVECT_1, COLLSP, REAL_1, XREAL_0, ORDINAL1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions STRUCT_0;
  theorems RLVECT_1, RELAT_1, DOMAIN_1, FUNCSDOM, ANALOAF, TARSKI, EQREL_1,
-      COLLSP, MCART_1, XCMPLX_0, XCMPLX_1, STRUCT_0;
+      COLLSP, MCART_1, XCMPLX_0, XCMPLX_1, STRUCT_0, ZFMISC_1;
  schemes EQREL_1, XBOOLE_0;
 
 begin
@@ -364,7 +364,7 @@ A9:   1*v = (b2*b1")*u & 1<>0 by RLVECT_1:def 9;
           .= 0.V + 0.V by RLVECT_1:23;
         hence contradiction by A5,RLVECT_1:10;
       end;
-      hence are_Prop u,v by A9,Def2;
+      hence thesis by A9,Def2;
     end;
     now
       assume
@@ -467,7 +467,7 @@ proof
 A1: not u,v,w are_LinDep;
   then u<>0.V & v<>0.V & w<>0.V by Th15;
   hence u is not zero & v is not zero & w is not zero by STRUCT_0:def 15;
-  thus not are_Prop u,v & not are_Prop v,w & not are_Prop w,u by A1,Th16;
+  thus thesis by A1,Th16;
 end;
 
 theorem Th18:
@@ -913,114 +913,49 @@ end;
 reserve x,y,z for set;
 
 definition
-  let V;
-  func Proper_Vectors_of V means
-  :Def4:
-  for u being set holds (u in it iff u<>0.V & u is Element of V);
-  existence
-  proof
-    defpred P[set] means $1 <> 0.V;
-    consider X be set such that
-A1: for u being set holds u in X iff u in the carrier of V
-    & P[u] from XBOOLE_0:sch 1;
-    take X;
-    let u be set;
-    thus thesis by A1;
-  end;
-  uniqueness
-  proof
-    let X1,X2 be set such that
-A2: for u being set holds (u in X1 iff u<>0.V & u is Element of V) and
-A3: for u being set holds (u in X2 iff u<>0.V & u is Element of V);
-    for u being set holds u in X1 iff u in X2
-    proof
-      let u be set; thus u in X1 implies u in X2
-      proof
-        assume u in X1;
-        then u<>0.V & u is Element of V by A2;
-        hence thesis by A3;
-      end;
-      thus u in X2 implies u in X1
-      proof
-        assume u in X2;
-        then u<>0.V & u is Element of V by A3;
-        hence thesis by A2;
-      end;
-    end;
-    hence X1 = X2 by TARSKI:2;
-  end;
-end;
-
-canceled 2;
-
-theorem Th26:
-  for u holds (u in Proper_Vectors_of V iff u is not zero)
-proof
-  let u;
-  thus u in Proper_Vectors_of V implies u is not zero
-  proof
-    assume u in Proper_Vectors_of V;
-    then u <> 0.V by Def4;
-    hence thesis by STRUCT_0:def 15;
-  end;
-  thus u is not zero implies u in Proper_Vectors_of V
-  proof
-    assume u is not zero;
-    then u <> 0.V by STRUCT_0:def 15;
-    hence thesis by Def4;
-  end;
-end;
-
-definition
+ canceled;
   let V;
   func
-  Proportionality_as_EqRel_of V -> Equivalence_Relation of Proper_Vectors_of V
+  Proportionality_as_EqRel_of V -> Equivalence_Relation of NonZero V
   means
   :Def5:
   for x,y holds [x,y] in it iff
-  (x in Proper_Vectors_of V & y in Proper_Vectors_of V
+  (x in NonZero V & y in NonZero V
   & ex u,v being Element of V st x=u & y=v & are_Prop u,v );
   existence
   proof
     defpred P[set,set] means
     ex u,v being Element of V st $1=u & $2=v & are_Prop u,v;
-A1: for x st x in Proper_Vectors_of V holds P[x,x]
-    proof
-      let x;
-      assume x in Proper_Vectors_of V;
-      then reconsider u=x as Element of V by Def4;
-      take u,u;
-      thus thesis;
-    end;
+A1: for x st x in NonZero V holds P[x,x];
 A2: for x,y st P[x,y] holds P[y,x];
 A3: for x,y,z st P[x,y] & P[y,z] holds P[x,z] by Th6;
-    consider R being Equivalence_Relation of Proper_Vectors_of V such that
+    consider R being Equivalence_Relation of NonZero V such that
 A4: for x,y holds [x,y] in R iff
-    (x in Proper_Vectors_of V & y in Proper_Vectors_of V & P[x,y])
+    (x in NonZero V & y in NonZero V & P[x,y])
     from EQREL_1:sch 1(A1,A2,A3);
     take R; thus thesis by A4;
   end;
   uniqueness
   proof
-    let R1,R2 be Equivalence_Relation of Proper_Vectors_of V such that
+    let R1,R2 be Equivalence_Relation of NonZero V such that
 A5: for x,y holds [x,y] in R1 iff
-    (x in Proper_Vectors_of V & y in Proper_Vectors_of V
+    (x in NonZero V & y in NonZero V
     & ex u,v being Element of V st x=u & y=v & are_Prop u,v ) and
 A6: for x,y holds [x,y] in R2 iff
-    (x in Proper_Vectors_of V & y in Proper_Vectors_of V
+    (x in NonZero V & y in NonZero V
     & ex u,v being Element of V st x=u & y=v & are_Prop u,v );
     for x,y holds ( [x,y] in R1 iff [x,y] in R2 )
     proof
       let x,y;
 A7:   now
         assume [x,y] in R1;
-        then x in Proper_Vectors_of V & y in Proper_Vectors_of V
+        then x in NonZero V & y in NonZero V
         & ex u,v being Element of V st x=u & y=v & are_Prop u,v by A5;
         hence [x,y] in R2 by A6;
       end;
       now
         assume [x,y] in R2;
-        then x in Proper_Vectors_of V & y in Proper_Vectors_of V
+        then x in NonZero V & y in NonZero V
         & ex u,v being Element of V st x=u & y=v & are_Prop u,v by A6;
         hence [x,y] in R1 by A5;
       end;
@@ -1030,7 +965,7 @@ A7:   now
   end;
 end;
 
-canceled;
+canceled 4;
 
 theorem
   [x,y] in Proportionality_as_EqRel_of V implies
@@ -1052,13 +987,13 @@ A1: now
 A2: [u,v] in Proportionality_as_EqRel_of V;
     then
 A3: ex u1,v1 st u=u1 & v=v1 & are_Prop u1,v1 by Def5;
-    u in Proper_Vectors_of V & v in Proper_Vectors_of V by A2,Def5;
-    hence u is not zero & v is not zero by Th26; thus are_Prop u,v by A3;
+    u in NonZero V & v in NonZero V by A2,Def5;
+    hence u is not zero & v is not zero by STRUCT_0:1; thus are_Prop u,v by A3;
   end;
   now
     assume
 A4: u is not zero & v is not zero & are_Prop u,v;
-    then u in Proper_Vectors_of V & v in Proper_Vectors_of V by Th26;
+    then u in NonZero V & v in NonZero V by STRUCT_0:1;
     hence [u,v] in Proportionality_as_EqRel_of V by A4,Def5;
   end;
   hence thesis by A1;
@@ -1067,7 +1002,7 @@ end;
 definition
   let V;
   let v;
-  func Dir(v) -> Subset of Proper_Vectors_of V equals
+  func Dir(v) -> Subset of NonZero V equals
   Class(Proportionality_as_EqRel_of V,v);
   correctness;
 end;
@@ -1076,28 +1011,9 @@ definition
   let V;
   func ProjectivePoints(V) means
   :Def7:
-  ex Y being Subset-Family of Proper_Vectors_of V st
+  ex Y being Subset-Family of NonZero V st
   Y = Class Proportionality_as_EqRel_of V & it = Y;
   correctness;
-end;
-
-definition
-  let V be non empty ZeroStr;
-  redefine attr V is trivial means
-  :Def8:
-  for u being Element of V holds u = 0.V;
-  compatibility
-  proof thus V is trivial implies
-    for a being Element of V holds a = 0.V by STRUCT_0:def 10;
-    assume
-A1: for a being Element of V holds a = 0.V;
-    now
-      let a,b be Element of V;
-      thus a = 0.V by A1
-        .= b by A1;
-    end;
-    hence V is trivial by STRUCT_0:def 10;
-  end;
 end;
 
 registration
@@ -1120,7 +1036,7 @@ A3:   u = 0.V;
         .= 1*u + 0*v by RLVECT_1:23;
       hence contradiction by A2;
     end;
-    then V is non trivial by Def8;
+    then V is non trivial by STRUCT_0:def 19;
     hence thesis;
   end;
 end;
@@ -1129,26 +1045,26 @@ canceled 3;
 
 theorem
   for V being RealLinearSpace holds (V is non trivial RealLinearSpace iff
-  ex u being Element of V st u in Proper_Vectors_of V)
+  ex u being Element of V st u in NonZero V)
 proof
   let V be RealLinearSpace;
 A1: V is non trivial RealLinearSpace implies
-  ex u being Element of V st u in Proper_Vectors_of V
+  ex u being Element of V st u in NonZero V
   proof
     assume V is non trivial RealLinearSpace;
     then consider u being Element of V such that
-A2: u <> 0.V by Def8;
+A2: u <> 0.V by STRUCT_0:def 19;
     reconsider u as Element of V;
-A3: u in Proper_Vectors_of V iff u is not zero by Th26;
-    take u; thus u in Proper_Vectors_of V by A2,A3,STRUCT_0:def 15;
+A3: u in NonZero V iff u is not zero by STRUCT_0:1;
+    take u; thus thesis by A2,A3,STRUCT_0:def 15;
   end;
-  (ex u being Element of V st u in Proper_Vectors_of V)
+  (ex u being Element of V st u in NonZero V)
   implies V is non trivial RealLinearSpace
   proof
     given u being Element of V such that
-A4: u in Proper_Vectors_of V;
-    u <> 0.V by A4,Def4;
-    hence thesis by Def8;
+A4: u in NonZero V;
+    u <> 0.V by A4,ZFMISC_1:64;
+    hence thesis by STRUCT_0:def 19;
   end;
   hence thesis by A1;
 end;
@@ -1158,22 +1074,14 @@ reserve p,q,r,u,v,w for Element of V;
 
 registration
   let V;
-  cluster Proper_Vectors_of V -> non empty;
-  coherence
-  proof
-    consider u being Element of V such that
-A1: u <> 0.V by Def8;
-    thus Proper_Vectors_of V is non empty by A1,Def4;
-  end;
   cluster ProjectivePoints V -> non empty;
   coherence
   proof
-    consider Z being Subset-Family of Proper_Vectors_of V such that
+    consider Z being Subset-Family of NonZero V such that
 A2: Z = Class Proportionality_as_EqRel_of V & ProjectivePoints(V) = Z by Def7;
     consider u be Element of V such that
-A3: u <> 0.V by Def8;
-    reconsider u as Element of V;
-A4: u in Proper_Vectors_of V by A3,Def4;
+A3: u <> 0.V by STRUCT_0:def 19;
+A4: u in NonZero V by A3,ZFMISC_1:64;
     set Y = Dir(u);
     Y in Z by A2,A4,EQREL_1:def 5;
     hence thesis by A2;
@@ -1184,7 +1092,7 @@ theorem Th34:
   p is not zero implies Dir(p) is Element of ProjectivePoints(V)
 proof
   assume p is not zero;
-  then p in Proper_Vectors_of V by Th26;
+  then p in NonZero V by STRUCT_0:1;
   then Dir(p) in Class Proportionality_as_EqRel_of V by EQREL_1:def 5;
   hence thesis by Def7;
 end;
@@ -1195,7 +1103,7 @@ proof
   assume
 A1: p is not zero & q is not zero;
   then
-A2: p in Proper_Vectors_of V by Th26;
+A2: p in NonZero V by STRUCT_0:1;
 A3: now
     assume Dir(p) = Dir(q);
     then [p,q] in Proportionality_as_EqRel_of V by A2,EQREL_1:44;
@@ -1210,6 +1118,7 @@ A3: now
 end;
 
 definition
+ canceled;
   let V;
   func ProjectiveCollinearity(V) -> Relation3 of ProjectivePoints(V) means
   :Def9:
@@ -1290,7 +1199,7 @@ A12:    u = [x,y,z] by A7,DOMAIN_1:15;
       end;
       hence u in R1 iff u in R2 by A8;
     end;
-    hence R1 = R2 by TARSKI:2;
+    hence thesis by TARSKI:2;
   end;
 end;
 
@@ -1343,14 +1252,14 @@ theorem
 proof now
     assume
 A1: x is Element of ProjectiveSpace(V);
-A2: ex Y being Subset-Family of Proper_Vectors_of V st
+A2: ex Y being Subset-Family of NonZero V st
     Y = Class Proportionality_as_EqRel_of V & ProjectivePoints(V) = Y by Def7;
-    then reconsider x' = x as Subset of Proper_Vectors_of V by A1,TARSKI:def 3;
+    then reconsider x' = x as Subset of NonZero V by A1,TARSKI:def 3;
     consider y being set such that
-A3: y in Proper_Vectors_of V &
+A3: y in NonZero V &
     x' = Class(Proportionality_as_EqRel_of V,y) by A1,A2,EQREL_1:def 5;
-A4: y<>0.V & y is Element of V by A3,Def4;
-    reconsider y as Element of V by A3,Def4;
+A4: y<>0.V & y is Element of V by A3,ZFMISC_1:64;
+    reconsider y as Element of V by A3;
     take y;
     thus y is not zero by A4,STRUCT_0:def 15; thus x = Dir(y) by A3;
   end;

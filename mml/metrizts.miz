@@ -1,0 +1,2825 @@
+:: Basic Properties of Metrizable Topological Spaces
+::  by Karol P\c{a}k
+::
+:: Received March 31, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies ABSVALUE, ARYTM, ARYTM_1, ARYTM_3, BOOLE, CARD_1, CARD_2, CARD_4,
+      CARD_5, COMPTS_1, CONNSP_1, EUCLID, FINSET_1, FINSEQ_1, FINSEQ_2,
+      FUNCOP_1, FUNCT_1, FUNCT_3, GROUP_1, GROUP_3, MCART_1, METRIC_1,
+      NAGATA_1, NATTRA_1, ORDINAL2, PCOMPS_1, PRE_TOPC, PROB_1, RAT_1, RCOMP_1,
+      RELAT_1, RLVECT_3, SETFAM_1, SUBSET_1, SUPINF_1, T_0TOPSP, TARSKI,
+      TOPGEN_1, TOPGEN_4, TOPMETR, TOPREAL7, TOPS_1, TOPS_2, WAYBEL23,
+      WEIERSTR, METRIZTS;
+ notations BINOP_1, TOPMETR, CARD_1, CANTOR_1, COMPLEX1, FINSET_1, TARSKI,
+      XBOOLE_0, RELAT_1, SUBSET_1, ORDINAL1, NUMBERS, ZFMISC_1, XREAL_0,
+      REAL_1, DOMAIN_1, METRIC_1, PCOMPS_1, CARD_3, KURATO_2, WAYBEL23,
+      TOPGEN_1, FUNCOP_1, XCMPLX_0, TOPS_1, CARD_2, NEWTON, BORSUK_1, NAGATA_1,
+      TEX_2, TOPGEN_4, RCOMP_1, WEIERSTR, TOPREAL7, ORDERS_4, XXREAL_0,
+      FUNCT_1, RELSET_1, FUNCT_2, FUNCT_3, NAT_1, FINSEQ_1, SETFAM_1, STRUCT_0,
+      PRE_TOPC, CONNSP_1, TOPS_2, BORSUK_3, EUCLID, FINSEQ_2;
+ constructors REAL_1, KURATO_2, CANTOR_1, URYSOHN3, TOPGEN_4, WAYBEL23,
+      TOPGEN_1, TOPS_1, FUNCT_3, TOPREAL9, CARD_2, NEWTON, CARD_5, NAGATA_1,
+      TEX_2, TSP_1, CONNSP_1, RCOMP_1, WEIERSTR, TOPREAL7, ORDERS_4, TOPS_2,
+      BORSUK_3, FUNCSDOM;
+ registrations TOPMETR, PRE_TOPC, PCOMPS_1, XREAL_0, SUBSET_1, STRUCT_0,
+      TOPS_1, METRIC_1, XXREAL_0, YELLOW13, CARD_1, XBOOLE_0, FINSET_1,
+      FUNCT_1, ORDINAL1, COMPTS_1, RELAT_1, XCMPLX_0, CARD_LAR, BORSUK_1,
+      TOPGEN_4, MEMBERED, TOPREAL7, BORSUK_3, EUCLID;
+ requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
+ definitions BINOP_1, CARD_3, METRIC_1, PCOMPS_1, PRE_TOPC, SUBSET_1, STRUCT_0,
+      TARSKI, TOPS_2, XBOOLE_0;
+ theorems ABSVALUE, BORSUK_1, BORSUK_5, CANTOR_1, CARD_1, CARD_2, CARD_3,
+      CARD_4, COMPL_SP, CONNSP_1, FUNCOP_1, FUNCT_1, FUNCT_2, FUNCT_3,
+      HAUSDORF, JGRAPH_2, JORDAN1K, MCART_1, METRIC_1, NAGATA_1, NAGATA_2,
+      NEWTON, PARTIT1, PCOMPS_1, PCOMPS_2, PREPOWER, PRE_TOPC, PROB_1,
+      SETFAM_1, SUBSET_1, TARSKI, TEX_2, TMAP_1, TOPGEN_1, TOPGEN_2, TOPGEN_4,
+      TOPMETR, TOPREAL7, TOPS_1, TOPS_2, TSEP_1, TSP_1, WAYBEL23, WAYBEL29,
+      XBOOLE_0, XBOOLE_1, XREAL_0, XREAL_1, XXREAL_0, XXREAL_1, YELLOW12,
+      YELLOW_9, ZFMISC_1, T_0TOPSP, TOPGRP_1, RELAT_1, ORDERS_4, NUMBERS,
+      TOPREAL6, TOPREALA, EUCLID, ORDINAL1, FINSEQ_2, YELLOW14, TOPS_3;
+ schemes BORSUK_2, CLASSES1, FRAENKEL, FUNCT_2, LMOD_7, NAT_1;
+
+begin :: Preliminaries
+
+reserve T, T1, T2 for TopSpace,
+  A, B for Subset of T,
+  F, G for Subset-Family of T,
+  A1 for Subset of T1,
+  A2 for Subset of T2,
+  TM, TM1, TM2 for metrizable TopSpace,
+  Am, Bm for Subset of TM,
+  Fm, Gm for Subset-Family of TM,
+  C for Cardinal,
+  iC for infinite Cardinal;
+
+definition
+  let T1,T2,A1,A2;
+  pred A1,A2 are_homeomorphic means :Def1:
+  T1|A1,T2|A2 are_homeomorphic;
+end;
+
+Lm1: for T1,T2 be empty TopSpace holds T1,T2 are_homeomorphic
+proof
+  let T1,T2 be empty TopSpace;
+  reconsider E={} as Function of T1,T2 by FUNCT_2:3,RELAT_1:60;
+A1: [#]T2={} iff [#]T1={};
+  for P be Subset of T2 st P is open holds E"P is open;
+  then
+A2: E is continuous by A1,TOPS_2:55;
+  for P be Subset of T1 st P is open holds(E")"P is open;
+  then E" is continuous by A1,TOPS_2:55;
+  then E is being_homeomorphism by A1,A2,RELAT_1:60,TOPS_2:def 5;
+  hence thesis by T_0TOPSP:def 1;
+end;
+
+theorem
+  T1,T2 are_homeomorphic iff [#]T1,[#]T2 are_homeomorphic
+proof
+A1: T1|([#]T1)=the TopStruct of T1 & T2|([#]T2)=the TopStruct of T2
+  by TSEP_1:100;
+  per cases;
+  suppose
+A3: T2 is non empty;
+    hereby
+      assume T1,T2 are_homeomorphic;
+      then the TopStruct of T1,the TopStruct of T2 are_homeomorphic
+      by A3,TOPREALA:36;
+      hence [#]T1,[#]T2 are_homeomorphic by A1,Def1;
+    end;
+    assume[#]T1,[#]T2 are_homeomorphic;
+    then the TopStruct of T1,the TopStruct of T2 are_homeomorphic
+    by A1,Def1;
+    hence thesis by A3,TOPREALA:36;
+  end;
+  suppose
+A4: T2 is empty;
+    hereby
+      assume T1,T2 are_homeomorphic; then
+      T1 is empty iff T2 is empty by YELLOW14:19;
+      then T1|([#]T1),T2|([#]T2) are_homeomorphic by A4,Lm1;
+      hence [#]T1,[#]T2 are_homeomorphic by Def1;
+    end;
+    assume [#]T1,[#]T2 are_homeomorphic;
+    then T1|([#]T1),T2|([#]T2) are_homeomorphic by Def1; then
+    T1 is empty by A4,YELLOW14:19;
+    hence thesis by A4,Lm1;
+  end;
+end;
+
+theorem Th2:
+  for f be Function of T1,T2 st f is being_homeomorphism
+    for g be Function of T1|A1,T2|(f.:A1) st g = f|A1
+      holds g is being_homeomorphism
+proof
+  let f be Function of T1,T2 such that
+A1: f is being_homeomorphism;
+AA: T1,T2 are_homeomorphic by A1,T_0TOPSP:def 1;
+  set B= f.:A1;
+A2: dom f=[#]T1 by A1,TOPS_2:def 5;
+A3: rng f=[#]T2 by A1,TOPS_2:def 5;
+    T1 is empty iff T2 is empty by YELLOW14:19,AA; then
+A4: [#]T1={} iff [#]T2={};
+  let g be Function of T1|A1,T2|B such that
+A5: g=f|A1;
+A6: rng g=B by A5,RELAT_1:148;
+    set TA=T1|A1,TB=T2|B;
+K:  [#]TA = A1 & [#]TB = B by PRE_TOPC:def 10;
+A7: dom g = dom f/\A1 by A5,RELAT_1:90
+    .= A1 by A2,XBOOLE_1:28; then
+    TA is empty iff TB is empty by K,A6,YELLOW14:19; then
+A8: [#]TA={} iff [#]TB={};
+A9: [#]TA=A1 by PRE_TOPC:def 10;
+A10: f is one-to-one by A1,TOPS_2:def 5; then
+A11: g is one-to-one by A5,FUNCT_1:84;
+A12: [#]TB=B by PRE_TOPC:def 10;
+A13: f is continuous by A1,TOPS_2:def 5;
+  for P be Subset of TB st P is open holds g"P is open
+  proof
+    let P be Subset of TB;
+    assume P is open;
+    then consider P1 be Subset of T2 such that
+A14: P1 is open and
+A15: P=P1/\B by A12,TSP_1:def 1;
+    reconsider PA=f"P1/\A1 as Subset of TA by A9,XBOOLE_1:17;
+A16: A1/\PA=PA by XBOOLE_1:17,28;
+    A1=f"B by A2,A10,FUNCT_1:164;
+    then PA=f"P by A15,FUNCT_1:137;
+    then
+A17: g"P=PA by A5,A16,FUNCT_1:139;
+    f"P1 is open by A13,A4,A14,TOPS_2:55;
+    hence thesis by A9,A17,TSP_1:def 1;
+  end;
+  then
+A18: g is continuous by A8,TOPS_2:55;
+A19: f" is continuous by A1,TOPS_2:def 5;
+  for P be Subset of TA st P is open holds(g")"P is open
+  proof
+    let P be Subset of TA;
+    assume P is open;
+    then consider P1 be Subset of T1 such that
+A20: P1 is open and
+A21: P=P1/\A1 by A9,TSP_1:def 1;
+    reconsider PB=(f")"P1/\B as Subset of TB by A12,XBOOLE_1:17;
+A22: (f")"P1 is open by A19,A4,A20,TOPS_2:55;
+    B = (f")"A1 by A3,A10,TOPS_2:67;
+    then PB = (f")"(P1/\A1) by FUNCT_1:137
+      .= f.:P by A3,A10,A21,TOPS_2:67
+      .= g.:P by A5,A9,RELAT_1:162
+      .= (g")"P by A12,A6,A11,TOPS_2:67;
+    hence thesis by A12,A22,TSP_1:def 1;
+  end;
+  then g" is continuous by A8,TOPS_2:55;
+  hence thesis by A9,A12,A7,A6,A11,A18,TOPS_2:def 5;
+end;
+
+theorem
+  for f be Function of T1,T2 st f is being_homeomorphism holds
+    A1,f.:A1 are_homeomorphic
+proof
+  let f be Function of T1,T2 such that
+A1: f is being_homeomorphism;
+  dom f=[#]T1 by A1,TOPS_2:def 5;
+  then
+A2: dom(f|A1) = [#]T1/\A1 by RELAT_1:90
+    .= A1 by XBOOLE_1:28
+    .= [#](T1|A1) by PRE_TOPC:def 10;
+  rng(f|A1) = f.:A1 by RELAT_1:148
+    .= [#](T2|(f.:A1)) by PRE_TOPC:def 10;
+  then reconsider g=f|A1 as Function of T1|A1,T2|(f.:A1) by A2,FUNCT_2:3;
+  g is being_homeomorphism by A1,Th2;
+  then T1|A1,T2|(f.:A1)are_homeomorphic by T_0TOPSP:def 1;
+  hence thesis by Def1;
+end;
+
+Lm2: for T1,T2 be non empty TopSpace st T1,T2 are_homeomorphic holds
+weight T2 c=weight T1
+proof
+  defpred P[set] means not contradiction;
+  let T1,T2 be non empty TopSpace;
+  consider B1 be Basis of T1 such that
+A1: card B1=weight T1 by WAYBEL23:75;
+  defpred PP[set] means $1 in B1 & P[$1];
+  assume T1,T2 are_homeomorphic;
+  then consider f be Function of T1,T2 such that
+A2: f is being_homeomorphism by T_0TOPSP:def 1;
+  deffunc F(Subset of T1)=f.:$1;
+  consider B2 be Subset-Family of T2 such that
+A3: B2={F(w) where w is Subset of T1:PP[w]} from LMOD_7:sch 5;
+A4: for A be Subset of T2 st A is open
+  for p be Point of T2 st p in A
+  ex a be Subset of T2 st a in B2 & p in a & a c=A
+  proof
+    let A be Subset of T2 such that
+A5: A is open;
+A6: f"A is open by A2,A5,TOPGRP_1:26;
+    let p be Point of T2 such that
+A7: p in A;
+A8: rng f=[#]T2 by A2,TOPGRP_1:25;
+    then consider x be set such that
+A9: x in dom f and
+A10: f.x=p by FUNCT_1:def 5;
+A11: x in f"A by A7,A9,A10,FUNCT_1:def 13;
+    reconsider x as Point of T1 by A9;
+    consider a1 be Subset of T1 such that
+A12: a1 in B1 & x in a1 and
+A13: a1 c=f"A by A11,A6,YELLOW_9:31;
+    take a=F(a1);
+    a c=f.:(f"A) by A13,RELAT_1:156;
+    hence thesis by A3,A8,A9,A10,A12,FUNCT_1:147,def 12;
+  end;
+A14: B1 c=the topology of T1 by CANTOR_1:def 2;
+  B2 c=the topology of T2
+  proof
+    let x be set;
+    assume x in B2;
+    then consider w be Subset of T1 such that
+A15: x=F(w) and
+A16: PP[w] by A3;
+    w is open by A14,A16,PRE_TOPC:def 5;
+    then F(w) is open by A2,TOPGRP_1:25;
+    hence thesis by A15,PRE_TOPC:def 5;
+  end;
+  then reconsider B2 as Basis of T2 by A4,YELLOW_9:32;
+A17: card{F(w) where w is Subset of T1:PP[w]}c=card B1 from BORSUK_2:sch 1;
+  weight T2 c=card B2 by WAYBEL23:74;
+  hence thesis by A1,A3,A17,XBOOLE_1:1;
+end;
+
+Lm3: for T be empty TopSpace holds weight T is empty
+proof
+  let T be empty TopSpace;
+  reconsider B={} as empty Subset-Family of T by TOPGEN_4:18;
+A1: B c=the topology of T by XBOOLE_1:2;
+  for A be Subset of T st A is open
+  for p be Point of T st p in A
+  ex a be Subset of T st a in B & p in a & a c=A;
+  then reconsider B as Basis of T by A1,YELLOW_9:32;
+  weight T c=card B by WAYBEL23:74;
+  hence thesis;
+end;
+
+theorem Th4:
+  T1,T2 are_homeomorphic implies weight T1 = weight T2
+proof
+  assume
+A1: T1,T2 are_homeomorphic;
+  per cases;
+  suppose
+A3: [#]T1={} or [#]T2={};
+A:  T1 is empty iff T2 is empty by A1,YELLOW14:19; then
+    weight T1=0 by Lm3,A3;
+    hence thesis by Lm3,A,A3;
+  end;
+  suppose T1 is non empty & T2 is non empty;
+    then weight T2 c=weight T1 & weight T1 c=weight T2 by A1,Lm2;
+    hence thesis by XBOOLE_0:def 10;
+  end;
+end;
+
+registration
+  cluster empty -> metrizable TopSpace;
+  coherence
+  proof
+    let T be TopSpace;
+    set cT=the carrier of T;
+A1: dom{}={} & rng{}c=REAL by XBOOLE_1:2;
+    assume
+A2: T is empty;
+    then
+A3: bool cT={{}} by ZFMISC_1:1;
+    cT = {} by A2; then
+    [:cT,cT:]={} by ZFMISC_1:113;
+    then reconsider E={} as Function of[:cT,cT:],REAL by A1,FUNCT_2:4;
+    take E;
+    set M=SpaceMetr(cT,E);
+    for a,b,c be Element of cT holds (E.(a,b)=0 iff a=b) & E.(a,b)=E.(b,a)
+    & E.(a,c)<=E.(a,b)+E.(b,c)
+    proof
+      let a,b,c be Element of cT;
+      not[{},{}] in dom E;
+      then
+A4:   E.({},{})={} by FUNCT_1:def 4;
+      a={} & b={} by A2,SUBSET_1:def 2;
+      hence thesis by A4;
+    end;
+    hence E is_metric_of cT by PCOMPS_1:def 7;
+    then
+A5: M=MetrStruct(# cT,E #) by PCOMPS_1:def 8;
+    then cT in Family_open_set(M) by PCOMPS_1:34;
+    then Family_open_set(M)={{}} by A3,A5,ZFMISC_1:39;
+    hence thesis by A3,ZFMISC_1:39;
+  end;
+  cluster metrizable -> T_4 TopSpace;
+  coherence
+  proof
+    let T be TopSpace such that
+A6: T is metrizable;
+    per cases;
+    suppose
+A7:   T is empty;
+      for F1,F2 being Subset of T st F1 is closed & F2 is closed &
+      F1 misses F2 ex G1,G2 be Subset of T st
+      G1 is open & G2 is open & F1 c=G1 & F2 c=G2 & G1 misses G2 by A7;
+      then T is normal by PRE_TOPC:def 18;
+      hence thesis by A7;
+    end;
+    suppose T is non empty;
+      then reconsider t=T as metrizable(non empty TopSpace) by A6;
+A9:   t is T_1 by NAGATA_2:19;
+      t is regular & ex Bn being FamilySequence of t st Bn is
+      Basis_sigma_locally_finite by NAGATA_2:19;
+      then T is normal by A9,NAGATA_1:20;
+      hence thesis by A9;
+    end;
+  end;
+  let M be MetrSpace;
+  cluster TopSpaceMetr M -> metrizable;
+  coherence
+  proof
+    per cases;
+    suppose M is empty;
+      then TopSpaceMetr(M) is empty;
+      hence thesis;
+    end;
+    suppose M is non empty;
+      then reconsider m=M as non empty MetrSpace;
+      set TM=TopSpaceMetr(M);
+      reconsider CM=[#]M as non empty Subset of m;
+      reconsider CTM=[#]TM as Subset of TM;
+      set TMM=TopSpaceMetr(m|CM);
+A10:  [#](m|CM)=CM by TOPMETR:def 2;
+      then reconsider D=the distance of m|CM as Function of
+      [:the carrier of TM,the carrier of TM:],REAL;
+      take D;
+A11:  D is_metric_of the carrier of TM by A10,PCOMPS_1:39;
+      TM|CTM=TMM & TM is SubSpace of TM by HAUSDORF:18,TSEP_1:2;
+      then the topology of TopSpaceMetr M
+      = the topology of TopSpaceMetr(m|CM) by A10,TSEP_1:5
+        .= Family_open_set(SpaceMetr(the carrier of TM,D))
+      by A10,A11,PCOMPS_1:def 8;
+      hence thesis by A10,PCOMPS_1:39;
+    end;
+  end;
+end;
+
+registration
+  let TM,Am;
+  cluster TM|Am -> metrizable;
+  coherence
+  proof
+    per cases;
+    suppose Am is empty;
+      hence thesis;
+    end;
+    suppose
+A1:   Am is non empty;
+      consider metr be Function of[:the carrier of TM,the carrier of TM:],
+      REAL such that
+A2:   metr is_metric_of the carrier of TM and
+A3:   Family_open_set(SpaceMetr(the carrier of TM,metr))
+      = the topology of TM by PCOMPS_1:def 9;
+      set TMM=SpaceMetr(the carrier of TM,metr);
+A4:   TM is non empty by A1;
+      then reconsider TMM=SpaceMetr(the carrier of TM,metr)
+      as non empty MetrSpace by A2,PCOMPS_1:40;
+      reconsider Atm=Am as non empty Subset of TMM
+      by A1,A2,A4,PCOMPS_2:8;
+      reconsider ATM=Atm as non empty Subset of TopSpaceMetr TMM;
+      TM is SubSpace of TM & the carrier of TopSpaceMetr TMM
+      = the carrier of TM by A2,A4,PCOMPS_2:8,TSEP_1:2;
+      then TopSpaceMetr TMM is SubSpace of TM by A3,TMAP_1:11;
+      then
+A5:   (TopSpaceMetr TMM)|ATM is SubSpace of TM by TSEP_1:7;
+      (TopSpaceMetr TMM)|ATM = TopSpaceMetr(TMM|Atm) &
+      [#]((TopSpaceMetr TMM)|ATM)= ATM by HAUSDORF:18,PRE_TOPC:def 10;
+      hence thesis by A5,PRE_TOPC:def 10;
+    end;
+  end;
+end;
+
+registration
+  let TM1,TM2;
+  cluster [:TM1,TM2:] -> metrizable;
+  coherence
+  proof
+    per cases;
+    suppose[:TM1,TM2:] is empty;
+      hence thesis;
+    end;
+    suppose
+A1:   [:TM1,TM2:] is non empty;
+      then
+A2:   TM1 is non empty;
+      consider metr1 be Function of [:the carrier of TM1,
+      the carrier of TM1:],REAL such that
+A3:   metr1 is_metric_of the carrier of TM1 and
+A4:   Family_open_set(SpaceMetr(the carrier of TM1,metr1))
+      = the topology of TM1 by PCOMPS_1:def 9;
+      set tm1=SpaceMetr(the carrier of TM1,metr1);
+      consider metr2 be Function of[:the carrier of TM2,
+      the carrier of TM2:],REAL such that
+A5:   metr2 is_metric_of the carrier of TM2 and
+A6:   Family_open_set(SpaceMetr(the carrier of TM2,metr2))
+      = the topology of TM2 by PCOMPS_1:def 9;
+      set tm2=SpaceMetr(the carrier of TM2,metr2);
+A7:   TM2 is non empty by A1;
+      then reconsider tm1,tm2 as non empty MetrStruct
+      by A5,A3,A2,PCOMPS_1:40;
+A8:   the TopStruct of TM1=the TopStruct of TopSpaceMetr(tm1)
+      by A3,A4,A2,PCOMPS_2:8;
+      the TopStruct of TM2=the TopStruct of TopSpaceMetr(tm2)
+      by A7,A5,A6,PCOMPS_2:8;
+      then [:TM1,TM2:]
+      = [:TopSpaceMetr(tm1),TopSpaceMetr(tm2):] by A8,WAYBEL29:10
+        .= TopSpaceMetr max-Prod2(tm1,tm2) by TOPREAL7:25;
+      hence thesis;
+    end;
+  end;
+end;
+
+registration
+  let T be empty TopSpace;
+  cluster weight T -> empty;
+  coherence by Lm3;
+end;
+
+theorem Th5:
+  weight [:T1,T2:] c= weight T1 *` weight T2
+proof
+  per cases;
+  suppose T1 is empty or T2 is empty;
+    hence thesis;
+  end;
+  suppose
+A1: T1 is non empty & T2 is non empty;
+    consider B1 be Basis of T1 such that
+A2: card B1=weight T1 by WAYBEL23:75;
+    consider B2 be Basis of T2 such that
+A3: card B2=weight T2 by WAYBEL23:75;
+    reconsider B12={[:a,b:] where a is Subset of T1,b is Subset of T2:
+    a in B1 & b in B2} as Basis of[:T1,T2:] by A1,YELLOW_9:40;
+    reconsider B1,B2,B12 as non empty set by A1,YELLOW12:34;
+    deffunc F(Element of[:B1,B2:])=[:$1`1,$1`2:];
+A4: for x be Element of[:B1,B2:] holds F(x) is Element of B12
+    proof
+      let x be Element of[:B1,B2:];
+      x`1 in B1 & x`2 in B2;
+      then F(x) in B12;
+      hence thesis;
+    end;
+    consider f be Function of[:B1,B2:],B12 such that
+A5: for x be Element of[:B1,B2:] holds f.x=F(x) from FUNCT_2:sch 9(A4);
+A6: dom f=[:B1,B2:] by FUNCT_2:def 1;
+    B12 c=rng f
+    proof
+      let x be set;
+      assume x in B12;
+      then consider a be Subset of T1,b be Subset of T2 such that
+A7:   x=[:a,b:] and
+A8:   a in B1 & b in B2;
+      reconsider ab=[a,b] as Element of[:B1,B2:] by A8,ZFMISC_1:106;
+      [a,b]`1=a & [a,b]`2=b by MCART_1:7;
+      then x=f.ab by A5,A7;
+      hence thesis by A6,FUNCT_1:def 5;
+    end;
+    then
+A9: weight[:T1,T2:]c=card B12 & card B12 c=card[:B1,B2:]
+    by A6,CARD_1:28,WAYBEL23:74;
+    card[:B1,B2:]=card[:card B1,card B2:] by CARD_2:14
+      .=(card B1)*`card B2 by CARD_2:def 2;
+    hence thesis by A3,A2,A9,XBOOLE_1:1;
+  end;
+end;
+
+theorem Th6:
+  T1 is non empty & T2 is non empty implies
+    weight T1 c= weight [:T1,T2:] & weight T2 c= weight[:T1,T2:]
+proof
+  defpred P[set] means not contradiction;
+  set PR2=pr2(the carrier of T1,the carrier of T2);
+  set PR1=pr1(the carrier of T1,the carrier of T2);
+  assume T1 is non empty & T2 is non empty;
+  then reconsider t1=T1,t2=T2 as non empty TopSpace;
+  reconsider T12=[:t1,t2:] as non empty TopSpace;
+  consider B12 be Basis of T12 such that
+A1: card B12=weight T12 by WAYBEL23:75;
+  defpred PP[set] means $1 in B12 & P[$1];
+  deffunc F1(Subset of T12)=PR1.:$1;
+  consider B1 be Subset-Family of T1 such that
+A2: B1={F1(w) where w is Subset of T12:PP[w]} from LMOD_7:sch 5;
+A3: B12 c=the topology of T12 by CANTOR_1:def 2;
+A4: B1 c=the topology of T1
+  proof
+    let x be set;
+    assume x in B1;
+    then consider w be Subset of T12 such that
+A5: x=F1(w) and
+A6: PP[w] by A2;
+    w is open by A3,A6,PRE_TOPC:def 5;
+    then F1(w) is open by BORSUK_1:59;
+    hence thesis by A5,PRE_TOPC:def 5;
+  end;
+  for A be Subset of T1 st A is open
+  for p be Point of T1 st p in A
+  ex a be Subset of T1 st a in B1 & p in a & a c=A
+  proof
+    let A be Subset of T1 such that
+A7: A is open;
+A8: [:A,[#]T2:] is open by A7,BORSUK_1:46;
+    set p2=the Point of T2;
+A9: p2 in [#]t2;
+    let p1 be Point of T1 such that
+A10: p1 in A;
+A11: [p1,p2] in [:A,[#]T2:] by A9,A10,ZFMISC_1:106;
+    then reconsider p=[p1,p2] as Point of T12;
+    consider a12 be Subset of T12 such that
+A12: a12 in B12 and
+A13: p in a12 and
+A14: a12 c=[:A,[#]T2:] by A8,A11,YELLOW_9:31;
+    p1 in [#]t1 & p2 in [#]t2;
+    then
+A15: PR1.(p1,p2)=p1 by FUNCT_3:def 5;
+    a12 is open by A3,A12,PRE_TOPC:def 5;
+    then reconsider a=F1(a12) as open Subset of T1 by BORSUK_1:59;
+    take a;
+    dom PR1 = [:[#]T1,[#]T2:] by FUNCT_3:def 5
+      .= [#]T12 by BORSUK_1:def 5;
+    hence a in B1 & p1 in a by A2,A12,A13,A15,FUNCT_1:def 12;
+    let y be set;
+    assume y in a;
+    then consider x be set such that
+A16: x in dom PR1 and
+A17: x in a12 & y=PR1.x by FUNCT_1:def 12;
+    consider x1,x2 be set such that
+A18: x1 in [#]T1 & x2 in [#]T2 and
+A19: x=[x1,x2] by A16,ZFMISC_1:def 2;
+    PR1.(x1,x2)=x1 by A18,FUNCT_3:def 5;
+    hence thesis by A14,A17,A19,ZFMISC_1:106;
+  end;
+  then reconsider B1 as Basis of T1 by A4,YELLOW_9:32;
+A20: card{F1(w) where w is Subset of T12:PP[w]} c= card B12
+  from BORSUK_2:sch 1;
+  weight t1 c=card B1 by WAYBEL23:74;
+  hence weight T1 c=weight[:T1,T2:] by A1,A2,A20,XBOOLE_1:1;
+  deffunc F2(Subset of T12)=PR2.:$1;
+  consider B2 be Subset-Family of T2 such that
+A21: B2={F2(w) where w is Subset of T12:PP[w]} from LMOD_7:sch 5;
+A22: for A be Subset of T2 st A is open
+  for p be Point of T2 st p in A
+  ex a be Subset of T2 st a in B2 & p in a & a c=A
+  proof
+    let A be Subset of T2 such that
+A23: A is open;
+A24: [:[#]T1,A:] is open by A23,BORSUK_1:46;
+    set p1=the Point of T1;
+A25: p1 in [#]t1;
+    let p2 be Point of T2 such that
+A26: p2 in A;
+A27: [p1,p2] in [:[#]T1,A:] by A25,A26,ZFMISC_1:106;
+    then reconsider p=[p1,p2] as Point of T12;
+    consider a12 be Subset of T12 such that
+A28: a12 in B12 and
+A29: p in a12 and
+A30: a12 c=[:[#]T1,A:] by A24,A27,YELLOW_9:31;
+    p1 in [#]t1 & p2 in [#]t2;
+    then
+A31: PR2.(p1,p2)=p2 by FUNCT_3:def 6;
+    a12 is open by A3,A28,PRE_TOPC:def 5;
+    then reconsider a=F2(a12) as open Subset of T2 by BORSUK_1:59;
+    take a;
+    dom PR2 = [:[#]T1,[#]T2:] by FUNCT_3:def 6
+      .= [#]T12 by BORSUK_1:def 5;
+    hence a in B2 & p2 in a by A21,A28,A29,A31,FUNCT_1:def 12;
+    let y be set;
+    assume y in a;
+    then consider x be set such that
+A32: x in dom PR2 and
+A33: x in a12 & y=PR2.x by FUNCT_1:def 12;
+    consider x1,x2 be set such that
+A34: x1 in [#]T1 & x2 in [#]T2 and
+A35: x=[x1,x2] by A32,ZFMISC_1:def 2;
+    PR2.(x1,x2)=x2 by A34,FUNCT_3:def 6;
+    hence thesis by A30,A33,A35,ZFMISC_1:106;
+  end;
+  B2 c=the topology of T2
+  proof
+    let x be set;
+    assume x in B2;
+    then consider w be Subset of T12 such that
+A36: x=F2(w) and
+A37: PP[w] by A21;
+    w is open by A3,A37,PRE_TOPC:def 5;
+    then F2(w) is open by BORSUK_1:59;
+    hence thesis by A36,PRE_TOPC:def 5;
+  end;
+  then reconsider B2 as Basis of T2 by A22,YELLOW_9:32;
+A38: card{F2(w) where w is Subset of T12:PP[w]}c=card B12 from BORSUK_2:sch 1;
+  weight T2 c=card B2 by WAYBEL23:74;
+  hence thesis by A1,A21,A38,XBOOLE_1:1;
+end;
+
+registration
+  let T1,T2 be second-countable TopSpace;
+  cluster [:T1,T2:] -> second-countable;
+  coherence
+  proof
+    weight T1 c=omega & weight T2 c=omega by WAYBEL23:def 6;
+    then
+A1: weight T1*`weight T2 c=omega by CARD_3:136,CARD_4:54;
+    weight[:T1,T2:]c=weight T1 *` weight T2 by Th5;
+    then weight[:T1,T2:]c=omega by A1,XBOOLE_1:1;
+    hence thesis by WAYBEL23:def 6;
+  end;
+end;
+
+theorem Th7:
+  card (F|A) c= card F
+proof
+  set FA=F|A;
+  per cases;
+  suppose FA is empty;
+    hence thesis;
+  end;
+  suppose
+A1: FA is non empty;
+    deffunc F(set)=$1/\A;
+A2: A=[#](T|A) by PRE_TOPC:def 10;
+A3: for x be set st x in F holds F(x) in FA
+    proof
+      let x be set;
+      assume
+A4:   x in F;
+      F(x)c=A by XBOOLE_1:17;
+      hence thesis by A2,A4,TOPS_2:def 3;
+    end;
+    consider g be Function of F,FA such that
+A5: for x be set st x in F holds g.x=F(x) from FUNCT_2:sch 2(A3);
+A6: dom g=F by A1,FUNCT_2:def 1;
+    FA c=rng g
+    proof
+      let x be set;
+      assume x in FA;
+      then consider B such that
+A7:   B in F and
+A8:   F(B)=x by TOPS_2:def 3;
+      x=g.B by A5,A7,A8;
+      hence thesis by A6,A7,FUNCT_1:def 5;
+    end;
+    hence thesis by A6,CARD_1:28;
+  end;
+end;
+
+theorem Th8:
+  for Bas be Basis of T holds Bas|A is Basis of T|A
+proof
+  let Bas be Basis of T;
+  set BasA=Bas|A;
+  set TA=T|A;
+A1: for U be Subset of TA st U is open
+  for p be Point of TA st p in U
+  ex a be Subset of TA st a in BasA & p in a & a c=U
+  proof
+    let U be Subset of TA such that
+A2: U is open;
+    consider W be Subset of T such that
+A3: W is open and
+A4: U=W/\the carrier of TA by A2,TSP_1:def 1;
+    let p be Point of TA such that
+A5: p in U;
+    p in W by A4,A5,XBOOLE_0:def 4;
+    then consider Wb be Subset of T such that
+A6: Wb in Bas and
+A7: p in Wb and
+A8: Wb c=W by A3,YELLOW_9:31;
+A9: Wb/\A in BasA by A6,TOPS_2:41;
+    then reconsider WbA=Wb/\A as Subset of TA;
+A10: [#]TA=A by PRE_TOPC:def 10;
+    then p in WbA by A5,A7,XBOOLE_0:def 4;
+    hence thesis by A4,A8,A9,A10,XBOOLE_1:26;
+  end;
+  BasA c=the topology of TA
+  proof
+    let x be set such that
+A11: x in BasA;
+    reconsider U=x as Subset of TA by A11;
+    Bas c=the topology of T by CANTOR_1:def 2;
+    then Bas is open by CANTOR_1:3,TOPS_2:18;
+    then BasA is open by TOPS_2:47;
+    then U is open by A11,TOPS_2:def 1;
+    hence thesis by PRE_TOPC:def 5;
+  end;
+  hence thesis by A1,YELLOW_9:32;
+end;
+
+registration
+  let T be second-countable TopSpace;
+  let A be Subset of T;
+  cluster T|A -> second-countable;
+  coherence
+  proof
+    consider B be Basis of T such that
+A1: card B=weight T by WAYBEL23:75;
+    B|A is Basis of T|A by Th8;
+    then
+A2: weight(T|A)c=card(B|A) by WAYBEL23:74;
+    card(B|A)c=card B by Th7;
+    then weight T c=omega & weight(T|A)c=weight T
+    by A1,A2,WAYBEL23:def 6,XBOOLE_1:1;
+    then weight(T|A)c=omega by XBOOLE_1:1;
+    hence thesis by WAYBEL23:def 6;
+  end;
+end;
+
+registration
+  let M be non empty MetrSpace;
+  let A be non empty Subset of TopSpaceMetr M;
+::  General Topology Th 4.1.10
+  cluster dist_min A -> continuous;
+  coherence
+  proof
+    set TM=TopSpaceMetr M;
+    set d=dist_min A;
+A1: for P being Subset of R^1 st P is open holds d"P is open
+    proof
+      let P be Subset of R^1;
+      assume
+A2:   P is open;
+      for p be Point of M st p in d"P ex r be real number st
+      r>0 & Ball(p,r)c=d"P
+      proof
+        reconsider P'=P as open Subset of TopSpaceMetr(RealSpace)
+        by A2,TOPMETR:def 7;
+        let p be Point of M;
+        assume p in d"P;
+        then
+A3:     d.p in P by FUNCT_1:def 13;
+        then reconsider dp=d.p as Point of RealSpace by TOPMETR:def 7;
+        consider r be real number such that
+A4:     r>0 and
+A5:     Ball(dp,r)c=P' by A3,TOPMETR:22;
+        take r;
+        thus r>0 by A4;
+        thus Ball(p,r)c=d"P
+        proof
+          let x be set;
+          assume
+A6:       x in Ball(p,r);
+          then reconsider q=x as Point of M;
+A7:       dist(p,q)<r by A6,METRIC_1:12;
+A8:       dom d=[#]M by FUNCT_2:def 1;
+          then d.q in rng d by FUNCT_1:def 5;
+          then reconsider dq=d.q as Point of RealSpace
+          by TOPMETR:def 7;
+          d.q<=dist(q,p)+d.p by HAUSDORF:17;
+          then d.q-d.p<=dist(p,q) by XREAL_1:22;
+          then
+A9:       -dist(p,q)<=-(d.q-d.p) by XREAL_1:26;
+          d.p<=dist(p,q)+d.q by HAUSDORF:17;
+          then d.p-d.q<=dist(p,q) by XREAL_1:22;
+          then abs(d.p-d.q)<=dist(p,q) by A9,ABSVALUE:12;
+          then abs(d.p-d.q)<r by A7,XXREAL_0:2;
+          then dist(dp,dq)<r by METRIC_1:def 13;
+          then dq in Ball(dp,r) by METRIC_1:12;
+          hence thesis by A5,A8,FUNCT_1:def 13;
+        end;
+      end;
+      hence thesis by TOPMETR:22;
+    end;
+    [#]R^1={} implies [#]TM={};
+    hence thesis by A1,TOPS_2:55;
+  end;
+end;
+
+theorem
+  for B be Subset of T,F be Subset of T|A st F = B holds T|A|F = T|B
+proof
+  let B be Subset of T,F be Subset of T|A such that
+A1: F = B;
+  (T|A|F) is SubSpace of T & [#](T|A|F)=F by PRE_TOPC:def 10,TSEP_1:7;
+  hence thesis by A1,PRE_TOPC:def 10;
+end;
+
+Lm5: for M be non empty MetrSpace
+for A be non empty Subset of TopSpaceMetr M,r be real number holds
+{p where p is Point of TopSpaceMetr M:(dist_min A).p<r}
+is open Subset of TopSpaceMetr M
+proof
+  let M be non empty MetrSpace;
+  set TM=TopSpaceMetr M;
+  let A be non empty Subset of TM,r be real number;
+  set d=dist_min A;
+  reconsider A=].-infty,r.[ as Subset of R^1 by TOPMETR:24;
+  set dA={p where p is Point of TM:d.p<r};
+A1: dA c=d"A
+  proof
+    let x be set;
+    assume x in dA;
+    then consider p be Point of TM such that
+A2: p=x and
+A3: d.p<r;
+    dom d=[#]TM & d.p in A by A3,FUNCT_2:def 1,XXREAL_1:233;
+    hence thesis by A2,FUNCT_1:def 13;
+  end;
+A4: d"A c=dA
+  proof
+    let x be set;
+    assume
+A5: x in d"A;
+    then reconsider p=x as Point of TM;
+    d.p in A by A5,FUNCT_1:def 13;
+    then d.p<r by XXREAL_1:233;
+    hence thesis;
+  end;
+A6: [#]R^1={} implies [#]TM={};
+  A is open by BORSUK_5:63;
+  then d"A is open by A6,TOPS_2:55;
+  hence thesis by A1,A4,XBOOLE_0:def 10;
+end;
+
+::  F_sigma and G_delta Types of Subsets
+
+registration
+  let TM;
+  cluster open -> F_sigma Subset of TM;
+  coherence
+  proof
+    let Am;
+    set TOP=the topology of TM,cTM=the carrier of TM;
+    assume
+A1: Am is open;
+    per cases;
+    suppose
+A2:   TM is empty;
+      reconsider E={} as empty Subset-Family of TM by TOPGEN_4:18;
+      Am=union E by A2,ZFMISC_1:2;
+      hence thesis by TOPGEN_4:def 6;
+    end;
+    suppose
+A3:   TM is non empty;
+      per cases;
+      suppose Am=[#]TM;
+        hence thesis by A3;
+      end;
+      suppose
+A4:     Am<>[#]TM;
+        consider metr be Function of[:cTM,cTM:],REAL such that
+A5:     metr is_metric_of cTM and
+A6:     Family_open_set(SpaceMetr(cTM,metr))=TOP by PCOMPS_1:def 9;
+        reconsider Tm=SpaceMetr(cTM,metr) as non empty MetrSpace
+        by A3,A5,PCOMPS_1:40;
+        set TTm=TopSpaceMetr Tm;
+        Am in the topology of TTm by A1,A6,PRE_TOPC:def 5;
+        then reconsider a=Am as open Subset of TTm by PRE_TOPC:def 5;
+        ({}TTm)`=[#]TTm;
+        then reconsider A'=a` as closed non empty Subset of TTm
+        by A3,A4,A5,
+        PCOMPS_2:8;
+        defpred P[set,set] means
+        for n be Nat st n=$1 holds$2={p where p is Point of TTm:
+        (dist_min A').p<1/(2|^n)};
+A7:     for x be set st x in NAT ex y be set st y in TOP & P[x,y]
+        proof
+          let x be set;
+          assume x in NAT;
+          then reconsider n=x as Element of NAT;
+          reconsider BallA={p where p is Point of TTm:
+          (dist_min A').p<1/(2|^n)} as open Subset of TTm by Lm5;
+          take BallA;
+          thus thesis by A6,PRE_TOPC:def 5;
+        end;
+        consider p be Function of NAT,TOP such that
+A8:     for x be set st x in NAT holds P[x,p.x]
+        from FUNCT_2:sch 1(A7);
+        TOP is open by CANTOR_1:3;
+        then reconsider RNG=rng p as open Subset-Family of TM
+        by TOPS_2:18,XBOOLE_1:1;
+        set Crng=COMPLEMENT(RNG);
+A9:     dom p=NAT by FUNCT_2:def 1;
+A10:    [#]TM=[#]TTm by A3,A5,PCOMPS_2:8;
+A11:    union Crng = Am
+        proof
+          hereby
+            let x be set;
+            assume
+A12:        x in union Crng;
+            then consider y be set such that
+A13:        x in y and
+A14:        y in COMPLEMENT(RNG) by TARSKI:def 4;
+            reconsider Y=y as Subset of TM by A14;
+            Y` in RNG by A14,SETFAM_1:def 8;
+            then consider n be set such that
+A15:        n in dom p and
+A16:        p.n=Y` by FUNCT_1:def 5;
+            reconsider n as Element of NAT by A15;
+            assume not x in Am;
+            then x in A' by A10,A12,XBOOLE_0:def 5;
+            then
+A17:        2|^n>0 & (dist_min A').x=0
+            by HAUSDORF:5,PREPOWER:13;
+            Y`={q where q is Point of TTm:(dist_min A').q<1/(2|^n)}
+            by A8,A16;
+            then x in Y` by A10,A12,A17;
+            hence contradiction by A13,XBOOLE_0:def 5;
+          end;
+          let x be set;
+          assume
+A18:      x in Am;
+          then reconsider q=x as Point of TTm by A3,A5,PCOMPS_2:8;
+          Cl A'=A' & not q in A' by A18,PRE_TOPC:52,XBOOLE_0:def 5;
+          then
+A19:      (dist_min A').q<>0 by HAUSDORF:10;
+          (dist_min A').q>=0 by JORDAN1K:9;
+          then consider n be Element of NAT such that
+A20:      1/(2|^n)<=(dist_min A').q by A19,PREPOWER:106;
+          p.n in RNG by A9,FUNCT_1:def 5;
+          then reconsider pn=p.n as Subset of TM;
+A21:      for s be Point of TTm st s=q holds
+          not 1/(2|^n)>(dist_min A').s by A20;
+          pn={s where s is Point of TTm:(dist_min A').s<1/(2|^n)}
+          by A8;
+          then not q in pn by A21;
+          then
+A22:      q in pn` by A18,XBOOLE_0:def 5;
+          pn`` in RNG by A9,FUNCT_1:def 5;
+          then pn` in Crng by SETFAM_1:def 8;
+          hence thesis by A22,TARSKI:def 4;
+        end;
+        Crng is closed & RNG is countable by A9,CARD_3:127,TOPS_2:17;
+        hence thesis by A11,TOPGEN_4:def 6;
+      end;
+    end;
+  end;
+  cluster closed -> G_delta Subset of TM;
+  coherence
+  proof
+    let Am;
+    assume
+A23: Am is closed;
+    per cases;
+    suppose
+A24:  TM is empty;
+      reconsider E={} as empty Subset-Family of TM by TOPGEN_4:18;
+      Am=meet E by A24,SETFAM_1:2;
+      hence thesis by TOPGEN_4:def 7;
+    end;
+    suppose TM is non empty;
+      then Am`` is G_delta by A23,TOPGEN_4:39;
+      hence thesis;
+    end;
+  end;
+end;
+
+theorem
+  for F be Subset of T|B st A is F_sigma & F = A/\B holds F is F_sigma
+proof
+  let F be Subset of T|B;
+  assume that
+A1: A is F_sigma and
+A2: F=A/\B;
+  consider G be closed countable Subset-Family of T such that
+A3: A=union G by A1,TOPGEN_4:def 6;
+A4: union(G|B)c=F
+  proof
+    let x be set;
+    assume x in union(G|B);
+    then consider g be set such that
+A5: x in g and
+A6: g in G|B by TARSKI:def 4;
+    consider h be Subset of T such that
+A7: h in G and
+A8: h/\B=g by A6,TOPS_2:def 3;
+    x in h by A5,A8,XBOOLE_0:def 4;
+    then
+A9: x in A by A3,A7,TARSKI:def 4;
+    x in B by A5,A8,XBOOLE_0:def 4;
+    hence thesis by A2,A9,XBOOLE_0:def 4;
+  end;
+  card(G|B)c=card G & card G c=omega by Th7,CARD_3:def 15;
+  then card(G|B)c=omega by XBOOLE_1:1;
+  then
+A10: G|B is closed & G|B is countable by CARD_3:def 15,TOPS_2:48;
+  A/\B/\B = A/\(B/\B) by XBOOLE_1:16
+    .= F by A2;
+  then F c=union(G|B) by A3,TOPS_2:42,XBOOLE_1:17;
+  then F=union(G|B) by A4,XBOOLE_0:def 10;
+  hence thesis by A10,TOPGEN_4:def 6;
+end;
+
+theorem
+  for F be Subset of T|B st A is G_delta & F = A/\B holds F is G_delta
+proof
+  let F be Subset of T|B;
+  assume that
+A1: A is G_delta and
+A2: F = A/\B;
+  consider G be open countable Subset-Family of T such that
+A3: A = meet G by A1,TOPGEN_4:def 7;
+A4: meet(G|B) c= F
+  proof
+    let x be set;
+    assume
+A5: x in meet(G|B);
+    then consider g be set such that
+A6: g in G|B by SETFAM_1:2,XBOOLE_0:def 1;
+    reconsider g as Subset of T|B by A6;
+A7: ex h be Subset of T st h in G & h/\B=g by A6,TOPS_2:def 3;
+    x in g by A5,A6,SETFAM_1:def 1;
+    then
+A8: x in B by A7,XBOOLE_0:def 4;
+    now
+      let Y be set;
+      assume Y in G;
+      then Y/\B in G|B by TOPS_2:41;
+      then x in Y/\B by A5,SETFAM_1:def 1;
+      hence x in Y by XBOOLE_0:def 4;
+    end;
+    then x in A by A3,A7,SETFAM_1:def 1;
+    hence thesis by A2,A8,XBOOLE_0:def 4;
+  end;
+  card(G|B)c=card G & card G c=omega by Th7,CARD_3:def 15;
+  then card(G|B)c=omega by XBOOLE_1:1;
+  then
+A9: G|B is open & G|B is countable by CARD_3:def 15,TOPS_2:47;
+  F c=meet(G|B)
+  proof
+    let x be set;
+    assume
+A10: x in F;
+    then
+A11: x in A by A2,XBOOLE_0:def 4;
+A12: x in B by A2,A10,XBOOLE_0:def 4;
+A13: now
+      let f be set;
+      assume f in G|B;
+      then consider h be Subset of T such that
+A14:  h in G and
+A15:  h/\B=f by TOPS_2:def 3;
+      x in h by A3,A11,A14,SETFAM_1:def 1;
+      hence x in f by A12,A15,XBOOLE_0:def 4;
+    end;
+    ex y be set st y in G by A3,A11,SETFAM_1:2,XBOOLE_0:def 1;
+    then G|B is non empty by TOPS_2:41;
+    hence thesis by A13,SETFAM_1:def 1;
+  end;
+  then F=meet(G|B) by A4,XBOOLE_0:def 10;
+  hence thesis by A9,TOPGEN_4:def 7;
+end;
+
+theorem Th13:
+  T is T_1 & A is discrete implies A is open Subset of T|(Cl A)
+proof
+  assume that
+A1: T is T_1 and
+A2: A is discrete;
+  set TA=T|(Cl A);
+A3: [#]TA=Cl A by PRE_TOPC:def 10;
+A4: A c=Cl A by PRE_TOPC:48;
+  per cases;
+  suppose TA is empty;
+    hence thesis by A3,PRE_TOPC:48;
+  end;
+  suppose TA is non empty;
+    then reconsider TA as non empty TopSpace;
+    deffunc F(Element of TA)={$1};
+    defpred P[set] means $1 in A;
+    consider S be Subset-Family of TA such that
+A5: S={F(x) where x is Element of TA:P[x]} from LMOD_7:sch 5;
+A6: S is open
+    proof
+      let B be Subset of TA;
+      assume B in S;
+      then consider y be Element of TA such that
+A7:   B=F(y) and
+A8:   P[y] by A5;
+      reconsider x=y as Point of T by A8;
+      consider G be Subset of T such that
+A9:   G is open and
+A10:  A/\G={x} by A2,A8,TEX_2:32;
+      reconsider X={x} as Subset of T by A10;
+      T is non empty by A7;
+      then
+A11:  Cl X=X by A1,PRE_TOPC:52;
+      x in {x} by TARSKI:def 1;
+      then x in A & x in G by A10,XBOOLE_0:def 4;
+      then
+A12:  G/\Cl A<>{} by A4,XBOOLE_0:def 4;
+      G/\Cl A c=Cl X by A9,A10,TOPS_1:40;
+      then G/\Cl A=X by A11,A12,ZFMISC_1:39;
+      hence thesis by A3,A7,A9,TSP_1:def 1;
+    end;
+    union S=A
+    proof
+      hereby
+        let x be set;
+        assume x in union S;
+        then consider y be set such that
+A13:    x in y and
+A14:    y in S by TARSKI:def 4;
+        ex z be Element of TA st F(z)=y & P[z] by A5,A14;
+        hence x in A by A13,TARSKI:def 1;
+      end;
+      let x be set;
+      assume x in A;
+      then
+A15:  {x} in S by A3,A4,A5;
+      x in {x} by TARSKI:def 1;
+      hence thesis by A15,TARSKI:def 4;
+    end;
+    hence thesis by A6,TOPS_2:26;
+  end;
+end;
+
+Lm6: omega*`iC=iC
+proof
+  omega c=iC by CARD_3:102;
+  then
+A1: omega*`iC c=iC*`iC by CARD_3:136;
+  iC*`iC=iC & iC c=omega*`iC by CARD_3:141,CARD_4:77;
+  hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+theorem Th14:
+  for T st for F st F is open & F is Cover of T
+  ex G st G c= F & G is Cover of T & card G c= C
+  holds for A st A is closed & A is discrete holds card A c= C
+proof
+  let T;
+  assume
+A1: for F st F is open & F is Cover of T
+  ex G st G c=F & G is Cover of T & card G c=C;
+  set TOP=the topology of T;
+  let A such that
+A2: A is closed and
+A3: A is discrete;
+  defpred Q[set,set] means {$2}=$1/\A;
+  A` in TOP by A2,PRE_TOPC:def 5;
+  then
+A4: {A`}c=TOP by ZFMISC_1:37;
+  defpred P[set,set] means A/\$2={$1};
+A5: for x be set st x in A ex y be set st y in TOP & P[x,y]
+  proof
+    let x be set;
+    assume x in A;
+    then consider G be Subset of T such that
+A6: G is open & A/\G={x} by A3,TEX_2:32;
+    take G;
+    thus thesis by A6,PRE_TOPC:def 5;
+  end;
+  consider p be Function of A,TOP such that
+A7: for x be set st x in A holds P[x,p.x] from FUNCT_2:sch 1(A5);
+  TOP is open by CANTOR_1:3;
+  then reconsider RNG=rng p,AA={A`} as open Subset-Family of T
+  by A4,TOPS_2:18,XBOOLE_1:1;
+  reconsider RngA=RNG\/AA as open Subset-Family of T by TOPS_2:20;
+  [#]T c=union RngA
+  proof
+    let x be set;
+    assume
+A8: x in [#]T;
+    per cases;
+    suppose
+A9:   x in A;
+      dom p=A by FUNCT_2:def 1;
+      then p.x in rng p by A9,FUNCT_1:def 5;
+      then
+A10:  p.x in RngA by XBOOLE_0:def 3;
+      x in {x} & A/\(p.x)={x} by A7,A9,TARSKI:def 1;
+      then x in p.x by XBOOLE_0:def 4;
+      hence thesis by A10,TARSKI:def 4;
+    end;
+    suppose
+A11:  not x in A;
+      A` in AA by TARSKI:def 1;
+      then
+A12:  A` in RngA by XBOOLE_0:def 3;
+      x in A` by A8,A11,XBOOLE_0:def 5;
+      hence thesis by A12,TARSKI:def 4;
+    end;
+  end;
+  then RngA is Cover of T by SETFAM_1:def 12;
+  then consider G be Subset-Family of T such that
+A13: G c=RngA and
+A14: G is Cover of T and
+A15: card G c=C by A1;
+A16: for x be set st x in G\AA ex y be set st y in A & Q[x,y]
+  proof
+    let x be set;
+    assume x in G\AA;
+    then x in G & not x in AA by XBOOLE_0:def 5;
+    then x in RNG by A13,XBOOLE_0:def 3;
+    then consider y be set such that
+A17: y in dom p & p.y=x by FUNCT_1:def 5;
+    take y;
+    thus thesis by A7,A17;
+  end;
+  consider q be Function of G\AA,A such that
+A18: for x be set st x in G\AA holds Q[x,q.x] from FUNCT_2:sch 1(A16);
+  per cases;
+  suppose A is empty;
+    hence thesis;
+  end;
+  suppose A is non empty;
+    then
+A19: dom q=G\AA by FUNCT_2:def 1;
+    A c=rng q
+    proof
+      let x be set such that
+A20:  x in A;
+      T is non empty by A20;
+      then consider U be Subset of T such that
+A21:  x in U and
+A22:  U in G by A14,A20,PCOMPS_1:5;
+      not x in A` by A20,XBOOLE_0:def 5;
+      then not U in AA by A21,TARSKI:def 1;
+      then U in G\AA by A22,XBOOLE_0:def 5;
+      then
+A23:  q.U in rng q & {q.U}=U/\A by A18,A19,FUNCT_1:def 5;
+      x in A/\U by A20,A21,XBOOLE_0:def 4;
+      hence thesis by A23,TARSKI:def 1;
+    end;
+    then
+A24: card A c=card(G\AA) by A19,CARD_1:28;
+    card(G\AA)c=card G by CARD_1:27,XBOOLE_1:36;
+    then card A c=card G by A24,XBOOLE_1:1;
+    hence card A c=C by A15,XBOOLE_1:1;
+  end;
+end;
+
+theorem Th15:
+  for TM st for Am st Am is closed & Am is discrete holds card Am c= iC
+    holds for Am st Am is discrete holds card Am c= iC
+proof
+  let TM;
+  assume
+A1: for Am st Am is closed & Am is discrete holds card Am c=iC;
+  let Am such that
+A2: Am is discrete;
+  per cases;
+  suppose Am is empty;
+    hence thesis;
+  end;
+  suppose
+A3: Am is non empty;
+    then reconsider Tm=TM as metrizable(non empty TopSpace);
+    Am c=Cl Am by PRE_TOPC:48;
+    then reconsider ClA=Cl Am as non empty closed Subset of Tm by A3;
+    set TA=TM|(Cl Am);
+    set TA=Tm|ClA;
+    reconsider A'=Am as open Subset of TA by A2,Th13;
+    consider F be closed countable Subset-Family of TA such that
+A4: A'=union F by TOPGEN_4:def 6;
+    consider f be Function of NAT,F such that
+A5: rng f=F by A3,A4,CARD_3:146,ZFMISC_1:2;
+A6: for x be set st x in dom f holds card(f.x)c=iC
+    proof
+      let x be set;
+      assume x in dom f;
+      then
+A7:   f.x in rng f by FUNCT_1:def 5;
+      then reconsider fx=f.x as Subset of TA by A5;
+A8:   f.x c=Am by A4,A7,ZFMISC_1:92;
+      then reconsider Fx=f.x as Subset of TM by XBOOLE_1:1;
+      [#]TA=ClA & fx is closed by A7,PRE_TOPC:def 10,TOPS_2:def 2;
+      then Fx is closed by TSEP_1:8;
+      hence thesis by A1,A2,A8,TEX_2:28;
+    end;
+    card dom f=omega by A3,A4,CARD_1:84,FUNCT_2:def 1,ZFMISC_1:2;
+    then card Union f c=(omega)*`iC by A6,CARD_3:132;
+    hence thesis by A4,A5,Lm6;
+  end;
+end;
+
+theorem Th16:
+  for T st for A st A is discrete holds card A c= C
+    for F st F is open & not {} in F &
+             for A,B st A in F & B in F & A <> B holds A misses B
+  holds card F c= C
+proof
+  let T;
+  assume
+A1: for A st A is discrete holds card A c=C;
+  let F such that
+A2: F is open and
+A3: not{} in F and
+A4: for A,B st A in F & B in F & A<>B holds A misses B;
+  per cases;
+  suppose F is empty;
+    hence thesis;
+  end;
+  suppose
+A5: F is non empty;
+    deffunc P(set)=the Element of$1;
+A6: for x be set st x in F holds P(x) in [#]T
+    proof
+      let x be set;
+      assume
+A7:   x in F;
+      then x<>{} by A3;
+      then P(x) in x;
+      hence thesis by A7;
+    end;
+    consider p be Function of F,[#]T such that
+A8: for x be set st x in F holds p.x=P(x) from FUNCT_2:sch 2(A6);
+    reconsider RNG=rng p as Subset of T;
+    ex xx be set st xx in F by A5,XBOOLE_0:def 1;
+    then
+A9: T is non empty by A3;
+    then
+A10: dom p=F by FUNCT_2:def 1;
+    for x be Point of T st x in RNG
+    ex G be Subset of T st G is open & RNG/\G={x}
+    proof
+      let x be Point of T;
+      assume
+A11:  x in RNG;
+      then consider G be set such that
+A12:  G in F and
+A13:  p.G=x by A10,FUNCT_1:def 5;
+      reconsider G as Subset of T by A12;
+A14:  RNG/\G c={x}
+      proof
+        let y be set;
+        assume
+A15:    y in RNG/\G;
+        then
+A16:    y in G by XBOOLE_0:def 4;
+        y in RNG by A15,XBOOLE_0:def 4;
+        then consider z be set such that
+A17:    z in F and
+A18:    p.z=y by A10,FUNCT_1:def 5;
+        y=P(z) by A8,A17,A18;
+        then z meets G by A3,A16,A17,XBOOLE_0:3;
+        then x=y by A4,A12,A13,A17,A18;
+        hence thesis by TARSKI:def 1;
+      end;
+      take G;
+      thus G is open by A2,A12,TOPS_2:def 1;
+      x=P(G) by A8,A12,A13;
+      then x in RNG/\G by A3,A11,A12,XBOOLE_0:def 4;
+      hence thesis by A14,ZFMISC_1:39;
+    end;
+    then
+A19: card RNG c=C by A1,A9,TEX_2:37;
+    for x1,x2 be set st x1 in dom p & x2 in dom p & p.x1=p.x2 holds x1=x2
+    proof
+      let x1,x2 be set such that
+A20:  x1 in dom p and
+A21:  x2 in dom p and
+A22:  p.x1=p.x2;
+A23:  p.x1=P(x1) & x1<>{} by A3,A8,A20;
+      p.x2=P(x2) & x2<>{} by A3,A8,A21;
+      then x1 meets x2 by A22,A23,XBOOLE_0:3;
+      hence thesis by A4,A10,A20,A21;
+    end;
+    then p is one-to-one by FUNCT_1:def 8;
+    then card F c=card RNG by A10,CARD_1:26;
+    hence thesis by A19,XBOOLE_1:1;
+  end;
+end;
+
+theorem Th27:
+  for F st F is Cover of T
+    ex G st G c= F & G is Cover of T & card G c= card [#]T
+proof
+  let F such that
+A1: F is Cover of T;
+  per cases;
+  suppose
+A2: F is empty;
+    take F;
+    thus thesis by A1,A2;
+  end;
+  suppose
+A3: F is non empty;
+    defpred P[set,set] means $1 in $2;
+A4: for x be set st x in [#]T ex y be set st y in F & P[x,y]
+    proof
+      let x be set;
+      assume x in [#]T;
+      then x in union F by A1,SETFAM_1:60;
+      then ex y be set st x in y & y in F by TARSKI:def 4;
+      hence thesis;
+    end;
+    consider g be Function of[#]T,F such that
+A5: for x be set st x in [#]T holds P[x,g.x] from FUNCT_2:sch 1(A4);
+    reconsider R=rng g as Subset-Family of T by XBOOLE_1:1;
+    take R;
+A6: dom g=[#]T by A3,FUNCT_2:def 1;
+    [#]T c=union R
+    proof
+      let x be set;
+      assume x in [#]T;
+      then x in g.x & g.x in R by A5,A6,FUNCT_1:def 5;
+      hence thesis by TARSKI:def 4;
+    end;
+    hence thesis by A6,CARD_1:28,SETFAM_1:def 12;
+  end;
+end;
+
+Lm7: (for Fm st Fm is open & not{} in Fm &
+for Am,Bm st Am in Fm & Bm in Fm & Am<>Bm holds Am misses Bm
+holds card Fm c=iC)
+implies density TM c=iC
+proof
+  assume
+A1: for Fm st Fm is open & not{} in Fm &
+  for Am,Bm st Am in Fm & Bm in Fm & Am<>Bm holds Am misses Bm
+  holds card Fm c=iC;
+  per cases;
+  suppose
+A2: TM is empty;
+    ex D be Subset of TM st D is dense & density TM=card D
+    by TOPGEN_1:def 12;
+    hence thesis by A2;
+  end;
+  suppose
+A3: TM is non empty;
+    consider metr be Function of[:the carrier of TM,the carrier of TM:],REAL
+    such that
+A4: metr is_metric_of the carrier of TM and
+A5: Family_open_set(SpaceMetr(the carrier of TM,metr))=the topology of TM
+    by PCOMPS_1:def 9;
+    reconsider M=SpaceMetr(the carrier of TM,metr) as non empty MetrSpace
+    by A3,A4,PCOMPS_1:40;
+    defpred P[set,set] means
+    for n be Nat st $1=n
+    ex G be Subset of TM st G=$2 & card G c= iC &
+    for p be Element of M
+    ex q be Element of M st q in G & dist(p,q)<1/(2|^n);
+A6: the carrier of TM=the carrier of M by A3,A4,PCOMPS_2:8;
+A7: for x be set st x in NAT
+    ex y be set st y in bool the carrier of TM & P[x,y]
+    proof
+      let x be set;
+      assume x in NAT;
+      then reconsider n=x as Element of NAT;
+      reconsider r=1/(2|^n) as Real by XREAL_0:def 1;
+A8:   2|^n>0 by PREPOWER:13;
+      then consider A be Subset of M such that
+A9:   for p,q be Point of M st p<>q & p in A & q in A holds
+      dist(p,q)>=r
+      and
+A10:  for p be Point of M ex q be Point of M st q in A & p in Ball(q,r)
+      by COMPL_SP:30;
+      set BALL={Ball(p,r/2) where p is Element of M:p in A};
+A11:  BALL c=the topology of TM
+      proof
+        let x be set;
+        assume x in BALL;
+        then ex p be Point of M st x=Ball(p,r/2) & p in A;
+        hence thesis by A5,PCOMPS_1:33;
+      end;
+      the topology of TM is open by CANTOR_1:3;
+      then reconsider BALL as open Subset-Family of TM
+      by A11,TOPS_2:18,XBOOLE_1:1;
+      defpred Q[set,set] means
+      for p be Point of M st Ball(p,r/2)=$1 & p in A holds p=$2;
+A12:  for x be set st x in BALL ex y be set st y in A & Q[x,y]
+      proof
+        let x be set;
+        assume x in BALL;
+        then consider p be Point of M such that
+A13:    x=Ball(p,r/2) and
+A14:    p in A;
+A15:    r/2<r by A8,XREAL_1:218;
+        take p;
+        thus p in A by A14;
+        let q be Point of M such that
+A16:    Ball(q,r/2)=x and
+A17:    q in A;
+        dist(p,p)=0 by METRIC_1:1;
+        then p in Ball(p,r/2) by A8,METRIC_1:12;
+        then dist(q,p)<r/2 by A13,A16,METRIC_1:12;
+        then dist(q,p)<r by A15,XXREAL_0:2;
+        hence thesis by A9,A14,A17;
+      end;
+      consider f be Function of BALL,A such that
+A18:  for x be set st x in BALL holds Q[x,f.x] from FUNCT_2:sch 1(A12);
+      reconsider RNG=rng f as Subset of TM by A6,XBOOLE_1:1;
+      ex q be Point of M st q in A & the Point of M in Ball(q,r) by A10;
+      then
+A19:  dom f=BALL by FUNCT_2:def 1;
+      then
+A20:  card RNG c=card BALL by CARD_1:28;
+A21:  for A',B' be Subset of TM st A' in BALL & B' in BALL & A'<>B'
+      holds A' misses B'
+      proof
+        let A',B' be Subset of TM such that
+A22:    A' in BALL and
+A23:    B' in BALL and
+A24:    A'<>B';
+        consider b be Element of M such that
+A25:    Ball(b,r/2)=B' and
+A26:    b in A by A23;
+        consider a be Element of M such that
+A27:    Ball(a,r/2)=A' and
+A28:    a in A by A22;
+        assume A' meets B';
+        then consider x be set such that
+A29:    x in A' and
+A30:    x in B' by XBOOLE_0:3;
+        reconsider x as Element of M by A27,A29;
+A31:    dist(a,x)<r/2 by A27,A29,METRIC_1:12;
+        dist(b,x)<r/2 by A25,A30,METRIC_1:12;
+        then
+A32:    dist(a,b)<=dist(a,x)+dist(x,b) & dist(a,x)+dist(x,b)<r/2+r/2
+        by A31,METRIC_1:4,XREAL_1:10;
+        dist(a,b)>=r by A9,A24,A25,A26,A27,A28;
+        hence thesis by A32,XXREAL_0:2;
+      end;
+      take RNG;
+      thus RNG in bool the carrier of TM;
+      let m be Nat such that
+A33:  x=m;
+A34:  now
+        let p be Element of M;
+        consider q be Point of M such that
+A35:    q in A and
+A36:    p in Ball(q,r) by A10;
+        take q;
+A37:    Ball(q,r/2) in BALL by A35;
+        then f.(Ball(q,r/2))=q by A18,A35;
+        hence q in RNG & dist(p,q)<1/(2|^m)
+        by A19,A33,A36,A37,FUNCT_1:def 5,METRIC_1:12;
+      end;
+      not {} in BALL
+      proof
+        assume {} in BALL;
+        then consider p be Element of M such that
+A38:    Ball(p,r/2)={} and
+        p in A;
+        dist(p,p)=0 by METRIC_1:1;
+        hence thesis by A8,A38,METRIC_1:12;
+      end;
+      then card BALL c=iC by A1,A21;
+      hence thesis by A20,A34,XBOOLE_1:1;
+    end;
+    consider p be Function of NAT,bool the carrier of TM such that
+A39: for x be set st x in NAT holds P[x,p.x] from FUNCT_2:sch 1(A7);
+    reconsider Up=Union p as Subset of TM;
+    for U be Subset of TM st U<>{} & U is open holds Up meets U
+    proof
+      let U be Subset of TM;
+      reconsider U'=U as Subset of M by A3,A4,PCOMPS_2:8;
+      assume that
+A40:  U<>{} and
+A41:  U is open;
+      consider q be set such that
+A42:  q in U by A40,XBOOLE_0:def 1;
+      reconsider q as Element of M by A3,A4,A42,PCOMPS_2:8;
+      U' in Family_open_set(M) by A5,A41,PRE_TOPC:def 5;
+      then consider r be Real such that
+A43:  r>0 and
+A44:  Ball(q,r)c=U' by A42,PCOMPS_1:def 5;
+      consider n be Element of NAT such that
+A45:  1/(2|^n)<=r by A43,PREPOWER:106;
+      consider G be Subset of TM such that
+A46:  G=p.n and
+      card G c=iC and
+A47:  for p be Element of M
+      ex q be Element of M st q in G & dist(p,q)<1/(2|^n) by A39;
+      consider qq be Element of M such that
+A48:  qq in G and
+A49:  dist(q,qq)<1/(2|^n) by A47;
+      dist(q,qq)<r by A45,A49,XXREAL_0:2;
+      then
+A50:  qq in Ball(q,r) by METRIC_1:12;
+      qq in Up by A46,A48,PROB_1:25;
+      hence thesis by A44,A50,XBOOLE_0:3;
+    end;
+    then Up is dense by TOPS_1:80;
+    then
+A51: density TM c=card Up by TOPGEN_1:def 12;
+A52: for x be set st x in dom p holds card(p.x)c=iC
+    proof
+      let x be set;
+      assume x in dom p;
+      then reconsider n=x as Element of NAT;
+      ex G be Subset of TM st G=p.n & card G c=iC &
+      for p be Element of M ex q be Element of M st
+      q in G & dist(p,q)<1/(2|^n) by A39;
+      hence thesis;
+    end;
+    card dom p=omega by CARD_1:84,FUNCT_2:def 1;
+    then
+A53: card Up c=omega*`iC by A52,CARD_3:132;
+    omega*`iC=iC by Lm6;
+    hence thesis by A51,A53,XBOOLE_1:1;
+  end;
+end;
+
+theorem Th17:
+  Am is dense implies weight TM c= omega *` card Am
+proof
+  assume
+A1: Am is dense;
+  per cases;
+  suppose TM is empty;
+    hence thesis;
+  end;
+  suppose
+A2: TM is non empty;
+    set TOP=the topology of TM,cTM=the carrier of TM;
+    consider metr be Function of[:cTM,cTM:],REAL such that
+A3: metr is_metric_of cTM and
+A4: Family_open_set(SpaceMetr(cTM,metr))=TOP by PCOMPS_1:def 9;
+    reconsider Tm=SpaceMetr(cTM,metr) as non empty MetrSpace
+    by A2,A3,PCOMPS_1:40;
+    defpred P[set,set] means for n be Nat st n = $1 holds
+    $2={Ball(p,1/(2|^n)) where p is Point of Tm:p in Am} &
+    card $2 c= card Am;
+A5: for x be set st x in NAT ex y be set st y in bool TOP & P[x,y]
+    proof
+      defpred P1[set] means $1 in Am;
+      let x be set;
+      defpred P[set] means not contradiction;
+      defpred P2[set] means $1 in Am & P[$1];
+      assume x in NAT;
+      then reconsider n=x as Element of NAT;
+      deffunc F(Point of Tm)=Ball($1,1/(2|^n));
+      set BALL1={F(p) where p is Point of Tm:P1[p]};
+      set BALL2={F(p) where p is Point of Tm:P2[p]};
+      take BALL1;
+A6:   BALL1 c=TOP
+      proof
+        let y be set;
+        assume y in BALL1;
+        then ex p be Point of Tm st y=F(p) & P1[p];
+        hence thesis by A4,PCOMPS_1:33;
+      end;
+A7:   for p be Point of Tm holds P1[p] iff P2[p];
+A8:   BALL1=BALL2 from FRAENKEL:sch 3(A7);
+      card BALL2 c=card Am from BORSUK_2:sch 1;
+      hence thesis by A6,A8;
+    end;
+    consider P be Function of NAT,bool TOP such that
+A9: for x be set st x in NAT holds P[x,P.x] from FUNCT_2:sch 1(A5);
+    reconsider Up=Union P as Subset-Family of TM by XBOOLE_1:1;
+    for B be Subset of TM st B is open
+    for p be Point of TM st p in B ex a be Subset of TM st
+    a in Up & p in a & a c= B
+    proof
+      let B be Subset of TM such that
+A10:  B is open;
+A11:  B in TOP by A10,PRE_TOPC:def 5;
+      let p be Point of TM such that
+A12:  p in B;
+      reconsider p'=p as Point of Tm by A2,A3,PCOMPS_2:8;
+      consider r be Real such that
+A13:  r>0 and
+A14:  Ball(p',r)c=B by A4,A11,A12,PCOMPS_1:def 5;
+      consider n be Element of NAT such that
+A15:  1/(2|^n)<=r/2 by A13,PREPOWER:106;
+      reconsider B2=Ball(p',1/(2|^n)) as Subset of TM by A2,A3,PCOMPS_2:8;
+      2|^n>0 & dist(p',p')=0 by METRIC_1:1,PREPOWER:13;
+      then
+A16:  p' in B2 by METRIC_1:12;
+      B2 in TOP by A4,PCOMPS_1:33;
+      then B2 is open by PRE_TOPC:def 5;
+      then B2 meets Am by A1,A16,TOPS_1:80;
+      then consider q be set such that
+A17:  q in B2 and
+A18:  q in Am by XBOOLE_0:3;
+      reconsider q as Point of Tm by A17;
+      reconsider B3=Ball(q,1/(2|^n)) as Subset of TM by A2,A3,PCOMPS_2:8;
+      take B3;
+      P.n={Ball(t,1/(2|^n)) where t is Point of Tm:t in Am} by A9;
+      then B3 in P.n by A18;
+      hence B3 in Up by PROB_1:25;
+A19:  dist(p',q)<1/(2|^n) by A17,METRIC_1:12;
+      hence p in B3 by METRIC_1:12;
+      let y be set;
+      assume
+A20:  y in B3;
+      then reconsider t=y as Point of Tm;
+      dist(q,t)<1/(2|^n) by A20,METRIC_1:12;
+      then
+A21:  dist(q,t)<r/2 by A15,XXREAL_0:2;
+      dist(p',q)<r/2 by A15,A19,XXREAL_0:2;
+      then dist(p',t)<=dist(p',q)+dist(q,t) & dist(p',q)+dist(q,t)<r/2+r/2
+      by A21,METRIC_1:4,XREAL_1:10;
+      then dist(p',t)<r by XXREAL_0:2;
+      then t in Ball(p',r) by METRIC_1:12;
+      hence thesis by A14;
+    end;
+    then Up is Basis of TM by YELLOW_9:32;
+    then
+A22: weight TM c=card Up by WAYBEL23:74;
+A23: for x be set st x in dom P holds card(P.x)c=card Am by A9;
+    card dom P=omega by CARD_1:84,FUNCT_2:def 1;
+    then card Union P c=(omega)*`card Am by A23,CARD_3:132;
+    hence thesis by A22,XBOOLE_1:1;
+  end;
+end;
+
+Lm8: density TM c=iC implies weight TM c=iC
+proof
+  consider A be Subset of TM such that
+A1: A is dense and
+A2: density TM=card A by TOPGEN_1:def 12;
+  assume density TM c=iC;
+  then
+A3: omega*`card A c=omega*`iC by A2,CARD_3:136;
+  weight TM c=omega*`card A by A1,Th17;
+  then weight TM c=omega*`iC by A3,XBOOLE_1:1;
+  hence thesis by Lm6;
+end;
+
+begin :: Main Properties
+
+::  General Topology Th 4.1.15 (a) <=> (c)
+
+theorem Th18:
+  weight TM c= iC iff
+         for Fm st Fm is open & Fm is Cover of TM
+           ex Gm st Gm c=Fm & Gm is Cover of TM & card Gm c= iC
+proof
+  hereby
+    assume
+A1: weight TM c=iC;
+    let F be Subset-Family of TM such that
+A2: F is open and
+A3: F is Cover of TM;
+    per cases;
+    suppose
+A4:   TM is empty;
+      reconsider G={} as Subset-Family of TM by TOPGEN_4:18;
+      take G;
+      the carrier of TM = {} by A4; then
+      [#]TM=union G by A4;
+      hence G c=F & G is Cover of TM & card G c=iC
+      by SETFAM_1:def 12,XBOOLE_1:2;
+    end;
+    suppose TM is non empty;
+      then consider G be open Subset-Family of TM such that
+A5:   G c=F & union G=union F & card G c=weight TM by A2,TOPGEN_2:12;
+      reconsider G as Subset-Family of TM;
+      take G;
+      union F=[#]TM by A3,SETFAM_1:60;
+      hence G c=F & G is Cover of TM & card G c=iC
+      by A1,A5,SETFAM_1:def 12,XBOOLE_1:1;
+    end;
+  end;
+  assume for F be Subset-Family of TM st F is open & F is Cover of TM
+  ex G be Subset-Family of TM st G c=F & G is Cover of TM & card G c=iC;
+  then for A be Subset of TM st A is closed & A is discrete holds
+  card A c=iC by Th14;
+  then for A be Subset of TM st A is discrete holds card A c=iC by Th15;
+  then for F be Subset-Family of TM st F is open & not{} in F &
+  for A,B be Subset of TM st A in F & B in F & A<>B holds A misses B
+  holds card F c=iC by Th16;
+  then density TM c=iC by Lm7;
+  hence thesis by Lm8;
+end;
+
+::  General Topology Th 4.1.15 (a) <=> (d)
+
+theorem Th19:
+  weight TM c=iC iff
+         for Am st Am is closed & Am is discrete holds card Am c= iC
+proof
+  hereby
+    assume weight TM c=iC;
+    then for Fm st Fm is open & Fm is Cover of TM
+    ex Gm st Gm c=Fm & Gm is Cover of TM & card Gm c=iC by Th18;
+    hence for Am st Am is closed & Am is discrete holds card Am c=iC
+    by Th14;
+  end;
+  assume for Am st Am is closed & Am is discrete holds card Am c=iC;
+  then for Am st Am is discrete holds card Am c=iC by Th15;
+  then for Fm st Fm is open & not{} in Fm &
+  for Am,Bm st Am in Fm & Bm in Fm & Am<>Bm holds Am misses Bm
+  holds card Fm c=iC by Th16;
+  then density TM c=iC by Lm7;
+  hence thesis by Lm8;
+end;
+
+::  General Topology Th 4.1.15 (a) <=> (e)
+
+theorem Th20:
+  weight TM c= iC iff
+         for Am st Am is discrete holds card Am c= iC
+proof
+  hereby
+    assume weight TM c=iC;
+    then for A be Subset of TM st A is closed & A is discrete holds
+    card A c=iC by Th19;
+    hence for A be Subset of TM st A is discrete holds card A c=iC by Th15;
+  end;
+  assume for A be Subset of TM st A is discrete holds card A c=iC;
+  then for F be Subset-Family of TM st F is open & not{} in F &
+  for A,B be Subset of TM st A in F & B in F & A<>B holds A misses B
+  holds card F c=iC by Th16;
+  then density TM c=iC by Lm7;
+  hence thesis by Lm8;
+end;
+
+::  General Topology Th 4.1.15 (a) <=> (f)
+
+theorem Th21:
+  weight TM c= iC iff
+         for Fm st Fm is open & not{} in Fm &
+            for Am,Bm st Am in Fm & Bm in Fm & Am <> Bm holds Am misses Bm
+  holds card Fm c= iC
+proof
+  hereby
+    assume weight TM c=iC;
+    then for A be Subset of TM st A is discrete holds card A c=iC by Th20;
+    hence for F be Subset-Family of TM st F is open & not{} in F &
+    for A,B be Subset of TM st A in F & B in F & A<>B holds A misses B holds
+    card F c= iC by Th16;
+  end;
+  assume for F be Subset-Family of TM st F is open & not{} in F &
+  for A,B be Subset of TM st A in F & B in F & A<>B holds A misses B
+  holds card F c=iC;
+  then density TM c=iC by Lm7;
+  hence thesis by Lm8;
+end;
+
+::  General Topology Th 4.1.15 (a) <=> (g)
+
+theorem Th22:
+  weight TM c= iC iff density TM c= iC
+proof
+  consider A be Subset of TM such that
+A1: A is dense and
+A2: density TM=card A by TOPGEN_1:def 12;
+  hereby
+    assume weight TM c=iC;
+    then for F be Subset-Family of TM st F is open & not{} in F &
+    for A,B be Subset of TM st A in F & B in F & A<>B holds A misses B
+    holds card F c=iC by Th21;
+    hence density TM c=iC by Lm7;
+  end;
+  assume density TM c=iC;
+  then
+A3: omega*`card A c=omega*`iC by A2,CARD_3:136;
+  weight TM c=omega*`card A by A1,Th17;
+  then weight TM c=omega*`iC by A3,XBOOLE_1:1;
+  hence thesis by Lm6;
+end;
+
+theorem Th23:
+  for B be Basis of TM st
+      for Fm st Fm is open & Fm is Cover of TM
+        ex Gm st Gm c=Fm & Gm is Cover of TM & card Gm c= iC
+  ex underB be Basis of TM st underB c= B & card underB c= iC
+proof
+  let B be Basis of TM such that
+A1: for F being Subset-Family of TM st F is open & F is Cover of TM
+  ex G be Subset-Family of TM st
+  G c=F & G is Cover of TM & card G c=iC;
+  per cases;
+  suppose TM is empty;
+    then weight TM=0;
+    then consider underB be Basis of TM such that
+A2: card underB=0 by WAYBEL23:75;
+    take underB;
+    underB={} by A2;
+    hence thesis by XBOOLE_1:2;
+  end;
+  suppose
+A3: TM is non empty;
+    set TOP=the topology of TM,cT=the carrier of TM;
+    consider metr be Function of[:cT,cT:],REAL such that
+A4: metr is_metric_of cT and
+A5: Family_open_set(SpaceMetr(cT,metr))=TOP by PCOMPS_1:def 9;
+    reconsider Tm=SpaceMetr(cT,metr) as non empty MetrSpace
+    by A3,A4,PCOMPS_1:40;
+    defpred P[set,set] means
+    for n be Nat st $1=n
+    ex G be open Subset-Family of TM st
+    G c={U where U is Subset of TM:
+    U in B & ex p be Point of Tm st U c=Ball(p,1/(2|^n))}
+    & G is Cover of TM & card G c= iC & $2 = G;
+A6: B c= TOP by CANTOR_1:def 2;
+A7: for x be set st x in NAT ex y be set st P[x,y]
+    proof
+      let x be set;
+      assume x in NAT;
+      then reconsider n=x as Nat;
+      set F={U where U is Subset of TM:U in B & ex p be Element of Tm st
+      U c=Ball (p,1/(2|^n))};
+A8:   F c=TOP
+      proof
+        let f be set;
+        assume f in F;
+        then ex U be Subset of TM st f=U & U in B & ex p be Point of Tm
+        st U c= Ball(p,1/(2|^n));
+        hence thesis by A6;
+      end;
+      then reconsider F as Subset-Family of TM by XBOOLE_1:1;
+      reconsider F as open Subset-Family of TM by A8,CANTOR_1:3,TOPS_2:18;
+      cT c=union F
+      proof
+        let y be set;
+        assume
+A9:     y in cT;
+        then reconsider p=y as Point of TM;
+        reconsider q=y as Element of Tm by A3,A4,A9,PCOMPS_2:8;
+        2|^n>0 & dist(q,q)=0 by METRIC_1:1,NEWTON:102;
+        then
+A10:    q in Ball(q,1/(2|^n)) by METRIC_1:12;
+        reconsider BALL=Ball(q,1/(2|^n)) as Subset of TM
+        by A3,A4,PCOMPS_2:8;
+        BALL in Family_open_set(Tm) by PCOMPS_1:33;
+        then BALL is open by A5,PRE_TOPC:def 5;
+        then consider U be Subset of TM such that
+A11:    U in B and
+A12:    p in U and
+A13:    U c=BALL by A10,YELLOW_9:31;
+        U in F by A11,A13;
+        hence thesis by A12,TARSKI:def 4;
+      end;
+      then F is Cover of TM by SETFAM_1:def 12;
+      then consider G be Subset-Family of TM such that
+A14:  G c=F and
+A15:  G is Cover of TM & card G c=iC by A1;
+      take G;
+      let m be Nat;
+      assume
+A16:  x=m;
+      G is open by A14,TOPS_2:18;
+      hence thesis by A14,A15,A16;
+    end;
+    consider f be Function such that
+A17: dom f=NAT & for e be set st e in NAT holds P[e,f.e]
+    from CLASSES1:sch 1(A7);
+A18: union rng f c=B
+    proof
+      let b be set;
+      assume b in union rng f;
+      then consider y be set such that
+A19:  b in y and
+A20:  y in rng f by TARSKI:def 4;
+      consider x be set such that
+A21:  x in dom f and
+A22:  f.x=y by A20,FUNCT_1:def 5;
+      reconsider n=x as Nat by A17,A21;
+      ex G be open Subset-Family of TM st
+      G c={U where U is Subset of TM:U in B & ex p be Point of Tm st
+      U c=Ball(p,1/(2|^n))} & G is Cover of TM & card G c=iC & f.n=G
+      by A17,A21;
+      then b in {U where U is Subset of TM:U in B & ex p be Point of Tm st
+      U c= Ball(p,1/(2|^n))} by A19,A22;
+      then ex U be Subset of TM st U=b & U in B &
+      ex p be Point of Tm st U c=Ball(p,1/(2|^n));
+      hence thesis;
+    end;
+    then reconsider Urngf=union rng f as Subset-Family of TM by XBOOLE_1:1;
+    for A be Subset of TM st A is open
+    for p be Point of TM st p in A
+    ex a be Subset of TM st a in Urngf & p in a & a c=A
+    proof
+      let A be Subset of TM such that
+A23:  A is open;
+A24:  A in Family_open_set(Tm) by A5,A23,PRE_TOPC:def 5;
+      let p be Point of TM such that
+A25:  p in A;
+      reconsider p'=p as Element of Tm by A3,A4,PCOMPS_2:8;
+      consider r be Real such that
+A26:  r>0 and
+A27:  Ball(p',r)c=A by A24,A25,PCOMPS_1:def 5;
+      consider n be Element of NAT such that
+A28:  1/(2|^n)<=r/2 by A26,PREPOWER:106;
+      consider G be open Subset-Family of TM such that
+A29:  G c={U where U is Subset of TM:U in B & ex p be Point of Tm st
+      U c= Ball(p,1/(2|^n))} and
+A30:  G is Cover of TM and
+      card G c=iC and
+A31:  f.n=G by A17;
+      [#]TM=union G by A30,SETFAM_1:60;
+      then consider a be set such that
+A32:  p in a and
+A33:  a in G by A3,TARSKI:def 4;
+      a in {U where U is Subset of TM:U in B &
+      ex p be Point of Tm st U c=Ball(p,1/(2|^n))} by A29,A33;
+      then consider U be Subset of TM such that
+A34:  a=U and
+      U in B and
+A35:  ex p be Point of Tm st U c=Ball(p,1/(2|^n));
+      take U;
+      f.n in rng f by A17,FUNCT_1:def 5;
+      hence U in Urngf & p in U by A31,A32,A33,A34,TARSKI:def 4;
+      thus U c=A
+      proof
+        let u' be set;
+        consider pp be Element of Tm such that
+A36:    U c=Ball(pp,1/(2|^n)) by A35;
+        assume
+A37:    u' in U;
+        then reconsider u=u' as Element of Tm by A3,A4,PCOMPS_2:8;
+        dist(pp,u)<1/(2|^n) by A36,A37,METRIC_1:12;
+        then
+A38:    dist(pp,u) < r/2 by A28,XXREAL_0:2;
+        dist(pp,p')<1/(2|^n) by A32,A34,A36,METRIC_1:12;
+        then dist(p',pp)<r/2 by A28,XXREAL_0:2;
+        then dist(p',u)<=dist(p',pp)+dist(pp,u) &
+        dist(p',pp)+dist(pp,u)<r/2+r/2
+        by A38,METRIC_1:4,XREAL_1:10;
+        then dist(p',u)<r/2+r/2 by XXREAL_0:2;
+        then u in Ball(p',r) by METRIC_1:12;
+        hence thesis by A27;
+      end;
+    end;
+    then reconsider Urngf as Basis of TM by A6,A18,XBOOLE_1:1,YELLOW_9:32;
+    take Urngf;
+    for x be set st x in dom f holds card(f.x)c=iC
+    proof
+      let x be set;
+      assume x in dom f;
+      then reconsider n=x as Element of NAT by A17;
+      ex G be open Subset-Family of TM st
+      G c={U where U is Subset of TM:U in B & ex p be Point of Tm st
+      U c=Ball(p,1/(2|^n))} & G is Cover of TM & card G c=iC & f.n=G
+      by A17;
+      hence thesis;
+    end;
+    then card Union f c=(omega)*`iC by A17,CARD_1:84,CARD_3:132;
+    hence thesis by A18,Lm6;
+  end;
+end;
+
+begin :: Properties of Lindel\"of spaces
+
+definition
+  let T;
+  attr T is Lindelof means :Def2:
+  for F st F is open & F is Cover of T
+    ex G st G c=F & G is Cover of T & G is countable;
+end;
+
+Lm9: T is Lindelof iff
+for F st F is open & F is Cover of T ex G st G c=F & G is Cover of T &
+card G c=omega
+proof
+  hereby
+    assume
+A1: T is Lindelof;
+    let F such that
+A2: F is open & F is Cover of T;
+    consider G be Subset-Family of T such that
+A3: G c=F & G is Cover of T & G is countable by A1,A2,Def2;
+    take G;
+    thus G c=F & G is Cover of T & card G c=omega by A3,CARD_3:def 15;
+  end;
+  assume
+A4: for F st F is open & F is Cover of T
+  ex G st G c=F & G is Cover of T & card G c=omega;
+  let F such that
+A5: F is open & F is Cover of T;
+  consider G such that
+A6: G c=F & G is Cover of T and
+A7: card G c=omega by A4,A5;
+  G is countable by A7,CARD_3:def 15;
+  hence thesis by A6;
+end;
+
+theorem
+  for B be Basis of TM st TM is Lindelof
+    ex B' be Basis of TM st B' c= B & B' is countable
+proof
+  let B be Basis of TM such that
+A1: TM is Lindelof;
+  for F be Subset-Family of TM st F is open & F is Cover of TM
+  ex G be Subset-Family of TM st G c=F & G is Cover of TM & card G c=omega
+  by A1,Lm9;
+  then consider underB be Basis of TM such that
+A2: underB c=B & card underB c=omega by Th23;
+  take underB;
+  thus thesis by A2,CARD_3:def 15;
+end;
+
+::  General Topology Cor 4.1.16 (b) <=> (a)
+
+Th25:
+  TM is Lindelof iff TM is second-countable
+proof
+  hereby
+    assume TM is Lindelof;
+    then for F be Subset-Family of TM st F is open & F is Cover of TM
+    ex G be Subset-Family of TM st G c=F & G is Cover of TM &
+    card G c=omega by Lm9;
+    then weight TM c=omega by Th18;
+    hence TM is second-countable by WAYBEL23:def 6;
+  end;
+  assume TM is second-countable;
+  then weight TM c=omega by WAYBEL23:def 6;
+  then for F be Subset-Family of TM st F is open & F is Cover of TM
+  ex G be Subset-Family of TM st G c=F & G is Cover of TM & card G c=omega
+  by Th18;
+  hence thesis by Lm9;
+end;
+
+registration
+  cluster Lindelof -> second-countable (metrizable TopSpace);
+  coherence by Th25;
+end;
+
+::  General Topology Cor 4.1.16 (b) <=> (c)
+
+Th26:
+  TM is Lindelof iff TM is separable
+proof
+  hereby
+    assume TM is Lindelof;
+    then weight TM c=omega by WAYBEL23:def 6;
+    then density TM c=omega by Th22;
+    hence TM is separable by TOPGEN_1:def 13;
+  end;
+  assume TM is separable;
+  then density TM c=omega by TOPGEN_1:def 13;
+  then weight TM c=omega by Th22;
+  then TM is second-countable by WAYBEL23:def 6;
+  hence thesis by Th25;
+end;
+
+registration
+  cluster Lindelof -> separable (metrizable TopSpace);
+  coherence by Th26;
+  cluster separable -> Lindelof (metrizable TopSpace);
+  coherence by Th26;
+end;
+
+registration
+  cluster Lindelof metrizable (non empty TopSpace);
+  existence
+  proof
+    set X=the non empty finite set;
+    TopSpaceMetr DiscreteSpace X is finite;
+    hence thesis;
+  end;
+::  General Topology Th 3.8.1
+  cluster second-countable -> Lindelof TopSpace;
+  coherence
+  proof
+    let T be TopSpace;
+    assume
+A1: T is second-countable;
+    let F be Subset-Family of T such that
+A2: F is open and
+A3: F is Cover of T;
+    per cases;
+    suppose
+A4:   T is empty;
+      take F;
+      F c={{}}
+      proof
+        let x be set;
+        assume x in F;
+        then x={} by A4;
+        hence thesis by TARSKI:def 1;
+      end;
+      hence thesis by A3;
+    end;
+    suppose T is non empty;
+      hence thesis by A1,A2,A3,COMPL_SP:34;
+    end;
+  end;
+::  General Topology Th 3.8.2
+  cluster regular Lindelof -> normal TopSpace;
+  coherence
+  proof
+    let T be TopSpace;
+    assume that
+A5: T is regular and
+A6: T is Lindelof;
+    per cases;
+    suppose
+A7:   T is empty;
+      let F1,F2 be Subset of T such that
+      F1 is closed and
+      F2 is closed and
+A8:   F1 misses F2;
+      take F1,F2;
+      thus thesis by A7,A8;
+    end;
+    suppose
+A9:   T is non empty;
+      set TOP=the topology of T;
+      for A be Subset of T,U be open Subset of T st
+      A is closed & U is open & A c= U
+      ex W be Function of NAT,bool(the carrier of T) st
+      A c=Union W & Union W c= U &
+      for n be Element of NAT holds Cl(W.n)c=U & W.n is open
+      proof
+        let A be Subset of T,U be open Subset of T such that
+A10:    A is closed and
+        U is open and
+A11:    A c=U;
+        defpred P[set,set] means
+        for p be Point of T st p=$1 ex W be Subset of T st
+        W is open & p in W & Cl W c=U & $2=W;
+A12:    for x be set st x in A ex y be set st y in TOP & P[x,y]
+        proof
+          let x be set;
+          assume
+A13:      x in A;
+          then reconsider p=x as Point of T;
+          U=U``;
+          then consider G1,G2 be Subset of T such that
+A14:      G1 is open and
+A15:      G2 is open and
+A16:      p in G1 and
+A17:      U`c=G2 and
+A18:      G1 misses G2 by A5,A11,A13,PRE_TOPC:def 17;
+          take G1;
+          thus G1 in TOP by A14,PRE_TOPC:def 5;
+          G1 c=G2` by A18,SUBSET_1:43;
+          then
+A20:      Cl G1 c=Cl(G2`) by PRE_TOPC:49;
+          let q be Point of T such that
+A21:      q=x;
+          Cl(G2`)=G2` & G2`c=U by A15,A17,PRE_TOPC:52,SUBSET_1:36;
+          hence thesis by A14,A16,A20,A21,XBOOLE_1:1;
+        end;
+        consider w be Function of A,TOP such that
+A22:    for x be set st x in A holds P[x,w.x] from FUNCT_2:sch 1(A12);
+        A` in TOP by A10,PRE_TOPC:def 5;
+        then TOP is open & {A`}c=TOP by CANTOR_1:3,ZFMISC_1:37;
+        then reconsider RNG=rng w,AA={A`} as open Subset-Family of T
+        by TOPS_2:18,XBOOLE_1:1;
+        set RngA=RNG\/AA;
+A23:    dom w=A by FUNCT_2:def 1;
+        [#]T c=union RngA
+        proof
+          let x be set;
+          assume
+A24:      x in [#]T;
+          then reconsider p=x as Point of T;
+          per cases;
+          suppose
+A25:        x in A;
+            then consider W be Subset of T such that
+            W is open and
+A26:        x in W and
+            Cl W c=U and
+A27:        w.x=W by A22;
+            W in rng w by A23,A25,A27,FUNCT_1:def 5;
+            then W in RngA by XBOOLE_0:def 3;
+            hence thesis by A26,TARSKI:def 4;
+          end;
+          suppose
+A28:        not x in A;
+            A` in AA by TARSKI:def 1;
+            then
+A29:        A` in RngA by XBOOLE_0:def 3;
+            x in A` by A24,A28,XBOOLE_0:def 5;
+            hence thesis by A29,TARSKI:def 4;
+          end;
+        end;
+        then RngA is open Subset-Family of T & RngA is Cover of T
+        by SETFAM_1:def 12,TOPS_2:20;
+        then consider G be Subset-Family of T such that
+A30:    G c=RngA and
+A31:    G is Cover of T and
+A32:    G is countable by A6,Def2;
+A33:    [#]T=union G by A31,SETFAM_1:60;
+        per cases;
+        suppose G\AA is empty;
+          then G c=AA by XBOOLE_1:37;
+          then
+A34:      union G c=union AA by ZFMISC_1:95;
+          take W=(NAT-->{}T);
+          rng W={{}T} by FUNCOP_1:14;
+          then
+A35:      ({}T)`=[#]T & Union W={}T by ZFMISC_1:31;
+          union AA=A` by ZFMISC_1:31;
+          then A`=[#]T by A33,A34,XBOOLE_0:def 10;
+          hence A c=Union W & Union W c=U by A35,SUBSET_1:64,XBOOLE_1:2;
+          let n be Element of NAT;
+          W.n={}T by FUNCOP_1:13;
+          then Cl(W.n)={}T by PRE_TOPC:52;
+          hence thesis by FUNCOP_1:13,XBOOLE_1:2;
+        end;
+        suppose
+A36:      G\AA is non empty;
+          G\AA is countable by A32,CARD_3:130;
+          then consider W be Function of NAT,G\AA such that
+A37:      rng W=G\AA by A36,CARD_3:146;
+          reconsider W as Function of NAT,bool(the carrier of T)
+          by A36,A37,FUNCT_2:8;
+          take W;
+          thus A c=Union W
+          proof
+            let x be set;
+            assume
+A38:        x in A;
+            then consider y be set such that
+A39:        x in y and
+A40:        y in G by A33,TARSKI:def 4;
+            not x in A` by A38,XBOOLE_0:def 5;
+            then not y in AA by A39,TARSKI:def 1;
+            then y in rng W by A37,A40,XBOOLE_0:def 5;
+            then ex n be set st n in dom W & W.n=y by FUNCT_1:def 5;
+            hence thesis by A39,PROB_1:25;
+          end;
+A41:      dom W=NAT by FUNCT_2:def 1;
+          thus Union W c=U
+          proof
+            let x be set;
+            assume x in Union W;
+            then consider n be Element of NAT such that
+A42:        x in W.n by PROB_1:25;
+A43:        W.n in G\AA by A37,A41,FUNCT_1:def 5;
+            then W.n in G by ZFMISC_1:64;
+            then
+A44:        W.n in RNG or W.n in AA by A30,XBOOLE_0:def 3;
+            W.n<>A` by A43,ZFMISC_1:64;
+            then consider xx be set such that
+A45:        xx in dom w & w.xx=W.n by A44,FUNCT_1:def 5,TARSKI:def 1;
+            consider W' be Subset of T such that
+            W' is open and
+            xx in W' and
+A46:        Cl W' c=U and
+A47:        W.n=W' by A22,A23,A45;
+            W' c=Cl W' by PRE_TOPC:48;
+            then x in Cl W' by A42,A47;
+            hence thesis by A46;
+          end;
+          let n be Element of NAT;
+A48:      W.n in G\AA by A37,A41,FUNCT_1:def 5;
+          then W.n in G by ZFMISC_1:64;
+          then
+A49:      W.n in RNG or W.n in AA by A30,XBOOLE_0:def 3;
+          W.n<>A` by A48,ZFMISC_1:64;
+          then consider xx be set such that
+A50:      xx in dom w & w.xx=W.n by A49,FUNCT_1:def 5,TARSKI:def 1;
+          ex W' be Subset of T st W' is open & xx in W' & Cl W' c=U &
+          W.n=W' by A22,A23,A50;
+          hence thesis;
+        end;
+      end;
+      hence thesis by A9,NAGATA_1:18;
+    end;
+  end;
+  cluster countable -> Lindelof TopSpace;
+  coherence
+  proof
+    let T be TopSpace;
+    assume T is countable;
+    then [#]T is countable by ORDERS_4:def 2;
+    then
+A51: card[#]T c=omega by CARD_3:def 15;
+    let F be Subset-Family of T;
+    assume that
+    F is open and
+A52: F is Cover of T;
+    consider G be Subset-Family of T such that
+A53: G c=F & G is Cover of T and
+A54: card G c=card[#]T by A52,Th27;
+    take G;
+    card G c=omega by A54,A51,XBOOLE_1:1;
+    hence thesis by A53,CARD_3:def 15;
+  end;
+end;
+
+Lm10: the TopStruct of TOP-REAL 1 is second-countable
+proof
+   reconsider R=RAT as Subset of R^1 by NUMBERS:12,TOPMETR:24;
+Y: the TopStruct of TOP-REAL 1 = TopSpaceMetr Euclid 1 &
+   the TopStruct of TOP-REAL (1+1) = TopSpaceMetr Euclid (1+1)
+     by EUCLID:def 8;
+X: weight [:the TopStruct of TOP-REAL 1, the TopStruct of TOP-REAL 1:] =
+     weight the TopStruct of TOP-REAL 2 by Th4,Y,TOPREAL7:27;
+K:the TopStruct of [:R^1,R^1:], the TopStruct of TOP-REAL 2
+    are_homeomorphic by TOPREALA:36,TOPREAL6:86;
+A1: weight the TopStruct of [:R^1,R^1:] =
+     weight the TopStruct of TOP-REAL 2 by Th4,K;
+  Cl R=[#](R^1) by BORSUK_5:35;
+  then R is dense by TOPS_1:def 3;
+  then R^1 is separable by TOPGEN_4:6; then
+A2: weight [:R^1,R^1:] c= omega by WAYBEL23:def 6,TOPMETR:def 7;
+  weight (the TopStruct of TOP-REAL 1) c=
+    weight [:the TopStruct of TOP-REAL 1,the TopStruct of TOP-REAL 1:]
+      by Th6; then
+  weight (the TopStruct of TOP-REAL 1) c= omega by X,A2,A1,XBOOLE_1:1;
+  hence thesis by WAYBEL23:def 6;
+end;
+
+registration
+  let n be Nat;
+  cluster the TopStruct of TOP-REAL n -> second-countable;
+  coherence
+  proof
+    defpred P[Nat] means the TopStruct of TOP-REAL $1 is second-countable;
+A1: for n be Nat st P[n] holds P[n+1]
+    proof
+      let n be Nat;
+Y:    the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n &
+      the TopStruct of TOP-REAL 1 = TopSpaceMetr Euclid 1 &
+      the TopStruct of TOP-REAL (n+1) = TopSpaceMetr Euclid (n+1)
+        by EUCLID:def 8;
+      n in NAT by ORDINAL1:def 13; then
+A2:   weight [:the TopStruct of TOP-REAL n,
+      the TopStruct of TOP-REAL 1:] = weight the TopStruct of TOP-REAL(n+1)
+        by Th4,Y,TOPREAL7:27;
+      assume P[n];
+      then weight [:the TopStruct of TOP-REAL n,
+        the TopStruct of TOP-REAL 1:] c= omega by Lm10,WAYBEL23:def 6;
+      hence thesis by A2,WAYBEL23:def 6;
+    end;
+    [#](TOP-REAL 0) = REAL 0 by EUCLID:25
+      .= 0-tuples_on REAL by EUCLID:def 1
+      .= {<*>REAL} by FINSEQ_2:112;
+    then the TopStruct of TOP-REAL 0 is finite;
+    then
+A3: P[0];
+    for n be Nat holds P[n] from NAT_1:sch 2(A3,A1);
+    hence thesis;
+  end;
+end;
+
+registration
+  let T be Lindelof TopSpace;
+  let A be closed Subset of T;
+::  General Topology Cor 3.8.4
+  cluster T|A -> Lindelof;
+  coherence
+  proof
+    set TOP=the topology of T;
+    let FA be Subset-Family of T|A such that
+A1: FA is open and
+A2: FA is Cover of T|A;
+    defpred P[set,set] means $2/\A=$1;
+A3: for x be set st x in FA ex y be set st y in TOP & P[x,y]
+    proof
+      let x be set such that
+A4:   x in FA;
+      reconsider X=x as Subset of T|A by A4;
+      X is open by A1,A4,TOPS_2:def 1;
+      then X in the topology of T|A by PRE_TOPC:def 5;
+      then consider Q be Subset of T such that
+A5:   Q in TOP & X=Q/\[#](T|A) by PRE_TOPC:def 9;
+      take Q;
+      thus thesis by A5,PRE_TOPC:def 10;
+    end;
+    consider f be Function of FA,TOP such that
+A6: for x be set st x in FA holds P[x,f.x] from FUNCT_2:sch 1(A3);
+    A` in TOP by PRE_TOPC:def 5;
+    then TOP is open & {A`}c=TOP by CANTOR_1:3,ZFMISC_1:37;
+    then reconsider RNG=rng f,AA={A`} as open Subset-Family of T
+    by TOPS_2:18,XBOOLE_1:1;
+    reconsider RA=RNG\/AA as open Subset-Family of T by TOPS_2:20;
+A7: A = [#](T|A) by PRE_TOPC:def 10;
+A8: dom f = FA by FUNCT_2:def 1;
+    [#]T c=union RA
+    proof
+A9:   A\/(A`)=[#](the carrier of T) by SUBSET_1:25;
+      let x be set such that
+A10:  x in [#]T;
+      per cases by A9,A10,XBOOLE_0:def 3;
+      suppose
+A11:    x in A;
+        A=union FA by A2,A7,SETFAM_1:60;
+        then consider y be set such that
+A12:    x in y and
+A13:    y in FA by A11,TARSKI:def 4;
+        f.y in RNG by A8,A13,FUNCT_1:def 5;
+        then
+A14:    f.y in RA by XBOOLE_0:def 3;
+        (f.y)/\A=y by A6,A13;
+        then x in f.y by A12,XBOOLE_0:def 4;
+        hence thesis by A14,TARSKI:def 4;
+      end;
+      suppose
+A15:    x in A`;
+        A` in AA by TARSKI:def 1;
+        then A` in RA by XBOOLE_0:def 3;
+        hence thesis by A15,TARSKI:def 4;
+      end;
+    end;
+    then RA is Cover of T by SETFAM_1:def 12;
+    then consider G be Subset-Family of T such that
+A16: G c=RA and
+A17: G is Cover of T and
+A18: G is countable by Def2;
+    reconsider E={{}} as Subset-Family of T|A by SETFAM_1:61;
+A19: card G c=omega by A18,CARD_3:def 15;
+    set GA=G|A;
+    take GE=GA\E;
+    thus GE c=FA
+    proof
+      let x be set;
+      assume
+A20:  x in GE;
+      then
+A21:  x<>{} by ZFMISC_1:64;
+      x in GA by A20,ZFMISC_1:64;
+      then consider R be Subset of T such that
+A22:  R in G and
+A23:  R /\ A = x by TOPS_2:def 3;
+      per cases by A16,A22,XBOOLE_0:def 3;
+      suppose R in RNG;
+        then consider y be set such that
+A24:    y in dom f and
+A25:    f.y=R by FUNCT_1:def 5;
+        y=R/\A by A6,A24,A25;
+        hence thesis by A23,A24;
+      end;
+      suppose R in AA;
+        then R=A` by TARSKI:def 1;
+        then x=A\A by A23,SUBSET_1:32;
+        hence thesis by A21,XBOOLE_1:37;
+      end;
+    end;
+    union G=[#]T by A17,SETFAM_1:60;
+    then [#](T|A) = union GA by A7,TOPS_2:43
+      .= union GE by PARTIT1:3;
+    hence GE is Cover of T|A by SETFAM_1:def 12;
+    card GA c=card G by Th7;
+    then card GA c=omega by A19,XBOOLE_1:1;
+    then GA is countable by CARD_3:def 15;
+    hence thesis by CARD_3:130;
+  end;
+end;
+
+registration
+  let TM be Lindelof metrizable TopSpace;
+  let A be Subset of TM;
+  cluster TM|A -> Lindelof;
+  coherence;
+end;
+
+definition
+  let T;
+  let A,B,L be Subset of T;
+  pred L separates A,B means :Def3:
+  ex U,W be open Subset of T st A c=U & B c=W & U misses W & L=(U\/W)`;
+end;
+
+Lm11: for M be non empty MetrSpace
+for A,B be non empty Subset of TopSpaceMetr M holds
+{p where p is Point of TopSpaceMetr M:(dist_min A).p-(dist_min B).p<0}
+is open Subset of TopSpaceMetr M
+proof
+  let M be non empty MetrSpace;
+  set TM=TopSpaceMetr M;
+  let A,B be non empty Subset of TM;
+  set dA=dist_min A;
+  set dB=dist_min B;
+  consider g be Function of the carrier of TM,the carrier of(R^1) such that
+A1: for p be Point of TM,r1,r2 be real number st dA.p=r1 & dB.p=r2
+  holds g.p=r1-r2 and
+A2: g is continuous by JGRAPH_2:31;
+  reconsider A=].-infty,0.[ as Subset of R^1 by TOPMETR:24;
+  set gA={p where p is Point of TM:dA.p-dB.p<0};
+A3: [#]R^1={} implies [#]TM={};
+A4: g"A c=gA
+  proof
+    let x be set;
+    assume
+A5: x in g"A;
+    then reconsider p=x as Point of TM;
+A6: dA.p-dB.p=g.x by A1;
+    g.x in A by A5,FUNCT_1:def 13;
+    then dA.p-dB.p<0 by A6,XXREAL_1:233;
+    hence thesis;
+  end;
+A7: gA c=g"A
+  proof
+    let x be set;
+    assume x in gA;
+    then consider p be Point of TM such that
+A8: p=x and
+A9: dA.p-dB.p<0;
+    g.p=dA.p-dB.p by A1;
+    then dom g=[#]TM & g.p in A by A9,FUNCT_2:def 1,XXREAL_1:233;
+    hence thesis by A8,FUNCT_1:def 13;
+  end;
+  A is open by BORSUK_5:63;
+  then g"A is open by A2,A3,TOPS_2:55;
+  hence thesis by A4,A7,XBOOLE_0:def 10;
+end;
+
+Lm12: for A,B be Subset of TM st A,B are_separated
+ex U,W be open Subset of TM st A c=U & B c=W & U misses W
+proof
+  let A,B be Subset of TM such that
+A1: A,B are_separated;
+  set TOP=the topology of TM,cTM=the carrier of TM;
+  consider metr be Function of[:cTM,cTM:],REAL such that
+A2: metr is_metric_of cTM and
+A3: Family_open_set(SpaceMetr(cTM,metr))=TOP by PCOMPS_1:def 9;
+  per cases;
+  suppose
+A4: A={}TM;
+    take U={}TM,W=[#]TM;
+    thus thesis by A4,XBOOLE_1:65;
+  end;
+  suppose
+A5: B={}TM;
+    take U=[#]TM,W={}TM;
+    thus thesis by A5,XBOOLE_1:65;
+  end;
+  suppose
+A6: A<>{}TM & B<>{}TM;
+    then
+A7: TM is non empty;
+    then reconsider Tm=SpaceMetr(cTM,metr) as non empty MetrSpace
+    by A2,PCOMPS_1:40;
+    set TTm=TopSpaceMetr Tm;
+    reconsider A'=A,B'=B as Subset of TTm by A2,A7,PCOMPS_2:8;
+    set dA=dist_min A',dB=dist_min B';
+    reconsider U={p where p is Point of Tm:dA.p-dB.p<0},
+    W={p where p is Point of Tm:dB.p-dA.p<0} as open Subset of TTm
+    by A6,Lm11;
+    U in Family_open_set(Tm) & W in Family_open_set(Tm) by PRE_TOPC:def 5;
+    then reconsider U,W as open Subset of TM by A3,PRE_TOPC:def 5;
+    take U,W;
+A8: [#]TM=[#]TTm by A2,A7,PCOMPS_2:8;
+    thus A c=U
+    proof
+      let x be set;
+      assume
+A9:   x in A;
+      then reconsider p=x as Point of Tm by A2,A7,PCOMPS_2:8;
+A10:  dA.p=0 by A9,HAUSDORF:5;
+      A misses Cl B by A1,CONNSP_1:def 1;
+      then not x in Cl B by A9,XBOOLE_0:3;
+      then not x in Cl B' by A3,A8,TOPS_3:80;
+      then
+A11:  dB.p<>0 by A6,HAUSDORF:10;
+      dB.p>=0 by A6,JORDAN1K:9;
+      then dA.p-dB.p<0 by A11,A10;
+      hence thesis;
+    end;
+    thus B c=W
+    proof
+      let x be set;
+      assume
+A12:  x in B;
+      then reconsider p=x as Point of Tm by A2,A7,PCOMPS_2:8;
+A13:  dB.p=0 by A12,HAUSDORF:5;
+      B misses Cl A by A1,CONNSP_1:def 1;
+      then not x in Cl A by A12,XBOOLE_0:3;
+      then not x in Cl A' by A3,A8,TOPS_3:80;
+      then
+A14:  dA.p<>0 by A6,HAUSDORF:10;
+      dA.p>=0 by A6,JORDAN1K:9;
+      then dB.p-dA.p<0 by A14,A13;
+      hence thesis;
+    end;
+    thus U misses W
+    proof
+      assume U meets W;
+      then consider x be set such that
+A15:  x in U and
+A16:  x in W by XBOOLE_0:3;
+      consider p be Point of Tm such that
+A17:  p=x and
+A18:  dB.p-dA.p<0 by A16;
+      ex q be Point of Tm st q=x & dA.q-dB.q<0 by A15;
+      then -(dA.p-dB.p)>-0 by A17;
+      hence thesis by A18;
+    end;
+  end;
+end;
+
+::  Teoria wymiaru Lm 1.2.8
+
+theorem
+  Am,Bm are_separated implies ex L be Subset of TM st L separates Am,Bm
+proof
+  assume Am,Bm are_separated;
+  then consider U,W be open Subset of TM such that
+A1: Am c=U & Bm c=W & U misses W by Lm12;
+  take L=(U\/W)`;
+  thus thesis by A1,Def3;
+end;
+
+:: Teoria wymiaru Lm 1.2.9
+
+theorem
+  for M be Subset of TM,
+      A1,A2 be closed Subset of TM,
+      V1,V2 be open Subset of TM st A1 c=V1 & A2 c=V2 & Cl V1 misses Cl V2
+  for mV1,mV2,mL be Subset of TM|M st
+      mV1 = M/\Cl V1 & mV2 = M/\Cl V2 & mL separates mV1,mV2
+  ex L be Subset of TM st L separates A1,A2 & M/\L c= mL
+proof
+  let M be Subset of TM,A1,A2 be closed Subset of TM,V1,V2 be open Subset of TM
+  such that
+A1: A1 c=V1 and
+A2: A2 c=V2 and
+A3: Cl V1 misses Cl V2;
+  set TMM=TM|M;
+  let mV1,mV2,mL be Subset of TMM such that
+A4: mV1=M/\Cl V1 and
+A5: mV2=M/\Cl V2 and
+A6: mL separates mV1,mV2;
+A7: V1/\M c=mV1 by A4,PRE_TOPC:48,XBOOLE_1:26;
+  consider U',W' be open Subset of TMM such that
+A8: mV1 c=U' and
+A9: mV2 c=W' and
+A10: U' misses W' and
+A11: mL=(U'\/W')` by A6,Def3;
+A12: [#]TMM=M by PRE_TOPC:def 10;
+  then reconsider u=U',w=W' as Subset of TM by XBOOLE_1:1;
+  set u1=u\/A1,w1=w\/A2;
+A13: mV1/\w c=U'/\W' by A8,XBOOLE_1:26;
+  U',W' are_separated by A10,TSEP_1:41;
+  then
+A14: u,w are_separated by CONNSP_1:6;
+  V1/\w = V1/\(M/\w) by A12,XBOOLE_1:28
+    .= V1/\M/\w by XBOOLE_1:16;
+  then V1/\w c=mV1/\w by A7,XBOOLE_1:26;
+  then V1/\w c=U'/\W' by A13,XBOOLE_1:1;
+  then V1/\w c={} by A10,XBOOLE_0:def 7;
+  then V1/\w={};
+  then V1 misses w by XBOOLE_0:def 7;
+  then
+A15: V1 misses Cl w by TSEP_1:40;
+A16: Cl w1 misses u1
+  proof
+    assume Cl w1 meets u1;
+    then consider x be set such that
+A17: x in Cl w1 & x in u1 by XBOOLE_0:3;
+A18: Cl w1=(Cl w)\/Cl A2 by PRE_TOPC:50;
+    per cases by A17,A18,XBOOLE_0:def 3;
+    suppose x in Cl w & x in u;
+      then Cl w meets u by XBOOLE_0:3;
+      hence contradiction by A14,CONNSP_1:def 1;
+    end;
+    suppose x in Cl w & x in A1;
+      hence contradiction by A1,A15,XBOOLE_0:3;
+    end;
+    suppose
+A19:  x in Cl A2 & x in u;
+      Cl A2 c=Cl V2 by A2,PRE_TOPC:49;
+      then x in mV2 by A5,A12,A19,XBOOLE_0:def 4;
+      hence contradiction by A9,A10,A19,XBOOLE_0:3;
+    end;
+    suppose
+A20:  x in Cl A2 & x in A1;
+A21:  Cl A2 c=Cl V2 & V1 c=Cl V1 by A2,PRE_TOPC:48,49;
+      x in V1 by A1,A20;
+      hence thesis by A3,A20,A21,XBOOLE_0:3;
+    end;
+  end;
+A22: V2/\M c=mV2 by A5,PRE_TOPC:48,XBOOLE_1:26;
+A23: mV2/\u c=U'/\W' by A9,XBOOLE_1:26;
+  V2/\u = V2/\(M/\u) by A12,XBOOLE_1:28
+    .= V2/\M/\u by XBOOLE_1:16;
+  then V2/\u c=mV2/\u by A22,XBOOLE_1:26;
+  then V2/\u c=U'/\W' by A23,XBOOLE_1:1;
+  then V2/\u c={} by A10,XBOOLE_0:def 7;
+  then V2/\u={};
+  then V2 misses u by XBOOLE_0:def 7;
+  then
+A24: V2 misses Cl u by TSEP_1:40;
+  Cl u1 misses w1
+  proof
+    assume Cl u1 meets w1;
+    then consider x be set such that
+A25: x in Cl u1 & x in w1 by XBOOLE_0:3;
+A26: Cl u1=(Cl u)\/Cl A1 by PRE_TOPC:50;
+    per cases by A25,A26,XBOOLE_0:def 3;
+    suppose x in Cl u & x in w;
+      then w meets Cl u by XBOOLE_0:3;
+      hence contradiction by A14,CONNSP_1:def 1;
+    end;
+    suppose x in Cl u & x in A2;
+      hence contradiction by A2,A24,XBOOLE_0:3;
+    end;
+    suppose
+A27:  x in Cl A1 & x in w;
+      Cl A1 c=Cl V1 by A1,PRE_TOPC:49;
+      then x in mV1 by A4,A12,A27,XBOOLE_0:def 4;
+      hence contradiction by A8,A10,A27,XBOOLE_0:3;
+    end;
+    suppose
+A28:  x in Cl A1 & x in A2;
+A29:  Cl A1 c=Cl V1 & V2 c=Cl V2 by A1,PRE_TOPC:48,49;
+      x in V2 by A2,A28;
+      hence thesis by A3,A28,A29,XBOOLE_0:3;
+    end;
+  end;
+  then u1,w1 are_separated by A16,CONNSP_1:def 1;
+  then consider U1,W1 be open Subset of TM such that
+A30: u1 c=U1 and
+A31: w1 c=W1 and
+A32: U1 misses W1 by Lm12;
+  take L=(U1\/W1)`;
+  A1 c=u1 by XBOOLE_1:7;
+  then
+A33: A1 c=U1 by A30,XBOOLE_1:1;
+  u c=u1 by XBOOLE_1:7;
+  then
+A34: u c=U1 by A30,XBOOLE_1:1;
+  w c=w1 by XBOOLE_1:7;
+  then w c=W1 by A31,XBOOLE_1:1;
+  then
+A35: u\/w c=U1\/W1 by A34,XBOOLE_1:13;
+  A2 c=w1 by XBOOLE_1:7;
+  then A2 c=W1 by A31,XBOOLE_1:1;
+  hence L separates A1,A2 by A32,A33,Def3;
+A36: ([#]TMM)\(U'\/W') = mL by A11;
+  M/\L = (M/\[#]TM)\(U1\/W1) by XBOOLE_1:49
+    .= M\(U1\/W1) by XBOOLE_1:28;
+  then M/\L c=M\(U'\/W') by A35,XBOOLE_1:34;
+  hence thesis by A36,PRE_TOPC:def 10;
+end;

@@ -20,21 +20,12 @@ begin
 reserve A,B,X,X1,Y,Y1,Y2,Z,a,x,y,z for set;
 
 ::
-::   RELATION AS A SUBSET OF CARTESIAN PRODUCT OF A TWO SETS
-::   _______________________________________________________
+::   RELATION AS A SUBSET OF CARTESIAN PRODUCT OF TWO SETS
+::   _____________________________________________________
 
 definition
   let X,Y;
-  mode Relation of X,Y means
-    :Def1:
-    it c= [:X,Y:];
-  existence;
-end;
-
-definition
-  let X,Y;
-  redefine mode Relation of X,Y -> Subset of [:X,Y:];
-  coherence by Def1;
+  mode Relation of X,Y is Subset of [:X,Y:];
 end;
 
 registration
@@ -43,11 +34,31 @@ registration
   coherence;
 end;
 
+registration
+  let X,Y;
+  cluster -> X-defined Y-valued Relation of X,Y;
+  coherence
+proof let R be Relation of X,Y;
+  thus dom R c= X
+  proof
+    let x;
+    assume x in dom R;
+    then ex y st [x,y] in R by RELAT_1:def 4;
+    hence thesis by ZFMISC_1:106;
+  end;
+  let y;
+  assume y in rng R;
+  then ex x st [x,y] in R by RELAT_1:def 5;
+  hence thesis by ZFMISC_1:106;
+end;
+end;
+
 reserve P,R for Relation of X,Y;
 
 canceled 3;
 
 definition
+ canceled;
   let X,Y,R,Z;
   redefine pred R c= Z means
 
@@ -66,7 +77,7 @@ A2: [a,b] in R;
     then reconsider a'=a as Element of X by ZFMISC_1:106;
     reconsider b'=b as Element of Y by A2,ZFMISC_1:106;
     [a',b'] in Z by A1,A2;
-    hence [a,b] in Z;
+    hence thesis;
   end;
 end;
 
@@ -97,17 +108,12 @@ A3: [a,b] in R;
     then reconsider a'=a as Element of X by ZFMISC_1:106;
     reconsider b'=b as Element of Y by A3,ZFMISC_1:106;
     [a',b'] in P by A1,A3;
-    hence [a,b] in P;
+    hence thesis;
   end;
 end;
 
 theorem
-  A c= R implies A is Relation of X,Y
-proof
-  assume A c= R;
-  then A c= [:X,Y:] by XBOOLE_1:1;
-  hence thesis by Def1;
-end;
+  A c= R implies A is Relation of X,Y by XBOOLE_1:1;
 
 canceled;
 
@@ -129,8 +135,7 @@ theorem
 proof
   assume x in X & y in Y;
   then [x,y] in [:X,Y:] by ZFMISC_1:106;
-  then {[x,y]} c= [:X,Y:] by ZFMISC_1:37;
-  hence thesis by Def1;
+  hence thesis by ZFMISC_1:37;
 end;
 
 canceled 2;
@@ -143,25 +148,10 @@ proof
 A1: dom R c= X & rng R c= Y;
 A2: R c= [:dom R, rng R:] by RELAT_1:21;
   [:dom R, rng R:] c= [:X,Y:] by A1,ZFMISC_1:119;
-  then R c= [:X,Y:] by A2,XBOOLE_1:1;
-  hence thesis by Def1;
+  hence thesis by A2,XBOOLE_1:1;
 end;
 
-theorem Th12:
-  dom R c= X & rng R c= Y
-proof
-  thus dom R c= X
-  proof
-    let x;
-    assume x in dom R;
-    then ex y st [x,y] in R by RELAT_1:def 4;
-    hence thesis by ZFMISC_1:106;
-  end;
-  let y;
-  assume y in rng R;
-  then ex x st [x,y] in R by RELAT_1:def 5;
-  hence thesis by ZFMISC_1:106;
-end;
+canceled;
 
 theorem
   dom R c= X1 implies R is Relation of X1,Y
@@ -169,10 +159,9 @@ proof
   assume
 A1: dom R c= X1;
 A2: R c= [:dom R, rng R:] by RELAT_1:21;
-  rng R c= Y by Th12;
+  rng R c= Y by RELAT_1:def 19;
   then [:dom R, rng R:] c= [:X1,Y:] by A1,ZFMISC_1:119;
-  then R c= [:X1,Y:] by A2,XBOOLE_1:1;
-  hence thesis by Def1;
+  hence thesis by A2,XBOOLE_1:1;
 end;
 
 theorem
@@ -181,10 +170,9 @@ proof
   assume
 A1: rng R c= Y1;
 A2: R c= [:dom R, rng R:] by RELAT_1:21;
-  dom R c= X by Th12;
+  dom R c= X by RELAT_1:def 18;
   then [:dom R, rng R:] c= [:X,Y1:] by A1,ZFMISC_1:119;
-  then R c= [:X,Y1:] by A2,XBOOLE_1:1;
-  hence thesis by Def1;
+  hence thesis by A2,XBOOLE_1:1;
 end;
 
 canceled 2;
@@ -194,38 +182,73 @@ theorem
 proof
   assume X c= X1 & Y c= Y1;
   then [:X,Y:] c= [:X1,Y1:] by ZFMISC_1:119;
-  then R c= [:X1,Y1:] by XBOOLE_1:1;
-  hence thesis by Def1;
+  hence thesis by XBOOLE_1:1;
 end;
 
-definition
-  let X,Y,P,R;
-  redefine func P \/ R -> Relation of X,Y;
-  coherence
+registration let X; let R,S be X-defined Relation;
+ cluster R \/ S -> X-defined;
+ coherence
   proof
-    P \/ R c= [:X,Y:];
-    hence thesis by Def1;
+A:  dom R c= X by RELAT_1:def 18;
+B:  dom S c= X by RELAT_1:def 18;
+    dom(R \/ S) = dom R \/ dom S by RELAT_1:13;
+   hence dom(R \/ S) c= X by A,B,XBOOLE_1:8;
   end;
-  redefine func P /\ R -> Relation of X,Y;
-  coherence
+end;
+
+registration let X; let R be X-defined Relation, S be Relation;
+ cluster R /\ S -> X-defined;
+ coherence
   proof
-    P /\ R c= [:X,Y:];
-    hence thesis by Def1;
+A:  dom R c= X by RELAT_1:def 18;
+    R /\ S c= R by XBOOLE_1:17;
+    then dom(R /\ S) c= dom R by RELAT_1:25;
+   hence dom(R /\ S) c= X by A,XBOOLE_1:1;
   end;
-  redefine func P \ R -> Relation of X,Y;
-  coherence
+ cluster R \ S -> X-defined;
+ coherence
   proof
-    P \ R c= [:X,Y:];
-    hence thesis by Def1;
+A:  dom R c= X by RELAT_1:def 18;
+    dom(R \ S) c= dom R by RELAT_1:25;
+   hence dom(R \ S) c= X by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let X; let R,S be X-valued Relation;
+ cluster R \/ S -> X-valued;
+ coherence
+  proof
+A:  rng R c= X by RELAT_1:def 19;
+B:  rng S c= X by RELAT_1:def 19;
+    rng(R \/ S) = rng R \/ rng S by RELAT_1:26;
+   hence rng(R \/ S) c= X by A,B,XBOOLE_1:8;
+  end;
+end;
+
+registration let X; let R be X-valued Relation, S be Relation;
+ cluster R /\ S -> X-valued;
+ coherence
+  proof
+A:  rng R c= X by RELAT_1:def 19;
+    R /\ S c= R by XBOOLE_1:17;
+    then rng(R /\ S) c= rng R by RELAT_1:25;
+   hence rng(R /\ S) c= X by A,XBOOLE_1:1;
+  end;
+ cluster R \ S -> X-valued;
+ coherence
+  proof
+A:  rng R c= X by RELAT_1:def 19;
+    rng(R \ S) c= rng R by RELAT_1:25;
+   hence rng(R \ S) c= X by A,XBOOLE_1:1;
   end;
 end;
 
 definition
   let X,Y,R;
   redefine func dom R -> Subset of X;
-  coherence by Th12;
+  coherence by RELAT_1:def 18;
   redefine func rng R -> Subset of Y;
-  coherence by Th12;
+  coherence by RELAT_1:def 19;
 end;
 
 canceled;
@@ -257,7 +280,7 @@ A1: for x st x in X ex y st [x,y] in R;
         end;
         hence x in dom R iff x in X;
       end;
-      hence dom R = X by TARSKI:2;
+      hence thesis by TARSKI:2;
     end;
   end;
   thus thesis by RELAT_1:def 4;
@@ -281,7 +304,7 @@ A1: for y st y in Y ex x st [x,y] in R;
         end;
         hence y in rng R iff y in Y;
       end;
-      hence rng R = Y by TARSKI:2;
+      hence thesis by TARSKI:2;
     end;
   end;
   thus thesis by RELAT_1:def 5;
@@ -292,15 +315,13 @@ definition
   redefine func R~ -> Relation of Y,X;
   coherence
   proof
-A1: now
+ now
       let x,y;
       assume [x,y] in R~;
       then [y,x] in R by RELAT_1:def 7;
       hence [x,y] in [:Y,X:] by ZFMISC_1:107;
     end;
-    reconsider P = [:Y,X:] as Relation;
-    R~ c= P by A1,RELAT_1:def 3;
-    hence thesis by Def1;
+   hence thesis by RELAT_1:def 3;
   end;
 end;
 
@@ -311,7 +332,7 @@ definition
   redefine func P*R -> Relation of X,Z;
   coherence
   proof
-A1: now
+ now
       let x,z;
       assume [x,z] in P*R;
       then consider y such that
@@ -319,9 +340,7 @@ A2:   [x,y] in P & [y,z] in R by RELAT_1:def 8;
       x in X & z in Z by A2,ZFMISC_1:106;
       hence [x,z] in [:X,Z:] by ZFMISC_1:106;
     end;
-    reconsider Q = [:X,Z:] as Relation;
-    P*R c= Q by A1,RELAT_1:def 3;
-    hence thesis by Def1;
+    hence thesis by RELAT_1:def 3;
   end;
 end;
 
@@ -371,11 +390,8 @@ A6:   [x,y] in R by RELAT_1:def 4;
   hence thesis by TARSKI:2;
 end;
 
-theorem Th25:
-  {} is Relation of X,Y
-proof {} c= [:X,Y:] by XBOOLE_1:2;
-  hence thesis by Def1;
-end;
+theorem
+  {} is Relation of X,Y by XBOOLE_1:2;
 
 registration let A be empty set, B be set;
  cluster -> empty Relation of A,B;
@@ -399,21 +415,19 @@ canceled 2;
 theorem Th28:
   id X c= [:X,X:]
 proof
-  reconsider R = [:X,X:] as Relation of X,X by Def1;
+  [:X,X:] c= [:X,X:];
+  then reconsider R = [:X,X:] as Relation of X,X;
   [x,y] in id X implies [x,y] in R
   proof
     assume [x,y] in id X;
     then x in X & x = y by RELAT_1:def 10;
-    hence [x,y] in R by ZFMISC_1:106;
+    hence thesis by ZFMISC_1:106;
   end;
   hence thesis by RELAT_1:def 3;
 end;
 
 theorem
-  id X is Relation of X,X
-proof id X c= [:X,X:] by Th28;
-  hence id X is Relation of X,X by Def1;
-end;
+  id X is Relation of X,X by Th28;
 
 theorem Th30:
   id A c= R implies A c= dom R & A c= rng R
@@ -467,15 +481,13 @@ definition
   redefine func R|A -> Relation of X,Y;
   coherence
   proof
-A1: now
+ now
       let x,y;
       assume [x,y] in R|A;
       then x in A & [x,y] in R by RELAT_1:def 11;
       hence [x,y] in [:X,Y:];
     end;
-    reconsider P = [:X,Y:] as Relation;
-    R|A c= P by A1,RELAT_1:def 3;
-    hence thesis by Def1;
+    hence thesis by RELAT_1:def 3;
   end;
 end;
 
@@ -484,22 +496,20 @@ definition
   redefine func B|R -> Relation of X,Y;
   coherence
   proof
-A1: now
+ now
       let x,y;
       assume [x,y] in B|R;
       then y in B & [x,y] in R by RELAT_1:def 12;
       hence [x,y] in [:X,Y:];
     end;
-    reconsider P = [:X,Y:] as Relation;
-    B|R c= P by A1,RELAT_1:def 3;
-    hence thesis by Def1;
+    hence thesis by RELAT_1:def 3;
   end;
 end;
 
 theorem
   R|X1 is Relation of X1,Y
 proof
-A1: now
+ now
     let x,y;
     assume
 A2: [x,y] in R|X1;
@@ -508,9 +518,7 @@ A3: x in X1 & [x,y] in R by RELAT_1:def 11;
     y in Y by A2,ZFMISC_1:106;
     hence [x,y] in [:X1,Y:] by A3,ZFMISC_1:106;
   end;
-  reconsider P = [:X1,Y:] as Relation;
-  R|X1 c= P by A1,RELAT_1:def 3;
-  hence thesis by Def1;
+  hence thesis by RELAT_1:def 3;
 end;
 
 theorem
@@ -534,7 +542,7 @@ end;
 theorem
   Y1|R is Relation of X,Y1
 proof
-A1: now
+ now
     let x,y;
     assume
 A2: [x,y] in Y1|R;
@@ -543,9 +551,7 @@ A3: y in Y1 & [x,y] in R by RELAT_1:def 12;
     x in X by A2,ZFMISC_1:106;
     hence [x,y] in [:X,Y1:] by A3,ZFMISC_1:106;
   end;
-  reconsider P = [:X,Y1:] as Relation;
-  Y1|R c= P by A1,RELAT_1:def 3;
-  hence thesis by Def1;
+  hence thesis by RELAT_1:def 3;
 end;
 
 theorem
@@ -572,13 +578,13 @@ definition
   coherence
   proof
     R.:A c= rng R by RELAT_1:144;
-    hence R.:A is Subset of Y by XBOOLE_1:1;
+    hence thesis by XBOOLE_1:1;
   end;
   redefine func R"A -> Subset of X;
   coherence
   proof
     R"A c= dom R by RELAT_1:167;
-    hence R"A is Subset of X by XBOOLE_1:1;
+    hence thesis by XBOOLE_1:1;
   end;
 end;
 
@@ -644,11 +650,11 @@ A1: for x,y holds [x,y] in R iff x in A() & y in B() & P[x,y]
     let x1,x2 be set;
     assume [x1,x2] in R;
     then x1 in A() & x2 in B() by A1;
-    hence [x1,x2] in [:A(),B():] by ZFMISC_1:106;
+    hence thesis by ZFMISC_1:106;
   end;
-  then reconsider R as Relation of A(),B() by Def1;
+  then reconsider R as Relation of A(),B();
   take R;
-  thus for x,y holds [x,y] in R iff x in A() & y in B() & P[x,y] by A1;
+  thus thesis by A1;
 end;
 
 :: Relation on a set
@@ -697,7 +703,7 @@ A1: [x,y] in R by RELAT_1:def 4;
   end;
   given y being Element of E such that
 A2: [x,y] in R;
-  thus x in dom R by A2,RELAT_1:20;
+  thus thesis by A2,RELAT_1:20;
 end;
 
 theorem
@@ -715,7 +721,7 @@ A1: [x,y] in R by RELAT_1:def 5;
   end;
   given x being Element of D such that
 A2: [x,y] in R;
-  thus y in rng R by A2,RELAT_1:20;
+  thus thesis by A2,RELAT_1:20;
 end;
 
 theorem
@@ -756,7 +762,7 @@ A1: [x,y] in P & [y,z] in R by RELAT_1:def 8;
   end;
   given y such that
 A2: [x,y] in P & [y,z] in R;
-  thus [x,z] in P*R by A2,RELAT_1:def 8;
+  thus thesis by A2,RELAT_1:def 8;
 end;
 
 theorem
@@ -773,7 +779,7 @@ A1: [x,y] in R & x in D1 by RELAT_1:def 13;
   end;
   given x such that
 A2: [x,y] in R & x in D1;
-  thus y in R.:D1 by A2,RELAT_1:def 13;
+  thus thesis by A2,RELAT_1:def 13;
 end;
 
 theorem
@@ -790,7 +796,7 @@ A1: [x,y] in R & y in D2 by RELAT_1:def 14;
   end;
   given y being Element of E such that
 A2: [x,y] in R & y in D2;
-  thus x in R"D2 by A2,RELAT_1:def 14;
+  thus thesis by A2,RELAT_1:def 14;
 end;
 
 scheme RelOnDomEx{A,B() -> non empty set, P[set,set]}:
@@ -831,7 +837,7 @@ A3: i in M();
 A4: [u,e] in R and
 A5: u in {i} by RELAT_1:def 13;
     u = i by A5,TARSKI:def 1;
-    hence e in F(i) by A2,A4;
+    hence thesis by A2,A4;
   end;
   let e be set;
 A6: i in {i} by TARSKI:def 1;
@@ -839,7 +845,7 @@ A6: i in {i} by TARSKI:def 1;
 A7: e in F(i);
   F(i) c= M() by A1,A3;
   then [i,e] in R by A2,A3,A7;
-  hence e in Im(R,i) by A6,RELAT_1:def 13;
+  hence thesis by A6,RELAT_1:def 13;
 end;
 
 theorem
@@ -859,7 +865,7 @@ A3: a in dom R by RELAT_1:def 4;
     then b in Im(R,a) by A2,RELAT_1:def 13;
     then b in Im(S,a) by A1,A3;
     then ex e being set st [e,b] in S & e in {a} by RELAT_1:def 13;
-    hence [a,b] in S by TARSKI:def 1;
+    hence thesis by TARSKI:def 1;
   end;
   assume
 A4: [a,b] in S;
@@ -871,7 +877,7 @@ A5: a in dom S by RELAT_1:def 4;
   then consider e being set such that
 A6: [e,b] in R and
 A7: e in {a} by RELAT_1:def 13;
-  thus [a,b] in R by A6,A7,TARSKI:def 1;
+  thus thesis by A6,A7,TARSKI:def 1;
 end;
 
 :: from AMI_3, 2007.06.13, A.T. (generalized)
@@ -944,7 +950,7 @@ registration let X,Y be set;
  cluster empty Relation of X,Y;
  existence
   proof
-    {} is Relation of X,Y by Th25;
+    {} is Relation of X,Y by XBOOLE_1:2;
    hence thesis;
   end;
 end;

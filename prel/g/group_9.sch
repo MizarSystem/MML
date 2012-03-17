@@ -9,7 +9,6 @@
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
@@ -34,10 +33,10 @@
 </Typ>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="82"/>
-<Adjective nr="83"/>
-<Adjective nr="91">
+<Adjective nr="38" value="false"/>
+<Adjective nr="87"/>
+<Adjective nr="88"/>
+<Adjective nr="96">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -46,9 +45,9 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="90">
+<Adjective nr="95">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -73,9 +72,9 @@
 <Var nr="2"/>
 <Not>
 <For>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="90">
+<Adjective nr="95">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -105,9 +104,9 @@
 </Not>
 <Not>
 <For>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="90">
+<Adjective nr="95">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>

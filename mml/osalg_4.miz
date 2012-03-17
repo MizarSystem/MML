@@ -17,10 +17,12 @@ environ
       PBOOLE, STRUCT_0, WAYBEL_0, MSUALG_1, MSUALG_3, OSALG_1, OSALG_3,
       MSUALG_4, XXREAL_0;
  constructors XXREAL_0, REAL_1, NAT_1, NAT_D, EQREL_1, FINSEQ_4, FINSEQ_5,
-      MSUALG_3, MSUALG_4, ORDERS_3, WAYBEL_0, OSALG_3;
+      MSUALG_3, MSUALG_4, ORDERS_3, WAYBEL_0, OSALG_3, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, PARTFUN1, FUNCOP_1, FRAENKEL,
-      XREAL_0, INT_1, FINSEQ_1, EQREL_1, PBOOLE, STRUCT_0, MSUALG_1, MSUALG_3,
-      MSAFREE, MSUALG_4, ORDERS_3, OSALG_1, ORDINAL1, CARD_3, TOLER_1;
+      XREAL_0, INT_1, FINSEQ_1, EQREL_1, FUNCT_1,
+      PBOOLE, STRUCT_0, MSUALG_1, MSUALG_3,
+      MSAFREE, MSUALG_4, ORDERS_3, OSALG_1, ORDINAL1, CARD_3, TOLER_1,
+      RELSET_1;
  requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
  definitions TARSKI, MSUALG_3, XBOOLE_0, OSALG_1, OSALG_3;
  theorems XBOOLE_0, XBOOLE_1, FUNCT_1, FUNCT_2, PBOOLE, CARD_3, MSUALG_1,
@@ -42,12 +44,12 @@ registration
     consider R1 be Relation;
     set f = I --> R1;
 A1: dom f = I & for x be set st x in I holds f.x = R1 by FUNCOP_1:13,19;
-    then reconsider f as ManySortedSet of I by PBOOLE:def 3;
+    then reconsider f as ManySortedSet of I by PARTFUN1:def 4;
     f is order-sorted
     proof
       let s1,s2 be Element of R such that s1 <= s2;
       f.s1 = R1 & f.s2 = R1 by FUNCOP_1:13;
-      hence f.s1 c= f.s2;
+      hence thesis;
     end;
     then reconsider f as OrderSortedSet of R;
     take f;
@@ -80,7 +82,7 @@ registration
 A1: R1 = {};
     set f = I --> R1;
     dom f = I & for x be set st x in I holds f.x = R1 by FUNCOP_1:13,19;
-    then reconsider f as ManySortedSet of R by PBOOLE:def 3;
+    then reconsider f as ManySortedSet of R by PARTFUN1:def 4;
     take f;
     set f1 = f;
 A2: for s1,s2 being Element of R st s1 <= s2
@@ -91,7 +93,7 @@ A2: for s1,s2 being Element of R st s1 <= s2
 A3:   f1.s1 = R1 by FUNCOP_1:13
         .= f1.s2 by FUNCOP_1:13;
       let x,y be set such that x in A.s1 & y in B.s1;
-      thus [x,y] in f1.s1 iff [x,y] in f1.s2 by A3;
+      thus thesis by A3;
     end;
     for i be set st i in I holds f.i is Relation of A.i,B.i
     proof
@@ -131,7 +133,7 @@ A2: s1 <= s2;
       let x,y be set such that
 A3:   [x,y] in OR.s1;
       x in A.s1 & y in B.s1 by A3,ZFMISC_1:106;
-      hence [x,y] in OR.s2 by A1,A2,A3,Def1;
+      hence thesis by A1,A2,A3,Def1;
     end;
     hence thesis by RELAT_1:def 3;
   end;
@@ -180,7 +182,8 @@ registration
     consider f be Function such that
 A1: dom f = the carrier of S & for d be Element of S holds
     f.d = F(d) from FUNCT_1:sch 4;
-    reconsider f as ManySortedSet of the carrier of S by A1,PBOOLE:def 3;
+    reconsider f as ManySortedSet of the carrier of S by A1,PARTFUN1:def 4
+,RELAT_1:def 18;
     for x be set st x in dom f holds f.x is Relation
     proof
       let x be set;
@@ -229,7 +232,7 @@ A6:   x in (the Sorts of U1).s1 & y in (the Sorts of U1).s1;
       thus [x,y] in f1.s1 implies [x,y] in f1.s2 by A4,A5;
       assume [x,y] in f1.s2;
       then x = y by A5,RELAT_1:def 10;
-      hence [x,y] in f1.s1 by A5,A6,RELAT_1:def 10;
+      hence thesis by A5,A6,RELAT_1:def 10;
     end;
     hence thesis by A2,Def3,MSUALG_4:def 5;
   end;
@@ -247,7 +250,8 @@ registration
     consider f be Function such that
 A1: dom f = the carrier of S & for d be Element of S holds
     f.d = F(d) from FUNCT_1:sch 4;
-    reconsider f as ManySortedSet of the carrier of S by A1,PBOOLE:def 3;
+    reconsider f as ManySortedSet of the carrier of S by A1,PARTFUN1:def 4
+,RELAT_1:def 18;
     for x be set st x in dom f holds f.x is Relation
     proof
       let x be set;
@@ -334,7 +338,7 @@ A13:  dom (the ResultSort of S) = the carrier' of S &
       rng (the ResultSort of S) c= the carrier of S by FUNCT_2:def 1;
       then
 A14:  dom ((the Sorts of U1)*(the ResultSort of S))
-      = dom (the ResultSort of S) by PBOOLE:def 3;
+      = dom (the ResultSort of S) by PARTFUN1:def 4;
       Result(o,U1) = ((the Sorts of U1) * the ResultSort of S).o
       by MSUALG_1:def 10
         .= (the Sorts of U1).((the ResultSort of S).o)
@@ -407,7 +411,7 @@ A6:   z = [x,y] &
       x in the carrier of R & y in the carrier of R & PC[x,y] by A5;
       thus thesis by A6,ZFMISC_1:106;
     end;
-    then reconsider P1 = P as Relation of the carrier of R by RELSET_1:def 1;
+    then reconsider P1 = P as Relation of the carrier of R ;
     now
       let x be set;
       assume
@@ -470,11 +474,10 @@ A21:    2 + 0 <= n2 by XREAL_1:8;
         then
 A22:    (len p - n1) + 2 <= len p - 2 + 2 by XREAL_1:8;
         reconsider n2 = (len p - n1) + 2 as Element of NAT by A21,INT_1:16
-        ,XXREAL_0:2;
+,XXREAL_0:2;
         p.(n2-1) = p.((len p - n1) + (2 - 1))
           .= F.n1 by A19,FINSEQ_5:61;
-        hence [F.n1,F.(n1-1)] in the InternalRel of R or
-        [F.(n1-1),F.n1] in the InternalRel of R by A13,A20,A21,A22;
+        hence thesis by A13,A20,A21,A22;
       end;
       hence [y,x] in P1 by A12;
     end;
@@ -521,8 +524,7 @@ A34:      n1 in dom p1 by A29,FINSEQ_3:27;
           n1 - 1 <= len p1 - 0 by A33,XREAL_1:15;
           then n11 in dom p1 by A30,FINSEQ_3:27;
           then F.n1 = p1.n1 & F.(n1 -1) = p1.(n1 - 1) by A34,FINSEQ_1:def 7;
-          hence [F.n1,F.(n1-1)] in the InternalRel of R or
-          [F.(n1-1),F.n1] in the InternalRel of R by A25,A28,A33;
+          hence thesis by A25,A28,A33;
         end;
         suppose
 A35:      len p1 + 1 < n1;
@@ -610,7 +612,7 @@ A5: n1 = 2 by A2,A4,XXREAL_0:1;
     [s1,s2] in the InternalRel of R by A1,ORDERS_2:def 9;
     hence thesis by A3,A5,FINSEQ_1:61;
   end;
-  hence [s1,s2] in Path_Rel R by A3,Def4;
+  hence thesis by A3,Def4;
 end;
 
 :: again, should be defined for Relations probably
@@ -699,7 +701,7 @@ proof
   let R be non empty Poset, s1,s2 be Element of R such that
 A1: s1 <= s2;
   [s1,s2] in Path_Rel R by A1,Th2;
-  hence CComp(s1) = CComp(s2) by EQREL_1:44;
+  hence thesis by EQREL_1:44;
 end;
 
 definition
@@ -804,7 +806,7 @@ A4:   [y,x] in Path_Rel R by A2,EQREL_1:27;
       hence y = x1;
     end;
     assume y = x1;
-    hence y in C by A2,EQREL_1:28;
+    hence thesis by A2,EQREL_1:28;
   end;
   hence thesis by TARSKI:def 1;
 end;
@@ -825,7 +827,7 @@ A3: x1 = x & x = y1 by A1,A2,TARSKI:def 1;
     take x1;
     thus thesis by A2,A3;
   end;
-  hence C is directed by WAYBEL_0:def 1;
+  hence thesis by WAYBEL_0:def 1;
 end;
 
 :: the system could generate this one from the following
@@ -934,7 +936,7 @@ A11:    z in CC;
 A12:    z = [x,y] & CC1[x,y] by A11;
         thus thesis by A12,ZFMISC_1:106;
       end;
-      then reconsider P1 = CC as Relation of SAC by RELSET_1:def 1;
+      then reconsider P1 = CC as Relation of SAC ;
       now
         let x be set such that
 A13:    x in SAC;
@@ -1099,7 +1101,7 @@ A7:     x = Class( CompClass(E,CComp(s1)), y);
         then y in union {(the Sorts of A).s where s is Element of
         the carrier of S: s in CComp(s1)} by A6,TARSKI:def 4;
         then x in Class( CompClass(E,CComp(s1))) by A7,EQREL_1:def 5;
-        hence x in CC by A5;
+        hence thesis by A5;
       end;
       hence thesis;
     end;
@@ -1188,14 +1190,15 @@ definition
     consider f being Function such that
 A1: dom f = the carrier of S and
 A2: for i being Element of S holds f.i = F(i) from FUNCT_1:sch 4;
-    reconsider f1 = f as ManySortedSet of the carrier of S by A1,PBOOLE:def 3;
+    reconsider f1 = f as ManySortedSet of the carrier of S by A1,PARTFUN1:def 4
+,RELAT_1:def 18;
     set f2 = f1;
     f2 is order-sorted
     proof
       let s1,s2 be Element of S such that
 A3:   s1 <= s2;
       f2.s1 = OSClass(E,s1) & f2.s2 = OSClass(E,s2) by A2;
-      hence f2.s1 c= f2.s2 by A3,Th11;
+      hence thesis by A3,Th11;
     end;
     hence thesis by A2;
   end;
@@ -1230,7 +1233,7 @@ registration
 A1:   i in the carrier of S;
       reconsider s = i as Element of S by A1;
       (OSClass E).s = OSClass( E,s) by Def13;
-      hence (OSClass E).i is non empty;
+      hence thesis;
     end;
     hence thesis by PBOOLE:def 16;
   end;
@@ -1298,7 +1301,7 @@ A7: [x,y] in E.s;
 A8: x in (the Sorts of U1)-carrier_of CComp(s) by Th6;
   s in CComp(s) by EQREL_1:28;
   then [x,y] in CompClass(E, CComp(s)) by A7,Def11;
-  hence OSClass(E,x) = OSClass(E,y) by A8,EQREL_1:44;
+  hence thesis by A8,EQREL_1:44;
 end;
 
 theorem
@@ -1347,7 +1350,7 @@ A2:   k in da;
     consider f be Function such that
 A3: dom f = da & for x be set st x in da holds P[x,f.x]
     from CLASSES1:sch 1(A1);
-A4: dom ((OSClass R) * ar) = da by PBOOLE:def 3;
+A4: dom ((OSClass R) * ar) = da by PARTFUN1:def 4;
     for y be set st y in dom ((OSClass R) * ar) holds
     f.y in ((OSClass R) * ar).y
     proof
@@ -1387,7 +1390,7 @@ A9: for n be Nat st n in dom (the_arity_of o) holds
     dom G = dom ((OSClass R) * (the_arity_of o)) by CARD_3:18;
     then
 A10: dom F = dom (the_arity_of o) &
-    dom G = dom (the_arity_of o) by PBOOLE:def 3;
+    dom G = dom (the_arity_of o) by PARTFUN1:def 4;
     for y be set st y in dom (the_arity_of o) holds F.y = G.y
     proof
       let y be set;
@@ -1428,13 +1431,14 @@ A1: dom f = D & for d be Element of D holds f.d = F(d) from FUNCT_1:sch 4;
 A2: o in the carrier' of S;
 A3: dom (the ResultSort of S) = the carrier' of S &
     rng (the ResultSort of S) c= the carrier of S by FUNCT_2:def 1;
-    o in dom ((the Sorts of A)*(the ResultSort of S)) by A2,PBOOLE:def 3;
+    o in dom ((the Sorts of A)*(the ResultSort of S)) by A2,PARTFUN1:def 4
+;
     then
 A4: ((the Sorts of A) * the ResultSort of S).o =
     (the Sorts of A).((the ResultSort of S).o) by FUNCT_1:22
       .= D by MSUALG_1:def 7;
     dom ((OSClass R) * the ResultSort of S) =
-    dom (the ResultSort of S) by A3,PBOOLE:def 3;
+    dom (the ResultSort of S) by A3,PARTFUN1:def 4;
     then
 A5: ((OSClass R) * the ResultSort of S).o =
     (OSClass R).((the ResultSort of S).o) by A3,FUNCT_1:22
@@ -1466,11 +1470,11 @@ A7: for x being Element of SA.rs holds g.x = OSClass(R,x);
 A8: o in the carrier' of S;
 A9: dom RS = the carrier' of S &
     rng RS c= the carrier of S by FUNCT_2:def 1;
-    o in dom (SA*RS) by A8,PBOOLE:def 3;
+    o in dom (SA*RS) by A8,PARTFUN1:def 4;
     then
 A10: (SA * RS).o = SA.(RS.o) by FUNCT_1:22
       .= SA.rs by MSUALG_1:def 7;
-    dom ((OSClass R) * RS) = dom RS by A9,PBOOLE:def 3;
+    dom ((OSClass R) * RS) = dom RS by A9,PARTFUN1:def 4;
     then ((OSClass R) * RS).o = (OSClass R).(RS.o) by A9,FUNCT_1:22
       .= (OSClass R).rs by MSUALG_1:def 7;
     then
@@ -1495,13 +1499,15 @@ A11: dom f = SA.rs & rng f c= (OSClass R).rs &
     consider f be Function such that
 A12: dom f = D & for d be Element of D holds f.d = F(d) from FUNCT_1:sch 4;
 A14: o in the carrier' of S;
-    then o in dom ((the Sorts of A)# * the Arity of S) by PBOOLE:def 3;
+    then o in dom ((the Sorts of A)# * the Arity of S) by PARTFUN1:def 4
+;
     then
 A15: ((the Sorts of A)# * the Arity of S).o =
     (the Sorts of A)#.((the Arity of S).o) by FUNCT_1:22
       .= ((the Sorts of A)#.(the_arity_of o)) by MSUALG_1:def 6;
     set ao = the_arity_of o;
-    o in dom ((OSClass R)# * the Arity of S) by A14,PBOOLE:def 3;
+    o in dom ((OSClass R)# * the Arity of S) by A14,PARTFUN1:def 4
+;
     then
 A16: ((OSClass R)# * the Arity of S).o =
     (OSClass R)#.((the Arity of S).o) by FUNCT_1:22
@@ -1516,7 +1522,7 @@ A17:  f.x1 = R #_os x1 by A12;
       hence thesis by A17;
     end;
     then reconsider f as Function of ((the Sorts of A)# * the Arity of S).o,
-    ((OSClass R)# * the Arity of S).o by A12,MSUALG_1:def 9,A15,A16,FUNCT_2:5;
+    ((OSClass R)# * the Arity of S).o by A12,A15,A16,FUNCT_2:5,MSUALG_1:def 9;
     take f;
     thus thesis by A12;
   end;
@@ -1528,7 +1534,8 @@ A17:  f.x1 = R #_os x1 by A12;
 A18: for x be Element of Args(o,A) holds f.x = R #_os x and
 A19: for x be Element of Args(o,A) holds g.x = R #_os x;
     o in the carrier' of S;
-    then o in dom ((the Sorts of A)# * the Arity of S) by PBOOLE:def 3;
+    then o in dom ((the Sorts of A)# * the Arity of S) by PARTFUN1:def 4
+;
     then
 A20: ((the Sorts of A)# * the Arity of S).o =
     (the Sorts of A)#.((the Arity of S).o) by FUNCT_1:22
@@ -1570,7 +1577,7 @@ A1: for x be set st x in O ex y be set st P[x,y]
     end;
     consider f be Function such that
 A2: dom f = O & for x be set st x in O holds P[x,f.x] from CLASSES1:sch 1(A1);
-    reconsider f as ManySortedSet of O by A2,PBOOLE:def 3;
+    reconsider f as ManySortedSet of O by A2,PARTFUN1:def 4,RELAT_1:def 18;
     for x be set st x in dom f holds f.x is Function
     proof
       let x be set;
@@ -1631,7 +1638,7 @@ A5: for x be set st x in O ex y be set st P[x,y]
     end;
     consider f be Function such that
 A6: dom f = O & for x be set st x in O holds P[x,f.x] from CLASSES1:sch 1(A5);
-    reconsider f as ManySortedSet of O by A6,PBOOLE:def 3;
+    reconsider f as ManySortedSet of O by A6,PARTFUN1:def 4,RELAT_1:def 18;
     for x be set st x in dom f holds f.x is Function
     proof
       let x be set;
@@ -1691,7 +1698,7 @@ A2: ar = (the Arity of S).o by MSUALG_1:def 6;
 A3: f = x & dom f = dom ((OSClass R) * ar) &
   for y be set st y in dom ((OSClass R) * ar) holds
   f.y in ((OSClass R) * ar).y by A1,CARD_3:def 5;
-A4: dom ((OSClass R) * ar) = dom ar by PBOOLE:def 3;
+A4: dom ((OSClass R) * ar) = dom ar by PARTFUN1:def 4;
 A5: for n be Nat st n in dom f holds f.n in OSClass (R,((ar)/.n))
   proof
     let n be Nat;
@@ -1724,7 +1731,7 @@ A11: dom g = dom f & for a be set st a in dom f holds P[a,g.a]
   from CLASSES1:sch 1(A8);
 A12: Args(o,A) = ((the Sorts of A)# * (the Arity of S)).o by MSUALG_1:def 9
     .= product ((the Sorts of A) * ar) by A2,MSAFREE:1;
-  dom (the Sorts of A) = the carrier of S by PBOOLE:def 3;
+  dom (the Sorts of A) = the carrier of S by PARTFUN1:def 4;
   then rng ar c= dom (the Sorts of A);
   then
 A13: dom g = dom ((the Sorts of A) * ar) by A3,A4,A11,RELAT_1:46;
@@ -1792,12 +1799,14 @@ A3:   dom Den(o,A) = Args(o,A) & rng Den(o,A) c= Result(o,A) by FUNCT_2:def 1;
 A4:   o in the carrier' of S;
       set ro = the_result_sort_of o, ar = the_arity_of o;
 A5:   ro in CComp(ro) by EQREL_1:28;
-      o in dom ((the Sorts of A) * the ResultSort of S) by A4,PBOOLE:def 3;
+      o in dom ((the Sorts of A) * the ResultSort of S) by A4,PARTFUN1:def 4
+;
       then
 A6:   ((the Sorts of A) * the ResultSort of S).o =
       (the Sorts of A).((the ResultSort of S).o) by FUNCT_1:22
         .= (the Sorts of A).ro by MSUALG_1:def 7;
-      o in dom ((OSClass R) * the ResultSort of S) by A4,PBOOLE:def 3;
+      o in dom ((OSClass R) * the ResultSort of S) by A4,PARTFUN1:def 4
+;
       then
 A7:   ((OSClass R) * the ResultSort of S).o =
       (OSClass R).((the ResultSort of S).o) by FUNCT_1:22
@@ -1839,7 +1848,7 @@ A19:    yb = b.n & (R #_os b).n = OSClass(R, yb) by A16,A17,Def15;
       end;
       then [da,db] in R.ro by MSUALG_4:def 6;
       then [da,db] in CompClass(R, CComp(ro)) by A5,Def11;
-      hence y = ((OSQuotRes(R,o)) * (Den(o,A))).b by A13,A14,A15,EQREL_1:44;
+      hence thesis by A13,A14,A15,EQREL_1:44;
     end;
     consider f be Function such that
 A20: dom f = Ca & rng f c= Cr & for x be set st x in Ca holds
@@ -1864,7 +1873,7 @@ A22: for a be Element of Args(o,A) st
 A23: dom (the Arity of S) = the carrier' of S &
     rng (the Arity of S) c= (the carrier of S)* by FUNCT_2:def 1;
     then dom ((OSClass R)# * the Arity of S) = dom (the Arity of S)
-    by PBOOLE:def 3;
+    by PARTFUN1:def 4;
     then
 A24: ((OSClass R)# * the Arity of S).o =
     (OSClass R)#.((the Arity of S).o) by A23,FUNCT_1:22
@@ -1908,7 +1917,7 @@ A1: for x be set st x in O ex y be set st P[x,y]
     end;
     consider f be Function such that
 A2: dom f = O & for x be set st x in O holds P[x,f.x] from CLASSES1:sch 1(A1);
-    reconsider f as ManySortedSet of O by A2,PBOOLE:def 3;
+    reconsider f as ManySortedSet of O by A2,PARTFUN1:def 4,RELAT_1:def 18;
     for x be set st x in dom f holds f.x is Function
     proof
       let x be set;
@@ -2019,7 +2028,8 @@ definition
     consider f be Function such that
 A1: dom f = the carrier of S & for d be Element of S holds
     f.d = F(d) from FUNCT_1:sch 4;
-    reconsider f as ManySortedSet of the carrier of S by A1,PBOOLE:def 3;
+    reconsider f as ManySortedSet of the carrier of S by A1,PARTFUN1:def 4
+,RELAT_1:def 18;
     for x be set st x in dom f holds f.x is Function
     proof
       let x be set;
@@ -2081,7 +2091,7 @@ A1: Den(o,QA) = (OSQuotCharact R).o by MSUALG_1:def 11
       .= OSQuotCharact(R,o) by Def21;
 A2: dom (F#x) = dom ar & dom x = dom ar by MSUALG_3:6;
 A3: dom (R #_os x) = dom ((OSClass R) * (the_arity_of o)) by CARD_3:18;
-    dom (OSClass R) = the carrier of S by PBOOLE:def 3;
+    dom (OSClass R) = the carrier of S by PARTFUN1:def 4;
     then rng ar c= dom (OSClass R);
     then
 A4: dom (R #_os x) = dom ar by A3,RELAT_1:46;
@@ -2096,7 +2106,7 @@ A5: ((OSClass R)# * the Arity of S).o = product ((OSClass R) * ar)
 A6:   a in dom ar;
       then reconsider n = a as Nat;
       set Fo = OSNat_Hom(U1,R,((ar)/.n)), s = ((ar)/.n);
-A7:   n in dom ((the Sorts of U1) * ar) by A6,PBOOLE:def 3;
+A7:   n in dom ((the Sorts of U1) * ar) by A6,PARTFUN1:def 4;
       then ((the Sorts of U1) * ar).n = (the Sorts of U1).(ar.n) by FUNCT_1:22
         .= S1.s by A6,PARTFUN1:def 8;
       then reconsider xn = x.n as Element of S1.s by A7,MSUALG_3:6;
@@ -2110,7 +2120,7 @@ A8:   z = x.n & (R #_os x).n = OSClass(R,z) by A6,Def15;
 A9: F # x = R #_os x by A2,A4,FUNCT_1:9;
 A10: dom Den(o,U1) = Args(o,U1) & rng Den(o,U1) c= Result(o,U1)
     by FUNCT_2:def 1;
-A11: dom (the Sorts of U1) = the carrier of S by PBOOLE:def 3;
+A11: dom (the Sorts of U1) = the carrier of S by PARTFUN1:def 4;
 A12: dom (the ResultSort of S) = the carrier' of S &
     rng (the ResultSort of S) c= the carrier of S by FUNCT_2:def 1;
     rng (the ResultSort of S) c= dom (the Sorts of U1) by A11;
@@ -2207,9 +2217,9 @@ A7: x1 in dom (F.s4) & (F.s3).x1 = (F.s4).x1 &
     (MSCng(F)).s1 = MSCng(F,s1) &
     (MSCng(F)).s2 = MSCng(F,s2) by A1,MSUALG_4:def 20;
     hence [x,y] in (MSCng(F)).s1 iff [x,y] in (MSCng(F)).s2 by A6,A7,
-    MSUALG_4:def 19;
+MSUALG_4:def 19;
   end;
-  hence MSCng(F) is OSCongruence of U1 by Def3;
+  hence thesis by Def3;
 end;
 
 :: just a casting func, currently no other way how to employ the type system
@@ -2269,7 +2279,7 @@ A6: dom G = cqa.s & rng G c= S2.s & for x be set st x in cqa.s
     reconsider G as Function of cqa.s,S2.s by A6,FUNCT_2:def 1,RELSET_1:11;
     take G;
     let a be Element of S1.s;
-    thus G.(OSClass(OSCng(F),a)) = (F.s).a by A2,A6;
+    thus thesis by A2,A6;
   end;
   uniqueness
   proof
@@ -2313,7 +2323,8 @@ definition
     consider f be Function such that
 A1: dom f = the carrier of S & for d be Element of S holds f.d = F(d)
     from FUNCT_1:sch 4;
-    reconsider f as ManySortedSet of the carrier of S by A1,PBOOLE:def 3;
+    reconsider f as ManySortedSet of the carrier of S by A1,PARTFUN1:def 4
+,RELAT_1:def 18;
     for x be set st x in dom f holds f.x is Function
     proof
       let x be set;
@@ -2383,7 +2394,7 @@ A3: x = mc #_os a by Th15;
 A4: dom Den(o,U1) = Args(o,U1) & rng Den(o,U1) c= Result(o,U1)
     by FUNCT_2:def 1;
     o in the carrier' of S;
-    then o in dom (S1 * the ResultSort of S) by PBOOLE:def 3;
+    then o in dom (S1 * the ResultSort of S) by PARTFUN1:def 4;
     then
 A5: ((the Sorts of U1) * the ResultSort of S).o
     = (the Sorts of U1).((the ResultSort of S).o) by FUNCT_1:22
@@ -2512,8 +2523,8 @@ A3: qh is_homomorphism qa,U2 & qh is "1-1" by MSUALG_3:def 11;
     then reconsider s = i as SortSymbol of S;
 A4: qh.i = OSHomQuot(F,s) by Def27;
     then
-A5: dom f = Sq.s & rng f c= S2.s by FUNCT_2:def 1,RELSET_1:12;
-    thus rng f c= S2.i by A4,RELSET_1:12;
+A5: dom f = Sq.s & rng f c= S2.s by FUNCT_2:def 1,RELAT_1:def 19;
+    thus rng f c= S2.i by A4,RELAT_1:def 19;
 A6: rng (F.s) = S2.s by A2,MSUALG_3:def 3;
     let x be set;
     assume x in S2.i;
@@ -2580,7 +2591,7 @@ A3: O1.s3 c= O1.s4 by A1,OSALG_1:def 18;
     C.s2 = [:(the Sorts of U1).s2,(the Sorts of U1).s2:] by PBOOLE:def 21;
     hence [x,y] in C.s1 iff [x,y] in C.s2 by A2,A3,ZFMISC_1:106;
   end;
-  hence [| the Sorts of U1, the Sorts of U1 |] is OSCongruence of U1 by Def3;
+  hence thesis by Def3;
 end;
 
 theorem Th22:
@@ -2606,7 +2617,7 @@ A4: O1.s1 c= O1.s2 by A3,OSALG_1:def 18;
 A5: Den(o1,U1).x1 in (the Sorts of U1).s2 &
   Den(o2,U1).x2 in (the Sorts of U1).s2 by A4,MSUALG_9:19;
   R.s2 = [:(the Sorts of U1).s2,(the Sorts of U1).s2:] by A1,PBOOLE:def 21;
-  hence [Den(o1,U1).x1,Den(o2,U1).x2] in R.(the_result_sort_of o2)
+  hence thesis
   by A5,ZFMISC_1:106;
 end;
 
@@ -2641,7 +2652,7 @@ proof
   for o be (Element of the carrier' of S), x,y be Element of Args(o,U1) st
   (for n be Nat st n in dom x holds [x.n,y.n] in R.((the_arity_of o)/.n))
   holds [Den(o,U1).x,Den(o,U1).y] in R.(the_result_sort_of o) by Def28;
-  hence R is MSCongruence-like by MSUALG_4:def 6;
+  hence thesis by MSUALG_4:def 6;
 end;
 
 registration
@@ -2670,8 +2681,7 @@ A4: [Den(o2,U1).x3,Den(o2,U1).x2] in R.(the_result_sort_of o2)
   by A2,MSUALG_4:def 6;
   x1 in Args(o1,U1);
   then x1 in dom Den(o1,U1) by FUNCT_2:def 1;
-  hence [Den(o1,U1).x1,Den(o2,U1).x2] in R.(the_result_sort_of o2) by A3,A4,
-  GRFUNC_1:8;
+  hence thesis by A3,A4,GRFUNC_1:8;
 end;
 
 registration
@@ -2750,7 +2760,7 @@ A20:    s1 <= s2 by A2,A16,OSALG_1:def 7;
         then reconsider z12 = z1 as
         Element of (the Sorts of U1).((the_arity_of o2)/.y) by TARSKI:def 3;
         OSClass(R, z2) = OSClass(R, z12) by A13,A14,A17,A18,A19,A20,Th5;
-        hence [a1.y,a2.y] in R.((the_arity_of o2)/.y) by A17,A18,Th13;
+        hence thesis by A17,A18,Th13;
       end;
       then
 A21:  [Den(o1,U1).a1,Den(o2,U1).a2] in R.(the_result_sort_of o2) by A1,Def28;
@@ -2784,9 +2794,9 @@ A24:  ((OSQuotRes(R,o2)) * (Den(o2,U1))).a2 = OSQuotRes(R,o2).da2 by FUNCT_1:23
       Element of (the Sorts of U1).(the_result_sort_of o2) by A7,TARSKI:def 3;
       OSClass(R,da1) = OSClass(R,da12) by A2,Th5
         .= OSClass(R,da2) by A21,Th13;
-      hence Den(o1,A).x = Den(o2,A).x by A6,A13,A14,A22,A23,A24;
+      hence thesis by A6,A13,A14,A22,A23,A24;
     end;
-    hence Den(o2,A)|Args(o1,A) = Den(o1,A) by A5,FUNCT_1:68;
+    hence thesis by A5,FUNCT_1:68;
   end;
 end;
 
@@ -2831,14 +2841,14 @@ A11: F#x1 in dom Den(o1,U2) by FUNCT_2:def 1;
 A12: Den(o2,U2)|Args(o1,U2) = Den(o1,U2) by A2,OSALG_1:def 23;
   (F.rs2).(Den(o1,U1).x1) = (F.rs1).(Den(o1,U1).x1) by A1,A6,A10,OSALG_3:def 1
     .= Den(o1,U2).(F#x1) by A1,MSUALG_3:def 9
-    .= Den(o2,U2).(F#x1) by A11,A12,FUNCT_1:68
+    .= Den(o2,U2).(F#x1) by A11,A12,FUNCT_1:70
     .= Den(o2,U2).(F#x12) by A1,A2,OSALG_3:13
     .= (F.rs2).(Den(o2,U1).x12) by A1,MSUALG_3:def 9;
   then
 A13: [D11,D12] in MSCng(F,rs2) by MSUALG_4:def 19;
   field(R.rs2) = (O1.rs2) by ORDERS_1:97;
   then (R.rs2) is_transitive_in (O1.rs2) by RELAT_2:def 16;
-  hence [Den(o1,U1).x1,Den(o2,U1).x2] in R.rs2 by A4,A8,A9,A13,RELAT_2:def 8;
+  hence thesis by A4,A8,A9,A13,RELAT_2:def 8;
 end;
 
 :: these are a bit more general versions of OSHomQuot, that
@@ -2890,7 +2900,7 @@ A7: dom G = cqa.s & rng G c= S2.s & for x be set st x in cqa.s
     reconsider G as Function of cqa.s,S2.s by A7,FUNCT_2:def 1,RELSET_1:11;
     take G;
     let a be Element of S1.s;
-    thus G.(OSClass(R,a)) = (F.s).a by A2,A7;
+    thus thesis by A2,A7;
   end;
   uniqueness
   proof
@@ -2934,7 +2944,8 @@ definition
     consider f be Function such that
 A1: dom f = the carrier of S & for d be Element of S holds f.d = F(d)
     from FUNCT_1:sch 4;
-    reconsider f as ManySortedSet of the carrier of S by A1,PBOOLE:def 3;
+    reconsider f as ManySortedSet of the carrier of S by A1,PARTFUN1:def 4
+,RELAT_1:def 18;
     for x be set st x in dom f holds f.x is Function
     proof
       let x be set;
@@ -3006,7 +3017,7 @@ A3: x = mc #_os a by Th15;
 A4: dom Den(o,U1) = Args(o,U1) & rng Den(o,U1) c= Result(o,U1)
     by FUNCT_2:def 1;
     o in the carrier' of S;
-    then o in dom (S1 * the ResultSort of S) by PBOOLE:def 3;
+    then o in dom (S1 * the ResultSort of S) by PARTFUN1:def 4;
     then
 A5: ((the Sorts of U1) * the ResultSort of S).o
     = (the Sorts of U1).((the ResultSort of S).o) by FUNCT_1:22

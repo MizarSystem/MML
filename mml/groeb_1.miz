@@ -11,27 +11,27 @@ environ
       BINOP_1, ARYTM_3, TERMORD, IDEAL_1, RELAT_2, DICKSON, MCART_1, FINSEQ_1,
       FINSEQ_4, BHSP_3, REWRITE1, ORDERS_1, INT_1, BINOM, TARSKI, FINSET_1,
       FUNCOP_1, FILTER_2, PBOOLE, POLYRED, RLVECT_2, CARD_3, CAT_3, SQUARE_1,
-      FUNCT_4, CARD_1, BAGORDER, GROEB_1, VECTSP_2, ARYTM, XREAL_0;
+      FUNCT_4, CARD_1, BAGORDER, GROEB_1, VECTSP_2, ARYTM, XREAL_0, STRUCT_0;
  notations TARSKI, RELAT_1, XBOOLE_0, RELAT_2, XCMPLX_0, XXREAL_0, RELSET_1,
       FUNCT_1, PARTFUN1, ORDINAL1, ALGSTR_0, ALGSTR_1, RLVECT_1, FINSET_1,
-      FUNCT_7,
-      DICKSON, CARD_3, CARD_1, SUBSET_1, MCART_1, FINSEQ_1, YELLOW_1, ORDERS_1,
-      PRALG_1, STRUCT_0, POLYNOM7, PBOOLE, PRE_CIRC, ORDERS_2, POLYNOM1,
-      IDEAL_1, REWRITE1, BAGORDER, VECTSP_1, TERMORD, GROUP_1, NUMBERS, NAT_1,
-      POLYRED, RECDEF_1;
- constructors XXREAL_0, PRE_CIRC, REWRITE1, VECTSP_2, PRALG_1, YELLOW_1,
-      IDEAL_1, DICKSON, BAGORDER, TERMORD, POLYRED, RECDEF_1, DOMAIN_1;
+      FUNCT_7, DICKSON, CARD_3, CARD_1, SUBSET_1, MCART_1, FINSEQ_1, YELLOW_1,
+      ORDERS_1, PRALG_1, STRUCT_0, POLYNOM7, PBOOLE, FUNCOP_1, ORDERS_2,
+      POLYNOM1, IDEAL_1, REWRITE1, BAGORDER, VECTSP_1, TERMORD, GROUP_1,
+      NUMBERS, NAT_1, POLYRED, RECDEF_1;
+ constructors XXREAL_0, REWRITE1, VECTSP_2, PRALG_1, YELLOW_1,
+      IDEAL_1, DICKSON, BAGORDER, TERMORD, POLYRED, RECDEF_1, DOMAIN_1,
+      RELSET_1, PBOOLE, FUNCT_7;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FINSET_1, XREAL_0, NAT_1, INT_1,
       CARD_1, REWRITE1, STRUCT_0, VECTSP_1, ORDERS_2, ALGSTR_1, YELLOW_1,
       GCD_1, POLYNOM1, POLYNOM2, POLYNOM4, IDEAL_1, POLYNOM7, DICKSON, TERMORD,
-      POLYRED, VALUED_0, ALGSTR_0, FINSEQ_1, SUBSET_1;
+      POLYRED, VALUED_0, ALGSTR_0, FINSEQ_1, SUBSET_1, PRE_CIRC;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions RELAT_2, RELAT_1;
+ definitions RELAT_2, RELAT_1, STRUCT_0;
  theorems TARSKI, RELSET_1, FINSEQ_1, RELAT_1, ZFMISC_1, VECTSP_1, POLYNOM1,
       RLVECT_1, NAT_1, ALGSTR_1, MCART_1, POLYNOM7, REWRITE1, XBOOLE_0,
       IDEAL_1, TERMORD, INT_1, FUNCT_1, ORDERS_2, FINSET_1, WELLORD2, XBOOLE_1,
-      CARD_3, DICKSON, FUNCOP_1, PBOOLE, PRALG_1, YELLOW_1, FUNCT_7, FUNCT_2,
-      CARD_1, CARD_2, BAGORDER, ORDINAL1, VECTSP_2, POLYRED, RELAT_2, PARTFUN1,
+      CARD_3, DICKSON, FUNCOP_1, PRALG_1, YELLOW_1, FUNCT_7, FUNCT_2, CARD_1,
+      CARD_2, BAGORDER, ORDINAL1, VECTSP_2, POLYRED, RELAT_2, PARTFUN1,
       ORDERS_1, GROUP_1, XREAL_1, XXREAL_0, VALUED_0, STRUCT_0;
  schemes RELSET_1, NAT_1, CLASSES1;
 
@@ -237,10 +237,11 @@ A1: P c= Q;
     assume
 A2: u in PolyRedRel(P,T);
     then consider p,q being set such that
-A3: p in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+A3: p in NonZero Polynom-Ring(n,L) &
     q in the carrier of Polynom-Ring(n,L) & u = [p,q] by ZFMISC_1:def 2;
     reconsider q as Polynomial of n,L by A3,POLYNOM1:def 27;
-    not(p in {0_(n,L)}) by A3,XBOOLE_0:def 5;
+  0_(n,L) = 0.Polynom-Ring(n,L) by POLYNOM1:def 27;
+    then not(p in {0_(n,L)}) by A3,XBOOLE_0:def 5;
     then p <> 0_(n,L) by TARSKI:def 1;
     then reconsider p as non-zero Polynomial of n,L
     by A3,POLYNOM1:def 27,POLYNOM7:def 2;
@@ -373,7 +374,7 @@ A2: P[0]
     then Support f,{} are_equipotent by CARD_1:def 5;
     then Support f = {} by CARD_1:46;
     then f = 0_(n,L) by POLYNOM7:1;
-    hence f <= g,T by POLYRED:30;
+    hence thesis by POLYRED:30;
   end;
 A3: now
     let k be Element of NAT;
@@ -494,6 +495,7 @@ proof
   Abelian almost_left_invertible (non trivial doubleLoopStr),
   p be Polynomial of n,L;
   set R = PolyRedRel({p},T);
+X:  0_(n,L) = 0.Polynom-Ring(n,L) by POLYNOM1:def 27;
   per cases;
   suppose
 A1: p = 0_(n,L);
@@ -502,10 +504,10 @@ A1: p = 0_(n,L);
       assume
 A2:   [a,b] in R & [a,c] in R;
       then consider p',q being set such that
-A3:   p' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+A3:   p' in NonZero Polynom-Ring(n,L) &
       q in the carrier of Polynom-Ring(n,L) & [a,b] = [p',q] by ZFMISC_1:def 2;
       reconsider q as Polynomial of n,L by A3,POLYNOM1:def 27;
-      not(p' in {0_(n,L)}) by A3,XBOOLE_0:def 5;
+      not(p' in {0_(n,L)}) by A3,X,XBOOLE_0:def 5;
       then p' <> 0_(n,L) by TARSKI:def 1;
       then reconsider p' as non-zero Polynomial of n,L
       by A3,POLYNOM1:def 27,POLYNOM7:def 2;
@@ -516,7 +518,7 @@ A4:   g in {p} & p' reduces_to q,g,T by POLYRED:def 7;
       then p' is_reducible_wrt 0_(n,L),T by A4,POLYRED:def 8;
       hence b,c are_convergent_wrt R by Lm3;
     end;
-    hence PolyRedRel({p},T) is locally-confluent by REWRITE1:def 24;
+    hence thesis by REWRITE1:def 24;
   end;
   suppose p <> 0_(n,L);
     then reconsider p as non-zero Polynomial of n,L by POLYNOM7:def 2;
@@ -525,11 +527,11 @@ A4:   g in {p} & p' reduces_to q,g,T by POLYRED:def 7;
       assume
 A5:   [a,b] in R & [a,c] in R;
       then consider pa,pb being set such that
-A6:   pa in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+A6:   pa in NonZero Polynom-Ring(n,L) &
       pb in the carrier of Polynom-Ring(n,L) & [a,b] = [pa,pb]
       by ZFMISC_1:def 2;
       reconsider pb as Polynomial of n,L by A6,POLYNOM1:def 27;
-      not(pa in {0_(n,L)}) by A6,XBOOLE_0:def 5;
+      not(pa in {0_(n,L)}) by A6,X,XBOOLE_0:def 5;
       then pa <> 0_(n,L) by TARSKI:def 1;
       then reconsider pa as non-zero Polynomial of n,L
       by A6,POLYNOM1:def 27,POLYNOM7:def 2;
@@ -542,7 +544,7 @@ A8:   pb = [a,b]`2 by A6,MCART_1:def 2
 A9:   p' in {p} & pa reduces_to pb,p',T by POLYRED:def 7;
 A10:  pa reduces_to pb,p,T by A9,TARSKI:def 1;
       consider pa',pc being set such that
-A11:  pa' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+A11:  pa' in NonZero Polynom-Ring(n,L) &
       pc in the carrier of Polynom-Ring(n,L) & [a,c] = [pa',pc]
       by A5,ZFMISC_1:def 2;
       reconsider pc as Polynomial of n,L by A11,POLYNOM1:def 27;
@@ -705,14 +707,14 @@ A1: p in P & P-Ideal = {p}-Ideal;
     assume
 A2: [a,b] in R & [a,c] in R;
     then consider pa,pb being set such that
-A3: pa in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+A3: pa in NonZero Polynom-Ring(n,L) &
     pb in the carrier of Polynom-Ring(n,L) & [a,b] = [pa,pb]
     by ZFMISC_1:def 2;
     reconsider pb as Polynomial of n,L by A3,POLYNOM1:def 27;
 A4: pb = [a,b]`2 by A3,MCART_1:def 2
       .= b by MCART_1:def 2;
     consider pa',pc being set such that
-A5: pa' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+A5: pa' in NonZero Polynom-Ring(n,L) &
     pc in the carrier of Polynom-Ring(n,L) & [a,c] = [pa',pc]
     by A2,ZFMISC_1:def 2;
     reconsider pc as Polynomial of n,L by A5,POLYNOM1:def 27;
@@ -843,11 +845,11 @@ A4: l + 1 in dom p by FINSEQ_1:def 3;
     then l in dom p by FINSEQ_1:def 3;
     then [h,g] in R by A1,A4,REWRITE1:def 2;
     then consider h',g' being set such that
-A5: [h,g] = [h',g'] & h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+A5: [h,g] = [h',g'] & h' in NonZero Polynom-Ring(n,L) &
     g' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
     g = [h',g']`2 by A5,MCART_1:def 2
       .= g' by MCART_1:def 2;
-    hence g is Polynomial of n,L by A5,POLYNOM1:def 27;
+    hence thesis by A5,POLYNOM1:def 27;
   end;
 end;
 
@@ -886,7 +888,7 @@ A6: 1 in dom p & 1 + 1 in dom p by A5,FINSEQ_1:def 3;
   set h = p.2;
 A7: [f,h] in R by A2,A6,REWRITE1:def 2;
   then consider f',h' being set such that
-A8: [f,h] = [f',h'] & f' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+A8: [f,h] = [f',h'] & f' in NonZero Polynom-Ring(n,L) &
   h' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
   h = [f',h']`2 by A8,MCART_1:def 2
     .= h' by MCART_1:def 2;
@@ -1295,13 +1297,13 @@ A17:  g' reduces_to u,P,T by POLYRED:def 9;
     assume
 A18: [a,b] in R & [a,c] in R;
     then consider a',b' being set such that
-A19: a' in ((the carrier of Polynom-Ring(n,L)) \ {0_(n,L)}) &
+A19: a' in (NonZero Polynom-Ring(n,L)) &
     b' in the carrier of Polynom-Ring(n,L) &
     [a,b] = [a',b'] by ZFMISC_1:def 2;
 A20: b' = [a,b]`2 by A19,MCART_1:def 2
       .= b by MCART_1:def 2;
     consider aa,c' being set such that
-A21: aa in ((the carrier of Polynom-Ring(n,L)) \ {0_(n,L)}) &
+A21: aa in (NonZero Polynom-Ring(n,L)) &
     c' in the carrier of Polynom-Ring(n,L) &
     [a,c] = [aa,c'] by A18,ZFMISC_1:def 2;
 A22: c' = [a,c]`2 by A21,MCART_1:def 2
@@ -1385,7 +1387,7 @@ A7:   1 in dom p by FINSEQ_1:def 3;
       then 1 + 1 in dom p by FINSEQ_1:def 3;
       then [f,q] in R by A2,A7,REWRITE1:def 2;
       then consider h',g' being set such that
-A8:   [f,q] = [h',g'] & h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+A8:   [f,q] = [h',g'] & h' in NonZero Polynom-Ring(n,L) &
       g' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
       f = [h',g']`1 by A8,MCART_1:def 1
         .= h' by MCART_1:def 1;
@@ -1395,7 +1397,7 @@ A8:   [f,q] = [h',g'] & h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
   hence f is Polynomial of n,L;
   now per cases;
     case len p = 1;
-      hence g is Polynomial of n,L by A1,A2;
+      hence thesis by A1,A2;
     end;
     case len p <> 1;
       then 0 + 1 < l + 1 by A4,XXREAL_0:1;
@@ -1404,14 +1406,14 @@ A8:   [f,q] = [h',g'] & h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
       then l in dom p by FINSEQ_1:def 3;
       then [h,g] in R by A2,A5,REWRITE1:def 2;
       then consider h',g' being set such that
-A9:   [h,g] = [h',g'] & h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+A9:   [h,g] = [h',g'] & h' in NonZero Polynom-Ring(n,L) &
       g' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
       g = [h',g']`2 by A9,MCART_1:def 2
         .= g' by MCART_1:def 2;
-      hence g is Polynomial of n,L by A9,POLYNOM1:def 27;
+      hence thesis by A9,POLYNOM1:def 27;
     end;
   end;
-  hence g is Polynomial of n,L;
+  hence thesis;
 end;
 
 theorem
@@ -1476,7 +1478,7 @@ A13:          now per cases by A12,XBOOLE_0:def 3;
                 case [h,b] in R;
                   then consider h',b' being set such that
 A14:              [h,b] = [h',b'] &
-                  h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+                  h' in NonZero Polynom-Ring(n,L) &
                   b' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
                   b = [h',b']`2 by A14,MCART_1:def 2
                     .= b' by MCART_1:def 2;
@@ -1486,7 +1488,7 @@ A14:              [h,b] = [h',b'] &
                   then [b,h] in R by RELAT_1:def 7;
                   then consider h',b' being set such that
 A15:              [b,h] = [h',b'] &
-                  h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+                  h' in NonZero Polynom-Ring(n,L) &
                   b' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
                   b = [h',b']`1 by A15,MCART_1:def 1
                     .= h' by MCART_1:def 1;
@@ -1505,7 +1507,7 @@ A17:          [a,g] in R \/ R~ by A6,A16,REWRITE1:def 2;
                 case [a,g] in R;
                   then consider h',b' being set such that
 A18:              [a,g] = [h',b'] &
-                  h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+                  h' in NonZero Polynom-Ring(n,L) &
                   b' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
                   a = [h',b']`1 by A18,MCART_1:def 1
                     .= h' by MCART_1:def 1;
@@ -1515,7 +1517,7 @@ A18:              [a,g] = [h',b'] &
                   then [g,a] in R by RELAT_1:def 7;
                   then consider h',b' being set such that
 A19:              [g,a] = [h',b'] &
-                  h' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+                  h' in NonZero Polynom-Ring(n,L) &
                   b' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
                   a = [h',b']`2 by A19,MCART_1:def 2
                     .= b' by MCART_1:def 2;
@@ -1697,8 +1699,7 @@ proof
   assume G is_Groebner_basis_of I,T;
   then
 A1: G-Ideal = I & PolyRedRel(G,T) is locally-confluent by Def4;
-  thus for f being Polynomial of n,L
-  st f in I holds PolyRedRel(G,T) reduces f,0_(n,L) by A1,Th15;
+  thus thesis by A1,Th15;
 end;
 
 theorem Th25: :: theorem 5.38 (i) ==> (ii), p. 207
@@ -2062,13 +2063,13 @@ A20: P-Ideal = I by A1,Lm7;
     assume
 A21: [a,b] in R & [a,c] in R;
     then consider a',b' being set such that
-A22: a' in ((the carrier of Polynom-Ring(n,L)) \ {0_(n,L)}) &
+A22: a' in (NonZero Polynom-Ring(n,L)) &
     b' in the carrier of Polynom-Ring(n,L) &
     [a,b] = [a',b'] by ZFMISC_1:def 2;
 A23: b' = [a,b]`2 by A22,MCART_1:def 2
       .= b by MCART_1:def 2;
     consider aa,c' being set such that
-A24: aa in ((the carrier of Polynom-Ring(n,L)) \ {0_(n,L)}) &
+A24: aa in (NonZero Polynom-Ring(n,L)) &
     c' in the carrier of Polynom-Ring(n,L) &
     [a,c] = [aa,c'] by A21,ZFMISC_1:def 2;
 A25: c' = [a,c]`2 by A24,MCART_1:def 2
@@ -2104,15 +2105,16 @@ proof
   commutative associative well-unital distributive
   Abelian almost_left_invertible (non trivial doubleLoopStr);
   set I = {0_(n,L)}, G = {0_(n,L)}, R = PolyRedRel(G,T);
+X:  0_(n,L) = 0.Polynom-Ring(n,L) by POLYNOM1:def 27;
   now
     let a,b,c be set;
     assume
 A1: [a,b] in R & [a,c] in R;
     then consider p,q being set such that
-A2: p in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+A2: p in NonZero Polynom-Ring(n,L) &
     q in the carrier of Polynom-Ring(n,L) & [a,b] = [p,q] by ZFMISC_1:def 2;
     reconsider q as Polynomial of n,L by A2,POLYNOM1:def 27;
-    not(p in {0_(n,L)}) by A2,XBOOLE_0:def 5;
+    not(p in {0_(n,L)}) by A2,X,XBOOLE_0:def 5;
     then p <> 0_(n,L) by TARSKI:def 1;
     then reconsider p as non-zero Polynomial of n,L
     by A2,POLYNOM1:def 27,POLYNOM7:def 2;
@@ -2252,7 +2254,7 @@ proof
   set 1bag = (EmptyBag n)+*({},1);
   reconsider 1bag as Element of Bags n by POLYNOM1:def 14;
 A1: {} in n by ORDINAL1:24;
-  dom EmptyBag n = n by PBOOLE:def 3;
+  dom EmptyBag n = n by PARTFUN1:def 4;
   then 1bag.{} = 1 by A1,FUNCT_7:33;
   then
 A2: EmptyBag n <> 1bag by POLYNOM1:56;
@@ -2450,7 +2452,7 @@ A46:  1 in dom s by A43,FINSEQ_1:3;
 A47:  [s.1,s.2] in R by A40,A46;
       then consider f',h' being set such that
 A48:  [0_(n,L),s.2] = [f',h'] &
-      f' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+      f' in NonZero Polynom-Ring(n,L) &
       h' in (the carrier of Polynom-Ring(n,L)) by A40,RELSET_1:6;
       s.2 = [f',h']`2 by A48,MCART_1:def 2
         .= h' by MCART_1:def 2;
@@ -2557,7 +2559,7 @@ A69:  1 in dom s by A66,FINSEQ_1:3;
 A70:  [q-p,s.2] in R by A64,A69;
       then consider f',h' being set such that
 A71:  [q-p,s.2] = [f',h'] &
-      f' in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+      f' in NonZero Polynom-Ring(n,L) &
       h' in (the carrier of Polynom-Ring(n,L)) by RELSET_1:6;
       s.2 = [f',h']`2 by A71,MCART_1:def 2
         .= h' by MCART_1:def 2;
@@ -2612,8 +2614,8 @@ A5:   x = b11 & y = b22 & b11 divides b22 by A1;
       consider b1', b2' being Element of Bags n such that
 A6:   y = b1' & x = b2' & b1' divides b2' by A1,A4;
       reconsider b11, b22 as bag of n;
-A7:   dom b11 = n by PBOOLE:def 3
-        .= dom b22 by PBOOLE:def 3;
+A7:   dom b11 = n by PARTFUN1:def 4
+        .= dom b22 by PARTFUN1:def 4;
       now
         let k be set;
         assume k in dom b11;
@@ -2621,7 +2623,7 @@ A8:     b11.k <= b22.k by A5,POLYNOM1:def 13;
         b1'.k <= b2'.k by A6,POLYNOM1:def 13;
         hence b11.k = b22.k by A5,A6,A8,XXREAL_0:1;
       end;
-      hence x = y by A5,A7,FUNCT_1:9;
+      hence thesis by A5,A7,FUNCT_1:9;
     end;
 A9: BO is_transitive_in Bags n
     proof
@@ -2633,7 +2635,7 @@ A11:  x = b1 & y = b2 & b1 divides b2 by A1,A10;
 A12:  y = b11 & z = b22 & b11 divides b22 by A1,A10;
       reconsider B1 = b1, B2' = b22 as bag of n;
       B1 divides B2' by A11,A12,Lm8;
-      hence [x,z] in BO by A1,A11,A12;
+      hence thesis by A1,A11,A12;
     end;
     dom BO = Bags n & field BO = Bags n by A2,ORDERS_1:98;
     then reconsider BO as Order of Bags n
@@ -2647,7 +2649,7 @@ A13: p in Bags n & q in Bags n by POLYNOM1:def 14;
 A14:  p = b1' & q = b2' & b1' divides b2' by A1;
       thus p divides q by A14;
     end;
-    thus p divides q implies [p,q] in BO by A1,A13;
+    thus thesis by A1,A13;
   end;
   uniqueness
   proof
@@ -2670,7 +2672,7 @@ A19: [a,b] in B2;
 A20: [a,b] = [b1,b2] & b1 in Bags n & b2 in Bags n by RELSET_1:6;
     reconsider b1, b2 as bag of n by A20,POLYNOM1:def 14;
     b1 divides b2 by A16,A19,A20;
-    hence [a,b] in B1 by A15,A20;
+    hence thesis by A15,A20;
   end;
 end;
 
@@ -2693,14 +2695,14 @@ A3:   x = g';
       consider g being Function such that
 A4:   x = g & dom g = dom SJ &
       for y being set st y in dom SJ holds g.y in SJ.y by A2,CARD_3:def 5;
-      thus dom g' = n by A3,A4,PBOOLE:def 3;
+      thus dom g' = n by A3,A4,PARTFUN1:def 4;
       thus for y being set st y in dom g' holds g'.y in NAT
       proof
         let y be set;
         assume
 A5:     y in dom g';
         then
-A6:     y in n by A3,A4,PBOOLE:def 3;
+A6:     y in n by A3,A4,PARTFUN1:def 4;
         then consider R being 1-sorted such that
 A7:     R = J.y & SJ.y = the carrier of R by PRALG_1:def 13;
         g.y in the carrier of R by A3,A4,A5,A7;
@@ -2724,14 +2726,14 @@ A14:  for x being set st x in n ex y being set st QQ[x,y];
       consider b being Function such that
 A15:  dom b = n & for x being set st x in n holds QQ[x,b.x]
       from CLASSES1:sch 1(A14);
-      reconsider b as ManySortedSet of n by A15,PBOOLE:def 3;
+      reconsider b as ManySortedSet of n by A15,PARTFUN1:def 4,RELAT_1:def 18;
       now
         let u be set;
         assume u in rng b;
         then consider x being set such that
 A16:    x in dom b & u = b.x by FUNCT_1:def 5;
 A17:    u = g.x by A15,A16;
-        x in dom g by A12,A16,PBOOLE:def 3;
+        x in dom g by A12,A16,PARTFUN1:def 4;
         hence u in NAT by A1,A10,A11,A17;
       end;
       then rng b c= NAT by TARSKI:def 3;
@@ -2740,7 +2742,7 @@ A17:    u = g.x by A15,A16;
       thus x in S by A10;
       take b;
       thus b = b;
-      thus b = x by A12,A15,FUNCT_1:9;
+      thus thesis by A12,A15,FUNCT_1:9;
     end;
     consider i being Function such that
 A18: dom i = S & for x being set st x in S holds Q[x,i.x]
@@ -2759,13 +2761,13 @@ A21: for x being Element of R
     proof
       let x be Element of R;
       reconsider g = x as bag of n by POLYNOM1:def 14;
-A22:  dom g = n by PBOOLE:def 3
-        .= dom(Carrier J) by PBOOLE:def 3;
+A22:  dom g = n by PARTFUN1:def 4
+        .= dom(Carrier J) by PARTFUN1:def 4;
 A23:  now
         let x be set;
         assume x in dom(Carrier J);
         then
-A24:    x in n by PBOOLE:def 3;
+A24:    x in n by PARTFUN1:def 4;
         then consider L being 1-sorted such that
 A25:    L = J.x & (Carrier J).x = the carrier of L by PRALG_1:def 13;
         the carrier of L = NAT by A24,A25,DICKSON:def 15,FUNCOP_1:13;
@@ -2779,7 +2781,7 @@ A26:  g in product Carrier J by A22,CARD_3:def 5;
       Q[g,i.g] by A18,A26;
       then consider g' being Function such that
 A27:  g' = g & g' in S & ex b being bag of n st b = i.g & b = g;
-      thus i.g = x by A27;
+      thus thesis by A27;
     end;
     now
       let N be Subset of R;
@@ -2854,7 +2856,7 @@ A45:    b1 = i.b' & b1 = b' by A18,A43;
         reconsider aa = a, bb = b as Element of Bags n;
         bb divides aa by A33,A41,A42,A43,A44,A45;
         then [b,a] in DivOrder(n) by Def5;
-        hence b <= a by ORDERS_2:def 9;
+        hence thesis by ORDERS_2:def 9;
       end;
       then B is_Dickson-basis_of N,R by A32,DICKSON:def 9;
       hence ex B being set st B is_Dickson-basis_of N,R & B is finite by A29;
@@ -2898,6 +2900,7 @@ proof
   commutative associative well-unital distributive
   almost_left_invertible non degenerated (non empty doubleLoopStr),
   I be add-closed left-ideal non empty Subset of Polynom-Ring(n,L);
+X:  0_(n,L) = 0.Polynom-Ring(n,L) by POLYNOM1:def 27;
   per cases;
   suppose
 A1: I = {0_(n,L)};
@@ -2908,10 +2911,10 @@ A1: I = {0_(n,L)};
       assume
 A2:   [a,b] in R & [a,c] in R;
       then consider p,q being set such that
-A3:   p in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+A3:   p in NonZero Polynom-Ring(n,L) &
       q in the carrier of Polynom-Ring(n,L) & [a,b] = [p,q] by ZFMISC_1:def 2;
       reconsider q as Polynomial of n,L by A3,POLYNOM1:def 27;
-      not(p in {0_(n,L)}) by A3,XBOOLE_0:def 5;
+      not(p in {0_(n,L)}) by A3,X,XBOOLE_0:def 5;
       then p <> 0_(n,L) by TARSKI:def 1;
       then reconsider p as non-zero Polynomial of n,L
       by A3,POLYNOM1:def 27,POLYNOM7:def 2;
@@ -3314,10 +3317,10 @@ A33:            i in dom(g') by FINSEQ_1:def 3;
           then reconsider l as LinearCombination of B by IDEAL_1:def 9;
           Sum l = Sum(g') + Sum(<*h*>) by RLVECT_1:58
             .= Sum f by A21,A14,A23,A24,RLVECT_1:55,61;
-          hence ex g being LinearCombination of B st u = Sum g by A10;
+          hence thesis by A10;
         end;
       end;
-      hence ex g being LinearCombination of B st u = Sum g by A10,A21;
+      hence thesis by A10,A21;
     end;
     hence P[k+1];
   end;
@@ -3347,6 +3350,7 @@ A1: I <> {0_(n,L)};
 A2: G is_Groebner_basis_of I,T by Th35;
 A3: G-Ideal = I & PolyRedRel(G,T) is locally-confluent by A2,Def4;
   set R = PolyRedRel(G,T);
+X:  0_(n,L) = 0.Polynom-Ring(n,L) by POLYNOM1:def 27;
   per cases;
   suppose not(0_(n,L) in G);
     hence thesis by A2;
@@ -3362,10 +3366,10 @@ A6: for u being set holds u in R implies u in R'
       assume
 A7:   u in R;
       then consider p,q being set such that
-A8:   p in (the carrier of Polynom-Ring(n,L)) \ {0_(n,L)} &
+A8:   p in NonZero Polynom-Ring(n,L) &
       q in the carrier of Polynom-Ring(n,L) & u = [p,q] by ZFMISC_1:def 2;
       reconsider q as Polynomial of n,L by A8,POLYNOM1:def 27;
-      not(p in {0_(n,L)}) by A8,XBOOLE_0:def 5;
+      not(p in {0_(n,L)}) by A8,X,XBOOLE_0:def 5;
       then p <> 0_(n,L) by TARSKI:def 1;
       then reconsider p as non-zero Polynomial of n,L
       by A8,POLYNOM1:def 27,POLYNOM7:def 2;
@@ -3701,7 +3705,7 @@ A3: HT(q,T) = HT(p,T) by POLYRED:21;
   then 1.L = coefficient(HM(q,T)) by POLYNOM7:9
     .= HC(q,T) by TERMORD:22;
   then HC(q,T) <> 0.L;
-  hence q <> 0_(n,L) by TERMORD:17;
+  hence thesis by TERMORD:17;
 end;
 
 theorem
@@ -3760,15 +3764,14 @@ A11: bb = HT(r,T) & r in G & r <> 0_(n,L) by A10;
     now per cases;
       case r = p;
 
-hence ex b' being bag of n st b' in HT(G',T) & b' divides b by A1,A8,A10,A11
-,Lm8;
+hence thesis by A1,A8,A10,A11,Lm8;
       end;
       case r <> p;
         then not(r in {p}) by TARSKI:def 1;
         then r in G' by A11,XBOOLE_0:def 5;
         then bb in {HT(u,T) where u is Polynomial of n,L :
         u in G' & u <> 0_(n,L)} by A11;
-        hence ex b' being bag of n st b' in HT(G',T) & b' divides b by A10;
+        hence thesis by A10;
       end;
     end;
     hence thesis;
@@ -4321,7 +4324,7 @@ A111:     pp in I by A109,A110,RLVECT_1:def 12;
     end;
     hence q is_irreducible_wrt G\{q},T;
   end;
-  hence G is_reduced_wrt T by Def7;
+  hence thesis by Def7;
 end;
 
 theorem :: theorem 5.43, p. 209
@@ -4419,7 +4422,7 @@ A16:  not(u in G \ H);
           hence u in H & not(u in G) by A15,XBOOLE_0:def 4;
         end;
       end;
-      hence u in H \ G by XBOOLE_0:def 5;
+      hence thesis by XBOOLE_0:def 5;
     end;
     hence u in (G \ H) \/ (H \ G) by XBOOLE_0:def 3;
   end;

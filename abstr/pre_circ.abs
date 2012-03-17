@@ -9,17 +9,18 @@ environ
  vocabularies FINSET_1, FUNCT_1, RELAT_1, FUNCOP_1, FUNCT_4, BOOLE, SQUARE_1,
       PBOOLE, TDGROUP, FINSEQ_1, CARD_3, ZF_REFLE, TARSKI, FUNCT_5, FUNCT_2,
       PRALG_1, PRALG_2, MCART_1, FINSEQ_2, TREES_1, TREES_3, TREES_2, FUNCT_6,
-      TREES_4, CQC_LANG, CARD_1, PRE_CIRC, ARYTM, ARYTM_1, CARD_FIN;
+      TREES_4, CQC_LANG, CARD_1, PRE_CIRC, ARYTM, ARYTM_1, CARD_FIN, PARTFUN1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, REAL_1, MCART_1, CARD_1, MEMBERED, SEQ_4, RELAT_1, FUNCT_1,
-      FINSET_1, FINSUB_1, SETWISEO, FUNCT_2, XXREAL_0, XXREAL_2, BINOP_1,
-      FUNCOP_1, FUNCT_4, CARD_3, BINARITH, TREES_1, TREES_2, TREES_3, TREES_4,
-      FUNCT_5, FUNCT_6, PBOOLE, FINSEQ_1, FINSEQ_2, NAT_1;
+      FINSET_1, FINSUB_1, PARTFUN1, SETWISEO, FUNCT_2, XXREAL_0, XXREAL_2,
+      BINOP_1, FUNCOP_1, FUNCT_4, CARD_3, BINARITH, TREES_2, TREES_1, TREES_3,
+      TREES_4, FUNCT_5, FUNCT_6, PBOOLE, FINSEQ_1, FINSEQ_2, NAT_1;
  constructors WELLORD2, BINOP_1, FUNCT_4, SETWISEO, XXREAL_0, NAT_1, FUNCT_5,
-      CARD_3, SEQ_4, PBOOLE, TREES_4, BINARITH, INT_1, SEQ_1, XXREAL_2;
+      CARD_3, SEQ_4, PBOOLE, TREES_4, BINARITH, INT_1, SEQ_1, XXREAL_2,
+      PARTFUN1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      FINSET_1, FRAENKEL, NUMBERS, XREAL_0, MEMBERED, FINSEQ_1, TREES_1,
-      CARD_3, PBOOLE, TREES_2, TREES_3, XXREAL_2, CARD_1, RELSET_1;
+      FINSET_1, FRAENKEL, NUMBERS, XREAL_0, MEMBERED, FINSEQ_1, CARD_3, PBOOLE,
+      TREES_2, TREES_3, XXREAL_2, CARD_1, RELSET_1, TREES_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -58,34 +59,29 @@ scheme :: PRE_CIRC:sch 2
   ex f being ManySortedSet of I() st for i being Element of I() st i in I()
   holds (P[i] implies f.i = F(i)) & (not P[i] implies f.i = G(i));
 
-notation
+registration
   let I be set;
-  let IT be ManySortedSet of I;
-  synonym IT is locally-finite for IT is finite-yielding;
-end;
-
-definition
-  let I be set;
-  let IT be ManySortedSet of I;
-  canceled 2;
-  redefine attr IT is locally-finite means
-:: PRE_CIRC:def 3
-  for i st i in I holds IT.i is finite;
+  cluster non-empty finite-yielding ManySortedSet of I;
 end;
 
 registration
-  let I be set;
-  cluster non-empty locally-finite ManySortedSet of I;
-end;
-
-definition
   let I, A be set;
-  redefine func I --> A -> ManySortedSet of I;
+  cluster I --> A -> I-defined;
 end;
 
-definition
+registration
+  let I, A be set;
+  cluster I --> A -> total (I-defined Function);
+end;
+
+registration
   let I be set, M be ManySortedSet of I, A be Subset of I;
-  redefine func M | A -> ManySortedSet of A;
+  cluster M | A -> total (A-defined Function);
+end;
+
+registration
+  let I be set, M be ManySortedSet of I, A be Subset of I;
+  cluster M | A -> total;
 end;
 
 registration
@@ -103,7 +99,9 @@ theorem :: PRE_CIRC:7
 theorem :: PRE_CIRC:8
   for I being non empty set, A being set,
   B being non-empty ManySortedSet of I,
-  F being ManySortedFunction of (I --> A), B holds dom commute F = A;
+  F being ManySortedFunction of
+   (I --> A qua total(I-defined Function)), B
+   holds dom commute F = A;
 
 scheme :: PRE_CIRC:sch 3
  LambdaRecCorrD {D() -> non empty set, A() -> Element of D(),
@@ -156,7 +154,8 @@ registration
 end;
 
 registration
-  let T be finite DecoratedTree, t be Element of dom T;
+  let T be finite DecoratedTree;
+  let t be Element of dom T;
   cluster T|t -> finite;
 end;
 
@@ -164,7 +163,8 @@ theorem :: PRE_CIRC:13
   T|p,{ t : p is_a_prefix_of t } are_equipotent;
 
 registration
-  let T be finite DecoratedTree, t be Element of dom T;
+  let T be finite DecoratedTree-like Function;
+  let t be Element of dom T;
   let T1 be finite DecoratedTree;
   cluster T with-replacement (t,T1) -> finite;
 end;
@@ -203,8 +203,7 @@ theorem :: PRE_CIRC:20
   for T being finite Tree, p being Element of T st p <> {}
   holds card (T|p) < card T;
 
-theorem :: PRE_CIRC:21
-  for f being Function holds card f = card dom f;
+canceled;
 
 theorem :: PRE_CIRC:22
   for T, T1 being finite Tree, p being Element of T

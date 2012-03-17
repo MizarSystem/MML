@@ -12,14 +12,14 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, RELAT_1, FUNCT_1,
       FUNCT_2, FINSEQ_1, SETFAM_1, FINSEQ_2, LATTICES, BINOP_1, CARD_3, PBOOLE,
       MSUALG_1;
- constructors SETFAM_1, BINOP_1, CARD_3, LATTICES, MSUALG_1;
+ constructors SETFAM_1, BINOP_1, CARD_3, LATTICES, MSUALG_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PBOOLE, STRUCT_0,
       LATTICES, MSUALG_1, FINSEQ_1, FUNCT_2, PARTFUN1, RELSET_1;
  requirements BOOLE, SUBSET;
  definitions TARSKI, PBOOLE, LATTICES, XBOOLE_0;
  theorems TARSKI, FUNCT_1, FINSEQ_1, PBOOLE, CARD_3, MSUALG_1, FUNCT_2,
       ZFMISC_1, SETFAM_1, BINOP_1, LATTICES, RELAT_1, RELSET_1, XBOOLE_0,
-      XBOOLE_1, FUNCOP_1;
+      XBOOLE_1, FUNCOP_1, PARTFUN1;
  schemes CLASSES1, BINOP_1, FUNCT_1, XBOOLE_0;
 
 begin
@@ -42,7 +42,7 @@ A2: i in I;
     then (X \/ Y).i = X.i \/ Y.i by PBOOLE:def 7;
     then
 A3: Y.i c= X.i \/ Y.i by A1,A2,PBOOLE:def 5;
-    thus (X \/ Y).i is non empty by A2,A3,PBOOLE:def 7;
+    thus thesis by A2,A3,PBOOLE:def 7;
   end;
   cluster Y \/ X -> non-empty;
   coherence;
@@ -56,7 +56,7 @@ theorem Th2:
 proof
   let I be non empty set, X, Y be ManySortedSet of I, i be Element of I*;
 A1: rng i c= I by FINSEQ_1:def 4;
-  dom X = I & dom Y =I & dom(X /\ Y) = I by PBOOLE:def 3;
+  dom X = I & dom Y =I & dom(X /\ Y) = I by PARTFUN1:def 4;
   then
 A2: dom (X *i) = dom i & dom (Y *i)= dom i & dom((X /\ Y)*i) = dom i
   by A1,RELAT_1:46;
@@ -195,7 +195,7 @@ A3:   s=x by TARSKI:def 1;
       a.o in rng a by A1,FUNCT_1:def 5;
       hence (the Arity of M).o = {} by A1,TARSKI:def 1;
       r.o in rng r by A2,FUNCT_1:def 5;
-      hence (the ResultSort of M).o = s by A2,A3,TARSKI:def 1;
+      hence thesis by A2,A3,TARSKI:def 1;
     end;
     hence M is all-with_const_op by Def3;
     thus thesis;
@@ -253,7 +253,8 @@ definition
     consider f be Function such that
 A1: dom f = the carrier of S &
     for d be SortSymbol of S holds f.d = G(d) from FUNCT_1:sch 4;
-    reconsider f as ManySortedSet of the carrier of S by A1,PBOOLE:def 3;
+    reconsider f as ManySortedSet of the carrier of S by A1,PARTFUN1:def 4
+,RELAT_1:def 18;
     f c= the Sorts of U0
     proof
       let s be set;
@@ -294,9 +295,9 @@ registration
     then consider o be OperSymbol of S such that
 A1: (the Arity of S).o = {} & (the ResultSort of S).o = s by Def2;
 A3: dom ((the Sorts of U0)# qua ManySortedSet of(the carrier of S)*)
-    = (the carrier of S)* by PBOOLE:def 3;
+    = (the carrier of S)* by PARTFUN1:def 4;
 A4: dom (the Arity of S) = the carrier' of S &
-    rng(the Arity of S) c= (the carrier of S)* by FUNCT_2:def 1,RELSET_1:12;
+    rng(the Arity of S) c= (the carrier of S)* by FUNCT_2:def 1,RELAT_1:def 19;
     then (the Arity of S).o in rng (the Arity of S) by FUNCT_1:def 5;
     then
 A5: o in dom ((the Sorts of U0)# * the Arity of S) by A3,A4,FUNCT_1:21;
@@ -311,12 +312,14 @@ A5: o in dom ((the Sorts of U0)# * the Arity of S) by A3,A4,FUNCT_1:21;
       .= {{}} by CARD_3:19;
     then
 A6: {} in Args(o,U0) by TARSKI:def 1;
-A7: dom f = Args (o,U0) & rng f c= Result(o,U0) by FUNCT_2:def 1,RELSET_1:12;
+A7: dom f = Args (o,U0) & rng f c= Result(o,U0) by FUNCT_2:def 1,RELAT_1:def 19
+;
     then
 A8: f.{} in rng f by A6,FUNCT_1:def 5;
-A9: dom (the Sorts of U0) = the carrier of S by PBOOLE:def 3;
+A9: dom (the Sorts of U0) = the carrier of S by PARTFUN1:def 4;
 A10: dom (the ResultSort of S) = the carrier' of S &
-    rng(the ResultSort of S) c= the carrier of S by FUNCT_2:def 1,RELSET_1:12;
+    rng(the ResultSort of S) c= the carrier of S by FUNCT_2:def 1
+,RELAT_1:def 19;
     then (the ResultSort of S).o in rng (the ResultSort of S) by FUNCT_1:def 5;
     then
 A11: o in
@@ -383,17 +386,19 @@ proof
   assume
 A1: B0 c= B1;
 A2: rng the Arity of S c= (the carrier of S)* &
-  dom (the Arity of S) = the carrier' of S by FUNCT_2:def 1,RELSET_1:12;
+  dom (the Arity of S) = the carrier' of S by FUNCT_2:def 1,RELAT_1:def 19;
   then
 A3: dom (B0# * the Arity of S) = dom (the Arity of S) &
-  dom (B1# * the Arity of S) = dom (the Arity of S) by PBOOLE:def 3;
+  dom (B1# * the Arity of S) = dom (the Arity of S) by PARTFUN1:def 4
+;
   reconsider a = (the Arity of S).o as Element of (the carrier of S)*;
   (B0# * the Arity of S).o = B0#.a & (B1# * the Arity of S).o = B1#.a
   by A2,A3,FUNCT_1:22;
   then
 A5: (B0# * the Arity of S).o = product (B0 * a) &
   (B1# * the Arity of S).o = product (B1 * a) by PBOOLE:def 19;
-A6: dom B0 = the carrier of S & dom B1 = the carrier of S by PBOOLE:def 3;
+A6: dom B0 = the carrier of S & dom B1 = the carrier of S by PARTFUN1:def 4
+;
 A7: rng a c= the carrier of S by FINSEQ_1:def 4;
   then
 A8: dom (B0 * a) = dom a & dom (B1 * a) = dom a by A6,RELAT_1:46;
@@ -456,7 +461,7 @@ A9:   A c= B0 by PBOOLE:def 23;
         .= (B# * the Arity of S).o by MSUALG_1:def 9;
       then
 A10:  dom f = ((B# * the Arity of S).o) /\ ((A# * the Arity of S).o) by
-FUNCT_1:68
+RELAT_1:90
         .= (A# * the Arity of S).o by A9,Th3,XBOOLE_1:28;
       rng f c= (A * the ResultSort of S).o by A1,Def6;
       hence thesis by A10,FUNCT_2:4;
@@ -485,7 +490,8 @@ A2: for x st x in the carrier' of S ex y st P[x,y]
     consider f be Function such that
 A3: dom f = the carrier' of S &
     for x st x in the carrier' of S holds P[x,f.x] from CLASSES1:sch 1(A2);
-    reconsider f as ManySortedSet of the carrier' of S by A3,PBOOLE:def 3;
+    reconsider f as ManySortedSet of the carrier' of S by A3,PARTFUN1:def 4
+,RELAT_1:def 18;
     for x st x in dom f holds f.x is Function
     proof
       let x;
@@ -556,7 +562,7 @@ A3:   Result(o,U0) = {} by A1,MSUALG_1:def 10;
       then Result(o,U0) <> {} by A1,MSUALG_1:def 10;
       then
 A4:   dom Den(o,U0) = Args(o,U0) & rng Den(o,U0) c= Result(o,U0)
-      by FUNCT_2:def 1,RELSET_1:12;
+      by FUNCT_2:def 1,RELAT_1:def 19;
 A5:   Args(o,U0) = (B# * the Arity of S).o by A1,MSUALG_1:def 9;
       Result (o,U0) = (B* the ResultSort of S).o by A1,MSUALG_1:def 10;
       hence rng ((Den(o,U0))|((B# * the Arity of S).o))
@@ -572,13 +578,13 @@ A6: o/.B = (Den(o,U0))|((B# * the Arity of S).o) by Def8;
     then
 A7: Result(o,U0) = {} by A1,MSUALG_1:def 10;
       Den(o,U0) = {} by A7;
-    hence o/.B = Den(o,U0) by A6;
+    hence thesis by A6;
   end;
   suppose (B * the ResultSort of S).o <> {};
     then Result(o,U0) <> {} by A1,MSUALG_1:def 10;
     then
 A8: dom Den(o,U0) = Args(o,U0) & rng Den(o,U0) c= Result(o,U0)
-    by FUNCT_2:def 1,RELSET_1:12;
+    by FUNCT_2:def 1,RELAT_1:def 19;
     Args(o,U0) = (B# * the Arity of S).o by A1,MSUALG_1:def 9;
     hence thesis by A6,A8,RELAT_1:97;
   end;
@@ -627,7 +633,7 @@ A1: B=the Sorts of U1;
       f1.o1 = Den(o1,U1) & f2.o1 = o1/.B by Def9,MSUALG_1:def 11;
       hence thesis by A1,Th4;
     end;
-    hence the Charact of U1 = Opers(U0,B) by PBOOLE:3;
+    hence thesis by PBOOLE:3;
   end;
 end;
 
@@ -705,7 +711,7 @@ A1: B=the Sorts of U0;
     f1.o1 = Den(o1,U0) & f2.o1 = o1/.B by Def9,MSUALG_1:def 11;
     hence thesis by A1,Th4;
   end;
-  hence the Charact of U0 = Opers(U0,B) by PBOOLE:3;
+  hence thesis by PBOOLE:3;
 end;
 
 theorem
@@ -745,7 +751,7 @@ A8: ((B0# * the Arity of S).o) c= ((B1'# * the Arity of S).o) by A2,Th3;
     by RELAT_1:100
       .= (Den(o,U2))|((B0# * the Arity of S).o) by A8,XBOOLE_1:28;
     then rng ((Den(o,U2))|((B0# * the Arity of S).o)) c= Result(o,U0)
-    by RELSET_1:12;
+    by RELAT_1:def 19;
     then rng ((Den(o,U2))|((B0# * the Arity of S).o)) c=
     ((the Sorts of U0) * the ResultSort of S).o by MSUALG_1:def 10;
     hence thesis by A3,Def6;
@@ -799,7 +805,7 @@ A4: B1 is_closed_on o by A3,Def7;
 A5: Args(o,U2) = (B2# * the Arity of S).o by MSUALG_1:def 9;
     thus O.x = o/.B1 by A3,Def9
       .= (Den(o,U2))|((B1# * the Arity of S).o) by A4,Def8
-      .= Den(o,U2) by A2,A5,FUNCT_2:40
+      .= Den(o,U2) by A2,A5,RELSET_1:34
       .= P.x by A3,MSUALG_1:def 11;
   end;
   hence thesis by A1,A2,A3,PBOOLE:3;
@@ -834,7 +840,7 @@ A6: Den(o,U2) = Opers(U0,B2).o by A3,MSUALG_1:def 11
     by A1,Th3,XBOOLE_1:28
       .= (Den(o,U2))|((B1# * the Arity of S).o) by A6,RELAT_1:100;
     then rng ((Den(o,U2))|((B1# * the Arity of S).o)) c= Result(o,U1)
-    by RELSET_1:12;
+    by RELAT_1:def 19;
     then rng ((Den(o,U2))|((B1# * the Arity of S).o)) c=
     ((the Sorts of U1) * the ResultSort of S).o by MSUALG_1:def 10;
     hence thesis by A2,Def6;
@@ -917,17 +923,17 @@ A7:     rng ((Den(o,U0))|((u1# * the Arity of S).o))
 A9:     dom ((the Sorts of U0)# qua ManySortedSet of(the carrier of S)*)
 
 = (the carrier of S)* & dom (u1# qua ManySortedSet of(the carrier of S)* )
-        = (the carrier of S)* by PBOOLE:def 3;
+        = (the carrier of S)* by PARTFUN1:def 4;
 A10:    dom (the Arity of S) = the carrier' of S &
         rng(the Arity of S) c= (the carrier of S)*
-        by FUNCT_2:def 1,RELSET_1:12;
+        by FUNCT_2:def 1,RELAT_1:def 19;
         then (the Arity of S).o in rng (the Arity of S) by FUNCT_1:def 5;
         then
 A11:    o in dom ((the Sorts of U0)# * the Arity of S) &
         o in dom (u1# * the Arity of S)by A9,A10,FUNCT_1:21;
         dom {} = {} & rng {} = {};
         then reconsider a = {} as Function of {},{} by FUNCT_2:3;
-        rng Den(o,U0) c= Result(o,U0) by RELSET_1:12;
+        rng Den(o,U0) c= Result(o,U0) by RELAT_1:def 19;
         then
 A12:    dom (Den (o,U0)) = Args(o,U0) by A6,FUNCT_2:def 1
           .= ((the Sorts of U0)# * the Arity of S).o by MSUALG_1:def 9
@@ -947,7 +953,7 @@ RELAT_1:97;
 A13:    b in (u1*the ResultSort of S).o by A6,A7;
         dom (the ResultSort of S) = the carrier' of S &
         rng(the ResultSort of S) c= the carrier of S
-        by FUNCT_2:def 1,RELSET_1:12;
+        by FUNCT_2:def 1,RELAT_1:def 19;
         hence thesis by A5,A6,A13,FUNCT_1:23;
       end;
     end;
@@ -1035,7 +1041,7 @@ proof
   let S be non void non empty ManySortedSign, U0 be MSAlgebra over S,
   A be MSSubset of U0;
   set f = Funcs(the carrier of S, bool (Union (the Sorts of U0)));
-A1: dom (the Sorts of U0) = the carrier of S by PBOOLE:def 3;
+A1: dom (the Sorts of U0) = the carrier of S by PARTFUN1:def 4;
   (Union (the Sorts of U0)) = union rng(the Sorts of U0) by CARD_3:def 4;
   then rng(the Sorts of U0) c= bool(Union (the Sorts of U0)) by ZFMISC_1:100;
   then
@@ -1097,7 +1103,7 @@ A1: for x be set holds
     x in X iff x in Funcs(the carrier of S, bool (Union (the Sorts of U0))) &
     P[x] from XBOOLE_0:sch 1;
     set f = Funcs(the carrier of S, bool (Union (the Sorts of U0)));
-A2: dom (the Sorts of U0) = the carrier of S by PBOOLE:def 3;
+A2: dom (the Sorts of U0) = the carrier of S by PARTFUN1:def 4;
     (Union (the Sorts of U0)) = union rng(the Sorts of U0) by CARD_3:def 4;
     then rng(the Sorts of U0) c= bool(Union (the Sorts of U0)) by ZFMISC_1:100;
     then
@@ -1131,7 +1137,7 @@ proof
 A1: B is opers_closed & Constants(U0) c= B & A c= B;
   set C = bool (Union (the Sorts of U0));
 A2: dom B = the carrier of S & dom (the Sorts of U0) = the carrier of S
-  by PBOOLE:def 3;
+  by PARTFUN1:def 4;
   union rng B c= union(rng(the Sorts of U0))
   proof
     let x be set;
@@ -1166,7 +1172,7 @@ proof
 A1: B is opers_closed;
   set C = bool (Union (the Sorts of U0));
 A2: dom B = the carrier of S & dom (the Sorts of U0) = the carrier of S
-  by PBOOLE:def 3;
+  by PARTFUN1:def 4;
   union rng B c= union(rng(the Sorts of U0))
   proof
     let x be set;
@@ -1214,7 +1220,7 @@ A3: for x be set holds
       given B be MSSubset of U0 such that
 A4:   B in SubSort(A) & x = B.s;
       dom (the Sorts of U0) = the carrier of S & dom B = the carrier of S
-      by PBOOLE:def 3;
+      by PARTFUN1:def 4;
       then (the Sorts of U0).s in rng (the Sorts of U0) by FUNCT_1:def 5;
       then
 A5:   (the Sorts of U0).s c= union( rng (the Sorts of U0)) by ZFMISC_1:92;
@@ -1256,7 +1262,7 @@ A3: for x be set holds
       given B be MSSubset of U0 such that
 A4:   B in SubSort(A) & x = B.s;
       dom (the Sorts of U0) = the carrier of S & dom B = the carrier of S
-      by PBOOLE:def 3;
+      by PARTFUN1:def 4;
       then (the Sorts of U0).s in rng (the Sorts of U0) by FUNCT_1:def 5;
       then
 A5:   (the Sorts of U0).s c= union( rng (the Sorts of U0)) by ZFMISC_1:92;
@@ -1287,7 +1293,8 @@ definition
     consider f be Function such that
 A1: dom f = the carrier of S &
     for s be SortSymbol of S holds f.s = F(s) from FUNCT_1:sch 4;
-    reconsider f as ManySortedSet of (the carrier of S) by A1,PBOOLE:def 3;
+    reconsider f as ManySortedSet of (the carrier of S) by A1,PARTFUN1:def 4
+,RELAT_1:def 18;
     f c= the Sorts of U0
     proof
       let x be set;
@@ -1426,7 +1433,8 @@ A2: not x in ((MSSubSort A) * (the ResultSort of S)).o;
   set r = the_result_sort_of o;
 A3: r = (the ResultSort of S).o by MSUALG_1:def 7;
 A4: dom (the ResultSort of S) = the carrier' of S &
-  rng (the ResultSort of S) c= the carrier of S by FUNCT_2:def 1,RELSET_1:12;
+  rng (the ResultSort of S) c= the carrier of S by FUNCT_2:def 1,RELAT_1:def 19
+;
   ((MSSubSort A) * (the ResultSort of S)).o = (MSSubSort A).r
   by A3,A4,FUNCT_1:23
     .= meet SubSort(A,r) by Def15;
@@ -1514,7 +1522,8 @@ A1:   rng((Den(o,U0))|((u1#*the Arity of S).o))c=(u1*the ResultSort of S).o &
       by Def6;
 A3:   dom (A# * the Arity of S) = the carrier' of S &
       dom (u1 # * the Arity of S) = the carrier' of S &
-      dom (u2 # * the Arity of S) = the carrier' of S by PBOOLE:def 3;
+      dom (u2 # * the Arity of S) = the carrier' of S by PARTFUN1:def 4
+;
       then
 A4:   (A# * the Arity of S).o =
       (A# qua ManySortedSet of (the carrier of S)*).((the Arity of S).o)
@@ -1562,7 +1571,8 @@ A6:   rng ((Den(o,U0))|((A# *(the Arity of S)).o)) c=
 XBOOLE_1:19;
 A7:   dom (u1 * the ResultSort of S) = the carrier' of S &
       dom (A * the ResultSort of S) = the carrier' of S &
-      dom (u2 * the ResultSort of S)=the carrier' of S by PBOOLE:def 3;
+      dom (u2 * the ResultSort of S)=the carrier' of S by PARTFUN1:def 4
+;
       then ((u1*the ResultSort of S).o)/\((u2*the ResultSort of S).o) =
       u1.((the ResultSort of S).o)/\
       ((u2*the ResultSort of S).o) by FUNCT_1:22
@@ -1624,7 +1634,7 @@ A6:   (the Sorts of u1).s = meet SubSort(A,s) by A2,Def15;
       B.s in SubSort(A,s) by A5,Def14;
       hence thesis by A6,SETFAM_1:4;
     end;
-    hence u1 is MSSubAlgebra of U2 by Th9;
+    hence thesis by Th9;
   end;
   uniqueness
   proof
@@ -1942,7 +1952,7 @@ A1:   x = GenMSAlg(@A);
     A is opers_closed by Def10;
     then reconsider h = A as Element of SubSort(U0) by Th15;
     a = GenMSAlg(@h) by Th23;
-    hence x in X;
+    hence thesis;
   end;
   uniqueness
   proof
@@ -2190,13 +2200,13 @@ A1: for a,b being Element of L holds a"\/"b = b"\/"a
     proof
       let a,b be Element of L;
       MSAlg_join(U0) is commutative by Th30;
-      hence a"\/"b =b"\/"a by BINOP_1:def 2;
+      hence thesis by BINOP_1:def 2;
     end;
 A2: for a,b,c being Element of L holds a"\/"(b"\/"c) = (a"\/"b)"\/"c
     proof
       let a,b,c be Element of L;
       MSAlg_join(U0) is associative by Th31;
-      hence a"\/"(b"\/"c) =(a"\/"b)"\/"c by BINOP_1:def 3;
+      hence thesis by BINOP_1:def 3;
     end;
 A3: for a,b being Element of L holds (a"/\"b)"\/"b = b
     proof
@@ -2210,19 +2220,19 @@ A3: for a,b being Element of L holds (a"/\"b)"\/"b = b
         = ((U1 /\ U2)"\/"U2) by Def21
           .=y by Th29;
       end;
-      hence (a"/\"b)"\/"b = b;
+      hence thesis;
     end;
 A4: for a,b being Element of L holds a"/\"b = b"/\"a
     proof
       let a,b be Element of L;
       MSAlg_meet(U0) is commutative by Th32;
-      hence a"/\"b =b"/\"a by BINOP_1:def 2;
+      hence thesis by BINOP_1:def 2;
     end;
 A5: for a,b,c being Element of L holds a"/\"(b"/\"c) = (a"/\"b)"/\"c
     proof
       let a,b,c be Element of L;
       MSAlg_meet(U0) is associative by Th33;
-      hence a"/\"(b"/\"c) =(a"/\"b)"/\"c by BINOP_1:def 3;
+      hence thesis by BINOP_1:def 3;
     end;
     for a,b being Element of L holds a"/\"(a"\/"b)=a
     proof
@@ -2236,12 +2246,12 @@ A5: for a,b,c being Element of L holds a"/\"(b"/\"c) = (a"/\"b)"/\"c
         = (U1 /\( U1"\/"U2)) by Def22
           .=x by Th28;
       end;
-      hence a"/\"(a"\/"b) = a;
+      hence thesis;
     end;
     then L is strict join-commutative join-associative meet-absorbing
     meet-commutative meet-associative join-absorbing
     by A1,A2,A3,A4,A5,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
-    hence L is strict Lattice;
+    hence thesis;
   end;
 end;
 
@@ -2367,6 +2377,6 @@ A2: x in Funcs(the carrier of S, bool (Union (the Sorts of U0))) &
   x is MSSubset of U0 & for B be MSSubset of U0 st
   B = x holds B is opers_closed & Constants(U0) c= B & A c= B by A1,Def11;
   for B be MSSubset of U0 st B = x holds B is opers_closed by A1,Def11;
-  hence x in SubSort(U0) by A2,Def12;
+  hence thesis by A2,Def12;
 end;
 

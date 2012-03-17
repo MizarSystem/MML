@@ -11,25 +11,28 @@ environ
       SPPOL_1, MCART_1, GOBOARD1, TREES_1, PSCOMP_1, SPRECT_1, COMPTS_1,
       JORDAN3, RELAT_1, SPPOL_2, FUNCT_1, TARSKI, RFINSEQ, GROUP_2, SEQM_3,
       GOBOARD5, GOBOARD9, SUBSET_1, TOPREAL4, JORDAN5D, GOBOARD2, SPRECT_2,
-      ABSVALUE, CARD_1, ORDINAL2, TOPS_1, JORDAN5C, FINSEQ_5, FINSEQ_4, ARYTM;
+      ABSVALUE, CARD_1, ORDINAL2, TOPS_1, JORDAN5C, FINSEQ_5, FINSEQ_4, ARYTM,
+      RLVECT_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS,
       XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, NAT_D, CARD_1, RFINSEQ,
       FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_4, FINSEQ_5, MATRIX_1, MATRIX_2,
       SEQM_3, STRUCT_0, METRIC_1, PRE_TOPC, TOPS_1, COMPTS_1, CONNSP_1,
-      PCOMPS_1, EUCLID, TOPREAL1, TOPREAL4, JORDAN1, PSCOMP_1, GOBOARD1,
+      PCOMPS_1, RLVECT_1,
+      RLTOPSP1, EUCLID, TOPREAL1, TOPREAL4, JORDAN1, PSCOMP_1,
+      GOBOARD1,
       GOBOARD2, SPPOL_1, SPPOL_2, GOBOARD5, GOBOARD9, JORDAN3, JORDAN5C,
       JORDAN5D, SPRECT_1, SPRECT_2, XXREAL_0;
  constructors XXREAL_0, REAL_1, NAT_1, COMPLEX1, FINSEQ_4, REALSET1, RFINSEQ,
       NAT_D, TOPS_1, CONNSP_1, TOPS_2, COMPTS_1, MATRIX_2, TOPMETR, TOPREAL2,
       TOPREAL4, GOBOARD2, SPPOL_1, JORDAN1, PSCOMP_1, GOBOARD9, JORDAN3,
       JORDAN5C, SPRECT_1, SPRECT_2, JORDAN5D, SEQ_1, GOBOARD1, SEQM_3,
-      BINARITH;
+      BINARITH, FUNCSDOM, CONVEX1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
       MEMBERED, FINSEQ_1, REALSET1, STRUCT_0, EUCLID, GOBOARD2, SPPOL_2,
       SPRECT_1, SPRECT_2, VALUED_0, CARD_1, FUNCT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, SPRECT_2, JORDAN1, TOPREAL4, GOBOARD1, XBOOLE_0, PSCOMP_1,
-      SEQM_3;
+ definitions TARSKI, RLTOPSP1, SPRECT_2, JORDAN1, TOPREAL4, GOBOARD1, XBOOLE_0,
+      PSCOMP_1, SEQM_3;
  theorems FINSEQ_4, TARSKI, FINSEQ_3, FINSEQ_1, SPRECT_2, GOBOARD7, PSCOMP_1,
       SPRECT_1, TOPREAL3, SPPOL_2, NAT_1, SPPOL_1, EUCLID, ZFMISC_1, TOPREAL1,
       GOBOARD5, JORDAN5D, FINSEQ_5, FINSEQ_6, JORDAN4, JORDAN3, TOPREAL5,
@@ -37,7 +40,7 @@ environ
       SUBSET_1, GOBRD12, JORDAN5C, JORDAN6, MATRIX_2, GOBOARD1, ENUMSET1,
       CARD_2, GOBOARD2, NAT_2, ABSVALUE, GOBOARD8, PARTFUN2, FUNCT_1, XBOOLE_0,
       XBOOLE_1, XREAL_0, FINSEQ_2, XREAL_1, XXREAL_0, PARTFUN1, MATRIX_1,
-      NAT_D;
+      NAT_D, PRE_TOPC, RLTOPSP1;
  schemes DOMAIN_1;
 
 begin :: Preliminaries
@@ -82,13 +85,13 @@ A1: 0 < r and
 A2: p = (1-r)*p+r*q;
 A3: (1-r)*p+r*p = ((1-r)+r)*p by EUCLID:37
     .= p by EUCLID:33;
-  r*p = r*p + 0.REAL n by EUCLID:31
+  r*p = r*p + 0.TOP-REAL n by EUCLID:31
     .= r*p + ((1-r)*p + -(1-r)*p) by EUCLID:40
     .= r*q + (1-r)*p + -(1-r)*p by A2,A3,EUCLID:30
     .= r*q + ((1-r)*p + -(1-r)*p) by EUCLID:30
-    .= r*q + 0.REAL n by EUCLID:40
+    .= r*q + 0.TOP-REAL n by EUCLID:40
     .= r*q by EUCLID:31;
-  hence p = q by A1,EUCLID:38;
+  hence thesis by A1,EUCLID:38;
 end;
 
 theorem Th14:
@@ -103,7 +106,7 @@ A2: p = (1-r)*q+r*p;
   then
 A3: 0 < 1 - r by XREAL_1:22;
   p = (1-s)*p+s*q by A2;
-  hence p = q by A3,Th13;
+  hence thesis by A3,Th13;
 end;
 
 theorem
@@ -112,7 +115,7 @@ proof
   let p,q be Point of TOP-REAL n;
   assume p = 1/2*(p+q);
   then p = (1 - 1/2)*p + 1/2*q by EUCLID:36;
-  hence p = q by Th13;
+  hence thesis by Th13;
 end;
 
 theorem Th16:
@@ -122,14 +125,14 @@ proof
   let p,q,r be Point of TOP-REAL n;
   assume q in LSeg(p,r);
   then consider r1 being Real such that
+A3: q = (1-r1)*p+r1*r and
 A1: 0<=r1 and
-A2: r1<=1 and
-A3: q = (1-r1)*p+r1*r by SPPOL_1:21;
+A2: r1<=1;
   assume r in LSeg(p,q);
   then consider r2 being Real such that
+A6: r = (1-r2)*p+r2*q and
 A4: 0<=r2 and
-A5: r2<=1 and
-A6: r = (1-r2)*p+r2*q by SPPOL_1:21;
+A5: r2<=1;
 A7: (1-r1)+r1*(1-r2) = 1 - r1*r2;
 A8: (1-r2)+r2*(1-r1) = 1 - r2*r1;
 A9: q = (1-r1)*p+(r1*((1-r2)*p)+r1*(r2*q)) by A3,A6,EUCLID:36
@@ -149,7 +152,7 @@ A12: r1*r2 = 1;
     then 1 <= r1 or 1 <= r2 by A1,A4,XREAL_1:164;
     then 1*r1 = 1 or 1*r2 = 1 by A2,A5,XXREAL_0:1;
     hence q = 0 * p+r by A3,A12,EUCLID:33
-      .= 0.REAL n+r by EUCLID:33
+      .= 0.TOP-REAL n+r by EUCLID:33
       .= r by EUCLID:31;
   end;
   suppose
@@ -173,9 +176,9 @@ A1: A = Ball(p,r);
   proof
     let w1,w2 be Point of TOP-REAL 2;
     assume w1 in A & w2 in A;
-    hence LSeg(w1,w2) c= A by A1,TOPREAL3:28;
+    hence thesis by A1,TOPREAL3:28;
   end;
-  hence A is connected by JORDAN1:9;
+  hence thesis by JORDAN1:9;
 end;
 
 theorem Th18:
@@ -186,8 +189,10 @@ proof
 A1: A is open and
 A2: B is_a_component_of A;
 A3: B c= A by A2,SPRECT_1:7;
-A4: TOP-REAL 2 = TopSpaceMetr (Euclid 2) by EUCLID:def 8;
-  reconsider C = B, D = A as Subset of TopSpaceMetr Euclid 2 by EUCLID:def 8;
+A4: the TopStruct of TOP-REAL 2 = TopSpaceMetr Euclid 2 by EUCLID:def 8;
+  then
+  reconsider C = B, D = A as Subset of TopSpaceMetr Euclid 2;
+X: D is open by A1,A4,PRE_TOPC:60;
   for p being Point of Euclid 2 st p in C
   ex r being real number st r>0 & Ball(p,r) c= C
   proof
@@ -196,7 +201,7 @@ A4: TOP-REAL 2 = TopSpaceMetr (Euclid 2) by EUCLID:def 8;
 A5: p in C;
     then consider r being real number such that
 A6: r > 0 and
-A7: Ball(p,r) c= D by A1,A3,A4,TOPMETR:22;
+A7: Ball(p,r) c= D by A3,X,TOPMETR:22;
     reconsider r as Real by XREAL_0:def 1;
     take r;
     thus r>0 by A6;
@@ -205,9 +210,10 @@ A8: p in E by A6,GOBOARD6:4;
     then
 A9: B meets E by A5,XBOOLE_0:3;
     E is connected by A8,Th17;
-    hence Ball(p,r) c= C by A2,A7,A9,GOBOARD9:6;
+    hence thesis by A2,A7,A9,GOBOARD9:6;
   end;
-  hence B is open by A4,TOPMETR:22;
+  then C is open by TOPMETR:22;
+ hence B is open by A4,PRE_TOPC:60;
 end;
 
 canceled 2;
@@ -251,10 +257,10 @@ A3:   x in LSeg(p,q) /\ LSeg(q,r);
       hence thesis by TOPREAL3:11;
     end;
     assume x = q;
-    then x in LSeg(p,q) & x in LSeg(q,r) by TOPREAL1:6;
+    then x in LSeg(p,q) & x in LSeg(q,r) by RLTOPSP1:69;
     hence thesis by XBOOLE_0:def 4;
   end;
-  hence LSeg(p,q) /\ LSeg(q,r) = {q} by TARSKI:def 1;
+  hence thesis by TARSKI:def 1;
 end;
 
 theorem
@@ -280,10 +286,10 @@ A5:   p`2 = r`2 by A1,A3,SPPOL_1:63;
       hence thesis by A5,TOPREAL3:11;
     end;
     assume x = r;
-    then x in LSeg(p,q) & x in LSeg(s,r) by A3,TOPREAL1:6;
+    then x in LSeg(p,q) & x in LSeg(s,r) by A3,RLTOPSP1:69;
     hence thesis by XBOOLE_0:def 4;
   end;
-  hence LSeg(p,q) /\ LSeg(s,r) = {r} by TARSKI:def 1;
+  hence thesis by TARSKI:def 1;
 end;
 
 begin :: Main
@@ -299,7 +305,7 @@ proof
 A1: 1 <= j & j <= k & k <= width G & 1 <= i & i <= len G;
   per cases by A1,XXREAL_0:1;
   suppose j < k;
-    hence G*(i,j)`2 <= G*(i,k)`2 by A1,GOBOARD5:5;
+    hence thesis by A1,GOBOARD5:5;
   end;
   suppose j = k;
     hence thesis;
@@ -314,7 +320,7 @@ proof
 A1: 1 <= j & j <= width G & 1 <= i & i <= k & k <= len G;
   per cases by A1,XXREAL_0:1;
   suppose i < k;
-    hence G*(i,j)`1 <= G*(k,j)`1 by A1,GOBOARD5:4;
+    hence thesis by A1,GOBOARD5:4;
   end;
   suppose i = k;
     hence thesis;
@@ -348,7 +354,7 @@ proof
   let C be non empty compact Subset of TOP-REAL 2;
 A1: N-min C in N-most C by PSCOMP_1:101;
   N-most C c= LSeg(NW-corner C,NE-corner C) by XBOOLE_1:17;
-  hence N-min C in LSeg(NW-corner C,NE-corner C) by A1;
+  hence thesis by A1;
 end;
 
 theorem
@@ -356,7 +362,7 @@ theorem
 proof
   (NW-corner C)`2 = N-bound C by EUCLID:56
     .= (NE-corner C)`2 by EUCLID:56;
-  hence LSeg(NW-corner C,NE-corner C) is horizontal by SPPOL_1:36;
+  hence thesis by SPPOL_1:36;
 end;
 
 canceled;
@@ -384,7 +390,7 @@ A10: L~f /\ L~g ={ g/.1 } by A4,SPPOL_2:21
     .={g.1} by A5,PARTFUN1:def 8;
   mid(f,1,len f-'1) = <*f/.1*> by A6,A7,JORDAN4:27
     .= <*p*> by FINSEQ_4:26;
-  hence <*p*>^g is being_S-Seq by A3,A8,A9,A10,JORDAN3:80;
+  hence thesis by A3,A8,A9,A10,JORDAN3:80;
 end;
 
 canceled;
@@ -411,7 +417,7 @@ A8: LSeg(mid(f,1,j),i) = LSeg(f,i+1-'1) by A1,A3,JORDAN4:31;
 A9: LE p, f/.(i+1), L~f, f/.1, f/.len f by A3,A4,A7,A8,JORDAN5C:26;
   1 <= i+1 by NAT_1:11;
   then LE f/.(i+1), f/.j, L~f, f/.1, f/.len f by A1,A6,JORDAN5C:24;
-  hence LE p, f/.j, L~f, f/.1, f/.len f by A9,JORDAN5C:13;
+  hence thesis by A9,JORDAN5C:13;
 end;
 
 theorem :: JORDAN4:47
@@ -450,7 +456,7 @@ A9:   k < j;
       i = k or i < k by A8,XXREAL_0:1;
       then i = k or i+1 <= k by NAT_1:13;
       then e in B or e in {LSeg(f,i)} by A7,A9,TARSKI:def 1;
-      hence e in B \/ {LSeg(f,i)} by XBOOLE_0:def 3;
+      hence thesis by XBOOLE_0:def 3;
     end;
     let e be set;
     assume
@@ -462,11 +468,11 @@ A11:  e = LSeg(f,k) and
 A12:  i+1 <= k and
 A13:  k < j;
       i < k by A12,NAT_1:13;
-      hence e in A by A11,A13;
+      hence thesis by A11,A13;
     end;
     suppose e in {LSeg(f,i)};
       then e = LSeg(f,i) by TARSKI:def 1;
-      hence e in A by A2;
+      hence thesis by A2;
     end;
   end;
   thus L~mid(f,i,j) = union A by A1,A2,A3,SPRECT_2:18
@@ -502,7 +508,7 @@ A9:   k < j;
       k <= j -' 1 by A9,NAT_D:49;
       then j -' 1 = k or k < j -' 1 by XXREAL_0:1;
       then e in B or e in {LSeg(f,j -' 1)} by A7,A8,TARSKI:def 1;
-      hence e in B \/ {LSeg(f,j -' 1)} by XBOOLE_0:def 3;
+      hence thesis by XBOOLE_0:def 3;
     end;
     let e be set;
     assume
@@ -515,14 +521,14 @@ A12:  e = LSeg(f,k) and
 A13:  i <= k and
 A14:  k < j -' 1;
       k < j by A11,A14,XXREAL_0:2;
-      hence e in A by A12,A13;
+      hence thesis by A12,A13;
     end;
     suppose e in {LSeg(f,j -' 1)};
       then
 A15:  e = LSeg(f,j -' 1) by TARSKI:def 1;
       1 <= j & 1 <= j -' 1 by A1,A2,A4,XXREAL_0:2;
       then j-' 1 < j by NAT_D:51;
-      hence e in A by A4,A15;
+      hence thesis by A4,A15;
     end;
   end;
   thus L~mid(f,i,j) = union A by A1,A2,A3,SPRECT_2:18
@@ -580,7 +586,7 @@ A17: L~f /\ L~h = L~f /\ (LSeg(f/.len f,g/.1) \/ L~g) by A14,SPPOL_2:20
     .= g|(len g-'1+1) by A12,NAT_D:34
     .= g|len g by A8,XREAL_1:237,XXREAL_0:2
     .= g by FINSEQ_1:79;
-  hence f^g is being_S-Seq by A1,A15,A16,A17,JORDAN3:73;
+  hence thesis by A1,A15,A16,A17,JORDAN3:73;
 end;
 
 theorem
@@ -656,7 +662,7 @@ A19:    i2 + 1 = j;
         then i2+2 <= len f by A1,A19,NAT_1:13;
         then p in {f/.j} by A14,A16,A19,TOPREAL1:def 8;
         then p = f/.j by TARSKI:def 1;
-        then q in {p} by A3,TOPREAL1:7;
+        then q in {p} by A3,RLTOPSP1:71;
         hence contradiction by A10,TARSKI:def 1;
       end;
       then
@@ -697,10 +703,10 @@ A30:  i1 = i2;
       then not LE p,q,f/.j,f/.(j+1) by JORDAN3:65;
       then LT q,p,f/.j,f/.(j+1)
       by A2,A5,A11,A18,A21,A23,A27,A28,A30,JORDAN3:63,XXREAL_0:1;
-      hence LE q,p,f/.i1,f/.(i1+1)
+      hence thesis
       by A18,A21,A23,A28,A30,JORDAN3:def 7,XXREAL_0:1;
     end;
-    hence LE q, p, L~f, f/.1, f/.len f by A2,A8,A9,A10,JORDAN5C:30;
+    hence thesis by A2,A8,A9,A10,JORDAN5C:30;
   end;
 end;
 
@@ -717,7 +723,7 @@ A1: (L~f)` is open by TOPS_1:29;
   LeftComp f is_a_component_of (L~f)` by GOBOARD9:def 1;
   hence LeftComp f is open by A1,Th18;
   RightComp f is_a_component_of (L~f)` by GOBOARD9:def 2;
-  hence RightComp f is open by A1,Th18;
+  hence thesis by A1,Th18;
 end;
 
 registration
@@ -728,7 +734,7 @@ registration
     W-bound L~f <> E-bound L~f by TOPREAL5:23;
     hence L~f is non vertical by SPRECT_1:17;
     S-bound L~f <> N-bound L~f by TOPREAL5:22;
-    hence L~f is non horizontal by SPRECT_1:18;
+    hence thesis by SPRECT_1:18;
   end;
   cluster LeftComp f -> being_Region;
   coherence
@@ -739,7 +745,7 @@ registration
 A1: A = LeftComp f and
 A2: A is_a_component_of (TOP-REAL 2)|(L~f)` by CONNSP_1:def 6;
     A is connected by A2,CONNSP_1:def 5;
-    hence LeftComp f is connected by A1,CONNSP_1:24;
+    hence thesis by A1,CONNSP_1:24;
   end;
   cluster RightComp f -> being_Region;
   coherence
@@ -750,7 +756,7 @@ A2: A is_a_component_of (TOP-REAL 2)|(L~f)` by CONNSP_1:def 6;
 A3: A = RightComp f and
 A4: A is_a_component_of (TOP-REAL 2)|(L~f)` by CONNSP_1:def 6;
     A is connected by A4,CONNSP_1:def 5;
-    hence RightComp f is connected by A3,CONNSP_1:24;
+    hence thesis by A3,CONNSP_1:24;
   end;
 end;
 
@@ -761,7 +767,7 @@ proof
   let f be non constant standard special_circular_sequence;
   (L~f)` =LeftComp f \/ RightComp f by GOBRD12:11;
   then RightComp f c= (L~f)` by XBOOLE_1:7;
-  hence RightComp f misses L~f by SUBSET_1:43;
+  hence thesis by SUBSET_1:43;
 end;
 
 theorem Th43:
@@ -771,7 +777,7 @@ proof
   let f be non constant standard special_circular_sequence;
   (L~f)` =LeftComp f \/ RightComp f by GOBRD12:11;
   then LeftComp f c= (L~f)` by XBOOLE_1:7;
-  hence LeftComp f misses L~f by SUBSET_1:43;
+  hence thesis by SUBSET_1:43;
 end;
 
 theorem Th44:
@@ -802,7 +808,7 @@ proof
   thus 1 <= i by JORDAN5D:47;
   i_e_n f <= len GoB f by JORDAN5D:47;
   hence i < len GoB f by Th44,XXREAL_0:2;
-  thus N-min L~f = (GoB f)*(i,width GoB f) by JORDAN5D:def 7;
+  thus thesis by JORDAN5D:def 7;
 end;
 
 theorem Th46:
@@ -899,7 +905,7 @@ A35: i2=i;
     width GoB f in NAT;
     then j2 < width GoB f & width GoB f = j2+1 by A29,A34,GOBOARD1:1;
 
-hence f/.(len f -' 1) = (GoB f)*(i,width GoB f -' 1) by A27,A35,NAT_D:34;
+hence thesis by A27,A35,NAT_D:34;
   end;
 end;
 
@@ -983,7 +989,7 @@ A3: f/.2 in N-most L~f by A1,SPRECT_2:34;
   then
 A4: LSeg(f/.1,f/.2) c= LSeg(NW-corner L~f,NE-corner L~f) by A2,A3,TOPREAL1:12;
   LSeg(NW-corner L~f,NE-corner L~f) c= L~SpStSeq L~f by Th26;
-  hence LSeg(f/.1,f/.2) c= L~SpStSeq L~f by A4,XBOOLE_1:1;
+  hence thesis by A4,XBOOLE_1:1;
 end;
 
 begin :: Rectangular
@@ -1134,7 +1140,7 @@ A11:  i = 5;
         .= g/.i by A4,A7,A11,FINSEQ_6:def 1;
     end;
   end;
-  hence f = g by A5,FINSEQ_5:13;
+  hence thesis by A5,FINSEQ_5:13;
 end;
 
 theorem Th52:
@@ -1182,11 +1188,7 @@ A6: x in C;
     W-bound C & p`2 = N-bound C)
     or (ex p st x = p & p`1 = W-bound C & p`2 <= N-bound C & p`2 >= S-bound C)
     by A2,A3,A4,A5;
-    hence x in { p where p is Point of TOP-REAL 2:
-    p`1 = W-bound C & p`2 <= N-bound C & p`2 >= S-bound C or
-    p`1 <= E-bound C & p`1 >= W-bound C & p`2 = N-bound C or
-    p`1 <= E-bound C & p`1 >= W-bound C & p`2 = S-bound C or
-    p`1 = E-bound C & p`2 <= N-bound C & p`2 >= S-bound C};
+    hence thesis;
   end;
   let x be set;
   assume x in { p where p is Point of TOP-REAL 2:
@@ -1209,7 +1211,7 @@ A6: x in C;
   then x in (LSeg(NW-corner C,NE-corner C) \/ LSeg(NE-corner C,SE-corner C))
   \/ (LSeg(SE-corner C,SW-corner C) \/ LSeg(SW-corner C,NW-corner C))
   by XBOOLE_0:def 3;
-  hence x in C by A1,SPRECT_1:43;
+  hence thesis by A1,SPRECT_1:43;
 end;
 
 theorem Th53:
@@ -1570,7 +1572,7 @@ A38: S-bound L~f < p`2 by A27,A31,A34,XREAL_1:8;
   then p`2 < N-bound L~f by A28,A31,A35,XREAL_1:8;
   then p in RC by A36,A37,A38;
   then RC meets RightComp f by A23,A24,XBOOLE_0:3;
-  hence RightComp f = RC by A1,A6,A21,GOBOARD9:3;
+  hence thesis by A1,A6,A21,GOBOARD9:3;
 end;
 
 registration
@@ -2148,19 +2150,19 @@ A27: x in P1 \/ P2 or x in P3 \/ P4 by XBOOLE_0:def 3;
     per cases by A27,XBOOLE_0:def 3;
     suppose x in P1;
       then ex p st x = p & p`2 < S-bound L~f;
-      hence x in LeftComp SpStSeq L~f by A24,Th57;
+      hence thesis by A24,Th57;
     end;
     suppose x in P2;
       then ex p st x = p & p`2 > N-bound L~f;
-      hence x in LeftComp SpStSeq L~f by A19,Th57;
+      hence thesis by A19,Th57;
     end;
     suppose x in P3;
       then ex p st x = p & p`1 > E-bound L~f;
-      hence x in LeftComp SpStSeq L~f by A25,Th57;
+      hence thesis by A25,Th57;
     end;
     suppose x in P4;
       then ex p st x = p & p`1 < W-bound L~f;
-      hence x in LeftComp SpStSeq L~f by A23,Th57;
+      hence thesis by A23,Th57;
     end;
   end;
   for p st p in P1 holds p`2 < (GoB f)*(1,1)`2
@@ -2168,7 +2170,7 @@ A27: x in P1 \/ P2 or x in P3 \/ P4 by XBOOLE_0:def 3;
     let p;
     assume p in P1;
     then ex q st p = q & q`2 < S-bound L~f;
-    hence p`2 < (GoB f)*(1,1)`2 by JORDAN5D:40;
+    hence thesis by JORDAN5D:40;
   end;
   then
 A28: P1 misses L~f by GOBOARD8:23;
@@ -2177,7 +2179,7 @@ A28: P1 misses L~f by GOBOARD8:23;
     let p;
     assume p in P2;
     then ex q st p = q & q`2 > N-bound L~f;
-    hence p`2 > (GoB f)*(1,width GoB f)`2 by JORDAN5D:42;
+    hence thesis by JORDAN5D:42;
   end;
   then P2 misses L~f by GOBOARD8:24;
   then
@@ -2187,7 +2189,7 @@ A29: P1 \/ P2 misses L~f by A28,XBOOLE_1:70;
     let p;
     assume p in P3;
     then ex q st p = q & q`1 > E-bound L~f;
-    hence p`1 > (GoB f)*(len GoB f,1)`1 by JORDAN5D:41;
+    hence thesis by JORDAN5D:41;
   end;
   then
 A30: P3 misses L~f by GOBOARD8:22;
@@ -2196,13 +2198,13 @@ A30: P3 misses L~f by GOBOARD8:22;
     let p;
     assume p in P4;
     then ex q st p = q & q`1 < W-bound L~f;
-    hence p`1 < (GoB f)*(1,1)`1 by JORDAN5D:39;
+    hence thesis by JORDAN5D:39;
   end;
   then P4 misses L~f by GOBOARD8:21;
   then P3 \/ P4 misses L~f by A30,XBOOLE_1:70;
   then LeftComp SpStSeq L~f misses L~f by A26,A29,XBOOLE_1:70;
   then LeftComp SpStSeq L~f c= (L~f)` by SUBSET_1:43;
-  hence LeftComp SpStSeq L~f c= LeftComp f by A2,A5,A22,GOBOARD9:6;
+  hence thesis by A2,A5,A22,GOBOARD9:6;
 end;
 
 begin :: In the area
@@ -2297,7 +2299,7 @@ A11: (SW-corner D)`1 = W-bound D & (NW-corner D)`1 = W-bound D by EUCLID:56;
     LSeg(SW-corner D,NW-corner D) by A2,A3,A5,A6,A7,A10,A11,GOBOARD7:8;
     then p in LSeg(SE-corner D,SW-corner D) \/ LSeg(SW-corner D,NW-corner D)
     by XBOOLE_0:def 3;
-    hence p in L~f by A4,XBOOLE_0:def 3;
+    hence thesis by A4,XBOOLE_0:def 3;
   end;
   suppose
 A12: p`1 = E-bound L~f;
@@ -2307,7 +2309,7 @@ A13: (NE-corner D)`1 = E-bound D & (SE-corner D)`1 = E-bound D by EUCLID:56;
     LSeg(NE-corner D,SE-corner D) by A2,A3,A6,A7,A8,A12,A13,GOBOARD7:8;
     then p in LSeg(NW-corner D,NE-corner D) \/ LSeg(NE-corner D,SE-corner D)
     by XBOOLE_0:def 3;
-    hence p in L~f by A4,XBOOLE_0:def 3;
+    hence thesis by A4,XBOOLE_0:def 3;
   end;
   suppose
 A14: p`2 = S-bound L~f;
@@ -2317,7 +2319,7 @@ A15: (SE-corner D)`1 = E-bound D & (SW-corner D)`1 = W-bound D by EUCLID:56;
     LSeg(SE-corner D,SW-corner D) by A2,A3,A5,A6,A8,A14,A15,GOBOARD7:9;
     then p in LSeg(SE-corner D,SW-corner D) \/ LSeg(SW-corner D,NW-corner D)
     by XBOOLE_0:def 3;
-    hence p in L~f by A4,XBOOLE_0:def 3;
+    hence thesis by A4,XBOOLE_0:def 3;
   end;
   suppose
 A16: p`2 = N-bound L~f;
@@ -2327,7 +2329,7 @@ A17: (NW-corner D)`1 = W-bound D & (NE-corner D)`1 = E-bound D by EUCLID:56;
     LSeg(NW-corner D,NE-corner D) by A2,A3,A5,A7,A8,A16,A17,GOBOARD7:9;
     then p in LSeg(NW-corner D,NE-corner D) \/ LSeg(NE-corner D,SE-corner D)
     by XBOOLE_0:def 3;
-    hence p in L~f by A4,XBOOLE_0:def 3;
+    hence thesis by A4,XBOOLE_0:def 3;
   end;
 end;
 
@@ -2382,7 +2384,7 @@ A16: (1-r)*N-bound L~f+r*N-bound L~f = 1*N-bound L~f;
 A17: r*q`2<= r*N-bound L~f by A1,A4,XREAL_1:66;
   (1-r)*p`2 <= (1-r)*N-bound L~f by A4,A10,XREAL_1:66;
   then (1-r)*p`2+r*q`2 <= N-bound L~f by A16,A17,XREAL_1:9;
-  hence (<*(1-r)*p+r*q*>/.n)`2 <= N-bound L~f by A6,A13,FINSEQ_4:25;
+  hence thesis by A6,A13,FINSEQ_4:25;
 end;
 
 theorem Th62:
@@ -2422,7 +2424,7 @@ A5: <*g/.i*> is_in_the_area_of f by A1,Th62;
   then <*g/.(i+1)*> is_in_the_area_of f by A1,Th62;
   then
 A6: <*g/.i,g/.(i+1)*> is_in_the_area_of f by A5,Th59;
-  ex r being Real st 0<=r & r<=1 & p = (1-r)*g/.i+r*g/.(i+1) by A4,SPPOL_1:21;
+  ex r being Real st p = (1-r)*g/.i+r*g/.(i+1) & 0<=r & r<=1 by A4;
   hence thesis by A6,Th61;
 end;
 
@@ -2462,9 +2464,9 @@ A13: x in LSeg(p,q) /\ L~f;
 A14: x in LSeg(p,q) by XBOOLE_0:def 4;
   reconsider p' = x as Point of TOP-REAL 2 by A13;
   consider r being Real such that
+A17: p' = (1-r)*p+r*q and
 A15: 0<=r and
-A16: r<=1 and
-A17: p' = (1-r)*p+r*q by A14,SPPOL_1:21;
+A16: r<=1 by A14;
 A18: p'`1 = ((1-r)*p)`1+(r*q)`1 by A17,TOPREAL3:7
     .= (1-r)*p`1+(r*q)`1 by TOPREAL3:9
     .= (1-r)*p`1+r*q`1 by TOPREAL3:9;
@@ -2475,31 +2477,31 @@ A20: p' in L~f by A13,XBOOLE_0:def 4;
   per cases by A20,Th49;
   suppose p'`1 = W-bound L~f;
     then r = 0 by A7,A11,A15,A16,A18,XREAL_1:182;
-    then p' = 1*p+0.REAL 2 by A17,EUCLID:33
+    then p' = 1*p+0.TOP-REAL 2 by A17,EUCLID:33
       .= 1*p by EUCLID:31
       .= p by EUCLID:33;
-    hence x in {p} by ZFMISC_1:37;
+    hence thesis by ZFMISC_1:37;
   end;
   suppose p'`1 = E-bound L~f;
     then r = 0 by A7,A11,A15,A16,A18,XREAL_1:181;
-    then p' = 1*p+0.REAL 2 by A17,EUCLID:33
+    then p' = 1*p+0.TOP-REAL 2 by A17,EUCLID:33
       .= 1*p by EUCLID:31
       .= p by EUCLID:33;
-    hence x in {p} by ZFMISC_1:37;
+    hence thesis by ZFMISC_1:37;
   end;
   suppose p'`2 = S-bound L~f;
     then r = 0 by A8,A12,A15,A16,A19,XREAL_1:182;
-    then p' = 1*p+0.REAL 2 by A17,EUCLID:33
+    then p' = 1*p+0.TOP-REAL 2 by A17,EUCLID:33
       .= 1*p by EUCLID:31
       .= p by EUCLID:33;
-    hence x in {p} by ZFMISC_1:37;
+    hence thesis by ZFMISC_1:37;
   end;
   suppose p'`2 = N-bound L~f;
     then r = 0 by A8,A12,A15,A16,A19,XREAL_1:181;
-    then p' = 1*p+0.REAL 2 by A17,EUCLID:33
+    then p' = 1*p+0.TOP-REAL 2 by A17,EUCLID:33
       .= 1*p by EUCLID:31
       .= p by EUCLID:33;
-    hence x in {p} by ZFMISC_1:37;
+    hence thesis by ZFMISC_1:37;
   end;
 end;
 
@@ -2517,9 +2519,9 @@ A3: <*q*> is_in_the_area_of f;
 A4: <*p*> is_in_the_area_of f by A1,Th63,SPRECT_2:25;
   <*p,q*> = <*p*>^<*q*> by FINSEQ_1:def 9;
   hence LSeg(p,q) /\ L~f c= {p} by A2,A3,A4,Th64,SPRECT_2:28;
-  p in LSeg(p,q) by TOPREAL1:6;
+  p in LSeg(p,q) by RLTOPSP1:69;
   then p in LSeg(p,q) /\ L~f by A1,XBOOLE_0:def 4;
-  hence {p} c= LSeg(p,q) /\ L~f by ZFMISC_1:37;
+  hence thesis by ZFMISC_1:37;
 end;
 
 theorem Th66:
@@ -2588,8 +2590,7 @@ A9: i = len g - n + 1 by A5,A7,XREAL_1:235
   then n-1 >= 0 by XREAL_1:50;
   then i <= len g - 0 by A9,XREAL_1:15;
   then i in dom g by A8,FINSEQ_3:27;
-  hence W-bound L~f <= ((Rev g)/.n)`1 & ((Rev g)/.n)`1 <= E-bound L~f &
-  S-bound L~f <= ((Rev g)/.n)`2 & ((Rev g)/.n)`2 <= N-bound L~f
+  hence thesis
   by A1,A6,SPRECT_2:def 1;
 end;
 
@@ -2617,13 +2618,13 @@ A6: Index(p,g) in dom g by FINSEQ_3:27;
     then
 A7: R_Cut(g,p) = mid(g,1,Index(p,g))^<*p*> by JORDAN3:def 5;
     mid(g,1,Index(p,g)) is_in_the_area_of f by A1,A5,A6,SPRECT_2:26;
-    hence R_Cut(g,p) is_in_the_area_of f by A2,A7,SPRECT_2:28;
+    hence thesis by A2,A7,SPRECT_2:28;
   end;
   suppose p=g.1;
     then R_Cut(g,p) = <*g.1*> by JORDAN3:def 5
       .= <*g/.1*> by A5,PARTFUN1:def 8
       .= mid(g,1,1) by A4,JORDAN4:27;
-    hence R_Cut(g,p) is_in_the_area_of f by A1,A5,SPRECT_2:26;
+    hence thesis by A1,A5,SPRECT_2:26;
   end;
 end;
 
@@ -2963,11 +2964,11 @@ A6: Index(p,g)+1 in dom g by A5,FINSEQ_3:27;
     then
 A7: L_Cut(g,p) = <*p*>^mid(g,Index(p,g)+1,len g) by JORDAN3:def 4;
     mid(g,Index(p,g)+1,len g) is_in_the_area_of f by A1,A4,A6,SPRECT_2:26;
-    hence L_Cut(g,p) is_in_the_area_of f by A2,A7,SPRECT_2:28;
+    hence thesis by A2,A7,SPRECT_2:28;
   end;
   suppose p=g.(Index(p,g)+1);
     then L_Cut(g,p) = mid(g,Index(p,g)+1,len g) by JORDAN3:def 4;
-    hence L_Cut(g,p) is_in_the_area_of f by A1,A4,A6,SPRECT_2:26;
+    hence thesis by A1,A4,A6,SPRECT_2:26;
   end;
 end;
 

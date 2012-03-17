@@ -8,19 +8,20 @@ environ
 
  vocabularies FINSET_1, TREES_2, TREES_1, CARD_1, FINSEQ_1, FUNCT_1, ARYTM_1,
       RELAT_1, ORDINAL1, BOOLE, TREES_4, TARSKI, TREES_3, FUNCT_6, DTCONSTR,
-      TREES_9, ARYTM;
+      TREES_9, ARYTM, REALSET1;  :: wyrzucenie slownika daje runtimowke
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       XXREAL_0, NAT_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FINSEQ_1, FINSET_1,
       FINSEQ_2, FUNCT_6, TREES_1, TREES_2, TREES_3, TREES_4;
- constructors WELLORD2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2, TREES_4;
+ constructors WELLORD2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2, TREES_4, RELSET_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, XREAL_0,
-      FINSEQ_1, TREES_1, TREES_2, TREES_3, PRE_CIRC, CARD_1;
+      FINSEQ_1, TREES_1, TREES_2, TREES_3, PRE_CIRC, CARD_1, ZFMISC_1,
+      REALSET1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, FUNCT_1, TREES_2, TREES_3;
  theorems TARSKI, AXIOMS, ZFMISC_1, NAT_1, WELLORD2, FUNCT_1, FUNCT_2,
       FINSEQ_1, FINSEQ_3, CARD_1, CARD_2, FUNCT_6, TREES_1, TREES_2, TREES_3,
       TREES_4, RELSET_1, RELAT_1, XBOOLE_0, XBOOLE_1, FINSET_1, XREAL_1,
-      XXREAL_0, ORDINAL1, FINSEQ_2;
+      XXREAL_0, ORDINAL1, FINSEQ_2, REALSET1;
  schemes NAT_1, FUNCT_1, FINSEQ_1, CLASSES1, WELLORD2;
 
 begin :: Root tree and successors of node in decorated tree
@@ -34,7 +35,7 @@ definition
   proof
     let x be Element of Tset;
     x in Tset & Tset c= F;
-    hence x is Element of F;
+    hence thesis;
   end;
 end;
 
@@ -80,7 +81,7 @@ A9:   z in dom f & y in dom f & f.z = f.y;
       then <*i1-1*> = <*i2-1*> by A9,FINSEQ_1:46;
       then i1-1 = <*i2-1*>.1 by FINSEQ_1:57
         .= i2-1 by FINSEQ_1:57;
-      hence z = y;
+      hence thesis;
     end;
     then card dom f c= card succ x & card succ x c= card t
     by A5,CARD_1:26,27;
@@ -206,20 +207,33 @@ A8: a in ((dom t)|p)|q by A3,TREES_1:def 9;
   hence thesis by A2,A4,TREES_2:33;
 end;
 
-definition
+notation
   let IT be DecoratedTree;
-  attr IT is root means
-  : Def1:
-  dom IT = elementary_tree 0;
+  synonym IT is root for IT is trivial;
 end;
 
-registration
-  cluster root -> finite DecoratedTree;
-  coherence
+definition
+  let IT be DecoratedTree;
+  redefine attr IT is root means
+  : Def1:
+  dom IT = elementary_tree 0;
+ compatibility
   proof
-    let t be DecoratedTree;
-    assume dom t = elementary_tree 0;
-    hence thesis by FINSET_1:29;
+   thus IT is root implies dom IT = elementary_tree 0
+    proof assume
+Z:    IT is root;
+      dom IT is not empty;
+      then IT is not empty;
+      then consider x being set such that
+W1:    IT = {x} by Z,REALSET1:def 4;
+      x in IT by W1,TARSKI:def 1;
+      then consider x1,x2 being set such that
+W2:    x = [x1,x2] by RELAT_1:def 1;
+A:    {} in dom IT by TREES_1:47;
+      dom IT = {x1} by W1,W2,RELAT_1:23;
+     hence dom IT = elementary_tree 0 by TREES_1:56,A,TARSKI:def 1;
+    end;
+   thus thesis by TREES_1:56;
   end;
 end;
 
@@ -366,7 +380,6 @@ registration
   proof
     let t be DecoratedTree;
     assume t is finite;
-    then dom t is finite Tree;
     hence dom t is finite-order;
   end;
   cluster finite-order -> finite-branching DecoratedTree;
@@ -374,18 +387,7 @@ registration
   proof
     let t be DecoratedTree;
     assume dom t is finite-order;
-    then dom t is finite-order Tree;
     hence dom t is finite-branching;
-  end;
-end;
-
-registration
-  cluster finite DecoratedTree;
-  existence
-  proof consider t being finite Tree;
-    consider f being Function of t,{0};
-    take f;
-    thus f is finite;
   end;
 end;
 
@@ -426,7 +428,7 @@ A4: X[0]
     consider n being Element of NAT such that
 A5: x = f(n) by A1;
     n = 0 or n > 0 by NAT_1:3;
-    hence f(0) in X() by A2,A5;
+    hence thesis by A2,A5;
   end;
 A6: for n being Element of NAT st X[n] holds X[n+1]
   proof
@@ -479,8 +481,7 @@ A18:  x = f(k) by A1;
       hence thesis;
     end;
     then n+1,X() are_equipotent by A11,A13,WELLORD2:def 4;
-    then card (n+1) = card X() & n+1 = card (n+1) by CARD_1:21,def 5;
-    hence thesis by A8;
+    hence thesis by A8,CARD_1:def 5;
   end;
 A19: for n being Element of NAT holds X[n] from NAT_1:sch 1(A4,A6);
   consider f being Function such that
@@ -586,8 +587,7 @@ A4: for i being Element of NAT st i < len q holds q.(i+1) = p^<*i*>
     proof
       let i be Element of NAT;
       assume i < len q;
-      then i+1 in dom q by Lm3;
-      then q.(i+1) = p^<*i+1-1*> by A1;
+      then q.(i+1) = p^<*i+1-1*> by A1,Lm3;
       hence thesis;
     end;
 A5: q is one-to-one
@@ -686,7 +686,7 @@ A3: m = 1+n by NAT_1:10;
     reconsider n as Element of NAT by ORDINAL1:def 13;
     reconsider y = t|<*n*> as set;
     take y, n;
-    thus n+1 = z & y = t|<*n*> by A3;
+    thus thesis by A3;
   end;
   consider p being Function such that
 A4: dom p = Seg card A and
@@ -721,11 +721,12 @@ A10:  r = <*n*>^q by A9,FINSEQ_2:150;
       take n, q;
 A11:  <*n*> in dom t & e^<*n*> = <*n*> & succ e = A by A7,A10,TREES_1:46;
       then <*n*> in A;
-      hence n < len doms p by A6,A7,A8;
+      hence
+K:     n < len doms p by A6,A7,A8;
       then
 A12:  n+1 in dom doms p & n+1 in dom p by A8,Lm3;
-      then consider k being Element of NAT such that
-A13:  k+1 = n+1 & p.(n+1) = t|<*k*> by A4,A5;
+      consider k being Element of NAT such that
+A13:  k+1 = n+1 & p.(n+1) = t|<*k*> by A4,A5,A8,Lm3,K;
       (doms p).(n+1) = dom (t|<*n*>) by A12,A13,FUNCT_6:31
         .= (dom t)|<*n*> by TREES_2:def 11;
       hence q in (doms p).(n+1) & x = <*n*>^q by A10,A11,TREES_1:def 9;
@@ -738,8 +739,8 @@ A15: not x in dom t;
     then consider n being Element of NAT, q being FinSequence such that
 A16: n < len doms p & q in (doms p).(n+1) & x = <*n*>^q by A14,TREES_1:47;
 A17: n+1 in dom p by A8,A16,Lm3;
-    then consider k being Element of NAT such that
-A18: k+1 = n+1 & p.(n+1) = t|<*k*> by A4,A5;
+    consider k being Element of NAT such that
+A18: k+1 = n+1 & p.(n+1) = t|<*k*> by A4,A5,A8,A16,Lm3;
     (doms p).(n+1) = dom (t|<*n*>) by A17,A18,FUNCT_6:31
       .= (dom t)|<*n*> by TREES_2:def 11;
     then reconsider q as Element of (dom t)|<*n*> by A16;
@@ -752,12 +753,11 @@ A19: dom t = tree doms p by TREES_3:def 15;
   now
     let n be Element of NAT;
     assume n < len p;
-    then n+1 in dom p by Lm3;
     then consider m being Element of NAT such that
-A20: m+1 = n+1 & p.(n+1) = t|<*m*> by A4,A5;
+A20: m+1 = n+1 & p.(n+1) = t|<*m*> by A4,A5,Lm3;
     thus t|<*n*> = p.(n+1) by A20;
   end;
-  hence t = x-tree p by A19,TREES_4:def 4;
+  hence thesis by A19,TREES_4:def 4;
 end;
 
 registration
@@ -808,7 +808,7 @@ registration
       let x be set;
       assume x in S;
       then ex p being Node of t st x = t|p;
-      hence x is DecoratedTree;
+      hence thesis;
     end;
     hence thesis;
   end;
@@ -858,7 +858,7 @@ registration
     let x be Element of Subtrees t;
     x in {t|p where p is Node of t: not contradiction};
     then ex p being Node of t st x = t|p;
-    hence x is finite;
+    hence thesis;
   end;
 end;
 
@@ -891,9 +891,8 @@ A3: t2 = t1|m;
   then reconsider p = m^n as Element of dom t by A3,TREES_1:def 9;
   t = t|p by A2,A3,Th3;
   then dom t = (dom t)|p by TREES_2:def 11;
-  then p = {} by Th10;
-  then n = {};
-  hence t1 = t2 by A2,Th1;
+  then n = {} by Th10;
+  hence thesis by A2,Th1;
 end;
 
 theorem
@@ -924,7 +923,7 @@ definition
       then consider p being Node of t such that
 A1:   x = [p,t|p];
       t|p in Subtrees t;
-      hence x in [:dom t, Subtrees t:] by A1,ZFMISC_1:106;
+      hence thesis by A1,ZFMISC_1:106;
     end;
     hence thesis;
   end;
@@ -1051,7 +1050,7 @@ A5:     x = s|<*k*> by A3,A4,TREES_4:def 4;
       take y; thus y in (Subtrees t)* by FINSEQ_1:def 11;
       reconsider d = s as DecoratedTree;
       take d, p;
-      thus p = y & d = x & d = (d.{})-tree p by A3,TREES_4:def 4;
+      thus thesis by A3,TREES_4:def 4;
     end;
     consider f being Function such that
 A6: dom f = C-Subtrees t & rng f c= (Subtrees t)* &
@@ -1111,7 +1110,7 @@ registration
       let x be set;
       assume x in S;
       then ex t being Element of X, p being Node of t st x = t|p;
-      hence x is DecoratedTree;
+      hence thesis;
     end;
     hence thesis;
   end;
@@ -1351,9 +1350,8 @@ A2: for x st x in C-Subtrees X ex y being set st y in (Subtrees X)* & X[x,y]
       consider t being Element of X, sp being Node of t such that
 A3:   s = t|sp by Th20;
       t is finite by A1;
-      then s is finite DecoratedTree by A3;
       then consider z being set, p being DTree-yielding FinSequence such that
-A4:   s = z-tree p by Th8;
+A4:   s = z-tree p by Th8,A3;
       rng p c= Subtrees X
       proof
         let x be set;
@@ -1374,7 +1372,7 @@ A6:     x = s|<*k*> by A4,A5,TREES_4:def 4;
       take y; thus y in (Subtrees X)* by FINSEQ_1:def 11;
       reconsider d = s as DecoratedTree;
       take d, p;
-      thus p = y & d = x & d = (d.{})-tree p by A4,TREES_4:def 4;
+      thus thesis by A4,TREES_4:def 4;
     end;
     consider f being Function such that
 A7: dom f = C-Subtrees X & rng f c= (Subtrees X)* &
@@ -1513,7 +1511,7 @@ A12: succ(t,n).(i+1) = t.((n succ).(i+1)) by A2,FUNCT_1:22
     then (roots p).(i+1) = t.(<*i*>^{}) by A11,TREES_1:47,TREES_2:def 11;
     hence succ(t,n).(i+1) = (roots p).(i+1) by A12,FINSEQ_1:47;
   end;
-  hence succ(t,n) = roots p by A3,A9,Lm2;
+  hence thesis by A3,A9,Lm2;
 end;
 
 theorem

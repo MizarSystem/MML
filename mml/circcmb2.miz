@@ -14,7 +14,7 @@ environ
       MCART_1, FINSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_2,
       FUNCT_4, PBOOLE, STRUCT_0, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2,
       CIRCCOMB, FACIRC_1;
- constructors LIMFUNC1, CIRCUIT1, CIRCUIT2, FACIRC_1, NAT_1;
+ constructors LIMFUNC1, CIRCUIT1, CIRCUIT2, FACIRC_1, NAT_1, RELSET_1;
  registrations RELAT_1, FUNCT_1, ORDINAL1, FRAENKEL, XREAL_0, CARD_3, STRUCT_0,
       CIRCCOMB, FACIRC_1, NAT_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -195,7 +195,7 @@ A4: for n being Nat st Q[n] holds Q[n+1]
 A5: S = f().n & P[S,h().n,n];
     take S' = S(S,h().n,n);
     f().(n+1) = S(S,h().n,n) & h().(n+1) = o(h().n, n) by A2,A5;
-    hence S' = f().(n+1) & P[S',h().(n+1),n+1] by A3,A5;
+    hence thesis by A3,A5;
   end;
 A6: Q[0] by A1;
   thus for n being Nat holds Q[n] from NAT_1:sch 2(A6,A4);
@@ -324,7 +324,7 @@ A23: S = f1.n & Pl[S,h1.n,n] by A11;
     hence B[n+1];
   end;
   for i being Nat holds B[i] from NAT_1:sch 2(A20,A21);
-  hence S1 = S2 by A1,A4;
+  hence thesis by A1,A4;
 end;
 
 scheme CIRCCMB2'sch6 :: CircStrDefSch
@@ -481,14 +481,7 @@ theorem Th7:
 proof
   let X being without_pairs set;
   let Y being Relation;
-  now
-    given x being set such that
-A1: x in X /\ Y;
-    x in X & x in Y by A1,XBOOLE_0:def 4;
-    then ex a,b being set st x =[a,b] by RELAT_1:def 1;
-    hence contradiction by A1,FACIRC_1:def 2;
-  end;
-  then X /\ Y = {} by XBOOLE_0:7;
+  X /\ Y = {};
   then X misses Y by XBOOLE_0:def 7;
   hence thesis by XBOOLE_1:83;
 end;
@@ -503,13 +496,7 @@ proof
 A1: Z c= Y;
   assume
 A2: Y \ Z is without_pairs;
-  now
-    given x being set such that
-A3: x in X /\ (Y \ Z);
- x in X & x in (Y \ Z) by A3,XBOOLE_0:def 4;
-    then ex a,b being set st x =[a,b] by RELAT_1:def 1;
-    hence contradiction by A2,A3,FACIRC_1:def 2;
-  end;
+  not(ex x being set st x in X /\ (Y \ Z)) by A2;
   then X /\ (Y \ Z) = {} by XBOOLE_0:7;
   then X misses Y \ Z by XBOOLE_0:def 7;
   then
@@ -529,13 +516,7 @@ proof
 A1: Z c= Y;
   assume
 A2: X \ Z is without_pairs;
-  now
-    given x being set such that
-A3: x in (Y \ Z) /\ (X \ Z);
-A4: x in (Y \ Z) & x in (X \ Z) by A3,XBOOLE_0:def 4;
-    then ex a,b being set st x =[a,b] by RELAT_1:def 1;
-    hence contradiction by A2,A4,FACIRC_1:def 2;
-  end;
+  not(ex x being set st x in (Y \ Z) /\ (X \ Z)) by A2;
   then (Y \ Z) /\ (X \ Z) = {} by XBOOLE_0:7;
   then Y \ Z misses X \ Z by XBOOLE_0:def 7;
   then
@@ -1128,7 +1109,7 @@ A9: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S st
   S = f1.0 & A = g1.0 by A4;
 A10: f1.0 = f2.0 & g1.0 = g2.0 & h1.0 = h2.0 by A4,A7;
   f1 = f2 & g1 = g2 & h1 = h2 from CIRCCMB2'sch14(A9,A10,A5,A8,A2);
-  hence A1 = A2 by A3,A6;
+  hence thesis by A3,A6;
 end;
 
 scheme CIRCCMB2'sch19 :: attrCircuitExSch
@@ -1412,7 +1393,7 @@ A30: S = f.n() & A = g.n() & P[S,A,n()];
   assume
 A31: S = f.n & A1 = g.n & x = h.n & A2 = A(x,n);
   A2 = MSAlg(A2, S(x,n)) by Def1;
-  hence f.(n+1) = S +* S(x,n) & g.(n+1) = A1 +* A2 & h.(n+1) = o(x,n)
+  hence thesis
   by A4,A31;
 end;
 
@@ -1647,11 +1628,10 @@ A5: s2 = s|the carrier of S2;
 A6: the carrier of S = (the carrier of S1)\/the carrier of S2
   by A1,CIRCCOMB:def 2;
   dom Following s = the carrier of S by CIRCUIT1:4;
-  then the carrier of S2 c= dom Following s by A6,XBOOLE_1:7;
   then
 A7: dom Following s2 = the carrier of S2 &
   dom ((Following s)|the carrier of S2) = the carrier of S2
-  by CIRCUIT1:4,RELAT_1:91;
+  by CIRCUIT1:4,RELAT_1:91,A6,XBOOLE_1:7;
   now
     let a be set;
     assume a in the carrier of S2;
@@ -1875,7 +1855,7 @@ A9: Following(s, n1+n2)|the carrier of S1 = Following(s1, n2) &
     .= Following(s2, n2)+*s1 by A3,A8,Th3
     .= Following(s2, n2)+*Following(s1, n2) by A3,A8,Th3
     .= Following(s, n1+n2) by A6,A9,FUNCT_4:74;
-  hence Following(s, n1+n2) is stable by CIRCUIT2:def 6;
+  hence thesis by CIRCUIT2:def 6;
 end;
 
 theorem Th21:
@@ -2173,11 +2153,10 @@ A27:  for n being Nat, x being set st x = h().n holds
       InputVertices S1 is without_pairs by A14,A16,A17;
       then
 A28:  InputVertices S' misses InnerVertices S(x,n) by A7,A16,A17,FACIRC_1:5;
-A29:  A' tolerates A2 by CIRCCOMB:68;
 A30:  for s being State of A2 holds Following(s, n(1)) is stable by A3,A17;
       n(0)+(n+1)*n(1) = n(0)+n*n(1)+n(1);
       hence Following(s, n(0)+(n+1)*n(1)) is stable
-      by A17,A18,A19,A28,A29,A30,Th21;
+      by A17,A18,A19,A28,CIRCCOMB:68,A30,Th21;
     end;
   end;
 A31: for S being non empty ManySortedSign, A being non-empty MSAlgebra over S

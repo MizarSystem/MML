@@ -9,21 +9,23 @@ environ
  vocabularies FINSEQ_1, EUCLID, PRE_TOPC, GOBOARD1, ABSVALUE, ARYTM_1,
       TOPREAL1, MCART_1, ARYTM_3, MATRIX_1, TREES_1, RELAT_1, SPPOL_1,
       GOBOARD2, BOOLE, TOPS_1, GOBOARD5, TARSKI, SEQM_3, FUNCT_1, FINSET_1,
-      CARD_1, FINSEQ_6, FINSEQ_4, ARYTM;
+      CARD_1, FINSEQ_6, FINSEQ_4, ARYTM, RLVECT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, COMPLEX1, REAL_1,
       NAT_1, INT_2, NAT_D, FUNCT_1, PARTFUN1, FINSEQ_1, FINSET_1, STRUCT_0,
-      MATRIX_1, PRE_TOPC, TOPS_1, EUCLID, TOPREAL1, GOBOARD1, GOBOARD2,
+      MATRIX_1, PRE_TOPC, TOPS_1, RLVECT_1,
+      RLTOPSP1, EUCLID, TOPREAL1, GOBOARD1,
+      GOBOARD2,
       SPPOL_1, FINSEQ_6, GOBOARD5, XXREAL_0;
  constructors PARTFUN1, XXREAL_0, REAL_1, NAT_1, INT_2, NAT_D, TOPS_1,
-      GOBOARD2, SPPOL_1, GOBOARD5, GOBOARD1;
+      GOBOARD2, SPPOL_1, GOBOARD5, GOBOARD1, DOMAIN_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, INT_1, MEMBERED,
       FINSEQ_1, STRUCT_0, EUCLID, GOBOARD2, GOBOARD5, FINSET_1, CARD_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI;
+ definitions TARSKI, RLTOPSP1;
  theorems GOBOARD5, TOPS_1, EUCLID, GOBOARD1, TOPREAL3, ABSVALUE, TARSKI,
       SPPOL_1, TOPREAL1, GOBOARD2, FINSEQ_3, NAT_1, FINSEQ_6, GOBOARD6,
       MATRIX_1, FINSEQ_1, CARD_2, FINSEQ_5, XBOOLE_0, XREAL_1, FUNCT_1,
-      XXREAL_0;
+      XXREAL_0, RLTOPSP1;
  schemes NAT_1;
 
 begin
@@ -52,7 +54,7 @@ A1: abs(r1-r2) > s;
       hence r2+s < r1 by A1,XREAL_1:22;
     end;
   end;
-  hence r1+s < r2 or r2+s < r1;
+  hence thesis;
 end;
 
 theorem Th2:
@@ -64,7 +66,7 @@ proof
     hence r = s;
   end;
   assume r = s;
-  hence abs(r - s) = 0 by ABSVALUE:7;
+  hence thesis by ABSVALUE:7;
 end;
 
 theorem Th3:
@@ -72,11 +74,11 @@ theorem Th3:
 proof
   let p,p1,q be Point of TOP-REAL n such that
 A1: p + p1 = q + p1;
-  thus p = p + 0.REAL n by EUCLID:31
+  thus p = p + 0.TOP-REAL n by EUCLID:31
     .= p + (p1 - p1) by EUCLID:46
     .= p + p1 - p1 by EUCLID:49
     .= q + (p1 - p1) by A1,EUCLID:49
-    .= q + 0.REAL n by EUCLID:46
+    .= q + 0.TOP-REAL n by EUCLID:46
     .= q by EUCLID:31;
 end;
 
@@ -87,35 +89,29 @@ theorem Th5:
   p1 in LSeg(p,q) & p`1 = q`1 implies p1`1 = q`1
 proof
   assume p1 in LSeg(p,q);
-  then consider r such that 0<=r & r<=1 and
-A1: p1 = (1-r)*p+r*q by SPPOL_1:21;
+  then consider r such that
+A1: p1 = (1-r)*p+r*q and 0<=r & r<=1;
 A2: p1`1 = ((1-r)*p)`1+(r*q)`1 by A1,TOPREAL3:7
     .= ((1-r)*p)`1+r*q`1 by TOPREAL3:9
     .= (1-r)*p`1+r*q`1 by TOPREAL3:9;
   assume p`1 = q`1;
-  hence p1`1 = q`1 by A2;
+  hence thesis by A2;
 end;
 
 theorem Th6:
   p1 in LSeg(p,q) & p`2 = q`2 implies p1`2 = q`2
 proof
   assume p1 in LSeg(p,q);
-  then consider r such that 0<=r & r<=1 and
-A1: p1 = (1-r)*p+r*q by SPPOL_1:21;
+  then consider r such that
+A1: p1 = (1-r)*p+r*q and 0<=r & r<=1;
 A2: p1`2 = ((1-r)*p)`2+(r*q)`2 by A1,TOPREAL3:7
     .= ((1-r)*p)`2+r*q`2 by TOPREAL3:9
     .= (1-r)*p`2+r*q`2 by TOPREAL3:9;
   assume p`2 = q`2;
-  hence p1`2 = q`2 by A2;
+  hence thesis by A2;
 end;
 
-theorem Th7:
-  for p,q being Point of TOP-REAL n holds 1/2*(p+q) in LSeg(p,q)
-proof
-  let p,q be Point of TOP-REAL n;
-  1/2*(p+q) = (1-1/2)*(p)+1/2*(q) by EUCLID:36;
-  hence 1/2*(p+q) in LSeg(p,q) by SPPOL_1:22;
-end;
+canceled;
 
 theorem Th8:
   p`1 = q`1 & q`1 = p1`1 & p`2 <= q`2 & q`2 <= p1`2 implies q in LSeg(p,p1)
@@ -132,7 +128,7 @@ A6: p`2 = p1`2;
     then p = |[p1`1,p1`2]| by A1,A2,EUCLID:57
       .= p1 by EUCLID:57;
     then
-A7: LSeg(p,p1) = {p} by TOPREAL1:7;
+A7: LSeg(p,p1) = {p} by RLTOPSP1:71;
     p`2 = q`2 by A3,A4,A6,XXREAL_0:1;
     then q = |[p`1,p`2]| by A1,EUCLID:57
       .= p by EUCLID:57;
@@ -142,7 +138,7 @@ A7: LSeg(p,p1) = {p} by TOPREAL1:7;
 A8: p`2 < p1`2;
 A9: q in {q1: q1`1 = q`1 & p`2 <= q1`2 & q1`2 <= p1`2} by A3,A4;
     p = |[q`1,p`2]| & p1 = |[q`1,p1`2]| by A1,A2,EUCLID:57;
-    hence q in LSeg(p,p1) by A8,A9,TOPREAL3:15;
+    hence thesis by A8,A9,TOPREAL3:15;
   end;
 end;
 
@@ -161,7 +157,7 @@ A6: p`1 = p1`1;
     then p = |[p1`1,p1`2]| by A3,A4,EUCLID:57
       .= p1 by EUCLID:57;
     then
-A7: LSeg(p,p1) = {p} by TOPREAL1:7;
+A7: LSeg(p,p1) = {p} by RLTOPSP1:71;
     p`1 = q`1 by A1,A2,A6,XXREAL_0:1;
     then q = |[p`1,p`2]| by A3,EUCLID:57
       .= p by EUCLID:57;
@@ -171,7 +167,7 @@ A7: LSeg(p,p1) = {p} by TOPREAL1:7;
 A8: p`1 < p1`1;
 A9: q in {q1: q1`2 = q`2 & p`1 <= q1`1 & q1`1 <= p1`1} by A1,A2;
     p = |[p`1,q`2]| & p1 = |[p1`1,q`2]| by A3,A4,EUCLID:57;
-    hence q in LSeg(p,p1) by A8,A9,TOPREAL3:16;
+    hence thesis by A8,A9,TOPREAL3:16;
   end;
 end;
 
@@ -427,13 +423,12 @@ A10:  G*(i,j+1)`2 < G*(i,j+2)`2 by A1,A2,A6,A7,GOBOARD5:5;
     assume
 A11: x = G*(i,j+1);
     then
-A12: x in LSeg(G*(i,j),G*(i,j+1)) by TOPREAL1:6;
-    x in LSeg(G*(i,j+1),G*(i,j+2)) by A11,TOPREAL1:6;
+A12: x in LSeg(G*(i,j),G*(i,j+1)) by RLTOPSP1:69;
+    x in LSeg(G*(i,j+1),G*(i,j+2)) by A11,RLTOPSP1:69;
     hence x in LSeg(G*(i,j),G*(i,j+1)) /\
     LSeg(G*(i,j+1),G*(i,j+2)) by A12,XBOOLE_0:def 4;
   end;
-  hence LSeg(G*(i,j),G*(i,j+1)) /\ LSeg(G*(i,j+1),G*(i,j+2)) = { G*
-  (i,j+1) } by TARSKI:def 1;
+  hence thesis by TARSKI:def 1;
 end;
 
 theorem Th16:
@@ -474,13 +469,12 @@ A10:  G*(i+1,j)`1 < G*(i+2,j)`1 by A1,A2,A6,A7,GOBOARD5:4;
     assume
 A11: x = G*(i+1,j);
     then
-A12: x in LSeg(G*(i,j),G*(i+1,j)) by TOPREAL1:6;
-    x in LSeg(G*(i+1,j),G*(i+2,j)) by A11,TOPREAL1:6;
+A12: x in LSeg(G*(i,j),G*(i+1,j)) by RLTOPSP1:69;
+    x in LSeg(G*(i+1,j),G*(i+2,j)) by A11,RLTOPSP1:69;
     hence x in LSeg(G*(i,j),G*(i+1,j)) /\
     LSeg(G*(i+1,j),G*(i+2,j)) by A12,XBOOLE_0:def 4;
   end;
-  hence LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i+1,j),G*(i+2,j)) = { G*
-  (i+1,j) } by TARSKI:def 1;
+  hence thesis by TARSKI:def 1;
 end;
 
 theorem Th17:
@@ -518,13 +512,12 @@ A9:   1 <= i+1 by NAT_1:11;
     assume
 A10: x = G*(i,j+1);
     then
-A11: x in LSeg(G*(i,j),G*(i,j+1)) by TOPREAL1:6;
-    x in LSeg(G*(i,j+1),G*(i+1,j+1)) by A10,TOPREAL1:6;
+A11: x in LSeg(G*(i,j),G*(i,j+1)) by RLTOPSP1:69;
+    x in LSeg(G*(i,j+1),G*(i+1,j+1)) by A10,RLTOPSP1:69;
     hence x in LSeg(G*(i,j),G*(i,j+1)) /\ LSeg(G*(i,j+1),G*(i+1,j+1))
     by A11,XBOOLE_0:def 4;
   end;
-  hence LSeg(G*(i,j),G*(i,j+1)) /\ LSeg(G*(i,j+1),G*(i+1,j+1)) = { G*
-  (i,j+1) } by TARSKI:def 1;
+  hence thesis by TARSKI:def 1;
 end;
 
 theorem Th18:
@@ -565,13 +558,12 @@ A11:  1 <= i+1 by NAT_1:11;
     assume
 A12: x = G*(i+1,j+1);
     then
-A13: x in LSeg(G*(i,j+1),G*(i+1,j+1)) by TOPREAL1:6;
-    x in LSeg(G*(i+1,j),G*(i+1,j+1)) by A12,TOPREAL1:6;
+A13: x in LSeg(G*(i,j+1),G*(i+1,j+1)) by RLTOPSP1:69;
+    x in LSeg(G*(i+1,j),G*(i+1,j+1)) by A12,RLTOPSP1:69;
     hence x in LSeg(G*(i,j+1),G*(i+1,j+1)) /\ LSeg(G*(i+1,j),G*(i+1,j+1))
     by A13,XBOOLE_0:def 4;
   end;
-  hence LSeg(G*(i,j+1),G*(i+1,j+1)) /\ LSeg(G*(i+1,j),G*(i+1,j+1)) = { G*
-  (i+1,j+1) } by TARSKI:def 1;
+  hence thesis by TARSKI:def 1;
 end;
 
 theorem Th19:
@@ -610,12 +602,12 @@ A10:  p in LSeg(G*(i,j),G*(i,j+1)) by A3,XBOOLE_0:def 4;
     assume
 A11: x = G*(i,j);
     then
-A12: x in LSeg(G*(i,j),G*(i+1,j)) by TOPREAL1:6;
-    x in LSeg(G*(i,j),G*(i,j+1)) by A11,TOPREAL1:6;
+A12: x in LSeg(G*(i,j),G*(i+1,j)) by RLTOPSP1:69;
+    x in LSeg(G*(i,j),G*(i,j+1)) by A11,RLTOPSP1:69;
     hence x in LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i,j),G*
     (i,j+1)) by A12,XBOOLE_0:def 4;
   end;
-  hence LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i,j),G*(i,j+1)) = { G*(i,j) }
+  hence thesis
   by TARSKI:def 1;
 end;
 
@@ -656,12 +648,12 @@ A11:  1 <= i+1 by NAT_1:11;
     assume
 A12: x = G*(i+1,j);
     then
-A13: x in LSeg(G*(i,j),G*(i+1,j)) by TOPREAL1:6;
-    x in LSeg(G*(i+1,j),G*(i+1,j+1)) by A12,TOPREAL1:6;
+A13: x in LSeg(G*(i,j),G*(i+1,j)) by RLTOPSP1:69;
+    x in LSeg(G*(i+1,j),G*(i+1,j+1)) by A12,RLTOPSP1:69;
     hence x in LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i+1,j),G*(i+1,j+1))
     by A13,XBOOLE_0:def 4;
   end;
-  hence LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i+1,j),G*(i+1,j+1)) = { G*(i+1,j) }
+  hence thesis
   by TARSKI:def 1;
 end;
 
@@ -683,11 +675,11 @@ A5: x in LSeg(G*(i1,j1),G*(i1,j1+1)) and
 A6: x in LSeg(G*(i2,j2),G*(i2,j2+1)) by XBOOLE_0:3;
   reconsider p = x as Point of TOP-REAL 2 by A5;
   consider r1 such that
-A7: r1 >= 0 & r1 <= 1 and
-A8: p = (1-r1)*(G*(i1,j1))+r1*(G*(i1,j1+1)) by A5,SPPOL_1:21;
+A8: p = (1-r1)*(G*(i1,j1))+r1*(G*(i1,j1+1)) and
+A7: r1 >= 0 & r1 <= 1 by A5;
   consider r2 such that
-A9: r2 >= 0 & r2 <= 1 and
-A10: p = (1-r2)*(G*(i2,j2))+r2*(G*(i2,j2+1)) by A6,SPPOL_1:21;
+A10: p = (1-r2)*(G*(i2,j2))+r2*(G*(i2,j2+1)) and
+A9: r2 >= 0 & r2 <= 1 by A6;
   assume
 A11: not thesis;
 A12: 1 <= j1+1 & j1 < width G by A2,NAT_1:13;
@@ -786,11 +778,11 @@ A5: x in LSeg(G*(i1,j1),G*(i1+1,j1)) and
 A6: x in LSeg(G*(i2,j2),G*(i2+1,j2)) by XBOOLE_0:3;
   reconsider p = x as Point of TOP-REAL 2 by A5;
   consider r1 such that
-A7: r1 >= 0 & r1 <= 1 and
-A8: p = (1-r1)*(G*(i1,j1))+r1*(G*(i1+1,j1)) by A5,SPPOL_1:21;
+A8: p = (1-r1)*(G*(i1,j1))+r1*(G*(i1+1,j1)) and
+A7: r1 >= 0 & r1 <= 1 by A5;
   consider r2 such that
-A9: r2 >= 0 & r2 <= 1 and
-A10: p = (1-r2)*(G*(i2,j2))+r2*(G*(i2+1,j2)) by A6,SPPOL_1:21;
+A10: p = (1-r2)*(G*(i2,j2))+r2*(G*(i2+1,j2)) and
+A9: r2 >= 0 & r2 <= 1 by A6;
   assume
 A11: not thesis;
 A12: 1 <= i1+1 & i1 < len G by A1,NAT_1:13;
@@ -889,11 +881,11 @@ A5: x in LSeg(G*(i1,j1),G*(i1,j1+1)) and
 A6: x in LSeg(G*(i2,j2),G*(i2+1,j2)) by XBOOLE_0:3;
   reconsider p = x as Point of TOP-REAL 2 by A5;
   consider r1 such that
-A7: r1 >= 0 & r1 <= 1 and
-A8: p = (1-r1)*(G*(i1,j1))+r1*(G*(i1,j1+1)) by A5,SPPOL_1:21;
+A8: p = (1-r1)*(G*(i1,j1))+r1*(G*(i1,j1+1)) and
+A7: r1 >= 0 & r1 <= 1 by A5;
   consider r2 such that
-A9: r2 >= 0 & r2 <= 1 and
-A10: p = (1-r2)*(G*(i2,j2))+r2*(G*(i2+1,j2)) by A6,SPPOL_1:21;
+A10: p = (1-r2)*(G*(i2,j2))+r2*(G*(i2+1,j2)) and
+A9: r2 >= 0 & r2 <= 1 by A6;
 A11: 1 <= j1+1 & j1 < width G by A2,NAT_1:13;
 A12: 1 <= i2+1 & i2 < len G by A3,NAT_1:13;
   thus i1 = i2 or i1 = i2+1
@@ -1013,15 +1005,13 @@ A8: j1+1+1 = j1+(1+1);
 A9: j2+1+1 = j2+(1+1);
   per cases by A7,Th2,GOBOARD1:1;
   case j1 = j2;
-    hence LSeg(G*(i1,j1),G*(i1,j1+1)) = LSeg(G*(i2,j2),G*(i2,j2+1)) by A6;
+    hence thesis by A6;
   end;
   case j1 = j2+1;
-    hence LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i2,j2),G*(i2,j2+1))
-    = { G*(i1,j1) } by A1,A2,A4,A6,A9,Th15;
+    hence thesis by A1,A2,A4,A6,A9,Th15;
   end;
   case j1+1 = j2;
-    hence LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i2,j2),G*(i2,j2+1))
-    = { G*(i2,j2) } by A1,A2,A4,A6,A8,Th15;
+    hence thesis by A1,A2,A4,A6,A8,Th15;
   end;
 end;
 
@@ -1051,15 +1041,13 @@ A8: i1+1+1 = i1+(1+1);
 A9: i2+1+1 = i2+(1+1);
   per cases by A7,Th2,GOBOARD1:1;
   case i1 = i2;
-    hence LSeg(G*(i1,j1),G*(i1+1,j1)) = LSeg(G*(i2,j2),G*(i2+1,j2)) by A6;
+    hence thesis by A6;
   end;
   case i1 = i2+1;
-    hence LSeg(G*(i1,j1),G*(i1+1,j1)) /\ LSeg(G*(i2,j2),G*(i2+1,j2))
-    = { G*(i1,j1) } by A1,A2,A3,A6,A9,Th16;
+    hence thesis by A1,A2,A3,A6,A9,Th16;
   end;
   case i1+1 = i2;
-    hence LSeg(G*(i1,j1),G*(i1+1,j1)) /\ LSeg(G*(i2,j2),G*(i2+1,j2))
-    = { G*(i2,j2) } by A1,A2,A3,A6,A8,Th16;
+    hence thesis by A1,A2,A3,A6,A8,Th16;
   end;
 end;
 
@@ -1090,8 +1078,7 @@ A6: j1 = j2;
         hence thesis by A2,A3,A6,Th20;
       end;
     end;
-    hence LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i2,j2),G*(i2+1,j2))
-    = { G*(i1,j1) };
+    hence thesis;
   end;
   case
 A7: j1+1 = j2;
@@ -1103,8 +1090,7 @@ A7: j1+1 = j2;
         hence thesis by A2,A3,A7,Th18;
       end;
     end;
-    hence LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i2,j2),G*(i2+1,j2))
-    = { G*(i1,j1+1) };
+    hence thesis;
   end;
 end;
 
@@ -1127,7 +1113,7 @@ A5: mi in LSeg(G*(i2,j2),G*(i2,j2+1));
 A6: 1/2*(G*(i1,j1))+1/2*(G*(i1,j1+1))
   = 1/2*(G*(i1,j1)+G*(i1,j1+1)) by EUCLID:36;
   then
-A7: mi in LSeg(G*(i1,j1),G*(i1,j1+1)) by Lm1,SPPOL_1:22;
+A7: mi in LSeg(G*(i1,j1),G*(i1,j1+1)) by Lm1;
   then
 A8: LSeg(G*(i1,j1),G*(i1,j1+1))
   meets LSeg(G*(i2,j2),G*(i2,j2+1)) by A5,XBOOLE_0:3;
@@ -1165,7 +1151,7 @@ A14:  j1+1 = j2;
   end;
   abs(j1-j2) <= 1 by A1,A2,A3,A4,A8,Th21;
   then abs(j1-j2) = 0 by A10,NAT_1:26;
-  hence j1 = j2 by Th2;
+  hence thesis by Th2;
 end;
 
 theorem Th28:
@@ -1185,7 +1171,7 @@ A5: mi in LSeg(G*(i2,j2),G*(i2+1,j2));
 A6: 1/2*(G*(i1,j1))+1/2*(G*(i1+1,j1))
   = 1/2*(G*(i1,j1)+G*(i1+1,j1)) by EUCLID:36;
   then
-A7: mi in LSeg(G*(i1,j1),G*(i1+1,j1)) by Lm1,SPPOL_1:22;
+A7: mi in LSeg(G*(i1,j1),G*(i1+1,j1)) by Lm1;
   then
 A8: LSeg(G*(i1,j1),G*(i1+1,j1))
   meets LSeg(G*(i2,j2),G*(i2+1,j2)) by A5,XBOOLE_0:3;
@@ -1224,7 +1210,7 @@ A14:  i1+1 = i2;
   abs(i1-i2) <= 1 by A1,A2,A3,A4,A8,Th22;
   then abs(i1-i2) = 0 by A10,NAT_1:26;
   hence i1 = i2 by Th2;
-  thus j1 = j2 by A1,A2,A3,A4,A8,Th22;
+  thus thesis by A1,A2,A3,A4,A8,Th22;
 end;
 
 theorem Th29:
@@ -1244,7 +1230,7 @@ A6: i1 < i1+1 by XREAL_1:31;
 A7: 1/2*(G*(i1,j1))+1/2*(G*(i1+1,j1))
   = 1/2*(G*(i1,j1)+G*(i1+1,j1)) by EUCLID:36;
   then
-A8: mi in LSeg(G*(i1,j1),G*(i1+1,j1)) by Lm1,SPPOL_1:22;
+A8: mi in LSeg(G*(i1,j1),G*(i1+1,j1)) by Lm1;
   then
 A9: LSeg(G*(i1,j1),G*(i1+1,j1))
   meets LSeg(G*(i2,j2),G*(i2,j2+1)) by A5,XBOOLE_0:3;
@@ -1320,7 +1306,7 @@ A6: j1 < j1+1 by XREAL_1:31;
 A7: 1/2*(G*(i1,j1))+1/2*(G*(i1,j1+1))
   = 1/2*(G*(i1,j1)+G*(i1,j1+1)) by EUCLID:36;
   then
-A8: mi in LSeg(G*(i1,j1),G*(i1,j1+1)) by Lm1,SPPOL_1:22;
+A8: mi in LSeg(G*(i1,j1),G*(i1,j1+1)) by Lm1;
   then
 A9: LSeg(G*(i1,j1),G*(i1,j1+1))
   meets LSeg(G*(i2,j2),G*(i2+1,j2)) by A5,XBOOLE_0:3;
@@ -2133,13 +2119,13 @@ A2: i < j and
 A3: j <= len f;
   per cases by A3,XXREAL_0:1;
   suppose j < len f;
-    hence f/.i <> f/.j by A1,A2,Th38;
+    hence thesis by A1,A2,Th38;
   end;
   suppose j = len f;
     then
 A4: f/.j = f/.1 by FINSEQ_6:def 1;
     i < len f by A2,A3,XXREAL_0:2;
-    hence f/.i <> f/.j by A1,A4,Th38;
+    hence thesis by A1,A4,Th38;
   end;
 end;
 
@@ -2213,14 +2199,12 @@ A22: j1 = j2 & i1+1 = i2;
   suppose
 A23: j1 = j2+1 & i1 = i2;
     then i = i2 & j = j2 by A1,A2,A11,A14,A16,A17,A19,A20,Th27;
-    hence LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k) by A7,A11,A14,A23,
-TOPREAL1:def 5;
+    hence thesis by A7,A11,A14,A23,TOPREAL1:def 5;
   end;
   suppose
 A24: j1+1 = j2 & i1 = i2;
     then i = i1 & j = j1 by A1,A2,A11,A14,A16,A17,A19,A20,Th27;
-    hence LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k) by A7,A11,A14,A24,
-TOPREAL1:def 5;
+    hence thesis by A7,A11,A14,A24,TOPREAL1:def 5;
   end;
 end;
 
@@ -2282,14 +2266,12 @@ A22: i1 = i2 & j1+1 = j2;
   suppose
 A23: i1 = i2+1 & j1 = j2;
     then j = j2 & i = i2 by A1,A2,A11,A14,A16,A17,A19,A20,Th28;
-    hence LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k) by A7,A11,A14,A23,
-TOPREAL1:def 5;
+    hence thesis by A7,A11,A14,A23,TOPREAL1:def 5;
   end;
   suppose
 A24: i1+1 = i2 & j1 = j2;
     then j = j1 & i = i1 by A1,A2,A11,A14,A16,A17,A19,A20,Th28;
-    hence LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k) by A7,A11,A14,A24,
-TOPREAL1:def 5;
+    hence thesis by A7,A11,A14,A24,TOPREAL1:def 5;
   end;
 end;
 
@@ -2331,7 +2313,7 @@ A15: i < i+1 by NAT_1:13;
 A16: (GoB f)*(i,j+1) <> (GoB f)*(i+1,j) by A1,A2,A12,A15,GOBOARD5:4;
   hence f/.k = (GoB f)*(i,j+1) by A7,A10,SPPOL_1:25;
   thus f/.(k+1) = (GoB f)*(i+1,j+1) by A6,A11,A16,SPPOL_1:25;
-  thus f/.(k+2) = (GoB f)*(i+1,j) by A6,A11,A16,SPPOL_1:25;
+  thus thesis by A6,A11,A16,SPPOL_1:25;
 end;
 
 theorem
@@ -2370,7 +2352,7 @@ A12: j+2 <= width GoB f by A2,NAT_1:13;
 A13: (GoB f)*(i,j)`2 < (GoB f)*(i,j+2)`2 by A1,A2,A12,GOBOARD5:5;
   hence f/.k = (GoB f)*(i,j+2) by A7,A10,SPPOL_1:25;
   thus f/.(k+1) = (GoB f)*(i,j+1) by A6,A11,A13,SPPOL_1:25;
-  thus f/.(k+2) = (GoB f)*(i,j) by A6,A11,A13,SPPOL_1:25;
+  thus thesis by A6,A11,A13,SPPOL_1:25;
 end;
 
 theorem
@@ -2411,7 +2393,7 @@ A15: j < j+1 by NAT_1:13;
 A16: (GoB f)*(i,j) <> (GoB f)*(i+1,j+1) by A1,A2,A12,A15,GOBOARD5:5;
   hence f/.k = (GoB f)*(i+1,j+1) by A7,A10,SPPOL_1:25;
   thus f/.(k+1) = (GoB f)*(i,j+1) by A6,A11,A16,SPPOL_1:25;
-  thus f/.(k+2) = (GoB f)*(i,j) by A6,A11,A16,SPPOL_1:25;
+  thus thesis by A6,A11,A16,SPPOL_1:25;
 end;
 
 theorem
@@ -2452,7 +2434,7 @@ A15: j < j+1 by NAT_1:13;
 A16: (GoB f)*(i+1,j) <> (GoB f)*(i,j+1) by A1,A2,A12,A15,GOBOARD5:5;
   hence f/.k = (GoB f)*(i+1,j) by A7,A10,SPPOL_1:25;
   thus f/.(k+1) = (GoB f)*(i+1,j+1) by A6,A11,A16,SPPOL_1:25;
-  thus f/.(k+2) = (GoB f)*(i,j+1) by A6,A11,A16,SPPOL_1:25;
+  thus thesis by A6,A11,A16,SPPOL_1:25;
 end;
 
 theorem
@@ -2491,7 +2473,7 @@ A12: i+2 <= len GoB f by A1,NAT_1:13;
 A13: (GoB f)*(i,j)`1 < (GoB f)*(i+2,j)`1 by A1,A2,A12,GOBOARD5:4;
   hence f/.k = (GoB f)*(i+2,j) by A7,A10,SPPOL_1:25;
   thus f/.(k+1) = (GoB f)*(i+1,j) by A6,A11,A13,SPPOL_1:25;
-  thus f/.(k+2) = (GoB f)*(i,j) by A6,A11,A13,SPPOL_1:25;
+  thus thesis by A6,A11,A13,SPPOL_1:25;
 end;
 
 theorem
@@ -2532,7 +2514,7 @@ A15: i < i+1 by NAT_1:13;
 A16: (GoB f)*(i,j) <> (GoB f)*(i+1,j+1) by A1,A2,A12,A15,GOBOARD5:4;
   hence f/.k = (GoB f)*(i+1,j+1) by A7,A10,SPPOL_1:25;
   thus f/.(k+1) = (GoB f)*(i+1,j) by A6,A11,A16,SPPOL_1:25;
-  thus f/.(k+2) = (GoB f)*(i,j) by A6,A11,A16,SPPOL_1:25;
+  thus thesis by A6,A11,A16,SPPOL_1:25;
 end;
 
 theorem
@@ -2573,7 +2555,7 @@ A15: i < i+1 by NAT_1:13;
 A16: (GoB f)*(i,j+1) <> (GoB f)*(i+1,j) by A1,A2,A12,A15,GOBOARD5:4;
   hence f/.k = (GoB f)*(i+1,j) by A7,A10,SPPOL_1:25;
   thus f/.(k+1) = (GoB f)*(i+1,j+1) by A6,A11,A16,SPPOL_1:25;
-  thus f/.(k+2) = (GoB f)*(i,j+1) by A6,A11,A16,SPPOL_1:25;
+  thus thesis by A6,A11,A16,SPPOL_1:25;
 end;
 
 theorem
@@ -2612,7 +2594,7 @@ A12: j+2 <= width GoB f by A2,NAT_1:13;
 A13: (GoB f)*(i,j)`2 < (GoB f)*(i,j+2)`2 by A1,A2,A12,GOBOARD5:5;
   hence f/.k = (GoB f)*(i,j) by A7,A10,SPPOL_1:25;
   thus f/.(k+1) = (GoB f)*(i,j+1) by A6,A11,A13,SPPOL_1:25;
-  thus f/.(k+2) = (GoB f)*(i,j+2) by A6,A11,A13,SPPOL_1:25;
+  thus thesis by A6,A11,A13,SPPOL_1:25;
 end;
 
 theorem
@@ -2653,7 +2635,7 @@ A15: j < j+1 by NAT_1:13;
 A16: (GoB f)*(i,j) <> (GoB f)*(i+1,j+1) by A1,A2,A12,A15,GOBOARD5:5;
   hence f/.k = (GoB f)*(i,j) by A7,A10,SPPOL_1:25;
   thus f/.(k+1) = (GoB f)*(i,j+1) by A6,A11,A16,SPPOL_1:25;
-  thus f/.(k+2) = (GoB f)*(i+1,j+1) by A6,A11,A16,SPPOL_1:25;
+  thus thesis by A6,A11,A16,SPPOL_1:25;
 end;
 
 theorem
@@ -2694,7 +2676,7 @@ A15: j < j+1 by NAT_1:13;
 A16: (GoB f)*(i+1,j) <> (GoB f)*(i,j+1) by A1,A2,A12,A15,GOBOARD5:5;
   hence f/.k = (GoB f)*(i,j+1) by A7,A10,SPPOL_1:25;
   thus f/.(k+1) = (GoB f)*(i+1,j+1) by A6,A11,A16,SPPOL_1:25;
-  thus f/.(k+2) = (GoB f)*(i+1,j) by A6,A11,A16,SPPOL_1:25;
+  thus thesis by A6,A11,A16,SPPOL_1:25;
 end;
 
 theorem
@@ -2733,7 +2715,7 @@ A12: i+2 <= len GoB f by A1,NAT_1:13;
 A13: (GoB f)*(i,j)`1 < (GoB f)*(i+2,j)`1 by A1,A2,A12,GOBOARD5:4;
   hence f/.k = (GoB f)*(i,j) by A7,A10,SPPOL_1:25;
   thus f/.(k+1) = (GoB f)*(i+1,j) by A6,A11,A13,SPPOL_1:25;
-  thus f/.(k+2) = (GoB f)*(i+2,j) by A6,A11,A13,SPPOL_1:25;
+  thus thesis by A6,A11,A13,SPPOL_1:25;
 end;
 
 theorem
@@ -2774,7 +2756,7 @@ A15: i < i+1 by NAT_1:13;
 A16: (GoB f)*(i,j) <> (GoB f)*(i+1,j+1) by A1,A2,A12,A15,GOBOARD5:4;
   hence f/.k = (GoB f)*(i,j) by A7,A10,SPPOL_1:25;
   thus f/.(k+1) = (GoB f)*(i+1,j) by A6,A11,A16,SPPOL_1:25;
-  thus f/.(k+2) = (GoB f)*(i+1,j+1) by A6,A11,A16,SPPOL_1:25;
+  thus thesis by A6,A11,A16,SPPOL_1:25;
 end;
 
 theorem Th55:
@@ -2800,13 +2782,13 @@ A7: j+2 <= width GoB f by A2,NAT_1:13;
 A8: 1 <= j+2 by A6,NAT_1:11;
 A9: j < width GoB f by A2,NAT_1:13;
   1/2*((GoB f)*(i,j)+(GoB f)*(i,j+1)) in LSeg((GoB f)*(i,j),(GoB f)* (i,j+1))
-  by Th7;
+  by RLTOPSP1:70;
   then consider k1 such that
 A10: 1 <= k1 & k1+1 <= len f and
 A11: LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k1) by A1,A2,A3,Th41;
 A12: k1 < len f by A10,NAT_1:13;
   1/2*((GoB f)*(i,j+1)+(GoB f)*(i,j+2)) in
-  LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) by Th7;
+  LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) by RLTOPSP1:70;
   then consider k2 such that
 A13: 1 <= k2 & k2+1 <= len f and
 A14: LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) = LSeg(f,k2) by A1,A4,A5,A6,A7,Th41;
@@ -3001,13 +2983,13 @@ A6: j < width GoB f by A2,NAT_1:13;
 A7: 1 <= i+1 by NAT_1:11;
 A8: i < len GoB f by A1,NAT_1:13;
   1/2*((GoB f)*(i,j)+(GoB f)*(i,j+1)) in LSeg((GoB f)*(i,j),(GoB f)* (i,j+1))
-  by Th7;
+  by RLTOPSP1:70;
   then consider k1 such that
 A9: 1 <= k1 & k1+1 <= len f and
 A10: LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k1) by A1,A2,A3,A8,Th41;
 A11: k1 < len f by A9,NAT_1:13;
   1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1))
-  in LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) by Th7;
+  in LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) by RLTOPSP1:70;
   then consider k2 such that
 A12: 1 <= k2 & k2+1 <= len f and
 A13: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k2) by A1,A2,A4,A5,Th42;
@@ -3205,13 +3187,13 @@ A6: j < width GoB f by A2,NAT_1:13;
 A7: 1 <= i+1 by NAT_1:11;
 A8: i < len GoB f by A1,NAT_1:13;
   1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1))
-  in LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) by Th7;
+  in LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) by RLTOPSP1:70;
   then consider k1 such that
 A9: 1 <= k1 & k1+1 <= len f and
 A10: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k1) by A1,A2,A3,A5,Th42;
 A11: k1 < len f by A9,NAT_1:13;
   1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1))
-  in LSeg((GoB f)*(i+1,j+1),(GoB f)*(i+1,j)) by Th7;
+  in LSeg((GoB f)*(i+1,j+1),(GoB f)*(i+1,j)) by RLTOPSP1:70;
   then consider k2 such that
 A12: 1 <= k2 & k2+1 <= len f and
 A13: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k2) by A1,A2,A4,A7,Th41;
@@ -3414,13 +3396,13 @@ A7: i+2 <= len GoB f by A1,NAT_1:13;
 A8: 1 <= i+2 by A6,NAT_1:11;
 A9: i < len GoB f by A1,NAT_1:13;
   1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j)) in LSeg((GoB f)*(i,j),(GoB f)* (i+1,j))
-  by Th7;
+  by RLTOPSP1:70;
   then consider k1 such that
 A10: 1 <= k1 & k1+1 <= len f and
 A11: LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k1) by A1,A2,A3,Th42;
 A12: k1 < len f by A10,NAT_1:13;
   1/2*((GoB f)*(i+1,j)+(GoB f)*(i+2,j)) in
-  LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) by Th7;
+  LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) by RLTOPSP1:70;
   then consider k2 such that
 A13: 1 <= k2 & k2+1 <= len f and
 A14: LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) = LSeg(f,k2) by A2,A4,A5,A6,A7,Th42;
@@ -3615,13 +3597,13 @@ A6: i < len GoB f by A1,NAT_1:13;
 A7: 1 <= j+1 by NAT_1:11;
 A8: j < width GoB f by A2,NAT_1:13;
   1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j)) in LSeg((GoB f)*(i,j),(GoB f)* (i+1,j))
-  by Th7;
+  by RLTOPSP1:70;
   then consider k1 such that
 A9: 1 <= k1 & k1+1 <= len f and
 A10: LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k1) by A1,A2,A3,A8,Th42;
 A11: k1 < len f by A9,NAT_1:13;
   1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1))
-  in LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) by Th7;
+  in LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) by RLTOPSP1:70;
   then consider k2 such that
 A12: 1 <= k2 & k2+1 <= len f and
 A13: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k2) by A1,A2,A4,A5,Th41;
@@ -3819,13 +3801,13 @@ A6: i < len GoB f by A1,NAT_1:13;
 A7: 1 <= j+1 by NAT_1:11;
 A8: j < width GoB f by A2,NAT_1:13;
   1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1))
-  in LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) by Th7;
+  in LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) by RLTOPSP1:70;
   then consider k1 such that
 A9: 1 <= k1 & k1+1 <= len f and
 A10: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k1) by A1,A2,A3,A5,Th41;
 A11: k1 < len f by A9,NAT_1:13;
   1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1))
-  in LSeg((GoB f)*(i+1,j+1),(GoB f)*(i,j+1)) by Th7;
+  in LSeg((GoB f)*(i+1,j+1),(GoB f)*(i,j+1)) by RLTOPSP1:70;
   then consider k2 such that
 A12: 1 <= k2 & k2+1 <= len f and
 A13: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k2) by A1,A2,A4,A7,Th42;
@@ -4590,7 +4572,7 @@ A6: p1`1 = r`1 by A2,A5,SPPOL_1:64;
 A7: p`1 = q`1 by A1,SPPOL_1:37;
   p1`2 <= r`2 & r`2 <= q1`2 by A4,A5,TOPREAL1:10;
   then p`2 <= r`2 & r`2 <= q`2 by A4,XXREAL_0:2;
-  hence x in LSeg(p,q) by A3,A6,A7,Th8;
+  hence thesis by A3,A6,A7,Th8;
 end;
 
 theorem
@@ -4612,6 +4594,6 @@ A6: p1`2 = r`2 by A2,A5,SPPOL_1:63;
 A7: p`2 = q`2 by A1,SPPOL_1:36;
   p1`1 <= r`1 & r`1 <= q1`1 by A4,A5,TOPREAL1:9;
   then p`1 <= r`1 & r`1 <= q`1 by A4,XXREAL_0:2;
-  hence x in LSeg(p,q) by A3,A6,A7,Th9;
+  hence thesis by A3,A6,A7,Th9;
 end;
 

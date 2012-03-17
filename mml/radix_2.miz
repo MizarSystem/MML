@@ -12,9 +12,9 @@ environ
       FUNCT_1, POWER, PARTFUN1, FINSEQ_1, SEQ_1, NEWTON, BINARITH, RVSUM_1,
       GR_CY_1, WSIERP_1, RADIX_1, SUBSET_1, RECDEF_1;
  constructors PARTFUN1, REAL_1, NAT_1, NAT_D, NEWTON, POWER, BINARITH,
-      WSIERP_1, GR_CY_1, RADIX_1, SEQ_1, RECDEF_1;
+      WSIERP_1, GR_CY_1, RADIX_1, SEQ_1, RECDEF_1, RELSET_1;
  registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
-      MEMBERED, NEWTON, XBOOLE_0, VALUED_0;
+      MEMBERED, NEWTON, XBOOLE_0, VALUED_0, FINSEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI;
  theorems NAT_1, NAT_2, INT_1, FINSEQ_1, PREPOWER, POWER, RVSUM_1, FINSEQ_2,
@@ -45,7 +45,7 @@ proof
     .= a+0;
   then n divides (a + (b mod n))-((a mod n)+(b mod n)) by INT_1:def 9;
   then (a + (b mod n)),((a mod n)+(b mod n)) are_congruent_mod n by INT_2:19;
-  hence ((a mod n)+(b mod n)) mod n = (a + (b mod n)) mod n by INT_3:12;
+  hence thesis by INT_3:12;
 end;
 
 theorem Th3:
@@ -59,7 +59,7 @@ proof
   then (a*b)-(a*(b mod n)) = (a*(b div n))*n;
   then n divides ((a*b)-(a*(b mod n))) by INT_1:def 9;
   then (a*b),(a*(b mod n)) are_congruent_mod n by INT_2:19;
-  hence (a*b) mod n = (a*(b mod n)) mod n by INT_3:12;
+  hence thesis by INT_3:12;
 end;
 
 theorem Th4:
@@ -98,7 +98,7 @@ proof
   then 1 <= i & i <= n by FINSEQ_1:3;
   then 1+1 <= i+1 & i+1 <= n+1 by XREAL_1:8;
   then 1 <= i+1 & i+1 <= n+1 by XXREAL_0:2;
-  hence i+1 in Seg (n+1) by FINSEQ_1:3;
+  hence thesis by FINSEQ_1:3;
 end;
 
 begin :: Properties of Addition operation using radix-2^k SD numbers
@@ -120,7 +120,7 @@ A1: 1 in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
   then
 A2: 1 -' 1 = 0 by XREAL_0:def 2;
 A3: (DigitSD(x))/.1 = SubDigit(x,1,k) by A1,RADIX_1:def 6;
-A4: len (DigitSD(x)) = 1 by FINSEQ_2:109;
+A4: len (DigitSD(x)) = 1 by FINSEQ_1:def 18;
   then 1 in dom DigitSD(x) by A1,FINSEQ_1:def 3;
   then
 A5: DigitSD(x).1 = SubDigit(x,1,k) by A3,PARTFUN1:def 8;
@@ -151,14 +151,15 @@ proof
   let x be Tuple of (n+1),k-SD, xn be Tuple of n,k-SD;
   assume
 A1: for i be Nat st i in Seg n holds x.i = xn.i;
-A2: len DigitSD(x) = n+1 by FINSEQ_2:109;
-A3: len DigitSD(xn) = n by FINSEQ_2:109;
+A2: len DigitSD(x) = n+1 by FINSEQ_1:def 18;
+A3: len DigitSD(xn) = n by FINSEQ_1:def 18;
 A4: len <*SubDigit(x,n+1,k)*> = 1 by FINSEQ_1:56;
   len (DigitSD(xn)^<*SubDigit(x,n+1,k)*>)
   = len DigitSD(xn) + len <*SubDigit(x,n+1,k)*> by FINSEQ_1:35
-    .= n+1 by A4,FINSEQ_2:109;
+    .= n+1 by A4,FINSEQ_1:def 18;
   then
-A5: len DigitSD(x) = len (DigitSD(xn)^<*SubDigit(x,n+1,k)*>) by FINSEQ_2:109;
+A5: len DigitSD(x) = len (DigitSD(xn)^<*SubDigit(x,n+1,k)*>) by FINSEQ_1:def 18
+;
 A6: for i be Element of NAT st i in Seg n holds DigA(x,i) = DigA(xn,i)
   proof
     let i be Element of NAT;
@@ -174,7 +175,7 @@ A7: i in Seg n;
   proof
     let i be Nat;
     assume 1 <= i & i <= len DigitSD(x);
-    then 1 <= i & i <= n+1 by FINSEQ_2:109;
+    then 1 <= i & i <= n+1 by FINSEQ_1:def 18;
     then
 A8: i in Seg (n+1) by FINSEQ_1:3;
 A9: n+1 in Seg(n+1) by FINSEQ_1:5;
@@ -203,7 +204,7 @@ A14:    i = n+1;
 A15:    i in dom DigitSD(x) by A2,A9,FINSEQ_1:def 3;
         ((DigitSD(xn))^<*SubDigit(x,n+1,k)*>).i
         = ((DigitSD(xn))^<*SubDigit(x,n+1,k)*>).((len (DigitSD(xn)))+1)
-        by A14,FINSEQ_2:109
+        by A14,FINSEQ_1:def 18
           .= SubDigit(x,n+1,k) by FINSEQ_1:59
           .= (DigitSD(x))/.(n+1) by A9,RADIX_1:def 6
           .= DigitSD(x).(n+1) by A14,A15,PARTFUN1:def 8;
@@ -536,7 +537,7 @@ A4: i in Seg n;
     let k1,k2 be Tuple of n,NAT such that
 A5: for i be Nat st i in Seg n holds k1/.i = SubDigit2(x,i,k) and
 A6: for i be Nat st i in Seg n holds k2/.i = SubDigit2(x,i,k);
-A7: len k1 = n & len k2 = n by FINSEQ_2:109;
+A7: len k1 = n & len k2 = n by FINSEQ_1:def 18;
 X: dom k1 = Seg n by A7,FINSEQ_1:def 3;
     now
       let j be Nat;
@@ -549,7 +550,7 @@ A9:   j in dom k1 & j in dom k2 by A7,X,FINSEQ_1:def 3;
         .= k2/.j by A6,A8,X;
       hence k1.j = k2.j by A9,PARTFUN1:def 8;
     end;
-    hence k1 = k2 by A7,FINSEQ_2:10;
+    hence thesis by A7,FINSEQ_2:10;
   end;
 end;
 
@@ -584,14 +585,14 @@ A3: dom z = Seg n by A1,FINSEQ_1:def 3;
     take z;
     let i be Nat;
     assume i in Seg n;
-    hence z.i = DigitDC2(x,i,k) by A2,A3;
+    hence thesis by A2,A3;
   end;
   uniqueness
   proof
     let k1,k2 be Tuple of n,NAT such that
 A4: for i be Nat st i in Seg n holds k1.i = DigitDC2(x,i,k) and
 A5: for i be Nat st i in Seg n holds k2.i = DigitDC2(x,i,k);
-A6: len k1 = n & len k2 = n by FINSEQ_2:109;
+A6: len k1 = n & len k2 = n by FINSEQ_1:def 18;
 X: dom k1 = Seg n by A6,FINSEQ_1:def 3;
     now
       let j be Nat;
@@ -600,7 +601,7 @@ A7:   j in dom k1;
       then k1.j = DigitDC2(x,j,k) by A4,X;
       hence k1.j = k2.j by A5,A7,X;
     end;
-    hence k1 = k2 by A6,FINSEQ_2:10;
+    hence thesis by A6,FINSEQ_2:10;
   end;
 end;
 
@@ -620,7 +621,7 @@ A2: now
       .= DigB(y,i) by RADIX_1:def 4;
     hence x.i = DigB(y,i);
   end;
-A3: len DigitSD2(x,k) = n & len DigitSD(y) = n by FINSEQ_2:109;
+A3: len DigitSD2(x,k) = n & len DigitSD(y) = n by FINSEQ_1:def 18;
    then
 X: dom DigitSD2(x,k) = Seg n by FINSEQ_1:def 3;
   now
@@ -656,7 +657,7 @@ theorem Th14:
   for x,n,k be Nat holds DecSD2(x,n,k) = DecSD(x,n,k)
 proof
   let x,n,k be Nat;
-A1: len DecSD2(x,n,k) = n & len DecSD(x,n,k) = n by FINSEQ_2:109;
+A1: len DecSD2(x,n,k) = n & len DecSD(x,n,k) = n by FINSEQ_1:def 18;
 X: dom DecSD2(x,n,k) = Seg n by A1,FINSEQ_1:def 3;
   now
     let j be Nat;
@@ -668,7 +669,7 @@ A2: j in dom DecSD2(x,n,k);
       .= DecSD(x,n,k).j by A2,X,RADIX_1:def 3;
     hence DecSD2(x,n,k).j = DecSD(x,n,k).j;
   end;
-  hence DecSD2(x,n,k) = DecSD(x,n,k) by A1,FINSEQ_2:10;
+  hence thesis by A1,FINSEQ_2:10;
 end;
 
 theorem Th15:
@@ -748,9 +749,9 @@ A7: s1.1 = Table1(q,c,f,n) & for i be Nat st 1 <= i & i <= n - 1 holds
 A8: s2.1 = Table1(q,c,f,n) & for i be Nat st 1 <= i & i <= n - 1 holds
     ex I1,I2 be Integer st I1 = s2.i & I2 = s2.(i+1) &
     I2 = (Radix(k)*I1+Table1(q,c,f,n -'i)) mod f;
-A9: len s1 = n by FINSEQ_2:109;
+A9: len s1 = n by FINSEQ_1:def 18;
     then
-A10: len s1 = len s2 by FINSEQ_2:109;
+A10: len s1 = len s2 by FINSEQ_1:def 18;
     defpred P[Nat] means 1 <= $1 & $1 <= n - 1 implies s1.$1 = s2.$1;
 A11: P[0];
 A12: for k be Nat st P[k] holds P[k+1]
@@ -763,7 +764,7 @@ A14:  1 <= kk + 1 & kk + 1 <= n - 1;
 A15:  0 = kk or 0 < kk & 0 + 1 = 1;
       per cases by A15,NAT_1:13;
       suppose 0 = kk;
-        hence s1.(kk+1) = s2.(kk+1) by A7,A8;
+        hence thesis by A7,A8;
       end;
       suppose
 A16:    1 <= kk;
@@ -776,7 +777,7 @@ A19:    ex I1,I2 be Integer st I1 = s1.kk & I2 = s1.(kk+1) &
         consider i1,i2 be Integer such that
 A20:    i1 = s2.kk & i2 = s2.(kk+1) &
         i2 = (Radix(k)*i1+Table1(q,c,f,n -'kk)) mod f by A8,A18;
-        thus s1.(kk+1) = s2.(kk+1) by A13,A14,A16,A17,A19,A20,XXREAL_0:2;
+        thus thesis by A13,A14,A16,A17,A19,A20,XXREAL_0:2;
       end;
     end;
 A21: for kk be Nat holds P[kk] from NAT_1:sch 2(A11,A12);
@@ -814,15 +815,15 @@ A29:      kk < len s1;
           then reconsider U1 = len s1 - 1 as Element of NAT by A9,INT_1:16;
           U1 + 1 = len s1;
           then kk <= U1 by A29,NAT_1:13;
-          hence s1.kk = s2.kk by A9,A21,A28;
+          hence thesis by A9,A21,A28;
         end;
         suppose kk = len s1;
-          hence s1.kk = s2.kk by A9,A22;
+          hence thesis by A9,A22;
         end;
       end;
       hence thesis;
     end;
-    hence s1 = s2 by A10,FINSEQ_1:18;
+    hence thesis by A10,FINSEQ_1:18;
   end;
 end;
 
@@ -946,7 +947,7 @@ A35:        i=0;
             then Mul_mod(q,cn,f,k).(i+1) = Table1(q,cn,f,n) by A5,Def7
               .= Table1(q,c,f,n+1) by A20,A31
               .= Mul_mod(q,c,f,k).1 by A6,Def7;
-            hence Mul_mod(q,cn,f,k).(i+1) = Mul_mod(q,c,f,k).(i+1) by A35;
+            hence thesis by A35;
           end;
           case
 A36:        i>=1;
@@ -968,10 +969,10 @@ A41:        1 <= n -' i by A37,XREAL_1:235;
             then Mul_mod(q,cn,f,k).(i+1) = (Radix(k)*Mul_mod(q,c,f,k).i
             + (q*DigA(c,(n -' i)+1) mod f)) mod f by A20,A29,A37,A39,FINSEQ_1:3
               .= Mul_mod(q,c,f,k).(i+1) by A37,A40,NAT_D:38;
-            hence Mul_mod(q,cn,f,k).(i+1)=Mul_mod(q,c,f,k).(i+1);
+            hence thesis;
           end;
         end;
-        hence Mul_mod(q,cn,f,k).(i+1) = Mul_mod(q,c,f,k).(i+1);
+        hence thesis;
       end;
       for i be Element of NAT holds P[i] from NAT_1:sch 1(A27,A28);
       hence thesis;
@@ -989,24 +990,24 @@ A45:  len rD = n and
 A46:  for i be Nat st i in dom rD holds rD.i = F(i) from FINSEQ_2:sch 1;
       reconsider rD as Tuple of n,REAL by A45,FINSEQ_2:110;
 A48:  dom DigitSD2(cn2,k) = Seg (len DigitSD2(cn2,k)) by FINSEQ_1:def 3
-        .= Seg n by FINSEQ_2:109;
+        .= Seg n by FINSEQ_1:def 18;
 A49:  dom rD = Seg n by A45,FINSEQ_1:def 3;
 A50:  1 - 1 = 0;
 A51:  DigitSD2(c2,k) = <*SubDigit2(c2,1,k)*>^(Radix(k)*DigitSD2(cn2,k))
       proof
-A52:    len DigitSD2(c2,k) = n+1 by FINSEQ_2:109;
+A52:    len DigitSD2(c2,k) = n+1 by FINSEQ_1:def 18;
 A53:    len (Radix(k) * DigitSD2(cn2,k))
         = len (r2 * rD) by A46,A48,A49,FINSEQ_1:17
-          .= n by FINSEQ_2:109;
+          .= n by FINSEQ_1:def 18;
 A54:    len <*SubDigit2(c2,1,k)*> = 1 by FINSEQ_1:56;
 A55:    len (<*SubDigit2(c2,1,k)*> ^ (Radix(k) * DigitSD2(cn2,k)))
         = len <*SubDigit2(c2,1,k)*> + len (Radix(k) * DigitSD2(cn2,k))
         by FINSEQ_1:35
-          .= n+1 by A53,FINSEQ_2:109;
+          .= n+1 by A53,FINSEQ_1:def 18;
         then
 A56:    len DigitSD2(c2,k)
         = len (<*SubDigit2(c2,1,k)*> ^ (Radix(k) * DigitSD2(cn2,k)))
-        by FINSEQ_2:109;
+        by FINSEQ_1:def 18;
         for i be Nat st 1 <= i & i <= len DigitSD2(c2,k) holds
         DigitSD2(c2,k).i=(<*SubDigit2(c2,1,k)*>^(Radix(k)*DigitSD2(cn2,k))).i
         proof
@@ -1014,7 +1015,7 @@ A56:    len DigitSD2(c2,k)
           assume
 A57:      1 <= i & i <= len DigitSD2(c2,k);
           then
-A58:      i <= n+1 by FINSEQ_2:109;
+A58:      i <= n+1 by FINSEQ_1:def 18;
           then
 A59:      i in Seg (n+1) by A57,FINSEQ_1:3;
           then
@@ -1080,7 +1081,7 @@ A66: Radix(k) > 0 by Th6;
 A67: icn is_represented_by n,k by RADIX_1:def 12;
     cn = DecSD2(icn2,n,k)
     proof
-A68:  len cn = len DecSD2(icn2,n,k) by A10,FINSEQ_2:109;
+A68:  len cn = len DecSD2(icn2,n,k) by A10,FINSEQ_1:def 18;
       for i be Nat st 1 <= i & i <= len cn holds cn.i=DecSD2(icn2,n,k).i
       proof
         let i be Nat;
@@ -1211,9 +1212,9 @@ A7: s1.1 = Table2(m,e,f,n) & for i be Nat st 1 <= i & i <= n - 1 holds
 A8: s2.1 = Table2(m,e,f,n) & for i be Nat st 1 <= i & i <= n - 1 holds
     ex I1,I2 be Nat st I1 = s2.i & I2 = s2.(i+1) &
     I2 = (((I1 |^ Radix(k)) mod f)*Table2(m,e,f,n-'i)) mod f;
-A9: len s1 = n by FINSEQ_2:109;
+A9: len s1 = n by FINSEQ_1:def 18;
     then
-A10: len s1 = len s2 by FINSEQ_2:109;
+A10: len s1 = len s2 by FINSEQ_1:def 18;
     defpred P[Element of NAT] means
     1 <= $1 & $1 <= n - 1 implies s1.$1 = s2.$1;
 A11: P[0];
@@ -1227,7 +1228,7 @@ A14:  1 <= kk + 1 & kk + 1 <= n - 1;
 A15:  0 = kk or 0 < kk & 0 + 1 = 1;
       per cases by A15,NAT_1:13;
       suppose 0 = kk;
-        hence s1.(kk+1) = s2.(kk+1) by A7,A8;
+        hence thesis by A7,A8;
       end;
       suppose
 A16:    1 <= kk;
@@ -1240,7 +1241,7 @@ A19:    i1 = s1.kk & i2 = s1.(kk+1) &
         consider i1,i2 be Nat such that
 A20:    i1 = s2.kk & i2 = s2.(kk+1) &
         i2 = (((i1 |^ Radix(k)) mod f)*Table2(m,e,f,n-'kk)) mod f by A8,A18;
-        thus s1.(kk+1) = s2.(kk+1) by A13,A14,A16,A17,A19,A20,XXREAL_0:2;
+        thus thesis by A13,A14,A16,A17,A19,A20,XXREAL_0:2;
       end;
     end;
 A21: for kk be Element of NAT holds P[kk] from NAT_1:sch 1 (A11,A12);
@@ -1279,15 +1280,15 @@ A30:      kk < len s1;
           then reconsider U1 = len s1 - 1 as Element of NAT by A9,INT_1:16;
           U1 + 1 = len s1;
           then kk <= U1 by A30,NAT_1:13;
-          hence s1.kk = s2.kk by A9,A21,A28,A29;
+          hence thesis by A9,A21,A28,A29;
         end;
         suppose kk = len s1;
-          hence s1.kk = s2.kk by A9,A22;
+          hence thesis by A9,A22;
         end;
       end;
       hence thesis;
     end;
-    hence s1 = s2 by A10,FINSEQ_1:18;
+    hence thesis by A10,FINSEQ_1:18;
   end;
 end;
 
@@ -1314,7 +1315,7 @@ A3: e = DecSD2(ie,1,k);
 A4: ie < Radix(k) by NEWTON:10;
 A5: 1 - 1 = 0;
 A6: 1 in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
-    len DecSD2(ie,1,k) = 1 by FINSEQ_2:109;
+    len DecSD2(ie,1,k) = 1 by FINSEQ_1:def 18;
     then 1 in dom DecSD2(ie,1,k) by A6,FINSEQ_1:def 3;
     then e/.1 = DecSD2(ie,1,k).1 by A3,PARTFUN1:def 8
       .= DigitDC2(ie,1,k) by A6,Def5
@@ -1371,7 +1372,7 @@ A26:    (i=0 or i+1>1+0) by XREAL_1:8;
 A27:    dom en = Seg n by A12,FINSEQ_1:def 3;
 A28:    dom e = Seg (len e) by FINSEQ_1:def 3;
         then
-A29:    dom e = Seg (n+1) by FINSEQ_2:109;
+A29:    dom e = Seg (n+1) by FINSEQ_1:def 18;
         now per cases by A26,NAT_1:13;
           case
 A30:        i=0;
@@ -1380,7 +1381,7 @@ A30:        i=0;
               .= (m |^ (e.(n+1))) mod f by A13,A17,A14
               .= Table2(m,e,f,n+1) by A18,A29,PARTFUN1:def 8
               .= Pow_mod(m,e,f,k).1 by A9,Def9;
-            hence Pow_mod(m,en,f,k).(i+1) = Pow_mod(m,e,f,k).(i+1) by A30;
+            hence thesis by A30;
           end;
           case
 A31:        i>=1;
@@ -1412,7 +1413,7 @@ A39:        (n+1) -' i <= n+1 by NAT_D:35;
             then 1 <= (n+1)-'i by XXREAL_0:2;
             then ((n+1)-'i) in Seg (n+1) by A39,FINSEQ_1:3;
             then
-A40:        ((n+1) -' i) in dom e by A28,FINSEQ_2:109;
+A40:        ((n+1) -' i) in dom e by A28,FINSEQ_1:def 18;
             Pow_mod(m,en,f,k).(i+1)
             = ((((Pow_mod(m,e,f,k).i) |^ Radix(k)) mod f)
             * ((m |^ (en.(n-'i))) mod f)) mod f by A22,A32,A34,A38,FINSEQ_1:3
@@ -1423,10 +1424,10 @@ A40:        ((n+1) -' i) in dom e by A28,FINSEQ_2:109;
             * ((m |^ (e.((n+1) -'i))) mod f)) mod f by A32,NAT_D:38
               .= ((((Pow_mod(m,e,f,k).i) |^ Radix(k)) mod f)
             * Table2(m,e,f,(n+1)-'i)) mod f by A40,PARTFUN1:def 8;
-            hence Pow_mod(m,en,f,k).(i+1)=Pow_mod(m,e,f,k).(i+1) by A35;
+            hence thesis by A35;
           end;
         end;
-        hence Pow_mod(m,en,f,k).(i+1) = Pow_mod(m,e,f,k).(i+1);
+        hence thesis;
       end;
       for i be Element of NAT holds Z[i] from NAT_1:sch 1(A20,A21);
       hence thesis;
@@ -1442,24 +1443,24 @@ A43:  len rD = n and
 A44:  for i be Nat st i in dom rD holds rD.i = F(i) from FINSEQ_2:sch 1;
       reconsider rD as Tuple of n,REAL by A43,FINSEQ_2:110;
 A46:  dom DigitSD2(en,k) = Seg (len DigitSD2(en,k)) by FINSEQ_1:def 3
-        .= Seg n by FINSEQ_2:109;
+        .= Seg n by FINSEQ_1:def 18;
 A47:  dom rD = Seg n by A43,FINSEQ_1:def 3;
 A48:  1 - 1 = 0;
 A49:  DigitSD2(e,k) = <*SubDigit2(e,1,k)*>^(Radix(k)*DigitSD2(en,k))
       proof
-A50:    len DigitSD2(e,k) = n+1 by FINSEQ_2:109;
+A50:    len DigitSD2(e,k) = n+1 by FINSEQ_1:def 18;
 A51:    len (Radix(k) * DigitSD2(en,k))
         = len (r2 * rD) by A44,A46,A47,FINSEQ_1:17
-          .= n by FINSEQ_2:109;
+          .= n by FINSEQ_1:def 18;
 A52:    len <*SubDigit2(e,1,k)*> = 1 by FINSEQ_1:56;
 A53:    len (<*SubDigit2(e,1,k)*> ^ (Radix(k) * DigitSD2(en,k)))
         = len <*SubDigit2(e,1,k)*> + len (Radix(k) * DigitSD2(en,k))
         by FINSEQ_1:35
-          .= n+1 by A51,FINSEQ_2:109;
+          .= n+1 by A51,FINSEQ_1:def 18;
         then
 A54:    len DigitSD2(e,k)
         = len (<*SubDigit2(e,1,k)*> ^ (Radix(k) * DigitSD2(en,k)))
-        by FINSEQ_2:109;
+        by FINSEQ_1:def 18;
         for i be Nat st 1 <= i & i <= len DigitSD2(e,k) holds
         DigitSD2(e,k).i=(<*SubDigit2(e,1,k)*> ^ (Radix(k)*DigitSD2(en,k))).i
         proof
@@ -1467,7 +1468,7 @@ A54:    len DigitSD2(e,k)
           assume
 A55:      1 <= i & i <= len DigitSD2(e,k);
           then
-A56:      i <= n+1 by FINSEQ_2:109;
+A56:      i <= n+1 by FINSEQ_1:def 18;
           then
 A57:      i in Seg (n+1) by A55,FINSEQ_1:3;
           then
@@ -1516,7 +1517,7 @@ A64:        i1 in dom rD by A47,A61,A62,FINSEQ_1:3;
       end;
       dom e = Seg (len e) by FINSEQ_1:def 3;
       then
-A65:  1 in dom e by A16,FINSEQ_2:109;
+A65:  1 in dom e by A16,FINSEQ_1:def 18;
       ie = SDDec2(e,k) by A10,A11,Th15,NAT_1:12
         .= SubDigit2(e,1,k) + Sum(Radix(k) * DigitSD2(en,k)) by A49,RVSUM_1:106
         .= SubDigit2(e,1,k) + Sum(r2 * rD) by A44,A46,A47,FINSEQ_1:17
@@ -1538,7 +1539,7 @@ A67: Radix(k) > 0 by Th6;
 A68: ien is_represented_by n,k by RADIX_1:def 12;
 A69: en = DecSD2(ien,n,k)
     proof
-A70:  len en = len DecSD2(ien,n,k) by A12,FINSEQ_2:109;
+A70:  len en = len DecSD2(ien,n,k) by A12,FINSEQ_1:def 18;
       for i be Nat st 1 <= i & i <= len en holds en.i=DecSD2(ien,n,k).i
       proof
         let i be Nat;
@@ -1556,7 +1557,7 @@ A74:    e.1 = DigitDC2(ie,1,k) by A11,A16,Def5
           .= ie mod Radix(k) by NEWTON:10;
         dom e = Seg (len e) by FINSEQ_1:def 3;
         then
-A75:    dom e = Seg (n+1) by FINSEQ_2:109;
+A75:    dom e = Seg (n+1) by FINSEQ_1:def 18;
 A76:    1 <= i+1 & 0 < Radix(k) by A71,Th6,XREAL_1:31;
 A77:    Radix(k) <> 0 & i <> 0 by A71,Th6;
 A78:    (e.1 + ien*Radix(k)) div Radix(k)

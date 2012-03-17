@@ -1,0 +1,275 @@
+:: Basic Properties of Metrizable Topological Spaces
+::  by Karol P\c{a}k
+::
+:: Received March 31, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies ABSVALUE, ARYTM, ARYTM_1, ARYTM_3, BOOLE, CARD_1, CARD_2, CARD_4,
+      CARD_5, COMPTS_1, CONNSP_1, EUCLID, FINSET_1, FINSEQ_1, FINSEQ_2,
+      FUNCOP_1, FUNCT_1, FUNCT_3, GROUP_1, GROUP_3, MCART_1, METRIC_1,
+      NAGATA_1, NATTRA_1, ORDINAL2, PCOMPS_1, PRE_TOPC, PROB_1, RAT_1, RCOMP_1,
+      RELAT_1, RLVECT_3, SETFAM_1, SUBSET_1, SUPINF_1, T_0TOPSP, TARSKI,
+      TOPGEN_1, TOPGEN_4, TOPMETR, TOPREAL7, TOPS_1, TOPS_2, WAYBEL23,
+      WEIERSTR, METRIZTS;
+ notations BINOP_1, TOPMETR, CARD_1, CANTOR_1, COMPLEX1, FINSET_1, TARSKI,
+      XBOOLE_0, RELAT_1, SUBSET_1, ORDINAL1, NUMBERS, ZFMISC_1, XREAL_0,
+      REAL_1, DOMAIN_1, METRIC_1, PCOMPS_1, CARD_3, KURATO_2, WAYBEL23,
+      TOPGEN_1, FUNCOP_1, XCMPLX_0, TOPS_1, CARD_2, NEWTON, BORSUK_1, NAGATA_1,
+      TEX_2, TOPGEN_4, RCOMP_1, WEIERSTR, TOPREAL7, ORDERS_4, XXREAL_0,
+      FUNCT_1, RELSET_1, FUNCT_2, FUNCT_3, NAT_1, FINSEQ_1, SETFAM_1, STRUCT_0,
+      PRE_TOPC, CONNSP_1, TOPS_2, BORSUK_3, EUCLID, FINSEQ_2;
+ constructors REAL_1, KURATO_2, CANTOR_1, URYSOHN3, TOPGEN_4, WAYBEL23,
+      TOPGEN_1, TOPS_1, FUNCT_3, TOPREAL9, CARD_2, NEWTON, CARD_5, NAGATA_1,
+      TEX_2, TSP_1, CONNSP_1, RCOMP_1, WEIERSTR, TOPREAL7, ORDERS_4, TOPS_2,
+      BORSUK_3, FUNCSDOM;
+ registrations TOPMETR, PRE_TOPC, PCOMPS_1, XREAL_0, SUBSET_1, STRUCT_0,
+      TOPS_1, METRIC_1, XXREAL_0, YELLOW13, CARD_1, XBOOLE_0, FINSET_1,
+      FUNCT_1, ORDINAL1, COMPTS_1, RELAT_1, XCMPLX_0, CARD_LAR, BORSUK_1,
+      TOPGEN_4, MEMBERED, TOPREAL7, BORSUK_3, EUCLID;
+ requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
+
+
+begin :: Preliminaries
+
+reserve T, T1, T2 for TopSpace,
+  A, B for Subset of T,
+  F, G for Subset-Family of T,
+  A1 for Subset of T1,
+  A2 for Subset of T2,
+  TM, TM1, TM2 for metrizable TopSpace,
+  Am, Bm for Subset of TM,
+  Fm, Gm for Subset-Family of TM,
+  C for Cardinal,
+  iC for infinite Cardinal;
+
+definition
+  let T1,T2,A1,A2;
+  pred A1,A2 are_homeomorphic means
+:: METRIZTS:def 1
+  T1|A1,T2|A2 are_homeomorphic;
+end;
+
+theorem :: METRIZTS:1
+  T1,T2 are_homeomorphic iff [#]T1,[#]T2 are_homeomorphic;
+
+theorem :: METRIZTS:2
+  for f be Function of T1,T2 st f is being_homeomorphism
+    for g be Function of T1|A1,T2|(f.:A1) st g = f|A1
+      holds g is being_homeomorphism;
+
+theorem :: METRIZTS:3
+  for f be Function of T1,T2 st f is being_homeomorphism holds
+    A1,f.:A1 are_homeomorphic;
+
+theorem :: METRIZTS:4
+  T1,T2 are_homeomorphic implies weight T1 = weight T2;
+
+registration
+  cluster empty -> metrizable TopSpace;
+  cluster metrizable -> T_4 TopSpace;
+  let M be MetrSpace;
+  cluster TopSpaceMetr M -> metrizable;
+end;
+
+registration
+  let TM,Am;
+  cluster TM|Am -> metrizable;
+end;
+
+registration
+  let TM1,TM2;
+  cluster [:TM1,TM2:] -> metrizable;
+end;
+
+registration
+  let T be empty TopSpace;
+  cluster weight T -> empty;
+end;
+
+theorem :: METRIZTS:5
+  weight [:T1,T2:] c= weight T1 *` weight T2;
+
+theorem :: METRIZTS:6
+  T1 is non empty & T2 is non empty implies
+    weight T1 c= weight [:T1,T2:] & weight T2 c= weight[:T1,T2:];
+
+registration
+  let T1,T2 be second-countable TopSpace;
+  cluster [:T1,T2:] -> second-countable;
+end;
+
+theorem :: METRIZTS:7
+  card (F|A) c= card F;
+
+theorem :: METRIZTS:8
+  for Bas be Basis of T holds Bas|A is Basis of T|A;
+
+registration
+  let T be second-countable TopSpace;
+  let A be Subset of T;
+  cluster T|A -> second-countable;
+end;
+
+registration
+  let M be non empty MetrSpace;
+  let A be non empty Subset of TopSpaceMetr M;
+::  General Topology Th 4.1.10
+  cluster dist_min A -> continuous;
+end;
+
+theorem :: METRIZTS:9
+  for B be Subset of T,F be Subset of T|A st F = B holds T|A|F = T|B;
+
+::  F_sigma and G_delta Types of Subsets
+
+registration
+  let TM;
+  cluster open -> F_sigma Subset of TM;
+  cluster closed -> G_delta Subset of TM;
+end;
+
+theorem :: METRIZTS:10
+  for F be Subset of T|B st A is F_sigma & F = A/\B holds F is F_sigma;
+
+theorem :: METRIZTS:11
+  for F be Subset of T|B st A is G_delta & F = A/\B holds F is G_delta;
+
+theorem :: METRIZTS:12
+  T is T_1 & A is discrete implies A is open Subset of T|(Cl A);
+
+theorem :: METRIZTS:13
+  for T st for F st F is open & F is Cover of T
+  ex G st G c= F & G is Cover of T & card G c= C
+  holds for A st A is closed & A is discrete holds card A c= C;
+
+theorem :: METRIZTS:14
+  for TM st for Am st Am is closed & Am is discrete holds card Am c= iC
+    holds for Am st Am is discrete holds card Am c= iC;
+
+theorem :: METRIZTS:15
+  for T st for A st A is discrete holds card A c= C
+    for F st F is open & not {} in F &
+             for A,B st A in F & B in F & A <> B holds A misses B
+  holds card F c= C;
+
+theorem :: METRIZTS:16
+  for F st F is Cover of T
+    ex G st G c= F & G is Cover of T & card G c= card [#]T;
+
+theorem :: METRIZTS:17
+  Am is dense implies weight TM c= omega *` card Am;
+
+begin :: Main Properties
+
+::  General Topology Th 4.1.15 (a) <=> (c)
+
+theorem :: METRIZTS:18
+  weight TM c= iC iff
+         for Fm st Fm is open & Fm is Cover of TM
+           ex Gm st Gm c=Fm & Gm is Cover of TM & card Gm c= iC;
+
+::  General Topology Th 4.1.15 (a) <=> (d)
+
+theorem :: METRIZTS:19
+  weight TM c=iC iff
+         for Am st Am is closed & Am is discrete holds card Am c= iC;
+
+::  General Topology Th 4.1.15 (a) <=> (e)
+
+theorem :: METRIZTS:20
+  weight TM c= iC iff
+         for Am st Am is discrete holds card Am c= iC;
+
+::  General Topology Th 4.1.15 (a) <=> (f)
+
+theorem :: METRIZTS:21
+  weight TM c= iC iff
+         for Fm st Fm is open & not{} in Fm &
+            for Am,Bm st Am in Fm & Bm in Fm & Am <> Bm holds Am misses Bm
+  holds card Fm c= iC;
+
+::  General Topology Th 4.1.15 (a) <=> (g)
+
+theorem :: METRIZTS:22
+  weight TM c= iC iff density TM c= iC;
+
+theorem :: METRIZTS:23
+  for B be Basis of TM st
+      for Fm st Fm is open & Fm is Cover of TM
+        ex Gm st Gm c=Fm & Gm is Cover of TM & card Gm c= iC
+  ex underB be Basis of TM st underB c= B & card underB c= iC;
+
+begin :: Properties of Lindel\"of spaces
+
+definition
+  let T;
+  attr T is Lindelof means
+:: METRIZTS:def 2
+  for F st F is open & F is Cover of T
+    ex G st G c=F & G is Cover of T & G is countable;
+end;
+
+theorem :: METRIZTS:24
+  for B be Basis of TM st TM is Lindelof
+    ex B' be Basis of TM st B' c= B & B' is countable;
+
+registration
+  cluster Lindelof -> second-countable (metrizable TopSpace);
+end;
+
+registration
+  cluster Lindelof -> separable (metrizable TopSpace);
+  cluster separable -> Lindelof (metrizable TopSpace);
+end;
+
+registration
+  cluster Lindelof metrizable (non empty TopSpace);
+::  General Topology Th 3.8.1
+  cluster second-countable -> Lindelof TopSpace;
+::  General Topology Th 3.8.2
+  cluster regular Lindelof -> normal TopSpace;
+  cluster countable -> Lindelof TopSpace;
+end;
+
+registration
+  let n be Nat;
+  cluster the TopStruct of TOP-REAL n -> second-countable;
+end;
+
+registration
+  let T be Lindelof TopSpace;
+  let A be closed Subset of T;
+::  General Topology Cor 3.8.4
+  cluster T|A -> Lindelof;
+end;
+
+registration
+  let TM be Lindelof metrizable TopSpace;
+  let A be Subset of TM;
+  cluster TM|A -> Lindelof;
+end;
+
+definition
+  let T;
+  let A,B,L be Subset of T;
+  pred L separates A,B means
+:: METRIZTS:def 3
+  ex U,W be open Subset of T st A c=U & B c=W & U misses W & L=(U\/W)`;
+end;
+
+::  Teoria wymiaru Lm 1.2.8
+
+theorem :: METRIZTS:25
+  Am,Bm are_separated implies ex L be Subset of TM st L separates Am,Bm;
+
+:: Teoria wymiaru Lm 1.2.9
+
+theorem :: METRIZTS:26
+  for M be Subset of TM,
+      A1,A2 be closed Subset of TM,
+      V1,V2 be open Subset of TM st A1 c=V1 & A2 c=V2 & Cl V1 misses Cl V2
+  for mV1,mV2,mL be Subset of TM|M st
+      mV1 = M/\Cl V1 & mV2 = M/\Cl V2 & mL separates mV1,mV2
+  ex L be Subset of TM st L separates A1,A2 & M/\L c= mL;

@@ -1,0 +1,448 @@
+:: Basic properties of even and odd functions
+::  by Bo Li and Yanhong Men
+:: 
+:: Received May 25, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM, ARYTM_1, RELAT_1, ABSVALUE, SQUARE_1, MEMBERED, EUCLID,
+      FUNCT_8, FUNCT_1, PARTFUN1, BOOLE, SIN_COS, SIN_COS2, RCOMP_1, ARYTM_3,
+      SIN_COS4, SIN_COS9, SEQ_1, SUBSET_1, COMPLEX1, XCMPLX_0, FINSEQ_4,
+      MATRIX_2, MATRIX_6;
+ notations COMPLEX1, XCMPLX_0, SIN_COS4, ORDINAL1, NUMBERS, XREAL_0, XXREAL_0,
+      REAL_1, MEMBERED, ABSVALUE, PARTFUN1, TARSKI, XBOOLE_0, SUBSET_1, EUCLID,
+      RELAT_1, FUNCT_1, FUNCT_2, SIN_COS2, SIN_COS, VALUED_0, VALUED_1, NAT_1,
+      RCOMP_1, SQUARE_1, SIN_COS9, RELSET_1, FINSEQ_4, PARTFUN2, FDIFF_9,
+      RFUNCT_1, SEQ_1, LIMFUNC1;
+ constructors REAL_1, SUPINF_1, RCOMP_1, SEQ_1, EUCLID, SQUARE_1, LIMFUNC1,
+      ABSVALUE, SIN_COS2, RFUNCT_1, RELSET_1, NUMBERS, MESFUNC1, SIN_COS9,
+      BINOP_2, SIN_COS, COMPLEX1, FINSEQ_4, PARTFUN2, PARTFUN1, FDIFF_9,
+      FDIFF_1, VALUED_1;
+ registrations XXREAL_0, XREAL_0, REAL_1, XBOOLE_0, MEMBERED, XCMPLX_0,
+      NUMBERS, VALUED_0, FUNCT_1, RELAT_1, COMPLEX1, RFUNCT_1, RFUNCT_2,
+      FDIFF_1, VALUED_1, PARTFUN1, FUNCT_2, RELSET_1;
+ requirements REAL, NUMERALS, SUBSET, ARITHM, BOOLE;
+
+
+begin :: Even and odd functions
+
+reserve x, r for Real;
+
+definition let A be set;
+  attr A is symmetrical means
+:: FUNCT_8:def 1
+  for x being complex number st x in A holds -x in A;
+end;
+
+registration
+  cluster symmetrical Subset of COMPLEX;
+end;
+
+registration
+  cluster symmetrical Subset of REAL;
+end;
+
+reserve A for symmetrical Subset of COMPLEX;
+
+definition
+  let R be Relation;
+  attr R is with_symmetrical_domain means
+:: FUNCT_8:def 2
+  dom R is symmetrical;
+end;
+
+registration
+  cluster empty -> with_symmetrical_domain Relation;
+ end;
+
+registration
+  let R be with_symmetrical_domain Relation;
+  cluster dom R -> symmetrical;
+end;
+
+definition
+  let X,Y be complex-membered set;
+  let F be PartFunc of X, Y;
+  attr F is quasi_even means
+:: FUNCT_8:def 3
+  for x st x in dom F & -x in dom F holds F.(-x)=F.x;
+end;
+
+definition
+  let X,Y be complex-membered set;
+  let F be PartFunc of X, Y;
+  attr F is even means
+:: FUNCT_8:def 4
+  F is with_symmetrical_domain quasi_even;
+end;
+
+registration
+  let X,Y be complex-membered set;
+  cluster with_symmetrical_domain quasi_even -> even PartFunc of X, Y;
+  cluster even -> with_symmetrical_domain quasi_even PartFunc of X, Y;
+end;
+
+definition
+  let A be set;
+  let X,Y be complex-membered set;
+  let F be PartFunc of X, Y;
+  pred F is_even_on A means
+:: FUNCT_8:def 5
+  A c= dom F & F|A is even;
+end;
+
+definition
+  let X,Y be complex-membered set;
+  let F be PartFunc of X, Y;
+  attr F is quasi_odd means
+:: FUNCT_8:def 6
+  for x st x in dom F & -x in dom F holds F.(-x)=-F.x;
+end;
+
+definition
+  let X,Y be complex-membered set;
+  let F be PartFunc of X, Y;
+  attr F is odd means
+:: FUNCT_8:def 7
+  F is with_symmetrical_domain quasi_odd;
+end;
+
+registration
+  let X,Y be complex-membered set;
+  cluster with_symmetrical_domain quasi_odd -> odd PartFunc of X, Y;
+  cluster odd -> with_symmetrical_domain quasi_odd  PartFunc of X, Y;
+end;
+
+definition
+  let A be set;
+  let X,Y be complex-membered set;
+  let F be PartFunc of X, Y;
+  pred F is_odd_on A means
+:: FUNCT_8:def 8
+  A c= dom F & F|A is odd;
+end;
+
+reserve F,G for PartFunc of REAL, REAL;
+
+theorem :: FUNCT_8:1
+  F is_odd_on A iff (A c= dom F & for x st x in A holds F.x+F.(-x)=0);
+
+theorem :: FUNCT_8:2
+  F is_even_on A iff (A c= dom F & for x st x in A holds F.x-F.(-x)=0);
+
+theorem :: FUNCT_8:3
+  (F is_odd_on A & for x st x in A holds F.x<>0) implies
+  (A c= dom F & for x st x in A holds F.x / F.(-x)=-1);
+
+theorem :: FUNCT_8:4
+  (A c= dom F & for x st x in A holds F.x / F.(-x)=-1)
+  implies F is_odd_on A;
+
+theorem :: FUNCT_8:5
+  (F is_even_on A & for x st x in A holds F.x<>0 ) implies
+  (A c= dom F & for x st x in A holds F.x / F.(-x)=1);
+
+theorem :: FUNCT_8:6
+  (A c= dom F & for x st x in A holds F.x / F.(-x)=1)
+  implies F is_even_on A;
+
+theorem :: FUNCT_8:7
+  F is_even_on A & F is_odd_on A implies for x st x in A holds F.x=0;
+
+theorem :: FUNCT_8:8
+  F is_even_on A implies for x st x in A holds F.x = F.(abs x);
+
+theorem :: FUNCT_8:9
+  (A c= dom F & for x st x in A holds F.x = F.(abs x)) implies
+  F is_even_on A;
+
+theorem :: FUNCT_8:10
+  F is_odd_on A & G is_odd_on A implies
+  F + G is_odd_on A;
+
+theorem :: FUNCT_8:11
+  F is_even_on A & G is_even_on A implies
+  F + G is_even_on A;
+
+theorem :: FUNCT_8:12
+  F is_odd_on A & G is_odd_on A implies
+  F - G is_odd_on A;
+
+theorem :: FUNCT_8:13
+  F is_even_on A & G is_even_on A implies
+  F - G is_even_on A;
+
+theorem :: FUNCT_8:14
+  F is_odd_on A implies r (#) F is_odd_on A;
+
+theorem :: FUNCT_8:15
+  F is_even_on A implies r (#) F is_even_on A;
+
+theorem :: FUNCT_8:16
+  F is_odd_on A implies -F is_odd_on A;
+
+theorem :: FUNCT_8:17
+  F is_even_on A implies -F is_even_on A;
+
+theorem :: FUNCT_8:18
+  F is_odd_on A implies F" is_odd_on A;
+
+theorem :: FUNCT_8:19
+  F is_even_on A implies F" is_even_on A;
+
+theorem :: FUNCT_8:20
+  F is_odd_on A implies |. F .| is_even_on A;
+
+theorem :: FUNCT_8:21
+  F is_even_on A implies |. F .| is_even_on A;
+
+theorem :: FUNCT_8:22
+  F is_odd_on A & G is_odd_on A implies
+  F (#) G is_even_on A;
+
+theorem :: FUNCT_8:23
+  F is_even_on A & G is_even_on A implies
+  F (#) G is_even_on A;
+
+theorem :: FUNCT_8:24
+  F is_even_on A & G is_odd_on A implies
+  F (#) G is_odd_on A;
+
+theorem :: FUNCT_8:25
+  F is_even_on A implies r+F is_even_on A;
+
+theorem :: FUNCT_8:26
+  F is_even_on A implies F-r is_even_on A;
+
+theorem :: FUNCT_8:27
+  F is_even_on A implies F^2 is_even_on A;
+
+theorem :: FUNCT_8:28
+  F is_odd_on A implies F^2 is_even_on A;
+
+theorem :: FUNCT_8:29
+  F is_odd_on A & G is_odd_on A implies
+  F /" G is_even_on A;
+
+theorem :: FUNCT_8:30
+  F is_even_on A & G is_even_on A implies
+  F /" G is_even_on A;
+
+theorem :: FUNCT_8:31
+  F is_odd_on A & G is_even_on A implies
+  F /" G is_odd_on A;
+
+theorem :: FUNCT_8:32
+  F is_even_on A & G is_odd_on A implies
+  F /" G is_odd_on A;
+
+theorem :: FUNCT_8:33
+  F is odd implies -F is odd;
+
+theorem :: FUNCT_8:34
+  F is even implies -F is even;
+
+theorem :: FUNCT_8:35
+  F is odd implies F" is odd;
+
+theorem :: FUNCT_8:36
+  F is even implies F" is even;
+
+theorem :: FUNCT_8:37
+  F is odd implies |. F .| is even;
+
+theorem :: FUNCT_8:38
+  F is even implies |. F .| is even;
+
+theorem :: FUNCT_8:39
+  F is odd implies F^2 is even;
+
+theorem :: FUNCT_8:40
+  F is even implies F^2 is even;
+
+theorem :: FUNCT_8:41
+  F is even implies r+F is even;
+
+theorem :: FUNCT_8:42
+  F is even implies F-r is even;
+
+theorem :: FUNCT_8:43
+  F is odd implies r (#) F is odd;
+
+theorem :: FUNCT_8:44
+  F is even implies r (#) F is even;
+
+theorem :: FUNCT_8:45
+  F is odd & G is odd & dom F /\ dom G is symmetrical implies
+  F + G is odd;
+
+theorem :: FUNCT_8:46
+  F is even & G is even & dom F /\ dom G is symmetrical implies
+  F + G is even;
+
+theorem :: FUNCT_8:47
+  F is odd & G is odd & dom F /\ dom G is symmetrical implies
+  F - G is odd;
+
+theorem :: FUNCT_8:48
+  F is even & G is even & dom F /\ dom G is symmetrical implies
+  F - G is even;
+
+theorem :: FUNCT_8:49
+  F is odd & G is odd & dom F /\ dom G is symmetrical implies
+  F (#) G is even;
+
+theorem :: FUNCT_8:50
+  F is even & G is even & dom F /\ dom G is symmetrical implies
+  F (#) G is even;
+
+theorem :: FUNCT_8:51
+  F is even & G is odd & dom F /\ dom G is symmetrical implies
+  F (#) G is odd;
+
+theorem :: FUNCT_8:52
+  F is odd & G is odd & dom F /\ dom G is symmetrical implies
+  F /" G is even;
+
+theorem :: FUNCT_8:53
+  F is even & G is even & dom F /\ dom G is symmetrical implies
+  F /" G is even;
+
+theorem :: FUNCT_8:54
+  F is odd & G is even & dom F /\ dom G is symmetrical implies
+  F /" G is odd;
+
+theorem :: FUNCT_8:55
+  F is even & G is odd & dom F /\ dom G is symmetrical implies
+  F /" G is odd;
+
+begin :: Examples
+
+definition
+  func signum -> Function of REAL, REAL means
+:: FUNCT_8:def 9
+  for x being Real holds it.x = sgn x;
+end;
+
+registration
+  let x be real number;
+  cluster signum.x -> real;
+end;
+
+theorem :: FUNCT_8:56
+  for x being real number st x > 0 holds signum.x = 1;
+
+theorem :: FUNCT_8:57
+  for x being real number st x < 0 holds signum.x = -1;
+
+theorem :: FUNCT_8:58
+  signum.0 = 0;
+
+theorem :: FUNCT_8:59
+  for x being real number holds signum.(-x) = -signum.x;
+
+theorem :: FUNCT_8:60
+  for A being symmetrical Subset of REAL holds signum is_odd_on A;
+
+theorem :: FUNCT_8:61
+  for x being real number st x >= 0 holds absreal.x = x;
+
+theorem :: FUNCT_8:62
+  for x being real number st x < 0 holds absreal.x = -x;
+
+theorem :: FUNCT_8:63
+  for x being real number holds absreal.(-x) = absreal.x;
+
+theorem :: FUNCT_8:64
+  for A being symmetrical Subset of REAL holds absreal is_even_on A;
+
+theorem :: FUNCT_8:65
+  for A being symmetrical Subset of REAL holds sin is_odd_on A;
+
+theorem :: FUNCT_8:66
+  for A being symmetrical Subset of REAL holds cos is_even_on A;
+
+registration
+  cluster sin -> odd;
+end;
+
+registration
+  cluster cos -> even;
+end;
+
+theorem :: FUNCT_8:67
+  for A being symmetrical Subset of REAL holds sinh is_odd_on A;
+
+theorem :: FUNCT_8:68
+  for A being symmetrical Subset of REAL holds cosh is_even_on A;
+
+registration
+  cluster sinh -> odd;
+end;
+
+registration
+  cluster cosh -> even;
+end;
+
+theorem :: FUNCT_8:69
+  A c= ].-PI/2,PI/2.[ implies tan is_odd_on A;
+
+theorem :: FUNCT_8:70
+  (A c= dom (tan) & for x st x in A holds cos.x <> 0) implies
+  tan is_odd_on A;
+
+theorem :: FUNCT_8:71
+  (A c= dom (cot) & for x st x in A holds sin.x <> 0) implies
+    cot is_odd_on A;
+
+theorem :: FUNCT_8:72
+  A c= [.-1,1.] implies arctan is_odd_on A;
+
+theorem :: FUNCT_8:73
+  for A being symmetrical Subset of REAL holds
+  |. sin .| is_even_on A;
+
+theorem :: FUNCT_8:74
+  for A being symmetrical Subset of REAL holds
+  |. cos .| is_even_on A;
+
+theorem :: FUNCT_8:75
+  for A being symmetrical Subset of REAL holds
+    sin" is_odd_on A;
+
+theorem :: FUNCT_8:76
+  for A being symmetrical Subset of REAL holds
+  cos" is_even_on A;
+
+theorem :: FUNCT_8:77
+  for A being symmetrical Subset of REAL holds
+    -sin is_odd_on A;
+
+theorem :: FUNCT_8:78
+  for A being symmetrical Subset of REAL holds
+  -cos is_even_on A;
+
+theorem :: FUNCT_8:79
+  for A being symmetrical Subset of REAL holds
+  sin^2 is_even_on A;
+
+theorem :: FUNCT_8:80
+  for A being symmetrical Subset of REAL holds
+  cos^2 is_even_on A;
+
+reserve B for symmetrical Subset of REAL;
+
+theorem :: FUNCT_8:81
+  B c= dom (sec) implies sec is_even_on B;
+
+theorem :: FUNCT_8:82
+  (for x being real number st x in B holds cos.x<>0)
+  implies sec is_even_on B;
+
+theorem :: FUNCT_8:83
+  B c= dom (cosec) implies cosec is_odd_on B;
+
+theorem :: FUNCT_8:84
+  (for x being real number st x in B holds sin.x<>0)
+  implies cosec is_odd_on B;

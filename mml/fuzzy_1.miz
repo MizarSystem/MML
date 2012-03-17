@@ -11,15 +11,17 @@ environ
       ARYTM_1, BOOLE, ABSVALUE, ARYTM_3, FUZZY_1, LATTICE3, ARYTM, VALUED_0,
       SEQ_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XXREAL_0, SQUARE_1, COMPLEX1,
-      REAL_1, RELAT_1, RELSET_1, FUNCT_1, PARTFUN1, VALUED_0, SEQ_1, SEQ_4,
-      RFUNCT_1, INTEGRA1, RCOMP_1, PSCOMP_1;
+      REAL_1, RELAT_1, RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, VALUED_0, SEQ_1,
+      SEQ_4, RFUNCT_1, INTEGRA1, RCOMP_1, PSCOMP_1;
  constructors REAL_1, SQUARE_1, COMPLEX1, RFUNCT_1, PSCOMP_1, INTEGRA1, SEQ_1,
-      SEQ_4;
+      SEQ_4, PARTFUN1, RELSET_1;
  registrations RELSET_1, NUMBERS, XXREAL_0, MEMBERED, INTEGRA1, XBOOLE_0,
-      VALUED_0;
+      VALUED_0, RFUNCT_1, FUNCT_2, FUNCOP_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions RELAT_1;
  theorems TARSKI, FUNCT_1, FUNCT_3, ABSVALUE, PARTFUN1, ZFMISC_1, INTEGRA1,
-      INTEGRA2, XBOOLE_0, XBOOLE_1, COMPLEX1, XREAL_1, XXREAL_0, XXREAL_1;
+      INTEGRA2, XBOOLE_0, XBOOLE_1, COMPLEX1, XREAL_1, XXREAL_0, XXREAL_1,
+      FUNCT_2, RELAT_1;
  schemes SEQ_1, PARTFUN1;
 
 begin
@@ -28,10 +30,11 @@ reserve x,y,y1,y2 for set;
 reserve C for non empty set;
 reserve c for Element of C;
 
-::::::Definition of Membership Function and Fuzzy Set
+:: Definition of Membership Function and Fuzzy Set
 
-theorem Th1:
-  rng chi(x,y) c= [.0,1.]
+registration let x,y;
+ cluster chi(x,y) -> [.0,1.]-valued;
+ coherence
 proof
 A1: rng chi(x,y) c= {0,1} by FUNCT_3:48;
   {0,1} c= [.0,1.]
@@ -39,28 +42,29 @@ A1: rng chi(x,y) c= {0,1} by FUNCT_3:48;
     1 in [.0,1.] & 0 in [.0,1.] by XXREAL_1:1;
     hence thesis by ZFMISC_1:38;
   end;
-  hence thesis by A1,XBOOLE_1:1;
+  hence rng chi(x,y) c= [.0,1.] by A1,XBOOLE_1:1;
+end;
+end;
+
+registration
+  let C;
+  cluster [.0,1.]-valued Function of C,REAL;
+  existence
+  proof
+    take chi(C,C);
+    thus rng chi(C,C) c= [.0,1.] by RELAT_1:def 19;
+  end;
 end;
 
 definition
   let C;
-  mode Membership_Func of C -> PartFunc of C,REAL means
-    :Def1:
-    dom it = C & rng it c= [.0,1.];
-  existence
-  proof
-    take chi(C,C);
-    thus thesis by Th1,FUNCT_3:def 3;
-  end;
+  mode Membership_Func of C is [.0,1.]-valued Function of C,REAL;
 end;
 
+canceled;
+
 theorem Th2:
-  chi(C,C) is Membership_Func of C
-proof
-A1: rng chi(C,C) c= [.0,1.] by Th1;
-  dom chi(C,C) =C by FUNCT_3:def 3;
-  hence thesis by A1,Def1;
-end;
+  chi(C,C) is Membership_Func of C;
 
 reserve f,h,g,h1 for Membership_Func of C;
 
@@ -71,6 +75,7 @@ registration
 end;
 
 definition
+ canceled;
   let f,g be real-valued Function;
   pred f is_less_than g means
   :Def2:
@@ -101,15 +106,15 @@ A1:     f is_less_than g;
         thus for x being Element of X holds f.x <= g.x
         proof
           let x be Element of X;
-          dom f = X by Def1;
+          dom f = X by FUNCT_2:def 1;
           hence thesis by A1,Def2;
         end;
       end;
       assume
 A2:   for x being Element of X holds f.x <= g.x;
-A3:   dom f = X & dom g = X by Def1;
+A3:   dom f = X & dom g = X by FUNCT_2:def 1;
       for x being set st x in dom f holds f.x <= g.x by A2;
-      hence f is_less_than g by A3,Def2;
+      hence thesis by A3,Def2;
     end;
   end;
 end;
@@ -127,14 +132,14 @@ proof
   set A = f, B = g;
   assume
 A1: A c= B & B c= A;
-A2: C = dom f & C = dom g by Def1;
+A2: C = dom f & C = dom g by FUNCT_2:def 1;
   for c being Element of C st c in C holds f.c = g.c
   proof
     let c be Element of C;
     f.c <= g.c & g.c <= f.c by A1,Def3;
     hence thesis by XXREAL_0:1;
   end;
-  hence f = g by A2,PARTFUN1:34;
+  hence thesis by A2,PARTFUN1:34;
 end;
 
 theorem
@@ -148,7 +153,7 @@ theorem
 
 begin
 
-::::::Intersection,Union and Complement
+:: Intersection,Union and Complement
 
 definition
   let C be non empty set;
@@ -184,7 +189,7 @@ A6:         x in C;
       end;
       rng IT c= [.0,1.]
       proof
-A7:     rng h c= [.0,1.] & rng g c= [.0,1.] by Def1;
+A7:     rng h c= [.0,1.] & rng g c= [.0,1.] by RELAT_1:def 19;
         for y being set st y in rng IT holds y in [.0,1.]
         proof
           let y be set;
@@ -197,7 +202,7 @@ reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
           then
 A9:       0=lower_bound A & 1=upper_bound A by INTEGRA1:6;
           x in C;
-          then x in dom h & x in dom g by Def1;
+          then x in dom h & x in dom g by FUNCT_2:def 1;
           then h.x in rng h & g.x in rng g by FUNCT_1:def 5;
           then
 A10:      0 <= h.x & h.x <= 1 & 0 <= g.x & g.x <= 1 by A7,A9,INTEGRA2:1;
@@ -211,8 +216,9 @@ then 0 <= min(h.x,g.x) & min(h.x,g.x) <= 1 by A10,XXREAL_0:2,20;
       end;
       hence thesis by A5;
     end;
+    then IT is total by PARTFUN1:def 4;
     then
-A11: IT is Membership_Func of C by Def1;
+A11: IT is Membership_Func of C by RELAT_1:def 19,A4;
     for c being Element of C holds IT.c = min(h.c,g.c) by A3,A4;
     hence thesis by A11;
   end;
@@ -222,7 +228,7 @@ A11: IT is Membership_Func of C by Def1;
     assume that
 A12: for c being Element of C holds F.c = min(h.c,g.c) and
 A13: for c being Element of C holds G.c = min(h.c,g.c);
-A14: C = dom F & C = dom G by Def1;
+A14: C = dom F & C = dom G by FUNCT_2:def 1;
     for c being Element of C st c in C holds F.c = G.c
     proof
       let c be Element of C;
@@ -269,7 +275,7 @@ A6:         x in C;
       end;
       rng IT c= [.0,1.]
       proof
-A7:     rng h c= [.0,1.] & rng g c= [.0,1.] by Def1;
+A7:     rng h c= [.0,1.] & rng g c= [.0,1.] by RELAT_1:def 19;
         for y being set st y in rng IT holds y in [.0,1.]
         proof
           let y be set;
@@ -282,7 +288,7 @@ reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
           then
 A9:       0=lower_bound A & 1=upper_bound A by INTEGRA1:6;
           x in C;
-          then x in dom h & x in dom g by Def1;
+          then x in dom h & x in dom g by FUNCT_2:def 1;
           then h.x in rng h & g.x in rng g by FUNCT_1:def 5;
           then 0 <= h.x & h.x <= 1 & 0 <= g.x & g.x <= 1 by A7,A9,INTEGRA2:1;
           then 0 <= max(h.x,g.x) & max(h.x,g.x) <= 1 by XXREAL_0:28,30;
@@ -293,8 +299,9 @@ A9:       0=lower_bound A & 1=upper_bound A by INTEGRA1:6;
       end;
       hence thesis by A5;
     end;
+    then IT is total by PARTFUN1:def 4;
     then
-A10: IT is Membership_Func of C by Def1;
+A10: IT is Membership_Func of C by RELAT_1:def 19,A4;
     for c being Element of C holds IT.c = max(h.c,g.c) by A3,A4;
     hence thesis by A10;
   end;
@@ -304,7 +311,7 @@ A10: IT is Membership_Func of C by Def1;
     assume that
 A11: for c being Element of C holds F.c = max(h.c,g.c) and
 A12: for c being Element of C holds G.c = max(h.c,g.c);
-A13: C = dom F & C = dom G by Def1;
+A13: C = dom F & C = dom G by FUNCT_2:def 1;
     for c being Element of C st c in C holds F.c = G.c
     proof
       let c be Element of C;
@@ -341,7 +348,7 @@ A3:   dom IT = C
             let x be set;
             assume
 A4:         x in C;
-            dom h = C by Def1;
+            dom h = C by FUNCT_2:def 1;
             hence thesis by A1,A4;
           end;
           hence thesis by TARSKI:def 3;
@@ -350,7 +357,7 @@ A4:         x in C;
       end;
       rng IT c= [.0,1.]
       proof
-A5:     rng h c= [.0,1.] by Def1;
+A5:     rng h c= [.0,1.] by RELAT_1:def 19;
         for y being set st y in rng IT holds y in [.0,1.]
         proof
           let y be set;
@@ -363,7 +370,7 @@ reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
           then
 A7:       0=lower_bound A & 1=upper_bound A by INTEGRA1:6;
           x in C;
-          then x in dom h by Def1;
+          then x in dom h by FUNCT_2:def 1;
           then h.x in rng h by FUNCT_1:def 5;
           then
 A8:       0 <= h.x & h.x <= 1 by A5,A7,INTEGRA2:1;
@@ -376,8 +383,9 @@ A8:       0 <= h.x & h.x <= 1 by A5,A7,INTEGRA2:1;
       end;
       hence thesis by A3;
     end;
+    then IT is total by PARTFUN1:def 4;
     then
-A9: IT is Membership_Func of C by Def1;
+A9: IT is Membership_Func of C by RELAT_1:def 19,A2;
     for c being Element of C holds IT.c = 1 - h.c by A1,A2;
     hence thesis by A9;
   end;
@@ -387,7 +395,7 @@ A9: IT is Membership_Func of C by Def1;
     assume that
 A10: for c being Element of C holds F.c = 1-h.c and
 A11: for c being Element of C holds G.c = 1-h.c;
-A12: C = dom F & C = dom G by Def1;
+A12: C = dom F & C = dom G by FUNCT_2:def 1;
     for c being Element of C st c in C holds F.c = G.c
     proof
       let c be Element of C;
@@ -418,7 +426,7 @@ theorem Th8:
   max(max(f,g),h) = max(f,max(g,h)) & min(min(f,g),h) = min(f,min(g,h))
 proof
 A1: C = dom max(max(f,g),h) & C = dom max(f,max(g,h)) &
-  C = dom min(min(f,g),h) & C = dom min(f,min(g,h)) by Def1;
+  C = dom min(min(f,g),h) & C = dom min(f,min(g,h)) by FUNCT_2:def 1;
 A2: for x being Element of C st x in C holds
   max(max(f,g),h).x = max(f,max(g,h)).x
   proof
@@ -447,7 +455,8 @@ end;
 theorem Th9:
   max(f,min(f,g)) = f & min(f,max(f,g)) = f
 proof
-A1: C = dom max(f,min(f,g)) & C = dom f & C = dom min(f,max(f,g)) by Def1;
+A1: C = dom max(f,min(f,g)) & C = dom f & C = dom min(f,max(f,g))
+ by FUNCT_2:def 1;
 A2: for x being Element of C st x in C holds max(f,min(f,g)).x = f.x
   proof
     let x be Element of C;
@@ -472,7 +481,8 @@ theorem Th10:
   max(f,min(g,h)) = min(max(f,g),max(f,h))
 proof
 A1: C = dom min(f,max(g,h)) & C = dom max(min(f,g),min(f,h)) &
-  C = dom max(f,min(g,h)) & C = dom min(max(f,g),max(f,h)) by Def1;
+  C = dom max(f,min(g,h)) & C = dom min(max(f,g),max(f,h))
+   by FUNCT_2:def 1;
 A2: for x being Element of C st x in C holds
   min(f,max(g,h)).x = max(min(f,g),min(f,h)).x
   proof
@@ -508,7 +518,8 @@ theorem Th12:
   1_minus(min(f,g)) = max(1_minus(f),1_minus(g))
 proof
 A1: C = dom 1_minus(max(f,g)) & C = dom min(1_minus(f),1_minus(g)) &
-  C = dom 1_minus(min(f,g)) & C = dom max(1_minus(f),1_minus(g)) by Def1;
+  C = dom 1_minus(min(f,g)) & C = dom max(1_minus(f),1_minus(g))
+   by FUNCT_2:def 1;
 A2: for x being Element of C st x in C holds
   (1_minus(max(f,g))).x = min(1_minus(f),1_minus(g)).x
   proof
@@ -546,22 +557,17 @@ end;
 
 begin
 
-::::::Empty Fuzzy Set and Universal Fuzzy Set
+:: Empty Fuzzy Set and Universal Fuzzy Set
 
 theorem Th13:
-  chi({},C) is Membership_Func of C
-proof
-A1: rng chi({},C) c= [.0,1.] by Th1;
-  dom chi({},C) =C by FUNCT_3:def 3;
-  hence thesis by A1,Def1;
-end;
+  chi({},C) is Membership_Func of C;
 
 definition
   let C be non empty set;
   func EMF(C) -> Membership_Func of C equals
 
   chi({},C);
-  correctness by Th13;
+  correctness;
 end;
 
 definition
@@ -569,7 +575,7 @@ definition
   func UMF(C) -> Membership_Func of C equals
 
   chi(C,C);
-  correctness by Th2;
+  correctness;
 end;
 
 theorem Th14:
@@ -600,9 +606,9 @@ theorem Th15:
   EMF(C) c= f
 proof
   let x be Element of C;
-A1: dom f = C by Def1;
+A1: dom f = C by FUNCT_2:def 1;
 A2: (EMF(C)).x = 0 by FUNCT_3:def 3;
-  rng f c= [.0,1.] by Def1;
+  rng f c= [.0,1.] by RELAT_1:def 19;
   hence thesis by A1,A2,Th14;
 end;
 
@@ -610,9 +616,9 @@ theorem Th16:
   f c= UMF(C)
 proof
   let x be Element of C;
-A1: dom f = C by Def1;
+A1: dom f = C by FUNCT_2:def 1;
 A2: (UMF(C)).x = 1 by FUNCT_3:def 3;
-  rng f c= [.0,1.] by Def1;
+  rng f c= [.0,1.] by RELAT_1:def 19;
   hence thesis by A1,A2,Th14;
 end;
 
@@ -648,7 +654,7 @@ proof
   hence max(f,UMF(C)) = UMF(C) by Lm1;
 A1: min(f,UMF(C)) = f
   proof
-A2: C = dom min(f,UMF(C)) & C = dom f by Def1;
+A2: C = dom min(f,UMF(C)) & C = dom f by FUNCT_2:def 1;
     for x being Element of C st x in C holds min(f,UMF(C)).x = f.x
     proof
       let x be Element of C;
@@ -661,7 +667,7 @@ A3:   f.x <= (UMF(C)).x by Th17;
   end;
 A4: max(f,EMF(C)) = f
   proof
-A5: C = dom max(f,EMF(C)) & C = dom f by Def1;
+A5: C = dom max(f,EMF(C)) & C = dom f by FUNCT_2:def 1;
     for x being Element of C st x in C holds max(f,EMF(C)).x = f.x
     proof
       let x be Element of C;
@@ -674,7 +680,7 @@ A6:   (EMF(C)).x <= f.x by Th17;
   end;
   min(f,EMF(C)) = EMF(C)
   proof
-A7: C = dom min(f,EMF(C)) & C = dom EMF(C) by Def1;
+A7: C = dom min(f,EMF(C)) & C = dom EMF(C) by FUNCT_2:def 1;
     for x being Element of C st x in C holds min(f,EMF(C)).x = (EMF(C)).x
     proof
       let x be Element of C;
@@ -784,7 +790,7 @@ theorem Th30:
 proof
   assume
 A1: f c= g;
-A2: C = dom min(f,g) & C = dom f by Def1;
+A2: C = dom min(f,g) & C = dom f by FUNCT_2:def 1;
   for x being Element of C st x in C holds min(f,g).x = f.x
   proof
     let x be Element of C;
@@ -801,7 +807,7 @@ theorem
 proof
   assume
 A1: f c= g & f c= h & min(g,h)= EMF(C);
-A2: C = dom f & C = dom EMF(C) by Def1;
+A2: C = dom f & C = dom EMF(C) by FUNCT_2:def 1;
   for x being Element of C st x in C holds f.x = (EMF(C)).x
   proof
     let x be Element of C;
@@ -834,7 +840,7 @@ theorem
 proof
   assume
 A1: f c= g & min(g,h) = EMF(C);
-A2: C = dom min(f,h) & C = dom EMF(C) by Def1;
+A2: C = dom min(f,h) & C = dom EMF(C) by FUNCT_2:def 1;
   for x being Element of C st x in C holds min(f,h).x = (EMF(C)).x
   proof
     let x be Element of C;
@@ -865,7 +871,7 @@ proof
 A1: max(f,g) = EMF(C);
     thus f = EMF(C)
     proof
-A2:   C = dom f & C = dom EMF(C) by Def1;
+A2:   C = dom f & C = dom EMF(C) by FUNCT_2:def 1;
       for x being Element of C st x in C holds f.x = (EMF(C)).x
       proof
         let x be Element of C;
@@ -878,7 +884,7 @@ A3:     (EMF(C)).x <= f.x by Th17;
     end;
     thus g = EMF(C)
     proof
-A4:   C = dom g & C = dom EMF(C) by Def1;
+A4:   C = dom g & C = dom EMF(C) by FUNCT_2:def 1;
       for x being Element of C st x in C holds g.x = (EMF(C)).x
       proof
         let x be Element of C;
@@ -909,7 +915,7 @@ A2: g c= h1 & h c= h1;
       let x be Element of C;
       g.x <= h1.x & h.x <= h1.x by A2,Def3;
       then max(g.x,h.x) <= h1.x by XXREAL_0:28;
-      hence f.x <= h1.x by A1,Def5;
+      hence thesis by A1,Def5;
     end;
   end;
   assume that
@@ -937,7 +943,7 @@ A2: h1 c= g & h1 c= h;
       let x be Element of C;
       h1.x <= g.x & h1.x <= h.x by A2,Def3;
       then min(g.x,h.x) >= h1.x by XXREAL_0:20;
-      hence f.x >= h1.x by A1,Def4;
+      hence thesis by A1,Def4;
     end;
   end;
   assume that
@@ -1008,7 +1014,7 @@ canceled;
 theorem Th44:
   1_minus(EMF(C)) = UMF(C) & 1_minus(UMF(C)) = EMF(C)
 proof
-A1: C = dom 1_minus(EMF(C)) & C = dom UMF(C) by Def1;
+A1: C = dom 1_minus(EMF(C)) & C = dom UMF(C) by FUNCT_2:def 1;
   for x being Element of C st x in C holds (1_minus(EMF(C))).x = (UMF(C)).x
   proof
     let x be Element of C;
@@ -1018,7 +1024,7 @@ A1: C = dom 1_minus(EMF(C)) & C = dom UMF(C) by Def1;
     hence thesis by FUNCT_3:def 3;
   end;
   hence 1_minus(EMF(C)) = UMF(C) by A1,PARTFUN1:34;
-A2: C = dom 1_minus(UMF(C)) & C = dom EMF(C) by Def1;
+A2: C = dom 1_minus(UMF(C)) & C = dom EMF(C) by FUNCT_2:def 1;
   for x being Element of C st x in C holds (1_minus(UMF(C))).x = (EMF(C)).x
   proof
     let x be Element of C;
@@ -1030,7 +1036,7 @@ A2: C = dom 1_minus(UMF(C)) & C = dom EMF(C) by Def1;
   hence thesis by A2,PARTFUN1:34;
 end;
 
-::::::Exclusive Sum, Absolute Difference
+:: Exclusive Sum, Absolute Difference
 
 definition
   let C be non empty set;
@@ -1151,7 +1157,7 @@ A6:         x in C;
       end;
       rng IT c= [.0,1.]
       proof
-A7:     rng h c= [.0,1.] & rng g c= [.0,1.] by Def1;
+A7:     rng h c= [.0,1.] & rng g c= [.0,1.] by RELAT_1:def 19;
         for y being set st y in rng IT holds y in [.0,1.]
         proof
           let y be set;
@@ -1164,7 +1170,7 @@ reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
           then
 A9:       0=lower_bound A & 1=upper_bound A by INTEGRA1:6;
           x in C;
-          then x in dom h & x in dom g by Def1;
+          then x in dom h & x in dom g by FUNCT_2:def 1;
           then h.x in rng h & g.x in rng g by FUNCT_1:def 5;
           then 0 <= h.x & h.x <= 1 & 0 <= g.x & g.x <= 1 by A7,A9,INTEGRA2:1;
           then h.x - g.x <= 1 - g.x & 1-0 >= 1-g.x &
@@ -1179,8 +1185,9 @@ then 0 <= abs(h.x - g.x) & abs(h.x - g.x) <= 1 by ABSVALUE:12,COMPLEX1:132;
       end;
       hence thesis by A5;
     end;
+    then IT is total by PARTFUN1:def 4;
     then
-A10: IT is Membership_Func of C by Def1;
+A10: IT is Membership_Func of C by RELAT_1:def 19,A4;
     for c being Element of C holds IT.c = abs(h.c - g.c) by A3,A4;
     hence thesis by A10;
   end;
@@ -1190,7 +1197,7 @@ A10: IT is Membership_Func of C by Def1;
     assume that
 A11: for c being Element of C holds F.c = abs(h.c - g.c) and
 A12: for c being Element of C holds G.c = abs(h.c - g.c);
-A13: C = dom F & C = dom G by Def1;
+A13: C = dom F & C = dom G by FUNCT_2:def 1;
     for c being Element of C st c in C holds F.c = G.c
     proof
       let c be Element of C;
