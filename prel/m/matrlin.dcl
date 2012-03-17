@@ -93,7 +93,7 @@
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="174">
+<Func kind="K" nr="176">
 <LocusVar nr="1"/>
 </Func>
 </Typ>

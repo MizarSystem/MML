@@ -8,7 +8,7 @@ environ
 
  vocabularies ARYTM, SEQ_1, PARTFUN1, ORDINAL2, FUNCT_1, PROB_1, RELAT_1,
       ARYTM_1, SEQ_2, LATTICES, ABSVALUE, SEQM_3, FUNCOP_1, FUNCT_3, FRECHET2,
-      FINSEQ_1, VALUED_0, ANPROJ_1;
+      FINSEQ_1, VALUED_0, ANPROJ_1, SUPINF_1;
  notations TARSKI, SUBSET_1, ORDINAL1, NUMBERS, VALUED_0, XCMPLX_0, XREAL_0,
       RELAT_1, PARTFUN1, FUNCT_1, FUNCT_3, FINSEQ_1, VALUED_1, SEQ_1, SEQ_2,
       COMPLEX1, NAT_1, FUNCOP_1, XXREAL_0, RECDEF_1;
@@ -198,20 +198,67 @@ end;
 :: DEFINITIONS OF MONOTONE AND CONSTANT SEQUENCES
 ::
 
+reserve e1,e2 for ext-real number;
+
 definition
-  let f be ext-real-valued Function;
+ redefine
+  let f be PartFunc of NAT, REAL;
   attr f is increasing means
   :Def1:
   for m,n st m in dom f & n in dom f & m < n holds f.m < f.n;
+  compatibility
+   proof
+    thus f is increasing implies
+     for m,n st m in dom f & n in dom f & m < n holds f.m < f.n
+    by VALUED_0:def 13;
+    assume
+Z:   for m,n st m in dom f & n in dom f & m < n holds f.m < f.n;
+    let e1,e2;
+     dom f c= NAT by RELSET_1:12;
+    hence thesis by Z;
+   end;
   attr f is decreasing means
   :Def2:
   for m,n st m in dom f & n in dom f & m < n holds f.m > f.n;
+  compatibility
+   proof
+    thus f is decreasing implies
+     for m,n st m in dom f & n in dom f & m < n holds f.m > f.n
+    by VALUED_0:def 14;
+    assume
+Z:   for m,n st m in dom f & n in dom f & m < n holds f.m > f.n;
+    let e1,e2;
+     dom f c= NAT by RELSET_1:12;
+    hence thesis by Z;
+   end;
   attr f is non-decreasing means
   :Def3:
   for m,n st m in dom f & n in dom f & m <= n holds f.m <= f.n;
+  compatibility
+   proof
+    thus f is non-decreasing implies
+     for m,n st m in dom f & n in dom f & m <= n holds f.m <= f.n
+    by VALUED_0:def 15;
+    assume
+Z:   for m,n st m in dom f & n in dom f & m <= n holds f.m <= f.n;
+    let e1,e2;
+     dom f c= NAT by RELSET_1:12;
+    hence thesis by Z;
+   end;
   attr f is non-increasing means
   :Def4:
   for m,n st m in dom f & n in dom f & m <= n holds f.m >= f.n;
+  compatibility
+   proof
+    thus f is non-increasing implies
+     for m,n st m in dom f & n in dom f & m <= n holds f.m >= f.n
+    by VALUED_0:def 16;
+    assume
+Z:   for m,n st m in dom f & n in dom f & m <= n holds f.m >= f.n;
+    let e1,e2;
+     dom f c= NAT by RELSET_1:12;
+    hence thesis by Z;
+   end;
 end;
 
 Lm6: f is increasing iff for n being Element of NAT holds f.n < f.(n+1)
@@ -755,32 +802,6 @@ definition
   mode Seq_of_Nat is natural-yielding Real_Sequence;
 end;
 
-definition
-  let seq,k;
-  canceled;
-  func seq ^\k ->Real_Sequence means
-  :Def9:
-  for n holds it.n=seq.(n+k);
-  existence
-  proof
-    deffunc U(Element of NAT) = seq.($1+k);
-    thus ex f being Real_Sequence st for n holds f.n=U(n) from SEQ_1:sch 1;
-  end;
-  uniqueness
-  proof
-    let seq1,seq2;
-    assume that
-A1: for n holds seq1.n=seq.(n+k) and
-A2: for n holds seq2.n=seq.(n+k);
-    now
-      let n;
-      seq1.n=seq.(n+k) & seq2.n=seq.(n+k) by A1,A2;
-      hence seq1.n=seq2.n;
-    end;
-    hence seq1=seq2 by FUNCT_2:113;
-  end;
-end;
-
 reserve Nseq,Nseq1,Nseq2 for increasing Seq_of_Nat;
 
 canceled;
@@ -868,14 +889,14 @@ registration
   proof
 A1: now
       let n;
-      (Nseq ^\k).n=Nseq.(n+k) by Def9;
+      (Nseq ^\k).n=Nseq.(n+k) by NAT_1:def 3;
       hence (Nseq ^\k).n is Element of NAT;
     end;
     now
       let n;
       Nseq.(n+k)<Nseq.(n+k+1) by Lm6;
-      then (Nseq ^\k).n<Nseq.(n+1+k) by Def9;
-      hence (Nseq ^\k).n<(Nseq ^\k).(n+1) by Def9;
+      then (Nseq ^\k).n<Nseq.(n+1+k) by NAT_1:def 3;
+      hence (Nseq ^\k).n<(Nseq ^\k).(n+1) by NAT_1:def 3;
     end;
     then Nseq ^\k is increasing by Lm6;
     hence thesis by A1,Th29;
@@ -888,6 +909,7 @@ end;
 
 definition
   let seq;
+ canceled 2;
   mode subsequence of seq -> Real_Sequence means
     :Def10:
     ex Nseq st it=seq*Nseq;
@@ -931,53 +953,17 @@ A3: X[k];
   thus for k holds X[k] from NAT_1:sch 1(A1,A2);
 end;
 
-theorem
-  seq ^\0 =seq
-proof
-  now
-    let n;
-    thus (seq ^\0).n=seq.(n+0) by Def9
-      .=seq.n;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
-
-theorem
-  (seq ^\k)^\m=(seq ^\m)^\k
-proof
-  now
-    let n;
-    thus ((seq ^\k)^\m).n=(seq ^\k).(n+m) by Def9
-      .=seq.(n+m+k) by Def9
-      .=seq.(n+k+m)
-      .=(seq ^\m).(n+k) by Def9
-      .=((seq ^\m)^\k).n by Def9;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
-
-theorem
-  (seq ^\k)^\m=seq ^\(k+m)
-proof
-  now
-    let n;
-    thus ((seq ^\k)^\m).n=(seq ^\k).(n+m) by Def9
-      .=seq.(n+m+k) by Def9
-      .=seq.(n+(k+m))
-      .=(seq ^\(k+m)).n by Def9;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
+canceled 3;
 
 theorem Th37:
   (seq+seq1) ^\k=(seq ^\k) +(seq1 ^\k)
 proof
   now
     let n;
-    thus ((seq+seq1) ^\k).n=(seq+seq1).(n+k) by Def9
+    thus ((seq+seq1) ^\k).n=(seq+seq1).(n+k) by NAT_1:def 3
       .=seq.(n+k) + seq1.(n+k) by SEQ_1:11
-      .=(seq ^\k).n +seq1.(n+k) by Def9
-      .=(seq ^\k).n +(seq1 ^\k).n by Def9
+      .=(seq ^\k).n +seq1.(n+k) by NAT_1:def 3
+      .=(seq ^\k).n +(seq1 ^\k).n by NAT_1:def 3
       .=((seq ^\k) +(seq1 ^\k)).n by SEQ_1:11;
   end;
   hence thesis by FUNCT_2:113;
@@ -988,9 +974,9 @@ theorem Th38:
 proof
   now
     let n;
-    thus ((-seq) ^\k).n=(-seq).(n+k) by Def9
+    thus ((-seq) ^\k).n=(-seq).(n+k) by NAT_1:def 3
       .=-(seq.(n+k)) by SEQ_1:14
-      .=-((seq ^\ k).n) by Def9
+      .=-((seq ^\ k).n) by NAT_1:def 3
       .=(-(seq ^\k)).n by SEQ_1:14;
   end;
   hence thesis by FUNCT_2:113;
@@ -1010,7 +996,7 @@ proof
 A1: seq is non-zero;
   now
     let n;
-    (seq ^\k).n=seq.(n+k) by Def9;
+    (seq ^\k).n=seq.(n+k) by NAT_1:def 3;
     hence (seq ^\k).n<>0 by A1,SEQ_1:7;
   end;
   hence thesis by SEQ_1:7;
@@ -1021,9 +1007,9 @@ theorem Th41:
 proof
   now
     let n;
-    thus ((seq") ^\k).n=(seq").(n+k) by Def9
+    thus ((seq") ^\k).n=(seq").(n+k) by NAT_1:def 3
       .=(seq.(n+k))" by VALUED_1:10
-      .=((seq ^\k).n)" by Def9
+      .=((seq ^\k).n)" by NAT_1:def 3
       .=((seq ^\k)").n by VALUED_1:10;
   end;
   hence thesis by FUNCT_2:113;
@@ -1034,10 +1020,10 @@ theorem Th42:
 proof
   now
     let n;
-    thus ((seq(#)seq1) ^\k).n=(seq(#)seq1).(n+k) by Def9
+    thus ((seq(#)seq1) ^\k).n=(seq(#)seq1).(n+k) by NAT_1:def 3
       .=seq.(n+k)*seq1.(n+k) by SEQ_1:12
-      .=(seq ^\k).n*seq1.(n+k) by Def9
-      .=(seq ^\k).n*(seq1 ^\k).n by Def9
+      .=(seq ^\k).n*seq1.(n+k) by NAT_1:def 3
+      .=(seq ^\k).n*(seq1 ^\k).n by NAT_1:def 3
       .=((seq ^\k)(#)(seq1 ^\k)).n by SEQ_1:12;
   end;
   hence thesis by FUNCT_2:113;
@@ -1055,9 +1041,9 @@ theorem
 proof
   now
     let n;
-    thus ((r(#)seq) ^\k).n=(r(#)seq).(n+k) by Def9
+    thus ((r(#)seq) ^\k).n=(r(#)seq).(n+k) by NAT_1:def 3
       .=r*(seq.(n+k)) by SEQ_1:13
-      .=r*((seq ^\k).n) by Def9
+      .=r*((seq ^\k).n) by NAT_1:def 3
       .=(r(#)(seq ^\k)).n by SEQ_1:13;
   end;
   hence thesis by FUNCT_2:113;
@@ -1068,9 +1054,9 @@ theorem
 proof
   now
     let n;
-    thus ((seq*Nseq) ^\k).n=(seq*Nseq).(n+k) by Def9
+    thus ((seq*Nseq) ^\k).n=(seq*Nseq).(n+k) by NAT_1:def 3
       .=seq.(Nseq.(n+k)) by Th31
-      .=seq.((Nseq ^\k).n) by Def9
+      .=seq.((Nseq ^\k).n) by NAT_1:def 3
       .=(seq*(Nseq ^\k)).n by Th31;
   end;
   hence thesis by FUNCT_2:113;
@@ -1120,7 +1106,7 @@ A3: seq1 is increasing by Lm6;
     let n;
     thus (seq*Nseq).n=seq.(Nseq.n) by Th31
       .=seq.(n+k) by A1
-      .=(seq ^\k).n by Def9;
+      .=(seq ^\k).n by NAT_1:def 3;
   end;
   hence thesis by FUNCT_2:113;
 end;

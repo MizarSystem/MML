@@ -12,8 +12,6 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="XXREAL_1"/>
 <ArticleID name="RCOMP_1"/>
@@ -23,7 +21,6 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="XXREAL_2"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="INTEGRA1"/>
 </Signature>
 <RCluster aid="INTEGRA1" nr="1">
@@ -35,10 +32,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="40"/>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
-<Adjective nr="57"/>
+<Adjective nr="43"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <RCluster aid="INTEGRA1" nr="2">
@@ -50,10 +47,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="40"/>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
-<Adjective nr="57"/>
+<Adjective nr="43"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <RCluster aid="INTEGRA1" nr="3">
@@ -61,14 +58,14 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="21"/>
 </Cluster>
 <Func kind="K" nr="24">
 <Func kind="K" nr="54"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="13">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -81,14 +78,14 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="21"/>
 </Cluster>
 <Func kind="K" nr="24">
 <Func kind="K" nr="54"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="129">
+<Func kind="K" nr="100">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -98,7 +95,7 @@
 <CCluster aid="INTEGRA1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="57"/>
+<Adjective nr="53"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -108,13 +105,13 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="21"/>
 </Cluster>
 </CCluster>
 <CCluster aid="INTEGRA1" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="57"/>
+<Adjective nr="53"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -123,7 +120,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="51"/>
 </Cluster>
 </CCluster>
 </Registrations>

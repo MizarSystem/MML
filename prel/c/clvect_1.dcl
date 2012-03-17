@@ -148,14 +148,14 @@
 <Adjective nr="4"/>
 <Adjective nr="10">
 <Func kind="K" nr="25">
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="83"/>
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="25">
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="83"/>
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -174,7 +174,7 @@
 </FCluster>
 <FCluster aid="CLVECT_1" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="139"/>
+<Func kind="K" nr="140"/>
 <Cluster>
 <Adjective nr="28" value="false"/>
 <Adjective nr="33"/>

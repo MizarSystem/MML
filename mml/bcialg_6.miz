@@ -1,0 +1,2375 @@
+:: {BCI}-Homomorphisms
+::  by Yuzhong Ding , Fuguo Ge and Chenglong Wu
+:: 
+:: Received August 26, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies BCIALG_1, BOOLE, RLVECT_1, FUNCT_1, RELAT_1, SUBSET_1, BCIALG_2,
+      BCIALG_6, BINOP_1, FUNCOP_1, UNIALG_2, REALSET1, TARSKI, CHORD, EQREL_1,
+      FILTER_2, PRE_TOPC, COHSP_1, WELLORD1, ALG_1, GROUP_6, PROB_1, SGRAPH1,
+      MOD_4, ARYTM, WAYBEL15, ABSVALUE, GROUP_1, ARYTM_1, ARYTM_3, INT_2,
+      NAT_1, INT_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REALSET1, RELAT_1, FUNCT_1,
+      RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, STRUCT_0, BCIALG_1, FUNCOP_1,
+      NAT_1, NUMBERS, XCMPLX_0, INT_2, XXREAL_0, BINOP_2, BCIALG_3, SUPINF_1,
+      SEQ_1, NAT_D, INT_1, BCIALG_2, EQREL_1;
+ constructors BINOP_1, FINSOP_1, REALSET1, BCIALG_1, BCIALG_2, FUNCOP_1, NAT_1,
+      XXREAL_0, REAL_1, INT_2, BINOP_2, FINSEQOP, BCIALG_3, SUPINF_1, INT_1,
+      SEQ_1, NAT_D;
+ registrations XBOOLE_0, RELSET_1, REALSET1, STRUCT_0, BCIALG_1, BCIALG_2,
+      FUNCT_2, PARTFUN1, RELAT_1, NAT_1, XREAL_0, ORDINAL1, XXREAL_0, BCIALG_3,
+      SUPINF_1, INT_1;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+ definitions TARSKI, REALSET1, BINOP_1, STRUCT_0, BCIALG_1, FUNCT_1, BCIALG_2,
+      XBOOLE_0, NAT_1, INT_1, BCIALG_3;
+ theorems TARSKI, FUNCT_1, FUNCT_2, FUNCOP_1, BINOP_1, ZFMISC_1, RELAT_1,
+      XBOOLE_0, XBOOLE_1, BCIALG_1, GROUP_6, BCIALG_2, EQREL_1, RELSET_1,
+      ABSVALUE, ORDINAL1, NAT_D, XREAL_1, INT_1, XCMPLX_1, INT_2, NAT_1,
+      NEWTON, XXREAL_0;
+ schemes BINOP_1, FUNCT_2, FUNCT_1, NAT_1, INT_1;
+
+begin :: The power of an Element of BCI-algebra
+
+ reserve X,Y for BCI-algebra;
+ reserve n for Element of NAT;
+ reserve i,j for Integer;
+
+definition
+  let D be set, f be Function of NAT,D;
+  let n be Nat;
+  redefine func f.n -> Element of D;
+  coherence
+  proof
+    reconsider n as Element of NAT by ORDINAL1:def 13;
+    f.n is Element of D;
+    hence thesis;
+  end;
+end;
+
+definition let G be non empty BCIStr_0;
+  func BCI-power G -> Function of [:the carrier of G,NAT:],the carrier of G
+    means
+  :Def1: for x being Element of G
+   holds it.(x,0)=0.G & for n holds it.(x,n + 1) = x\(it.(x,n))`;
+ existence
+ proof
+    defpred P[set,set] means
+     ex f being Function of NAT, the carrier of G,
+            x being Element of G st $1 = x & f = $2 &
+          f.0 = 0.G & for n holds f.(n + 1) = x\(f.n)`;
+     A1: for x1,y1,y2 be set st x1 in the carrier of G & P[x1,y1] & P[x1,y2]
+           holds y1 = y2
+      proof let x1,y1,y2 be set;
+        assume x1 in the carrier of G;
+        given g1 being Function of NAT, the carrier of G,
+              h being Element of G such that
+    A2: x1 = h & g1 = y1 & g1.0 = 0.G &for n holds g1.(n + 1) = h\(g1.n)`;
+        given g2 being Function of NAT, the carrier of G,
+              m being Element of G such that
+        A6: x1 = m & g2 = y2 & g2.0 = 0.G &
+            for n holds g2.(n + 1) = m\(g2.n)`;
+         defpred P[Element of NAT] means g1.$1 = g2.$1;
+         A10: P[0] by A2,A6;
+         A11: now let n;
+              assume P[n];
+                then g1.(n + 1) = m\(g2.n)` by A2,A6
+                               .= g2.(n + 1) by A6;
+                hence P[n+1];
+              end;
+         for n holds P[n] from NAT_1:sch 1(A10,A11);
+       hence thesis by A2,A6,FUNCT_2:113;
+      end;
+     A12: for x be set st x in the carrier of G ex y be set st P[x,y]
+      proof let x be set;
+        assume x in the carrier of G;
+        then reconsider b = x as Element of G;
+        deffunc Ff(Nat,Element of G) = b\($2)`;
+        consider g0 being Function of NAT,the carrier of G such that
+         A13: g0.0 = 0.G &
+              for n being Nat holds g0.(n+1) = Ff(n,g0.n)
+                from NAT_1:sch 12;
+         reconsider y = g0 as set;
+       take y;
+       take g0;
+       take b;
+       thus x = b & g0 = y & g0.0 = 0.G by A13;
+       let n;
+       thus g0.(n + 1) = b\(g0.n)` by A13;
+      end;
+    consider f being Function such that
+      A15:dom f = the carrier of G &
+            for x be set st x in the carrier of G holds P[x,f.x]
+          from FUNCT_1:sch 2(A1,A12);
+    defpred P[Element of G,Element of NAT,set] means
+     ex g0 being Function of NAT, the carrier of G st g0 = f.$1 & $3 = g0.$2;
+     A16: for a being Element of G, n being Element of NAT
+          ex b being Element of G st P[a,n,b]
+      proof
+        let a be Element of G, n be Element of NAT;
+        consider g0 being Function of NAT, the carrier of G,
+                 h being Element of G such that a = h and
+         A17: g0 = f.a and g0.0 = 0.G &
+         for n holds g0.(n + 1) = h\(g0.n)` by A15;
+       take g0.n, g0;
+       thus thesis by A17;
+      end;
+    consider F being Function of [:the carrier of G,NAT:], the carrier of G
+     such that
+      A18: for a being Element of G,
+      n being Element of NAT holds P[a,n,F.(a,n)] from BINOP_1:sch 3(A16);
+   take F;
+   let h be Element of G;
+ A19: ex g1 being Function of NAT, the carrier of G
+       st g1 = f.h & F.(h,0) = g1.0 by A18;
+  ex g2 being Function of NAT, the carrier of G,b being Element of G
+  st h = b & g2 = f.h & g2.0 = 0.G &for n holds g2.(n + 1) = b\(g2.n)` by A15;
+   hence F.(h,0) = 0.G by A19;
+   let n;
+ A20: ex g0 being Function of NAT, the carrier of G
+       st g0 = f.h & F.(h,n) = g0.n by A18;
+ A21: ex g1 being Function of NAT, the carrier of G
+            st g1 = f.h & F.(h,n + 1) = g1.(n + 1) by A18;
+    consider g2 being Function of NAT, the carrier of G,
+                  b being Element of G such that
+     A22: h = b & g2 = f.h & g2.0 = 0.G and
+     A23: for n holds g2.(n + 1) = b\(g2.n)` by A15;
+   thus F.(h,n + 1) = h\(F.(h,n))` by A20,A21,A22,A23;
+  end;
+ uniqueness
+ proof let f,g be Function of [:the carrier of G,NAT:], the carrier of G;
+    assume that
+    A24: for h being Element of G holds f.(h,0) = 0.G &
+                    for n holds f.(h,n + 1) = h\(f.(h,n))` and
+    A25: for h being Element of G holds g.(h,0) = 0.G &
+                    for n holds g.(h,n + 1) = h\(g.(h,n))`;
+         now let h be Element of G, n be Element of NAT;
+        defpred P[Element of NAT] means f.[h,$1] = g.[h,$1];
+          f.[h,0] = f.(h,0)
+                   .= 0.G by A24
+                   .= g.(h,0) by A25
+                   .= g.[h,0];
+        then A26: P[0];
+        A27: now let n;
+          assume A28: P[n];
+           A29: f.[h,n] = f.(h,n) & g.[h,n] = g.(h,n);
+           f.[h,n + 1] = f.(h,n + 1)
+                         .= h\(f.(h,n))` by A24
+                         .= g.(h,n + 1) by A25,A28,A29
+                         .= g.[h,n + 1];
+          hence P[n+1];
+        end;
+        for n holds P[n] from NAT_1:sch 1(A26,A27);
+      hence f.(h,n) = g.(h,n);
+     end;
+   hence thesis by BINOP_1:2;
+  end;
+end;
+
+ reserve x,y for Element of X;
+ reserve a,b for Element of AtomSet(X);
+ reserve m,n for Nat;
+ reserve i,j for Integer;
+
+definition let X,i,x;
+  func x |^ i -> Element of X equals
+  :Def2: BCI-power(X).(x,abs(i)) if 0 <= i otherwise
+        (BCI-power(X).(x`,abs(i)));
+  correctness;
+end;
+
+definition let X,n,x;
+  redefine func x |^ n equals
+    BCI-power(X).(x,n);
+  compatibility
+  proof let g be Element of X;
+    abs n = n by ABSVALUE:def 1;
+    hence thesis by Def2;
+  end;
+end;
+
+theorem Th0:
+  a\(x\b) = b\(x\a)
+proof
+A1: b in AtomSet(X);
+    consider y1 being Element of X such that
+A3: b=y1&y1 is atom by A1;
+    a\(x\b)<=(b\(x\a)) by BCIALG_1:26;
+    then A5:a\(x\b)\(b\(x\a)) = 0.X by BCIALG_1:def 11;
+    (x\(x\b))\b=0.X by BCIALG_1:1;
+then (b\(x\a))\(a\(x\b))= ((x\(x\b))\(x\a))\(a\(x\b)) by A3,BCIALG_1:def 14;
+    then (b\(x\a))\(a\(x\b))= ((x\(x\a))\(x\b))\(a\(x\b))by BCIALG_1:7;
+    then (b\(x\a))\(a\(x\b))= ((x\(x\a))\(x\b))\(a\(x\b))\0.X by BCIALG_1:2;
+    then (b\(x\a))\(a\(x\b))
+      =((x\(x\a))\(x\b))\(a\(x\b))\((x\(x\a))\a) by BCIALG_1:1;
+    then b\(x\a)\(a\(x\b))=0.X by BCIALG_1:def 3;
+    hence thesis by BCIALG_1:def 7,A5;
+end;
+
+theorem Th1:
+   x |^ (n+1) = x\(x |^ n )`
+proof
+  reconsider n as Element of NAT by ORDINAL1:def 13;
+  x |^ (n + 1) = x\(x |^ n )` by Def1;
+  hence thesis;
+end;
+
+theorem Th2:
+   x |^ 0 = 0.X by Def1;
+
+theorem Th3:
+   x |^ 1 = x
+proof
+   x |^ 1 = x|^(0+1) .= x\(x|^0)` by Def1
+    .=x\(0.X)` by Def1
+    .=x\0.X by BCIALG_1:def 5;
+   hence thesis by BCIALG_1:2;
+end;
+
+theorem Th4:
+   x |^ -1 = x`
+proof
+   x |^ (-1)= BCI-power(X).(x`,abs(-1)) by Def2;
+   then x |^ (-1)= BCI-power(X).(x`,-(-1)) by ABSVALUE:def 1;
+   then x |^ (-1)= x`|^ 1;
+   hence thesis by Th3;
+end;
+
+theorem
+   x |^ 2 = x\x`
+proof
+   x |^ 2 = x|^(1+1) .= x\(x|^1)` by Def1;
+   hence thesis by Th3;
+end;
+
+theorem Th6:
+   0.X |^ n = 0.X
+proof
+  defpred P[Nat] means (0.X) |^ $1 = 0.X;
+A1: P[0] by Def1;
+A2: now
+    let n;
+    assume P[n];
+    then (0.X) |^ (n + 1) = ((0.X)`)` by Th1
+      .=(0.X)` by BCIALG_1:def 5
+      .= 0.X by BCIALG_1:def 5;
+    hence P[n+1];
+  end;
+  for n holds P[n] from NAT_1:sch 2(A1,A2);
+  hence thesis;
+end;
+
+::P18-theorem 1.4.2(1-4)
+theorem
+  (a |^ (-1))|^ (-1) = a
+proof
+ (a |^ -1)|^ -1 = (a`)|^ -1 by Th4
+   .= a`` by Th4;
+  hence thesis by BCIALG_1:29;
+end;
+
+theorem
+  x |^(-n) =(x``)|^(-n)
+proof
+  defpred P[Nat] means x |^(-$1) =(x``)|^(-$1);
+    x |^(0) =0.X by Def1 .=(x``)|^(0) by Def1;
+then A1: P[0];
+A3: now
+    let n;
+    assume P[n];
+    set m=-(n+1);
+    -(-(n+1))>0;
+    then B3:m<0;
+    then x |^ m = BCI-power(X).(x`,abs(m)) by Def2
+    .= BCI-power(X).((x``)`,abs(m)) by BCIALG_1:8
+    .= (x``) |^(-(n+1)) by Def2,B3;
+    hence P[n+1];
+  end;
+  for n holds P[n] from NAT_1:sch 2(A1,A3);
+  hence thesis;
+end;
+
+theorem Th9:
+  a` |^ n = a |^ -n
+proof
+  per cases;
+  suppose A1:n=0;
+   hence a` |^ n = 0.X by Def1 .= a|^ -n by A1,Th2;
+  end;
+  suppose A3:n>0;
+     set m=-n;
+   -(-n)>0 by A3;
+  then A5:m<0;
+   then a|^m = BCI-power(X).(a`,abs(m)) by Def2
+   .=BCI-power(X).(a`,-(-n)) by ABSVALUE:def 1,A5;
+   hence thesis;
+  end;
+end;
+
+theorem
+   x in BCK-part(X) & n>=1 implies x|^n = x
+proof
+assume A1:x in BCK-part(X)& n>=1;
+then consider y being Element of X such that
+A3:y=x &0.X<=y;
+  defpred P[Nat] means x |^ $1 = x;
+B1: P[1] by Th3;
+B3: now
+    let n;
+    assume n>=1;
+    assume B7:P[n];
+    x |^ (n+1) =x\x` by B7,Th1
+       .=x\0.X by A3,BCIALG_1:def 11
+       .= x by BCIALG_1:2;
+    hence P[n+1];
+  end;
+  for n st n>=1 holds P[n] from NAT_1:sch 8(B1,B3);
+  hence thesis by A1;
+end;
+
+theorem
+   x in BCK-part(X) implies x|^ (-n) = 0.X
+proof
+  assume x in BCK-part(X);
+then consider y being Element of X such that
+C3:y=x &0.X<=y;
+  defpred P[Nat] means x |^ (-$1) = 0.X;
+A1: P[0] by Def1;
+A3: now
+    let n;
+    assume B1:P[n];
+    -(-(n+1))>0;
+    then B3:-(n+1)<0;
+    per cases;
+    suppose -n=0;
+    then x |^(-(n+1)) =x` by Th4
+         .=0.X by C3,BCIALG_1:def 11;
+    hence P[n+1];
+    end;
+    suppose BB:-n<0;
+    then BCI-power(X).(x`,abs(-n)) = 0.X by Def2,B1;
+    then BCI-power(X).(x`,--n) = 0.X by ABSVALUE:def 1,BB;
+    then x`\(x` |^ n )` =(x\0.X)` by BCIALG_1:9
+    .=x` by BCIALG_1:2;
+    then x`\(x` |^ n )`= 0.X by BCIALG_1:def 11,C3;
+    then 0.X = x`|^ (n+1) by Th1
+    .=BCI-power(X).(x`,-(-(n+1)))
+    .=BCI-power(X).(x`,abs(-(n+1))) by ABSVALUE:def 1,B3
+    .=x |^ (-(n+1)) by Def2,B3;
+    hence P[n+1];
+    end;
+  end;
+  for n holds P[n] from NAT_1:sch 2(A1,A3);
+  hence thesis;
+end;
+
+::P19 theorem 1.4.3
+theorem Th12:
+  a|^i in AtomSet(X)
+proof
+  defpred P[Integer] means a |^ $1 in AtomSet(X);
+  0.X in AtomSet(X);
+ then A3: P[0] by Def1;
+  per cases;
+  suppose A4:i>=0;
+  A5:for i2 be Integer st i2>=0 holds P[i2] implies P[i2 + 1]
+  proof
+   let i2 be Integer;
+   assume B1:i2>=0;
+   assume B3:P[i2];
+   reconsider j=i2 as Element of NAT by B1,INT_1:16;
+    (a|^(j+1))``=(a\(a |^ j )`)`` by Def1;
+   then (a|^(j+1))``=(a`\(a |^ j )``)` by BCIALG_1:9;
+   then (a|^(j+1))``=a``\(a |^ j)``` by BCIALG_1:9;
+   then (a|^(j+1))``=a\(a |^ j)``` by BCIALG_1:29;
+   then (a|^(j+1))``=a\(a |^ j)` by BCIALG_1:29,B3;
+   then (a|^(j+1))``=a |^ (j+1) by Def1;
+   hence P[i2 + 1] by BCIALG_1:29;
+  end;
+   for i st i>=0 holds P[i] from INT_1:sch 2(A3,A5);
+  hence thesis by A4;
+  end;
+  suppose A6:i<=0;
+ A7:for i2 be Integer st i2<=0 holds P[i2] implies P[i2 - 1]
+  proof
+   let i2 be Integer;
+   assume B1:i2<=0;
+   assume B3:P[i2];
+   per cases by B1;
+   suppose D1:i2=0;
+     (a`)``=a` by BCIALG_1:8;
+     then a` in AtomSet(X) by BCIALG_1:29;
+     hence P[i2-1] by D1,Th4;
+   end;
+   suppose D1:i2<0;
+   set j=i2;
+  reconsider m=-j as Element of NAT by INT_1:16,D1;
+ a|^(j-1)=(BCI-power(X).(a`,abs(j-1))) by Def2,D1;
+ then a|^(j-1)=(BCI-power(X).(a`,-(j-1))) by ABSVALUE:def 1,D1;
+ then a|^(j-1)=a`|^(m+1);
+ then a|^(j-1)=a`\(a` |^ m )` by Def1;
+ then a|^(j-1)=a`\(a |^ --j )` by Th9;
+ then (a|^(j-1))``=(a``\(a |^ j )``)` by BCIALG_1:9;
+ then (a|^(j-1))``=(a\(a |^ j )``)` by BCIALG_1:29;
+ then (a|^(j-1))``=(a\(a |^ j ))` by BCIALG_1:29,B3;
+ then (a|^(j-1))``=a`\(a |^ -m )` by BCIALG_1:9;
+ then (a|^(j-1))``=a`\(a` |^ m )` by Th9;
+ then (a|^(j-1))``=a` |^ (m+1) by Def1;
+ then (a|^(j-1))``=(BCI-power(X).(a`,-(j-1)));
+ then (a|^(j-1))``=(BCI-power(X).(a`,abs(j-1))) by ABSVALUE:def 1,D1;
+ then (a|^(j-1))``=a|^(j-1) by Def2,D1;
+   hence P[i2-1] by BCIALG_1:29;
+   end;
+  end;
+   for i st i<=0 holds P[i] from INT_1:sch 3(A3,A7);
+  hence thesis by A6;
+  end;
+end;
+
+theorem Th13:
+  (a|^(n+1))` = (a|^n)`\a
+proof
+A1:a|^n in AtomSet(X) by Th12;
+(a|^(n+1))` =( a\(a |^ n )`)` by Th1
+.=a`\(a |^ n )`` by BCIALG_1:9
+.=a`\(a |^ n ) by A1,BCIALG_1:29;
+hence thesis by BCIALG_1:7;
+end;
+
+::P20 Th1.4.5(1)--(4)
+Th14:  a|^(n+m) = a|^m\(a|^n)`
+proof
+  defpred P[Nat] means a|^(n+$1) = a|^$1\(a|^n)`;
+  reconsider p = a|^n as Element of AtomSet(X) by Th12;
+  a|^0\(a|^n)` = (a|^n)`` by Def1 .=p by BCIALG_1:29;
+then A1: P[0];
+A3: now
+    let m;
+    assume B1:P[m];
+      reconsider q = a|^(m+1) as Element of AtomSet(X) by Th12;
+    a|^(n+(m+1))=a|^(n+m+1)
+    .=a\(a|^m\(a|^n)`)` by B1,Th1
+    .=a\((a|^m)`\((a|^n)``)) by BCIALG_1:9
+    .=a\((a|^m)`\p) by BCIALG_1:29
+    .=p\((a|^m)`\a) by Th0
+    .=a|^n\(a|^(m+1))` by Th13
+     .=q\(p)` by Th0
+    .= a|^(m+1)\(a|^n)`;
+    hence P[m+1];
+    end;
+  for m holds P[m] from NAT_1:sch 2(A1,A3);
+  hence thesis;
+end;
+
+Th15:
+  (a|^m)|^n = a|^(m*n)
+proof
+  defpred P[Nat] means (a|^m)|^$1 = a|^(m*$1);
+    (a|^m)|^0 =0.X by Def1;
+then A1: P[0] by Def1;
+A3: now
+    let n;
+    assume B1:P[n];
+    (a|^m)|^(n+1) =(a|^m)\((a|^(m*n)))` by B1,Th1
+    .=(a|^(m+m*n)) by Th14
+    .= a|^(m*(n+1));
+    hence P[n+1];
+    end;
+  for n holds P[n] from NAT_1:sch 2(A1,A3);
+  hence thesis;
+end;
+
+theorem Th16:
+  (a\b)|^n = a|^n\(b|^n)
+proof
+ defpred P[Nat] means (a\b)|^$1 = a|^$1\(b|^$1);
+  (a\b)|^0=0.X by Def1 .=(0.X)` by BCIALG_1:def 5
+  .=a|^0\0.X by Def1;
+then A1: P[0] by Def1;
+A3: now
+    let n;
+    assume B1:P[n];
+    B2:(b|^n)` in AtomSet(X)&a|^(n+1) in AtomSet(X) by Th12,BCIALG_1:34;
+    (a\b)|^(n+1) = (a\b)\(a|^n\(b|^n))` by B1,Th1
+    .= (a\(a|^n\(b|^n))`)\b by BCIALG_1:7
+    .= (a\((a|^n)`\(b|^n)`))\b by BCIALG_1:9
+    .= ((b|^n)`\((a|^n)`\a))\b by B2,Th0
+    .= ((b|^n)`\b)\((a|^n)`\a) by BCIALG_1:7
+    .= (b|^(n+1))`\((a|^n)`\a) by Th13
+    .= (b|^(n+1))`\(a|^(n+1))` by Th13
+    .= ((b|^(n+1))\(a|^(n+1)))` by BCIALG_1:9
+   .= a|^(n+1)\(b|^(n+1)) by B2,BCIALG_1:30;
+    hence P[n+1];
+    end;
+  for n holds P[n] from NAT_1:sch 2(A1,A3);
+  hence thesis;
+end;
+
+theorem
+  (a\b)|^(-n) = a|^(-n)\(b|^(-n))
+proof
+  B3:(a\b)|^(-n)=((a\b)`)|^n by Th9
+ .=(a`\b`)|^n by BCIALG_1:9;
+  set c = a`, d = b`;
+  reconsider c,d as Element of AtomSet(X) by BCIALG_1:34;
+  c|^n = a|^(-n) & d|^n = b |^ (-n) by Th9;
+  hence (a\b)|^(-n) = a|^(-n)\(b|^(-n)) by Th16,B3;
+end;
+
+theorem Th17:
+  a`|^n = (a|^n)`
+proof
+ defpred P[Nat] means a`|^$1 = (a|^$1)`;
+   a`|^0 =0.X by Def1 .=(0.X)` by BCIALG_1:def 5;
+then A1: P[0] by Def1;
+A3: now
+    let n;
+    assume P[n];
+     0.X in AtomSet(X);then
+     a`|^(n+1) =(0.X)|^(n+1)\(a|^(n+1)) by Th16
+     .= (a|^(n+1))` by Th6;
+    hence P[n+1];
+    end;
+  for n holds P[n] from NAT_1:sch 2(A1,A3);
+  hence thesis;
+end;
+
+theorem Th17b:
+  x`|^n = (x|^n)`
+proof
+ defpred P[Nat] means x`|^$1 = (x|^$1)`;
+   x`|^0 = 0.X by Def1 .=(0.X)` by BCIALG_1:def 5;
+then A1: P[0] by Def1;
+A3: now let n;
+    assume B1:P[n];
+    x`|^(n+1) =x`\((x|^ n)`)` by B1,Th1
+     .=(x\(x|^ n )`)` by BCIALG_1:9
+     .= (x|^(n+1))` by Th1;
+    hence P[n+1];
+   end;
+  for n holds P[n] from NAT_1:sch 2(A1,A3);
+  hence thesis;
+end;
+
+theorem
+  a`|^(-n) = (a|^(-n))`
+proof
+  reconsider c =a` as Element of AtomSet(X) by BCIALG_1:34;
+  c|^(-n) = c`|^n by Th9 .= (c|^n)` by Th17 .= (a|^(-n))` by Th9;
+  hence (a`)|^(-n) = (a|^(-n))`;
+end;
+
+theorem Th18:
+  a=(x``)|^n implies x|^n in BranchV(a)
+proof
+ defpred P[Nat] means for a st a=(x``)|^$1 holds x|^$1 in BranchV(a);
+   x|^0 = 0.X by Def1;
+then 0.X \ x|^0 = 0.X by BCIALG_1:2;
+then 0.X <= x|^0 by BCIALG_1:def 11;
+then (x``)|^0 <= x|^0 by Def1;
+then A1: P[0];
+A3: now
+    let n;
+    assume B1:P[n];
+    now let a;
+    assume a=(x``)|^(n+1);
+    set b=(x``)|^n;
+    b in AtomSet(X)
+    proof
+     x`` in AtomSet(X) by BCIALG_1:34;
+    hence thesis by Th12;
+    end;
+    then reconsider b as Element of AtomSet(X);
+    B5:0.X in AtomSet(X);
+    x|^n in BranchV(b) by B1;
+then (x|^n)` =((x``)|^n)` by BCIALG_1:37,B5;
+then B5:x|^(n+1) =x\((x``)|^n)` by Th1;
+((x``\(((x``)|^n)`))\((x)\(((x``)|^n)` )))\(x``\x)=0.X by BCIALG_1:def 3;
+then (x``|^(n+1))\x|^(n+1)\(x``\x)=0.X by B5,Th1;
+then (x``|^(n+1))\x|^(n+1)\0.X=0.X by BCIALG_1:1;
+then (x``|^(n+1))\x|^(n+1)=0.X by BCIALG_1:2;
+then x``|^(n+1) <= x|^(n+1) by BCIALG_1:def 11;
+     hence a=(x``)|^(n+1) implies x|^(n+1) in BranchV(a);
+    end;
+   hence P[n+1];
+  end;
+  for n holds P[n] from NAT_1:sch 2(A1,A3);
+  hence thesis;
+end;
+
+theorem Th19:
+   (x|^n)` = ((x``)|^n)`
+proof
+  set b=(x``)|^n;
+  x`` in AtomSet(X) by BCIALG_1:34;
+  then reconsider b as Element of AtomSet(X) by Th12;
+  B5:0.X in AtomSet(X);
+  x|^n in BranchV(b) by Th18;
+  hence (x|^n)` = ((x``)|^n)` by BCIALG_1:37,B5;
+end;
+
+Lm20:
+  i>0&j>0 implies a|^i \ a|^j = a|^(i-j)
+proof
+assume A1:i>0&j>0;
+per cases by XXREAL_0:1;
+suppose A1:i=j;
+then a|^i \ a|^j = 0.X by BCIALG_1:def 5;
+then a|^i \ a|^j = a|^0 by Def1;
+hence thesis by A1;
+end;
+suppose B0:i>j;
+set m=i-j;
+   m>0 by XREAL_1:52,B0;
+then reconsider j,m as Element of NAT by INT_1:16,A1;
+a|^m in AtomSet(X) by Th12;
+then B5:(a|^m)``=a|^m by BCIALG_1:29;
+  a|^i = a|^((i-j)+j) .=a|^j\(a|^m)` by Th14;
+then a|^i\a|^j=a|^j\a|^j\(a|^m)` by BCIALG_1:7;
+hence thesis by B5,BCIALG_1:def 5;
+end;
+suppose C1:i<j;
+set m=j-i;
+m>0 by XREAL_1:52,C1;
+then reconsider i,m as Element of NAT by INT_1:16,A1;
+C7:0.X in AtomSet(X);
+a|^j = a|^(i+(j-i)) .=a|^i\(a|^m)` by Th14;
+then a|^i\a|^j = (a|^m)` by BCIALG_1:32,C7;
+then a|^i\a|^j = a`|^m by Th17;
+then a|^i\a|^j = a|^(-m) by Th9;
+hence thesis;
+end;
+end;
+
+theorem Th20:
+  a|^i \ a|^j = a|^(i-j)
+proof
+  per cases;
+  suppose A5:i>0;
+    per cases;
+    suppose j>0;
+      hence thesis by Lm20,A5;
+    end;
+    suppose C1:j=0;
+     a|^(i-0) = a|^i\0.X by BCIALG_1:2
+    .=a|^i \ a|^0 by Def1;
+     hence thesis by C1;
+    end;
+    suppose C3:j<0;
+    set m=-j;
+    reconsider i,m as Element of NAT by INT_1:16,A5,C3;
+     a|^j = BCI-power(X).(a`,abs(j)) by Def2,C3
+    .= a`|^m by ABSVALUE:def 1,C3
+    .= (a|^m)` by Th17;
+    then a|^i \ a|^j = a|^(i+m) by Th14;
+    hence thesis;
+    end;
+  end;
+  suppose A9:i=0;
+  per cases;
+  suppose j>=0;
+  then reconsider j as Element of NAT by INT_1:16;
+    a|^0 \ a|^j = (a|^j)` by Def1
+   .= a`|^j by Th17 .=a|^ -j by Th9;
+   hence thesis by A9;
+  end;
+  suppose C3:j<0;
+  set m=-j;
+    reconsider m as Element of NAT by INT_1:16,C3;
+         a|^j = BCI-power(X).(a`,abs(j)) by Def2,C3
+    .= a`|^m by ABSVALUE:def 1,C3
+    .= (a|^m)` by Th17;
+    then a|^0 \ a|^j = a|^(0+m) by Th14;
+    hence thesis by A9;
+  end;
+  end;
+  suppose E1:i<0;
+  then E2:-i>0 by XREAL_1:60;
+   reconsider m=-i as Element of NAT by INT_1:16,E1;
+  per cases;
+  suppose E3:j>=0;
+  set n=-(i-j);
+   reconsider n,j as Element of NAT by E1,INT_1:16,E3;
+  reconsider b=a` as Element of AtomSet(X) by BCIALG_1:34;
+  E9:a|^(i-j) = BCI-power(X).(a`,abs(i-j)) by Def2,E1
+    .= a`|^n by ABSVALUE:def 1,E1
+    .= b|^(j+m)
+    .= a`|^m\(a`|^j)` by Th14;
+  E11:a|^i = BCI-power(X).(a`,abs(i)) by Def2,E1
+    .= a`|^m by ABSVALUE:def 1,E1;
+    (a`|^j)` = b`|^j by Th17 .=a|^j by BCIALG_1:29;
+  hence thesis by E9,E11;
+  end;
+  suppose E13:j<0;
+  then E15:-j>0 by XREAL_1:60;
+   reconsider n=-j as Element of NAT by INT_1:16,E13;
+  reconsider b=a` as Element of AtomSet(X) by BCIALG_1:34;
+  E17:a|^i = BCI-power(X).(a`,abs(i)) by Def2,E1
+    .= a`|^m by ABSVALUE:def 1,E1;
+    a|^j = BCI-power(X).(a`,abs(j)) by Def2,E13
+    .= a`|^n by ABSVALUE:def 1,E13;
+  then E19:a|^i\a|^j = b|^(m-n) by Lm20,E15,E2,E17;
+  per cases;
+  suppose m>=n;
+  then reconsider q=m-n as Element of NAT by INT_1:16,XREAL_1:50;
+  a|^i\a|^j = a|^(-q) by Th9,E19;
+  hence thesis;
+  end;
+  suppose F0:m<n;
+  then n-m>0 by XREAL_1:52;
+  then reconsider p=n-m as Element of NAT by INT_1:16;
+  reconsider c = b` as Element of AtomSet(X) by BCIALG_1:34;
+      F3:m-n<0 by XREAL_1:51,F0;
+  then a|^i\a|^j=BCI-power(X).(b`,abs(m-n)) by Def2,E19
+ .=BCI-power(X).(b`,-(m-n)) by ABSVALUE:def 1,F3
+  .=a|^p by BCIALG_1:29;
+  hence thesis;
+  end;
+  end;
+  end;
+end;
+
+::1.4.11
+theorem Th21:
+   (a|^i)|^j = a|^(i*j)
+proof
+per cases;
+suppose A1:i>=0;
+ per cases;
+ suppose B1:j>=0;
+ reconsider i,j as Element of NAT by INT_1:16,A1,B1;
+    (a|^i)|^j = a|^(i*j) by Th15;
+ hence thesis;
+ end;
+ suppose B3:j<0;
+ then reconsider m=-j as Element of NAT by INT_1:16;
+ reconsider i as Element of NAT by INT_1:16,A1;
+  per cases by B3;
+ suppose D1:i*j<0;
+ then reconsider p=-i*j as Element of NAT by INT_1:16;
+ reconsider b=a` as Element of AtomSet(X) by BCIALG_1:34;
+ reconsider d = a|^i as Element of AtomSet(X) by Th12;
+      a|^(i*j)=BCI-power(X).(a`,abs(i*j)) by Def2,D1
+  .=a`|^p by ABSVALUE:def 1,D1
+  .=a`|^(i*(-j))
+  .=(b|^i)|^m by Th15
+  .=(a|^i)`|^m by Th17
+  .=d|^(-m) by Th9
+  .=a|^i |^(-(-j));
+  hence thesis;
+ end;
+ suppose D3:i*j=0;
+  reconsider d = 0.X as Element of AtomSet(X) by BCIALG_1:23;
+  (a|^0)|^j = 0.X|^j by Def1
+ .=BCI-power(X).((0.X)`,abs(j)) by Def2,B3
+ .=(0.X)`|^m by ABSVALUE:def 1,B3
+ .=(d|^m)` by Th17
+ .=(0.X)` by Th6
+ .=0.X by BCIALG_1:2
+ .=a|^(i*j) by D3,Th2;
+ hence thesis by XCMPLX_1:6,B3,D3;
+ end;
+ end;
+end;
+suppose A3:i<0;
+ then reconsider m=-i as Element of NAT by INT_1:16;
+ per cases;
+ suppose C1:j>0;
+ then reconsider j as Element of NAT by INT_1:16;
+ reconsider p=-i*j as Element of NAT by INT_1:16,A3;
+ reconsider b = a` as Element of AtomSet(X) by BCIALG_1:34;
+ D1:i*j<0*j by A3,C1,XREAL_1:70;
+ then  a|^(i*j)=BCI-power(X).(a`,abs(i*j)) by Def2
+  .=a`|^p by ABSVALUE:def 1,D1
+  .=a`|^((-i)*j)
+  .=(b|^m)|^j by Th15
+  .=(a|^(-m))|^j by Th9;
+ hence thesis;
+ end;
+ suppose C3:j=0;
+ reconsider b = a|^i as Element of AtomSet(X) by Th12;
+ (a|^i)|^j = b|^0 by C3 .= 0.X by Def1 .=a|^(i*0) by Th2;
+ hence thesis by C3;
+ end;
+ suppose C5:j<0;
+ then reconsider n=-j as Element of NAT by INT_1:16;
+reconsider p=i*j as Element of NAT by INT_1:16,A3,C5;
+ reconsider b=a` as Element of AtomSet(X) by BCIALG_1:34;
+ reconsider d = a|^m as Element of AtomSet(X) by Th12;
+ reconsider e =d` as Element of AtomSet(X) by BCIALG_1:34;
+  a|^i = BCI-power(X).(a`,abs(i)) by Def2,A3
+    .= a`|^m by ABSVALUE:def 1,A3;
+ then (a|^i)|^j =e|^(-n) by Th17
+ .=e`|^n by Th9
+ .=d|^n by BCIALG_1:29
+ .=a|^((-i)*(-j)) by Th15;
+ hence thesis;
+ end;
+end;
+end;
+
+theorem Th22:
+  a|^(i+j) = a|^i\(a|^j)`
+proof
+per cases;
+suppose j>0;
+then reconsider j as Element of NAT by INT_1:16;
+  a|^i\(a|^j)`=a|^i\(a`|^j) by Th17 .=a|^i\(a|^(-j)) by Th9
+  .=a|^(i-(-j)) by Th20;
+hence thesis;
+end;
+suppose A3:j=0;
+then a|^(i+j) = a|^i\0.X by BCIALG_1:2
+.=a|^i\(0.X)` by BCIALG_1:2
+.=a|^i\(a|^j)` by A3,Th2;
+hence thesis;
+end;
+suppose j<0;
+ then reconsider n=-j as Element of NAT by INT_1:16;
+ reconsider b=a` as Element of AtomSet(X) by BCIALG_1:34;
+ a|^i\(a|^j)`=a|^i\(a|^(--j))`
+ .=a|^i\(a`|^n)` by Th9
+ .=a|^i\(b`|^n) by Th17
+ .=a|^i\(a|^n) by BCIALG_1:29
+ .=a|^(i-n) by Th20;
+hence thesis;
+end;
+end;
+
+definition let X,x;
+  attr x is finite-period means :Defx1:
+    ex n being Element of NAT st n<>0 & x|^n in BCK-part(X);
+end;
+
+theorem Thx22:
+  x is finite-period implies x`` is finite-period
+proof
+  assume A1:x is finite-period;
+  reconsider b = x`` as Element of AtomSet(X) by BCIALG_1:34;
+    consider p being Element of NAT such that
+C71:p<>0 & x|^p in BCK-part(X) by A1,Defx1;
+    consider y being Element of X such that
+C72:y = x|^p & 0.X <= y by C71;
+    (x|^p)` = 0.X by C72,BCIALG_1:def 11;
+  then (b|^p)` = 0.X by Th19;
+  then 0.X <= b|^p by BCIALG_1:def 11;
+  then b|^p in BCK-part(X);
+  hence x`` is finite-period by Defx1,C71;
+end;
+
+definition
+  let X,x such that A1:x is finite-period;
+  func ord x -> Element of NAT means  :Def8a:
+    x|^it in BCK-part(X)& it<>0 &
+  for m being Element of NAT st x|^m in BCK-part(X) & m <> 0 holds it <= m;
+  existence
+proof
+    defpred P[Nat] means x|^$1 in BCK-part(X)& $1<>0;
+    consider n being Element of NAT such that
+A3:   n<>0 & x|^n in BCK-part(X) by Defx1,A1;
+A5:   ex n being Nat st P[n] by A3;
+      consider k being Nat such that
+A7:   P[k] and
+A9:   for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A5);
+      reconsider k as Element of NAT by ORDINAL1:def 13;
+      take k;
+      thus x|^k in BCK-part(X)&k <> 0 by A7;
+      let m be Element of NAT;
+      assume x |^ m in BCK-part(X) & m <> 0;
+      hence k <= m by A9;
+  end;
+  uniqueness
+proof
+    let n1,n2 be Element of NAT;
+    assume that
+A6: x|^ n1 in BCK-part(X)& n1<>0 &
+    for m being Element of NAT st x|^ m in BCK-part(X)&m <> 0 holds n1<=m and
+A7: x|^ n2 in BCK-part(X) &n2<>0 &
+    for m being Element of NAT st x|^ m in BCK-part(X)&m <> 0 holds n2<=m;
+    n1 <= n2 & n2 <= n1 by A6,A7;
+    hence thesis by XXREAL_0:1;
+  end;
+end;
+
+theorem Th23:
+  a is finite-period & ord a = n implies a|^n = 0.X
+proof
+ assume a is finite-period & ord a = n;
+ then a|^n in BCK-part(X) by Def8a;
+ then consider x being Element of X such that
+ A3:x = a|^n &0.X<=x;
+ a|^n in AtomSet(X) by Th12;
+ then consider y being Element of X such that
+ A5:y = a|^n & y is atom;
+ 0.X\a|^n = 0.X by A3,BCIALG_1:def 11;
+ hence thesis by BCIALG_1:def 14,A5;
+end;
+
+theorem
+  X is BCK-algebra iff (for x holds x is finite-period & ord x = 1)
+proof
+thus X is BCK-algebra implies (for x holds x is finite-period & ord x = 1)
+proof
+assume A1:X is BCK-algebra;
+let x;
+x`=0.X by A1,BCIALG_1:def 8;
+then 0.X<=x by BCIALG_1:def 11;
+then x in BCK-part(X);
+then A5:x|^1 in BCK-part(X)&1<>0 by Th3;
+then A3:x is finite-period by Defx1;
+for m being Element of NAT st x|^m in BCK-part(X) & m <> 0 holds 1<=m
+proof
+let m be Element of NAT;
+assume x|^m in BCK-part(X) & m <> 0;
+then 0+1<=m by INT_1:20;
+hence thesis;
+end;
+hence thesis by A3,A5,Def8a;
+end;
+assume B1:for x holds x is finite-period & ord x = 1;
+for y,z being Element of X holds (y\z)\y=0.X
+proof
+let y,z be Element of X;
+(y\z)\y = (y\y)\z by BCIALG_1:7;
+then C1:(y\z)\y = z` by BCIALG_1:def 5;
+z is finite-period & ord z = 1 by B1;
+then z|^1 in BCK-part(X) by Def8a;
+then z in BCK-part(X) by Th3;
+then consider z1 being Element of X such that
+D1:z=z1 & 0.X<=z1;
+thus thesis by D1,BCIALG_1:def 11,C1;
+end;
+then X is_K by BCIALG_1:def 6;
+hence thesis by BCIALG_1:18;
+end;
+
+theorem Th25:
+  x is finite-period & a is finite-period & x in BranchV(a) implies
+    ord x = ord a
+proof
+  assume A1:x is finite-period & a is finite-period & x in BranchV(a);
+  then consider xx being Element of X such that
+A3:x = xx & a<=xx;
+  set nx = ord x, na = ord a;
+  a|^na in BCK-part(X) & na<>0 by Def8a,A1;
+  then A5:na>=1 by NAT_1:14;
+  per cases by A5,XXREAL_0:1;
+  suppose B0:na=1;
+  then a|^1 in BCK-part(X) by Def8a,A1;
+  then a in BCK-part(X) by Th3;
+  then consider aa being Element of X such that
+B1:a = aa & 0.X <= aa;
+  a in AtomSet(X);
+  then consider ab being Element of X such that
+  B3:a = ab & ab is atom;
+     a` = 0.X by B1,BCIALG_1:def 11;
+  then a = 0.X by B3,BCIALG_1:def 14;
+  then x in BCK-part(X) by A3;
+  then B7:x|^1 in BCK-part(X)&1<>0 by Th3;
+  for m being Element of NAT st x|^m in BCK-part(X) & m <> 0
+   holds 1 <= m by NAT_1:14;
+  hence thesis by B0,Def8a,A1,B7;
+end;
+suppose C1:na>1;
+ a|^na in BCK-part(X) by Def8a,A1;
+then consider aa being Element of X such that
+B1:a|^na = aa & 0.X <= aa;
+  0.X in AtomSet(X);
+then B2:x` = a` by A1,BCIALG_1:37;
+     (a|^na)` = 0.X by B1,BCIALG_1:def 11;
+then x`|^na = 0.X by B2,Th17;
+then (x|^na)` = 0.X by Th17b;
+then 0.X <= x|^na by BCIALG_1:def 11;
+then B7:x|^na in BCK-part(X)&na<>0 by C1;
+for m being Element of NAT st x|^m in BCK-part(X) & m <> 0 holds na <= m
+proof
+let m be Element of NAT;
+assume C1:x|^m in BCK-part(X) & m <> 0;
+then consider xx being Element of X such that
+C3:x|^m = xx & 0.X <= xx;
+     (x|^m)` = 0.X by C3,BCIALG_1:def 11;
+then a`|^m = 0.X by B2,Th17b;
+then (a|^m)` = 0.X by Th17;
+then 0.X <= a|^m by BCIALG_1:def 11;
+then a|^m in BCK-part(X);
+hence thesis by Def8a,A1,C1;
+end;
+hence thesis by Def8a,A1,B7;
+end;
+end;
+
+theorem Th26:  ::1.5.3
+  x is finite-period & ord x = n implies(x|^m in BCK-part(X) iff n divides m)
+proof
+assume A1: x is finite-period & ord x = n;
+thus x|^m in BCK-part(X) implies n divides m
+proof
+  defpred P[Nat] means x|^$1 in BCK-part(X) implies n divides $1;
+C1: for m being Nat st for k being Nat st k < m holds P[k] holds P[m]
+  proof
+    let m be Nat;
+    assume C2: for k being Nat st k < m holds P[k];
+    assume C3: x|^m in BCK-part(X);
+    per cases;
+    suppose m = 0;
+      hence thesis by INT_2:16;
+    end;
+    suppose C4:m <> 0;
+    reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+    m<>0 & x|^mm in BCK-part(X) by C3,C4;
+then n <= m by Def8a,A1;
+then consider k being Nat such that
+C6: m = n + k by NAT_1:10;
+reconsider b = x`` as Element of AtomSet(X) by BCIALG_1:34;
+C8:b is finite-period by Thx22,A1;
+    b\x = 0.X by BCIALG_1:1;
+then b<=x by BCIALG_1:def 11;
+then x in BranchV(b);
+then n = ord b by Th25,C8,A1;
+then b|^n in BCK-part(X) by Def8a,C8;
+then consider z being Element of X such that
+C13:z = b|^n & 0.X <= z;
+C15:(b|^n)` = 0.X by C13,BCIALG_1:def 11;
+    reconsider a = b|^m as Element of AtomSet(X) by Th12;
+    consider zz being Element of X such that
+C17:zz = x|^m & 0.X <= zz by C3;
+    (x|^m)` = 0.X by C17,BCIALG_1:def 11;
+then (b|^(n+k))`= 0.X by C6,Th19;
+then (b|^n\(b|^k)`)`= 0.X by Th22;
+then ((b|^k)`)`` = 0.X by C15, BCIALG_1:9;
+then (b|^k)` = 0.X by BCIALG_1:8;
+then (x|^k)` = 0.X by Th19;
+then 0.X <= x|^k by BCIALG_1:def 11;
+then DD:x|^k in BCK-part(X);
+    n<>0 by Def8a,A1;
+then n divides k by C2,DD,NAT_1:16,C6;
+then consider i being Nat such that
+C8:  k = n * i by NAT_D:def 3;
+        m =n * (1 + i) by C6,C8;
+        hence thesis by NAT_D:def 3;
+      end;
+  end;
+  for m being Nat holds P[m] from NAT_1:sch 4(C1);
+  hence thesis;
+end;
+assume n divides m;
+then consider i being Nat such that
+D3:m = n * i by NAT_D:def 3;
+ reconsider b = x`` as Element of AtomSet(X) by BCIALG_1:34;
+D5:b is finite-period by Thx22,A1;
+    b\x = 0.X by BCIALG_1:1;
+then b<=x by BCIALG_1:def 11;
+then x in BranchV(b);
+then n = ord b by Th25,D5,A1;
+then b|^n in BCK-part(X) by Def8a,D5;
+then consider z being Element of X such that
+D13:z = b|^n & 0.X <= z;
+D15:(b|^n)` = 0.X by D13,BCIALG_1:def 11;
+reconsider bn = b|^n as Element of AtomSet(X) by Th12;
+     (b|^m)` =((bn)|^i)` by Th21,D3;
+then (b|^m)` =(0.X)|^i by D15,Th17;
+then (b|^m)` =0.X by Th6;
+then (x|^m)` =0.X by Th19;
+then 0.X <= x|^m by BCIALG_1:def 11;
+hence thesis;
+end;
+
+theorem   ::1.5.4
+  x is finite-period & x|^m is finite-period & ord x = n & m>0
+    implies ord(x|^m)=n div (m gcd n)
+proof
+   assume A1: x is finite-period & x|^m is finite-period & ord x = n & m>0;
+   then A2:n<>0 by Def8a;
+Aa:(m gcd n) divides n by INT_2:32;
+   abs(n) > 0 by ABSVALUE:def 1,A2; then
+A3: abs(n) hcf abs(m) > 0 by NEWTON:71;
+A4: n gcd m > 0 by NEWTON:71,A1;
+   reconsider mgn=(m gcd n) as Element of NAT by A3,INT_2:51;
+   consider vn being Nat such that
+A5: n = mgn * vn by Aa,NAT_D:def 3;
+   reconsider vn as Element of NAT by ORDINAL1:def 13;
+   m gcd n divides m by INT_2:31;
+   then consider i being Nat such that
+A6: m = mgn * i by NAT_D:def 3;
+   reconsider i as Element of NAT by ORDINAL1:def 13;
+   n = mgn * vn + 0 by A5;
+   then A9: n div mgn = vn by A4,NAT_D:def 1;
+A13: vn,i are_relative_prime
+   proof
+     (i gcd vn) divides vn by NAT_D:def 5;
+     then consider b1 being Nat such that
+B1:  vn = (i gcd vn)*b1 by NAT_D:def 3;
+     (i gcd vn) divides i by NAT_D:def 5;
+     then consider b2 being Nat such that
+B3:  i = (i gcd vn)*b2 by NAT_D:def 3;
+B5:  n = (m gcd n) * (i gcd vn)*b1 by A5,B1;
+     m = (m gcd n) * (i gcd vn)*b2 by A6,B3;
+     then (m gcd n) * (i gcd vn) divides n
+       & (m gcd n) * (i gcd vn) divides m by B5,NAT_D:def 3;
+     then (m gcd n) * (i gcd vn) divides (m gcd n) by NAT_D:def 5;
+     then consider c being Nat such that
+B7:  m gcd n = (m gcd n) * (i gcd vn)*c by NAT_D:def 3;
+B9:  (m gcd n)*1 = (m gcd n) * ((i gcd vn)*c) by B7;
+     m gcd n <>0 by A1,INT_2:35;
+     then 1 = i gcd vn by NAT_1:15,B9,XCMPLX_1:5;
+     hence thesis by INT_2:def 4;
+   end;
+   reconsider b = x`` as Element of AtomSet(X) by BCIALG_1:34;
+C8:b is finite-period by Thx22,A1;
+   b\x = 0.X by BCIALG_1:1;
+   then b<=x by BCIALG_1:def 11;
+   then x in BranchV(b);
+   then C12:n = ord b by Th25,C8,A1;
+   then b|^n in BCK-part(X) by Def8a,C8;
+   then consider z being Element of X such that
+C13:z = b|^n & 0.X <= z;
+A12: (x|^m)|^ vn in BCK-part(X)
+   proof
+     ((x|^m)|^ vn)` = (x|^m)`|^ vn by Th17b
+      .=(b|^m)`|^ vn by Th19
+      .=(b|^m|^ vn)` by Th17b
+      .=(b|^(mgn*i*vn))` by A6,Th21
+      .=(b|^(n*i))` by A5
+      .=((b|^n)|^i)` by Th21
+      .=(b|^n)`|^i by Th17b
+      .=(0.X)|^i by C13,BCIALG_1:def 11
+      .= 0.X by Th6;
+     then 0.X <= (x|^m)|^ vn by BCIALG_1:def 11;
+     hence thesis;
+   end;
+A11:for mm being Element of NAT st (x|^m)|^mm in BCK-part(X)&mm<>0
+      holds vn <= mm
+proof
+ let mm be Element of NAT;
+ assume D1:(x|^m)|^mm in BCK-part(X)&mm<>0;
+then consider z being Element of X such that
+D3:z = (x|^m)|^mm & 0.X <= z;
+     ((x|^m)|^mm)` = 0.X by BCIALG_1:def 11,D3;
+then (x|^m)`|^mm = 0.X by Th17b;
+then (b|^m)`|^mm = 0.X by Th19;
+then (b|^m|^mm)` = 0.X by Th17b;
+then (b|^(m*mm))` = 0.X by Th21;
+then 0.X <= b|^(m*mm) by BCIALG_1:def 11;
+then b|^(m*mm) in BCK-part(X);
+then mgn*vn divides mgn*i*mm by A5,A6,C12,Th26,C8;
+then consider c being Nat such that
+D5: mgn*i*mm = mgn*vn*c by NAT_D:def 3;
+D6: mgn*(i*mm) = mgn*(vn*c) by D5;
+    mgn <>0 by A1,INT_2:35;
+then i*mm = vn*c by D6,XCMPLX_1:5;
+then vn divides i*mm by NAT_D:def 3;
+then vn divides mm by A13,INT_2:40;
+then consider cc being Nat such that
+D7: mm = vn*cc by NAT_D:def 3;
+    cc<>0 by D1,D7;
+hence thesis by D7,NAT_1:24;
+end;
+    vn <> 0 by A5,A1,Def8a;
+hence thesis by A9,A12,Def8a,A1,A11;
+end;
+
+theorem
+  x is finite-period & x` is finite-period implies ord x = ord(x`)
+proof
+  assume A1:x is finite-period & x` is finite-period;
+  set n = ord x;
+  set m = ord(x`);
+  x|^n in BCK-part(X) by Def8a,A1;
+  then consider zz being Element of X such that
+A3:zz = x|^n & 0.X <= zz;
+     (x|^n)` = 0.X by A3,BCIALG_1:def 11;
+then (x`)|^n = 0.X by Th17b;
+then ((x`)|^n)` = 0.X by BCIALG_1:def 5;
+then 0.X <= (x`)|^n by BCIALG_1:def 11;
+then (x`)|^n in BCK-part(X) & n<>0 by Def8a,A1;
+then C1:m<=n by Def8a,A1;
+    (x`)|^m in BCK-part(X) by Def8a,A1;
+then consider zz being Element of X such that
+A3:zz = (x`)|^m & 0.X <= zz;
+     ((x`)|^m)` = 0.X by A3,BCIALG_1:def 11;
+then (x``)|^m = 0.X by Th17b;
+then ((x``)|^m)` = 0.X by BCIALG_1:def 5;
+then (x|^m)` = 0.X by Th19;
+then 0.X <= x|^m by BCIALG_1:def 11;
+then x|^m in BCK-part(X) & m<>0 by Def8a,A1;
+then n<=m by Def8a,A1;
+hence thesis by C1,XXREAL_0:1;
+end;
+
+theorem
+  x\y is finite-period & x in BranchV(a) & y in BranchV(a) implies ord(x\y)=1
+proof
+assume A1:x\y is finite-period & x in BranchV(a) & y in BranchV(a);
+then x\y in BCK-part(X) by BCIALG_1:40;
+then A3:(x\y)|^1 in BCK-part(X) by Th3;
+for m being Element of NAT st (x\y)|^m in BCK-part(X) & m <> 0
+holds 1 <= m by NAT_1:14;
+hence thesis by Def8a,A3,A1;
+end;
+
+theorem
+  x\y is finite-period & a\b is finite-period & x is finite-period
+  & y is finite-period & a is finite-period & b is finite-period & a<>b &
+  x in BranchV(a) & y in BranchV(b) implies ord(a\b) divides (ord x lcm ord y)
+proof
+assume A1:x\y is finite-period & a\b is finite-period & x is finite-period
+& y is finite-period & a is finite-period & b is finite-period & a<>b &
+x in BranchV(a) & y in BranchV(b);
+A6:ord x divides (ord x lcm ord y)
+   &ord y divides (ord x lcm ord y)by NAT_D:def 4;
+then consider xy being Nat such that
+A7:ord x lcm ord y =(ord x)* xy by NAT_D:def 3;
+   consider yx being Nat such that
+A8:ord x lcm ord y =(ord y)* yx by NAT_D:def 3,A6;
+  reconsider xly = ord x lcm ord y as Element of NAT;
+  reconsider na = ord a, nb = ord b as Element of NAT;
+  reconsider nab = ord(a\b) as Element of NAT;
+ (a\b)|^xly = a|^((ord x)* xy)\b|^((ord y)* yx) by A8,A7,Th16
+.=(a|^(ord x))|^xy\b|^((ord y)* yx) by Th21
+.=(a|^(ord x))|^xy\b|^(ord y)|^ yx by Th21
+.=(a|^na)|^xy\b|^(ord y)|^ yx by A1,Th25
+.=(0.X)|^xy\b|^(ord y)|^ yx by Th23,A1
+.=(0.X)|^xy\b|^(ord b)|^ yx by A1,Th25
+.=(0.X)|^xy\(0.X)|^ yx by Th23,A1
+.=((0.X)|^ yx)` by Th6
+.=(0.X)` by Th6
+.=0.X by BCIALG_1:def 5;
+then ((a\b)|^xly)` = 0.X by BCIALG_1:def 5;
+then 0.X <=(a\b)|^xly by BCIALG_1:def 11;
+then (a\b)|^xly in BCK-part(X);
+hence ord(a\b) divides (ord x lcm ord y) by Th26,A1;
+end;
+
+begin :: Definition of {BCI}-Homomorphisms
+
+reserve X,X',Y,Z,W for BCI-algebra,
+        H,H' for SubAlgebra of X',
+        G for SubAlgebra of X,
+        A for non empty Subset of X,
+        A' for non empty Subset of X',
+        I for Ideal of X,
+        CI,K for closed Ideal of X,
+        x,y,a,b for Element of X,
+        RI for I-congruence of X,I,
+        RK for I-congruence of X,K;
+
+theorem Lmth14:
+for X being BCI-algebra
+for Y being SubAlgebra of X holds
+for x,y being Element of X,x',y' being Element of Y st x = x' & y = y'
+holds x\y = x'\y'
+proof
+  let X be BCI-algebra;
+  let Y be SubAlgebra of X;
+  let x,y be Element of X,x',y' be Element of Y such that
+A1: x = x' & y = y';
+A2: [x',y'] in [:the carrier of Y,the carrier of Y:] by ZFMISC_1:106;
+     x'\y' = ((the InternalDiff of X)||the carrier of Y).(x',y')
+      by BCIALG_1:def 10
+    .= x\y by A1,FUNCT_1:72,A2;
+ hence thesis;
+end;
+
+definition let X,X' be non empty BCIStr_0; let f be Function of X,X';
+  attr f is multiplicative means :Def0:
+    for a, b being Element of X holds f.(a\b) = f.a\f.b;
+end;
+
+registration let X,X' be BCI-algebra;
+  cluster multiplicative Function of X,X';
+  existence
+  proof
+   reconsider f = (the carrier of X) --> 0.X' as Function of X, X';
+   take f;
+   for x,y being Element of X holds f.(x \ y) = f.x \ f.y
+    proof
+    let x,y be Element of X;
+     f.(x \ y) = 0.X' by FUNCOP_1:13
+              .= (0.X')` by BCIALG_1:2
+              .= f.x \ 0.X' by FUNCOP_1:13;
+    hence thesis by FUNCOP_1:13;
+    end;
+   hence thesis by Def0;
+  end;
+end;
+
+definition let X,X' be BCI-algebra;
+  mode BCI-homomorphism of X,X' is multiplicative Function of X,X';
+end;
+
+reserve f for BCI-homomorphism of X,X';
+reserve g for BCI-homomorphism of X',X;
+reserve h for BCI-homomorphism of X',Y;
+
+definition let X,X',f;
+  attr f is isotonic means
+    for x,y st x <= y holds f.x <= f.y;
+end;
+
+definition let X;
+  mode Endomorphism of X is BCI-homomorphism of X,X;
+end;
+
+definition let X,X',f;
+  func Ker f equals {x where x is Element of X:f.x=0.X'};
+  coherence;
+end;
+
+theorem PR1621:
+   f.(0.X) = 0.X'
+proof
+   f.(0.X) = f.((0.X)`) by BCIALG_1:2
+         .=f.(0.X)\f.(0.X) by Def0;
+   hence thesis by BCIALG_1:def 5;
+end;
+
+registration let X,X',f;
+  cluster Ker f -> non empty;
+  coherence
+  proof
+    f.(0.X) = 0.X' by PR1621;
+    then 0.X in Ker f;
+    hence thesis;
+  end;
+end;
+
+theorem
+  x <= y implies f.x <= f.y
+proof
+   assume A1:x<=y;
+   f.x\f.y = f.(x\y) by Def0
+         .=f.(0.X) by BCIALG_1:def 11,A1
+         .= 0.X' by PR1621;
+   hence thesis by BCIALG_1:def 11;
+end;
+
+theorem
+  f is one-to-one iff Ker(f) = {0.X}
+proof
+  thus f is one-to-one implies Ker(f) = {0.X}
+  proof
+  assume
+A1:   f is one-to-one;
+   thus Ker(f) c= {0.X}
+   proof
+     let a be set;
+     assume a in Ker f;
+     then consider x being Element of X such that
+     B1:a=x & f.x = 0.X';
+     reconsider a as Element of X by B1;
+     f.a = f.(0.X) by B1,PR1621;
+     then a = 0.X by A1,FUNCT_2:25;
+     hence thesis by TARSKI:def 1;
+   end;
+    let a be set;
+    assume A1:a in {0.X};
+    then reconsider a as Element of X by TARSKI:def 1;
+    a = 0.X by TARSKI:def 1,A1;
+    then f.a = 0.X' by PR1621;
+    hence thesis;
+  end;
+   assume AA:Ker(f) = {0.X};
+     now let a,b;
+        assume that
+      A1: a <> b and
+      A3: f.a = f.b;
+      f.a \ f.b = 0.X'&f.b \ f.a = 0.X' by A3,BCIALG_1:def 5;
+     then f.(a \ b) = 0.X'& f.(b\a) = 0.X' by Def0;
+     then a\b in Ker f & b\a in Ker f;
+     then a\b =0.X & b\a = 0.X by AA,TARSKI:def 1;
+     hence contradiction by A1,BCIALG_1:def 7;
+    end;
+    then for a,b st f.a = f.b holds a = b;
+    hence thesis by GROUP_6:1;
+end;
+
+theorem
+  f is bijective & g=f" implies g is bijective
+proof
+  assume A1:f is bijective & g=f";
+  then A4:g is one-to-one by FUNCT_1:62;
+  dom f = the carrier of X by FUNCT_2:def 1; then
+  rng g = the carrier of X by A1,FUNCT_1:55;
+  then g is onto by FUNCT_2:def 3;
+  hence thesis by A4;
+end;
+
+theorem
+  h*f is BCI-homomorphism of X,Y
+proof
+   reconsider g = h*f as Function of X,Y;
+   now let a,b;
+    thus g.(a \ b) = h.(f.(a \ b)) by FUNCT_2:21
+              .= h.(f.a \ f.b) by Def0
+              .= (h.(f.a)) \ (h.(f.b)) by Def0
+              .= (g.a)\(h.(f.b)) by FUNCT_2:21
+              .= g.a \ g.b by FUNCT_2:21;
+   end;
+   hence thesis by Def0;
+end;
+
+theorem
+  for f being BCI-homomorphism of X,Y,g being BCI-homomorphism of Y,Z,
+  h being BCI-homomorphism of Z,W holds h*(g*f) = (h*g)*f
+proof
+  let f be BCI-homomorphism of X,Y,g be BCI-homomorphism of Y,Z,
+  h be BCI-homomorphism of Z,W;
+  reconsider g1 = h*(g*f) as Function of X,W;
+  reconsider g2 = (h*g)*f as Function of X,W;
+  for x being set st x in the carrier of X holds g1.x = g2.x
+  proof let x be set;
+  assume D1:x in the carrier of X; then
+  D2:g1.x = h.((g*f).x) by FUNCT_2:21
+              .=h.(g.(f.x)) by FUNCT_2:21,D1;
+  g2.x = (h*g).(f.x) by D1,FUNCT_2:21
+      .=h.(g.(f.x))by FUNCT_2:21,D1,FUNCT_2:7;
+  hence g1.x =g2.x by D2;
+  end;
+  hence thesis by FUNCT_2:18;
+end;
+
+theorem
+  for Z being SubAlgebra of X' st the carrier of Z = rng f holds
+    f is BCI-homomorphism of X,Z
+proof
+  let Z be SubAlgebra of X';
+  assume A1: the carrier of Z = rng f;
+  f is Function of X, Z
+  proof
+    dom f = the carrier of X by FUNCT_2:def 1;
+    hence thesis by FUNCT_2:def 1,RELSET_1:11,A1;
+  end;
+  then reconsider f' = f as Function of X,Z;
+  now
+    let a,b;
+    thus f'.a \f'.b = f.a \ f.b by Lmth14
+      .= f'.(a \ b) by Def0;
+  end;
+  hence thesis by Def0;
+end;
+
+theorem PR1641:
+  Ker f is closed Ideal of X
+proof
+   now
+     let x be set;
+     assume x in Ker f;
+     then consider x' being Element of X such that
+     B1:x=x' & f.x' = 0.X';
+     thus x in the carrier of X by B1;
+    end; then
+   A1:Ker f is non empty Subset of X by TARSKI:def 3;
+   Ker f is Ideal of X
+   proof
+      f.(0.X) = 0.X' by PR1621;
+      then B1:0.X in Ker f;
+      now let x,y;
+      assume B3:x\y in Ker f& y in Ker f;
+      then consider y' being Element of X such that
+      B5:y=y' & f.y' = 0.X';
+      consider x' being Element of X such that
+      B7:x\y=x' & f.x' = 0.X' by B3;
+      f.x \ 0.X' = 0.X' by B5,B7,Def0;
+      then f.x = 0.X' by BCIALG_1:2;
+      hence x in Ker f;
+      end;
+    hence thesis by A1,B1,BCIALG_1:def 18;
+   end;
+   then reconsider Kf=Ker f as Ideal of X;
+   Kf is closed
+   proof
+   let x be Element of Kf;
+   x in Kf;
+   then consider x' being Element of X such that
+   B1:x=x' & f.x'=0.X';
+   f.(x`)=f.(0.X)\f.x by Def0;
+   then f.(x`)=(0.X')` by PR1621,B1;
+   then f.(x`)=0.X' by BCIALG_1:def 5;
+   hence x` in Kf;
+   end;
+   hence thesis;
+end;
+
+registration let X,X',f;
+  cluster Ker f -> closed Ideal of X;
+  coherence by PR1641;
+end;
+
+theorem Lm1653:
+  f is onto implies for c being Element of X' ex x st c = f.x
+proof
+  assume f is onto; then
+  A3: rng f = the carrier of X' by FUNCT_2:def 3;
+  for c being set holds c in rng f iff ex x st c = f.x
+  proof
+   let c be set;
+   thus c in rng f implies ex x st c = f.x
+    proof assume c in rng f;
+      then consider y being set such that
+      A1:y in dom f& f.y = c by FUNCT_1:def 5;
+      reconsider y as Element of X by A1;
+     take y;
+     thus thesis by A1;
+    end;
+    given x such that A3: c = f.x;
+    x in the carrier of X & the carrier of X = dom f by FUNCT_2:def 1;
+    hence thesis by A3,FUNCT_1:def 5;
+  end;
+ hence thesis by A3;
+end;
+
+::P75
+theorem
+  for a being Element of X st a is minimal holds f.a is minimal
+proof
+  let a be Element of X;
+  assume a is minimal;
+  then f.a=f.(a``)by BCIALG_2:29;
+  then f.a=f.0.X\(f.(0.X\a)) by Def0;
+  then f.a=f.0.X\(f.0.X\f.a) by Def0;
+  then f.a=(f.0.X\f.a)` by PR1621;
+  then f.a=(f.a)`` by PR1621;
+  hence thesis by BCIALG_2:29;
+end;
+
+theorem
+  for a being Element of AtomSet(X),b being Element of AtomSet(X')st b=f.a
+  holds f.:BranchV(a) c= BranchV(b)
+proof
+ let a be Element of AtomSet(X),b be Element of AtomSet(X') such that
+ A1:b=f.a;
+ let y be set;
+ assume y in f.:BranchV(a);
+ then consider x being set such that
+B1:x in dom f & x in BranchV(a) & y = f.x by FUNCT_1:def 12;
+   consider x1 being Element of X such that
+B3:x=x1 & a<=x1 by B1;
+  reconsider x as Element of X by B3;
+  f.a\f.x=f.(a\x) by Def0;
+  then f.a\f.x=f.(0.X) by B3,BCIALG_1:def 11;
+  then f.a\f.x=0.X' by PR1621;
+  then b <= f.x by A1,BCIALG_1:def 11;
+  hence y in BranchV(b) by B1;
+end;
+
+::P76
+theorem Thp167:
+  A' is Ideal of X' implies f"A' is Ideal of X
+proof
+assume A1:A' is Ideal of X';
+ 0.X' in A' by A1,BCIALG_1:def 18;
+ then f.0.X in A' by PR1621; then
+C3: 0.X in f"A' by FUNCT_2:46;
+now let x,y be Element of X;
+assume B1:x\y in f"A' & y in f"A'; then
+E1: f.(x\y) in A' by FUNCT_2:46;
+E3: f.y in A' by B1,FUNCT_2:46;
+ f.x\f.y in A' by Def0,E1;
+then f.x in A' by A1,BCIALG_1:def 18,E3;
+hence x in f"A' by FUNCT_2:46;
+end;
+hence thesis by C3,BCIALG_1:def 18;
+end;
+
+theorem
+  A' is closed Ideal of X' implies f"A' is closed Ideal of X
+proof
+ assume A1: A' is closed Ideal of X';
+ then reconsider XY=f"A' as Ideal of X by Thp167;
+ for y being Element of XY holds y` in XY
+ proof
+ let y be Element of XY;
+B1:  f.y in A' by FUNCT_2:46;
+ reconsider y as Element of X;
+ (f.y)` in A' by BCIALG_1:def 19,A1,B1;
+ then f.0.X\f.y in A' by PR1621;
+ then f.(y`) in A' by Def0;
+ hence thesis by FUNCT_2:46;
+ end;
+ hence thesis by BCIALG_1:def 19;
+end;
+
+theorem PR1651:
+   f is onto implies f.:I is Ideal of X'
+proof
+  assume AA:f is onto;
+   f.:I is non empty Subset of X'
+   proof
+  AB: 0.X in I by BCIALG_1:def 18;
+      0.X in the carrier of X;
+      then 0.X in dom f&f.(0.X)=0.X' by PR1621,FUNCT_2:def 1;
+     hence thesis by FUNCT_1:def 12,AB;
+   end;
+   then reconsider imaf = f.:I as non empty Subset of X';
+   BC: 0.X' in imaf
+      proof
+      AB: 0.X in I by BCIALG_1:def 18;
+      BB:f.(0.X)=0.X' by PR1621;
+      0.X in the carrier of X;
+      then 0.X in dom f by FUNCT_2:def 1;
+      hence 0.X' in imaf by FUNCT_1:def 12,AB,BB;
+      end;
+     for x,y being Element of X' st x\y in imaf & y in imaf holds x in imaf
+     proof
+      let x,y be Element of X';
+      assume B3:x\y in imaf& y in imaf;
+      then consider y' being set such that
+      B5:y' in dom f & y' in I & y = f.y' by FUNCT_1:def 12;
+      consider z being set such that
+      B7:z in dom f & z in I & x\y = f.z by B3,FUNCT_1:def 12;
+      reconsider y',z as Element of X by B5,B7;
+      consider yy being Element of X such that
+      B10:f.yy=x by Lm1653,AA;
+      set u=yy\((yy\y')\z);
+      (yy\y'\((yy\y')\z))\z =0.X by BCIALG_1:1;
+      then (u\y')\z = 0.X by BCIALG_1:7;
+      then (u\y')\z in I by BCIALG_1:def 18;
+      then u\y' in I by BCIALG_1:def 18,B7;
+      then B13:u in I &u in the carrier of X by BCIALG_1:def 18,B5;
+      then u in dom f by FUNCT_2:def 1;
+      then [u,f.u] in f by FUNCT_1:8;
+      then f.(yy\((yy\y')\z))in f.:I by B13,RELAT_1:def 13;
+      then f.yy\f.((yy\y')\z) in f.:I by Def0;
+      then f.yy\(f.(yy\y')\f.z) in f.:I by Def0;
+      then f.yy\(x\y\(x\y))in f.:I by B5,B7,B10,Def0;
+      then f.yy\0.X' in f.:I by BCIALG_1:def 5;
+      hence thesis by B10,BCIALG_1:2;
+     end;
+    hence thesis by BC,BCIALG_1:def 18;
+end;
+
+theorem
+  f is onto implies f.:CI is closed Ideal of X'
+proof
+  assume f is onto;
+  then reconsider Kf = f.:CI as Ideal of X' by PR1651;
+   now let x' be Element of Kf;
+       consider x being set such that
+      B5:x in dom f & x in CI & x' = f.x by FUNCT_1:def 12;
+      reconsider x as Element of CI by B5;
+      B7: x` in CI by BCIALG_1:def 19;
+       x` in the carrier of X;
+      then x` in dom f by FUNCT_2:def 1;
+      then [x`,f.(x`)] in f by FUNCT_1:8;
+      then f.(x`)in f.:CI by B7,RELAT_1:def 13;
+      then f.(0.X)\f.x in f.:CI by Def0;
+   hence x'` in Kf by B5,PR1621;
+   end;
+   hence thesis by BCIALG_1:def 19;
+end;
+
+definition let X,X' be BCI-algebra;
+  pred X,X' are_isomorphic means
+   :Def4: ex f being BCI-homomorphism of X,X' st f is bijective;
+end;
+
+registration let X;let I be Ideal of X,RI be I-congruence of X,I;
+  cluster X./.RI -> strict being_B being_C being_I being_BCI-4;
+  coherence;
+end;
+
+definition let X; let I be Ideal of X,RI be I-congruence of X,I;
+  func nat_hom RI -> BCI-homomorphism of X, X./.RI means
+  :Def5: for x holds it.x = Class(RI,x);
+ existence
+  proof
+    defpred P[Element of X,set] means $2 = Class(RI,$1);
+  A1: for x being Element of X
+   ex y being Element of X./.RI st P[x,y]
+   proof
+    let x be Element of X;
+     reconsider y = Class(RI,x) as Element of X./.RI by EQREL_1:def 5;
+    take y;
+    thus thesis;
+   end;
+  consider f being Function of X,X./.RI such that
+  A3: for x being Element of X holds P[x,f.x] from FUNCT_2:sch 3(A1);
+      now let a,b be Element of X;
+       A5:f.a = Class(RI,a) & f.b = Class(RI,b)by A3;
+       reconsider E=RI as Congruence of X;
+       reconsider w1=Class(E,a),w2=Class(E,b)as Element of X./.RI
+                                               by EQREL_1:def 5;
+        f.a \ f.b=Class(RI,a\b) by BCIALG_2:def 17,A5;
+       hence f.a\f.b=f.(a\b) by A3;
+     end;
+     then reconsider f as BCI-homomorphism of X,X./.RI by Def0;
+  take f;
+  thus thesis by A3;
+  end;
+  uniqueness
+  proof
+    let f,g be BCI-homomorphism of X,X./.RI;
+  assume that
+  A5: for x be Element of X holds f.x = Class(RI,x) and
+  A7: for x be Element of X holds g.x = Class(RI,x);
+    now let x be Element of X;
+      f.x = Class(RI,x) & g.x = Class(RI,x) by A7,A5;
+      hence f.x = g.x;
+    end;
+    hence thesis by FUNCT_2:113;
+  end;
+end;
+
+begin ::Fundamental Theorem of Homomorphisms
+
+::::::::::::::::::::::::::::::::::::::::
+::Fundamental Theorem of Homomorphisms::
+::::::::::::::::::::::::::::::::::::::::
+::                f                  :::
+::          X--------->X'            :::
+::          |        /               :::
+::         g|       / h              :::
+::          |      /                 :::
+::          |     /                  :::
+::          |    /                   :::
+::          V   /                    :::
+::         X/Ker(f)                  :::
+::::::::::::::::::::::::::::::::::::::::
+theorem
+  nat_hom RI is onto
+proof
+   set f = nat_hom RI;
+   set Y = X./.RI;
+   reconsider Y as BCI-algebra;
+   reconsider f as BCI-homomorphism of X,Y;
+   for y being set st y in the carrier of Y
+        ex x being set st x in the carrier of X & y = f.x
+   proof
+   let y be set;
+   assume A1:y in the carrier of Y;
+   then reconsider y as Element of Y;
+   consider x being set such that
+   A3:x in the carrier of X & y = Class(RI,x)by EQREL_1:def 5,A1;
+   take x;
+   reconsider x as Element of X by A3;
+   thus thesis by A3,Def5;
+   end;
+  then rng f = the carrier of Y by FUNCT_2:16;
+   hence thesis by FUNCT_2:def 3;
+end;
+
+theorem Lm1662:
+  I=Ker f implies (ex h being BCI-homomorphism of X./.RI,X' st
+                  (f = h*nat_hom(RI) & h is one-to-one))
+proof
+  assume AA:I = Ker f;
+  set J = X./.RI;
+    defpred P[set,set] means for a being Element of X st $1=Class(RI,a)
+       holds $2 = f.a;
+  A1: for x being Element of J ex y being Element of X' st P[x,y]
+   proof
+    let x be Element of J;
+    x in Class(RI);
+    then consider y being set such that
+    B3:y in the carrier of X & x = Class(RI,y) by EQREL_1:def 5;
+    reconsider y as Element of X by B3;
+    reconsider t=f.y as Element of X';
+    take t;
+    let a be Element of X;
+    assume x = Class(RI,a);
+    then y in Class(RI,a) by EQREL_1:31,B3;
+    then [a,y] in RI by EQREL_1:26;
+    then B4:a\y in Ker f & y\a in Ker f by BCIALG_2:def 12,AA;
+    then consider x1 being Element of X such that
+    B5:a\y=x1&f.x1=0.X';
+     consider x2 being Element of X such that
+    B7:y\a=x2&f.x2=0.X' by B4;
+      f.a\f.y=0.X' & f.y\f.a=0.X' by Def0,B5,B7;
+    hence thesis by BCIALG_1:def 7;
+   end;
+  consider h being Function of J,X' such that
+  A9: for x being Element of J holds P[x,h.x] from FUNCT_2:sch 3(A1);
+      now let a,b be Element of J;
+      A11:a in Class(RI) & b in Class(RI);
+          then consider a1 being set such that
+      A13:a1 in the carrier of X & a = Class(RI,a1) by EQREL_1:def 5;
+          consider b1 being set such that
+      A15:b1 in the carrier of X & b = Class(RI,b1) by EQREL_1:def 5,A11;
+      reconsider a1,b1 as Element of X by A13,A15;
+           h.a = f.a1 & h.b = f.b1 by A9,A13,A15;
+      then A19:h.a\h.b =f.(a1\b1) by Def0;
+      a\b=Class(RI,a1\b1) by A13,A15,BCIALG_2:def 17;
+     hence h.a\h.b=h.(a\b) by A19,A9;
+     end;
+     then reconsider h as BCI-homomorphism of X./.RI,X' by Def0;
+     X1:h is one-to-one
+      proof
+       let y1,y2 be set;
+      assume DD:y1 in dom h & y2 in dom h & h.y1 = h.y2;
+      then reconsider S=y1,T=y2 as Element of J;
+      A21:S in Class(RI) & T in Class(RI);
+      consider a1 being set such that
+      A23:a1 in the carrier of X & S = Class(RI,a1) by EQREL_1:def 5,A21;
+          consider b1 being set such that
+      A25:b1 in the carrier of X & T = Class(RI,b1) by EQREL_1:def 5,A21;
+          reconsider a1,b1 as Element of X by A23,A25;
+              h.S = f.a1 & h.T = f.b1 by A9,A23,A25;
+         then f.a1\f.b1=0.X'&f.b1\f.a1=0.X' by BCIALG_1:def 5,DD;
+         then f.(a1\b1)=0.X'&f.(b1\a1)=0.X' by Def0;
+         then a1\b1 in Ker f & b1\a1 in Ker f;
+         then [a1,b1] in RI by BCIALG_2:def 12,AA;
+         then b1 in Class(RI,a1) by EQREL_1:26;
+         hence thesis by A23,A25,EQREL_1:31;
+      end;
+      take h;
+      f = h*nat_hom(RI)
+      proof
+     A31: dom(nat_hom(RI)) = the carrier of X
+         &dom f = the carrier of X by FUNCT_2:def 1;
+     A33: now let x be set;
+     thus x in dom f implies x in dom nat_hom RI & (nat_hom RI).x in dom h
+        proof
+         assume A35: x in dom f;
+         hence x in dom nat_hom RI by A31;
+        (nat_hom RI).x in rng nat_hom RI &dom h = the carrier of X./.RI
+           &dom f = the carrier of X by A31,A35,FUNCT_1:def 5,FUNCT_2:def 1;
+         hence (nat_hom RI).x in dom h;
+        end;
+      assume x in dom nat_hom RI & (nat_hom RI).x in dom h;
+      hence x in dom f by A31;
+     end;
+     now let x be set;
+      assume x in dom f;
+      then reconsider a = x as Element of X;
+      (nat_hom RI).a = Class(RI,a) by Def5;
+      hence f.x = h.((nat_hom RI).x) by A9;
+     end;
+   hence thesis by A33,FUNCT_1:20;
+  end;
+hence thesis by X1;
+end;
+
+theorem
+   for X,X',I,RI,f st
+   I=Ker f holds (ex h being BCI-homomorphism of X./.RI,X' st
+   (f=h*nat_hom(RI) & h is one-to-one)) by Lm1662;
+
+theorem
+   Ker(nat_hom RK) = K
+proof
+   set h=nat_hom RK;
+   set Y = X./.RK;
+  thus Ker h c= K
+proof
+  let y be set;
+  assume y in Ker h;
+  then consider x being Element of X such that
+  D1:y=x & h.x = 0.Y;
+  Class(RK,0.X)=Class(RK,x) by Def5,D1;
+  then x in Class(RK,0.X) by EQREL_1:31;
+  then [0.X,x] in RK by EQREL_1:26;
+  then x\0.X in K by BCIALG_2:def 12;
+  hence y in K by D1,BCIALG_1:2;
+end;
+  let y be set;
+  assume D1:y in K;
+  then reconsider x=y as Element of X;
+ D3:x\0.X in K by BCIALG_1:2,D1;
+  x` in K by BCIALG_1:def 19,D1;
+  then [0.X,x] in RK by BCIALG_2:def 12,D3;
+  then x in Class(RK,0.X) by EQREL_1:26;
+  then Class(RK,0.X)=Class(RK,x) by EQREL_1:31;
+  then h.x =0.Y by Def5;
+  hence y in Ker h;
+end;
+
+Lmco1671:
+  the carrier of H' = rng f implies f is BCI-homomorphism of X,H'
+proof
+  assume A1:the carrier of H' = rng f;
+  f is Function of X,H'
+    proof
+    the carrier of X=dom f by FUNCT_2:def 1;
+    hence thesis by FUNCT_2:def 1,RELSET_1:11,A1;
+    end;
+   then reconsider h=f as Function of X,H';
+   now let a,b be Element of X;
+    h.a\h.b=f.a\f.b by Lmth14;
+   hence h.(a\b) = h.a\h.b by Def0;
+   end;
+  hence thesis by Def0;
+end;
+
+begin :: First Isomorphism Theorem
+
+theorem
+   I = Ker f & the carrier of H' = rng f implies X./.RI,H' are_isomorphic
+proof
+   assume AA:I = Ker f & the carrier of H' = rng f;
+   set J = X./.RI;
+    defpred P[set,set] means for a being Element of X st $1=Class(RI,a)
+       holds $2 = f.a;
+  A1: for x being Element of J ex y being Element of H' st P[x,y]
+   proof
+    let x be Element of J;
+         x in Class(RI);
+    then consider y being set such that
+    B3:y in the carrier of X & x = Class(RI,y) by EQREL_1:def 5;
+    reconsider y as Element of X by B3;
+         dom f = the carrier of X by FUNCT_2:def 1;
+    then reconsider t=f.y as Element of H' by AA, FUNCT_1:def 5;
+    take t;
+    let a be Element of X;
+    assume x = Class(RI,a);
+    then y in Class(RI,a) by EQREL_1:31,B3;
+    then [a,y] in RI by EQREL_1:26;
+    then B4:a\y in Ker f & y\a in Ker f by BCIALG_2:def 12,AA;
+    then consider x1 being Element of X such that
+    B5:a\y=x1&f.x1=0.X';
+     consider x2 being Element of X such that
+    B7:y\a=x2&f.x2=0.X' by B4;
+     f.a\f.y=0.X' & f.y\f.a=0.X' by Def0,B5,B7;
+    hence thesis by BCIALG_1:def 7;
+   end;
+  consider h being Function of J,H' such that
+  A9: for x being Element of J holds P[x,h.x] from FUNCT_2:sch 3(A1);
+      now let a,b be Element of J;
+      A11:a in Class(RI) & b in Class(RI);
+          then consider a1 being set such that
+      A13:a1 in the carrier of X & a = Class(RI,a1) by EQREL_1:def 5;
+          consider b1 being set such that
+      A15:b1 in the carrier of X & b = Class(RI,b1) by EQREL_1:def 5,A11;
+      reconsider a1,b1 as Element of X by A13,A15;
+      reconsider f as BCI-homomorphism of X,H' by AA,Lmco1671;
+           h.a = f.a1 & h.b = f.b1 by A9,A13,A15;
+      then A19: h.a \ h.b =f.(a1\b1) by Def0;
+           a\b=Class(RI,a1\b1) by A13,A15,BCIALG_2:def 17;
+     hence h.a\h.b=h.(a\b) by A19,A9;
+     end;
+     then reconsider h as BCI-homomorphism of X./.RI,H' by Def0;
+X1:   h is one-to-one
+      proof
+      let y1,y2 be set;
+      assume DD:y1 in dom h & y2 in dom h & h.y1 = h.y2;
+      then reconsider y1,y2 as Element of J;
+      A21:y1 in Class(RI) & y2 in Class(RI);
+          then consider a1 being set such that
+      A23:a1 in the carrier of X & y1 = Class(RI,a1) by EQREL_1:def 5;
+          consider b1 being set such that
+      A25:b1 in the carrier of X & y2 = Class(RI,b1) by EQREL_1:def 5,A21;
+          reconsider a1,b1 as Element of X by A23,A25;
+         h.y1 = f.a1 & h.y2 = f.b1 by A9,A23,A25;
+         then f.a1\f.b1=0.X'&f.b1\f.a1=0.X' by BCIALG_1:def 5,DD;
+         then f.(a1\b1)=0.X'&f.(b1\a1)=0.X' by Def0;
+         then a1\b1 in Ker f & b1\a1 in Ker f;
+         then [a1,b1] in RI by BCIALG_2:def 12,AA;
+         then b1 in Class(RI,a1) by EQREL_1:26;
+         hence thesis by A23,A25,EQREL_1:31;
+      end;
+      X3:the carrier of H' c= rng h
+      proof
+        let y be set;
+        assume y in the carrier of H';
+        then consider x being set such that
+        B3:x in dom f & y=f.x by FUNCT_1:def 5,AA;
+        reconsider S=Class(RI,x) as Element of J by EQREL_1:def 5,B3;
+        h.S = f.x & S in the carrier of J & the carrier of J = dom h
+          by A9,B3,FUNCT_2:def 1;
+        hence y in rng h by B3,FUNCT_1:def 5;
+      end;
+       rng h = the carrier of H' by XBOOLE_0:def 10,X3;
+   then h is onto by FUNCT_2:def 3;
+   hence thesis by Def4,X1;
+end;
+
+theorem CO1672:
+   I = Ker f & f is onto implies X./.RI,X' are_isomorphic
+proof
+   assume A1:I = Ker f & f is onto;
+   then consider h being BCI-homomorphism of X./.RI,X' such that
+   A3:f=h*nat_hom(RI) & h is one-to-one by Lm1662;
+for y being set st y in the carrier of X' holds ex z being set st
+    z in the carrier of X./.RI&h.z = y
+ proof let y be set;
+     assume y in the carrier of X';
+     then y in rng f by FUNCT_2:def 3,A1;
+     then consider x being set such that
+     B3:x in dom f & y=f.x by FUNCT_1:def 5;
+     take z = (nat_hom RI).x;
+     dom(nat_hom(RI)) = the carrier of X
+        & dom f=the carrier of X by FUNCT_2:def 1;
+ then dom(nat_hom(RI)) = the carrier of X
+         & dom f=the carrier of X
+         &(nat_hom RI).x in rng nat_hom RI &dom h = the carrier of X./.RI
+         & dom f = the carrier of X by FUNCT_1:def 5,FUNCT_2:def 1,B3;
+   hence thesis by FUNCT_1:23,B3,A3;
+   end;
+   then rng h = the carrier of X' by FUNCT_2:16;
+   then h is onto by FUNCT_2:def 3;
+   hence thesis by Def4,A3;
+ end;
+
+begin :: Second Isomorphism Theorem
+
+definition let X,G,K,RK;
+  func Union(G,RK) -> non empty Subset of X equals
+     union{Class(RK,a)
+         where a is Element of G:Class(RK,a) in the carrier of X./.RK};
+correctness
+proof
+  set Z1 =union{Class(RK,a)
+         where a is Element of G:Class(RK,a) in the carrier of X./.RK};
+  set Z2={Class(RK,a)
+         where a is Element of G:Class(RK,a) in the carrier of X./.RK};
+  [0.X,0.X] in RK by EQREL_1:11;
+   then B5:0.X in Class(RK,0.X) by EQREL_1:26;
+   0.X = 0.G by BCIALG_1:def 10;
+   then a1: Class(RK,0.X) in Z2;
+  now
+  let x be set;
+  assume x in Z1;
+  then consider g being set such that
+  A1:x in g & g in Z2 by TARSKI:def 4;
+    consider a being Element of G such that
+  A3:g=Class(RK,a)&Class(RK,a) in the carrier of X./.RK by A1;
+  thus x in the carrier of X by A1,A3;
+  end;
+  hence thesis by TARSKI:def 3,a1,TARSKI:def 4,B5;
+end;
+end;
+
+::P72
+Lm168:for w being Element of Union(G,RK) holds ex a being
+      Element of G st w in Class(RK,a)
+proof
+  defpred P[Element of Union(G,RK),Element of Union(G,RK),set] means
+            $3 = $1\$2;
+  set Z1 =union{Class(RK,a)
+         where a is Element of G:Class(RK,a) in the carrier of X./.RK};
+  set Z2={Class(RK,a)
+         where a is Element of G:Class(RK,a) in the carrier of X./.RK};
+  let w be Element of Union(G,RK);
+          consider g being set such that
+      B1:w in g & g in Z2 by TARSKI:def 4;
+        consider a being Element of G such that
+      B3:g=Class(RK,a)&Class(RK,a) in the carrier of X./.RK by B1;
+      take a;
+      thus thesis by B1,B3;
+end;
+
+definition let X,G,K,RK;
+ func HKOp(G,RK) -> BinOp of Union(G,RK) means
+ :Def6:for w1,w2 being Element of Union(G,RK)
+         for x,y being Element of X st w1=x&w2=y holds it.(w1,w2)=x\y;
+ existence
+ proof
+ defpred P[Element of Union(G,RK),Element of Union(G,RK),set] means
+     for x,y st $1 =x & $2 = y holds $3 = x\y;
+    A1: for w1,w2 being Element of Union(G,RK)
+         ex v being Element of Union(G,RK) st P[w1,w2,v]
+     proof
+      let w1,w2 be Element of Union(G,RK);
+       consider a being Element of G such that
+      B2:w1 in Class(RK,a) by Lm168;
+      B4:[a,w1] in RK by EQREL_1:26,B2;
+      consider b being Element of G such that
+      B6:w2 in Class(RK,b) by Lm168;
+      B9:[b,w2] in RK by EQREL_1:26,B6;
+  the carrier of G c= the carrier of X by BCIALG_1:def 10;
+  then reconsider a1=a,b1=b as Element of X by TARSKI:def 3;
+  reconsider w1,w2 as Element of X;
+     [a1\b1,w1\w2] in RK by BCIALG_2:def 9,B4,B9;
+     then w1\w2 in Class(RK,a1\b1) by EQREL_1:26;
+     then B11:w1\w2 in Class(RK,a\b) by Lmth14;
+     Class(RK,a1\b1) in the carrier of X./.RK by EQREL_1:def 5;
+     then Class(RK,a\b) in the carrier of X./.RK by Lmth14;
+     then Class(RK,a\b) in {Class(RK,c) where c is Element of G:
+     Class(RK,c) in the carrier of X./.RK};
+     then reconsider C = w1\w2 as Element of Union(G,RK) by TARSKI:def 4,B11;
+     take C;
+     thus thesis;
+    end;
+thus ex B being BinOp of Union(G,RK) st for w1,w2 being Element of
+Union(G,RK) holds P[w1,w2,B.(w1,w2)] from BINOP_1:sch 3(A1);
+ end;
+ uniqueness
+ proof
+    let o1,o2 be BinOp of Union(G,RK);
+   assume A4:for w1,w2 being Element of Union(G,RK)
+      for x,y being Element of X st w1=x&w2=y holds o1.(w1,w2)=x\y;
+   assume A5:for w1,w2 being Element of Union(G,RK)
+         for x,y being Element of X st w1=x&w2=y holds o2.(w1,w2)=x\y;
+    now let w1,w2 be Element of Union(G,RK);
+      o1.(w1,w2)=w1\w2 by A4;
+      hence o1.(w1,w2)=o2.(w1,w2) by A5;
+    end;
+   hence thesis by BINOP_1:2;
+ end;
+end;
+
+definition let X,G,K,RK;
+  func zeroHK(G,RK) -> Element of Union(G,RK) equals
+    0.X;
+  coherence
+  proof
+  A1:0.G = 0.X by BCIALG_1:def 10;
+  then A3:0.G in Class(RK,0.G) by EQREL_1:28;
+  Class(RK,0.G) in {Class(RK,c) where c is Element of G:
+  Class(RK,c) in the carrier of X./.RK}by A1;
+  hence thesis by A1,TARSKI:def 4,A3;
+  end;
+end;
+
+definition let X,G,K,RK;
+  func HK(G,RK) -> BCIStr_0 equals
+    BCIStr_0(#Union(G,RK),HKOp(G,RK),zeroHK(G,RK) #);
+  coherence;
+end;
+
+registration let X,G,K,RK;
+  cluster HK(G,RK) -> non empty;
+  coherence;
+end;
+
+definition let X,G,K,RK; let w1,w2 be Element of Union(G,RK);
+  func w1\w2 -> Element of Union(G,RK) equals
+    HKOp(G,RK).(w1,w2);
+  coherence;
+end;
+
+theorem Thz1:
+  HK(G,RK) is BCI-algebra
+proof
+   reconsider IT = HK(G,RK) as non empty BCIStr_0;
+   C1: IT is_B
+   proof
+   now let x,y,z be Element of IT;
+    reconsider x1=x,y1=y,z1=z as Element of Union(G,RK);
+    reconsider x2=x1,y2=y1,z2=z1 as Element of X;
+     AA:x2\y2 = x1\y1&z2\y2=z1\y1&x2\z2=x1\z1 by Def6;
+    then (x2\y2)\(z2\y2) = x1\y1\(z1\y1) by Def6;
+    then ((x2\y2)\(z2\y2))\(x2\z2)=((x1\y1)\(z1\y1))\(x1\z1)by AA,Def6;
+   hence ((x\y)\(z\y))\(x\z)=0.IT by BCIALG_1:def 3;
+   end;
+   hence thesis by BCIALG_1:def 3;
+   end;
+   C3:IT is_C
+   proof
+    let x,y,z be Element of IT;
+    reconsider x1=x,y1=y,z1=z as Element of Union(G,RK);
+    reconsider x2=x1,y2=y1,z2=z1 as Element of X;
+     x2\y2 = x1\y1&x2\z2=x1\z1 by Def6;
+    then (x2\y2)\z2 = (x1\y1)\z1&(x2\z2)\y2=(x1\z1)\y1 by Def6;
+    then ((x2\y2)\z2)\((x2\z2)\y2)=((x1\y1)\z1)\((x1\z1)\y1) by Def6;
+   hence ((x\y)\z)\((x\z)\y)=0.IT by BCIALG_1:def 4;
+   end;
+   C5:IT is_I
+   proof
+    let x be Element of IT;
+    reconsider x1=x  as Element of Union(G,RK);
+    reconsider x2=x1 as Element of X;
+         x2\x2=x1\x1 by Def6;
+    hence x\x = 0.IT by BCIALG_1:def 5;
+   end;
+   IT is_BCI-4
+   proof
+   let x,y be Element of IT;
+   assume D1:x\y=0.IT&y\x=0.IT;
+    reconsider x1=x,y1=y  as Element of Union(G,RK);
+    reconsider x2=x1,y2=y1 as Element of X;
+     x2\y2 = 0.X & y2\x2 = 0.X by D1,Def6;
+    hence x=y by BCIALG_1:def 7;
+   end;
+hence thesis by C1,C3,C5;
+end;
+
+registration let X,G,K,RK;
+  cluster HK(G,RK) -> strict being_B being_C being_I being_BCI-4;
+  coherence by Thz1;
+end;
+
+theorem Thxm1:
+  HK(G,RK) is SubAlgebra of X
+proof
+set IT = HK(G,RK);
+C1:0.IT = 0.X;
+set V1=the carrier of IT;
+reconsider D = V1 as non empty set;
+set A = (the InternalDiff of X)||V1;
+set B = the InternalDiff of IT;
+set VV = the carrier of X;
+    dom(the InternalDiff of X) = [:VV,VV:] by FUNCT_2:def 1;
+then dom A = [:VV,VV:] /\ [:V1,V1:] & [:V1,V1:] c= [:VV,VV:]
+      by RELAT_1:90,ZFMISC_1:119;
+then A3:dom A = [:D,D:] by XBOOLE_1:28;
+rng A = D
+proof
+ for y being set holds y in D iff ex z being set st z in dom A & y = A.z
+ proof let y be set;
+ E1:y in D implies ex z being set st z in dom A & y = A.z
+ proof
+  assume F1:y in D;
+  then reconsider y1=y,y2=0.IT as Element of X;
+  F3:[y,0.IT] in [:D,D:] & [y,0.IT] in [:VV,VV:] by F1,ZFMISC_1:106;
+  then A.[y,0.IT] = y1\y2 by FUNCT_1:72
+                 .= y by BCIALG_1:2;
+  hence thesis by A3,F3;
+ end;
+ now given z being set such that
+ F5:z in dom A & y = A.z;
+    consider x1,x2 being set such that
+F7:x1 in D & x2 in D and
+F9:z = [x1,x2] by A3,F5,ZFMISC_1:def 2;
+reconsider x1,x2 as Element of Union(G,RK) by F7;
+reconsider v1 = x1, v2 = x2 as Element of VV;
+y = v1\v2 by F5,F9,FUNCT_1:70;
+then y = x1\x2 by Def6;
+ hence y in D;
+ end;
+ hence thesis by E1;
+ end;
+ hence thesis by FUNCT_1:def 5;
+end;
+then reconsider A as BinOp of V1 by A3,FUNCT_2:def 1,RELSET_1:11;
+now let x,y be Element of V1;
+    G1: x in V1 & y in V1;
+then G3:[x,y] in [:V1,V1:]&[x,y] in [:VV,VV:] by ZFMISC_1:def 2;
+reconsider xx=x,yy=y as Element of Union(G,RK);
+reconsider vx=x,vy=y as Element of VV by G1;
+   A.(x,y)=vx\vy by G3,FUNCT_1:72;
+hence A.(x,y)=B.(x,y) by Def6;
+end;
+then A=B by BINOP_1:2;
+hence thesis by BCIALG_1:def 10,C1;
+end;
+
+theorem
+  (the carrier of G)/\K is closed Ideal of G
+proof
+set GK = (the carrier of G)/\K;
+A1:0.G = 0.X by BCIALG_1:def 10; then
+c1:0.G in K by BCIALG_1:def 18; then
+C1:0.G in GK by XBOOLE_0:def 3;
+ for x being set st x in GK holds x in the carrier of G by XBOOLE_0:def 3;
+ then C2:GK is non empty Subset of G by TARSKI:def 3,c1,XBOOLE_0:def 3;
+  for x,y being Element of G st x\y in GK & y in GK holds x in GK
+  proof
+   let x,y be Element of G;
+   assume x\y in GK & y in GK;
+   then D3:x\y in K & y in K by XBOOLE_0:def 3;
+   the carrier of G c= the carrier of X by BCIALG_1:def 10;
+   then reconsider x1=x,y1=y as Element of X by TARSKI:def 3;
+    x1\y1 in K & y1 in K by Lmth14,D3;
+   then x in K by BCIALG_1:def 18;
+   hence x in GK by XBOOLE_0:def 3;
+  end;
+then reconsider GK as Ideal of G by C1,BCIALG_1:def 18,C2;
+  for x being Element of GK holds x` in GK
+  proof
+  let x be Element of GK;
+  D1:x in the carrier of G & x in K by XBOOLE_0:def 3;
+  then reconsider y=x as Element of X;
+  y` in K by BCIALG_1:def 19,D1;
+  then x` in K by Lmth14,A1;
+  hence thesis by XBOOLE_0:def 3;
+  end;
+  hence thesis by BCIALG_1:def 19;
+end;
+
+theorem
+  for K1 being Ideal of HK(G,RK),RK1 being I-congruence of HK(G,RK),K1,
+  I being Ideal of G,RI being I-congruence of G,I st
+  K1=K & RK1=RK & I=(the carrier of G)/\K holds
+  G./.RI,HK(G,RK)./.RK1 are_isomorphic
+proof
+  let K1 be Ideal of HK(G,RK),RK1 be I-congruence of HK(G,RK),K1,
+  I be Ideal of G,RI be I-congruence of G,I;
+  assume
+A1:K1=K & RK1=RK & I=(the carrier of G)/\K;
+A3:the carrier of G c= the carrier of HK(G,RK)
+proof
+ let xx be set;
+ assume xx in the carrier of G;
+ then reconsider x=xx as Element of G;
+ the carrier of G c= the carrier of X by BCIALG_1:def 10;
+ then H2:x in the carrier of X by TARSKI:def 3;
+ then [x,x] in RK by EQREL_1:11;
+ then H3:x in Class(RK,x) by EQREL_1:26;
+ Class(RK,x) in the carrier of X./.RK by EQREL_1:def 5,H2;
+ then Class(RK,x) in {Class(RK,a)
+   where a is Element of G:Class(RK,a) in the carrier of X./.RK};
+ hence xx in the carrier of HK(G,RK)by TARSKI:def 4,H3;
+end;
+defpred P[Element of G,set] means $2 = Class(RK1,$1);
+A5: for x being Element of G
+         ex y being Element of HK(G,RK)./.RK1 st P[x,y]
+proof let x be Element of G;
+set y=Class(RK1,x);
+  x in the carrier of G; then
+  reconsider y as Element of HK(G,RK)./.RK1 by EQREL_1:def 5,A3;
+take y;
+thus thesis;
+end;
+consider f being Function of G, HK(G,RK)./.RK1 such that
+A7: for x being Element of G holds P[x,f.x]from FUNCT_2:sch 3(A5);
+now let a,b be Element of G;
+   a in the carrier of G& b in the carrier of G;
+then reconsider Wa=Class(RK1,a),Wb=Class(RK1,b)as Element of Class RK1
+by EQREL_1:def 5,A3;
+   a in the carrier of G& b in the carrier of G;
+then reconsider a1=a,b1=b as Element of HK(G,RK) by A3;
+   Wa=f.a&Wb=f.b by A7;
+then B9:f.a\f.b=Class(RK1,a1\b1) by BCIALG_2:def 17;
+the carrier of G c= the carrier of X by BCIALG_1:def 10;
+then reconsider xa=a,xb=b as Element of X by TARSKI:def 3;
+ CC: HK(G,RK) is SubAlgebra of X by Thxm1;
+    xa\xb=a1\b1 by Lmth14,CC;
+then f.a\f.b=Class(RK1,a\b) by B9,Lmth14;
+hence f.(a\b)=f.a\f.b by A7;
+end;
+then reconsider f as BCI-homomorphism of G, HK(G,RK)./.RK1 by Def0;
+CC1:f is onto
+proof
+ now let y be set;
+ y in the carrier of HK(G,RK)./.RK1 implies y in rng f
+ proof
+ assume y in the carrier of HK(G,RK)./.RK1;
+ then consider x being set such that
+ D3:x in the carrier of HK(G,RK) & y=Class(RK1,x) by EQREL_1:def 5;
+    consider a being Element of G such that
+ D5:x in Class(RK,a) by Lm168,D3;
+   a in the carrier of G &
+     the carrier of G c= the carrier of X by BCIALG_1:def 10;
+then y = Class(RK1,a) by D3,A1,D5,EQREL_1:31;
+ then D9:y=f.a by A7;
+      a in the carrier of G &dom f = the carrier of G by FUNCT_2:def 1;
+ hence y in rng f by D9,FUNCT_1:def 5;
+ end;
+ hence y in rng f iff y in the carrier of HK(G,RK)./.RK1;
+ end;
+ then rng f = the carrier of HK(G,RK)./.RK1 by TARSKI:2;
+ hence thesis by FUNCT_2:def 3;
+end;
+Ker f = I
+proof
+set X' = HK(G,RK)./.RK1;
+ thus Ker f c= I
+ proof let h be set;
+ assume h in Ker f;
+ then consider x being Element of G such that
+ D1:h=x & f.x = 0.X';
+ x in the carrier of G &
+   the carrier of G c= the carrier of X by BCIALG_1:def 10;
+ then reconsider x as Element of X;
+   Class(RK,x)= Class(RK,0.X)by A1,D1,A7;
+ then 0.X in Class(RK,x) by EQREL_1:31;
+ then [x,0.X] in RK by EQREL_1:26;
+ then x\0.X in K & 0.X in K by BCIALG_2:def 12,BCIALG_1:def 18;
+ then x in K by BCIALG_1:def 18;
+ hence h in I by D1,A1,XBOOLE_0:def 3;
+ end;
+ let h be set;
+ assume D0:h in I;
+ then reconsider x=h as Element of X by A1;
+ D1:h in the carrier of G & h in K by A1,XBOOLE_0:def 3,D0;
+ D3:x\0.X in K by BCIALG_1:2,D1;
+ x` in K by BCIALG_1:def 19,D1;
+ then [x,0.X] in RK by D3,BCIALG_2:def 12;
+ then 0.X in Class(RK,x) by EQREL_1:26;
+ then Class(RK1,h)= Class(RK1,0.X)by A1,EQREL_1:31;
+ then f.h = 0.X' by A7,D0;
+ hence h in Ker f by D0;
+end;
+hence thesis by CO1672,CC1;
+end;

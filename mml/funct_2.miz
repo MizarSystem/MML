@@ -7,12 +7,12 @@
 environ
 
  vocabularies RELAT_1, BOOLE, FUNCT_1, PARTFUN1, FUNCT_2, SGRAPH1, RELAT_2,
-      FUNCT_3, MCART_1, SUBSET_1, COMPLEX1, FINSEQ_4, SETFAM_1, TARSKI;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1,
-      RELAT_1, RELAT_2, FUNCT_1,
-      RELSET_1, PARTFUN1, MCART_1;
+      FUNCT_3, MCART_1, SUBSET_1, COMPLEX1, FINSEQ_4, SETFAM_1, TARSKI,
+      OPPCAT_1, NORMSP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MCART_1,
+      RELAT_1, RELAT_2, FUNCT_1, RELSET_1, PARTFUN1;
  constructors RELAT_2, PARTFUN1, MCART_1, SETFAM_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, RELSET_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0, PARTFUN1, FUNCT_1, SUBSET_1;
  theorems TARSKI, RELAT_1, FUNCT_1, ZFMISC_1, PARTFUN1, GRFUNC_1, RELSET_1,
@@ -23,9 +23,7 @@ begin
 
 reserve P,Q,X,Y,Z,p,x,x',x1,x2,y,z for set;
 
-::::::::::::::::::::::::::::::::::::
 :: function from a set into a set ::
-::::::::::::::::::::::::::::::::::::
 
 definition
   let X,Y;
@@ -73,7 +71,7 @@ A1: dom f = X;
       thus X = dom f by A1;
     end;
     case Y = {} & X <> {};
-      hence f = {} by PARTFUN1:64;
+      hence f = {};
     end;
   end;
 end;
@@ -106,8 +104,7 @@ theorem Th4:
   for f being Function st rng f c= Y holds f is Function of dom f, Y
 proof
   let f be Function;
-  assume
-A1: rng f c= Y;
+  assume rng f c= Y;
   then reconsider R = f as Relation of dom f,Y by RELSET_1:10;
   R is quasi_total
   proof
@@ -115,9 +112,7 @@ A1: rng f c= Y;
     case Y = {} implies dom f = {};
       thus thesis;
     end;
-    case
-   Y = {} & dom f <> {};
-      then rng f = {} by A1;
+    case Y = {} & dom f <> {};
       hence thesis;
     end;
   end;
@@ -151,7 +146,7 @@ A3:   Y = {} and
 A4:   dom f <> {};
       consider x being Element of dom f;
       x in dom f by A4;
-      hence thesis by A1,A2,A3;
+     thus thesis by A3;
     end;
   end;
   hence thesis by A1;
@@ -209,7 +204,7 @@ A2: Y c= Z;
       thus X = dom R by A1,Def1;
     end;
     case Z = {} & X <> {};
-      hence thesis by A1,A2;
+      hence thesis;
     end;
   end;
   hence thesis;
@@ -303,9 +298,7 @@ A2: for x st x in X() ex y st y in Y() & P[x,y] by A1;
   from FuncEx1(A2);
 end;
 
-::::::::::::::::::::::::::::::::::::::::::::
 :: set of functions from a set into a set ::
-::::::::::::::::::::::::::::::::::::::::::::
 
 definition
   let X,Y;
@@ -431,7 +424,7 @@ proof
   let f1,f2 be Function of X,Y;
   per cases;
   suppose Y = {};
-    then f1 = {} & f2 = {} by RELSET_1:27;
+    then f1 = {} & f2 = {};
     hence thesis;
   end;
   suppose Y <> {};
@@ -465,7 +458,7 @@ A4:   Z = {};
   case
 A5: Z = {} & X <> {};
     Y = {} or Y <> {};
-    then f = {} or g = {} by A5,Def1;
+    f = {} or g = {} by A5;
     hence thesis;
   end;
 end;
@@ -481,7 +474,7 @@ proof
   hence thesis by RELAT_1:47;
 end;
 
-theorem
+theorem Th21:
   for f being Function of X,Y, g being Function
   st Y <> {} & x in X holds (g*f).x = g.(f.x)
 proof
@@ -755,7 +748,7 @@ A3: Z = dom(f|Z) by A2,RELAT_1:91;
       thus thesis;
     end;
     case Y = {} & Z <> {};
-      hence thesis by A1,A2;
+      hence thesis;
     end;
   end;
   hence thesis;
@@ -773,7 +766,7 @@ proof
     hence thesis by RELAT_1:97;
   end;
   suppose Y = {} & X <> {};
-    then f = {} by Def1;
+    then f = {};
     hence thesis by RELAT_1:111;
   end;
 end;
@@ -890,9 +883,7 @@ proof
   hence thesis by FUNCT_1:160;
 end;
 
-::::::::::::::::::::
 :: Empty Function ::
-::::::::::::::::::::
 
 canceled;
 
@@ -912,7 +903,7 @@ A1: dom f = {};
       thus dom f = {};
     end;
     case Y = {} & {} <> {};
-      hence thesis;
+      thus thesis;
     end;
   end;
   hence thesis;
@@ -933,9 +924,7 @@ end;
 theorem
   for f being Function of {},Y holds f"Q = {};
 
-:::::::::::::::::::::::::::::::::::::::
 :: Function from a singelton into set::
-:::::::::::::::::::::::::::::::::::::::
 
 theorem
   for f being Function of {x},Y st Y <> {} holds f.x in Y
@@ -966,9 +955,7 @@ proof
   hence thesis by Th62;
 end;
 
-::::::::::::::::::::::::::::::::::::::::::
 :: Function from a set into a singelton ::
-::::::::::::::::::::::::::::::::::::::::::
 
 theorem Th65:
   for f being Function of X,{y} st x in X holds f.x = y
@@ -991,24 +978,56 @@ proof
   hence f1 = f2 by Th18;
 end;
 
-::::::::::::::::::::::::::::
 :: Function from X into X ::
-::::::::::::::::::::::::::::
-
-registration
-  let X;
-  let f,g be quasi_total PartFunc of X,X;
-  cluster g*f -> quasi_total PartFunc of X,X;
-  coherence
-  proof X <> {} or X = {};
-    hence thesis by Th19;
-  end;
-end;
 
 theorem Th67:
   for f being Function of X,X holds dom f = X
 proof X = {} implies X = {};
   hence thesis by Def1;
+end;
+
+registration let X,Y be set;
+ let f be quasi_total PartFunc of X,Y;
+ let g be quasi_total PartFunc of X,X;
+ cluster f*g -> quasi_total PartFunc of X,Y;
+ coherence
+  proof
+   per cases;
+   suppose Y = {};
+    hence thesis;
+   end;
+   suppose
+S:   Y <> {};
+    then dom f = X by Def1;
+    then dom(f*g) = g"X by RELAT_1:182
+           .= dom g by RELSET_1:38
+           .= X by Th67;
+    then f*g is quasi_total by Def1,S;
+   hence thesis;
+   end;
+  end;
+end;
+
+registration let X,Y be set;
+ let f be quasi_total PartFunc of Y,Y;
+ let g be quasi_total PartFunc of X,Y;
+ cluster f*g -> quasi_total PartFunc of X,Y;
+ coherence
+  proof
+   per cases;
+   suppose Y = {};
+    hence thesis;
+   end;
+   suppose
+S:   Y <> {};
+    then dom f = Y by Th67;
+    then dom(f*g) = g"Y by RELAT_1:182
+           .= dom g by RELSET_1:38
+           .= X by S,Def1;
+    then f*g is quasi_total by Def1,S;
+   hence thesis;
+   end;
+  end;
 end;
 
 canceled 2;
@@ -1072,9 +1091,7 @@ canceled 2;
 theorem
   for f being Function of X,X holds f"(f.:X) = X by Th51;
 
-::::::::::::::::::::::::::
 :: Permutation of a set ::
-::::::::::::::::::::::::::
 
 definition
   let X, Y be set;
@@ -1231,9 +1248,7 @@ A1: P c= X;
   hence thesis by A1,FUNCT_1:147,XBOOLE_0:def 10;
 end;
 
-::::::::::::::::::::::::::::::::::::::::::::
 :: Function from a set into a nonempty set
-::::::::::::::::::::::::::::::::::::::::::::
 
 reserve D for non empty set;
 
@@ -1270,7 +1285,7 @@ definition
     end;
     suppose
 A1:   D is empty;
-      then dom f = {} by PARTFUN1:64,RELAT_1:60;
+      then dom f = {};
       then f.c = {} by FUNCT_1:def 4;
       hence thesis by A1,SUBSET_1:def 2;
     end;
@@ -1492,13 +1507,7 @@ end;
 
 theorem Th142:
   for f,g being Function of X,Y st (Y = {} implies X = {}) &
-  f tolerates g holds f = g
-proof
-  let f,g be Function of X,Y;
-  assume Y = {} implies X = {};
-  then f is total & g is total by Th132;
-  hence thesis by PARTFUN1:148;
-end;
+  f tolerates g holds f = g by PARTFUN1:148;
 
 theorem
   for f,g being Function of X,X st f tolerates g holds f = g by Th142;
@@ -1550,14 +1559,7 @@ canceled;
 theorem Th151:
   for f,g being PartFunc of X,Y for h being Function of X,Y
   st (Y = {} implies X = {}) & f tolerates h & g tolerates h holds
-  f tolerates g
-proof
-  let f,g be PartFunc of X,Y;
-  let h be Function of X,Y;
-  assume Y = {} implies X = {};
-  then h is total by Th132;
-  hence thesis by PARTFUN1:158;
-end;
+  f tolerates g by PARTFUN1:158;
 
 theorem
   for f,g being PartFunc of X,X for h being Function of X,X
@@ -1580,8 +1582,7 @@ proof
   then consider h being PartFunc of X,Y such that
 A1: h is total and
 A2: f tolerates h & g tolerates h by PARTFUN1:162;
-  h is Function of X,Y by A1;
-  hence thesis by A2;
+  thus thesis by A1,A2;
 end;
 
 theorem Th155:
@@ -1723,7 +1724,7 @@ proof
 A1: dom g c= dom f;
   now per cases;
     suppose Y = {} & X <> {};
-      then g = {} by PARTFUN1:64;
+      then g = {};
       hence thesis by XBOOLE_1:2;
     end;
     suppose
@@ -1761,7 +1762,7 @@ A1: TotFuncs f c= TotFuncs g and
 A2: for y holds Y <> {y};
   now per cases;
     suppose Y = {};
-      then g = {} by PARTFUN1:64;
+      then g = {};
       hence dom g c= dom f by RELAT_1:60,XBOOLE_1:2;
     end;
     suppose
@@ -2217,7 +2218,7 @@ A3: dom(f|Y) = Y by A1,RELAT_1:91;
 A4: rng(f|Y) c= Z by A2,RELAT_1:148;
   now
     assume Z = {};
-    then rng(f|Y) = {} by A4;
+    then rng(f|Y) = {} by A2,RELAT_1:148;
     hence Y = {} by A3,RELAT_1:65;
   end;
   hence f|Y is Function of Y,Z by A3,A4,Def1,RELSET_1:11;
@@ -2477,3 +2478,64 @@ A3: A c= A2 by FUNCT_1:146;
   hence thesis by A1,A3,TARSKI:def 4;
 end;
 
+:: Generelized RFUNCT_2:def 1,CFCONT_1:def 1,NFCONT_1:def 7,def 8
+::  NCFCONT1:def 9,def 10,def 11,def 12,def 13,def 14
+:: 2008.08.15, A.T.
+
+definition let X,Y,Z be set;
+ let f be Function of X,Y;
+ let p be PartFunc of Y,Z;
+ assume that
+Z1: Y <> {} and
+Z: rng f c= dom p;
+ func p/*f -> Function of X,Z equals
+:Def12: p*f;
+ coherence
+  proof
+    dom f = X by Z1,Def1;
+    then dom(p*f) = X by Z,RELAT_1:46;
+    then p*f is total by PARTFUN1:def 4;
+   hence p*f is Function of X,Z;
+  end;
+end;
+
+reserve Y for non empty set,
+        f for Function of X,Y,
+        p for PartFunc of Y,Z,
+        x for Element of X;
+
+theorem Th185:
+ X <> {} & rng f c= dom p implies (p/*f).x = p.(f.x)
+proof
+ assume that
+Z1: X <> {} and
+Z: rng f c= dom p;
+   p/*f = p*f by Z,Def12;
+ hence (p/*f).x = p.(f.x) by Th21,Z1;
+end;
+
+theorem
+ X <> {} & rng f c= dom p implies (p/*f).x = p/.(f.x)
+proof
+ assume that
+Z1: X <> {} and
+Z: rng f c= dom p;
+A: f.x in rng f by Th6,Z1;
+ thus (p/*f).x = p.(f.x) by Z,Z1,Th185
+      .= p/.(f.x) by A,Z,PARTFUN1:def 8;
+end;
+
+reserve g for Function of X,X;
+
+theorem
+  rng f c= dom p implies (p/*f)*g = p/*(f*g)
+ proof
+  assume
+Z:  rng f c= dom p;
+    rng(f*g) c= rng f by RELAT_1:45;
+    then
+A:  rng(f*g) c= dom p by Z,XBOOLE_1:1;
+  thus (p/*f)*g = p*f*g by Z,Def12
+       .= p*(f*g) by RELAT_1:55
+       .= p /* (f*g) by A,Def12;
+ end;

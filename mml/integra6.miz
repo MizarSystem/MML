@@ -11,10 +11,11 @@ environ
       PARTFUN1, REALSET1, SEQ_1, BOOLE, RFUNCT_1, FCONT_1, INT_1, SEQ_2,
       ABSVALUE, INTEGRA2, FUNCT_3, ORDINAL2, MEASURE5, ARYTM_3, SQUARE_1,
       FDIFF_1, RCOMP_1, INTEGRA5, ARYTM, RFINSEQ, INTEGRA4, RSSPACE,
-      ANPROJ_1, LATTICES;
+      ANPROJ_1, LATTICES, OPPCAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, COMPLEX1, REAL_1, NAT_1, INT_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      RCOMP_1, FINSEQ_1, VALUED_1, SEQ_1, RFUNCT_1, SEQ_2, SEQM_3,
+      RCOMP_1, FINSEQ_1,
+      VALUED_0, VALUED_1, SEQ_1, RFUNCT_1, SEQ_2, SEQM_3,
       FDIFF_1, RFINSEQ, XXREAL_2, PSCOMP_1, RVSUM_1, INTEGRA1, INTEGRA2,
       FCONT_1, RFUNCT_2, RSSPACE, INTEGRA4, INTEGRA5, XXREAL_0;
  constructors PARTFUN1, REAL_1, NAT_1, BINOP_2, COMPLEX1, RFUNCT_1, RFUNCT_2,
@@ -156,10 +157,10 @@ proof
 A1: A c= dom f;
   assume f is_integrable_on A & f|A is bounded;
   then
-A2: f||A is_integrable_on A & f||A|A is bounded by INTEGRA5:9,def 2;
+A2: f||A is integrable & f||A|A is bounded by INTEGRA5:9,def 2;
   f||A is Function of A,REAL by A1,Lm1;
   then
-A3: abs(f||A) is_integrable_on A &
+A3: abs(f||A) is integrable &
   abs(integral(f||A))<=integral(abs(f||A)) by A2,INTEGRA4:23;
   abs(f||A) = abs(f)||A by RFUNCT_1:62;
   hence thesis by A3,INTEGRA5:def 2;
@@ -183,13 +184,13 @@ proof
   assume
 A1: A c= dom f & f is_integrable_on A & f|A is bounded;
   then
-A2: f||A is_integrable_on A & f||A|A is bounded by INTEGRA5:9,def 2;
+A2: f||A is integrable & f||A|A is bounded by INTEGRA5:9,def 2;
   rng f c= REAL;
   then f is Function of dom f,REAL by FUNCT_2:4;
   then
 A3: f|A is Function of A,REAL by A1,FUNCT_2:38;
   r(#)(f||A) =(r(#)f)|A by RFUNCT_1:65;
-  then (r(#)f)||A is_integrable_on A by A2,A3,INTEGRA2:31;
+  then (r(#)f)||A is integrable by A2,A3,INTEGRA2:31;
   hence r(#)f is_integrable_on A by INTEGRA5:def 2;
   integral((r(#)f),A) =integral(r(#)(f||A)) by RFUNCT_1:65;
   hence integral((r(#)f),A) =r*integral(f,A) by A2,A3,INTEGRA2:31;
@@ -219,12 +220,12 @@ proof
 A1: A c= dom f & A c= dom g & f is_integrable_on A & f|A is bounded &
   g is_integrable_on A & g|A is bounded;
   then
-A2: f||A is_integrable_on A & g||A is_integrable_on A &
+A2: f||A is integrable & g||A is integrable &
   f||A|A is bounded & g||A|A is bounded by INTEGRA5:9,def 2;
 A3: f||A is Function of A,REAL & g||A is Function of A,REAL by A1,Lm1;
   then
-A4: f||A + g||A is_integrable_on A &
-  f||A - g||A is_integrable_on A by A2,INTEGRA1:59,INTEGRA2:33;
+A4: f||A + g||A is integrable &
+  f||A - g||A is integrable by A2,INTEGRA1:59,INTEGRA2:33;
 A5: f||A + g||A = (f+g)||A & f||A - g||A = (f-g)||A by RFUNCT_1:60,63;
   hence f+g is_integrable_on A & f-g is_integrable_on A by A4,INTEGRA5:def 2;
   thus thesis by A2,A3,A5,INTEGRA1:59,INTEGRA2:33;
@@ -264,11 +265,11 @@ proof
 A1: A c= dom f & A c= dom g & f is_integrable_on A & f|A is bounded &
   g is_integrable_on A & g|A is bounded;
   then
-A2: f||A is_integrable_on A & f||A|A is bounded &
-  g||A is_integrable_on A & g||A|A is bounded by INTEGRA5:9,def 2;
+A2: f||A is integrable & f||A|A is bounded &
+  g||A is integrable & g||A|A is bounded by INTEGRA5:9,def 2;
 A3: f||A is Function of A,REAL & g||A is Function of A,REAL by A1,Lm1;
   (f||A)(#)(g||A) = (f(#)g)||A by INTEGRA5:4;
-  then (f(#)g)||A is_integrable_on A by A2,A3,INTEGRA4:29;
+  then (f(#)g)||A is integrable by A2,A3,INTEGRA4:29;
   hence f(#)g is_integrable_on A by INTEGRA5:def 2;
 end;
 
@@ -532,10 +533,10 @@ A6: inf [' a,b '] = a & sup [' a,b '] = b &
   set FAB = f||[' a,b '], FAC = f||[' a,c '], FCB = f||[' c,b '];
 A7: FAB is Function of [' a,b '],REAL & FAC is Function of [' a,c '],REAL &
   FCB is Function of [' c,b '],REAL by A1,A5,Lm1,XBOOLE_1:1;
-  FAB is_integrable_on [' a,b '] by A1,INTEGRA5:def 2;
+  FAB is integrable by A1,INTEGRA5:def 2;
   then
-A8: FAB is_upper_integrable_on [' a,b '] &
-  FAB is_lower_integrable_on [' a,b '] &
+A8: FAB is upper_integrable &
+  FAB is lower_integrable &
   upper_integral FAB = lower_integral FAB by INTEGRA1:def 17;
  f|[' a,c '] is bounded &
   f|[' c,b '] is bounded by A1,A5,RFUNCT_1:91;
@@ -1478,12 +1479,12 @@ A233: lower_sum(FAC,T1) is convergent &
   then
 A234: lower_integral FAC = upper_integral FAC &
   lower_integral FCB = upper_integral FCB by A8,A185,A211,Th1;
-  FAC is_upper_integrable_on [' a,c '] &
-  FAC is_lower_integrable_on [' a,c '] &
-  FCB is_upper_integrable_on [' c,b '] &
-  FCB is_lower_integrable_on [' c,b '] by A7,A10,INTEGRA4:10;
-  then FAC is_integrable_on [' a,c '] &
-  FCB is_integrable_on [' c,b '] by A234,INTEGRA1:def 17;
+  FAC is upper_integrable &
+  FAC is lower_integrable &
+  FCB is upper_integrable &
+  FCB is lower_integrable by A7,A10,INTEGRA4:10;
+  then FAC is integrable &
+  FCB is integrable by A234,INTEGRA1:def 17;
   hence f is_integrable_on [' a,c '] & f is_integrable_on [' c,b ']
   by INTEGRA5:def 2;
 end;
@@ -1510,7 +1511,7 @@ A7: [' c,b ']= [.c,b.] by INTEGRA5:def 4;
     then inf([' c,b ']) = c & sup([' c,b ']) = b by A7,INTEGRA1:6;
     then
 A8: vol(['c,b ']) =0 by A6;
-    then f||['c,b '] is_integrable_on ['c,b '] & integral(f||['c,b '])=0
+    then f||['c,b '] is integrable & integral(f||['c,b '])=0
     by INTEGRA4:6;
     hence f is_integrable_on ['c,b '] by INTEGRA5:def 2;
     c is Real & b is Real by XREAL_0:def 1;
@@ -1756,8 +1757,8 @@ A7: h.x =e by TARSKI:def 1;
     then g.x = abs(f.x) by VALUED_1:18;
     hence g.x <= h.x by A1,A6,A7;
   end;
-A8: g is_integrable_on A & g|A is bounded by A2,INTEGRA5:9,def 2;
-A9: h is_integrable_on A & integral h = e*vol A by A4,INTEGRA4:4;
+A8: g is integrable & g|A is bounded by A2,INTEGRA5:9,def 2;
+A9: h is integrable & integral h = e*vol A by A4,INTEGRA4:4;
   vol A = abs(d-c) by Th6;
   then integral(abs f,min(c,d),max(c,d)) <= e * abs(d-c)
   by A3,A4,A5,A8,A9,INTEGRA2:34;
@@ -1942,7 +1943,7 @@ A6: h.x in {e1} by A3,A5,FUNCT_2:6;
   end;
   then
 A7: h=g by FUNCT_2:18;
-  h is_integrable_on [' a,b '] by A3,INTEGRA4:4;
+  h is integrable by A3,INTEGRA4:4;
   hence f is_integrable_on [' a,b '] by A7,INTEGRA5:def 2;
   thus f|[' a,b '] is bounded
   proof
@@ -2052,11 +2053,11 @@ A5: x in dom R & y=R.x by FUNCT_1:def 5;
   reconsider L as LINEAR by A3,FDIFF_1:def 4;
 A6: R is total by A4,PARTFUN1:def 4;
   for h be convergent_to_0 Real_Sequence holds
-  (h")(#)(R*h) is convergent & lim ((h")(#)(R*h)) = 0
+  (h")(#)(R/*h) is convergent & lim ((h")(#)(R/*h)) = 0
   proof
     let h be convergent_to_0 Real_Sequence;
 A7: for e be real number st 0<e ex n be Element of NAT st
-    for m be Element of NAT st n <= m holds abs(((h")(#)(R*h)).m - 0) < e
+    for m be Element of NAT st n <= m holds abs(((h")(#)(R/*h)).m - 0) < e
     proof
       let e0 be real number;
       set e=e0/2;
@@ -2198,13 +2199,13 @@ A41:  integral(g,x0,x0+h.m)=(f.x0)*((x0+h.m)-x0) by A1,A2,A15,A18,A21,A22,Th27;
       then
 A42:  abs(R.(h.m)/(h.m)) <= e by A39,A40,XCMPLX_1:90;
       rng h c= dom R by A4;
-      then R.(h.m)/(h.m) =(R*h).m /(h.m) by RFUNCT_2:21;
-      then R.(h.m)/(h.m) =((R*h).m) *((h").m) by VALUED_1:10;
-      then R.(h.m)/(h.m) = ((h")(#)(R*h)).m by SEQ_1:12;
+      then R.(h.m)/(h.m) =(R/*h).m /(h.m) by FUNCT_2:185;
+      then R.(h.m)/(h.m) =((R/*h).m) *((h").m) by VALUED_1:10;
+      then R.(h.m)/(h.m) = ((h")(#)(R/*h)).m by SEQ_1:12;
       hence thesis by A8,A42,XXREAL_0:2;
     end;
-    hence (h")(#)(R*h) is convergent by SEQ_2:def 6;
-    hence lim((h")(#)(R*h)) = 0 by A7,SEQ_2:def 7;
+    hence (h")(#)(R/*h) is convergent by SEQ_2:def 6;
+    hence lim((h")(#)(R/*h)) = 0 by A7,SEQ_2:def 7;
   end;
   then reconsider R as REST by A6,FDIFF_1:def 3;
   consider N be Neighbourhood of x0 such that

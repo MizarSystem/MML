@@ -8,7 +8,7 @@ environ
 
  vocabularies FINSEQ_1, INTEGRA1, ARYTM, ORDINAL2, RCOMP_1, PROB_1, RELAT_1,
       FUNCT_1, RFINSEQ, FINSEQ_5, ARYTM_1, BOOLE, CARD_1, JORDAN3, PARTFUN1,
-      RFUNCT_1, SEQ_2, ARYTM_3, SEQ_1, MEASURE5, RLVECT_1, FUNCT_3, SQUARE_1,
+      SEQ_2, ARYTM_3, SEQ_1, MEASURE5, RLVECT_1, FUNCT_3, SQUARE_1,
       INTEGRA2, MEMBERED, MSUALG_3, LATTICES;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XREAL_0,
       MEMBERED, REAL_1, NAT_1, FUNCT_1, RELSET_1, SEQ_4, PARTFUN1, FUNCT_2,
@@ -17,7 +17,8 @@ environ
       BINARITH,
       XXREAL_0;
  constructors PARTFUN1, REAL_1, NAT_1, SEQM_3, RFUNCT_1, RFINSEQ, BINARITH,
-      FINSEQ_5, PRE_CIRC, PSCOMP_1, JORDAN3, INTEGRA1, SEQ_1, XXREAL_2;
+      FINSEQ_5, PRE_CIRC, PSCOMP_1, JORDAN3, INTEGRA1, SEQ_1, XXREAL_2,
+      NAT_D;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FUNCT_2, FINSET_1, NUMBERS,
       XXREAL_0, XREAL_0, MEMBERED, FINSEQ_1, RFINSEQ, INTEGRA1, VALUED_0,
       VALUED_1, XXREAL_2, CARD_1, SEQ_2;
@@ -283,15 +284,15 @@ A4: 1<=k2+1 & k2+1<=k3 & k1<k3 by A1,A2,NAT_1:13,XXREAL_0:2;
 A5: 1<=k2+1 & k2+1<=k3 & k2+1<=len f & k1<=k3 & k1 <= k2+1
   by A1,NAT_1:12,XXREAL_0:2;
 A6: len mid(f,k1,k2)=k2-'k1+1 by A3,JORDAN3:27
-    .=k2-k1+1 by A1,BINARITH:50;
+    .=k2-k1+1 by A1,XREAL_1:235;
 A7: len mid(f,k2+1,k3)=k3-'(k2+1)+1 by A3,A5,JORDAN3:27
-    .=k3-(k2+1)+1 by A4,BINARITH:50
+    .=k3-(k2+1)+1 by A4,XREAL_1:235
     .=k3-k2;
   then
 A8: len(mid(f,k1,k2)^mid(f,k2+1,k3))=(k2-k1+1)+(k3-k2) by A6,FINSEQ_1:35
     .=k3-k1+1;
 A9: len mid(f,k1,k3)=k3-'k1+1 by A3,A4,JORDAN3:27
-    .=k3-k1+1 by A4,BINARITH:50;
+    .=k3-k1+1 by A4,XREAL_1:235;
   for k be Nat st 1<=k & k<=len(mid(f,k1,k2)^mid(f,k2+1,k3)) holds
   (mid(f,k1,k2)^mid(f,k2+1,k3)).k = mid(f,k1,k3).k
   proof
@@ -1254,15 +1255,15 @@ end;
 
 theorem Th31:
   for A be closed-interval Subset of REAL, f be Function of A,REAL
-  st f|A is bounded & f is_integrable_on A
-  holds r(#)f is_integrable_on A & integral(r(#)f) = r*integral(f)
+  st f|A is bounded & f is integrable
+  holds r(#)f is integrable & integral(r(#)f) = r*integral(f)
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
   assume that
 A1: f|A is bounded and
-A2: f is_integrable_on A;
-A3: r(#)f is_upper_integrable_on A
+A2: f is integrable;
+A3: r(#)f is upper_integrable
   proof
     rng upper_sum_set(r(#)f) is bounded_below
     proof
@@ -1293,7 +1294,7 @@ A3: r(#)f is_upper_integrable_on A
     end;
     hence thesis by INTEGRA1:def 13;
   end;
-A4: r(#)f is_lower_integrable_on A
+A4: r(#)f is lower_integrable
   proof
     rng lower_sum_set(r(#)f) is bounded_above
     proof
@@ -1333,7 +1334,7 @@ A6: upper_sum_set(f) is total by PARTFUN1:def 4;
     then
 A7: upper_sum_set(f) is Function of divs A,REAL;
 A8: rng(upper_sum_set(f)) is non empty by A5,RELAT_1:65;
-    f is_upper_integrable_on A & f is_lower_integrable_on A
+    f is upper_integrable & f is lower_integrable
     by A2,INTEGRA1:def 17;
     then
 A9: rng(upper_sum_set(f)) is bounded_below &
@@ -1481,13 +1482,13 @@ begin :: Monotonicity of Integral
 theorem Th32:
   for A be closed-interval Subset of REAL,
   f be Function of A,REAL st f|A is bounded &
-  f is_integrable_on A &(for x st x in A holds f.x >= 0) holds
+  f is integrable &(for x st x in A holds f.x >= 0) holds
   integral(f) >= 0
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
   assume
-A1: f|A is bounded & f is_integrable_on A &
+A1: f|A is bounded & f is integrable &
   (for x st x in A holds f.x >= 0);
 A2: upper_integral(f) = inf rng upper_sum_set(f) by INTEGRA1:def 15;
   dom upper_sum_set(f) is non empty by INTEGRA1:def 11;
@@ -1545,20 +1546,20 @@ end;
 theorem Th33:
   for A be closed-interval Subset of REAL,
   f,g be Function of A,REAL st f|A is bounded &
-  f is_integrable_on A & g|A is bounded & g is_integrable_on A holds
-  f-g is_integrable_on A & integral(f-g) = integral(f)-integral(g)
+  f is integrable & g|A is bounded & g is integrable holds
+  f-g is integrable & integral(f-g) = integral(f)-integral(g)
 proof
   let A be closed-interval Subset of REAL;
   let f,g be Function of A,REAL;
   assume
-A1: f|A is bounded & f is_integrable_on A
-  & g|A is bounded & g is_integrable_on A;
+A1: f|A is bounded & f is integrable
+  & g|A is bounded & g is integrable;
   then
 A2: (-g)|A is bounded by RFUNCT_1:99;
   -g = (-1)(#)g;
   then
-A3: -g is_integrable_on A & integral(-g) = (-1)*integral(g) by A1,Th31;
-  hence f-g is_integrable_on A by A1,A2,INTEGRA1:59;
+A3: -g is integrable & integral(-g) = (-1)*integral(g) by A1,Th31;
+  hence f-g is integrable by A1,A2,INTEGRA1:59;
   integral(f-g)=integral(f)+-integral(g) by A1,A2,A3,INTEGRA1:59;
   hence thesis;
 end;
@@ -1566,18 +1567,18 @@ end;
 theorem
   for A be closed-interval Subset of REAL,
   f,g be Function of A,REAL st f|A is bounded &
-  f is_integrable_on A & g|A is bounded &
-  g is_integrable_on A & (for x st x in A holds f.x >= g.x) holds
+  f is integrable & g|A is bounded &
+  g is integrable & (for x st x in A holds f.x >= g.x) holds
   integral(f) >= integral(g)
 proof
   let A be closed-interval Subset of REAL;
   let f,g be Function of A,REAL;
   assume
-A1: f|A is bounded & f is_integrable_on A
-  & g|A is bounded & g is_integrable_on A &
+A1: f|A is bounded & f is integrable
+  & g|A is bounded & g is integrable &
   (for x st x in A holds f.x >= g.x);
   then
-A2: f-g is_integrable_on A & integral(f-g)=integral(f)-integral(g) by Th33;
+A2: f-g is integrable & integral(f-g)=integral(f)-integral(g) by Th33;
 A3: dom (f-g)= A by FUNCT_2:def 1;
 A4: for x st x in A holds (f-g).x >= 0
   proof

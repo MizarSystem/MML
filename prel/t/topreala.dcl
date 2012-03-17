@@ -59,7 +59,7 @@
 <Adjective nr="33" value="false"/>
 <Adjective nr="45"/>
 <Adjective nr="46"/>
-<Adjective nr="139"/>
+<Adjective nr="143"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TOPREALA" nr="1">
@@ -76,9 +76,9 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="112">
 <LocusVar nr="1"/>
-<Func kind="K" nr="89">
+<Func kind="K" nr="90">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -101,9 +101,9 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="108">
+<Func kind="K" nr="110">
 <LocusVar nr="1"/>
-<Func kind="K" nr="89">
+<Func kind="K" nr="90">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -126,9 +126,9 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="109">
+<Func kind="K" nr="111">
 <LocusVar nr="1"/>
-<Func kind="K" nr="89">
+<Func kind="K" nr="90">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -151,9 +151,9 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="107">
+<Func kind="K" nr="109">
 <LocusVar nr="1"/>
-<Func kind="K" nr="89">
+<Func kind="K" nr="90">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -176,8 +176,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
-<Func kind="K" nr="93">
+<Func kind="K" nr="112">
+<Func kind="K" nr="94">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -201,8 +201,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="108">
-<Func kind="K" nr="93">
+<Func kind="K" nr="110">
+<Func kind="K" nr="94">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -226,8 +226,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="109">
-<Func kind="K" nr="93">
+<Func kind="K" nr="111">
+<Func kind="K" nr="94">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -251,8 +251,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="107">
-<Func kind="K" nr="93">
+<Func kind="K" nr="109">
+<Func kind="K" nr="94">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -277,7 +277,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="112">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -300,7 +300,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="108">
+<Func kind="K" nr="110">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -323,7 +323,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="109">
+<Func kind="K" nr="111">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -346,7 +346,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="107">
+<Func kind="K" nr="109">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -369,7 +369,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="112">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -392,7 +392,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="108">
+<Func kind="K" nr="110">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -415,7 +415,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="109">
+<Func kind="K" nr="111">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -438,7 +438,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="107">
+<Func kind="K" nr="109">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -473,7 +473,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="403">
+<Func kind="K" nr="405">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 <LocusVar nr="2"/>
@@ -488,7 +488,7 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="46"/>
-<Adjective nr="139"/>
+<Adjective nr="143"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -498,7 +498,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="139"/>
+<Adjective nr="143"/>
 </Cluster>
 </CCluster>
 <CCluster aid="TOPREALA" nr="2">

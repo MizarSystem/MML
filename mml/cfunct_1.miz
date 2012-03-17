@@ -7,26 +7,26 @@
 environ
 
  vocabularies PARTFUN1, COMPLEX1, ARYTM, ARYTM_3, RELAT_1, BOOLE, FINSEQ_4,
-      FINSEQ_1, FUNCT_1, ARYTM_1, SEQ_1, RFUNCT_1, ABSVALUE, PARTFUN2,
-      CFUNCT_1, SEQM_3, LATTICES, SEQ_2;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      FUNCT_1, RELSET_1, PARTFUN1, PARTFUN2,
-      SEQ_2, RFUNCT_1, VALUED_1, COMPLEX1,
-      XXREAL_0;
+      FINSEQ_1, FUNCT_1, ARYTM_1, SEQ_1, RFUNCT_1, ABSVALUE,
+      CFUNCT_1, SEQM_3, LATTICES, SEQ_2, VALUED_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XXREAL_0, XREAL_0,
+      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, PARTFUN2,
+      RFUNCT_1, COMPLEX1, VALUED_0, VALUED_1, SEQ_2;
  constructors PARTFUN1, XXREAL_0, REAL_1, COMPLEX1, PARTFUN2, VALUED_1,
-      RFUNCT_1, SEQ_1, SEQ_2;
+      RFUNCT_1, SEQ_1, SEQ_2, NAT_1;
  registrations RELSET_1, NUMBERS, XREAL_0, MEMBERED, COMPLEX1, VALUED_0,
       XBOOLE_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, PARTFUN1, RFUNCT_1, XBOOLE_0, VALUED_1;
+ definitions TARSKI, PARTFUN1, RFUNCT_1, XBOOLE_0, VALUED_1, SEQ_2;
  theorems TARSKI, SUBSET_1, FUNCT_1, PARTFUN1, PARTFUN2, RFUNCT_1, COMPLEX1,
       RELAT_1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, XREAL_1, XXREAL_0,
-      VALUED_1;
+      VALUED_1, SEQ_2;
  schemes PARTFUN2;
 
 begin
 
-reserve x,X,Y for set;
+reserve x,y,X,Y for set;
 reserve C for non empty set;
 reserve c for Element of C;
 reserve f,f1,f2,f3,g,g1 for PartFunc of C,COMPLEX;
@@ -954,12 +954,11 @@ end;
 theorem
   (f/g)(#)g = (f|dom(g^))
 proof
-A1: dom (g^) c= dom g by Th15;
 A2: dom ((f/g)(#)g) = dom (f/g) /\ dom g by Th5
     .= dom f /\ (dom g \ g"{0c}) /\ dom g by Def1
     .= dom f /\ ((dom g \ g"{0c}) /\ dom g) by XBOOLE_1:16
     .= dom f /\ (dom (g^) /\ dom g) by Def2
-    .= dom f /\ dom (g^) by A1,XBOOLE_1:28
+    .= dom f /\ dom (g^) by Th15,XBOOLE_1:28
     .= dom (f|(dom (g^))) by RELAT_1:90;
   now
     let c;
@@ -1708,32 +1707,57 @@ begin
 :: BOUNDED AND CONSTANT PARTIAL FUNCTIONS FROM A DOMAIN, TO COMPLEX
 ::
 
-definition
-  let C,f,Y;
-  pred f is_bounded_on Y means
-  :Def3:
-  |.f.||Y is bounded;
-end;
+
+Def3:
+  |.f.| is bounded iff f is bounded
+ proof
+F: dom f = dom |.f.| by VALUED_1:def 11;
+  thus |.f.| is bounded implies f is bounded
+   proof assume |.f.| is bounded;
+    then consider r1 being real number such that
+G:   for y st y in dom |.f.| holds abs(|.f.|.y) < r1 by SEQ_2:def 5;
+    take r1;
+    let y;
+    assume
+Z:   y in dom f;
+     then abs(|.f.|.y) < r1 by F,G;
+     then abs(|.f.y.|) < r1 by F,VALUED_1:def 11,Z;
+    hence abs(f.y) <r1;
+   end;
+  given r1 such that
+G:   for y st y in dom f holds abs(f.y) <r1;
+  now take r1;
+  let y;
+  assume
+Z: y in dom |.f.|;
+   then abs(|.f.y.|) <r1 by F,G;
+  hence abs(|.f.|.y) <r1 by VALUED_1:def 11,Z;
+  end;
+  hence thesis by SEQ_2:def 5;
+ end;
 
 theorem Th81:
-  f is_bounded_on Y iff ex p be real number st
+  f|Y is bounded iff ex p be real number st
   for c st c in Y /\ dom f holds |.(f/.c).|<= p
 proof
 A1: dom |.f.| = dom f by VALUED_1:def 11;
+B1: dom(|.f.||Y) = Y /\ dom|.f.| by RELAT_1:90;
+F:  |.f.||Y = |.f|Y.| by RFUNCT_1:62;
   hereby
-    assume f is_bounded_on Y;
-    then |.f.||Y is bounded by Def3;
+    assume f|Y is bounded;
+    then |.f.||Y is bounded by Def3,F;
     then consider p be real number such that
-A2: for c being set st c in Y /\ dom |.f.| holds abs(|.f.|.c) <= p
-    by RFUNCT_1:90;
+A2: for c being set st c in dom(|.f.||Y) holds abs((|.f.||Y).c) <= p
+    by RFUNCT_1:89;
     now
       let c such that
 A3:   c in Y /\ dom f;
       c in dom f by A3,XBOOLE_0:def 3;
       then
 A4:   f.c = f/.c by PARTFUN1:def 8;
-      abs(|.f.|.c)= abs(|.(f.c).|) by VALUED_1:18;
-      hence |.(f/.c).| <= p by A1,A2,A3,A4;
+      abs((|.f.||Y).c) = abs(|.f.|.c) by FUNCT_1:70,A1,A3,B1
+          .= abs(|.(f.c).|) by VALUED_1:18;
+      hence |.(f/.c).| <= p by A1,A2,A3,A4,B1;
     end;
     hence ex p be real number st
     for c st c in Y /\ dom f holds |.(f/.c).| <= p;
@@ -1743,27 +1767,30 @@ A5: for c st c in Y /\ dom f holds |.(f/.c).| <= p;
 A6: dom |.f.| = dom f by VALUED_1:def 11;
   now
     let c be set such that
-A7: c in Y /\ dom |.f.|;
-A8: c in dom |.f.| by A7,XBOOLE_0:def 3;
-    abs(|.f.|.c)= abs(|.(f.c).|) by VALUED_1:18
+A7: c in dom(|.f.||Y);
+A8: c in dom |.f.| by A7,RELAT_1:86;
+    abs((|.f.||Y).c) = abs(|.f.|.c) by A7,FUNCT_1:70
+      .= abs(|.(f.c).|) by VALUED_1:18
       .= abs(|.(f/.c).|) by A1,A8,PARTFUN1:def 8;
-    hence abs(|.f.|.c) <= p by A5,A6,A7;
+    hence abs((|.f.||Y).c) <= p by A5,A6,A7,B1;
   end;
-  then |.f.||Y is bounded by RFUNCT_1:90;
-  hence f is_bounded_on Y by Def3;
+  then |.f.||Y is bounded by RFUNCT_1:89;
+  hence f|Y is bounded by Def3,F;
 end;
 
 theorem
-  Y c= X & f is_bounded_on X implies f is_bounded_on Y
+  Y c= X & f|X is bounded implies f|Y is bounded
 proof
-  assume Y c= X & f is_bounded_on X;
-  then Y c= X & |.f.||X is bounded by Def3;
+F:  |.f.||Y = |.f|Y.| by RFUNCT_1:62;
+G:  |.f.||X = |.f|X.| by RFUNCT_1:62;
+  assume Y c= X & f|X is bounded;
+  then Y c= X & |.f.||X is bounded by Def3,G;
   then |.f.||Y is bounded by RFUNCT_1:91;
-  hence thesis by Def3;
+  hence thesis by Def3,F;
 end;
 
 theorem
-  X misses dom f implies f is_bounded_on X
+  X misses dom f implies f|X is bounded
 proof
   assume X /\ dom f = {};
   then for c holds c in X /\ dom f implies |.(f/.c).| <= 0;
@@ -1771,13 +1798,15 @@ proof
 end;
 
 theorem Th84:
-  f is_bounded_on Y implies r(#)f is_bounded_on Y
+  f|Y is bounded implies (r(#)f)|Y is bounded
 proof
-  assume f is_bounded_on Y;
-  then |.f.||Y is bounded by Def3;
+F:  |.f.||Y = |.f|Y.| by RFUNCT_1:62;
+G:  |.r(#)f.||Y = |.(r(#)f)|Y.| by RFUNCT_1:62;
+  assume f|Y is bounded;
+  then |.f.||Y is bounded by Def3,F;
   then (|.r.|(#)|.f.|)|Y is bounded by RFUNCT_1:97;
   then |.r(#)f.||Y is bounded by Th39;
-  hence r(#)f is_bounded_on Y by Def3;
+  hence (r(#)f)|Y is bounded by Def3,G;
 end;
 
 theorem
@@ -1798,20 +1827,21 @@ A2: f.c = f/.c by A1,PARTFUN1:def 8;
 end;
 
 theorem Th86:
-  f is_bounded_on Y implies |.f.||Y is bounded & -f is_bounded_on Y
+  f|Y is bounded implies |.f.||Y is bounded & (-f)|Y is bounded
 proof
+F:  |.f.||Y = |.f|Y.| by RFUNCT_1:62;
+G:  (-1r)(#)(f|Y) = ((-1r)(#)f)|Y by RFUNCT_1:65;
   assume
-A1: f is_bounded_on Y;
-  hence |.f.||Y is bounded by Def3;
-  (-1r)(#)f is_bounded_on Y by A1,Th84;
-  hence thesis by COMPLEX1:def 7;
+A1: f|Y is bounded;
+  hence |.f.||Y is bounded by Def3,F;
+  thus thesis by A1,Th84,COMPLEX1:def 7,G;
 end;
 
 theorem Th87:
-  f1 is_bounded_on X & f2 is_bounded_on Y implies f1+f2 is_bounded_on X /\ Y
+  f1|X is bounded & f2|Y is bounded implies (f1+f2)|(X /\ Y) is bounded
 proof
   assume
-A1: f1 is_bounded_on X & f2 is_bounded_on Y;
+A1: f1|X is bounded & f2|Y is bounded;
   then consider r1 such that
 A2: for c st c in X /\ dom f1 holds |.((f1/.c)).| <= r1 by Th81;
   consider r2 such that
@@ -1837,15 +1867,15 @@ A7: |.((f1/.c)).|+|.((f2/.c)).| <= r0 by A6,XREAL_1:9;
     then |.((f1/.c)) + ((f2/.c)).| <= r0 by A7,XXREAL_0:2;
     hence |.(f1+f2)/.c.| <= r0 by A4,Th3;
   end;
-  hence f1+f2 is_bounded_on X /\ Y by Th81;
+  hence (f1+f2)|(X /\ Y) is bounded by Th81;
 end;
 
 theorem Th88:
-  f1 is_bounded_on X & f2 is_bounded_on Y implies
-  f1(#)f2 is_bounded_on (X /\ Y) & f1-f2 is_bounded_on X /\ Y
+  f1|X is bounded & f2|Y is bounded implies
+  (f1(#)f2)|(X /\ Y) is bounded & (f1-f2)|(X /\ Y) is bounded
 proof
   assume
-A1: f1 is_bounded_on X & f2 is_bounded_on Y;
+A1: f1|X is bounded & f2|Y is bounded;
   then consider r1 such that
 A2: for c st c in X /\ dom f1 holds |.((f1/.c)).| <= r1 by Th81;
   consider r2 such that
@@ -1869,21 +1899,24 @@ A8: 0<=|.((f1/.c)).| by COMPLEX1:132;
     then |.((f1/.c)) * ((f2/.c)).| <= r by COMPLEX1:151;
     hence |.(f1(#)f2)/.c.| <= r by A4,Th5;
   end;
-  hence f1(#)f2 is_bounded_on X /\ Y by Th81;
-  -f2 is_bounded_on Y by A1,Th86;
+  hence (f1(#)f2)|(X /\ Y) is bounded by Th81;
+  (-f2)|Y is bounded by A1,Th86;
   hence thesis by A1,Th87;
 end;
 
 theorem
-  f is_bounded_on X & f is_bounded_on Y implies f is_bounded_on X \/ Y
+  f|X is bounded & f|Y is bounded implies f|(X \/ Y) is bounded
 proof
+F:  |.f.||Y = |.f|Y.| by RFUNCT_1:62;
+G:  |.f.||X = |.f|X.| by RFUNCT_1:62;
+H:  |.f.||(X \/ Y) = |.f|(X \/ Y).| by RFUNCT_1:62;
   assume
-A1: f is_bounded_on X & f is_bounded_on Y;
+A1: f|X is bounded & f|Y is bounded;
   then
-A2: |.f.||X is bounded by Def3;
-  |.f.||Y is bounded by A1,Def3;
+A2: |.f.||X is bounded by Def3,G;
+  |.f.||Y is bounded by A1,Def3,F;
   then |.f.||(X \/ Y) is bounded by A2,RFUNCT_1:104;
-  hence f is_bounded_on X \/ Y by Def3;
+  hence f|(X \/ Y) is bounded by Def3,H;
 end;
 
 theorem
@@ -1997,7 +2030,7 @@ A6: -(f/.c) = p by A1;
 end;
 
 theorem Th93:
-  f|Y is constant implies f is_bounded_on Y
+  f|Y is constant implies f|Y is bounded
 proof
   assume f|Y is constant;
   then consider r such that
@@ -2012,42 +2045,39 @@ A1: for c st c in Y /\ dom f holds (f/.c) = r by PARTFUN2:54;
 end;
 
 theorem
-  f|Y is constant implies (for r holds r(#)f is_bounded_on Y) &
-  (-f is_bounded_on Y) & |.f.||Y is bounded
+  f|Y is constant implies (for r holds (r(#)f)|Y is bounded) &
+  (-f)|Y is bounded & |.f.||Y is bounded
 proof
   assume
 A1: f|Y is constant;
-  hereby let r;
-    (r(#)f)|Y is constant by Th91,A1;
-   hence r(#)f is_bounded_on Y by Th93;
-  end;
-  (-f)|Y is constant by A1,Th92;
-  hence -f is_bounded_on Y by Th93;
-  |.f.||Y is constant by A1,Th92;
-  hence |.f.||Y is bounded by RFUNCT_1:108;
+  hence for r holds (r(#)f)|Y is bounded by Th93,Th91;
+  thus (-f)|Y is bounded by Th93,A1,Th92;
+  thus |.f.||Y is bounded by RFUNCT_1:108,A1,Th92;
 end;
 
 theorem Th95:
-  (f1 is_bounded_on X & f2|Y is constant implies
-  f1+f2 is_bounded_on (X /\ Y))
+  (f1|X is bounded & f2|Y is constant implies
+  (f1+f2)|(X /\ Y) is bounded)
 proof
   assume
-A1: f1 is_bounded_on X & f2|Y is constant;
-  then f2 is_bounded_on Y by Th93;
+A1: f1|X is bounded & f2|Y is constant;
+  then f2|Y is bounded by Th93;
   hence thesis by A1,Th87;
 end;
 
 theorem
-  (f1 is_bounded_on X & f2|Y is constant implies
-  f1-f2 is_bounded_on X /\ Y &
-  f2-f1 is_bounded_on X /\ Y & f1(#)f2 is_bounded_on X /\ Y)
+  (f1|X is bounded & f2|Y is constant implies
+  (f1-f2)|(X /\ Y) is bounded &
+  (f2-f1)|(X /\ Y) is bounded & (f1(#)f2)|(X /\ Y) is bounded)
 proof
   assume
-A1: f1 is_bounded_on X & f2|Y is constant;
+A1: f1|X is bounded & f2|Y is constant;
   then (-f2)|Y is constant by Th92;
-  hence f1-f2 is_bounded_on X /\ Y by A1,Th95;
-A2: f2 is_bounded_on Y by A1,Th93;
-  hence f2-f1 is_bounded_on X /\ Y by A1,Th88;
+  hence (f1-f2)|(X /\ Y) is bounded by A1,Th95;
+A2: f2|Y is bounded by A1,Th93;
+  hence (f2-f1)|(X /\ Y) is bounded by A1,Th88;
   thus thesis by A1,A2,Th88;
 end;
 
+theorem
+  |.f.| is bounded iff f is bounded by Def3;

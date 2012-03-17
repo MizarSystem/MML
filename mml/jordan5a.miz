@@ -9,7 +9,7 @@ environ
  vocabularies PRE_TOPC, EUCLID, TOPREAL1, COMPTS_1, BORSUK_1, RELAT_1, TOPS_2,
       FUNCT_1, BOOLE, ORDINAL2, SUBSET_1, METRIC_1, PCOMPS_1, RCOMP_1, ARYTM_1,
       CONNSP_2, TOPS_1, ARYTM_3, TOPMETR, COMPLEX1, ABSVALUE, BORSUK_2,
-      GRAPH_1, PARTFUN1, TMAP_1, FCONT_1, RFUNCT_2, SQUARE_1, SEQ_4, LATTICES,
+      GRAPH_1, PARTFUN1, TMAP_1, FCONT_1, SQUARE_1, SEQ_4, LATTICES,
       SEQ_2, FINSEQ_4, ARYTM, BORSUK_6, SEQM_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
       XREAL_0, COMPLEX1, XXREAL_2,
@@ -482,6 +482,7 @@ proof
   let g be PartFunc of REAL, REAL, x1 be Real;
   assume
 A1: f is_continuous_at x & f = g & x = x1;
+A2: dom f = the carrier of R^1 by FUNCT_2:def 1;
   for N1 being Neighbourhood of g.x1
   ex N being Neighbourhood of x1 st g.:N c= N1
   proof
@@ -508,22 +509,25 @@ A6: N c= V1 by A1,A4,RCOMP_1:39;
     then g.:N c= g.:H by RELAT_1:156;
     hence thesis by A1,A3,XBOOLE_1:1;
   end;
-  hence thesis by FCONT_1:5;
+  hence thesis by A1,A2,FCONT_1:5;
 end;
 
 theorem Th8:
   for f being continuous Function of R^1, R^1,
-  g being PartFunc of REAL, REAL st f = g holds g is_continuous_on REAL
+  g being PartFunc of REAL, REAL st f = g holds g|REAL is continuous
 proof
   let f be continuous Function of R^1, R^1;
 A1: dom f = REAL by FUNCT_2:def 1,TOPMETR:24;
   let g be PartFunc of REAL, REAL;
   assume
 A2: f = g;
-  for x0 being real number st x0 in REAL holds g|REAL is_continuous_in x0
+  for x0 being real number st x0 in dom(g|REAL)
+   holds g|REAL is_continuous_in x0
   proof
     let x0 be real number;
-    assume x0 in REAL;
+    assume x0 in dom(g|REAL);
+    then
+     x0 in REAL by RELAT_1:86;
     reconsider x0 as Real by XREAL_0:def 1;
     reconsider x1=x0 as Point of R^1 by TOPMETR:24;
 A3: f is_continuous_at x1 by TMAP_1:49;
@@ -531,20 +535,28 @@ A3: f is_continuous_at x1 by TMAP_1:49;
     then f = g|REAL by A2,RELAT_1:97;
     hence thesis by A3,Th7;
   end;
-  hence g is_continuous_on REAL by A1,A2,FCONT_1:def 2;
+  hence g|REAL is continuous by A1,A2,FCONT_1:def 2;
 end;
 
 Lm5: for f being continuous one-to-one Function of R^1, R^1,
-g being PartFunc of REAL, REAL st f = g holds
+g being PartFunc of REAL, REAL st [.0,1.] c= dom f & f = g holds
 g| [.0,1.] is increasing or g| [.0,1.] is decreasing
 proof
   let f be continuous one-to-one Function of R^1, R^1;
   let g be PartFunc of REAL, REAL;
+ assume
+Z: [.0,1.] c= dom f;
+   the carrier of R^1 = REAL by TOPMETR:24;
+   then
+X: REAL c= dom f by FUNCT_2:def 1;
   assume
 A1: f = g;
-  then g is_continuous_on REAL by Th8;
-  hence g| [.0,1.] is increasing or g| [.0,1.] is decreasing
-  by A1,FCONT_1:17,FCONT_2:18;
+  then g|REAL is continuous by Th8;
+  then g| [.0,1.] is continuous
+  by A1,FCONT_1:17,FCONT_2:18,Z,X;
+  then g| [.0,1.] is increasing or g| [.0,1.] is decreasing
+  by A1,FCONT_1:17,FCONT_2:18,Z,X;
+  hence thesis by A1;
 end;
 
 theorem
@@ -558,7 +570,8 @@ proof
 A1: [.0,1.] /\ dom f = [.0,1.] /\ the carrier of R^1 by FUNCT_2:def 1
     .= [.0,1.] by BORSUK_1:35,83,TOPMETR:27,XBOOLE_1:28;
   reconsider g = f as PartFunc of REAL, REAL by TOPMETR:24;
-  per cases by Lm5;
+X: [.0,1.] c= dom g by A1,XBOOLE_1:18;
+  per cases by Lm5,X;
   suppose g| [.0,1.] is increasing;
     hence thesis by A1,BORSUK_1:83,RFUNCT_2:43;
   end;
@@ -670,7 +683,7 @@ A9:     ].r-gg,r+gg.[ c= Ball(x,r1)
 A10:        j = i & r-gg < j & j < r+gg;
             2*r <= 2*((a+b)/2) by A7,XREAL_1:66;
             then
-A11:        2*r - a <= a+b -a by XREAL_1:15;
+A11:        2*r - a <= a+b -a by XREAL_1:15,16,17;
 A12:        gg <= r-a by XXREAL_0:17;
             then r + gg <= r + (r - a) by XREAL_1:8;
             then
@@ -719,8 +732,8 @@ A18:        j = i & r-gg < j & j < r+gg;
 A19:        gg <= b - r by XXREAL_0:17;
             2*r >= ((a+b)/2)*2 by A15,XREAL_1:66;
             then
-A20:        2*r - b >= a+b - b by XREAL_1:15;
-            r-gg >= r-(b-r) by A19,XREAL_1:15;
+A20:        2*r - b >= a+b - b by XREAL_1:15,16,17;
+            r-gg >= r-(b-r) by A19,XREAL_1:15,16,17;
             then r-gg >= a by A20,XXREAL_0:2;
             then
 A21:        a <= j by A18,XXREAL_0:2;
@@ -756,11 +769,11 @@ A3: 0<g & ].a-g,a+g.[ c= X by RCOMP_1:40;
 A4: g/2 <> 0 by A3;
     g/2 >= 0 by A3;
     then
-A5: a - g/2 < a-0 by A4,XREAL_1:17;
+A5: a - g/2 < a-0 by A4,XREAL_1:15,16,17;
 A6: a+0 < a+g by A3,XREAL_1:10;
 A7: ].a-g,a+g.[ c= [.a,b.] by A1,A3,XBOOLE_1:1;
     g > g/2 by A3,XREAL_1:218;
-    then a-g < a-g/2 & a-g/2 < a + g by A5,A6,XREAL_1:17,XXREAL_0:2;
+    then a-g < a-g/2 & a-g/2 < a + g by A5,A6,XREAL_1:15,16,17,XXREAL_0:2;
     then a-g/2 in {l where l is Real : a-g<l & l<a+g };
     then a-g/2 in ].a-g,a+g.[ by RCOMP_1:def 2;
     then a-g/2 in [.a,b.] by A7;
@@ -778,7 +791,7 @@ A10: g/2 <> 0 by A9;
 A11: b+g/2 > b+0 by A10,XREAL_1:8;
 A12: ].b-g,b+g.[ c= [.a,b.] by A1,A9,XBOOLE_1:1;
 A13: g > g/2 by A9,XREAL_1:218;
-A14: b-g < b-0 by A9,XREAL_1:17;
+A14: b-g < b-0 by A9,XREAL_1:15,16,17;
 A15: b+g/2 < b+g by A13,XREAL_1:10;
     b-g < b+g/2 by A11,A14,XXREAL_0:2;
     then b+g/2 in {l where l is Real : b-g<l & l<b+g } by A15;
@@ -1005,7 +1018,7 @@ A26: N c= V1 by A1,A22,RCOMP_1:39;
     then g.:N c= g.:H by RELAT_1:156;
     hence thesis by A1,A21,XBOOLE_1:1;
   end;
-  hence thesis by FCONT_1:5;
+  hence thesis by A1,A2,FCONT_1:5;
 end;
 
 theorem Th14:
@@ -1032,6 +1045,7 @@ A3: g = g| [.a,b.] by A2,PARTFUN2:32;
   per cases;
   suppose
 A4: x1 = a;
+A5: dom f = the carrier of Closed-Interval-TSpace(a,b) by FUNCT_2:def 1;
     for N1 being Neighbourhood of g.x1
     ex N being Neighbourhood of x1 st g.:N c= N1
     proof
@@ -1087,10 +1101,11 @@ cc in the carrier of Closed-Interval-TSpace(a,b) by A1,A19,FUNCT_2:def 1;
       end;
       hence thesis;
     end;
-    hence thesis by A3,FCONT_1:5;
+    hence thesis by A1,A3,A5,FCONT_1:5;
   end;
   suppose
 A20: x1 = b;
+A21: dom f = the carrier of Closed-Interval-TSpace(a,b) by FUNCT_2:def 1;
     for N1 being Neighbourhood of g.x1
     ex N being Neighbourhood of x1 st g.:N c= N1
     proof
@@ -1143,7 +1158,7 @@ A33:    cc in dom g & cc in N & a' = g.cc by A32,PARTFUN2:78;
       end;
       hence thesis;
     end;
-    hence thesis by A3,FCONT_1:5;
+    hence thesis by A1,A3,A21,FCONT_1:5;
   end;
   suppose x1 <> a & x1 <> b;
     hence thesis by A1,A3,Lm7;
@@ -1155,7 +1170,7 @@ theorem Th15:
   of Closed-Interval-TSpace(a,b), Closed-Interval-TSpace(c,d),
   g being PartFunc of REAL, REAL st
   f is continuous one-to-one & a < b & c < d & f = g & f.a = c & f.b = d
-  holds g is_continuous_on [.a,b.]
+  holds g| [.a,b.] is continuous
 proof
   let a, b, c, d be Real;
 
@@ -1165,18 +1180,19 @@ let f be Function of Closed-Interval-TSpace(a,b), Closed-Interval-TSpace(c,d);
 A1: f is continuous one-to-one & a < b & c < d & f = g & f.a = c & f.b = d;
 A2: dom f = the carrier of Closed-Interval-TSpace(a,b) by FUNCT_2:def 1
     .= [.a,b.] by A1,TOPMETR:25;
-  for x0 being real number st x0 in [.a,b.] holds
+  for x0 being real number st x0 in dom(g| [.a,b.]) holds
   g| [.a,b.] is_continuous_in x0
   proof
     let x0 be real number;
-    assume x0 in [.a,b.];
+    assume x0 in dom(g| [.a,b.]);
+     then x0 in [.a,b.] by RELAT_1:86;
     then reconsider x1=x0 as Point of Closed-Interval-TSpace(a,b) by A1,
     TOPMETR:25;
 A3: f is_continuous_at x1 by A1,TMAP_1:49;
     x0 is Real by XREAL_0:def 1;
     hence g| [.a,b.] is_continuous_in x0 by A1,A3,Th14;
   end;
-  hence g is_continuous_on [.a,b.] by A1,A2,FCONT_1:def 2;
+  hence g| [.a,b.] is continuous by A1,A2,FCONT_1:def 2;
 end;
 
 begin
@@ -1207,8 +1223,9 @@ A4: [.a,b.] /\ dom f = [.a,b.] /\ the carrier of Closed-Interval-TSpace(a,b)
   then reconsider g = f as PartFunc of [.a,b.], REAL by A2,A3,PARTFUN1:25,
   XBOOLE_1:1;
   reconsider g as PartFunc of REAL, REAL by A2,A3,PARTFUN1:28;
-A5: g is_continuous_on [.a,b.] by A1,Th15;
-  per cases by A1,A5,FCONT_2:18;
+A5: g| [.a,b.] is continuous by A1,Th15;
+B5: [.a,b.] c= dom f by A4,XBOOLE_1:18;
+  per cases by A1,A5,FCONT_2:18,B5;
   suppose
 A6: g| [.a,b.] is increasing;
     for x, y be Point of Closed-Interval-TSpace(a,b),
@@ -1275,7 +1292,7 @@ A5: [#]Closed-Interval-TSpace(a,b) = the carrier of Closed-Interval-TSpace(a,b)
   [#]PP is bounded by A1,WEIERSTR:17;
   then
 A6: [#]PP <> {} & [#]PP is closed & [#]PP is bounded_below
-  by A1,WEIERSTR:18,def 3;
+  by A1,XXREAL_2:def 11,WEIERSTR:18,def 3;
   then
 A7: lower_bound [#]PP in [#]PP by RCOMP_1:31;
   then
@@ -1292,7 +1309,7 @@ A11: IT in QQ by A1,A9,FUNCT_1:def 12;
   then QQ is compact by A1,A2,COMPTS_1:11;
   then [#]QQ is bounded by WEIERSTR:17;
   then
-A12: [#]QQ is bounded_below;
+A12: [#]QQ is bounded_below by XXREAL_2:def 11;
 A13: IT in [#]QQ by A11,WEIERSTR:def 3;
 A14: for r be real number st r in [#]QQ holds IT<=r
   proof
@@ -1367,7 +1384,7 @@ A5: [#]Closed-Interval-TSpace(a,b) = the carrier of Closed-Interval-TSpace(a,b)
   [#]PP is bounded by A1,WEIERSTR:17;
   then
 A6: [#]PP <> {} & [#]PP is closed & [#]PP is bounded_above
-  by A1,WEIERSTR:18,def 3;
+  by A1,XXREAL_2:def 11,WEIERSTR:18,def 3;
   then
 A7: upper_bound [#]PP in [#]PP by RCOMP_1:30;
   then
@@ -1384,7 +1401,7 @@ A11: IT in QQ by A1,A9,FUNCT_1:def 12;
   then QQ is compact by A1,A2,COMPTS_1:11;
   then [#]QQ is bounded by WEIERSTR:17;
   then
-A12: [#]QQ is bounded_above;
+A12: [#]QQ is bounded_above by XXREAL_2:def 11;
 A13: IT in [#]QQ by A11,WEIERSTR:def 3;
 A14: for r be real number st r in [#]QQ holds IT>=r
   proof
@@ -1418,7 +1435,7 @@ A16: r2 >= r1 by A6,A15,SEQ_4:def 4;
     assume not thesis;
     then consider s be real number such that
 A17: 0<s & not ex r be real number st r in [#]QQ & r>IT-s;
-    IT-s<IT-0 by A17,XREAL_1:17;
+    IT-s<IT-0 by A17,XREAL_1:15,16,17;
     hence thesis by A13,A17;
   end;
   hence thesis by A12,A13,A14,SEQ_4:def 4;
@@ -1678,7 +1695,7 @@ A13: g.:PQ c= [#] (I[01]);
   then
 A14: [#](GPQ) is bounded & [#](GPQ) is closed by WEIERSTR:17,18;
   then
-A15: [#](GPQ) is bounded_below;
+A15: [#](GPQ) is bounded_below by XXREAL_2:def 11;
   consider OO be set such that
 A16: OO in PQ by XBOOLE_0:def 1;
   dom g = the carrier of (TOP-REAL 2)|P by FUNCT_2:def 1;
@@ -1687,7 +1704,7 @@ A17: g.OO in GPQ by A16,FUNCT_1:def 12;
   set Ex = lower_bound ([#](GPQ));
   take EX = f.Ex;
   [#](GPQ)<>{} & [#](GPQ) is closed & [#](GPQ) is bounded_below
-  by A14,A17,WEIERSTR:def 3;
+  by A14,A17,XXREAL_2:def 11,WEIERSTR:def 3;
   then Ex in [#](GPQ) by RCOMP_1:31;
   then
 A18: Ex in GPQ by WEIERSTR:def 3;
@@ -1775,7 +1792,7 @@ A13: g.:PQ c= [#] (I[01]);
   then
 A14: [#](GPQ) is bounded & [#](GPQ) is closed by WEIERSTR:17,18;
   then
-A15: [#](GPQ) is bounded_above;
+A15: [#](GPQ) is bounded_above by XXREAL_2:def 11;
   consider OO be set such that
 A16: OO in PQ by XBOOLE_0:def 1;
   dom g = the carrier of (TOP-REAL 2)|P by FUNCT_2:def 1;
@@ -1784,7 +1801,7 @@ A17: g.OO in GPQ by A16,FUNCT_1:def 12;
   set Ex = upper_bound ([#](GPQ));
   take EX = f.Ex;
   [#](GPQ)<>{} & [#](GPQ) is closed & [#](GPQ) is bounded_above
-  by A14,A17,WEIERSTR:def 3;
+  by A14,A17,XXREAL_2:def 11,WEIERSTR:def 3;
   then Ex in [#](GPQ) by RCOMP_1:30;
   then
 A18: Ex in GPQ by WEIERSTR:def 3;

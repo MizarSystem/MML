@@ -16,6 +16,7 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -24,7 +25,6 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
@@ -55,30 +55,30 @@
 <Func kind="K" nr="47"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="389">
+<Func kind="K" nr="391">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="7"/>
 <Adjective nr="19">
 <Func kind="U" nr="1">
-<Func kind="K" nr="371">
-<Func kind="K" nr="298">
+<Func kind="K" nr="373">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="298">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Func>
 <Func kind="K" nr="43"/>
 </Adjective>
-<Adjective nr="105">
-<Func kind="K" nr="371">
-<Func kind="K" nr="298">
+<Adjective nr="109">
+<Func kind="K" nr="373">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="298">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -89,11 +89,11 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="107"/>
+<Adjective nr="111"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="298">
+<Func kind="K" nr="300">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -108,15 +108,15 @@
 <Func kind="K" nr="47"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="390">
+<Func kind="K" nr="392">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="109">
-<Func kind="K" nr="298">
+<Adjective nr="113">
+<Func kind="K" nr="300">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -126,11 +126,11 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="107"/>
+<Adjective nr="111"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="298">
+<Func kind="K" nr="300">
 <Num nr="2"/>
 </Func>
 </Func>

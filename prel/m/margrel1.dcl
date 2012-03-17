@@ -53,7 +53,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="120">
+<Func kind="K" nr="121">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -62,7 +62,7 @@
 </FCluster>
 <FCluster aid="MARGREL1" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="123"/>
+<Func kind="K" nr="124"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
@@ -73,7 +73,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="128">
+<Func kind="K" nr="129">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -106,7 +106,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="123"/>
+<Func kind="K" nr="124"/>
 </Typ>
 <Cluster>
 <Adjective nr="22"/>
@@ -121,9 +121,9 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="94">
+<Func kind="K" nr="95">
 <LocusVar nr="1"/>
-<Func kind="K" nr="123"/>
+<Func kind="K" nr="124"/>
 </Func>
 </Typ>
 <Cluster>

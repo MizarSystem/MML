@@ -18,14 +18,14 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="CLASSES2"/>
 <ArticleID name="ORDINAL4"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="AFINSQ_1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="CATALAN2"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="RELAT_2"/>
@@ -63,10 +63,10 @@
 </ArgTypes>
 <Typ kind="M" nr="5">
 <Cluster/>
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -93,7 +93,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="99">
+<Func kind="K" nr="100">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -119,7 +119,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="101">
+<Func kind="K" nr="102">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -149,7 +149,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="232">
+<Func kind="K" nr="233">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -179,7 +179,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="233">
+<Func kind="K" nr="234">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -217,21 +217,21 @@
 </Typ>
 <Typ kind="M" nr="5">
 <Cluster/>
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="240">
+<Func kind="K" nr="241">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -249,7 +249,7 @@
 <Cluster/>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
 </Func>
 </Typ>

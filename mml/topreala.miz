@@ -10,7 +10,7 @@ environ
       TOPS_1, INT_1, FUNCT_1, ORDINAL2, ARYTM_1, MCART_1, T_0TOPSP, TOPS_2,
       ARYTM_3, RCOMP_1, ASYMPT_0, FUNCOP_1, TOPMETR, SGRAPH1, BOOLE, TOPREALA,
       FCONT_1, FINSEQ_1, PARTFUN1, TMAP_1, CONNSP_2, JGRAPH_6, NATTRA_1,
-      TDLAT_3, PARTFUN2, FINSEQ_4, MONOID_0, SEQM_3;
+      TDLAT_3, FINSEQ_4, MONOID_0, SEQM_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, RELAT_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
       REAL_1, FUNCOP_1, PARTFUN2, INT_1, CARD_3, FINSEQ_1, FUNCT_4, MONOID_0,
@@ -22,7 +22,7 @@ environ
  registrations XBOOLE_0, RELSET_1, FUNCT_2, FUNCT_4, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, STRUCT_0, PRE_TOPC, TOPS_1,
       BORSUK_1, TSEP_1, TDLAT_3, MONOID_0, EUCLID, TOPMETR, YELLOW12, TOPGRP_1,
-      BORSUK_6, VALUED_0;
+      BORSUK_6, VALUED_0, FCONT_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, XBOOLE_0, FUNCT_2, PRE_TOPC, T_0TOPSP, TMAP_1, STRUCT_0,
       RCOMP_1, FCONT_1, MONOID_0, EUCLID, PARTFUN2;
@@ -111,7 +111,7 @@ A2: a < r+1;
 A3: [\a/] = [\r/]+1 by A1,Th5;
 A4: frac a = a-[\a/] & frac r = r-[\r/] by INT_1:def 6;
   a-1 < r by A2,XREAL_1:21;
-  then a-1-[\r/] < r-[\r/] by XREAL_1:16;
+  then a-1-[\r/] < r-[\r/] by XREAL_1:15,16,17;
   hence frac a < frac r by A3,A4;
 end;
 
@@ -181,26 +181,26 @@ registration
   cluster ].r-s,r.[ -> non empty;
   coherence
   proof
-    r-s < r-0 by XREAL_1:17;
+    r-s < r-0 by XREAL_1:15,16,17;
     then r-s < (r-s+r)/2 & (r-s+r)/2 < r by XREAL_1:228;
     hence thesis by XXREAL_1:4;
   end;
   cluster [.r-s,r.[ -> non empty;
   coherence
   proof
-    r-s < r-0 by XREAL_1:17;
+    r-s < r-0 by XREAL_1:15,16,17;
     hence thesis by XXREAL_1:3;
   end;
   cluster ].r-s,r.] -> non empty;
   coherence
   proof
-    r-s < r-0 by XREAL_1:17;
+    r-s < r-0 by XREAL_1:15,16,17;
     hence thesis by XXREAL_1:32;
   end;
   cluster [.r-s,r.] -> non empty;
   coherence
   proof
-    r-s < r-0 by XREAL_1:17;
+    r-s < r-0 by XREAL_1:15,16,17;
     hence thesis by XXREAL_1:1;
   end;
 end;
@@ -663,7 +663,7 @@ begin :: R^1
 
 theorem
   for f being PartFunc of REAL,REAL st f = REAL --> r holds
-  f is_continuous_on REAL
+  f|REAL is continuous
 proof
   let f be PartFunc of REAL,REAL such that
 A1: f = REAL --> r;
@@ -678,20 +678,20 @@ A2: dom f = REAL by A1,FUNCOP_1:19;
 Y:   c in REAL /\ dom f by RELAT_1:90;
     then
 X:   c in dom f by XBOOLE_0:def 3;
-    thus (f|REAL)/.c = f/.c by PARTFUN2:34,Y
+    hence (f|REAL)/.c = f/.c by PARTFUN2:34,Y
       .= f.c by PARTFUN1:def 8,X
       .= r by A1,FUNCOP_1:13;
   end;
-  hence f is_continuous_on REAL by A2,FCONT_1:44;
+  hence f|REAL is continuous by A2,FCONT_1:44;
 end;
 
 theorem
   for f, f1, f2 being PartFunc of REAL,REAL st
   dom f = dom f1 \/ dom f2 & dom f1 is open & dom f2 is open &
-  f1 is_continuous_on dom f1 & f2 is_continuous_on dom f2 &
+  f1|dom f1 is continuous & f2|dom f2 is continuous &
   (for z being set st z in dom f1 holds f.z = f1.z) &
   (for z being set st z in dom f2 holds f.z = f2.z) holds
-  f is_continuous_on dom f
+  f|dom f is continuous
 proof
   let f, f1, f2 be PartFunc of REAL,REAL;
   set X1 = dom f1, X2 = dom f2;
@@ -699,17 +699,21 @@ proof
 A1: dom f = X1 \/ X2 and
 A2: X1 is open and
 A3: X2 is open and
-A4: f1 is_continuous_on X1 and
-A5: f2 is_continuous_on X2 and
+A4: f1|X1 is continuous and
+A5: f2|X2 is continuous and
 A6: for z being set st z in X1 holds f.z = f1.z and
 A7: for z being set st z in X2 holds f.z = f2.z;
+A8: f|(X1 \/ X2) = (f|X1) \/ (f|X2) by RELAT_1:107;
+A9: dom ((f|X1) \/ (f|X2)) = dom (f|X1) \/ dom (f|X2) by RELAT_1:13;
 A10: dom (f|X1) = dom f /\ X1 by RELAT_1:90;
 A11: dom f /\ X1 = X1 by A1,XBOOLE_1:7,28;
 A12: dom (f|X2) = dom f /\ X2 by RELAT_1:90;
 A13: dom f /\ X2 = X2 by A1,XBOOLE_1:7,28;
-  thus dom f c= dom f;
-  let x be real number such that
-A14: x in dom f;
+  let x be real number;
+  assume
+Z:  x in dom(f|dom f);
+   then
+A14: x in dom f by RELAT_1:86,A1;
 A15: (f|(X1 \/ X2)).x = f.x by A1,A14,FUNCT_1:72;
   per cases by A1,A14,XBOOLE_0:def 2;
   suppose
@@ -717,13 +721,15 @@ A16: x in X1;
     then
 A17: (f|(X1 \/ X2)).x = f1.x by A6,A15
       .= (f1|X1).x by A16,FUNCT_1:72;
+A18: x in dom (f|(X1 \/ X2)) by A8,A9,A10,A11,A16,XBOOLE_0:def 2;
     for N1 being Neighbourhood of (f|(X1 \/ X2)).x
     ex N being Neighbourhood of x st
     for x1 being real number st x1 in dom (f|(X1 \/ X2)) & x1 in N holds
     (f|(X1 \/ X2)).x1 in N1
     proof
       let N1 be Neighbourhood of (f|(X1 \/ X2)).x;
-      f1|X1 is_continuous_in x by A4,A16,FCONT_1:def 2;
+      x in dom(f1|X1) by A16,RELAT_1:86;
+      then f1|X1 is_continuous_in x by A4,A16,FCONT_1:def 2,Z;
       then consider N being Neighbourhood of x such that
 A19:  for x1 being real number st x1 in dom (f1|X1) & x1 in N holds
       (f1|X1).x1 in N1 by A17,FCONT_1:4;
@@ -754,20 +760,22 @@ A28:    not x1 in dom (f|X1);
         hence (f|(X1 \/ X2)).x1 in N1 by A10,A11,A20,A28;
       end;
     end;
-    hence f|dom f is_continuous_in x by A1,FCONT_1:4;
+    hence f|dom f is_continuous_in x by A1,A18,FCONT_1:4;
   end;
   suppose
 A29: x in X2;
     then
 A30: (f|(X1 \/ X2)).x = f2.x by A7,A15
       .= (f2|X2).x by A29,FUNCT_1:72;
+A31: x in dom (f|(X1 \/ X2)) by A8,A9,A12,A13,A29,XBOOLE_0:def 2;
     for N1 being Neighbourhood of (f|(X1 \/ X2)).x
     ex N being Neighbourhood of x st
     for x1 being real number st x1 in dom (f|(X1 \/ X2)) & x1 in N holds
     (f|(X1 \/ X2)).x1 in N1
     proof
       let N1 be Neighbourhood of (f|(X1 \/ X2)).x;
-      f2|X2 is_continuous_in x by A5,A29,FCONT_1:def 2;
+      x in dom(f2|X2) by A29,RELAT_1:86;
+      then f2|X2 is_continuous_in x by A5,A29,FCONT_1:def 2,Z;
       then consider N being Neighbourhood of x such that
 A32:  for x1 being real number st x1 in dom (f2|X2) & x1 in N holds
       (f2|X2).x1 in N1 by A30,FCONT_1:4;
@@ -798,7 +806,7 @@ A41:    not x1 in dom (f|X2);
         hence (f|(X1 \/ X2)).x1 in N1 by A12,A13,A33,A41;
       end;
     end;
-    hence f|dom f is_continuous_in x by A1,FCONT_1:4;
+    hence f|dom f is_continuous_in x by A1,A31,FCONT_1:4;
   end;
 end;
 
@@ -855,16 +863,17 @@ end;
 
 theorem
   for f being Function of R^1,R^1, g being Function of REAL,REAL st
-  f = g & g is_continuous_on REAL holds f is continuous
+  f = g & g|REAL is continuous holds f is continuous
 proof
   let f be Function of R^1,R^1, g be Function of REAL,REAL such that
 A1: f = g and
-A2: g is_continuous_on REAL;
+A2: g|REAL is continuous;
   for x being Point of R^1 holds f is_continuous_at x
   proof
     let x be Point of R^1;
 A3: dom g = REAL by FUNCT_2:def 1;
     x is Real by XREAL_0:def 1;
+    then x in dom(g|REAL) by A3,RELAT_1:86;
     then g|REAL is_continuous_in x by A2,FCONT_1:def 2;
     then g is_continuous_in x by A3,RELAT_1:98;
     hence f is_continuous_at x by A1,Th42;
@@ -981,7 +990,7 @@ A7:   a <= x by A3,A5,XXREAL_1:1;
       x < r by A6,XXREAL_1:4;
       hence thesis by A7,XXREAL_1:3;
     end;
-    a-1 < a-0 by XREAL_1:17;
+    a-1 < a-0 by XREAL_1:15,16,17;
     then A c= C by XXREAL_1:48;
     hence thesis by XBOOLE_1:19;
   end;

@@ -7,11 +7,12 @@
 environ
 
  vocabularies RELAT_1, BOOLE, FUNCT_1, PARTFUN1, FUNCT_2, SGRAPH1, RELAT_2,
-      FUNCT_3, MCART_1, SUBSET_1, COMPLEX1, FINSEQ_4, SETFAM_1, TARSKI;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, RELAT_2,
-      FUNCT_1, RELSET_1, PARTFUN1, MCART_1;
+      FUNCT_3, MCART_1, SUBSET_1, COMPLEX1, FINSEQ_4, SETFAM_1, TARSKI,
+      OPPCAT_1, NORMSP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MCART_1, RELAT_1,
+      RELAT_2, FUNCT_1, RELSET_1, PARTFUN1;
  constructors RELAT_2, PARTFUN1, MCART_1, SETFAM_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, RELSET_1;
  requirements SUBSET, BOOLE;
 
 
@@ -19,9 +20,7 @@ begin
 
 reserve P,Q,X,Y,Z,p,x,x',x1,x2,y,z for set;
 
-::::::::::::::::::::::::::::::::::::
 :: function from a set into a set ::
-::::::::::::::::::::::::::::::::::::
 
 definition
   let X,Y;
@@ -86,9 +85,7 @@ scheme :: FUNCT_2:sch 2
 provided
  for x st x in X() holds F(x) in Y();
 
-::::::::::::::::::::::::::::::::::::::::::::
 :: set of functions from a set into a set ::
-::::::::::::::::::::::::::::::::::::::::::::
 
 definition
   let X,Y;
@@ -265,9 +262,7 @@ theorem :: FUNCT_2:53
   st (Z = {} implies Y = {}) & (Y = {} implies X = {})
   holds f"Q c= (g*f)"(g.:Q);
 
-::::::::::::::::::::
 :: Empty Function ::
-::::::::::::::::::::
 
 canceled;
 
@@ -282,9 +277,7 @@ theorem :: FUNCT_2:59
 theorem :: FUNCT_2:60
   for f being Function of {},Y holds f"Q = {};
 
-:::::::::::::::::::::::::::::::::::::::
 :: Function from a singelton into set::
-:::::::::::::::::::::::::::::::::::::::
 
 theorem :: FUNCT_2:61
   for f being Function of {x},Y st Y <> {} holds f.x in Y;
@@ -297,9 +290,7 @@ canceled;
 theorem :: FUNCT_2:64
   for f being Function of {x},Y st Y <> {} holds f.:P c= {f.x};
 
-::::::::::::::::::::::::::::::::::::::::::
 :: Function from a set into a singelton ::
-::::::::::::::::::::::::::::::::::::::::::
 
 theorem :: FUNCT_2:65
   for f being Function of X,{y} st x in X holds f.x = y;
@@ -307,18 +298,22 @@ theorem :: FUNCT_2:65
 theorem :: FUNCT_2:66
   for f1,f2 being Function of X,{y} holds f1 = f2;
 
-::::::::::::::::::::::::::::
 :: Function from X into X ::
-::::::::::::::::::::::::::::
-
-registration
-  let X;
-  let f,g be quasi_total PartFunc of X,X;
-  cluster g*f -> quasi_total PartFunc of X,X;
-end;
 
 theorem :: FUNCT_2:67
   for f being Function of X,X holds dom f = X;
+
+registration let X,Y be set;
+ let f be quasi_total PartFunc of X,Y;
+ let g be quasi_total PartFunc of X,X;
+ cluster f*g -> quasi_total PartFunc of X,Y;
+end;
+
+registration let X,Y be set;
+ let f be quasi_total PartFunc of Y,Y;
+ let g be quasi_total PartFunc of X,Y;
+ cluster f*g -> quasi_total PartFunc of X,Y;
+end;
 
 canceled 2;
 
@@ -353,9 +348,7 @@ canceled 2;
 theorem :: FUNCT_2:82
   for f being Function of X,X holds f"(f.:X) = X;
 
-::::::::::::::::::::::::::
 :: Permutation of a set ::
-::::::::::::::::::::::::::
 
 definition
   let X, Y be set;
@@ -438,9 +431,7 @@ canceled 3;
 theorem :: FUNCT_2:92
   for f being Permutation of X st P c= X holds f.:(f"P) = P & f"(f.:P) = P;
 
-::::::::::::::::::::::::::::::::::::::::::::
 :: Function from a set into a nonempty set
-::::::::::::::::::::::::::::::::::::::::::::
 
 reserve D for non empty set;
 
@@ -822,3 +813,33 @@ theorem :: FUNCT_2:184
   for T,S being non empty set, f being Function of T,S,
   P being Subset-Family of T holds union P c= union(f"(f.:P));
 
+:: Generelized RFUNCT_2:def 1,CFCONT_1:def 1,NFCONT_1:def 7,def 8
+::  NCFCONT1:def 9,def 10,def 11,def 12,def 13,def 14
+:: 2008.08.15, A.T.
+
+definition let X,Y,Z be set;
+ let f be Function of X,Y;
+ let p be PartFunc of Y,Z;
+ assume that
+ Y <> {} and
+ rng f c= dom p;
+ func p/*f -> Function of X,Z equals
+:: FUNCT_2:def 12
+ p*f;
+end;
+
+reserve Y for non empty set,
+        f for Function of X,Y,
+        p for PartFunc of Y,Z,
+        x for Element of X;
+
+theorem :: FUNCT_2:185
+ X <> {} & rng f c= dom p implies (p/*f).x = p.(f.x);
+
+theorem :: FUNCT_2:186
+ X <> {} & rng f c= dom p implies (p/*f).x = p/.(f.x);
+
+reserve g for Function of X,X;
+
+theorem :: FUNCT_2:187
+  rng f c= dom p implies (p/*f)*g = p/*(f*g);

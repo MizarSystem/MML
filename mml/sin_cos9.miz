@@ -8,7 +8,7 @@ environ
 
  vocabularies FUNCT_1, RELAT_1, PRE_TOPC, ARYTM_1, ARYTM_3, PARTFUN1, SIN_COS,
       FDIFF_1, SQUARE_1, FINSEQ_1, SIN_COS4, ARYTM, BOOLE, SEQ_1, RCOMP_1,
-      INT_1, FCONT_1, RFUNCT_2, SIN_COS9, TAYLOR_1, PREPOWER, LIMFUNC1,
+      INT_1, SIN_COS9, TAYLOR_1, PREPOWER, LIMFUNC1,
       SEQM_3, ORDINAL2;
  notations TARSKI, SUBSET_1, ORDINAL1, XXREAL_0, XCMPLX_0, FUNCT_1, RELSET_1,
       PARTFUN1, RCOMP_1, SIN_COS, RFUNCT_1, SQUARE_1, VALUED_1, NUMBERS,
@@ -19,7 +19,7 @@ environ
       SEQ_1, XXREAL_2, PARTFUN1, SIN_COS6;
  registrations XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED, RCOMP_1, RELSET_1,
       SIN_COS, FUNCT_1, SIN_COS6, RFUNCT_2, NUMBERS, INT_1, VALUED_0,
-      XXREAL_2;
+      XXREAL_2, PARTFUN2;
  requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
  definitions TARSKI, XCMPLX_0, LIMFUNC1, SIN_COS, VALUED_1, SQUARE_1;
  theorems FDIFF_2, XCMPLX_1, FDIFF_1, RELAT_1, SIN_COS, COMPTRIG, RFUNCT_2,
@@ -140,14 +140,15 @@ theorem
   for x st x in ].0,PI.[ holds diff(cot,x) = -1/(sin.x)^2 by Lm2,Lm4;
 
 theorem
-  tan is_continuous_on ].-PI/2,PI/2.[ by Lm1,FDIFF_1:33;
+  tan|].-PI/2,PI/2.[ is continuous  by Lm1,FDIFF_1:33;
 
 theorem
-  cot is_continuous_on ].0,PI.[ by Lm2,FDIFF_1:33;
+  cot|].0,PI.[ is continuous  by Lm2,FDIFF_1:33;
 
 theorem Th7:
   tan|].-PI/2,PI/2.[ is increasing
 proof
+X: ].-PI/2,PI/2.[ c= dom tan by Lm1,FDIFF_1:def 7;
     for x be Real st x in ].-PI/2,PI/2.[ holds diff(tan,x) > 0
     proof
       let x be Real;
@@ -155,15 +156,16 @@ proof
   A3: x in ].-PI/2,PI/2.[;
       then 0 < cos.x by COMPTRIG:27;then
       (cos.x)^2 > 0 by SQUARE_1:74;
-      then 1/(cos.x)^2 > 0 /(cos.x)^2 by XREAL_1:76;
+      then 1/(cos.x)^2 > 0 /(cos.x)^2 by XREAL_1:74,76;
       hence thesis by A3,Lm3;
     end;
-    hence thesis by Lm1,ROLLE:9;
+    hence thesis by Lm1,ROLLE:9,X;
 end;
 
 theorem Th8:
   cot|].0,PI.[ is decreasing
 proof
+X: ].0,PI.[ c= dom cot by Lm2,FDIFF_1:def 7;
     PI in ].0, 4.[ by SIN_COS:def 32;then
 A1: PI > 0 by XXREAL_1:4;
     for x be Real st x in ].0,PI.[ holds diff(cot,x) < 0
@@ -173,14 +175,14 @@ A1: PI > 0 by XXREAL_1:4;
   A3: x in ].0,PI.[;
       then 0 < sin.x by COMPTRIG:23;then
       (sin.x)^2 > 0 by SQUARE_1:74;
-      then 1/(sin.x)^2 > 0 /(sin.x)^2 by XREAL_1:76;
+      then 1/(sin.x)^2 > 0 /(sin.x)^2 by XREAL_1:74,76;
       then -1/(sin.x)^2 < -0 by XREAL_1:26;
       hence thesis by A3,Lm4;
     end;
-    hence thesis by A1,Lm2,ROLLE:10;
+    hence thesis by A1,Lm2,ROLLE:10,X;
 end;
 
-theorem
+theorem Thx:
   tan | ].-PI/2,PI/2.[ is one-to-one by Th7,FCONT_3:16;
 
 theorem
@@ -416,7 +418,7 @@ A3: x in ].-PI/4,PI/4.[ or x in {-PI/4,PI/4} by XBOOLE_0:def 2;
    A6:  [.-PI/4,PI/4.] c= ].-PI/2,PI/2.[ by Lm7,Lm8,XXREAL_2:def 12;
    then
    A7:  tan|[.-PI/4,PI/4.] is increasing
-        by Th7,RFUNCT_2:60;
+        by Lm7,Lm8,Th7,XXREAL_2:def 12,RFUNCT_2:60;
         -PI/4 in {s where s is Real: -PI/4 <= s & s <= PI/4};then
    A8:  -PI/4 in [.-PI/4,PI/4.] by RCOMP_1:def 1;
    A9:  [.-PI/4,PI/4.] /\ dom tan = [.-PI/4,PI/4.]
@@ -472,7 +474,7 @@ A3: x in ].PI/4,3/4*PI.[ or x in {PI/4,3/4*PI} by XBOOLE_0:def 2;
    A6:  [.PI/4,3/4*PI.] c= ].0,PI.[ by Lm9,Lm10,XXREAL_2:def 12;
    then
    A7:  cot|[.PI/4,3/4*PI.] is decreasing
-        by Th8,RFUNCT_2:61;
+        by Lm9,Lm10,Th8,XXREAL_2:def 12,RFUNCT_2:61;
    A8:  PI/4 in {s where s is Real: PI/4 <= s & s <= 3/4*PI} by A2;
    A9:  [.PI/4,3/4*PI.] /\ dom cot = [.PI/4,3/4*PI.]
         by A6,Th2,XBOOLE_1:1,XBOOLE_1:28;then
@@ -513,18 +515,19 @@ proof
       assume
   A1: y in [.-1,1.];
       then reconsider y1=y as Real;
-  A2: tan is_continuous_on ].-PI/2,PI/2.[ by Lm1,FDIFF_1:33;
-     [.-PI/4,PI/4.] c= ].-PI/2,PI/2.[
-      by Lm7,Lm8,XXREAL_2:def 12;
+  A2: tan|].-PI/2,PI/2.[ is continuous  by Lm1,FDIFF_1:33;
+F:     [.-PI/4,PI/4.] c= ].-PI/2,PI/2.[
+      by A2,Lm7,Lm8,XXREAL_2:def 12,FCONT_1:17;
+Y:   [.-PI/4,PI/4.] c= dom tan by Th1,F,XBOOLE_1:1;
      then
-  A4: tan is_continuous_on [.-PI/4,PI/4.]
-      by A2,FCONT_1:17;
+  A4: tan|[.-PI/4,PI/4.] is continuous
+      by A2,Lm7,Lm8,XXREAL_2:def 12,FCONT_1:17,F,Th1;
       y1 in [.tan.(-PI/4),tan.(PI/4).] by A1,SIN_COS:def 32,Th15;
       then y1 in [.tan.(-PI/4),tan.(PI/4).] \/ [.tan.(PI/4),tan.(-PI/4).]
       by XBOOLE_0:def 2;
       then consider x be Real such that
   A5: x in [.-PI/4,PI/4.] and
-  A6: y1 = tan.x by A4,FCONT_2:16;
+  A6: y1 = tan.x by A4,FCONT_2:16,Y;
       take x;
       thus x in dom (tan | [.-PI/4,PI/4.]) & y = (tan | [.-PI/4,PI/4.]).x
       by A5,A6,Lm11,FUNCT_1:72;
@@ -561,17 +564,19 @@ proof
         then (PI/4)*3 > PI/4 by REAL_2:144;
         hence PI/4 <= 3/4*PI;
       end;
-  A3: cot is_continuous_on ].0,PI.[ by Lm2,FDIFF_1:33;
-      [.PI/4,3/4*PI.] c= ].0,PI.[
-      by Lm9,Lm10,XXREAL_2:def 12;
-      then
-  A5: cot is_continuous_on [.PI/4,3/4*PI.]
-      by A3,FCONT_1:17;
+  A3: cot|].0,PI.[ is continuous  by Lm2,FDIFF_1:33;
+F:    [.PI/4,3/4*PI.] c= ].0,PI.[
+      by A3,Lm9,Lm10,XXREAL_2:def 12,FCONT_1:17;
+     ].0,PI.[ c= dom cot by A3,Lm9,Lm10,XXREAL_2:def 12,Th2;
+     then
+  A5: cot|[.PI/4,3/4*PI.] is continuous
+      by A3,Lm9,Lm10,XXREAL_2:def 12,FCONT_1:17,F;
+Y:    [.PI/4,3/4*PI.] c= dom cot by F,Th2,XBOOLE_1:1;
       y1 in [.cot.(3/4*PI),cot.(PI/4).] \/ [.cot.(PI/4),cot.(3/4*PI).]
       by A1,Th16,XBOOLE_0:def 2;
       then consider x be Real such that
   A6: x in [.PI/4,3/4*PI.] and
-  A7: y1 = cot.x by A2,A5,FCONT_2:16;
+  A7: y1 = cot.x by A2,A5,FCONT_2:16,Y;
       take x;
       thus x in dom (cot | [.PI/4,3/4*PI.]) & y = (cot | [.PI/4,3/4*PI.]).x
       by A6,A7,Lm12,FUNCT_1:72;
@@ -632,32 +637,32 @@ Lm13:
   tan | [.-PI/4,PI/4.]|[.-PI/4,PI/4.] is increasing
 proof
     [.-PI/4,PI/4.] c= ].-PI/2,PI/2.[
-    by Lm7,Lm8,XXREAL_2:def 12;
+    by Lm7,Lm8,Th7,XXREAL_2:def 12,RFUNCT_2:60;
     then
     tan|[.-PI/4,PI/4.] is increasing
-    by Th7,RFUNCT_2:60;
-    hence thesis;
+    by Lm7,Lm8,Th7,XXREAL_2:def 12,RFUNCT_2:60;
+    hence thesis by RELAT_1:101;
 end;
 
 Lm14:
   cot | [.PI/4,3/4*PI.] |[.PI/4,3/4*PI.] is decreasing
 proof
      [.PI/4,3/4*PI.] c=  ].0,PI.[
-    by Lm9,Lm10,XXREAL_2:def 12;
+    by Lm9,Lm10,Th8,XXREAL_2:def 12,RFUNCT_2:61;
      then
     cot|[.PI/4,3/4*PI.] is decreasing
-    by Th8,RFUNCT_2:61;
-    hence thesis;
+    by Lm9,Lm10,Th8,XXREAL_2:def 12,RFUNCT_2:61;
+    hence thesis by RELAT_1:101;
 end;
 
 Lm15:
   tan | [.-PI/4,PI/4.] is one-to-one
 proof
     [.-PI/4,PI/4.] c= ].-PI/2,PI/2.[
-    by Lm7,Lm8,XXREAL_2:def 12;
+    by Lm7,Lm8,Th7,XXREAL_2:def 12,RFUNCT_2:60;
     then
     (tan | ].-PI/2,PI/2.[) | [.-PI/4,PI/4.]
-    = tan | [.-PI/4,PI/4.] by RELAT_1:103;
+    = tan | [.-PI/4,PI/4.] by Lm7,Lm8,XXREAL_2:def 12,RELAT_1:103;
     hence tan | [.-PI/4,PI/4.] is one-to-one;
 end;
 
@@ -665,10 +670,10 @@ Lm16:
   cot | [.PI/4,3/4*PI.] is one-to-one
 proof
      [.PI/4,3/4*PI.] c=  ].0,PI.[
-    by Lm9,Lm10,XXREAL_2:def 12;
+    by Lm9,Lm10,Th8,XXREAL_2:def 12,RFUNCT_2:61;
      then
     (cot | ].0,PI.[) | [.PI/4,3/4*PI.] = cot | [.PI/4,3/4*PI.]
-    by RELAT_1:103;
+    by Lm9,Lm10,XXREAL_2:def 12,RELAT_1:103;
     hence cot | [.PI/4,3/4*PI.] is one-to-one;
 end;
 
@@ -685,11 +690,11 @@ proof
 X: [.-PI/4,PI/4.] c= ].-PI/2,PI/2.[ by Lm7,Lm8,XXREAL_2:def 12;
     set h = tan | ].-PI/2,PI/2.[;
     (tan | [.-PI/4,PI/4.])" = (h | [.-PI/4,PI/4.])"
-                            by RELAT_1:103,X
+                            by Lm7,Lm8,XXREAL_2:def 12,RELAT_1:103,X
                            .= h" | (h.:[.-PI/4,PI/4.]) by RFUNCT_2:40
                            .= h" | rng (h | [.-PI/4,PI/4.]) by RELAT_1:148
                            .= h" | ([.-1,1.])
-                            by Th19,RELAT_1:103,X;
+                            by Lm7,Lm8,Th19,XXREAL_2:def 12,RELAT_1:103,X;
     hence (tan | [.-PI/4,PI/4.])" = arctan | [.-1,1.];
 end;
 
@@ -699,11 +704,11 @@ proof
 X:  [.PI/4,3/4*PI.] c= ].0,PI.[ by Lm9,Lm10,XXREAL_2:def 12;
     set h = cot | ].0,PI.[;
     (cot | [.PI/4,3/4*PI.])" = (h | [.PI/4,3/4*PI.])"
-                             by RELAT_1:103,X
+                             by Lm9,Lm10,XXREAL_2:def 12,RELAT_1:103,X
                             .= h" | (h.:[.PI/4,3/4*PI.]) by RFUNCT_2:40
                             .= h" | rng (h | [.PI/4,3/4*PI.]) by RELAT_1:148
                             .= h" | ([.-1,1.])
-                             by Th20,RELAT_1:103,X;
+                             by Lm9,Lm10,Th20,XXREAL_2:def 12,RELAT_1:103,X;
     hence (cot | [.PI/4,3/4*PI.])" = arccot | [.-1,1.];
 end;
 
@@ -847,7 +852,7 @@ theorem Th43:
 proof
     set f = tan | ].-PI/2,PI/2.[;
 A4: f|].-PI/2,PI/2.[ = f by RELAT_1:102;
-A5: f|].-PI/2,PI/2.[ is increasing by Th7;
+A5: f|].-PI/2,PI/2.[ is increasing by Th7,RELAT_1:101;
     f.:].-PI/2,PI/2.[ = rng(f|].-PI/2,PI/2.[) by RELAT_1:148
                      .= rng(tan|].-PI/2,PI/2.[) by RELAT_1:102
                      .= tan.:].-PI/2,PI/2.[ by RELAT_1:148;
@@ -859,7 +864,7 @@ theorem Th44:
 proof
     set f = cot | ].0,PI.[;
 A4: f|].0,PI.[ = f by RELAT_1:102;
-A5: f|].0,PI.[ is decreasing  by Th8;
+A5: f|].0,PI.[ is decreasing  by Th8,RELAT_1:101;
     f.:].0,PI.[ = rng(f|].0,PI.[) by RELAT_1:148
                .= rng(cot|].0,PI.[) by RELAT_1:102
                .= cot.:].0,PI.[ by RELAT_1:148;
@@ -872,7 +877,7 @@ proof
 X: [.-PI/4,PI/4.] c= ].-PI/2,PI/2.[ by Lm7,Lm8,XXREAL_2:def 12;
 A2: [.-1,1.] = tan.:[.-PI/4,PI/4.] by Th19,RELAT_1:148;
     [.-1,1.] c= tan.:].-PI/2,PI/2.[
-    by A2,RELAT_1:156,X;
+    by A2,Lm7,Lm8,XXREAL_2:def 12,RELAT_1:156,X;
     hence arctan|[.-1,1.] is increasing by Th43,RFUNCT_2:60;
 end;
 
@@ -882,7 +887,7 @@ proof
 X:  [.PI/4,3/4*PI.] c= ].0,PI.[ by Lm9,Lm10,XXREAL_2:def 12;
 A2: [.-1,1.] = cot.:[.PI/4,3/4*PI.] by Th20,RELAT_1:148;
     [.-1,1.] c= cot.:].0,PI.[
-    by A2,RELAT_1:156,X;
+    by A2,Lm9,Lm10,XXREAL_2:def 12,RELAT_1:156,X;
     hence arccot|[.-1,1.] is decreasing by Th44,RFUNCT_2:61;
 end;
 
@@ -991,19 +996,19 @@ A4: [.PI/4,3/4*PI.] c= ].0,PI.[ by Lm9,Lm10,XXREAL_2:def 12;
 end;
 
 theorem Th51:
-  arctan is_continuous_on [.-1,1.]
+  arctan|[.-1,1.] is continuous
 proof
     set f = tan | [.-PI/4,PI/4.];
 A3: f|[.-PI/4,PI/4.] = f by RELAT_1:101;
-    (f|[.-PI/4,PI/4.])" is_continuous_on f.:[.-PI/4,PI/4.]
+    (f|[.-PI/4,PI/4.])"|(f.:[.-PI/4,PI/4.]) is continuous
     by Lm11,Lm13,FCONT_1:54;
-    then arctan | [.-1,1.] is_continuous_on [.-1,1.]
+    then arctan | [.-1,1.]|[.-1,1.] is continuous
     by A3,Th19,Th23,RELAT_1:148;
-    hence arctan is_continuous_on [.-1,1.] by FCONT_1:16;
+    hence arctan|[.-1,1.] is continuous  by FCONT_1:16;
 end;
 
 theorem Th52:
-  arccot is_continuous_on [.-1,1.]
+  arccot|[.-1,1.] is continuous
 proof
     set f = cot | [.PI/4,3/4*PI.];
     PI in ].0,4.[ by SIN_COS:def 32;
@@ -1011,11 +1016,11 @@ proof
     then PI/4 > 0/4 by XREAL_1:76;then
 A1: PI/4 < (PI/4)*3 by REAL_2:144;
 A3: f|[.PI/4,3/4*PI.] = f by RELAT_1:101;
-    (f|[.PI/4,3/4*PI.])" is_continuous_on f.:[.PI/4,3/4*PI.]
+    (f|[.PI/4,3/4*PI.])"|(f.:[.PI/4,3/4*PI.]) is continuous
     by A1,Lm12,Lm14,FCONT_1:54;
-    then arccot | [.-1,1.] is_continuous_on [.-1,1.]
+    then arccot | [.-1,1.]|[.-1,1.] is continuous
     by A3,Th20,Th24,RELAT_1:148;
-    hence arccot is_continuous_on [.-1,1.] by FCONT_1:16;
+    hence arccot|[.-1,1.] is continuous  by FCONT_1:16;
 end;
 
 theorem Th53:
@@ -1033,7 +1038,7 @@ proof
       by A1,Th35,Th37,XBOOLE_0:def 2;
       then consider x be Real such that
   A3: x in [.-1,1.] and
-  A4: y1 = arctan.x by Th51,FCONT_2:16;
+  A4: y1 = arctan.x by Th51,FCONT_2:16,Th21;
       take x;
       thus x in dom (arctan | [.-1,1.]) & y = (arctan | [.-1,1.]).x
       by A3,A4,Th21,RELAT_1:91,FUNCT_1:72;
@@ -1068,7 +1073,7 @@ proof
       by A1,Th36,Th38,XBOOLE_0:def 2;
       then consider x be Real such that
   A3: x in [.-1,1.] and
-  A4: y1 = arccot.x by Th52,FCONT_2:16;
+  A4: y1 = arccot.x by Th52,FCONT_2:16,Th22;
       take x;
       thus x in dom (arccot | [.-1,1.]) & y = (arccot | [.-1,1.]).x
       by A3,A4,Th22,RELAT_1:91,FUNCT_1:72;
@@ -1251,6 +1256,9 @@ A1: f|].-PI/2,PI/2.[ = f by RELAT_1:101;
 A3: dom(f") = rng (tan|].-PI/2,PI/2.[) by FUNCT_1:55
            .= tan.:].-PI/2,PI/2.[ by RELAT_1:148;
 A5: f is_differentiable_on ].-PI/2,PI/2.[ by Lm1,FDIFF_2:16;
+   dom f = dom tan /\ ].-PI/2,PI/2.[ by RELAT_1:90;
+   then
+X: ].-PI/2,PI/2.[ c= dom f by Th1,XBOOLE_1:19;
     now
       let x0 be Real such that
   A7: x0 in ].-PI/2,PI/2.[;
@@ -1264,12 +1272,13 @@ A5: f is_differentiable_on ].-PI/2,PI/2.[ by Lm1,FDIFF_2:16;
         assume x0 in ].-PI/2,PI/2.[;
         then 0 < cos.x0 by COMPTRIG:27;then
     A9: (cos.x0)^2 > 0 by SQUARE_1:74;
-        1/(cos.x0)^2 > 0 /(cos.x0)^2 by A9,XREAL_1:76;
+        1/(cos.x0)^2 > 0 /(cos.x0)^2 by A9,XREAL_1:74,76;
         hence 1/(cos.x0)^2 > 0;
       end;
       hence 0 < diff(f,x0) by A7,A8;
     end;
-    hence g is_differentiable_on tan.:].-PI/2,PI/2.[ by A1,A3,A5,FDIFF_2:48;
+ hence g is_differentiable_on tan.:].-PI/2,PI/2.[
+  by A1,A3,A5,FDIFF_2:48,Th1,Thx,X;
 end;
 
 theorem Th70:
@@ -1280,6 +1289,9 @@ proof
 A1: f|].0,PI.[ = f by RELAT_1:101;
 A3: dom(f") = rng (cot|].0,PI.[) by FUNCT_1:55
            .= cot.:].0,PI.[ by RELAT_1:148;
+   dom f = dom cot /\ ].0,PI.[ by RELAT_1:90;
+   then
+X: ].0,PI.[ c= dom f by Th2,XBOOLE_1:19;
 A5: f is_differentiable_on ].0,PI.[ by Lm2,FDIFF_2:16;
     now
       let x0 be Real such that
@@ -1294,13 +1306,13 @@ A5: f is_differentiable_on ].0,PI.[ by Lm2,FDIFF_2:16;
         assume x0 in ].0,PI.[;
         then 0 < sin.x0 by COMPTRIG:23;then
     A9: (sin.x0)^2 > 0 by SQUARE_1:74;
-        1/(sin.x0)^2 > 0 /(sin.x0)^2 by A9,XREAL_1:76;
+        1/(sin.x0)^2 > 0 /(sin.x0)^2 by A9,XREAL_1:74,76;
         then -1/(sin.x0)^2 < -0 by XREAL_1:26;
         hence -1/(sin.x0)^2 < 0;
       end;
       hence diff(f,x0) < 0 by A7,A8;
     end;
-    hence g is_differentiable_on cot.:].0,PI.[ by A1,A3,A5,FDIFF_2:48;
+    hence g is_differentiable_on cot.:].0,PI.[ by A1,A3,A5,FDIFF_2:48,X;
 end;
 
 theorem Th71:
@@ -1379,14 +1391,16 @@ A14: now
          assume x0 in ].-PI/2,PI/2.[;
          then 0 < cos.x0 by COMPTRIG:27;then
     A17: (cos.x0)^2 > 0 by SQUARE_1:74;
-         1/(cos.x0)^2 > 0 /(cos.x0)^2 by A17,XREAL_1:76;
+         1/(cos.x0)^2 > 0 /(cos.x0)^2 by A17,XREAL_1:74,76;
          hence 1/(cos.x0)^2 > 0;
        end;
        hence 0 < diff(f,x0) by A15,A16;
      end;
 A18: f|].-PI/2,PI/2.[ = f by RELAT_1:101;
-     diff(g,r) = 1/(1/(cos x)^2)
-               by A2,A6,A13,A14,A18,Th21,FDIFF_2:48
+   dom f = dom tan /\ ].-PI/2,PI/2.[ by RELAT_1:90;
+   then
+    ].-PI/2,PI/2.[ c= dom f by Th1,XBOOLE_1:19;
+     then diff(g,r) = 1/(1/(cos x)^2) by A2,A6,A13,A14,A18,Th21,FDIFF_2:48
               .= 1/(r^2+1) by A9,XCMPLX_1:74;
      hence diff(arctan,r) = 1/(1+r^2);
 end;
@@ -1430,28 +1444,31 @@ A14: now
          assume x0 in ].0,PI.[;
          then 0 < sin.x0 by COMPTRIG:23;then
     A17: (sin.x0)^2 > 0 by SQUARE_1:74;
-         1/(sin.x0)^2 > 0 /(sin.x0)^2 by A17,XREAL_1:76;
+         1/(sin.x0)^2 > 0 /(sin.x0)^2 by A17,XREAL_1:74,76;
          then -1/(sin.x0)^2 < -0 by XREAL_1:26;
          hence -1/(sin.x0)^2 < 0;
        end;
        hence diff(f,x0) < 0 by A15,A16;
      end;
 A18: f|].0,PI.[ = f by RELAT_1:101;
-     diff(g,r) = 1/(-(1/(sin x)^2)) by A2,A6,A13,A14,A18,Th22,FDIFF_2:48
+   dom f = dom cot /\ ].0,PI.[ by RELAT_1:90;
+   then ].0,PI.[ c= dom f by Th2,XBOOLE_1:19;
+     then diff(g,r) = 1/(-(1/(sin x)^2)) by A2,A6,A13,A14,A18,Th22,FDIFF_2:48
               .= -1/(1/(sin x)^2) by XCMPLX_1:189
               .= -1/(r^2+1) by A9,XCMPLX_1:74;
      hence diff(arccot,r) = -1/(1+r^2);
 end;
 
 theorem
-  arctan is_continuous_on tan.:].-PI/2,PI/2.[ by Th69,FDIFF_1:33;
+  arctan|(tan.:].-PI/2,PI/2.[) is continuous  by Th69,FDIFF_1:33;
 
 theorem
-  arccot is_continuous_on cot.:].0,PI.[ by Th70,FDIFF_1:33;
+  arccot|(cot.:].0,PI.[) is continuous  by Th70,FDIFF_1:33;
 
 theorem
   dom arctan is open
 proof
+X: ].-PI/2,PI/2.[ c= dom tan by Th1;
     for x0 be Real st x0 in ].-PI/2,PI/2.[ holds 0 < diff(tan,x0)
     proof
       let x0 be Real;
@@ -1459,16 +1476,17 @@ proof
   A2: x0 in ].-PI/2,PI/2.[;
       0 < cos.x0 by A2,COMPTRIG:27;then
   A4: (cos.x0)^2 > 0 by SQUARE_1:74;
-      1/(cos.x0)^2 > 0 /(cos.x0)^2 by A4,XREAL_1:76;
+      1/(cos.x0)^2 > 0 /(cos.x0)^2 by A4,XREAL_1:74,76;
       hence 0 < diff(tan,x0) by A2,Lm3;
     end;
-    then rng (tan|].-PI/2,PI/2.[) is open by Lm1,FDIFF_2:41;
+    then rng (tan|].-PI/2,PI/2.[) is open by Lm1,FDIFF_2:41,X;
     hence dom arctan is open by FUNCT_1:55;
 end;
 
 theorem
   dom arccot is open
 proof
+X: ].0,PI.[ c= dom cot by Th2;
     for x0 be Real st x0 in ].0,PI.[ holds diff(cot,x0) < 0
     proof
       let x0 be Real;
@@ -1476,11 +1494,11 @@ proof
   A2: x0 in ].0,PI.[;
       0 < sin.x0 by A2,COMPTRIG:23;then
   A4: (sin.x0)^2 > 0 by SQUARE_1:74;
-      1/(sin.x0)^2 > 0 /(sin.x0)^2 by A4,XREAL_1:76;
+      1/(sin.x0)^2 > 0 /(sin.x0)^2 by A4,XREAL_1:74,76;
       then -1/(sin.x0)^2 < -0 by XREAL_1:26;
       hence diff(cot,x0) < 0 by A2,Lm4;
     end;
-    then rng (cot|].0,PI.[) is open by Lm2,FDIFF_2:41;
+    then rng (cot|].0,PI.[) is open by Lm2,FDIFF_2:41,X;
     hence dom arccot is open by FUNCT_1:55;
 end;
 

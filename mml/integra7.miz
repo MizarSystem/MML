@@ -7,8 +7,8 @@
 environ
 
  vocabularies INTEGRA1, INTEGRA2, ARYTM_1, RELAT_1, FUNCT_1, SEQFUNC, PARTFUN1,
-      REALSET1, SEQ_1, SEQ_2, FUNCT_3, RLVECT_1, BOOLE, RFUNCT_1, FCONT_1,
-      ABSVALUE, ORDINAL2, ARYTM_3, SQUARE_1, FDIFF_1, RCOMP_1, PARTFUN2,
+      REALSET1, SEQ_1, SEQ_2, FUNCT_3, RLVECT_1, BOOLE, FCONT_1,
+      ABSVALUE, ORDINAL2, ARYTM_3, SQUARE_1, FDIFF_1, RCOMP_1,
       PRE_TOPC, INTEGRA5, FINSEQ_1, FINSEQ_2, FINSEQ_4, ARYTM, SIN_COS,
       INTEGRA7, MEASURE5, PREPOWER, LATTICES, SEQM_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
@@ -19,10 +19,10 @@ environ
       INTEGRA2, SEQFUNC, SIN_COS, TAYLOR_1, INTEGRA5;
  constructors REAL_1, FDIFF_1, PARTFUN1, PARTFUN2, RFUNCT_1, INTEGRA2,
       LIMFUNC1, FCONT_1, PSCOMP_1, NAT_1, BINOP_2, INTEGRA5, SIN_COS, PREPOWER,
-      TAYLOR_1, SQUARE_1, SEQ_1, XXREAL_2, RFUNCT_2;
+      TAYLOR_1, SQUARE_1, SEQ_1, XXREAL_2, RFUNCT_2, SEQFUNC;
  registrations XREAL_0, RELSET_1, FINSEQ_2, INTEGRA1, RCOMP_1, INT_1, ORDINAL1,
       MEMBERED, PREPOWER, XBOOLE_0, NUMBERS, VALUED_0, VALUED_1, FUNCT_2,
-      XXREAL_2, SEQ_2;
+      XXREAL_2, SEQ_2, FCONT_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions XCMPLX_0, SUBSET_1, INTEGRA1, INTEGRA5, VALUED_1, FDIFF_1;
  theorems TARSKI, PARTFUN1, RVSUM_1, ZFMISC_1, PREPOWER, INTEGRA1, INTEGRA2,
@@ -587,7 +587,7 @@ A20: (f(#)G-F(#)g).x = diff(F,x)*G.x - diff(G,x)*F.x by A6,A11,VALUED_1:13;
 end;
 
 theorem
-  a <= b & [' a,b '] c= dom f & f is_continuous_on [' a,b '] &
+  a <= b & [' a,b '] c= dom f & f|[' a,b '] is continuous &
   ]. a,b .[ c= dom F &
   (for x be real number st x in ].a,b.[ holds F.x = integral(f,a,x) + F.a)
   implies F is_integral_of f,]. a,b .[
@@ -596,7 +596,7 @@ proof
   assume that
 A1: a <= b and
 A2: [' a,b '] c= dom f and
-A3: f is_continuous_on [' a,b '] and
+A3: f|[' a,b '] is continuous and
 A4: ]. a,b .[ c= dom F and
 A5: for x be real number st x in ].a,b.[ holds F.x = integral(f,a,x) +F.a;
   [' a,b '] = [.a,b.] by A1,INTEGRA5:def 4;
@@ -626,12 +626,15 @@ A12: for x be Real st x in O holds G is_differentiable_in x & diff(G,x)=f.x
     let x be Real;
     assume
 A13: x in ]. a,b .[;
+     then x in dom f by A7;
+     then
+B13: x in dom(f|O) by A13,RELAT_1:86;
     reconsider z = x as real number;
-    f is_continuous_on O by A3,A6,FCONT_1:17;
+    f|O is continuous by A3,A6,FCONT_1:17,A2;
     then
-A14: f|O is_continuous_in z by A13,FCONT_1:def 2;
+A14: f|O is_continuous_in z by A13,FCONT_1:def 2,B13;
 A15: f|[' a,b '] is bounded & f is_integrable_on [' a,b ']
-    by A3,INTEGRA5:10,11;
+    by A3,INTEGRA5:10,11,A2;
     for r be real number st 0 < r ex s be real number st
     0 < s & for x1 be real number st x1 in dom f & abs(x1-z) < s
     holds abs(f.x1 - f.z) < r
@@ -665,7 +668,7 @@ A21:    O = dom(f|O) by PARTFUN2:32;
       end;
       hence thesis by A16,A17,XXREAL_0:15;
     end;
-    then f is_continuous_in z by FCONT_1:3;
+    then f is_continuous_in z by A7,A13,FCONT_1:3;
     hence thesis by A1,A2,A10,A11,A13,A15,INTEGRA6:28;
   end;
   then for x be Real st x in O holds G is_differentiable_in x;
@@ -746,13 +749,15 @@ end;
 
 theorem
   for x,x0 be real number st
-  f is_continuous_on [.a,b.] & x in ].a,b.[ & x0 in ].a,b.[ &
+  f| [. a,b .] is continuous & [.a,b.] c= dom f
+   & x in ].a,b.[ & x0 in ].a,b.[ &
   F is_integral_of f,].a,b.[ holds F.x = integral(f,x0,x) + F.x0
 proof
   let x,x0 be real number;
   set O = ].a,b.[;
   assume that
-A1: f is_continuous_on [. a,b .] and
+A1: f| [. a,b .] is continuous and
+A0: [. a,b .] c= dom f and
 A2: x in ].a,b.[ & x0 in ].a,b.[ and
 A3: F is_integral_of f,].a,b.[;
 A4: F is_differentiable_on O & F`|O = f|O by A3,Lm1;
@@ -767,12 +772,17 @@ A9: [' x0,x '] c= ].a,b.[ by A6,INTEGRA5:def 4;
     then
 A10: (F`|].a,b.[)||[' x0,x '] = f||[' x0,x '] by A9,FUNCT_1:82;
 A11: [' x0,x '] c= [.a,b.] by A5,A9,XBOOLE_1:1;
-A12: f is_continuous_on [' x0,x '] by A1,A5,A9,FCONT_1:17,XBOOLE_1:1;
-    f is_integrable_on [' x0,x '] by A1,A11,FCONT_1:17,INTEGRA5:17;
-    then f||[' x0,x '] is_integrable_on [' x0,x '] by INTEGRA5:def 2;
+     then
+X:    [' x0,x '] c= dom f by A0,XBOOLE_1:1;
+     then
+A12: f| [' x0,x '] is continuous
+ by A1,A5,A9,FCONT_1:17,XBOOLE_1:1,A5,A0,A11;
+    f|[' x0,x '] is continuous  by A1,A11,FCONT_1:17,INTEGRA5:17,A5,A0,X;
+    then f is_integrable_on [' x0,x '] by A1,A11,INTEGRA5:17,A5,A0,X;
+    then f||[' x0,x '] is integrable by INTEGRA5:def 2;
     then
 A13: F`|].a,b.[ is_integrable_on [' x0,x '] by A10,INTEGRA5:def 2;
-    f|[' x0,x ']|[' x0,x '] is bounded by A12,INTEGRA5:9,10;
+    f|[' x0,x ']|[' x0,x '] is bounded by A12,INTEGRA5:9,10,X;
     then f|[' x0,x '] is bounded by Th3;
     then F.x = integral(f|].a,b.[,x0,x) +F.x0 by A4,A8,A9,A10,A13,Th10;
     then F.x = integral(f|].a,b.[,[' x0,x ']) + F.x0 by A8,INTEGRA5:def 5;
@@ -791,12 +801,17 @@ A16: integral(f,x0,x) = -integral(f,x,x0) by A14,INTEGRA5:def 5;
     then
 A17: (F`|]. a,b .[)|| [' x,x0 '] = f|| [' x,x0 '] by A15,FUNCT_1:82;
 A18: [' x,x0 '] c= [.a,b.] by A5,A15,XBOOLE_1:1;
-A19: f is_continuous_on [' x,x0 '] by A1,A5,A15,FCONT_1:17,XBOOLE_1:1;
-    f is_integrable_on [' x,x0 '] by A1,A18,FCONT_1:17,INTEGRA5:17;
-    then f||[' x,x0 '] is_integrable_on [' x,x0 '] by INTEGRA5:def 2;
+     then
+X: [' x,x0 '] c= dom f by A0,XBOOLE_1:1;
+A19: f| [' x,x0 '] is continuous
+ by A1,A5,A15,FCONT_1:17,XBOOLE_1:1,A5,A0,A18;
+    then
+    f is_integrable_on [' x,x0 '] by A1,A18,FCONT_1:17,INTEGRA5:17,A5,A0,X;
+    then f||[' x,x0 '] is integrable by INTEGRA5:def 2;
     then
 A20: F`|].a,b.[ is_integrable_on [' x,x0 '] by A17,INTEGRA5:def 2;
-    (F`|].a,b.[)|[' x,x0 ']|[' x,x0 '] is bounded  by A17,A19,INTEGRA5:9,10;
+    (F`|].a,b.[)|[' x,x0 '] is bounded  by A17,A19,INTEGRA5:10,X;
+    then (F`|].a,b.[)|[' x,x0 ']|[' x,x0 '] is bounded by A17,A19,INTEGRA5:9;
     then F.x0 = integral(f|]. a,b .[,x,x0) +F.x by A4,A14,A15,A20,Th3,Th10;
     then F.x0 = integral(f|]. a,b .[,[' x,x0 ']) +F.x by A14,INTEGRA5:def 5;
     then F.x0 = integral(f,[' x,x0 ']) +F.x by A15,FUNCT_1:82;
@@ -822,7 +837,7 @@ A4: F is_differentiable_on X & F`|X=f|X by Lm1;
   then
 A5: (F`|X)||[' a,b '] = f||[' a,b '] by A2,FUNCT_1:82;
   assume f is_integrable_on [' a,b '];
-  then f||[' a,b '] is_integrable_on [' a,b '] by INTEGRA5:def 2;
+  then f||[' a,b '] is integrable by INTEGRA5:def 2;
   then
 A6: F`|X is_integrable_on [' a,b '] by A5,INTEGRA5:def 2;
   assume f|[' a,b '] is bounded;
@@ -834,30 +849,35 @@ A6: F`|X is_integrable_on [' a,b '] by A5,INTEGRA5:def 2;
 end;
 
 theorem Th19:
-  a <= b & [. a,b .] c= X & f is_continuous_on X implies
-  f is_continuous_on [' a,b '] & f is_integrable_on [' a,b '] &
+  a <= b & [. a,b .] c= X & X c= dom f & f|X is continuous implies
+  f|[' a,b '] is continuous & f is_integrable_on [' a,b '] &
   f|[' a,b '] is bounded
 proof
   assume a <= b;
   then
 A1: [. a,b .] = [' a,b '] by INTEGRA5:def 4;
-  assume [. a,b .] c= X & f is_continuous_on X;
-  hence f is_continuous_on [' a,b '] by A1,FCONT_1:17;
-  hence thesis by INTEGRA5:10,17;
+  assume
+Z:   [. a,b .] c= X & X c= dom f & f|X is continuous;
+   then
+X: [. a,b .] c= dom f by XBOOLE_1:1;
+  thus f|[' a,b '] is continuous by A1,FCONT_1:17,Z;
+  hence thesis by INTEGRA5:10,17,Z,A1,X;
 end;
 
 theorem Th20:
-  a <= b & [. a,b .] c= X & f is_continuous_on X & F is_integral_of f,X
+  a <= b & [. a,b .] c= X & X c= dom f &
+   f|X is continuous & F is_integral_of f,X
   implies F.b = integral(f,a,b) + F.a
 proof
   assume that
 A1: a <= b and
-A2: [. a,b .] c= X;
+A2: [. a,b .] c= X and
+A0: X c= dom f;
 A3: [. a,b .] =[' a,b '] by A1,INTEGRA5:def 4;
-  assume f is_continuous_on X;
+  assume f|X is continuous;
   then
-A4: f is_continuous_on [' a,b '] & f is_integrable_on [' a,b '] &
-  f|[' a,b '] is bounded by A1,A2,Th19;
+A4: f|[' a,b '] is continuous & f is_integrable_on [' a,b '] &
+  f|[' a,b '] is bounded by A1,A2,Th19,A3,A0;
   assume F is_integral_of f,X;
   hence F.b = integral(f,a,b) + F.a by A1,A2,A3,A4,Th18;
 end;
@@ -890,15 +910,18 @@ A9: F is_differentiable_on X & F`|X=f|X &
 A10: X is open Subset of REAL by FDIFF_1:15,17;
   then
 A11: F(#)G is_differentiable_on X by A9,FDIFF_2:20;
-  F is_continuous_on I & G is_continuous_on I by A2,A9,FCONT_1:17,FDIFF_1:33;
-  then
+   F|X is continuous & G|X is continuous
+   by A2,A9,FCONT_1:17,FDIFF_1:33,A7;
+   then
+Y: F|I is continuous & G|I is continuous
+   by A2,A9,FCONT_1:17,FDIFF_1:33,A7;
+X:  I c= dom f & I c= dom g & I c= dom F & I c= dom G by A2,A5,A7,XBOOLE_1:1;
+   then
 A12: F is_integrable_on I & G is_integrable_on I &
-  F|I is bounded & G|I is bounded by INTEGRA5:10,17;
-  I c= dom f & I c= dom g & I c= dom F & I c= dom G by A2,A5,A7,XBOOLE_1:1;
-  then
+  F|I is bounded & G|I is bounded by INTEGRA5:10,17,A11,Y;
 A13: f(#)G is_integrable_on I & F(#)g is_integrable_on I &
   (f(#)G)|(I /\ I) is bounded & (F(#)g)|(I /\ I) is bounded
-  by A3,A4,A12,INTEGRA6:14,RFUNCT_1:101;
+  by A3,A4,A12,INTEGRA6:14,RFUNCT_1:101,X;
   then
 A14: f(#)G + F(#)g is_integrable_on I &
   (f(#)G + F(#)g)|(I /\ I) is bounded  by A8,INTEGRA6:11,RFUNCT_1:100;
@@ -922,7 +945,7 @@ end;
 
 theorem
   b <= a & [. b,a .] c= X & X c= dom f & X c= dom g &
-  f is_continuous_on X & g is_continuous_on X &
+  f|X is continuous & g|X is continuous &
   F is_integral_of f,X & G is_integral_of g,X implies
   (F.a)*(G.a) - (F.b)*(G.b) = integral(f(#)G,b,a)+ integral(F(#)g,b,a)
 proof
@@ -931,13 +954,14 @@ A1: b <= a and
 A2: [. b,a .] c= X;
   assume that
 A3: X c= dom f & X c= dom g and
-A4: f is_continuous_on X & g is_continuous_on X and
+A4: f|X is continuous & g|X is continuous and
 A5: F is_integral_of f,X & G is_integral_of g,X;
+X:[. b,a .] c= dom f & [. b,a .] c= dom g by A2,A3,XBOOLE_1:1;
 A6: [. b,a .] =[' b,a '] by A1,INTEGRA5:def 4;
-  then f is_continuous_on [' b,a '] & g is_continuous_on [' b,a ']
-  by A2,A4,FCONT_1:17;
+  then f|[' b,a '] is continuous & g|[' b,a '] is continuous
+  by A2,A4,FCONT_1:17,A3;
   then f is_integrable_on [' b,a '] & f|[' b,a '] is bounded &
-  g is_integrable_on [' b,a '] & g|[' b,a '] is bounded by INTEGRA5:10,17;
+  g is_integrable_on [' b,a '] & g|[' b,a '] is bounded by INTEGRA5:10,17,X,A6;
   hence thesis by A1,A2,A3,A5,A6,Th21;
 end;
 
@@ -964,12 +988,13 @@ end;
 theorem
   sin.b-sin.a = integral(cos,a,b)
 proof
-A1: cos is_continuous_on REAL by FDIFF_1:33,SIN_COS:72;
+A1: cos|REAL is continuous by FDIFF_1:33,SIN_COS:72;
 A2: min(a,b) <= a & a <= max(a,b) by XXREAL_0:17,25;
+X: REAL = dom cos by FUNCT_2:def 1;
   [. min(a,b),max(a,b) .] c= REAL;
   then
 A3: sin.max(a,b) = integral(cos,min(a,b),max(a,b)) + sin.min(a,b)
-  by A1,A2,Th20,Th23,XXREAL_0:2;
+  by A1,A2,Th20,Th23,XXREAL_0:2,X;
 A4: now
     assume
 A5: min(a,b) = a;
@@ -1018,16 +1043,17 @@ end;
 theorem
   cos.a - cos.b = integral(sin,a,b)
 proof
-A2: sin is_continuous_on REAL by FDIFF_1:33,SIN_COS:73;
+A2: sin|REAL is continuous by FDIFF_1:33,SIN_COS:73;
   min(a,b) in REAL & max(a,b) in REAL by XREAL_0:def 1;
   then
 A3: min(a,b) in dom((-1)(#)cos) & max(a,b) in dom((-1)(#)cos) by SIN_COS:27,
   VALUED_1:def 5;
+X: REAL c= dom sin by FUNCT_2:def 1;
 A4: min(a,b) <= a & a <= max(a,b) by XXREAL_0:17,25;
   [. min(a,b),max(a,b) .] c= REAL;
   then ((-1)(#)cos).max(a,b)
   = integral(sin,min(a,b),max(a,b)) + ((-1)(#)cos).min(a,b)
-  by A2,A4,Th20,Th25,XXREAL_0:2;
+  by A2,A4,Th20,Th25,XXREAL_0:2,X;
   then (-1)*cos.max(a,b) = integral(sin,min(a,b),max(a,b)) + ((-1)(#)cos).min
   (a,b) by A3,VALUED_1:def 5;
   then (-1)*cos.max(a,b) = integral(sin,min(a,b),max(a,b)) + (-1)*cos.min(a,b
@@ -1080,12 +1106,13 @@ end;
 theorem
   exp_R.b-exp_R.a = integral(exp_R,a,b)
 proof
-A1: exp_R is_continuous_on REAL by FDIFF_1:33,TAYLOR_1:16;
+A1: exp_R|REAL is continuous by FDIFF_1:33,TAYLOR_1:16;
 A2: min(a,b) <= a & a <= max(a,b) by XXREAL_0:17,25;
+X: REAL c= dom exp_R by SIN_COS:51;
   [. min(a,b),max(a,b) .] c= REAL;
   then
 A3: exp_R.max(a,b) = integral(exp_R,min(a,b),max(a,b)) + exp_R.min(a,b)
-  by A1,A2,Th20,Th27,XXREAL_0:2;
+  by A1,A2,Th20,Th27,XXREAL_0:2,X;
 A4: min(a,b) = a implies exp_R.b - exp_R.a= integral(exp_R,a,b)
   proof
     assume
@@ -1168,7 +1195,7 @@ A2: REAL c= dom((n+1)(#)( #Z n)) by FUNCT_2:def 1;
   (((n+1)(#)( #Z n))`|REAL).x = (n+1)*diff( #Z n,x)
   by A2,FCONT_3:4,FDIFF_1:28;
   then
-A3: (n+1)(#)( #Z n) is_continuous_on REAL by FDIFF_1:33;
+A3: ((n+1)(#)( #Z n))|REAL is continuous  by FDIFF_1:33;
 A4: min(a,b) <= a & a <= max(a,b) by XXREAL_0:17,25;
   then
 A5: min(a,b) <= max(a,b) by XXREAL_0:2;
@@ -1176,7 +1203,7 @@ A5: min(a,b) <= max(a,b) by XXREAL_0:2;
   then
 A6: ( #Z (n+1)).max(a,b)
   = integral((n+1)(#)( #Z n),min(a,b),max(a,b)) + ( #Z (n+1)).min(a,b)
-  by A3,A5,Th20,Th29;
+  by A3,A5,Th20,Th29,A2;
 A7: min(a,b) = a implies
   ( #Z (n+1)).b - ( #Z (n+1)).a= integral((n+1)(#)( #Z n),a,b)
   proof
@@ -1280,7 +1307,7 @@ A15: (H.n)||AB is Function of AB,REAL by FUNCT_2:131,INTEGRA5:6;
     lim upper_sum((H.n)||AB,T) = upper_integral((H.n)||AB)
     by A13,A15,INTEGRA4:8,9;
     (H.n) is_integrable_on AB by A2;
-    then (H.n)||AB is_integrable_on AB by INTEGRA5:def 2;
+    then (H.n)||AB is integrable by INTEGRA5:def 2;
     hence lower_integral((H.n)||AB) = upper_integral((H.n)||AB) by
     INTEGRA1:def 17;
     rseq.n = integral(H.n,a,b) by A2;
@@ -1296,7 +1323,7 @@ A16: H0|AB is bounded_above & H0|AB is bounded_below by INTEGRA5:7,8;
 A17: H0|AB is bounded;
 A18: H0 is Function of AB,REAL by A5,FUNCT_2:131,INTEGRA5:6;
   then
-A19: H0 is_upper_integrable_on AB & H0 is_lower_integrable_on AB
+A19: H0 is upper_integrable & H0 is lower_integrable
   by A17,INTEGRA4:10;
 A20: for e be Element of REAL st 0 < e ex N be Element of NAT st
   for n,k be Element of NAT st N<=n holds
@@ -1382,8 +1409,8 @@ B33:      f|divset(T.k,i) is bounded_above by A33;
           by A18,A32,FUNCT_2:38;
           g|divset(T.k,i) is bounded_above by A16,A32,INTEGRA2:5;
           then
-A34:      rng f is bounded_above & rng g is bounded_above by
-          INTEGRA1:15,B33;
+A34:      rng f is bounded_above & rng g is bounded_above by A32,A33,
+          INTEGRA1:15,INTEGRA2:5,B33;
 A35:      rng (H1|divset(T.k,i)) c= {e} by A23,RELAT_1:99;
           consider x0 be set such that
 A36:      x0 in divset(T.k,i) by XBOOLE_0:def 1;
@@ -1527,8 +1554,8 @@ X:      g|divset(T.k,i) is bounded_below by A59;
         then Hn|AB is bounded_below;
         then f|divset(T.k,i) is bounded_below by A58,INTEGRA2:6;
         then
-A60:    rng f is bounded_below & rng g is bounded_below by INTEGRA1:13
-        ,X;
+A60:    rng f is bounded_below & rng g is bounded_below by A59,INTEGRA1:13
+        ,INTEGRA2:6,X;
 A61:    rng(H1|divset(T.k,i)) c= {e} by A50,RELAT_1:99;
         consider x0 be set such that
 A62:    x0 in divset(T.k,i) by XBOOLE_0:def 1;
@@ -1744,7 +1771,7 @@ A100: abs(L1 - K1) <= abs(K - K1) + abs(K - L1) by COMPLEX1:143;
     then 0 < abs(L1 -K1) by COMPLEX1:148;
     hence contradiction by A93;
   end;
-  then lim(H,AB)||AB is_integrable_on AB by A19,INTEGRA1:def 17;
+  then lim(H,AB)||AB is integrable by A19,INTEGRA1:def 17;
   hence lim(H,AB) is_integrable_on AB by INTEGRA5:def 2;
 A101: for p be real number st 0<p ex n be Element of NAT st
   for m be Element of NAT st n<=m holds abs(rseq.m-integral(lim(H,AB),a,b))<p

@@ -10,7 +10,7 @@ environ
       FUNCT_2, ORDINAL2, FINSEQ_4, COMPLEX1, SEQ_1, SEQ_2, SEQM_3, PREPOWER,
       MEASURE6, BOOLE, ARYTM, ARYTM_1, SETFAM_1, MESFUNC1, TARSKI, ARYTM_3,
       RLVECT_1, GROUP_1, PROB_1, SEQFUNC, TDGROUP, MESFUNC5, SUPINF_1,
-      SUPINF_2, SETLIM_1, RINFSUP1, MESFUNC8, FINSET_1, PRALG_2, XXREAL_2,
+      SUPINF_2, SETLIM_1, RINFSUP1, MESFUNC8, PRALG_2, XXREAL_2,
       VALUED_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, COMPLEX1, XXREAL_0, XXREAL_2, VALUED_0,
@@ -21,7 +21,7 @@ environ
       SERIES_1, EXTREAL1, MESFUNC1, MESFUNC5, RINFSUP2, CARD_3;
  constructors REAL_1, NAT_1, EXTREAL1, NEWTON, PREPOWER, SERIES_1, MESFUNC1,
       PROB_2, MEASURE6, MEASURE3, PARTFUN3, KURATO_2, RINFSUP1, SETLIM_1,
-      MESFUNC5, RINFSUP2, SEQ_1, SUPINF_1;
+      MESFUNC5, RINFSUP2, SEQ_1, SUPINF_1, SEQFUNC;
  registrations SUBSET_1, XREAL_0, MEMBERED, ORDINAL1, PARTFUN1, MEASURE1,
       FUNCT_2, RELAT_1, XXREAL_0, XBOOLE_0, FUNCT_1, NUMBERS, VALUED_0,
       VALUED_1, SETLIM_1;
@@ -203,7 +203,7 @@ A1: F is with_the_same_dom implies
 A2:   rng F is with_common_domain by Def1;
       hereby
         let n,m be natural number;
-        dom F = NAT by SEQFUNC:def 1;
+        dom F = NAT by FUNCT_2:def 1;
         then n in dom F & m in dom F by ORDINAL1:def 13;
         then F.n in rng F & F.m in rng F by FUNCT_1:12;
         hence dom(F.n) = dom(F.m) by A2,CARD_3:def 10;
@@ -222,7 +222,7 @@ A4:     f in rng F & g in rng F;
 A5:     n in dom F & f = F.n by FUNCT_1:def 5;
         consider m be set such that
 A6:     m in dom F & g = F.m by A4,FUNCT_1:def 5;
-        n in NAT & m in NAT by A5,A6,SEQFUNC:def 1;
+        n in NAT & m in NAT by A5,A6,FUNCT_2:def 1;
         then reconsider n,m as Nat;
         dom(F.n) = dom(F.m) by A3;
         hence dom f = dom g by A5,A6;
@@ -545,32 +545,6 @@ A2:   dom(F.n) = dom (f.0) by Def5;
   end;
 end;
 
-definition
-  let X,Y be set;
-  redefine mode Functional_Sequence of X,Y -> Function of NAT,PFuncs(X,Y);
-  coherence
-  proof
-    let f be Functional_Sequence of X,Y;
-    dom f = NAT & rng f c= PFuncs(X,Y) by SEQFUNC:def 1;
-    hence thesis by FUNCT_2:4;
-  end;
-end;
-
-definition
-  let X,Y be set, f be Functional_Sequence of X,Y, n be Element of NAT;
-  func f^\n -> Functional_Sequence of X,Y equals
-
-  f^\n;
-  correctness
-  proof
-    reconsider g =f as Function of NAT,PFuncs(X,Y);
-    g^\n in Funcs(NAT,PFuncs(X,Y)) by FUNCT_2:11;
-    then ex h being Function st
-    g^\n = h & dom h = NAT & rng h c= PFuncs(X,Y) by FUNCT_2:def 2;
-    hence thesis by SEQFUNC:def 1;
-  end;
-end;
-
 registration
   let X,Y be set;
   let f be with_the_same_dom Functional_Sequence of X,Y;
@@ -583,9 +557,9 @@ registration
       let k,l be Nat;
       reconsider k'=k, l'=l as Element of NAT by ORDINAL1:def 13;
       reconsider g=f as Function of NAT,PFuncs(X,Y);
-      dom((f^\n).k) = dom((g.(n+k'))) by KURATO_2:def 2;
+      dom((f^\n).k) = dom((g.(n+k'))) by NAT_1:def 3;
       then dom((f^\n).k) = dom((g.(n+l'))) by Def2;
-      hence dom((f^\n).k)=dom((f^\n).l) by KURATO_2:def 2;
+      hence dom((f^\n).k)=dom((f^\n).l) by NAT_1:def 3;
     end;
     hence f^\n is with_the_same_dom by Def2;
   end;
@@ -600,7 +574,7 @@ proof
   reconsider g=f as Function of NAT,PFuncs(X,ExtREAL);
 A1: dom((inferior_realsequence f).n) = dom(f.0) by Def5;
   dom inf(f^\n) =dom((f^\n).0) by Def3;
-  then dom inf(f^\n) =dom(g.(n+(0 qua Nat))) by KURATO_2:def 2;
+  then dom inf(f^\n) =dom(g.(n+(0 qua Nat))) by NAT_1:def 3;
   then
 A2: dom inf(f^\n) =dom(f.0) by Def2;
   now
@@ -610,9 +584,9 @@ A3: x in dom inf(f^\n);
     now
       let k be Element of NAT;
       ((f^\n)#x).k =((f^\n).k).x by MESFUNC5:def 13;
-      then ((f^\n)#x).k =(g.(n+k)).x by KURATO_2:def 2;
+      then ((f^\n)#x).k =(g.(n+k)).x by NAT_1:def 3;
       then ((f^\n)#x).k =(f#x).(n+k) by MESFUNC5:def 13;
-      hence ((f^\n)#x).k = ((f#x)^\n).k by KURATO_2:def 2;
+      hence ((f^\n)#x).k = ((f#x)^\n).k by NAT_1:def 3;
     end;
     then (f^\n)#x = (f#x)^\n by FUNCT_2:113;
     then
@@ -633,7 +607,7 @@ proof
   reconsider g=f as Function of NAT,PFuncs(X,ExtREAL);
 A1: dom ((superior_realsequence f).n) = dom(f.0) by Def6;
   dom sup(f^\n) = dom((f^\n).0) by Def4;
-  then dom sup(f^\n) = dom(g.(n+(0 qua Nat))) by KURATO_2:def 2;
+  then dom sup(f^\n) = dom(g.(n+(0 qua Nat))) by NAT_1:def 3;
   then
 A2: dom sup(f^\n) = dom(f.0) by Def2;
   now
@@ -643,9 +617,9 @@ A3: x in dom sup(f^\n);
     now
       let k be Element of NAT;
       ((f^\n)#x).k =((f^\n).k).x by MESFUNC5:def 13;
-      then ((f^\n)#x).k =(g.(n+k)).x by KURATO_2:def 2;
+      then ((f^\n)#x).k =(g.(n+k)).x by NAT_1:def 3;
       then ((f^\n)#x).k =(f#x).(n+k) by MESFUNC5:def 13;
-      hence ((f^\n)#x).k = ((f#x)^\n).k by KURATO_2:def 2;
+      hence ((f^\n)#x).k = ((f#x)^\n).k by NAT_1:def 3;
     end;
     then (f^\n)#x = (f#x)^\n by FUNCT_2:113;
     then
@@ -675,6 +649,7 @@ A1: x in dom(f.0);
 end;
 
 definition
+ canceled;
   let X be non empty set, f be Functional_Sequence of X,ExtREAL;
   func lim_inf f -> PartFunc of X,ExtREAL means
   :Def8:
@@ -1079,22 +1054,22 @@ A1: for n be natural number holds F.n = E /\ great_dom(f.n,R_EAL r);
   set F1=F^\n';
   now
     let k be Element of NAT;
-    F1.k= F.(n+k) by KURATO_2:def 2;
+    F1.k= F.(n+k) by NAT_1:def 3;
     hence F1.k in S by PROB_1:def 9;
   end;
   then
 A2: F1 is SetSequence of S by PROB_1:def 9;
   consider g be Function of NAT,PFuncs(X,ExtREAL) such that
 A3: f=g & f^\n'=g^\n';
-  f1.0 = g.(n+(0 qua Nat)) by A3,KURATO_2:def 2;
+  f1.0 = g.(n+(0 qua Nat)) by A3,NAT_1:def 3;
   then
 A4: dom(f1.0)= E by A3,Def2;
   now
     let k be natural number;
     reconsider k'=k as Element of NAT by ORDINAL1:def 13;
-    F1.k = F.(n+k') by KURATO_2:def 2;
+    F1.k = F.(n+k') by NAT_1:def 3;
     then F1.k = E /\ great_dom(f.(n+k'),R_EAL r) by A1;
-    hence F1.k = E /\ great_dom(f1.k,R_EAL r) by KURATO_2:def 2;
+    hence F1.k = E /\ great_dom(f1.k,R_EAL r) by NAT_1:def 3;
   end;
   then
 A5: union rng F1 = E /\ great_dom(sup f1,R_EAL r) by A2,A4,Th15;
@@ -1120,22 +1095,22 @@ A1: for n be natural number holds F.n = E /\ great_eq_dom(f.n,R_EAL r);
   set F1=F^\n';
   now
     let k be Element of NAT;
-    F1.k= F.(n+k) by KURATO_2:def 2;
+    F1.k= F.(n+k) by NAT_1:def 3;
     hence F1.k in S by PROB_1:def 9;
   end;
   then
 A2: F1 is SetSequence of S by PROB_1:def 9;
   consider g be Function of NAT,PFuncs(X,ExtREAL) such that
 A3: f=g & f^\n'=g^\n';
-  f1.0 = g.(n+(0 qua Nat)) by A3,KURATO_2:def 2;
+  f1.0 = g.(n+(0 qua Nat)) by A3,NAT_1:def 3;
   then
 A4: dom(f1.0) = E by A3,Def2;
   now
     let k be natural number;
     reconsider k'=k as Element of NAT by ORDINAL1:def 13;
-    F1.k = F.(n+k') by KURATO_2:def 2;
+    F1.k = F.(n+k') by NAT_1:def 3;
     then F1.k = E /\ great_eq_dom(f.(n+k'),R_EAL r) by A1;
-    hence F1.k = E /\ great_eq_dom(f1.k,R_EAL r) by KURATO_2:def 2;
+    hence F1.k = E /\ great_eq_dom(f1.k,R_EAL r) by NAT_1:def 3;
   end;
   then
 A5: meet rng F1 = E /\ great_eq_dom(inf f1,R_EAL r) by A2,A4,Th16;

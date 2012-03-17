@@ -15,8 +15,6 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -24,8 +22,10 @@
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="CLASSES2"/>
 <ArticleID name="ORDINAL4"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="AFINSQ_1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="CATALAN2"/>
 <ArticleID name="FLANG_2"/>
 </Signature>
@@ -37,13 +37,13 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="24">
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="228">
+<Func kind="K" nr="229">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

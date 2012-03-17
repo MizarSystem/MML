@@ -34,7 +34,6 @@
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="GOBOARD1"/>
 </Signature>
 <RCluster aid="GOBOARD1" nr="1">
@@ -52,7 +51,7 @@
 <Adjective nr="87"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
-<Adjective nr="124"/>
+<Adjective nr="93"/>
 </Cluster>
 </RCluster>
 <RCluster aid="GOBOARD1" nr="2">
@@ -76,9 +75,9 @@
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="128">
+<Func kind="K" nr="130">
 <Func kind="U" nr="1">
-<Func kind="K" nr="295">
+<Func kind="K" nr="297">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -91,10 +90,10 @@
 <Adjective nr="23"/>
 <Adjective nr="28"/>
 <Adjective nr="85"/>
+<Adjective nr="129"/>
 <Adjective nr="130"/>
 <Adjective nr="131"/>
 <Adjective nr="132"/>
-<Adjective nr="133"/>
 </Cluster>
 </RCluster>
 <CCluster aid="GOBOARD1" nr="1">

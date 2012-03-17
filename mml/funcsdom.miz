@@ -8,16 +8,18 @@ environ
 
  vocabularies BINOP_1, FUNCT_2, FUNCT_1, QC_LANG1, RELAT_1, FUNCOP_1, VECTSP_1,
       RLVECT_1, ARYTM_1, LATTICES, FUNCSDOM, GROUP_1, VECTSP_2, STRUCT_0,
-      ARYTM, ALGSTR_0;
+      ARYTM, ALGSTR_0, BOOLE;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
       FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, BINOP_2, STRUCT_0, ALGSTR_0,
       RLVECT_1, REAL_1, GROUP_1, VECTSP_1, FRAENKEL;
  constructors BINOP_1, DOMAIN_1, FUNCOP_1, FRAENKEL, REAL_1, BINOP_2, VECTSP_1,
-      RLVECT_1;
+      RLVECT_1, FUNCT_3;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, RLVECT_1, VECTSP_1,
-      ALGSTR_0;
+      ALGSTR_0, BINOP_2, FUNCOP_1, FUNCT_3;
+ registrations RELAT_1, FUNCT_1, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions RLVECT_1, STRUCT_0, GROUP_1, BINOP_1, VECTSP_1, ALGSTR_0;
+ definitions RLVECT_1, STRUCT_0, GROUP_1, BINOP_1, VECTSP_1, ALGSTR_0,
+      FUNCOP_1;
  theorems FUNCT_2, BINOP_1, FUNCOP_1, RLVECT_1, VECTSP_1, TARSKI, BINOP_2,
       GROUP_1, STRUCT_0;
  schemes BINOP_1, FUNCT_2;
@@ -28,7 +30,7 @@ reserve x1,x2,z for set;
 reserve A,B for non empty set;
 
 definition
-  let A,B;
+  let A be set, B be non empty set;
   let F be BinOp of Funcs(A,B);
   let f,g be Element of Funcs(A,B);
   redefine func F.(f,g) -> Element of Funcs(A,B);
@@ -51,30 +53,22 @@ definition
   end;
 end;
 
-definition
-  let A,B be non empty set;
-  let f be Function of A,B;
-  func @f -> Element of Funcs(A,B) equals
-
-  f;
-  coherence by FUNCT_2:11;
-end;
-
 reserve f,g,h for Element of Funcs(A,REAL);
 
 definition
-  let X,Z be non empty set;
+  let X be non empty set, Z be set;
   let F be (BinOp of X), f,g be Function of Z,X;
+ canceled;
   redefine func F.:(f,g) -> Element of Funcs(Z,X);
   coherence
   proof
-    F.:(f,g) in Funcs(Z,X) by FUNCT_2:11;
+     F.:(f,g) in Funcs(Z,X) by FUNCT_2:11;
     hence thesis;
   end;
 end;
 
 definition
-  let X,Z be non empty set;
+  let X be non empty set, Z be set;
   let F be (BinOp of X),a be Element of X,f be Function of Z,X;
   redefine func F[;](a,f) -> Element of Funcs(Z,X);
   coherence
@@ -85,7 +79,7 @@ definition
 end;
 
 definition
-  let A;
+  let A be set;
   func RealFuncAdd(A) -> BinOp of Funcs(A,REAL) means
   :Def2:
   for f,g being Element of Funcs(A,REAL) holds it.(f,g) = addreal.:(f,g);
@@ -97,7 +91,7 @@ definition
 A1: for x,y being Element of Funcs(A,REAL) holds
     F.(x,y) = F(x,y) from BINOP_1:sch 4;
     take F;
-    let f,g;
+    let f,g be Element of Funcs(A,REAL);
     thus F.(f,g) =(addreal.:(f,g)) by A1;
   end;
   uniqueness
@@ -147,52 +141,43 @@ A3: for f,g being Element of Funcs(A,REAL) holds it2.(f,g) = multreal.:(f,g);
 end;
 
 definition
-  let A;
+  let A be set;
   func RealFuncExtMult(A) -> Function of [:REAL,Funcs(A,REAL):],Funcs(A,REAL)
   means
   :Def4:
-  for a being Real,
-  f being (Element of Funcs(A,REAL)), x being (Element of A) holds
-  (it.[a,f]).x = a*(f.x);
+  for a being Real, f being Element of Funcs(A,REAL)
+   holds it.(a,f) = multreal[;](a,f);
   existence
   proof
     deffunc F(Element of REAL,Element of Funcs(A,REAL)) =
-    @(multreal[;]($1,$2));
+      (multreal[;]($1,$2));
     consider F being Function of [:REAL,Funcs(A,REAL):],Funcs(A,REAL)
     such that
 A1: for a being Element of REAL, f being Element of Funcs(A,REAL)
     holds F.(a,f) = F(a,f) from BINOP_1:sch 4;
     take F;
-    let a be Real,f be Element of Funcs(A,REAL), x be Element of A;
-    F.(a,f) = @(multreal[;](a,f)) by A1
-      .= (multreal[;](a,f));
-    hence (F.[a,f]).x = multreal.(a,f.x) by FUNCOP_1:66
-      .= a*(f.x) by BINOP_2:def 11;
+    let a be Real, f be Element of Funcs(A,REAL);
+    thus F.(a,f) = multreal[;](a,f) by A1;
   end;
   uniqueness
   proof
     let it1,it2 be Function of [:REAL,Funcs(A,REAL):],Funcs(A,REAL) such that
-A2: for a being Real, f being Element of Funcs(A,REAL),
-    x being Element of A holds (it1.[a,f]).x = a*(f.x) and
-A3: for a being Real, f being Element of Funcs(A,REAL),
-    x being Element of A holds (it2.[a,f]).x = a*(f.x);
+A2: for a being Real, f being Element of Funcs(A,REAL)
+    holds it1.(a,f) = multreal[;](a,f) and
+A3: for a being Real, f being Element of Funcs(A,REAL)
+    holds it2.(a,f) = multreal[;](a,f);
     now
-      let a be Element of REAL, f be Element of Funcs(A,REAL);
-      now
-        let x be Element of A;
-        thus (it1.[a,f]).x = a*(f.x) by A2
-          .= (it2.[a,f]).x by A3;
-      end;
-      hence it1.(a,f) = it2.(a,f) by FUNCT_2:113;
+      let a be Real, f be Element of Funcs(A,REAL);
+      thus it1.(a,f) = multreal[;](a,f) by A2
+        .= it2.(a,f) by A3;
     end;
     hence thesis by BINOP_1:2;
   end;
 end;
 
 definition
-  let A;
+  let A be set;
   func RealFuncZero(A) -> Element of Funcs(A,REAL) equals
-
   A --> 0;
   coherence by FUNCT_2:11;
 end;
@@ -215,12 +200,12 @@ end;
 canceled 9;
 
 theorem Th10:
-  h = (RealFuncAdd(A)).(f,g) iff
+  h = (RealFuncAdd A).(f,g) iff
   for x being Element of A holds h.x = f.x + g.x
 proof
 A1: now
     assume
-A2: h = (RealFuncAdd(A)).(f,g);
+A2: h = (RealFuncAdd A).(f,g);
     let x be Element of A;
 A3: x in dom (addreal.:(f,g)) by Lm1;
     thus h.x = (addreal.:(f,g)).x by A2,Def2
@@ -233,12 +218,12 @@ A4: for x being Element of A holds h.x=f.x + g.x;
     now
       let x be Element of A;
 A5:   x in dom (addreal.:(f,g)) by Lm1; thus
-      ((RealFuncAdd(A)).(f,g)).x = (addreal.:(f,g)).x by Def2
+      ((RealFuncAdd A).(f,g)).x = (addreal.:(f,g)).x by Def2
         .= addreal.(f.x,g.x) by A5,FUNCOP_1:28
         .= f.x + g.x by BINOP_2:def 9
         .= h.x by A4;
     end;
-    hence h = (RealFuncAdd(A)).(f,g) by FUNCT_2:113;
+    hence h = (RealFuncAdd A).(f,g) by FUNCT_2:113;
   end;
   hence thesis by A1;
 end;
@@ -284,21 +269,31 @@ end;
 reserve a,b for Real;
 
 theorem Th15:
-  h = (RealFuncExtMult(A)).[a,f] iff
+  h = (RealFuncExtMult A).[a,f] iff
   for x being Element of A holds h.x = a*(f.x)
 proof
-  thus h = (RealFuncExtMult(A)).[a,f] implies
-  (for x being Element of A holds h.x = a*(f.x)) by Def4;
+  thus h = (RealFuncExtMult A).[a,f] implies
+   for x being Element of A holds h.x = a*(f.x)
+  proof assume h = (RealFuncExtMult A).[a,f];
+    then
+Z:  h = (RealFuncExtMult A).(a,f);
+   let x be Element of A;
+   thus h.x = (multreal[;](a,f)).x by Z,Def4
+      .= multreal.(a,f.x) by FUNCOP_1:66
+      .= a*(f.x) by BINOP_2:def 11;
+  end;
   now
     assume
 A1: for x being Element of A holds h.x = a*(f.x);
-    for x being Element of A holds h.x = ((RealFuncExtMult(A)).[a,f]).x
+    for x being Element of A holds h.x = ((RealFuncExtMult A).[a,f]).x
     proof
+B:   multreal[;](a,f) = (RealFuncExtMult A).(a,f) by Def4;
       let x be Element of A;
       thus h.x = a*(f.x) by A1
-        .= ((RealFuncExtMult(A)).[a,f]).x by Def4;
+        .= multreal.(a,f.x) by BINOP_2:def 11
+        .= ((RealFuncExtMult A).[a,f]).x by B,FUNCOP_1:66;
     end;
-    hence h = (RealFuncExtMult(A)).[a,f] by FUNCT_2:113;
+    hence h = (RealFuncExtMult A).(a,f) by FUNCT_2:113;
   end;
   hence thesis;
 end;
@@ -307,31 +302,26 @@ reserve u,v,w for VECTOR of RLSStruct(#Funcs(A,REAL),
     (RealFuncZero(A)),RealFuncAdd(A),RealFuncExtMult(A)#);
 
 theorem Th16:
-  (RealFuncAdd(A)).(f,g) = (RealFuncAdd(A)).(g,f)
-proof
-  now
-    let x be Element of A; thus
-    ((RealFuncAdd(A)).(f,g)).x = g.x + f.x by Th10
-      .= ((RealFuncAdd(A)).(g,f)).x by Th10;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
+ for A being set, f,g being Element of Funcs(A,REAL)
+ holds (RealFuncAdd A).(f,g) = (RealFuncAdd A).(g,f)
+ proof let A be set, f,g be Element of Funcs(A,REAL);
+  thus (RealFuncAdd A).(f,g) = addreal.:(f,g) by Def2
+     .= addreal.:(g,f) by FUNCOP_1:80
+     .= (RealFuncAdd A).(g,f) by Def2;
+ end;
 
 theorem Th17:
-  (RealFuncAdd(A)).(f,(RealFuncAdd(A)).(g,h)) =
-  (RealFuncAdd(A)).((RealFuncAdd(A)).(f,g),h)
-proof
-  now
-    let x be Element of A; thus
-    ((RealFuncAdd(A)).(f,(RealFuncAdd(A)).(g,h))).x =
-    f.x + ((RealFuncAdd(A)).(g,h)).x by Th10
-      .= f.x + (g.x + h.x) by Th10
-      .= (f.x + g.x) + h.x
-      .= ((RealFuncAdd(A)).(f,g)).x + h.x by Th10
-      .= ((RealFuncAdd(A)).((RealFuncAdd(A)).(f,g),h)).x by Th10;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
+ for A being set, f,g,h being Element of Funcs(A,REAL) holds
+  (RealFuncAdd A).(f,(RealFuncAdd A).(g,h)) =
+  (RealFuncAdd A).((RealFuncAdd A).(f,g),h)
+ proof let A be set, f,g,h be Element of Funcs(A,REAL);
+  thus (RealFuncAdd A).(f,(RealFuncAdd A).(g,h))
+     = (RealFuncAdd A).(f,addreal.:(g,h)) by Def2
+    .= addreal.:(f,addreal.:(g,h)) by Def2
+    .= addreal.:(addreal.:(f,g),h) by FUNCOP_1:76
+    .= (RealFuncAdd A).(addreal.:(f,g),h) by Def2
+    .= (RealFuncAdd A).((RealFuncAdd A).(f,g),h) by Def2;
+ end;
 
 theorem Th18:
   (RealFuncMult(A)).(f,g) = (RealFuncMult(A)).(g,f)
@@ -374,122 +364,206 @@ proof
 end;
 
 theorem Th21:
-  (RealFuncAdd(A)).(RealFuncZero(A),f) = f
-proof
+ for A being set, f being Element of Funcs(A,REAL) holds
+  (RealFuncAdd A).(RealFuncZero(A),f) = f
+proof let A be set, f being Element of Funcs(A,REAL);
+ per cases;
+ suppose A = {};
+   then
+A:  f = {};
+  thus (RealFuncAdd A).(RealFuncZero(A),f)
+     = addreal.:(RealFuncZero(A),f) by Def2
+    .= f by A;
+ end;
+ suppose A <> {};
+  then reconsider A as non empty set;
+  reconsider f as Element of Funcs(A,REAL);
   now
     let x be Element of A;
-    thus ((RealFuncAdd(A)).(RealFuncZero(A),f)).x =
+    thus ((RealFuncAdd A).(RealFuncZero(A),f)).x =
     (RealFuncZero(A)).x + f.x by Th10
       .= 0 + f.x by FUNCOP_1:13
       .= f.x;
   end;
   hence thesis by FUNCT_2:113;
+ end;
 end;
 
 theorem Th22:
-  (RealFuncAdd(A)).(f,(RealFuncExtMult(A)).[-1,f]) = RealFuncZero(A)
-proof
+ for A being set, f be Element of Funcs(A,REAL) holds
+  (RealFuncAdd A).(f,(RealFuncExtMult A).[-1,f]) = RealFuncZero(A)
+proof let A be set, f be Element of Funcs(A,REAL);
+ per cases;
+ suppose
+S: A = {};
+   (RealFuncExtMult A).(-1,f) = multreal[;](-1 qua Real,f) by Def4;
+  hence (RealFuncAdd A).(f,(RealFuncExtMult A).[-1,f])
+     = {} by S,Def2
+    .= RealFuncZero(A) by S;
+ end;
+ suppose A <> {};
+  then reconsider A as non empty set;
+  reconsider f as Element of Funcs(A,REAL);
   now
     let x be Element of A;
     set y=f.x; thus
-    ((RealFuncAdd(A)).(f,(RealFuncExtMult(A)).[-1,f])).x =
-    f.x + ((RealFuncExtMult(A)).[-1,f]).x by Th10
+    ((RealFuncAdd A).(f,(RealFuncExtMult A).[-1,f])).x =
+    f.x + ((RealFuncExtMult A).[-1,f]).x by Th10
       .= f.x + ((-1)*y) by Th15
       .= (RealFuncZero(A)).x by FUNCOP_1:13;
   end;
   hence thesis by FUNCT_2:113;
+ end;
 end;
 
 theorem Th23:
-  (RealFuncExtMult(A)).[1,f] = f
-proof
+ for A being set, f being Element of Funcs(A,REAL) holds
+  (RealFuncExtMult A).(1,f) = f
+proof let A be set, f be Element of Funcs(A,REAL);
+ per cases;
+ suppose A = {};
+   then
+A:  f = {};
+  thus (RealFuncExtMult A).(1,f)
+     = multreal[;](1,f) by Def4
+    .= f by A;
+ end;
+ suppose A <> {};
+  then reconsider A as non empty set;
+  reconsider f as Element of Funcs(A,REAL);
   now
     let x be Element of A;
-    thus ((RealFuncExtMult(A)).[1 qua Real,f]).x = 1*(f.x) by Th15
+    thus ((RealFuncExtMult A).[1,f]).x = 1*(f.x) by Th15
       .= f.x;
   end;
   hence thesis by FUNCT_2:113;
+ end;
 end;
 
 theorem Th24:
-  (RealFuncExtMult(A)).[a,(RealFuncExtMult(A)).[b,f]] =
-  (RealFuncExtMult(A)).[a*b,f]
-proof
+ for A being set, f being Element of Funcs(A,REAL) holds
+  (RealFuncExtMult A).(a,(RealFuncExtMult A).(b,f)) =
+  (RealFuncExtMult A).(a*b,f)
+proof let A be set, f be Element of Funcs(A,REAL);
+ per cases;
+ suppose
+S: A = {};
+   (RealFuncExtMult A).(b,f) = multreal[;](b,f) by Def4;
+  hence (RealFuncExtMult A).(a,(RealFuncExtMult A).(b,f))
+     = multreal[;](a,multreal[;](b,f)) by Def4
+    .= multreal[;](a*b,f) by S
+    .= (RealFuncExtMult A).(a*b,f) by Def4;
+ end;
+ suppose A <> {};
+  then reconsider A as non empty set;
+  reconsider f as Element of Funcs(A,REAL);
   now
     let x be Element of A;
-    thus ((RealFuncExtMult(A)).[a,(RealFuncExtMult(A)).[b,f]]).x
-    = a*(((RealFuncExtMult(A)).[b,f]).x) by Th15
+    thus ((RealFuncExtMult A).[a,(RealFuncExtMult A).[b,f]]).x
+    = a*(((RealFuncExtMult A).[b,f]).x) by Th15
       .= a*(b*(f.x)) by Th15
       .= (a*b)*(f.x)
-      .= ((RealFuncExtMult(A)).[a*b,f]).x by Th15;
+      .= ((RealFuncExtMult A).[a*b,f]).x by Th15;
   end;
   hence thesis by FUNCT_2:113;
+ end;
 end;
 
 theorem Th25:
-  (RealFuncAdd(A)). ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,f])
-  = (RealFuncExtMult(A)).[a+b,f]
-proof
+ for A being set, f being Element of Funcs(A,REAL) holds
+  (RealFuncAdd A).((RealFuncExtMult A).(a,f),(RealFuncExtMult A).(b,f))
+  = (RealFuncExtMult A).(a+b,f)
+proof let A be set, f be Element of Funcs(A,REAL);
+ per cases;
+ suppose
+S:  A = {};
+B: (RealFuncExtMult A).(a,f) = multreal[;](a,f) by Def4;
+   (RealFuncExtMult A).(b,f) = multreal[;](b,f) by Def4;
+  hence (RealFuncAdd A).((RealFuncExtMult A).(a,f),(RealFuncExtMult A).(b,f))
+     = {} by S,B,Def2
+    .= multreal[;](a+b,f) by S
+    .= (RealFuncExtMult A).(a+b,f) by Def4;
+ end;
+ suppose A <> {};
+  then reconsider A as non empty set;
+  reconsider f as Element of Funcs(A,REAL);
   now
     let x be Element of A; thus
-    ((RealFuncAdd(A)).
-    ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,f])).x =
-    ((RealFuncExtMult(A)).[a,f]).x + ((RealFuncExtMult(A)).[b,f]).x by Th10
-      .= a*(f.x) + ((RealFuncExtMult(A)).[b,f]).x by Th15
+    ((RealFuncAdd A).
+    ((RealFuncExtMult A).[a,f],(RealFuncExtMult A).[b,f])).x =
+    ((RealFuncExtMult A).[a,f]).x + ((RealFuncExtMult A).[b,f]).x by Th10
+      .= a*(f.x) + ((RealFuncExtMult A).[b,f]).x by Th15
       .= a*(f.x) + b*(f.x) by Th15
       .= (a+b)*(f.x)
-      .= ((RealFuncExtMult(A)).[a+b,f]).x by Th15;
+      .= ((RealFuncExtMult A).[a+b,f]).x by Th15;
   end;
   hence thesis by FUNCT_2:113;
+ end;
 end;
 
-Lm2: (RealFuncAdd(A)). ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[a,g])
-= (RealFuncExtMult(A)).[a,(RealFuncAdd(A)).(f,g)]
-proof
+Lm2:
+ for A being set, f,g being Element of Funcs(A,REAL) holds
+ (RealFuncAdd A). ((RealFuncExtMult A).(a,f),(RealFuncExtMult A).(a,g))
+= (RealFuncExtMult A).(a,(RealFuncAdd A).(f,g))
+proof let A be set, f,g be Element of Funcs(A,REAL);
+ per cases;
+ suppose
+S: A = {};
+B: (RealFuncExtMult A).(a,f) = multreal[;](a,f) by Def4;
+   (RealFuncExtMult A).(a,g) = multreal[;](a,g) by Def4;
+  hence (RealFuncAdd A).((RealFuncExtMult A).(a,f),(RealFuncExtMult A).(a,g))
+     = {} by S,B,Def2
+    .= multreal[;](a,(RealFuncAdd A).(f,g)) by Def2,S
+    .= (RealFuncExtMult A).(a,(RealFuncAdd A).(f,g)) by Def4;
+ end;
+ suppose A <> {};
+  then reconsider A as non empty set;
+  reconsider f,g as Element of Funcs(A,REAL);
   now
     let x be Element of A;
-    thus ((RealFuncAdd(A)).
-    ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[a,g])).x
-    = ((RealFuncExtMult(A)).[a,f]).x + ((RealFuncExtMult(A)).[a,g]).x by Th10
-      .= a*(f.x) + ((RealFuncExtMult(A)).[a,g]).x by Th15
+    thus ((RealFuncAdd A).
+    ((RealFuncExtMult A).[a,f],(RealFuncExtMult A).[a,g])).x
+    = ((RealFuncExtMult A).[a,f]).x + ((RealFuncExtMult A).[a,g]).x by Th10
+      .= a*(f.x) + ((RealFuncExtMult A).[a,g]).x by Th15
       .= a*(f.x) + a*(g.x) by Th15
       .= a*(f.x + g.x)
-      .= a*(((RealFuncAdd(A)).(f,g)).x) by Th10
-      .= ((RealFuncExtMult(A)).[a,(RealFuncAdd(A)).(f,g)]).x by Th15;
+      .= a*(((RealFuncAdd A).(f,g)).x) by Th10
+      .= ((RealFuncExtMult A).[a,(RealFuncAdd A).(f,g)]).x by Th15;
   end;
   hence thesis by FUNCT_2:113;
+ end;
 end;
 
 theorem Th26:
-  (RealFuncMult(A)).(f,(RealFuncAdd(A)).(g,h)) =
-  (RealFuncAdd(A)).((RealFuncMult(A)).(f,g),(RealFuncMult(A)).(f,h))
+  (RealFuncMult(A)).(f,(RealFuncAdd A).(g,h)) =
+  (RealFuncAdd A).((RealFuncMult(A)).(f,g),(RealFuncMult(A)).(f,h))
 proof
   now
     let x be Element of A; thus
-    ((RealFuncMult(A)).(f,(RealFuncAdd(A)).(g,h))).x =
-    f.x * (((RealFuncAdd(A)).(g,h)).x) by Th11
+    ((RealFuncMult(A)).(f,(RealFuncAdd A).(g,h))).x =
+    f.x * (((RealFuncAdd A).(g,h)).x) by Th11
       .= f.x * (g.x + h.x) by Th10
       .= (f.x * g.x) + (f.x * h.x)
       .= ((RealFuncMult(A)).(f,g)).x + (f.x * h.x) by Th11
       .= ((RealFuncMult(A)).(f,g)).x + ((RealFuncMult(A)).(f,h)).x by Th11
-      .= ((RealFuncAdd(A)).
+      .= ((RealFuncAdd A).
     ((RealFuncMult(A)).(f,g),(RealFuncMult(A)).(f,h))).x by Th10;
   end;
   hence thesis by FUNCT_2:113;
 end;
 
 theorem Th27:
-  (RealFuncMult(A)).((RealFuncExtMult(A)).[a,f],g) =
-  (RealFuncExtMult(A)).[a,(RealFuncMult(A)).(f,g)]
+  (RealFuncMult(A)).((RealFuncExtMult A).[a,f],g) =
+  (RealFuncExtMult A).[a,(RealFuncMult(A)).(f,g)]
 proof
   now
     let x be Element of A;
-    thus ((RealFuncMult(A)). ((RealFuncExtMult(A)).[a,f],g)).x
-    = ((RealFuncExtMult(A)).[a,f]).x * g.x by Th11
+    thus ((RealFuncMult(A)). ((RealFuncExtMult A).[a,f],g)).x
+    = ((RealFuncExtMult A).[a,f]).x * g.x by Th11
       .= (a*(f.x)) * g.x by Th15
       .= a*(f.x * g.x)
       .= a*(((RealFuncMult(A)).(f,g)).x) by Th11
-      .= ((RealFuncExtMult(A)).[a,(RealFuncMult(A)).(f,g)]).x by Th15;
+      .= ((RealFuncExtMult A).[a,(RealFuncMult(A)).(f,g)]).x by Th15;
   end;
   hence thesis by FUNCT_2:113;
 end;
@@ -522,8 +596,8 @@ theorem Th29:
   (x1 in A & x2 in A & x1<>x2) & (for z st z in A holds
   (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0)) & (for z st z in A holds
   (z=x1 implies g.z = 0) & (z<>x1 implies g.z = 1)) implies
-  (for a,b st (RealFuncAdd(A)).
-  ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]) = RealFuncZero(A)
+  (for a,b st (RealFuncAdd A).
+  ((RealFuncExtMult A).[a,f],(RealFuncExtMult A).[b,g]) = RealFuncZero(A)
   holds a=0 & b=0)
 proof
   assume that
@@ -534,29 +608,29 @@ A4: f.x1=1 & f.x2=0 & g.x1=0 & g.x2=1 by A1,A2,A3;
   reconsider x1,x2 as Element of A by A1;
   let a,b;
   assume
-A5: (RealFuncAdd(A)).
-  ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]) = RealFuncZero(A);
+A5: (RealFuncAdd A).
+  ((RealFuncExtMult A).[a,f],(RealFuncExtMult A).[b,g]) = RealFuncZero(A);
   then
-A6: 0 = ((RealFuncAdd(A)).
-  ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g])).x1 by FUNCOP_1:13
-    .= (((RealFuncExtMult(A)).[a,f]).x1) +
-  (((RealFuncExtMult(A)).[b,g]).x1) by Th10
-    .= a*(f.x1) + (((RealFuncExtMult(A)).[b,g]).x1) by Th15
+A6: 0 = ((RealFuncAdd A).
+  ((RealFuncExtMult A).[a,f],(RealFuncExtMult A).[b,g])).x1 by FUNCOP_1:13
+    .= (((RealFuncExtMult A).[a,f]).x1) +
+  (((RealFuncExtMult A).[b,g]).x1) by Th10
+    .= a*(f.x1) + (((RealFuncExtMult A).[b,g]).x1) by Th15
     .= a + b*0 by A4,Th15
     .= a;
-  0 = ((RealFuncAdd(A)).
-  ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g])).x2 by A5,FUNCOP_1:13
-    .= (((RealFuncExtMult(A)).[a,f]).x2) +
-  (((RealFuncExtMult(A)).[b,g]).x2) by Th10
-    .= a*(f.x2) + (((RealFuncExtMult(A)).[b,g]).x2) by Th15
+  0 = ((RealFuncAdd A).
+  ((RealFuncExtMult A).[a,f],(RealFuncExtMult A).[b,g])).x2 by A5,FUNCOP_1:13
+    .= (((RealFuncExtMult A).[a,f]).x2) +
+  (((RealFuncExtMult A).[b,g]).x2) by Th10
+    .= a*(f.x2) + (((RealFuncExtMult A).[b,g]).x2) by Th15
     .=0 + b*1 by A4,Th15
     .= b;
   hence a=0 & b=0 by A6;
 end;
 
 theorem
-  x1 in A & x2 in A & x1<>x2 implies (ex f,g st for a,b st (RealFuncAdd(A)).
-  ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]) = RealFuncZero(A)
+  x1 in A & x2 in A & x1<>x2 implies (ex f,g st for a,b st (RealFuncAdd A).
+  ((RealFuncExtMult A).[a,f],(RealFuncExtMult A).[b,g]) = RealFuncZero(A)
   holds a=0 & b=0)
 proof
   assume
@@ -567,8 +641,8 @@ A3: for z st z in A holds
   (z=x1 implies g.z = 0) & (z<>x1 implies g.z = 1) by Th28;
   take f,g;
   let a,b;
-  assume (RealFuncAdd(A)).
-  ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]) = RealFuncZero(A);
+  assume (RealFuncAdd A).
+  ((RealFuncExtMult A).[a,f],(RealFuncExtMult A).[b,g]) = RealFuncZero(A);
   hence thesis by A1,A2,A3,Th29;
 end;
 
@@ -576,8 +650,8 @@ theorem Th31:
   A = {x1,x2} & x1<>x2 & (for z st z in A holds
   (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0)) & (for z st z in A holds
   (z=x1 implies g.z = 0) & (z<>x1 implies g.z = 1)) implies for h holds
-  (ex a,b st h = (RealFuncAdd(A)).
-  ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]))
+  (ex a,b st h = (RealFuncAdd A).
+  ((RealFuncExtMult A).[a,f],(RealFuncExtMult A).[b,g]))
 proof
   assume that
 A1: A = {x1,x2} & x1<>x2 and
@@ -592,29 +666,29 @@ A4: f.x1=1 & f.x2=0 & g.x1=0 & g.x2=1 by A1,A2,A3;
   now
     let x be Element of A;
 A5: x = x1 or x = x2 by A1,TARSKI:def 2;
-A6: ((RealFuncAdd(A)).
-    ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g])).x1
-    = (((RealFuncExtMult(A)).[a,f]).x1) +
-    (((RealFuncExtMult(A)).[b,g]).x1) by Th10
-      .= a*(f.x1) + (((RealFuncExtMult(A)).[b,g]).x1) by Th15
+A6: ((RealFuncAdd A).
+    ((RealFuncExtMult A).[a,f],(RealFuncExtMult A).[b,g])).x1
+    = (((RealFuncExtMult A).[a,f]).x1) +
+    (((RealFuncExtMult A).[b,g]).x1) by Th10
+      .= a*(f.x1) + (((RealFuncExtMult A).[b,g]).x1) by Th15
       .= a + b*0 by A4,Th15
       .= h.x1;
-    ((RealFuncAdd(A)).
-    ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g])).x2
-    = (((RealFuncExtMult(A)).[a,f]).x2) +
-    (((RealFuncExtMult(A)).[b,g]).x2) by Th10
-      .= a*(f.x2) + (((RealFuncExtMult(A)).[b,g]).x2) by Th15
+    ((RealFuncAdd A).
+    ((RealFuncExtMult A).[a,f],(RealFuncExtMult A).[b,g])).x2
+    = (((RealFuncExtMult A).[a,f]).x2) +
+    (((RealFuncExtMult A).[b,g]).x2) by Th10
+      .= a*(f.x2) + (((RealFuncExtMult A).[b,g]).x2) by Th15
       .= 0 + b*1 by A4,Th15
       .= h.x2;
-    hence h.x = ((RealFuncAdd(A)).
-    ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g])).x by A5,A6;
+    hence h.x = ((RealFuncAdd A).
+    ((RealFuncExtMult A).[a,f],(RealFuncExtMult A).[b,g])).x by A5,A6;
   end;
   hence thesis by FUNCT_2:113;
 end;
 
 theorem
   A = {x1,x2} & x1<>x2 implies ex f,g st (for h holds (ex a,b st h =
-  (RealFuncAdd(A)). ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g])))
+  (RealFuncAdd A). ((RealFuncExtMult A).[a,f],(RealFuncExtMult A).[b,g])))
 proof
   assume
 A1: A = {x1,x2} & x1<>x2;
@@ -628,10 +702,10 @@ end;
 
 theorem Th33:
   (A = {x1,x2} & x1<>x2) implies (ex f,g st (for a,b st
-  (RealFuncAdd(A)).((RealFuncExtMult(A)).[a,f],
-  (RealFuncExtMult(A)).[b,g]) = RealFuncZero(A) holds a=0 & b=0) &
-  (for h holds (ex a,b st h = (RealFuncAdd(A)).
-  ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]))))
+  (RealFuncAdd A).((RealFuncExtMult A).[a,f],
+  (RealFuncExtMult A).[b,g]) = RealFuncZero(A) holds a=0 & b=0) &
+  (for h holds (ex a,b st h = (RealFuncAdd A).
+  ((RealFuncExtMult A).[a,f],(RealFuncExtMult A).[b,g]))))
 proof
   assume
 A1: A = {x1,x2} & x1<>x2;
@@ -645,78 +719,76 @@ A4: for z st z in A holds
   thus thesis by A1,A2,A3,A4,Th29,Th31;
 end;
 
-theorem Th34:
-  RLSStruct(#Funcs(A,REAL),
-    (RealFuncZero(A)),RealFuncAdd(A),RealFuncExtMult(A)#) is RealLinearSpace
-proof
-  set IT = RLSStruct(#Funcs(A,REAL),
-    (RealFuncZero(A)),RealFuncAdd(A),RealFuncExtMult(A)#);
-  IT is Abelian add-associative right_zeroed right_complementable
-  RealLinearSpace-like
-  proof
-    thus u+v = v+u by Th16;
-    thus (u+v)+w = u+(v+w) by Th17;
-    thus u+0.IT = u
-    proof
-      reconsider u'=u as Element of Funcs(A,REAL);
-      thus u+0.IT = (RealFuncAdd(A)).(RealFuncZero(A),u') by Th16
-        .= u by Th21;
-    end;
-    thus IT is right_complementable
-    proof
-      let u;
-      reconsider u' = u as Element of Funcs(A,REAL);
-      reconsider w = (RealFuncExtMult(A)).[-1,u'] as VECTOR of IT;
-      take w;
-      thus u+w = 0.IT by Th22;
-    end;
-    thus a*(u+v) = a*u + a *v by Lm2;
-    thus (a+b)*v = a*v + b*v by Th25;
-    thus (a*b)*v = a*(b*v) by Th24;
-    thus 1*v = v by Th23;
-  end;
-  hence thesis;
-end;
-
 definition
-  let A;
+  let A be set;
   func RealVectSpace(A) -> strict RealLinearSpace equals
   RLSStruct(#Funcs(A,REAL),
     (RealFuncZero(A)),RealFuncAdd(A),RealFuncExtMult(A)#);
-  coherence by Th34;
+  coherence
+   proof
+    set S =
+     RLSStruct(#Funcs(A,REAL),
+       (RealFuncZero(A)),RealFuncAdd(A),RealFuncExtMult(A)#);
+X1:  S is Abelian
+      proof let u,v be Element of S;
+       thus u+v = v+u by Th16;
+      end;
+X2:  S is add-associative
+      proof let u,v,w be Element of S;
+       thus (u+v)+w = u+(v+w) by Th17;
+      end;
+X4:  S is right_zeroed
+    proof let u be Element of S;
+      reconsider u'=u as Element of Funcs(A,REAL);
+      thus u+0.S = (RealFuncAdd A).(RealFuncZero(A),u') by Th16
+        .= u by Th21;
+    end;
+X5:  S is right_complementable
+    proof
+      let u be Element of S;
+      reconsider u' = u as Element of Funcs(A,REAL);
+      reconsider w = (RealFuncExtMult A).[-1,u'] as VECTOR of S;
+      take w;
+      thus u+w = 0.S by Th22;
+    end;
+     S is RealLinearSpace-like
+      proof
+       thus for a for v,w being Element of S
+        holds a * (v + w) = a * v + a * w by Lm2;
+       thus for a,b for v being Element of S
+        holds (a + b) * v = a * v + b * v by Th25;
+       thus for a,b for v being Element of S
+        holds (a * b) * v = a * (b * v) by Th24;
+       let v being Element of S;
+       thus 1 * v = v by Th23;
+      end;
+    hence thesis by X1,X2,X4,X5;
+   end;
 end;
 
-Lm3: ex A,x1,x2 st A={x1,x2} & x1<>x2
-proof
-  reconsider A={1,2} as non empty set;
-  take A;
-  thus thesis;
-end;
-
-canceled 2;
+canceled 3;
 
 theorem
-  ex V being strict RealLinearSpace st (ex u,v being VECTOR of V st
+  ex V being strict RealLinearSpace st (ex u,v being Element of V st
   (for a,b st a*u + b*v = 0.V holds a=0 & b=0) &
-  (for w being VECTOR of V ex a,b st w = a*u + b*v))
-proof consider A,x1,x2 such that
-A1: A={x1,x2} & x1<>x2 by Lm3;
+  (for w being Element of V ex a,b st w = a*u + b*v))
+proof set A ={0,1};
   take V = RealVectSpace(A);
-  consider f,g such that
-A2: (for a,b st (RealFuncAdd(A)).((RealFuncExtMult(A)).[a,f],
-  (RealFuncExtMult(A)).[b,g]) = RealFuncZero(A) holds a=0 & b=0) &
-  (for h holds (ex a,b st h = (RealFuncAdd(A)).
-  ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]))) by A1,Th33;
-  reconsider u=f, v=g as VECTOR of V;
+  consider f,g being Element of Funcs(A,REAL) such that
+A2: (for a,b st (RealFuncAdd A).((RealFuncExtMult A).[a,f],
+  (RealFuncExtMult A).[b,g]) = RealFuncZero(A) holds a=0 & b=0) &
+  (for h being Element of Funcs(A,REAL) holds (ex a,b st h = (RealFuncAdd A).
+  ((RealFuncExtMult A).[a,f],(RealFuncExtMult A).[b,g]))) by Th33;
+  reconsider u=f, v=g as Element of V;
   take u,v;
   thus for a,b st a*u + b*v = 0.V holds a=0 & b=0 by A2;
-  thus for w being VECTOR of V ex a,b st w = a*u + b*v
+  thus for w being Element of V ex a,b st w = a*u + b*v
   proof
-    let w be VECTOR of V;
+    let w be Element of V;
     reconsider h=w as Element of Funcs(A,REAL);
     consider a,b such that
-A3: h = (RealFuncAdd(A)).((RealFuncExtMult(A)).[a,f],
-    (RealFuncExtMult(A)).[b,g]) by A2;
+A3: h = (RealFuncAdd A).((RealFuncExtMult A).[a,f],
+    (RealFuncExtMult A).[b,g]) by A2;
     h = a*u + b*v by A3;
     hence thesis;
   end;
@@ -776,11 +848,11 @@ proof
   reconsider f=x as Element of Funcs(A,REAL);
   thus x+y = y+x by Th16;
   thus (x+y)+z = x+(y+z) by Th17;
-  thus x+(0.RRing(A)) = (RealFuncAdd(A)).(RealFuncZero(A),f) by Th16
+  thus x+(0.RRing(A)) = (RealFuncAdd A).(RealFuncZero(A),f) by Th16
     .= x by Th21;
   thus ex t being Element of RRing(A) st x+t=(0.RRing(A))
   proof
-    set h = (RealFuncExtMult(A)).[-1,f];
+    set h = (RealFuncExtMult A).[-1,f];
     reconsider t=h as Element of IT;
     take t;
     thus x+t = 0.IT by Th22;
@@ -967,7 +1039,7 @@ proof
   reconsider f=x as Element of Funcs(A,REAL);
   thus x+y = y+x by Th16;
   thus (x+y)+z = x+(y+z) by Th17;
-  thus x+(0.RAlgebra(A)) = (RealFuncAdd(A)).(RealFuncZero(A),f) by Th16
+  thus x+(0.RAlgebra(A)) = (RealFuncAdd A).(RealFuncZero(A),f) by Th16
     .= x by Th21;
   thus x*y = y*x by Th18;
   thus (x*y)*z = x*(y*z) by Th19;
@@ -986,9 +1058,6 @@ definition
   :Def20:
   for x,y,z being Element of IT
   for a,b holds
-
-:::         x*(1.IT) = x &
-:::         x*(y+z) = x*y + x*z &
   a*(x*y) = (a*x)*y & a*(x+y) = a*x + a*y & (a+b)*x = a*x + b*x &
   (a*b)*x = a*(b*x);
 end;
@@ -997,7 +1066,7 @@ Lm6: RAlgebra A is right_complementable
 proof
   let x be Element of RAlgebra A;
   reconsider f=x as Element of Funcs(A,REAL);
-  set h = (RealFuncExtMult(A)).[-1,f];
+  set h = (RealFuncExtMult A).[-1,f];
   reconsider t=h as Element of RAlgebra A;
   take t;
   thus x+t = 0.RAlgebra A by Th22;

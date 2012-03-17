@@ -9,7 +9,7 @@ environ
 
  vocabularies PARTFUN1, ARYTM, SQUARE_1, FINSEQ_2, RVSUM_1, FINSEQ_1, VECTSP_1,
       RELAT_1, FUNCT_1, ARYTM_1, RLVECT_1, RFUNCT_3, RCOMP_1, ARYTM_3, SEQ_1,
-      BOOLE, MEASURE5, FCONT_1, ABSVALUE, RFUNCT_4;
+      BOOLE, MEASURE5, FCONT_1, ABSVALUE, RFUNCT_4, ORDINAL2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       RELAT_1, COMPLEX1, NAT_1, FUNCT_1, FINSEQ_1, REAL_1, FINSEQ_2, PARTFUN1,
       FINSEQOP, BINOP_2, VALUED_1, SEQ_1, RVSUM_1, RCOMP_1, RFUNCT_3, SUPINF_1,
@@ -1359,6 +1359,7 @@ proof
   let f be PartFunc of REAL,REAL, I be Interval, a be Real such that
 A1: (
   ex x1,x2 being Real st x1 in I & x2 in I & x1<a & a<x2) & f is_convex_on I;
+A2: I c= dom f by A1,RFUNCT_3:def 13;
   consider x1,x2 being Real such that
 A3: x1 in I & x2 in I & x1 < a & a < x2 by A1;
 A4: a in I by A3,XXREAL_2:84;
@@ -1597,7 +1598,7 @@ A53:        x1 <= x & x <= x2 by XREAL_1:11;
     end;
     hence thesis;
   end;
-  hence thesis by FCONT_1:3;
+  hence thesis by A2,A4,FCONT_1:3;
 end;
 
 begin :: Definitions of several convexity and semicontinuity concepts
@@ -1678,6 +1679,12 @@ A1: f is_upper_semicontinuous_in x0 & f is_lower_semicontinuous_in x0
   proof
     assume
 A2: f is_upper_semicontinuous_in x0&f is_lower_semicontinuous_in x0;
+    then
+A3: x0 in dom f &
+    (for r st 0<r ex s st 0<s & for x st x in dom f & abs(x-x0)<s holds
+    f.x-f.x0<r) &
+    (for r st 0<r ex s st 0<s & for x st x in dom f & abs(x-x0)<s holds
+    f.x0-f.x<r) by Def5,Def7;
     for r be real number st 0<r ex s be real number st 0<s &
     for x be real number st x in dom f & abs(x-x0)<s holds abs(f.x-f.x0)<r
     proof
@@ -1734,13 +1741,17 @@ A14:      abs(f.x-f.x0)=r;
       take s;
       thus thesis by A8,A9;
     end;
-    hence f is_continuous_in x0 by FCONT_1:3;
+    hence f is_continuous_in x0 by A3,FCONT_1:3;
   end;
   f is_continuous_in x0 implies
   f is_upper_semicontinuous_in x0 & f is_lower_semicontinuous_in x0
   proof
     assume
 A15: f is_continuous_in x0;
+    then
+A16:for r be real number st 0<r ex s be real number st 0<s &
+    for x be real number st x in dom f & abs(x-x0)<s holds
+    abs(f.x-f.x0)<r by FCONT_1:3;
 A17: for r st 0<r ex s st 0<s & for x st x in dom f & abs(x-x0)<s holds
     f.x-f.x0<r
     proof
@@ -1782,31 +1793,33 @@ A27:    abs(f.x-f.x0)<r by A24,A26;
       thus s is Real by XREAL_0:def 1;
       thus thesis by A24,A25;
     end;
-    hence thesis by A17,Def5,Def7,Z;
+    hence thesis by A16,A17,Def5,Def7,Z;
   end;
   hence thesis by A1;
 end;
 
 theorem
-  for X, f holds
+  for X, f st X c= dom f holds
   f is_upper_semicontinuous_on X & f is_lower_semicontinuous_on X
-  iff f is_continuous_on X
+  iff f|X is continuous
 proof
-  let X, f;
+  let X, f such that
+Z: X c= dom f;
 A1: f is_upper_semicontinuous_on X & f is_lower_semicontinuous_on X
-  implies f is_continuous_on X
+  implies f|X is continuous
   proof
     assume
 A2: f is_upper_semicontinuous_on X & f is_lower_semicontinuous_on X;
-    X c= dom f & for x0 be real number st x0 in X holds f|X is_continuous_in x0
+    X c= dom f &
+    for x0 be real number st x0 in dom(f|X) holds f|X is_continuous_in x0
     proof
      thus
 K:    X c= dom f by A2,Def6;
       let x0 be real number such that
-A3:   x0 in X;
-      x0 in dom f by K,A3;
+X:   x0 in dom(f|X);
+      x0 in dom f by K,X,RELAT_1:86;
       then
-X:    x0 in dom(f|X) by A3,RELAT_1:86;
+A3:    x0 in X by X,RELAT_1:86;
       x0 is Real by XREAL_0:def 1;
       then f|X is_upper_semicontinuous_in x0 & f|X is_lower_semicontinuous_in
       x0 by A2,A3,Def6,Def8;
@@ -1814,16 +1827,16 @@ X:    x0 in dom(f|X) by A3,RELAT_1:86;
     end;
     hence thesis by FCONT_1:def 2;
   end;
-  f is_continuous_on X implies
+  f|X is continuous implies
   f is_upper_semicontinuous_on X & f is_lower_semicontinuous_on X
   proof
     assume
-A4: f is_continuous_on X;
+A4: f|X is continuous;
     X c= dom f & (for x0 st x0 in X holds f|X is_upper_semicontinuous_in x0) &
     (for x0 st x0 in X holds f|X is_lower_semicontinuous_in x0)
     proof
       thus
-K:       X c= dom f by A4,FCONT_1:def 2;
+K:       X c= dom f by Z;
 A5:   for x0 st x0 in X holds f|X is_upper_semicontinuous_in x0
       proof
         let x0;
@@ -1834,7 +1847,7 @@ A6:     x0 in X;
 X:      x0 in dom(f|X) by A6,RELAT_1:86;
         f|X is_upper_semicontinuous_in x0
         proof
-          f|X is_continuous_in x0 by A4,A6,FCONT_1:def 2;
+          f|X is_continuous_in x0 by A4,A6,FCONT_1:def 2,X;
           hence thesis by Th20,X;
         end;
         hence thesis;
@@ -1849,7 +1862,7 @@ A7:     x0 in X;
 X:      x0 in dom(f|X) by A7,RELAT_1:86;
         f|X is_lower_semicontinuous_in x0
         proof
-          f|X is_continuous_in x0 by A4,A7,FCONT_1:def 2;
+          f|X is_continuous_in x0 by A4,A7,FCONT_1:def 2,X;
           hence thesis by Th20,X;
         end;
         hence thesis;

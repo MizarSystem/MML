@@ -7,15 +7,16 @@
 environ
 
  vocabularies FUNCT_1, COMPLEX1, RELAT_1, ANPROJ_1, BOOLE, SEQ_1, ARYTM_1,
-      ARYTM_3, COMSEQ_1, ARYTM, FUNCOP_1, XCMPLX_0, VALUED_0, ZF_REFLE;
+      ARYTM_3, COMSEQ_1, ARYTM, FUNCOP_1, XCMPLX_0, VALUED_0, ZF_REFLE,
+      NORMSP_1;
  notations TARSKI, XBOOLE_0,
-      SUBSET_1, XCMPLX_0, NUMBERS, COMPLEX1, RELAT_1, FUNCT_1,
+      SUBSET_1, XCMPLX_0, NUMBERS, COMPLEX1, RELAT_1, FUNCT_1, NAT_1,
       ORDINAL1, RELSET_1, FUNCT_2, FUNCOP_1, VALUED_0, VALUED_1, SEQ_1;
  constructors PARTFUN1, FUNCOP_1, REAL_1, COMPLEX1, SEQ_1, VALUED_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS, MEMBERED,
       VALUED_0, VALUED_1, XCMPLX_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions VALUED_1, RELAT_1;
+ definitions VALUED_1, RELAT_1, COMPLEX1;
  theorems COMPLEX1, FUNCT_1, FUNCT_2, TARSKI, SEQ_1, RELSET_1, XBOOLE_0,
       XCMPLX_1, XCMPLX_0, FUNCOP_1, VALUED_1, ZFMISC_1, RELAT_1;
  schemes CLASSES1;
@@ -28,7 +29,7 @@ reserve r,p for Element of COMPLEX;
 reserve x,y,z for set;
 
 definition
-  mode Complex_Sequence is Function of NAT,COMPLEX;
+  mode Complex_Sequence is sequence of COMPLEX;
 end;
 
 reserve seq,seq1,seq2,seq3,seq',seq1' for Complex_Sequence;
@@ -113,24 +114,14 @@ notation
   synonym f is non-zero for f is non-empty;
 end;
 
-definition
-  let IT be Complex_Sequence;
-  redefine attr IT is non-zero means
-  :Def1:
-  rng IT c= COMPLEX \ {0c};
-  compatibility
-   proof
-    thus IT is non-empty implies rng IT c= COMPLEX \ {0c}
-     proof assume IT is non-empty;
-       then not 0c in rng IT by RELAT_1:def 9;
-      hence rng IT c= COMPLEX \ {0c} by ZFMISC_1:40;
-     end;
-    assume
-Z:    rng IT c= COMPLEX \ {0c};
-    assume {} in rng IT;
-     then not 0c in {0c} by XBOOLE_0:def 4,Z;
-    hence contradiction by TARSKI:def 1;
-   end;
+registration
+  cluster non-zero Complex_Sequence;
+  existence
+  proof
+    take s = NAT --> 1r;
+     rng s = {1} by FUNCOP_1:14;
+    hence not 0 in rng s by TARSKI:def 1;
+  end;
 end;
 
 theorem Th3:
@@ -138,41 +129,19 @@ theorem Th3:
 proof
   thus seq is non-zero implies for x st x in NAT holds seq.x<>0c
   proof
-    assume seq is non-zero;
-    then
-A1: rng seq c= COMPLEX\{0c} by Def1;
+    assume
+Z:   seq is non-zero;
     let x;
     assume x in NAT;
     then x in dom seq by Th2;
     then seq.x in rng seq by FUNCT_1:def 5;
-    then not seq.x in {0c} by A1,XBOOLE_0:def 4;
-    hence seq.x<>0c by TARSKI:def 1;
+    hence seq.x<>0c by RELAT_1:def 9,Z;
   end;
   assume
 A2: for x st x in NAT holds seq.x<>0c;
-  now
-    let y;
-    assume y in rng seq;
-    then consider x such that
-A3: x in dom seq and
-A4: seq.x=y by FUNCT_1:def 5;
-A5: y is Element of COMPLEX by A3,A4,Th1;
-    y<>0c by A2,A3,A4;
-    then not y in {0c} by TARSKI:def 1;
-    hence y in COMPLEX\{0c} by A5,XBOOLE_0:def 4;
-  end;
-  then rng seq c= COMPLEX \ {0c} by TARSKI:def 3;
-  hence thesis by Def1;
-end;
-
-registration
-  cluster non-zero Complex_Sequence;
-  existence
-  proof
-    take s = NAT --> 1r;
-    for x st x in NAT holds s.x<>0c by COMPLEX1:12,15,FUNCOP_1:13;
-    hence thesis by Th3;
-  end;
+    assume 0 in rng seq;
+    then ex x st x in dom seq & seq.x=0 by FUNCT_1:def 5;
+  hence contradiction by A2;
 end;
 
 theorem Th4:
@@ -184,7 +153,13 @@ proof
   hence thesis by Th3;
 end;
 
-canceled;
+theorem
+ for IT being non-zero Complex_Sequence
+  holds rng IT c= COMPLEX \ {0c}
+     proof let IT be non-zero Complex_Sequence;
+       not 0c in rng IT by RELAT_1:def 9;
+      hence rng IT c= COMPLEX \ {0c} by ZFMISC_1:40;
+     end;
 
 theorem Th6:
   for seq,seq1 st (for n holds seq.n=seq1.n) holds seq=seq1

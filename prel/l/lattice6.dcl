@@ -32,7 +32,6 @@
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCT_3"/>
@@ -77,7 +76,7 @@
 <Adjective nr="55"/>
 <Adjective nr="56"/>
 <Adjective nr="86"/>
-<Adjective nr="113"/>
+<Adjective nr="112"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICE6" nr="3">
@@ -97,7 +96,7 @@
 <Adjective nr="55"/>
 <Adjective nr="56"/>
 <Adjective nr="86"/>
-<Adjective nr="114"/>
+<Adjective nr="113"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICE6" nr="4">
@@ -133,7 +132,7 @@
 <Adjective nr="51"/>
 <Adjective nr="52"/>
 <Adjective nr="86"/>
-<Adjective nr="119"/>
+<Adjective nr="118"/>
 </Cluster>
 </RCluster>
 <FCluster aid="LATTICE6" nr="1">
@@ -146,7 +145,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="210">
+<Func kind="K" nr="212">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -154,7 +153,7 @@
 <Adjective nr="65"/>
 <Adjective nr="66"/>
 <Adjective nr="67"/>
-<Adjective nr="110"/>
+<Adjective nr="109"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LATTICE6" nr="2">
@@ -164,15 +163,15 @@
 <Adjective nr="30" value="false"/>
 <Adjective nr="52"/>
 <Adjective nr="86"/>
-<Adjective nr="114"/>
+<Adjective nr="113"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="347">
+<Func kind="K" nr="346">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="121">
+<Adjective nr="120">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -184,15 +183,15 @@
 <Adjective nr="30" value="false"/>
 <Adjective nr="52"/>
 <Adjective nr="86"/>
-<Adjective nr="113"/>
+<Adjective nr="112"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="348">
+<Func kind="K" nr="347">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="120">
+<Adjective nr="119">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -226,7 +225,7 @@
 <Cluster>
 <Adjective nr="30" value="false"/>
 <Adjective nr="52"/>
-<Adjective nr="113"/>
+<Adjective nr="112"/>
 </Cluster>
 </CCluster>
 <CCluster aid="LATTICE6" nr="3">
@@ -242,7 +241,7 @@
 <Cluster>
 <Adjective nr="30" value="false"/>
 <Adjective nr="52"/>
-<Adjective nr="114"/>
+<Adjective nr="113"/>
 </Cluster>
 </CCluster>
 </Registrations>

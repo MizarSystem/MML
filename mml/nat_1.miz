@@ -7,7 +7,8 @@
 environ
 
  vocabularies ORDINAL2, ARYTM, ARYTM_1, ORDINAL1, XREAL_0, ZF_LANG, HENMODEL,
-      FINSET_1, CARD_1, BOOLE, GR_CY_1, RELAT_1, FUNCT_1, SQUARE_1;
+      FINSET_1, CARD_1, BOOLE, GR_CY_1, RELAT_1, FUNCT_1, SQUARE_1, NORMSP_1,
+      SEQM_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, FINSET_1, CARD_1, NUMBERS,
       XCMPLX_0, XREAL_0, REAL_1, XXREAL_0, RELAT_1, FUNCT_1, FUNCT_2;
  constructors NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, CARD_1, WELLORD2, FUNCT_2;
@@ -17,7 +18,7 @@ environ
  definitions TARSKI, XBOOLE_0, CARD_1;
  theorems AXIOMS, ORDINAL1, XCMPLX_1, XREAL_1, XXREAL_0, TARSKI,
       ORDINAL2, XBOOLE_1, XBOOLE_0, CARD_1, FUNCT_2, FUNCT_1;
- schemes SUBSET_1, ORDINAL2;
+ schemes SUBSET_1, ORDINAL2, FUNCT_2;
 
 begin
 
@@ -1330,4 +1331,74 @@ definition
     f.n is Element of D;
     hence thesis;
   end;
+end;
+
+:: from MODELC_2, 2008.08.18, A.T.
+
+definition let X be set;
+ mode sequence of X is Function of NAT,X;
+end;
+
+:: from SEQM_3, BHSP_3, COMSEQ_3, KURATO_2, LOPBAN_3, CLVECT_2, CLOPBAN3
+::      (generalized), 2008.08.23, A.T.
+
+definition let X be non empty set, s be sequence of X, k be Nat;
+ func s ^\ k -> sequence of X means
+:Def3:  for n being Nat holds it.n=s.(n+k);
+  existence
+  proof
+    deffunc U(Element of NAT) = s.($1+k);
+    consider f being sequence of X such that
+W:  for n being Element of NAT holds f.n=U(n) from FUNCT_2:sch 4;
+    take f;
+    let n be Nat;
+     n in NAT by ORDINAL1:def 13;
+    hence thesis by W;
+  end;
+  uniqueness
+  proof
+    let s1,s2 be sequence of X;
+    assume that
+A1: for n holds s1.n=s.(n+k) and
+A2: for n holds s2.n=s.(n+k);
+    now
+      let n be Element of NAT;
+      s1.n=s.(n+k) & s2.n=s.(n+k) by A1,A2;
+      hence s1.n=s2.n;
+    end;
+    hence s1=s2 by FUNCT_2:113;
+  end;
+end;
+
+ reserve X for non empty set, s for sequence of X, k,m for Nat;
+
+ theorem
+  s^\0 =s
+proof
+  now
+    let n be Element of NAT;
+    thus (s ^\0).n=s.(n+0) by Def3
+      .=s.n;
+  end;
+  hence thesis by FUNCT_2:113;
+end;
+
+theorem Th59:
+  s ^\k^\m = s^\(k+m)
+proof
+  now
+    let n be Element of NAT;
+    thus (s ^\k^\m).n=(s ^\k).(n+m) by Def3
+      .=s.(n+m+k) by Def3
+      .=s.(n+(k+m))
+      .=(s ^\(k+m)).n by Def3;
+  end;
+  hence thesis by FUNCT_2:113;
+end;
+
+theorem
+  s^\k^\m = s^\m^\k
+proof
+ thus s^\k^\m = s^\(k+m) by Th59
+    .= s^\m^\k by Th59;
 end;

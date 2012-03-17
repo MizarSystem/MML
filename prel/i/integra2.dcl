@@ -15,7 +15,6 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -28,7 +27,7 @@
 </Signature>
 <RCluster aid="INTEGRA2" nr="1">
 <ArgTypes/>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="K" nr="54"/>
 </Typ>
@@ -38,9 +37,9 @@
 <Adjective nr="21"/>
 <Adjective nr="22"/>
 <Adjective nr="23"/>
-<Adjective nr="38"/>
-<Adjective nr="43"/>
-<Adjective nr="52"/>
+<Adjective nr="37"/>
+<Adjective nr="42"/>
+<Adjective nr="54"/>
 </Cluster>
 </RCluster>
 </Registrations>

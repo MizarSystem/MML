@@ -45,7 +45,7 @@
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="295">
+<Func kind="K" nr="297">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -59,12 +59,12 @@
 <Adjective nr="8" value="false"/>
 <Adjective nr="22"/>
 <Adjective nr="27"/>
-<Adjective nr="137"/>
-<Adjective nr="138"/>
-<Adjective nr="139"/>
-<Adjective nr="140"/>
+<Adjective nr="141"/>
 <Adjective nr="142"/>
 <Adjective nr="143"/>
+<Adjective nr="144"/>
+<Adjective nr="146"/>
+<Adjective nr="147"/>
 </Cluster>
 </RCluster>
 <FCluster aid="JORDAN1J" nr="1">
@@ -85,7 +85,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="315">
+<Func kind="K" nr="317">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

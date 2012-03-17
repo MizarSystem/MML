@@ -35,9 +35,6 @@
 <ArticleID name="AMI_2"/>
 <ArticleID name="SCMFSA_1"/>
 <ArticleID name="SCMFSA_2"/>
-<ArticleID name="XBOOLEAN"/>
-<ArticleID name="MARGREL1"/>
-<ArticleID name="BINARITH"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
@@ -54,28 +51,28 @@
 <Cluster>
 <Adjective nr="23"/>
 <Adjective nr="83">
-<Func kind="K" nr="284"/>
+<Func kind="K" nr="286"/>
 <Func kind="K" nr="16">
 <Func kind="K" nr="46"/>
-<Func kind="K" nr="128">
+<Func kind="K" nr="130">
 <Func kind="K" nr="46"/>
 </Func>
 </Func>
-<Func kind="K" nr="300"/>
+<Func kind="K" nr="302"/>
 </Adjective>
-<Adjective nr="103"/>
-<Adjective nr="105"/>
+<Adjective nr="104"/>
+<Adjective nr="106"/>
 </Cluster>
-<Func kind="K" nr="195">
+<Func kind="K" nr="197">
 <Func kind="U" nr="9">
-<Func kind="K" nr="284"/>
+<Func kind="K" nr="286"/>
 <Func kind="K" nr="16">
 <Func kind="K" nr="46"/>
-<Func kind="K" nr="128">
+<Func kind="K" nr="130">
 <Func kind="K" nr="46"/>
 </Func>
 </Func>
-<Func kind="K" nr="300"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Func>
 </Typ>
@@ -83,24 +80,24 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="449">
+<Func kind="K" nr="413">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="23"/>
 <Adjective nr="83">
-<Func kind="K" nr="284"/>
+<Func kind="K" nr="286"/>
 <Func kind="K" nr="16">
 <Func kind="K" nr="46"/>
-<Func kind="K" nr="128">
+<Func kind="K" nr="130">
 <Func kind="K" nr="46"/>
 </Func>
 </Func>
-<Func kind="K" nr="300"/>
+<Func kind="K" nr="302"/>
 </Adjective>
-<Adjective nr="103"/>
-<Adjective nr="105"/>
+<Adjective nr="104"/>
+<Adjective nr="106"/>
 </Cluster>
 </FCluster>
 </Registrations>

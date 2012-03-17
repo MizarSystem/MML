@@ -21,7 +21,6 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="XXREAL_2"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="XXREAL_1"/>
 <ArticleID name="RCOMP_1"/>
 <ArticleID name="INTEGRA1"/>
@@ -31,7 +30,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="48"/>
+<Adjective nr="52"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="K" nr="63"/>
@@ -42,12 +41,12 @@
 <Func kind="K" nr="63"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="147">
+<Func kind="K" nr="146">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="48"/>
+<Adjective nr="52"/>
 </Cluster>
 </FCluster>
 </Registrations>

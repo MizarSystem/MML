@@ -29,7 +29,7 @@
 </Signature>
 <FCluster aid="TAYLOR_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="204"/>
+<Func kind="K" nr="206"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
@@ -41,7 +41,7 @@
 </FCluster>
 <FCluster aid="TAYLOR_1" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="103">
+<Func kind="K" nr="105">
 <Func kind="K" nr="59"/>
 </Func>
 <Cluster>

@@ -6,13 +6,15 @@
 
 environ
 
- vocabularies ARYTM_1, ARYTM_3, NAT_1, INT_1, ARYTM, INT_2, ABSVALUE;
- notations SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, INT_1, INT_2;
+ vocabularies ARYTM_1, ARYTM_3, NAT_1, INT_1, ARYTM, INT_2, ABSVALUE,
+    ORDINAL2;
+ notations SUBSET_1, ORDINAL1,
+    NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, INT_2;
  constructors XXREAL_0, NAT_1, INT_2, REAL_1;
  registrations XXREAL_0, XREAL_0, NAT_1, INT_1, ORDINAL1, XBOOLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems ORDINAL1, XCMPLX_1, XREAL_1, XXREAL_0, NAT_1, INT_1, INT_2,
-      ABSVALUE;
+      ABSVALUE, XREAL_0;
  schemes NAT_1;
 
 begin
@@ -907,5 +909,392 @@ A2: i <> 0;
   r = [\ r /] by INT_1:47
     .= i qua Integer div j by INT_1:def 7;
   hence thesis by A1,A2,Th27,XCMPLX_1:50;
+end;
+
+:: from BINARITH, 2008.08.18, A.T.
+
+definition
+  let i,j be natural number;
+  redefine func i -' j -> Element of NAT;
+  coherence
+   proof
+     i -' j =  i - j & 0 <= i -' j  or  i -' j = 0 by XREAL_0:def 2;
+    hence thesis by INT_1:16;
+   end;
+end;
+
+theorem Th39:
+  for i,j being natural number holds i + j -' j = i
+proof
+  let i, j be natural number;
+  i + j - j >= 0;
+  hence i + j -' j = i by XREAL_0:def 2;
+end;
+
+reserve a,b,c for natural number;
+
+theorem Th52:
+  a -' b <= a
+proof
+  a-b <= a-0 by XREAL_1:232;
+  hence thesis by XREAL_0:def 2;
+end;
+
+reserve n,i,j,k for Nat;
+
+theorem Th54:
+  n-'i=0 implies n<=i
+proof
+  assume
+A1: n-'i=0;
+  assume i<n;
+  then i+1<=n by NAT_1:13;
+  then i+1-i<=n-i by XREAL_1:11;
+  hence contradiction by A1,XREAL_0:def 2;
+end;
+
+theorem
+  i<=j implies j+k-'i=j+k-i by XREAL_1:235,NAT_1:12;
+
+theorem
+  i<=j implies j+k-'i=j-'i+k
+proof
+  assume
+A1: i<=j;
+  hence j+k-'i=j+k-i by XREAL_1:235,NAT_1:12
+    .=j-i+k
+    .=j-'i+k by A1,XREAL_1:235;
+end;
+
+reserve i,j,k,i1,i2,n for natural number;
+
+theorem Th57:
+  i-'i1>=1 or i-i1>=1 implies i-'i1=i-i1
+proof
+  assume
+A1: i-'i1>=1 or i-i1>=1;
+  per cases by A1;
+  suppose i-'i1>=1;
+    hence thesis by XREAL_0:def 2;
+  end;
+  suppose i-i1>=1;
+    hence thesis by XREAL_0:def 2;
+  end;
+end;
+
+theorem
+  n-'0=n
+proof
+  n-'0=n-0 by XREAL_0:def 2
+    .=n;
+  hence thesis;
+end;
+
+theorem
+  i1<=i2 implies n-'i2<=n-'i1
+proof
+  assume
+A1: i1<=i2;
+  per cases;
+  suppose
+A2: i2<=n;
+    then
+A3: n-'i1=n-i1 by A1,XREAL_1:235,XXREAL_0:2;
+    n-'i2=n-i2 by A2,XREAL_1:235;
+    hence n-'i2<=n-'i1 by A1,A3,XREAL_1:12;
+  end;
+  suppose i2>n;
+    then n-i2<0 by XREAL_1:51;
+    hence n-'i2<=n-'i1 by XREAL_0:def 2;
+  end;
+end;
+
+theorem Th60:
+  i1<=i2 implies i1-'n<=i2-'n
+proof
+  assume
+A1: i1<=i2;
+  per cases;
+  suppose i1-n>=0;
+    then
+A2: i1-'n=i1-n by XREAL_0:def 2;
+    i1-n<=i2-n by A1,XREAL_1:11;
+    hence thesis by A2,XREAL_0:def 2;
+  end;
+  suppose i1-n<0;
+    hence thesis by XREAL_0:def 2;
+  end;
+end;
+
+theorem Th61:
+  i-'i1>=1 or i-i1>=1 implies i-'i1+i1=i
+proof
+  assume i-'i1>=1 or i-i1>=1;
+  then i-'i1+i1=i-i1+i1 by Th57
+    .=i;
+  hence thesis;
+end;
+
+theorem
+  i1<=i2 implies i1-'1<=i2
+proof
+  assume
+A1: i1<=i2;
+  per cases;
+  suppose i1-1>=0;
+    then i1-'1=i1-1 by XREAL_0:def 2;
+    then i1-'1<=i1-1+1 by NAT_1:12;
+    hence i1-'1<=i2 by A1,XXREAL_0:2;
+  end;
+  suppose i1-1<0;
+    hence i1-'1<=i2 by XREAL_0:def 2;
+  end;
+end;
+
+theorem Th63:
+  i-'2=i-'1-'1
+proof
+  per cases;
+  suppose
+A1: i>=2;
+    then 1<=i by XXREAL_0:2;
+    then i-1>=0 by XREAL_1:50;
+    then
+A2: i-'1=i-1 by XREAL_0:def 2;
+    i-1>=1+1-1 by A1,XREAL_1:11;
+    then i-1-1>=1-1 by XREAL_1:11;
+    then i-'1-'1 =i-2 by A2,XREAL_0:def 2;
+    hence thesis by XREAL_0:def 2;
+  end;
+  suppose
+A3: i<2;
+    then i-2<2-2 by XREAL_1:11;
+    then
+A4: i-'2=0 by XREAL_0:def 2;
+A5: i+1-1<=1+1-1 by A3,NAT_1:13;
+    now per cases;
+      case 1<=i;
+        then i=1 by A5,XXREAL_0:1;
+        then
+A6:     i-'1-'1=0-'1 by XREAL_1:234;
+        thus thesis by A4,A6,Th52;
+      end;
+      case i<1;
+        then i-1<1-1 by XREAL_1:11;
+        then
+A7:     i-'1-'1=0-'1 by XREAL_0:def 2;
+        thus thesis by A4,A7,Th52;
+      end;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem Th64:
+  i1+1<=i2 implies i1-'1<i2 & i1-'2<i2 & i1<=i2
+proof
+  assume
+A1: i1+1<=i2;
+  then
+A2: i1<i2 by NAT_1:13;
+  i1-'1<=i1 by Th52;
+  hence
+A3: i1-'1<i2 by A2,XXREAL_0:2;
+A4: i1-'1-'1=i1-'2 by Th63;
+  i1-'1-'1<=i1-'1 by Th52;
+  hence i1-'2<i2 by A3,A4,XXREAL_0:2;
+  thus thesis by A1,NAT_1:13;
+end;
+
+theorem
+  i1+2<=i2 or i1+1+1<=i2
+  implies i1+1<i2 & i1+1-'1<i2 & i1+1-'2<i2 & i1+1<=i2 &
+  i1-'1+1<i2 & i1-'1+1-'1<i2 & i1<i2 & i1-'1<i2 & i1-'2<i2 & i1<=i2
+proof
+  assume i1+2<=i2 or i1+1+1<=i2;
+  then i1+1+1<=i2;
+  hence
+A1: i1+1<i2 & i1+1-'1<i2 & i1+1-'2<i2 & i1+1<=i2 by Th64,NAT_1:13;
+  i1-'1<=i1 by Th52;
+  then i1-'1+1<=i1+1 by XREAL_1:8;
+  then
+A2: i1-'1+1<i2 by A1,XXREAL_0:2;
+  i1-'1+1-'1<=i1-'1+1 by Th52;
+  hence i1-'1+1<i2 & i1-'1+1-'1<i2 by A2,XXREAL_0:2;
+  thus i1<i2 & i1-'1<i2 & i1-'2<i2 & i1<=i2 by A1,Th64,NAT_1:13;
+end;
+
+theorem
+  i1<=i2 or i1<=i2-'1 implies
+  i1<i2+1 & i1<=i2+1 & i1<i2+1+1 & i1<=i2+1+1 & i1<i2+2 & i1<=i2+2
+proof
+  assume
+A1: i1<=i2 or i1<=i2-'1;
+A2: now
+    assume i1<=i2;
+    then
+A3: i1<i2+1 by NAT_1:13;
+    i2+1+1=i2+(1+1);
+    hence i1<i2+1 & i1<=i2+1 & i1<i2+1+1 & i1<=i2+1+1 & i1<i2+2 & i1<=i2+2
+    by A3,NAT_1:13;
+  end;
+  now
+    assume
+A4: i1<=i2-'1;
+    i2-'1<=i2 by Th52;
+    hence i1<i2+1 & i1<=i2+1 & i1<i2+1+1 & i1<=i2+1+1 & i1<i2+2 & i1<=i2+2
+    by A2,A4,XXREAL_0:2;
+  end;
+  hence thesis by A1,A2;
+end;
+
+theorem
+  i1<i2 or i1+1<=i2 implies i1<=i2-'1
+proof
+  assume
+A1: i1<i2 or i1+1<=i2;
+  per cases by A1;
+  suppose
+A2: i1<i2;
+    then i1+1<=i2 by NAT_1:13;
+    then
+A3: i1+1-1<=i2-1 by XREAL_1:11;
+    0+1<=i2 by A2,NAT_1:13;
+    hence i1<=i2-'1 by A3,XREAL_1:235;
+  end;
+  suppose
+A4: i1+1<=i2;
+    then
+A5: i1+1-1<=i2-1 by XREAL_1:11;
+    0+1<=i2 by A4,NAT_1:13;
+    hence i1<=i2-'1 by A5,XREAL_1:235;
+  end;
+end;
+
+theorem Thxx:
+  i>=i1 implies i>=i1-'i2
+proof
+  assume
+A1: i>=i1;
+  i1>=i1-'i2 by Th52;
+  hence thesis by A1,XXREAL_0:2;
+end;
+
+theorem
+  1<=i & 1<=i1-'i implies i1-'i<i1
+proof
+  assume
+A1: 1<=i & 1<=i1-'i;
+  then i1-i=(i1-'i)+i-i by Th61
+    .=i1-'i;
+  hence thesis by A1,XREAL_1:233;
+end;
+
+theorem Th70:
+  i-'k <= j implies i <= j + k
+proof
+  assume
+A1: i-'k <= j;
+  per cases;
+  suppose
+A2: i >= k;
+    i-'k +k <= j + k by A1,XREAL_1:8;
+    hence i <= j + k by A2,XREAL_1:237;
+  end;
+  suppose
+A3: i <= k;
+    k <= j + k by NAT_1:11;
+    hence i <= j + k by A3,XXREAL_0:2;
+  end;
+end;
+
+theorem
+  i <= j + k implies i-'k <= j
+proof
+  assume i <= j + k;
+  then i -' k <= j + k -' k by Th60;
+  hence i-'k <= j by Th39;
+end;
+
+theorem
+  i <= j -' k & k <= j implies i + k <= j
+proof
+  assume that
+A1: i <= j -' k and
+A2: j >= k;
+  i + k <= j -' k + k by A1,XREAL_1:8;
+  hence i + k <= j by A2,XREAL_1:237;
+end;
+
+theorem
+  j + k <= i implies k <= i -' j
+proof
+  assume
+A1: j + k <= i;
+  per cases by A1,XXREAL_0:1;
+  suppose j + k = i;
+    hence k <= i -' j by Th39;
+  end;
+  suppose j + k < i;
+    hence k <= i -' j by Th70;
+  end;
+end;
+
+theorem
+  k <= i & i < j implies i -' k < j -' k
+proof
+  assume that
+A1: k <= i and
+A2: i < j;
+  i -' k + k = i by A1,XREAL_1:237;
+  then i -' k + k < j -' k + k by A1,A2,XREAL_1:237,XXREAL_0:2;
+  hence i -' k < j -' k by XREAL_1:8;
+end;
+
+theorem
+  i < j & k < j implies i -' k < j -' k
+proof
+  assume that
+A1: i < j and
+A2: k < j;
+  per cases;
+  suppose k <= i;
+    then
+A3: i -' k = i - k by XREAL_1:235;
+    j -' k = j - k by A2,XREAL_1:235;
+    hence thesis by A1,A3,XREAL_1:11;
+  end;
+  suppose k > i;
+    then i - k < 0 by XREAL_1:51;
+    then
+A4: i -' k = 0 by XREAL_0:def 2;
+    j -' k <> 0 by A2,Th54;
+    hence thesis by A4;
+  end;
+end;
+
+:: form JCT_MISC, 2008.08.21, A.T.
+
+theorem
+  i <= j implies j-'(j-'i) = i
+proof
+  assume
+A1: i <= j;
+  j-'(j-'i) + (j-'i) = j by XREAL_1:237,Thxx
+    .= i + (j-'i) by A1,XREAL_1:237;
+  hence thesis;
+end;
+
+:: from LEXBFS, 2008.08.23, A.T.
+
+theorem
+  for n,k being natural number st n < k holds k -' (n+1) + 1 = k -' n
+proof
+  let n,k be Nat such that
+A1: n < k;
+A2: k -' n = k - n by A1,XREAL_1:235;
+  n+1 <= k by A1,NAT_1:13;
+  then k -' (n+1) = k - (n+1) by XREAL_1:235;
+  hence k -' (n+1) + 1 = k -' n by A2;
 end;
 

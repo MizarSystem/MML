@@ -8,16 +8,17 @@ environ
 
  vocabularies SEQ_1, PARTFUN1, SUBSET_1, PRE_TOPC, RELAT_1, SEQ_2, ORDINAL2,
       BOOLE, LIMFUNC1, FUNCT_1, PROB_1, ARYTM, RCOMP_1, ARYTM_1, ABSVALUE,
-      ARYTM_3, FCONT_1, RFUNCT_2, SQUARE_1, FUNCOP_1, SEQM_3;
+      ARYTM_3, FCONT_1, SQUARE_1, FUNCOP_1, SEQM_3, OPPCAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, PROB_1, REAL_1, FUNCT_1, FUNCOP_1, VALUED_1, SEQ_1, RELSET_1,
+      COMPLEX1, PROB_1, REAL_1, FUNCT_1,
+      FUNCT_2, FUNCOP_1, VALUED_1, SEQ_1, RELSET_1,
       SEQ_2, PARTFUN1, PARTFUN2, RCOMP_1, FCONT_1, LIMFUNC1,
       XXREAL_0, RFUNCT_2;
  constructors PARTFUN1, REAL_1, COMPLEX1, NAT_1, SEQ_2, PROB_1, RCOMP_1,
       PARTFUN2, RFUNCT_2, FCONT_1, LIMFUNC1, VALUED_1, SEQ_1, XXREAL_2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
       MEMBERED, SEQM_3, RCOMP_1, RFUNCT_2, VALUED_1, FUNCT_2, VALUED_0,
-      XXREAL_2, FUNCOP_1;
+      XXREAL_2, FUNCOP_1, FCONT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, RCOMP_1, XBOOLE_0, SUBSET_1, PROB_1, LIMFUNC1;
  theorems FUNCT_1, NAT_1, SEQ_2, SEQ_4, ABSVALUE, PARTFUN1, PARTFUN2,
@@ -339,16 +340,16 @@ A21: rng d c= dom f
     hence thesis by A15;
   end;
   then
-A22: f*d is convergent & f.x0 = lim (f*d) by A1,A19,A20,FCONT_1:def 1;
+A22: f/*d is convergent & f.x0 = lim (f/*d) by A1,A19,A20,FCONT_1:def 1;
   now
     let r2 be real number such that
 A23: 0 < r2;
     take n = 0;
     let m such that n <= m;
-    abs((f*d).m - r) = abs(f.(d.m) - r) by A21,RFUNCT_2:21
+    abs((f/*d).m - r) = abs(f.(d.m) - r) by A21,FUNCT_2:185
       .= abs(r - r) by A15
       .= 0 by ABSVALUE:7;
-    hence abs((f*d).m - r) < r2 by A23;
+    hence abs((f/*d).m - r) < r2 by A23;
   end;
   hence contradiction by A1,A22,SEQ_2:def 7;
 end;
@@ -483,7 +484,7 @@ end;
 
 theorem Th19:
   X c= dom f & f|X is monotone &
-  (ex p st f.:X = left_open_halfline(p)) implies f is_continuous_on X
+  (ex p st f.:X = left_open_halfline(p)) implies f|X is continuous
 proof
   assume
 A1: X c= dom f & f|X is monotone;
@@ -494,11 +495,12 @@ A2: f.:X = left_open_halfline(p);
     suppose f|X is non-decreasing;
       then
 A3:   f|X|X is non-decreasing;
-      for x0 be real number st x0 in X holds f|X is_continuous_in x0
+      for x0 be real number st x0 in dom(f|X) holds f|X is_continuous_in x0
       proof
         let x0 be real number;
-        assume
-A4:     x0 in X;
+        assume x0 in dom(f|X);
+        then
+A4:     x0 in X by RELAT_1:86;
         then x0 in dom f /\ X by A1,XBOOLE_0:def 3;
         then
 A5:     x0 in dom (f|X) by RELAT_1:90;
@@ -600,16 +602,17 @@ A40:      (f|X).x <= (f|X).r2 by A3,A38,A39,RFUNCT_2:45;
         end;
         hence thesis by FCONT_1:4;
       end;
-      hence f is_continuous_on X by A1,FCONT_1:def 2;
+      hence f|X is continuous by FCONT_1:def 2;
     end;
     suppose f|X is non-increasing;
       then
 A41:  f|X|X is non-increasing by RELAT_1:101;
-      for x0 be real number st x0 in X holds f|X is_continuous_in x0
+      for x0 be real number st x0 in dom(f|X) holds f|X is_continuous_in x0
       proof
         let x0 be real number;
-        assume
-A42:    x0 in X;
+        assume x0 in dom(f|X);
+        then
+A42:    x0 in X by RELAT_1:86;
         then x0 in dom f /\ X by A1,XBOOLE_0:def 3;
         then
 A43:    x0 in dom(f|X) by RELAT_1:90;
@@ -711,7 +714,7 @@ A78:      (f|X).x <= (f|X).r2 by A41,A74,A77,RFUNCT_2:46;
         end;
         hence thesis by FCONT_1:4;
       end;
-      hence f is_continuous_on X by A1,FCONT_1:def 2;
+      hence f|X is continuous by FCONT_1:def 2;
     end;
   end;
   hence thesis;
@@ -719,7 +722,7 @@ end;
 
 theorem Th20:
   X c= dom f & f|X is monotone &
-  (ex p st f.:X = right_open_halfline(p)) implies f is_continuous_on X
+  (ex p st f.:X = right_open_halfline(p)) implies f|X is continuous
 proof
   assume
 A1: X c= dom f & f|X is monotone;
@@ -730,11 +733,12 @@ A2: f.:X = right_open_halfline(p);
     suppose f|X is non-decreasing;
       then
 A3:   f|X|X is non-decreasing;
-      for x0 be real number st x0 in X holds f|X is_continuous_in x0
+      for x0 be real number st x0 in dom(f|X) holds f|X is_continuous_in x0
       proof
         let x0 be real number;
-        assume
-A4:     x0 in X;
+        assume x0 in dom(f|X);
+        then
+A4:     x0 in X by RELAT_1:86;
         then x0 in dom f /\ X by A1,XBOOLE_0:def 3;
         then
 A5:     x0 in dom (f|X) by RELAT_1:90;
@@ -836,16 +840,17 @@ A40:      (f|X).x <= (f|X).r2 by A3,A38,A39,RFUNCT_2:45;
         end;
         hence thesis by FCONT_1:4;
       end;
-      hence f is_continuous_on X by A1,FCONT_1:def 2;
+      hence f|X is continuous by FCONT_1:def 2;
     end;
     suppose f|X is non-increasing;
       then
 A41:  f|X|X is non-increasing by RELAT_1:101;
-      for x0 be real number st x0 in X holds f|X is_continuous_in x0
+      for x0 be real number st x0 in dom(f|X) holds f|X is_continuous_in x0
       proof
         let x0 be real number;
-        assume
-A42:    x0 in X;
+        assume x0 in dom(f|X);
+        then
+A42:     x0 in X by RELAT_1:86;
         then x0 in dom f /\ X by A1,XBOOLE_0:def 3;
         then
 A43:    x0 in dom(f|X) by RELAT_1:90;
@@ -947,7 +952,7 @@ A78:      (f|X).x <= (f|X).r2 by A41,A74,A77,RFUNCT_2:46;
         end;
         hence thesis by FCONT_1:4;
       end;
-      hence f is_continuous_on X by A1,FCONT_1:def 2;
+      hence f|X is continuous by FCONT_1:def 2;
     end;
   end;
   hence thesis;
@@ -955,7 +960,7 @@ end;
 
 theorem Th21:
   X c= dom f & f|X is monotone &
-  (ex p st f.:X = left_closed_halfline(p)) implies f is_continuous_on X
+  (ex p st f.:X = left_closed_halfline(p)) implies f|X is continuous
 proof
   assume
 A1: X c= dom f & f|X is monotone;
@@ -963,11 +968,12 @@ A1: X c= dom f & f|X is monotone;
 A2: f.:X = left_closed_halfline(p);
   set l = left_closed_halfline(p);
   set L = left_open_halfline(p);
-  for x0 be real number st x0 in X holds f|X is_continuous_in x0
+  for x0 be real number st x0 in dom(f|X) holds f|X is_continuous_in x0
   proof
     let x0 be real number;
-    assume
-A3: x0 in X;
+        assume x0 in dom(f|X);
+        then
+A3:     x0 in X by RELAT_1:86;
     then x0 in dom f /\ X by A1,XBOOLE_0:def 3;
     then
 A4: x0 in dom (f|X) by RELAT_1:90;
@@ -1310,12 +1316,12 @@ for r1 be real number st r1 in dom(f|X) & r1 in N holds (f|X).r1 in N1;
     end;
     hence thesis by FCONT_1:4;
   end;
-  hence f is_continuous_on X by A1,FCONT_1:def 2;
+  hence f|X is continuous by FCONT_1:def 2;
 end;
 
 theorem Th22:
   X c= dom f & f|X is monotone &
-  (ex p st f.:X = right_closed_halfline(p)) implies f is_continuous_on X
+  (ex p st f.:X = right_closed_halfline(p)) implies f|X is continuous
 proof
   assume
 A1: X c= dom f & f|X is monotone;
@@ -1323,11 +1329,12 @@ A1: X c= dom f & f|X is monotone;
 A2: f.:X = right_closed_halfline(p);
   set l = right_closed_halfline(p);
   set L = right_open_halfline(p);
-  for x0 be real number st x0 in X holds f|X is_continuous_in x0
+  for x0 be real number st x0 in dom(f|X) holds f|X is_continuous_in x0
   proof
     let x0 be real number;
-    assume
-A3: x0 in X;
+        assume x0 in dom(f|X);
+        then
+A3:     x0 in X by RELAT_1:86;
     then x0 in dom f /\ X by A1,XBOOLE_0:def 3;
     then
 A4: x0 in dom (f|X) by RELAT_1:90;
@@ -1670,12 +1677,12 @@ for r1 be real number st r1 in dom(f|X) & r1 in N holds (f|X).r1 in N1;
     end;
     hence thesis by FCONT_1:4;
   end;
-  hence f is_continuous_on X by A1,FCONT_1:def 2;
+  hence f|X is continuous by FCONT_1:def 2;
 end;
 
 theorem Th23:
   X c= dom f & f|X is monotone & (ex p,g st f.:X = ].p,g.[) implies
-  f is_continuous_on X
+  f|X is continuous
 proof
   assume
 A1: X c= dom f & f|X is monotone;
@@ -1686,11 +1693,12 @@ A2: f.:X = ].p,g.[;
     suppose f|X is non-decreasing;
       then
 A3:   f|X|X is non-decreasing;
-      for x0 be real number st x0 in X holds f|X is_continuous_in x0
+      for x0 be real number st x0 in dom(f|X) holds f|X is_continuous_in x0
       proof
         let x0 be real number;
-        assume
-A4:     x0 in X;
+        assume x0 in dom(f|X);
+        then
+A4:     x0 in X by RELAT_1:86;
         then x0 in dom f /\ X by A1,XBOOLE_0:def 3;
         then
 A5:     x0 in dom (f|X) by RELAT_1:90;
@@ -1792,16 +1800,17 @@ A40:      (f|X).x <= (f|X).r2 by A3,A38,A39,RFUNCT_2:45;
         end;
         hence thesis by FCONT_1:4;
       end;
-      hence f is_continuous_on X by A1,FCONT_1:def 2;
+      hence f|X is continuous by FCONT_1:def 2;
     end;
     suppose f|X is non-increasing;
       then
 A41:  f|X|X is non-increasing by RELAT_1:101;
-      for x0 be real number st x0 in X holds f|X is_continuous_in x0
+      for x0 be real number st x0 in dom(f|X) holds f|X is_continuous_in x0
       proof
         let x0 be real number;
-        assume
-A42:    x0 in X;
+        assume x0 in dom(f|X);
+        then
+A42:     x0 in X by RELAT_1:86;
         then x0 in dom f /\ X by A1,XBOOLE_0:def 3;
         then
 A43:    x0 in dom(f|X) by RELAT_1:90;
@@ -1903,14 +1912,14 @@ A78:      (f|X).x <= (f|X).r2 by A41,A74,A77,RFUNCT_2:46;
         end;
         hence thesis by FCONT_1:4;
       end;
-      hence f is_continuous_on X by A1,FCONT_1:def 2;
+      hence f|X is continuous by FCONT_1:def 2;
     end;
   end;
   hence thesis;
 end;
 
 theorem Th24:
-  X c= dom f & f|X is monotone & f.:X = REAL implies f is_continuous_on X
+  X c= dom f & f|X is monotone & f.:X = REAL implies f|X is continuous
 proof
   assume
 A1: X c= dom f & f|X is monotone & f.:X = REAL;
@@ -1918,11 +1927,12 @@ A1: X c= dom f & f|X is monotone & f.:X = REAL;
     suppose f|X is non-decreasing;
       then
 A2:   f|X|X is non-decreasing;
-      for x0 be real number st x0 in X holds f|X is_continuous_in x0
+      for x0 be real number st x0 in dom(f|X) holds f|X is_continuous_in x0
       proof
         let x0 be real number;
-        assume
-A3:     x0 in X;
+        assume x0 in dom(f|X);
+        then
+A3:     x0 in X by RELAT_1:86;
         then x0 in dom f /\ X by A1,XBOOLE_0:def 3;
         then
 A4:     x0 in dom (f|X) by RELAT_1:90;
@@ -2013,16 +2023,17 @@ A34:      (f|X).x <= (f|X).r2 by A2,A32,A33,RFUNCT_2:45;
         end;
         hence thesis by FCONT_1:4;
       end;
-      hence f is_continuous_on X by A1,FCONT_1:def 2;
+      hence f|X is continuous by FCONT_1:def 2;
     end;
     suppose f|X is non-increasing;
       then
 A35:  f|X|X is non-increasing by RELAT_1:101;
-      for x0 be real number st x0 in X holds f|X is_continuous_in x0
+      for x0 be real number st x0 in dom(f|X) holds f|X is_continuous_in x0
       proof
         let x0 be real number;
-        assume
-A36:    x0 in X;
+        assume x0 in dom(f|X);
+        then
+A36:     x0 in X by RELAT_1:86;
         then x0 in dom f /\ X by A1,XBOOLE_0:def 3;
         then
 A37:    x0 in dom (f|X) by RELAT_1:90;
@@ -2113,7 +2124,7 @@ A67:      (f|X).x <= (f|X).r2 by A35,A63,A66,RFUNCT_2:46;
         end;
         hence thesis by FCONT_1:4;
       end;
-      hence f is_continuous_on X by A1,FCONT_1:def 2;
+      hence f|X is continuous by FCONT_1:def 2;
     end;
   end;
   hence thesis;
@@ -2122,7 +2133,7 @@ end;
 theorem
   for f be one-to-one PartFunc of REAL,REAL st
   (f|].p,g.[ is increasing or f|].p,g.[ is decreasing) &
-  ].p,g.[ c= dom f holds (f|].p,g.[)" is_continuous_on f.:].p,g.[
+  ].p,g.[ c= dom f holds (f|].p,g.[)"|(f.:].p,g.[) is continuous
 proof
   let f be one-to-one PartFunc of REAL,REAL;
   assume that
@@ -2190,7 +2201,7 @@ theorem
   (f|left_open_halfline p is increasing or
   f|left_open_halfline p is decreasing) &
   left_open_halfline(p) c= dom f holds
-  (f|left_open_halfline(p))" is_continuous_on f.:left_open_halfline(p)
+  (f|left_open_halfline(p))"|(f.:left_open_halfline(p)) is continuous
 proof
   let f be one-to-one PartFunc of REAL,REAL;
   set L = left_open_halfline(p);
@@ -2257,7 +2268,7 @@ theorem
   (f|right_open_halfline p is increasing or
   f|right_open_halfline p is decreasing) &
   right_open_halfline(p) c= dom f holds
-  (f|right_open_halfline(p))" is_continuous_on f.:right_open_halfline(p)
+  (f|right_open_halfline(p))"|(f.:right_open_halfline(p)) is continuous
 proof
   let f be one-to-one PartFunc of REAL,REAL;
   set L = right_open_halfline(p);
@@ -2324,7 +2335,7 @@ theorem
   (f|left_closed_halfline p is increasing or
   f|left_closed_halfline p is decreasing) &
   left_closed_halfline(p) c= dom f holds
-  (f|left_closed_halfline(p))" is_continuous_on f.:left_closed_halfline(p)
+  (f|left_closed_halfline(p))"|(f.:left_closed_halfline(p)) is continuous
 proof
   let f be one-to-one PartFunc of REAL,REAL;
   set L = left_closed_halfline(p);
@@ -2391,7 +2402,7 @@ theorem
   (f|right_closed_halfline p is increasing or
   f|right_closed_halfline p is decreasing) &
   right_closed_halfline(p) c= dom f holds
-  (f|right_closed_halfline(p))" is_continuous_on f.:right_closed_halfline(p)
+  (f|right_closed_halfline(p))"|(f.:right_closed_halfline(p)) is continuous
 proof
   let f be one-to-one PartFunc of REAL,REAL;
   set L = right_closed_halfline(p);
@@ -2456,7 +2467,7 @@ end;
 theorem
   for f be one-to-one PartFunc of REAL,REAL st
   (f|[#]REAL is increasing or f|[#]REAL is decreasing)
-   & f is total holds f" is_continuous_on rng f
+   & f is total holds f"|rng f is continuous
 proof
   let f be one-to-one PartFunc of REAL,REAL;
   set L = [#] REAL;
@@ -2488,8 +2499,8 @@ A6:   f.:L c= dom ((f|L)") by SUBSET_1:7;
         .= dom (f|L) by FUNCT_1:55
         .= dom f /\ L by RELAT_1:90
         .= REAL by A3;
-      then (f|L)" is_continuous_on f.:L by A4,A6,Th24;
-      then (f|L)" is_continuous_on rng f by A3,RELAT_1:146;
+      then (f|L)"|(f.:L) is continuous by A4,A6,Th24;
+      then (f|L)"|rng f is continuous by A3,RELAT_1:146;
       hence thesis by A3,RELAT_1:97;
     end;
     suppose f|L is decreasing;
@@ -2515,8 +2526,8 @@ A9:   f.:L c= dom ((f|L)") by SUBSET_1:7;
         .= dom (f|L) by FUNCT_1:55
         .= dom f /\ L by RELAT_1:90
         .= REAL by A3;
-      then (f|L)" is_continuous_on f.:L by A7,A9,Th24;
-      then (f|L)" is_continuous_on rng f by A3,RELAT_1:146;
+      then (f|L)"|(f.:L) is continuous by A7,A9,Th24;
+      then (f|L)"|rng f is continuous by A3,RELAT_1:146;
       hence thesis by A3,RELAT_1:97;
     end;
   end;
@@ -2524,12 +2535,13 @@ A9:   f.:L c= dom ((f|L)") by SUBSET_1:7;
 end;
 
 theorem
-  f is_continuous_on ].p,g.[ &
+  ].p,g.[ c= dom f & f|].p,g.[ is continuous &
   (f|].p,g.[ is increasing or f|].p,g.[ is decreasing) implies
   rng (f|].p,g.[) is open
 proof
   assume that
-A1: f is_continuous_on ].p,g.[ and
+A0: ].p,g.[ c= dom f and
+A1: f|].p,g.[ is continuous and
 A2: f|].p,g.[ is increasing or f|].p,g.[ is decreasing;
   now
     set f1 = f|].p,g.[;
@@ -2544,7 +2556,6 @@ A5: N c= ].p,g.[ by RCOMP_1:39;
     consider r be real number such that
 A6: 0 < r & N = ].x0 - r, x0 + r.[ by RCOMP_1:def 7;
     reconsider r as Real by XREAL_0:def 1;
-A7: f is_continuous_on N by A1,A5,FCONT_1:17;
 A8: r/2 < r by A6,XREAL_1:218;
     then
 A9: x0 - r < x0 - r/2 by XREAL_1:17;
@@ -2563,14 +2574,14 @@ A15: x0 < x0 + r/2 by A10,REAL_2:174;
 A16: x0 + r/2 in ].x0 - r, x0 + r.[ by A13;
     then
 A17: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A12,XXREAL_2:def 12;
-    [.x0 - r/2, x0 + r/2.] c= ].p,g.[ by A5,A6,A12,A16
+Y:    [.x0 - r/2, x0 + r/2.] c= ].p,g.[ by A5,A6,A12,A16
     ,XXREAL_2:def 12;
     then
-A18: f is_continuous_on [.x0 - r/2, x0 + r/2.] by A1,FCONT_1:17;
+A18: f|[.x0 - r/2, x0 + r/2.] is continuous  by A1,FCONT_1:17,A0;
     set fm = f.(x0 - r/2);
     set fp = f.(x0 + r/2);
 A19: x0 - r/2 < x0 + r/2 by A11,A15,XXREAL_0:2;
-A20: N c= dom f by A7,FCONT_1:def 2;
+A20: N c= dom f by A0,A5,XBOOLE_1:1;
     then
 A21: x0 + r/2 in ].p,g.[ /\ dom f by A5,A6,A16,XBOOLE_0:def 3;
 A22: x0 - r/2 in ].p,g.[ /\ dom f by A5,A6,A12,A20,XBOOLE_0:def 3;
@@ -2606,10 +2617,11 @@ A29:      fm < r2 by A27,XXREAL_0:2;
           then r2 < fp by A27,XXREAL_0:2;
           then
 A30:      r2 in ].fm,fp.[ by A29;
+X:        [.x0 - r/2, x0 + r/2.] c= dom f by Y,A0,XBOOLE_1:1;
           ].fm,fp.[ c= [.fm,fp.] by XXREAL_1:25;
           then consider s such that
 A31:      s in [.x0 - r/2, x0 + r/2.] & x = f.s by A18,A19,A25,A27,A30,
-          FCONT_2:16;
+          FCONT_2:16,X;
           s in N by A6,A17,A31;
           then s in dom f /\ ].p,g.[ by A5,A20,XBOOLE_0:def 3;
           then
@@ -2648,10 +2660,11 @@ A38:      fp < r2 by A36,XXREAL_0:2;
           then r2 < fm by A36,XXREAL_0:2;
           then
 A39:      r2 in ].fp,fm.[ by A38;
+X:        [.x0 - r/2, x0 + r/2.] c= dom f by Y,A0,XBOOLE_1:1;
           ].fp,fm.[ c= [.fp,fm.] by XXREAL_1:25;
           then consider s such that
 A40:      s in [.x0 - r/2, x0 + r/2.] & x = f.s by A18,A19,A34,A36,A39,
-          FCONT_2:16;
+          FCONT_2:16,X;
           s in N by A6,A17,A40;
           then s in dom f /\ ].p,g.[ by A5,A20,XBOOLE_0:def 3;
           then
@@ -2667,14 +2680,16 @@ A41:      s in dom f1 by FUNCT_1:68;
 end;
 
 theorem
-  f is_continuous_on left_open_halfline(p) &
+   left_open_halfline(p) c= dom f &
+  f|left_open_halfline p is continuous &
   (f|left_open_halfline p is increasing or
   f|left_open_halfline p is decreasing) implies
   rng (f|left_open_halfline(p)) is open
 proof
   set L = left_open_halfline(p);
   assume that
-A1: f is_continuous_on L and
+A0: left_open_halfline(p) c= dom f and
+A1: f|L is continuous and
 A2: f|L is increasing or f|L is decreasing;
   now
     set f1 = f|L;
@@ -2689,7 +2704,7 @@ A5: N c= L by RCOMP_1:39;
     consider r be real number such that
 A6: 0 < r & N = ].x0 - r, x0 + r.[ by RCOMP_1:def 7;
     reconsider r as Real by XREAL_0:def 1;
-A7: f is_continuous_on N by A1,A5,FCONT_1:17;
+A7: f|N is continuous by A1,A5,FCONT_1:17,A0;
 A8: r/2 < r by A6,XREAL_1:218;
     then
 A9: x0 - r < x0 - r/2 by XREAL_1:17;
@@ -2708,13 +2723,16 @@ A15: x0 < x0 + r/2 by A10,REAL_2:174;
 A16: x0 + r/2 in ].x0 - r, x0 + r.[ by A13;
     then
 A17: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A12,XXREAL_2:def 12;
+    then [.x0 - r/2, x0 + r/2.] c= L by A5,A6,XBOOLE_1:1;
     then
-A18: f is_continuous_on [.x0 - r/2, x0 + r/2.] by A6,A7,FCONT_1:17
-    ;
+X:    [.x0 - r/2, x0 + r/2.] c= dom f by A0,XBOOLE_1:1;
+    N c= dom f by A0,A5,XBOOLE_1:1;
+    then
+A18: f|[.x0 - r/2, x0 + r/2.] is continuous  by A6,A7,FCONT_1:17,A17;
     set fm = f.(x0 - r/2);
     set fp = f.(x0 + r/2);
 A19: x0 - r/2 < x0 + r/2 by A11,A15,XXREAL_0:2;
-A20: N c= dom f by A7,FCONT_1:def 2;
+A20: N c= dom f by A0,A5,XBOOLE_1:1;
     then
 A21: x0 + r/2 in L /\ dom f by A5,A6,A16,XBOOLE_0:def 3;
 A22: x0 - r/2 in L /\ dom f by A5,A6,A12,A20,XBOOLE_0:def 3;
@@ -2753,7 +2771,7 @@ A30:      r2 in ].fm,fp.[ by A29;
           ].fm,fp.[ c= [.fm,fp.] by XXREAL_1:25;
           then consider s such that
 A31:      s in [.x0 - r/2, x0 + r/2.] & x = f.s by A18,A19,A25,A27,A30,
-          FCONT_2:16;
+          FCONT_2:16,X;
           s in N by A6,A17,A31;
           then s in dom f /\ L by A5,A20,XBOOLE_0:def 3;
           then
@@ -2795,7 +2813,7 @@ A39:      r2 in ].fp,fm.[ by A38;
           ].fp,fm.[ c= [.fp,fm.] by XXREAL_1:25;
           then consider s such that
 A40:      s in [.x0 - r/2, x0 + r/2.] & x = f.s by A18,A19,A34,A36,A39,
-          FCONT_2:16;
+          FCONT_2:16,X;
           s in N by A6,A17,A40;
           then s in dom f /\ L by A5,A20,XBOOLE_0:def 3;
           then
@@ -2811,14 +2829,16 @@ A41:      s in dom f1 by FUNCT_1:68;
 end;
 
 theorem
-  f is_continuous_on right_open_halfline(p) &
+  right_open_halfline(p) c= dom f &
+  f|right_open_halfline p is continuous &
   (f|right_open_halfline p is increasing or
   f|right_open_halfline p is decreasing) implies
   rng (f|right_open_halfline(p)) is open
 proof
   set L = right_open_halfline(p);
   assume that
-A1: f is_continuous_on L and
+A0: right_open_halfline(p) c= dom f and
+A1: f|L is continuous and
 A2: f|L is increasing or f|L is decreasing;
   now
     set f1 = f|L;
@@ -2833,7 +2853,7 @@ A5: N c= L by RCOMP_1:39;
     consider r be real number such that
 A6: 0 < r & N = ].x0 - r, x0 + r.[ by RCOMP_1:def 7;
     reconsider r as Real by XREAL_0:def 1;
-A7: f is_continuous_on N by A1,A5,FCONT_1:17;
+A7: f|N is continuous by A1,A5,FCONT_1:17,A0;
 A8: r/2 < r by A6,XREAL_1:218;
     then
 A9: x0 - r < x0 - r/2 by XREAL_1:17;
@@ -2852,13 +2872,16 @@ A15: x0 < x0 + r/2 by A10,REAL_2:174;
 A16: x0 + r/2 in ].x0 - r, x0 + r.[ by A13;
     then
 A17: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A12,XXREAL_2:def 12;
+    then [.x0 - r/2, x0 + r/2.] c= L by A5,XBOOLE_1:1,A6;
     then
-A18: f is_continuous_on [.x0 - r/2, x0 + r/2.] by A6,A7,FCONT_1:17
-    ;
+X:        [.x0 - r/2, x0 + r/2.] c= dom f by A0,XBOOLE_1:1;
+    N c= dom f by A0,A5,XBOOLE_1:1;
+    then
+A18: f|([.x0 - r/2, x0 + r/2.]) is continuous  by A6,A7,FCONT_1:17,A17;
     set fm = f.(x0 - r/2);
     set fp = f.(x0 + r/2);
 A19: x0 - r/2 < x0 + r/2 by A11,A15,XXREAL_0:2;
-A20: N c= dom f by A7,FCONT_1:def 2;
+A20: N c= dom f by A0,A5,XBOOLE_1:1;
     then
 A21: x0 + r/2 in L /\ dom f by A5,A6,A16,XBOOLE_0:def 3;
 A22: x0 - r/2 in L /\ dom f by A5,A6,A12,A20,XBOOLE_0:def 3;
@@ -2897,7 +2920,7 @@ A30:      r2 in ].fm,fp.[ by A29;
           ].fm,fp.[ c= [.fm,fp.] by XXREAL_1:25;
           then consider s such that
 A31:      s in [.x0 - r/2, x0 + r/2.] & x = f.s by A18,A19,A25,A27,A30,
-          FCONT_2:16;
+          FCONT_2:16,X;
           s in N by A6,A17,A31;
           then s in dom f /\ L by A5,A20,XBOOLE_0:def 3;
           then
@@ -2939,7 +2962,7 @@ A39:      r2 in ].fp,fm.[ by A38;
           ].fp,fm.[ c= [.fp,fm.] by XXREAL_1:25;
           then consider s such that
 A40:      s in [.x0 - r/2, x0 + r/2.] & x = f.s by A18,A19,A34,A36,A39,
-          FCONT_2:16;
+          FCONT_2:16,X;
           s in N by A6,A17,A40;
           then s in dom f /\ L by A5,A20,XBOOLE_0:def 3;
           then
@@ -2955,13 +2978,14 @@ A41:      s in dom f1 by FUNCT_1:68;
 end;
 
 theorem
-  f is_continuous_on [#](REAL) &
+  [#](REAL) c= dom f & f|[#]REAL is continuous &
   (f|[#]REAL is increasing or f|[#]REAL is decreasing) implies
   rng f is open
 proof
   set L = [#]REAL;
   assume that
-A1: f is_continuous_on L and
+A0: [#](REAL) c= dom f and
+A1: f|L is continuous and
 A2: f|L is increasing or f|L is decreasing;
   now
     let r1 be real number;
@@ -2972,7 +2996,6 @@ A3: x0 in dom f & f.x0 = r1 by PARTFUN1:26;
     consider r be real number such that
 A4: 0 < r & N = ].x0 - r, x0 + r.[ by RCOMP_1:def 7;
     reconsider r as Real by XREAL_0:def 1;
-A5: f is_continuous_on N by A1,FCONT_1:17;
 A6: r/2 < r by A4,XREAL_1:218;
     then
 A7: x0 - r < x0 - r/2 by XREAL_1:17;
@@ -2991,11 +3014,11 @@ A13: x0 < x0 + r/2 by A8,REAL_2:174;
 A14: x0 + r/2 in ].x0 - r, x0 + r.[ by A11;
     then
 A15: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A10,XXREAL_2:def 12;
-A16: f is_continuous_on [.x0 - r/2, x0 + r/2.] by A1,FCONT_1:17;
+A16: f|([.x0 - r/2, x0 + r/2.]) is continuous  by A1,FCONT_1:17,A0;
     set fm = f.(x0 - r/2);
     set fp = f.(x0 + r/2);
 A17: x0 - r/2 < x0 + r/2 by A9,A13,XXREAL_0:2;
-A18: N c= dom f by A5,FCONT_1:def 2;
+A18: N c= dom f by A0,XBOOLE_1:1;
     then
 A19: x0 + r/2 in L /\ dom f by A4,A14,XBOOLE_0:def 3;
 A20: x0 - r/2 in L /\ dom f by A4,A10,A18,XBOOLE_0:def 3;
@@ -3031,10 +3054,13 @@ A27:      fm < r2 by A25,XXREAL_0:2;
           then r2 < fp by A25,XXREAL_0:2;
           then
 A28:      r2 in ].fm,fp.[ by A27;
+          ].x0 - r, x0 + r.[ c= dom f by A0,XBOOLE_1:1;
+          then
+X:        [.x0 - r/2, x0 + r/2.] c= dom f by A15,XBOOLE_1:1;
           ].fm,fp.[ c= [.fm,fp.] by XXREAL_1:25;
           then consider s such that
 A29:      s in [.x0 - r/2, x0 + r/2.] & x = f.s by A16,A17,A23,A25,A28,
-          FCONT_2:16;
+          FCONT_2:16,X;
           s in N by A4,A15,A29;
           hence thesis by A18,A29,FUNCT_1:def 5;
         end;
@@ -3069,10 +3095,11 @@ A35:      fp < r2 by A33,XXREAL_0:2;
           then r2 < fm by A33,XXREAL_0:2;
           then
 A36:      r2 in ].fp,fm.[ by A35;
+X:        [.x0 - r/2, x0 + r/2.] c= dom f by A0,XBOOLE_1:1;
           ].fp,fm.[ c= [.fp,fm.] by XXREAL_1:25;
           then consider s such that
 A37:      s in [.x0 - r/2, x0 + r/2.] & x = f.s by A16,A17,A31,A33,A36,
-          FCONT_2:16;
+          FCONT_2:16,X;
           s in N by A4,A15,A37;
           hence thesis by A18,A37,FUNCT_1:def 5;
         end;

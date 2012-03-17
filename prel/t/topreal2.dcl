@@ -41,7 +41,7 @@
 <Cluster/>
 <Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="262">
+<Func kind="K" nr="264">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -49,26 +49,26 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="87"/>
+<Adjective nr="91"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TOPREAL2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="272"/>
+<Func kind="K" nr="274"/>
 <Cluster>
-<Adjective nr="87"/>
+<Adjective nr="91"/>
 </Cluster>
 </FCluster>
 <CCluster aid="TOPREAL2" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="87"/>
+<Adjective nr="91"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="262">
+<Func kind="K" nr="264">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -77,7 +77,7 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="47">
-<Func kind="K" nr="262">
+<Func kind="K" nr="264">
 <Num nr="2"/>
 </Func>
 </Adjective>

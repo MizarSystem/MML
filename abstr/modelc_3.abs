@@ -1,0 +1,938 @@
+:: Model Checking, Part {III}
+::  by Kazuhisa Ishida and Yasunari Shidama
+:: 
+:: Received August 19, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies MODELC_3, SUBSTUT1, MODELC_2, MODELC_1, BOOLE, FUNCT_1, ARYTM_1,
+      RELAT_1, FINSEQ_1, ORDERS_1, ZF_LANG, ZF_MODEL, FSM_1, FSM_2, NORMSP_1,
+      FINSET_1, RELOC, SERIES_1, SEQ_1, RLVECT_1, CARD_1, ARYTM_3, ARYTM,
+      INT_1, CAT_3, TARSKI, SQUARE_1, ALG_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, FINSET_1, CARD_1,
+      NUMBERS, XCMPLX_0, XREAL_0, REAL_1, XXREAL_0, NAT_1, RELAT_1, FUNCT_1,
+      BINOP_1, RELSET_1, FINSEQ_1, ORDERS_1, FUNCOP_1, MARGREL1, FUNCT_2,
+      INT_1, SEQ_1, SERIES_1, PARTFUN1, MODELC_1, MODELC_2, RFINSEQ2;
+ constructors BINOP_1, FUNCT_3, XXREAL_0, NAT_1, MARGREL1, ABIAN, ZF_LANG,
+      KNASTER, MODELC_1, MODELC_2, FINSEQ_1, SERIES_1, FINSEQ_4, FUNCOP_1,
+      REAL_1, SEQ_2, SEQM_3, NEWTON, PREPOWER, POWER, ORDINAL3, ARYTM_1,
+      ARYTM_0, FUNCT_4, FUNCT_7, XCMPLX_0, XREAL_0, RFINSEQ2, NUMBERS,
+      VALUED_1, SEQ_1, VALUED_0;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
+      FUNCT_2, FUNCOP_1, ARYTM_3, XXREAL_0, XREAL_0, NAT_1, INT_1, ORDERS_1,
+      XBOOLEAN, MARGREL1, KNASTER, FINSET_1, CARD_5, MODELC_1, MODELC_2,
+      FINSEQ_1, RELSET_1, NUMBERS, VALUED_0, VALUED_1, SERIES_1, MEMBERED,
+      SEQM_3, NEWTON, CARD_1, ARYTM_2, XCMPLX_0, REAL_1;
+ requirements REAL, NUMERALS, ARITHM, SUBSET, BOOLE;
+
+
+begin
+
+ reserve k,k1,n,n1,m,m1,m0,m01,h,i,i1,j,j1 for Nat,
+         a,b,x,y,X,X1,X2,X3,X4,Y,Z for set,
+         D,D1,D2,S for non empty set;
+ reserve L,L',L1,L2 for FinSequence;
+ reserve F,F1,G,G1,H for LTL-formula;
+ reserve W,W1,W2 for Subset of Subformulae H;
+ reserve v for LTL-formula;
+ reserve r,r1,r2 for real number;
+
+definition let F;
+  redefine func Subformulae F -> Subset of LTL_WFF;
+end;
+
+:: definition of basic operations to build an automaton for LTL.
+
+definition let H;
+  func LTLNew1 H -> Subset of Subformulae H equals
+:: MODELC_3:def 1
+
+  {the_left_argument_of H,the_right_argument_of H } if H is conjunctive,
+  {the_left_argument_of H } if H is disjunctive,
+  {} if H is next,
+  {the_left_argument_of H } if H is Until,
+  {the_right_argument_of H } if H is Release
+  otherwise {};
+
+  func LTLNew2 H -> Subset of Subformulae H equals
+:: MODELC_3:def 2
+
+  {} if H is conjunctive,
+  {the_right_argument_of H } if H is disjunctive,
+  {} if H is next,
+  {the_right_argument_of H } if H is Until,
+  {the_left_argument_of H,the_right_argument_of H } if H is Release
+  otherwise {};
+
+  func LTLNext H -> Subset of Subformulae H equals
+:: MODELC_3:def 3
+
+  {} if H is conjunctive,
+  {} if H is disjunctive,
+  {the_argument_of H} if H is next,
+  {H} if H is Until,
+  {H} if H is Release
+  otherwise {};
+ end;
+
+definition let v;
+  struct LTLnode over v
+    (#LTLold,LTLnew,LTLnext -> Subset of Subformulae v #);
+end;
+
+definition let v; let N be LTLnode over v; let H;
+ assume H in the LTLnew of N;
+ func SuccNode1(H,N) -> strict LTLnode over v means
+:: MODELC_3:def 4
+    the LTLold of it =(the LTLold of N) \/ {H} &
+            the LTLnew of it = ((the LTLnew of N) \ {H})
+                                 \/ (LTLNew1 H \ the LTLold of N) &
+            the LTLnext of it = (the LTLnext of N) \/ LTLNext H;
+  end;
+
+definition let v; let N be LTLnode over v; let H;
+ assume (H in the LTLnew of N) &
+           (H is disjunctive or H is Until or H is Release);
+func SuccNode2(H,N) -> strict LTLnode over v means
+:: MODELC_3:def 5
+    the LTLold of it =(the LTLold of N) \/ {H}  &
+            the LTLnew of it = ((the LTLnew of N) \ {H})
+                                 \/ (LTLNew2 H \ the LTLold of N) &
+            the LTLnext of it = the LTLnext of N;
+ end;
+
+definition let v; let N1,N2 be LTLnode over v; let H;
+pred N2 is_succ_of N1,H means
+:: MODELC_3:def 6
+H in the LTLnew of N1 &
+           (N2 = SuccNode1(H,N1) or
+           (H is disjunctive or H is Until or H is Release) &
+                N2=SuccNode2(H,N1));
+end;
+
+definition let v; let N1,N2 be LTLnode over v;
+ pred N2 is_succ1_of N1 means
+:: MODELC_3:def 7
+ ex H st H in the LTLnew of N1 & N2 = SuccNode1(H,N1);
+
+ pred N2 is_succ2_of N1 means
+:: MODELC_3:def 8
+ ex H st H in the LTLnew of N1 &
+                (H is disjunctive or H is Until or H is Release) &
+                N2=SuccNode2(H,N1);
+ end;
+
+definition let v; let N1,N2 be LTLnode over v;
+ pred N2 is_succ_of N1 means
+:: MODELC_3:def 9
+ N2 is_succ1_of N1 or N2 is_succ2_of N1;
+end;
+
+definition let v; let N be LTLnode over v;
+ attr N is failure means
+:: MODELC_3:def 10
+      ex H,F st H is atomic & F = 'not' H
+                   & H in the LTLold of N & F in the LTLold of N;
+end;
+
+definition let v; let N be LTLnode over v;
+ attr N is elementary means
+:: MODELC_3:def 11
+ the LTLnew of N = {};
+end;
+
+definition let v; let N be LTLnode over v;
+ attr N is final means
+:: MODELC_3:def 12
+    N is elementary & the LTLnext of N = {};
+end;
+
+definition let v;
+  func {}v -> Subset of Subformulae v equals
+:: MODELC_3:def 13
+        {};
+end;
+
+definition let v;
+  func Seed v -> Subset of Subformulae v equals
+:: MODELC_3:def 14
+       {v};
+end;
+
+registration let v;
+  cluster elementary strict LTLnode over v;
+end;
+
+definition let v;
+  func FinalNode v -> elementary strict LTLnode over v equals
+:: MODELC_3:def 15
+       LTLnode(# {}v,{}v,{}v #);
+end;
+
+definition let x, v;
+  func CastNode(x,v) -> strict LTLnode over v equals
+:: MODELC_3:def 16
+    x if x is strict LTLnode over v
+      otherwise LTLnode(# {}v,{}v,{}v #);
+end;
+
+definition let v;
+ func init v -> elementary strict LTLnode over v equals
+:: MODELC_3:def 17
+        LTLnode(# {}v,{}v,Seed v #);
+end;
+
+definition let v; let N be LTLnode over v;
+  func 'X' N -> strict LTLnode over v equals
+:: MODELC_3:def 18
+     LTLnode(# {}v,the LTLnext of N,{}v #);
+end;
+
+:: Some properties of basic operations to build an automaton for LTL.
+
+ reserve N,N1,N2,N3,N10,N20,M,M1,M2 for strict LTLnode over v;
+ reserve w for Element of Inf_seq(AtomicFamily);
+
+definition let v, L;
+  pred L is_Finseq_for v means
+:: MODELC_3:def 19
+    for k st 1 <= k & k < len(L) holds
+                ex N,M st N = L.k & M=L.(k+1) & M is_succ_of N;
+end;
+
+definition let v, N1,N2;
+  pred N2 is_next_of N1 means
+:: MODELC_3:def 20
+ N1 is elementary & N2 is elementary &
+         ex L st 1<=len(L) & L is_Finseq_for v &
+                 L.1 = 'X' N1 & L.(len(L)) = N2;
+end;
+
+definition let v; let W be Subset of Subformulae v;
+  func CastLTL(W) -> Subset of LTL_WFF equals
+:: MODELC_3:def 21
+             W;
+end;
+
+definition let v, N;
+  func *N -> Subset of LTL_WFF equals
+:: MODELC_3:def 22
+       ((the LTLold of N) \/ (the LTLnew of N))
+                                 \/ 'X' CastLTL(the LTLnext of N);
+end;
+
+theorem :: MODELC_3:1
+  H in the LTLnew of N &
+   (H is atomic or H is negative or H is conjunctive or H is next ) implies
+     (w |= *N iff w |= *SuccNode1(H,N));
+
+theorem :: MODELC_3:2
+  (H in the LTLnew of N) &
+   (H is disjunctive or H is Until or H is Release) implies
+  (w |= *N iff (w |= *SuccNode1(H,N) or w |= *SuccNode2(H,N)));
+
+theorem :: MODELC_3:3
+  ex L st Subformulae H = rng L;
+
+registration let H;
+  cluster Subformulae H -> finite;
+end;
+
+definition let H, W, L, x;
+  func Length_fun(L,W,x) -> Nat equals
+:: MODELC_3:def 23
+
+    len CastLTL(L.x) if L.x in W
+    otherwise 0;
+end;
+
+definition let H, W, L;
+ func Partial_seq(L,W) -> Real_Sequence means
+:: MODELC_3:def 24
+
+    for k holds (L.k in W implies it.k = len CastLTL(L.k)) &
+                (not (L.k in W) implies it.k=0 );
+end;
+
+reserve R,R1,R2 for Real_Sequence;
+
+definition let H, W, L;
+  func len(L,W) -> Real equals
+:: MODELC_3:def 25
+      Sum(Partial_seq(L,W), len L);
+end;
+
+theorem :: MODELC_3:4
+  len(L,{}H) = 0;
+
+theorem :: MODELC_3:5
+  not F in W implies len(L,W \ {F}) = len(L,W);
+
+theorem :: MODELC_3:6
+    (rng L = Subformulae H & L is one-to-one) & F in W implies
+      len(L,W\{F}) = len(L,W) - len F;
+
+theorem :: MODELC_3:7
+  (rng L = Subformulae H & L is one-to-one) & (not F in W) & W1 = W \/ {F}
+      implies len(L,W1) = len(L,W) + len F;
+
+theorem :: MODELC_3:8
+  (rng L1 = Subformulae H & L1 is one-to-one) &
+  (rng L2 = Subformulae H & L2 is one-to-one) implies
+      len(L1,W) = len(L2,W);
+
+definition let H, W;
+  func len(W) -> Real means
+:: MODELC_3:def 26
+
+  ex L st rng L = Subformulae H & L is one-to-one & it = len(L,W);
+ end;
+
+theorem :: MODELC_3:9
+  not (F in W) implies len(W\{F}) = len(W);
+
+theorem :: MODELC_3:10
+  F in W implies len(W\{F}) = len(W) - len F;
+
+theorem :: MODELC_3:11
+  (not F in W) & (W1 = W \/ {F}) implies
+    len(W1) = len(W) + len F;
+
+theorem :: MODELC_3:12
+  W1 = W \/ {F} implies len(W1) <= len(W) + len F;
+
+theorem :: MODELC_3:13
+  len({}H ) = 0;
+
+theorem :: MODELC_3:14
+  W = {F} implies len(W) = len F;
+
+theorem :: MODELC_3:15
+    W c= W1 implies len(W) <= len(W1);
+
+theorem :: MODELC_3:16
+  len(W)<1 implies W = {}H;
+
+theorem :: MODELC_3:17
+  len(W) >= 0;
+
+theorem :: MODELC_3:18
+  W = W1 \/ W2 implies len(W) <= len(W1) + len(W2);
+
+definition let v, H;
+  assume H in Subformulae v;
+ func LTLNew1(H,v) -> Subset of Subformulae v equals
+:: MODELC_3:def 27
+    LTLNew1 H;
+
+ func LTLNew2(H,v) -> Subset of Subformulae v equals
+:: MODELC_3:def 28
+    LTLNew2 H;
+  end;
+
+theorem :: MODELC_3:19
+  N2 is_succ1_of N1 implies
+    len(the LTLnew of N2) <= len(the LTLnew of N1) - 1;
+
+theorem :: MODELC_3:20
+  N2 is_succ2_of N1 implies
+     len(the LTLnew of N2) <= len(the LTLnew of N1) - 1;
+
+definition let v, N;
+  func len(N) -> Nat equals
+:: MODELC_3:def 29
+    [\ len(the LTLnew of N) /];
+ end;
+
+theorem :: MODELC_3:21
+  N2 is_succ_of N1 implies len(N2) <= len(N1) - 1;
+
+theorem :: MODELC_3:22
+  len(N)<=0 implies the LTLnew of N = {}v;
+
+theorem :: MODELC_3:23
+  len(N)>0 implies the LTLnew of N <> {}v;
+
+theorem :: MODELC_3:24
+  ex n,L,M st 1 <= n & len L = n & L.1 = N & L.n = M &
+        the LTLnew of M = {}v &
+        L is_Finseq_for v;
+
+theorem :: MODELC_3:25
+  N2 is_succ_of N1 implies
+        the LTLold of N1 c= the LTLold of N2 &
+        the LTLnext of N1 c= the LTLnext of N2;
+
+theorem :: MODELC_3:26
+  L is_Finseq_for v & m<= len(L) & L1 = L|Seg m
+            implies L1 is_Finseq_for v;
+
+theorem :: MODELC_3:27
+  L is_Finseq_for v &
+      not (F in the LTLold of CastNode(L.1,v)) &
+      (1< n & n <= len(L) & F in the LTLold of CastNode(L.n,v) )
+       implies ex m st 1<= m & m<n &
+              not(F in the LTLold of CastNode(L.m,v)) &
+              F in the LTLold of CastNode(L.(m+1),v);
+
+theorem :: MODELC_3:28
+  N2 is_succ_of N1 &
+     not (F in the LTLold of N1) &
+     F in the LTLold of N2
+           implies N2 is_succ_of N1,F;
+
+theorem :: MODELC_3:29
+  L is_Finseq_for v &
+      F in the LTLnew of CastNode(L.1,v)  &
+      (1< n & n <= len(L) & not (F in the LTLnew of CastNode(L.n,v)) )
+       implies ex m st 1<= m & m<n &
+              F in the LTLnew of CastNode(L.m,v) &
+              not (F in the LTLnew of CastNode(L.(m+1),v));
+
+theorem :: MODELC_3:30
+  N2 is_succ_of N1 &
+     F in the LTLnew of N1 &
+     not (F in the LTLnew of N2)
+           implies N2 is_succ_of N1,F;
+
+theorem :: MODELC_3:31
+  L is_Finseq_for v & (1<= m & m<=n & n<= len(L))
+       implies (the LTLold of CastNode(L.m,v)
+                    c= the LTLold of CastNode(L.n,v)) &
+               (the LTLnext of CastNode(L.m,v)
+                    c= the LTLnext of CastNode(L.n,v));
+
+theorem :: MODELC_3:32
+  N2 is_succ_of N1,F implies F in the LTLold of N2;
+
+theorem :: MODELC_3:33
+  L is_Finseq_for v & 1<= len(L) &
+     the LTLnew of CastNode(L.(len(L)),v) = {} v
+       implies the LTLnew of CastNode(L.1,v)
+                    c= the LTLold of CastNode(L.(len(L)),v);
+
+theorem :: MODELC_3:34
+  L is_Finseq_for v & 1<= m & m<=len(L) &
+     the LTLnew of CastNode(L.(len(L)),v) = {} v
+       implies the LTLnew of CastNode(L.m,v)
+                    c= the LTLold of CastNode(L.(len(L)),v);
+
+theorem :: MODELC_3:35
+  L is_Finseq_for v & 1<= k & k<len(L)
+       implies CastNode(L.(k+1),v) is_succ_of CastNode(L.k,v);
+
+theorem :: MODELC_3:36
+   L is_Finseq_for v & 1<= k & k<=len(L)
+       implies len(CastNode(L.k,v)) <= len(CastNode(L.1,v)) -k+1;
+
+reserve s,s0,s1,s2,t,t0,t1,t2 for elementary strict LTLnode over v;
+
+theorem :: MODELC_3:37
+  s2 is_next_of s1 implies the LTLnext of s1 c= the LTLold of s2;
+
+theorem :: MODELC_3:38
+  s2 is_next_of s1 & F in the LTLold of s2
+     implies ex L,m st 1<=len(L) & L is_Finseq_for v &
+                     L.1 = 'X' s1 & L.(len(L)) = s2 &
+                     1 <= m & m <len(L) &
+                     CastNode(L.(m+1),v) is_succ_of CastNode(L.m,v),F;
+
+theorem :: MODELC_3:39
+  s2 is_next_of s1 & H is Release & H in the LTLold of s2 &
+  not (the_left_argument_of H in the LTLold of s2)
+     implies the_right_argument_of H in the LTLold of s2 &
+             H in the LTLnext of s2;
+
+theorem :: MODELC_3:40
+  s2 is_next_of s1 & H is Release & H in the LTLnext of s1
+    implies
+       the_right_argument_of H in the LTLold of s2 &
+       H in the LTLold of s2;
+
+theorem :: MODELC_3:41
+ s1 is_next_of s0 & H in the LTLold of s1 implies
+ (H is conjunctive
+     implies the_left_argument_of H in the LTLold of s1 &
+              the_right_argument_of H in the LTLold of s1) &
+ (H is disjunctive or H is Until
+     implies the_left_argument_of H in the LTLold of s1 or
+              the_right_argument_of H in the LTLold of s1) &
+ (H is next
+     implies the_argument_of H in the LTLnext of s1 ) &
+ (H is Release
+     implies the_right_argument_of H in the LTLold of s1);
+
+theorem :: MODELC_3:42
+ s1 is_next_of s0 & s2 is_next_of s1 &
+ H in the LTLold of s1 & H is Until
+     implies the_right_argument_of H in the LTLold of s1 or
+            (the_left_argument_of H in the LTLold of s1  &
+             H in the LTLold of s2);
+
+definition
+  let v;
+  func LTLNodes(v) -> non empty set means
+:: MODELC_3:def 30
+
+     x in it iff ex N being strict LTLnode over v st x=N;
+end;
+
+registration
+  let v;
+  cluster LTLNodes(v) -> finite;
+  end;
+
+definition
+  let v;
+  func LTLStates(v) -> non empty set equals
+:: MODELC_3:def 31
+     {x where x is Element of LTLNodes(v):
+                    x is elementary strict LTLnode over v};
+  end;
+
+registration
+  let v;
+  cluster LTLStates(v) -> finite;
+  end;
+
+theorem :: MODELC_3:43
+  init v is Element of LTLStates(v);
+
+theorem :: MODELC_3:44
+  s is Element of LTLStates(v);
+
+theorem :: MODELC_3:45
+  x is Element of LTLStates(v) iff ex s st s=x;
+
+definition
+ let v;
+ let w;
+ let f be Function;
+ pred f is_succ_homomorphism v,w means
+:: MODELC_3:def 32
+ for x st x in LTLNodes(v) &
+                      CastNode(x,v) is non elementary &
+                      w |= *CastNode(x,v)
+                 holds CastNode(f.x,v) is_succ_of CastNode(x,v) &
+                       w |= *CastNode(f.x,v);
+
+ pred f is_homomorphism v,w means
+:: MODELC_3:def 33
+ for x st x in LTLNodes(v) &
+                  CastNode(x,v) is non elementary &
+                  w |= *CastNode(x,v)
+                 holds w |= *CastNode(f.x,v);
+end;
+
+theorem :: MODELC_3:46
+  for f being Function of LTLNodes(v),LTLNodes(v)
+          st f is_succ_homomorphism v,w holds
+         f is_homomorphism v,w;
+
+theorem :: MODELC_3:47
+  for f being Function of LTLNodes(v),LTLNodes(v)
+          st f is_homomorphism v,w holds
+    (for x st x in LTLNodes(v) & CastNode(x,v) is non elementary &
+                 w |= *CastNode(x,v) holds
+       (for k st (for i st i<=k holds
+                     CastNode((f|**i).x,v) is non elementary) holds
+           w |= *CastNode((f|**k).x,v)));
+
+theorem :: MODELC_3:48
+  for f being Function of LTLNodes(v),LTLNodes(v)
+          st f is_succ_homomorphism v,w holds
+    (for x st x in LTLNodes(v) & CastNode(x,v) is non elementary &
+                 w |= *CastNode(x,v) holds
+       (for k st (for i st i<=k holds
+                     CastNode((f|**i).x,v) is non elementary) holds
+       CastNode((f|**(k+1)).x,v) is_succ_of CastNode((f|**k).x,v) &
+       w |= *CastNode((f|**k).x,v)));
+
+theorem :: MODELC_3:49
+   for f being Function of LTLNodes(v),LTLNodes(v)
+         st f is_succ_homomorphism v,w holds
+       (for x st x in LTLNodes(v) & CastNode(x,v) is non elementary &
+                 w |= *CastNode(x,v)
+          holds ex n st
+          (for i st i<n holds CastNode((f|**i).x,v) is non elementary) &
+          CastNode((f|**n).x,v) is elementary);
+
+theorem :: MODELC_3:50
+  for f being Function of LTLNodes(v),LTLNodes(v)
+    st f is_homomorphism v,w holds
+    (for x st x in LTLNodes(v) & CastNode(x,v) is non elementary
+         holds
+       (for k st CastNode((f|**k).x,v) is non elementary &
+                  w |= *CastNode((f|**k).x,v) holds
+                  w |= *CastNode((f|**(k+1)).x,v)));
+
+theorem :: MODELC_3:51
+  for f being Function of LTLNodes(v),LTLNodes(v)
+    st f is_succ_homomorphism v,w holds
+    (for x st x in LTLNodes(v) & CastNode(x,v) is non elementary &
+              w |= *CastNode(x,v) holds
+      ex n st
+        (for i st i<n holds
+          CastNode((f|**i).x,v) is non elementary &
+          CastNode((f|**(i+1)).x,v) is_succ_of CastNode((f|**i).x,v)) &
+        CastNode((f|**n).x,v) is elementary &
+        (for i st i<=n holds w |= *CastNode((f|**i).x,v)));
+
+reserve q,q1,q2 for sequence of LTLStates(v);
+
+theorem :: MODELC_3:52
+ex s st s = CastNode(q.n,v);
+
+theorem :: MODELC_3:53
+   H is Until & H in the LTLold of CastNode(q.1,v) &
+  (for i holds CastNode(q.(i+1),v) is_next_of CastNode(q.i,v))
+  implies
+  ((for i st 1<=i & i<n holds
+       not the_right_argument_of H in the LTLold of CastNode(q.i,v))
+        implies
+  (for i st 1<=i & i<n holds
+       (the_left_argument_of H in the LTLold of CastNode(q.i,v)) &
+       (H in the LTLold of CastNode(q.i,v))));
+
+theorem :: MODELC_3:54
+  H is Until & H in the LTLold of CastNode(q.1,v) &
+  (for i holds CastNode(q.(i+1),v) is_next_of CastNode(q.i,v))
+        implies
+  (for i st i>=1 holds
+      (H in the LTLold of CastNode(q.i,v)) &
+      (the_left_argument_of H in the LTLold of CastNode(q.i,v)) &
+      not (the_right_argument_of H in the LTLold of CastNode(q.i,v)))
+     or
+  (ex j st j>=1 &
+    (the_right_argument_of H in the LTLold of CastNode(q.j,v)) &
+    (for i st 1<=i & i<j holds
+       (H in the LTLold of CastNode(q.i,v)) &
+       (the_left_argument_of H in the LTLold of CastNode(q.i,v))));
+
+::some properties for choice function
+
+theorem :: MODELC_3:55
+  union BOOL X = X;
+
+theorem :: MODELC_3:56
+  N is non elementary implies
+         the LTLnew of N <> {} &
+         the LTLnew of N in BOOL Subformulae v;
+
+registration let v;
+  cluster union BOOL Subformulae v -> non empty;
+  cluster BOOL Subformulae v -> non empty;
+end;
+
+theorem :: MODELC_3:57
+  ex f being Choice_Function of BOOL Subformulae v st
+         f is Function of BOOL Subformulae v,Subformulae v;
+
+reserve U for Choice_Function of BOOL Subformulae v;
+
+definition
+  let v;
+  let U;
+  let N;
+  assume N is non elementary;
+  func chosen_formula(U,N) -> LTL-formula equals
+:: MODELC_3:def 34
+  U.(the LTLnew of N);
+end;
+
+theorem :: MODELC_3:58
+   N is non elementary implies chosen_formula(U,N) in the LTLnew of N;
+
+definition
+  let w;
+  let v;
+  let U;
+  let N;
+  func chosen_succ(w,v,U,N) -> strict LTLnode over v equals
+:: MODELC_3:def 35
+
+   SuccNode1(chosen_formula(U,N),N)
+                 if (not chosen_formula(U,N) is Until &
+                     w |= *SuccNode1(chosen_formula(U,N),N))
+                    or
+                    (chosen_formula(U,N) is Until &
+                     w |/= the_right_argument_of chosen_formula(U,N))
+   otherwise SuccNode2(chosen_formula(U,N),N);
+end;
+
+theorem :: MODELC_3:59
+  w|=*N & N is non elementary implies
+          w|=*chosen_succ(w,v,U,N) &
+          chosen_succ(w,v,U,N) is_succ_of N;
+
+theorem :: MODELC_3:60
+  w|=*N & N is non elementary implies
+    ( chosen_formula(U,N) is Until &
+      w |= the_right_argument_of chosen_formula(U,N)
+         implies
+      (the_right_argument_of chosen_formula(U,N)
+                 in the LTLnew of chosen_succ(w,v,U,N) or
+       the_right_argument_of chosen_formula(U,N)
+                 in the LTLold of N  ) &
+      (chosen_formula(U,N)
+                 in the LTLold of chosen_succ(w,v,U,N)) );
+
+theorem :: MODELC_3:61
+  w|=*N & N is non elementary implies
+    the LTLold of N c= the LTLold of chosen_succ(w,v,U,N) &
+    the LTLnext of N c= the LTLnext of chosen_succ(w,v,U,N);
+
+definition
+  let w;
+  let v;
+  let U;
+  func choice_succ_func(w,v,U)
+          -> Function of LTLNodes(v),LTLNodes(v) means
+:: MODELC_3:def 36
+
+     for x st x in LTLNodes(v) holds
+        it.x = chosen_succ(w,v,U,CastNode(x,v));
+end;
+
+theorem :: MODELC_3:62
+  choice_succ_func(w,v,U) is_succ_homomorphism v,w;
+
+begin :: Definition of Negation inner most LTL.
+
+definition let H;
+  attr H is neg-inner-most means
+:: MODELC_3:def 37
+
+      for G being LTL-formula st G is_subformula_of H holds
+            G is negative implies the_argument_of G is atomic;
+end;
+
+registration
+  cluster neg-inner-most LTL-formula;
+end;
+
+definition let H;
+  attr H is Sub_atomic means
+:: MODELC_3:def 38
+H is atomic or ex G being LTL-formula
+                            st G is atomic & H = 'not' G;
+end;
+
+theorem :: MODELC_3:63
+    H is neg-inner-most & F is_subformula_of H
+             implies F is neg-inner-most;
+
+theorem :: MODELC_3:64
+    H is Sub_atomic iff H is atomic or
+       (H is negative & the_argument_of H is atomic);
+
+theorem :: MODELC_3:65
+  H is neg-inner-most implies
+     (H is Sub_atomic or
+      H is conjunctive or H is disjunctive or H is next or
+      H is Until or H is Release);
+
+theorem :: MODELC_3:66
+  H is next & H is neg-inner-most
+        implies the_argument_of H is neg-inner-most;
+
+theorem :: MODELC_3:67
+  (H is conjunctive or H is disjunctive or
+            H is Until or H is Release)  &
+  H is neg-inner-most implies
+                the_left_argument_of H is neg-inner-most
+                & the_right_argument_of H is neg-inner-most;
+
+begin :: Definition of Buchi Automaton (finite state & infinite word ) .
+
+definition
+  let W be non empty set;
+  struct BuchiAutomaton over W (#
+    carrier -> set,
+    Tran -> Relation of [:the carrier,W :], the carrier,
+    InitS -> Element of bool the carrier,
+    FinalS -> Subset of bool the carrier #);
+end;
+
+definition let W be non empty set, B be BuchiAutomaton over W;
+           let w be Element of Inf_seq(W);
+  pred w is-accepted-by B means
+:: MODELC_3:def 39
+
+      ex run be sequence of the carrier of B st
+      run.0 in the InitS of B
+          &
+      for i be Nat holds
+         [[run.i,CastSeq(w,W).i],run.(i+1)] in the Tran of B
+          &
+      for FSet be set st FSet in the FinalS of B holds
+           {k where k is Element of NAT:run.k in FSet} is infinite set;
+end;
+
+::  Preparation to define Buch Automaton for neg-inner-most LTL-formula v
+::  after this, reserve v as neg-inner-most LTL-formula
+
+ reserve v for neg-inner-most LTL-formula;
+ reserve U for Choice_Function of BOOL Subformulae v;
+ reserve N,N1,N2,M,M1,M2 for strict LTLnode over v;
+ reserve s,s0,s1,s2 for elementary strict LTLnode over v;
+
+definition
+  let v;
+  let N;
+  func atomic_LTL(N) -> Subset of LTL_WFF equals
+:: MODELC_3:def 40
+   {x where x is LTL-formula:x is atomic & x in the LTLold of N};
+
+ func Neg_atomic_LTL(N) -> Subset of LTL_WFF equals
+:: MODELC_3:def 41
+    {x where x is LTL-formula:x is atomic & ('not' x) in the LTLold of N};
+ end;
+
+definition
+  let v;
+  let N;
+  func Label_(N) -> set equals
+:: MODELC_3:def 42
+    {x where x is Subset of atomic_LTL:atomic_LTL(N) c= x &
+                                       Neg_atomic_LTL(N) misses x };
+end;
+
+definition
+  let v;
+  func Tran_LTL(v) -> Relation of
+         [:LTLStates(v),AtomicFamily:], LTLStates(v) equals
+:: MODELC_3:def 43
+  {y where y is Element of [:LTLStates(v),AtomicFamily,LTLStates(v):]
+        : ex s,s1,x st y=[[s,x],s1] & s1 is_next_of s & x in Label_(s1)};
+
+  func InitS_LTL(v) -> Element of bool LTLStates(v) equals
+:: MODELC_3:def 44
+    {init v};
+  end;
+
+definition
+  let v;
+  let F;
+  func FinalS_LTL(F,v) -> Element of bool LTLStates(v) equals
+:: MODELC_3:def 45
+     {x where x is Element of LTLStates(v):
+         not F in the LTLold of CastNode(x,v) or
+         the_right_argument_of F in the LTLold of CastNode(x,v) };
+  end;
+
+definition
+  let v;
+  func FinalS_LTL(v) -> Subset of bool LTLStates(v) equals
+:: MODELC_3:def 46
+     {x where x is Element of bool LTLStates(v):
+         ex F st F is_subformula_of v & F is Until &
+                 x= FinalS_LTL(F,v)};
+  end;
+
+definition
+  let v;
+  func BAutomaton(v) -> BuchiAutomaton over AtomicFamily equals
+:: MODELC_3:def 47
+  BuchiAutomaton (#
+        LTLStates(v),
+        Tran_LTL(v),
+        InitS_LTL(v),
+        FinalS_LTL(v) #);
+end;
+
+::************
+::  verification of the main theorem
+::************
+
+theorem :: MODELC_3:68
+  w is-accepted-by BAutomaton(v) implies w |= v;
+
+definition
+  let w;
+  let v;
+  let U;
+  let N;
+  assume
+    N is non elementary & w |= *N;
+  func chosen_succ_end_num(w,v,U,N) -> Nat means
+:: MODELC_3:def 48
+
+   (for i st i<it holds
+      CastNode((choice_succ_func(w,v,U)|**i).N,v)
+        is non elementary &
+      CastNode((choice_succ_func(w,v,U)|**(i+1)).N,v)
+        is_succ_of
+          CastNode((choice_succ_func(w,v,U)|**i).N,v)) &
+     CastNode((choice_succ_func(w,v,U)|**it).N,v)
+        is elementary &
+     (for i st i<=it holds
+        w |= *CastNode((choice_succ_func(w,v,U)|**i).N,v));
+end;
+
+definition
+  let w;
+  let v;
+  let U;
+  let N;
+  assume w |= * ('X' N);
+  func chosen_next(w,v,U,N) ->
+       elementary strict LTLnode over v equals
+:: MODELC_3:def 49
+
+    CastNode
+     ((choice_succ_func(w,v,U)
+        |**chosen_succ_end_num(w,v,U,'X' N)).('X' N)
+           ,v) if 'X' N is non elementary
+    otherwise FinalNode v;
+  end;
+
+theorem :: MODELC_3:69
+   w |= * ('X' s) implies
+       chosen_next(w,v,U,s) is_next_of s &
+       w |= *chosen_next(w,v,U,s);
+
+definition
+  let w;
+  let v;
+  let U;
+  func chosen_run(w,v,U) -> sequence of LTLStates(v) means
+:: MODELC_3:def 50
+
+      it.0 = init v &
+      for n holds
+          it.(n+1) = chosen_next(Shift(w,n),v,U,CastNode(it.n,v));
+  end;
+
+theorem :: MODELC_3:70
+   w |= * N implies Shift(w,1) |= * ('X' N);
+
+theorem :: MODELC_3:71
+   w |= 'X' v implies w |= * (init v);
+
+theorem :: MODELC_3:72
+  w |= v iff w |= *('X' init v);
+
+theorem :: MODELC_3:73
+   w |= v implies
+    for n holds
+     CastNode(chosen_run(w,v,U).(n+1),v) is_next_of
+                CastNode(chosen_run(w,v,U).n,v) &
+     Shift(w,n) |= * ('X' CastNode(chosen_run(w,v,U).n,v));
+
+theorem :: MODELC_3:74
+ w |= v implies
+  for i holds
+    H in the LTLold of CastNode(chosen_run(w,v,U).(i+1),v) &
+    H is Until &
+    Shift(w,i)|=the_right_argument_of H
+      implies
+        the_right_argument_of H
+          in the LTLold of CastNode(chosen_run(w,v,U).(i+1),v);
+
+theorem :: MODELC_3:75
+ w |= v implies w is-accepted-by BAutomaton(v);
+
+theorem :: MODELC_3:76
+  w is-accepted-by BAutomaton(v) iff w |= v;

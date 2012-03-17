@@ -139,7 +139,7 @@
 <Func kind="K" nr="58"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="258">
+<Func kind="K" nr="261">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -193,7 +193,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="259">
+<Func kind="K" nr="262">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -231,7 +231,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="260">
+<Func kind="K" nr="263">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -258,7 +258,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="252">
+<Func kind="K" nr="255">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -308,7 +308,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="263">
+<Func kind="K" nr="266">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -327,7 +327,7 @@
 </FCluster>
 <FCluster aid="POLYNOM5" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="205"/>
+<Func kind="K" nr="207"/>
 <Cluster>
 <Adjective nr="78"/>
 <Adjective nr="119"/>

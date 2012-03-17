@@ -45,7 +45,7 @@
 </Pred>
 </For>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="169">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -70,9 +70,9 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="101">
+<Func kind="K" nr="102">
 <Var nr="1"/>
-<Func kind="K" nr="103">
+<Func kind="K" nr="104">
 <Var nr="2"/>
 </Func>
 </Func>

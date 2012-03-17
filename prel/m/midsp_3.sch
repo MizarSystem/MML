@@ -32,7 +32,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
+<Func kind="K" nr="86"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -53,10 +53,10 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="110">
+<Func kind="K" nr="112">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="96">
+<Func kind="K" nr="97">
 <Func kind="F" nr="1"/>
 <Num nr="1"/>
 </Func>

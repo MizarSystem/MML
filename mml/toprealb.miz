@@ -30,7 +30,8 @@ environ
       XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, RCOMP_1, SIN_COS6,
       STRUCT_0, PRE_TOPC, TOPS_1, BORSUK_1, TEX_2, MONOID_0, EUCLID, TOPMETR,
       TOPREAL1, TOPREAL2, PSCOMP_1, TOPGRP_1, BORSUK_3, JORDAN16, BORSUK_6,
-      TOPALG_3, TOPREAL9, TOPREALA, VALUED_0, REALSET1;
+      TOPALG_3, TOPREAL9, TOPREALA, VALUED_0, REALSET1, SIN_COS, FCONT_1,
+      FUNCOP_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, XBOOLE_0, FUNCT_1, FUNCT_2, PRE_TOPC, TOPS_2, T_0TOPSP,
       TMAP_1, STRUCT_0, TAXONOM2, TSEP_1, BORSUK_1, JORDAN16, TOPREALA,
@@ -87,8 +88,6 @@ Lm6: 1*PI < 3/2*PI by XREAL_1:70;
 
 Lm7: 3/2*PI < 2*PI by XREAL_1:70;
 
-Lm8: dom sin = REAL by SIN_COS:27;
-
 Lm9: for X being non empty TopSpace, Y being non empty SubSpace of X,
 Z being non empty SubSpace of Y, p being Point of Z holds p is Point of X
 proof
@@ -110,19 +109,13 @@ end;
 
 registration
   cluster sin -> continuous;
-  coherence by JORDAN16:def 1,COMPTRIG:43,SIN_COS:27;
+  coherence;
   cluster cos -> continuous;
-  coherence by JORDAN16:def 1,COMPTRIG:44,SIN_COS:27;
+  coherence;
   cluster arcsin -> continuous;
-  coherence
-  proof
-    thus arcsin is_continuous_on dom arcsin by SIN_COS6:64,85;
-  end;
+  coherence by RELAT_1:98,SIN_COS6:64,85;
   cluster arccos -> continuous;
-  coherence
-  proof
-    thus arccos is_continuous_on dom arccos by SIN_COS6:88,109;
-  end;
+  coherence by RELAT_1:98,SIN_COS6:88,109;
 end;
 
 theorem Th1:
@@ -383,18 +376,16 @@ Lm11: sin is Function of R^1,R^1
 proof
 A1: sin = R^1(sin);
   dom sin = REAL by SIN_COS:27;
-  then R^1|(R^1 dom sin) = R^1 by Th6;
-  then sin is Function of R^1,R^1|R^1 [.-1,1.] by A1,COMPTRIG:46;
-  hence thesis by TOPREALA:28;
+  R^1|(R^1 dom sin) = R^1 by Th6,SIN_COS:27;
+  hence thesis by TOPREALA:28,A1,COMPTRIG:46;
 end;
 
 Lm12: cos is Function of R^1,R^1
 proof
 A1: cos = R^1(cos);
   dom cos = REAL by SIN_COS:27;
-  then R^1|(R^1 dom cos) = R^1 by Th6;
-  then cos is Function of R^1,R^1|R^1 [.-1,1.] by A1,COMPTRIG:47;
-  hence thesis by TOPREALA:28;
+  R^1|(R^1 dom cos) = R^1 by Th6,SIN_COS:27;
+  hence thesis by TOPREALA:28,A1,COMPTRIG:47;
 end;
 
 registration
@@ -416,11 +407,9 @@ registration
 A1:     the carrier of R^1|R^1(A) = A by PRE_TOPC:29;
         consider Z being Neighbourhood of (f.x qua real number) such that
 A2:     Z c= G by TOPREALA:41;
-A3:     f is_continuous_on dom f by JORDAN16:def 1;
-A4:     f|dom f = f by RELAT_1:98;
-        f|dom f is_continuous_in x by A1,A3,FCONT_1:def 2;
+        f is_continuous_in x by A1,FCONT_1:def 2;
         then consider N being Neighbourhood of x such that
-A5:     f.:N c= Z by A4,FCONT_1:5;
+A5:     f.:N c= Z by FCONT_1:5;
         consider g being real number such that
 A6:     0 < g and
 A7:     N = ].x-g,x+g.[ by RCOMP_1:def 7;
@@ -441,8 +430,7 @@ A8:     NN = Int NN by TOPS_1:55;
       hence thesis by PRE_TOPC:57;
     end;
     suppose dom f is empty;
-      then f is empty by RELAT_1:64;
-      hence thesis;
+      hence thesis by RELAT_1:64;
     end;
   end;
 end;
@@ -777,8 +765,7 @@ A12: f.a = f.b;
 A13: f.a1 = r*a1+x by A1,A10;
     f.b1 = r*b1+x by A1,A11;
     then r*a1 = r*b1+x-x by A12,A13,EUCLID:52;
-    then r*a1 = r*b1 by EUCLID:52;
-    hence a = b by EUCLID:38;
+    hence a = b by EUCLID:38,52;
   end;
 A14: for u being Point of TOP-REAL n ex y being Point of TOP-REAL n st P[u,y];
   consider F being Function of TOP-REAL n, TOP-REAL n such that
@@ -807,8 +794,7 @@ A18: a in dom f;
       .= F.y by A15
       .= (F|Sphere(0.REAL n,1)).a by A3,A18,FUNCT_1:72;
   end;
-  then f = F|Sphere(0.REAL n,1) by A3,A5,A17,FUNCT_1:9;
-  hence f is continuous by A16,BORSUK_4:69;
+  hence f is continuous by A16,BORSUK_4:69,A3,A5,A17,FUNCT_1:9;
   defpred R[Point of TOP-REAL n,set] means $2 = 1/r*($1-x);
 A19: for u being Point of TOP-REAL n ex y being Point of TOP-REAL n st R[u,y];
   consider G being Function of TOP-REAL n, TOP-REAL n such that
@@ -850,8 +836,7 @@ A25: 1/r * (y - x) in Sphere(0.REAL n,1) by A2;
       .= G.y by A20
       .= (G|Sphere(x,r)).a by A4,A24,FUNCT_1:72;
   end;
-  then f" = G|Sphere(x,r) by A4,A21,A22,FUNCT_1:9;
-  hence f" is continuous by A23,BORSUK_4:69;
+  hence f" is continuous by A23,BORSUK_4:69,A4,A21,A22,FUNCT_1:9;
 end;
 
 registration
@@ -1369,11 +1354,9 @@ registration
   proof
 A1: AffineMap(2*PI,0) = R^1(AffineMap(2*PI,0));
     dom sin = REAL by SIN_COS:27;
-    then
-A2: R^1|(R^1 dom sin) = R^1 by Th6;
+A2: R^1|(R^1 dom sin) = R^1 by Th6,SIN_COS:27;
     dom cos = REAL by SIN_COS:27;
-    then
-A3: R^1|(R^1 dom cos) = R^1 by Th6;
+A3: R^1|(R^1 dom cos) = R^1 by Th6,SIN_COS:27;
     set sR = R^1(sin), cR = R^1(cos);
     reconsider sR, cR as Function of R^1,R^1 by Lm11,Lm12;
     reconsider l = AffineMap(2*PI,0) as Function of R^1,R^1 by Th8;
@@ -1404,24 +1387,24 @@ A13:  B is open by JORDAN6:46;
 A14:  g.p = |[ c.p, s.p ]| by Lm22;
       then
 A15:  (g.p)`2 = s.p by EUCLID:56;
-      sR is continuous by A2,PRE_TOPC:56;
+B16:  sR is continuous by A2,PRE_TOPC:56;
       then
 A16:  s is continuous by A1,A4,A5,Th5;
-      s.p in B by A11,A15,TOPREAL6:20;
+      s.p in B by A9,SQUARE_1:84,A15,TOPREAL6:20;
       then consider Ws being Subset of R^1 such that
 A17:  p in Ws and
 A18:  Ws is open and
-A19:  s.:Ws c= B by A13,A16,JGRAPH_2:20;
+A19:  s.:Ws c= B by A13,B16,JGRAPH_2:20,A1,A4,A5,Th5;
 A20:  A is open by JORDAN6:46;
 A21:  (g.p)`1 = c.p by A14,EUCLID:56;
-      cR is continuous by A3,PRE_TOPC:56;
+B22:  cR is continuous by A3,PRE_TOPC:56;
       then
 A22:  c is continuous by A1,A4,A5,Th5;
-      c.p in A by A11,A21,TOPREAL6:20;
+      c.p in A by A9,SQUARE_1:84,A21,TOPREAL6:20;
       then consider Wc being Subset of R^1 such that
 A23:  p in Wc and
 A24:  Wc is open and
-A25:  c.:Wc c= A by A20,A22,JGRAPH_2:20;
+A25:  c.:Wc c= A by A20,B22,JGRAPH_2:20,A1,A4,A5,Th5;
       set W = Ws /\ Wc;
       take W;
       thus p in W by A17,A23,XBOOLE_0:def 3;
@@ -1576,7 +1559,7 @@ A16: [.0,PI/2.] c= [.0,PI.] by Lm5,XXREAL_1:34;
       then
 A17:  2*PI*y in [.0,2*PI*1/4.] by XXREAL_1:1;
       set g = sin | [.0,PI/2.];
-A18:  dom g = [.0,PI/2.] by Lm8,RELAT_1:91;
+A18:  dom g = [.0,PI/2.] by SIN_COS:27,RELAT_1:91;
       g.(2*PI*x) = sin.(2*PI*x) by A15,FUNCT_1:72
         .= sin.(2*PI*y) by A8,A9,SIN_COS:def 21
         .= g.(2*PI*y) by A17,FUNCT_1:72;
@@ -1615,7 +1598,7 @@ A22: ].PI/2,PI.] c= [.0,PI.] by XXREAL_1:36;
 A23:  2*PI*y in ].2*PI*(1/4),2*PI*(1/2).] by XXREAL_1:2;
       set g = sin | ].PI/2,PI.];
 A24:  g is one-to-one by A14,Lm6,SIN_COS6:2,XXREAL_1:36;
-A25:  dom g = ].PI/2,PI.] by Lm8,RELAT_1:91;
+A25:  dom g = ].PI/2,PI.] by SIN_COS:27,RELAT_1:91;
       g.(2*PI*x) = sin.(2*PI*x) by A20,FUNCT_1:72
         .= sin.(2*PI*y) by A8,A9,SIN_COS:def 21
         .= g.(2*PI*y) by A23,FUNCT_1:72;
@@ -1647,7 +1630,7 @@ A28: ].PI,3/2*PI.] c= [.PI/2,3/2*PI.] by Lm5,XXREAL_1:36;
 A29:  2*PI*y in ].PI,2*PI*(3/4).] by XXREAL_1:2;
       set g = sin | ].PI,3/2*PI.];
 A30:  g is one-to-one by A14,Lm5,SIN_COS6:2,XXREAL_1:36;
-A31:  dom g = ].PI,3/2*PI.] by Lm8,RELAT_1:91;
+A31:  dom g = ].PI,3/2*PI.] by SIN_COS:27,RELAT_1:91;
       g.(2*PI*x) = sin.(2*PI*x) by A26,FUNCT_1:72
         .= sin.(2*PI*y) by A8,A9,SIN_COS:def 21
         .= g.(2*PI*y) by A29,FUNCT_1:72;
@@ -1684,7 +1667,7 @@ A34:  2*PI*y in ].PI,3/2*PI.] by XXREAL_1:2;
       then
 A35:  2*PI*y in ].3/2*PI,2*PI.[ by XXREAL_1:4;
       set g = sin | ].3/2*PI,2*PI.[;
-A36:  dom g = ].3/2*PI,2*PI.[ by Lm8,RELAT_1:91;
+A36:  dom g = ].3/2*PI,2*PI.[ by SIN_COS:27,RELAT_1:91;
       g.(2*PI*x) = sin.(2*PI*x) by A32,FUNCT_1:72
         .= sin.(2*PI*y) by A8,A9,SIN_COS:def 21
         .= g.(2*PI*y) by A35,FUNCT_1:72;
@@ -2397,7 +2380,7 @@ A21:    c < 1;
         then
 A22:    2*PI*c < 2*PI+2*PI*0;
 A23:    1-c < 1-1/2 by A14,XREAL_1:17;
-        1-1 <= 1-c by A21,XREAL_1:15;
+        1-1 <= 1-c by A21,XREAL_1:17;
         then
 A24:    2*PI*0 <= 2*PI*(1-c)+0;
 A25:    2*PI*(1-c) <= 2*PI*(1/2) by A23,XREAL_1:66;
@@ -2776,14 +2759,17 @@ A3: y <= 0 implies C.p = 1-arccos x/P2 by Def13;
 A4: x in K by XXREAL_1:1;
     then
 A5: (h|K).x = h.x by FUNCT_1:72;
+    dom h = dom arccos by VALUED_1:def 5
+       .= K by SIN_COS6:88;
+    then x in dom h by RELAT_1:86,A4;
+    then
+B4: x in dom(h|K) by A4,RELAT_1:86;
 A6: the carrier of Z = ].0,0+p1.[ by PRE_TOPC:29;
 A7: dom h = dom arccos by VALUED_1:def 5;
     then
 A8: h.x = arccos.x*j by A4,SIN_COS6:88,VALUED_1:def 5
       .= 1*arccos.x/P2 by XCMPLX_1:75;
-A9: h is_continuous_on K by FCONT_1:21,SIN_COS6:109;
-    then
-A10: h|K is_continuous_in x by A4,FCONT_1:def 2;
+A10: h|K is_continuous_in x by FCONT_1:def 2,B4;
     Tcircle(0.REAL 2,1) is SubSpace of TREC by Th10;
     then
 A11: TOUC is SubSpace of TREC by TSEP_1:7;
@@ -2810,15 +2796,15 @@ A17:    C.p = 1-arccos.x/P2 by A3,A14,SIN_COS6:def 4;
 A18:    N1 c= V1 by A16,RCOMP_1:39;
         set hh = h1-h;
 A19:    (hh|K).x = hh.x by A4,FUNCT_1:72;
-A20:    dom hh = dom h1 /\ dom h by VALUED_1:12
-          .= REAL /\ dom h by FUNCOP_1:19
+        dom hh = dom h1 /\ dom h by VALUED_1:12;
+        then
+B20:    dom hh = REAL /\ dom h by FUNCOP_1:19
           .= K by A7,SIN_COS6:88,XBOOLE_1:28;
         then
 A21:    hh.x = h1.x - h.x by A4,VALUED_1:13
           .= 1-1*arccos.x/P2 by A4,A8,FUNCOP_1:13;
-        h1 is_continuous_on K by FCONT_1:17,TOPREALA:38;
-        then hh is_continuous_on K by A9,FCONT_1:19;
-        then hh|K is_continuous_in x by A4,FCONT_1:def 2;
+Y:      x in dom(hh|K) by B20,RELAT_1:86,A4;
+        hh|K is_continuous_in x by FCONT_1:def 2,Y;
         then consider N being Neighbourhood of x such that
 A22:    (hh|K).:N c= N1 by A17,A19,A21,FCONT_1:5;
         set N3 = N /\ K;
@@ -2854,10 +2840,10 @@ A29:    c2 <= 0 implies C.c = 1-arccos c1/P2 by Def13;
 A30:    c in product ((1,2) --> (N3,J)) by A26,XBOOLE_0:def 3;
         then
 A31:    c.1 in N3 by TOPREALA:24;
-A32:    dom (hh|K) = K by A20,RELAT_1:91;
+A32:    dom (hh|K) = K by RELAT_1:91,B20;
 A33:    (hh|K).:N3 c= (hh|K).:N by RELAT_1:156,XBOOLE_1:17;
 A34:    (hh|K).(c.1) = hh.(c.1) by A23,A31,FUNCT_1:72
-          .= h1.(c.1) - h.(c.1) by A20,A23,A31,VALUED_1:13
+          .= h1.(c.1) - h.(c.1) by A23,A31,VALUED_1:13,B20
           .= 1 - h.(c.1) by A31,FUNCOP_1:13
           .= 1-arccos.(c.1)*j by A7,A23,A31,SIN_COS6:88,VALUED_1:def 5
           .= 1-arccos.c1*j by A28,TOPREALA:50
@@ -3294,7 +3280,6 @@ A6: dom h = dom arccos by VALUED_1:def 5;
     then
 A7: h.x = arccos.x*j by A4,SIN_COS6:88,VALUED_1:def 5
       .= 1*arccos.x/P2 by XCMPLX_1:75;
-A8: h is_continuous_on K by FCONT_1:21,SIN_COS6:109;
     Tcircle(0.REAL 2,1) is SubSpace of TREC by Th10;
     then
 A9: TOUCm is SubSpace of TREC by TSEP_1:7;
@@ -3321,15 +3306,15 @@ A15:    Cm.p = 1-arccos.x/P2 by A3,A12,SIN_COS6:def 4;
 A16:    N1 c= V1 by A14,RCOMP_1:39;
         set hh = h1-h;
 A17:    (hh|K).x = hh.x by A4,FUNCT_1:72;
-A18:    dom hh = dom h1 /\ dom h by VALUED_1:12
-          .= REAL /\ dom h by FUNCOP_1:19
+        dom hh = dom h1 /\ dom h by VALUED_1:12;
+        then
+A18:    dom hh = REAL /\ dom h by FUNCOP_1:19
           .= K by A6,SIN_COS6:88,XBOOLE_1:28;
         then
 A19:    hh.x = h1.x - h.x by A4,VALUED_1:13
           .= 1-1*arccos.x/P2 by A4,A7,FUNCOP_1:13;
-        h1 is_continuous_on K by FCONT_1:17,TOPREALA:38;
-        then hh is_continuous_on K by A8,FCONT_1:19;
-        then hh|K is_continuous_in x by A4,FCONT_1:def 2;
+Y:      x in dom(hh|K) by A18,RELAT_1:86,A4;
+        hh|K is_continuous_in x by FCONT_1:def 2,Y;
         then consider N being Neighbourhood of x such that
 A20:    (hh|K).:N c= N1 by A15,A17,A19,FCONT_1:5;
         set N3 = N /\ K;
@@ -3400,15 +3385,15 @@ A36:    Cm.p = 1+arccos.x/P2 by A2,A33,SIN_COS6:def 4;
 A37:    N1 c= V1 by A35,RCOMP_1:39;
         set hh = h1+h;
 A38:    (hh|K).x = hh.x by A4,FUNCT_1:72;
-A39:    dom hh = dom h1 /\ dom h by VALUED_1:def 1
-          .= REAL /\ dom h by FUNCOP_1:19
+        dom hh = dom h1 /\ dom h by VALUED_1:def 1;
+        then
+A39:    dom hh = REAL /\ dom h by FUNCOP_1:19
           .= K by A6,SIN_COS6:88,XBOOLE_1:28;
         then
 A40:    hh.x = h1.x + h.x by A4,VALUED_1:def 1
           .= 1+1*arccos.x/P2 by A4,A7,FUNCOP_1:13;
-        h1 is_continuous_on K by FCONT_1:17,TOPREALA:38;
-        then hh is_continuous_on K by A8,FCONT_1:19;
-        then hh|K is_continuous_in x by A4,FCONT_1:def 2;
+Y:      x in dom(hh|K) by A39,RELAT_1:86,A4;
+        hh|K is_continuous_in x by FCONT_1:def 2,Y;
         then consider N being Neighbourhood of x such that
 A41:    (hh|K).:N c= N1 by A36,A38,A40,FCONT_1:5;
         set N3 = N /\ K;

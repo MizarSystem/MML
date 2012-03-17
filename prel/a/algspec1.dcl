@@ -71,13 +71,13 @@
 <Adjective nr="4"/>
 <Adjective nr="10">
 <LocusVar nr="2"/>
-<Func kind="K" nr="145">
+<Func kind="K" nr="146">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 </Cluster>
 <LocusVar nr="2"/>
-<Func kind="K" nr="145">
+<Func kind="K" nr="146">
 <LocusVar nr="1"/>
 </Func>
 </Typ>

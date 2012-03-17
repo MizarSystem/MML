@@ -13,6 +13,7 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="FCONT_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -45,7 +46,7 @@
 <Cluster/>
 <Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="268">
+<Func kind="K" nr="270">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -66,18 +67,18 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="19">
+<Adjective nr="19"/>
+<Adjective nr="21">
 <Func kind="K" nr="43"/>
 <Func kind="K" nr="43"/>
 </Adjective>
-<Adjective nr="54">
+<Adjective nr="56">
 <Func kind="K" nr="43"/>
 <Func kind="K" nr="43"/>
 </Adjective>
-<Adjective nr="69"/>
-<Adjective nr="70"/>
 <Adjective nr="71"/>
-<Adjective nr="81"/>
+<Adjective nr="72"/>
+<Adjective nr="73"/>
 </Cluster>
 </RCluster>
 <FCluster aid="JORDAN16" nr="1">
@@ -93,17 +94,17 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="277">
+<Func kind="K" nr="279">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="19">
+<Adjective nr="19"/>
+<Adjective nr="21">
 <Func kind="K" nr="43"/>
 <Func kind="K" nr="43"/>
 </Adjective>
-<Adjective nr="81"/>
 </Cluster>
 </FCluster>
 </Registrations>

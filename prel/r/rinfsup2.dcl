@@ -14,7 +14,6 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="RINFSUP2"/>
 </Signature>
 <FCluster aid="RINFSUP2" nr="1">
@@ -31,7 +30,7 @@
 <Func kind="K" nr="49"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="94">
+<Func kind="K" nr="92">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -57,7 +56,7 @@
 <Func kind="K" nr="49"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="93">
+<Func kind="K" nr="91">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

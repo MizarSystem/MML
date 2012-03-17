@@ -94,19 +94,19 @@
 <Adjective nr="7"/>
 <Adjective nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="217"/>
+<Func kind="K" nr="219"/>
 </Func>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="38">
-<Func kind="K" nr="217"/>
+<Func kind="K" nr="219"/>
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="58">
 <Func kind="U" nr="1">
-<Func kind="K" nr="217"/>
+<Func kind="K" nr="219"/>
 </Func>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -153,7 +153,7 @@
 <Adjective nr="9"/>
 <Adjective nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="217"/>
+<Func kind="K" nr="219"/>
 </Func>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -161,7 +161,7 @@
 </Adjective>
 <Adjective nr="58">
 <Func kind="U" nr="1">
-<Func kind="K" nr="217"/>
+<Func kind="K" nr="219"/>
 </Func>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -202,7 +202,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="106">
+<Func kind="K" nr="108">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -248,7 +248,7 @@
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="218">
+<Func kind="K" nr="220">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
@@ -283,7 +283,7 @@
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="219">
+<Func kind="K" nr="221">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
@@ -310,7 +310,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="195">
+<Func kind="K" nr="197">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -337,7 +337,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="195">
+<Func kind="K" nr="197">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -364,7 +364,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="195">
+<Func kind="K" nr="197">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -376,7 +376,7 @@
 </FCluster>
 <FCluster aid="BORSUK_2" nr="7">
 <ArgTypes/>
-<Func kind="K" nr="210"/>
+<Func kind="K" nr="212"/>
 <Cluster>
 <Adjective nr="41"/>
 <Adjective nr="48"/>
@@ -384,7 +384,7 @@
 </FCluster>
 <FCluster aid="BORSUK_2" nr="8">
 <ArgTypes/>
-<Func kind="K" nr="210"/>
+<Func kind="K" nr="212"/>
 <Cluster>
 <Adjective nr="83"/>
 </Cluster>
@@ -395,7 +395,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="217"/>
+<Func kind="K" nr="219"/>
 </Func>
 </Typ>
 <Cluster>
@@ -431,7 +431,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="38">
-<Func kind="K" nr="217"/>
+<Func kind="K" nr="219"/>
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

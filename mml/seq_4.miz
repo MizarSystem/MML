@@ -10,8 +10,9 @@ environ
       LATTICES, ABSVALUE, FUNCT_1, PROB_1, SEQ_4, MEMBERED, FUNCOP_1, FRECHET2,
       SQUARE_1, XXREAL_2, SUPINF_1, ANPROJ_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      REAL_1, RELAT_1, COMPLEX1, FUNCT_2, VALUED_1, SEQ_1, SEQ_2, NAT_1,
-      FUNCOP_1, SQUARE_1, SEQM_3, MEMBERED, XXREAL_0, XXREAL_2, RECDEF_1;
+      REAL_1, RELAT_1, COMPLEX1, FUNCT_2, VALUED_0, VALUED_1, SEQ_1, SEQ_2,
+      NAT_1, FUNCOP_1, SQUARE_1, SEQM_3, MEMBERED, XXREAL_0, XXREAL_2,
+      RECDEF_1;
  constructors FUNCOP_1, REAL_1, NAT_1, COMPLEX1, PARTFUN1, SEQ_2, SEQM_3,
       SQUARE_1, VALUED_1, SEQ_1, RECDEF_1, XXREAL_2;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
@@ -860,7 +861,7 @@ A9: now
   end;
 A10: m1+k=m by A8;
   abs(seq.m1-g1)<p by A5,A9;
-  hence abs(seq1.m-g)<p by A3,A10,SEQM_3:def 9;
+  hence abs(seq1.m-g)<p by A3,A10,NAT_1:def 3;
 end;
 
 theorem
@@ -894,7 +895,7 @@ A9: now
     end;
 A10: m1+k=m by A8;
     abs(seq.m1-(lim seq))<p by A5,A9;
-    hence abs(seq1.m-(lim seq))<p by A4,A10,SEQM_3:def 9;
+    hence abs(seq1.m-(lim seq))<p by A4,A10,NAT_1:def 3;
   end;
   hence thesis by A3,SEQ_2:def 7;
 end;
@@ -914,9 +915,9 @@ A3: for m st n1<=m holds abs(lim seq)/2<abs((seq.m)) by A1,A2,SEQ_2:30;
     then 0+k<=n+k by XREAL_1:9;
     then abs(lim seq)/2<abs((seq.(n+k))) by A3;
     then
-A4: abs(lim seq)/2<abs(((seq ^\k).n)) by SEQM_3:def 9;
+A4: abs(lim seq)/2<abs(((seq ^\k).n)) by NAT_1:def 3;
     0<abs(lim seq) by A2,COMPLEX1:133;
-    then 0/2<abs(lim seq)/2 by XREAL_1:76;
+    then 0/2<abs(lim seq)/2 by XREAL_1:74,76;
     hence (seq ^\k).n<>0 by A4,ABSVALUE:7;
   end;
   hence thesis by SEQ_1:7;
@@ -1341,8 +1342,8 @@ A2: seq is bounded;
 A3: seq is bounded_below by A2;
   seq is bounded_above by A2;
   then
-A4: seq is non-decreasing implies thesis;
-  seq is non-increasing implies thesis by A3;
+A4: seq is non-decreasing implies thesis by Th51;
+  seq is non-increasing implies thesis by A3,Th52;
   hence thesis by A1,A4,SEQM_3:def 7;
 end;
 end;
@@ -1357,16 +1358,21 @@ proof
   assume that
 A1: seq is bounded_above and
 A2: seq is non-decreasing;
-A3: seq is convergent by A1,A2;
+A3: seq is convergent by A1,A2,Th51;
   let m;
   reconsider seq1 = NAT --> seq.m as Real_Sequence;
   seq1.0=seq.m by FUNCOP_1:13;
   then
 A5: lim seq1=seq.m by Th40;
-  deffunc U(Element of NAT) = seq.($1+m);
+  deffunc U(Nat) = seq.($1+m);
   consider seq2 such that
 A6: for n holds seq2.n=U(n) from SEQ_1:sch 1;
-A7: seq2=seq^\m by A6,SEQM_3:def 9;
+  now let n be Nat;
+    n in NAT by ORDINAL1:def 13;
+   hence seq2.n=U(n) by A6;
+  end;
+  then
+A7: seq2=seq^\m by A6,NAT_1:def 3;
   then
 A8: lim seq2=lim seq by A3,Th33;
 A9: seq2 is convergent by A3,A7,Th33;
@@ -1386,7 +1392,7 @@ proof
   assume that
 A1: seq is bounded_below and
 A2: seq is non-increasing;
-A3: seq is convergent by A1,A2;
+A3: seq is convergent by A1,A2,Th52;
   let m;
   deffunc U(Element of NAT) = seq.m;
   consider seq1 such that
@@ -1397,10 +1403,15 @@ A6: seq1 is convergent;
   seq1.0=seq.m by A4;
   then
 A7: lim seq1=seq.m by A5,Th40;
-  deffunc U(Element of NAT) = seq.($1+m);
+  deffunc U(Nat) = seq.($1+m);
   consider seq2 such that
 A8: for n holds seq2.n=U(n) from SEQ_1:sch 1;
-A9: seq2=seq^\m by A8,SEQM_3:def 9;
+  now let n be Nat;
+    n in NAT by ORDINAL1:def 13;
+   hence seq2.n=U(n) by A8;
+  end;
+  then
+A9: seq2=seq^\m by A8,NAT_1:def 3;
   then
 A10: lim seq2=lim seq by A3,Th33;
 A11: seq2 is convergent by A3,A9,Th33;
@@ -1461,8 +1472,8 @@ A12:  n1=n-(1+k1);
       hence k<l;
 A13:  n=l+(1+k1) by A12;
       seq.n<=seq.(k+(1+k1)) by A10;
-      then seq.n<=seq1.k by SEQM_3:def 9;
-      hence seq1.l<=seq1.k by A13,SEQM_3:def 9;
+      then seq.n<=seq1.k by NAT_1:def 3;
+      hence seq1.l<=seq1.k by A13,NAT_1:def 3;
     end;
     defpred P[set,set,set] means for k,l st k=$2 & l=$3 holds k<l &
     seq1.l<=seq1.k & for m st k<m & seq1.m<=seq1.k holds l<=m;

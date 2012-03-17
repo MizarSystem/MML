@@ -61,10 +61,10 @@
 <FCluster aid="CSSPACE" nr="1">
 <ArgTypes/>
 <Func kind="G" nr="14">
-<Func kind="K" nr="155"/>
-<Func kind="K" nr="160"/>
-<Func kind="K" nr="158"/>
+<Func kind="K" nr="156"/>
+<Func kind="K" nr="161"/>
 <Func kind="K" nr="159"/>
+<Func kind="K" nr="160"/>
 </Func>
 <Cluster>
 <Adjective nr="77"/>
@@ -73,7 +73,7 @@
 </FCluster>
 <FCluster aid="CSSPACE" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="161"/>
+<Func kind="K" nr="162"/>
 <Cluster>
 <Adjective nr="28" value="false"/>
 <Adjective nr="52"/>
@@ -117,14 +117,14 @@
 <Adjective nr="4"/>
 <Adjective nr="10">
 <Func kind="K" nr="25">
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="83"/>
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="25">
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="83"/>
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -137,14 +137,14 @@
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="83"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="25">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="83"/>
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="16">
@@ -162,20 +162,20 @@
 <FCluster aid="CSSPACE" nr="4">
 <ArgTypes/>
 <Func kind="G" nr="16">
-<Func kind="K" nr="165"/>
-<Func kind="K" nr="164">
-<Func kind="K" nr="161"/>
-<Func kind="K" nr="165"/>
-</Func>
-<Func kind="K" nr="162">
-<Func kind="K" nr="161"/>
-<Func kind="K" nr="165"/>
+<Func kind="K" nr="166"/>
+<Func kind="K" nr="165">
+<Func kind="K" nr="162"/>
+<Func kind="K" nr="166"/>
 </Func>
 <Func kind="K" nr="163">
-<Func kind="K" nr="161"/>
-<Func kind="K" nr="165"/>
+<Func kind="K" nr="162"/>
+<Func kind="K" nr="166"/>
 </Func>
-<Func kind="K" nr="171"/>
+<Func kind="K" nr="164">
+<Func kind="K" nr="162"/>
+<Func kind="K" nr="166"/>
+</Func>
+<Func kind="K" nr="172"/>
 </Func>
 <Cluster>
 <Adjective nr="28" value="false"/>
@@ -184,7 +184,7 @@
 </FCluster>
 <FCluster aid="CSSPACE" nr="5">
 <ArgTypes/>
-<Func kind="K" nr="172"/>
+<Func kind="K" nr="173"/>
 <Cluster>
 <Adjective nr="28" value="false"/>
 <Adjective nr="52"/>

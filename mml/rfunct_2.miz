@@ -7,11 +7,11 @@
 environ
 
  vocabularies SEQ_1, ORDINAL2, SEQM_3, PARTFUN1, FUNCT_1, RELAT_1, BOOLE,
-      ARYTM_1, ABSVALUE, SEQ_2, ARYTM, FINSEQ_1, LATTICES, SEQ_4, PARTFUN2,
-      RCOMP_1, RFUNCT_2, FRECHET2, ANPROJ_1, PROB_1, REALSET1;
+      ARYTM_1, ABSVALUE, SEQ_2, ARYTM, FINSEQ_1, LATTICES, SEQ_4,
+      RCOMP_1, FRECHET2, ANPROJ_1, PROB_1, REALSET1, OPPCAT_1, SUPINF_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, COMPLEX1,
-      REAL_1, NAT_1, RELAT_1, FUNCT_1, REALSET1,
-      RELSET_1, PARTFUN1, VALUED_1, SEQ_1,
+      REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, REALSET1,
+      RELSET_1, PARTFUN1, VALUED_0, VALUED_1, SEQ_1,
       SEQ_2, SEQ_4, PARTFUN2, RCOMP_1, RFUNCT_1, SEQM_3, XXREAL_0,
       XXREAL_2, RECDEF_1;
  constructors PARTFUN1, REAL_1, NAT_1, COMPLEX1, SEQ_2, SEQM_3, SEQ_4, RCOMP_1,
@@ -19,10 +19,11 @@ environ
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0,
       MEMBERED, SEQM_3, VALUED_0, VALUED_1, FUNCT_2, RELAT_1, REALSET1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, SEQM_3, XBOOLE_0, FUNCT_1;
+ definitions TARSKI, SEQM_3, XBOOLE_0, FUNCT_1, VALUED_0;
  theorems TARSKI, SUBSET_1, FUNCT_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4,
       PARTFUN1, PARTFUN2, RFUNCT_1, FUNCT_2, RELAT_1, RELSET_1, XBOOLE_0,
-      XBOOLE_1, XREAL_1, XXREAL_0, VALUED_1, XXREAL_1, ZFMISC_1;
+      XBOOLE_1, XREAL_1, XXREAL_0, VALUED_1, XXREAL_1, ZFMISC_1, NAT_1,
+      VALUED_0;
 
 begin
 
@@ -226,7 +227,7 @@ proof
   then consider y such that
 A1: y in dom (seq^\n) & (seq^\n).y = x by FUNCT_1:def 5;
   reconsider y as Element of NAT by A1;
-A2: (seq^\n).y = seq.(y+n) by SEQM_3:def 9;
+A2: (seq^\n).y = seq.(y+n) by NAT_1:def 3;
   y+n in NAT;
   then y+n in dom seq by FUNCT_2:def 1;
   hence x in rng seq by A1,A2,FUNCT_1:def 5;
@@ -403,57 +404,27 @@ A1: for n holds seq.n in Y;
   hence x in Y by A1;
 end;
 
-definition
-  let h,seq;
-  assume
-A1: rng seq c= dom h;
-  func h*seq -> Real_Sequence equals
-  :Def1:
-  (h qua Function)*seq;
-  coherence
-  proof dom seq = NAT by FUNCT_2:def 1;
-    then
-A2: dom ((h qua Function)*seq) = NAT by A1,RELAT_1:46;
-    rng ((h qua Function)*seq) c= rng h by RELAT_1:45;
-    then rng ((h qua Function)*seq) c= REAL by XBOOLE_1:1;
-
-hence (h qua Function)*seq is Real_Sequence by A2,FUNCT_2:def 1,RELSET_1:11;
-  end;
-end;
-
-canceled;
-
-theorem Th21:
-  rng seq c= dom h implies (h*seq).n = h.(seq.n)
-proof
-  assume
-A1: rng seq c= dom h;
-  n in NAT;
-  then
-A2: n in dom seq by FUNCT_2:def 1;
-  thus (h*seq).n = ((h qua Function)*seq).n by A1,Def1
-    .=h.(seq.n) by A2,FUNCT_1:23;
-end;
+canceled 2;
 
 theorem Th22:
-  rng seq c= dom h implies (h*seq)^\n=h*(seq^\n)
+  rng seq c= dom h implies (h/*seq)^\n=h/*(seq^\n)
 proof
   assume
 A1: rng seq c= dom h;
 A2: rng (seq^\n) c= rng seq by Th7;
   now
     let m;
-    thus ((h*seq)^\n).m = (h*seq).(m+n) by SEQM_3:def 9
-      .= h.(seq.(m+n)) by A1,Th21
-      .= h.((seq^\n).m) by SEQM_3:def 9
-      .= (h*(seq^\n)).m by A1,A2,Th21,XBOOLE_1:1;
+    thus ((h/*seq)^\n).m = (h/*seq).(m+n) by NAT_1:def 3
+      .= h.(seq.(m+n)) by A1,FUNCT_2:185
+      .= h.((seq^\n).m) by NAT_1:def 3
+      .= (h/*(seq^\n)).m by A1,A2,FUNCT_2:185,XBOOLE_1:1;
   end;
   hence thesis by FUNCT_2:113;
 end;
 
 theorem Th23:
-  rng seq c= dom h1 /\ dom h2 implies (h1+h2)*seq=h1*seq+h2*seq &
-  (h1-h2)*seq=h1*seq-h2*seq & (h1(#)h2)*seq=(h1*seq)(#)(h2*seq)
+  rng seq c= dom h1 /\ dom h2 implies (h1+h2)/*seq=h1/*seq+h2/*seq &
+  (h1-h2)/*seq=h1/*seq-h2/*seq & (h1(#)h2)/*seq=(h1/*seq)(#)(h2/*seq)
 proof
   assume
 A1: rng seq c= dom h1 /\ dom h2;
@@ -464,33 +435,33 @@ A5: rng seq c= dom (h1 (#) h2) by A1,VALUED_1:def 4;
   now
     let n;
 A6: seq.n in dom (h1 + h2) by A3,Th8;
-    thus ((h1+h2)*seq).n = (h1+h2).(seq.n) by A3,Th21
+    thus ((h1+h2)/*seq).n = (h1+h2).(seq.n) by A3,FUNCT_2:185
       .= h1.(seq.n) + h2.(seq.n) by A6,VALUED_1:def 1
-      .= (h1*seq).n + h2.(seq.n) by A1,A2,Th21,XBOOLE_1:1
-      .= (h1*seq).n + (h2*seq).n by A1,A2,Th21,XBOOLE_1:1;
+      .= (h1/*seq).n + h2.(seq.n) by A1,A2,FUNCT_2:185,XBOOLE_1:1
+      .= (h1/*seq).n + (h2/*seq).n by A1,A2,FUNCT_2:185,XBOOLE_1:1;
   end;
-  hence (h1+h2)*seq=h1*seq+h2*seq by SEQ_1:11;
+  hence (h1+h2)/*seq=h1/*seq+h2/*seq by SEQ_1:11;
   now
     let n;
-    thus ((h1-h2)*seq).n = (h1-h2).(seq.n) by A4,Th21
+    thus ((h1-h2)/*seq).n = (h1-h2).(seq.n) by A4,FUNCT_2:185
       .= h1.(seq.n) - h2.(seq.n) by A4,Th8,VALUED_1:13
-      .= (h1*seq).n - h2.(seq.n) by A1,A2,Th21,XBOOLE_1:1
-      .= (h1*seq).n - (h2*seq).n by A1,A2,Th21,XBOOLE_1:1;
+      .= (h1/*seq).n - h2.(seq.n) by A1,A2,FUNCT_2:185,XBOOLE_1:1
+      .= (h1/*seq).n - (h2/*seq).n by A1,A2,FUNCT_2:185,XBOOLE_1:1;
   end;
-  hence (h1-h2)*seq=h1*seq-h2*seq by Th6;
+  hence (h1-h2)/*seq=h1/*seq-h2/*seq by Th6;
   now
     let n;
-    thus ((h1(#)h2)*seq).n = (h1(#)h2).(seq.n) by A5,Th21
+    thus ((h1(#)h2)/*seq).n = (h1(#)h2).(seq.n) by A5,FUNCT_2:185
       .= h1.(seq.n) * h2.(seq.n) by VALUED_1:5
-      .= (h1*seq).n * h2.(seq.n) by A1,A2,Th21,XBOOLE_1:1
-      .= (h1*seq).n * (h2*seq).n by A1,A2,Th21,XBOOLE_1:1;
+      .= (h1/*seq).n * h2.(seq.n) by A1,A2,FUNCT_2:185,XBOOLE_1:1
+      .= (h1/*seq).n * (h2/*seq).n by A1,A2,FUNCT_2:185,XBOOLE_1:1;
   end;
   hence thesis by SEQ_1:12;
 end;
 
 theorem Th24:
-  for r being real number holds rng seq c= dom h implies (r(#)h)*seq = r(#)
-  (h*seq)
+  for r being real number holds rng seq c= dom h implies (r(#)h)/*seq = r(#)
+  (h/*seq)
 proof
   let r be real number;
   assume
@@ -500,15 +471,15 @@ A2: rng seq c= dom (r(#)h) by VALUED_1:def 5;
   now
     let n;
 A3: seq.n in dom (r(#)h) by A2,Th8;
-    thus ((r(#)h)*seq).n = (r(#)h).(seq.n) by A2,Th21
+    thus ((r(#)h)/*seq).n = (r(#)h).(seq.n) by A2,FUNCT_2:185
       .= r * (h.(seq.n)) by A3,VALUED_1:def 5
-      .= r * (h*seq).n by A1,Th21;
+      .= r * (h/*seq).n by A1,FUNCT_2:185;
   end;
   hence thesis by SEQ_1:13;
 end;
 
 theorem
-  rng seq c= dom h implies abs(h*seq) = (abs(h))*seq & -(h*seq) = (-h)*seq
+  rng seq c= dom h implies abs(h/*seq) = (abs(h))/*seq & -(h/*seq) = (-h)/*seq
 proof
   assume
 A1: rng seq c= dom h;
@@ -516,19 +487,19 @@ A1: rng seq c= dom h;
 A2: rng seq c= dom abs(h) by VALUED_1:def 11;
   now
     let n;
-    thus abs(h*seq).n = abs((h*seq).n) by SEQ_1:16
-      .= abs(h.(seq.n)) by A1,Th21
+    thus abs(h/*seq).n = abs((h/*seq).n) by SEQ_1:16
+      .= abs(h.(seq.n)) by A1,FUNCT_2:185
       .= abs(h).(seq.n) by VALUED_1:18
-      .= (abs(h)*seq).n by A2,Th21;
+      .= (abs(h)/*seq).n by A2,FUNCT_2:185;
   end;
-  hence abs(h*seq) = (abs(h))*seq by FUNCT_2:113;
-  thus -(h*seq) = (-1)(#)(h*seq) by SEQ_1:25
-    .= ((-1)(#)h)*seq by A1,Th24
-    .= (-h)*seq by RFUNCT_1:38;
+  hence abs(h/*seq) = (abs(h))/*seq by FUNCT_2:113;
+  thus -(h/*seq) = (-1)(#)(h/*seq) by SEQ_1:25
+    .= ((-1)(#)h)/*seq by A1,Th24
+    .= (-h)/*seq by RFUNCT_1:38;
 end;
 
 theorem
-  rng seq c= dom (h^) implies h*seq is non-zero
+  rng seq c= dom (h^) implies h/*seq is non-zero
 proof
   assume
 A1: rng seq c= dom (h^);
@@ -536,21 +507,21 @@ A2: dom h \ h"{0} c= dom h by XBOOLE_1:36;
 A3: rng seq c= dom h \ h"{0} by A1,RFUNCT_1:def 8;
   now
     given n such that
-A4: (h*seq).n=0;
+A4: (h/*seq).n=0;
     seq.n in rng seq by Th9;
     then seq.n in dom (h^) by A1;
     then seq.n in dom h \ h"{0} by RFUNCT_1:def 8;
     then seq.n in dom h & not seq.n in h"{0} by XBOOLE_0:def 4;
     then
 A5: not h.(seq.n) in {0} by FUNCT_1:def 13;
-    h.(seq.n) =0 by A2,A3,A4,Th21,XBOOLE_1:1;
+    h.(seq.n) =0 by A2,A3,A4,FUNCT_2:185,XBOOLE_1:1;
     hence contradiction by A5,TARSKI:def 1;
   end;
   hence thesis by SEQ_1:7;
 end;
 
 theorem
-  rng seq c= dom (h^) implies (h^)*seq =(h*seq)"
+  rng seq c= dom (h^) implies (h^)/*seq =(h/*seq)"
 proof
   assume
 A1: rng seq c= dom (h^);
@@ -559,30 +530,30 @@ A3: rng seq c= dom h \ h"{0} by A1,RFUNCT_1:def 8;
   now
     let n;
 A4: seq.n in rng seq by Th9;
-    thus ((h^)*seq).n = (h^).(seq.n) by A1,Th21
+    thus ((h^)/*seq).n = (h^).(seq.n) by A1,FUNCT_2:185
       .= (h.(seq.n))" by A1,A4,RFUNCT_1:def 8
-      .= ((h*seq).n)" by A2,A3,Th21,XBOOLE_1:1
-      .= ((h*seq)").n by VALUED_1:10;
+      .= ((h/*seq).n)" by A2,A3,FUNCT_2:185,XBOOLE_1:1
+      .= ((h/*seq)").n by VALUED_1:10;
   end;
   hence thesis by FUNCT_2:113;
 end;
 
 theorem Th28:
-  rng seq c= dom h implies (h*seq)*Ns = h * (seq*Ns)
+  rng seq c= dom h implies (h/*seq)*Ns = h /* (seq*Ns)
 proof
   assume
 A1: rng seq c= dom h;
   (seq * Ns) is subsequence of seq by SEQM_3:def 10;
   then
 A2: rng (seq*Ns) c= rng seq by Th11;
-  thus (h*seq)*Ns = ((h qua Function)*seq)*Ns by A1,Def1
+  thus (h/*seq)*Ns = ((h qua Function)*seq)*Ns by A1,FUNCT_2:def 12
     .= (h qua Function)*(seq*Ns) by RELAT_1:55
-    .= h*(seq*Ns) by A1,A2,Def1,XBOOLE_1:1;
+    .= h/*(seq*Ns) by A1,A2,FUNCT_2:def 12,XBOOLE_1:1;
 end;
 
 theorem
   rng seq1 c= dom h & seq2 is subsequence of seq1 implies
-  h*seq2 is subsequence of h*seq1
+  h/*seq2 is subsequence of h/*seq1
 proof
   assume
 A1: rng seq1 c= dom h & seq2 is subsequence of seq1;
@@ -592,16 +563,16 @@ A2: seq2=seq1*Ns by SEQM_3:def 10;
 end;
 
 theorem
-  h is total implies (h*seq).n = h.(seq.n)
+  h is total implies (h/*seq).n = h.(seq.n)
 proof
   assume h is total;
   then dom h = REAL by PARTFUN1:def 4;
   then rng seq c= dom h;
-  hence thesis by Th21;
+  hence thesis by FUNCT_2:185;
 end;
 
 theorem
-  h is total implies h*(seq^\n) = (h*seq)^\n
+  h is total implies h/*(seq^\n) = (h/*seq)^\n
 proof
   assume h is total;
   then dom h = REAL by PARTFUN1:def 4;
@@ -610,21 +581,21 @@ proof
 end;
 
 theorem
-  h1 is total & h2 is total implies (h1+h2)*seq = h1*seq + h2*seq &
-  (h1-h2)*seq = h1*seq - h2*seq & (h1(#)h2)*seq = (h1*seq) (#) (h2*seq)
+  h1 is total & h2 is total implies (h1+h2)/*seq = h1/*seq + h2/*seq &
+  (h1-h2)/*seq = h1/*seq - h2/*seq & (h1(#)h2)/*seq = (h1/*seq) (#) (h2/*seq)
 proof
   assume h1 is total & h2 is total;
   then dom (h1+h2) = REAL by PARTFUN1:def 4;
   then dom h1 /\ dom h2 = REAL by VALUED_1:def 1;
   then
 A1: rng seq c= dom h1 /\ dom h2;
-  hence (h1+h2)*seq = h1*seq + h2*seq by Th23;
-  thus (h1-h2)*seq = h1*seq - h2*seq by A1,Th23;
+  hence (h1+h2)/*seq = h1/*seq + h2/*seq by Th23;
+  thus (h1-h2)/*seq = h1/*seq - h2/*seq by A1,Th23;
   thus thesis by A1,Th23;
 end;
 
 theorem
-  h is total implies (r(#)h)*seq = r(#)(h*seq)
+  h is total implies (r(#)h)/*seq = r(#)(h/*seq)
 proof
   assume h is total;
   then dom h = REAL by PARTFUN1:def 4;
@@ -633,7 +604,7 @@ proof
 end;
 
 theorem
-  rng seq c= dom (h|X) implies (h|X)*seq = h*seq
+  rng seq c= dom (h|X) implies (h|X)/*seq = h/*seq
 proof
   assume
 A1: rng seq c= dom (h|X);
@@ -643,16 +614,16 @@ A2: dom (h|X) c= dom h by XBOOLE_1:17;
   now
     let n;
 A3: seq.n in rng seq by Th9;
-    thus ((h|X)*seq).n = (h|X).(seq.n) by A1,Th21
+    thus ((h|X)/*seq).n = (h|X).(seq.n) by A1,FUNCT_2:185
       .= h.(seq.n) by A1,A3,FUNCT_1:68
-      .= (h*seq).n by A1,A2,Th21,XBOOLE_1:1;
+      .= (h/*seq).n by A1,A2,FUNCT_2:185,XBOOLE_1:1;
   end;
   hence thesis by FUNCT_2:113;
 end;
 
 theorem
   rng seq c= dom (h|X) & (rng seq c= dom (h|Y) or X c= Y) implies
-  (h|X)*seq = (h|Y)*seq
+  (h|X)/*seq = (h|Y)/*seq
 proof
   assume
 A1: rng seq c= dom (h|X) & (rng seq c= dom (h|Y) or X c= Y);
@@ -662,10 +633,10 @@ A2:   rng seq c= dom (h|Y);
       now
         let n;
 A3:     seq.n in rng seq by Th9;
-        thus ((h|X)*seq).n = (h|X).(seq.n) by A1,Th21
+        thus ((h|X)/*seq).n = (h|X).(seq.n) by A1,FUNCT_2:185
           .= h.(seq.n) by A1,A3,FUNCT_1:68
           .= (h|Y).(seq.n) by A2,A3,FUNCT_1:68
-          .= ((h|Y)*seq).n by A2,Th21;
+          .= ((h|Y)/*seq).n by A2,FUNCT_2:185;
       end;
       hence thesis by FUNCT_2:113;
     end;
@@ -679,10 +650,10 @@ A5:   rng seq c= dom (h|Y) by A1,XBOOLE_1:1;
       now
         let n;
 A6:     seq.n in rng seq by Th9;
-        thus ((h|X)*seq).n = (h|X).(seq.n) by A1,Th21
+        thus ((h|X)/*seq).n = (h|X).(seq.n) by A1,FUNCT_2:185
           .= h.(seq.n) by A1,A6,FUNCT_1:68
           .= (h|Y).(seq.n) by A5,A6,FUNCT_1:68
-          .= ((h|Y)*seq).n by A1,A4,Th21,XBOOLE_1:1;
+          .= ((h|Y)/*seq).n by A1,A4,FUNCT_2:185,XBOOLE_1:1;
       end;
       hence thesis by FUNCT_2:113;
     end;
@@ -691,7 +662,7 @@ A6:     seq.n in rng seq by Th9;
 end;
 
 theorem
-  rng seq c= dom (h|X) implies abs((h|X)*seq) = ((abs(h))|X)*seq
+  rng seq c= dom (h|X) implies abs((h|X)/*seq) = ((abs(h))|X)/*seq
 proof
   assume
 A1: rng seq c= dom (h|X);
@@ -705,18 +676,18 @@ A3: seq.n in rng seq by Th9;
     then seq.n in dom h /\ X by RELAT_1:90;
     then
 A4: seq.n in dom h & seq.n in X by XBOOLE_0:def 3;
-    thus (abs((h|X)*seq)).n = abs( ((h|X)*seq).n ) by SEQ_1:16
-      .= abs( (h|X).(seq.n) ) by A1,Th21
+    thus (abs((h|X)/*seq)).n = abs( ((h|X)/*seq).n ) by SEQ_1:16
+      .= abs( (h|X).(seq.n) ) by A1,FUNCT_2:185
       .= abs( h.(seq.n) ) by A1,A3,FUNCT_1:68
       .= (abs(h)).(seq.n) by VALUED_1:18
       .= ((abs(h))|X).(seq.n) by A4,FUNCT_1:72
-      .= (((abs(h))|X)*seq).n by A1,A2,Th21;
+      .= (((abs(h))|X)/*seq).n by A1,A2,FUNCT_2:185;
   end;
   hence thesis by FUNCT_2:113;
 end;
 
 theorem
-  rng seq c= dom (h|X) & h"{0}={} implies ((h^)|X)*seq = ((h|X)*seq)"
+  rng seq c= dom (h|X) & h"{0}={} implies ((h^)|X)/*seq = ((h|X)/*seq)"
 proof
   assume
 A1: rng seq c= dom (h|X) & h"{0}={};
@@ -741,45 +712,45 @@ A3: seq.n in rng seq by Th9;
 A4: seq.n in dom h \ h"{0} & seq.n in X by A1,XBOOLE_0:def 3;
     then
 A5: seq.n in dom (h^) & seq.n in X by RFUNCT_1:def 8;
-    thus (((h^)|X)*seq).n = ((h^)|X).(seq.n) by A2,Th21
+    thus (((h^)|X)/*seq).n = ((h^)|X).(seq.n) by A2,FUNCT_2:185
       .= (h^).(seq.n) by A4,FUNCT_1:72
       .= (h.(seq.n))" by A5,RFUNCT_1:def 8
       .= ((h|X).(seq.n))" by A1,A3,FUNCT_1:68
-      .= (((h|X)*seq).n)" by A1,Th21
-      .= (((h|X)*seq)").n by VALUED_1:10;
+      .= (((h|X)/*seq).n)" by A1,FUNCT_2:185
+      .= (((h|X)/*seq)").n by VALUED_1:10;
   end;
   hence thesis by FUNCT_2:113;
 end;
 
 theorem Th38:
-  rng seq c= dom h implies h.:(rng seq) = rng (h*seq)
+  rng seq c= dom h implies h.:(rng seq) = rng (h/*seq)
 proof
   assume
 A1: rng seq c= dom h;
   now
     let r be Element of REAL;
-    thus r in h.:(rng seq) implies r in rng (h*seq)
+    thus r in h.:(rng seq) implies r in rng (h/*seq)
     proof
       assume r in h.:(rng seq);
       then consider p such that
 A2:   p in dom h & p in rng seq & r=h.p by PARTFUN2:78;
       consider n such that
 A3:   p=seq.n by A2,Th9;
-      r = (h*seq).n by A1,A2,A3,Th21;
-      hence r in rng (h*seq) by Th9;
+      r = (h/*seq).n by A1,A2,A3,FUNCT_2:185;
+      hence r in rng (h/*seq) by Th9;
     end;
-    assume r in rng (h*seq);
+    assume r in rng (h/*seq);
     then consider n such that
-A4: (h*seq).n=r by Th9;
+A4: (h/*seq).n=r by Th9;
 A5: seq.n in rng seq by Th9;
-    r = h.(seq.n) by A1,A4,Th21;
+    r = h.(seq.n) by A1,A4,FUNCT_2:185;
     hence r in h.:(rng seq) by A1,A5,FUNCT_1:def 12;
   end;
   hence thesis by SUBSET_1:8;
 end;
 
 theorem
-  rng seq c= dom (h2*h1) implies h2*(h1*seq) = h2*h1*seq
+  rng seq c= dom (h2*h1) implies h2/*(h1/*seq) = (h2*h1)/*seq
 proof
   assume
 A1: rng seq c= dom (h2*h1);
@@ -790,11 +761,11 @@ A1: rng seq c= dom (h2*h1);
 A2: seq.n in dom h1 & h1.(seq.n) in dom h2 by A1,FUNCT_1:21;
 A3: rng seq c= dom h1 & h1.:(rng seq) c= dom h2 by A1,Th4;
     then
-A4: rng seq c= dom h1 & rng (h1*seq) c= dom h2 by Th38;
-    thus (h2*h1*seq).n = (h2*h1).(seq.n) by A1,Th21
+A4: rng seq c= dom h1 & rng (h1/*seq) c= dom h2 by Th38;
+    thus ((h2*h1)/*seq).n = (h2*h1).(seq.n) by A1,FUNCT_2:185
       .= h2.(h1.(seq.n)) by A2,FUNCT_1:23
-      .= h2.((h1*seq).n) by A3,Th21
-      .= (h2*(h1*seq)).n by A4,Th21;
+      .= h2.((h1/*seq).n) by A3,FUNCT_2:185
+      .= (h2/*(h1/*seq)).n by A4,FUNCT_2:185;
   end;
   hence thesis by FUNCT_2:113;
 end;
@@ -908,16 +879,69 @@ A7: (h|Y).p=r by A5;
   hence thesis by PARTFUN2:76;
 end;
 
+reserve e1,e2 for ext-real number;
+
 definition
+ canceled;
+ redefine
   let h;
   attr h is increasing means
 :NDef2:  for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r1 < h.r2;
+  compatibility
+   proof
+    thus h is increasing implies
+     for r1,r2 st r1 in dom h & r2 in dom h & r1 < r2 holds h.r1 < h.r2
+    by VALUED_0:def 13;
+    assume
+Z:   for r1,r2 st r1 in dom h & r2 in dom h & r1 < r2 holds h.r1 < h.r2;
+    let e1,e2;
+     dom h c= REAL by RELSET_1:12;
+    hence thesis by Z;
+   end;
   attr h is decreasing means
 :NDef3:  for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r2 < h.r1;
+  compatibility
+   proof
+    thus h is decreasing implies
+     for r1,r2 st r1 in dom h & r2 in dom h & r1 < r2 holds h.r1 > h.r2
+    by VALUED_0:def 14;
+    assume
+Z:   for r1,r2 st r1 in dom h & r2 in dom h & r1 < r2 holds h.r1 > h.r2;
+    let e1,e2;
+     dom h c= REAL by RELSET_1:12;
+    hence thesis by Z;
+   end;
+E:  dom h c= REAL by RELSET_1:12;
   attr h is non-decreasing means
 :NDef4:  for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r1 <= h.r2;
+  compatibility
+   proof
+    thus h is non-decreasing implies
+     for r1,r2 st r1 in dom h & r2 in dom h & r1 < r2 holds h.r1 <= h.r2
+    by VALUED_0:def 15;
+    assume
+Z:   for r1,r2 st r1 in dom h & r2 in dom h & r1 < r2 holds h.r1 <= h.r2;
+    let e1,e2 such that
+Z1:   e1 in dom h & e2 in dom h;
+    assume e1 <= e2;
+    then e1 < e2 or e1 = e2 by XXREAL_0:1;
+    hence thesis by Z,E,Z1;
+   end;
   attr h is non-increasing means
 :NDef5:  for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r2 <= h.r1;
+  compatibility
+   proof
+    thus h is non-increasing implies
+     for r1,r2 st r1 in dom h & r2 in dom h & r1 < r2 holds h.r1 >= h.r2
+    by VALUED_0:def 16;
+    assume
+Z:   for r1,r2 st r1 in dom h & r2 in dom h & r1 < r2 holds h.r1 >= h.r2;
+    let e1,e2 such that
+Z1:   e1 in dom h & e2 in dom h;
+    assume e1 <= e2;
+    then e1 < e2 or e1 = e2 by XXREAL_0:1;
+    hence thesis by Z,E,Z1;
+   end;
 end;
 
 theorem Def2:

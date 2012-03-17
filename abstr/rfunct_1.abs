@@ -7,15 +7,15 @@
 environ
 
  vocabularies PARTFUN1, ARYTM, ARYTM_1, RELAT_1, ARYTM_3, BOOLE, FUNCT_1,
-      FINSEQ_1, SEQ_1, ABSVALUE, FUNCT_3, PARTFUN2, RFUNCT_1, MEMBERED,
+      FINSEQ_1, SEQ_1, ABSVALUE, FUNCT_3, MEMBERED, ZF_LANG, ASYMPT_0,
       VALUED_0, COMPLEX1, XCMPLX_0, SEQM_3, SEQ_2, LATTICES;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, MEMBERED, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_3,
-      PARTFUN2, VALUED_0, VALUED_1, SEQ_1, SEQ_2, XXREAL_0, REAL_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
+      XREAL_0, COMPLEX1, MEMBERED, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_3, PARTFUN2, VALUED_0, VALUED_1, SEQ_1, SEQ_2, REAL_1;
  constructors PARTFUN1, FUNCT_3, XXREAL_0, REAL_1, COMPLEX1, VALUED_1,
       PARTFUN2, SEQ_2, SEQ_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, NUMBERS, XREAL_0, MEMBERED,
-      VALUED_0, VALUED_1, XCMPLX_0, SEQ_2;
+      VALUED_0, VALUED_1, XCMPLX_0, SEQ_2, XXREAL_0, RELAT_1, FUNCOP_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
 
 
@@ -359,7 +359,9 @@ theorem :: RFUNCT_1:88
  f|Y is bounded_below iff
   ex r st for c being set st c in Y /\ dom f holds r <= f.c;
 
-canceled;
+theorem :: RFUNCT_1:89
+  f is bounded iff
+  ex r st for c being set st c in dom f holds abs(f.c)<=r;
 
 theorem :: RFUNCT_1:90
   f|Y is bounded iff
@@ -374,11 +376,55 @@ theorem :: RFUNCT_1:92
   f|X is bounded_above & f|Y is bounded_below implies
   f|(X /\ Y) is bounded;
 
+registration
+ cluster empty -> constant Function;
+end;
+
+registration
+ cluster empty -> bounded (real-valued Function);
+end;
+
+registration
+ cluster constant -> bounded (real-valued Function);
+end;
+
 theorem :: RFUNCT_1:93
   X misses dom f implies f|X is bounded;
 
 theorem :: RFUNCT_1:94
   0 = r implies (r(#)f)|Y is bounded;
+
+registration
+ cluster empty set;
+end;
+
+registration let f be bounded_above (real-valued Function), X be set;
+ cluster f|X -> bounded_above (real-valued Function);
+end;
+
+registration let f be bounded_below (real-valued Function), X be set;
+ cluster f|X -> bounded_below (real-valued Function);
+end;
+
+registration let f be bounded_above (real-valued Function);
+ let r be non negative (real number);
+ cluster r(#)f -> bounded_above (real-valued Function);
+end;
+
+registration let f be bounded_below (real-valued Function);
+ let r be non negative (real number);
+ cluster r(#)f -> bounded_below (real-valued Function);
+end;
+
+registration let f be bounded_above (real-valued Function);
+ let r be non positive (real number);
+ cluster r(#)f -> bounded_below (real-valued Function);
+end;
+
+registration let f be bounded_below (real-valued Function);
+ let r be non positive (real number);
+ cluster r(#)f -> bounded_above (real-valued Function);
+end;
 
 theorem :: RFUNCT_1:95
   (f|Y is bounded_above & 0<=r implies (r(#)f)|Y is bounded_above) &
@@ -391,13 +437,33 @@ theorem :: RFUNCT_1:96
 theorem :: RFUNCT_1:97
   f|Y is bounded implies (r(#)f)|Y is bounded;
 
+registration let f;
+ cluster abs f -> bounded_below;
+end;
+
 theorem :: RFUNCT_1:98
   (abs f)|X is bounded_below;
+
+registration let f be bounded (real-valued Function);
+ cluster abs f -> bounded (real-valued Function);
+end;
+
+registration let f be bounded_above (real-valued Function);
+ cluster -f -> bounded_below (real-valued Function);
+end;
 
 theorem :: RFUNCT_1:99
   f|Y is bounded implies (abs f)|Y is bounded & (-f)|Y is bounded;
 
 reserve f1,f2 for real-valued Function;
+
+registration let f1,f2 be bounded_above (real-valued Function);
+ cluster f1+f2 -> bounded_above (real-valued Function);
+end;
+
+registration let f1,f2 be bounded_below (real-valued Function);
+ cluster f1+f2 -> bounded_below (real-valued Function);
+end;
 
 theorem :: RFUNCT_1:100
   (f1|X is bounded_above & f2|Y is bounded_above implies
@@ -405,6 +471,10 @@ theorem :: RFUNCT_1:100
   (f1|X is bounded_below & f2|Y is bounded_below implies
   (f1+f2)|(X /\ Y) is bounded_below) &
   (f1|X is bounded & f2|Y is bounded implies (f1+f2)|(X /\ Y) is bounded);
+
+registration let f1,f2 be bounded (real-valued Function);
+ cluster f1(#)f2 -> bounded (real-valued Function);
+end;
 
 theorem :: RFUNCT_1:101
   f1|X is bounded & f2|Y is bounded implies
@@ -433,6 +503,10 @@ theorem :: RFUNCT_1:106
 
 theorem :: RFUNCT_1:107
   f|Y is constant implies (abs f)|Y is constant & (-f)|Y is constant;
+
+registration
+ cluster constant -> bounded (real-valued Function);
+end;
 
 theorem :: RFUNCT_1:108
   f|Y is constant implies f|Y is bounded;

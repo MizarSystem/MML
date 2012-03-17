@@ -19,13 +19,13 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCSDOM"/>
 <ArticleID name="LOPBAN_1"/>
 <ArticleID name="GROUP_1"/>
@@ -36,13 +36,13 @@
 <ArgTypes>
 <Typ kind="G" nr="16">
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="59"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="57"/>
+<Adjective nr="82"/>
+<Adjective nr="83"/>
 <Adjective nr="84"/>
 <Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="90"/>
+<Adjective nr="88"/>
 <Adjective nr="97"/>
 <Adjective nr="104"/>
 <Adjective nr="108"/>
@@ -94,7 +94,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="169">
+<Func kind="K" nr="152">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -117,12 +117,12 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="169">
+<Func kind="K" nr="152">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="146">
+<Func kind="K" nr="129">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

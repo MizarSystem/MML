@@ -19,10 +19,10 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="MULTOP_1"/>
 <ArticleID name="ALTCAT_1"/>
 <ArticleID name="FUNCT_3"/>
@@ -140,7 +140,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="237">
+<Func kind="K" nr="238">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

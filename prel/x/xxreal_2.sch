@@ -35,7 +35,7 @@
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="51"/>
+<Func kind="K" nr="52"/>
 </Typ>
 <Func kind="F" nr="3">
 <Var nr="1"/>

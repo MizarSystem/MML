@@ -14,7 +14,6 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -28,18 +27,18 @@
 </Signature>
 <FCluster aid="CSSPACE2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="175"/>
+<Func kind="K" nr="173"/>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="104"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="103"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CSSPACE2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="175"/>
+<Func kind="K" nr="173"/>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="109"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="108"/>
 </Cluster>
 </FCluster>
 </Registrations>

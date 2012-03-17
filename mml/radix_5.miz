@@ -18,7 +18,7 @@ environ
  definitions TARSKI;
  theorems RADIX_1, RADIX_4, REAL_2, INT_1, NAT_1, FINSEQ_1, POWER,
       FINSEQ_2, NEWTON, RADIX_2, NAT_2, PREPOWER, BINARITH, PEPIN, JORDAN5B,
-      FUNCT_1, RVSUM_1, XREAL_1, XXREAL_0, NAT_D, PARTFUN1, ORDINAL1;
+      FUNCT_1, RVSUM_1, XREAL_1, XXREAL_0, NAT_D, PARTFUN1, ORDINAL1, XREAL_0;
  schemes NAT_1, FINSEQ_2;
 
 begin :: Some Useful Theorems
@@ -47,11 +47,11 @@ proof
   assume
 A1: i > 1 & i in Seg n;
   then i - 1 > 1 - 1 by XREAL_1:11;
-  then i -' 1 > 0 by A1,BINARITH:50;
+  then i -' 1 > 0 by A1,XREAL_1:235;
   then
 A2: i -' 1 >= 0 + 1 by NAT_1:13;
   i >= 1 & i <= n by A1,FINSEQ_1:3;
-  then i -' 1 <= n by BINARITH:62;
+  then i -' 1 <= n by NAT_D:44;
   hence thesis by A2,FINSEQ_1:3;
 end;
 
@@ -90,7 +90,7 @@ A1: 1 in Seg 1 by FINSEQ_1:3;
 A2: (DigitSD(tx))/.1 = SubDigit(tx,1,k) by RADIX_1:def 6
     .= ( Radix(k) |^ (1-'1) )*DigB(tx,1) by RADIX_1:def 5
     .= (Radix(k) |^ (1-'1))*DigA(tx,1) by RADIX_1:def 4
-    .= (Radix(k) |^ 0)*DigA(tx,1) by BINARITH:51
+    .= (Radix(k) |^ 0)*DigA(tx,1) by XREAL_1:234
     .= 1 * DigA(tx,1) by NEWTON:9;
 A3: len DigitSD(tx) = 1 by FINSEQ_2:109;
   then 1 in dom DigitSD(tx) by A1,FINSEQ_1:def 3;
@@ -166,7 +166,7 @@ A4: DigA(DecSD(1,n,k),i) = DigitDC(1,i,k) by A1,RADIX_1:def 9
     .=(1 mod (Radix(k) |^ i)) div (Radix(k) |^ (i-'1)) by RADIX_1:def 8
     .=(1 div (Radix(k) |^ (i-'1))) mod Radix(k) by A1,A2,RADIX_2:4;
   i-1 > 1 - 1 by A1,XREAL_1:16;
-  then i-'1 > 0 by BINARITH:def 3;
+  then i-'1 > 0 by XREAL_0:def 2;
   then 1 div (Radix(k) |^ (i-'1)) = 0 by A3,NAT_D:27,PEPIN:26;
   hence thesis by A4,NAT_D:26;
 end;
@@ -506,9 +506,9 @@ A5: SDDec(tz '+' tw) = DigA(tz '+' tw,1) by Th4
       .= SD_Add_Data(DigA(tz,1)+DigA(tw,1),k)
     + SD_Add_Carry(DigA(tz,1-'1)+DigA(tw,1-'1)) by A2,A4,RADIX_1:def 13
       .= SD_Add_Data(DigA(tz,1)+DigA(tw,1),k)
-    + SD_Add_Carry(DigA(tz,0)+DigA(tw,1-'1)) by BINARITH:51
+    + SD_Add_Carry(DigA(tz,0)+DigA(tw,1-'1)) by XREAL_1:234
       .= SD_Add_Data(DigA(tz,1)+DigA(tw,1),k)
-    + SD_Add_Carry(DigA(tz,0)+DigA(tw,0)) by BINARITH:51
+    + SD_Add_Carry(DigA(tz,0)+DigA(tw,0)) by XREAL_1:234
       .= SD_Add_Data(DigA(tz,1)+DigA(tw,1),k)
     + SD_Add_Carry(DigA(tz,0)+0) by RADIX_1:def 3
       .= SD_Add_Data(DigA(tz,1)+DigA(tw,1),k)
@@ -519,9 +519,9 @@ A6: SDDec(tx '+' ty) = DigA(tx '+' ty,1) by Th4
       .= SD_Add_Data(DigA(tx,1)+DigA(ty,1),k)
     + SD_Add_Carry(DigA(tx,1-'1)+DigA(ty,1-'1)) by A2,A4,RADIX_1:def 13
       .= SD_Add_Data(DigA(tx,1)+DigA(ty,1),k)
-    + SD_Add_Carry(DigA(tx,0)+DigA(ty,1-'1)) by BINARITH:51
+    + SD_Add_Carry(DigA(tx,0)+DigA(ty,1-'1)) by XREAL_1:234
       .= SD_Add_Data(DigA(tx,1)+DigA(ty,1),k)
-    + SD_Add_Carry(DigA(tx,0)+DigA(ty,0)) by BINARITH:51
+    + SD_Add_Carry(DigA(tx,0)+DigA(ty,0)) by XREAL_1:234
       .= SD_Add_Data(DigA(tx,1)+DigA(ty,1),k)
     + SD_Add_Carry(DigA(tx,0)+0) by RADIX_1:def 3
       .= SD_Add_Data(DigA(tx,1)+DigA(ty,1),k)
@@ -1124,9 +1124,9 @@ A7:   SDDec(SDMax(1,m,k) '+' DecSD(1,1,k))
       by A2,A4,RADIX_1:def 13
         .= SD_Add_Data(DigA(SDMax(1,m,k),1)+DigA(DecSD(1,1,k),1),k)
       + SD_Add_Carry(DigA(SDMax(1,m,k),0)+DigA(DecSD(1,1,k),1-'1))
-      by BINARITH:51
+      by XREAL_1:234
         .= SD_Add_Data(DigA(SDMax(1,m,k),1)+DigA(DecSD(1,1,k),1),k)
-      + SD_Add_Carry(DigA(SDMax(1,m,k),0)+DigA(DecSD(1,1,k),0)) by BINARITH:51
+      + SD_Add_Carry(DigA(SDMax(1,m,k),0)+DigA(DecSD(1,1,k),0)) by XREAL_1:234
         .= SD_Add_Data(DigA(SDMax(1,m,k),1)+DigA(DecSD(1,1,k),1),k)
       + SD_Add_Carry(DigA(SDMax(1,m,k),0)+0) by RADIX_1:def 3
         .= SD_Add_Data(DigA(SDMax(1,m,k),1)+DigA(DecSD(1,1,k),1),k)
@@ -1194,7 +1194,7 @@ A26:        DigA(DecSD(1,n,k),i) = 0 by A2,A16,A23,Th8;
             now per cases by A21,XXREAL_0:1;
               suppose i = m+1;
                 then DigA(SDMax(n,m,k),i-'1) = DigA(SDMax(n,m,k),m) by
-                BINARITH:39
+                NAT_D:34
                   .= SDMaxDigit(m,k,m) by A2,Def4
                   .= 0 by A2,Def3;
                 then DigA(SDMax(n,m,k) '+' DecSD(1,n,k),i)
@@ -1205,7 +1205,7 @@ A26:        DigA(DecSD(1,n,k),i) = 0 by A2,A16,A23,Th8;
               suppose i > m+1;
                 then i - 1 > m + 1 - 1 by XREAL_1:16;
                 then
-A27:            i -' 1 > m by BINARITH:def 3;
+A27:            i -' 1 > m by XREAL_0:def 2;
                 i -' 1 in Seg n by A16,A23,Th2;
                 then DigA(SDMax(n,m,k),i-'1) = SDMaxDigit(m,k,i-'1) by Def4
                   .= 0 by A2,A27,Def3;
@@ -1245,7 +1245,7 @@ A39:                DigA(SDMax(n,m,k),i-'1)
 A40:                i >= 1 + 1 by A30,INT_1:20;
                     now per cases by A40,XXREAL_0:1;
                       suppose i = 2;
-                        then i -' 1 = 2 - 1 by BINARITH:50;
+                        then i -' 1 = 2 - 1 by XREAL_1:235;
                         then DigA(SDMax(n,m,k) '+' DecSD(1,n,k),i)
                         = SD_Add_Data(0+0,k)
 
@@ -1258,7 +1258,7 @@ A40:                i >= 1 + 1 by A30,INT_1:20;
 A41:                    i > 2;
                         then i - 1 > 2 - 1 by XREAL_1:16;
                         then
-A42:                    i -' 1 > 1 by BINARITH:def 3;
+A42:                    i -' 1 > 1 by XREAL_0:def 2;
                         i > 1 by A41,XXREAL_0:2;
                         then i -' 1 in Seg n by A16,Th2;
                         then DigA(SDMax(n,m,k) '+' DecSD(1,n,k),i)
@@ -1283,7 +1283,7 @@ A47:                i -' 1 in Seg n by A16,A30,Th2;
                     now per cases by A45,XXREAL_0:1;
                       suppose i = 2;
                         then
-A48:                    i -' 1 = 2 - 1 by BINARITH :50;
+A48:                    i -' 1 = 2 - 1 by XREAL_1:235;
                         then
 A49:                    DigA(DecSD(1,n,k),i-'1) = 1 by A2,A5,Th7;
                         DigA(SDMax(n,m,k),i-'1)
@@ -1304,7 +1304,7 @@ A49:                    DigA(DecSD(1,n,k),i-'1) = 1 by A2,A5,Th7;
 A50:                    i > 2;
                         then i - 1 > 2 - 1 by XREAL_1:16;
                         then
-A51:                    i -' 1 > 1 by BINARITH:def 3;
+A51:                    i -' 1 > 1 by XREAL_0:def 2;
                         i > 1 by A50,XXREAL_0:2;
                         then i -' 1 in Seg n by A16,Th2;
                         then
@@ -1428,10 +1428,10 @@ A19:        DigA(Fmin(n+1,m,k),i) = FminDigit(m,k,m+1) by A10, Def6
               .= 0 by A1,A12,Def5;
 A20:        DigA(Fmax(n+1,m,k),i) = FmaxDigit(m,k,m+1) by A10,A18,Def8
               .= 0 by A1,A12,Def7;
-A21:        DigA(Fmin(n+1,m,k),i-'1) = DigA(Fmin(n+1,m,k),m) by A18,BINARITH:39
+A21:        DigA(Fmin(n+1,m,k),i-'1) = DigA(Fmin(n+1,m,k),m) by A18,NAT_D:34
               .= FminDigit(m,k,m) by A9,Def6
               .= 1 by A1,Def5;
-A22:        DigA(Fmax(n+1,m,k),i-'1) = DigA(Fmax(n+1,m,k),m) by A18,BINARITH:39
+A22:        DigA(Fmax(n+1,m,k),i-'1) = DigA(Fmax(n+1,m,k),m) by A18,NAT_D:34
               .= FmaxDigit(m,k,m) by A9,Def8
               .= Radix(k) - 1 by A1,Def7;
 A23:        DigA(Fmin(n+1,m+1,k),i) = FminDigit(m+1,k,m+1) by A10,A18,Def6
@@ -1452,7 +1452,7 @@ A25:        i > m + 1 by A17,XXREAL_0:1;
 A26:        i -' 1 in Seg (n+1) by A10,Th2;
             i - 1 > m + 1 - 1 by A25,XREAL_1:16;
             then
-A27:        i -' 1 > m by BINARITH:def 3;
+A27:        i -' 1 > m by XREAL_0:def 2;
 A28:        DigA(Fmin(n+1,m,k),i) = 0 by A1,A12,A13,A17,Def5;
 A29:        DigA(Fmax(n+1,m,k),i) = 0 by A1,A12,A14,A17,Def7;
 A30:        DigA(Fmin(n+1,m,k),i-'1) = FminDigit(m,k,i-'1) by A26,Def6
@@ -1499,7 +1499,7 @@ A43:            i -' 1 < i by A16,JORDAN5B:1;
                 then i -' 1 < m by A42,XXREAL_0:2;
                 then
 A44:            i -' 1 <= n+1 by A3,XXREAL_0:2;
-                i -' 1 >= 1 by A33,BINARITH:67;
+                i -' 1 >= 1 by A33,NAT_D:49;
                 then
 A45:            i -' 1 in Seg (n+1) by A44,FINSEQ_1:3;
 A46:            DigA(Fmax(n+1,m,k),i) = 0 by A1,A14,A42,Def7;

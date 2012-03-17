@@ -21,10 +21,8 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="SEQFUNC"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="RFUNCT_1"/>
@@ -51,7 +49,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="78"/>
+<Adjective nr="77"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
@@ -60,7 +58,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="84"/>
+<Adjective nr="83"/>
 </Cluster>
 </CCluster>
 <CCluster aid="MESFUNC5" nr="2">
@@ -73,7 +71,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="83"/>
+<Adjective nr="82"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
@@ -82,7 +80,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="85"/>
+<Adjective nr="84"/>
 </Cluster>
 </CCluster>
 </Registrations>

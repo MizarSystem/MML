@@ -25,7 +25,6 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="RFUNCT_1"/>
@@ -52,9 +51,9 @@
 <Adjective nr="4"/>
 <Adjective nr="23"/>
 <Adjective nr="28"/>
+<Adjective nr="52"/>
 <Adjective nr="53"/>
-<Adjective nr="54"/>
-<Adjective nr="55">
+<Adjective nr="54">
 <Func kind="K" nr="24">
 <LocusVar nr="1"/>
 </Func>

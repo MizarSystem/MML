@@ -193,7 +193,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="135">
+<Func kind="K" nr="136">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -210,7 +210,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="175">
+<Func kind="K" nr="176">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -229,7 +229,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="203">
+<Func kind="K" nr="204">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -242,7 +242,7 @@
 </FCluster>
 <FCluster aid="ALTCAT_2" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="204"/>
+<Func kind="K" nr="205"/>
 <Cluster>
 <Adjective nr="31"/>
 <Adjective nr="71"/>
@@ -262,7 +262,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="205">
+<Func kind="K" nr="206">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -289,7 +289,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="205">
+<Func kind="K" nr="206">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

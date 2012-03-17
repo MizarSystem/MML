@@ -313,7 +313,7 @@
 </FCluster>
 <FCluster aid="ALGSTR_0" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="84"/>
 <Cluster>
 <Adjective nr="14" value="false"/>
 <Adjective nr="19"/>
@@ -322,7 +322,7 @@
 </FCluster>
 <FCluster aid="ALGSTR_0" nr="5">
 <ArgTypes/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="84"/>
 <Cluster>
 <Adjective nr="32"/>
 </Cluster>
@@ -446,7 +446,7 @@
 </FCluster>
 <FCluster aid="ALGSTR_0" nr="9">
 <ArgTypes/>
-<Func kind="K" nr="84"/>
+<Func kind="K" nr="85"/>
 <Cluster>
 <Adjective nr="14" value="false"/>
 <Adjective nr="19"/>
@@ -455,14 +455,14 @@
 </FCluster>
 <FCluster aid="ALGSTR_0" nr="10">
 <ArgTypes/>
-<Func kind="K" nr="84"/>
+<Func kind="K" nr="85"/>
 <Cluster>
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ALGSTR_0" nr="11">
 <ArgTypes/>
-<Func kind="K" nr="84"/>
+<Func kind="K" nr="85"/>
 <Cluster>
 <Adjective nr="39"/>
 </Cluster>
@@ -571,7 +571,7 @@
 </FCluster>
 <FCluster aid="ALGSTR_0" nr="15">
 <ArgTypes/>
-<Func kind="K" nr="88"/>
+<Func kind="K" nr="89"/>
 <Cluster>
 <Adjective nr="14" value="false"/>
 <Adjective nr="19"/>
@@ -580,7 +580,7 @@
 </FCluster>
 <FCluster aid="ALGSTR_0" nr="16">
 <ArgTypes/>
-<Func kind="K" nr="88"/>
+<Func kind="K" nr="89"/>
 <Cluster>
 <Adjective nr="46"/>
 </Cluster>
@@ -704,7 +704,7 @@
 </FCluster>
 <FCluster aid="ALGSTR_0" nr="20">
 <ArgTypes/>
-<Func kind="K" nr="89"/>
+<Func kind="K" nr="90"/>
 <Cluster>
 <Adjective nr="14" value="false"/>
 <Adjective nr="19"/>
@@ -713,14 +713,14 @@
 </FCluster>
 <FCluster aid="ALGSTR_0" nr="21">
 <ArgTypes/>
-<Func kind="K" nr="89"/>
+<Func kind="K" nr="90"/>
 <Cluster>
 <Adjective nr="46"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ALGSTR_0" nr="22">
 <ArgTypes/>
-<Func kind="K" nr="89"/>
+<Func kind="K" nr="90"/>
 <Cluster>
 <Adjective nr="53"/>
 </Cluster>
@@ -859,7 +859,7 @@
 </FCluster>
 <FCluster aid="ALGSTR_0" nr="26">
 <ArgTypes/>
-<Func kind="K" nr="91"/>
+<Func kind="K" nr="92"/>
 <Cluster>
 <Adjective nr="14" value="false"/>
 <Adjective nr="19"/>
@@ -868,14 +868,14 @@
 </FCluster>
 <FCluster aid="ALGSTR_0" nr="27">
 <ArgTypes/>
-<Func kind="K" nr="91"/>
+<Func kind="K" nr="92"/>
 <Cluster>
 <Adjective nr="57"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ALGSTR_0" nr="28">
 <ArgTypes/>
-<Func kind="K" nr="91"/>
+<Func kind="K" nr="92"/>
 <Cluster>
 <Adjective nr="60"/>
 </Cluster>
@@ -1068,7 +1068,7 @@
 </FCluster>
 <FCluster aid="ALGSTR_0" nr="32">
 <ArgTypes/>
-<Func kind="K" nr="93"/>
+<Func kind="K" nr="94"/>
 <Cluster>
 <Adjective nr="14" value="false"/>
 <Adjective nr="19"/>

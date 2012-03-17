@@ -13,11 +13,13 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, CARD_1, XCMPLX_0,
       ORDINAL1, VALUED_1, REAL_1, ALGSTR_0, XXREAL_0, XREAL_0, NAT_1, RELAT_1,
       FUNCT_1, PARTFUN1, FINSEQ_1, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1,
-      FINSEQ_2, MATRIX_1, MATRIX_2, FVSUM_1, RVSUM_1, BINARITH, GROUP_4,
+      FINSEQ_2, MATRIX_1, MATRIX_2, FVSUM_1, RVSUM_1, NAT_D,
+      BINARITH, GROUP_4,
       MATRIX_3, MATRIX11, FINSEQOP, MATRIX13, LAPLACE, RFINSEQ, POLYNOM1,
       WSIERP_1;
  constructors XXREAL_0, GROUP_4, VECTSP_7, MATRIX11, MATRIX13, LAPLACE,
-      RFINSEQ, POLYNOM1, WSIERP_1, SEQ_1, VALUED_0, VALUED_1, REAL_1;
+      RFINSEQ, POLYNOM1, WSIERP_1, SEQ_1, VALUED_0, VALUED_1, REAL_1, NAT_D,
+      BINARITH;
  registrations XBOOLE_0, FINSET_1, STRUCT_0, VECTSP_1, ORDINAL1, XXREAL_0,
       NAT_1, FINSEQ_1, RELAT_1, FINSEQ_2, SEQM_3, MATRIX13, XREAL_0, VALUED_0,
       CARD_1;
@@ -29,7 +31,7 @@ environ
       MATRIXR2, NAT_1, ORDINAL1, PARTFUN1, POLYNOM3, PRGCOR_1, RELAT_1,
       RFINSEQ, RLVECT_1, RVSUM_1, TARSKI, VECTSP_1, XBOOLE_0, XBOOLE_1,
       XREAL_1, XXREAL_0, ZFMISC_1, MATRIX_4, FUNCT_2, FUNCOP_1, MATRIXR1,
-      CARD_1;
+      CARD_1, NAT_D;
  schemes FINSEQ_1, FINSEQ_2, NAT_1, MATRIX_1;
 
 begin :: Preliminaries
@@ -416,7 +418,7 @@ A1: i in Seg (Sum f);
   F in dom f by A1,Def1;
   then 1<=F by FINSEQ_3:27;
   hence
-A2: F-'1=F-1 by BINARITH:50;
+A2: F-'1=F-1 by XREAL_1:235;
   assume Sum(f|(F-'1))>=i;
   then F-'1>=F-0 by A1,Def1;
   hence thesis by A2,XREAL_1:12;
@@ -485,7 +487,7 @@ A8:  j<=Sum(g|min(g,j)) by Def1,A6;
   then Sum (fg|(len f+min(g,j)))=Sum f + Sum(g|min(g,j)) by RVSUM_1:105;
   then Sum (fg|(len f+min(g,j)))>=Sum f+j by A8,XREAL_1:9;
   then len f+min(g,j)>=min(fg,i) by A3,Def1;
-  then len f+min(g,j)=min(fg,i) &j=i-'Sum f by A5,A7,XXREAL_0:1,BINARITH:50;
+  then len f+min(g,j)=min(fg,i) &j=i-'Sum f by A5,A7,XXREAL_0:1,XREAL_1:235;
   hence thesis;
 end;
 
@@ -494,7 +496,7 @@ proof
   assume
 A1: i in dom f;
   i>=1 by A1,FINSEQ_3:27;
-  then i-'1=i-1 by BINARITH:50;
+  then i-'1=i-1 by XREAL_1:235;
   then
 A2: i=i-'1+1;
 A3: f/.i = f.i by A1,PARTFUN1:def 8;
@@ -514,7 +516,7 @@ A1: i in dom f & j in Seg (f/.i);
   set fi=f/.i;
 A2:  fi=f.i by A1,PARTFUN1:def 8;
 A3:  i>=1 & i<=len f by A1,FINSEQ_3:27;
-  then i-'1=i-1 by BINARITH:50;
+  then i-'1=i-1 by XREAL_1:235;
   then
 A4:  i=(i-'1)+1;
 A5:  fi+Sum(f|(i-'1))= Sum(f|i) by A1,A2,Lm2;
@@ -1125,7 +1127,7 @@ A6:    len Len F12=1+1 by A2,FINSEQ_2:19;
 A7:    dom Len F12={1,2} by FINSEQ_1:def 3,4;
 A8:    len Width F12=len F12 & len F12=len Len F12 by FINSEQ_2:109;
 A9:    1 in dom Len F12 & 2 in dom Len F12 & 1-'1=0 & 2-'1=2-1
-       by A7,TARSKI:def 2,BINARITH:50,51;
+       by A7,TARSKI:def 2,XREAL_1:235,234;
      then
 A10:  (Len F12).2=L2 & (Len F12)/.2=(Len F12).2 & (Len F12).1=L1 &
       (Len F12)/.1=(Len F12).1 & (Len F12)|0=<*>REAL & (Width F12)|0=<*>REAL&
@@ -1166,8 +1168,8 @@ A11:   Sum ((Width F12)|2)=W1+W2 by Th20;
                 thus LM.j = M*(i,j) by A3,A4,A17,MATRIX_1:def 8
                          .= F12.1*(i-'Sum((Len F12)|0),j-'Sum ((Width F12)|0))
                              by A12,A16,A18,A9,A19,A10,Def5,A20,A3,RVSUM_1:102
-                         .= F12.1*(i,j-'0) by BINARITH:58,RVSUM_1:102
-                         .= F12.1*(i,j) by BINARITH:58
+                         .= F12.1*(i,j-'0) by NAT_D:40,RVSUM_1:102
+                         .= F12.1*(i,j) by NAT_D:40
                          .= M1*(i,j) by FINSEQ_1:58
                          .= LM1.j by A21,MATRIX_1:def 8
                          .= (LM1^W2d).j by A21,FINSEQ_1:def 7;end;
@@ -1225,8 +1227,8 @@ A11:   Sum ((Width F12)|2)=W1+W2 by Th20;
                       thus LM.j = B*(i+L1,j) by A12,A29,MATRIX_1:def 8
                                .= F12.2*(i+L1-'L1,j-'W1)
                                     by A27,A28,A3,A30,A9,A10,A31,A1,A34,Def5
-                               .= F12.2*(i,j-'W1) by BINARITH:39
-                               .= F12.(len F1+1)*(i,k) by A5,A35,BINARITH:39
+                               .= F12.2*(i,j-'W1) by NAT_D:34
+                               .= F12.(len F1+1)*(i,k) by A5,A35,NAT_D:34
                                .= M2*(i,k) by FINSEQ_1:59
                                .= LM2.k by A35,A36,MATRIX_1:def 8
                                .= (W1d^LM2).j by A27,A35,FINSEQ_1:def 7;end;
@@ -1270,8 +1272,8 @@ A37: for i holds (i in dom M1 implies Line(M,i)=Line(M1,i)^(W2 |-> d))&
                    by A41,A42,FINSEQ_1:3,FINSEQ_3:27;
                 thus B*(i,j) = F12.1*(i-'0, j-'0)
                               by A9,A10,A38,A39,A41,A45,A46,Def5,A3,RVSUM_1:102
-                            .= F12.1*(i,j-'0) by BINARITH:58
-                            .= F12.1*(i,j) by BINARITH:58
+                            .= F12.1*(i,j-'0) by NAT_D:40
+                            .= F12.1*(i,j) by NAT_D:40
                             .= M1*(i,j) by FINSEQ_1:58
                             .= LM1.j by A47,MATRIX_1:def 8
                             .= (LM1^W2d).j by A47,FINSEQ_1:def 7;end;
@@ -1318,8 +1320,8 @@ A37: for i holds (i in dom M1 implies Line(M,i)=Line(M1,i)^(W2 |-> d))&
                     by A42,FINSEQ_1:def 3,A58,FINSEQ_3:31;
                   thus B*(i,j) = F12.2*(iL+L1-'L1,j-'W1)
                                    by A3,A9,A10,A11,A38,A39,A41,A57,A54,Def5
-                              .= F12.2*(iL,j-'W1) by BINARITH:39
-                              .= F12.(len F1+1)*(iL,k) by A5,A59,BINARITH:39
+                              .= F12.2*(iL,j-'W1) by NAT_D:34
+                              .= F12.(len F1+1)*(iL,k) by A5,A59,NAT_D:34
                               .= M2*(iL,k) by FINSEQ_1:59
                               .= LM2.k by A60,A59,MATRIX_1:def 8
                               .= (W1d^LM2).j by A42,A59,A60,FINSEQ_1:def 7;end;
@@ -1577,7 +1579,7 @@ A2:  Indices B1 is Subset of Indices B12 by Th25;
 A3:  min(L1,i)=min(L,i) & min(L1,i) in dom L1
     by Th8,Def1;
   then
-A4:  min(L1,i)<=len L1 & min(L1,i)-'1<=min(L1,i) by FINSEQ_3:27,BINARITH:52;
+A4:  min(L1,i)<=len L1 & min(L1,i)-'1<=min(L1,i) by FINSEQ_3:27,NAT_D:35;
   then min(L1,i)-'1<=len L1 & len L1=len F1 & len F1=len W1
     by XXREAL_0:2,FINSEQ_2:109;
   then
@@ -1664,7 +1666,7 @@ A7:  i+Sum L1 in Seg(Sum L1+Sum L2)\Seg Sum L1 & min(L2,i)>=1 &
   then
 A8:  min(L,i+Sum L1)=min(L2,(i+Sum L1)-'Sum L1)+len L1 &
      (i+Sum L1)-'Sum L1=i+Sum L1-Sum L1 & min(L2,i)+len L1-'1=
-     (min(L2,i)-'1)+len L1 by A1,Th9,BINARITH:56;
+     (min(L2,i)-'1)+len L1 by A1,Th9,NAT_D:38;
   then W1^(W2|(min(L2,i)))=W|min(L,i+Sum L1) &
        W1^(W2|(min(L2,i)-'1))=W|(min(L,i+Sum L1)-'1)&
        L1^(L2|(min(L2,i)-'1))=L|(min(L,i+Sum L1)-'1) by A3,FINSEQ_6:16,A1;
@@ -1746,7 +1748,7 @@ W|(len L1)=W1 & Sum (W|min(L1,i))<=
       i-'Sum L1 in Seg Sum L2 by A2,A10,A12,FINSEQ_1:82;
       then min(L2,i-'Sum L1) in dom L2 by Def1;
       then min(L2,i-'Sum L1) >=1 by FINSEQ_3:27;
-      then min(L,i)-'1=(min(L2,i-'Sum L1)-'1)+len L1 by A11,BINARITH:56;
+      then min(L,i)-'1=(min(L2,i-'Sum L1)-'1)+len L1 by A11,NAT_D:38;
       then min(L,i)-'1>=len L1+0 by XREAL_1:9;
       then Sum(W|(min(L,i)-'1))>=Sum ((W1^W2)|len W1) & (W1^W2)|len W1=W1
         by A1,A3,POLYNOM3:18,FINSEQ_5:26;
@@ -1792,7 +1794,7 @@ A9:  [jS,kS] in Indices B by FINSEQ_1:def 3;
 A10:  Sum(W|(i-'1))+0<kS & Sum(L|(i-'1))+0<=jS & kS <= Sum(W|i)
       by A8,XREAL_1:8,FINSEQ_1:3;
   then jS-'Sum(L|(i-'1))=jS-Sum(L|(i-'1)) & kS-'Sum(W|(i-'1))=kS- Sum(W|(i-'1))
-    by BINARITH:50;
+    by XREAL_1:235;
   hence B*(jS,kS)=Fi*(j,k) by A8,A9,A10,Def5;
 end;
 
@@ -1814,7 +1816,7 @@ A1:  i in dom F;
 A2:  dom F=dom L & dom F=dom W by Def3,Def4;
 A3:  SL1+L.i=SL & SW1+W.i=SW by A1,A2,Lm2;
 A4:  width Fi=W.i & len Fi=L.i by A1,A2,Def3,Def4;
-  i-'1 <=i & i in NAT by BINARITH:52,ORDINAL1:def 13;
+  i-'1 <=i & i in NAT by NAT_D:35,ORDINAL1:def 13;
   then SL1 <= SL & SW1 <=SW by POLYNOM3:18;
   then
 A5:  Seg SL1 c= Seg SL & Seg SW1 c= Seg SW by FINSEQ_1:7;
@@ -1849,7 +1851,7 @@ proof
   set MF=<*M*>^F;
   set L=Len MF;
   set W=Width MF;
-A1:  1-'1=0 by BINARITH:51;
+A1:  1-'1=0 by XREAL_1:234;
 A2:  Seg Sum (L|0)={} & Seg Sum (W|0)={} by FINSEQ_1:4,RVSUM_1:102;
   L=Len<*M*>^Len F & Len<*M*>=<*len M*> & len <*len M*>=1 &
     W=Width <*M*>^Width F & Width <*M*>=<*width M*> & len <*width M*>=1
@@ -1873,7 +1875,7 @@ proof
   set L=Len FM;
   set W=Width FM;
   set 1F=1+len F;
-A1:  1F-'1=1F-1 by BINARITH:55;
+A1:  1F-'1=1F-1 by NAT_D:37;
   L = Len F ^ Len <*M*> & W=Width F^Width<*M*> & len Len F=len F &
     len Width F=len F & Len <*M*>=<*len M*> & Width <*M*>=<*width M*>
       by Th14,Th15,Th18,Th19,FINSEQ_2:109;
@@ -2043,13 +2045,13 @@ A1:  i in Seg Sum Len F & m = min(Len F,i);
   set L=Len F;
 A2:  1<=i & i <= Sum(L|m) & Sum(L|(m-'1))<i by A1,Def1,FINSEQ_1:3,Th7;
   then
-A3:  i-Sum(L|(m-'1))=i-'Sum(L|(m-'1)) & i-Sum(L|(m-'1))<>0 by BINARITH:50;
+A3:  i-Sum(L|(m-'1))=i-'Sum(L|(m-'1)) & i-Sum(L|(m-'1))<>0 by XREAL_1:235;
   then
 A4:  i-'Sum(L|(m-'1))>=1 by NAT_1:14;
 A5:  m in dom L & dom L=dom F by A1,Def1,Def3;
   then 1 <= m & m <= len F & m <= len L by FINSEQ_3:27;
   then
-A6:  m-'1=m-1 & len (F|m)=m & len (L|m)=m by BINARITH:50,FINSEQ_1:80;
+A6:  m-'1=m-1 & len (F|m)=m & len (L|m)=m by XREAL_1:235,FINSEQ_1:80;
   then
 A7:  m=m-'1+1;
   then
@@ -2089,7 +2091,7 @@ A14: block_diagonal(F,d) = block_diagonal((F|m)^<*BF'm*>,d) by A8,Th36
              .= Sum (Width F|m)+width BF'm by Def5;
   then
 A15:  Sum Width F-'Sum (Width F|m)
-        = (Sum (Width F|m)+width BF'm)-Sum (Width F|m) by BINARITH:50,NAT_1:11
+        = (Sum (Width F|m)+width BF'm)-Sum (Width F|m) by XREAL_1:235,NAT_1:11
        .= width BF'm;
   len BFm = Sum Len (F|m) by Def5
          .= Sum (L|m) by Th17;
@@ -2111,13 +2113,13 @@ A1:  i in Seg Sum Width F & m = min(Width F,i);
   set W=Width F;
 A2:  1<=i & i <= Sum(W|m) & Sum(W|(m-'1))<i by A1,Def1,FINSEQ_1:3,Th7;
   then
-A3:  i-Sum(W|(m-'1))=i-'Sum(W|(m-'1)) & i-Sum(W|(m-'1))<>0 by BINARITH:50;
+A3:  i-Sum(W|(m-'1))=i-'Sum(W|(m-'1)) & i-Sum(W|(m-'1))<>0 by XREAL_1:235;
   then
 A4:  i-'Sum(W|(m-'1))>=1 by NAT_1:14;
 A5:  m in dom W & dom W=dom F by A1,Def1,Def4;
   then 1 <= m & m <= len W & m <= len F by FINSEQ_3:27;
   then
-A6:  m-'1=m-1 & len (W|m)=m & len (F|m)=m by BINARITH:50,FINSEQ_1:80;
+A6:  m-'1=m-1 & len (W|m)=m & len (F|m)=m by XREAL_1:235,FINSEQ_1:80;
   then
 A7:  m=m-'1+1;
   then
@@ -2156,7 +2158,7 @@ A14:  block_diagonal(F,d) = block_diagonal((F|m)^<*BF'm*>,d) by A8,Th36
        .= Sum (Len F|m)+len BF'm by Def5;
   then
 A15:  Sum Len F-'Sum (Len F|m) = (Sum (Len F|m)+len BF'm)-Sum (Len F|m)
-                                    by BINARITH:50,NAT_1:11
+                                    by XREAL_1:235,NAT_1:11
                               .= len BF'm;
   width BFm = Sum Width (F|m) by Def5
            .= Sum (W|m) by Th21;
@@ -2469,7 +2471,7 @@ A5: now let j such that
             reconsider w1=width A-1 as Element of NAT
               by A1,FINSEQ_1:4,NAT_1:21,14;
         A12:  width Da = w1+1-'1 by A1,LAPLACE:3
-                      .= w1 by BINARITH:39;
+                      .= w1 by NAT_D:34;
         A13:  dom (width A |-> a) = Seg width A by FINSEQ_2:144;
             jL<>0 by A11;
             then
@@ -2518,7 +2520,7 @@ A5:  now let j such that
        A8:  dom (width A|->a)=Seg width A &
              len (width bG|->a)=width bG by FINSEQ_2:144,69;
        A9:  len Line(bG,j)=width bG by MATRIX_1:def 8;
-           width A-'1=width A-1 by BINARITH:50,A1,FINSEQ_1:4,NAT_1:14;
+           width A-'1=width A-1 by XREAL_1:235,A1,FINSEQ_1:4,NAT_1:14;
            then
        A10: width A=(width A-'1)+1;
            now per cases;
@@ -2783,7 +2785,7 @@ A5: LAR=len A +Sum Len R & LAB=len A+Sum Len B & LAB=Sum Width AA+width b &
         then
    A7:   i=1 & j=1 by A1,A3,FINSEQ_1:4,TARSKI:def 1;
         len Deleting(A,i,j) = 1-'1 by A1,A6,LAPLACE:2
-                           .= 0 by BINARITH:51;
+                           .= 0 by XREAL_1:234;
         then
    A8:   Deleting(A,i,j)={};
         thus Deleting(block_diagonal(AA^R,a),i,j)
@@ -2836,7 +2838,7 @@ A7:  LRA=len A +Sum Len R & LBA=len A+Sum Len B & LBA=Sum Width AA+width b &
         then
     A9:  i=1 & j=1 by A1,A3,FINSEQ_1:4,TARSKI:def 1;
         len Deleting(A,i,j) = 1-'1 by A1,A8,LAPLACE:2
-                           .= 0 by BINARITH:51;
+                           .= 0 by XREAL_1:234;
         then
     A10:  Deleting(A,i,j)={};
         thus Deleting(block_diagonal(R^AA,a),iS,jS)
@@ -3030,7 +3032,7 @@ A4:  for i st P[i] holds P[i+1]
                           .= block_diagonal(<*Delete(N,1,j),N1*>,0.K)
                                by A10,A14,LAPLACE:def 1;
       A17:  i=n-'1  & i+m+1-'1=i+m & len Delete(N,1,j)=n-'1
-            by A6,BINARITH:39,MATRIX_1:def 3;
+            by A6,NAT_D:34,MATRIX_1:def 3;
           Minor(N,1,j) *D = Det block_diagonal(<*Delete(N,1,j),N1*>,0.K)
                                by A17,A5
                          .= Minor(bN,1,j) by A16,A17,A8,A6,Th16;
@@ -3208,7 +3210,7 @@ A6: for k st P[k] holds P[k+1]
                             .= n-1 by FINSEQ_1:78
                             .= k+width A2 by A8,A10;
                     then
-               A23:   card Q = k+width A2+1-'1 by BINARITH:39
+               A23:   card Q = k+width A2+1-'1 by NAT_D:34
                             .= n-'1 by A8,A10;
                     k<>0 by A8,A20;
                     then k in Seg k by FINSEQ_1:5;
@@ -3249,7 +3251,7 @@ A6: for k st P[k] holds P[k+1]
                A31:  len A1=L1+1;
                A32:  width A1=width DL by A30,LAPLACE:4;
                     then width DC=width A1-'1 & len DC=len DL & k1-'1=k
-                      by A13,LAPLACE:3,MATRIX_2:def 6,BINARITH:39;
+                      by A13,LAPLACE:3,MATRIX_2:def 6,NAT_D:34;
                     then
                A33:  len DC<>width DC & width DC=k by A8,A31,A19,FINSEQ_3:118;
                     Delete(N,i,1) = Deleting(N,i,1) by A14,A17,LAPLACE:def 1
@@ -3526,7 +3528,7 @@ A8:           [n,n] in [:Seg i,Seg i:] by ZFMISC_1:106;
                          .= 1_K by A3,A8,MATRIX_1:def 12;
           end;
           suppose n>i;
-            then n-'i=n-i & n-i<>0 by BINARITH:50;
+            then n-'i=n-i & n-i<>0 by XREAL_1:235;
             then
 A9:           n-'i>0 & n=n-'i+i;
 A10:          [n-'i,n-'i] in [:Seg j,Seg j:] by A1,A2,A3,A5,A9,Th27;
@@ -3553,7 +3555,7 @@ A14:           [n,m] in [:Seg i,Seg i:] by ZFMISC_1:106;
                           .= 0.K by A3,A11,A14,MATRIX_1:def 12;
           end;
           suppose n>i & m>i;
-             then n-'i=n-i & n-i<>0 & m-'i=m-i & m-i<>0 by BINARITH:50;
+             then n-'i=n-i & n-i<>0 & m-'i=m-i & m-i<>0 by XREAL_1:235;
              then
 A15:            n-'i>0 & n=n-'i+i & m-'i>0 & m=m-'i+i;
              then

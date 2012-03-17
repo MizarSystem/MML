@@ -31,22 +31,22 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="10">
-<Func kind="K" nr="85"/>
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="86"/>
+<Func kind="K" nr="82"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="85"/>
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="86"/>
+<Func kind="K" nr="82"/>
 </Typ>
 <Not>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="81"/>
-<Func kind="K" nr="85"/>
+<Func kind="K" nr="82"/>
+<Func kind="K" nr="86"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="88">
+<Func kind="K" nr="90">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

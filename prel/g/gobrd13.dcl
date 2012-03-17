@@ -18,15 +18,15 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="VALUED_1"/>
@@ -52,12 +52,12 @@
 </Typ>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="140">
+<Func kind="K" nr="148">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="361">
+<Func kind="K" nr="363">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -73,12 +73,12 @@
 <Cluster/>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="140">
+<Func kind="K" nr="148">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="141"/>
+<Adjective nr="145"/>
 </Cluster>
 </CCluster>
 <CCluster aid="GOBRD13" nr="2">
@@ -86,7 +86,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="141"/>
+<Adjective nr="145"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>

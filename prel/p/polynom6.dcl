@@ -99,27 +99,27 @@
 </Typ>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="49" value="false"/>
-<Adjective nr="54" value="false"/>
-<Adjective nr="73"/>
-<Adjective nr="98"/>
-<Adjective nr="99"/>
-<Adjective nr="100"/>
-<Adjective nr="105"/>
-<Adjective nr="127"/>
-<Adjective nr="128"/>
+<Adjective nr="53" value="false"/>
+<Adjective nr="58" value="false"/>
+<Adjective nr="77"/>
+<Adjective nr="102"/>
+<Adjective nr="103"/>
+<Adjective nr="104"/>
+<Adjective nr="109"/>
+<Adjective nr="131"/>
+<Adjective nr="132"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="378">
+<Func kind="K" nr="380">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="49" value="false"/>
-<Adjective nr="54" value="false"/>
-<Adjective nr="96"/>
-<Adjective nr="128"/>
+<Adjective nr="53" value="false"/>
+<Adjective nr="58" value="false"/>
+<Adjective nr="100"/>
+<Adjective nr="132"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -9,7 +9,7 @@ environ
  vocabularies PRE_TOPC, BOOLE, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
       PROB_1, LATTICES, RELAT_1, ABSVALUE, ORDINAL2, PARTFUN1, LIMFUNC1,
       FCONT_1, SEQ_1, SEQ_2, SEQM_3, RCOMP_1, FDIFF_1, PREPOWER, POWER,
-      SERIES_1, FINSEQ_4, SUPINF_2, FRECHET2;
+      SERIES_1, FINSEQ_4, SUPINF_2, FRECHET2, OPPCAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, PARTFUN1, FUNCT_2, RFUNCT_2,
       LIMFUNC1, RCOMP_1, FCONT_1, XXREAL_0, XREAL_0, COMPLEX1, ORDINAL1,
       NUMBERS, REAL_1, NAT_1, VALUED_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1,
@@ -283,12 +283,16 @@ A45:        r=z & x<=r & r<=x+t;
           hence thesis by TARSKI:def 3;
         end;
 A46:    ].x,x+t.[ c= [.x,x+t.] by XXREAL_1:25;
-A47:    f is_continuous_on [.x,x+t.] by A39,A43,FCONT_1:17,FDIFF_1:33;
+X:      right_open_halfline(0) c= dom f by A27;
+        f|right_open_halfline(0) is continuous  by A39,FDIFF_1:33;
+        then
+A47:    f|[.x,x+t.] is continuous  by A43,FCONT_1:17,X;
+Y:      [.x,x+t.] c= dom f by X,A43,XBOOLE_1:1;
         f is_differentiable_on ].x,x+t.[ by A39,A43,A46,FDIFF_1:34,XBOOLE_1:1;
         then consider s be Real such that
 A48:    0<s and
 A49:    s<1 and
-A50:    f.(x+t) = f.x + t*diff(f,x+s*t) by A42,A47,ROLLE:4;
+A50:    f.(x+t) = f.x + t*diff(f,x+s*t) by A42,A47,ROLLE:4,Y;
         0*t < s*t by A42,A48,XREAL_1:70;
         then
 A51:    0 + 0 < x+s*t by A36;
@@ -332,11 +336,15 @@ A58:        r=z & 1<=r & r<=1+t;
           hence thesis by TARSKI:def 3;
         end;
 A59:    ].1,1+t.[ c= [.1,1+t.] by XXREAL_1:25;
-A60:    f is_continuous_on [.1,1+t.] by A39,A56,FCONT_1:17,FDIFF_1:33;
+X:      right_open_halfline(0) c= dom f by A27;
+        f|right_open_halfline(0) is continuous  by A39,FDIFF_1:33;
+        then
+A60:    f|[.1,1+t.] is continuous  by A56,FCONT_1:17,X;
+Y:      [.1,1+t.] c= dom f by X,A56,XBOOLE_1:1;
         f is_differentiable_on ].1,1+t.[ by A39,A56,A59,FDIFF_1:34,XBOOLE_1:1;
         then consider s be Real such that
 A61:    0<s and s<1 and
-A62:    f.(1+t) = f.1 + t*diff(f,1+s*t) by A55,A60,ROLLE:4;
+A62:    f.(1+t) = f.1 + t*diff(f,1+s*t) by A55,A60,ROLLE:4,Y;
 A63:    0*t < s*t by A55,A61,XREAL_1:70;
         then
 A64:    0 + 0 < 1+s*t;
@@ -1312,16 +1320,16 @@ A7:       for n be Element of NAT holds (a^\N).n=0
           proof
             let n be Element of NAT;
             a.(n+N)=0 by A6,NAT_1:12;
-            hence (a^\N).n=0 by SEQM_3:def 9;
+            hence (a^\N).n=0 by NAT_1:def 3;
           end;
 A8:       now
             let e be real number such that
 A9:         e>0;
             take n=0;
             let m be Element of NAT such that n<=m;
-A10:        (ap^\N).m= ap.(m+N) by SEQM_3:def 9
+A10:        (ap^\N).m= ap.(m+N) by NAT_1:def 3
               .= (a.(m+N)) to_power p by A4
-              .= ((a^\N).m) to_power p by SEQM_3:def 9
+              .= ((a^\N).m) to_power p by NAT_1:def 3
               .= 0 to_power p by A7
               .= 0 by A1,POWER:def 2;
             (lim a) to_power p = 0 by A1,A5,POWER:def 2;
@@ -1508,7 +1516,7 @@ A55:    now
           abs(a.(k+m)-e0)<e0/2 by A54,NAT_1:12;
           then -(e0/2) <= a.(k+m)-e0 by ABSVALUE:12;
           then -(e0/2)+e0 <= a.(k+m)-e0+e0 by XREAL_1:9;
-          hence 0 < (a^\k).m by A53,SEQM_3:def 9;
+          hence 0 < (a^\k).m by A53,NAT_1:def 3;
         end;
         now
           let x be set such that
@@ -1528,9 +1536,9 @@ A59:  a^\k is convergent & lim (a^\k) = lim a by A2,SEQ_4:33;
       then ( #R p) is_differentiable_in lim (a^\k) by A52,TAYLOR_1:21;
       then ( #R p) is_continuous_in lim (a^\k) by FDIFF_1:32;
       then
-A60:  ( #R p)*(a^\k) is convergent & ( #R p).(lim (a^\k))
-      = lim ( ( #R p)*(a^\k)) by A58,A59,FCONT_1:def 1;
-A61:  ( #R p)*(a^\k) = ap^\k
+A60:  ( #R p)/*(a^\k) is convergent & ( #R p).(lim (a^\k))
+      = lim (( #R p)/*(a^\k)) by A58,A59,FCONT_1:def 1;
+A61:  ( #R p)/*(a^\k) = ap^\k
       proof
         now
           let x be set such that
@@ -1540,16 +1548,16 @@ A62:      x in NAT;
           then (a^\k).n in dom ( #R p) by A58;
           then
 A63:      (a^\k).n in right_open_halfline(0) by TAYLOR_1:def 4;
-          then a.(k+n) in right_open_halfline(0) by SEQM_3:def 9;
+          then a.(k+n) in right_open_halfline(0) by NAT_1:def 3;
           then a.(k+n) in {g where g is Real : 0<g} by XXREAL_1:230;
           then consider g be Real such that
 A64:      a.(k+n) = g & g > 0;
-          thus (( #R p)*(a^\k)).x = ( #R p).((a^\k).n) by A58,RFUNCT_2:21
+          thus (( #R p)/*(a^\k)).x = ( #R p).((a^\k).n) by A58,FUNCT_2:185
             .=((a^\k).n) #R p by A63,TAYLOR_1:def 4
-            .=(a.(k+n)) #R p by SEQM_3:def 9
+            .=(a.(k+n)) #R p by NAT_1:def 3
             .=(a.(k+n)) to_power p by A64,POWER:def 2
             .=ap.(k+n) by A4
-            .=(ap^\k).x by SEQM_3:def 9;
+            .=(ap^\k).x by NAT_1:def 3;
         end;
         hence thesis by SEQ_1:8;
       end;

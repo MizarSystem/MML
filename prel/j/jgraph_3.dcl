@@ -35,18 +35,18 @@
 </Signature>
 <FCluster aid="JGRAPH_3" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="270"/>
+<Func kind="K" nr="272"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
 <Adjective nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="261">
+<Func kind="K" nr="263">
 <Num nr="2"/>
 </Func>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="261">
+<Func kind="K" nr="263">
 <Num nr="2"/>
 </Func>
 </Func>

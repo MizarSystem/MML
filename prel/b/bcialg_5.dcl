@@ -52,19 +52,19 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="98"/>
+<Func kind="K" nr="99"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="98"/>
+<Func kind="K" nr="99"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="98"/>
+<Func kind="K" nr="99"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="98"/>
+<Func kind="K" nr="99"/>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="10">
@@ -85,7 +85,7 @@
 </RCluster>
 <FCluster aid="BCIALG_5" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="84"/>
+<Func kind="K" nr="85"/>
 <Cluster>
 <Adjective nr="67"/>
 </Cluster>

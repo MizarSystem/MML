@@ -36,11 +36,11 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="24">
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="82"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="177">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

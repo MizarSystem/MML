@@ -56,7 +56,7 @@
 </RCluster>
 <FCluster aid="TDGROUP" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="153"/>
+<Func kind="K" nr="155"/>
 <Cluster>
 <Adjective nr="47"/>
 <Adjective nr="98"/>
@@ -71,7 +71,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="161">
+<Func kind="K" nr="163">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

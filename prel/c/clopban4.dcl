@@ -19,11 +19,11 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="CLVECT_1"/>
@@ -37,11 +37,11 @@
 <ArgTypes>
 <Typ kind="G" nr="17">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="57"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="55"/>
+<Adjective nr="80"/>
+<Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="83"/>
-<Adjective nr="84"/>
 <Adjective nr="89"/>
 <Adjective nr="93"/>
 <Adjective nr="95"/>
@@ -58,7 +58,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="232">
+<Func kind="K" nr="233">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

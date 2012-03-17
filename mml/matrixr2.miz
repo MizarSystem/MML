@@ -10,10 +10,11 @@ environ
       MATRIX_1, TREES_1, ARYTM, GROUP_1, MATRIX_3, RELAT_1, BOOLE, FINSEQ_7,
       FUNCT_2, MATRIX_2, FINSEQ_2, BINOP_1, SETWISEO, MATRIXR1, CAT_1, PRALG_1,
       INCSP_1, CAT_3, RVSUM_1, QC_LANG1, EUCLID, EUCLID_2, FINSEQ_4, ORDINAL2,
-      ALGSTR_0;
+      ALGSTR_0, FUNCT_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, XXREAL_0, ZFMISC_1, ORDINAL1, NAT_1,
       NUMBERS, ENUMSET1, SETWOP_2, XCMPLX_0, XREAL_0, REAL_1, RELAT_1, FUNCT_1,
       PARTFUN1, BINOP_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSOP_1,
+      FUNCT_7,
       STRUCT_0, ALGSTR_0, MATRIX_1, FVSUM_1, RLVECT_1, FINSEQ_7, SETWISEO,
       GROUP_1, MATRIX_2, MATRIX_3, MATRIX_6, MATRIXR1, EUCLID, MATRIX_7,
       MATRIX_4, RVSUM_1, VECTSP_1, EUCLID_2, MATRPROB;
@@ -22,7 +23,7 @@ environ
       EUCLID_2, SEQ_1, VALUED_1, RVSUM_1, EUCLID;
  registrations FINSEQ_2, NAT_1, RELSET_1, MEMBERED, STRUCT_0, VECTSP_1,
       NUMBERS, XXREAL_0, MATRIX_2, FINSEQ_1, FVSUM_1, FINSET_1, XBOOLE_0,
-      VALUED_0, CARD_1;
+      VALUED_0, CARD_1, FUNCT_7;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, MATRIX_1, STRUCT_0, RLVECT_1, VECTSP_1, MATRIXR1,
       FINSEQ_1, VALUED_1;
@@ -31,7 +32,7 @@ environ
       SETWISEO, FUNCT_2, XBOOLE_0, ENUMSET1, XCMPLX_0, ZFMISC_1, MATRIX_7,
       MATRIXR1, FINSEQ_3, XXREAL_0, EUCLID_2, RVSUM_1, ORDINAL1, MATRIX10,
       MATRIX11, MATRPROB, FINSEQ_4, MATRIX_9, MATRIXC1, PARTFUN1, RELAT_1,
-      CARD_2;
+      CARD_2, FUNCT_7;
  schemes FINSEQ_4;
 
 begin :: Preliminaries
@@ -817,7 +818,7 @@ theorem Th33:
 proof
   let s1,s2,s3 be FinSequence;
   assume that
-A1: len s1 =n and
+A1: len s1 = n and
 A2: len s2 = n and
 A3: len s3 = n;
   now
@@ -1821,16 +1822,22 @@ proof
 end;
 
 definition
-  let n; let i be Nat;
+  let n,i be Nat;
   func Base_FinSeq(n,i) -> FinSequence of REAL equals
-  Replace(n |-> (0 qua Element of REAL), i,1);
-  coherence;
+   (n |-> 0)+*(i,1);
+  coherence
+   proof reconsider n as Element of NAT by ORDINAL1:def 13;
+     (n |-> 0)+*(i,1) =  Replace(n |-> 0, i,1);
+    hence thesis;
+   end;
 end;
+
+reserve n,i,j for Nat;
 
 theorem Th74:
   len Base_FinSeq(n,i) = n
 proof
-  len (Replace(n |-> 0, i,1)) = len (n |-> 0) by FINSEQ_7:7
+  len((n |-> 0)+*(i,1)) = len (n |-> 0) by FUNCT_7:99
     .= n by FINSEQ_2:69;
   hence thesis;
 end;
@@ -1840,28 +1847,23 @@ theorem Th75:
 proof
   assume
 A1: 1<=i & i<=n;
-A2: len (n |-> 0)=n by FINSEQ_2:69;
-  len Replace((n |-> 0),i,1) = len (n |-> 0) by FINSEQ_7:7
-    .= n by FINSEQ_2:69;
-  hence (Base_FinSeq(n,i)).i = (Replace((n |-> 0),i,1))/.i by A1,FINSEQ_4:24
-    .= 1 by A1,A2,FINSEQ_7:10;
+  len (n |-> 0)=n by FINSEQ_2:69;
+  then i in dom(n |-> 0) by A1,FINSEQ_3:27;
+  hence (Base_FinSeq(n,i)).i = 1 by FUNCT_7:33;
 end;
 
 theorem Th76:
-  1<=i & i<=n & 1<=j & j<=n & i<>j implies (Base_FinSeq(n,i)).j=0
+  1<=j & j<=n & i<>j implies (Base_FinSeq(n,i)).j=0
 proof
   assume
-A1: 1<=i & i<=n & 1<=j & j<=n & i<>j;
+A1: 1<=j & j<=n & i<>j;
   then
-A2: j in Seg n;
-A3: len (n |-> 0)=n by FINSEQ_2:69;
-  len Replace((n |-> 0),i,1) = len (n |-> 0) by FINSEQ_7:7
-    .= n by FINSEQ_2:69;
-  hence (Base_FinSeq(n,i)).j = (Replace(n |-> 0,i,1))/.j by A1,FINSEQ_4:24
-    .= ((n |-> 0))/.j by A1,A3,FINSEQ_7:12
-    .= ((n |-> 0)).j by A1,A3,FINSEQ_4:24
-    .= 0 by A1,A2,FINSEQ_2:71;
+A2: j in Seg n by FINSEQ_1:3;
+  thus (Base_FinSeq(n,i)).j = (n |-> 0).j by A1,FUNCT_7:34
+     .= 0 by A1,A2,FINSEQ_2:71;
 end;
+
+reserve n for Element of NAT;
 
 theorem
   Base_FinSeq(1,1)= <* 1 *> & Base_FinSeq(2,1)= <* 1,0 *> &
@@ -1900,7 +1902,8 @@ A1: 1<=i & i<=n;
 A2: len (1_Rmatrix(n))=n by MATRIX_1:25;
 A3: 1<=n by A1,XXREAL_0:2;
 A4: len Base_FinSeq(n,i)=n by Th74;
-  i in Seg n & 1 in Seg n by A1,A3;
+  i in NAT by ORDINAL1:def 13;
+  then i in Seg n & 1 in Seg n by A1,A3;
   then [i,1] in [:Seg n, Seg n:] by ZFMISC_1:106;
   then [i,1] in Indices (1.(F_Real,n)) by MATRIX_1:25;
   then consider q being FinSequence of REAL such that
@@ -1914,7 +1917,7 @@ A6: len q=n by MATRIX_1:def 3;
     let j be Nat;
     assume
 A7: 1<=j & j<=n;
-A8: j in NAT by ORDINAL1:def 13;
+A8: i in NAT & j in NAT by ORDINAL1:def 13;
     then i in Seg n & j in Seg n by A1,A7;
     then [i,j] in [:Seg n, Seg n:] by ZFMISC_1:106;
     then

@@ -1,0 +1,1007 @@
+:: Stability of the 4-2 Binary Addition Circuit Cells. Part {I}
+::  by Katsumi Wasaki
+:: 
+:: Received August 28, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, MCART_1, RELAT_1, FUNCT_1, FINSEQ_1, FUNCT_4, ZF_LANG,
+      LATTICES, MARGREL1, BINARITH, PARTFUN1, AMI_1, MSUALG_1, MSAFREE2,
+      CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1, TWOSCOMP, GFACIRC1, FTACELL1,
+      STRUCT_0;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NAT_1, MCART_1, RELAT_1,
+      NUMBERS, STRUCT_0, FUNCT_1, FUNCT_2, PARTFUN1, FINSEQ_1, FINSEQ_2,
+      MARGREL1, CARD_3, BINARITH, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2,
+      CIRCCOMB, FACIRC_1, TWOSCOMP, GFACIRC1;
+ constructors ENUMSET1, XXREAL_0, CLASSES1, BINARITH, CIRCUIT1, CIRCUIT2,
+      FACIRC_1, TWOSCOMP, NAT_1, GFACIRC1;
+ registrations RELAT_1, FRAENKEL, MARGREL1, FINSEQ_2, CARD_3, STRUCT_0,
+      MSUALG_1, CIRCCOMB, FACIRC_1, ORDINAL1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: 1. Stability of 4-2 Binary Addition Circuit Cell (TYPE-0)
+
+::========================================================================
+:: [4-2 Binary Addition Cell_i : TYPE-0]
+::
+::   Cell Module Symbol :
+::
+::                 a+ b+ c+ d+            Input : a+,b+,c+,d+ (non pair set)
+::                 |  |  |  |                     cin+ (pair)
+::               +-*--*--*--*-+    cin+
+::               |            |   /
+::            +--* FTA TYPE-0 *--+        Output : p+,q+,cout+ (pair)
+::           /   |            |
+::        cout+  +---*----*---+
+::                   |    |
+::                   p+   q+
+::
+::   Composition : Cascade by Adder Output together with two GFA TYPE-0
+::   Function    : p[i+1] + q[i] + Intermediate_Carry_out
+::                 = a[i] + b[i] + c[i] + d[i] + Intermediate_Carry_in
+::
+::                 a^{+}[i]  b^{+}[i]
+::                     |     /
+::                     |    /
+::                 +---*---*
+::                 |  GFA  *---- c^{+}[i]  Circuit Composition :
+::                 | TYPE0 |                    BitGFA0Str(a+,b+,c+)
+::                 *---*---+                    BitGFA0Str(A1,cin,d+)
+::                /    |      cin[i]           --->
+::               /   A1|     /                  FTA0Str(a+,b+,c+,d+,cin)
+::      cout[i+1]      |    /
+::                 +---*---*               Intermediate Addition and Carry:
+::                 |  GFA  *---- d^{+}[i]       A1 <= GFA0AdderOutput
+::                 | TYPE0 |                    cout[i+1] <= GFA0CarryOutput
+::                 *---*---+                    q[i] <= GFA0AdderOutput
+::                /    |                        p[i+1] <= GFA0CarryOutput
+::               /     |
+::     p^{+}[i+1]   q^{+}[i]
+::
+::   Calculation Stability : Following(s,2+2) is stable.
+::
+::=========================================================================
+
+::---------------------------------------------------------------
+:: 1-1. Circuit Definition for Intermediate Addition and Carry Circuit (TYPE-0)
+::---------------------------------------------------------------
+
+:: Def. Combined Circuit Structure of 1-bit FTA TYPE-0
+
+definition
+ let ap,bp,cp,dp,cin be set;
+ func BitFTA0Str(ap,bp,cp,dp,cin) ->
+      unsplit gate`1=arity gate`2isBoolean
+      non void strict non empty ManySortedSign equals
+:: FTACELL1:def 1
+    BitGFA0Str(ap,bp,cp) +*
+    BitGFA0Str(GFA0AdderOutput(ap,bp,cp),cin,dp);
+end;
+
+definition
+ let ap,bp,cp,dp,cin be set;
+ func BitFTA0Circ(ap,bp,cp,dp,cin) ->
+    strict Boolean gate`2=den Circuit of BitFTA0Str(ap,bp,cp,dp,cin)
+ equals
+:: FTACELL1:def 2
+    BitGFA0Circ(ap,bp,cp) +*
+    BitGFA0Circ(GFA0AdderOutput(ap,bp,cp),cin,dp);
+end;
+
+::-----------------------------------------------
+:: 1-2. Properties of 1-bit FTA Circuit Structure (TYPE-0)
+::-----------------------------------------------
+
+:: InnerVertices and InputVertices of 1-bit FTA Circuit Structure (FTA0)
+
+theorem :: FTACELL1:1
+  for ap,bp,cp,dp,cin being set holds
+  InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) =
+    {[<*ap,bp*>,xor2], GFA0AdderOutput(ap,bp,cp)} \/
+    {[<*ap,bp*>,and2], [<*bp,cp*>,and2], [<*cp,ap*>,and2],
+                        GFA0CarryOutput(ap,bp,cp)} \/
+    {[<*GFA0AdderOutput(ap,bp,cp),cin*>,xor2],
+        GFA0AdderOutput(GFA0AdderOutput(ap,bp,cp),cin,dp)} \/
+    {[<*GFA0AdderOutput(ap,bp,cp),cin*>,and2],
+     [<*cin,dp*>,and2], [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2],
+     GFA0CarryOutput(GFA0AdderOutput(ap,bp,cp),cin,dp)};
+
+theorem :: FTACELL1:2
+  for ap,bp,cp,dp,cin being set holds
+    InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) is Relation;
+
+theorem :: FTACELL1:3
+  for ap,bp,cp,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+      not cin in InnerVertices BitGFA0Str(ap,bp,cp)
+    holds
+      InputVertices BitFTA0Str(ap,bp,cp,dp,cin) = {ap,bp,cp,dp,cin};
+
+:: The Element of Carriers, InnerVertices and InputVertices (FTA0)
+
+theorem :: FTACELL1:4
+  for ap,bp,cp,dp,cin being set holds
+   ap in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   bp in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   cp in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   dp in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   cin in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*ap,bp*>,xor2] in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   GFA0AdderOutput(ap,bp,cp) in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*ap,bp*>,and2] in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*bp,cp*>,and2] in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*cp,ap*>,and2] in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   GFA0CarryOutput(ap,bp,cp) in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*GFA0AdderOutput(ap,bp,cp),cin*>,xor2]
+                             in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   GFA0AdderOutput(GFA0AdderOutput(ap,bp,cp),cin,dp)
+                             in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*GFA0AdderOutput(ap,bp,cp),cin*>,and2]
+                             in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*cin,dp*>,and2]        in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2]
+                             in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   GFA0CarryOutput(GFA0AdderOutput(ap,bp,cp),cin,dp)
+                             in the carrier of BitFTA0Str(ap,bp,cp,dp,cin);
+
+theorem :: FTACELL1:5
+  for ap,bp,cp,dp,cin being set holds
+   [<*ap,bp*>,xor2] in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   GFA0AdderOutput(ap,bp,cp) in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*ap,bp*>,and2] in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*bp,cp*>,and2] in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*cp,ap*>,and2] in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   GFA0CarryOutput(ap,bp,cp) in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*GFA0AdderOutput(ap,bp,cp),cin*>,xor2]
+                             in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   GFA0AdderOutput(GFA0AdderOutput(ap,bp,cp),cin,dp)
+                             in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*GFA0AdderOutput(ap,bp,cp),cin*>,and2]
+                             in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*cin,dp*>,and2] in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2]
+                             in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   GFA0CarryOutput(GFA0AdderOutput(ap,bp,cp),cin,dp)
+                             in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin);
+
+theorem :: FTACELL1:6
+  for ap,bp,cp,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+      not cin in InnerVertices BitGFA0Str(ap,bp,cp)
+   holds
+     ap in InputVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+     bp in InputVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+     cp in InputVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+     dp in InputVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+     cin in InputVertices BitFTA0Str(ap,bp,cp,dp,cin);
+
+::-------------------------------------------
+:: 1-3. Output Definitions of the Combined Circuit
+::-------------------------------------------
+
+:: Def. External/Internal Signal Outputs of 1-bit FTA TYPE-0
+
+definition
+ let ap,bp,cp,dp,cin be set;
+ func BitFTA0CarryOutput(ap,bp,cp,dp,cin) ->
+         Element of InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) equals
+:: FTACELL1:def 3
+    GFA0CarryOutput(ap,bp,cp);
+
+ func BitFTA0AdderOutputI(ap,bp,cp,dp,cin) ->
+         Element of InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) equals
+:: FTACELL1:def 4
+    GFA0AdderOutput(ap,bp,cp);
+
+ func BitFTA0AdderOutputP(ap,bp,cp,dp,cin) ->
+         Element of InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) equals
+:: FTACELL1:def 5
+    GFA0CarryOutput(GFA0AdderOutput(ap,bp,cp),cin,dp);
+
+ func BitFTA0AdderOutputQ(ap,bp,cp,dp,cin) ->
+         Element of InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) equals
+:: FTACELL1:def 6
+    GFA0AdderOutput(GFA0AdderOutput(ap,bp,cp),cin,dp);
+end;
+
+::----------------------------------------------------
+:: 1-4. Stability of the Combined Circuit and its Outputs
+::----------------------------------------------------
+
+:: Intermediate (External/Internal) Carry/Adder Outputs after Two-steps
+
+theorem :: FTACELL1:7
+  for ap,bp,cp being non pair set
+  for dp,cin being set
+   for s being State of BitFTA0Circ(ap,bp,cp,dp,cin)
+   for a1,a2,a3 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bp & a3 = s.cp
+   holds Following(s,2).BitFTA0CarryOutput(ap,bp,cp,dp,cin)
+         = (a1 '&' a2) 'or' (a2 '&' a3) 'or' (a3 '&' a1) &
+         Following(s,2).BitFTA0AdderOutputI(ap,bp,cp,dp,cin)
+         = a1 'xor' a2 'xor' a3;
+
+:: Temporal (Internal) Calculations after Two-steps
+
+theorem :: FTACELL1:8
+  for ap,bp,cp,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+      not cin in InnerVertices BitGFA0Str(ap,bp,cp)
+   for s being State of BitFTA0Circ(ap,bp,cp,dp,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bp & a3 = s.cp & a4 = s.dp & a5 = s.cin
+   holds Following(s,2).GFA0AdderOutput(ap,bp,cp) = a1 'xor' a2 'xor' a3 &
+         Following(s,2).ap = a1 & Following(s,2).bp = a2 &
+         Following(s,2).cp = a3 & Following(s,2).dp = a4 &
+         Following(s,2).cin = a5;
+
+:: Main Proposition #1-1 (External Circuit Outputs after Four-steps) FTA0
+
+theorem :: FTACELL1:9
+  for ap,bp,cp,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+      not cin in InnerVertices BitGFA0Str(ap,bp,cp)
+   for s being State of BitFTA0Circ(ap,bp,cp,dp,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bp & a3 = s.cp & a4 = s.dp & a5 = s.cin
+   holds Following(s,4).BitFTA0AdderOutputP(ap,bp,cp,dp,cin)
+         = ((a1 'xor' a2 'xor' a3) '&' a5) 'or'
+           (a5 '&' a4) 'or' (a4 '&' (a1 'xor' a2 'xor' a3)) &
+         Following(s,4).BitFTA0AdderOutputQ(ap,bp,cp,dp,cin)
+         = a1 'xor' a2 'xor' a3 'xor' a4 'xor' a5;
+
+:: Main Proposition #1-2 (The Whole Circuit Stability after Four-steps) FTA0
+
+theorem :: FTACELL1:10
+  for ap,bp,cp,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2]
+   for s being State of BitFTA0Circ(ap,bp,cp,dp,cin)
+    holds Following(s,4) is stable;
+
+begin :: 2. Stability of 4-2 Binary Addition Circuit Cell (TYPE-1)
+
+::========================================================================
+:: [4-2 Binary Addition Cell_i : TYPE-1]
+::
+::   Cell Module Symbol :
+::
+::                 a+ b- c+ d-            Input : a+,b-,c+,d- (non pair set)
+::                 |  |  |  |                     cin+ (pair)
+::               +-*--O--*--O-+    cin+
+::               |            |   /
+::            +--* FTA TYPE-1 *--+        Output : p-,q+,cout+ (pair)
+::           /   |            |
+::        cout+  +---O----*---+
+::                   |    |
+::                   p-   q+
+::
+::   Composition : Cascade by Adder Output together with GFA TYPE-1 and TYPE-2
+::   Function    : -p[i+1] + q[i] + Intermediate_Carry_out
+::                  = a[i] - b[i] + c[i] - d[i] + Intermediate_Carry_in
+::
+::                 a^{+}[i]  b^{-}[i]
+::                     |     /
+::                     |    /
+::                 +---*---O
+::                 |  GFA  *---- c^{+}[i]  Circuit Composition :
+::                 | TYPE1 |                    BitGFA1Str(a+,b-,c+)
+::                 *---O---+                    BitGFA2Str(A1,cin,d-)
+::                /    |      cin[i]           --->
+::               /   A1|     /                  FTA1Str(a+,b-,c+,d-,cin)
+::      cout[i+1]      |    /
+::                 +---O---*               Intermediate Addition and Carry:
+::                 |  GFA  O---- d^{-}[i]       A1 <= GFA1AdderOutput
+::                 | TYPE2 |                    cout[i+1] <= GFA1CarryOutput
+::                 O---*---+                    q[i] <= GFA2AdderOutput
+::                /    |                        p[i+1] <= GFA2CarryOutput
+::               /     |
+::     p^{-}[i+1]   q^{+}[i]
+::
+::   Calculation Stability : Following(s,2+2) is stable.
+::
+::=========================================================================
+
+::---------------------------------------------------------------
+:: 2-1. Circuit Definition for Intermediate Addition and Carry Circuit (TYPE-1)
+::---------------------------------------------------------------
+
+:: Def. Combined Circuit Structure of 1-bit FTA TYPE-1
+
+definition
+ let ap,bm,cp,dm,cin be set;
+ func BitFTA1Str(ap,bm,cp,dm,cin) ->
+      unsplit gate`1=arity gate`2isBoolean
+      non void strict non empty ManySortedSign equals
+:: FTACELL1:def 7
+    BitGFA1Str(ap,bm,cp) +*
+    BitGFA2Str(GFA1AdderOutput(ap,bm,cp),cin,dm);
+end;
+
+definition
+ let ap,bm,cp,dm,cin be set;
+ func BitFTA1Circ(ap,bm,cp,dm,cin) ->
+    strict Boolean gate`2=den Circuit of BitFTA1Str(ap,bm,cp,dm,cin)
+ equals
+:: FTACELL1:def 8
+    BitGFA1Circ(ap,bm,cp) +*
+    BitGFA2Circ(GFA1AdderOutput(ap,bm,cp),cin,dm);
+end;
+
+::-----------------------------------------------
+:: 2-2. Properties of 1-bit FTA Structure and Circuit (TYPE-1)
+::-----------------------------------------------
+
+:: InnerVertices and InputVertices of 1-bit FTA Circuit Structure (FTA1)
+
+theorem :: FTACELL1:11
+  for ap,bm,cp,dm,cin being set holds
+  InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) =
+    {[<*ap,bm*>,xor2c], GFA1AdderOutput(ap,bm,cp)} \/
+    {[<*ap,bm*>,and2c], [<*bm,cp*>,and2a], [<*cp,ap*>,and2],
+                        GFA1CarryOutput(ap,bm,cp)} \/
+    {[<*GFA1AdderOutput(ap,bm,cp),cin*>,xor2c],
+        GFA2AdderOutput(GFA1AdderOutput(ap,bm,cp),cin,dm)} \/
+    {[<*GFA1AdderOutput(ap,bm,cp),cin*>,and2a],
+     [<*cin,dm*>,and2c], [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b],
+     GFA2CarryOutput(GFA1AdderOutput(ap,bm,cp),cin,dm)};
+
+theorem :: FTACELL1:12
+  for ap,bm,cp,dm,cin being set holds
+    InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) is Relation;
+
+theorem :: FTACELL1:13
+  for ap,bm,cp,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+      not cin in InnerVertices BitGFA1Str(ap,bm,cp)
+    holds
+      InputVertices BitFTA1Str(ap,bm,cp,dm,cin) = {ap,bm,cp,dm,cin};
+
+:: The Element of Carriers, InnerVertices and InputVertices (FTA1)
+
+theorem :: FTACELL1:14
+  for ap,bm,cp,dm,cin being set holds
+   ap in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   bm in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   cp in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   dm in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   cin in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*ap,bm*>,xor2c] in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   GFA1AdderOutput(ap,bm,cp) in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*ap,bm*>,and2c] in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*bm,cp*>,and2a] in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*cp,ap*>,and2 ] in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   GFA1CarryOutput(ap,bm,cp) in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*GFA1AdderOutput(ap,bm,cp),cin*>,xor2c]
+                             in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   GFA2AdderOutput(GFA1AdderOutput(ap,bm,cp),cin,dm)
+                             in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*GFA1AdderOutput(ap,bm,cp),cin*>,and2a]
+                             in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*cin,dm*>,and2c]        in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b]
+                             in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   GFA2CarryOutput(GFA1AdderOutput(ap,bm,cp),cin,dm)
+                             in the carrier of BitFTA1Str(ap,bm,cp,dm,cin);
+
+theorem :: FTACELL1:15
+  for ap,bm,cp,dm,cin being set holds
+   [<*ap,bm*>,xor2c] in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   GFA1AdderOutput(ap,bm,cp) in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*ap,bm*>,and2c] in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*bm,cp*>,and2a] in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*cp,ap*>,and2 ] in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   GFA1CarryOutput(ap,bm,cp) in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*GFA1AdderOutput(ap,bm,cp),cin*>,xor2c]
+                             in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   GFA2AdderOutput(GFA1AdderOutput(ap,bm,cp),cin,dm)
+                             in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*GFA1AdderOutput(ap,bm,cp),cin*>,and2a]
+                             in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*cin,dm*>,and2c] in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b]
+                             in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   GFA2CarryOutput(GFA1AdderOutput(ap,bm,cp),cin,dm)
+                             in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin);
+
+theorem :: FTACELL1:16
+  for ap,bm,cp,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+      not cin in InnerVertices BitGFA1Str(ap,bm,cp)
+   holds
+     ap in InputVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+     bm in InputVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+     cp in InputVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+     dm in InputVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+     cin in InputVertices BitFTA1Str(ap,bm,cp,dm,cin);
+
+::-------------------------------------------
+:: 2-3. Output Definitions of the Combined Circuit
+::-------------------------------------------
+
+:: Def. External/Internal Signal Outputs of 1-bit FTA TYPE-1
+
+definition
+ let ap,bm,cp,dm,cin be set;
+ func BitFTA1CarryOutput(ap,bm,cp,dm,cin) ->
+         Element of InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) equals
+:: FTACELL1:def 9
+    GFA1CarryOutput(ap,bm,cp);
+
+ func BitFTA1AdderOutputI(ap,bm,cp,dm,cin) ->
+         Element of InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) equals
+:: FTACELL1:def 10
+    GFA1AdderOutput(ap,bm,cp);
+
+ func BitFTA1AdderOutputP(ap,bm,cp,dm,cin) ->
+         Element of InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) equals
+:: FTACELL1:def 11
+    GFA2CarryOutput(GFA1AdderOutput(ap,bm,cp),cin,dm);
+
+ func BitFTA1AdderOutputQ(ap,bm,cp,dm,cin) ->
+         Element of InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) equals
+:: FTACELL1:def 12
+    GFA2AdderOutput(GFA1AdderOutput(ap,bm,cp),cin,dm);
+end;
+
+::-----------------------------------
+:: 2-4. Stability of the Combined Circuit and its Outputs
+::-----------------------------------
+
+:: Intermediate (External/Internal) Carry/Adder Outputs after Two-steps
+
+theorem :: FTACELL1:17
+  for ap,bm,cp being non pair set
+  for dm,cin being set
+   for s being State of BitFTA1Circ(ap,bm,cp,dm,cin)
+   for a1,a2,a3 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bm & a3 = s.cp
+   holds Following(s,2).BitFTA1CarryOutput(ap,bm,cp,dm,cin)
+         = (a1 '&' 'not' a2) 'or' ('not' a2 '&' a3) 'or' (a3 '&' a1) &
+         Following(s,2).BitFTA1AdderOutputI(ap,bm,cp,dm,cin)
+         = 'not' (a1 'xor' 'not' a2 'xor' a3);
+
+:: Temporal (Internal) Calculations after Two-steps
+
+theorem :: FTACELL1:18
+  for ap,bm,cp,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+      not cin in InnerVertices BitGFA1Str(ap,bm,cp)
+   for s being State of BitFTA1Circ(ap,bm,cp,dm,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bm & a3 = s.cp & a4 = s.dm & a5 = s.cin
+   holds Following(s,2).GFA1AdderOutput(ap,bm,cp)
+          = 'not' (a1 'xor' 'not' a2 'xor' a3) &
+         Following(s,2).ap = a1 & Following(s,2).bm = a2 &
+         Following(s,2).cp = a3 & Following(s,2).dm = a4 &
+         Following(s,2).cin = a5;
+
+:: Main Proposition #2-1 (External Circuit Outputs after Four-steps) FTA1
+
+theorem :: FTACELL1:19
+  for ap,bm,cp,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+      not cin in InnerVertices BitGFA1Str(ap,bm,cp)
+   for s being State of BitFTA1Circ(ap,bm,cp,dm,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bm & a3 = s.cp & a4 = s.dm & a5 = s.cin
+   holds Following(s,4).BitFTA1AdderOutputP(ap,bm,cp,dm,cin)
+         = 'not' (((a1 'xor' 'not' a2 'xor' a3) '&' a5) 'or'
+                  (a5 '&' 'not' a4) 'or'
+                  ('not' a4 '&' (a1 'xor' 'not' a2 'xor' a3))) &
+         Following(s,4).BitFTA1AdderOutputQ(ap,bm,cp,dm,cin)
+         = a1 'xor' 'not' a2 'xor' a3 'xor' 'not' a4 'xor' a5;
+
+:: Main Proposition #2-2 (The Whole Circuit Stability after Four-steps) FTA1
+
+theorem :: FTACELL1:20
+  for ap,bm,cp,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b]
+   for s being State of BitFTA1Circ(ap,bm,cp,dm,cin)
+    holds Following(s,4) is stable;
+
+begin :: 3. Stability of 4-2 Binary Addition Circuit Cell (TYPE-2)
+
+::========================================================================
+:: [4-2 Binary Addition Cell_i : TYPE-2]
+::
+::   Cell Module Symbol :
+::
+::                 a- b+ c- d+            Input : a-,b+,c-,d+ (non pair set)
+::                 |  |  |  |                     cin- (pair)
+::               +-O--*--O--*-+    cin-
+::               |            |   /
+::            +--O FTA TYPE-2 O--+        Output : p+,q-,cout- (pair)
+::           /   |            |
+::        cout-  +---*----O---+
+::                   |    |
+::                   p+   q-
+::
+::   Composition : Cascade by Adder Output together with GFA TYPE-2 and TYPE-1
+::   Function    : p[i+1] - q[i] - Intermediate_Carry_out
+::                  = -a[i] + b[i] - c[i] + d[i] - Intermediate_Carry_in
+::
+::                 a^{-}[i]  b^{+}[i]
+::                     |     /
+::                     |    /
+::                 +---O---*
+::                 |  GFA  O---- c^{-}[i]  Circuit Composition :
+::                 | TYPE2 |                    BitGFA2Str(a-,b+,c-)
+::                 O---*---+                    BitGFA1Str(A1,cin,d+)
+::                /    |      cin[i]           --->
+::               /   A1|     /                  FTA2Str(a-,b+,c-,d+,cin)
+::      cout[i+1]      |    /
+::                 +---*---O               Intermediate Addition and Carry:
+::                 |  GFA  *---- d^{+}[i]       A1 <= GFA2AdderOutput
+::                 | TYPE1 |                    cout[i+1] <= GFA2CarryOutput
+::                 *---O---+                    q[i] <= GFA1AdderOutput
+::                /    |                        p[i+1] <= GFA1CarryOutput
+::               /     |
+::     p^{+}[i+1]   q^{-}[i]
+::
+::   Calculation Stability : Following(s,2+2) is stable.
+::
+::=========================================================================
+
+::---------------------------------------------------------------
+:: 3-1. Circuit Definition for Intermediate Addition and Carry Circuit (TYPE-2)
+::---------------------------------------------------------------
+
+:: Def. Combined Circuit Structure of 1-bit FTA TYPE-2
+
+definition
+ let am,bp,cm,dp,cin be set;
+ func BitFTA2Str(am,bp,cm,dp,cin) ->
+      unsplit gate`1=arity gate`2isBoolean
+      non void strict non empty ManySortedSign equals
+:: FTACELL1:def 13
+    BitGFA2Str(am,bp,cm) +*
+    BitGFA1Str(GFA2AdderOutput(am,bp,cm),cin,dp);
+end;
+
+definition
+ let am,bp,cm,dp,cin be set;
+ func BitFTA2Circ(am,bp,cm,dp,cin) ->
+    strict Boolean gate`2=den Circuit of BitFTA2Str(am,bp,cm,dp,cin)
+ equals
+:: FTACELL1:def 14
+    BitGFA2Circ(am,bp,cm) +*
+    BitGFA1Circ(GFA2AdderOutput(am,bp,cm),cin,dp);
+end;
+
+::-----------------------------------------------
+:: 3-2. Properties of 1-bit FTA Structure and Circuit (TYPE-2)
+::-----------------------------------------------
+
+:: InnerVertices and InputVertices of 1-bit FTA Circuit Structure (FTA2)
+
+theorem :: FTACELL1:21
+  for am,bp,cm,dp,cin being set holds
+  InnerVertices BitFTA2Str(am,bp,cm,dp,cin) =
+    {[<*am,bp*>,xor2c], GFA2AdderOutput(am,bp,cm)} \/
+    {[<*am,bp*>,and2a], [<*bp,cm*>,and2c], [<*cm,am*>,and2b],
+                        GFA2CarryOutput(am,bp,cm)} \/
+    {[<*GFA2AdderOutput(am,bp,cm),cin*>,xor2c],
+        GFA1AdderOutput(GFA2AdderOutput(am,bp,cm),cin,dp)} \/
+    {[<*GFA2AdderOutput(am,bp,cm),cin*>,and2c],
+     [<*cin,dp*>,and2a], [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2],
+     GFA1CarryOutput(GFA2AdderOutput(am,bp,cm),cin,dp)};
+
+theorem :: FTACELL1:22
+  for am,bp,cm,dp,cin being set holds
+    InnerVertices BitFTA2Str(am,bp,cm,dp,cin) is Relation;
+
+theorem :: FTACELL1:23
+  for am,bp,cm,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+      not cin in InnerVertices BitGFA2Str(am,bp,cm)
+    holds
+      InputVertices BitFTA2Str(am,bp,cm,dp,cin) = {am,bp,cm,dp,cin};
+
+:: The Element of Carriers, InnerVertices and InputVertices (FTA2)
+
+theorem :: FTACELL1:24
+  for am,bp,cm,dp,cin being set holds
+   am in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   bp in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   cm in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   dp in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   cin in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*am,bp*>,xor2c] in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   GFA2AdderOutput(am,bp,cm) in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*am,bp*>,and2a] in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*bp,cm*>,and2c] in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*cm,am*>,and2b] in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   GFA2CarryOutput(am,bp,cm) in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*GFA2AdderOutput(am,bp,cm),cin*>,xor2c]
+                             in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   GFA1AdderOutput(GFA2AdderOutput(am,bp,cm),cin,dp)
+                             in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*GFA2AdderOutput(am,bp,cm),cin*>,and2c]
+                             in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*cin,dp*>,and2a]        in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2]
+                             in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   GFA1CarryOutput(GFA2AdderOutput(am,bp,cm),cin,dp)
+                             in the carrier of BitFTA2Str(am,bp,cm,dp,cin);
+
+theorem :: FTACELL1:25
+  for am,bp,cm,dp,cin being set holds
+   [<*am,bp*>,xor2c] in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   GFA2AdderOutput(am,bp,cm) in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*am,bp*>,and2a] in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*bp,cm*>,and2c] in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*cm,am*>,and2b] in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   GFA2CarryOutput(am,bp,cm) in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*GFA2AdderOutput(am,bp,cm),cin*>,xor2c]
+                             in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   GFA1AdderOutput(GFA2AdderOutput(am,bp,cm),cin,dp)
+                             in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*GFA2AdderOutput(am,bp,cm),cin*>,and2c]
+                             in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*cin,dp*>,and2a] in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2]
+                             in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   GFA1CarryOutput(GFA2AdderOutput(am,bp,cm),cin,dp)
+                             in InnerVertices BitFTA2Str(am,bp,cm,dp,cin);
+
+theorem :: FTACELL1:26
+  for am,bp,cm,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+      not cin in InnerVertices BitGFA2Str(am,bp,cm)
+   holds
+     am in InputVertices BitFTA2Str(am,bp,cm,dp,cin) &
+     bp in InputVertices BitFTA2Str(am,bp,cm,dp,cin) &
+     cm in InputVertices BitFTA2Str(am,bp,cm,dp,cin) &
+     dp in InputVertices BitFTA2Str(am,bp,cm,dp,cin) &
+     cin in InputVertices BitFTA2Str(am,bp,cm,dp,cin);
+
+::-------------------------------------------
+:: 3-3. Output Definitions of the Combined Circuit
+::-------------------------------------------
+
+:: Def. External/Internal Signal Outputs of 1-bit FTA TYPE-2
+
+definition
+ let am,bp,cm,dp,cin be set;
+ func BitFTA2CarryOutput(am,bp,cm,dp,cin) ->
+         Element of InnerVertices BitFTA2Str(am,bp,cm,dp,cin) equals
+:: FTACELL1:def 15
+    GFA2CarryOutput(am,bp,cm);
+
+ func BitFTA2AdderOutputI(am,bp,cm,dp,cin) ->
+         Element of InnerVertices BitFTA2Str(am,bp,cm,dp,cin) equals
+:: FTACELL1:def 16
+    GFA2AdderOutput(am,bp,cm);
+
+func BitFTA2AdderOutputP(am,bp,cm,dp,cin) ->
+         Element of InnerVertices BitFTA2Str(am,bp,cm,dp,cin) equals
+:: FTACELL1:def 17
+    GFA1CarryOutput(GFA2AdderOutput(am,bp,cm),cin,dp);
+
+ func BitFTA2AdderOutputQ(am,bp,cm,dp,cin) ->
+         Element of InnerVertices BitFTA2Str(am,bp,cm,dp,cin) equals
+:: FTACELL1:def 18
+    GFA1AdderOutput(GFA2AdderOutput(am,bp,cm),cin,dp);
+end;
+
+::-----------------------------------
+:: 3-4. Stability of the Combined Circuit and its Outputs
+::-----------------------------------
+
+:: Intermediate (External/Internal) Carry/Adder Outputs after Two-steps
+
+theorem :: FTACELL1:27
+  for am,bp,cm being non pair set
+  for dp,cin being set
+   for s being State of BitFTA2Circ(am,bp,cm,dp,cin)
+   for a1,a2,a3 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bp & a3 = s.cm
+   holds Following(s,2).BitFTA2CarryOutput(am,bp,cm,dp,cin)
+          = 'not' (('not' a1 '&' a2) 'or' (a2 '&' 'not' a3) 'or'
+                   ('not' a3 '&' 'not' a1)) &
+         Following(s,2).BitFTA2AdderOutputI(am,bp,cm,dp,cin)
+          = 'not' a1 'xor' a2 'xor' 'not' a3;
+
+:: Temporal (Internal) Calculations after Two-steps
+
+theorem :: FTACELL1:28
+  for am,bp,cm,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+      not cin in InnerVertices BitGFA2Str(am,bp,cm)
+   for s being State of BitFTA2Circ(am,bp,cm,dp,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bp & a3 = s.cm & a4 = s.dp & a5 = s.cin
+   holds Following(s,2).GFA2AdderOutput(am,bp,cm)
+          = 'not' a1 'xor' a2 'xor' 'not' a3 &
+         Following(s,2).am = a1 & Following(s,2).bp = a2 &
+         Following(s,2).cm = a3 & Following(s,2).dp = a4 &
+         Following(s,2).cin = a5;
+
+:: Main Proposition #3-1 (External Circuit Outputs after Four-steps) FTA2
+
+theorem :: FTACELL1:29
+  for am,bp,cm,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+      not cin in InnerVertices BitGFA2Str(am,bp,cm)
+   for s being State of BitFTA2Circ(am,bp,cm,dp,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bp & a3 = s.cm & a4 = s.dp & a5 = s.cin
+   holds Following(s,4).BitFTA2AdderOutputP(am,bp,cm,dp,cin)
+          = (('not' a1 'xor' a2 'xor' 'not' a3) '&' 'not' a5) 'or'
+            ('not' a5 '&' a4) 'or'
+            (a4 '&' ('not' a1 'xor' a2 'xor' 'not' a3)) &
+         Following(s,4).BitFTA2AdderOutputQ(am,bp,cm,dp,cin)
+          = 'not' ('not' a1 'xor' a2 'xor' 'not' a3 'xor' a4 'xor' 'not' a5);
+
+:: Main Proposition #3-2 (The Whole Circuit Stability after Four-steps) FTA2
+
+theorem :: FTACELL1:30
+  for am,bp,cm,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2]
+   for s being State of BitFTA2Circ(am,bp,cm,dp,cin)
+    holds Following(s,4) is stable;
+
+begin :: 4. Stability of 4-2 Binary Addition Circuit Cell (TYPE-3)
+
+::========================================================================
+:: [4-2 Binary Addition Cell_i : TYPE-3]
+::
+::   Cell Module Symbol :
+::
+::                 a- b- c- d-            Input : a-,b-,c-,d- (non pair set)
+::                 |  |  |  |                     cin- (pair)
+::               +-O--O--O--O-+    cin-
+::               |            |   /
+::            +--O FTA TYPE-3 O--+        Output : p-,q-,cout- (pair)
+::           /   |            |
+::        cout-  +---O----O---+
+::                   |    |
+::                   p-   q-
+::
+::   Composition : Cascade by Adder Output together with two GFA TYPE-3
+::   Function    : -p[i+1] - q[i] - Intermediate_Carry_out
+::                 = -a[i] - b[i] - c[i] - d[i] - Intermediate_Carry_in
+::
+::                 a^{-}[i]  b^{-}[i]
+::                     |     /
+::                     |    /
+::                 +---O---O
+::                 |  GFA  O---- c^{-}[i]  Circuit Composition :
+::                 | TYPE3 |                    BitGFA3Str(a-,b-,c-)
+::                 O---O---+                    BitGFA3Str(A1,cin,d-)
+::                /    |      cin[i]           --->
+::               /   A1|     /                  FTA3Str(a-,b-,c-,d-,cin)
+::      cout[i+1]      |    /
+::                 +---O---O               Intermediate Addition and Carry:
+::                 |  GFA  O---- d^{-}[i]       A1 <= GFA3AdderOutput
+::                 | TYPE3 |                    cout[i+1] <= GFA3CarryOutput
+::                 O---O---+                    q[i] <= GFA3AdderOutput
+::                /    |                        p[i+1] <= GFA3CarryOutput
+::               /     |
+::     p^{-}[i+1]   q^{-}[i]
+::
+::   Calculation Stability : Following(s,2+2) is stable.
+::
+::=========================================================================
+
+::---------------------------------------------------------------
+:: 4-1. Circuit Definition for Intermediate Addition and Carry Circuit (TYPE-3)
+::---------------------------------------------------------------
+
+:: Def. Combined Circuit Structure of 1-bit FTA TYPE-2
+
+definition
+ let am,bm,cm,dm,cin be set;
+ func BitFTA3Str(am,bm,cm,dm,cin) ->
+      unsplit gate`1=arity gate`2isBoolean
+      non void strict non empty ManySortedSign equals
+:: FTACELL1:def 19
+    BitGFA3Str(am,bm,cm) +*
+    BitGFA3Str(GFA3AdderOutput(am,bm,cm),cin,dm);
+end;
+
+definition
+ let am,bm,cm,dm,cin be set;
+ func BitFTA3Circ(am,bm,cm,dm,cin) ->
+    strict Boolean gate`2=den Circuit of BitFTA3Str(am,bm,cm,dm,cin)
+ equals
+:: FTACELL1:def 20
+    BitGFA3Circ(am,bm,cm) +*
+    BitGFA3Circ(GFA3AdderOutput(am,bm,cm),cin,dm);
+end;
+
+::-----------------------------------------------
+:: 4-2. Properties of 1-bit FTA Structure and Circuit (TYPE-3)
+::-----------------------------------------------
+
+:: InnerVertices and InputVertices of 1-bit FTA Circuit Structure (FTA3)
+
+theorem :: FTACELL1:31
+  for am,bm,cm,dm,cin being set holds
+  InnerVertices BitFTA3Str(am,bm,cm,dm,cin) =
+    {[<*am,bm*>,xor2], GFA3AdderOutput(am,bm,cm)} \/
+    {[<*am,bm*>,and2b], [<*bm,cm*>,and2b], [<*cm,am*>,and2b],
+                        GFA3CarryOutput(am,bm,cm)} \/
+    {[<*GFA3AdderOutput(am,bm,cm),cin*>,xor2],
+        GFA3AdderOutput(GFA3AdderOutput(am,bm,cm),cin,dm)} \/
+    {[<*GFA3AdderOutput(am,bm,cm),cin*>,and2b],
+     [<*cin,dm*>,and2b], [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b],
+     GFA3CarryOutput(GFA3AdderOutput(am,bm,cm),cin,dm)};
+
+theorem :: FTACELL1:32
+  for am,bm,cm,dm,cin being set holds
+    InnerVertices BitFTA3Str(am,bm,cm,dm,cin) is Relation;
+
+theorem :: FTACELL1:33
+  for am,bm,cm,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+      not cin in InnerVertices BitGFA3Str(am,bm,cm)
+    holds
+      InputVertices BitFTA3Str(am,bm,cm,dm,cin) = {am,bm,cm,dm,cin};
+
+:: The Element of Carriers, InnerVertices and InputVertices (FTA3)
+
+theorem :: FTACELL1:34
+  for am,bm,cm,dm,cin being set holds
+   am in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   bm in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   cm in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   dm in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   cin in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*am,bm*>,xor2] in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   GFA3AdderOutput(am,bm,cm) in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*am,bm*>,and2b] in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*bm,cm*>,and2b] in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*cm,am*>,and2b] in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   GFA3CarryOutput(am,bm,cm) in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*GFA3AdderOutput(am,bm,cm),cin*>,xor2]
+                             in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   GFA3AdderOutput(GFA3AdderOutput(am,bm,cm),cin,dm)
+                             in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*GFA3AdderOutput(am,bm,cm),cin*>,and2b]
+                             in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*cin,dm*>,and2b]        in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b]
+                             in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   GFA3CarryOutput(GFA3AdderOutput(am,bm,cm),cin,dm)
+                             in the carrier of BitFTA3Str(am,bm,cm,dm,cin);
+
+theorem :: FTACELL1:35
+  for am,bm,cm,dm,cin being set holds
+   [<*am,bm*>,xor2] in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   GFA3AdderOutput(am,bm,cm) in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*am,bm*>,and2b] in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*bm,cm*>,and2b] in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*cm,am*>,and2b] in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   GFA3CarryOutput(am,bm,cm) in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*GFA3AdderOutput(am,bm,cm),cin*>,xor2]
+                             in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   GFA3AdderOutput(GFA3AdderOutput(am,bm,cm),cin,dm)
+                             in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*GFA3AdderOutput(am,bm,cm),cin*>,and2b]
+                             in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*cin,dm*>,and2b] in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b]
+                             in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   GFA3CarryOutput(GFA3AdderOutput(am,bm,cm),cin,dm)
+                             in InnerVertices BitFTA3Str(am,bm,cm,dm,cin);
+
+theorem :: FTACELL1:36
+  for am,bm,cm,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+      not cin in InnerVertices BitGFA3Str(am,bm,cm)
+   holds
+     am in InputVertices BitFTA3Str(am,bm,cm,dm,cin) &
+     bm in InputVertices BitFTA3Str(am,bm,cm,dm,cin) &
+     cm in InputVertices BitFTA3Str(am,bm,cm,dm,cin) &
+     dm in InputVertices BitFTA3Str(am,bm,cm,dm,cin) &
+     cin in InputVertices BitFTA3Str(am,bm,cm,dm,cin);
+
+::-------------------------------------------
+:: 4-3. Output Definitions of the Combined Circuit
+::-------------------------------------------
+
+:: Def. External/Internal Signal Outputs of 1-bit FTA TYPE-3
+
+definition
+ let am,bm,cm,dm,cin be set;
+ func BitFTA3CarryOutput(am,bm,cm,dm,cin) ->
+         Element of InnerVertices BitFTA3Str(am,bm,cm,dm,cin) equals
+:: FTACELL1:def 21
+    GFA3CarryOutput(am,bm,cm);
+
+ func BitFTA3AdderOutputI(am,bm,cm,dm,cin) ->
+         Element of InnerVertices BitFTA3Str(am,bm,cm,dm,cin) equals
+:: FTACELL1:def 22
+    GFA3AdderOutput(am,bm,cm);
+
+ func BitFTA3AdderOutputP(am,bm,cm,dm,cin) ->
+         Element of InnerVertices BitFTA3Str(am,bm,cm,dm,cin) equals
+:: FTACELL1:def 23
+    GFA3CarryOutput(GFA3AdderOutput(am,bm,cm),cin,dm);
+
+ func BitFTA3AdderOutputQ(am,bm,cm,dm,cin) ->
+         Element of InnerVertices BitFTA3Str(am,bm,cm,dm,cin) equals
+:: FTACELL1:def 24
+    GFA3AdderOutput(GFA3AdderOutput(am,bm,cm),cin,dm);
+end;
+
+::-----------------------------------
+:: 4-4. Stability of the Combined Circuit and its Outputs
+::-----------------------------------
+
+:: Intermediate (External/Internal) Carry/Adder Outputs after Two-steps
+
+theorem :: FTACELL1:37
+  for am,bm,cm being non pair set
+  for dm,cin being set
+   for s being State of BitFTA3Circ(am,bm,cm,dm,cin)
+   for a1,a2,a3 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bm & a3 = s.cm
+   holds Following(s,2).BitFTA3CarryOutput(am,bm,cm,dm,cin)
+          = 'not' (('not' a1 '&' 'not' a2) 'or' ('not' a2 '&' 'not' a3) 'or'
+                   ('not' a3 '&' 'not' a1)) &
+         Following(s,2).BitFTA3AdderOutputI(am,bm,cm,dm,cin)
+          = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3);
+
+:: Temporal (Internal) Calculations after Two-steps
+
+theorem :: FTACELL1:38
+  for am,bm,cm,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+      not cin in InnerVertices BitGFA3Str(am,bm,cm)
+   for s being State of BitFTA3Circ(am,bm,cm,dm,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bm & a3 = s.cm & a4 = s.dm & a5 = s.cin
+   holds Following(s,2).GFA3AdderOutput(am,bm,cm)
+          = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3) &
+         Following(s,2).am = a1 & Following(s,2).bm = a2 &
+         Following(s,2).cm = a3 & Following(s,2).dm = a4 &
+         Following(s,2).cin = a5;
+
+:: Main Proposition #4-1 (External Circuit Outputs after Four-steps) FTA3
+
+theorem :: FTACELL1:39
+  for am,bm,cm,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+      not cin in InnerVertices BitGFA3Str(am,bm,cm)
+   for s being State of BitFTA3Circ(am,bm,cm,dm,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bm & a3 = s.cm & a4 = s.dm & a5 = s.cin
+   holds Following(s,4).BitFTA3AdderOutputP(am,bm,cm,dm,cin)
+      = 'not' ((('not' a1 'xor' 'not' a2 'xor' 'not' a3) '&' 'not' a5) 'or'
+               ('not' a5 '&' 'not' a4) 'or'
+               ('not' a4 '&' ('not' a1 'xor' 'not' a2 'xor' 'not' a3))) &
+         Following(s,4).BitFTA3AdderOutputQ(am,bm,cm,dm,cin)
+      = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3 'xor' 'not' a4
+                        'xor' 'not' a5);
+
+:: Main Proposition #4-2 (The Whole Circuit Stability after Four-steps) FTA3
+
+theorem :: FTACELL1:40
+  for am,bm,cm,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b]
+   for s being State of BitFTA3Circ(am,bm,cm,dm,cin)
+    holds Following(s,4) is stable;

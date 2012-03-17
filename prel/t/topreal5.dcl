@@ -37,22 +37,22 @@
 <CCluster aid="TOPREAL5" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="80"/>
+<Adjective nr="84"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="261">
+<Func kind="K" nr="263">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="80"/>
-<Adjective nr="81" value="false"/>
-<Adjective nr="82" value="false"/>
+<Adjective nr="84"/>
+<Adjective nr="85" value="false"/>
+<Adjective nr="86" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -41,7 +41,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="273">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -55,7 +55,7 @@
 <Cluster/>
 <Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="273">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -69,7 +69,7 @@
 <Cluster/>
 <Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="273">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -79,7 +79,7 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="30">
 <Func kind="U" nr="1">
-<Func kind="K" nr="273">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -89,7 +89,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="273">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -108,7 +108,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="273">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -138,7 +138,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="273">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -155,15 +155,15 @@
 </Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="62">
-<Func kind="K" nr="273">
+<Adjective nr="66">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="273">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -174,7 +174,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="273">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -183,7 +183,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="273">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -191,13 +191,13 @@
 <And>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="1">
-<Func kind="K" nr="278">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="93">
+<Func kind="K" nr="94">
 <Func kind="F" nr="1">
 <Var nr="1"/>
 </Func>
@@ -208,13 +208,13 @@
 </Pred>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="2">
-<Func kind="K" nr="278">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="93">
+<Func kind="K" nr="94">
 <Func kind="F" nr="2">
 <Var nr="1"/>
 </Func>
@@ -230,7 +230,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="273">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -239,34 +239,34 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="273">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
+<Func kind="K" nr="106">
+<Func kind="K" nr="272">
+<Func kind="K" nr="280">
+<Num nr="2"/>
+<Var nr="1"/>
+<Var nr="2"/>
+</Func>
+</Func>
+</Func>
+<Func kind="K" nr="90">
 <Func kind="K" nr="104">
-<Func kind="K" nr="270">
-<Func kind="K" nr="278">
-<Num nr="2"/>
-<Var nr="1"/>
-<Var nr="2"/>
-</Func>
-</Func>
-</Func>
-<Func kind="K" nr="89">
-<Func kind="K" nr="102">
 <Func kind="F" nr="1">
-<Func kind="K" nr="278">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
 </Func>
 </Func>
-<Func kind="K" nr="102">
+<Func kind="K" nr="104">
 <Func kind="F" nr="2">
-<Func kind="K" nr="278">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 <Var nr="1"/>
 <Var nr="2"/>

@@ -17,13 +17,13 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCT_5"/>
@@ -42,7 +42,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="32" value="false"/>
+<Adjective nr="31" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -67,7 +67,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="64">
+<Adjective nr="63">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

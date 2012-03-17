@@ -1,0 +1,3485 @@
+:: Stability of the 4-2 Binary Addition Circuit Cells. Part {I}
+::  by Katsumi Wasaki
+:: 
+:: Received August 28, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, MCART_1, RELAT_1, FUNCT_1, FINSEQ_1, FUNCT_4, ZF_LANG,
+      LATTICES, MARGREL1, BINARITH, PARTFUN1, AMI_1, MSUALG_1, MSAFREE2,
+      CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1, TWOSCOMP, GFACIRC1, FTACELL1,
+      STRUCT_0;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NAT_1, MCART_1, RELAT_1,
+      NUMBERS, STRUCT_0, FUNCT_1, FUNCT_2, PARTFUN1, FINSEQ_1, FINSEQ_2,
+      MARGREL1, CARD_3, BINARITH, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2,
+      CIRCCOMB, FACIRC_1, TWOSCOMP, GFACIRC1;
+ constructors ENUMSET1, XXREAL_0, CLASSES1, BINARITH, CIRCUIT1, CIRCUIT2,
+      FACIRC_1, TWOSCOMP, NAT_1, GFACIRC1;
+ registrations RELAT_1, FRAENKEL, MARGREL1, FINSEQ_2, CARD_3, STRUCT_0,
+      MSUALG_1, CIRCCOMB, FACIRC_1, ORDINAL1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0, MSAFREE2, CIRCUIT2, FACIRC_1, TWOSCOMP,
+      GFACIRC1, XBOOLEAN;
+ theorems XBOOLE_0, XBOOLE_1, ZFMISC_1, ENUMSET1, MCART_1, FUNCT_1, FINSEQ_2,
+      CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1, TWOSCOMP, CIRCCMB2, GFACIRC1,
+      XBOOLEAN;
+
+begin :: 1. Stability of 4-2 Binary Addition Circuit Cell (TYPE-0)
+
+::========================================================================
+:: [4-2 Binary Addition Cell_i : TYPE-0]
+::
+::   Cell Module Symbol :
+::
+::                 a+ b+ c+ d+            Input : a+,b+,c+,d+ (non pair set)
+::                 |  |  |  |                     cin+ (pair)
+::               +-*--*--*--*-+    cin+
+::               |            |   /
+::            +--* FTA TYPE-0 *--+        Output : p+,q+,cout+ (pair)
+::           /   |            |
+::        cout+  +---*----*---+
+::                   |    |
+::                   p+   q+
+::
+::   Composition : Cascade by Adder Output together with two GFA TYPE-0
+::   Function    : p[i+1] + q[i] + Intermediate_Carry_out
+::                 = a[i] + b[i] + c[i] + d[i] + Intermediate_Carry_in
+::
+::                 a^{+}[i]  b^{+}[i]
+::                     |     /
+::                     |    /
+::                 +---*---*
+::                 |  GFA  *---- c^{+}[i]  Circuit Composition :
+::                 | TYPE0 |                    BitGFA0Str(a+,b+,c+)
+::                 *---*---+                    BitGFA0Str(A1,cin,d+)
+::                /    |      cin[i]           --->
+::               /   A1|     /                  FTA0Str(a+,b+,c+,d+,cin)
+::      cout[i+1]      |    /
+::                 +---*---*               Intermediate Addition and Carry:
+::                 |  GFA  *---- d^{+}[i]       A1 <= GFA0AdderOutput
+::                 | TYPE0 |                    cout[i+1] <= GFA0CarryOutput
+::                 *---*---+                    q[i] <= GFA0AdderOutput
+::                /    |                        p[i+1] <= GFA0CarryOutput
+::               /     |
+::     p^{+}[i+1]   q^{+}[i]
+::
+::   Calculation Stability : Following(s,2+2) is stable.
+::
+::=========================================================================
+
+::---------------------------------------------------------------
+:: 1-1. Circuit Definition for Intermediate Addition and Carry Circuit (TYPE-0)
+::---------------------------------------------------------------
+
+:: Def. Combined Circuit Structure of 1-bit FTA TYPE-0
+
+definition
+ let ap,bp,cp,dp,cin be set;
+ func BitFTA0Str(ap,bp,cp,dp,cin) ->
+      unsplit gate`1=arity gate`2isBoolean
+      non void strict non empty ManySortedSign equals
+    BitGFA0Str(ap,bp,cp) +*
+    BitGFA0Str(GFA0AdderOutput(ap,bp,cp),cin,dp);
+  coherence;
+end;
+
+definition
+ let ap,bp,cp,dp,cin be set;
+ func BitFTA0Circ(ap,bp,cp,dp,cin) ->
+    strict Boolean gate`2=den Circuit of BitFTA0Str(ap,bp,cp,dp,cin)
+ equals
+    BitGFA0Circ(ap,bp,cp) +*
+    BitGFA0Circ(GFA0AdderOutput(ap,bp,cp),cin,dp);
+  coherence;
+end;
+
+::-----------------------------------------------
+:: 1-2. Properties of 1-bit FTA Circuit Structure (TYPE-0)
+::-----------------------------------------------
+
+:: InnerVertices and InputVertices of 1-bit FTA Circuit Structure (FTA0)
+
+theorem ThFTA0S1:
+  for ap,bp,cp,dp,cin being set holds
+  InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) =
+    {[<*ap,bp*>,xor2], GFA0AdderOutput(ap,bp,cp)} \/
+    {[<*ap,bp*>,and2], [<*bp,cp*>,and2], [<*cp,ap*>,and2],
+                        GFA0CarryOutput(ap,bp,cp)} \/
+    {[<*GFA0AdderOutput(ap,bp,cp),cin*>,xor2],
+        GFA0AdderOutput(GFA0AdderOutput(ap,bp,cp),cin,dp)} \/
+    {[<*GFA0AdderOutput(ap,bp,cp),cin*>,and2],
+     [<*cin,dp*>,and2], [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2],
+     GFA0CarryOutput(GFA0AdderOutput(ap,bp,cp),cin,dp)}
+   proof
+     let ap,bp,cp,dp,cin be set;
+     set S  = BitFTA0Str(ap,bp,cp,dp,cin);
+     set S1 = BitGFA0Str(ap,bp,cp);
+     set A1 = GFA0AdderOutput(ap,bp,cp);  set C1 = GFA0CarryOutput(ap,bp,cp);
+     set S2 = BitGFA0Str(A1,cin,dp);
+     set A2 = GFA0AdderOutput(A1,cin,dp); set C2 = GFA0CarryOutput(A1,cin,dp);
+     set apbp0  = [<*ap,bp*>, xor2]; set apbp  = [<*ap,bp*>, and2];
+     set bpcp   = [<*bp,cp*>, and2]; set cpap  = [<*cp,ap*>, and2];
+     set A1cin0 = [<*A1,cin*>,xor2]; set A1cin = [<*A1,cin*>,and2];
+     set cindp  = [<*cin,dp*>,and2]; set dpA1  = [<*dp,A1*>, and2];
+
+     S = S1 +* S2 & S1 tolerates S2 by CIRCCOMB:55;
+    hence InnerVertices S
+       = (InnerVertices S1) \/ (InnerVertices S2) by CIRCCOMB:15
+      .= ({apbp0} \/ {A1} \/ {apbp,bpcp,cpap} \/ {C1}) \/ (InnerVertices S2)
+           by GFACIRC1:39
+      .= ({apbp0,A1} \/ {apbp,bpcp,cpap} \/ {C1}) \/ (InnerVertices S2)
+           by ENUMSET1:41
+      .= ({apbp0,A1} \/ ({apbp,bpcp,cpap} \/ {C1})) \/ (InnerVertices S2)
+           by XBOOLE_1:4
+      .= ({apbp0,A1} \/ {apbp,bpcp,cpap,C1}) \/ (InnerVertices S2)
+           by ENUMSET1:46
+      .= ({apbp0,A1} \/ {apbp,bpcp,cpap,C1}) \/
+         ({A1cin0} \/ {A2} \/ {A1cin,cindp,dpA1} \/ {C2}) by GFACIRC1:39
+      .= ({apbp0,A1} \/ {apbp,bpcp,cpap,C1}) \/
+         ({A1cin0,A2} \/ {A1cin,cindp,dpA1} \/ {C2}) by ENUMSET1:41
+      .= ({apbp0,A1} \/ {apbp,bpcp,cpap,C1}) \/
+         ({A1cin0,A2} \/ ({A1cin,cindp,dpA1} \/ {C2})) by XBOOLE_1:4
+      .= ({apbp0,A1} \/ {apbp,bpcp,cpap,C1}) \/
+         ({A1cin0,A2} \/ {A1cin,cindp,dpA1,C2}) by ENUMSET1:46
+      .= {apbp0,A1} \/ {apbp,bpcp,cpap,C1} \/
+         {A1cin0,A2} \/ {A1cin,cindp,dpA1,C2} by XBOOLE_1:4;
+   end;
+
+theorem
+  for ap,bp,cp,dp,cin being set holds
+    InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) is Relation
+   proof
+     let ap,bp,cp,dp,cin be set;
+     set S  = BitFTA0Str(ap,bp,cp,dp,cin);
+     set S1 = BitGFA0Str(ap,bp,cp);
+     set A1 = GFA0AdderOutput(ap,bp,cp);
+     set S2 = BitGFA0Str(A1,cin,dp);
+     InnerVertices S1 is Relation & InnerVertices S2 is Relation
+       by GFACIRC1:40;
+    hence InnerVertices S is Relation by FACIRC_1:3;
+   end;
+
+LemmaX11:
+  for x,y,z being set
+   for p being set holds GFA0AdderOutput(x,y,z) <> [p,and2]
+   proof
+     let x,y,z be set, p be set;
+     set A1 = GFA0AdderOutput(x,y,z);
+     now assume [p,and2]`2 = A1`2; then
+A1:    [p,and2]`2 = xor2 by MCART_1:7;
+       [p,and2]`2 = and2 by MCART_1:7;
+       hence contradiction by A1,TWOSCOMP:11,13;
+     end;
+    hence thesis;
+   end;
+
+LemmaX12:
+  for ap,bp,cp being non pair set
+  for x,y,z being set holds
+   InputVertices BitGFA0Str(ap,bp,cp) misses InnerVertices BitGFA0Str(x,y,z)
+   proof
+     let ap,bp,cp be non pair set;
+     let x,y,z be set;
+     set S1 = BitGFA0Str(ap,bp,cp);
+     set S2 = BitGFA0Str(x,y,z);
+     InputVertices S1 is without_pairs & InnerVertices S2 is Relation
+       by GFACIRC1:43,40;
+    hence thesis by FACIRC_1:5;
+   end;
+
+theorem ThFTA0S4:
+  for ap,bp,cp,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+      not cin in InnerVertices BitGFA0Str(ap,bp,cp)
+    holds
+      InputVertices BitFTA0Str(ap,bp,cp,dp,cin) = {ap,bp,cp,dp,cin}
+   proof
+     let ap,bp,cp,dp be non pair set;
+     let cin be set;
+     set S  = BitFTA0Str(ap,bp,cp,dp,cin);
+     set S1 = BitGFA0Str(ap,bp,cp);
+     set A1 = GFA0AdderOutput(ap,bp,cp);  set C1 = GFA0CarryOutput(ap,bp,cp);
+     set S2 = BitGFA0Str(A1,cin,dp);
+     set A2 = GFA0AdderOutput(A1,cin,dp); set C2 = GFA0CarryOutput(A1,cin,dp);
+     set apbp0  = [<*ap,bp*>, xor2]; set apbp  = [<*ap,bp*>, and2];
+     set bpcp   = [<*bp,cp*>, and2]; set cpap  = [<*cp,ap*>, and2];
+     set A1cin0 = [<*A1,cin*>,xor2]; set A1cin = [<*A1,cin*>,and2];
+     set cindp  = [<*cin,dp*>,and2]; set dpA1  = [<*dp,A1*>, and2];
+
+     assume A1: cin <> dpA1 & not cin in InnerVertices S1; then
+A2:  dp <> A1cin0 & A1 <> cindp & cin <> dpA1 & dp <> A1cin by LemmaX11;
+
+A3:  InnerVertices S2 misses InputVertices S1 by LemmaX12;
+
+A4:  InnerVertices S1
+       = {apbp0} \/ {A1} \/ {apbp,bpcp,cpap} \/ {C1} by GFACIRC1:39
+      .= {apbp0,A1} \/ {apbp,bpcp,cpap} \/ {C1} by ENUMSET1:41
+      .= {apbp0,A1} \/ ({apbp,bpcp,cpap} \/ {C1}) by XBOOLE_1:4
+      .= {A1,apbp0} \/ {apbp,bpcp,cpap,C1} by ENUMSET1:46
+      .= {A1,apbp0,apbp,bpcp,cpap,C1} by ENUMSET1:52;
+
+     A1 in {A1,apbp0,apbp,bpcp,cpap,C1} by ENUMSET1:def 4; then
+A5:  {A1} \ {A1,apbp0,apbp,bpcp,cpap,C1} = {} by ZFMISC_1:68;
+
+A6:  not dp in {A1,apbp0,apbp,bpcp,cpap,C1} by ENUMSET1:def 4;
+
+A7:  {A1,cin,dp} \ InnerVertices S1
+       = ({A1} \/ {cin,dp}) \ {A1,apbp0,apbp,bpcp,cpap,C1} by A4,ENUMSET1:42
+      .= ({A1} \ {A1,apbp0,apbp,bpcp,cpap,C1}) \/
+         ({cin,dp} \ {A1,apbp0,apbp,bpcp,cpap,C1}) by XBOOLE_1:42
+      .= ({cin} \/ {dp}) \ {A1,apbp0,apbp,bpcp,cpap,C1} by A5,ENUMSET1:41
+      .= ({cin} \ {A1,apbp0,apbp,bpcp,cpap,C1}) \/
+         ({dp} \ {A1,apbp0,apbp,bpcp,cpap,C1}) by XBOOLE_1:42
+      .= ({cin}) \/ ({dp} \ {A1,apbp0,apbp,bpcp,cpap,C1}) by A1,A4,ZFMISC_1:67
+      .= ({cin}) \/ ({dp}) by A6,ZFMISC_1:67
+      .= {cin,dp} by ENUMSET1:41;
+
+     S = S1 +* S2 & S1 tolerates S2 by CIRCCOMB:55;
+    hence InputVertices (S)
+       = (InputVertices S1) \/ (InputVertices S2 \ InnerVertices S1)
+           by A3,FACIRC_1:4
+      .= ({ap,bp,cp}) \/ (InputVertices S2 \ InnerVertices S1) by GFACIRC1:42
+      .= ({ap,bp,cp}) \/ ({A1,cin,dp} \ InnerVertices S1) by A2,GFACIRC1:41
+      .= {ap,bp,cp,dp,cin} by A7,ENUMSET1:49;
+   end;
+
+:: The Element of Carriers, InnerVertices and InputVertices (FTA0)
+
+theorem ThFTA0S6:
+  for ap,bp,cp,dp,cin being set holds
+   ap in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   bp in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   cp in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   dp in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   cin in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*ap,bp*>,xor2] in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   GFA0AdderOutput(ap,bp,cp) in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*ap,bp*>,and2] in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*bp,cp*>,and2] in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*cp,ap*>,and2] in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   GFA0CarryOutput(ap,bp,cp) in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*GFA0AdderOutput(ap,bp,cp),cin*>,xor2]
+                             in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   GFA0AdderOutput(GFA0AdderOutput(ap,bp,cp),cin,dp)
+                             in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*GFA0AdderOutput(ap,bp,cp),cin*>,and2]
+                             in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*cin,dp*>,and2]        in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2]
+                             in the carrier of BitFTA0Str(ap,bp,cp,dp,cin) &
+   GFA0CarryOutput(GFA0AdderOutput(ap,bp,cp),cin,dp)
+                             in the carrier of BitFTA0Str(ap,bp,cp,dp,cin)
+   proof
+     let ap,bp,cp,dp,cin be set;
+     set S  = BitFTA0Str(ap,bp,cp,dp,cin);
+     set S1 = BitGFA0Str(ap,bp,cp);
+     set A1 = GFA0AdderOutput(ap,bp,cp);  set C1 = GFA0CarryOutput(ap,bp,cp);
+     set S2 = BitGFA0Str(A1,cin,dp);
+     set A2 = GFA0AdderOutput(A1,cin,dp); set C2 = GFA0CarryOutput(A1,cin,dp);
+     set apbp0  = [<*ap,bp*>, xor2]; set apbp  = [<*ap,bp*>, and2];
+     set bpcp   = [<*bp,cp*>, and2]; set cpap  = [<*cp,ap*>, and2];
+     set A1cin0 = [<*A1,cin*>,xor2]; set A1cin = [<*A1,cin*>,and2];
+     set cindp  = [<*cin,dp*>,and2]; set dpA1  = [<*dp,A1*>, and2];
+
+A1:  ap in the carrier of S1 & bp in the carrier of S1 &
+     cp in the carrier of S1 &
+     apbp0 in the carrier of S1 & A1 in the carrier of S1 &
+     apbp in the carrier of S1 & bpcp in the carrier of S1 &
+     cpap in the carrier of S1 & C1 in the carrier of S1 by GFACIRC1:44;
+
+     A1 in the carrier of S2 & cin in the carrier of S2 &
+     dp in the carrier of S2 &
+     A1cin0 in the carrier of S2 & A2 in the carrier of S2 &
+     A1cin in the carrier of S2 & cindp in the carrier of S2 &
+     dpA1 in the carrier of S2 & C2 in the carrier of S2 by GFACIRC1:44;
+    hence thesis by A1,FACIRC_1:20;
+   end;
+
+theorem ThFTA0S7:
+  for ap,bp,cp,dp,cin being set holds
+   [<*ap,bp*>,xor2] in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   GFA0AdderOutput(ap,bp,cp) in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*ap,bp*>,and2] in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*bp,cp*>,and2] in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*cp,ap*>,and2] in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   GFA0CarryOutput(ap,bp,cp) in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*GFA0AdderOutput(ap,bp,cp),cin*>,xor2]
+                             in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   GFA0AdderOutput(GFA0AdderOutput(ap,bp,cp),cin,dp)
+                             in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*GFA0AdderOutput(ap,bp,cp),cin*>,and2]
+                             in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*cin,dp*>,and2] in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2]
+                             in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+   GFA0CarryOutput(GFA0AdderOutput(ap,bp,cp),cin,dp)
+                             in InnerVertices BitFTA0Str(ap,bp,cp,dp,cin)
+   proof
+     let ap,bp,cp,dp,cin be set;
+     set S  = BitFTA0Str(ap,bp,cp,dp,cin);
+     set S1 = BitGFA0Str(ap,bp,cp);
+     set A1 = GFA0AdderOutput(ap,bp,cp);  set C1 = GFA0CarryOutput(ap,bp,cp);
+     set S2 = BitGFA0Str(A1,cin,dp);
+     set A2 = GFA0AdderOutput(A1,cin,dp); set C2 = GFA0CarryOutput(A1,cin,dp);
+     set apbp0  = [<*ap,bp*>, xor2]; set apbp  = [<*ap,bp*>, and2];
+     set bpcp   = [<*bp,cp*>, and2]; set cpap  = [<*cp,ap*>, and2];
+     set A1cin0 = [<*A1,cin*>,xor2]; set A1cin = [<*A1,cin*>,and2];
+     set cindp  = [<*cin,dp*>,and2]; set dpA1  = [<*dp,A1*>, and2];
+     set p1 = {apbp0,A1,apbp,bpcp,cpap,C1};
+     set p2 = {A1cin0,A2,A1cin,cindp,dpA1,C2};
+
+A1:  InnerVertices S
+       = {apbp0,A1} \/ {apbp,bpcp,cpap,C1} \/
+         {A1cin0,A2} \/ {A1cin,cindp,dpA1,C2} by ThFTA0S1
+      .= p1 \/ {A1cin0,A2} \/ {A1cin,cindp,dpA1,C2} by ENUMSET1:52
+      .= p1 \/ ({A1cin0,A2} \/ {A1cin,cindp,dpA1,C2}) by XBOOLE_1:4
+      .= p1 \/ p2 by ENUMSET1:52;
+
+     (apbp0 in p1 & A1 in p1 &
+      apbp in p1 & bpcp in p1 & cpap in p1 & C1 in p1) &
+     (A1cin0 in p2 & A2 in p2 &
+      A1cin in p2 & cindp in p2 & dpA1 in p2 & C2 in p2 ) by ENUMSET1:def 4;
+    hence thesis by A1,XBOOLE_0:def 2;
+   end;
+
+theorem ThFTA0S8:
+  for ap,bp,cp,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+      not cin in InnerVertices BitGFA0Str(ap,bp,cp)
+   holds
+     ap in InputVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+     bp in InputVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+     cp in InputVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+     dp in InputVertices BitFTA0Str(ap,bp,cp,dp,cin) &
+     cin in InputVertices BitFTA0Str(ap,bp,cp,dp,cin)
+   proof
+     let ap,bp,cp,dp be non pair set;
+     let cin be set;
+     set S  = BitFTA0Str(ap,bp,cp,dp,cin);
+     set S1 = BitGFA0Str(ap,bp,cp);
+     set A1 = GFA0AdderOutput(ap,bp,cp);
+     set dpA1 = [<*dp,A1*>,and2];
+
+     assume cin <> dpA1 & not cin in InnerVertices S1; then
+     InputVertices S = {ap,bp,cp,dp,cin} by ThFTA0S4;
+    hence thesis by ENUMSET1:def 3;
+   end;
+
+::-------------------------------------------
+:: 1-3. Output Definitions of the Combined Circuit
+::-------------------------------------------
+
+:: Def. External/Internal Signal Outputs of 1-bit FTA TYPE-0
+
+definition
+ let ap,bp,cp,dp,cin be set;
+ func BitFTA0CarryOutput(ap,bp,cp,dp,cin) ->
+         Element of InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) equals
+    GFA0CarryOutput(ap,bp,cp);
+ coherence by ThFTA0S7;
+
+ func BitFTA0AdderOutputI(ap,bp,cp,dp,cin) ->
+         Element of InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) equals
+    GFA0AdderOutput(ap,bp,cp);
+ coherence by ThFTA0S7;
+
+ func BitFTA0AdderOutputP(ap,bp,cp,dp,cin) ->
+         Element of InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) equals
+    GFA0CarryOutput(GFA0AdderOutput(ap,bp,cp),cin,dp);
+ coherence by ThFTA0S7;
+
+ func BitFTA0AdderOutputQ(ap,bp,cp,dp,cin) ->
+         Element of InnerVertices BitFTA0Str(ap,bp,cp,dp,cin) equals
+    GFA0AdderOutput(GFA0AdderOutput(ap,bp,cp),cin,dp);
+ coherence by ThFTA0S7;
+end;
+
+::----------------------------------------------------
+:: 1-4. Stability of the Combined Circuit and its Outputs
+::----------------------------------------------------
+
+:: Intermediate (External/Internal) Carry/Adder Outputs after Two-steps
+
+theorem
+  for ap,bp,cp being non pair set
+  for dp,cin being set
+   for s being State of BitFTA0Circ(ap,bp,cp,dp,cin)
+   for a1,a2,a3 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bp & a3 = s.cp
+   holds Following(s,2).BitFTA0CarryOutput(ap,bp,cp,dp,cin)
+         = (a1 '&' a2) 'or' (a2 '&' a3) 'or' (a3 '&' a1) &
+         Following(s,2).BitFTA0AdderOutputI(ap,bp,cp,dp,cin)
+         = a1 'xor' a2 'xor' a3
+ proof
+    let ap,bp,cp be non pair set;
+    let dp,cin be set;
+    let s be State of BitFTA0Circ(ap,bp,cp,dp,cin);
+    set S1 = BitGFA0Str(ap,bp,cp);      set C1 = BitGFA0Circ(ap,bp,cp);
+    set A1 = GFA0AdderOutput(ap,bp,cp); set A2 = GFA0CarryOutput(ap,bp,cp);
+    set S2 = BitGFA0Str(A1,cin,dp);     set C2 = BitGFA0Circ(A1,cin,dp);
+    let a1,a2,a3 be Element of BOOLEAN such that
+A1: a1 = s.ap & a2 = s.bp & a3 = s.cp;
+
+A2: ap in the carrier of S1 & bp in the carrier of S1 & cp in the carrier of S1
+      by GFACIRC1:44;
+    reconsider s1 = s|the carrier of S1 as State of C1 by FACIRC_1:26;
+    reconsider t = s as State of C1+*C2;
+
+A3: A1 in the carrier of S1 & A2 in the carrier of S1 by GFACIRC1:44;
+A4: InputVertices S1 misses InnerVertices S2 by LemmaX12;
+
+    dom s1 = the carrier of S1 by CIRCUIT1:4; then
+A5: a1 = s1.ap & a2 = s1.bp & a3 = s1.cp by A1,A2,FUNCT_1:70; then
+    Following(t,2).GFA0CarryOutput(ap,bp,cp)
+     = Following(s1,2).GFA0CarryOutput(ap,bp,cp) &
+    Following(s1,2).GFA0CarryOutput(ap,bp,cp)
+     = (a1 '&' a2) 'or' (a2 '&' a3) 'or' (a3 '&' a1)
+      by A3,A4,FACIRC_1:32,GFACIRC1:47;
+   hence Following(s,2).BitFTA0CarryOutput(ap,bp,cp,dp,cin)
+     = (a1 '&' a2) 'or' (a2 '&' a3) 'or' (a3 '&' a1);
+
+    Following(t,2).GFA0AdderOutput(ap,bp,cp)
+     = Following(s1,2).GFA0AdderOutput(ap,bp,cp) &
+    Following(s1,2).GFA0AdderOutput(ap,bp,cp) = a1 'xor' a2 'xor' a3
+      by A3,A4,A5,FACIRC_1:32,GFACIRC1:47;
+   hence Following(s,2).BitFTA0AdderOutputI(ap,bp,cp,dp,cin)
+     = a1 'xor' a2 'xor' a3;
+end;
+
+:: Temporal (Internal) Calculations after Two-steps
+
+theorem ThFTA0S11:
+  for ap,bp,cp,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+      not cin in InnerVertices BitGFA0Str(ap,bp,cp)
+   for s being State of BitFTA0Circ(ap,bp,cp,dp,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bp & a3 = s.cp & a4 = s.dp & a5 = s.cin
+   holds Following(s,2).GFA0AdderOutput(ap,bp,cp) = a1 'xor' a2 'xor' a3 &
+         Following(s,2).ap = a1 & Following(s,2).bp = a2 &
+         Following(s,2).cp = a3 & Following(s,2).dp = a4 &
+         Following(s,2).cin = a5
+ proof
+    let ap,bp,cp,dp be non pair set;
+    let cin be set such that
+A1: cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+    not cin in InnerVertices BitGFA0Str(ap,bp,cp);
+    let s be State of BitFTA0Circ(ap,bp,cp,dp,cin);
+    set S  = BitFTA0Str(ap,bp,cp,dp,cin);
+    set S1 = BitGFA0Str(ap,bp,cp);      set C1 = BitGFA0Circ(ap,bp,cp);
+    set A1 = GFA0AdderOutput(ap,bp,cp);
+    set S2 = BitGFA0Str(A1,cin,dp);     set C2 = BitGFA0Circ(A1,cin,dp);
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.ap & a2 = s.bp & a3 = s.cp & a4 = s.dp & a5 = s.cin;
+
+A3: ap in the carrier of S1 & bp in the carrier of S1 & cp in the carrier of S1
+      by GFACIRC1:44;
+    reconsider s1 = s|the carrier of S1 as State of C1 by FACIRC_1:26;
+    reconsider t = s as State of C1+*C2;
+
+A4: A1 in the carrier of S1 by GFACIRC1:44;
+A5: InputVertices S1 misses InnerVertices S2 by LemmaX12;
+
+    dom s1 = the carrier of S1 by CIRCUIT1:4; then
+    a1 = s1.ap & a2 = s1.bp & a3 = s1.cp by A2,A3,FUNCT_1:70; then
+    Following(t,2).GFA0AdderOutput(ap,bp,cp)
+     = Following(s1,2).GFA0AdderOutput(ap,bp,cp) &
+    Following(s1,2).GFA0AdderOutput(ap,bp,cp) = a1 'xor' a2 'xor' a3
+      by A4,A5,FACIRC_1:32,GFACIRC1:47;
+   hence Following(s,2).GFA0AdderOutput(ap,bp,cp) = a1 'xor' a2 'xor' a3;
+
+A6: Following(s,2) = Following Following s by FACIRC_1:15;
+A7: ap in InputVertices S & bp in InputVertices S &
+    cp in InputVertices S & dp in InputVertices S &
+    cin in InputVertices S by A1,ThFTA0S8; then
+    (Following s).ap = a1 & (Following s).bp = a2 &
+    (Following s).cp = a3 & (Following s).dp = a4 &
+    (Following s).cin = a5 by A2,CIRCUIT2:def 5;
+   hence thesis by A6,A7,CIRCUIT2:def 5;
+end;
+
+LmFTA0S12p:
+ for ap,bp,cp,dp being non pair set
+  for cin being set
+   for s being State of BitFTA0Circ(ap,bp,cp,dp,cin)
+    for a123,a4,a5 being Element of BOOLEAN
+      st a123 = s.GFA0AdderOutput(ap,bp,cp) & a4 = s.dp & a5 = s.cin
+  holds (Following s).[<*GFA0AdderOutput(ap,bp,cp),cin*>,and2] = a123 '&' a5 &
+        (Following s).[<*cin,dp*>,and2] = a5 '&' a4 &
+        (Following s).[<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] = a4 '&' a123
+ proof
+    let ap,bp,cp,dp be non pair set;
+    let cin be set;
+    set S  = BitFTA0Str(ap,bp,cp,dp,cin);set C  = BitFTA0Circ(ap,bp,cp,dp,cin);
+    set A1 = GFA0AdderOutput(ap,bp,cp);
+    set S2 = BitGFA0Str(A1,cin,dp);      set C2 = BitGFA0Circ(A1,cin,dp);
+    set A1cin = [<*A1,cin*>,and2]; set cindp = [<*cin,dp*>,and2];
+    set dpA1  = [<*dp,A1*>, and2];
+    let s be State of C;
+    let a123,a4,a5 be Element of BOOLEAN such that
+A1: a123 = s.A1 & a4 = s.dp & a5 = s.cin;
+
+A2: A1 in the carrier of S & dp in the carrier of S & cin in the carrier of S
+      by ThFTA0S6;
+A3: dom s = the carrier of S by CIRCUIT1:4;
+    InnerVertices S = the carrier' of S by FACIRC_1:37; then
+A4: A1cin in the carrier' of S & cindp in the carrier' of S &
+    dpA1 in the carrier' of S by ThFTA0S7;
+   hence (Following s).A1cin = and2.(s*<*A1,cin*>) by FACIRC_1:35
+       .= and2.<*a123, a5*> by A1,A2,A3,FINSEQ_2:145
+       .= a123 '&' a5 by TWOSCOMP:def 1;
+   thus (Following s).cindp
+        = and2.(s*<*cin,dp*>) by A4,FACIRC_1:35
+       .= and2.<*a5,a4*> by A1,A2,A3,FINSEQ_2:145
+       .= a5 '&' a4 by TWOSCOMP:def 1;
+   thus (Following s).dpA1
+        = and2.(s*<*dp,A1*>) by A4,FACIRC_1:35
+       .= and2.<*a4,a123*> by A1,A2,A3,FINSEQ_2:145
+       .= a4 '&' a123 by TWOSCOMP:def 1;
+ end;
+
+LmFTA0S12q:
+ for ap,bp,cp,dp being non pair set
+  for cin being set
+   for s being State of BitFTA0Circ(ap,bp,cp,dp,cin)
+    for a123,a5 being Element of BOOLEAN
+      st a123 = s.GFA0AdderOutput(ap,bp,cp) & a5 = s.cin
+    holds (Following s).[<*GFA0AdderOutput(ap,bp,cp),cin*>,xor2]
+          = a123 'xor' a5
+ proof
+    let ap,bp,cp,dp be non pair set;
+    let cin be set;
+    set S  = BitFTA0Str(ap,bp,cp,dp,cin);set C  = BitFTA0Circ(ap,bp,cp,dp,cin);
+    set A1 = GFA0AdderOutput(ap,bp,cp);
+    set A1cin = [<*A1,cin*>,xor2];
+    let s be State of C;
+    let a123,a5 be Element of BOOLEAN such that
+A1: a123 = s.A1 & a5 = s.cin;
+
+A2: A1 in the carrier of S & cin in the carrier of S by ThFTA0S6;
+A3: dom s = the carrier of S by CIRCUIT1:4;
+    InnerVertices S = the carrier' of S by FACIRC_1:37; then
+    A1cin in the carrier' of S by ThFTA0S7;
+   hence (Following s).A1cin
+        = xor2.(s*<*A1,cin*>) by FACIRC_1:35
+       .= xor2.<*a123, a5*> by A1,A2,A3,FINSEQ_2:145
+       .= a123 'xor' a5 by TWOSCOMP:def 13;
+ end;
+
+LmFTA0S13p:    :: Temporal (Internal) Calculations after Three-steps (for p)
+  for ap,bp,cp,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+      not cin in InnerVertices BitGFA0Str(ap,bp,cp)
+   for s being State of BitFTA0Circ(ap,bp,cp,dp,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bp & a3 = s.cp & a4 = s.dp & a5 = s.cin
+   holds Following(s,3).[<*GFA0AdderOutput(ap,bp,cp),cin*>,and2]
+         = (a1 'xor' a2 'xor' a3) '&' a5 &
+         Following(s,3).[<*cin,dp*>,and2] = a5 '&' a4 &
+         Following(s,3).[<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2]
+         = a4 '&' (a1 'xor' a2 'xor' a3) &
+         Following(s,3).ap = a1 & Following(s,3).bp = a2 &
+         Following(s,3).cp = a3 & Following(s,3).dp = a4 &
+         Following(s,3).cin = a5
+ proof
+    let ap,bp,cp,dp be non pair set;
+    let cin be set such that
+A1: cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+    not cin in InnerVertices BitGFA0Str(ap,bp,cp);
+    let s be State of BitFTA0Circ(ap,bp,cp,dp,cin);
+    set S  = BitFTA0Str(ap,bp,cp,dp,cin);set C  = BitFTA0Circ(ap,bp,cp,dp,cin);
+    set S1 = BitGFA0Str(ap,bp,cp);       set C1 = BitGFA0Circ(ap,bp,cp);
+    set A1 = GFA0AdderOutput(ap,bp,cp);
+    set S2 = BitGFA0Str(A1,cin,dp);      set C2 = BitGFA0Circ(A1,cin,dp);
+    set A1cin = [<*A1,cin*>,and2]; set cindp = [<*cin,dp*>,and2];
+    set dpA1  = [<*dp,A1*>, and2];
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.ap & a2 = s.bp & a3 = s.cp & a4 = s.dp & a5 = s.cin;
+
+A3: Following(s,2+1) = Following Following(s,2) by FACIRC_1:12;
+
+    Following(s,2).A1 = a1 'xor' a2 'xor' a3 &
+    Following(s,2).dp = a4 & Following(s,2).cin = a5 by A1,A2,ThFTA0S11;
+   hence Following(s,3).A1cin = (a1 'xor' a2 'xor' a3) '&' a5 &
+         Following(s,3).cindp = a5 '&' a4 &
+         Following(s,3).dpA1 = a4 '&' (a1 'xor' a2 'xor' a3) by A3,LmFTA0S12p;
+
+A4: ap in InputVertices S & bp in InputVertices S &
+    cp in InputVertices S & dp in InputVertices S &
+    cin in InputVertices S by A1,ThFTA0S8;
+    Following(s,2).ap = a1 & Following(s,2).bp = a2 &
+    Following(s,2).cp = a3 & Following(s,2).dp = a4 &
+    Following(s,2).cin = a5 by A1,A2,ThFTA0S11;
+   hence thesis by A3,A4,CIRCUIT2:def 5;
+ end;
+
+LmFTA0S13q:   :: Temporal (Internal) Calculations after Three-steps (for q)
+  for ap,bp,cp,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+      not cin in InnerVertices BitGFA0Str(ap,bp,cp)
+   for s being State of BitFTA0Circ(ap,bp,cp,dp,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bp & a3 = s.cp & a4 = s.dp & a5 = s.cin
+   holds Following(s,3).[<*GFA0AdderOutput(ap,bp,cp),cin*>,xor2]
+         = (a1 'xor' a2 'xor' a3) 'xor' a5 &
+         Following(s,3).ap = a1 & Following(s,3).bp = a2 &
+         Following(s,3).cp = a3 & Following(s,3).dp = a4 &
+         Following(s,3).cin = a5
+ proof
+    let ap,bp,cp,dp be non pair set;
+    let cin be set such that
+A1: cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+    not cin in InnerVertices BitGFA0Str(ap,bp,cp);
+    let s be State of BitFTA0Circ(ap,bp,cp,dp,cin);
+    set S  = BitFTA0Str(ap,bp,cp,dp,cin);set C  = BitFTA0Circ(ap,bp,cp,dp,cin);
+    set S1 = BitGFA0Str(ap,bp,cp);       set C1 = BitGFA0Circ(ap,bp,cp);
+    set A1 = GFA0AdderOutput(ap,bp,cp);
+    set S2 = BitGFA0Str(A1,cin,dp);      set C2 = BitGFA0Circ(A1,cin,dp);
+    set A1cin = [<*A1,cin*>,xor2];
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.ap & a2 = s.bp & a3 = s.cp & a4 = s.dp & a5 = s.cin;
+
+A3: Following(s,2+1) = Following Following(s,2) by FACIRC_1:12;
+
+    Following(s,2).A1 = a1 'xor' a2 'xor' a3 &
+    Following(s,2).cin = a5 by A1,A2,ThFTA0S11;
+   hence Following(s,3).A1cin = (a1 'xor' a2 'xor' a3) 'xor' a5
+      by A3,LmFTA0S12q;
+
+A4: ap in InputVertices S & bp in InputVertices S &
+    cp in InputVertices S & dp in InputVertices S &
+    cin in InputVertices S by A1,ThFTA0S8;
+    Following(s,2).ap = a1 & Following(s,2).bp = a2 &
+    Following(s,2).cp = a3 & Following(s,2).dp = a4 &
+    Following(s,2).cin = a5 by A1,A2,ThFTA0S11;
+   hence thesis by A3,A4,CIRCUIT2:def 5;
+ end;
+
+LmFTA0S14p:
+ for ap,bp,cp,dp being non pair set
+  for cin being set
+   for s being State of BitFTA0Circ(ap,bp,cp,dp,cin)
+    for a123x,a123y,a123z being Element of BOOLEAN
+      st a123x = s.[<*GFA0AdderOutput(ap,bp,cp),cin*>,and2] &
+         a123y = s.[<*cin,dp*>,and2] &
+         a123z = s.[<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2]
+    holds (Following s).GFA0CarryOutput(GFA0AdderOutput(ap,bp,cp),cin,dp)
+          = a123x 'or' a123y 'or' a123z
+ proof
+    let ap,bp,cp,dp be non pair set;
+    let cin be set;
+    set S  = BitFTA0Str(ap,bp,cp,dp,cin);set C  = BitFTA0Circ(ap,bp,cp,dp,cin);
+    set A1 = GFA0AdderOutput(ap,bp,cp);
+    set A2 = GFA0CarryOutput(A1,cin,dp);
+    set A1cin = [<*A1,cin*>,and2]; set cindp = [<*cin,dp*>,and2];
+    set dpA1  = [<*dp,A1*>, and2];
+    let s be State of C;
+    let a123x,a123y,a123z be Element of BOOLEAN such that
+A1: a123x = s.A1cin & a123y = s.cindp & a123z = s.dpA1;
+
+A2: A1cin in the carrier of S & cindp in the carrier of S &
+    dpA1 in the carrier of S by ThFTA0S6;
+A3: dom s = the carrier of S by CIRCUIT1:4;
+    InnerVertices S = the carrier' of S by FACIRC_1:37; then
+    A2 in the carrier' of S by ThFTA0S7;
+   hence (Following s).A2
+        = or3.(s*<*A1cin,cindp,dpA1*>) by FACIRC_1:35
+       .= or3.<*a123x, a123y, a123z*> by A1,A2,A3,FINSEQ_2:146
+       .= a123x 'or' a123y 'or' a123z by TWOSCOMP:def 24;
+ end;
+
+LmFTA0S14q:
+ for ap,bp,cp,dp being non pair set
+  for cin being set
+   for s being State of BitFTA0Circ(ap,bp,cp,dp,cin)
+    for a1235,a4 being Element of BOOLEAN
+      st a1235 = s.[<*GFA0AdderOutput(ap,bp,cp),cin*>,xor2] & a4 = s.dp
+    holds (Following s).GFA0AdderOutput(GFA0AdderOutput(ap,bp,cp),cin,dp)
+          = a1235 'xor' a4
+ proof
+    let ap,bp,cp,dp be non pair set;
+    let cin be set;
+    set S  = BitFTA0Str(ap,bp,cp,dp,cin);set C  = BitFTA0Circ(ap,bp,cp,dp,cin);
+    set A1 = GFA0AdderOutput(ap,bp,cp);
+    set A2 = GFA0AdderOutput(A1,cin,dp);
+    set A1cin = [<*A1,cin*>,xor2];
+    let s be State of C;
+    let a1235,a4 be Element of BOOLEAN such that
+A1: a1235 = s.A1cin & a4 = s.dp;
+
+A2: A1cin in the carrier of S & A1 in the carrier of S &
+    cin in the carrier of S & dp in the carrier of S by ThFTA0S6;
+A3: dom s = the carrier of S by CIRCUIT1:4;
+    InnerVertices S = the carrier' of S by FACIRC_1:37; then
+    A2 in the carrier' of S by ThFTA0S7;
+   hence (Following s).A2
+        = xor2.(s*<*A1cin,dp*>) by FACIRC_1:35
+       .= xor2.<*a1235, a4*> by A1,A2,A3,FINSEQ_2:145
+       .= a1235 'xor' a4 by TWOSCOMP:def 13;
+ end;
+
+LmFTA0S15p:    :: Temporal (External) Calculations after Four-steps (for p)
+  for ap,bp,cp,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+      not cin in InnerVertices BitGFA0Str(ap,bp,cp)
+   for s being State of BitFTA0Circ(ap,bp,cp,dp,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bp & a3 = s.cp & a4 = s.dp & a5 = s.cin
+   holds Following(s,4).GFA0CarryOutput(GFA0AdderOutput(ap,bp,cp),cin,dp)
+         = ((a1 'xor' a2 'xor' a3) '&' a5) 'or'
+           (a5 '&' a4) 'or' (a4 '&' (a1 'xor' a2 'xor' a3)) &
+         Following(s,4).ap = a1 & Following(s,4).bp = a2 &
+         Following(s,4).cp = a3 & Following(s,4).dp = a4 &
+         Following(s,4).cin = a5
+ proof
+    let ap,bp,cp,dp be non pair set;
+    let cin be set such that
+A1: cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+    not cin in InnerVertices BitGFA0Str(ap,bp,cp);
+    let s be State of BitFTA0Circ(ap,bp,cp,dp,cin);
+    set S  = BitFTA0Str(ap,bp,cp,dp,cin);set C  = BitFTA0Circ(ap,bp,cp,dp,cin);
+    set S1 = BitGFA0Str(ap,bp,cp);       set C1 = BitGFA0Circ(ap,bp,cp);
+    set A1 = GFA0AdderOutput(ap,bp,cp);
+    set S2 = BitGFA0Str(A1,cin,dp);      set C2 = BitGFA0Circ(A1,cin,dp);
+    set A2 = GFA0CarryOutput(A1,cin,dp);
+    set A1cin = [<*A1,cin*>,and2]; set cindp = [<*cin,dp*>,and2];
+    set dpA1  = [<*dp,A1*>, and2];
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.ap & a2 = s.bp & a3 = s.cp & a4 = s.dp & a5 = s.cin;
+
+A3: Following(s,3+1) = Following Following(s,3) by FACIRC_1:12;
+
+    Following(s,3).A1cin = (a1 'xor' a2 'xor' a3) '&' a5 &
+    Following(s,3).cindp = a5 '&' a4 &
+    Following(s,3).dpA1 = a4 '&' (a1 'xor' a2 'xor' a3) by A1,A2,LmFTA0S13p;
+   hence Following(s,4).A2 = ((a1 'xor' a2 'xor' a3) '&' a5) 'or'
+     (a5 '&' a4) 'or' (a4 '&' (a1 'xor' a2 'xor' a3)) by A3,LmFTA0S14p;
+
+A4: ap in InputVertices S & bp in InputVertices S &
+    cp in InputVertices S & dp in InputVertices S &
+    cin in InputVertices S by A1,ThFTA0S8;
+    Following(s,3).ap = a1 & Following(s,3).bp = a2 &
+    Following(s,3).cp = a3 & Following(s,3).dp = a4 &
+    Following(s,3).cin = a5 by A1,A2,LmFTA0S13p;
+   hence thesis by A3,A4,CIRCUIT2:def 5;
+ end;
+
+LmFTA0S15q:    :: Temporal (External) Calculations after Four-steps (for q)
+  for ap,bp,cp,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+      not cin in InnerVertices BitGFA0Str(ap,bp,cp)
+   for s being State of BitFTA0Circ(ap,bp,cp,dp,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bp & a3 = s.cp & a4 = s.dp & a5 = s.cin
+   holds Following(s,4).GFA0AdderOutput(GFA0AdderOutput(ap,bp,cp),cin,dp)
+         = a1 'xor' a2 'xor' a3 'xor' a4 'xor' a5 &
+         Following(s,4).ap = a1 & Following(s,4).bp = a2 &
+         Following(s,4).cp = a3 & Following(s,4).dp = a4 &
+         Following(s,4).cin = a5
+ proof
+    let ap,bp,cp,dp be non pair set;
+    let cin be set such that
+A1: cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+    not cin in InnerVertices BitGFA0Str(ap,bp,cp);
+    let s be State of BitFTA0Circ(ap,bp,cp,dp,cin);
+    set S  = BitFTA0Str(ap,bp,cp,dp,cin);set C  = BitFTA0Circ(ap,bp,cp,dp,cin);
+    set S1 = BitGFA0Str(ap,bp,cp);       set C1 = BitGFA0Circ(ap,bp,cp);
+    set A1 = GFA0AdderOutput(ap,bp,cp);
+    set S2 = BitGFA0Str(A1,cin,dp);      set C2 = BitGFA0Circ(A1,cin,dp);
+    set A2 = GFA0AdderOutput(A1,cin,dp);
+    set A1cin = [<*A1,cin*>,xor2];
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.ap & a2 = s.bp & a3 = s.cp & a4 = s.dp & a5 = s.cin;
+
+A3: Following(s,3+1) = Following Following(s,3) by FACIRC_1:12;
+
+    Following(s,3).A1cin = (a1 'xor' a2 'xor' a3) 'xor' a5 &
+    Following(s,3).dp = a4 by A1,A2,LmFTA0S13q;
+   hence Following(s,4).A2
+     = (a1 'xor' a2 'xor' a3) 'xor' a5 'xor' a4 by A3,LmFTA0S14q
+    .= a1 'xor' a2 'xor' a3 'xor' a4 'xor' a5 by XBOOLEAN:73;
+
+A4: ap in InputVertices S & bp in InputVertices S &
+    cp in InputVertices S & dp in InputVertices S &
+    cin in InputVertices S by A1,ThFTA0S8;
+    Following(s,3).ap = a1 & Following(s,3).bp = a2 &
+    Following(s,3).cp = a3 & Following(s,3).dp = a4 &
+    Following(s,3).cin = a5 by A1,A2,LmFTA0S13q;
+   hence thesis by A3,A4,CIRCUIT2:def 5;
+ end;
+
+:: Main Proposition #1-1 (External Circuit Outputs after Four-steps) FTA0
+
+theorem
+  for ap,bp,cp,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2] &
+      not cin in InnerVertices BitGFA0Str(ap,bp,cp)
+   for s being State of BitFTA0Circ(ap,bp,cp,dp,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bp & a3 = s.cp & a4 = s.dp & a5 = s.cin
+   holds Following(s,4).BitFTA0AdderOutputP(ap,bp,cp,dp,cin)
+         = ((a1 'xor' a2 'xor' a3) '&' a5) 'or'
+           (a5 '&' a4) 'or' (a4 '&' (a1 'xor' a2 'xor' a3)) &
+         Following(s,4).BitFTA0AdderOutputQ(ap,bp,cp,dp,cin)
+         = a1 'xor' a2 'xor' a3 'xor' a4 'xor' a5
+   by LmFTA0S15p,LmFTA0S15q;
+
+:: Main Proposition #1-2 (The Whole Circuit Stability after Four-steps) FTA0
+
+theorem
+  for ap,bp,cp,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA0AdderOutput(ap,bp,cp)*>,and2]
+   for s being State of BitFTA0Circ(ap,bp,cp,dp,cin)
+    holds Following(s,4) is stable
+  proof
+    let ap,bp,cp,dp be non pair set;
+    let cin be set;
+    set S  = BitFTA0Str(ap,bp,cp,dp,cin);set C  = BitFTA0Circ(ap,bp,cp,dp,cin);
+    set S1 = BitGFA0Str(ap,bp,cp);       set C1 = BitGFA0Circ(ap,bp,cp);
+    set A1 = GFA0AdderOutput(ap,bp,cp);
+    set S2 = BitGFA0Str(A1,cin,dp);      set C2 = BitGFA0Circ(A1,cin,dp);
+    set apbp0  = [<*ap,bp*>, xor2]; set apbp  = [<*ap,bp*>, and2];
+    set bpcp   = [<*bp,cp*>, and2]; set cpap  = [<*cp,ap*>, and2];
+    set A1cin0 = [<*A1,cin*>,xor2]; set A1cin = [<*A1,cin*>,and2];
+    set cindp  = [<*cin,dp*>,and2]; set dpA1  = [<*dp,A1*>, and2];
+    set n1=2, n2=2, n12=4;
+
+    assume A1: cin <> dpA1;
+    let s be State of C;
+A2: C1 tolerates C2 by CIRCCOMB:68;
+
+A3: InputVertices S1 misses InnerVertices S2 by LemmaX12;
+
+A4: the Sorts of C1 tolerates the Sorts of C2 by A2,CIRCCOMB:def 3; then
+    reconsider s1 = s|the carrier of S1 as State of C1 by CIRCCOMB:33;
+    reconsider s2 = Following(s,n1)|the carrier of S2 as State of C2
+      by A4,CIRCCOMB:33;
+
+A5: Following(s1,n1) is stable by GFACIRC1:48;
+    dp<>A1cin0 & A1<>cindp & cin<>dpA1 & dp<>A1cin by A1,LemmaX11; then
+    Following(s2,n2) is stable by GFACIRC1:48; then
+    Following(s,n1+n2) is stable by A3,A5,CIRCCOMB:68,CIRCCMB2:20;
+   hence Following(s,n12) is stable;
+  end;
+
+begin :: 2. Stability of 4-2 Binary Addition Circuit Cell (TYPE-1)
+
+::========================================================================
+:: [4-2 Binary Addition Cell_i : TYPE-1]
+::
+::   Cell Module Symbol :
+::
+::                 a+ b- c+ d-            Input : a+,b-,c+,d- (non pair set)
+::                 |  |  |  |                     cin+ (pair)
+::               +-*--O--*--O-+    cin+
+::               |            |   /
+::            +--* FTA TYPE-1 *--+        Output : p-,q+,cout+ (pair)
+::           /   |            |
+::        cout+  +---O----*---+
+::                   |    |
+::                   p-   q+
+::
+::   Composition : Cascade by Adder Output together with GFA TYPE-1 and TYPE-2
+::   Function    : -p[i+1] + q[i] + Intermediate_Carry_out
+::                  = a[i] - b[i] + c[i] - d[i] + Intermediate_Carry_in
+::
+::                 a^{+}[i]  b^{-}[i]
+::                     |     /
+::                     |    /
+::                 +---*---O
+::                 |  GFA  *---- c^{+}[i]  Circuit Composition :
+::                 | TYPE1 |                    BitGFA1Str(a+,b-,c+)
+::                 *---O---+                    BitGFA2Str(A1,cin,d-)
+::                /    |      cin[i]           --->
+::               /   A1|     /                  FTA1Str(a+,b-,c+,d-,cin)
+::      cout[i+1]      |    /
+::                 +---O---*               Intermediate Addition and Carry:
+::                 |  GFA  O---- d^{-}[i]       A1 <= GFA1AdderOutput
+::                 | TYPE2 |                    cout[i+1] <= GFA1CarryOutput
+::                 O---*---+                    q[i] <= GFA2AdderOutput
+::                /    |                        p[i+1] <= GFA2CarryOutput
+::               /     |
+::     p^{-}[i+1]   q^{+}[i]
+::
+::   Calculation Stability : Following(s,2+2) is stable.
+::
+::=========================================================================
+
+::---------------------------------------------------------------
+:: 2-1. Circuit Definition for Intermediate Addition and Carry Circuit (TYPE-1)
+::---------------------------------------------------------------
+
+:: Def. Combined Circuit Structure of 1-bit FTA TYPE-1
+
+definition
+ let ap,bm,cp,dm,cin be set;
+ func BitFTA1Str(ap,bm,cp,dm,cin) ->
+      unsplit gate`1=arity gate`2isBoolean
+      non void strict non empty ManySortedSign equals
+    BitGFA1Str(ap,bm,cp) +*
+    BitGFA2Str(GFA1AdderOutput(ap,bm,cp),cin,dm);
+  coherence;
+end;
+
+definition
+ let ap,bm,cp,dm,cin be set;
+ func BitFTA1Circ(ap,bm,cp,dm,cin) ->
+    strict Boolean gate`2=den Circuit of BitFTA1Str(ap,bm,cp,dm,cin)
+ equals
+    BitGFA1Circ(ap,bm,cp) +*
+    BitGFA2Circ(GFA1AdderOutput(ap,bm,cp),cin,dm);
+  coherence;
+end;
+
+::-----------------------------------------------
+:: 2-2. Properties of 1-bit FTA Structure and Circuit (TYPE-1)
+::-----------------------------------------------
+
+:: InnerVertices and InputVertices of 1-bit FTA Circuit Structure (FTA1)
+
+theorem ThFTA1S1:
+  for ap,bm,cp,dm,cin being set holds
+  InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) =
+    {[<*ap,bm*>,xor2c], GFA1AdderOutput(ap,bm,cp)} \/
+    {[<*ap,bm*>,and2c], [<*bm,cp*>,and2a], [<*cp,ap*>,and2],
+                        GFA1CarryOutput(ap,bm,cp)} \/
+    {[<*GFA1AdderOutput(ap,bm,cp),cin*>,xor2c],
+        GFA2AdderOutput(GFA1AdderOutput(ap,bm,cp),cin,dm)} \/
+    {[<*GFA1AdderOutput(ap,bm,cp),cin*>,and2a],
+     [<*cin,dm*>,and2c], [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b],
+     GFA2CarryOutput(GFA1AdderOutput(ap,bm,cp),cin,dm)}
+   proof
+     let ap,bm,cp,dm,cin be set;
+     set S  = BitFTA1Str(ap,bm,cp,dm,cin);
+     set S1 = BitGFA1Str(ap,bm,cp);
+     set A1 = GFA1AdderOutput(ap,bm,cp);  set C1 = GFA1CarryOutput(ap,bm,cp);
+     set S2 = BitGFA2Str(A1,cin,dm);
+     set A2 = GFA2AdderOutput(A1,cin,dm); set C2 = GFA2CarryOutput(A1,cin,dm);
+     set apbm0  = [<*ap,bm*>, xor2c]; set apbm  = [<*ap,bm*>, and2c];
+     set bmcp   = [<*bm,cp*>, and2a]; set cpap  = [<*cp,ap*>, and2 ];
+     set A1cin0 = [<*A1,cin*>,xor2c]; set A1cin = [<*A1,cin*>,and2a];
+     set cindm  = [<*cin,dm*>,and2c]; set dmA1  = [<*dm,A1*>, and2b];
+
+     S = S1 +* S2 & S1 tolerates S2 by CIRCCOMB:55;
+    hence InnerVertices S
+       = (InnerVertices S1) \/ (InnerVertices S2) by CIRCCOMB:15
+      .= ({apbm0} \/ {A1} \/ {apbm,bmcp,cpap} \/ {C1}) \/ (InnerVertices S2)
+           by GFACIRC1:76
+      .= ({apbm0,A1} \/ {apbm,bmcp,cpap} \/ {C1}) \/ (InnerVertices S2)
+           by ENUMSET1:41
+      .= ({apbm0,A1} \/ ({apbm,bmcp,cpap} \/ {C1})) \/ (InnerVertices S2)
+           by XBOOLE_1:4
+      .= ({apbm0,A1} \/ {apbm,bmcp,cpap,C1}) \/ (InnerVertices S2)
+           by ENUMSET1:46
+      .= ({apbm0,A1} \/ {apbm,bmcp,cpap,C1}) \/
+         ({A1cin0} \/ {A2} \/ {A1cin,cindm,dmA1} \/ {C2}) by GFACIRC1:113
+      .= ({apbm0,A1} \/ {apbm,bmcp,cpap,C1}) \/
+         ({A1cin0,A2} \/ {A1cin,cindm,dmA1} \/ {C2}) by ENUMSET1:41
+      .= ({apbm0,A1} \/ {apbm,bmcp,cpap,C1}) \/
+         ({A1cin0,A2} \/ ({A1cin,cindm,dmA1} \/ {C2})) by XBOOLE_1:4
+      .= ({apbm0,A1} \/ {apbm,bmcp,cpap,C1}) \/
+         ({A1cin0,A2} \/ {A1cin,cindm,dmA1,C2}) by ENUMSET1:46
+      .= {apbm0,A1} \/ {apbm,bmcp,cpap,C1} \/
+         {A1cin0,A2} \/ {A1cin,cindm,dmA1,C2} by XBOOLE_1:4;
+   end;
+
+theorem
+  for ap,bm,cp,dm,cin being set holds
+    InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) is Relation
+   proof
+     let ap,bm,cp,dm,cin be set;
+     set S  = BitFTA1Str(ap,bm,cp,dm,cin);
+     set S1 = BitGFA1Str(ap,bm,cp);
+     set A1 = GFA1AdderOutput(ap,bm,cp);
+     set S2 = BitGFA2Str(A1,cin,dm);
+
+     InnerVertices S1 is Relation & InnerVertices S2 is Relation
+       by GFACIRC1:77,114;
+    hence InnerVertices S is Relation by FACIRC_1:3;
+   end;
+
+LemmaX21:
+  for x,y,z being set
+   for p being set holds GFA1AdderOutput(x,y,z) <> [p,and2c]
+   proof
+     let x,y,z be set, p be set;
+     set A1 = GFA1AdderOutput(x,y,z);
+
+     now assume [p,and2c]`2 = A1`2; then
+A1:    [p,and2c]`2 = xor2c by MCART_1:7;
+       [p,and2c]`2 = and2c by MCART_1:7;
+       hence contradiction by A1,GFACIRC1:3,4;
+     end;
+    hence thesis;
+   end;
+
+LemmaX22:
+  for ap,bm,cp being non pair set
+  for x,y,z being set holds
+   InputVertices BitGFA1Str(ap,bm,cp) misses InnerVertices BitGFA2Str(x,y,z)
+   proof
+     let ap,bm,cp be non pair set;
+     let x,y,z be set;
+     set S1 = BitGFA1Str(ap,bm,cp);
+     set S2 = BitGFA2Str(x,y,z);
+
+     InputVertices S1 is without_pairs & InnerVertices S2 is Relation
+       by GFACIRC1:80,114;
+    hence thesis by FACIRC_1:5;
+   end;
+
+theorem ThFTA1S4:
+  for ap,bm,cp,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+      not cin in InnerVertices BitGFA1Str(ap,bm,cp)
+    holds
+      InputVertices BitFTA1Str(ap,bm,cp,dm,cin) = {ap,bm,cp,dm,cin}
+   proof
+     let ap,bm,cp,dm be non pair set;
+     let cin be set;
+     set S  = BitFTA1Str(ap,bm,cp,dm,cin);
+     set S1 = BitGFA1Str(ap,bm,cp);
+     set A1 = GFA1AdderOutput(ap,bm,cp);  set C1 = GFA1CarryOutput(ap,bm,cp);
+     set S2 = BitGFA2Str(A1,cin,dm);
+     set A2 = GFA2AdderOutput(A1,cin,dm); set C2 = GFA2CarryOutput(A1,cin,dm);
+     set apbm0  = [<*ap,bm*>, xor2c]; set apbm  = [<*ap,bm*>, and2c];
+     set bmcp   = [<*bm,cp*>, and2a]; set cpap  = [<*cp,ap*>, and2 ];
+     set A1cin0 = [<*A1,cin*>,xor2c]; set A1cin = [<*A1,cin*>,and2a];
+     set cindm  = [<*cin,dm*>,and2c]; set dmA1  = [<*dm,A1*>, and2b];
+
+     assume A1: cin <> dmA1 & not cin in InnerVertices S1;
+
+A3:  InnerVertices S2 misses InputVertices S1 by LemmaX22;
+
+A4:  InnerVertices S1
+       = {apbm0} \/ {A1} \/ {apbm,bmcp,cpap} \/ {C1} by GFACIRC1:76
+      .= {apbm0,A1} \/ {apbm,bmcp,cpap} \/ {C1} by ENUMSET1:41
+      .= {apbm0,A1} \/ ({apbm,bmcp,cpap} \/ {C1}) by XBOOLE_1:4
+      .= {A1,apbm0} \/ {apbm,bmcp,cpap,C1} by ENUMSET1:46
+      .= {A1,apbm0,apbm,bmcp,cpap,C1} by ENUMSET1:52;
+
+     A1 in {A1,apbm0,apbm,bmcp,cpap,C1} by ENUMSET1:def 4; then
+A5:  {A1} \ {A1,apbm0,apbm,bmcp,cpap,C1} = {} by ZFMISC_1:68;
+
+A6:  not dm in {A1,apbm0,apbm,bmcp,cpap,C1} by ENUMSET1:def 4;
+
+A7:  {A1,cin,dm} \ InnerVertices S1
+       = ({A1} \/ {cin,dm}) \ {A1,apbm0,apbm,bmcp,cpap,C1} by A4,ENUMSET1:42
+      .= ({A1} \ {A1,apbm0,apbm,bmcp,cpap,C1}) \/
+         ({cin,dm} \ {A1,apbm0,apbm,bmcp,cpap,C1}) by XBOOLE_1:42
+      .= ({cin} \/ {dm}) \ {A1,apbm0,apbm,bmcp,cpap,C1} by A5,ENUMSET1:41
+      .= ({cin} \ {A1,apbm0,apbm,bmcp,cpap,C1}) \/
+         ({dm} \ {A1,apbm0,apbm,bmcp,cpap,C1}) by XBOOLE_1:42
+      .= ({cin}) \/ ({dm} \ {A1,apbm0,apbm,bmcp,cpap,C1}) by A1,A4,ZFMISC_1:67
+      .= ({cin}) \/ ({dm}) by A6,ZFMISC_1:67
+      .= {cin,dm} by ENUMSET1:41;
+
+     S = S1 +* S2 & S1 tolerates S2 by CIRCCOMB:55;
+    hence InputVertices (S)
+       = (InputVertices S1) \/ (InputVertices S2 \ InnerVertices S1)
+           by A3,FACIRC_1:4
+      .= ({ap,bm,cp}) \/ (InputVertices S2 \ InnerVertices S1) by GFACIRC1:79
+      .= ({ap,bm,cp}) \/ ({A1,cin,dm} \ InnerVertices S1)
+           by A1,LemmaX21,GFACIRC1:115
+      .= {ap,bm,cp,dm,cin} by A7,ENUMSET1:49;
+   end;
+
+:: The Element of Carriers, InnerVertices and InputVertices (FTA1)
+
+theorem ThFTA1S6:
+  for ap,bm,cp,dm,cin being set holds
+   ap in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   bm in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   cp in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   dm in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   cin in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*ap,bm*>,xor2c] in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   GFA1AdderOutput(ap,bm,cp) in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*ap,bm*>,and2c] in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*bm,cp*>,and2a] in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*cp,ap*>,and2 ] in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   GFA1CarryOutput(ap,bm,cp) in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*GFA1AdderOutput(ap,bm,cp),cin*>,xor2c]
+                             in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   GFA2AdderOutput(GFA1AdderOutput(ap,bm,cp),cin,dm)
+                             in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*GFA1AdderOutput(ap,bm,cp),cin*>,and2a]
+                             in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*cin,dm*>,and2c]        in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b]
+                             in the carrier of BitFTA1Str(ap,bm,cp,dm,cin) &
+   GFA2CarryOutput(GFA1AdderOutput(ap,bm,cp),cin,dm)
+                             in the carrier of BitFTA1Str(ap,bm,cp,dm,cin)
+   proof
+     let ap,bm,cp,dm,cin be set;
+     set S  = BitFTA1Str(ap,bm,cp,dm,cin);
+     set S1 = BitGFA1Str(ap,bm,cp);
+     set A1 = GFA1AdderOutput(ap,bm,cp);  set C1 = GFA1CarryOutput(ap,bm,cp);
+     set S2 = BitGFA2Str(A1,cin,dm);
+     set A2 = GFA2AdderOutput(A1,cin,dm); set C2 = GFA2CarryOutput(A1,cin,dm);
+     set apbm0  = [<*ap,bm*>, xor2c]; set apbm  = [<*ap,bm*>, and2c];
+     set bmcp   = [<*bm,cp*>, and2a]; set cpap  = [<*cp,ap*>, and2 ];
+     set A1cin0 = [<*A1,cin*>,xor2c]; set A1cin = [<*A1,cin*>,and2a];
+     set cindm  = [<*cin,dm*>,and2c]; set dmA1  = [<*dm,A1*>, and2b];
+
+A1:  ap in the carrier of S1 & bm in the carrier of S1 &
+     cp in the carrier of S1 &
+     apbm0 in the carrier of S1 & A1 in the carrier of S1 &
+     apbm in the carrier of S1 & bmcp in the carrier of S1 &
+     cpap in the carrier of S1 & C1 in the carrier of S1 by GFACIRC1:81;
+
+     A1 in the carrier of S2 & cin in the carrier of S2 &
+     dm in the carrier of S2 &
+     A1cin0 in the carrier of S2 & A2 in the carrier of S2 &
+     A1cin in the carrier of S2 & cindm in the carrier of S2 &
+     dmA1 in the carrier of S2 & C2 in the carrier of S2 by GFACIRC1:118;
+    hence thesis by A1,FACIRC_1:20;
+   end;
+
+theorem ThFTA1S7:
+  for ap,bm,cp,dm,cin being set holds
+   [<*ap,bm*>,xor2c] in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   GFA1AdderOutput(ap,bm,cp) in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*ap,bm*>,and2c] in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*bm,cp*>,and2a] in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*cp,ap*>,and2 ] in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   GFA1CarryOutput(ap,bm,cp) in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*GFA1AdderOutput(ap,bm,cp),cin*>,xor2c]
+                             in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   GFA2AdderOutput(GFA1AdderOutput(ap,bm,cp),cin,dm)
+                             in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*GFA1AdderOutput(ap,bm,cp),cin*>,and2a]
+                             in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*cin,dm*>,and2c] in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b]
+                             in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+   GFA2CarryOutput(GFA1AdderOutput(ap,bm,cp),cin,dm)
+                             in InnerVertices BitFTA1Str(ap,bm,cp,dm,cin)
+   proof
+     let ap,bm,cp,dm,cin be set;
+     set S  = BitFTA1Str(ap,bm,cp,dm,cin);
+     set S1 = BitGFA1Str(ap,bm,cp);
+     set A1 = GFA1AdderOutput(ap,bm,cp);  set C1 = GFA1CarryOutput(ap,bm,cp);
+     set S2 = BitGFA2Str(A1,cin,dm);
+     set A2 = GFA2AdderOutput(A1,cin,dm); set C2 = GFA2CarryOutput(A1,cin,dm);
+     set apbm0  = [<*ap,bm*>, xor2c]; set apbm  = [<*ap,bm*>, and2c];
+     set bmcp   = [<*bm,cp*>, and2a]; set cpap  = [<*cp,ap*>, and2 ];
+     set A1cin0 = [<*A1,cin*>,xor2c]; set A1cin = [<*A1,cin*>,and2a];
+     set cindm  = [<*cin,dm*>,and2c]; set dmA1  = [<*dm,A1*>, and2b];
+     set p1 = {apbm0,A1,apbm,bmcp,cpap,C1};
+     set p2 = {A1cin0,A2,A1cin,cindm,dmA1,C2};
+
+A1:  InnerVertices S
+       = {apbm0,A1} \/ {apbm,bmcp,cpap,C1} \/
+         {A1cin0,A2} \/ {A1cin,cindm,dmA1,C2} by ThFTA1S1
+      .= p1 \/ {A1cin0,A2} \/ {A1cin,cindm,dmA1,C2} by ENUMSET1:52
+      .= p1 \/ ({A1cin0,A2} \/ {A1cin,cindm,dmA1,C2}) by XBOOLE_1:4
+      .= p1 \/ p2 by ENUMSET1:52;
+
+     (apbm0 in p1 & A1 in p1 &
+      apbm in p1 & bmcp in p1 & cpap in p1 & C1 in p1) &
+     (A1cin0 in p2 & A2 in p2 &
+      A1cin in p2 & cindm in p2 & dmA1 in p2 & C2 in p2 ) by ENUMSET1:def 4;
+    hence thesis by A1,XBOOLE_0:def 2;
+   end;
+
+theorem ThFTA1S8:
+  for ap,bm,cp,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+      not cin in InnerVertices BitGFA1Str(ap,bm,cp)
+   holds
+     ap in InputVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+     bm in InputVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+     cp in InputVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+     dm in InputVertices BitFTA1Str(ap,bm,cp,dm,cin) &
+     cin in InputVertices BitFTA1Str(ap,bm,cp,dm,cin)
+   proof
+     let ap,bm,cp,dm be non pair set;
+     let cin be set;
+     set S  = BitFTA1Str(ap,bm,cp,dm,cin);
+     set S1 = BitGFA1Str(ap,bm,cp);
+     set A1 = GFA1AdderOutput(ap,bm,cp);
+     set dmA1 = [<*dm,A1*>,and2b];
+
+     assume cin <> dmA1 & not cin in InnerVertices S1; then
+     InputVertices S = {ap,bm,cp,dm,cin} by ThFTA1S4;
+    hence thesis by ENUMSET1:def 3;
+   end;
+
+::-------------------------------------------
+:: 2-3. Output Definitions of the Combined Circuit
+::-------------------------------------------
+
+:: Def. External/Internal Signal Outputs of 1-bit FTA TYPE-1
+
+definition
+ let ap,bm,cp,dm,cin be set;
+ func BitFTA1CarryOutput(ap,bm,cp,dm,cin) ->
+         Element of InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) equals
+    GFA1CarryOutput(ap,bm,cp);
+ coherence by ThFTA1S7;
+
+ func BitFTA1AdderOutputI(ap,bm,cp,dm,cin) ->
+         Element of InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) equals
+    GFA1AdderOutput(ap,bm,cp);
+ coherence by ThFTA1S7;
+
+ func BitFTA1AdderOutputP(ap,bm,cp,dm,cin) ->
+         Element of InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) equals
+    GFA2CarryOutput(GFA1AdderOutput(ap,bm,cp),cin,dm);
+ coherence by ThFTA1S7;
+
+ func BitFTA1AdderOutputQ(ap,bm,cp,dm,cin) ->
+         Element of InnerVertices BitFTA1Str(ap,bm,cp,dm,cin) equals
+    GFA2AdderOutput(GFA1AdderOutput(ap,bm,cp),cin,dm);
+ coherence by ThFTA1S7;
+end;
+
+::-----------------------------------
+:: 2-4. Stability of the Combined Circuit and its Outputs
+::-----------------------------------
+
+:: Intermediate (External/Internal) Carry/Adder Outputs after Two-steps
+
+theorem
+  for ap,bm,cp being non pair set
+  for dm,cin being set
+   for s being State of BitFTA1Circ(ap,bm,cp,dm,cin)
+   for a1,a2,a3 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bm & a3 = s.cp
+   holds Following(s,2).BitFTA1CarryOutput(ap,bm,cp,dm,cin)
+         = (a1 '&' 'not' a2) 'or' ('not' a2 '&' a3) 'or' (a3 '&' a1) &
+         Following(s,2).BitFTA1AdderOutputI(ap,bm,cp,dm,cin)
+         = 'not' (a1 'xor' 'not' a2 'xor' a3)
+ proof
+    let ap,bm,cp be non pair set;
+    let dm,cin be set;
+    let s be State of BitFTA1Circ(ap,bm,cp,dm,cin);
+    set S1 = BitGFA1Str(ap,bm,cp);      set C1 = BitGFA1Circ(ap,bm,cp);
+    set A1 = GFA1AdderOutput(ap,bm,cp); set A2 = GFA1CarryOutput(ap,bm,cp);
+    set S2 = BitGFA2Str(A1,cin,dm);     set C2 = BitGFA2Circ(A1,cin,dm);
+    let a1,a2,a3 be Element of BOOLEAN such that
+A1: a1 = s.ap & a2 = s.bm & a3 = s.cp;
+
+A2: ap in the carrier of S1 & bm in the carrier of S1 & cp in the carrier of S1
+      by GFACIRC1:81;
+    reconsider s1 = s|the carrier of S1 as State of C1 by FACIRC_1:26;
+    reconsider t = s as State of C1+*C2;
+
+A3: A1 in the carrier of S1 & A2 in the carrier of S1 by GFACIRC1:81;
+A4: InputVertices S1 misses InnerVertices S2 by LemmaX22;
+
+    dom s1 = the carrier of S1 by CIRCUIT1:4; then
+A5: a1 = s1.ap & a2 = s1.bm & a3 = s1.cp by A1,A2,FUNCT_1:70; then
+    Following(t,2).GFA1CarryOutput(ap,bm,cp)
+     = Following(s1,2).GFA1CarryOutput(ap,bm,cp) &
+    Following(s1,2).GFA1CarryOutput(ap,bm,cp)
+     = (a1 '&' 'not' a2) 'or' ('not' a2 '&' a3) 'or' (a3 '&' a1)
+      by A3,A4,FACIRC_1:32,GFACIRC1:84;
+   hence Following(s,2).BitFTA1CarryOutput(ap,bm,cp,dm,cin)
+     = (a1 '&' 'not' a2) 'or' ('not' a2 '&' a3) 'or' (a3 '&' a1);
+
+    Following(t,2).GFA1AdderOutput(ap,bm,cp)
+     = Following(s1,2).GFA1AdderOutput(ap,bm,cp) &
+    Following(s1,2).GFA1AdderOutput(ap,bm,cp)
+     = 'not' (a1 'xor' 'not' a2 'xor' a3)
+      by A3,A4,A5,FACIRC_1:32,GFACIRC1:84;
+   hence Following(s,2).BitFTA1AdderOutputI(ap,bm,cp,dm,cin)
+     = 'not' (a1 'xor' 'not' a2 'xor' a3);
+end;
+
+:: Temporal (Internal) Calculations after Two-steps
+
+theorem ThFTA1S11:
+  for ap,bm,cp,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+      not cin in InnerVertices BitGFA1Str(ap,bm,cp)
+   for s being State of BitFTA1Circ(ap,bm,cp,dm,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bm & a3 = s.cp & a4 = s.dm & a5 = s.cin
+   holds Following(s,2).GFA1AdderOutput(ap,bm,cp)
+          = 'not' (a1 'xor' 'not' a2 'xor' a3) &
+         Following(s,2).ap = a1 & Following(s,2).bm = a2 &
+         Following(s,2).cp = a3 & Following(s,2).dm = a4 &
+         Following(s,2).cin = a5
+ proof
+    let ap,bm,cp,dm be non pair set;
+    let cin be set such that
+A1: cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+    not cin in InnerVertices BitGFA1Str(ap,bm,cp);
+    let s be State of BitFTA1Circ(ap,bm,cp,dm,cin);
+    set S  = BitFTA1Str(ap,bm,cp,dm,cin);
+    set S1 = BitGFA1Str(ap,bm,cp);      set C1 = BitGFA1Circ(ap,bm,cp);
+    set A1 = GFA1AdderOutput(ap,bm,cp);
+    set S2 = BitGFA2Str(A1,cin,dm);     set C2 = BitGFA2Circ(A1,cin,dm);
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.ap & a2 = s.bm & a3 = s.cp & a4 = s.dm & a5 = s.cin;
+
+A3: ap in the carrier of S1 & bm in the carrier of S1 & cp in the carrier of S1
+      by GFACIRC1:81;
+    reconsider s1 = s|the carrier of S1 as State of C1 by FACIRC_1:26;
+    reconsider t = s as State of C1+*C2;
+
+A4: A1 in the carrier of S1 by GFACIRC1:81;
+A5: InputVertices S1 misses InnerVertices S2 by LemmaX22;
+
+    dom s1 = the carrier of S1 by CIRCUIT1:4; then
+    a1 = s1.ap & a2 = s1.bm & a3 = s1.cp by A2,A3,FUNCT_1:70; then
+    Following(t,2).GFA1AdderOutput(ap,bm,cp)
+     = Following(s1,2).GFA1AdderOutput(ap,bm,cp) &
+    Following(s1,2).GFA1AdderOutput(ap,bm,cp)
+     = 'not' (a1 'xor' 'not' a2 'xor' a3) by A4,A5,FACIRC_1:32,GFACIRC1:84;
+   hence Following(s,2).GFA1AdderOutput(ap,bm,cp)
+     = 'not' (a1 'xor' 'not' a2 'xor' a3);
+
+A6: Following(s,2) = Following Following s by FACIRC_1:15;
+A7: ap in InputVertices S & bm in InputVertices S &
+    cp in InputVertices S & dm in InputVertices S &
+    cin in InputVertices S by A1,ThFTA1S8; then
+    (Following s).ap = a1 & (Following s).bm = a2 &
+    (Following s).cp = a3 & (Following s).dm = a4 &
+    (Following s).cin = a5 by A2,CIRCUIT2:def 5;
+   hence thesis by A6,A7,CIRCUIT2:def 5;
+end;
+
+LmFTA1S12p:
+ for ap,bm,cp,dm being non pair set
+  for cin being set
+   for s being State of BitFTA1Circ(ap,bm,cp,dm,cin)
+    for a123,a4,a5 being Element of BOOLEAN
+      st a123 = s.GFA1AdderOutput(ap,bm,cp) & a4 = s.dm & a5 = s.cin
+  holds (Following s).[<*GFA1AdderOutput(ap,bm,cp),cin*>,and2a]
+         = 'not' a123 '&' a5 &
+        (Following s).[<*cin,dm*>,and2c] = a5 '&' 'not' a4 &
+        (Following s).[<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b]
+         = 'not' a4 '&' 'not' a123
+ proof
+    let ap,bm,cp,dm be non pair set;
+    let cin be set;
+    set S  = BitFTA1Str(ap,bm,cp,dm,cin);set C  = BitFTA1Circ(ap,bm,cp,dm,cin);
+    set A1 = GFA1AdderOutput(ap,bm,cp);
+    set S2 = BitGFA2Str(A1,cin,dm);      set C2 = BitGFA2Circ(A1,cin,dm);
+    set A1cin = [<*A1,cin*>,and2a]; set cindm = [<*cin,dm*>,and2c];
+    set dmA1  = [<*dm,A1*>, and2b];
+    let s be State of C;
+    let a123,a4,a5 be Element of BOOLEAN such that
+A1: a123 = s.A1 & a4 = s.dm & a5 = s.cin;
+
+A2: A1 in the carrier of S & dm in the carrier of S & cin in the carrier of S
+      by ThFTA1S6;
+A3: dom s = the carrier of S by CIRCUIT1:4;
+    InnerVertices S = the carrier' of S by FACIRC_1:37; then
+A4: A1cin in the carrier' of S & cindm in the carrier' of S &
+    dmA1  in the carrier' of S by ThFTA1S7;
+   hence (Following s).A1cin
+        = and2a.(s*<*A1,cin*>) by FACIRC_1:35
+       .= and2a.<*a123, a5*> by A1,A2,A3,FINSEQ_2:145
+       .= 'not' a123 '&' a5 by TWOSCOMP:def 2;
+   thus (Following s).cindm
+        = and2c.(s*<*cin,dm*>) by A4,FACIRC_1:35
+       .= and2c.<*a5,a4*> by A1,A2,A3,FINSEQ_2:145
+       .= a5 '&' 'not' a4 by GFACIRC1:def 3;
+   thus (Following s).dmA1
+        = and2b.(s*<*dm,A1*>) by A4,FACIRC_1:35
+       .= and2b.<*a4,a123*> by A1,A2,A3,FINSEQ_2:145
+       .= 'not' a4 '&' 'not' a123 by TWOSCOMP:def 3;
+ end;
+
+LmFTA1S12q:
+ for ap,bm,cp,dm being non pair set
+  for cin being set
+   for s being State of BitFTA1Circ(ap,bm,cp,dm,cin)
+    for a123,a5 being Element of BOOLEAN
+      st a123 = s.GFA1AdderOutput(ap,bm,cp) & a5 = s.cin
+    holds (Following s).[<*GFA1AdderOutput(ap,bm,cp),cin*>,xor2c]
+          = a123 'xor' 'not' a5
+ proof
+    let ap,bm,cp,dm be non pair set;
+    let cin be set;
+    set S  = BitFTA1Str(ap,bm,cp,dm,cin);set C  = BitFTA1Circ(ap,bm,cp,dm,cin);
+    set A1 = GFA1AdderOutput(ap,bm,cp);
+    set A1cin = [<*A1,cin*>,xor2c];
+    let s be State of C;
+    let a123,a5 be Element of BOOLEAN such that
+A1: a123 = s.A1 & a5 = s.cin;
+
+A2: A1 in the carrier of S & cin in the carrier of S by ThFTA1S6;
+A3: dom s = the carrier of S by CIRCUIT1:4;
+    InnerVertices S = the carrier' of S by FACIRC_1:37; then
+    A1cin in the carrier' of S by ThFTA1S7;
+   hence (Following s).A1cin
+        = xor2c.(s*<*A1,cin*>) by FACIRC_1:35
+       .= xor2c.<*a123, a5*> by A1,A2,A3,FINSEQ_2:145
+       .= a123 'xor' 'not' a5 by GFACIRC1:def 4;
+ end;
+
+LmFTA1S13p:    :: Temporal (Internal) Calculations after Three-steps (for p)
+  for ap,bm,cp,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+      not cin in InnerVertices BitGFA1Str(ap,bm,cp)
+   for s being State of BitFTA1Circ(ap,bm,cp,dm,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bm & a3 = s.cp & a4 = s.dm & a5 = s.cin
+   holds Following(s,3).[<*GFA1AdderOutput(ap,bm,cp),cin*>,and2a]
+         = (a1 'xor' 'not' a2 'xor' a3) '&' a5 &
+         Following(s,3).[<*cin,dm*>,and2c] = a5 '&' 'not' a4 &
+         Following(s,3).[<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b]
+         = 'not' a4 '&' (a1 'xor' 'not' a2 'xor' a3) &
+         Following(s,3).ap = a1 & Following(s,3).bm = a2 &
+         Following(s,3).cp = a3 & Following(s,3).dm = a4 &
+         Following(s,3).cin = a5
+ proof
+    let ap,bm,cp,dm be non pair set;
+    let cin be set such that
+A1: cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+    not cin in InnerVertices BitGFA1Str(ap,bm,cp);
+    let s be State of BitFTA1Circ(ap,bm,cp,dm,cin);
+    set S  = BitFTA1Str(ap,bm,cp,dm,cin);set C  = BitFTA1Circ(ap,bm,cp,dm,cin);
+    set S1 = BitGFA1Str(ap,bm,cp);       set C1 = BitGFA1Circ(ap,bm,cp);
+    set A1 = GFA1AdderOutput(ap,bm,cp);
+    set S2 = BitGFA2Str(A1,cin,dm);      set C2 = BitGFA2Circ(A1,cin,dm);
+    set A1cin = [<*A1,cin*>,and2a]; set cindm = [<*cin,dm*>,and2c];
+    set dmA1  = [<*dm,A1*>, and2b];
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.ap & a2 = s.bm & a3 = s.cp & a4 = s.dm & a5 = s.cin;
+
+A3: Following(s,2+1) = Following Following(s,2) by FACIRC_1:12;
+
+    Following(s,2).A1 = 'not' (a1 'xor' 'not' a2 'xor' a3) &
+    Following(s,2).dm = a4 & Following(s,2).cin = a5 by A1,A2,ThFTA1S11;
+   hence Following(s,3).A1cin = (a1 'xor' 'not' a2 'xor' a3) '&' a5 &
+         Following(s,3).cindm = a5 '&' 'not' a4 &
+         Following(s,3).dmA1 = 'not' a4 '&' (a1 'xor' 'not' a2 'xor' a3)
+           by A3,LmFTA1S12p;
+
+A4: ap in InputVertices S & bm in InputVertices S &
+    cp in InputVertices S & dm in InputVertices S &
+    cin in InputVertices S by A1,ThFTA1S8;
+    Following(s,2).ap = a1 & Following(s,2).bm = a2 &
+    Following(s,2).cp = a3 & Following(s,2).dm = a4 &
+    Following(s,2).cin = a5 by A1,A2,ThFTA1S11;
+   hence thesis by A3,A4,CIRCUIT2:def 5;
+ end;
+
+LmFTA1S13q:   :: Temporal (Internal) Calculations after Three-steps (for q)
+  for ap,bm,cp,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+      not cin in InnerVertices BitGFA1Str(ap,bm,cp)
+   for s being State of BitFTA1Circ(ap,bm,cp,dm,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bm & a3 = s.cp & a4 = s.dm & a5 = s.cin
+   holds Following(s,3).[<*GFA1AdderOutput(ap,bm,cp),cin*>,xor2c]
+         = 'not' (a1 'xor' 'not' a2 'xor' a3) 'xor' 'not' a5 &
+         Following(s,3).ap = a1 & Following(s,3).bm = a2 &
+         Following(s,3).cp = a3 & Following(s,3).dm = a4 &
+         Following(s,3).cin = a5
+ proof
+    let ap,bm,cp,dm be non pair set;
+    let cin be set such that
+A1: cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+    not cin in InnerVertices BitGFA1Str(ap,bm,cp);
+    let s be State of BitFTA1Circ(ap,bm,cp,dm,cin);
+    set S  = BitFTA1Str(ap,bm,cp,dm,cin);set C  = BitFTA1Circ(ap,bm,cp,dm,cin);
+    set S1 = BitGFA1Str(ap,bm,cp);       set C1 = BitGFA1Circ(ap,bm,cp);
+    set A1 = GFA1AdderOutput(ap,bm,cp);
+    set S2 = BitGFA2Str(A1,cin,dm);      set C2 = BitGFA1Circ(A1,cin,dm);
+    set A1cin = [<*A1,cin*>,xor2c];
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.ap & a2 = s.bm & a3 = s.cp & a4 = s.dm & a5 = s.cin;
+
+A3: Following(s,2+1) = Following Following(s,2) by FACIRC_1:12;
+
+    Following(s,2).A1 = 'not' (a1 'xor' 'not' a2 'xor' a3) &
+    Following(s,2).cin = a5 by A1,A2,ThFTA1S11;
+   hence Following(s,3).A1cin
+     = 'not' (a1 'xor' 'not' a2 'xor' a3) 'xor' 'not' a5 by A3,LmFTA1S12q;
+
+A4: ap in InputVertices S & bm in InputVertices S &
+    cp in InputVertices S & dm in InputVertices S &
+    cin in InputVertices S by A1,ThFTA1S8;
+    Following(s,2).ap = a1 & Following(s,2).bm = a2 &
+    Following(s,2).cp = a3 & Following(s,2).dm = a4 &
+    Following(s,2).cin = a5 by A1,A2,ThFTA1S11;
+   hence thesis by A3,A4,CIRCUIT2:def 5;
+ end;
+
+LmFTA1S14p:
+ for ap,bm,cp,dm being non pair set
+  for cin being set
+   for s being State of BitFTA1Circ(ap,bm,cp,dm,cin)
+    for a123x,a123y,a123z being Element of BOOLEAN
+      st a123x = s.[<*GFA1AdderOutput(ap,bm,cp),cin*>,and2a] &
+         a123y = s.[<*cin,dm*>,and2c] &
+         a123z = s.[<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b]
+    holds (Following s).GFA2CarryOutput(GFA1AdderOutput(ap,bm,cp),cin,dm)
+          = 'not' (a123x 'or' a123y 'or' a123z)
+ proof
+    let ap,bm,cp,dm be non pair set;
+    let cin be set;
+    set S  = BitFTA1Str(ap,bm,cp,dm,cin);set C  = BitFTA1Circ(ap,bm,cp,dm,cin);
+    set A1 = GFA1AdderOutput(ap,bm,cp);
+    set A2 = GFA2CarryOutput(A1,cin,dm);
+    set A1cin = [<*A1,cin*>,and2a]; set cindm = [<*cin,dm*>,and2c];
+    set dmA1  = [<*dm,A1*>, and2b];
+    let s be State of C;
+    let a123x,a123y,a123z be Element of BOOLEAN such that
+A1: a123x = s.A1cin & a123y = s.cindm & a123z = s.dmA1;
+
+A2: A1cin in the carrier of S & cindm in the carrier of S &
+    dmA1 in the carrier of S by ThFTA1S6;
+A3: dom s = the carrier of S by CIRCUIT1:4;
+    InnerVertices S = the carrier' of S by FACIRC_1:37; then
+    A2 in the carrier' of S by ThFTA1S7;
+   hence (Following s).A2
+        = nor3.(s*<*A1cin,cindm,dmA1*>) by FACIRC_1:35
+       .= nor3.<*a123x, a123y, a123z*> by A1,A2,A3,FINSEQ_2:146
+       .= 'not' (a123x 'or' a123y 'or' a123z) by TWOSCOMP:def 28;
+ end;
+
+LmFTA1S14q:
+ for ap,bm,cp,dm being non pair set
+  for cin being set
+   for s being State of BitFTA1Circ(ap,bm,cp,dm,cin)
+    for a1235,a4 being Element of BOOLEAN
+      st a1235 = s.[<*GFA1AdderOutput(ap,bm,cp),cin*>,xor2c] & a4 = s.dm
+    holds (Following s).GFA2AdderOutput(GFA1AdderOutput(ap,bm,cp),cin,dm)
+          = a1235 'xor' 'not' a4
+ proof
+    let ap,bm,cp,dm be non pair set;
+    let cin be set;
+    set S  = BitFTA1Str(ap,bm,cp,dm,cin);set C  = BitFTA1Circ(ap,bm,cp,dm,cin);
+    set A1 = GFA1AdderOutput(ap,bm,cp);
+    set A2 = GFA2AdderOutput(A1,cin,dm);
+    set A1cin = [<*A1,cin*>,xor2c];
+    let s be State of C;
+    let a1235,a4 be Element of BOOLEAN such that
+A1: a1235 = s.A1cin & a4 = s.dm;
+
+A2: A1cin in the carrier of S & A1 in the carrier of S &
+    cin in the carrier of S & dm in the carrier of S by ThFTA1S6;
+A3: dom s = the carrier of S by CIRCUIT1:4;
+    InnerVertices S = the carrier' of S by FACIRC_1:37; then
+    A2 in the carrier' of S by ThFTA1S7;
+   hence (Following s).A2
+        = xor2c.(s*<*A1cin,dm*>) by FACIRC_1:35
+       .= xor2c.<*a1235, a4*> by A1,A2,A3,FINSEQ_2:145
+       .= a1235 'xor' 'not' a4 by GFACIRC1:def 4;
+ end;
+
+LmFTA1S15p:    :: Temporal (External) Calculations after Four-steps (for p)
+  for ap,bm,cp,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+      not cin in InnerVertices BitGFA1Str(ap,bm,cp)
+   for s being State of BitFTA1Circ(ap,bm,cp,dm,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bm & a3 = s.cp & a4 = s.dm & a5 = s.cin
+   holds Following(s,4).GFA2CarryOutput(GFA1AdderOutput(ap,bm,cp),cin,dm)
+         = 'not' (((a1 'xor' 'not' a2 'xor' a3) '&' a5) 'or'
+                  (a5 '&' 'not' a4) 'or'
+                  ('not' a4 '&' (a1 'xor' 'not' a2 'xor' a3))) &
+         Following(s,4).ap = a1 & Following(s,4).bm = a2 &
+         Following(s,4).cp = a3 & Following(s,4).dm = a4 &
+         Following(s,4).cin = a5
+ proof
+    let ap,bm,cp,dm be non pair set;
+    let cin be set such that
+A1: cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+    not cin in InnerVertices BitGFA1Str(ap,bm,cp);
+    let s be State of BitFTA1Circ(ap,bm,cp,dm,cin);
+    set S  = BitFTA1Str(ap,bm,cp,dm,cin);set C  = BitFTA1Circ(ap,bm,cp,dm,cin);
+    set S1 = BitGFA1Str(ap,bm,cp);       set C1 = BitGFA1Circ(ap,bm,cp);
+    set A1 = GFA1AdderOutput(ap,bm,cp);
+    set S2 = BitGFA2Str(A1,cin,dm);      set C2 = BitGFA2Circ(A1,cin,dm);
+    set A2 = GFA2CarryOutput(A1,cin,dm);
+    set A1cin = [<*A1,cin*>,and2a]; set cindm = [<*cin,dm*>,and2c];
+    set dmA1  = [<*dm,A1*>, and2b];
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.ap & a2 = s.bm & a3 = s.cp & a4 = s.dm & a5 = s.cin;
+
+A3: Following(s,3+1) = Following Following(s,3) by FACIRC_1:12;
+
+    Following(s,3).A1cin = (a1 'xor' 'not' a2 'xor' a3) '&' a5 &
+    Following(s,3).cindm = a5 '&' 'not' a4 &
+    Following(s,3).dmA1 = 'not' a4 '&' (a1 'xor' 'not' a2 'xor' a3)
+      by A1,A2,LmFTA1S13p;
+   hence Following(s,4).A2
+         = 'not' (((a1 'xor' 'not' a2 'xor' a3) '&' a5) 'or'
+                  (a5 '&' 'not' a4) 'or'
+                  ('not' a4 '&' (a1 'xor' 'not' a2 'xor' a3)))
+      by A3,LmFTA1S14p;
+
+A4: ap in InputVertices S & bm in InputVertices S &
+    cp in InputVertices S & dm in InputVertices S &
+    cin in InputVertices S by A1,ThFTA1S8;
+    Following(s,3).ap = a1 & Following(s,3).bm = a2 &
+    Following(s,3).cp = a3 & Following(s,3).dm = a4 &
+    Following(s,3).cin = a5 by A1,A2,LmFTA1S13p;
+   hence thesis by A3,A4,CIRCUIT2:def 5;
+ end;
+
+LmFTA1S15q:    :: Temporal (External) Calculations after Four-steps (for q)
+  for ap,bm,cp,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+      not cin in InnerVertices BitGFA1Str(ap,bm,cp)
+   for s being State of BitFTA1Circ(ap,bm,cp,dm,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bm & a3 = s.cp & a4 = s.dm & a5 = s.cin
+   holds Following(s,4).GFA2AdderOutput(GFA1AdderOutput(ap,bm,cp),cin,dm)
+         = a1 'xor' 'not' a2 'xor' a3 'xor' 'not' a4 'xor' a5 &
+         Following(s,4).ap = a1 & Following(s,4).bm = a2 &
+         Following(s,4).cp = a3 & Following(s,4).dm = a4 &
+         Following(s,4).cin = a5
+ proof
+    let ap,bm,cp,dm be non pair set;
+    let cin be set such that
+A1: cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+    not cin in InnerVertices BitGFA1Str(ap,bm,cp);
+    let s be State of BitFTA1Circ(ap,bm,cp,dm,cin);
+    set S  = BitFTA1Str(ap,bm,cp,dm,cin);set C  = BitFTA1Circ(ap,bm,cp,dm,cin);
+    set S1 = BitGFA1Str(ap,bm,cp);       set C1 = BitGFA1Circ(ap,bm,cp);
+    set A1 = GFA1AdderOutput(ap,bm,cp);
+    set S2 = BitGFA2Str(A1,cin,dm);      set C2 = BitGFA2Circ(A1,cin,dm);
+    set A2 = GFA2AdderOutput(A1,cin,dm);
+    set A1cin = [<*A1,cin*>,xor2c];
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.ap & a2 = s.bm & a3 = s.cp & a4 = s.dm & a5 = s.cin;
+
+A3: Following(s,3+1) = Following Following(s,3) by FACIRC_1:12;
+
+    Following(s,3).A1cin = 'not' (a1 'xor' 'not' a2 'xor' a3) 'xor' 'not' a5 &
+    Following(s,3).dm = a4 by A1,A2,LmFTA1S13q;
+   hence Following(s,4).A2
+     = (a1 'xor' 'not' a2 'xor' a3) 'xor' a5 'xor' 'not' a4 by A3,LmFTA1S14q
+    .= a1 'xor' 'not' a2 'xor' a3 'xor' 'not' a4 'xor' a5 by XBOOLEAN:73;
+
+A4: ap in InputVertices S & bm in InputVertices S &
+    cp in InputVertices S & dm in InputVertices S &
+    cin in InputVertices S by A1,ThFTA1S8;
+    Following(s,3).ap = a1 & Following(s,3).bm = a2 &
+    Following(s,3).cp = a3 & Following(s,3).dm = a4 &
+    Following(s,3).cin = a5 by A1,A2,LmFTA1S13q;
+   hence thesis by A3,A4,CIRCUIT2:def 5;
+ end;
+
+:: Main Proposition #2-1 (External Circuit Outputs after Four-steps) FTA1
+
+theorem
+  for ap,bm,cp,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b] &
+      not cin in InnerVertices BitGFA1Str(ap,bm,cp)
+   for s being State of BitFTA1Circ(ap,bm,cp,dm,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.ap & a2 = s.bm & a3 = s.cp & a4 = s.dm & a5 = s.cin
+   holds Following(s,4).BitFTA1AdderOutputP(ap,bm,cp,dm,cin)
+         = 'not' (((a1 'xor' 'not' a2 'xor' a3) '&' a5) 'or'
+                  (a5 '&' 'not' a4) 'or'
+                  ('not' a4 '&' (a1 'xor' 'not' a2 'xor' a3))) &
+         Following(s,4).BitFTA1AdderOutputQ(ap,bm,cp,dm,cin)
+         = a1 'xor' 'not' a2 'xor' a3 'xor' 'not' a4 'xor' a5
+   by LmFTA1S15p,LmFTA1S15q;
+
+:: Main Proposition #2-2 (The Whole Circuit Stability after Four-steps) FTA1
+
+theorem
+  for ap,bm,cp,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA1AdderOutput(ap,bm,cp)*>,and2b]
+   for s being State of BitFTA1Circ(ap,bm,cp,dm,cin)
+    holds Following(s,4) is stable
+   proof
+     let ap,bm,cp,dm be non pair set;
+     let cin be set;
+     set S  = BitFTA1Str(ap,bm,cp,dm,cin);
+     set C  = BitFTA1Circ(ap,bm,cp,dm,cin);
+     set S1 = BitGFA1Str(ap,bm,cp);        set C1 = BitGFA1Circ(ap,bm,cp);
+     set A1 = GFA1AdderOutput(ap,bm,cp);
+     set S2 = BitGFA2Str(A1,cin,dm);       set C2 = BitGFA2Circ(A1,cin,dm);
+     set apbm0  = [<*ap,bm*>, xor2c]; set apbm  = [<*ap,bm*>, and2c];
+     set bmcp   = [<*bm,cp*>, and2a]; set cpap  = [<*cp,ap*>, and2 ];
+     set A1cin0 = [<*A1,cin*>,xor2c]; set A1cin = [<*A1,cin*>,and2a];
+     set cindm  = [<*cin,dm*>,and2c]; set dmA1  = [<*dm,A1*>, and2b];
+     set n1=2, n2=2, n12=4;
+
+     assume A1: cin <> dmA1;
+     let s be State of C;
+A2:  C1 tolerates C2 by CIRCCOMB:68;
+
+A3:  InputVertices S1 misses InnerVertices S2 by LemmaX22;
+
+A4:  the Sorts of C1 tolerates the Sorts of C2 by A2,CIRCCOMB:def 3; then
+     reconsider s1 = s|the carrier of S1 as State of C1 by CIRCCOMB:33;
+     reconsider s2 = Following(s,n1)|the carrier of S2 as State of C2
+       by A4,CIRCCOMB:33;
+
+A5:  Following(s1,n1) is stable by GFACIRC1:85;
+     Following(s2,n2) is stable by A1,LemmaX21,GFACIRC1:122; then
+     Following(s,n1+n2) is stable by A3,A5,CIRCCOMB:68,CIRCCMB2:20;
+    hence Following(s,n12) is stable;
+   end;
+
+begin :: 3. Stability of 4-2 Binary Addition Circuit Cell (TYPE-2)
+
+::========================================================================
+:: [4-2 Binary Addition Cell_i : TYPE-2]
+::
+::   Cell Module Symbol :
+::
+::                 a- b+ c- d+            Input : a-,b+,c-,d+ (non pair set)
+::                 |  |  |  |                     cin- (pair)
+::               +-O--*--O--*-+    cin-
+::               |            |   /
+::            +--O FTA TYPE-2 O--+        Output : p+,q-,cout- (pair)
+::           /   |            |
+::        cout-  +---*----O---+
+::                   |    |
+::                   p+   q-
+::
+::   Composition : Cascade by Adder Output together with GFA TYPE-2 and TYPE-1
+::   Function    : p[i+1] - q[i] - Intermediate_Carry_out
+::                  = -a[i] + b[i] - c[i] + d[i] - Intermediate_Carry_in
+::
+::                 a^{-}[i]  b^{+}[i]
+::                     |     /
+::                     |    /
+::                 +---O---*
+::                 |  GFA  O---- c^{-}[i]  Circuit Composition :
+::                 | TYPE2 |                    BitGFA2Str(a-,b+,c-)
+::                 O---*---+                    BitGFA1Str(A1,cin,d+)
+::                /    |      cin[i]           --->
+::               /   A1|     /                  FTA2Str(a-,b+,c-,d+,cin)
+::      cout[i+1]      |    /
+::                 +---*---O               Intermediate Addition and Carry:
+::                 |  GFA  *---- d^{+}[i]       A1 <= GFA2AdderOutput
+::                 | TYPE1 |                    cout[i+1] <= GFA2CarryOutput
+::                 *---O---+                    q[i] <= GFA1AdderOutput
+::                /    |                        p[i+1] <= GFA1CarryOutput
+::               /     |
+::     p^{+}[i+1]   q^{-}[i]
+::
+::   Calculation Stability : Following(s,2+2) is stable.
+::
+::=========================================================================
+
+::---------------------------------------------------------------
+:: 3-1. Circuit Definition for Intermediate Addition and Carry Circuit (TYPE-2)
+::---------------------------------------------------------------
+
+:: Def. Combined Circuit Structure of 1-bit FTA TYPE-2
+
+definition
+ let am,bp,cm,dp,cin be set;
+ func BitFTA2Str(am,bp,cm,dp,cin) ->
+      unsplit gate`1=arity gate`2isBoolean
+      non void strict non empty ManySortedSign equals
+    BitGFA2Str(am,bp,cm) +*
+    BitGFA1Str(GFA2AdderOutput(am,bp,cm),cin,dp);
+  coherence;
+end;
+
+definition
+ let am,bp,cm,dp,cin be set;
+ func BitFTA2Circ(am,bp,cm,dp,cin) ->
+    strict Boolean gate`2=den Circuit of BitFTA2Str(am,bp,cm,dp,cin)
+ equals
+    BitGFA2Circ(am,bp,cm) +*
+    BitGFA1Circ(GFA2AdderOutput(am,bp,cm),cin,dp);
+  coherence;
+end;
+
+::-----------------------------------------------
+:: 3-2. Properties of 1-bit FTA Structure and Circuit (TYPE-2)
+::-----------------------------------------------
+
+:: InnerVertices and InputVertices of 1-bit FTA Circuit Structure (FTA2)
+
+theorem ThFTA2S1:
+  for am,bp,cm,dp,cin being set holds
+  InnerVertices BitFTA2Str(am,bp,cm,dp,cin) =
+    {[<*am,bp*>,xor2c], GFA2AdderOutput(am,bp,cm)} \/
+    {[<*am,bp*>,and2a], [<*bp,cm*>,and2c], [<*cm,am*>,and2b],
+                        GFA2CarryOutput(am,bp,cm)} \/
+    {[<*GFA2AdderOutput(am,bp,cm),cin*>,xor2c],
+        GFA1AdderOutput(GFA2AdderOutput(am,bp,cm),cin,dp)} \/
+    {[<*GFA2AdderOutput(am,bp,cm),cin*>,and2c],
+     [<*cin,dp*>,and2a], [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2],
+     GFA1CarryOutput(GFA2AdderOutput(am,bp,cm),cin,dp)}
+   proof
+     let am,bp,cm,dp,cin be set;
+     set S  = BitFTA2Str(am,bp,cm,dp,cin);
+     set S1 = BitGFA2Str(am,bp,cm);
+     set A1 = GFA2AdderOutput(am,bp,cm);  set C1 = GFA2CarryOutput(am,bp,cm);
+     set S2 = BitGFA1Str(A1,cin,dp);
+     set A2 = GFA1AdderOutput(A1,cin,dp); set C2 = GFA1CarryOutput(A1,cin,dp);
+     set ambp0  = [<*am,bp*>, xor2c]; set ambp  = [<*am,bp*>, and2a];
+     set bpcm   = [<*bp,cm*>, and2c]; set cmam  = [<*cm,am*>, and2b];
+     set A1cin0 = [<*A1,cin*>,xor2c]; set A1cin = [<*A1,cin*>,and2c];
+     set cindp  = [<*cin,dp*>,and2a]; set dpA1  = [<*dp,A1*>, and2 ];
+
+     S = S1 +* S2 & S1 tolerates S2 by CIRCCOMB:55;
+    hence InnerVertices S
+       = (InnerVertices S1) \/ (InnerVertices S2) by CIRCCOMB:15
+      .= ({ambp0} \/ {A1} \/ {ambp,bpcm,cmam} \/ {C1}) \/ (InnerVertices S2)
+           by GFACIRC1:113
+      .= ({ambp0,A1} \/ {ambp,bpcm,cmam} \/ {C1}) \/ (InnerVertices S2)
+           by ENUMSET1:41
+      .= ({ambp0,A1} \/ ({ambp,bpcm,cmam} \/ {C1})) \/ (InnerVertices S2)
+           by XBOOLE_1:4
+      .= ({ambp0,A1} \/ {ambp,bpcm,cmam,C1}) \/ (InnerVertices S2)
+           by ENUMSET1:46
+      .= ({ambp0,A1} \/ {ambp,bpcm,cmam,C1}) \/
+         ({A1cin0} \/ {A2} \/ {A1cin,cindp,dpA1} \/ {C2}) by GFACIRC1:76
+      .= ({ambp0,A1} \/ {ambp,bpcm,cmam,C1}) \/
+         ({A1cin0,A2} \/ {A1cin,cindp,dpA1} \/ {C2}) by ENUMSET1:41
+      .= ({ambp0,A1} \/ {ambp,bpcm,cmam,C1}) \/
+         ({A1cin0,A2} \/ ({A1cin,cindp,dpA1} \/ {C2})) by XBOOLE_1:4
+      .= ({ambp0,A1} \/ {ambp,bpcm,cmam,C1}) \/
+         ({A1cin0,A2} \/ {A1cin,cindp,dpA1,C2}) by ENUMSET1:46
+      .= {ambp0,A1} \/ {ambp,bpcm,cmam,C1} \/
+         {A1cin0,A2} \/ {A1cin,cindp,dpA1,C2} by XBOOLE_1:4;
+   end;
+
+theorem
+  for am,bp,cm,dp,cin being set holds
+    InnerVertices BitFTA2Str(am,bp,cm,dp,cin) is Relation
+   proof
+     let am,bp,cm,dp,cin be set;
+     set S  = BitFTA2Str(am,bp,cm,dp,cin);
+     set S1 = BitGFA2Str(am,bp,cm);
+     set A1 = GFA2AdderOutput(am,bp,cm);
+     set S2 = BitGFA1Str(A1,cin,dp);
+
+     InnerVertices S1 is Relation & InnerVertices S2 is Relation
+       by GFACIRC1:114,77;
+    hence InnerVertices S is Relation by FACIRC_1:3;
+   end;
+
+LemmaX31:
+  for x,y,z being set
+   for p being set holds GFA2AdderOutput(x,y,z) <> [p,and2a]
+   proof
+     let x,y,z be set, p be set;
+     set A1 = GFA2AdderOutput(x,y,z);
+
+     now assume [p,and2a]`2 = A1`2; then
+A1:    [p,and2a]`2 = xor2c by MCART_1:7;
+       [p,and2a]`2 = and2a by MCART_1:7;
+       hence contradiction by A1,GFACIRC1:4,TWOSCOMP:11;
+     end;
+    hence thesis;
+   end;
+
+LemmaX32:
+  for am,bp,cm being non pair set
+  for x,y,z being set holds
+   InputVertices BitGFA2Str(am,bp,cm) misses InnerVertices BitGFA1Str(x,y,z)
+   proof
+     let am,bp,cm be non pair set;
+     let x,y,z be set;
+     set S1 = BitGFA2Str(am,bp,cm);
+     set S2 = BitGFA1Str(x,y,z);
+
+     InputVertices S1 is without_pairs & InnerVertices S2 is Relation
+       by GFACIRC1:117,77;
+    hence thesis by FACIRC_1:5;
+   end;
+
+theorem ThFTA2S4:
+  for am,bp,cm,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+      not cin in InnerVertices BitGFA2Str(am,bp,cm)
+    holds
+      InputVertices BitFTA2Str(am,bp,cm,dp,cin) = {am,bp,cm,dp,cin}
+   proof
+     let am,bp,cm,dp be non pair set;
+     let cin be set;
+     set S  = BitFTA2Str(am,bp,cm,dp,cin);
+     set S1 = BitGFA2Str(am,bp,cm);
+     set A1 = GFA2AdderOutput(am,bp,cm);  set C1 = GFA2CarryOutput(am,bp,cm);
+     set S2 = BitGFA1Str(A1,cin,dp);
+     set A2 = GFA1AdderOutput(A1,cin,dp); set C2 = GFA1CarryOutput(A1,cin,dp);
+     set ambp0  = [<*am,bp*>, xor2c]; set ambp  = [<*am,bp*>, and2a];
+     set bpcm   = [<*bp,cm*>, and2c]; set cmam  = [<*cm,am*>, and2b];
+     set A1cin0 = [<*A1,cin*>,xor2c]; set A1cin = [<*A1,cin*>,and2c];
+     set cindp  = [<*cin,dp*>,and2a]; set dpA1  = [<*dp,A1*>, and2 ];
+
+     assume A1: cin <> dpA1 & not cin in InnerVertices S1;
+
+A3:  InnerVertices S2 misses InputVertices S1 by LemmaX32;
+
+A4:  InnerVertices S1
+       = {ambp0} \/ {A1} \/ {ambp,bpcm,cmam} \/ {C1} by GFACIRC1:113
+      .= {ambp0,A1} \/ {ambp,bpcm,cmam} \/ {C1} by ENUMSET1:41
+      .= {ambp0,A1} \/ ({ambp,bpcm,cmam} \/ {C1}) by XBOOLE_1:4
+      .= {A1,ambp0} \/ {ambp,bpcm,cmam,C1} by ENUMSET1:46
+      .= {A1,ambp0,ambp,bpcm,cmam,C1} by ENUMSET1:52;
+
+     A1 in {A1,ambp0,ambp,bpcm,cmam,C1} by ENUMSET1:def 4; then
+A5:  {A1} \ {A1,ambp0,ambp,bpcm,cmam,C1} = {} by ZFMISC_1:68;
+
+A6:  not dp in {A1,ambp0,ambp,bpcm,cmam,C1} by ENUMSET1:def 4;
+
+A7:  {A1,cin,dp} \ InnerVertices S1
+       = ({A1} \/ {cin,dp}) \ {A1,ambp0,ambp,bpcm,cmam,C1} by A4,ENUMSET1:42
+      .= ({A1} \ {A1,ambp0,ambp,bpcm,cmam,C1}) \/
+         ({cin,dp} \ {A1,ambp0,ambp,bpcm,cmam,C1}) by XBOOLE_1:42
+      .= ({cin} \/ {dp}) \ {A1,ambp0,ambp,bpcm,cmam,C1} by A5,ENUMSET1:41
+      .= ({cin} \ {A1,ambp0,ambp,bpcm,cmam,C1}) \/
+         ({dp} \ {A1,ambp0,ambp,bpcm,cmam,C1}) by XBOOLE_1:42
+      .= ({cin}) \/ ({dp} \ {A1,ambp0,ambp,bpcm,cmam,C1}) by A1,A4,ZFMISC_1:67
+      .= ({cin}) \/ ({dp}) by A6,ZFMISC_1:67
+      .= {cin,dp} by ENUMSET1:41;
+
+     S = S1 +* S2 & S1 tolerates S2 by CIRCCOMB:55;
+    hence InputVertices (S)
+       = (InputVertices S1) \/ (InputVertices S2 \ InnerVertices S1)
+           by A3,FACIRC_1:4
+      .= ({am,bp,cm}) \/ (InputVertices S2 \ InnerVertices S1) by GFACIRC1:116
+      .= ({am,bp,cm}) \/ ({A1,cin,dp} \ InnerVertices S1)
+           by A1,LemmaX31,GFACIRC1:78
+      .= {am,bp,cm,dp,cin} by A7,ENUMSET1:49;
+   end;
+
+:: The Element of Carriers, InnerVertices and InputVertices (FTA2)
+
+theorem ThFTA2S6:
+  for am,bp,cm,dp,cin being set holds
+   am in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   bp in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   cm in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   dp in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   cin in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*am,bp*>,xor2c] in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   GFA2AdderOutput(am,bp,cm) in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*am,bp*>,and2a] in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*bp,cm*>,and2c] in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*cm,am*>,and2b] in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   GFA2CarryOutput(am,bp,cm) in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*GFA2AdderOutput(am,bp,cm),cin*>,xor2c]
+                             in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   GFA1AdderOutput(GFA2AdderOutput(am,bp,cm),cin,dp)
+                             in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*GFA2AdderOutput(am,bp,cm),cin*>,and2c]
+                             in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*cin,dp*>,and2a]        in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2]
+                             in the carrier of BitFTA2Str(am,bp,cm,dp,cin) &
+   GFA1CarryOutput(GFA2AdderOutput(am,bp,cm),cin,dp)
+                             in the carrier of BitFTA2Str(am,bp,cm,dp,cin)
+   proof
+     let am,bp,cm,dp,cin be set;
+     set S  = BitFTA2Str(am,bp,cm,dp,cin);
+     set S1 = BitGFA2Str(am,bp,cm);
+     set A1 = GFA2AdderOutput(am,bp,cm);  set C1 = GFA2CarryOutput(am,bp,cm);
+     set S2 = BitGFA1Str(A1,cin,dp);
+     set A2 = GFA1AdderOutput(A1,cin,dp); set C2 = GFA1CarryOutput(A1,cin,dp);
+     set ambp0  = [<*am,bp*>, xor2c]; set ambp  = [<*am,bp*>, and2a];
+     set bpcm   = [<*bp,cm*>, and2c]; set cmam  = [<*cm,am*>, and2b];
+     set A1cin0 = [<*A1,cin*>,xor2c]; set A1cin = [<*A1,cin*>,and2c];
+     set cindp  = [<*cin,dp*>,and2a]; set dpA1  = [<*dp,A1*>, and2 ];
+
+A1:  am in the carrier of S1 & bp in the carrier of S1 &
+     cm in the carrier of S1 &
+     ambp0 in the carrier of S1 & A1 in the carrier of S1 &
+     ambp in the carrier of S1 & bpcm in the carrier of S1 &
+     cmam in the carrier of S1 & C1 in the carrier of S1 by GFACIRC1:118;
+
+     A1 in the carrier of S2 & cin in the carrier of S2 &
+     dp in the carrier of S2 &
+     A1cin0 in the carrier of S2 & A2 in the carrier of S2 &
+     A1cin in the carrier of S2 & cindp in the carrier of S2 &
+     dpA1 in the carrier of S2 & C2 in the carrier of S2 by GFACIRC1:81;
+    hence thesis by A1,FACIRC_1:20;
+   end;
+
+theorem ThFTA2S7:
+  for am,bp,cm,dp,cin being set holds
+   [<*am,bp*>,xor2c] in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   GFA2AdderOutput(am,bp,cm) in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*am,bp*>,and2a] in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*bp,cm*>,and2c] in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*cm,am*>,and2b] in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   GFA2CarryOutput(am,bp,cm) in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*GFA2AdderOutput(am,bp,cm),cin*>,xor2c]
+                             in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   GFA1AdderOutput(GFA2AdderOutput(am,bp,cm),cin,dp)
+                             in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*GFA2AdderOutput(am,bp,cm),cin*>,and2c]
+                             in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*cin,dp*>,and2a] in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2]
+                             in InnerVertices BitFTA2Str(am,bp,cm,dp,cin) &
+   GFA1CarryOutput(GFA2AdderOutput(am,bp,cm),cin,dp)
+                             in InnerVertices BitFTA2Str(am,bp,cm,dp,cin)
+   proof
+     let am,bp,cm,dp,cin be set;
+     set S  = BitFTA2Str(am,bp,cm,dp,cin);
+     set S1 = BitGFA2Str(am,bp,cm);
+     set A1 = GFA2AdderOutput(am,bp,cm);  set C1 = GFA2CarryOutput(am,bp,cm);
+     set S2 = BitGFA1Str(A1,cin,dp);
+     set A2 = GFA1AdderOutput(A1,cin,dp); set C2 = GFA1CarryOutput(A1,cin,dp);
+     set ambp0  = [<*am,bp*>, xor2c]; set ambp  = [<*am,bp*>, and2a];
+     set bpcm   = [<*bp,cm*>, and2c]; set cmam  = [<*cm,am*>, and2b];
+     set A1cin0 = [<*A1,cin*>,xor2c]; set A1cin = [<*A1,cin*>,and2c];
+     set cindp  = [<*cin,dp*>,and2a]; set dpA1  = [<*dp,A1*>, and2 ];
+     set p1 = {ambp0,A1,ambp,bpcm,cmam,C1};
+     set p2 = {A1cin0,A2,A1cin,cindp,dpA1,C2};
+
+A1:  InnerVertices S
+       = {ambp0,A1} \/ {ambp,bpcm,cmam,C1} \/
+         {A1cin0,A2} \/ {A1cin,cindp,dpA1,C2} by ThFTA2S1
+      .= p1 \/ {A1cin0,A2} \/ {A1cin,cindp,dpA1,C2} by ENUMSET1:52
+      .= p1 \/ ({A1cin0,A2} \/ {A1cin,cindp,dpA1,C2}) by XBOOLE_1:4
+      .= p1 \/ p2 by ENUMSET1:52;
+
+     (ambp0 in p1 & A1 in p1 &
+      ambp in p1 & bpcm in p1 & cmam in p1 & C1 in p1) &
+     (A1cin0 in p2 & A2 in p2 &
+      A1cin in p2 & cindp in p2 & dpA1 in p2 & C2 in p2 ) by ENUMSET1:def 4;
+    hence thesis by A1,XBOOLE_0:def 2;
+   end;
+
+theorem ThFTA2S8:
+  for am,bp,cm,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+      not cin in InnerVertices BitGFA2Str(am,bp,cm)
+   holds
+     am in InputVertices BitFTA2Str(am,bp,cm,dp,cin) &
+     bp in InputVertices BitFTA2Str(am,bp,cm,dp,cin) &
+     cm in InputVertices BitFTA2Str(am,bp,cm,dp,cin) &
+     dp in InputVertices BitFTA2Str(am,bp,cm,dp,cin) &
+     cin in InputVertices BitFTA2Str(am,bp,cm,dp,cin)
+   proof
+     let am,bp,cm,dp be non pair set;
+     let cin be set;
+     set S  = BitFTA2Str(am,bp,cm,dp,cin);
+     set S1 = BitGFA2Str(am,bp,cm);
+     set A1 = GFA2AdderOutput(am,bp,cm);
+     set dpA1 = [<*dp,A1*>,and2];
+
+     assume cin <> dpA1 & not cin in InnerVertices S1; then
+     InputVertices S = {am,bp,cm,dp,cin} by ThFTA2S4;
+    hence thesis by ENUMSET1:def 3;
+   end;
+
+::-------------------------------------------
+:: 3-3. Output Definitions of the Combined Circuit
+::-------------------------------------------
+
+:: Def. External/Internal Signal Outputs of 1-bit FTA TYPE-2
+
+definition
+ let am,bp,cm,dp,cin be set;
+ func BitFTA2CarryOutput(am,bp,cm,dp,cin) ->
+         Element of InnerVertices BitFTA2Str(am,bp,cm,dp,cin) equals
+    GFA2CarryOutput(am,bp,cm);
+ coherence by ThFTA2S7;
+
+ func BitFTA2AdderOutputI(am,bp,cm,dp,cin) ->
+         Element of InnerVertices BitFTA2Str(am,bp,cm,dp,cin) equals
+    GFA2AdderOutput(am,bp,cm);
+ coherence by ThFTA2S7;
+
+func BitFTA2AdderOutputP(am,bp,cm,dp,cin) ->
+         Element of InnerVertices BitFTA2Str(am,bp,cm,dp,cin) equals
+    GFA1CarryOutput(GFA2AdderOutput(am,bp,cm),cin,dp);
+ coherence by ThFTA2S7;
+
+ func BitFTA2AdderOutputQ(am,bp,cm,dp,cin) ->
+         Element of InnerVertices BitFTA2Str(am,bp,cm,dp,cin) equals
+    GFA1AdderOutput(GFA2AdderOutput(am,bp,cm),cin,dp);
+ coherence by ThFTA2S7;
+end;
+
+::-----------------------------------
+:: 3-4. Stability of the Combined Circuit and its Outputs
+::-----------------------------------
+
+:: Intermediate (External/Internal) Carry/Adder Outputs after Two-steps
+
+theorem
+  for am,bp,cm being non pair set
+  for dp,cin being set
+   for s being State of BitFTA2Circ(am,bp,cm,dp,cin)
+   for a1,a2,a3 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bp & a3 = s.cm
+   holds Following(s,2).BitFTA2CarryOutput(am,bp,cm,dp,cin)
+          = 'not' (('not' a1 '&' a2) 'or' (a2 '&' 'not' a3) 'or'
+                   ('not' a3 '&' 'not' a1)) &
+         Following(s,2).BitFTA2AdderOutputI(am,bp,cm,dp,cin)
+          = 'not' a1 'xor' a2 'xor' 'not' a3
+ proof
+    let am,bp,cm be non pair set;
+    let dp,cin be set;
+    let s be State of BitFTA2Circ(am,bp,cm,dp,cin);
+    set S1 = BitGFA2Str(am,bp,cm);      set C1 = BitGFA2Circ(am,bp,cm);
+    set A1 = GFA2AdderOutput(am,bp,cm); set A2 = GFA2CarryOutput(am,bp,cm);
+    set S2 = BitGFA1Str(A1,cin,dp);     set C2 = BitGFA1Circ(A1,cin,dp);
+    let a1,a2,a3 be Element of BOOLEAN such that
+A1: a1 = s.am & a2 = s.bp & a3 = s.cm;
+
+A2: am in the carrier of S1 & bp in the carrier of S1 & cm in the carrier of S1
+      by GFACIRC1:118;
+    reconsider s1 = s|the carrier of S1 as State of C1 by FACIRC_1:26;
+    reconsider t = s as State of C1+*C2;
+
+A3: A1 in the carrier of S1 & A2 in the carrier of S1 by GFACIRC1:118;
+A4: InputVertices S1 misses InnerVertices S2 by LemmaX32;
+
+    dom s1 = the carrier of S1 by CIRCUIT1:4; then
+A5: a1 = s1.am & a2 = s1.bp & a3 = s1.cm by A1,A2,FUNCT_1:70; then
+    Following(t,2).GFA2CarryOutput(am,bp,cm)
+     = Following(s1,2).GFA2CarryOutput(am,bp,cm) &
+    Following(s1,2).GFA2CarryOutput(am,bp,cm)
+     = 'not' (('not' a1 '&' a2) 'or' (a2 '&' 'not' a3) 'or'
+              ('not' a3 '&' 'not' a1))
+      by A3,A4,FACIRC_1:32,GFACIRC1:121;
+   hence Following(s,2).BitFTA2CarryOutput(am,bp,cm,dp,cin)
+     = 'not' (('not' a1 '&' a2) 'or' (a2 '&' 'not' a3) 'or'
+              ('not' a3 '&' 'not' a1));
+
+    Following(t,2).GFA2AdderOutput(am,bp,cm)
+     = Following(s1,2).GFA2AdderOutput(am,bp,cm) &
+    Following(s1,2).GFA2AdderOutput(am,bp,cm)
+     = 'not' a1 'xor' a2 'xor' 'not' a3
+      by A3,A4,A5,FACIRC_1:32,GFACIRC1:121;
+   hence Following(s,2).BitFTA2AdderOutputI(am,bp,cm,dp,cin)
+     = 'not' a1 'xor' a2 'xor' 'not' a3;
+end;
+
+:: Temporal (Internal) Calculations after Two-steps
+
+theorem ThFTA2S11:
+  for am,bp,cm,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+      not cin in InnerVertices BitGFA2Str(am,bp,cm)
+   for s being State of BitFTA2Circ(am,bp,cm,dp,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bp & a3 = s.cm & a4 = s.dp & a5 = s.cin
+   holds Following(s,2).GFA2AdderOutput(am,bp,cm)
+          = 'not' a1 'xor' a2 'xor' 'not' a3 &
+         Following(s,2).am = a1 & Following(s,2).bp = a2 &
+         Following(s,2).cm = a3 & Following(s,2).dp = a4 &
+         Following(s,2).cin = a5
+ proof
+    let am,bp,cm,dp be non pair set;
+    let cin be set such that
+A1: cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+    not cin in InnerVertices BitGFA2Str(am,bp,cm);
+    let s be State of BitFTA2Circ(am,bp,cm,dp,cin);
+    set S  = BitFTA2Str(am,bp,cm,dp,cin);
+    set S1 = BitGFA2Str(am,bp,cm);      set C1 = BitGFA2Circ(am,bp,cm);
+    set A1 = GFA2AdderOutput(am,bp,cm);
+    set S2 = BitGFA1Str(A1,cin,dp);     set C2 = BitGFA1Circ(A1,cin,dp);
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.am & a2 = s.bp & a3 = s.cm & a4 = s.dp & a5 = s.cin;
+
+A3: am in the carrier of S1 & bp in the carrier of S1 & cm in the carrier of S1
+      by GFACIRC1:118;
+    reconsider s1 = s|the carrier of S1 as State of C1 by FACIRC_1:26;
+    reconsider t = s as State of C1+*C2;
+
+A4: A1 in the carrier of S1 by GFACIRC1:118;
+A5: InputVertices S1 misses InnerVertices S2 by LemmaX32;
+
+    dom s1 = the carrier of S1 by CIRCUIT1:4; then
+    a1 = s1.am & a2 = s1.bp & a3 = s1.cm by A2,A3,FUNCT_1:70; then
+    Following(t,2).GFA2AdderOutput(am,bp,cm)
+     = Following(s1,2).GFA2AdderOutput(am,bp,cm) &
+    Following(s1,2).GFA2AdderOutput(am,bp,cm)
+     = 'not' a1 'xor' a2 'xor' 'not' a3 by A4,A5,FACIRC_1:32,GFACIRC1:121;
+   hence Following(s,2).GFA2AdderOutput(am,bp,cm)
+     = 'not' a1 'xor' a2 'xor' 'not' a3;
+
+A6: Following(s,2) = Following Following s by FACIRC_1:15;
+A7: am in InputVertices S & bp in InputVertices S &
+    cm in InputVertices S & dp in InputVertices S &
+    cin in InputVertices S by A1,ThFTA2S8; then
+    (Following s).am = a1 & (Following s).bp = a2 &
+    (Following s).cm = a3 & (Following s).dp = a4 &
+    (Following s).cin = a5 by A2,CIRCUIT2:def 5;
+   hence thesis by A6,A7,CIRCUIT2:def 5;
+end;
+
+LmFTA2S12p:
+ for am,bp,cm,dp being non pair set
+  for cin being set
+   for s being State of BitFTA2Circ(am,bp,cm,dp,cin)
+    for a123,a4,a5 being Element of BOOLEAN
+      st a123 = s.GFA2AdderOutput(am,bp,cm) & a4 = s.dp & a5 = s.cin
+  holds (Following s).[<*GFA2AdderOutput(am,bp,cm),cin*>,and2c]
+         = a123 '&' 'not' a5 &
+        (Following s).[<*cin,dp*>,and2a] = 'not' a5 '&' a4 &
+        (Following s).[<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] = a4 '&' a123
+ proof
+    let am,bp,cm,dp be non pair set;
+    let cin be set;
+    set S  = BitFTA2Str(am,bp,cm,dp,cin);set C  = BitFTA2Circ(am,bp,cm,dp,cin);
+    set A1 = GFA2AdderOutput(am,bp,cm);
+    set S2 = BitGFA1Str(A1,cin,dp);      set C2 = BitGFA1Circ(A1,cin,dp);
+    set A1cin = [<*A1,cin*>,and2c]; set cindp = [<*cin,dp*>,and2a];
+    set dpA1  = [<*dp,A1*>, and2];
+    let s be State of C;
+    let a123,a4,a5 be Element of BOOLEAN such that
+A1: a123 = s.A1 & a4 = s.dp & a5 = s.cin;
+
+A2: A1 in the carrier of S & dp in the carrier of S & cin in the carrier of S
+      by ThFTA2S6;
+A3: dom s = the carrier of S by CIRCUIT1:4;
+    InnerVertices S = the carrier' of S by FACIRC_1:37; then
+A4: A1cin in the carrier' of S & cindp in the carrier' of S &
+    dpA1  in the carrier' of S by ThFTA2S7;
+   hence (Following s).A1cin
+        = and2c.(s*<*A1,cin*>) by FACIRC_1:35
+       .= and2c.<*a123, a5*> by A1,A2,A3,FINSEQ_2:145
+       .= a123 '&' 'not' a5 by GFACIRC1:def 3;
+   thus (Following s).cindp
+        = and2a.(s*<*cin,dp*>) by A4,FACIRC_1:35
+       .= and2a.<*a5,a4*> by A1,A2,A3,FINSEQ_2:145
+       .= 'not' a5 '&' a4 by TWOSCOMP:def 2;
+   thus (Following s).dpA1
+        = and2.(s*<*dp,A1*>) by A4,FACIRC_1:35
+       .= and2.<*a4,a123*> by A1,A2,A3,FINSEQ_2:145
+       .= a4 '&' a123 by TWOSCOMP:def 1;
+ end;
+
+LmFTA2S12q:
+ for am,bp,cm,dp being non pair set
+  for cin being set
+   for s being State of BitFTA2Circ(am,bp,cm,dp,cin)
+    for a123,a5 being Element of BOOLEAN
+      st a123 = s.GFA2AdderOutput(am,bp,cm) & a5 = s.cin
+    holds (Following s).[<*GFA2AdderOutput(am,bp,cm),cin*>,xor2c]
+          = a123 'xor' 'not' a5
+ proof
+    let am,bp,cm,dp be non pair set;
+    let cin be set;
+    set S  = BitFTA2Str(am,bp,cm,dp,cin);set C  = BitFTA2Circ(am,bp,cm,dp,cin);
+    set A1 = GFA2AdderOutput(am,bp,cm);
+    set A1cin = [<*A1,cin*>,xor2c];
+    let s be State of C;
+    let a123,a5 be Element of BOOLEAN such that
+A1: a123 = s.A1 & a5 = s.cin;
+
+A2: A1 in the carrier of S & cin in the carrier of S by ThFTA2S6;
+A3: dom s = the carrier of S by CIRCUIT1:4;
+    InnerVertices S = the carrier' of S by FACIRC_1:37; then
+    A1cin in the carrier' of S by ThFTA2S7;
+   hence (Following s).A1cin
+        = xor2c.(s*<*A1,cin*>) by FACIRC_1:35
+       .= xor2c.<*a123, a5*> by A1,A2,A3,FINSEQ_2:145
+       .= a123 'xor' 'not' a5 by GFACIRC1:def 4;
+ end;
+
+LmFTA2S13p:    :: Temporal (Internal) Calculations after Three-steps (for p)
+  for am,bp,cm,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+      not cin in InnerVertices BitGFA2Str(am,bp,cm)
+   for s being State of BitFTA2Circ(am,bp,cm,dp,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bp & a3 = s.cm & a4 = s.dp & a5 = s.cin
+   holds Following(s,3).[<*GFA2AdderOutput(am,bp,cm),cin*>,and2c]
+          = ('not' a1 'xor' a2 'xor' 'not' a3) '&' 'not' a5 &
+         Following(s,3).[<*cin,dp*>,and2a] = 'not' a5 '&' a4 &
+         Following(s,3).[<*dp,GFA2AdderOutput(am,bp,cm)*>,and2]
+          = a4 '&' ('not' a1 'xor' a2 'xor' 'not' a3) &
+         Following(s,3).am = a1 & Following(s,3).bp = a2 &
+         Following(s,3).cm = a3 & Following(s,3).dp = a4 &
+         Following(s,3).cin = a5
+ proof
+    let am,bp,cm,dp be non pair set;
+    let cin be set such that
+A1: cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+    not cin in InnerVertices BitGFA2Str(am,bp,cm);
+    let s be State of BitFTA2Circ(am,bp,cm,dp,cin);
+    set S  = BitFTA2Str(am,bp,cm,dp,cin);set C  = BitFTA2Circ(am,bp,cm,dp,cin);
+    set S1 = BitGFA2Str(am,bp,cm);       set C1 = BitGFA2Circ(am,bp,cm);
+    set A1 = GFA2AdderOutput(am,bp,cm);
+    set S2 = BitGFA1Str(A1,cin,dp);      set C2 = BitGFA1Circ(A1,cin,dp);
+    set A1cin = [<*A1,cin*>,and2c]; set cindp = [<*cin,dp*>,and2a];
+    set dpA1  = [<*dp,A1*>, and2];
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.am & a2 = s.bp & a3 = s.cm & a4 = s.dp & a5 = s.cin;
+
+A3: Following(s,2+1) = Following Following(s,2) by FACIRC_1:12;
+
+    Following(s,2).A1 = 'not' a1 'xor' a2 'xor' 'not' a3 &
+    Following(s,2).dp = a4 & Following(s,2).cin = a5 by A1,A2,ThFTA2S11;
+   hence Following(s,3).A1cin
+          = ('not' a1 'xor' a2 'xor' 'not' a3) '&' 'not' a5 &
+         Following(s,3).cindp = 'not' a5 '&' a4 &
+         Following(s,3).dpA1
+          =  a4 '&' ('not' a1 'xor' a2 'xor' 'not' a3) by A3,LmFTA2S12p;
+
+A4: am in InputVertices S & bp in InputVertices S &
+    cm in InputVertices S & dp in InputVertices S &
+    cin in InputVertices S by A1,ThFTA2S8;
+    Following(s,2).am = a1 & Following(s,2).bp = a2 &
+    Following(s,2).cm = a3 & Following(s,2).dp = a4 &
+    Following(s,2).cin = a5 by A1,A2,ThFTA2S11;
+   hence thesis by A3,A4,CIRCUIT2:def 5;
+ end;
+
+LmFTA2S13q:   :: Temporal (Internal) Calculations after Three-steps (for q)
+  for am,bp,cm,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+      not cin in InnerVertices BitGFA2Str(am,bp,cm)
+   for s being State of BitFTA2Circ(am,bp,cm,dp,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bp & a3 = s.cm & a4 = s.dp & a5 = s.cin
+   holds Following(s,3).[<*GFA2AdderOutput(am,bp,cm),cin*>,xor2c]
+         = ('not' a1 'xor' a2 'xor' 'not' a3) 'xor' 'not' a5 &
+         Following(s,3).am = a1 & Following(s,3).bp = a2 &
+         Following(s,3).cm = a3 & Following(s,3).dp = a4 &
+         Following(s,3).cin = a5
+ proof
+    let am,bp,cm,dp be non pair set;
+    let cin be set such that
+A1: cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+    not cin in InnerVertices BitGFA2Str(am,bp,cm);
+    let s be State of BitFTA2Circ(am,bp,cm,dp,cin);
+    set S  = BitFTA2Str(am,bp,cm,dp,cin);set C  = BitFTA2Circ(am,bp,cm,dp,cin);
+    set S1 = BitGFA2Str(am,bp,cm);       set C1 = BitGFA2Circ(am,bp,cm);
+    set A1 = GFA2AdderOutput(am,bp,cm);
+    set S2 = BitGFA1Str(A1,cin,dp);      set C2 = BitGFA1Circ(A1,cin,dp);
+    set A1cin = [<*A1,cin*>,xor2c];
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.am & a2 = s.bp & a3 = s.cm & a4 = s.dp & a5 = s.cin;
+
+A3: Following(s,2+1) = Following Following(s,2) by FACIRC_1:12;
+
+    Following(s,2).A1 = 'not' a1 'xor' a2 'xor' 'not' a3 &
+    Following(s,2).cin = a5 by A1,A2,ThFTA2S11;
+   hence Following(s,3).A1cin
+     = ('not' a1 'xor' a2 'xor' 'not' a3) 'xor' 'not' a5 by A3,LmFTA2S12q;
+
+A4: am in InputVertices S & bp in InputVertices S &
+    cm in InputVertices S & dp in InputVertices S &
+    cin in InputVertices S by A1,ThFTA2S8;
+    Following(s,2).am = a1 & Following(s,2).bp = a2 &
+    Following(s,2).cm = a3 & Following(s,2).dp = a4 &
+    Following(s,2).cin = a5 by A1,A2,ThFTA2S11;
+   hence thesis by A3,A4,CIRCUIT2:def 5;
+ end;
+
+LmFTA2S14p:
+ for am,bp,cm,dp being non pair set
+  for cin being set
+   for s being State of BitFTA2Circ(am,bp,cm,dp,cin)
+    for a123x,a123y,a123z being Element of BOOLEAN
+      st a123x = s.[<*GFA2AdderOutput(am,bp,cm),cin*>,and2c] &
+         a123y = s.[<*cin,dp*>,and2a] &
+         a123z = s.[<*dp,GFA2AdderOutput(am,bp,cm)*>,and2]
+    holds (Following s).GFA1CarryOutput(GFA2AdderOutput(am,bp,cm),cin,dp)
+          = a123x 'or' a123y 'or' a123z
+ proof
+    let am,bp,cm,dp be non pair set;
+    let cin be set;
+    set S  = BitFTA2Str(am,bp,cm,dp,cin);set C  = BitFTA2Circ(am,bp,cm,dp,cin);
+    set A1 = GFA2AdderOutput(am,bp,cm);
+    set A2 = GFA1CarryOutput(A1,cin,dp);
+    set A1cin = [<*A1,cin*>,and2c]; set cindp = [<*cin,dp*>,and2a];
+    set dpA1  = [<*dp,A1*>, and2];
+    let s be State of C;
+    let a123x,a123y,a123z be Element of BOOLEAN such that
+A1: a123x = s.A1cin & a123y = s.cindp & a123z = s.dpA1;
+
+A2: A1cin in the carrier of S & cindp in the carrier of S &
+    dpA1 in the carrier of S by ThFTA2S6;
+A3: dom s = the carrier of S by CIRCUIT1:4;
+    InnerVertices S = the carrier' of S by FACIRC_1:37; then
+    A2 in the carrier' of S by ThFTA2S7;
+   hence (Following s).A2
+        = or3.(s*<*A1cin,cindp,dpA1*>) by FACIRC_1:35
+       .= or3.<*a123x, a123y, a123z*> by A1,A2,A3,FINSEQ_2:146
+       .= a123x 'or' a123y 'or' a123z by TWOSCOMP:def 24;
+ end;
+
+LmFTA2S14q:
+ for am,bp,cm,dp being non pair set
+  for cin being set
+   for s being State of BitFTA2Circ(am,bp,cm,dp,cin)
+    for a1235,a4 being Element of BOOLEAN
+      st a1235 = s.[<*GFA2AdderOutput(am,bp,cm),cin*>,xor2c] & a4 = s.dp
+    holds (Following s).GFA1AdderOutput(GFA2AdderOutput(am,bp,cm),cin,dp)
+          = a1235 'xor' 'not' a4
+ proof
+    let am,bp,cm,dp be non pair set;
+    let cin be set;
+    set S  = BitFTA2Str(am,bp,cm,dp,cin);set C  = BitFTA2Circ(am,bp,cm,dp,cin);
+    set A1 = GFA2AdderOutput(am,bp,cm);
+    set A2 = GFA1AdderOutput(A1,cin,dp);
+    set A1cin = [<*A1,cin*>,xor2c];
+    let s be State of C;
+    let a1235,a4 be Element of BOOLEAN such that
+A1: a1235 = s.A1cin & a4 = s.dp;
+
+A2: A1cin in the carrier of S & A1 in the carrier of S &
+    cin in the carrier of S & dp in the carrier of S by ThFTA2S6;
+A3: dom s = the carrier of S by CIRCUIT1:4;
+    InnerVertices S = the carrier' of S by FACIRC_1:37; then
+    A2 in the carrier' of S by ThFTA2S7;
+   hence (Following s).A2
+        = xor2c.(s*<*A1cin,dp*>) by FACIRC_1:35
+       .= xor2c.<*a1235, a4*> by A1,A2,A3,FINSEQ_2:145
+       .= a1235 'xor' 'not' a4 by GFACIRC1:def 4;
+ end;
+
+LmFTA2S15p:    :: Temporal (External) Calculations after Four-steps (for p)
+  for am,bp,cm,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+      not cin in InnerVertices BitGFA2Str(am,bp,cm)
+   for s being State of BitFTA2Circ(am,bp,cm,dp,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bp & a3 = s.cm & a4 = s.dp & a5 = s.cin
+   holds Following(s,4).GFA1CarryOutput(GFA2AdderOutput(am,bp,cm),cin,dp)
+          = (('not' a1 'xor' a2 'xor' 'not' a3) '&' 'not' a5) 'or'
+            ('not' a5 '&' a4) 'or'
+            (a4 '&' ('not' a1 'xor' a2 'xor' 'not' a3)) &
+         Following(s,4).am = a1 & Following(s,4).bp = a2 &
+         Following(s,4).cm = a3 & Following(s,4).dp = a4 &
+         Following(s,4).cin = a5
+ proof
+    let am,bp,cm,dp be non pair set;
+    let cin be set such that
+A1: cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+    not cin in InnerVertices BitGFA2Str(am,bp,cm);
+    let s be State of BitFTA2Circ(am,bp,cm,dp,cin);
+    set S  = BitFTA2Str(am,bp,cm,dp,cin);set C  = BitFTA2Circ(am,bp,cm,dp,cin);
+    set S1 = BitGFA2Str(am,bp,cm);       set C1 = BitGFA2Circ(am,bp,cm);
+    set A1 = GFA2AdderOutput(am,bp,cm);
+    set S2 = BitGFA1Str(A1,cin,dp);      set C2 = BitGFA2Circ(A1,cin,dp);
+    set A2 = GFA1CarryOutput(A1,cin,dp);
+    set A1cin = [<*A1,cin*>,and2c]; set cindp = [<*cin,dp*>,and2a];
+    set dpA1  = [<*dp,A1*>, and2];
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.am & a2 = s.bp & a3 = s.cm & a4 = s.dp & a5 = s.cin;
+
+A3: Following(s,3+1) = Following Following(s,3) by FACIRC_1:12;
+
+    Following(s,3).A1cin = ('not' a1 'xor' a2 'xor' 'not' a3) '&' 'not' a5 &
+    Following(s,3).cindp = 'not' a5 '&' a4 &
+    Following(s,3).dpA1 = a4 '&' ('not' a1 'xor' a2 'xor' 'not' a3)
+      by A1,A2,LmFTA2S13p;
+   hence Following(s,4).A2
+          = (('not' a1 'xor' a2 'xor' 'not' a3) '&' 'not' a5) 'or'
+            ('not' a5 '&' a4) 'or'
+            (a4 '&' ('not' a1 'xor' a2 'xor' 'not' a3)) by A3,LmFTA2S14p;
+
+A4: am in InputVertices S & bp in InputVertices S &
+    cm in InputVertices S & dp in InputVertices S &
+    cin in InputVertices S by A1,ThFTA2S8;
+    Following(s,3).am = a1 & Following(s,3).bp = a2 &
+    Following(s,3).cm = a3 & Following(s,3).dp = a4 &
+    Following(s,3).cin = a5 by A1,A2,LmFTA2S13p;
+   hence thesis by A3,A4,CIRCUIT2:def 5;
+ end;
+
+LmFTA2S15q:    :: Temporal (External) Calculations after Four-steps (for q)
+  for am,bp,cm,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+      not cin in InnerVertices BitGFA2Str(am,bp,cm)
+   for s being State of BitFTA2Circ(am,bp,cm,dp,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bp & a3 = s.cm & a4 = s.dp & a5 = s.cin
+   holds Following(s,4).GFA1AdderOutput(GFA2AdderOutput(am,bp,cm),cin,dp)
+        = 'not' ('not' a1 'xor' a2 'xor' 'not' a3 'xor' a4 'xor' 'not' a5) &
+         Following(s,4).am = a1 & Following(s,4).bp = a2 &
+         Following(s,4).cm = a3 & Following(s,4).dp = a4 &
+         Following(s,4).cin = a5
+ proof
+    let am,bp,cm,dp be non pair set;
+    let cin be set such that
+A1: cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+    not cin in InnerVertices BitGFA2Str(am,bp,cm);
+    let s be State of BitFTA2Circ(am,bp,cm,dp,cin);
+    set S  = BitFTA2Str(am,bp,cm,dp,cin);set C  = BitFTA2Circ(am,bp,cm,dp,cin);
+    set S1 = BitGFA2Str(am,bp,cm);       set C1 = BitGFA2Circ(am,bp,cm);
+    set A1 = GFA2AdderOutput(am,bp,cm);
+    set S2 = BitGFA1Str(A1,cin,dp);      set C2 = BitGFA1Circ(A1,cin,dp);
+    set A2 = GFA1AdderOutput(A1,cin,dp);
+    set A1cin = [<*A1,cin*>,xor2c];
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.am & a2 = s.bp & a3 = s.cm & a4 = s.dp & a5 = s.cin;
+
+A3: Following(s,3+1) = Following Following(s,3) by FACIRC_1:12;
+
+    Following(s,3).A1cin = ('not' a1 'xor' a2 'xor' 'not' a3) 'xor' 'not' a5 &
+    Following(s,3).dp = a4 by A1,A2,LmFTA2S13q;
+   hence Following(s,4).A2
+     = ('not' a1 'xor' a2 'xor' 'not' a3) 'xor' 'not' a5 'xor' 'not' a4
+      by A3,LmFTA2S14q
+    .= 'not' (('not' a1 'xor' a2 'xor' 'not' a3) 'xor' 'not' a5 'xor' a4)
+      by XBOOLEAN:74
+    .= 'not' ('not' a1 'xor' a2 'xor' 'not' a3 'xor' a4 'xor' 'not' a5)
+      by XBOOLEAN:73;
+
+A4: am in InputVertices S & bp in InputVertices S &
+    cm in InputVertices S & dp in InputVertices S &
+    cin in InputVertices S by A1,ThFTA2S8;
+    Following(s,3).am = a1 & Following(s,3).bp = a2 &
+    Following(s,3).cm = a3 & Following(s,3).dp = a4 &
+    Following(s,3).cin = a5 by A1,A2,LmFTA2S13q;
+   hence thesis by A3,A4,CIRCUIT2:def 5;
+ end;
+
+:: Main Proposition #3-1 (External Circuit Outputs after Four-steps) FTA2
+
+theorem
+  for am,bp,cm,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2] &
+      not cin in InnerVertices BitGFA2Str(am,bp,cm)
+   for s being State of BitFTA2Circ(am,bp,cm,dp,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bp & a3 = s.cm & a4 = s.dp & a5 = s.cin
+   holds Following(s,4).BitFTA2AdderOutputP(am,bp,cm,dp,cin)
+          = (('not' a1 'xor' a2 'xor' 'not' a3) '&' 'not' a5) 'or'
+            ('not' a5 '&' a4) 'or'
+            (a4 '&' ('not' a1 'xor' a2 'xor' 'not' a3)) &
+         Following(s,4).BitFTA2AdderOutputQ(am,bp,cm,dp,cin)
+          = 'not' ('not' a1 'xor' a2 'xor' 'not' a3 'xor' a4 'xor' 'not' a5)
+   by LmFTA2S15p,LmFTA2S15q;
+
+:: Main Proposition #3-2 (The Whole Circuit Stability after Four-steps) FTA2
+
+theorem
+  for am,bp,cm,dp being non pair set
+  for cin being set st
+      cin <> [<*dp,GFA2AdderOutput(am,bp,cm)*>,and2]
+   for s being State of BitFTA2Circ(am,bp,cm,dp,cin)
+    holds Following(s,4) is stable
+   proof
+     let am,bp,cm,dp be non pair set;
+     let cin be set;
+     set S  = BitFTA2Str(am,bp,cm,dp,cin);
+     set C  = BitFTA2Circ(am,bp,cm,dp,cin);
+     set S1 = BitGFA2Str(am,bp,cm);        set C1 = BitGFA2Circ(am,bp,cm);
+     set A1 = GFA2AdderOutput(am,bp,cm);
+     set S2 = BitGFA1Str(A1,cin,dp);       set C2 = BitGFA1Circ(A1,cin,dp);
+     set ambp0  = [<*am,bp*>, xor2c]; set ambp  = [<*am,bp*>, and2a];
+     set bpcm   = [<*bp,cm*>, and2c]; set cmam  = [<*cm,am*>, and2b];
+     set A1cin0 = [<*A1,cin*>,xor2c]; set A1cin = [<*A1,cin*>,and2c];
+     set cindp  = [<*cin,dp*>,and2a]; set dpA1  = [<*dp,A1*>, and2 ];
+     set n1=2, n2=2, n12=4;
+
+     assume A1: cin <> dpA1;
+     let s be State of C;
+A2:  C1 tolerates C2 by CIRCCOMB:68;
+
+A3:  InputVertices S1 misses InnerVertices S2 by LemmaX32;
+
+A4:  the Sorts of C1 tolerates the Sorts of C2 by A2,CIRCCOMB:def 3; then
+     reconsider s1 = s|the carrier of S1 as State of C1 by CIRCCOMB:33;
+     reconsider s2 = Following(s,n1)|the carrier of S2 as State of C2
+       by A4,CIRCCOMB:33;
+
+A5:  Following(s1,n1) is stable by GFACIRC1:122;
+     Following(s2,n2) is stable by A1,LemmaX31,GFACIRC1:85; then
+     Following(s,n1+n2) is stable by A3,A5,CIRCCOMB:68,CIRCCMB2:20;
+    hence Following(s,n12) is stable;
+   end;
+
+begin :: 4. Stability of 4-2 Binary Addition Circuit Cell (TYPE-3)
+
+::========================================================================
+:: [4-2 Binary Addition Cell_i : TYPE-3]
+::
+::   Cell Module Symbol :
+::
+::                 a- b- c- d-            Input : a-,b-,c-,d- (non pair set)
+::                 |  |  |  |                     cin- (pair)
+::               +-O--O--O--O-+    cin-
+::               |            |   /
+::            +--O FTA TYPE-3 O--+        Output : p-,q-,cout- (pair)
+::           /   |            |
+::        cout-  +---O----O---+
+::                   |    |
+::                   p-   q-
+::
+::   Composition : Cascade by Adder Output together with two GFA TYPE-3
+::   Function    : -p[i+1] - q[i] - Intermediate_Carry_out
+::                 = -a[i] - b[i] - c[i] - d[i] - Intermediate_Carry_in
+::
+::                 a^{-}[i]  b^{-}[i]
+::                     |     /
+::                     |    /
+::                 +---O---O
+::                 |  GFA  O---- c^{-}[i]  Circuit Composition :
+::                 | TYPE3 |                    BitGFA3Str(a-,b-,c-)
+::                 O---O---+                    BitGFA3Str(A1,cin,d-)
+::                /    |      cin[i]           --->
+::               /   A1|     /                  FTA3Str(a-,b-,c-,d-,cin)
+::      cout[i+1]      |    /
+::                 +---O---O               Intermediate Addition and Carry:
+::                 |  GFA  O---- d^{-}[i]       A1 <= GFA3AdderOutput
+::                 | TYPE3 |                    cout[i+1] <= GFA3CarryOutput
+::                 O---O---+                    q[i] <= GFA3AdderOutput
+::                /    |                        p[i+1] <= GFA3CarryOutput
+::               /     |
+::     p^{-}[i+1]   q^{-}[i]
+::
+::   Calculation Stability : Following(s,2+2) is stable.
+::
+::=========================================================================
+
+::---------------------------------------------------------------
+:: 4-1. Circuit Definition for Intermediate Addition and Carry Circuit (TYPE-3)
+::---------------------------------------------------------------
+
+:: Def. Combined Circuit Structure of 1-bit FTA TYPE-2
+
+definition
+ let am,bm,cm,dm,cin be set;
+ func BitFTA3Str(am,bm,cm,dm,cin) ->
+      unsplit gate`1=arity gate`2isBoolean
+      non void strict non empty ManySortedSign equals
+    BitGFA3Str(am,bm,cm) +*
+    BitGFA3Str(GFA3AdderOutput(am,bm,cm),cin,dm);
+  coherence;
+end;
+
+definition
+ let am,bm,cm,dm,cin be set;
+ func BitFTA3Circ(am,bm,cm,dm,cin) ->
+    strict Boolean gate`2=den Circuit of BitFTA3Str(am,bm,cm,dm,cin)
+ equals
+    BitGFA3Circ(am,bm,cm) +*
+    BitGFA3Circ(GFA3AdderOutput(am,bm,cm),cin,dm);
+  coherence;
+end;
+
+::-----------------------------------------------
+:: 4-2. Properties of 1-bit FTA Structure and Circuit (TYPE-3)
+::-----------------------------------------------
+
+:: InnerVertices and InputVertices of 1-bit FTA Circuit Structure (FTA3)
+
+theorem ThFTA3S1:
+  for am,bm,cm,dm,cin being set holds
+  InnerVertices BitFTA3Str(am,bm,cm,dm,cin) =
+    {[<*am,bm*>,xor2], GFA3AdderOutput(am,bm,cm)} \/
+    {[<*am,bm*>,and2b], [<*bm,cm*>,and2b], [<*cm,am*>,and2b],
+                        GFA3CarryOutput(am,bm,cm)} \/
+    {[<*GFA3AdderOutput(am,bm,cm),cin*>,xor2],
+        GFA3AdderOutput(GFA3AdderOutput(am,bm,cm),cin,dm)} \/
+    {[<*GFA3AdderOutput(am,bm,cm),cin*>,and2b],
+     [<*cin,dm*>,and2b], [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b],
+     GFA3CarryOutput(GFA3AdderOutput(am,bm,cm),cin,dm)}
+   proof
+     let am,bm,cm,dm,cin be set;
+     set S  = BitFTA3Str(am,bm,cm,dm,cin);
+     set S1 = BitGFA3Str(am,bm,cm);
+     set A1 = GFA3AdderOutput(am,bm,cm);  set C1 = GFA3CarryOutput(am,bm,cm);
+     set S2 = BitGFA3Str(A1,cin,dm);
+     set A2 = GFA3AdderOutput(A1,cin,dm); set C2 = GFA3CarryOutput(A1,cin,dm);
+     set ambm0  = [<*am,bm*>, xor2 ]; set ambm  = [<*am,bm*>, and2b];
+     set bmcm   = [<*bm,cm*>, and2b]; set cmam  = [<*cm,am*>, and2b];
+     set A1cin0 = [<*A1,cin*>,xor2 ]; set A1cin = [<*A1,cin*>,and2b];
+     set cindm  = [<*cin,dm*>,and2b]; set dmA1  = [<*dm,A1*>, and2b];
+
+     S = S1 +* S2 & S1 tolerates S2 by CIRCCOMB:55;
+    hence InnerVertices S
+       = (InnerVertices S1) \/ (InnerVertices S2) by CIRCCOMB:15
+      .= ({ambm0} \/ {A1} \/ {ambm,bmcm,cmam} \/ {C1}) \/ (InnerVertices S2)
+           by GFACIRC1:150
+      .= ({ambm0,A1} \/ {ambm,bmcm,cmam} \/ {C1}) \/ (InnerVertices S2)
+           by ENUMSET1:41
+      .= ({ambm0,A1} \/ ({ambm,bmcm,cmam} \/ {C1})) \/ (InnerVertices S2)
+           by XBOOLE_1:4
+      .= ({ambm0,A1} \/ {ambm,bmcm,cmam,C1}) \/ (InnerVertices S2)
+           by ENUMSET1:46
+      .= ({ambm0,A1} \/ {ambm,bmcm,cmam,C1}) \/
+         ({A1cin0} \/ {A2} \/ {A1cin,cindm,dmA1} \/ {C2}) by GFACIRC1:150
+      .= ({ambm0,A1} \/ {ambm,bmcm,cmam,C1}) \/
+         ({A1cin0,A2} \/ {A1cin,cindm,dmA1} \/ {C2}) by ENUMSET1:41
+      .= ({ambm0,A1} \/ {ambm,bmcm,cmam,C1}) \/
+         ({A1cin0,A2} \/ ({A1cin,cindm,dmA1} \/ {C2})) by XBOOLE_1:4
+      .= ({ambm0,A1} \/ {ambm,bmcm,cmam,C1}) \/
+         ({A1cin0,A2} \/ {A1cin,cindm,dmA1,C2}) by ENUMSET1:46
+      .= {ambm0,A1} \/ {ambm,bmcm,cmam,C1} \/
+         {A1cin0,A2} \/ {A1cin,cindm,dmA1,C2} by XBOOLE_1:4;
+   end;
+
+theorem
+  for am,bm,cm,dm,cin being set holds
+    InnerVertices BitFTA3Str(am,bm,cm,dm,cin) is Relation
+   proof
+     let am,bm,cm,dm,cin be set;
+     set S  = BitFTA3Str(am,bm,cm,dm,cin);
+     set S1 = BitGFA3Str(am,bm,cm);
+     set A1 = GFA3AdderOutput(am,bm,cm);
+     set S2 = BitGFA3Str(A1,cin,dm);
+
+     InnerVertices S1 is Relation & InnerVertices S2 is Relation
+       by GFACIRC1:151;
+    hence InnerVertices S is Relation by FACIRC_1:3;
+   end;
+
+LemmaX41:
+  for x,y,z being set
+   for p being set holds GFA3AdderOutput(x,y,z) <> [p,and2b]
+   proof
+     let x,y,z be set, p be set;
+     set A1 = GFA3AdderOutput(x,y,z);
+
+     now assume [p,and2b]`2 = A1`2; then
+A1:    [p,and2b]`2 = xor2 by MCART_1:7;
+       [p,and2b]`2 = and2b by MCART_1:7;
+       hence contradiction by A1,TWOSCOMP:11,13;
+     end;
+    hence thesis;
+   end;
+
+LemmaX42:
+  for am,bm,cm being non pair set
+  for x,y,z being set holds
+   InputVertices BitGFA3Str(am,bm,cm) misses InnerVertices BitGFA3Str(x,y,z)
+   proof
+     let am,bm,cm be non pair set;
+     let x,y,z be set;
+     set S1 = BitGFA3Str(am,bm,cm);
+     set S2 = BitGFA3Str(x,y,z);
+
+     InputVertices S1 is without_pairs & InnerVertices S2 is Relation
+       by GFACIRC1:154,151;
+    hence thesis by FACIRC_1:5;
+   end;
+
+theorem ThFTA3S4:
+  for am,bm,cm,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+      not cin in InnerVertices BitGFA3Str(am,bm,cm)
+    holds
+      InputVertices BitFTA3Str(am,bm,cm,dm,cin) = {am,bm,cm,dm,cin}
+   proof
+     let am,bm,cm,dm be non pair set;
+     let cin be set;
+     set S  = BitFTA3Str(am,bm,cm,dm,cin);
+     set S1 = BitGFA3Str(am,bm,cm);
+     set A1 = GFA3AdderOutput(am,bm,cm);  set C1 = GFA3CarryOutput(am,bm,cm);
+     set S2 = BitGFA3Str(A1,cin,dm);
+     set A2 = GFA3AdderOutput(A1,cin,dm); set C2 = GFA3CarryOutput(A1,cin,dm);
+     set ambm0  = [<*am,bm*>, xor2 ]; set ambm  = [<*am,bm*>, and2b];
+     set bmcm   = [<*bm,cm*>, and2b]; set cmam  = [<*cm,am*>, and2b];
+     set A1cin0 = [<*A1,cin*>,xor2 ]; set A1cin = [<*A1,cin*>,and2b];
+     set cindm  = [<*cin,dm*>,and2b]; set dmA1  = [<*dm,A1*>, and2b];
+
+     assume A1: cin <> dmA1 & not cin in InnerVertices S1; then
+A2:  dm <> A1cin0 & A1 <> cindm & cin <> dmA1 & dm <> A1cin by LemmaX41;
+
+A3:  InnerVertices S2 misses InputVertices S1 by LemmaX42;
+
+A4:  InnerVertices S1
+       = {ambm0} \/ {A1} \/ {ambm,bmcm,cmam} \/ {C1} by GFACIRC1:150
+      .= {ambm0,A1} \/ {ambm,bmcm,cmam} \/ {C1} by ENUMSET1:41
+      .= {ambm0,A1} \/ ({ambm,bmcm,cmam} \/ {C1}) by XBOOLE_1:4
+      .= {A1,ambm0} \/ {ambm,bmcm,cmam,C1} by ENUMSET1:46
+      .= {A1,ambm0,ambm,bmcm,cmam,C1} by ENUMSET1:52;
+
+     A1 in {A1,ambm0,ambm,bmcm,cmam,C1} by ENUMSET1:def 4; then
+A5:  {A1} \ {A1,ambm0,ambm,bmcm,cmam,C1} = {} by ZFMISC_1:68;
+
+A6:  not dm in {A1,ambm0,ambm,bmcm,cmam,C1} by ENUMSET1:def 4;
+
+A7:  {A1,cin,dm} \ InnerVertices S1
+       = ({A1} \/ {cin,dm}) \ {A1,ambm0,ambm,bmcm,cmam,C1} by A4,ENUMSET1:42
+      .= ({A1} \ {A1,ambm0,ambm,bmcm,cmam,C1}) \/
+         ({cin,dm} \ {A1,ambm0,ambm,bmcm,cmam,C1}) by XBOOLE_1:42
+      .= ({cin} \/ {dm}) \ {A1,ambm0,ambm,bmcm,cmam,C1} by A5,ENUMSET1:41
+      .= ({cin} \ {A1,ambm0,ambm,bmcm,cmam,C1}) \/
+         ({dm} \ {A1,ambm0,ambm,bmcm,cmam,C1}) by XBOOLE_1:42
+      .= ({cin}) \/ ({dm} \ {A1,ambm0,ambm,bmcm,cmam,C1}) by A1,A4,ZFMISC_1:67
+      .= ({cin}) \/ ({dm}) by A6,ZFMISC_1:67
+      .= {cin,dm} by ENUMSET1:41;
+
+     S = S1 +* S2 & S1 tolerates S2 by CIRCCOMB:55;
+    hence InputVertices (S)
+       = (InputVertices S1) \/ (InputVertices S2 \ InnerVertices S1)
+           by A3,FACIRC_1:4
+      .= ({am,bm,cm}) \/ (InputVertices S2 \ InnerVertices S1) by GFACIRC1:153
+      .= ({am,bm,cm}) \/ ({A1,cin,dm} \ InnerVertices S1) by A2,GFACIRC1:152
+      .= {am,bm,cm,dm,cin} by A7,ENUMSET1:49;
+   end;
+
+:: The Element of Carriers, InnerVertices and InputVertices (FTA3)
+
+theorem ThFTA3S6:
+  for am,bm,cm,dm,cin being set holds
+   am in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   bm in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   cm in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   dm in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   cin in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*am,bm*>,xor2] in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   GFA3AdderOutput(am,bm,cm) in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*am,bm*>,and2b] in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*bm,cm*>,and2b] in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*cm,am*>,and2b] in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   GFA3CarryOutput(am,bm,cm) in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*GFA3AdderOutput(am,bm,cm),cin*>,xor2]
+                             in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   GFA3AdderOutput(GFA3AdderOutput(am,bm,cm),cin,dm)
+                             in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*GFA3AdderOutput(am,bm,cm),cin*>,and2b]
+                             in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*cin,dm*>,and2b]        in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b]
+                             in the carrier of BitFTA3Str(am,bm,cm,dm,cin) &
+   GFA3CarryOutput(GFA3AdderOutput(am,bm,cm),cin,dm)
+                             in the carrier of BitFTA3Str(am,bm,cm,dm,cin)
+   proof
+     let am,bm,cm,dm,cin be set;
+     set S  = BitFTA3Str(am,bm,cm,dm,cin);
+     set S1 = BitGFA3Str(am,bm,cm);
+     set A1 = GFA3AdderOutput(am,bm,cm);  set C1 = GFA3CarryOutput(am,bm,cm);
+     set S2 = BitGFA3Str(A1,cin,dm);
+     set A2 = GFA3AdderOutput(A1,cin,dm); set C2 = GFA3CarryOutput(A1,cin,dm);
+     set ambm0  = [<*am,bm*>, xor2 ]; set ambm  = [<*am,bm*>, and2b];
+     set bmcm   = [<*bm,cm*>, and2b]; set cmam  = [<*cm,am*>, and2b];
+     set A1cin0 = [<*A1,cin*>,xor2 ]; set A1cin = [<*A1,cin*>,and2b];
+     set cindm  = [<*cin,dm*>,and2b]; set dmA1  = [<*dm,A1*>, and2b];
+
+A1:  am in the carrier of S1 & bm in the carrier of S1 &
+     cm in the carrier of S1 &
+     ambm0 in the carrier of S1 & A1 in the carrier of S1 &
+     ambm in the carrier of S1 & bmcm in the carrier of S1 &
+     cmam in the carrier of S1 & C1 in the carrier of S1 by GFACIRC1:155;
+
+     A1 in the carrier of S2 & cin in the carrier of S2 &
+     dm in the carrier of S2 &
+     A1cin0 in the carrier of S2 & A2 in the carrier of S2 &
+     A1cin in the carrier of S2 & cindm in the carrier of S2 &
+     dmA1 in the carrier of S2 & C2 in the carrier of S2 by GFACIRC1:155;
+    hence thesis by A1,FACIRC_1:20;
+   end;
+
+theorem ThFTA3S7:
+  for am,bm,cm,dm,cin being set holds
+   [<*am,bm*>,xor2] in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   GFA3AdderOutput(am,bm,cm) in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*am,bm*>,and2b] in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*bm,cm*>,and2b] in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*cm,am*>,and2b] in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   GFA3CarryOutput(am,bm,cm) in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*GFA3AdderOutput(am,bm,cm),cin*>,xor2]
+                             in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   GFA3AdderOutput(GFA3AdderOutput(am,bm,cm),cin,dm)
+                             in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*GFA3AdderOutput(am,bm,cm),cin*>,and2b]
+                             in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*cin,dm*>,and2b] in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b]
+                             in InnerVertices BitFTA3Str(am,bm,cm,dm,cin) &
+   GFA3CarryOutput(GFA3AdderOutput(am,bm,cm),cin,dm)
+                             in InnerVertices BitFTA3Str(am,bm,cm,dm,cin)
+   proof
+     let am,bm,cm,dm,cin be set;
+     set S  = BitFTA3Str(am,bm,cm,dm,cin);
+     set S1 = BitGFA3Str(am,bm,cm);
+     set A1 = GFA3AdderOutput(am,bm,cm);  set C1 = GFA3CarryOutput(am,bm,cm);
+     set S2 = BitGFA3Str(A1,cin,dm);
+     set A2 = GFA3AdderOutput(A1,cin,dm); set C2 = GFA3CarryOutput(A1,cin,dm);
+     set ambm0  = [<*am,bm*>, xor2 ]; set ambm  = [<*am,bm*>, and2b];
+     set bmcm   = [<*bm,cm*>, and2b]; set cmam  = [<*cm,am*>, and2b];
+     set A1cin0 = [<*A1,cin*>,xor2 ]; set A1cin = [<*A1,cin*>,and2b];
+     set cindm  = [<*cin,dm*>,and2b]; set dmA1  = [<*dm,A1*>, and2b];
+     set p1 = {ambm0,A1,ambm,bmcm,cmam,C1};
+     set p2 = {A1cin0,A2,A1cin,cindm,dmA1,C2};
+
+A1:  InnerVertices S
+       = {ambm0,A1} \/ {ambm,bmcm,cmam,C1} \/
+         {A1cin0,A2} \/ {A1cin,cindm,dmA1,C2} by ThFTA3S1
+      .= p1 \/ {A1cin0,A2} \/ {A1cin,cindm,dmA1,C2} by ENUMSET1:52
+      .= p1 \/ ({A1cin0,A2} \/ {A1cin,cindm,dmA1,C2}) by XBOOLE_1:4
+      .= p1 \/ p2 by ENUMSET1:52;
+
+     (ambm0 in p1 & A1 in p1 &
+      ambm in p1 & bmcm in p1 & cmam in p1 & C1 in p1) &
+     (A1cin0 in p2 & A2 in p2 &
+      A1cin in p2 & cindm in p2 & dmA1 in p2 & C2 in p2 ) by ENUMSET1:def 4;
+    hence thesis by A1,XBOOLE_0:def 2;
+   end;
+
+theorem ThFTA3S8:
+  for am,bm,cm,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+      not cin in InnerVertices BitGFA3Str(am,bm,cm)
+   holds
+     am in InputVertices BitFTA3Str(am,bm,cm,dm,cin) &
+     bm in InputVertices BitFTA3Str(am,bm,cm,dm,cin) &
+     cm in InputVertices BitFTA3Str(am,bm,cm,dm,cin) &
+     dm in InputVertices BitFTA3Str(am,bm,cm,dm,cin) &
+     cin in InputVertices BitFTA3Str(am,bm,cm,dm,cin)
+   proof
+     let am,bm,cm,dm be non pair set;
+     let cin be set;
+     set S  = BitFTA3Str(am,bm,cm,dm,cin);
+     set S1 = BitGFA3Str(am,bm,cm);
+     set A1 = GFA3AdderOutput(am,bm,cm);
+     set dmA1 = [<*dm,A1*>,and2b];
+
+     assume cin <> dmA1 & not cin in InnerVertices S1; then
+     InputVertices S = {am,bm,cm,dm,cin} by ThFTA3S4;
+    hence thesis by ENUMSET1:def 3;
+   end;
+
+::-------------------------------------------
+:: 4-3. Output Definitions of the Combined Circuit
+::-------------------------------------------
+
+:: Def. External/Internal Signal Outputs of 1-bit FTA TYPE-3
+
+definition
+ let am,bm,cm,dm,cin be set;
+ func BitFTA3CarryOutput(am,bm,cm,dm,cin) ->
+         Element of InnerVertices BitFTA3Str(am,bm,cm,dm,cin) equals
+    GFA3CarryOutput(am,bm,cm);
+ coherence by ThFTA3S7;
+
+ func BitFTA3AdderOutputI(am,bm,cm,dm,cin) ->
+         Element of InnerVertices BitFTA3Str(am,bm,cm,dm,cin) equals
+    GFA3AdderOutput(am,bm,cm);
+ coherence by ThFTA3S7;
+
+ func BitFTA3AdderOutputP(am,bm,cm,dm,cin) ->
+         Element of InnerVertices BitFTA3Str(am,bm,cm,dm,cin) equals
+    GFA3CarryOutput(GFA3AdderOutput(am,bm,cm),cin,dm);
+ coherence by ThFTA3S7;
+
+ func BitFTA3AdderOutputQ(am,bm,cm,dm,cin) ->
+         Element of InnerVertices BitFTA3Str(am,bm,cm,dm,cin) equals
+    GFA3AdderOutput(GFA3AdderOutput(am,bm,cm),cin,dm);
+ coherence by ThFTA3S7;
+end;
+
+::-----------------------------------
+:: 4-4. Stability of the Combined Circuit and its Outputs
+::-----------------------------------
+
+:: Intermediate (External/Internal) Carry/Adder Outputs after Two-steps
+
+theorem
+  for am,bm,cm being non pair set
+  for dm,cin being set
+   for s being State of BitFTA3Circ(am,bm,cm,dm,cin)
+   for a1,a2,a3 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bm & a3 = s.cm
+   holds Following(s,2).BitFTA3CarryOutput(am,bm,cm,dm,cin)
+          = 'not' (('not' a1 '&' 'not' a2) 'or' ('not' a2 '&' 'not' a3) 'or'
+                   ('not' a3 '&' 'not' a1)) &
+         Following(s,2).BitFTA3AdderOutputI(am,bm,cm,dm,cin)
+          = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3)
+ proof
+    let am,bm,cm be non pair set;
+    let dm,cin be set;
+    let s be State of BitFTA3Circ(am,bm,cm,dm,cin);
+    set S1 = BitGFA3Str(am,bm,cm);      set C1 = BitGFA3Circ(am,bm,cm);
+    set A1 = GFA3AdderOutput(am,bm,cm); set A2 = GFA3CarryOutput(am,bm,cm);
+    set S2 = BitGFA3Str(A1,cin,dm);     set C2 = BitGFA3Circ(A1,cin,dm);
+    let a1,a2,a3 be Element of BOOLEAN such that
+A1: a1 = s.am & a2 = s.bm & a3 = s.cm;
+
+A2: am in the carrier of S1 & bm in the carrier of S1 & cm in the carrier of S1
+      by GFACIRC1:155;
+    reconsider s1 = s|the carrier of S1 as State of C1 by FACIRC_1:26;
+    reconsider t = s as State of C1+*C2;
+
+A3: A1 in the carrier of S1 & A2 in the carrier of S1 by GFACIRC1:155;
+A4: InputVertices S1 misses InnerVertices S2 by LemmaX42;
+
+    dom s1 = the carrier of S1 by CIRCUIT1:4; then
+A5: a1 = s1.am & a2 = s1.bm & a3 = s1.cm by A1,A2,FUNCT_1:70; then
+    Following(t,2).GFA3CarryOutput(am,bm,cm)
+     = Following(s1,2).GFA3CarryOutput(am,bm,cm) &
+    Following(s1,2).GFA3CarryOutput(am,bm,cm)
+     = 'not' (('not' a1 '&' 'not' a2) 'or' ('not' a2 '&' 'not' a3) 'or'
+              ('not' a3 '&' 'not' a1))
+      by A3,A4,FACIRC_1:32,GFACIRC1:158;
+   hence Following(s,2).BitFTA3CarryOutput(am,bm,cm,dm,cin)
+     = 'not' (('not' a1 '&' 'not' a2) 'or' ('not' a2 '&' 'not' a3) 'or'
+              ('not' a3 '&' 'not' a1));
+
+    Following(t,2).GFA3AdderOutput(am,bm,cm)
+     = Following(s1,2).GFA3AdderOutput(am,bm,cm) &
+    Following(s1,2).GFA3AdderOutput(am,bm,cm)
+     = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3)
+      by A3,A4,A5,FACIRC_1:32,GFACIRC1:158;
+   hence Following(s,2).BitFTA3AdderOutputI(am,bm,cm,dm,cin)
+     = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3);
+end;
+
+:: Temporal (Internal) Calculations after Two-steps
+
+theorem ThFTA3S11:
+  for am,bm,cm,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+      not cin in InnerVertices BitGFA3Str(am,bm,cm)
+   for s being State of BitFTA3Circ(am,bm,cm,dm,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bm & a3 = s.cm & a4 = s.dm & a5 = s.cin
+   holds Following(s,2).GFA3AdderOutput(am,bm,cm)
+          = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3) &
+         Following(s,2).am = a1 & Following(s,2).bm = a2 &
+         Following(s,2).cm = a3 & Following(s,2).dm = a4 &
+         Following(s,2).cin = a5
+ proof
+    let am,bm,cm,dm be non pair set;
+    let cin be set such that
+A1: cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+    not cin in InnerVertices BitGFA3Str(am,bm,cm);
+    let s be State of BitFTA3Circ(am,bm,cm,dm,cin);
+    set S  = BitFTA3Str(am,bm,cm,dm,cin);
+    set S1 = BitGFA3Str(am,bm,cm);      set C1 = BitGFA3Circ(am,bm,cm);
+    set A1 = GFA3AdderOutput(am,bm,cm);
+    set S2 = BitGFA3Str(A1,cin,dm);     set C2 = BitGFA3Circ(A1,cin,dm);
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.am & a2 = s.bm & a3 = s.cm & a4 = s.dm & a5 = s.cin;
+
+A3: am in the carrier of S1 & bm in the carrier of S1 & cm in the carrier of S1
+      by GFACIRC1:155;
+    reconsider s1 = s|the carrier of S1 as State of C1 by FACIRC_1:26;
+    reconsider t = s as State of C1+*C2;
+
+A4: A1 in the carrier of S1 by GFACIRC1:155;
+A5: InputVertices S1 misses InnerVertices S2 by LemmaX42;
+
+    dom s1 = the carrier of S1 by CIRCUIT1:4; then
+    a1 = s1.am & a2 = s1.bm & a3 = s1.cm by A2,A3,FUNCT_1:70; then
+    Following(t,2).GFA3AdderOutput(am,bm,cm)
+     = Following(s1,2).GFA3AdderOutput(am,bm,cm) &
+    Following(s1,2).GFA3AdderOutput(am,bm,cm)
+     = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3)
+       by A4,A5,FACIRC_1:32,GFACIRC1:158;
+   hence Following(s,2).GFA3AdderOutput(am,bm,cm)
+     = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3);
+
+A6: Following(s,2) = Following Following s by FACIRC_1:15;
+A7: am in InputVertices S & bm in InputVertices S &
+    cm in InputVertices S & dm in InputVertices S &
+    cin in InputVertices S by A1,ThFTA3S8; then
+    (Following s).am = a1 & (Following s).bm = a2 &
+    (Following s).cm = a3 & (Following s).dm = a4 &
+    (Following s).cin = a5 by A2,CIRCUIT2:def 5;
+   hence thesis by A6,A7,CIRCUIT2:def 5;
+end;
+
+LmFTA3S12p:
+ for am,bm,cm,dm being non pair set
+  for cin being set
+   for s being State of BitFTA3Circ(am,bm,cm,dm,cin)
+    for a123,a4,a5 being Element of BOOLEAN
+      st a123 = s.GFA3AdderOutput(am,bm,cm) & a4 = s.dm & a5 = s.cin
+  holds (Following s).[<*GFA3AdderOutput(am,bm,cm),cin*>,and2b]
+         = 'not' a123 '&' 'not' a5 &
+        (Following s).[<*cin,dm*>,and2b] = 'not' a5 '&' 'not' a4 &
+        (Following s).[<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b]
+         = 'not' a4 '&' 'not' a123
+ proof
+    let am,bm,cm,dm be non pair set;
+    let cin be set;
+    set S  = BitFTA3Str(am,bm,cm,dm,cin);set C  = BitFTA3Circ(am,bm,cm,dm,cin);
+    set A1 = GFA3AdderOutput(am,bm,cm);
+    set S2 = BitGFA3Str(A1,cin,dm);      set C2 = BitGFA3Circ(A1,cin,dm);
+    set A1cin = [<*A1,cin*>,and2b]; set cindm = [<*cin,dm*>,and2b];
+    set dmA1  = [<*dm,A1*>, and2b];
+    let s be State of C;
+    let a123,a4,a5 be Element of BOOLEAN such that
+A1: a123 = s.A1 & a4 = s.dm & a5 = s.cin;
+
+A2: A1 in the carrier of S & dm in the carrier of S & cin in the carrier of S
+      by ThFTA3S6;
+A3: dom s = the carrier of S by CIRCUIT1:4;
+    InnerVertices S = the carrier' of S by FACIRC_1:37; then
+A4: A1cin in the carrier' of S & cindm in the carrier' of S &
+    dmA1  in the carrier' of S by ThFTA3S7;
+   hence (Following s).A1cin
+        = and2b.(s*<*A1,cin*>) by FACIRC_1:35
+       .= and2b.<*a123, a5*> by A1,A2,A3,FINSEQ_2:145
+       .= 'not' a123 '&' 'not' a5 by TWOSCOMP:def 3;
+   thus (Following s).cindm
+        = and2b.(s*<*cin,dm*>) by A4,FACIRC_1:35
+       .= and2b.<*a5,a4*> by A1,A2,A3,FINSEQ_2:145
+       .= 'not' a5 '&' 'not' a4 by TWOSCOMP:def 3;
+   thus (Following s).dmA1
+        = and2b.(s*<*dm,A1*>) by A4,FACIRC_1:35
+       .= and2b.<*a4,a123*> by A1,A2,A3,FINSEQ_2:145
+       .= 'not' a4 '&' 'not' a123 by TWOSCOMP:def 3;
+ end;
+
+LmFTA3S12q:
+ for am,bm,cm,dm being non pair set
+  for cin being set
+   for s being State of BitFTA3Circ(am,bm,cm,dm,cin)
+    for a123,a5 being Element of BOOLEAN
+      st a123 = s.GFA3AdderOutput(am,bm,cm) & a5 = s.cin
+    holds (Following s).[<*GFA3AdderOutput(am,bm,cm),cin*>,xor2]
+          = a123 'xor' a5
+ proof
+    let am,bm,cm,dm be non pair set;
+    let cin be set;
+    set S  = BitFTA3Str(am,bm,cm,dm,cin);set C  = BitFTA3Circ(am,bm,cm,dm,cin);
+    set A1 = GFA3AdderOutput(am,bm,cm);
+    set A1cin = [<*A1,cin*>,xor2];
+    let s be State of C;
+    let a123,a5 be Element of BOOLEAN such that
+A1: a123 = s.A1 & a5 = s.cin;
+
+A2: A1 in the carrier of S & cin in the carrier of S by ThFTA3S6;
+A3: dom s = the carrier of S by CIRCUIT1:4;
+    InnerVertices S = the carrier' of S by FACIRC_1:37; then
+    A1cin in the carrier' of S by ThFTA3S7;
+   hence (Following s).A1cin
+        = xor2.(s*<*A1,cin*>) by FACIRC_1:35
+       .= xor2.<*a123, a5*> by A1,A2,A3,FINSEQ_2:145
+       .= a123 'xor' a5 by TWOSCOMP:def 13;
+ end;
+
+LmFTA3S13p:    :: Temporal (Internal) Calculations after Three-steps (for p)
+  for am,bm,cm,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+      not cin in InnerVertices BitGFA3Str(am,bm,cm)
+   for s being State of BitFTA3Circ(am,bm,cm,dm,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bm & a3 = s.cm & a4 = s.dm & a5 = s.cin
+   holds Following(s,3).[<*GFA3AdderOutput(am,bm,cm),cin*>,and2b]
+          = ('not' a1 'xor' 'not' a2 'xor' 'not' a3) '&' 'not' a5 &
+         Following(s,3).[<*cin,dm*>,and2b] = 'not' a5 '&' 'not' a4 &
+         Following(s,3).[<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b]
+          = 'not' a4 '&' ('not' a1 'xor' 'not' a2 'xor' 'not' a3) &
+         Following(s,3).am = a1 & Following(s,3).bm = a2 &
+         Following(s,3).cm = a3 & Following(s,3).dm = a4 &
+         Following(s,3).cin = a5
+ proof
+    let am,bm,cm,dm be non pair set;
+    let cin be set such that
+A1: cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+    not cin in InnerVertices BitGFA3Str(am,bm,cm);
+    let s be State of BitFTA3Circ(am,bm,cm,dm,cin);
+    set S  = BitFTA3Str(am,bm,cm,dm,cin);set C  = BitFTA3Circ(am,bm,cm,dm,cin);
+    set S1 = BitGFA3Str(am,bm,cm);       set C1 = BitGFA3Circ(am,bm,cm);
+    set A1 = GFA3AdderOutput(am,bm,cm);
+    set S2 = BitGFA3Str(A1,cin,dm);      set C2 = BitGFA3Circ(A1,cin,dm);
+    set A1cin = [<*A1,cin*>,and2b]; set cindm = [<*cin,dm*>,and2b];
+    set dmA1  = [<*dm,A1*>, and2b];
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.am & a2 = s.bm & a3 = s.cm & a4 = s.dm & a5 = s.cin;
+
+A3: Following(s,2+1) = Following Following(s,2) by FACIRC_1:12;
+
+    Following(s,2).A1 = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3) &
+    Following(s,2).dm = a4 & Following(s,2).cin = a5 by A1,A2,ThFTA3S11;
+   hence Following(s,3).A1cin
+          = ('not' a1 'xor' 'not' a2 'xor' 'not' a3) '&' 'not' a5 &
+         Following(s,3).cindm = 'not' a5 '&' 'not' a4 &
+         Following(s,3).dmA1
+          = 'not' a4 '&' ('not' a1 'xor' 'not' a2 'xor' 'not' a3)
+           by A3,LmFTA3S12p;
+
+A4: am in InputVertices S & bm in InputVertices S &
+    cm in InputVertices S & dm in InputVertices S &
+    cin in InputVertices S by A1,ThFTA3S8;
+    Following(s,2).am = a1 & Following(s,2).bm = a2 &
+    Following(s,2).cm = a3 & Following(s,2).dm = a4 &
+    Following(s,2).cin = a5 by A1,A2,ThFTA3S11;
+   hence thesis by A3,A4,CIRCUIT2:def 5;
+ end;
+
+LmFTA3S13q:   :: Temporal (Internal) Calculations after Three-steps (for q)
+  for am,bm,cm,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+      not cin in InnerVertices BitGFA3Str(am,bm,cm)
+   for s being State of BitFTA3Circ(am,bm,cm,dm,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bm & a3 = s.cm & a4 = s.dm & a5 = s.cin
+   holds Following(s,3).[<*GFA3AdderOutput(am,bm,cm),cin*>,xor2]
+         = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3) 'xor' a5 &
+         Following(s,3).am = a1 & Following(s,3).bm = a2 &
+         Following(s,3).cm = a3 & Following(s,3).dm = a4 &
+         Following(s,3).cin = a5
+ proof
+    let am,bm,cm,dm be non pair set;
+    let cin be set such that
+A1: cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+    not cin in InnerVertices BitGFA3Str(am,bm,cm);
+    let s be State of BitFTA3Circ(am,bm,cm,dm,cin);
+    set S  = BitFTA3Str(am,bm,cm,dm,cin);set C  = BitFTA3Circ(am,bm,cm,dm,cin);
+    set S1 = BitGFA3Str(am,bm,cm);       set C1 = BitGFA3Circ(am,bm,cm);
+    set A1 = GFA3AdderOutput(am,bm,cm);
+    set S2 = BitGFA3Str(A1,cin,dm);      set C2 = BitGFA3Circ(A1,cin,dm);
+    set A1cin = [<*A1,cin*>,xor2];
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.am & a2 = s.bm & a3 = s.cm & a4 = s.dm & a5 = s.cin;
+
+A3: Following(s,2+1) = Following Following(s,2) by FACIRC_1:12;
+
+    Following(s,2).A1 = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3) &
+    Following(s,2).cin = a5 by A1,A2,ThFTA3S11;
+   hence Following(s,3).A1cin
+     = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3) 'xor' a5
+      by A3,LmFTA3S12q;
+
+A4: am in InputVertices S & bm in InputVertices S &
+    cm in InputVertices S & dm in InputVertices S &
+    cin in InputVertices S by A1,ThFTA3S8;
+    Following(s,2).am = a1 & Following(s,2).bm = a2 &
+    Following(s,2).cm = a3 & Following(s,2).dm = a4 &
+    Following(s,2).cin = a5 by A1,A2,ThFTA3S11;
+   hence thesis by A3,A4,CIRCUIT2:def 5;
+ end;
+
+LmFTA3S14p:
+ for am,bm,cm,dm being non pair set
+  for cin being set
+   for s being State of BitFTA3Circ(am,bm,cm,dm,cin)
+    for a123x,a123y,a123z being Element of BOOLEAN
+      st a123x = s.[<*GFA3AdderOutput(am,bm,cm),cin*>,and2b] &
+         a123y = s.[<*cin,dm*>,and2b] &
+         a123z = s.[<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b]
+    holds (Following s).GFA3CarryOutput(GFA3AdderOutput(am,bm,cm),cin,dm)
+          = 'not' (a123x 'or' a123y 'or' a123z)
+ proof
+    let am,bm,cm,dm be non pair set;
+    let cin be set;
+    set S  = BitFTA3Str(am,bm,cm,dm,cin);set C  = BitFTA3Circ(am,bm,cm,dm,cin);
+    set A1 = GFA3AdderOutput(am,bm,cm);
+    set A2 = GFA3CarryOutput(A1,cin,dm);
+    set A1cin = [<*A1,cin*>,and2b]; set cindm = [<*cin,dm*>,and2b];
+    set dmA1  = [<*dm,A1*>, and2b];
+    let s be State of C;
+    let a123x,a123y,a123z be Element of BOOLEAN such that
+A1: a123x = s.A1cin & a123y = s.cindm & a123z = s.dmA1;
+
+A2: A1cin in the carrier of S & cindm in the carrier of S &
+    dmA1 in the carrier of S by ThFTA3S6;
+A3: dom s = the carrier of S by CIRCUIT1:4;
+    InnerVertices S = the carrier' of S by FACIRC_1:37; then
+    A2 in the carrier' of S by ThFTA3S7;
+   hence (Following s).A2
+        = nor3.(s*<*A1cin,cindm,dmA1*>) by FACIRC_1:35
+       .= nor3.<*a123x, a123y, a123z*> by A1,A2,A3,FINSEQ_2:146
+       .= 'not' (a123x 'or' a123y 'or' a123z) by TWOSCOMP:def 28;
+ end;
+
+LmFTA3S14q:
+ for am,bm,cm,dm being non pair set
+  for cin being set
+   for s being State of BitFTA3Circ(am,bm,cm,dm,cin)
+    for a1235,a4 being Element of BOOLEAN
+      st a1235 = s.[<*GFA3AdderOutput(am,bm,cm),cin*>,xor2] & a4 = s.dm
+    holds (Following s).GFA3AdderOutput(GFA3AdderOutput(am,bm,cm),cin,dm)
+          = a1235 'xor' a4
+ proof
+    let am,bm,cm,dm be non pair set;
+    let cin be set;
+    set S  = BitFTA3Str(am,bm,cm,dm,cin);set C  = BitFTA3Circ(am,bm,cm,dm,cin);
+    set A1 = GFA3AdderOutput(am,bm,cm);
+    set A2 = GFA3AdderOutput(A1,cin,dm);
+    set A1cin = [<*A1,cin*>,xor2];
+    let s be State of C;
+    let a1235,a4 be Element of BOOLEAN such that
+A1: a1235 = s.A1cin & a4 = s.dm;
+
+A2: A1cin in the carrier of S & A1 in the carrier of S &
+    cin in the carrier of S & dm in the carrier of S by ThFTA3S6;
+A3: dom s = the carrier of S by CIRCUIT1:4;
+    InnerVertices S = the carrier' of S by FACIRC_1:37; then
+    A2 in the carrier' of S by ThFTA3S7;
+   hence (Following s).A2
+        = xor2.(s*<*A1cin,dm*>) by FACIRC_1:35
+       .= xor2.<*a1235, a4*> by A1,A2,A3,FINSEQ_2:145
+       .= a1235 'xor' a4 by TWOSCOMP:def 13;
+ end;
+
+LmFTA3S15p:    :: Temporal (External) Calculations after Four-steps (for p)
+  for am,bm,cm,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+      not cin in InnerVertices BitGFA3Str(am,bm,cm)
+   for s being State of BitFTA3Circ(am,bm,cm,dm,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bm & a3 = s.cm & a4 = s.dm & a5 = s.cin
+   holds Following(s,4).GFA3CarryOutput(GFA3AdderOutput(am,bm,cm),cin,dm)
+     = 'not' ((('not' a1 'xor' 'not' a2 'xor' 'not' a3) '&' 'not' a5) 'or'
+              ('not' a5 '&' 'not' a4) 'or'
+              ('not' a4 '&' ('not' a1 'xor' 'not' a2 'xor' 'not' a3))) &
+         Following(s,4).am = a1 & Following(s,4).bm = a2 &
+         Following(s,4).cm = a3 & Following(s,4).dm = a4 &
+         Following(s,4).cin = a5
+ proof
+    let am,bm,cm,dm be non pair set;
+    let cin be set such that
+A1: cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+    not cin in InnerVertices BitGFA3Str(am,bm,cm);
+    let s be State of BitFTA3Circ(am,bm,cm,dm,cin);
+    set S  = BitFTA3Str(am,bm,cm,dm,cin);set C  = BitFTA3Circ(am,bm,cm,dm,cin);
+    set S1 = BitGFA3Str(am,bm,cm);       set C1 = BitGFA3Circ(am,bm,cm);
+    set A1 = GFA3AdderOutput(am,bm,cm);
+    set S2 = BitGFA3Str(A1,cin,dm);      set C2 = BitGFA3Circ(A1,cin,dm);
+    set A2 = GFA3CarryOutput(A1,cin,dm);
+    set A1cin = [<*A1,cin*>,and2b]; set cindm = [<*cin,dm*>,and2b];
+    set dmA1  = [<*dm,A1*>, and2b];
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.am & a2 = s.bm & a3 = s.cm & a4 = s.dm & a5 = s.cin;
+
+A3: Following(s,3+1) = Following Following(s,3) by FACIRC_1:12;
+
+    Following(s,3).A1cin
+      = ('not' a1 'xor' 'not' a2 'xor' 'not' a3) '&' 'not' a5 &
+    Following(s,3).cindm = 'not' a5 '&' 'not' a4 &
+    Following(s,3).dmA1
+      = 'not' a4 '&' ('not' a1 'xor' 'not' a2 'xor' 'not' a3)
+      by A1,A2,LmFTA3S13p;
+   hence Following(s,4).A2
+      = 'not' ((('not' a1 'xor' 'not' a2 'xor' 'not' a3) '&' 'not' a5) 'or'
+               ('not' a5 '&' 'not' a4) 'or'
+               ('not' a4 '&' ('not' a1 'xor' 'not' a2 'xor' 'not' a3)))
+      by A3,LmFTA3S14p;
+
+A4: am in InputVertices S & bm in InputVertices S &
+    cm in InputVertices S & dm in InputVertices S &
+    cin in InputVertices S by A1,ThFTA3S8;
+    Following(s,3).am = a1 & Following(s,3).bm = a2 &
+    Following(s,3).cm = a3 & Following(s,3).dm = a4 &
+    Following(s,3).cin = a5 by A1,A2,LmFTA3S13p;
+   hence thesis by A3,A4,CIRCUIT2:def 5;
+ end;
+
+LmFTA3S15q:    :: Temporal (External) Calculations after Four-steps (for q)
+  for am,bm,cm,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+      not cin in InnerVertices BitGFA3Str(am,bm,cm)
+   for s being State of BitFTA3Circ(am,bm,cm,dm,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bm & a3 = s.cm & a4 = s.dm & a5 = s.cin
+   holds Following(s,4).GFA3AdderOutput(GFA3AdderOutput(am,bm,cm),cin,dm)
+        = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3 'xor' 'not' a4
+                          'xor' 'not' a5) &
+         Following(s,4).am = a1 & Following(s,4).bm = a2 &
+         Following(s,4).cm = a3 & Following(s,4).dm = a4 &
+         Following(s,4).cin = a5
+ proof
+    let am,bm,cm,dm be non pair set;
+    let cin be set such that
+A1: cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+    not cin in InnerVertices BitGFA3Str(am,bm,cm);
+    let s be State of BitFTA3Circ(am,bm,cm,dm,cin);
+    set S  = BitFTA3Str(am,bm,cm,dm,cin);set C  = BitFTA3Circ(am,bm,cm,dm,cin);
+    set S1 = BitGFA3Str(am,bm,cm);       set C1 = BitGFA3Circ(am,bm,cm);
+    set A1 = GFA3AdderOutput(am,bm,cm);
+    set S2 = BitGFA3Str(A1,cin,dm);      set C2 = BitGFA3Circ(A1,cin,dm);
+    set A2 = GFA3AdderOutput(A1,cin,dm);
+    set A1cin = [<*A1,cin*>,xor2];
+    let a1,a2,a3,a4,a5 be Element of BOOLEAN such that
+A2: a1 = s.am & a2 = s.bm & a3 = s.cm & a4 = s.dm & a5 = s.cin;
+
+A3: Following(s,3+1) = Following Following(s,3) by FACIRC_1:12;
+
+    Following(s,3).A1cin
+      = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3) 'xor' a5 &
+    Following(s,3).dm = a4 by A1,A2,LmFTA3S13q;
+   hence Following(s,4).A2
+     = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3)
+               'xor' a5 'xor' a4 by A3,LmFTA3S14q
+    .= 'not' (('not' a1 'xor' 'not' a2 'xor' 'not' a3)
+               'xor' 'not' a5 'xor' 'not' a4) by XBOOLEAN:74
+    .= 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3
+               'xor' 'not' a4 'xor' 'not' a5) by XBOOLEAN:73;
+
+A4: am in InputVertices S & bm in InputVertices S &
+    cm in InputVertices S & dm in InputVertices S &
+    cin in InputVertices S by A1,ThFTA3S8;
+    Following(s,3).am = a1 & Following(s,3).bm = a2 &
+    Following(s,3).cm = a3 & Following(s,3).dm = a4 &
+    Following(s,3).cin = a5 by A1,A2,LmFTA3S13q;
+   hence thesis by A3,A4,CIRCUIT2:def 5;
+ end;
+
+:: Main Proposition #4-1 (External Circuit Outputs after Four-steps) FTA3
+
+theorem
+  for am,bm,cm,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b] &
+      not cin in InnerVertices BitGFA3Str(am,bm,cm)
+   for s being State of BitFTA3Circ(am,bm,cm,dm,cin)
+   for a1,a2,a3,a4,a5 being Element of BOOLEAN st
+       a1 = s.am & a2 = s.bm & a3 = s.cm & a4 = s.dm & a5 = s.cin
+   holds Following(s,4).BitFTA3AdderOutputP(am,bm,cm,dm,cin)
+      = 'not' ((('not' a1 'xor' 'not' a2 'xor' 'not' a3) '&' 'not' a5) 'or'
+               ('not' a5 '&' 'not' a4) 'or'
+               ('not' a4 '&' ('not' a1 'xor' 'not' a2 'xor' 'not' a3))) &
+         Following(s,4).BitFTA3AdderOutputQ(am,bm,cm,dm,cin)
+      = 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3 'xor' 'not' a4
+                        'xor' 'not' a5)
+   by LmFTA3S15p,LmFTA3S15q;
+
+:: Main Proposition #4-2 (The Whole Circuit Stability after Four-steps) FTA3
+
+theorem
+  for am,bm,cm,dm being non pair set
+  for cin being set st
+      cin <> [<*dm,GFA3AdderOutput(am,bm,cm)*>,and2b]
+   for s being State of BitFTA3Circ(am,bm,cm,dm,cin)
+    holds Following(s,4) is stable
+   proof
+     let am,bm,cm,dm be non pair set;
+     let cin be set;
+     set S  = BitFTA3Str(am,bm,cm,dm,cin);
+     set C  = BitFTA3Circ(am,bm,cm,dm,cin);
+     set S1 = BitGFA3Str(am,bm,cm);        set C1 = BitGFA3Circ(am,bm,cm);
+     set A1 = GFA3AdderOutput(am,bm,cm);
+     set S2 = BitGFA3Str(A1,cin,dm);       set C2 = BitGFA3Circ(A1,cin,dm);
+     set ambm0  = [<*am,bm*>, xor2 ]; set ambm  = [<*am,bm*>, and2b];
+     set bmcm   = [<*bm,cm*>, and2b]; set cmam  = [<*cm,am*>, and2b];
+     set A1cin0 = [<*A1,cin*>,xor2 ]; set A1cin = [<*A1,cin*>,and2b];
+     set cindm  = [<*cin,dm*>,and2b]; set dmA1  = [<*dm,A1*>, and2b];
+     set n1=2, n2=2, n12=4;
+
+     assume A1: cin <> dmA1;
+     let s be State of C;
+A2:  C1 tolerates C2 by CIRCCOMB:68;
+
+A3:  InputVertices S1 misses InnerVertices S2 by LemmaX42;
+
+A4:  the Sorts of C1 tolerates the Sorts of C2 by A2,CIRCCOMB:def 3; then
+     reconsider s1 = s|the carrier of S1 as State of C1 by CIRCCOMB:33;
+     reconsider s2 = Following(s,n1)|the carrier of S2 as State of C2
+       by A4,CIRCCOMB:33;
+
+A5:  Following(s1,n1) is stable by GFACIRC1:159;
+     dm<>A1cin0 & A1<>cindm & cin<>dmA1 & dm<>A1cin by A1,LemmaX41; then
+     Following(s2,n2) is stable by GFACIRC1:159; then
+     Following(s,n1+n2) is stable by A3,A5,CIRCCOMB:68,CIRCCMB2:20;
+    hence Following(s,n12) is stable;
+   end;

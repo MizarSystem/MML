@@ -667,7 +667,7 @@ A1: a < b & c <= d;
   hence thesis;
 end;
 
-theorem
+theorem Th17:
   a <= b & c < d implies a-d < b-c
 proof
   assume a <= b & c < d;
@@ -840,7 +840,7 @@ A1: a < b;
   hence thesis by A1;
 end;
 
-theorem :: REAL_2:173`1`2
+theorem Th33:
   0 <= a implies b <= a+b
 proof
   assume
@@ -898,7 +898,7 @@ proof
   hence thesis;
 end;
 
-theorem
+theorem Th40:
   0 <= a & b <= c implies b <= a+c
 proof
   assume 0 <= a & b <= c;
@@ -906,7 +906,7 @@ proof
   hence thesis;
 end;
 
-theorem
+theorem Th41:
   0 < a & b <= c implies b < a+c
 proof
   assume 0 < a & b <= c;
@@ -3151,5 +3151,73 @@ A7:   p < s by A1,Th229;
     end;
   end;
   hence thesis by Th229;
+end;
+
+:: missing, 2008.08.13, A.T.
+
+theorem Th232:
+  0 <= a & b <= c implies b-a <= c
+proof
+  assume 0 <= a & b <= c;
+  then b+0 <= a+c by Th40;
+  hence thesis by Lm18;
+end;
+
+theorem
+  0 < a & b <= c implies b-a < c
+proof
+  assume 0 < a & b <= c;
+  then b+0 < a+c by Th41;
+  hence thesis by Lm17;
+end;
+
+begin
+
+theorem
+  a -' a = 0
+proof a-a = 0;
+  hence thesis by XREAL_0:def 2;
+end;
+
+theorem Th50x:
+  b <= a implies a -' b = a - b
+proof
+  assume a >= b;
+  then a - b >= 0 by Th50;
+  hence thesis by XREAL_0:def 2;
+end;
+
+theorem
+  c <= a & c <= b & a -' c = b -' c implies a = b
+proof
+  assume
+A1: a >= c & b >= c & a -' c = b -' c;
+  then a - c >= 0 by Th50;
+  then
+A2: a -' c = a - c by XREAL_0:def 2;
+  b - c >= 0 by A1,Th50;
+  then a + (-c) = b + (-c) by A1,A2,XREAL_0:def 2;
+  hence thesis;
+end;
+
+theorem
+  a >= b implies a -' b + b = a
+proof
+  assume a >= b;
+   then a - b = a -' b by Th50x;
+  hence a -' b + b = a;
+end;
+
+:: from LEXBFS, 2008.08.23, A.T.
+
+theorem
+  a <= b & c < a implies b -' a < b -' c
+proof
+  assume that
+A1: a <= b and
+A2: c < a;
+A3: b -' c = b - c by A1,A2,Th50x,XXREAL_0:2;
+  b - a < b - c by A2,Th17;
+  hence b -' a < b -' c by A1,A3,Th50x;
 end;
 

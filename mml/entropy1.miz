@@ -8,18 +8,20 @@ environ
 
  vocabularies ARYTM, FINSEQ_1, BOOLE, ARYTM_1, FUNCT_1, NAT_1, MATRIXC1,
       MATRPROB, RELAT_1, RVSUM_1, ARYTM_3, FINSEQ_2, INCSP_1, MATRIXR1,
-      FCONT_1, RLVECT_1, MATRIX_1, TREES_1, PARTFUN1, CAT_3, POWER, TAYLOR_1,
+      RLVECT_1, MATRIX_1, TREES_1, PARTFUN1, CAT_3, POWER, TAYLOR_1,
       LIMFUNC1, FDIFF_1, RCOMP_1, SEQ_1, SUPINF_2, PARTFUN3, ROUGHS_1,
-      FINSEQ_4, ENTROPY1, FUNCOP_1;
+      FINSEQ_4, ENTROPY1, FUNCOP_1, RELAT_2, ORDINAL2;
  notations TARSKI, SUBSET_1, XBOOLE_0, XXREAL_0, XREAL_0, REAL_1, NAT_1, NAT_D,
-      ORDINAL1, NUMBERS, PARTFUN1, RELAT_1, FUNCT_1, VALUED_1, SEQ_1, ZFMISC_1,
+      ORDINAL1, NUMBERS, RELAT_1, FUNCT_1,
+      XXREAL_2, VALUED_1, SEQ_1, ZFMISC_1, PARTFUN1,
       FUNCOP_1, RVSUM_1, FINSEQ_1, FINSEQ_2, NEWTON, MATRIXR1, MATRIX_1,
-      PARTFUN3, POWER, LIMFUNC1, RCOMP_1, FCONT_1, MATRPROB, FDIFF_1, TAYLOR_1;
+      PARTFUN3, POWER, LIMFUNC1, RCOMP_1, MATRPROB, FDIFF_1, TAYLOR_1, FCONT_1;
  constructors REAL_1, NAT_D, BINOP_2, MATRIX_3, MATRIXR1, MATRLIN, EUCLID_2,
       NAT_1, MATRPROB, PARTFUN3, PARTFUN2, FDIFF_1, FCONT_1, POWER, LIMFUNC1,
-      SIN_COS, TAYLOR_1, INTEGRA1, SEQ_1;
+      SIN_COS, TAYLOR_1, INTEGRA1, SEQ_1, XXREAL_2;
  registrations MATRPROB, RELSET_1, NAT_1, MEMBERED, ORDINAL1, XREAL_0, FCONT_3,
-      RCOMP_1, XXREAL_0, NUMBERS, XBOOLE_0, VALUED_0, FINSEQ_1, CARD_1;
+      RCOMP_1, XXREAL_0, NUMBERS, XBOOLE_0, VALUED_0, FINSEQ_1, CARD_1,
+      XXREAL_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, PARTFUN3, FINSEQ_2, LIMFUNC1, RCOMP_1, VALUED_1;
  theorems FUNCT_1, NAT_1, REAL_2, MATRIX_2, XREAL_1, NAT_2, MATRIXR1, GOBOARD1,
@@ -27,7 +29,7 @@ environ
       FINSEQ_2, PARTFUN3, FINSEQ_3, RVSUM_1, POWER, FDIFF_1, RELSET_1, TREES_1,
       XBOOLE_1, TAYLOR_1, LIMFUNC1, SQUARE_1, RELAT_1, ROLLE, FCONT_1,
       XCMPLX_1, INTEGRA1, XXREAL_0, ORDINAL1, MATRPROB, FUNCOP_1,
-      PEPIN, NAT_D, PARTFUN1, VALUED_1, CARD_2, XXREAL_1;
+      PEPIN, NAT_D, PARTFUN1, VALUED_1, CARD_2, XXREAL_1, XXREAL_2;
  schemes FINSEQ_2, SEQ_1, NAT_1, RECDEF_1, FINSEQ_1, MATRIX_1;
 
 begin :: Preliminaries
@@ -72,6 +74,7 @@ theorem Th2:
   (r <> 1 iff (log_ number_e).r < r - 1)
 proof
   set Z = right_open_halfline(0);
+Z: 1 in Z by XXREAL_1:235;
   defpred P[set] means $1 in REAL;
   deffunc G(Real) = $1-1;
   consider f1 being PartFunc of REAL,REAL such that
@@ -172,24 +175,27 @@ A28: 1 < 1/r by XREAL_1:189;
     diff(f,r) = 1 - 1/r by A9,A24,A27;
     hence thesis by A28,XREAL_1:51;
   end;
-A29: f is_continuous_on Z & f is_continuous_on Z1 & f is_continuous_on Z2
+A29: f|Z is continuous & f|Z1 is continuous & f|Z2 is continuous
   by A9,A20,A25,FDIFF_1:33;
+X:  Z c= dom f by A4;
 A30: for r st r in Z1 holds f.r > 0
   proof
     assume not for r st r in Z1 holds f.r > 0;
     then consider r1 such that
 A31: r1 in Z1 & f.r1 <= 0;
+Y:  r1 in dom f by A19,A31,A4;
     r1 in {g where g is Real: 1 < g} by A31,XXREAL_1:230;
     then
 A32: ex g1 being Real st g1 = r1 & 1 < g1;
-A33: f is_continuous_on [.1,r1.] by A29,FCONT_1:17,XXREAL_1:249;
+A33: f|[.1,r1.] is continuous  by A29,FCONT_1:17,XXREAL_1:249,X;
     ].1,r1.[ c= Z by XXREAL_1:247;
     then
 A34: f is_differentiable_on ].1,r1.[ by A9,FDIFF_1:34;
+y:  [.1,r1.] c= dom f by Y,XXREAL_2:def 12,A4,Z;
     per cases by A31;
     suppose f.r1 = 0;
       then consider r2 being Real such that
-A35:  r2 in ].1,r1.[ & diff(f,r2)=0 by A18,A32,A33,A34,ROLLE:1;
+A35:  r2 in ].1,r1.[ & diff(f,r2)=0 by A18,A32,A33,A34,ROLLE:1,X,y;
       ex g1 being Real st g1 = r2 & 1 < g1 & g1 < r1 by A35;
       then r2 in {g where g is Real : 1<g};
       then r2 in Z1 by XXREAL_1:230;
@@ -198,7 +204,7 @@ A35:  r2 in ].1,r1.[ & diff(f,r2)=0 by A18,A32,A33,A34,ROLLE:1;
     suppose
 A36:  f.r1 < 0;
       consider r3 being Real such that
-A37:  r3 in ].1,r1.[ & diff(f,r3)=(f.r1-f.1)/(r1-1) by A32,A33,A34,ROLLE:3;
+A37:  r3 in ].1,r1.[ & diff(f,r3)=(f.r1-f.1)/(r1-1) by A32,A33,A34,ROLLE:3,X,y;
       ex g1 being Real st g1 = r3 & 1 < g1 & g1 < r1 by A37;
       then r3 in {g where g is Real : 1<g};
       then
@@ -213,16 +219,20 @@ A39: for r st r in Z2 holds f.r > 0
     assume not for r st r in Z2 holds f.r > 0;
     then consider r1 such that
 A40: r1 in Z2 & f.r1 <= 0;
+Y:  r1 in dom f by A24,A40,A4;
 A41: ex g1 being Real st g1 = r1 & 0<g1 & g1<1 by A40;
     then
-A42: f is_continuous_on [.r1,1.] by A29,FCONT_1:17,XXREAL_1:249;
+A42: f|[.r1,1.] is continuous  by A29,FCONT_1:17,XXREAL_1:249,X;
+    Z is connected by Y,A4;
+    then
+y:  [.r1,1.] c= dom f by Y,XXREAL_2:def 12,A4,Z;
     ].r1,1.[ c= Z by A41,XXREAL_1:247;
     then
 A43: f is_differentiable_on ].r1,1.[ by A9,FDIFF_1:34;
     per cases by A40;
     suppose f.r1 = 0;
       then consider r2 being Real such that
-A44:  r2 in ].r1,1.[ & diff(f,r2)=0 by A18,A41,A42,A43,ROLLE:1;
+A44:  r2 in ].r1,1.[ & diff(f,r2)=0 by A18,A41,A42,A43,ROLLE:1,y;
       ex g1 being Real st g1 = r2 & r1 < g1 & g1 < 1 by A44;
       then r2 in {g where g is Real : 0<g & g<1 } by A41;
       hence contradiction by A26,A44;
@@ -230,7 +240,7 @@ A44:  r2 in ].r1,1.[ & diff(f,r2)=0 by A18,A41,A42,A43,ROLLE:1;
     suppose
 A45:  f.r1 < 0;
       consider r3 being Real such that
-A46:  r3 in ].r1,1.[ & diff(f,r3)=(f.1-f.r1)/(1-r1) by A41,A42,A43,ROLLE:3;
+A46:  r3 in ].r1,1.[ & diff(f,r3)=(f.1-f.r1)/(1-r1) by A41,A42,A43,ROLLE:3,y;
       ex g1 being Real st g1 = r3 & r1 < g1 & g1 < 1 by A46;
       then
 A47:  r3 in Z2 by A41;

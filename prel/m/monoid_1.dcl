@@ -48,7 +48,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="319">
+<Func kind="K" nr="321">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -67,12 +67,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="319">
+<Func kind="K" nr="321">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="111"/>
+<Adjective nr="115"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MONOID_1" nr="3">
@@ -90,7 +90,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="319">
+<Func kind="K" nr="321">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -133,7 +133,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="332">
+<Func kind="K" nr="334">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

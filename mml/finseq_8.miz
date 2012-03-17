@@ -10,15 +10,15 @@ environ
  vocabularies FINSEQ_8, ARYTM_1, RELAT_1, FINSEQ_1, FUNCT_1, FINSEQ_5, BOOLE,
       RFINSEQ, JORDAN3, SQUARE_1, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1,
-      BINARITH, RELAT_1, RFINSEQ, FINSEQ_1, FUNCT_1, JORDAN3, FINSEQ_5;
- constructors SQUARE_1, NAT_1, RFINSEQ, BINARITH, FINSEQ_5, JORDAN3, REAL_1;
+      NAT_D, RELAT_1, RFINSEQ, FINSEQ_1, FUNCT_1, JORDAN3, FINSEQ_5;
+ constructors SQUARE_1, NAT_1, RFINSEQ, NAT_D, FINSEQ_5, JORDAN3, REAL_1;
  registrations RELSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, ORDINAL1,
       XBOOLE_0, CARD_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions FINSEQ_1;
  theorems REAL_2, NAT_1, NAT_2, JORDAN3, FINSEQ_1, FINSEQ_3, FINSEQ_5,
       FINSEQ_6, BINARITH, SQUARE_1, RFINSEQ, RELAT_1, XREAL_1, XBOOLE_1,
-      XXREAL_0, ORDINAL1, CARD_1, CARD_2;
+      XXREAL_0, ORDINAL1, CARD_1, CARD_2, XREAL_0, NAT_D;
  schemes NAT_1;
 
 begin
@@ -41,12 +41,12 @@ proof
   assume
 A1: len f>=1;
   then len f-1>=0 by XREAL_1:50;
-  then len f -1=len f-'1 by BINARITH:def 3;
+  then len f -1=len f-'1 by XREAL_0:def 2;
   then
 A2: len f-'1+1=len f;
   1-1=0;
   then
-A3: 1-'1=0 by BINARITH:def 3;
+A3: 1-'1=0 by XREAL_0:def 2;
   (f^g)|len f=f by FINSEQ_5:26;
   then ((f^g)/^0)|len f=f by FINSEQ_5:31;
   hence mid(f^g,1,len f)=f by A1,A2,A3,JORDAN3:def 1;
@@ -106,9 +106,9 @@ proof
   let D be non empty set,f be FinSequence of D,k1,k2 be Element of NAT;
   assume
 A1: k1<=k2;
-  then k2-'k1+1=k2-k1+1 by BINARITH:50
+  then k2-'k1+1=k2-k1+1 by XREAL_1:235
     .=k2+1-k1
-    .=k2+1-'k1 by A1,BINARITH:50,NAT_1:12;
+    .=k2+1-'k1 by A1,XREAL_1:235,NAT_1:12;
   hence smid(f,k1,k2)=mid(f,k1,k2) by A1,JORDAN3:def 1;
 end;
 
@@ -119,7 +119,7 @@ proof
   let D be non empty set,f be FinSequence of D,k2 be Element of NAT;
   thus smid(f,1,k2) = (f/^0)|(k2+1-'1) by NAT_2:10
     .= f|(k2+1-'1) by FINSEQ_5:31
-    .=f|k2 by BINARITH:39;
+    .=f|k2 by NAT_D:34;
 end;
 
 theorem Th6:
@@ -155,8 +155,8 @@ proof
   let D be set, f be FinSequence of D,k2 be Element of NAT;
   thus smid(f,0,k2)=(f/^0)|(k2+1-'0) by NAT_2:10
     .= f|(k2+1-'0) by FINSEQ_5:31
-    .= f|(k2+1) by BINARITH:58
-    .= f|(k2+1+1-'1) by BINARITH:39
+    .= f|(k2+1) by NAT_D:40
+    .= f|(k2+1+1-'1) by NAT_D:34
     .= (f/^0)|(k2+1+1-'1) by FINSEQ_5:31
     .= smid(f,1,k2+1) by NAT_2:10;
 end;
@@ -167,10 +167,10 @@ theorem Th9:
 proof
   let D be non empty set,f,g be FinSequence of D;
   len g+len f+1-'(len f+1) =len g+(len f+1)-'(len f+1)
-    .= len g by BINARITH:39;
+    .= len g by NAT_D:34;
   then g|(len g+len f+1-'(len f+1))=g by FINSEQ_1:79;
   then ((f^g)/^(len f))|(len f+len g+1-'(len f+1))=g by FINSEQ_5:40;
-  hence smid(f^g,len f+1,len f+len g)=g by BINARITH:39;
+  hence smid(f^g,len f+1,len f+len g)=g by NAT_D:34;
 end;
 
 :: Overlapping Part
@@ -187,7 +187,7 @@ definition
   proof
     defpred P[Nat] means $1 <=len g & smid(g,1,$1)=smid(f,len f-'$1+1,len f);
 A1: smid(g,1,0)={} by Th7;
-    len f-'0+1=len f-0+1 by BINARITH:50
+    len f-'0+1=len f-0+1 by XREAL_1:235
       .=len f+1;
     then smid(f,len f-'0+1,len f)={} by Th7,XREAL_1:31;
     then
@@ -208,7 +208,7 @@ A7:     b=mid(g,1,k) by Th4;
           case len g>0;
             then 0+1<=len g by NAT_1:13;
             hence len b=k-'1+1 by A4,A6,A7,JORDAN3:27
-              .=k-1+1 by A6,BINARITH:50
+              .=k-1+1 by A6,XREAL_1:235
               .=k;
           end;
           case len g<=0;
@@ -253,7 +253,7 @@ proof
     assume
 A1: len ovlpart(f,g)>len f;
     then len f - len ovlpart(f,g)<0 by REAL_2:105;
-    then len f -' len ovlpart(f,g)=0 by BINARITH:def 3;
+    then len f -' len ovlpart(f,g)=0 by XREAL_0:def 2;
     then smid(f,len f-'len ovlpart(f,g)+1,len f) =f by Th6;
     hence contradiction by A1,Def2;
   end;
@@ -275,25 +275,25 @@ theorem Th11:
   holds ovlcon(f,g)=(f|(len f-'len ovlpart(f,g)))^g
 proof
   let D be non empty set,f,g be FinSequence of D;
-A1: len f-'len ovlpart(f,g)=len f-len ovlpart(f,g) by Th10,BINARITH:50;
+A1: len f-'len ovlpart(f,g)=len f-len ovlpart(f,g) by Th10,XREAL_1:235;
   len f+1<=len f+1+len ovlpart(f,g) by NAT_1:12;
   then len f+1-len ovlpart(f,g)<= len f+1+len ovlpart(f,g)-len ovlpart(f,g)
   by XREAL_1:11;
   then
 A2: len f+1-'(len f-'len ovlpart(f,g)+1) =len f +1-(len f-'len ovlpart(f
-  ,g)+1) by A1,BINARITH:50
+  ,g)+1) by A1,XREAL_1:235
     .= len ovlpart(f,g) by A1;
-  len f-'len ovlpart(f,g)<=len f by BINARITH:52;
+  len f-'len ovlpart(f,g)<=len f by NAT_D:35;
   then
 A3: len (f/^(len f-'len ovlpart(f,g)))
   =len f-(len f-'len ovlpart(f,g)) by RFINSEQ:def 2
     .=0+len ovlpart(f,g) by A1;
 A4: ovlpart(f,g)=smid(f,len f-'len ovlpart(f,g)+1,len f) by Def2
-    .=(f/^(len f-'len ovlpart(f,g)))|(len ovlpart(f,g)) by A2,BINARITH:39
+    .=(f/^(len f-'len ovlpart(f,g)))|(len ovlpart(f,g)) by A2,NAT_D:34
     .=(f/^(len f-'len ovlpart(f,g))) by A3,FINSEQ_1:79;
   ovlpart(f,g)=smid(g,1,len ovlpart(f,g)) by Def2
-    .=(g/^(0+1-'1))|(len ovlpart(f,g)) by BINARITH:39
-    .=(g/^(0))|(len ovlpart(f,g)) by BINARITH:39
+    .=(g/^(0+1-'1))|(len ovlpart(f,g)) by NAT_D:34
+    .=(g/^(0))|(len ovlpart(f,g)) by NAT_D:34
     .= g|(len ovlpart(f,g)) by FINSEQ_5:31;
   hence ovlcon(f,g)= (f|(len f-'len ovlpart(f,g)))^
   (g|(len ovlpart(f,g)))^(g/^(len ovlpart(f,g))) by A4,RFINSEQ:21
@@ -346,7 +346,7 @@ proof
   let D be non empty set,f be FinSequence of D;
 A1: ovlpart(f,f)=smid(f,1,len ovlpart(f,f)) &
   ovlpart(f,f)=smid(f,len f-'len ovlpart(f,f)+1,len f) by Def2;
-  len f-'len f+1=len f-len f+1 by BINARITH:50
+  len f-'len f+1=len f-len f+1 by XREAL_1:235
     .=0+1;
   then smid(f,1,len f)=smid(f,len f-'len f+1,len f);
   then
@@ -355,7 +355,7 @@ A2: len f<=len ovlpart(f,f) by Def2;
 A3: ovlcon(f,f)=f^(<*>D) by Th2
     .=f by FINSEQ_1:47;
 A4: ovlldiff(f,f)= f|(len f-'len f) by A1,A2,Th6
-    .= f|(0) by BINARITH:51
+    .= f|(0) by XREAL_1:234
     .= {};
   ovlrdiff(f,f)= <*>D by A2,Th2
     .= {};
@@ -372,7 +372,7 @@ A1: len ovlpart(f^g,g)<=len g by Def2;
 A2: smid(g,1,len g)=g|(len g) by Th5
     .=g by FINSEQ_1:79;
   len (f^g)-'len g+1 =len f + len g -'len g+1 by FINSEQ_1:35
-    .=len f +1 by BINARITH:39;
+    .=len f +1 by NAT_D:34;
   then smid(f^g,len (f^g)-'len g+1,len (f^g))
   = smid(f^g,len f+1,len f + len g) by FINSEQ_1:35
     .= g by Th9;
@@ -383,11 +383,11 @@ A4: ovlpart(f^g,g)=smid(g,1,len ovlpart(f^g,g)) by Def2
     .=g|(len g) by A3,Th5
     .=g by FINSEQ_1:79;
 A5: len ovlpart(f,f^g)<=len f by Th10;
-  len f-'len f+1=0+1 by BINARITH:51
+  len f-'len f+1=0+1 by XREAL_1:234
     .=1;
   then
-A6: smid(f,len f-'len f+1,len f) = (f/^(0+1-'1))|(len (f)) by BINARITH:39
-    .= (f/^(0))|(len (f)) by BINARITH:39
+A6: smid(f,len f-'len f+1,len f) = (f/^(0+1-'1))|(len (f)) by NAT_D:34
+    .= (f/^(0))|(len (f)) by NAT_D:34
     .= f|(len (f)) by FINSEQ_5:31
     .= f by FINSEQ_1:79;
   len f<=len f+len g by NAT_1:12;
@@ -414,13 +414,13 @@ proof
 A1: len ovlpart(f,g) <= len g by Def2;
 A2: len ovlcon(f,g)=len f +len (g/^(len ovlpart(f,g))) by FINSEQ_1:35
     .=len f+(len g-'len ovlpart(f,g)) by JORDAN3:19
-    .=len f+(len g -len ovlpart(f,g)) by A1,BINARITH:50;
+    .=len f+(len g -len ovlpart(f,g)) by A1,XREAL_1:235;
   hence
 A3: len ovlcon(f,g)=len f+len g -len ovlpart(f,g);
 A4: len ovlpart(f,g)<=len g by Def2;
   hence len ovlcon(f,g)
-  =len f+len g -'len ovlpart(f,g) by A3,BINARITH:50,NAT_1:12;
-  thus len ovlcon(f,g)=len f+(len g -'len ovlpart(f,g)) by A2,A4,BINARITH:50;
+  =len f+len g -'len ovlpart(f,g) by A3,XREAL_1:235,NAT_1:12;
+  thus len ovlcon(f,g)=len f+(len g -'len ovlpart(f,g)) by A2,A4,XREAL_1:235;
 end;
 
 theorem Th16:
@@ -469,16 +469,16 @@ A6: len ((CR|1)^((CR/^1)|(len (CR/^1)-'len ovlpart(CR/^1,CR))))
     =len (CR|1)+len ((CR/^1)|(len (CR/^1)-'len ovlpart(CR/^1,CR)))
     by FINSEQ_1:35
 
-.=len (CR|1) +(len (CR/^1)-'len ovlpart(CR/^1,CR)) by BINARITH:52,FINSEQ_1:80
-      .=len (CR|1) +(len (CR/^1)-len ovlpart(CR/^1,CR)) by A3,BINARITH:50
+.=len (CR|1) +(len (CR/^1)-'len ovlpart(CR/^1,CR)) by NAT_D:35,FINSEQ_1:80
+      .=len (CR|1) +(len (CR/^1)-len ovlpart(CR/^1,CR)) by A3,XREAL_1:235
       .=len (CR|1)+len (CR/^1)- len ovlpart(CR/^1,CR)
       .=len ((CR|1)^(CR/^1))- len ovlpart(CR/^1,CR) by FINSEQ_1:35
       .=len CR - len ovlpart(CR/^1,CR) by RFINSEQ:21;
     len ovlpart(CR/^1,CR)<=len CR by Th16;
     then
 A7: len CR - len ovlpart(CR/^1,CR)=len CR -' len ovlpart(CR/^1,CR)
-    by BINARITH:50;
-A8: len CR +1-'1=len CR by BINARITH:39;
+    by XREAL_1:235;
+A8: len CR +1-'1=len CR by NAT_D:34;
 A9: len ovlpart(CR/^1,CR)<=len CR by Def2;
 A10: len f= len (CR|1) +len ovlcon(CR/^1,CR) by FINSEQ_1:35
       .= len (CR|1) +(len (CR/^1)+len CR - len ovlpart(CR/^1,CR)) by Th15
@@ -489,30 +489,30 @@ A10: len f= len (CR|1) +len ovlcon(CR/^1,CR) by FINSEQ_1:35
 A11: len CR<len CR +1 by XREAL_1:31;
 A12: len ovlpart(CR/^1,CR)<=len CR by Def2;
     then
-A13: j=1+len CR -len ovlpart(CR/^1,CR) by A11,BINARITH:50,XXREAL_0:2
+A13: j=1+len CR -len ovlpart(CR/^1,CR) by A11,XREAL_1:235,XXREAL_0:2
       .=1+(len CR -len ovlpart(CR/^1,CR))
-      .=1+(len CR -'len ovlpart(CR/^1,CR)) by A12,BINARITH:50;
+      .=1+(len CR -'len ovlpart(CR/^1,CR)) by A12,XREAL_1:235;
     then
 A14: 1<=j by NAT_1:12;
-A15: smid(f,1,1+len CR-'1)=(f/^(0+1-'1))|(len CR+1-'1) by BINARITH:39
-      .=(f/^0)|len CR by A8,BINARITH:39
+A15: smid(f,1,1+len CR-'1)=(f/^(0+1-'1))|(len CR+1-'1) by NAT_D:34
+      .=(f/^0)|len CR by A8,NAT_D:34
       .=f|len CR by FINSEQ_5:31
       .=CR by A4,FINSEQ_5:26;
-    j+len CR-'1+1 =j+len CR-1+1 by A14,BINARITH:50,NAT_1:12
+    j+len CR-'1+1 =j+len CR-1+1 by A14,XREAL_1:235,NAT_1:12
       .=j+len CR;
     then
-A16: j+len CR-'1+1-'j =j+len CR -j by BINARITH:50,NAT_1:12
+A16: j+len CR-'1+1-'j =j+len CR -j by XREAL_1:235,NAT_1:12
       .=len CR;
     1<= 1+(len CR -'len ovlpart(CR/^1,CR)) by NAT_1:12;
-    then 1<= 1+(len CR -len ovlpart(CR/^1,CR)) by A9,BINARITH:50;
+    then 1<= 1+(len CR -len ovlpart(CR/^1,CR)) by A9,XREAL_1:235;
     then 1<= 1+len CR -len ovlpart(CR/^1,CR);
-    then 1<=len CR +1-'len ovlpart(CR/^1,CR) by A9,BINARITH:50,NAT_1:12;
+    then 1<=len CR +1-'len ovlpart(CR/^1,CR) by A9,XREAL_1:235,NAT_1:12;
     then len CR +1-'len ovlpart(CR/^1,CR)-'1
-    =len CR +1-'len ovlpart(CR/^1,CR)-1 by BINARITH:50;
+    =len CR +1-'len ovlpart(CR/^1,CR)-1 by XREAL_1:235;
     then len CR +1-'len ovlpart(CR/^1,CR)-'1
-    =len CR+1-len ovlpart(CR/^1,CR) -1 by A9,BINARITH:50,NAT_1:12
+    =len CR+1-len ovlpart(CR/^1,CR) -1 by A9,XREAL_1:235,NAT_1:12
       .=len CR +1 -1-len ovlpart(CR/^1,CR)
-      .=len CR -'len ovlpart(CR/^1,CR) by A12,BINARITH:50;
+      .=len CR -'len ovlpart(CR/^1,CR) by A12,XREAL_1:235;
     then
 A17: smid(f,j,j+len CR-'1) =CR|len CR by A5,A6,A7,A16,FINSEQ_5:40
       .=smid(f,1,1+len CR-'1) by A15,FINSEQ_1:79;
@@ -522,22 +522,22 @@ A17: smid(f,j,j+len CR-'1) =CR|len CR by A5,A6,A7,A16,FINSEQ_5:40
 A18: len CR+1-len ovlpart(CR/^1,CR) >= 1+len CR -(len CR -'1) by REAL_2:106;
     now per cases;
       case len CR >=1;
-        then 1+len CR -(len CR -'1)=1+len CR -(len CR -1) by BINARITH:50
+        then 1+len CR -(len CR -'1)=1+len CR -(len CR -1) by XREAL_1:235
           .=1+1;
         then 1< len CR +1-len ovlpart(CR/^1,CR) by A18,XXREAL_0:2;
         then
-A19:    1<j by A11,A12,BINARITH:50,XXREAL_0:2;
+A19:    1<j by A11,A12,XREAL_1:235,XXREAL_0:2;
         (len CR -'len ovlpart(CR/^1,CR))+len CR+1 -'1
-        <= len CR + (len CR -' len ovlpart(CR/^1,CR)) by BINARITH:39;
+        <= len CR + (len CR -' len ovlpart(CR/^1,CR)) by NAT_D:34;
         then 1+(len CR -'len ovlpart(CR/^1,CR))+len CR -'1
-        <= len CR + (len CR - len ovlpart(CR/^1,CR)) by A12,BINARITH:50;
+        <= len CR + (len CR - len ovlpart(CR/^1,CR)) by A12,XREAL_1:235;
         then
 A20:    j-'1 >=len CR by A2,A10,A13,A15,A17,A19,Def6;
-A21:    j-'1=1+(len CR -'len ovlpart(CR/^1,CR))-1 by A13,BINARITH:50,NAT_1:12
+A21:    j-'1=1+(len CR -'len ovlpart(CR/^1,CR))-1 by A13,XREAL_1:235,NAT_1:12
           .= (len CR -'len ovlpart(CR/^1,CR));
-A22:    len CR -'len ovlpart(CR/^1,CR)<=len CR by BINARITH:52;
+A22:    len CR -'len ovlpart(CR/^1,CR)<=len CR by NAT_D:35;
         len CR -'len ovlpart(CR/^1,CR)=len CR -len ovlpart(CR/^1,CR)
-        by A12,BINARITH:50;
+        by A12,XREAL_1:235;
         then len CR -len ovlpart(CR/^1,CR)=len CR by A20,A21,A22,XXREAL_0:1;
         hence len ovlpart(CR/^1,CR) =0;
       end;
@@ -566,8 +566,8 @@ A25:  1<=i & i<j & j+len CR-'1<=len f &
       then
 A26:  j-i>0 by XREAL_1:52;
       then
-A27:  j-'i=j-i by BINARITH:def 3;
-A28:  i+(j-'i)=j-i+i by A26,BINARITH:def 3
+A27:  j-'i=j-i by XREAL_0:def 2;
+A28:  i+(j-'i)=j-i+i by A26,XREAL_0:def 2
         .=j;
       now per cases;
         case len CR<=0;
@@ -578,62 +578,62 @@ A29:      len CR>0;
           then
 A30:      0+1<=len CR by NAT_1:13;
           then
-A31:      len CR -'1=len CR-1 by BINARITH:50;
-A32:      i+len CR-'1=i+len CR-1 by A30,BINARITH:50,NAT_1:12;
+A31:      len CR -'1=len CR-1 by XREAL_1:235;
+A32:      i+len CR-'1=i+len CR-1 by A30,XREAL_1:235,NAT_1:12;
 A33:      i<=i+(len CR -'1) by NAT_1:12;
           then
 A34:      1<=i+len CR -'1 by A25,A31,A32,XXREAL_0:2;
           set k=j-'i;
 A35:      0+1<=k by A26,A27,NAT_1:13;
           then
-A36:      k-1=k-'1 by BINARITH:50;
-A37:      i+(k-'1)=i+(k-1) by A35,BINARITH:50
-            .=i+(j-i-1) by A26,BINARITH:def 3
+A36:      k-1=k-'1 by XREAL_1:235;
+A37:      i+(k-'1)=i+(k-1) by A35,XREAL_1:235
+            .=i+(j-i-1) by A26,XREAL_0:def 2
             .=j-1;
           i+1<=j by A25,NAT_1:13;
           then
 A38:      i+1-1<=j-1 by XREAL_1:11;
           then
-A39:      j-'1=j-1 by BINARITH:def 3;
+A39:      j-'1=j-1 by XREAL_0:def 2;
           j-i>0 by A25,XREAL_1:52;
-          then j-'i>0 by BINARITH:def 3;
+          then j-'i>0 by XREAL_0:def 2;
           then
 A40:      j-'i>=0+1 by NAT_1:13;
 A41:      j-'1<=j-'1+len CR by NAT_1:12;
           j<=j+len CR by NAT_1:12;
           then
 A42:      i<j+len CR by A25,XXREAL_0:2;
-          j-'1+len CR=j-1+len CR by A38,BINARITH:def 3
+          j-'1+len CR=j-1+len CR by A38,XREAL_0:def 2
             .=j+len CR-1
-            .=j+len CR-'1 by A25,A42,BINARITH:50,XXREAL_0:2;
+            .=j+len CR-'1 by A25,A42,XREAL_1:235,XXREAL_0:2;
           then
 A43:      i+(k-'1)<=len f by A25,A37,A39,A41,XXREAL_0:2;
           now
             assume
 A44:        j-'i<len CR;
             then k-1<len CR-1 by XREAL_1:11;
-            then k-'1<len CR-1 by A40,BINARITH:50;
-            then k-'1<len CR -'1 by A30,BINARITH:50;
+            then k-'1<len CR-1 by A40,XREAL_1:235;
+            then k-'1<len CR -'1 by A30,XREAL_1:235;
             then
 A45:        k-'1+1<=len CR -'1 by NAT_1:13;
 A46:        k-k<len CR -k by A44,XREAL_1:11;
-            then 0<len CR -'k by BINARITH:def 3;
+            then 0<len CR -'k by XREAL_0:def 2;
             then
 A47:        0+1<=len CR -'k by NAT_1:13;
-A48:        len CR -'k=len CR -k by A46,BINARITH:def 3;
+A48:        len CR -'k=len CR -k by A46,XREAL_0:def 2;
             1<len CR by A35,A44,XXREAL_0:2;
             then 1+1<=len CR by NAT_1:13;
             then
 A49:        1+1-1<=len CR -1 by XREAL_1:11;
-A50:        len CR-'1=len CR-1 by A35,A44,BINARITH:50,XXREAL_0:2;
+A50:        len CR-'1=len CR-1 by A35,A44,XREAL_1:235,XXREAL_0:2;
             then
 A51:        len CR -'k<= len CR -'1 by A35,A48,REAL_2:106;
             i<=i+(k-'1) by NAT_1:12;
             then
 A52:        i<=len f by A43,XXREAL_0:2;
-            j+len CR-'1=j+len CR-1 by A25,A42,BINARITH:50,XXREAL_0:2
+            j+len CR-'1=j+len CR-1 by A25,A42,XREAL_1:235,XXREAL_0:2
               .=j+(len CR-1)
-              .=j+(len CR-'1) by A30,BINARITH:50;
+              .=j+(len CR-'1) by A30,XREAL_1:235;
             then j<=j+len CR -'1 by NAT_1:12;
             then
 A53:        j<=len f by A25,XXREAL_0:2;
@@ -645,7 +645,7 @@ A55:        1<j by A25,XXREAL_0:2;
 A56:        j<j+len CR by A29,XREAL_1:31;
             then
 A57:        1<j+len CR by A55,XXREAL_0:2;
-A58:        j+len CR-'1=j+len CR-1 by A55,A56,BINARITH:50,XXREAL_0:2;
+A58:        j+len CR-'1=j+len CR-1 by A55,A56,XREAL_1:235,XXREAL_0:2;
             then
 A59:        i+1-1+len CR <=len f by A25,A54,XXREAL_0:2;
             i+len CR<=i+len CR+1 by NAT_1:12;
@@ -666,12 +666,12 @@ A66:        len smid(CR,1,(len CR) -'k)
             = len mid(CR,1,(len CR) -'k) by A47,Th4;
 A67:        len mid(CR,1,(len CR) -'k)
             = (len CR) -'k -'1+1 by A30,A47,A48,A64,JORDAN3:27
-              .= (len CR) -'k -1+1 by A47,BINARITH:50
+              .= (len CR) -'k -1+1 by A47,XREAL_1:235
               .= (len CR) -'k;
 A68:        len (CR/^1) -'(len CR-'k)+1
             =len CR-'1-'(len CR -'k)+1 by JORDAN3:19
-              .=len CR-'1-(len CR-'k)+1 by A51,BINARITH:50
-              .=len CR-1-(len CR-k)+1 by A35,A44,A48,BINARITH:50,XXREAL_0:2
+              .=len CR-'1-(len CR-'k)+1 by A51,XREAL_1:235
+              .=len CR-1-(len CR-k)+1 by A35,A44,A48,XREAL_1:235,XXREAL_0:2
               .=k;
 A69:        len (CR/^1)=len CR -'1 by JORDAN3:19;
             then
@@ -679,9 +679,9 @@ A70:        smid(CR/^1,len (CR/^1) -'(len CR-'k)+1,len (CR/^1) )
             = mid(CR/^1,k,len CR -'1) by A36,A45,A68,Th4;
 A71:        len mid(CR/^1,k,len CR -'1)=len CR-'1-'k+1
             by A35,A36,A45,A49,A50,A69,JORDAN3:27
-              .=len CR-'1-k+1 by A36,A45,BINARITH:50
-              .=len CR -1-k+1 by A35,A44,BINARITH:50,XXREAL_0:2
-              .=len CR -'k by A46,BINARITH:def 3;
+              .=len CR-'1-k+1 by A36,A45,XREAL_1:235
+              .=len CR -1-k+1 by A35,A44,XREAL_1:235,XXREAL_0:2
+              .=len CR -'k by A46,XREAL_0:def 2;
             for jj being Nat st 1<=jj & jj<=len CR -'k holds
             smid(CR,1,(len CR) -'k).jj
             =smid(CR/^1,len (CR/^1) -'(len CR-'k)+1,len (CR/^1)).jj
@@ -696,18 +696,18 @@ A74:          jj+k-1<=len CR -1 by A48,XREAL_1:11;
               reconsider j1=jj as Element of NAT by ORDINAL1:def 13;
 A75:          len mid(f,i,i+len CR-'1)=i+len CR-'1-'i+1
               by A25,A31,A32,A33,A34,A52,A60,JORDAN3:27
-                .=i+len CR -1-i+1 by A31,A32,A33,BINARITH:50
+                .=i+len CR -1-i+1 by A31,A32,A33,XREAL_1:235
                 .=len CR;
-              len CR-'k<=len CR by BINARITH:52;
+              len CR-'k<=len CR by NAT_D:35;
               then
 A76:          jj <= len CR by A72,XXREAL_0:2;
 A77:          1<=jj+(k-'1) by A72,NAT_1:12;
-A78:          jj+(k-'1)=jj+(k-1) by A35,BINARITH:50
+A78:          jj+(k-'1)=jj+(k-1) by A35,XREAL_1:235
                 .=jj+k-1
-                .=jj+k-'1 by A72,BINARITH:50,NAT_1:12;
+                .=jj+k-'1 by A72,XREAL_1:235,NAT_1:12;
 A79:          1<=jj+k by A72,NAT_1:12;
-              jj+k-'1<=len CR -1 by A72,A74,BINARITH:50,NAT_1:12;
-              then jj+k-'1<=len CR -'1 by A30,BINARITH:50;
+              jj+k-'1<=len CR -1 by A72,A74,XREAL_1:235,NAT_1:12;
+              then jj+k-'1<=len CR -'1 by A30,XREAL_1:235;
               then jj+k-'1 in Seg len (CR/^1) by A69,A77,A78;
               then
 A80:          jj+k-'1 in dom (CR/^1) by FINSEQ_1:def 3;
@@ -718,12 +718,12 @@ A81:          smid(f,j,j+len CR-'1) =mid(f,j,j+len CR-'1) by A58,A62,Th4; thus
 
 .= smid(f,i,i+len CR-'1).(jj+k-'1+1) by A25,A30,A80,RFINSEQ:def 2
                 .= mid(f,i,i+len CR-'1).(jj+k-'1+1) by A31,A32,A33,Th4
-                .= mid(f,i,i+len CR-'1).(jj+k-1+1) by A72,BINARITH:50,NAT_1:12
+                .= mid(f,i,i+len CR-'1).(jj+k-1+1) by A72,XREAL_1:235,NAT_1:12
                 .=f.(i+(j1+k)-'1)
               by A25,A31,A32,A33,A34,A48,A52,A60,A73,A75,A79,JORDAN3:27
                 .=f.(i+k+j1-'1)
                 .=CR.jj by A25,A28,A53,A55,A58,A61,A62,A72,A76,A81,JORDAN3:27
-                .=CR.(j1+1-'1) by BINARITH:39
+                .=CR.(j1+1-'1) by NAT_D:34
                 .= mid(CR,1,(len CR) -'k).j1
               by A30,A47,A48,A64,A67,A72,JORDAN3:27
                 .= smid(CR,1,(len CR) -'k).jj by A47,Th4;
@@ -732,7 +732,7 @@ A81:          smid(f,j,j+len CR-'1) =mid(f,j,j+len CR-'1) by A58,A62,Th4; thus
             =smid(CR/^1,len (CR/^1) -'(len CR-'k)+1,len (CR/^1))
             by A66,A67,A70,A71,FINSEQ_1:18;
             then (len CR)-'k<=len p by A65,Def2;
-            hence contradiction by A24,A46,BINARITH:def 3;
+            hence contradiction by A24,A46,XREAL_0:def 2;
           end;
           hence j-'i>=len CR;
         end;
@@ -806,10 +806,10 @@ A4:   len g>=0+1 by A2,NAT_1:13;
 A5:       i=0;
           0-1<0;
           then
-A6:       i-'1=0 by A5,BINARITH:def 3;
+A6:       i-'1=0 by A5,XREAL_0:def 2;
           then
 A7:       (f/^(0-'1))|(len g-'0+1)=g by A3,A5,JORDAN3:def 1;
-          len g -'0=len g -0 by BINARITH:def 3
+          len g -'0=len g -0 by XREAL_0:def 2
             .=len g;
           then
 A8:       f|(len g+1)=g by A5,A6,A7,FINSEQ_5:31;
@@ -865,8 +865,8 @@ A3:   0+1 <= len g by A2,NAT_1:13;
       len g <= len f by A1,FINSEQ_1:84;
       hence 1<=len f by A3,XXREAL_0:2;
       thus mid(f,1,len g) = (f/^(1-'1))|(len g-'1+1) by A3,JORDAN3:def 1
-        .= (f/^(1-'1))|len g by A3,BINARITH:53
-        .= (f/^0)|len g by BINARITH:51
+        .= (f/^(1-'1))|len g by A3,XREAL_1:237
+        .= (f/^0)|len g by XREAL_1:234
         .= f|len g by FINSEQ_5:31
         .= g by A1,FINSEQ_3:122;
     end;
@@ -967,9 +967,9 @@ A13: g=Rev Rev g by FINSEQ_6:29
       .=mid(Rev (Rev f),len f-'len g+1,len f-'1+1)
     by A5,A7,A9,A12,JORDAN3:22
       .=mid(f,len f -'len g +1,len f-'1+1) by FINSEQ_6:29;
-A14: len f -'len g+1=len f-len g+1 by A10,BINARITH:def 3
-      .=(len f+1)-'len g by A11,BINARITH:def 3;
-    len f-'1+1=len f-1+1 by A8,BINARITH:def 3
+A14: len f -'len g+1=len f-len g+1 by A10,XREAL_0:def 2
+      .=(len f+1)-'len g by A11,XREAL_0:def 2;
+    len f-'1+1=len f-1+1 by A8,XREAL_0:def 2
       .=len f;
     hence len g<=len f & mid(f,(len f+1) -' len g,len f)=g by A1,A13,A14,Th23;
   end;
@@ -996,25 +996,25 @@ A5:   len g-1>=0 by XREAL_1:50;
       then len g<len f+1 by A1,XXREAL_0:2;
       then
 A6:   len f+1-len g>0 by XREAL_1:52;
-      then (len f+1)-'len g =len f+1-len g by BINARITH:def 3;
+      then (len f+1)-'len g =len f+1-len g by XREAL_0:def 2;
       then
 A7:   0+1<= (len f+1)-'len g by A6,NAT_1:13;
-A8:   (len f+1)-' len g=len f-(len g-1) by A6,BINARITH:def 3;
+A8:   (len f+1)-' len g=len f-(len g-1) by A6,XREAL_0:def 2;
       len f+0<=len f+(len g-1) by A5,XREAL_1:9;
       then
 A9:   len f-(len g -1)<=len f by XREAL_1:22;
 A10:  1<=len f & len f<=len f by A1,A4,XXREAL_0:2;
-A11:  len f-'len f+1=len f-len f+1 by BINARITH:def 3
+A11:  len f-'len f+1=len f-len f+1 by XREAL_0:def 2
         .=1;
       len f<len f+1 by XREAL_1:31;
       then len g<=len f+1 by A1,XXREAL_0:2;
       then len f+1-len g>=0 by XREAL_1:50;
       then
-A12:  len f -((len f+1)-'len g)=len f-(len f+1-len g) by BINARITH:def 3
+A12:  len f -((len f+1)-'len g)=len f-(len f+1-len g) by XREAL_0:def 2
         .=len g -1;
       then
 A13:  len f-'((len f+1)-'len g)+1
-      =len f -((len f+1)-'len g)+1 by A5,BINARITH:def 3;
+      =len f -((len f+1)-'len g)+1 by A5,XREAL_0:def 2;
       Rev g =mid((Rev f),len f-'len f+1,len f-'((len f+1)-'len g)+1)
       by A1,A3,A7,A8,A9,A10,JORDAN3:22
         .=mid(Rev f,1,len (Rev g)) by A11,A12,A13,FINSEQ_5:def 3;
@@ -1085,7 +1085,7 @@ A7:             i-'1<= len f;
 A8:             i-1>= len f +1-1 by XREAL_1:11;
                 0+1<=i by A2,NAT_1:13;
                 then 0<=i-1 by XREAL_1:50;
-                then i-'1=i-1 by BINARITH:def 3;
+                then i-'1=i-1 by XREAL_0:def 2;
                 then
 A9:             i-'1=len f by A7,A8,XXREAL_0:1;
                 len (f/^(i-'1))=len f -(i-'1) by A7,RFINSEQ:def 2;
@@ -1107,7 +1107,7 @@ A11:          mid(f,i,(i-'1)+len g)=g;
 A12:          0<=i-1 by XREAL_1:50;
               i<i+1 by XREAL_1:31;
               then i-1<i+1-1 by XREAL_1:11;
-              hence contradiction by A4,A5,A6,A10,A11,A12,BINARITH:def 3;
+              hence contradiction by A4,A5,A6,A10,A11,A12,XREAL_0:def 2;
             end;
             hence mid(f,i,(i-'1)+len g)<>g;
           end;
@@ -1120,7 +1120,7 @@ A13:        i>(i-'1)+len g;
 A14:          (i-'1)+len g>=(i-'1)+1 by XREAL_1:9;
               0+1<=i by A2,NAT_1:13;
               then 0<=i-1 by XREAL_1:50;
-              then i-'1=i-1 by BINARITH:def 3;
+              then i-'1=i-1 by XREAL_0:def 2;
               hence contradiction by A13,A14;
             end;
             hence contradiction by A1,Def7;
@@ -1144,7 +1144,7 @@ definition
   & (it=0 implies not(g is_substring_of f,n));
   existence
   proof
-A1: 1-'1=1-1 by BINARITH:def 3;
+A1: 1-'1=1-1 by XREAL_0:def 2;
     now per cases;
       case
 A2:     g is_substring_of f,n;
@@ -1170,7 +1170,7 @@ A8:             n <= k0 & k0<=len f & mid(f,k0,(k0-'1)+len g)=g &
                 0+1<=k0 by A6,A8,NAT_1:13;
                 then k0-1>=0 by XREAL_1:50;
                 then
-A9:             k0-'1=k0-1 by BINARITH:def 3;
+A9:             k0-'1=k0-1 by XREAL_0:def 2;
                 k0<k0+1 by XREAL_1:31;
                 then k0-1<k0+1-1 by XREAL_1:11;
                 then k0-'1<len f by A8,A9,XXREAL_0:2;
@@ -1179,15 +1179,15 @@ A10:            len (f/^(k0-'1))=len f -(k0-'1) by RFINSEQ:def 2;
                 len f -k0>=0 by A8,XREAL_1:50;
                 then
 A11:            len f -k0 +1 >=0+1 by XREAL_1:9;
-A12:            1-'1=1-1 by BINARITH:def 3;
+A12:            1-'1=1-1 by XREAL_0:def 2;
 A13:            0+1<=len g by A3,NAT_1:13;
                 then
 A14:            k0-'1+1<=k0-'1 + len g by XREAL_1:9;
 A15:            len g-1>=0 by A13,XREAL_1:50;
                 then -1+len g +k0-k0>=0;
                 then
-A16:            ((k0-'1)+len g)-'k0+1 =len g-1+1 by A9,BINARITH:def 3
-                  .=len g-'1+ 1 by A15,BINARITH:def 3;
+A16:            ((k0-'1)+len g)-'k0+1 =len g-1+1 by A9,XREAL_0:def 2
+                  .=len g-'1+ 1 by A15,XREAL_0:def 2;
                 mid(f/^(k0-'1),1,len g)=((f/^(k0-'1))/^(1-'1))|(len g-'1+1)
                 by A5,JORDAN3:def 1
                   .=(f/^(k0-'1))|(((k0-'1)+len g)-'k0+1) by A12,A16,FINSEQ_5:31
@@ -1208,11 +1208,11 @@ A20:                  j<=len f;
                       0+1<=j by A18,NAT_1:13;
                       then j-1>=0 by XREAL_1:50;
                       then
-A21:                  j-'1=j-1 by BINARITH:def 3;
+A21:                  j-'1=j-1 by XREAL_0:def 2;
                       -1+len g +j-j>=0 by A15;
                       then
-A22:                  ((j-'1)+len g)-'j+1 =len g-1+1 by A21,BINARITH:def 3
-                        .=len g-'1+1 by A15,BINARITH:def 3;
+A22:                  ((j-'1)+len g)-'j+1 =len g-1+1 by A21,XREAL_0:def 2
+                        .=len g-'1+1 by A15,XREAL_0:def 2;
 A23:                  j-'1+1<=j-'1 + len g by A13,XREAL_1:9;
                       mid(f/^(j-'1),1,len g)=((f/^(j-'1))/^(1-'1))|(len g-'1+1
                       ) by A5,JORDAN3:def 1
@@ -1252,7 +1252,7 @@ A28:            n2 <= k0 & k0<=len f & mid(f,k0,(k0-'1)+len g)=g &
                 reconsider k0 as Element of NAT by ORDINAL1:def 13;
                 k0-1>=0 by A28,XREAL_1:50;
                 then
-A29:            k0-'1=k0-1 by BINARITH:def 3;
+A29:            k0-'1=k0-1 by XREAL_0:def 2;
                 k0<k0+1 by XREAL_1:31;
                 then k0-1<k0+1-1 by XREAL_1:11;
                 then k0-'1<len f by A28,A29,XXREAL_0:2;
@@ -1267,8 +1267,8 @@ A33:            k0-'1+1<=k0-'1 + len g by XREAL_1:9;
 A34:            len g-1>=0 by A32,XREAL_1:50;
                 then -1+len g +k0-k0>=0;
                 then
-A35:            ((k0-'1)+len g)-'k0+1 =len g-1+1 by A29,BINARITH:def 3
-                  .=len g-'1 +1 by A34,BINARITH:def 3;
+A35:            ((k0-'1)+len g)-'k0+1 =len g-1+1 by A29,XREAL_0:def 2
+                  .=len g-'1 +1 by A34,XREAL_0:def 2;
                 mid(f/^(k0-'1),1,len g)=((f/^(k0-'1))/^(1-'1))|(len g-'1+1)
                 by A5,JORDAN3:def 1
                   .=(f/^(k0-'1))|(((k0-'1)+len g)-'k0+1) by A1,A35,FINSEQ_5:31
@@ -1288,11 +1288,11 @@ A39:              1<=len (f/^(j-'1)) & mid(f/^(j-'1),1, len g)=g by A3,Def8;
 A40:                  j<=len f;
                       j-1>=0 by A38,XREAL_1:50;
                       then
-A41:                  j-'1=j-1 by BINARITH:def 3;
+A41:                  j-'1=j-1 by XREAL_0:def 2;
                       -1+len g +j-j>=0 by A34;
                       then
-A42:                  ((j-'1)+len g)-'j+1 =len g-1+1 by A41,BINARITH:def 3
-                        .=len g-'1+1 by A34,BINARITH:def 3;
+A42:                  ((j-'1)+len g)-'j+1 =len g-1+1 by A41,XREAL_0:def 2
+                        .=len g-'1+1 by A34,XREAL_0:def 2;
 A43:                  j-'1+1<=j-'1 + len g by A32,XREAL_1:9;
                       mid(f/^(j-'1),1,len g)=((f/^(j-'1))/^(1-'1))|(len g-'1+1
                       ) by A5,JORDAN3:def 1
@@ -1373,7 +1373,7 @@ A49:          j >= n & j > 0 & (g is_preposition_of f/^(j-'1));
   end;
   uniqueness
   proof
-A50: 1-'1=1-1 by BINARITH:def 3;
+A50: 1-'1=1-1 by XREAL_0:def 2;
     thus for k1,k2 being Element of NAT st
     ((k1 <> 0 implies n <= k1 & g is_preposition_of f/^(k1-'1) &
     for j being Element of NAT
@@ -1421,11 +1421,11 @@ A58:            n <= i & 0 < i;
                 then 0+1<=i by NAT_1:13;
                 then i-1>=0 by XREAL_1:50;
                 then
-A59:            i-'1=i-1 by BINARITH:def 3;
+A59:            i-'1=i-1 by XREAL_0:def 2;
                 -1+len g +i-i>=0 by A53;
                 then
-A60:            ((i-'1)+len g)-'i+1 =len g-1+1 by A59,BINARITH:def 3
-                  .=len g-'1+1 by A53,BINARITH:def 3;
+A60:            ((i-'1)+len g)-'i+1 =len g-1+1 by A59,XREAL_0:def 2
+                  .=len g-'1+1 by A53,XREAL_0:def 2;
 A61:            i-'1+1<=i-'1 + len g by A52,XREAL_1:9;
                 mid(f/^(i-'1),1,len g)=((f/^(i-'1))/^(1-'1))|(len g-'1+1)
                 by A52,JORDAN3:def 1
@@ -1450,11 +1450,11 @@ A64:            n <= i & 0 < i;
                 then 0+1<=i by NAT_1:13;
                 then i-1>=0 by XREAL_1:50;
                 then
-A65:            i-'1=i-1 by BINARITH:def 3;
+A65:            i-'1=i-1 by XREAL_0:def 2;
                 -1+len g +i-i>=0 by A53;
                 then
-A66:            ((i-'1)+len g)-'i+1 =len g-1+1 by A65,BINARITH:def 3
-                  .=len g-'1+1 by A53,BINARITH:def 3;
+A66:            ((i-'1)+len g)-'i+1 =len g-1+1 by A65,XREAL_0:def 2
+                  .=len g-'1+1 by A53,XREAL_0:def 2;
 A67:            i-'1+1<=i-'1 + len g by A52,XREAL_1:9;
                 mid(f/^(i-'1),1,len g)=((f/^(i-'1))/^(1-'1))|(len g-'1+1)
                 by A52,JORDAN3:def 1
@@ -1521,9 +1521,9 @@ theorem
   f is_terminated_by f
 proof
   let D be non empty set,f be FinSequence of D;
-A1: len f + 1 -'len f=len f+1-len f by BINARITH:def 3;
+A1: len f + 1 -'len f=len f+1-len f by XREAL_0:def 2;
   1-'1=0+1-'1
-    .=0 by BINARITH:39;
+    .=0 by NAT_D:34;
   then
 A2: f/^(1-'1)=f by FINSEQ_5:31;
   for j being Element of NAT st j >= 1 & j > 0

@@ -9,10 +9,12 @@ environ
  vocabularies PRE_TOPC, FCONT_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
       RELAT_1, ABSVALUE, LATTICES, SQUARE_1, ORDINAL2, SEQ_1, SEQ_2, SEQM_3,
       RCOMP_1, BOOLE, REALSET1, FINSEQ_4, PARTFUN1, NORMSP_1, RSSPACE,
-      LOPBAN_1, FDIFF_1, NDIFF_2, FUNCOP_1, ANPROJ_1;
+      LOPBAN_1, FDIFF_1, NDIFF_2, FUNCOP_1, ANPROJ_1, OPPCAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
-      PRE_TOPC, STRUCT_0, XCMPLX_0, XXREAL_0, XREAL_0, ORDINAL1, NUMBERS,
-      REAL_1, NAT_1, SQUARE_1, COMPLEX1, FUNCOP_1, RLVECT_1, VALUED_1, SEQ_1,
+      XCMPLX_0, XXREAL_0, XREAL_0, ORDINAL1, NUMBERS,
+      REAL_1, NAT_1, SQUARE_1, COMPLEX1, FUNCOP_1, RLVECT_1,
+      PRE_TOPC, STRUCT_0,
+      VALUED_0, VALUED_1, SEQ_1,
       SEQ_2, SEQM_3, VFUNCT_1, NORMSP_1, RSSPACE, LOPBAN_1, LOPBAN_3, NFCONT_1,
       FDIFF_1, NDIFF_1;
  constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, SEQ_2, FDIFF_1,
@@ -79,8 +81,8 @@ theorem Th1:
   ex N being Neighbourhood of x0 st ( N c= dom f & for z be Point of S holds
   for h be convergent_to_0 Real_Sequence
   for c st rng c = {x0} & rng (h*z+c) c= N holds
-  h"(#)(f*(h*z+c) - f*c) is convergent &
-  diff(f,x0).z = lim (h"(#)(f*(h*z+c) - f*c)) )
+  h"(#)(f/*(h*z+c) - f/*c) is convergent &
+  diff(f,x0).z = lim (h"(#)(f/*(h*z+c) - f/*c)) )
 proof
   let x0 be Point of S such that
 A1: f is_differentiable_in x0;
@@ -103,8 +105,8 @@ A7: rng (h*z+c) c= N;
     then
 A8: rng c c= dom f by A2,A6,ZFMISC_1:37;
 A9: for n be Element of NAT holds
-    ||. (h"(#)(f*(h*z+c) - f*c)).n - diff(f,x0).z .||
-    = ||. (h"(#) (R*(h*z))).n .||
+    ||. (h"(#)(f/*(h*z+c) - f/*c)).n - diff(f,x0).z .||
+    = ||. (h"(#) (R/*(h*z))).n .||
     proof
       let n be Element of NAT;
       R_NormSpace_of_BoundedLinearOperators(S,T)
@@ -134,14 +136,15 @@ A12:  h.n*z+x0 in N by A11,NDIFF_1:def 3;
       h is non-zero by FDIFF_1:def 1;
       then
 A13:  h.n <> 0 by SEQ_1:7;
-      (h"(#)(f*(h*z+c) - f*c)).n - diff(f,x0).z
-      = (h".n) * (f*(h*z+c) - f*c).n - diff(f,x0).z by NDIFF_1:def 2
-        .= (h.n)" * (f*(h*z+c) - f*c).n - diff(f,x0).z by VALUED_1:10
-        .= (h.n)" * ((f*(h*z+c)).n - (f*c).n) - diff(f,x0).z by NORMSP_1:def 6
-        .= (h.n)" * (f/.((h*z+c).n) - (f*c).n) - diff(f,x0).z
-      by A2,A7,NFCONT_1:8,XBOOLE_1:1
+      (h"(#)(f/*(h*z+c) - f/*c)).n - diff(f,x0).z
+      = (h".n) * (f/*(h*z+c) - f/*c).n - diff(f,x0).z by NDIFF_1:def 2
+        .= (h.n)" * (f/*(h*z+c) - f/*c).n - diff(f,x0).z by VALUED_1:10
+        .= (h.n)" * ((f/*(h*z+c)).n - (f/*c).n) - diff(f,x0).z
+        by NORMSP_1:def 6
+        .= (h.n)" * (f/.((h*z+c).n) - (f/*c).n) - diff(f,x0).z
+      by A2,A7,FUNCT_2:186,XBOOLE_1:1
         .= (h.n)" * (f/.((h*z+c).n) - f/.(c.n) )- diff(f,x0).z
-      by A8,NFCONT_1:8
+      by A8,FUNCT_2:186
         .= (h.n)" * (f/.((h*z).n+c.n) - f/.(c.n) )- diff(f,x0).z
       by NORMSP_1:def 5
         .= (h.n)" * (f/.(h.n*z+c.n) - f/.(c.n) )- diff(f,x0).z
@@ -180,36 +183,36 @@ A13:  h.n <> 0 by SEQ_1:7;
         .= (h.n)" * (R/.(h.n*z)) by RLVECT_1:10
         .= (h".n) * (R/.(h.n*z)) by VALUED_1:10
         .= (h".n) * (R/.((h*z).n)) by NDIFF_1:def 3
-        .= (h".n) * ((R*(h*z)).n) by A10,NFCONT_1:8
-        .=(h"(#) (R*(h*z))).n by NDIFF_1:def 2;
+        .= (h".n) * ((R/*(h*z)).n) by A10,FUNCT_2:186
+        .=(h"(#) (R/*(h*z))).n by NDIFF_1:def 2;
       hence thesis;
     end;
-A14: abs(h)"(#)(R*(h*z)) is convergent & lim ( abs(h)"(#)(R*(h*z)) ) = 0.T
+A14: abs(h)"(#)(R/*(h*z)) is convergent & lim ( abs(h)"(#)(R/*(h*z)) ) = 0.T
     proof
       now per cases;
         case
 A15:      z= 0.S;
-A16:      for n be Element of NAT holds (abs(h)"(#) (R*(h*z))).n = 0.T
+A16:      for n be Element of NAT holds (abs(h)"(#) (R/*(h*z))).n = 0.T
           proof
             let n be Element of NAT;
             R is total by NDIFF_1:def 5;
             then dom R = the carrier of S by PARTFUN1:def 4;
             then
 A17:        rng (h*z) c= dom R;
-            thus (abs(h)"(#)(R*(h*z))).n
-            =abs(h)".n*(R*(h*z)).n by NDIFF_1:def 2
-              .=(abs(h).n)"*(R*(h*z)).n by VALUED_1:10
-              .=(abs(h.n))"*(R*(h*z)).n by SEQ_1:16
-              .= (abs(h.n))"*(R/.((h*z).n)) by A17,NFCONT_1:8
+            thus (abs(h)"(#)(R/*(h*z))).n
+            =abs(h)".n*(R/*(h*z)).n by NDIFF_1:def 2
+              .=(abs(h).n)"*(R/*(h*z)).n by VALUED_1:10
+              .=(abs(h.n))"*(R/*(h*z)).n by SEQ_1:16
+              .= (abs(h.n))"*(R/.((h*z).n)) by A17,FUNCT_2:186
               .= (abs(h.n))"*(R/.(h.n*0.S)) by A15,NDIFF_1:def 3
               .= (abs(h.n))"*(R/.(0.S)) by RLVECT_1:23
               .=0.T by A4,RLVECT_1:23;
           end;
           then
-A18:      abs(h)"(#) (R*(h*z)) is constant by LOPBAN_3:def 5;
-          (abs(h)"(#) (R*(h*z))).0 = 0.T by A16;
-          hence abs(h)"(#) (R*(h*z)) is convergent &
-          lim ( abs(h)"(#) (R*(h*z)) ) =0.T by A18,NDIFF_1:21;
+A18:      abs(h)"(#) (R/*(h*z)) is constant by LOPBAN_3:def 5;
+          (abs(h)"(#) (R/*(h*z))).0 = 0.T by A16;
+          hence abs(h)"(#) (R/*(h*z)) is convergent &
+          lim ( abs(h)"(#) (R/*(h*z)) ) =0.T by A18,NDIFF_1:21;
         end;
         case z<> 0.S;
           then reconsider s = h*z as convergent_to_0 sequence of S
@@ -244,78 +247,78 @@ A22:        ||.z.|| *( ||.s.||.n )" = (abs(h.n))" by NORMSP_1:def 10;
             then dom R = the carrier of S by PARTFUN1:def 4;
             then
 A23:        rng (h*z) c= dom R; thus
-            (abs(h)"(#)(R*(h*z))).n = abs(h)".n*(R*(h*z)).n by NDIFF_1:def 2
-              .=(abs(h).n)"*(R*(h*z)).n by VALUED_1:10
-              .=(abs(h.n))"*(R*(h*z)).n by SEQ_1:16
-              .= (abs(h.n))"*(R/.((h*z).n)) by A23,NFCONT_1:8
+            (abs(h)"(#)(R/*(h*z))).n = abs(h)".n*(R/*(h*z)).n by NDIFF_1:def 2
+              .=(abs(h).n)"*(R/*(h*z)).n by VALUED_1:10
+              .=(abs(h.n))"*(R/*(h*z)).n by SEQ_1:16
+              .= (abs(h.n))"*(R/.((h*z).n)) by A23,FUNCT_2:186
               .= ( ||.z.|| *||.s.||".n)*(R/.(s.n)) by A22,VALUED_1:10
               .= ||.z.|| *(||.s.||".n *(R/.(s.n)) ) by RLVECT_1:def 9
-              .= ||.z.|| *((||.s.||".n)*((R*s).n)) by A19,NFCONT_1:8
-              .= ||.z.|| *((||.s.||")(#)(R*s)).n by NDIFF_1:def 2
-              .= ( ||.z.|| *((||.s.||")(#)(R*s))).n by NORMSP_1:def 8;
+              .= ||.z.|| *((||.s.||".n)*((R/*s).n)) by A19,FUNCT_2:186
+              .= ||.z.|| *((||.s.||")(#)(R/*s)).n by NDIFF_1:def 2
+              .= ( ||.z.|| *((||.s.||")(#)(R/*s))).n by NORMSP_1:def 8;
           end;
           then
-A24:      (abs(h)"(#)(R*(h*z))) = ||.z.|| *((||.s.||")(#)(R*s))
+A24:      (abs(h)"(#)(R/*(h*z))) = ||.z.|| *((||.s.||")(#)(R/*s))
           by FUNCT_2:113;
-A25:      (||.s.||")(#)(R*s) is convergent & lim ((||.s.||")(#)(R*s)) = 0.T
+A25:      (||.s.||")(#)(R/*s) is convergent & lim ((||.s.||")(#)(R/*s)) = 0.T
           by NDIFF_1:def 5;
-          hence (abs(h)"(#)(R*(h*z))) is convergent by A24,NORMSP_1:37;
-          thus lim (abs(h)"(#)(R*(h*z)))
+          hence (abs(h)"(#)(R/*(h*z))) is convergent by A24,NORMSP_1:37;
+          thus lim (abs(h)"(#)(R/*(h*z)))
           = ||.z.|| * 0.T by A24,A25,NORMSP_1:45
             .= 0.T by RLVECT_1:23;
         end;
       end;
       hence thesis;
     end;
-A26: h"(#) (R*(h*z)) is convergent & lim ( h"(#) (R*(h*z)) )=0.T
+A26: h"(#) (R/*(h*z)) is convergent & lim ( h"(#) (R/*(h*z)) )=0.T
     proof
 A27:  now
         let e be Real such that
 A28:    0 < e;
         consider m be Element of NAT such that
 A29:    for n be Element of NAT st m <= n holds
-        ||.(abs(h)"(#) (R*(h*z))).n - 0.T .|| < e by A14,A28,NORMSP_1:def 11;
+        ||.(abs(h)"(#) (R/*(h*z))).n - 0.T .|| < e by A14,A28,NORMSP_1:def 11;
         now
           let n be Element of NAT such that
 A30:      m <= n;
-          ||.(h"(#) (R*(h*z))).n -0.T .||
-          = ||.(h"(#) (R*(h*z))).n .|| by RLVECT_1:26
-            .= ||.h".n*(R*(h*z)).n .|| by NDIFF_1:def 2
-            .= ||.(h.n)"*(R*(h*z)).n .|| by VALUED_1:10
-            .=abs(abs((h.n)")) * ||.(R*(h*z)).n .|| by NORMSP_1:def 2
-            .= ||.abs((h.n)")*(R*(h*z)).n .|| by NORMSP_1:def 2
-            .= ||.abs(h".n)*(R*(h*z)).n .|| by VALUED_1:10
-            .= ||.abs(h").n*(R*(h*z)).n .|| by SEQ_1:16
-            .= ||.(abs(h))".n*(R*(h*z)).n .|| by SEQ_1:62
-            .= ||.(abs(h)"(#) (R*(h*z))).n .|| by NDIFF_1:def 2
-            .= ||.(abs(h)"(#) (R*(h*z))).n -0.T .|| by RLVECT_1:26;
-          hence ||.(h"(#) (R*(h*z))).n -0.T .|| < e by A29,A30;
+          ||.(h"(#) (R/*(h*z))).n -0.T .||
+          = ||.(h"(#) (R/*(h*z))).n .|| by RLVECT_1:26
+            .= ||.h".n*(R/*(h*z)).n .|| by NDIFF_1:def 2
+            .= ||.(h.n)"*(R/*(h*z)).n .|| by VALUED_1:10
+            .=abs(abs((h.n)")) * ||.(R/*(h*z)).n .|| by NORMSP_1:def 2
+            .= ||.abs((h.n)")*(R/*(h*z)).n .|| by NORMSP_1:def 2
+            .= ||.abs(h".n)*(R/*(h*z)).n .|| by VALUED_1:10
+            .= ||.abs(h").n*(R/*(h*z)).n .|| by SEQ_1:16
+            .= ||.(abs(h))".n*(R/*(h*z)).n .|| by SEQ_1:62
+            .= ||.(abs(h)"(#) (R/*(h*z))).n .|| by NDIFF_1:def 2
+            .= ||.(abs(h)"(#) (R/*(h*z))).n -0.T .|| by RLVECT_1:26;
+          hence ||.(h"(#) (R/*(h*z))).n -0.T .|| < e by A29,A30;
         end;
         hence ex m be Element of NAT st
         for n be Element of NAT st m <= n holds
-        ||.(h"(#) (R*(h*z))).n -0.T .|| < e;
+        ||.(h"(#) (R/*(h*z))).n -0.T .|| < e;
       end;
-      hence h"(#) (R*(h*z)) is convergent by NORMSP_1:def 9;
-      hence lim ( h"(#) (R*(h*z)) ) =0.T by A27,NORMSP_1:def 11;
+      hence h"(#) (R/*(h*z)) is convergent by NORMSP_1:def 9;
+      hence lim ( h"(#) (R/*(h*z)) ) =0.T by A27,NORMSP_1:def 11;
     end;
 A31: now
       let e be Real such that
 A32:  0 < e;
       consider m be Element of NAT such that
 A33:  for n be Element of NAT st m <= n holds
-      ||.(h"(#) (R*(h*z))).n - 0.T .|| < e by A26,A32,NORMSP_1:def 11;
+      ||.(h"(#) (R/*(h*z))).n - 0.T .|| < e by A26,A32,NORMSP_1:def 11;
       now
         let n be Element of NAT such that
 A34:    m <= n;
-        ||.(h"(#) (R*(h*z))).n -0.T .|| < e by A33,A34;
-        then ||.(h"(#) (R*(h*z))).n .|| < e by RLVECT_1:26;
-        hence ||. (h"(#)(f*(h*z+c) - f*c)).n - diff(f,x0).z .|| < e by A9;
+        ||.(h"(#) (R/*(h*z))).n -0.T .|| < e by A33,A34;
+        then ||.(h"(#) (R/*(h*z))).n .|| < e by RLVECT_1:26;
+        hence ||. (h"(#)(f/*(h*z+c) - f/*c)).n - diff(f,x0).z .|| < e by A9;
       end;
       hence ex m be Element of NAT st for n be Element of NAT st m <= n holds
-      ||. (h"(#)(f*(h*z+c) - f*c)).n - diff(f,x0).z .|| < e;
+      ||. (h"(#)(f/*(h*z+c) - f/*c)).n - diff(f,x0).z .|| < e;
     end;
-    hence (h"(#)(f*(h*z+c) - f*c)) is convergent by NORMSP_1:def 9;
-    hence lim (h"(#)(f*(h*z+c) - f*c)) = diff(f,x0).z by A31,NORMSP_1:def 11;
+    hence (h"(#)(f/*(h*z+c) - f/*c)) is convergent by NORMSP_1:def 9;
+    hence lim (h"(#)(f/*(h*z+c) - f/*c)) = diff(f,x0).z by A31,NORMSP_1:def 11;
   end;
   hence thesis by A2;
 end;
@@ -324,8 +327,8 @@ theorem
   for x0 be Point of S st f is_differentiable_in x0 for z be Point of S
   for h be convergent_to_0 Real_Sequence
   for c st (rng c = {x0} & rng (h*z+c) c= dom f ) holds
-  h"(#)(f*(h*z+c) - f*c) is convergent &
-  diff(f,x0).z = lim (h"(#)(f*(h*z+c) - f*c))
+  h"(#)(f/*(h*z+c) - f/*c) is convergent &
+  diff(f,x0).z = lim (h"(#)(f/*(h*z+c) - f/*c))
 proof
   let x0 be Point of S such that
 A1: f is_differentiable_in x0;
@@ -338,8 +341,8 @@ A3: rng (h*z+c) c= dom f;
 A4: N c= dom f and
 A5: for z be Point of S holds for h be convergent_to_0 Real_Sequence
   for c st rng c = {x0} & rng (h*z+c) c= N holds
-  h"(#)(f*(h*z+c) - f*c) is convergent
-  & diff(f,x0).z = lim (h"(#)(f*(h*z+c) - f*c)) by A1,Th1;
+  h"(#)(f/*(h*z+c) - f/*c) is convergent
+  & diff(f,x0).z = lim (h"(#)(f/*(h*z+c) - f/*c)) by A1,Th1;
   consider g be Real such that
 A6: 0<g and
 A7: {y where y is Point of S: ||.y-x0.|| < g} c= N by NFCONT_1:def 3;
@@ -410,7 +413,7 @@ A24: y = ((h^\n*z+c)).m by NFCONT_1:6;
     then ||.((h*z).(n+m)+x0) -x0.||<g by A8;
     then ||.((h*z).(n+m)+c.m) -x0.||<g by A8;
     then ||.((h.(n+m)*z)+c.m) -x0.||<g by NDIFF_1:def 3;
-    then ||.((h^\n).m*z+c.m) -x0.||<g by SEQM_3:def 9;
+    then ||.((h^\n).m*z+c.m) -x0.||<g by NAT_1:def 3;
     then ||.(((h^\n)*z).m+c.m) -x0.||<g by NDIFF_1:def 3;
     then
 A25: ||.((h^\n*z+c)).m - x0 .|| < g by NORMSP_1:def 5;
@@ -420,48 +423,48 @@ A25: ||.((h^\n*z+c)).m - x0 .|| < g by NORMSP_1:def 5;
   end;
   then consider n be Element of NAT such that
 A26: rng ((h^\n*z+c)) c= N;
-A27: (h^\n)"(#)(f*(h^\n*z+c) - f*c) is convergent
-  & diff(f,x0).z = lim ((h^\n)"(#)(f*(h^\n*z+c) - f*c)) by A2,A5,A26;
+A27: (h^\n)"(#)(f/*(h^\n*z+c) - f/*c) is convergent
+  & diff(f,x0).z = lim ((h^\n)"(#)(f/*(h^\n*z+c) - f/*c)) by A2,A5,A26;
 A28: now
     let m be Element of NAT; thus
-    ((h*z+c)^\n).m = (h*z+c).(n+m) by LOPBAN_3:def 6
+    ((h*z+c)^\n).m = (h*z+c).(n+m) by NAT_1:def 3
       .= (h*z).(n+m)+c.(n+m) by NORMSP_1:def 5
       .=(h*z).(n+m)+x0 by A8
       .=(h*z).(n+m)+c.m by A8
       .=(h.(n+m)*z)+c.m by NDIFF_1:def 3
-      .=(h^\n).m*z+c.m by SEQM_3:def 9
+      .=(h^\n).m*z+c.m by NAT_1:def 3
       .=((h^\n)*z).m+c.m by NDIFF_1:def 3
       .=(h^\n*z+c).m by NORMSP_1:def 5;
   end;
   x0 in N by NFCONT_1:4;
   then
 A29: rng c c= dom f by A2,A4,ZFMISC_1:37;
-  (h^\n)"(#)(f*(h^\n*z+c) - f*c) = (h"(#)(f*(h*z+c) - f*c))^\n
+  (h^\n)"(#)(f/*(h^\n*z+c) - f/*c) = (h"(#)(f/*(h*z+c) - f/*c))^\n
   proof
     now
       let m be Element of NAT;
-A30:  ((f*(h*z+c))^\n).m =(f*(h*z+c)).(n+m) by LOPBAN_3:def 6
-        .=f/.((h*z+c).(n+m)) by A3,NFCONT_1:8
-        .=f/.( ( (h*z+c)^\n).m) by LOPBAN_3:def 6
+A30:  ((f/*(h*z+c))^\n).m =(f/*(h*z+c)).(n+m) by NAT_1:def 3
+        .=f/.((h*z+c).(n+m)) by A3,FUNCT_2:186
+        .=f/.( ( (h*z+c)^\n).m) by NAT_1:def 3
         .=f/.( (h^\n*z+c).m) by A28;
       thus
-      ( (h"(#)(f*(h*z+c) - f*c))^\n).m
-      =(h"(#)(f*(h*z+c) - f*c)).(n+m) by LOPBAN_3:def 6
-        .=h".(n+m)*(f*(h*z+c) - f*c).(n+m) by NDIFF_1:def 2
-        .=(h.(n+m))"*(f*(h*z+c) - f*c).(n+m) by VALUED_1:10
-        .=((h^\n).m)"*(f*(h*z+c) - f*c).(n+m) by SEQM_3:def 9
-        .=((h^\n).m)"*((f*(h*z+c)).(n+m) - (f*c).(n+m)) by NORMSP_1:def 6
-        .=((h^\n).m)"*(((f*(h*z+c))^\n).m - (f*c).(n+m)) by LOPBAN_3:def 6
+      ( (h"(#)(f/*(h*z+c) - f/*c))^\n).m
+      =(h"(#)(f/*(h*z+c) - f/*c)).(n+m) by NAT_1:def 3
+        .=h".(n+m)*(f/*(h*z+c) - f/*c).(n+m) by NDIFF_1:def 2
+        .=(h.(n+m))"*(f/*(h*z+c) - f/*c).(n+m) by VALUED_1:10
+        .=((h^\n).m)"*(f/*(h*z+c) - f/*c).(n+m) by NAT_1:def 3
+        .=((h^\n).m)"*((f/*(h*z+c)).(n+m) - (f/*c).(n+m)) by NORMSP_1:def 6
+        .=((h^\n).m)"*(((f/*(h*z+c))^\n).m - (f/*c).(n+m)) by NAT_1:def 3
         .=((h^\n).m)"*(f/.( (h^\n*z+c).m) - f/.(c.(n+m)))
-      by A29,A30,NFCONT_1:8
+      by A29,A30,FUNCT_2:186
         .=((h^\n).m)"*(f/.( (h^\n*z+c).m) - f/.x0) by A8
         .=((h^\n).m)"*(f/.( (h^\n*z+c).m) - f/.(c.m)) by A8
-        .=((h^\n).m)"*(f/.((h^\n*z+c).m) - (f*c).m) by A29,NFCONT_1:8
-        .=((h^\n).m)"*((f*(h^\n*z+c)).m - (f*c).m) by A4,A26,NFCONT_1:8
+        .=((h^\n).m)"*(f/.((h^\n*z+c).m) - (f/*c).m) by A29,FUNCT_2:186
+        .=((h^\n).m)"*((f/*(h^\n*z+c)).m - (f/*c).m) by A4,A26,FUNCT_2:186
       ,XBOOLE_1:1
-        .=((h^\n).m)"*((f*(h^\n*z+c) - f*c).m) by NORMSP_1:def 6
-        .=((h^\n)".m)*(f*(h^\n*z+c) - f*c).m by VALUED_1:10
-        .=((h^\n)"(#)(f*(h^\n*z+c) - f*c)).m by NDIFF_1:def 2;
+        .=((h^\n).m)"*((f/*(h^\n*z+c) - f/*c).m) by NORMSP_1:def 6
+        .=((h^\n)".m)*(f/*(h^\n*z+c) - f/*c).m by VALUED_1:10
+        .=((h^\n)"(#)(f/*(h^\n*z+c) - f/*c)).m by NDIFF_1:def 2;
     end;
     hence thesis by FUNCT_2:113;
   end;
@@ -473,7 +476,7 @@ theorem Th3:
   for z be Point of S for dv be Point of T holds (
   (for h be convergent_to_0 Real_Sequence
   for c st ( rng c = {x0} & rng (h*z+c) c= N ) holds
-  h"(#)(f*(h*z+c) - f*c) is convergent & dv = lim (h"(#)(f*(h*z+c) - f*c)))
+  h"(#)(f/*(h*z+c) - f/*c) is convergent & dv = lim (h"(#)(f/*(h*z+c) - f/*c)))
   iff (for e be Real st e > 0 holds ex d be Real st d > 0 &
   for h be Real st ( abs(h) < d & h <> 0 & h*z+x0 in N) holds
   ||. h"*(f/.(h*z+x0) - f/.x0) - dv .|| < e ) )
@@ -487,7 +490,8 @@ A2: now
     assume
 A3: ( for h be convergent_to_0 Real_Sequence
     for c st ( rng c = {x0} & rng (h*z+c) c= N ) holds
-    h"(#)(f*(h*z+c) - f*c) is convergent & dv = lim (h"(#)(f*(h*z+c) - f*c)));
+    h"(#)(f/*(h*z+c) - f/*c) is convergent &
+    dv = lim (h"(#)(f/*(h*z+c) - f/*c)));
     assume not ( for r be Real st r > 0 holds ex d be Real st d > 0 &
     for h be Real st ( abs(h) < d & h <> 0 & h*z+x0 in N) holds
     ||. h"*(f/.(h*z+x0) - f/.x0) - dv .|| < r );
@@ -591,19 +595,19 @@ A23:    P[n,h.n] by A8;
       end;
       hence thesis by TARSKI:def 3;
     end;
-    then h"(#)(f*(h*z+c) - f*c) is convergent
-    & dv = lim (h"(#)(f*(h*z+c) - f*c)) by A3,A9;
+    then h"(#)(f/*(h*z+c) - f/*c) is convergent
+    & dv = lim (h"(#)(f/*(h*z+c) - f/*c)) by A3,A9;
     then consider n be Element of NAT such that
 A24: for m be Element of NAT st n <=m holds
-    ||. (h"(#)(f*(h*z+c) - f*c)).m- dv.|| < r by A4,NORMSP_1:def 11;
+    ||. (h"(#)(f/*(h*z+c) - f/*c)).m- dv.|| < r by A4,NORMSP_1:def 11;
 A25: P[n,h.n] by A8;
-    ||. (h"(#)(f*(h*z+c) - f*c)).n- dv.||
-    = ||.(h".n)*((f*(h*z+c) - f*c).n)- dv.|| by NDIFF_1:def 2
-      .= ||.(h.n)"*((f*(h*z+c) - f*c).n)- dv.|| by VALUED_1:10
-      .= ||.(h.n)"*( (f*(h*z+c)).n - (f*c).n)- dv.|| by NORMSP_1:def 6
-      .= ||.(h.n)"*( (f*(h*z+c)).n - f/.(c.n)) - dv.|| by A12,NFCONT_1:8
-      .= ||.(h.n)"*( (f*(h*z+c)).n - f/.x0) - dv.|| by FUNCOP_1:13
-      .= ||.(h.n)"*( f/.( (h*z+c).n) - f/.x0) - dv.|| by A1,A21,NFCONT_1:8
+    ||. (h"(#)(f/*(h*z+c) - f/*c)).n- dv.||
+    = ||.(h".n)*((f/*(h*z+c) - f/*c).n)- dv.|| by NDIFF_1:def 2
+      .= ||.(h.n)"*((f/*(h*z+c) - f/*c).n)- dv.|| by VALUED_1:10
+      .= ||.(h.n)"*( (f/*(h*z+c)).n - (f/*c).n)- dv.|| by NORMSP_1:def 6
+      .= ||.(h.n)"*( (f/*(h*z+c)).n - f/.(c.n)) - dv.|| by A12,FUNCT_2:186
+      .= ||.(h.n)"*( (f/*(h*z+c)).n - f/.x0) - dv.|| by FUNCOP_1:13
+      .= ||.(h.n)"*( f/.( (h*z+c).n) - f/.x0) - dv.|| by A1,A21,FUNCT_2:186
     ,XBOOLE_1:1
       .= ||.(h.n)"*( f/.((h*z).n+c.n) - f/.x0) - dv.|| by NORMSP_1:def 5
       .= ||.(h.n)"*( f/.((h*z).n+x0) - f/.x0) - dv.|| by FUNCOP_1:13
@@ -645,7 +649,7 @@ A37:    for m be Element of NAT st n <=m holds
         abs(h.m-0) < d by A32,A35,SEQ_2:def 7;
         take n;
         thus for m be Element of NAT st n <=m holds
-        ||. (h"(#)(f*(h*z+c) - f*c)).m- dv.|| < r
+        ||. (h"(#)(f/*(h*z+c) - f/*c)).m- dv.|| < r
         proof
           let m be Element of NAT;
           assume n <= m;
@@ -658,26 +662,29 @@ A39:      h.m <> 0 by A31,SEQ_1:7;
           then h.m*z + c.m in N by NDIFF_1:def 3;
           then
 A40:      h.m*z + x0 in N by A29;
-          ||. (h"(#)(f*(h*z+c) - f*c)).m- dv.||
-          = ||.(h".m)*((f*(h*z+c) - f*c).m)- dv.|| by NDIFF_1:def 2
-            .= ||.(h.m)"*((f*(h*z+c) - f*c).m)- dv.|| by VALUED_1:10
-            .= ||.(h.m)"*( (f*(h*z+c)).m - (f*c).m)- dv.|| by NORMSP_1:def 6
-            .= ||.(h.m)"*( (f*(h*z+c)).m - f/.(c.m)) - dv.|| by A30,NFCONT_1:8
-            .= ||.(h.m)"*( (f*(h*z+c)).m - f/.x0) - dv.|| by A29
+          ||. (h"(#)(f/*(h*z+c) - f/*c)).m- dv.||
+          = ||.(h".m)*((f/*(h*z+c) - f/*c).m)- dv.|| by NDIFF_1:def 2
+            .= ||.(h.m)"*((f/*(h*z+c) - f/*c).m)- dv.|| by VALUED_1:10
+            .= ||.(h.m)"*( (f/*(h*z+c)).m - (f/*c).m)- dv.|| by NORMSP_1:def 6
+            .= ||.(h.m)"*( (f/*(h*z+c)).m - f/.(c.m)) - dv.||
+             by A30,FUNCT_2:186
+            .= ||.(h.m)"*( (f/*(h*z+c)).m - f/.x0) - dv.|| by A29
 
-.= ||.(h.m)"*( f/.( (h*z+c).m) - f/.x0) - dv.|| by A1,A28,NFCONT_1:8,XBOOLE_1:1
+.= ||.(h.m)"*( f/.( (h*z+c).m) - f/.x0) - dv.||
+ by A1,A28,FUNCT_2:186,XBOOLE_1:1
             .= ||.(h.m)"*( f/.((h*z).m+c.m) - f/.x0) - dv.|| by NORMSP_1:def 5
             .= ||.(h.m)"*( f/.((h*z).m+x0) - f/.x0) - dv.|| by A29
             .= ||.(h.m)"*(f/.((h.m)*z+x0) - f/.x0)-dv .|| by NDIFF_1:def 3;
           hence thesis by A36,A38,A39,A40;
         end;
       end;
-      hence (h"(#)(f*(h*z+c) - f*c)) is convergent by NORMSP_1:def 9;
-      hence lim (h"(#)(f*(h*z+c) - f*c)) = dv by A33,NORMSP_1:def 11;
+      hence (h"(#)(f/*(h*z+c) - f/*c)) is convergent by NORMSP_1:def 9;
+      hence lim (h"(#)(f/*(h*z+c) - f/*c)) = dv by A33,NORMSP_1:def 11;
     end;
     hence for h be convergent_to_0 Real_Sequence
     for c st ( rng c = {x0} & rng (h*z+c) c= N ) holds
-    h"(#)(f*(h*z+c) - f*c) is convergent & dv = lim (h"(#)(f*(h*z+c) - f*c));
+    h"(#)(f/*(h*z+c) - f/*c) is convergent &
+    dv = lim (h"(#)(f/*(h*z+c) - f/*c));
   end;
   hence thesis by A2;
 end;
@@ -908,7 +915,8 @@ theorem
   ( f is_Gateaux_differentiable_in x0,z iff ex N being Neighbourhood of x0 st
   ( N c= dom f & ex dv be Point of T st for h be convergent_to_0 Real_Sequence
   for c st rng c = {x0} & rng (h*z+c) c= N holds
-  h"(#)(f*(h*z+c) - f*c) is convergent & dv= lim (h"(#)(f*(h*z+c) - f*c)) ) )
+  h"(#)(f/*(h*z+c) - f/*c) is convergent &
+  dv= lim (h"(#)(f/*(h*z+c) - f/*c)) ) )
 proof
   let x0 be Point of S;
   let z be Point of S;
@@ -921,29 +929,31 @@ A3: for e be Real st e > 0 holds ex d be Real st d > 0 &
     ||. h"*(f/.(h*z+x0) - f/.x0) - Gateaux_diff(f,x0,z) .|| < e by Def4;
     for h be convergent_to_0 Real_Sequence, c st
     ( rng c = {x0} & rng (h*z+c) c= N ) holds
-    h"(#)(f*(h*z+c) - f*c) is convergent &
-    Gateaux_diff(f,x0,z) = lim (h"(#)(f*(h*z+c) - f*c)) by A2,A3,Th3;
+    h"(#)(f/*(h*z+c) - f/*c) is convergent &
+    Gateaux_diff(f,x0,z) = lim (h"(#)(f/*(h*z+c) - f/*c)) by A2,A3,Th3;
     hence ex N being Neighbourhood of x0 st ( N c= dom f &
     ex dv be Point of T st for h be convergent_to_0 Real_Sequence, c st
     rng c = {x0} & rng (h*z+c) c= N holds
-    h"(#)(f*(h*z+c) - f*c) is convergent & dv= lim (h"(#)(f*(h*z+c) - f*c))
+    h"(#)(f/*(h*z+c) - f/*c) is convergent & dv= lim (h"(#)(f/*(h*z+c) - f/*c))
     ) by A2;
   end;
   now
     assume ex N being Neighbourhood of x0 st ( N c= dom f &
     ex dv be Point of T st for h be convergent_to_0 Real_Sequence, c st
     rng c = {x0} & rng (h*z+c) c= N holds
-    h"(#)(f*(h*z+c) - f*c) is convergent & dv= lim (h"(#)(f*(h*z+c) - f*c)) );
+    h"(#)(f/*(h*z+c) - f/*c) is convergent &
+    dv= lim (h"(#)(f/*(h*z+c) - f/*c)) );
     then consider N being Neighbourhood of x0 such that
 A4: N c= dom f and
 A5: ex dv be Point of T st for h be convergent_to_0 Real_Sequence, c st
     rng c = {x0} & rng (h*z+c) c= N holds
-    h"(#)(f*(h*z+c) - f*c) is convergent & dv= lim (h"(#)(f*(h*z+c) - f*c));
+    h"(#)(f/*(h*z+c) - f/*c) is convergent &
+    dv= lim (h"(#)(f/*(h*z+c) - f/*c));
     consider dv be Point of T such that
 A6: for h be convergent_to_0 Real_Sequence, c st
     rng c = {x0} & rng (h*z+c) c= N holds
-    h"(#)(f*(h*z+c) - f*c) is convergent &
-    dv= lim (h"(#)(f*(h*z+c) - f*c)) by A5;
+    h"(#)(f/*(h*z+c) - f/*c) is convergent &
+    dv= lim (h"(#)(f/*(h*z+c) - f/*c)) by A5;
     for e be Real st e > 0 holds ex d be Real st d > 0 &
     for h be Real st ( abs(h) < d & h <> 0 & h*z+x0 in N) holds
     ||. h"*(f/.(h*z+x0) - f/.x0) - dv .|| < e by A4,A6,Th3;
@@ -957,8 +967,9 @@ theorem
   ( f is_Gateaux_differentiable_in x0,z & Gateaux_diff(f,x0,z)=diff(f,x0).z &
   ex N being Neighbourhood of x0 st ( N c= dom f &
   for h be convergent_to_0 Real_Sequence, c st
-  rng c = {x0} & rng (h*z+c) c= N holds h"(#)(f*(h*z+c) - f*c) is convergent &
-  Gateaux_diff(f,x0,z)= lim (h"(#)(f*(h*z+c) - f*c))) )
+  rng c = {x0} & rng (h*z+c) c= N
+   holds h"(#)(f/*(h*z+c) - f/*c) is convergent &
+  Gateaux_diff(f,x0,z)= lim (h"(#)(f/*(h*z+c) - f/*c))) )
 proof
   let x0 be Point of S such that
 A1: f is_differentiable_in x0;
@@ -966,11 +977,13 @@ A1: f is_differentiable_in x0;
   consider N being Neighbourhood of x0 such that
 A2: N c= dom f and
 A3: for z be Point of S holds for h be convergent_to_0 Real_Sequence, c st
-  rng c = {x0} & rng (h*z+c) c= N holds h"(#)(f*(h*z+c) - f*c) is convergent &
-  diff(f,x0).z = lim (h"(#)(f*(h*z+c) - f*c)) by A1,Th1;
+  rng c = {x0} & rng (h*z+c) c= N
+  holds h"(#)(f/*(h*z+c) - f/*c) is convergent &
+  diff(f,x0).z = lim (h"(#)(f/*(h*z+c) - f/*c)) by A1,Th1;
 A4: for h be convergent_to_0 Real_Sequence, c st
-  rng c = {x0} & rng (h*z+c) c= N holds h"(#)(f*(h*z+c) - f*c) is convergent &
-  diff(f,x0).z = lim (h"(#)(f*(h*z+c) - f*c)) by A3;
+  rng c = {x0} & rng (h*z+c) c= N
+  holds h"(#)(f/*(h*z+c) - f/*c) is convergent &
+  diff(f,x0).z = lim (h"(#)(f/*(h*z+c) - f/*c)) by A3;
   then
 A5: for e be Real st e > 0 holds ex d be Real st d > 0 &
   for h be Real st ( abs(h) < d & h <> 0 & h*z+x0 in N) holds
@@ -1047,13 +1060,13 @@ A7: R*L is total by PARTFUN1:def 4;
     let e be Real such that
 A8: e > 0;
     set e1=e/(1 + K);
-A9: 0/(1 + K) < e/(1 + K) by A2,A8,XREAL_1:76;
+A9: 0/(1 + K) < e/(1 + K) by A2,A8,XREAL_1:74,76;
     then consider d be Real such that
 A10: 0 < d and
 A11: for h be Point of T st ||.h.|| < d holds
     ||.R/.h.|| <= e1*||.h.|| by A1,Th7;
     set d1=d/( 1 + K );
-A12: 0/(1 + K) < d/(1 + K) by A2,A10,XREAL_1:76;
+A12: 0/(1 + K) < d/(1 + K) by A2,A10,XREAL_1:74,76;
     now
       let h be Point of S such that
 A13:  h <> 0.S and
@@ -1115,7 +1128,7 @@ A9: ee > 0;
 A10: e > 0 by A9,SEQ_2:3;
 A11: e < ee by A9,XREAL_1:218;
     set e1=e/( 1 + K );
-A12: 0/(1 + K) < e/(1 + K) by A1,A10,XREAL_1:76;
+A12: 0/(1 + K) < e/(1 + K) by A1,A10,XREAL_1:74,76;
     R is total by NDIFF_1:def 5;
     then consider d be Real such that
 A13: 0 < d and
@@ -1253,13 +1266,13 @@ A14: ee > 0;
 A15: e > 0 by A14,SEQ_2:3;
 A16: e < ee by A14,XREAL_1:218;
     set e1=e/( 1 + K );
-A17: 0/(1 + K) < e/(1 + K) by A3,A15,XREAL_1:76;
+A17: 0/(1 + K) < e/(1 + K) by A3,A15,XREAL_1:74,76;
     then consider d be Real such that
 A18: 0 < d and
 A19: for z be Point of T st ||.z.|| < d holds
     ||.R2/.z.|| <= e1*||.z.|| by A2,Th7;
     set d1=d/( 1 + K );
-A20: 0/(1 + K) < d/(1 + K) by A3,A18,XREAL_1:76;
+A20: 0/(1 + K) < d/(1 + K) by A3,A18,XREAL_1:74,76;
     set dd1=min(d0,d1);
 A21: dd1 <=d0 & dd1 <=d1 by XXREAL_0:17;
 A22: 0 < dd1 by A5,A20,XXREAL_0:15;

@@ -26,7 +26,6 @@
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="SQUARE_1"/>
 <ArticleID name="MEASURE6"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="XXREAL_1"/>
 <ArticleID name="RCOMP_1"/>
 <ArticleID name="INTEGRA1"/>
@@ -38,7 +37,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="31"/>
-<Adjective nr="47"/>
+<Adjective nr="51"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -47,7 +46,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="148">
+<Func kind="K" nr="150">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -60,7 +59,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="31"/>
-<Adjective nr="47"/>
+<Adjective nr="51"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -69,7 +68,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="176">
+<Func kind="K" nr="175">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -85,7 +84,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="140">
+<Func kind="K" nr="142">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -100,7 +99,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="180">
+<Func kind="K" nr="179">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -118,7 +117,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="180">
+<Func kind="K" nr="179">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

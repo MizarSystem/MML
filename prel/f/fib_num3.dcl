@@ -18,7 +18,7 @@
 </Signature>
 <FCluster aid="FIB_NUM3" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="75"/>
+<Func kind="K" nr="76"/>
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="20"/>
@@ -26,7 +26,7 @@
 </FCluster>
 <FCluster aid="FIB_NUM3" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="76"/>
+<Func kind="K" nr="77"/>
 <Cluster>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
@@ -39,7 +39,7 @@
 <Func kind="K" nr="67"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="77">
+<Func kind="K" nr="78">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

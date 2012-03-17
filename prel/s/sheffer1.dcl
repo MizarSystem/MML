@@ -104,21 +104,21 @@
 </RCluster>
 <FCluster aid="SHEFFER1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="109"/>
+<Func kind="K" nr="110"/>
 <Cluster>
 <Adjective nr="14" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SHEFFER1" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="109"/>
+<Func kind="K" nr="110"/>
 <Cluster>
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SHEFFER1" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="109"/>
+<Func kind="K" nr="110"/>
 <Cluster>
 <Adjective nr="49"/>
 <Adjective nr="60"/>

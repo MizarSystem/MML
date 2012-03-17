@@ -18,10 +18,10 @@ environ
       FRAENKEL, PARTFUN1, FUNCOP_1, FINSEQ_1, POLYNOM1, RVSUM_1, STRUCT_0,
       ALGSTR_0, RLVECT_1, VECTSP_2, VECTSP_1, RFINSEQ, FUNCSDOM, CFCONT_1,
       VALUED_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, XXREAL_0, COMSEQ_1, COMSEQ_2,
-      COMSEQ_3, BINARITH, COMPLFLD, HAHNBAN1, ALGSEQ_1, POLYNOM3, POLYNOM4,
+      COMSEQ_3, NAT_D, COMPLFLD, HAHNBAN1, ALGSEQ_1, POLYNOM3, POLYNOM4,
       GROUP_1, RECDEF_1;
  constructors FINSEQ_4, ENUMSET1, REAL_1, SEQ_4, FINSOP_1, COMSEQ_2, RVSUM_1,
-      COMSEQ_3, CFCONT_1, RFINSEQ, BINARITH, FUNCSDOM, VECTSP_2, ALGSTR_1,
+      COMSEQ_3, CFCONT_1, RFINSEQ, NAT_D, FUNCSDOM, VECTSP_2, ALGSTR_1,
       MATRIX_2, HAHNBAN1, POLYNOM1, POLYNOM4, SEQ_1, RECDEF_1, BINOP_2,
       SUPINF_1, XXREAL_2;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
@@ -39,9 +39,9 @@ environ
       JORDAN8, ALGSEQ_1, COMPLEX1, COMPLFLD, HAHNBAN1, POLYNOM1, POLYNOM2,
       POLYNOM3, POLYNOM4, XBOOLE_0, XCMPLX_0, XCMPLX_1, VECTSP_2, XREAL_1,
       XXREAL_0, FINSOP_1, NORMSP_1, PARTFUN1, ORDINAL1, VALUED_1, RELAT_1,
-      CARD_1;
+      CARD_1, NAT_D;
  schemes NAT_1, FUNCT_2, FINSEQ_2, FINSEQ_1, BINOP_1, FINSEQ_4,
-      SEQ_1, CFCONT_1, DOMAIN_1;
+      SEQ_1, CFCONT_1, DOMAIN_1, FUNCT_7;
 
 begin :: Preliminaries
 
@@ -109,8 +109,7 @@ A4: x > 0;
 A5: mi > 0 & ma > 0 by A2,XXREAL_0:15,16;
 A6: c > 0 by A5;
 A7: mi/ma <= 1 by A4,Th2;
-    mi/ma > 0 by A5;
-    then mi/ma*2 > mi/ma by REAL_2:144;
+    mi/ma*2 > mi/ma by A5,REAL_2:144;
     then mi/ma > mi/ma/2 by REAL_2:178;
     then mi/ma > mi/(ma*2) by XCMPLX_1:79;
     then c < 1 by A7,XXREAL_0:2;
@@ -220,8 +219,7 @@ A15:    j+1 in dom p by A14,FINSEQ_3:27;
 A16:    p/.(j+1) >= 0 by A15,PARTFUN1:def 8;
         p|(j+1) = p|j ^ <*p/.(j+1)*> by A14,JORDAN8:2;
         then Sum (p|(j+1)) = Sum(p|j) + p/.(j+1) by RVSUM_1:104;
-        then Sum (p|(j+1)) >= 0+0 by A13,A16;
-        hence Sum (p|(j+1)) >= 0;
+        hence Sum (p|(j+1)) >= 0 by A13,A16;
       end;
       suppose
 A17:    j+1 > len p;
@@ -267,8 +265,7 @@ theorem Th6:
   [**x1,y1**] - [**x2,y2**] = [**x1 - x2,y1 - y2**]
 proof
   let x1,y1,x2,y2 be Real;
-  thus [**x1,y1**]-[**x2,y2**] = [**x1,y1**]+-[**x2,y2**]
-    .= [**x1,y1**]+[**-x2,-y2**] by Th5
+  thus [**x1,y1**]-[**x2,y2**] = [**x1,y1**]+[**-x2,-y2**] by Th5
     .= [**x1-x2,y1-y2**];
 end;
 
@@ -504,12 +501,12 @@ A11:  n > 0 + len p by A3,FINSEQ_3:27;
       then
 A12:  n - len p > 0 by XREAL_1:22;
 A13:  n = len p + (n-len p)
-        .= len p + (n-'len p) by A12,BINARITH:def 3;
+        .= len p + (n-'len p) by A12,XREAL_0:def 2;
 A14:  1 + len p <= n by A11,NAT_1:13;
       n <= len (p^q) by A2,A5,FINSEQ_1:3,X;
       then n <= len q + len p by FINSEQ_1:35;
       then 1 <= n-len p & n-len p <= len q by A14,XREAL_1:21,22;
-      then 1 <= n-'len p & n-'len p <= len q by BINARITH:def 3;
+      then 1 <= n-'len p & n-'len p <= len q by XREAL_0:def 2;
       then
 A15:  (n-'len p) in Seg len q by FINSEQ_1:3;
       then
@@ -742,7 +739,7 @@ proof
   assume len p > 0;
   then consider k being Nat such that
 A1: len p = k+1 by NAT_1:6;
-  len p = (len p -'1)+1 by A1,BINARITH:39;
+  len p = (len p -'1)+1 by A1,NAT_D:34;
   hence p.(len p -'1) <> 0.L by ALGSEQ_1:25;
 end;
 
@@ -767,7 +764,7 @@ A5: len p > 0 by A1;
     then len p >= 0+1 by NAT_1:13;
     then len p-1 >= 0+1-1 by XREAL_1:11;
     then
-A6: len p-'1 = len p-1 by BINARITH:def 3;
+A6: len p-'1 = len p-1 by XREAL_0:def 2;
     n*(len p-'1)+1 >= 0+1 by XREAL_1:8;
     then (p`^n).(len (p`^n)-'1) <> 0.L & p.(len p -'1) <> 0.L by A4,A5,A6,Lm2;
     then
@@ -822,8 +819,7 @@ registration
     assume
 A1: i >= s;
     reconsider ii=i as Element of NAT by ORDINAL1:def 13;
-    thus (v*p).i = (v*p).ii
-      .= v*p.ii by Def3
+    thus (v*p).i = v*p.ii by Def3
       .= v*0.L by A1,ALGSEQ_1:22
       .= 0.L by VECTSP_1:36;
   end;
@@ -839,11 +835,9 @@ proof
 A1: 0 is_at_least_length_of (0.L*p)
   proof
     let i be Nat;
-    assume
-   i>=0;
+    assume i>=0;
     reconsider ii=i as Element of NAT by ORDINAL1:def 13;
-    thus (0.L*p).i = (0.L*p).ii
-       .= 0.L*p.ii by Def3
+    thus (0.L*p).i = 0.L*p.ii by Def3
       .= 0.L by VECTSP_1:39;
   end;
   thus thesis by A1,ALGSEQ_1:def 4;
@@ -868,8 +862,7 @@ A2: len p is_at_least_length_of (v*p)
     assume
 A3: i >= len p;
     reconsider ii=i as Element of NAT by ORDINAL1:def 13;
-    thus (v*p).i = (v*p).ii
-      .= v*p.ii by Def3
+    thus (v*p).i = v*p.ii by Def3
       .= v*0.L by A3,ALGSEQ_1:22
       .= 0.L by VECTSP_1:36;
   end;
@@ -953,7 +946,6 @@ A1:   n=0;
     end;
     suppose
 A2:   n<>0;
-      then n > 0;
       then
 A3:   n >= 0+1 by NAT_1:13;
       len <%v%> <= 1 by ALGSEQ_1:def 6;
@@ -1041,7 +1033,7 @@ A6:   i <> 1;
       then i > 0+1 by A6,XXREAL_0:1;
       then i-1 > 0 by XREAL_1:22;
       then
-A7:   i-'1 > 0 by BINARITH:def 3;
+A7:   i-'1 > 0 by XREAL_0:def 2;
       thus F/.i = F.i by A5,PARTFUN1:def 8
         .= p.(i-'1) * (power L).(0.L,i-'1) by A3,A5
         .= p.(i-'1) * 0.L by A7,VECTSP_1:95
@@ -1050,10 +1042,10 @@ A7:   i-'1 > 0 by BINARITH:def 3;
     hence eval(p,0.L) = F/.1 by A1,A4,POLYNOM2:5
       .= F.1 by A4,PARTFUN1:def 8
       .= p.(1-'1) * (power L).(0.L,1-'1) by A3,A4
-      .= p.(1-'1) * (power L).(0.L,0) by BINARITH:51
+      .= p.(1-'1) * (power L).(0.L,0) by XREAL_1:234
       .= p.(1-'1) * 1_L by GROUP_1:def 8
       .= p.(1-'1) by GROUP_1:def 5
-      .= p.0 by BINARITH:51;
+      .= p.0 by XREAL_1:234;
   end;
   suppose len F = 0;
     then
@@ -1096,7 +1088,6 @@ proof
   then <%z0%>.0 <> 0.L by ALGSEQ_1:def 6;
   then <%z0%> <> <%0.L%> by ALGSEQ_1:def 6;
   then len <%z0%> <> 0 by ALGSEQ_1:31;
-  then len <%z0%> > 0;
   then
 A1: len <%z0%> >= 0+1 by NAT_1:13;
   assume len <%z0%> <> 1;
@@ -1124,12 +1115,10 @@ A1: len <%x%> <= 1 & len <%y%> <= 1 by ALGSEQ_1:def 6;
   per cases;
   suppose
 A2: len <%x%> <> 0 & len <%y%> <> 0;
-    then
-A3: len <%x%> > 0 & len <%y%> > 0;
     then len <%x%> >= 0+1 & len <%y%> >= 0+1 by NAT_1:13;
     then
 A4: len <%x%> = 1 & len <%y%> = 1 by A1,XXREAL_0:1;
-    <%x%>.(len <%x%> -'1) <> 0.L & <%y%>.(len <%y%> -'1) <> 0.L by A3,Lm2;
+    <%x%>.(len <%x%> -'1) <> 0.L & <%y%>.(len <%y%> -'1) <> 0.L by A2,Lm2;
     then <%x%>.(len <%x%> -'1)*<%y%>.(len <%y%> -'1)<>0.L by VECTSP_2:def 5;
     then
 A5: len (<%x%>*'<%y%>) = 1+1-1 by A4,POLYNOM4:13;
@@ -1140,8 +1129,8 @@ A8: for k be Element of NAT st k in dom r
     holds r.k = <%x%>.(k-'1) * <%y%>.(0+1-'k) by POLYNOM3:def 11;
     1 in dom r by A6,FINSEQ_3:27;
     then r.1 = <%x%>.(1-'1) * <%y%>.(0+1-'1) by A8
-      .= <%x%>.0 * <%y%>.(1-'1) by BINARITH:51
-      .= <%x%>.0 * <%y%>.0 by BINARITH:51
+      .= <%x%>.0 * <%y%>.(1-'1) by XREAL_1:234
+      .= <%x%>.0 * <%y%>.0 by XREAL_1:234
       .= <%x%>.0 * y by ALGSEQ_1:def 6
       .= x*y by ALGSEQ_1:def 6;
     then
@@ -1150,9 +1139,8 @@ A10: now
       let n be Nat;
       assume n < 1;
       then n < 0+1;
-      then n <= 0 by NAT_1:13;
       then
-A11:  n = 0;
+A11:  n = 0 by NAT_1:13;
       hence (<%x%>*'<%y%>).n = x*y by A7,A9,RLVECT_1:61
         .= <%x*y%>.n by A11,ALGSEQ_1:def 6;
     end;
@@ -1240,8 +1228,8 @@ A6: len F = 1;
     then 0+1 in Seg len F by FINSEQ_1:6;
     then 1 in dom F by FINSEQ_1:def 3;
     then F.1 = <%z0%>.(1-'1) * (power L).(x,1-'1) by A3
-      .= <%z0%>.0 * (power L).(x,1-'1) by BINARITH:51
-      .= <%z0%>.0 * (power L).(x,0) by BINARITH:51
+      .= <%z0%>.0 * (power L).(x,1-'1) by XREAL_1:234
+      .= <%z0%>.0 * (power L).(x,0) by XREAL_1:234
       .= z0 * (power L).(x,0) by Th33
       .= z0 * 1_L by GROUP_1:def 8
       .= z0 by GROUP_1:def 5;
@@ -1448,8 +1436,8 @@ A5: len F = 1;
     then 0+1 in Seg len F by FINSEQ_1:6;
     then 1 in dom F by FINSEQ_1:def 3;
     then F.1 = <%z0,z1%>.(1-'1) * (power L).(x,1-'1) by A3
-      .= <%z0,z1%>.0 * (power L).(x,1-'1) by BINARITH:51
-      .= <%z0,z1%>.0 * (power L).(x,0) by BINARITH:51
+      .= <%z0,z1%>.0 * (power L).(x,1-'1) by XREAL_1:234
+      .= <%z0,z1%>.0 * (power L).(x,0) by XREAL_1:234
       .= z0 * (power L).(x,0) by Th39
       .= z0 * 1_L by GROUP_1:def 8
       .= z0 by GROUP_1:def 5;
@@ -1466,12 +1454,12 @@ A6: len F = 2;
 A7: 1 in dom F & 2 in dom F by FINSEQ_3:27;
     then
 A8: F.1 = <%z0,z1%>.(1-'1) * (power L).(x,1-'1) by A3
-      .= <%z0,z1%>.0 * (power L).(x,1-'1) by BINARITH:51
-      .= <%z0,z1%>.0 * (power L).(x,0) by BINARITH:51
+      .= <%z0,z1%>.0 * (power L).(x,1-'1) by XREAL_1:234
+      .= <%z0,z1%>.0 * (power L).(x,0) by XREAL_1:234
       .= z0 * (power L).(x,0) by Th39
       .= z0 * 1_L by GROUP_1:def 8
       .= z0 by GROUP_1:def 5;
-A9: 2-'1 = 2-1 by BINARITH:def 3;
+A9: 2-'1 = 2-1 by XREAL_0:def 2;
     F.2 = <%z0,z1%>.(2-'1) * (power L).(x,2-'1) by A3,A7
       .= z1 * (power L).(x,1) by A9,Th39
       .= z1 * x by GROUP_1:98;
@@ -1640,8 +1628,8 @@ A7:   n > 0+1 by A6,XXREAL_0:1;
 A8:   n-2 >= 1+1-2 by XREAL_1:11;
       n-1 >= 0 by A7,XREAL_1:21;
       then
-A9:   n-'1 = n-(1+1)+1 by BINARITH:def 3
-        .= n-'2+1 by A8,BINARITH:def 3;
+A9:   n-'1 = n-(1+1)+1 by XREAL_0:def 2
+        .= n-'2+1 by A8,XREAL_0:def 2;
       thus F/.n = F.n by A5,PARTFUN1:def 8
         .= p.(n-'1)*((0_.(L))`^(n-'1)) by A3,A5
         .= p.(n-'1)*(0_.(L)) by A9,Th21
@@ -1651,8 +1639,8 @@ A9:   n-'1 = n-(1+1)+1 by BINARITH:def 3
     hence Subst(p,0_.(L)) = F/.1 by A1,A4,POLYNOM2:5
       .= F.1 by A4,PARTFUN1:def 8
       .= p.(1-'1)*((0_.(L))`^(1-'1)) by A3,A4
-      .= p.(1-'1)*((0_.(L))`^0) by BINARITH:51
-      .= p.0*((0_.(L))`^0) by BINARITH:51
+      .= p.(1-'1)*((0_.(L))`^0) by XREAL_1:234
+      .= p.0*((0_.(L))`^0) by XREAL_1:234
       .= p.0*(1_.(L)) by Th16
       .= <%p.0%> by Th30;
   end;
@@ -1730,8 +1718,8 @@ A12:        n+1 in dom F by A11,FINSEQ_3:27;
             then
 A13:        F/.(n+1) = F.(n+1) by PARTFUN1:def 8
               .= p.(n+1-'1)*(<%x%>`^(n+1-'1)) by A2,A12
-              .= p.n*(<%x%>`^(n+1-'1)) by BINARITH:39
-              .= p.n*(<%x%>`^n) by BINARITH:39;
+              .= p.n*(<%x%>`^(n+1-'1)) by NAT_D:34
+              .= p.n*(<%x%>`^n) by NAT_D:34;
             F|(n+1) = F|n ^ <*F/.(n+1)*> by A11,JORDAN8:2;
             then q = Sum(F|n) + F/.(n+1) by A7,FVSUM_1:87
               .= F1 + p.n*(<%x%>`^n) by A13,POLYNOM3:def 12;
@@ -1789,14 +1777,14 @@ A9: F1 = Sum(F|1);
     then Sum(F|1) = F/.1 by RLVECT_1:61
       .= F.1 by A7,PARTFUN1:def 8
       .= p.(1-'1)*(q`^(1-'1)) by A5,A7
-      .= p.0*(q`^(1-'1)) by BINARITH:51
-      .= p.0*(q`^0) by BINARITH:51
+      .= p.0*(q`^(1-'1)) by XREAL_1:234
+      .= p.0*(q`^0) by XREAL_1:234
       .= p.0*(1_.(L)) by Th16
       .= <%p.0%> by Th30;
     then len F1 <= 1 by A9,ALGSEQ_1:def 6;
     then len F1 <= len (1_.(L)) by POLYNOM4:7;
     then len F1 <= len (q`^0) by Th16;
-    hence len F1 <= len (q`^(1-'1)) by BINARITH:51;
+    hence len F1 <= len (q`^(1-'1)) by XREAL_1:234;
   end;
 A10: for n be non empty Nat st P[n] holds P[n+1]
   proof
@@ -1815,13 +1803,13 @@ A13: n-1 >=0 by XREAL_1:21;
     then
 A14: len q-1 >=0 by XREAL_1:21;
 A15: len(q`^(n-'1)) = (n-'1)*len q-(n-'1)+1 by A2,Th24
-      .= (n-1)*len q-(n-'1)+1 by A13,BINARITH:def 3
-      .= n*len q-1*len q-(n-1)+1 by A13,BINARITH:def 3
+      .= (n-1)*len q-(n-'1)+1 by A13,XREAL_0:def 2
+      .= n*len q-1*len q-(n-1)+1 by A13,XREAL_0:def 2
       .= n*len q-len q-n+1+1;
     reconsider nn = n as Element of NAT by ORDINAL1:def 13;
     n*len q+(len q-'1) >= n*len q by NAT_1:11;
     then n*len q-(len q-'1) <= n*len q by XREAL_1:22;
-    then n*len q-(len q-1) <= n*len q by A14,BINARITH:def 3;
+    then n*len q-(len q-1) <= n*len q by A14,XREAL_0:def 2;
     then n*len q-len q+1-n <= n*len q-n by XREAL_1:11;
     then n*len q-len q-n+1+1 <= n*len q-n+1 by XREAL_1:8;
     then
@@ -1840,8 +1828,8 @@ A19:  F1 = Sum(F|n) + F/.(n+1) by A12,FVSUM_1:87;
 A20:  maxFq >= len F2 & maxFq >= len (p.nn*(q`^nn)) by XXREAL_0:25;
       F/.(n+1) = F.(n+1) by A18,PARTFUN1:def 8
         .= p.(n+1-'1)*(q`^(n+1-'1)) by A5,A18
-        .= p.nn*(q`^(n+1-'1)) by BINARITH:39
-        .= p.nn*(q`^nn) by BINARITH:39;
+        .= p.nn*(q`^(n+1-'1)) by NAT_D:34
+        .= p.nn*(q`^nn) by NAT_D:34;
       then F1 = F2 + p.nn*(q`^nn) by A19,POLYNOM3:def 12;
       then
 A21:  len F1 <= maxFq by A20,POLYNOM4:9;
@@ -1860,7 +1848,7 @@ A22:  len F2 <= len (q`^nn) by A16,XXREAL_0:2;
       end;
       then maxFq <= len (q`^nn) by A22,SQUARE_1:50;
       then len F1 <= len (q`^nn) by A21,XXREAL_0:2;
-      hence len F1 <= len (q`^(n+1-'1)) by BINARITH:39;
+      hence len F1 <= len (q`^(n+1-'1)) by NAT_D:34;
     end;
     suppose
 A23:  n+1 > len F;
@@ -1868,7 +1856,7 @@ A23:  n+1 > len F;
       then F|n = F & F|(n+1) = F by A23,FINSEQ_1:79;
       then len F1 <= len (q`^(n-'1)) by A11,A12;
       then len F1 <= len (q`^nn) by A16,XXREAL_0:2;
-      hence len F1 <= len (q`^(n+1-'1)) by BINARITH:39;
+      hence len F1 <= len (q`^(n+1-'1)) by NAT_D:34;
     end;
   end;
 A24: for n be non empty Nat holds P[n] from NAT_1:sch 10(A8,A10);
@@ -1880,8 +1868,8 @@ A25: len p-1 >=0 by XREAL_1:21;
   then
 A26: len Subst(p,q) <= len (q`^(len F-'1)) by A1,A3,A4,A24;
 A27: len (q`^(len F-'1)) = (len p-'1)*len q - (len p-'1) + 1 by A2,A4,Th24
-    .= (len p-'1)*len q-(len p-1)+1 by A25,BINARITH:def 3
-    .= (len p-1)*len q-(len p-1)+1 by A25,BINARITH:def 3
+    .= (len p-'1)*len q-(len p-1)+1 by A25,XREAL_0:def 2
+    .= (len p-1)*len q-(len p-1)+1 by A25,XREAL_0:def 2
     .= (len p)*(len q)-len p-len q+(1+1);
   len Subst(p,q) >= (len p)*(len q)-len p-len q+(1+1)
   proof
@@ -1894,7 +1882,7 @@ A29: Subst(p,q).k = 0.L by ALGSEQ_1:22;
     set lF1 = len F-'1;
     set F1 = F|lF1;
     reconsider sF1 = Sum F1 as Polynomial of L by POLYNOM3:def 12;
-A30: len F = lF1+1 by A6,BINARITH:53;
+A30: len F = lF1+1 by A6,XREAL_1:237;
     then
 A31: F = F1^<*F/.len F*> by FINSEQ_5:24;
     then
@@ -1920,8 +1908,8 @@ A37:      F2 = Sum(F1|1);
             .= F1.1 by A35,PARTFUN1:def 8
             .= F.1 by A31,A35,FINSEQ_1:def 7
             .= p.(1-'1)*(q`^(1-'1)) by A5,A7
-            .= p.0*(q`^(1-'1)) by BINARITH:51
-            .= p.0*(q`^0) by BINARITH:51
+            .= p.0*(q`^(1-'1)) by XREAL_1:234
+            .= p.0*(q`^0) by XREAL_1:234
             .= p.0*(1_.(L)) by Th16
             .= <%p.0%> by Th30;
           hence len F2 <= 1*len q-len q-1+2 by A37,ALGSEQ_1:def 6;
@@ -1959,8 +1947,8 @@ A47:          n+1 in dom F by A45,FINSEQ_3:27;
 A48:          F1/.(n+1) = F1.(n+1) by A46,PARTFUN1:def 8
                 .= F.(n+1) by A31,A46,FINSEQ_1:def 7
                 .= p.(n+1-'1)*(q`^(n+1-'1)) by A5,A47
-                .= p.nn*(q`^(n+1-'1)) by BINARITH:39
-                .= p.nn*(q`^nn) by BINARITH:39;
+                .= p.nn*(q`^(n+1-'1)) by NAT_D:34
+                .= p.nn*(q`^nn) by NAT_D:34;
               reconsider maxFq = max(len F3,len (p.nn*(q`^nn)))
                as Element of NAT
               by FINSEQ_2:1;
@@ -2034,8 +2022,8 @@ A62:    F1 = <*>(the carrier of Polynom-Ring L) by FINSEQ_1:32;
 A63:    len F = 0+1 by A31,A61,FINSEQ_2:19;
 A64:    F/.1 = F.1 by A7,PARTFUN1:def 8
           .= p.(1-'1)*(q`^(1-'1)) by A5,A7
-          .= p.0*(q`^(1-'1)) by BINARITH:51
-          .= p.0*(q`^0) by BINARITH:51
+          .= p.0*(q`^(1-'1)) by XREAL_1:234
+          .= p.0*(q`^0) by XREAL_1:234
           .= p.0*(1_.(L)) by Th16
           .= <%p.0%> by Th30;
 A65:    0.(Polynom-Ring L) = 0_.(L) by POLYNOM3:def 12;
@@ -2105,15 +2093,15 @@ A17:  p.(n+1-'1)*(power L).(eval(q,x),n+1-'1) = F1.(n+1) by A6,A14,A15
 A18:  F1|(n+1) = F1|n ^ <*F1/.(n+1)*> by A2,A5,A13,JORDAN8:2;
       F/.(n+1) = F.(n+1) by A14,PARTFUN1:def 8
         .= p.(n+1-'1)*(q`^(n+1-'1)) by A3,A14
-        .= p.n*(q`^(n+1-'1)) by BINARITH:39
-        .= p.n*(q`^n) by BINARITH:39;
+        .= p.n*(q`^(n+1-'1)) by NAT_D:34
+        .= p.n*(q`^n) by NAT_D:34;
       then r = r1 + p.n*(q`^n) by A16,POLYNOM3:def 12;
       hence eval(r,x) = eval(r1,x) + eval(p.n*(q`^n),x) by POLYNOM4:22
         .= Sum(F1|n) + eval(p.n*(q`^n),x) by A11
         .= Sum(F1|n) + p.n*eval(q`^n,x) by Th31
         .= Sum(F1|n) + p.n*(power L).(eval(q,x),n) by Th23
-        .= Sum(F1|n) + p.(n+1-'1)*(power L).(eval(q,x),n) by BINARITH:39
-        .= Sum(F1|n) + F1/.(n+1) by A17,BINARITH:39
+        .= Sum(F1|n) + p.(n+1-'1)*(power L).(eval(q,x),n) by NAT_D:34
+        .= Sum(F1|n) + F1/.(n+1) by A17,NAT_D:34
         .= Sum(F1|(n+1)) by A18,FVSUM_1:87;
     end;
     suppose
@@ -2307,7 +2295,7 @@ proof
   assume len p <> 0;
   then len p > 0;
   then len p >= 0+1 by NAT_1:13;
-  then len p = len p-'1+1 by BINARITH:53;
+  then len p = len p-'1+1 by XREAL_1:237;
   then
 A1: p.(len p-'1) <> 0.L by ALGSEQ_1:25;
   thus (NormPolynomial p).(len p-'1) = p.(len p-'1) / p.(len p-'1) by Def10
@@ -2324,7 +2312,7 @@ proof
   assume len p <> 0;
   then len p > 0;
   then len p >= 0+1 by NAT_1:13;
-  then len p = len p-'1+1 by BINARITH:53;
+  then len p = len p-'1+1 by XREAL_1:237;
   then p.(len p-'1) <> 0.L by ALGSEQ_1:25;
   then
 A1: (p.(len p-'1))" <> 0.L by VECTSP_1:74;
@@ -2413,7 +2401,7 @@ proof
 A1: len p <> 0;
   then len p > 0;
   then len p >= 0+1 by NAT_1:13;
-  then len p = len p-'1+1 by BINARITH:53;
+  then len p = len p-'1+1 by XREAL_1:237;
   then p.(len p-'1) <> 0.L by ALGSEQ_1:25;
   then
 A2: (p.(len p-'1))" <> 0.L by VECTSP_1:74;
@@ -2752,9 +2740,11 @@ A1: the carrier of F_Complex = COMPLEX by COMPLFLD:def 1;
   take f;
   thus f = Polynomial-Function(F_Complex,p);
   set FuFF=Funcs(COMPLEX,COMPLEX);
-  deffunc F(Element of FuFF,Element of FuFF) = @($1+$2);
+  deffunc F(Element of FuFF,Element of FuFF) = $1+$2;
+A: for x,y being Element of FuFF holds F(x,y) in FuFF by FUNCT_2:11;
   consider fadd be BinOp of FuFF such that
-A2: for x,y be Element of FuFF holds fadd.(x,y) = F(x,y) from BINOP_1:sch 4;
+A2: for x,y be Element of FuFF holds fadd.(x,y) = F(x,y)
+    from FUNCT_7:sch 1(A);
   reconsider fzero = COMPLEX --> 0c as Element of FuFF by FUNCT_2:12;
   reconsider L=addLoopStr(#FuFF,fadd,fzero#) as non empty addLoopStr;
 A3: now
@@ -2762,14 +2752,10 @@ A3: now
     reconsider u1=u, v1=v, w1=w as Function of COMPLEX,COMPLEX by FUNCT_2:121;
 A4: u1+v1 in Funcs(COMPLEX,COMPLEX) & v1+w1 in Funcs(COMPLEX,COMPLEX)
     by FUNCT_2:12;
-    thus (u+v)+w = fadd.(@(u1+v1),w) by A2
-      .= fadd.(u1+v1,w) by FUNCSDOM:def 1
-      .= @(u1+v1+w1) by A2,A4
-      .= u1+v1+w1 by FUNCSDOM:def 1
+    thus (u+v)+w = fadd.(u1+v1,w) by A2
+      .= u1+v1+w1 by A2,A4
       .= u1+(v1+w1) by CFUNCT_1:22
-      .= @(u1+(v1+w1)) by FUNCSDOM:def 1
       .= fadd.(u,v1+w1) by A2,A4
-      .= fadd.(u,@(v1+w1)) by FUNCSDOM:def 1
       .= u+(v+w) by A2;
   end;
 A5: now
@@ -2781,8 +2767,7 @@ A6: now
         .= v1.x+0c by FUNCOP_1:13
         .= v1.x;
     end;
-    thus v + 0.L = @(v1+fzero) by A2
-      .= v1+fzero by FUNCSDOM:def 1
+    thus v + 0.L = v1+fzero by A2
       .= v by A6,FUNCT_2:113;
   end;
   L is right_complementable
@@ -2797,8 +2782,7 @@ A7: now
         .= v1.x+-v1.x by VALUED_1:8
         .= fzero.x by FUNCOP_1:13;
     end;
-    thus v + w = @(v1+-v1) by A2
-      .= v1+-v1 by FUNCSDOM:def 1
+    thus v + w = v1+-v1 by A2
       .= 0.L by A7,FUNCT_2:113;
   end;
   then reconsider L as add-associative right_zeroed right_complementable
@@ -2849,16 +2833,15 @@ A20:  k+1 in dom F by A19,FINSEQ_3:27;
       then
 A21:  F/.(k+1) = F.(k+1) by PARTFUN1:def 8
         .= FPower(p.(k+1-'1),k+1-'1) by A9,A10,A20
-        .= FPower(p.k,k+1-'1) by BINARITH:39
-        .= FPower(p.k,k) by BINARITH:39;
+        .= FPower(p.k,k+1-'1) by NAT_D:34
+        .= FPower(p.k,k) by NAT_D:34;
       consider g2 be Function of COMPLEX,COMPLEX such that
 A22:  g2 = FPower(p.k,k) and
 A23:  g2 is_continuous_on COMPLEX by Th71;
       F|(k+1) = F|k ^ <*F.(k+1)*> by A18,POLYNOM3:19
         .= F|k ^ <*F/.(k+1)*> by A20,PARTFUN1:def 8;
       then g = Sum(F|k) + F/.(k+1) by A16,FVSUM_1:87
-        .= @(g1+g2) by A2,A21,A22
-        .= g1+g2 by FUNCSDOM:def 1;
+        .= g1+g2 by A2,A21,A22;
       hence g is_continuous_on COMPLEX by A17,A23,CFCONT_1:65;
     end;
     suppose
@@ -2918,20 +2901,19 @@ A39:    k+1 in dom F by A37,FINSEQ_3:27;
         then
 A40:    H/.(k+1) = H.(k+1) by A38,PARTFUN1:def 8
           .= p.(k+1-'1)*(power F_Complex).(x1,k+1-'1) by A28,A38,A39
-          .= p.k*(power F_Complex).(x1,k+1-'1) by BINARITH:39
-          .= p.k*(power F_Complex).(x1,k) by BINARITH:39
+          .= p.k*(power F_Complex).(x1,k+1-'1) by NAT_D:34
+          .= p.k*(power F_Complex).(x1,k) by NAT_D:34
           .= FPower(p.k,k).x by Def11;
 A41:    F/.(k+1) = F.(k+1) by A39,PARTFUN1:def 8
           .= FPower(p.(k+1-'1),k+1-'1) by A9,A10,A39
-          .= FPower(p.k,k+1-'1) by BINARITH:39
-          .= FPower(p.k,k) by BINARITH:39;
+          .= FPower(p.k,k+1-'1) by NAT_D:34
+          .= FPower(p.k,k) by NAT_D:34;
         reconsider g2 = FPower(p.k,k) as Function of COMPLEX,COMPLEX by A1;
         F|(k+1) = F|k ^ <*F.(k+1)*> by A36,POLYNOM3:19
           .= F|k ^ <*F/.(k+1)*> by A39,PARTFUN1:def 8;
         then
 A42:    SFk = Sum(F|k) + F/.(k+1) by A35,FVSUM_1:87
-          .= @(SFk1+g2) by A2,A41
-          .= SFk1+g2 by FUNCSDOM:def 1;
+          .= SFk1+g2 by A2,A41;
 A43:    Sum (H|k) = SFk1.x by A34;
         H|(k+1) = H|k ^ <*H.(k+1)*> by A27,A29,A36,POLYNOM3:19
           .= H|k ^ <*H/.(k+1)*> by A38,A39,PARTFUN1:def 8;
@@ -2983,7 +2965,7 @@ A7: eval(p,z) = Sum G and
 A8: len G = len p and
 A9: for n be Element of NAT st n in dom G holds
   G.n = p.(n-'1)*(power F_Complex).(z,n-'1) by POLYNOM4:def 2;
-A10: lF1+1 = len F by A1,A4,BINARITH:53,XXREAL_0:2;
+A10: lF1+1 = len F by A1,A4,XREAL_1:237,XXREAL_0:2;
 A11: len F >= 1+1+0 by A1,A4;
   then
 A12: lF1 >= 1 by A10,XREAL_1:8;
@@ -3032,7 +3014,7 @@ A25: dom(F|lF1) c= dom F by FINSEQ_5:20;
     .= F/.1 by A19,FINSEQ_4:85
     .= F.1 by A13,PARTFUN1:def 8
     .= |.p.(1-'1).| by A5,A13
-    .= |.p.0 .| by BINARITH:51;
+    .= |.p.0 .| by XREAL_1:234;
   then Sum(F|lF1) >= |.p.0 .| by A19,A23,Th4;
   then
 A26: Sum F >= |.p.0 .|+1 by A16,XREAL_1:8;
@@ -3048,8 +3030,8 @@ A31: len F-2 >=0 by A11,XREAL_1:21;
   1 = 1+0;
   then
 A32: len F-1 >= 0 by A3,A4,XREAL_1:21;
-A33: lF2+1 = len F-2+1 by A31,BINARITH:def 3
-    .= lF1 by A32,BINARITH:def 3;
+A33: lF2+1 = len F-2+1 by A31,XREAL_0:def 2
+    .= lF1 by A32,XREAL_0:def 2;
 A34: for n be Element of NAT st P[n] holds P[n+1]
   proof
     let n be Element of NAT;
@@ -3080,12 +3062,12 @@ A41:  Sum(F|lF1|(n+1)) = Sum ((F|lF1)|n) + (F|lF1)/.(n+1) by RVSUM_1 :104;
 A42:  (F|lF1)/.(n+1) = F/.(n+1) by A22,A38,FINSEQ_4:85
         .= F.(n+1) by A14,A38,A39,PARTFUN1:def 8
         .= |.p.(n+1-'1).| by A5,A14,A38,A39
-        .= |.p.n.| by BINARITH:39;
+        .= |.p.n.| by NAT_D:34;
       (G|lF1)/.(n+1) = G/.(n+1) by A38,FINSEQ_4:85
         .= G.(n+1) by A38,A39,PARTFUN1:def 8
         .= p.(n+1-'1)*(power F_Complex).(z,n+1-'1) by A9,A38,A39
-        .= p.n*(power F_Complex).(z,n+1-'1) by BINARITH:39
-        .= p.n*(power F_Complex).(z,n) by BINARITH:39;
+        .= p.n*(power F_Complex).(z,n+1-'1) by NAT_D:34
+        .= p.n*(power F_Complex).(z,n) by NAT_D:34;
       then
 A43:  |.(G|lF1)/.(n+1).| =
       (F|lF1)/.(n+1)*|.(power F_Complex).(z,n).| by A42,COMPLFLD:109;
@@ -3138,7 +3120,7 @@ A49: |.(power F_Complex).(z,lF2).|*(|.z.|-Sum (F|lF1)) >=
 A50: |.eval(p,z).| >= |.(power F_Complex).(z,lF2).| by A47,A49,XXREAL_0: 2;
   len F >= 2+1 by A1,A4,NAT_1:13;
   then len F-2 >= 1 by XREAL_1:21;
-  then lF2 >= 1 by BINARITH:def 3;
+  then lF2 >= 1 by XREAL_0:def 2;
   then |.z.| to_power lF2 >= |.z.| to_power 1 by A29,PRE_FF:10;
   then |.(power F_Complex).(z,lF2).| >= |.z.| to_power 1 by A30,Th8;
   then |.(power F_Complex).(z,lF2).| >= |.(power F_Complex).(z,1).|
@@ -3196,7 +3178,7 @@ A11: for n be Nat st n in dom F holds F.n = G(n) from FINSEQ_2:sch 1;
 A12: dom F = Seg len np by A10,FINSEQ_1:def 3;
 A13: for n be Element of NAT st n in Seg len np holds F.n = G(n) by A11,A12;
 A14: Seg len np = dom F by A10,FINSEQ_1:def 3;
-A15: len p = len p-'1+1 by A1,BINARITH:53,XXREAL_0:2;
+A15: len p = len p-'1+1 by A1,XREAL_1:237,XXREAL_0:2;
   then p.(len p-'1) <> 0.F_Complex by ALGSEQ_1:25;
   then
 A16: |.p.(len p-'1).| > 0 by COMPLFLD:96;
@@ -3396,7 +3378,7 @@ A6: len q = 2*len p - len p - 2 + 2 by A1,Th53
 A7: ex k be Nat st P[k]
     proof
       len q-1 >= 1-1 by A1,A6,XREAL_1:11;
-      then len q-1 = len q-'1 by BINARITH:def 3;
+      then len q-1 = len q-'1 by XREAL_0:def 2;
       then reconsider k=len q-1 as Element of NAT;
       take k;
       len q >= 1+1 by A1,A6,NAT_1:13;
@@ -3420,7 +3402,7 @@ A13: for n be Nat st n in dom F2 holds F2.n = O(n)
     from FINSEQ_2:sch 1;
     len q-(k+1) >= 0 by A11,XREAL_1:21;
     then
-A15: len F2 = len q-(k+1) by A12,BINARITH:def 3;
+A15: len F2 = len q-(k+1) by A12,XREAL_0:def 2;
 A16: for n be Element of NAT st n in dom F2
       holds F2.n = q.(k+n)*(power F_Complex).(sq,k+n) by A13;
     now
@@ -3456,12 +3438,12 @@ A29:    i-1 >= 0 by XREAL_1:21;
         then i >= 1+1 by NAT_1:13;
         then i-1 >= 1+1-1 by XREAL_1:11;
         then
-A30:    i-'1 >= 1 by BINARITH:def 3;
+A30:    i-'1 >= 1 by XREAL_0:def 2;
         i <= k by A23,A28,FINSEQ_1:80;
         then i < k+1 by NAT_1:13;
         then i-1 < k by XREAL_1:21;
         then
-A31:    i-'1 < k by A29,BINARITH:def 3;
+A31:    i-'1 < k by A29,XREAL_0:def 2;
         thus (F1|k1)/.i = F1/.i by A26,FINSEQ_4:85
           .= F1.i by A25,A26,PARTFUN1:def 8
           .= q.(i-'1)*(power F_Complex).(z1,i-'1) by A20,A25,A26
@@ -3473,14 +3455,14 @@ A32:  Sum (F1|k) = (F1|k1)/.1 by A24,POLYNOM2:5
         .= F1/.1 by A24,FINSEQ_4:85
         .= F1.1 by A24,A25,PARTFUN1:def 8
         .= q.(1-'1)*(power F_Complex).(z1,1-'1) by A20,A24,A25
-        .= q.0*(power F_Complex).(z1,1-'1) by BINARITH:51
-        .= q.0*(power F_Complex).(z1,0) by BINARITH:51
+        .= q.0*(power F_Complex).(z1,1-'1) by XREAL_1:234
+        .= q.0*(power F_Complex).(z1,0) by XREAL_1:234
         .= q.0*1_F_Complex by GROUP_1:def 8
         .= q.0 by GROUP_1:def 5;
 A33:  F1/.(k+1) = F1.(k+1) by A21,PARTFUN1:def 8
         .= q.(k+1-'1)*(power F_Complex).(z1,k+1-'1) by A20,A21
-        .= q.k1*(power F_Complex).(z1,k+1-'1) by BINARITH:39
-        .= q.k1*(power F_Complex).(z1,k1) by BINARITH:39
+        .= q.k1*(power F_Complex).(z1,k+1-'1) by NAT_D:34
+        .= q.k1*(power F_Complex).(z1,k1) by NAT_D:34
         .= q.k1*((power F_Complex).([**c,0**],k1)*
       (power F_Complex).(sq,k1)) by GROUP_1:100
         .= q.k1*((power F_Complex).([**c,0**],k1)*(-(q.0/q.k1)))
@@ -3506,11 +3488,10 @@ A37:  Sum(F1/^(k+1)) = [**c to_power (k+1),0**]*Sum(F1/^(k+1))/
       by A22,RLVECT_1:58
         .= Sum(F1|(k+1-'1)) + Sum<*F1/.(k+1)*> + Sum
       (F1/^(k+1)) by RLVECT_1:58
-        .= Sum(F1|k) + Sum<*F1/.(k+1)*> + Sum(F1/^(k+1)) by BINARITH:39
+        .= Sum(F1|k) + Sum<*F1/.(k+1)*> + Sum(F1/^(k+1)) by NAT_D:34
         .= q.0 + (-q.0)*[**c to_power k,0**] + Sum(F1/^(k+1))
       by A32,A33,RLVECT_1:61
         .= q.0 + -q.0*[**c to_power k,0**] + Sum(F1/^(k+1)) by VECTSP_1:41
-        .= q.0 - q.0*[**c to_power k,0**] + Sum(F1/^(k+1))
         .= q.0*1_F_Complex - q.0*[**c to_power k,0**] + Sum(F1/^(k+1))
       by VECTSP_1:def 13
         .= q.0*(1_F_Complex-[**c to_power k,0**])+
@@ -3565,7 +3546,7 @@ A45:    i in Seg len |.(F1/^(k+1))*[**c to_power (k+1),0**]".|
         then i in Seg len ((F1/^(k+1))*[**c to_power (k+1),0**]") by Def1;
         then
 A46:    i in dom ((F1/^(k+1))*[**c to_power (k+1),0**]") by FINSEQ_1:def 3;
-A47:    k+1+i-'1 = k+i+1-1 by BINARITH:def 3
+A47:    k+1+i-'1 = k+i+1-1 by XREAL_0:def 2
           .= k+i;
 A48:    len F2 = len |.F2.| by Def1;
         then
@@ -3582,7 +3563,7 @@ A52:    k+1+i in dom F1 by A51,FINSEQ_3:27;
 A53:    i-1 >= 0 by XREAL_1:21;
         c to_power (i-'1) <= 1 by A17,TBSP_1:2;
         then
-A54:    c to_power (i-1) <= 1 by A53,BINARITH:def 3;
+A54:    c to_power (i-1) <= 1 by A53,XREAL_0:def 2;
 A55:    c to_power (k+i) > 0 by A17,POWER:39;
 A56:    |.q.(k+i)*(power F_Complex).(sq,k+i).| >= 0 by COMPLEX1:132;
 A57:    q.(k+i)*(power F_Complex).(sq,k+i) = F2.i by A16,A50
@@ -3648,7 +3629,7 @@ A61: len p = 2;
     set np=NormPolynomial(p);
 A62: len np = len p by A61,Th58;
 A63: len <%np.0,1_F_Complex%> = 2 by Th41;
-A64: len p-'1 = 2-1 by A61,BINARITH:def 3;
+A64: len p-'1 = 2-1 by A61,XREAL_0:def 2;
     now
       let k be Nat;
       assume

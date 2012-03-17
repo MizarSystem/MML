@@ -22,25 +22,24 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="BHSP_3"/>
 <ArticleID name="RSSPACE"/>
 </Signature>
 <FCluster aid="RSSPACE2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="171"/>
+<Func kind="K" nr="168"/>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="93"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="97"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RSSPACE2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="171"/>
+<Func kind="K" nr="168"/>
 <Cluster>
-<Adjective nr="34" value="false"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="100"/>
 <Adjective nr="101"/>
-<Adjective nr="102"/>
 </Cluster>
 </FCluster>
 </Registrations>

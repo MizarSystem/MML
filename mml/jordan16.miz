@@ -9,7 +9,7 @@ environ
  vocabularies ARYTM, PRE_TOPC, SUBSET_1, COMPTS_1, BOOLE, RELAT_1, ORDINAL2,
       FUNCT_1, RCOMP_1, ARYTM_1, PCOMPS_1, EUCLID, BORSUK_1, ARYTM_3, TOPMETR,
       PSCOMP_1, JORDAN6, TOPREAL1, TOPS_2, TOPREAL2, JORDAN3,
-      JGRAPH_2, PARTFUN1, FCONT_1, CONNSP_2, SGRAPH1, REALSET1;
+      JGRAPH_2, PARTFUN1, CONNSP_2, SGRAPH1, REALSET1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
       FINSET_1, FUNCT_2, FCONT_1, REALSET1, PRE_CIRC, STRUCT_0, PRE_TOPC,
@@ -19,7 +19,7 @@ environ
       TOPMETR, TOPREAL1, PSCOMP_1, JORDAN5C, JORDAN6, JORDAN7, SEQ_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2, FINSET_1, NUMBERS,
       XXREAL_0, XREAL_0, MEMBERED, STRUCT_0, PRE_TOPC, BORSUK_1, TEX_2, EUCLID,
-      TOPMETR, TOPREAL2, VALUED_0;
+      TOPMETR, TOPREAL2, VALUED_0, FCONT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, TOPS_2, TOPREAL1, FUNCT_1, XBOOLE_0, BORSUK_1, STRUCT_0;
  theorems PRE_TOPC, STRUCT_0, TOPMETR, XREAL_0, XBOOLE_0, FUNCT_1, XBOOLE_1,
@@ -597,24 +597,7 @@ A2: Segment(p,W-min C,C) = {p1: LE p,p1,C or p in C & p1=W-min C}
 end;
 
 definition
-  let f be PartFunc of REAL, REAL;
-  attr f is continuous means
-  :Def1:
-  f is_continuous_on dom f;
-end;
-
-definition
-  let f be Function of REAL, REAL;
-  redefine attr f is continuous means
-
-  f is_continuous_on REAL;
-  compatibility
-  proof dom f = REAL by FUNCT_2:def 1;
-    hence thesis by Def1;
-  end;
-end;
-
-definition
+ canceled 2;
   let a,b be real number;
   func AffineMap(a,b) -> Function of REAL, REAL means
   :Def3:
@@ -651,9 +634,10 @@ registration
   coherence
   proof
     set f = AffineMap(a,b);
-A1: REAL c= dom f by FUNCT_2:def 1;
+A1: REAL = dom f by FUNCT_2:def 1;
     for x0 being real number st x0 in REAL holds f.x0 = a*x0+b by Def3;
-    hence AffineMap(a,b) is_continuous_on REAL by A1,FCONT_1:48;
+    then AffineMap(a,b)|REAL is continuous by A1,FCONT_1:48;
+   hence thesis by A1,RELAT_1:98;
   end;
 end;
 
@@ -668,18 +652,7 @@ end;
 
 theorem
   for f,g being continuous PartFunc of REAL, REAL
-  holds g*f is continuous PartFunc of REAL, REAL
-proof
-  let f,g be continuous PartFunc of REAL, REAL;
-  reconsider h = g*f as PartFunc of REAL, REAL;
-  f is_continuous_on dom f by Def1;
-  then
-A1: f is_continuous_on dom h by FCONT_1:17,RELAT_1:44;
-  g is_continuous_on dom g by Def1;
-  then g is_continuous_on f.:dom h by FCONT_1:17,FUNCT_3:2;
-  then h is_continuous_on dom h by A1,FCONT_1:26;
-  hence g*f is continuous PartFunc of REAL, REAL by Def1;
-end;
+  holds g*f is continuous PartFunc of REAL, REAL;
 
 theorem Th25:
   for a,b being real number holds AffineMap(a,b).0 = b

@@ -49,7 +49,7 @@
 <Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
-<Adjective nr="67"/>
+<Adjective nr="71"/>
 </Cluster>
 </RCluster>
 <FCluster aid="MESFUN6C" nr="1">
@@ -57,7 +57,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="18"/>
-<Adjective nr="30" value="false"/>
+<Adjective nr="34" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -68,20 +68,20 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="67"/>
+<Adjective nr="71"/>
 </Cluster>
 <LocusVar nr="2"/>
 <Func kind="K" nr="43"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="166">
+<Func kind="K" nr="168">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="67"/>
+<Adjective nr="71"/>
 </Cluster>
 </FCluster>
 </Registrations>

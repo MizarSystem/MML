@@ -15,18 +15,17 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCSDOM"/>
 <ArticleID name="LOPBAN_1"/>
 <ArticleID name="GROUP_1"/>
@@ -39,18 +38,18 @@
 <ArgTypes>
 <Typ kind="G" nr="16">
 <Cluster>
-<Adjective nr="43" value="false"/>
-<Adjective nr="67"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="64"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
+<Adjective nr="91"/>
 <Adjective nr="92"/>
-<Adjective nr="93"/>
-<Adjective nr="94"/>
 <Adjective nr="95"/>
-<Adjective nr="98"/>
-<Adjective nr="105"/>
-<Adjective nr="112"/>
-<Adjective nr="116"/>
-<Adjective nr="118"/>
-<Adjective nr="129"/>
+<Adjective nr="104"/>
+<Adjective nr="111"/>
+<Adjective nr="115"/>
+<Adjective nr="117"/>
+<Adjective nr="128"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -60,7 +59,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="240">
+<Func kind="K" nr="237">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -72,7 +71,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="131">
+<Adjective nr="130">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -21,7 +21,6 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCOP_1"/>
@@ -51,7 +50,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="273">
+<Func kind="K" nr="272">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -103,7 +102,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="57" value="false"/>
+<Adjective nr="56" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -145,7 +144,7 @@
 <Var nr="2"/>
 </Pred>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="110">
+<Func kind="K" nr="111">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -169,7 +168,7 @@
 <Pred kind="P" nr="1">
 <Func kind="F" nr="2"/>
 </Pred>
-<Pred kind="V" nr="75">
+<Pred kind="V" nr="74">
 <Func kind="F" nr="1"/>
 </Pred>
 </Scheme>
@@ -177,7 +176,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="57" value="false"/>
+<Adjective nr="56" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -217,7 +216,7 @@
 </Pred>
 </Not>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="110">
+<Func kind="K" nr="111">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -247,7 +246,7 @@
 </And>
 </Not>
 </For>
-<Pred kind="V" nr="75">
+<Pred kind="V" nr="74">
 <Func kind="F" nr="1"/>
 </Pred>
 </Scheme>

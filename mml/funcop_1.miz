@@ -11,11 +11,11 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELSET_1, RELAT_1,
       FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1;
  constructors PARTFUN1, BINOP_1, FUNCT_3;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_3;
  requirements SUBSET, BOOLE;
  definitions TARSKI, RELAT_1, BINOP_1, FUNCT_1;
  theorems ZFMISC_1, RELAT_1, RELSET_1, FUNCT_1, FUNCT_2, FUNCT_3, TARSKI,
-      BINOP_1, MCART_1, XBOOLE_0, XBOOLE_1, GRFUNC_1;
+      BINOP_1, MCART_1, XBOOLE_0, XBOOLE_1, GRFUNC_1, PARTFUN1;
  schemes FUNCT_1;
 
 begin
@@ -311,6 +311,13 @@ registration
   let x;
   let A be empty set;
   cluster A --> x -> empty;
+  coherence;
+end;
+
+registration
+  let x;
+  let A be non empty set;
+  cluster A --> x -> non empty;
   coherence;
 end;
 
@@ -737,7 +744,7 @@ proof
     .= F[;](x,f|A) by RELAT_1:94;
 end;
 
-reserve X,Y for non empty set,
+reserve X for non empty set, Y for set,
   F for BinOp of X,
   f,g,h for Function of Y,X,
   x,x1,x2 for Element of X;
@@ -749,11 +756,16 @@ proof F*<:f,g:> is Function of Y,X;
 end;
 
 definition
-  let X,Z be non empty set;
+  let X be non empty set, Z be set;
   let F be BinOp of X, f,g be Function of Z,X;
   redefine func F.:(f,g) -> Function of Z,X;
   coherence by Th47;
 end;
+
+reserve X,Y for non empty set,
+  F for BinOp of X,
+  f,g,h for Function of Y,X,
+  x,x1,x2 for Element of X;
 
 theorem Th48:
   for z being Element of Y holds (F.:(f,g)).z = F.(f.z,g.z)
@@ -861,6 +873,11 @@ end;
 theorem
   for A,X,x holds A --> x is Function of A, X;
 
+reserve X for non empty set, Y for set,
+  F for BinOp of X,
+  f,g,h for Function of Y,X,
+  x,x1,x2 for Element of X;
+
 theorem Th59:
   F[:](f,x) is Function of Y,X
 proof dom f = Y by FUNCT_2:def 1;
@@ -870,11 +887,16 @@ proof dom f = Y by FUNCT_2:def 1;
 end;
 
 definition
-  let X,Z be non empty set;
+  let X be non empty set, Z be set;
   let F be BinOp of X, f be Function of Z,X, x be Element of X;
   redefine func F[:](f,x) -> Function of Z,X;
   coherence by Th59;
 end;
+
+reserve X,Y for non empty set,
+  F for BinOp of X,
+  f,g,h for Function of Y,X,
+  x,x1,x2 for Element of X;
 
 theorem Th60:
   for y being Element of Y holds (F[:](f,x)).y = F.(f.y,x)
@@ -913,6 +935,11 @@ proof
     .= F.(x,x) by FUNCT_1:35;
 end;
 
+reserve X for non empty set, Y for set,
+  F for BinOp of X,
+  f,g,h for Function of Y,X,
+  x,x1,x2 for Element of X;
+
 theorem Th65:
   F[;](x,g) is Function of Y,X
 proof dom g = Y by FUNCT_2:def 1;
@@ -922,12 +949,17 @@ proof dom g = Y by FUNCT_2:def 1;
 end;
 
 definition
-  let X,Z be non empty set;
+  let X be non empty set, Z be set;
   let F be BinOp of X, x be Element of X;
   let g be Function of Z,X;
   redefine func F[;](x,g) -> Function of Z,X;
   coherence by Th65;
 end;
+
+reserve X,Y for non empty set,
+  F for BinOp of X,
+  f,g,h for Function of Y,X,
+  x,x1,x2 for Element of X;
 
 theorem Th66:
   for y being Element of Y holds (F[;](x,f)).y = F.(x,f.y)
@@ -949,6 +981,11 @@ A1: for y being Element of Y holds g.y = F.(x,f.y);
   end;
   hence g = F[;](x,f) by FUNCT_2:113;
 end;
+
+reserve X for non empty set, Y for set,
+  F for BinOp of X,
+  f,g,h for Function of Y,X,
+  x,x1,x2 for Element of X;
 
 canceled;
 
@@ -1058,14 +1095,25 @@ theorem
 proof
   assume
 A1: F is associative;
+ per cases;
+ suppose Y = {};
+   then
+A2: f = {} by PARTFUN1:57;
+  hence F[:](F[;](x1,f),x2) = {}
+      .= F[;](x1,F[:](f,x2)) by A2;
+ end;
+ suppose
+S: Y <> {};
   now
     let y;
-    thus (F[:](F[;](x1,f),x2)).y = F.((F[;](x1,f)).y,x2) by Th60
-      .= F.(F.(x1,f.y),x2) by Th66
-      .= F.(x1,F.(f.y,x2)) by A1,BINOP_1:def 3
-      .= F.(x1,(F[:](f,x2)).y) by Th60;
+    reconsider x3 = f.y as Element of X by S,FUNCT_2:7;
+    thus (F[:](F[;](x1,f),x2)).y = F.((F[;](x1,f)).y,x2) by S,Th60
+      .= F.(F.(x1,x3),x2) by S,Th66
+      .= F.(x1,F.(x3,x2)) by S,A1,BINOP_1:def 3
+      .= F.(x1,(F[:](f,x2)).y) by S,Th60;
   end;
-  hence F[:](F[;](x1,f),x2) = F[;](x1,F[:](f,x2)) by Th67;
+  hence F[:](F[;](x1,f),x2) = F[;](x1,F[:](f,x2)) by S,Th67;
+ end;
 end;
 
 theorem
@@ -1073,14 +1121,25 @@ theorem
 proof
   assume
 A1: F is associative;
+ per cases;
+ suppose Y = {};
+   then
+A2: f = {} by PARTFUN1:57;
+  hence F.:(F[:](f,x),g) = {}
+      .= F.:(f,F[;](x,g)) by A2;
+ end;
+ suppose
+S: Y <> {};
   now
     let y;
-    thus (F.:(F[:](f,x),g)).y = F.((F[:](f,x)).y,g.y) by Th48
-      .= F.(F.(f.y,x),g.y) by Th60
-      .= F.(f.y,F.(x,g.y)) by A1,BINOP_1:def 3
-      .= F.(f.y,(F[;](x,g)).y) by Th66;
+    reconsider x1 = f.y, x2 = g.y as Element of X by S,FUNCT_2:7;
+    thus (F.:(F[:](f,x),g)).y = F.((F[:](f,x)).y,g.y) by S,Th48
+      .= F.(F.(x1,x),x2) by S,Th60
+      .= F.(x1,F.(x,x2)) by S,A1,BINOP_1:def 3
+      .= F.(f.y,(F[;](x,g)).y) by S,Th66;
   end;
-  hence F.:(F[:](f,x),g) = F.:(f,F[;](x,g)) by Th49;
+  hence F.:(F[:](f,x),g) = F.:(f,F[;](x,g)) by S,Th49;
+ end;
 end;
 
 theorem
@@ -1088,14 +1147,25 @@ theorem
 proof
   assume
 A1: F is associative;
+ per cases;
+ suppose Y = {};
+   then
+A2: f = {} by PARTFUN1:57;
+  hence F.:(F.:(f,g),h) = {}
+      .= F.:(f,F.:(g,h)) by A2;
+ end;
+ suppose
+S: Y <> {};
   now
     let y;
-    thus (F.:(F.:(f,g),h)).y = F.((F.:(f,g)).y,h.y) by Th48
-      .= F.(F.(f.y,g.y),h.y) by Th48
-      .= F.(f.y,F.(g.y,h.y)) by A1,BINOP_1:def 3
-      .= F.(f.y,(F.:(g,h)).y) by Th48;
+    reconsider x1 = f.y, x2 = g.y, x3 = h.y as Element of X by S,FUNCT_2:7;
+    thus (F.:(F.:(f,g),h)).y = F.((F.:(f,g)).y,h.y) by S,Th48
+      .= F.(F.(f.y,g.y),h.y) by S,Th48
+      .= F.(x1,F.(x2,x3)) by S,A1,BINOP_1:def 3
+      .= F.(f.y,(F.:(g,h)).y) by S,Th48;
   end;
-  hence F.:(F.:(f,g),h) = F.:(f,F.:(g,h)) by Th49;
+  hence F.:(F.:(f,g),h) = F.:(f,F.:(g,h)) by S,Th49;
+ end;
 end;
 
 theorem
@@ -1103,13 +1173,24 @@ theorem
 proof
   assume
 A1: F is associative;
+ per cases;
+ suppose Y = {};
+   then
+A2: f = {} by PARTFUN1:57;
+  hence F[;](F.(x1,x2),f) = {}
+      .= F[;](x1,F[;](x2,f)) by A2;
+ end;
+ suppose
+S: Y <> {};
   now
     let y;
-    thus (F[;](F.(x1,x2),f)).y = F.(F.(x1,x2),f.y) by Th66
-      .= F.(x1,F.(x2,f.y)) by A1,BINOP_1:def 3
-      .= F.(x1,(F[;](x2,f)).y) by Th66;
+    reconsider x3 = f.y as Element of X by S,FUNCT_2:7;
+    thus (F[;](F.(x1,x2),f)).y = F.(F.(x1,x2),f.y) by S,Th66
+      .= F.(x1,F.(x2,x3)) by A1,BINOP_1:def 3
+      .= F.(x1,(F[;](x2,f)).y) by S,Th66;
   end;
-  hence F[;](F.(x1,x2),f) = F[;](x1,F[;](x2,f)) by Th67;
+  hence F[;](F.(x1,x2),f) = F[;](x1,F[;](x2,f)) by S,Th67;
+ end;
 end;
 
 theorem
@@ -1117,13 +1198,24 @@ theorem
 proof
   assume
 A1: F is associative;
+ per cases;
+ suppose Y = {};
+   then
+A2: f = {} by PARTFUN1:57;
+  hence F[:](f, F.(x1,x2)) = {}
+      .= F[:](F[:](f,x1),x2) by A2;
+ end;
+ suppose
+S: Y <> {};
   now
     let y;
-    thus (F[:](f, F.(x1,x2))).y = F.(f.y, F.(x1,x2)) by Th60
-      .= F.(F.(f.y,x1),x2) by A1,BINOP_1:def 3
-      .= F.(F[:](f,x1).y,x2) by Th60;
+    reconsider x3 = f.y as Element of X by S,FUNCT_2:7;
+    thus (F[:](f, F.(x1,x2))).y = F.(f.y, F.(x1,x2)) by S,Th60
+      .= F.(F.(x3,x1),x2) by A1,BINOP_1:def 3
+      .= F.(F[:](f,x1).y,x2) by S,Th60;
   end;
-  hence F[:](f,F.(x1,x2)) = F[:](F[:](f,x1),x2) by Th61;
+  hence F[:](f,F.(x1,x2)) = F[:](F[:](f,x1),x2) by S,Th61;
+ end;
 end;
 
 theorem
@@ -1131,12 +1223,23 @@ theorem
 proof
   assume
 A1: F is commutative;
+ per cases;
+ suppose Y = {};
+   then
+A2: f = {} by PARTFUN1:57;
+  hence F[;](x,f) = {}
+      .= F[:](f,x) by A2;
+ end;
+ suppose
+S: Y <> {};
   now
     let y;
-    thus (F[;](x,f)).y = F.(x,f.y) by Th66
+    reconsider x1 = f.y as Element of X by S,FUNCT_2:7;
+    thus (F[;](x,f)).y = F.(x,x1) by S,Th66
       .= F.(f.y,x) by A1,BINOP_1:def 2;
   end;
-  hence F[;](x,f) = F[:](f,x) by Th61;
+  hence F[;](x,f) = F[:](f,x) by S,Th61;
+ end;
 end;
 
 theorem
@@ -1144,21 +1247,53 @@ theorem
 proof
   assume
 A1: F is commutative;
+ per cases;
+ suppose Y = {};
+   then
+A2: f = {} by PARTFUN1:57;
+  hence F.:(f,g) = {}
+      .= F.:(g,f) by A2;
+ end;
+ suppose
+S: Y <> {};
   now
     let y;
-    thus (F.:(f,g)).y = F.(f.y,g.y) by Th48
+    reconsider x1 = f.y, x2 = g.y as Element of X by S,FUNCT_2:7;
+    thus (F.:(f,g)).y = F.(x1,x2) by S,Th48
       .= F.(g.y,f.y) by A1,BINOP_1:def 2;
   end;
-  hence F.:(f,g) = F.:(g,f) by Th49;
+  hence F.:(f,g) = F.:(g,f) by S,Th49;
+ end;
 end;
 
 theorem
   F is idempotent implies F.:(f,f) = f
 proof
-  assume F is idempotent;
-  then for y holds f.y = F.(f.y,f.y) by BINOP_1:def 4;
-  hence F.:(f,f) = f by Th49;
+  assume
+Z:  F is idempotent;
+ per cases;
+ suppose Y = {};
+   then
+A2: f = {} by PARTFUN1:57;
+  hence F.:(f,f) = {}
+      .= f by A2;
+ end;
+ suppose
+S: Y <> {};
+  now let y;
+    reconsider x = f.y as Element of X by S,FUNCT_2:7;
+   thus f.y = F.(x,x) by Z,BINOP_1:def 4
+    .= F.(f.y,f.y);
+  end;
+  hence F.:(f,f) = f by S,Th49;
+ end;
 end;
+
+reserve X,Y for non empty set,
+  F for BinOp of X,
+  f for Function of Y,X,
+  x for Element of X,
+  y for Element of Y;
 
 theorem
   F is idempotent implies F[;](f.y,f).y = f.y
@@ -1523,4 +1658,22 @@ G:   x in dom f & y in dom f by F;
           .= (f|X).y by Z,FUNCT_1:70;
   end;
 end;
+
+:: missing, 2008.08.14, A.T.
+
+theorem
+ for f being non empty constant Function
+  ex y st for x st x in dom f holds f.x = y
+ proof let f be non empty constant Function;
+  consider y such that
+W1: y in rng f by XBOOLE_0:def 1;
+  consider x0 being set such that
+W2: x0 in dom f and
+W3: f.x0 = y by W1,FUNCT_1:def 5;
+  take y;
+  let x;
+  assume x in dom f;
+  hence f.x = y by W2,W3,FUNCT_1:def 16;
+ end;
+
 

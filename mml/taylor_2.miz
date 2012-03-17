@@ -9,12 +9,13 @@ environ
  vocabularies PRE_TOPC, BOOLE, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
       RELAT_1, ABSVALUE, SUBSET_1, ORDINAL2, QC_LANG1, PARTFUN1, SEQ_1, SEQ_2,
       RCOMP_1, SIN_COS, FDIFF_1, SERIES_1, GROUP_1, SUPINF_2, TAYLOR_1,
-      TAYLOR_2, RFUNCT_2, MATRIX_2, PROB_1;
- notations SUBSET_1, RELAT_1, PARTFUN1, RFUNCT_2, RCOMP_1, XXREAL_0, XREAL_0,
+      TAYLOR_2, MATRIX_2, PROB_1;
+ notations TARSKI,
+      SUBSET_1, RELAT_1, PARTFUN1, RFUNCT_2, RCOMP_1, XXREAL_0, XREAL_0,
       ORDINAL1, NUMBERS, COMPLEX1, REAL_1, NAT_1, FUNCT_2, VALUED_1, SEQ_1,
       SEQ_2, SERIES_1, FDIFF_1, SEQFUNC, NEWTON, SIN_COS, TAYLOR_1, ABIAN;
  constructors ARYTM_0, REAL_1, NAT_1, SEQ_2, RCOMP_1, RFUNCT_2, LIMFUNC1,
-      FDIFF_1, COMSEQ_3, SIN_COS, ABIAN, TAYLOR_1, SEQ_1;
+      FDIFF_1, COMSEQ_3, SIN_COS, ABIAN, TAYLOR_1, SEQ_1, SEQFUNC;
  registrations RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, MEMBERED, RCOMP_1,
       XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
@@ -63,13 +64,14 @@ end;
 
 theorem Th2:
   for n be Element of NAT, f be PartFunc of REAL,REAL, r be Real st
-  ( 0 < r & f is_differentiable_on n+1, ].-r,r.[ )
+  0 < r & ].-r,r.[ c= dom f & f is_differentiable_on n+1,].-r,r.[
   for x be Real st x in ].-r, r.[ holds ex s be Real st 0 < s & s < 1 &
   f.x = Partial_Sums(Maclaurin(f,].-r,r.[,x)).n
   + (diff(f,].-r,r.[).(n+1)).(s*x) * x |^ (n+1) / ((n+1)!)
 proof
   let n be Element of NAT, f be PartFunc of REAL,REAL, r be Real such that
 A1: 0 < r and
+A0: ].-r,r.[ c= dom f and
 A2: f is_differentiable_on n+1, ].-r,r.[;
   let x be Real such that
 A3: x in ].-r, r.[;
@@ -77,14 +79,14 @@ A3: x in ].-r, r.[;
 A4: 0 < s & s < 1 and
 A5: f.x=Partial_Sums(Taylor(f, ].0-r,0+r.[,0,x)).n
   + (diff(f,].0-r,0+r.[).(n+1)).(0+s*(x-0))
-  * (x-0) |^ (n+1) / ((n+1)!) by A1,A2,A3,TAYLOR_1:33;
+  * (x-0) |^ (n+1) / ((n+1)!) by A1,A2,A3,TAYLOR_1:33,A0;
   take s;
   thus thesis by A4,A5;
 end;
 
 theorem
   for n be Element of NAT, f be PartFunc of REAL,REAL, x0, r be Real st
-  ( 0 < r & f is_differentiable_on n+1, ].x0-r,x0+r.[ )
+   0 < r & ].x0-r,x0+r.[ c= dom f & f is_differentiable_on n+1, ].x0-r,x0+r.[
   for x be Real st x in ].x0-r, x0+r.[ holds ex s be Real st 0 < s & s < 1 &
   abs(f.x-Partial_Sums(Taylor(f, ].x0-r,x0+r.[,x0,x)).n)
   = abs( (diff(f,].x0-r,x0+r.[).(n+1)).(x0+s*(x-x0))
@@ -94,6 +96,7 @@ proof
   let f be PartFunc of REAL,REAL;
   let x0,r be Real such that
 A1: 0 < r and
+A0: ].x0-r,x0+r.[ c= dom f and
 A2: f is_differentiable_on n+1, ].x0-r,x0+r.[;
   let x be Real such that
 A3: x in ].x0-r,x0+r.[;
@@ -101,13 +104,13 @@ A3: x in ].x0-r,x0+r.[;
 A4: 0 < s & s < 1 and
 A5: f.x=Partial_Sums(Taylor(f, ].x0-r,x0+r.[,x0,x)).n
   + (diff(f,].x0-r,x0+r.[).(n+1)).(x0+s*(x-x0))
-  * (x-x0) |^ (n+1) /((n+1)!) by A1,A2,A3,TAYLOR_1:33;
+  * (x-x0) |^ (n+1) /((n+1)!) by A1,A2,A3,TAYLOR_1:33,A0;
   thus thesis by A4,A5;
 end;
 
 theorem Th4:
   for n be Element of NAT, f be PartFunc of REAL,REAL, r be Real st
-  ( 0 < r & f is_differentiable_on n+1, ].-r,r.[ )
+   0 < r & ].-r,r.[ c= dom f & f is_differentiable_on n+1, ].-r,r.[
   for x be Real st x in ].-r, r.[ holds ex s be Real st 0 < s & s < 1 &
   abs(f.x-Partial_Sums(Maclaurin(f,].-r,r.[,x)).n)
   = abs( (diff(f,].-r,r.[).(n+1)).(s*x) * x |^ (n+1) / ((n+1)!) )
@@ -116,13 +119,14 @@ proof
   let f be PartFunc of REAL,REAL;
   let r be Real such that
 A1: 0 < r and
+A0: ].-r,r.[ c= dom f and
 A2: f is_differentiable_on n+1, ].-r,r.[;
   let x be Real such that
 A3: x in ].-r,r.[;
   consider s be Real such that
 A4: 0 < s & s < 1 and
 A5: f.x=Partial_Sums(Maclaurin(f, ].-r,r.[,x)).n
-  + (diff(f,].-r,r.[).(n+1)).(s*x) * x |^ (n+1) / ((n+1)!) by A1,A2,A3,Th2;
+  + (diff(f,].-r,r.[).(n+1)).(s*x) * x |^ (n+1) / ((n+1)!) by A1,A2,A3,Th2,A0;
   thus thesis by A4,A5;
 end;
 
@@ -287,10 +291,11 @@ A3:   abs(x-0) < r by RCOMP_1:8;
 A4:   (s*x) in ].0-r,0+r.[ by RCOMP_1:8;
 A5:   abs(exp_R.(s*x)) >= 0 by COMPLEX1:132;
 A6:   abs(x |^ n /(n!)) >= 0 by COMPLEX1:132;
+X:    [#]REAL c= dom exp_R by SIN_COS:51;
       exp_R is_differentiable_on [#]REAL &
       (for x0 be Real holds 0 <= diff(exp_R,x0)) by TAYLOR_1:16;
       then
-A7:   exp_R|[#](REAL) is non-decreasing  by FDIFF_2:39;
+A7:   exp_R|[#](REAL) is non-decreasing  by FDIFF_2:39,X;
       (s*x) in {p where p is Real : -r<p & p<r} by A4,RCOMP_1:def 2;
       then
 A8:   ex g be Real st g= s*x & -r<g & g<r;
@@ -436,6 +441,7 @@ A3: for m be Element of NAT st n <= m holds
   let m be Element of NAT such that
 A4: n <= m;
 A5: exp_R is_differentiable_on m+1, ].-r,r.[ by Th10;
+X: ].-r,r.[ c= dom exp_R by SIN_COS:51;
   now
     let x be Real such that
 A6: x in ].-r,r.[;
@@ -443,7 +449,7 @@ A6: x in ].-r,r.[;
 A7: 0 < s & s < 1 and
 A8: abs(exp_R.x-Partial_Sums(Maclaurin(exp_R,].-r,r.[,x)).m)
     =abs( (diff(exp_R,].-r,r.[).(m+1)).(s*x)
-    * x |^ (m+1) / ((m+1)!) ) by A1,A5,A6,Th4;
+    * x |^ (m+1) / ((m+1)!) ) by A1,A5,A6,Th4,X;
     m <= m+1 by NAT_1:11;
     then n <= m+1 by A4,XXREAL_0:2;
     hence abs(exp_R.x-Partial_Sums(Maclaurin(exp_R,].-r,r.[,x)).m) < e
@@ -1048,6 +1054,9 @@ A3: for m be Element of NAT st n <= m holds
 A4: n <= m;
 A5: sin is_differentiable_on m+1, ].-r,r.[ &
   cos is_differentiable_on m+1, ].-r,r.[ by Th21;
+  dom sin = REAL & dom cos =REAL by FUNCT_2:def 1;
+  then
+X: ].-r,r.[ c= dom sin & ].-r,r.[ c= dom cos by FUNCT_2:def 1;
   now
     let x be Real such that
 A6: x in ].-r,r.[;
@@ -1055,7 +1064,7 @@ A6: x in ].-r,r.[;
 A7: 0 < s & s < 1 and
 A8: abs(sin.x-Partial_Sums(Maclaurin(sin,].-r,r.[,x)).m)
     =abs((diff(sin,].-r,r.[).(m+1)).(s*x)
-    * x |^ (m+1) / ((m+1)!)) by A1,A5,A6,Th4;
+    * x |^ (m+1) / ((m+1)!)) by A1,A5,A6,Th4,X;
     m <= m+1 by NAT_1:11;
     then
 A9: n <= m+1 by A4,XXREAL_0:2;
@@ -1065,7 +1074,7 @@ A9: n <= m+1 by A4,XXREAL_0:2;
 A10: 0 < s & s < 1 and
 A11: abs(cos.x-Partial_Sums(Maclaurin(cos,].-r,r.[,x)).m)
     =abs((diff(cos,].-r,r.[).(m+1)).(s*x)
-    * x |^ (m+1) / ((m+1)!)) by A1,A5,A6,Th4;
+    * x |^ (m+1) / ((m+1)!)) by A1,A5,A6,Th4,X;
     thus abs(cos.x-Partial_Sums(Maclaurin(cos,].-r,r.[,x)).m) < e
     by A3,A6,A9,A10,A11;
   end;

@@ -9,16 +9,16 @@ environ
  vocabularies FINSEQ_1, RFINSEQ, ARYTM_1, FUNCT_1, RELAT_1, ZF_REFLE, PROB_1,
       TARSKI, BOOLE, SUBSET_1, GENEALG1, FINSEQ_4, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, FUNCT_1,
-      PARTFUN1, FINSEQ_1, CARD_3, RFINSEQ, BINARITH, XXREAL_0;
+      NAT_D, PARTFUN1, FINSEQ_1, CARD_3, RFINSEQ, BINARITH, XXREAL_0;
  constructors SETFAM_1, XXREAL_0, XREAL_0, NAT_1, CARD_3, RFINSEQ, PARTFUN1,
-      BINARITH, REAL_1;
+      BINARITH, REAL_1, NAT_D;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, XREAL_0, FINSEQ_1,
       ORDINAL1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions SUBSET_1;
  theorems FINSEQ_1, FINSEQ_2, FUNCT_1, NAT_1, SUBSET_1, REAL_2, BINARITH,
       ZFMISC_1, FINSEQ_4, FINSEQ_5, FINSEQ_6, RFINSEQ, CARD_3, XREAL_1,
-      XXREAL_0, ORDINAL1, PARTFUN1;
+      XXREAL_0, ORDINAL1, PARTFUN1, XREAL_0;
  schemes FINSEQ_1;
 
 begin :: Preliminaries
@@ -102,9 +102,7 @@ A1: (f1^f2)|(len f1 + i) = (f1^f2)|Seg(len f1 + i) by FINSEQ_1:def 15;
   hence thesis by A1,FINSEQ_6:16;
 end;
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: Definitions of Gene-Set,GA-Space and Individual ::
-:::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Definitions of Gene-Set,GA-Space and Individual
 
 definition
   mode Gene-Set is non-empty non empty FinSequence;
@@ -158,11 +156,7 @@ A5: dom IT = Seg len S & for k be Nat st k in Seg len S holds P[k,IT.k]
   end;
 end;
 
-begin
-
-::::::::::::::::::::::::::::::::::::::::::::::
-:: Definitions of several genetic operators ::
-::::::::::::::::::::::::::::::::::::::::::::::
+begin :: Definitions of several genetic operators
 
 definition
   let S be Gene-Set, p1,p2 be FinSequence of GA-Space S, n;
@@ -208,11 +202,7 @@ definition
   correctness;
 end;
 
-begin
-
-:::::::::::::::::::::::::::::::::::::
-:: Properties of 1-point crossover ::
-:::::::::::::::::::::::::::::::::::::
+begin :: Properties of 1-point crossover
 
 reserve S for Gene-Set;
 reserve p1,p2 for Individual of S;
@@ -226,10 +216,10 @@ A2: len crossover(p1,p2,n) = len (p1|n) + len (p2/^n) by FINSEQ_1:35;
     now per cases;
       suppose
 A3:     n <= len p1;
-        len(p2/^n) = len p2 -'n by BINARITH:76
+        len(p2/^n) = len p2 -'n by RFINSEQ:42
           .= len S -'n by Def1
           .= len p1 -'n by Def1
-          .= len p1 - n by A3,BINARITH:50;
+          .= len p1 - n by A3,XREAL_1:235;
         then len crossover(p1,p2,n) = n + (len p1 - n) by A2,A3,FINSEQ_1:80
           .= len p1;
         hence thesis by Def1;
@@ -241,10 +231,10 @@ A5:     len p1 - n < 0 by REAL_2:105;
         p1|n = p1|Seg n by FINSEQ_1:def 15;
         then
 A6:     p1|n = p1 by A4,FINSEQ_2:23;
-        len(p2/^n) = len p2 -'n by BINARITH:76
+        len(p2/^n) = len p2 -'n by RFINSEQ:42
           .= len S -'n by Def1
           .= len p1 -'n by Def1
-          .= 0 by A5,BINARITH:def 3;
+          .= 0 by A5,XREAL_0:def 2;
         hence thesis by A2,A6,Def1;
       end;
     end;
@@ -339,11 +329,7 @@ A2: n >= len p2 by Def1;
   hence thesis;
 end;
 
-begin
-
-::::::::::::::::::::::::::::::::::::::
-:: Properties of 2-points crossover ::
-:::::::::::::::::::::::: :::::::::::::
+begin :: Properties of 2-points crossover
 
 theorem Th6:
   crossover(p1,p2,n1,n2) is Individual of S
@@ -505,7 +491,7 @@ A12:      len(p1|n2) = n2 by A5,A9,FINSEQ_1:80,XXREAL_0:2;
 A13:      len(p1|n2) + i = n1 by A1,A2,A5,A9,A11,FINSEQ_1:80,XXREAL_0:2;
           then i=n1-n2 by A12;
           then
-A14:      i= n1-'n2 by A5,BINARITH:50;
+A14:      i= n1-'n2 by A5,XREAL_1:235;
           len(p1|n1) = n1 by A9,FINSEQ_1:80;
           then ((p1|n1)^(p2/^n1))|n2 = (p1|n1)|n2 by A5,FINSEQ_5:25
             .= p1|n2 by A5,FINSEQ_5:80;
@@ -597,7 +583,7 @@ A33:      ((p1|n2)^(p2/^n2))|n1 = (p1|n2)|n1 by A29,FINSEQ_5:25
             .= p1|n1 by A17,FINSEQ_5:80;
           ((p2|n2)^(p1/^n2))/^n1 = ((p2|n2)/^n1)^(p1/^n2) by A30,Th1
             .=((p2/^n1)|(n2-'n1))^(p1/^n2) by FINSEQ_5:83
-            .=((p2/^n1)|i)^(p1/^n2) by A17,A31,BINARITH:50;
+            .=((p2/^n1)|i)^(p1/^n2) by A17,A31,XREAL_1:235;
           hence thesis by A32,A33,FINSEQ_1:45;
         end;
       end;
@@ -613,11 +599,7 @@ A34:  n2 = 0;
   hence thesis;
 end;
 
-begin
-
-::::::::::::::::::::::::::::::::::::::
-:: Properties of 3-points crossover ::
-:::::::::::::::::::::::: :::::::::::::
+begin :: Properties of 3-points crossover
 
 theorem Th14:
   crossover(p1,p2,n1,n2,n3) is Individual of S
@@ -799,11 +781,7 @@ proof
     .=crossover(p1,p2,n1) by Th12;
 end;
 
-begin
-
-::::::::::::::::::::::::::::::::::::::
-:: Properties of 4-points crossover ::
-:::::::::::::::::::::::: :::::::::::::
+begin :: Properties of 4-points crossover
 
 theorem Th28:
   crossover(p1,p2,n1,n2,n3,n4) is Individual of S
@@ -1412,11 +1390,7 @@ proof
   hence thesis by Th12;
 end;
 
-begin
-
-::::::::::::::::::::::::::::::::::::::
-:: Properties of 5-points crossover ::
-:::::::::::::::::::::::: :::::::::::::
+begin :: Properties of 5-points crossover
 
 theorem Th40:
   crossover(p1,p2,n1,n2,n3,n4,n5) is Individual of S
@@ -2258,11 +2232,7 @@ proof
   hence thesis by Th12;
 end;
 
-begin
-
-::::::::::::::::::::::::::::::::::::::
-:: Properties of 6-points crossover ::
-::::::::::::::::::::::::::::::::::::::
+begin :: Properties of 6-points crossover
 
 theorem Th53:
   crossover(p1,p2,n1,n2,n3,n4,n5,n6) is Individual of S

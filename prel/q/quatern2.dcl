@@ -41,7 +41,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="209">
+<Func kind="K" nr="211">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -51,7 +51,7 @@
 </FCluster>
 <FCluster aid="QUATERN2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="219"/>
+<Func kind="K" nr="221"/>
 <Cluster>
 <Adjective nr="32" value="false"/>
 <Adjective nr="51"/>
@@ -59,7 +59,7 @@
 </FCluster>
 <FCluster aid="QUATERN2" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="219"/>
+<Func kind="K" nr="221"/>
 <Cluster>
 <Adjective nr="51"/>
 <Adjective nr="56"/>
@@ -70,7 +70,7 @@
 </FCluster>
 <FCluster aid="QUATERN2" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="220"/>
+<Func kind="K" nr="222"/>
 <Cluster>
 <Adjective nr="32" value="false"/>
 <Adjective nr="79"/>
@@ -78,7 +78,7 @@
 </FCluster>
 <FCluster aid="QUATERN2" nr="5">
 <ArgTypes/>
-<Func kind="K" nr="220"/>
+<Func kind="K" nr="222"/>
 <Cluster>
 <Adjective nr="79"/>
 <Adjective nr="95"/>
@@ -86,7 +86,7 @@
 </FCluster>
 <FCluster aid="QUATERN2" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="220"/>
+<Func kind="K" nr="222"/>
 <Cluster>
 <Adjective nr="36" value="false"/>
 <Adjective nr="56"/>
@@ -107,7 +107,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="219"/>
+<Func kind="K" nr="221"/>
 </Func>
 </Typ>
 <Cluster>
@@ -120,7 +120,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="220"/>
+<Func kind="K" nr="222"/>
 </Func>
 </Typ>
 <Cluster>

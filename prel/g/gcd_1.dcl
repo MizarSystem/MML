@@ -122,7 +122,7 @@
 </RCluster>
 <FCluster aid="GCD_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="129"/>
+<Func kind="K" nr="131"/>
 <Cluster>
 <Adjective nr="73"/>
 <Adjective nr="99"/>
@@ -143,7 +143,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="165">
+<Func kind="K" nr="167">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -159,7 +159,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="166">
+<Func kind="K" nr="168">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

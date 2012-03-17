@@ -9,10 +9,11 @@ environ
 
  vocabularies ARYTM, SEQ_1, PARTFUN1, ARYTM_1, RELAT_1, BOOLE, SQUARE_1,
       ARYTM_3, PROB_1, RCOMP_1, SEQ_2, FUNCT_1, ORDINAL2, ABSVALUE, SEQM_3,
-      LATTICES, RFUNCT_1, RFUNCT_2, FINSEQ_1, LIMFUNC1, FUNCT_3, FUNCOP_1,
-      FRECHET2, SUPINF_1, ANPROJ_1;
+      LATTICES, FINSEQ_1, LIMFUNC1, FUNCT_3, FUNCOP_1,
+      FRECHET2, SUPINF_1, ANPROJ_1, OPPCAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, REAL_1, NAT_1, FUNCOP_1, VALUED_1, SEQ_1, SEQ_2, SEQM_3,
+      COMPLEX1, REAL_1, NAT_1, FUNCT_2, FUNCOP_1,
+      VALUED_0, VALUED_1, SEQ_1, SEQ_2, SEQM_3,
       PROB_1, RELSET_1, SQUARE_1, PARTFUN1, FUNCT_3, RFUNCT_1, RFUNCT_2,
       XXREAL_0, XXREAL_1, RECDEF_1;
  constructors PARTFUN1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, VALUED_1,
@@ -40,7 +41,7 @@ Lm1: 0<g & r<=r1 implies r-g<r1 & r<r1+g
 proof
   assume
 A1: 0<g & r<=r1;
-  then r-g<r1-0 by XREAL_1:17;
+  then r-g<r1-0 by XREAL_1:15,16,17;
   hence r-g<r1;
   r+0<r1+g by A1,XREAL_1:10;
   hence thesis;
@@ -117,7 +118,7 @@ proof
 A1: seq is non-decreasing;
     take seq.0-1;
     let n;
-A2: seq.0-1<seq.0-0 by XREAL_1:17;
+A2: seq.0-1<seq.0-0 by XREAL_1:15,16,17;
     seq.0<=seq.n by A1,SEQM_3:21;
     hence thesis by A2,XXREAL_0:2;
   end;
@@ -269,7 +270,7 @@ A3:   n<=m;
       now
         let k;
         0<seq.(k+m) by A2,A3,NAT_1:12;
-        hence 0<>(seq^\m).k by SEQM_3:def 9;
+        hence 0<>(seq^\m).k by NAT_1:def 3;
       end;
       hence seq^\m is non-zero by SEQ_1:7;
     end;
@@ -282,7 +283,7 @@ A5:   n<=m;
       now
         let k;
         seq.(k+m)<0 by A4,A5,NAT_1:12;
-        hence (seq^\m).k<>0 by SEQM_3:def 9;
+        hence (seq^\m).k<>0 by NAT_1:def 3;
       end;
       hence seq^\m is non-zero by SEQ_1:7;
     end;
@@ -309,7 +310,7 @@ A3: m=n+n2 by NAT_1:10;
     reconsider n2 as Element of NAT by ORDINAL1:def 13;
 A4: n1+n2+k=m by A3;
     r<(seq^\k).(n1+n2) by A2,NAT_1:12;
-    hence r<seq.m by A4,SEQM_3:def 9;
+    hence r<seq.m by A4,NAT_1:def 3;
   end;
   assume
 A5: seq^\k is divergent_to-infty;
@@ -324,7 +325,7 @@ A7: m=n+n2 by NAT_1:10;
   reconsider n2 as Element of NAT by ORDINAL1:def 13;
 A8: n1+n2+k=m by A7;
   (seq^\k).(n1+n2)< r by A6,NAT_1:12;
-  hence seq.m<r by A8,SEQM_3:def 9;
+  hence seq.m<r by A8,NAT_1:def 3;
 end;
 
 theorem Th35:
@@ -802,7 +803,7 @@ B3: seq1^\n1 is subsequence of seq1 by SEQM_3:47;
   now thus 0<(lim seq2)/2 by A1,XREAL_1:217;
     let n;
     (lim seq2)/2<seq2.(n+n1) by A2,NAT_1:12;
-    hence (lim seq2)/2<=(seq2^\n1).n by SEQM_3:def 9;
+    hence (lim seq2)/2<=(seq2^\n1).n by NAT_1:def 3;
   end;
   then (seq1^\n1)(#)(seq2^\n1) is divergent_to+infty by B3,Th49,A1,Th53;
   then (seq1(#)seq2)^\n1 is divergent_to+infty by SEQM_3:42;
@@ -949,7 +950,7 @@ A18:    seq.m<-0 by A13,Z,A14;
         then ((-1)*(r"))"<1/seq.m by XCMPLX_1:217;
         then
 A19:    (-1)"*(r"")<1/seq.m by XCMPLX_1:205;
-        1/seq.m<0/seq.m by A18,XREAL_1:77;
+        1/seq.m<0/seq.m by A18,XREAL_1:75,77;
         then abs(1/seq.m)=-(1/seq.m) by ABSVALUE:def 1;
         then -(1*r)<-abs(1/seq.m) by A19;
         then abs(1/seq.m)<r by XREAL_1:26;
@@ -1122,32 +1123,32 @@ definition
   :Def6:
   (for r ex g st r<g & g in dom f) &
   ex g st for seq st seq is divergent_to+infty & rng seq c= dom f holds
-  f*seq is convergent & lim(f*seq)=g;
+  f/*seq is convergent & lim(f/*seq)=g;
   attr f is divergent_in+infty_to+infty means
   :Def7:
   (for r ex g st r<g & g in dom f) &
   for seq st seq is divergent_to+infty & rng seq c= dom f holds
-  f*seq is divergent_to+infty;
+  f/*seq is divergent_to+infty;
   attr f is divergent_in+infty_to-infty means
   :Def8:
   (for r ex g st r<g & g in dom f) &
   for seq st seq is divergent_to+infty & rng seq c= dom f holds
-  f*seq is divergent_to-infty;
+  f/*seq is divergent_to-infty;
   attr f is convergent_in-infty means
   :Def9:
   (for r ex g st g<r & g in dom f) &
   ex g st for seq st seq is divergent_to-infty & rng seq c= dom f holds
-  f*seq is convergent & lim(f*seq)=g;
+  f/*seq is convergent & lim(f/*seq)=g;
   attr f is divergent_in-infty_to+infty means
   :Def10:
   (for r ex g st g<r & g in dom f) &
   for seq st seq is divergent_to-infty & rng seq c= dom f holds
-  f*seq is divergent_to+infty;
+  f/*seq is divergent_to+infty;
   attr f is divergent_in-infty_to-infty means
   :Def11:
   (for r ex g st g<r & g in dom f) &
   for seq st seq is divergent_to-infty & rng seq c= dom f holds
-  f*seq is divergent_to-infty;
+  f/*seq is divergent_to-infty;
 end;
 
 canceled 6;
@@ -1164,7 +1165,7 @@ proof thus f is convergent_in+infty implies (for r ex g st r<g & g in dom f) &
 A1: f is convergent_in+infty;
     then consider g2 such that
 A2: for seq st seq is divergent_to+infty & rng seq c=dom f holds
-    f*seq is convergent & lim(f*seq)=g2 by Def6;
+    f/*seq is convergent & lim(f/*seq)=g2 by Def6;
     assume not (for r ex g st r<g & g in dom f) or for g ex g1 st 0<g1 & for r
     ex r1 st r<r1 & r1 in dom f & abs(f.r1-g)>=g1;
     then consider g such that
@@ -1189,11 +1190,11 @@ A8: s is divergent_to+infty by Lm7,Th47,Th69;
     end;
     then
 A9: rng s c=dom f by TARSKI:def 3;
-    then f*s is convergent & lim(f*s)=g2 by A2,A8;
+    then f/*s is convergent & lim(f/*s)=g2 by A2,A8;
     then consider n such that
-A10: for m st n<=m holds abs((f*s).m-g2)<g by A3,SEQ_2:def 7;
-    abs((f*s).n-g2)<g by A10;
-    then abs(f.(s.n)-g2)<g by A9,RFUNCT_2:21;
+A10: for m st n<=m holds abs((f/*s).m-g2)<g by A3,SEQ_2:def 7;
+    abs((f/*s).n-g2)<g by A10;
+    then abs(f.(s.n)-g2)<g by A9,FUNCT_2:185;
     hence contradiction by A6;
   end;
   assume
@@ -1217,10 +1218,10 @@ A17:  for m st n<=m holds r<s.m by A13,Def4;
 A18:  n<=m;
       s.m in rng s by RFUNCT_2:10;
       then abs(f.(s.m)-g)<g1 by A13,A16,A17,A18;
-      hence abs((f*s).m-g)<g1 by A13,RFUNCT_2:21;
+      hence abs((f/*s).m-g)<g1 by A13,FUNCT_2:185;
     end;
-    hence f*s is convergent by SEQ_2:def 6;
-    hence lim(f*s)=g by A14,SEQ_2:def 7;
+    hence f/*s is convergent by SEQ_2:def 6;
+    hence lim(f/*s)=g by A14,SEQ_2:def 7;
   end;
   hence thesis by A11,Def6;
 end;
@@ -1237,7 +1238,7 @@ proof thus f is convergent_in-infty implies (for r ex g st g<r & g in dom f) &
 A1: f is convergent_in-infty;
     then consider g2 such that
 A2: for seq st seq is divergent_to-infty & rng seq c=dom f holds
-    f*seq is convergent & lim(f*seq)=g2 by Def9;
+    f/*seq is convergent & lim(f/*seq)=g2 by Def9;
     assume not (for r ex g st g<r & g in dom f) or for g ex g1 st 0<g1 & for r
     ex r1 st r1<r & r1 in dom f & abs(f.r1-g)>=g1;
     then consider g such that
@@ -1265,11 +1266,11 @@ A9: s is divergent_to-infty by A7,Th48,Th70;
     end;
     then
 A10: rng s c=dom f by TARSKI:def 3;
-    then f*s is convergent & lim(f*s)=g2 by A2,A9;
+    then f/*s is convergent & lim(f/*s)=g2 by A2,A9;
     then consider n such that
-A11: for m st n<=m holds abs((f*s).m-g2)<g by A3,SEQ_2:def 7;
-    abs((f*s).n-g2)<g by A11;
-    then abs(f.(s.n)-g2)<g by A10,RFUNCT_2:21;
+A11: for m st n<=m holds abs((f/*s).m-g2)<g by A3,SEQ_2:def 7;
+    abs((f/*s).n-g2)<g by A11;
+    then abs(f.(s.n)-g2)<g by A10,FUNCT_2:185;
     hence contradiction by A6;
   end;
   assume
@@ -1293,10 +1294,10 @@ A18:  for m st n<=m holds s.m<r by A14,Def5;
 A19:  n<=m;
       s.m in rng s by RFUNCT_2:10;
       then abs(f.(s.m)-g)<g1 by A14,A17,A18,A19;
-      hence abs((f*s).m-g)<g1 by A14,RFUNCT_2:21;
+      hence abs((f/*s).m-g)<g1 by A14,FUNCT_2:185;
     end;
-    hence f*s is convergent by SEQ_2:def 6;
-    hence lim(f*s)=g by A15,SEQ_2:def 7;
+    hence f/*s is convergent by SEQ_2:def 6;
+    hence lim(f/*s)=g by A15,SEQ_2:def 7;
   end;
   hence thesis by A12,Def9;
 end;
@@ -1334,11 +1335,11 @@ A7: s is divergent_to+infty by Lm7,Th47,Th69;
     end;
     then
 A8: rng s c=dom f by TARSKI:def 3;
-    then f*s is divergent_to+infty by A1,A7,Def7;
+    then f/*s is divergent_to+infty by A1,A7,Def7;
     then consider n such that
-A9: for m st n<=m holds g<(f*s).m by Def4;
-    g<(f*s).n by A9;
-    then g<f.(s.n) by A8,RFUNCT_2:21;
+A9: for m st n<=m holds g<(f/*s).m by Def4;
+    g<(f/*s).n by A9;
+    then g<f.(s.n) by A8,FUNCT_2:185;
     hence contradiction by A5;
   end;
   assume that
@@ -1359,9 +1360,9 @@ A14:  for m st n<=m holds r<s.m by A12,Def4;
 A15:  n<=m;
       s.m in rng s by RFUNCT_2:10;
       then g<f.(s.m) by A12,A13,A14,A15;
-      hence g<(f*s).m by A12,RFUNCT_2:21;
+      hence g<(f/*s).m by A12,FUNCT_2:185;
     end;
-    hence f*s is divergent_to+infty by Def4;
+    hence f/*s is divergent_to+infty by Def4;
   end;
   hence thesis by A10,Def7;
 end;
@@ -1399,11 +1400,11 @@ A7: s is divergent_to+infty by Lm7,Th47,Th69;
     end;
     then
 A8: rng s c=dom f by TARSKI:def 3;
-    then f*s is divergent_to-infty by A1,A7,Def8;
+    then f/*s is divergent_to-infty by A1,A7,Def8;
     then consider n such that
-A9: for m st n<=m holds (f*s).m<g by Def5;
-    (f*s).n<g by A9;
-    then f.(s.n)<g by A8,RFUNCT_2:21;
+A9: for m st n<=m holds (f/*s).m<g by Def5;
+    (f/*s).n<g by A9;
+    then f.(s.n)<g by A8,FUNCT_2:185;
     hence contradiction by A5;
   end;
   assume that
@@ -1424,9 +1425,9 @@ A14:  for m st n<=m holds r<s.m by A12,Def4;
 A15:  n<=m;
       s.m in rng s by RFUNCT_2:10;
       then f.(s.m)<g by A12,A13,A14,A15;
-      hence (f*s).m<g by A12,RFUNCT_2:21;
+      hence (f/*s).m<g by A12,FUNCT_2:185;
     end;
-    hence f*s is divergent_to-infty by Def5;
+    hence f/*s is divergent_to-infty by Def5;
   end;
   hence thesis by A10,Def8;
 end;
@@ -1467,11 +1468,11 @@ A8: s is divergent_to-infty by A6,Th48,Th70;
     end;
     then
 A9: rng s c=dom f by TARSKI:def 3;
-    then f*s is divergent_to+infty by A1,A8,Def10;
+    then f/*s is divergent_to+infty by A1,A8,Def10;
     then consider n such that
-A10: for m st n<=m holds g<(f*s).m by Def4;
-    g<(f*s).n by A10;
-    then g<f.(s.n) by A9,RFUNCT_2:21;
+A10: for m st n<=m holds g<(f/*s).m by Def4;
+    g<(f/*s).n by A10;
+    then g<f.(s.n) by A9,FUNCT_2:185;
     hence contradiction by A5;
   end;
   assume that
@@ -1492,9 +1493,9 @@ A15:  for m st n<=m holds s.m<r by A13,Def5;
 A16:  n<=m;
       s.m in rng s by RFUNCT_2:10;
       then g<f.(s.m) by A13,A14,A15,A16;
-      hence g<(f*s).m by A13,RFUNCT_2:21;
+      hence g<(f/*s).m by A13,FUNCT_2:185;
     end;
-    hence f*s is divergent_to+infty by Def4;
+    hence f/*s is divergent_to+infty by Def4;
   end;
   hence thesis by A11,Def10;
 end;
@@ -1535,11 +1536,11 @@ A8: s is divergent_to-infty by A6,Th48,Th70;
     end;
     then
 A9: rng s c=dom f by TARSKI:def 3;
-    then f*s is divergent_to-infty by A1,A8,Def11;
+    then f/*s is divergent_to-infty by A1,A8,Def11;
     then consider n such that
-A10: for m st n<=m holds (f*s).m<g by Def5;
-    (f*s).n<g by A10;
-    then f.(s.n)<g by A9,RFUNCT_2:21;
+A10: for m st n<=m holds (f/*s).m<g by Def5;
+    (f/*s).n<g by A10;
+    then f.(s.n)<g by A9,FUNCT_2:185;
     hence contradiction by A5;
   end;
   assume that
@@ -1560,9 +1561,9 @@ A15:  for m st n<=m holds s.m<r by A13,Def5;
 A16:  n<=m;
       s.m in rng s by RFUNCT_2:10;
       then f.(s.m)<g by A13,A14,A15,A16;
-      hence (f*s).m<g by A13,RFUNCT_2:21;
+      hence (f/*s).m<g by A13,FUNCT_2:185;
     end;
-    hence f*s is divergent_to-infty by Def5;
+    hence f/*s is divergent_to-infty by Def5;
   end;
   hence thesis by A11,Def11;
 end;
@@ -1588,10 +1589,10 @@ A4: seq is divergent_to+infty & rng seq c=dom(f1+f2);
     then
 A5: dom(f1+f2)=dom f1/\dom f2 & rng seq c=dom f1 & rng seq c=dom f2 by Lm2;
     then
-A6: f1*seq is divergent_to+infty by A1,A4,Def7;
-    f2*seq is divergent_to+infty by A1,A4,A5,Def7;
-    then f1*seq+f2*seq is divergent_to+infty by A6,Th35;
-    hence (f1+f2)*seq is divergent_to+infty by A4,A5,RFUNCT_2:23;
+A6: f1/*seq is divergent_to+infty by A1,A4,Def7;
+    f2/*seq is divergent_to+infty by A1,A4,A5,Def7;
+    then f1/*seq+f2/*seq is divergent_to+infty by A6,Th35;
+    hence (f1+f2)/*seq is divergent_to+infty by A4,A5,RFUNCT_2:23;
   end;
   hence f1+f2 is divergent_in+infty_to+infty by A2,Def7;
 A7: now
@@ -1608,10 +1609,10 @@ A9: seq is divergent_to+infty & rng seq c=dom(f1(#) f2);
 A10: dom(f1(#)f2)=dom f1/\
     dom f2 & rng seq c=dom f1 & rng seq c=dom f2 by Lm3;
     then
-A11: f1*seq is divergent_to+infty by A1,A9,Def7;
-    f2*seq is divergent_to+infty by A1,A9,A10,Def7;
-    then (f1*seq)(#)(f2*seq) is divergent_to+infty by A11,Th37;
-    hence (f1(#)f2)*seq is divergent_to+infty by A9,A10,RFUNCT_2:23;
+A11: f1/*seq is divergent_to+infty by A1,A9,Def7;
+    f2/*seq is divergent_to+infty by A1,A9,A10,Def7;
+    then (f1/*seq)(#)(f2/*seq) is divergent_to+infty by A11,Th37;
+    hence (f1(#)f2)/*seq is divergent_to+infty by A9,A10,RFUNCT_2:23;
   end;
   hence thesis by A7,Def7;
 end;
@@ -1637,10 +1638,10 @@ A4: seq is divergent_to+infty & rng seq c=dom(f1+f2);
     then
 A5: dom(f1+f2)=dom f1/\dom f2 & rng seq c=dom f1 & rng seq c=dom f2 by Lm2;
     then
-A6: f1*seq is divergent_to-infty by A1,A4,Def8;
-    f2*seq is divergent_to-infty by A1,A4,A5,Def8;
-    then f1*seq+f2*seq is divergent_to-infty by A6,Th38;
-    hence (f1+f2)*seq is divergent_to-infty by A4,A5,RFUNCT_2:23;
+A6: f1/*seq is divergent_to-infty by A1,A4,Def8;
+    f2/*seq is divergent_to-infty by A1,A4,A5,Def8;
+    then f1/*seq+f2/*seq is divergent_to-infty by A6,Th38;
+    hence (f1+f2)/*seq is divergent_to-infty by A4,A5,RFUNCT_2:23;
   end;
   hence f1+f2 is divergent_in+infty_to-infty by A2,Def8;
 A7: now
@@ -1657,10 +1658,10 @@ A9: seq is divergent_to+infty & rng seq c=dom(f1(#) f2);
 A10: dom(f1(#)f2)=dom f1/\
     dom f2 & rng seq c=dom f1 & rng seq c=dom f2 by Lm3;
     then
-A11: f1*seq is divergent_to-infty by A1,A9,Def8;
-    f2*seq is divergent_to-infty by A1,A9,A10,Def8;
-    then (f1*seq)(#)(f2*seq) is divergent_to+infty by A11,Th51;
-    hence (f1(#)f2)*seq is divergent_to+infty by A9,A10,RFUNCT_2:23;
+A11: f1/*seq is divergent_to-infty by A1,A9,Def8;
+    f2/*seq is divergent_to-infty by A1,A9,A10,Def8;
+    then (f1/*seq)(#)(f2/*seq) is divergent_to+infty by A11,Th51;
+    hence (f1(#)f2)/*seq is divergent_to+infty by A9,A10,RFUNCT_2:23;
   end;
   hence thesis by A7,Def7;
 end;
@@ -1686,10 +1687,10 @@ A4: seq is divergent_to-infty & rng seq c=dom(f1+f2);
     then
 A5: dom(f1+f2)=dom f1/\dom f2 & rng seq c=dom f1 & rng seq c=dom f2 by Lm2;
     then
-A6: f1*seq is divergent_to+infty by A1,A4,Def10;
-    f2*seq is divergent_to+infty by A1,A4,A5,Def10;
-    then f1*seq+f2*seq is divergent_to+infty by A6,Th35;
-    hence (f1+f2)*seq is divergent_to+infty by A4,A5,RFUNCT_2:23;
+A6: f1/*seq is divergent_to+infty by A1,A4,Def10;
+    f2/*seq is divergent_to+infty by A1,A4,A5,Def10;
+    then f1/*seq+f2/*seq is divergent_to+infty by A6,Th35;
+    hence (f1+f2)/*seq is divergent_to+infty by A4,A5,RFUNCT_2:23;
   end;
   hence f1+f2 is divergent_in-infty_to+infty by A2,Def10;
 A7: now
@@ -1706,10 +1707,10 @@ A9: seq is divergent_to-infty & rng seq c=dom(f1(#) f2);
 A10: dom(f1(#)f2)=dom f1/\
     dom f2 & rng seq c=dom f1 & rng seq c=dom f2 by Lm3;
     then
-A11: f1*seq is divergent_to+infty by A1,A9,Def10;
-    f2*seq is divergent_to+infty by A1,A9,A10,Def10;
-    then (f1*seq)(#)(f2*seq) is divergent_to+infty by A11,Th37;
-    hence (f1(#)f2)*seq is divergent_to+infty by A9,A10,RFUNCT_2:23;
+A11: f1/*seq is divergent_to+infty by A1,A9,Def10;
+    f2/*seq is divergent_to+infty by A1,A9,A10,Def10;
+    then (f1/*seq)(#)(f2/*seq) is divergent_to+infty by A11,Th37;
+    hence (f1(#)f2)/*seq is divergent_to+infty by A9,A10,RFUNCT_2:23;
   end;
   hence thesis by A7,Def10;
 end;
@@ -1735,10 +1736,10 @@ A4: seq is divergent_to-infty & rng seq c=dom(f1+f2);
     then
 A5: dom(f1+f2)=dom f1/\dom f2 & rng seq c=dom f1 & rng seq c=dom f2 by Lm2;
     then
-A6: f1*seq is divergent_to-infty by A1,A4,Def11;
-    f2*seq is divergent_to-infty by A1,A4,A5,Def11;
-    then f1*seq+f2*seq is divergent_to-infty by A6,Th38;
-    hence (f1+f2)*seq is divergent_to-infty by A4,A5,RFUNCT_2:23;
+A6: f1/*seq is divergent_to-infty by A1,A4,Def11;
+    f2/*seq is divergent_to-infty by A1,A4,A5,Def11;
+    then f1/*seq+f2/*seq is divergent_to-infty by A6,Th38;
+    hence (f1+f2)/*seq is divergent_to-infty by A4,A5,RFUNCT_2:23;
   end;
   hence f1+f2 is divergent_in-infty_to-infty by A2,Def11;
 A7: now
@@ -1755,10 +1756,10 @@ A9: seq is divergent_to-infty & rng seq c=dom(f1(#) f2);
 A10: dom(f1(#)f2)=dom f1/\
     dom f2 & rng seq c=dom f1 & rng seq c=dom f2 by Lm3;
     then
-A11: f1*seq is divergent_to-infty by A1,A9,Def11;
-    f2*seq is divergent_to-infty by A1,A9,A10,Def11;
-    then (f1*seq)(#)(f2*seq) is divergent_to+infty by A11,Th51;
-    hence (f1(#)f2)*seq is divergent_to+infty by A9,A10,RFUNCT_2:23;
+A11: f1/*seq is divergent_to-infty by A1,A9,Def11;
+    f2/*seq is divergent_to-infty by A1,A9,A10,Def11;
+    then (f1/*seq)(#)(f2/*seq) is divergent_to+infty by A11,Th51;
+    hence (f1(#)f2)/*seq is divergent_to+infty by A9,A10,RFUNCT_2:23;
   end;
   hence thesis by A7,Def10;
 end;
@@ -1787,7 +1788,7 @@ A7: rng(seq^\k)c=rng seq by RFUNCT_2:7;
     then
 A8: rng(seq^\k)c=dom f1 & rng(seq^\k)c=dom f2 by A4,XBOOLE_1:1;
     then
-A9: f1*(seq^\k) is divergent_to+infty by A1,A6,Def7;
+A9: f1/*(seq^\k) is divergent_to+infty by A1,A6,Def7;
     consider r2 be real number such that
 A10: for g being set st g in right_open_halfline(r1)/\dom f2 holds r2<=f2.g
     by A2,RFUNCT_1:88;
@@ -1796,24 +1797,24 @@ A10: for g being set st g in right_open_halfline(r1)/\dom f2 holds r2<=f2.g
 A11:  (seq^\k).n in rng(seq^\k) by RFUNCT_2:10;
 A12:  (seq^\k).n < +infty by XXREAL_0:9;
       r1<seq.(n+k) by A5,NAT_1:12;
-      then r1<(seq^\k).n by SEQM_3:def 9;
+      then r1<(seq^\k).n by NAT_1:def 3;
       then (seq^\k).n in right_open_halfline(r1) by A12,XXREAL_1:4;
 
 then (seq^\k).n in right_open_halfline(r1)/\dom f2 by A8,A11,XBOOLE_0:def 3;
       then r2<=f2.((seq^\k).n) by A10;
       then
-A13:  r2<=(f2*(seq^\k)).n by A4,A7,RFUNCT_2:21,XBOOLE_1:1;
+A13:  r2<=(f2/*(seq^\k)).n by A4,A7,FUNCT_2:185,XBOOLE_1:1;
       -abs(r2)<=r2 by ABSVALUE:11;
-      then -abs(r2)-1<r2-0 by XREAL_1:17;
-      hence -abs(r2)-1<(f2*(seq^\k)).n by A13,XXREAL_0:2;
+      then -abs(r2)-1<r2-0 by XREAL_1:15,16,17;
+      hence -abs(r2)-1<(f2/*(seq^\k)).n by A13,XXREAL_0:2;
     end;
-    then f2*(seq^\k) is bounded_below by SEQ_2:def 4;
+    then f2/*(seq^\k) is bounded_below by SEQ_2:def 4;
     then
-A14: f1*(seq^\k)+f2*(seq^\k) is divergent_to+infty by A9,Th36;
+A14: f1/*(seq^\k)+f2/*(seq^\k) is divergent_to+infty by A9,Th36;
     rng(seq^\k)c=dom f1/\dom f2 by A3,A4,A7,XBOOLE_1:1;
-    then f1*(seq^\k)+f2*(seq^\k)=(f1+f2)*(seq^\k) by RFUNCT_2:23
-      .=((f1+f2)*seq)^\k by A3,RFUNCT_2:22;
-    hence (f1+f2)*seq is divergent_to+infty by A14,Th34;
+    then f1/*(seq^\k)+f2/*(seq^\k)=(f1+f2)/*(seq^\k) by RFUNCT_2:23
+      .=((f1+f2)/*seq)^\k by A3,RFUNCT_2:22;
+    hence (f1+f2)/*seq is divergent_to+infty by A14,Th34;
   end;
   hence thesis by A1,Def7;
 end;
@@ -1843,25 +1844,25 @@ A7: rng(seq^\k)c=rng seq by RFUNCT_2:7;
     then
 A8: rng(seq^\k)c=dom f1 & rng(seq^\k)c=dom f2 by A4,XBOOLE_1:1;
     then
-A9: f1*(seq^\k) is divergent_to+infty by A1,A6,Def7;
+A9: f1/*(seq^\k) is divergent_to+infty by A1,A6,Def7;
     now thus 0<r2 by A2;
       let n;
 A10:  (seq^\k).n in rng(seq^\k) by RFUNCT_2:10;
       r1<seq.(n+k) by A5,NAT_1:12;
-      then r1<(seq^\k).n by SEQM_3:def 9;
+      then r1<(seq^\k).n by NAT_1:def 3;
       then (seq^\k).n in {g2: r1<g2};
       then (seq^\k).n in right_open_halfline(r1) by XXREAL_1:230;
 
 then (seq^\k).n in dom f2/\right_open_halfline(r1) by A8,A10,XBOOLE_0:def 3;
       then r2<=f2.((seq^\k).n) by A2;
-      hence r2<=(f2*(seq^\k)).n by A4,A7,RFUNCT_2:21,XBOOLE_1:1;
+      hence r2<=(f2/*(seq^\k)).n by A4,A7,FUNCT_2:185,XBOOLE_1:1;
     end;
     then
-A11: (f1*(seq^\k))(#)(f2*(seq^\k)) is divergent_to+infty by A9,Th49;
+A11: (f1/*(seq^\k))(#)(f2/*(seq^\k)) is divergent_to+infty by A9,Th49;
     rng(seq^\k)c=dom f1/\dom f2 by A3,A4,A7,XBOOLE_1:1;
-    then (f1*(seq^\k))(#)(f2*(seq^\k))=(f1(#)f2)*(seq^\k) by RFUNCT_2:23
-      .=((f1(#)f2)*seq)^\k by A3,RFUNCT_2:22;
-    hence (f1(#)f2)*seq is divergent_to+infty by A11,Th34;
+    then (f1/*(seq^\k))(#)(f2/*(seq^\k))=(f1(#)f2)/*(seq^\k) by RFUNCT_2:23
+      .=((f1(#)f2)/*seq)^\k by A3,RFUNCT_2:22;
+    hence (f1(#)f2)/*seq is divergent_to+infty by A11,Th34;
   end;
   hence thesis by A1,Def7;
 end;
@@ -1890,7 +1891,7 @@ A7: rng(seq^\k)c=rng seq by RFUNCT_2:7;
     then
 A8: rng(seq^\k)c=dom f1 & rng(seq^\k)c=dom f2 by A4,XBOOLE_1:1;
     then
-A9: f1*(seq^\k) is divergent_to+infty by A1,A6,Def10;
+A9: f1/*(seq^\k) is divergent_to+infty by A1,A6,Def10;
     consider r2 be real number such that
 A10: for g being set st g in left_open_halfline(r1)/\dom f2 holds r2<=f2.g
     by A2,RFUNCT_1:88;
@@ -1898,25 +1899,25 @@ A10: for g being set st g in left_open_halfline(r1)/\dom f2 holds r2<=f2.g
       let n;
 A11:  (seq^\k).n in rng(seq^\k) by RFUNCT_2:10;
       seq.(n+k)<r1 by A5,NAT_1:12;
-      then (seq^\k).n<r1 by SEQM_3:def 9;
+      then (seq^\k).n<r1 by NAT_1:def 3;
       then (seq^\k).n in {g2: g2<r1};
       then (seq^\k).n in left_open_halfline(r1) by XXREAL_1:229;
 
 then (seq^\k).n in left_open_halfline(r1)/\dom f2 by A8,A11,XBOOLE_0:def 3;
       then r2<=f2.((seq^\k).n) by A10;
       then
-A12:  r2<=(f2*(seq^\k)).n by A4,A7,RFUNCT_2:21,XBOOLE_1:1;
+A12:  r2<=(f2/*(seq^\k)).n by A4,A7,FUNCT_2:185,XBOOLE_1:1;
       -abs(r2)<=r2 by ABSVALUE:11;
-      then -abs(r2)-1<r2-0 by XREAL_1:17;
-      hence -abs(r2)-1<(f2*(seq^\k)).n by A12,XXREAL_0:2;
+      then -abs(r2)-1<r2-0 by XREAL_1:15,16,17;
+      hence -abs(r2)-1<(f2/*(seq^\k)).n by A12,XXREAL_0:2;
     end;
-    then f2*(seq^\k) is bounded_below by SEQ_2:def 4;
+    then f2/*(seq^\k) is bounded_below by SEQ_2:def 4;
     then
-A13: f1*(seq^\k)+f2*(seq^\k) is divergent_to+infty by A9,Th36;
+A13: f1/*(seq^\k)+f2/*(seq^\k) is divergent_to+infty by A9,Th36;
     rng(seq^\k)c=dom f1/\dom f2 by A3,A4,A7,XBOOLE_1:1;
-    then f1*(seq^\k)+f2*(seq^\k)=(f1+f2)*(seq^\k) by RFUNCT_2:23
-      .=((f1+f2)*seq)^\k by A3,RFUNCT_2:22;
-    hence (f1+f2)*seq is divergent_to+infty by A13,Th34;
+    then f1/*(seq^\k)+f2/*(seq^\k)=(f1+f2)/*(seq^\k) by RFUNCT_2:23
+      .=((f1+f2)/*seq)^\k by A3,RFUNCT_2:22;
+    hence (f1+f2)/*seq is divergent_to+infty by A13,Th34;
   end;
   hence thesis by A1,Def10;
 end;
@@ -1947,25 +1948,25 @@ A7: rng(seq^\k)c=rng seq by RFUNCT_2:7;
     then
 A8: rng(seq^\k)c=dom f1 & rng(seq^\k)c=dom f2 by A4,XBOOLE_1:1;
     then
-A9: f1*(seq^\k) is divergent_to+infty by A1,A6,Def10;
+A9: f1/*(seq^\k) is divergent_to+infty by A1,A6,Def10;
     now thus 0<r2 by A2;
       let n;
 A10:  (seq^\k).n in rng(seq^\k) by RFUNCT_2:10;
       seq.(n+k)<r1 by A5,NAT_1:12;
-      then (seq^\k).n<r1 by SEQM_3:def 9;
+      then (seq^\k).n<r1 by NAT_1:def 3;
       then (seq^\k).n in {g2: g2<r1};
       then (seq^\k).n in left_open_halfline(r1) by XXREAL_1:229;
 
 then (seq^\k).n in dom f2/\left_open_halfline(r1) by A8,A10,XBOOLE_0:def 3;
       then r2<=f2.((seq^\k).n) by A2;
-      hence r2<=(f2*(seq^\k)).n by A4,A7,RFUNCT_2:21,XBOOLE_1:1;
+      hence r2<=(f2/*(seq^\k)).n by A4,A7,FUNCT_2:185,XBOOLE_1:1;
     end;
     then
-A11: (f1*(seq^\k))(#)(f2*(seq^\k)) is divergent_to+infty by A9,Th49;
+A11: (f1/*(seq^\k))(#)(f2/*(seq^\k)) is divergent_to+infty by A9,Th49;
     rng(seq^\k)c=dom f1/\dom f2 by A3,A4,A7,XBOOLE_1:1;
-    then (f1*(seq^\k))(#)(f2*(seq^\k))=(f1(#)f2)*(seq^\k) by RFUNCT_2:23
-      .=((f1(#)f2)*seq)^\k by A3,RFUNCT_2:22;
-    hence (f1(#)f2)*seq is divergent_to+infty by A11,Th34;
+    then (f1/*(seq^\k))(#)(f2/*(seq^\k))=(f1(#)f2)/*(seq^\k) by RFUNCT_2:23
+      .=((f1(#)f2)/*seq)^\k by A3,RFUNCT_2:22;
+    hence (f1(#)f2)/*seq is divergent_to+infty by A11,Th34;
   end;
   hence thesis by A1,Def10;
 end;
@@ -1996,9 +1997,9 @@ A3:   r1<g & g in dom f by A1,Def7;
       assume seq is divergent_to+infty & rng seq c=dom(r(#)f);
       then
 A4:   seq is divergent_to+infty & rng seq c=dom f by VALUED_1:def 5;
-      then f*seq is divergent_to+infty by A1,Def7;
-      then r(#)(f*seq) is divergent_to+infty by A1,Th40;
-      hence (r(#)f)*seq is divergent_to+infty by A4,RFUNCT_2:24;
+      then f/*seq is divergent_to+infty by A1,Def7;
+      then r(#)(f/*seq) is divergent_to+infty by A1,Th40;
+      hence (r(#)f)/*seq is divergent_to+infty by A4,RFUNCT_2:24;
     end;
     hence thesis by A2,Def7;
   end;
@@ -2018,9 +2019,9 @@ A7:   r1<g & g in dom f by A5,Def7;
       assume seq is divergent_to+infty & rng seq c=dom(r(#)f);
       then
 A8:   seq is divergent_to+infty & rng seq c=dom f by VALUED_1:def 5;
-      then f*seq is divergent_to+infty by A5,Def7;
-      then r(#)(f*seq) is divergent_to-infty by A5,Th40;
-      hence (r(#)f)*seq is divergent_to-infty by A8,RFUNCT_2:24;
+      then f/*seq is divergent_to+infty by A5,Def7;
+      then r(#)(f/*seq) is divergent_to-infty by A5,Th40;
+      hence (r(#)f)/*seq is divergent_to-infty by A8,RFUNCT_2:24;
     end;
     hence thesis by A6,Def8;
   end;
@@ -2040,9 +2041,9 @@ A11:  r1<g & g in dom f by A9,Def8;
       assume seq is divergent_to+infty & rng seq c=dom(r(#)f);
       then
 A12:  seq is divergent_to+infty & rng seq c=dom f by VALUED_1:def 5;
-      then f*seq is divergent_to-infty by A9,Def8;
-      then r(#)(f*seq) is divergent_to-infty by A9,Th41;
-      hence (r(#)f)*seq is divergent_to-infty by A12,RFUNCT_2:24;
+      then f/*seq is divergent_to-infty by A9,Def8;
+      then r(#)(f/*seq) is divergent_to-infty by A9,Th41;
+      hence (r(#)f)/*seq is divergent_to-infty by A12,RFUNCT_2:24;
     end;
     hence thesis by A10,Def8;
   end;
@@ -2059,9 +2060,9 @@ A15: r1<g & g in dom f by A13,Def8;
     assume seq is divergent_to+infty & rng seq c=dom(r(#)f);
     then
 A16: seq is divergent_to+infty & rng seq c=dom f by VALUED_1:def 5;
-    then f*seq is divergent_to-infty by A13,Def8;
-    then r(#)(f*seq) is divergent_to+infty by A13,Th41;
-    hence (r(#)f)*seq is divergent_to+infty by A16,RFUNCT_2:24;
+    then f/*seq is divergent_to-infty by A13,Def8;
+    then r(#)(f/*seq) is divergent_to+infty by A13,Th41;
+    hence (r(#)f)/*seq is divergent_to+infty by A16,RFUNCT_2:24;
   end;
   hence thesis by A14,Def7;
 end;
@@ -2092,9 +2093,9 @@ A3:   g<r1 & g in dom f by A1,Def10;
       assume seq is divergent_to-infty & rng seq c=dom(r(#)f);
       then
 A4:   seq is divergent_to-infty & rng seq c=dom f by VALUED_1:def 5;
-      then f*seq is divergent_to+infty by A1,Def10;
-      then r(#)(f*seq) is divergent_to+infty by A1,Th40;
-      hence (r(#)f)*seq is divergent_to+infty by A4,RFUNCT_2:24;
+      then f/*seq is divergent_to+infty by A1,Def10;
+      then r(#)(f/*seq) is divergent_to+infty by A1,Th40;
+      hence (r(#)f)/*seq is divergent_to+infty by A4,RFUNCT_2:24;
     end;
     hence thesis by A2,Def10;
   end;
@@ -2114,9 +2115,9 @@ A7:   g<r1 & g in dom f by A5,Def10;
       assume seq is divergent_to-infty & rng seq c=dom(r(#)f);
       then
 A8:   seq is divergent_to-infty & rng seq c=dom f by VALUED_1:def 5;
-      then f*seq is divergent_to+infty by A5,Def10;
-      then r(#)(f*seq) is divergent_to-infty by A5,Th40;
-      hence (r(#)f)*seq is divergent_to-infty by A8,RFUNCT_2:24;
+      then f/*seq is divergent_to+infty by A5,Def10;
+      then r(#)(f/*seq) is divergent_to-infty by A5,Th40;
+      hence (r(#)f)/*seq is divergent_to-infty by A8,RFUNCT_2:24;
     end;
     hence thesis by A6,Def11;
   end;
@@ -2136,9 +2137,9 @@ A11:  g<r1 & g in dom f by A9,Def11;
       assume seq is divergent_to-infty & rng seq c=dom(r(#)f);
       then
 A12:  seq is divergent_to-infty & rng seq c=dom f by VALUED_1:def 5;
-      then f*seq is divergent_to-infty by A9,Def11;
-      then r(#)(f*seq) is divergent_to-infty by A9,Th41;
-      hence (r(#)f)*seq is divergent_to-infty by A12,RFUNCT_2:24;
+      then f/*seq is divergent_to-infty by A9,Def11;
+      then r(#)(f/*seq) is divergent_to-infty by A9,Th41;
+      hence (r(#)f)/*seq is divergent_to-infty by A12,RFUNCT_2:24;
     end;
     hence thesis by A10,Def11;
   end;
@@ -2155,9 +2156,9 @@ A15: g<r1 & g in dom f by A13,Def11;
     assume seq is divergent_to-infty & rng seq c=dom(r(#)f);
     then
 A16: seq is divergent_to-infty & rng seq c=dom f by VALUED_1:def 5;
-    then f*seq is divergent_to-infty by A13,Def11;
-    then r(#)(f*seq) is divergent_to+infty by A13,Th41;
-    hence (r(#)f)*seq is divergent_to+infty by A16,RFUNCT_2:24;
+    then f/*seq is divergent_to-infty by A13,Def11;
+    then r(#)(f/*seq) is divergent_to+infty by A13,Th41;
+    hence (r(#)f)/*seq is divergent_to+infty by A16,RFUNCT_2:24;
   end;
   hence thesis by A14,Def10;
 end;
@@ -2184,9 +2185,9 @@ A4:     r<g & g in dom f by A2,Def7;
 A5:     seq is divergent_to+infty & rng seq c=dom abs(f);
         then
 A6:     rng seq c=dom f by VALUED_1:def 11;
-        then f*seq is divergent_to+infty by A2,A5,Def7;
-        then abs(f*seq) is divergent_to+infty by Th52;
-        hence abs(f)*seq is divergent_to+infty by A6,RFUNCT_2:25;
+        then f/*seq is divergent_to+infty by A2,A5,Def7;
+        then abs(f/*seq) is divergent_to+infty by Th52;
+        hence (abs f)/*seq is divergent_to+infty by A6,RFUNCT_2:25;
       end;
       hence thesis by A3,Def7;
     end;
@@ -2205,9 +2206,9 @@ A9:     r<g & g in dom f by A7,Def8;
 A10:    seq is divergent_to+infty & rng seq c=dom abs( f );
         then
 A11:    rng seq c=dom f by VALUED_1:def 11;
-        then f*seq is divergent_to-infty by A7,A10,Def8;
-        then abs(f*seq) is divergent_to+infty by Th52;
-        hence abs(f)*seq is divergent_to+infty by A11,RFUNCT_2:25;
+        then f/*seq is divergent_to-infty by A7,A10,Def8;
+        then abs(f/*seq) is divergent_to+infty by Th52;
+        hence (abs f)/*seq is divergent_to+infty by A11,RFUNCT_2:25;
       end;
       hence thesis by A8,Def7;
     end;
@@ -2237,9 +2238,9 @@ A4:     g<r & g in dom f by A2,Def10;
 A5:     seq is divergent_to-infty & rng seq c=dom abs(f);
         then
 A6:     rng seq c=dom f by VALUED_1:def 11;
-        then f*seq is divergent_to+infty by A2,A5,Def10;
-        then abs(f*seq) is divergent_to+infty by Th52;
-        hence abs(f)*seq is divergent_to+infty by A6,RFUNCT_2:25;
+        then f/*seq is divergent_to+infty by A2,A5,Def10;
+        then abs(f/*seq) is divergent_to+infty by Th52;
+        hence (abs f)/*seq is divergent_to+infty by A6,RFUNCT_2:25;
       end;
       hence thesis by A3,Def10;
     end;
@@ -2258,9 +2259,9 @@ A9:     g<r & g in dom f by A7,Def11;
 A10:    seq is divergent_to-infty & rng seq c=dom abs( f );
         then
 A11:    rng seq c=dom f by VALUED_1:def 11;
-        then f*seq is divergent_to-infty by A7,A10,Def11;
-        then abs(f*seq) is divergent_to+infty by Th52;
-        hence abs(f)*seq is divergent_to+infty by A11,RFUNCT_2:25;
+        then f/*seq is divergent_to-infty by A7,A10,Def11;
+        then abs(f/*seq) is divergent_to+infty by Th52;
+        hence (abs f)/*seq is divergent_to+infty by A11,RFUNCT_2:25;
       end;
       hence thesis by A8,Def10;
     end;
@@ -2308,9 +2309,9 @@ A10:  g1<=abs(g1) by ABSVALUE:11;
       then g1<seq.m by A7,XXREAL_0:2;
       then f.g1<=f.(seq.m) by A1,A4,A9,RFUNCT_2:45;
       then r<f.(seq.m) by A4,XXREAL_0:2;
-      hence r<(f*seq).m by A3,RFUNCT_2:21;
+      hence r<(f/*seq).m by A3,FUNCT_2:185;
     end;
-    hence f*seq is divergent_to+infty by Def4;
+    hence f/*seq is divergent_to+infty by Def4;
   end;
   hence thesis by A2,Def7;
 end;
@@ -2361,9 +2362,9 @@ A10:  g1<=abs(g1) by ABSVALUE:11;
       then g1<seq.m by A7,XXREAL_0:2;
       then f.(seq.m)<=f.g1 by A1,A4,A9,RFUNCT_2:46;
       then f.(seq.m)<r by A4,XXREAL_0:2;
-      hence (f*seq).m<r by A3,RFUNCT_2:21;
+      hence (f/*seq).m<r by A3,FUNCT_2:185;
     end;
-    hence f*seq is divergent_to-infty by Def5;
+    hence f/*seq is divergent_to-infty by Def5;
   end;
   hence thesis by A2,Def8;
 end;
@@ -2402,7 +2403,7 @@ A6:   seq.m in rng seq by RFUNCT_2:10;
 A7:   seq.m<-abs(r1)-abs(g1) by A5;
 A8:   -abs(r1)<=r1 by ABSVALUE:11;
       0<=abs(g1) by COMPLEX1:132;
-      then -abs(r1)-abs(g1)<=r1-0 by A8,XREAL_1:15;
+      then -abs(r1)-abs(g1)<=r1-0 by A8,XREAL_1:15,17;
       then seq.m<r1 by A7,XXREAL_0:2;
       then seq.m in {g2: g2<r1};
       then seq.m in left_open_halfline(r1) by XXREAL_1:229;
@@ -2410,13 +2411,13 @@ A8:   -abs(r1)<=r1 by ABSVALUE:11;
 A9:   seq.m in left_open_halfline(r1)/\dom f by A3,A6,XBOOLE_0:def 3;
 A10:  -abs(g1)<=g1 by ABSVALUE:11;
       0<=abs(r1) by COMPLEX1:132;
-      then -abs(g1)-abs(r1)<=g1-0 by A10,XREAL_1:15;
+      then -abs(g1)-abs(r1)<=g1-0 by A10,XREAL_1:15,17;
       then seq.m<g1 by A7,XXREAL_0:2;
       then f.g1<= f.(seq.m) by A1,A4,A9,RFUNCT_2:46;
       then r<f.(seq.m) by A4,XXREAL_0:2;
-      hence r<(f*seq).m by A3,RFUNCT_2:21;
+      hence r<(f/*seq).m by A3,FUNCT_2:185;
     end;
-    hence f*seq is divergent_to+infty by Def4;
+    hence f/*seq is divergent_to+infty by Def4;
   end;
   hence thesis by A2,Def10;
 end;
@@ -2455,7 +2456,7 @@ A6:   seq.m in rng seq by RFUNCT_2:10;
 A7:   seq.m<-abs(r1)-abs(g1) by A5;
 A8:   -abs(r1)<=r1 by ABSVALUE:11;
       0<=abs(g1) by COMPLEX1:132;
-      then -abs(r1)-abs(g1)<=r1-0 by A8,XREAL_1:15;
+      then -abs(r1)-abs(g1)<=r1-0 by A8,XREAL_1:15,16,17;
       then seq.m<r1 by A7,XXREAL_0:2;
       then seq.m in {g2: g2<r1};
       then seq.m in left_open_halfline(r1) by XXREAL_1:229;
@@ -2463,13 +2464,13 @@ A8:   -abs(r1)<=r1 by ABSVALUE:11;
 A9:   seq.m in left_open_halfline(r1)/\dom f by A3,A6,XBOOLE_0:def 3;
 A10:  -abs(g1)<=g1 by ABSVALUE:11;
       0<=abs(r1) by COMPLEX1:132;
-      then -abs(g1)-abs(r1)<=g1-0 by A10,XREAL_1:15;
+      then -abs(g1)-abs(r1)<=g1-0 by A10,XREAL_1:15,16,17;
       then seq.m<g1 by A7,XXREAL_0:2;
       then f.(seq.m)<= f.g1 by A1,A4,A9,RFUNCT_2:45;
       then f.(seq.m)<r by A4,XXREAL_0:2;
-      hence (f*seq).m<r by A3,RFUNCT_2:21;
+      hence (f/*seq).m<r by A3,FUNCT_2:185;
     end;
-    hence f*seq is divergent_to-infty by Def5;
+    hence f/*seq is divergent_to-infty by Def5;
   end;
   hence thesis by A2,Def11;
 end;
@@ -2507,7 +2508,7 @@ A6: rng(seq^\k)c=dom f by A3,XBOOLE_1:1;
       then consider n such that
 A7:   (seq^\k).n=x by RFUNCT_2:9;
       r1<seq.(n+k) by A4,NAT_1:12;
-      then r1<(seq^\k).n by SEQM_3:def 9;
+      then r1<(seq^\k).n by NAT_1:def 3;
       then x in {g2: r1<g2} by A7;
       hence x in right_open_halfline(r1) by XXREAL_1:230;
     end;
@@ -2522,18 +2523,18 @@ A11: rng(seq^\k)c=dom f1 by A9,XBOOLE_1:1;
     seq^\k is subsequence of seq by SEQM_3:47;
     then seq^\k is divergent_to+infty by A3,Th53;
     then
-A12: f1*(seq^\k) is divergent_to+infty by A1,A11,Def7;
+A12: f1/*(seq^\k) is divergent_to+infty by A1,A11,Def7;
     now
       let n;
       (seq^\k).n in rng(seq^\k) by RFUNCT_2:10;
       then f1.((seq^\k).n)<=f.((seq^\k).n) by A2,A8;
-      then (f1*(seq^\k)).n<=f.((seq^\k).n) by A9,A10,RFUNCT_2:21,XBOOLE_1:1;
-      hence (f1*(seq^\k)).n<=(f*(seq^\k)).n by A3,A5,RFUNCT_2:21,XBOOLE_1:1;
+      then (f1/*(seq^\k)).n<=f.((seq^\k).n) by A9,A10,FUNCT_2:185,XBOOLE_1:1;
+      hence (f1/*(seq^\k)).n<=(f/*(seq^\k)).n by A3,A5,FUNCT_2:185,XBOOLE_1:1;
     end;
     then
-A13: f*(seq^\k) is divergent_to+infty by A12,Th69;
-    f*(seq^\k)=(f*seq)^\k by A3,RFUNCT_2:22;
-    hence f*seq is divergent_to+infty by A13,Th34;
+A13: f/*(seq^\k) is divergent_to+infty by A12,Th69;
+    f/*(seq^\k)=(f/*seq)^\k by A3,RFUNCT_2:22;
+    hence f/*seq is divergent_to+infty by A13,Th34;
   end;
   hence f is divergent_in+infty_to+infty by A1,Def7;
 end;
@@ -2564,7 +2565,7 @@ A6: rng(seq^\k)c=dom f by A3,XBOOLE_1:1;
       then consider n such that
 A7:   (seq^\k).n=x by RFUNCT_2:9;
       r1<seq.(n+k) by A4,NAT_1:12;
-      then r1<(seq^\k).n by SEQM_3:def 9;
+      then r1<(seq^\k).n by NAT_1:def 3;
       then x in {g2: r1<g2} by A7;
       hence x in right_open_halfline(r1) by XXREAL_1:230;
     end;
@@ -2579,18 +2580,18 @@ A11: rng(seq^\k)c=dom f1 by A9,XBOOLE_1:1;
     seq^\k is subsequence of seq by SEQM_3:47;
     then seq^\k is divergent_to+infty by A3,Th53;
     then
-A12: f1*(seq^\k) is divergent_to-infty by A1,A11,Def8;
+A12: f1/*(seq^\k) is divergent_to-infty by A1,A11,Def8;
     now
       let n;
       (seq^\k).n in rng(seq^\k) by RFUNCT_2:10;
       then f.((seq^\k).n)<=f1.((seq^\k).n) by A2,A8;
-      then (f*(seq^\k)).n<=f1.((seq^\k).n) by A3,A5,RFUNCT_2:21,XBOOLE_1:1;
-      hence (f*(seq^\k)).n<=(f1*(seq^\k)).n by A9,A10,RFUNCT_2:21,XBOOLE_1:1;
+      then (f/*(seq^\k)).n<=f1.((seq^\k).n) by A3,A5,FUNCT_2:185,XBOOLE_1:1;
+      hence (f/*(seq^\k)).n<=(f1/*(seq^\k)).n by A9,A10,FUNCT_2:185,XBOOLE_1:1;
     end;
     then
-A13: f*(seq^\k) is divergent_to-infty by A12,Th70;
-    f*(seq^\k)=(f*seq)^\k by A3,RFUNCT_2:22;
-    hence f*seq is divergent_to-infty by A13,Th34;
+A13: f/*(seq^\k) is divergent_to-infty by A12,Th70;
+    f/*(seq^\k)=(f/*seq)^\k by A3,RFUNCT_2:22;
+    hence f/*seq is divergent_to-infty by A13,Th34;
   end;
   hence f is divergent_in+infty_to-infty by A1,Def8;
 end;
@@ -2621,7 +2622,7 @@ A6: rng(seq^\k)c=dom f by A3,XBOOLE_1:1;
       then consider n such that
 A7:   (seq^\k).n=x by RFUNCT_2:9;
       seq.(n+k)<r1 by A4,NAT_1:12;
-      then (seq^\k).n<r1 by SEQM_3:def 9;
+      then (seq^\k).n<r1 by NAT_1:def 3;
       then x in {g2: g2<r1} by A7;
       hence x in left_open_halfline(r1) by XXREAL_1:229;
     end;
@@ -2636,18 +2637,18 @@ A11: rng(seq^\k)c=dom f1 by A9,XBOOLE_1:1;
     seq^\k is subsequence of seq by SEQM_3:47;
     then seq^\k is divergent_to-infty by A3,Th54;
     then
-A12: f1*(seq^\k) is divergent_to+infty by A1,A11,Def10;
+A12: f1/*(seq^\k) is divergent_to+infty by A1,A11,Def10;
     now
       let n;
       (seq^\k).n in rng(seq^\k) by RFUNCT_2:10;
       then f1.((seq^\k).n)<=f.((seq^\k).n) by A2,A8;
-      then (f1*(seq^\k)).n<=f.((seq^\k).n) by A9,A10,RFUNCT_2:21,XBOOLE_1:1;
-      hence (f1*(seq^\k)).n<=(f*(seq^\k)).n by A3,A5,RFUNCT_2:21,XBOOLE_1:1;
+      then (f1/*(seq^\k)).n<=f.((seq^\k).n) by A9,A10,FUNCT_2:185,XBOOLE_1:1;
+      hence (f1/*(seq^\k)).n<=(f/*(seq^\k)).n by A3,A5,FUNCT_2:185,XBOOLE_1:1;
     end;
     then
-A13: f*(seq^\k) is divergent_to+infty by A12,Th69;
-    f*(seq^\k)=(f*seq)^\k by A3,RFUNCT_2:22;
-    hence f*seq is divergent_to+infty by A13,Th34;
+A13: f/*(seq^\k) is divergent_to+infty by A12,Th69;
+    f/*(seq^\k)=(f/*seq)^\k by A3,RFUNCT_2:22;
+    hence f/*seq is divergent_to+infty by A13,Th34;
   end;
   hence f is divergent_in-infty_to+infty by A1,Def10;
 end;
@@ -2678,7 +2679,7 @@ A6: rng(seq^\k)c=dom f by A3,XBOOLE_1:1;
       then consider n such that
 A7:   (seq^\k).n=x by RFUNCT_2:9;
       seq.(n+k)<r1 by A4,NAT_1:12;
-      then (seq^\k).n<r1 by SEQM_3:def 9;
+      then (seq^\k).n<r1 by NAT_1:def 3;
       then x in {g2: g2<r1} by A7;
       hence x in left_open_halfline(r1) by XXREAL_1:229;
     end;
@@ -2693,18 +2694,18 @@ A11: rng(seq^\k)c=dom f1 by A9,XBOOLE_1:1;
     seq^\k is subsequence of seq by SEQM_3:47;
     then seq^\k is divergent_to-infty by A3,Th54;
     then
-A12: f1*(seq^\k) is divergent_to-infty by A1,A11,Def11;
+A12: f1/*(seq^\k) is divergent_to-infty by A1,A11,Def11;
     now
       let n;
       (seq^\k).n in rng(seq^\k) by RFUNCT_2:10;
       then f.((seq^\k).n)<=f1.((seq^\k).n) by A2,A8;
-      then (f*(seq^\k)).n<=f1.((seq^\k).n) by A3,A5,RFUNCT_2:21,XBOOLE_1:1;
-      hence (f*(seq^\k)).n<=(f1*(seq^\k)).n by A9,A10,RFUNCT_2:21,XBOOLE_1:1;
+      then (f/*(seq^\k)).n<=f1.((seq^\k).n) by A3,A5,FUNCT_2:185,XBOOLE_1:1;
+      hence (f/*(seq^\k)).n<=(f1/*(seq^\k)).n by A9,A10,FUNCT_2:185,XBOOLE_1:1;
     end;
     then
-A13: f*(seq^\k) is divergent_to-infty by A12,Th70;
-    f*(seq^\k)=(f*seq)^\k by A3,RFUNCT_2:22;
-    hence f*seq is divergent_to-infty by A13,Th34;
+A13: f/*(seq^\k) is divergent_to-infty by A12,Th70;
+    f/*(seq^\k)=(f/*seq)^\k by A3,RFUNCT_2:22;
+    hence f/*seq is divergent_to-infty by A13,Th34;
   end;
   hence f is divergent_in-infty_to-infty by A1,Def11;
 end;
@@ -2815,11 +2816,11 @@ A4: g<-abs(r)-abs(r1) by XREAL_1:4;
     take g;
 A5: 0<=abs(r1) by COMPLEX1:132;
     -abs(r)<=r by ABSVALUE:11;
-    then -abs(r)-abs(r1)<=r-0 by A5,XREAL_1:15;
+    then -abs(r)-abs(r1)<=r-0 by A5,XREAL_1:15,16,17;
     hence g<r by A4,XXREAL_0:2;
 A6: 0<=abs(r) by COMPLEX1:132;
     -abs(r1)<=r1 by ABSVALUE:11;
-    then -abs(r1)-abs(r)<=r1-0 by A6,XREAL_1:15;
+    then -abs(r1)-abs(r)<=r1-0 by A6,XREAL_1:15,16,17;
     then g<r1 by A4,XXREAL_0:2;
     then g in {g2: g2<r1};
     then g in left_open_halfline(r1) by XXREAL_1:229;
@@ -2857,11 +2858,11 @@ A4: g<-abs(r)-abs(r1) by XREAL_1:4;
     take g;
 A5: 0<=abs(r1) by COMPLEX1:132;
     -abs(r)<=r by ABSVALUE:11;
-    then -abs(r)-abs(r1)<=r-0 by A5,XREAL_1:15;
+    then -abs(r)-abs(r1)<=r-0 by A5,XREAL_1:15,16,17;
     hence g<r by A4,XXREAL_0:2;
 A6: 0<=abs(r) by COMPLEX1:132;
     -abs(r1)<=r1 by ABSVALUE:11;
-    then -abs(r1)-abs(r)<=r1-0 by A6,XREAL_1:15;
+    then -abs(r1)-abs(r)<=r1-0 by A6,XREAL_1:15,16,17;
     then g<r1 by A4,XXREAL_0:2;
     then g in {g2: g2<r1};
     then g in left_open_halfline(r1) by XXREAL_1:229;
@@ -2887,15 +2888,15 @@ A1: f is convergent_in+infty;
   func lim_in+infty f ->Real means
   :Def12:
   for seq st seq is divergent_to+infty & rng seq c= dom f holds
-  f*seq is convergent & lim(f*seq)=it;
+  f/*seq is convergent & lim(f/*seq)=it;
   existence by A1,Def6;
   uniqueness
   proof
     let g1,g2 such that
 A2: for seq st seq is divergent_to+infty & rng seq c= dom f holds
-    f*seq is convergent & lim(f*seq)=g1 and
+    f/*seq is convergent & lim(f/*seq)=g1 and
 A3: for seq st seq is divergent_to+infty & rng seq c= dom f holds
-    f*seq is convergent & lim(f*seq)=g2;
+    f/*seq is convergent & lim(f/*seq)=g2;
     defpred X[Element of NAT,real number] means $1<$2 & $2 in dom f;
 A4: for n ex r st X[n,r] by A1,Def6;
     consider s2 be Real_Sequence such that
@@ -2914,7 +2915,7 @@ A9: rng s2 c= dom f
       then ex n st x=s2.n by RFUNCT_2:9;
       hence x in dom f by A6;
     end;
-    then lim(f*s2)=g1 by A2,A8;
+    then lim(f/*s2)=g1 by A2,A8;
     hence g1=g2 by A3,A8,A9;
   end;
 end;
@@ -2926,15 +2927,15 @@ A1: f is convergent_in-infty;
   func lim_in-infty f ->Real means
   :Def13:
   for seq st seq is divergent_to-infty & rng seq c= dom f holds
-  f*seq is convergent & lim(f*seq)=it;
+  f/*seq is convergent & lim(f/*seq)=it;
   existence by A1,Def9;
   uniqueness
   proof
     let g1,g2 such that
 A2: for seq st seq is divergent_to-infty & rng seq c= dom f holds
-    f*seq is convergent & lim(f*seq)=g1 and
+    f/*seq is convergent & lim(f/*seq)=g1 and
 A3: for seq st seq is divergent_to-infty & rng seq c= dom f holds
-    f*seq is convergent & lim(f*seq)=g2;
+    f/*seq is convergent & lim(f/*seq)=g2;
     defpred X[Element of NAT,real number] means $2<-$1 & $2 in dom f;
 A4: for n ex r st X[n,r] by A1,Def9;
     consider s1 be Real_Sequence such that
@@ -2956,7 +2957,7 @@ A10: rng s1 c= dom f
       then ex n st x=s1.n by RFUNCT_2:9;
       hence x in dom f by A6;
     end;
-    then lim(f*s1)=g1 by A2,A9;
+    then lim(f/*s1)=g1 by A2,A9;
     hence g1=g2 by A3,A9,A10;
   end;
 end;
@@ -2999,11 +3000,11 @@ A9: s is divergent_to-infty by A7,Th48,Th70;
     end;
     then
 A10: rng s c=dom f by TARSKI:def 3;
-    then f*s is convergent & lim(f*s)=g by A1,A2,A9,Def13;
+    then f/*s is convergent & lim(f/*s)=g by A1,A2,A9,Def13;
     then consider n such that
-A11: for m st n<=m holds abs((f*s).m-g)<g1 by A3,SEQ_2:def 7;
-    abs((f*s).n-g)<g1 by A11;
-    then abs(f.(s.n)-g)<g1 by A10,RFUNCT_2:21;
+A11: for m st n<=m holds abs((f/*s).m-g)<g1 by A3,SEQ_2:def 7;
+    abs((f/*s).n-g)<g1 by A11;
+    then abs(f.(s.n)-g)<g1 by A10,FUNCT_2:185;
     hence contradiction by A6;
   end;
   assume
@@ -3025,10 +3026,10 @@ A17:  for m st n<=m holds s.m<r by A13,Def5;
 A18:  n<=m;
       s.m in rng s by RFUNCT_2:10;
       then abs(f.(s.m)-g)<g1 by A13,A16,A17,A18;
-      hence abs((f*s).m-g)<g1 by A13,RFUNCT_2:21;
+      hence abs((f/*s).m-g)<g1 by A13,FUNCT_2:185;
     end;
-    hence f*s is convergent by SEQ_2:def 6;
-    hence lim(f*s)=g by A14,SEQ_2:def 7;
+    hence f/*s is convergent by SEQ_2:def 6;
+    hence lim(f/*s)=g by A14,SEQ_2:def 7;
   end;
   hence thesis by A1,Def13;
 end;
@@ -3066,11 +3067,11 @@ A8: s is divergent_to+infty by Lm7,Th47,Th69;
     end;
     then
 A9: rng s c=dom f by TARSKI:def 3;
-    then f*s is convergent & lim(f*s)=g by A1,A2,A8,Def12;
+    then f/*s is convergent & lim(f/*s)=g by A1,A2,A8,Def12;
     then consider n such that
-A10: for m st n<=m holds abs((f*s).m-g)<g1 by A3,SEQ_2:def 7;
-    abs((f*s).n-g)<g1 by A10;
-    then abs(f.(s.n)-g)<g1 by A9,RFUNCT_2:21;
+A10: for m st n<=m holds abs((f/*s).m-g)<g1 by A3,SEQ_2:def 7;
+    abs((f/*s).n-g)<g1 by A10;
+    then abs(f.(s.n)-g)<g1 by A9,FUNCT_2:185;
     hence contradiction by A6;
   end;
   assume
@@ -3092,10 +3093,10 @@ A16:  for m st n<=m holds r<s.m by A12,Def4;
 A17:  n<=m;
       s.m in rng s by RFUNCT_2:10;
       then abs(f.(s.m)-g)<g1 by A12,A15,A16,A17;
-      hence abs((f*s).m-g)<g1 by A12,RFUNCT_2:21;
+      hence abs((f/*s).m-g)<g1 by A12,FUNCT_2:185;
     end;
-    hence f*s is convergent by SEQ_2:def 6;
-    hence lim(f*s)=g by A13,SEQ_2:def 7;
+    hence f/*s is convergent by SEQ_2:def 6;
+    hence lim(f/*s)=g by A13,SEQ_2:def 7;
   end;
   hence thesis by A1,Def12;
 end;
@@ -3120,10 +3121,10 @@ A5: lim_in+infty f=lim_in+infty f;
     then
 A6: seq is divergent_to+infty & rng seq c=dom f by VALUED_1:def 5;
     then
-A7: f*seq is convergent & lim(f*seq)=lim_in+infty f by A1,A5,Def12;
-    then r(#)(f*seq) is convergent by SEQ_2:21;
-    hence (r(#)f)*seq is convergent by A6,RFUNCT_2:24;
-    thus lim((r(#)f)*seq)=lim(r(#)(f*seq)) by A6,RFUNCT_2:24
+A7: f/*seq is convergent & lim(f/*seq)=lim_in+infty f by A1,A5,Def12;
+    then r(#)(f/*seq) is convergent by SEQ_2:21;
+    hence (r(#)f)/*seq is convergent by A6,RFUNCT_2:24;
+    thus lim((r(#)f)/*seq)=lim(r(#)(f/*seq)) by A6,RFUNCT_2:24
       .=r*(lim_in+infty f) by A7,SEQ_2:22;
   end;
   hence r(#)f is convergent_in+infty by A2,Def6;
@@ -3158,11 +3159,11 @@ A4: seq is divergent_to+infty & rng seq c=dom(f1+f2);
     then
 A5: dom(f1+f2)=dom f1/\dom f2 & rng seq c=dom f1 & rng seq c=dom f2 by Lm2;
     then
-A6: f1*seq is convergent & lim(f1*seq)=lim_in+infty f1 by A1,A3,A4,Def12;
-A7: f2*seq is convergent & lim(f2*seq)=lim_in+infty f2 by A1,A3,A4,A5,Def12;
-    then f1*seq+f2*seq is convergent by A6,SEQ_2:19;
-    hence (f1+f2)*seq is convergent by A4,A5,RFUNCT_2:23;
-    thus lim((f1+f2)*seq)=lim(f1*seq+f2*seq) by A4,A5,RFUNCT_2:23
+A6: f1/*seq is convergent & lim(f1/*seq)=lim_in+infty f1 by A1,A3,A4,Def12;
+A7: f2/*seq is convergent & lim(f2/*seq)=lim_in+infty f2 by A1,A3,A4,A5,Def12;
+    then f1/*seq+f2/*seq is convergent by A6,SEQ_2:19;
+    hence (f1+f2)/*seq is convergent by A4,A5,RFUNCT_2:23;
+    thus lim((f1+f2)/*seq)=lim(f1/*seq+f2/*seq) by A4,A5,RFUNCT_2:23
       .=lim_in+infty f1+lim_in+infty f2 by A6,A7,SEQ_2:20;
   end;
   hence f1+f2 is convergent_in+infty by A1,Def6;
@@ -3201,10 +3202,10 @@ A4: now
     assume
 A5: seq is divergent_to+infty & rng seq c=dom(f^);
     then
-A6: f*seq is convergent & lim(f*seq)=lim_in+infty f by A1,A2,Def12;
-    then (f*seq)" is convergent by A1,A5,RFUNCT_2:26,SEQ_2:35;
-    hence (f^)*seq is convergent by A5,RFUNCT_2:27;
-    thus lim((f^)*seq)=lim((f*seq)") by A5,RFUNCT_2:27
+A6: f/*seq is convergent & lim(f/*seq)=lim_in+infty f by A1,A2,Def12;
+    then (f/*seq)" is convergent by A1,A5,RFUNCT_2:26,SEQ_2:35;
+    hence (f^)/*seq is convergent by A5,RFUNCT_2:27;
+    thus lim((f^)/*seq)=lim((f/*seq)") by A5,RFUNCT_2:27
       .=(lim_in+infty f)" by A1,A5,A6,RFUNCT_2:26,SEQ_2:36;
   end;
   hence f^ is convergent_in+infty by A3,Def6;
@@ -3230,10 +3231,10 @@ A5: lim_in+infty f=lim_in+infty f;
     then
 A6: seq is divergent_to+infty & rng seq c=dom f by VALUED_1:def 11;
     then
-A7: f*seq is convergent & lim(f*seq)=lim_in+infty f by A1,A5,Def12;
-    then abs(f*seq) is convergent by SEQ_4:26;
-    hence abs(f)*seq is convergent by A6,RFUNCT_2:25;
-    thus lim(abs(f)*seq)=lim abs(f*seq) by A6,RFUNCT_2:25
+A7: f/*seq is convergent & lim(f/*seq)=lim_in+infty f by A1,A5,Def12;
+    then abs(f/*seq) is convergent by SEQ_4:26;
+    hence (abs f)/*seq is convergent by A6,RFUNCT_2:25;
+    thus lim((abs f)/*seq)=lim abs(f/*seq) by A6,RFUNCT_2:25
       .=abs(lim_in+infty f) by A7,SEQ_4:27;
   end;
   hence abs(f) is convergent_in+infty by A2,Def6;
@@ -3265,10 +3266,10 @@ A6: dom(f^)=dom f\f"{0} by RFUNCT_1:def 8;
     dom f\f"{0}c=dom f by XBOOLE_1:36;
     then rng seq c=dom f by A5,A6,XBOOLE_1:1;
     then
-A7: f*seq is convergent & lim(f*seq)=lim_in+infty f by A1,A5,Def12;
-    (f*seq)" is convergent by A7,A1,A5,RFUNCT_2:26,SEQ_2:35;
-    hence (f^)*seq is convergent by A5,RFUNCT_2:27;
-    thus lim((f^)*seq)=lim((f*seq)") by A5,RFUNCT_2:27
+A7: f/*seq is convergent & lim(f/*seq)=lim_in+infty f by A1,A5,Def12;
+    (f/*seq)" is convergent by A7,A1,A5,RFUNCT_2:26,SEQ_2:35;
+    hence (f^)/*seq is convergent by A5,RFUNCT_2:27;
+    thus lim((f^)/*seq)=lim((f/*seq)") by A5,RFUNCT_2:27
       .=(lim_in+infty f)" by A1,A7,A5,RFUNCT_2:26,SEQ_2:36;
   end;
   hence f^ is convergent_in+infty by A2,Def6;
@@ -3292,11 +3293,11 @@ A4: seq is divergent_to+infty & rng seq c=dom(f1(#)f2);
     then
 A5: dom(f1(#)f2)=dom f1/\dom f2 & rng seq c=dom f1 & rng seq c=dom f2 by Lm3;
     then
-A6: f1*seq is convergent & lim(f1*seq)=lim_in+infty f1 by A1,A3,A4,Def12;
-A7: f2*seq is convergent & lim(f2*seq)=lim_in+infty f2 by A1,A3,A4,A5,Def12;
-    then (f1*seq)(#)(f2*seq) is convergent by A6,SEQ_2:28;
-    hence (f1(#)f2)*seq is convergent by A4,A5,RFUNCT_2:23;
-    thus lim((f1(#)f2)*seq)=lim((f1*seq)(#)(f2*seq)) by A4,A5,RFUNCT_2:23
+A6: f1/*seq is convergent & lim(f1/*seq)=lim_in+infty f1 by A1,A3,A4,Def12;
+A7: f2/*seq is convergent & lim(f2/*seq)=lim_in+infty f2 by A1,A3,A4,A5,Def12;
+    then (f1/*seq)(#)(f2/*seq) is convergent by A6,SEQ_2:28;
+    hence (f1(#)f2)/*seq is convergent by A4,A5,RFUNCT_2:23;
+    thus lim((f1(#)f2)/*seq)=lim((f1/*seq)(#)(f2/*seq)) by A4,A5,RFUNCT_2:23
       .=(lim_in+infty f1)*(lim_in+infty f2) by A6,A7,SEQ_2:29;
   end;
   hence f1(#) f2 is convergent_in+infty by A1,Def6;
@@ -3364,10 +3365,10 @@ A5: lim_in-infty f=lim_in-infty f;
     then
 A6: seq is divergent_to-infty & rng seq c=dom f by VALUED_1:def 5;
     then
-A7: f*seq is convergent & lim(f*seq)=lim_in-infty f by A1,A5,Def13;
-    then r(#)(f*seq) is convergent by SEQ_2:21;
-    hence (r(#)f)*seq is convergent by A6,RFUNCT_2:24;
-    thus lim((r(#)f)*seq)=lim(r(#)(f*seq)) by A6,RFUNCT_2:24
+A7: f/*seq is convergent & lim(f/*seq)=lim_in-infty f by A1,A5,Def13;
+    then r(#)(f/*seq) is convergent by SEQ_2:21;
+    hence (r(#)f)/*seq is convergent by A6,RFUNCT_2:24;
+    thus lim((r(#)f)/*seq)=lim(r(#)(f/*seq)) by A6,RFUNCT_2:24
       .=r*(lim_in-infty f) by A7,SEQ_2:22;
   end;
   hence r(#)f is convergent_in-infty by A2,Def9;
@@ -3405,11 +3406,11 @@ A5: rng seq c=dom f1/\dom f2 by VALUED_1:def 1;
     then
 A6: rng seq c=dom f1 & rng seq c=dom f2 by A5,XBOOLE_1:1;
     then
-A7: f1*seq is convergent & lim(f1*seq)=lim_in-infty f1 by A1,A3,A4,Def13;
-A8: f2*seq is convergent & lim(f2*seq)=lim_in-infty f2 by A1,A3,A4,A6,Def13;
-    then f1*seq+f2*seq is convergent by A7,SEQ_2:19;
-    hence (f1+f2)*seq is convergent by A5,RFUNCT_2:23;
-    thus lim((f1+f2)*seq)=lim(f1*seq+f2*seq) by A5,RFUNCT_2:23
+A7: f1/*seq is convergent & lim(f1/*seq)=lim_in-infty f1 by A1,A3,A4,Def13;
+A8: f2/*seq is convergent & lim(f2/*seq)=lim_in-infty f2 by A1,A3,A4,A6,Def13;
+    then f1/*seq+f2/*seq is convergent by A7,SEQ_2:19;
+    hence (f1+f2)/*seq is convergent by A5,RFUNCT_2:23;
+    thus lim((f1+f2)/*seq)=lim(f1/*seq+f2/*seq) by A5,RFUNCT_2:23
       .=lim_in-infty f1+lim_in-infty f2 by A7,A8,SEQ_2:20;
   end;
   hence f1+f2 is convergent_in-infty by A1,Def9;
@@ -3448,10 +3449,10 @@ A4: now
     assume
 A5: seq is divergent_to-infty & rng seq c=dom(f^);
     then
-A6: f*seq is convergent & lim(f*seq)=lim_in-infty f by A1,A2,Def13;
-    then (f*seq)" is convergent by A1,A5,RFUNCT_2:26,SEQ_2:35;
-    hence (f^)*seq is convergent by A5,RFUNCT_2:27;
-    thus lim((f^)*seq)=lim((f*seq)") by A5,RFUNCT_2:27
+A6: f/*seq is convergent & lim(f/*seq)=lim_in-infty f by A1,A2,Def13;
+    then (f/*seq)" is convergent by A1,A5,RFUNCT_2:26,SEQ_2:35;
+    hence (f^)/*seq is convergent by A5,RFUNCT_2:27;
+    thus lim((f^)/*seq)=lim((f/*seq)") by A5,RFUNCT_2:27
       .=(lim_in-infty f)" by A1,A5,A6,RFUNCT_2:26,SEQ_2:36;
   end;
   hence f^ is convergent_in-infty by A3,Def9;
@@ -3477,10 +3478,10 @@ A5: lim_in-infty f=lim_in-infty f;
     then
 A6: seq is divergent_to-infty & rng seq c=dom f by VALUED_1:def 11;
     then
-A7: f*seq is convergent & lim(f*seq)=lim_in-infty f by A1,A5,Def13;
-    then abs(f*seq) is convergent by SEQ_4:26;
-    hence abs(f)*seq is convergent by A6,RFUNCT_2:25;
-    thus lim(abs(f)*seq)=lim abs(f*seq) by A6,RFUNCT_2:25
+A7: f/*seq is convergent & lim(f/*seq)=lim_in-infty f by A1,A5,Def13;
+    then abs(f/*seq) is convergent by SEQ_4:26;
+    hence (abs f)/*seq is convergent by A6,RFUNCT_2:25;
+    thus lim((abs f)/*seq)=lim abs(f/*seq) by A6,RFUNCT_2:25
       .=abs(lim_in-infty f) by A7,SEQ_4:27;
   end;
   hence abs(f) is convergent_in-infty by A2,Def9;
@@ -3512,10 +3513,10 @@ A6: dom(f^)=dom f\f"{0} by RFUNCT_1:def 8;
     dom f\f"{0}c=dom f by XBOOLE_1:36;
     then rng seq c=dom f by A5,A6,XBOOLE_1:1;
     then
-A7: f*seq is convergent & lim(f*seq)=lim_in-infty f by A1,A5,Def13;
-    (f*seq)" is convergent by A1,A7,SEQ_2:35,A5,RFUNCT_2:26;
-    hence (f^)*seq is convergent by A5,RFUNCT_2:27;
-    thus lim((f^)*seq)=lim((f*seq)") by A5,RFUNCT_2:27
+A7: f/*seq is convergent & lim(f/*seq)=lim_in-infty f by A1,A5,Def13;
+    (f/*seq)" is convergent by A1,A7,SEQ_2:35,A5,RFUNCT_2:26;
+    hence (f^)/*seq is convergent by A5,RFUNCT_2:27;
+    thus lim((f^)/*seq)=lim((f/*seq)") by A5,RFUNCT_2:27
       .=(lim_in-infty f)" by A1,A7,A5,RFUNCT_2:26,SEQ_2:36;
   end;
   hence f^ is convergent_in-infty by A2,Def9;
@@ -3540,13 +3541,13 @@ A5: dom f1/\dom f2 c=dom f1 & dom f1/\dom f2 c=dom f2 by XBOOLE_1:17;
 A6: dom(f1(#)f2)=dom f1/\dom f2 by VALUED_1:def 4;
     then rng seq c=dom f1 by A4,A5,XBOOLE_1:1;
     then
-A7: f1*seq is convergent & lim(f1*seq)=lim_in-infty f1 by A1,A3,A4,Def13;
+A7: f1/*seq is convergent & lim(f1/*seq)=lim_in-infty f1 by A1,A3,A4,Def13;
     rng seq c=dom f2 by A4,A5,A6,XBOOLE_1:1;
     then
-A8: f2*seq is convergent & lim(f2*seq)=lim_in-infty f2 by A1,A3,A4,Def13;
-    then (f1*seq)(#)(f2*seq) is convergent by A7,SEQ_2:28;
-    hence (f1(#)f2)*seq is convergent by A4,A6,RFUNCT_2:23;
-    thus lim((f1(#)f2)*seq)=lim((f1*seq)(#)(f2*seq)) by A4,A6,RFUNCT_2:23
+A8: f2/*seq is convergent & lim(f2/*seq)=lim_in-infty f2 by A1,A3,A4,Def13;
+    then (f1/*seq)(#)(f2/*seq) is convergent by A7,SEQ_2:28;
+    hence (f1(#)f2)/*seq is convergent by A4,A6,RFUNCT_2:23;
+    thus lim((f1(#)f2)/*seq)=lim((f1/*seq)(#)(f2/*seq)) by A4,A6,RFUNCT_2:23
       .=(lim_in-infty f1)*(lim_in-infty f2) by A7,A8,SEQ_2:29;
   end;
   hence f1(#) f2 is convergent_in-infty by A1,Def9;
@@ -3624,7 +3625,7 @@ A9: rng(s^\k)c=rng s by RFUNCT_2:7;
 A10: rng(s^\k)c=dom f1/\dom f2 & rng(s^\k)c=dom f1 & rng(s^\k)c=dom f2
     by A5,A6,XBOOLE_1:1;
     then
-A11: f1*(s^\k) is convergent & lim(f1*(s^\k))=0 by A1,A8,Def12;
+A11: f1/*(s^\k) is convergent & lim(f1/*(s^\k))=0 by A1,A8,Def12;
     now
       set t=abs(g)+1;
       0<=abs(g) by COMPLEX1:132;
@@ -3632,27 +3633,27 @@ A11: f1*(s^\k) is convergent & lim(f1*(s^\k))=0 by A1,A8,Def12;
       let n;
 A12:  (s^\k).n in rng(s^\k) by RFUNCT_2:10;
       r<s.(n+k) by A7,NAT_1:12;
-      then r<(s^\k).n by SEQM_3:def 9;
+      then r<(s^\k).n by NAT_1:def 3;
       then (s^\k).n in {g1: r<g1};
       then (s^\k).n in right_open_halfline(r) by XXREAL_1:230;
 
 then (s^\k).n in right_open_halfline(r)/\dom f2 by A10,A12,XBOOLE_0:def 3;
       then abs(f2.((s^\k).n))<=g by A3;
       then
-A13:  abs((f2*(s^\k)).n)<= g by A6,A9,RFUNCT_2:21,XBOOLE_1:1;
+A13:  abs((f2/*(s^\k)).n)<= g by A6,A9,FUNCT_2:185,XBOOLE_1:1;
       g<=abs(g) by ABSVALUE:11;
       then g<t by Lm1;
-      hence abs((f2*(s^\k)).n)<t by A13,XXREAL_0:2;
+      hence abs((f2/*(s^\k)).n)<t by A13,XXREAL_0:2;
     end;
     then
-A14: f2*(s^\k) is bounded by SEQ_2:15;
+A14: f2/*(s^\k) is bounded by SEQ_2:15;
     then
-A15: (f1*(s^\k))(#)(f2*(s^\k)) is convergent by A11,SEQ_2:39;
-A16: lim((f1*(s^\k))(#)(f2*(s^\k)))=0 by A11,A14,SEQ_2:40;
-A17: (f1*(s^\k))(#)(f2*(s^\k))=(f1(#)f2)*(s^\k) by A10,RFUNCT_2:23
-      .=((f1(#)f2)*s)^\k by A5,RFUNCT_2:22;
-    hence (f1(#)f2)*s is convergent by A15,SEQ_4:35;
-    thus lim((f1(#)f2)*s)=0 by A15,A16,A17,SEQ_4:36;
+A15: (f1/*(s^\k))(#)(f2/*(s^\k)) is convergent by A11,SEQ_2:39;
+A16: lim((f1/*(s^\k))(#)(f2/*(s^\k)))=0 by A11,A14,SEQ_2:40;
+A17: (f1/*(s^\k))(#)(f2/*(s^\k))=(f1(#)f2)/*(s^\k) by A10,RFUNCT_2:23
+      .=((f1(#)f2)/*s)^\k by A5,RFUNCT_2:22;
+    hence (f1(#)f2)/*s is convergent by A15,SEQ_4:35;
+    thus lim((f1(#)f2)/*s)=0 by A15,A16,A17,SEQ_4:36;
   end;
   hence f1(#) f2 is convergent_in+infty by A1,Def6;
   hence thesis by A4,Def12;
@@ -3688,7 +3689,7 @@ A9: rng(s^\k)c=rng s by RFUNCT_2:7;
 A10: rng(s^\k)c=dom f1/\dom f2 & rng(s^\k)c=dom f1 & rng(s^\k)c=dom f2
     by A5,A6,XBOOLE_1:1;
     then
-A11: f1*(s^\k) is convergent & lim(f1*(s^\k))=0 by A1,A8,Def13;
+A11: f1/*(s^\k) is convergent & lim(f1/*(s^\k))=0 by A1,A8,Def13;
     now
       set t=abs(g)+1;
       0<=abs(g) by COMPLEX1:132;
@@ -3696,26 +3697,26 @@ A11: f1*(s^\k) is convergent & lim(f1*(s^\k))=0 by A1,A8,Def13;
       let n;
 A12:  (s^\k).n in rng(s^\k) by RFUNCT_2:10;
       s.(n+k)<r by A7,NAT_1:12;
-      then (s^\k).n<r by SEQM_3:def 9;
+      then (s^\k).n<r by NAT_1:def 3;
       then (s^\k).n in {g1: g1<r};
       then (s^\k).n in left_open_halfline(r) by XXREAL_1:229;
       then (s^\k).n in left_open_halfline(r)/\dom f2 by A10,A12,XBOOLE_0:def 3;
       then abs(f2.((s^\k).n))<=g by A3;
       then
-A13:  abs((f2*(s^\k)).n)<= g by A6,A9,RFUNCT_2:21,XBOOLE_1:1;
+A13:  abs((f2/*(s^\k)).n)<= g by A6,A9,FUNCT_2:185,XBOOLE_1:1;
       g<=abs(g) by ABSVALUE:11;
       then g<t by Lm1;
-      hence abs((f2*(s^\k)).n)<t by A13,XXREAL_0:2;
+      hence abs((f2/*(s^\k)).n)<t by A13,XXREAL_0:2;
     end;
     then
-A14: f2*(s^\k) is bounded by SEQ_2:15;
+A14: f2/*(s^\k) is bounded by SEQ_2:15;
     then
-A15: (f1*(s^\k))(#)(f2*(s^\k)) is convergent by A11,SEQ_2:39;
-A16: lim((f1*(s^\k))(#)(f2*(s^\k)))=0 by A11,A14,SEQ_2:40;
-A17: (f1*(s^\k))(#)(f2*(s^\k))=(f1(#)f2)*(s^\k) by A10,RFUNCT_2:23
-      .=((f1(#)f2)*s)^\k by A5,RFUNCT_2:22;
-    hence (f1(#)f2)*s is convergent by A15,SEQ_4:35;
-    thus lim((f1(#)f2)*s)=0 by A15,A16,A17,SEQ_4:36;
+A15: (f1/*(s^\k))(#)(f2/*(s^\k)) is convergent by A11,SEQ_2:39;
+A16: lim((f1/*(s^\k))(#)(f2/*(s^\k)))=0 by A11,A14,SEQ_2:40;
+A17: (f1/*(s^\k))(#)(f2/*(s^\k))=(f1(#)f2)/*(s^\k) by A10,RFUNCT_2:23
+      .=((f1(#)f2)/*s)^\k by A5,RFUNCT_2:22;
+    hence (f1(#)f2)/*s is convergent by A15,SEQ_4:35;
+    thus lim((f1(#)f2)/*s)=0 by A15,A16,A17,SEQ_4:36;
   end;
   hence f1(#) f2 is convergent_in-infty by A1,Def9;
   hence thesis by A4,Def13;
@@ -3760,7 +3761,7 @@ A8:     seq^\k is divergent_to+infty by A6,Th53;
           then consider n such that
 A9:       x=(seq^\k).n by RFUNCT_2:9;
           r1<seq.(n+k) by A7,NAT_1:12;
-          then r1<(seq^\k).n by SEQM_3:def 9;
+          then r1<(seq^\k).n by NAT_1:def 3;
           then x in {g: r1<g} by A9;
           hence x in right_open_halfline(r1) by XXREAL_1:230;
         end;
@@ -3775,13 +3776,13 @@ A13:    rng(seq^\k)c=dom f1/\right_open_halfline(r1) by A4,XBOOLE_1:1;
 A14:    dom f1/\right_open_halfline(r1)c=dom f1 by XBOOLE_1:17;
         then rng(seq^\k)c=dom f1 by A13,XBOOLE_1:1;
         then
-A15:    f1*(seq^\k) is convergent & lim(f1*(seq^\k))=lim_in+infty f1
+A15:    f1/*(seq^\k) is convergent & lim(f1/*(seq^\k))=lim_in+infty f1
         by A1,A8,Def12;
 A16:    rng(seq^\k)c=dom f2/\right_open_halfline(r1) by A4,A13,XBOOLE_1:1;
 A17:    dom f2/\right_open_halfline(r1) c=dom f2 by XBOOLE_1:17;
         then rng(seq^\k)c=dom f2 by A16,XBOOLE_1:1;
         then
-A18:    f2*(seq^\k) is convergent & lim(f2*(seq^\k))=lim_in+infty f1
+A18:    f2/*(seq^\k) is convergent & lim(f2/*(seq^\k))=lim_in+infty f1
         by A1,A8,Def12;
 A19:    now
           let n;
@@ -3790,18 +3791,18 @@ A19:    now
 then f1.((seq^\k).n)<=f.((seq^\k).n) & f.((seq^\k).n)<=f2.((seq^\k).n) by A3
           ,A12;
 
-then f1.((seq^\k).n)<=(f*(seq^\k)).n & (f*(seq^\k)).n<=f2.((seq^\k).n)
-          by A6,A11,RFUNCT_2:21,XBOOLE_1:1;
+then f1.((seq^\k).n)<=(f/*(seq^\k)).n & (f/*(seq^\k)).n<=f2.((seq^\k).n)
+          by A6,A11,FUNCT_2:185,XBOOLE_1:1;
 
-hence (f1*(seq^\k)).n<=(f*(seq^\k)).n & (f*(seq^\k)).n<=(f2*(seq^\k)).n
-          by A13,A14,A16,A17,RFUNCT_2:21,XBOOLE_1:1;
+hence (f1/*(seq^\k)).n<=(f/*(seq^\k)).n & (f/*(seq^\k)).n<=(f2/*(seq^\k)).n
+          by A13,A14,A16,A17,FUNCT_2:185,XBOOLE_1:1;
         end;
-A20:    f*(seq^\k)=(f*seq)^\k by A6,RFUNCT_2:22;
-        then (f*seq)^\k is convergent by A15,A18,A19,SEQ_2:33;
+A20:    f/*(seq^\k)=(f/*seq)^\k by A6,RFUNCT_2:22;
+        then (f/*seq)^\k is convergent by A15,A18,A19,SEQ_2:33;
         hence
-A21:    f*seq is convergent by SEQ_4:35;
-        lim((f*seq)^\k)=lim_in+infty f1 by A15,A18,A19,A20,SEQ_2:34;
-        hence lim(f*seq)=lim_in+infty f1 by A21,SEQ_4:33;
+A21:    f/*seq is convergent by SEQ_4:35;
+        lim((f/*seq)^\k)=lim_in+infty f1 by A15,A18,A19,A20,SEQ_2:34;
+        hence lim(f/*seq)=lim_in+infty f1 by A21,SEQ_4:33;
       end;
       hence f is convergent_in+infty by A1,Def6;
       hence thesis by A5,Def12;
@@ -3824,7 +3825,7 @@ A26:    seq^\k is divergent_to+infty by A24,Th53;
           then consider n such that
 A27:      x=(seq^\k).n by RFUNCT_2:9;
           r1<seq.(n+k) by A25,NAT_1:12;
-          then r1<(seq^\k).n by SEQM_3:def 9;
+          then r1<(seq^\k).n by NAT_1:def 3;
           then x in {g: r1<g} by A27;
           hence x in right_open_halfline(r1) by XXREAL_1:230;
         end;
@@ -3839,13 +3840,13 @@ A31:    rng(seq^\k)c=dom f2/\right_open_halfline(r1) by A22,XBOOLE_1:1;
 A32:    dom f2/\right_open_halfline(r1)c=dom f2 by XBOOLE_1:17;
         then rng(seq^\k)c=dom f2 by A31,XBOOLE_1:1;
         then
-A33:    f2*(seq^\k) is convergent & lim(f2*(seq^\k))=lim_in+infty f1
+A33:    f2/*(seq^\k) is convergent & lim(f2/*(seq^\k))=lim_in+infty f1
         by A1,A26,Def12;
 A34:    rng(seq^\k)c=dom f1/\right_open_halfline(r1) by A22,A31,XBOOLE_1:1;
 A35:    dom f1/\right_open_halfline(r1) c=dom f1 by XBOOLE_1:17;
         then rng(seq^\k)c=dom f1 by A34,XBOOLE_1:1;
         then
-A36:    f1*(seq^\k) is convergent & lim(f1*(seq^\k))=lim_in+infty f1
+A36:    f1/*(seq^\k) is convergent & lim(f1/*(seq^\k))=lim_in+infty f1
         by A1,A26,Def12;
 A37:    now
           let n;
@@ -3854,18 +3855,18 @@ A37:    now
 then f1.((seq^\k).n)<=f.((seq^\k).n) & f.((seq^\k).n)<=f2.((seq^\k).n) by A3
           ,A30;
 
-then f1.((seq^\k).n)<=(f*(seq^\k)).n & (f*(seq^\k)).n<=f2.((seq^\k).n)
-          by A24,A29,RFUNCT_2:21,XBOOLE_1:1;
+then f1.((seq^\k).n)<=(f/*(seq^\k)).n & (f/*(seq^\k)).n<=f2.((seq^\k).n)
+          by A24,A29,FUNCT_2:185,XBOOLE_1:1;
 
-hence (f1*(seq^\k)).n<=(f*(seq^\k)).n & (f*(seq^\k)).n<=(f2*(seq^\k)).n
-          by A31,A32,A34,A35,RFUNCT_2:21,XBOOLE_1:1;
+hence (f1/*(seq^\k)).n<=(f/*(seq^\k)).n & (f/*(seq^\k)).n<=(f2/*(seq^\k)).n
+          by A31,A32,A34,A35,FUNCT_2:185,XBOOLE_1:1;
         end;
-A38:    f*(seq^\k)=(f*seq)^\k by A24,RFUNCT_2:22;
-        then (f*seq)^\k is convergent by A33,A36,A37,SEQ_2:33;
+A38:    f/*(seq^\k)=(f/*seq)^\k by A24,RFUNCT_2:22;
+        then (f/*seq)^\k is convergent by A33,A36,A37,SEQ_2:33;
         hence
-A39:    f*seq is convergent by SEQ_4:35;
-        lim((f*seq)^\k)=lim_in+infty f1 by A33,A36,A37,A38,SEQ_2:34;
-        hence lim(f*seq)=lim_in+infty f1 by A39,SEQ_4:33;
+A39:    f/*seq is convergent by SEQ_4:35;
+        lim((f/*seq)^\k)=lim_in+infty f1 by A33,A36,A37,A38,SEQ_2:34;
+        hence lim(f/*seq)=lim_in+infty f1 by A39,SEQ_4:33;
       end;
       hence f is convergent_in+infty by A1,Def6;
       hence thesis by A23,Def12;
@@ -3967,7 +3968,7 @@ A8:     seq^\k is divergent_to-infty by A6,Th54;
           then consider n such that
 A9:       x=(seq^\k).n by RFUNCT_2:9;
           seq.(n+k)<r1 by A7,NAT_1:12;
-          then (seq^\k).n<r1 by SEQM_3:def 9;
+          then (seq^\k).n<r1 by NAT_1:def 3;
           then x in {g: g<r1} by A9;
           hence x in left_open_halfline(r1) by XXREAL_1:229;
         end;
@@ -3982,13 +3983,13 @@ A13:    rng(seq^\k)c=dom f1/\left_open_halfline(r1) by A4,XBOOLE_1:1;
 A14:    dom f1/\left_open_halfline(r1)c=dom f1 by XBOOLE_1:17;
         then rng(seq^\k)c=dom f1 by A13,XBOOLE_1:1;
         then
-A15:    f1*(seq^\k) is convergent & lim(f1*(seq^\k))=lim_in-infty f1
+A15:    f1/*(seq^\k) is convergent & lim(f1/*(seq^\k))=lim_in-infty f1
         by A1,A8,Def13;
 A16:    rng(seq^\k)c=dom f2/\left_open_halfline(r1) by A4,A13,XBOOLE_1:1;
 A17:    dom f2/\left_open_halfline(r1)c=dom f2 by XBOOLE_1:17;
         then rng(seq^\k)c=dom f2 by A16,XBOOLE_1:1;
         then
-A18:    f2*(seq^\k) is convergent & lim(f2*(seq^\k))=lim_in-infty f1
+A18:    f2/*(seq^\k) is convergent & lim(f2/*(seq^\k))=lim_in-infty f1
         by A1,A8,Def13;
 A19:    now
           let n;
@@ -3997,18 +3998,18 @@ A19:    now
 then f1.((seq^\k).n)<=f.((seq^\k).n) & f.((seq^\k).n)<=f2.((seq^\k).n) by A3
           ,A12;
 
-then f1.((seq^\k).n)<=(f*(seq^\k)).n & (f*(seq^\k)).n<=f2.((seq^\k).n)
-          by A6,A11,RFUNCT_2:21,XBOOLE_1:1;
+then f1.((seq^\k).n)<=(f/*(seq^\k)).n & (f/*(seq^\k)).n<=f2.((seq^\k).n)
+          by A6,A11,FUNCT_2:185,XBOOLE_1:1;
 
-hence (f1*(seq^\k)).n<=(f*(seq^\k)).n & (f*(seq^\k)).n<=(f2*(seq^\k)).n
-          by A13,A14,A16,A17,RFUNCT_2:21,XBOOLE_1:1;
+hence (f1/*(seq^\k)).n<=(f/*(seq^\k)).n & (f/*(seq^\k)).n<=(f2/*(seq^\k)).n
+          by A13,A14,A16,A17,FUNCT_2:185,XBOOLE_1:1;
         end;
-A20:    f*(seq^\k)=(f*seq)^\k by A6,RFUNCT_2:22;
-        then (f*seq)^\k is convergent by A15,A18,A19,SEQ_2:33;
+A20:    f/*(seq^\k)=(f/*seq)^\k by A6,RFUNCT_2:22;
+        then (f/*seq)^\k is convergent by A15,A18,A19,SEQ_2:33;
         hence
-A21:    f*seq is convergent by SEQ_4:35;
-        lim((f*seq)^\k)=lim_in-infty f1 by A15,A18,A19,A20,SEQ_2:34;
-        hence lim(f*seq)=lim_in-infty f1 by A21,SEQ_4:33;
+A21:    f/*seq is convergent by SEQ_4:35;
+        lim((f/*seq)^\k)=lim_in-infty f1 by A15,A18,A19,A20,SEQ_2:34;
+        hence lim(f/*seq)=lim_in-infty f1 by A21,SEQ_4:33;
       end;
       hence f is convergent_in-infty by A1,Def9;
       hence thesis by A5,Def13;
@@ -4031,7 +4032,7 @@ A26:    seq^\k is divergent_to-infty by A24,Th54;
           then consider n such that
 A27:      x=(seq^\k).n by RFUNCT_2:9;
           seq.(n+k)<r1 by A25,NAT_1:12;
-          then (seq^\k).n<r1 by SEQM_3:def 9;
+          then (seq^\k).n<r1 by NAT_1:def 3;
           then x in {g: g<r1} by A27;
           hence x in left_open_halfline(r1) by XXREAL_1:229;
         end;
@@ -4046,13 +4047,13 @@ A31:    rng(seq^\k)c=dom f2/\left_open_halfline(r1) by A22,XBOOLE_1:1;
 A32:    dom f2/\left_open_halfline(r1)c=dom f2 by XBOOLE_1:17;
         then rng(seq^\k)c=dom f2 by A31,XBOOLE_1:1;
         then
-A33:    f2*(seq^\k) is convergent & lim(f2*(seq^\k))=lim_in-infty f1
+A33:    f2/*(seq^\k) is convergent & lim(f2/*(seq^\k))=lim_in-infty f1
         by A1,A26,Def13;
 A34:    rng(seq^\k)c=dom f1/\left_open_halfline(r1) by A22,A31,XBOOLE_1:1;
 A35:    dom f1/\left_open_halfline(r1)c=dom f1 by XBOOLE_1:17;
         then rng(seq^\k)c=dom f1 by A34,XBOOLE_1:1;
         then
-A36:    f1*(seq^\k) is convergent & lim(f1*(seq^\k))=lim_in-infty f1
+A36:    f1/*(seq^\k) is convergent & lim(f1/*(seq^\k))=lim_in-infty f1
         by A1,A26,Def13;
 A37:    now
           let n;
@@ -4061,18 +4062,18 @@ A37:    now
 then f1.((seq^\k).n)<=f.((seq^\k).n) & f.((seq^\k).n)<=f2.((seq^\k).n) by A3
           ,A30;
 
-then f1.((seq^\k).n)<=(f*(seq^\k)).n & (f*(seq^\k)).n<=f2.((seq^\k).n)
-          by A24,A29,RFUNCT_2:21,XBOOLE_1:1;
+then f1.((seq^\k).n)<=(f/*(seq^\k)).n & (f/*(seq^\k)).n<=f2.((seq^\k).n)
+          by A24,A29,FUNCT_2:185,XBOOLE_1:1;
 
-hence (f1*(seq^\k)).n<=(f*(seq^\k)).n & (f*(seq^\k)).n<=(f2*(seq^\k)).n
-          by A31,A32,A34,A35,RFUNCT_2:21,XBOOLE_1:1;
+hence (f1/*(seq^\k)).n<=(f/*(seq^\k)).n & (f/*(seq^\k)).n<=(f2/*(seq^\k)).n
+          by A31,A32,A34,A35,FUNCT_2:185,XBOOLE_1:1;
         end;
-A38:    f*(seq^\k)=(f*seq)^\k by A24,RFUNCT_2:22;
-        then (f*seq)^\k is convergent by A33,A36,A37,SEQ_2:33;
+A38:    f/*(seq^\k)=(f/*seq)^\k by A24,RFUNCT_2:22;
+        then (f/*seq)^\k is convergent by A33,A36,A37,SEQ_2:33;
         hence
-A39:    f*seq is convergent by SEQ_4:35;
-        lim((f*seq)^\k)=lim_in-infty f1 by A33,A36,A37,A38,SEQ_2:34;
-        hence lim(f*seq)=lim_in-infty f1 by A39,SEQ_4:33;
+A39:    f/*seq is convergent by SEQ_4:35;
+        lim((f/*seq)^\k)=lim_in-infty f1 by A33,A36,A37,A38,SEQ_2:34;
+        hence lim(f/*seq)=lim_in-infty f1 by A39,SEQ_4:33;
       end;
       hence f is convergent_in-infty by A1,Def9;
       hence thesis by A23,Def13;
@@ -4106,11 +4107,11 @@ A6: g<-abs(r)-abs(r1) by XREAL_1:4;
     take g;
 A7: -abs(r)<=r by ABSVALUE:11;
     0<=abs(r1) by COMPLEX1:132;
-    then -abs(r)-abs(r1)<=r-0 by A7,XREAL_1:15;
+    then -abs(r)-abs(r1)<=r-0 by A7,XREAL_1:15,16,17;
     hence g<r by A6,XXREAL_0:2;
 A8: -abs(r1)<=r1 by ABSVALUE:11;
     0<=abs(r) by COMPLEX1:132;
-    then -abs(r1)-abs(r)<=r1-0 by A8,XREAL_1:15;
+    then -abs(r1)-abs(r)<=r1-0 by A8,XREAL_1:15,16,17;
     then g<r1 by A6,XXREAL_0:2;
     then g in {g1: g1<r1};
     then g in left_open_halfline(r1) by XXREAL_1:229;
@@ -4195,7 +4196,7 @@ A12:  rng s2 c=dom f1
         hence x in dom f1 by XBOOLE_0:def 3;
       end;
       then
-A13:  f1*s2 is convergent & lim(f1*s2)=lim_in+infty f1 by A1,A10,A11,Def12;
+A13:  f1/*s2 is convergent & lim(f1/*s2)=lim_in+infty f1 by A1,A10,A11,Def12;
 A14:  rng s2 c=dom f2
       proof
         let x be real number;
@@ -4205,12 +4206,12 @@ A14:  rng s2 c=dom f2
         hence x in dom f2 by A3,XBOOLE_0:def 3;
       end;
       then
-A15:  f2*s2 is convergent & lim(f2*s2)=lim_in+infty f2 by A1,A10,A11,Def12;
+A15:  f2/*s2 is convergent & lim(f2/*s2)=lim_in+infty f2 by A1,A10,A11,Def12;
       now
         let n;
         f1.(s2.n)<=f2.(s2.n) by A3,A8;
-        then (f1*s2).n<=f2.(s2.n) by A12,RFUNCT_2:21;
-        hence (f1*s2).n<=(f2*s2).n by A14,RFUNCT_2:21;
+        then (f1/*s2).n<=f2.(s2.n) by A12,FUNCT_2:185;
+        hence (f1/*s2).n<=(f2/*s2).n by A14,FUNCT_2:185;
       end;
       hence thesis by A13,A15,SEQ_2:32;
     end;
@@ -4254,7 +4255,7 @@ A25:  rng s2 c=dom f2
         hence x in dom f2 by XBOOLE_0:def 3;
       end;
       then
-A26:  f2*s2 is convergent & lim(f2*s2)=lim_in+infty f2 by A1,A23,A24,Def12;
+A26:  f2/*s2 is convergent & lim(f2/*s2)=lim_in+infty f2 by A1,A23,A24,Def12;
 A27:  rng s2 c=dom f1
       proof
         let x be real number;
@@ -4264,12 +4265,12 @@ A27:  rng s2 c=dom f1
         hence x in dom f1 by A16,XBOOLE_0:def 3;
       end;
       then
-A28:  f1*s2 is convergent & lim(f1*s2)=lim_in+infty f1 by A1,A23,A24,Def12;
+A28:  f1/*s2 is convergent & lim(f1/*s2)=lim_in+infty f1 by A1,A23,A24,Def12;
       now
         let n;
         f1.(s2.n)<=f2.(s2.n) by A16,A21;
-        then (f1*s2).n<=f2.(s2.n) by A27,RFUNCT_2:21;
-        hence (f1*s2).n<=(f2*s2).n by A25,RFUNCT_2:21;
+        then (f1/*s2).n<=f2.(s2.n) by A27,FUNCT_2:185;
+        hence (f1/*s2).n<=(f2/*s2).n by A25,FUNCT_2:185;
       end;
       hence thesis by A26,A28,SEQ_2:32;
     end;
@@ -4306,10 +4307,10 @@ A5:     g<-n-abs(r) & g in dom f1 by A1,Def9;
         take g;
         0<=abs(r) by COMPLEX1:132;
         then
-A6:     -n-abs(r)<=-n-0 by XREAL_1:15;
+A6:     -n-abs(r)<=-n-0 by XREAL_1:15,16,17;
 A7:     0<=n by NAT_1:2;
         -abs(r)<=r by ABSVALUE:11;
-        then -abs(r)-n<=r-0 by A7,XREAL_1:15;
+        then -abs(r)-n<=r-0 by A7,XREAL_1:15,16,17;
         then g<r by A5,XXREAL_0:2;
         then g in {g2: g2<r};
         then g in left_open_halfline(r) by XXREAL_1:229;
@@ -4337,7 +4338,7 @@ A13:  rng s2 c=dom f1
         hence x in dom f1 by XBOOLE_0:def 3;
       end;
       then
-A14:  f1*s2 is convergent & lim(f1*s2)=lim_in-infty f1 by A1,A11,A12,Def13;
+A14:  f1/*s2 is convergent & lim(f1/*s2)=lim_in-infty f1 by A1,A11,A12,Def13;
 A15:  rng s2 c=dom f2
       proof
         let x be real number;
@@ -4347,12 +4348,12 @@ A15:  rng s2 c=dom f2
         hence x in dom f2 by A3,XBOOLE_0:def 3;
       end;
       then
-A16:  f2*s2 is convergent & lim(f2*s2)=lim_in-infty f2 by A1,A11,A12,Def13;
+A16:  f2/*s2 is convergent & lim(f2/*s2)=lim_in-infty f2 by A1,A11,A12,Def13;
       now
         let n;
         f1.(s2.n)<=f2.(s2.n) by A3,A8;
-        then (f1*s2).n<=f2.(s2.n) by A13,RFUNCT_2:21;
-        hence (f1*s2).n<=(f2*s2).n by A15,RFUNCT_2:21;
+        then (f1/*s2).n<=f2.(s2.n) by A13,FUNCT_2:185;
+        hence (f1/*s2).n<=(f2/*s2).n by A15,FUNCT_2:185;
       end;
       hence thesis by A14,A16,SEQ_2:32;
     end;
@@ -4368,10 +4369,10 @@ A19:    g<-n-abs(r) & g in dom f2 by A1,Def9;
         take g;
         0<=abs(r) by COMPLEX1:132;
         then
-A20:    -n-abs(r)<=-n-0 by XREAL_1:15;
+A20:    -n-abs(r)<=-n-0 by XREAL_1:15,16,17;
 A21:    0<=n by NAT_1:2;
         -abs(r)<=r by ABSVALUE:11;
-        then -abs(r)-n<=r-0 by A21,XREAL_1:15;
+        then -abs(r)-n<=r-0 by A21,XREAL_1:15,16,17;
         then g<r by A19,XXREAL_0:2;
         then g in {g2: g2<r};
         then g in left_open_halfline(r) by XXREAL_1:229;
@@ -4399,7 +4400,7 @@ A27:  rng s2 c=dom f2
         hence x in dom f2 by XBOOLE_0:def 3;
       end;
       then
-A28:  f2*s2 is convergent & lim(f2*s2)=lim_in-infty f2 by A1,A25,A26,Def13;
+A28:  f2/*s2 is convergent & lim(f2/*s2)=lim_in-infty f2 by A1,A25,A26,Def13;
 A29:  rng s2 c=dom f1
       proof
         let x be real number;
@@ -4409,12 +4410,12 @@ A29:  rng s2 c=dom f1
         hence x in dom f1 by A17,XBOOLE_0:def 3;
       end;
       then
-A30:  f1*s2 is convergent & lim(f1*s2)=lim_in-infty f1 by A1,A25,A26,Def13;
+A30:  f1/*s2 is convergent & lim(f1/*s2)=lim_in-infty f1 by A1,A25,A26,Def13;
       now
         let n;
         f1.(s2.n)<=f2.(s2.n) by A17,A22;
-        then (f1*s2).n<=f2.(s2.n) by A29,RFUNCT_2:21;
-        hence (f1*s2).n<=(f2*s2).n by A27,RFUNCT_2:21;
+        then (f1/*s2).n<=f2.(s2.n) by A29,FUNCT_2:185;
+        hence (f1/*s2).n<=(f2/*s2).n by A27,FUNCT_2:185;
       end;
       hence thesis by A28,A30,SEQ_2:32;
     end;
@@ -4448,9 +4449,9 @@ A7:   now
 A8:     seq is divergent_to+infty & rng seq c=dom(f^);
         dom(f^) c=dom f by A3,XBOOLE_1:36;
         then rng seq c=dom f by A8,XBOOLE_1:1;
-        then f*seq is divergent_to+infty by A6,A8,Def7;
-        then (f*seq)" is convergent & lim((f*seq)")=0 by Th61;
-        hence (f^)*seq is convergent & lim((f^)*seq)=0 by A8,RFUNCT_2:27;
+        then f/*seq is divergent_to+infty by A6,A8,Def7;
+        then (f/*seq)" is convergent & lim((f/*seq)")=0 by Th61;
+        hence (f^)/*seq is convergent & lim((f^)/*seq)=0 by A8,RFUNCT_2:27;
       end;
       hence f^ is convergent_in+infty by A4,Def6;
       hence thesis by A7,Def12;
@@ -4462,9 +4463,9 @@ A10:  now
 A11:    seq is divergent_to+infty & rng seq c=dom(f^);
         dom(f^) c=dom f by A3,XBOOLE_1:36;
         then rng seq c=dom f by A11,XBOOLE_1:1;
-        then f*seq is divergent_to-infty by A9,A11,Def8;
-        then (f*seq)" is convergent & lim((f*seq)")=0 by Th61;
-        hence (f^)*seq is convergent & lim((f^)*seq)=0 by A11,RFUNCT_2:27;
+        then f/*seq is divergent_to-infty by A9,A11,Def8;
+        then (f/*seq)" is convergent & lim((f/*seq)")=0 by Th61;
+        hence (f^)/*seq is convergent & lim((f^)/*seq)=0 by A11,RFUNCT_2:27;
       end;
       hence f^ is convergent_in+infty by A4,Def6;
       hence thesis by A10,Def12;
@@ -4499,9 +4500,9 @@ A7:   now
 A8:     seq is divergent_to-infty & rng seq c=dom(f^);
         dom(f^) c=dom f by A3,XBOOLE_1:36;
         then rng seq c=dom f by A8,XBOOLE_1:1;
-        then f*seq is divergent_to+infty by A6,A8,Def10;
-        then (f*seq)" is convergent & lim((f*seq)")=0 by Th61;
-        hence (f^)*seq is convergent & lim((f^)*seq)=0 by A8,RFUNCT_2:27;
+        then f/*seq is divergent_to+infty by A6,A8,Def10;
+        then (f/*seq)" is convergent & lim((f/*seq)")=0 by Th61;
+        hence (f^)/*seq is convergent & lim((f^)/*seq)=0 by A8,RFUNCT_2:27;
       end;
       hence f^ is convergent_in-infty by A4,Def9;
       hence thesis by A7,Def13;
@@ -4513,9 +4514,9 @@ A10:  now
 A11:    seq is divergent_to-infty & rng seq c=dom(f^);
         dom(f^) c=dom f by A3,XBOOLE_1:36;
         then rng seq c=dom f by A11,XBOOLE_1:1;
-        then f*seq is divergent_to-infty by A9,A11,Def11;
-        then (f*seq)" is convergent & lim((f*seq)")=0 by Th61;
-        hence (f^)*seq is convergent & lim((f^)*seq)=0 by A11,RFUNCT_2:27;
+        then f/*seq is divergent_to-infty by A9,A11,Def11;
+        then (f/*seq)" is convergent & lim((f/*seq)")=0 by Th61;
+        hence (f^)/*seq is convergent & lim((f^)/*seq)=0 by A11,RFUNCT_2:27;
       end;
       hence f^ is convergent_in-infty by A4,Def9;
       hence thesis by A10,Def13;
@@ -4563,30 +4564,30 @@ A9: rng(s^\k)c=rng s by RFUNCT_2:7;
   then
 A10: rng(s^\k)c=dom(f^) & rng(s^\k)c=dom f by A4,A8,XBOOLE_1:1;
   then
-A11: f*(s^\k) is convergent & lim(f*(s^\k))=0 by A1,A6,Def12;
-A12: f*(s^\k) is non-zero by A4,A9,RFUNCT_2:26,XBOOLE_1:1;
+A11: f/*(s^\k) is convergent & lim(f/*(s^\k))=0 by A1,A6,Def12;
+A12: f/*(s^\k) is non-zero by A4,A9,RFUNCT_2:26,XBOOLE_1:1;
 A13: now
     let n;
 A14: (s^\k).n in rng(s^\k) by RFUNCT_2:10;
     r<s.(n+k) by A5,NAT_1:12;
-    then r<(s^\k).n by SEQM_3:def 9;
+    then r<(s^\k).n by NAT_1:def 3;
     then (s^\k).n in {g2: r<g2};
     then (s^\k).n in right_open_halfline(r) by XXREAL_1:230;
     then (s^\k).n in dom f/\right_open_halfline(r) by A10,A14,XBOOLE_0:def 3;
     then
 A15: 0<= f.((s^\k).n) by A2;
-    (f*(s^\k)).n<>0 by A12,SEQ_1:7;
-    hence 0<(f*(s^\k)).n by A8,A9,A15,RFUNCT_2:21,XBOOLE_1:1;
+    (f/*(s^\k)).n<>0 by A12,SEQ_1:7;
+    hence 0<(f/*(s^\k)).n by A8,A9,A15,FUNCT_2:185,XBOOLE_1:1;
   end;
-  then for n holds 0<>(f*(s^\k)).n;
+  then for n holds 0<>(f/*(s^\k)).n;
   then
-A16: f*(s^\k) is non-zero by SEQ_1:7;
-  for n holds 0<=n implies 0<(f*(s^\k)).n by A13;
+A16: f/*(s^\k) is non-zero by SEQ_1:7;
+  for n holds 0<=n implies 0<(f/*(s^\k)).n by A13;
   then
-A17: (f*(s^\k))" is divergent_to+infty by A11,A16,Th62;
-  (f*(s^\k))"=((f*s)^\k)" by A4,A7,RFUNCT_2:22,XBOOLE_1:1
-    .=((f*s)")^\k by SEQM_3:41
-    .=((f^)*s)^\k by A4,RFUNCT_2:27;
+A17: (f/*(s^\k))" is divergent_to+infty by A11,A16,Th62;
+  (f/*(s^\k))"=((f/*s)^\k)" by A4,A7,RFUNCT_2:22,XBOOLE_1:1
+    .=((f/*s)")^\k by SEQM_3:41
+    .=((f^)/*s)^\k by A4,RFUNCT_2:27;
   hence thesis by A17,Th34;
 end;
 
@@ -4629,30 +4630,30 @@ A9: rng(s^\k)c=rng s by RFUNCT_2:7;
   then
 A10: rng(s^\k)c=dom(f^) & rng(s^\k)c=dom f by A4,A8,XBOOLE_1:1;
   then
-A11: f*(s^\k) is convergent & lim(f*(s^\k))=0 by A1,A6,Def12;
-A12: f*(s^\k) is non-zero by A4,A9,RFUNCT_2:26,XBOOLE_1:1;
+A11: f/*(s^\k) is convergent & lim(f/*(s^\k))=0 by A1,A6,Def12;
+A12: f/*(s^\k) is non-zero by A4,A9,RFUNCT_2:26,XBOOLE_1:1;
 A13: now
     let n;
 A14: (s^\k).n in rng(s^\k) by RFUNCT_2:10;
     r<s.(n+k) by A5,NAT_1:12;
-    then r<(s^\k).n by SEQM_3:def 9;
+    then r<(s^\k).n by NAT_1:def 3;
     then (s^\k).n in {g2: r<g2};
     then (s^\k).n in right_open_halfline(r) by XXREAL_1:230;
     then (s^\k).n in dom f/\right_open_halfline(r) by A10,A14,XBOOLE_0:def 3;
     then
 A15: f.((s^\k).n)<=0 by A2;
-    (f*(s^\k)).n<>0 by A12,SEQ_1:7;
-    hence (f*(s^\k)).n<0 by A8,A9,A15,RFUNCT_2:21,XBOOLE_1:1;
+    (f/*(s^\k)).n<>0 by A12,SEQ_1:7;
+    hence (f/*(s^\k)).n<0 by A8,A9,A15,FUNCT_2:185,XBOOLE_1:1;
   end;
-  then for n holds 0<>(f*(s^\k)).n;
+  then for n holds 0<>(f/*(s^\k)).n;
   then
-A16: f*(s^\k) is non-zero by SEQ_1:7;
-  for n holds 0<=n implies (f*(s^\k)).n<0 by A13;
+A16: f/*(s^\k) is non-zero by SEQ_1:7;
+  for n holds 0<=n implies (f/*(s^\k)).n<0 by A13;
   then
-A17: (f*(s^\k))" is divergent_to-infty by A11,A16,Th63;
-  (f*(s^\k))"=((f*s)^\k)" by A4,A7,RFUNCT_2:22,XBOOLE_1:1
-    .=((f*s)")^\k by SEQM_3:41
-    .=((f^)*s)^\k by A4,RFUNCT_2:27;
+A17: (f/*(s^\k))" is divergent_to-infty by A11,A16,Th63;
+  (f/*(s^\k))"=((f/*s)^\k)" by A4,A7,RFUNCT_2:22,XBOOLE_1:1
+    .=((f/*s)")^\k by SEQM_3:41
+    .=((f^)/*s)^\k by A4,RFUNCT_2:27;
   hence thesis by A17,Th34;
 end;
 
@@ -4695,30 +4696,30 @@ A9: rng(s^\k)c=rng s by RFUNCT_2:7;
   then
 A10: rng(s^\k)c=dom (f^) & rng(s^\k)c=dom f by A4,A8,XBOOLE_1:1;
   then
-A11: f*(s^\k) is convergent & lim(f*(s^\k))=0 by A1,A6,Def13;
-A12: f*(s^\k) is non-zero by A4,A9,RFUNCT_2:26,XBOOLE_1:1;
+A11: f/*(s^\k) is convergent & lim(f/*(s^\k))=0 by A1,A6,Def13;
+A12: f/*(s^\k) is non-zero by A4,A9,RFUNCT_2:26,XBOOLE_1:1;
 A13: now
     let n;
 A14: (s^\k).n in rng(s^\k) by RFUNCT_2:10;
     s.(n+k)<r by A5,NAT_1:12;
-    then (s^\k).n<r by SEQM_3:def 9;
+    then (s^\k).n<r by NAT_1:def 3;
     then (s^\k).n in {g2: g2<r};
     then (s^\k).n in left_open_halfline(r) by XXREAL_1:229;
     then (s^\k).n in dom f/\left_open_halfline(r) by A10,A14,XBOOLE_0:def 3;
     then
 A15: 0<=f.((s^\k).n) by A2;
-    0<>(f*(s^\k)).n by A12,SEQ_1:7;
-    hence 0<(f*(s^\k)).n by A8,A9,A15,RFUNCT_2:21,XBOOLE_1:1;
+    0<>(f/*(s^\k)).n by A12,SEQ_1:7;
+    hence 0<(f/*(s^\k)).n by A8,A9,A15,FUNCT_2:185,XBOOLE_1:1;
   end;
-  then for n holds 0<>(f*(s^\k)).n;
+  then for n holds 0<>(f/*(s^\k)).n;
   then
-A16: f*(s^\k) is non-zero by SEQ_1:7;
-  for n holds 0<=n implies 0<(f*(s^\k)).n by A13;
+A16: f/*(s^\k) is non-zero by SEQ_1:7;
+  for n holds 0<=n implies 0<(f/*(s^\k)).n by A13;
   then
-A17: (f*(s^\k))" is divergent_to+infty by A11,A16,Th62;
-  (f*(s^\k))"=((f*s)^\k)" by A4,A7,RFUNCT_2:22,XBOOLE_1:1
-    .=((f*s)")^\k by SEQM_3:41
-    .=((f^)*s)^\k by A4,RFUNCT_2:27;
+A17: (f/*(s^\k))" is divergent_to+infty by A11,A16,Th62;
+  (f/*(s^\k))"=((f/*s)^\k)" by A4,A7,RFUNCT_2:22,XBOOLE_1:1
+    .=((f/*s)")^\k by SEQM_3:41
+    .=((f^)/*s)^\k by A4,RFUNCT_2:27;
   hence thesis by A17,Th34;
 end;
 
@@ -4761,30 +4762,30 @@ A9: rng(s^\k)c=rng s by RFUNCT_2:7;
   then
 A10: rng(s^\k)c=dom(f^) & rng(s^\k)c=dom f by A4,A8,XBOOLE_1:1;
   then
-A11: f*(s^\k) is convergent & lim(f*(s^\k))=0 by A1,A6,Def13;
-A12: f*(s^\k) is non-zero by A4,A9,RFUNCT_2:26,XBOOLE_1:1;
+A11: f/*(s^\k) is convergent & lim(f/*(s^\k))=0 by A1,A6,Def13;
+A12: f/*(s^\k) is non-zero by A4,A9,RFUNCT_2:26,XBOOLE_1:1;
 A13: now
     let n;
 A14: (s^\k).n in rng(s^\k) by RFUNCT_2:10;
     s.(n+k)<r by A5,NAT_1:12;
-    then (s^\k).n<r by SEQM_3:def 9;
+    then (s^\k).n<r by NAT_1:def 3;
     then (s^\k).n in {g2: g2<r};
     then (s^\k).n in left_open_halfline(r) by XXREAL_1:229;
     then (s^\k).n in dom f/\left_open_halfline(r) by A10,A14,XBOOLE_0:def 3;
     then
 A15: f.((s^\k).n)<=0 by A2;
-    (f*(s^\k)).n<>0 by A12,SEQ_1:7;
-    hence (f*(s^\k)).n<0 by A8,A9,A15,RFUNCT_2:21,XBOOLE_1:1;
+    (f/*(s^\k)).n<>0 by A12,SEQ_1:7;
+    hence (f/*(s^\k)).n<0 by A8,A9,A15,FUNCT_2:185,XBOOLE_1:1;
   end;
-  then for n holds 0<>(f*(s^\k)).n;
+  then for n holds 0<>(f/*(s^\k)).n;
   then
-A16: f*(s^\k) is non-zero by SEQ_1:7;
-  for n holds 0<=n implies (f*(s^\k)).n<0 by A13;
+A16: f/*(s^\k) is non-zero by SEQ_1:7;
+  for n holds 0<=n implies (f/*(s^\k)).n<0 by A13;
   then
-A17: (f*(s^\k))" is divergent_to-infty by A11,A16,Th63;
-  (f*(s^\k))"=((f*s)^\k)" by A4,A7,RFUNCT_2:22,XBOOLE_1:1
-    .=((f*s)")^\k by SEQM_3:41
-    .=((f^)*s)^\k by A4,RFUNCT_2:27;
+A17: (f/*(s^\k))" is divergent_to-infty by A11,A16,Th63;
+  (f/*(s^\k))"=((f/*s)^\k)" by A4,A7,RFUNCT_2:22,XBOOLE_1:1
+    .=((f/*s)")^\k by SEQM_3:41
+    .=((f^)/*s)^\k by A4,RFUNCT_2:27;
   hence thesis by A17,Th34;
 end;
 
@@ -4855,27 +4856,27 @@ A13: rng(s^\k)c=rng s by RFUNCT_2:7;
   then
 A14: rng(s^\k)c=dom(f^) & rng(s^\k)c=dom f by A8,A12,XBOOLE_1:1;
   then
-A15: f*(s^\k) is convergent & lim(f*(s^\k))=0 by A1,A10,Def12;
+A15: f/*(s^\k) is convergent & lim(f/*(s^\k))=0 by A1,A10,Def12;
 A16: now
     let n;
 A17: (s^\k).n in rng(s^\k) by RFUNCT_2:10;
     r<s.(n+k) by A9,NAT_1:12;
-    then r<(s^\k).n by SEQM_3:def 9;
+    then r<(s^\k).n by NAT_1:def 3;
     then (s^\k).n in {g2: r<g2};
     then (s^\k).n in right_open_halfline(r) by XXREAL_1:230;
     then (s^\k).n in dom f/\right_open_halfline(r) by A14,A17,XBOOLE_0:def 3;
     then 0<f.((s^\k).n) by A2;
-    hence 0<(f*(s^\k)).n by A12,A13,RFUNCT_2:21,XBOOLE_1:1;
+    hence 0<(f/*(s^\k)).n by A12,A13,FUNCT_2:185,XBOOLE_1:1;
   end;
-  then for n holds 0<>(f*(s^\k)).n;
+  then for n holds 0<>(f/*(s^\k)).n;
   then
-A18: f*(s^\k) is non-zero by SEQ_1:7;
-  for n holds 0<=n implies 0<(f*(s^\k)).n by A16;
+A18: f/*(s^\k) is non-zero by SEQ_1:7;
+  for n holds 0<=n implies 0<(f/*(s^\k)).n by A16;
   then
-A19: (f*(s^\k))" is divergent_to+infty by A15,A18,Th62;
-  (f*(s^\k))"=((f*s)^\k)" by A8,A11,RFUNCT_2:22,XBOOLE_1:1
-    .=((f*s)")^\k by SEQM_3:41
-    .=((f^)*s)^\k by A8,RFUNCT_2:27;
+A19: (f/*(s^\k))" is divergent_to+infty by A15,A18,Th62;
+  (f/*(s^\k))"=((f/*s)^\k)" by A8,A11,RFUNCT_2:22,XBOOLE_1:1
+    .=((f/*s)")^\k by SEQM_3:41
+    .=((f^)/*s)^\k by A8,RFUNCT_2:27;
   hence thesis by A19,Th34;
 end;
 
@@ -4946,28 +4947,28 @@ A13: rng(s^\k)c=rng s by RFUNCT_2:7;
   then
 A14: rng(s^\k)c=dom(f^) & rng(s^\k)c=dom f by A8,A12,XBOOLE_1:1;
   then
-A15: f*(s^\k) is convergent & lim(f*(s^\k))=0 by A1,A10,Def12;
+A15: f/*(s^\k) is convergent & lim(f/*(s^\k))=0 by A1,A10,Def12;
 A16: now
     let n;
 A17: (s^\k).n in rng(s^\k) by RFUNCT_2:10;
     r<s.(n+k) by A9,NAT_1:12;
-    then r<(s^\k).n by SEQM_3:def 9;
+    then r<(s^\k).n by NAT_1:def 3;
     then (s^\k).n in {g2: r<g2};
     then (s^\k).n in right_open_halfline(r) by XXREAL_1:230;
     then (s^\k).n in dom f/\right_open_halfline(r) by A14,A17,XBOOLE_0:def 3;
     then f.((s^\k).n)<0 by A2;
-    hence (f*(s^\k)).n<0 by A12,A13,RFUNCT_2:21,XBOOLE_1:1;
+    hence (f/*(s^\k)).n<0 by A12,A13,FUNCT_2:185,XBOOLE_1:1;
   end;
-  then for n holds 0<>(f*(s^\k)).n;
+  then for n holds 0<>(f/*(s^\k)).n;
   then
-A18: f*(s^\k) is non-zero by SEQ_1:7;
-  for n holds 0<=n implies (f*(s^\k)).n<0 by A16;
+A18: f/*(s^\k) is non-zero by SEQ_1:7;
+  for n holds 0<=n implies (f/*(s^\k)).n<0 by A16;
   then
-A19: (f*(s^\k))" is divergent_to-infty by A15,A18,Th63;
-  (f*(s^\k))"=((f*s)^\k)" by A8,A11,RFUNCT_2:22,XBOOLE_1:1
-    .=((f*s)")^\k by SEQM_3:41
-    .=((f^)*s)^\k by A8,RFUNCT_2:27;
-  hence (f^)*s is divergent_to-infty by A19,Th34;
+A19: (f/*(s^\k))" is divergent_to-infty by A15,A18,Th63;
+  (f/*(s^\k))"=((f/*s)^\k)" by A8,A11,RFUNCT_2:22,XBOOLE_1:1
+    .=((f/*s)")^\k by SEQM_3:41
+    .=((f^)/*s)^\k by A8,RFUNCT_2:27;
+  hence (f^)/*s is divergent_to-infty by A19,Th34;
 end;
 
 theorem
@@ -5037,27 +5038,27 @@ A13: rng(s^\k)c=rng s by RFUNCT_2:7;
   then
 A14: rng(s^\k)c=dom(f^) & rng(s^\k)c=dom f by A8,A12,XBOOLE_1:1;
   then
-A15: f*(s^\k) is convergent & lim(f*(s^\k))=0 by A1,A10,Def13;
+A15: f/*(s^\k) is convergent & lim(f/*(s^\k))=0 by A1,A10,Def13;
 A16: now
     let n;
 A17: (s^\k).n in rng(s^\k) by RFUNCT_2:10;
     s.(n+k)<r by A9,NAT_1:12;
-    then (s^\k).n<r by SEQM_3:def 9;
+    then (s^\k).n<r by NAT_1:def 3;
     then (s^\k).n in {g2: g2<r};
     then (s^\k).n in left_open_halfline(r) by XXREAL_1:229;
     then (s^\k).n in dom f/\left_open_halfline(r) by A14,A17,XBOOLE_0:def 3;
     then 0<f.((s^\k).n) by A2;
-    hence 0<(f*(s^\k)).n by A12,A13,RFUNCT_2:21,XBOOLE_1:1;
+    hence 0<(f/*(s^\k)).n by A12,A13,FUNCT_2:185,XBOOLE_1:1;
   end;
-  then for n holds 0<>(f*(s^\k)).n;
+  then for n holds 0<>(f/*(s^\k)).n;
   then
-A18: f*(s^\k) is non-zero by SEQ_1:7;
-  for n holds 0<=n implies 0<(f*(s^\k)).n by A16;
+A18: f/*(s^\k) is non-zero by SEQ_1:7;
+  for n holds 0<=n implies 0<(f/*(s^\k)).n by A16;
   then
-A19: (f*(s^\k))" is divergent_to+infty by A15,A18,Th62;
-  (f*(s^\k))"=((f*s)^\k)" by A8,A11,RFUNCT_2:22,XBOOLE_1:1
-    .=((f*s)")^\k by SEQM_3:41
-    .=((f^)*s)^\k by A8,RFUNCT_2:27;
+A19: (f/*(s^\k))" is divergent_to+infty by A15,A18,Th62;
+  (f/*(s^\k))"=((f/*s)^\k)" by A8,A11,RFUNCT_2:22,XBOOLE_1:1
+    .=((f/*s)")^\k by SEQM_3:41
+    .=((f^)/*s)^\k by A8,RFUNCT_2:27;
   hence thesis by A19,Th34;
 end;
 
@@ -5128,27 +5129,27 @@ A13: rng(s^\k)c=rng s by RFUNCT_2:7;
   then
 A14: rng(s^\k)c=dom(f^) & rng(s^\k)c=dom f by A8,A12,XBOOLE_1:1;
   then
-A15: f*(s^\k) is convergent & lim(f*(s^\k))=0 by A1,A10,Def13;
+A15: f/*(s^\k) is convergent & lim(f/*(s^\k))=0 by A1,A10,Def13;
 A16: now
     let n;
 A17: (s^\k).n in rng(s^\k) by RFUNCT_2:10;
     s.(n+k)<r by A9,NAT_1:12;
-    then (s^\k).n<r by SEQM_3:def 9;
+    then (s^\k).n<r by NAT_1:def 3;
     then (s^\k).n in {g2: g2<r};
     then (s^\k).n in left_open_halfline(r) by XXREAL_1:229;
     then (s^\k).n in dom f/\left_open_halfline(r) by A14,A17,XBOOLE_0:def 3;
     then f.((s^\k).n)<0 by A2;
-    hence (f*(s^\k)).n<0 by A12,A13,RFUNCT_2:21,XBOOLE_1:1;
+    hence (f/*(s^\k)).n<0 by A12,A13,FUNCT_2:185,XBOOLE_1:1;
   end;
-  then for n holds 0<>(f*(s^\k)).n;
+  then for n holds 0<>(f/*(s^\k)).n;
   then
-A18: f*(s^\k) is non-zero by SEQ_1:7;
-  for n holds 0<=n implies (f*(s^\k)).n<0 by A16;
+A18: f/*(s^\k) is non-zero by SEQ_1:7;
+  for n holds 0<=n implies (f/*(s^\k)).n<0 by A16;
   then
-A19: (f*(s^\k))" is divergent_to-infty by A15,A18,Th63;
-  (f*(s^\k))"=((f*s)^\k)" by A8,A11,RFUNCT_2:22,XBOOLE_1:1
-    .=((f*s)")^\k by SEQM_3:41
-    .=((f^)*s)^\k by A8,RFUNCT_2:27;
+A19: (f/*(s^\k))" is divergent_to-infty by A15,A18,Th63;
+  (f/*(s^\k))"=((f/*s)^\k)" by A8,A11,RFUNCT_2:22,XBOOLE_1:1
+    .=((f/*s)")^\k by SEQM_3:41
+    .=((f^)/*s)^\k by A8,RFUNCT_2:27;
   hence thesis by A19,Th34;
 end;
 

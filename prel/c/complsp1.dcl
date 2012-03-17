@@ -32,10 +32,10 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
+<Func kind="K" nr="86"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="208">
+<Func kind="K" nr="210">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -63,24 +63,24 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="44" value="false"/>
-<Adjective nr="56"/>
+<Adjective nr="48" value="false"/>
+<Adjective nr="60"/>
 </Cluster>
 </FCluster>
 <FCluster aid="COMPLSP1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
+<Func kind="K" nr="86"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="223">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="44" value="false"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
+<Adjective nr="48" value="false"/>
+<Adjective nr="60"/>
+<Adjective nr="61"/>
 </Cluster>
 </FCluster>
 </Registrations>

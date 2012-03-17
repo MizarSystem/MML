@@ -9,7 +9,7 @@ environ
 
  vocabularies RELAT_1, ABSVALUE, FUNCT_1, ORDINAL2, LATTICES,
       COMPLEX1, SEQ_1, SEQ_2, SEQM_3, MEASURE6, ARYTM, ARYTM_1, PROB_1,
-      SQUARE_1, RLVECT_1, GROUP_1, MESFUNC5, SUPINF_1, RINFSUP1, FINSET_1,
+      SQUARE_1, RLVECT_1, GROUP_1, MESFUNC5, SUPINF_1, RINFSUP1,
       XXREAL_2, VALUED_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, XXREAL_0, RELSET_1, FUNCT_2, PARTFUN1, NAT_1,
@@ -21,10 +21,11 @@ environ
  registrations SUBSET_1, RELSET_1, XREAL_0, MEMBERED, ORDINAL1, INT_1, NUMBERS,
       XBOOLE_0, VALUED_0, SEQ_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, SUPINF_2, MESFUNC1, RINFSUP1, MEASURE6;
+ definitions TARSKI, SUPINF_2, MESFUNC1, RINFSUP1, MEASURE6, VALUED_0;
  theorems NAT_1, TARSKI, SUPINF_1, FUNCT_1, FUNCT_2, KURATO_2, SUPINF_2,
       EXTREAL1, INT_1, EXTREAL2, SEQ_2, SEQM_3, SEQ_4, RINFSUP1, XREAL_0,
-      XBOOLE_0, MESFUNC2, XREAL_1, XXREAL_0, ORDINAL1, MESFUNC5, XXREAL_2;
+      XBOOLE_0, MESFUNC2, XREAL_1, XXREAL_0, ORDINAL1, MESFUNC5, XXREAL_2,
+      VALUED_0;
  schemes FUNCT_2, DOMAIN_1;
 
 begin :: Inferior limit, superior limit and convergence of sequence
@@ -230,6 +231,8 @@ proof
   hence thesis by FUNCT_2:8;
 end;
 
+reserve e1,e2 for ext-real number;
+
 theorem Th7:
   (seq is increasing iff for n,m be Element of NAT st m<n holds seq.m<seq.n) &
   (seq is decreasing iff for n,m be Element of NAT st m<n holds seq.n<seq.m) &
@@ -239,16 +242,44 @@ theorem Th7:
   for n,m be Element of NAT st m<=n holds seq.n<=seq.m)
 proof
 A1: dom seq = NAT by FUNCT_2:def 1;
-  (seq is increasing iff
+X:  (seq is increasing implies
   for m, n st m in dom seq & n in dom seq & m < n holds seq.m < seq.n) &
-  (seq is decreasing iff
+  (seq is decreasing implies
   for m,n st m in dom seq & n in dom seq & m < n holds seq.n < seq.m) &
-  (seq is non-decreasing iff
+  (seq is non-decreasing implies
   for m,n st m in dom seq & n in dom seq & m <= n holds seq.m <= seq.n) &
-  (seq is non-increasing iff
+  (seq is non-increasing implies
   for m,n st m in dom seq & n in dom seq & m <= n holds seq.n <= seq.m)
-  by SEQM_3:def 1,def 2,def 3,def 4;
-  hence thesis by A1;
+  by VALUED_0:def 13,def 14,def 15,def 16;
+X1:  (for m, n st m in dom seq & n in dom seq & m < n holds seq.m < seq.n)
+       implies seq is increasing
+   proof assume
+Z:  for m, n st m in dom seq & n in dom seq & m < n holds seq.m < seq.n;
+    let e1,e2;
+    thus thesis by Z,A1;
+   end;
+X2:  (for m, n st m in dom seq & n in dom seq & m < n holds seq.m > seq.n)
+       implies seq is decreasing
+   proof assume
+Z:  for m, n st m in dom seq & n in dom seq & m < n holds seq.m > seq.n;
+    let e1,e2;
+    thus thesis by Z,A1;
+   end;
+X3:  (for m, n st m in dom seq & n in dom seq & m <= n holds seq.m >= seq.n)
+       implies seq is non-increasing
+   proof assume
+Z:  for m, n st m in dom seq & n in dom seq & m <= n holds seq.m >= seq.n;
+    let e1,e2;
+    thus thesis by Z,A1;
+   end;
+  (for m, n st m in dom seq & n in dom seq & m <= n holds seq.m <= seq.n)
+       implies seq is non-decreasing
+   proof assume
+Z:  for m, n st m in dom seq & n in dom seq & m <= n holds seq.m <= seq.n;
+    let e1,e2;
+    thus thesis by Z,A1;
+   end;
+  hence thesis by A1,X,X1,X2,X3;
 end;
 
 theorem Th8:
@@ -620,7 +651,7 @@ A7:   n1 <= m;
 A8:   n+k-k <= m-k by XREAL_1:11;
       k <= n+k by NAT_1:11;
       then reconsider mk = m-k as Element of NAT by A7,INT_1:18,XXREAL_0:2;
-      seq0.(m-k) = seq.(mk+k) by KURATO_2:def 2;
+      seq0.(m-k) = seq.(mk+k) by NAT_1:def 3;
       hence |.seq.m -lim seq0 .| < p by A6,A8;
     end;
   end;
@@ -661,7 +692,7 @@ A5:     n1 <= m;
 A6:     n+k-k <= m-k by XREAL_1:11;
         k <= n+k by NAT_1:11;
         then reconsider mk = m-k as Element of NAT by A5,INT_1:18,XXREAL_0:2;
-        seq0.(m-k) = seq.(mk+k) by KURATO_2:def 2;
+        seq0.(m-k) = seq.(mk+k) by NAT_1:def 3;
         hence g <= seq.m by A4,A6;
       end;
     end;
@@ -690,7 +721,7 @@ A11:    n1 <= m;
 A12:    n+k-k <= m-k by XREAL_1:11;
         k <= n+k by NAT_1:11;
         then reconsider mk = m-k as Element of NAT by A11,INT_1:18,XXREAL_0:2;
-        seq0.(m-k) = seq.(mk+k) by KURATO_2:def 2;
+        seq0.(m-k) = seq.(mk+k) by NAT_1:def 3;
         hence seq.m <= g by A10,A12;
       end;
     end;
@@ -771,7 +802,7 @@ A8: (superior_realsequence seq).n <= K1 &
     then consider n be set such that
 A9: n in dom (seq^\k) & x=(seq^\k).n by FUNCT_1:def 5;
     reconsider n as Element of NAT by A9;
-A10: x=seq.(n+k) by A9,KURATO_2:def 2;
+A10: x=seq.(n+k) by A9,NAT_1:def 3;
     k <= n+k by NAT_1:11;
     hence x <= K1 by A7,A10;
   end;
@@ -783,7 +814,7 @@ A10: x=seq.(n+k) by A9,KURATO_2:def 2;
     then consider n be set such that
 A11: n in dom(seq^\k) & x = (seq^\k).n by FUNCT_1:def 5;
     reconsider n as Element of NAT by A11;
-A12: x=seq.(n+k) by A11,KURATO_2:def 2;
+A12: x=seq.(n+k) by A11,NAT_1:def 3;
     k <= n+k by NAT_1:11;
     hence K2 <= x by A7,A12;
   end;
@@ -829,7 +860,7 @@ A8: n in dom(seq^\K) & r=(seq^\K).n by FUNCT_1:def 5;
     then seq.(n+k)+0. <= 1. +lim seq by EXTREAL1:9;
     then seq.(n+k) <= 1. +lim seq by SUPINF_2:18;
     then seq.(n+k) <= UB by A4,A6,SUPINF_2:1;
-    hence r <= UB by A8,KURATO_2:def 2;
+    hence r <= UB by A8,NAT_1:def 3;
   end;
   then UB is UpperBound of rng(seq^\K) by XXREAL_2:def 1;
   hence rng (seq^\K) is bounded_above by SUPINF_1:def 11;
@@ -848,7 +879,7 @@ A10: -1. +lim seq <= seq.(n+k)+0. by EXTREAL1:9;
     -1.= -1 by SUPINF_2:3;
     then -1+ g = -1.+ lim seq by A4,A6,SUPINF_2:1;
     then UL <= seq.(n+k) by A10,SUPINF_2:18;
-    hence UL <= r by A9,KURATO_2:def 2;
+    hence UL <= r by A9,NAT_1:def 3;
   end;
   then UL is LowerBound of rng (seq^\K) by XXREAL_2:def 2;
   hence rng (seq^\K) is bounded_below by SUPINF_1:def 12;
@@ -888,7 +919,7 @@ A7:   n <= m;
       then
 A8:   |.seq.(m+k) -lim seq .| < p by A6;
       m is Element of NAT by ORDINAL1:def 13;
-      hence |.seq0.m -lim seq .| < p by A8,KURATO_2:def 2;
+      hence |.seq0.m -lim seq .| < p by A8,NAT_1:def 3;
     end;
   end;
   lim seq = R_EAL g by A4;
@@ -928,7 +959,7 @@ A5:     n <= m;
         then
 A6:     g <=seq.(m+k) by A4;
         m is Element of NAT by ORDINAL1:def 13;
-        hence g <= seq0.m by A6,KURATO_2:def 2;
+        hence g <= seq0.m by A6,NAT_1:def 3;
       end;
     end;
     then
@@ -956,7 +987,7 @@ A11:    n <= m;
         then
 A12:    seq.(m+k) <= g by A10;
         m is Element of NAT by ORDINAL1:def 13;
-        hence seq0.m <= g by A12,KURATO_2:def 2;
+        hence seq0.m <= g by A12,NAT_1:def 3;
       end;
     end;
     then
@@ -982,7 +1013,7 @@ A1: UB in REAL by SUPINF_1:def 11;
 A2:   n in dom (seq^\k) & r = (seq^\k).n by FUNCT_1:def 5;
       reconsider n as Element of NAT by A2;
       seq.(n+k) <= UB by XXREAL_2:def 1,FUNCT_2:6;
-      hence r <= UB by A2,KURATO_2:def 2;
+      hence r <= UB by A2,NAT_1:def 3;
     end;
     then UB is UpperBound of rng (seq^\k) by XXREAL_2:def 1;
     then rng (seq^\k) is bounded_above by A1,SUPINF_1:def 11;
@@ -1000,7 +1031,7 @@ A3: UB in REAL by SUPINF_1:def 12;
 A4:   n in dom (seq^\k) & r=(seq^\k).n by FUNCT_1:def 5;
       reconsider n as Element of NAT by A4;
       UB <= seq.(n+k) by XXREAL_2:def 2,FUNCT_2:6;
-      hence UB <= r by A4,KURATO_2:def 2;
+      hence UB <= r by A4,NAT_1:def 3;
     end;
     then UB is LowerBound of rng (seq^\k) by XXREAL_2:def 2;
     then rng (seq^\k) is bounded_below by A3,SUPINF_1:def 12;
@@ -1036,8 +1067,8 @@ A1: seq is non-increasing;
     assume m<=n;
     then k+m <= k+n by XREAL_1:8;
     then seq.(k+n) <=seq.(k+m) by A1,Th7;
-    then seq0.n <= seq.(k+m) by KURATO_2:def 2;
-    hence seq0.n <= seq0.m by KURATO_2:def 2;
+    then seq0.n <= seq.(k+m) by NAT_1:def 3;
+    hence seq0.n <= seq0.m by NAT_1:def 3;
   end;
   hence seq^\k is non-increasing by Th7;
   now
@@ -1046,7 +1077,7 @@ A1: seq is non-increasing;
     then consider n be set such that
 A2: n in dom seq0 & y=seq0.n by FUNCT_1:def 5;
     reconsider n as Element of NAT by A2;
-    seq0.n= seq.(n+k) by KURATO_2:def 2;
+    seq0.n= seq.(n+k) by NAT_1:def 3;
     then inf seq <= seq0.n by Th23;
     hence inf rng seq <= y by A2;
   end;
@@ -1062,7 +1093,7 @@ A4: n in dom seq & y=seq.n by FUNCT_1:def 5;
     n <= n+k by NAT_1:11;
     then
 A5: seq.(n+k) <= seq.n by A1,Th7;
-    seq0.n = seq.(n+k) by KURATO_2:def 2;
+    seq0.n = seq.(n+k) by NAT_1:def 3;
     then inf seq0 <= seq.(n+k) by Th23;
     hence inf rng seq0 <= y by A4,A5,XXREAL_0:2;
   end;
@@ -1083,8 +1114,8 @@ A1: seq is non-decreasing;
     assume m <= n;
     then k+m <= k+n by XREAL_1:8;
     then seq.(k+m) <=seq.(k+n) by A1,Th7;
-    then seq0.m <= seq.(k+n) by KURATO_2:def 2;
-    hence seq0.m <= seq0.n by KURATO_2:def 2;
+    then seq0.m <= seq.(k+n) by NAT_1:def 3;
+    hence seq0.m <= seq0.n by NAT_1:def 3;
   end;
   hence seq^\k is non-decreasing by Th7;
   now
@@ -1093,7 +1124,7 @@ A1: seq is non-decreasing;
     then consider n be set such that
 A2: n in dom seq0 & y=seq0.n by FUNCT_1:def 5;
     reconsider n as Element of NAT by A2;
-    seq0.n= seq.(n+k) by KURATO_2:def 2;
+    seq0.n= seq.(n+k) by NAT_1:def 3;
     then seq0.n <=sup seq by Th23;
     hence y <= sup rng seq by A2;
   end;
@@ -1109,7 +1140,7 @@ A4: n in dom seq & y=seq.n by FUNCT_1:def 5;
     n <=n+k by NAT_1:11;
     then
 A5: seq.n <= seq.(n+k) by A1,Th7;
-    seq0.n= seq.(n+k) by KURATO_2:def 2;
+    seq0.n= seq.(n+k) by NAT_1:def 3;
     then seq.(n+k) <= sup seq0 by Th23;
     hence y <= sup rng seq0 by A4,A5,XXREAL_0:2;
   end;
@@ -1138,7 +1169,7 @@ A2: ex Z being non empty Subset of ExtREAL st
 A3:   x=seq.k & n <= k;
       reconsider k1=k-n as Element of NAT by A3,INT_1:18;
       x = seq.(n+k1) by A3;
-      then x = rseq.k1 by KURATO_2:def 2;
+      then x = rseq.k1 by NAT_1:def 3;
       hence x in rng rseq by FUNCT_2:6;
     end;
     then
@@ -1149,7 +1180,7 @@ A4: {seq.k where k is Element of NAT: n <= k} c= rng rseq by TARSKI:def 3;
       then consider z be set such that
 A5:   z in dom rseq & x=rseq.z by FUNCT_1:def 5;
       reconsider k0=z as Element of NAT by A5;
-A6:   x = seq.(n+k0) by A5,KURATO_2:def 2;
+A6:   x = seq.(n+k0) by A5,NAT_1:def 3;
       n <=n+k0 by NAT_1:11;
       hence x in {seq.k where k is Element of NAT: n <= k} by A6;
     end;
@@ -1180,7 +1211,7 @@ A2: ex Y3 being non empty Subset of ExtREAL st
       assume x in {rseq.k where k is Element of NAT: n <= k};
       then consider k be Element of NAT such that
 A3:   x=rseq.k & n <= k;
-      x = seq.(j+k) & n <= k by A3,KURATO_2:def 2;
+      x = seq.(j+k) & n <= k by A3,NAT_1:def 3;
       hence x in { seq.(j+k1) where k1 is Element of NAT: n <= k1};
     end;
     then
@@ -1191,7 +1222,7 @@ A4: {rseq.k where k is Element of NAT: n <= k}
       assume x in {seq.(j+k) where k is Element of NAT: n <= k};
       then consider k be Element of NAT such that
 A5:   x=seq.(j+k) & n <= k;
-      x = rseq.k & n <= k by A5,KURATO_2:def 2;
+      x = rseq.k & n <= k by A5,NAT_1:def 3;
       hence x in { rseq.k1 where k1 is Element of NAT: n<= k1};
     end;
     then {seq.(j+k) where k is Element of NAT: n <= k}
@@ -1226,7 +1257,7 @@ A9:   x=seq.k & j+n <= k;
     then {seq.(j+k) where k is Element of NAT: n <= k}
     = { seq.k where k is Element of NAT: (j+n) <= k} by A8,XBOOLE_0:def 10;
     hence (superior_realsequence rseq).n = ((superior_realsequence seq)^\j).n
-    by A1,A2,A6,KURATO_2:def 2;
+    by A1,A2,A6,NAT_1:def 3;
   end;
   then (superior_realsequence seq)^\j = superior_realsequence rseq by
   FUNCT_2:113;
@@ -1253,7 +1284,7 @@ A2: ex Y3 being non empty Subset of ExtREAL st
       assume x in {rseq.k where k is Element of NAT: n <= k};
       then consider k be Element of NAT such that
 A3:   x=rseq.k & n <= k;
-      x = seq.(j+k) & n <= k by A3,KURATO_2:def 2;
+      x = seq.(j+k) & n <= k by A3,NAT_1:def 3;
       hence x in {seq.(j+k1) where k1 is Element of NAT: n <= k1};
     end;
     then
@@ -1264,7 +1295,7 @@ A4: {rseq.k where k is Element of NAT: n <= k}
       assume x in {seq.(j+k) where k is Element of NAT: n <= k};
       then consider k be Element of NAT such that
 A5:   x=seq.(j+k) & n <= k;
-      x = rseq.k & n <= k by A5,KURATO_2:def 2;
+      x = rseq.k & n <= k by A5,NAT_1:def 3;
       hence x in { rseq.k1 where k1 is Element of NAT: n<= k1};
     end;
     then {seq.(j+k) where k is Element of NAT: n <= k}
@@ -1299,7 +1330,7 @@ A9:   x=seq.k & j+n <= k;
     then {seq.(j+k) where k is Element of NAT: n <= k}
     = {seq.k where k is Element of NAT: (j+n) <= k} by A8,XBOOLE_0:def 10;
     hence (inferior_realsequence rseq).n = ((inferior_realsequence seq)^\j).n
-    by A1,A2,A6,KURATO_2:def 2;
+    by A1,A2,A6,NAT_1:def 3;
   end;
   then (inferior_realsequence seq)^\j = inferior_realsequence rseq by
   FUNCT_2:113;
@@ -1323,14 +1354,14 @@ A2: n in dom seq0 & y=seq0.n by FUNCT_1:def 5;
     reconsider n as Element of NAT by A2;
     k <= n+k by NAT_1:11;
     then seq.(n+k) <= seq.k by A1,Th7;
-    hence y <= seq.k by A2,KURATO_2:def 2;
+    hence y <= seq.k by A2,NAT_1:def 3;
   end;
   then
 A3: seq.k is UpperBound of rng seq0 by XXREAL_2:def 1;
   seq.k in REAL by A1,XXREAL_0:14;
   then
 A4: rng seq0 is bounded_above by A3,SUPINF_1:def 11;
-  seq0.0= seq.(0+k) by KURATO_2:def 2;
+  seq0.0= seq.(0+k) by NAT_1:def 3;
   then seq.k in rng seq0 by FUNCT_2:6;
   hence thesis by A3,A4,Def4,XXREAL_2:55;
 end;
@@ -1352,14 +1383,14 @@ A2: n in dom seq0 & y=seq0.n by FUNCT_1:def 5;
     reconsider n as Element of NAT by A2;
     k <= n+k by NAT_1:11;
     then seq.k <= seq.(n+k) by A1,Th7;
-    hence seq.k <= y by A2,KURATO_2:def 2;
+    hence seq.k <= y by A2,NAT_1:def 3;
   end;
   then
 A3: seq.k is LowerBound of rng seq0 by XXREAL_2:def 2;
   seq.k in REAL by A1,XXREAL_0:14;
   then
 A4: rng seq0 is bounded_below by A3,SUPINF_1:def 12;
-  seq0.0 = seq.(0+k) by KURATO_2:def 2;
+  seq0.0 = seq.(0+k) by NAT_1:def 3;
   then seq.k in rng seq0 by FUNCT_2:6;
   hence thesis by A3,A4,Def3,XXREAL_2:56;
 end;
@@ -1766,10 +1797,10 @@ A13:  dom(seq1^\k1) = NAT by FUNCT_2:def 1;
         then consider n be set such that
 A14:    n in dom (seq1^\k) & (seq1^\k).n=y by FUNCT_1:def 5;
         reconsider n as Element of NAT by A14;
-A15:    y=seq1.(k+n) by A14,KURATO_2:def 2;
+A15:    y=seq1.(k+n) by A14,NAT_1:def 3;
         reconsider k2=k-k1 as Element of NAT by INT_1:18,XXREAL_0:25;
         y = seq1.(k1 +(k2+n)) by A15;
-        then y = (seq1^\k1).(k2+n) by KURATO_2:def 2;
+        then y = (seq1^\k1).(k2+n) by NAT_1:def 3;
         hence y in rng(seq1^\k1) by A13,FUNCT_1:def 5;
       end;
       then rng (seq1^\k) c=rng (seq1^\k1) by TARSKI:def 3;
@@ -1795,10 +1826,10 @@ A19:  dom(seq2^\k2) = NAT by FUNCT_2:def 1;
         then consider n be set such that
 A20:    n in dom (seq2^\k) & (seq2^\k).n=y by FUNCT_1:def 5;
         reconsider n as Element of NAT by A20;
-A21:    y=seq2.(k+n) by A20,KURATO_2:def 2;
+A21:    y=seq2.(k+n) by A20,NAT_1:def 3;
         reconsider k3=k-k2 as Element of NAT by INT_1:18,XXREAL_0:25;
         y=seq2.(k2 +(k3+n)) by A21;
-        then y=(seq2^\k2).(k3+n) by KURATO_2:def 2;
+        then y=(seq2^\k2).(k3+n) by NAT_1:def 3;
         hence y in rng(seq2^\k2) by A19,FUNCT_1:def 5;
       end;
       then rng (seq2^\k) c= rng (seq2^\k2) by TARSKI:def 3;
@@ -1817,7 +1848,7 @@ A22:  rseq1 is convergent & rseq2 is convergent &
 A23:  for n be Element of NAT holds rseq1.n <= rseq2.n
       proof
         let n be Element of NAT;
-        (seq1^\k).n =seq1.(k+n) & (seq2^\k).n =seq2.(k+n) by KURATO_2:def 2;
+        (seq1^\k).n =seq1.(k+n) & (seq2^\k).n =seq2.(k+n) by NAT_1:def 3;
         hence rseq1.n <= rseq2.n by A1;
       end;
       lim seq1 = lim(seq1^\k) & lim seq2 = lim(seq2^\k) by A2,A7,Th20;

@@ -95,14 +95,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="190">
+<Func kind="K" nr="192">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="61">
+<Func kind="K" nr="62">
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
@@ -128,14 +128,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="190">
+<Func kind="K" nr="192">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="62">
+<Func kind="K" nr="63">
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
@@ -148,34 +148,9 @@
 <Cluster>
 <Adjective nr="22" value="false"/>
 </Cluster>
-<Func kind="K" nr="190">
-<Func kind="K" nr="212"/>
-<Func kind="K" nr="212"/>
-</Func>
-</Typ>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="61">
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="17"/>
-</Cluster>
-</FCluster>
-<FCluster aid="BORSUK_6" nr="4">
-<ArgTypes>
-<Typ kind="M" nr="7">
-<Cluster>
-<Adjective nr="22" value="false"/>
-</Cluster>
-<Func kind="K" nr="190">
-<Func kind="K" nr="212"/>
-<Func kind="K" nr="212"/>
+<Func kind="K" nr="192">
+<Func kind="K" nr="214"/>
+<Func kind="K" nr="214"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">
@@ -192,9 +167,34 @@
 <Adjective nr="17"/>
 </Cluster>
 </FCluster>
+<FCluster aid="BORSUK_6" nr="4">
+<ArgTypes>
+<Typ kind="M" nr="7">
+<Cluster>
+<Adjective nr="22" value="false"/>
+</Cluster>
+<Func kind="K" nr="192">
+<Func kind="K" nr="214"/>
+<Func kind="K" nr="214"/>
+</Func>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="63">
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="17"/>
+</Cluster>
+</FCluster>
 <FCluster aid="BORSUK_6" nr="5">
 <ArgTypes/>
-<Func kind="K" nr="210"/>
+<Func kind="K" nr="212"/>
 <Cluster>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
@@ -207,7 +207,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="88">
+<Func kind="K" nr="90">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -218,96 +218,96 @@
 </FCluster>
 <FCluster aid="BORSUK_6" nr="7">
 <ArgTypes/>
-<Func kind="K" nr="219"/>
-<Cluster>
-<Adjective nr="4"/>
-<Adjective nr="18">
-<Func kind="U" nr="1">
-<Func kind="K" nr="212"/>
-</Func>
-<Func kind="U" nr="1">
-<Func kind="K" nr="212"/>
-</Func>
-</Adjective>
-<Adjective nr="38">
-<Func kind="K" nr="212"/>
-<Func kind="K" nr="212"/>
-</Adjective>
-</Cluster>
-</FCluster>
-<FCluster aid="BORSUK_6" nr="8">
-<ArgTypes/>
-<Func kind="K" nr="220"/>
-<Cluster>
-<Adjective nr="4"/>
-<Adjective nr="18">
-<Func kind="U" nr="1">
-<Func kind="K" nr="212"/>
-</Func>
-<Func kind="U" nr="1">
-<Func kind="K" nr="212"/>
-</Func>
-</Adjective>
-<Adjective nr="38">
-<Func kind="K" nr="212"/>
-<Func kind="K" nr="212"/>
-</Adjective>
-</Cluster>
-</FCluster>
-<FCluster aid="BORSUK_6" nr="9">
-<ArgTypes/>
 <Func kind="K" nr="221"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="18">
 <Func kind="U" nr="1">
-<Func kind="K" nr="212"/>
+<Func kind="K" nr="214"/>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="212"/>
+<Func kind="K" nr="214"/>
 </Func>
 </Adjective>
 <Adjective nr="38">
-<Func kind="K" nr="212"/>
-<Func kind="K" nr="212"/>
+<Func kind="K" nr="214"/>
+<Func kind="K" nr="214"/>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster aid="BORSUK_6" nr="8">
+<ArgTypes/>
+<Func kind="K" nr="222"/>
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="18">
+<Func kind="U" nr="1">
+<Func kind="K" nr="214"/>
+</Func>
+<Func kind="U" nr="1">
+<Func kind="K" nr="214"/>
+</Func>
+</Adjective>
+<Adjective nr="38">
+<Func kind="K" nr="214"/>
+<Func kind="K" nr="214"/>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster aid="BORSUK_6" nr="9">
+<ArgTypes/>
+<Func kind="K" nr="223"/>
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="18">
+<Func kind="U" nr="1">
+<Func kind="K" nr="214"/>
+</Func>
+<Func kind="U" nr="1">
+<Func kind="K" nr="214"/>
+</Func>
+</Adjective>
+<Adjective nr="38">
+<Func kind="K" nr="214"/>
+<Func kind="K" nr="214"/>
 </Adjective>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_6" nr="10">
 <ArgTypes/>
-<Func kind="K" nr="222"/>
+<Func kind="K" nr="224"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="37">
-<Func kind="K" nr="190">
-<Func kind="K" nr="212"/>
-<Func kind="K" nr="212"/>
+<Func kind="K" nr="192">
+<Func kind="K" nr="214"/>
+<Func kind="K" nr="214"/>
 </Func>
 </Adjective>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_6" nr="11">
 <ArgTypes/>
-<Func kind="K" nr="223"/>
+<Func kind="K" nr="225"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="37">
-<Func kind="K" nr="190">
-<Func kind="K" nr="212"/>
-<Func kind="K" nr="212"/>
+<Func kind="K" nr="192">
+<Func kind="K" nr="214"/>
+<Func kind="K" nr="214"/>
 </Func>
 </Adjective>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_6" nr="12">
 <ArgTypes/>
-<Func kind="K" nr="224"/>
+<Func kind="K" nr="226"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="37">
-<Func kind="K" nr="190">
-<Func kind="K" nr="212"/>
-<Func kind="K" nr="212"/>
+<Func kind="K" nr="192">
+<Func kind="K" nr="214"/>
+<Func kind="K" nr="214"/>
 </Func>
 </Adjective>
 </Cluster>

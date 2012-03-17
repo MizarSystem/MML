@@ -11,22 +11,19 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQM_3"/>
 </Signature>
 <CCluster aid="JORDAN7" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="25"/>
-<Adjective nr="29"/>
-<Adjective nr="33"/>
+<Adjective nr="22"/>
+<Adjective nr="26"/>
+<Adjective nr="30"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -35,8 +32,8 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
-<Adjective nr="25"/>
-<Adjective nr="29"/>
+<Adjective nr="22"/>
+<Adjective nr="26"/>
 </Cluster>
 </CCluster>
 </Registrations>

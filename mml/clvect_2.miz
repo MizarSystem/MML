@@ -14,7 +14,7 @@ environ
       NORMSP_1, BHSP_1, BHSP_3, SEQ_2, COMPLEX1, CFUNCT_1, CLVECT_1, CSSPACE,
       FUNCT_3, RECDEF_1;
  constructors DOMAIN_1, FUNCT_3, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2,
-      BHSP_3, CSSPACE, SEQ_1, VALUED_1, PARTFUN1, RECDEF_1;
+      BHSP_3, CSSPACE, SEQ_1, VALUED_1, PARTFUN1, RECDEF_1, SEQM_3;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, MEMBERED, SEQM_3, STRUCT_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
@@ -2350,81 +2350,17 @@ A6: Nseq.n >= k & Nseq.m >= k by A5,XXREAL_0:2;
   hence thesis by Def8;
 end;
 
-definition
-  let X;
-  let seq;
-  let k;
-  func seq ^\k -> sequence of X means
-  :Def11:
-  for n holds it.n=seq.(n + k);
-  existence
-  proof
-    deffunc F(Element of NAT) = seq.($1 + k);
-    thus ex IT being sequence of X st for n holds IT.n=F(n)
-    from FUNCT_2:sch 4;
-  end;
-  uniqueness
-  proof
-    let seq1, seq2;
-    assume that
-A1: for n holds seq1.n = seq.(n + k) and
-A2: for n holds seq2.n = seq.(n + k);
-    now
-      let n;
-      seq1.n = seq.(n + k) by A1;
-      hence seq1.n = seq2.n by A2;
-    end;
-    hence seq1 = seq2 by FUNCT_2:113;
-  end;
-end;
-
-theorem
-  seq ^\0 = seq
-proof
-  now
-    let n;
-    thus (seq ^\0).n = seq.(n + 0) by Def11
-      .= seq.n;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
-
-theorem
-  (seq ^\k)^\m = (seq ^\m)^\k
-proof
-  now
-    let n;
-    thus ((seq ^\k)^\m).n = (seq ^\k).(n + m) by Def11
-      .= seq.(n + m + k) by Def11
-      .= seq.(n + k + m)
-      .= (seq ^\m).(n + k) by Def11
-      .= ((seq ^\m)^\k).n by Def11;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
-
-theorem
-  (seq ^\k)^\m=seq ^\(k + m)
-proof
-  now
-    let n; thus
-    ((seq ^\k)^\m).n = (seq ^\k).(n + m) by Def11
-      .= seq.(n + m + k) by Def11
-      .= seq.(n + (k + m))
-      .= (seq ^\(k + m)).n by Def11;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
+canceled 3;
 
 theorem Th94:
   (seq1 + seq2) ^\k = (seq1 ^\k) + (seq2 ^\k)
 proof
   now
     let n; thus
-    ((seq1 + seq2) ^\k).n = (seq1 + seq2).(n + k) by Def11
+    ((seq1 + seq2) ^\k).n = (seq1 + seq2).(n + k) by NAT_1:def 3
       .= seq1.(n + k) + seq2.(n + k) by NORMSP_1:def 5
-      .= (seq1 ^\k).n + seq2.(n + k) by Def11
-      .= (seq1 ^\k).n + (seq2 ^\k).n by Def11
+      .= (seq1 ^\k).n + seq2.(n + k) by NAT_1:def 3
+      .= (seq1 ^\k).n + (seq2 ^\k).n by NAT_1:def 3
       .= ((seq1 ^\k) + (seq2 ^\k)).n by NORMSP_1:def 5;
   end;
   hence thesis by FUNCT_2:113;
@@ -2435,9 +2371,9 @@ theorem Th95:
 proof
   now
     let n; thus
-    ((-seq) ^\k).n = (-seq).(n + k) by Def11
+    ((-seq) ^\k).n = (-seq).(n + k) by NAT_1:def 3
       .= -(seq.(n + k)) by BHSP_1:def 10
-      .= -((seq ^\ k).n) by Def11
+      .= -((seq ^\ k).n) by NAT_1:def 3
       .= (-(seq ^\k)).n by BHSP_1:def 10;
   end;
   hence thesis by FUNCT_2:113;
@@ -2457,9 +2393,9 @@ theorem
 proof
   now
     let n; thus
-    ((z * seq) ^\k).n = (z * seq).(n + k) by Def11
+    ((z * seq) ^\k).n = (z * seq).(n + k) by NAT_1:def 3
       .= z * (seq.(n + k)) by CLVECT_1:def 15
-      .= z * ((seq ^\k).n) by Def11
+      .= z * ((seq ^\k).n) by NAT_1:def 3
       .= (z * (seq ^\k)).n by CLVECT_1:def 15;
   end;
   hence thesis by FUNCT_2:113;
@@ -2470,9 +2406,9 @@ theorem
 proof
   now
     let n; thus
-    ((seq * Nseq) ^\k).n = (seq * Nseq).(n + k) by Def11
+    ((seq * Nseq) ^\k).n = (seq * Nseq).(n + k) by NAT_1:def 3
       .= seq.(Nseq.(n + k)) by Th82
-      .= seq.((Nseq ^\k).n) by SEQM_3:def 9
+      .= seq.((Nseq ^\k).n) by NAT_1:def 3
       .= (seq * (Nseq ^\k)).n by Th82;
   end;
   hence thesis by FUNCT_2:113;
@@ -2505,7 +2441,7 @@ A3: Rseq is increasing by SEQM_3:def 11;
       let n;
       thus (seq * Nseq).n = seq.(Nseq.n) by Th82
         .= seq.(n + k) by A1
-        .= (seq ^\k).n by Def11;
+        .= (seq ^\k).n by NAT_1:def 3;
     end;
     hence thesis by FUNCT_2:113;
   end;
@@ -2556,7 +2492,7 @@ A9: now
     end;
 A10: l + k = n by A8;
     ||.seq.l - g.|| < r by A5,A9;
-    hence ||.seq1.n - g.|| < r by A3,A10,Def11;
+    hence ||.seq1.n - g.|| < r by A3,A10,NAT_1:def 3;
   end;
   hence thesis by Th9;
 end;
@@ -2603,8 +2539,8 @@ A13: now
 A14: l2 + k = n by A10;
 A15: l3 + k = m by A12;
   dist((seq.l2), (seq.l3)) < r by A4,A11,A13;
-  then dist((seq1.n), (seq.l3)) < r by A3,A14,Def11;
-  hence dist((seq1.n), (seq1.m)) < r by A3,A15,Def11;
+  then dist((seq1.n), (seq.l3)) < r by A3,A14,NAT_1:def 3;
+  hence dist((seq1.n), (seq1.m)) < r by A3,A15,NAT_1:def 3;
 end;
 
 theorem
@@ -2631,8 +2567,8 @@ A3: n >= m;
   n + k >= n by NAT_1:11;
   then n + k >= m by A3,XXREAL_0:2;
   then dist((seq1.(n + k)), (seq2.(n + k))) < r by A2;
-  then dist((seq1 ^\k).n, (seq2.(n + k))) < r by Def11;
-  hence dist((seq1 ^\k).n, (seq2 ^\k).n) < r by Def11;
+  then dist((seq1 ^\k).n, (seq2.(n + k))) < r by NAT_1:def 3;
+  hence dist((seq1 ^\k).n, (seq2 ^\k).n) < r by NAT_1:def 3;
 end;
 
 theorem
@@ -2654,6 +2590,7 @@ A1: seq is constant;
 end;
 
 definition
+ canceled;
   let X;
   attr X is complete means
   :Def12:

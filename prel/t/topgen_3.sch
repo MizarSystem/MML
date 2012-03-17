@@ -194,7 +194,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="108">
+<Func kind="K" nr="109">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -322,7 +322,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="109">
+<Func kind="K" nr="110">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

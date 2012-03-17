@@ -52,14 +52,14 @@
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="85"/>
+<Func kind="K" nr="86"/>
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="14">
-<Func kind="K" nr="378">
+<Func kind="K" nr="380">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="398">
+<Func kind="K" nr="400">
 <LocusVar nr="1"/>
 </Func>
 </Func>

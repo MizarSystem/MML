@@ -6,10 +6,11 @@
 
 environ
 
- vocabularies BOOLE, INTEGRA1, ARYTM_1, REALSET1, RFUNCT_1, FUNCT_3, ORDINAL2,
+ vocabularies BOOLE, INTEGRA1, ARYTM_1, REALSET1, FUNCT_3, ORDINAL2,
       MEASURE5, RCOMP_1, INTEGRA5, FUNCOP_1, INTEGRA8, SIN_COS, PRE_TOPC,
-      FUNCT_1, RELAT_1, ARYTM_3, PARTFUN1, FDIFF_1, SEQ_2, FCONT_1, SIN_COS2,
-      POWER, SQUARE_1, SIN_COS4, SEQ_1, SIN_COS6, ABSVALUE, ARYTM, LATTICES;
+      FUNCT_1, RELAT_1, ARYTM_3, PARTFUN1, FDIFF_1, SEQ_2, SIN_COS2,
+      POWER, SQUARE_1, SIN_COS4, SEQ_1, SIN_COS6, ABSVALUE, ARYTM, LATTICES,
+      OPPCAT_1;
  notations TARSKI, XBOOLE_0, FUNCOP_1, INTEGRA1, RFUNCT_1, PSCOMP_1, RELAT_1,
       INTEGRA5, SIN_COS, SUBSET_1, PARTFUN1, RCOMP_1, NUMBERS, FDIFF_1,
       XXREAL_0, REAL_1, FCONT_1, SEQ_2, RFUNCT_2, SIN_COS2, NAT_1, POWER,
@@ -19,7 +20,7 @@ environ
       SIN_COS2, NAT_1, SIN_COS6, SEQ_1;
  registrations INTEGRA1, RELSET_1, MEMBERED, RCOMP_1, FDIFF_1, INT_1, XXREAL_0,
       XREAL_0, NUMBERS, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, XXREAL_2,
-      SEQ_2;
+      SEQ_2, FCONT_1, SIN_COS;
  requirements ARITHM, SUBSET, NUMERALS, BOOLE, REAL;
  definitions TARSKI, SIN_COS, INTEGRA5, VALUED_1;
  theorems PARTFUN1, INTEGRA1, FUNCT_1, SEQ_1, FDIFF_1, TARSKI, RCOMP_1,
@@ -347,7 +348,7 @@ A1: R1 is total by FDIFF_1:def 3;
   then
 A2: -R1 is total;
 A3: dom R1 = REAL & dom (-R1) = REAL by A1,PARTFUN1:def 4;
-A4: for h being convergent_to_0 Real_Sequence holds -(R1*h) = (-R1)*h
+A4: for h being convergent_to_0 Real_Sequence holds -(R1/*h) = (-R1)/*h
   proof
     let h be convergent_to_0 Real_Sequence;
     rng h c= dom R1 by A3,VALUED_0:def 3;
@@ -355,11 +356,11 @@ A4: for h being convergent_to_0 Real_Sequence holds -(R1*h) = (-R1)*h
   end;
   now
     let h be convergent_to_0 Real_Sequence;
-A5: (h")(#)(R1*h) is convergent & lim ((h")(#)(R1*h)) = 0 by FDIFF_1:def 3;
-A6: (h")(#)((-R1)*h) = (h")(#)(-(R1*h)) by A4
-      .= - ((h")(#)(R1*h)) by SEQ_1:27;
-    hence (h")(#)((-R1)*h) is convergent by A5,SEQ_2:23;
-    thus lim ((h")(#)((-R1)*h)) = - (lim ((h")(#)((R1)*h))) by A5,A6,SEQ_2:24
+A5: (h")(#)(R1/*h) is convergent & lim ((h")(#)(R1/*h)) = 0 by FDIFF_1:def 3;
+A6: (h")(#)((-R1)/*h) = (h")(#)(-(R1/*h)) by A4
+      .= - ((h")(#)(R1/*h)) by SEQ_1:27;
+    hence (h")(#)((-R1)/*h) is convergent by A5,SEQ_2:23;
+    thus lim ((h")(#)((-R1)/*h)) = - (lim ((h")(#)(R1/*h))) by A5,A6,SEQ_2:24
       .= 0 by A5;
   end;
   hence -R1 is REST by A2,FDIFF_1:def 3;
@@ -433,7 +434,7 @@ A5: f1 is_differentiable_in x by A2,FDIFF_1:16;
   hence thesis;
 end;
 
-theorem Th24:
+theorem
   -sin is_differentiable_on REAL
 proof
 A1: dom (-sin) = REAL by FUNCT_2:def 1;
@@ -665,12 +666,19 @@ A2: (Cst(1))||A = chi(A,A) by Th36;
   hence integral(Cst(1),a,b)=b-a by A1,A2,INTEGRA4:2;
 end;
 
-Lm5: cos is_continuous_on A by FDIFF_1:33,SIN_COS:72,FCONT_1:17;
+D1: dom sin = REAL by FUNCT_2:def 1;
+D2: dom cos = REAL by FUNCT_2:def 1;
+D3: dom -sin = REAL by FUNCT_2:def 1;
+D4: dom exp_R = REAL by FUNCT_2:def 1;
+D5: dom sinh = REAL by FUNCT_2:def 1;
+D6: dom cosh = REAL by FUNCT_2:def 1;
+
 
 Lm6: cos is_integrable_on A & cos|A is bounded
 proof
-  cos is_continuous_on A by Lm5;
-  hence thesis by INTEGRA5:10,11;
+X: A c= dom cos by D2;
+  cos|A is continuous;
+  hence thesis by INTEGRA5:10,11,X;
 end;
 
 theorem Th39:
@@ -763,8 +771,9 @@ end;
 
 Lm7: -sin is_integrable_on A & (-sin)|A is bounded
 proof
-  -sin is_continuous_on A by Th24,FCONT_1:17,FDIFF_1:33;
-  hence thesis by INTEGRA5:10,11;
+Y: A c= dom -sin by D3;
+   (-sin)|A is continuous;
+  hence thesis by INTEGRA5:10,11,Y;
 end;
 
 theorem Th46:
@@ -856,12 +865,11 @@ proof
   hence thesis;
 end;
 
-Lm8: exp_R is_continuous_on A by FDIFF_1:33,SIN_COS:71,FCONT_1:17;
-
 Lm9: exp_R is_integrable_on A & (exp_R)|A is bounded
 proof
-  exp_R is_continuous_on A by Lm8;
-  hence thesis by INTEGRA5:10,11;
+X: A c= dom exp_R by D4;
+  exp_R|A is continuous;
+  hence thesis by INTEGRA5:10,11,X;
 end;
 
 theorem Th53:
@@ -891,12 +899,17 @@ proof
   hence thesis by Th53,IRRAT_1:def 7,SIN_COS:56;
 end;
 
-Lm10: sinh is_continuous_on A by FDIFF_1:33,SIN_COS2:34,FCONT_1:17;
+Lm10: sinh|A is continuous
+ proof
+    sinh|REAL is continuous by FDIFF_1:33,SIN_COS2:34;
+  hence thesis by FCONT_1:17;
+ end;
 
 Lm11: sinh is_integrable_on A & sinh|A is bounded
 proof
-  sinh is_continuous_on A by Lm10;
-  hence thesis by INTEGRA5:10,11;
+X: A c= dom sinh by D5;
+  sinh|A is continuous by Lm10;
+  hence thesis by INTEGRA5:10,11,X;
 end;
 
 theorem Th55:
@@ -938,12 +951,17 @@ A2: 2*number_e > 0
   hence thesis;
 end;
 
-Lm12: cosh is_continuous_on A by FDIFF_1:33,SIN_COS2:35,FCONT_1:17;
+Lm12: cosh|A is continuous
+ proof
+    cosh|REAL is continuous by FDIFF_1:33,SIN_COS2:35;
+  hence thesis by FCONT_1:17;
+ end;
 
 Lm13: cosh is_integrable_on A & cosh|A is bounded
 proof
-  cosh is_continuous_on A by Lm12;
-  hence thesis by INTEGRA5:10,11;
+X: A c= dom cosh by D6;
+  cosh|A is continuous by Lm12;
+  hence thesis by INTEGRA5:10,11,X;
 end;
 
 theorem Th57:
@@ -978,12 +996,12 @@ end;
 theorem
   A c= Z & dom tan = Z & dom tan = dom f2 &
   (for x st x in Z holds f2.x = 1/(cos.x)^2 & cos.x <> 0) &
-  f2 is_continuous_on A implies integral(f2,A) = tan.(sup A)-tan.(inf A)
+  f2|A is continuous implies integral(f2,A) = tan.(sup A)-tan.(inf A)
 proof
   assume
 A1: A c= Z & dom tan = Z & dom tan = dom f2 &
   (for x st x in Z holds f2.x = 1/(cos.x)^2 & cos.x <> 0) &
-  f2 is_continuous_on A;
+  f2|A is continuous;
   then
 A2: f2 is_integrable_on A & f2|A is bounded by INTEGRA5:10,11;
 A3: tan is_differentiable_on Z by A1,Th33;
@@ -1005,12 +1023,12 @@ end;
 theorem
   A c= Z & dom cot = Z & dom cot = dom f2 &
   (for x st x in Z holds f2.x = -1/(sin.x)^2 & sin.x <> 0) &
-  f2 is_continuous_on A implies integral(f2,A) = cot.(sup A)-cot.(inf A)
+  f2|A is continuous implies integral(f2,A) = cot.(sup A)-cot.(inf A)
 proof
   assume
 A1: A c= Z & dom cot = Z & dom cot = dom f2 &
   (for x st x in Z holds f2.x = -1/(sin.x)^2 & sin.x <> 0) &
-  f2 is_continuous_on A;
+  f2|A is continuous;
   then
 A2: f2 is_integrable_on A & f2|A is bounded by INTEGRA5:10,11;
 A3: cot is_differentiable_on Z by A1,Th34;
@@ -1031,13 +1049,15 @@ end;
 
 theorem
   dom tanh = dom f2 & (for x st x in REAL holds f2.x = 1/(cosh.x)^2) &
-  f2 is_continuous_on A implies integral(f2,A) = tanh.(sup A)-tanh.(inf A)
+  f2|A is continuous implies integral(f2,A) = tanh.(sup A)-tanh.(inf A)
 proof
   assume
 A1: dom tanh = dom f2 & (for x st x in REAL holds f2.x = 1/(cosh.x)^2) &
-  f2 is_continuous_on A;
+  f2|A is continuous;
+  dom tanh = REAL by FUNCT_2:def 1;
+  then A c= dom f2 by A1;
   then
-A2: f2 is_integrable_on A & f2|A is bounded by INTEGRA5:10,11;
+A2: f2 is_integrable_on A & f2|A is bounded by INTEGRA5:10,11,A1;
 A3: dom tanh = REAL by SIN_COS2:30;
 A4: for x st x in dom (tanh`|REAL) holds (tanh`|REAL).x = f2.x
   proof
@@ -1053,24 +1073,25 @@ A4: for x st x in dom (tanh`|REAL) holds (tanh`|REAL).x = f2.x
   hence thesis by A2,INTEGRA5:13,SIN_COS2:36;
 end;
 
+A4: dom ((arcsin)`|].-1,1.[ ) = ].-1,1.[ by FDIFF_1:def 8,SIN_COS6:84;
+
 theorem Th62:
   A c=].-1,1.[ & dom ((arcsin)`|].-1,1.[) = dom f2 &
   (for x holds x in ].-1,1.[ & f2.x = 1/sqrt(1-x^2)) &
-  f2 is_continuous_on A implies integral(f2,A) = arcsin.(sup A)-arcsin.(inf A)
+  f2|A is continuous implies integral(f2,A) = arcsin.(sup A)-arcsin.(inf A)
 proof
   assume
 A1: A c=].-1,1.[ & dom ((arcsin)`|].-1,1.[) = dom f2 &
-  (for x holds x in ].-1,1.[ & f2.x = 1/sqrt(1-x^2)) & f2 is_continuous_on A;
+  (for x holds x in ].-1,1.[ & f2.x = 1/sqrt(1-x^2)) & f2|A is continuous;
+  A c= dom f2 by A1,A4;
   then
-A2: f2 is_integrable_on A & f2|A is bounded by INTEGRA5:10,11;
+A2: f2 is_integrable_on A & f2|A is bounded by INTEGRA5:10,11,A1;
   for x st x in dom ((arcsin)`|].-1,1.[) holds ((arcsin)`|].-1,1.[).x = f2.x
   proof
     let x;
     assume
 A3: x in dom ((arcsin)`|].-1,1.[);
-A4: dom ((arcsin)`|].-1,1.[ ) = ].-1,1.[ by FDIFF_1:def 8,SIN_COS6:84;
-    then
-A5: -1 < x & x < 1 by A3,XXREAL_1:4;
+A5: -1 < x & x < 1 by A3,XXREAL_1:4,A4;
     ((arcsin)`|].-1,1.[).x =diff(arcsin,x) by A3,A4,FDIFF_1:def 8,SIN_COS6:84
       .= 1 / sqrt(1-x^2) by A5,SIN_COS6:84
       .= f2.x by A1;
@@ -1083,21 +1104,21 @@ end;
 theorem Th63:
   A c=].-1,1.[ & dom (arccos`|].-1,1.[) = dom f2 &
   (for x holds x in ].-1,1.[ & f2.x = -1/sqrt(1-x^2)) &
-  f2 is_continuous_on A implies integral(f2,A) = arccos.(sup A)-arccos.(inf A)
+  f2|A is continuous implies integral(f2,A) = arccos.(sup A)-arccos.(inf A)
 proof
+A4: dom (arccos`|].-1,1.[ ) = ].-1,1.[ by FDIFF_1:def 8,SIN_COS6:108;
   assume
 A1: A c=].-1,1.[ & dom ((arccos)`|].-1,1.[) = dom f2 &
-  (for x holds x in ].-1,1.[ & f2.x = -1/sqrt(1-x^2)) & f2 is_continuous_on A;
+  (for x holds x in ].-1,1.[ & f2.x = -1/sqrt(1-x^2)) & f2|A is continuous;
+  A c= dom f2 by A1,A4;
   then
-A2: f2 is_integrable_on A & f2|A is bounded by INTEGRA5:10,11;
+A2: f2 is_integrable_on A & f2|A is bounded by INTEGRA5:10,11,A1;
   for x st x in dom ((arccos)`|].-1,1.[) holds ((arccos)`|].-1,1.[).x = f2.x
   proof
     let x;
     assume
 A3: x in dom (arccos`|].-1,1.[);
-A4: dom (arccos`|].-1,1.[ ) = ].-1,1.[ by FDIFF_1:def 8,SIN_COS6:108;
-    then
-A5: -1 < x & x < 1 by A3,XXREAL_1:4;
+A5: -1 < x & x < 1 by A3,XXREAL_1:4,A4;
     ((arccos)`|].-1,1.[).x =diff(arccos,x) by A3,A4,FDIFF_1:def 8,SIN_COS6:108
       .= -1 / sqrt(1-x^2) by A5,SIN_COS6:108
       .= f2.x by A1;
@@ -1110,11 +1131,11 @@ end;
 theorem
   A = [.-sqrt 2/2,sqrt 2/2.] & dom ((arcsin)`|].-1,1.[) = dom f2 &
   (for x holds x in ].-1,1.[ & f2.x = 1/sqrt(1-x^2)) &
-  f2 is_continuous_on A implies integral(f2,A) = PI/2
+  f2|A is continuous implies integral(f2,A) = PI/2
 proof
   assume
 A1: A = [.-sqrt 2/2,sqrt 2/2.] & dom ((arcsin)`|].-1,1.[) = dom f2 &
-  (for x holds x in ].-1,1.[ & f2.x = 1/sqrt(1-x^2)) & f2 is_continuous_on A;
+  (for x holds x in ].-1,1.[ & f2.x = 1/sqrt(1-x^2)) & f2|A is continuous;
   then sup A = sqrt 2/2 & inf A = -sqrt 2/2 by Th37;
   then integral(f2,A) = arcsin.(sqrt 2/2) - arcsin.(-sqrt 2/2) by A1,Th9,Th62
     .= arcsin(sqrt 2/2) - arcsin.(-sqrt 2/2) by SIN_COS6:def 2
@@ -1126,11 +1147,11 @@ end;
 theorem
   A = [.-sqrt 2/2,sqrt 2/2.] & dom ((arccos)`|].-1,1.[) = dom f2 &
   (for x holds x in ].-1,1.[ & f2.x = -1/sqrt(1-x^2)) &
-  f2 is_continuous_on A implies integral(f2,A) = -PI/2
+  f2|A is continuous implies integral(f2,A) = -PI/2
 proof
   assume
 A1: A = [.-sqrt 2/2,sqrt 2/2.] & dom ((arccos)`|].-1,1.[) = dom f2 &
-  (for x holds x in ].-1,1.[ & f2.x = -1/sqrt(1-x^2)) & f2 is_continuous_on A;
+  (for x holds x in ].-1,1.[ & f2.x = -1/sqrt(1-x^2)) & f2|A is continuous;
   then sup A = sqrt 2/2 & inf A = -sqrt 2/2 by Th37;
   then integral(f2,A) = arccos.(sqrt 2/2)-arccos.(-sqrt 2/2) by A1,Th9,Th63
     .= arccos(sqrt 2/2) - arccos.(-sqrt 2/2) by SIN_COS6:def 4
@@ -1153,12 +1174,17 @@ A4: f`|Z is_integrable_on A and
 A5: (f`|Z)|A is bounded and
 A6: g`|Z is_integrable_on A and
 A7: (g`|Z)|A is bounded;
-  f is_continuous_on Z & g is_continuous_on Z by A1,A2,FDIFF_1:33;
-
-then f is_integrable_on A & g is_integrable_on A by A3,FCONT_1:17,INTEGRA5:11;
+   Z c= dom f & Z c= dom g by A1,A2,FDIFF_1:def 7;
+   then
+Y: A c= dom f & A c= dom g by A3,XBOOLE_1:1;
+  f|Z is continuous & g|Z is continuous by A1,A2,FDIFF_1:33;
+then f|A is continuous & g|A is continuous
+ by A3,FCONT_1:17;
+then f is_integrable_on A & g is_integrable_on A
+ by INTEGRA5:11,Y;
   then
-A8: f||A is_integrable_on A & g||A is_integrable_on A &
-  (f`|Z)||A is_integrable_on A & (g`|Z)||A is_integrable_on A
+A8: f||A is integrable & g||A is integrable &
+  (f`|Z)||A is integrable & (g`|Z)||A is integrable
   by A4,A6,INTEGRA5:def 2;
   A c= dom(f`|Z) & A c= dom(g`|Z) by A1,A2,A3,FDIFF_1:def 8;
   then
@@ -1188,12 +1214,18 @@ A4: f`|Z is_integrable_on A and
 A5: (f`|Z)|A is bounded and
 A6: g`|Z is_integrable_on A and
 A7: (g`|Z)|A is bounded;
-  f is_continuous_on Z & g is_continuous_on Z by A1,A2,FDIFF_1:33;
+   Z c= dom f & Z c= dom g by A1,A2,FDIFF_1:def 7;
+   then
+Y: A c= dom f & A c= dom g by A3,XBOOLE_1:1;
+  f|Z is continuous & g|Z is continuous by A1,A2,FDIFF_1:33;
 
-then f is_integrable_on A & g is_integrable_on A by A3,FCONT_1:17,INTEGRA5:11;
+then f|A is continuous & g|A is continuous
+ by A3,FCONT_1:17;
+then f is_integrable_on A & g is_integrable_on A
+ by INTEGRA5:11,Y;
   then
-A8: f||A is_integrable_on A & g||A is_integrable_on A &
-  (f`|Z)||A is_integrable_on A & (g`|Z)||A is_integrable_on A
+A8: f||A is integrable & g||A is integrable &
+  (f`|Z)||A is integrable & (g`|Z)||A is integrable
   by A4,A6,INTEGRA5:def 2;
   A c= dom(f`|Z) & A c= dom(g`|Z) by A1,A2,A3,FDIFF_1:def 8;
   then
@@ -1218,11 +1250,15 @@ A1: f is_differentiable_on Z and
 A2: A c= Z and
 A3: f`|Z is_integrable_on A and
 A4: (f`|Z)|A is bounded;
-  f is_continuous_on Z by A1,FDIFF_1:33;
-  then f is_integrable_on A by A2,FCONT_1:17,INTEGRA5:11;
+   Z c= dom f by A1,FDIFF_1:def 7;
+   then
+Y: A c= dom f by A2,XBOOLE_1:1;
+  f|Z is continuous by A1,FDIFF_1:33;
+  then f|A is continuous by A2,FCONT_1:17;
+  then f is_integrable_on A by INTEGRA5:11,Y;
   then
-A5: f||A is_integrable_on A &
-  (f`|Z)||A is_integrable_on A by A3,INTEGRA5:def 2;
+A5: f||A is integrable &
+  (f`|Z)||A is integrable by A3,INTEGRA5:def 2;
   A c= dom(f`|Z) by A1,A2,FDIFF_1:def 8;
   then
 A6: (f`|Z)||A is Function of A,REAL by FUNCT_2:131,INTEGRA5:6;
@@ -1233,12 +1269,11 @@ A7: (f`|Z)||A|A is bounded by A4,INTEGRA5:9;
   hence thesis;
 end;
 
-Lm14: sin is_continuous_on A by FDIFF_1:33,SIN_COS:73,FCONT_1:17;
-
 Lm15: sin is_integrable_on A & sin|A is bounded
 proof
-  sin is_continuous_on A by Lm14;
-  hence thesis by INTEGRA5:10,11;
+X: A c= dom sin by D1;
+  sin|A is continuous;
+  hence thesis by INTEGRA5:10,11,X;
 end;
 
 theorem Th69:
@@ -1366,12 +1401,14 @@ theorem Th76:
   integral(sinh+cosh,A) =
   cosh.(sup A) - cosh.(inf A) + sinh.(sup A) - sinh.(inf A)
 proof
-  cosh is_continuous_on A by Lm12;
+X: A c= dom cosh by D6;
+  cosh|A is continuous by Lm12;
   then
-A1: cosh is_integrable_on A & cosh|A is bounded by INTEGRA5:10,11;
-  sinh is_continuous_on A by Lm10;
+A1: cosh is_integrable_on A & cosh|A is bounded by INTEGRA5:10,11,X;
+Y: A c= dom sinh by D5;
+  sinh|A is continuous by Lm10;
   then
-A2: sinh is_integrable_on A & sinh|A is bounded by INTEGRA5:10,11;
+A2: sinh is_integrable_on A & sinh|A is bounded by INTEGRA5:10,11,Y;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   hence thesis by A1,A2,Th30,Th31,Th66,SIN_COS2:34,35;
 end;
@@ -1520,9 +1557,10 @@ end;
 theorem
   integral(r(#)sin,A) = r*(-cos).(sup A) - r*(-cos).(inf A)
 proof
-  sin is_continuous_on A by Lm14;
+X: A c= dom sin by D1;
+  sin|A is continuous;
   then
-A1: sin is_integrable_on A & sin|A is bounded by INTEGRA5:10,11;
+A1: sin is_integrable_on A & sin|A is bounded by INTEGRA5:10,11,X;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   hence thesis by A1,Th26,Th29,Th68;
 end;
@@ -1538,9 +1576,10 @@ end;
 theorem
   integral(r(#)sinh,A) = r*cosh.(sup A) - r*cosh.(inf A)
 proof
-  sinh is_continuous_on A by Lm10;
+X: A c= dom sinh by D5;
+  sinh|A is continuous by Lm10;
   then
-A1: sinh is_integrable_on A & sinh|A is bounded by INTEGRA5:10,11;
+A1: sinh is_integrable_on A & sinh|A is bounded by INTEGRA5:10,11,X;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   hence thesis by A1,Th31,Th68,SIN_COS2:35;
 end;
@@ -1548,9 +1587,10 @@ end;
 theorem
   integral(r(#)cosh,A) = r*sinh.(sup A) - r*sinh.(inf A)
 proof
-  cosh is_continuous_on A by Lm12;
+X: A c= dom cosh by D6;
+  cosh|A is continuous by Lm12;
   then
-A1: cosh is_integrable_on A & cosh|A is bounded by INTEGRA5:10,11;
+A1: cosh is_integrable_on A & cosh|A is bounded by INTEGRA5:10,11,X;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   hence thesis by A1,Th30,Th68,SIN_COS2:34;
 end;
@@ -1558,9 +1598,10 @@ end;
 theorem
   integral(r(#)exp_R,A) = r*exp_R.(sup A) - r*exp_R.(inf A)
 proof
-  exp_R is_continuous_on A by Lm8;
+X: A c= dom exp_R by D4;
+  exp_R|A is continuous;
   then
-A1: exp_R is_integrable_on A & (exp_R)|A is bounded by INTEGRA5:10,11;
+A1: exp_R is_integrable_on A & (exp_R)|A is bounded by INTEGRA5:10,11,X;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   hence thesis by A1,Th32,Th68,SIN_COS:71;
 end;
@@ -1569,14 +1610,16 @@ theorem Th90:
   integral(sin(#)cos,A)
   = 1/2*(cos.(inf A)*cos.(inf A)-cos.(sup A)*cos.(sup A))
 proof
-  sin is_continuous_on A by Lm14;
+Y: A c= dom sin by D1;
+W: A c= dom -sin by D3;
+  sin|A is continuous;
   then
 A1: (-cos)`|REAL is_integrable_on A & ((-cos)`|REAL)|A is bounded
-  by Th29,INTEGRA5:10,11;
-  -sin is_continuous_on A by Th24,FCONT_1:17,FDIFF_1:33;
+  by Th29,INTEGRA5:10,11,Y;
+  (-sin)|A is continuous;
   then
 A2: cos`|REAL is_integrable_on A & (cos`|REAL)|A is bounded
-  by Th28,INTEGRA5:10,11;
+  by Th28,INTEGRA5:10,11,W;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   then integral(sin(#)cos,A)
   =(-cos).(sup A)*cos.(sup A)-(-cos).(inf A)*cos.(inf A)
@@ -1671,30 +1714,34 @@ proof
   hence thesis;
 end;
 
-Lm16: cos is_continuous_on A by FDIFF_1:33,SIN_COS:72,FCONT_1:17;
-
 Lm17: cos(#)cos is_integrable_on A & (cos(#)cos)|A is bounded
 proof
-  cos is_continuous_on A by Lm16;
-  then cos(#)cos is_continuous_on A by FCONT_1:19;
-  hence thesis by INTEGRA5:10,11;
+   dom cos = REAL by FUNCT_2:def 1;
+   then
+   A c= dom cos /\ dom cos;
+   then
+Y: A c= dom(cos(#)cos) by VALUED_1:def 4;
+   (cos(#)cos)|A is continuous;
+  hence thesis by INTEGRA5:10,11,Y;
 end;
 
 theorem
   integral(sin(#)sin,A)=cos.(inf A)*sin.(inf A)-
   cos.(sup A)*sin.(sup A)+integral((cos)(#)(cos),A)
 proof
-  sin is_continuous_on A by Lm14;
+X: A c= dom sin by D1;
+  sin|A is continuous;
   then
 A1: (-cos)`|REAL is_integrable_on A & ((-cos)`|REAL)|A is bounded
-  by Th29,INTEGRA5:10,11;
-  cos is_continuous_on A by Lm16;
+  by Th29,INTEGRA5:10,11,X;
+Y: A c= dom cos by D2;
+  cos|A is continuous;
   then
 A2: sin`|REAL is_integrable_on A & (sin`|REAL)|A is bounded
-  by Th27,INTEGRA5:10,11;
+  by Th27,INTEGRA5:10,11,Y;
   cos(#)cos is_integrable_on A & (cos(#)cos)|A is bounded by Lm17;
   then
-A3: (cos(#)cos)||A is_integrable_on A &
+A3: (cos(#)cos)||A is integrable &
   (cos(#)cos)||A|A is bounded by INTEGRA5:9,def 2;
   dom(cos(#)cos) = REAL by FUNCT_2:def 1;
   then
@@ -1733,10 +1780,11 @@ theorem
   integral(sinh(#)cosh,A)
   =1/2*((cosh.(sup A))*cosh.(sup A)-(cosh).(inf A)*cosh.(inf A))
 proof
-  sinh is_continuous_on A by Lm10;
+X: A c= dom sinh by D5;
+  sinh|A is continuous by Lm10;
   then
 A1: (cosh)`|REAL is_integrable_on A & (cosh`|REAL)|A is bounded
-  by Th31,INTEGRA5:10,11;
+  by Th31,INTEGRA5:10,11,X;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   then integral(sinh(#)cosh,A)
   =(cosh.(sup A))*cosh.(sup A)-(cosh).(inf A)*cosh.(inf A)
@@ -1747,10 +1795,11 @@ end;
 theorem
   integral(exp_R(#)exp_R,A) =1/2*((exp_R.(sup A))^2-((exp_R).(inf A))^2)
 proof
-  exp_R is_continuous_on A by Lm8;
+X: A c= dom exp_R by D4;
+  exp_R|A is continuous;
   then
 A1: exp_R`|REAL is_integrable_on A & (exp_R`|REAL)|A is bounded
-  by Th32,INTEGRA5:10,11;
+  by Th32,INTEGRA5:10,11,X;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   then integral(exp_R(#)exp_R,A)
   =(exp_R).(sup A)*exp_R.(sup A)-(exp_R).(inf A)*exp_R.(inf A)
@@ -1762,28 +1811,30 @@ A1: exp_R`|REAL is_integrable_on A & (exp_R`|REAL)|A is bounded
   hence thesis;
 end;
 
-Lm18: sin is_continuous_on A by FDIFF_1:33,SIN_COS:73,FCONT_1:17;
-
 Lm19: exp_R(#)(sin + cos) is_integrable_on A &
 (exp_R(#)(sin +cos))|A is bounded
 proof
-A1: exp_R is_continuous_on A by Lm8;
-A2: cos is_continuous_on A by Lm16;
-  sin is_continuous_on A by Lm18;
-  then sin + cos is_continuous_on A by A2,FCONT_1:19;
-  then exp_R(#)(sin + cos) is_continuous_on A by A1,FCONT_1:19;
-  hence thesis by INTEGRA5:10,11;
+W:  dom sin = REAL & dom cos = REAL by FUNCT_2:def 1;
+A:  dom(sin + cos) = dom sin /\ dom cos by VALUED_1:def 1;
+   dom exp_R = REAL by SIN_COS:51;
+   then
+   A c= dom exp_R /\ dom(sin + cos) by A,W;
+   then
+V: A c= dom(exp_R(#)(sin + cos)) by VALUED_1:def 4;
+   (exp_R(#)(sin + cos))|A is continuous;
+  hence thesis by INTEGRA5:10,11,V;
 end;
 
 Lm20: exp_R(#)(cos - sin) is_integrable_on A &
 (exp_R(#)(cos - sin))|A is bounded
 proof
-A1: exp_R is_continuous_on A by Lm8;
-A2: cos is_continuous_on A by Lm16;
-  sin is_continuous_on A by Lm18;
-  then cos - sin is_continuous_on A by A2,FCONT_1:19;
-  then exp_R(#)(cos - sin) is_continuous_on A by A1,FCONT_1:19;
-  hence thesis by INTEGRA5:10,11;
+   dom exp_R = REAL & dom(cos - sin) = REAL by FUNCT_2:def 1;
+   then
+   A c= dom exp_R /\ dom(cos - sin);
+   then
+V: A c= dom(exp_R(#)(cos - sin)) by VALUED_1:def 4;
+   (exp_R(#)(cos - sin))|A is continuous;
+  hence thesis by INTEGRA5:10,11,V;
 end;
 
 theorem

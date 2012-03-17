@@ -36,19 +36,19 @@
 <Func kind="K" nr="24">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="85"/>
+<Func kind="K" nr="86"/>
 </Pred>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="36">
 <Var nr="1"/>
-<Func kind="K" nr="86"/>
+<Func kind="K" nr="87"/>
 </Func>
 <Func kind="F" nr="1"/>
 </Pred>
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
+<Func kind="K" nr="86"/>
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
@@ -58,7 +58,7 @@
 </Func>
 <Func kind="K" nr="36">
 <Var nr="1"/>
-<Func kind="K" nr="96">
+<Func kind="K" nr="97">
 <Var nr="2"/>
 <Num nr="1"/>
 </Func>
@@ -72,7 +72,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
+<Func kind="K" nr="86"/>
 </Typ>
 <For>
 <Typ kind="M" nr="1">

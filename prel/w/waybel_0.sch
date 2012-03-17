@@ -44,13 +44,13 @@
 <Func kind="F" nr="2"/>
 </Func>
 </Typ>
-<Func kind="K" nr="93">
+<Func kind="K" nr="94">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="93">
+<Func kind="K" nr="94">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
@@ -82,7 +82,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="93">
+<Func kind="K" nr="94">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
@@ -123,7 +123,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="93">
+<Func kind="K" nr="94">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
@@ -147,13 +147,13 @@
 <Func kind="F" nr="2"/>
 </Func>
 </Typ>
-<Func kind="K" nr="93">
+<Func kind="K" nr="94">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="93">
+<Func kind="K" nr="94">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

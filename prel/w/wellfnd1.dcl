@@ -22,7 +22,6 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCOP_1"/>
@@ -62,8 +61,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="62" value="false"/>
-<Adjective nr="113"/>
+<Adjective nr="61" value="false"/>
+<Adjective nr="112"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WELLFND1" nr="3">
@@ -81,7 +80,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="114">
+<Adjective nr="113">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -92,7 +91,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="96">
+<Func kind="K" nr="97">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -106,14 +105,14 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="311">
+<Func kind="K" nr="310">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="99">
+<Adjective nr="98">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="114">
+<Adjective nr="113">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

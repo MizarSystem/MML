@@ -33,7 +33,7 @@
 </Signature>
 <FCluster aid="FRECHET" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="193"/>
+<Func kind="K" nr="195"/>
 <Cluster>
 <Adjective nr="34"/>
 <Adjective nr="35"/>

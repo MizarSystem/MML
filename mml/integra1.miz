@@ -8,17 +8,18 @@ environ
 
  vocabularies FINSEQ_1, RCOMP_1, COMPTS_1, SEQ_2, LATTICES, ORDINAL2, ARYTM,
       ARYTM_1, RELAT_1, FUNCT_1, MEASURE5, PARTFUN1, RLVECT_1, SUBSET_1, BOOLE,
-      RFUNCT_1, FUNCT_3, PARTFUN2, FINSEQ_4, FINSEQ_2, SQUARE_1, RFINSEQ,
+      FUNCT_3, FINSEQ_4, FINSEQ_2, SQUARE_1, RFINSEQ,
       JORDAN3, SEQ_4, CARD_1, INTEGRA1, REALSET1, FUNCOP_1, SEQM_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
-      XREAL_0, REAL_1, NAT_1, FUNCT_1, REALSET1, RELSET_1, VALUED_1, SEQ_1,
+      XREAL_0, REAL_1, NAT_1, NAT_D,
+      FUNCT_1, REALSET1, RELSET_1, VALUED_1, SEQ_1,
       SEQM_3, SEQ_4, XXREAL_0, XXREAL_2, SEQ_2,
       RCOMP_1, PSCOMP_1, FINSEQ_2, PARTFUN2, RFUNCT_1,
       RVSUM_1, COMPLSP1, RFINSEQ, BINARITH, JORDAN3, PARTFUN1,
       FINSEQ_1, FUNCT_2;
  constructors PARTFUN1, REAL_1, NAT_1, RCOMP_1, FINSOP_1, PARTFUN2, RFUNCT_1,
       REALSET1, RFINSEQ, BINARITH, FINSEQ_5, COMPLSP1, GOBOARD1, PSCOMP_1,
-      JORDAN3, SEQ_1, BINOP_2, XXREAL_2, SEQM_3;
+      JORDAN3, SEQ_1, BINOP_2, XXREAL_2, SEQM_3, NAT_D;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, FINSEQ_2, GOBOARD1,
       PSCOMP_1, VALUED_0, VALUED_1, FINSET_1, XXREAL_2, CARD_1, SEQ_2;
@@ -30,7 +31,7 @@ environ
       GOBOARD2, RFINSEQ, JORDAN7, SEQ_2,
       CARD_1, RELAT_1, FUNCT_2, XBOOLE_0, XBOOLE_1,
       XREAL_0, FUNCOP_1, RELSET_1, XREAL_1, XXREAL_0, FINSOP_1, ORDINAL1,
-      XXREAL_1, VALUED_1, FINSEQ_3, CARD_2, XXREAL_2, SEQM_3;
+      XXREAL_1, VALUED_1, FINSEQ_3, CARD_2, XXREAL_2, SEQM_3, NAT_D;
  schemes FINSEQ_2, SEQ_1, NAT_1, XBOOLE_0;
 
 begin :: Definition of closed interval and its properties
@@ -715,10 +716,10 @@ end;
 definition
   let A be closed-interval Subset of REAL;
   let f be PartFunc of A,REAL;
-  pred f is_upper_integrable_on A means
+  attr f is upper_integrable means
   :Def13:
   rng upper_sum_set(f) is bounded_below;
-  pred f is_lower_integrable_on A means
+  attr f is lower_integrable means
   :Def14:
   rng lower_sum_set(f) is bounded_above;
 end;
@@ -744,9 +745,9 @@ end;
 definition
   let A be closed-interval Subset of REAL;
   let f be PartFunc of A,REAL;
-  pred f is_integrable_on A means
+  attr f is integrable means
   :Def17:
-  f is_upper_integrable_on A & f is_lower_integrable_on A &
+  f is upper_integrable & f is lower_integrable &
   upper_integral(f) = lower_integral(f);
 end;
 
@@ -1977,7 +1978,7 @@ A3: mid(p,i,j)=(p/^(i-'1))|(j-'i+1) by A2,JORDAN3:def 1;
   j in Seg(len p) by A1,FINSEQ_1:def 3;
   then j <= len p by FINSEQ_1:3;
   then i <= len p by A2,XXREAL_0:2;
-  then p/^(i-'1) is increasing FinSequence of REAL by Th36,BINARITH:62;
+  then p/^(i-'1) is increasing FinSequence of REAL by Th36,NAT_D:44;
   then (p/^(i-'1))|Seg(j-'i+1) is increasing FinSequence of REAL
   by FINSEQ_1:23,GOBOARD2:20;
   hence thesis by A3,FINSEQ_1:def 15;
@@ -2003,7 +2004,7 @@ A3: i<=j;
     j in Seg(len D) by A2,FINSEQ_1:def 3;
     then j <= len D by FINSEQ_1:3;
     then i <= len D by A3,XXREAL_0:2;
-    hence thesis by BINARITH:62;
+    hence thesis by NAT_D:44;
   end;
   then
 A4: len (D/^(i-'1)) = len D - (i-'1) by RFINSEQ:def 2;
@@ -2015,9 +2016,9 @@ A5: j-'i+1 <= len (D/^(i-'1))
 A6: j-(i-'1) <= len D-(i-'1) by XREAL_1:11;
     i in Seg(len D) by A1,FINSEQ_1:def 3;
     then 1 <= i by FINSEQ_1:3;
-    then j-(i-'1)=j-(i-1) by BINARITH:50;
+    then j-(i-'1)=j-(i-1) by XREAL_1:235;
     then j-(i-'1)=j-i+1;
-    hence thesis by A3,A4,A6,BINARITH:50;
+    hence thesis by A3,A4,A6,XREAL_1:235;
   end;
   reconsider k=j-'i+1 as Element of NAT;
   reconsider D1=D/^(i-'1) as FinSequence of REAL;
@@ -2064,7 +2065,7 @@ A12:  i in dom M & x=M.i by PARTFUN1:26;
     end;
     hence thesis by SUBSET_1:7;
   end;
-A13: len mid(D,i,j) = j-i+1 by A3,A8,BINARITH:50;
+A13: len mid(D,i,j) = j-i+1 by A3,A8,XREAL_1:235;
 A14: B=[.inf B,sup B.] by Th5;
   then
 A15: inf B = M.1 by Th6;
@@ -2198,7 +2199,7 @@ A6:   1 <= len D1 by FINSEQ_1:3;
       then
 A7:   len mid(D1,1,1)=1-'1+1 by JORDAN3:27;
       then
-A8:   len mid(D1,1,1)=1 by BINARITH:53;
+A8:   len mid(D1,1,1)=1 by XREAL_1:237;
 A9:   mid(D1,1,1)=D1|1
       proof
 A10:    len mid(D1,1,1)=len (D1|1) by A6,A8,FINSEQ_1:80;
@@ -2228,7 +2229,7 @@ A14:  1 <= indx(D2,D1,1) & indx(D2,D1,1) <= len D2 by FINSEQ_1:3;
 A15:  1 <= len D2 by XXREAL_0:2;
       then len mid(D2,1,indx(D2,D1,1))=indx(D2,D1,1)-'1+1 by A14,JORDAN3:27;
       then
-A16:  len mid(D2,1,indx(D2,D1,1))=indx(D2,D1,1)-1+1 by A14, BINARITH :50;
+A16:  len mid(D2,1,indx(D2,D1,1))=indx(D2,D1,1)-1+1 by A14, XREAL_1:235;
       then
 A17:  len mid(D2,1,indx(D2,D1,1))=len (D2|indx(D2,D1,1)) by A14, FINSEQ_1:80;
 A18:  for k be Nat st 1 <= k & k <= len mid(D2,1,indx(D2,D1,1)) holds
@@ -2240,7 +2241,7 @@ A19:    1 <= k & k <= len mid(D2,1,indx(D2,D1,1));
         k in NAT by ORDINAL1:def 13;
         then mid(D2,1,indx(D2,D1,1)).k=D2.(k+1-'1) by A14,A15,A19,JORDAN3:27;
         then
-A20:    mid(D2,1,indx(D2,D1,1)).k=D2.(k+1-1) by BINARITH:50,NAT_1: 11;
+A20:    mid(D2,1,indx(D2,D1,1)).k=D2.(k+1-1) by XREAL_1:235,NAT_1: 11;
         k in Seg len (D2|indx(D2,D1,1)) by A17,A19,FINSEQ_1:3;
         then k in dom (D2|indx(D2,D1,1)) by FINSEQ_1:def 3;
         then k in dom (D2|Seg indx(D2,D1,1)) by FINSEQ_1:def 15;
@@ -2302,11 +2303,11 @@ A33:      dom g c= dom f by RELAT_1:89;
         hence thesis by RFUNCT_1:87;
       end;
       then
-A34:  upper_sum(g,DD1) >= upper_sum(g,DD2) by A7,A29,Th32,BINARITH: 53;
+A34:  upper_sum(g,DD1) >= upper_sum(g,DD2) by A8,A29,Th32,XREAL_1:237;
 A35:  upper_volume(g,DD1) = upper_volume(f,D1)|1
       proof
 A36:    len upper_volume(g,DD1)=len DD1 by Def7
-          .= 1 by A7,BINARITH:53;
+          .= 1 by A7,XREAL_1:237;
         1 <= len upper_volume(f,D1) by A6,Def7;
         then
 A37:    len upper_volume(g,DD1) = len (upper_volume(f,D1)|1)
@@ -2317,7 +2318,7 @@ A37:    len upper_volume(g,DD1) = len (upper_volume(f,D1)|1)
           let i be Nat;
           assume
 A38:      1 <= i & i <= len upper_volume(g,DD1);
-A39:      len DD1 = 1 by A7,BINARITH:53;
+A39:      len DD1 = 1 by A7,XREAL_1:237;
 A40:      1 in Seg 1 by FINSEQ_1:5;
           then
 A41:      1 in dom DD1 by A39,FINSEQ_1:def 3;
@@ -2801,7 +2802,7 @@ A157:       q1=upper_volume(g,MD1)
             proof
               len MD1 = (k+1) -'(k+1) + 1 by A96,JORDAN3:27;
               then
-A158:         len MD1 = ((k+1)-(k+1)) +1 by BINARITH:50;
+A158:         len MD1 = ((k+1)-(k+1)) +1 by XREAL_1:235;
               then
 A159:         len q1 = len(upper_volume(g,MD1)) by A120,Def7;
 
@@ -2852,7 +2853,7 @@ A170:           inf DD1 = D1.k by A94,A97,Def5;
 A171:       q2=upper_volume(g,MD2)
             proof
 A172:         indx(D2,D1,k+1)-'(indx(D2,D1,k)+1)+1
-              =indx(D2,D1,k+1)-(indx(D2,D1,k)+1)+1 by A144,BINARITH:50
+              =indx(D2,D1,k+1)-(indx(D2,D1,k)+1)+1 by A144,XREAL_1:235
                 .=indx(D2,D1,k+1)-indx(D2,D1,k);
 A173:         len(upper_volume(g,MD2))=
               len mid(D2,indx(D2,D1,k)+1,indx(D2,D1,k+1)) by Def7
@@ -2940,7 +2941,7 @@ A199:                 indx(D2,D1,k)+1 <= indx(D2,D1,k+1) by A110,NAT_1:13;
 A200:                 n=1+n1 by A174,NAT_1:10;
                       reconsider n1 as Element of NAT by ORDINAL1:def 13;
 A201:                 n1+(indx(D2,D1,k)+1)-'1=indx(D2,D1,k)+n-1
-                      by A182,A200,BINARITH:50;
+                      by A182,A200,XREAL_1:235;
 A202:                 1<=n-1 & n-1<=len MD2
                       proof
                         n is non trivial by A174,A198,NAT_2:def 1;
@@ -2952,7 +2953,7 @@ A202:                 1<=n-1 & n-1<=len MD2
                       end;
 A203:                 n
 
-+(indx(D2,D1,k)+1)-'1=n+indx(D2,D1,k)+1-1 by BINARITH:50, NAT_1:11
++(indx(D2,D1,k)+1)-'1=n+indx(D2,D1,k)+1-1 by XREAL_1:235, NAT_1:11
                         .=indx(D2,D1,k)+n;
 A204:                 indx(D2,D1,k)+n <> 1
                       proof
@@ -2997,7 +2998,7 @@ hence divset(MD2,n)=divset(D2,indx(D2,D1,k)+n) by A205,A206, Th5;
             proof
               len MD1 = (k+1) -'(k+1) + 1 by A96,JORDAN3:27;
               then
-A209:         len MD1 = (k+1) - (k+1) + 1 by BINARITH:50;
+A209:         len MD1 = (k+1) - (k+1) + 1 by XREAL_1:235;
               hence len MD1 = 1;
               thus thesis by A209,Th31;
             end;
@@ -3051,7 +3052,7 @@ A6:   1 <= len D1 by FINSEQ_1:3;
       then
 A7:   len mid(D1,1,1)=1-'1+1 by JORDAN3:27;
       then
-A8:   len mid(D1,1,1)=1 by BINARITH:53;
+A8:   len mid(D1,1,1)=1 by XREAL_1:237;
 A9:   mid(D1,1,1)=D1|1
       proof
 A10:    len mid(D1,1,1)=len (D1|1) by A6,A8,FINSEQ_1:80;
@@ -3081,7 +3082,7 @@ A14:  1 <= indx(D2,D1,1) & indx(D2,D1,1) <= len D2 by FINSEQ_1:3;
 A15:  1 <= len D2 by XXREAL_0:2;
       then len mid(D2,1,indx(D2,D1,1))=indx(D2,D1,1)-'1+1 by A14,JORDAN3:27;
       then
-A16:  len mid(D2,1,indx(D2,D1,1))=indx(D2,D1,1)-1+1 by A14, BINARITH :50;
+A16:  len mid(D2,1,indx(D2,D1,1))=indx(D2,D1,1)-1+1 by A14, XREAL_1:235;
       then
 A17:  len mid(D2,1,indx(D2,D1,1))=len(D2|indx(D2,D1,1)) by A14, FINSEQ_1:80;
 A18:  for k be Nat st 1 <= k & k <= len mid(D2,1,indx(D2,D1,1)) holds
@@ -3094,7 +3095,7 @@ A19:    1 <= k & k <= len mid(D2,1,indx(D2,D1,1));
 A20:    k in Seg len (D2|indx(D2,D1,1)) by A17,FINSEQ_1:3;
         then mid(D2,1,indx(D2,D1,1)).k=D2.(k+1-'1) by A14,A15,A19,JORDAN3:27;
         then
-A21:    mid(D2,1,indx(D2,D1,1)).k=D2.(k+1-1) by BINARITH:50,NAT_1: 11;
+A21:    mid(D2,1,indx(D2,D1,1)).k=D2.(k+1-1) by XREAL_1:235,NAT_1: 11;
         k in dom (D2|indx(D2,D1,1)) by A20,FINSEQ_1:def 3;
         then k in dom (D2|Seg indx(D2,D1,1)) by FINSEQ_1:def 15;
         then (D2|Seg indx(D2,D1,1)).k=D2.k by FUNCT_1:68;
@@ -3154,11 +3155,11 @@ A34:      dom g c= dom f by RELAT_1:89;
         hence thesis by RFUNCT_1:88;
       end;
       then
-A35:  lower_sum(g,DD1) <= lower_sum(g,DD2) by A7,A30,Th33,BINARITH: 53;
+A35:  lower_sum(g,DD1) <= lower_sum(g,DD2) by A8,A30,Th33,XREAL_1:237;
 A36:  lower_volume(g,DD1) = lower_volume(f,D1)|1
       proof
 A37:    len lower_volume(g,DD1)=len DD1 by Def8
-          .= 1 by A7,BINARITH:53;
+          .= 1 by A7,XREAL_1:237;
         1 <= len lower_volume(f,D1) by A6,Def8;
         then
 A38:    len lower_volume(g,DD1) = len (lower_volume(f,D1)|1)
@@ -3169,7 +3170,7 @@ A38:    len lower_volume(g,DD1) = len (lower_volume(f,D1)|1)
           let i be Nat;
           assume
 A39:      1 <= i & i <= len lower_volume(g,DD1);
-A40:      len DD1 = 1 by A7,BINARITH:53;
+A40:      len DD1 = 1 by A7,XREAL_1:237;
 A41:      1 in Seg 1 by FINSEQ_1:5;
 A43:      1 in dom DD1 by A40,A41,FINSEQ_1:def 3;
 A44:      1 in dom(D1|Seg 1)
@@ -3651,7 +3652,7 @@ A158:       q1=lower_volume(g,MD1)
             proof
               len MD1 = (k+1) -'(k+1) + 1 by A98,JORDAN3:27;
               then
-A159:         len MD1 = (k+1) - (k+1) + 1 by BINARITH:50;
+A159:         len MD1 = (k+1) - (k+1) + 1 by XREAL_1:235;
               then
 A160:         len q1 = len(lower_volume(g,MD1)) by A121,Def8;
 
@@ -3704,7 +3705,7 @@ A169:           inf DD1 = D1.k by A96,A99,Def5;
 A170:       q2=lower_volume(g,MD2)
             proof
 A171:         indx(D2,D1,k+1)-'(indx(D2,D1,k)+1)+1
-              =indx(D2,D1,k+1)-(indx(D2,D1,k)+1)+1 by A145,BINARITH:50
+              =indx(D2,D1,k+1)-(indx(D2,D1,k)+1)+1 by A145,XREAL_1:235
                 .=indx(D2,D1,k+1)-indx(D2,D1,k);
 A172:         len(lower_volume(g,MD2))=
               len mid(D2,indx(D2,D1,k)+1,indx(D2,D1,k+1)) by Def8
@@ -3786,7 +3787,7 @@ A197:                 indx(D2,D1,k)+1 <= indx(D2,D1,k+1) by A112,NAT_1:13;
 A198:                 n=1+n1 by A173,NAT_1:10;
                       reconsider n1 as Element of NAT by ORDINAL1:def 13;
 A199:                 n1+(indx(D2,D1,k)+1)-'1=indx(D2,D1,k)+n-1
-                      by A181,A198,BINARITH:50;
+                      by A181,A198,XREAL_1:235;
 A200:                 1<=n-1 & n-1<=len MD2
                       proof
                         n is non trivial by A173,A196,NAT_2:def 1;
@@ -3799,7 +3800,7 @@ A200:                 1<=n-1 & n-1<=len MD2
 A201:                 n+(indx(D2,D1,k)+1)-'1=indx(D2,D1,k)+n
                       proof
 
-n+(indx(D2,D1,k)+1)-'1=n+indx(D2,D1,k)+1-1 by BINARITH:50 ,NAT_1:11
+n+(indx(D2,D1,k)+1)-'1=n+indx(D2,D1,k)+1-1 by XREAL_1:235 ,NAT_1:11
                           .=indx(D2,D1,k)+n;
                         hence thesis;
                       end;
@@ -3845,7 +3846,7 @@ hence divset(MD2,n)=divset(D2,indx(D2,D1,k)+n) by A203,A204, Th5;
             len MD1 = 1 & MD1 <= MD2
             proof
               len MD1 = (k+1) -'(k+1) + 1 by A98,JORDAN3:27;
-              then len MD1 = (k+1) - (k+1) + 1 by BINARITH:50;
+              then len MD1 = (k+1) - (k+1) + 1 by XREAL_1:235;
               hence thesis by Th31;
             end;
             then lower_sum(g,MD1) <= lower_sum(g,MD2) by A152,Th33;
@@ -4484,16 +4485,16 @@ end;
 theorem
   for A be closed-interval Subset of REAL, f,g be Function of A,REAL st
   f|A is bounded & g|A is bounded &
-  f is_integrable_on A & g is_integrable_on A
-  holds f+g is_integrable_on A & integral(f+g)=integral(f)+integral(g)
+  f is integrable & g is integrable
+  holds f+g is integrable & integral(f+g)=integral(f)+integral(g)
 proof
   let A be closed-interval Subset of REAL;
   let f,g be Function of A,REAL;
   assume that
 A1: f|A is bounded and
 A2: g|A is bounded and
-A3: f is_integrable_on A and
-A4: g is_integrable_on A;
+A3: f is integrable and
+A4: g is integrable;
 A5: f|A is bounded_above & f|A is bounded_below by A1;
 A6: g|A is bounded_above & g|A is bounded_below by A2;
 A7: (f+g)|(A /\ A) is bounded by A1,A2,RFUNCT_1:100;
@@ -4533,7 +4534,7 @@ A13: (inf rng f)*vol(A)+lower_sum(g,D) <= (upper_sum_set(f+g)).D
   then
 A14: rng upper_sum_set(f+g) is bounded_below by Th13;
   then
-A15: f+g is_upper_integrable_on A by Def13;
+A15: f+g is upper_integrable by Def13;
 A16: rng lower_sum_set(f+g) is bounded_above
   proof
     (lower_sum_set(f+g))|divs A is bounded_above
@@ -4574,7 +4575,7 @@ A20:    (lower_sum_set(f+g)).D <= (sup rng f)*vol(A)+upper_sum(g,D )
     hence thesis by Th15;
   end;
   then
-A21: f+g is_lower_integrable_on A by Def14;
+A21: f+g is lower_integrable by Def14;
   upper_integral(f+g) = lower_integral(f+g) &
   upper_integral(f+g) = integral(f) + integral(g)
   proof

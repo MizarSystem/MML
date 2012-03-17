@@ -17,10 +17,10 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="FINSEQ_6"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="FINSEQ_6"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
@@ -43,7 +43,7 @@
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="296">
+<Func kind="K" nr="298">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -55,17 +55,17 @@
 <Adjective nr="7" value="false"/>
 <Adjective nr="21"/>
 <Adjective nr="26"/>
-<Adjective nr="28">
+<Adjective nr="30">
 <Func kind="U" nr="1">
-<Func kind="K" nr="296">
+<Func kind="K" nr="298">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="125"/>
-<Adjective nr="126"/>
+<Adjective nr="129"/>
 <Adjective nr="130"/>
-<Adjective nr="131"/>
+<Adjective nr="134"/>
+<Adjective nr="135"/>
 </Cluster>
 </RCluster>
 </Registrations>

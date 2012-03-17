@@ -36,11 +36,11 @@
 <FCluster aid="SINCOS10" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="7">
-<Func kind="K" nr="227"/>
-<Func kind="K" nr="229">
+<Func kind="K" nr="229"/>
+<Func kind="K" nr="231">
 <Func kind="K" nr="48"/>
-<Func kind="K" nr="66">
-<Func kind="K" nr="222"/>
+<Func kind="K" nr="67">
+<Func kind="K" nr="224"/>
 <Num nr="2"/>
 </Func>
 </Func>
@@ -53,13 +53,13 @@
 <FCluster aid="SINCOS10" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="7">
-<Func kind="K" nr="227"/>
-<Func kind="K" nr="230">
-<Func kind="K" nr="66">
-<Func kind="K" nr="222"/>
+<Func kind="K" nr="229"/>
+<Func kind="K" nr="232">
+<Func kind="K" nr="67">
+<Func kind="K" nr="224"/>
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="222"/>
+<Func kind="K" nr="224"/>
 </Func>
 </Func>
 <Cluster>
@@ -70,11 +70,11 @@
 <FCluster aid="SINCOS10" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="7">
-<Func kind="K" nr="228"/>
-<Func kind="K" nr="229">
-<Func kind="K" nr="57">
-<Func kind="K" nr="66">
-<Func kind="K" nr="222"/>
+<Func kind="K" nr="230"/>
+<Func kind="K" nr="231">
+<Func kind="K" nr="58">
+<Func kind="K" nr="67">
+<Func kind="K" nr="224"/>
 <Num nr="2"/>
 </Func>
 </Func>
@@ -89,11 +89,11 @@
 <FCluster aid="SINCOS10" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="7">
-<Func kind="K" nr="228"/>
-<Func kind="K" nr="230">
+<Func kind="K" nr="230"/>
+<Func kind="K" nr="232">
 <Func kind="K" nr="48"/>
-<Func kind="K" nr="66">
-<Func kind="K" nr="222"/>
+<Func kind="K" nr="67">
+<Func kind="K" nr="224"/>
 <Num nr="2"/>
 </Func>
 </Func>
@@ -105,7 +105,7 @@
 </FCluster>
 <FCluster aid="SINCOS10" nr="5">
 <ArgTypes/>
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="233"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
@@ -113,7 +113,7 @@
 </FCluster>
 <FCluster aid="SINCOS10" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="232"/>
+<Func kind="K" nr="234"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
@@ -121,7 +121,7 @@
 </FCluster>
 <FCluster aid="SINCOS10" nr="7">
 <ArgTypes/>
-<Func kind="K" nr="233"/>
+<Func kind="K" nr="235"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
@@ -129,7 +129,7 @@
 </FCluster>
 <FCluster aid="SINCOS10" nr="8">
 <ArgTypes/>
-<Func kind="K" nr="234"/>
+<Func kind="K" nr="236"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
@@ -138,11 +138,11 @@
 <FCluster aid="SINCOS10" nr="9">
 <ArgTypes/>
 <Func kind="K" nr="7">
-<Func kind="K" nr="227"/>
-<Func kind="K" nr="76">
+<Func kind="K" nr="229"/>
+<Func kind="K" nr="77">
 <Func kind="K" nr="48"/>
-<Func kind="K" nr="66">
-<Func kind="K" nr="222"/>
+<Func kind="K" nr="67">
+<Func kind="K" nr="224"/>
 <Num nr="4"/>
 </Func>
 </Func>
@@ -155,16 +155,16 @@
 <FCluster aid="SINCOS10" nr="10">
 <ArgTypes/>
 <Func kind="K" nr="7">
-<Func kind="K" nr="227"/>
-<Func kind="K" nr="76">
-<Func kind="K" nr="64">
-<Func kind="K" nr="66">
+<Func kind="K" nr="229"/>
+<Func kind="K" nr="77">
+<Func kind="K" nr="65">
+<Func kind="K" nr="67">
 <Num nr="3"/>
 <Num nr="4"/>
 </Func>
-<Func kind="K" nr="222"/>
+<Func kind="K" nr="224"/>
 </Func>
-<Func kind="K" nr="222"/>
+<Func kind="K" nr="224"/>
 </Func>
 </Func>
 <Cluster>
@@ -175,17 +175,17 @@
 <FCluster aid="SINCOS10" nr="11">
 <ArgTypes/>
 <Func kind="K" nr="7">
-<Func kind="K" nr="228"/>
-<Func kind="K" nr="76">
-<Func kind="K" nr="57">
-<Func kind="K" nr="66">
-<Func kind="K" nr="222"/>
+<Func kind="K" nr="230"/>
+<Func kind="K" nr="77">
+<Func kind="K" nr="58">
+<Func kind="K" nr="67">
+<Func kind="K" nr="224"/>
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="57">
-<Func kind="K" nr="66">
-<Func kind="K" nr="222"/>
+<Func kind="K" nr="58">
+<Func kind="K" nr="67">
+<Func kind="K" nr="224"/>
 <Num nr="4"/>
 </Func>
 </Func>
@@ -199,14 +199,14 @@
 <FCluster aid="SINCOS10" nr="12">
 <ArgTypes/>
 <Func kind="K" nr="7">
-<Func kind="K" nr="228"/>
-<Func kind="K" nr="76">
-<Func kind="K" nr="66">
-<Func kind="K" nr="222"/>
+<Func kind="K" nr="230"/>
+<Func kind="K" nr="77">
+<Func kind="K" nr="67">
+<Func kind="K" nr="224"/>
 <Num nr="4"/>
 </Func>
-<Func kind="K" nr="66">
-<Func kind="K" nr="222"/>
+<Func kind="K" nr="67">
+<Func kind="K" nr="224"/>
 <Num nr="2"/>
 </Func>
 </Func>

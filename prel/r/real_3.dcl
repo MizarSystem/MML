@@ -38,7 +38,7 @@
 <Adjective nr="24"/>
 <Adjective nr="25"/>
 <Adjective nr="27"/>
-<Adjective nr="29">
+<Adjective nr="33">
 <Func kind="K" nr="47"/>
 <Func kind="K" nr="43"/>
 </Adjective>
@@ -52,7 +52,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="99">
+<Func kind="K" nr="101">
 <LocusVar nr="1"/>
 <Func kind="K" nr="48"/>
 </Func>
@@ -69,7 +69,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="100">
+<Func kind="K" nr="102">
 <LocusVar nr="1"/>
 <Func kind="K" nr="48"/>
 </Func>
@@ -86,7 +86,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="99">
+<Func kind="K" nr="101">
 <Func kind="K" nr="48"/>
 <LocusVar nr="1"/>
 </Func>
@@ -103,7 +103,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="100">
+<Func kind="K" nr="102">
 <Func kind="K" nr="48"/>
 <LocusVar nr="1"/>
 </Func>
@@ -146,7 +146,7 @@
 </FCluster>
 <FCluster aid="REAL_3" nr="7">
 <ArgTypes/>
-<Func kind="K" nr="95">
+<Func kind="K" nr="97">
 <Func kind="K" nr="48"/>
 </Func>
 <Cluster>

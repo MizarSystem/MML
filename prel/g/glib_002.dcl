@@ -111,7 +111,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="177">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -134,7 +134,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="177">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -328,7 +328,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="177">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -338,7 +338,7 @@
 <Cluster/>
 <LocusVar nr="1"/>
 <Func kind="K" nr="71">
-<Func kind="K" nr="177">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>
@@ -397,7 +397,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="177">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -406,13 +406,13 @@
 <Typ kind="M" nr="17">
 <Cluster/>
 <LocusVar nr="1"/>
-<Func kind="K" nr="214">
+<Func kind="K" nr="215">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
-<Func kind="K" nr="193">
+<Func kind="K" nr="194">
 <LocusVar nr="1"/>
-<Func kind="K" nr="214">
+<Func kind="K" nr="215">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -433,7 +433,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="216">
+<Func kind="K" nr="217">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -443,7 +443,7 @@
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
-<Func kind="K" nr="193">
+<Func kind="K" nr="194">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -470,7 +470,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="177">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -480,17 +480,17 @@
 <Cluster/>
 <LocusVar nr="1"/>
 <Func kind="K" nr="27">
-<Func kind="K" nr="177">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 </Func>
 <Func kind="K" nr="1">
 <LocusVar nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="193">
+<Func kind="K" nr="194">
 <LocusVar nr="1"/>
 <Func kind="K" nr="27">
-<Func kind="K" nr="177">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 </Func>
 <Func kind="K" nr="1">

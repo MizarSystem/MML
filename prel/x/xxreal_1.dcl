@@ -21,7 +21,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="11">
+<Func kind="K" nr="12">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -42,7 +42,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="12">
+<Func kind="K" nr="13">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -63,7 +63,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="13">
+<Func kind="K" nr="14">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -84,7 +84,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="14">
+<Func kind="K" nr="15">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -100,7 +100,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="11">
+<Func kind="K" nr="12">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
@@ -116,7 +116,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="12">
+<Func kind="K" nr="13">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
@@ -132,7 +132,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="13">
+<Func kind="K" nr="14">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
@@ -148,7 +148,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="14">
+<Func kind="K" nr="15">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
@@ -169,7 +169,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="14">
+<Func kind="K" nr="15">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -190,7 +190,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="12">
+<Func kind="K" nr="13">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -211,7 +211,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="13">
+<Func kind="K" nr="14">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -232,7 +232,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="11">
+<Func kind="K" nr="12">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

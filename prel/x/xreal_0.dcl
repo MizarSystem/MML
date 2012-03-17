@@ -756,6 +756,54 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
+<FCluster aid="XREAL_0" nr="35">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="19"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="19"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="41">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="19"/>
+</Cluster>
+</FCluster>
+<FCluster aid="XREAL_0" nr="36">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="19"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="19"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="41">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="18" value="false"/>
+<Adjective nr="19"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="19"/>
+</Cluster>
+</Typ>
+</FCluster>
 <CCluster aid="XREAL_0" nr="1">
 <ArgTypes/>
 <Cluster>

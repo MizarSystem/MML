@@ -178,7 +178,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="180">
+<Func kind="K" nr="182">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -352,7 +352,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="182">
+<Func kind="K" nr="184">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -370,7 +370,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="190">
+<Func kind="K" nr="192">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -392,7 +392,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="191">
+<Func kind="K" nr="193">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -404,7 +404,7 @@
 </FCluster>
 <FCluster aid="BORSUK_1" nr="7">
 <ArgTypes/>
-<Func kind="K" nr="197"/>
+<Func kind="K" nr="199"/>
 <Cluster>
 <Adjective nr="35" value="false"/>
 <Adjective nr="47"/>

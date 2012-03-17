@@ -39,10 +39,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="38">
+<Adjective nr="42">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="41">
+<Adjective nr="45">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -75,7 +75,7 @@
 <Func kind="K" nr="78"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="170">
+<Func kind="K" nr="171">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

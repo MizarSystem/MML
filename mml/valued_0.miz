@@ -7,17 +7,18 @@
 environ
 
  vocabularies VALUED_0, RELAT_1, COMPLEX1, RAT_1, INT_1, FUNCT_1, ORDINAL2,
-      XCMPLX_0, ARYTM, MEMBERED, BOOLE, FUNCOP_1, FUNCT_4, CAT_1, SUPINF_1;
+      XCMPLX_0, ARYTM, MEMBERED, BOOLE, FUNCOP_1, FUNCT_4, CAT_1, SUPINF_1,
+      ANPROJ_1, ZF_REFLE, SEQM_3, PROB_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
       RELSET_1, FUNCOP_1, FUNCT_4, NUMBERS, MEMBERED, XCMPLX_0, XREAL_0,
       XXREAL_0, RAT_1, INT_1;
  constructors XCMPLX_0, RAT_1, MEMBERED, FUNCOP_1, FUNCT_4, XXREAL_0;
  registrations MEMBERED, RELAT_1, FUNCOP_1, XREAL_0, RAT_1, ORDINAL1, INT_1,
       FUNCT_1, XBOOLE_0;
- requirements SUBSET;
+ requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
  definitions TARSKI, RELAT_1, XBOOLE_0, FUNCOP_1;
  theorems NUMBERS, XBOOLE_1, RELAT_1, MEMBERED, FUNCT_1, XCMPLX_0, XXREAL_0,
-      XREAL_0, RAT_1, INT_1, ORDINAL1, FUNCT_4;
+      XREAL_0, RAT_1, INT_1, ORDINAL1, FUNCT_4, FUNCOP_1, XBOOLE_0;
 
 begin
 
@@ -1404,5 +1405,129 @@ A1: Y c= NAT by MEMBERED:6;
     rng [:X,Y:] c= Y by RELAT_1:194;
     hence rng [:X,Y:] c= NAT by A1,XBOOLE_1:1;
   end;
+end;
+
+notation
+  let f be ext-real-valued Relation;
+  synonym f is non-zero for f is non-empty;
+end;
+
+registration
+ cluster non empty constant natural-valued Function;
+ existence
+  proof
+   take 1 .--> 1;
+   thus thesis;
+  end;
+end;
+
+theorem
+ for f being non empty constant complex-valued Function
+  ex r being complex number st for x st x in dom f holds f.x = r
+proof
+ let f be non empty constant complex-valued Function;
+  consider r being set such that
+W: for x st x in dom f holds f.x = r by FUNCOP_1:93;
+  consider x being set such that
+W1: x in dom f by XBOOLE_0:def 1;
+   r = f.x by W,W1;
+   then r in rng f by W1,FUNCT_1:12;
+   then r is complex;
+  hence thesis by W;
+end;
+
+theorem
+ for f being non empty constant ext-real-valued Function
+  ex r being ext-real number st for x st x in dom f holds f.x = r
+proof
+ let f be non empty constant ext-real-valued Function;
+  consider r being set such that
+W: for x st x in dom f holds f.x = r by FUNCOP_1:93;
+  consider x being set such that
+W1: x in dom f by XBOOLE_0:def 1;
+   r = f.x by W,W1;
+   then r in rng f by W1,FUNCT_1:12;
+   then r is ext-real;
+  hence thesis by W;
+end;
+
+theorem
+ for f being non empty constant real-valued Function
+  ex r being real number st for x st x in dom f holds f.x = r
+proof
+ let f be non empty constant real-valued Function;
+  consider r being set such that
+W: for x st x in dom f holds f.x = r by FUNCOP_1:93;
+  consider x being set such that
+W1: x in dom f by XBOOLE_0:def 1;
+   r = f.x by W,W1;
+   then r in rng f by W1,FUNCT_1:12;
+   then r is real;
+  hence thesis by W;
+end;
+
+theorem
+ for f being non empty constant rational-valued Function
+  ex r being rational number st for x st x in dom f holds f.x = r
+proof
+ let f be non empty constant rational-valued Function;
+  consider r being set such that
+W: for x st x in dom f holds f.x = r by FUNCOP_1:93;
+  consider x being set such that
+W1: x in dom f by XBOOLE_0:def 1;
+   r = f.x by W,W1;
+   then r in rng f by W1,FUNCT_1:12;
+   then r is rational;
+  hence thesis by W;
+end;
+
+theorem
+ for f being non empty constant integer-valued Function
+  ex r being integer number st for x st x in dom f holds f.x = r
+proof
+ let f be non empty constant integer-valued Function;
+  consider r being set such that
+W: for x st x in dom f holds f.x = r by FUNCOP_1:93;
+  consider x being set such that
+W1: x in dom f by XBOOLE_0:def 1;
+   r = f.x by W,W1;
+   then r in rng f by W1,FUNCT_1:12;
+   then r is integer;
+  hence thesis by W;
+end;
+
+theorem
+ for f being non empty constant natural-valued Function
+  ex r being natural number st for x st x in dom f holds f.x = r
+proof
+ let f be non empty constant natural-valued Function;
+  consider r being set such that
+W: for x st x in dom f holds f.x = r by FUNCOP_1:93;
+  consider x being set such that
+W1: x in dom f by XBOOLE_0:def 1;
+   r = f.x by W,W1;
+   then r in rng f by W1,FUNCT_1:12;
+   then r is natural;
+  hence thesis by W;
+end;
+
+begin :: inecreasing & decreasing functions
+
+reserve e1,e2 for ext-real number;
+
+definition
+  let f be ext-real-valued Function;
+  attr f is increasing means
+  :Def13:
+  for e1,e2 st e1 in dom f & e2 in dom f & e1 < e2 holds f.e1 < f.e2;
+  attr f is decreasing means
+  :Def14:
+  for e1,e2 st e1 in dom f & e2 in dom f & e1 < e2 holds f.e1 > f.e2;
+  attr f is non-decreasing means
+  :Def15:
+  for e1,e2 st e1 in dom f & e2 in dom f & e1 <= e2 holds f.e1 <= f.e2;
+  attr f is non-increasing means
+  :Def16:
+  for e1,e2 st e1 in dom f & e2 in dom f & e1 <= e2 holds f.e1 >= f.e2;
 end;
 

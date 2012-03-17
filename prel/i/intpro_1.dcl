@@ -31,14 +31,14 @@
 </RCluster>
 <FCluster aid="INTPRO_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="114"/>
+<Func kind="K" nr="115"/>
 <Cluster>
 <Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <FCluster aid="INTPRO_1" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="114"/>
+<Func kind="K" nr="115"/>
 <Cluster>
 <Adjective nr="13"/>
 </Cluster>
@@ -48,11 +48,11 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="24">
-<Func kind="K" nr="114"/>
+<Func kind="K" nr="115"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="120">
+<Func kind="K" nr="121">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -61,7 +61,7 @@
 </FCluster>
 <FCluster aid="INTPRO_1" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="121"/>
+<Func kind="K" nr="122"/>
 <Cluster>
 <Adjective nr="35"/>
 </Cluster>
@@ -71,11 +71,11 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="24">
-<Func kind="K" nr="114"/>
+<Func kind="K" nr="115"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="124">
+<Func kind="K" nr="125">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -84,7 +84,7 @@
 </FCluster>
 <FCluster aid="INTPRO_1" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="125"/>
+<Func kind="K" nr="126"/>
 <Cluster>
 <Adjective nr="36"/>
 </Cluster>
@@ -94,11 +94,11 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="24">
-<Func kind="K" nr="114"/>
+<Func kind="K" nr="115"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="126">
+<Func kind="K" nr="127">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -107,7 +107,7 @@
 </FCluster>
 <FCluster aid="INTPRO_1" nr="8">
 <ArgTypes/>
-<Func kind="K" nr="127"/>
+<Func kind="K" nr="128"/>
 <Cluster>
 <Adjective nr="37"/>
 </Cluster>
@@ -143,8 +143,8 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="24">
-<Func kind="K" nr="108">
-<Func kind="K" nr="86"/>
+<Func kind="K" nr="109">
+<Func kind="K" nr="87"/>
 </Func>
 </Func>
 </Typ>
@@ -157,7 +157,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="114"/>
+<Func kind="K" nr="115"/>
 </Typ>
 <Cluster>
 <Adjective nr="26"/>

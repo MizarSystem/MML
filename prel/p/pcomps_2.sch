@@ -132,16 +132,16 @@
 <Adjective nr="10"/>
 <Adjective nr="27">
 <Func kind="K" nr="63"/>
-<Func kind="K" nr="149">
-<Func kind="K" nr="149">
+<Func kind="K" nr="152">
+<Func kind="K" nr="152">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="63"/>
-<Func kind="K" nr="149">
-<Func kind="K" nr="149">
+<Func kind="K" nr="152">
+<Func kind="K" nr="152">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -149,9 +149,9 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="116">
-<Func kind="K" nr="149">
-<Func kind="K" nr="149">
+<Func kind="K" nr="118">
+<Func kind="K" nr="152">
+<Func kind="K" nr="152">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -166,14 +166,14 @@
 <Func kind="K" nr="63"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="116">
-<Func kind="K" nr="149">
-<Func kind="K" nr="149">
+<Func kind="K" nr="118">
+<Func kind="K" nr="152">
+<Func kind="K" nr="152">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
 <Var nr="1"/>
-<Func kind="K" nr="112">
+<Func kind="K" nr="114">
 <Var nr="2"/>
 <Num nr="1"/>
 </Func>
@@ -217,9 +217,9 @@
 </Pred>
 <Pred kind="R" nr="1">
 <Var nr="5"/>
-<Func kind="K" nr="116">
-<Func kind="K" nr="149">
-<Func kind="K" nr="149">
+<Func kind="K" nr="118">
+<Func kind="K" nr="152">
+<Func kind="K" nr="152">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -281,16 +281,16 @@
 <Adjective nr="10"/>
 <Adjective nr="27">
 <Func kind="K" nr="63"/>
-<Func kind="K" nr="149">
-<Func kind="K" nr="149">
+<Func kind="K" nr="152">
+<Func kind="K" nr="152">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="63"/>
-<Func kind="K" nr="149">
-<Func kind="K" nr="149">
+<Func kind="K" nr="152">
+<Func kind="K" nr="152">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -298,9 +298,9 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="116">
-<Func kind="K" nr="149">
-<Func kind="K" nr="149">
+<Func kind="K" nr="118">
+<Func kind="K" nr="152">
+<Func kind="K" nr="152">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -315,14 +315,14 @@
 <Func kind="K" nr="63"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="116">
-<Func kind="K" nr="149">
-<Func kind="K" nr="149">
+<Func kind="K" nr="118">
+<Func kind="K" nr="152">
+<Func kind="K" nr="152">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
 <Var nr="1"/>
-<Func kind="K" nr="112">
+<Func kind="K" nr="114">
 <Var nr="2"/>
 <Num nr="1"/>
 </Func>
@@ -361,9 +361,9 @@
 </Typ>
 <Func kind="K" nr="28">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="116">
-<Func kind="K" nr="149">
-<Func kind="K" nr="149">
+<Func kind="K" nr="118">
+<Func kind="K" nr="152">
+<Func kind="K" nr="152">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>

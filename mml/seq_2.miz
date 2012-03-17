@@ -16,7 +16,7 @@ environ
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions VALUED_1;
  theorems SEQ_1, ABSVALUE, NAT_1, XREAL_0, XCMPLX_0, XCMPLX_1, XREAL_1,
-      COMPLEX1, XXREAL_0, VALUED_1;
+      COMPLEX1, XXREAL_0, VALUED_1, FUNCT_2;
  schemes NAT_1;
 
 begin
@@ -92,10 +92,10 @@ definition
   let f be real-valued Function;
   attr f is bounded_above means
 
-  ex r st for y st y in dom f holds f.y<r;
+:Def1: ex r st for y st y in dom f holds f.y<r;
   attr f is bounded_below means
 
-  ex r st for y st y in dom f holds r<f.y;
+:Def2: ex r st for y st y in dom f holds r<f.y;
 end;
 
 definition
@@ -144,17 +144,68 @@ A5: for n holds r < seq.n;
 end;
 
 definition
-  let f;
+  let f be complex-valued Function;
   attr f is bounded means
   :Def5:
-  f is bounded_above bounded_below;
+  ex r st for y st y in dom f holds abs(f.y) <r;
 end;
 
 registration
   cluster bounded -> bounded_above bounded_below (real-valued Function);
-  coherence by Def5;
+  coherence
+   proof let f be real-valued Function;
+    given r such that
+G:   for y st y in dom f holds abs(f.y) <r;
+    thus f is bounded_above
+     proof
+      take r;
+      let y;
+F:    f.y <=  abs(f.y) by ABSVALUE:11;
+      assume y in dom f;
+       then abs(f.y) <r by G;
+      hence f.y<r by F,XXREAL_0:2;
+     end;
+    take -abs r;
+    let y;
+F1:  -abs(f.y) <= f.y by ABSVALUE:11;
+    r <= abs r by ABSVALUE:11;
+    then
+F2:  - abs r <= -r by XREAL_1:26;
+    assume y in dom f;
+     then abs(f.y) <r by G;
+     then -r < -abs(f.y) by XREAL_1:26;
+     then -abs r < -abs(f.y) by F2,XXREAL_0:2;
+    hence -abs r<f.y by F1,XXREAL_0:2;
+   end;
   cluster bounded_above bounded_below -> bounded (real-valued Function);
-  coherence by Def5;
+  coherence
+  proof let f be real-valued Function;
+    assume f is bounded_above;
+    then consider r1 such that
+A2: for y st y in dom f holds f.y<r1 by Def1;
+    assume f is bounded_below;
+    then consider r2 such that
+A3: for y st y in dom f holds r2<f.y by Def2;
+    take g=abs(r1)+abs(r2)+1;
+A4: 0<=abs(r1) by COMPLEX1:132;
+    0<=abs(r2) by COMPLEX1:132;
+    then 0+0<=abs(r1)+abs(r2) by A4;
+    let y such that
+Z:   y in dom f;
+    r1<=abs(r1) by ABSVALUE:11;
+    then f.y<abs(r1) by A2,XXREAL_0:2,Z;
+    then f.y +0<abs(r1)+abs(r2) by COMPLEX1:132,XREAL_1:10;
+    then
+A5: f.y<g by XREAL_1:10;
+A6: -abs(r2)<=r2 by ABSVALUE:11;
+A7: -abs(r1)<=-0 by A4;
+    -abs(r2)<f.y by A3,A6,XXREAL_0:2,Z;
+    then -abs(r1)+-abs(r2)<0+f.y by A7,XREAL_1:10;
+    then
+A8: -abs(r1)-abs(r2)+-1<f.y+0 by XREAL_1:10;
+    -abs(r1)-abs(r2)-1=-g;
+    hence abs(f.y)<g by A5,A8,Th9;
+  end;
 end;
 
 canceled 3;
@@ -194,23 +245,10 @@ A8: -abs(r1)-abs(r2)+-1<seq.n+0 by XREAL_1:10;
   end;
   given r such that 0<r and
 A9: for n holds abs(seq.n)<r;
-  now
-    take g=r;
-    let n;
-    seq.n<=abs(seq.n) by ABSVALUE:11;
-    hence seq.n<g by A9,XXREAL_0:2;
-  end;
-  hence seq is bounded_above by Def3;
-  now
-    take g=-r;
-    let n;
-    abs(seq.n)<r by A9;
-    then
-A10: -r<-abs(seq.n) by XREAL_1:26;
-    -abs(seq.n)<=seq.n by ABSVALUE:11;
-    hence g<seq.n by A10,XXREAL_0:2;
-  end;
-  hence seq is bounded_below by Def4;
+ take r; let y;
+ assume y in dom seq;
+  then y is Element of NAT by FUNCT_2:def 1;
+ hence thesis by A9,Def5;
 end;
 
 theorem Th16:
@@ -336,6 +374,13 @@ A12: abs(g1-g2)<=abs(seq.(n1+n2)-g1)+abs(seq.(n1+n2)-g2) by COMPLEX1:138;
     abs(g1-g2)/2 <abs(g1-g2) by A5,A6,XREAL_1:218;
     hence contradiction by A11,A12,XXREAL_0:2;
   end;
+end;
+
+definition let f be real-valued Function;
+ redefine
+  attr f is bounded means
+   f is bounded_above bounded_below;
+ compatibility;
 end;
 
 definition
