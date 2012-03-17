@@ -2,7 +2,15 @@
 ::  by Yatsuka Nakamura, Piotr Rudnicki, Andrzej Trybulec and Pauline N. Kawamoto
 ::
 :: Received November 17, 1994
-:: Copyright (c) 1994 Association of Mizar Users
+:: Copyright (c) 1994-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -61,52 +69,13 @@ proof
   hence thesis by ZFMISC_1:35;
 end;
 
-theorem Th3:
-  for f, g, h being Function st f c= g holds f +* h c= g +* h
-proof
-  let f, g, h be Function;
-  assume
-A1: f c= g;
-  now
-    dom (f +* h) = dom f \/ dom h & dom (g +* h) = dom g \/ dom h by
-FUNCT_4:def 1;
-    hence dom (f +* h) c= dom (g +* h) by A1,RELAT_1:25,XBOOLE_1:9;
-    let x be set;
-    assume x in dom (f +* h);
-    then
-A2: x in dom f or x in dom h by FUNCT_4:13;
-    per cases;
-    suppose
-A3:   x in dom h;
-      hence (f +* h).x = h.x by FUNCT_4:14
-        .= (g +* h).x by A3,FUNCT_4:14;
-    end;
-    suppose
-A4:   not x in dom h;
-      then (f +* h).x = f.x & (g +* h).x = g.x by FUNCT_4:12;
-      hence (f +* h).x = (g +* h).x by A1,A2,A4,GRFUNC_1:8;
-    end;
-  end;
-  hence thesis by GRFUNC_1:8;
-end;
-
-theorem
-  for f, g, h being Function st f c= g & dom f misses dom h holds f c= g +* h
-proof
-  let f, g, h be Function;
-  assume f c= g;
-  then
-A1: f +* h c= g +* h by Th3;
-  assume dom f misses dom h;
-  then f c= f +* h by FUNCT_4:33;
-  hence thesis by A1,XBOOLE_1:1;
-end;
-
 begin
 
 ::---------------------------------------------------------------------------
 :: Many Sorted Sets and Functions
 ::---------------------------------------------------------------------------
+
+canceled 2;
 
 theorem
   for I being set, MSS being ManySortedSet of I holds MSS#.<*>I = {{}}
@@ -1174,45 +1143,31 @@ end;
 canceled;
 
 theorem
-  {k where k is Element of NAT: k > 1} is infinite
+  for n being Nat holds
+  {k where k is Element of NAT: k > n} is infinite
 proof
-  set X = {k where k is Element of NAT: k > 1};
+  let n be Nat;
+  set X = {k where k is Element of NAT: k > n};
 A1: X c= NAT
   proof
     let x be set;
     assume x in X;
-    then ex k being Element of NAT st x = k & k > 1;
+    then ex k being Element of NAT st x = k & k > n;
     hence thesis;
   end;
-A2: 2 in X;
+  n+1 > n+0 by XREAL_1:10; then
+A2: n+1 in X;
   assume X is finite;
   then reconsider X as non empty finite Subset of NAT by A1,A2;
   set m = max X;
   m in X by XXREAL_2:def 8;
   then consider k being Element of NAT such that
 A3: m = k and
-A4: k > 1;
+A4: k > n;
   k+1 > k+0 by XREAL_1:10;
-  then k+1 > 1 by A4,XXREAL_0:2;
+  then k+1 > n by A4,XXREAL_0:2;
   then m+1 in X by A3;
   then m+1 <= m+0 by XXREAL_2:def 8;
   hence contradiction by XREAL_1:10;
 end;
 
-theorem
- f c= g & not x in dom f implies f c= g+*(x,y)
- proof assume that
-A1: f c= g;
-  assume not x in dom f;
-  then
-A2: f c= f +*(x .--> y) by FUNCT_4:115;
-  per cases;
-  suppose x in dom g;
-   then g+*(x,y) = g+*(x.-->y) by FUNCT_7:def 3;
-   then f +*(x .--> y) c= g+*(x,y) by A1,Th3;
-  hence f c= g+*(x,y) by A2,XBOOLE_1:1;
-  end;
-  suppose not x in dom g;
-  hence f c= g+*(x,y) by A1,FUNCT_7:def 3;
-  end;
- end;

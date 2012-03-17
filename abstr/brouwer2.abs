@@ -1,0 +1,102 @@
+:: Brouwer Fixed Point Theorem in the General Case
+::  by Karol P\kak
+:: 
+:: Received December 21, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies ABIAN, ARYTM_1, ARYTM_3, BORSUK_1, BROUWER, CARD_1, COMPLEX1,
+      CONNSP_2, CONVEX1, EUCLID, FUNCOP_1, FUNCT_1, FUNCT_3, FUNCT_4, JGRAPH_4,
+      JORDAN2C, MEASURE5, MEMBERED, METRIC_1, NAT_1, NUMBERS, ORDINAL1,
+      ORDINAL2, PCOMPS_1, PRE_TOPC, PROB_1, RCOMP_1, REAL_1, RELAT_1, RLAFFIN1,
+      RLTOPSP1, RLVECT_1, RLVECT_5, RUSUB_4, RVSUM_1, STRUCT_0, SUBSET_1,
+      SUPINF_2, TARSKI, TOPMETR, TOPREALB, TOPS_1, TOPS_2, VALUED_1, VALUED_2,
+      XBOOLE_0, XREAL_0, XXREAL_0, XXREAL_2, FUNCT_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_2, ORDINAL1, NUMBERS, VALUED_1, CARD_1, XCMPLX_0, XREAL_0,
+      XXREAL_0, MEMBERED, COMPLEX1, NAT_1, FUNCOP_1, FINSEQ_2, VALUED_2,
+      STRUCT_0, PRE_TOPC, RLAFFIN2, TOPS_1, METRIC_1, PCOMPS_1, TOPMETR,
+      BORSUK_1, RLVECT_1, RLTOPSP1, EUCLID, TOPREAL9, TOPREALB, DOMAIN_1,
+      TOPS_2, COMPTS_1, TBSP_1, JORDAN2C, XXREAL_2, FUNCT_4, JGRAPH_4, TMAP_1,
+      RUSUB_4, CONVEX1, REAL_1, CONNSP_2, BROUWER, ABIAN, RLVECT_5, RLAFFIN1;
+ constructors BINOP_2, COMPLEX1, POLYEQ_1, TBSP_1, MONOID_0, JORDAN2C, CONVEX1,
+      GRCAT_1, TOPREAL9, TOPS_1, COMPTS_1, PCOMPS_1, XXREAL_2, FUNCSDOM,
+      JGRAPH_4, TMAP_1, TOPREALC, BROUWER, ABIAN, RUSUB_4, RLAFFIN1, RLAFFIN2,
+      RLVECT_5, SEQ_4;
+ registrations BORSUK_1, BORSUK_3, BROUWER, CARD_1, COMPTS_1, CONVEX1, EUCLID,
+      EUCLID_9, FUNCOP_1, FUNCT_1, FUNCT_2, JGRAPH_4, JORDAN, JORDAN2C,
+      MEMBERED, NAT_1, PCOMPS_1, PRE_TOPC, REALSET1, RELAT_1, REVROT_1,
+      RLAFFIN1, RLAFFIN3, RLTOPSP1, RLVECT_1, SIMPLEX2, STRUCT_0, SUBSET_1,
+      TMAP_1, TOPGRP_1, TOPMETR, TOPREAL1, TOPREAL9, TOPREALC, TOPS_1,
+      VALUED_0, VALUED_2, WAYBEL_2, XBOOLE_0, XCMPLX_0, XREAL_0, XXREAL_0,
+      ZFMISC_1, RELSET_1;
+ requirements ARITHM, BOOLE, NUMERALS, SUBSET, REAL;
+
+
+begin :: Preliminaries
+
+reserve n for Nat,
+        p,q,u,w for Point of TOP-REAL n,
+        S for Subset of TOP-REAL n,
+        A, B for convex Subset of TOP-REAL n,
+        r for real number;
+
+theorem :: BROUWER2:1
+  (1-r)*p + r*q = p + r*(q-p);
+
+theorem :: BROUWER2:2
+  u in halfline(p,q) & w in halfline(p,q) & |.u-p.| = |.w-p.| implies u = w;
+
+theorem :: BROUWER2:3
+  for S st p in S & p <> q & S/\halfline(p,q) is Bounded
+  ex w st w in (Fr S)/\halfline(p,q) &
+          (for u st u in S/\halfline(p,q) holds |.p-u.| <= |.p-w.|) &
+          for r st r > 0 ex u st u in S/\halfline(p,q) & |.w-u.| < r;
+
+theorem :: BROUWER2:4
+  for A st A is closed & p in Int A & p <> q & A/\halfline(p,q) is Bounded
+  ex u st(Fr A)/\halfline(p,q)={u};
+
+theorem :: BROUWER2:5
+  r > 0 implies Fr cl_Ball(p,r) = Sphere(p,r);
+
+registration
+  let n be Element of NAT;
+  let A be Bounded Subset of TOP-REAL n;
+  let p be Point of TOP-REAL n;
+  cluster p+A -> Bounded;
+end;
+
+begin :: Main Theorems
+
+theorem :: BROUWER2:6
+  for n be Element of NAT
+  for A be convex Subset of TOP-REAL n st A is compact non boundary
+  ex h be Function of(TOP-REAL n) |A,Tdisk(0.TOP-REAL n,1) st
+    h is being_homeomorphism & h.:Fr A = Sphere(0.TOP-REAL n,1);
+
+theorem :: BROUWER2:7
+  for A,B st A is compact non boundary & B is compact non boundary
+  ex h be Function of(TOP-REAL n) |A,(TOP-REAL n) |B st
+    h is being_homeomorphism & h.:Fr A = Fr B;
+
+theorem :: BROUWER2:8
+  for A st A is compact non boundary
+  for h be continuous Function of(TOP-REAL n) |A,(TOP-REAL n) |A
+    holds h has_a_fixpoint;
+
+theorem :: BROUWER2:9
+ for A be non empty convex Subset of TOP-REAL n st
+   A is compact non boundary
+ for FR be non empty SubSpace of (TOP-REAL n) |A st [#]FR = Fr A
+  holds not FR is_a_retract_of (TOP-REAL n) |A;
+

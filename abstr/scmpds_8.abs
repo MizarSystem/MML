@@ -2,26 +2,34 @@
 ::  by JingChao Chen
 ::
 :: Received June 14, 2000
-:: Copyright (c) 2000 Association of Mizar Users
+:: Copyright (c) 2000-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
  vocabularies NUMBERS, SCMPDS_2, FSM_1, AMI_2, SUBSET_1, SCMP_GCD, AMI_3,
       FUNCT_1, CARD_1, AMI_1, ARYTM_3, CARD_3, XXREAL_0, INT_1, SCMFSA_9,
       TURING_1, ARYTM_1, SCMPDS_4, SCMFSA_7, RELAT_1, UNIALG_2, SCMFSA7B,
-      SCMFSA6A, FUNCT_4, CIRCUIT2, TARSKI, SCMFSA6B, MSUALG_1, GRAPHSP,
-      STRUCT_0, VALUED_1, NAT_1, XBOOLE_0, SCMPDS_8, ORDINAL1, PARTFUN1,
-      SCMNORM, SCMFSA6C;
+      FUNCT_4, CIRCUIT2, TARSKI, SCMFSA6B, MSUALG_1, GRAPHSP, STRUCT_0,
+      VALUED_1, NAT_1, XBOOLE_0, SCMPDS_8, ORDINAL1, PARTFUN1, SCMNORM,
+      SCMFSA6C, PBOOLE;
  notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_2, CARD_1, NUMBERS, RELAT_1,
-      FUNCT_1, PARTFUN1, VALUED_1, XCMPLX_0, FUNCT_4, RECDEF_1, NAT_1, INT_1,
-      STRUCT_0, COMPOS_1, EXTPRO_1, AMI_1, AMI_2, AMI_3, SCMPDS_2, SCMPDS_4,
-      SCMPDS_6, SCMP_GCD, CARD_3, DOMAIN_1, XXREAL_0;
+      FUNCT_1, PARTFUN1, VALUED_1, XCMPLX_0, FUNCT_4, PBOOLE, RECDEF_1, NAT_1,
+      INT_1, STRUCT_0, COMPOS_1, EXTPRO_1, AMI_1, AMI_2, AMI_3, SCMPDS_2,
+      SCMPDS_4, SCMPDS_6, SCMP_GCD, CARD_3, DOMAIN_1, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, RECDEF_1, SCM_1, SCMPDS_4, SCMPDS_5,
       SCMPDS_6, SCMP_GCD, PRE_POLY, AMI_1, AMI_2;
  registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, CARD_3, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6,
       XBOOLE_0, VALUED_0, VALUED_1, AMI_1, RELAT_1, GRFUNC_1, FUNCT_2,
-      COMPOS_1, AFINSQ_1, EXTPRO_1;
+      COMPOS_1, AFINSQ_1, EXTPRO_1, PBOOLE, FUNCT_4;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -94,97 +102,113 @@ theorem :: SCMPDS_8:8
 while<0(a,i,I). 0=(a,i)>=0_goto (card I +2) & while<0(a,i,I). (card
   I+1)=goto -(card I+1);
 
+reserve P,Q for (the Instructions of SCMPDS)-valued ManySortedSet of NAT;
+
 theorem :: SCMPDS_8:9
   for s being State of SCMPDS,I being Program of SCMPDS,a being
   Int_position, i being Integer st s.DataLoc(s.a,i) >= 0 holds while<0(a,i,I)
-  is_closed_on s & while<0(a,i,I) is_halting_on s;
+  is_closed_on s,P & while<0(a,i,I) is_halting_on s,P;
 
 theorem :: SCMPDS_8:10
   for s being State of SCMPDS,I being Program of SCMPDS,a,c being
-Int_position, i being Integer st s.DataLoc(s.a,i) >= 0 holds IExec(while<0(a,i,
-  I),s) = s +* Start-At((card I+2),SCMPDS);
+Int_position, i being Integer st s.DataLoc(s.a,i) >= 0
+ holds IExec(while<0(a,i,I),P,s) = s +* Start-At((card I+2),SCMPDS);
 
 theorem :: SCMPDS_8:11
   for s being State of SCMPDS,I being Program of SCMPDS,a being
-Int_position, i being Integer st s.DataLoc(s.a,i) >= 0 holds IC IExec(while<0(a
-  ,i,I),s) =  (card I + 2);
+Int_position, i being Integer st s.DataLoc(s.a,i) >= 0
+ holds IC IExec(while<0(a,i,I),P,s) =  (card I + 2);
 
 theorem :: SCMPDS_8:12
   for s being State of SCMPDS,I being Program of SCMPDS, a,b being
-Int_position , i being Integer st s.DataLoc(s.a,i) >= 0 holds IExec(while<0(a,i
-  ,I),s).b = s.b;
+Int_position , i being Integer st s.DataLoc(s.a,i) >= 0
+ holds IExec(while<0(a,i,I),P,s).b = s.b;
 
 scheme :: SCMPDS_8:sch 1
 
-  WhileLHalt { F(State of SCMPDS)-> Element of NAT, s() -> State of SCMPDS,I()
+  WhileLHalt { F(State of SCMPDS)-> Element of NAT, s() -> State of SCMPDS,
+    P() -> (the Instructions of SCMPDS)-valued ManySortedSet of NAT,
+    I()
 -> halt-free shiftable Program of SCMPDS, a() -> Int_position,i() -> Integer,
   P[State of SCMPDS]}: (F(s())=F(s()) or P[s()]) & while<0(a(),i(),I())
-  is_closed_on s() & while<0(a(),i(),I()) is_halting_on s()
+  is_closed_on s(),P() & while<0(a(),i(),I()) is_halting_on s(), P()
 provided
- card I() > 0 and
  for t be State of SCMPDS st P[Dstate t] & F(Dstate(t))=0 holds t.
 DataLoc(s().a(),i()) >= 0 and
  P[Dstate s()] and
- for t be State of SCMPDS st P[Dstate t] & t.a()=s().a() & t.DataLoc(
-s().a(),i()) < 0 holds IExec(I(),t).a()=t.a() & I() is_closed_on t & I()
-is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) & P[Dstate(IExec(I(),t))
-];
+ for t be State of SCMPDS, Q st P[Dstate t] & t.a()=s().a() & t.DataLoc(
+s().a(),i()) < 0 holds IExec(I(),Q,t).a()=t.a() & I() is_closed_on t,Q &
+ I() is_halting_on t,Q &
+  F(Dstate IExec(I(),Q,t)) < F(Dstate t) & P[Dstate(IExec(I(),Q,t))];
 
 scheme :: SCMPDS_8:sch 2
 
-  WhileLExec { F(State of SCMPDS)-> Element of NAT, s() -> State of SCMPDS,I()
+  WhileLExec { F(State of SCMPDS)-> Element of NAT, s() -> State of SCMPDS,
+    P() -> (the Instructions of SCMPDS)-valued ManySortedSet of NAT,
+    I()
 -> halt-free shiftable Program of SCMPDS, a() -> Int_position,i() -> Integer,
-P[State of SCMPDS]}: (F(s())=F(s()) or P[s()]) & IExec(while<0(a(),i(),I()),s()
-  ) = IExec(while<0(a(),i(),I()),IExec(I(),s()))
+P[State of SCMPDS]}: (F(s())=F(s()) or P[s()]) &
+   IExec(while<0(a(),i(),I()),P(),s())
+    = IExec(while<0(a(),i(),I()),P(),IExec(I(),P(),s()))
 provided
- card I() > 0 and
  s().DataLoc(s().a(),i()) < 0 and
  for t be State of SCMPDS st P[Dstate t] & F(Dstate(t))=0 holds t.
 DataLoc(s().a(),i()) >= 0 and
  P[Dstate s()] and
- for t be State of SCMPDS st P[Dstate t] & t.a()=s().a() & t.DataLoc(
-s().a(),i()) < 0 holds IExec(I(),t).a()=t.a() & I() is_closed_on t & I()
-is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) & P[Dstate(IExec(I(),t))
-];
+ for t be State of SCMPDS,Q st P[Dstate t] & t.a()=s().a() & t.DataLoc(
+s().a(),i()) < 0 holds IExec(I(),Q,t).a()=t.a() & I() is_closed_on t,Q & I()
+is_halting_on t,Q & F(Dstate IExec(I(),Q,t)) < F(Dstate t) &
+P[Dstate(IExec(I(),Q,t))];
 
 theorem :: SCMPDS_8:13
   for s being State of SCMPDS,I being halt-free shiftable Program of
 SCMPDS , a be Int_position, i be Integer,X be set, f being Function of product
-the Object-Kind of SCMPDS,NAT st card I > 0 & ( for t be State of SCMPDS st f.
-Dstate(t)=0 holds t.DataLoc(s.a,i) >= 0 ) & (for t be State of SCMPDS st (for x
+the Object-Kind of SCMPDS,NAT st card I > 0 &
+ ( for t be State of SCMPDS st f.
+Dstate(t)=0 holds t.DataLoc(s.a,i) >= 0 ) &
+(for t be State of SCMPDS,Q st (for x
 be Int_position st x in X holds t.x=s.x) & t.a=s.a & t.DataLoc(s.a,i) < 0 holds
-  IExec(I,t).a=t.a & f.Dstate(IExec(I,t)) < f.Dstate(t) & I is_closed_on t & I
-is_halting_on t & for x be Int_position st x in X holds IExec(I,t).x=t.x) holds
-  while<0(a,i,I) is_closed_on s & while<0(a,i,I) is_halting_on s;
+  IExec(I,Q,t).a=t.a & f.Dstate(IExec(I,Q,t)) < f.Dstate(t)
+   & I is_closed_on t,Q & I
+is_halting_on t,Q & for x be Int_position st x in X holds IExec(I,Q,t).x=t.x)
+ holds
+  while<0(a,i,I) is_closed_on s, P & while<0(a,i,I) is_halting_on s, P;
 
 theorem :: SCMPDS_8:14
   for s being State of SCMPDS,I being halt-free shiftable Program of
   SCMPDS, a be Int_position, i be Integer,X be set,f being Function of product
-the Object-Kind of SCMPDS,NAT st card I > 0 & s.DataLoc(s.a,i) < 0 & (for t be
-  State of SCMPDS st f.Dstate(t)=0 holds t.DataLoc(s.a,i) >= 0 ) & (for t be
-State of SCMPDS st (for x be Int_position st x in X holds t.x=s.x) & t.a=s.a &
-  t.DataLoc(s.a,i) < 0 holds IExec(I,t).a=t.a & I is_closed_on t & I
-is_halting_on t & f.Dstate(IExec(I,t)) < f.Dstate(t) & for x be Int_position st
-x in X holds IExec(I,t).x=t.x) holds IExec(while<0(a,i,I),s) =IExec(while<0(a,i
-  ,I),IExec(I,s));
+the Object-Kind of SCMPDS,NAT st s.DataLoc(s.a,i) < 0 & (for t be
+  State of SCMPDS st f.Dstate(t)=0 holds t.DataLoc(s.a,i) >= 0 ) &
+   (for t be State of SCMPDS,Q
+    st (for x be Int_position st x in X holds t.x=s.x) & t.a=s.a &
+  t.DataLoc(s.a,i) < 0 holds IExec(I,Q,t).a=t.a & I is_closed_on t,Q & I
+is_halting_on t,Q & f.Dstate(IExec(I,Q,t)) < f.Dstate(t)
+ & for x be Int_position st
+x in X holds IExec(I,Q,t).x=t.x) holds IExec(while<0(a,i,I),P,s)
+ =IExec(while<0(a,i,I),P,IExec(I,P,s));
 
 theorem :: SCMPDS_8:15
   for s being State of SCMPDS,I being halt-free shiftable
   Program of SCMPDS, a be Int_position, i be Integer,X be set st card I > 0 & (
-for t be State of SCMPDS st (for x be Int_position st x in X holds t.x=s.x) & t
-.a=s.a & t.DataLoc(s.a,i) < 0 holds IExec(I,t).a=t.a & IExec(I,t).DataLoc(s.a,i
-  ) > t.DataLoc(s.a,i) & I is_closed_on t & I is_halting_on t & for x be
-  Int_position st x in X holds IExec(I,t).x=t.x) holds while<0(a,i,I)
-  is_closed_on s & while<0(a,i,I) is_halting_on s;
+for t be State of SCMPDS,Q
+ st (for x be Int_position st x in X holds t.x=s.x) & t
+.a=s.a & t.DataLoc(s.a,i) < 0 holds IExec(I,Q,t).a=t.a &
+IExec(I,Q,t).DataLoc(s.a,i
+  ) > t.DataLoc(s.a,i) & I is_closed_on t,Q & I is_halting_on t,Q & for x be
+  Int_position st x in X holds IExec(I,Q,t).x=t.x) holds while<0(a,i,I)
+  is_closed_on s, P & while<0(a,i,I) is_halting_on s, P;
 
 theorem :: SCMPDS_8:16
   for s being State of SCMPDS,I being halt-free shiftable Program of
 SCMPDS , a be Int_position,i be Integer,X be set st s.DataLoc(s.a,i) < 0 & card
-I > 0 & (for t be State of SCMPDS st (for x be Int_position st x in X holds t.x
-  =s.x) & t.a=s.a & t.DataLoc(s.a,i) < 0 holds IExec(I,t).a=t.a & IExec(I,t).
-DataLoc(s.a,i) > t.DataLoc(s.a,i) & I is_closed_on t & I is_halting_on t & for
-x be Int_position st x in X holds IExec(I,t).x=t.x) holds IExec(while<0(a,i,I),
-  s) =IExec(while<0(a,i,I),IExec(I,s));
+I > 0 & (for t be State of SCMPDS,Q
+ st (for x be Int_position st x in X holds t.x
+  =s.x) & t.a=s.a & t.DataLoc(s.a,i) < 0 holds
+  IExec(I,Q,t).a=t.a & IExec(I,Q,t).
+DataLoc(s.a,i) > t.DataLoc(s.a,i) & I is_closed_on t,Q & I is_halting_on t,Q
+ & for
+x be Int_position st x in X holds IExec(I,Q,t).x=t.x)
+ holds IExec(while<0(a,i,I),P,s) =IExec(while<0(a,i,I),P,IExec(I,P,s));
 
 begin :: The construction and basic properties of while>0 program
 
@@ -224,122 +248,155 @@ while>0(a,i,I). 0=(a,i)<=0_goto (card I +2) & while>0(a,i,I). (card
 theorem :: SCMPDS_8:20
   for s being State of SCMPDS,I being Program of SCMPDS,a being
   Int_position, i being Integer st s.DataLoc(s.a,i) <= 0 holds while>0(a,i,I)
-  is_closed_on s & while>0(a,i,I) is_halting_on s;
+  is_closed_on s, P & while>0(a,i,I) is_halting_on s, P;
 
 theorem :: SCMPDS_8:21
   for s being State of SCMPDS,I being Program of SCMPDS,a,c being
-Int_position, i being Integer st s.DataLoc(s.a,i) <= 0 holds IExec(while>0(a,i,
-  I),s) = s +* Start-At((card I+2),SCMPDS);
+Int_position, i being Integer st s.DataLoc(s.a,i) <= 0
+ holds IExec(while>0(a,i,I),P,s) = s +* Start-At((card I+2),SCMPDS);
 
 theorem :: SCMPDS_8:22
   for s being State of SCMPDS,I being Program of SCMPDS,a being
-Int_position, i being Integer st s.DataLoc(s.a,i) <= 0 holds IC IExec(while>0(a
-  ,i,I),s) =  (card I + 2);
+Int_position, i being Integer st s.DataLoc(s.a,i) <= 0
+ holds IC IExec(while>0(a
+  ,i,I),P,s) =  (card I + 2);
 
 theorem :: SCMPDS_8:23
   for s being State of SCMPDS,I being Program of SCMPDS, a,b being
-Int_position , i being Integer st s.DataLoc(s.a,i) <= 0 holds IExec(while>0(a,i
-  ,I),s).b = s.b;
+Int_position , i being Integer st s.DataLoc(s.a,i) <= 0
+ holds IExec(while>0(a,i
+  ,I),P,s).b = s.b;
 
 scheme :: SCMPDS_8:sch 3
 
-  WhileGHalt { F(State of SCMPDS)-> Element of NAT, s() -> State of SCMPDS,I()
+  WhileGHalt { F(State of SCMPDS)-> Element of NAT, s() -> State of SCMPDS,
+    P() -> (the Instructions of SCMPDS)-valued ManySortedSet of NAT,
+  I()
 -> halt-free shiftable Program of SCMPDS, a() -> Int_position,i() -> Integer,
   P[State of SCMPDS]}: (F(s())=F(s()) or P[s()]) & while>0(a(),i(),I())
-  is_closed_on s() & while>0(a(),i(),I()) is_halting_on s()
+  is_closed_on s(), P() & while>0(a(),i(),I()) is_halting_on s(), P()
 provided
- card I() > 0 and
  for t be State of SCMPDS st P[Dstate t] & F(Dstate(t))=0 holds t.
 DataLoc(s().a(),i()) <= 0 and
  P[Dstate s()] and
- for t be State of SCMPDS st P[Dstate t] & t.a()=s().a() & t.DataLoc(
-s().a(),i()) > 0 holds IExec(I(),t).a()=t.a() & I() is_closed_on t & I()
-is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) & P[Dstate(IExec(I(),t))
-];
+ for t be State of SCMPDS,Q
+ st P[Dstate t] & t.a()=s().a() & t.DataLoc(
+s().a(),i()) > 0 holds IExec(I(),Q,t).a()=t.a() & I() is_closed_on t,Q & I()
+is_halting_on t,Q & F(Dstate IExec(I(),Q,t)) < F(Dstate t)
+ & P[Dstate(IExec(I(),Q,t))];
 
 scheme :: SCMPDS_8:sch 4
 
-  WhileGExec { F(State of SCMPDS)-> Element of NAT, s() -> State of SCMPDS,I()
+  WhileGExec { F(State of SCMPDS)-> Element of NAT, s() -> State of SCMPDS,
+    P() -> (the Instructions of SCMPDS)-valued ManySortedSet of NAT,
+    I()
 -> halt-free shiftable Program of SCMPDS, a() -> Int_position,i() -> Integer,
-P[State of SCMPDS]}: (F(s())=F(s()) or P[s()]) & IExec(while>0(a(),i(),I()),s()
-  ) = IExec(while>0(a(),i(),I()),IExec(I(),s()))
+P[State of SCMPDS]}: (F(s())=F(s()) or P[s()]) &
+ IExec(while>0(a(),i(),I()),P(),s()
+  ) = IExec(while>0(a(),i(),I()),P(),IExec(I(),P(),s()))
 provided
- card I() > 0 and
  s().DataLoc(s().a(),i()) > 0 and
  for t be State of SCMPDS st P[Dstate t] & F(Dstate(t))=0 holds t.
 DataLoc(s().a(),i()) <= 0 and
  P[Dstate s()] and
- for t be State of SCMPDS st P[Dstate t] & t.a()=s().a() & t.DataLoc(
-s().a(),i()) > 0 holds IExec(I(),t).a()=t.a() & I() is_closed_on t & I()
-is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) & P[Dstate(IExec(I(),t))
-];
+ for t be State of SCMPDS,Q
+ st P[Dstate t] & t.a()=s().a() & t.DataLoc(
+s().a(),i()) > 0 holds IExec(I(),Q,t).a()=t.a() & I() is_closed_on t,Q & I()
+is_halting_on t,Q & F(Dstate IExec(I(),Q,t)) < F(Dstate t)
+ & P[Dstate(IExec(I(),Q,t))];
 
 theorem :: SCMPDS_8:24
   for s being State of SCMPDS,I being halt-free shiftable
   Program of SCMPDS, a be Int_position,i,c be Integer,X,Y be set, f being
-  Function of product the Object-Kind of SCMPDS,NAT st card I > 0 & ( for t be
-State of SCMPDS st f.Dstate(t)=0 holds t.DataLoc(s.a,i) <= 0 ) & (for x st x in
-  X holds s.x >= c+s.DataLoc(s.a,i)) & (for t be State of SCMPDS st (for x st x
+  Function of product the Object-Kind of SCMPDS,NAT st card I > 0 &
+  ( for t be State of SCMPDS
+   st f.Dstate(t)=0 holds t.DataLoc(s.a,i) <= 0 ) & (for x st x in
+  X holds s.x >= c+s.DataLoc(s.a,i)) &
+   (for t be State of SCMPDS,Q st (for x st x
 in X holds t.x >= c+t.DataLoc(s.a,i)) & (for x st x in Y holds t.x=s.x) & t.a=s
-  .a & t.DataLoc(s.a,i) > 0 holds IExec(I,t).a=t.a & I is_closed_on t & I
-  is_halting_on t & f.Dstate(IExec(I,t)) < f.Dstate(t) & (for x st x in X holds
-IExec(I,t).x >= c+IExec(I,t).DataLoc(s.a,i)) & for x st x in Y holds IExec(I,t)
-  .x=t.x) holds while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s;
+  .a & t.DataLoc(s.a,i) > 0 holds IExec(I,Q,t).a=t.a & I is_closed_on t,Q & I
+  is_halting_on t,Q & f.Dstate(IExec(I,Q,t)) < f.Dstate(t)
+   & (for x st x in X holds
+IExec(I,Q,t).x >= c+IExec(I,Q,t).DataLoc(s.a,i))
+ & for x st x in Y holds IExec(I,Q,t)
+  .x=t.x) holds while>0(a,i,I) is_closed_on s, P &
+  while>0(a,i,I) is_halting_on s, P;
 
 theorem :: SCMPDS_8:25
   for s being State of SCMPDS,I being halt-free shiftable
   Program of SCMPDS, a be Int_position, i,c be Integer,X,Y be set,f being
   Function of product the Object-Kind of SCMPDS,NAT st s.DataLoc(s.a,i) > 0 &
 card I > 0 & ( for t be State of SCMPDS st f.Dstate(t)=0 holds t.DataLoc(s.a,i)
-<= 0 ) & (for x st x in X holds s.x >= c+s.DataLoc(s.a,i)) & (for t be State of
-SCMPDS st (for x st x in X holds t.x >= c+t.DataLoc(s.a,i)) & (for x st x in Y
-  holds t.x=s.x) & t.a=s.a & t.DataLoc(s.a,i) > 0 holds IExec(I,t).a=t.a & I
-is_closed_on t & I is_halting_on t & f.Dstate(IExec(I,t)) < f.Dstate(t) & (for
-x st x in X holds IExec(I,t).x >= c+IExec(I,t).DataLoc(s.a,i)) & for x st x in
-Y holds IExec(I,t).x=t.x) holds IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),
-  IExec(I,s));
+<= 0 ) & (for x st x in X holds s.x >= c+s.DataLoc(s.a,i)) &
+ (for t be State of SCMPDS,Q
+  st (for x st x in X holds t.x >= c+t.DataLoc(s.a,i)) & (for x st x in Y
+  holds t.x=s.x) & t.a=s.a & t.DataLoc(s.a,i) > 0 holds IExec(I,Q,t).a=t.a & I
+is_closed_on t,Q & I is_halting_on t,Q & f.Dstate(IExec(I,Q,t)) < f.Dstate(t)
+ & (for
+x st x in X holds IExec(I,Q,t).x >= c+IExec(I,Q,t).DataLoc(s.a,i))
+ & for x st x in
+Y holds IExec(I,Q,t).x=t.x)
+ holds IExec(while>0(a,i,I),P,s) =IExec(while>0(a,i,I),P,
+  IExec(I,P,s));
 
 theorem :: SCMPDS_8:26
   for s being State of SCMPDS,I being halt-free shiftable Program of
 SCMPDS , a be Int_position, i be Integer,X be set, f being Function of product
   the Object-Kind of SCMPDS,NAT st card I > 0 & (for t be State of SCMPDS st f.
-Dstate(t)=0 holds t.DataLoc(s.a,i) <= 0 ) & (for t be State of SCMPDS st (for x
-st x in X holds t.x=s.x) & t.a=s.a & t.DataLoc(s.a,i) > 0 holds IExec(I,t).a=t.
-a & I is_closed_on t & I is_halting_on t & f.Dstate(IExec(I,t)) < f.Dstate(t) &
-  for x st x in X holds IExec(I,t).x=t.x) holds while>0(a,i,I) is_closed_on s &
-while>0(a,i,I) is_halting_on s & (s.DataLoc(s.a,i) > 0 implies IExec(while>0(a,
-  i,I),s) =IExec(while>0(a,i,I),IExec(I,s)));
+Dstate(t)=0 holds t.DataLoc(s.a,i) <= 0 ) &
+ (for t be State of SCMPDS,Q st (for x
+st x in X holds t.x=s.x) & t.a=s.a & t.DataLoc(s.a,i) > 0
+ holds IExec(I,Q,t).a=t.
+a & I is_closed_on t,Q & I is_halting_on t,Q
+ & f.Dstate(IExec(I,Q,t)) < f.Dstate(t) &
+  for x st x in X holds IExec(I,Q,t).x=t.x)
+   holds while>0(a,i,I) is_closed_on s, P &
+while>0(a,i,I) is_halting_on s, P & (s.DataLoc(s.a,i) > 0 implies
+IExec(while>0(a,
+  i,I),P,s) =IExec(while>0(a,i,I),P,IExec(I,P,s)));
 
 theorem :: SCMPDS_8:27
   for s being State of SCMPDS,I being halt-free shiftable
-Program of SCMPDS, a be Int_position, i,c be Integer,X,Y be set st card I > 0 &
-  (for x st x in X holds s.x >= c+s.DataLoc(s.a,i)) & (for t be State of SCMPDS
+Program of SCMPDS, a be Int_position, i,c be Integer,X,Y be set st
+  (for x st x in X holds s.x >= c+s.DataLoc(s.a,i)) &
+   (for t be State of SCMPDS,Q
 st (for x st x in X holds t.x >= c+t.DataLoc(s.a,i)) & (for x st x in Y holds t
-  .x=s.x) & t.a=s.a & t.DataLoc(s.a,i) > 0 holds IExec(I,t).a=t.a & I
-is_closed_on t & I is_halting_on t & IExec(I,t).DataLoc(s.a,i) < t.DataLoc(s.a,
-i) & (for x st x in X holds IExec(I,t).x >= c+IExec(I,t).DataLoc(s.a,i)) & for
-  x st x in Y holds IExec(I,t).x=t.x) holds while>0(a,i,I) is_closed_on s &
-while>0(a,i,I) is_halting_on s & ( s.DataLoc(s.a,i) > 0 implies IExec(while>0(a
-  ,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)));
+  .x=s.x) & t.a=s.a & t.DataLoc(s.a,i) > 0 holds IExec(I,Q,t).a=t.a & I
+is_closed_on t,Q & I is_halting_on t,Q
+ & IExec(I,Q,t).DataLoc(s.a,i) < t.DataLoc(s.a,
+i) & (for x st x in X holds IExec(I,Q,t).x >= c+IExec(I,Q,t).DataLoc(s.a,i))
+ & for
+  x st x in Y holds IExec(I,Q,t).x=t.x)
+   holds while>0(a,i,I) is_closed_on s, P &
+while>0(a,i,I) is_halting_on s, P &
+ ( s.DataLoc(s.a,i) > 0 implies IExec(while>0(a
+  ,i,I),P,s) =IExec(while>0(a,i,I),P,IExec(I,P,s)));
 
 theorem :: SCMPDS_8:28
   for s being State of SCMPDS,I being halt-free shiftable Program of
-  SCMPDS , a be Int_position, i be Integer,X be set st card I > 0 & (for t be
-State of SCMPDS st (for x st x in X holds t.x=s.x) & t.a=s.a & t.DataLoc(s.a,i)
-> 0 holds IExec(I,t).a=t.a & I is_closed_on t & I is_halting_on t & IExec(I,t).
-  DataLoc(s.a,i) < t.DataLoc(s.a,i) & for x st x in X holds IExec(I,t).x=t.x)
-  holds while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s & (s.
-DataLoc(s.a,i) > 0 implies IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(
-  I,s)));
+  SCMPDS , a be Int_position, i be Integer,X be set st card I > 0 &
+   (for t be State of SCMPDS,Q
+    st (for x st x in X holds t.x=s.x) & t.a=s.a & t.DataLoc(s.a,i)
+> 0 holds IExec(I,Q,t).a=t.a & I is_closed_on t,Q & I is_halting_on t,Q
+ & IExec(I,Q,t).
+  DataLoc(s.a,i) < t.DataLoc(s.a,i) & for x st x in X holds IExec(I,Q,t).x=t.x)
+  holds while>0(a,i,I) is_closed_on s, P & while>0(a,i,I) is_halting_on s, P
+   & (s.
+DataLoc(s.a,i) > 0 implies IExec(while>0(a,i,I),P,s)
+ =IExec(while>0(a,i,I),P,IExec(I,P,s)));
 
 theorem :: SCMPDS_8:29
   for s being State of SCMPDS,I being halt-free shiftable Program of
 SCMPDS , a be Int_position, i,c be Integer,X be set st card I > 0 & (for x st x
-in X holds s.x >= c+s.DataLoc(s.a,i)) & (for t be State of SCMPDS st (for x st
+in X holds s.x >= c+s.DataLoc(s.a,i)) &
+ (for t be State of SCMPDS,Q st (for x st
 x in X holds t.x >= c+t.DataLoc(s.a,i)) & t.a=s.a & t.DataLoc(s.a,i) > 0 holds
-IExec(I,t).a=t.a & I is_closed_on t & I is_halting_on t & IExec(I,t).DataLoc(s.
-  a,i) < t.DataLoc(s.a,i) & for x st x in X holds IExec(I,t).x >= c+IExec(I,t).
-  DataLoc(s.a,i)) holds while>0(a,i,I) is_closed_on s & while>0(a,i,I)
-is_halting_on s & (s.DataLoc(s.a,i) > 0 implies IExec(while>0(a,i,I),s) =IExec(
-  while>0(a,i,I),IExec(I,s)));
+IExec(I,Q,t).a=t.a & I is_closed_on t,Q & I is_halting_on t,Q
+ & IExec(I,Q,t).DataLoc(s.
+  a,i) < t.DataLoc(s.a,i) & for x st x in X
+   holds IExec(I,Q,t).x >= c+IExec(I,Q,t).
+  DataLoc(s.a,i)) holds while>0(a,i,I) is_closed_on s, P & while>0(a,i,I)
+is_halting_on s, P & (s.DataLoc(s.a,i) > 0
+ implies IExec(while>0(a,i,I),P,s) =IExec(
+  while>0(a,i,I),P,IExec(I,P,s)));
 

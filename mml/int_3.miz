@@ -2,7 +2,15 @@
 ::  by Christoph Schwarzweller
 ::
 :: Received February 4, 1999
-:: Copyright (c) 1999 Association of Mizar Users
+:: Copyright (c) 1999-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -10,16 +18,17 @@ environ
       ALGSTR_0, FUNCT_7, CARD_1, STRUCT_0, XBOOLE_0, INT_1, ARYTM_3, SUPINF_2,
       VECTSP_1, MESFUNC1, GROUP_1, RLVECT_1, LATTICES, VECTSP_2, COMPLEX1,
       XXREAL_0, EUCLID, TARSKI, NAT_1, FUNCSDOM, GCD_1, ORDINAL1, INT_2,
-      XCMPLX_0, MCART_1, NEWTON, INT_3;
+      XCMPLX_0, MCART_1, NEWTON, INT_3, MEMBERED;
  notations TARSKI, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0, COMPLEX1,
       MCART_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCSDOM, BINOP_1, EUCLID, XXREAL_0,
-      BINOP_2, GR_CY_1, INT_1, FUNCT_7, NEWTON, INT_2, NAT_D, STRUCT_0,
+      BINOP_2, GR_CY_1, INT_1, FUNCT_7, NEWTON, INT_2, NAT_D,
+      MEMBERED, STRUCT_0,
       ALGSTR_0, RLVECT_1, GCD_1, GROUP_1, VECTSP_1, VECTSP_2, NAT_1;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, NAT_D, BINOP_2, NEWTON,
       FUNCT_7, GR_CY_1, EUCLID, GCD_1, SEQ_1, RELSET_1, GROUP_2;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, NEWTON, STRUCT_0, VECTSP_1, GR_CY_1, GCD_1,
-      VALUED_0, REAL_1;
+      VALUED_0, REAL_1, MEMBERED;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions RLVECT_1, STRUCT_0, GROUP_1, VECTSP_1, VECTSP_2, CARD_1, ALGSTR_0,
       GR_CY_1;
@@ -102,7 +111,7 @@ registration
 end;
 
 registration
-  cluster -> integer Element of INT.Ring;
+  cluster the carrier of INT.Ring -> integer-membered;
   coherence;
 end;
 
@@ -113,7 +122,6 @@ registration
   proof
     assume
 A1: a = c & b = d;
-    reconsider a, b as Element of INT;
     multint.(a,b) = multreal.(a,b) by Def1
       .= c * d by A1,BINOP_2:def 11;
     hence thesis;
@@ -123,7 +131,6 @@ A1: a = c & b = d;
   proof
     assume
 A2: a = c & b = d;
-    reconsider a, b as Element of INT;
     addint.(a,b) = addreal.(a,b) by GR_CY_1:def 2
       .= c + d by A2,BINOP_2:def 9;
     hence thesis;
@@ -1042,21 +1049,21 @@ proof
 A1: now
     assume
 A2: n <> 0;
-    thus (a + n * k) div n = [\ (a + n * k)/n /] by INT_1:def 7
+    thus (a + n * k) div n = [\ (a + n * k)/n /] by INT_1:def 9
       .= [\ (a + n * k) * n" /] by XCMPLX_0:def 9
       .= [\ a * n" + (n * n") * k /]
       .= [\ a * n" + 1 * k /] by A2,XCMPLX_0:def 7
       .= [\ a * n" /] + k by INT_1:51
       .= [\ a/n /] + k by XCMPLX_0:def 9
-      .= (a div n) + k by INT_1:def 7;
+      .= (a div n) + k by INT_1:def 9;
   end;
   per cases;
   suppose
 A3: n <> 0;
     hence (a + n * k) mod n = (a + n * k) - ((a div n) + k) * n by A1,
-INT_1:def 8
+INT_1:def 10
       .= a - (a div n) * n
-      .= a mod n by A3,INT_1:def 8;
+      .= a mod n by A3,INT_1:def 10;
   end;
   suppose
     n = 0;
@@ -1073,16 +1080,16 @@ proof
 A1: n > 0;
   let a be Integer;
   now
-    a div n = [\ a/n /] by INT_1:def 7;
-    then a div n <= a/n by INT_1:def 4;
+    a div n = [\ a/n /] by INT_1:def 9;
+    then a div n <= a/n by INT_1:def 6;
     then (a div n) * n <= a/n * n by XREAL_1:66;
     then (a div n) * n <= (a * n") * n by XCMPLX_0:def 9;
     then (a div n) * n <= a * (n" * n);
     then (a div n) * n <= a * 1 by A1,XCMPLX_0:def 7;
     then (a div n) * n - (a div n) * n <= a - (a div n) * n by XREAL_1:11;
-    hence 0 <= a mod n by INT_1:def 8;
+    hence 0 <= a mod n by INT_1:def 10;
     assume a mod n >= n;
-    then a - (a div n) * n >= n by A1,INT_1:def 8;
+    then a - (a div n) * n >= n by A1,INT_1:def 10;
     then (a + -(a div n) * n) + (a div n) * n >= n + (a div n) * n by XREAL_1:8
 ;
     then a - n >= (n + (a div n) * n) - n by XREAL_1:11;
@@ -1092,8 +1099,8 @@ A1: n > 0;
     then a * n" - 1 >= (a div n) by A1,XCMPLX_0:def 7;
     then
 A2: a/n - 1 >= (a div n) by XCMPLX_0:def 9;
-    a div n = [\ a/n /] by INT_1:def 7;
-    hence contradiction by A2,INT_1:def 4;
+    a div n = [\ a/n /] by INT_1:def 9;
+    hence contradiction by A2,INT_1:def 6;
   end;
   hence thesis;
 end;
@@ -1147,10 +1154,10 @@ A9: a/n - 1 < -1
     a * n" >= (-n) * n" by A7,A8,XREAL_1:66;
     then a /n >= -(n * n") by XCMPLX_0:def 9;
     then -1 <= a/n by A1,XCMPLX_0:def 7;
-    then [\ a/n /] = -1 by A9,INT_1:def 4;
+    then [\ a/n /] = -1 by A9,INT_1:def 6;
     then
-A10: a div n = -1 by INT_1:def 7;
-    a mod n = a - (a div n) * n by A1,INT_1:def 8;
+A10: a div n = -1 by INT_1:def 9;
+    a mod n = a - (a div n) * n by A1,INT_1:def 10;
     hence thesis by A10;
   end;
 end;
@@ -1167,16 +1174,16 @@ proof
     assume
 A1: n <> 0;
     assume a mod n = b mod n;
-    then a - (a div n) * n = b mod n by A1,INT_1:def 8;
-    then a - (a div n) * n = b - (b div n) * n by A1,INT_1:def 8;
+    then a - (a div n) * n = b mod n by A1,INT_1:def 10;
+    then a - (a div n) * n = b - (b div n) * n by A1,INT_1:def 10;
     then a - b = (-(b div n) + (a div n)) * n;
-    then n divides (a-b) by INT_1:def 9;
+    then n divides (a-b) by INT_1:def 3;
     hence a,b are_congruent_mod n by INT_2:19;
   end;
   assume a,b are_congruent_mod n;
   then n divides (a-b) by INT_2:19;
   then consider k being Integer such that
-A2: n * k = a - b by INT_1:def 9;
+A2: n * k = a - b by INT_1:def 3;
   a = n * k + b by A2;
   hence thesis by Th8;
 end;
@@ -1190,8 +1197,8 @@ proof
   per cases;
   suppose
 A1: n = 0;
-    hence (a mod n) mod n = 0 by INT_1:def 8
-      .= a mod n by A1,INT_1:def 8;
+    hence (a mod n) mod n = 0 by INT_1:def 10
+      .= a mod n by A1,INT_1:def 10;
   end;
   suppose
     n <> 0;
@@ -1207,16 +1214,16 @@ proof
   per cases;
   suppose
 A1: n = 0;
-    hence (a + b) mod n = 0 by INT_1:def 8
-      .= ((a mod n) + (b mod n)) mod n by A1,INT_1:def 8;
+    hence (a + b) mod n = 0 by INT_1:def 10
+      .= ((a mod n) + (b mod n)) mod n by A1,INT_1:def 10;
   end;
   suppose
     n <> 0;
     then
     a mod n + (a div n) * n = (a - (a div n) * n) + (a div n) * n & b mod
-    n + (b div n) * n = (b - (b div n) * n) + (b div n) * n by INT_1:def 8;
+    n + (b div n) * n = (b - (b div n) * n) + (b div n) * n by INT_1:def 10;
     then (a + b) - ((a mod n) + (b mod n)) = ((a div n) + (b div n)) * n;
-    then n divides (a + b) - ((a mod n) + (b mod n)) by INT_1:def 9;
+    then n divides (a + b) - ((a mod n) + (b mod n)) by INT_1:def 3;
     then a+b,(a mod n)+(b mod n) are_congruent_mod n by INT_2:19;
     hence thesis by Th12;
   end;
@@ -1229,17 +1236,17 @@ proof
   per cases;
   suppose
 A1: n = 0;
-    hence (a * b) mod n = 0 by INT_1:def 8
-      .= ((a mod n) * (b mod n)) mod n by A1,INT_1:def 8;
+    hence (a * b) mod n = 0 by INT_1:def 10
+      .= ((a mod n) * (b mod n)) mod n by A1,INT_1:def 10;
   end;
   suppose
     n <> 0;
     then
     a mod n + (a div n) * n = (a - (a div n) * n) + (a div n) * n & b mod
-    n + (b div n) * n = (b - (b div n) * n) + (b div n) * n by INT_1:def 8;
+    n + (b div n) * n = (b - (b div n) * n) + (b div n) * n by INT_1:def 10;
     then (a * b) - ((a mod n) * (b mod n)) = (((a mod n) * (b div n)) + (((a
     div n) * (b mod n)) + (((a div n) * n) * (b div n)))) * n;
-    then n divides ((a * b) - ((a mod n) * (b mod n))) by INT_1:def 9;
+    then n divides ((a * b) - ((a mod n) * (b mod n))) by INT_1:def 3;
     then (a*b),((a mod n)*(b mod n)) are_congruent_mod n by INT_2:19;
     hence thesis by Th12;
   end;

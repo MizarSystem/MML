@@ -2,7 +2,15 @@
 ::  by Andrzej N\c{e}dzusiak
 ::
 :: Received October 16, 1989
-:: Copyright (c) 1990 Association of Mizar Users
+:: Copyright (c) 1990-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -50,13 +58,23 @@ end;
 
 registration
   let X be set;
+  cluster bool X -> cap-closed;
+end;
+
+registration
+  let X be set;
+  cluster bool X -> compl-closed Subset-Family of X;
+end;
+
+registration
+  let X be set;
   cluster non empty compl-closed cap-closed Subset-Family of X;
 end;
 
 definition
   let X be set;
-  mode Field_Subset of X is non empty compl-closed cap-closed Subset-Family of
-    X;
+  mode Field_Subset of X is non empty compl-closed cap-closed
+       Subset-Family of X;
 end;
 
 reserve F for Field_Subset of X;
@@ -81,6 +99,11 @@ theorem :: PROB_1:12
 theorem :: PROB_1:13
   for A, B being set holds (A in F & B in F implies (A \ B) \/ B in F);
 
+registration
+  let X be set;
+  cluster { {}, X } -> cap-closed;
+end;
+
 theorem :: PROB_1:14
   { {}, X } is Field_Subset of X;
 
@@ -97,18 +120,13 @@ theorem :: PROB_1:18
 
 definition
   let X be set;
-  mode SetSequence of X is Function of NAT, bool X;
+  mode SetSequence of X is sequence of bool X;
 end;
 
 reserve ASeq,BSeq for SetSequence of Omega;
 reserve A1 for SetSequence of X;
 
 canceled 4;
-
-definition
-  let X,A1,n;
-  redefine func A1.n -> Subset of X;
-end;
 
 theorem :: PROB_1:23
   union rng A1 is Subset of X;
@@ -172,6 +190,11 @@ end;
 
 registration
   let X be set;
+  cluster bool X -> sigma-multiplicative Subset-Family of X;
+end;
+
+registration
+  let X be set;
   cluster compl-closed sigma-multiplicative non empty Subset-Family of X;
 end;
 
@@ -185,8 +208,8 @@ canceled;
 
 theorem :: PROB_1:32
   for S being non empty set holds S is SigmaField of X iff S c= bool X &
-(for A1 being SetSequence of X st rng A1 c= S holds Intersection A1 in S) & for
-  A being Subset of X st A in S holds A` in S;
+  (for A1 being SetSequence of X st rng A1 c= S holds Intersection A1 in S) &
+  for A being Subset of X st A in S holds A` in S;
 
 canceled 2;
 
@@ -315,9 +338,9 @@ definition
   mode Probability of Sigma -> Function of Sigma,REAL means
 :: PROB_1:def 13
 
-    (for A
-holds 0 <= it.A) & it.Omega = 1 & (for A,B st A misses B holds it.(A \/ B) = it
-.A + it.B) & for ASeq st ASeq is non-ascending holds it * ASeq is convergent &
+  (for A holds 0 <= it.A) & it.Omega = 1 &
+  (for A,B st A misses B holds it.(A \/ B) = it.A + it.B) &
+  for ASeq st ASeq is non-ascending holds it * ASeq is convergent &
     lim (it * ASeq) = it.Intersection ASeq;
 end;
 
@@ -367,7 +390,7 @@ reserve D for Subset of REAL;
 reserve S for Subset-Family of Omega;
 
 theorem :: PROB_1:76
-  bool Omega is SigmaField of Omega;
+  bool X is SigmaField of X;
 
 definition
   let Omega;
@@ -387,8 +410,7 @@ end;
 definition
   func Family_of_halflines -> Subset-Family of REAL equals
 :: PROB_1:def 16
-  {D: ex r st D =
-  halfline(r)};
+  { halfline(r) where r is Element of REAL: not contradiction };
 end;
 
 definition

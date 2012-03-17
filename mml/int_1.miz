@@ -2,7 +2,15 @@
 ::  by Micha{\l} J. Trybulec
 ::
 :: Received February 7, 1990
-:: Copyright (c) 1990 Association of Mizar Users
+:: Copyright (c) 1990-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -256,8 +264,6 @@ end;
 :: Relations between sets INT, NAT and REAL ( and their elements )
 
 registration
-  cluster -> integer Element of NAT;
-  coherence by Th7;
   cluster natural -> integer number;
   coherence by Th7;
 end;
@@ -686,13 +692,45 @@ A7: F() - n = i1 by A1,Lm7;
   hence thesis by A5;
 end;
 
-:: abs and sgn functions with integers
+:: The divisibility relation
+
+definition
+  let i1,i2 be Integer;
+  pred i1 divides i2 means
+  :Def9:
+  ex i3 st i2 = i1 * i3;
+  reflexivity
+  proof
+    let a be Integer;
+    take 1;
+    thus thesis;
+  end;
+end;
 
 definition
   let i1,i2,i3 be Integer;
   pred i1,i2 are_congruent_mod i3 means
+  i3 divides i1 - i2;
+end;
+
+definition
+  let i1,i2,i3 be Integer;
+  redefine pred i1,i2 are_congruent_mod i3 means
   :Def3:
   ex i4 st i3 * i4 = i1 - i2;
+  compatibility
+  proof
+    thus i1,i2 are_congruent_mod i3 implies
+    ex i4 st i3 * i4 = i1 - i2
+    proof
+      assume i3 divides i1-i2;
+      hence thesis by Def9;
+    end;
+    given i4 such that
+a1: i3 * i4 = i1 - i2;
+    take i4;
+    thus thesis by a1;
+  end;
 end;
 
 canceled 8;
@@ -730,8 +768,8 @@ A1: (i1 - i2) = i3 * i0 by Def3;
 end;
 
 theorem
-  i1,i2 are_congruent_mod i5 & i2,i3 are_congruent_mod i5 implies i1,i3
-  are_congruent_mod i5
+  i1,i2 are_congruent_mod i5 & i2,i3 are_congruent_mod i5 implies
+  i1,i3 are_congruent_mod i5
 proof
   assume that
 A1: i1,i2 are_congruent_mod i5 and
@@ -745,8 +783,8 @@ A4: i5 * i9 = i2 - i3 by A2,Def3;
 end;
 
 theorem
-  i1,i2 are_congruent_mod i5 & i3,i4 are_congruent_mod i5 implies (i1 +
-  i3),(i2 + i4) are_congruent_mod i5
+  i1,i2 are_congruent_mod i5 & i3,i4 are_congruent_mod i5 implies
+  (i1 + i3),(i2 + i4) are_congruent_mod i5
 proof
   assume that
 A1: i1,i2 are_congruent_mod i5 and
@@ -760,8 +798,8 @@ A4: i5 * i9 = i3 - i4 by A2,Def3;
 end;
 
 theorem
-  i1,i2 are_congruent_mod i5 & i3,i4 are_congruent_mod i5 implies (i1 -
-  i3),(i2 - i4) are_congruent_mod i5
+  i1,i2 are_congruent_mod i5 & i3,i4 are_congruent_mod i5 implies
+  (i1 - i3),(i2 - i4) are_congruent_mod i5
 proof
   assume that
 A1: i1,i2 are_congruent_mod i5 and
@@ -775,8 +813,8 @@ A4: i5 * i9 = i3 - i4 by A2,Def3;
 end;
 
 theorem
-  i1,i2 are_congruent_mod i5 & i3,i4 are_congruent_mod i5 implies (i1 *
-  i3),(i2 * i4) are_congruent_mod i5
+  i1,i2 are_congruent_mod i5 & i3,i4 are_congruent_mod i5 implies
+  (i1 * i3),(i2 * i4) are_congruent_mod i5
 proof
   assume that
 A1: i1,i2 are_congruent_mod i5 and
@@ -811,8 +849,8 @@ A2: ex i0 st i5 * i0 = i1 - (i3 - i2) by Def3;
 end;
 
 theorem
-  i4 * i5 = i3 implies (i1,i2 are_congruent_mod i3 implies i1,i2
-  are_congruent_mod i4)
+  i4 * i5 = i3 implies (i1,i2 are_congruent_mod i3 implies
+  i1,i2 are_congruent_mod i4)
 proof
   assume
 A1: i4 * i5 = i3;
@@ -1280,22 +1318,6 @@ definition
   correctness;
 end;
 
-:: The divisibility relation
-
-definition
-  let i1,i2 be Integer;
-  pred i1 divides i2 means
-  :Def9:
-  ex i3 st i2 = i1 * i3;
-  reflexivity
-  proof
-    reconsider x = 1 as Integer;
-    let a be Integer;
-    take x;
-    thus thesis;
-  end;
-end;
-
 canceled;
 
 theorem Th74:
@@ -1418,9 +1440,8 @@ A3: i <= i div j;
   then j * (i div j) <= j * (i/j) by A2,XREAL_1:66;
   then j * (i div j) <= i by A2,XCMPLX_1:88;
   then j * (i div j) <= i div j by A3,XXREAL_0:2;
-  then j * (i div j) * (i div j)" <= (i div j) * (i div j)" by A1,A3,
-  XREAL_1
-  :66;
+  then j * (i div j) * (i div j)" <= (i div j) * (i div j)" by A1,A3,XREAL_1:66
+;
   then j * ((i div j) * (i div j)") <= (i div j) * (i div j)";
   then j * 1 <= (i div j) * (i div j)" by A1,A3,XCMPLX_0:def 7;
   hence contradiction by A1,A2,A3,XCMPLX_0:def 7;

@@ -21,9 +21,9 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="ANALOAF"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
-<ArticleID name="ANALOAF"/>
 <ArticleID name="TDGROUP"/>
 </Signature>
 <RCluster aid="TDGROUP" nr="1">
@@ -38,28 +38,28 @@
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="111"/>
+<Adjective nr="114"/>
 <Adjective nr="115"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TDGROUP" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="38" value="false"/>
 <Adjective nr="43" value="false"/>
-<Adjective nr="112"/>
+<Adjective nr="94"/>
 <Adjective nr="116"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TDGROUP" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="153"/>
+<Func kind="K" nr="155"/>
 <Cluster>
 <Adjective nr="56"/>
-<Adjective nr="111"/>
+<Adjective nr="114"/>
 <Adjective nr="115"/>
 </Cluster>
 </FCluster>
@@ -76,7 +76,7 @@
 </Func>
 <Cluster>
 <Adjective nr="38" value="false"/>
-<Adjective nr="112"/>
+<Adjective nr="94"/>
 </Cluster>
 </FCluster>
 </Registrations>

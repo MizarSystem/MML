@@ -2,7 +2,15 @@
 ::  by Andrzej N\c{e}dzusiak
 ::
 :: Received October 16, 1989
-:: Copyright (c) 1990 Association of Mizar Users
+:: Copyright (c) 1990-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -71,33 +79,46 @@ end;
 
 registration
   let X be set;
-  cluster non empty compl-closed cap-closed Subset-Family of X;
-  existence
+  cluster bool X -> cap-closed;
+  coherence
   proof
-    reconsider S = bool X as Subset-Family of X;
-    take S;
-    thus S is non empty;
-    thus S is compl-closed
+    let A, B be set;
+    assume that
+A1: A in bool X and
+    B in bool X;
+    A /\ B c= X by A1,XBOOLE_1:108;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X be set;
+  cluster bool X -> compl-closed Subset-Family of X;
+  coherence
+  proof
+    bool X is compl-closed
     proof
       let A be Subset of X;
       thus thesis;
     end;
-    thus S is cap-closed
-    proof
-      let A, B be set;
-      assume that
-A1:   A in S and
-      B in S;
-      A /\ B c= X by A1,XBOOLE_1:108;
-      hence thesis;
-    end;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X be set;
+  cluster non empty compl-closed cap-closed Subset-Family of X;
+  existence
+  proof
+    take bool X;
+    thus thesis;
   end;
 end;
 
 definition
   let X be set;
-  mode Field_Subset of X is non empty compl-closed cap-closed Subset-Family of
-    X;
+  mode Field_Subset of X is non empty compl-closed cap-closed
+       Subset-Family of X;
 end;
 
 reserve F for Field_Subset of X;
@@ -172,9 +193,20 @@ theorem
   for A, B being set holds (A in F & B in F implies (A \ B) \/ B in F)
 proof
   let A, B be set;
-A1: A \/ B = (A \ B) \/ B by XBOOLE_1:39;
-  assume A in F & B in F;
-  hence thesis by A1,Th9;
+  A \/ B = (A \ B) \/ B by XBOOLE_1:39;
+  hence thesis by Th9;
+end;
+
+registration
+  let X be set;
+  cluster { {}, X } -> cap-closed;
+  coherence
+  proof
+    let A,B be set;
+A4: (A = {} or B = {}) implies A /\ B = {};
+    A = X & B = X implies A /\ B = X;
+    hence thesis by A4,TARSKI:def 2;
+  end;
 end;
 
 theorem
@@ -182,44 +214,17 @@ theorem
 proof
   {} c= X & X in bool X by XBOOLE_1:2,ZFMISC_1:def 1;
   then reconsider EX = { {}, X } as Subset-Family of X by Th4;
-A1: now
+  now
     let A be Subset of X;
 A2: A = {} implies A` = X;
-A3: A = X implies A` = {} X by XBOOLE_1:37;
-    assume A in EX;
-    hence A` in EX by A2,A3,TARSKI:def 2;
+    A = X implies A` = {} X by XBOOLE_1:37;
+    hence A in EX implies A` in EX by A2,TARSKI:def 2;
   end;
-  now
-    let A,B be set;
-A4: (A = {} or B = {}) implies A /\ B = {};
-A5: A = X & B = X implies A /\ B = X;
-    assume A in EX & B in EX;
-    hence A /\ B in EX by A4,A5,TARSKI:def 2;
-  end;
-  hence thesis by A1,Def1,FINSUB_1:def 2;
+  hence thesis by Def1;
 end;
 
 theorem
-  bool X is Field_Subset of X
-proof
-  reconsider K = bool X as Subset-Family of X;
-A1: K is cap-closed
-  proof
-    let A,B be set;
-    assume that
-A2: A in K and
-    B in K;
-    A /\ B c= X by A2,XBOOLE_1:108;
-    hence thesis;
-  end;
-  K is compl-closed
-  proof
-    let A be Subset of X;
-    assume A in K;
-    thus thesis;
-  end;
-  hence thesis by A1;
-end;
+  bool X is Field_Subset of X;
 
 theorem
   { {} , X } c= F & F c= bool X
@@ -247,21 +252,13 @@ end;
 
 definition
   let X be set;
-  mode SetSequence of X is Function of NAT, bool X;
+  mode SetSequence of X is sequence of bool X;
 end;
 
 reserve ASeq,BSeq for SetSequence of Omega;
 reserve A1 for SetSequence of X;
 
-Lm1: for n holds A1.n in bool X;
-
 canceled 4;
-
-definition
-  let X,A1,n;
-  redefine func A1.n -> Subset of X;
-  coherence by Lm1;
-end;
 
 theorem Th23:
   union rng A1 is Subset of X
@@ -460,13 +457,21 @@ end;
 
 registration
   let X be set;
+  cluster bool X -> sigma-multiplicative Subset-Family of X;
+  coherence
+  proof
+    for BSeq be SetSequence of X st rng BSeq c= bool X
+    holds Intersection BSeq in bool X;
+    hence thesis by Def8;
+  end;
+end;
+
+registration
+  let X be set;
   cluster compl-closed sigma-multiplicative non empty Subset-Family of X;
   existence
   proof
-    reconsider F = bool X as non empty Subset-Family of X;
-    take F;
-    thus (for A being Subset of X st A in F holds A` in F) & for A1 being
-    SetSequence of X st rng A1 c= F holds Intersection A1 in F;
+    take bool X;
     thus thesis;
   end;
 end;
@@ -481,8 +486,8 @@ canceled;
 
 theorem
   for S being non empty set holds S is SigmaField of X iff S c= bool X &
-(for A1 being SetSequence of X st rng A1 c= S holds Intersection A1 in S) & for
-  A being Subset of X st A in S holds A` in S by Def1,Def8;
+  (for A1 being SetSequence of X st rng A1 c= S holds Intersection A1 in S) &
+  for A being Subset of X st A in S holds A` in S by Def1,Def8;
 
 canceled 2;
 
@@ -598,8 +603,7 @@ theorem
   x in Si implies x is Event of Si;
 
 theorem
-  for A,B being Event of Si holds A /\ B is Event of Si by FINSUB_1:def
-  2;
+  for A,B being Event of Si holds A /\ B is Event of Si by FINSUB_1:def 2;
 
 theorem
   for A being Event of Si holds A` is Event of Si by Def1;
@@ -679,8 +683,7 @@ A2: for n holds ASeq.n is Event of Sigma;
 end;
 
 theorem
-  ASeq is SetSequence of Sigma implies Union ASeq is Event of Sigma by
-  Th46;
+  ASeq is SetSequence of Sigma implies Union ASeq is Event of Sigma by Th46;
 
 :: DEFINITION OF sigma-ADDITIVE PROBABILITY
 
@@ -762,10 +765,10 @@ definition
   let Omega,Sigma;
   canceled;
   mode Probability of Sigma -> Function of Sigma,REAL means
-    :Def13:
-    (for A
-holds 0 <= it.A) & it.Omega = 1 & (for A,B st A misses B holds it.(A \/ B) = it
-.A + it.B) & for ASeq st ASeq is non-ascending holds it * ASeq is convergent &
+  :Def13:
+  (for A holds 0 <= it.A) & it.Omega = 1 &
+  (for A,B st A misses B holds it.(A \/ B) = it.A + it.B) &
+  for ASeq st ASeq is non-ascending holds it * ASeq is convergent &
     lim (it * ASeq) = it.Intersection ASeq;
   existence
   proof
@@ -790,8 +793,7 @@ A5:     for n holds p in ASeq.n;
         for n holds (P * ASeq).n = 1
         proof
           let n;
-A6:       rng ASeq c= Sigma & ASeq.n in rng ASeq by NAT_1:52,RELAT_1:def
-          19;
+A6:       rng ASeq c= Sigma & ASeq.n in rng ASeq by NAT_1:52,RELAT_1:def 19;
           p in ASeq.n by A5;
           then P.(ASeq.n) = 1 by A1,A6;
           hence thesis by A3;
@@ -814,8 +816,7 @@ A9:     not p in ASeq.m;
           then ASeq.n c= ASeq.m by A7,Def6;
           then
 A10:      not p in ASeq.n by A9;
-          rng ASeq c= Sigma & ASeq.n in rng ASeq by NAT_1:52,RELAT_1:def
-          19;
+          rng ASeq c= Sigma & ASeq.n in rng ASeq by NAT_1:52,RELAT_1:def 19;
           then P.(ASeq.n) = 0 by A1,A10;
           hence thesis by A3;
         end;
@@ -875,9 +876,7 @@ A25:  not p in A & not p in B implies not p in (A \/ B) by XBOOLE_0:def 3;
     take P;
 A26: P.Omega = 1
     proof
-      Omega c= Omega;
-      then reconsider O = Omega as Subset of Omega;
-      O in Sigma by Th11;
+      [#]Sigma in Sigma;
       hence thesis by A1;
     end;
     for A holds 0 <= P.A by A1;
@@ -989,14 +988,8 @@ end;
 reserve D for Subset of REAL;
 reserve S for Subset-Family of Omega;
 
-theorem Th76:
-  bool Omega is SigmaField of Omega
-proof
-  set Y = bool Omega;
-A1: for E st E in Y holds E` in Y;
-  Y c= bool Omega & for BSeq st rng BSeq c= Y holds Intersection BSeq in Y;
-  hence thesis by A1,Def1,Def8;
-end;
+theorem
+  bool X is SigmaField of X;
 
 Lm3: for X being Subset-Family of Omega ex Y being SigmaField of Omega st X c=
 Y & for Z st X c= Z & Z is SigmaField of Omega holds Y c= Z
@@ -1010,12 +1003,7 @@ A1: now
     then ex S st Z = S & X c= S & S is SigmaField of Omega;
     hence X c= Z;
   end;
-A2: bool Omega in V
-  proof
-    reconsider X1 = bool Omega as Subset-Family of Omega;
-    X1 is SigmaField of Omega by Th76;
-    hence thesis;
-  end;
+A2: bool Omega in V;
 A3: for E st E in Y holds E` in Y
   proof
     let E such that
@@ -1024,7 +1012,7 @@ A4: E in Y;
       let Z;
       assume Z in V;
       then E in Z & ex S st Z = S & X c= S & S is SigmaField of Omega by A4,
-      SETFAM_1:def 1;
+SETFAM_1:def 1;
       hence E` in Z by Def1;
     end;
     hence thesis by A2,SETFAM_1:def 1;
@@ -1055,9 +1043,8 @@ A8:   rng BSeq c= Z by NAT_1:53;
     then ex S st Z = S & X c= S & S is SigmaField of Omega;
     hence {} in Z by Th10;
   end;
-  then reconsider Y as SigmaField of Omega by A2,
-  A5,A3,Def1,Def8,SETFAM_1:4,def
-  1;
+  then reconsider Y as SigmaField of Omega by A2,A5,A3,Def1,Def8,SETFAM_1:4
+,def 1;
   take Y;
   for Z st X c= Z & Z is SigmaField of Omega holds Y c= Z
   proof
@@ -1107,19 +1094,16 @@ end;
 
 definition
   func Family_of_halflines -> Subset-Family of REAL equals
-  {D: ex r st D =
-  halfline(r)};
+  { halfline(r) where r is Element of REAL: not contradiction };
   coherence
   proof
-    {D: ex r st D = halfline(r)} is Subset-Family of REAL
+    {halfline(r) where r is Element of REAL: not contradiction}
+    c= bool REAL
     proof
-      now
-        let p;
-        assume p in {D: ex r st D = halfline(r)};
-        then ex D st p = D & ex r st D = halfline(r);
-        hence p in bool REAL;
-      end;
-      hence thesis by TARSKI:def 3;
+      let p;
+      assume p in {halfline(r) where r is Element of REAL:not contradiction};
+      then ex r being Element of REAL st p = halfline(r);
+      hence p in bool REAL;
     end;
     hence thesis;
   end;

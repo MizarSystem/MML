@@ -8,7 +8,6 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
@@ -18,43 +17,40 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LATTICES"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="REAL_LAT"/>
 </Signature>
 <FCluster aid="REAL_LAT" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="112"/>
+<Func kind="U" nr="1">
+<Func kind="K" nr="111"/>
+</Func>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="67"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_LAT" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="112"/>
+<Func kind="K" nr="111"/>
 <Cluster>
-<Adjective nr="47"/>
-<Adjective nr="54"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="46"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_LAT" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="112"/>
+<Func kind="K" nr="111"/>
 <Cluster>
-<Adjective nr="47"/>
-<Adjective nr="55"/>
+<Adjective nr="46"/>
+<Adjective nr="53"/>
 </Cluster>
 </FCluster>
-<CCluster aid="REAL_LAT" nr="1">
+<FCluster aid="REAL_LAT" nr="4">
 <ArgTypes/>
-<Cluster/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="U" nr="1">
-<Func kind="K" nr="112"/>
-</Func>
-</Typ>
+<Func kind="K" nr="111"/>
 <Cluster>
-<Adjective nr="11"/>
+<Adjective nr="46"/>
+<Adjective nr="54"/>
 </Cluster>
-</CCluster>
+</FCluster>
 </Registrations>

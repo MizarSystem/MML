@@ -115,6 +115,7 @@
 <Adjective nr="29"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
+<Adjective nr="107"/>
 <Adjective nr="118"/>
 <Adjective nr="119">
 <LocusVar nr="1"/>

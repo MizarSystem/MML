@@ -2,7 +2,15 @@
 ::  by Noriko Asamoto , Yatsuka Nakamura , Piotr Rudnicki and Andrzej Trybulec
 ::
 :: Received July 22, 1996
-:: Copyright (c) 1996 Association of Mizar Users
+:: Copyright (c) 1996-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -10,22 +18,22 @@ environ
       RELAT_1, ARYTM_3, FUNCT_4, SCMFSA6A, TARSKI, XBOOLE_0, CIRCUIT2, NUMBERS,
       SUBSET_1, GRAPHSP, AMI_3, XXREAL_0, SF_MASTR, FUNCOP_1, FUNCT_7,
       STRUCT_0, ARYTM_1, INT_1, COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2,
-      MSUALG_1, AOFA_I00, ORDINAL1, SCMNORM, PBOOLE, SCMFSA6C;
+      MSUALG_1, AOFA_I00, ORDINAL1, SCMNORM, PBOOLE, SCMFSA6C, AMISTD_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ENUMSET1, CARD_1, NUMBERS, XCMPLX_0,
       NAT_1, INT_1, COMPLEX1, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_2,
       FUNCOP_1, FUNCT_4, PBOOLE,
-      STRUCT_0, COMPOS_1, EXTPRO_1, AMI_1, FUNCT_7,
+      STRUCT_0, COMPOS_1, EXTPRO_1, AMISTD_2, FUNCT_7,
       SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B, XXREAL_0;
  constructors DOMAIN_1, SETWISEO, XXREAL_0, INT_2, SCMFSA6A, SF_MASTR,
-      SCMFSA6B, RELSET_1, PRE_POLY, AMISTD_2, AMI_1, PBOOLE;
+      SCMFSA6B, RELSET_1, PRE_POLY, AMISTD_1, AMISTD_2, PBOOLE;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1,
-      NUMBERS, XREAL_0, INT_1, AMI_1, SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B,
+      NUMBERS, XREAL_0, INT_1, SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B,
       ORDINAL1, RELSET_1, COMPOS_1, STRUCT_0, EXTPRO_1, SCMFSA10, PBOOLE,
-      FUNCT_4;
+      FUNCT_4, AMISTD_2;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions FUNCOP_1, COMPOS_1, EXTPRO_1, AMI_1, SCMFSA6B, SCMFSA6A, PARTFUN1;
+ definitions FUNCOP_1, COMPOS_1, EXTPRO_1, SCMFSA6B, SCMFSA6A, PARTFUN1;
  theorems RELAT_1, FUNCT_7, FUNCT_4, FUNCT_1, SCMFSA_3, ZFMISC_1, FUNCOP_1,
-      TARSKI, NAT_1, AMI_1, SCMFSA_2, ENUMSET1, GRFUNC_1, SCMFSA6A, SF_MASTR,
+      TARSKI, NAT_1, SCMFSA_2, ENUMSET1, GRFUNC_1, SCMFSA6A, SF_MASTR,
       SCMFSA6B, XBOOLE_0, XBOOLE_1, PARTFUN1, COMPOS_1, EXTPRO_1, AMISTD_2,
       PBOOLE;
 
@@ -89,29 +97,24 @@ proof
   set m = Macro halt SCM+FSA;
   set m1 = Initialize m;
   assume
-A1: m1 c= s;
+A1: Start-At(0,SCM+FSA) c= s;
   let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
   such that
-A2: ProgramPart m1 c= P;
- dom(SA0) = {IC SCM+FSA} by FUNCOP_1:19;
-  then
-A3: IC SCM+FSA in dom (SA0) by TARSKI:def 1;
-  then
-A4: IC SCM+FSA in dom m1 by FUNCT_4:13;
-A5: IC m1 = (SA0).IC SCM+FSA by A3,FUNCT_4:14
-    .=  0 by FUNCOP_1:87;
+A2: m c= P;
+B4: IC SCM+FSA in dom Start-At(0,SCM+FSA) by COMPOS_1:52;
   take 0;
 A6: dom P = NAT by PARTFUN1:def 4;
     thus IC Comput(P,s,0) in dom P by A6;
   dom m = { 0, 1} by FUNCT_4:65;
   then
 A7:  0 in dom m by TARSKI:def 2;
-A8: m c= P by A2,COMPOS_1:144;
+A8: m c= P by A2;
   CurInstr(P,Comput(P,s,0))
    = CurInstr(P,s)  by EXTPRO_1:3
     .= P.IC s by A6,PARTFUN1:def 8
-    .= P.IC m1 by A1,A4,GRFUNC_1:8
-    .= m. 0 by A5,GRFUNC_1:8,A8,A7
+    .= P.IC Start-At(0,SCM+FSA) by A1,GRFUNC_1:8,B4
+    .= P.0 by COMPOS_1:64
+    .= m. 0 by GRFUNC_1:8,A8,A7
     .= halt SCM+FSA by FUNCT_4:66;
     hence thesis;
 end;
@@ -121,7 +124,7 @@ proof
   set Mi = Macro halt SCM+FSA;
     let s be State of SCM+FSA;
     assume
-A1: Initialize Mi c= s;
+A1: Start-At(0,SCM+FSA) c= s;
     let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
     assume
 A2:  Mi c= P;
@@ -133,7 +136,7 @@ A5: 0 in dom Mi by COMPOS_1:147;
   s by EXTPRO_1:3;
   then
     CurInstr(P,Comput(P,s,0))
-       = P.0 by A1,A4,COMPOS_1:143
+       = P.0 by A1,A4,COMPOS_1:228
       .= Mi.0 by GRFUNC_1:8,A2,A5
       .= halt SCM+FSA by COMPOS_1:148;
     hence (Comput(P,s,k)).intloc 0 = s.intloc 0 by A3,EXTPRO_1:6,NAT_1:2;
@@ -175,21 +178,18 @@ registration
   proof
     set Ma = Macro (a := b);
     let s such that
-A1: Initialize Macro (a := b) c= s;
+A1: Start-At(0,SCM+FSA) c= s;
   let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
   such that
-A2: ProgramPart(Initialize Ma) c= P;
-A3: Ma c= P by A2,COMPOS_1:144;
+A2: Ma c= P;
+A3: Ma c= P by A2;
     take 1;
 A4: dom P = NAT by PARTFUN1:def 4;
     thus IC Comput(P,s,1) in dom P by A4;
     dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
     then
 A5: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-    SA0 c= Initialize Macro (a := b) by FUNCT_4:26;
-    then SA0 c= s by A1,XBOOLE_1:1;
-    then
-A6: IC s = SA0.IC SCM+FSA by A5,GRFUNC_1:8
+A6: IC s = SA0.IC SCM+FSA by A5,GRFUNC_1:8,A1
       .=  0 by FUNCOP_1:87;
     then
 A7: IC Exec(a:=b, s) = succ  0 by SCMFSA_2:89
@@ -211,21 +211,19 @@ A11: P.1 = Ma.1 by A3,A8,GRFUNC_1:8
   proof
     set Ma = Macro (AddTo(a,b));
     let s such that
-A12: Initialize Macro (AddTo(a,b)) c= s;
+A12: Start-At(0,SCM+FSA) c= s;
   let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
   such that
-A13: ProgramPart(Initialize Ma) c= P;
-A14: Ma c= P by A13,COMPOS_1:144;
+A13: Ma c= P;
+A14: Ma c= P by A13;
     take 1;
 A15: dom P = NAT by PARTFUN1:def 4;
     thus IC Comput(P,s,1) in dom P by A15;
     dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
     then
 A16: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-    SA0 c= Initialize Macro (AddTo(a,b)) by FUNCT_4:26;
-    then SA0 c= s by A12,XBOOLE_1:1;
-    then
-A17: IC s = SA0.IC SCM+FSA by A16,GRFUNC_1:8
+::    then
+A17: IC s = SA0.IC SCM+FSA by A16,GRFUNC_1:8,A12
       .=  0 by FUNCOP_1:87;
     then
 A18: IC Exec(AddTo(a,b), s) = succ  0 by SCMFSA_2:90
@@ -247,21 +245,18 @@ A22: P.1 = Ma.1 by A14,A19,GRFUNC_1:8
   proof
     set Ma = Macro (SubFrom(a,b));
     let s such that
-A23: Initialize Macro (SubFrom(a,b)) c= s;
+A23: Start-At(0,SCM+FSA) c= s;
   let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
   such that
-A24: ProgramPart(Initialize Ma) c= P;
-A25: Ma c= P by A24,COMPOS_1:144;
+A24: Ma c= P;
+A25: Ma c= P by A24;
     take 1;
 A26: dom P = NAT by PARTFUN1:def 4;
     thus IC Comput(P,s,1) in dom P by A26;
     dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
     then
 A27: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-    SA0 c= Initialize Macro (SubFrom(a,b)) by FUNCT_4:26;
-    then SA0 c= s by A23,XBOOLE_1:1;
-    then
-A28: IC s = SA0.IC SCM+FSA by A27,GRFUNC_1:8
+A28: IC s = SA0.IC SCM+FSA by A27,GRFUNC_1:8,A23
       .=  0 by FUNCOP_1:87;
     then
 A29: IC Exec(SubFrom(a,b), s) = succ  0 by SCMFSA_2:91
@@ -283,21 +278,18 @@ A33: P.1 = Ma.1 by A25,A30,GRFUNC_1:8
   proof
     set Ma = Macro (MultBy(a,b));
     let s such that
-A34: Initialize Macro (MultBy(a,b)) c= s;
+A34: Start-At(0,SCM+FSA) c= s;
   let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
   such that
-A35: ProgramPart(Initialize Macro (MultBy(a,b))) c= P;
-A36: Ma c= P by A35,COMPOS_1:144;
+A35: Macro (MultBy(a,b)) c= P;
+A36: Ma c= P by A35;
     take 1;
 A37: dom P = NAT by PARTFUN1:def 4;
     thus IC Comput(P,s,1) in dom P by A37;
     dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
     then
 A38: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-    SA0 c= Initialize Macro (MultBy(a,b)) by FUNCT_4:26;
-    then SA0 c= s by A34,XBOOLE_1:1;
-    then
-A39: IC s = SA0.IC SCM+FSA by A38,GRFUNC_1:8
+A39: IC s = SA0.IC SCM+FSA by A38,GRFUNC_1:8,A34
       .=  0 by FUNCOP_1:87;
     then
 A40: IC Exec(MultBy(a,b), s) = succ  0 by SCMFSA_2:92
@@ -319,21 +311,18 @@ A44: P.1 = Ma.1 by A36,A41,GRFUNC_1:8
   proof
     set Ma = Macro (Divide(a,b));
     let s such that
-A45: Initialize Macro (Divide(a,b)) c= s;
+A45: Start-At(0,SCM+FSA) c= s;
   let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
   such that
-A46: ProgramPart(Initialize Macro (Divide(a,b))) c= P;
-A47: Ma c= P by A46,COMPOS_1:144;
+A46: Macro (Divide(a,b)) c= P;
+A47: Ma c= P by A46;
     take 1;
 A48: dom P = NAT by PARTFUN1:def 4;
     thus IC Comput(P,s,1) in dom P by A48;
     dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
     then
 A49: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-    SA0 c= Initialize Macro (Divide(a,b)) by FUNCT_4:26;
-    then SA0 c= s by A45,XBOOLE_1:1;
-    then
-A50: IC s = SA0.IC SCM+FSA by A49,GRFUNC_1:8
+A50: IC s = SA0.IC SCM+FSA by A49,GRFUNC_1:8,A45
       .=  0 by FUNCOP_1:87;
     then
 A51: IC Exec(Divide(a,b), s) = succ  0 by SCMFSA_2:93
@@ -356,21 +345,18 @@ A55: P.1 = Ma.1 by A47,A52,GRFUNC_1:8
   proof
     set Ma = Macro (b:=(f,a));
     let s such that
-A56: Initialize Macro (b:=(f,a)) c= s;
+A56: Start-At(0,SCM+FSA) c= s;
   let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
   such that
-A57: ProgramPart(Initialize Macro (b:=(f,a))) c= P;
-A58: Ma c= P by A57,COMPOS_1:144;
+A57: Macro (b:=(f,a)) c= P;
+A58: Ma c= P by A57;
     take 1;
 A59: dom P = NAT by PARTFUN1:def 4;
     thus IC Comput(P,s,1) in dom P by A59;
     dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
     then
 A60: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-    SA0 c= Initialize Macro (b:=(f,a)) by FUNCT_4:26;
-    then SA0 c= s by A56,XBOOLE_1:1;
-    then
-A61: IC s = SA0.IC SCM+FSA by A60,GRFUNC_1:8
+A61: IC s = SA0.IC SCM+FSA by A60,GRFUNC_1:8,A56
       .=  0 by FUNCOP_1:87;
     then
 A62: IC Exec(b:=(f,a), s) = succ  0 by SCMFSA_2:98
@@ -394,21 +380,18 @@ A66: P.1 = Ma.1 by A58,A63,GRFUNC_1:8
     proof
       set Ma = Macro ((f,a):=b);
       let s such that
-A67:  Initialize Macro ((f,a):=b) c= s;
+A67:  Start-At(0,SCM+FSA) c= s;
   let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
   such that
-A68: ProgramPart(Initialize Macro ((f,a):=b)) c= P;
-A69: Ma c= P by A68,COMPOS_1:144;
+A68: Macro ((f,a):=b) c= P;
+A69: Ma c= P by A68;
       take 1;
 A70: dom P = NAT by PARTFUN1:def 4;
     thus IC Comput(P,s,1) in dom P by A70;
       dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
       then
 A71:  IC SCM+FSA in dom SA0 by TARSKI:def 1;
-      SA0 c= Initialize Macro ((f,a):=b) by FUNCT_4:26;
-      then SA0 c= s by A67,XBOOLE_1:1;
-      then
-A72:  IC s = SA0.IC SCM+FSA by A71,GRFUNC_1:8
+A72:  IC s = SA0.IC SCM+FSA by A71,GRFUNC_1:8,A67
         .=  0 by FUNCOP_1:87;
       then
 A73:  IC Exec((f,a):=b, s) = succ  0 by SCMFSA_2:99
@@ -430,7 +413,7 @@ A77: P.1 = Ma.1 by A69,A74,GRFUNC_1:8
       set Ma = Macro ((f,a):=b);
       let s;
       assume
-A78:  Initialize Macro ((f,a):=b) c= s;
+A78:  Start-At(0,SCM+FSA) c= s;
     let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
     assume
 A79: Ma c= P;
@@ -438,10 +421,7 @@ A79: Ma c= P;
       dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
       then
 A80:  IC SCM+FSA in dom SA0 by TARSKI:def 1;
-      SA0 c= Initialize Macro ((f,a):=b) by FUNCT_4:26;
-      then SA0 c= s by A78,XBOOLE_1:1;
-      then
-A81:  IC s = SA0.IC SCM+FSA by A80,GRFUNC_1:8
+A81:  IC s = SA0.IC SCM+FSA by A80,GRFUNC_1:8,A78
         .=  0 by FUNCOP_1:87;
     0 in dom Ma by COMPOS_1:147;
       then
@@ -481,21 +461,18 @@ registration
   proof
     set Ma = Macro (a:=len f);
     let s such that
-A1: Initialize Macro (a:=len f) c= s;
+A1: Start-At(0,SCM+FSA) c= s;
   let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
   such that
-A2: ProgramPart(Initialize Macro (a:=len f)) c= P;
-A3: Ma c= P by A2,COMPOS_1:144;
+A2: Macro (a:=len f) c= P;
+A3: Ma c= P by A2;
     take 1;
 A4: dom P = NAT by PARTFUN1:def 4;
     thus IC Comput(P,s,1) in dom P by A4;
     dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
     then
 A5: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-    SA0 c= Initialize Macro (a:=len f) by FUNCT_4:26;
-    then SA0 c= s by A1,XBOOLE_1:1;
-    then
-A6: IC s = SA0.IC SCM+FSA by A5,GRFUNC_1:8
+A6: IC s = SA0.IC SCM+FSA by A5,GRFUNC_1:8,A1
       .=  0 by FUNCOP_1:87;
     then
 A7: IC Exec(a:=len f, s) = succ  0 by SCMFSA_2:100
@@ -519,21 +496,18 @@ A11: P.1 = Ma.1 by A3,A8,GRFUNC_1:8
     proof
       set Ma = Macro (f:=<0,...,0>a);
       let s such that
-A12:   Initialize Macro (f:=<0,...,0>a) c= s;
+A12:   Start-At(0,SCM+FSA) c= s;
   let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
   such that
-A13: ProgramPart(Initialize Macro (f:=<0,...,0>a)) c= P;
-A14: Ma c= P by A13,COMPOS_1:144;
+A13: Macro (f:=<0,...,0>a) c= P;
+A14: Ma c= P by A13;
       take 1;
 A15: dom P = NAT by PARTFUN1:def 4;
     thus IC Comput(P,s,1) in dom P by A15;
       dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
       then
 A16:  IC SCM+FSA in dom SA0 by TARSKI:def 1;
-      SA0 c= Initialize Macro (f:=<0,...,0>a) by FUNCT_4:26;
-      then SA0 c= s by A12,XBOOLE_1:1;
-      then
-A17:  IC s = SA0.IC SCM+FSA by A16,GRFUNC_1:8
+A17:  IC s = SA0.IC SCM+FSA by A16,GRFUNC_1:8,A12
         .=  0 by FUNCOP_1:87;
       then
 A18:  IC Exec(f:=<0,...,0>a, s) = succ  0 by SCMFSA_2:101
@@ -555,7 +529,7 @@ A22: P.1 = Ma.1 by A14,A19,GRFUNC_1:8
       set Ma = Macro (f:=<0,...,0>a);
       let s;
       assume
-A23:  Initialize Macro (f:=<0,...,0>a) c= s;
+A23:  Start-At(0,SCM+FSA) c= s;
     let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
     assume
 A24: Ma c= P;
@@ -563,10 +537,7 @@ A24: Ma c= P;
       dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
       then
 A25:  IC SCM+FSA in dom SA0 by TARSKI:def 1;
-      SA0 c= Initialize Macro (f:=<0,...,0>a) by FUNCT_4:26;
-      then SA0 c= s by A23,XBOOLE_1:1;
-      then
-A26:  IC s = SA0.IC SCM+FSA by A25,GRFUNC_1:8
+A26:  IC s = SA0.IC SCM+FSA by A25,GRFUNC_1:8,A23
         .=  0 by FUNCOP_1:87;
     0 in dom Ma by COMPOS_1:147;
       then
@@ -609,7 +580,7 @@ registration
     set Ma = Macro (a:=b);
     let s;
     assume
-A1: Initialize Macro (a:=b) c= s;
+A1: Start-At(0,SCM+FSA) c= s;
     let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
     assume
 A2: Ma c= P;
@@ -617,10 +588,7 @@ A2: Ma c= P;
     dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
     then
 A3: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-    SA0 c= Initialize Macro (a:=b) by FUNCT_4:26;
-    then SA0 c= s by A1,XBOOLE_1:1;
-    then
-A4: IC s = SA0.IC SCM+FSA by A3,GRFUNC_1:8
+A4: IC s = SA0.IC SCM+FSA by A3,GRFUNC_1:8,A1
       .=  0 by FUNCOP_1:87;
   0 in dom Ma by COMPOS_1:147;
     then
@@ -657,7 +625,7 @@ A10:   1 <= k;
     set Ma = Macro (AddTo(a,b));
     let s;
     assume
-A11: Initialize Macro (AddTo(a,b)) c= s;
+A11: Start-At(0,SCM+FSA) c= s;
     let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
     assume
 A12: Ma c= P;
@@ -665,10 +633,7 @@ A12: Ma c= P;
     dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
     then
 A13: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-    SA0 c= Initialize Macro (AddTo(a,b)) by FUNCT_4:26;
-    then SA0 c= s by A11,XBOOLE_1:1;
-    then
-A14: IC s = SA0.IC SCM+FSA by A13,GRFUNC_1:8
+A14: IC s = SA0.IC SCM+FSA by A13,GRFUNC_1:8,A11
       .=  0 by FUNCOP_1:87;
   0 in dom Ma by COMPOS_1:147;
     then
@@ -706,7 +671,7 @@ A20:  1 <= k;
     set Ma = Macro (SubFrom(a,b));
     let s;
     assume
-A21: Initialize Macro (SubFrom(a,b)) c= s;
+A21: Start-At(0,SCM+FSA) c= s;
     let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
     assume
 A22: Ma c= P;
@@ -714,10 +679,7 @@ A22: Ma c= P;
     dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
     then
 A23: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-    SA0 c= Initialize Macro (SubFrom(a,b)) by FUNCT_4:26;
-    then SA0 c= s by A21,XBOOLE_1:1;
-    then
-A24: IC s = SA0.IC SCM+FSA by A23,GRFUNC_1:8
+A24: IC s = SA0.IC SCM+FSA by A23,GRFUNC_1:8,A21
       .=  0 by FUNCOP_1:87;
   0 in dom Ma by COMPOS_1:147;
     then
@@ -755,7 +717,7 @@ A30:  1 <= k;
     set Ma = Macro (MultBy(a,b));
     let s;
     assume
-A31: Initialize Macro (MultBy(a,b)) c= s;
+A31: Start-At(0,SCM+FSA) c= s;
     let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
     assume
 A32: Ma c= P;
@@ -763,10 +725,7 @@ A32: Ma c= P;
     dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
     then
 A33: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-    SA0 c= Initialize Macro (MultBy(a,b)) by FUNCT_4:26;
-    then SA0 c= s by A31,XBOOLE_1:1;
-    then
-A34: IC s = SA0.IC SCM+FSA by A33,GRFUNC_1:8
+A34: IC s = SA0.IC SCM+FSA by A33,GRFUNC_1:8,A31
       .=  0 by FUNCOP_1:87;
   0 in dom Ma by COMPOS_1:147;
     then
@@ -808,7 +767,7 @@ registration
     set Ma = Macro (Divide(a,b));
     let s;
     assume
-A1: Initialize Macro (Divide(a,b)) c= s;
+A1: Start-At(0,SCM+FSA) c= s;
     let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
     assume
 A2: Ma c= P;
@@ -816,10 +775,7 @@ A2: Ma c= P;
     dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
     then
 A3: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-    SA0 c= Initialize Macro (Divide(a,b)) by FUNCT_4:26;
-    then SA0 c= s by A1,XBOOLE_1:1;
-    then
-A4: IC s = SA0.IC SCM+FSA by A3,GRFUNC_1:8
+A4: IC s = SA0.IC SCM+FSA by A3,GRFUNC_1:8,A1
       .=  0 by FUNCOP_1:87;
   0 in dom Ma by COMPOS_1:147;
     then
@@ -860,7 +816,7 @@ registration
     set Ma = Macro (b:=(f,a));
     let s;
     assume
-A1: Initialize Macro (b:=(f,a)) c= s;
+A1: Start-At(0,SCM+FSA) c= s;
     let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
     assume
 A2: Ma c= P;
@@ -868,10 +824,7 @@ A2: Ma c= P;
     dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
     then
 A3: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-    SA0 c= Initialize Macro (b:=(f,a)) by FUNCT_4:26;
-    then SA0 c= s by A1,XBOOLE_1:1;
-    then
-A4: IC s = SA0.IC SCM+FSA by A3,GRFUNC_1:8
+A4: IC s = SA0.IC SCM+FSA by A3,GRFUNC_1:8,A1
       .=  0 by FUNCOP_1:87;
   0 in dom Ma by COMPOS_1:147;
     then
@@ -912,7 +865,7 @@ registration
     set Ma = Macro (b:=len f);
     let s;
     assume
-A1: Initialize Macro (b:=len f) c= s;
+A1: Start-At(0,SCM+FSA) c= s;
     let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
     assume
 A2: Ma c= P;
@@ -920,10 +873,7 @@ A2: Ma c= P;
     dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
     then
 A3: IC SCM+FSA in dom SA0 by TARSKI:def 1;
-    SA0 c= Initialize Macro (b:=len f) by FUNCT_4:26;
-    then SA0 c= s by A1,XBOOLE_1:1;
-    then
-A4: IC s = SA0.IC SCM+FSA by A3,GRFUNC_1:8
+A4: IC s = SA0.IC SCM+FSA by A3,GRFUNC_1:8,A1
       .=  0 by FUNCOP_1:87;
   0 in dom Ma by COMPOS_1:147;
     then
@@ -1017,20 +967,9 @@ theorem Th3:
   being read-write Int-Location holds (Initialized s).a = s.a) & (for f holds (
   Initialized s).f = s.f) & for l holds (Initialized s).l = s.l
 proof
-A1: ((intloc 0) .--> 1).intloc 0 = 1 by FUNCOP_1:87;
-  dom SA0 = {IC SCM+FSA} by FUNCOP_1:19;
-  then
-A2: IC SCM+FSA in dom SA0 by TARSKI:def 1;
+ thus IC Initialized s =  0 & (Initialized s).intloc 0 = 1 by SCMFSA6A:82;
 A3: Initialized s = Initialize(s +* ((intloc 0) .--> 1)) by FUNCT_4:15;
-  SA0.IC SCM+FSA =  0 by FUNCOP_1:87;
-  hence IC Initialized s =  0 by A2,FUNCT_4:14,A3;
 A4: dom ((intloc 0) .--> 1) = {intloc 0} by FUNCOP_1:19;
-  then
-A5: intloc 0 in dom ((intloc 0) .--> 1) by TARSKI:def 1;
-  not intloc 0 in dom SA0 by SCMFSA6B:9;
-  hence (Initialized s).intloc 0 = (s+*((intloc 0) .--> 1)).intloc 0 by
-FUNCT_4:12,A3
-    .= 1 by A5,A1,FUNCT_4:14;
   hereby
     let a be read-write Int-Location;
 A6: not a in dom ((intloc 0) .--> 1) by A4,TARSKI:def 1;
@@ -1064,10 +1003,8 @@ theorem Th5:
 proof
   assume
 A1: DataPart s1 = DataPart s2;
-A2: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
-A3: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:8;
   set l = i;
-A4: InsCode i <= 11+1 by SCMFSA_2:35;
+A4: InsCode i <= 13 by SCMFSA_2:35;
 A5: dom Exec(l,s1) = the carrier of SCM+FSA by PARTFUN1:def 4;
   then
 A6: dom Exec(l,s1) = dom Exec(l,s2) by PARTFUN1:def 4;
@@ -1077,7 +1014,7 @@ A8: dom Exec(l,s2) = the carrier of SCM+FSA by PARTFUN1:def 4;
   then
 A9: dom ((Exec (l,s2)) | (Data-Locations SCM+FSA)) = (
   Data-Locations SCM+FSA) by RELAT_1:91;
-  per cases by A4,A3,A2,NAT_1:8,33;
+  per cases by A4,NAT_1:38;
   suppose
     InsCode i = 0;
     then
@@ -1900,6 +1837,64 @@ A155: da in Data-Locations SCM+FSA by XBOOLE_0:def 3,SCMFSA_2:127;
     then Exec (l,s1) | {fa} = Exec(l,s2) | {fa} by A6,A147,A146,GRFUNC_1:90;
     hence thesis by A154,A153,RELAT_1:185;
   end;
+  suppose
+    InsCode i = 13;
+    then consider da being Int-Location such that
+A134: l = da:==1 by SCMFSA_2:134;
+A135: for x being set st x in ((Data-Locations SCM+FSA) \ {da})
+holds (Exec (l,s1) | (Data-Locations SCM+FSA \ {da})).x = (Exec (l,
+    s2) | (Data-Locations SCM+FSA \ {da})).x
+    proof
+      let x be set;
+      assume
+A136: x in ((Data-Locations SCM+FSA) \ {da});
+      then
+A137: x in Data-Locations SCM+FSA by XBOOLE_0:def 5;
+A138: not x in {da} by A136,XBOOLE_0:def 5;
+      per cases by A137,XBOOLE_0:def 3,SCMFSA_2:127;
+      suppose
+        x in Int-Locations;
+        then reconsider a = x as Int-Location by SCMFSA_2:11;
+A139:   a <> da by A138,TARSKI:def 1;
+        thus (Exec (l,s1) | (Data-Locations SCM+FSA \ {da})).x = (
+        Exec (l,s1)).a by A136,FUNCT_1:72
+          .= s1.a by A134,A139,SCMFSA_2:136
+          .= (DataPart s1).a by A137,FUNCT_1:72
+          .= s2.a by A1,A137,FUNCT_1:72
+          .= (Exec (l,s2)).a by A134,A139,SCMFSA_2:136
+          .= (Exec (l,s2) | (Data-Locations SCM+FSA \ {da})).x by
+A136,FUNCT_1:72;
+      end;
+      suppose
+        x in FinSeq-Locations;
+        then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
+        thus (Exec (l,s1) | (Data-Locations SCM+FSA \ {da})).x = (
+        Exec (l,s1)).a by A136,FUNCT_1:72
+          .= s1.a by A134,SCMFSA_2:136
+          .= (DataPart s1).a by A137,FUNCT_1:72
+          .= s2.a by A1,A137,FUNCT_1:72
+          .= (Exec (l,s2)).a by A134,SCMFSA_2:136
+          .= (Exec (l,s2) | (Data-Locations SCM+FSA \ {da})).x by
+A136,FUNCT_1:72;
+      end;
+    end;
+    da in Int-Locations by SCMFSA_2:9;
+    then da in Data-Locations SCM+FSA by XBOOLE_0:def 3,SCMFSA_2:127;
+    then
+A140: Data-Locations SCM+FSA = Data-Locations SCM+FSA \/ {da} by ZFMISC_1:46
+      .= (Data-Locations SCM+FSA \ {da} ) \/ {da} by XBOOLE_1:39;
+    Exec (l,s1).da = 1 by A134,SCMFSA_2:136
+      .= Exec (l,s2).da by A134,SCMFSA_2:136;
+    then
+A142: Exec (l,s1) | {da} = Exec(l,s2) | {da} by A5,A8,GRFUNC_1:90;
+A143: dom ((Exec (l,s2)) | (Data-Locations SCM+FSA \ {da})) = (
+    Data-Locations SCM+FSA \ {da}) by A8,RELAT_1:91;
+    dom ((Exec (l,s1)) | (Data-Locations SCM+FSA \ {da})) = (
+    Data-Locations SCM+FSA \ {da}) by A5,RELAT_1:91;
+    then Exec (l,s1) | (Data-Locations SCM+FSA \ {da} ) = Exec (l,
+    s2) | (Data-Locations SCM+FSA \ {da} ) by A143,A135,FUNCT_1:9;
+    hence thesis by A140,A142,RELAT_1:185;
+  end;
 end;
 
 Lm3: now
@@ -1914,14 +1909,10 @@ A2: the carrier of SCM+FSA = {IC SCM+FSA} \/ Data-Locations SCM+FSA \/ NAT
       .= {IC SCM+FSA} \/ NAT \/ Data-Locations SCM+FSA
            by XBOOLE_1:4;
 A3: dom IE = the carrier of SCM+FSA by PARTFUN1:def 4;
-
-    hence dom DataPart Initialized IE = dom IE /\ IF by A1,RELAT_1:90
-;
-
+    hence dom DataPart Initialized IE = dom IE /\ IF by A1,RELAT_1:90;
     then
 A4: dom DataPart Initialized IE= Data-Locations SCM+FSA
        by A3,XBOOLE_1:21,A2;
-
     let x;
     assume
 A5: x in dom DataPart Initialized IE;
@@ -1933,20 +1924,16 @@ A5: x in dom DataPart Initialized IE;
         per cases;
         suppose
 A6:       x9 is read-write;
-
           thus (DataPart Initialized IE).x = (Initialized IE).x by A5,A4,
 FUNCT_1:72
-
             .= IE.x by A6,Th3;
         end;
         suppose
           x9 is read-only;
           then
 A7:       x9 = intloc 0 by SF_MASTR:def 5;
-
           thus (DataPart Initialized IE).x = (Initialized IE).x9 by A5,A4,
 FUNCT_1:72
-
             .= 1 by A7,Th3
             .= IE.x by A7,SCMFSA6B:35;
         end;
@@ -1955,10 +1942,8 @@ FUNCT_1:72
     suppose
       x in FinSeq-Locations;
       then reconsider x9 = x as FinSeq-Location by SCMFSA_2:12;
-
       thus (DataPart Initialized IE).x = (Initialized IE).x9
       by A5,A4,FUNCT_1:72
-
         .= IE.x by Th3;
     end;
   end;
@@ -1967,101 +1952,46 @@ end;
 
 theorem Th6:
   for i being parahalting Instruction of SCM+FSA
-   holds Exec(i,Initialized s) = IExec(Macro i,P,s)
+   holds NPP Exec(i,Initialized s) = NPP IExec(Macro i,P,s)
 proof
   let i be parahalting Instruction of SCM+FSA;
   set Mi = Macro i;
-  set sI = s+*Initialized Mi,
+  set sI = s+*Initialize((intloc 0).-->1),
       pI = P+*Mi;
 A1:  Mi c= pI by FUNCT_4:26;
   set Is = Initialized s;
   set IC1 = IC Comput(P+*Mi,sI,1);
   reconsider Mi as parahalting Program of SCM+FSA;
-A2:  Initialize Mi c= sI by FUNCT_4:26,SCMFSA6B:8;
-A3: IC1 in dom Mi by SCMFSA6B:def 2,A2,FUNCT_4:26;
-A4: Initialized Mi c= sI by FUNCT_4:26;
+A4: Initialize((intloc 0).-->1) c= sI by FUNCT_4:26;
+  Start-At(0,SCM+FSA) c= Initialize((intloc 0).-->1) by FUNCT_4:26;
+    then
+B4:  Start-At(0,SCM+FSA) c= sI by A4,XBOOLE_1:1;
+    then
+A3: IC1 in dom Mi by SCMFSA6B:def 2,FUNCT_4:26;
 A5: now
-    set Y = NAT;
     set X = Data-Locations SCM+FSA \/ {IC SCM+FSA};
     assume
 A6: Result(P+*Mi,sI) = Exec(i, sI);
-A7: s+* ((intloc 0) .--> 1),s+*Mi+* ((intloc 0) .--> 1) equal_outside Y
-    by FUNCT_7:106,132;
-A8: Initialized s = Initialize(s +* ((intloc 0) .--> 1)) by FUNCT_4:15;
-A9: Initialized Mi = Initialize(Mi +* ((intloc 0) .--> 1)) by FUNCT_4:15;
-    sI = s+* (Mi +* (Initialize ((intloc 0) .--> 1)))
-     by FUNCT_4:15
-      .= s+* Mi +* (Initialize ((intloc 0) .--> 1))
-       by FUNCT_4:15
-       .= Initialize (s+* Mi +* ((intloc 0) .--> 1)) by FUNCT_4:15;
-    then Is, sI equal_outside Y by A7,FUNCT_7:106,A8,A9;
-    then Is | X = sI | X by COMPOS_1:175;
-    then
-A10: Exec(i, Is) | X = Exec(i, sI) | X by AMISTD_2:65;
-A11: Y /\ (X \/ Y) c= Y /\ (X \/ Y);
-A12: dom IExec(Mi,P,s) = the carrier of SCM+FSA by PARTFUN1:def 4;
-A13: dom Exec(i, Is) = the carrier of SCM+FSA by PARTFUN1:def 4;
-A14: the carrier of SCM+FSA = X \/ Y by COMPOS_1:160;
-A15: dom s = X \/ Y by COMPOS_1:172;
-    now
-      thus dom (Exec(i, Is) | Y) = dom s /\ Y
-       by A13,A15,RELAT_1:90,A14;
-      let x;
-      assume x in dom (Exec(i, Is) | Y);
-      then
-A16:  x in Y /\ (X \/ Y) by A13,RELAT_1:90,A14;
-      then reconsider x9 = x as Element of NAT by XBOOLE_1:21;
-      x in Y by A16,XBOOLE_1:21;
-      hence (Exec(i, Is)|Y).x = (Exec(i, Is)).x by FUNCT_1:72
-        .= Is.x9 by AMI_1:def 13
-        .= s.x by Th3;
-    end;
-    then
-A17: Exec(i, Is) | Y = s | Y by FUNCT_1:68;
-    dom Exec(i, sI) = the carrier of SCM+FSA by PARTFUN1:def 4;
-    then
-A18: IExec(Mi,P,s) | Y = s | Y by A6,A15,A11,FUNCT_4:93,A14;
-    X misses Y
-    proof
-      assume X meets Y;
-      then consider x such that
-A19:  x in X and
-A20:  x in Y by XBOOLE_0:3;
-A21:  x in Int-Locations \/ FinSeq-Locations or x in {IC SCM+FSA} by A19,
-XBOOLE_0:def 3,SCMFSA_2:127;
-      per cases by A21,TARSKI:def 1,XBOOLE_0:def 3;
-      suppose
-        x in Int-Locations;
-        hence contradiction by A20,SCMFSA_2:13,XBOOLE_0:3;
-      end;
-      suppose
-        x in FinSeq-Locations;
-        hence contradiction by A20,SCMFSA_2:14,XBOOLE_0:3;
-      end;
-      suppose
-A22:    x = IC SCM+FSA;
-        reconsider x as Element of NAT by A20;
-        x = IC SCM+FSA by A22;
-        hence contradiction by COMPOS_1:3;
-      end;
-    end;
-    then X misses dom (s|Y) by RELAT_1:87,XBOOLE_1:63;
-    then IExec(Mi,P,s) | X = Exec(i, sI) | X by A6,FUNCT_4:76;
-    then
-A23: Exec(i, Is)| (X \/ Y) = IExec(Mi,P,s) | (X \/ Y)
- by A10,A18,A17,RELAT_1:185;
-    thus Exec(i, Is) = Exec(i, Is)| (X \/ Y) by A13,RELAT_1:98,A14
-      .= IExec(Mi,P,s) by A12,A23,RELAT_1:98,A14;
+    thus NPP IExec(Mi,P,s)
+         = NPP Result(P+*Mi,sI) +* NPP(s|NAT) by COMPOS_1:221
+        .= NPP Result(P+*Mi,sI) +* {}
+        .= NPP Result(P+*Mi,sI) by FUNCT_4:22
+        .= NPP Exec(i, sI) by A6;
   end;
 A24:  1 in dom Mi by COMPOS_1:147;
 A25:  0 in dom Mi by COMPOS_1:147;
 A26: Mi. 0 = i by COMPOS_1:148;
-A27:  (P+*Mi)/.IC sI
- = (P+*Mi).IC sI by PBOOLE:158;
+XX2: Initialize((intloc 0).-->1) c= Initialized Mi by FUNCT_4:26;
+XX3: IC SCM+FSA in dom Initialize((intloc 0).-->1) by COMPOS_1:225;
+    then
+XX:  IC sI = IC Initialize((intloc 0).-->1) by FUNCT_4:14
+      .= IC Initialized Mi by XX2,GRFUNC_1:8,XX3
+      .= 0 by SCMFSA6A:25;
 A28: Comput(P+*Mi,sI,0+1) = Following(P+*Mi,
         Comput(P+*Mi,sI,0)) by EXTPRO_1:4
     .= Following(P+*Mi,sI) by EXTPRO_1:3
-    .= Exec(pI. 0, sI) by A27,FUNCT_4:26,SCMFSA6B:34
+    .= Exec(pI.IC sI,sI) by PBOOLE:158
+    .= Exec(pI. 0, sI) by XX
     .= Exec(i, sI) by A26,GRFUNC_1:8,A1,A25;
   per cases by A3,COMPOS_1:147;
   suppose
@@ -2069,7 +1999,7 @@ A29: IC1 =  0;
     then
 A30: CurInstr(P+*Mi,Comput(P+*Mi,sI,1)) = (P+*Mi). 0 by PBOOLE:158
       .= i by A26,FUNCT_4:14,A25;
-    succ IC sI = succ  0 by FUNCT_4:26,SCMFSA6B:34
+    succ IC sI = succ  0 by XX
       .=  1;
     then
 A31: InsCode i in {0, 6, 7, 8} by A28,A29,SCMFSA6A:23;
@@ -2103,7 +2033,6 @@ A34:    now
             hence sI.a = Exec(i, sI).a by SCMFSA_2:97;
           end;
         end;
-A35:    for l holds sI.l = Exec(i, sI).l by AMI_1:def 13;
 A36:    now
           let f;
           per cases by A33;
@@ -2123,29 +2052,28 @@ A36:    now
             hence sI.f = Exec(i, sI).f by SCMFSA_2:97;
           end;
         end;
-        IC sI = IC Exec(i, sI) by A28,A29,FUNCT_4:26,SCMFSA6B:34;
-        then
-A37:    sI = Exec(i, sI) by A34,A36,A35,SCMFSA_2:86;
-A38:    Following(P+*Mi,sI) =
-Following(P+*Mi,Comput(P+*Mi,sI,0)
-) by EXTPRO_1:3
+A37:    NPP sI = NPP Exec(i, sI) by A34,A36,SCMFSA_2:138,A28,A29,XX;
+A38:    Following(P+*Mi,sI)
+           = Following(P+*Mi,Comput(P+*Mi,sI,0)) by EXTPRO_1:3
           .= Exec(i, sI) by A28,EXTPRO_1:4;
         now
           let n be Element of NAT;
-          Comput(P+*Mi,sI,n) = sI by A37,A38,EXTPRO_1:27
-            .= Following(P+*Mi,Comput(
-P+*Mi,sI,0))
+          NPP Comput(P+*Mi,sI,n) = NPP sI by A37,A38,AMISTD_2:70
+          .= NPP Following(P+*Mi,Comput(P+*Mi,sI,0))
              by A37,A38,EXTPRO_1:3
-            .= Comput(P+*Mi,sI,0+1) by EXTPRO_1:4;
+            .= NPP Comput(P+*Mi,sI,0+1) by EXTPRO_1:4;
+           then IC Comput(P+*Mi,sI,n)
+                = IC NPP Comput(P+*Mi,sI,1) by COMPOS_1:240
+               .= IC Comput(P+*Mi,sI,1) by COMPOS_1:240;
+           then CurInstr(P+*Mi,Comput(P+*Mi,sI,n)) = i by A30;
           hence CurInstr(P+*Mi,Comput(P+*Mi,sI,n))
-           <> halt SCM+FSA by A30,A33,SCMFSA_2:124;
+           <> halt SCM+FSA by A33,SCMFSA_2:124;
         end;
         then
 A39:      not P+*Mi halts_on sI by EXTPRO_1:30;
-A40:      ProgramPart Initialized Mi = Mi by SCMFSA6A:33;
          Mi c= P+*Mi by FUNCT_4:26;
-        hence Exec(i,Initialized s) = IExec(Macro i,P,s)
-            by A4,EXTPRO_1:def 10,A39,A40;
+        hence NPP Exec(i,Initialized s) = NPP IExec(Macro i,P,s)
+            by A39,B4,SCMFSA6B:def 3;
       end;
     end;
   end;
@@ -2201,7 +2129,9 @@ A2: DataPart Initialized IExec(I,P,s) = DataPart IExec(I,P,s) by Lm3;
 A3: a in Data-Locations SCM+FSA by XBOOLE_0:def 3,SCMFSA_2:127;
   thus IExec(I ';' j,P,s).a = (IExec(Mj,P,IExec(I,P,s))+*SA).a by SCMFSA6B:44
     .= IExec(Mj,P,IExec(I,P,s)).a by A1,FUNCT_4:12
-    .= Exec(j, Initialized IExec(I,P,s)).a by Th6
+    .= (NPP IExec(Mj,P,IExec(I,P,s))).a by Lm4
+    .= (NPP Exec(j, Initialized IExec(I,P,s))).a by Th6
+    .= Exec(j, Initialized IExec(I,P,s)).a by Lm4
     .= (DataPart Exec(j, Initialized IExec(I,P,s))).a by A3,FUNCT_1:72
 
     .= (DataPart Exec(j,IExec(I,P,s))).a by A2,Th5
@@ -2224,7 +2154,9 @@ A2: DataPart Initialized IExec(I,P,s) = DataPart IExec(I,P,s) by Lm3;
 A3: f in Data-Locations SCM+FSA by XBOOLE_0:def 3,SCMFSA_2:127;
   thus IExec(I ';' j,P,s).f = (IExec(Mj,P,IExec(I,P,s))+*SA).f by SCMFSA6B:44
     .= IExec(Mj,P,IExec(I,P,s)).f by A1,FUNCT_4:12
-    .= Exec(j, Initialized IExec(I,P,s)).f by Th6
+    .= (NPP IExec(Mj,P,IExec(I,P,s))).f by Lm5
+    .= (NPP Exec(j, Initialized IExec(I,P,s))).f by Th6
+    .= Exec(j, Initialized IExec(I,P,s)).f by Lm5
     .= (DataPart Exec(j, Initialized IExec(I,P,s))).f by A3,FUNCT_1:72
 
     .= (DataPart Exec(j,IExec(I,P,s))).f by A2,Th5
@@ -2239,9 +2171,12 @@ proof
   let i be keeping_0 parahalting Instruction of SCM+FSA, j be parahalting
   Instruction of SCM+FSA;
   set Mi = Macro i;
+A: NPP IExec(Mi,P,s) = NPP Exec(i, Initialized s) by Th6;
   thus IExec(i ';' j,P,s).a = IExec(Mi ';' j,P, s).a
     .= Exec(j,IExec(Mi,P,s)).a by Th7
-    .= Exec(j, Exec(i, Initialized s)).a by Th6;
+    .= (NPP Exec(j,IExec(Mi,P,s))).a by Lm4
+    .= (NPP Exec(j,Exec(i, Initialized s))).a by A,AMISTD_2:def 20
+    .= Exec(j, Exec(i, Initialized s)).a by Lm4;
 end;
 
 theorem
@@ -2252,9 +2187,12 @@ proof
   let i be keeping_0 parahalting Instruction of SCM+FSA, j be parahalting
   Instruction of SCM+FSA;
   set Mi = Macro i;
+A: NPP IExec(Mi,P,s) = NPP Exec(i, Initialized s) by Th6;
   thus IExec(i ';' j,P,s).f = IExec(Mi ';' j,P,s).f
     .= Exec(j,IExec(Mi,P,s)).f by Th8
-    .= Exec(j, Exec(i, Initialized s)).f by Th6;
+    .= (NPP Exec(j,IExec(Mi,P,s))).f by Lm5
+    .= (NPP Exec(j, Exec(i, Initialized s))).f by A,AMISTD_2:def 20
+    .= Exec(j, Exec(i, Initialized s)).f by Lm5;
 end;
 
 begin :: An example

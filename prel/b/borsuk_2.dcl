@@ -539,19 +539,6 @@
 </Cluster>
 </FCluster>
 <CCluster aid="BORSUK_2" nr="1">
-<ArgTypes/>
-<Cluster/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="U" nr="1">
-<Func kind="K" nr="234"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="28"/>
-</Cluster>
-</CCluster>
-<CCluster aid="BORSUK_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -585,7 +572,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster aid="BORSUK_2" nr="3">
+<CCluster aid="BORSUK_2" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="37" value="false"/>
@@ -601,7 +588,7 @@
 <Adjective nr="60"/>
 </Cluster>
 </CCluster>
-<CCluster aid="BORSUK_2" nr="4">
+<CCluster aid="BORSUK_2" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="37"/>

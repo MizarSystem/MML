@@ -2,7 +2,15 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received December 29, 1992
-:: Copyright (c) 1992 Association of Mizar Users
+:: Copyright (c) 1992-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -553,17 +561,21 @@ provided
  P[1.G()];
 
 notation
-  let G,a,b;
+  let G be multMagma, a,b be Element of G;
   synonym a [*] b for a*b;
 end;
 
 begin :: Monoids on natural numbers
 
 definition
-  func <REAL,+> -> unital associative invertible commutative cancelable strict
-  (non empty multMagma) equals
+  func <REAL,+> -> non empty multMagma equals
 :: MONOID_0:def 26
   multMagma(#REAL, addreal#);
+end;
+
+registration
+  cluster <REAL,+> -> unital associative invertible commutative cancelable
+  strict;
 end;
 
 canceled;
@@ -785,12 +797,16 @@ begin :: Monoids of mappings
 
 definition
   let X be set;
-  func GPFuncs X -> unital associative constituted-Functions strict (non empty
-  multMagma) means
+  func GPFuncs X -> constituted-Functions strict multMagma means
 :: MONOID_0:def 37
 
-  the carrier of it = PFuncs(X,X) & for f,g being
-  Element of it holds f [*] g = f(*)g;
+  the carrier of it = PFuncs(X,X) &
+  for f,g being Element of it holds f [*] g = g (*) f;
+end;
+
+registration
+  let X be set;
+  cluster GPFuncs X -> unital associative non empty;
 end;
 
 definition
@@ -815,7 +831,7 @@ theorem :: MONOID_0:78
 
 theorem :: MONOID_0:79
   for F being non empty SubStr of GPFuncs X for f,g being Element
-  of F holds f [*] g = f (*) g;
+  of F holds f [*] g = g (*) f;
 
 theorem :: MONOID_0:80
   for F being non empty SubStr of GPFuncs X st id X is Element of
@@ -826,10 +842,15 @@ theorem :: MONOID_0:81
 
 definition
   let X be set;
-  func GFuncs X -> unital strict (non empty SubStr of GPFuncs X) means
+  func GFuncs X -> strict SubStr of GPFuncs X means
 :: MONOID_0:def 40
 
   the carrier of it = Funcs(X,X);
+end;
+
+registration
+  let X be set;
+  cluster GFuncs X -> unital non empty;
 end;
 
 :: corollary
@@ -860,12 +881,17 @@ theorem :: MONOID_0:85
 
 definition
   let X be set;
-  func GPerms X -> unital invertible strict (non empty SubStr of GFuncs X)
+  func GPerms X -> strict non empty SubStr of GFuncs X
   means
 :: MONOID_0:def 42
 
   for f being Element of GFuncs X holds f in the carrier of it iff
   f is Permutation of X;
+end;
+
+registration
+  let X be set;
+  cluster GPerms X -> unital invertible;
 end;
 
 :: corollary

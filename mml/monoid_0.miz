@@ -2,7 +2,15 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received December 29, 1992
-:: Copyright (c) 1992 Association of Mizar Users
+:: Copyright (c) 1992-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -245,20 +253,7 @@ definition
   the multF of IT is having_a_unity;
   compatibility
   proof
-    thus IT is unital implies the multF of IT is having_a_unity
-    proof
-      given e being Element of IT such that
-A1:   for h being Element of IT holds h * e = h & e * h = h;
-      take e;
-      for a being Element of IT holds (the multF of IT).(e,a) = a & (the
-      multF of IT).(a,e) = a
-      proof
-        let a be Element of IT;
-        thus (the multF of IT).(e,a) = e*a .= a by A1;
-        thus (the multF of IT).(a,e) = a*e .= a by A1;
-      end;
-      hence thesis by BINOP_1:11;
-    end;
+    thus IT is unital implies the multF of IT is having_a_unity;
     given x being Element of IT such that
 A2: x is_a_unity_wrt the multF of IT;
     take x;
@@ -292,14 +287,7 @@ A2: for a,b holds op(G).(a,b) = op(G).(b,a);
   the multF of G is associative;
   compatibility
   proof
-    thus G is associative implies the multF of G is associative
-    proof
-      assume
-A3:   a*b*c = a*(b*c);
-      let a,b,c;
-      op(G).(a*b,c) = a*b*c & op(G).(a,b*c) = a*(b*c);
-      hence thesis by A3;
-    end;
+    thus G is associative implies the multF of G is associative;
     assume
 A4: for a,b,c holds op(G).(a,op(G).(b,c)) = op(G).(op(G).(a,b),c);
     let a,b,c;
@@ -1673,9 +1661,8 @@ A1: for x,y being Element of D holds x*y in D and
 A2: 1.G in D;
   thus ex H being strict non empty MonoidalSubStr of G st the carrier of H = D
 proof
-A3: for x,y being Element of D holds x*y in D by A1;
   consider H being strict non empty SubStr of G such that
-A4: the carrier of H = D by Lm6,A3;
+A4: the carrier of H = D by Lm6,A1;
   reconsider e = 1.G as Element of H by A2,A4;
   set N = multLoopStr(#the carrier of H, the multF of H, e#);
   op(N) c= op(G) & for M being multLoopStr st G = M holds 1.N = 1.M by
@@ -1709,16 +1696,21 @@ A5: for x being Element of G holds x in the carrier of H iff P[x] from
 end;
 
 notation
-  let G,a,b;
+  let G be multMagma, a,b be Element of G;
   synonym a [*] b for a*b;
 end;
 
 begin :: Monoids on natural numbers
 
 definition
-  func <REAL,+> -> unital associative invertible commutative cancelable strict
-  (non empty multMagma) equals
+  func <REAL,+> -> non empty multMagma equals
   multMagma(#REAL, addreal#);
+  coherence;
+end;
+
+registration
+  cluster <REAL,+> -> unital associative invertible commutative cancelable
+  strict;
   coherence by GROUP_1:92;
 end;
 
@@ -1867,7 +1859,6 @@ A9:   a*b = n+m by Th43;
       hence a = b & b = the_unity_wrt op(N) by A5,A8,A9,BINOP_1:def 8;
     end;
 A10: N is unital by A4,Th6;
-    then op(N) is having_a_unity;
     then N is uniquely-decomposable by A7,Th16;
     hence thesis by A10;
   end;
@@ -2052,7 +2043,6 @@ A9:   a*b = n*m by Th58;
       hence a = b & b = the_unity_wrt op(N) by A5,A8,A9,BINOP_1:def 8;
     end;
 A10: N is unital by A4,Th6;
-    then op(N) is having_a_unity;
     then N is uniquely-decomposable by A7,Th16;
     hence thesis by A10;
   end;
@@ -2302,7 +2292,6 @@ proof
   let F be unital (non empty SubStr of D*+^);
   set p = the_unity_wrt op(F);
   reconsider q = p as Element of F qua SubStr of D*+^;
-A1: op(F) is having_a_unity;
   q^{} = p by FINSEQ_1:47
     .= p[*]p by SETWISEO:23
     .= q^q by Th72;
@@ -2360,22 +2349,21 @@ begin :: Monoids of mappings
 
 definition
   let X be set;
-  func GPFuncs X -> unital associative constituted-Functions strict (non empty
-  multMagma) means
+  func GPFuncs X -> constituted-Functions strict multMagma means
   :Def37:
-  the carrier of it = PFuncs(X,X) & for f,g being
-  Element of it holds f [*] g = f(*)g;
+  the carrier of it = PFuncs(X,X) &
+  for f,g being Element of it holds f [*] g = g (*) f;
   existence
   proof
     reconsider g = id X as PartFunc of X,X;
     set D = PFuncs(X,X);
     defpred P[Element of D,Element of D,Element of D] means ex f,g being
-    PartFunc of X,X st $1 = f & $2 = g & $3 = f(*)g;
+    PartFunc of X,X st $1 = f & $2 = g & $3 = g(*)f;
 A1: for a,b being Element of D ex c being Element of D st P[a,b,c]
     proof
       let a,b be Element of D;
       reconsider f = a, g = b as PartFunc of X,X by PARTFUN1:120;
-      reconsider c = f*g as Element of D by PARTFUN1:119;
+      reconsider c = g*f as Element of D by PARTFUN1:119;
       take c, f, g;
       thus thesis;
     end;
@@ -2388,57 +2376,61 @@ A2: for a,b being Element of D holds P[a,b,f.(a,b)] from BINOP_1:sch 3
       let x be Element of G;
       thus thesis;
     end;
-    then reconsider G as constituted-Functions strict non empty multMagma;
-A3: now
-      let a,b be Element of G;
-      ex g,h being PartFunc of X,X st a = g & b = h & f.(a,b) = g(*)h by A2;
-      hence a[*]b = a(*)b;
-    end;
-A4: now
-      let f9,g,h be Element of G;
-      reconsider fg = f9[*]g, gh = g[*]h as Element of G;
-      thus f9[*]g[*]h = fg(*)h by A3
-        .= f9(*)g(*)h by A3
-        .= f9(*)(g(*)h) by RELAT_1:55
-        .= f9(*)gh by A3
-        .= f9[*](g[*]h) by A3;
-    end;
-    reconsider f1 = g as Element of G by PARTFUN1:119;
-    now
-      let h be Element of G;
-      reconsider j = h as PartFunc of X,X by PARTFUN1:120;
-      thus f1[*]h = g(*)j by A3
-        .= h by PARTFUN1:37;
-      thus h[*]f1 = j(*)g by A3
-        .= h by PARTFUN1:36;
-    end;
-    then reconsider
-    G as unital associative constituted-Functions strict (non empty
-    multMagma) by A4,Lm2,Th6;
+    then reconsider G as constituted-Functions strict multMagma;
     take G;
     thus carr(G) = PFuncs(X,X);
     let g,h be Element of G;
     reconsider g9 = g, h9 = h as Element of D;
-    ex g,h being PartFunc of X,X st g9 = g & h9 = h & f.(g9,h9) = g(*)h by
+    ex g,h being PartFunc of X,X st g9 = g & h9 = h & f.(g9,h9) = h(*)g by
     A2;
     hence thesis;
   end;
   uniqueness
   proof
-    let G1,G2 be unital associative constituted-Functions strict (non empty
-    multMagma) such that
+    let G1,G2 be constituted-Functions strict multMagma such that
 A5: carr(G1) = PFuncs(X,X) and
-A6: for f,g being Element of G1 holds f [*] g = f(*)g and
+A6: for f,g being Element of G1 holds f [*] g = g(*)f and
 A7: carr(G2) = PFuncs(X,X) and
-A8: for f,g being Element of G2 holds f [*] g = f(*)g;
+A8: for f,g being Element of G2 holds f [*] g = g(*)f;
     set f1 = op(G1), f2 = op(G2);
     now
       let a,b be Element of G1;
       reconsider a9 = a, b9 = b as Element of G2 by A5,A7;
-      a[*]b = a(*)b & a9[*]b9 = a9(*)b9 by A6,A8;
+      a[*]b = b(*)a & a9[*]b9 = b9(*)a9 by A6,A8;
       hence f1.(a,b) = f2.(a,b);
     end;
     hence thesis by A5,A7,BINOP_1:2;
+  end;
+end;
+
+registration
+  let X be set;
+  cluster GPFuncs X -> unital associative non empty;
+  coherence
+  proof
+    set G = GPFuncs X;
+    reconsider g = id X as PartFunc of X,X;
+    set D = PFuncs(X,X);
+A1: the carrier of GPFuncs X = D by Def37;
+A4: now
+      let f9,g,h be Element of G;
+      reconsider fg = f9[*]g, gh = g[*]h as Element of G;
+      thus f9[*]g[*]h = h(*)fg by Def37
+        .= h(*)(g(*)f9) by Def37
+        .= h(*)g(*)f9 by RELAT_1:55
+        .= gh(*)f9 by Def37
+        .= f9[*](g[*]h) by Def37;
+    end;
+    reconsider f1 = g as Element of G by A1,PARTFUN1:119;
+    now
+      let h be Element of G;
+      reconsider j = h as PartFunc of X,X by A1,PARTFUN1:120;
+      thus f1[*]h = j(*)g by Def37
+        .= h by PARTFUN1:36;
+      thus h[*]f1 = g(*)j by Def37
+        .= h by PARTFUN1:37;
+    end;
+    hence thesis by A1,A4,Lm2,Th6;
   end;
 end;
 
@@ -2478,10 +2470,10 @@ A1: carr(GPFuncs X) = PFuncs(X,X) by Def37;
   now
     let h be Element of GPFuncs X;
     reconsider j = h as PartFunc of X,X by A1,PARTFUN1:120;
-    thus op.(f,h) = f[*]h .= g(*)j by Def37
-      .= h by PARTFUN1:37;
-    thus op.(h,f) = h[*]f .= j(*)g by Def37
+    thus op.(f,h) = f[*]h .= j(*)g by Def37
       .= h by PARTFUN1:36;
+    thus op.(h,f) = h[*]f .= g(*)j by Def37
+      .= h by PARTFUN1:37;
   end;
   then f is_a_unity_wrt op by BINOP_1:11;
   hence thesis by BINOP_1:def 8;
@@ -2489,7 +2481,7 @@ end;
 
 theorem Th79:
   for F being non empty SubStr of GPFuncs X for f,g being Element
-  of F holds f [*] g = f (*) g
+  of F holds f [*] g = g (*) f
 proof
   let F be non empty SubStr of GPFuncs X;
   let f,g be Element of F;
@@ -2529,7 +2521,7 @@ A6: x`1 in PFuncs(Y,Y) & x`2 in PFuncs(Y,Y) by MCART_1:10;
     then reconsider x1 = x`1, x2 = x`2 as Element of GPFuncs Y by Def37;
     reconsider y1 = x`1, y2 = x`2 as Element of GPFuncs X by A3,A6,Def37;
     thus op(GPFuncs Y).x = x1[*]x2 by A5,MCART_1:23
-      .= x1(*)x2 by Def37
+      .= x2(*)x1 by Def37
       .= y1[*]y2 by Def37
       .= op(GPFuncs X).x by A5,MCART_1:23;
   end;
@@ -2538,18 +2530,9 @@ A6: x`1 in PFuncs(Y,Y) & x`2 in PFuncs(Y,Y) by MCART_1:10;
   hence op(GPFuncs Y) c= op(GPFuncs X) by A1,A2,A4,GRFUNC_1:8;
 end;
 
-Lm8: x in Funcs(X,X) implies x is Function of X,X
-proof
-  assume x in Funcs(X,X);
-  then ex f being Function st x = f & dom f = X & rng f c= X by
-  FUNCT_2:def
-  2;
-  hence thesis by FUNCT_2:4;
-end;
-
 definition
   let X be set;
-  func GFuncs X -> unital strict (non empty SubStr of GPFuncs X) means
+  func GFuncs X -> strict SubStr of GPFuncs X means
   :Def40:
   the carrier of it = Funcs(X,X);
   existence
@@ -2559,20 +2542,27 @@ definition
 A1: for x,y being Element of F holds x [*] y in F
     proof
       let x,y be Element of F;
-      reconsider f = x, g = y as Function of X,X by Lm8;
-      x[*]y = f*g by Def37;
+      reconsider f = x, g = y as Function of X,X by FUNCT_2:121;
+      x[*]y = g*f by Def37;
       hence thesis by FUNCT_2:12;
     end;
     consider G being strict non empty SubStr of GPFuncs X such that
 A2: the carrier of G = F by Lm6,A1;
-    id X in F by FUNCT_2:12;
-    then reconsider G as unital strict (non empty SubStr of GPFuncs X) by A2,
-    Th80;
     take G;
     thus thesis by A2;
-
   end;
   uniqueness by Th28;
+end;
+
+registration
+  let X be set;
+  cluster GFuncs X -> unital non empty;
+  coherence
+  proof
+A1: the carrier of GFuncs X = Funcs(X,X) by Def40;
+    id X in Funcs(X,X) by FUNCT_2:12;
+    hence thesis by A1,Th80;
+  end;
 end;
 
 :: corollary
@@ -2592,7 +2582,7 @@ theorem
   x is Element of GFuncs X iff x is Function of X,X
 proof
   carr(GFuncs X) = Funcs(X,X) by Def40;
-  hence thesis by Lm8,FUNCT_2:12;
+  hence thesis by FUNCT_2:121,12;
 end;
 
 theorem Th83:
@@ -2622,7 +2612,7 @@ end;
 
 definition
   let X be set;
-  func GPerms X -> unital invertible strict (non empty SubStr of GFuncs X)
+  func GPerms X -> strict non empty SubStr of GFuncs X
   means
   :Def42:
   for f being Element of GFuncs X holds f in the carrier of it iff
@@ -2638,46 +2628,25 @@ A1: ex x being Element of GFuncs X st P[x]
       take x;
       thus thesis;
     end;
-A2: carr(GFuncs X) = Funcs(X,X) by Def40;
+    carr(GFuncs X) = Funcs(X,X) by Def40;
     then reconsider f = id X as Element of GFuncs X by FUNCT_2:12;
 A3: for x,y being Element of GFuncs X st P[x] & P[y] holds P[x [*] y]
     proof
       let x,y be Element of GFuncs X;
       assume x is Permutation of X & y is Permutation of X;
       then reconsider f = x, g = y as Permutation of X;
-      x[*]y = f*g by Th79;
+      x[*]y = g*f by Th79;
       hence thesis;
     end;
     consider G being strict non empty SubStr of GFuncs X such that
 A4: for f being Element of GFuncs X holds f in the carrier of G iff P[
     f] from SubStrEx2(A3,A1);
-    f in carr(G) by A4;
-    then reconsider G as unital strict (non empty SubStr of GFuncs X) by Th80;
-    now
-      reconsider i = f as Element of G by A4;
-      let a,b be Element of G;
-      carr(G) c= carr(GFuncs X) by Th25;
-      then reconsider a9 = a, b9 = b as Element of GFuncs X by TARSKI:def 3;
-      reconsider f = a9, g = b9 as Permutation of X by A4;
-A5:   i = f(*)(f") & i = f"(*)f by FUNCT_2:88;
-      reconsider f9 = f" as Element of GFuncs X by A2,FUNCT_2:12;
-A6:   g(*)i = g & i(*)g = g by FUNCT_2:23;
-      reconsider f9 as Element of G by A4;
-      reconsider r = f9[*]b, l = b[*]f9 as Element of G;
-      take r,l;
-A7:   i[*]b = (id X)(*)g & b[*]i = g(*) id X by Th79;
-      a[*]f9 = f(*)(f") & f9[*]a = f"(*)f by Th79;
-      hence a[*]r = b & l[*]a = b by A5,A6,A7,Lm2;
-    end;
-    then reconsider
-    G as unital invertible strict (non empty SubStr of GFuncs X )
-    by Th12;
     take G;
     thus thesis by A4;
   end;
   uniqueness
   proof
-    let G1,G2 be unital invertible strict (non empty SubStr of GFuncs X) such
+    let G1,G2 be strict non empty SubStr of GFuncs X such
     that
 A8: for f being Element of GFuncs X holds f in carr(G1) iff f is
     Permutation of X and
@@ -2707,6 +2676,36 @@ A13:  x in carr(G2);
   end;
 end;
 
+registration
+  let X be set;
+  cluster GPerms X -> unital invertible;
+  coherence
+  proof
+    set G = GPerms X;
+A2: carr(GFuncs X) = Funcs(X,X) by Def40;
+    then reconsider f = id X as Element of GFuncs X by FUNCT_2:12;
+    f in carr(G) by Def42;
+    hence G is unital by Th80;
+    now
+      reconsider i = f as Element of G by Def42;
+      let a,b be Element of G;
+      carr(G) c= carr(GFuncs X) by Th25;
+      then reconsider a9 = a, b9 = b as Element of GFuncs X by TARSKI:def 3;
+      reconsider f = a9, g = b9 as Permutation of X by Def42;
+A5:   i = f(*)(f") & i = f"(*)f by FUNCT_2:88;
+      reconsider f9 = f" as Element of GFuncs X by A2,FUNCT_2:12;
+A6:   g(*)i = g & i(*)g = g by FUNCT_2:23;
+      reconsider f9 as Element of G by Def42;
+      reconsider r = f9[*]b, l = b[*]f9 as Element of G;
+      take r,l;
+A7:   i[*]b = g(*)id X & b[*]i = id X(*)g by Th79;
+      a[*]f9 = f"(*)f & f9[*]a = f(*)(f") by Th79;
+      hence a[*]r = b & l[*]a = b by A5,A6,A7,Lm2;
+    end;
+    hence thesis by Th12;
+  end;
+end;
+
 :: corollary
 :: GPerms X is constituted-Functions Group;
 
@@ -2717,8 +2716,7 @@ A1: x is Permutation of X implies x in Funcs(X,X) by FUNCT_2:12;
   carr(GPerms X) c= carr(GFuncs X) by Th25;
   then
 A2: x is Element of GPerms X implies x is Element of GFuncs X by
-  TARSKI:
-  def 3;
+  TARSKI:def 3;
   carr(GFuncs X) = Funcs(X,X) by Def40;
   hence thesis by A1,A2,Def42;
 end;
@@ -2730,10 +2728,10 @@ proof
   now
     let a be Element of GPerms X;
     reconsider f = a as Permutation of X by Th86;
-    a[*]i = a(*)i by Th79;
+    a[*]i = i(*)a by Th79;
     then
-A1: op(GPerms X).(a,i) = f(*)i;
-    i[*]a = i(*)a by Th79;
+A1: op(GPerms X).(a,i) = i(*)f;
+    i[*]a = a(*)i by Th79;
     hence op(GPerms X).(i,a) = a & op(GPerms X).(a,i) = a by A1,FUNCT_2:23;
   end;
   then i is_a_unity_wrt op(GPerms X) by BINOP_1:11;
@@ -2749,8 +2747,8 @@ proof
 A1: g(*)(g") = id X & g"(*)g = id X by FUNCT_2:88;
   reconsider b = g" as Element of GPerms X by Th86;
   reconsider b as Element of GPerms X;
-A2: b[*]f = g"(*)g by Th79;
-  id X = 1_GPerms X & f[*]b = g(*)(g") by Th79,Th87;
+A2: b[*]f = g(*)(g") by Th79;
+  id X = 1_GPerms X & f[*]b = g"(*)g by Th79,Th87;
   hence thesis by A1,A2,GROUP_1:def 6;
 end;
 

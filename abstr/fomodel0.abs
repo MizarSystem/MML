@@ -1,0 +1,1115 @@
+:: Preliminaries to Classical First-order Model Theory
+::  by Marco B. Caminati
+:: 
+:: Received December 29, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, INT_1,
+      RELAT_1, FINSEQ_1, FUNCT_1, ARYTM_3, XCMPLX_0, CARD_1, MONOID_0,
+      ORDINAL1, ARYTM_1, FUNCT_2, XXREAL_0, XREAL_0, ALGSTR_0, ORDINAL4,
+      BINOP_1, FUNCT_7, FUNCT_4, FUNCOP_1, FINSEQ_2, MCART_1, PARTFUN1,
+      FUNCT_3, MARGREL1, RELAT_2, PRE_POLY, XBOOLEAN, MATROID0, FINSET_1,
+      COMPLEX1, SETFAM_1, CARD_3, FOMODEL0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NAT_1, ZFMISC_1, NUMBERS, INT_1,
+      XCMPLX_0, RELAT_1, FUNCT_1, PARTFUN1, RELSET_1, FUNCT_2, FUNCT_4,
+      PRE_POLY, FINSEQ_1, MONOID_0, STRUCT_0, ORDINAL1, XXREAL_0, XREAL_0,
+      BINOP_1, FUNCT_7, FUNCOP_1, FINSEQ_2, MCART_1, FINSEQOP, ALGSTR_0,
+      FUNCT_3, MARGREL1, RELAT_2, SETFAM_1, DOMAIN_1, MATROID0, FINSET_1,
+      COMPLEX1, CARD_1, CARD_3;
+ constructors MONOID_0, BINOP_1, FUNCT_7, FUNCT_4, RELSET_1, FINSEQOP,
+      DOMAIN_1, SETWISEO, REAL_1, SETFAM_1, LEXBFS, MATROID0, COMPLEX1;
+ registrations SUBSET_1, ORDINAL1, XCMPLX_0, NAT_1, RELAT_1, NUMBERS, FUNCT_1,
+      INT_1, FINSEQ_1, MONOID_0, FUNCT_2, FUNCT_4, FINSEQ_2, RELSET_1,
+      FUNCOP_1, ZFMISC_1, BINOP_1, XBOOLE_0, XXREAL_0, XREAL_0, EUCLID_9,
+      FINSEQ_6, PRE_POLY, PRALG_1, CARD_1, PARTFUN1, LEXBFS, SIMPLEX0,
+      FINSET_1, SETFAM_1, REALSET1, CARD_3;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+reserve U, D for non empty set,
+        X for non empty Subset of D,
+        d,d1,d2 for Element of D,
+        A,B,C,Y,x,y,z for set,
+        f for BinOp of D, i,m,n for Nat;
+reserve g for Function;
+
+::###################  Preliminary Definitions  #########################
+::#######################################################################
+
+definition let X be set; let f be Function;
+  attr f is X-one-to-one means
+:: FOMODEL0:def 1
+f|X is one-to-one;
+end;
+
+definition let D,f; let X be set;
+  attr X is f-unambiguous means
+:: FOMODEL0:def 2
+f is [:X,D:]-one-to-one;
+end;
+
+definition ::def3 1
+let D;
+let X be set;
+attr X is D-prefix means
+:: FOMODEL0:def 3
+X is (D-concatenation)-unambiguous;
+end;
+
+definition
+let D be set;
+func D-pr1 -> BinOp of D equals
+:: FOMODEL0:def 4
+pr1(D,D);
+end;
+
+theorem :: FOMODEL0:1
+m-tuples_on A /\ (B*) = m-tuples_on A /\ (m-tuples_on B);
+
+theorem :: FOMODEL0:2
+m-tuples_on A /\ (B*) = m-tuples_on (A/\B);
+
+theorem :: FOMODEL0:3
+m-tuples_on (A/\B)=m-tuples_on A /\ (m-tuples_on B);
+
+theorem :: FOMODEL0:4
+for x,y being FinSequence st x is U-valued & y is U-valued
+holds (U-concatenation).(x,y)=x^y;
+
+theorem :: FOMODEL0:5
+for x being set holds ::th5 1, to be replaced by Th30
+(x is non empty FinSequence of D iff x in D*\{{}});
+
+::#####################  Preliminary lemmas  ############################
+::##############################  END  ##################################
+
+::############################  Type tuning  ############################
+::#######################################################################
+
+registration let D be non empty set;
+cluster D-pr1 -> associative BinOp of D;
+end;
+
+registration let D be set;
+cluster associative BinOp of D;
+end;
+
+definition let X be set, Y be Subset of X;
+redefine func Y* -> non empty Subset of X*;
+end;
+
+registration let D be non empty set;
+cluster D-concatenation -> associative (BinOp of D*);
+end;
+
+registration let D be non empty set;
+cluster D* \ {{}} -> non empty;
+end;
+
+registration ::exreg4 1
+let D be non empty set, m be Nat;
+cluster m-element Element of D*;
+end;
+
+definition
+let X be set;
+let f be Function;
+redefine attr f is X-one-to-one means
+:: FOMODEL0:def 5
+(for x,y being set st x in X /\ dom f & y in X /\ dom f & f.x=f.y holds x=y);
+end;
+
+registration let D,f;
+cluster f-unambiguous set;
+end;
+
+registration
+::# cfr cluster trivial -> one-to-one Function in NECKLACE.MIZ
+::# this alternate proof tries to reuse existing results instead
+let f be Function, x be set;
+cluster f|{x} -> one-to-one;
+end;
+
+registration let e be empty set;
+identify e* with {e};
+identify {e} with e*;
+end;
+
+registration
+cluster empty -> empty-membered set;
+::#thanks to cluster with_non-empty_element -> non empty set from SETFAM_1;
+let e be empty set;
+cluster {e} -> empty-membered;
+end;
+
+registration let U; let m1 be non zero Nat;
+cluster m1-tuples_on U -> with_non-empty_elements;
+end;
+
+registration let X be empty-membered set;
+cluster -> empty-membered Subset of X;
+end;
+
+registration let A; let m0 be zero number;
+cluster m0-tuples_on A -> empty-membered set;
+end;
+
+registration let e be empty set; let m1 be non zero Nat;
+cluster m1-tuples_on e -> empty;
+end;
+
+registration let D,f; let e be empty set;
+cluster e /\ f -> f-unambiguous;
+end;
+
+registration let U; let e be empty set;
+cluster e/\U -> U-prefix;
+end;
+
+registration let U;
+cluster U-prefix set;
+end;
+
+::############################  Type tuning  ############################
+::##############################  END  ##################################
+
+::###########################  MultPlace  ###############################
+::#######################################################################
+
+definition let D,f;
+let x be FinSequence of D;
+func MultPlace(f,x) -> Function means
+:: FOMODEL0:def 6
+dom it=NAT & it.0=x.1 & for n being Nat holds it.(n+1)=f.(it.n,x.(n+2));
+end;
+
+definition let D,f;
+let x be Element of D*\{{}};
+func MultPlace(f,x) -> Function equals
+:: FOMODEL0:def 7
+MultPlace(f, x qua Element of D*);
+end;
+
+definition let D,f;
+::# MultPlace is an operator which transforms a BinOp f into a function
+::# operating # on an arbitrary (positive and natural) number of arguments by
+::# recursively # associating f on the left # Too late I realized something
+::# similar (yielding a functor rather than # a function, though) was
+::# introduced in FINSOP_1
+
+func MultPlace(f) -> Function of D*\{{}}, D means
+:: FOMODEL0:def 8
+for x being Element of D*\{{}} holds
+it.x=MultPlace(f,x).(len x - 1);
+end;
+
+definition ::def10 1
+let D,f; let X be set;
+redefine attr X is f-unambiguous means
+:: FOMODEL0:def 9
+for x,y,d1,d2 being set st x in X/\D & y in X/\D & d1 in D & d2 in D &
+f.(x,d1)=f.(y,d2) holds (x=y & d1=d2);
+end;
+
+::###########################  MultPlace  ###############################
+::##############################  END  ##################################
+
+::###########################  FirstChar  ###############################
+::#######################################################################
+
+definition
+let D;
+::# A function-like extracting the first item of a non empty FinSequence of D
+func D-firstChar -> Function of D*\{{}}, D equals
+:: FOMODEL0:def 10
+MultPlace(D-pr1);
+end;
+
+theorem :: FOMODEL0:6
+for p being FinSequence st p is U-valued & p is non empty ::Th6
+holds U-firstChar.p=p.1;
+
+::###########################  FirstChar  ###############################
+::##############################  END  ##################################
+
+::########################### MultiCat #################################
+::######################################################################
+::#When f is concatenation of strings, MultPlace(f) can be extended to the
+::#empty finsequence of strings in the immediate way, obtaining the multiCat
+::#function, which chains an arbitrary (natural) number of strings
+
+definition let D;
+func D-multiCat -> Function equals
+:: FOMODEL0:def 11
+({} .--> {}) +* MultPlace(D-concatenation);
+end;
+
+definition let D;
+redefine func D-multiCat -> Function of D**,D*;
+end;
+
+registration let D; let e be empty set;
+cluster (D-multiCat).e -> empty set;
+end;
+
+registration let D;
+cluster -> D-prefix (Subset of 1-tuples_on D);
+end;
+
+theorem :: FOMODEL0:7  ::Th7
+A is D-prefix implies (D-multiCat).:(m-tuples_on A) is D-prefix;
+
+theorem :: FOMODEL0:8
+A is D-prefix implies D-multiCat is (m-tuples_on A)-one-to-one;
+
+theorem :: FOMODEL0:9
+(m+1)-tuples_on Y c= Y*\{{}};
+
+theorem :: FOMODEL0:10
+m is zero implies m-tuples_on Y={{}}; ::Th10
+
+theorem :: FOMODEL0:11
+i-tuples_on Y = Funcs(Seg i,Y);
+::#extending FUNCT_2:111
+
+theorem :: FOMODEL0:12
+x in m-tuples_on A implies x is FinSequence of A;
+
+definition let A,X be set;
+redefine func chi (A,X) -> Function of X, BOOLEAN;
+end;
+
+theorem :: FOMODEL0:13
+(MultPlace(f)).(<*d*>) = d & for x being non empty FinSequence of D holds
+(MultPlace(f)).(x^<*d*>) = f.((MultPlace(f)).x, d);
+
+theorem :: FOMODEL0:14
+for d being non empty Element of D** holds
+D-multiCat.d=(MultPlace(D-concatenation)).d;
+
+theorem :: FOMODEL0:15
+for d1,d2 be Element of (D*) holds D-multiCat.(<*d1,d2*>)=d1^d2;
+
+registration let f,g be FinSequence;
+cluster <:f,g:> -> FinSequence-like;
+end;
+
+registration let m; let f,g be m-element FinSequence;
+cluster <:f,g:> -> m-element;
+end;
+
+registration
+let X,Y be set; let f be X-defined Function, g be Y-defined Function;
+cluster <:f,g:> -> (X/\Y)-defined Function;
+end;
+
+registration let X be set; let f,g be X-defined Function;
+cluster <:f,g:> -> X-defined Function;
+end;
+
+registration let X,Y be set;
+let f be total (X-defined Function), g be total (Y-defined Function);
+cluster <:f,g:> -> total ((X/\Y)-defined Function);
+end;
+
+registration
+let X be set; let f,g be total (X-defined Function);
+cluster <:f,g:> -> total (X-defined Function);
+end;
+
+registration
+let X,Y be set; let f be X-valued Function, g be Y-valued Function;
+cluster <:f,g:> -> [:X,Y:]-valued Function;
+end;
+
+registration ::exreg 7
+let D; cluster D-valued FinSequence;
+end;
+
+registration let D, m;
+cluster m-element (D-valued FinSequence);
+end;
+
+registration
+let X,Y be non empty set;
+let f be Function of X,Y; let p be X-valued FinSequence;
+cluster f*p -> FinSequence-like;
+end;
+
+registration
+let X,Y be non empty set; let m;
+let f be Function of X,Y; let p be m-element (X-valued FinSequence);
+cluster f*p -> m-element;
+end;
+
+definition
+let D,f; let p,q be Element of D*;
+func f AppliedPairwiseTo (p,q) -> FinSequence of D equals
+:: FOMODEL0:def 12
+f*<:p,q:>;
+end;
+
+registration
+let D,f,m; let p,q be m-element Element of D*;
+cluster f AppliedPairwiseTo (p,q) -> m-element;
+end;
+
+notation
+let D,f; let p,q be Element of D*;
+synonym f _\ (p,q) for f AppliedPairwiseTo (p,q);
+end;
+
+definition ::to infer NAT c= INT more easily
+redefine func INT equals
+:: FOMODEL0:def 13
+NAT \/ ([:{0},NAT:] \ {[0,0]});
+end;
+
+theorem :: FOMODEL0:16
+for p being FinSequence st p is Y-valued & p is m-element holds
+p in m-tuples_on Y;
+
+::##############################Automatizations###############################
+::############################################################################
+
+::#To automatize things like A/\B c= A
+definition let A,B;
+func A typed/\ B -> Subset of A equals
+:: FOMODEL0:def 14
+A/\B;
+func A /\typed B -> Subset of B equals
+:: FOMODEL0:def 15
+A/\B;
+end;
+
+registration let A,B;
+identify A/\B with A typed/\ B;
+identify A typed/\ B with A/\B;
+identify A/\B with A /\typed B;
+identify A /\typed B with A/\B;
+end;
+
+definition let B,A;
+func A null B equals
+:: FOMODEL0:def 16
+A;
+end;
+
+registration :: to automatize things like X/\(X/\Y)=X/\Y
+let A; let B be Subset of A;
+identify A/\B with B null A;
+identify B null A with A/\B;
+end;
+
+registration
+let A,B,C;
+cluster (B\A) /\ (A/\C) -> empty set;
+end;
+
+definition ::To automatize things like A\B c= A
+let A,B;
+func A typed\ B -> Subset of A equals
+:: FOMODEL0:def 17
+A\B;
+end;
+
+registration let A,B;
+identify A\B with A typed\ B;
+identify A typed\ B with A\B;
+end;
+
+definition
+::# to automatize like: A null B c= A\/B; then A c= A\/B; this is mainly
+::# not to have to remember each time what XBOOLE_1 theorem is to be invoked,
+::# as element as this file is imported via definitions directive
+let A,B;
+func A \typed/ B -> Subset of A\/B equals
+:: FOMODEL0:def 18
+A;
+end;
+
+registration
+let A,B;
+identify A \typed/ B with A null B;
+identify A null B with A \typed/ B ;
+end;
+
+registration :: to automatize things like X\/(X/\Y)=X
+let A; let B be Subset of A;
+identify A\/B with A null B;
+identify A null B with A\/B;
+end;
+
+reserve X for set, P,Q,R for Relation, f for Function, p,q for FinSequence;
+reserve U1,U2 for non empty set;
+
+registration
+let R be Relation;
+cluster R[*] -> transitive Relation;
+cluster R[*] -> reflexive Relation;
+end;
+
+definition
+func plus -> Function of COMPLEX, COMPLEX means
+:: FOMODEL0:def 19
+ for z being complex number holds it.z=z+1;
+end;
+
+theorem :: FOMODEL0:17
+rng f c= dom f implies f[*] = ::Th17
+union {iter(f,mm) where mm is Element of NAT: not contradiction};
+
+theorem :: FOMODEL0:18
+f c= g implies iter(f,m) c= iter(g,m); ::Th18
+
+registration let X be functional set;
+cluster union X -> Relation-like;
+end;
+
+theorem :: FOMODEL0:19
+Y c= Funcs(A,B) implies union Y c= [:A,B:]; ::Th19
+
+registration
+let Y; let R be Y-valued Relation;
+identify Y|R with R null Y;
+end;
+
+registration
+let Y;
+cluster Y\Y -> empty set;
+end;
+
+registration
+let D,d;
+cluster {(id D).d} \ {d} -> empty set;
+end;
+
+registration
+let p be FinSequence, q be empty FinSequence;
+identify p^q with p null q;
+identify p null q with p^q;
+identify q^p with p null q;
+identify p null q with q^p;
+end;
+
+registration
+let Y; let R be Y-defined Relation;
+identify R|Y with R null Y;
+identify R null Y with R|Y;
+end;
+
+theorem :: FOMODEL0:20
+f={[x,f.x] where x is Element of dom f: x in dom f};
+
+theorem :: FOMODEL0:21
+for R being total (Y-defined Relation) holds id Y c= R*(R~);
+
+theorem :: FOMODEL0:22
+(m+n)-tuples_on D=D-concatenation.: [:m-tuples_on D,n-tuples_on D:];
+
+theorem :: FOMODEL0:23
+for P,Q being Relation holds (P\/Q)"Y = P"Y \/ (Q"Y);
+
+theorem :: FOMODEL0:24
+(chi(A,B))"{0}=B\A & (chi(A,B))"{1}=A/\B;
+
+theorem :: FOMODEL0:25
+for y being non empty set holds (y=f.x iff x in f"{y});
+
+theorem :: FOMODEL0:26 ::Th26
+f is Y-valued & f is FinSequence-like implies f is FinSequence of Y;
+
+registration
+let Y; let X be Subset of Y;
+cluster X-valued -> Y-valued Relation;
+end;
+
+registration let A,U;
+cluster quasi_total -> total Relation of A,U;
+end;
+
+theorem :: FOMODEL0:27
+for Q being quasi_total Relation of B, U1, ::Th27
+R being quasi_total Relation of B, U2, P being Relation of
+A, B st P*Q*(Q~)*R is Function-like holds P*Q*(Q~)*R=P*R;
+
+theorem :: FOMODEL0:28
+for p,q being FinSequence st p is non empty holds (p^q).1=p.1;
+
+registration :: to be generalized for p being X-valued, q being Y-valued
+let U; let p,q be U-valued FinSequence;
+cluster p^q -> U-valued FinSequence;
+end;
+
+definition let X be set;
+redefine mode FinSequence of X -> Element of X*;
+end;
+
+definition ::def21 1
+let U,X;
+redefine attr X is U-prefix means
+:: FOMODEL0:def 20
+for p1, q1, p2, q2
+being U-valued FinSequence st p1 in X & p2 in X & p1^q1=p2^q2 holds
+(p1=p2 & q1=q2);
+end;
+
+registration
+let X be set;
+cluster -> X-valued Element of X*;
+end;
+
+registration
+let U, m; let X be U-prefix set;
+cluster (U-multiCat).:(m-tuples_on X) -> U-prefix set;
+end;
+
+theorem :: FOMODEL0:29
+X \+\ Y={} iff X=Y;
+
+registration let x;
+cluster (id {x}) \+\ {[x,x]} -> empty set;
+end;
+
+registration
+let x,y;
+cluster (x.-->y) \+\ {[x,y]} -> empty set;
+end;
+
+registration
+let x;
+cluster (id {x}) \+\ (x.-->x) -> empty set;
+end;
+
+theorem :: FOMODEL0:30
+x in D*\{{}} iff (x is D-valued FinSequence & x is non empty);
+
+reserve f for BinOp of D;
+
+theorem :: FOMODEL0:31
+(MultPlace(f)).(<*d*>) = d & for x being D-valued FinSequence st
+x is non empty holds (MultPlace(f)).(x^<*d*>) = f.((MultPlace(f)).x, d);
+
+reserve
+A,B,C,X,Y,Z,x,x1,x2,y,y1,y2,z for set, U,U1,U2,U3 for non empty set,
+u,u1,u2 for Element of U, P,Q,R for Relation, f,g for Function,
+k,m,n for Nat, kk,mm,nn for Element of NAT, m1, n1 for non zero Nat,
+p, p1, p2 for FinSequence, q, q1, q2 for U-valued FinSequence;
+
+registration
+let p,x,y;
+cluster p +~ (x,y) -> FinSequence-like;
+end;
+
+definition
+let x,y,p;
+func (x,y)-SymbolSubstIn p -> FinSequence equals
+:: FOMODEL0:def 21
+p +~ (x,y);
+end;
+
+registration
+let x,y,m; let p be m-element FinSequence;
+cluster (x,y)-SymbolSubstIn p -> m-element FinSequence;
+end;
+
+registration
+let X;
+cluster X-valued FinSequence;
+end;
+
+registration
+let x, U, u; let p be U-valued FinSequence;
+cluster (x,u)-SymbolSubstIn p -> U-valued FinSequence;
+end;
+
+definition
+let X,x,y; let p be X-valued FinSequence;
+redefine func (x,y)-SymbolSubstIn p equals
+:: FOMODEL0:def 22
+(id X +* (x,y))*p;
+end;
+
+definition
+let U, x, u, q;
+redefine func (x,u)-SymbolSubstIn q -> FinSequence of U;
+end;
+
+definition ::def24 1
+let U, x, u;
+func x SubstWith u -> Function of U*, U* means
+:: FOMODEL0:def 23
+for q holds it.q = (x, u)-SymbolSubstIn q;
+end;
+
+registration
+let U, x, u;
+cluster x SubstWith u -> FinSequence-yielding Function;
+end;
+
+registration
+let F be FinSequence-yielding Function, x be set;
+cluster F.x -> FinSequence-like;
+end;
+
+registration
+let U,x,u,m; let p be U-valued m-element FinSequence;
+cluster (x SubstWith u).p -> m-element FinSequence;
+end;
+
+registration
+let U,x,u; let e be empty set;
+cluster (x SubstWith u).e -> empty set;
+end;
+
+registration
+let U;
+cluster U-multiCat -> FinSequence-yielding Function;
+end;
+
+registration
+let U;
+cluster non empty (U-valued FinSequence);
+end;
+
+registration
+let U,m1,n; let p be (m1+n)-element U-valued FinSequence;
+cluster {p.m1} \ U -> empty set;
+end;
+
+registration
+let U,m,n; let p be (m+1+n)-element Element of U*;
+cluster {p.(m+1)} \ U -> empty set;
+end;
+
+registration
+let x;
+cluster <*x*> \+\ {[1,x]} -> empty set;
+end;
+
+registration ::funcreg39 1
+let m; let p be (m+1)-element FinSequence;
+cluster p|Seg m ^ <*p.(m+1)*> \+\ p -> empty set;
+end;
+
+registration
+let m,n; let p be (m+n)-element FinSequence;
+cluster p|Seg m -> m-element FinSequence;
+end;
+
+registration
+cluster {{}}-valued -> empty-yielding Relation;
+cluster empty-yielding -> {{}}-valued Relation;
+end;
+
+theorem :: FOMODEL0:32
+U-multiCat.x=(MultPlace(U-concatenation)).x;
+
+theorem :: FOMODEL0:33
+p is U*-valued implies
+(U-multiCat).(p^<*q*>) = (U-multiCat.p)^q;
+
+registration
+let Y; let X be Subset of Y; let R be total (Y-defined Relation);
+cluster R|X -> total (X-defined Relation);
+end;
+
+theorem :: FOMODEL0:34
+(u=u1 implies (u1,x2)-SymbolSubstIn <*u*>=<*x2*>) &
+(u<>u1 implies (u1,x2)-SymbolSubstIn <*u*>=<*u*>);
+
+theorem :: FOMODEL0:35
+(u=u1 implies (u1 SubstWith u2).<*u*>=<*u2*>) &
+(u<>u1 implies (u1 SubstWith u2).<*u*>=<*u*>);
+
+theorem :: FOMODEL0:36
+(x SubstWith u).(q1^q2)=((x SubstWith u).q1)^((x SubstWith u).q2);
+
+theorem :: FOMODEL0:37
+p is U*-valued implies ::Th37
+(x SubstWith u).(U-multiCat.p)=U-multiCat.((x SubstWith u)*p);
+
+theorem :: FOMODEL0:38
+(U-concatenation).:(id (1-tuples_on U)) =
+{<*u,u*> where u is Element of U: not contradiction};
+
+registration
+let f,U,u;
+cluster ((f|U).u) \+\ f.u -> empty set;
+end;
+
+registration ::funcreg43 1
+let f,U1,U2; let u be Element of U1, g be Function of U1,U2;
+cluster (f*g).u \+\ f.(g.u) -> empty set;
+end;
+
+registration
+cluster non negative -> natural (integer number);
+end;
+
+registration
+let x,y be real number;
+cluster max(x,y)-x -> non negative (ext-real number);
+end;
+
+theorem :: FOMODEL0:39
+x is boolean implies (x=1 iff x<>0);
+
+registration
+let Y; let X be Subset of Y;
+cluster X\Y -> empty set;
+end;
+
+registration
+let x,y;
+cluster {x}\{x,y} -> empty set;
+cluster ([x,y]`1) \+\ x -> empty set;
+end;
+registration
+let x,y;
+cluster ([x,y]`2) \+\ y -> empty set;
+end;
+
+registration
+let n be positive Nat;
+let X be non empty set;
+cluster n-element Element of X*\{{}};
+end;
+
+registration
+let m1;
+cluster (m1+0)-element -> non empty FinSequence;
+end;
+
+registration
+let R,x;
+cluster R null x -> Relation-like set;
+end;
+
+registration
+let f be Function-like set; let x;
+cluster f null x -> Function-like set;
+end;
+
+registration
+let p be FinSequence-like Relation; let x;
+cluster p null x -> FinSequence-like Relation;
+end;
+
+registration
+let p,x;
+cluster p null x -> (len p)-element FinSequence;
+end;
+
+registration
+::#need card (non empty) -> non empty from CARD_1 (len being synonym of card)
+let p be non empty FinSequence;
+cluster len p -> non zero number;
+end;
+
+registration
+let R be Relation, X be set;
+cluster R|X -> X-defined Relation;
+end;
+
+registration
+let x; let e be empty set;
+cluster e null x -> empty set;
+end;
+
+registration
+let X; let e be empty set;
+cluster e null X -> X-valued Relation;
+end;
+
+registration
+let Y be non empty FinSequence-membered set;
+cluster Y-valued -> FinSequence-yielding Function;
+end;
+
+registration
+let X,Y;
+cluster -> FinSequence-yielding Element of Funcs (X,Y*);
+end;
+
+theorem :: FOMODEL0:40
+f is X*-valued implies f.x in X*;
+
+registration
+let m,n; let p be m-element FinSequence;
+cluster p null n -> (Seg (m+n))-defined Relation;
+end;
+
+registration
+let m,n; let p be m-element FinSequence; let q be n-element FinSequence;
+cluster p^q -> (m+n)-element FinSequence;
+end;
+
+theorem :: FOMODEL0:41
+for p1,p2,q1,q2 being FinSequence st p1 is m-element & ::Th41
+q1 is m-element & (p1^p2=q1^q2 or p2^p1=q2^q1) holds (p1=q1 & p2=q2);
+
+theorem :: FOMODEL0:42
+(U-multiCat.x is U1-valued & x in U**) implies
+x is FinSequence of (U1*);
+
+registration
+let U;
+cluster total (reflexive Relation of U);
+end;
+
+registration
+let m;
+cluster (m+1)-element -> non empty FinSequence;
+end;
+
+registration
+let U,u;
+cluster (id U).u \+\ u -> empty set;
+end;
+
+registration
+let U; let p be U-valued non empty FinSequence;
+cluster {p.1}\U -> empty set;
+end;
+
+theorem :: FOMODEL0:43
+(x1=x2 implies f+*(x1.-->y1)+*(x2.-->y2)=f+*(x2.-->y2)) &
+(x1<>x2 implies f+*(x1.-->y1)+*(x2.-->y2)=f+*(x2.-->y2)+*(x1.-->y1));
+
+registration
+let X,U;
+cluster U-valued total (X-defined Function);
+end;
+
+registration
+let X, U; let P be U-valued total (X-defined Relation);
+let Q be total (U-defined Relation);
+cluster P*Q -> total (X-defined Relation);
+end;
+
+theorem :: FOMODEL0:44 ::Th44
+p^p1^p2 is X-valued implies (p2 is X-valued & p1 is X-valued & p is X-valued);
+
+registration
+let X; let R be Relation;
+cluster R null X -> (X \/ rng R)-valued Relation;
+end;
+
+registration
+let X,Y be functional set;
+cluster X\/Y -> functional;
+end;
+
+registration
+cluster FinSequence-membered -> finite-membered set;
+end;
+
+definition
+let X be functional set;
+func SymbolsOf X equals
+:: FOMODEL0:def 24
+union {rng x where x is Element of X\/{{}}: x in X};
+end;
+
+registration
+cluster trivial FinSequence-membered non empty set;
+end;
+
+registration let X be functional finite finite-membered set;
+cluster SymbolsOf X -> finite;
+end;
+
+registration let X be finite FinSequence-membered set;
+cluster SymbolsOf X -> finite;
+end;
+
+theorem :: FOMODEL0:45
+SymbolsOf {f} = rng f;
+
+registration let z be non zero (complex number);
+cluster abs(z) -> positive (ext-real number);
+end;
+
+scheme :: FOMODEL0:sch 1
+ Sc1 {A() -> set, B() -> set, F(set) -> set}:
+{F(x) where x is Element of A(): x in A()} =
+{F(x) where x is Element of B(): x in A()}
+provided
+ A() c= B();
+
+definition let X be functional set;
+redefine func SymbolsOf X equals
+:: FOMODEL0:def 25
+union {rng x where x is Element of X: x in X};
+end;
+
+theorem :: FOMODEL0:46
+for B being functional set, A being Subset of B holds
+SymbolsOf A c= SymbolsOf B; ::Th46
+
+theorem :: FOMODEL0:47
+for A,B being functional set holds
+SymbolsOf (A\/B) = SymbolsOf A \/ (SymbolsOf B);
+
+registration let X; let F be Subset of bool X;
+cluster union F \ X -> empty set;
+end;
+
+theorem :: FOMODEL0:48
+X=X\Y\/(X/\Y);
+
+theorem :: FOMODEL0:49
+m-tuples_on A meets n-tuples_on B implies m=n;
+
+theorem :: FOMODEL0:50
+B is D-prefix & A c= B implies A is D-prefix;
+
+theorem :: FOMODEL0:51
+f c= g iff for x st x in dom f holds (x in dom g & f.x = g.x);
+
+registration let U;
+cluster non empty -> non empty-yielding Element of (U*\{{}})*;
+end;
+
+registration let e be empty set;
+cluster -> empty Element of e*;
+end;
+
+theorem :: FOMODEL0:52
+(U1-multiCat.x <> {} & U2-multiCat.x <> {} implies
+U1-multiCat.x = U2-multiCat.x) &
+(p is {}*-valued implies U1-multiCat.p={}) &
+(U1-multiCat.p={} & p is U1*-valued implies p is {}*-valued);
+
+registration let U, x;
+cluster U-multiCat.x -> U-valued;
+end;
+
+definition let x;
+func x null equals
+:: FOMODEL0:def 26
+x;
+end;
+
+registration let Y be with_non-empty_elements set;
+cluster non empty -> non empty-yielding (Y-valued Relation);
+end;
+
+registration let X;
+cluster X\{{}} -> with_non-empty_elements;
+end;
+
+registration let X be with_non-empty_elements set;
+cluster -> with_non-empty_elements (Subset of X);
+end;
+
+registration let U;
+cluster U* -> infinite set;
+end;
+
+registration let U;
+cluster U* -> with_non-empty_element;
+end;
+
+registration let X be with_non-empty_element set;
+cluster with_non-empty_elements non empty Subset of X;
+end;
+
+theorem :: FOMODEL0:53
+U1 c= U2 & Y c= U1* & p is Y-valued & p<>{} &
+Y is with_non-empty_elements implies U1-multiCat.p=U2-multiCat.p;
+
+theorem :: FOMODEL0:54
+(ex p st x=p & p is X*-valued) implies U-multiCat.x is X-valued;
+
+registration let X,m;
+cluster (m-tuples_on X) \ (X*) -> empty set;
+end;
+
+theorem :: FOMODEL0:55
+(A/\B)* = A* /\ (B*);
+
+theorem :: FOMODEL0:56
+(P\/Q)|X = P|X \/ (Q|X);
+
+registration let X;
+cluster (bool X) \ X -> non empty set;
+end;
+
+registration let X; let R be Relation;
+cluster R null X -> (X\/dom R)-defined Relation;
+end;
+
+theorem :: FOMODEL0:57
+f|X +* g = f|(X\dom g) \/ g;
+
+registration
+let X; let f be X-defined Function, g be total (X-defined Function);
+identify f+*g with g null f;
+identify g null f with f+*g;
+end;
+
+theorem :: FOMODEL0:58
+not y in proj2 X implies [:A,{y}:] misses X;
+
+definition let X;
+func X-freeCountableSet equals
+:: FOMODEL0:def 27
+[:NAT, {the Element of (bool proj2 X\proj2 X)}:];
+end;
+
+theorem :: FOMODEL0:59
+X-freeCountableSet /\X={} & X-freeCountableSet is infinite;
+
+registration let X;
+cluster X-freeCountableSet -> infinite set;
+end;
+
+registration let X;
+cluster X-freeCountableSet /\ X -> empty;
+end;
+
+registration
+let X;
+cluster X-freeCountableSet -> countable set;
+end;
+
+registration
+cluster NAT\INT -> empty;
+end;
+
+registration
+let x,p;
+cluster (<*x*>^p).1 \+\ x -> empty set;
+end;
+
+registration
+let m; let m0 be zero number; let p be m-element FinSequence;
+cluster p null m0 -> total ((Seg (m+m0))-defined FinSequence);
+end;
+
+registration
+let U, q1, q2;
+cluster U-multiCat.<*q1, q2*> \+\ q1^q2 -> empty set;
+end;
+
+registration
+let f; let e be empty set;
+identify f +* e with f null e;
+identify f null e with f+*e;
+identify e+*f with f null e;
+identify f null e with e+*f;
+end;

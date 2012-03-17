@@ -2,7 +2,15 @@
 ::  by Andrzej Trybulec , Piotr Rudnicki and Artur Korni{\l}owicz
 ::
 :: Received April 14, 2000
-:: Copyright (c) 2000 Association of Mizar Users
+:: Copyright (c) 2000-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -10,28 +18,28 @@ environ
       FUNCT_4, FUNCOP_1, RELAT_1, TARSKI, STRUCT_0, FUNCT_1, CARD_3, ZFMISC_1,
       CIRCUIT2, CAT_1, NAT_1, GLIB_000, XXREAL_0, PARTFUN1, FINSEQ_1, ARYTM_3,
       CARD_1, GOBOARD5, FUNCT_2, FINSEQ_4, ARYTM_1, FINSET_1, FRECHET,
-      RCOMP_1, AMISTD_1, SCMNORM, AFINSQ_1, COMPOS_1, AMISTD_2;
+      RCOMP_1, AMISTD_1, SCMNORM, AFINSQ_1, COMPOS_1, AMISTD_2, PBOOLE;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, SETFAM_1, ORDINAL1,
       CARD_1, XXREAL_0, NUMBERS, XCMPLX_0, NAT_1, MEMBERED, FUNCT_1, RELSET_1,
       PARTFUN1, MCART_1, VALUED_1,
       DOMAIN_1, CARD_3, FINSEQ_1, FINSEQ_4, FUNCOP_1, FINSET_1,
-      FUNCT_4, AFINSQ_1,
+      FUNCT_4, FUNCT_7, AFINSQ_1, PBOOLE,
       STRUCT_0, GRAPH_2, NAT_D, XXREAL_2, COMPOS_1,
       EXTPRO_1, FUNCT_2;
  constructors WELLORD2, REAL_1, FINSEQ_4, REALSET1, NAT_D, XXREAL_2, COMPOS_1,
       EXTPRO_1, RELSET_1, PRE_POLY, GRAPH_2, AFINSQ_1, MCART_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
       FUNCOP_1, FINSET_1, NUMBERS, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, CARD_3,
-      REALSET1, FUNCT_7, STRUCT_0, JORDAN1J, CARD_1, XXREAL_2, RELSET_1,
+      REALSET1, FUNCT_7, STRUCT_0, CARD_1, XXREAL_2, RELSET_1,
       FUNCT_4, AFINSQ_1, ORDINAL1, ZFMISC_1, SUBSET_1, VALUED_1, COMPOS_1,
-      EXTPRO_1;
+      EXTPRO_1, PBOOLE, PRE_POLY;
  requirements NUMERALS, BOOLE, REAL, SUBSET, ARITHM;
  definitions TARSKI, STRUCT_0, COMPOS_1, EXTPRO_1, YELLOW_8, XBOOLE_0,
-      FUNCOP_1, NAT_1, RELAT_1, FUNCT_4, NAT_D, AFINSQ_1, VALUED_1;
+      FUNCT_1, FUNCOP_1, NAT_1, RELAT_1, FUNCT_4, NAT_D, AFINSQ_1, VALUED_1;
  theorems TARSKI, FINSEQ_4, FINSEQ_1, NAT_1, FUNCT_4, FUNCT_1,
       FUNCT_2, ENUMSET1, ZFMISC_1, CARD_1, FUNCOP_1, CARD_3, ORDINAL1,
       MCART_1, GRFUNC_1, FINSEQ_3, INT_1, SETFAM_1, REVROT_1, EXTPRO_1,
-      RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, COMPOS_1,
+      RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, COMPOS_1, FUNCT_7,
       PARTFUN1, FINSET_1, XREAL_0, NAT_D, PBOOLE, AFINSQ_1, RECDEF_2;
  schemes NAT_1, FINSEQ_2, FUNCT_2;
 
@@ -109,43 +117,34 @@ definition
   end;
 end;
 
-Lm1: now
+Lm1:
+ now
   let N;
-
   let S be realistic IC-Ins-separated definite
   (non empty stored-program
   AMI-Struct over N), i be Element of the Instructions of S, l be
-  Element of NAT, s be State of S, f be FinPartState of S such that
-
-A1: f = (IC S,l) --> (l,i);
-  reconsider t = s +* f as Element of product the Object-Kind of S
+  Element of NAT, s be State of S,
+  P be (the Instructions of S)-valued ManySortedSet of NAT;
+  reconsider t = s+*(IC S,l) as Element of product the Object-Kind of S
    by PBOOLE:155;
-A2: dom f = {IC S,l} by A1,FUNCT_4:65;
-  then
-A3:  l in dom f by TARSKI:def 2;
-A4: (ProgramPart t)/.l = t.l by COMPOS_1:38
-    .= f.l by A3,FUNCT_4:14
-    .= i by A1,FUNCT_4:66;
-  IC S in dom f by A2,TARSKI:def 2;
-  then IC t = f.IC S by FUNCT_4:14
-    .= l by A1,COMPOS_1:3,FUNCT_4:66;
-  hence IC Following(ProgramPart(s+*f),s+*f) in NIC(i,l) by A4;
+    l in NAT;
+    then
+A1: l in dom P by PARTFUN1:def 4;
+    IC S in dom s by COMPOS_1:9;
+    then
+A4: IC t = l by FUNCT_7:33;
+   then CurInstr(P+*(l,i),t) = (P+*(l,i)).l by PBOOLE:158
+       .= i by A1,FUNCT_7:33;
+  hence IC Following(P+*(l,i),s+*(IC S,l)) in NIC(i,l) by A4;
 end;
 
 registration
-
   let N be with_non-empty_elements non empty set,
   S be realistic IC-Ins-separated definite
    (non empty stored-program AMI-Struct over N), i be Element of the
   Instructions of S, l be Element of NAT;
   cluster NIC(i,l) -> non empty;
-  coherence
-  proof
-    set s =the  State of S;
-    reconsider f = (IC S,l) --> (l,i) as PartState of S by COMPOS_1:37;
-    IC Following(ProgramPart(s+*f),s+*f) in NIC(i,l) by Lm1;
-    hence thesis;
-  end;
+  coherence by Lm1;
 end;
 
 definition
@@ -233,24 +232,25 @@ A1: for s being State of S holds Exec(i,s) = s;
     then n = il by A1;
     hence n in {il} by TARSKI:def 1;
   end;
-  reconsider f = (IC S,il) --> (il,i) as PartState of S  by COMPOS_1:37;
-  set s =the  State of S;
+    set s = the  State of S,
+        P = the (the Instructions of S)-valued ManySortedSet of NAT;
   let n be set;
   assume
-A2: n in {il};
-  set a = s+*f;
-A3: dom f = {IC S,il} by FUNCT_4:65;
-  then IC S in dom f by TARSKI:def 2;
+ n in {il};
   then
-A4: a.IC S = f.IC S by FUNCT_4:14
-    .= il by COMPOS_1:3,FUNCT_4:66;
-A5: il in dom f by A3,TARSKI:def 2;
-  (ProgramPart a)/.IC a = a.IC a by COMPOS_1:38
-    .= f.il by A4,A5,FUNCT_4:14
-    .= i by FUNCT_4:66;
-  then IC Following(ProgramPart a,a) = a.IC S by A1
-    .= n by A2,A4,TARSKI:def 1;
-  hence thesis by Lm1;
+B2: n = il by TARSKI:def 1;
+    il in NAT;
+    then
+A5: il in dom P by PARTFUN1:def 4;
+C3: IC S in dom s by COMPOS_1:9;
+   then IC(s+*(IC S,il)) = il by FUNCT_7:33;
+   then CurInstr(P+*(il,i),s+*(IC S,il))
+         = (P+*(il,i)).il by PBOOLE:158
+        .= i by A5,FUNCT_7:33;
+   then IC Following(P+*(il,i),s+*(IC S,il))
+      = IC(s+*(IC S,il)) by A1
+     .= n by B2,C3,FUNCT_7:33;
+  hence n in NIC(i,il) by Lm1;
 end;
 
 begin :: Ordering of Instruction Locations
@@ -896,12 +896,8 @@ end;
 
 Lm5: for l being Element of NAT, i being Element of the
 Instructions of STC N st l = z & InsCode i = 1 holds NIC(i, l) = {z+1}
-
 proof
-
-  let l be Element of NAT, i be Element of the Instructions of
-  STC N;
-
+  let l be Element of NAT, i be Element of the Instructions of STC N;
   assume that
 A1: l = z and
 A2: InsCode i = 1;
@@ -909,22 +905,15 @@ A2: InsCode i = 1;
   set F = { IC Exec(i,ss)
    where ss is Element of product the Object-Kind of STC N: IC ss = l};
   now
-    set f = (NAT) --> i;
+    set f = NAT --> i;
     set w =the  State of M;
     reconsider l9 = l as Element of ObjectKind IC M by COMPOS_1:def 6;
     set u = (IC M).-->l9;
 A3: dom u = {IC M} by FUNCOP_1:19;
-    reconsider s = w +* f as State of M;
     let y be set;
-A4: dom f = NAT by FUNCOP_1:19;
-    reconsider t = s+*u as Element of product the Object-Kind of STC N
+    reconsider t = w+*u as Element of product the Object-Kind of STC N
      by PBOOLE:155;
-    l <> IC M by COMPOS_1:3;
-    then
-A5:    not l in dom u by A3,TARSKI:def 1;
-A6: (ProgramPart t)/.l = t.l by COMPOS_1:38
-      .= s.l by A5,FUNCT_4:12
-      .= f.l by A4,FUNCT_4:14
+A6:  f/.l = f.l
       .= i by FUNCOP_1:13;
     hereby
       assume y in F;
@@ -943,7 +932,7 @@ A7: y = succ z by TARSKI:def 1;
     then
 A8: IC t = u.IC M by FUNCT_4:14
       .= z by A1,FUNCOP_1:87;
-    then IC Following(ProgramPart t,t) = succ z by A1,A2,A6,Lm4;
+    then IC Following(f,t) = succ z by A1,A2,A6,Lm4;
     hence y in F by A1,A7,A8,A6;
   end;
   hence thesis by TARSKI:2;
@@ -1126,25 +1115,23 @@ A1: for s being State of S holds Exec(i, s).IC S = succ IC s;
     let x be set;
 A2: now
       reconsider il1 = il as Element of ObjectKind IC S by COMPOS_1:def 6;
-      reconsider I = i as Element of (the Object-Kind of S).il by
-COMPOS_1:def 8;
-      set t =the  State of S;
+      reconsider I = i as Element of (the Object-Kind of S).il
+           by COMPOS_1:def 8;
+      set t = the  State of S,
+        P = the (the Instructions of S)-valued ManySortedSet of NAT;
       assume
 A3:   x = succ il;
-      reconsider f = (IC S,il) --> (il1,I) as PartState of S by COMPOS_1:37;
-      reconsider u = t+*f as
+      reconsider u = t+*(IC S,il1) as
        Element of product the Object-Kind of S by PBOOLE:155;
-A4:   dom ((IC S, il)-->(il1, I)) = {IC S, il} by FUNCT_4:65;
+      il in NAT;
       then
-A5:     il in dom ((IC S, il)-->(il1, I)) by TARSKI:def 2;
-A6:   (ProgramPart u)/.il = u.il by COMPOS_1:38
-        .= ((IC S, il)-->(il1, I)).il by A5,FUNCT_4:14
-        .= i by FUNCT_4:66;
-      IC S in dom ((IC S, il)-->(il1, I)) by A4,TARSKI:def 2;
+X:     il in dom P by PARTFUN1:def 4;
+A6:   (P+*(il,i))/.il = (P+*(il,i)).il by PBOOLE:158
+         .= i by X,FUNCT_7:33;
+      IC S in dom t by COMPOS_1:9;
       then
-A7:   IC u = ((IC S, il)-->(il1, I)).IC S by FUNCT_4:14
-        .= il by COMPOS_1:3,FUNCT_4:66;
-      then IC Following(ProgramPart u,u) = succ il by A1,A6;
+A7:   IC u = il by FUNCT_7:33;
+      then IC Following(P+*(il,i),u) = succ il by A1,A6;
       hence x in {IC Exec(i,ss)
        where ss is Element of product the Object-Kind of S
         : IC ss = il} by A3,A7,A6;
@@ -1342,7 +1329,6 @@ A1: dom F = {0} by FUNCOP_1:19;
   then
 A2: card dom F = 1 by CARD_1:50;
 A3: LastLoc F = card F -' 1 by AFINSQ_1:74
-    .= card dom F -' 1
     .= 0 by A2,XREAL_1:234;
   hence F.(LastLoc F) = halt S by FUNCOP_1:87;
   let l be Element of NAT such that
@@ -1483,23 +1469,20 @@ A6: for s being State of M holds f.s = s+*(NAT .-->succ(s.NAT))
   hence thesis;
  end;
 A7: the ZeroF of M = NAT by Def11;
-A8: Start-At(IC s+1,M) = NAT .--> (IC s + 1) by Def11
-      .= NAT .-->succ(s.NAT) by A7,NAT_1:39;
+A8: Start-At(IC s+1,M) = NAT .-->succ(s.NAT) by A7,NAT_1:39;
   dom ([0,0,0] .--> id product the Object-Kind of M) = {[0,0,0]}
    by FUNCOP_1:19;
   then (the Execution of M).i = ([1,0,0] .--> f).i by A5,A2,FUNCT_4:12
     .= f by A3,FUNCOP_1:13;
-  hence Exec(i,s) = s +* (NAT .-->succ(s.NAT)) by A6
-    .= s +* Start-At(IC s+1,M) by A8
-    .= IncIC(s,1);
+  hence Exec(i,s) = IncIC(s,1) by A8,A6;
 end;
 
 registration let N; let p be PartState of STC N;
  cluster DataPart p -> empty;
  coherence
   proof
-   Data-Locations STC N = (the carrier of STC N) \ ({IC STC N} \/ NAT)
-     .= (the carrier of STC N) \ ({NAT} \/ NAT) by Def11
+   Data-Locations STC N
+      = (the carrier of STC N) \ ({NAT} \/ NAT) by Def11
      .= ({NAT} \/ NAT) \ ({NAT} \/ NAT) by Def11
      .= {} by XBOOLE_1:37;
   hence thesis;

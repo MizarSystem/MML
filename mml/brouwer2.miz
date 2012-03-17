@@ -1,0 +1,1600 @@
+:: Brouwer Fixed Point Theorem in the General Case
+::  by Karol P\kak
+:: 
+:: Received December 21, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies ABIAN, ARYTM_1, ARYTM_3, BORSUK_1, BROUWER, CARD_1, COMPLEX1,
+      CONNSP_2, CONVEX1, EUCLID, FUNCOP_1, FUNCT_1, FUNCT_3, FUNCT_4, JGRAPH_4,
+      JORDAN2C, MEASURE5, MEMBERED, METRIC_1, NAT_1, NUMBERS, ORDINAL1,
+      ORDINAL2, PCOMPS_1, PRE_TOPC, PROB_1, RCOMP_1, REAL_1, RELAT_1, RLAFFIN1,
+      RLTOPSP1, RLVECT_1, RLVECT_5, RUSUB_4, RVSUM_1, STRUCT_0, SUBSET_1,
+      SUPINF_2, TARSKI, TOPMETR, TOPREALB, TOPS_1, TOPS_2, VALUED_1, VALUED_2,
+      XBOOLE_0, XREAL_0, XXREAL_0, XXREAL_2, FUNCT_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_2, ORDINAL1, NUMBERS, VALUED_1, CARD_1, XCMPLX_0, XREAL_0,
+      XXREAL_0, MEMBERED, COMPLEX1, NAT_1, FUNCOP_1, FINSEQ_2, VALUED_2,
+      STRUCT_0, PRE_TOPC, RLAFFIN2, TOPS_1, METRIC_1, PCOMPS_1, TOPMETR,
+      BORSUK_1, RLVECT_1, RLTOPSP1, EUCLID, TOPREAL9, TOPREALB, DOMAIN_1,
+      TOPS_2, COMPTS_1, TBSP_1, JORDAN2C, XXREAL_2, FUNCT_4, JGRAPH_4, TMAP_1,
+      RUSUB_4, CONVEX1, REAL_1, CONNSP_2, BROUWER, ABIAN, RLVECT_5, RLAFFIN1;
+ constructors BINOP_2, COMPLEX1, POLYEQ_1, TBSP_1, MONOID_0, JORDAN2C, CONVEX1,
+      GRCAT_1, TOPREAL9, TOPS_1, COMPTS_1, PCOMPS_1, XXREAL_2, FUNCSDOM,
+      JGRAPH_4, TMAP_1, TOPREALC, BROUWER, ABIAN, RUSUB_4, RLAFFIN1, RLAFFIN2,
+      RLVECT_5, SEQ_4;
+ registrations BORSUK_1, BORSUK_3, BROUWER, CARD_1, COMPTS_1, CONVEX1, EUCLID,
+      EUCLID_9, FUNCOP_1, FUNCT_1, FUNCT_2, JGRAPH_4, JORDAN, JORDAN2C,
+      MEMBERED, NAT_1, PCOMPS_1, PRE_TOPC, REALSET1, RELAT_1, REVROT_1,
+      RLAFFIN1, RLAFFIN3, RLTOPSP1, RLVECT_1, SIMPLEX2, STRUCT_0, SUBSET_1,
+      TMAP_1, TOPGRP_1, TOPMETR, TOPREAL1, TOPREAL9, TOPREALC, TOPS_1,
+      VALUED_0, VALUED_2, WAYBEL_2, XBOOLE_0, XCMPLX_0, XREAL_0, XXREAL_0,
+      ZFMISC_1, RELSET_1;
+ requirements ARITHM, BOOLE, NUMERALS, SUBSET, REAL;
+ definitions TARSKI, XCMPLX_0, STRUCT_0, ALGSTR_0, TOPREAL9, BORSUK_1, BROUWER;
+ theorems ABIAN, ABSVALUE, BOOLMARK, BORSUK_1, BROUWER, COMPLEX1, COMPTS_1,
+      CONNSP_2, CONVEX1, EUCLID, FUNCOP_1, FUNCT_1, FUNCT_2, FUNCT_4, GOBOARD6,
+      HAUSDORF, JGRAPH_4, JORDAN24, JORDAN2C, MEMBERED, METRIC_1, NECKLACE,
+      ORDINAL1, PRE_TOPC, RELAT_1, RLAFFIN1, RLAFFIN2, RLAFFIN3, RLTOPSP1,
+      RLVECT_1, RUSUB_4, SIMPLEX2, SPPOL_1, SUBSET_1, TARSKI, TBSP_1, TMAP_1,
+      TOPGEN_1, TOPMETR, TOPMETR2, TOPREAL9, TOPREALB, TOPREALC, TOPRNS_1,
+      TOPS_1, TOPS_2, TOPS_4, VALUED_2, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_0,
+      XREAL_1, XXREAL_0, XXREAL_2, ZFMISC_1;
+
+begin :: Preliminaries
+
+reserve n for Nat,
+        p,q,u,w for Point of TOP-REAL n,
+        S for Subset of TOP-REAL n,
+        A, B for convex Subset of TOP-REAL n,
+        r for real number;
+
+Lm1: (1-r)*p+r*q-p = r*(q-p)
+  proof
+A1: n in NAT by ORDINAL1:def 13;
+    thus (1-r)*p+r*q-p = r*q+((1-r)*p-p) by EUCLID:49
+                      .= r*q+((1 *p-r*p)-p) by EUCLID:54
+                      .= r*q+((p-r*p)-p) by RLVECT_1:def 11
+                      .= r*q+((p-p)-r*p) by A1,TOPREAL9:1
+                      .= r*q+(0.(TOP-REAL n)-r*p) by RLVECT_1:28
+                      .= r*q-r*p by RLVECT_1:27
+                      .= r*(q-p) by EUCLID:53;
+  end;
+
+Lm2: r>=0 implies r*p in halfline(0.TOP-REAL n,p)
+  proof
+A1: n in NAT by ORDINAL1:def 13;
+    assume
+A2:   r>=0;
+    (1-r)*0.TOP-REAL n=0.TOP-REAL n & 0.TOP-REAL n+r*p=r*p by RLVECT_1:10,23;
+    hence thesis by A1,A2,TOPREAL9:26;
+  end;
+
+theorem Th1:
+  (1-r)*p + r*q = p + r*(q-p)
+  proof
+    thus p+r*(q-p) = ((1-r)*p+r*q-p)+p by Lm1
+                  .= ((1-r)*p+r*q)-(p-p) by EUCLID:51
+                  .= ((1-r)*p+r*q)-0.TOP-REAL n by RLVECT_1:28
+                  .= (1-r)*p+r*q by RLVECT_1:26;
+  end;
+
+theorem Th2:
+  u in halfline(p,q) & w in halfline(p,q) & |.u-p.| = |.w-p.| implies u = w
+  proof
+    set r1=u,r2=w;
+    assume that
+A1:   r1 in halfline(p,q) and
+A2:   r2 in halfline(p,q) and
+A3:   |.r1-p.|=|.r2-p.|;
+A4: n in NAT by ORDINAL1:def 13;
+    per cases;
+      suppose p<>q;
+        then
+A5:       |.q-p.|<>0 by A4,TOPRNS_1:29;
+        consider a1 be real number such that
+A6:       r1=(1-a1)*p+a1*q and
+A7:       a1>=0 by A1,A4,TOPREAL9:26;
+A8:     abs a1=a1 by A7,ABSVALUE:def 1;
+        a1 in REAL & r1-p=a1*(q-p) by A6,Lm1,XREAL_0:def 1;
+        then
+A9:       |.r1-p.|=abs(a1)*|.q-p.| by A4,TOPRNS_1:8;
+        consider a2 be real number such that
+A10:      r2=(1-a2)*p+a2*q and
+A11:      a2>=0 by A2,A4,TOPREAL9:26;
+        a2 in REAL & r2-p=a2*(q-p) by A10,Lm1,XREAL_0:def 1;
+        then
+A12:      |.r2-p.|=abs(a2)*|.q-p.| by A4,TOPRNS_1:8;
+        abs a2=a2 by A11,ABSVALUE:def 1;
+        then a1=a2 by A3,A5,A9,A12,A8,XCMPLX_1:5;
+        hence thesis by A6,A10;
+      end;
+      suppose
+A13:      p=q;
+        then r1 in {p} by A1,A4,TOPREAL9:29;
+        then
+A14:      r1=p by TARSKI:def 1;
+        r2 in {p} by A2,A4,A13,TOPREAL9:29;
+        hence thesis by A14,TARSKI:def 1;
+      end;
+  end;
+
+Lm3: for A be Subset of TOP-REAL n st
+       p in A & p<>q & A/\halfline(p,q) is Bounded
+     ex w be Point of Euclid n st w in (Fr A)/\halfline(p,q) &
+     (for u,P be Point of Euclid n st
+          P=p & u in A/\halfline(p,q) holds dist(P,u)<=dist(P,w)) &
+     for r st r>0 ex u be Point of Euclid n st u in A/\halfline(p,q) &
+       dist(w,u)<r
+proof
+  set TRn=TOP-REAL n;
+  let A be Subset of TRn such that
+A1: p in A and
+A2: p<>q and
+A3: A/\halfline(p,q) is Bounded;
+  reconsider P=p,Q=q as Element of Euclid n by EUCLID:71;
+A4: dist(P,Q)>0 by A2,METRIC_1:7;
+  set H=halfline(p,q);
+  reconsider AH=A/\H as bounded Subset of Euclid n by A3,JORDAN2C:def 2;
+A5: n in NAT by ORDINAL1:def 13;
+  then
+A6: dist(Q,P)=|.q-p.| by SPPOL_1:62;
+  p in H by A5,TOPREAL9:27;
+  then
+A7: p in AH by A1,XBOOLE_0:def 4;
+  set DAH=diameter AH;
+  set X={r where r is Real:(1-r)*p+r*q in AH & 0<=r};
+  set dAH=DAH+1;
+A8: now let x be set;
+   assume x in X;
+   then ex r be Real st x=r & (1-r)*p+r*q in AH & 0<=r;
+   hence x is real;
+  end;
+  1 *p=p & 0 *q=0.TRn by RLVECT_1:23,def 11;
+  then p=(1-0)*p+0 *q by RLVECT_1:def 7;
+  then
+A9: 0 in X by A7;
+  then reconsider X as non empty real-membered set by A8,MEMBERED:def 3;
+A10: DAH+0<dAH by XREAL_1:10;
+  now let x be ext-real number;
+    assume x in X;
+    then consider r be Real such that
+A11:  x=r and
+A12:  (1-r)*p+r*q in AH and
+A13:  0<=r;
+    reconsider PQ=(1-r)*p+r*q as Element of Euclid n by A12;
+    (1-r)*p+r*q-p=r*(q-p) by Lm1;
+    then dist(PQ,P) = |.r*(q-p).| by A5,SPPOL_1:62
+                   .= abs(r)*|.q-p.| by A5,TOPRNS_1:8
+                   .= r*dist(Q,P) by A6,A13,ABSVALUE:def 1;
+    then r*dist(Q,P)<=DAH by A7,A12,TBSP_1:def 10;
+    then
+A14:  r*dist(Q,P)<=dAH by A10,XXREAL_0:2;
+    r*dist(Q,P)/dist(Q,P)=r*(dist(Q,P)/dist(Q,P))
+                        .=r*1 by A4,XCMPLX_1:60;
+    hence x<=dAH/dist(Q,P) by A11,A14,XREAL_1:74;
+  end;
+  then dAH/dist(P,Q) is UpperBound of X by XXREAL_2:def 1;
+  then X is bounded_above by XXREAL_2:def 10;
+  then reconsider S=sup X as Real by XXREAL_2:16;
+A15: 0<=S by A9,XXREAL_2:4;
+  set Spq=(1-S)*p+S*q;
+  reconsider spq=Spq as Element of Euclid n by EUCLID:71;
+A16: for r be real number st r>0
+       ex w be Point of Euclid n st w in AH & dist(spq,w)<r
+    proof
+      let r be real number such that
+A17:    r>0;
+      set r2=r/|.q-p.|;
+      assume
+A18:    for w be Point of Euclid n st w in AH holds dist(spq,w)>=r;
+      now let x be ext-real number;
+        assume
+A19:      x in X;
+        then consider w be Real such that
+A20:      x=w and
+A21:      (1-w)*p+w*q in AH and 0<=w;
+        S-w>=0 by A19,A20,XREAL_1:50,XXREAL_2:4;
+        then
+A22:      abs(S-w)=S-w by ABSVALUE:def 1;
+        reconsider PQ=(1-w)*p+w*q as Element of Euclid n by A21;
+A23:      PQ=p+w*(q-p) by Th1;
+        Spq-(p+w*(q-p)) = (Spq-p)-w*(q-p) by RLVECT_1:41
+                       .= S*(q-p)-w*(q-p) by Lm1
+                       .= (S-w)*(q-p) by RLVECT_1:49;
+        then dist(spq,PQ) = |.(S-w)*(q-p).| by A5,A23,SPPOL_1:62
+                         .= (S-w)*|.q-p.| by A5,A22,TOPRNS_1:8;
+        then (S-w)*|.q-p.|>=r by A18,A21;
+        then S-w>=r2 by A2,A6,METRIC_1:7,XREAL_1:81;
+        hence S-r2>=x by A20,XREAL_1:13;
+      end;
+      then S-r2 is UpperBound of X by XXREAL_2:def 1;
+      then S-0<=S-r2 by XXREAL_2:def 3;
+      hence contradiction by A4,A6,A17,XREAL_1:10;
+    end;
+A24: the TopStruct of TRn=TopSpaceMetr Euclid n by EUCLID:def 8;
+  now let U be Subset of TRn;
+    reconsider UE=U as Subset of TopSpaceMetr Euclid n by A24;
+    assume that
+A25:  U is open and
+A26:  Spq in U;
+    UE in the topology of TopSpaceMetr Euclid n by A24,A25,PRE_TOPC:def 5;
+    then UE is open by PRE_TOPC:def 5;
+    then consider r be real number such that
+A27:  r>0 and
+A28:  Ball(spq,r)c=UE by A26,TOPMETR:22;
+    set r2 = r/|.q-p.|;
+    set Sr = S+r2/2;
+    consider w be Element of Euclid n such that
+A29:  w in AH & dist(spq,w)<r by A16,A27;
+    w in Ball(spq,r) & w in A by A29,METRIC_1:12,XBOOLE_0:def 4;
+    hence A meets U by A28,XBOOLE_0:3;
+A30: r2*|.q-p.| = r*(|.q-p.|/|.q-p.|)
+               .= r*1 by A4,A6,XCMPLX_1:60;
+    Sr>S+0 by A4,A6,A27,XREAL_1:8;
+    then S-Sr<0 by XREAL_1:51;
+    then
+A31:  abs(S-Sr) = -(S-Sr) by ABSVALUE:def 1
+               .= r2/2;
+    set Srpq=(1-Sr)*p+Sr*q;
+    reconsider srpq=Srpq as Element of Euclid n by EUCLID:71;
+A32:  srpq in H by A15,A27;
+A33:  not srpq in A
+      proof
+        assume srpq in A;
+        then srpq in AH by A32,XBOOLE_0:def 4;
+        then Sr in X by A15,A27;
+        then S+r2/2<=S+0 by XXREAL_2:4;
+        hence contradiction by A4,A6,A27,XREAL_1:10;
+      end;
+      Spq-Srpq = Spq-(p+Sr*(q-p)) by Th1
+              .= (Spq-p)-Sr*(q-p) by RLVECT_1:41
+              .= S*(q-p)-Sr*(q-p) by Lm1
+              .= (S-Sr)*(q-p) by RLVECT_1:49;
+      then dist(spq,srpq) = |.(S-Sr)*(q-p).| by A5,SPPOL_1:62
+                         .= r2/2*|.q-p.| by A5,A31,TOPRNS_1:8
+                         .= r/2 by A30;
+      then dist(spq,srpq)<r by A27,XREAL_1:218;
+      then srpq in Ball(spq,r) by METRIC_1:12;
+      hence U\A<>{} by A28,A33,XBOOLE_0:def 5;
+    end;
+  then
+A34: Spq in Fr A by TOPGEN_1:11;
+  take spq;
+A35: Spq-p=S*(q-p) by Lm1;
+  Spq in H by A15;
+  hence spq in (Fr A)/\H by A34,XBOOLE_0:def 4;
+A36: abs S=S by A15,ABSVALUE:def 1;
+  hereby let u,P be Point of Euclid n such that
+A37:       P=p and
+A38:       u in A/\H;
+A39:  dist(P,spq) = |.S*(q-p).| by A5,A35,A37,SPPOL_1:62
+                 .= S*|.q-p.| by A5,A36,TOPRNS_1:8;
+    u in H by A38,XBOOLE_0:def 4;
+    then consider Ur be real number such that
+A40:  u=(1-Ur)*p+Ur*q and
+A41:  0<=Ur by A5,TOPREAL9:26;
+A42:  abs Ur=Ur by A41,ABSVALUE:def 1;
+    Ur in REAL by XREAL_0:def 1;
+    then Ur in X by A38,A40,A41;
+    then
+A43:  Ur<=S by XXREAL_2:4;
+    set du=dist(P,u),ds=dist(P,spq);
+A44: (1-Ur)*p+Ur*q-p=Ur*(q-p) by Lm1;
+    dist(P,u) = |.Ur*(q-p).| by A5,A37,A40,A44,SPPOL_1:62
+             .= Ur*|.q-p.| by A5,A42,TOPRNS_1:8;
+    hence du<=ds by A39,A43,XREAL_1:66;
+  end;
+  thus thesis by A16;
+end;
+
+theorem
+  for S st p in S & p <> q & S/\halfline(p,q) is Bounded
+  ex w st w in (Fr S)/\halfline(p,q) &
+          (for u st u in S/\halfline(p,q) holds |.p-u.| <= |.p-w.|) &
+          for r st r > 0 ex u st u in S/\halfline(p,q) & |.w-u.| < r
+proof
+  set T=TOP-REAL n,E=Euclid n;
+  let A be Subset of T such that
+A1: p in A & p<>q & A/\halfline(p,q) is Bounded;
+  consider W be Point of E such that
+A2: W in (Fr A)/\halfline(p,q) and
+A3: for u,P be Point of E st P=p & u in A/\halfline(p,q)
+      holds dist(P,u)<= dist(P,W) and
+A4: for r st r>0 ex u be Point of E st u in A/\halfline(p,q)
+& dist(W,u)<r by A1,Lm3;
+  reconsider w=W as Point of T by EUCLID:71;
+  take w;
+  thus w in (Fr A)/\halfline(p,q) by A2;
+  reconsider P=p as Point of E by EUCLID:71;
+A5: n in NAT by ORDINAL1:def 13;
+  hereby let u be Point of T such that
+A6:   u in A/\halfline(p,q);
+    reconsider U=u as Point of E by EUCLID:71;
+A7:   dist(P,U)=|.p-u.| by A5,SPPOL_1:62;
+    dist(P,U)<=dist(P,W) by A3,A6;
+    hence |.p-u.|<=|.p-w.| by A5,A7,SPPOL_1:62;
+  end;
+  let r be real number;
+  assume r>0;
+  then consider U be Point of E such that
+A8: U in A/\halfline(p,q) & dist(W,U)<r by A4;
+  reconsider u=U as Point of T by EUCLID:71;
+  n in NAT by ORDINAL1:def 13;
+  then dist(W,U)=|.w-u.| by SPPOL_1:62;
+  hence thesis by A8;
+ end;
+
+theorem Th4:
+  for A st A is closed & p in Int A & p <> q & A/\halfline(p,q) is Bounded
+  ex u st(Fr A)/\halfline(p,q)={u}
+ proof
+   set TRn=TOP-REAL n;
+   set En=Euclid n;
+   let A be convex Subset of TOP-REAL n such that
+A1:  A is closed and
+A2:  p in Int A and
+A3:  p<>q and
+A4:  A/\halfline(p,q) is Bounded;
+A5:  n in NAT by ORDINAL1:def 13;
+   reconsider P=p,Q=q as Point of En by EUCLID:71;
+A6:  the TopStruct of TRn=TopSpaceMetr Euclid n by EUCLID:def 8;
+   then reconsider I=Int A as Subset of TopSpaceMetr En;
+   Int A in the topology of TopSpaceMetr En by A6,PRE_TOPC:def 5;
+   then I is open by PRE_TOPC:def 5;
+   then consider r be real number such that
+A7:  r>0 and
+A8:  Ball(P,r)c=I by A2,TOPMETR:22;
+   dist(P,P)<r by A7,METRIC_1:1;
+   then
+A9:  P in Ball(P,r) by METRIC_1:12;
+   set H=halfline(p,q);
+   reconsider AH=A/\H as bounded Subset of En by A4,JORDAN2C:def 2;
+A10: Int A c=A by TOPS_1:44;
+   then consider W be Point of En such that
+A11: W in (Fr A)/\H and
+A12: for u,P be Point of Euclid n st P=p & u in AH holds
+       dist(P,u)<=dist(P,W) and
+    for r be real number st r>0 ex u be Point of En st u in AH & dist(W,u)<r
+      by A2,A3,A4,Lm3;
+   reconsider w=W as Point of TRn by EUCLID:71;
+A13: W in Fr A by A11,XBOOLE_0:def 4;
+   W in H by A11,XBOOLE_0:def 4;
+   then consider Wr be real number such that
+A14: W=(1-Wr)*p+Wr*q and
+A15: Wr>=0 by A5,TOPREAL9:26;
+A16: Fr A c=A by A1,TOPS_1:69;
+A17: Fr A misses Ball(P,r) by A8,TOPS_1:73,XBOOLE_1:63;
+   (Fr A)/\H={W}
+     proof
+       assume(Fr A)/\H<>{W};
+       then consider u be set such that
+A18:     u in (Fr A)/\H and
+A19:     u<>W by A11,ZFMISC_1:41;
+       reconsider u as Point of TRn by A18;
+A20:     u in H by A18,XBOOLE_0:def 4;
+       then consider Ur be real number such that
+A21:     u=(1-Ur)*p+Ur*q and
+A22:     Ur>=0 by A5,TOPREAL9:26;
+A23:   abs Ur=Ur by A22,ABSVALUE:def 1;
+       reconsider U=u as Element of En by EUCLID:71;
+A24:     Wr-Ur in REAL by XREAL_0:def 1;
+       (1-Ur)*p+Ur*q-p=Ur*(q-p) by Lm1;
+       then
+A25:     dist(U,P) = |.Ur*(q-p).| by A5,A21,SPPOL_1:62
+                  .= Ur*|.q-p.| by A5,A23,TOPRNS_1:8;
+       set R=r*(Wr-Ur)/Wr;
+       reconsider b=Ball(U,R) as Subset of TopSpaceMetr En by A6,EUCLID:71;
+       set x=(Wr-Ur)/Wr;
+       b is open by TOPMETR:21;
+       then b in the topology of TRn by A6,PRE_TOPC:def 5;
+       then reconsider B=b as open Subset of TRn by PRE_TOPC:def 5;
+A26:     abs Wr=Wr by A15,ABSVALUE:def 1;
+       (1-Wr)*p+Wr*q-p=Wr*(q-p) by Lm1;
+       then
+A27:     dist(W,P) = |.Wr*(q-p).| by A5,A14,SPPOL_1:62
+                  .= Wr*|.q-p.| by A5,A26,TOPRNS_1:8;
+A28:   u in Fr A by A18,XBOOLE_0:def 4;
+       then
+A29:     u in AH by A16,A20,XBOOLE_0:def 4;
+       P<>W by A17,A9,A13,XBOOLE_0:3;
+       then
+A30:     Wr>0 by A27,METRIC_1:7;
+       then
+A31:     1-x = Wr/Wr-x by XCMPLX_1:60
+            .= Ur/Wr;
+       P<>u by A17,A9,A28,XBOOLE_0:3;
+       then Ur>0 by A25,METRIC_1:7;
+       then 1-x>=x-x by A30,A31;
+       then
+A32:     x in REAL & x<=1 by XREAL_0:def 1,XREAL_1:8;
+A33:   (1-Wr)*p+Wr*q=Wr*(q-p)+p by Th1;
+A34:   (1-Ur)*p+Ur*q=p+Ur*(q-p) by Th1;
+       then (1-Wr)*p+Wr*q-((1-Ur)*p+Ur*q)
+            = (p+Wr*(q-p)-p)-Ur*(q-p) by A33,RLVECT_1:41
+           .= Wr*(q-p)+(p-p)-Ur*(q-p) by EUCLID:49
+           .= Wr*(q-p)+0.TRn-Ur*(q-p) by EUCLID:46
+           .= Wr*(q-p)-Ur*(q-p) by RLVECT_1:def 7
+           .= (Wr-Ur)*(q-p) by EUCLID:54;
+       then
+A35:     dist(U,W) = |.(Wr-Ur)*(q-p).| by A5,A14,A21,SPPOL_1:62
+                  .= abs(Wr-Ur)*|.q-p.| by A5,A24,TOPRNS_1:8;
+       dist(U,W)>0 by A19,METRIC_1:7;
+       then |.q-p.|>0 by A35,XREAL_1:136;
+       then Ur<=Wr by A12,A25,A27,A29,XREAL_1:70;
+       then Wr-Ur>=0 by XREAL_1:50;
+       then
+A36:     abs(Wr-Ur)=Wr-Ur by ABSVALUE:def 1;
+       then
+A37:     Wr-Ur>0 by A19,A35,METRIC_1:7;
+       dist(U,U)=0 by METRIC_1:1;
+       then U in B by A7,A30,A37,METRIC_1:12;
+       then B\A<>{} by A28,TOPGEN_1:11;
+       then consider t be set such that
+A38:     t in B\A by XBOOLE_0:def 1;
+A39:     t in B by A38,XBOOLE_0:def 5;
+       reconsider t as Point of TRn by A38;
+       set z=p+Wr/(Wr-Ur)*(t-u);
+       reconsider Z=z as Point of En by EUCLID:71;
+       reconsider T=t as Point of En by EUCLID:71;
+A40:   dist(U,T)=|.u-t.| by A5,SPPOL_1:62;
+A41:   Wr/(Wr-Ur)*R = Wr/Wr*(Wr-Ur)/(Wr-Ur)*r
+                   .= (Wr-Ur)/(Wr-Ur)*r by A30,XCMPLX_1:89
+                   .= r by A37,XCMPLX_1:89;
+       abs(-Wr)=--Wr by A30,ABSVALUE:def 1;
+       then
+A42:     (-Wr)/(Wr-Ur) in REAL & abs((-Wr)/(Wr-Ur))=Wr/(Wr-Ur)
+         by A36,COMPLEX1:153,XREAL_0:def 1;
+A43:  (Ur/Wr)*(Wr*(q-p)) = (Ur/Wr*Wr)*(q-p) by RLVECT_1:def 10
+                        .= (Wr/Wr*Ur)*(q-p)
+                        .= Ur*(q-p) by A30,XCMPLX_1:89;
+       p-z =(p-p)-Wr/(Wr-Ur)*(t-u) by RLVECT_1:41
+          .= 0.TRn-Wr/(Wr-Ur)*(t-u) by RLVECT_1:28
+          .= -Wr/(Wr-Ur)*(t-u) by RLVECT_1:27
+          .= (-1)*(Wr/(Wr-Ur)*(t-u)) by RLVECT_1:29
+          .= ((-1)*(Wr/(Wr-Ur)))*(t-u) by RLVECT_1:def 10
+          .= (-Wr)/(Wr-Ur)*(t-u);
+       then
+A44:     dist(P,Z) = |.((-Wr)/(Wr-Ur))*(t-u).| by A5,SPPOL_1:62
+                  .= Wr/(Wr-Ur)*|.t-u.| by A5,A42,TOPRNS_1:8;
+       dist(U,T)<R by A39,METRIC_1:12;
+       then Wr/(Wr-Ur)*|.u-t.|<r by A30,A37,A40,A41,XREAL_1:70;
+       then dist(P,Z)<r by A5,A40,A44,SPPOL_1:62;
+       then Z in Ball(P,r) by METRIC_1:12;
+       then
+A45:     Z in I by A8;
+       x*(Wr/(Wr-Ur)*(t-u)) = x*(Wr/(Wr-Ur))*(t-u) by RLVECT_1:def 10
+                           .= (Wr-Ur)/(Wr-Ur)*Wr/Wr*(t-u)
+                           .= Wr/Wr*(t-u) by A37,XCMPLX_1:89
+                           .= 1 *(t-u) by A30,XCMPLX_1:60
+                           .= t-u by RLVECT_1:def 11;
+       then x*z=x*p+(t-u) by RLVECT_1:def 8;
+       then x*z+(1-x)*w
+          = t-u+x*p+((1-x)*p+Ur*(q-p))  by A14,A31,A33,A43,RLVECT_1:def 8
+         .= t-u+x*p+(1-x)*p+Ur*(q-p) by RLVECT_1:def 6
+         .= t-u+(x*p+(1-x)*p)+Ur*(q-p) by RLVECT_1:def 6
+         .= t-u+(x+(1-x))*p+Ur*(q-p) by RLVECT_1:def 9
+         .= t-u+p+Ur*(q-p) by RLVECT_1:def 11
+         .= t-u+u by A21,A34,RLVECT_1:def 6
+         .= t-(u-u) by RLVECT_1:43
+         .= t-0.TRn by RLVECT_1:28
+         .= t by RLVECT_1:26;
+       then t in A by A16,A10,A13,A30,A32,A37,A45,RLTOPSP1:def 1;
+       hence contradiction by A38,XBOOLE_0:def 5;
+    end;
+  hence thesis by A11;
+end;
+
+Lm4: for n be Element of NAT st n>0
+     for A be convex Subset of TOP-REAL n st A is compact & 0*n in Int A
+     ex h be Function of(TOP-REAL n) |A,Tdisk(0.TOP-REAL n,1) st
+       h is being_homeomorphism & h.:Fr A=Sphere(0.TOP-REAL n,1)
+proof
+  let n be Element of NAT;
+  set TRn=TOP-REAL n,En=Euclid n,cTRn=the carrier of TRn;
+  assume
+A1: n>0;
+  cTRn\{0.TRn}={0.TRn}` by SUBSET_1:def 5;
+  then reconsider cTR0=cTRn\{0.TRn} as non empty open Subset of TRn by A1;
+  set CL=cl_Ball(0.TRn,1),S=Sphere(0.TRn,1);
+  set TRn0=TRn|cTR0;
+  set nN=n NormF;
+  set En=Euclid n;
+  set I0=0.TRn.-->0.TRn;
+  let A be convex Subset of TRn such that
+A2:  A is compact and
+A3:  0*n in Int A;
+A4:   A is non empty by A3;
+  reconsider 0TRn=0.TRn as Point of En by EUCLID:71;
+A5: 0*n=0.TRn by EUCLID:74;
+  then consider e be real number such that
+A6:  e>0 and
+A7:  Ball(0TRn,e)c=A by A3,GOBOARD6:8;
+  Fr A misses Int A by TOPS_1:73;
+  then
+A8:  not 0*n in Fr A by A3,XBOOLE_0:3;
+  then
+A9:  (Fr A)\{0.TRn}=Fr A by A5,ZFMISC_1:65;
+  set TM=TopSpaceMetr En;
+A10: [#]TRn0=cTR0 by PRE_TOPC:def 10;
+A11: the TopStruct of TRn=TM by EUCLID:def 8;
+  then reconsider a=A as Subset of TM;
+  reconsider aa=a as Subset of En by EUCLID:71;
+  TRn|A is compact by A2;
+  then TM|a is compact by A11,PRE_TOPC:66;
+  then
+A12: a is compact by A4,COMPTS_1:12;
+A13: for p be Point of TRn st p<>0.TRn ex x be Point of TRn st
+       (Fr A)/\halfline(0.TRn,p)={x}
+    proof
+      let p be Point of TRn such that
+A14:    p<>0.TRn;
+A15:    A/\halfline(0.TRn,p)c=aa by XBOOLE_1:17;
+      then reconsider F=A/\halfline(0.TRn,p) as Subset of En by XBOOLE_1:1;
+A16:    0.TRn in Int A by A3,EUCLID:74;
+      F is bounded by A12,A15,HAUSDORF:20,TBSP_1:21;
+      then A/\halfline(0.TRn,p) is Bounded by JORDAN2C:def 2;
+      hence thesis by A2,A14,A16,Th4;
+    end;
+  Fr A is non empty
+    proof
+      set q=the Element of cTR0;
+      q<>0.TRn by ZFMISC_1:64;
+      then ex x be Point of TRn st (Fr A)/\halfline(0.TRn,q)={x} by A13;
+      hence thesis;
+    end;
+  then reconsider FrA=Fr A as non empty Subset of TRn0 by A10,A9,XBOOLE_1:33;
+A17: Fr A c=A by A2,TOPS_1:69;
+  set TS=TRn|S;
+  reconsider I=incl TRn0 as continuous Function of TRn0,TRn by TMAP_1:98;
+A18: [#]TS=S by PRE_TOPC:def 10;
+A19: nN|TRn0=nN|the carrier of TRn0 by TMAP_1:def 4;
+A20: not 0 in rng(nN|TRn0)
+   proof
+     assume 0 in rng(nN|TRn0);
+     then consider x be set such that
+A21:   x in dom(nN|TRn0) and
+A22:   (nN|TRn0).x=0 by FUNCT_1:def 5;
+      x in dom nN by A19,A21,RELAT_1:86;
+      then reconsider x as Element of TRn;
+      reconsider X=x as Element of REAL n by EUCLID:25;
+      0 = nN.x by A19,A21,A22,FUNCT_1:70
+       .= |.X.| by JGRAPH_4:def 1;
+      then x=0.TRn by A5,EUCLID:11;
+      then x in {0.TRn} by TARSKI:def 1;
+      hence contradiction by A10,A21,XBOOLE_0:def 5;
+    end;
+  then reconsider nN0=nN|TRn0 as non-empty continuous Function of TRn0,R^1
+    by RELAT_1:def 9;
+  reconsider b=I</>nN0 as Function of TRn0,TRn by TOPREALC:46;
+A23: dom b = cTR0 by A10,FUNCT_2:def 1;
+A24: for p be Point of TRn st p in cTR0 holds
+       b.p=1/|.p.|*p & |.(1/|.p.|)*p.|=1
+    proof
+      let p be Point of TRn;
+      assume
+A25:    p in cTR0;
+      then
+A26:    nN0.p=nN.p & I.p=p by A10,A19,FUNCT_1:72,TMAP_1:95;
+      thus b.p = I.p(/)nN0.p by A23,A25,VALUED_2:72
+              .= p(/)|.p.| by A26,JGRAPH_4:def 1
+              .= 1/|.p.|(#)p by VALUED_2:def 32
+              .= 1/|.p.|*p by EUCLID:69;
+A27:  abs(1/|.p.|)=1/|.p.| & p<>0.TRn by A25,ABSVALUE:def 1,ZFMISC_1:64;
+      thus|.(1/|.p.|)*p.| = abs(1/|.p.|)*|.p.| by TOPRNS_1:8
+                         .= 1 by A27,TOPRNS_1:25,XCMPLX_1:88;
+    end;
+A28: rng b c=S
+    proof
+      let y be set;
+      assume y in rng b;
+      then consider x be set such that
+A29:    x in dom b and
+A30:    b.x=y by FUNCT_1:def 5;
+      reconsider x as Point of TRn by A23,A29;
+A31:  (1/|.x.|)*x-0.TRn=(1/|.x.|)*x & |.(1/|.x.|)*x.|=1
+         by A10,A24,A29,RLVECT_1:26;
+      y = 1/|.x.|*x by A10,A24,A29,A30;
+      hence thesis by A31;
+    end;
+  then reconsider B=b as Function of TRn0,TS by A10,A18,A23,FUNCT_2:4;
+A32: I0={0.TRn}-->0.TRn by FUNCOP_1:def 9;
+  then
+A33: dom I0={0.TRn} by FUNCOP_1:19;
+  set FRA=TRn0|FrA,H=b|FRA;
+A34: dom H=the carrier of FRA by FUNCT_2:def 1;
+A35: H=b|the carrier of FRA by TMAP_1:def 4;
+  then
+A36: rng H c=rng b by RELAT_1:99;
+  then
+A37: rng H c=S by A28,XBOOLE_1:1;
+  reconsider H as Function of FRA,TS by A18,A28,A34,A36,FUNCT_2:4,XBOOLE_1:1;
+A38: [#]FRA=FrA by PRE_TOPC:def 10;
+A39: (Fr A)\{0.TRn}c=cTR0 by XBOOLE_1:33;
+  S c=rng H
+    proof
+      let x be set;
+      assume x in S;
+      then consider p be Point of TRn such that
+A40:    x=p and
+A41:    |.p-0.TRn.|=1;
+      p <> 0.TRn by A5,A41;
+      then consider q be Point of TRn such that
+A42: FrA/\halfline(0.TRn,p)={q} by A13;
+A43: q in {q} by TARSKI:def 1;
+      then
+A44:    q in FrA by A42,XBOOLE_0:def 4;
+      then
+A45:    b.q=1/|.q.|*q & b.q=H.q by A9,A24,A35,A38,A39,FUNCT_1:72;
+      q in halfline(0.TRn,p) by A42,A43,XBOOLE_0:def 4;
+      then halfline(0.TRn,p)=halfline(0.TRn,q) by A5,A8,A44,TOPREAL9:31;
+      then
+A46:    1/|.q.|*q in halfline(0.TRn,p) by Lm2;
+A47:    1/|.q.|*q-0.TRn=1/|.q.|*q & p in halfline(0.TRn,p) by RLVECT_1:26
+,TOPREAL9:28;
+      H.q in rng H & |.1/|.q.|*q.|=1 by A9,A24,A34,A38,A39,A44,FUNCT_1:def 5;
+      hence thesis by A40,A41,A46,A47,A45,Th2;
+    end;
+  then
+A48: S=rng H by A37,XBOOLE_0:def 10;
+  (Fr A) \ {0.TRn} c= cTR0 by XBOOLE_1:33;
+  then
+A49: dom H=[#]FRA & TRn| (Fr A)=FRA by A9,FUNCT_2:def 1,PRE_TOPC:28;
+     for x1,x2 be set st x1 in dom H & x2 in dom H & H.x1=H.x2 holds x1=x2
+    proof
+      let x1,x2 be set such that
+A51:    x1 in dom H and
+A52:    x2 in dom H and
+A53:    H.x1=H.x2;
+A54:    x2 in dom b by A35,A52,RELAT_1:86;
+A55:    x1 in dom b by A35,A51,RELAT_1:86;
+      then reconsider p1=x1,p2=x2 as Point of TRn by A23,A54;
+A56:    b.p1=1/|.p1.|*p1 by A10,A24,A55;
+      x2<>0.TRn by A10,A54,ZFMISC_1:64;
+      then consider q be Point of TRn such that
+A57:   (Fr A)/\halfline(0.TRn,p2)={q} by A13;
+      p2 in halfline(0.TRn,p2) by TOPREAL9:28;
+      then p2 in {q} by A38,A52,A57,XBOOLE_0:def 4;
+      then
+A58:    p2=q by TARSKI:def 1;
+      |.(1/|.p2.|)*p2.|=1 by A10,A24,A54;
+      then
+A59:    1/|.p2.|*p2<>0.TRn by TOPRNS_1:24;
+A60:    0.TRn+1/|.p2.|*p2=1/|.p2.|*p2 by RLVECT_1:10;
+A61:    b.p2=1/|.p2.|*p2 by A10,A24,A54;
+A62:    H.x1=b.x1 & H.x2=b.x2 by A35,A51,A52,FUNCT_1:70;
+      (1-1/|.p1.|)*0.TRn = 0.TRn by RLVECT_1:23;
+      then
+A63:    1/|.p1.|*p1 in halfline(0.TRn,p1) by A53,A56,A60,A61,A62;
+      (1-1/|.p2.|)*0.TRn=0.TRn by RLVECT_1:23;
+      then 1/|.p2.|*p2 in halfline(0.TRn,p2) by A60;
+      then halfline(0.TRn,p2)
+          = halfline(0.TRn,1/|.p1.|*p1) by A53,A56,A59,A61,A62,TOPREAL9:31
+         .= halfline(0.TRn,p1) by A53,A56,A59,A61,A62,A63,TOPREAL9:31;
+      then p1 in halfline(0.TRn,p2) by TOPREAL9:28;
+      then p1 in {q} by A38,A51,A57,XBOOLE_0:def 4;
+      hence thesis by A58,TARSKI:def 1;
+    end;
+  then
+CC: H is one-to-one by FUNCT_1:def 8;
+  then H is being_homeomorphism by A2,A18,A48,A49,COMPTS_1:26,PRE_TOPC:57;
+  then reconsider H1=H" as continuous Function of TS,FRA by TOPS_2:def 5;
+  reconsider HH=H as Function;
+  set nN0F=nN0|FRA;
+  reconsider H1B=H1*B as Function of TRn0,FRA by A48;
+  reconsider NH1B=nN0F*H1B as Function of TRn0,R^1;
+A64: nN0F=nN0|the carrier of FRA by TMAP_1:def 4;
+  then rng NH1B c=rng nN0F & rng nN0F c=rng nN0 by RELAT_1:45,99;
+  then rng NH1B c=rng nN0 by XBOOLE_1:1;
+  then
+A65: not 0 in rng NH1B by A20;
+  (B is continuous) & S is non empty by A28,PRE_TOPC:57;
+  then reconsider NH1B as non-empty continuous Function of TRn0,R^1
+    by A65,RELAT_1:def 9;
+  reconsider G=I</>NH1B as Function of TRn0,TRn by TOPREALC:46;
+A66: dom G=cTR0 by A10,FUNCT_2:def 1;
+A67: dom nN0F=FrA by A38,FUNCT_2:def 1;
+A68: for p be Point of TRn st p in cTR0 ex Hp be Point of TRn st Hp=H1B.p &
+       Hp in FrA & G.p=1/|.Hp.|*p & |.Hp.|>0
+    proof
+      let p be Point of TRn;
+      assume
+A69:    p in cTR0;
+      then
+A70:    p in dom NH1B by A10,FUNCT_2:def 1;
+      then
+A71:    H1B.p in dom nN0F by FUNCT_1:21;
+      then reconsider Hp=H1B.p as Point of TRn by A67;
+A72:    nN0F.Hp=nN0.Hp by A64,A71,FUNCT_1:72;
+A73:    nN.Hp=|.Hp.| & nN0.Hp=nN.Hp by A19,A67,A71,FUNCT_1:72,JGRAPH_4:def 1;
+      take Hp;
+A74:  NH1B.p=nN0F.(H1B.p) by A70,FUNCT_1:22;
+      G.p = I.p(/)NH1B.p by A66,A69,VALUED_2:72
+         .= p(/)|.Hp.| by A10,A69,A74,A72,A73,TMAP_1:95
+         .= 1/|.Hp.|(#)p by VALUED_2:def 32
+         .= 1/|.Hp.|*p by EUCLID:69;
+      hence thesis by A38,A64,A70,A71,A74,A73,FUNCT_1:72;
+    end;
+A75: not 0.TRn in rng G
+    proof
+      assume 0.TRn in rng G;
+      then consider p be set such that
+A76:    p in dom G and
+A77:    G.p=0.TRn by FUNCT_1:def 5;
+      reconsider p as Point of TRn by A66,A76;
+      consider Hp be Point of TRn such that
+        Hp=H1B.p and
+        Hp in FrA and
+A78:    G.p=1/|.Hp.|*p & |.Hp.|>0 by A10,A68,A76;
+      p<>0.TRn by A10,A76,ZFMISC_1:64;
+      hence contradiction by A77,A78,RLVECT_1:24;
+    end;
+A79: for x1,x2 be set st x1 in dom I0 & x2 in dom G\dom I0 holds I0.x1<>G.x2
+    proof
+      let x1,x2 be set such that
+A80:    x1 in dom I0 and
+A81:    x2 in dom G\dom I0;
+      x1=0.TRn by A33,A80,TARSKI:def 1;
+      then
+A82:    I0.x1=0.TRn by FUNCOP_1:87;
+      x2 in dom G by A81,XBOOLE_0:def 5;
+      hence thesis by A75,A82,FUNCT_1:def 5;
+    end;
+    H is onto by A18,A48,FUNCT_2:def 3;
+    then
+A84:  H"=HH" by CC,A18,A48,TOPS_2:def 4;
+A85: for p be Point of TRn st p in cTR0 holds
+     (Fr A)/\halfline(0.TRn,p)={H1B.p}
+    proof
+      let p be Point of TRn;
+      assume
+A86:    p in cTR0;
+      then
+A87:    p in dom H1B by A10,FUNCT_2:def 1;
+      then
+A88:    H1B.p=H1.(B.p) by FUNCT_1:22;
+      B.p in dom H1 by A87,FUNCT_1:21;
+      then consider x be set such that
+A89:    x in dom H and
+A90:    H.x=B.p by A18,A48,FUNCT_1:def 5;
+      reconsider x as Point of TRn by A34,A38,A89;
+A91:    H.x=b.x by A35,A89,FUNCT_1:70;
+      set xp=|.x.|/|.p.|;
+A92:    x in FrA by A38,A89;
+      then
+A93:    b.x=1/|.x.|*x by A9,A24,A39;
+      |.(1/|.x.|)*x.|=1 by A9,A24,A39,A92;
+      then (1/|.x.|)*x<>0.TRn by TOPRNS_1:24;
+      then 1/|.x.|<>0 by RLVECT_1:23;
+      then |.x.|>0;
+      then 1 = |.x.|/|.x.| by XCMPLX_1:60
+            .= |.x.|*(1/|.x.|);
+      then x = (|.x.|*(1/|.x.|))*x by RLVECT_1:def 11
+            .= |.x.|*(1/|.x.|*x) by RLVECT_1:def 10
+            .= |.x.|*(1/|.p.|*p) by A24,A86,A90,A91,A93
+            .= xp*p by RLVECT_1:def 10;
+      then x in halfline(0.TRn,p) by Lm2;
+      then
+A94:    x in (Fr A)/\halfline(0.TRn,p) by A38,A89,XBOOLE_0:def 4;
+      p<>0.TRn by A86,ZFMISC_1:64;
+      then consider y be Point of TRn such that
+A95:   (Fr A)/\halfline(0.TRn,p)={y} by A13;
+      H1.(B.p)=x by CC,A84,A89,A90,FUNCT_1:56;
+      hence thesis by A88,A94,A95,TARSKI:def 1;
+    end;
+  for x1,x2 be set st x1 in dom G & x2 in dom G & G.x1=G.x2 holds x1=x2
+    proof
+      let x1,x2 be set such that
+A96:    x1 in dom G and
+A97:    x2 in dom G and
+A98:    G.x1=G.x2;
+      reconsider p1=x1,p2=x2 as Point of TRn by A66,A96,A97;
+      consider Hp1 be Point of TRn such that
+A99:    Hp1=H1B.p1 and
+         Hp1 in FrA and
+A100:    G.p1=1/|.Hp1.|*p1 and
+A101:    |.Hp1.|>0 by A10,A68,A96;
+A102: FrA/\halfline(0.TRn,p1)={Hp1} by A10,A85,A96,A99;
+      consider Hp2 be Point of TRn such that
+A103:   Hp2=H1B.p2 and
+        Hp2 in FrA and
+A104:   G.p2=1/|.Hp2.|*p2 and
+      |.Hp2.|>0 by A10,A68,A97;
+      p1<>0.TRn by A10,A96,ZFMISC_1:64;
+      then
+A105:   1/|.Hp1.|*p1<>0.TRn by A101,RLVECT_1:24;
+      then halfline(0.TRn,p1) = halfline(0.TRn,1/|.Hp1.|*p1) by Lm2,TOPREAL9:31
+                             .= halfline(0.TRn,p2)
+        by A98,A100,A104,A105,Lm2,TOPREAL9:31;
+      then Hp1 in {Hp1} & {Hp1}={Hp2} by A10,A85,A97,A102,A103,TARSKI:def 1;
+      then 1/|.Hp1.|=1/|.Hp2.| by TARSKI:def 1;
+      hence thesis by A98,A100,A101,A104,RLVECT_1:50;
+    end;
+  then
+A106: G is one-to-one by FUNCT_1:def 8;
+  set G0=G+*I0;
+A107: dom G0 = dom G\/dom I0 by FUNCT_4:def 1
+            .= cTR0\/{0.TRn} by A32,A66,FUNCOP_1:19
+            .= cTRn by ZFMISC_1:140;
+A108: for p,Hp be Point of TRn st p in cTR0 & Hp=H1B.p holds
+        p=G.(|.Hp.|*p) & (|.Hp.|*p) in dom G
+    proof
+      let p,Hp1 be Point of TRn such that
+A109:   p in cTR0 and
+A110:   Hp1=H1B.p;
+      reconsider p as Point of TRn;
+      consider Hp be Point of TRn such that
+A111:   Hp=H1B.p and
+        Hp in FrA and
+        G.p=1/|.Hp.|*p and
+A112: |.Hp.|>0 by A68,A109;
+      set Hpp=|.Hp.|*p;
+      p<>0.TRn by A109,ZFMISC_1:64;
+      then
+A113:   Hpp<>0.TRn by A112,RLVECT_1:24;
+      then
+A114:   Hpp in cTR0 by ZFMISC_1:64;
+      then consider HP be Point of TRn such that
+A115:   HP=H1B.Hpp and
+        HP in FrA and
+A116:   G.Hpp=1/|.HP.|*Hpp and
+        |.HP.|>0 by A68;
+A117: Hp in {Hp} by TARSKI:def 1;
+      {HP} = (Fr A)/\halfline(0.TRn,Hpp) by A85,A114,A115
+          .= (Fr A)/\halfline(0.TRn,p) by A113,Lm2,TOPREAL9:31
+          .= {Hp} by A85,A109,A111;
+      then G.Hpp = 1/|.Hp.|*(|.Hp.|*p) by A116,A117,TARSKI:def 1
+                .= (|.Hp.|/|.Hp.|)*p by RLVECT_1:def 10
+                .= 1 *p by A112,XCMPLX_1:60
+                .= p by RLVECT_1:def 11;
+      hence thesis by A66,A110,A111,A113,ZFMISC_1:64;
+    end;
+A118: S c=G.:FrA
+    proof
+      let p be set;
+      assume
+A119:   p in S;
+      then reconsider p as Point of TRn;
+      |.p.|=1 by A119,TOPREAL9:12;
+      then p<>0.TRn by TOPRNS_1:24;
+      then
+A120:   p in cTR0 by ZFMISC_1:64;
+      then consider Hp be Point of TRn such that
+A121:   Hp=H1B.p and
+A122:   Hp in FrA and
+        G.p=1/|.Hp.|*p and
+        |.Hp.|>0 by A68;
+      set Hpp=|.Hp.|*p;
+A123: p=G.Hpp & Hpp in dom G by A108,A120,A121;
+      Hp in {Hp} & (Fr A)/\halfline(0.TRn,p)={Hp}
+        by A85,A120,A121,TARSKI:def 1;
+      then
+A124:   Hp in halfline(0.TRn,p) by XBOOLE_0:def 4;
+A125:   Hp-0.TRn=Hp by RLVECT_1:26;
+      abs|.Hp.|=|.Hp.| by ABSVALUE:def 1;
+      then
+A126:  |.Hpp.| = |.Hp.|*|.p.| by TOPRNS_1:8
+              .= |.Hp.|*1 by A119,TOPREAL9:12;
+      Hpp-0.TRn=Hpp & Hpp in halfline(0.TRn,p) by Lm2,RLVECT_1:26;
+      then Hp=Hpp by A126,A124,A125,Th2;
+      hence thesis by A122,A123,FUNCT_1:def 12;
+    end;
+A127: 0.TRn in {0.TRn} by TARSKI:def 1;
+  then
+A128: I0.(0.TRn)=0.TRn by A32,FUNCOP_1:13;
+  rng I0={0.TRn} by A32,FUNCOP_1:14;
+  then rng G0=rng G\/{0.TRn} by A33,A66,NECKLACE:7,XBOOLE_1:79;
+  then reconsider G1=G0 as one-to-one Function of TRn,TRn
+    by A107,A79,A106,FUNCT_2:4,TOPMETR2:2;
+A129: G1.0.TRn=I0.(0.TRn) by A33,A127,FUNCT_4:14;
+A130: G.:FrA c=S
+    proof
+      let y be set;
+      assume y in G.:FrA;
+      then consider p be set such that
+A131:   p in dom G and
+A132:   p in FrA and
+A133:   G.p=y by FUNCT_1:def 12;
+      reconsider p as Point of TRn by A132;
+      consider Hp be Point of TRn such that
+A134:   Hp=H1B.p and
+        Hp in FrA and
+A135:   G.p=1/|.Hp.|*p and
+A136: |.Hp.|>0 by A10,A68,A131;
+      p in halfline(0.TRn,p) by TOPREAL9:28;
+      then
+A137:   p in FrA/\halfline(0.TRn,p) by A132,XBOOLE_0:def 4;
+      FrA/\halfline(0.TRn,p)={Hp} by A10,A85,A131,A134;
+      then
+A138:   p=Hp by A137,TARSKI:def 1;
+      abs(1/|.Hp.|)=1/|.Hp.| by ABSVALUE:def 1;
+      then |.1/|.Hp.|*p.| = (1/|.Hp.|)*|.Hp.| by A138,TOPRNS_1:8
+                         .= 1 by A136,XCMPLX_1:107;
+      then |.1/|.Hp.|*p-0.TRn.|=1 by RLVECT_1:26;
+      hence thesis by A133,A135;
+    end;
+  set TRnCL=TRn|CL;
+  set TRnA=TRn|A;
+A139: Int A c=A by TOPS_1:44;
+  set GA=G1|TRnA;
+A140: G1|TRnA=G1|the carrier of TRnA by TMAP_1:def 4;
+A141: [#]TRnA=A by PRE_TOPC:def 10;
+  then
+A142: dom GA=A by FUNCT_2:def 1;
+A143: dom GA=the carrier of TRnA by FUNCT_2:def 1;
+A144: cl_Ball(0.TRn,1)c=rng GA
+    proof
+      let p be set;
+      assume
+A145:   p in cl_Ball(0.TRn,1);
+      then reconsider p as Point of TRn;
+      per cases;
+      suppose p=0.TRn;
+        then p=GA.0.TRn by A3,A139,A5,A128,A140,A141,A129,FUNCT_1:72;
+        hence thesis by A3,A139,A5,A141,A143,FUNCT_1:def 5;
+      end;
+      suppose
+A146:     p<>0.TRn;
+        set h=halfline(0.TRn,p);
+A147:     p in cTR0 by A146,ZFMISC_1:64;
+        then consider Hp be Point of TRn such that
+A148:     Hp=H1B.p and
+A149:     Hp in FrA and
+          G.p=1/|.Hp.|*p and
+A150:    |.Hp.|>0 by A68;
+A151:   abs|.Hp.|=|.Hp.| by ABSVALUE:def 1;
+        Fr A/\h={Hp} by A85,A147,A148;
+        then Hp in Fr A/\h by TARSKI:def 1;
+        then
+A152:     Hp in h by XBOOLE_0:def 4;
+        Hp<>0.TRn by A150,TOPRNS_1:24;
+        then h=halfline(0.TRn,Hp) by A152,TOPREAL9:31;
+        then
+A153:     |.p.|*Hp in h by Lm2;
+        |.p.|<=1 by A145,TOPREAL9:11;
+        then (1- |.p.|)*0.TRn=0.TRn & |.p.|*Hp+(1- |.p.|)*0.TRn in A
+          by A3,A139,A5,A17,A149,RLTOPSP1:def 1,RLVECT_1:23;
+        then |.p.|*Hp in dom GA by A142,RLVECT_1:10;
+        then
+A154:     GA.(|.p.|*Hp) in rng GA & GA.(|.p.|*Hp)=G1.(|.p.|*Hp)
+          by A140,FUNCT_1:70,def 5;
+A155:   |.Hp.|*p in h by Lm2;
+        (|.Hp.|*p) in dom G by A108,A147,A148;
+        then |.Hp.|*p<>0.TRn by A10,ZFMISC_1:64;
+        then not |.Hp.|*p in dom I0 by A33,TARSKI:def 1;
+        then
+A156:     G.(|.Hp.|*p)=G1.(|.Hp.|*p) by FUNCT_4:12;
+        abs|.p.|=|.p.| by ABSVALUE:def 1;
+        then |.|.p.|*Hp.| = |.p.|*|.Hp.| by TOPRNS_1:8
+                         .= |.|.Hp.|*p.| by A151,TOPRNS_1:8;
+        then
+A157:     |.|.p.|*Hp-0.TRn.| = |.|.Hp.|*p.| by RLVECT_1:26
+                            .= |.|.Hp.|*p-0.TRn.| by RLVECT_1:26;
+        p=G.(|.Hp.|*p) by A108,A147,A148;
+        hence thesis by A153,A156,A157,A154,A155,Th2;
+      end;
+    end;
+  rng GA c=cl_Ball(0.TRn,1)
+    proof
+      let x be set;
+      assume x in rng GA;
+      then consider p be set such that
+A158:   p in dom GA and
+A159:   GA.p=x by FUNCT_1:def 5;
+      reconsider p as Point of TRn by A142,A158;
+A160:   GA.p=G1.p by A140,A158,FUNCT_1:70;
+A161:   G1.p-0.TRn=G1.p by RLVECT_1:26;
+      per cases;
+      suppose p=0.TRn;
+        then G1.p=0.TRn by A32,A127,A129,FUNCOP_1:13;
+        then |.G1.p-0.TRn.|=0 by A161,TOPRNS_1:24;
+        hence thesis by A159,A160;
+      end;
+      suppose
+A162:     p<>0.TRn;
+        set h=halfline(0.TRn,p);
+A163:   A/\h c=aa by XBOOLE_1:17;
+        then reconsider F=A/\h as Subset of En by XBOOLE_1:1;
+        F is bounded by A12,A163,HAUSDORF:20,TBSP_1:21;
+        then A/\h is Bounded by JORDAN2C:def 2;
+        then consider w be Point of En such that
+A164:     w in (Fr A)/\h and
+A165:     for u,P be Point of En st P=0.TRn & u in A/\h holds
+            dist(P,u)<=dist(P,w) and
+        for r st r>0 ex u be Point of En st u in A/\h & dist(w,u)<r
+          by A3,A139,A5,A162,Lm3;
+        reconsider P=p as Point of En by EUCLID:71;
+        p in h by TOPREAL9:28;
+        then
+A166:      p in A/\h by A141,A158,XBOOLE_0:def 4;
+A167:   not p in dom I0 by A33,A162,TARSKI:def 1;
+A168:   p in cTR0 by A162,ZFMISC_1:64;
+        then consider Hp be Point of TRn such that
+A169:     Hp=H1B.p and
+          Hp in FrA and
+A170:     G.p=1/|.Hp.|*p and
+          |.Hp.|>0 by A68;
+        abs(1/|.Hp.|)=1/|.Hp.| by ABSVALUE:def 1;
+        then
+A171:     |.1/|.Hp.|*p.|=|.p.|/|.Hp.| by TOPRNS_1:8;
+        (Fr A)/\h={Hp} by A85,A168,A169;
+        then w=Hp by A164,TARSKI:def 1;
+        then
+A172:     dist(0TRn,w) = |.0.TRn-Hp.| by SPPOL_1:62
+                      .= |.-Hp.| by RLVECT_1:27
+                      .= |.Hp.| by TOPRNS_1:27;
+        dist(0TRn,P) = |.0.TRn-p.| by SPPOL_1:62
+                    .= |.-p.| by RLVECT_1:27
+                    .= |.p.| by TOPRNS_1:27;
+        then |.1/|.Hp.|*p.|<=1 by A165,A166,A171,A172,XREAL_1:185;
+        then |.G1.p.|<=1 by A167,A170,FUNCT_4:12;
+        hence thesis by A159,A160,A161;
+      end;
+    end;
+  then
+A173: rng GA=CL by A144,XBOOLE_0:def 10;
+A174: [#]TRnCL=CL by PRE_TOPC:def 10;
+  then reconsider GA as Function of TRnA,TRnCL by A141,A142,A173,FUNCT_2:3;
+  set e2=e/2;
+A175: GA is one-to-one by A140,FUNCT_1:84;
+A176: e2<e by A6,XREAL_1:218;
+A177: G1 is continuous
+    proof
+      let x being Point of TRn,U being a_neighborhood of G1.x;
+      per cases;
+      suppose
+A178:     x<>0.TRn;
+        then
+A179:     x in dom G by A66,ZFMISC_1:64;
+        then reconsider X=x as Point of TRn0;
+        not x in dom I0 by A33,A178,TARSKI:def 1;
+        then
+A180:     G.x=G1.x by FUNCT_4:12;
+        then
+A181:     G1.x<>0.TRn by A75,A179,FUNCT_1:def 5;
+        then reconsider G1x=G1.x as Point of TRn0 by A10,ZFMISC_1:64;
+        G1.x in cTR0 by A181,ZFMISC_1:64;
+        then cTR0 is a_neighborhood of G1.x by CONNSP_2:5;
+        then cTR0/\U is a_neighborhood of G1.x by CONNSP_2:4;
+        then consider H be a_neighborhood of X such that
+A182:     G.:H c=cTR0/\U by A180,BORSUK_1:def 3;
+        reconsider h=H as Subset of TRn by A10,XBOOLE_1:1;
+        reconsider h as a_neighborhood of x by CONNSP_2:11;
+        {0.TRn}misses H by A10,XBOOLE_1:63,79;
+        then cTR0/\U c=U & G.:H=G1.:h by A32,BOOLMARK:3,XBOOLE_1:17;
+        hence thesis by A182,XBOOLE_1:1;
+        reconsider U1=cTR0/\U as Subset of TRn0 by A10,XBOOLE_1:17;
+      end;
+      suppose
+A183:      x=0.TRn;
+        reconsider 0TRn=0.TRn as Point of Euclid n by EUCLID:71;
+A184:     0.TRn in Int(U) by A128,A129,A183,CONNSP_2:def 1;
+        then consider r be real number such that
+A185:     r>0 and
+A186:     Ball(0TRn,r)c=U by GOBOARD6:8;
+        reconsider B=Ball(0TRn,r*e2) as Subset of TRn by EUCLID:71;
+        0TRn in Int B by A6,A185,GOBOARD6:8;
+        then reconsider Bx=B as a_neighborhood of x by A183,CONNSP_2:def 1;
+        take Bx;
+        let y be set;
+        assume
+A187:     y in G1.:Bx;
+        then reconsider p=y as Point of TRn;
+A188:     Int U c=U by TOPS_1:44;
+        per cases;
+          suppose y=0.TRn;
+            hence y in U by A184,A188;
+          end;
+          suppose
+A189:         p<>0.TRn;
+            set PP=e2/|.p.|*p;
+            abs(e2/|.p.|)=e2/|.p.| by A6,ABSVALUE:def 1;
+            then
+A190:         |.PP.| = (e2/|.p.|)*|.p.| by TOPRNS_1:8
+                    .= e2*(|.p.|/|.p.|)
+                    .= e2*1 by A189,TOPRNS_1:25,XCMPLX_1:60
+                    .= e2;
+            then |.PP-0.TRn.|<e by A176,RLVECT_1:26;
+            then
+A191:         PP in Ball(0.TRn,e);
+            set h=halfline(0.TRn,p);
+A192:       A/\h c=aa by XBOOLE_1:17;
+            then reconsider F=A/\h as Subset of En by XBOOLE_1:1;
+            F is bounded by A12,A192,HAUSDORF:20,TBSP_1:21;
+            then A/\h is Bounded by JORDAN2C:def 2;
+            then consider w be Point of En such that
+A193:         w in (Fr A)/\h and
+A194:         for u,P be Point of En st P=0.TRn & u in A/\h holds
+                dist(P,u)<=dist (P,w) and
+              for r st r>0 ex u be Point of En st u in A/\h & dist(w,u)<r
+              by A3,A139,A5,A189,Lm3;
+A195:         p in cTR0 by A189,ZFMISC_1:64;
+            then consider Hp be Point of TRn such that
+A196:         Hp=H1B.p and
+              Hp in FrA and
+              G.p=1/|.Hp.|*p and
+A197:         |.Hp.|>0 by A68;
+            Fr A/\h={Hp} by A85,A195,A196;
+            then w=Hp by A193,TARSKI:def 1;
+            then
+A198:         dist(0TRn,w) = |.0.TRn-Hp.| by SPPOL_1:62
+                          .= |.-Hp.| by RLVECT_1:27
+                          .= |.Hp.| by TOPRNS_1:27;
+            set Hpp=|.Hp.|*p;
+            Hpp in dom G by A108,A195,A196;
+            then Hpp<>0.TRn by A10,ZFMISC_1:64;
+            then not Hpp in dom I0 by A33,TARSKI:def 1;
+            then
+A199:         G.Hpp=G1.Hpp by FUNCT_4:12;
+            |.Hp.|=abs|.Hp.| by ABSVALUE:def 1;
+            then
+A200:         Bx=Ball(0.TRn,r*e2) & |.Hpp.|=|.Hp.|*|.p.|
+              by TOPREAL9:13,TOPRNS_1:8;
+            reconsider pp=PP as Point of En by EUCLID:71;
+            consider x be set such that
+A201:         x in dom G1 and
+A202:         x in Bx and
+A203:         G1.x=p by A187,FUNCT_1:def 12;
+            PP in h & Ball(0.TRn,e)=Ball(0TRn,e) by A6,Lm2,TOPREAL9:13;
+            then
+A204:         pp in A/\h by A7,A191,XBOOLE_0:def 4;
+            dist(0TRn,pp) = |.0.TRn-PP.| by SPPOL_1:62
+                         .= |.-PP.| by RLVECT_1:27
+                         .= e2 by A190,TOPRNS_1:27;
+            then e2/|.Hp.|<=1 by A194,A198,A204,XREAL_1:185;
+            then
+A205:         r*(e2/|.Hp.|)<=r*1 by A185,XREAL_1:66;
+            p=G.Hpp by A108,A195,A196;
+            then Hpp=x by A107,A199,A201,A203,FUNCT_1:def 8;
+            then |.p.|<(r*e2)/|.Hp.| by A197,A200,A202,TOPREAL9:10,XREAL_1:83;
+            then |.p.|<r by A205,XXREAL_0:2;
+            then |.p-0.TRn.|<r by RLVECT_1:26;
+            then p in Ball(0.TRn,r);
+            then p in Ball(0TRn,r) by TOPREAL9:13;
+            hence y in U by A186;
+          end;
+        end;
+  end;
+  GA.:FrA=G1.:FrA by A2,A140,A141,RELAT_1:162,TOPS_1:69;
+  then GA.:FrA=G.:FrA by A5,A8,A32,BOOLMARK:3,ZFMISC_1:56;
+  then
+A206: GA.:FrA=S by A118,A130,XBOOLE_0:def 10;
+  dom GA=[#]TRnA & rng GA=[#]TRnCL by A144,A174,FUNCT_2:def 1,XBOOLE_0:def 10;
+  then GA is being_homeomorphism
+    by A2,A3,A139,A175,A177,COMPTS_1:26,PRE_TOPC:57;
+  hence thesis by A206;
+end;
+
+theorem Th5:
+  r > 0 implies Fr cl_Ball(p,r) = Sphere(p,r)
+proof
+  set TR=TOP-REAL n;
+  assume
+A1: r>0;
+  set CB=cl_Ball(p,r),B=Ball(p,r),S=Sphere(p,r);
+  reconsider tr=TR as TopSpace;
+  reconsider cb=CB as Subset of tr;
+A2:  n in NAT by ORDINAL1:def 13;
+  then
+A3: B misses S by TOPREAL9:19;
+A4: B\/S=CB by A2,TOPREAL9:18;
+A5: Int cb c=B
+    proof
+      reconsider ONE=1 as Real;
+      let x be set;
+      assume x in Int cb;
+      then consider Q be Subset of TR such that
+A6:     Q is open and
+A7:     Q c=CB and
+A8:     x in Q by TOPS_1:54;
+      reconsider q=x as Point of TR by A8;
+      consider w be positive(real number) such that
+A9:     Ball(q,w)c=Q by A6,A8,TOPS_4:2;
+      assume not x in B;
+      then q in Sphere(p,r) by A4,A7,A8,XBOOLE_0:def 3;
+      then
+A10:    |.q-p.|=r by A2,TOPREAL9:9;
+      set w2=w/2;
+      set wr=(w2/r)*(q-p);
+A11:    abs(w2/r)=w2/r by A1,ABSVALUE:def 1;
+A12:  wr+q-p = wr+(q-p) by RLVECT_1:42
+            .= wr+ONE*(q-p) by RLVECT_1:def 11
+            .= (w2/r+ONE)*(q-p) by RLVECT_1:def 9;
+      |.wr+q-q.| = |.wr+(q-q).| by EUCLID:49
+                .= |.wr+0.TR.| by RLVECT_1:28
+                .= |.wr.| by RLVECT_1:def 7
+                .= (w2/r)*r by A2,A10,A11,TOPRNS_1:8
+                .= w2 by A1,XCMPLX_1:88;
+      then |.wr+q-q.|<w by XREAL_1:218;
+      then wr+q in Ball(q,w);
+      then
+A13:    wr+q in Q by A9;
+A14:    w2/r+ONE = w2/r+r/r by A1,XCMPLX_1:60
+                .= (w2+r)/r;
+A15:  w2+r>0+r by XREAL_1:8;
+      abs((w2+r)/r)=(w2+r)/r by A1,ABSVALUE:def 1;
+      then |.wr+q-p.| = (w2+r)/r*r by A2,A10,A14,A12,TOPRNS_1:8
+                     .= w2+r by A1,XCMPLX_1:88;
+      hence contradiction by A2,A7,A13,A15,TOPREAL9:8;
+    end;
+  B c=Int cb by A2,TOPREAL9:16,TOPS_1:56;
+  then Int cb=B by A5,XBOOLE_0:def 10;
+  then Fr CB=CB\B by TOPS_1:77;
+  hence thesis by A4,A3,XBOOLE_1:88;
+end;
+
+registration
+  let n be Element of NAT;
+  let A be Bounded Subset of TOP-REAL n;
+  let p be Point of TOP-REAL n;
+  cluster p+A -> Bounded;
+  coherence
+    proof
+      set TR=TOP-REAL n;
+      set En=Euclid n;
+      reconsider a=A as bounded Subset of En by JORDAN2C:def 2;
+      reconsider pA=p+A as Subset of En by EUCLID:71;
+      consider r be Real such that
+A1:     0<r and
+A2:     for x,y be Point of En st x in a & y in a holds dist(x,y)<=r
+        by TBSP_1:def 9;
+A3:   pA={p+u where u is Element of TR:u in A} by RUSUB_4:def 9;
+      now let x,y be Point of En;
+        assume x in pA;
+        then consider px be Element of TR such that
+A4:       x=p+px and
+A5:       px in A by A3;
+        assume y in pA;
+        then consider py be Element of TR such that
+A6:       y=p+py and
+A7:       py in A by A3;
+        reconsider pX=px,pY=py as Point of En by EUCLID:71;
+        p+px-(p+py) = p+px-p-py by EUCLID:50
+                   .= px-py by EUCLID:52;
+        then dist(x,y) = |.px-py.| by A4,A6,SPPOL_1:62
+                      .= dist(pX,pY) by SPPOL_1:62;
+        hence dist(x,y)<=r by A2,A5,A7;
+      end;
+      then pA is bounded by A1,TBSP_1:def 9;
+      hence thesis by JORDAN2C:def 2;
+    end;
+end;
+
+begin :: Main Theorems
+
+theorem Th6:
+  for n be Element of NAT
+  for A be convex Subset of TOP-REAL n st A is compact non boundary
+  ex h be Function of(TOP-REAL n) |A,Tdisk(0.TOP-REAL n,1) st
+    h is being_homeomorphism & h.:Fr A = Sphere(0.TOP-REAL n,1)
+proof
+  let n be Element of NAT;
+  set TRn=TOP-REAL n;
+  let A be convex Subset of TRn such that
+A1: A is compact non boundary;
+  Int A<>{} by A1,TOPS_1:84;
+  then consider p be set such that
+A2: p in Int A by XBOOLE_0:def 1;
+  set TRnA=TRn|A;
+  reconsider p as Point of TRn by A2;
+A3: Int A c=A by TOPS_1:44;
+A4: A is non empty by A2;
+  per cases;
+    suppose
+A5:     n=0;
+      set T=Tdisk(0.TRn,1);
+A6:   {0.TRn} = the carrier of TRn by A5,EUCLID:25,JORDAN2C:113;
+      then
+A7:     A={0.TRn} by A4,ZFMISC_1:39;
+      then reconsider I=id(TRn|A) as Function of TRn|A,T by A6,ZFMISC_1:39;
+      take I;
+A8:   Fr A=A\Int A by A5,JORDAN2C:113,TOPS_1:77;
+A9:   Sphere(0.TRn,1)={}
+        proof
+          assume Sphere(0.TRn,1)<>{};
+          then Sphere(0.TRn,1)=A by A6,A7,ZFMISC_1:39;
+          then |.0.TRn.|=1 by A6,A7,TOPREAL9:12;
+          hence contradiction by TOPRNS_1:24;
+        end;
+      Int A=A by A2,A3,A7,ZFMISC_1:39;
+      then
+A10:    Fr A={} by A8,XBOOLE_1:37;
+      T=TRn|A by A6,A7,ZFMISC_1:39;
+      hence thesis by A10,A9;
+    end;
+    suppose
+A11:    n>0;
+      set T=transl(-p,TRn);
+      set TA=T.:A;
+A12:    TA=-p+A by RLTOPSP1:34;
+      then
+A13:    0.TRn=0*n & TA is convex by CONVEX1:7,EUCLID:74;
+      reconsider TT=T|A as Function of TRnA,TRn|TA by JORDAN24:12;
+A14:    TT.:Int A=T.:Int A by RELAT_1:162,TOPS_1:44;
+      0.TRn=-p+p by RLVECT_1:16;
+      then
+A15:    0.TRn in {-p+q where q is Element of TRn:q in Int A} by A2;
+      Int TA=-p+Int A by A12,RLTOPSP1:38;
+      then 0.TRn in Int TA by A15,RUSUB_4:def 9;
+      then consider h be Function of TRn|TA,Tdisk(0.TRn,1) such that
+A16:    h is being_homeomorphism and
+A17:    h.:Fr TA=Sphere(0.TRn,1) by A1,A11,A12,A13,Lm4;
+      reconsider hTT=h*TT as Function of TRn|A,Tdisk(0.TRn,1) by A4;
+      take hTT;
+A18:  Int TA = -p+Int A by A12,RLTOPSP1:38
+            .= T.:Int A by RLTOPSP1:34;
+A19:  TT is being_homeomorphism by JORDAN24:14;
+      then dom TT=[#]TRnA by TOPS_2:def 5;
+      then
+A20:    dom TT=A by PRE_TOPC:def 10;
+      thus hTT is being_homeomorphism by A4,A16,A19,TOPS_2:71;
+      rng TT=[#](TRn|TA) by A19,TOPS_2:def 5;
+      then A21: rng TT=TA by PRE_TOPC:def 10;
+      Fr A=A\Int A by A1,TOPS_1:77;
+      then
+A22:    TT.:Fr A=(TT.:A)\TT.:(Int A) by A19,FUNCT_1:123;
+      Fr TA = TA\Int TA by A1,A12,TOPS_1:77
+           .= TT.:Fr A by A18,A22,A20,A21,A14,RELAT_1:146;
+      hence hTT.:Fr A= Sphere(0.TRn,1) by A17,RELAT_1:159;
+    end;
+end;
+
+theorem Th7:
+  for A,B st A is compact non boundary & B is compact non boundary
+  ex h be Function of(TOP-REAL n) |A,(TOP-REAL n) |B st
+    h is being_homeomorphism & h.:Fr A = Fr B
+proof
+  set T=TOP-REAL n;
+  let A,B be convex Subset of T such that
+A1: A is compact non boundary and
+A2: B is compact non boundary;
+A3: (A is non empty) & B is non empty by A1,A2;
+   reconsider N=n as Element of NAT by ORDINAL1:def 13;
+   set TN=TOP-REAL N;
+   consider hA be Function of T|A,Tdisk(0.TN,1) such that
+A4:  hA is being_homeomorphism and
+A5:  hA.:Fr A=Sphere(0.T,1) by A1,Th6;
+   consider hB be Function of T|B,Tdisk(0.TN,1) such that
+A6:  hB is being_homeomorphism and
+A7:  hB.:Fr B=Sphere(0.T,1) by A2,Th6;
+   reconsider h=(hB")*hA as Function of T|A,T|B;
+   take h;
+   hB" is being_homeomorphism by A6,TOPS_2:70;
+   hence h is being_homeomorphism by A3,A4,TOPS_2:71;
+A8:  rng hB=[#]Tdisk(0.TN,1) by A6,TOPS_2:def 5;
+   dom hB=[#](T|B) by A6,TOPS_2:def 5;
+   then
+A9:  dom hB=B by PRE_TOPC:def 10;
+   the carrier of Tdisk(0.TN,1)=cl_Ball(0.TN,1) by BROUWER:3;
+   then
+A10:  Sphere(0.T,1) is Subset of Tdisk(0.TN,1) by TOPREAL9:17;
+   thus h.:Fr A = (hB").:Sphere(0.T,1) by A5,RELAT_1:159
+               .= hB"Sphere(0.T,1) by A6,A8,A10,TOPS_2:68
+               .= Fr B by A2,A6,A7,A9,FUNCT_1:164,TOPS_1:69;
+ end;
+
+theorem Th8:
+  for A st A is compact non boundary
+  for h be continuous Function of(TOP-REAL n) |A,(TOP-REAL n) |A
+    holds h has_a_fixpoint
+ proof
+  set T=TOP-REAL n;
+  consider I be affinely-independent Subset of T such that
+    {}T c=I and
+    I c=[#]T and
+A1: Affin I=Affin[#]T by RLAFFIN1:60;
+  reconsider TT=T as non empty RLSStruct;
+  reconsider i=I as Subset of TT;
+  set II=Int i;
+A2: I is non empty by A1;
+  then
+A3: II is non empty by RLAFFIN2:20;
+  reconsider ii=II as Subset of T;
+A4: Int ii c=Int conv I by RLAFFIN2:5,TOPS_1:48;
+  let A be convex Subset of T such that
+A5: A is compact non boundary;
+A6: A is non empty by A5;
+  let h be continuous Function of T|A,T|A;
+  [#]T is Affine by RUSUB_4:22;
+  then dim T=n & Affin[#]T=[#]T by RLAFFIN1:50,RLAFFIN3:4;
+  then
+A7: card I=n+1 by A1,RLAFFIN3:6;
+  then ii is open by RLAFFIN3:33;
+  then conv I is non boundary by A3,A4,TOPS_1:55;
+  then consider f be Function of T|A,T|conv I such that
+A8: f is being_homeomorphism and
+    f.:Fr A=Fr conv I by A5,Th7;
+  reconsider fhf=f*(h*(f")) as Function of T|conv I,T|conv I by A6;
+  f" is continuous by A8,TOPS_2:def 5;
+  then consider p be Point of T such that
+A9:  p in dom fhf and
+A10:  fhf.p=p by A7,A2,A8,A6,SIMPLEX2:23;
+A11:  p in dom(h*(f")) by A9,FUNCT_1:21;
+  reconsider F=f as Function;
+A12: rng f=[#](T|conv I) by A8,TOPS_2:def 5;
+  then
+A13: f"=F" by A8,TOPS_2:def 4;
+  consider x be set such that
+A14: x in dom F and
+A15: F.x=p by A12,A9,FUNCT_1:def 5;
+  (F").p=x by A8,A14,A15,FUNCT_1:56;
+  then (h*(f")).p=h.x by A11,A13,FUNCT_1:22;
+  then
+A16: p=f.(h.x) by A9,A10,FUNCT_1:22;
+A17: dom f=[#](T|A) by A8,TOPS_2:def 5;
+  then
+A18: x in dom h by A14,FUNCT_2:67;
+  then h.x in rng h by FUNCT_1:def 5;
+  then h.x=x by A8,A17,A14,A15,A16,FUNCT_1:def 8;
+  then x is_a_fixpoint_of h by A18,ABIAN:def 3;
+  hence thesis by ABIAN:def 5;
+end;
+
+Lm5: cl_Ball(0.TOP-REAL n,1) is non boundary
+ proof
+   set TR=TOP-REAL n;
+   reconsider tr=TR as TopStruct;
+   reconsider cB=cl_Ball(0.TR,1) as Subset of tr;
+   n in NAT by ORDINAL1:def 13;
+   then Ball(0.TR,1)c=Int cB by TOPREAL9:16,TOPS_1:56;
+   hence thesis;
+ end;
+
+Lm6: for n be Element of NAT for X be non empty SubSpace of Tdisk(0.TOP-REAL n,
+1) st X=Tcircle(0.TOP-REAL n,1) holds not X is_a_retract_of Tdisk(0.TOP-REAL n,
+1)
+ proof
+  let n be Element of NAT;
+  set TR=TOP-REAL n;
+  set Td=Tdisk(0.TR,1);
+A1: Sphere(0.TR,1)c=cl_Ball(0.TR,1) by TOPREAL9:17;
+  set M=mlt(-1,TR);
+  let X be non empty SubSpace of Tdisk(0.TR,1) such that
+A2: X=Tcircle(0.TR,1);
+A3: the carrier of X=Sphere(0.TR,1) by A2,TOPREALB:9;
+  assume X is_a_retract_of Td;
+  then consider F be continuous Function of Td,X such that
+A4: F is being_a_retraction by BORSUK_1:def 20;
+A5: the carrier of Td=cl_Ball(0.TR,1) by BROUWER:3;
+  then reconsider f=F as Function of Td,Td by A3,A1,FUNCT_2:9;
+  set Mf=(M|Td)*f;
+A6: M|Td=M|the carrier of Td by TMAP_1:def 4;
+A7: rng Mf c= Sphere(0.TR,1)
+  proof
+    let y be set;
+    assume y in rng Mf;
+    then consider x be set such that
+A8:   x in dom Mf and
+A9:   Mf.x=y by FUNCT_1:def 5;
+A10:  f.x in dom(M|Td) by A8,FUNCT_1:21;
+    then f.x in dom M by A6,RELAT_1:86;
+    then reconsider fx=f.x as Point of TR;
+    x in dom f by A8,FUNCT_1:21;
+    then f.x in rng F by FUNCT_1:def 5;
+    then
+A11: 1 = |.fx.| by A3,TOPREAL9:12
+      .= |.-fx.| by EUCLID:13
+      .= |.-fx-0.TR.| by RLVECT_1:26;
+    y=(M|Td).(f.x) by A8,A9,FUNCT_1:22;
+    then y=M.(f.x) by A6,A10,FUNCT_1:70;
+    then y = (-1)*fx by RLTOPSP1:def 13
+          .= -fx by RLVECT_1:29;
+    hence thesis by A11;
+  end;
+  then rng Mf c=cl_Ball(0.TR,1) by A1,XBOOLE_1:1;
+  then reconsider MF=Mf as Function of Td,Td by A5,FUNCT_2:8;
+A12:  cl_Ball(0.TR,1) is non boundary by Lm5;
+  f is continuous by PRE_TOPC:56;
+  then MF is continuous by PRE_TOPC:57;
+  then MF has_a_fixpoint by A12,Th8;
+  then consider p be set such that
+A13: p is_a_fixpoint_of MF by ABIAN:def 5;
+A14: p in dom MF by A13,ABIAN:def 3;
+A15: p=MF.p by A13,ABIAN:def 3;
+  then
+A16:  p in rng MF by A14,FUNCT_1:def 5;
+  then reconsider p as Point of TR by A7;
+A17: f.p=p by A4,A3,A7,A16,BORSUK_1:def 19;
+  then
+A18: p in dom(M|Td) by A14,FUNCT_1:21;
+  p=(M|Td).p by A14,A15,A17,FUNCT_1:22;
+  then p=M.p by A6,A18,FUNCT_1:70;
+  then p = (-1)*p by RLTOPSP1:def 13
+        .= -p by RLVECT_1:29;
+  then
+A19: p=0.TR by RLVECT_1:33;
+  |.p.|=1 by A7,A16,TOPREAL9:12;
+  hence contradiction by A19,TOPRNS_1:24;
+end;
+
+theorem
+ for A be non empty convex Subset of TOP-REAL n st
+   A is compact non boundary
+ for FR be non empty SubSpace of (TOP-REAL n) |A st [#]FR = Fr A
+  holds not FR is_a_retract_of (TOP-REAL n) |A
+proof
+  set T=TOP-REAL n;
+A1: n in NAT by ORDINAL1:def 13;
+  set cB=cl_Ball(0.T,1),S=Sphere(0.T,1);
+A2: [#](T|cB)=cB by PRE_TOPC:def 10;
+  then reconsider s=S as Subset of T|cB by A1,TOPREAL9:17;
+A3: T|S=T|cB|s by A1,PRE_TOPC:28,TOPREAL9:17;
+  let A be non empty convex Subset of T such that
+A4: A is compact non boundary;
+A5: [#](T|A)=A & Fr A c=A by A4,PRE_TOPC:def 10,TOPS_1:69;
+  let FR be non empty SubSpace of T|A such that
+A6: [#]FR=Fr A;
+  n>0
+  proof
+   assume n<=0;
+   then n=0;
+   then {0.T} =the carrier of T by EUCLID:25,JORDAN2C:113;
+   then
+A7:  A=[#]T by ZFMISC_1:39;
+   then Fr A=Cl A\A by TOPS_1:76;
+   hence contradiction by A6,A7,XBOOLE_1:37;
+  end;
+  then reconsider Ts=T|cB|s as non empty SubSpace of T|cB;
+  assume FR is_a_retract_of T|A;
+  then consider F be continuous Function of T|A,FR such that
+A8: F is being_a_retraction by BORSUK_1:def 20;
+  reconsider f=F as Function of T|A,T|A by A6,A5,FUNCT_2:9;
+A9: f is continuous by PRE_TOPC:56;
+A10: rng F c=Fr A by A6;
+  reconsider N=n as Element of NAT by ORDINAL1:def 13;
+  set TN=TOP-REAL N;
+A11: [#](T|S)=S by PRE_TOPC:def 10;
+  T|cB=Tdisk(0.TN,1) & T|S=Tcircle(0.TN,1) by TOPREALB:def 6;
+  then
+A12: not Ts is_a_retract_of T|cB by A3,Lm6;
+  cB is non boundary by Lm5;
+  then consider h be Function of T|cB,T|A such that
+A13: h is being_homeomorphism and
+A14: h.:Fr cB=Fr A by A1,A4,Th7;
+A15: dom h=[#](T|cB) by A13,TOPS_2:def 5;
+  rng((h")*f)=((h")*f).:dom((h")*f) by RELAT_1:146;
+  then
+A16: rng((h")*f)c=((h")*f).:dom f by RELAT_1:44,156;
+  reconsider H=h as Function;
+A17: Fr cB=S by Th5;
+A18: rng h=[#](T|A) by A13,TOPS_2:def 5;
+  then
+A19: h".:(Fr A) = h"(Fr A) by A13,A5,TOPS_2:68
+               .= Fr cB by A13,A14,A2,A15,FUNCT_1:164,TOPS_1:69;
+  ((h")*f).:dom f = (h").:(f.:dom f) by RELAT_1:159
+                 .= h".:rng f by RELAT_1:146;
+  then ((h")*f).:dom f c=Fr cB by A19,A10,RELAT_1:156;
+  then rng((h")*f*h)c=rng((h")*f) & rng((h")*f)c=Fr cB
+    by A16,RELAT_1:45,XBOOLE_1:1;
+  then rng((h")*f*h)c=Fr cB by XBOOLE_1:1;
+  then reconsider hfh=(h")*f*h as Function of T|cB,Ts by A3,A17,A11,FUNCT_2:8;
+  h" is continuous by A13,TOPS_2:def 5;
+  then hfh is continuous by A13,A9,PRE_TOPC:57;
+  then not hfh is being_a_retraction by A12,BORSUK_1:def 20;
+  then consider x be Point of T|cB such that
+A20: x in S and
+A21: hfh.x<>x by A3,A11,BORSUK_1:def 19;
+  set hx=h.x;
+A22: dom hfh=the carrier of(T|cB) by FUNCT_2:def 1;
+  then
+A23: hfh.x=((h")*f).hx by FUNCT_1:22;
+  x in dom h by A22,FUNCT_1:21;
+  then
+A24: hx in the carrier of FR by A6,A14,A17,A20,FUNCT_1:def 12;
+  hx in dom((h")*f) by A22,FUNCT_1:21;
+  then
+A25: ((h")*f).hx=(h").(f.hx) by FUNCT_1:22;
+A26: H"=h" by A13,A18,TOPS_2:def 4;
+  H".hx=x by A13,A15,FUNCT_1:56;
+  hence contradiction by A8,A26,A21,A23,A25,A24,BORSUK_1:def 19;
+end;
+

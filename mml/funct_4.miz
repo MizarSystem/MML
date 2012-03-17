@@ -3,7 +3,15 @@
 ::  by Czes{\l}aw Byli\'nski
 ::
 :: Received March 1, 1990
-:: Copyright (c) 1990 Association of Mizar Users
+:: Copyright (c) 1990-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -501,7 +509,7 @@ A2: x in dom((f +* g)|(dom f \ dom g));
 end;
 
 theorem Th26:
-  g c= (f +* g)
+  g c= f +* g
 proof
   dom(f +* g) = dom f \/ dom g by Def1;
   then
@@ -1603,25 +1611,25 @@ A1: dom g = dom h;
     .= f +* h by A1,Th20;
 end;
 
-theorem Th79:
-  for f,g being Function holds f c= g implies f +* g = g & g +* f = g
+Lm79:
+  for f,g being Function holds f c= g implies g +* f = g
 proof
   let f,g be Function;
   assume
 A1: f c= g;
-  then dom f c= dom g by GRFUNC_1:8;
-  hence
-A2: f +* g = g by Th20;
-  f tolerates g by A1,PARTFUN1:135;
-  hence thesis by A2,Th35;
+  then f tolerates g by PARTFUN1:135;
+  hence g+*f = f\/ g by Th31
+    .= g by A1,XBOOLE_1:12;
 end;
+
+canceled;
 
 theorem
   for f being Function, A being set holds f +* f|A = f
 proof
   let f be Function, A be set;
-  (f|A) c= f by RELAT_1:88;
-  hence thesis by Th79;
+   f|A c= f by RELAT_1:88;
+  hence thesis by Lm79;
 end;
 
 theorem
@@ -1766,7 +1774,7 @@ end;
 
 :: from SCMFSA6A, 2007.07.23, A.T.
 
-theorem
+theorem Th92:
   for f,g,h being Function st f c= h & g c= h holds f +* g c= h
 proof
   let f,g,h be Function;
@@ -2023,7 +2031,7 @@ A2:   [y,z] = [x,x] by A1,TARSKI:def 1;
   hence thesis by RELAT_1:def 10;
 end;
 
-theorem
+theorem Th103:
   f c= g implies f+*g = g
 proof
   assume
@@ -2402,7 +2410,7 @@ theorem
   f|A +* f = f
 proof
   f|A c= f by RELAT_1:88;
-  hence thesis by Th79;
+  hence thesis by Th103;
 end;
 
 :: from AMISTD_3, 2010.01.10, A.T
@@ -2494,7 +2502,7 @@ A3: (g +* h)|dom f = g|dom f +* h|dom f by Th75
  hence f c= g by RELAT_1:219;
 end;
 
-theorem
+theorem Th125:
   dom f misses dom h & f c= g implies f c= g +* h
 proof assume that
 A1: dom f misses dom h and
@@ -2624,3 +2632,59 @@ A26:     not x in dom g by A1,XBOOLE_0:3;
     end;
     hence thesis by A4,FUNCT_1:9;
   end;
+
+theorem
+ for f1,f2,g1,g2 being Function
+  st f1 c= g1 & f2 c= g2 & dom f1 misses dom g2
+ holds f1 +* f2 c= g1 +* g2
+ proof
+  let f1,f2,g1,g2 be Function such that
+Z1: f1 c= g1 and
+Z2: f2 c= g2 and
+Z3: dom f1 misses dom g2;
+A: f1 c= g1 +* g2 by Z1,Z3,Th125;
+   g2 c= g1 +* g2 by Th26;
+   then f2 c= g1 +* g2 by Z2,XBOOLE_1:1;
+  hence f1 +* f2 c= g1 +* g2 by A,Th92;
+ end;
+
+theorem Th131:
+  for f, g, h being Function st f c= g holds f +* h c= g +* h
+proof
+  let f, g, h be Function;
+  assume
+A1: f c= g;
+  now
+    dom (f +* h) = dom f \/ dom h & dom (g +* h) = dom g \/ dom h by Def1;
+    hence dom (f +* h) c= dom (g +* h) by A1,RELAT_1:25,XBOOLE_1:9;
+    let x be set;
+    assume x in dom (f +* h);
+    then
+A2: x in dom f or x in dom h by Th13;
+    per cases;
+    suppose
+A3:   x in dom h;
+      hence (f +* h).x = h.x by Th14
+        .= (g +* h).x by A3,Th14;
+    end;
+    suppose
+A4:   not x in dom h;
+      then (f +* h).x = f.x & (g +* h).x = g.x by Th12;
+      hence (f +* h).x = (g +* h).x by A1,A2,A4,GRFUNC_1:8;
+    end;
+  end;
+  hence thesis by GRFUNC_1:8;
+end;
+
+theorem
+  for f, g, h being Function st f c= g & dom f misses dom h holds f c= g +* h
+proof
+  let f, g, h be Function;
+  assume f c= g;
+  then
+A1: f +* h c= g +* h by Th131;
+  assume dom f misses dom h;
+  then f c= f +* h by Th33;
+  hence thesis by A1,XBOOLE_1:1;
+end;
+

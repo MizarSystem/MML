@@ -21,21 +21,21 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="ANALOAF"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
-<ArticleID name="ANALOAF"/>
 <ArticleID name="TDGROUP"/>
 <ArticleID name="AFVECT0"/>
 </Signature>
 <RCluster aid="AFVECT0" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="38" value="false"/>
 <Adjective nr="43" value="false"/>
-<Adjective nr="112"/>
+<Adjective nr="94"/>
 <Adjective nr="117"/>
 </Cluster>
 </RCluster>
@@ -52,13 +52,13 @@
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="111"/>
+<Adjective nr="114"/>
 <Adjective nr="115"/>
 </Cluster>
 </RCluster>
 <FCluster aid="AFVECT0" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="13">
 <Cluster>
 <Adjective nr="38" value="false"/>
 <Adjective nr="43" value="false"/>
@@ -83,7 +83,7 @@
 </FCluster>
 <FCluster aid="AFVECT0" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="13">
 <Cluster>
 <Adjective nr="38" value="false"/>
 <Adjective nr="43" value="false"/>
@@ -111,7 +111,7 @@
 </FCluster>
 <FCluster aid="AFVECT0" nr="3">
 <ArgTypes>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="13">
 <Cluster>
 <Adjective nr="38" value="false"/>
 <Adjective nr="43" value="false"/>
@@ -136,7 +136,7 @@
 </FCluster>
 <FCluster aid="AFVECT0" nr="4">
 <ArgTypes>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="13">
 <Cluster>
 <Adjective nr="38" value="false"/>
 <Adjective nr="43" value="false"/>
@@ -156,12 +156,12 @@
 </Func>
 <Cluster>
 <Adjective nr="56"/>
-<Adjective nr="111"/>
+<Adjective nr="114"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AFVECT0" nr="5">
 <ArgTypes>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="13">
 <Cluster>
 <Adjective nr="38" value="false"/>
 <Adjective nr="43" value="false"/>
@@ -194,7 +194,7 @@
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="111"/>
+<Adjective nr="114"/>
 <Adjective nr="115"/>
 </Cluster>
 </Typ>
@@ -204,7 +204,7 @@
 </Func>
 <Cluster>
 <Adjective nr="43" value="false"/>
-<Adjective nr="112"/>
+<Adjective nr="94"/>
 <Adjective nr="116"/>
 </Cluster>
 </FCluster>
@@ -214,7 +214,7 @@
 <Adjective nr="38" value="false"/>
 <Adjective nr="116"/>
 </Cluster>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>

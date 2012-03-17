@@ -1,0 +1,306 @@
+:: Brouwer Fixed Point Theorem for Simplexes
+::  by Karol P\kak
+:: 
+:: Received December 21, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies ABIAN, AOFA_I00, ARYTM_1, ARYTM_3, CARD_1, CARD_3, CLASSES1,
+      COMPLEX1, CONVEX1, EUCLID, EUCLID_9, FINSEQ_1, FINSEQ_2, FINSEQ_4,
+      FINSET_1, FUNCOP_1, FUNCT_1, FUNCT_2, FUNCT_4, GLIB_000, INT_1, JORDAN2C,
+      MATROID0, MEASURE5, MEMBERED, METRIC_1, NAT_1, NEWTON, NUMBERS, ORDERS_1,
+      ORDINAL1, ORDINAL2, ORDINAL4, PARTFUN1, PCOMPS_1, PEPIN, POWER, PRE_TOPC,
+      QC_LANG1, RCOMP_1, REAL_1, RELAT_1, RLAFFIN1, RLAFFIN2, RLVECT_1,
+      RLVECT_2, RLVECT_5, RUSUB_4, SEMI_AF1, SEQ_4, SETFAM_1, SGRAPH1,
+      SIMPLEX0, SIMPLEX1, SQUARE_1, STRUCT_0, SUBSET_1, SUPINF_2, TARSKI,
+      TOPDIM_1, TOPMETR, TOPS_1, TOPS_2, VALUED_1, WEIERSTR, XBOOLE_0, XREAL_0,
+      XXREAL_0, XXREAL_1, XXREAL_2, ZFMISC_1, SIMPLEX2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ZFMISC_1, RELAT_1, FUNCT_1,
+      RELSET_1, FUNCT_2, PARTFUN1, FUNCOP_1, FUNCT_4, XXREAL_3, VALUED_1,
+      NAT_1, PRE_TOPC, NUMBERS, XREAL_0, FINSEQ_1, BINOP_1, FINSEQ_2, TOPMETR,
+      METRIC_1, EUCLID, FINSET_1, XXREAL_0, REAL_1, SETFAM_1, TOPS_2, INT_1,
+      STRUCT_0, COMPTS_1, PCOMPS_1, RCOMP_1, WEIERSTR, SEQ_4, XXREAL_2,
+      RVSUM_1, RLVECT_1, RUSUB_4, RLVECT_5, SIMPLEX0, RLAFFIN1, RLAFFIN2,
+      SIMPLEX1, ORDERS_1, CARD_1, DOMAIN_1, PENCIL_1, CLASSES1, MATROID0,
+      TBSP_1, MEMBERED, RLVECT_2, CONVEX1, TOPREAL9, COMPLEX1, NEWTON, POWER,
+      JORDAN2C, SQUARE_1, BORSUK_1, CARD_3, EUCLID_9, TMAP_1, FINSEQOP, ABIAN,
+      WAYBEL23, TOPDIM_1, TOPDIM_2, RLAFFIN3;
+ constructors ABIAN, BINOP_2, COMPTS_1, CONVEX1, EUCLID_9, FINSEQOP, FUNCSDOM,
+      JORDAN2C, LEXBFS, MONOID_0, NEWTON, POWER, REAL_1, RFINSEQ2, RLAFFIN1,
+      RLAFFIN2, RLAFFIN3, RLVECT_5, RUSUB_5, SEQ_1, SEQ_4, SIMPLEX1, SQUARE_1,
+      TBSP_1, TMAP_1, TOPDIM_1, TOPDIM_2, TOPREAL9, TOPS_2, WAYBEL23, WEIERSTR;
+ registrations ASYMPT_0, BORSUK_1, BORSUK_2, CARD_1, COMPTS_1, DILWORTH,
+      EUCLID, EUCLID_9, FINSEQ_1, FINSEQ_2, FINSET_1, FUNCT_1, FUNCT_2, INT_1,
+      JORDAN2B, JORDAN2C, MEMBERED, METRIZTS, MONOID_0, NAT_1, NEWTON, NUMBERS,
+      PCOMPS_1, PRE_TOPC, RELAT_1, RELSET_1, RLAFFIN1, RLAFFIN3, SEQ_4,
+      SIMPLEX0, SIMPLEX1, SPRECT_1, STRUCT_0, SUBSET_1, TBSP_1, TMAP_1,
+      TOPDIM_1, TOPDIM_2, TOPMETR, TOPREAL9, TOPREALC, TOPS_1, VALUED_0,
+      VALUED_1, XBOOLE_0, XREAL_0, XXREAL_0, XXREAL_2, XXREAL_3, YELLOW13,
+      JORDAN;
+ requirements REAL, SUBSET, NUMERALS, ARITHM, BOOLE;
+
+
+begin :: The Lebesgue Number
+
+reserve M for non empty MetrSpace,
+        F,G for open Subset-Family of TopSpaceMetr M;
+
+definition
+  let M such that
+     TopSpaceMetr M is compact;
+  let F be Subset-Family of TopSpaceMetr M such that
+     F is open and
+     F is Cover of TopSpaceMetr M;
+   mode Lebesgue_number of F -> positive Real means
+:: SIMPLEX2:def 1
+     for p be Point of M
+     ex A be Subset of TopSpaceMetr M st A in F & Ball(p,it) c= A;
+end;
+
+reserve L for Lebesgue_number of F;
+
+theorem :: SIMPLEX2:1
+  TopSpaceMetr M is compact & F is Cover of TopSpaceMetr M & F c= G
+    implies L is Lebesgue_number of G;
+
+theorem :: SIMPLEX2:2
+  TopSpaceMetr M is compact & F is Cover of TopSpaceMetr M & F is_finer_than G
+    implies L is Lebesgue_number of G;
+
+theorem :: SIMPLEX2:3
+  for L1 be positive Real st TopSpaceMetr M is compact &
+                             F is Cover of TopSpaceMetr M & L1 <= L
+    holds L1 is Lebesgue_number of F;
+
+begin :: Bounded Simplicial Complexes
+
+reserve n,k for Nat,
+        r for real number,
+        X for set,
+        M for Reflexive (non empty MetrStruct),
+        A for Subset of M,
+        K for SimplicialComplexStr;
+
+registration let M;
+  cluster finite -> bounded Subset of M;
+end;
+
+theorem :: SIMPLEX2:4
+  for S be finite non empty Subset of M
+    ex p,q be Point of M st p in S & q in S & dist(p,q) = diameter S;
+
+definition let M,K;
+  attr K is M bounded means
+:: SIMPLEX2:def 2
+    ex r st for A st A in the topology of K holds
+       A is bounded & diameter A <= r;
+end;
+
+theorem :: SIMPLEX2:5
+  for K be non void SimplicialComplexStr st
+      K is M bounded & A is Simplex of K
+    holds A is bounded;
+
+registration let M,X;
+  cluster M bounded non void SimplicialComplex of X;
+end;
+
+registration let M;
+  cluster M bounded non void subset-closed finite-membered
+    SimplicialComplexStr;
+end;
+
+registration let M,X;
+  let K be M bounded SimplicialComplexStr of X;
+  cluster -> M bounded (SubSimplicialComplex of K);
+end;
+
+registration
+  let M,X;
+  let K be M bounded subset-closed SimplicialComplexStr of X;
+  let i be Integer;
+  cluster Skeleton_of(K,i) -> M bounded;
+end;
+
+theorem :: SIMPLEX2:6
+  K is finite-vertices implies K is M bounded;
+
+begin
+
+definition let M;
+  let K be SimplicialComplexStr such that
+     K is M bounded;
+  func diameter(M,K) -> Real means
+:: SIMPLEX2:def 3
+    (for A st A in the topology of K holds diameter A <= it)
+  &  for r st (for A st A in the topology of K holds diameter A <= r)
+     holds r >= it if the topology of K meets bool [#]M
+                   otherwise it = 0;
+end;
+
+theorem :: SIMPLEX2:7
+  K is M bounded implies 0 <= diameter(M,K);
+
+theorem :: SIMPLEX2:8
+  for K be M bounded SimplicialComplexStr of X,
+      KX be SubSimplicialComplex of K
+    holds diameter(M,KX) <= diameter(M,K);
+
+theorem :: SIMPLEX2:9
+  for K be M bounded subset-closed SimplicialComplexStr of X,i be Integer
+    holds
+  diameter(M,Skeleton_of(K,i)) <= diameter(M,K);
+
+definition let M;
+ let K be M bounded non void subset-closed SimplicialComplexStr;
+ redefine func diameter(M,K) -> Real means
+:: SIMPLEX2:def 4
+  (for A st A is Simplex of K holds diameter A <= it) &
+  for r st (for A st A is Simplex of K holds diameter A <= r)
+    holds r >= it;
+end;
+
+theorem :: SIMPLEX2:10
+  for S be finite Subset of M holds diameter(M,Complex_of{S}) = diameter S;
+
+definition
+ let n;
+ let K be SimplicialComplexStr of TOP-REAL n;
+ attr K is bounded means
+:: SIMPLEX2:def 5
+   K is (Euclid n) bounded;
+ func diameter K -> Real equals
+:: SIMPLEX2:def 6
+   diameter(Euclid n,K);
+end;
+
+registration
+  let n;
+  cluster bounded -> Euclid n bounded (SimplicialComplexStr of TOP-REAL n);
+  cluster bounded affinely-independent simplex-join-closed non void
+    finite-degree total SimplicialComplex of TOP-REAL n;
+  cluster finite-vertices -> bounded SimplicialComplexStr of TOP-REAL n;
+end;
+
+begin :: The Estimation of Diameter of the Barycentric Subdivision
+
+reserve V for RealLinearSpace,
+        Kv for non void SimplicialComplex of V;
+
+theorem :: SIMPLEX2:11
+  for S be Simplex of BCS Kv
+  for F be c=-linear finite finite-membered Subset-Family of V st
+    S = (center_of_mass V).:F & union F is Simplex of Kv
+  for a1,a2 be VECTOR of V st a1 in S & a2 in S
+  ex b1,b2 be VECTOR of V,r be Real st
+     b1 in Vertices BCS Complex_of{union F} &
+     b2 in Vertices BCS Complex_of{union F} &
+     a1-a2 = r*(b1-b2) & 0 <= r & r <= (card union F-1)/card union F;
+
+theorem :: SIMPLEX2:12
+  for A be affinely-independent Subset of TOP-REAL n
+  for E be Enumeration of A st dom E\X is non empty
+    holds
+  conv(E.:X) = meet{conv(A\{E.k}) where k is Element of NAT: k in dom E\X};
+
+reserve A for Subset of TOP-REAL n;
+
+theorem :: SIMPLEX2:13
+  for a be bounded Subset of Euclid n st a=A
+  for p be Point of Euclid n st p in conv A holds
+    conv A c= cl_Ball(p,diameter a);
+
+theorem :: SIMPLEX2:14
+  A is Bounded iff conv A is Bounded;
+
+theorem :: SIMPLEX2:15
+  for a,ca be bounded Subset of Euclid n st ca = conv A & a = A holds
+    diameter a = diameter ca;
+
+registration
+  let n;
+  let K be bounded SimplicialComplexStr of TOP-REAL n;
+  cluster -> bounded SubdivisionStr of K;
+end;
+
+theorem :: SIMPLEX2:16
+  for K be bounded finite-degree non void SimplicialComplex of TOP-REAL n st
+       |.K.| c= [#]K
+    holds diameter BCS K <= degree K/(degree K+1) * diameter K;
+
+theorem :: SIMPLEX2:17
+  for K be bounded finite-degree non void SimplicialComplex of TOP-REAL n st
+      |.K.| c= [#]K
+    holds diameter BCS(k,K) <= (degree K/(degree K+1))|^k * diameter K;
+
+theorem :: SIMPLEX2:18
+  for K be bounded finite-degree non void SimplicialComplex of TOP-REAL n st
+      |.K.| c= [#]K for r st r>0 ex k st diameter BCS(k,K) < r;
+
+theorem :: SIMPLEX2:19
+  for i,j be Element of NAT
+  ex f be Function of[:TOP-REAL i,TOP-REAL j:],TOP-REAL(i+j) st
+    f is being_homeomorphism &
+    for fi be Element of TOP-REAL i,fj be Element of TOP-REAL j
+    holds f.(fi,fj) = fi^fj;
+
+theorem :: SIMPLEX2:20
+  for i,j be Element of NAT
+  for f be Function of [:TOP-REAL i,TOP-REAL j:],TOP-REAL(i+j) st
+       for fi be Element of TOP-REAL i,fj be Element of TOP-REAL j
+         holds f.(fi,fj) = fi^fj
+  for r for fi be Point of Euclid i,fj be Point of Euclid j,
+            fij be Point of Euclid(i+j) st fij = fi^fj
+    holds f.:[:OpenHypercube(fi,r),OpenHypercube(fj,r):] = OpenHypercube(fij,r)
+;
+
+theorem :: SIMPLEX2:21
+  A is Bounded iff ex p be Point of Euclid n,r st A c= OpenHypercube(p,r);
+
+registration
+ let n;
+ cluster closed Bounded -> compact Subset of TOP-REAL n;
+end;
+
+registration
+ let n;
+ let A be affinely-independent Subset of TOP-REAL n;
+ cluster conv A -> compact;
+end;
+
+begin :: Main Theorems
+
+theorem :: SIMPLEX2:22
+  for A be non empty affinely-independent Subset of TOP-REAL n
+  for E be Enumeration of A
+  for F be FinSequence of bool the carrier of ((TOP-REAL n)|(conv A)) st
+    len F = card A & rng F is closed &
+    for S be Subset of dom F holds conv(E.:S) c= union(F.:S)
+      holds meet rng F is non empty;
+
+reserve A for affinely-independent Subset of TOP-REAL n;
+
+theorem :: SIMPLEX2:23
+  for A st card A = n+1
+  for f be continuous Function of(TOP-REAL n)|conv A,(TOP-REAL n)|conv A
+  ex p be Point of TOP-REAL n st p in dom f & f.p=p;
+
+theorem :: SIMPLEX2:24
+  for A st card A = n+1
+  for f be continuous Function of (TOP-REAL n)|conv A,(TOP-REAL n)|conv A
+    holds f has_a_fixpoint;
+
+theorem :: SIMPLEX2:25
+  card A = n+1 implies ind conv A = n;
+
+theorem :: SIMPLEX2:26
+  ind TOP-REAL n = n;

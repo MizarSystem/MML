@@ -2,30 +2,38 @@
 ::  by Artur Korni{\l}owicz and Yasunari Shidama
 ::
 :: Received February 6, 2004
-:: Copyright (c) 2004 Association of Mizar Users
+:: Copyright (c) 2004-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
  vocabularies ORDINAL1, SUBSET_1, NUMBERS, XBOOLE_0, SETFAM_1, SCMFSA7B,
       FUNCSDOM, AMI_3, AMI_1, FSM_1, STRUCT_0, AMI_2, FUNCT_1, TARSKI,
       RELAT_1, AMISTD_2, ARYTM_3, FUNCT_4, CIRCUIT2, CARD_1, GRAPHSP, ARYTM_1,
-      SUPINF_2, FUNCOP_1, ZFMISC_1, GLIB_000, PARTFUN1, SCMNORM, RELOC, NAT_1,
-      AMISTD_5, COMPOS_1, CARD_5, UNIALG_1, PBOOLE;
+      SUPINF_2, FUNCOP_1, ZFMISC_1, PARTFUN1, SCMNORM, RELOC, NAT_1,
+      AMISTD_5, COMPOS_1, PBOOLE;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, DOMAIN_1, ORDINAL1, RELAT_1,
       NUMBERS, FUNCT_1, PARTFUN1, STRUCT_0, ALGSTR_0, FUNCSDOM, FUNCOP_1,
-      XCMPLX_0, NAT_1, FUNCT_4, NAT_D, VALUED_1, PBOOLE,
-      COMPOS_1, EXTPRO_1, AMI_1, AMI_2, AMI_3, SCMRING1,
+      XCMPLX_0, NAT_1, FUNCT_4, FUNCT_7, NAT_D, VALUED_1, PBOOLE,
+      COMPOS_1, EXTPRO_1, AMI_2, AMI_3, SCMRING1,
       SCMRING2, SCMRING3, AMISTD_2, AMISTD_5;
  constructors XXREAL_0, REALSET2, AMI_3, AMISTD_2, SCMRING3, PRE_POLY,
-      NAT_D, AMI_1, AMISTD_1, AMISTD_5, PBOOLE;
+      NAT_D, AMISTD_1, AMISTD_5, PBOOLE, INT_3, FUNCT_7;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, XREAL_0, NAT_1,
-      CARD_3, STRUCT_0, AMI_1, AMI_3, SCMRING2, AMISTD_2, SCMRING3,
-      FINSET_1, ORDINAL1, RELSET_1, GRFUNC_1, FUNCT_2, VALUED_1,
-      COMPOS_1, EXTPRO_1, AMISTD_5, AMI_5, PBOOLE;
+      CARD_3, STRUCT_0, AMI_3, SCMRING2, AMISTD_2, SCMRING3,
+      FINSET_1, ORDINAL1, RELSET_1, GRFUNC_1, FUNCT_2, VALUED_1, FUNCT_4,
+      COMPOS_1, EXTPRO_1, AMISTD_5, AMI_5, PBOOLE, PRE_POLY, FUNCT_7;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions AMI_1, EXTPRO_1, FUNCOP_1, AMI_3, AMI_2, AMISTD_1, AMISTD_2,
+ definitions FUNCT_1, EXTPRO_1, FUNCOP_1, AMI_3, AMI_2, AMISTD_1, AMISTD_2,
       NAT_1, COMPOS_1, AMISTD_5, STRUCT_0;
- theorems TARSKI, NAT_1, AMI_1, SCMRING2, AMI_3, FUNCT_4, FUNCT_1,
+ theorems TARSKI, NAT_1, SCMRING2, AMI_3, FUNCT_4, FUNCT_1,
       ZFMISC_1, FUNCOP_1, SCMRING1, AMI_2, STRUCT_0, XBOOLE_0, XBOOLE_1,
       RELAT_1, GRFUNC_1, SCMRING3, AMISTD_2, PBOOLE,
       PARTFUN1, ORDINAL1, COMPOS_1, EXTPRO_1, AMISTD_5;
@@ -125,43 +133,33 @@ dom (Start-At(loc,SCM R)) by FUNCOP_1:19,XBOOLE_0:def 3;
 end;
 
 theorem Th8:
-  IC(s1) = IC(s2) & (for a being Data-Location of R holds s1.a =
-  s2.a) & (for i being Element of NAT holds s1.i = s2.i) implies
-  s1 = s2
+  for s1,s2 being State of SCM R st IC(s1) = IC(s2) &
+  (for a being Data-Location of R holds s1.a = s2.a)
+    holds NPP s1 = NPP s2
 proof
-  assume that
-A1: IC(s1) = IC(s2) and
-A2: for a being Data-Location of R holds s1.a = s2.a and
-A3: for i being Element of NAT holds s1.i = s2.i;
-A4: dom s1 = the carrier of SCM R by PARTFUN1:def 4;
-A5: dom s2 = the carrier of SCM R by PARTFUN1:def 4;
-A6: now
-A7: SCM-Memory = {IC SCM R} \/ Data-Locations SCM \/ NAT
-   by AMI_3:72,SCMRING2:def 1;
-    let x be set;
-    assume x in SCM-Memory;
+  let s1,s2 be State of SCM R such that
+A1: IC(s1) = IC(s2);
+    IC SCM R in dom s1 & IC SCM R in dom s2 by COMPOS_1:9;
     then
-A8: x in {IC SCM R} \/ Data-Locations SCM or x in NAT by A7,XBOOLE_0:def 3;
-    per cases by A8,XBOOLE_0:def 3;
-    suppose
-      x in {IC SCM R};
-      then x = IC SCM R by TARSKI:def 1;
-      hence s1.x = s2.x by A1;
+X1: NPP s1 = DataPart s1 +* Start-At (IC s1,SCM R) &
+    NPP s2 = DataPart s2 +* Start-At (IC s2,SCM R) by COMPOS_1:74;
+  assume
+B2: for a being Data-Location of R holds s1.a = s2.a;
+   DataPart s1 = DataPart s2
+    proof
+B1:   dom DataPart s1 = Data-Locations SCM R by COMPOS_1:50;
+     hence
+    dom DataPart s1 = dom DataPart s2 by COMPOS_1:50;
+     let x be set;
+     assume
+Z:     x in dom DataPart s1;
+      then
+A2:   x is Data-Location of R by B1,SCMRING2:32;
+     thus (DataPart s1).x = s1.x by Z,B1,FUNCT_1:72
+         .= s2.x by A2,B2
+         .= (DataPart s2).x by Z,B1,FUNCT_1:72;
     end;
-    suppose
-      x in Data-Locations SCM;
-      then x is Data-Location of R by SCMRING2:1;
-      hence s1.x = s2.x by A2;
-    end;
-    suppose
-      x in NAT;
-      then reconsider l = x as Element of NAT;
-      l = x;
-      hence s1.x = s2.x by A3;
-    end;
-  end;
-   SCM-Memory = dom s1 by A4,SCMRING2:def 1;
-  hence thesis by A4,A5,A6,FUNCT_1:9;
+  hence thesis by A1,X1;
 end;
 
 registration let R;
@@ -173,15 +171,6 @@ registration let R;
 A1: IC IncIC(Exec(IncAddr(INS,j),s),k)
        = IC Exec(IncAddr(INS,j),s) + k by COMPOS_1:54
       .= IC Exec(IncAddr(INS,j+k),IncIC(s,k)) by AMISTD_2:def 18;
-         :: steady programmed
-A2: now
-    let l be Element of NAT;
-    thus Exec(IncAddr(INS,j+k),IncIC(s,k)).l
-       = IncIC(s,k).l by AMI_1:def 13
-      .= s.l by COMPOS_1:20
-      .= Exec(IncAddr(INS,j),s).l by AMI_1:def 13
-      .= IncIC(Exec(IncAddr(INS,j),s),k).l by COMPOS_1:20;
-  end;
   per cases by NAT_1:32,SCMRING3:71;
   suppose InsCode INS = 0;
     then
@@ -218,7 +207,7 @@ A6:     da <> d;
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by Th7;
       end;
     end;
-   hence thesis by A2,Th8,A1;
+   hence thesis by Th8,A1;
   end;
   suppose InsCode INS = 2;
     then consider da,db being Data-Location of R such that
@@ -247,7 +236,7 @@ A9:     da <> d;
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by Th7;
       end;
     end;
-   hence thesis by A2,Th8,A1;
+   hence thesis by Th8,A1;
   end;
   suppose InsCode INS = 3;
     then consider da,db being Data-Location of R such that
@@ -276,7 +265,7 @@ A12:     da <> d;
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by Th7;
       end;
     end;
-    hence thesis by A2,Th8,A1;
+    hence thesis by Th8,A1;
   end;
   suppose InsCode INS = 4;
     then consider da,db being Data-Location of R such that
@@ -305,7 +294,7 @@ A15:     da <> d;
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by Th7;
       end;
     end;
-    hence thesis by A2,Th8,A1;
+    hence thesis by Th8,A1;
   end;
   suppose InsCode INS = 5;
     then consider da being Data-Location of R,
@@ -333,7 +322,7 @@ A18:     da <> d;
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by Th7;
       end;
     end;
-    hence thesis by A2,Th8,A1;
+    hence thesis by Th8,A1;
   end;
   suppose InsCode INS = 6;
     then consider loc being Element of NAT such that
@@ -347,7 +336,7 @@ A21: IncAddr(INS, j) = goto (loc + j,R) by A19,SCMRING3:69;
           .= Exec(IncAddr(INS,j), s).d by A21,SCMRING2:17
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by Th7;
     end;
-    hence thesis by A2,Th8,A1;
+    hence thesis by Th8,A1;
   end;
   suppose InsCode INS = 7;
     then consider da being Data-Location of R, loc being Element of NAT
@@ -362,7 +351,7 @@ A24: IncAddr(INS, j) = da=0_goto (loc + j) by A22,SCMRING3:70;
           .= Exec(IncAddr(INS,j), s).d by A24,SCMRING2:18
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by Th7;
     end;
-   hence thesis by A2,A1,Th8;
+   hence thesis by A1,Th8;
   end;
  end;
 end;
@@ -561,8 +550,10 @@ FUNCT_4:def 1
 A39:  p c= s2 by A35,XBOOLE_1:1;
     hence ProgramPart p c= Q by RELAT_1:105;
     take s1, s2;
-    thus p c= s1 by A38;
-    thus p c= s2 by A39;
+     p c= s1 by A38;
+    hence NPP p c= s1 by XBOOLE_1:1;
+     p c= s2 by A39;
+    hence NPP p c= s2 by XBOOLE_1:1;
     take 1;
 A40: dom ((il .--> (d1:=d2)) +* ( d2.--> e) +* Start-At(il,SCM R)) = dom ((il
     .--> (d1:=d2)) +* ( d2.--> e)) \/ dom(Start-At(il,SCM R)) by FUNCT_4:def 1;
@@ -624,10 +615,8 @@ A55:  (ProgramPart s1)/.il = s1.il by COMPOS_1:38;
       .= (Following(ProgramPart s1,s1)).d1 by EXTPRO_1:3
       .= 0.R by A15,A31,A27,A55,SCMRING2:13;
     then
-A56:   (Comput(P,s1,1)|dom NPP p).d1 = 0.R
+   (Comput(P,s1,1)|dom NPP p).d1 = 0.R
      by A33,FUNCT_1:70,A3,A4;
-:::     d1 in dom(Comput(Q,s2,1)|dom NPP p)
-:::        by A3,A37,A4;
     hence Comput(P,s1,1)|dom NPP p <> Comput(Q,s2,1)|dom NPP p
         by A34,A3,A37,A4,A54,FUNCT_1:70;
   end;
@@ -641,125 +630,97 @@ registration let R be non trivial good Ring;
  cluster SCM R -> CurIns-recognized;
  coherence
 proof
-  let p be autonomic non NAT-defined FinPartState of SCM R;
-  let s be State of SCM R such that
-A1: p c= s;
+  let p be autonomic non NAT-defined FinPartState of SCM R,
+      s be State of SCM R such that
+A1: NPP p c= s;
   let P be (the Instructions of SCM R)-valued ManySortedSet of NAT such that
 A2: ProgramPart p c= P;
-  let n be Element of NAT;
-  set Csi = Comput(P,s,n);
+  let i be Element of NAT;
+  set Csi = Comput(P,s,i);
   set loc = IC Csi;
-  consider ll being natural number such that
-A3: loc = ll;
-  set loc1 = ll+1;
-A4: loc <> loc1 by A3;
-  set p2 = p +* (loc .--> goto(loc1,R));
-A5: loc in dom ProgramPart p iff loc in dom p /\ NAT by RELAT_1:90;
-  set p1 = p +* (loc .--> goto(loc,R));
-A6: dom (loc .--> goto(loc,R)) = {loc} by FUNCOP_1:19;
+  set loc1 = loc+1;
+A3: loc in dom ProgramPart p iff loc in dom p /\ NAT by RELAT_1:90;
+  assume not IC Comput(P,s,i) in dom ProgramPart(p);
   then
-A7: loc in dom (loc .--> goto(loc,R)) by TARSKI:def 1;
-  assume not IC Comput(P,s,n) in dom ProgramPart(p);
+A4: not loc in dom p by A3,XBOOLE_0:def 4;
+  set I = dl.(R,0) := dl.(R,0);
+  set p1 = p +* (loc .--> I);
+  set p2 = p +* (loc .--> halt SCM R);
+  reconsider P1 = P +* (loc .--> I)
+   as (the Instructions of SCM R)-valued ManySortedSet of NAT;
+  reconsider P2 = P +* (loc .--> halt SCM R)
+   as (the Instructions of SCM R)-valued ManySortedSet of NAT;
+A6: dom (loc .--> halt SCM R) = {loc} by FUNCOP_1:19;
   then
-A8: not loc in dom p by A5,XBOOLE_0:def 4;
-  consider s2 being State of SCM R such that
-A9: p2 c= s2 by PBOOLE:156;
-  set Cs2i = Comput(ProgramPart(s2),s2,n);
-  consider s1 being State of SCM R such that
-A10: p1 c= s1 by PBOOLE:156;
-  set Cs1i = Comput(ProgramPart(s1),s1,n);
-A11: dom (loc .--> goto(loc1,R)) = {loc} by FUNCOP_1:19;
+A7: loc in dom (loc .--> halt SCM R) by TARSKI:def 1;
+A12: dom (loc .--> I) = {loc} by FUNCOP_1:19;
   then
-A12: loc in dom (loc .--> goto(loc1,R)) by TARSKI:def 1;
-A13: dom p2 = dom p \/ dom (loc .--> goto(loc1,R)) by FUNCT_4:def 1;
-  then
-A14: loc in dom p2 by A12,XBOOLE_0:def 3;
-A15: dom p1 = dom p \/ dom (loc .--> goto(loc,R)) by FUNCT_4:def 1;
-  then
-A16: loc in dom p1 by A7,XBOOLE_0:def 3;
+A13: loc in dom (loc .--> I) by TARSKI:def 1;
+Y6: dom p misses dom (loc .--> halt SCM R) by A4,A6,ZFMISC_1:56;
+Y5: dom p misses dom (loc .--> I) by A4,A12,ZFMISC_1:56;
+    ProgramPart p1 = ProgramPart p +* ProgramPart(loc .--> I) by FUNCT_4:75
+      .= ProgramPart p +* (loc .--> I) by RELAT_1:209;
+   then
+P3: ProgramPart p1 c= P1 by A2,FUNCT_4:131;
+    ProgramPart p2 = ProgramPart p +* ProgramPart(loc .--> halt SCM R)
+              by FUNCT_4:75
+      .= ProgramPart p +* (loc .--> halt SCM R) by RELAT_1:209;
+   then
+P4: ProgramPart p2 c= P2 by A2,FUNCT_4:131;
+  set Cs2i = Comput(P2,s,i), Cs1i = Comput(P1,s,i);
   p is not autonomic
   proof
-A17: now
-      let x be set;
-      assume
-A18:  x in dom p;
-      dom p misses dom (loc .--> goto(loc1,R)) by A8,A11,ZFMISC_1:56;
-      then
-A19:  p.x = p2.x by A18,FUNCT_4:17;
-      x in dom p2 by A13,A18,XBOOLE_0:def 3;
-      hence p.x = s2.x by A9,A19,GRFUNC_1:8;
-    end;
-    (loc .--> goto(loc1,R)).loc = goto(loc1,R) by FUNCOP_1:87;
-    then p2.loc = goto(loc1,R) by A12,FUNCT_4:14;
-    then s2.loc = goto(loc1,R) by A14,A9,GRFUNC_1:8;
+    (loc .--> halt SCM R).loc = halt SCM R by FUNCOP_1:87;
     then
-A20: Cs2i.loc = goto(loc1,R) by AMI_1:54;
-    (loc .--> goto(loc,R)).loc = goto(loc,R) by FUNCOP_1:87;
-    then p1.loc = goto(loc,R) by A7,FUNCT_4:14;
-    then s1.loc = goto(loc,R) by A16,A10,GRFUNC_1:8;
+A18:  P2.loc = halt SCM R by A7,FUNCT_4:14;
+    (loc .--> I).loc = I by FUNCOP_1:87;
     then
-A21: Cs1i.loc = goto(loc,R) by AMI_1:54;
-    take P1 = ProgramPart s1, P2 = ProgramPart s2;
-A22: now
-      let x be set;
-      assume
-A23:  x in dom p;
-      dom p misses dom (loc .--> goto(loc,R)) by A8,A6,ZFMISC_1:56;
-      then
-A24:  p.x = p1.x by A23,FUNCT_4:17;
-      x in dom p1 by A15,A23,XBOOLE_0:def 3;
-      hence p.x = s1.x by A10,A24,GRFUNC_1:8;
-    end;
-    dom s1 = the carrier of SCM R by PARTFUN1:def 4;
-    then dom p c= dom s1 by RELAT_1:def 18;
-    then
-A25: p c= s1 by A22,GRFUNC_1:8;
+A19:  P1.loc = I by A13,FUNCT_4:14;
+    take P1, P2;
+    ProgramPart p c= ProgramPart p1 by Y5,FUNCT_4:33,RELAT_1:105;
     hence
-A26:  ProgramPart p c= P1 by RELAT_1:105;
-    dom s2 = the carrier of SCM R by PARTFUN1:def 4;
-    then dom p c= dom s2 by RELAT_1:def 18;
-    then
-A27:     p c= s2 by A17,GRFUNC_1:8;
+A25:  ProgramPart p c= P1 by P3,XBOOLE_1:1;
+    ProgramPart p c= ProgramPart p2 by Y6,FUNCT_4:33,RELAT_1:105;
     hence
-A28: ProgramPart p c= P2 by RELAT_1:105;
-    take s1, s2;
-    thus p c= s1 by A25;
-A29: (Cs1i|dom NPP p) = (Csi|dom NPP p) by A1,EXTPRO_1:def 9,A2,A26,A25;
-    thus p c= s2 by A27;
-A30: (Cs1i|dom NPP p) = (Cs2i|dom NPP p) by A1,A29,EXTPRO_1:def 9,A2,A28,A27;
-    take k = n+1;
-    set Cs1k = Comput(ProgramPart(s1),s1,k);
-A31: Cs1k = Following(ProgramPart s1,Cs1i) by EXTPRO_1:4
-      .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by AMI_1:123;
-A32:  (ProgramPart Cs1i)/.loc = Cs1i.loc by COMPOS_1:38;
-A33:IC SCM R in dom p by AMISTD_5:6;
-A34: Csi.IC SCM R = (Csi|dom NPP p).IC SCM R by FUNCT_1:72,A33,COMPOS_1:179;
-    then Cs1i.IC SCM R = loc by A29,FUNCT_1:72,A33,COMPOS_1:179;
+A27:  ProgramPart p c= P2 by P4,XBOOLE_1:1;
+    take s, s;
+    thus NPP p c= s by A1;
+A28: (Cs1i|dom NPP p) = (Csi|dom NPP p) by A25,A2,A1,EXTPRO_1:def 9;
+    thus NPP p c= s by A1;
+A29: (Cs1i|dom NPP p) = (Cs2i|dom NPP p) by A25,A27,A1,EXTPRO_1:def 9;
+    take k = i+1;
+    set Cs1k = Comput(P1,s,k);
+A33: IC SCM R in dom p by AMISTD_5:6;
+ IC Csi = IC(Csi|dom NPP p) by A33,COMPOS_1:179,FUNCT_1:72;
     then
-A35: Cs1k.IC SCM R = loc by A31,A21,A32,SCMRING2:17;
-    set Cs2k = Comput(ProgramPart(s2),s2,k);
-A36: Cs2k = Following(ProgramPart s2,Cs2i) by EXTPRO_1:4
-      .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by AMI_1:123;
-A37:  (ProgramPart Cs2i)/.loc = Cs2i.loc by COMPOS_1:38;
-A38: Cs2i.IC SCM R = loc by A29,A34,A30,FUNCT_1:72,A33,COMPOS_1:179;
+  IC Cs1i = loc by A28,A33,COMPOS_1:179,FUNCT_1:72;
     then
- Cs2k.IC SCM R = loc1 by A36,A20,A37,SCMRING2:17;
-  (Cs1k|dom NPP p).IC SCM R = Cs1k.IC SCM R &
-    (Cs2k|dom NPP p).IC SCM R = Cs2k.IC SCM R
-    by FUNCT_1:72,A33,COMPOS_1:179;
-    hence thesis by A4,A35,A38,A36,A20,A37,SCMRING2:17;
+XX: CurInstr(P1,Cs1i) = P1.loc by PBOOLE:158
+         .= I by A19;
+A31: Cs1k = Following(P1,Cs1i) by EXTPRO_1:4
+      .= Exec (CurInstr(P1,Cs1i), Cs1i)
+      .= Exec(I,Cs1i) by XX;
+A32:  IC Exec(I,Cs1i) = succ IC Cs1i by SCMRING2:13;
+A33: IC SCM R in dom p by AMISTD_5:6;
+A34: IC Csi = IC(Csi|dom NPP p) by A33,COMPOS_1:179,FUNCT_1:72;
+    then IC Cs1i = loc by A28,A33,COMPOS_1:179,FUNCT_1:72;
+    then
+A35: IC Cs1k = succ loc by A31,A32
+         .= loc1;
+    set Cs2k = Comput(P2,s,k);
+A36: Cs2k = Following(P2,Cs2i) by EXTPRO_1:4
+      .= Exec (CurInstr(P2,Cs2i), Cs2i);
+A37:  P2/.IC Cs2i = P2.IC Cs2i by PBOOLE:158;
+    IC Cs2i = loc by A28,A34,A29,A33,COMPOS_1:179,FUNCT_1:72;
+    then
+A38: IC Cs2k = loc by A36,A18,A37,EXTPRO_1:def 3;
+    IC(Cs1k|dom NPP p) = IC Cs1k & IC(Cs2k|dom NPP p) = IC Cs2k
+     by A33,COMPOS_1:179,FUNCT_1:72;
+    hence thesis by A35,A38;
   end;
   hence contradiction;
 end;
 end;
-
-reserve N for with_non-empty_elements non empty set,
-   S for relocable1 (relocable IC-recognized proper-halt
-    (regular homogeneous J/A-independent
-    Exec-preserving
-     halting realistic  steady-programmed
-   (standard-ins IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N))));
 
 Lm2:
  for p being PartState of SCM R
@@ -779,7 +740,7 @@ end;
 
 theorem Th9:
   R is non trivial implies for p being autonomic non NAT-defined
-  FinPartState of SCM R st p c= s1 & p c= s2 &
+  FinPartState of SCM R st NPP p c= s1 & NPP p c= s2 &
   ProgramPart p c= P1 & ProgramPart p c= P2 &
   CurInstr(P1,Comput(P1,s1,n)) = a := b &
   a in dom p
@@ -793,7 +754,7 @@ proof
   set Cs1i = Comput(P1,s1,n);
   set I = CurInstr(P1,Comput(P1,s1,n));
   let p be autonomic non NAT-defined FinPartState of SCM R such that
-A1: p c= s1 & p c= s2 and
+A1: NPP p c= s1 & NPP p c= s2 and
 A2: ProgramPart p c= P1 & ProgramPart p c= P2;
 A3: a in dom NPP p implies
  (Cs1i1|dom NPP p).a = Cs1i1.a & (Cs2i1|dom NPP p).a = Cs2i1.a
@@ -816,7 +777,7 @@ end;
 
 theorem Th10:
   R is non trivial implies for p being autonomic non NAT-defined
-  FinPartState of SCM R st p c= s1 & p c= s2 &
+  FinPartState of SCM R st NPP p c= s1 & NPP p c= s2 &
   ProgramPart p c= P1 & ProgramPart p c= P2 &
   CurInstr(P1,Comput(P1,s1,n)) =
   AddTo(a,b) & a in dom p holds Comput(P1,s1,n).a + Comput(P1,s1,n).b =
@@ -830,7 +791,7 @@ proof
   set Cs1i = Comput(P1,s1,n);
   set I = CurInstr(P1,Comput(P1,s1,n));
   let p be autonomic non NAT-defined FinPartState of SCM R such that
-A1: p c= s1 & p c= s2 and
+A1: NPP p c= s1 & NPP p c= s2 and
 A2: ProgramPart p c= P1 & ProgramPart p c= P2;
 A3: a in dom NPP p
  implies (Cs1i1|dom NPP p).a = Cs1i1.a & (Cs2i1|dom NPP p).a = Cs2i1.a
@@ -854,7 +815,7 @@ end;
 
 theorem Th11:
   R is non trivial implies for p being autonomic non NAT-defined
-  FinPartState of SCM R st p c= s1 & p c= s2 &
+  FinPartState of SCM R st NPP p c= s1 & NPP p c= s2 &
   ProgramPart p c= P1 & ProgramPart p c= P2 &
   CurInstr(P1,Comput(P1,s1,n)) =
   SubFrom(a, b) & a in dom p holds Comput(P1,s1,n).a - Comput(
@@ -869,7 +830,7 @@ proof
   set Cs1i = Comput(P1,s1,n);
   set I = CurInstr(P1,Comput(P1,s1,n));
   let p be autonomic non NAT-defined FinPartState of SCM R such that
-A1: p c= s1 & p c= s2 and
+A1: NPP p c= s1 & NPP p c= s2 and
 A2: ProgramPart p c= P1 & ProgramPart p c= P2;
 A3: a in dom NPP p
  implies (Cs1i1|dom NPP p).a = Cs1i1.a & (Cs2i1|dom NPP p).a = Cs2i1.a
@@ -893,7 +854,7 @@ end;
 
 theorem Th12:
   R is non trivial implies for p being autonomic non NAT-defined
-  FinPartState of SCM R st p c= s1 & p c= s2 &
+  FinPartState of SCM R st NPP p c= s1 & NPP p c= s2 &
   ProgramPart p c= P1 & ProgramPart p c= P2 &
   CurInstr(P1,Comput(P1,s1,n)) =
   MultBy(a, b) & a in dom p holds Comput(P1,s1,n).a * Comput(
@@ -908,7 +869,7 @@ proof
   set Cs1i = Comput(P1,s1,n);
   set I = CurInstr(P1,Comput(P1,s1,n));
   let p be autonomic non NAT-defined FinPartState of SCM R such that
-A1: p c= s1 & p c= s2 and
+A1: NPP p c= s1 & NPP p c= s2 and
 A2: ProgramPart p c= P1 & ProgramPart p c= P2;
 A3: a in dom NPP p
     implies (Cs1i1|dom NPP p).a = Cs1i1.a & (Cs2i1|dom NPP p).a = Cs2i1.a
@@ -932,7 +893,7 @@ end;
 
 theorem Th13:
   R is non trivial implies for p being autonomic non NAT-defined
-  FinPartState of SCM R st p c= s1 & p c= s2 &
+  FinPartState of SCM R st NPP p c= s1 & NPP p c= s2 &
   ProgramPart p c= P1 & ProgramPart p c= P2 &
   CurInstr(P1,Comput(P1,s1,n)) = a
 =0_goto loc & loc <> succ (IC Comput(P1,s1,n)) holds Comput(
@@ -945,7 +906,7 @@ proof
   set Cs1i1 = Comput(P1,s1,n+1);
   set I = CurInstr(P1,Comput(P1,s1,n));
   let p be autonomic non NAT-defined FinPartState of SCM R such that
-A1: p c= s1 & p c= s2 and
+A1: NPP p c= s1 & NPP p c= s2 and
 A2: ProgramPart p c= P1 & ProgramPart p c= P2;
 A3: I = CurInstr(P2,Comput(P2,s2,n))
         by A1,AMISTD_5:7,A2;
@@ -982,25 +943,22 @@ end;
 begin :: Relocability
 
 theorem Th14:
-  R is non trivial implies for p being autonomic FinPartState of
-  SCM R st IC SCM R in dom p & p c= s1 & Relocated (p,k) c= s2
-for P1,P2 being (the Instructions of SCM R)-valued ManySortedSet of NAT
+ for p being autonomic FinPartState of
+  SCM R st IC SCM R in dom p &
+   NPP p c= s1 & NPP Relocated (p,k) c= s2
+ for P1,P2 being (the Instructions of SCM R)-valued ManySortedSet of NAT
   st ProgramPart p c= P1 & Reloc(ProgramPart p,k) c= P2
   for i being Element of NAT
-   holds IC Comput(P1,s1,i) + k = IC
-  Comput(P2,s2,i) & IncAddr(CurInstr(P1,
-  Comput(P1,s1,i)), k) =
-   CurInstr(P2,Comput(P2,s2,i))
-    & Comput(P1,s1,i)|dom (DataPart p)
-     = Comput(P2,s2,i)|dom(DataPart (Relocated (p,k))) &
-   DataPart Comput(P1,s1 +* DataPart s2,i) = DataPart Comput(P2,s2,i)
+   holds IC Comput(P1,s1,i) + k = IC Comput(P2,s2,i) &
+  IncAddr(CurInstr(P1,Comput(P1,s1,i)), k) = CurInstr(P2,Comput(P2,s2,i)) &
+  Comput(P1,s1,i)|dom (DataPart p) = Comput(P2,s2,i)|dom DataPart p &
+  DataPart Comput(P1,s1 +* DataPart s2,i) = DataPart Comput(P2,s2,i)
 proof
-  assume
- R is non trivial;
   let p be autonomic FinPartState of SCM R such that
 A1: IC SCM R in dom p and
-A2: p c= s1 and
-A3: Relocated (p,k) c= s2;
+A2: NPP p c= s1 and
+A3: NPP Relocated (p,k) c= s2;
+B1: IC SCM R in dom NPP p by A1,COMPOS_1:179;
   let P1,P2 be (the Instructions of SCM R)-valued ManySortedSet of NAT
   such that
 A4: ProgramPart p c= P1 & Reloc(ProgramPart p,k) c= P2;
@@ -1009,31 +967,25 @@ A4: ProgramPart p c= P1 & Reloc(ProgramPart p,k) c= P2;
    IC Comput(P1,s1,$1) + k = IC Comput(P2,s2,$1) &
 IncAddr(CurInstr(P1,Comput(P1,s1,$1)), k) =
 CurInstr(P2,Comput(P2,s2,$1)) &
-Comput(P1,s1,$1)|dom (DataPart p) = Comput(P2,s2,$1)|
-dom (DataPart (
-  Relocated (p,k))) & DataPart Comput(P1,s,$1)
-   = DataPart Comput(P2,s2,$1);
+Comput(P1,s1,$1)|dom (DataPart p) = Comput(P2,s2,$1)|dom DataPart p &
+ DataPart Comput(P1,s,$1) = DataPart Comput(P2,s2,$1);
 A6: p is non NAT-defined by A1,COMPOS_1:19;
-A7: IC p = IC s1 by A1,A2,GRFUNC_1:8;
-  then IC p = IC Comput(P1,s1,0) by EXTPRO_1:3;
+A7: IC NPP p = IC s1 by A2,GRFUNC_1:8,B1;
+  then IC NPP p = IC Comput(P1,s1,0) by EXTPRO_1:3;
   then
-A8: IC p in dom ProgramPart p by A2,A6,AMISTD_5:def 4,A4;
-A9: p c= s by A2,A3,COMPOS_1:161;
+A8: IC NPP p in dom ProgramPart p by A2,A6,AMISTD_5:def 4,A4;
+A9: NPP p c= s by A2,A3,COMPOS_1:203;
 A10: for i being Element of NAT st P[i] holds P[i+1 qua Element of NAT]
   proof
     set DPp = DataPart p;
     let i be Element of NAT such that
-A11: IC Comput(P1,s1,i) + k = IC Comput(P2,s2
-,i) and
+A11: IC Comput(P1,s1,i) + k = IC Comput(P2,s2,i) and
 A12:
 IncAddr(CurInstr(P1,Comput(P1,s1,i)), k) =
 CurInstr(P2,Comput(P2,s2,i))
 and
-A13: Comput(P1,s1,i)|dom (DataPart p) = Comput(P2,s2,
-i)|dom (
-    DataPart (Relocated (p,k))) and
-A14: DataPart Comput(P1,s,i) = DataPart Comput(P2,s2,i
-);
+A13: Comput(P1,s1,i)|dom DataPart p = Comput(P2,s2,i)|dom DataPart p and
+A14: DataPart Comput(P1,s,i) = DataPart Comput(P2,s2,i);
     set Cs2i1 = Comput(P2,s2,i+1);
     set Cs3i = Comput(P1,s,i);
     set Cs2i = Comput(P2,s2,i);
@@ -1067,7 +1019,6 @@ A23:  loc in dom ProgramPart p by A2,A6,AMISTD_5:def 4,A4;
       then
 A24:  Reloc(ProgramPart p, k).(loc + k) = P2.(loc + k)
            by GRFUNC_1:8,A4;
-:::        .= P2.(loc + k);
 A25:  P2/.IC Comput(P2,s2,i+1)
     = P2.IC Comput(P2,s2,i+1) by PBOOLE:158;
       CurInstr(P1,Cs1i1) = P1.loc by PBOOLE:158
@@ -1164,9 +1115,8 @@ A57:  I = halt SCM R by SCMRING3:16;
       IncAddr(CurInstr(P1,Comput(P1,s1,i+1)), k)
        = CurInstr(P2,Comput(P2,s2,i+1)) by A21;
 A58:  Cs2i1 = Cs2i by A12,A15,A57,EXTPRO_1:def 3;
-      hence Comput(P1,s1,i+1)|dom (DataPart p) = Comput(
-P2,s2,i+1)|dom (
-      DataPart (Relocated (p,k))) by A13,A41,A57,EXTPRO_1:def 3;
+      hence Comput(P1,s1,i+1)|dom (DataPart p)
+       = Comput(P2,s2,i+1)|dom DataPart p by A13,A41,A57,EXTPRO_1:def 3;
       thus thesis by A14,A56,A57,A58,EXTPRO_1:def 3;
     end;
     suppose
@@ -1209,9 +1159,8 @@ SCMRING2:13;
         end;
       end;
       then (Cs1i1|dom DPp) c= (Cs2i1|dom DPp) by A46,GRFUNC_1:8;
-      hence Comput(P1,s1,i+1)|dom (DataPart p) = Comput(
-P2,s2,i+1)|dom (
-      DataPart (Relocated (p,k))) by A44,A43,A45,GRFUNC_1:9;
+      hence Comput(P1,s1,i+1)|dom (DataPart p)
+       = Comput(P2,s2,i+1)|dom DataPart p by A44,A43,A45,GRFUNC_1:9;
       now
         let x be set;
         assume
@@ -1274,9 +1223,8 @@ SCMRING2:14;
         end;
       end;
       then (Cs1i1|dom DPp) c= (Cs2i1|dom DPp) by A46,GRFUNC_1:8;
-      hence Comput(P1,s1,i+1)|dom (DataPart p) = Comput(
-P2,s2,i+1)|dom (
-      DataPart (Relocated (p,k))) by A44,A43,A45,GRFUNC_1:9;
+      hence Comput(P1,s1,i+1)|dom (DataPart p)
+       = Comput(P2,s2,i+1)|dom DataPart p by A44,A43,A45,GRFUNC_1:9;
       now
         let x be set;
         assume
@@ -1339,9 +1287,8 @@ SCMRING2:15;
         end;
       end;
       then (Cs1i1|dom DPp) c= (Cs2i1|dom DPp) by A46,GRFUNC_1:8;
-      hence Comput(P1,s1,i+1)|dom (DataPart p) = Comput(
-P2,s2,i+1)|dom (
-      DataPart (Relocated (p,k))) by A44,A43,A45,GRFUNC_1:9;
+      hence Comput(P1,s1,i+1)|dom (DataPart p)
+       = Comput(P2,s2,i+1)|dom DataPart p by A44,A43,A45,GRFUNC_1:9;
       now
         let x be set;
         assume
@@ -1404,9 +1351,8 @@ SCMRING2:16;
         end;
       end;
       then (Cs1i1|dom DPp) c= (Cs2i1|dom DPp) by A46,GRFUNC_1:8;
-      hence Comput(P1,s1,i+1)|dom (DataPart p) = Comput(
-P2,s2,i+1)|dom (
-      DataPart (Relocated (p,k))) by A44,A43,A45,GRFUNC_1:9;
+      hence Comput(P1,s1,i+1)|dom (DataPart p)
+       = Comput(P2,s2,i+1)|dom DataPart p by A44,A43,A45,GRFUNC_1:9;
       now
         let x be set;
         assume
@@ -1466,9 +1412,8 @@ SCMRING2:19;
         end;
       end;
       then (Cs1i1|dom DPp) c= (Cs2i1|dom DPp) by A46,GRFUNC_1:8;
-      hence Comput(P1,s1,i+1)|dom (DataPart p) = Comput(
-P2,s2,i+1)|dom (
-      DataPart (Relocated (p,k))) by A44,A43,A45,GRFUNC_1:9;
+      hence Comput(P1,s1,i+1)|dom (DataPart p)
+       = Comput(P2,s2,i+1)|dom DataPart p by A44,A43,A45,GRFUNC_1:9;
       now
         let x be set;
         assume
@@ -1514,9 +1459,8 @@ A99:   x in dom (Cs1i1|dom DPp);
         hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x by A43,A48,A99;
       end;
       then (Cs1i1|dom DPp) c= (Cs2i1|dom DPp) by A46,GRFUNC_1:8;
-      hence Comput(P1,s1,i+1)|dom (DataPart p) = Comput(
-P2,s2,i+1)|dom (
-      DataPart (Relocated (p,k))) by A44,A43,A45,GRFUNC_1:9;
+      hence Comput(P1,s1,i+1)|dom (DataPart p)
+       = Comput(P2,s2,i+1)|dom DataPart p by A44,A43,A45,GRFUNC_1:9;
       now
         let x be set;
         assume
@@ -1595,9 +1539,8 @@ A106:   x in dom (Cs1i1|dom DPp);
         hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x by A43,A48,A106;
       end;
       then (Cs1i1|dom DPp) c= (Cs2i1|dom DPp) by A46,GRFUNC_1:8;
-      hence Comput(P1,s1,i+1)|dom (DataPart p) = Comput(
-P2,s2,i+1)|dom (
-      DataPart (Relocated (p,k))) by A44,A43,A45,GRFUNC_1:9;
+      hence Comput(P1,s1,i+1)|dom (DataPart p)
+       = Comput(P2,s2,i+1)|dom DataPart p by A44,A43,A45,GRFUNC_1:9;
       now
         let x be set;
         assume
@@ -1612,53 +1555,54 @@ GRFUNC_1:8;
       hence thesis by A29,A31,GRFUNC_1:9;
     end;
   end;
-A108: DataPart (Relocated(p,k)) c= Relocated(p,k) by RELAT_1:88;
-A109: DataPart p c= p by RELAT_1:88;
 A110: DataPart p = DataPart (Relocated (p,k)) by COMPOS_1:115;
+B127: DataPart NPP p c= NPP p by RELAT_1:88;
+  DataPart p = DataPart NPP p by COMPOS_1:73;
+    then
+X1: DataPart p c= s1 by A2,B127,XBOOLE_1:1;
+    DataPart Relocated (p,k) c= NPP Relocated (p,k) by COMPOS_1:169;
+    then
+X2: DataPart p c= s2 by A3,A110,XBOOLE_1:1;
 A111: Comput(P1,s1,0)|dom (DataPart p) = s1 | dom (DataPart p) by
 EXTPRO_1:3
-    .= DataPart p by A2,A109,GRFUNC_1:64,XBOOLE_1:1
-    .= s2 | dom (DataPart p) by A3,A110,A108,GRFUNC_1:64,XBOOLE_1:1
-    .= Comput(P2,s2,0)|dom (DataPart (Relocated (p,k))) by A110,
-EXTPRO_1:3;
-A112: DataPart Comput(P1,s,0) = DataPart(s1 +* DataPart s2) by
-EXTPRO_1:3
+    .= DataPart p by GRFUNC_1:64,X1
+    .= s2 | dom (DataPart p) by GRFUNC_1:64,X2
+    .= Comput(P2,s2,0)|dom DataPart p by EXTPRO_1:3;
+A112: DataPart Comput(P1,s,0) = DataPart(s1 +* DataPart s2) by EXTPRO_1:3
     .= DataPart s2 by PBOOLE:157
     .= DataPart Comput(P2,s2,0) by EXTPRO_1:3;
 A113: IC SCM R in dom Relocated(p,k) by COMPOS_1:119;
+   then
+B130: IC SCM R in dom NPP Relocated(p,k) by COMPOS_1:179;
 A114: IC Comput(P1,s1,0) + k = IC s1 + k by EXTPRO_1:3
-    .= IC p + k by A1,A2,GRFUNC_1:8
+      .= IC NPP p + k by A2,GRFUNC_1:8,B1
+    .= IC p + k by A1,COMPOS_1:72
     .= IC Relocated(p,k) by A1,COMPOS_1:120
-    .= IC s2 by A3,A113,GRFUNC_1:8
+      .= IC NPP Relocated(p,k) by A113,COMPOS_1:72
+    .= IC s2 by A3,GRFUNC_1:8,B130
     .= IC Comput(P2,s2,0) by EXTPRO_1:3;
-A115: IC SCM R in dom Relocated (p, k) by COMPOS_1:119;
-A116: (IC p) + k in dom Reloc(ProgramPart p,k) by A8,COMPOS_1:158;
-A117:  P2/.IC Relocated (p, k) = P2.IC Relocated (p, k)
- by PBOOLE:158;
+ IC SCM R in dom Relocated (p, k) by COMPOS_1:119;
+      then
+B134: IC SCM R in dom NPP Relocated (p, k) by COMPOS_1:179;
+A116: (IC NPP p) + k in dom Reloc(ProgramPart p,k) by A8,COMPOS_1:158;
+B117:  P2/.IC s2 = P2.IC s2 by PBOOLE:158;
  Comput(P2,s2,0) = s2 by EXTPRO_1:3;
  then
 A118: CurInstr(P2,Comput(P2,s2,0))
-     = P2.(IC Relocated (p, k)) by A3,A115,A117,GRFUNC_1:8
+     = P2.IC s2 by B117
+    .= P2.(IC NPP Relocated (p, k)) by A3,GRFUNC_1:8,B134
+     .= P2.(IC Relocated (p, k)) by GRFUNC_1:8,B134
     .= P2.((IC p) + k) by A1,COMPOS_1:120
-    .= (Reloc(ProgramPart p,k)).((IC p) + k) by A116,GRFUNC_1:8,A4;
-A119: (ProgramPart p).IC p
-:::     = P1.IC p by A8,GRFUNC_1:8,A4
+      .= P2.((IC NPP p) +k) by A1,COMPOS_1:72
+    .= (Reloc(ProgramPart p,k)).((IC NPP p) + k) by A116,GRFUNC_1:8,A4;
+A119: (ProgramPart p).IC NPP p
     = P1.IC s1 by A7,A8,GRFUNC_1:8,A4;
 A120:  IC Comput(P1,s1,0) + k = IC Comput(P2,s2,0)
       by A114;
-A121:  CurInstr(P1,s1)
-::: = P1.IC s1 by PBOOLE:158
-       = (ProgramPart p).IC p
-       by A119,PBOOLE:158;
-
+A121:  CurInstr(P1,s1) = (ProgramPart p).IC NPP p by A119,PBOOLE:158;
 A122: IncAddr(CurInstr(P1,Comput(P1,s1,0)), k)
       = IncAddr(CurInstr(P1,s1), k) by EXTPRO_1:3
-:::     .= (Reloc(ProgramPart p,k)).((IC p) + k)
-:::       by A8,COMPOS_1:122,A121
      .= CurInstr(P2,Comput(P2,s2,0)) by A118,A8,COMPOS_1:122,A121;
-A123: Comput(P1,s1,0)|dom (DataPart p) = Comput(P2,s2,0)|
-dom (DataPart (Relocated (p,k)))
-      by A111;
 A124: P[0 qua Element of NAT] by A120,A122,A111,A112;
   for n holds P[n] from NAT_1:sch 1(A124,A10);
   hence thesis;
@@ -1672,8 +1616,8 @@ registration let R be non trivial good Ring;
    proof
    thus
     for k being Element of NAT, p being autonomic FinPartState of
-SCM R , s1, s2 being State of SCM R st IC SCM R in dom p & p c= s1 &
-     Relocated (p,k) c= s2
+SCM R , s1, s2 being State of SCM R st IC SCM R in dom p &
+    NPP p c= s1 & NPP Relocated (p,k) c= s2
   for P1,P2 being (the Instructions of SCM R)-valued ManySortedSet of NAT
    st ProgramPart p c= P1 & Reloc(ProgramPart p,k) c= P2
 for i being Element of NAT
@@ -1683,12 +1627,12 @@ for i being Element of NAT
   let k be Element of NAT, p be autonomic FinPartState of SCM R,
       s1, s2 be State of SCM R;
   assume
-A1:  IC SCM R in dom p & p c= s1 & Relocated(p,k) c= s2;
+A1:  IC SCM R in dom p & NPP p c= s1 & NPP Relocated(p,k) c= s2;
   let P1,P2 be (the Instructions of SCM R)-valued ManySortedSet of NAT;
   assume ProgramPart p c= P1 & Reloc(ProgramPart p,k) c= P2;
   hence for i being Element of NAT holds
    Comput(P1,s1,i)|dom DataPart p =
-    Comput(P2,s2,i)|dom DataPart Relocated(p,k) by A1,Th14;
+    Comput(P2,s2,i)|dom DataPart p by A1,Th14;
   end;
 end;
 

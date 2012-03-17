@@ -1,0 +1,579 @@
+:: Cayley's Theorem
+::  by Artur Korni{\l}owicz
+:: 
+:: Received December 29, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies RELAT_1, XBOOLE_0, FUNCT_1, SUBSET_1, MSSUBFAM, FUNCT_2, CAYLEY,
+      ALGSTR_0, GROUP_1, BINOP_1, STRUCT_0, WELLORD1, GROUP_6, NAT_1, MATRIX_2,
+      FINSEQ_1, TARSKI, MONOID_0, FINSET_1, FUNCT_5, ZFMISC_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      FINSET_1, FUNCT_2, BINOP_1, NAT_1, FINSEQ_1, FUNCT_5, PARTIT_2, STRUCT_0,
+      ALGSTR_0, GROUP_1, GROUP_6, MONOID_0, TOPGRP_1, MATRIX_2;
+ constructors RELSET_1, GROUP_6, TOPGRP_1, BINOP_1, MATRIX_2, MONOID_0,
+      WELLORD2, PARTIT_2, FUNCT_5;
+ registrations XBOOLE_0, FUNCT_1, PARTFUN1, GROUP_2, STRUCT_0, TOPGRP_1,
+      FUNCT_2, MATRIX_2, RELSET_1, MONOID_0, FINSET_1, FRAENKEL, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, XBOOLE_0, FUNCT_1, FUNCT_2, FUNCT_5, STRUCT_0, ALGSTR_0,
+      MONOID_0, GROUP_1, GROUP_6;
+ theorems FUNCT_2, TOPGRP_1, FUNCT_1, GROUP_1, RELAT_1, BINOP_1, GROUP_6,
+      MATRIX_2, WELLORD2, CARD_1, TARSKI, FUNCOP_1;
+ schemes FUNCT_2, BINOP_1;
+
+begin
+
+reserve X,Y for set;
+reserve G for Group;
+reserve n for Nat;
+
+registration
+  let X;
+  cluster {}(X,{}) -> onto;
+  coherence
+  proof
+    thus rng {}(X,{}) = {};
+  end;
+end;
+
+registration
+  cluster permutational -> functional set;
+  coherence
+  proof
+    let X;
+    assume X is permutational;
+    then
+A1: ex n st for x being set st x in X holds x is Permutation of Seg n
+    by MATRIX_2:def 9;
+    let x be set;
+    thus thesis by A1;
+  end;
+end;
+
+definition
+  let X;
+  func permutations(X) equals
+  {f where f is Permutation of X: not contradiction};
+  coherence;
+end;
+
+theorem Th1:
+  for f being set st f in permutations(X) holds f is Permutation of X
+  proof
+    let f be set;
+    assume f in permutations(X);
+    then ex g being Permutation of X st g = f;
+    hence thesis;
+  end;
+
+theorem Th2:
+  permutations(X) c= Funcs(X,X)
+  proof
+    let x be set;
+    assume x in permutations(X);
+    then x is Permutation of X by Th1;
+    hence thesis by FUNCT_2:12;
+  end;
+
+theorem Th3:
+  permutations(Seg n) = Permutations(n)
+  proof
+    thus permutations(Seg n) c= Permutations(n)
+    proof
+      let x be set;
+      assume x in permutations(Seg n);
+      then x is Permutation of Seg n by Th1;
+      hence thesis by MATRIX_2:def 11;
+    end;
+    let x be set;
+    assume x in Permutations(n);
+    then x is Permutation of Seg n by MATRIX_2:def 11;
+    hence thesis;
+  end;
+
+registration
+  let X;
+  cluster permutations(X) -> non empty functional;
+  coherence
+  proof
+    the Permutation of X in permutations(X);
+    hence permutations(X) is non empty;
+    let x be set;
+    thus thesis by Th1;
+  end;
+end;
+
+registration
+  let X be finite set;
+  cluster permutations(X) -> finite;
+  coherence
+  proof
+    permutations(X) c= Funcs(X,X) by Th2;
+    hence thesis;
+  end;
+end;
+
+theorem Th4:
+  permutations {} = 1
+  proof
+    set P = permutations {};
+    thus P c= 1
+    proof
+      let x be set;
+      assume x in P;
+      then x is Permutation of {} by Th1;
+      hence thesis by CARD_1:87,TARSKI:def 1;
+    end;
+    let x be set;
+    assume x in 1;
+    then x = {}({},{}) by CARD_1:87,TARSKI:def 1;
+    hence thesis;
+  end;
+
+definition
+  let X;
+  set c = permutations(X);
+  func SymGroup(X) -> strict constituted-Functions multMagma means
+  :Def2:
+  the carrier of it = permutations(X) &
+  for x,y being Element of it holds x * y = y qua Function * x;
+  existence
+  proof
+    defpred P[Element of c,Element of c,set] means $3 = $2 * $1;
+A1: for x,y being Element of c ex z being Element of c st P[x,y,z]
+    proof
+      let x,y be Element of c;
+      reconsider f = x, g = y as Permutation of X by Th1;
+      g*f in c;
+      hence thesis;
+    end;
+    consider F being BinOp of c such that
+A2: for x,y being Element of c holds P[x,y,F.(x,y)] from BINOP_1:sch 3(A1);
+    set S = multMagma(#c,F#);
+    S is constituted-Functions
+    proof
+      let x be Element of S;
+      thus thesis;
+    end;
+    then reconsider S as strict constituted-Functions multMagma;
+    take S;
+    thus the carrier of S = c;
+    let x,y be Element of S;
+    thus thesis by A2;
+  end;
+  uniqueness
+  proof
+    let A,B be strict constituted-Functions multMagma such that
+A3: the carrier of A = permutations(X) and
+A4: for x,y being Element of A holds x * y = y qua Function * x and
+A5: the carrier of B = permutations(X) and
+A6: for x,y being Element of B holds x * y = y qua Function * x;
+    now
+      let x,y be Element of A;
+      reconsider f = x, g = y as Element of B by A3,A5;
+      thus (the multF of A).(x,y) = x*y
+      .= y qua Function * x by A4
+      .= f*g by A6
+      .= (the multF of B).(x,y);
+    end;
+    hence thesis by A3,A5,BINOP_1:2;
+  end;
+end;
+
+theorem Th5:
+  for f being Element of SymGroup(X) holds f is Permutation of X
+  proof
+    let f be Element of SymGroup(X);
+    the carrier of SymGroup(X) = permutations(X) by Def2;
+    hence thesis by Th1;
+  end;
+
+registration
+  let X;
+  cluster SymGroup(X) -> non empty associative Group-like;
+  coherence
+  proof
+    the carrier of SymGroup(X) = permutations(X) by Def2;
+    hence the carrier of SymGroup(X) is non empty;
+    thus SymGroup(X) is associative
+    proof
+      let x,y,z be Element of SymGroup(X);
+      thus x*y*z = z qua Function*(x*y) by Def2
+      .= z qua Function*(y qua Function*x) by Def2
+      .= z qua Function*y qua Function*x by RELAT_1:55
+      .= (y*z)qua Function*x by Def2
+      .= x*(y*z) by Def2;
+    end;
+    set e = id X;
+    e in permutations(X);
+    then reconsider e as Element of SymGroup(X) by Def2;
+    take e;
+    let h be Element of SymGroup(X);
+    reconsider h1 = h as Permutation of X by Th5;
+    thus h * e = e * h1 by Def2
+    .= h by FUNCT_2:23;
+    thus e * h = h1 * e by Def2
+    .= h by FUNCT_2:23;
+    h1" in permutations(X);
+    then reconsider g = h1" as Element of SymGroup(X) by Def2;
+    take g;
+    thus h * g = g qua Function * h by Def2
+    .= e by FUNCT_2:88;
+    thus g * h = h qua Function * g by Def2
+    .= e by FUNCT_2:88;
+  end;
+end;
+
+theorem Th6:
+  1_SymGroup(X) = id X
+  proof
+    set e = id X;
+    e in permutations(X);
+    then reconsider e as Element of SymGroup(X) by Def2;
+    now
+      let h be Element of SymGroup(X);
+      reconsider h1 = h as Permutation of X by Th5;
+      thus h * e = e * h1 by Def2
+      .= h by FUNCT_2:23;
+      thus e * h = h1 * e by Def2
+      .= h by FUNCT_2:23;
+    end;
+    hence thesis by GROUP_1:10;
+  end;
+
+theorem
+  for x being Element of SymGroup(X) holds x" = x qua Function"
+  proof
+    let x be Element of SymGroup(X);
+    reconsider f = x as Permutation of X by Th5;
+    f" in permutations(X);
+    then reconsider g = f" as Element of SymGroup(X) by Def2;
+A1: 1_SymGroup(X) = id X by Th6;
+    x * g = g qua Function * x by Def2;
+    then
+A2: x*g = id X by FUNCT_2:88;
+    g * x = x qua Function * g by Def2;
+    then g*x = id X by FUNCT_2:88;
+    hence thesis by A2,A1,GROUP_1:def 6;
+  end;
+
+registration
+  let n;
+  cluster Group_of_Perm(n) -> constituted-Functions;
+  coherence
+  proof
+    let x be set;
+    the carrier of Group_of_Perm(n) = Permutations(n) by MATRIX_2:def 13;
+    hence thesis;
+  end;
+end;
+
+theorem
+  SymGroup(Seg n) = Group_of_Perm(n)
+  proof
+A1: the carrier of SymGroup(Seg n) = permutations(Seg n) by Def2;
+A2: permutations(Seg n) = Permutations(n) by Th3
+    .= the carrier of Group_of_Perm(n) by MATRIX_2:def 13;
+    now
+      let a,b be Element of SymGroup(Seg n);
+A3:   a * b = b qua Function * a by Def2;
+      a is Permutation of Seg n & b is Permutation of Seg n by Th5;
+      then a in Permutations(n) & b in Permutations(n) by MATRIX_2:def 11;
+      hence (the multF of SymGroup(Seg n)).(a,b) =
+      (the multF of Group_of_Perm(n)).(a,b) by A3,MATRIX_2:def 13;
+    end;
+    hence thesis by A1,A2,BINOP_1:2;
+  end;
+
+registration
+  let X be finite set;
+  cluster SymGroup(X) -> finite;
+  coherence
+  proof
+    the carrier of SymGroup(X) = permutations(X) by Def2;
+    hence the carrier of SymGroup(X) is finite;
+  end;
+end;
+
+theorem Th9:
+  SymGroup({}) = Trivial-multMagma
+  proof
+    set G = SymGroup({});
+A1: the carrier of G = permutations {} by Def2;
+    now
+      let x,y be Element of 1;
+      reconsider f = x, g = y as Element of G by Th4,Def2;
+      thus (the multF of G).(x,y) = f * g
+      .= {} by A1,Th4,CARD_1:87,TARSKI:def 1
+      .= op2.(x,y) by CARD_1:87,FUNCOP_1:92;
+    end;
+    hence thesis by A1,Th4,BINOP_1:2;
+  end;
+
+registration
+  cluster SymGroup {} -> trivial;
+  coherence by Th9,CARD_1:87;
+end;
+
+definition
+  let X,Y;
+  let p be Function of X,Y such that
+A1: X <> {} & Y <> {} and
+A2: p is bijective;
+  set G = SymGroup(X), H = SymGroup(Y);
+  func SymGroupsIso(p) -> Function of SymGroup(X),SymGroup(Y) means
+:Def3:
+  for x being Element of SymGroup(X) holds it.x = p*x*(p");
+  existence
+  proof
+A3: dom p = X by A1,FUNCT_2:def 1;
+A4: rng p = Y by A2,FUNCT_2:def 3;
+    reconsider p1 = p" as Function of Y,X by A2,A4,FUNCT_2:31;
+A5: rng p1 = X by A2,A3,FUNCT_1:55;
+    defpred P[Function,set] means $2 = p*$1*p1;
+A6: for x being Element of G ex y being Element of H st P[x,y]
+    proof
+      let x be Element of G;
+      reconsider f = x as Permutation of X by Th5;
+      set y = p*f*p1;
+      rng f = X by FUNCT_2:def 3;
+      then rng (p*f) = Y by A4,A1,FUNCT_2:20;
+      then rng y = Y by A1,A5,FUNCT_2:20;
+      then y is Permutation of Y by A2,A1,FUNCT_2:83;
+      then y in permutations(Y);
+      then reconsider y as Element of H by Def2;
+      take y;
+      thus P[x,y];
+    end;
+    ex h being Function of G,H st
+    for x being Element of G holds P[x,h.x] from FUNCT_2:sch 3(A6);
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let f,g be Function of G,H such that
+A7: for x being Element of G holds f.x = p*x*(p") and
+A8: for x being Element of G holds g.x = p*x*(p");
+    let x be Element of G;
+    thus f.x = p*x*(p") by A7
+    .= g.x by A8;
+  end;
+end;
+
+theorem Th10:
+  for X,Y being non empty set
+  for p being Function of X,Y st p is bijective holds
+  SymGroupsIso(p) is multiplicative
+  proof
+    let X,Y be non empty set;
+    let p be Function of X,Y such that
+A1: p is bijective;
+    set h = SymGroupsIso(p);
+A2: rng p = Y by A1,FUNCT_2:def 3;
+    let x,y be Element of SymGroup(X);
+    reconsider p1 = p" as Function of Y,X by A1,A2,FUNCT_2:31;
+A3: id X = p1*p by A2,A1,FUNCT_2:35;
+A4: h.x = p*x*p1 & h.y = p*y*p1 by A1,Def3;
+    reconsider f = x, g = y as Permutation of X by Th5;
+    thus h.(x*y) = p*(x*y)*p1 by A1,Def3
+    .= p*(g*f)*p1 by Def2
+    .= p*(g*(id X)*f)*p1 by FUNCT_2:23
+    .= p*(g*p1*p*f)*p1 by A3,RELAT_1:55
+    .= p*(g*p1*(p*f))*p1 by RELAT_1:55
+    .= p*(g*p1)*(p*f)*p1 by RELAT_1:55
+    .= p*(g*p1)*(p*f*p1) by RELAT_1:55
+    .= p*g*p1*(p*f*p1) by RELAT_1:55
+    .= h.x * h.y by A4,Def2;
+  end;
+
+theorem Th11:
+  for X,Y being non empty set
+  for p being Function of X,Y st p is bijective holds
+  SymGroupsIso(p) is one-to-one
+  proof
+    let X,Y be non empty set;
+    let p be Function of X,Y such that
+A1: p is bijective;
+    set h = SymGroupsIso(p);
+A2: rng p = Y by A1,FUNCT_2:def 3;
+    reconsider p1 = p" as Function of Y,X by A1,A2,FUNCT_2:31;
+A3: id X = p1*p by A1,A2,FUNCT_2:35;
+    let x,y be set such that
+A4: x in dom h & y in dom h and
+A5: h.x = h.y;
+    reconsider x, y as Element of SymGroup(X) by A4;
+    reconsider f = x, g = y as Permutation of X by Th5;
+    h.x = p*f*p1 & h.y = p*g*p1 by A1,Def3;
+    then p*f*(p1*p) = p*g*p1*p by A5,RELAT_1:55;
+    then p*f*(p1*p) = p*g*(p1*p) by RELAT_1:55;
+    then p*f = p*g*id X by A3,FUNCT_2:23;
+    then p1*(p*f) = p1*(p*g) by FUNCT_2:23;
+    then p1*p*f = p1*(p*g) by RELAT_1:55;
+    then p1*p*f = p1*p*g by RELAT_1:55;
+    then f = id X*g by A3,FUNCT_2:23;
+    hence thesis by FUNCT_2:23;
+  end;
+
+theorem Th12:
+  for X,Y being non empty set
+  for p being Function of X,Y st p is bijective holds
+  SymGroupsIso(p) is onto
+  proof
+    let X,Y be non empty set;
+    let p be Function of X,Y such that
+A1: p is bijective;
+    set G = SymGroup(X), H = SymGroup(Y);
+    set h = SymGroupsIso(p);
+A2: dom p = X by FUNCT_2:def 1;
+    thus rng h c= the carrier of H;
+    let y be set;
+    assume y in the carrier of H;
+    then reconsider y as Element of H;
+    reconsider g = y as Permutation of Y by Th5;
+A3: rng p = Y by A1,FUNCT_2:def 3;
+    then reconsider p1 = p" as Function of Y,X by A1,FUNCT_2:31;
+A4: id Y = p*p1 by A1,A3,FUNCT_2:35;
+A5: dom h = the carrier of G by FUNCT_2:def 1;
+    set x = p1*g*p;
+A6: rng p1 = X by A1,A2,FUNCT_1:55;
+    rng g = Y by FUNCT_2:def 3;
+    then rng (p1*g) = X by A6,FUNCT_2:20;
+    then rng x = X by A3,FUNCT_2:20;
+    then x is Permutation of X by A1,FUNCT_2:83;
+    then x in permutations X;
+    then reconsider x as Element of G by Def2;
+    h.x = p*x*p1 by A1,Def3
+    .= p*(p1*g)*p*p1 by RELAT_1:55
+    .= p*(p1*g)*(p*p1) by RELAT_1:55
+    .= (id Y)*g*(id Y) by A4,RELAT_1:55
+    .= g*(id Y) by FUNCT_2:23
+    .= y by FUNCT_2:23;
+    hence thesis by A5,FUNCT_1:def 5;
+  end;
+
+theorem
+  X,Y are_equipotent implies SymGroup(X),SymGroup(Y) are_isomorphic
+  proof
+    assume
+A1: X,Y are_equipotent;
+    then consider p being Function such that
+A2: p is one-to-one and
+A3: dom p = X and
+A4: rng p = Y by WELLORD2:def 4;
+    per cases;
+    suppose X = {};
+      hence thesis by A1,CARD_1:46;
+    end;
+    suppose
+A5:   X <> {};
+      then
+A6:   Y <> {} by A1,CARD_1:46;
+      reconsider p as Function of X,Y by A3,A4,FUNCT_2:4;
+A7:   p is onto by A4,FUNCT_2:def 3;
+      then reconsider h = SymGroupsIso(p) as
+      Homomorphism of SymGroup(X),SymGroup(Y) by A2,A5,A6,Th10;
+      take h;
+      thus h is one-to-one onto by A2,A5,A6,A7,Th11,Th12;
+    end;
+  end;
+
+definition
+  let G;
+  func CayleyIso(G) -> Function of G,SymGroup(the carrier of G) means
+:Def4:
+  for g being Element of G holds it.g = *g;
+  existence
+  proof
+    set c = the carrier of G;
+    defpred P[Element of G,set] means $2 = *$1;
+A1: for x being Element of G ex y being Element of SymGroup(c) st P[x,y]
+    proof
+      let x be Element of G;
+      set y = *x;
+      y in permutations(c);
+      then reconsider y as Element of SymGroup(c) by Def2;
+      take y;
+      thus thesis;
+    end;
+    ex f being Function of G,SymGroup(c) st
+    for x being Element of G holds P[x,f.x] from FUNCT_2:sch 3(A1);
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let a,b be Function of G,SymGroup(the carrier of G) such that
+A2: for g being Element of G holds a.g = *g and
+A3: for g being Element of G holds b.g = *g;
+    let x be Element of G;
+    thus a.x = *x by A2
+    .= b.x by A3;
+  end;
+end;
+
+registration
+  let G;
+  cluster CayleyIso(G) -> multiplicative;
+  coherence
+  proof
+    set c = the carrier of G;
+    set f = CayleyIso(G);
+    let g1,g2 be Element of G;
+A1: f.(g1*g2) is Permutation of c by Th5;
+    then
+A2: dom(f.(g1*g2)) = c by FUNCT_2:def 1;
+    f.g1*f.g2 is Permutation of c by Th5;
+    then
+A3: dom(f.g1*f.g2) = c by FUNCT_2:def 1;
+    now
+      let y be set;
+      assume y in dom(f.(g1*g2));
+      then reconsider x = y as Element of G by A1,FUNCT_2:def 1;
+      thus f.(g1*g2).y = (*(g1*g2)).x by Def4
+      .= x*(g1*g2) by TOPGRP_1:def 2
+      .= x*g1*g2 by GROUP_1:def 4
+      .= (*g2).(x*g1) by TOPGRP_1:def 2
+      .= (*g2).((*g1).x) by TOPGRP_1:def 2
+      .= ((*g2) * (*g1)).x by FUNCT_2:21
+      .= ((f.g2) * (*g1)).x by Def4
+      .= (f.g2 qua Function* f.g1).y by Def4
+      .= (f.g1 * f.g2).y by Def2;
+    end;
+    hence thesis by A2,A3,FUNCT_1:9;
+  end;
+end;
+
+registration
+  let G;
+  cluster CayleyIso(G) -> one-to-one;
+  coherence
+  proof
+    set f = CayleyIso(G);
+    let g1,g2 be set such that
+A1: g1 in dom f & g2 in dom f and
+A2: f.g1 = f.g2 and
+A3: g1 <> g2;
+    reconsider g1,g2 as Element of G by A1;
+A4: f.g1 = *g1 & f.g2 = *g2 by Def4;
+A5: dom(*g1) = the carrier of G by FUNCT_2:def 1;
+A6: g1" <> g2" by A3,GROUP_1:17;
+A7: (*g1).(g1") = g1"*g1 by TOPGRP_1:def 2
+    .= 1_G by GROUP_1:def 6;
+    (*g2).(g2") = g2"*g2 by TOPGRP_1:def 2
+    .= 1_G by GROUP_1:def 6;
+    hence thesis by A2,A4,A5,A6,A7,FUNCT_1:def 8;
+  end;
+end;
+
+::$N Cayley Theorem
+theorem
+  G, Image CayleyIso(G) are_isomorphic by GROUP_6:79;

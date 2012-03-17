@@ -33,10 +33,31 @@
 <ArticleID name="EXTPRO_1"/>
 <ArticleID name="AMI_3"/>
 <ArticleID name="AMISTD_2"/>
-<ArticleID name="AMI_1"/>
 <ArticleID name="AMISTD_5"/>
 </Signature>
 <FCluster aid="RELOC" nr="1">
+<ArgTypes>
+<Typ kind="M" nr="12">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="12">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="299">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="80">
+<Func kind="K" nr="1">
+<Func kind="K" nr="66"/>
+</Func>
+<Func kind="K" nr="297"/>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster aid="RELOC" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="12">
 <Cluster/>
@@ -54,11 +75,11 @@
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="RELOC" nr="2">
+<FCluster aid="RELOC" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="12">
 <Cluster/>
@@ -76,11 +97,11 @@
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="RELOC" nr="3">
+<FCluster aid="RELOC" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="12">
 <Cluster/>
@@ -98,11 +119,11 @@
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="RELOC" nr="4">
+<FCluster aid="RELOC" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="12">
 <Cluster/>
@@ -120,42 +141,20 @@
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
-<Func kind="K" nr="298"/>
-</Adjective>
-</Cluster>
-</FCluster>
-<FCluster aid="RELOC" nr="5">
-<ArgTypes>
-<Typ kind="M" nr="12">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="12">
-<Cluster/>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="304">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="80">
-<Func kind="K" nr="1">
-<Func kind="K" nr="66"/>
-</Func>
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 </Adjective>
 </Cluster>
 </FCluster>
 <FCluster aid="RELOC" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 <Cluster>
 <Adjective nr="82">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
 </Adjective>
-<Adjective nr="95">
+<Adjective nr="94">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
@@ -164,19 +163,19 @@
 </FCluster>
 <FCluster aid="RELOC" nr="7">
 <ArgTypes/>
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 <Cluster>
 <Adjective nr="82">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
 </Adjective>
-<Adjective nr="98">
+<Adjective nr="97">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
 </Adjective>
-<Adjective nr="99">
+<Adjective nr="98">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>

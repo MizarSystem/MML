@@ -1,0 +1,3618 @@
+:: Preliminaries to Classical First-order Model Theory
+::  by Marco B. Caminati
+:: 
+:: Received December 29, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, INT_1,
+      RELAT_1, FINSEQ_1, FUNCT_1, ARYTM_3, XCMPLX_0, CARD_1, MONOID_0,
+      ORDINAL1, ARYTM_1, FUNCT_2, XXREAL_0, XREAL_0, ALGSTR_0, ORDINAL4,
+      BINOP_1, FUNCT_7, FUNCT_4, FUNCOP_1, FINSEQ_2, MCART_1, PARTFUN1,
+      FUNCT_3, MARGREL1, RELAT_2, PRE_POLY, XBOOLEAN, MATROID0, FINSET_1,
+      COMPLEX1, SETFAM_1, CARD_3, FOMODEL0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NAT_1, ZFMISC_1, NUMBERS, INT_1,
+      XCMPLX_0, RELAT_1, FUNCT_1, PARTFUN1, RELSET_1, FUNCT_2, FUNCT_4,
+      PRE_POLY, FINSEQ_1, MONOID_0, STRUCT_0, ORDINAL1, XXREAL_0, XREAL_0,
+      BINOP_1, FUNCT_7, FUNCOP_1, FINSEQ_2, MCART_1, FINSEQOP, ALGSTR_0,
+      FUNCT_3, MARGREL1, RELAT_2, SETFAM_1, DOMAIN_1, MATROID0, FINSET_1,
+      COMPLEX1, CARD_1, CARD_3;
+ constructors MONOID_0, BINOP_1, FUNCT_7, FUNCT_4, RELSET_1, FINSEQOP,
+      DOMAIN_1, SETWISEO, REAL_1, SETFAM_1, LEXBFS, MATROID0, COMPLEX1;
+ registrations SUBSET_1, ORDINAL1, XCMPLX_0, NAT_1, RELAT_1, NUMBERS, FUNCT_1,
+      INT_1, FINSEQ_1, MONOID_0, FUNCT_2, FUNCT_4, FINSEQ_2, RELSET_1,
+      FUNCOP_1, ZFMISC_1, BINOP_1, XBOOLE_0, XXREAL_0, XREAL_0, EUCLID_9,
+      FINSEQ_6, PRE_POLY, PRALG_1, CARD_1, PARTFUN1, LEXBFS, SIMPLEX0,
+      FINSET_1, SETFAM_1, REALSET1, CARD_3;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions FINSEQ_1, BINOP_1, RELAT_1, MARGREL1, FUNCT_4, FUNCOP_1, XBOOLE_0,
+      XBOOLEAN;
+ theorems TARSKI, XBOOLE_0, INT_1, ZFMISC_1, NUMBERS, FUNCT_1, FINSEQ_1,
+      RELAT_1, XBOOLE_1, FUNCT_2, FUNCT_4, FUNCOP_1, MONOID_0, XXREAL_0, NAT_1,
+      ORDINAL1, MCART_1, FINSEQ_5, FINSEQ_2, FINSEQ_3, PARTFUN1, XREAL_1,
+      BINOP_1, RELSET_1, ALGSTR_0, FUNCT_5, FUNCT_3, FUNCT_7, ARYTM_3, RELAT_2,
+      LANG1, XCMPLX_0, FRAENKEL, CIRCCOMB, GRFUNC_1, SYSREL, PRE_POLY,
+      FINSEQOP, XBOOLEAN, FINSEQ_6, MATROID0, COMPLEX1, SETFAM_1, CARD_4,
+      CARD_1, COMPUT_1;
+ schemes NAT_1, FUNCT_2, CLASSES1, FRAENKEL;
+
+begin
+
+reserve U, D for non empty set,
+        X for non empty Subset of D,
+        d,d1,d2 for Element of D,
+        A,B,C,Y,x,y,z for set,
+        f for BinOp of D, i,m,n for Nat;
+reserve g for Function;
+
+::###################  Preliminary Definitions  #########################
+::#######################################################################
+
+definition let X be set; let f be Function;
+  attr f is X-one-to-one means :DefInj1: f|X is one-to-one;
+end;
+
+definition let D,f; let X be set;
+  attr X is f-unambiguous means :DefUnambiguous1: f is [:X,D:]-one-to-one;
+end;
+
+definition ::def3 1
+let D;
+let X be set;
+attr X is D-prefix means :DefPrefix: X is (D-concatenation)-unambiguous;
+end;
+
+definition
+let D be set;
+func D-pr1 -> BinOp of D equals pr1(D,D);
+::# where pr1(,) is defined in FUNCT_3
+coherence;
+end;
+
+::###################  Preliminary Definitions  #########################
+::##############################  END  ##################################
+
+::#####################  Preliminary lemmas  #############################
+::########################################################################
+
+Lm45: g is Y-valued & g is FinSequence-like implies g is FinSequence of Y
+proof
+set f=g, X=Y; assume B0: f is X-valued & f is FinSequence-like; then
+reconsider p=f as FinSequence; rng p c= X by B0, RELAT_1:def 19;
+hence thesis by FINSEQ_1:def 4;
+end;
+
+Lm28: Y c= Funcs(A,B) implies union Y c= [:A,B:]
+proof
+set AB=[:A,B:], F=Funcs(A,B), X=Y; assume X c= F; then
+X c= F & F c= bool AB by FRAENKEL:5; then reconsider
+XX=X as Subset of bool AB by XBOOLE_1:1; union XX is Subset of AB;
+hence thesis;
+end;
+
+LmOneOne: for X being set, f being Function holds (
+f is X-one-to-one iff
+(for x,y being set st x in dom f/\X & y in dom f/\X & f.x=f.y holds x=y))
+proof
+let X be set, f be Function;
+set g=f|X;
+thus f is X-one-to-one implies
+(for x,y being set st x in dom f/\X & y in dom f/\X & f.x=f.y holds x=y)
+proof
+assume f is X-one-to-one; then B1: g is one-to-one by DefInj1;
+let x,y be set;
+assume x in dom f/\X; then
+C3: x in dom g by RELAT_1:90;
+assume y in dom f/\X;
+then C4: y in dom g by RELAT_1:90;
+assume f.x=f.y; then g.x=f.x & g.y=f.y & f.x=f.y by C3, C4, FUNCT_1:70;
+hence x=y by B1, FUNCT_1:def 8,C3,C4;
+end;
+assume A1:
+(for x,y being set st x in dom f/\X & y in dom f/\X & f.x=f.y holds x=y);
+now
+let x,y be set;
+assume B1: x in dom g & y in dom g & g.x=g.y;
+then g.x=f.x & g.y=f.y & g.x=g.y by FUNCT_1:70;
+then x in dom f/\X & y in dom f /\ X & f.x=f.y by B1, RELAT_1:90;
+hence x=y by A1;
+end;
+then g is one-to-one by FUNCT_1:def 8; hence thesis by DefInj1;
+end;
+
+Lm12: A c= B & f is B-one-to-one implies f is A-one-to-one
+proof
+assume A c= B & f is B-one-to-one; then
+f|B is one-to-one & f|A = (f|B)|A by FUNCT_1:82, DefInj1; then
+(f|B)|A is one-to-one & f|A=(f|B)|A by FUNCT_1:84;
+hence thesis by DefInj1;
+end;
+
+Lm18: m-tuples_on A meets n-tuples_on B implies m=n
+proof
+assume m-tuples_on A meets (n-tuples_on B);
+then m-tuples_on A /\ (n-tuples_on B) is non empty by XBOOLE_0:def 7; then
+consider p being set such that
+B1: p in m-tuples_on A/\ (n-tuples_on B) by XBOOLE_0:def 1;
+B2: p in m-tuples_on A & p in n-tuples_on B by XBOOLE_0:def 4, B1;
+reconsider pA=p as m-element FinSequence by FINSEQ_2:161,B2;
+reconsider pB=p as n-element FinSequence by FINSEQ_2:161,B2;
+m = len pA by CARD_1:def 13 .= len pB .= n by CARD_1:def 13;
+hence thesis;
+end;
+
+Lm21: for i being Nat, Y being set holds i-tuples_on Y = Funcs(Seg i,Y)
+proof ::: FINSEQ_2:111
+let i be Nat,Y be set;
+per cases;
+suppose B1: Y is empty;
+  per cases;
+  suppose i is zero; then i is zero & Seg i={}; then
+  Funcs(Seg i,Y)={{}} & i-tuples_on Y={{}} by FUNCT_5:64,COMPUT_1:8;
+  hence thesis;end;
+  suppose i is non zero; then
+  Funcs(Seg i,Y)={} & i-tuples_on Y={} by FINSEQ_3:128,B1;hence thesis;end;
+end;
+suppose Y is non empty; then reconsider YY=Y as non empty set;
+i-tuples_on YY=Funcs(Seg i,YY) by FINSEQ_2:111; hence thesis;
+end;
+end;
+
+Lm11: m-tuples_on A /\ (B*) c= m-tuples_on B
+proof
+reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+set L=m-tuples_on A /\ (B*), R=m-tuples_on B;
+now
+let x be set; assume x in L; then
+Z1: x in m-tuples_on A & x in B* by XBOOLE_0:def 4; then B1: x is m-element
+FinSequence & x is FinSequence of B by FINSEQ_2:161, FINSEQ_1:def 11;
+reconsider xx=x as FinSequence of B by Z1, FINSEQ_1:def 11;
+len xx=m by B1, CARD_1:def 13;
+then xx=xx & dom xx=Seg m & rng xx c= B by FINSEQ_1:def 3; then
+xx in Funcs (Seg m, B) by FUNCT_2:def 2; hence x in R by Lm21;
+end;
+hence thesis by TARSKI:def 3;
+end;
+
+theorem Lm22: m-tuples_on A /\ (B*) = m-tuples_on A /\ (m-tuples_on B)
+proof
+reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+set L=m-tuples_on A /\ (B*), R=m-tuples_on A /\ m-tuples_on B;
+m-tuples_on A /\ L c= R by XBOOLE_1:26, Lm11; then
+A2: (m-tuples_on A /\ m-tuples_on A) /\ (B*) c= R by XBOOLE_1:16;
+now
+let x be set; assume C1: x in m-tuples_on B; then
+reconsider xx=x as m-element FinSequence by FINSEQ_2:161;
+xx in mm-tuples_on B by C1;then len xx=mm & rng xx c= B by FINSEQ_2:152;then
+x is FinSequence of B by FINSEQ_1:def 4;hence x in B* by FINSEQ_1:def 11;
+end;
+then m-tuples_on B c= B* by TARSKI:def 3; then R c= L by XBOOLE_1:26;
+hence thesis by XBOOLE_0:def 10, A2;
+end;
+
+Lm20: Funcs(A,B) /\ Funcs(A,C) = Funcs(A,B/\C)
+proof
+set L=Funcs(A,B) /\ Funcs(A,C), R= Funcs(A,B/\C);
+now
+let f be set; assume f in L; then C0: f in Funcs(A,B) & f in Funcs(A,C) by
+XBOOLE_0:def 4;
+consider f1 being Function such that
+C1: f1=f & dom f1=A & rng f1 c= B by FUNCT_2:def 2,C0;
+consider f2 being Function such that
+C2: f2=f & dom f2=A & rng f2 c= C by FUNCT_2:def 2,C0;
+f1=f & dom f1=A & rng f1 c= B/\C by XBOOLE_1:19, C1, C2;
+hence f in Funcs(A,B/\C) by FUNCT_2:def 2;
+end;
+then A1: L c= R by TARSKI:def 3;
+R c= Funcs(A,B) & R c= Funcs(A,C) by XBOOLE_1:17, FUNCT_5:63; then
+R c= L by XBOOLE_1:19; hence thesis by A1, XBOOLE_0:def 10;
+end;
+
+theorem Lm23: m-tuples_on A /\ (B*) = m-tuples_on (A/\B)
+proof
+m-tuples_on (A/\B)= Funcs(Seg m, A/\B) by Lm21 .=
+Funcs(Seg m,A) /\ Funcs(Seg m,B) by Lm20 .=
+m-tuples_on A /\ Funcs(Seg m,B) by Lm21 .= m-tuples_on A /\ m-tuples_on B
+by Lm21 .= m-tuples_on A/\(B*) by Lm22; hence thesis;
+end;
+
+theorem Lm24: m-tuples_on (A/\B)=m-tuples_on A /\ (m-tuples_on B)
+proof
+m-tuples_on (A/\B) = m-tuples_on A /\ (B*) by Lm23 .=
+m-tuples_on A /\ (m-tuples_on B) by Lm22; hence thesis;
+end;
+
+ThConcatenation:
+for x,y being FinSequence of D holds (D-concatenation).(x,y) = x^y
+proof
+let x,y be FinSequence of D;
+reconsider x2=x, y2=y as Element of D* by FINSEQ_1:def 11;
+reconsider x1=x2, y1=y2 as Element of D*+^ by MONOID_0:def 34;
+B1: D-concatenation = the multF of D*+^ by MONOID_0:def 36;
+x1^y1 = x1 * y1 by MONOID_0:def 34
+.= (D-concatenation).(x1,y1) by B1, ALGSTR_0:def 18;
+hence thesis;
+end;
+
+theorem Th4: for x,y being FinSequence st x is U-valued & y is U-valued
+holds (U-concatenation).(x,y)=x^y
+proof
+let x,y be FinSequence; set f=U-concatenation; assume x is U-valued &
+y is U-valued; then reconsider xx=x, yy=y as FinSequence of U by Lm45;
+f.(xx,yy)=xx^yy by ThConcatenation; hence thesis;
+end;
+
+theorem Lm2: for x being set holds ::th5 1, to be replaced by Th30
+(x is non empty FinSequence of D iff x in D*\{{}})
+proof
+let x be set;
+thus x is non empty FinSequence of D implies x in D*\{{}}
+proof
+assume x is non empty FinSequence of D;
+then not x in {{}} & x in D* by FINSEQ_1:def 11, TARSKI:def 1;
+hence thesis by XBOOLE_0:def 5;
+end;
+assume x in D*\{{}}; then
+x in D* & not x in {{}} by XBOOLE_0:def 5;
+hence thesis by FINSEQ_1:def 11, TARSKI:def 1;
+end;
+
+Lm13: B is f-unambiguous & A c= B implies A is f-unambiguous
+proof
+assume
+ B is f-unambiguous & A c= B;then
+C1: f is [:B,D:]-one-to-one & A c= B by DefUnambiguous1;
+f is [:A,D:]-one-to-one by ZFMISC_1:119, C1, Lm12;
+hence thesis by DefUnambiguous1;
+end;
+
+Lm14: {} is f-unambiguous
+proof
+reconsider A=[:{},D:] as empty set; f|A is one-to-one;
+then f is A-one-to-one by DefInj1;hence thesis by DefUnambiguous1;
+end;
+
+Lm27:
+for f,g being FinSequence holds dom <:f,g:>=Seg (min (len f, len g))
+proof
+let f,g be FinSequence; set m=len f, n=len g, l=min(m,n);
+thus dom <:f,g:> = dom f /\ dom g by FUNCT_3:def 8 .=
+Seg m /\ dom g by FINSEQ_1:def 3 .=
+Seg m /\ Seg n by FINSEQ_1:def 3 .= Seg l by FINSEQ_2:2;
+end;
+
+::#####################  Preliminary lemmas  ############################
+::##############################  END  ##################################
+
+::############################  Type tuning  ############################
+::#######################################################################
+
+registration let D be non empty set;
+cluster D-pr1 -> associative BinOp of D;
+coherence
+proof
+now
+let a,b,c be Element of D; D-pr1.(a,D-pr1.(b,c))=a &
+D-pr1.(D-pr1.(a,b),c)=D-pr1.(a,c) by FUNCT_3:def 5;
+hence D-pr1.(a,D-pr1.(b,c))=D-pr1.(D-pr1.(a,b),c) by FUNCT_3:def 5;
+end;
+hence thesis by BINOP_1:def 3;
+end;
+end;
+
+registration let D be set;
+cluster associative BinOp of D;
+existence
+proof
+per cases;
+suppose D is non empty; then reconsider DD=D as non empty set;
+reconsider ff=DD-pr1 as BinOp of D; take ff;
+thus thesis;
+end;
+suppose D is empty; then reconsider DD=D as empty set;
+set f = the BinOp of {};
+f is associative & f is BinOp of DD; hence thesis;
+end;
+end;
+end;
+
+definition let X be set, Y be Subset of X;
+redefine func Y* -> non empty Subset of X*;
+coherence by FINSEQ_1:83;
+end;
+
+registration let D be non empty set;
+cluster D-concatenation -> associative (BinOp of D*);
+coherence by MONOID_0:76;
+end;
+
+registration let D be non empty set;
+cluster D* \ {{}} -> non empty;
+coherence
+proof
+set x = the Element of D;
+<*x*> in D* & not <*x*> in {{}} by TARSKI:def 1,FINSEQ_1:def 11;
+hence thesis by XBOOLE_0:def 5;
+end;
+end;
+
+registration ::exreg4 1
+let D be non empty set, m be Nat;
+cluster m-element Element of D*;
+existence
+proof
+set p = the m-element FinSequence of D;
+reconsider pp=p as
+Element of D* by FINSEQ_1:def 11; take pp; thus thesis;
+end;
+end;
+
+definition
+let X be set;
+let f be Function;
+redefine attr f is X-one-to-one means :DefInj2:
+(for x,y being set st x in X /\ dom f & y in X /\ dom f & f.x=f.y holds x=y);
+compatibility by LmOneOne;
+end;
+
+registration let D,f;
+cluster f-unambiguous set;
+existence proof take {}; thus thesis by Lm14; end;
+end;
+
+registration
+::# cfr cluster trivial -> one-to-one Function in NECKLACE.MIZ
+::# this alternate proof tries to reuse existing results instead
+let f be Function, x be set;
+cluster f|{x} -> one-to-one;
+coherence
+proof
+set g=f|{x}; per cases;
+suppose x in dom f; then g = x .--> (f.x) by FUNCT_7:6; hence thesis; end;
+suppose not x in dom f; then reconsider
+gg=g as empty Function by RELAT_1:187, ZFMISC_1:56; gg is one-to-one;
+hence thesis;
+end;
+end;
+end;
+
+registration let e be empty set;
+identify e* with {e};
+compatibility by FUNCT_7:19;
+identify {e} with e*;
+compatibility;
+end;
+
+registration
+cluster empty -> empty-membered set;
+coherence;
+::#thanks to cluster with_non-empty_element -> non empty set from SETFAM_1;
+let e be empty set;
+cluster {e} -> empty-membered;
+coherence
+proof
+not ex x being non empty set st x in {e} by TARSKI:def 1;
+hence thesis by SETFAM_1:def 11;
+end;
+end;
+
+registration let U; let m1 be non zero Nat;
+cluster m1-tuples_on U -> with_non-empty_elements;
+coherence
+proof
+not len {}=m1;
+then not {} is Element of m1-tuples_on U by CARD_1:def 13;
+hence thesis by SETFAM_1:def 9;
+end;
+end;
+
+registration let X be empty-membered set;
+cluster -> empty-membered Subset of X;
+coherence
+proof
+let Y be Subset of X;
+not ex x being non empty set st x in Y by SETFAM_1:def 11;
+hence thesis by SETFAM_1:def 11;
+end;
+end;
+
+registration let A; let m0 be zero number;
+cluster m0-tuples_on A -> empty-membered set;
+coherence by COMPUT_1:8;
+end;
+
+registration let e be empty set; let m1 be non zero Nat;
+cluster m1-tuples_on e -> empty;
+coherence by FINSEQ_3:128;
+end;
+
+registration let D,f; let e be empty set;
+cluster e /\ f -> f-unambiguous;
+coherence by Lm14;
+end;
+
+registration let U; let e be empty set;
+cluster e/\U -> U-prefix;
+coherence
+proof
+set f=U-concatenation; e/\f is f-unambiguous; hence thesis by DefPrefix;
+end;
+end;
+
+registration let U;
+cluster U-prefix set;
+existence proof take {}/\U; thus thesis; end;
+end;
+
+::############################  Type tuning  ############################
+::##############################  END  ##################################
+
+::###########################  MultPlace  ###############################
+::#######################################################################
+
+definition let D,f;
+let x be FinSequence of D;
+func MultPlace(f,x) -> Function means :DefMultPlace:
+dom it=NAT & it.0=x.1 & for n being Nat holds it.(n+1)=f.(it.n,x.(n+2));
+existence
+proof
+deffunc F(Nat, set) = f.($2, x.($1+2));
+consider f1 being Function such that B1: dom f1 = NAT &
+f1.0=x.1 & for n being Nat holds f1.(n+1) = F (n,f1.n) from NAT_1:sch 11;
+take f1;
+thus thesis by B1;
+end;
+uniqueness
+proof
+let IT1, IT2 be Function;
+assume C1:
+dom IT1=NAT & IT1.0 = x.1 &
+for n being Nat holds IT1.(n+1) = f.(IT1.n, x.(n+2));
+assume C2:
+dom IT2=NAT & IT2.0 = x.1 &
+for n being Nat holds IT2.(n+1) = f.( IT2.n, x.(n+2));
+deffunc RecFun(Nat,set)=f.( $2, x.($1+2));
+B1: dom IT1=NAT by C1;
+B2: IT1.0=x.1 by C1;
+B3: for n being Nat holds IT1.(n+1) = RecFun(n, IT1.n) by C1;
+B4: dom IT2=NAT by C2;
+B5: IT2.0=x.1 by C2;
+B6: for n being Nat holds IT2.(n+1) = RecFun(n, IT2.n) by C2;
+thus thesis from NAT_1:sch 15(B1,B2,B3,B4,B5,B6);
+end;
+end;
+
+Lm1: for x being FinSequence of D holds for m being Nat holds
+(m+1<=len x implies MultPlace(f,x).m in D) &
+for n being Nat st n>= m+1 holds MultPlace(f,x|n).m = MultPlace(f,x).m
+proof
+let x be FinSequence of D;
+defpred Q[Nat] means $1+1<=len x implies MultPlace(f,x).$1 in D;
+C0: Q[0]
+proof
+assume 0+1<=len x;
+then 1 in Seg len x;
+then 1 in dom x by FINSEQ_1:def 3;
+then x.1 in rng x & rng x c= D by FUNCT_1:def 5;
+then x.1 in D & MultPlace(f,x).0 = x.1 by DefMultPlace;
+hence thesis;
+end;
+C1: for m being Nat st Q[m] holds Q[m+1]
+proof
+let m be Nat;
+assume E0: Q[m];
+assume E1: (m+1)+1 <= len x;
+then m+2 <= len x & 1<=m+2 by NAT_1:12;
+then m+2 in Seg len x by FINSEQ_1:3;
+then m+2 in dom x by FINSEQ_1:def 3; then
+Z1: x.(m+2) in rng x & rng x c= D by FUNCT_1:def 5;
+Z3: (m+1<=m+2 implies  m+1 <= len x) by E1, XXREAL_0:2;
+[MultPlace(f,x).m , x.(m+2)] in [:D,D:]
+by Z3, E0, XREAL_1:8 , Z1, ZFMISC_1:def 2;
+then f.((MultPlace(f,x)).m, x.(m+2)) in D by FUNCT_2:7;
+hence thesis by DefMultPlace;
+end;
+defpred P[Nat] means
+for n being Nat st n >= ($1+1) holds MultPlace(f,x|n).$1 = MultPlace(f,x).$1;
+B0:P[0]
+proof
+let n be Nat; assume
+Z1: n>= 0+1;
+MultPlace(f,x|n).0 = (x|n).1 by DefMultPlace
+.= x.1 by FINSEQ_3:121,Z1
+.=MultPlace(f,x).0 by DefMultPlace;
+hence thesis;
+end;
+B1: for m being Nat st P[m] holds P[m+1]
+proof
+let m be Nat;
+assume C1: P[m];
+let n be Nat;
+assume C2: n >= m+1+1; then
+Z2: m+2>=m+1 & n>=m+2 by XREAL_1:8;
+MultPlace(f,x|n).(m+1)=f.( MultPlace(f,x|n).m, (x|n).(m+2)) by DefMultPlace
+.= f.(MultPlace(f,x).m, (x|n).(m+2)) by C1,XXREAL_0:2, Z2
+.= f.(MultPlace(f,x).m, x.(m+2)) by C2, FINSEQ_3:121
+.= MultPlace(f,x).(m+1) by DefMultPlace;
+hence thesis;
+end;
+defpred R[Nat] means P[$1] & Q[$1];
+D0: R[0] by B0,C0;
+D1: for m being Nat st R[m] holds R[m+1] by B1,C1;
+for m being Nat holds R[m] from NAT_1:sch 2(D0,D1);
+hence thesis;
+end;
+
+definition let D,f;
+let x be Element of D*\{{}};
+func MultPlace(f,x) -> Function equals MultPlace(f, x qua Element of D*);
+coherence;
+end;
+
+definition let D,f;
+::# MultPlace is an operator which transforms a BinOp f into a function
+::# operating # on an arbitrary (positive and natural) number of arguments by
+::# recursively # associating f on the left # Too late I realized something
+::# similar (yielding a functor rather than # a function, though) was
+::# introduced in FINSOP_1
+
+func MultPlace(f) -> Function of D*\{{}}, D means :DefMultPlace2:
+for x being Element of D*\{{}} holds
+it.x=MultPlace(f,x).(len x - 1);
+existence
+proof
+defpred P[Element of D*\{{}}, Element of D] means
+$2=MultPlace(f,$1).(len $1 - 1);
+B1: for x being Element of D*\{{}} ex y being Element of D st P[x,y]
+proof
+let x be Element of D*\{{}};
+reconsider x1=x as Element of D*;
+not x1 in {{}} by XBOOLE_0:def 5;
+then x1 <> {} by TARSKI:def 1;
+then len x1 >= 1 by FINSEQ_1:28;
+then len x1 - 1 in NAT by INT_1:16, XREAL_1:50;
+then reconsider m=(len x1 - 1) as Nat;
+C1: m + 1 <= len x1;
+reconsider y=MultPlace(f,x1).m as Element of D
+by Lm1, C1;
+take y;
+thus thesis;
+end;
+consider g being Function of D*\{{}}, D such that
+B2:for x being Element of D*\{{}} holds P[x,g.x] from FUNCT_2:sch 3(B1);
+take g;
+thus thesis by B2;
+end;
+uniqueness
+proof
+let IT1,IT2 be Function of D*\{{}}, D;
+Z1: dom IT1=D*\{{}} & dom IT2=D*\{{}} by FUNCT_2:def 1;
+assume A1: for x being Element of D*\{{}} holds
+IT1.x=MultPlace(f,x).(len x - 1);
+assume A2: for x being Element of D*\{{}} holds
+IT2.x=MultPlace(f,x).(len x - 1);
+now
+let x be set; assume x in dom IT1;
+then reconsider xx=x as Element of D*\{{}};
+IT1.x=MultPlace(f,xx).(len xx - 1) by A1 .= IT2.x by A2;
+hence IT1.x=IT2.x;
+end;
+hence thesis by FUNCT_1:9, Z1;
+end;
+end;
+
+LmMultPlace: for x being non empty FinSequence of D,
+y being Element of D holds (MultPlace(f)).(<*y*>) = y &
+(MultPlace(f)).(x^<*y*>) = f.((MultPlace(f)).x, y)
+proof
+set F=MultPlace(f);
+let x be non empty FinSequence of D, y be Element of D;
+consider k being Nat such that B2: k+1 = len x by NAT_1:6;
+reconsider x0=x as Element of D*\{{}} by Lm2;
+reconsider x1=x^<*y*> as non empty FinSequence of D;
+1 in Seg 1; then 1 in dom <* y *> by FINSEQ_1:def 8; then
+Z2: x1.(len x + 1)=(<*y*>).1 by FINSEQ_1:def 7 .= y by FINSEQ_1:57;
+Z1: x1|(len x)=x|(len x) by FINSEQ_5:25 .= x by FINSEQ_3:55;
+B7: len <*y*> =1 by FINSEQ_1:57; then B3: len x1=len x + 1 by FINSEQ_1:35;
+reconsider y1=<* y *> as non empty FinSequence of D;
+reconsider y2=y1 as Element of D*\{{}} by Lm2;
+len y2 - 1 =0 by B7; then F.(y2) = MultPlace(f, y2).0 by DefMultPlace2
+.= y2.1 by DefMultPlace .= y by FINSEQ_1:def 8;
+hence F.(<* y *>) = y;
+reconsider x2=x1 as Element of D*\{{}} by Lm2;
+F.x2 = (MultPlace(f,x2)).(len x2 - 1) by DefMultPlace2
+.= f.((MultPlace(f,x2)).k, x2.(k+2)) by DefMultPlace, B2, B3
+.= f.((MultPlace(f,x0)).(len x - 1), x2.(len x + 1)) by Z1, B2, Lm1
+.= f.(F.x0, y) by Z2, DefMultPlace2;
+hence thesis;
+end;
+
+Lm3:for X being set holds (f is [:X,D:]-one-to-one iff
+(for x,y,d1,d2 being set st x in X/\D & y in X/\D & d1 in D & d2 in D &
+f.(x,d1)=f.(y,d2) holds (x=y & d1=d2)))
+proof
+A1: dom f=[:D,D:] by FUNCT_2:def 1;
+let X be set;
+thus f is [:X,D:]-one-to-one implies
+(for x,y,d1,d2 being set st x in X/\D & y in X/\D & d1 in D & d2 in D &
+f.(x,d1)=f.(y,d2) holds (x=y & d1=d2))
+proof
+assume
+Z1: f is [:X,D:]-one-to-one;
+let x,y,d1,d2 be set;
+assume C1: x in X/\D & y in X/\D & d1 in D & d2 in D & f.(x,d1)=f.(y,d2);
+then [x,d1] in [:X/\D,D/\D:] & [y,d2] in [:X/\D,D/\D:] by ZFMISC_1:def 2;
+then C2: [x,d1] in [:X,D:] /\ [:D,D:] & [y,d2] in [:X,D:] /\ [:D,D:]
+by ZFMISC_1:123; [x,d1] = [y,d2] by DefInj2, A1,Z1 , C2, C1;
+hence x=y & d1=d2 by ZFMISC_1:33;
+end;
+assume
+B2: for x,y,d1,d2 being set st x in X/\D & y in X/\D & d1 in D & d2 in D &
+f.(x,d1)=f.(y,d2) holds x=y & d1=d2;
+now
+let x,y be set; assume
+Z1: x in [:X,D:] /\ dom f & y in [:X,D:] /\ dom f & f.x=f.y; then
+C1: x in [:X/\D, D/\D:] & y in [:X/\D,D/\D:] & f.x=f.y by ZFMISC_1:123,A1;
+then consider x1,d1 being set such that
+C2: x1 in X/\D & d1 in D & x=[x1,d1] by ZFMISC_1:def 2;
+consider x2,d2 being set such that
+C3: x2 in X/\D & d2 in D & y=[x2,d2] by ZFMISC_1:def 2,C1;
+x1 in X/\D & x2 in X/\D & d1 in D & d2 in D & f.(x1,d1)=f.(x2,d2) by C2,C3,
+Z1;
+then x1=x2 & d1=d2 by B2; hence x=y by C2,C3;
+end;
+hence f is [:X,D:]-one-to-one by DefInj2;
+end;
+
+definition ::def10 1
+let D,f; let X be set;
+redefine attr X is f-unambiguous means :DefUnambiguous2:
+for x,y,d1,d2 being set st x in X/\D & y in X/\D & d1 in D & d2 in D &
+f.(x,d1)=f.(y,d2) holds (x=y & d1=d2);
+compatibility
+proof
+thus X is f-unambiguous implies
+(for x,y,d1,d2 being set st x in X/\D & y in X/\D & d1 in D & d2 in D &
+f.(x,d1)=f.(y,d2) holds (x=y & d1=d2))
+proof
+assume X is f-unambiguous; then f is [:X,D:]-one-to-one by DefUnambiguous1;
+hence thesis by Lm3;
+end;
+assume
+(for x,y,d1,d2 being set st x in X/\D & y in X/\D & d1 in D & d2 in D &
+f.(x,d1)=f.(y,d2) holds (x=y & d1=d2));
+then f is [:X,D:]-one-to-one by Lm3; hence thesis by DefUnambiguous1;
+end;
+end;
+
+Lm19:f is associative implies for d being Element of D holds
+(for m being Nat, x being Element of (m+1)-tuples_on D holds
+(MultPlace(f)).(<*d*>^x)=f.(d,(MultPlace(f)).x))
+proof
+set F=MultPlace(f);
+assume A10: f is associative;
+let d be Element of D;
+defpred P[Nat] means for x being Element of ($1+1)-tuples_on D holds
+F.(<*d*>^x) = f.(d, F.x);
+A0: P[0]
+proof
+let x be Element of (0+1)-tuples_on D;
+consider xx being Element of D such that C1: x=<*xx*> by FINSEQ_2:117;
+F.(<*d*>^x)=
+ f.(F.(<*d*>), xx ) by LmMultPlace, C1
+.= f.(d,xx) by LmMultPlace .= f.(d,F.x) by LmMultPlace,C1;
+hence thesis;
+end;
+A1: for m being Nat holds (P[m] implies P[m+1])
+proof
+let m be Nat;
+assume B0: P[m];
+let x be Element of ((m+1)+1)-tuples_on D;
+m+1+0 <= m+1+1 & len x = (m+1)+1 by CARD_1:def 13,XREAL_1:8;
+then len(x|(m+1))=m+1 by FINSEQ_1:80; then
+reconsider xx=x|(m+1) as Element of (m+1)-tuples_on D by FINSEQ_2:110;
+reconsider xxx=xx as non empty FinSequence of D;
+reconsider y=x /. len x as Element of D;
+xxx in D*\{{}} by Lm2; then
+reconsider XX=F.xxx as Element of D by FUNCT_2:7;
+B2: (m+1)+1 = len x by CARD_1:def 13; then
+F.(<*d*>^x)=F.(<*d*>^(x|(m+1) ^ <*y*>)) by FINSEQ_5:24
+.= F.((<*d*> ^ xx)^<*y*>) by FINSEQ_1:45
+.= f.(F.(<*d*>^xx), y) by LmMultPlace .= f.(f.(d, F.xx), y) by B0
+.= f.(d, f.(XX, y )) by A10, BINOP_1:def 3
+.= f.(d,F.(xxx^<*y*>)) by LmMultPlace .= f.(d,F.x) by FINSEQ_5:24, B2;
+hence thesis;
+end;
+thus for m being Nat holds P[m] from NAT_1:sch 2(A0,A1);
+end;
+
+Lm5: (f is associative & X is f-unambiguous) implies
+(MultPlace(f)).:((m+1)-tuples_on X) is f-unambiguous
+proof
+set F=MultPlace(f);
+assume A10: f is associative;
+assume A11: X is f-unambiguous;
+defpred P[Nat] means F.:(($1+1)-tuples_on X) is f-unambiguous;
+A0: P[0]
+proof
+set Z=(0+1)-tuples_on X;
+set Y=F.:Z;
+for x,y,d1,d2 being set st x in Y/\D & y in Y/\D & d1 in D &
+d2 in D & f.(x,d1)=f.(y,d2) holds x=y & d1=d2
+proof
+let x,y,d1,d2 be set;
+assume x in Y/\D; then x in Y by XBOOLE_0:def 4;
+then consider uu being set such that C1:
+uu in dom F & [uu,x] in F & uu in Z by RELAT_1:143;
+assume y in Y/\D; then y in Y by XBOOLE_0:def 4;
+then consider vv being set such that C2:
+vv in dom F & [vv,y] in F & vv in Z by RELAT_1:143;
+assume d1 in D;
+then reconsider d11=d1 as Element of D;
+assume d2 in D;
+then reconsider d22=d2 as Element of D;
+reconsider u=uu as Element of 1-tuples_on X by C1;
+reconsider v=vv as Element of 1-tuples_on X by C2;
+assume f.(x,d1)=f.(y,d2); then
+C7: f.(x,d1)=f.(y,d2) & F.u=x & F.v=y by C1,C2,FUNCT_1:def 4;
+consider ee being Element of X such that C5: u=<*ee*> by FINSEQ_2:117;
+consider ff being Element of X such that C6: v=<*ff*> by FINSEQ_2:117;
+reconsider eee=ee, fff=ff as Element of D;
+f.(F.<*eee*>,d1)=f.(F.<*fff*>,d2) & F.<*eee*>=eee & F.<*fff*>=fff
+by C7, C5, C6, LmMultPlace;
+then ee in X/\D & ff in X/\D & d11 in D & d22 in D
+& f.(ee,d11)=f.(ff,d22) by XBOOLE_0:def 4;
+hence thesis by C7, C5, C6, A11, DefUnambiguous2;
+end;
+hence thesis by DefUnambiguous2;
+end;
+A1: for m being Nat st P[m] holds P[m+1]
+proof
+let m be Nat;
+assume B1: P[m]; set Z=(m+1+1)-tuples_on X; set Y=F.:Z;
+for x,y,d1,d2 being set st x in Y/\D & y in Y/\D & d1 in D &
+d2 in D & f.(x,d1)=f.(y,d2) holds x=y & d1=d2
+proof
+let x,y,d1,d2 be set;
+assume x in Y/\D; then x in Y by XBOOLE_0:def 4;
+then consider uu being set such that C1:
+uu in dom F & [uu,x] in F & uu in Z by RELAT_1:143;
+assume y in Y/\D; then y in Y by XBOOLE_0:def 4;
+then consider vv being set such that C2:
+vv in dom F & [vv,y] in F & vv in Z by RELAT_1:143;
+assume d1 in D;
+then reconsider d11=d1 as Element of D;
+assume d2 in D;
+then reconsider d22=d2 as Element of D;
+reconsider u=uu as Element of (m+1+1)-tuples_on X by C1;
+reconsider v=vv as Element of (m+1+1)-tuples_on X by C2;
+len u=m+1+1 & len v=m+1+1 & m+1 <= m+1+1
+by CARD_1:def 13, NAT_1:11; then
+C3: u=(u|(m+1))^<*u/.(len u)*> & v=(v|(m+1))^<*v/.(len v)*>
+& len (u|(m+1))=m+1 & len (v|(m+1))=m+1 by FINSEQ_5:24, FINSEQ_1:80;
+then reconsider u1=u|(m+1),v1=v|(m+1) as Tuple of m+1, X by CARD_1:def 13;
+rng u1 c= D & rng v1 c= D by XBOOLE_1:1;
+then reconsider u2=u1, v2=v1 as non empty FinSequence of D
+by FINSEQ_1:def 4, C3;
+reconsider u3=u2, v3=v2 as Element of D*\{{}} by Lm2;
+reconsider u4=u2, v4=v3 as Element of (m+1)-tuples_on X by FINSEQ_2:151;
+reconsider ul=u/.len u, vl=v/.len v as Element of D by TARSKI:def 3;
+C15: ul in X/\D & vl in X /\ D by XBOOLE_0:def 4;
+C5: F.(u2^<*ul*>)=f.(F.u2,ul) & F.(v2^<*vl*>)=f.(F.v2,vl) by LmMultPlace;
+C6: f.(f.(F.u3,ul),d11)=f.(F.u3,f.(ul,d11)) &
+f.(f.(F.v3,vl),d22)=f.(F.v3,f.(vl,d22)) by BINOP_1:def 3,A10;
+assume
+ f.(x,d1)=f.(y,d2); then
+Z2: f.(x,d1)=f.(y,d2) & F.u=x & F.v=y by C1,C2,FUNCT_1:def 4;
+dom F=D*\{{}} by FUNCT_2:def 1; then
+ u3 in dom F & v3 in dom F &
+u4 in (m+1)-tuples_on X & v4 in (m+1)-tuples_on X; then
+ F.u4 in F.:((m+1)-tuples_on X) & F.v4 in F.:((m+1)-tuples_on X)
+& f.(ul,d11) in D & f.(vl,d22) in D by FUNCT_1:def 12; then
+ F.u4 in F.:((m+1)-tuples_on X) /\ D & F.v4 in F.:((m+1)-tuples_on X) /\D
+& f.(ul,d11) in D & f.(vl,d22) in D by XBOOLE_0:def 4; then
+C8: F.u3=F.v3 & f.(ul,d11)=f.(vl,d22) by Z2, C3, C5, C6, B1, DefUnambiguous2;
+thus x=y & d1=d2 by C8,A11, DefUnambiguous2, C15, Z2, C3, C5;
+end;
+hence thesis by DefUnambiguous2;
+end;
+for m being Nat holds P[m] from NAT_1:sch 2(A0,A1);
+hence thesis;
+end;
+
+Lm15: f is associative & Y is f-unambiguous implies
+(MultPlace(f)).:((m+1)-tuples_on Y) is f-unambiguous
+proof
+set F=MultPlace(f); B1: dom F = D*\{{}} by FUNCT_2:def 1;
+assume f is associative & Y is f-unambiguous; then B0:
+f is associative & Y/\D is f-unambiguous by XBOOLE_1:17, Lm13;
+B2: (m+1)-tuples_on (Y/\D) misses 0-tuples_on Y by Lm18;
+Z1: F.:((m+1)-tuples_on Y) =
+F.:( (D*\{{}}) /\ (m+1)-tuples_on Y) by B1, RELAT_1:145 .=
+F.: ( (D* /\ (m+1)-tuples_on Y)\{{}}) by XBOOLE_1:49 .=
+F.: (((m+1)-tuples_on (Y/\D))\{{}}) by Lm23 .=
+F.: (((m+1)-tuples_on (Y/\D))\(0-tuples_on Y)) by COMPUT_1:8
+.= F.:((m+1)-tuples_on (Y/\D)) by B2, XBOOLE_1:83;
+per cases;
+suppose Y/\D <> {}; then reconsider YY=Y/\D as non empty Subset of D by
+XBOOLE_1:17; F.:((m+1)-tuples_on Y)=F.:((m+1)-tuples_on YY) by Z1;
+hence thesis by Lm5, B0;
+end;
+suppose Y/\D = {}; then
+F.:((m+1)-tuples_on Y) =
+F.:{} by Z1 .= {} by RELAT_1:149; hence thesis by Lm14;
+end;
+end;
+
+Lm17: (f is associative & X is f-unambiguous) implies
+(MultPlace(f)) is ((m+1)-tuples_on X)-one-to-one
+proof
+set F=MultPlace(f);
+A0: dom F=D*\{{}} by FUNCT_2:def 1;
+defpred P[Nat] means F is (($1+1)-tuples_on X)-one-to-one; assume
+Z2: f is associative & X is f-unambiguous;
+A10: P[0]
+proof
+now
+let x,y be set; assume
+Z3: x in (0+1)-tuples_on X /\ dom F &
+y in (0+1)-tuples_on X /\ dom F & F.x=F.y; then
+Z1: x is Element of 1-tuples_on X & y is Element of 1-tuples_on X & F.x=F.y
+by XBOOLE_0:def 4;
+consider u being Element of X such that C3: x=<*u*> by FINSEQ_2:117,Z1;
+consider v being Element of X such that C4: y=<*v*> by FINSEQ_2:117,Z1;
+reconsider uu=u,vv=v as Element of D;
+uu=F.y by Z3, C3, LmMultPlace .= vv by C4,LmMultPlace;
+hence x=y by C3,C4;
+end;
+hence F is ((0+1)-tuples_on X)-one-to-one by DefInj2;
+end;
+A11: for m being Nat st P[m] holds P[m+1]
+proof
+let m be Nat; assume B1: P[m];
+set goal=(m+1+1)-tuples_on X;
+now
+let x,y be set; assume
+Z1: x in goal /\ dom F & y in goal /\ dom F & F.x=F.y;
+reconsider xx=x,yy=y as Element of (m+1+1)-tuples_on X by XBOOLE_0:def 4, Z1;
+len xx=m+1+1 & len yy=m+1+1 & m+1+0<=m+1+1 by CARD_1:def 13, NAT_1:11;
+then len(xx|(m+1))=m+1 & len(yy|(m+1))=m+1 by FINSEQ_1:80; then
+reconsider x1=xx|(m+1),y1=yy|(m+1) as Element of (m+1)-tuples_on X
+by FINSEQ_2:110;
+reconsider x11=x1, y11=y1 as non empty FinSequence of X;
+rng x11 c= D & rng y11 c= D by XBOOLE_1:1; then
+reconsider x111=x11, y111=y11 as non empty FinSequence of D by FINSEQ_1:def 4;
+reconsider xl=xx/.len xx,yl=yy/.len yy as Element of D by TARSKI:def 3;
+C2: F.(x111^<*xl*>)=f.(F.x111,xl) & F.(y111^<*yl*>)=f.(F.y111,yl)
+by LmMultPlace;
+len xx=m+1+1 & len yy=m+1+1 by CARD_1:def 13; then
+C10: xx=x1^<*xl*> & yy=y1^<*yl*> by FINSEQ_5:24;
+C7: x111 in dom F & x1 in (m+1)-tuples_on X &
+y111 in dom F & y1 in (m+1)-tuples_on X by Lm2,A0;
+then
+F.x1 in F.:((m+1)-tuples_on X) & F.x111 in D &
+F.y1 in F.:((m+1)-tuples_on X) & F.y111 in D by PARTFUN1:27,FUNCT_1:def 12;
+then C4: F.x1 in F.:((m+1)-tuples_on X) /\ D &
+F.y1 in F.:((m+1)-tuples_on X) /\ D & xl in D & yl in D
+& f.(F.x1,xl)=f.(F.y1,yl)  by XBOOLE_0:def 4, C10, C2, Z1;
+F.:((m+1)-tuples_on X) is f-unambiguous by Z2, Lm5;
+then C8: F.x1=F.y1 & xl=yl by C4, DefUnambiguous2;
+x1 in (m+1)-tuples_on X /\ dom F &
+y1 in (m+1)-tuples_on X /\ dom F by C7,XBOOLE_0:def 4;
+hence x=y by C8,B1,DefInj2, C10;
+end;
+hence F is goal-one-to-one by DefInj2;
+end;
+for m being Nat holds P[m] from NAT_1:sch 2(A10,A11);
+hence thesis;
+end;
+
+Lm26: (f is associative & Y is f-unambiguous) implies
+(MultPlace(f)) is ((m+1)-tuples_on Y)-one-to-one
+proof
+A0: (m+1)-tuples_on Y misses 0-tuples_on Y by Lm18;
+assume B0: f is associative & Y is f-unambiguous;
+set F=MultPlace(f); dom F=D*\{{}} by FUNCT_2:def 1; then
+Z1: F|((m+1)-tuples_on Y)=(F|(D*\{{}}))|((m+1)-tuples_on Y) by RELAT_1:98
+.= F|((D*\{{}})/\((m+1)-tuples_on Y)) by RELAT_1:100 .=
+F|(D*/\((m+1)-tuples_on Y)\{{}}) by XBOOLE_1:49 .=
+F|(D*/\(((m+1)-tuples_on Y)\{{}})) by XBOOLE_1:49 .=
+F|(D*/\(((m+1)-tuples_on Y)\0-tuples_on Y)) by COMPUT_1:8 .=
+F|(D*/\((m+1)-tuples_on Y)) by XBOOLE_1:83, A0 .=
+F|((m+1)-tuples_on (Y/\D)) by Lm23;
+B2: Y/\D is f-unambiguous by Lm13, B0, XBOOLE_1:17;
+per cases;
+suppose D/\Y <> {}; then reconsider X=D/\Y as non empty Subset of D
+by XBOOLE_1:17;
+F is ((m+1)-tuples_on X)-one-to-one by Lm17,B2,B0; then
+F|((m+1)-tuples_on Y) is one-to-one by DefInj1,Z1; hence thesis by DefInj1;
+end;
+suppose D/\Y={};
+hence thesis by Z1, DefInj1;
+end;
+end;
+
+::###########################  MultPlace  ###############################
+::##############################  END  ##################################
+
+::###########################  FirstChar  ###############################
+::#######################################################################
+
+definition
+let D;
+::# A function-like extracting the first item of a non empty FinSequence of D
+func D-firstChar -> Function of D*\{{}}, D equals
+MultPlace(D-pr1);
+coherence;
+end;
+
+Th2: for w being non empty FinSequence of D holds D-firstChar.w=w.1
+proof
+let w be non empty FinSequence of D;
+consider d being Element of D, df1 being FinSequence of D such that B1:
+d = w.1 & w=<*d*>^df1 by FINSEQ_3:111;
+set f=D-pr1, F=MultPlace(f);
+per cases;
+suppose len w <= 1;
+then len w <= 0 or len w=0+1 by NAT_1:8;
+then w=<*d*> by B1, FINSEQ_1:57;
+hence thesis by LmMultPlace, B1;
+end;
+suppose C1: len w > 1;
+len w = len <*d*> + len df1 by B1, FINSEQ_1:35 .= 1 + len df1 by FINSEQ_1:57;
+then len df1 <>0 by C1; then consider k being Nat such that
+C2: len df1=k+1 by NAT_1:6;
+reconsider df11 = df1 as Element of (k+1)-tuples_on D by C2, FINSEQ_2:153;
+reconsider df111=df11 as Element of D*\{{}} by Lm2;
+F.w =
+(pr1(D,D)).(d,(MultPlace(f)).df111) by B1, Lm19 .= w.1 by FUNCT_3:def 5, B1;
+hence thesis;
+end;
+end;
+
+theorem for p being FinSequence st p is U-valued & p is non empty ::Th6
+holds U-firstChar.p=p.1
+proof
+let p be FinSequence; assume p is U-valued & p is non empty; then
+reconsider pp=p as non empty FinSequence of U by Lm45;
+U-firstChar.pp=pp.1 by Th2; hence thesis;
+end;
+
+::###########################  FirstChar  ###############################
+::##############################  END  ##################################
+
+::########################### MultiCat #################################
+::######################################################################
+::#When f is concatenation of strings, MultPlace(f) can be extended to the
+::#empty finsequence of strings in the immediate way, obtaining the multiCat
+::#function, which chains an arbitrary (natural) number of strings
+
+definition let D;
+func D-multiCat -> Function equals
+({} .--> {}) +* MultPlace(D-concatenation);
+coherence;
+end;
+
+definition let D;
+redefine func D-multiCat -> Function of D**,D*;
+coherence
+proof
+{} in D** & {} in D* by FINSEQ_1:66; then
+Z1: {{}} c= D** & {{}} c= D* by ZFMISC_1:37; then
+A0: {{}}\/D** = D** & {{}}\/D*=D* by XBOOLE_1:12;
+set f={} .--> {}; set g=MultPlace(D-concatenation);
+A1: dom f = {{}} & rng f c= {{}} by FUNCOP_1:19;
+A2: dom g = D**\{{}} & rng g c= D* by FUNCT_2:def 1;
+dom f \/ dom g = {{}} \/ D** by XBOOLE_1:39,A1,A2;
+then A4: dom f \/ dom g = D** by Z1, XBOOLE_1:12;
+rng f \/ rng g c= D* & rng (f +* g) c= rng f \/ rng g
+by A0, A1, XBOOLE_1:13, FUNCT_4:18; then
+dom (D-multiCat)=D** & rng (D-multiCat) c= D*
+by FUNCT_4:def 1, A4, XBOOLE_1:1;
+hence thesis by RELSET_1:11, FUNCT_2:130;
+end;
+end;
+
+Lm6:D-multiCat | (D**\{{}}) = MultPlace(D-concatenation)
+proof
+set f=D-concatenation; set F=MultPlace(f);
+dom F=D**\{{}} by FUNCT_2:def 1; hence thesis by FUNCT_4:24;
+end;
+
+Lm16:D-multiCat | (Y\{{}}) = (MultPlace(D-concatenation)) | Y
+proof
+set F=D-multiCat;
+B1: dom F = D** by FUNCT_2:def 1;
+F|(Y\{{}})=(F|(D**))|(Y\{{}}) by RELAT_1:98, B1 .= F|(D**/\(Y\{{}}))
+by RELAT_1:100 .= F|((D** /\ Y )\{{}}) by XBOOLE_1:49 .=
+D-multiCat|(Y/\(D**\{{}})) by XBOOLE_1:49 .= (D-multiCat|(D**\{{}}))|Y
+by RELAT_1:100 .= (MultPlace(D-concatenation)) |Y by Lm6; hence thesis;
+end;
+
+Lm9: ({} .--> {}) tolerates MultPlace(D-concatenation)
+proof
+set f={}.-->{}; set g=MultPlace(D-concatenation);
+dom f = {{}} & dom g=D**\{{}} by FUNCT_2:def 1;
+then dom g misses dom f by XBOOLE_1:79;
+then for x being set st x in dom g /\ dom f holds f.x=g.x by XBOOLE_0:def 7;
+hence thesis by PARTFUN1:def 6;
+end;
+
+registration let D; let e be empty set;
+cluster (D-multiCat).e -> empty set;
+coherence
+proof
+set g=MultPlace(D-concatenation), f={}.-->{};
+dom f = {{}} & dom g=D**\{{}} by
+FUNCT_2:def 1;
+then {} in dom f by TARSKI:def 1; then A1:
+{} in dom f & {} in dom g \/ dom f by XBOOLE_0:def 3;
+f tolerates g by Lm9;
+then D-multiCat=g +* f by FUNCT_4:35; then e={} & (D-multiCat).{}=f.{}
+by A1, FUNCT_4:def 1; hence thesis by FUNCOP_1:87;
+end;
+end;
+
+Lm59: B is D-prefix & A c= B implies A is D-prefix
+proof
+set f=D-concatenation; assume B is D-prefix & A c= B; then
+B is f-unambiguous & A c= B by DefPrefix; then
+A is f-unambiguous by Lm13; hence thesis by DefPrefix;
+end;
+
+registration let D;
+cluster -> D-prefix (Subset of 1-tuples_on D);
+coherence
+proof
+set f=D-concatenation, D1=1-tuples_on D;
+let X be Subset of D1; B1: D1 c= D* by FINSEQ_2: 154;
+now
+let x1,x2,d1,d2 be set; assume C1:
+x1 in X/\(D*) & x2 in X/\(D*) & d1 in D* & d2 in D*; then
+reconsider x11=x1, x22=x2 as Element of D1;
+reconsider x111=x11, x222=x22 as 1-element FinSequence;
+reconsider x1111=x11,x2222=x22 as Element of D* by B1, TARSKI:def 3;
+reconsider xx1=x1111,xx2=x2222,dd1=d1,dd2=d2 as FinSequence of D
+by FINSEQ_1:def 11, C1;
+len xx1=1 & len xx2= 1 by CARD_1:def 13; then
+C3: xx1=<*xx1.1*> & xx2=<*xx2.1*> by FINSEQ_1:57;
+C2: f.(x1,d1)=xx1^dd1 & f.(x2,d2)=xx2^dd2 by ThConcatenation; assume
+Z1: f.(x1,d1)=f.(x2,d2);
+Z2: xx1.1= (xx1^dd1).1 by C3, FINSEQ_1:58 .= xx2.1
+by C3, Z1, C2, FINSEQ_1:58;
+thus x1=x2 & d1=d2 by FINSEQ_1:46, Z2, C3, Z1, C2;
+end;
+then X is f-unambiguous by DefUnambiguous2; hence thesis by DefPrefix;
+end;
+end;
+
+theorem Lm25: ::Th7
+A is D-prefix implies (D-multiCat).:(m-tuples_on A) is D-prefix
+proof
+reconsider f=D-concatenation as BinOp of (D*);
+set F=D-multiCat, Y=F.:(m-tuples_on A); {} in D** by FINSEQ_1:66; then
+A1: {} in dom F by FUNCT_2:def 1;
+per cases;
+suppose m=0; then
+Z1: Y=F.:({<*>A}) by FINSEQ_2:112 .= Im(F,{}) .= {F.{}}
+by FUNCT_1:117, A1 .= {{}};
+for x,y,d1,d2 being set st x in Y/\(D*) & y in Y/\(D*) &
+d1 in D* & d2 in D* & f.(x,d1)=f.(y,d2) holds (x=y & d1=d2)
+proof
+let x,y,d1,d2 be set; assume
+C1: x in Y/\(D*) & y in Y/\(D*) & d1 in D* & d2 in D* & f.(x,d1)=f.(y,d2);
+then x in Y & x in D* & y in Y & y in D* by XBOOLE_0:def 4; then
+C3: x={} & y={} by TARSKI:def 1,Z1;
+reconsider xx=x as Element of D* by C1;
+reconsider yy=y as Element of D* by C1;
+reconsider d11=d1 as Element of D* by C1;
+reconsider d22=d2 as Element of D* by C1;
+d11 = xx^d11 by C3,FINSEQ_1:47 .=
+f.(yy,d22) by ThConcatenation, C1 .=
+{}^d22 by C3,ThConcatenation .= d22 by FINSEQ_1:47;
+hence x=y & d1=d2 by C3;
+end;
+then Y is f-unambiguous by DefUnambiguous2;
+hence thesis by DefPrefix;
+end;
+suppose m<>0; then
+consider k being Nat such that C0: m=k+1 by NAT_1:6;
+set B=(k+1)-tuples_on A; B misses 0-tuples_on A by Lm18; then
+B misses {{}} by COMPUT_1:8; then C1: B\{{}}=B by XBOOLE_1:83;
+assume A is D-prefix; then A is f-unambiguous by DefPrefix; then C2:
+(MultPlace(f)).:B is f-unambiguous by Lm15;
+F.:B = (F|(B\{{}})).:(B\{{}}) by RELAT_1:162, C1
+.= ((MultPlace(f))|B) .: B by C1, Lm16
+.= (MultPlace(f)).:B by RELAT_1:162;
+hence thesis by C0, C2, DefPrefix;
+end;
+end;
+
+theorem A is D-prefix implies D-multiCat is (m-tuples_on A)-one-to-one ::th5
+proof
+set f=D-concatenation, F=D-multiCat, Z=m-tuples_on A; assume A is D-prefix;
+then B1: f is associative & A is f-unambiguous by DefPrefix;
+per cases;
+suppose m=0;
+then Z=Funcs(Seg 0,A) by Lm21 .= {{}} by FUNCT_5:64;
+then F|Z is one-to-one;
+hence thesis by DefInj1;
+end;
+suppose m<>0; then consider k being Nat such that C1: m=k+1 by NAT_1:6;
+reconsider kk=k+1 as Element of NAT by ORDINAL1:def 13;
+set ZZ=kk-tuples_on A;
+(MultPlace(f)) is ZZ-one-to-one by B1, Lm26; then
+C2: (MultPlace(f)) | ZZ is one-to-one by DefInj1;
+len {} = 0; then not {} in ZZ by FINSEQ_2:152; then {{}}
+misses ZZ by ZFMISC_1:56; then ZZ\{{}} = ZZ by XBOOLE_1:83;
+then F|Z is one-to-one by Lm16, C2,C1; hence thesis by DefInj1;
+end;
+end;
+
+theorem (m+1)-tuples_on Y c= Y*\{{}} ::Th9
+proof
+reconsider k=m, K=m+1 as Element of NAT by ORDINAL1:def 13;
+A1: 0-tuples_on Y misses K-tuples_on Y by Lm18;
+K-tuples_on Y c= Y*\ (0-tuples_on Y) by FINSEQ_2:154, XBOOLE_1:86, A1;
+hence thesis by COMPUT_1:8;
+end;
+
+theorem m is zero implies m-tuples_on Y={{}} by COMPUT_1:8; ::Th10
+
+theorem i-tuples_on Y = Funcs(Seg i,Y) by Lm21;
+::#extending FUNCT_2:111
+
+theorem x in m-tuples_on A implies x is FinSequence of A
+proof
+assume B1: x in m-tuples_on A; then
+reconsider p=x as m-element FinSequence by FINSEQ_2:161;
+p in Funcs(Seg m,A) by B1, Lm21; then consider f being Function
+such that B2: p=f & dom f = Seg m & rng f c= A by FUNCT_2:def 2;
+thus x is FinSequence of A by B2, FINSEQ_1:def 4;
+end;
+
+definition let A,X be set;
+redefine func chi (A,X) -> Function of X, BOOLEAN;
+coherence
+proof
+chi(A,X) is Function of X,{{},1} & {{},1}=BOOLEAN; hence thesis;
+end;
+end;
+
+theorem
+(MultPlace(f)).(<*d*>) = d & for x being non empty FinSequence of D holds
+(MultPlace(f)).(x^<*d*>) = f.((MultPlace(f)).x, d) by LmMultPlace;
+
+theorem Th14:
+for d being non empty Element of D** holds
+D-multiCat.d=(MultPlace(D-concatenation)).d
+proof
+let d be non empty Element of D**; set f=D-concatenation, F=D-multiCat;
+not d in {{}} by TARSKI:def 1; then
+d in D**\{{}} by XBOOLE_0:def 5; hence
+F.d = (F|(D**\{{}})).d by FUNCT_1:72 .= (MultPlace(f)).d by Lm6;
+end;
+
+theorem for d1,d2 be Element of (D*) holds D-multiCat.(<*d1,d2*>)=d1^d2 ::Th15
+proof
+let d1, d2 be Element of D*; set F=D-multiCat, f=D-concatenation, d =
+<*d1,d2*>; reconsider dd = <*d1*>^<*d2*> as non empty Element of D**;
+B0: F.dd=(MultPlace(f)).(dd) by Th14; thus F.d = f.((MultPlace(f)).<*d1*>,d2)
+by LmMultPlace, B0 .= f.(d1,d2) by LmMultPlace .= d1^d2 by ThConcatenation;
+end;
+
+registration let f,g be FinSequence;
+cluster <:f,g:> -> FinSequence-like;
+coherence
+proof
+set m=len f, n=len g, l=min(m,n);
+dom <:f,g:>=Seg l by Lm27; hence thesis by FINSEQ_1:def 2; end;
+end;
+
+registration let m; let f,g be m-element FinSequence;
+cluster <:f,g:> -> m-element;
+coherence
+proof
+set l=min (len f, len g);
+Z1: len f=m & len g =m by CARD_1:def 13;
+reconsider h=<:f,g:> as FinSequence; reconsider ll=l as
+Element of NAT by ORDINAL1:def 13; dom h=Seg ll by Lm27; then
+len h=ll by FINSEQ_1:def 3; hence thesis by CARD_1:def 13, Z1;
+end;
+end;
+
+registration
+let X,Y be set; let f be X-defined Function, g be Y-defined Function;
+cluster <:f,g:> -> (X/\Y)-defined Function;
+coherence
+proof
+reconsider F=dom f as Subset of X by RELAT_1:def 18;
+reconsider G=dom g as Subset of Y by RELAT_1:def 18;
+set h=<:f,g:>;
+Z2: dom h = G /\ F by FUNCT_3:def 8;
+dom h /\ dom h c= X /\ Y by XBOOLE_1:27, Z2;
+hence thesis by RELAT_1:def 18;
+end;
+end;
+
+registration let X be set; let f,g be X-defined Function;
+cluster <:f,g:> -> X-defined Function;
+coherence;
+end;
+
+registration let X,Y be set;
+let f be total (X-defined Function), g be total (Y-defined Function);
+cluster <:f,g:> -> total ((X/\Y)-defined Function);
+coherence
+proof
+reconsider h=<:f,g:> as (X/\Y)-defined Function;
+dom f=X & dom g=Y by PARTFUN1:def 4; then dom h=X/\Y by FUNCT_3:def 8;
+hence thesis by PARTFUN1:def 4;
+end;
+end;
+
+registration
+let X be set; let f,g be total (X-defined Function);
+cluster <:f,g:> -> total (X-defined Function);
+coherence;
+end;
+
+registration
+let X,Y be set; let f be X-valued Function, g be Y-valued Function;
+cluster <:f,g:> -> [:X,Y:]-valued Function;
+coherence
+proof
+rng f c= X & rng g c= Y by RELAT_1:def 19; then
+B0: [:rng f, rng g:] c= [:X,Y:] by ZFMISC_1:119;
+set h=<:f,g:>; rng h c= [:rng f, rng g:] by FUNCT_3:71; then
+rng h c= [:X,Y:] by B0, XBOOLE_1:1; hence thesis by RELAT_1:def 19;
+end;
+end;
+
+registration ::exreg 7
+let D; cluster D-valued FinSequence;
+existence
+proof take the FinSequence of D; thus thesis; end;
+end;
+
+registration let D, m;
+cluster m-element (D-valued FinSequence);
+existence
+proof take the m-element FinSequence of D; thus thesis; end;
+end;
+
+registration
+let X,Y be non empty set;
+let f be Function of X,Y; let p be X-valued FinSequence;
+cluster f*p -> FinSequence-like;
+coherence
+proof
+rng p c= X by RELAT_1:def 19; then
+reconsider pp=p as FinSequence of X by FINSEQ_1:def 4;
+f*pp is FinSequence of Y; hence thesis;
+end;
+end;
+
+registration
+let X,Y be non empty set; let m;
+let f be Function of X,Y; let p be m-element (X-valued FinSequence);
+cluster f*p -> m-element;
+coherence
+proof
+reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+rng p c= X & dom f=X by RELAT_1:def 19, FUNCT_2:def 1; then
+dom (f*p)=dom p by RELAT_1:46 .= Seg (len p) by FINSEQ_1:def 3
+.= Seg mm by CARD_1:def 13; then len (f*p)=mm by FINSEQ_1:def 3;
+hence thesis by CARD_1:def 13;
+end;
+end;
+
+definition
+let D,f; let p,q be Element of D*;
+func f AppliedPairwiseTo (p,q) -> FinSequence of D equals f*<:p,q:>;
+coherence
+proof
+rng (f*<:p,q:>) c= D by RELAT_1:def 19; hence thesis by FINSEQ_1:def 4;
+end;
+end;
+
+registration
+let D,f,m; let p,q be m-element Element of D*;
+cluster f AppliedPairwiseTo (p,q) -> m-element;
+coherence;
+end;
+
+notation
+let D,f; let p,q be Element of D*;
+synonym f _\ (p,q) for f AppliedPairwiseTo (p,q);
+end;
+
+definition ::to infer NAT c= INT more easily
+redefine func INT equals NAT \/ ([:{0},NAT:] \ {[0,0]});
+compatibility
+proof
+B1: not [0,0] in NAT by ARYTM_3:38;
+INT=NAT \ {[0,0]} \/ ([:{0},NAT:] \ {[0,0]}) by NUMBERS:def 4, XBOOLE_1:42.=
+NAT \/ ([:{0},NAT:] \ {[0,0]}) by ZFMISC_1:65, B1; hence thesis;
+end;
+end;
+
+theorem Th16: for p being FinSequence st p is Y-valued & p is m-element holds
+p in m-tuples_on Y
+proof
+reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+let p be FinSequence; assume p is Y-valued & p is m-element; then
+rng p c= Y & len p = mm by RELAT_1:def 19, CARD_1:def 13;
+hence thesis by FINSEQ_2:152;
+end;
+
+::##############################Automatizations###############################
+::############################################################################
+
+::#To automatize things like A/\B c= A
+definition let A,B;
+func A typed/\ B -> Subset of A equals A/\B;
+coherence by XBOOLE_1:17;
+func A /\typed B -> Subset of B equals A/\B;
+coherence by XBOOLE_1:17;
+end;
+
+registration let A,B;
+identify A/\B with A typed/\ B;
+compatibility;
+identify A typed/\ B with A/\B;
+compatibility;
+identify A/\B with A /\typed B;
+compatibility;
+identify A /\typed B with A/\B;
+compatibility;
+end;
+
+definition let B,A;
+func A null B equals A;
+coherence;
+end;
+
+registration :: to automatize things like X/\(X/\Y)=X/\Y
+let A; let B be Subset of A;
+identify A/\B with B null A;
+compatibility by XBOOLE_1:28;
+identify B null A with A/\B;
+compatibility;
+end;
+
+registration
+let A,B,C;
+cluster (B\A) /\ (A/\C) -> empty set;
+coherence
+proof
+set X=B\A, Y=A/\C; X misses A & Y c= A by XBOOLE_1:79; then
+X misses Y by XBOOLE_1:63; hence thesis by XBOOLE_0:def 7;
+end;
+end;
+
+definition ::To automatize things like A\B c= A
+let A,B;
+func A typed\ B -> Subset of A equals A\B;
+coherence;
+end;
+
+registration let A,B;
+identify A\B with A typed\ B;
+compatibility;
+identify A typed\ B with A\B;
+compatibility;
+end;
+
+definition
+::# to automatize like: A null B c= A\/B; then A c= A\/B; this is mainly
+::# not to have to remember each time what XBOOLE_1 theorem is to be invoked,
+::# as element as this file is imported via definitions directive
+let A,B;
+func A \typed/ B -> Subset of A\/B equals A;
+coherence by XBOOLE_1:7;
+end;
+
+registration
+let A,B;
+identify A \typed/ B with A null B;
+compatibility;
+identify A null B with A \typed/ B ;
+compatibility;
+end;
+
+registration :: to automatize things like X\/(X/\Y)=X
+let A; let B be Subset of A;
+identify A\/B with A null B;
+compatibility by XBOOLE_1:12;
+identify A null B with A\/B;
+compatibility;
+end;
+
+reserve X for set, P,Q,R for Relation, f for Function, p,q for FinSequence;
+reserve U1,U2 for non empty set;
+
+Lm43: f c= g implies iter(f,m) c= iter(g,m)
+proof
+assume B2: f c= g; defpred P[Nat] means iter(f,$1) c= iter(g,$1);
+B0: P[0]
+proof
+C0: iter(f,0)=id field f & iter(g,0)=id field g by FUNCT_7:70;
+dom f c= dom g & rng f c= rng g by RELAT_1:25, B2; then
+dom f \/ rng f c= dom g \/ rng g by XBOOLE_1:13;
+hence thesis by C0, FUNCT_4:4;
+end;
+B1: for n st P[n] holds P[n+1]
+proof
+let n; assume P[n]; then
+f*iter(f,n) c= g*iter(g,n) by B2, RELAT_1:50; then
+iter(f,n+1) c= g*iter(g,n) by FUNCT_7:73; hence thesis by FUNCT_7:73;
+end;
+P[n] from NAT_1:sch 2(B0,B1); hence thesis;
+end;
+
+Lm31: R[*] is_transitive_in field R
+proof
+set X=field R, S=R[*];
+now
+let x,y,z; assume C7: x in X & y in X & z in X;
+assume C0: [x,y] in S & [y,z] in S;
+consider p1 being FinSequence such that C1: len p1 >= 1 & p1.1 = x &
+p1.(len p1) = y & for i being Nat st i >= 1 & i < len p1 holds
+[p1.i,p1.(i+1)] in R by C0, FINSEQ_1:def 16;
+consider m being Nat such that C5: len p1=m+1 by NAT_1:6, C1;
+consider p2 being FinSequence such that C2: len p2 >= 1 & p2.1 = y &
+p2.(len p2) = z & for i being Nat st i >= 1 & i < len p2 holds
+[p2.i,p2.(i+1)] in R by C0, FINSEQ_1:def 16;
+C6: 1 in dom p2 by FINSEQ_3:27, C2;
+reconsider l1=len p1, l2=len p2 as non zero Nat by C1, C2;
+reconsider p11=p1|(Seg m) as FinSequence;
+set p=p11^p2;
+Z1: m+0<m+1 by XREAL_1:10;
+C21: len p11=m by Z1, C5, FINSEQ_1:21;
+Z11: m+l2>=0+1 by C2, XREAL_1:9;
+C3: n>=1 & n<=len p2 implies p.(m+n) = p2.n
+proof
+reconsider nn=n as Element of NAT by ORDINAL1:def 13; D0: nn=n;
+assume n>=1 & n<=len p2; then n in Seg len p2 by D0; then
+n in dom p2 by FINSEQ_1:def 3; hence thesis
+by FINSEQ_1:def 7, C21;
+end;
+C11: p.1=x
+proof
+per cases;
+suppose D0: m=0;
+thus p.1 = x by D0, C5, C1, C3, C2;
+end;
+suppose m<>0;
+then 0+1<=m by INT_1:20; then 1 in Seg m;
+then E0: 1 in dom p11 by Z1, C5, FINSEQ_1:21;
+hence p.1=p11.1 by FINSEQ_1:def 7 .= x by C1, FUNCT_1:70, E0;
+end;
+end;
+l2 in Seg l2 by C2; then
+l2 in dom p2 by FINSEQ_1:def 3; then
+Z13: p.(len p11+len p2) = z by FINSEQ_1:def 7, C2;
+C13: for i being Nat st i>=1 & i<len p holds [p.i,p.(i+1)] in R
+proof
+let i be Nat; assume
+Z9: i >= 1 & i < len p; then
+D1: i+1>=1 & i>=1 & i<len p by NAT_1:11;
+per cases by XXREAL_0:1;
+suppose i < m; then E1: i<l1 & i<m & i+1<=m
+by INT_1:20, Z1, C5, XXREAL_0:2; then
+i in Seg m & i+1 in Seg m by FINSEQ_1:3, D1; then
+E0: i in dom p11 & i+1 in dom p11
+by Z1, C5, FINSEQ_1:21; then
+p.i = p11.i & p.(i+1)=p11.(i+1) by FINSEQ_1:def 7; then
+p.i = p1.i & p.(i+1)=p1.(i+1) by E0, FUNCT_1:70;
+hence [p.i, p.(i+1)] in R by C1, Z9, E1;
+end;
+suppose
+E0: i = m;
+E10: m in dom p11 by E0, Z9, C21, FINSEQ_3:27;
+then
+E1: p.m = p11.m by FINSEQ_1:def 7 .= p1.m by FUNCT_1:70,E10;
+E2: p.(m+1)= p1.(m+1) by
+C1, C6, C5, C21, FINSEQ_1:def 7, C2;
+thus [p.i, p.(i+1)] in R by E0, E1, E2, C1, Z9, Z1, C5;
+end;
+suppose E4: i > m;
+then consider j being Nat such that E3: i=m+j by NAT_1:10;
+j<>0 by E4, E3; then
+Z12: j>=0+1 by INT_1:20; then
+E7: j>=1 & j+1>=1+0 by XREAL_1:9;
+m+j<m+l2 by E3, Z9, C21, FINSEQ_1:35; then
+E5: j<l2 by XREAL_1:9; then
+E6: j<=l2 & j+1<=l2 by INT_1:20;
+j in Seg l2 & j+1 in Seg l2 by E6,E7,FINSEQ_1:3; then
+E0: j in dom p2 & j+1 in dom p2 by FINSEQ_1:def 3;
+E1: p.i = p2.j by FINSEQ_1:def 7, E0, E3, C21;
+E2: p.(i+1)=p.(len p11 +(j+1)) by E3, C21 .=
+p2.(j+1) by FINSEQ_1:def 7,E0;
+thus [p.i, p.(i+1)] in R by E1, E2, C2,E5,Z12;
+end;
+end;
+x in X & z in X & len p >= 1 & p.1=x & p.(len p)=z &
+for i being Nat st i>=1 & i<len p holds [p.i,p.(i+1)] in R
+by C7,Z11, C21, FINSEQ_1:35,C11,Z13,C13; hence
+[x,z] in S by FINSEQ_1:def 16;
+end;
+hence thesis by RELAT_2:def 8;
+end;
+
+Lm32: field (R[*]) c= field R
+proof
+set RR=R[*], LH=field RR, RH=field R;
+now
+let x; assume
+Z0: x in LH;
+per cases by Z0, XBOOLE_0:def 3;
+suppose x in dom RR; then consider y such that
+D0: [x,y] in RR by RELAT_1:def 4;
+thus x in RH by D0, FINSEQ_1:def 16;
+end;
+suppose x in rng RR; then consider y such that
+D0: [y,x] in RR by RELAT_1:def 5;
+thus x in RH by FINSEQ_1:def 16,D0;
+end;
+end;
+hence thesis by TARSKI:def 3;
+end;
+
+Lm37: R[*] is_reflexive_in field R
+proof
+set RR=R[*], X=field R;
+now
+let x; reconsider p=<*x*> as 1-element FinSequence;
+len p=1 & p.1=x by FINSEQ_1:57; then
+C0: len p >= 1 & p.1=x & p.(len p)=x &
+for i st i>=1 & i<len p holds [p.i, p.(i+1)] in R;
+assume x in X; hence [x,x] in RR by C0, FINSEQ_1:def 16;
+end;
+hence thesis by RELAT_2:def 1;
+end;
+
+Lm34: field (R[*]) = field R
+proof
+set LH=field(R[*]), RH=field R;
+B0: RH c= LH by LANG1:18, RELAT_1:31;
+LH c= RH by Lm32;
+hence thesis by XBOOLE_0:def 10, B0;
+end;
+
+registration
+let R be Relation;
+cluster R[*] -> transitive Relation;
+coherence
+proof
+R[*] is_transitive_in field R by Lm31; then
+R[*] is_transitive_in field (R[*]) by Lm34;
+hence thesis by  RELAT_2:def 16;
+end;
+cluster R[*] -> reflexive Relation;
+coherence
+proof
+R[*] is_reflexive_in field R by Lm37; then
+R[*] is_reflexive_in field (R[*]) by Lm34; hence thesis by RELAT_2:def 9;
+end;
+end;
+
+Lm38: iter (f,0) c= f[*]
+proof
+set LH=iter(f,0), RH=f[*];
+LH = id (field f) by FUNCT_7:70 .= id (field RH) by Lm34;
+hence thesis by RELAT_2:17;
+end;
+
+Lm39: iter (f,m+1) c= f[*]
+proof
+set RH=f[*];
+defpred P[Nat] means iter(f,$1+1) c= RH;
+B0: P[0]
+proof
+C0: iter(f,1)=f by FUNCT_7:72;
+thus thesis by LANG1:18, C0;
+end;
+B1: for n st P[n] holds P[n+1]
+proof
+let n; assume P[n];
+then iter (f,n+1) c= RH & f c= RH by LANG1:18; then
+C0: (iter (f,n+1))*f c= RH*RH by RELAT_1:50;
+RH*RH c= RH by RELAT_2:44; then (iter (f,n+1))*f c= RH by C0, XBOOLE_1:1;
+hence thesis by FUNCT_7:71;
+end;
+for n holds P[n] from NAT_1:sch 2(B0,B1); hence thesis;
+end;
+
+Lm40: iter (f,m) c= f[*]
+proof
+per cases;
+suppose m=0; hence thesis by Lm38; end;
+suppose m<>0; then consider n such that C0: m=n+1 by NAT_1:6;
+thus thesis by Lm39,C0;
+end;
+end;
+
+Lm35:
+(rng f c= dom f & x in dom f & g.0=x & for i st i < m holds g.(i+1)=f.(g.i))
+implies g.m=iter(f,m).x
+proof
+assume B10: rng f c= dom f & x in dom f; then
+B11: x in (dom f \/ rng f) by XBOOLE_0:def 3;
+defpred P[Nat] means (g.0=x & for i st i < $1 holds g.(i+1)=f.(g.i))
+implies g.($1)=(iter(f,$1)).x;
+B0: P[0]
+proof
+Z1: iter(f,0)=id field f by FUNCT_7:70;
+assume g.0=x & for i st i < 0 holds g.(i+1)=f.(g.i);
+hence thesis by Z1, FUNCT_1:34, B11;
+end;
+B1: for n st P[n] holds P[n+1]
+proof
+let n; assume
+C0: P[n]; assume
+C1: g.0=x; assume
+C2: for i st i < n+1 holds g.(i+1)=f.(g.i);
+Z3: for i st i < n holds g.(i+1)=f.(g.i)
+proof
+let i; assume i<n; then i+0<n+1 by XREAL_1:10; hence thesis by C2;
+end;
+C4: x in dom (iter (f,n)) by B10, FUNCT_7:76;
+n+0<(n+1) by XREAL_1:10; then
+g.(n+1)= f.(g.n) by C2 .=
+(f*iter(f,n)).x by C4, FUNCT_1:23, Z3, C0, C1
+.= (iter(f,n+1)).x by FUNCT_7:73; hence thesis;
+end;
+for n holds P[n] from NAT_1:sch 2(B0,B1); hence thesis;
+end;
+
+definition
+func plus -> Function of COMPLEX, COMPLEX means
+:DefPlus: for z being complex number holds it.z=z+1;
+existence
+proof
+defpred P[set,set] means for z being complex number st z=$1 holds $2=z+1;
+B0: for x be Element of COMPLEX ex zz being Element of COMPLEX st P[x,zz]
+proof
+let x be Element of COMPLEX;
+reconsider z0=x as complex number; reconsider
+z1=z0+1 as Element of COMPLEX by XCMPLX_0:def 2; take z1;
+thus P[x,z1];
+end;
+consider f being Function of COMPLEX, COMPLEX such that
+B1: for x being Element of COMPLEX holds P[x,f.x] from FUNCT_2:sch 3(B0);
+take f;
+now
+let z be complex number; reconsider
+zz=z as Element of COMPLEX by XCMPLX_0:def 2;
+z=zz & P[zz,f.zz] by B1; hence f.z=z+1;
+end; hence thesis;
+end;
+uniqueness
+proof
+let IT1,IT2 be Function of COMPLEX, COMPLEX;
+assume B1: for z being complex number holds IT1.z=z+1;
+assume B2: for z being complex number holds IT2.z=z+1;
+now
+let zz be Element of COMPLEX; thus IT1.zz=zz+1 by B1 .=IT2.zz by B2;
+end;
+hence thesis by FUNCT_2:113;
+end;
+end;
+
+Lm36: (rng f c= dom f & x in dom f & p.1=x &
+for i st i>=1 & i < m+1 holds p.(i+1)=f.(p.i)) implies p.(m+1)=iter(f,m).x
+proof
+B4: dom plus=COMPLEX by FUNCT_2:def 1; then
+reconsider
+Z=0 as Element of dom plus by XCMPLX_0:def 2;
+reconsider g=p*plus as Function;
+B2: for z being complex number holds g.z=p.(z+1)
+proof
+let z be complex number; reconsider
+zz=z as Element of dom plus by XCMPLX_0:def 2, B4;
+thus g.z = p.(plus.zz) by FUNCT_1:23 .= p.(z+1) by DefPlus;
+end;
+assume B10: rng f c= dom f & x in dom f;
+assume p.1=x; then p.(0+1)=x; then B0: g.0=x by B2;
+assume B3: for i st i >= 1 & i < m+1 holds p.(i+1)=f.(p.i);
+now
+let j be Nat; reconsider jz=j as complex number;
+assume j<m; then
+j+1 >=0+1 & j+1<m+1 by XREAL_1:9,10; then
+p.(j+1+1)=f.(p.(j+1)) by B3
+.= f.(g.j) by B2;
+hence g.(j+1)=f.(g.j) by B2;
+end;
+then g.m=iter(f,m).x by Lm35,B0,B10; hence p.(m+1)=iter(f,m).x by B2;
+end;
+
+Lm41: z in f[*] & rng f c= dom f implies ex n st z in iter (f,n)
+proof
+set LH=f[*]; assume
+C19: z in LH; then consider x,y such that
+C8: z=[x,y] by RELAT_1:def 1;
+consider p being FinSequence such that
+C0: len p >= 1 & p.1 = x & p.(len p) = y &
+for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in f
+by C8, C19, FINSEQ_1:def 16; assume C9: rng f c= dom f; then
+Z2: field f = dom f & x in field f
+by C8,C19 ,FINSEQ_1:def 16, XBOOLE_1:12;
+consider m being Nat such that C1: m+1=len p by C0, NAT_1:6; take m;
+ for i st i >=1 & i < len p holds p.i in dom f & p.(i+1)=f.(p.i)
+proof
+let i; assume i >= 1 & i < len p; then D0: [p.i,p.(i+1)] in f by C0; hence
+p.i in dom f by RELAT_1:def 4; hence p.(i+1)=f.(p.i) by FUNCT_1:def 4, D0;
+end; then
+C2: m+1 >= 1 & p.1 = x & p.(m+1) = y &
+for i being Nat st i >= 1 & i < m+1 holds p.(i+1)=f.(p.i) by C0, C1;
+x in dom iter (f,m) & p.(m+1)=iter(f,m).x by Z2, C9, C2, Lm36, FUNCT_7:76;
+hence z in iter (f,m) by C8, C0, C1, FUNCT_1:8;
+end;
+
+Lm42: rng f c= dom f implies
+f[*]=union {iter(f,mm) where mm is Element of NAT: not contradiction}
+proof
+set F={iter (f,mm) where mm is Element of NAT:not contradiction},
+LH=f[*], RH=union F;
+now
+let x; assume x in RH; then consider X being set such that
+C0: x in X & X in F by TARSKI:def 4;
+consider mm being Element of NAT such that
+C1: X=iter(f,mm) & not contradiction by C0;
+x in iter (f,mm) & iter (f,mm) c= f[*] by C0, C1, Lm40;
+hence x in LH;
+end; then
+B1: RH c= LH by TARSKI:def 3;
+assume B0: rng f c= dom f;
+now
+let x; assume x in LH; then consider m such that
+C0: x in iter(f,m) by B0, Lm41; reconsider
+mm=m as Element of NAT by ORDINAL1:def 13;
+x in iter (f,mm) & iter(f,mm) in F by C0; hence
+x in RH by TARSKI:def 4;
+end; then
+B2: LH c= RH by TARSKI:def 3;
+thus thesis by B1, B2, XBOOLE_0:def 10;
+end;
+
+theorem rng f c= dom f implies f[*] = ::Th17
+union {iter(f,mm) where mm is Element of NAT: not contradiction} by Lm42;
+
+theorem f c= g implies iter(f,m) c= iter(g,m) by Lm43; ::Th18
+
+registration let X be functional set;
+cluster union X -> Relation-like;
+::# This is stated elsewhere (CARD_4, COMPUT_1, MSUALG_8,ORDINAL1,
+::# TREES_2, WELLFND1), but always in a too strong form
+coherence
+proof
+now
+let x; assume x in union X; then consider Y such that
+C0: x in Y & Y in X by TARSKI:def 4;
+thus ex y,z st x=[y,z] by C0, RELAT_1:def 1;
+end;
+hence thesis by RELAT_1:def 1;
+end;
+end;
+
+theorem Y c= Funcs(A,B) implies union Y c= [:A,B:] by Lm28; ::Th19
+
+registration
+let Y; let R be Y-valued Relation;
+identify Y|R with R null Y;
+compatibility
+proof rng R c= Y by RELAT_1:def 19; hence thesis by RELAT_1:125; end;
+end;
+
+registration
+let Y;
+cluster Y\Y -> empty set;
+coherence by XBOOLE_1:37;
+end;
+
+registration
+let D,d;
+cluster {(id D).d} \ {d} -> empty set;
+coherence
+proof
+(id D).d=d by FUNCT_1:34;hence thesis;
+end;
+end;
+
+registration
+let p be FinSequence, q be empty FinSequence;
+identify p^q with p null q;
+compatibility by FINSEQ_1:47;
+identify p null q with p^q;
+compatibility;
+identify q^p with p null q;
+compatibility by FINSEQ_1:47;
+identify p null q with q^p;
+compatibility;
+end;
+
+registration
+let Y; let R be Y-defined Relation;
+identify R|Y with R null Y;
+compatibility
+proof
+dom R c= Y by RELAT_1:def 18;
+hence thesis by RELAT_1:97;
+end;
+identify R null Y with R|Y;
+compatibility;
+end;
+
+theorem Th20: f={[x,f.x] where x is Element of dom f: x in dom f}
+proof
+set RH={[x,f.x] where x is Element of dom f: x in dom f};
+now let z; assume
+C2: z in f; then consider x, y such that
+C0: z=[x,y] by RELAT_1:def 1;
+reconsider xx=x as Element of dom f by FUNCT_1:8, C0, C2;
+z=[xx,f.xx] & xx in dom f by C0, FUNCT_1:8, C2;
+hence z in RH;
+end; then
+B0: f c= RH by TARSKI:def 3;
+now let z; assume
+C0: z in RH;
+consider x being Element of dom f such that
+D0: z=[x,f.x] & x in dom f by C0;
+thus z in f by D0, FUNCT_1:8;
+end;
+then RH c= f by TARSKI:def 3; hence thesis by XBOOLE_0:def 10, B0;
+end;
+
+theorem Th21: for R being total (Y-defined Relation) holds id Y c= R*(R~)
+proof
+set X=Y; let R be total (X-defined Relation); reconsider f=id X as Function;
+B0: f={[x,f.x] where x is Element of dom f: x in dom f} by Th20;
+now
+let z; assume z in f; then consider x being Element of dom f such that
+C2: z=[x,(id X).x] & x in dom (id X) by B0;
+C0: x in X & z=[x,x] by C2, FUNCT_1:34;
+x in dom R by C0, PARTFUN1:def 4; then consider y such that
+C1: [x,y] in R by RELAT_1:def 4; [y,x] in R~ by C1, RELAT_1:def 7;
+then [x,x] in R*(R~) by C1, RELAT_1:def 8;
+hence z in R*(R~) by C2, FUNCT_1:34;
+end;
+hence thesis by TARSKI:def 3;
+end;
+
+theorem (m+n)-tuples_on D=D-concatenation.: [:m-tuples_on D,n-tuples_on D:]
+proof
+reconsider m,n as Element of NAT by ORDINAL1:def 13;
+set U=D, LH=(m+n)-tuples_on U, M=m-tuples_on U, N=n-tuples_on U,
+C=U-concatenation, RH=C.:[:M,N:];
+B0: LH={z^t where z is Tuple of m,U,  t is Tuple of n,U: not contradiction}
+by FINSEQ_2:125;
+B1: dom C=[:U*,U*:] by FUNCT_2:def 1; M c= U* & N c= U* by FINSEQ_2:154; then
+B2: [:M,N:] c= [:U*, U*:] by ZFMISC_1:119;
+now
+let y; assume y in LH; then
+consider Tz being Tuple of m,U, Tt being Tuple of n,U such that
+C0: y=Tz^Tt & not contradiction by B0;
+reconsider zz=Tz as Element of M by FINSEQ_2:151;
+reconsider tt=Tt as Element of N by FINSEQ_2:151;
+reconsider x=[zz,tt] as Element of [:M,N:];
+reconsider xx=x as Element of dom C by B1, B2, TARSKI:def 3;
+C1: C.:{x} c= RH by RELAT_1:156;
+y= C.(Tz,Tt) by C0, ThConcatenation .= C.x; then
+y in {C.xx} by TARSKI:def 1; then y in Im(C,xx) by FUNCT_1:117;
+hence y in RH by C1;
+end; then
+B3: LH c= RH by TARSKI:def 3;
+now
+let y; assume y in RH; then consider x such that
+C0:x in dom C & x in [:M,N:] & y=C.x by FUNCT_1:def 12;
+consider z,t being set such that
+C1:z in M & t in N & x=[z,t] by ZFMISC_1:def 2, C0;
+reconsider zz=z as Element of M by C1; reconsider tt=t as Element of N by C1;
+reconsider zzz=zz, ttt=tt as FinSequence of U;
+reconsider Tz=zz as Tuple of m, U; reconsider Tt=tt as Tuple of n, U;
+y= C.(zzz,ttt) by C0, C1 .= Tz^Tt by ThConcatenation;
+hence y in LH by B0;
+end;
+then RH c= LH by TARSKI:def 3; hence thesis by B3, XBOOLE_0:def 10;
+end;
+
+theorem Th23: for P,Q being Relation holds (P\/Q)"Y = P"Y \/ (Q"Y)
+proof
+let P,Q be Relation; set R=P\/Q, LH=R"Y, RH=P"Y \/ (Q"Y);
+reconsider PP=P null Q, QQ=Q null P as Subset of R;
+now
+let x; assume x in LH; then consider y such that
+C0: [x,y] in R & y in Y by RELAT_1:def 14;set z=[x,y];
+(z in P & y in Y) or(z in Q & y in Y) by XBOOLE_0:def 3, C0; then
+x in P"Y or x in Q"Y by RELAT_1:def 14;hence x in RH by XBOOLE_0:def 3;
+end; then
+B0: LH c= RH by TARSKI:def 3; reconsider PX=PP"Y, QX=QQ"Y as Subset of LH
+by RELAT_1:179; PX \/ QX c= LH; hence thesis by B0, XBOOLE_0:def 10;
+end;
+
+Lm4: chi(A,B) = (B --> 0) +* (A/\B --> 1)
+proof
+set f=B --> 0, g= A/\B --> 1, IT=f+*g;
+B1: dom f=B & dom g=A/\B & dom IT=dom f\/dom g by FUNCT_4:def 1,FUNCOP_1:19;
+B0: dom IT = B by XBOOLE_1:22, B1;
+now
+let x; assume
+Z0: x in B; then
+C0: x in B & x in dom IT & x in (dom f \/ dom g) by XBOOLE_1:22, B1;
+thus x in A implies IT.x=1
+proof
+assume
+Z1: x in A; then
+D0: x in A/\B by Z0, XBOOLE_0:def 4;
+x in dom g by Z1, Z0, XBOOLE_0:def 4, B1;
+then IT.x = g.x by C0, FUNCT_4:def 1 .= 1 by FUNCOP_1:13, D0; hence thesis;
+end;
+thus not x in A implies IT.x={}
+proof
+assume not x in A; then not x in A/\B; then
+not x in dom g; then IT.x = f.x by C0, FUNCT_4:def 1
+.= 0 by FUNCOP_1:13, Z0; hence thesis;
+end;
+end;
+hence thesis by FUNCT_3:def 3, B0;
+end;
+
+Lm10: chi(A,B) = (B\A --> 0) +* (A/\B --> 1)
+proof
+set Z=B\A, O=A/\B, f=B --> 0, g=O --> 1, IT=chi(A,B);
+reconsider BB=B/\B, OO=O, ZZ=Z as Subset of B; reconsider OOO=O/\O as
+Subset of O; B4: O\/Z=B & dom IT=BB by XBOOLE_1:51, FUNCT_3:def 3;
+B0: B/\OO=OO & Z/\O={} & B/\ZZ=ZZ;
+B1: (f+*g)|Z = f|Z +* (g|Z) & (f+*g)|O = f|O +* (g|O) by FUNCT_4:75;
+B2: f|Z=(B/\Z) --> 0 & g|Z={} --> 1 & f|O=OOO-->0 & g|O=g
+by FUNCOP_1:18, B0; then dom (f|O)=OOO & dom (g|O)=O
+by FUNCOP_1:19; then
+B3: (f|O) +* (g|O) = g|O by FUNCT_4:20;
+thus IT=IT|Z +* IT|O by FUNCT_4:74, B4 .= (f +* g)|Z +* IT|O by Lm4 .=
+(((B/\Z) --> 0) +* {}) +* g|O by B1, Lm4, B2,B3 .=
+(Z --> 0) +* g by FUNCT_4:22;
+end;
+
+Lm29: chi(A,B)=(B\A --> 0) \/ (A/\B --> 1)
+proof
+set f=(B\A)-->0, g=(A/\B)-->1; (B\A) /\ (A/\B)={}; then
+B\A misses A/\B by XBOOLE_0:def 7; then f tolerates g by CIRCCOMB:4;
+then f+*g=f\/g by FUNCT_4:31; hence thesis by Lm10;
+end;
+
+theorem (chi(A,B))"{0}=B\A & (chi(A,B))"{1}=A/\B ::Th24
+proof
+set f=B\A --> 0, g=A/\B --> 1, IT=chi(A,B);
+B0: 0 in {0} & 1 in {1} & not 1 in {0} & not 0 in {1} by TARSKI:def 1;
+B2: f"{1}={} & g"{0}={} by B0, FUNCOP_1:22;
+thus IT"{0} =(f\/g)"{0} by Lm29.=f"{0}\/g"{0} by Th23.= B\A
+by B0, FUNCOP_1:20, B2;
+thus IT"{1} =(f\/g)"{1} by Lm29.=f"{1}\/g"{1} by Th23.= A/\B
+by B0,FUNCOP_1:20, B2;
+end;
+
+theorem for y being non empty set holds (y=f.x iff x in f"{y}) ::Th25
+proof
+let y be non empty set; thus y=f.x implies x in f"{y}
+proof
+assume y=f.x; then x in dom f & f.x in {y} by FUNCT_1:def 4, TARSKI:def 1;
+hence thesis by FUNCT_1:def 13;
+end;
+assume x in f"{y}; then x in dom f & f.x in {y} by FUNCT_1:def 13;
+hence thesis by TARSKI:def 1;
+end;
+
+theorem ::Th26
+f is Y-valued & f is FinSequence-like implies f is FinSequence of Y by Lm45;
+
+registration
+let Y; let X be Subset of Y;
+cluster X-valued -> Y-valued Relation;
+coherence
+proof
+let R be Relation; assume R is X-valued; then rng R c= X & X c= Y by
+RELAT_1:def 19;then rng R c= Y by XBOOLE_1:1;hence thesis by RELAT_1:def 19;
+end;
+end;
+
+Lm46: for R being total (Y-defined Relation) ex
+f being Function of Y, rng R st f c= R & dom f=Y
+proof
+set X=Y; let R be total (X-defined Relation);
+B0: dom R=X by PARTFUN1:def 4;
+defpred P[set,set] means [$1,$2] in R;
+B1: for x st x in X ex y st P[x,y] by RELAT_1:def 4, B0;
+consider f such that
+B2: dom f=X & for x st x in X holds P[x,f.x] from CLASSES1:sch 1(B1);
+B3: f={[x,f.x] where x is Element of dom f: x in dom f} by Th20;
+Z1: now
+let z; assume z in f; then consider x being Element of dom f such that
+C0: z=[x,f.x] & x in dom f by B3;
+thus z in R by C0, B2;
+end; then
+ f c= R by TARSKI:def 3; then rng f c= rng R by RELAT_1:25; then
+reconsider g=f as Function of X, rng R by B2, RELSET_1:11, FUNCT_2:130;
+take g; thus thesis by Z1, TARSKI:def 3, B2;
+end;
+
+Lm47: (dom f c= dom R & R c= f) implies R=f
+proof :: generalizing GRFUNC_1:9
+set X=dom f; assume
+B4: X c= dom R & R c= f; then
+B2: X c= dom R & dom R c= X by RELAT_1:25; then
+B3: dom f=dom R by XBOOLE_0:def 10; reconsider RR=R as X-defined Relation
+by RELAT_1:def 18, B2; reconsider P=RR as total (X-defined Relation)
+by PARTFUN1:def 4, B3; consider g being Function of X, rng P such that
+B0: g c= P & dom g=X by Lm46;
+f c= R by GRFUNC_1:9, B0, B4, XBOOLE_1:1;
+hence thesis by B4, XBOOLE_0:def 10;
+end;
+
+Lm48: for Q being Y-defined Relation st Q is total & R is Y-defined &
+P*Q*(Q~)*R is Function-like & rng P c= dom R holds P*Q*(Q~)*R=P*R
+proof
+let Q be Y-defined Relation; assume Q is total; then
+reconsider QQ=Q as total (Y-defined Relation); set tQ=QQ~;
+assume R is Y-defined; then reconsider RR=R as Y-defined Relation;
+assume P*Q*(Q~)*R is Function-like; then reconsider f=P*Q*tQ*R as Function;
+B0: f=(P*Q)*(tQ*R) by RELAT_1:55 .=
+P*(Q*(tQ*R)) by RELAT_1:55 .= P*(Q*tQ*RR) by RELAT_1:55;
+(id Y)*RR c= Q*tQ*RR by RELAT_1:49, Th21; then
+Z1: RR|Y c= Q*tQ*RR by RELAT_1:94;
+assume rng P c= dom R; then
+B1: dom (P*R)=dom P by RELAT_1:46;
+dom (P*(Q*tQ)) c= dom P & dom ((P*Q*tQ)*R) c= dom (P*Q*tQ) by RELAT_1:44;
+then dom (P*Q*tQ) c= dom P & dom f c= dom (P*Q*tQ) by RELAT_1:55; then
+dom f c= dom (P*R) by XBOOLE_1:1, B1;
+hence thesis by Z1, B0, RELAT_1:48, Lm47;
+end;
+
+registration let A,U;
+cluster quasi_total -> total Relation of A,U;
+coherence
+proof
+let R be Relation of A,U; assume R is quasi_total; then
+dom R=A by FUNCT_2:def 1; hence thesis by PARTFUN1:def 4;
+end;
+end;
+
+theorem for Q being quasi_total Relation of B, U1, ::Th27
+R being quasi_total Relation of B, U2, P being Relation of
+A, B st P*Q*(Q~)*R is Function-like holds P*Q*(Q~)*R=P*R
+proof
+let Q be quasi_total Relation of B, U1;
+let  R be quasi_total Relation of B, U2; let P be Relation of A, B;
+reconsider QQ=Q as total (B-defined Relation);
+reconsider RR=R as total (B-defined Relation);
+Z0: dom R=B & rng P c= B by PARTFUN1:def 4;
+assume P*Q*(Q~)*R is Function-like; hence thesis by Z0, Lm48;
+end;
+
+theorem for p,q being FinSequence st p is non empty holds (p^q).1=p.1
+proof
+let p,q be FinSequence; assume p is non empty; then reconsider
+p as non empty FinSequence; set n=len p;
+1<=1 & 1<=n by NAT_1:14; then 1 in Seg n; then
+1 in dom p by FINSEQ_1:def 3; hence thesis by FINSEQ_1:def 7;
+end;
+
+registration :: to be generalized for p being X-valued, q being Y-valued
+let U; let p,q be U-valued FinSequence;
+cluster p^q -> U-valued FinSequence;
+coherence
+proof
+reconsider pp=p, qq=q as FinSequence of U by Lm45; pp^qq is U-valued;
+hence thesis;
+end;
+end;
+
+definition let X be set;
+redefine mode FinSequence of X -> Element of X*;
+coherence by FINSEQ_1:def 11;
+end;
+
+definition ::def21 1
+let U,X;
+redefine attr X is U-prefix means for p1, q1, p2, q2
+being U-valued FinSequence st p1 in X & p2 in X & p1^q1=p2^q2 holds
+(p1=p2 & q1=q2);
+compatibility
+proof
+set f=U-concatenation, D=U*;
+defpred Q[set] means $1 is FinSequence of U;
+defpred P[] means for p1, q1, p2, q2 being U-valued FinSequence st
+p1 in X & p2 in X & p1^q1=p2^q2 holds (p1=p2 & q1=q2);
+thus X is U-prefix implies P[]
+proof
+assume X is U-prefix; then
+B2: X is f-unambiguous by DefPrefix; let p1,q1,p2,q2
+be U-valued FinSequence;
+Z0: Q[p1] & Q[p2] & Q[q1] & Q[q2] by Lm45; assume
+p1 in X & p2 in X; then
+B1: p1 in X/\D & p2 in X/\D & q1 in U* & q2 in U* by Z0,XBOOLE_0:def 4;
+assume p1^q1=p2^q2; then f.(p1,q1)=p2^q2 by Th4 .= f.(p2,q2) by Th4; hence
+p1=p2 & q1=q2 by B2, DefUnambiguous2, B1;
+end;
+assume B3: P[];
+now
+let x1, x2, d1, d2 be set; assume
+C0: x1 in X/\D & x2 in X/\D & d1 in D & d2 in D;
+then reconsider x11=x1, x22=x2, d11=d1, d22=d2 as Element of D;
+assume f.(x1,d1)=f.(x2,d2);
+then x11^d11=f.(x22,d22) by Th4 .= x22^d22 by Th4;
+hence x1=x2 & d1=d2 by B3, C0;
+end;
+then X is f-unambiguous by DefUnambiguous2; hence thesis by DefPrefix;
+end;
+end;
+
+registration
+let X be set;
+cluster -> X-valued Element of X*;
+coherence;
+end;
+
+registration
+let U, m; let X be U-prefix set;
+cluster (U-multiCat).:(m-tuples_on X) -> U-prefix set;
+coherence by Lm25;
+end;
+
+theorem Th29: X \+\ Y={} iff X=Y
+proof
+set Z=X \+\ Y, Z1=X\Y, Z2=Y\X;
+thus Z={} implies X=Y
+proof
+assume Z={}; then Z1={} & Z2={}; then
+X c= Y & Y c= X by XBOOLE_1:37; hence thesis by XBOOLE_0:def 10;
+end;
+assume X=Y;
+hence thesis;
+end;
+
+registration let x;
+cluster (id {x}) \+\ {[x,x]} -> empty set;
+coherence proof id {x} = {[x,x]} by SYSREL:30; hence thesis; end;
+end;
+
+registration
+let x,y;
+cluster (x.-->y) \+\ {[x,y]} -> empty set;
+coherence proof x.-->y={[x,y]} by ZFMISC_1:35; hence thesis; end;
+end;
+
+registration
+let x;
+cluster (id {x}) \+\ (x.-->x) -> empty set;
+coherence
+proof
+(id {x}) \+\ {[x,x]} = {} & (x.-->x) \+\ {[x,x]}={};
+hence thesis by Th29;
+end;
+end;
+
+theorem x in D*\{{}} iff (x is D-valued FinSequence & x is non empty)
+proof
+(x is D-valued FinSequence & x is non empty) iff
+(x is non empty FinSequence of D) by Lm45; hence thesis by Lm2;
+end;
+
+reserve f for BinOp of D;
+
+theorem Th31:
+(MultPlace(f)).(<*d*>) = d & for x being D-valued FinSequence st
+x is non empty holds (MultPlace(f)).(x^<*d*>) = f.((MultPlace(f)).x, d)
+proof
+set F=MultPlace f; thus F.<*d*>=d by LmMultPlace;
+let x be D-valued FinSequence; assume x is non empty; then
+reconsider xx=x as non empty FinSequence of D by Lm45;
+F.(xx^<*d*>)=f.(F.xx,d) by LmMultPlace; hence thesis;
+end;
+
+reserve
+A,B,C,X,Y,Z,x,x1,x2,y,y1,y2,z for set, U,U1,U2,U3 for non empty set,
+u,u1,u2 for Element of U, P,Q,R for Relation, f,g for Function,
+k,m,n for Nat, kk,mm,nn for Element of NAT, m1, n1 for non zero Nat,
+p, p1, p2 for FinSequence, q, q1, q2 for U-valued FinSequence;
+
+registration
+let p,x,y;
+cluster p +~ (x,y) -> FinSequence-like;
+coherence
+proof
+set IT=p+~(x,y); dom IT=dom p by FUNCT_4:105 .= Seg (len p)
+by FINSEQ_1:def 3; hence thesis by FINSEQ_1:def 2;
+end;
+end;
+
+definition
+let x,y,p;
+func (x,y)-SymbolSubstIn p -> FinSequence equals p +~ (x,y);
+coherence;
+end;
+
+registration
+let x,y,m; let p be m-element FinSequence;
+cluster (x,y)-SymbolSubstIn p -> m-element FinSequence;
+coherence
+proof
+set IT=(x,y)-SymbolSubstIn p;
+reconsider mm=m as Element of NAT by ORDINAL1:def 13; dom IT = dom p
+by FUNCT_4:105.= Seg len p by FINSEQ_1:def 3 .= Seg mm by CARD_1:def 13;
+then len IT=mm by FINSEQ_1:def 3; hence thesis by CARD_1:def 13;
+end;
+end;
+
+registration
+let X;
+cluster X-valued FinSequence;
+existence
+proof
+reconsider IT={} as FinSequence; take IT; rng IT = X /\ {};
+hence thesis by RELAT_1:def 19;
+end;
+end;
+
+registration
+let x, U, u; let p be U-valued FinSequence;
+cluster (x,u)-SymbolSubstIn p -> U-valued FinSequence;
+coherence;
+end;
+
+definition
+let X,x,y; let p be X-valued FinSequence;
+redefine func (x,y)-SymbolSubstIn p equals
+(id X +* (x,y))*p;
+compatibility
+proof rng p c= X by RELAT_1:def 19; hence thesis by FUNCT_7:118; end;
+end;
+
+definition
+let U, x, u, q;
+redefine func (x,u)-SymbolSubstIn q -> FinSequence of U;
+coherence by Lm45;
+end;
+
+Lm53:
+(u=u1 implies (u1,x2)-SymbolSubstIn <*u*>=<*x2*>) &
+(u<>u1 implies (u1,x2)-SymbolSubstIn <*u*>=<*u*>)
+proof
+set X=U, s=u, s1=u1, s2=x2, w=<*s*>, IT=(s1,s2)-SymbolSubstIn w, f1=1.-->s1,
+f2=1.-->s2,f=1.-->s,subst=s1 .--> s2, I=id X, w1=<*s1*>, w2=<*s2*>;
+Z0: w \+\ f={} & w2 \+\ f2={} & w1 \+\ f1={}; then
+B0: w=f & w2=f2 & w1=f1 by Th29;
+B2: dom subst={s1} & dom f2={1} & dom f1={1} & dom f={1}
+& rng f={s} by FUNCOP_1:14, 19; s1 in {s1} by TARSKI:def 1; then
+B5: subst.s1=s2 by FUNCOP_1:13;
+B3: IT = w +* (subst*f) by Z0, Th29;
+thus s=s1 implies IT = w2
+proof
+assume C0: s=s1; then s in dom subst by B2, TARSKI:def 1; then
+IT = f +* f2 by C0, B0, B5, FUNCOP_1:23 .=
+w2 by B0, FUNCT_4:20, B2; hence IT=w2;
+end;
+assume s<>s1; then
+subst*f={} by B2, ZFMISC_1:17, RELAT_1:67;
+hence thesis by B3, FUNCT_4:22;
+end;
+
+Lm50: (x, u)-SymbolSubstIn (q1^q2) =
+((x, u)-SymbolSubstIn q1) ^ (x, u)-SymbolSubstIn q2
+proof
+set s1=x, s2=u, w1=q1, w2=q2, w=w1^w2, IT1=(s1, s2)-SymbolSubstIn w1,
+IT2=(s1, s2)-SymbolSubstIn w2,IT=(s1, s2)-SymbolSubstIn w,f=s1.-->s2,I=id U;
+reconsider g=I+*(s1,s2) as Function of U, U;
+reconsider w11=w1, w22=w2, ww=w as FinSequence of U by Lm45; thus
+IT = (g*w11) ^ (g*w22) by FINSEQOP:10 .= IT1 ^ IT2;
+end;
+
+definition ::def24 1
+let U, x, u; set D=U*;
+deffunc F(Element of U*)=(x,u)-SymbolSubstIn $1;
+func x SubstWith u -> Function of U*, U* means :DefSubst:
+for q holds it.q = (x, u)-SymbolSubstIn q;
+existence
+proof
+consider f being Function of D,D such that
+B0: for x being Element of D holds f.x=F(x) from FUNCT_2:sch 4;
+take f;
+now
+let q; reconsider qq=q as FinSequence of U by Lm45;
+reconsider qqq=qq as Element of D; f.qqq=F(qqq) by B0;
+hence f.q = (x,u)-SymbolSubstIn q;
+end;
+hence thesis;
+end;
+uniqueness
+proof
+let IT1, IT2 be Function of D, D; assume
+B1: for q holds IT1.q = (x, u)-SymbolSubstIn q; assume
+B2: for q holds IT2.q = (x, u)-SymbolSubstIn q;
+now let w be Element of D; thus IT1.w=F(w) by B1 .= IT2.w by B2; end;
+hence thesis by FUNCT_2:113;
+end;
+end;
+
+Lm54: (u=u1 implies (u1 SubstWith u2).<*u*>=<*u2*>) &
+(u<>u1 implies (u1 SubstWith u2).<*u*>=<*u*>)
+proof
+set e=u1 SubstWith u2, es=(u1,u2)-SymbolSubstIn <*u*>;
+es=e.<*u*> by DefSubst; hence thesis by Lm53;
+end;
+
+registration
+let U, x, u;
+cluster x SubstWith u -> FinSequence-yielding Function;
+coherence
+proof
+set e=x SubstWith u;
+now
+let y; assume y in dom e; then reconsider yy=y as Element of U*;
+e.yy is FinSequence; hence e.y is FinSequence;
+end;
+hence thesis by PRE_POLY:def 3;
+end;
+end;
+
+registration
+let F be FinSequence-yielding Function, x be set;
+cluster F.x -> FinSequence-like;
+coherence
+proof
+per cases;
+suppose x in dom F; hence thesis by PRE_POLY:def 3; end;
+suppose not x in dom F; hence thesis by FUNCT_1:def 4; end;
+end;
+end;
+
+Lm55: (x SubstWith u).(q1^q2)=((x SubstWith u).q1)^((x SubstWith u).q2)
+proof
+set e=x SubstWith u, w1=q1, w2=q2, w=w1^w2, W1=(x,u)-SymbolSubstIn w1,
+W2=(x,u)-SymbolSubstIn w2, W=(x,u)-SymbolSubstIn w;
+e.w1=W1 & e.w2=W2 & e.w=W by DefSubst; hence thesis by Lm50;
+end;
+
+registration
+let U,x,u,m; let p be U-valued m-element FinSequence;
+cluster (x SubstWith u).p -> m-element FinSequence;
+coherence
+proof (x SubstWith u).p=(x,u)-SymbolSubstIn p by DefSubst; hence thesis; end;
+end;
+
+registration
+let U,x,u; let e be empty set;
+cluster (x SubstWith u).e -> empty set;
+coherence
+proof
+rng e = U/\{};
+then reconsider ee=e as U-valued 0-element FinSequence by RELAT_1:def 19;
+(X SubstWith u).ee is 0-element; hence thesis;
+end;
+end;
+
+registration
+let U;
+cluster U-multiCat -> FinSequence-yielding Function;
+coherence
+proof
+set f=U-multiCat, C=U*, D=C*;
+now
+let x; assume x in dom f; then reconsider xx=x as Element of dom f;
+f.xx is Element of C; hence f.x is FinSequence;
+end;
+hence thesis by PRE_POLY:def 3;
+end;
+end;
+
+registration
+let U;
+cluster non empty (U-valued FinSequence);
+existence proof
+take <*the Element of U*>; thus thesis; end;
+end;
+
+registration
+let U,m1,n; let p be (m1+n)-element U-valued FinSequence;
+cluster {p.m1} \ U -> empty set;
+coherence
+proof
+consider m such that B0: m1=m+1 by NAT_1:6;
+set IT={p.m1}\U, M=m1+n; p in M-tuples_on U by Th16; then
+p is Element of Funcs(Seg M,U) by Lm21; then
+reconsider f=p as Function of Seg M, U; 1<=m+1 & m+1<=m+1+n by NAT_1:11;
+then reconsider ms=m1 as Element of Seg M by B0, FINSEQ_1:3;
+f.ms in U;
+hence thesis by ZFMISC_1:68;
+end;
+end;
+
+registration
+let U,m,n; let p be (m+1+n)-element Element of U*;
+cluster {p.(m+1)} \ U -> empty set;
+coherence;
+end;
+
+registration
+let x;
+cluster <*x*> \+\ {[1,x]} -> empty set;
+coherence;
+end;
+
+registration ::funcreg39 1
+let m; let p be (m+1)-element FinSequence;
+cluster p|Seg m ^ <*p.(m+1)*> \+\ p -> empty set;
+coherence
+proof
+set q=p|Seg m; len p=m+1 by CARD_1:def 13; then
+p=q^<*p.(m+1)*> by FINSEQ_3:61; hence thesis;
+end;
+end;
+
+registration
+let m,n; let p be (m+n)-element FinSequence;
+cluster p|Seg m -> m-element FinSequence;
+coherence
+proof
+reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+set q=p|(Seg m), N=m+n; m + 0 <= N & len p=N by XREAL_1:9, CARD_1:def 13;
+then Seg m c= Seg N & dom p = Seg N by FINSEQ_1:7, def 3; then
+reconsider M=Seg m as Subset of dom p;
+dom q= M null (dom p) by RELAT_1:90 .= Seg mm;
+then len q=mm by FINSEQ_1:def 3; hence thesis by CARD_1:def 13;
+end;
+end;
+
+Lm51: R is {{}}-valued iff R is empty-yielding
+proof
+R is {{}}-valued iff rng R c= {{}} by RELAT_1:def 19;
+hence thesis by RELAT_1:def 15;
+end;
+
+registration
+cluster {{}}-valued -> empty-yielding Relation;
+coherence by Lm51;
+cluster empty-yielding -> {{}}-valued Relation;
+coherence by Lm51;
+end;
+
+theorem Th32: U-multiCat.x=(MultPlace(U-concatenation)).x
+proof
+set D=U*, f=U-concatenation, F=MultPlace f, G=U-multiCat;
+reconsider g={} .--> {} as {{}}-valued Function;
+dom f=[:D,D:] & dom F=D*\{{}} & dom G=D* by FUNCT_2:def 1; then
+reconsider dF=dom F as Subset of dom G;
+per cases;
+suppose x in dom F; hence G.x=F.x by FUNCT_4:14; end;
+suppose C0: not x in dom F; hence G.x = g.x by FUNCT_4:12 .=
+F.x by FUNCT_1:def 4, C0; end;
+end;
+
+theorem Th33: p is U*-valued implies
+(U-multiCat).(p^<*q*>) = (U-multiCat.p)^q
+proof
+set C=U-multiCat, g=U-concatenation, G=MultPlace g;
+reconsider qq=q as FinSequence of U by Lm45;
+per cases;
+suppose p is empty; then reconsider e=p as empty set;
+C0: (C.e)^q=q & C.(e^<*q*>) = C.(<*q*>);
+C.(e^<*q*>)=G.(<*qq*>) by Th32 .= qq by Th31; hence thesis
+by C0
+; end;
+suppose C0: not p is empty; assume p is U*-valued; then reconsider
+pp=p as non empty U*-valued FinSequence by C0;
+reconsider ppp=pp as non empty FinSequence of U* by Lm45;
+C.(pp^<*q*>)= G.(pp^<*qq*>) by Th32 .= g.(G.pp, qq) by Th31 .=
+g.(C.ppp, q) by Th32 .= (C.p) ^ q by Th4; hence thesis;
+end;
+end;
+
+Lm52: p is U*-valued implies
+(x SubstWith u).(U-multiCat.p)=U-multiCat.((x SubstWith u)*p)
+proof
+set S=U, C=S-multiCat, SS=U, strings=U*, e=x SubstWith u, m=len p,
+F=U-firstChar, FF=strings-firstChar, g=SS-concatenation, G=MultPlace g;
+defpred P[Nat] means for p being $1-element strings-valued FinSequence
+holds e.(C.p)=C.(e*p);
+B10: P[0];
+B11: for n st P[n] holds P[n+1]
+proof
+let n; set n1=n+1; assume
+C0: P[n]; let p be n1-element strings-valued FinSequence;
+reconsider q=p|Seg n as n-element strings-valued FinSequence;
+reconsider qq=q as n-element FinSequence of strings by Lm45;
+p is (n1+0)-element; then {p.n1}\strings={}; then
+reconsider z=p.n1 as Element of strings by ZFMISC_1:68;
+reconsider f=e.z as Element of SS*; q^<*z*> \+\ p ={}; then
+C1: q^<*z*>=p by Th29;
+C.(e*p)= C.((e*qq)^<*f*>) by FINSEQOP:9,C1 .=
+(C.(e*qq))^f by Th33 .= (e.(C.qq)) ^ f by C0 .= e.((C.qq)^z) by Lm55
+.= e.(C.p) by Th33, C1; hence thesis;
+end;
+B1: for n holds P[n] from NAT_1:sch 2(B10, B11);
+assume p is U*-valued; then
+reconsider pp=p as m-element U*-valued FinSequence by CARD_1:def 13;
+e.(C.pp)=C.(e*pp) by B1; hence thesis;
+end;
+
+registration
+let Y; let X be Subset of Y; let R be total (Y-defined Relation);
+cluster R|X -> total (X-defined Relation);
+coherence
+proof
+set IT=R|X; dom R=Y by PARTFUN1:def 4; then
+B0: dom IT=X null Y by RELAT_1:90;
+reconsider ITT=IT as X-defined Relation;
+thus thesis by B0, PARTFUN1:def 4;
+end;
+end;
+
+theorem (u=u1 implies (u1,x2)-SymbolSubstIn <*u*>=<*x2*>) &
+(u<>u1 implies (u1,x2)-SymbolSubstIn <*u*>=<*u*>) ::Th34
+by Lm53;
+
+theorem (u=u1 implies (u1 SubstWith u2).<*u*>=<*u2*>) &
+(u<>u1 implies (u1 SubstWith u2).<*u*>=<*u*>) ::Th35
+by Lm54;
+
+theorem (x SubstWith u).(q1^q2)=((x SubstWith u).q1)^((x SubstWith u).q2)
+by Lm55;
+
+theorem p is U*-valued implies ::Th37
+(x SubstWith u).(U-multiCat.p)=U-multiCat.((x SubstWith u)*p)
+by Lm52;
+
+theorem (U-concatenation).:(id (1-tuples_on U)) =
+{<*u,u*> where u is Element of U: not contradiction} ::Th38
+proof
+set f=U-concatenation, U1=1-tuples_on U, D=id U1, U2=2-tuples_on U, A=f.:D,
+B= {<*u,u*> where u is Element of U: not contradiction};
+D c= [:U1, U1:] & U1 c= U* by FINSEQ_2:162; then
+[:U1, U1:] c= [:U*, U*:] by ZFMISC_1:119; then
+reconsider DD=D as Subset of [:U*, U*:] by XBOOLE_1:1;
+B2: U1={<*u*> where u is Element of U: not contradiction} by FINSEQ_2:116;
+B0: dom D=U1 & dom f=[:U*, U*:] by FUNCT_2:def 1; then
+B1: D={[x,D.x] where x is Element of U1: x in U1} by Th20;
+now
+let y; assume y in A; then consider x such that
+C0: x in dom f & x in D & y=f.x by FUNCT_1:def 12;
+consider p being Element of U1 such that
+C2: x=[p,D.p] & p in U1 by C0, B1; consider u being Element of U such that
+C3: p=<*u*> & not contradiction by C2, B2;
+reconsider pp=p as FinSequence of U; {D.p}\{p} is empty; then
+y=f.(pp,pp) by C0, C2, ZFMISC_1:21; then
+y = <*u,u*> by Th4, C3; hence y in B;
+end; then
+B3: A c= B by TARSKI:def 3;
+now
+let y; assume y in B; then consider u being Element of U such that
+C0: y=<*u,u*> & not contradiction; reconsider p=<*u*> as Element of
+U1 by FINSEQ_2:118; reconsider pp=p as FinSequence of U;
+[p,D.p]=[p,p] & p in U1 by FUNCT_1:35; then [p,p] in D by B1; then
+reconsider dd=[p,p] as Element of D;
+Z0: dd in DD null [:U*, U*:];  y = f.(pp,pp) by C0, Th4 .= f.dd;
+hence y in f.:D by Z0, B0, FUNCT_1:def 12;
+end;
+then B c= A by TARSKI:def 3; hence thesis by B3, XBOOLE_0:def 10;
+end;
+
+registration
+let f,U,u;
+cluster ((f|U).u) \+\ f.u -> empty set;
+coherence proof (f|U).u=f.u by FUNCT_1:72; hence thesis; end;
+end;
+
+registration ::funcreg43 1
+let f,U1,U2; let u be Element of U1, g be Function of U1,U2;
+cluster (f*g).u \+\ f.(g.u) -> empty set;
+coherence
+proof
+dom g=U1 by FUNCT_2:def 1; then
+(f*g).u=f.(g.u) by FUNCT_1:23; hence thesis;
+end;
+end;
+
+registration
+cluster non negative -> natural (integer number);
+coherence
+proof
+let i be integer number; assume i is non negative;
+then i in NAT by INT_1:16; hence thesis;
+end;
+end;
+
+registration
+let x,y be real number;
+cluster max(x,y)-x -> non negative (ext-real number);
+coherence
+proof
+set z=max(x,y); x<=z by XXREAL_0:25; then x+(-x)<=z+(-x) by XREAL_1:8;
+then 0<=z-x; hence thesis;
+end;
+end;
+
+theorem x is boolean implies (x=1 iff x<>0) ::Th38
+by XBOOLEAN:def 3;
+
+registration
+let Y; let X be Subset of Y;
+cluster X\Y -> empty set;
+coherence by XBOOLE_1:37;
+end;
+
+registration
+let x,y;
+cluster {x}\{x,y} -> empty set;
+coherence proof x in {x,y} by TARSKI:def 2;hence thesis by ZFMISC_1:68;end;
+cluster ([x,y]`1) \+\ x -> empty set;
+coherence proof [x,y]`1=x by MCART_1:7;hence thesis; end;
+end;
+registration
+let x,y;
+cluster ([x,y]`2) \+\ y -> empty set;
+coherence
+proof [x,y]`2=y by MCART_1:7 .=[y,x]`1 by MCART_1:7; hence thesis; end;
+end;
+
+registration
+let n be positive Nat;
+let X be non empty set;
+cluster n-element Element of X*\{{}};
+existence
+proof
+consider m such that
+B0: n=m+1 by NAT_1:6;
+set x = the Element of (m+1)-tuples_on X;
+reconsider mm=m+1 as Element of NAT by ORDINAL1:def 13;
+Z0: x in mm-tuples_on X & mm-tuples_on X c= X* by FINSEQ_2:154;
+not x in {{}} by TARSKI:def 1; then
+reconsider xx=x as Element of X*\{{}} by Z0, XBOOLE_0:def 5;
+take xx; thus thesis by B0;
+end;
+end;
+
+registration
+let m1;
+cluster (m1+0)-element -> non empty FinSequence;
+coherence
+proof
+let p be FinSequence; assume p is (m1+0)-element; then
+len p=m1 by CARD_1:def 13; hence thesis;
+end;
+end;
+
+registration
+let R,x;
+cluster R null x -> Relation-like set;
+coherence;
+end;
+
+registration
+let f be Function-like set; let x;
+cluster f null x -> Function-like set;
+coherence;
+end;
+
+registration
+let p be FinSequence-like Relation; let x;
+cluster p null x -> FinSequence-like Relation;
+coherence;
+end;
+
+registration
+let p,x;
+cluster p null x -> (len p)-element FinSequence;
+coherence by CARD_1:def 13;
+end;
+
+registration
+::#need card (non empty) -> non empty from CARD_1 (len being synonym of card)
+let p be non empty FinSequence;
+cluster len p -> non zero number;
+coherence;
+end;
+
+registration
+let R be Relation, X be set;
+cluster R|X -> X-defined Relation;
+coherence
+proof dom (R|X) c= X by RELAT_1:87; hence thesis by RELAT_1:def 18; end;
+end;
+
+registration
+let x; let e be empty set;
+cluster e null x -> empty set;
+coherence;
+end;
+
+registration
+let X; let e be empty set;
+cluster e null X -> X-valued Relation;
+coherence
+proof rng e=rng e /\ X; hence thesis by RELAT_1:def 19; end;
+end;
+
+registration
+let Y be non empty FinSequence-membered set;
+cluster Y-valued -> FinSequence-yielding Function;
+coherence
+proof
+let f; assume f is Y-valued; then
+B0: rng f c= Y by RELAT_1:def 19;
+now
+let x; assume C0: x in dom f; then reconsider D=dom f as non empty set;
+reconsider xx=x as Element of D by C0;
+reconsider ff=f as Function of D, Y by FUNCT_2:4, B0;
+ff.xx in Y; hence f.x is FinSequence;
+end;
+hence thesis by PRE_POLY:def 3;
+end;
+end;
+
+registration
+let X,Y;
+cluster -> FinSequence-yielding Element of Funcs (X,Y*);
+coherence;
+end;
+
+theorem Th40: f is X*-valued implies f.x in X*
+proof
+assume f is X*-valued; then
+B0: rng f c= X* by RELAT_1:def 19;
+per cases;
+suppose C0: x in dom f; then reconsider D=dom f as non empty set;
+reconsider e=x as Element of D by C0;
+reconsider ff=f as Function of D, X* by FUNCT_2:4, B0;
+ff.e is Element of X*; hence thesis;
+end;
+suppose not x in dom f; then f.x = {} by FUNCT_1:def 4;
+hence thesis by FINSEQ_1:66;
+end;
+end;
+
+registration
+let m,n; let p be m-element FinSequence;
+cluster p null n -> (Seg (m+n))-defined Relation;
+coherence
+proof
+dom p= Seg len p by FINSEQ_1:def 3; then
+m+0<=m+n & dom p = Seg m by CARD_1:def 13, XREAL_1:8;
+then dom p c= Seg (m+n) by FINSEQ_1:7; hence thesis by RELAT_1:def 18;
+end;
+end;
+
+Lm56: for p1,p2,q1,q2 being FinSequence st p1 is m-element & q1 is m-element &
+p1^p2=q1^q2 holds (p1=q1 & p2=q2)
+proof
+let p1,p2,q1,q2 be FinSequence; set P=p1^p2, Q=q1^q2; assume
+p1 is m-element & q1 is m-element; then reconsider x=p1, y=q1
+   as m-element FinSequence;
+Seg (len p1)=dom p1 & Seg (len q1)=dom q1 by FINSEQ_1:def 3; then
+B0: dom x=Seg m & dom y=Seg m by CARD_1:def 13; assume
+B1: P=Q; x null 0 is (Seg(m+0))-defined & y null 0 is (Seg(m+0))-defined;
+then reconsider p11=p1, q11=q1 as (Seg m)-defined FinSequence;
+Z0: p11 null (Seg m) = (q11^q2)|(Seg m) by B0,B1,FINSEQ_6:13
+.= q11 null (Seg m) by B0, FINSEQ_6:13;
+hence p1=q1; thus p2=q2 by Z0, B1, FINSEQ_1:46;
+end;
+
+registration
+let m,n; let p be m-element FinSequence; let q be n-element FinSequence;
+cluster p^q -> (m+n)-element FinSequence;
+coherence
+proof
+reconsider mm=m, nn=n as Element of NAT by ORDINAL1:def 13;
+reconsider pp=p as mm-element FinSequence;
+reconsider qq=q as nn-element FinSequence; pp^qq is (mm+nn)-element;
+hence thesis;
+end;
+end;
+
+theorem for p1,p2,q1,q2 being FinSequence st p1 is m-element & ::Th41
+q1 is m-element & (p1^p2=q1^q2 or p2^p1=q2^q1) holds (p1=q1 & p2=q2)
+proof ::weakening FINSEQ_1:46
+let p1,p2,q1,q2 be FinSequence;
+set m1=len p1, m2=len p2, n1=len q1, n2=len q2;
+assume p1 is m-element & q1 is m-element; then reconsider p11=p1, q11=q1
+ as m-element
+FinSequence; reconsider p22=p2 null p2 as m2-element FinSequence;
+reconsider q22=q2 null q2 as n2-element FinSequence;
+set PA=p11^p22, PB=p22^p11, QA=q11^q22, QB=q22^q11;
+B0: len PA=m+m2 & len PB=m2+m & len QA=m+n2 & len QB=n2+m by CARD_1:def 13;
+assume
+Z1: p1^p2=q1^q2 or p2^p1=q2^q1; then
+B2: PA=QA or PB=QB;
+reconsider q22 as m2-element FinSequence by Z1, B0;
+p22 is m2-element & q22 is m2-element;
+hence thesis by B2, Lm56;
+end;
+
+theorem (U-multiCat.x is U1-valued & x in U**) implies
+x is FinSequence of (U1*) ::Th42
+proof
+set C=U-multiCat, f=U-concatenation, F=MultPlace f, D=U*;
+{} null (U*) is U*-valued Relation; then
+reconsider e={} as U*-valued FinSequence;
+defpred P[Nat] means for p being ($1+1)-element U*-valued FinSequence
+st C.p is U1-valued holds p is U1*-valued;
+B0: P[0]
+proof
+let p be (0+1)-element U*-valued FinSequence;
+reconsider ppp=p as (1+0)-element U*-valued FinSequence;
+{ppp.1} \ U* ={}; then reconsider
+p1=p.1 as Element of U* by ZFMISC_1:68;
+Z0: len p=1 by CARD_1:def 13; p={}^<*p.1*> by Z0, FINSEQ_1:57; then
+C0: C.p=(C.e)^(p1) by Th33 .= {}^p.1 .= p.1;
+p is 1-element FinSequence of U* by Lm45; then
+reconsider pp=p as 1-element Element of U**;
+assume C.p is U1-valued; then reconsider u1=C.pp as FinSequence of U1
+by Lm45; u1=p.1 by C0; then reconsider q=p.1 as Element of U1*;
+<*q*> is FinSequence of U1*; hence thesis by Z0, FINSEQ_1:57;
+end;
+B1: for n st P[n] holds P[n+1]
+proof
+let n; reconsider NN =
+n+1 as non zero Element of NAT by ORDINAL1:def 13; assume
+C1: P[n]; let p be (n+1+1)-element U*-valued FinSequence; assume
+C0: C.p is U1-valued;
+reconsider pp=p null p as (n+2)-element U*-valued FinSequence;
+reconsider ppp=pp as (NN+1)-element U*-valued FinSequence;
+reconsider pppp=ppp as (NN+1+0)-element U*-valued FinSequence;
+reconsider p1=ppp|(Seg NN) as NN-element U*-valued FinSequence;
+{pppp.(NN+1)} \ U* = {}; then
+reconsider u=ppp.(NN+1) as Element of U* by ZFMISC_1:68;
+Z0: ppp \+\ (p1 ^ <*ppp.(NN+1)*>)={}; then
+ p=p1^<*u*> by Th29; then
+C2: C.p=(C.p1)^u by Th33; then rng (C.p) c= U1 &
+rng (C.p1) c= rng (C.p) by C0, RELAT_1:def 19, FINSEQ_1:42; then
+rng (C.p1) c= U1 by XBOOLE_1:1; then reconsider q= C.p1 as
+U1-valued FinSequence by RELAT_1:def 19; q is U1-valued; then
+reconsider p11=p1 as NN-element U1*-valued FinSequence by C1;
+rng u c= rng (C.p) & rng (C.p) c= U1 by C2, FINSEQ_1:43, RELAT_1:def 19, C0;
+then rng u c= U1 by XBOOLE_1:1; then u is U1-valued by RELAT_1:def 19; then
+u is FinSequence of U1 by Lm45; then reconsider uu=u as Element of U1*;
+p11^<*uu*> is U1*-valued; hence thesis by Z0, Th29;
+end;
+B3: for n holds P[n] from NAT_1:sch 2(B0,B1); assume
+B2: C.x is U1-valued & x in U**;
+per cases;
+suppose x is empty; then reconsider xx=x as empty set;
+xx null (U1*) is (U1*)-valued FinSequence;
+hence thesis by Lm45;
+end;
+suppose not x is empty; then reconsider xx=x as non empty U*-valued
+FinSequence by B2; consider m such that
+C0: len xx=m+1 by NAT_1:6; xx null {} is (m+1)-element by C0; then reconsider
+xxx=xx as (m+1)-element U*-valued FinSequence;
+xxx is U1*-valued by B2, B3; hence thesis by Lm45;
+end;
+end;
+
+registration
+let U;
+cluster total (reflexive Relation of U);
+existence
+proof
+take R = the total symmetric transitive (reflexive Relation of U);
+thus thesis;
+end;
+end;
+
+registration
+let m;
+cluster (m+1)-element -> non empty FinSequence;
+coherence
+proof
+let p; set M=m+1; assume p is M-element; then reconsider pp=p
+as (M+0)-element FinSequence; pp is non empty; hence thesis;
+end;
+end;
+
+registration
+let U,u;
+cluster (id U).u \+\ u -> empty set;
+coherence
+proof {(id U).u} \ {u}={}; then (id U).u=u by ZFMISC_1:21; hence thesis;end;
+end;
+
+registration
+let U; let p be U-valued non empty FinSequence;
+cluster {p.1}\U -> empty set;
+coherence
+proof
+consider m such that B0: len p=m+1 by NAT_1:6; reconsider pp=p as (1+m)-element
+U-valued FinSequence by B0, CARD_1:def 13; {pp.1}\U = {}; hence thesis;
+end;
+end;
+
+theorem (x1=x2 implies f+*(x1.-->y1)+*(x2.-->y2)=f+*(x2.-->y2)) &
+(x1<>x2 implies f+*(x1.-->y1)+*(x2.-->y2)=f+*(x2.-->y2)+*(x1.-->y1)) ::Th43
+proof
+set f1=x1.-->y1, f2=x2.-->y2, LH=f+*f1+*f2;
+hereby
+assume x1=x2; then {x1} = dom f2 by FUNCOP_1:19;
+then dom f1 = dom f2 by FUNCOP_1:19; then
+f1+*f2 = f2 by FUNCT_4:20; hence LH=f+*f2 by FUNCT_4:15;
+end;
+assume x1<>x2; then {x1} misses {x2} by ZFMISC_1:17; then
+f1 tolerates f2 by CIRCCOMB:4; then f+*(f1+*f2)=f+*(f2+*f1) by FUNCT_4:35 .=
+f+*f2+*f1 by FUNCT_4:15; hence LH=f+*f2+*f1 by FUNCT_4:15;
+end;
+
+registration
+let X,U;
+cluster U-valued total (X-defined Function);
+existence
+proof take the total PartFunc of X,U; thus thesis; end;
+end;
+
+registration
+let X, U; let P be U-valued total (X-defined Relation);
+let Q be total (U-defined Relation);
+cluster P*Q -> total (X-defined Relation);
+coherence
+proof
+rng P c= U & dom Q=U by PARTFUN1:def 4, RELAT_1:def 19; then
+dom (P*Q)=dom P by RELAT_1:46 .= X
+by PARTFUN1:def 4; hence thesis by PARTFUN1:def 4;
+end;
+end;
+
+theorem ::Th44
+p^p1^p2 is X-valued implies (p2 is X-valued & p1 is X-valued & p is X-valued)
+proof
+set q=p^p1^p2; assume q is X-valued; then rng q c= X & rng (p^p1) c= rng q
+& rng p2 c= rng q by RELAT_1:def 19, FINSEQ_1:42,43; then rng p2 c= X
+& rng p c= rng (p^p1) & rng p1 c= rng (p^p1) & rng (p^p1) c= X by
+XBOOLE_1:1,FINSEQ_1:42, 43; then rng p c= X & rng p1 c= X & rng p2 c= X
+by XBOOLE_1:1; hence thesis by RELAT_1:def 19;
+end;
+
+registration
+let X; let R be Relation;
+cluster R null X -> (X \/ rng R)-valued Relation;
+coherence
+proof rng R null X c= rng R \/ X; hence thesis by RELAT_1:def 19; end;
+end;
+
+registration
+let X,Y be functional set;
+cluster X\/Y -> functional;
+coherence
+proof
+now
+let x; assume x in X\/Y; then x in X or x in Y by XBOOLE_0:def 3;
+hence x is Function;
+end;
+hence thesis by FUNCT_1:def 19;
+end;
+end;
+
+registration
+cluster FinSequence-membered -> finite-membered set;
+coherence
+proof
+let X; assume
+B0: X is FinSequence-membered;
+for x st x in X holds x is finite by B0;
+hence thesis by MATROID0:def 5;
+end;
+end;
+
+definition
+let X be functional set;
+func SymbolsOf X equals union {rng x where x is Element of X\/{{}}: x in X};
+coherence;
+end;
+
+Lm58: for X being functional set st X is finite &
+X is finite-membered holds SymbolsOf X is finite
+proof
+let X be functional set; set Y=X\/{{}},
+F={rng y where y is Element of Y: y in X}; assume
+B0: X is finite;
+F is finite from FRAENKEL:sch 21(B0); then reconsider
+FF=F as finite set;
+assume X is finite-membered; then reconsider YY=Y as
+finite-membered set;
+now
+let y; assume y in F; then consider x being Element of Y such that
+C0: y=rng x & x in X; reconsider xx=x as Element of YY; xx is finite;
+hence y is finite by C0;
+end; then reconsider FFF=FF as finite-membered (finite set) by MATROID0:def 5;
+union FFF is finite; hence thesis;
+end;
+
+registration
+cluster trivial FinSequence-membered non empty set;
+existence
+proof take {the Element of (the non empty set)*}; thus thesis; end;
+end;
+
+registration let X be functional finite finite-membered set;
+cluster SymbolsOf X -> finite;
+coherence by Lm58;
+end;
+
+registration let X be finite FinSequence-membered set;
+cluster SymbolsOf X -> finite;
+coherence;
+end;
+
+theorem SymbolsOf {f} = rng f ::Th45
+proof
+set P=f, X={P}, F={rng x where x is Element of X\/{{}}: x in X}, LH=union F,
+RH=rng P;
+X null {{}} c= X\/{{}}; then reconsider XX=X as Subset of X\/{{}};
+reconsider PP=P as Element of XX by TARSKI:def 1;
+reconsider PPP=PP as Element of X\/{{}} by TARSKI:def 3;
+now
+let y; assume y in LH; then consider z such that
+C0: y in z & z in F by TARSKI:def 4; consider x being Element of X\/{{}}
+such that
+C1: z=rng x & x in X by C0;
+thus y in RH by C0, C1, TARSKI:def 1;
+end; then
+B0: LH c= RH by TARSKI:def 3;
+now
+let y; assume y in RH; then y in rng PP & rng PPP in F; hence
+y in LH by TARSKI:def 4;
+end; then
+RH c= LH by TARSKI:def 3; hence thesis by B0, XBOOLE_0:def 10;
+end;
+
+registration let z be non zero (complex number);
+cluster abs(z) -> positive (ext-real number);
+coherence by COMPLEX1:133;
+end;
+
+scheme Sc1 {A() -> set, B() -> set, F(set) -> set}:
+{F(x) where x is Element of A(): x in A()} =
+{F(x) where x is Element of B(): x in A()}
+provided
+B0: A() c= B()
+proof
+set LH={F(x) where x is Element of A(): x in A()}, RH=
+{F(x) where x is Element of B(): x in A()};
+now
+let y; assume y in LH; then consider x being Element of A() such that
+C0: y=F(x) & x in A();
+reconsider xx=x as Element of B() by C0, B0;
+y=F(xx) & xx in A() by C0; hence y in RH;
+end; then
+B1: LH c= RH by TARSKI:def 3;
+now
+let y; assume y in RH; then consider x being Element of B() such that
+C2: y=F(x) & x in A(); reconsider xx=x as Element of A() by C2;
+thus y in LH by C2;
+end; then
+RH c= LH by TARSKI:def 3; hence thesis by B1, XBOOLE_0:def 10;
+end;
+
+definition let X be functional set;
+redefine func SymbolsOf X equals
+union {rng x where x is Element of X: x in X};
+compatibility
+proof
+set F1={rng x where x is Element of X: x in X}, F2=
+{rng x where x is Element of X\/{{}}:x in X};X null {{}} c= X\/{{}}; then
+B0: X c= X\/{{}};
+F1=F2 from Sc1 (B0); hence thesis;
+end;
+end;
+
+Lm57: for B being functional set, A being Subset of B holds
+{rng x where x is Element of A: x in A} c=
+{rng x where x is Element of B: x in B}
+proof
+let B be functional set;  let A be Subset of B;
+set AF={rng x where x is Element of A: x in A}, BF=
+{rng x where x is Element of B:x in B};
+now
+let y; assume y in AF; then consider x being Element of A such that
+C0: y=rng x & x in A; reconsider xb=x as Element of B by C0;
+thus y in BF by C0;
+end;
+hence thesis by TARSKI:def 3;
+end;
+
+theorem for B being functional set, A being Subset of B holds
+SymbolsOf A c= SymbolsOf B by Lm57, ZFMISC_1:95; ::Th46
+
+theorem for A,B being functional set holds
+SymbolsOf (A\/B) = SymbolsOf A \/ (SymbolsOf B) ::Th47
+proof
+let A, B be functional set;
+set AF={rng x where x is Element of A: x in A}, BF=
+{rng x where x is Element of B: x in B}, F=
+{rng x where x is Element of A\/B: x in A\/B};
+A null B c= A\/B & B null A c= A\/B; then reconsider
+AFF=AF, BFF=BF as Subset of F by Lm57;
+B0: AFF \/ BFF c= F;
+now
+let y; assume y in F\BF; then
+C1: y in F & not y in BF by XBOOLE_0:def 5; then
+consider x being Element of A\/B such that
+C0: y=rng x & x in A\/B;
+not x in B by C0, C1;
+then
+C2: x in A null {{}} by C0, XBOOLE_0:def 3; then reconsider xx=x as
+Element of A\/{{}};
+thus y in AF by C2, C0;
+end; then
+F \ BF c= AF by TARSKI:def 3; then F\BF \/ BF c= AF \/ BF by XBOOLE_1:9;
+then F null BFF c= AF \/ BF by XBOOLE_1:39; then
+B1: AF \/ BF = F by B0, XBOOLE_0:def 10;
+thus thesis by B1, ZFMISC_1:96;
+end;
+
+registration let X; let F be Subset of bool X;
+cluster union F \ X -> empty set;
+coherence;
+end;
+
+theorem Th48: X=X\Y\/(X/\Y)
+proof
+reconsider x=X\Y as Subset of X; X=x\/(X\x) by XBOOLE_1:45 .=
+x\/(X/\Y) by XBOOLE_1:48; hence thesis;
+end;
+
+theorem m-tuples_on A meets n-tuples_on B implies m=n by Lm18;
+
+theorem B is D-prefix & A c= B implies A is D-prefix ::Th50
+by Lm59;
+
+theorem f c= g iff for x st x in dom f holds (x in dom g & f.x = g.x) ::Th51
+proof
+defpred Q1[] means for x st x in dom f holds x in dom g;
+defpred Q2[] means for x st x in dom f holds f.x=g.x;
+defpred Q3[] means for x st x in dom f holds (x in dom g & f.x = g.x);
+Q1[] & Q2[] iff dom f c= dom g & Q2[] by TARSKI:def 3;
+hence thesis by GRFUNC_1:8;
+end;
+
+registration let U;
+cluster non empty -> non empty-yielding Element of (U*\{{}})*;
+coherence
+proof
+set D=(U*\{{}})*; let p be Element of D; assume p is non empty; then
+consider m such that
+B0: m+1=len p by NAT_1:6;
+reconsider pp=p as (1+m)-element (U*\{{}})-valued
+FinSequence by B0, CARD_1:def 13;
+{pp.1} \ (U*\{{}}) = {}; then pp.1 in U*\{{}} by ZFMISC_1:68; then
+p.1 in U* & not p.1 in {{}} by XBOOLE_0:def 5; then
+p.1 <> {} by TARSKI:def 1; hence thesis;
+end;
+end;
+
+registration let e be empty set;
+cluster -> empty Element of e*;
+coherence;
+end;
+
+theorem Th52: (U1-multiCat.x <> {} & U2-multiCat.x <> {} implies
+U1-multiCat.x = U2-multiCat.x) &
+(p is {}*-valued implies U1-multiCat.p={}) &
+(U1-multiCat.p={} & p is U1*-valued implies p is {}*-valued)
+proof
+reconsider e={} as Element of {{}} by TARSKI:def 1;
+defpred P[Nat] means for U1, U2, p st p is ($1+1)-element holds
+(p is {}*-valued implies U1-multiCat.p={}) &
+(U1-multiCat.p = {} & p is U1*-valued implies p is {{}}-valued) &
+(U1-multiCat.p <> {} & U2-multiCat.p <> {} implies U1-multiCat.p=
+U2-multiCat.p);
+A0: P[0]
+proof
+let U1, U2, p; set C1=U1-multiCat, C2=U2-multiCat;
+B2: dom C1=U1** & dom C2=U2** by FUNCT_2:def 1;
+{} /\ U1={}; then reconsider EE={} as Subset of U1; {}/\U2={}; then
+reconsider EE2={} as Subset of U2; reconsider E2=EE2* as non empty Subset of
+U2*; reconsider eu2={} as Element of E2 by TARSKI:def 1;
+reconsider E=EE* as non empty Subset of U1*;
+reconsider euu={} as Element of E by TARSKI:def 1;
+assume p is (0+1)-element; then reconsider pp=p as (1+0)-element FinSequence;
+len pp = 1 by CARD_1:def 13; then
+B0: p= {}^<*p.1*> by FINSEQ_1:57 .= euu ^ <*p.1*>;
+hereby
+assume p is {}*-valued; then p=euu ^ <*euu*> by B0; hence C1.p=
+C1.euu^euu by Th33 .= {}^{} .= {};
+end;
+hereby
+assume D0: C1.p={} & p is U1*-valued; then reconsider
+ppp=pp as non empty U1*-valued FinSequence;  {ppp.1}\U1*={}; then
+reconsider l=pp.1 as Element of U1* by ZFMISC_1:68; C1.p =
+C1.euu^l by Th33, B0 .= {}^l .= l; then
+p=euu ^ <*euu*> by B0, D0; hence p is {{}}-valued;
+end;
+hereby assume C1.p<>{} & C2.p<>{}; then
+D0: p in U1** & p in U2** by FUNCT_1:def 4, B2;
+reconsider p1=pp as non empty U1*-valued FinSequence by D0;
+reconsider p2=pp as non empty U2*-valued FinSequence by D0;
+Z0: {p1.1} \ U1* ={} & {p2.1}\U2*={};
+reconsider u1=p1.1 as Element of U1* by Z0, ZFMISC_1:68;
+reconsider u2=p2.1 as Element of U2* by Z0, ZFMISC_1:68;
+D2: C1.p= C1.euu^u1 by B0, Th33 .= {}^u1 .= u1;
+C2.p = C2.eu2^u2 by B0, Th33 .= {}^u1 .= u1;
+hence C1.p=C2.p by D2;
+end;
+end;
+A1: for n st P[n] holds P[n+1]
+proof
+let n; assume
+D2: P[n];
+let U1,U2; set C1=U1-multiCat, C2=U2-multiCat;
+B0: dom C1=U1** & dom C2=U2** by FUNCT_2:def 1;
+let p; assume
+D0: p is (n+1+1)-element;
+thus p is {}*-valued implies C1.p={}
+proof
+{} /\ U1={}; then reconsider EE={} as Subset of U1;
+reconsider E=EE* as non empty Subset of U1*;
+assume p is {}*-valued; then reconsider pp=p as (n+1+1+0)-element {}*-valued
+FinSequence by D0; reconsider p1=pp|(Seg (n+1)) as (n+1)-element
+E-valued FinSequence; {pp.(n+1+1)} \ {}* = {}; then
+reconsider x1=pp.(n+1+1) as Element of E by ZFMISC_1:68;
+pp \+\ p1 ^ <*x1*>={}; then pp=p1^<*x1*> & p1 is U1*-valued by Th29;
+then C1.pp=C1.p1 ^ x1 by Th33 .= C1.p1 ^ {} .= {} by D2; hence thesis;
+end;
+thus C1.p={} & p is U1*-valued implies p is {{}}-valued
+proof
+assume
+E0: C1.p={} & p is U1*-valued; then reconsider
+pp=p as (n+1+1+0)-element U1*-valued FinSequence by D0;
+reconsider p1=pp|(Seg (n+1)) as (n+1)-element U1*-valued FinSequence;
+{pp.(n+1+1)} \ U1* = {}; then
+reconsider x1=pp.(n+1+1) as Element of U1* by ZFMISC_1:68;
+Z0: pp \+\ p1 ^ <*x1*> = {}; then
+ pp=p1^<*x1*> by Th29; then
+C1.p1^x1 = {} by Th33, E0; then C1.p1 = {} & x1=e;
+then C1.p1 = {} & <*x1*>=<*e*>; then
+reconsider p11=p1, x11=<*x1*> as {{}}-valued FinSequence by D2;
+p11^x11 is {{}}-valued; hence p is {{}}-valued by Z0, Th29;
+end;
+assume
+D4: C1.p<>{} & C2.p <> {}; then
+p in U1** by B0, FUNCT_1:def 4; then reconsider p1=p as
+(n+1+1+0)-element U1*-valued FinSequence by D0;
+reconsider q1=p1|(Seg (n+1)) as (n+1)-element U1*-valued FinSequence;
+{p1.(n+1+1)} \ U1* = {}; then
+reconsider x1=p1.(n+1+1) as Element of U1* by ZFMISC_1:68;
+p in U2** by D4, B0, FUNCT_1:def 4; then reconsider p2=p as
+(n+1+1+0)-element U2*-valued FinSequence by D0;
+reconsider q2=p2|(Seg (n+1)) as (n+1)-element U2*-valued FinSequence;
+{p2.(n+1+1)} \ U2*={}; then reconsider x2=p2.(n+1+1) as Element of U2*
+by ZFMISC_1:68; p1 \+\ q1^<*x1*>={} & p2 \+\ q2^<*x2*> = {}; then
+p1=q1^<*x1*> & p2=q2^<*x2*> by Th29; then
+D1: C1.p1=C1.q1^x1 & C2.p2=C2.q2^x2 by Th33; assume
+D3: C1.p <> C2.p; then
+C1.q1 = {} or C2.q2={} by D2, D1; then
+q1 is {{}}-valued by D2; then C1.q1={} & C2.q2={} by D2;
+hence contradiction by D3, D1;
+end;
+A2: for n holds P[n] from NAT_1:sch 2(A0, A1);
+set C1=U1-multiCat, C2=U2-multiCat;
+A10: dom C1=U1** & dom C2=U2** by FUNCT_2:def 1;
+hereby
+assume
+A12: C1.x<>{} & C2.x<>{}; then x in U1** & x <> {} by A10, FUNCT_1:def 4;
+then reconsider p=x as non empty FinSequence;
+consider m such that
+A11: len p=m+1 by NAT_1:6;
+reconsider pp=p as (m+1)-element FinSequence by A11, CARD_1:def 13;
+C1.pp<>{} & C2.pp<>{} implies C1.pp=C2.pp by A2;
+hence C1.x=C2.x by A12;
+end;
+hereby
+assume
+D0: p is {}*-valued;
+per cases;
+suppose p={}; hence C1.p={};
+end;
+suppose not p={}; then consider m such that
+E0: m+1=len p by NAT_1:6; reconsider pp=p as (m+1)-element FinSequence by
+E0, CARD_1:def 13;
+C1.pp={} by D0, A2; hence C1.p={};
+end;
+end;
+assume
+D1: C1.p={} & p is U1*-valued;
+per cases;
+suppose p={}; hence p is {}*-valued;
+end;
+suppose not p={}; then consider m such that
+E0: m+1=len p by NAT_1:6; reconsider pp=p as (m+1)-element FinSequence by
+E0, CARD_1:def 13;
+pp is {}*-valued by D1, A2;
+hence p is {}*-valued;
+end;
+end;
+
+registration let U, x;
+cluster U-multiCat.x -> U-valued;
+coherence proof U-multiCat.x in U* by Th40; hence thesis; end;
+end;
+
+definition let x;
+func x null equals x;
+coherence;
+end;
+
+registration let Y be with_non-empty_elements set;
+cluster non empty -> non empty-yielding (Y-valued Relation);
+coherence
+proof
+let R be Y-valued Relation; assume R is non empty; then reconsider
+Y0 = rng R as non empty set; set y=the Element of Y0;
+B0: Y0 c= Y by RELAT_1:def 19;
+now
+assume Y0 c= {{}}; then y in {{}} & y in Y by TARSKI:def 3, B0;
+hence contradiction;
+end; hence thesis by RELAT_1:def 15;
+end;
+end;
+
+registration let X;
+cluster X\{{}} -> with_non-empty_elements;
+coherence
+proof
+{} in {{}} by TARSKI:def 1; then not {} in X\{{}} by XBOOLE_0:def 5;
+hence thesis by SETFAM_1:def 9;
+end;
+end;
+
+registration let X be with_non-empty_elements set;
+cluster -> with_non-empty_elements (Subset of X);
+coherence
+proof
+let Y be Subset of X;
+not {} in Y; hence thesis by SETFAM_1:def 9;
+end;
+end;
+
+registration let U;
+cluster U* -> infinite set;
+coherence proof omega c= card (U*) by CARD_4:66; hence thesis; end;
+end;
+
+registration let U;
+cluster U* -> with_non-empty_element;
+coherence;
+end;
+
+registration let X be with_non-empty_element set;
+cluster with_non-empty_elements non empty Subset of X;
+existence
+proof
+take {the non empty Element of X}; thus thesis;
+end;
+end;
+
+Lm60: p <> {} & p is Y-valued & Y c= U* & Y is with_non-empty_elements
+implies U-multiCat.p <> {}
+proof
+assume p<>{}; then reconsider pp=p as non empty FinSequence; assume
+B0: p is Y-valued & Y c= U* & Y is with_non-empty_elements; then
+rng pp c= Y & Y c= U* by RELAT_1:def 19; then reconsider YY=Y as
+with_non-empty_elements non empty Subset of U* by B0;
+reconsider pp as non empty YY-valued FinSequence by B0; pp is U*-valued &
+not pp is {}*-valued;
+hence thesis by Th52;
+end;
+
+theorem U1 c= U2 & Y c= U1* & p is Y-valued & p<>{} &
+Y is with_non-empty_elements implies U1-multiCat.p=U2-multiCat.p ::Th53
+proof
+assume U1 c= U2; then reconsider U11=U1 as non empty Subset of U2;
+assume Y c= U1*; then reconsider Y1=Y as Subset of U11*;
+reconsider Y2 = Y1 as Subset of U2* by XBOOLE_1:1; assume
+p is Y-valued; then reconsider p1=p as Y1-valued
+FinSequence; reconsider p2=p1 as Y2-valued FinSequence;
+assume p <> {} & Y is with_non-empty_elements; then
+U1-multiCat.p1 <> {} & U2-multiCat.p2 <> {} by Lm60; hence thesis by Th52;
+end;
+
+theorem (ex p st x=p & p is X*-valued) implies U-multiCat.x is X-valued ::Th53
+proof
+set C=U-multiCat;
+B1: dom C=U** by FUNCT_2:def 1; given p such that
+B0: x=p & p is X*-valued; x is FinSequence of X* by B0, Lm45;
+then reconsider px=x as Element of X**;
+per cases;
+suppose
+C1: C.p<>{}; then p in U** & p<>{} by FUNCT_1:def 4, B1; then
+reconsider pp=x as non empty FinSequence of U* by Lm45, B0;
+C0: pp is X*-valued & not pp is {}*-valued by Th52, B0, C1;
+reconsider XX=X as non empty set by Th52, B0, C1; set CX=XX-multiCat;
+reconsider pxx=px as Element of XX**; CX.pp<>{} by Th52, C0;
+hence thesis by Th52, C1, B0;
+end;
+suppose C.p={}; then reconsider e=C.p as empty set;
+rng e c= X by XBOOLE_1:2; hence thesis by RELAT_1:def 19, B0;
+end;
+end;
+
+registration let X,m;
+cluster (m-tuples_on X) \ (X*) -> empty set;
+coherence
+proof
+reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+mm-tuples_on X c= X* by FINSEQ_2:154; hence thesis;
+end;
+end;
+
+theorem (A/\B)* = A* /\ (B*)
+proof
+set X=A/\B; reconsider XA=A/\B as Subset of A; reconsider XB=A/\B as
+Subset of B; XA* c= A* & XB* c= B*; then B0: X* c= A* /\ (B*) by XBOOLE_1:19;
+now
+let x; assume
+C0: x in A*/\(B*); reconsider pa=x as A-valued FinSequence by C0;
+set m=len pa, mA=m-tuples_on A, mB=m-tuples_on B, mX=m-tuples_on X;
+mX\(X*)={}; then C1: mX c= X* by XBOOLE_1:37;
+reconsider pb=x as B-valued FinSequence by C0;
+pa is m-element & pb is m-element by CARD_1:def 13; then
+pa in mA & pb in mB by Th16; then pa in mA/\mB by XBOOLE_0:def 4; then
+pa in mX by Lm24; hence x in X* by C1;
+end; then A*/\(B*) c= X* by TARSKI:def 3; hence thesis by B0, XBOOLE_0:def 10;
+end;
+
+theorem (P\/Q)|X = P|X \/ (Q|X)
+proof
+set R1=P|X, R2=Q|X, R=P\/Q, LH=R|X, RH=R1\/R2;
+(P null Q)|X c= (P\/Q)|X & (Q null P)|X c= (P\/Q)|X by RELAT_1:105; then
+B0: RH c= LH by XBOOLE_1:8;
+now
+let z; assume C1: z in LH; then consider x,y such that
+C2: z=[x,y] by RELAT_1:def 1;
+C0: x in X & [x,y] in (P\/Q) by RELAT_1:def 11, C1, C2;
+(x in X & [x,y] in P) or (x in X & [x,y] in Q) by C0, XBOOLE_0:def 3;
+then [x,y] in P|X or [x,y] in Q|X by RELAT_1:def 11;
+hence z in P|X \/ (Q|X) by XBOOLE_0:def 3, C2;
+end; then LH c= RH by TARSKI:def 3; hence thesis by B0, XBOOLE_0:def 10;
+end;
+
+registration let X;
+cluster (bool X) \ X -> non empty set;
+coherence
+proof
+not bool X c= X by CARD_1:45;
+hence thesis by XBOOLE_1:37;
+end;
+end;
+
+registration let X; let R be Relation;
+cluster R null X -> (X\/dom R)-defined Relation;
+coherence
+proof
+dom R null X c= dom R \/ X;
+hence thesis by RELAT_1:def 18;
+end;
+end;
+
+theorem f|X +* g = f|(X\dom g) \/ g ::Th57
+proof
+set f1=f|(X\dom g), a1=g;
+dom f1 c= X\dom a1 & X\dom a1 misses dom a1 by RELAT_1:def 18,
+XBOOLE_1:79; then
+B0: f1 tolerates a1 by PARTFUN1:138, XBOOLE_1:63;
+f|X +* a1 = f|(X\dom a1\/(X/\dom a1)) +* a1 by Th48 .=
+f1 +* f|(X/\dom a1) +* a1 by FUNCT_4:83 .=
+f1 +* (f|(X/\dom a1) +*(a1 null {} null ({}\/dom a1)))
+by FUNCT_4:15 .= f1 +* (f|X|dom a1 +* a1|(dom a1))
+by RELAT_1:100 .= f1 +* (f|X +* a1)|(dom a1) by FUNCT_4:75
+.= f1 +* a1 by FUNCT_4: 24 .= f1 \/ a1 by B0, FUNCT_4:31; hence thesis;
+end;
+
+registration
+let X; let f be X-defined Function, g be total (X-defined Function);
+identify f+*g with g null f;
+compatibility
+proof
+dom g=X & dom f c= X by PARTFUN1:def 4, RELAT_1:def 18;
+hence thesis by FUNCT_4:20;
+end;
+identify g null f with f+*g;
+compatibility;
+end;
+
+theorem Th58: not y in proj2 X implies [:A,{y}:] misses X
+proof
+set X2=proj2 X, Y=[:A,{y}:], Z=X/\Y; assume B0: not y in X2; assume
+Y meets X; then Z<>{} by XBOOLE_0:def 7; then consider z such that
+B1: z in Z by XBOOLE_0:def 1; set x1=z`1, y1=z`2;
+x1 in A & y1 in {y} & z=[x1,y1] & z in X by B1, MCART_1:10,23; then
+y1=y & y1 in X2 by TARSKI:def 1, RELAT_1:def 5;
+hence contradiction by B0;
+end;
+
+definition let X;
+func X-freeCountableSet equals
+[:NAT, {the Element of (bool proj2 X\proj2 X)}:];
+coherence;
+end;
+
+theorem Th59: X-freeCountableSet /\X={} & X-freeCountableSet is infinite
+proof
+set X2=proj2 X, Y=(bool X2)\X2, y=the Element of Y, IT=X-freeCountableSet;
+not y in X2 by XBOOLE_0:def 5; then IT misses X by Th58;
+hence IT/\X={} by XBOOLE_0:def 7;
+thus thesis;
+end;
+
+registration let X;
+cluster X-freeCountableSet -> infinite set;
+coherence;
+end;
+
+registration let X;
+cluster X-freeCountableSet /\ X -> empty;
+coherence by Th59;
+end;
+
+registration
+let X;
+cluster X-freeCountableSet -> countable set;
+coherence by CARD_4:55;
+end;
+
+registration
+cluster NAT\INT -> empty;
+coherence
+proof
+set X=NAT null ([:{0},NAT:] \ {[0,0]}); reconsider
+XX=X as Subset of INT; XX\INT ={}; hence thesis;
+end;
+end;
+
+registration
+let x,p;
+cluster (<*x*>^p).1 \+\ x -> empty set;
+coherence proof (<*x*>^p).1=x by FINSEQ_1:58; hence thesis; end;
+end;
+
+registration
+let m; let m0 be zero number; let p be m-element FinSequence;
+cluster p null m0 -> total ((Seg (m+m0))-defined FinSequence);
+coherence
+proof
+reconsider q=p null m0 as (Seg (m+m0))-defined FinSequence;
+reconsider l=len p as Element of NAT;
+dom p = Seg l by FINSEQ_1:def 3 .= Seg m by CARD_1:def 13;
+hence thesis by PARTFUN1:def 4;
+end;
+end;
+
+registration
+let U, q1, q2;
+cluster U-multiCat.<*q1, q2*> \+\ q1^q2 -> empty set;
+coherence
+proof
+reconsider f=U-concatenation as BinOp of U*; q1 is FinSequence of U
+by Lm45; then reconsider q11=q1 as Element of U*; set F=MultPlace f,
+p=<*q11*>, C=U-multiCat; C.<*q1, q2*>=(C.p)^q2 by Th33
+.= (F.p)^q2 by Th32 .= q1^q2 by LmMultPlace; hence thesis;
+end;
+end;
+
+registration
+let f; let e be empty set;
+identify f +* e with f null e;
+compatibility by FUNCT_4:22;
+identify f null e with f+*e;
+compatibility;
+identify e+*f with f null e;
+compatibility by FUNCT_4:21;
+identify f null e with e+*f;
+compatibility;
+end;

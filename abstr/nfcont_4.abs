@@ -1,0 +1,397 @@
+:: More on the Continuity of Real Functions
+::  by Keiko Narita , Artur Kornilowicz and Yasunari Shidama
+:: 
+:: Received February 22, 2011
+:: Copyright (c) 2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, SUBSET_1, XREAL_0, ORDINAL1, SEQ_1, PARTFUN1, RELAT_1,
+      TARSKI, SEQ_2, ORDINAL2, FUNCT_2, FUNCT_1, XBOOLE_0, XXREAL_0, NAT_1,
+      ARYTM_3, CARD_1, COMPLEX1, ARYTM_1, REAL_1, RCOMP_1, VALUED_1, ZFMISC_1,
+      XXREAL_2, FCONT_1, NORMSP_1, STRUCT_0, PRE_TOPC, FINSEQ_1, CARD_3,
+      FINSET_1, MEMBERED, BORSUK_1, REAL_NS1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
+      RELSET_1, PARTFUN1, FUNCT_2, FINSET_1, NUMBERS, XXREAL_0, XREAL_0,
+      VALUED_0, VALUED_1, REAL_1, NAT_1, MEMBERED, COMPLEX1, BINOP_2, XXREAL_2,
+      FINSEQ_1, SEQ_1, SEQ_2, RCOMP_1, FCONT_1, STRUCT_0, PRE_TOPC, RLVECT_1,
+      NORMSP_0, NORMSP_1, EUCLID, NFCONT_1, REAL_NS1, PDIFF_1, INTEGR15,
+      VALUED_2, NFCONT_3, VFUNCT_1;
+ constructors REAL_1, COMPLEX1, SEQ_2, SEQ_4, SEQ_1, RELSET_1, FCONT_1,
+      NFCONT_1, VFUNCT_1, BINOP_2, PDIFF_1, INTEGR15, NFCONT_3, VALUED_2;
+ registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
+      MEMBERED, VALUED_0, FUNCT_2, XXREAL_2, FUNCT_1, ZFMISC_1, STRUCT_0,
+      EUCLID, FINSEQ_1, REAL_NS1, NFCONT_3, VALUED_2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE;
+
+
+
+begin :: Basic Properties of the continuous functions of PartFunc of REAL,REAL n
+
+reserve n,m,i,k for Element of NAT;
+reserve x,X,X1 for set;
+reserve r,p for Real;
+reserve s,x0,x1,x2 for real number;
+reserve f,f1,f2 for PartFunc of REAL,REAL n;
+reserve h for PartFunc of REAL, the carrier of REAL-NS n;
+
+definition let n,f,x0;
+  pred f is_continuous_in x0 means
+:: NFCONT_4:def 1
+  ex g be PartFunc of REAL,the carrier of REAL-NS n st
+    f=g & g is_continuous_in x0;
+end;
+
+theorem :: NFCONT_4:1
+  h = f implies (f is_continuous_in x0 iff h is_continuous_in x0);
+
+theorem :: NFCONT_4:2
+  x0 in X & f is_continuous_in x0 implies f|X is_continuous_in x0;
+
+theorem :: NFCONT_4:3
+  f is_continuous_in x0 iff x0 in dom f &
+  for r st 0<r ex s st 0<s & for x1 st x1 in dom f & abs(x1-x0)<s
+  holds |. f/.x1 - f/.x0 .|<r;
+
+theorem :: NFCONT_4:4
+ for r be Real, z be Element of REAL n,w be Point of REAL-NS n
+  st z=w holds
+ {y where y is Element of REAL n: |.y-z.| < r} =
+ {y where y is Point of REAL-NS n: ||.y-w.|| < r};
+
+definition
+  let n be Element of NAT;
+  let Z be set;
+  let f be PartFunc of Z,REAL n;
+  deffunc
+
+  func |.f.| -> PartFunc of Z,REAL means
+:: NFCONT_4:def 2
+  dom it = dom f & for x be set st x in dom it holds it/.x = |. f/.x .|;
+end;
+
+definition
+  let n be Element of NAT;
+  let Z be non empty set;
+  let f be PartFunc of Z,REAL n;
+  deffunc
+
+  defpred
+
+  func -f -> PartFunc of Z, REAL n means
+:: NFCONT_4:def 3
+  dom it = dom f & for c be set st c in dom it holds it/.c = - (f/.c);
+end;
+
+theorem :: NFCONT_4:5
+  for f1,f2 be PartFunc of REAL,the carrier of REAL-NS n,
+      g1,g2 be PartFunc of REAL,REAL n st f1=g1 & f2=g2 holds
+    f1+f2 = g1+g2;
+
+theorem :: NFCONT_4:6
+  for f1 be PartFunc of REAL,the carrier of REAL-NS n,
+      g1 be PartFunc of REAL,REAL n,
+      a be Real st f1=g1 holds
+    a(#)f1 = a(#)g1;
+
+theorem :: NFCONT_4:7
+  for f1 be PartFunc of REAL, REAL n holds (-1)(#)f1 = -f1;
+
+theorem :: NFCONT_4:8
+  for f1 be PartFunc of REAL,the carrier of REAL-NS n,
+      g1 be PartFunc of REAL,REAL n st f1=g1 holds
+    -f1 = -g1;
+
+theorem :: NFCONT_4:9
+ for f1 be PartFunc of REAL,the carrier of REAL-NS n,
+     g1 be PartFunc of REAL,REAL n st f1=g1 holds
+  ||. f1 .|| = |. g1 .|;
+
+theorem :: NFCONT_4:10
+ for f1,f2 be PartFunc of REAL,the carrier of REAL-NS n,
+     g1,g2 be PartFunc of REAL,REAL n st f1=g1 & f2=g2 holds
+  f1-f2 = g1-g2;
+
+theorem :: NFCONT_4:11
+  f is_continuous_in x0 iff
+  x0 in dom f & for N1 be Subset of REAL n st ex r be Real st 0 < r &
+  {y where y is Element of REAL  n: |.y-f/.x0.| < r} = N1
+  ex N being Neighbourhood of x0 st
+  for x1 st x1 in dom f & x1 in N holds f/.x1 in N1;
+
+theorem :: NFCONT_4:12
+  f is_continuous_in x0 iff x0 in dom f &
+  for N1 be Subset of REAL n
+  st ex r be Real st 0 < r &
+  {y where y is Element of REAL n: |.y-f/.x0.| < r} = N1
+  ex N being Neighbourhood of x0 st f.:N c= N1;
+
+theorem :: NFCONT_4:13
+  (ex N be Neighbourhood of x0 st dom f /\ N = {x0}) implies
+  f is_continuous_in x0;
+
+theorem :: NFCONT_4:14
+  x0 in dom f1 /\ dom f2 & f1 is_continuous_in x0 & f2 is_continuous_in x0
+    implies f1+f2 is_continuous_in x0;
+
+theorem :: NFCONT_4:15
+  x0 in dom f1 /\ dom f2 & f1 is_continuous_in x0 & f2 is_continuous_in x0
+  implies f1-f2 is_continuous_in x0;
+
+theorem :: NFCONT_4:16
+  f is_continuous_in x0 implies r(#)f is_continuous_in x0;
+
+theorem :: NFCONT_4:17
+  x0 in dom f & f is_continuous_in x0 implies
+    |. f .| is_continuous_in x0;
+
+theorem :: NFCONT_4:18
+  x0 in dom f & f is_continuous_in x0 implies
+    -f is_continuous_in x0;
+
+theorem :: NFCONT_4:19
+  for S be RealNormSpace,
+      z be Point of REAL-NS n,
+      f1 be PartFunc of REAL,REAL n,
+      f2 be PartFunc of the carrier of REAL-NS n,the carrier of S
+     st x0 in dom (f2*f1) & f1 is_continuous_in x0
+        & z=f1/.x0 & f2 is_continuous_in z
+    holds f2*f1 is_continuous_in x0;
+
+theorem :: NFCONT_4:20
+  for S be RealNormSpace,
+      f1 be PartFunc of REAL,the carrier of S,
+      f2 be PartFunc of the carrier of S,REAL
+     st x0 in dom (f2*f1) & f1 is_continuous_in x0
+      & f2 is_continuous_in f1/.x0
+    holds f2*f1 is_continuous_in x0;
+
+definition let n;
+  let f be PartFunc of REAL n,REAL;
+  let x0 be Element of REAL n;
+  pred f is_continuous_in x0 means
+:: NFCONT_4:def 4
+  ex y0 be Point of REAL-NS n,
+     g be PartFunc of the carrier of REAL-NS n,REAL st
+    x0=y0 & f=g & g is_continuous_in y0;
+end;
+
+theorem :: NFCONT_4:21
+ for f be PartFunc of REAL n,REAL,
+     h be PartFunc of the carrier of REAL-NS n,REAL,
+     x0 be Element of REAL n,
+     y0 be Point of REAL-NS n
+  st f=h & x0=y0 holds
+  f is_continuous_in x0 iff h is_continuous_in y0;
+
+theorem :: NFCONT_4:22
+for f1 be PartFunc of REAL,REAL n,
+    f2 be PartFunc of REAL n,REAL st x0 in dom (f2*f1) &
+ f1 is_continuous_in x0 & f2 is_continuous_in f1/.x0
+ holds f2*f1 is_continuous_in x0;
+
+definition let n,f;
+  attr f is continuous means
+:: NFCONT_4:def 5
+  for x0 st x0 in dom f holds f is_continuous_in x0;
+end;
+
+theorem :: NFCONT_4:23
+ for g be PartFunc of REAL,the carrier of REAL-NS n,
+     f be PartFunc of REAL,REAL n st g=f holds
+  g is continuous iff f is continuous;
+
+theorem :: NFCONT_4:24
+  X c= dom f implies
+  (f|X is continuous iff for x0,r st x0 in X & 0<r
+    ex s st 0<s & for x1 st x1 in X & abs(x1-x0) < s
+    holds |. f/.x1 - f/.x0 .| < r);
+
+registration let n;
+  cluster constant -> continuous PartFunc of REAL,REAL n;
+end;
+
+registration let n;
+  cluster continuous PartFunc of REAL,REAL n;
+end;
+
+registration let n;
+  let f be continuous PartFunc of REAL,REAL n, X be set;
+  cluster f|X -> continuous PartFunc of REAL,REAL n;
+end;
+
+theorem :: NFCONT_4:25
+  f|X is continuous & X1 c= X implies f|X1 is continuous;
+
+registration let n;
+  cluster empty -> continuous PartFunc of REAL,REAL n;
+end;
+
+registration let n,f;
+  let X be trivial set;
+  cluster f|X -> continuous PartFunc of REAL,REAL n;
+end;
+
+registration let n;
+  let f1,f2 be continuous PartFunc of REAL,REAL n;
+  cluster f1+f2 -> continuous PartFunc of REAL,REAL n;
+end;
+
+theorem :: NFCONT_4:26
+  X c= dom f1 /\ dom f2 & f1|X is continuous & f2|X is continuous
+  implies (f1+f2) |X is continuous & (f1-f2) |X is continuous;
+
+theorem :: NFCONT_4:27
+  X c= dom f1 & X1 c= dom f2 & f1|X is continuous & f2|X1 is continuous
+  implies (f1+f2) | (X /\ X1) is continuous & (f1-f2) | (X /\ X1) is continuous
+;
+
+registration let n;
+  let f be continuous PartFunc of REAL,REAL n;
+  let r;
+  cluster r(#)f -> continuous PartFunc of REAL,REAL n;
+end;
+
+theorem :: NFCONT_4:28
+  X c= dom f & f|X is continuous implies (r(#)f) | X is continuous;
+
+theorem :: NFCONT_4:29
+  X c= dom f & f|X is continuous
+  implies |. f .| |X is continuous & (-f) | X is continuous;
+
+theorem :: NFCONT_4:30
+  f is total & (for x1,x2 holds f/.(x1+x2) = f/.x1 + f/.x2) &
+  (ex x0 st f is_continuous_in x0) implies f|REAL is continuous;
+
+theorem :: NFCONT_4:31
+  for Y be Subset of REAL-NS n st
+  dom f is compact & f| (dom f) is continuous & Y = rng f
+  holds Y is compact;
+
+theorem :: NFCONT_4:32
+  for Y be Subset of REAL, Z be Subset of REAL-NS n st
+  Y c= dom f & Z = f.:Y & Y is compact & f|Y is continuous
+  holds Z is compact;
+
+definition let n,f;
+  attr f is Lipschitzian means
+:: NFCONT_4:def 6
+  ex g be PartFunc of REAL,the carrier of REAL-NS n st g=f &
+  g is Lipschitzian;
+end;
+
+theorem :: NFCONT_4:33
+  f is Lipschitzian iff
+  ex r be real number st 0<r & for x1,x2 st x1 in dom f &
+  x2 in dom f holds |.f/.x1-f/.x2.| <= r*abs(x1-x2);
+
+theorem :: NFCONT_4:34
+  f=h implies (f is Lipschitzian iff h is Lipschitzian);
+
+theorem :: NFCONT_4:35
+  f|X is Lipschitzian iff ex r be real number
+     st 0<r & for x1,x2 st x1 in dom(f|X) &
+   x2 in dom(f|X) holds |. f/.x1-f/.x2 .| <= r*abs(x1-x2);
+
+registration let n;
+  cluster empty -> Lipschitzian PartFunc of REAL,REAL n;
+end;
+
+registration let n;
+  cluster empty PartFunc of REAL,REAL n;
+end;
+
+registration let n;
+  let f be Lipschitzian PartFunc of REAL,REAL n, X be set;
+  cluster f|X -> Lipschitzian PartFunc of REAL,REAL n;
+end;
+
+theorem :: NFCONT_4:36
+  f|X is Lipschitzian & X1 c= X implies f|X1 is Lipschitzian;
+
+registration let n;
+  let f1,f2 be Lipschitzian PartFunc of REAL,REAL n;
+  cluster f1+f2 -> Lipschitzian PartFunc of REAL,REAL n;
+  cluster f1-f2 -> Lipschitzian PartFunc of REAL,REAL n;
+end;
+
+theorem :: NFCONT_4:37
+  f1|X is Lipschitzian & f2|X1 is Lipschitzian implies
+    (f1+f2) | (X /\ X1) is Lipschitzian;
+
+theorem :: NFCONT_4:38
+  f1|X is Lipschitzian & f2|X1 is Lipschitzian implies
+  (f1-f2) | (X /\ X1) is Lipschitzian;
+
+registration let n;
+  let f be Lipschitzian PartFunc of REAL, REAL n;
+  let p;
+  cluster p(#)f -> Lipschitzian PartFunc of REAL, REAL n;
+end;
+
+theorem :: NFCONT_4:39
+  f|X is Lipschitzian & X c= dom f implies (p(#)f) | X is Lipschitzian;
+
+registration let n;
+  let f be Lipschitzian PartFunc of REAL, REAL n;
+  cluster |. f .| -> Lipschitzian PartFunc of REAL,REAL;
+end;
+
+theorem :: NFCONT_4:40
+  f|X is Lipschitzian implies -(f|X) is Lipschitzian
+    & |. f .| |X is Lipschitzian & (-f) |X is Lipschitzian;
+
+registration let n;
+  cluster constant -> Lipschitzian PartFunc of REAL, REAL n;
+end;
+
+registration let n;
+  cluster Lipschitzian -> continuous PartFunc of REAL, REAL n;
+end;
+
+theorem :: NFCONT_4:41
+  for r,p be Element of REAL n
+    st (for x0 st x0 in X holds f/.x0 = x0*r+p)
+  holds f|X is continuous;
+
+theorem :: NFCONT_4:42
+  for x0 be Element of REAL n st 1 <= i & i <= n
+  holds proj(i,n) is_continuous_in x0;
+
+theorem :: NFCONT_4:43
+for n be non empty Element of NAT, h be PartFunc of REAL, REAL n holds
+h is_continuous_in x0 iff
+    (x0 in dom h & for i be Element of NAT st i in Seg n
+    holds proj(i,n)*h is_continuous_in x0);
+
+theorem :: NFCONT_4:44
+for n be non empty Element of NAT, h be PartFunc of REAL, REAL n holds
+ h is continuous iff
+  for i be Element of NAT st i in Seg n
+    holds proj(i,n)*h is continuous;
+
+theorem :: NFCONT_4:45
+  for x0 be Point of REAL-NS n st 1 <= i & i <= n holds
+  Proj(i,n) is_continuous_in x0;
+
+theorem :: NFCONT_4:46
+for n be non empty Element of NAT,
+    h be PartFunc of REAL,the carrier of REAL-NS n holds
+ h is_continuous_in x0 iff
+  for i be Element of NAT st i in Seg n
+    holds Proj(i,n)*h is_continuous_in x0;
+
+theorem :: NFCONT_4:47
+for n be non empty Element of NAT,
+    h be PartFunc of REAL, the carrier of REAL-NS n holds
+ h is continuous iff
+  for i be Element of NAT st i in Seg n
+    holds Proj(i,n)*h is continuous;

@@ -233,6 +233,7 @@
 <Func kind="K" nr="31"/>
 </Func>
 </Adjective>
+<Adjective nr="63"/>
 <Adjective nr="149">
 <LocusVar nr="1"/>
 <Func kind="K" nr="93">

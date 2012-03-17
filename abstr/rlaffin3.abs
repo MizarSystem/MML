@@ -1,0 +1,307 @@
+:: Continuity of Barycentric Coordinates in Euclidean Topological Spaces
+::  by Karol P\kak
+:: 
+:: Received December 21, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies ALGSTR_0, AOFA_I00, ARYTM_1, ARYTM_3, CARD_1, CARD_3, CLASSES1,
+      COMPLEX1, CONVEX1, EUCLID, EUCLID_9, FINSEQ_1, FINSEQ_2, FINSEQ_4,
+      FINSET_1, FUNCOP_1, FUNCSDOM, FUNCT_1, FUNCT_2, LMOD_7, MATRIX_1,
+      MATRIX_3, MATRIX13, MATRLIN, MATRLIN2, MESFUNC1, METRIC_1, MONOID_0,
+      NAT_1, NUMBERS, ORDINAL1, ORDINAL2, ORDINAL4, PARTFUN1, PCOMPS_1,
+      PRE_TOPC, PROB_1, PRVECT_1, QC_LANG1, RCOMP_1, REAL_1, RELAT_1, RFINSEQ,
+      RLAFFIN1, RLSUB_1, RLTOPSP1, RLVECT_1, RLVECT_2, RLVECT_3, RLVECT_5,
+      RUSUB_4, SEMI_AF1, SETFAM_1, STRUCT_0, SUBSET_1, SUPINF_2, TARSKI,
+      TOPMETR, TOPS_1, TOPS_2, VALUED_0, VALUED_1, VECTSP_1, XBOOLE_0,
+      XCMPLX_0, XREAL_0, XXREAL_0, XXREAL_1, ZFMISC_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, NAT_1,
+      XXREAL_0, CARD_1, XREAL_0, REAL_1, FINSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
+      RELSET_1, PARTFUN1, FUNCT_2, FINSEQ_1, FUNCOP_1, STRUCT_0, FINSEQ_2,
+      FINSEQOP, RVSUM_1, RLVECT_1, RLVECT_2, RUSUB_4, CONVEX1, RLAFFIN1,
+      COMPLEX1, VALUED_0, METRIC_1, BINOP_2, PRE_TOPC, PCOMPS_1, ALGSTR_0,
+      FUNCSDOM, TOPS_2, RLTOPSP1, EUCLID, VFUNCT_1, FVSUM_1, RLSUB_1, RLVECT_3,
+      RLVECT_5, CARD_3, RCOMP_1, EUCLID_9, VECTSP_1, MATRIX_1, NAT_D, MATRIX_3,
+      MATRIX_6, VECTSP_6, VECTSP_7, MATRIX13, MATRLIN, RLSUB_2, RFINSEQ,
+      TOPMETR, RLAFFIN2, SETFAM_1, PRVECT_1, TOPREAL9, MATRTOP1;
+ constructors BINOP_2, CONVEX1, EUCLID_9, FUNCSDOM, FVSUM_1, MATRIX_6,
+      MATRIX13, MATRTOP1, MONOID_0, NAT_D, RANKNULL, RCOMP_1, REAL_1, REALSET1,
+      RFINSEQ, RLAFFIN1, RLAFFIN2, RLSUB_2, RLVECT_3, RLVECT_5, RUSUB_5, SEQ_1,
+      TDLAT_3, TOPMETR, TOPREAL9, TOPS_2, VECTSP_7, VFUNCT_1, WELLORD2, SEQ_4;
+ registrations CARD_1, EUCLID, EUCLID_7, EUCLID_9, FINSEQ_1, FINSEQ_2,
+      FINSET_1, FUNCT_1, JORDAN2B, MATRIX13, MATRTOP1, MEMBERED, MONOID_0,
+      NAT_1, NUMBERS, PRE_TOPC, PRVECT_1, REAL_1, REALSET1, RELAT_1, RELSET_1,
+      RLAFFIN1, RLTOPSP1, RLVECT_5, RVSUM_1, STRUCT_0, SUBSET_1, TEX_1,
+      TOPGEN_1, TOPMETR, TOPREAL1, TOPREALC, TOPS_1, VALUED_0, VECTSP_1,
+      VECTSP_9, XBOOLE_0, XREAL_0, XXREAL_0, ZFMISC_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+ reserve x for set,
+         n,m,k for Nat,
+         r for Real,
+         V for RealLinearSpace,
+         v,u,w,t for VECTOR of V,
+         Av for finite Subset of V,
+         Affv for finite affinely-independent Subset of V;
+
+theorem :: RLAFFIN3:1
+  for f1,f2 be real-valued FinSequence, r be real number
+    holds Intervals(f1,r)^Intervals(f2,r) = Intervals(f1^f2,r);
+
+theorem :: RLAFFIN3:2
+  for f1,f2 be FinSequence holds
+    x in product(f1^f2)
+  iff
+    ex p1,p2 be FinSequence st x = p1^p2 & p1 in product f1 & p2 in product f2;
+
+theorem :: RLAFFIN3:3
+  V is finite-dimensional iff (Omega).V is finite-dimensional;
+
+registration
+  let V be finite-dimensional RealLinearSpace;
+  cluster -> finite (affinely-independent Subset of V);
+end;
+
+registration
+  let n;
+  cluster TOP-REAL n -> add-continuous Mult-continuous;
+ cluster TOP-REAL n -> finite-dimensional;
+end;
+
+reserve pn for Point of TOP-REAL n,
+        An for Subset of TOP-REAL n,
+        Affn for affinely-independent Subset of TOP-REAL n,
+        Ak for Subset of TOP-REAL k;
+
+theorem :: RLAFFIN3:4
+  dim TOP-REAL n = n;
+
+theorem :: RLAFFIN3:5
+  for V be finite-dimensional RealLinearSpace
+  for A be affinely-independent Subset of V holds card A <= 1+dim V;
+
+theorem :: RLAFFIN3:6
+  for V be finite-dimensional RealLinearSpace,
+      A be affinely-independent Subset of V
+  holds
+    card A = dim V + 1
+  iff
+    Affin A = [#]V;
+
+begin :: Open and Closed Subsets of a Subspace of the Euclidean Topological
+      :: Space
+
+theorem :: RLAFFIN3:7
+  k <= n & An = {v where v is Element of TOP-REAL n : v|k in Ak}
+    implies
+  (An is open iff Ak is open);
+
+theorem :: RLAFFIN3:8
+  for A be Subset of TOP-REAL(k+n) st
+    A = {v^(n|->0) where v is Element of TOP-REAL k: not contradiction}
+  for B be Subset of (TOP-REAL(k+n))|A st
+    B = {v where v is Point of TOP-REAL(k+n): v|k in Ak & v in A}
+  holds Ak is open iff B is open;
+
+theorem :: RLAFFIN3:9
+  for A be affinely-independent Subset of V, B be Subset of V st B c= A
+  holds conv A/\Affin B = conv B;
+
+theorem :: RLAFFIN3:10
+  for V be non empty RLSStruct, A be non empty set
+  for f be PartFunc of A,the carrier of V
+  for X be set holds (r(#)f).:X = r*(f.:X);
+
+theorem :: RLAFFIN3:11
+  0*n in An implies Affin An = [#]Lin An;
+
+registration
+  let V be non empty addLoopStr;
+  let A be finite Subset of V;
+  let v be Element of V;
+  cluster v+A -> finite;
+end;
+
+registration
+  let V be non empty RLSStruct;
+  let A be finite Subset of V;
+  let r;
+  cluster r*A -> finite;
+end;
+
+theorem :: RLAFFIN3:12
+  for A be Subset of V holds
+    card A = card(r*A)
+  iff
+    r<>0 or A is trivial;
+
+registration
+  let V be non empty RLSStruct;
+  let f be FinSequence of V;
+  let r;
+  cluster r(#)f -> FinSequence-like;
+end;
+
+begin :: The Vector of Barycentric Coordinates
+
+definition
+  let X be finite set;
+  mode Enumeration of X -> one-to-one FinSequence means
+:: RLAFFIN3:def 1
+    rng it = X;
+end;
+
+definition
+  let X be 1-sorted;
+  let A be finite Subset of X;
+  redefine mode Enumeration of A -> one-to-one FinSequence of X;
+end;
+
+reserve EV for Enumeration of Affv,
+        EN for Enumeration of Affn;
+
+theorem :: RLAFFIN3:13
+  for V be Abelian add-associative right_zeroed right_complementable
+    non empty addLoopStr
+  for A be finite Subset of V, E be Enumeration of A, v be Element of V
+  holds E+(card A|->v) is Enumeration of (v+A);
+
+theorem :: RLAFFIN3:14
+  for E be Enumeration of Av holds
+    r(#)E is Enumeration of r*Av
+  iff
+    r<>0 or Av is trivial;
+
+theorem :: RLAFFIN3:15
+  for M be Matrix of n,m,F_Real st the_rank_of M = n
+  for A be finite Subset of TOP-REAL n, E be Enumeration of A
+    holds (Mx2Tran M)*E is Enumeration of(Mx2Tran M).:A;
+
+definition
+  let V,Av;
+  let E be Enumeration of Av;
+  let x;
+  func x|--E -> FinSequence of REAL equals
+:: RLAFFIN3:def 2
+    (x|--Av)*E;
+end;
+
+theorem :: RLAFFIN3:16
+  for E be Enumeration of Av holds len (x|--E) = card Av;
+
+theorem :: RLAFFIN3:17
+  for E be Enumeration of v+Affv st w in Affin Affv & E = EV+(card Affv|->v)
+    holds w|--EV=(v+w)|--E;
+
+theorem :: RLAFFIN3:18
+  for rE be Enumeration of r*Affv st v in Affin Affv & rE = r(#)EV & r<>0
+    holds v|--EV = (r*v)|--rE;
+
+theorem :: RLAFFIN3:19
+  for M be Matrix of n,m,F_Real st the_rank_of M = n
+  for ME be Enumeration of (Mx2Tran M).:Affn st ME = (Mx2Tran M)*EN
+  for pn st pn in Affin Affn holds pn |-- EN = ((Mx2Tran M).pn) |-- ME;
+
+theorem :: RLAFFIN3:20
+  for A be Subset of V st A c= Affv & x in Affin Affv holds
+    x in Affin A
+  iff
+    for y be set st y in dom(x|--EV) & not EV.y in A holds (x|--EV).y = 0;
+
+theorem :: RLAFFIN3:21
+  for EV st x in Affin Affv holds
+    x in Affin(EV.:Seg k)
+  iff
+    x|--EV = ((x|--EV)|k)^((card Affv-' k)|->0);
+
+theorem :: RLAFFIN3:22
+  for EV st k <= card Affv & x in Affin Affv holds
+    x in Affin(Affv\(EV.:Seg k))
+  iff
+    x|--EV = (k|->0)^((x|--EV)/^k);
+
+theorem :: RLAFFIN3:23
+  0*n in Affn & EN.len EN=0*n implies
+    rng(EN|(card Affn-' 1)) = Affn\{0*n} &
+    for A be Subset of n-VectSp_over F_Real st Affn = A holds
+      EN|(card Affn-' 1) is OrdBasis of Lin A;
+
+theorem :: RLAFFIN3:24
+  for A be Subset of n-VectSp_over F_Real st
+    Affn = A & 0*n in Affn & EN.len EN = 0*n
+  for B be OrdBasis of Lin A st B = EN|(card Affn-' 1)
+  for v be Element of Lin A holds v|--B = (v|--EN)|(card Affn-' 1);
+
+theorem :: RLAFFIN3:25
+  for EN,An st k <= n & card Affn = n+1 & An = {pn:(pn|--EN)|k in Ak}
+    holds Ak is open iff An is open;
+
+theorem :: RLAFFIN3:26
+  for EN st k <=n & card Affn = n+1 & An = {pn:(pn|--EN)|k in Ak}
+    holds Ak is closed iff An is closed;
+
+registration
+  let n;
+  cluster Affine -> closed Subset of TOP-REAL n;
+end;
+
+reserve pnA for Element of(TOP-REAL n)|Affin Affn;
+
+theorem :: RLAFFIN3:27
+  for EN for B be Subset of (TOP-REAL n)|Affin Affn st
+    k < card Affn & B = {pnA: (pnA|--EN) |k in Ak}
+  holds Ak is open iff B is open;
+
+theorem :: RLAFFIN3:28
+  for EN for B be Subset of (TOP-REAL n)|Affin Affn st
+    k < card Affn & B = {pnA: (pnA|--EN)|k in Ak}
+  holds Ak is closed iff B is closed;
+
+registration
+  let n;
+  let p,q be Point of TOP-REAL n;
+  cluster halfline(p,q) -> closed;
+end;
+
+begin :: Continuity of Barycentric Coordinates
+
+definition
+  let V;
+  let A be Subset of V,x;
+  func |--(A,x) -> Function of V,R^1 means
+:: RLAFFIN3:def 3
+    it.v = (v|--A).x;
+end;
+
+theorem :: RLAFFIN3:29
+  for A be Subset of V st not x in A holds |--(A,x) = [#]V-->0;
+
+theorem :: RLAFFIN3:30
+  for A be affinely-independent Subset of V st |--(A,x) = [#]V-->0
+    holds not x in A;
+
+theorem :: RLAFFIN3:31
+  |--(Affn,x)|Affin Affn is continuous Function of (TOP-REAL n)|Affin Affn,R^1;
+
+theorem :: RLAFFIN3:32
+  card Affn = n+1 implies |--(Affn,x) is continuous;
+
+registration
+  let n,Affn;
+  cluster conv Affn -> closed;
+end;
+
+theorem :: RLAFFIN3:33
+  card Affn = n+1 implies Int Affn is open;

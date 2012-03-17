@@ -44,36 +44,36 @@
 </Cluster>
 </FCluster>
 <FCluster aid="COMPLEX1" nr="3">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="11"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="63">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="11"/>
-<Adjective nr="12"/>
-</Cluster>
-</FCluster>
-<FCluster aid="COMPLEX1" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="63">
 <Func kind="K" nr="33"/>
 </Func>
 <Cluster>
 <Adjective nr="1"/>
+<Adjective nr="12"/>
+</Cluster>
+</FCluster>
+<FCluster aid="COMPLEX1" nr="4">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1" value="false"/>
 <Adjective nr="11"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="63">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="12"/>
 </Cluster>
 </FCluster>
 <FCluster aid="COMPLEX1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="1" value="false"/>
 <Adjective nr="11"/>
 </Cluster>
 </Typ>
@@ -82,23 +82,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="11"/>
-</Cluster>
-</FCluster>
-<FCluster aid="COMPLEX1" nr="6">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="11"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="63">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 <Adjective nr="15" value="false"/>
 </Cluster>
 </FCluster>

@@ -1,0 +1,259 @@
+:: Mazur-Ulam Theorem
+::  by Artur Korni{\l}owicz
+:: 
+:: Received December 21, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies FUNCT_1, NORMSP_1, VECTMETR, PRE_TOPC, ARYTM_1, RUSUB_4, XREAL_0,
+      ORDINAL1, CARD_1, XXREAL_0, RELAT_1, ARYTM_3, FUNCT_2, SEQ_2, MEMBERED,
+      ORDINAL2, MAZURULM, BINOP_1, VALUED_1, SUPINF_2, COMPLEX1, SUBSET_1,
+      XXREAL_2, XBOOLE_0, NUMBERS, MEMBER_1, SUPINF_1, TARSKI, RLVECT_1,
+      CFCONT_1, NAT_1, PARTFUN1, REAL_1, NEWTON, TOPMETR, BORSUK_1, TOPS_1,
+      XXREAL_1, URYSOHN1, METRIC_1, STRUCT_0, SEQ_1, FUNCOP_1, RCOMP_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_2, FUNCOP_1, NUMBERS, XXREAL_0, XXREAL_1, XXREAL_3, XREAL_0,
+      REAL_1, XXREAL_2, MEMBERED, VALUED_1, SEQ_1, SEQ_2, COMPLEX1, MEMBER_1,
+      SUPINF_1, NEWTON, BINOP_2, MEASURE6, STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2,
+      BORSUK_1, METRIC_1, TOPMETR, ALGSTR_0, RLVECT_1, NORMSP_0, NORMSP_1,
+      NDIFF_1, NFCONT_1, CONNSP_3, URYSOHN1;
+ constructors TOPS_2, REAL_1, SUPINF_2, INTEGRA2, EXTREAL1, BINOP_2, NFCONT_1,
+      NEWTON, CONNSP_3, URYSOHN1, TOPS_1, TOPMETR, PCOMPS_1, MEASURE6, NDIFF_1,
+      SEQ_1;
+ registrations RELSET_1, XREAL_0, ORDINAL1, STRUCT_0, MEMBERED, FUNCT_1,
+      FUNCT_2, XBOOLE_0, NORMSP_1, FUNCTOR1, NUMBERS, SEQ_4, SPRECT_1,
+      XXREAL_2, MEMBER_1, XXREAL_0, RLVECT_1, TOPS_1, TOPMETR, METRIC_1,
+      XXREAL_1, VALUED_1, VALUED_0, FUNCOP_1, BORSUK_1, INT_1, NEWTON;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+:: Mazur-Ulam Theorem
+:: cluster bijective isometric -> Affine Function of E,F;
+:: is a consequence of two registrations:
+:: cluster bijective isometric -> midpoints-preserving Function of E,F;
+:: cluster isometric midpoints-preserving -> Affine Function of E,F;
+
+reserve E,F,G for RealNormSpace;
+reserve f for Function of E,F;
+reserve g for Function of F,G;
+reserve a,b,c for Point of E;
+reserve t for real number;
+
+registration
+  cluster I[01] -> closed SubSpace of R^1;
+end;
+
+theorem :: MAZURULM:1
+  DYADIC is dense Subset of I[01];
+
+theorem :: MAZURULM:2
+  Cl DYADIC = [. 0,1 .];
+
+theorem :: MAZURULM:3
+  a + a = 2*a;
+
+theorem :: MAZURULM:4
+  a + b - b = a;
+
+registration
+  let A be bounded_above (real-membered set);
+  let r be non negative (real number);
+  cluster r**A -> bounded_above;
+end;
+
+registration
+  let A be bounded_above (real-membered set);
+  let r be non positive (real number);
+  cluster r**A -> bounded_below;
+end;
+
+registration
+  let A be bounded_below (real-membered set);
+  let r be non negative (real number);
+  cluster r**A -> bounded_below;
+end;
+
+registration
+  let A be bounded_below non empty (real-membered set);
+  let r be non positive (real number);
+  cluster r**A -> bounded_above;
+end;
+
+theorem :: MAZURULM:5
+  for f being Real_Sequence holds f + (NAT --> t) = t + f;
+
+theorem :: MAZURULM:6
+  for r being Real holds lim (NAT --> r) = r;
+
+theorem :: MAZURULM:7
+  for f being convergent Real_Sequence holds
+  lim (t + f) = t + lim f;
+
+registration
+  let f be convergent Real_Sequence;
+  let t;
+  cluster t + f -> convergent Real_Sequence;
+end;
+
+theorem :: MAZURULM:8
+  for f be Real_Sequence holds f (#) (NAT --> a) = f * a;
+
+theorem :: MAZURULM:9
+  lim (NAT --> a) = a;
+
+theorem :: MAZURULM:10
+  for f being convergent Real_Sequence holds
+  lim (f * a) = (lim f) * a;
+
+registration
+  let f be convergent Real_Sequence;
+  let E,a;
+  cluster f * a -> convergent;
+end;
+
+definition
+  let E,F be non empty NORMSTR, f be Function of E,F;
+  attr f is isometric means
+:: MAZURULM:def 1
+  for a,b being Point of E holds ||. f.a - f.b .|| = ||. a - b .||;
+end;
+
+definition
+  let E,F be non empty RLSStruct, f be Function of E,F;
+
+  attr f is Affine means
+:: MAZURULM:def 2
+  for a,b being Point of E, t being real number st 0 <= t & t <= 1 holds
+  f.((1-t)*a+t*b) = (1-t)*(f.a) + t*(f.b);
+
+  attr f is midpoints-preserving means
+:: MAZURULM:def 3
+  for a,b being Point of E holds f.(1/2*(a+b)) = 1/2*(f.a+f.b);
+end;
+
+registration
+  let E be non empty NORMSTR;
+  cluster id E -> isometric;
+end;
+
+registration
+  let E be non empty RLSStruct;
+  cluster id E -> midpoints-preserving Affine;
+end;
+
+registration
+  let E be non empty NORMSTR;
+  cluster bijective isometric midpoints-preserving Affine UnOp of E;
+end;
+
+theorem :: MAZURULM:11
+  f is isometric & g is isometric implies g*f is isometric;
+
+registration
+  let E; let f,g be isometric UnOp of E;
+  cluster g*f -> isometric UnOp of E;
+end;
+
+theorem :: MAZURULM:12
+  f is bijective isometric implies f/" is isometric;
+
+registration
+  let E; let f be bijective isometric UnOp of E;
+  cluster f/" -> isometric;
+end;
+
+theorem :: MAZURULM:13
+  f is midpoints-preserving & g is midpoints-preserving implies
+  g*f is midpoints-preserving;
+
+registration
+  let E; let f,g be midpoints-preserving UnOp of E;
+  cluster g*f -> midpoints-preserving UnOp of E;
+end;
+
+theorem :: MAZURULM:14
+  f is bijective midpoints-preserving implies f/" is midpoints-preserving;
+
+registration
+  let E; let f be bijective midpoints-preserving UnOp of E;
+  cluster f/" -> midpoints-preserving;
+end;
+
+theorem :: MAZURULM:15
+  f is Affine & g is Affine implies g*f is Affine;
+
+registration
+  let E; let f,g be Affine UnOp of E;
+  cluster g*f -> Affine UnOp of E;
+end;
+
+theorem :: MAZURULM:16
+  f is bijective Affine implies f/" is Affine;
+
+registration
+  let E; let f be bijective Affine UnOp of E;
+  cluster f/" -> Affine;
+end;
+
+definition
+  let E be non empty RLSStruct, a be Point of E;
+  func a-reflection -> UnOp of E means
+:: MAZURULM:def 4
+  for b being Point of E holds it.b = 2*a - b;
+end;
+
+theorem :: MAZURULM:17
+  (a-reflection) * (a-reflection) = id E;
+
+registration
+  let E,a;
+  cluster a-reflection -> bijective;
+end;
+
+theorem :: MAZURULM:18  :: a is the only fixed point of R
+  (a-reflection).a = a & for b st (a-reflection).b = b holds a = b;
+
+theorem :: MAZURULM:19
+  (a-reflection).b - a = a - b;
+
+theorem :: MAZURULM:20
+  ||. (a-reflection).b - a .|| = ||. b - a .||;
+
+theorem :: MAZURULM:21
+  (a-reflection).b - b = 2 * (a - b);
+
+theorem :: MAZURULM:22
+  ||. (a-reflection).b - b .|| = 2 * ||. b - a .||;
+
+theorem :: MAZURULM:23
+  (a-reflection)/" = a-reflection;
+
+registration
+  let E,a;
+  cluster a-reflection -> isometric;
+end;
+
+theorem :: MAZURULM:24
+  f is isometric implies f is_continuous_on dom f;
+
+registration
+  let E,F;
+  cluster bijective isometric -> midpoints-preserving Function of E,F;
+ end;
+
+registration
+  let E,F;
+  cluster isometric midpoints-preserving -> Affine Function of E,F;
+end;
+

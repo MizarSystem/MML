@@ -2,7 +2,15 @@
 ::  by Andrzej Trybulec and Yatsuka Nakamura
 ::
 :: Received October 8, 1993
-:: Copyright (c) 1993 Association of Mizar Users
+:: Copyright (c) 1993-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -698,6 +706,7 @@ A9: x = (a,b) --> (i1,i2) by Th11;
   reconsider d = x as FinPartState of SCM by A9;
   consider t being State of SCM such that
 A10: p +* d c= t by PBOOLE:156;
+B10: ProgramPart(p +* d) c= ProgramPart t by A10,RELAT_1:105;
 A11: dom d = { a, b } by A9,FUNCT_4:65;
   then
 A12: b in dom d by TARSKI:def 2;
@@ -721,16 +730,20 @@ A18: dom d misses NAT by COMPOS_1:40;
 A19: ProgramPart(p+*d) = ProgramPart p by FUNCT_4:76;
 A20: NPP d = d by A17,COMPOS_1:176;
 A21: a in dom d by A11,TARSKI:def 2;
-A22: for t being State of SCM st p +* d c= t holds t.a = i1 & t.b = i2
+A22: for t being State of SCM st NPP(p +* d) c= t
+  holds t.a = i1 & t.b = i2
   proof
 A23: d c= p +* d by FUNCT_4:26;
     let t be State of SCM;
-    assume p +* d c= t;
+    assume
+Z:    NPP(p +* d) c= t;
+    d c= p +* d by FUNCT_4:26;
+    then NPP d c= NPP(p +* d) by COMPOS_1:170;
     then
-A24: d c= t by A23,XBOOLE_1:1;
-    hence t.a = d.a by A21,GRFUNC_1:8
+A24: NPP d c= t by A23,XBOOLE_1:1,Z;
+    hence t.a = d.a by A21,GRFUNC_1:8,A20
       .= i1 by A9,AMI_3:52,FUNCT_4:66;
-    thus t.b = d.b by A12,A24,GRFUNC_1:8
+    thus t.b = d.b by A12,A24,GRFUNC_1:8,A20
       .= i2 by A9,FUNCT_4:66;
   end;
   dom(Start-At(0,SCM)) = { IC SCM } by FUNCOP_1:19;
@@ -783,8 +796,8 @@ A38: p +* d is autonomic
 A39: ProgramPart(p +* d) c= P and
 A40: ProgramPart(p +* d) c= Q;
     let s1,s2 be State of SCM such that
-A41: p +* d c= s1 and
-A42: p +* d c= s2;
+A41: NPP(p +* d) c= s1 and
+A42: NPP(p +* d) c= s2;
 A43: s2.a = i1 & s2.b = i2 by A22,A42;
     let k;
 A44: Euclide-Algorithm c= Q by A37,XBOOLE_1:1,A40;
@@ -893,15 +906,17 @@ A79: p +* d is halting
     reconsider i19 = i1, i29 = i2 as Element of NAT by A7,A8,INT_1:16;
     let t be State of SCM;
     assume
-A80: p +* d c= t;
+A80: NPP(p +* d) c= t;
+    then
+B80: NPP(p +* d) c= t by XBOOLE_1:1;
     let P be (the Instructions of SCM)-valued ManySortedSet of NAT such that
 A81:  ProgramPart(p +* d) c= P;
     set t9 = Comput(P,t,4);
 A82:  ProgramPart(p +* d) c= P by A81;
     then
 A83: q c= P by A37,XBOOLE_1:1;
-A84: t.b = i2 by A22,A80;
-A85: t is 0-started & t.a = i1 by A35,A22,A80,COMPOS_1:8;
+A84: t.b = i2 by A22,A80,B80;
+A85: t is 0-started & t.a = i1 by A35,A22,A80,COMPOS_1:8,B80;
     per cases by XXREAL_0:1;
     suppose
       i1 > i2;
@@ -960,7 +975,8 @@ A97: ProgramPart(d +* q)
    by A38,A79,EXTPRO_1:def 11;
    then
 A98: Result(ProgramPart(d +* q),p +* d)
- = (Result(ProgramPart(t),t))|dom NPP(p +* d) by A10,EXTPRO_1:def 12,A19,A97;
+ = (Result(ProgramPart(t),t))|dom NPP(p +* d)
+  by A10,EXTPRO_1:def 12,A19,A97,B10;
   a in the carrier of SCM;
   then
 A99: a in dom Result(ProgramPart(t),t) by PARTFUN1:def 4;

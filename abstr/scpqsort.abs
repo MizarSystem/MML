@@ -2,29 +2,38 @@
 ::  by JingChao Chen
 ::
 :: Received June 14, 2000
-:: Copyright (c) 2000 Association of Mizar Users
+:: Copyright (c) 2000-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+::, SCMPDS_4;
 
 environ
 
  vocabularies NUMBERS, SCMPDS_2, SUBSET_1, FSM_1, SCMPDS_4, AMI_1, TURING_1,
       SCMFSA8A, SCMFSA_7, AMI_3, INT_1, SCMFSA8B, CARD_1, ARYTM_3, FUNCT_1,
       XXREAL_0, UNIALG_2, SCMFSA7B, SCMFSA6B, RELAT_1, FUNCT_4, AMI_2,
-      SCMFSA_9, ARYTM_1, VALUED_1, TARSKI, GRAPHSP, SCMFSA6A, CIRCUIT2,
-      MSUALG_1, NAT_1, FUNCOP_1, FUNCT_7, XBOOLE_0, CARD_3, SCMPDS_8, FINSEQ_1,
-      GRAPH_2, SCPISORT, SCMP_GCD, CLASSES1, SCPQSORT, ORDINAL1, PARTFUN1,
-      SCMNORM, SCMFSA6C;
+      SCMFSA_9, ARYTM_1, VALUED_1, TARSKI, GRAPHSP, CIRCUIT2, MSUALG_1, NAT_1,
+      FUNCOP_1, CARD_3, SCMPDS_8, FINSEQ_1, GRAPH_2, SCPISORT, SCMP_GCD,
+      CLASSES1, SCPQSORT, ORDINAL1, SCMNORM, SCMFSA6C, PBOOLE;
  notations TARSKI, XBOOLE_0, FUNCT_2, SUBSET_1, CARD_1, NUMBERS, XXREAL_0,
-      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, VALUED_1, XCMPLX_0, RECDEF_1, INT_1,
-      NAT_1, COMPOS_1, EXTPRO_1, AMI_1, AMI_2, FUNCT_7, SCMPDS_2, SCMPDS_4,
-      SCMPDS_5, SCMPDS_6, SCMP_GCD, CARD_3, FINSEQ_1, SCMPDS_8, GRAPH_2,
-      CLASSES1, SCPISORT;
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, PBOOLE, VALUED_1, XCMPLX_0,
+      RECDEF_1, INT_1, NAT_1, STRUCT_0, EXTPRO_1, AMI_2, FUNCT_7, SCMPDS_2,
+      SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD, CARD_3, FINSEQ_1, SCMPDS_8,
+      GRAPH_2, CLASSES1, COMPOS_1, SCPISORT;
  constructors REAL_1, RECDEF_1, NEWTON, MESFUNC1, SCM_1, SCMPDS_4, SCMPDS_5,
       SCMPDS_6, SCMP_GCD, SCMPDS_8, SCPISORT, CLASSES1, GRAPH_2, VALUED_1,
-      AMI_1, AMI_2;
+      AMI_2, SCMPDS_1, PRE_POLY, AMISTD_1, AMISTD_2, SCMPDS_7, PBOOLE,
+      AMISTD_5;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMPDS_8,
-      ORDINAL1, VALUED_0, VALUED_1, AMI_1, RELAT_1, COMPOS_1, AFINSQ_1,
-      EXTPRO_1;
+      ORDINAL1, VALUED_0, VALUED_1, RELAT_1, COMPOS_1, AFINSQ_1, EXTPRO_1,
+      FUNCT_4, FUNCT_7, FUNCOP_1, PRE_POLY, PBOOLE, SCMPDS_3;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -38,26 +47,28 @@ registration
   cluster if>0(a,k1,I,J) -> shiftable;
 end;
 
+reserve P,Q,V for (the Instructions of SCMPDS)-valued ManySortedSet of NAT;
+
 theorem :: SCPQSORT:1  :: see SCMPDS_6:87
   for s being State of SCMPDS,I being halt-free shiftable Program
   of SCMPDS, J being shiftable Program of SCMPDS,a,b be Int_position,k1 being
-  Integer st s.DataLoc(s.a,k1) > 0 & I is_closed_on s & I is_halting_on s holds
-  IExec(if>0(a,k1,I,J),s).b = IExec(I,s).b;
+  Integer st s.DataLoc(s.a,k1) > 0 & I is_closed_on s,P & I is_halting_on s,P
+   holds
+  IExec(if>0(a,k1,I,J),P,s).b = IExec(I,P,s).b;
 
 theorem :: SCPQSORT:2
   for s,sm be State of SCMPDS,I be halt-free shiftable Program of
   SCMPDS, a be Int_position,i be Integer, m be Element of NAT st card I>0 & I
-  is_closed_on s & I is_halting_on s & s.DataLoc(s.a,i) > 0 & m=LifeSpan(
-ProgramPart(Initialize s +* stop I),Initialize s +* stop I)+2 &
- sm=Comput(ProgramPart((Initialize s +* stop while>0(a,i,I))),
-   (Initialize s +* stop while>0(a,i,I)),m)
- holds DataPart sm = DataPart IExec(I,s) &
-   Initialize sm +*stop while>0(a,i,I)=sm;
+  is_closed_on s,P & I is_halting_on s,P & s.DataLoc(s.a,i) > 0 &
+   m=LifeSpan(P +* stop I,Initialize s)+2 &
+ sm=Comput(P +* stop while>0(a,i,I),Initialize s,m)
+ holds DataPart sm = DataPart IExec(I,P,s) &
+   Initialize sm=sm;
 
 theorem :: SCPQSORT:3
   for s be State of SCMPDS,I be Program of SCMPDS st for t be State
-  of SCMPDS st DataPart t = DataPart s holds I is_halting_on t holds I
-  is_closed_on s;
+  of SCMPDS, Q st DataPart t = DataPart s holds I is_halting_on t,Q holds I
+  is_closed_on s,P;
 
 theorem :: SCPQSORT:4
   for i1,i2,i3,i4 be Instruction of SCMPDS holds card (i1 ';' i2
@@ -67,33 +78,46 @@ theorem :: SCPQSORT:5
   for s being State of SCMPDS,I being halt-free shiftable Program
   of SCMPDS, a,x,y be Int_position, i,c be Integer st card I > 0 & s.x >= c+s.
 DataLoc(s.a,i) &
-(for t be State of SCMPDS st t.x >= c+t.DataLoc(s.a,i) & t.y=s
-.y & t.a=s.a & t.DataLoc(s.a,i) > 0 holds IExec(I,t).a=t.a & I is_closed_on t &
-I is_halting_on t & IExec(I,t).DataLoc(s.a,i) < t.DataLoc(s.a,i) & IExec(I,t).x
-  >= c+IExec(I,t).DataLoc(s.a,i) & IExec(I,t).y=t.y)
- holds while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s &
+(for t be State of SCMPDS,Q st t.x >= c+t.DataLoc(s.a,i) & t.y=s
+.y & t.a=s.a & t.DataLoc(s.a,i) > 0
+ holds IExec(I,Q,t).a=t.a & I is_closed_on t,Q &
+I is_halting_on t,Q & IExec(I,Q,t).DataLoc(s.a,i) < t.DataLoc(s.a,i)
+ & IExec(I,Q,t).x
+  >= c+IExec(I,Q,t).DataLoc(s.a,i) & IExec(I,Q,t).y=t.y)
+ holds while>0(a,i,I) is_closed_on s,P & while>0(a,i,I) is_halting_on s,P &
  (s.DataLoc(s.a,i) > 0 implies
-  IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)));
+  IExec(while>0(a,i,I),P,s) =IExec(while>0(a,i,I),P,IExec(I,P,s)));
 
 theorem :: SCPQSORT:6
   for s being State of SCMPDS,I being halt-free shiftable Program
-  of SCMPDS, a,x,y be Int_position, i,c be Integer st card I > 0 & s.x >= c & (
-for t be State of SCMPDS st t.x >= c & t.y=s.y & t.a=s.a & t.DataLoc(s.a,i) > 0
-  holds IExec(I,t).a=t.a & I is_closed_on t & I is_halting_on t & IExec(I,t).
-DataLoc(s.a,i) < t.DataLoc(s.a,i) & IExec(I,t).x >= c & IExec(I,t).y=t.y) holds
-while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s & ( s.DataLoc(s.
-  a,i) > 0 implies IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)));
+  of SCMPDS, a,x,y be Int_position, i,c be Integer st s.x >= c & (
+for t be State of SCMPDS,Q
+ st t.x >= c & t.y=s.y & t.a=s.a & t.DataLoc(s.a,i) > 0
+  holds IExec(I,Q,t).a=t.a & I is_closed_on t,Q
+   & I is_halting_on t,Q & IExec(I,Q,t).
+DataLoc(s.a,i) < t.DataLoc(s.a,i) & IExec(I,Q,t).x >= c
+ & IExec(I,Q,t).y=t.y) holds
+while>0(a,i,I) is_closed_on s,P & while>0(a,i,I) is_halting_on s,P
+ & ( s.DataLoc(s.
+  a,i) > 0
+   implies IExec(while>0(a,i,I),P,s) =IExec(while>0(a,i,I),P,IExec(I,P,s)));
 
 theorem :: SCPQSORT:7
   for s being State of SCMPDS,I being halt-free shiftable Program
-of SCMPDS, a,x1,x2,x3,x4 be Int_position, i,c,md be Integer st card I > 0 & s.
-x4=s.x3-c+s.x1 & md <= s.x3-c & (for t be State of SCMPDS st t.x4=t.x3-c+t.x1 &
-md <= t.x3-c & t.x2=s.x2 & t.a=s.a & t.DataLoc(s.a,i) > 0 holds IExec(I,t).a=t.
-  a & I is_closed_on t & I is_halting_on t & IExec(I,t).DataLoc(s.a,i) < t.
-DataLoc(s.a,i) & IExec(I,t).x4=IExec(I,t).x3-c+IExec(I,t).x1 & md <= IExec(I,t)
-.x3-c & IExec(I,t).x2=t.x2) holds while>0(a,i,I) is_closed_on s & while>0(a,i,I
-  ) is_halting_on s & ( s.DataLoc(s.a,i) > 0 implies IExec(while>0(a,i,I),s) =
-  IExec(while>0(a,i,I),IExec(I,s)) );
+of SCMPDS, a,x1,x2,x3,x4 be Int_position, i,c,md be Integer st s.
+x4=s.x3-c+s.x1 & md <= s.x3-c &
+ (for t be State of SCMPDS,Q st t.x4=t.x3-c+t.x1 &
+md <= t.x3-c & t.x2=s.x2 & t.a=s.a & t.DataLoc(s.a,i) > 0
+ holds IExec(I,Q,t).a=t.
+  a & I is_closed_on t,Q & I is_halting_on t,Q
+   & IExec(I,Q,t).DataLoc(s.a,i) < t.
+DataLoc(s.a,i) & IExec(I,Q,t).x4=IExec(I,Q,t).x3-c+IExec(I,Q,t).x1
+ & md <= IExec(I,Q,t)
+.x3-c & IExec(I,Q,t).x2=t.x2) holds while>0(a,i,I) is_closed_on s,P
+ & while>0(a,i,I
+  ) is_halting_on s,P & ( s.DataLoc(s.a,i) > 0
+   implies IExec(while>0(a,i,I),P,s) =
+  IExec(while>0(a,i,I),P,IExec(I,P,s)) );
 
 theorem :: SCPQSORT:8
   for f being FinSequence of INT,m,k1,k,n be Element of NAT st k1=k
@@ -147,27 +171,28 @@ theorem :: SCPQSORT:12
 theorem :: SCPQSORT:13
   for s be 0-started State of SCMPDS,
   md,p0 be Element of NAT st s.GBP=0 & s.
-  intpos 2=md & md >= p0+1 & p0 >= 7 holds Partition is_closed_on s & Partition
-  is_halting_on s;
+  intpos 2=md & md >= p0+1 & p0 >= 7 holds Partition is_closed_on s,P
+   & Partition
+  is_halting_on s,P;
 
 theorem :: SCPQSORT:14
   for s be 0-started State of SCMPDS,
   md,p0,n be Element of NAT,f,f1 be
 FinSequence of INT st s.GBP=0 & s.intpos 4-s.intpos 2 > 0 & s.intpos 2=md & md
   >= p0+1 & s.intpos 4 <= p0+n & p0 >= 7 & f is_FinSequence_on s,p0 & len f=n &
-f1 is_FinSequence_on IExec(Partition,s),p0 & len f1=n holds
-IExec(Partition,s).GBP=0 &
-IExec(Partition,s).intpos 1=s.intpos 1 &
+f1 is_FinSequence_on IExec(Partition,P,s),p0 & len f1=n holds
+IExec(Partition,P,s).GBP=0 &
+IExec(Partition,P,s).intpos 1=s.intpos 1 &
  f,f1 are_fiberwise_equipotent
 & ex m4 be Element of NAT
-   st m4=IExec(Partition,s).intpos 4 &
+   st m4=IExec(Partition,P,s).intpos 4 &
       md <= m4 & m4 <= s.intpos 4 &
   (for i be Element of NAT st md<=i & i < m4
-    holds IExec(Partition,s).intpos m4 >= IExec(Partition,s).intpos i) &
+    holds IExec(Partition,P,s).intpos m4 >= IExec(Partition,P,s).intpos i) &
   (for i be Element of NAT st m4 < i & i <= s.intpos 4
-    holds IExec(Partition,s).intpos m4 <= IExec(Partition,s).intpos i) &
+    holds IExec(Partition,P,s).intpos m4 <= IExec(Partition,P,s).intpos i) &
   for i be Element of NAT st i >= p0+1 & (i < s.intpos 2 or i > s.
-    intpos 4) holds IExec(Partition,s).intpos i = s.intpos i;
+    intpos 4) holds IExec(Partition,P,s).intpos i = s.intpos i;
 
 theorem :: SCPQSORT:15
   Partition is halt-free shiftable;
@@ -184,6 +209,6 @@ theorem :: SCPQSORT:17
 theorem :: SCPQSORT:18
   for s being 0-started State of SCMPDS,p0,n being Element of NAT st p0 >= 7
 ex f,g be FinSequence of INT st len f=n & f is_FinSequence_on s,p0 & len g = n
-  & g is_FinSequence_on IExec(QuickSort(n,p0),s),p0 & f,g
+  & g is_FinSequence_on IExec(QuickSort(n,p0),P,s),p0 & f,g
   are_fiberwise_equipotent & g is_non_decreasing_on 1,n;
 

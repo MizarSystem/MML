@@ -155,6 +155,79 @@
 <Adjective nr="1"/>
 </Cluster>
 </RCluster>
+<FCluster aid="PROB_1" nr="1">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="10">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="8"/>
+</Cluster>
+</FCluster>
+<FCluster aid="PROB_1" nr="2">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="10">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="60">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Typ>
+</FCluster>
+<FCluster aid="PROB_1" nr="3">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="2">
+<Func kind="K" nr="5"/>
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="8"/>
+</Cluster>
+</FCluster>
+<FCluster aid="PROB_1" nr="4">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="10">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="63">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Typ>
+</FCluster>
 <CCluster aid="PROB_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">

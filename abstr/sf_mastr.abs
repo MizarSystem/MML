@@ -2,7 +2,15 @@
 ::  by Piotr Rudnicki and Andrzej Trybulec
 ::
 :: Received July 18, 1996
-:: Copyright (c) 1996 Association of Mizar Users
+:: Copyright (c) 1996-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -15,15 +23,14 @@ environ
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS,
       XCMPLX_0, FINSET_1, FINSUB_1, NAT_1, INT_1, VALUED_1, STRUCT_0, SETWISEO,
       SEQ_4, CARD_3, FINSEQ_1, FINSEQ_2, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
-      FUNCT_2, FUNCT_4, PBOOLE, FUNCT_7, COMPOS_1, AMI_2, EXTPRO_1, AMI_1,
-      AMI_3, SCMFSA_2, AMISTD_2, SCMFSA6A, INT_2, XXREAL_0;
+      FUNCT_2, FUNCT_4, PBOOLE, FUNCT_7, COMPOS_1, AMI_2, EXTPRO_1, AMI_3,
+      SCMFSA_2, AMISTD_2, SCMFSA6A, INT_2, XXREAL_0;
  constructors SETWISEO, INT_2, SEQ_4, AMI_3, SCMFSA6A, RELSET_1, VALUED_1,
-      AMISTD_2, AMI_1, AMISTD_1, AMI_2, SCMFSA_1, CARD_5, PRE_POLY, DOMAIN_1,
-      PBOOLE;
+      AMISTD_2, AMISTD_1, AMI_2, SCMFSA_1, CARD_5, PRE_POLY, DOMAIN_1, PBOOLE;
  registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, FINSET_1,
-      FINSUB_1, NUMBERS, XREAL_0, INT_1, MEMBERED, CARD_3, AMI_1, SCMFSA_2,
-      XBOOLE_0, XXREAL_2, VALUED_1, FINSEQ_1, AMISTD_2, AMI_3, SCMFSA10,
-      COMPOS_1, EXTPRO_1, CARD_5, ZFMISC_1, AMI_2, CARD_1, PBOOLE;
+      FINSUB_1, NUMBERS, XREAL_0, INT_1, MEMBERED, CARD_3, SCMFSA_2, XBOOLE_0,
+      XXREAL_2, VALUED_1, FINSEQ_1, AMISTD_2, AMI_3, SCMFSA10, COMPOS_1,
+      EXTPRO_1, CARD_5, ZFMISC_1, AMI_2, CARD_1, PBOOLE, SCMFSA_4;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -96,9 +103,13 @@ MultBy(a, b) or i = Divide(a, b)) & it = {a, b} if InsCode i in {1, 2, 3, 4, 5}
   , ex a being Int-Location, l being Element of NAT st (i = a
 =0_goto l or i = a>0_goto l) & it = {a} if InsCode i = 7 or InsCode i = 8, ex a
 , b being Int-Location, f being FinSeq-Location st (i = b := (f, a) or i = (f,
-  a) := b) & it = {a, b} if InsCode i = 9 or InsCode i = 10, ex a being
-Int-Location, f being FinSeq-Location st (i = a :=len f or i = f :=<0,...,0>a)
-  & it = {a} if InsCode i = 11 or InsCode i = 12 otherwise it = {};
+  a) := b) & it = {a, b} if InsCode i = 9 or InsCode i = 10,
+    ex a being Int-Location, f being FinSeq-Location st
+     (i = a :=len f or i = f :=<0,...,0>a) & it = {a}
+      if InsCode i = 11 or InsCode i = 12,
+    ex a being Int-Location st i = a :==1 & it = {a}
+      if InsCode i = 13
+    otherwise it = {};
 end;
 
 theorem :: SF_MASTR:17
@@ -384,7 +395,7 @@ theorem :: SF_MASTR:68
   not c in UsedIntLoc i implies Exec(i, s).c = s.c;
 
 theorem :: SF_MASTR:69
-  Initialize I c= s & I c= P &
+  Start-At(0,SCM+FSA) c= s & I c= P &
    (for m st m < n holds IC Comput(P,s,m) in dom I) &
     not a in UsedIntLoc I implies Comput(P,s,n).a = s.a;
 
@@ -392,7 +403,7 @@ theorem :: SF_MASTR:70
   not f in UsedInt*Loc i implies Exec(i, s).f = s.f;
 
 theorem :: SF_MASTR:71
-  Initialize I c= s & I c= P &
+  Start-At(0,SCM+FSA) c= s & I c= P &
    (for m st m < n holds IC Comput(P,s,m) in dom I) &
     not f in UsedInt*Loc I implies Comput(P,s,n).f = s.f;
 
@@ -404,18 +415,19 @@ UsedInt*Loc i & IC s = IC t implies IC Exec(i, s) = IC Exec(i, t) & Exec(i, s)
 
 theorem :: SF_MASTR:73
  for P,Q being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
-  st I c= P & I c= Q
- holds
-  Initialize I c= s & Initialize I c= t &
-   s | UsedIntLoc
-I = t | UsedIntLoc I & s | UsedInt*Loc I = t | UsedInt*Loc I & (for m st m < n
-  holds IC Comput(P,s,m) in dom I) implies (for m st m < n holds
-IC
-  Comput(Q,t,m) in dom I) & for m st m <= n holds IC Comput(
-P,s,m) = IC
-  Comput(Q,t,m) & (for a st a in UsedIntLoc I holds Comput(
-P,s,m).a =
-  Comput(Q,t,m).a) & for f st f in UsedInt*Loc I holds Comput(
-P,s,m).f =
-  Comput(Q,t,m).f;
+  st I c= P & I c= Q &
+   Start-At(0,SCM+FSA) c= s & Start-At(0,SCM+FSA) c= t &
+   s | UsedIntLoc I = t | UsedIntLoc I &
+   s | UsedInt*Loc I = t | UsedInt*Loc I &
+   (for m st m < n holds IC Comput(P,s,m) in dom I)
+  holds
+   (for m st m < n holds IC Comput(Q,t,m) in dom I) &
+   for m st m <= n holds IC Comput(P,s,m) = IC Comput(Q,t,m) &
+    (for a st a in UsedIntLoc I holds Comput(P,s,m).a = Comput(Q,t,m).a) &
+     for f st f in UsedInt*Loc I holds Comput(P,s,m).f = Comput(Q,t,m).f;
 
+theorem :: SF_MASTR:74
+  a1:==1 = a2 :==1 implies a1 = a2;
+
+theorem :: SF_MASTR:75
+  i = a :==1 implies UsedIntLoc i = {a};

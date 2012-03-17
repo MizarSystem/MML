@@ -2,28 +2,36 @@
 ::  by JingChao Chen and Piotr Rudnicki
 ::
 :: Received December 27, 1999
-:: Copyright (c) 1999 Association of Mizar Users
+:: Copyright (c) 1999-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
  vocabularies NUMBERS, SUBSET_1, SCMPDS_2, AMI_1, FSM_1, INT_1, AMI_2, ARYTM_1,
       COMPLEX1, ARYTM_3, CARD_1, RELAT_1, FUNCT_4, FUNCOP_1, XBOOLE_0,
       CIRCUIT2, FUNCT_1, NAT_1, TARSKI, TURING_1, VALUED_1, SCMPDS_4, AMISTD_2,
-      XXREAL_0, AMI_3, SCMFSA_7, FUNCT_7, UNIALG_2, SCMFSA7B, GRAPHSP,
-      MSUALG_1, SCMFSA6B, SCMPDS_5, STRUCT_0, SFMASTR3, SEMI_AF1, SCMP_GCD,
-      FINSEQ_1, CARD_3, FINSEQ_3, SCMPDS_7, ORDINAL1, PARTFUN1, SCMNORM,
-      SCMFSA6C;
+      XXREAL_0, AMI_3, SCMFSA_7, UNIALG_2, SCMFSA7B, GRAPHSP, MSUALG_1,
+      SCMFSA6B, SCMPDS_5, STRUCT_0, SFMASTR3, SEMI_AF1, SCMP_GCD, FINSEQ_1,
+      CARD_3, FINSEQ_3, SCMPDS_7, ORDINAL1, PARTFUN1, SCMNORM, SCMFSA6C,
+      PBOOLE, COMPOS_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       XXREAL_0, COMPLEX1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, INT_1, NAT_1,
       FUNCOP_1, AFINSQ_1, VALUED_1, STRUCT_0, COMPOS_1, EXTPRO_1, AMI_1, AMI_2,
-      FUNCT_7, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD, FINSEQ_1,
-      WSIERP_1;
+      FUNCT_7, PBOOLE, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD,
+      FINSEQ_1, WSIERP_1;
  constructors ENUMSET1, XXREAL_0, REAL_1, INT_2, WSIERP_1, SCM_1, SCMPDS_4,
       SCMPDS_5, SCMPDS_6, SCMP_GCD, SEQ_1, AMI_1, AMI_2;
  registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, SCMPDS_2, SCMPDS_4, SCMPDS_5, XBOOLE_0,
       VALUED_0, FINSEQ_1, CARD_1, VALUED_1, AMI_1, FUNCT_4, COMPOS_1, AFINSQ_1,
-      RELAT_1, EXTPRO_1;
+      RELAT_1, EXTPRO_1, PBOOLE;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -32,12 +40,10 @@ begin :: Preliminaries
 reserve x for set,
   m,n for Element of NAT,
   a,b for Int_position,
-  i,j,k for
-  Instruction of SCMPDS,
+  i,j,k for Instruction of SCMPDS,
   s,s1,s2 for State of SCMPDS,
   k1,k2 for Integer,
-  loc,l
-  for Element of NAT,
+  loc,l for Element of NAT,
   I,J,K for Program of SCMPDS;
 
 theorem :: SCMPDS_7:1  ::SCMPDS_6:23
@@ -65,251 +71,225 @@ theorem :: SCMPDS_7:18
   loc in dom I implies Shift(stop I,n).(loc+n)=Shift(I,n).(loc+n);
 
 theorem :: SCMPDS_7:19
-  card I > 0 implies Shift(stop I,n). n=Shift(I,n). n;
+  Shift(stop I,n). n=Shift(I,n). n;
 
 theorem :: SCMPDS_7:20
   for s being State of SCMPDS, i being Instruction of SCMPDS st InsCode
   i in {0,4,5,6} holds DataPart Exec(i,s) = DataPart s;
 
-theorem :: SCMPDS_7:21 :: ?!?
-  for s,ss being State of SCMPDS holds (s +* ss | NAT) | SCM-Data-Loc =
-  DataPart s;
-
-canceled;
+canceled 2;
 
 theorem :: SCMPDS_7:23  ::SCMPDS_4:15
   IC s1 = IC s2 & DataPart s1 = DataPart s2 implies IC Exec(i,s1)=
   IC Exec(i,s2) & DataPart Exec(i,s1) = DataPart Exec(i,s2);
 
+reserve P,P1,P2,Q for (the Instructions of SCMPDS)-valued ManySortedSet of NAT;
+
 theorem :: SCMPDS_7:24
   for s1,s2 being State of SCMPDS,I being Program of SCMPDS st I
-  is_closed_on s1 & Initialize stop I c= s1 & Initialize stop I c= s2 &
-DataPart s1 = DataPart s2 for i being Element of NAT holds
-  IC Comput(ProgramPart(s1),s1,i)
-= IC Comput(ProgramPart(s2),s2,i) &
-  CurInstr(ProgramPart (s1),Comput(ProgramPart(s1),s1,i))
- = CurInstr(ProgramPart (s2),Comput(ProgramPart(s2),s2,i)) &
-  DataPart Comput(ProgramPart(s1),s1,i) = DataPart Comput(ProgramPart(s2),s2,i)
-;
+  is_closed_on s1,P1 & Start-At(0,SCMPDS) c= s1 & Start-At(0,SCMPDS) c= s2 &
+  stop I c= P1 & stop I c= P2 & DataPart s1 = DataPart s2
+ for i being Element of NAT holds
+  IC Comput(P1,s1,i) = IC Comput(P2,s2,i) &
+  CurInstr(P1,Comput(P1,s1,i)) = CurInstr(P2,Comput(P2,s2,i)) &
+  DataPart Comput(P1,s1,i) = DataPart Comput(P2,s2,i);
 
 theorem :: SCMPDS_7:25
   for s1,s2 being State of SCMPDS,I being Program of SCMPDS
-   st I is_closed_on s1 & DataPart s1 = DataPart s2
+   st I is_closed_on s1,P1 & DataPart s1 = DataPart s2
  for k being Element of NAT
-  holds Comput(ProgramPart(Initialize s1+*stop I),Initialize s1+*stop I,k),
-  Comput(ProgramPart(Initialize s2+*stop I),Initialize s2+*stop I
-  ,k) equal_outside NAT &
-  CurInstr(ProgramPart (Initialize s1+*stop I),
-   Comput(ProgramPart(Initialize s1+*stop I),Initialize s1+*stop I,k)) =
-  CurInstr(ProgramPart (Initialize s2+*stop I),
-   Comput(ProgramPart(Initialize s2+*stop I),Initialize s2+*stop I,k));
+  holds
+  NPP Comput(P1 +* stop I,Initialize s1,k)
+  = NPP Comput(P2 +* stop I,Initialize s2,k) &
+  CurInstr(P1 +* stop I,Comput(P1 +* stop I,Initialize s1,k)) =
+  CurInstr(P2 +* stop I,Comput(P2 +* stop I,Initialize s2,k));
 
 theorem :: SCMPDS_7:26  ::SCMPDS_5:20
-  for I being Program of SCMPDS st I is_closed_on s1 & Initialize
-  stop I c= s1 & Initialize stop I c= s2 & s1,s2 equal_outside NAT holds for k
-  being Element of NAT holds Comput(ProgramPart(s1),s1,k), Comput(ProgramPart(
-s2),s2,k) equal_outside
-  NAT & CurInstr(ProgramPart (s1),Comput(ProgramPart(s1),s1,k))
-   = CurInstr(ProgramPart (s2),Comput(ProgramPart(s2),s2,k));
+  for I being Program of SCMPDS st I is_closed_on s1,P1 &
+   stop I c= P1 & stop I c= P2 &
+   Start-At(0,SCMPDS) c= s1 & Start-At(0,SCMPDS) c= s2 &
+   NPP s1 = NPP s2
+  for k being Element of NAT holds NPP Comput(P1,s1,k)
+   = NPP Comput(P2,s2,k)
+   & CurInstr(P1,Comput(P1,s1,k)) = CurInstr(P2,Comput(P2,s2,k));
 
 theorem :: SCMPDS_7:27
   for s1,s2 being State of SCMPDS,I being Program of SCMPDS st I
-  is_closed_on s1 & I is_halting_on s1 & Initialize stop I c= s1 & Initialize
-  stop I c= s2 & DataPart s1 = DataPart s2 holds LifeSpan(ProgramPart(s1),s1) =
-LifeSpan(ProgramPart(s2),s2);
+  is_closed_on s1,P1 & I is_halting_on s1,P1 &
+   stop I c= P1 & stop I c= P2 &
+   Start-At(0,SCMPDS) c= s1 & Start-At(0,SCMPDS) c= s2 &
+   DataPart s1 = DataPart s2
+    holds LifeSpan(P1,s1) = LifeSpan(P2,s2);
 
 theorem :: SCMPDS_7:28  ::SCMPDS_5:21
-  for I being Program of SCMPDS st I is_closed_on s1 & I
-is_halting_on s1 & Initialize stop I c= s1 & Initialize stop I c= s2 & s1,s2
-  equal_outside NAT holds LifeSpan(ProgramPart(s1),s1) = LifeSpan(ProgramPart(
-s2),s2) & Result(ProgramPart(s1),s1), Result(ProgramPart(s2),s2)
-  equal_outside NAT;
+  for I being Program of SCMPDS st I is_closed_on s1,P1 & I
+is_halting_on s1,P1 &
+ stop I c= P1 & stop I c= P2 &
+ Start-At(0,SCMPDS) c= s1 & Start-At(0,SCMPDS) c= s2 &
+ NPP s1 = NPP s2
+  holds LifeSpan(P1,s1) = LifeSpan(P2,s2)
+   & NPP Result(P1,s1) = NPP Result(P2,s2);
 
 theorem :: SCMPDS_7:29
   for s1,s2 being State of SCMPDS,I being Program of SCMPDS st I
-is_closed_on s1 & I is_halting_on s1 & DataPart s1 = DataPart s2 holds LifeSpan
-(ProgramPart(Initialize s1 +* stop I),Initialize s1 +* stop I) = LifeSpan(
-ProgramPart(Initialize s2 +* stop I),Initialize s2 +* stop I) & Result(
-ProgramPart(Initialize s1 +* stop I),
-   Initialize s1
-  +* stop I),Result(ProgramPart(Initialize s2 +* stop I),Initialize s2 +*
-stop I) equal_outside NAT;
+is_closed_on s1,P1 & I is_halting_on s1,P1 & DataPart s1 = DataPart s2
+ holds LifeSpan(P1 +* stop I,Initialize s1)
+  = LifeSpan(P2 +* stop I,Initialize s2) &
+ NPP Result(P1 +* stop I,Initialize s1)
+ = NPP Result(P2 +* stop I,Initialize s2);
 
 theorem :: SCMPDS_7:30
   for s1,s2 being State of SCMPDS,I being Program of SCMPDS st I
-  is_closed_on s1 & I is_halting_on s1 & Initialize stop I c= s1 & Initialize
-stop I c= s2 & ex k being Element of NAT st Comput(ProgramPart(s1),s1,k),s2
-equal_outside
-  NAT holds Result(ProgramPart(s1),s1),Result(ProgramPart(s2),s2) equal_outside
-NAT;
+  is_closed_on s1,P1 & I is_halting_on s1,P1 &
+  stop I c= P1 & stop I c= P2 &
+  Start-At(0,SCMPDS) c= s1 & Start-At(0,SCMPDS) c= s2 &
+   ex k being Element of NAT st
+ NPP Comput(P1,s1,k) = NPP s2
+  holds NPP Result(P1,s1) = NPP Result(P2,s2);
 
 theorem :: SCMPDS_7:31
   for s being State of SCMPDS,I being Program of SCMPDS, a being
-  Int_position st I is_halting_on s holds IExec(I,s).a =
-  Comput(ProgramPart(Initialize s +* stop I),Initialize s +*
-  stop I, (LifeSpan(ProgramPart(Initialize s +* stop I),Initialize s +*
-stop I))).a;
+  Int_position st I is_halting_on s,P holds IExec(I,P,s).a =
+  Comput(P +* stop I,Initialize s, (LifeSpan(P +* stop I,Initialize s))).a;
 
 theorem :: SCMPDS_7:32
   for s being State of SCMPDS,I being parahalting Program of SCMPDS, a
-being Int_position holds IExec(I,s).a =
- Comput(ProgramPart(Initialize s +* stop I),Initialize s +* stop I, (
-  LifeSpan(ProgramPart(Initialize s +* stop I),Initialize s +* stop I))).a;
+being Int_position holds IExec(I,P,s).a =
+ Comput(P +* stop I,Initialize s, (LifeSpan(P +* stop I,Initialize s))).a;
 
 theorem :: SCMPDS_7:33
   for I being Program of SCMPDS,i being Element of NAT st
-Initialize stop I c= s & I is_closed_on s & I is_halting_on s & i < LifeSpan(
-ProgramPart(s),s)
-  holds IC Comput(ProgramPart(s),s,i) in dom I;
+   stop I c= P &
+   Start-At(0,SCMPDS) c= s &
+I is_closed_on s,P & I is_halting_on s,P
+ & i < LifeSpan(P,s)
+  holds IC Comput(P,s,i) in dom I;
 
 theorem :: SCMPDS_7:34
-  for I being shiftable Program of SCMPDS st Initialize stop I c=
-s1 & I is_closed_on s1 & I is_halting_on s1 for n being Element of NAT st Shift
-  (I,n) c= s2 & card I > 0 & IC s2 =  n & DataPart s1 = DataPart s2 for i
-  being Element of NAT holds i < LifeSpan(ProgramPart(s1),s1) implies IC Comput
-(ProgramPart(s1),
-s1,i) + n =
-IC Comput(ProgramPart(s2),s2,i) &
-CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),s1,i))
-=
-CurInstr(ProgramPart Comput(ProgramPart(s2),s2,i),Comput(ProgramPart(s2),s2,i))
- & DataPart Comput(ProgramPart(s1),s1,i) = DataPart Comput(ProgramPart(s2),s2,i
-);
+  for I being shiftable Program of SCMPDS st
+   stop I c= P1 & Start-At(0,SCMPDS) c= s1 &
+   I is_closed_on s1,P1 & I is_halting_on s1,P1
+ for n being Element of NAT
+ st Shift(I,n) c= P2 & IC s2 =  n & DataPart s1 = DataPart s2
+  for i being Element of NAT holds i < LifeSpan(P1,s1) implies
+   IC Comput(P1,s1,i) + n = IC Comput(P2,s2,i) &
+   CurInstr(P1,Comput(P1,s1,i)) = CurInstr(P2,Comput(P2,s2,i))
+ & DataPart Comput(P1,s1,i) = DataPart Comput(P2,s2,i);
 
 theorem :: SCMPDS_7:35
-  for I being halt-free Program of SCMPDS st Initialize stop I
-  c= s & I is_halting_on s & card I > 0 holds LifeSpan(ProgramPart(s),s) > 0;
+  for I being halt-free Program of SCMPDS st
+   stop I c= P & Start-At(0,SCMPDS) c= s &
+    I is_halting_on s,P holds LifeSpan(P,s) > 0;
 
 theorem :: SCMPDS_7:36
   for I being halt-free shiftable Program of SCMPDS st
-  Initialize stop I c= s1 & I is_closed_on s1 & I is_halting_on s1 for n being
-  Element of NAT st Shift(I,n) c= s2 & card I > 0 & IC s2 =  n & DataPart
-  s1 = DataPart s2 holds IC Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),
-s1)) =  (card I + n) &
-  DataPart Comput(ProgramPart(s1),s1,LifeSpan(ProgramPart(s1),s1)) = DataPart
-Comput(ProgramPart
-(s2),s2,LifeSpan(ProgramPart(s1),s1));
+   stop I c= P1 &
+   Start-At(0,SCMPDS) c= s1 &
+   I is_closed_on s1,P1 & I is_halting_on s1,P1
+  for n being
+  Element of NAT st Shift(I,n) c= P2 & IC s2 =  n & DataPart
+  s1 = DataPart s2 holds IC Comput(P2,s2,LifeSpan(P1,s1)) = card I + n &
+  DataPart Comput(P1,s1,LifeSpan(P1,s1)) = DataPart
+       Comput(P2,s2,LifeSpan(P1,s1));
 
 theorem :: SCMPDS_7:37
   for s being 0-started State of SCMPDS,I being Program of SCMPDS,
       n being Element of NAT
-  st IC Comput(ProgramPart(s+*I),s+*I,n) =  0 holds
-    Initialize Comput(ProgramPart(s+*I),s+*I,n) +* I =
-       Comput(ProgramPart(s+*I),s+*I,n);
+  st IC Comput(P+*I,s,n) =  0 holds
+    Initialize Comput(P+*I,s,n) = Comput(P+*I,s,n);
 
 theorem :: SCMPDS_7:38  ::SCMPDS_5:33
   for I being Program of SCMPDS,J being Program of SCMPDS, k being
-  Element of NAT st I is_closed_on s & I is_halting_on s &
-   k <= LifeSpan(ProgramPart(Initialize s +* stop I),Initialize s +* stop I)
-    holds Comput(ProgramPart(Initialize s +* stop I),Initialize s +*
-stop I,k), Comput(ProgramPart(Initialize s +* (I ';' J)),
-   Initialize s +* (I ';' J),k)
- equal_outside NAT;
+  Element of NAT st I is_closed_on s,P & I is_halting_on s,P &
+   k <= LifeSpan(P +* stop I,Initialize s)
+    holds NPP Comput(P +* stop I,Initialize s,k)
+   = NPP Comput(P+*(I ';' J), Initialize s,k);
 
 theorem :: SCMPDS_7:39  ::SCMPDS_5:29
   for I,J being Program of SCMPDS,k be Element of NAT st I c= J &
-I is_closed_on s & I is_halting_on s &
- k <= LifeSpan(ProgramPart(Initialize s +*
-stop(I)),Initialize s +* stop(I))
-holds Comput(ProgramPart(Initialize s +* J), Initialize s +* J,k),
-Comput(ProgramPart(Initialize s +* stop I),
- (Initialize s +* stop(I)),k) equal_outside NAT;
+I is_closed_on s,P & I is_halting_on s,P &
+ k <= LifeSpan(P +* stop I,Initialize s)
+holds NPP Comput(P +* J, Initialize s,k)
+ = NPP Comput(P +* stop I,Initialize s,k);
 
 theorem :: SCMPDS_7:40
   for I,J being Program of SCMPDS,k be Element of NAT st k <=
-  LifeSpan(ProgramPart(Initialize s +* stop I),Initialize s +* stop I) & I
-c= J & I is_closed_on s & I
-  is_halting_on s holds IC Comput(ProgramPart(Initialize s +* J),
-  Initialize s +* J,k) in dom stop I;
+  LifeSpan(P +* stop I,Initialize s) & I c= J &
+   I is_closed_on s,P & I is_halting_on s,P
+   holds IC Comput(P +* J,Initialize s,k) in dom stop I;
 
 theorem :: SCMPDS_7:41  ::SCMPDS_5:31
-  for I,J being Program of SCMPDS st I c= J & I is_closed_on s & I
-is_halting_on s
- holds CurInstr(ProgramPart Comput(ProgramPart(Initialize s +* J),
- Initialize s +* J,LifeSpan(ProgramPart(Initialize s +*
-  stop(I)),Initialize s +*
-  stop(I))),
-  Comput(ProgramPart(Initialize s +* J), Initialize s +* J,LifeSpan(
-ProgramPart(Initialize s
-+*
-  stop(I)),Initialize s
-+*
-  stop(I))))
-   = halt SCMPDS or IC Comput(ProgramPart(Initialize s +* J),
-    Initialize s +* J,
-  LifeSpan(ProgramPart(Initialize s +* stop(I)),Initialize s +* stop(I))) =
-card I;
+  for I,J being Program of SCMPDS st I c= J & I is_closed_on s,P & I
+is_halting_on s,P
+ holds CurInstr(P +* J,Comput(P +* J, Initialize s,
+ LifeSpan(P +* stop I,Initialize s))) = halt SCMPDS
+  or IC Comput(P +* J,Initialize s,
+   LifeSpan(P +* stop I,Initialize s)) = card I;
 
 theorem :: SCMPDS_7:42
-  for I,J being Program of SCMPDS st I is_halting_on s & J
-  is_closed_on IExec(I,s) & J is_halting_on IExec(I,s) holds J is_closed_on
-Comput(ProgramPart(Initialize s +* stop I), (Initialize s +* stop I),
-LifeSpan(ProgramPart(Initialize s +* stop I),Initialize s +* stop I)) & J
-  is_halting_on Comput(ProgramPart(Initialize s +* stop I),
-    Initialize s +* stop I, LifeSpan(ProgramPart(Initialize s +*
-  stop I),Initialize s +* stop I));
+  for I,J being Program of SCMPDS st I is_halting_on s,P & J
+  is_closed_on IExec(I,P,s),P & J is_halting_on IExec(I,P,s),P
+   holds J is_closed_on Comput(P +* stop I, Initialize s,
+   LifeSpan(P +* stop I,Initialize s)), P +* stop I & J
+  is_halting_on Comput(P +* stop I,
+    Initialize s,
+     LifeSpan(P +* stop I,Initialize s)), P +* stop I;
 
 theorem :: SCMPDS_7:43
   for I being Program of SCMPDS,J being shiftable Program of
-SCMPDS st I is_closed_on s & I is_halting_on s & J is_closed_on IExec(I,s) & J
-  is_halting_on IExec(I,s) holds (I ';'J) is_closed_on s & (I ';' J)
-  is_halting_on s;
+SCMPDS st I is_closed_on s,P & I is_halting_on s,P
+ & J is_closed_on IExec(I,P,s),P
+ & J is_halting_on IExec(I,P,s),P
+  holds I ';'J is_closed_on s,P & I ';' J is_halting_on s,P;
 
 theorem :: SCMPDS_7:44  :: SCMPDS_5:30
   for I be halt-free Program of SCMPDS,J be Program of SCMPDS st
-  I c= J & I is_closed_on s & I is_halting_on s
-   holds IC Comput(ProgramPart(Initialize s+*J), Initialize s +*J,
-    LifeSpan(ProgramPart(Initialize s +* stop(I)),Initialize s +*
-          stop(I))) =  card I;
+  I c= J & I is_closed_on s,P & I is_halting_on s,P
+   holds IC Comput(P+*J, Initialize s,
+    LifeSpan(P +* stop I,Initialize s)) =  card I;
 
 theorem :: SCMPDS_7:45 ::SCMPDS_6:42
   for I being Program of SCMPDS,s being State of SCMPDS, k being Element
-  of NAT st I is_halting_on s & k < LifeSpan(ProgramPart(Initialize s +* stop
-I),Initialize s +* stop I) holds
-  CurInstr(ProgramPart (Initialize s +* stop I),
-   Comput(ProgramPart(Initialize s +* stop I),Initialize s +* stop I,k)
-)
-   <> halt SCMPDS;
+  of NAT st I is_halting_on s,P
+   & k < LifeSpan(P+*stop I,Initialize s) holds
+  CurInstr(P+*stop I,Comput(P +* stop I,Initialize s,k)) <> halt SCMPDS;
 
 theorem :: SCMPDS_7:46  ::SCMPDS_6:42
   for I,J being Program of SCMPDS,s being State of SCMPDS, k being
-  Element of NAT st I is_closed_on s & I is_halting_on s & k < LifeSpan(
-ProgramPart(Initialize s +* stop I),Initialize s +* stop I) holds
- CurInstr(ProgramPart Comput(ProgramPart(Initialize s +* stop (I ';' J)),
-  Initialize s +* stop (I ';' J),k),
-  Comput(ProgramPart(Initialize s +* stop (I ';' J)),
-    Initialize s +* stop (I ';' J),k))
+  Element of NAT st I is_closed_on s,P & I is_halting_on s,P & k < LifeSpan(
+P +* stop I,Initialize s) holds
+ CurInstr(P+*stop(I ';' J),Comput(P+*stop(I ';' J),Initialize s,k))
    <> halt SCMPDS;
 
 theorem :: SCMPDS_7:47 ::SCMPDS_5:37
   for I being halt-free Program of SCMPDS,J being shiftable Program of
-SCMPDS st I is_closed_on s & I is_halting_on s & J is_closed_on IExec(I,s) & J
-  is_halting_on IExec(I,s)
-holds LifeSpan(ProgramPart(Initialize s +* stop (I
-';' J)),Initialize s +* stop (I ';' J)) =
-LifeSpan(ProgramPart(Initialize s +* stop I),Initialize s +* stop I) +
-LifeSpan(ProgramPart(
-   Initialize Result(
-    ProgramPart(Initialize s +* stop I),Initialize s +* stop I) +* stop J),
-  Initialize Result(ProgramPart(Initialize s +* stop I),
-      Initialize s +* stop I) +* stop J);
+SCMPDS st I is_closed_on s,P & I is_halting_on s,P
+ & J is_closed_on IExec(I,P,s),P & J
+  is_halting_on IExec(I,P,s),P
+holds LifeSpan(P+*stop(I ';' J),Initialize s) =
+ LifeSpan(P +* stop I,Initialize s) +
+  LifeSpan(P +* stop I +* stop J,
+  Initialize Result(P +* stop I,Initialize s));
 
 theorem :: SCMPDS_7:48  :: SCMPDS_5:38
   for I being halt-free Program of SCMPDS, J being shiftable
-  Program of SCMPDS st I is_closed_on s & I is_halting_on s & J is_closed_on
-IExec(I,s) & J is_halting_on IExec(I,s) holds IExec(I ';' J,s) = IExec(J,IExec(
-  I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I,SCMPDS);
+  Program of SCMPDS st I is_closed_on s,P & I is_halting_on s,P
+   & J is_closed_on
+IExec(I,P,s),P & J is_halting_on IExec(I,P,s),P
+ holds IExec(I ';' J,P,s) = IncIC(IExec(J,P,IExec(I,P,s)), card I);
 
 theorem :: SCMPDS_7:49  ::SCMPDS_5:39
   for I being halt-free Program of SCMPDS, J being shiftable
-  Program of SCMPDS st I is_closed_on s & I is_halting_on s & J is_closed_on
-  IExec(I,s) & J is_halting_on IExec(I,s) holds IExec(I ';' J, s).a = IExec(J,
-  IExec(I,s)).a;
+  Program of SCMPDS st I is_closed_on s,P & I is_halting_on s,P
+   & J is_closed_on
+  IExec(I,P,s),P & J is_halting_on IExec(I,P,s),P holds IExec(I ';' J,P,s).a
+   = IExec(J,P,IExec(I,P,s)).a;
 
 theorem :: SCMPDS_7:50  ::SCMPDS_5:46
   for I being halt-free Program of SCMPDS,j being parahalting
-  shiftable Instruction of SCMPDS st I is_closed_on s & I is_halting_on s holds
-  IExec(I ';' j, s).a = Exec(j, IExec(I, s)).a;
+  shiftable Instruction of SCMPDS st I is_closed_on s,P & I is_halting_on s,P
+   holds
+  IExec(I ';' j,P,s).a = Exec(j, IExec(I,P,s)).a;
 
 begin :: The construction of for-up loop program
 
@@ -343,42 +323,49 @@ for-up(a,i,n,I). (card I+1)=AddTo(a,i,n) & for-up(a,i,n,I). (card I
 theorem :: SCMPDS_7:54
   for s being State of SCMPDS,I being Program of SCMPDS,a being
   Int_position, i being Integer,n be Element of NAT st s.DataLoc(s.a,i) >= 0
-  holds for-up(a,i,n,I) is_closed_on s & for-up(a,i,n,I) is_halting_on s;
+  holds for-up(a,i,n,I) is_closed_on s,P & for-up(a,i,n,I) is_halting_on s,P;
 
 theorem :: SCMPDS_7:55
   for s being State of SCMPDS,I being Program of SCMPDS,a,c being
   Int_position, i being Integer,n be Element of NAT st s.DataLoc(s.a,i) >= 0
-  holds IExec(for-up(a,i,n,I),s) = s +* Start-At((card I+3),SCMPDS);
+  holds IExec(for-up(a,i,n,I),P,s) = s +* Start-At((card I+3),SCMPDS);
 
 theorem :: SCMPDS_7:56
   for s being State of SCMPDS,I being Program of SCMPDS,a being
   Int_position, i being Integer,n be Element of NAT st s.DataLoc(s.a,i) >= 0
-  holds IC IExec(for-up(a,i,n,I),s) =  (card I + 3);
+  holds IC IExec(for-up(a,i,n,I),P,s) =  (card I + 3);
 
 theorem :: SCMPDS_7:57
   for s being State of SCMPDS,I being Program of SCMPDS,a,b being
   Int_position, i being Integer,n be Element of NAT st s.DataLoc(s.a,i) >= 0
-  holds IExec(for-up(a,i,n,I),s).b = s.b;
+  holds IExec(for-up(a,i,n,I),P,s).b = s.b;
 
 theorem :: SCMPDS_7:58
   for s being State of SCMPDS,I being halt-free shiftable
 Program of SCMPDS, a be Int_position, i be Integer,n be Element of NAT,X be set
-  st s.DataLoc(s.a,i) < 0 & not DataLoc(s.a,i) in X & n > 0 & card I > 0 & a <>
-DataLoc(s.a,i) & (for t be State of SCMPDS st (for x be Int_position st x in X
-holds t.x=s.x) & t.a=s.a holds IExec(I,t).a=t.a & IExec(I,t).DataLoc(s.a,i)=t.
-  DataLoc(s.a,i) & I is_closed_on t & I is_halting_on t & for y be Int_position
-st y in X holds IExec(I,t).y=t.y) holds for-up(a,i,n,I) is_closed_on s & for-up
-  (a,i,n,I) is_halting_on s;
+  st s.DataLoc(s.a,i) < 0 & not DataLoc(s.a,i) in X & n > 0 &
+  a <> DataLoc(s.a,i) &
+(for t be State of SCMPDS,Q st (for x be Int_position st x in X
+holds t.x=s.x) & t.a=s.a holds IExec(I,Q,t).a=t.a &
+IExec(I,Q,t).DataLoc(s.a,i)=t.DataLoc(s.a,i) &
+ I is_closed_on t,Q & I is_halting_on t,Q &
+   for y be Int_position
+st y in X holds IExec(I,Q,t).y=t.y)
+ holds for-up(a,i,n,I) is_closed_on s,P
+ & for-up(a,i,n,I) is_halting_on s,P;
 
 theorem :: SCMPDS_7:59
   for s being State of SCMPDS,I being halt-free shiftable Program of
   SCMPDS, a be Int_position, i be Integer,n be Element of NAT,X be set st s.
-  DataLoc(s.a,i) < 0 & not DataLoc(s.a,i) in X & n > 0 & card I > 0 & a <>
-DataLoc(s.a,i) & (for t be State of SCMPDS st (for x be Int_position st x in X
-holds t.x=s.x) & t.a=s.a holds IExec(I,t).a=t.a & IExec(I,t).DataLoc(s.a,i)=t.
-  DataLoc(s.a,i) & I is_closed_on t & I is_halting_on t & for y be Int_position
-st y in X holds IExec(I,t).y=t.y) holds IExec(for-up(a,i,n,I),s) = IExec(for-up
-  (a,i,n,I),IExec(I ';' AddTo(a,i,n),s));
+  DataLoc(s.a,i) < 0 & not DataLoc(s.a,i) in X & n > 0 & a <>
+DataLoc(s.a,i) & (for t be State of SCMPDS,Q
+ st (for x be Int_position st x in X
+holds t.x=s.x) & t.a=s.a holds IExec(I,Q,t).a=t.a
+ & IExec(I,Q,t).DataLoc(s.a,i)=t.
+  DataLoc(s.a,i) & I is_closed_on t,Q & I is_halting_on t,Q &
+   for y be Int_position
+st y in X holds IExec(I,Q,t).y=t.y) holds IExec(for-up(a,i,n,I),P,s)
+ = IExec(for-up(a,i,n,I),P,IExec(I ';' AddTo(a,i,n),P,s));
 
 registration
   let I be shiftable Program of SCMPDS, a be Int_position,i be Integer,n be
@@ -424,46 +411,50 @@ for-down(a,i,n,I). (card I+1)=AddTo(a,i,-n) & for-down(a,i,n,I). (
 theorem :: SCMPDS_7:63
   for s being State of SCMPDS,I being Program of SCMPDS,a being
   Int_position, i being Integer,n be Element of NAT st s.DataLoc(s.a,i) <= 0
-  holds for-down(a,i,n,I) is_closed_on s & for-down(a,i,n,I) is_halting_on s;
+  holds for-down(a,i,n,I) is_closed_on s,P
+   & for-down(a,i,n,I) is_halting_on s,P;
 
 theorem :: SCMPDS_7:64
   for s being State of SCMPDS,I being Program of SCMPDS,a,c being
   Int_position, i being Integer,n be Element of NAT st s.DataLoc(s.a,i) <= 0
-  holds IExec(for-down(a,i,n,I),s) = s +* Start-At((card I+3),SCMPDS);
+  holds IExec(for-down(a,i,n,I),P,s) = s +* Start-At((card I+3),SCMPDS);
 
 theorem :: SCMPDS_7:65
   for s being State of SCMPDS,I being Program of SCMPDS,a being
   Int_position, i being Integer,n be Element of NAT st s.DataLoc(s.a,i) <= 0
-  holds IC IExec(for-down(a,i,n,I),s) =  (card I + 3);
+  holds IC IExec(for-down(a,i,n,I),P,s) = card I + 3;
 
 theorem :: SCMPDS_7:66
   for s being State of SCMPDS,I being Program of SCMPDS,a,b being
   Int_position, i being Integer,n be Element of NAT st s.DataLoc(s.a,i) <= 0
-  holds IExec(for-down(a,i,n,I),s).b = s.b;
+  holds IExec(for-down(a,i,n,I),P,s).b = s.b;
 
 theorem :: SCMPDS_7:67
   for s being State of SCMPDS,I being halt-free shiftable
 Program of SCMPDS, a be Int_position, i be Integer,n be Element of NAT,X be set
-  st s.DataLoc(s.a,i) > 0 & not DataLoc(s.a,i) in X & n > 0 & card I > 0 & a <>
+  st s.DataLoc(s.a,i) > 0 & not DataLoc(s.a,i) in X & n > 0 & a <>
 DataLoc(s.a,i) &
- (for t be 0-started State of SCMPDS st (for x be Int_position st x in X
-   holds t.x=s.x) & t.a=s.a holds IExec(I,t).a=t.a &
-     IExec(I,t).DataLoc(s.a,i)=t.DataLoc(s.a,i) &
-     I is_closed_on t & I is_halting_on t &
-     for y be Int_position st y in X holds IExec(I,t).y=t.y)
- holds for-down(a,i,n,I) is_closed_on s &
-       for-down(a,i,n,I) is_halting_on s;
+ (for t be 0-started State of SCMPDS,Q st (for x be Int_position st x in X
+   holds t.x=s.x) & t.a=s.a holds IExec(I,Q,t).a=t.a &
+     IExec(I,Q,t).DataLoc(s.a,i)=t.DataLoc(s.a,i) &
+     I is_closed_on t,Q & I is_halting_on t,Q &
+     for y be Int_position st y in X holds IExec(I,Q,t).y=t.y)
+ holds for-down(a,i,n,I) is_closed_on s,P &
+       for-down(a,i,n,I) is_halting_on s,P;
 
 theorem :: SCMPDS_7:68
   for s being 0-started State of SCMPDS,I being halt-free shiftable
 Program of SCMPDS, a be Int_position, i be Integer,n be Element of NAT,X be set
-  st s.DataLoc(s.a,i) > 0 & not DataLoc(s.a,i) in X & n > 0 & card I > 0 & a <>
+  st s.DataLoc(s.a,i) > 0 & not DataLoc(s.a,i) in X & n > 0 & a <>
 DataLoc(s.a,i) &
-  (for t be 0-started State of SCMPDS st (for x be Int_position st x in X
-holds t.x=s.x) & t.a=s.a holds IExec(I,t).a=t.a & IExec(I,t).DataLoc(s.a,i)=t.
-  DataLoc(s.a,i) & I is_closed_on t & I is_halting_on t & for y be Int_position
-  st y in X holds IExec(I,t).y=t.y) holds IExec(for-down(a,i,n,I),s) = IExec(
-  for-down(a,i,n,I),IExec(I ';' AddTo(a,i,-n),s));
+  (for t be 0-started State of SCMPDS,Q st (for x be Int_position st x in X
+holds t.x=s.x) & t.a=s.a holds IExec(I,Q,t).a=t.a
+ & IExec(I,Q,t).DataLoc(s.a,i)=t.
+  DataLoc(s.a,i) & I is_closed_on t,Q & I is_halting_on t,Q &
+   for y be Int_position
+  st y in X holds IExec(I,Q,t).y=t.y)
+   holds IExec(for-down(a,i,n,I),P,s) = IExec(
+  for-down(a,i,n,I),P,IExec(I ';' AddTo(a,i,-n),P,s));
 
 registration
   let I be shiftable Program of SCMPDS, a be Int_position,i be Integer,n be
@@ -491,17 +482,17 @@ end;
 
 theorem :: SCMPDS_7:69
   for s being 0-started State of SCMPDS st s.GBP=0 holds for-down(GBP,2,1,
-  Load AddTo(GBP,3,1)) is_closed_on s & for-down(GBP,2,1, Load AddTo(GBP,3,1))
-  is_halting_on s;
+  Load AddTo(GBP,3,1)) is_closed_on s,P
+   & for-down(GBP,2,1, Load AddTo(GBP,3,1)) is_halting_on s,P;
 
 theorem :: SCMPDS_7:70
   for s being 0-started State of SCMPDS,n be Element of NAT
    st s.GBP=0 & s.intpos 2=n & s.intpos 3=0
-   holds IExec(for-down(GBP,2,1, Load AddTo(GBP,3,1)),s).intpos 3=n;
+   holds IExec(for-down(GBP,2,1, Load AddTo(GBP,3,1)),P,s).intpos 3=n;
 
 theorem :: SCMPDS_7:71
   for s being 0-started State of SCMPDS,n be Element of NAT
-   holds IExec(sum(n),s).intpos 3 =n;
+   holds IExec(sum(n),P,s).intpos 3 =n;
 
 :: sum=Sum x1+x2+...+x2
 
@@ -519,17 +510,19 @@ theorem :: SCMPDS_7:72
 st s.intpos sp > sp & cv < result & s.intpos pp=pD & s.intpos sp+result < pp &
 pp <pD & pD < s.intpos pD
  holds for-down(intpos sp,cv,1, AddTo(intpos sp,result,intpos pD,0) ';'
-  AddTo(intpos pp,0,1)) is_closed_on s &
+  AddTo(intpos pp,0,1)) is_closed_on s,P &
    for-down(intpos sp,cv,1, AddTo(intpos sp,result,intpos pD,0) ';'
-  AddTo(intpos pp,0,1)) is_halting_on s;
+  AddTo(intpos pp,0,1)) is_halting_on s,P;
 
 theorem :: SCMPDS_7:73
   for s being 0-started State of SCMPDS,sp,cv,result,pp,pD be Element of NAT
 , f be FinSequence of NAT st s.intpos sp > sp & cv < result & s.intpos pp=pD &
   s.intpos sp+result < pp & pp <pD & pD < s.intpos pD & s.DataLoc(s.intpos sp,
 result)=0 & len f = s.DataLoc(s.intpos sp,cv) & for k be Element of NAT st k <
-len f holds f.(k+1)=s.DataLoc(s.intpos pD,k) holds IExec(for-down(intpos sp,cv,
-1, AddTo(intpos sp,result,intpos pD,0) ';' AddTo(intpos pp,0,1)),s).DataLoc(s.
+len f holds f.(k+1)=s.DataLoc(s.intpos pD,k)
+ holds IExec(for-down(intpos sp,cv,
+1, AddTo(intpos sp,result,intpos pD,0) ';'
+AddTo(intpos pp,0,1)),P,s).DataLoc(s.
   intpos sp,result)=Sum f;
 
 theorem :: SCMPDS_7:74
@@ -537,6 +530,7 @@ theorem :: SCMPDS_7:74
    sp,cv,result,pp,pD be Element of NAT, f be
 FinSequence of NAT st s.intpos sp > sp & cv < result & s.intpos sp+result < pp
   & pp <pD & pD < s.intpos pD & len f = s.DataLoc(s.intpos sp,cv) & for k be
-Element of NAT st k < len f holds f.(k+1)=s.DataLoc(s.intpos pD,k) holds IExec(
-  sum(sp,cv,result,pp,pD),s).DataLoc(s.intpos sp,result)=Sum f;
+Element of NAT st k < len f holds f.(k+1)=s.DataLoc(s.intpos pD,k)
+ holds IExec(
+  sum(sp,cv,result,pp,pD),P,s).DataLoc(s.intpos sp,result)=Sum f;
 

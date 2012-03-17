@@ -2,7 +2,15 @@
 ::  by Keiichi Miyajima , Takahiro Kato and Yasunari Shidama
 ::
 :: Received May 20, 2010
-:: Copyright (c) 2010 Association of Mizar Users
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -169,7 +177,7 @@ proof
       R1, R2, R3 be FinSequence of X;
   assume A1: len R1 = len R2 & R3 = R1 + R2; then
   dom R1 = dom R2 by FINSEQ_3:31;
-  hence Sum(R3) = Sum(R1) + Sum(R2) by BINOM:7,A1;
+  hence Sum(R3) = Sum(R1) + Sum(R2) by A1,BINOM:7;
 end;
 
 theorem
@@ -189,7 +197,7 @@ A5: for k be Element of NAT st k in dom R1 holds R3.k = R1/.k - R2/.k
     let k be Element of NAT;
     assume A6: k in dom R1;
     thus R3.k = R3/.k by A6,A3,PARTFUN1:def 8
-             .= R1/.k - R2/.k by A1,VFUNCT_1:def 2,A6,A3;
+             .= R1/.k - R2/.k by A1,A6,A3,VFUNCT_1:def 2;
   end;
   thus thesis by A1,A4,A5,RLVECT_2:7;
 end;
@@ -203,14 +211,14 @@ proof
       R1, R2 be FinSequence of X,
       a be Element of REAL;
   assume A1: R2 = a(#)R1;
-  dom R2 = dom R1 by VFUNCT_1:def 4,A1; then
+  dom R2 = dom R1 by A1,VFUNCT_1:def 4; then
 A2: len R2 = len R1 by FINSEQ_3:31;
 A3: for k be Element of NAT st k in dom R1 holds R2.k = a * R1/.k
   proof
     let k be Element of NAT;
     assume k in dom R1; then
-A4: k in dom R2 by VFUNCT_1:def 4,A1;
-    thus R2.k = R2/.k by PARTFUN1:def 8,A4
+A4: k in dom R2 by A1,VFUNCT_1:def 4;
+    thus R2.k = R2/.k by A4,PARTFUN1:def 8
              .= a * R1/.k by A4,A1,VFUNCT_1:def 4;
   end;
   thus thesis by A2,A3,RLVECT_2:5;
@@ -329,12 +337,12 @@ A16:      p = F.k & len p = len (T.k) & for i be Nat st i in dom (T.k) holds
           (S.k).i = (vol divset((T.k),i)) * z by A11;
         p.i in dom (h|divset((T.k),i)) by A15,A16; then
 A17:    p.i in dom h & p.i in (divset((T.k),i)) by RELAT_1:86; then
-        p.i in dom (f|divset((T.k),i)) by RELAT_1:86,A2; then
+        p.i in dom (f|divset((T.k),i)) by A2,RELAT_1:86; then
         (f|divset((T.k),i)).(p.i) in rng (f|divset((T.k),i))
           by FUNCT_1:12; then
         reconsider x = (f|divset((T.k),i)).(p.i)
           as Element of the carrier of X;
-A18:    (F.k).i in dom (f|divset((T.k),i)) by A16,A17,RELAT_1:86,A2;
+A18:    (F.k).i in dom (f|divset((T.k),i)) by A16,A17,A2,RELAT_1:86;
         (vol divset((T.k),i)) * x is Element of the carrier of X;
         hence thesis by A16,A18;
       end;
@@ -398,12 +406,12 @@ A31:     (F.n).i in divset((T.n),i) by A30,RELAT_1:86;
           (F.n).i in A by A30; then
 A32:     (F.n).i in dom h by FUNCT_2:def 1;
 A33:     (F.n).i in dom f by A30,RELAT_1:86;
-A34:     f/.((F.n).i) = f.((F.n).i) by PARTFUN1:def 8,A33
+A34:     f/.((F.n).i) = f.((F.n).i) by A33,PARTFUN1:def 8
                       .= z by A30,A31,FUNCT_1:72;
 A35:     t = (h|divset((T.n),i)).((F.n).i) by A29
            .= h.((F.n).i) by A31,FUNCT_1:72
-           .= h/.((F.n).i) by PARTFUN1:def 8,A32
-           .= r * (f/.((F.n).i) ) by VFUNCT_1:def 4,A32,A1
+           .= h/.((F.n).i) by A32,PARTFUN1:def 8
+           .= r * (f/.((F.n).i) ) by A32,A1,VFUNCT_1:def 4
            .= r * z by A34;
 A36:     (vol divset((T.n),i)) * z = (Sf.n).x by A30,A26
                                    .= (Sf.n)/.x by A28,A27,PARTFUN1:def 8;
@@ -414,7 +422,7 @@ A36:     (vol divset((T.n),i)) * z = (Sf.n).x by A30,A26
                        .= r * ((vol divset((T.n),i))*z) by RLVECT_1:def 10
                        .= r * ((Sf.n)/.x) by A36;
         end; then
-A37:    r(#)(Sf.n) = S.n by VFUNCT_1:def 4,A27;
+A37:    r(#)(Sf.n) = S.n by A27,VFUNCT_1:def 4;
         thus r * (middle_sum(f,Sf)).n = r * (middle_sum(f,Sf.n) ) by Def4
                                      .= r * Sum(Sf.n)
                                      .= Sum(S.n) by A37,Th3
@@ -423,7 +431,7 @@ A37:    r(#)(Sf.n) = S.n by VFUNCT_1:def 4,A27;
       end;
       hence thesis by NORMSP_1:def 8;
     end;
-A38: lim (r * middle_sum(f,Sf)) = r * lim (middle_sum(f,Sf)) by NORMSP_1:45,A23
+A38: lim (r * middle_sum(f,Sf)) = r * lim (middle_sum(f,Sf)) by A23,NORMSP_1:45
                               .= r * integral(f) by Def6,A1,A4;
     thus middle_sum(h,S) is convergent by A23,A24,NORMSP_1:37;
     thus lim (middle_sum(h,S)) = r * integral(f) by A24,A38;
@@ -527,12 +535,12 @@ A16:      p = F.k & len p = len (T.k) & for i be Nat st i in dom (T.k) holds
           (S.k).i = (vol divset((T.k),i)) * z by A11;
         p.i in dom (h|divset((T.k),i)) by A15,A16; then
 A17:    p.i in dom h & p.i in (divset((T.k),i)) by RELAT_1:86; then
-        p.i in dom(f|divset((T.k),i)) by RELAT_1:86,A2; then
+        p.i in dom(f|divset((T.k),i)) by A2,RELAT_1:86; then
         (f|divset((T.k),i)).(p.i) in rng (f|divset((T.k),i))
           by FUNCT_1:12; then
         reconsider x = (f|divset((T.k),i)).(p.i)
           as Element of the carrier of X;
-A18:    (F.k).i in dom (f|divset((T.k),i)) by A16,A17,RELAT_1:86,A2;
+A18:    (F.k).i in dom (f|divset((T.k),i)) by A16,A17,A2,RELAT_1:86;
         (vol divset((T.k),i)) * x is Element of the carrier of X;
         hence thesis by A16,A18;
       end;
@@ -592,12 +600,12 @@ A27:      p = F.k & len p = len (T.k) & for i be Nat st i in dom (T.k) holds
           (S.k).i = (vol divset((T.k),i)) * z by A11;
         p.i in dom (h|divset((T.k),i)) by A26,A27; then
 A28:    p.i in dom h & p.i in (divset((T.k),i)) by RELAT_1:86; then
-        p.i in dom(g|divset((T.k),i)) by RELAT_1:86,A2; then
+        p.i in dom(g|divset((T.k),i)) by A2,RELAT_1:86; then
         (g|divset((T.k),i)).(p.i) in rng (g|divset((T.k),i))
           by FUNCT_1:12; then
         reconsider x = (g|divset((T.k),i)).(p.i)
           as Element of the carrier of X;
-A29:    (F.k).i in dom (g|divset((T.k),i)) by A27,A28,RELAT_1:86,A2;
+A29:    (F.k).i in dom (g|divset((T.k),i)) by A27,A28,A2,RELAT_1:86;
         (vol divset((T.k),i)) * x is Element of the carrier of X;
         hence thesis by A27,A29;
       end;
@@ -678,14 +686,14 @@ A47:     (F.n).i in dom g by A45,RELAT_1:86;
 A48:     (F.n).i in A by A45; then
 A49:     (F.n).i in dom h by FUNCT_2:def 1;
 A50:     (F.n).i in dom f by A48,FUNCT_2:def 1;
-A51:     f/.((F.n).i) = f.((F.n).i) by PARTFUN1:def 8,A50
+A51:     f/.((F.n).i) = f.((F.n).i) by A50,PARTFUN1:def 8
                       .= z by A44,A46,FUNCT_1:72;
-A52:     g/.((F.n).i) = g.((F.n).i) by PARTFUN1:def 8,A47
+A52:     g/.((F.n).i) = g.((F.n).i) by A47,PARTFUN1:def 8
                       .= w by A45,A46,FUNCT_1:72;
 A53:     t = (h|divset((T.n),i)).((F.n).i) by A43
            .= h.((F.n).i) by A46,FUNCT_1:72
-           .= h/.((F.n).i) by PARTFUN1:def 8,A49
-           .= f/.((F.n).i) + g/.((F.n).i) by VFUNCT_1:def 1,A49,A1
+           .= h/.((F.n).i) by A49,PARTFUN1:def 8
+           .= f/.((F.n).i) + g/.((F.n).i) by A49,A1,VFUNCT_1:def 1
            .= z + w by A51,A52;
 A54:     (vol divset((T.n),i)) * z = (Sf.n).i by A44,A38
                                    .= (Sf.n)/.i by A42,A41,PARTFUN1:def 8;
@@ -697,7 +705,7 @@ A55:     (vol divset((T.n),i)) * w = (Sg.n).i by A45,A39
                          by A53,RLVECT_1:def 8
                        .= (Sf.n)/.i + (Sg.n)/.i by A54,A55;
         end; then
-A56:    Sf.n + Sg.n = S.n by BINOM:def 4,A41;
+A56:    Sf.n + Sg.n = S.n by A41,BINOM:def 4;
         thus middle_sum(f,Sf).n + middle_sum(g,Sg).n
            = middle_sum(f,Sf.n) + middle_sum(g,Sg).n by Def4
           .= middle_sum(f,Sf.n) + middle_sum(g,Sg.n) by Def4
@@ -804,9 +812,9 @@ proof
   assume A1: g = g1 & f = f1;
 A2: dom (g + f) = (dom g) /\ (dom f) by VFUNCT_1:def 1
                .= (dom g1) /\ (dom f1) by A1;
-A3: g + f is PartFunc of Y,the carrier of V by RELSET_1:13,A2;
+A3: g + f is PartFunc of Y,the carrier of V by A2,RELSET_1:13;
   for c be Element of Y st c in dom (g + f) holds
-    (g + f)/.c = g1/.c + f1/.c by VFUNCT_1:def 1,A1;
+    (g + f)/.c = g1/.c + f1/.c by A1,VFUNCT_1:def 1;
   hence thesis by A3,A2,VFUNCT_1:def 1;
 end;
 
@@ -824,9 +832,9 @@ proof
   assume A1: g = g1 & f = f1;
 A2: dom (g - f) = (dom g) /\ (dom f) by VFUNCT_1:def 2
                .= (dom g1) /\ (dom f1) by A1;
-A3: g - f is PartFunc of Y,the carrier of V by RELSET_1:13,A2;
+A3: g - f is PartFunc of Y,the carrier of V by A2,RELSET_1:13;
   for c be Element of Y st c in dom (g - f) holds
-    (g - f)/.c = g1/.c - f1/.c by VFUNCT_1:def 2,A1;
+    (g - f)/.c = g1/.c - f1/.c by A1,VFUNCT_1:def 2;
   hence thesis by A3,A2,VFUNCT_1:def 2;
 end;
 
@@ -846,9 +854,9 @@ proof
   assume A1: g = g1;
 A2: dom (r(#)g) = dom (g) by VFUNCT_1:def 4
                .= dom (g1) by A1;
-A3: r(#)g is PartFunc of Y,the carrier of V by RELSET_1:13,A2;
+A3: r(#)g is PartFunc of Y,the carrier of V by A2,RELSET_1:13;
   for c be Element of Y st c in dom (r(#)g) holds
-    (r(#)g)/.c = r * (g1/.c) by VFUNCT_1:def 4,A1;
+    (r(#)g)/.c = r * (g1/.c) by A1,VFUNCT_1:def 4;
   hence thesis by A3,A2,VFUNCT_1:def 4;
 end;
 
@@ -865,7 +873,7 @@ proof
   let A be closed-interval Subset of REAL;
   let f be PartFunc of REAL,the carrier of X;
   assume A1: A c= dom f & f is_integrable_on A;
-A2: A c= dom(r(#)f) by VFUNCT_1:def 4,A1;
+A2: A c= dom(r(#)f) by A1,VFUNCT_1:def 4;
   consider g be Function of A,the carrier of X such that
 A3: g = f|A & g is integrable by A1,Def7;
 A4: (r(#)f)|A = r(#)(f|A) by VFUNCT_1:37
@@ -997,10 +1005,10 @@ A6:      k in dom (T.i) by FINSEQ_1:def 3; then
 A7:        c in rng (g|divset((T.i),k)) &
             (S.i).k = (vol divset((T.i),k)) * c by Def1;
           0 <= vol divset((T.i),k) & vol divset((T.i),k) <= 0
-            by A1,INTEGRA1:11,INTEGRA2:40,A6,INTEGRA1:10; then
+            by A1,A6,INTEGRA1:10,11,INTEGRA2:40; then
 A8:      vol divset((T.i),k) = 0;
           (S.i).k = 0.X by A8,A7,RLVECT_1:23;
-          hence (S.i).k = -v by RLVECT_1:25,A5;
+          hence (S.i).k = -v by A5,RLVECT_1:25;
         end;
         then Sum((S.i)) = -Sum((S.i)) by A4,RLVECT_1:57;
         hence thesis by RLVECT_1:33;

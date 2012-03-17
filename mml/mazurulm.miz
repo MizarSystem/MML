@@ -1,0 +1,1171 @@
+:: Mazur-Ulam Theorem
+::  by Artur Korni{\l}owicz
+:: 
+:: Received December 21, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies FUNCT_1, NORMSP_1, VECTMETR, PRE_TOPC, ARYTM_1, RUSUB_4, XREAL_0,
+      ORDINAL1, CARD_1, XXREAL_0, RELAT_1, ARYTM_3, FUNCT_2, SEQ_2, MEMBERED,
+      ORDINAL2, MAZURULM, BINOP_1, VALUED_1, SUPINF_2, COMPLEX1, SUBSET_1,
+      XXREAL_2, XBOOLE_0, NUMBERS, MEMBER_1, SUPINF_1, TARSKI, RLVECT_1,
+      CFCONT_1, NAT_1, PARTFUN1, REAL_1, NEWTON, TOPMETR, BORSUK_1, TOPS_1,
+      XXREAL_1, URYSOHN1, METRIC_1, STRUCT_0, SEQ_1, FUNCOP_1, RCOMP_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, FUNCT_1, RELSET_1, PARTFUN1,
+      FUNCT_2, FUNCOP_1, NUMBERS, XXREAL_0, XXREAL_1, XXREAL_3, XREAL_0,
+      REAL_1, XXREAL_2, MEMBERED, VALUED_1, SEQ_1, SEQ_2, COMPLEX1, MEMBER_1,
+      SUPINF_1, NEWTON, BINOP_2, MEASURE6, STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2,
+      BORSUK_1, METRIC_1, TOPMETR, ALGSTR_0, RLVECT_1, NORMSP_0, NORMSP_1,
+      NDIFF_1, NFCONT_1, CONNSP_3, URYSOHN1;
+ constructors TOPS_2, REAL_1, SUPINF_2, INTEGRA2, EXTREAL1, BINOP_2, NFCONT_1,
+      NEWTON, CONNSP_3, URYSOHN1, TOPS_1, TOPMETR, PCOMPS_1, MEASURE6, NDIFF_1,
+      SEQ_1;
+ registrations RELSET_1, XREAL_0, ORDINAL1, STRUCT_0, MEMBERED, FUNCT_1,
+      FUNCT_2, XBOOLE_0, NORMSP_1, FUNCTOR1, NUMBERS, SEQ_4, SPRECT_1,
+      XXREAL_2, MEMBER_1, XXREAL_0, RLVECT_1, TOPS_1, TOPMETR, METRIC_1,
+      XXREAL_1, VALUED_1, VALUED_0, FUNCOP_1, BORSUK_1, INT_1, NEWTON;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, XBOOLE_0, FUNCT_2, XXREAL_2, XCMPLX_0, STRUCT_0, RLVECT_1,
+      NORMSP_1, METRIC_1, TOPS_1, CONNSP_3;
+ theorems FUNCT_2, RLVECT_1, FUNCT_1, NORMSP_1, COMPLEX1, TOPS_2, RELAT_1,
+      XXREAL_2, XREAL_1, XXREAL_0, MEMBERED, URYSOHN2, MEMBER_1, EXTREAL1,
+      GROUP_6, PENCIL_2, XXREAL_3, XREAL_0, INTEGRA2, VECTSP_1, NDIFF_1,
+      NFCONT_1, XCMPLX_1, NEWTON, BORSUK_1, XBOOLE_0, CONNSP_3, TOPMETR,
+      GOBOARD6, FRECHET, XXREAL_1, TOPREAL6, MEASURE6, SEQ_2, FUNCOP_1,
+      VALUED_1, URYSOHN1, SEQ_4, TREAL_1, TOPS_3, NAT_1, INT_1;
+ schemes FUNCT_2, NAT_1;
+
+begin
+
+:: Mazur-Ulam Theorem
+:: cluster bijective isometric -> Affine Function of E,F;
+:: is a consequence of two registrations:
+:: cluster bijective isometric -> midpoints-preserving Function of E,F;
+:: cluster isometric midpoints-preserving -> Affine Function of E,F;
+
+reserve E,F,G for RealNormSpace;
+reserve f for Function of E,F;
+reserve g for Function of F,G;
+reserve a,b,c for Point of E;
+reserve t for real number;
+
+registration
+  cluster I[01] -> closed SubSpace of R^1;
+  coherence by TOPMETR:27,TREAL_1:5;
+end;
+
+reconsider D = DYADIC as Subset of I[01] by BORSUK_1:83,URYSOHN2:32;
+
+Lm1: Cl D = [#]I[01]
+    proof
+      reconsider P = [. 0,1 .] as Subset of R^1 by MEMBERED:3,TOPMETR:24;
+A1:   I[01] = R^1 | P by TOPMETR:26,27;
+      reconsider D1 = D as Subset of R^1 | P by TOPMETR:26,27;
+A2:   Cl D = (Cl Up(D1)) /\ P by A1,CONNSP_3:31;
+      thus Cl D c= [#]I[01];
+      let x be set;
+      assume
+A3:   x in [#]I[01];
+      reconsider p = x as Point of RealSpace by A3,BORSUK_1:83;
+      now
+        let r be real number such that
+A4:     r > 0;
+A5:     p-r < p-0 by A4,XREAL_1:12;
+A6:     p <= 1 by A3,BORSUK_1:86;
+        r is Real by XREAL_0:def 1;
+        then
+A7:     Ball(p,r) = ].p-r, p+r.[ by FRECHET:7;
+        per cases;
+        suppose r <= p;
+          then r-r <= p-r by XREAL_1:11;
+          then consider c being Real such that
+A8:       c in D and
+A9:       p-r < c and
+A10:       c < p by A5,A6,URYSOHN2:28;
+          p+0 < p+r by A4,XREAL_1:10;
+          then c < p+r by A10,XXREAL_0:2;
+          then c in Ball(p,r) by A9,A7,XXREAL_1:4;
+          hence Ball(p,r) meets D by A8,XBOOLE_0:3;
+        end;
+        suppose r > p;
+          then
+A11:       p-r < p-p by XREAL_1:12;
+          0 <= p by A3,BORSUK_1:86;
+          then 0 in Ball(p,r) by A4,A11,A7,XXREAL_1:4;
+          hence Ball(p,r) meets D by URYSOHN2:31,XBOOLE_0:3;
+        end;
+      end;
+      then x in Cl Up(D1) by GOBOARD6:95,TOPMETR:def 7;
+      hence x in Cl D by A3,A2,BORSUK_1:83,XBOOLE_0:def 4;
+    end;
+
+theorem
+  DYADIC is dense Subset of I[01]
+  proof
+    D is dense
+    proof
+      thus Cl D = [#]I[01] by Lm1;
+    end;
+    hence thesis;
+  end;
+
+theorem Th2:
+  Cl DYADIC = [. 0,1 .]
+  proof
+    reconsider W = D as Subset of R^1 by TOPMETR:24;
+    thus Cl DYADIC = Cl W by TOPREAL6:80
+    .= [. 0,1 .] by Lm1,BORSUK_1:83,TOPS_3:55;
+  end;
+
+theorem Th3:
+  a + a = 2*a
+  proof
+    1*a = a by RLVECT_1:def 11;
+    hence a + a = (1+1)*a by RLVECT_1:def 9
+    .= 2*a;
+  end;
+
+theorem Th4:
+  a + b - b = a
+  proof
+    thus a + b - b = a + (b - b) by RLVECT_1:42
+    .= a + 0.E by RLVECT_1:28
+    .= a by RLVECT_1:10;
+  end;
+
+registration
+  let A be bounded_above (real-membered set);
+  let r be non negative (real number);
+  cluster r**A -> bounded_above;
+  coherence
+  proof
+    per cases;
+    suppose A0: A <> {};
+A1:   r in REAL by XREAL_0:def 1;
+      A c= REAL by MEMBERED:3;
+      hence thesis by A0,A1,INTEGRA2:9;
+    end;
+    suppose A = {};
+      hence thesis;
+    end;
+  end;
+end;
+
+registration
+  let A be bounded_above (real-membered set);
+  let r be non positive (real number);
+  cluster r**A -> bounded_below;
+  coherence
+  proof
+    per cases;
+      suppose A0: A <> {};
+A1:   r in REAL by XREAL_0:def 1;
+      A c= REAL by MEMBERED:3;
+      hence thesis by A0,A1,INTEGRA2:10;
+    end;
+    suppose A = {};
+      hence thesis;
+    end;
+  end;
+end;
+
+registration
+  let A be bounded_below (real-membered set);
+  let r be non negative (real number);
+  cluster r**A -> bounded_below;
+  coherence
+  proof
+    per cases;
+      suppose A0: A <> {};
+A1:   r in REAL by XREAL_0:def 1;
+      A c= REAL by MEMBERED:3;
+      hence thesis by A0,A1,INTEGRA2:11;
+    end;
+    suppose A = {};
+      hence thesis;
+    end;
+  end;
+end;
+
+registration
+  let A be bounded_below non empty (real-membered set);
+  let r be non positive (real number);
+  cluster r**A -> bounded_above;
+  coherence
+  proof
+A1: r in REAL by XREAL_0:def 1;
+    A c= REAL by MEMBERED:3;
+    hence thesis by A1,INTEGRA2:12;
+  end;
+end;
+
+theorem Th5:
+  for f being Real_Sequence holds f + (NAT --> t) = t + f
+  proof
+    let f be Real_Sequence;
+    let n be Element of NAT;
+A1: (NAT --> t).n = t by FUNCOP_1:13;
+    thus (f + (NAT --> t)).n = f.n + (NAT --> t).n by VALUED_1:1
+    .= (f + t).n by A1,VALUED_1:2;
+  end;
+
+theorem Th6:
+  for r being Real holds lim (NAT --> r) = r
+  proof
+    let r be Real;
+    thus lim (NAT --> r) = (NAT --> r).0 by SEQ_4:41
+    .= r by FUNCOP_1:13;
+  end;
+
+theorem Th7:
+  for f being convergent Real_Sequence holds
+  lim (t + f) = t + lim f
+  proof
+    let f be convergent Real_Sequence;
+    reconsider r = t as Real by XREAL_0:def 1;
+    f + (NAT --> t) = t + f by Th5;
+    hence lim (t + f) = lim (NAT --> r) + lim f by SEQ_2:20
+    .= t + lim f by Th6;
+  end;
+
+registration
+  let f be convergent Real_Sequence;
+  let t;
+  cluster t + f -> convergent Real_Sequence;
+  coherence
+  proof
+    reconsider r = t as Real by XREAL_0:def 1;
+    f + (NAT --> r) = t + f by Th5;
+    hence thesis by SEQ_2:19;
+  end;
+end;
+
+theorem Th8:
+  for f be Real_Sequence holds f (#) (NAT --> a) = f * a
+  proof
+    let f be Real_Sequence;
+    let n be Element of NAT;
+A1: (NAT --> a).n = a by FUNCOP_1:13;
+    thus (f (#) (NAT --> a)).n = f.n * (NAT --> a).n by NDIFF_1:def 2
+    .= (f * a).n by A1,NDIFF_1:def 3;
+  end;
+
+theorem Th9:
+  lim (NAT --> a) = a
+  proof
+    thus lim (NAT --> a) = (NAT --> a).0 by NDIFF_1:21
+    .= a by FUNCOP_1:13;
+  end;
+
+theorem Th10:
+  for f being convergent Real_Sequence holds
+  lim (f * a) = (lim f) * a
+  proof
+    let f be convergent Real_Sequence;
+    f (#) (NAT --> a) = f * a by Th8;
+    hence lim (f * a) = lim f * lim (NAT --> a) by NDIFF_1:14,21
+    .= (lim f) * a by Th9;
+  end;
+
+registration
+  let f be convergent Real_Sequence;
+  let E,a;
+  cluster f * a -> convergent;
+  coherence
+  proof
+    f (#) (NAT --> a) = f * a by Th8;
+    hence thesis by NDIFF_1:13,21;
+  end;
+end;
+
+definition
+  let E,F be non empty NORMSTR, f be Function of E,F;
+  attr f is isometric means :Def1:
+  for a,b being Point of E holds ||. f.a - f.b .|| = ||. a - b .||;
+end;
+
+definition
+  let E,F be non empty RLSStruct, f be Function of E,F;
+
+  attr f is Affine means :Def2:
+  for a,b being Point of E, t being real number st 0 <= t & t <= 1 holds
+  f.((1-t)*a+t*b) = (1-t)*(f.a) + t*(f.b);
+
+  attr f is midpoints-preserving means :Def3:
+  for a,b being Point of E holds f.(1/2*(a+b)) = 1/2*(f.a+f.b);
+end;
+
+registration
+  let E be non empty NORMSTR;
+  cluster id E -> isometric;
+  coherence
+  proof
+    let a,b be Point of E;
+    (id E).a = a & (id E).b = b by FUNCT_1:35;
+    hence thesis;
+  end;
+end;
+
+registration
+  let E be non empty RLSStruct;
+  cluster id E -> midpoints-preserving Affine;
+  coherence
+  proof
+    thus id E is midpoints-preserving
+    proof
+      let a,b be Point of E;
+      (id E).a = a & (id E).b = b by FUNCT_1:35;
+      hence thesis by FUNCT_1:35;
+    end;
+    let a,b be Point of E;
+    (id E).a = a & (id E).b = b by FUNCT_1:35;
+    hence thesis by FUNCT_1:35;
+  end;
+end;
+
+registration
+  let E be non empty NORMSTR;
+  cluster bijective isometric midpoints-preserving Affine UnOp of E;
+  existence
+  proof
+    take id E;
+    thus thesis;
+  end;
+end;
+
+theorem Th11:
+  f is isometric & g is isometric implies g*f is isometric
+  proof
+    assume that
+A1: f is isometric and
+A2: g is isometric;
+    set h = g*f;
+    let a,b;
+    h.a = g.(f.a) & h.b = g.(f.b) by FUNCT_2:21;
+    hence ||. h.a - h.b .|| = ||. f.a - f.b .|| by A2,Def1
+    .= ||. a - b .|| by A1,Def1;
+  end;
+
+registration
+  let E; let f,g be isometric UnOp of E;
+  cluster g*f -> isometric UnOp of E;
+  coherence by Th11;
+end;
+
+Lm2:
+  now
+    let E,F,f;
+    assume
+A1: f is bijective;
+    set g = f/";
+    let a be Point of F;
+A2: rng f = [#]F by A1,FUNCT_2:def 3;
+    then
+A3: g/" = f by A1,TOPS_2:64;
+A4: g = f qua Function" by A1,A2,TOPS_2:def 4;
+A5: g is bijective by A1,PENCIL_2:12;
+    then rng g = [#]E by FUNCT_2:def 3;
+    then f = g qua Function" by A3,A5,TOPS_2:def 4;
+    hence f.(g.a) = a by A1,A4,FUNCT_2:32;
+  end;
+
+theorem Th12:
+  f is bijective isometric implies f/" is isometric
+  proof
+    assume that
+A1: f is bijective and
+A2: f is isometric;
+    set g = f/";
+    let a,b be Point of F;
+    f.(g.a) = a & f.(g.b) = b by A1,Lm2;
+    hence thesis by A2,Def1;
+  end;
+
+registration
+  let E; let f be bijective isometric UnOp of E;
+  cluster f/" -> isometric;
+  coherence by Th12;
+end;
+
+theorem Th13:
+  f is midpoints-preserving & g is midpoints-preserving implies
+  g*f is midpoints-preserving
+  proof
+    assume that
+A1: f is midpoints-preserving and
+A2: g is midpoints-preserving;
+    set h = g*f;
+    let a,b;
+A3: h.a = g.(f.a) & h.b = g.(f.b) by FUNCT_2:21;
+    thus h.(1/2*(a+b)) = g.(f.(1/2*(a+b))) by FUNCT_2:21
+    .= g.(1/2*((f.a)+(f.b))) by A1,Def3
+    .= 1/2*(h.a+h.b) by A3,A2,Def3;
+  end;
+
+registration
+  let E; let f,g be midpoints-preserving UnOp of E;
+  cluster g*f -> midpoints-preserving UnOp of E;
+  coherence by Th13;
+end;
+
+Lm3:
+  now
+    let E,F,f;
+    assume
+A1: f is bijective;
+    then
+A2: rng f = [#]F by FUNCT_2:def 3;
+    dom f = [#]E by FUNCT_2:def 1;
+    hence (f/")*f = id E by A1,A2,TOPS_2:65;
+  end;
+
+theorem Th14:
+  f is bijective midpoints-preserving implies f/" is midpoints-preserving
+  proof
+    assume that
+A1: f is bijective and
+A2: f is midpoints-preserving;
+    set g = f/";
+    let a,b be Point of F;
+A3: g*f = id E by A1,Lm3;
+    f.(g.a) = a & f.(g.b) = b by A1,Lm2;
+    hence g.(1/2*(a+b)) = g.(f.(1/2*((f/".a)+(f/".b)))) by A2,Def3
+    .= (g*f).(1/2*((f/".a)+(f/".b))) by FUNCT_2:21
+    .= 1/2*(g.a+g.b) by A3,FUNCT_1:35;
+  end;
+
+registration
+  let E; let f be bijective midpoints-preserving UnOp of E;
+  cluster f/" -> midpoints-preserving;
+  coherence by Th14;
+end;
+
+theorem Th15:
+  f is Affine & g is Affine implies g*f is Affine
+  proof
+    assume that
+A1: f is Affine and
+A2: g is Affine;
+    set h = g*f;
+    let a,b,t such that
+A3: 0 <= t & t <= 1;
+A4: h.a = g.(f.a) & h.b = g.(f.b) by FUNCT_2:21;
+    thus h.((1-t)*a+t*b) = g.(f.((1-t)*a+t*b)) by FUNCT_2:21
+    .= g.((1-t)*f.a+t*f.b) by A1,A3,Def2
+    .= (1-t)*(h.a) + t*(h.b) by A2,A3,A4,Def2;
+  end;
+
+registration
+  let E; let f,g be Affine UnOp of E;
+  cluster g*f -> Affine UnOp of E;
+  coherence by Th15;
+end;
+
+theorem Th16:
+  f is bijective Affine implies f/" is Affine
+  proof
+    assume that
+A1: f is bijective and
+A2: f is Affine;
+    set g = f/";
+    let a,b be Point of F;
+    let t such that
+A3: 0 <= t & t <= 1;
+A4: g*f = id E by A1,Lm3;
+    f.(g.a) = a & f.(g.b) = b by A1,Lm2;
+    hence g.((1-t)*a+t*b) = g.(f.((1-t)*(g.a)+t*(g.b))) by A3,A2,Def2
+    .= (g*f).((1-t)*(g.a)+t*(g.b)) by FUNCT_2:21
+    .= (1-t)*g.a+t*g.b by A4,FUNCT_1:35;
+  end;
+
+registration
+  let E; let f be bijective Affine UnOp of E;
+  cluster f/" -> Affine;
+  coherence by Th16;
+end;
+
+definition
+  let E be non empty RLSStruct, a be Point of E;
+  func a-reflection -> UnOp of E means :Def4:
+  for b being Point of E holds it.b = 2*a - b;
+  existence
+  proof
+    deffunc F(Point of E) = 2*a - $1;
+    ex f being UnOp of E st for x being Point of E holds f.x = F(x)
+    from FUNCT_2:sch 4;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let f1,f2 be UnOp of E such that
+A1: for b being Point of E holds f1.b = 2*a - b and
+A2: for b being Point of E holds f2.b = 2*a - b;
+    let b be Point of E;
+    thus f1.b = 2*a - b by A1
+    .= f2.b by A2;
+  end;
+end;
+
+theorem Th17:
+  (a-reflection) * (a-reflection) = id E
+  proof
+    set R = a-reflection;
+    let b;
+    thus (R*R).b = R.(R.b) by FUNCT_2:21
+    .= 2*a - R.b by Def4
+    .= 2*a - (2*a - b) by Def4
+    .= 2*a - 2*a + b by RLVECT_1:43
+    .= (0.E) + b by RLVECT_1:16
+    .= b by RLVECT_1:10
+    .= (id E).b by FUNCT_1:35;
+  end;
+
+registration
+  let E,a;
+  cluster a-reflection -> bijective;
+  coherence
+  proof
+    set R = a-reflection;
+    R*R = id E by Th17;
+    hence R is one-to-one onto by FUNCT_2:29;
+  end;
+end;
+
+theorem Th18: :: a is the only fixed point of R
+  (a-reflection).a = a & for b st (a-reflection).b = b holds a = b
+  proof
+    set R = a-reflection;
+    thus R.a = 2*a - a by Def4
+    .= a + a - a by Th3
+    .= a + (a - a) by RLVECT_1:42
+    .= a + 0.E by RLVECT_1:28
+    .= a by RLVECT_1:def 7;
+    let b;
+    assume R.b = b;
+    then
+A1: R.b + b = 2*b by Th3;
+    R.b = 2*a - b by Def4;
+    then R.b + b = 2*a - (b - b) by RLVECT_1:43
+    .= 2*a - 0.E by RLVECT_1:28
+    .= 2*a by RLVECT_1:26;
+    hence thesis by A1,RLVECT_1:50;
+  end;
+
+theorem Th19:
+  (a-reflection).b - a = a - b
+  proof
+    set R = a-reflection;
+A1: 1*a = a by RLVECT_1:def 11;
+    R.b = 2*a - b by Def4;
+    hence R.b - a = 2*a - a - b by VECTSP_1:93
+    .= (2-1)*a - b by A1,RLVECT_1:49
+    .= a - b by RLVECT_1:def 11;
+  end;
+
+theorem Th20:
+  ||. (a-reflection).b - a .|| = ||. b - a .||
+  proof
+    (a-reflection).b - a = a - b by Th19;
+    hence thesis by NORMSP_1:11;
+  end;
+
+theorem Th21:
+  (a-reflection).b - b = 2 * (a - b)
+  proof
+    2*a - b - b = 2*a - (b + b) by RLVECT_1:41
+    .= 2*a - 2*b by Th3
+    .= 2*(a-b) by RLVECT_1:48;
+    hence thesis by Def4;
+  end;
+
+theorem Th22:
+  ||. (a-reflection).b - b .|| = 2 * ||. b - a .||
+  proof
+A1: (a-reflection).b - b = 2 * (a - b) by Th21;
+A2: abs(2) = 2 by COMPLEX1:129;
+    ||. a - b .|| = ||. b - a .|| by NORMSP_1:11;
+    hence thesis by A1,A2,NORMSP_1:def 2;
+  end;
+
+theorem Th23:
+  (a-reflection)/" = a-reflection
+  proof
+    set R = a-reflection;
+A1: rng R = [#]E by FUNCT_2:def 3;
+    then
+A2: R/" = (R qua Function)" by TOPS_2:def 4;
+    R*R = id E by Th17;
+    hence thesis by A1,A2,FUNCT_2:36;
+  end;
+
+registration
+  let E,a;
+  cluster a-reflection -> isometric;
+  coherence
+  proof
+    set R = a-reflection;
+    let b,c;
+    R.b = 2*a - b & R.c = 2*a - c by Def4;
+    then R.b - R.c = 2*a - b - 2*a + c by RLVECT_1:43
+    .= 2*a - 2*a - b + c by VECTSP_1:93
+    .= 0.E - b + c by RLVECT_1:28
+    .= c - b by RLVECT_1:27;
+    hence ||. R.b - R.c .|| = ||. b - c .|| by NORMSP_1:11;
+  end;
+end;
+
+deffunc W(RealNormSpace,Point of $1,Point of $1) =
+        {g where g is UnOp of $1: g is bijective isometric &
+        g.$2 = $2 & g.$3 = $3};
+deffunc l(RealNormSpace,Point of $1,Point of $1) =
+        {||. g.(1/2*($2+$3)) - (1/2*($2+$3)) .||
+        where g is UnOp of $1: g in W($1,$2,$3)};
+
+Lm4:
+  now
+    let E,a,b;
+    let l be real-membered set such that
+A1: l = l(E,a,b);
+    set z = 1/2*(a+b);
+    thus 2 * ||. a - z .|| is UpperBound of l
+    proof
+      let x be ext-real number;
+      assume x in l;
+      then consider g1 being UnOp of E such that
+A2:   x = ||. g1.z - z .|| and
+A3:   g1 in W(E,a,b) by A1;
+      consider g being UnOp of E such that
+A4:   g1 = g and
+      g is bijective and
+A5:   g is isometric and
+A6:   g.a = a and g.b = b by A3;
+A7:   ||. g.z - a .|| = ||. z - a .|| by A5,A6,Def1
+      .= ||. a - z .|| by NORMSP_1:11;
+      ||. g.z - z .|| <= ||. g.z - a .|| + ||. a - z .|| by NORMSP_1:14;
+      hence thesis by A2,A4,A7;
+    end;
+  end;
+
+Lm5:
+  now
+    let E,a,b;
+    let h be UnOp of E such that
+A1: h in W(E,a,b);
+    set z = 1/2*(a+b);
+    set R = z-reflection;
+    set gs = R*(h/")*R*h;
+    consider g being UnOp of E such that
+A2: g = h and
+A3: g is bijective and
+A4: g is isometric and
+A5: g.a = a and
+A6: g.b = b by A1;
+    rng g = [#]E by A3,FUNCT_2:def 3;
+    then
+A7: g/" = (g qua Function)" by A3,TOPS_2:def 4;
+    then
+A8: g/" is bijective by A3,GROUP_6:73;
+A9: 2*z = (2*(1/2))*(a+b) by RLVECT_1:def 10
+    .= a + b by RLVECT_1:def 11;
+    then
+A10: 2*z - a = b by Th4;
+A11: 2*z - b = a by A9,Th4;
+A12: dom g = [#]E by FUNCT_2:def 1;
+A13: (g/").b = b by A7,A6,A3,A12,FUNCT_1:54;
+A14: (g/").a = a by A7,A5,A3,A12,FUNCT_1:54;
+A15: gs.a = (R*(g/")*R).a by A5,A2,FUNCT_2:21
+    .= (R*(g/")).(R.a) by FUNCT_2:21
+    .= (R*(g/")).b by A10,Def4
+    .= R.((g/").b) by FUNCT_2:21
+    .= 2*z - b by A13,Def4
+    .= a by A9,Th4;
+    gs.b = (R*(g/")*R).b by A6,A2,FUNCT_2:21
+    .= (R*(g/")).(R.b) by FUNCT_2:21
+    .= (R*(g/")).a by A11,Def4
+    .= R.((g/").a) by FUNCT_2:21
+    .= 2*z - a by A14,Def4
+    .= b by A9,Th4;
+    hence gs in W(E,a,b) by A2,A3,A4,A8,A15;
+  end;
+
+Lm6:
+  now
+    let E,a,b;
+    let l be non empty bounded_above Subset of REAL such that
+A1: l = l(E,a,b);
+    thus sup l is UpperBound of 2**l
+    proof
+      set z = 1/2*(a+b);
+      set R = z-reflection;
+      let x be ext-real number;
+      assume x in 2**l;
+      then consider w being Element of ExtREAL such that
+A2:   x = 2*w and
+A3:   w in l by MEMBER_1:188;
+      consider h being UnOp of E such that
+A4:   w = ||. h.z - z .|| and
+A5:   h in W(E,a,b) by A3,A1;
+      consider g being UnOp of E such that
+A6:   g = h and
+A7:   g is bijective and
+A8:   g is isometric and g.a = a & g.b = b by A5;
+A9:  R*(g/"*(R*g)) = R*(g/")*(R*g) by RELAT_1:55
+      .= R*(g/")*R*g by RELAT_1:55;
+A10:  R.(g/".(R.(g.z))) = R.(g/".((R*g).z)) by FUNCT_2:21
+      .= R.((g/"*(R*g)).z) by FUNCT_2:21
+      .= (R*(g/"*(R*g))).z by FUNCT_2:21;
+      rng g = [#]E by A7,FUNCT_2:def 3;
+      then
+A11:  g/" = (g qua Function)" by A7,TOPS_2:def 4;
+      R*(g/")*R*g in W(E,a,b) by A5,A6,Lm5;
+      then
+A12:  ||. (R*(g/")*R*g).z - z .|| in l by A1;
+      reconsider d = 2 as R_eal by XXREAL_0:def 1;
+      ||. g.z - z .|| in ExtREAL by XXREAL_0:def 1;
+      then
+A13:  d * ||. g.z - z .|| = 2 * ||. g.z - z .|| by EXTREAL1:13;
+A14:  g/".(g.z) = z by A7,A11,FUNCT_2:32;
+      2 * ||. g.z - z .|| = ||. R.(g.z) - g.z .|| by Th22
+      .= ||. g/".(R.(g.z)) - g/".(g.z) .|| by A7,A8,Def1
+      .= ||. R.(g/".(R.(g.z))) - z .|| by A14,Th20;
+      hence x <= sup l by A2,A4,A9,A10,A12,A6,A13,XXREAL_2:4;
+    end;
+  end;
+
+Lm7:
+  now
+    let E,a,b;
+    let l be real-membered set such that
+A1: l = l(E,a,b);
+    let g be UnOp of E such that
+A2: g in W(E,a,b);
+    set z = 1/2*(a+b);
+    set R = z-reflection;
+A3: l c= REAL
+    proof
+      let x be set;
+      assume x in l;
+      then ex g being UnOp of E st x = ||. g.z - z .|| & g in W(E,a,b) by A1;
+      hence thesis;
+    end;
+    (id E).a = a & (id E).b = b by FUNCT_1:35;
+    then id E in W(E,a,b);
+    then
+A4: ||. (id E).z - z .|| in l by A1;
+    2 * ||. a - z .|| is UpperBound of l by A1,Lm4;
+    then reconsider A = l as non empty bounded_above Subset of REAL
+    by A3,A4,XXREAL_2:def 10;
+    set lambda = sup A;
+    reconsider d = 2 as R_eal by XXREAL_0:def 1;
+A5: d*sup A = sup(2**A) by URYSOHN2:20;
+A6: ||. g.z - z .|| in A by A1,A2;
+A7: d*sup A = 2*lambda by XXREAL_3:def 5;
+    lambda is UpperBound of 2**A by A1,Lm6;
+    then sup(2**A) <= lambda by XXREAL_2:def 3;
+    then 2*lambda - lambda <= lambda - lambda by A7,A5,XREAL_1:11;
+    then ||. g.z - z .|| = 0 by A6,XXREAL_2:4;
+    hence g.z = z by NORMSP_1:10;
+  end;
+
+theorem Th24:
+  f is isometric implies f is_continuous_on dom f
+  proof
+    assume
+A1: f is isometric;
+    set X = dom f;
+    for s1 being sequence of E st rng s1 c= X & s1 is convergent &
+    lim s1 in X holds f/*s1 is convergent & f/.(lim s1) = lim (f/*s1)
+    proof
+      let s1 be sequence of E;
+      assume that
+A2:   rng s1 c= X and
+A3:   s1 is convergent and lim s1 in X;
+      consider a such that
+A4:   for r being Real st 0 < r
+      ex m being Element of NAT st for n being Element of NAT st m <= n
+      holds ||. s1.n - a .|| < r by A3,NORMSP_1:def 9;
+A5:   a = lim s1 by A3,A4,NORMSP_1:def 11;
+A6:   for r being Real st 0 < r ex m being Element of NAT st
+      for n being Element of NAT st m <= n holds ||. (f/*s1).n - f.a .|| < r
+      proof
+        let r be Real;
+        assume 0 < r;
+        then consider m being Element of NAT such that
+A7:     for n being Element of NAT st m <= n holds ||. s1.n - a .|| < r by A4;
+        take m;
+        let n be Element of NAT;
+        assume m <= n;
+        then
+A8:     ||. s1.n - a .|| < r by A7;
+A9:     ||. f.(s1.n) - f.a .|| = ||. s1.n - a .|| by A1,Def1;
+        f/*s1 = f*s1 by A2,FUNCT_2:def 12;
+        hence ||. (f/*s1).n - f.a .|| < r by A8,A9,FUNCT_2:21;
+      end;
+      thus f/*s1 is convergent
+      proof
+        take f.a;
+        thus thesis by A6;
+      end;
+      hence f/.(lim s1) = lim (f/*s1) by A5,A6,NORMSP_1:def 11;
+    end;
+    hence thesis by NFCONT_1:25;
+  end;
+
+Lm8:
+ (1-t)*a + t*b = a + t*(b-a)
+ proof
+   thus (1-t)*a + t*b = 1*a - t*a + t*b by RLVECT_1:49
+   .= a - t*a + t*b by RLVECT_1:def 11
+   .= a + t*b - t*a by RLVECT_1:def 6
+   .= a + (t*b - t*a) by RLVECT_1:42
+   .= a + t*(b-a) by RLVECT_1:48;
+ end;
+
+Lm9:
+  now
+    let E,F,f,a,b;
+    let n,j be natural number;
+    set m = 2|^(n+1);
+    set k = 2|^n;
+    set x = k-j;
+    assume
+A1: f is midpoints-preserving;
+    assume j <= k;
+    then x in NAT by INT_1:18;
+    then reconsider x as natural number;
+    take x;
+    thus x = k-j;
+    set z = 1-j/m - 1/2;
+A2: k <> 0 by NEWTON:102;
+A3: 2*k = m by NEWTON:11;
+A4: (1/2)*(1/k) = 1/(2*k) by XCMPLX_1:103;
+    x/m = (1*k)/m - j/m
+    .= 1/2 - j/m by A2,A3,XCMPLX_1:92
+    .= z;
+    then
+A5: z*a + j/m*b = 1/m*(x*a) + 1/m*j*b by RLVECT_1:def 10
+    .= 1/m*(x*a) + 1/m*(j*b) by RLVECT_1:def 10
+    .= 1/m*(x*a+j*b) by RLVECT_1:def 8
+    .= 1/2*(1/k*(x*a+j*b)) by A4,A3,RLVECT_1:def 10;
+    a+j/m*(b-a) = a+(j/m*b-j/m*a) by RLVECT_1:48
+    .= a+j/m*b-j/m*a by RLVECT_1:def 6
+    .= a-j/m*a+j/m*b by RLVECT_1:def 6
+    .= 1*a-j/m*a+j/m*b by RLVECT_1:def 11
+    .= (1-j/m)*a+j/m*b by RLVECT_1:49
+    .= (1-j/m)*a + z*a - z*a + j/m*b by Th4
+    .= (1-j/m)*a - z*a + z*a + j/m*b by RLVECT_1:def 6
+    .= (1-j/m-z)*a + z*a + j/m*b by RLVECT_1:49
+    .= 1/2*a + (z*a + j/m*b) by RLVECT_1:def 6
+    .= 1/2*(a+(1/k*(x*a+j*b))) by A5,RLVECT_1:def 8;
+    hence f.(a+j/m*(b-a)) = 1/2*(f.a+f.(1/k*(x*a+j*b))) by A1,Def3;
+  end;
+
+Lm10:
+  now
+    let E,F,f,a,b;
+    let n,j be natural number;
+    set m = 2|^(n+1);
+    set k = 2|^n;
+    set x = k+j-m;
+    assume
+A1: f is midpoints-preserving;
+A2: 2*k = m by NEWTON:11;
+    assume j >= k;
+    then k+k <= k+j by XREAL_1:8;
+    then x in NAT by A2,INT_1:18;
+    then reconsider x as natural number;
+    take x;
+    thus x = k+j-m;
+    set z = j/m - 1/2;
+A3: k <> 0 by NEWTON:102;
+A4: m <> 0 by NEWTON:102;
+A5: m/m = 1 by A4,XCMPLX_1:60;
+    then
+A6: 1-j/m = 1/m*(m-j);
+A7: k/m = (1*k)/(2*k) by NEWTON:11
+    .= 1/2 by A3,XCMPLX_1:92;
+A8: (1/2)*(1/k) = 1/(2*k) by XCMPLX_1:103;
+    x/m = (k+j)/m - m/m
+    .= z by A5,A7;
+    then
+A9: z*b + (1-j/m)*a = 1/m*((m-j)*a) + 1/m*x*b by A6,RLVECT_1:def 10
+    .= 1/m*((m-j)*a) + 1/m*(x*b) by RLVECT_1:def 10
+    .= 1/m*((m-j)*a+x*b) by RLVECT_1:def 8
+    .= 1/2*(1/k*((m-j)*a+x*b)) by A8,A2,RLVECT_1:def 10;
+    a+j/m*(b-a) = a+(j/m*b-j/m*a) by RLVECT_1:48
+    .= a+j/m*b-j/m*a by RLVECT_1:def 6
+    .= a-j/m*a+j/m*b by RLVECT_1:def 6
+    .= 1*a-j/m*a+j/m*b by RLVECT_1:def 11
+    .= (1-j/m)*a+j/m*b by RLVECT_1:49
+    .= j/m*b + z*b - z*b + (1-j/m)*a by Th4
+    .= j/m*b - z*b + z*b + (1-j/m)*a by RLVECT_1:def 6
+    .= (j/m-z)*b + z*b + (1-j/m)*a by RLVECT_1:49
+    .= 1/2*b + (z*b + (1-j/m)*a) by RLVECT_1:def 6
+    .= 1/2*(b+(1/k*((m-j)*a+x*b))) by A9,RLVECT_1:def 8;
+    hence f.(a+j/m*(b-a)) = 1/2*(f.b+f.(1/k*((m-j)*a+x*b))) by A1,Def3;
+  end;
+
+Lm11:
+  now
+    let E,F,f,a,b;
+    let t be natural number;
+    assume
+A1: f is midpoints-preserving;
+    thus for n being natural number st t <= 2|^n holds
+    f.((1-t/(2|^n))*a + t/(2|^n)*b) = (1-t/(2|^n))*f.a + t/(2|^n)*f.b
+    proof
+      defpred P[natural number] means
+      for w being natural number st w <= 2|^$1 holds
+      f.((1-w/(2|^$1))*a + w/(2|^$1)*b) =
+      (1-w/(2|^$1))*f.a + w/(2|^$1)*f.b;
+A2:   P[0]
+      proof
+        let t be natural number such that
+A3:     t <= 2|^0;
+A4:     2|^0 = 1 by NEWTON:9;
+        per cases by A3,A4,NAT_1:26;
+        suppose
+A5:       t = 1;
+          then f.((1-t)*a + t*b) = f.(0.E + t*b) by RLVECT_1:23
+          .= f.(t*b) by RLVECT_1:10
+          .= f.b by A5,RLVECT_1:def 11
+          .= t*(f.b) by A5,RLVECT_1:def 11
+          .= 0.F + t*(f.b) by RLVECT_1:10
+          .= (1-t)*(f.a) + t*(f.b) by A5,RLVECT_1:23;
+          hence thesis by A4;
+        end;
+        suppose
+A6:       t = 0;
+          then f.((1-t)*a + t*b) = f.(1*a + 0.E) by RLVECT_1:23
+          .= f.(1*a) by RLVECT_1:10
+          .= f.a by RLVECT_1:def 11
+          .= (1-t)*(f.a) by A6,RLVECT_1:def 11
+          .= (1-t)*(f.a) + 0.F by RLVECT_1:10
+          .= (1-t)*(f.a) + t*(f.b) by A6,RLVECT_1:23;
+          hence thesis by A4;
+        end;
+      end;
+A7:   for n being natural number st P[n] holds P[n+1]
+      proof
+        let n be natural number;
+        set m = 2|^n, k = 2|^(n+1);
+        assume
+A8:     P[n];
+        let t be natural number such that
+A9:     t <= k;
+A10:     k = m*2 by NEWTON:11;
+A11:     m <> 0 by NEWTON:102;
+A12:     1/2*(t/m) = (1*t)/(2*m) by XCMPLX_1:77
+        .= t/k by NEWTON:11;
+        per cases;
+        suppose
+A13:       t <= m;
+          then consider x being natural number such that
+A14:       x = m-t and
+A15:       f.(a+t/k*(b-a)) = 1/2*(f.a+f.(1/m*(x*a+t*b))) by A1,Lm9;
+A16:       x/m = m/m-t/m by A14
+          .= 1-t/m by A11,XCMPLX_1:60;
+A17:       1/m*(x*a+t*b) = 1/m*(x*a) + 1/m*(t*b) by RLVECT_1:def 8
+          .= 1/m*(x*a) + t/m*b by RLVECT_1:def 10
+          .= x/m*a + t/m*b by RLVECT_1:def 10;
+          thus f.((1-t/k)*a + t/k*b) = f.(a+t/k*(b-a)) by Lm8
+          .= 1/2*f.a + 1/2*f.(1/m*(x*a+t*b)) by A15,RLVECT_1:def 8
+          .= 1/2*f.a + 1/2*((1-t/m)*f.a + t/m*f.b) by A16,A13,A17,A8
+          .= 1/2*f.a + (1/2*((1-t/m)*f.a) + 1/2*(t/m*f.b)) by RLVECT_1:def 8
+          .= 1/2*f.a + 1/2*((1-t/m)*f.a) + 1/2*(t/m*f.b) by RLVECT_1:def 6
+          .= 1/2*f.a + 1/2*(1-t/m)*f.a + 1/2*(t/m*f.b) by RLVECT_1:def 10
+          .= (1/2+1/2*(1-t/m))*f.a + 1/2*(t/m*f.b) by RLVECT_1:def 9
+          .= (1-t/k)*f.a + t/k*f.b by A12,RLVECT_1:def 10;
+        end;
+        suppose t >= m;
+          then consider x being natural number such that
+A18:       x = m+t-k and
+A19:       f.(a+t/k*(b-a)) = 1/2*(f.b+f.(1/m*((k-t)*a+x*b))) by A1,Lm10;
+          set w = t-m;
+A20:       w <= 2*m-m by A9,A10,XREAL_1:11;
+A21:       m/m = 1 by A11,XCMPLX_1:60;
+A22:       k/m = (2*m)/(1*m) by NEWTON:11
+          .= 2/1 by A11,XCMPLX_1:92;
+A23:       1/2*(1-w/m) = 1 - 1/2*(t/m) by A21
+          .= 1 - (1*t)/(2*m) by XCMPLX_1:77
+          .= 1-t/k by NEWTON:11;
+          thus f.((1-t/k)*a + t/k*b) = f.(a+t/k*(b-a)) by Lm8
+          .= 1/2*f.b + 1/2*f.(1/m*((k-t)*a+x*b)) by A19,RLVECT_1:def 8
+          .= 1/2*f.b + 1/2*f.(1/m*((k-t)*a)+1/m*(x*b)) by RLVECT_1:def 8
+          .= 1/2*f.b + 1/2*f.(1/m*(k-t)*a+1/m*(x*b)) by RLVECT_1:def 10
+          .= 1/2*f.b + 1/2*f.(1/m*(k-t)*a+1/m*x*b) by RLVECT_1:def 10
+          .= 1/2*f.b + 1/2*((1-w/m)*f.a + w/m*f.b) by A20,A21,A22,A18,A10,A8
+          .= 1/2*f.b + (1/2*((1-w/m)*f.a) + 1/2*(w/m*f.b)) by RLVECT_1:def 8
+          .= 1/2*((1-w/m)*f.a) + (1/2*f.b + 1/2*(w/m*f.b)) by RLVECT_1:def 6
+          .= 1/2*((1-w/m)*f.a) + (1/2*(f.b+(w/m*f.b))) by RLVECT_1:def 8
+          .= 1/2*((1-w/m)*f.a) + (1/2*(1*f.b+(w/m*f.b))) by RLVECT_1:def 11
+          .= 1/2*((1-w/m)*f.a) + 1/2*((1+w/m)*f.b) by RLVECT_1:def 9
+          .= 1/2*((1-w/m)*f.a) + 1/2*(1+w/m)*f.b by RLVECT_1:def 10
+          .= (1-t/k)*f.a + t/k*f.b by A23,RLVECT_1:def 10;
+        end;
+      end;
+      for n being natural number holds P[n] from NAT_1:sch 2(A2,A7);
+      hence thesis;
+    end;
+  end;
+
+registration
+  let E,F;
+  cluster bijective isometric -> midpoints-preserving Function of E,F;
+  coherence
+  proof
+    let f be Function of E,F such that
+A1: f is bijective and
+A2: f is isometric;
+    let a,b be Point of E;
+    set W = W(E,a,b);
+    set l = l(E,a,b);
+    set z = 1/2 * (a + b);
+    set z1 = 1/2 * (f.a + f.b);
+    set R = z-reflection;
+    set R1 = z1-reflection;
+    set h = R * (f/") * R1 * f;
+    now
+      let x be set;
+      assume x in l;
+      then ex g being UnOp of E st x = ||. g.z - z .|| & g in W(E,a,b);
+      hence x is real;
+    end;
+    then reconsider l as real-membered set by MEMBERED:def 3;
+A3: rng f = [#]F by A1,FUNCT_2:def 3;
+    then
+A4: f/" = (f qua Function)" by A1,TOPS_2:def 4;
+    then
+A5: f/" is bijective by A1,GROUP_6:73;
+    R * (f/") is onto by A5,FUNCT_2:33;
+    then R * (f/") * R1 is onto by FUNCT_2:33;
+    then
+A6: h is onto by A1,FUNCT_2:33;
+    f/" is isometric by A1,A2,Th12;
+    then R * (f/") is isometric by Th11;
+    then R * (f/") * R1 is isometric by Th11;
+    then
+A7: h is isometric by A2,Th11;
+A8: 2*z = (2*(1/2))*(a+b) by RLVECT_1:def 10
+    .= a + b by RLVECT_1:def 11;
+    then
+A9: 2*z - a = b by Th4;
+A10: 2*z - b = a by A8,Th4;
+A11: 2*z1 = (2*(1/2))*(f.a+f.b) by RLVECT_1:def 10
+     .= f.a + f.b by RLVECT_1:def 11;
+     then
+A12: 2*z1 - f.a = f.b by Th4;
+A13: 2*z1 - f.b = f.a by A11,Th4;
+A14: h.a = (R * (f/") * R1).(f.a) by FUNCT_2:21
+     .= (R * (f/")).(R1.(f.a)) by FUNCT_2:21
+     .= (R * (f/")).(f.b) by A12,Def4
+     .= R.((f/").(f.b)) by FUNCT_2:21
+     .= R.b by A4,A1,FUNCT_2:32
+     .= a by A10,Def4;
+     h.b = (R * (f/") * R1).(f.b) by FUNCT_2:21
+     .= (R * (f/")).(R1.(f.b)) by FUNCT_2:21
+     .= (R * (f/")).(f.a) by A13,Def4
+     .= R.((f/").(f.a)) by FUNCT_2:21
+     .= R.a by A4,A1,FUNCT_2:32
+     .= b by A9,Def4;
+     then
+A15: h in W by A4,A1,A6,A7,A14;
+     rng R = [#]E by FUNCT_2:def 3;
+     then
+A16: R/" * R = id dom R by TOPS_2:65
+     .= id E by FUNCT_2:def 1;
+A17: f * (f/") = id F by A1,A3,TOPS_2:65;
+A18: R/" * h = R/" * (R * (f/") * (R1 * f)) by RELAT_1:55
+     .= R/" * (R * (f/" * (R1 * f))) by RELAT_1:55
+     .= R/" * R * (f/" * (R1 * f)) by RELAT_1:55
+     .= R/" * R * (f/") * (R1 * f) by RELAT_1:55
+     .= R/" * R * (f/") * R1 * f by RELAT_1:55
+     .= (f/") * R1 * f by A16,FUNCT_2:23;
+A19: f * (f/" * R1 * f) = f * (f/" * (R1 * f)) by RELAT_1:55
+     .= f * (f/") * (R1 * f) by RELAT_1:55
+     .= R1 * f by A17,FUNCT_2:23;
+     l = l(E,a,b);
+     then h.z = z by A15,Lm7;
+     then (R/"*h).z = R/".z by FUNCT_2:21;
+     then
+A20: (f*(f/" * R1 * f)).z = f.(R/".z) by A18,FUNCT_2:21
+     .= (f*(R/")).z by FUNCT_2:21;
+     R1.(f.z) = (R1*f).z by FUNCT_2:21
+     .= (f*R).z by A20,A19,Th23
+     .= f.(R.z) by FUNCT_2:21
+     .= f.z by Th18;
+     hence thesis by Th18;
+   end;
+ end;
+
+registration
+  let E,F;
+  cluster isometric midpoints-preserving -> Affine Function of E,F;
+  coherence
+  proof
+    let f such that
+A1: f is isometric and
+A2: f is midpoints-preserving;
+    let a,b,t;
+    assume 0 <= t & t <= 1;
+    then t in [. 0,1 .] by XXREAL_1:1;
+    then consider s being Real_Sequence such that
+A3: rng s c= DYADIC and
+A4: s is convergent and
+A5: lim s = t by Th2,MEASURE6:100;
+A6: dom f = the carrier of E by FUNCT_2:def 1;
+    set stb = s * b;
+    set 1t = 1+(-s);
+    set s1ta = 1t * a;
+    set s1 = s1ta + stb;
+    set za = 1t * f.a;
+    set zb = s * f.b;
+A7: f is_continuous_on dom f by A1,Th24;
+A8: -s is convergent by A4,SEQ_2:23;
+    then
+A9: s1 is convergent by A4,NORMSP_1:34;
+A10: lim s1ta = lim 1t * a by A8,Th10;
+A11: lim -s = -lim s by A4,SEQ_2:24;
+A12: lim 1t = 1-t by A5,A11,A8,Th7;
+    lim stb = lim s * b by A4,Th10;
+    then
+A13: lim s1 = (1-t)*a + t*b by A5,A10,A12,A8,A4,NORMSP_1:42;
+A14: lim za = (1-t)*(f.a) by A8,A12,Th10;
+A15: lim zb = t*(f.b) by A4,A5,Th10;
+A16: f/*s1 = za+zb
+    proof
+      let n be Element of NAT;
+A17:   1t.n = 1 + ((-s).n) by VALUED_1:2
+      .= 1 + -s.n by VALUED_1:8;
+      dom s = NAT by FUNCT_2:def 1;
+      then s.n in rng s by FUNCT_1:12;
+      then consider m being Element of NAT such that
+A18:   s.n in dyadic(m) by A3,URYSOHN1:def 4;
+A19:   ex i being Element of NAT st i <= 2|^m & s.n = i/(2|^m)
+      by A18,URYSOHN1:def 3;
+      rng s1 c= dom f by A6;
+      hence (f/*s1).n = f.(s1.n) by FUNCT_2:185
+      .= f.(s1ta.n + stb.n) by NORMSP_1:def 5
+      .= f.((1-s.n) * a + stb.n) by A17,NDIFF_1:def 3
+      .= f.((1-s.n) * a + s.n * b) by NDIFF_1:def 3
+      .= (1-s.n) * f.a + s.n * f.b by A2,A19,Lm11
+      .= 1t.n * f.a + zb.n by A17,NDIFF_1:def 3
+      .= za.n + zb.n by NDIFF_1:def 3
+      .= (za+zb).n by NORMSP_1:def 5;
+    end;
+A20: rng s1 c= the carrier of E;
+    thus f.((1-t)*a+t*b) = f/.((1-t)*a+t*b)
+    .= lim (f/*s1) by A6,A7,A20,A9,A13,NFCONT_1:25
+    .= (1-t)*(f.a) + t*(f.b) by A14,A15,A8,A4,A16,NORMSP_1:42;
+  end;
+end;
+

@@ -2,7 +2,15 @@
 ::  by Christoph Schwarzweller
 ::
 :: Received November 20, 2000
-:: Copyright (c) 2000 Association of Mizar Users
+:: Copyright (c) 2000-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -24,7 +32,8 @@ environ
  definitions BINOP_1, ALGSTR_0;
  theorems TARSKI, FUNCT_2, VECTSP_1, RLVECT_1, ALGSTR_1, NAT_1, MCART_1,
       FINSEQ_1, GROUP_1, NEWTON, FINSEQ_2, FUNCT_1, ZFMISC_1, INT_1, RELAT_1,
-      POLYNOM1, XBOOLE_0, XREAL_1, PARTFUN1, ORDINAL1, ALGSTR_0, CARD_1;
+      POLYNOM1, XBOOLE_0, XREAL_1, PARTFUN1, ORDINAL1, ALGSTR_0, CARD_1,
+      FINSEQ_5;
  schemes NAT_1, RECDEF_1, INT_1;
 
 begin  :: Preliminaries
@@ -770,65 +779,22 @@ A17: for i being Element of NAT st 0 <= i & i <= len p holds P[i] from
     .= Sum p * a by A1,A17;
 end;
 
-::$N Binomial Theorem
 theorem
-  for R being commutative (non empty doubleLoopStr), a being Element of
-  R, p being FinSequence of the carrier of R holds Sum(p * a) = Sum(a * p)
+  for R being commutative (non empty multMagma), a being Element of R,
+  p being FinSequence of the carrier of R holds p * a = a * p
 proof
-  let R be commutative (non empty doubleLoopStr), a be Element of R, p be
+  let R be commutative (non empty multMagma), a be Element of R, p be
   FinSequence of the carrier of R;
-  consider f being Function of NAT,the carrier of R such that
-A1: Sum(p * a) = f.(len(p * a)) and
-A2: f.0 = 0.R and
-A3: for j being Element of NAT, v being Element of R st j < len(p * a) &
-  v = (p * a).(j + 1) holds f.(j + 1) = f.j + v by RLVECT_1:def 15;
-  consider g being Function of NAT,the carrier of R such that
-A4: Sum(a * p) = g.(len(a * p)) and
-A5: g.0 = 0.R and
-A6: for j being Element of NAT, v being Element of R st j < len(a * p) &
-  v = (a * p).(j + 1) holds g.(j + 1) = g.j + v by RLVECT_1:def 15;
-  defpred P[Element of NAT] means f.$1 = g.$1;
-A7: Seg(len(p * a)) = dom(p * a) by FINSEQ_1:def 3
-    .= dom p by POLYNOM1:def 3
-    .= Seg(len p) by FINSEQ_1:def 3;
-A8: Seg(len(a * p)) = dom(a * p) by FINSEQ_1:def 3
-    .= dom p by POLYNOM1:def 2
-    .= Seg(len p) by FINSEQ_1:def 3;
-A9: now
-    let j be Element of NAT;
-    assume that
-    0 <= j and
-A10: j < len p;
-    thus P[j] implies P[j+1]
-    proof
-A11:  j < len(a * p) by A8,A10,FINSEQ_1:8;
-A12:  j < len(p * a) by A7,A10,FINSEQ_1:8;
-      then
-A13:  j + 1 <= len(p * a) by NAT_1:13;
-A14:  0 + 1 <= j + 1 by XREAL_1:8;
-      then j + 1 in Seg len(p * a) by A13,FINSEQ_1:3;
-      then j + 1 in dom(p * a) by FINSEQ_1:def 3;
-      then
-A15:  (p * a)/.(j + 1) = (p * a).(j + 1) by PARTFUN1:def 8;
-      j + 1 in Seg len(a * p) by A8,A7,A13,A14,FINSEQ_1:3;
-      then
-A16:  j + 1 in dom(a * p) by FINSEQ_1:def 3;
-      then
-A17:  j + 1 in dom p by POLYNOM1:def 2;
-A18:  (a * p)/.(j + 1) = (a * p).(j + 1) by A16,PARTFUN1:def 8;
-      assume f.j = g.j;
-      hence f.(j+1) = g.j + (p * a)/.(j + 1) by A3,A12,A15
-        .= g.j + p/.(j + 1) * a by A17,POLYNOM1:def 3
-        .= g.j + (a * p)/.(j + 1) by A17,POLYNOM1:def 2
-        .= g.(j+1) by A6,A11,A18;
-    end;
+  set pa = p*a, ap = a*p;
+A1: dom pa = dom p by POLYNOM1:def 3;
+A2: dom ap = dom p by POLYNOM1:def 2;
+  now
+    let i be Nat such that
+A3: i in dom pa;
+    thus pa/.i = p/.i * a by A1,A3,POLYNOM1:def 3
+    .= ap/.i by A1,A3,POLYNOM1:def 2;
   end;
-A19: P[0] by A2,A5;
-A20: for i being Element of NAT st 0 <= i & i <= len p holds P[i] from
-  INT_1:sch 7(A19,A9);
-  thus Sum(p * a) = f.(len p) by A1,A7,FINSEQ_1:8
-    .= g.(len p) by A20
-    .= Sum(a * p) by A4,A8,FINSEQ_1:8;
+  hence thesis by A1,A2,FINSEQ_5:13;
 end;
 
 definition
@@ -1547,6 +1513,7 @@ A2: l = 0 & n + 1 in dom((a,b) In_Power n) by FINSEQ_1:6;
     .= b|^n by GROUP_1:def 5;
 end;
 
+::$N Binomial Theorem
 theorem
   for R being Abelian add-associative left_zeroed right_zeroed
   commutative associative add-cancelable distributive unital (non empty

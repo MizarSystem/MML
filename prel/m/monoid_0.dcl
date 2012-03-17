@@ -236,6 +236,67 @@
 <Adjective nr="145"/>
 </Cluster>
 </RCluster>
+<FCluster aid="MONOID_0" nr="1">
+<ArgTypes/>
+<Func kind="K" nr="268"/>
+<Cluster>
+<Adjective nr="40" value="false"/>
+<Adjective nr="65"/>
+<Adjective nr="87"/>
+<Adjective nr="89"/>
+<Adjective nr="91"/>
+<Adjective nr="141"/>
+<Adjective nr="144"/>
+</Cluster>
+</FCluster>
+<FCluster aid="MONOID_0" nr="2">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="278">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="40" value="false"/>
+<Adjective nr="65"/>
+<Adjective nr="87"/>
+<Adjective nr="89"/>
+<Adjective nr="129"/>
+</Cluster>
+</FCluster>
+<FCluster aid="MONOID_0" nr="3">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="281">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="40" value="false"/>
+<Adjective nr="65"/>
+<Adjective nr="87"/>
+</Cluster>
+</FCluster>
+<FCluster aid="MONOID_0" nr="4">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="283">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="40" value="false"/>
+<Adjective nr="65"/>
+<Adjective nr="87"/>
+<Adjective nr="141"/>
+</Cluster>
+</FCluster>
 <CCluster aid="MONOID_0" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="1">

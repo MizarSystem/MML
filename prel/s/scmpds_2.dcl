@@ -33,13 +33,12 @@
 <ArticleID name="EXTPRO_1"/>
 <ArticleID name="AMI_2"/>
 <ArticleID name="SCMPDS_1"/>
-<ArticleID name="AMI_1"/>
 <ArticleID name="SCMPDS_2"/>
 </Signature>
 <FCluster aid="SCMPDS_2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="25">
-<Func kind="K" nr="314"/>
+<Func kind="K" nr="313"/>
 </Func>
 <Cluster>
 <Adjective nr="36"/>
@@ -47,7 +46,7 @@
 </FCluster>
 <FCluster aid="SCMPDS_2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="339"/>
+<Func kind="K" nr="338"/>
 <Cluster>
 <Adjective nr="38" value="false"/>
 <Adjective nr="65">
@@ -69,7 +68,7 @@
 </FCluster>
 <FCluster aid="SCMPDS_2" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="339"/>
+<Func kind="K" nr="338"/>
 <Cluster>
 <Adjective nr="66">
 <Func kind="K" nr="1">
@@ -90,7 +89,7 @@
 </FCluster>
 <FCluster aid="SCMPDS_2" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="339"/>
+<Func kind="K" nr="338"/>
 <Cluster>
 <Adjective nr="82">
 <Func kind="K" nr="1">
@@ -106,7 +105,7 @@
 </FCluster>
 <FCluster aid="SCMPDS_2" nr="5">
 <ArgTypes/>
-<Func kind="K" nr="339"/>
+<Func kind="K" nr="338"/>
 <Cluster>
 <Adjective nr="69">
 <Func kind="K" nr="1">
@@ -114,11 +113,6 @@
 </Func>
 </Adjective>
 <Adjective nr="82">
-<Func kind="K" nr="1">
-<Func kind="K" nr="66"/>
-</Func>
-</Adjective>
-<Adjective nr="87">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
@@ -141,7 +135,7 @@
 <Adjective nr="4"/>
 <Adjective nr="7">
 <Func kind="U" nr="1">
-<Func kind="K" nr="339"/>
+<Func kind="K" nr="338"/>
 </Func>
 </Adjective>
 <Adjective nr="9"/>

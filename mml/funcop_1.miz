@@ -2,7 +2,15 @@
 ::  by Andrzej Trybulec
 ::
 :: Received September 4, 1989
-:: Copyright (c) 1990 Association of Mizar Users
+:: Copyright (c) 1990-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -304,7 +312,7 @@ A1: x in A;
   hence thesis by FUNCT_1:8;
 end;
 
-theorem Th14:
+theorem
   A <> {} implies rng (A --> x) = {x} by RELAT_1:195;
 
 theorem Th15:
@@ -313,8 +321,7 @@ proof
   assume
 A1: rng f = {x};
   then dom f <> {} by RELAT_1:65;
-  then dom((dom f) --> x) = dom f & rng((dom f) -->x) = {x} by
-  RELAT_1:195;
+  then dom((dom f) --> x) = dom f & rng((dom f) -->x) = {x} by RELAT_1:195;
   hence thesis by A1,FUNCT_1:17;
 end;
 
@@ -1340,19 +1347,16 @@ definition
   let IT be Function;
   attr IT is Function-yielding means
   :Def6:
-  for x being set st x in dom IT
-  holds IT.x is Function;
+  for x being set st x in dom IT holds IT.x is Function;
 end;
 
 registration
   cluster Function-yielding Function;
   existence
   proof
-    set f =the  Function,I =the  set;
-    take I --> f;
+    take the set --> the Function;
     let x be set;
-    dom (I --> f) = I by Th19;
-    hence thesis by Th13;
+    thus thesis;
   end;
 end;
 
@@ -1612,14 +1616,8 @@ registration
   cluster A --> f -> Function-yielding;
   coherence
   proof
-    set g = A --> f;
-    g is Function-yielding
-    proof
-      let a be set;
-      assume a in dom g;
-      hence thesis by Th13;
-    end;
-    hence thesis;
+    let a be set;
+    thus thesis;
   end;
 end;
 
@@ -1764,7 +1762,7 @@ proof
 A1: field R = {x} by RELAT_1:208;
   hence dom F = field R by Th19;
   field S = {y} by RELAT_1:208;
-  hence rng F = field S by Th14;
+  hence rng F = field S by RELAT_1:195;
   thus F is one-to-one;
   let a,b be set;
   hereby
@@ -1810,7 +1808,7 @@ registration let A be non empty set;
  cluster x .--> i -> A-valued;
  coherence
   proof
-    rng(x .--> i) = {i} by Th14;
+    rng(x .--> i) = {i} by RELAT_1:195;
    hence rng(x .--> i) c= A by ZFMISC_1:37;
   end;
 end;
@@ -1860,3 +1858,27 @@ registration let A be non empty set, x be Element of A, y be set;
   end;
 end;
 
+theorem
+ for x,y,A being set st x in A
+ holds (x .--> y)|A = x .--> y
+proof let x,y,A be set;
+  assume x in A;
+  then {x} c= A by ZFMISC_1:37;
+  then dom(x .--> y) c= A by Th19;
+  hence thesis by RELAT_1:97;
+end;
+
+:: missing, 2011.02.06, A.K.
+
+registration
+  let Y be functional set;
+  cluster Y-valued -> Function-yielding Function;
+  coherence
+  proof
+    let f be Function;
+    assume
+A1: f is Y-valued;
+    let x be set;
+    thus thesis by A1;
+  end;
+end;

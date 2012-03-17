@@ -52,4 +52,21 @@
 <Adjective nr="17" value="false"/>
 </Cluster>
 </RCluster>
+<FCluster aid="INT_2" nr="1">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="4" value="false"/>
+<Adjective nr="13"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="43">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="14"/>
+</Cluster>
+</FCluster>
 </Registrations>

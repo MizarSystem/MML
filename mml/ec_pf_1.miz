@@ -1,0 +1,2480 @@
+:: Set of Points on Elliptic Curve in Projective Coordinates
+::  by Yuichi Futa , Hiroyuki Okazaki and Yasunari Shidama
+:: 
+:: Received December 21, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, CARD_1, FUNCT_1, RELAT_1, XBOOLE_0, ARYTM_3, NEWTON,
+      TARSKI, FINSET_1, MCART_1, CARD_3, FINSEQ_1, SUBSET_1, ARYTM_1, XXREAL_0,
+      FUNCT_2, PARTFUN1, INT_2, NAT_1, BINOP_1, BINOP_2, REALSET1, ZFMISC_1,
+      INT_3, SUPINF_2, ALGSTR_0, GROUP_1, MESFUNC1, INT_1, VECTSP_1, STRUCT_0,
+      GROUP_2, GRAPH_1, FINSEQ_2, EC_PF_1, RLVECT_1, LATTICES, EQREL_1,
+      RELAT_2, UNIROOTS, PROB_2, REAL_1, MOD_2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELAT_2,
+      RELSET_1, PARTFUN1, MCART_1, FUNCT_2, BINOP_1, DOMAIN_1, FINSET_1,
+      CARD_1, NUMBERS, XCMPLX_0, XXREAL_0, REAL_1, NAT_1, INT_1, NAT_D,
+      REALSET1, FINSEQ_1, FINSEQ_2, EQREL_1, RVSUM_1, NEWTON, WSIERP_1, MOD_2,
+      STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1, GROUP_2, GR_CY_1, INT_3,
+      UNIROOTS, PROB_2, BINOM;
+ constructors REAL_1, NAT_D, NAT_3, SEQ_1, REALSET1, GROUP_2, BINOP_1, GR_CY_1,
+      INT_3, WSIERP_1, UPROOTS, BINOP_2, RELSET_1, FUNCT_7, UNIROOTS, PROB_2,
+      GROUP_1, FINSET_1, BINOM, MOD_2;
+ registrations XBOOLE_0, STRUCT_0, XREAL_0, ORDINAL1, NAT_1, INT_1, GROUP_2,
+      FINSET_1, GR_CY_1, ALGSTR_0, VECTSP_1, INT_3, XXREAL_0, NEWTON, SUBSET_1,
+      CARD_1, VALUED_0, EQREL_1, RELSET_1, FINSEQ_2, UNIROOTS, NUMBERS,
+      ALGSTR_1, MOD_2, MEMBERED;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions STRUCT_0, GROUP_1, INT_3, CARD_1, ALGSTR_0, BINOP_1, FINSEQ_1,
+      REALSET1, TARSKI, FINSEQ_2, VECTSP_1, RLVECT_1, EQREL_1, BINOM;
+ theorems TARSKI, XBOOLE_0, ZFMISC_1, ORDINAL1, FUNCT_1, FUNCT_2, VECTSP_1,
+      INT_1, RELAT_1, RLVECT_1, GR_CY_1, FUNCT_7, NAT_1, INT_2, INT_3, PEPIN,
+      NAT_D, NUMBERS, CARD_1, GROUP_1, GROUP_2, STRUCT_0, XREAL_1, NEWTON,
+      XXREAL_0, ALGSEQ_1, NAT_3, RVSUM_1, CARD_2, EULER_1, XBOOLE_1, FINSEQ_1,
+      RELSET_1, FUNCOP_1, PARTFUN1, FINSEQ_2, BINOP_1, ALGSTR_0, MCART_1,
+      EQREL_1, UNIROOTS, RELAT_2, GR_CY_3, DIST_1, PROB_2, BINOM, MOD_2;
+ schemes NAT_1, FUNCT_2, INT_1, FINSEQ_1;
+
+begin :: 1.Finite Prime Field $\bf{GF}(p)$
+
+reserve x for set;
+reserve i,j for Integer;
+reserve n,n1,n2,n3 for Nat;
+reserve K,K1,K2,K3 for Field;
+
+definition
+  let K be Field;
+  mode Subfield of K -> Field means  :PFDef2:
+  the carrier of it c= the carrier of K
+  & the addF of it = (the addF of K) || the carrier of it
+  & the multF of it = (the multF of K) || the carrier of it
+  & 1.it = 1.K & 0.it = 0.K;
+  existence
+  proof
+    take K;
+    thus thesis by RELSET_1:34;
+  end;
+end;
+
+theorem PF1:
+  K is Subfield of K
+  proof
+P0: the addF of K = (the addF of K) || the carrier of K by RELSET_1:34;
+P1: the multF of K = (the multF of K) || the carrier of K by RELSET_1:34;
+    the carrier of K c= the carrier of K & 1.K = 1.K & 0.K = 0.K;
+    hence thesis by P0,P1,PFDef2;
+  end;
+
+theorem PF2:
+  for ST be non empty doubleLoopStr
+  st the carrier of ST is Subset of the carrier of K
+  & the addF of ST = (the addF of K) || (the carrier of ST)
+  & the multF of ST = (the multF of K) || (the carrier of ST)
+  & 1.ST = 1.K & 0.ST = 0.K
+  & ST is right_complementable commutative almost_left_invertible
+  non degenerated holds ST is Subfield of K
+  proof
+    let ST be non empty doubleLoopStr such that
+    A1: the carrier of ST is Subset of the carrier of K and
+    A2: the addF of ST = (the addF of K) || the carrier of ST and
+    A3: the multF of ST = (the multF of K) || the carrier of ST and
+    A4: 1.ST = 1.K and
+    A5: 0.ST = 0.K and
+    A6: ST is right_complementable commutative
+    almost_left_invertible non degenerated;
+    set C1 = the carrier of ST;
+    set AC = the addF of ST;
+    set MC = the multF of ST;
+    set d0 = 0.ST;
+    set d1 = 1.ST;
+A7: now
+      let a,x be Element of ST;
+      a*x = (the multF of K).([a,x]) by A3,FUNCT_1:72;
+      hence a*x = (the multF of K).(a,x);
+    end;
+A8: now
+      let x,y be Element of ST;
+      x + y = (the addF of K).([x,y]) by A2,FUNCT_1:72;
+      hence x + y = (the addF of K).(x,y);
+    end;
+    ST is Abelian add-associative right_zeroed associative well-unital
+      distributive
+    proof
+      set MK = the multF of K;
+      set AK = the addF of K;
+      hereby
+        let x,y be Element of ST;
+        reconsider x1 = x, y1 = y as Element of K by A1,TARSKI:def 3;
+        x + y = x1 + y1 & y + x = y1 + x1 by A8;
+        hence x + y = y + x;
+      end;
+      hereby
+        let x,y,z be Element of ST;
+        reconsider x1 = x, y1 = y, z1 = z as Element of K by A1,TARSKI:def 3;
+        x + (y + z) = AK.(x1,y + z) by A8; then
+        A10: x + (y + z) = x1 + (y1 + z1) by A8;
+        (x + y) + z = AK.(x +y,z1) by A8;
+        then (x + y) + z = (x1 + y1) + z1 by A8;
+        hence (x + y) + z = x + (y + z) by A10,RLVECT_1:def 6;
+      end;
+      hereby
+        let x be Element of ST;
+        reconsider y = x, z = 0.ST as Element of K by A1,TARSKI:def 3;
+        x + 0.ST = y + 0.K by A5,A8;
+        hence x + 0.ST = x by RLVECT_1:10;
+      end;
+      hereby
+        let a,b,x be Element of ST;
+        reconsider y=x, a1=a, b1=b as Element of K by A1,TARSKI:def 3;
+        a * (b * x) = MK.(a,b * x) by A7; then
+   A12: a * (b * x) = a1 * (b1 * y) by A7;
+        a * b = a1 * b1 by A7;
+        then (a * b) * x = (a1 * b1) * y by A7;
+        hence (a * b) * x = a * (b * x) by A12,GROUP_1:def 4;
+      end;
+      hereby
+        let x be Element of ST;
+        reconsider y = x as Element of K by A1,TARSKI:def 3;
+        x*1.ST = y * 1.K & 1.ST * x = 1.K * y by A4,A7;
+        hence x*1.ST = x & 1.ST * x =x by VECTSP_1:def 16;
+      end;
+      hereby
+        let a,x,y be Element of ST;
+        reconsider x1=x, y1=y, a1=a as Element of K by A1,TARSKI:def 3;
+        (x+y)*a = MK.(x+y,a) by A7;
+        then (x+y)*a = (x1+y1)*a1 by A8;
+        then (x+y)*a = x1*a1 + y1*a1 by VECTSP_1:def 18;
+        then (x+y)*a = AK.(MK.(x1,a1),y*a) by A7; then
+   A13: (x+y)*a = AK.(x*a,y*a) by A7;
+        a*(x+y) = MK.(a,x+y) by A7;
+        then a*(x+y) = a1*(x1+y1) by A8;
+        then a*(x+y) = a1*x1 + a1*y1 by VECTSP_1:def 18;
+        then a*(x+y) = AK.(MK.(a,x1),a*y) by A7;
+        then a*(x+y) = AK.(a*x,a*y) by A7;
+        hence a*(x+y) = a*x + a*y & (x+y)*a = x*a + y*a by A8,A13;
+      end;
+    end;
+    hence thesis by A1,A2,A3,A4,A5,A6,PFDef2;
+  end;
+
+registration let K be Field;
+  cluster strict Subfield of K;
+  existence
+  proof
+    set C1 = [#]K;
+    P0: the addF of K = (the addF of K) || C1
+    & the multF of K = (the multF of K) || C1 by RELSET_1:34;
+    set ST = doubleLoopStr (# the carrier of K, the addF of K,
+    the multF of K, 1.K, 0.K #);
+    P4: 0.ST = 0.K & 1.ST = 1.K;
+    ST is right_complementable commutative almost_left_invertible
+    non degenerated
+    proof
+      thus ST is right_complementable
+      proof
+        let x be Element of ST;
+        reconsider x1 = x as Element of K;
+        consider v be Element of K such that
+    A1: x1 + v = 0.K by ALGSTR_0:def 11;
+        reconsider y = v as Element of ST;
+        take y;
+        thus thesis by A1;
+      end;
+      thus ST is commutative
+      proof
+        let x,y be Element of ST;
+        reconsider x1 = x, y1 = y as Element of K;
+        x * y = x1 * y1 & y * x = y1 * x1;
+        hence x * y = y * x;
+      end;
+      thus ST is almost_left_invertible
+      proof
+        let x be Element of ST such that A2: x <> 0.ST;
+        reconsider x1 = x as Element of K;
+        x1 is left_invertible by A2,ALGSTR_0:def 39;
+        then consider v be Element of K such that
+    A3: v * x1 = 1.K by ALGSTR_0:def 27;
+        reconsider y = v as Element of ST;
+        take y;
+        thus thesis by A3;
+      end;
+      0.ST = 0.K & 1.ST = 1.K & 0.K <> 1.K;
+      hence thesis by STRUCT_0:def 8;
+    end; then
+    ST is Subfield of K by P0,P4,PF2;
+    hence thesis;
+  end;
+end;
+
+reserve SK1,SK2 for Subfield of K;
+reserve ek,ek1,ek2 for Element of K;
+
+theorem PF4:
+  K1 is Subfield of K2 implies for x st x in K1 holds x in K2
+  proof
+    assume K1 is Subfield of K2;
+    then A0: the carrier of K1 c= the carrier of K2 by PFDef2;
+    for x st x in K1 holds x in K2
+    proof
+      let x;
+      assume x in K1;
+      then x in the carrier of K1 by STRUCT_0:def 5;
+      hence thesis by A0,STRUCT_0:def 5;
+    end;
+    hence thesis;
+  end;
+
+theorem PF5:
+  for K1,K2 be strict Field st
+  K1 is Subfield of K2 & K2 is Subfield of K1 holds K1 = K2
+  proof
+    let K1,K2 be strict Field;
+    assume AS: K1 is Subfield of K2
+    & K2 is Subfield of K1;
+P3: the carrier of K1 c= the carrier of K2 &
+    the carrier of K2 c= the carrier of K1 by AS,PFDef2; then
+P0: the carrier of K1 = the carrier of K2 by XBOOLE_0:def 10;
+P1: the addF of K2 = (the addF of K2) || the carrier of K1 by P0,RELSET_1:34
+    .= the addF of K1 by AS,PFDef2;
+P2: the multF of K2 = (the multF of K2) || the carrier of K1
+    by P0,RELSET_1:34
+    .= the multF of K1 by AS,PFDef2;
+    1.K1 = 1.K2 & 0.K1 = 0.K2 by AS,PFDef2;
+    hence thesis by P1,P2,P3,XBOOLE_0:def 10;
+  end;
+
+theorem
+  for K1, K2, K3 be strict Field st
+  K1 is Subfield of K2 & K2 is Subfield of K3 holds K1 is Subfield of K3
+  proof
+    let K1, K2, K3 be strict Field;
+    assume AS: K1 is Subfield of K2 & K2 is Subfield of K3;
+    set C1 = the carrier of K1;
+    set C2 = the carrier of K2;
+    set C = the carrier of K3;
+    set ADD = the addF of K3;
+    set MULT = the multF of K3;
+A0: C1 c= C2 by AS,PFDef2;
+    then A1: [:C1,C1:] c= [:C2,C2:] by ZFMISC_1:119;
+    C2 c= C by AS,PFDef2; then
+A2: C1 c= C by A0,XBOOLE_1:1;
+A3: the addF of K2 = ADD || C2 by AS,PFDef2;
+A4: the addF of K1 = (the addF of K2) || C1 by AS,PFDef2
+    .= ADD || C1 by A1,A3,FUNCT_1:82;
+A5: the multF of K2 = MULT || C2 by AS,PFDef2;
+A6: the multF of K1 = (the multF of K2) || C1 by AS,PFDef2
+    .= MULT || C1 by A1,A5,FUNCT_1:82;
+    1.K1 = 1.K2 & 0.K1 = 0.K2 by AS,PFDef2;
+    then 1.K1 = 1.K3 & 0.K1 = 0.K3 by AS,PFDef2;
+    hence thesis by A2,A4,A6,PFDef2;
+  end;
+
+theorem PF7:
+  SK1 is Subfield of SK2 iff the carrier of SK1 c= the carrier of SK2
+  proof
+    set C1 = the carrier of SK1;
+    set C2 = the carrier of SK2;
+    set ADD = the addF of K;
+    set MULT = the multF of K;
+    thus SK1 is Subfield of SK2 implies C1 c= C2 by PFDef2;
+    assume AS: C1 c= C2;
+    then A0: [:C1,C1:] c= [:C2,C2:] by ZFMISC_1:119;
+    the addF of SK2 = ADD || C2 by PFDef2;
+    then A1: (the addF of SK2) || C1 = ADD || C1 by A0,FUNCT_1:82
+    .= the addF of SK1 by PFDef2;
+    the multF of SK2 = MULT || C2 by PFDef2;
+    then A2: (the multF of SK2) || C1 = MULT || C1 by A0,FUNCT_1:82
+    .= the multF of SK1 by PFDef2;
+    1.SK1 = 1.K & 0.SK1 = 0.K by PFDef2;
+    then 1.SK1 = 1.SK2 & 0.SK1 = 0.SK2 by PFDef2;
+    hence thesis by AS,A1,A2,PFDef2;
+  end;
+
+theorem PF8:
+  SK1 is Subfield of SK2 iff for x st x in SK1 holds x in SK2
+   proof
+     thus SK1 is Subfield of SK2 implies
+     for x st x in SK1 holds x in SK2 by PF4;
+     assume AS: for x st x in SK1 holds x in SK2;
+     the carrier of SK1 c= the carrier of SK2
+     proof
+       let x be set;
+       assume x in the carrier of SK1;
+       then reconsider x as Element of SK1;
+       x in SK1 by STRUCT_0:def 5;
+       then x in SK2 by AS;
+       hence thesis by STRUCT_0:def 5;
+     end;
+     hence thesis by PF7;
+   end;
+
+theorem PF9:
+  for SK1,SK2 be strict Subfield of K holds
+  SK1 = SK2 iff the carrier of SK1 = the carrier of SK2
+  proof
+    let SK1, SK2 be strict Subfield of K;
+    thus SK1 = SK2 implies
+    the carrier of SK1 = the carrier of SK2;
+    assume AS: the carrier of SK1 = the carrier of SK2;
+    then A0: SK2 is strict Subfield of SK1 by PF7;
+    SK1 is strict Subfield of SK2 by AS,PF7;
+    hence thesis by A0,PF5;
+  end;
+
+theorem
+  for SK1, SK2 be strict Subfield of K holds
+  (SK1 = SK2 iff for x holds x in SK1 iff x in SK2)
+  proof
+    let SK1,SK2 be strict Subfield of K;
+    thus SK1 = SK2 implies for x holds x in SK1 iff x in SK2;
+    assume for x holds x in SK1 iff x in SK2;
+    then SK1 is strict Subfield of SK2
+    & SK2 is strict Subfield of SK1 by PF8;
+    hence thesis by PF5;
+  end;
+
+registration
+  let K be finite Field;
+  cluster finite Subfield of K;
+  existence
+  proof
+    reconsider L = K as Subfield of K by PF1;
+    take L;
+    thus thesis;
+  end;
+end;
+
+definition
+  let K be finite Field;
+  redefine func card K -> Element of NAT;
+  coherence
+  proof
+    card the carrier of K in NAT;
+    hence thesis;
+  end;
+end;
+
+registration
+  cluster strict finite Field;
+  existence
+  proof
+    Z3 is finite by MOD_2:def 23;
+    hence thesis by MOD_2:37;
+  end;
+end;
+
+theorem
+  for K be strict finite Field,
+  SK1 be strict Subfield of K st
+  card K = card SK1 holds SK1 = K
+  proof
+    let K be strict finite Field, SK1 be strict Subfield of K;
+    assume
+A1: card K = card SK1;
+A2: the carrier of SK1 = the carrier of K
+    proof
+      assume A21: the carrier of SK1 <> the carrier of K;
+ A22: the carrier of SK1 c= the carrier of K by PFDef2; then
+      the carrier of SK1 c< the carrier of K by A21,XBOOLE_0:def 8;
+      hence contradiction by A1,A22,CARD_2:67;
+    end;
+    K is Subfield of K by PF1;
+    hence thesis by A2,PF9;
+  end;
+
+definition let IT be Field;
+  attr IT is prime means :PFDef3:
+  K1 is strict Subfield of IT implies K1 = IT;
+end;
+
+notation let p be Prime;
+  synonym GF(p) for INT.Ring(p);
+end;
+
+registration let p be Prime;
+  cluster GF(p) -> finite;
+  coherence;
+end;
+
+registration let p be Prime;
+  cluster GF(p) -> prime;
+  coherence
+  proof
+    set K = GF(p);
+P0: p > 1 by INT_2:def 5;
+    now let K1 be strict Subfield of K;
+      set C = the carrier of K;
+      set C1 = the carrier of K1;
+      set n1 = p-1;
+      reconsider n1 as Element of NAT by P0,NAT_1:20;
+  A1: for x st x in K holds x in K1
+      proof
+    A5: for n be Element of NAT st n in Segm(p) holds n in C1
+        proof
+          defpred P[Nat] means $1 in C1;
+          0 in Segm(p) by NAT_1:45;
+          then 0.K = 0 by FUNCT_7:def 1;
+          then 0.K1 = 0 by PFDef2;
+          then A2: P[0];
+      A3: now let n be Element of NAT such that B0: 0<=n & n<n1;
+            assume B1: P[n];
+        B2: 1.K1 = 1.K by PFDef2
+            .= 1 by P0,INT_3:24;
+            then B3: [1,n] in [:C1,C1:] by B1,ZFMISC_1:106;
+        B4: the addF of K1 = (the addF of K) || C1 by PFDef2;
+        B6: 1+n < n1+1 by B0,XREAL_1:8;
+            n < n1+1 by B0,NAT_1:13;
+            then B7: 1 in Segm(p) & n in Segm(p) by P0,NAT_1:45;
+            (the addF of K1).(1,n) = (addint(p)).(1,n) by B3,B4,FUNCT_1:72
+            .= (1+n) mod p by B7,GR_CY_1:def 5
+            .= 1+n by B6,INT_3:10;
+            hence P[n+1] by B1,B2,BINOP_1:29;
+          end;
+      A4: for n being Element of NAT st 0 <= n & n <= n1 holds P[n]
+          from INT_1:sch 7(A2,A3);
+          thus for n be Element of NAT st n in Segm(p) holds P[n]
+          proof
+            let n be Element of NAT such that B0: n in Segm(p);
+            0 <= n & n < n1+1 by B0,ALGSEQ_1:10;
+            then 0 <= n & n <= n1 by NAT_1:13;
+            hence P[n] by A4;
+          end;
+        end;
+        thus for x st x in K holds x in K1
+        proof
+          let x be set such that B0: x in K;
+          x in C by B0,STRUCT_0:def 5;
+          then x in C1 by A5;
+          hence x in K1 by STRUCT_0:def 5;
+        end;
+      end;
+      K is strict Subfield of K by PF1;
+      then K is strict Subfield of K1 by A1,PF8;
+      hence K1 = K by PF5;
+    end;
+    then K1 is strict Subfield of K implies K1 = K;
+    hence thesis by PFDef3;
+  end;
+end;
+
+registration
+  cluster prime Field;
+  existence
+  proof
+    take GF(the Prime);
+    thus thesis;
+  end;
+end;
+
+begin :: 2. Arithmetic in $\bf{GF}(p)$
+
+reserve p for Prime;
+reserve a,b,c for Element of GF(p);
+reserve F for FinSequence of GF(p);
+
+EXLm1:
+for M be non empty multMagma, a be Element of M, n be Nat
+holds (power M).(a,n) is Element of M
+proof
+  let M be non empty multMagma;
+  let a be Element of M;
+  defpred P[Nat] means
+  (power M).(a,$1) is Element of M;
+  (power M).(a,0) = 1_M by GROUP_1:def 8;
+  then P0: P[0];
+P1: now let n be Nat;
+    assume P[n]; then
+    reconsider b = (power M).(a,n) as Element of M;
+    n-0 is Element of NAT by NAT_1:21;
+    then (power M).(a,n+1) = b*a by GROUP_1:def 8;
+    hence P[n+1];
+  end;
+  for n be Nat holds P[n] from NAT_1:sch 2(P0,P1);
+  hence thesis;
+end;
+
+theorem XLm2:
+  0 = 0.(GF p)
+  proof
+    0 in Segm p by NAT_1:45;
+    hence 0 = 0.(GF(p)) by FUNCT_7:def 1;
+  end;
+
+theorem XLm3:
+  1 = 1.(GF p)
+  proof
+    1 < p by INT_2:def 5;
+    then 1 in Segm p by NAT_1:45;
+    hence thesis by FUNCT_7:def 1;
+  end;
+
+theorem GF1:
+  ex n1 st a = n1 mod p
+  proof
+    reconsider a as Element of Segm(p);
+    0<=a & a<p by ALGSEQ_1:10;
+    then a = a mod p by INT_3:10;
+    hence thesis;
+  end;
+
+theorem GF2:
+  ex a st a = i mod p
+  proof
+    reconsider b = i mod p as Integer;
+    b in NAT by INT_1:16,84;
+    then reconsider b as Nat;
+    b<p by INT_1:85;
+    then b in Segm(p) by ALGSEQ_1:10;
+    hence thesis;
+  end;
+
+theorem GF3:
+  a = i mod p & b = j mod p implies a+b = (i+j) mod p
+  proof
+    assume AS: a = i mod p & b = j mod p;
+    a+b = ((i mod p) + (j mod p)) mod p by AS,GR_CY_1:def 5;
+    hence thesis by INT_3:14;
+  end;
+
+theorem GF4:
+  a = i mod p implies -a = (p-i) mod p
+  proof
+    assume AS: a = i mod p;
+    consider b be Element of GF(p) such that
+P2: b = (p-i) mod p by GF2;
+    a+b = (i+(p-i)) mod p by AS,P2,GF3
+    .= 0 by INT_1:77
+    .= 0.GF(p) by XLm2;
+    hence thesis by P2,VECTSP_1:63;
+  end;
+
+theorem
+  a = i mod p & b = j mod p implies a-b = (i-j) mod p
+  proof
+    assume AS: a = i mod p & b = j mod p; then
+P0: -b = (p-j) mod p by GF4;
+    a-b = (i+(p-j)) mod p by AS,P0,GF3
+    .= (i-j+1*p) mod p;
+    hence thesis by INT_3:8;
+  end;
+
+theorem GF6:
+  a = i mod p & b = j mod p implies a*b = (i*j) mod p
+  proof
+    assume a = i mod p & b = j mod p; then
+    a*b = ((i mod p) * (j mod p)) mod p by INT_3:def 11;
+    hence thesis by INT_3:15;
+  end;
+
+theorem
+  a = i mod p & i*j mod p = 1 implies a" = j mod p
+  proof
+    assume AS: a = i mod p & i*j mod p = 1;
+    consider b be Element of GF(p) such that P0: b = j mod p by GF2;
+P1: p > 1 by INT_2:def 5;
+P3: b*a = 1 by AS,P0,GF6
+    .= 1.GF(p) by P1,INT_3:24; then
+    a <> 0.(GF(p)) by VECTSP_1:39;
+    hence thesis by P0,P3,VECTSP_1:def 22;
+  end;
+
+theorem GF8:
+  a = 0 or b = 0 iff a*b = 0
+  proof
+    a = 0.GF(p) or b = 0.GF(p) iff a*b = 0.GF(p) by VECTSP_1:44;
+    hence thesis by XLm2;
+  end;
+
+theorem EX1:
+  a |^ 0 = 1_GF(p) & a |^ 0 = 1
+  proof
+    thus P1: a |^ 0 = 1_GF(p) by BINOM:8;
+    p > 1 by INT_2:def 5;
+    hence a |^ 0 = 1 by P1,INT_3:24;
+  end;
+
+EXLm3: (power GF(p)).(a,1) = a
+proof
+  consider b be Element of GF(p) such that
+P0: b = (power GF(p)).(a,0);
+  (power GF(p)).(a,0+1) = b*a by P0,GROUP_1:def 8
+  .= (1_GF(p))*a by P0,GROUP_1:def 8
+  .= a by GROUP_1:def 5;
+  hence thesis;
+end;
+
+EXLm4: (power GF(p)).(a,2) = a*a
+proof
+  consider b be Element of GF(p) such that
+  P0: b = (power GF(p)).(a,1);
+  (power GF(p)).(a,1+1) = b*a by P0,GROUP_1:def 8
+  .= a*a by P0,EXLm3;
+  hence thesis;
+end;
+
+theorem
+  a |^ 2 = a*a by EXLm4;
+
+theorem EX4:
+  a = n1 mod p implies a|^n = n1|^n mod p
+  proof
+P0: p > 1 by INT_2:def 5;
+    assume AS: a = n1 mod p;
+    defpred P[Nat] means
+    (power GF(p)).(a,$1) = n1|^($1) mod p;
+    a|^0 = 1 by EX1;
+    then P1: a|^0 = 1 mod p by P0,INT_3:10;
+P2: P[0] by P1,NEWTON:9;
+P3: now let n be Nat;
+      assume A0: P[n];
+      reconsider b = (power GF(p)).(a,n) as Element of GF(p) by EXLm1;
+      n-0 is Element of NAT by NAT_1:21;
+      then (power GF(p)).(a,n+1) = b*a by GROUP_1:def 8
+      .= (n1|^n*n1) mod p by AS,A0,GF6
+      .= n1|^(n+1) mod p by NEWTON:11;
+      hence P[n+1];
+    end;
+    for n be Nat holds P[n] from NAT_1:sch 2(P2,P3);
+    hence thesis;
+  end;
+
+theorem EX5:
+  a|^(n+1) = a|^n * a
+  proof
+    consider n1 be Nat such that P1: a = n1 mod p by GF1;
+    a|^n = n1|^n mod p by P1,EX4; then
+    a|^n * a = (n1|^n*n1) mod p by P1,GF6
+    .= n1|^(n+1) mod p by NEWTON:11;
+    hence thesis by P1,EX4;
+  end;
+
+theorem EX6:
+  a <> 0 implies a |^ n <> 0
+  proof
+    assume AS1: a <> 0;
+    consider n1 be Nat such that P1: a = n1 mod p by GF1;
+    not p divides n1 by AS1,P1,INT_1:89;
+    then not p divides n1|^n by NAT_3:5;
+    then n1|^n mod p <> 0 by INT_1:89;
+    hence thesis by P1,EX4;
+  end;
+
+theorem EX7:
+  for F being Abelian add-associative right_zeroed right_complementable
+  associative commutative well-unital almost_left_invertible distributive
+  (non empty doubleLoopStr), x,y being Element of F holds x*x=y*y
+    iff x=y or x=-y
+    proof
+      let F be Abelian add-associative right_zeroed right_complementable
+      associative commutative well-unital almost_left_invertible
+      distributive (non empty doubleLoopStr), x,y be Element of F;
+  P1: (x-y)*(x+y) =(x-y)*x +(x-y)*y by VECTSP_1:22
+      .=x*x -x*y +(x-y)*y by VECTSP_1:43
+      .=x*x -x*y + (y*x-y*y) by VECTSP_1:43
+      .=(x*x -x*y + y*x) + -y*y by RLVECT_1:def 6
+      .=(x*x + ((-x*y) + y*x)) + -y*y by RLVECT_1:def 6
+      .=(x*x + (y*x  - x*y )) + -y*y
+      .= (x*x + (x-x)*y ) + -y*y by VECTSP_1:43
+      .= (x*x + 0.F * y )-y*y by RLVECT_1:16
+      .= (x*x + 0.F )-y*y by VECTSP_1:39
+      .= x*x - y*y by RLVECT_1:def 7;
+      hereby assume A1: x*x=y*y;
+        (x-y)*(x+y) = 0.F by P1,A1,RLVECT_1:16;
+        then x-y =0.F or x + y = 0.F by VECTSP_1:44;
+        hence x = y or x =-y by RLVECT_1:19,35;
+      end;
+      assume x = y or x =-y;
+      then x-y =0.F or x+y = 0.F by RLVECT_1:16;
+      hence x*x = y*y by P1,RLVECT_1:35,VECTSP_1:36;
+    end;
+
+theorem EX8:
+  for p be Prime, x be Element of GF(p) st 2 < p & x+x = 0.(GF p)
+  holds x = 0.(GF(p))
+  proof
+    let p be Prime, x be Element of GF(p);
+    assume AS:2 < p & x+x = 0.(GF(p));
+    x in Segm p; then
+    reconsider Ix=x as Element of NAT;
+A1: 1= 1.(GF(p)) by XLm3;
+B1: 1+1 < p by AS;
+A2: 1.(GF(p))+1.(GF(p)) = 2 by A1,B1,INT_3:17;
+    set d = 1.(GF(p))+1.(GF(p));
+A3: d*x = 2*Ix mod p by A2,INT_3:def 11;
+    x+x =1.(GF(p))*x +x by VECTSP_1:def 16
+    .=1.(GF(p))*x +1.(GF(p))*x by VECTSP_1:def 16
+    .= 2*Ix mod p by A3,VECTSP_1:def 18; then
+    2*Ix mod p = 0 by AS,XLm2; then
+    2*Ix - (2*Ix div p) * p= 0 by INT_1:def 10; then
+D6: p divides 2*Ix by INT_1:def 3;
+    p divides Ix by AS,D6,EULER_1:14,INT_2:44,47; then
+    Ix = p * (Ix div p) by NAT_D:3; then
+    Ix - (Ix div p)*p = 0; then
+D3: Ix mod p = 0 by INT_1:def 10;
+    Ix < p by NAT_1:45;
+    then Ix = 0 by D3,INT_3:10;
+    hence x = 0.(GF(p)) by XLm2;
+  end;
+
+theorem EX9:
+  a|^n * b|^n = (a*b) |^ n
+  proof
+    n in NAT by ORDINAL1:def 13;
+    hence thesis by BINOM:10;
+  end;
+
+theorem EX10:
+  a <> 0 implies (a") |^n = (a|^n)"
+  proof
+    assume AS: a <> 0;
+P0: p > 1 by INT_2:def 5;
+    consider n1 be Nat such that P1: a = n1 mod p by GF1;
+    consider n2 be Nat such that P2: a" = n2 mod p by GF1;
+P3: a|^n = n1|^n mod p by P1,EX4;
+P4: (a") |^ n = (n2|^n) mod p by P2,EX4;
+P5: (n1 * n2) |^ n mod p = (n1|^n * n2|^n) mod p by NEWTON:12
+    .= (a|^n) * ((a") |^ n) by P3,P4,GF6;
+    a <> 0.GF(p) by AS,XLm2;
+    then a" * a = 1.GF(p) by VECTSP_1:def 22
+    .= 1 by XLm3;
+    then (n1*n2) mod p = 1 by P1,P2,GF6;
+    then (n1 * n2) |^ n mod p = 1 by P0,PEPIN:36;
+    then P7: ((a") |^ n) * (a|^n) = 1.GF(p) by P0,P5,INT_3:24;
+    then a|^n <> 0.GF(p) by VECTSP_1:39;
+    hence thesis by P7,VECTSP_1:def 22;
+  end;
+
+theorem EX11:
+  a|^n1 * a|^n2 = a|^(n1+n2)
+  proof
+    n1 in NAT & n2 in NAT by ORDINAL1:def 13;
+    hence thesis by BINOM:11;
+  end;
+
+theorem EX12:
+  (a|^n1) |^ n2 = a|^(n1*n2)
+  proof
+    n1 in NAT & n2 in NAT by ORDINAL1:def 13;
+    hence thesis by BINOM:12;
+  end;
+
+registration let p;
+  cluster MultGroup GF(p) -> cyclic;
+  coherence
+  proof
+    MultGroup GF(p) is finite Subgroup of MultGroup GF(p) by GROUP_2:63;
+    hence thesis by GR_CY_3:38;
+  end;
+end;
+
+theorem LMCycle4:
+  for x be Element of MultGroup GF(p), x1 be Element of GF(p),
+  n be Nat st x = x1 holds x|^n = x1 |^n
+  proof
+    let x be Element of MultGroup GF(p), x1 be Element of GF(p), n be Nat;
+    assume
+    AS: x = x1;
+    defpred P[Nat] means x|^$1 = x1 |^$1;
+    A1: for n be Nat st P[n] holds P[n+1]
+    proof
+      let n be Nat;
+      A2: x|^(n+1) = (x|^n)*x by GROUP_1:66;
+      A3: x1 |^(n+1) = (x1 |^n)*x1 by EX5;
+      assume x|^n = x1 |^n;
+      hence thesis by AS,A2,A3,UNIROOTS:19;
+    end;
+    x|^0 = 1_(MultGroup GF(p)) by GROUP_1:43
+    .= 1_GF(p) by UNIROOTS:20
+    .= x1 |^0 by EX1; then
+A4: P[0];
+    for n be Nat holds P[n] from NAT_1:sch 2(A4,A1);
+    hence thesis;
+  end;
+
+theorem LMCycle5:
+  ex g be Element of GF(p) st
+  for a be Element of GF(p) st a <> 0.GF(p) holds
+  ex n be Nat st a = g|^n
+  proof
+    consider g be Element of MultGroup GF(p) such that
+P1: for a be Element of MultGroup GF(p)
+    holds ex n be Nat st a= g|^n by GR_CY_1:42;
+    reconsider g0=g as Element of GF(p) by UNIROOTS:22;
+    take g0;
+    now let a be Element of GF(p);
+      assume a <> 0.GF(p); then
+      P0:not a in {0.GF(p)} by TARSKI:def 1;
+      the carrier of GF(p) = (the carrier of MultGroup GF(p))
+      \/ {0.GF(p)} by UNIROOTS:18; then
+      reconsider a0 = a as Element of MultGroup GF(p) by P0,XBOOLE_0:def 3;
+      consider n be Nat such that
+      P2: a0= g|^n by P1;
+      take n;
+      thus a = g0|^n by P2,LMCycle4;
+    end;
+    hence thesis;
+  end;
+
+begin :: 3.Relation between Legendre symbol and the number of roots in $\bf{GF}(p)$
+
+definition let p, a;
+  attr a is quadratic_residue means :QRDef1:
+  a <> 0 & ex x being Element of GF(p) st x|^2 = a;
+  attr a is not_quadratic_residue means :QRDef2:
+  a <> 0 & not ex x being Element of GF(p) st x|^2 = a;
+end;
+
+theorem QR1:
+  a <> 0 implies a|^2 is quadratic_residue
+  proof
+    assume P0: a<>0;
+    reconsider b = a|^2 as Element of GF p;
+    b <> 0 by P0,EX6;
+    hence thesis by QRDef1;
+  end;
+
+registration let p be Prime;
+  cluster 1.(GF p) -> quadratic_residue;
+  correctness
+  proof
+P0: p > 1 by INT_2:def 5;
+    reconsider a = 1.GF(p) as Element of GF p;
+P2: a = 1 by P0,INT_3:24;
+    a|^2 = (1.GF(p))*(1.GF(p)) by EXLm4
+    .= 1_GF(p) by GROUP_1:def 5;
+    hence thesis by P2,QR1;
+  end;
+end;
+
+definition let p, a;
+  func Lege_p(a) -> Integer equals  :QRDef3:
+  0 if a = 0,
+  1 if a is quadratic_residue
+  otherwise -1;
+  coherence;
+  consistency by QRDef1;
+end;
+
+theorem QR10:
+  a is not_quadratic_residue iff Lege_p(a) = -1
+  proof
+    hereby assume a is not_quadratic_residue;
+      then a <> 0 & not ex x being Element
+      of GF(p) st x|^2= a by QRDef2;
+      then a <> 0 & not a is quadratic_residue by QRDef1;
+      hence Lege_p(a) = -1 by QRDef3;
+    end;
+    assume Lege_p(a) = -1;
+    then a <> 0 & not a is quadratic_residue by QRDef3;
+    then a <> 0 & not ex x being Element of GF(p)
+    st x|^2 = a by QRDef1;
+    hence thesis by QRDef2;
+  end;
+
+theorem QR11:
+  a is quadratic_residue iff Lege_p(a) = 1
+  proof
+    thus a is quadratic_residue implies Lege_p(a) = 1 by QRDef3;
+    assume Lege_p(a) = 1;
+    then a <> 0 & Lege_p(a) <> -1 by QRDef3;
+    hence thesis by QRDef3;
+  end;
+
+theorem QR12:
+  a = 0 iff Lege_p(a) = 0
+  proof
+    thus a = 0 implies Lege_p(a) = 0 by QRDef3;
+    assume Lege_p(a) = 0;
+    then not a is quadratic_residue & Lege_p(a) <> -1 by QRDef3;
+    hence a = 0 by QRDef3;
+  end;
+
+theorem
+  a <> 0 implies Lege_p(a|^2) = 1
+  proof
+    assume a <> 0;
+    then a|^2 is quadratic_residue by QR1;
+    hence Lege_p(a|^2) = 1 by QR11;
+  end;
+
+theorem QR14:
+  Lege_p(a*b) = Lege_p(a) * Lege_p(b)
+  proof
+    per cases;
+    suppose P0: a is quadratic_residue;
+      then P1: Lege_p(a) = 1 by QR11;
+      per cases;
+      suppose A0: b is quadratic_residue;
+        then A1: Lege_p(b) = 1 by QR11;
+    A2: a <> 0 & ex x being Element of GF(p) st x|^2 = a by P0,QRDef1;
+        b <> 0 & ex x being Element of GF(p) st x|^2 = b by A0,QRDef1;
+        then A4: a*b <> 0 by A2,GF8;
+        ex x being Element of GF(p) st x|^2 = a*b
+        proof
+          consider a1 be Element of GF(p) such that
+          B0: a1|^2 = a by P0,QRDef1;
+          consider b1 be Element of GF(p) such that
+          B1: b1|^2 = b by A0,QRDef1;
+          (a1|^2) * (b1|^2) = (a1*b1) |^ 2 by EX9;
+          hence thesis by B0,B1;
+        end;
+        then a*b is quadratic_residue by A4,QRDef1;
+        hence thesis by P1,A1,QR11;
+      end;
+      suppose A0: b = 0;
+        then Lege_p(b) = 0 by QRDef3;
+        hence thesis by A0,GF8;
+      end;
+      suppose A0: b <> 0 & not b is quadratic_residue;
+        then A1: Lege_p(b) = -1 by QRDef3;
+        A2: a <> 0 &
+        ex x being Element of GF(p) st x|^2 = a by P0,QRDef1;
+        A4: a*b <> 0 by A0,A2,GF8;
+        not ex x being Element of GF(p) st x|^2 = a*b
+        proof
+          given xab being Element of GF(p) such that
+          L1: xab|^2 = a*b;
+          consider xa being Element of GF(p) such that
+          L2: xa|^2 = a by P0,QRDef1;
+          L3: xa|^2 <> 0.GF(p) by A2,L2,XLm2;
+          L4: xa <> 0
+          proof
+            assume xa =0; then
+            xa = 0.GF(p) by XLm2; then
+            xa*xa=0.GF(p) by VECTSP_1:44; then
+            xa|^2 = 0.GF(p) by EXLm4;
+            hence contradiction by L2,A2,XLm2;
+          end;
+          (xa"*xab) |^2 = (xa") |^2* (a*b) by L1,EX9
+          .=(xa") |^2* (xa|^2) *b by L2,GROUP_1:def 4
+          .=(xa|^2)" * (xa|^2) *b by EX10,L4
+          .= 1.GF(p) *b by L3,VECTSP_1:def 22
+          .= b by VECTSP_1:def 19;
+          hence contradiction by A0,QRDef1;
+        end;
+        then a*b is not_quadratic_residue by A4,QRDef2;
+        hence thesis by P1,A1,QR10;
+      end;
+    end;
+    suppose P2: not a is quadratic_residue;
+      now per cases;
+        suppose P3: a = 0;
+          then Lege_p(a) = 0 by QR12;
+          hence thesis by P3,GF8;
+        end;
+        suppose P4: a <> 0;
+          then P5: Lege_p(a) = -1 by P2,QRDef3;
+          per cases;
+          suppose A0: b is quadratic_residue;
+            then A1: Lege_p(b) = 1 by QR11;
+            A3: b <> 0 &
+            ex x being Element of GF(p) st x|^2 = b by A0,QRDef1;
+            then A4: a*b <> 0 by P4,GF8;
+            not ex x being Element of GF(p) st x|^2 = a*b
+            proof
+              given xab being Element of GF(p) such that
+            L1: xab|^2 = a*b;
+            consider xb being Element of GF(p) such that
+            L2: xb|^2 = b by A0,QRDef1;
+            L3: xb|^2 <> 0.GF(p) by A3,L2,XLm2;
+            L4: xb <> 0
+            proof
+              assume xb = 0; then
+              xb = 0.GF(p) by XLm2; then
+              xb*xb=0.GF(p) by VECTSP_1:44; then
+              xb|^2 = 0.GF(p) by EXLm4;
+              hence contradiction by L2,A3,XLm2;
+            end;
+            (xab*xb") |^2 = (a*b) * (xb") |^2 by L1,EX9
+            .= a * ((xb|^2)  *(xb") |^2) by L2,GROUP_1:def 4
+            .= a * ((xb|^2) * (xb|^2)" ) by EX10,L4
+            .= a * 1.GF(p) by L3,VECTSP_1:def 22
+            .= a by VECTSP_1:def 19;
+            hence contradiction by P2,P4,QRDef1;
+          end;
+          then a*b is not_quadratic_residue by A4,QRDef2;
+          hence thesis by P5,A1,QR10;
+        end;
+        suppose A0: b = 0;
+          then Lege_p(b) = 0 by QR12;
+          hence thesis by A0,GF8;
+        end;
+        suppose A0: b <> 0 & not b is quadratic_residue;
+          then A1: Lege_p(b) = -1 by QRDef3;
+      A4: a*b <> 0 by P4,A0,GF8;
+          ex x being Element of GF(p) st x|^2 = a*b
+          proof
+            consider g be Element of GF(p) such that
+          XP1:for a be Element of GF(p) st a <> 0.GF(p)
+              holds ex n be Nat st a= g|^n by LMCycle5;
+              a <> 0.GF(p) by P4,XLm2; then
+              consider na be Nat such that
+         XP2: a= g|^na by XP1;
+              b <> 0.GF(p) by A0,XLm2; then
+              consider nb be Nat such that
+         XP3: b= g|^nb by XP1;
+         XP4: na = (na div 2)*2 + (na mod 2) by NAT_D:2;
+         XP5: nb = (nb div 2)*2 + (nb mod 2) by NAT_D:2;
+              na mod 2 <> 0
+              proof
+                assume XP61: na mod 2 = 0;
+                reconsider nn= (na div 2) as Element of NAT;
+                a = (g|^nn) |^2 by XP2,XP4,XP61,EX12;
+                hence contradiction by P2,P4,QRDef1;
+              end; then
+         XP7: na mod 2 = 1 by NAT_D:12;
+              nb mod 2 <> 0
+              proof
+                assume XP61: nb mod 2 = 0;
+                reconsider nn= (nb div 2) as Element of NAT;
+                b = (g|^nn) |^2 by XP3,XP5,XP61,EX12;
+                hence contradiction by A0,QRDef1;
+              end; then
+         XP9: nb mod 2 = 1 by NAT_D:12;
+              reconsider nc = ((na div 2)+(nb div 2) + 1) as Nat;
+         XP10:na+nb = ((na div 2)*2 + 1) + nb by XP7,NAT_D:2
+              .=((na div 2)*2 + 1) + ((nb div 2)*2 + 1) by XP9,NAT_D:2
+              .=nc * 2;
+              a*b =g|^(na+nb) by XP2,XP3,EX11
+              .= (g|^nc) |^2 by XP10,EX12;
+              hence thesis;
+            end;
+            then a*b is quadratic_residue by A4,QRDef1;
+            hence thesis by P5,A1,QR11;
+          end;
+        end;
+      end;
+      hence thesis;
+    end;
+  end;
+
+theorem QR15:
+  a <> 0 & n mod 2 = 0 implies Lege_p(a|^n) = 1
+  proof
+    assume AS: a <> 0 & n mod 2 = 0;
+P0: n = (n div 2) * 2 + (n mod 2) by INT_1:86
+    .= (n div 2) * 2 by AS;
+    reconsider n1 = n div 2 as Nat;
+    (a|^n1) |^ 2 is quadratic_residue by AS,QR1,EX6;
+    then a|^n is quadratic_residue by P0,EX12;
+    hence thesis by QRDef3;
+  end;
+
+theorem
+  n mod 2 = 1 implies Lege_p(a|^n) = Lege_p(a)
+  proof
+    assume AS: n mod 2 = 1;
+    P0: n = (n div 2) * 2 + 1 by AS,INT_1:86;
+    reconsider n1 = n - 1 as Nat by P0;
+    a |^ (n1+1) = a |^ n1 * a by EX5;
+    then P2: Lege_p(a|^n) = Lege_p(a |^ n1) * Lege_p(a) by QR14;
+    per cases;
+    suppose a = 0;
+      then Lege_p(a) = 0 by QRDef3;
+      hence thesis by P2;
+    end;
+    suppose A0: a <> 0;
+      n-1 mod 2 = 0 + ((n div 2) * 2) mod 2 by P0
+      .= 0 mod 2 by INT_3:8
+      .= 0 by NAT_D:26;
+      then Lege_p(a |^ n1) = 1 by A0,QR15;
+      hence thesis by P2;
+    end;
+  end;
+
+theorem QRRT1:
+  2 < p implies card({b : b|^2 = a}) = 1 + Lege_p(a)
+  proof
+    assume AS:2 < p;
+    per cases;
+    suppose A1: a is quadratic_residue; then
+      consider x being Element of GF(p) such that
+  P1: x|^2= a by QRDef1;
+  P2: x in {b : b|^2 = a} by P1;
+      (-x) |^2 = (-x)*(-x) by EXLm4
+      .=x*x by VECTSP_1:42
+      .=a by P1,EXLm4; then
+      -x in {b : b|^2 = a}; then
+      P4: {x,-x } c= {b : b|^2 = a} by P2,ZFMISC_1:38;
+      P5: x <> -x
+      proof
+        assume x = -x; then
+        x+x = 0.(GF(p)) by VECTSP_1:63; then
+        F2: x = 0.(GF(p)) by AS,EX8;
+        x|^2 = (0.(GF(p))) * (0.(GF(p))) by F2,EXLm4
+        .= 0.(GF(p)) by VECTSP_1:44
+        .= 0 by XLm2;
+        hence contradiction by P1,A1,QRDef1;
+      end;
+      now let y be set;
+        assume y in {b : b|^2 = a}; then
+        consider z be Element of GF(p) such that
+   P52: y=z & z|^2 = a;
+        z*z = z|^2 by EXLm4
+        .=x*x by P1,P52,EXLm4; then
+        z = x or z = -x by EX7;
+        hence y in {x,-x } by P52,TARSKI:def 2;
+      end; then
+      {b : b|^2 = a} c={x,-x } by TARSKI:def 3;
+      hence card ({b : b|^2 = a}) = card ({x,-x }) by P4,XBOOLE_0:def 10
+      .= 1+1 by P5,CARD_2:76
+      .= 1+Lege_p(a) by A1,QRDef3;
+    end;
+    suppose A1: not a is quadratic_residue;
+      now per cases;
+        suppose A10: a = 0;
+          thus card({b : b|^2 = a})=1+Lege_p(a)
+          proof
+            now let x be set;
+              assume x in {b : b|^2 = a};
+              then consider b such that
+              A101: x = b & b|^2 = 0 by A10;
+              b = 0 by EX6,A101
+              .= 0.(GF(p)) by XLm2;
+              hence x in {0.(GF(p))} by A101,TARSKI:def 1;
+            end; then
+            A11: {b : b|^2 = a} c= {0.(GF(p))} by TARSKI:def 3;
+            (0.(GF(p))) |^2 = (0.(GF(p))) * (0.(GF(p))) by EXLm4
+            .= 0.(GF(p)) by VECTSP_1:44
+            .= 0 by XLm2; then
+            0.(GF(p)) in {b : b|^2 = a} by A10; then
+            {0.(GF(p))} c= {b : b|^2 = a} by ZFMISC_1:37; then
+            {b : b|^2 = a} = {0.(GF(p))} by A11,XBOOLE_0:def 10;
+            hence card ({b : b|^2 = a}) = 1+0 by CARD_2:60
+            .= 1+ Lege_p(a) by A10,QRDef3;
+          end;
+        end;
+        suppose A11: a <> 0;
+          A13: {b : b|^2 = a} = {}
+          proof
+            assume {b : b|^2 = a} <> {}; then
+            consider x be set
+            such that A131: x in {b : b|^2 = a} by XBOOLE_0:def 1;
+            ex b st x = b & b|^2 = a by A131;
+            hence contradiction by A1,QRDef1,A11;
+          end;
+          thus card({b : b|^2 = a}) = 1 + - 1 by A13
+          .= 1+ Lege_p(a) by A1,A11,QRDef3;
+        end;
+      end;
+      hence card({b : b|^2 = a})=1+Lege_p(a);
+    end;
+  end;
+
+begin :: 4.Set of points on an elliptic curve over $\bf{GF}(p)$
+
+definition let K be Field;
+  func ProjCo(K) -> non empty Subset of
+  [:the carrier of K, the carrier of K, the carrier of K:] equals
+  [:the carrier of K, the carrier of K, the carrier of K:] \ {[0.K,0.K,0.K]};
+  correctness
+  proof
+    [1.K,1.K,1.K] <> [0.K,0.K,0.K] by MCART_1:28; then
+    not [1.K,1.K,1.K] in {[0.K,0.K,0.K]} by TARSKI:def 1;
+    hence thesis by XBOOLE_0:def 5;
+  end;
+end;
+
+theorem GFProjCo:
+  ProjCo(GF(p)) = [:the carrier of GF(p),
+  the carrier of GF(p), the carrier of GF(p):] \ {[0,0,0]}
+  proof
+    0.GF(p) = 0 by XLm2;
+    hence thesis;
+  end;
+
+reserve Px,Py,Pz for Element of GF(p);
+
+definition
+  let p be Prime;
+  let a, b be Element of GF(p);
+  func Disc(a,b,p) -> Element of GF(p) means
+  for g4, g27 be Element of GF(p) st g4 = 4 mod p & g27 = 27 mod p
+  holds it = g4*a|^2 + g27*b|^3;
+  existence
+  proof
+    consider g40 be Element of GF(p) such that P0: g40 = 4 mod p by GF2;
+    consider g270 be Element of GF(p) such that P1: g270 = 27 mod p by GF2;
+    reconsider d = g40*a|^2 + g270*b|^3 as Element of GF(p);
+    take d;
+    thus thesis by P0,P1;
+  end;
+  uniqueness
+  proof
+    let d1,d2 be Element of GF(p);
+    assume
+    A1: for g4, g27 be Element of GF(p) st g4 = 4 mod p & g27 = 27 mod p
+    holds d1 = g4*a|^2 + g27*b|^3;
+    assume
+A2: for g4, g27 be Element of GF(p) st g4 = 4 mod p & g27 = 27 mod p
+    holds d2 = g4*a|^2 + g27*b|^3;
+    consider g4 be Element of GF(p) such that P0: g4 = 4 mod p by GF2;
+    consider g27 be Element of GF(p) such that
+P1: g27 = 27 mod p by GF2;
+    thus d1 = g4*a|^2 + g27*b|^3 by A1,P0,P1
+    .= d2 by A2,P0,P1;
+  end;
+end;
+
+definition
+  let p be Prime;
+  let a, b be Element of GF(p);
+  func EC_WEqProjCo(a,b,p) -> Function of
+  [:the carrier of GF(p), the carrier of GF(p), the carrier of GF(p):],
+    GF(p) means :ECDefEQ:
+  for P be Element of [:the carrier of GF(p),
+  the carrier of GF(p), the carrier of GF(p):] holds
+  it. P = ((P`2) |^2)*(P`3)-((P`1) |^3 +a*(P`1)*(P`3) |^2+b*(P`3) |^3);
+  existence
+  proof
+    set DX = [:the carrier of GF(p),
+    the carrier of GF(p), the carrier of GF(p):];
+    deffunc F(Element of DX) = (($1`2) |^2)*($1`3)-(($1`1) |^3
+    +a*($1`1)*($1`3) |^2+b*($1`3) |^3);
+    consider f be Function of DX,the carrier of GF(p)
+    such that P1: for x being Element of DX holds f.x = F(x)
+    from FUNCT_2:sch 4;
+    take f;
+    thus thesis by P1;
+    end;
+    uniqueness
+    proof
+      set DX = [:the carrier of GF(p), the carrier of GF(p),
+      the carrier of GF(p):];
+      deffunc F(Element of DX)
+      =(($1`2) |^2)*($1`3)-(($1`1) |^3
+      +a*($1`1)*($1`3) |^2+b*($1`3) |^3);
+      let f,g be Function of DX,the carrier of GF(p);
+      assume P1: for x being Element of DX holds f.x = F(x);
+      assume P2: for x being Element of DX holds g.x = F(x);
+      now let x be Element of DX;
+        thus f.x = F(x) by P1
+        .=g.x by P2;
+      end;
+      hence f=g by FUNCT_2:def 9;
+    end;
+  end;
+
+theorem LmECDefEQ:
+  for X,Y,Z be Element of GF(p) holds
+  EC_WEqProjCo(a,b,p).([X,Y,Z]) = Y |^2*Z-(X|^3 +a*X*Z |^2+b*Z |^3)
+  proof
+    let X,Y,Z be Element of GF(p);
+    set DX = [:the carrier of GF(p),
+    the carrier of GF(p), the carrier of GF(p):];
+    reconsider P = [X,Y,Z] as Element of DX;
+    P`1 = X & P`2 = Y & P`3 = Z by MCART_1:47;
+    hence thesis by ECDefEQ;
+  end;
+
+LML:[0,1,0] is Element of ProjCo(GF(p))
+& EC_WEqProjCo(a,b,p).([0,1,0]) = 0.GF(p)
+proof
+  set P = [0,1,0];
+  hereby P <> [0,0,0] by MCART_1:28;
+    then P0: not P in {[0,0,0]} by TARSKI:def 1;
+P1: 0 in the carrier of GF(p) by NAT_1:45;
+    1.GF(p) in the carrier of GF(p);
+    then 1 in the carrier of GF(p) by XLm3;
+    then P in [:the carrier of GF(p),
+    the carrier of GF(p), the carrier of GF(p):] by P1,MCART_1:73;
+    then P in [:the carrier of GF(p),
+    the carrier of GF(p), the carrier of GF(p):] \ {[0,0,0]}
+      by P0,XBOOLE_0:def 5;
+    hence P is Element of ProjCo(GF(p)) by GFProjCo;
+  end;
+  then reconsider P=[0,1,0] as Element of ProjCo(GF(p));
+  set Px = P`1, Py = P`2, Pz = P`3;
+  P3: P = [0.GF(p),1,0] by XLm2
+  .= [0.GF(p),1.GF(p),0] by XLm3
+  .= [0.GF(p),1.GF(p),0.GF(p)] by XLm2;
+  then P4: Px = 0.GF(p) by MCART_1:47;
+  P6: Pz = 0.GF(p) by P3,MCART_1:47;
+  P7: (Px) |^3 = (Px) |^(2+1)
+  .= (Px) |^2 * (Px) by EX5
+  .= 0.GF(p) by P4,VECTSP_1:44;
+  P8: (Pz) |^3 = (Pz) |^(2+1)
+  .= (Pz) |^2 * (Pz) by EX5
+  .= 0.GF(p) by P6,VECTSP_1:44;
+  P9: (Pz) |^2 = (Pz) |^(1+1)
+  .= (Pz) |^1 * (Pz) by EX5
+  .= 0.GF(p) by P6,VECTSP_1:44;
+  EC_WEqProjCo(a,b,p).P =
+  (Py |^2)*Pz-(Px |^3 +a*Px*Pz |^2+b*Pz |^3) by ECDefEQ
+  .= 0.GF(p) -(Px |^3 +a*Px*Pz |^2+b*Pz |^3) by P6,VECTSP_1:44
+  .= -(0.GF(p) +a*Px*Pz |^2+b*Pz |^3) by P7,RLVECT_1:10
+  .= -(a*Px*Pz |^2+b*Pz |^3) by RLVECT_1:10
+  .= -(0.GF(p)+b*Pz |^3) by P9,VECTSP_1:44
+  .= -(b*Pz |^3) by RLVECT_1:10
+  .= -(0.GF(p)) by P8,VECTSP_1:44
+  .= 0.GF(p) - (0.GF(p)) by RLVECT_1:10;
+  hence thesis by VECTSP_1:66;
+end;
+
+definition
+  let p be Prime;
+  let a, b be Element of GF(p);
+  func EC_SetProjCo(a,b,p) -> non empty Subset of ProjCo(GF(p)) equals
+  {P where P is Element of ProjCo(GF(p)) : EC_WEqProjCo(a,b,p).P = 0.GF(p) };
+  correctness
+  proof
+X1: now let x be set;
+      assume x in {P where P is Element of ProjCo(GF(p)) :
+      EC_WEqProjCo(a,b,p).P = 0.GF(p) }; then
+      ex P be Element of ProjCo(GF(p)) st
+      x = P & EC_WEqProjCo(a,b,p).P = 0.GF(p);
+      hence x in ProjCo(GF(p));
+    end;
+    reconsider D0=[0,1,0] as Element of ProjCo(GF(p)) by LML;
+    EC_WEqProjCo(a,b,p).D0 = 0.GF(p) by LML;
+    then
+    D0 in {P where P is Element of ProjCo(GF(p)) :
+    EC_WEqProjCo(a,b,p).P = 0.GF(p) };
+    hence thesis by X1,TARSKI:def 3;
+  end;
+end;
+
+LMNGA0:
+for p be Prime, d,Y be Element of GF(p)
+holds [d,Y,1] is Element of ProjCo(GF(p))
+proof
+  let p be Prime, d,Y be Element of GF(p);
+  set P = [d,Y,1];
+  P <> [0,0,0] by MCART_1:28;
+  then P0: not P in {[0,0,0]} by TARSKI:def 1;
+  1.GF(p) in the carrier of GF(p);
+  then 1 in the carrier of GF(p) by XLm3;
+  then P in [:the carrier of GF(p),
+  the carrier of GF(p),
+  the carrier of GF(p):] by MCART_1:73;
+  then P in [:the carrier of GF(p),
+  the carrier of GF(p),
+  the carrier of GF(p):] \ {[0,0,0]} by P0,XBOOLE_0:def 5;
+  hence P is Element of ProjCo(GF(p)) by GFProjCo;
+end;
+
+theorem ECZERO:
+  [0,1,0] is Element of EC_SetProjCo(a,b,p)
+  proof
+    [0,1,0] is Element of ProjCo(GF(p))
+    & EC_WEqProjCo(a,b,p).([0,1,0]) = 0.GF(p) by LML;
+    then [0,1,0] in {P where P is Element of ProjCo(GF(p)) :
+    EC_WEqProjCo(a,b,p).P = 0.GF(p)};
+    hence thesis;
+  end;
+
+theorem ECAFF:
+  for p be Prime, a, b, X, Y be Element of GF(p) holds
+  Y|^2 = X|^3 + a*X + b iff [X,Y,1] is Element of EC_SetProjCo(a,b,p)
+  proof
+    let p be Prime, a, b, X, Y be Element of GF(p);
+P1: 1 = 1.(GF p) by XLm3;
+    reconsider Q=[X,Y,1] as Element of ProjCo(GF(p)) by LMNGA0;
+P2: Y|^2 = Y|^2 * 1.(GF(p)) by VECTSP_1:def 16;
+P3: a*X = a*X*(1.(GF(p))) by VECTSP_1:def 16
+    .= a*X*((1.(GF(p)))*(1.(GF(p)))) by VECTSP_1:def 16
+    .= a*X*((1.(GF(p))) |^2) by EXLm4;
+P4: b = b*(1.(GF(p))) by VECTSP_1:def 16
+    .= b*((1.(GF(p)))*(1.(GF(p)))) by VECTSP_1:def 16
+    .= b*((1.(GF(p))) |^2) by EXLm4
+    .= b*(((1.(GF(p))) |^2) *(1.(GF(p)))) by VECTSP_1:def 16
+    .= b*((1.(GF(p))) |^(2+1)) by EX5
+    .= b*((1.(GF(p))) |^3);
+    hereby
+      assume AS2: Y|^2 = X|^3 + a*X + b;
+      Y|^2 - (X|^3 + a*X + b) = 0.(GF(p)) by AS2,VECTSP_1:66;
+      then EC_WEqProjCo(a,b,p).Q = 0.(GF(p)) by P1,P2,P3,P4,LmECDefEQ;
+      then Q in {P where P is Element of ProjCo(GF(p)) :
+      EC_WEqProjCo(a,b,p).P = 0.GF(p)};
+      hence [X,Y,1] is Element of EC_SetProjCo(a,b,p);
+    end;
+    assume [X,Y,1] is Element of EC_SetProjCo(a,b,p);
+    then Q in {P where P is Element of ProjCo(GF(p)) :
+    EC_WEqProjCo(a,b,p).P = 0.GF(p)};
+    then ex P be Element of ProjCo(GF(p)) st P=Q &
+    EC_WEqProjCo(a,b,p).P = 0.GF(p);
+    then Y|^2 - (X|^3 + a*X + b) = 0.(GF(p)) by P1,P2,P3,P4,LmECDefEQ;
+    hence Y|^2 = X|^3 + a*X + b by VECTSP_1:66;
+  end;
+
+definition
+  let p be Prime;
+  let P,Q be Element of ProjCo(GF(p));
+  pred P _EQ_ Q means :DefEQV:
+    ex a be Element of GF(p) st a <> 0.GF(p)
+    & P`1 = a*Q`1 & P`2 = a*Q`2 & P`3 = a*Q`3;
+  reflexivity
+  proof
+    for R be Element of ProjCo(GF(p)) holds
+    ex a be Element of GF(p) st a <> 0.GF(p)&
+    R`1 = a*R`1 & R`2 = a*R`2 & R`3 = a*R`3
+    proof
+      let R be Element of ProjCo(GF(p));
+      reconsider a = 1.(GF(p)) as Element of GF(p);
+      R`1 = a*R`1 & R`2 = a*R`2 & R`3 = a*R`3 by VECTSP_1:def 16;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  symmetry
+  proof
+    thus for P,Q be Element of ProjCo(GF(p))
+     st ex a be Element of GF(p) st a <> 0.GF(p)
+    & P`1 = a*Q`1 & P`2 = a*Q`2 & P`3 = a*Q`3 holds
+         ex b be Element of GF(p) st b <> 0.GF(p)
+    & Q`1 = b*P`1 & Q`2 = b*P`2 & Q`3 = b*P`3
+    proof
+      let P,Q be Element of ProjCo(GF(p));
+      given a be Element of GF(p) such that
+      P1: a <> 0.GF(p) & P`1 = a*Q`1
+      & P`2 = a*Q`2 & P`3 = a*Q`3;
+      take b=a";
+P2:   b <> 0.GF(p)
+      proof
+        assume b = 0.GF(p);
+        then b*a = 0.GF(p) by VECTSP_1:39;
+        then 1.GF(p) =0.GF(p) by P1,VECTSP_1:def 22;
+        hence contradiction;
+      end;
+  P3: Q`1 = (1.(GF(p)))*Q`1 by VECTSP_1:def 16
+        .=(b*a)*Q`1 by P1,VECTSP_1:def 22
+        .=b*P`1 by P1,GROUP_1:def 4;
+  P4: Q`2 = (1.(GF(p)))*Q`2 by VECTSP_1:def 16
+        .=(b*a)*Q`2 by P1,VECTSP_1:def 22
+        .=b*P`2 by P1,GROUP_1:def 4;
+      Q`3 = (1.(GF(p)))*Q`3 by VECTSP_1:def 16
+         .=(b*a)*Q`3 by P1,VECTSP_1:def 22
+         .=b*P`3 by P1,GROUP_1:def 4;
+      hence thesis by P2,P3,P4;
+    end;
+  end;
+end;
+
+theorem LmEQV3:
+  for p be Prime, P,Q,R be Element of ProjCo(GF(p)) holds
+  ( P _EQ_ Q & Q _EQ_ R implies P _EQ_ R)
+  proof
+    let p be Prime, P,Q,R be Element of ProjCo(GF(p));
+    assume AS:P _EQ_ Q & Q _EQ_ R; then
+    consider a be Element of GF(p) such that
+    P1: a <> 0.GF(p) & P`1 = a*Q`1 & P`2 = a*Q`2
+    & P`3 = a*Q`3 by DefEQV;
+    consider b be Element of GF(p) such that
+    Q1: b <> 0.GF(p) & Q`1 = b*R`1 & Q`2 = b*R`2
+    & Q`3 = b*R`3 by DefEQV,AS;
+    take d = a*b;
+    thus thesis by P1,Q1,GROUP_1:def 4,VECTSP_1:44;
+  end;
+
+theorem LmEQV4:
+  for p be Prime, a, b be Element of GF(p),
+  P,Q be Element of [:the carrier of GF(p), the carrier of GF(p),
+  the carrier of GF(p):], d be Element of GF(p)
+  st p > 3 & Disc(a,b,p) <> 0.GF(p) &
+  P in EC_SetProjCo(a,b,p) & d <> 0.GF(p)
+  & Q`1 = d*P`1 & Q`2 = d*P`2 & Q`3 = d*P`3 holds
+  Q in EC_SetProjCo(a,b,p)
+  proof
+    let p be Prime, a, b be Element of GF(p),
+    P,Q be Element of [:the carrier of GF(p), the carrier of GF(p),
+    the carrier of GF(p):], d be Element of GF(p);
+    assume
+    AS: p > 3 & Disc(a,b,p) <> 0.GF(p) &
+    P in EC_SetProjCo(a,b,p) & d <> 0.GF(p)
+    & Q`1 = d*P`1 & Q`2 = d*P`2 & Q`3 = d*P`3;
+    set DX = [:the carrier of GF(p), the carrier of GF(p),
+    the carrier of GF(p):];
+    consider PP be Element of ProjCo(GF(p)) such that
+    P1: P = PP & EC_WEqProjCo(a,b,p).PP = 0.GF(p) by AS;
+    P2: EC_WEqProjCo(a,b,p).P
+    = ((P`2) |^2)*(P`3)-((P`1) |^3 +a*(P`1)*(P`3) |^2+b*(P`3) |^3) by ECDefEQ;
+    P4: EC_WEqProjCo(a,b,p).Q = ((d*P`2) |^2)*(d*P`3)-((d*P`1) |^3
+    +a*(d*P`1)*(d*P`3) |^2+b*(d*P`3) |^3) by AS,ECDefEQ
+    .=(d|^2 * (P`2) |^2 )*(d*P`3)-((d*P`1) |^3
+    +a*(d*P`1)*(d*P`3) |^2+b*(d*P`3) |^3) by EX9
+    .=(d|^2 * (P`2) |^2 *d)*(P`3)-((d*P`1) |^3
+    +a*(d*P`1)*(d*P`3) |^2+b*(d*P`3) |^3) by GROUP_1:def 4
+    .=(d|^2 *d* (P`2) |^2 )*P`3-((d*P`1) |^3
+    +a*(d*P`1)*(d*P`3) |^2+b*(d*P`3) |^3) by GROUP_1:def 4
+    .=(d|^(2+1) * (P`2) |^2 )*(P`3)-((d*P`1) |^3
+    +a*(d*P`1)*(d*P`3) |^2+b*(d*P`3) |^3) by EX5
+    .=(d|^3 * (P`2) |^2 )*(P`3)-(d|^3 *(P`1) |^3
+    +a*(d*P`1)*(d*P`3) |^2+b*(d*P`3) |^3) by EX9
+    .=(d|^3 * (P`2) |^2 )*(P`3)-(d|^3 *(P`1) |^3
+    +a*(d*P`1)*(d|^2*(P`3) |^2)+b*(d*P`3) |^3) by EX9
+    .=(d|^3) * ((P`2) |^2 )*(P`3)-(d|^3 *(P`1) |^3
+    +(a*(d*P`1)*(d|^2))*(P`3) |^2+b*(d*P`3) |^3) by GROUP_1:def 4
+    .=(d|^3) * ((P`2) |^2 )*(P`3)-(d|^3 *(P`1) |^3
+    +(a*(d*P`1*(d|^2)))*(P`3) |^2+b*(d*P`3) |^3) by GROUP_1:def 4
+    .=(d|^3) * ((P`2) |^2 )*(P`3)-(d|^3 *(P`1) |^3
+    +(a*((d|^2)*d*P`1))*(P`3) |^2+b*(d*P`3) |^3) by GROUP_1:def 4
+    .=(d|^3) * ((P`2) |^2 )*(P`3)-(d|^3 *(P`1) |^3
+    +(a*(d|^(2+1)*P`1))*(P`3) |^2+b*(d*P`3) |^3) by EX5
+    .=(d|^3) * ((P`2) |^2 )*(P`3)-((d|^3) *(P`1) |^3
+    +(d|^3)*(a*P`1)*(P`3) |^2+b*(d*P`3) |^3) by GROUP_1:def 4
+    .=(d|^3) * ((P`2) |^2 )*(P`3)-((d|^3) *(P`1) |^3
+    +(d|^3)*(a*P`1)*(P`3) |^2+b*(d|^3*(P`3) |^3)) by EX9
+    .=(d|^3) * ((P`2) |^2 )*(P`3)-((d|^3) *(P`1) |^3
+    +(d|^3)*(a*P`1)*(P`3) |^2+(d|^3)*b*(P`3) |^3) by GROUP_1:def 4
+    .=(d|^3) * (((P`2) |^2 )*(P`3))-((d|^3) *(P`1) |^3
+    +(d|^3)*(a*P`1)*(P`3) |^2+(d|^3)*b*(P`3) |^3) by GROUP_1:def 4
+    .=(d|^3) * (((P`2) |^2 )*(P`3))-((d|^3) *(P`1) |^3
+    +(d|^3)*((a*P`1)*(P`3) |^2)+(d|^3)*b*(P`3) |^3) by GROUP_1:def 4
+    .=(d|^3) * (((P`2) |^2 )*(P`3))-((d|^3) *(P`1) |^3
+    +(d|^3)*((a*P`1)*(P`3) |^2)+(d|^3)*(b*(P`3) |^3)) by GROUP_1:def 4
+    .=(d|^3) * (((P`2) |^2 )*(P`3))-((d|^3) *((P`1) |^3
+    +a*(P`1)*(P`3) |^2)+(d|^3)*(b*(P`3) |^3)) by VECTSP_1:22
+    .=(d|^3) * (((P`2) |^2 )*(P`3))
+    -(d|^3) * ((P`1) |^3 +a*(P`1)*(P`3) |^2+b*(P`3) |^3) by VECTSP_1:22
+    .= d|^3*(((P`2) |^2)*(P`3)-((P`1) |^3
+    +a*(P`1)*(P`3) |^2+b*(P`3) |^3)) by VECTSP_1:43
+    .= 0.GF(p) by P1,P2,VECTSP_1:44;
+    PP in ProjCo(GF(p)); then
+    PP in [:the carrier of GF(p), the carrier of GF(p),
+    the carrier of GF(p):] \ {[0,0,0]} by GFProjCo; then
+    P5: not P in {[0,0,0]} by P1,XBOOLE_0:def 5;
+    P6: Q = [Q`1,Q`2,Q`3] by MCART_1:48;
+    P`1 <> 0 or P`2 <> 0 or P`3 <> 0
+    proof
+      assume not (P`1 <> 0 or P`2 <> 0 or P`3 <> 0); then
+      P = [0,0,0] by MCART_1:48;
+      hence contradiction by P5,TARSKI:def 1;
+    end; then
+    P`1 <> 0.GF(p) or P`2 <> 0.GF(p) or P`3 <> 0.GF(p) by XLm2; then
+    d*P`1 <> 0.GF(p) or d*P`2 <> 0.GF(p) or d*P`3 <> 0.GF(p)
+      by AS,VECTSP_1:44; then
+    Q`1 <> 0 or Q`2 <> 0 or Q`3 <> 0 by AS,XLm2; then
+    [Q`1,Q`2,Q`3] <> [0,0,0] by MCART_1:28; then
+    not Q in {[0,0,0]} by P6,TARSKI:def 1; then
+    Q in [:the carrier of GF(p), the carrier of GF(p),
+    the carrier of GF(p):] \ {[0,0,0]} by XBOOLE_0:def 5; then
+    Q in ProjCo(GF(p)) by GFProjCo;
+    hence thesis by P4;
+  end;
+
+definition
+  let p be Prime;
+  func R_ProjCo p -> Relation of ProjCo(GF(p)) equals
+  {[P,Q] where P,Q is Element of ProjCo(GF(p)) : P _EQ_ Q};
+  correctness
+  proof
+    set RX = {[P,Q] where P,Q is Element of ProjCo(GF(p)) : P _EQ_ Q};
+    now let x be set;
+      assume x in RX; then
+      consider P,Q be Element of ProjCo(GF(p)) such that
+  P1: x = [P,Q] & P _EQ_ Q;
+      thus x in [:ProjCo(GF(p)),ProjCo(GF(p)):] by P1;
+    end;
+    hence thesis by TARSKI:def 3;
+  end;
+end;
+
+theorem LmDefREQ:
+  for p be Prime, P,Q be Element of ProjCo(GF(p)) holds
+  P _EQ_ Q iff [P,Q] in R_ProjCo p
+  proof
+    let p be Prime, P,Q be Element of ProjCo(GF(p));
+    thus P _EQ_ Q implies [P,Q] in R_ProjCo p;
+    assume [P,Q] in R_ProjCo p; then
+    consider X0,Y0 be Element of ProjCo(GF(p)) such that
+P2: [P,Q] = [X0,Y0] & X0 _EQ_ Y0;
+    P=X0 & Q=Y0 by P2,ZFMISC_1:33;
+    hence P _EQ_ Q by P2;
+  end;
+
+registration let p be Prime;
+  cluster R_ProjCo p -> total symmetric transitive;
+  coherence
+  proof
+    set R = R_ProjCo p;
+    for x be set holds
+    x in ProjCo(GF(p)) iff ex y be set st [x,y] in R
+    proof
+      let x be set;
+      hereby assume x in ProjCo(GF(p)); then
+        reconsider X =x as Element of ProjCo(GF(p));
+        X _EQ_ X;
+        then [x,x] in R;
+        hence ex y be set st [x,y] in R;
+      end;
+      given y be set such that
+  P1: [x,y] in R;
+      consider X,Y be Element of ProjCo(GF(p)) such that
+  P2: [x,y] = [X,Y] & X _EQ_ Y by P1;
+      x=X by P2,ZFMISC_1:33;
+      hence x in ProjCo(GF(p));
+    end; then
+    dom R = ProjCo(GF(p)) by RELAT_1:def 4;
+    hence R is total by PARTFUN1:def 4;
+    for x,y be set holds
+    (x in field R & y in field R & [x,y] in R implies [ y,x] in R)
+    proof
+      let x,y be set;
+      assume x in field R & y in field R & [x,y] in R;
+      then consider X,Y be Element of ProjCo(GF(p)) such that
+  P1: [x,y] = [X,Y] & X _EQ_ Y;
+      x=X & y=Y by P1,ZFMISC_1:33;
+      hence [y,x] in R by P1;
+    end; then
+    R is_symmetric_in field R by RELAT_2:def 3;
+    hence R is symmetric by RELAT_2:def 11;
+    for x,y,z be set holds
+    (x in field R & y in field R & z in field R
+    & [x,y] in R & [y,z] in R implies [x,z] in R)
+    proof
+      let x,y,z be set;
+      assume AS1: x in field R & y in field R & z in field R
+      & [x,y] in R & [y,z] in R; then
+      consider X,Y be Element of ProjCo(GF(p)) such that
+  P1: [x,y] = [X,Y] & X _EQ_ Y;
+  P2: x=X & y=Y by P1,ZFMISC_1:33;
+      consider Y1,Z be Element of ProjCo(GF(p)) such that
+  P3: [y,z] = [Y1,Z] & Y1 _EQ_ Z by AS1;
+      X _EQ_ Y & Y _EQ_ Z by P1,P2,P3,ZFMISC_1:33; then
+  P5: X _EQ_ Z by LmEQV3;
+      [x,z] = [X,Z] by P2,P3,ZFMISC_1:33;
+      hence [x,z] in R by P5;
+    end; then
+    R is_transitive_in field R by RELAT_2:def 8;
+    hence R is transitive by RELAT_2:def 16;
+  end;
+end;
+
+definition
+  let p be Prime;
+  let a, b be Element of GF(p);
+  func R_EllCur (a,b,p) -> Equivalence_Relation of EC_SetProjCo(a,b,p)
+  equals
+  (R_ProjCo p) /\ nabla EC_SetProjCo(a,b,p);
+  correctness
+  proof
+    set P = R_ProjCo p;
+    set R = nabla EC_SetProjCo(a,b,p);
+    reconsider PR = (P /\ R) as Relation of EC_SetProjCo(a,b,p);
+    for x be set holds
+    (x in EC_SetProjCo(a,b,p) iff ex y be set st [x,y] in PR)
+    proof
+      let x be set;
+      hereby assume AS1:x in EC_SetProjCo(a,b,p); then
+        reconsider X =x as Element of ProjCo(GF(p));
+        X _EQ_ X; then
+    P4: [x,x] in P;
+        [x,x] in [:EC_SetProjCo(a,b,p),EC_SetProjCo(a,b,p):]
+        by AS1,ZFMISC_1:106;
+        then [x,x] in PR by P4,XBOOLE_0:def 4;
+        hence ex y be set st [x,y] in PR;
+      end;
+      given y be set such that
+  P1: [x,y] in PR;
+      thus x in EC_SetProjCo(a,b,p) by P1,ZFMISC_1:106;
+    end; then
+    dom PR = EC_SetProjCo(a,b,p) by RELAT_1:def 4;
+    hence thesis by PARTFUN1:def 4,RELAT_2:35,43;
+  end;
+end;
+
+theorem LmDefREQ0:
+  for p be Prime, a, b be Element of GF(p),
+  P,Q be Element of ProjCo(GF(p))
+  st Disc(a,b,p) <> 0.GF(p) &
+  P in EC_SetProjCo(a,b,p) & Q in EC_SetProjCo(a,b,p) holds
+  ( P _EQ_ Q iff [P,Q] in R_EllCur (a,b,p))
+  proof
+    let p be Prime, a, b be Element of GF(p),
+    P,Q be Element of ProjCo(GF(p));
+    assume AS: Disc(a,b,p) <> 0.GF(p)
+    & P in EC_SetProjCo(a,b,p) & Q in EC_SetProjCo(a,b,p);
+    hereby assume P _EQ_ Q; then
+  P1: [P,Q] in R_ProjCo p;
+      [P,Q] in [:EC_SetProjCo(a,b,p),EC_SetProjCo(a,b,p):]
+      by AS,ZFMISC_1:106;
+      hence [P,Q] in R_EllCur (a,b,p) by P1,XBOOLE_0:def 4;
+    end;
+    assume [P,Q] in R_EllCur (a,b,p); then
+    [P,Q] in (R_ProjCo p) by XBOOLE_0:def 4;
+    hence P _EQ_ Q by LmDefREQ;
+  end;
+
+theorem LmDefREQ1:
+  for p be Prime, a, b be Element of GF(p),
+  P be Element of ProjCo(GF(p))
+  st p > 3 & Disc(a,b,p) <> 0.GF(p) &
+  P in EC_SetProjCo(a,b,p) & P`3 <> 0 holds
+  ex Q be Element of ProjCo(GF(p)) st Q in EC_SetProjCo(a,b,p)
+  & Q _EQ_ P & Q`3 = 1
+  proof
+    let p be Prime, a, b be Element of GF(p), P be Element of ProjCo(GF(p));
+    assume
+    AS: p > 3 & Disc(a,b,p) <> 0.GF(p) &
+    P in EC_SetProjCo(a,b,p) & P`3 <> 0;
+    set d=(P`3)";
+AS0: P`3 <> 0.GF(p) by AS,XLm2;
+AS1: d <> 0.GF(p)
+    proof
+      assume A1: d = 0.GF(p);
+  A2: d*P`3 = 1_GF(p) by AS0,VECTSP_1:def 22
+      .=1 by XLm3;
+      d*P`3 = 0.GF(p) by A1,VECTSP_1:44
+      .= 0 by XLm2;
+      hence contradiction by A2;
+    end;
+    reconsider Q =[d*P`1,d*P`2,d*P`3] as Element of
+    [:the carrier of GF(p), the carrier of GF(p), the carrier of GF(p):];
+P1: Q`1 = d*P`1 & Q`2 = d*P`2 & Q`3 = d*P`3 by MCART_1:47; then
+    Q in EC_SetProjCo(a,b,p) by AS,AS1,LmEQV4; then
+    consider PP be Element of ProjCo(GF(p)) such that
+P2: Q = PP & EC_WEqProjCo(a,b,p).PP = 0.GF(p);
+    reconsider Q as Element of ProjCo(GF(p)) by P2;
+    take Q;
+    thus Q in EC_SetProjCo(a,b,p) by P1,AS,AS1,LmEQV4;
+    thus Q _EQ_ P by P1,AS1,DefEQV;
+    thus Q`3 = d*P`3 by MCART_1:def 7
+    .= 1_GF(p) by AS0,VECTSP_1:def 22
+    .= 1 by XLm3;
+  end;
+
+theorem LmDefREQ2:
+  for p be Prime, a, b be Element of GF(p),
+  P be Element of ProjCo(GF(p))
+  st p > 3 & Disc(a,b,p) <> 0.GF(p) &
+  P in EC_SetProjCo(a,b,p) & P`3 = 0 holds
+  ex Q be Element of ProjCo(GF(p))
+  st Q in EC_SetProjCo(a,b,p) & Q _EQ_ P & Q`1 = 0 & Q`2= 1 & Q`3= 0
+  proof
+    let p be Prime, a, b be Element of GF(p),
+    P be Element of ProjCo(GF(p));
+    assume
+    AS: p > 3 & Disc(a,b,p) <> 0.GF(p) &
+    P in EC_SetProjCo(a,b,p) & P`3 = 0;
+    ASX: P`3 = 0.GF(p) by AS,XLm2;
+    set d=(P`2)";
+    W1: ex X0 be Element of ProjCo(GF(p))
+    st P=X0 & EC_WEqProjCo(a,b,p).X0 = 0.GF(p) by AS;
+    W2: (P`3) |^3 = (P`3) |^(2+1)
+    .= (P`3) |^2 * (P`3) by EX5
+    .= 0.GF(p) by ASX,VECTSP_1:44;
+    W3: (P`3) |^2 = (P`3) |^(1+1)
+    .= (P`3) |^1 * (P`3) by EX5
+    .= 0.GF(p) by ASX,VECTSP_1:44;
+    0.GF(p) = ((P`2) |^2)*(P`3)-((P`1) |^3
+    +a*(P`1)*(P`3) |^2+b*(P`3) |^3) by W1,ECDefEQ
+    .= 0.GF(p)-((P`1) |^3
+    +a*(P`1)*(P`3) |^2+b*(P`3) |^3) by ASX,VECTSP_1:44
+    .= 0.GF(p)-((P`1) |^3 +0.GF(p)+b*(P`3) |^3) by W3,VECTSP_1:44
+    .= 0.GF(p)-((P`1) |^3 +0.GF(p)+0.GF(p)) by W2,VECTSP_1:44
+    .= 0.GF(p)-((P`1) |^3 +0.GF(p)) by RLVECT_1:10
+    .= 0.GF(p)-(P`1) |^3 by RLVECT_1:10
+    .= - (P`1) |^3 by RLVECT_1:27; then
+    W9: (P`1) |^3 = (P`1) |^3 + - (P`1) |^3 by RLVECT_1:10;
+AS2:P`1 = 0.GF(p)
+    proof
+      assume AS21: P`1 <> 0.GF(p); then
+      P`1 * P`1 <>  0.GF(p) by VECTSP_1:44; then
+      (P`1) |^1 * P`1 <> 0.GF(p) by EXLm3; then
+      (P`1) |^(1+1) <> 0.GF(p) by EX5; then
+      (P`1) |^2 * P`1 <> 0.GF(p) by AS21,VECTSP_1:44; then
+      (P`1) |^(2+1) <>  0.GF(p) by EX5;
+      hence contradiction by W9,RLVECT_1:16;
+    end;
+    AS0: P`2 <> 0.GF(p)
+    proof
+      assume P`2 = 0.GF(p); then
+      P`2 = 0 by XLm2; then
+      [P`1,P`2,P`3] = [0,0,0] by AS,AS2,XLm2; then
+      P = [0,0,0] by MCART_1:48; then
+      P in {[0,0,0]} by TARSKI:def 1; then
+      not P in [:the carrier of GF(p), the carrier of GF(p),
+      the carrier of GF(p):] \ {[0,0,0]} by XBOOLE_0:def 5;
+      then not P in ProjCo(GF(p)) by GFProjCo;
+      hence contradiction;
+    end;
+AS1: d <> 0.GF(p)
+    proof
+      assume A1: d = 0.GF(p);
+      A2: d*P`2 = 1_GF(p) by AS0,VECTSP_1:def 22
+      .=1 by XLm3;
+      d*P`2 = 0.GF(p) by A1,VECTSP_1:44
+      .= 0 by XLm2;
+      hence contradiction by A2;
+    end;
+    reconsider Q =[d*P`1,d*P`2,d*P`3] as Element of
+    [:the carrier of GF(p), the carrier of GF(p), the carrier of GF(p):];
+    P1: Q`1 = d*P`1 & Q`2 = d*P`2 & Q`3 = d*P`3 by MCART_1:47; then
+    Q in EC_SetProjCo(a,b,p) by AS,AS1,LmEQV4; then
+    consider PP be Element of ProjCo(GF(p)) such that
+P2: Q = PP & EC_WEqProjCo(a,b,p).PP = 0.GF(p);
+    reconsider Q as Element of ProjCo(GF(p)) by P2;
+    take Q;
+    thus Q in EC_SetProjCo(a,b,p) by P1,AS,AS1,LmEQV4;
+    thus Q _EQ_ P by P1,AS1,DefEQV;
+    thus Q`1 = d*P`1 by MCART_1:47
+    .=0.GF(p) by AS2,VECTSP_1:44
+    .=0 by XLm2;
+    thus Q`2 = d*P`2 by MCART_1:47
+    .= 1_GF(p) by AS0,VECTSP_1:def 22
+    .= 1 by XLm3;
+    thus Q`3 = d*P`3 by MCART_1:47
+    .=0.GF(p) by ASX,VECTSP_1:44
+    .=0 by XLm2;
+  end;
+
+theorem LmDefREQ3:
+  for p be Prime, a, b be Element of GF(p), x be set st
+  p > 3 & Disc(a,b,p) <> 0.GF(p)
+  & x in Class (R_EllCur(a,b,p)) holds
+  ( ex P be Element of ProjCo(GF(p)) st P in EC_SetProjCo(a,b,p) & P=[0,1,0]
+  & x = Class(R_EllCur(a,b,p),P) ) or
+  ex P be Element of ProjCo(GF(p)), X,Y be Element of GF(p)
+  st P in EC_SetProjCo(a,b,p) & P=[X,Y,1]
+  & x = Class(R_EllCur(a,b,p),P)
+  proof
+    let p be Prime, a, b be Element of GF(p), x be set;
+    assume AS1: p > 3 & Disc(a,b,p) <> 0.GF(p)
+    & x in Class (R_EllCur(a,b,p)); then
+    consider y0 be Element of EC_SetProjCo(a,b,p) such that
+P1: x = Class(R_EllCur(a,b,p),y0) by EQREL_1:45;
+    reconsider w=y0 as Element of ProjCo(GF(p));
+    per cases;
+    suppose w`3 = 0; then
+      consider y be Element of ProjCo(GF(p)) such that
+  D2: y in EC_SetProjCo(a,b,p) & y _EQ_ w
+      & y`1 = 0 & y`2= 1 & y`3= 0 by AS1,LmDefREQ2;
+      [y,w] in R_EllCur(a,b,p) by AS1,LmDefREQ0,D2; then
+      x = Class(R_EllCur(a,b,p),y) by P1,D2,EQREL_1:44;
+      hence thesis by D2,MCART_1:48;
+    end;
+    suppose w`3 <> 0; then
+      consider y be Element of ProjCo(GF(p)) such that
+      D2: y in EC_SetProjCo(a,b,p) & y _EQ_ w & y`3 = 1 by AS1,LmDefREQ1;
+      set e=y`1;
+      set f=y`2;
+      F1: y = [e,f,1] by D2,MCART_1:48;
+      [y,w] in R_EllCur(a,b,p) by AS1,LmDefREQ0,D2; then
+      x = Class(R_EllCur(a,b,p),y) by P1,D2,EQREL_1:44;
+      hence thesis by F1,D2;
+    end;
+  end;
+
+theorem LmDefREQ4:
+  for p be Prime, a, b be Element of GF(p) st
+  p > 3 & Disc(a,b,p) <> 0.GF(p) holds
+  Class (R_EllCur(a,b,p)) = {Class(R_EllCur(a,b,p),[0,1,0])}
+  \/ {Class(R_EllCur(a,b,p),P)
+  where P is Element of ProjCo(GF(p)):
+  P in EC_SetProjCo(a,b,p) & ex X,Y be Element of GF(p) st P=[X,Y,1]}
+  proof
+    let p be Prime, a, b be Element of GF(p);
+    assume
+AS: p > 3 & Disc(a,b,p) <> 0.GF(p);
+    set A = Class (R_EllCur(a,b,p));
+    set B = {Class(R_EllCur(a,b,p),[0,1,0])} \/
+    {Class(R_EllCur(a,b,p),P) where P is Element of ProjCo(GF(p)):
+    P in EC_SetProjCo(a,b,p) & ex X,Y be Element of GF(p) st P=[X,Y,1]};
+    reconsider d0=[0,1,0] as Element of EC_SetProjCo(a,b,p) by ECZERO;
+    for x be set holds x in A iff x in B
+    proof
+      let x be set;
+      hereby assume x in A; then
+        ( ex y be Element of ProjCo(GF(p))
+        st y in EC_SetProjCo(a,b,p) & y=[0,1,0]
+        & x = Class(R_EllCur(a,b,p),y) ) or
+        ex y be Element of ProjCo(GF(p)), e,f be Element of GF(p)
+        st y in EC_SetProjCo(a,b,p) & y=[e,f,1]
+        & x = Class(R_EllCur(a,b,p),y) by AS,LmDefREQ3; then
+        x in {Class(R_EllCur(a,b,p),[0,1,0])} or
+        x in {Class(R_EllCur(a,b,p),y)
+        where y is Element of ProjCo(GF(p)): y in EC_SetProjCo(a,b,p) &
+        ex e,f be Element of GF(p) st y=[e,f,1]} by TARSKI:def 1;
+        hence x in B by XBOOLE_0:def 3;
+      end;
+      assume x in B; then
+      P1: x in {Class(R_EllCur(a,b,p),[0,1,0])} or
+      x in {Class(R_EllCur(a,b,p),y) where y is Element of ProjCo(GF(p)):
+      y in EC_SetProjCo(a,b,p) & ex e,f be Element of GF(p)
+      st y=[e,f,1]} by XBOOLE_0:def 3;
+      now per cases by P1,TARSKI:def 1;
+        suppose AD1: x = Class(R_EllCur(a,b,p),[0,1,0]);
+          EqClass(R_EllCur(a,b,p),d0) is Element of A;
+          hence x in A by AD1;
+        end;
+        suppose
+          ex y be Element of ProjCo(GF(p))
+          st x = Class(R_EllCur(a,b,p),y) & y in EC_SetProjCo(a,b,p)
+          & ex e,f be Element of GF(p) st y=[e,f,1];
+          then consider y be Element of ProjCo(GF(p)) such that
+          AD3: x = Class(R_EllCur(a,b,p),y)
+          & y in EC_SetProjCo(a,b,p)
+          & ex e,f be Element of GF(p) st y=[e,f,1];
+          reconsider y as Element of EC_SetProjCo(a,b,p) by AD3;
+          EqClass(R_EllCur(a,b,p),y) is Element of A;
+          hence x in A by AD3;
+        end;
+      end;
+      hence x in A;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+
+theorem LMNGA2:
+  for p be Prime,
+  a, b,d1,Y1,d2,Y2 be Element of GF(p)
+  st p > 3 & Disc(a,b,p) <> 0.GF(p)
+  & [d1,Y1,1] in EC_SetProjCo(a,b,p)
+  & [d2,Y2,1] in EC_SetProjCo(a,b,p) holds
+  Class(R_EllCur(a,b,p),[d1,Y1,1]) = Class(R_EllCur(a,b,p),[d2,Y2,1])
+  iff d1=d2 & Y1=Y2
+  proof
+    let p be Prime, a, b,d1,Y1,d2,Y2 be Element of GF(p);
+    assume
+    AS: p > 3 & Disc(a,b,p) <> 0.GF(p)
+    & [d1,Y1,1] in EC_SetProjCo(a,b,p) & [d2,Y2,1] in EC_SetProjCo(a,b,p);
+    hereby assume
+      Class(R_EllCur(a,b,p),[d1,Y1,1])
+      = Class(R_EllCur(a,b,p),[d2,Y2,1]); then
+      [d2,Y2,1] in Class(R_EllCur(a,b,p),[d1,Y1,1]) by AS,EQREL_1:31; then
+      P07: [[d1,Y1,1],[d2,Y2,1]] in R_EllCur(a,b,p) by EQREL_1:26;
+      reconsider P=[d1,Y1,1], Q=[d2,Y2,1] as Element of ProjCo(GF(p)) by AS;
+      P _EQ_ Q by LmDefREQ0,AS,P07; then
+      consider a be Element of GF(p) such that
+      P08: a <> 0.GF(p) & Q`1 = a*P`1 & Q`2 = a*P`2 & Q`3 = a*P`3 by DefEQV;
+      PP1: p > 1 by INT_2:def 5;
+      P09: 1.GF(p)= 1 by PP1,INT_3:24
+      .=P`3 by MCART_1:47;
+      P10: 1.GF(p)= 1 by PP1,INT_3:24
+      .=a*P`3 by P08,MCART_1:47
+      .=a by P09,VECTSP_1:def 19;
+      thus d2 = a*P`1 by P08,MCART_1:47
+      .= P`1 by P10,VECTSP_1:def 19
+      .= d1 by MCART_1:47;
+      thus Y2 = a*P`2 by P08,MCART_1:47
+      .= P`2 by P10,VECTSP_1:def 19
+      .=Y1 by MCART_1:47;
+    end;
+    assume d1=d2 & Y1=Y2;
+    hence thesis;
+  end;
+
+theorem MIS:
+  for p be Prime, a, b be Element of GF(p),
+  F1,F2 be set st p > 3 & Disc(a,b,p) <> 0.GF(p)
+  & F1 = {Class(R_EllCur(a,b,p),[0,1,0])} & F2 = {Class(R_EllCur(a,b,p),P)
+  where P is Element of ProjCo(GF(p)):
+  P in EC_SetProjCo(a,b,p) &
+  ex X,Y be Element of GF(p) st P=[X,Y,1]} holds F1 misses F2
+  proof
+    let p be Prime, a, b be Element of GF(p), F1,F2 be set;
+    assume AS: p > 3 & Disc(a,b,p) <> 0.GF(p)
+    & F1 = {Class(R_EllCur(a,b,p),[0,1,0])}
+    & F2 = {Class(R_EllCur(a,b,p),P) where P is Element of ProjCo(GF(p)):
+    P in EC_SetProjCo(a,b,p) & ex X,Y be Element of GF(p) st P=[X,Y,1]};
+    assume F1 meets F2; then
+    F1 /\ F2 <> {} by XBOOLE_0:def 7; then
+    consider z be set such that A501: z in F1 /\ F2 by XBOOLE_0:def 1;
+    A50: z in F1 & z in F2 by A501,XBOOLE_0:def 4;
+    consider P be Element of ProjCo(GF(p)) such that
+    A52:z=Class(R_EllCur(a,b,p),P) & P in EC_SetProjCo(a,b,p) &
+    ex X,Y be Element of GF(p) st P=[X,Y,1] by AS,A50;
+    consider X1,Y1 be Element of GF(p) such that
+    A53: P=[X1,Y1,1] by A52;
+    A55: z= Class(R_EllCur(a,b,p),[0,1,0]) by AS,A50,TARSKI:def 1;
+    reconsider Q=[0,1,0] as Element of ProjCo(GF(p)) by LML;
+    A57: Q is Element of EC_SetProjCo(a,b,p) by ECZERO;
+    Q in Class(R_EllCur(a,b,p),P) by A52,A55,EQREL_1:31;
+    then [P,Q] in R_EllCur(a,b,p) by EQREL_1:26;
+    then P _EQ_ Q by LmDefREQ0,AS,A57,A52;
+    then consider a be Element of GF(p) such that
+    P08: a <> 0.GF(p) & Q`1 = a*P`1 & Q`2 = a*P`2
+    & Q`3 = a*P`3 by DefEQV;
+    PP1: p > 1 by INT_2:def 5;
+    P09: 1.GF(p)= 1 by PP1,INT_3:24
+    .=P`3 by A53,MCART_1:47;
+    0.GF(p)= 0 by XLm2
+    .=a*P`3 by P08,MCART_1:47
+    .=a by P09,VECTSP_1:def 19;
+    hence contradiction by P08;
+  end;
+
+theorem LmDefREQ42:
+  for X be non empty finite set,
+  R be Equivalence_Relation of X,
+  S be Class(R)-valued Function, i be set st i in dom S holds
+  S.i is finite Subset of X
+  proof
+    let X be non empty finite set,
+    R be Equivalence_Relation of X, S be Class(R)-valued Function,
+    i be set;
+    assume i in dom S; then
+    S.i in Class(R) by FUNCT_1:172;
+    hence thesis;
+  end;
+
+theorem LmDefREQ43:
+  for X be non empty set,
+  R be Equivalence_Relation of X,
+  S be Class(R)-valued Function st S is one-to-one
+  holds S is disjoint_valued
+  proof
+    let X be non empty set,
+    R be Equivalence_Relation of X,
+    S be Class(R)-valued Function;
+    assume AS:S is one-to-one;
+    now let x,y be set;
+      assume
+      A3: x <> y;
+      per cases;
+      suppose
+        A4: x in dom S & y in dom S; then
+        A5: S.x <> S.y by AS,A3,FUNCT_1:def 8;
+        S.x in Class(R) & S.y in Class(R) by A4,FUNCT_1:172;
+        hence S.x misses S.y by A5,EQREL_1:def 6;
+      end;
+      suppose
+        not (x in dom S & y in dom S);
+        then S.x = {} or S.y = {} by FUNCT_1:def 4;
+        hence S.x misses S.y by XBOOLE_1:65;
+      end;
+    end;
+    hence thesis by PROB_2:def 3;
+  end;
+
+theorem LmDefREQ44:
+  for X be non empty set,
+  R be Equivalence_Relation of X,
+  S be Class(R)-valued Function st S is onto
+  holds union (rng S) = X
+  proof
+    let X be non empty set,
+    R be Equivalence_Relation of X,
+    S be Class(R)-valued Function;
+    assume AS:S is onto;
+    union (Class R) = X by EQREL_1:def 6;
+    hence thesis by AS,FUNCT_2:def 3;
+  end;
+
+theorem
+  for X be non empty finite set,
+  R be Equivalence_Relation of X,
+  S be Class(R)-valued Function,
+  L be FinSequence of NAT
+  st S is one-to-one onto
+  & dom S = dom L
+  & (for i be Nat st i in dom S holds L.i = card (S.i))
+  holds card (X) = Sum L
+  proof
+    let X be non empty finite set,
+    R be Equivalence_Relation of X,
+    S be Class(R)-valued Function,
+    L be FinSequence of NAT;
+    assume
+AS: S is one-to-one onto
+    & dom S = dom L & (for i be Nat st i in dom S holds L.i = card (S.i));
+P1: S is disjoint_valued by AS,LmDefREQ43;
+P2: for i be Nat st i in dom S holds
+    S.i is finite & L.i = card (S.i) by AS,LmDefREQ42;
+    union rng S = X by LmDefREQ44,AS;
+    hence thesis by AS,P1,P2,DIST_1:18;
+  end;
+
+theorem LmCardA:
+  for p be Prime, a, b,d be Element of GF(p), F,G be set st
+  p > 3 & Disc(a,b,p) <> 0.GF(p)
+  & F = {Y where Y is Element of GF(p) : Y|^2= d|^3 + a*d + b} & F <> {}
+  & G = {Class(R_EllCur(a,b,p),[d,Y,1])
+  where Y is Element of GF(p) : [d,Y,1] in EC_SetProjCo(a,b,p) } holds
+  ex I be Function of F,G st I is onto & I is one-to-one
+  proof
+    let p be Prime, a, b,d be Element of GF(p), F,G be set;
+    assume AS:
+    p > 3 & Disc(a,b,p) <> 0.GF(p)
+    & F = {Y where Y is Element of GF(p) : Y|^2= d|^3 + a*d + b} & F <> {}
+    & G = {Class(R_EllCur(a,b,p),[d,P,1]) where P is Element of GF(p)
+    : [d,P,1] in EC_SetProjCo(a,b,p) };
+    consider z be set such that
+E0: z in F by AS,XBOOLE_0:def 1;
+    consider W be Element of GF(p)
+    such that E1: z=W & W|^2= d|^3 + a*d + b by AS,E0;
+    [d,W,1] is Element of EC_SetProjCo(a,b,p) by E1,ECAFF; then
+    D0: Class(R_EllCur(a,b,p),[d,W,1]) in G by AS;
+    deffunc FG(set) = Class(R_EllCur(a,b,p),[d,$1,1]);
+    P0: for x be set st x in F holds FG(x) in G
+    proof
+      let x be set;
+      assume x in F; then
+      consider Y be Element of GF(p)
+      such that P01:x=Y & Y|^2= d|^3 + a*d + b by AS;
+      [d,Y,1] is Element of EC_SetProjCo(a,b,p) by P01,ECAFF;
+      hence FG(x) in G by AS,P01;
+    end;
+    consider I be Function of F,G such that
+P1: for x be set st x in F holds I.x = FG(x) from FUNCT_2:sch 2(P0);
+    take I;
+    now let y be set;
+      assume y in G; then
+      consider P be Element of GF(p)
+      such that D2: y= Class(R_EllCur(a,b,p),[d,P,1])
+      & [d,P,1] in EC_SetProjCo(a,b,p) by AS;
+      P|^2= d|^3 + a*d + b by D2,ECAFF; then
+      D3: P in F by AS; then
+      y=I.P by P1,D2;
+      hence y in rng I by D3,D0,FUNCT_2:189;
+    end; then
+    G c= rng I by TARSKI:def 3; then
+    G = rng I by XBOOLE_0:def 10;
+    hence I is onto by FUNCT_2:def 3;
+      now let x1,x2 be set
+        such that AS2: x1 in dom I & x2 in dom I & I.x1 = I.x2;
+    Q1: x1 in F & x2 in F by AS2; then
+        consider Y1 be Element of GF(p)
+        such that P01:x1=Y1 & Y1|^2= d|^3 + a*d + b by AS;
+        consider Y2 be Element of GF(p)
+        such that P02:x2=Y2 & Y2|^2= d|^3 + a*d + b by AS,Q1;
+   P03: I.x1 = Class(R_EllCur(a,b,p),[d,x1,1]) by AS2,P1;
+   P05: Class(R_EllCur(a,b,p),[d,x1,1])
+        = Class(R_EllCur(a,b,p),[d,x2,1]) by AS2,P1,P03;
+   P08: [d,Y2,1] is Element of EC_SetProjCo(a,b,p) by ECAFF,P02;
+        [d,Y1,1] is Element of EC_SetProjCo(a,b,p) by ECAFF,P01;
+        hence x1=x2 by AS,P01,P02,P05,P08,LMNGA2;
+      end;
+      hence I is one-to-one by FUNCT_1:def 8;
+  end;
+
+theorem LmECPFCardB:
+  for p be Prime, a, b, d be Element of GF(p) st
+  p > 3 & Disc(a,b,p) <> 0.GF(p) holds
+  card ({Class(R_EllCur(a,b,p),[d,Y,1]) where Y is Element of GF(p)
+  : [d,Y,1] in EC_SetProjCo(a,b,p) }) = 1 + Lege_p(d|^3 + a*d + b)
+  proof
+    let p be Prime, a,b,d be Element of GF(p);
+    assume
+    AS: p > 3 & Disc(a,b,p) <> 0.GF(p);
+    set F = {Y where Y is Element of GF(p) : Y|^2= d|^3 + a*d + b};
+    set G = {Class(R_EllCur(a,b,p),[d,Y,1])
+    where Y is Element of GF(p) : [d,Y,1] in EC_SetProjCo(a,b,p) };
+    per cases;
+    suppose NH2: F = {};
+      H1: G ={}
+      proof
+        assume G <> {}; then
+        consider z be set such that
+    P1: z in G by XBOOLE_0:def 1;
+        consider Y be Element of GF(p) such that
+    P2: z= Class(R_EllCur(a,b,p),[d,Y,1])
+        & [d,Y,1] in EC_SetProjCo(a,b,p) by P1;
+        Y|^2= d|^3 + a*d + b by P2,ECAFF;
+        then Y in F;
+        hence contradiction by NH2;
+      end;
+      2 < p by AS,XXREAL_0:2;
+      hence thesis by H1,NH2,QRRT1;
+    end;
+    suppose H2: F <> {};
+      then consider z be set such that E0: z in F by XBOOLE_0:def 1;
+      consider W be Element of GF(p)
+      such that E1: z=W & W|^2= d|^3 + a*d + b by E0;
+      [d,W,1] is Element of EC_SetProjCo(a,b,p) by E1,ECAFF; then
+      H1: Class(R_EllCur(a,b,p),[d,W,1]) in G;
+      consider I be Function of F,G such that
+      P0: I is onto & I is one-to-one by AS,H2,LmCardA;
+      A1: dom I = F by H1,FUNCT_2:def 1;
+      P2: rng I = G by P0,FUNCT_2:def 3; then
+      P1: card F c= card G by P0,A1,CARD_1:26;
+      reconsider h=I" as Function of G,F by P0,P2,FUNCT_2:31;
+      I"*I = id F & I*I" = id G by P0,P2,H1,FUNCT_2:35; then
+      Q0: h is onto & h is one-to-one by FUNCT_2:29; then
+      Q1:rng h = F by FUNCT_2:def 3;
+      dom h = G by H2,FUNCT_2:def 1; then
+      card G c= card F by Q0,Q1,CARD_1:26; then
+      X1: card F = card G by P1,XBOOLE_0:def 10;
+      2 < p by AS,XXREAL_0:2;
+      hence thesis by X1,QRRT1;
+    end;
+  end;
+
+LMNG:
+ for p be Prime, n be Nat st n in Seg p holds n-1 is Element of GF(p)
+ proof
+   let p be Prime, n be Nat;
+   assume n in Seg p;
+   then 1<=n & n<= p by FINSEQ_1:3; then
+   X2:1-1 <=n-1 & n-1 <=p-1 by XREAL_1:11; then
+   X3: n-1 is Element of NAT by INT_1:16;
+   p-1 < p-0 by XREAL_1:17;
+   then n-1 < p by X2,XXREAL_0:2;
+   hence thesis by X3,NAT_1:45;
+ end;
+
+LmECPFCardC:
+for p be Prime, a, b, c, d be Element of GF(p)
+st p > 3 & Disc(a,b,p) <> 0.GF(p) holds
+ex S be Function st dom S = Seg p &
+(for n be Nat st n in dom S holds
+S.n= {Class(R_EllCur(a,b,p),[(n-1),Y,1]) where Y is Element of GF(p) :
+[(n-1),Y,1] in EC_SetProjCo(a,b,p)}) & S is disjoint_valued &
+(for n be Nat st n in dom S
+holds S.n is finite) & union rng S = {Class(R_EllCur(a,b,p),P)
+where P is Element of ProjCo(GF(p)):
+P in EC_SetProjCo(a,b,p) & ex X,Y be Element of GF(p) st P=[X,Y,1]}
+proof
+  let p be Prime, a, b, c, d be Element of GF(p);
+  assume AS: p > 3 & Disc(a,b,p) <> 0.GF(p);
+  deffunc F(Nat) = {Class(R_EllCur(a,b,p),[($1-1),Y,1])
+  where Y is Element of GF(p) : [($1-1),Y,1] in EC_SetProjCo(a,b,p) };
+  consider S be FinSequence such that
+  P2: len S = p &
+  for i be Nat st i in dom S holds S.i = F(i) from FINSEQ_1:sch 2;
+  take S;
+  thus P20: dom S = Seg p by P2,FINSEQ_1:def 3;
+  thus for n be Nat st n in dom S holds
+  S.n= {Class(R_EllCur(a,b,p),[(n-1),Y,1]) where Y is Element of GF(p) :
+  [(n-1),Y,1] in EC_SetProjCo(a,b,p) } by P2;
+  now let x,y be set;
+    assume
+A3: x <> y;
+    per cases;
+    suppose
+  A4: x in dom S & y in dom S; then
+      reconsider n=x,m=y as Nat;
+      x in Seg p & y in Seg p by A4,P2,FINSEQ_1:def 3; then
+  V1: n-1 is Element of GF(p) & m-1 is Element of GF(p) by LMNG;
+ A40: S.n= {Class(R_EllCur(a,b,p),[(n-1),Y,1])
+      where Y is Element of GF(p) :
+      [(n-1),Y,1] in EC_SetProjCo(a,b,p) } by A4,P2;
+ A41: S.m= {Class(R_EllCur(a,b,p),[(m-1),Y,1])
+      where Y is Element of GF(p) :
+      [(m-1),Y,1] in EC_SetProjCo(a,b,p) } by A4,P2;
+      thus S.x misses S.y
+      proof
+        assume S.x meets S.y;
+        then consider z be set such that
+A50:    z in S.x & z in S.y by XBOOLE_0:3;
+        consider Yx be Element of GF(p) such that
+A52:    z = Class(R_EllCur(a,b,p),[(n-1),Yx,1])
+        & [(n-1),Yx,1] in EC_SetProjCo(a,b,p) by A40,A50;
+        consider Yy be Element of GF(p) such that
+A53:    z = Class(R_EllCur(a,b,p),[(m-1),Yy,1])
+        & [(m-1),Yy,1] in EC_SetProjCo(a,b,p) by A41,A50;
+        n-1 = m-1 by LMNGA2,AS,A52,A53,V1;
+        hence contradiction by A3;
+      end;
+    end;
+    suppose
+      not (x in dom S & y in dom S);
+      then S.x = {} or S.y = {} by FUNCT_1:def 4;
+      hence S.x misses S.y by XBOOLE_1:65;
+    end;
+  end;
+  hence S is disjoint_valued by PROB_2:def 3;
+  thus for n be Nat st n in dom S holds S.n is finite
+  proof
+    let n be Nat;
+    assume ASN: n in dom S; then
+Q1: S.n= {Class(R_EllCur(a,b,p),[(n-1),Y,1])
+    where Y is Element of GF(p) : [(n-1),Y,1] in EC_SetProjCo(a,b,p) } by P2;
+    1<=n & n<= p by ASN,P20,FINSEQ_1:3; then
+X2: 1-1 <=n-1 & n-1 <=p-1 by XREAL_1:11; then
+X3: n-1 is Element of NAT by INT_1:16;
+    p-1 < p-0 by XREAL_1:17; then
+    n-1 < p by X2,XXREAL_0:2; then
+    reconsider d=n-1 as Element of GF(p) by X3,NAT_1:45;
+X1: card (S.n) = card (  {Class(R_EllCur(a,b,p),[d,Y,1])
+    where Y is Element of GF(p) : [d,Y,1] in EC_SetProjCo(a,b,p) }) by Q1
+    .= 1 + Lege_p(d|^3 + a*d + b) by LmECPFCardB,AS;
+    0 <= 1 + Lege_p(d|^3 + a*d + b)
+    proof
+      per cases;
+      suppose not (d|^3 + a*d + b = 0 or d|^3 + a*d + b is quadratic_residue);
+        then Lege_p(d|^3 + a*d + b) = -1 by QRDef3;
+        hence 0<= 1 + Lege_p(d|^3 + a*d + b);
+      end;
+      suppose C2: d|^3 + a*d + b = 0
+        or d|^3 + a*d + b is quadratic_residue;
+        now per cases by C2;
+          suppose d|^3 + a*d + b = 0;
+            then Lege_p(d|^3 + a*d + b) = 0 by QRDef3;
+            hence 0<= 1 + Lege_p(d|^3 + a*d + b);
+          end;
+          suppose d|^3 + a*d + b is quadratic_residue;
+            then Lege_p(d|^3 + a*d + b) = 1 by QRDef3;
+            hence 0<= 1 + Lege_p(d|^3 + a*d + b);
+          end;
+        end;
+        hence 0<= 1 + Lege_p(d|^3 + a*d + b);
+      end;
+    end; then
+    card (S.n) in NAT by X1,INT_1:16;
+    hence S.n is finite;
+  end;
+  set B={Class(R_EllCur(a,b,p),P) where P is Element of ProjCo(GF(p)):
+  P in EC_SetProjCo(a,b,p) & ex X,Y be Element of GF(p) st P=[X,Y,1]};
+  for x be set holds x in union rng S iff x in B
+  proof
+    let x be set;
+    hereby assume x in union rng S; then
+      consider Z be set such that A2:
+      x in Z & Z in rng S by TARSKI:def 4;
+      consider n be set such that A4:
+      n in dom S & Z = S.n by A2,FUNCT_1:def 5;
+      reconsider n as Nat by A4;
+      S.n = {Class(R_EllCur(a,b,p),[(n-1),Y,1]) where Y is Element of GF(p) :
+      [(n-1),Y,1] in EC_SetProjCo(a,b,p) } by A4,P2; then
+      consider Y be Element of GF(p) such that
+  A6: x = Class(R_EllCur(a,b,p),[(n-1),Y,1])
+      & [(n-1),Y,1] in EC_SetProjCo(a,b,p) by A2,A4;
+      n-1 is Element of GF(p) by P20,A4,LMNG;
+      hence x in B by A6;
+    end;
+    assume x in B;
+    then consider P be Element of ProjCo(GF(p)) such that
+A3: x = Class(R_EllCur(a,b,p),P) & P in EC_SetProjCo(a,b,p) &
+    ex X,Y be Element of GF(p) st P=[X,Y,1];
+    consider X,Y be Element of GF(p) such that
+A4: P=[X,Y,1] by A3;
+    reconsider n1=X as Nat;
+D2: 0<=n1 & n1 < p by NAT_1:45;
+D3: (0 qua Nat) + 1 <= n1+1 by XREAL_1:8;
+D4: n1 + 1 <= p by D2,NAT_1:13;
+    set n=n1+1;
+A5: n in Seg p & n-1=X by D3,D4;
+    x in {Class(R_EllCur(a,b,p),[(n-1),Q,1]) where Q is Element of GF(p) :
+    [(n-1),Q,1] in EC_SetProjCo(a,b,p) } by A3,A4; then
+A6: x in S.n by A5,P2,P20;
+    S.n in rng S by A5,P20,FUNCT_1:12;
+    hence x in union rng S by A6,TARSKI:def 4;
+  end;
+  hence thesis by TARSKI:2;
+end;
+
+theorem LmECPFCardY:
+  for p be Prime, a, b be Element of GF(p)
+  st p > 3 & Disc(a,b,p) <> 0.GF(p) holds
+  ex F be FinSequence of NAT st len F = p
+  & (for n be Nat st n in Seg p
+  ex d be Element of GF(p) st d=n-1 & F.n = 1 + Lege_p(d|^3 + a*d + b))
+  & card {Class(R_EllCur(a,b,p),P)
+  where P is Element of ProjCo(GF(p)): P in EC_SetProjCo(a,b,p) &
+  ex X,Y be Element of GF(p) st P=[X,Y,1]} = Sum(F)
+  proof
+    let p be Prime, a, b be Element of GF(p);
+    assume AS: p > 3 & Disc(a,b,p) <> 0.GF(p); then
+    consider S be Function such that
+P1: dom S =Seg p & (for n be Nat st n in dom S holds
+    S.n= {Class(R_EllCur(a,b,p),[(n-1),Y,1])
+    where Y is Element of GF(p) :
+    [(n-1),Y,1] in EC_SetProjCo(a,b,p) } ) &
+    S is disjoint_valued & (for n be Nat st n in dom S holds S.n is finite)
+    & union rng S = {Class(R_EllCur(a,b,p),P)
+    where P is Element of ProjCo(GF(p)): P in EC_SetProjCo(a,b,p) &
+    ex X,Y be Element of GF(p) st P=[X,Y,1]} by LmECPFCardC;
+    defpred P0[Nat,Nat] means $2= card (S.$1);
+P20:now let i be Nat;
+      assume i in Seg p;
+      then S.i is finite by P1; then
+      reconsider x = card (S.i) as Element of NAT by ORDINAL1:def 13;
+      take x;
+      thus P0[i,x];
+    end;
+    consider L be FinSequence of NAT such that
+    P2: dom L= Seg p &
+    for i be Nat st i in Seg p holds P0[i,L.i] from FINSEQ_1:sch 5(P20);
+    take L;
+    p is Element of NAT by ORDINAL1:def 13;
+    hence len L = p by P2,FINSEQ_1:def 3;
+P3: now let n be Nat;
+      assume P31:n in Seg p; then
+      1<=n & n<= p by FINSEQ_1:3; then
+   X2:1-1 <=n-1 & n-1 <=p-1 by XREAL_1:11; then
+  X3: n-1 is Element of NAT by INT_1:16;
+      p-1 < p-0 by XREAL_1:17; then
+      n-1 < p by X2,XXREAL_0:2; then
+      reconsider d=n-1 as Element of GF(p) by X3,NAT_1:45;
+      take d;
+      thus d=n-1;
+      thus L.n = card (S.n) by P2,P31
+      .= card ({Class(R_EllCur(a,b,p),[(n-1),Y,1])
+      where Y is Element of GF(p) :
+      [(n-1),Y,1] in EC_SetProjCo(a,b,p) } ) by P1,P31
+      .= card ({Class(R_EllCur(a,b,p),[d,Y,1])
+      where Y is Element of GF(p) : [d,Y,1] in EC_SetProjCo(a,b,p) } )
+      .= 1 + Lege_p(d|^3 + a*d + b) by LmECPFCardB,AS;
+    end;
+    for i be Nat st i in dom S holds
+    S.i is finite & L.i = card (S.i) by P1,P2;
+    hence thesis by P1,P2,P3,DIST_1:18;
+  end;
+
+theorem
+  for p be Prime, a, b be Element of GF(p)
+  st p > 3 & Disc(a,b,p) <> 0.GF(p)
+  ex F be FinSequence of INT st len F = p &
+  (for n be Nat st n in Seg p ex d be Element of GF(p)
+  st d=n-1 & F.n = Lege_p(d|^3 + a*d + b)) &
+  card(Class(R_EllCur(a,b,p))) = 1 + p + Sum(F)
+  proof
+    let p be Prime, a, b be Element of GF(p);
+    assume
+AS: p > 3 & Disc(a,b,p) <> 0.GF(p); then
+    consider L be FinSequence of NAT such that
+P1: len L = p
+    & (for n be Nat st n in Seg p ex d be Element of GF(p) st d=n-1 &
+    L.n = 1 + Lege_p(d|^3 + a*d + b))
+    & card {Class(R_EllCur(a,b,p),P)
+    where P is Element of ProjCo(GF(p)): P in EC_SetProjCo(a,b,p) &
+    ex X,Y be Element of GF(p) st P=[X,Y,1]} = Sum(L) by LmECPFCardY;
+X0: p is Element of NAT by ORDINAL1:def 13;
+    defpred P0[Nat,set] means
+    ex d be Element of GF(p) st d=$1-1 & $2 = Lege_p(d|^3 + a*d + b);
+P20:now let n be Nat;
+      assume n in Seg p; then
+      1<=n & n<= p by FINSEQ_1:3; then
+      X2:1-1 <=n-1 & n-1 <=p-1 by XREAL_1:11; then
+      X3: n-1 is Element of NAT by INT_1:16;
+      p-1 < p-0 by XREAL_1:17; then
+      n-1 < p by X2,XXREAL_0:2; then
+      reconsider d=n-1 as Element of GF(p) by X3,NAT_1:45;
+      reconsider x = Lege_p(d|^3 + a*d + b) as Element of INT by INT_1:def 2;
+      take x;
+      thus P0[n,x];
+    end;
+    consider F be FinSequence of INT such that
+P2: dom F= Seg p &
+   for i be Nat st i in Seg p holds P0[i,F.i] from FINSEQ_1:sch 5(P20);
+   take F;
+   thus XX1:len F = p by P2,X0,FINSEQ_1:def 3;
+   reconsider pp=(p |-> (1 qua Real )) as
+   Element of p-tuples_on REAL by FINSEQ_2:132;
+   F is FinSequence of REAL by FINSEQ_2:27,NUMBERS:15;
+   then reconsider FF=F as Element of p-tuples_on REAL by XX1,FINSEQ_2:110;
+P3: now let n be Nat;
+      assume 1<=n & n<=p; then
+      P30: n in Seg p by FINSEQ_1:3; then
+      P31: ex d be Element of GF(p) st d=n-1 &
+      L.n = 1 + Lege_p(d|^3 + a*d + b) by P1;
+      ex f be Element of GF(p) st f=n-1 &
+      F.n = Lege_p(f|^3 + a*f + b) by P2,P30; then
+      L.n=(p |-> (1 qua Real )).n +F.n by P31,P30,FUNCOP_1:13;
+      hence L.n=(pp+FF).n by RVSUM_1:27;
+    end;
+    len (pp+FF) = p by X0,FINSEQ_2:152; then
+    L=pp+FF by P1,P3,FINSEQ_1:18; then
+    Sum(L)=Sum(p |-> (1 qua Real ))+Sum(F) by RVSUM_1:119; then
+P4: Sum(L)=p*1+Sum(F) by RVSUM_1:110;
+    reconsider F1 = {Class(R_EllCur(a,b,p),[0,1,0])} as finite set;
+    reconsider F2 = {Class(R_EllCur(a,b,p),P)
+      where P is Element of ProjCo(GF(p)):
+    P in EC_SetProjCo(a,b,p) & ex X,Y be Element of GF(p)
+    st P=[X,Y,1]} as finite set by P1;
+F4: card F1 = 1 by CARD_2:60;
+    card (Class (R_EllCur(a,b,p))) = card(F1 \/ F2) by AS,LmDefREQ4
+    .= 1 + (p+Sum(F)) by AS,F4,P1,P4,MIS,CARD_2:53;
+    hence thesis by P2;
+  end;
+

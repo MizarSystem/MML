@@ -15,10 +15,10 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSEQ_6"/>
 <ArticleID name="FINSEQ_2"/>
@@ -64,9 +64,9 @@
 <Adjective nr="6"/>
 <Adjective nr="8" value="false"/>
 <Adjective nr="11" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="33"/>
+<Adjective nr="27"/>
 <Adjective nr="34"/>
+<Adjective nr="35"/>
 <Adjective nr="38">
 <Func kind="U" nr="1">
 <Func kind="K" nr="298">

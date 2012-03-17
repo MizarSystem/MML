@@ -33,26 +33,25 @@
 <ArticleID name="EXTPRO_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="SCMFSA_2"/>
-<ArticleID name="AMI_1"/>
 <ArticleID name="AMISTD_2"/>
 <ArticleID name="AMISTD_5"/>
 </Signature>
 <FCluster aid="SCMFSA_3" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 <Cluster>
 <Adjective nr="82">
 <Func kind="K" nr="2">
 <Func kind="K" nr="66"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="66"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="96">
+<Adjective nr="95">
 <Func kind="K" nr="2">
 <Func kind="K" nr="66"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="66"/>
 </Func>
 </Func>
@@ -61,20 +60,20 @@
 </FCluster>
 <FCluster aid="SCMFSA_3" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 <Cluster>
 <Adjective nr="82">
 <Func kind="K" nr="2">
 <Func kind="K" nr="66"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="66"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="97">
+<Adjective nr="96">
 <Func kind="K" nr="2">
 <Func kind="K" nr="66"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="66"/>
 </Func>
 </Func>

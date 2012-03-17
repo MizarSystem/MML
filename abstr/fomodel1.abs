@@ -1,0 +1,861 @@
+:: Definition of first order language with arbitrary alphabet. Syntax of 
+:: terms, atomic formulas and their subterms.
+::  by Marco B. Caminati
+:: 
+:: Received December 29, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, INT_1,
+      RELAT_1, FINSEQ_1, FUNCT_1, ARYTM_3, XCMPLX_0, CARD_1, MONOID_0,
+      ORDINAL1, ARYTM_1, STRUCT_0, XXREAL_0, XREAL_0, ORDINAL4, BINOP_1,
+      FINSEQ_2, COMPLEX1, PARTFUN1, FINSET_1, SUPINF_2, MESFUNC1, PRE_POLY,
+      SETFAM_1, FUNCT_4, FUNCOP_1, FUNCT_2, CARD_3, FOMODEL0, FOMODEL1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NAT_1, CARD_1, NUMBERS, INT_1, PRE_POLY,
+      FINSEQ_1, XCMPLX_0, RELAT_1, FUNCT_1, FUNCT_2, MONOID_0, ORDINAL1,
+      XXREAL_0, XREAL_0, BINOP_1, FINSEQ_2, PARTFUN1, INT_2, FINSET_1,
+      MATRIX_2, STRUCT_0, RELSET_1, SETFAM_1, FUNCT_4, FUNCOP_1, DOMAIN_1,
+      CARD_3, ORDERS_4, FOMODEL0;
+ constructors TARSKI, NAT_1, CARD_1, ZFMISC_1, NUMBERS, INT_1, ARYTM_3,
+      FINSEQ_1, MONOID_0, STRUCT_0, XXREAL_0, BINOP_1, FINSEQ_2, COMPLEX1,
+      RELSET_1, INT_2, FINSEQOP, DOMAIN_1, FINSET_1, MATRIX_2, REAL_1,
+      PRE_POLY, SETFAM_1, FUNCT_4, FUNCOP_1, RELAT_1, FUNCT_1, FUNCT_2, CARD_3,
+      ORDERS_4, FOMODEL0;
+ registrations XCMPLX_0, NAT_1, RELAT_1, NUMBERS, FUNCT_1, INT_1, FINSEQ_1,
+      STRUCT_0, FUNCT_2, FINSEQ_2, SUBSET_1, CARD_1, CARD_5, FINSET_1, PRALG_1,
+      PRE_POLY, FINSEQ_6, FOMODEL0, XBOOLE_0, XXREAL_0, XREAL_0, FUNCOP_1,
+      FUNCT_4, RELSET_1, RAMSEY_1, CARD_3, ORDINAL1;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
+
+
+begin
+
+reserve k,m,n for Nat, kk,mm,nn for Element of NAT, X,Y,x,y,z for set;
+
+registration
+let z be zero (integer number);
+cluster abs(z) -> zero (integer number);
+end;
+
+registration
+cluster negative integer (real number);
+cluster positive -> natural (integer number);
+end;
+
+registration
+let S be non degenerated ZeroOneStr;
+cluster (the carrier of S) \ {the OneF of S} -> non empty;
+end;
+
+::##########  First-order structure (theory) formalization  ###########
+::######################  basic definitions  ##########################
+::#####################################################################
+::#####################################################################
+
+definition
+struct (ZeroOneStr) Language-like
+(#carrier -> set, ZeroF, OneF -> Element of the carrier,
+adicity->Function of the carrier\{the OneF}, INT#);
+end;
+
+definition
+let S be Language-like;
+func AllSymbolsOf S equals
+:: FOMODEL1:def 1
+the carrier of S;
+func LettersOf S equals
+:: FOMODEL1:def 2
+(the adicity of S) " {0};
+func OpSymbolsOf S equals
+:: FOMODEL1:def 3
+(the adicity of S) " (NAT \ {0});
+func RelSymbolsOf S equals
+:: FOMODEL1:def 4
+(the adicity of S) " (INT \ NAT);
+func TermSymbolsOf S equals
+:: FOMODEL1:def 5
+(the adicity of S) " NAT;
+func LowerCompoundersOf S equals
+:: FOMODEL1:def 6
+(the adicity of S) " (INT \ {0});
+func TheEqSymbOf S equals
+:: FOMODEL1:def 7
+the ZeroF of S;
+func TheNorSymbOf S equals
+:: FOMODEL1:def 8
+the OneF of S;
+func OwnSymbolsOf S equals
+:: FOMODEL1:def 9
+(the carrier of S)\{the ZeroF of S,the OneF of S};
+end;
+
+definition
+let S be Language-like;
+mode Element of S is Element of (AllSymbolsOf S);
+func AtomicFormulaSymbolsOf S equals
+:: FOMODEL1:def 10
+(AllSymbolsOf S) \ {TheNorSymbOf S};
+func AtomicTermsOf S equals
+:: FOMODEL1:def 11
+1-tuples_on (LettersOf S);
+attr S is operational means
+:: FOMODEL1:def 12
+(OpSymbolsOf S) is non empty;
+attr S is relational means
+:: FOMODEL1:def 13
+(RelSymbolsOf S) \ {TheEqSymbOf S} is non empty;
+end;
+
+definition
+let S be Language-like;
+let s be Element of S;
+attr s is literal means
+:: FOMODEL1:def 14
+s in LettersOf S;
+attr s is low-compounding means
+:: FOMODEL1:def 15
+s in LowerCompoundersOf S;
+attr s is operational means
+:: FOMODEL1:def 16
+s in OpSymbolsOf S;
+attr s is relational means
+:: FOMODEL1:def 17
+s in RelSymbolsOf S;
+attr s is termal means
+:: FOMODEL1:def 18
+s in TermSymbolsOf S;
+attr s is own means
+:: FOMODEL1:def 19
+s in OwnSymbolsOf S; ::def19
+attr s is ofAtomicFormula means
+:: FOMODEL1:def 20
+s in AtomicFormulaSymbolsOf S;
+end;
+
+definition
+let S be ZeroOneStr;
+let s be Element of (the carrier of S)\{the OneF of S};
+func TrivialArity(s) -> integer number equals
+:: FOMODEL1:def 21
+-2 if s=the ZeroF of S otherwise 0;
+end;
+
+definition
+let S be ZeroOneStr;
+let s be Element of (the carrier of S)\{the OneF of S};
+redefine func TrivialArity(s) -> Element of INT;
+end;
+
+definition
+let S be non degenerated ZeroOneStr;
+func S TrivialArity->Function of (the carrier of S)\{the OneF of S},INT means
+:: FOMODEL1:def 22
+ for s being Element of (the carrier of S)\{the OneF of S}
+holds it.s=TrivialArity(s);
+end;
+
+registration
+cluster infinite (non degenerated ZeroOneStr);
+end;
+
+registration
+let S be infinite (non degenerated ZeroOneStr);
+cluster (S TrivialArity)"{0} -> infinite;
+end;
+
+definition
+let S be Language-like;
+attr S is eligible means
+:: FOMODEL1:def 23
+LettersOf S is infinite & ::Def23
+(the adicity of S).(TheEqSymbOf S)=-2;
+end;
+
+registration
+cluster non degenerated Language-like;
+end;
+
+registration
+cluster eligible (non degenerated Language-like);
+end;
+
+definition
+mode Language is eligible (non degenerated Language-like);
+end;
+
+reserve S,S1,S2 for Language, s,s1,s2 for Element of S;
+
+definition
+let S be non empty Language-like;
+redefine func AllSymbolsOf S -> non empty set;
+end;
+
+registration
+let S be eligible Language-like;
+cluster LettersOf S -> infinite;
+end;
+
+definition
+let S be Language;
+redefine func LettersOf S -> non empty Subset of (AllSymbolsOf S);
+end;
+
+registration
+let S be Language;
+cluster TheEqSymbOf S -> relational Element of S;
+end;
+
+definition
+let S be non degenerated Language-like;
+redefine func AtomicFormulaSymbolsOf S
+-> non empty Subset of (AllSymbolsOf S);
+end;
+
+definition
+let S be non degenerated Language-like;
+redefine func TheEqSymbOf S -> Element of AtomicFormulaSymbolsOf S;
+end;
+
+theorem :: FOMODEL1:1
+for S being Language holds ::Th1
+LettersOf S /\ OpSymbolsOf S ={} &
+TermSymbolsOf S /\ LowerCompoundersOf S = OpSymbolsOf S &
+RelSymbolsOf S \ OwnSymbolsOf S = {TheEqSymbOf S} &
+OwnSymbolsOf S c= AtomicFormulaSymbolsOf S &
+RelSymbolsOf S c= LowerCompoundersOf S &
+OpSymbolsOf S c= TermSymbolsOf S &
+LettersOf S c= TermSymbolsOf S &
+TermSymbolsOf S c= OwnSymbolsOf S &
+OpSymbolsOf S c= LowerCompoundersOf S &
+LowerCompoundersOf S c= AtomicFormulaSymbolsOf S;
+
+registration
+let S be Language;
+cluster TermSymbolsOf S -> non empty set;
+cluster own -> ofAtomicFormula Element of S;
+cluster relational -> low-compounding Element of S;
+cluster operational -> termal Element of S;
+cluster literal -> termal Element of S;
+cluster termal -> own Element of S;
+cluster operational -> low-compounding Element of S;
+cluster low-compounding -> ofAtomicFormula Element of S;
+cluster termal -> non relational Element of S;
+cluster literal -> non relational Element of S;
+cluster literal -> non operational Element of S;
+end;
+
+registration
+let S be Language;
+cluster relational Element of S;
+cluster literal Element of S;
+end;
+
+registration
+let S be Language;
+cluster termal -> operational (low-compounding Element of S);
+end;
+
+registration
+let S be Language;
+cluster ofAtomicFormula Element of S;
+end;
+
+definition
+let S be Language;
+let s be ofAtomicFormula Element of S;
+func ar(s) -> Element of INT equals
+:: FOMODEL1:def 24
+(the adicity of S).s;
+end;
+
+registration
+let S be Language; let s be literal Element of S;
+cluster ar(s) -> zero number;
+end;
+
+definition
+let S be Language;
+func S-cons -> BinOp of (AllSymbolsOf S)* :: Lisp-like
+equals
+:: FOMODEL1:def 25
+(AllSymbolsOf S)-concatenation;
+end;
+
+definition
+let S be Language;
+func S-multiCat -> Function of (AllSymbolsOf S)**, (AllSymbolsOf S)*
+equals
+:: FOMODEL1:def 26
+(AllSymbolsOf S)-multiCat;
+end;
+
+definition
+let S be Language;
+func S-firstChar -> Function of (AllSymbolsOf S)*\{{}}, AllSymbolsOf S equals
+:: FOMODEL1:def 27
+(AllSymbolsOf S)-firstChar;
+end;
+
+definition ::def28 1
+let S be Language;
+let X be set;
+attr X is S-prefix means
+:: FOMODEL1:def 28
+X is (AllSymbolsOf S)-prefix;
+end;
+
+registration
+let S be Language;
+cluster S-prefix -> (AllSymbolsOf S)-prefix set;
+cluster (AllSymbolsOf S)-prefix -> S-prefix set;
+end;
+
+definition
+let S be Language;
+mode string of S is Element of ((AllSymbolsOf S)*\{{}});
+end;
+
+registration
+let S;
+cluster (AllSymbolsOf S)*\{{}} -> non empty set;
+end;
+
+registration
+let S;
+cluster -> non empty string of S;
+end;
+
+registration
+cluster -> infinite Language;
+end;
+
+registration
+let S be Language; cluster AllSymbolsOf S -> infinite;
+
+end;
+
+definition
+let S be Language;
+let s be ofAtomicFormula Element of S;
+let Strings be set;
+func Compound(s,Strings) equals
+:: FOMODEL1:def 29
+{<*s*> ^ ((S-multiCat).StringTuple) where
+StringTuple is Element of (AllSymbolsOf S)**:
+rng StringTuple c= Strings & StringTuple is (abs(ar(s)))-element};
+end;
+
+definition
+let S be Language;
+let s be ofAtomicFormula Element of S;
+let Strings be set;
+redefine func Compound(s,Strings) -> Element of bool ((AllSymbolsOf S)*\{{}});
+end;
+
+definition
+let S be Language;
+func S-termsOfMaxDepth -> Function means
+:: FOMODEL1:def 30
+dom it=NAT & ::Def30
+it.0 = (AtomicTermsOf S) & for n being Nat holds it.(n+1) =
+(union {Compound(s,it.n) where s is ofAtomicFormula Element of S:
+s is operational})
+\/ it.n;
+end;
+
+definition
+let S;
+redefine func AtomicTermsOf S -> Subset of (AllSymbolsOf S)*;
+end;
+
+definition
+let S be Language;
+func AllTermsOf S equals
+:: FOMODEL1:def 31
+union rng (S-termsOfMaxDepth);
+end;
+
+theorem :: FOMODEL1:2
+S-termsOfMaxDepth.mm c= AllTermsOf S;
+
+definition
+let S be Language;
+let w be string of S;
+attr w is termal means
+:: FOMODEL1:def 32
+w in AllTermsOf S; ::def32
+end;
+
+definition
+let m be Nat;
+let S be Language;
+let w be string of S;
+attr w is m-termal means
+:: FOMODEL1:def 33
+w in S-termsOfMaxDepth.m; ::def33
+end;
+
+registration
+let m be Nat;
+let S be Language;
+cluster m-termal -> termal string of S;
+end;
+
+definition let S;
+redefine func S-termsOfMaxDepth -> Function of NAT,bool((AllSymbolsOf S)*);
+end;
+
+definition
+let S;
+redefine func AllTermsOf S -> non empty Subset of (AllSymbolsOf S)*;
+end;
+
+registration
+let S;
+cluster AllTermsOf S -> non empty;
+end;
+
+registration
+let S,m;
+cluster S-termsOfMaxDepth.m -> non empty;
+end;
+
+registration
+let S,m;
+cluster -> non empty (Element of S-termsOfMaxDepth.m);
+end;
+
+registration
+let S;
+cluster -> non empty (Element of AllTermsOf S);
+end;
+
+registration
+let m be Nat, S be Language;
+cluster m-termal string of S;
+end;
+
+registration
+let S;
+cluster 0-termal -> 1-element (string of S);
+end;
+
+registration
+let S be Language; let w be 0-termal string of S;
+cluster S-firstChar.w -> literal Element of S;
+end;
+
+registration
+let S;
+let w be termal (string of S);
+cluster S-firstChar.w -> termal Element of S;
+end;
+
+definition
+let S; let t be termal string of S;
+func ar(t) -> Element of INT equals
+:: FOMODEL1:def 34
+ar(S-firstChar.t);
+end;
+
+theorem :: FOMODEL1:3
+for w being (mm+1)-termal string of S ex T being Element of
+((S-termsOfMaxDepth).mm)* st T is (abs(ar(S-firstChar.w)))-element
+& w=<*S-firstChar.w*>^((S-multiCat).T);
+
+registration
+let S,m;
+cluster S-termsOfMaxDepth.m -> S-prefix;
+end;
+
+registration
+let S; let V be Element of (AllTermsOf S)*;
+cluster S-multiCat.V -> Relation-like;
+end;
+
+registration
+let S; let V be Element of (AllTermsOf S)*;
+cluster S-multiCat.V -> Function-like Relation;
+end;
+
+definition
+let S;
+let phi be string of S;
+attr phi is 0wff means
+:: FOMODEL1:def 35
+ex s being relational ::def35
+Element of S, V being abs(ar(s))-element Element of (AllTermsOf S)* st
+phi=<*s*>^(S-multiCat.V);
+end;
+
+registration
+let S;
+cluster 0wff string of S;
+end;
+
+registration
+let S; let phi be 0wff string of S;
+cluster S-firstChar.phi -> relational Element of S;
+end;
+
+definition
+let S; func AtomicFormulasOf S equals
+:: FOMODEL1:def 36 ::def36
+{phi where phi is string of S: phi is 0wff};
+end;
+
+definition
+let S;
+redefine func AtomicFormulasOf S -> Subset of (AllSymbolsOf S)*\{{}};
+end;
+
+registration
+let S;
+cluster AtomicFormulasOf S -> non empty;
+end;
+
+registration
+let S;
+cluster -> 0wff (Element of AtomicFormulasOf S);
+end;
+
+registration
+let S;
+cluster AllTermsOf S -> S-prefix;
+end;
+
+definition
+let S; let t be termal string of S;
+func SubTerms(t) -> Element of (AllTermsOf S)* means
+:: FOMODEL1:def 37
+it is (abs(ar(S-firstChar.t)))-element &
+t=<*S-firstChar.t*>^(S-multiCat.it);
+end;
+
+registration
+let S; let t be termal string of S;
+cluster SubTerms(t) -> (abs(ar(t)))-element Element of (AllTermsOf S)*;
+end;
+
+registration
+let S; let t0 be 0-termal string of S;
+cluster SubTerms(t0) -> empty Element of (AllTermsOf S)*;
+end;
+
+registration
+let mm,S; let t be (mm+1)-termal string of S;
+cluster SubTerms(t) ->
+(S-termsOfMaxDepth.mm)-valued (Element of (AllTermsOf S)*);
+end;
+
+definition ::def38 1
+let S; let phi be 0wff string of S;
+func SubTerms(phi) -> abs(ar(S-firstChar.phi))-element
+Element of (AllTermsOf S)* means
+:: FOMODEL1:def 38
+phi=<*S-firstChar.phi*>^(S-multiCat.it);
+end;
+
+registration
+let S; let phi be 0wff string of S;
+cluster SubTerms phi -> abs(ar(S-firstChar.phi))-element FinSequence;
+end;
+
+definition
+let S;
+redefine func AllTermsOf S -> Element of
+bool ((AllSymbolsOf S)*\{{}});
+end;
+
+registration
+let S;
+cluster -> termal Element of AllTermsOf S;
+end;
+
+definition
+let S;
+func S-subTerms -> Function of (AllTermsOf S), (AllTermsOf S)* means
+:: FOMODEL1:def 39 ::def39
+for t being Element of AllTermsOf S holds it.t=SubTerms(t);
+end;
+
+theorem :: FOMODEL1:4
+S-termsOfMaxDepth.m c= S-termsOfMaxDepth.(m+n); ::Th4
+
+theorem :: FOMODEL1:5
+x in AllTermsOf S implies ex nn st x in S-termsOfMaxDepth.nn;
+
+theorem :: FOMODEL1:6
+AllTermsOf S c= (AllSymbolsOf S)*\{{}};
+
+theorem :: FOMODEL1:7
+AllTermsOf S is S-prefix;
+
+theorem :: FOMODEL1:8
+x in AllTermsOf S implies x is string of S;
+
+theorem :: FOMODEL1:9
+(AtomicFormulaSymbolsOf S) \ OwnSymbolsOf S={TheEqSymbOf S};
+
+theorem :: FOMODEL1:10
+TermSymbolsOf S\(LettersOf S) = OpSymbolsOf S;
+
+theorem :: FOMODEL1:11
+(AtomicFormulaSymbolsOf S) \ (RelSymbolsOf S)=TermSymbolsOf S;
+
+registration let S;
+cluster non relational -> termal (ofAtomicFormula Element of S);
+end;
+
+definition let S;
+redefine func OwnSymbolsOf S -> Subset of AllSymbolsOf S;
+end;
+
+registration let S;
+cluster non literal -> operational (termal Element of S);
+end;
+
+theorem :: FOMODEL1:12
+x is string of S iff x is non empty Element of ((AllSymbolsOf S)*);
+
+theorem :: FOMODEL1:13 ::Th13
+x is string of S iff x is non empty FinSequence of (AllSymbolsOf S);
+
+theorem :: FOMODEL1:14
+S-termsOfMaxDepth is Function of NAT,bool((AllSymbolsOf S)*);
+
+registration let S;
+cluster -> literal Element of (LettersOf S);
+end;
+
+registration
+let S;
+cluster TheNorSymbOf S -> non low-compounding Element of S;
+end;
+
+registration let S;
+cluster TheNorSymbOf S -> non own Element of S;
+end;
+
+theorem :: FOMODEL1:15 ::Th15
+s<>TheNorSymbOf S & s<>TheEqSymbOf S implies s in OwnSymbolsOf S;
+
+reserve l,l1,l2 for literal Element of S, a for ofAtomicFormula Element of S,
+r for relational Element of S, w,w1,w2 for string of S,
+t,t1,t2 for termal string of S, tt,tt1, tt2 for Element of AllTermsOf S;
+
+definition ::def40 1
+let S, t;
+func Depth t -> Nat means
+:: FOMODEL1:def 40
+t is it-termal & for n st t is n-termal holds it <= n;
+end;
+
+registration
+let S; let m0 be zero number; let t be m0-termal string of S;
+cluster Depth t -> zero number;
+end;
+
+registration
+let S; let s be low-compounding Element of S;
+cluster ar(s) -> non zero number;
+end;
+
+registration
+let S; let s be termal Element of S;
+cluster ar s -> non negative ext-real;
+end;
+
+registration
+let S; let s be relational Element of S;
+cluster ar s -> negative ext-real;
+end;
+
+theorem :: FOMODEL1:16
+t is non 0-termal implies S-firstChar.t is operational &
+SubTerms t <> {};
+
+registration let S;
+cluster S-multiCat -> FinSequence-yielding Function;
+end;
+
+registration
+let S; let W be non empty ((AllSymbolsOf S)*\{{}})-valued FinSequence;
+cluster S-multiCat.W -> non empty set;
+end;
+
+registration let S, l;
+cluster <*l*> -> 0-termal string of S;
+end;
+
+registration let S, m, n;
+cluster (m+0*n)-termal -> (m+n)-termal string of S;
+end;
+
+registration let S;
+cluster non low-compounding -> literal (own Element of S);
+end;
+
+registration let S, t;
+cluster SubTerms t -> (rng t)*-valued Relation;
+end;
+
+registration
+let S; let phi0 be 0wff string of S;
+cluster SubTerms phi0 -> (rng phi0)*-valued Relation;
+end;
+
+definition let S;
+redefine func S-termsOfMaxDepth ->
+Function of NAT,bool((AllSymbolsOf S)*\{{}});
+end;
+
+registration let S,mm;
+cluster S-termsOfMaxDepth.mm -> with_non-empty_elements;
+end;
+
+registration
+let S,m; let t be termal string of S;
+cluster t null m -> (Depth t+m)-termal string of S;
+end;
+
+registration
+let S;
+cluster termal -> (TermSymbolsOf S)-valued string of S;
+end;
+
+registration
+let S;
+cluster AllTermsOf S\((TermSymbolsOf S)*) -> empty set;
+end;
+
+registration
+let S; let phi0 be 0wff string of S;
+cluster SubTerms phi0 -> (TermSymbolsOf S)*-valued;
+end;
+
+registration
+let S;
+cluster 0wff -> (AtomicFormulaSymbolsOf S)-valued string of S;
+end;
+
+registration
+let S;
+cluster OwnSymbolsOf S -> non empty set;
+end;
+
+reserve phi0 for 0wff string of S;
+
+theorem :: FOMODEL1:17
+S-firstChar.phi0<>TheEqSymbOf S implies
+phi0 is (OwnSymbolsOf S)-valued;
+
+registration
+cluster strict non empty Language-like;
+end;
+
+definition ::def41 1
+let S1, S2 be Language-like;
+attr S2 is S1-extending means
+:: FOMODEL1:def 41
+the adicity of S1 c= the adicity of S2 & TheEqSymbOf S1=TheEqSymbOf S2 &
+TheNorSymbOf S1 = TheNorSymbOf S2;
+end;
+
+registration
+let S;
+cluster S null -> S-extending Language-like;
+end;
+
+registration
+let S;
+cluster S-extending Language;
+end;
+
+registration
+let S1; let S2 be S1-extending Language;
+cluster OwnSymbolsOf S1 \ OwnSymbolsOf S2 -> empty;
+end;
+
+definition
+let f be (INT)-valued Function; let L be non empty Language-like;
+func L extendWith f -> strict non empty Language-like means
+:: FOMODEL1:def 42
+the adicity of it = f|(dom f \ {the OneF of L}) +* (the adicity of L) &
+the ZeroF of it = the ZeroF of L &
+the OneF of it = the OneF of L;
+end;
+
+registration
+let S be non empty Language-like; let f be (INT)-valued Function;
+cluster S extendWith f -> S-extending;
+end;
+
+registration
+let S be non degenerated Language-like;
+cluster S-extending -> non degenerated (Language-like);
+end;
+
+registration
+let S be eligible Language-like;
+cluster S-extending -> eligible (Language-like);
+end;
+
+registration
+let E be empty Relation; let X;
+cluster X|E -> empty;
+end;
+
+registration
+let X; let m be integer number;
+cluster X --> m -> (INT)-valued;
+end;
+
+definition
+let S; let X be functional set;
+func S addLettersNotIn X -> S-extending Language equals
+:: FOMODEL1:def 43
+S extendWith (
+(((AllSymbolsOf S)\/(SymbolsOf X))-freeCountableSet --> 0)
+ qua ((INT)-valued Function));
+end;
+
+registration
+let S1; let X be functional set;
+cluster (LettersOf (S1 addLettersNotIn X)) \ SymbolsOf X -> infinite;
+end;
+
+registration
+cluster countable Language;
+end;
+
+registration
+let S be countable Language;
+cluster AllSymbolsOf S -> countable;
+end;
+
+registration
+let S be countable Language;
+cluster (AllSymbolsOf S)*\{{}} -> countable;
+end;
+
+registration
+let L be non empty Language-like; let f be (INT)-valued Function;
+cluster AllSymbolsOf (L extendWith f) \+\ (dom f \/ AllSymbolsOf L)
+-> empty set;
+end;
+
+registration
+let S be countable Language; let X be functional set;
+cluster S addLettersNotIn X -> countable 1-sorted;
+end;
+

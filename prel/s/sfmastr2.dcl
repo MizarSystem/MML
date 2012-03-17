@@ -49,7 +49,7 @@
 </Adjective>
 <Adjective nr="16">
 <Func kind="U" nr="1">
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="17">
@@ -60,7 +60,7 @@
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="18"/>
@@ -72,7 +72,7 @@
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="27"/>
@@ -96,7 +96,7 @@
 </Adjective>
 <Adjective nr="16">
 <Func kind="U" nr="1">
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="17">
@@ -107,7 +107,7 @@
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="18"/>
@@ -119,7 +119,7 @@
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="27"/>

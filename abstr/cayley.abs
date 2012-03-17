@@ -1,0 +1,166 @@
+:: Cayley's Theorem
+::  by Artur Korni{\l}owicz
+:: 
+:: Received December 29, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies RELAT_1, XBOOLE_0, FUNCT_1, SUBSET_1, MSSUBFAM, FUNCT_2, CAYLEY,
+      ALGSTR_0, GROUP_1, BINOP_1, STRUCT_0, WELLORD1, GROUP_6, NAT_1, MATRIX_2,
+      FINSEQ_1, TARSKI, MONOID_0, FINSET_1, FUNCT_5, ZFMISC_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      FINSET_1, FUNCT_2, BINOP_1, NAT_1, FINSEQ_1, FUNCT_5, PARTIT_2, STRUCT_0,
+      ALGSTR_0, GROUP_1, GROUP_6, MONOID_0, TOPGRP_1, MATRIX_2;
+ constructors RELSET_1, GROUP_6, TOPGRP_1, BINOP_1, MATRIX_2, MONOID_0,
+      WELLORD2, PARTIT_2, FUNCT_5;
+ registrations XBOOLE_0, FUNCT_1, PARTFUN1, GROUP_2, STRUCT_0, TOPGRP_1,
+      FUNCT_2, MATRIX_2, RELSET_1, MONOID_0, FINSET_1, FRAENKEL, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+reserve X,Y for set;
+reserve G for Group;
+reserve n for Nat;
+
+registration
+  let X;
+  cluster {}(X,{}) -> onto;
+end;
+
+registration
+  cluster permutational -> functional set;
+end;
+
+definition
+  let X;
+  func permutations(X) equals
+:: CAYLEY:def 1
+  {f where f is Permutation of X: not contradiction};
+end;
+
+theorem :: CAYLEY:1
+  for f being set st f in permutations(X) holds f is Permutation of X;
+
+theorem :: CAYLEY:2
+  permutations(X) c= Funcs(X,X);
+
+theorem :: CAYLEY:3
+  permutations(Seg n) = Permutations(n);
+
+registration
+  let X;
+  cluster permutations(X) -> non empty functional;
+end;
+
+registration
+  let X be finite set;
+  cluster permutations(X) -> finite;
+end;
+
+theorem :: CAYLEY:4
+  permutations {} = 1;
+
+definition
+  let X;
+  func SymGroup(X) -> strict constituted-Functions multMagma means
+:: CAYLEY:def 2
+
+  the carrier of it = permutations(X) &
+  for x,y being Element of it holds x * y = y qua Function * x;
+end;
+
+theorem :: CAYLEY:5
+  for f being Element of SymGroup(X) holds f is Permutation of X;
+
+registration
+  let X;
+  cluster SymGroup(X) -> non empty associative Group-like;
+end;
+
+theorem :: CAYLEY:6
+  1_SymGroup(X) = id X;
+
+theorem :: CAYLEY:7
+  for x being Element of SymGroup(X) holds x" = x qua Function";
+
+registration
+  let n;
+  cluster Group_of_Perm(n) -> constituted-Functions;
+end;
+
+theorem :: CAYLEY:8
+  SymGroup(Seg n) = Group_of_Perm(n);
+
+registration
+  let X be finite set;
+  cluster SymGroup(X) -> finite;
+end;
+
+theorem :: CAYLEY:9
+  SymGroup({}) = Trivial-multMagma;
+
+registration
+  cluster SymGroup {} -> trivial;
+end;
+
+definition
+  let X,Y;
+  let p be Function of X,Y such that
+ X <> {} & Y <> {} and
+ p is bijective;
+  func SymGroupsIso(p) -> Function of SymGroup(X),SymGroup(Y) means
+:: CAYLEY:def 3
+
+  for x being Element of SymGroup(X) holds it.x = p*x*(p");
+end;
+
+theorem :: CAYLEY:10
+  for X,Y being non empty set
+  for p being Function of X,Y st p is bijective holds
+  SymGroupsIso(p) is multiplicative;
+
+theorem :: CAYLEY:11
+  for X,Y being non empty set
+  for p being Function of X,Y st p is bijective holds
+  SymGroupsIso(p) is one-to-one;
+
+theorem :: CAYLEY:12
+  for X,Y being non empty set
+  for p being Function of X,Y st p is bijective holds
+  SymGroupsIso(p) is onto;
+
+theorem :: CAYLEY:13
+  X,Y are_equipotent implies SymGroup(X),SymGroup(Y) are_isomorphic;
+
+definition
+  let G;
+  func CayleyIso(G) -> Function of G,SymGroup(the carrier of G) means
+:: CAYLEY:def 4
+
+  for g being Element of G holds it.g = *g;
+end;
+
+registration
+  let G;
+  cluster CayleyIso(G) -> multiplicative;
+end;
+
+registration
+  let G;
+  cluster CayleyIso(G) -> one-to-one;
+end;
+
+::$N Cayley Theorem
+theorem :: CAYLEY:14
+  G, Image CayleyIso(G) are_isomorphic;

@@ -2,7 +2,15 @@
 ::  by Dariusz Surowik
 ::
 :: Received November 22, 1991
-:: Copyright (c) 1991 Association of Mizar Users
+:: Copyright (c) 1991-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -10,12 +18,12 @@ environ
       CARD_1, XBOOLE_0, BINOP_2, FUNCT_1, BINOP_1, ARYTM_3, CARD_3, SETWISEO,
       RELAT_1, TARSKI, NAT_1, SETWOP_2, FINSEQ_2, NEWTON, STRUCT_0, ORDINAL4,
       QC_LANG1, GROUP_4, ARYTM_1, FINSET_1, XXREAL_0, GROUP_2, ALGSTR_0,
-      ZFMISC_1, REALSET1, REAL_1, INT_2, RLSUB_1, GRAPH_1, GR_CY_1;
+      ZFMISC_1, REALSET1, REAL_1, INT_2, RLSUB_1, GRAPH_1, GR_CY_1, MEMBERED;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, ORDINAL1, NUMBERS,
       XCMPLX_0, RELAT_1, FUNCT_1, REAL_1, FUNCT_2, FINSET_1, BINOP_1, DOMAIN_1,
       INT_1, FINSEQ_1, FINSOP_1, SETWISEO, SETWOP_2, BINOP_2, REALSET1, INT_2,
-      NAT_1, NAT_D, RVSUM_1, GROUP_2, XXREAL_0, STRUCT_0, ALGSTR_0, GROUP_1,
-      GROUP_4;
+      NAT_1, NAT_D, MEMBERED,
+      RVSUM_1, XXREAL_0, STRUCT_0, ALGSTR_0, GROUP_1, GROUP_2, GROUP_4;
  constructors WELLORD2, BINOP_1, SETWISEO, XXREAL_0, REAL_1, NAT_1, NAT_D,
       BINOP_2, FINSOP_1, SETWOP_2, RVSUM_1, REALSET1, GROUP_4, FUNCOP_1,
       RELSET_1;
@@ -50,8 +58,6 @@ registration
 end;
 
 Lm1: for n holds x in Segm (n) implies x is Element of NAT;
-
-:: Definition addint
 
 definition
   canceled;
@@ -772,7 +778,7 @@ definition
 end;
 
 registration
-  cluster -> integer Element of INT.Group;
+  cluster the carrier of INT.Group -> integer-membered;
   coherence;
 end;
 
@@ -784,7 +790,7 @@ end;
 
 registration
   let n be natural number;
-  cluster -> natural Element of Segm n;
+  cluster Segm n -> natural-membered;
   coherence;
 end;
 
@@ -797,14 +803,12 @@ A1: n > 0;
   existence
   proof
     reconsider n as non zero natural number by A1;
-    defpred P[Element of Segm n,Element of Segm n,set] means $3 = ($1+$2) mod
-    n;
+    defpred P[Nat,Nat,set] means $3 = ($1+$2) mod n;
 A2: for k,l being Element of Segm(n) ex c being Element of Segm(n) st P[k, l,c]
     proof
       let k,l be Element of Segm(n);
-      reconsider k9=k,l9=l as Element of NAT;
-      ((k9+l9) mod n) < n by NAT_D:1;
-      then reconsider c = (k9+l9) mod n as Element of Segm(n) by NAT_1:45;
+      (k+l) mod n < n by NAT_D:1;
+      then reconsider c = (k+l) mod n as Element of Segm(n) by NAT_1:45;
       take c;
       thus thesis;
     end;
@@ -849,7 +853,6 @@ A1: g * f = (B + C) mod n by Def5;
   take e;
   let h be Element of G;
   reconsider A = h as Element of Segm(n);
-  reconsider A as Element of NAT;
 A2: A < n by NAT_1:45;
   then consider p being Nat such that
 A3: n=A+p by NAT_1:10;
@@ -905,8 +908,7 @@ definition
 A1: n > 0;
   func INT.Group(n) -> strict Group equals
   :Def6:
-  multMagma(#Segm(n),addint(n)
-  #);
+  multMagma(#Segm(n),addint(n)#);
   coherence by A1,Th34;
 end;
 
@@ -923,8 +925,7 @@ end;
 theorem Th35:
   1_INT.Group = 0
 proof
-  reconsider e = 0 as Element of INT by INT_1:def 2;
-  reconsider e as Element of INT.Group;
+  reconsider e = 0 as Element of INT.Group by INT_1:def 2;
   for h being Element of INT.Group holds h * e = h & e * h = h;
   hence thesis by GROUP_1:10;
 end;
@@ -966,7 +967,7 @@ theorem Th37:
 proof
   let h be Element of INT.Group;
   reconsider g=-h as Element of INT.Group;
-  h *g =1_INT.Group by Th35;
+  h * g =1_INT.Group by Th35;
   hence thesis by GROUP_1:20;
 end;
 

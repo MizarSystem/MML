@@ -2,7 +2,15 @@
 ::  by JingChao Chen
 ::
 :: Received June 15, 1999
-:: Copyright (c) 1999 Association of Mizar Users
+:: Copyright (c) 1999-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -14,19 +22,19 @@ environ
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, XCMPLX_0, FUNCT_1, FUNCT_2,
       INT_1, NAT_1, MCART_1, FUNCOP_1, CARD_1, CARD_3, ZFMISC_1, STRUCT_0,
       RELAT_1, FUNCT_4, FINSET_1, FINSEQ_1, FINSEQ_4, FUNCT_7, NUMBERS,
-      COMPOS_1, EXTPRO_1, AMI_1, AMI_2,
+      COMPOS_1, EXTPRO_1, AMI_2,
       SCMPDS_1, AMI_3, INT_2, XXREAL_0, RECDEF_2;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, INT_2, FINSEQ_4, CAT_2, AMI_3,
-      SCMPDS_1, RELSET_1, RECDEF_2, AMI_1;
+      SCMPDS_1, RELSET_1, RECDEF_2;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1, NUMBERS,
-      XREAL_0, INT_1, FINSEQ_1, CARD_3, AMI_1, AMI_2, SCMPDS_1, XXREAL_0,
+      XREAL_0, INT_1, FINSEQ_1, CARD_3, AMI_2, SCMPDS_1, XXREAL_0,
       FUNCT_1, GR_CY_1, FINSEQ_4, FUNCT_2, RELSET_1, COMPOS_1, EXTPRO_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, COMPOS_1, EXTPRO_1, AMI_1, FUNCOP_1, AMI_2, CARD_1,
+ definitions TARSKI, COMPOS_1, EXTPRO_1, FUNCOP_1, AMI_2, CARD_1,
  SCMPDS_1, NAT_1,
       RELAT_1, FINSEQ_1, MCART_1, STRUCT_0;
  theorems NAT_1, FUNCT_1, TARSKI, ZFMISC_1, ENUMSET1, AMI_2, FUNCOP_1, FUNCT_4,
-      AMI_1, CARD_3, FUNCT_2, MCART_1, INT_1, SCMPDS_1, AMI_3, ABSVALUE,
+      CARD_3, FUNCT_2, MCART_1, INT_1, SCMPDS_1, AMI_3, ABSVALUE,
       STRUCT_0, XBOOLE_0, XBOOLE_1, RELAT_1, XREAL_1, FUNCT_7, ARYTM_3,
       NUMBERS, XXREAL_0, FINSEQ_1, PARTFUN1, PBOOLE, RECDEF_2, COMPOS_1,
       EXTPRO_1;
@@ -2058,195 +2066,16 @@ end;
 theorem
   halt SCMPDS = goto 0 by Th75,Th92;
 
-canceled 2;
-
-theorem Th96:
-  for s being State of SCMPDS, i being Instruction of SCMPDS, l
-  being Element of NAT holds Exec(i,s).l = s.l
-proof
-  let s be State of SCMPDS, i be Instruction of SCMPDS, l be
-  Element of NAT;
-  reconsider c = i as Element of SCMPDS-Instr;
-  reconsider S = s as Element of product SCMPDS-OK by PBOOLE:155;
-  reconsider l9 = l as Element of NAT;
-  now
-    per cases by Lm2;
-    case
-      c in S1;
-      then ex k1 being Element of INT st c = [0,{},<*k1*>];
-      hence SCM-Exec-Res(c,S).l9 = SCM-Chg(S,jump_address(S,c const_INT )).l9
-      by SCMPDS_1:def 24
-        .= S.l9 by SCMPDS_1:28;
-    end;
-    case
-A1:   c in S2;
-      set SS=SCM-Chg(S,c address_1, S.Address_Add(S,c address_1,RetSP));
-      ex d1 st c = [1,{},<*d1*>] by A1;
-      hence SCM-Exec-Res(c,S).l9 = SCM-Chg(SS,PopInstrLoc(S,Address_Add(S,c
-      address_1,RetIC))).l9 by SCMPDS_1:def 24
-        .= SS.l9 by SCMPDS_1:28
-        .= S.l9 by SCMPDS_1:32;
-    end;
-    case
-A2:   c in S3;
-      set SS=SCM-Chg(S, c P21address, c P22const);
-      consider I1 being Element of Segm 14, d1 being Element of SCM-Data-Loc,
-      k1 being Element of INT such that
-A3:   c = [I1,{},<*d1,k1*>] and
-A4:   I1 in { 2,3 } by A2;
-      now
-        per cases by A4,TARSKI:def 2;
-        case
-          I1=2;
-          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(SS,succ IC S).l9 by A3,
-SCMPDS_1:def 24
-            .= SS.l9 by SCMPDS_1:28
-            .= S.l9 by SCMPDS_1:32;
-        end;
-        case
-A5:       I1=3;
-          set SS = SCM-Chg(S,Address_Add(S,c P21address,c P22const),IC S);
-          thus SCM-Exec-Res(c,S).l9 = SCM-Chg(SS,succ IC S).l9 by A3,A5,
-SCMPDS_1:def 24
-            .= SS.l9 by SCMPDS_1:28
-            .= S.l9 by SCMPDS_1:32;
-        end;
-      end;
-      hence SCM-Exec-Res(c,S).l9 = S.l9;
-    end;
-    case
-      c in S4;
-      then consider
-      I1 being Element of Segm 14, d1 being Element of SCM-Data-Loc,
-      k1,k2 being Element of INT such that
-A6:   c = [I1,{},<*d1,k1,k2*>] and
-A7:   I1 in { 4,5,6,7,8};
-      now
-        per cases by A7,ENUMSET1:def 3;
-        case
-          I1 = 4;
-          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(S, IFEQ(S.Address_Add(S,c
-P31address,c P32const), 0, succ IC S,jump_address(S,c P33const ))).l9 by A6,
-SCMPDS_1:def 24
-            .= S.l9 by SCMPDS_1:28;
-        end;
-        case
-          I1 = 5;
-          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(S, IFGT(S.Address_Add(S,c
-P31address,c P32const), 0, succ IC S,jump_address(S,c P33const ))).l9 by A6,
-SCMPDS_1:def 24
-            .= S.l9 by SCMPDS_1:28;
-        end;
-        case
-          I1 = 6;
-          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(S,IFGT(0, S.Address_Add(S,c
-P31address,c P32const), succ IC S,jump_address(S,c P33const ))).l9 by A6,
-SCMPDS_1:def 24
-            .= S.l9 by SCMPDS_1:28;
-        end;
-        case
-A8:       I1 = 7;
-          set SS=SCM-Chg(S,Address_Add(S,c P31address,c P32const),c P33const);
-          thus SCM-Exec-Res(c,S).l9 =SCM-Chg(SS,succ IC S).l9 by A6,A8,
-SCMPDS_1:def 24
-            .= SS.l9 by SCMPDS_1:28
-            .= S.l9 by SCMPDS_1:32;
-        end;
-        case
-A9:       I1 = 8;
-          set SS=SCM-Chg(S,Address_Add(S,c P31address,c P32const), S.
-          Address_Add(S,c P31address,c P32const)+ (c P33const));
-          thus SCM-Exec-Res(c,S).l9 = SCM-Chg(SS,succ IC S).l9 by A6,A9,
-SCMPDS_1:def 24
-            .= SS.l9 by SCMPDS_1:28
-            .= S.l9 by SCMPDS_1:32;
-        end;
-      end;
-      hence SCM-Exec-Res(c,S).l9 = S.l9;
-    end;
-    case
-      c in S5;
-      then consider I1 being Element of Segm 14, d1,d2 being Element of
-      SCM-Data-Loc, k1,k2 being Element of INT such that
-A10:  c = [I1,{},<*d1,d2,k1,k2*>]and
-A11:  I1 in { 9,10,11,12,13 };
-      now
-        per cases by A11,ENUMSET1:def 3;
-        case
-A12:      I1 = 9;
-          set SS=SCM-Chg(S, Address_Add(S,c P41address,c P43const), S.
-Address_Add(S,c P41address,c P43const)+ S.Address_Add(S,c P42address,c P44const
-          ));
-          thus SCM-Exec-Res(c,S).l9 = SCM-Chg(SS,succ IC S).l9 by A10,A12,
-SCMPDS_1:def 24
-            .= SS.l9 by SCMPDS_1:28
-            .= S.l9 by SCMPDS_1:32;
-        end;
-        case
-A13:      I1 = 10;
-          set SS=SCM-Chg(S, Address_Add(S,c P41address,c P43const), S.
-Address_Add(S,c P41address,c P43const)- S.Address_Add(S,c P42address,c P44const
-          ));
-          thus SCM-Exec-Res(c,S).l9 = SCM-Chg(SS,succ IC S).l9 by A10,A13,
-SCMPDS_1:def 24
-            .= SS.l9 by SCMPDS_1:28
-            .= S.l9 by SCMPDS_1:32;
-        end;
-        case
-A14:      I1 = 11;
-          set SS=SCM-Chg(S, Address_Add(S,c P41address,c P43const), S.
-Address_Add(S,c P41address,c P43const)* S.Address_Add(S,c P42address,c P44const
-          ));
-          thus SCM-Exec-Res(c,S).l9 = SCM-Chg(SS,succ IC S).l9 by A10,A14,
-SCMPDS_1:def 24
-            .= SS.l9 by SCMPDS_1:28
-            .= S.l9 by SCMPDS_1:32;
-        end;
-        case
-A15:      I1 = 12;
-          set SA= SCM-Chg(S,Address_Add(S,c P41address,c P43const), S.
-Address_Add(S,c P41address,c P43const) div S.Address_Add(S,c P42address,c
-          P44const)), SB=SCM-Chg(SA, Address_Add(S,c P42address,c P44const), S.
-Address_Add(S,c P41address,c P43const) mod S.Address_Add(S,c P42address,c
-          P44const));
-          thus SCM-Exec-Res(c,S).l9 = SCM-Chg(SB,succ IC S).l9 by A10,A15,
-SCMPDS_1:def 24
-            .= SB.l9 by SCMPDS_1:28
-            .= SA.l9 by SCMPDS_1:32
-            .= S.l9 by SCMPDS_1:32;
-        end;
-        case
-A16:      I1 = 13;
-          set SS=SCM-Chg(S, Address_Add(S,c P41address,c P43const), S.
-          Address_Add(S,c P42address,c P44const));
-          thus SCM-Exec-Res(c,S).l9 = SCM-Chg(SS,succ IC S).l9 by A10,A16,
-SCMPDS_1:def 24
-            .= SS.l9 by SCMPDS_1:28
-            .= S.l9 by SCMPDS_1:32;
-        end;
-      end;
-      hence SCM-Exec-Res(c,S).l9 = S.l9;
-    end;
-  end;
-  hence thesis by SCMPDS_1:def 25;
-end;
-
 registration
-  cluster SCMPDS -> steady-programmed realistic;
+  cluster SCMPDS -> realistic;
   coherence
   proof
-    thus SCMPDS is steady-programmed
-    proof
-      let s be State of SCMPDS, i be Instruction of SCMPDS, l be
-      Element of NAT;
-      thus Exec(i,s).l = s.l by Th96;
-    end;
   assume the ZeroF of SCMPDS in NAT;
   hence contradiction by Th6;
   end;
 end;
 
-canceled;
+canceled 4;
 
 theorem
   for i being Element of NAT holds IC SCMPDS <> dl.i & IC SCMPDS <> i

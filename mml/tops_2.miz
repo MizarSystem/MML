@@ -2,11 +2,19 @@
 ::  by Agata Darmochwa{\l}
 ::
 :: Received June 21, 1989
-:: Copyright (c) 1990 Association of Mizar Users
+:: Copyright (c) 1990-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
- vocabularies SUBSET_1, NUMBERS, PRE_TOPC, SETFAM_1, STRUCT_0, TARSKI,
+ vocabularies SUBSET_1, NUMBERS, PRE_TOPC, SETFAM_1, STRUCT_0, TARSKI, FUNCT_2,
       ZFMISC_1, XBOOLE_0, FINSET_1, FUNCT_1, RELAT_1, RCOMP_1, FINSEQ_1, NAT_1,
       XXREAL_0, ARYTM_3, CARD_1, ORDINAL2, VALUED_1, RELAT_2, CONNSP_1, TOPS_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0, RELAT_1,
@@ -15,7 +23,7 @@ environ
  constructors SETFAM_1, PARTFUN1, FUNCT_3, XXREAL_0, XREAL_0, NAT_1, MEMBERED,
       FINSEQ_1, CONNSP_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, MEMBERED, STRUCT_0,
-      PRE_TOPC, XREAL_0, FINSEQ_1;
+      PRE_TOPC, XREAL_0, FINSEQ_1, RELAT_1, FUNCT_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, PRE_TOPC, SUBSET_1, STRUCT_0, RELAT_1;
  theorems TARSKI, FINSET_1, SETFAM_1, FUNCT_1, FUNCT_2, FUNCT_3, NAT_1,
@@ -26,7 +34,6 @@ environ
 begin
 
 reserve x, y for set,
-
   T for TopStruct,
   GX for TopSpace,
   P, Q, M, N for Subset of T,
@@ -442,13 +449,12 @@ proof
   then COMPLEMENT(W) is open & COMPLEMENT(W) is finite by Th13,Th16;
   then
 A1: meet C is open by Th27;
-A2: now
+  now
     assume W <> {};
     then meet COMPLEMENT(W) = (union W)` by Th11;
     hence thesis by A1,TOPS_1:29;
   end;
-   W = {} implies thesis by ZFMISC_1:2;
-  hence thesis by A2;
+  hence thesis by ZFMISC_1:2;
 end;
 
 theorem
@@ -1110,11 +1116,15 @@ end;
 definition
   let S, T be set, f be Function of S,T;
   assume
-A1: rng f = T & f is one-to-one;
+A1: f is bijective;
   func f/" -> Function of T,S equals
   :Def4:
   f";
-  coherence by A1,FUNCT_2:31;
+  coherence
+  proof
+    rng f = [#]T by A1,FUNCT_2:def 3;
+    hence thesis by A1,FUNCT_2:31;
+  end;
 end;
 
 notation
@@ -1125,17 +1135,17 @@ end;
 canceled;
 
 theorem Th62:
-  for T being 1-sorted, S being non empty 1-sorted, f being
-Function of T,S st rng f = [#]S & f is one-to-one holds dom(f") = [#]S & rng(f"
-  ) = [#]T
+  for T being 1-sorted, S being non empty 1-sorted, f being Function of T,S
+  st rng f = [#]S & f is one-to-one holds dom(f") = [#]S & rng(f") = [#]T
 proof
   let T be 1-sorted, S be non empty 1-sorted, f be Function of T,S;
   assume that
 A1: rng f = [#]S and
 A2: f is one-to-one;
-  thus dom(f") = dom((f qua Function)") by A1,A2,Def4
+A3: f is onto by A1,FUNCT_2:def 3;  
+  hence dom(f") = dom((f qua Function)") by A2,Def4
     .= [#]S by A1,A2,FUNCT_1:54;
-  thus rng(f") = rng((f qua Function)") by A1,A2,Def4
+  thus rng(f") = rng((f qua Function)") by A2,A3,Def4
     .= dom f by A2,FUNCT_1:55
     .= [#]T by FUNCT_2:def 1;
 end;
@@ -1148,8 +1158,9 @@ proof
   assume that
 A1: rng f = [#]S and
 A2: f is one-to-one;
-  (f qua Function)" is one-to-one by A2,FUNCT_1:62;
-  hence thesis by A1,A2,Def4;
+A3: f is onto by A1,FUNCT_2:def 3;
+  (f qua Function)" is one-to-one by A2;
+  hence thesis by A2,A3,Def4;
 end;
 
 theorem Th64:
@@ -1160,11 +1171,14 @@ proof
   assume that
 A1: rng f = [#]S and
 A2: f is one-to-one;
+B1: f is onto by A1,FUNCT_2:def 3;
   f = ((f qua Function)")" by A2,FUNCT_1:65;
   then
-A3: f = (f" qua Function)" by A1,A2,Def4;
+A3: f = (f" qua Function)" by B1,A2,Def4;
+B2: f" is one-to-one by A1,A2,Th63;
   rng(f") = [#]T by A1,A2,Th62;
-  hence thesis by A1,A2,A3,Def4,Th63;
+  then f" is onto by FUNCT_2:def 3;
+  hence thesis by A3,B2,Def4;
 end;
 
 theorem
@@ -1175,9 +1189,10 @@ proof
   assume that
 A1: rng f = [#]S and
 A2: f is one-to-one;
+A3: f is onto by A1,FUNCT_2:def 3;
   (f qua Function)"*f = id dom f & f*(f qua Function)" = id rng f by A2,
   FUNCT_1:61;
-  hence thesis by A1,A2,Def4;
+  hence thesis by A2,A3,Def4;
 end;
 
 theorem Th66:
@@ -1195,12 +1210,13 @@ A2: f is one-to-one;
 A3: dom g = [#]S and
 A4: rng g = [#] V and
 A5: g is one-to-one;
-  rng(g*f) = [#] V & g*f is one-to-one by A1,A2,A3,A4,A5,FUNCT_1:46 ,
-  RELAT_1:47;
+B1: f is onto & g is onto by A1,A4,FUNCT_2:def 3;
+    rng(g*f) = [#] V by  A1,A3,A4,RELAT_1:47;
+    then g*f is onto by FUNCT_2:def 3;
   then
-A6: (g*f)" = ((g*f) qua Function)" by Def4;
-A7: f" = (f qua Function)" by A1,A2,Def4;
-  g" = (g qua Function)" by A4,A5,Def4;
+A6: (g*f)" = ((g*f) qua Function)" by A2,A5,Def4;
+A7: f" = (f qua Function)" by A2,B1,Def4;
+  g" = (g qua Function)" by A5,B1,Def4;
   hence thesis by A2,A5,A7,A6,FUNCT_1:66;
 end;
 
@@ -1212,8 +1228,9 @@ proof
   assume that
 A1: rng f = [#]S and
 A2: f is one-to-one;
+A3: f is onto by A1,FUNCT_2:def 3;
   f.:P = ((f qua Function)")"P by A2,FUNCT_1:154;
-  hence thesis by A1,A2,Def4;
+  hence thesis by A2,A3,Def4;
 end;
 
 theorem Th68:
@@ -1221,8 +1238,10 @@ theorem Th68:
   Subset of S st rng f = [#]S & f is one-to-one holds f"P1 = (f").:P1
 proof
   let T, S be 1-sorted, f be Function of T, S, P1 be Subset of S;
-  assume that
-A1: rng f = [#]S and
+  assume rng f = [#]S;
+  then
+A1: f is onto by FUNCT_2:def 3;
+  assume
 A2: f is one-to-one;
   f"P1 = ((f qua Function)").:P1 by A2,FUNCT_1:155;
   hence thesis by A1,A2,Def4;
@@ -1272,7 +1291,7 @@ A4: rng g = [#](V) by A2,Def5;
   dom f = [#]T by A1,Def5;
   hence dom(g*f) = [#]T & rng(g*f) = [#] V by A3,A4,RELAT_1:46,47;
 A5: f is one-to-one & g is one-to-one by A1,A2,Def5;
-  hence g*f is one-to-one by FUNCT_1:46;
+  hence g*f is one-to-one;
   f is continuous & g is continuous by A1,A2,Def5;
   hence g*f is continuous by Th58;
   f" is continuous & g" is continuous by A1,A2,Def5;
@@ -1294,7 +1313,8 @@ A3: f" is continuous by A1,Def5;
     hereby
       assume
 A4:   P is closed;
-      (f")"P = ((f qua Function)")"P by A2,Def4
+      f is onto by A2,FUNCT_2:def 3;
+      then (f")"P = ((f qua Function)")"P by A2,Def4
         .= f.:P by A2,FUNCT_1:154;
       hence f.:P is closed by A3,A4,PRE_TOPC:def 12;
     end;
@@ -1327,7 +1347,8 @@ A13: B is closed;
   proof
     let B be Subset of T such that
 A14: B is closed;
-    (f")"B = ((f qua Function)")"B by A9,A10,Def4
+    f is onto by A9,FUNCT_2:def 3;
+    then (f")"B = ((f qua Function)")"B by A10,Def4
       .= f.:B by A10,FUNCT_1:154;
     hence thesis by A11,A14;
   end;

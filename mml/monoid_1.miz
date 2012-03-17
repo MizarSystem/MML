@@ -2,7 +2,15 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received December 29, 1992
-:: Copyright (c) 1992 Association of Mizar Users
+:: Copyright (c) 1992-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -38,11 +46,6 @@ deffunc op(multMagma) = the multF of $1;
 deffunc un(multLoopStr) = 1.$1;
 
 definition
-  let D1,D2,D be non empty set;
-  mode Function of D1,D2,D is Function of [:D1,D2:],D;
-end;
-
-definition
   let f be Function, x1,x2,y be set;
   func f..(x1,x2,y) equals
   f..([x1,x2],y);
@@ -51,7 +54,7 @@ end;
 
 definition
   let A,D1,D2,D be non empty set;
-  let f be Function of D1, D2, Funcs(A,D);
+  let f be Function of [:D1, D2:], Funcs(A,D);
   let x1 be Element of D1;
   let x2 be Element of D2;
   let x be Element of A;
@@ -68,15 +71,15 @@ end;
 
 definition
   let A be set;
-  let D1,D2,D be non empty set, f be Function of D1,D2,D;
+  let D1,D2,D be non empty set, f be Function of [:D1,D2:],D;
   let g1 be Function of A,D1;
   let g2 be Function of A,D2;
   redefine func f.:(g1,g2) -> Element of Funcs(A,D);
   coherence
   proof
     f.:(g1,g2) = f*<:g1,g2:> by FUNCOP_1:def 3;
-    then dom (f.:(g1,g2)) = A & rng (f.:(g1,g2)) c= D by FUNCT_2:def 1 ,
-    RELAT_1:def 19;
+    then dom (f.:(g1,g2)) = A & rng (f.:(g1,g2)) c= D by FUNCT_2:def 1
+,RELAT_1:def 19;
     hence thesis by FUNCT_2:def 2;
   end;
 end;
@@ -106,7 +109,7 @@ end;
 
 definition
   let A be set;
-  let D1,D2,D be non empty set, f be Function of D1,D2,D;
+  let D1,D2,D be non empty set, f be Function of [:D1,D2:],D;
   let d be Element of D1;
   let g be Function of A,D2;
   redefine func f[;](d,g) -> Element of Funcs(A,D);
@@ -114,15 +117,15 @@ definition
   proof
     dom g = A by FUNCT_2:def 1;
     then f[;](d,g) = f*<:A --> d, g:> by FUNCOP_1:def 5;
-    then dom (f[;](d,g)) = A & rng (f[;](d,g)) c= D by FUNCT_2:def 1 ,
-    RELAT_1:def 19;
+    then dom (f[;](d,g)) = A & rng (f[;](d,g)) c= D by FUNCT_2:def 1
+,RELAT_1:def 19;
     hence thesis by FUNCT_2:def 2;
   end;
 end;
 
 definition
   let A be set;
-  let D1,D2,D be non empty set, f be Function of D1,D2,D;
+  let D1,D2,D be non empty set, f be Function of [:D1,D2:],D;
   let g be Function of A,D1;
   let d be Element of D2;
   redefine func f[:](g,d) -> Element of Funcs(A,D);
@@ -130,8 +133,8 @@ definition
   proof
     dom g = A by FUNCT_2:def 1;
     then f[:](g,d) = f*<:g, A --> d:> by FUNCOP_1:def 4;
-    then dom (f[:](g,d)) = A & rng (f[:](g,d)) c= D by FUNCT_2:def 1 ,
-    RELAT_1:def 19;
+    then dom (f[:](g,d)) = A & rng (f[:](g,d)) c= D by FUNCT_2:def 1
+,RELAT_1:def 19;
     hence thesis by FUNCT_2:def 2;
   end;
 end;
@@ -215,17 +218,18 @@ begin :: Monoid of functions into a semigroup
 
 definition
   let D1,D2,D be non empty set;
-  let f be Function of D1,D2,D;
+  let f be Function of [:D1,D2:],D;
   let A be set;
-  func (f,D).:A -> Function of Funcs(A,D1), Funcs(A,D2), Funcs(A,D) means
+  func (f,D).:A -> Function of [:Funcs(A,D1), Funcs(A,D2):], Funcs(A,D)
+    means
   :
   Def2: for f1 being Element of Funcs(A,D1) for f2 being Element of Funcs(A,D2)
   holds it.(f1,f2) = f.:(f1,f2);
   existence
   proof
     deffunc G(Element of Funcs(A,D1),Element of Funcs(A,D2)) = f.:($1,$2);
-    consider b being Function of Funcs(A,D1), Funcs(A,D2), Funcs(A,D) such
-    that
+    consider b being Function of [:Funcs(A,D1), Funcs(A,D2):],
+      Funcs(A,D) such that
 A1: for f1 being Element of Funcs(A,D1) for f2 being Element of Funcs(
     A,D2) holds b.(f1,f2) = G(f1,f2) from BINOP_1:sch 4;
     take b;
@@ -234,7 +238,8 @@ A1: for f1 being Element of Funcs(A,D1) for f2 being Element of Funcs(
   end;
   uniqueness
   proof
-    let o1,o2 be Function of Funcs(A,D1), Funcs(A,D2), Funcs(A,D) such that
+    let o1,o2 be Function of [:Funcs(A,D1), Funcs(A,D2):], Funcs(A,D)
+      such that
 A2: for f1 being Element of Funcs(A,D1) for f2 being Element of Funcs(
     A,D2) holds o1.(f1,f2) = f.:(f1,f2) and
 A3: for f1 being Element of Funcs(A,D1) for f2 being Element of Funcs(
@@ -249,12 +254,12 @@ A3: for f1 being Element of Funcs(A,D1) for f2 being Element of Funcs(
 end;
 
 theorem
-  for D1,D2,D being non empty set for f being Function of D1,D2,D for A
+  for D1,D2,D being non empty set for f being Function of [:D1,D2:],D for A
 being set, f1 being (Function of A,D1), f2 being Function of A,D2 for x st x in
   A holds ((f,D).:A)..(f1,f2,x) = f.(f1.x,f2.x)
 proof
   let D1,D2,D be non empty set;
-  let f be Function of D1,D2,D;
+  let f be Function of [:D1,D2:],D;
   let A be set, f1 be (Function of A,D1), f2 be Function of A,D2;
   dom f2 = A & rng f2 c= D2 by FUNCT_2:def 1;
   then reconsider f2 as Element of Funcs(A,D2) by FUNCT_2:def 2;
@@ -425,7 +430,7 @@ proof
   given a such that
 A1: a is_a_unity_wrt o;
   a = the_unity_wrt o & A --> a is_a_unity_wrt (o,D).:A by A1,Th10,
-  BINOP_1:def 8;
+BINOP_1:def 8;
   hence the_unity_wrt (o,D).:A = A --> the_unity_wrt o by BINOP_1:def 8;
   take A --> a;
   thus thesis by A1,Th10;
@@ -588,11 +593,11 @@ end;
 
 theorem Th17:
   for D1, D2, D, E1, E2, E being non empty set, o1 being Function
-of D1, D2, D, o2 being Function of E1, E2, E st o1 c= o2 holds (o1,D).:A c= (o2
-  ,E).:A
+of [:D1, D2:], D, o2 being Function of [:E1, E2:], E st o1 c= o2
+  holds (o1,D).:A c= (o2,E).:A
 proof
-  let D1, D2, D, E1, E2, E be non empty set, o1 be Function of D1, D2, D, o2
-  be Function of E1, E2, E;
+  let D1, D2, D, E1, E2, E be non empty set, o1 be Function of [:D1, D2:], D,
+      o2 be Function of [:E1, E2:], E;
 A1: dom o1 = [:D1,D2:] by FUNCT_2:def 1;
   assume
 A2: o1 c= o2;
@@ -691,8 +696,7 @@ end;
 theorem
   x is Element of .: (G,X) iff x is Function of X, the carrier of G
 proof
-  x is Element of .:(G,X) implies x is Element of Funcs(X, carr(G)) by
-  Th18;
+  x is Element of .:(G,X) implies x is Element of Funcs(X, carr(G)) by Th18;
   hence x is Element of .:(G,X) implies x is Function of X, carr(G);
   assume x is Function of X, carr(G);
   then reconsider f = x as Function of X, carr(G);
@@ -767,9 +771,7 @@ proof
   let f1,f2 be Element of .:(G,D), a be Element of D;
   reconsider g1 = f1, g2 = f2 as Element of Funcs(D, carr(G)) by Th18;
   op(.:(G,D)) = (op(G),carr(G)).:D by Th18;
-  then dom (op(G).:(g1,g2)) = D & f1*f2 = op(G).:(g1,g2) by
-  Def2,FUNCT_2:def
-  1;
+  then dom (op(G).:(g1,g2)) = D & f1*f2 = op(G).:(g1,g2) by Def2,FUNCT_2:def 1;
   hence thesis by FUNCOP_1:28;
 end;
 
@@ -786,8 +788,8 @@ definition
     then consider a being Element of G such that
 A1: a is_a_unity_wrt op(G) by SETWISEO:def 2;
 A2: 1.M = A --> the_unity_wrt the multF of G & .:(G,A) = M by Def3;
-    a = the_unity_wrt op(G) & A --> a is_a_unity_wrt (op(G),carr(G)).:A by
-    A1, Th10,BINOP_1:def 8;
+    a = the_unity_wrt op(G) & A --> a is_a_unity_wrt (op(G),carr(G)).:A by A1
+,Th10,BINOP_1:def 8;
     hence thesis by A2,MONOID_0:def 21;
   end;
 end;
@@ -813,7 +815,7 @@ proof
   let G;
   let A be set;
 A1: op(.:(G,A)) = (op(G), carr(G)).:A & carr(.:(G,A)) = Funcs(A, carr(G)) by
-  Th18;
+Th18;
   thus G is commutative implies .:(G,A) is commutative
   proof
     assume op(G) is commutative;
@@ -848,8 +850,7 @@ theorem
 proof
   let H be non empty SubStr of G;
 A1: op(.:(H,X)) = (op(H), carr(H)).:X by Th18;
-  op(H) c= op(G) & op(.:(G,X)) = (op(G), carr(G)).:X by Th18,MONOID_0:def
-  23;
+  op(H) c= op(G) & op(.:(G,X)) = (op(G), carr(G)).:X by Th18,MONOID_0:def 23;
   hence op(.:(H,X)) c= op(.:(G,X)) by A1,Th17;
 end;
 
@@ -861,12 +862,11 @@ proof
   let G be unital (non empty multMagma), H be non empty SubStr of G;
   assume
 A1: the_unity_wrt the multF of G in carr(H);
-  then reconsider G9 = G, H9 = H as unital (non empty multMagma) by
-  MONOID_0:32;
+  then reconsider G9 = G, H9 = H as unital (non empty multMagma) by MONOID_0:32
+;
 A2: the_unity_wrt op(H9) = the_unity_wrt op(G9) by A1,MONOID_0:32;
 A3: op(.:(H,X)) = (op(H), carr(H)).:X by Th18;
-  op(H) c= op(G) & op(.:(G,X)) = (op(G), carr(G)).:X by Th18,MONOID_0:def
-  23;
+  op(H) c= op(G) & op(.:(G,X)) = (op(G), carr(G)).:X by Th18,MONOID_0:def 23;
   then
 A4: op(.:(H,X)) c= op(.:(G,X)) by A3,Th17;
   1..:(G9,X) = X --> the_unity_wrt op(G) & 1..:(H9,X) = X -->
@@ -902,7 +902,7 @@ theorem Th27:
   MultiSet_over X = (addnat,NAT).:X & 1.MultiSet_over X = X --> 0
 proof
   the multMagma of <NAT,+,0> = <NAT,+> & the_unity_wrt op(<NAT,+>) = 0 by
-  MONOID_0:44,def 22;
+MONOID_0:44,def 22;
   hence thesis by Th18,Th23,MONOID_0:52;
 end;
 
@@ -965,8 +965,8 @@ proof
   rng chi(Y,X) c= {0,1};
   then
 A1: rng chi(Y,X) c= NAT by XBOOLE_1:1;
-  dom chi(Y,X) = X & carr(MultiSet_over X) = Funcs(X,NAT) by Th27, FUNCT_3
-  :def 3;
+  dom chi(Y,X) = X & carr(MultiSet_over X) = Funcs(X,NAT) by Th27,FUNCT_3:def 3
+;
   hence thesis by A1,FUNCT_2:def 2;
 end;
 
@@ -1054,8 +1054,7 @@ A8:     not h.x in {0} by XBOOLE_0:def 5;
         then n <> 0 or m <> 0 by A8,TARSKI:def 1;
         then not n in {0} or not m in {0} by TARSKI:def 1;
         then n in NAT\{0} or m in NAT\{0} by XBOOLE_0:def 5;
-        then x in f"(NAT\{0}) or x in g"(NAT\{0}) by A6,A7,
-        FUNCT_1:def 13;
+        then x in f"(NAT\{0}) or x in g"(NAT\{0}) by A6,A7,FUNCT_1:def 13;
         hence thesis by XBOOLE_0:def 3;
       end;
       hence thesis by A3,A5;
@@ -1084,8 +1083,8 @@ A13: for a being Multiset of A holds a in the carrier of M iff P[a]
     thus f in carr(M) implies f"(NAT\{0}) is finite
     proof
       assume f in carr(M);
-      then ex g being Function of A,NAT st f = g & g"(NAT\{0}) is finite by
-      A13;
+      then ex g being Function of A,NAT st f = g & g"(NAT\{0}) is finite by A13
+;
       hence thesis;
     end;
     reconsider g = f as Function of A,NAT by Th28;
@@ -1174,13 +1173,12 @@ A8: a in dom ({x}|p) \/ {len p+1};
   then a in dom ({x}|p) or a in {len p+1} by XBOOLE_0:def 3;
   then
 A9: a in dom p & p.a in {x} or a in {len p+1} & a = len p+1 & x in {x} by
-  FUNCT_1:86,TARSKI:def 1;
-  Seg len p = dom p & Seg (len p+1) = Seg len p \/ {len p+1} by FINSEQ_1:
-  11 ,def 3;
+FUNCT_1:86,TARSKI:def 1;
+  Seg len p = dom p & Seg (len p+1) = Seg len p \/ {len p+1} by FINSEQ_1:11
+,def 3;
   then
-A10: (p^<*x*>).(len p+1) = x & a in dom (p^<*x*>) by A9,A7,
-  FINSEQ_1:59
-  ,XBOOLE_0:def 3;
+A10: (p^<*x*>).(len p+1) = x & a in dom (p^<*x*>) by A9,A7,FINSEQ_1:59
+,XBOOLE_0:def 3;
   reconsider a as Element of NAT by A8;
   a in dom p implies (p^<*x*>).a = p.a by FINSEQ_1:def 7;
   hence thesis by A9,A10,FUNCT_1:86;
@@ -1218,8 +1216,8 @@ A10: a in dom p by FUNCT_1:86;
   len <*y*> = 1 by FINSEQ_1:57;
   then
 A11: dom (p^<*y*>) = Seg (len p+1) by FINSEQ_1:def 7;
-  Seg len p = dom p & Seg (len p+1) = Seg len p \/ {len p+1} by FINSEQ_1:
-  11 ,def 3;
+  Seg len p = dom p & Seg (len p+1) = Seg len p \/ {len p+1} by FINSEQ_1:11
+,def 3;
   then
 A12: a in dom (p^<*y*>) by A10,A11,XBOOLE_0:def 3;
 A13: p.a in {x} by A9,FUNCT_1:86;
@@ -1309,11 +1307,11 @@ proof
     then
 A1: not len p+1 in dom ({b}|p) by FINSEQ_3:27;
 A2: |.p^<*a*>.|.b = card dom ({b}|pa) & |.p.|.b = card dom ({b}|p) by Def7;
-A3: a <> b implies dom ({b}|(p^<*a*>)) = dom ({b}|p) & (chi a).b = 0 by
-    Th32,Th36;
+A3: a <> b implies dom ({b}|(p^<*a*>)) = dom ({b}|p) & (chi a).b = 0 by Th32
+,Th36;
 A4: (|.p.| [*] chi a).b = (|.p.|.b) + ((chi a).b) by Th30;
-    dom ({a}|(p^<*a*>)) = dom ({a}|p) \/ {len p+1} & (chi a).a = 1 by Th32
-    ,Th35;
+    dom ({a}|(p^<*a*>)) = dom ({a}|p) \/ {len p+1} & (chi a).a = 1 by Th32,Th35
+;
     hence |.p^<*a*>.|.b = (|.p.| [*] chi a).b by A1,A2,A3,A4,CARD_2:54;
   end;
   hence thesis by Th33;
@@ -1583,20 +1581,21 @@ begin :: Monoid of subsets of a semigroup
 reserve a,b,c for Element of D;
 
 definition
-  let D1,D2,D be non empty set, f be Function of D1,D2,D;
-  func f.:^2 -> Function of bool D1, bool D2, bool D means
+  let D1,D2,D be non empty set, f be Function of [:D1,D2:],D;
+  func f.:^2 -> Function of [:bool D1, bool D2:], bool D means
   : Def8:
   for x being Element of [:bool D1, bool D2:] holds it.x = f.:[:x`1,x`2:];
   existence
   proof
     deffunc F(Element of [:bool D1, bool D2:]) = f.:[:$1`1,$1`2:];
-    ex f being Function of bool D1,bool D2,bool D st for x being Element
+    ex f being Function of [:bool D1,bool D2:],bool D st
+    for x being Element
     of [:bool D1, bool D2:] holds f.x = F(x) from FUNCT_2:sch 4;
     hence thesis;
   end;
   uniqueness
   proof
-    let F1,F2 be Function of bool D1, bool D2, bool D such that
+    let F1,F2 be Function of [:bool D1, bool D2:], bool D such that
 A1: for x being Element of [:bool D1, bool D2:] holds F1.x = f.:[:x`1,
     x`2:] and
 A2: for x being Element of [:bool D1, bool D2:] holds F2.x = f.:[:x`1, x`2:];
@@ -1610,22 +1609,22 @@ A2: for x being Element of [:bool D1, bool D2:] holds F2.x = f.:[:x`1, x`2:];
 end;
 
 theorem Th45:
-  for D1,D2,D being non empty set, f being Function of D1,D2,D for
+  for D1,D2,D being non empty set, f being Function of [:D1,D2:],D for
 X1 being Subset of D1, X2 being Subset of D2 holds (f.:^2).(X1,X2) = f.:[:X1,X2
   :]
 proof
-  let D1,D2,D be non empty set, f be Function of D1,D2,D;
+  let D1,D2,D be non empty set, f be Function of [:D1,D2:],D;
   let X1 be Subset of D1, X2 be Subset of D2;
   [X1,X2]`1 = X1 & [X1,X2]`2 = X2 by MCART_1:7;
   hence thesis by Def8;
 end;
 
 theorem Th46:
-  for D1,D2,D being non empty set, f being Function of D1,D2,D for
+  for D1,D2,D being non empty set, f being Function of [:D1,D2:],D for
 X1 being Subset of D1, X2 being Subset of D2, x1,x2 being set st x1 in X1 & x2
   in X2 holds f.(x1,x2) in (f.:^2).(X1,X2)
 proof
-  let D1,D2,D be non empty set, f be Function of D1,D2,D;
+  let D1,D2,D be non empty set, f be Function of [:D1,D2:],D;
   let X1 be Subset of D1, X2 be Subset of D2, x1,x2 be set;
   assume that
 A1: x1 in X1 and
@@ -1638,11 +1637,11 @@ A3: (f.:^2).(X1,X2) = f.:[:X1,X2:] & dom f = [:D1,D2:] by Th45,FUNCT_2:def 1;
 end;
 
 theorem
-  for D1,D2,D being non empty set, f being Function of D1,D2,D for X1
+  for D1,D2,D being non empty set, f being Function of [:D1,D2:],D for X1
   being Subset of D1, X2 being Subset of D2 holds (f.:^2).(X1,X2) = {f.(a,b)
   where a is Element of D1, b is Element of D2: a in X1 & b in X2}
 proof
-  let D1,D2,D be non empty set, f be Function of D1,D2,D;
+  let D1,D2,D be non empty set, f be Function of [:D1,D2:],D;
   let X1 be Subset of D1, X2 be Subset of D2;
   set A = {f.(a,b) where a is Element of D1, b is Element of D2: a in X1 & b
   in X2};
@@ -1972,8 +1971,8 @@ registration
     suppose
       G is not unital;
       then
-      bool G = multMagma(#bool the carrier of G, (the multF of G).:^2#) by
-      Def9;
+      bool G = multMagma(#bool the carrier of G, (the multF of G).:^2#) by Def9
+;
       hence the carrier of bool G is non empty;
     end;
   end;
@@ -2007,8 +2006,8 @@ theorem
   the_unity_wrt the multF of G}
 proof
   let G be unital (non empty multMagma);
-  bool G = multLoopStr(#bool carr(G), op(G).:^2,{the_unity_wrt op(G)}#) by
-  Def9;
+  bool G = multLoopStr(#bool carr(G), op(G).:^2,{the_unity_wrt op(G)}#) by Def9
+;
   hence thesis;
 end;
 

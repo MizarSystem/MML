@@ -12,7 +12,6 @@
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -57,9 +56,9 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="9"/>
+<Adjective nr="229"/>
 <Adjective nr="230"/>
 <Adjective nr="231"/>
-<Adjective nr="232"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WAYBEL27" nr="2">
@@ -98,7 +97,7 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="230"/>
+<Adjective nr="229"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WAYBEL27" nr="3">
@@ -137,7 +136,7 @@
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="231"/>
+<Adjective nr="230"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WAYBEL27" nr="4">
@@ -146,16 +145,16 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="141"/>
-<Adjective nr="161"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="140"/>
+<Adjective nr="160"/>
+<Adjective nr="162"/>
 <Adjective nr="163"/>
 <Adjective nr="164"/>
-<Adjective nr="165"/>
+<Adjective nr="188"/>
 <Adjective nr="189"/>
 <Adjective nr="190"/>
-<Adjective nr="191"/>
-<Adjective nr="229" value="false"/>
+<Adjective nr="228" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WAYBEL27" nr="5">
@@ -164,8 +163,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="141"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="140"/>
 </Cluster>
 </RCluster>
 <FCluster aid="WAYBEL27" nr="1">
@@ -174,7 +173,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="9"/>
-<Adjective nr="230"/>
+<Adjective nr="229"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -187,7 +186,7 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="230"/>
+<Adjective nr="229"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WAYBEL27" nr="2">
@@ -196,7 +195,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="9"/>
-<Adjective nr="231"/>
+<Adjective nr="230"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -209,14 +208,14 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="231"/>
+<Adjective nr="230"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WAYBEL27" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="141"/>
+<Adjective nr="140"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -231,84 +230,84 @@
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="42" value="false"/>
+<Adjective nr="41" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="163"/>
-<Adjective nr="165"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="162"/>
+<Adjective nr="164"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="408">
+<Func kind="K" nr="390">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="141"/>
-<Adjective nr="161"/>
-<Adjective nr="163"/>
-<Adjective nr="165"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="140"/>
+<Adjective nr="160"/>
+<Adjective nr="162"/>
+<Adjective nr="164"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WAYBEL27" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="42" value="false"/>
+<Adjective nr="41" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="42" value="false"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="162"/>
 <Adjective nr="163"/>
 <Adjective nr="164"/>
-<Adjective nr="165"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="408">
+<Func kind="K" nr="390">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="161"/>
-<Adjective nr="164"/>
+<Adjective nr="160"/>
+<Adjective nr="163"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WAYBEL27" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
+<Adjective nr="162"/>
 <Adjective nr="163"/>
 <Adjective nr="164"/>
-<Adjective nr="165"/>
+<Adjective nr="188"/>
 <Adjective nr="189"/>
 <Adjective nr="190"/>
-<Adjective nr="191"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="13">
 <Cluster>
+<Adjective nr="162"/>
 <Adjective nr="163"/>
 <Adjective nr="164"/>
-<Adjective nr="165"/>
+<Adjective nr="188"/>
 <Adjective nr="189"/>
 <Adjective nr="190"/>
-<Adjective nr="191"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="408">
+<Func kind="K" nr="390">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="161"/>
-<Adjective nr="191"/>
+<Adjective nr="160"/>
+<Adjective nr="190"/>
 </Cluster>
 </FCluster>
 <CCluster aid="WAYBEL27" nr="1">
@@ -324,67 +323,30 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="9"/>
+<Adjective nr="229"/>
 <Adjective nr="230"/>
 <Adjective nr="231"/>
-<Adjective nr="232"/>
 </Cluster>
 </CCluster>
 <CCluster aid="WAYBEL27" nr="2">
 <ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="12"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Cluster>
-<Adjective nr="9"/>
-<Adjective nr="23">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Adjective>
-</Cluster>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="10">
-<Func kind="K" nr="11">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="9"/>
-<Adjective nr="23">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Adjective>
-<Adjective nr="26"/>
-</Cluster>
-</CCluster>
-<CCluster aid="WAYBEL27" nr="3">
-<ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="141"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="140"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="42" value="false"/>
+<Adjective nr="41" value="false"/>
 </Cluster>
 <Typ kind="M" nr="25">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="141"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="140"/>
 </Cluster>
 </CCluster>
 </Registrations>

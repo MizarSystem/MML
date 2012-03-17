@@ -1,0 +1,4969 @@
+:: Sequent calculus, derivability, provability. Goedel's completeness theorem.
+::  by Marco B. Caminati
+:: 
+:: Received December 29, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
+      RELAT_2, FINSEQ_1, FUNCT_1, ARYTM_3, XCMPLX_0, CARD_1, ARYTM_1, FUNCT_2,
+      XXREAL_0, ORDINAL4, FUNCT_7, FINSEQ_2, EQREL_1, COMPLEX1, MCART_1,
+      PARTFUN1, MARGREL1, XBOOLEAN, FINSET_1, FUNCT_3, SETFAM_1, FUNCT_4,
+      FUNCOP_1, CARD_3, FOMODEL0, FOMODEL1, FOMODEL2, FOMODEL3, FOMODEL4;
+ notations TARSKI, MARGREL1, XBOOLE_0, ZFMISC_1, SETFAM_1, SUBSET_1, DOMAIN_1,
+      RELAT_1, RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, MCART_1, NAT_1, CARD_1,
+      NUMBERS, XCMPLX_0, RELAT_2, XXREAL_0, FUNCT_7, FINSEQ_1, LANG1, FINSEQ_2,
+      EQREL_1, INT_2, FINSET_1, FUNCT_4, FUNCOP_1, CARD_3, ORDERS_4, FOMODEL0,
+      FOMODEL1, FOMODEL2, FOMODEL3;
+ constructors NAT_1, CARD_1, ZFMISC_1, NUMBERS, INT_1, FINSEQ_1, XCMPLX_0,
+      MONOID_0, XXREAL_0, FUNCT_7, FINSEQ_2, ENUMSET1, EQREL_1, RELSET_1,
+      MCART_1, MARGREL1, FINSET_1, PARTFUN1, FINSEQOP, MATRIX_2, FUNCT_3,
+      RFUNCT_3, SETFAM_1, LANG1, PRE_POLY, FUNCT_1, FUNCT_4, FUNCOP_1, CARD_3,
+      ORDERS_4, FOMODEL0, FOMODEL1, FOMODEL2, FOMODEL3;
+ registrations ORDINAL1, XCMPLX_0, NAT_1, RELAT_1, NUMBERS, REAL_1, FUNCT_1,
+      INT_1, FINSEQ_1, XREAL_0, FUNCT_2, FINSEQ_2, SUBSET_1, RELSET_1,
+      PARTFUN1, EQREL_1, FINSEQ_6, PRE_POLY, CARD_1, XBOOLE_0, XXREAL_0,
+      ZFMISC_1, SETFAM_1, MARGREL1, SIMPLEX0, FINSET_1, RAMSEY_1, YELLOW12,
+      REALSET1, FUNCOP_1, CARD_3, FOMODEL0, FOMODEL1, FOMODEL2, FOMODEL3;
+ requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
+ definitions FINSEQ_1, RELAT_1, XBOOLEAN, FUNCOP_1, FOMODEL0, FOMODEL1,
+      FOMODEL2, FOMODEL3;
+ theorems TARSKI, XBOOLE_0, FUNCT_1, FINSEQ_1, RELAT_1, XBOOLE_1, ZFMISC_1,
+      FUNCT_2, ENUMSET1, NAT_1, ORDINAL1, MCART_1, FUNCT_7, ABSVALUE, EQREL_1,
+      RELSET_1, PARTFUN1, RELSET_2, LANG1, FRAENKEL, RFUNCT_1, FINSEQ_2,
+      HENMODEL, FUNCT_4, FUNCOP_1, SUPINF_2, GRFUNC_1, RELAT_2, XREAL_1,
+      FOMODEL0, FOMODEL1, FOMODEL2, FOMODEL3, CARD_1;
+ schemes NAT_1, FUNCT_2, RELSET_1, FRAENKEL;
+
+begin
+
+reserve k,m,n for Nat,
+        kk,mm,nn for Element of NAT, U for non empty set,
+        A,B,X,Y,Z,x,x1,x2,y,z for set, S for Language,
+        s, s1, s2 for Element of S, f,g for Function,
+        w for string of S, tt,tt1,tt2 for Element of AllTermsOf S,
+        psi,psi1,psi2,phi,phi1,phi2 for wff string of S,
+        u,u1,u2 for Element of U,
+        Phi,Phi1,Phi2 for Subset of AllFormulasOf S,
+        t,t1,t2 for termal string of S,
+r for relational Element of S, a for ofAtomicFormula Element of S,
+l, l1, l2 for literal Element of S, p for FinSequence,
+m1, n1 for non zero Nat, S1, S2 for Language;
+
+Lm7: X is Subset of Funcs(A,B) implies X is Subset-Family of [:A,B:]
+proof
+B0: Funcs(A,B) c= bool [:A,B:] by FRAENKEL:5;
+assume X is Subset of Funcs (A, B); hence thesis by B0, XBOOLE_1:1;
+end;
+
+Lm10: <*TheEqSymbOf S*>^t1^t2 is 0wff string of S
+proof
+set E=TheEqSymbOf S, AT=AllTermsOf S, C=S-multiCat, SS=AllSymbolsOf S;
+reconsider tt1=t1,tt2=t2 as Element of AT by FOMODEL1:def 32; reconsider
+T=<*tt1*>^<*tt2*> as 2-element Element of (AT*) by FINSEQ_1:def 11;
+reconsider ATT=AT as Subset of SS* by XBOOLE_1:1; reconsider
+TT=T as Element of ATT*;
+reconsider TTT=TT as Element of SS**;
+reconsider EE=E as ofAtomicFormula Element of S;
+B0: abs(-2)=-(-2) by ABSVALUE:def 1 .= 2;
+B1: abs(ar(EE))=2 by B0, FOMODEL1:def 23; C.TT is Element of SS*;
+then reconsider tailer=C.T as FinSequence of SS;
+reconsider SSS=SS as non empty set;
+reconsider EEE=EE as Element of SSS;
+reconsider header=<*EEE*> as FinSequence of SS;
+reconsider IT=header^tailer as non empty FinSequence of SS;
+reconsider phi=IT as string of S by FOMODEL1:12;
+tailer = (SS-multiCat.<*tt1,tt2*>) .= tt1^tt2 by FOMODEL0:15;
+then <*E*>^(t1^t2) is 0wff string of S by B1, FOMODEL1:def 35;
+hence <*E*>^t1^t2 is 0wff string of S by FINSEQ_1:45;
+end;
+
+::#####################################################################
+::#Definitions and auxiliary lemmas
+definition let S be Language;
+func S-sequents equals
+{[premises,conclusion] where premises is Subset of (AllFormulasOf S),
+conclusion is wff string of S: premises is finite};
+coherence;
+end;
+
+registration let S be Language;
+cluster S-sequents -> non empty;
+coherence
+proof
+set AF=AllFormulasOf S; set premises = the finite Subset of AF;
+set conclusion = the wff string of S;
+[premises,conclusion] in S-sequents; hence thesis;
+end;
+end;
+
+registration let S;
+cluster S-sequents -> Relation-like;
+coherence
+proof
+set SS=AllSymbolsOf S, strings=SS*\{{}}, FF=AllFormulasOf S;
+now
+let z; assume z in S-sequents; then consider x being Subset of FF,
+y being wff string of S such that C0: z=[x,y] & x is finite;
+thus z in [:bool FF, strings:] by C0;
+end; then S-sequents is Subset of [:bool FF, strings:] by TARSKI:def 3;
+hence thesis;
+end;
+end;
+
+definition
+let S be Language;
+let x be set;
+attr x is S-sequent-like means :DefSeqtLike: x in S-sequents;
+end;
+
+definition ::def3 1
+let S,X;
+attr X is S-sequents-like means :DefSeqtLike2: X c= S-sequents;
+end;
+
+registration let S;
+cluster -> S-sequents-like Subset of S-sequents;
+coherence by DefSeqtLike2;
+cluster -> S-sequent-like Element of S-sequents;
+coherence by DefSeqtLike;
+end;
+
+registration
+let S be Language;
+cluster S-sequent-like Element of S-sequents;
+existence proof take the Element of S-sequents; thus thesis; end;
+cluster S-sequents-like Subset of S-sequents;
+existence proof take the Subset of S-sequents; thus thesis; end;
+end;
+
+registration let S;
+cluster S-sequent-like set;
+existence proof take the Element of S-sequents; thus thesis; end;
+cluster S-sequents-like set;
+existence proof take the Subset of S-sequents; thus thesis; end;
+end;
+
+definition let S be Language;
+mode Rule of S is Element of Funcs (bool (S-sequents), bool (S-sequents));
+end;
+
+definition let S be Language;
+mode RuleSet of S is Subset of Funcs (bool (S-sequents), bool (S-sequents));
+end;
+
+reserve D,D1,D2,D3 for RuleSet of S, R for Rule of S,
+Seqts,Seqts1,Seqts2 for Subset of S-sequents,
+seqt,seqt1,seqt2 for Element of S-sequents,
+SQ,SQ1,SQ2 for S-sequents-like set, Sq,Sq1,Sq2 for S-sequent-like set;
+
+registration
+let A,B;
+let X be Subset of Funcs(A,B);
+cluster union X -> Relation-like;
+coherence;
+end;
+
+registration
+let S be Language; let D be RuleSet of S;
+cluster union D -> Relation-like;
+coherence;
+end;
+
+definition
+let S,D;
+func OneStep(D) -> Rule of S means :Def1Step:
+for Seqs being Element of bool (S-sequents) holds
+it.Seqs = union ((union D) .: {Seqs});
+existence
+proof
+set Q=S-sequents, F=Funcs(bool Q,bool Q);
+reconsider RR=union D as Relation of bool Q by FOMODEL0:19;
+deffunc G(Element of bool Q)=union (RR.:{$1}); consider f being
+Function of bool Q, bool Q such that B0: for x being Element of bool Q
+holds f.x=G(x) from FUNCT_2:sch 4; reconsider ff=f as Element of F
+by FUNCT_2:11; take ff; thus thesis by B0;
+end;
+uniqueness
+proof
+set Q=S-sequents, F=Funcs(bool Q,bool Q); let IT1,IT2 be Rule of S;
+reconsider IT11=IT1, IT22=IT2 as Function of bool Q, bool Q;
+deffunc G(set)=union ((union D).:{$1});
+assume B1: for Seqs being Element of bool Q holds IT1.Seqs = G(Seqs);
+assume B2: for Seqs being Element of bool Q holds IT2.Seqs = G(Seqs);
+now
+let x be Element of bool Q; thus IT11.x=G(x) by B1 .= IT22.x by B2;
+end;
+hence thesis by FUNCT_2:113;
+end;
+end;
+
+Lm4: dom (OneStep D)=bool (S-sequents) & rng (OneStep D) c= dom (OneStep D) &
+iter(OneStep D,m) is Function of bool (S-sequents), bool (S-sequents) &
+dom iter(OneStep D,m)=bool (S-sequents) & dom (OneStep D) \/
+rng (OneStep D) = bool (S-sequents) & Seqts in dom R & SQ in dom (iter(R,m))
+proof
+set O=OneStep D, Q=S-sequents; thus B1: dom O=bool Q by FUNCT_2:def 1;
+hence B0: rng O c= dom O by RELAT_1:def 19;
+thus iter(O,m) is Function of bool Q, bool Q by FUNCT_7:85; hence
+dom iter(O,m)=bool Q by FUNCT_2:def 1; thus
+dom O \/ rng O = bool Q by B1, XBOOLE_1:12, B0;
+dom R=bool Q by FUNCT_2:def 1; hence Seqts in dom R;
+iter(R,m) is Function of bool Q, bool Q by FUNCT_7:85; then
+dom (iter (R,m))=bool Q & SQ c= Q by FUNCT_2:def 1, DefSeqtLike2;
+hence SQ in dom (iter(R,m));
+end;
+
+definition let S,D,m;
+func (m,D)-derivables -> Rule of S equals iter(OneStep D,m);
+coherence
+proof
+set Q=S-sequents, O=OneStep D, IT=iter(O,m);
+IT is Function of bool Q, bool Q by FUNCT_7:85; hence thesis by FUNCT_2:11;
+end;
+end;
+
+definition
+let S be Language;
+let D be RuleSet of S;
+let Seqs1,Seqs2 be set;
+attr Seqs2 is (Seqs1,D)-derivable means :DefDerivable:
+Seqs2 c= union (((OneStep D) [*]) .: {Seqs1});
+end;
+
+definition ::def7 1
+let m,S,D; let Seqts,seqt be set;
+attr seqt is (m,Seqts,D)-derivable means :DefDerivable3:
+seqt in (m,D)-derivables.Seqts;
+end;
+
+definition let S,D;
+func D-iterators -> Subset-Family of [:bool (S-sequents), bool (S-sequents):]
+equals {iter(OneStep D,mm):not contradiction};
+coherence
+proof
+set O=OneStep D, Q=S-sequents, IT={iter(O,mm):not contradiction};
+now
+let x; assume x in IT; then consider mm such that
+C0: x=iter(O,mm) & not contradiction; x is Relation of bool Q, bool Q by
+Lm4, C0;
+hence x in bool [:bool Q, bool Q:];
+end;
+hence thesis by TARSKI:def 3;
+end;
+end;
+
+definition let S,R;
+attr R is isotone means :DefMonotonic1:
+Seqts1 c= Seqts2 implies R.Seqts1 c= R.Seqts2;
+end;
+
+Lm16: id (bool (S-sequents)) is Rule of S &
+(R=id (bool (S-sequents)) implies R is isotone)
+proof
+set Q=S-sequents;
+reconsider I=id (bool Q) as Rule of S by FUNCT_2:11;
+id (bool Q)=I;hence id (bool Q) is Rule of S;
+B0: now
+let Seqts1, Seqts2;
+C0: I.Seqts1=Seqts1 & I.Seqts2=Seqts2 by FUNCT_1:34;
+assume Seqts1 c= Seqts2;
+hence I.Seqts1 c= I.Seqts2 by C0;
+end;
+assume R=id (bool Q); hence thesis by B0, DefMonotonic1;
+end;
+
+registration let S;
+cluster isotone Rule of S;
+existence
+proof
+set Q=S-sequents; reconsider I=id(bool Q) as Rule of S by Lm16; take I;
+thus I is isotone by Lm16;
+end;
+end;
+
+definition let S,D;
+attr D is isotone means :DefMonotonic2: for Seqts1,Seqts2,f st
+Seqts1 c= Seqts2 & f in D ex g st (g in D & f.Seqts1 c= g.Seqts2);
+end;
+
+registration let S; let M be isotone Rule of S;
+cluster {M} -> isotone RuleSet of S;
+coherence
+proof
+set Q=S-sequents;
+now
+let Seqts1,Seqts2,f; assume C0: Seqts1 c= Seqts2 & f in {M}; then
+reconsider F=f as isotone Rule of S by TARSKI:def 1;
+take g=f; thus g in {M} by C0;
+F.Seqts1 c= F.Seqts2 by C0, DefMonotonic1; hence f.Seqts1 c= g.Seqts2;
+end;
+hence thesis by DefMonotonic2;
+end;
+end;
+
+registration let S;
+cluster isotone RuleSet of S;
+existence
+proof set M = the isotone Rule of S; take D={M}; thus thesis; end;
+end;
+
+reserve M,K,K1,K2 for isotone RuleSet of S;
+
+definition
+let S be Language;
+let D be RuleSet of S;
+let Seqts be set;
+attr Seqts is D-derivable means :DefDerivable2: Seqts is ({},D)-derivable;
+end;
+
+registration
+let S,D;
+cluster D-derivable -> ({},D)-derivable set;
+coherence by DefDerivable2;
+cluster ({},D)-derivable -> D-derivable set;
+coherence by DefDerivable2;
+end;
+
+registration
+let S,D; let Seqts be empty set;
+cluster (Seqts,D)-derivable -> D-derivable set;
+coherence;
+end;
+
+definition let S,D,X; let phi be set;
+attr phi is (X,D)-provable means :DefProvable: ::Def13 1
+{[X,phi]} is D-derivable or ex seqt being set
+st (seqt`1 c= X & seqt`2 = phi & {seqt} is D-derivable);
+end;
+
+definition let S,D,X,x;
+redefine attr x is (X,D)-provable means :DefProvable2:
+ex seqt being set st (seqt`1 c= X & seqt`2 = x & {seqt} is D-derivable);
+compatibility
+proof
+defpred P[] means ex seqt being set st
+(seqt`1 c= X & seqt`2 = x & {seqt} is D-derivable);
+thus  x is (X,D)-provable implies P[]
+proof assume
+C0: x is (X,D)-provable;
+per cases; suppose
+D0: {[X,x]} is D-derivable; take seqt=[X,x];
+thus seqt`1 c= X & seqt`2 = x by MCART_1:7;
+thus {seqt} is D-derivable by D0;
+end;
+suppose not {[X,x]} is D-derivable; hence thesis by DefProvable, C0; end;
+end;
+assume P[]; hence x is (X,D)-provable by DefProvable;
+end;
+end;
+
+definition let S,D,R;
+attr R is D-macro means for Seqs being Subset of S-sequents
+holds R.Seqs is (Seqs,D)-derivable;
+end;
+
+definition let S,D; let Phi be set;
+func (Phi,D)-termEq equals
+{ [t1, t2] where t1,t2 is termal string of S:
+<* TheEqSymbOf S *> ^ t1 ^ t2 is (Phi,D)-provable};
+coherence;
+end;
+
+definition
+let S,D; let Phi be set; ::Def16 1
+attr Phi is D-expanded means :DefExpanded:
+::#Deductively closed (cfr. Hedman)
+x is (Phi,D)-provable implies {x} c= Phi;
+end;
+
+definition
+let S,x; ::Def17 1
+attr x is S-null means :DefNull: not contradiction;
+end;
+
+Lm31: X c= Y & x is (X,D)-provable implies x is (Y,D)-provable
+proof
+assume
+B1: X c= Y; assume
+x is (X,D)-provable; then consider seqt being set such that
+B0: (seqt`1 c= X & seqt`2 = x & {seqt} is D-derivable) by DefProvable2;
+(seqt`1 c= Y & seqt`2 = x & {seqt} is D-derivable) by B0, B1, XBOOLE_1:1;
+hence thesis by DefProvable2;
+end;
+
+::#####################################################################
+::#####################################################################
+::#####################################################################
+::#Type Tuning
+
+definition
+let S,D; let Phi be set;
+redefine func (Phi,D)-termEq -> Relation of (AllTermsOf S);
+coherence
+proof
+now
+let x be set;
+assume x in (Phi,D)-termEq;
+then consider t1,t2 being termal string of S such that B1:
+x=[t1,t2] & <* TheEqSymbOf S *> ^ t1 ^ t2 is (Phi,D)-provable;
+reconsider t1b = t1 as Element of (AllTermsOf S) by FOMODEL1:def 32;
+reconsider t2b = t2 as Element of (AllTermsOf S) by FOMODEL1:def 32;
+x=[t1b,t2b] by B1;
+hence x in [:AllTermsOf S, AllTermsOf S:];
+end;
+hence thesis by TARSKI:def 3;
+end;
+end;
+
+registration
+let S,phi;
+let Phi1,Phi2 be finite Subset of (AllFormulasOf S);
+cluster [Phi1 \/ Phi2, phi] -> S-sequent-like;
+coherence
+proof
+set AF=AllFormulasOf S; reconsider Phi=Phi1 \/ Phi2 as finite Subset of AF;
+[Phi, phi] in S-sequents; hence thesis;
+end;
+end;
+
+definition
+let S;
+let x be empty set;
+let phi be wff string of S;
+redefine func [ x, phi ] -> Element of S-sequents;
+coherence
+proof
+reconsider premises=x as finite Subset of ((AllSymbolsOf S)*) by XBOOLE_1:2;
+premises c= AllFormulasOf S by XBOOLE_1:2;
+then [premises ,phi] in S-sequents;
+hence thesis;
+end;
+end;
+
+registration let S;
+cluster {} /\ S -> S-sequents-like set;
+coherence
+proof
+set Q=S-sequents, IT={}/\S;
+reconsider ITT=IT as Subset of Q by XBOOLE_1:2;
+ITT is S-sequents-like; hence thesis;
+end;
+end;
+
+registration let S;
+cluster S-null set;
+existence by DefNull;
+end;
+
+registration let S;
+cluster S-sequent-like -> S-null set;
+coherence by DefNull;
+end;
+
+registration
+let S;
+cluster -> S-null Element of S-sequents; coherence;
+end;
+
+registration
+let m,S,D,X;
+cluster (m,D)-derivables.X -> S-sequents-like;
+coherence
+proof
+set Q=S-sequents;
+reconsider f=(m,D)-derivables as Function of bool Q, bool Q;
+per cases;
+suppose not X in bool Q; then not X in dom f;
+then f.X={} by FUNCT_1:def 4; then f.X c= Q by XBOOLE_1:2;
+hence thesis;
+end;
+suppose X in bool Q; then reconsider XX=X as Element of bool Q;
+f.XX is Element of bool Q; hence thesis;
+end;
+end;
+end;
+
+registration let S,Y; let X be S-sequents-like set;
+cluster X/\Y -> S-sequents-like set;
+coherence
+proof
+set Q=S-sequents;
+X c= Q by DefSeqtLike2; then X/\Y c= Q by XBOOLE_1:1;
+hence thesis;
+end;
+end;
+
+registration
+let S,D,m,X;
+cluster (m,X,D)-derivable -> S-sequent-like set;
+coherence
+proof
+set O=OneStep D, All=union ((O[*]).:{X}), Q=S-sequents;
+B0: (m,D)-derivables.X c= Q by DefSeqtLike2;
+let x; assume x is (m,X,D)-derivable; then
+x in (m,D)-derivables.X by DefDerivable3;
+hence thesis by B0;
+end;
+end;
+
+registration
+let S,D;
+let Phi1, Phi2 be set;
+cluster (Phi1\Phi2,D)-provable -> (Phi1,D)-provable set;
+coherence by Lm31;
+end;
+
+registration
+let S,D;
+let Phi1, Phi2 be set;
+cluster (Phi1\Phi2,D)-provable -> (Phi1\/Phi2,D)-provable set;
+coherence by XBOOLE_1:7, Lm31;
+end;
+
+registration
+let S,D; let Phi1,Phi2 be set;
+cluster (Phi1/\Phi2,D)-provable -> (Phi1,D)-provable set;
+coherence by Lm31;
+end;
+
+registration
+let S,D; let X be set, x be Subset of X;
+cluster (x,D)-provable -> (X,D)-provable set;
+coherence
+proof
+let y; assume y is (x,D)-provable; then consider seqt being set such that
+B0: (seqt`1 c= x & seqt`2 = y & {seqt} is D-derivable) by DefProvable2;
+(seqt`1 c= X & seqt`2 = y & {seqt} is D-derivable) by B0, XBOOLE_1:1;
+hence thesis by DefProvable2;
+end;
+end;
+
+registration
+let S; let premises be finite Subset of (AllFormulasOf S);
+let phi be wff string of S;
+cluster [premises,phi] -> S-sequent-like set;
+coherence
+proof
+set x=[premises,phi], Q=S-sequents;
+x in Q; hence thesis;
+end;
+end;
+
+registration
+let S; let phi1,phi2 be wff string of S;
+cluster [{phi1},phi2] -> S-sequent-like set;
+coherence
+proof
+set AF=AllFormulasOf S;
+reconsider phi11=phi1 as Element of AF by FOMODEL2:16;
+reconsider Phi={phi11} as finite Subset of AF;
+[Phi,phi2] is S-sequent-like; hence thesis;
+end;
+let phi3 be wff string of S;
+cluster [{phi1,phi2},phi3] -> S-sequent-like set;
+coherence
+proof
+set AF=AllFormulasOf S; reconsider phi11=phi1,phi22=phi2 as
+Element of AF by FOMODEL2:16; reconsider Phi={phi11}\/{phi22} as
+finite Subset of AF; [Phi,phi2] is S-sequent-like
+& Phi={phi11, phi22} by ENUMSET1:41; hence thesis;
+end;
+end;
+
+registration
+let S, phi1, phi2; let Phi be finite Subset of AllFormulasOf S;
+cluster [Phi\/{phi1}, phi2] -> S-sequent-like set;
+coherence
+proof
+set AF=AllFormulasOf S;
+reconsider phi11=phi1 as Element of AF by FOMODEL2:16;
+reconsider Phi2=Phi\/{phi11} as finite Subset of AF;
+[Phi2,phi2] is S-sequent-like; hence thesis;
+end;
+end;
+
+::######################################################################
+::########################Lemmas
+
+Lm13: X c= S-sequents implies (OneStep D).X = union( union
+{R.:{X} where R is Subset of [:bool(S-sequents),bool(S-sequents):]:R in D})
+proof
+set Q=S-sequents,F={R.:{X} where R is Subset of [:bool Q,bool Q:]:R in D},
+O=OneStep D; assume X c= Q;
+then reconsider Seqts=X as Element of bool Q;
+reconsider DD=D as Subset-Family of [:bool Q, bool Q:] by Lm7;
+O.Seqts = union ((union DD) .: {Seqts}) by Def1Step .=
+union (union F) by RELSET_2:35; hence thesis;
+end;
+
+Lm8: R=OneStep({R})
+proof
+set IT=OneStep({R}); B0:
+dom R= bool (S-sequents) by FUNCT_2:def 1 .= dom IT by FUNCT_2:def 1;
+now
+let x be set;assume C1: x in dom R; thus
+R.x = union ({R.x}) by ZFMISC_1:31 .= union (Im(R,x)) by FUNCT_1:117, C1 .=
+union ((union {R}).:{x}) by ZFMISC_1:31 .= IT.x by Def1Step, C1;
+end;
+hence thesis by B0,FUNCT_1:9;
+end;
+
+Lm3:{y} is (Seqts,D)-derivable implies ex mm st y is (mm,Seqts,D)-derivable
+proof
+set X=Seqts, Q=S-sequents, O=OneStep D, I=D-iterators;
+assume {y} is (X,D)-derivable; then
+{y} c= union ((O[*]).:{X}) by DefDerivable; then
+y in union ((O[*]).:{X}) by ZFMISC_1:37; then consider
+Y such that B0: y in Y & Y in ((O[*]).:{X}) by TARSKI:def 4;
+rng O c= dom O by Lm4; then O[*]=union I by FOMODEL0:17; then
+(O[*]).:{X} = union {R.:{X} where R is Subset of [:bool Q, bool Q:]: R in I}
+by RELSET_2:35; then consider Z such that
+B1: Y in Z & Z in {R.:{X} where R is Subset of [:bool Q, bool Q:]: R in I}
+by B0, TARSKI:def 4;
+consider f being Subset of [:bool Q, bool Q:] such that
+B2: Z=f.:{X} & f in I by B1; consider mm being Element of NAT such that
+B3: f=iter(O,mm) & not contradiction by B2; take mm;
+iter(O,mm) is Function of bool Q, bool Q by FUNCT_7:85; then
+BB4: dom iter(O,mm) = bool Q by FUNCT_2:def 1;
+y in Y & Y in Im((iter(O,mm)),X) by B0, B1, B3, B2; then
+y in Y & Y in {(iter(O,mm)).X} by BB4, FUNCT_1:117;
+then y in (mm,D)-derivables.Seqts by TARSKI:def 1;
+hence y is (mm,Seqts,D)-derivable by DefDerivable3;
+end;
+
+Lm5:
+X c= S-sequents implies (m,D)-derivables.X c= union (((OneStep D)[*]).:{X})
+proof
+set O=OneStep D, RH=union ((O[*]).:{X}),Q=S-sequents; assume X c= Q;then
+B0: X in dom iter(O,m) by Lm4;
+reconsider f=union {iter(O,m)} as Function by ZFMISC_1:31;
+B1: iter(O,m).X = union {iter(O,m).X} by ZFMISC_1:31 .=
+union (Im(iter(O,m),X)) by FUNCT_1:117, B0 .= union (f.:{X})
+by ZFMISC_1:31; reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+iter(O,mm)=iter(O,m); then iter(O,m) in D-iterators; then
+{iter(O,m)} c= D-iterators by ZFMISC_1:37; then
+union {iter(O,m)} c= union (D-iterators) by ZFMISC_1:95; then
+f.:{X} c= (union (D-iterators)).:{X} by RELAT_1:157; then
+B2: (m,D)-derivables.X c= union ((union (D-iterators)).:{X})
+by B1, ZFMISC_1:95; rng O c= dom O by Lm4;
+hence thesis by B2, FOMODEL0:17;
+end;
+
+Lm18: union (((OneStep D)[*]).:{X}) =
+union {(mm,D)-derivables.X where mm is Element of NAT: not contradiction}
+proof
+set F={(mm,D)-derivables.X where mm is Element of NAT: not contradiction},
+LH=union F, Q=S-sequents, O=OneStep D, RH=union((O[*]).:{X});
+per cases;
+suppose C0: not X in bool Q; then {X} misses bool Q by ZFMISC_1:56; then
+{X} misses dom (O[*]) by XBOOLE_1:63; then {X} /\ dom (O[*]) = {} by
+XBOOLE_0:def 7;
+then (O[*]).:{X} = (O[*]).:{} by RELAT_1:145.= {} by RELAT_1:149; then
+reconsider E=(O[*]).:{X} as empty set;
+now
+let x; assume x in F; then consider mm such that
+E0: x=(mm,D)-derivables.X; not X in dom (mm,D)-derivables by C0;
+then x={} by FUNCT_1:def 4, E0; hence x in {{}} by TARSKI:def 1;
+end;
+then F c= {{}} by TARSKI:def 3; then LH c= union {{}} by ZFMISC_1:95;
+then LH c= {} by ZFMISC_1:31; then union E = {} & LH ={};
+hence thesis;
+end;
+suppose C0: X in bool Q; then reconsider Seqts=X as Element of bool Q;
+for Y st Y in F holds Y c= RH
+proof
+let Y; assume Y in F; then consider mm such that
+E0: Y=(mm,D)-derivables.X & not contradiction;
+thus thesis by E0, C0, Lm5;
+end;
+then C2: LH c= RH by ZFMISC_1:94;
+now
+let y; assume y in RH; then {y} c= RH by ZFMISC_1:37; then {y} is (Seqts,D)
+-derivable by DefDerivable; then consider mm such that
+E1: y is (mm,Seqts,D)-derivable by Lm3;
+set Y=(mm,D)-derivables.Seqts; y in Y & Y in F by DefDerivable3, E1;
+hence y in LH by TARSKI:def 4;
+end;
+then RH c= LH by TARSKI:def 3; hence thesis by C2, XBOOLE_0:def 10;
+end;
+end;
+
+Lm18b: (m,D)-derivables.X c= union (((OneStep D)[*]).:{X})
+proof
+set F={(mm,D)-derivables.X where mm is Element of NAT: not contradiction},
+LH=union F, Q=S-sequents, O=OneStep D, RH=union((O[*]).:{X});
+reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+(mm,D)-derivables.X in F; then (mm,D)-derivables.X c= union F
+by ZFMISC_1:92; hence thesis by Lm18;
+end;
+
+Lm29: x is (m,X,D)-derivable implies {x} is (X,D)-derivable
+proof
+set Q=S-sequents, O=OneStep D, RH=union((O[*]).:{X});
+assume x is (m,X,D)-derivable; then
+B0: x in (m,D)-derivables.X by DefDerivable3;
+(m,D)-derivables.X c= RH by Lm18b; then
+{x} c= RH by ZFMISC_1:37, B0; hence thesis by DefDerivable;
+end;
+
+Lm14: Seqts1 c= Seqts2 & D1 c= D2 & (D2 is isotone or D1 is isotone)
+implies (OneStep D1).Seqts1 c= (OneStep D2).Seqts2
+proof
+set Q=S-sequents, U1=union D1, U2=union D2, O1=OneStep D1, O2=OneStep D2,
+F1={R.:{Seqts1} where R is Subset of [:bool Q, bool Q:]:R in D1},
+F2={R.:{Seqts2} where R is Subset of [:bool Q, bool Q:]:R in D2},
+X1=Seqts1, X2=Seqts2;
+B2: O1.X1=union (union F1) & O2.X2 = union (union F2) by Lm13; assume
+B1: X1 c= X2 & D1 c= D2 & (D2 is isotone or D1 is isotone);
+now
+let z; assume z in union union F1; then consider x such that
+C7: z in x & x in union F1 by TARSKI:def 4;
+consider X such that
+C0: x in X & X in F1 by TARSKI:def 4, C7;
+consider R being Subset of [: bool Q, bool Q:] such that
+C1: X=R.:{X1} & R in D1 by C0;
+reconsider RR=R as Rule of S by C1;
+X=Im(RR,X1) & R in D1 & X1 in dom RR by C1, Lm4; then
+CC4: X={RR.X1} by FUNCT_1:117;
+now
+per cases;
+suppose D2 is isotone; hence ex g st
+g in D2 & RR.X1 c= g.X2 by C1, B1, DefMonotonic2;
+end;
+suppose not D2 is isotone; then consider g such that
+E1: g in D1 & RR.X1 c= g.X2 by C1, B1, DefMonotonic2;
+thus ex g st g in D2 & RR.X1 c= g.X2 by E1, B1;
+end;
+end;
+then consider g such that
+C3: g in D2 & RR.X1 c= g.X2;
+reconsider Rg=g as Rule of S by C3; C5: X2 in dom Rg by Lm4;
+C6: x c= g.X2 by C3, CC4, C0, TARSKI:def 1; Im(Rg,X2) in F2 by C3; then
+{Rg.X2} in F2 by FUNCT_1:117, C5; then {{Rg.X2}} c= F2 by ZFMISC_1:37;
+then union {{g.X2}} c= union F2 by ZFMISC_1:95; then
+{g.X2} c= union F2 by ZFMISC_1:31; then
+union {g.X2} c= union union F2 by ZFMISC_1:95; then
+g.X2 c= union union F2 by ZFMISC_1:31; then
+x c= union union F2 by C6, XBOOLE_1:1; hence
+z in union union F2 by C7;
+end;
+hence thesis by TARSKI:def 3, B2;
+end;
+
+Lm15: Seqts1 c= Seqts2 & D1 c= D2 & (D2 is isotone or D1 is isotone)
+implies (m,D1)-derivables.Seqts1 c= (m,D2)-derivables.Seqts2
+proof
+set O1=OneStep D1, O2=OneStep D2, Q=S-sequents, X1=Seqts1, X2=Seqts2;
+assume B2: X1 c= X2 & D1 c= D2 & (D2 is isotone or D1 is isotone);
+defpred P[Nat] means ($1,D1)-derivables.X1 c= ($1,D2)-derivables.X2;
+B0: P[0]
+proof
+C0: iter(O1,0).X1=(id field O1).X1 by FUNCT_7:70
+.= id(bool Q).X1 by Lm4 .= X1 by FUNCT_1:34;
+iter(O2,0).X2=(id field O2).X2 by FUNCT_7:70
+.= id(bool Q).X2 by Lm4 .= X2 by FUNCT_1:34;
+hence thesis by C0, B2;
+end;
+B1: for n st P[n] holds P[n+1]
+proof
+let n; C1:X1 in dom iter(O1,n) & X2 in dom iter(O2,n) by Lm4; reconsider
+X11=(n,D1)-derivables.X1, X22=(n,D2)-derivables.X2 as Subset of Q;
+assume
+CC2: P[n];
+C0: (n+1,D1)-derivables.X1=(O1*iter(O1,n)).X1 by FUNCT_7:73 .=
+O1.X11 by C1, FUNCT_1:23;
+(n+1,D2)-derivables.X2 = (O2*iter(O2,n)).X2 by FUNCT_7:73 .=
+O2.X22 by C1, FUNCT_1:23;
+hence thesis by C0, CC2, Lm14, B2;
+end;
+for k being Nat holds P[k] from NAT_1:sch 2(B0,B1); hence thesis;
+end;
+
+Lm15b: SQ1 c= SQ2 & D1 c= D2 & (D2 is isotone or D1 is isotone)
+implies (m,D1)-derivables.SQ1 c= (m,D2)-derivables.SQ2
+proof
+reconsider Seqts1=SQ1, Seqts2=SQ2 as Subset of S-sequents by DefSeqtLike2;
+assume SQ1 c= SQ2 & D1 c= D2 & (D2 is isotone or D1 is isotone);
+then (m,D1)-derivables.Seqts1 c= (m,D2)-derivables.Seqts2 by Lm15;
+hence thesis;
+end;
+
+Lm17: D1 c= D2 & (D2 is isotone or D1 is isotone) implies
+(m,D1)-derivables.X c= (m,D2)-derivables.X
+proof
+set Q=S-sequents, f1=(m,D1)-derivables, f2=(m,D2)-derivables;
+assume B0: D1 c= D2 & (D2 is isotone or D1 is isotone);
+per cases;
+suppose X in bool Q;
+then reconsider Seqts1=X as Element of bool Q;
+f1.Seqts1 c= f2.Seqts1 by Lm15, B0; hence f1.X c= f2.X;
+end;
+suppose not X in bool Q; then not X in dom f1 & not X in dom f2;
+then f1.X={} & f2.X={} by FUNCT_1:def 4; hence f1.X c= f2.X;
+end;
+end;
+
+Lm19: D1 c= D2 & (D2 is isotone or D1 is isotone) implies
+union (((OneStep D1)[*]).:{X}) c= union (((OneStep D2)[*]).:{X})
+proof
+set F1={(mm,D1)-derivables.X where mm is Element of NAT: not contradiction},
+F2={(mm,D2)-derivables.X where mm is Element of NAT: not contradiction},
+O1=OneStep D1, O2=OneStep D2, Q=S-sequents, LH=union ((O1[*]).:{X}),
+RH=union ((O2[*]).:{X});
+B1: LH=union F1 & RH=union F2 by Lm18;
+assume B0: D1 c= D2 & (D2 is isotone or D1 is isotone);
+now
+let x; assume x in F1; then consider mm such that
+C0: x=(mm,D1)-derivables.X & not contradiction;
+C1: x c= (mm,D2)-derivables.X by B0, Lm17, C0;
+(mm,D2)-derivables.X in F2; then
+(mm,D2)-derivables.X c= union F2 by ZFMISC_1:92;
+hence x c= union F2 by C1, XBOOLE_1:1;
+end;
+hence thesis by B1, ZFMISC_1:94;
+end;
+
+Lm20: D1 c= D2 & (D2 is isotone or D1 is isotone) & Y is (X,D1)-derivable
+implies Y is (X,D2)-derivable
+proof
+set O1=OneStep D1, O2=OneStep D2, Q=S-sequents, LH=union ((O1[*]).:{X}),
+RH=union ((O2[*]).:{X}); assume
+D1 c= D2 & (D2 is isotone or D1 is isotone) & Y is (X,D1)-derivable;
+then LH c= RH & Y c= LH by DefDerivable, Lm19; then
+Y c= RH by XBOOLE_1:1; hence thesis by DefDerivable;
+end;
+
+Lm9: Y c= R.Seqts implies Y is (Seqts,{R})-derivable
+proof
+set D={R}, RR=(OneStep D)[*], Q=S-sequents;
+Seqts in bool Q & dom R=bool Q by FUNCT_2:def 1; then
+B0: {R.Seqts}=Im(R,Seqts) by FUNCT_1:117 .= R.:{Seqts};
+(OneStep D) c= RR by LANG1:18; then B1: R c= RR by Lm8;
+{R.Seqts} c= RR.:{Seqts} by B0, B1, RELAT_1:157; then
+union {R.Seqts} c= union (RR.:{Seqts}) by ZFMISC_1:95; then
+B3: R.Seqts c= union (RR.:{Seqts}) by ZFMISC_1:31;
+assume Y c= R.Seqts; then Y c= union (RR.:{Seqts}) by B3, XBOOLE_1:1;
+hence thesis by DefDerivable;
+end;
+
+Lm27: (D1 is isotone & D1\/D2 is isotone &
+SQ2 c= iter(OneStep D1,m).SQ1 & Z c= iter(OneStep D2,n).SQ2) implies
+Z c= iter (OneStep (D1\/D2),m+n).SQ1
+proof
+reconsider mm=m, nn=n as Element of NAT by ORDINAL1:def 13;
+set D3=D1\/D2, O1=OneStep D1, O2=OneStep D2,
+O3=OneStep (D3), X=SQ1, Y=SQ2; assume
+B11: D1 is isotone & D3 is isotone; assume
+B0: Y c= iter(O1,m).X & Z c= iter(O2,n).Y;
+B2: D3 c= D3 & D1 c= D3 & D2 c= D3 by XBOOLE_1:7; then
+(m,D1)-derivables.X c= (m,D1\/D2)-derivables.X by Lm17,B11; then
+BB3: Y c= (m,D3)-derivables.X by B0, XBOOLE_1:1;
+B6: X in dom iter(O3,m) by Lm4;
+(n,D2)-derivables.Y c= (n,D3)-derivables.Y by B2, B11, Lm17; then
+B5: Z c= (n,D3)-derivables.Y by B0, XBOOLE_1:1;
+(m+n,D1\/D2)-derivables.X =
+(iter(O3,nn)*iter(O3,mm)).X by FUNCT_7: 79
+.= (n,D1\/D2)-derivables.(iter(O3,m).X) by FUNCT_1:23, B6; then
+(n,D1\/D2)-derivables.Y c= (m+n,D1\/D2)-derivables.X by BB3, B11, Lm15b;
+hence thesis by B5, XBOOLE_1:1;
+end;
+
+Lm28: (D1 is isotone & D1\/D2 is isotone &
+y is (m,X,D1)-derivable & z is (n,{y},D2)-derivable) implies
+z is (m+n,X,D1\/D2)-derivable
+proof
+set Q=S-sequents, D3=D1\/D2, O1=OneStep D1, O2=OneStep D2, O3=OneStep D3;
+assume
+B2: D1 is isotone & D3 is isotone; assume
+B0: y is (m,X,D1)-derivable & z is (n,{y},D2)-derivable; then
+B1: y in (m,D1)-derivables.X & z in (n,D2)-derivables.{y} by DefDerivable3;
+X in bool Q
+proof
+assume not X in bool Q; then not X in dom (m,D1)-derivables; then
+C1: (m,D1)-derivables.X = {} by FUNCT_1:def 4;
+thus contradiction by C1, B0, DefDerivable3;
+end; then reconsider SQ=X as Subset of Q;
+reconsider yy=y as Element of Q by DefSeqtLike, B0;
+{yy} c= iter(O1,m).SQ & {z} c= iter(O2,n).{yy} by ZFMISC_1:37, B1; then
+{z} c= iter (O3,m+n).SQ by Lm27, B2; then z in (m+n,D3)-derivables.X by
+ZFMISC_1:37; hence thesis by DefDerivable3;
+end;
+
+Lm23: [t1,t2] in (X,D)-termEq iff <*TheEqSymbOf S*>^t1^t2 is (X,D)-provable
+proof
+set E=TheEqSymbOf S, R=(X,D)-termEq;
+thus [t1,t2] in R implies <*E*>^t1^t2 is (X,D)-provable
+proof
+assume [t1,t2] in R; then consider t11,t22 being termal string
+of S such that C1: [t11,t22]=[t1,t2] & <*E*>^t11^t22 is (X,D)-provable;
+t11=t1 & t22=t2 & <*E*>^t11^t22 is (X,D)-provable by C1, ZFMISC_1:33;
+hence thesis;
+end;
+assume <*E*>^t1^t2 is (X,D)-provable; hence thesis;
+end;
+
+Lm32: Sq`2 is wff string of S
+proof
+set Q=S-sequents; reconsider seqt=Sq as Element of Q by DefSeqtLike;
+seqt in Q; then consider premises being Subset of (AllFormulasOf S),
+conclusion being wff string of S such that
+B0: seqt=[premises,conclusion] & premises is finite;
+thus Sq`2 is wff string of S by MCART_1:7, B0;
+end;
+
+Lm33: x is (X,D)-provable implies x is wff string of S
+proof
+set Q=S-sequents;
+assume x is (X,D)-provable; then consider y such that
+B1: y`1 c= X & y`2=x & {y} is D-derivable by DefProvable2;
+reconsider E={} as Subset of Q by XBOOLE_1:2;
+{y} is ({},D)-derivable by B1; then consider mm such that
+B2: y is (mm,E,D)-derivable by Lm3;
+reconsider yy=y as Element of Q by DefSeqtLike, B2;
+yy`2 is wff string of S by Lm32; hence thesis by B1;
+end;
+
+Lm34: AllFormulasOf S is D-expanded
+proof
+set AF=AllFormulasOf S;
+now
+let x; assume x is (AF,D)-provable; then reconsider
+xx=x as wff string of S by Lm33; consider m such that
+C0: xx is m-wff by FOMODEL2:def 25;
+xx in AF by C0; hence {x} c= AF by ZFMISC_1:37;
+end;
+hence thesis by DefExpanded;
+end;
+
+registration
+let S,D;
+cluster D-expanded (Subset of AllFormulasOf S);
+existence
+proof
+set AF=AllFormulasOf S; reconsider AFF=AF as Subset of AF
+by XBOOLE_0:def 10; take AFF; thus thesis by Lm34;
+end;
+end;
+
+registration
+let S,D;
+cluster D-expanded set;
+existence
+proof set AF=AllFormulasOf S; take the D-expanded Subset of AF;
+thus thesis; end;
+end;
+
+::############################################################################
+::# Encoding of modified Gentzen rules
+definition
+let Seqts be set; let S be Language; let seqt be S-null set;
+
+pred seqt Rule0 Seqts means :Def0: seqt`2 in seqt`1; ::Def18 1
+
+pred seqt Rule1 Seqts means :Def1: ex y being set st y in Seqts &
+y`1 c= seqt`1 & seqt`2 = y`2;
+
+pred seqt Rule2 Seqts means :Def2: seqt`1 is empty &
+ex t being termal string of S st seqt`2 = <* TheEqSymbOf S *> ^ t ^ t;
+
+pred seqt Rule3a Seqts means :Def3a:
+ex t,t1,t2 being termal string of S, x being set st
+(x in Seqts & seqt`1 = x`1 \/ { <* TheEqSymbOf S *> ^ t1 ^ t2 } &
+x`2 = <* TheEqSymbOf S *> ^ t ^ t1 & seqt`2 = <* TheEqSymbOf S *> ^ t ^ t2);
+
+pred seqt Rule3b Seqts means :Def3b: ::Def22 1
+ex t1,t2 being termal string of S st seqt`1 = {<*TheEqSymbOf S*>^t1^t2} &
+seqt`2 = <*TheEqSymbOf S*>^t2^t1;
+
+pred seqt Rule3d Seqts means :Def3d: ::Def24 1
+ex s being low-compounding Element of S,
+T,U being (abs(ar(s)))-element Element of (AllTermsOf S)* st
+(s is operational & seqt`1=
+{<*TheEqSymbOf S*>^(TT.j)^(UU.j) where j is Element of Seg abs(ar(s)),
+TT,UU is Function of Seg abs(ar(s)), (AllSymbolsOf S)*\{{}} : TT=T & UU=U}
+& seqt`2=<*TheEqSymbOf S*>^(s-compound(T))^(s-compound(U)));
+
+pred seqt Rule3e Seqts means :Def3e:
+ex s being relational Element of S,
+T,U being (abs(ar(s)))-element Element of (AllTermsOf S)* st
+(seqt`1={s-compound(T)} \/
+{<*TheEqSymbOf S*>^(TT.j)^(UU.j) where j is Element of Seg abs(ar(s)),
+TT,UU is Function of Seg abs(ar(s)), (AllSymbolsOf S)*\{{}} : TT=T & UU=U}
+& seqt`2=s-compound(U));
+
+pred seqt Rule4 Seqts means :Def4:
+ex l being literal Element of S, phi being wff string of S, t being
+termal string of S st seqt`1={(l,t) SubstIn phi} & seqt`2=<*l*>^phi;
+
+pred seqt Rule5 Seqts means :Def5: ex v1,v2 being
+(literal Element of S), x,p st
+seqt`1=x \/ {<*v1*>^p} & v2 is (x\/{p}\/{seqt`2})-absent &
+[x\/{(v1 SubstWith v2).p},seqt`2] in Seqts;
+
+pred seqt Rule6 Seqts means :Def6: ::def28 1
+ex y1,y2 being set,phi1, phi2 being wff string of S st y1 in Seqts &
+y2 in Seqts & y1`1 = y2`1 & y2`1=seqt`1 &
+y1`2= <*TheNorSymbOf S*> ^ phi1 ^ phi1 &
+y2`2=  <*TheNorSymbOf S*> ^ phi2 ^ phi2 &
+seqt`2 = <*TheNorSymbOf S*> ^ phi1 ^ phi2;
+
+pred seqt Rule7 Seqts means :Def7:
+ex y being set, phi1, phi2 being wff string of S st y in Seqts &
+y`1 = seqt`1 & y`2 =<* TheNorSymbOf S*> ^ phi1 ^ phi2 &
+seqt`2 = <* TheNorSymbOf S*> ^ phi2 ^ phi1;
+
+pred seqt Rule8 Seqts means :Def8:
+ex y1,y2 being set, phi,phi1,phi2 being wff string of S st y1 in Seqts &
+y2 in Seqts & y1`1=y2`1 & y1`2=phi1 &
+y2`2 = <* TheNorSymbOf S *> ^ phi1 ^ phi2 &
+{phi}\/seqt`1=y1`1 & seqt`2= <* TheNorSymbOf S *> ^ phi ^ phi;
+
+pred seqt Rule9 Seqts means :Def9:
+ex y being set, phi being wff string of S st
+y in Seqts & seqt`2=phi & y`1=seqt`1 & y`2=xnot (xnot phi);
+end;
+
+definition
+let S be Language;
+func P0(S) -> Relation of bool (S-sequents), S-sequents means :DefP0:
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule0 Seqts;
+existence
+proof
+defpred P[set, Element of S-sequents] means $2 Rule0 $1;
+consider R being Relation of bool (S-sequents), S-sequents such that B1:
+for x being Element of bool (S-sequents), y being Element of S-sequents holds
+[x,y] in R iff P[x,y] from RELSET_1:sch 2;
+take R;
+thus thesis by B1;
+end;
+uniqueness
+proof
+defpred P[set, Element of S-sequents] means $2 Rule0 $1;
+let IT1 be Relation of bool (S-sequents), S-sequents;
+let IT2 be Relation of bool (S-sequents), S-sequents;
+assume B1: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT1 iff P[x,y];
+assume B2: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT2 iff P[x,y];
+thus thesis from RELSET_1:sch 4(B1,B2);
+end;
+
+func P1(S) -> Relation of bool (S-sequents), S-sequents means :DefP1: ::def32
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule1 Seqts;
+existence
+proof
+defpred P[set, Element of S-sequents] means $2 Rule1 $1;
+consider R being Relation of bool (S-sequents), S-sequents such that B1:
+for x being Element of bool (S-sequents), y being Element of S-sequents holds
+[x,y] in R iff P[x,y] from RELSET_1:sch 2;
+take R;
+thus thesis by B1;
+end;
+uniqueness
+proof
+defpred P[set, Element of S-sequents] means $2 Rule1 $1;
+let IT1 be Relation of bool (S-sequents), S-sequents;
+let IT2 be Relation of bool (S-sequents), S-sequents;
+assume B1: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT1 iff P[x,y];
+assume B2: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT2 iff P[x,y];
+thus thesis from RELSET_1:sch 4(B1,B2);
+end;
+
+func P2(S) -> Relation of bool (S-sequents), S-sequents means :DefP2:
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule2 Seqts;
+existence
+proof
+defpred P[set, Element of S-sequents] means $2 Rule2 $1;
+consider R being Relation of bool (S-sequents), S-sequents such that B1:
+for x being Element of bool (S-sequents), y being Element of S-sequents holds
+[x,y] in R iff P[x,y] from RELSET_1:sch 2;
+take R;
+thus thesis by B1;
+end;
+uniqueness
+proof
+defpred P[set, Element of S-sequents] means $2 Rule2 $1;
+let IT1 be Relation of bool (S-sequents), S-sequents;
+let IT2 be Relation of bool (S-sequents), S-sequents;
+assume B1: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT1 iff P[x,y];
+assume B2: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT2 iff P[x,y];
+thus thesis from RELSET_1:sch 4(B1,B2);
+end;
+
+func P3a(S) -> Relation of bool (S-sequents), S-sequents means :DefP3a:
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule3a Seqts;
+existence
+proof
+defpred P[set, Element of S-sequents] means $2 Rule3a $1;
+consider R being Relation of bool (S-sequents), S-sequents such that B1:
+for x being Element of bool (S-sequents), y being Element of S-sequents holds
+[x,y] in R iff P[x,y] from RELSET_1:sch 2;
+take R;
+thus thesis by B1;
+end;
+uniqueness
+proof
+defpred P[set, Element of S-sequents] means $2 Rule3a $1;
+let IT1 be Relation of bool (S-sequents), S-sequents;
+let IT2 be Relation of bool (S-sequents), S-sequents;
+assume B1: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT1 iff P[x,y];
+assume B2: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT2 iff P[x,y];
+thus thesis from RELSET_1:sch 4(B1,B2);
+end;
+
+func P3b(S) -> Relation of bool (S-sequents), S-sequents means :DefP3b:
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule3b Seqts;
+existence
+proof
+defpred P[set, Element of S-sequents] means $2 Rule3b $1;
+consider R being Relation of bool (S-sequents), S-sequents such that B1:
+for x being Element of bool (S-sequents), y being Element of S-sequents holds
+[x,y] in R iff P[x,y] from RELSET_1:sch 2;
+take R;
+thus thesis by B1;
+end;
+uniqueness
+proof
+defpred P[set, Element of S-sequents] means $2 Rule3b $1;
+let IT1 be Relation of bool (S-sequents), S-sequents;
+let IT2 be Relation of bool (S-sequents), S-sequents;
+assume B1: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT1 iff P[x,y];
+assume B2: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT2 iff P[x,y];
+thus thesis from RELSET_1:sch 4(B1,B2);
+end;
+
+func P3d(S) -> Relation of bool (S-sequents), S-sequents means :DefP3d:
+for Seqts being Element of bool (S-sequents), seqt being ::Def37 1
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule3d Seqts;
+existence
+proof
+defpred P[set, Element of S-sequents] means $2 Rule3d $1;
+consider R being Relation of bool (S-sequents), S-sequents such that B1:
+for x being Element of bool (S-sequents), y being Element of S-sequents
+holds [x,y] in R iff P[x,y] from RELSET_1:sch 2;
+take R;
+thus thesis by B1;
+end;
+uniqueness
+proof
+defpred P[set, Element of S-sequents] means $2 Rule3d $1;
+let IT1 be Relation of bool (S-sequents), S-sequents;
+let IT2 be Relation of bool (S-sequents), S-sequents;
+assume B1: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT1 iff P[x,y];
+assume B2: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT2 iff P[x,y];
+thus thesis from RELSET_1:sch 4(B1,B2);
+end;
+
+func P3e(S) -> Relation of bool (S-sequents), S-sequents means :DefP3e:
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule3e Seqts;
+existence
+proof
+defpred P[set, Element of S-sequents] means $2 Rule3e $1;
+consider R being Relation of bool (S-sequents), S-sequents such that B1:
+for x being Element of bool (S-sequents), y being Element of S-sequents
+holds [x,y] in R iff P[x,y] from RELSET_1:sch 2;
+take R;
+thus thesis by B1;
+end;
+uniqueness
+proof
+defpred P[set, Element of S-sequents] means $2 Rule3e $1;
+let IT1 be Relation of bool (S-sequents), S-sequents;
+let IT2 be Relation of bool (S-sequents), S-sequents;
+assume B1: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT1 iff P[x,y];
+assume B2: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT2 iff P[x,y];
+thus thesis from RELSET_1:sch 4(B1,B2);
+end;
+
+func P4(S) -> Relation of bool (S-sequents), S-sequents means :DefP4:
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule4 Seqts;
+existence
+proof
+defpred P[set, Element of S-sequents] means $2 Rule4 $1;
+consider R being Relation of bool (S-sequents), S-sequents such that B1:
+for x being Element of bool (S-sequents), y being Element of S-sequents holds
+[x,y] in R iff P[x,y] from RELSET_1:sch 2;
+take R;
+thus thesis by B1;
+end;
+uniqueness
+proof
+defpred P[set, Element of S-sequents] means $2 Rule4 $1;
+let IT1 be Relation of bool (S-sequents), S-sequents;
+let IT2 be Relation of bool (S-sequents), S-sequents;
+assume B1: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT1 iff P[x,y];
+assume B2: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT2 iff P[x,y];
+thus thesis from RELSET_1:sch 4(B1,B2);
+end;
+
+func P5(S) -> Relation of bool (S-sequents), S-sequents means :DefP5:
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule5 Seqts;
+existence
+proof
+defpred P[set, Element of S-sequents] means $2 Rule5 $1;
+consider R being Relation of bool (S-sequents), S-sequents such that B1:
+for x being Element of bool (S-sequents), y being Element of S-sequents holds
+[x,y] in R iff P[x,y] from RELSET_1:sch 2;
+take R;
+thus thesis by B1;
+end;
+uniqueness
+proof
+defpred P[set, Element of S-sequents] means $2 Rule5 $1;
+let IT1 be Relation of bool (S-sequents), S-sequents;
+let IT2 be Relation of bool (S-sequents), S-sequents;
+assume B1: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT1 iff P[x,y];
+assume B2: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT2 iff P[x,y];
+thus thesis from RELSET_1:sch 4(B1,B2);
+end;
+
+func P6(S) -> Relation of bool (S-sequents), S-sequents means :DefP6:
+for Seqts being Element of bool (S-sequents), seqt being ::def41 1
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule6 Seqts;
+existence
+proof
+defpred P[set, Element of S-sequents] means $2 Rule6 $1;
+consider R being Relation of bool (S-sequents), S-sequents such that B1:
+for x being Element of bool (S-sequents), y being Element of S-sequents holds
+[x,y] in R iff P[x,y] from RELSET_1:sch 2;
+take R;
+thus thesis by B1;
+end;
+uniqueness
+proof
+defpred P[set, Element of S-sequents] means $2 Rule6 $1;
+let IT1 be Relation of bool (S-sequents), S-sequents;
+let IT2 be Relation of bool (S-sequents), S-sequents;
+assume B1: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT1 iff P[x,y];
+assume B2: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT2 iff P[x,y];
+thus thesis from RELSET_1:sch 4(B1,B2);
+end;
+
+func P7(S) -> Relation of bool (S-sequents), S-sequents means :DefP7:
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule7 Seqts;
+existence
+proof
+defpred P[set, Element of S-sequents] means $2 Rule7 $1;
+consider R being Relation of bool (S-sequents), S-sequents such that B1:
+for x being Element of bool (S-sequents), y being Element of S-sequents holds
+[x,y] in R iff P[x,y] from RELSET_1:sch 2;
+take R;
+thus thesis by B1;
+end;
+uniqueness
+proof
+defpred P[set, Element of S-sequents] means $2 Rule7 $1;
+let IT1 be Relation of bool (S-sequents), S-sequents;
+let IT2 be Relation of bool (S-sequents), S-sequents;
+assume B1: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT1 iff P[x,y];
+assume B2: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT2 iff P[x,y];
+thus thesis from RELSET_1:sch 4(B1,B2);
+end;
+
+func P8(S) -> Relation of bool (S-sequents), S-sequents means :DefP8:
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule8 Seqts;
+existence
+proof
+defpred P[set, Element of S-sequents] means $2 Rule8 $1;
+consider R being Relation of bool (S-sequents), S-sequents such that B1:
+for x being Element of bool (S-sequents), y being Element of S-sequents holds
+[x,y] in R iff P[x,y] from RELSET_1:sch 2;
+take R;
+thus thesis by B1;
+end;
+uniqueness
+proof
+defpred P[set, Element of S-sequents] means $2 Rule8 $1;
+let IT1 be Relation of bool (S-sequents), S-sequents;
+let IT2 be Relation of bool (S-sequents), S-sequents;
+assume B1: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT1 iff P[x,y];
+assume B2: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT2 iff P[x,y];
+thus thesis from RELSET_1:sch 4(B1,B2);
+end;
+
+func P9(S) -> Relation of bool (S-sequents), S-sequents means :DefP9:
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule9 Seqts;
+existence
+proof
+defpred P[set, Element of S-sequents] means $2 Rule9 $1;
+consider R being Relation of bool (S-sequents), S-sequents such that B1:
+for x being Element of bool (S-sequents), y being Element of S-sequents holds
+[x,y] in R iff P[x,y] from RELSET_1:sch 2;
+take R;
+thus thesis by B1;
+end;
+uniqueness
+proof
+defpred P[set, Element of S-sequents] means $2 Rule9 $1;
+let IT1 be Relation of bool (S-sequents), S-sequents;
+let IT2 be Relation of bool (S-sequents), S-sequents;
+assume B1: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT1 iff P[x,y];
+assume B2: for x being Element of bool (S-sequents),
+y being Element of S-sequents holds [x,y] in IT2 iff P[x,y];
+thus thesis from RELSET_1:sch 4(B1,B2);
+end;
+end;
+
+definition
+let S;
+let R be Relation of bool (S-sequents), S-sequents;
+func FuncRule(R) -> Rule of S means :DefFr:
+for inseqs being set st inseqs in bool (S-sequents) holds it.inseqs =
+{ x where x is Element of S-sequents : [inseqs, x] in R};
+existence
+proof
+deffunc A(set) = { x where x is Element of S-sequents : [$1,x] in R};
+B1: for inseqs being set holds A(inseqs) in (bool (S-sequents))
+proof
+let inseqs be set;
+now
+let x be set;
+assume x in A(inseqs); then
+consider seq being Element of S-sequents such that B1:
+seq=x & [inseqs,seq] in R;
+thus x in S-sequents by B1;
+end;
+then A(inseqs) c= S-sequents by TARSKI:def 3;
+hence thesis;
+end;
+B2: for inseqs being set st inseqs in bool (S-sequents) holds
+A(inseqs) in (bool (S-sequents)) by B1;
+consider f being Function of bool (S-sequents),bool (S-sequents)
+such that B3: for x being set st x in bool (S-sequents) holds
+f.x = A(x) from FUNCT_2:sch 2(B2);
+take f;
+thus thesis by B3, FUNCT_2:11;
+end;
+uniqueness
+proof
+set Q=S-sequents; let IT1,IT2 be Rule of S;
+deffunc F(set)={ x where x is Element of S-sequents : [$1, x] in R};
+assume
+B1: for inseqs being set st inseqs in bool (S-sequents) holds
+IT1.inseqs = F(inseqs); assume
+B2: for inseqs being set st inseqs in bool (S-sequents) holds
+IT2.inseqs = F(inseqs);
+for x st x in bool Q holds IT1.x=IT2.x
+proof
+let x; assume C0: x in bool Q; hence IT1.x=F(x) by B1 .= IT2.x by B2, C0;
+end;
+hence thesis by FUNCT_2:18;
+end;
+end;
+
+Lm1: for R being Relation of bool (S-sequents), S-sequents holds
+[Seqts, seqt] in R implies seqt in (FuncRule(R)).Seqts
+proof
+let R be Relation of bool (S-sequents), S-sequents;
+B1: (FuncRule(R)).Seqts =
+{ x where x is Element of S-sequents : [Seqts, x] in R} by DefFr;
+assume [Seqts, seqt] in R; hence thesis by B1;
+end;
+
+Lm1b: for R being Relation of bool (S-sequents), S-sequents holds
+[SQ, Sq] in R implies Sq is (1,SQ,{FuncRule(R)})-derivable
+proof
+set Q=S-sequents; let R be Relation of bool Q,Q;
+set F=FuncRule(R), O=OneStep {F};
+reconsider Seqts=SQ as Subset of Q by DefSeqtLike2;
+reconsider seqt=Sq as Element of Q by DefSeqtLike;
+B0: F=O by Lm8 .= (1,{F})-derivables by FUNCT_7:72; assume
+[SQ, Sq] in R; then seqt in (1,{F})-derivables.Seqts by B0, Lm1;
+hence thesis by DefDerivable3;
+end;
+
+Lm1d: for R being Relation of bool (S-sequents), S-sequents holds
+(y in (FuncRule R).SQ iff (y in S-sequents & [SQ,y] in R))
+proof
+set Q=S-sequents; let R be Relation of bool Q, Q;
+reconsider F=FuncRule R as Function of bool Q, bool Q;
+reconsider Seqts=SQ as Element of (bool Q) by DefSeqtLike2;
+set G={ x where x is Element of S-sequents : [Seqts, x] in R};
+B2: F.Seqts=G by DefFr;
+B3: F.Seqts c= Q;
+thus y in (FuncRule R).SQ implies (y in Q & [SQ,y] in R)
+proof
+assume
+CC0: y in (FuncRule R).SQ; thus y in Q by B3, CC0;
+consider x being Element of Q such that
+C1: y=x & [Seqts,x] in R by CC0,B2; thus thesis by C1;
+end; assume
+B4: y in Q & [SQ,y] in R; then reconsider seqt=y as Element of Q;
+seqt in F.Seqts by Lm1, B4; hence thesis;
+end;
+
+Lm1e: for R being Relation of bool (S-sequents), S-sequents holds
+(y in (FuncRule R).X iff (y in S-sequents & [X,y] in R))
+proof
+set Q=S-sequents; let R be Relation of bool Q, Q;
+reconsider F=FuncRule R as Function of bool Q, bool Q;
+per cases;
+suppose C0: not X in bool Q;
+not X in dom F by C0;
+hence thesis by C0, ZFMISC_1:106, FUNCT_1:def 4;
+end;
+suppose X in bool Q; then reconsider Seqts=X as Element of bool Q;
+set SQ=Seqts;
+(y in (FuncRule R).SQ iff (y in S-sequents & [SQ,y] in R)) by Lm1d;
+hence thesis;
+end;
+end;
+
+definition let S;
+func R0(S) -> Rule of S equals FuncRule(P0(S));
+coherence;
+func R1(S) -> Rule of S equals FuncRule(P1(S));
+coherence;
+func R2(S) -> Rule of S equals FuncRule(P2(S));
+coherence;
+func R3a(S) -> Rule of S equals FuncRule(P3a(S));
+coherence;
+func R3b(S) -> Rule of S equals FuncRule(P3b(S));
+coherence;
+func R3d(S) -> Rule of S equals FuncRule(P3d(S));
+coherence;
+func R3e(S) -> Rule of S equals FuncRule(P3e(S));
+coherence;
+func R4(S) -> Rule of S equals FuncRule(P4(S));
+coherence;
+func R5(S) -> Rule of S equals FuncRule(P5(S));
+coherence;
+func R6(S) -> Rule of S equals FuncRule(P6(S));
+coherence;
+func R7(S) -> Rule of S equals FuncRule(P7(S));
+coherence;
+func R8(S) -> Rule of S equals FuncRule(P8(S));
+coherence;
+func R9(S) -> Rule of S equals FuncRule(P9(S));
+coherence;
+end;
+
+registration
+let S; let t be termal string of S;
+cluster {[{},<*TheEqSymbOf S*>^t^t]} -> {R2(S)}-derivable set;
+coherence
+proof
+set E=TheEqSymbOf S, SS=AllSymbolsOf S, T=S-termsOfMaxDepth,
+C=S-multiCat; reconsider phi=<*E*>^t^t as wff string of S by Lm10;
+reconsider Seqts={} as Element of bool (S-sequents) by XBOOLE_1:2;
+reconsider seqt=[{},phi] as Element of S-sequents;
+seqt`1 is empty & seqt`2=<*E*>^t^t by MCART_1:7; then
+seqt Rule2 {} by Def2; then [Seqts,seqt] in P2(S) by DefP2;
+then seqt in (R2(S)).Seqts by Lm1; then
+{seqt} c= (R2(S)).Seqts by ZFMISC_1:37; then
+{seqt} is ({},{R2(S)})-derivable by Lm9;hence thesis;
+end;
+end;
+
+registration
+let S;
+cluster R2(S) -> isotone Rule of S;
+coherence
+proof
+now
+let Seqts1, Seqts2; set X=Seqts1, Y=Seqts2; assume X c= Y;
+::# note this assumption remains unused here
+set R=R2(S), Q=S-sequents;
+now
+let x; assume
+CC0: x in R.X; then
+C0: x in Q & [X,x] in P2(S) by Lm1e;
+reconsider seqt=x as Element of Q by CC0;
+seqt Rule2 X by DefP2, C0;
+then seqt`1 is empty &
+ex t being termal string of S st seqt`2 = <* TheEqSymbOf S *> ^ t ^ t
+by Def2;
+then seqt Rule2 Y by Def2; then [Y,seqt] in P2(S) by DefP2;
+hence x in R.Y by Lm1;
+end;
+hence R.X c= R.Y by TARSKI:def 3;
+end;
+hence thesis by DefMonotonic1;
+end;
+end;
+
+Lm24: {R2(S)} c= D implies (X,D)-termEq is total
+proof
+assume
+B0:{R2(S)} c= D;
+set AT=AllTermsOf S, E=TheEqSymbOf S, Phi=X, R=(Phi,D)-termEq;
+now
+let x; assume x in AT; then reconsider t=x as termal string of S;
+set phi=<*E*>^t^t, seqt=[{},phi];
+{seqt} is ({},D)-derivable by B0,Lm20;
+then phi is ({}\(Phi\{}),D)-provable by DefProvable; then
+phi is (Phi\/{},D)-provable;
+then [t,t] in (Phi,D)-termEq;
+hence x in dom R by RELAT_1:def 4;
+end;
+then AT c= dom R by TARSKI:def 3;
+then AT=dom R by XBOOLE_0:def 10; hence R is total by PARTFUN1:def 4;
+end;
+
+registration
+let S;
+cluster R3b(S) -> isotone Rule of S;
+coherence
+proof
+now
+let Seqts1, Seqts2; set X=Seqts1, Y=Seqts2; assume X c= Y;
+::#note this assumption remains unused here
+set R=R3b(S), Q=S-sequents;
+now
+let x; assume
+CC0: x in R.X;
+reconsider seqt=x as Element of Q by CC0;
+[X,seqt] in P3b(S) by CC0, Lm1e; then
+seqt Rule3b X by DefP3b;
+then
+ex t1,t2 being termal string of S st seqt`1 = {<*TheEqSymbOf S*>^t1^t2} &
+seqt`2 = <*TheEqSymbOf S*>^t2^t1 by Def3b;
+then seqt Rule3b Y by Def3b; then [Y,seqt] in P3b(S) by DefP3b;
+hence x in R.Y by Lm1;
+end;
+hence R.X c= R.Y by TARSKI:def 3;
+end;
+hence thesis by DefMonotonic1;
+end;
+end;
+
+Lm25:
+{R3b(S)} c= D & X is D-expanded implies (X,D)-termEq is symmetric
+proof
+set AT=AllTermsOf S, E=TheEqSymbOf S, Q=S-sequents, AF=AllFormulasOf S,
+Phi=X, R=(X,D)-termEq;
+assume B7: {R3b(S)} c= D;
+assume B6: Phi is D-expanded;
+B9: field R c= AT\/AT by RELSET_1:19;
+now
+let x,y; assume x in field R & y in field R; then
+reconsider tt1=x, tt2=y as Element of AT by B9;
+reconsider t1=tt1, t2=tt2 as termal string of S;
+reconsider phi1=<*E*>^t1^t2 as wff string of S by Lm10;
+reconsider phi2=<*E*>^t2^t1 as wff string of S by Lm10;
+reconsider seqt=[{phi1},phi2] as Element of S-sequents by DefSeqtLike;
+B0: seqt`1={phi1} & seqt`2 = phi2 by MCART_1:7;
+reconsider Seqts={} as Element of bool Q by XBOOLE_1:2;
+B1: seqt Rule3b {} by B0, Def3b;
+[Seqts,seqt] in P3b(S) by B1, DefP3b; then
+seqt in (R3b(S)).Seqts by Lm1; then
+{seqt} c= (R3b(S)).Seqts by ZFMISC_1:37;
+then {seqt} is ({},{R3b(S)})-derivable by Lm9;
+then {seqt} is ({},D)-derivable by B7, Lm20; then
+B8: phi2 is ({phi1},D)-provable by DefProvable;
+assume [x,y] in (Phi,D)-termEq; then consider
+t11,t22 be termal string of S such that
+B2: [x,y]=[t11,t22] & <*E*>^t11^t22 is (Phi,D)-provable;
+t1=t11 & t2=t22 by ZFMISC_1:33, B2; then
+{phi1} c= Phi by B6, DefExpanded, B2;
+hence [y,x] in (Phi,D)-termEq by B8;
+end;
+then R is_symmetric_in field R by RELAT_2:def 3;
+hence thesis by RELAT_2:def 11;
+end;
+
+registration
+let S; let t,t1,t2 be termal string of S;
+let premises be finite (Subset of AllFormulasOf S);
+cluster [premises\/{<*TheEqSymbOf S*>^t1^t2},<*TheEqSymbOf S*>^t^t2]
+-> (1,{[premises,<*TheEqSymbOf S*>^t^t1]},{R3a(S)})-derivable set;
+coherence
+proof
+set E=TheEqSymbOf S, AF=AllFormulasOf S;
+reconsider phi0=<*E*>^t1^t2, phi1=<*E*>^t^t1, phi2=<*E*>^t^t2 as
+0wff string of S by Lm10;
+phi0 in AF; then
+reconsider Phi0={phi0} as finite Subset of AF by ZFMISC_1:37;
+reconsider prem2=premises \/ Phi0 as finite Subset of AF;
+reconsider seqt2=[prem2,phi2], seqt1=[premises,phi1] as
+Element of S-sequents by DefSeqtLike;
+reconsider Seqts={seqt1} as Subset of S-sequents;
+B0:seqt1 in Seqts by TARSKI:def 1;
+B1: seqt2`1=premises \/ {phi0} by MCART_1:7 .= (seqt1`1)\/{phi0} by MCART_1:7;
+B2: seqt1`2=phi1 & seqt2`2=phi2 by MCART_1:7;
+seqt2 Rule3a Seqts by B0,B1,B2,Def3a; then [Seqts, seqt2] in P3a(S) by
+DefP3a; hence thesis by Lm1b;
+end;
+end;
+
+registration
+let S; let t,t1,t2 be termal string of S, phi be wff string of S;
+cluster [{phi,<*TheEqSymbOf S*>^t1^t2},<*TheEqSymbOf S*>^t^t2]
+-> (1,{[{phi},<*TheEqSymbOf S*>^t^t1]},{R3a(S)})-derivable set;
+coherence
+proof
+set AF=AllFormulasOf S, E=TheEqSymbOf S, allpremises={phi,<*E*>^t1^t2},
+IT=[{phi,<*E*>^t1^t2},<*E*>^t^t2];
+reconsider phii=phi as Element of AF by FOMODEL2:16;
+reconsider premises={phii} as finite Subset of AF;
+[premises\/{<*E*>^t1^t2}, <*E*>^t^t2] is
+(1,{[premises,<*E*>^t^t1]},{R3a(S)})-derivable; hence thesis by ENUMSET1:41;
+end;
+end;
+
+registration
+let S; let phi be wff string of S, Phi be finite Subset of AllFormulasOf S;
+cluster [Phi \/ {phi}, phi] -> (1,{},{R0(S)})-derivable set;
+coherence
+proof
+set Q=S-sequents;
+reconsider Sq=[Phi \/ {phi}, phi] as Element of Q by DefSeqtLike;
+reconsider E={} as Subset of Q by XBOOLE_1:2;
+BB0: phi in {phi} & {phi} c= Phi\/{phi} by TARSKI:def 1, XBOOLE_1:7;
+Sq`2=phi & Sq`1=Phi\/{phi} by MCART_1:7; then
+Sq Rule0 E by Def0, BB0; then [E,Sq] in P0(S) by DefP0; hence thesis by Lm1b;
+end;
+end;
+
+registration
+let S; let phi1,phi2 be wff string of S;
+cluster [{phi1,phi2},phi1] -> (1,{},{R0(S)})-derivable set;
+coherence
+proof
+set AF=AllFormulasOf S;
+reconsider phi11=phi1, phi22=phi2 as Element of AF by FOMODEL2:16;
+reconsider Phi={phi22} as finite Subset of AF;
+[Phi \/ {phi1}, phi1] is (1,{},{R0(S)})-derivable;
+hence thesis by ENUMSET1:41;
+end;
+end;
+
+registration
+let S,phi;
+cluster [{phi},phi] -> (1,{},{R0(S)})-derivable set;
+coherence
+proof
+set AF=AllFormulasOf S;
+reconsider Phi={} as finite Subset of AF by XBOOLE_1:2;
+[Phi\/{phi},phi] is (1,{},{R0(S)})-derivable; hence thesis;
+end;
+end;
+
+registration
+let S; let phi be wff string of S;
+cluster {[{phi}, phi]} -> ({},{R0(S)})-derivable set;
+coherence by Lm29;
+end;
+
+registration
+let S;
+cluster R0(S) -> isotone Rule of S;
+coherence
+proof
+now
+let Seqts1, Seqts2; set X=Seqts1, Y=Seqts2; assume X c= Y;
+::# note this assumption remains unused here
+set R=R0(S), Q=S-sequents;
+now
+let x; assume
+CC0: x in R.X;
+reconsider seqt=x as Element of Q by CC0;
+[X,seqt] in P0(S) by CC0, Lm1e; then
+seqt Rule0 X by DefP0; then
+seqt`2 in seqt`1 by Def0; then seqt Rule0 Y by Def0;
+then [Y,seqt] in P0(S) by DefP0;
+hence x in R.Y by Lm1;
+end;
+hence R.X c= R.Y by TARSKI:def 3;
+end;
+hence thesis by DefMonotonic1;
+end;
+cluster R3a(S) -> isotone Rule of S;
+coherence
+proof
+now
+let Seqts1, Seqts2; set X=Seqts1, Y=Seqts2; assume
+B0: X c= Y;
+set R=R3a(S), Q=S-sequents;
+now
+let x; assume
+CC0: x in R.X;
+reconsider seqt=x as Element of Q by CC0;
+[X,seqt] in P3a(S) by CC0, Lm1e; then
+seqt Rule3a X by DefP3a; then
+consider t,t1,t2 being termal string of S, xx being set such that
+C1:(xx in X & seqt`1 = xx`1 \/ { <* TheEqSymbOf S *> ^ t1 ^ t2 } &
+xx`2 = <* TheEqSymbOf S *> ^ t ^ t1 & seqt`2 = <* TheEqSymbOf S *> ^ t ^ t2)
+by Def3a; seqt Rule3a Y by Def3a, C1, B0; then
+[Y,seqt] in P3a(S) by DefP3a; hence x in R.Y by Lm1;
+end;
+hence R.X c= R.Y by TARSKI:def 3;
+end;
+hence thesis by DefMonotonic1;
+end;
+cluster R3d(S) -> isotone Rule of S;
+coherence
+proof
+now
+let Seqts1, Seqts2; set X=Seqts1, Y=Seqts2; assume
+X c= Y;
+set R=R3d(S), Q=S-sequents;
+now
+let x; assume
+CC0: x in R.X;
+reconsider seqt=x as Element of Q by CC0;
+[X,seqt] in P3d(S) by CC0, Lm1e; then
+seqt Rule3d X by DefP3d; then
+ex s being low-compounding Element of S,
+T,U being (abs(ar(s)))-element Element of (AllTermsOf S)* st
+(s is operational & seqt`1=
+{<*TheEqSymbOf S*>^(TT.j)^(UU.j) where j is Element of Seg abs(ar(s)),
+TT,UU is Function of Seg abs(ar(s)), (AllSymbolsOf S)*\{{}} : TT=T & UU=U}
+& seqt`2=<*TheEqSymbOf S*>^(s-compound(T))^(s-compound(U))) by Def3d;
+then seqt Rule3d Y by Def3d;
+then [Y,seqt] in P3d(S) by DefP3d;
+hence x in R.Y by Lm1;
+end;
+hence R.X c= R.Y by TARSKI:def 3;
+end;
+hence thesis by DefMonotonic1;
+end;
+cluster R3e(S) -> isotone Rule of S;
+coherence
+proof
+now
+let Seqts1, Seqts2; set X=Seqts1, Y=Seqts2; assume
+X c= Y;
+set R=R3e(S), Q=S-sequents;
+now
+let x; assume
+CC0: x in R.X;
+reconsider seqt=x as Element of Q by CC0;
+[X,seqt] in P3e(S) by CC0, Lm1e; then
+seqt Rule3e X by DefP3e; then
+ex s being relational Element of S,
+T,U being (abs(ar(s)))-element Element of (AllTermsOf S)* st
+(seqt`1={s-compound(T)} \/
+{<*TheEqSymbOf S*>^(TT.j)^(UU.j) where j is Element of Seg abs(ar(s)),
+TT,UU is Function of Seg abs(ar(s)), (AllSymbolsOf S)*\{{}} : TT=T & UU=U}
+& seqt`2=s-compound(U)) by Def3e;
+then seqt Rule3e Y by Def3e;
+then [Y,seqt] in P3e(S) by DefP3e;
+hence x in R.Y by Lm1;
+end;
+hence R.X c= R.Y by TARSKI:def 3;
+end;
+hence thesis by DefMonotonic1;
+end;
+let K1,K2;
+cluster K1\/K2 -> isotone RuleSet of S;
+coherence
+proof
+set D=K1\/K2;
+B0: K1 c= D & K2 c= D by XBOOLE_1:7;
+for Seqts1,Seqts2,f st
+Seqts1 c= Seqts2 & f in D ex g st g in D & f.Seqts1 c= g.Seqts2
+proof
+let Seqts1, Seqts2, f; set X=Seqts1, Y=Seqts2; assume
+C0: X c= Y & f in D;
+per cases;
+suppose f in K1; then consider g such that
+D0: g in K1 & f.X c= g.Y by C0, DefMonotonic2; take g;
+thus g in D & f.X c= g.Y by D0, B0;
+end;
+suppose not f in K1; then f in K2 by C0, XBOOLE_0:def 3; then
+consider g such that
+D0: g in K2 & f.X c= g.Y by C0, DefMonotonic2; take g;
+thus g in D & f.X c= g.Y by D0, B0;
+end;
+end;
+hence thesis by DefMonotonic2;
+end;
+end;
+
+Lm26:
+{R0(S)}\/{R3a(S)} c= D & X is D-expanded implies (X,D)-termEq is transitive
+proof
+set AT=AllTermsOf S, E=TheEqSymbOf S, Q=S-sequents, AF=AllFormulasOf S,
+Phi=X, R=(X,D)-termEq;
+reconsider Seqts={} as Element of bool Q by XBOOLE_1:2; assume
+B7: {R0(S)}\/{R3a(S)} c= D; assume
+B6: Phi is D-expanded;
+B9: field R c= AT\/AT by RELSET_1:19;
+now
+let x,y,z; assume x in field R & y in field R & z in field R; then
+reconsider tt1=x, tt2=y, tt3=z as Element of AT by B9;
+reconsider t1=tt1, t2=tt2, t3=tt3 as termal string of S;
+reconsider phi1=<*E*>^t1^t2 as wff string of S by Lm10;
+reconsider phi2=<*E*>^t2^t3 as wff string of S by Lm10;
+reconsider phi3=<*E*>^t1^t3 as wff string of S by Lm10;
+[{phi1,<*E*>^t2^t3},<*E*>^t1^t3] is
+(1,{[{phi1},<*E*>^t1^t2]},{R3a(S)})-derivable; then
+B2: [{phi1,phi2},phi3] is (1,{[{phi1},phi1]},{R3a(S)})-derivable;
+[{phi1,phi2},phi3] is (1+1,{},{R0(S)}\/{R3a(S)})-derivable by B2
+, Lm28; then
+{[{phi1,phi2},phi3]} is ({},{R0(S)}\/{R3a(S)})-derivable by Lm29;
+then {[{phi1,phi2},phi3]} is ({},D)-derivable by Lm20, B7; then
+BB3: {phi1,phi2}={phi1} \/ {phi2} & phi3 is ({phi1,phi2},D)-provable
+by ENUMSET1:41, DefProvable; assume [x,y] in R & [y,z] in R; then
+phi1 is (Phi,D)-provable & phi2 is (Phi,D)-provable by Lm23; then
+reconsider Phi1={phi1}, Phi2={phi2} as Subset of Phi by B6, DefExpanded;
+reconsider Phi3=Phi1\/Phi2 as Subset of Phi;
+phi3 is (Phi3,D)-provable by BB3; hence [x,z] in (Phi,D)-termEq;
+end;
+then R is_transitive_in field R by RELAT_2:def 8;
+hence thesis by RELAT_2:def 16;
+end;
+
+Lm11: {R0(S),R3a(S)} c= D & {R2(S),R3b(S)} c= D & X is D-expanded implies
+(X,D)-termEq is Equivalence_Relation of (AllTermsOf S)
+proof
+B0: {R2(S)} c= {R2(S),R3b(S)} & {R3b(S)} c= {R2(S),R3b(S)} by ZFMISC_1:12;
+assume {R0(S),R3a(S)} c= D; then
+B1: {R0(S)}\/{R3a(S)} c= D by ENUMSET1:41;
+assume {R2(S),R3b(S)} c= D; then
+B2: {R2(S)} /\ D = {R2(S)} & {R3b(S)} /\ D={R3b(S)} by B0, XBOOLE_1:1, 28;
+assume
+B3: X is D-expanded; set R=(X,D)-termEq;
+thus thesis by Lm24, Lm26, B1, B3, Lm25, B2;
+end;
+
+registration
+let S; let t1,t2 be termal string of S;
+cluster <*TheEqSymbOf S*>^t1^t2 -> 0-wff string of S;
+coherence by Lm10;
+end;
+
+definition
+let S; let m be non zero Nat;
+let T,U be m-element (Element of ((AllTermsOf S)*));
+func PairWiseEq (T,U) equals
+{<*TheEqSymbOf S*>^(TT.j)^(UU.j) where j is Element of Seg m,
+TT,UU is Function of Seg m, (AllSymbolsOf S)*\{{}} : TT=T & UU=U};
+coherence;
+end;
+
+definition
+let S; let m be non zero Nat, T1,T2 be m-element Element of ((AllTermsOf S)*);
+redefine func PairWiseEq (T1,T2) -> Subset of AllFormulasOf S;
+coherence
+proof
+set P=PairWiseEq (T1,T2), SS=AllSymbolsOf S, E=TheEqSymbOf S,
+AT=AllTermsOf S, AF=AllFormulasOf S;
+now
+let x; assume x in P; then consider
+j being Element of Seg m, T11,T22 being Function of Seg m,SS*\{{}}
+such that C0: x=<*E*>^T11.j^T22.j & T11=T1 & T22=T2;
+m-tuples_on AT = Funcs(Seg m, AT) by FOMODEL0:11; then
+T1 is Element of Funcs(Seg m,AT) & T2 is Element of Funcs(Seg m,AT)
+by FOMODEL0:16; then reconsider T111=T1, T222=T2 as Function of Seg m, AT;
+T111.j is Element of AT & T222.j is Element of AT; then
+reconsider t1=T111.j, t2=T222.j as  string of S; reconsider
+w=<*E*>^t1^t2 as 0-wff string of S; w in AF; hence x in AF by C0;
+end;
+hence thesis by TARSKI:def 3;
+end;
+end;
+
+registration
+let S; let m be non zero Nat;
+let T,U be m-element (Element of ((AllTermsOf S)*));
+cluster PairWiseEq(T,U) -> finite;
+coherence
+proof
+set AT=AllTermsOf S, E=TheEqSymbOf S, SS=AllSymbolsOf S;
+T in m-tuples_on AT & U in m-tuples_on AT by FOMODEL0:16; then
+T is Element of Funcs (Seg m, AT) & U is Element of Funcs (Seg m,AT)
+by FOMODEL0:11; then reconsider TT=T, UU=U as Function of Seg m, AT;
+deffunc F(Element of Seg m)=<*E*>^(TT.$1)^(UU.$1);
+set IT={F(j) where j is Element of Seg m:j in Seg m};
+B0: Seg m is finite; IT is finite from FRAENKEL:sch 21(B0); then
+reconsider ITT=IT as finite set;
+now
+let x; assume x in PairWiseEq (T,U); then consider
+j be Element of Seg m, TTT,UUU be Function of Seg m, SS*\{{}}
+such that C1: x=<*E*>^TTT.j^UUU.j & TTT=T & UUU=U;
+thus x in IT by C1;
+end;
+then reconsider Y=PairWiseEq(T,U) as Subset of ITT by TARSKI:def 3;
+Y is finite; hence thesis;
+end;
+end;
+
+Lm41: for s being low-compounding Element of S,
+T,U being abs(ar(s))-element Element of (AllTermsOf S)* st s is termal
+holds
+{[PairWiseEq(T,U), <*TheEqSymbOf S*>^(s-compound(T))^(s-compound(U))]}
+is ({},{R3d(S)})-derivable
+proof
+let s be low-compounding Element of S; set m=abs(ar(s)),
+AT=AllTermsOf S, E=TheEqSymbOf S;
+let T,U be m-element Element of AT*;
+assume s is termal; then reconsider ss=s as termal Element of S;
+reconsider t1=ss-compound(T), t2=ss-compound(U) as termal string of S;
+reconsider conclusion=<*E*>^t1^t2 as wff string of S; reconsider
+seqt=[PairWiseEq(T,U),conclusion] as Element of S-sequents by DefSeqtLike;
+reconsider Seqts={} as Subset of S-sequents by XBOOLE_1:2; ss is termal;then
+B0: s is operational &
+seqt`1=PairWiseEq(T,U) & seqt`2=<*E*>^(s-compound(T))^(s-compound(U))
+by MCART_1:7; seqt Rule3d Seqts by B0, Def3d; then
+[Seqts,seqt] in P3d(S) by DefP3d; then seqt in (R3d(S)).Seqts by Lm1;
+then {seqt} c= (R3d(S)).Seqts by ZFMISC_1:37;
+hence thesis by Lm9;
+end;
+
+Lm44: for s being relational Element of S,
+T1,T2 being abs(ar(s))-element Element of (AllTermsOf S)* holds
+{[PairWiseEq(T1,T2)\/{s-compound(T1)},s-compound(T2)]}
+is ({},{R3e(S)})-derivable
+proof
+let s be relational Element of S; set m=abs(ar(s)),
+AT=AllTermsOf S, E=TheEqSymbOf S, AF=AllFormulasOf S;
+let T1,T2 be m-element Element of AT*; reconsider
+w1=s-compound(T1), conclusion=s-compound(T2) as 0-wff string of S;
+w1 in AF; then reconsider w11=w1 as Element of AF;
+reconsider premises=PairWiseEq(T1,T2)\/{w11} as Subset of AF; reconsider
+seqt=[premises,conclusion] as Element of S-sequents by DefSeqtLike;
+reconsider Seqts={} as Subset of S-sequents by XBOOLE_1:2;
+seqt`1={s-compound(T1)}\/PairWiseEq(T1,T2) & seqt`2=s-compound(T2)
+by MCART_1:7; then seqt Rule3e Seqts by Def3e; then
+[Seqts,seqt] in P3e(S) by DefP3e; then seqt in (R3e(S)).Seqts by Lm1;
+then {seqt} c= (R3e(S)).Seqts by ZFMISC_1:37;
+hence thesis by Lm9;
+end;
+
+registration
+let S; let s be relational Element of S;
+let T1,T2 be abs(ar(s))-element Element of (AllTermsOf S)*;
+cluster {[PairWiseEq(T1,T2)\/{s-compound(T1)},s-compound(T2)]} ->
+({},{R3e(S)})-derivable;
+coherence by Lm44;
+end;
+
+Lm42: for s being low-compounding Element of S holds
+(X is D-expanded & [x1,x2] in abs(ar(s))-placesOf (X,D)-termEq)
+implies ex T,U being abs(ar(s))-element Element of (AllTermsOf S)* st
+(T=x1 & U=x2 & PairWiseEq(T,U) c= X )
+proof
+let s be low-compounding Element of S;
+set n=abs(ar(s)), AT=AllTermsOf S, E=TheEqSymbOf S, Phi=X,
+f=S-cons, SS=AllSymbolsOf S, R=(Phi,D)-termEq, SS=AllSymbolsOf S;
+assume B4: Phi is D-expanded;
+assume [x1,x2] in n-placesOf R; then
+consider p,q being Element of n-tuples_on AT such that B2:
+[x1,x2]=[p,q] & for i being set st i in Seg n holds [p.i,q.i] in R;
+B3: p=x1 & q=x2 by B2,ZFMISC_1:33;
+reconsider T1=x1, T2=x2 as Element of n-tuples_on AT by B2,ZFMISC_1:33;
+reconsider T11=T1, T22=T2 as n-element Element of AT* by FINSEQ_1:def 11;
+take T=T11, U=T22; thus T=x1 & U=x2; set Z=PairWiseEq(T,U);
+T1 is Element of Funcs(Seg n, AT) & T2 is Element of Funcs(Seg n, AT) by
+FOMODEL0:11; then reconsider T111=T1, T222=T2 as Function of Seg n, AT;
+now
+let z; assume z in Z; then
+consider j be Element of Seg n, TT,UU be Function of Seg n, SS*\{{}}
+such that C0: z=<*E*>^(TT.j)^(UU.j) & TT=T11 & UU=T22;
+reconsider t11=T111.j, t22=T222.j as Element of AT;
+reconsider t1=t11, t2=t22 as termal string of S;
+[T111.j,T222.j] in R by B2, B3; then
+<*E*>^t1^t2 is (Phi,D)-provable by Lm23; then
+{<*E*>^t1^t2} c= Phi by B4, DefExpanded;
+hence z in Phi by C0, ZFMISC_1:37;
+end;
+hence Z c= Phi by TARSKI:def 3;
+end;
+
+Lm48: for s being low-compounding Element of S holds {R3d(S)} c= D &
+X is D-expanded & s is termal implies X-freeInterpreter(s) is
+((X,D)-termEq)-respecting
+proof
+let s be low-compounding Element of S;
+set n=abs(ar(s)), AT=AllTermsOf S, E=TheEqSymbOf S, Phi=X,
+R=(Phi,D)-termEq, I=X-freeInterpreter(s); assume
+B1: {R3d(S)} c= D; assume
+B2: Phi is D-expanded; assume s is termal; then reconsider ss=s as
+termal Element of S;
+BB3: not ss is relational;
+now
+let x1,x2; assume [x1,x2] in n-placesOf R;
+then consider T1,T2 being n-element Element of AT* such that
+B0: T1=x1 & T2=x2 & PairWiseEq(T1,T2) c= X by Lm42,B2;
+set Z=PairWiseEq(T1,T2); reconsider
+t1 = ss-compound(T1), t2 = ss-compound(T2) as termal string of S;
+reconsider ZZ=Z as Subset of Phi by B0;
+{[Z,<*E*>^t1^t2]} is ({},{R3d(S)})-derivable by Lm41; then
+B4: {[Z,<*E*>^t1^t2]} is ({},D)-derivable by B1, Lm20;
+BB7: <*E*>^t1^t2 is (ZZ,D)-provable by B4, DefProvable;
+I.T1=t1 & I.T2=t2 by FOMODEL3:6; hence [I.x1,I.x2] in R by BB7,B0;
+end;
+then I is (n-placesOf R,R)-respecting by FOMODEL3:def 9; hence
+I is R-respecting by FOMODEL3:def 10, BB3;
+end;
+
+Lm45: {R3e(S)} c= D &
+X is D-expanded & [x1,x2] in abs(ar(r))-placesOf ((X,D)-termEq) &
+r-compound.x1 in X implies r-compound.x2 in X
+proof
+set s=r, n=abs(ar(s)), AT=AllTermsOf S, E=TheEqSymbOf S, Phi=X,
+f=s-compound, R=(Phi,D)-termEq;
+assume B1: {R3e(S)} c= D;
+assume B2: Phi is D-expanded;
+assume [x1,x2] in n-placesOf R;
+then consider T1,T2 being n-element Element of AT* such that
+B0: T1=x1 & T2=x2 & PairWiseEq(T1,T2) c= X by Lm42,B2;
+set Z=PairWiseEq(T1,T2);
+reconsider w1=s-compound(T1), w2=s-compound(T2) as 0-wff string of S;
+B4: f.x1=w1 & f.x2=w2 by B0, FOMODEL3:def 2;
+assume f.x1 in X;
+then reconsider X1={w1} as Subset of X by ZFMISC_1:37, B4;
+reconsider ZZ=Z as Subset of Phi by B0;
+reconsider ZZZ=ZZ \/ X1 as Subset of X;
+{[Z\/{s-compound(T1)},s-compound(T2)]} is ({},{R3e(S)})-derivable;
+then {[ZZZ,w2]} is ({},D)-derivable by Lm20, B1; then
+w2 is (ZZZ,D)-provable by DefProvable; then
+{w2} c= Phi by B2,DefExpanded; hence thesis by B4, ZFMISC_1:37;
+end;
+
+Lm46: {R2(S)}/\D={R2(S)} & {R3b(S)}/\D={R3b(S)} & D/\{R3e(S)}={R3e(S)} &
+X is D-expanded & [x1,x2] in abs(ar(r))-placesOf ((X,D)-termEq) implies
+(r-compound.x1 in X iff r-compound.x2 in X)
+proof
+set s=r, n=abs(ar(s)), AT=AllTermsOf S, E=TheEqSymbOf S, Phi=X,
+f=s-compound, R=(X,D)-termEq; assume
+B0: {R2(S)}/\D={R2(S)} & {R3b(S)}/\D={R3b(S)} &
+D/\{R3e(S)}={R3e(S)} & X is D-expanded &
+[x1,x2] in n-placesOf R;
+then reconsider Rr=R as symmetric total Relation of AT by Lm24, Lm25;
+thus f.x1 in X implies f.x2 in X by B0, Lm45; reconsider RR =
+n-placesOf Rr as symmetric total Relation of n-tuples_on AT; [x2,x1] in RR
+by EQREL_1:12, B0; hence f.x2 in X implies f.x1 in X by B0, Lm45;
+end;
+
+Lm47: for x,y being Element of U st x in Y iff y in Y
+holds [(chi(Y,U)).x, (chi(Y,U)).y] in (id BOOLEAN)
+proof
+let x,y be Element of U; set f=chi(Y,U);
+assume B0: x in Y iff y in Y;
+per cases;
+suppose x in Y; then f.x=1 & y in Y by B0, RFUNCT_1:79; then
+f.x=1 & f.y=1 & 1 in BOOLEAN by RFUNCT_1:79; hence thesis by RELAT_1:def 10;
+end;
+suppose not x in Y; then f.x=0 & not y in Y by B0, RFUNCT_1:80; then
+f.x=0 & f.y=0 & 0 in BOOLEAN by RFUNCT_1:80; hence thesis by RELAT_1:def 10;
+end;
+end;
+
+Lm51: {R2(S)}/\D={R2(S)} & {R3b(S)}/\D={R3b(S)} & D/\{R3e(S)}={R3e(S)} &
+X is D-expanded implies X-freeInterpreter(r) is ((X,D)-termEq)-respecting
+proof
+assume B0: {R2(S)}/\D={R2(S)} & {R3b(S)}/\D={R3b(S)} &
+D/\{R3e(S)}={R3e(S)} & X is D-expanded;
+set  AT=AllTermsOf S, R=(X,D)-termEq,
+I=X-freeInterpreter(r), AF=AtomicFormulasOf S, ch=chi(X,AF),
+SS=AllSymbolsOf S;
+set g=r-compound, m=abs(ar(r));
+now
+let x1,x2; assume C0: [x1,x2] in m-placesOf R;
+then consider T1,T2 being m-element Element of AT* such that C1:
+T1=x1 & T2=x2 & PairWiseEq(T1,T2) c= X by Lm42, B0;
+reconsider w1=r-compound(T1), w2=r-compound(T2) as 0-wff string of S;
+w1 in AF & w2 in AF; then reconsider w11=w1, w22=w2 as Element of AF;
+C2: g.x1=w11 & g.x2=w22 by C1, FOMODEL3:def 2;
+w11 in X iff w22 in X by C2, B0, C0, Lm46; then
+[ch.w1,ch.w2] in id BOOLEAN & I.T1=ch.w1 & I.T2=ch.w2 by Lm47, FOMODEL3:6;
+hence [I.x1, I.x2] in (id BOOLEAN) by C1;
+end;
+then I is (m-placesOf R, id BOOLEAN)-respecting by FOMODEL3:def 9;
+hence thesis by FOMODEL3:def 10;
+end;
+
+Lm49: for R being total (reflexive Relation of U),
+f being Function of X,U st x in X holds f is ({[x,x]},R)-respecting
+proof
+let R be total reflexive Relation of U; let f be Function of X,U;
+reconsider E={[x,x]} as Relation;
+assume B0: x in X; then reconsider XX=X as non empty set;
+reconsider ff=f as Function of XX,U;
+now
+let x1,x2 be set;
+assume [x1,x2] in E; then
+CC1: [x1,x2] = [x,x] by TARSKI:def 1; then
+C1: x1=x & x2=x by ZFMISC_1:33;
+reconsider x11=x1, x22=x2 as Element of XX by B0, CC1, ZFMISC_1:33;
+ff.x11 in U & ff.x22 in U & ff.x11=ff.x22 by C1; hence
+[f.x1, f.x2] in R by EQREL_1:11;
+end;
+hence thesis by FOMODEL3:def 9;
+end;
+
+Lm50: for E being total (reflexive Relation of U),
+f being Interpreter of l,U holds f is E-respecting
+proof
+let E being total (reflexive Relation of U);
+reconsider m=abs(ar(l)) as zero Nat; let f be Interpreter of l,U;
+m-tuples_on U={{}} by FOMODEL0:10;
+then reconsider ff=f as Function of {{}},U by FOMODEL2:def 2;
+{} in {{}} by TARSKI:def 1;then ff is ({[{},{}]},E)-respecting by Lm49;
+then f is (m-placesOf E,E)-respecting; hence thesis by FOMODEL3:def 10;
+end;
+
+Lm52: {R0(S),R3a(S)} c= D & {R2(S),R3b(S)} c= D & X is D-expanded implies
+X-freeInterpreter(l) is ((X,D)-termEq)-respecting
+proof
+set AT=AllTermsOf S, I=X-freeInterpreter(l);
+assume {R0(S),R3a(S)} c= D & {R2(S),R3b(S)} c= D & X is D-expanded;
+then reconsider R=(X,D)-termEq as Equivalence_Relation of AT by Lm11;
+I is R-respecting by Lm50;
+hence thesis;
+end;
+
+Lm53: {R0(S),R3a(S)} c= D &
+D/\{R3d(S)}={R3d(S)} & {R2(S)}/\D={R2(S)} & {R3b(S)}/\D={R3b(S)} &
+D/\{R3e(S)}={R3e(S)} & X is D-expanded implies
+X-freeInterpreter(a) is ((X,D)-termEq)-respecting
+proof
+set s=a, AT=AllTermsOf S, I=X-freeInterpreter(s), AF=AtomicFormulasOf S,
+ch=chi(X,AF), SS=AllSymbolsOf S, n=abs(ar(s)), f=s-compound, R=(X,D)-termEq;
+assume B0: {R0(S),R3a(S)} c= D & D/\{R3d(S)}={R3d(S)} & {R2(S)}/\D={R2(S)}
+& {R3b(S)}/\D={R3b(S)} & D/\{R3e(S)}={R3e(S)} & X is D-expanded; then
+reconsider S2={R2(S)}, S3={R3b(S)} as Subset of D;
+BB1: S2\/S3 c= D;
+per cases;
+suppose not s is relational; then reconsider ss=s as termal Element of S;
+per cases;
+suppose ss is literal; then reconsider l=ss as literal Element of S;
+{R2(S),R3b(S)} c= D by BB1, ENUMSET1:41; then
+X-freeInterpreter(l) is R-respecting by Lm52, B0; hence thesis;
+end;
+suppose ss is non literal; then
+reconsider sss=ss as low-compounding Element of S;
+X-freeInterpreter(sss) is R-respecting by Lm48, B0; hence thesis;
+end;
+end;
+suppose s is relational;then reconsider r=s as relational Element of S;
+X-freeInterpreter(r) is R-respecting by Lm51,B0; hence thesis;
+end;
+end;
+
+definition
+let m,S,D;
+attr D is m-ranked means :DefRank: ::def58 1
+R0(S) in D & R2(S) in D & R3a(S) in D & R3b(S) in D if m=0,
+R0(S) in D & R2(S) in D & R3a(S) in D & R3b(S) in D
+& R3d(S) in D & R3e(S) in D if m=1,
+R0(S) in D & R1(S) in D & R2(S) in D & R3a(S) in D & R3b(S) in D
+& R3d(S) in D & R3e(S) in D & R4(S) in D & R5(S) in D & R6(S) in D &
+R7(S) in D & R8(S) in D if m=2 otherwise D={};
+consistency;
+end;
+
+registration
+let S;
+cluster 1-ranked -> 0-ranked RuleSet of S;
+coherence
+proof
+let D be RuleSet of S; assume D is 1-ranked; then
+R0(S) in D & R2(S) in D & R3a(S) in D & R3b(S) in D by DefRank;
+hence thesis by DefRank;
+end;
+cluster 2-ranked -> 1-ranked RuleSet of S;
+coherence
+proof
+let D be RuleSet of S; assume D is 2-ranked; then
+R0(S) in D & R2(S) in D & R3a(S) in D & R3b(S) in D
+& R3d(S) in D & R3e(S) in D by DefRank; hence thesis by DefRank;
+end;
+end;
+
+definition
+let S;
+func S-rules -> RuleSet of S equals
+{R0(S), R1(S), R2(S), R3a(S), R3b(S), R3d(S), R3e(S), R4(S)} \/
+{R5(S), R6(S), R7(S), R8(S)};
+coherence;
+end;
+
+registration let S;
+cluster S-rules -> 2-ranked RuleSet of S;
+coherence
+proof
+set A={R0(S), R1(S), R2(S), R3a(S), R3b(S), R3d(S), R3e(S), R4(S)},
+B={R5(S),R6(S),R7(S), R8(S)}, C=A\/B;
+R0(S) in A & R1(S) in A & R2(S) in A & R3a(S) in A & R3b(S) in A
+& R3d(S) in A & R3e(S) in A & R4(S) in A & R5(S) in B & R6(S) in B &
+R7(S) in B & R8(S) in B by ENUMSET1:def 6, def 2; then
+R0(S) in C & R1(S) in C & R2(S) in C & R3a(S) in C & R3b(S) in C
+& R3d(S) in C & R3e(S) in C & R4(S) in C & R5(S) in C & R6(S) in C &
+R7(S) in C & R8(S) in C by XBOOLE_0:def 3;
+hence thesis by  DefRank;
+end;
+end;
+
+registration let S;
+cluster 2-ranked RuleSet of S;
+existence proof take S-rules; thus thesis; end;
+end;
+
+registration let S;
+cluster 1-ranked RuleSet of S;
+existence proof take the 2-ranked RuleSet of S; thus thesis; end;
+end;
+
+registration let S;
+cluster 0-ranked RuleSet of S;
+existence proof take the 1-ranked RuleSet of S; thus thesis; end;
+end;
+
+Lm53a:
+D is 1-ranked & X is D-expanded implies
+X-freeInterpreter(a) is ((X,D)-termEq)-respecting
+proof
+assume
+B0: D is 1-ranked; then R0 S in D & R3a S in D by DefRank; then
+{R0(S)} c= D & {R3a(S)} c= D by ZFMISC_1:37; then
+{R0(S)} \/ {R3a(S)} c= D by XBOOLE_1:8; then
+B1: {R0 S,R3a S} c= D by ENUMSET1:41;
+R3d S in D & R2 S in D & R3b S in D & R3e S in D by B0, DefRank; then
+{R3d S} c= D & {R2 S} c= D & {R3b S} c= D & {R3e S} c= D by ZFMISC_1:37;then
+B2: D/\{R3d S}={R3d S} & D/\{R2 S}={R2 S} & D/\{R3b S}={R3b S}
+& D/\{R3e S}={R3e S} by XBOOLE_1:28; assume
+X is D-expanded; hence thesis by Lm53,B1, B2;
+end;
+
+registration
+let S; let D be 1-ranked RuleSet of S; let X be D-expanded set; let a;
+cluster X-freeInterpreter(a) -> ((X,D)-termEq)-respecting Interpreter of a
+,AllTermsOf S;
+coherence by Lm53a;
+end;
+
+Lm11a: D is 0-ranked & X is D-expanded implies
+(X,D)-termEq is Equivalence_Relation of (AllTermsOf S)
+proof
+assume D is 0-ranked; then
+R0 S in D & R3a S in D & R2 S in D & R3b S in D by DefRank; then
+{R0(S)} c= D & {R3a(S)} c= D & {R2 S} c= D & {R3b S} c= D
+by ZFMISC_1:37; then {R0(S)} \/ {R3a(S)} c= D
+& {R2 S} \/ {R3b S} c= D by XBOOLE_1:8; then
+B1: {R0 S,R3a S} c= D & {R2 S, R3b S} c= D by ENUMSET1:41;
+assume X is D-expanded; hence thesis by B1, Lm11;
+end;
+
+registration
+let S; let D be 0-ranked RuleSet of S; let X be D-expanded set;
+cluster ((X,D)-termEq) ->
+total symmetric transitive Relation of (AllTermsOf S);
+coherence by Lm11a;
+end;
+
+registration let S;
+cluster 1-ranked (0-ranked RuleSet of S);
+existence
+proof
+set D = the 1-ranked RuleSet of S;
+reconsider DD=D as 0-ranked RuleSet of S; take DD; thus thesis;
+end;
+end;
+
+theorem D1 c= D2 & (D2 is isotone or D1 is isotone) &
+Y is (X,D1)-derivable implies Y is (X,D2)-derivable by Lm20;
+
+registration let S, Sq;
+cluster {Sq} -> S-sequents-like;
+coherence
+proof
+set Q=S-sequents; Sq in Q by DefSeqtLike; then {Sq} c= Q by ZFMISC_1:37;
+hence thesis;
+end;
+end;
+
+registration
+let S,SQ1,SQ2;
+cluster SQ1\/SQ2 -> S-sequents-like set;
+coherence
+proof
+set Q=S-sequents; reconsider X=SQ1, Y=SQ2 as Subset of Q by DefSeqtLike2;
+X\/Y c= Q; hence thesis;
+end;
+end;
+
+registration
+let S; let x,y be S-sequent-like set;
+cluster {x,y} -> S-sequents-like set;
+coherence proof {x,y}={x}\/{y} by ENUMSET1:41; hence thesis; end;
+end;
+
+Lm40: (D1\/D2 is isotone & D1\/D2\/D3 is isotone &
+x is (m,SQ1,D1)-derivable & y is (m,SQ2,D2)-derivable &
+z is (n,{x,y},D3)-derivable)
+implies z is (m+n,SQ1\/SQ2,D1\/D2\/D3)-derivable
+proof
+set Q=S-sequents, D=D1\/D2, O1=OneStep D1, O2=OneStep D2, O3=OneStep D3,
+O=OneStep D, OO=OneStep(D\/D3); reconsider X=SQ1, Y=SQ2 as Subset of Q
+by DefSeqtLike2; set Z=X\/Y; assume
+B1: D is isotone & D\/D3 is isotone; assume
+B3: x is (m,SQ1,D1)-derivable & y is (m,SQ2,D2)-derivable; then
+BB2: x in (m,D1)-derivables.X & y in (m,D2)-derivables.Y
+by DefDerivable3;
+reconsider sq1=x, sq2=y as S-sequent-like set by B3;
+X null Y c= Z & Y null X c= Z & D1 null D2 c= D & D2 null D1 c= D; then
+(m,D1)-derivables.X c= (m,D)-derivables.Z
+& (m,D2)-derivables.Y c= (m,D)-derivables.Z by Lm15, B1; then
+B0: {sq1,sq2} c= iter(O,m).Z by ZFMISC_1:38, BB2; assume
+z is (n,{x,y},D3)-derivable; then z in (n,D3)-derivables.{x,y}
+by DefDerivable3; then {z} c= iter(O3,n).{x,y} by ZFMISC_1:37; then
+{z} c= iter (OO,m+n).Z by B0, B1, Lm27;
+then z in (m+n,D\/D3)-derivables.Z by ZFMISC_1:37;
+hence thesis by DefDerivable3;
+end;
+
+Lm35: (D1 c= D2 & (D1 is isotone or D2 is isotone) &
+x is (X,D1)-provable) implies x is (X,D2)-provable
+proof
+assume
+B1: D1 c= D2 & (D1 is isotone or D2 is isotone);
+assume x is (X,D1)-provable; then consider seqt being set such that
+B0: seqt`1 c= X & seqt`2 = x & {seqt} is D1-derivable by DefProvable2;
+{seqt} is ({},D2)-derivable by B0, B1, Lm20;
+hence thesis by B0, DefProvable2;
+end;
+
+Lm22: x in R.X implies x is (1,X,{R})-derivable
+proof
+set Q=S-sequents, D={R}, O=OneStep(D), f=iter(O,1); assume
+B0: x in R.X; then X in dom R by FUNCT_1:def 4; then
+reconsider Seqts=X as Element of bool Q;
+iter(O,1)=O by FUNCT_7:72 .= R by Lm8; then
+x in (1,D)-derivables.Seqts by B0; hence thesis by DefDerivable3;
+end;
+
+registration
+let S, phi1, phi2;
+cluster [{xnot phi1, xnot phi2},<*TheNorSymbOf S*>^phi1^phi2]
+-> (1,
+{[{xnot phi1,xnot phi2}, xnot phi1], [{xnot phi1, xnot phi2}, xnot phi2]},
+{R6(S)})-derivable set;
+coherence
+proof
+set Q=S-sequents, x1=xnot phi1, x2=xnot phi2, N=TheNorSymbOf S, prem={x1,x2},
+sq=[prem,<*N*>^phi1^phi2], sq1=[prem,x1], sq2=[prem,x2], SQ={sq1, sq2};
+reconsider seqt=sq as Element of Q by DefSeqtLike;
+reconsider Seqts=SQ as Element of bool Q by DefSeqtLike2; {sq1}\Seqts={} &
+{sq2}\Seqts={} & sq1`1 \+\ prem = {} & sq2`1 \+\ prem={}
+& sq`1 \+\ prem = {} & sq`1 \+\ prem={} & sq1`2 \+\ xnot phi1={} &
+sq2`2 \+\ xnot phi2 ={} & sq`2 \+\ (<*N*>^phi1^phi2)={}; then sq1 in Seqts &
+sq2 in Seqts & sq1`1=prem & sq2`1=prem & sq`1=prem & sq1`2=xnot phi1
+& sq2`2=xnot phi2 & sq`2=<*N*>^phi1^phi2 by FOMODEL0:29, ZFMISC_1:68; then
+seqt Rule6 Seqts by Def6; then [Seqts,seqt] in P6(S) by DefP6;
+then seqt in (R6(S)).Seqts by Lm1; hence thesis by Lm22;
+end;
+end;
+
+registration
+let S,phi1,phi2;
+cluster [{phi1,phi2},phi2] -> (1,{},{R0(S)})-derivable set;
+coherence proof [{phi1,phi2},phi2]=[{phi2,phi1},phi2]; hence thesis; end;
+end;
+
+theorem Th3: for R being Relation of bool (S-sequents), S-sequents
+st [SQ, Sq] in R holds Sq in (FuncRule(R)).SQ
+proof
+set Q=S-sequents; reconsider seqt=Sq as Element of Q by DefSeqtLike;
+reconsider Seqts=SQ as Element of bool Q by DefSeqtLike2;
+let R be Relation of bool Q, Q; [Seqts,seqt] in R implies
+seqt in (FuncRule(R)).Seqts by Lm1; hence thesis;
+end;
+
+theorem x in R.X implies x is (1,X,{R})-derivable by Lm22;
+
+definition
+let S,D,X;
+redefine attr X is D-expanded means :DefExpanded2: ::def59 1
+x is (X,D)-provable implies x in X;
+compatibility
+proof
+defpred P[] means for x st x is (X,D)-provable holds x in X;
+thus X is D-expanded implies P[]
+proof
+assume B1: X is D-expanded;
+hereby
+let x; assume x is (X,D)-provable; then
+{x} c= X by B1, DefExpanded; hence x in X by ZFMISC_1:37;
+end;
+end;
+assume
+B0: P[];
+hereby
+let x; assume x is (X,D)-provable; then x in X by B0;
+hence {x} c= X by ZFMISC_1:37;
+end;
+end;
+end;
+
+theorem Lm2: phi in X implies phi is (X,{R0(S)})-provable ::Th5 1
+proof
+assume phi in X; then reconsider Xphi={phi} as Subset of X by ZFMISC_1:37;
+{[{phi},phi]} is ({},{R0(S)})-derivable; then
+phi is (Xphi,{R0(S)})-provable by DefProvable; hence thesis;
+end;
+
+theorem (D1\/D2 is isotone & D1\/D2\/D3 is isotone &
+x is (m,SQ1,D1)-derivable & y is (m,SQ2,D2)-derivable &
+z is (n,{x,y},D3)-derivable) implies
+z is (m+n,SQ1\/SQ2,D1\/D2\/D3)-derivable by Lm40; ::#generalizing Lm28
+
+theorem (D1 is isotone & D1\/D2 is isotone &
+y is (m,X,D1)-derivable & z is (n,{y},D2)-derivable) implies
+z is (m+n,X,D1\/D2)-derivable by Lm28;
+
+theorem x is (m,X,D)-derivable implies {x} is (X,D)-derivable by Lm29;
+
+registration let S;
+cluster R6(S) -> isotone Rule of S;
+coherence
+proof
+set R=R6(S), Q=S-sequents;
+now
+let Seqts, Seqts2; set X=Seqts, Y=Seqts2; assume
+B0: X c= Y;
+now
+let x; assume
+CC0: x in R.X;
+reconsider seqt=x as Element of Q by CC0;
+[X,seqt] in P6(S) by CC0, Lm1e; then
+seqt Rule6 X by DefP6; then
+consider y1,y2 being set,phi1, phi2 being wff string of S such that
+C1: y1 in Seqts & y2 in Seqts & y1`1 = y2`1 & y2`1=seqt`1 &
+y1`2= <* TheNorSymbOf S *> ^ phi1 ^ phi1 &
+y2`2=  <* TheNorSymbOf S *> ^ phi2 ^ phi2 &
+seqt`2 = <* TheNorSymbOf S *> ^ phi1 ^ phi2 by Def6;
+seqt Rule6 Y by Def6, C1, B0;
+then [Y,seqt] in P6(S) by DefP6;
+hence x in R.Y by Th3;
+end;
+hence R.X c= R.Y by TARSKI:def 3;
+end;
+hence thesis by DefMonotonic1;
+end;
+end;
+
+theorem (D1 c= D2 & (D1 is isotone or D2 is isotone) &
+x is (X,D1)-provable) implies x is (X,D2)-provable by Lm35;
+
+theorem X c= Y & x is (X,D)-provable implies x is (Y,D)-provable;
+
+registration let S;
+cluster R8(S) -> isotone Rule of S;
+coherence
+proof
+set R=R8(S), Q=S-sequents;
+now
+let Seqts, Seqts2; set X=Seqts, Y=Seqts2; assume
+B0: X c= Y;
+now
+let x; assume
+CC0: x in R.X;
+reconsider seqt=x as Element of Q by CC0;
+[X,seqt] in P8(S) by CC0, Lm1e; then
+seqt Rule8 X by DefP8; then
+consider y1,y2 being set, phi, phi1, phi2 being wff string of S such that
+C1:y1 in Seqts & y2 in Seqts & y1`1=y2`1 & y1`2=phi1 &
+y2`2 = <*TheNorSymbOf S*>^phi1^phi2 & {phi}\/seqt`1=y1`1 &
+seqt`2= <*TheNorSymbOf S*>^phi^phi by Def8; seqt Rule8 Y by Def8, C1, B0;
+then [Y,seqt] in P8(S) by DefP8;
+hence x in R.Y by Th3;
+end;
+hence R.X c= R.Y by TARSKI:def 3;
+end;
+hence thesis by DefMonotonic1;
+end;
+end;
+
+registration
+let S;
+cluster R1(S) -> isotone Rule of S;
+coherence
+proof
+set R=R1(S), Q=S-sequents;
+now
+let Seqts, Seqts2; set X=Seqts, Y=Seqts2; assume
+B0: X c= Y;
+now
+let x; assume
+CC0: x in R.X;
+reconsider seqt=x as Element of Q by CC0;
+[X,seqt] in P1(S) by CC0, Lm1e; then
+seqt Rule1 X by DefP1; then consider
+y being set such that
+C1: y in Seqts & y`1 c= seqt`1 & seqt`2 = y`2 by Def1;
+seqt Rule1 Y by Def1, C1, B0; then [Y,seqt] in P1(S) by DefP1;
+hence x in R.Y by Th3;
+end;
+hence R.X c= R.Y by TARSKI:def 3;
+end;
+hence thesis by DefMonotonic1;
+end;
+end;
+
+theorem ::Th11
+{y} is (SQ,D)-derivable implies ex mm st y is (mm,SQ,D)-derivable
+proof
+set Q=S-sequents; reconsider Seqts=SQ as Element of bool Q
+by DefSeqtLike2; {y} is (Seqts,D)-derivable implies ex mm st
+y is (mm,Seqts,D)-derivable by Lm3; hence thesis;
+end;
+
+registration
+let S,D,X;
+cluster (X,D)-derivable -> S-sequents-like set;
+coherence
+proof
+set Q=S-sequents, O=OneStep D, F={(mm,D)-derivables.X: not contradiction};
+let IT be set;assume IT is (X,D)-derivable; then IT c= union ((O[*]).:{X})
+by DefDerivable; then
+B0: IT c= union F by Lm18;
+now
+let x; assume x in IT; then consider Y such that
+C0: x in Y & Y in F by B0, TARSKI:def 4; consider mm such that
+C1: Y=(mm,D)-derivables.X & not contradiction by C0;
+x is (mm,X,D)-derivable by DefDerivable3, C0, C1;
+hence x in Q by DefSeqtLike;
+end;
+then IT c= Q by TARSKI:def 3; hence thesis;
+end;
+end;
+
+definition ::def64 4
+let S,D,X,x;
+redefine attr x is (X,D)-provable means :DefProvable3:
+ex H being set, m st H c= X & [H,x] is (m,{},D)-derivable;
+compatibility
+proof
+set FF=AllFormulasOf S, Q=S-sequents; defpred P[] means
+ex H being set, m st (H c= X & [H,x] is (m,{},D)-derivable);
+{} /\ S is S-sequents-like; then reconsider e={} as Element of bool Q by
+DefSeqtLike2;
+thus x is (X,D)-provable implies P[]
+proof
+assume x is (X,D)-provable; then consider seqt being set such that
+C0: (seqt`1 c= X & seqt`2 = x & {seqt} is D-derivable) by DefProvable2;
+CC2: seqt`1 c= X & seqt`2 = x & {seqt} is ({},D)-derivable by C0;
+{seqt} c= Q & seqt in {seqt} by CC2, TARSKI:def 1, DefSeqtLike2;
+then seqt in Q; then consider
+premises being Subset of FF, conclusion being wff string of S such that
+C3: seqt=[premises, conclusion] & premises is finite;
+consider mm such that
+C1: seqt is (mm,e,D)-derivable by CC2, Lm3; take H=seqt`1, m=mm;
+H=premises & seqt`2=conclusion by C3, MCART_1:7;
+hence thesis by C0, C1, C3;
+end;
+assume P[]; then consider H being set, m such that
+C0: H c= X & [H,x] is (m,{},D)-derivable;
+now
+take seqt=[H,x];
+seqt`1 c= X & seqt`2=x  & {seqt} is ({},D)-derivable by C0, MCART_1:7, Lm29;
+hence seqt`1 c= X & seqt`2=x & {seqt} is D-derivable;
+end;
+hence thesis by DefProvable;
+end;
+end;
+
+theorem Th12: D1 c= D2 & (D2 is isotone or D1 is isotone) & x is
+(m,X,D1)-derivable implies x is (m,X,D2)-derivable
+proof
+set f1=(m,D1)-derivables, f2=(m,D2)-derivables;
+assume D1 c= D2 & (D2 is isotone or D1 is isotone); then
+B0: f1.X c= f2.X by Lm17; assume x is (m,X,D1)-derivable; then
+x in f1.X by DefDerivable3;
+hence thesis by DefDerivable3, B0;
+end;
+
+registration
+let S;
+cluster R7(S) -> isotone Rule of S;
+coherence
+proof
+set R=R7(S), Q=S-sequents;
+now
+let Seqts, Seqts2; set X=Seqts, Y=Seqts2; assume
+B0: X c= Y;
+now
+let x; assume
+CC0: x in R.X;
+reconsider seqt=x as Element of Q by CC0;
+[X,seqt] in P7(S) by CC0, Lm1e; then
+seqt Rule7 X by DefP7; then consider
+y being set, phi1, phi2 being wff string of S such that
+C1: y in Seqts & y`1 = seqt`1 & y`2 =<* TheNorSymbOf S*> ^ phi1 ^ phi2 &
+seqt`2 = <* TheNorSymbOf S*> ^ phi2 ^ phi1 by Def7;
+seqt Rule7 Y by Def7, C1, B0; then [Y,seqt] in P7(S) by DefP7;
+hence x in R.Y by Th3;
+end;
+hence R.X c= R.Y by TARSKI:def 3;
+end;
+hence thesis by DefMonotonic1;
+end;
+end;
+
+theorem x is (X,D)-provable implies x is wff string of S by Lm33;
+
+reserve D,E,F for (RuleSet of S), D1 for 1-ranked (0-ranked RuleSet of S),
+D2 for 2-ranked RuleSet of S;
+
+registration
+let S, D1; let X be D1-expanded set;
+cluster (S,X)-freeInterpreter -> ((X,D1)-termEq)-respecting
+((S,AllTermsOf S)-interpreter-like Function);
+coherence
+proof
+set TT=AllTermsOf S, E=(X,D1)-termEq, I=(S,X)-freeInterpreter;
+now
+let o be own Element of S; I.o=X-freeInterpreter(o) by FOMODEL3:def 4;
+hence I.o is E-respecting;
+end;
+hence thesis by FOMODEL3:def 16;
+end;
+end;
+
+definition
+let S; let D be 0-ranked RuleSet of S; let X be D-expanded set;
+func D Henkin X -> Function equals
+(S,X)-freeInterpreter quotient ((X,D)-termEq);
+coherence;
+end;
+
+registration
+let S; let D be 0-ranked RuleSet of S; let X be D-expanded set;
+cluster D Henkin X -> (OwnSymbolsOf S)-defined;
+coherence;
+end;
+
+registration
+let S, D1; let X be D1-expanded set;
+cluster D1 Henkin X -> (S,Class (X,D1)-termEq)-interpreter-like Function;
+coherence;
+end;
+
+definition
+let S, D1; let X be D1-expanded set;
+redefine func D1 Henkin X ->
+Element of (Class (X,D1)-termEq)-InterpretersOf S;
+coherence
+proof
+set TT=AllTermsOf S, R=(X,D1)-termEq, I=(S,X)-freeInterpreter;
+I quotient R is Element of (Class R)-InterpretersOf S; hence thesis;
+end;
+end;
+
+registration
+let S, phi1, phi2;
+cluster <*TheNorSymbOf S*>^phi1^phi2 ->
+({xnot phi1, xnot phi2},{R0(S)}\/{R6(S)})-provable set;
+coherence
+proof
+set N=TheNorSymbOf S, phi=<*N*>^phi1^phi2, x1=xnot phi1, x2=xnot phi2,
+prem={x1,x2}, sq=[prem,phi], sq1=[prem,x1], sq2=[prem, x2];
+{} /\ S is S-sequents-like; then reconsider SQe={} as S-sequents-like set;
+sq is (1+1,SQe\/SQe,{R0(S)}\/{R0(S)}\/{R6(S)})-derivable by Lm40; then
+{sq} is ({},{R0(S)}\/{R6(S)})-derivable by Lm29;
+hence thesis by DefProvable;
+end;
+end;
+
+registration
+let S;
+cluster -> non empty (0-ranked RuleSet of S);
+coherence by DefRank;
+end;
+
+definition ::def62 1
+let S,x;
+attr x is S-premises-like means :DefPremLike:
+x c= AllFormulasOf S & x is finite;
+end;
+
+registration
+let S;
+cluster S-premises-like -> finite set;
+coherence by DefPremLike;
+end;
+
+registration
+let S,phi;
+cluster {phi} -> S-premises-like set;
+coherence
+proof
+set FF=AllFormulasOf S; phi in FF by FOMODEL2:16; then
+{phi} c= FF & {phi} is finite by ZFMISC_1:37; hence thesis by DefPremLike;
+end;
+end;
+
+registration
+let S; let e be empty set;
+cluster e null S -> S-premises-like set;
+coherence
+proof
+set FF=AllFormulasOf S; e /\ FF=e; hence thesis by DefPremLike;
+end;
+end;
+
+registration
+let X,S;
+cluster S-premises-like Subset of X;
+existence
+proof
+{}/\X={}; then reconsider e={} null S as Subset of X; take e; thus thesis;
+end;
+end;
+
+registration
+let S;
+cluster S-premises-like set;
+existence
+proof take the S-premises-like Subset of S; thus thesis; end;
+end;
+
+registration
+let S; let X be S-premises-like set;
+cluster -> S-premises-like Subset of X;
+coherence
+proof
+set FF=AllFormulasOf S; reconsider XX=X as finite Subset of FF
+by DefPremLike; let Y be Subset of X; Y is Subset of XX; then
+Y is finite Subset of FF by XBOOLE_1:1; hence thesis by DefPremLike;
+end;
+end;
+
+reserve H,H1,H2,H3 for (S-premises-like set);
+
+definition
+let S, H2, H1;
+redefine func H1 null H2 -> Subset of (AllFormulasOf S);
+coherence by DefPremLike;
+end;
+
+registration
+let S,H,x;
+cluster H null x -> S-premises-like;
+coherence;
+end;
+
+registration
+let S, H1, H2;
+cluster H1\/H2 -> S-premises-like set;
+coherence
+proof
+set FF=AllFormulasOf S; (H1 null H1) \/ (H2 null H2) c= FF;
+hence thesis by DefPremLike;
+end;
+end;
+
+registration
+let S,H,phi;
+cluster [H,phi] -> S-sequent-like;
+coherence
+proof
+set FF=AllFormulasOf S; reconsider HH=H as finite Subset of FF by DefPremLike;
+[HH,phi] is S-sequent-like; hence thesis;
+end;
+end;
+
+registration
+let S, H1, H2, phi;
+cluster [H1\/H2, phi] -> (1,{[H1,phi]},{R1(S)})-derivable set;
+coherence
+proof
+set y=[H1,phi], SQ={y}, H=H1\/H2, Sq=[H,phi], Q=S-sequents;
+reconsider seqt=Sq as Element of Q by DefSeqtLike;
+reconsider Seqts=SQ as Element of bool Q by DefSeqtLike2;
+H1 null H2 c= H & {y}\SQ={} & y`1\+\H1={} & Sq`1\+\H={} &
+Sq`2 \+\ phi = {} & y`2 \+\ phi={}; then
+H1 c= H & y in SQ & y`1 = H1 & Sq`1=H & Sq`2=phi & y`2=phi
+by FOMODEL0:29,ZFMISC_1:68;
+then seqt Rule1 Seqts by Def1; then [Seqts,seqt] in P1(S) by DefP1;
+then Sq in (R1(S)).SQ by Th3; hence thesis by Lm22;
+end;
+end;
+
+registration
+let S,H, phi, phi1, phi2;
+cluster [H null (phi1^phi2),xnot phi] -> (1,
+{[H\/{phi},phi1],[H\/{phi},<*TheNorSymbOf S*>^phi1^phi2]},
+{R8(S)})-derivable set;
+coherence
+proof
+set N=TheNorSymbOf S, H1=H\/{phi}, psi=<*N*>^phi1^phi2, y1=[H1,phi1],
+y2=[H1,psi], SQ={y1,y2}, Sq=[H, xnot phi], Q=S-sequents;
+reconsider seqt=Sq as Element of Q by DefSeqtLike;
+reconsider Seqts=SQ as Element of bool Q by DefSeqtLike2;
+{y1}\SQ={} & {y2}\SQ={} & y1`1\+\H1={} & y2`1\+\H1={}  &
+y1`2\+\phi1={} & y2`2\+\psi={} & Sq`1\+\H={} & Sq`2\+\(xnot phi)={};
+then y1 in SQ & y2 in SQ & y1`1=H1 & y2`1=H1 & y1`2=phi1 & y2`2=psi &
+Sq`1=H & Sq`2=xnot phi by FOMODEL0:29, ZFMISC_1:68; then seqt Rule8 Seqts
+by Def8;
+then [Seqts,seqt] in P8(S) by DefP8; then Sq in (R8(S)).SQ by Th3;
+hence thesis by Lm22;
+end;
+end;
+
+registration
+let S;
+cluster {} null S -> S-sequents-like set;
+coherence
+proof {} null S = {}/\S; hence thesis; end;
+end;
+
+registration
+let S,H,phi;
+cluster [H\/{phi}, phi] -> (1,{},{R0(S)})-derivable set;
+coherence
+proof
+set H1=H\/{phi}, Sq=[H1,phi], SQ={} null S, Q=S-sequents;
+reconsider seqt=Sq as Element of Q by DefSeqtLike;
+reconsider Seqts=SQ as Element of bool Q by DefSeqtLike2;
+Sq`2\+\phi={} & Sq`1\+\H1={} & ({phi} null H)\H1 = {}; then
+Sq`2=phi & Sq`1=H1 & phi in H1 by FOMODEL0:29, ZFMISC_1:68; then
+seqt Rule0 Seqts by Def0; then [Seqts,seqt] in P0(S) by DefP0;
+then Sq in (R0(S)).SQ by Th3; hence thesis by Lm22;
+end;
+end;
+
+registration
+let S, H, phi1, phi2;
+cluster [H null phi2,xnot phi1] -> (2,
+{[H,<*TheNorSymbOf S*>^phi1^phi2]},{R0(S)}\/{R1(S)}\/{R8(S)})-derivable set;
+coherence
+proof
+set N=TheNorSymbOf S, psi1=xnot phi1, psi2=<*N*>^phi1^phi2,
+Sq=[H,psi2], Sq1=[H\/{phi1}, psi2], Sq2=[H\/{phi1},phi1], SQ={} null S,
+goal=[H null (phi1^phi2), xnot phi1];
+goal is (1+1, SQ\/{Sq}, {R0(S)}\/{R1(S)}\/{R8(S)})-derivable by Lm40;
+hence thesis;
+end;
+end;
+
+registration
+let S, H, phi1, phi2;
+cluster [H, <*TheNorSymbOf S*>^phi2^phi1] -> (1,
+{[H,<*TheNorSymbOf S*>^phi1^phi2]},{R7(S)})-derivable set;
+coherence
+proof
+set N=TheNorSymbOf S, psi1=<*N*>^phi1^phi2, psi2=<*N*>^phi2^phi1,
+Sq=[H,psi2], y=[H,psi1], SQ={y}, Q=S-sequents;
+reconsider seqt=Sq as Element of Q by DefSeqtLike;
+reconsider Seqts=SQ as Element of bool Q by DefSeqtLike2;
+{y}\SQ={} & y`1\+\H={} & Sq`1\+\H={} & y`2\+\psi1={} & Sq`2\+\psi2={}; then
+y in SQ & y`1=H & Sq`1=H & y`2=psi1 & Sq`2=psi2 by FOMODEL0:29, ZFMISC_1:68;
+then seqt Rule7 Seqts by Def7; then [Seqts,seqt] in P7(S) by DefP7;
+then Sq in (R7(S)).SQ by Th3; hence thesis by Lm22;
+end;
+end;
+
+registration
+let S, H, phi1, phi2;
+cluster [H null phi1, xnot phi2] ->
+(3,{[H,<*TheNorSymbOf S*>^phi1^phi2]},{R0(S)}\/{R1(S)}\/{R8(S)}\/{R7(S)})
+-derivable set;
+coherence
+proof
+set N=TheNorSymbOf S, psi2=<*N*>^phi2^phi1, Sq1=[H, psi2], D1={R7(S)},
+D2=D1, D3= {R0(S)}\/{R1(S)}\/{R8(S)}, goal=[H null phi1, xnot phi2],
+SQ1={[H,<*N*>^phi1^phi2]}, SQ2=SQ1;
+B0: D1\/D2 is isotone & D1\/D2\/D3 is isotone &
+{Sq1,Sq1}={Sq1}\/{Sq1} by ENUMSET1:41;
+goal is (1+2, SQ1\/SQ2, D1\/D2\/D3)-derivable by B0, Lm40;
+hence thesis;
+end;
+end;
+
+registration
+let S,Sq;
+cluster Sq`1 -> S-premises-like set;
+coherence
+proof
+set FF=AllFormulasOf S, Q=S-sequents; Sq in Q by DefSeqtLike; then consider
+premises being Subset of FF, conclusion being wff string of S such that
+B0: Sq=[premises, conclusion] & premises is finite;
+Sq`1=premises by B0, MCART_1:7; hence thesis by B0, DefPremLike;
+end;
+end;
+
+definition
+let S,X,D;
+redefine func D null X -> RuleSet of S;
+coherence;
+end;
+
+registration
+let S,phi1,phi2,l1,H;
+let l2 be (H\/{phi1}\/{phi2})-absent literal Element of S;
+cluster [(H\/{<*l1*>^phi1}) null l2, phi2] ->
+(1,{[H\/{(l1,l2)-SymbolSubstIn phi1}, phi2]},{R5(S)})-derivable set;
+coherence
+proof
+reconsider phi11=(l1,l2)-SymbolSubstIn phi1 as wff string of S;
+set H1=H\/{phi11}, Sq1=[H1,phi2],H2=H\/{<*l1*>^phi1}, Sq2=[H2,phi2],
+R=R5(S), Q=S-sequents, x=H, SS=AllSymbolsOf S, SQ={Sq1}, s=l1 SubstWith l2;
+reconsider p=phi1 as SS-valued FinSequence; reconsider seqt=Sq2 as
+Element of Q by DefSeqtLike; reconsider Seqts=SQ as Element of bool Q
+by DefSeqtLike2; seqt`1 \+\ H2={} & seqt`2 \+\ phi2={}; then
+B1: seqt`1=H2 & seqt`2=phi2 by FOMODEL0:29; x\/{s.p}=H1 by FOMODEL0:def 23;
+then [x\/{s.p},seqt`2] in Seqts by B1, TARSKI:def 1;
+then seqt Rule5 Seqts by B1, Def5; then [Seqts,seqt] in P5(S)
+by DefP5; then seqt in (R5(S)).Seqts by Th3; hence thesis by Lm22;
+end;
+end;
+
+definition ::def63 2
+let S,D,X;
+attr X is D-inconsistent means :DefInc: ex phi1,phi2 st
+(phi1 is (X,D)-provable & <*TheNorSymbOf S*>^phi1^phi2 is (X,D)-provable);
+end;
+
+registration
+let m1, S, H1, H2, phi;
+cluster [(H1\/H2) null m1, phi] -> (m1,{[H1,phi]},{R1(S)})-derivable set;
+coherence
+proof
+set H=H1\/H2, sq1=[H1,phi], sq=[H, phi]; consider m such that
+B3: m1=m+1 by NAT_1:6; defpred P[Nat] means
+sq is ($1+1,{sq1},{R1(S)})-derivable;
+B2: [H\/H,phi] is (1,{sq},{R1(S)})-derivable;
+B0: P[0];
+B1: for n st P[n] holds P[n+1]
+proof
+let n; assume P[n]; then
+sq is (n+1+1,{sq1},{R1(S)}\/{R1(S)})-derivable by Lm28, B2;
+hence thesis;
+end;
+for n holds P[n] from NAT_1:sch 2(B0,B1); hence thesis by B3;
+end;
+end;
+
+registration
+let S;
+cluster non empty (isotone RuleSet of S);
+existence proof take {R0(S)}; thus thesis; end;
+end;
+
+theorem Th14:
+(X is D-inconsistent & D is isotone & R1(S) in D & R8(S) in D)
+implies xnot phi is (X,D)-provable
+proof
+set N=TheNorSymbOf S;
+assume X is D-inconsistent; then consider phi1,phi2 such that
+B0: phi1 is (X,D)-provable & <*N*>^phi1^phi2 is (X,D)-provable by DefInc;
+reconsider psi=<*N*>^phi1^phi2 as wff string of S;
+consider H being set, m such that
+B1: H c= X & [H,phi1] is (m, {}, D)-derivable by B0, DefProvable3;
+consider K being set, n such that
+B2: K c= X & [K,psi] is (n,{},D)-derivable by B0, DefProvable3;
+reconsider HHH=H, KKK=K as Subset of X by B1, B2;
+reconsider sq1=[H,phi1], sq2=[K,psi] as S-sequent-like set by B1, B2;
+H=sq1`1 & K=sq2`1 by MCART_1:7; then
+reconsider HH=H, KK=K as S-premises-like set;
+reconsider J=HH\/KK\/{phi} as S-premises-like set; assume
+B3: D is isotone & R1(S) in D & R8(S) in D; then
+reconsider DD=D as non empty (isotone RuleSet of S);
+reconsider E1=R1(S), E8=R8(S) as Element of DD by B3;
+B4: DD\/{E1} = DD null E1 & DD \/ {E8} = DD null E8 & D\/D is isotone &
+D\/D\/{R8(S)} is isotone & D is non empty & HHH\/KKK c= X by B3;
+B7: [(J\/J) null (n+1), phi1] is (n+1,{[J,phi1]},{R1(S)})-derivable &
+[(J\/J) null (m+1), psi] is (m+1,{[J,psi]},{R1(S)})-derivable;
+[HH\/(KK\/{phi}), phi1] is (m+1,{},D\/{R1(S)})-derivable
+by Lm28, B1, B3; then
+[J,phi1] is (m+1,{},D)-derivable by B4, XBOOLE_1:4; then
+BB5: [J,phi1] is ((m+1)+(n+1),{},D)-derivable by B7, B4, Lm28;
+[KK\/(HH\/{phi}),  psi] is (n+1,{},D\/{R1(S)})-derivable
+by Lm28, B2, B3; then
+[J,psi] is (n+1,{},D)-derivable by B4, XBOOLE_1:4; then
+BB6: [J,psi] is (n+1+(m+1),{},D)-derivable by B7, Lm28, B4;
+[(KK\/HH) null (phi1^phi2),xnot phi] is
+(1, {[J,phi1],[J,psi]}, {R8(S)})-derivable; then [KK\/HH, xnot phi] is
+((m+n+2)+1, ({} null S)\/({} null S), D\/D\/{R8(S)})-derivable
+by Lm40, BB5, BB6, B3; hence thesis by B4, DefProvable3;
+end;
+
+registration
+let S;
+cluster R5(S) -> isotone Rule of S;
+coherence
+proof
+set R=R5(S), Q=S-sequents;
+now
+let Seqts, Seqts2; set X=Seqts, Y=Seqts2; assume
+B0: X c= Y;
+now
+let x; assume
+CC0: x in R.X;
+reconsider seqt=x as Element of Q by CC0;
+[X,seqt] in P5(S) by CC0, Lm1e; then
+seqt Rule5 X by DefP5; then consider
+v1,v2 being (literal Element of S), z,p such that
+C1: seqt`1=z \/ {<*v1*>^p} & v2 is (z\/{p}\/{seqt`2})-absent &
+[z\/{(v1 SubstWith v2).p},seqt`2] in X by Def5;
+seqt Rule5 Y by Def5, B0, C1; then
+[Y,seqt] in P5(S) by DefP5; hence x in R.Y by Th3;
+end;
+hence R.X c= R.Y by TARSKI:def 3;
+end;
+hence thesis by DefMonotonic1;
+end;
+end;
+
+registration
+let S,l,t,phi;
+cluster [{(l,t) SubstIn phi}, <*l*>^phi] -> (1,{},{R4(S)})-derivable set;
+coherence
+proof
+set Q=S-sequents, psi=(l,t) SubstIn phi;
+reconsider Sq=[{psi},<*l*>^phi] as S-sequent-like set;
+reconsider SQ={} null S as S-sequents-like set;
+reconsider seqt=Sq as Element of Q by DefSeqtLike;
+reconsider Seqts=SQ as Element of bool Q by DefSeqtLike2;
+seqt`1 \+\ {psi}={} & seqt`2\+\<*l*>^phi={}; then
+Seqts={} & seqt`1={psi} & seqt`2=<*l*>^phi by FOMODEL0:29;
+then seqt Rule4 Seqts by Def4; then [Seqts,seqt] in P4(S) by DefP4;
+then Sq in (R4(S)).SQ by Th3; hence thesis by Lm22;
+end;
+end;
+
+registration
+let S;
+cluster R4(S) -> isotone Rule of S;
+coherence
+proof
+set R=R4(S), Q=S-sequents;
+now
+let Seqts, Seqts2; set X=Seqts, Y=Seqts2; assume
+X c= Y;
+now
+let x; assume
+CC0: x in R.X;
+reconsider seqt=x as Element of Q by CC0;
+[X,seqt] in P4(S) by CC0, Lm1e; then
+seqt Rule4 X by DefP4; then consider
+l being literal Element of S, phi being wff string of S, t being
+termal string of S such that
+C1: seqt`1={(l,t) SubstIn phi} & seqt`2=<*l*>^phi by Def4;
+seqt Rule4 Y by C1, Def4; then [Y,seqt] in P4(S) by DefP4;
+hence x in R.Y by Th3;
+end;
+hence R.X c= R.Y by TARSKI:def 3;
+end;
+hence thesis by DefMonotonic1;
+end;
+end;
+
+Lm12: for X being D1-expanded set, phi being 0wff string of S holds
+((D1 Henkin X)-AtomicEval phi = 1 iff phi in X)
+proof
+let X be D1-expanded set, phi be 0wff string of S;
+R0(S) in D1 by DefRank; then
+B10: {R0(S)} c= D1 by ZFMISC_1:37;
+set TT=AllTermsOf S, E=TheEqSymbOf S, p=SubTerms phi, F=S-firstChar, s=F.phi,
+n=abs(ar s), R=(X,D1)-termEq, U=Class R, AF=AtomicFormulasOf S,
+d=U-deltaInterpreter, i=(S,X)-freeInterpreter;
+BB0: abs(ar E)-2=0;
+reconsider I=D1 Henkin X as Element of U-InterpretersOf S;
+set UV=I-TermEval, V=I-AtomicEval phi, uv=i-TermEval, v=i-AtomicEval phi,
+f=I===.s, G=I.s, g=i.s, O=OwnSymbolsOf S, FF=AllFormulasOf S,
+C=S-multiCat, SS=AllSymbolsOf S;
+reconsider pp=p as Element of n-tuples_on TT by FOMODEL0:16;
+pp is Element of Funcs(Seg n, TT) by FOMODEL0:11; then
+reconsider fp=pp as Function of Seg n, TT;
+B4: 2-tuples_on (SS*\{{}}) = {<*tt1,tt2*> where tt1,tt2 is
+Element of SS*\{{}}: not contradiction} by FINSEQ_2:119;
+p in TT*; then reconsider Pp=p as Element of (SS*\{{}})*;
+B5: phi = <*s*>^(C.p) by FOMODEL1:def 38;
+B1: UV=(R-class)*uv by FOMODEL3:3;
+B2: uv=id TT by FOMODEL3:4;
+n-tuples_on TT c= TT* & TT* c= (SS*\{{}})* by FINSEQ_2:162; then
+n-tuples_on TT c= (SS*\{{}})* by XBOOLE_1:1; then reconsider nc =
+(s-compound|(n-tuples_on TT)) as Function of n-tuples_on TT, SS*\{{}}
+by FUNCT_2:38;
+per cases;
+suppose C6: s=E;
+reconsider p1=p as (0+1+1)-element Element of TT* by C6,  BB0;
+Pp in 2-tuples_on (SS*\{{}}) by  BB0, C6, FOMODEL0:16; then
+consider tt11, tt22 being Element of SS*\{{}} such that
+C3: Pp=<*tt11, tt22*> & not contradiction by B4;
+C4: C.<*tt11, tt22*>=tt11^tt22 by FOMODEL0:15;
+reconsider p2=p as (1+1+0)-element Element of TT* by C6, BB0;
+{p1.(0+1)}\TT={} & {p2.(1+1)}\TT={}; then
+reconsider tt1=p.1, tt2=p.2 as Element of TT by ZFMISC_1:68;
+reconsider t1=tt1, t2=tt2 as termal string of S;
+C8: (R-class).tt1=EqClass(R,tt1) & (R-class).tt2=EqClass(R,tt2)
+by FOMODEL3:def 13;
+C5: tt1=tt11 & tt2=tt22 by C3, FINSEQ_1:61;
+{(id TT).tt1}\{tt1}={} & {(id TT).tt2}\{tt2}={}; then
+C1: (id TT).tt1=tt1 & (id TT).tt2=tt2 by ZFMISC_1:21;
+((R-class)*uv).tt1\+\(R-class).(uv.tt1)={} &
+((R-class)*uv).tt2\+\(R-class).(uv.tt2)={}; then
+((R-class)*uv).tt1 = (R-class).(uv.tt1) &
+((R-class)*uv).tt2 = (R-class).(uv.tt2) by FOMODEL0:29; then
+CC2: V=1 iff EqClass(R,tt1) = EqClass(R,tt2)
+by C8, C1, FOMODEL2:15, B1, C6, B2; then
+C2: V=1 iff [tt1, tt2] in R by EQREL_1:44;
+C7: <*E*>^t1^t2 = phi by B5,  C3 ,C4, C5, C6, FINSEQ_1:45;
+thus (D1 Henkin X)-AtomicEval phi=1 implies phi in X
+proof
+assume (D1 Henkin X)-AtomicEval phi=1; then
+[tt1, tt2] in R by CC2, EQREL_1:44; then
+consider t11, t22 being termal string of S such that
+D0: [tt1, tt2]=[t11,t22] & <*E*>^t11^t22 is (X,D1)-provable;
+t11=tt1 & t22=tt2 by D0, ZFMISC_1:33; then
+<*E*>^(t11^t22) =
+phi by B5, C3 , FOMODEL0:15, C5, C6; then
+phi is (X,D1)-provable by D0, FINSEQ_1:45;
+then {phi} c= X by DefExpanded;
+hence thesis by ZFMISC_1:37;
+end;
+assume phi in X;
+then reconsider Xphi={phi} as Subset of X by ZFMISC_1:37;
+{[{phi},phi]} is
+({},D1)-derivable by Lm20, B10; then phi is (Xphi,D1)-provable by DefProvable;
+hence thesis by C2, C7;
+end;
+suppose
+C2: not s=E; then reconsider o=s as Element of O by FOMODEL1:15; set gg=i.o;
+s<>E & V=v & v=gg.(uv*p) by FOMODEL3:5, FOMODEL2:14, C2; then V=
+gg.((id TT)*fp) by FOMODEL3:4 .= gg.(fp) by FUNCT_2:23 .=
+(X-freeInterpreter o).p by FOMODEL3:def 4 .=
+(chi(X,AF)*(o-compound|(n-tuples_on TT))).pp by FOMODEL3:def 3 .=
+chi(X,AF).(nc.pp) by FUNCT_2:21 .=
+chi(X,AF).((o-compound).pp) by FUNCT_1:72 .=
+chi(X,AF).(o-compound Pp) by FOMODEL3:def 2 .=
+chi(X,AF).phi by FOMODEL1:def 38; then
+V=1 iff phi in (chi(X,AF))"{1} by FOMODEL0:25; then
+V=1 iff (phi in X/\AF) by FOMODEL0:24; then
+phi in AF & (V=1 iff (phi in X & phi in AF)) by XBOOLE_0:def 4;
+hence thesis;
+end;
+end;
+
+definition
+let S,X;
+attr X is S-witnessed means :DefWit1:
+for l1, phi1 st <*l1*>^phi1 in X ex l2 st (
+(l1,l2)-SymbolSubstIn phi1 in X & not l2 in rng phi1);
+end;
+
+theorem Th15: for X being D1-expanded set st
+R1(S) in D1 & R4(S) in D1 & R6(S) in D1 & R7(S) in D1 &
+R8(S) in D1 & X is S-mincover & X is S-witnessed
+holds (D1 Henkin X)-TruthEval psi = 1 iff psi in X
+proof
+let X be D1-expanded set; set TT=AllTermsOf S, E=TheEqSymbOf S,
+F=S-firstChar, N=TheNorSymbOf S, R=(X,D1)-termEq, U=Class R, L=LettersOf S,
+AF=AtomicFormulasOf S, d=U-deltaInterpreter, i=(S,X)-freeInterpreter,
+II=U-InterpretersOf S, D=D1, ii=TT-InterpretersOf S, G0=R0(S), G1=R1(S),
+G2=R2(S), G4=R4(S), G6=R6(S), G7=R7(S), G8=R8(S), E0={G0}, E1={G1},
+E2={G2}, E4={G4}, E6={G6}, E7={G7}, E8={G8}; reconsider
+E0, E1, E2, E4, E6, E7, E8 as RuleSet of S; assume
+G1 in D & G4 in D & G6 in D & G7 in D & G8 in D; then
+G0 in D & G1 in D & G2 in D & G4 in D & G6 in D & G7 in D & G8 in D by
+DefRank; then
+reconsider F0=E0, F1=E1, F2=E2, F4=E4, F6=E6, F7=E7, F8=E8 as Subset of D
+by ZFMISC_1:37;
+B2: (F0\/(F0\/F1\/F8)) c= D & F0\/F6 c= D & F0 c= D &
+F0\/(F0\/F1\/F8\/F7) c= D;
+reconsider I=D1 Henkin X as Element of II;
+set UV=I-TermEval, uv=i-TermEval, O=OwnSymbolsOf S, FF=AllFormulasOf S,
+C=S-multiCat, SS=AllSymbolsOf S; assume
+B0: X is S-mincover & X is S-witnessed;
+defpred P[Nat] means for phi st phi is $1-wff holds
+(I-TruthEval phi=1 iff phi in X);
+B10: P[0]
+proof
+let phi; assume phi is 0-wff; then reconsider phi0=phi as 0wff string of S;
+I-AtomicEval phi0=1 iff phi0 in X by Lm12; hence thesis;
+end;
+B11: for n st P[n] holds P[n+1]
+proof
+let n; set Vn=(I,n)-TruthEval; assume
+C0: P[n]; let phi; set s=F.phi, V=I-TruthEval phi; assume
+C1: phi is (n+1)-wff;
+per cases;
+suppose phi is non 0wff & phi is exal; then
+reconsider phii=phi as non 0wff exal (n+1)-wff string of S by C1;
+reconsider phi1=head phii as n-wff string of S;
+reconsider l=F.phii as literal Element of S;
+D1: phii=<*l*>^phi1^(tail phii) by FOMODEL2:23 .= <*l*>^phi1;
+hereby
+assume V=1;
+then consider u being Element of U such that
+E0: ((l,u) ReassignIn I)-TruthEval phi1=1 by D1, FOMODEL2:19;
+consider x such that
+E2: x in TT & u=Class (R,x) by EQREL_1:def 5;
+reconsider tt=x as Element of TT by E2;
+reconsider psi1=(l,tt) SubstIn phi1 as n-wff string of S;
+id TT.tt \+\ tt={}; then id TT.tt=tt & ((R-class)*(i-TermEval)).tt \+\
+(R-class).(i-TermEval.tt)={} by FOMODEL0:29; then
+E1: i-TermEval.tt=tt & ((R-class)*(i-TermEval)).tt=(R-class).(i-TermEval.tt)
+by FOMODEL0:29, FOMODEL3:4; I-TermEval.tt = ((R-class)*(i-TermEval)).tt
+by FOMODEL3:3 .= u by E1, FOMODEL3:def 13, E2; then
+1 = I-TruthEval psi1 by E0, FOMODEL3:10; then psi1 in X by C0; then
+E3: {psi1} c= X by ZFMISC_1:37; [{(l,tt) SubstIn phi1},<*l*>^phi1] is
+(1,{},{R4(S)})-derivable; then <*l*>^phi1 is (X,E4)-provable &
+F4 c= D & E4 is isotone by E3, DefProvable3; then
+phii is (X,D)-provable by D1, Lm35; hence phi in X by DefExpanded2;
+end;
+assume phi in X; then consider l2 such that
+E0: (l,l2)-SymbolSubstIn phi1 in X & not l2 in rng phi1 by B0, DefWit1, D1;
+reconsider psi1=(l,l2)-SymbolSubstIn phi1 as n-wff string of S;
+consider u being Element of U such that
+E1: u=I.l2.{} & (l2,u) ReassignIn I=I by FOMODEL2:26;
+reconsider I2=(l2,u) ReassignIn I, I1=(l,u) ReassignIn I as Element of II;
+I2-TruthEval psi1=1 by E0, C0, E1; then
+I1-TruthEval phi1=1 by E0, FOMODEL3:9; hence thesis by D1, FOMODEL2:19;
+end;
+suppose phi is non 0wff & phi is non exal; then
+reconsider phii=phi as non 0wff non exal (n+1)-wff string of S by C1;
+set phi1=head phii, phi2=tail phii; F.phii\+\N={}; then
+s = N by FOMODEL0:29; then
+D0: phi=<*N*>^phi1^phi2 by FOMODEL2:23;
+V=1 iff (I-TruthEval phi1=0 & I-TruthEval phi2=0) by D0, FOMODEL2:19;
+then V=1 iff ((not I-TruthEval phi1=1) & (not I-TruthEval phi2=1)) by
+FOMODEL0:39; then
+DD2: V=1 iff ((not phi1 in X) & (not phi2 in X)) by C0;
+DD3: now
+assume xnot phi1 in X & xnot phi2 in X; then xnot phi1 is
+(X,{R0(S)})-provable & xnot phi2 is (X,{R0(S)})-provable by Lm2; then
+xnot phi1 is (X,D1)-provable & xnot phi2 is (X,D1)-provable by B2, Lm35;
+then xnot phi1 in X & xnot phi2 in X by DefExpanded2; then
+reconsider Y={xnot phi1, xnot phi2} as Subset of X by ZFMISC_1:38;
+phi is (X null Y,D1)-provable by Lm35, B2, D0;
+hence phi in X by DefExpanded2;
+end;
+now
+reconsider H={phi} as S-premises-like set; assume phi in X; then
+E7: H c= X by ZFMISC_1:37;
+E3: [{phi},phi] is (1, {}, E0)-derivable;
+EE0: [H null phi2,xnot phi1] is (2,{[{phi},phi]},E0\/E1\/E8)-derivable by D0;
+EE1: [H null phi1, xnot phi2] is (3,{[H,phi]},E0\/E1\/E8\/E7)-derivable by D0;
+[H,xnot phi1] is (1+2,{},E0\/(E0\/E1\/E8))-derivable by EE0, Lm28; then
+[H,xnot phi1] is (3,{},D)-derivable by B2, Th12; then
+xnot phi1 is (X,D)-provable by DefProvable3, E7; hence xnot phi1 in X by
+DefExpanded2;
+EE8: [H,xnot phi2] is (1+3, {}, E0\/(E0\/E1\/E8\/E7))-derivable
+by E3, EE1, Lm28;
+[H,xnot phi2] is (4, {}, D)-derivable by B2, EE8, Th12; then
+xnot phi2 is (X,D)-provable by DefProvable3, E7; hence xnot phi2 in X by
+DefExpanded2;
+end;
+hence thesis by DD2, B0, FOMODEL2:def 34, DD3;
+end;
+suppose phi is 0wff; hence thesis by B10; end;
+end;
+B12: for n holds P[n] from NAT_1:sch 2(B10, B11); psi is (Depth psi)-wff
+by FOMODEL2:def 31;
+hence thesis by B12;
+end;
+
+notation
+let S,D,X;
+antonym X is D-consistent for X is D-inconsistent;
+end;
+
+theorem Th16: for X being Subset of Y st X is D-inconsistent
+holds Y is D-inconsistent
+proof
+let X be Subset of Y; set N=TheNorSymbOf S; assume X is D-inconsistent;
+then consider phi1, phi2 such that
+B0: phi1 is (X,D)-provable & <*N*>^phi1^phi2 is (X,D)-provable
+by DefInc; thus thesis by DefInc, B0;
+end;
+
+definition
+let S,D; let X be functional set; let phi be Element of ExFormulasOf S;
+func (D,phi) AddAsWitnessTo X equals :DefWit2:
+X\/{
+(S-firstChar.phi, the Element of (
+LettersOf S \ SymbolsOf (((AllSymbolsOf S)*\{{}})/\(X\/{head phi}))
+))-SymbolSubstIn (head phi)
+} if X\/{phi} is D-consistent &
+LettersOf S \ SymbolsOf (((AllSymbolsOf S)*\{{}})/\(X\/{head phi}))<>{}
+otherwise X;
+consistency;
+coherence;
+end;
+
+registration
+let S,D; let X be functional set; let phi be Element of ExFormulasOf S;
+cluster X \ ((D,phi) AddAsWitnessTo X) -> empty set;
+coherence
+proof
+set F=S-firstChar, L=LettersOf S, Y=(D,phi) AddAsWitnessTo X, s1=F.phi,
+phi1=head phi, SS=AllSymbolsOf S, strings=SS*\{{}}, no=
+SymbolsOf (strings/\(X\/{phi1})), s2=the Element of L\no,
+Z={(s1,s2)-SymbolSubstIn phi1};
+defpred P[] means X\/{phi} is D-consistent & L\no <> {};
+(P[] implies (X null Z c= X\/Z & Y=X\/Z)) &
+((not P[]) implies Y=X null Z) by DefWit2; hence thesis;
+end;
+end;
+
+registration
+let S,D; let X be functional set; let phi be Element of ExFormulasOf S;
+cluster ((D,phi) AddAsWitnessTo X)\X -> trivial set;
+coherence
+proof
+set F=S-firstChar,L=LettersOf S,SS=AllSymbolsOf S,strings=SS*\{{}},
+s1=F.phi, Y=(D,phi) AddAsWitnessTo X, phi1=head phi, no=SymbolsOf
+(strings/\(X\/{phi1})),s2=the Element of L\no, Z={(s1,s2)-SymbolSubstIn phi1};
+defpred P[] means X\/{phi} is D-consistent & L\no <> {};
+(P[] implies Y=X\/Z) & ((not P[]) implies Y=X) by DefWit2; then
+(P[] implies Y\X=Z\X) & ((not P[]) implies Y\X={}) by XBOOLE_1:40;
+hence thesis;
+end;
+end;
+
+definition
+let S,D; let X be functional set; let phi be Element of ExFormulasOf S;
+redefine func (D,phi) AddAsWitnessTo X -> Subset of (X\/AllFormulasOf S);
+coherence
+proof
+set F=S-firstChar, IT=(D,phi) AddAsWitnessTo X, L=LettersOf S, l1=F.phi,
+phi1=head phi, SS=AllSymbolsOf S, strings=SS*\{{}}, FF=AllFormulasOf S,
+no=SymbolsOf (strings/\(X\/{phi1})), s2=the Element of (L\no);
+defpred P[] means X\/{phi} is D-consistent & L\no<>{};
+per cases;
+suppose
+C0: P[]; then reconsider Y=L\no as non empty set;
+s2 in Y & Y c= L; then
+reconsider l2=s2 as literal Element of SS;
+reconsider psi=(l1,l2)-SymbolSubstIn phi1 as wff string of S;
+reconsider psii=psi as Element of FF by FOMODEL2:16;
+IT=X\/{psii} by C0, DefWit2; hence thesis by XBOOLE_1:9;
+end;
+suppose not P[]; then IT=X null FF by DefWit2; hence thesis; end;
+end;
+end;
+
+definition ::def67 1
+let S,D;
+attr D is Correct means :DefCorrect: for phi, X st
+phi is (X,D)-provable holds for U for I being Element of U-InterpretersOf S
+st X is I-satisfied holds I-TruthEval phi=1;
+end;
+
+Lm2b: (D is isotone & R1(S) in D & R8(S) in D &
+X \/ {phi} is D-inconsistent) implies xnot phi is (X,D)-provable
+proof
+set XX=X\/{phi},N=TheNorSymbOf S,G1=R1(S),G8=R8(S),E1={G1}, E8={G8};assume
+B10: D is isotone & G1 in D & G8 in D; then
+reconsider F1=E1, F8=E8 as Subset of D by ZFMISC_1:37; assume
+XX is D-inconsistent; then consider phi1, phi2 such that
+B0: phi1 is (XX,D)-provable & <*N*>^phi1^phi2 is (XX,D)-provable
+by DefInc;
+set nphi1=<*N*>^phi1^phi2; consider H1 being set, m1 being Nat such that
+B1: H1 c= XX & [H1,phi1] is (m1,{},D)-derivable by DefProvable3, B0;
+consider H2 being set, m2 being Nat such that
+B2: H2 c= XX & [H2,nphi1] is (m2,{},D)-derivable by DefProvable3, B0;
+reconsider seqt1=[H1,phi1], seqt2=[H2, nphi1] as S-sequent-like set by B1, B2;
+seqt1`1 \+\H1= {} & seqt2`1 \+\ H2={}; then reconsider
+H11=H1, H22=H2 as S-premises-like Subset of XX by FOMODEL0:29, B1, B2;
+reconsider H111=H11\{phi}, H222=H22\{phi} as
+S-premises-like Subset of X by XBOOLE_1:43;
+H11\H111=H11/\{phi} & H22\H222=H22/\{phi} by XBOOLE_1:48; then reconsider
+pH1=H11\H111, pH2=H22\H222 as S-premises-like Subset of {phi};
+reconsider H=H11\/H22 as S-premises-like Subset of XX;
+reconsider h=H\{phi} as S-premises-like Subset of X by XBOOLE_1:43;
+reconsider hp=H/\{phi} as S-premises-like Subset of {phi};
+reconsider Phi={phi} as S-premises-like set; set M=m1+m2+1;
+reconsider hh=h\/{phi} as S-premises-like set;
+reconsider e={} null S as S-sequents-like set;
+set x=[hh,phi1], y=[hh, nphi1];
+[(H11\/(H22\/Phi)) null (m2+1), phi1] is
+(m2+1,{[H11, phi1]},E1)-derivable; then
+[H11\/(H22\/{phi}), phi1] is (m1+(m2+1),{},D\/E1)-derivable by B1, Lm28, B10;
+then [H\/{phi},phi1] is (m1+m2+1,{},D null F1)-derivable
+by XBOOLE_1:4; then [h\/hp\/{phi}, phi1] is
+(m1+m2+1,{},D)-derivable by FOMODEL0:48; then
+BB3: [h\/({phi} null hp), phi1] is (m1+m2+1,{},D)-derivable by XBOOLE_1:4;
+[(H22\/(H11\/{phi})) null (m1+1), nphi1] is
+(m1+1,{[H22, nphi1]},E1)-derivable; then
+[H22\/(H11\/{phi}), nphi1] is (m2+(m1+1),{},D\/E1)-derivable by B2, Lm28, B10;
+then [H\/{phi}, nphi1] is (m1+m2+1,{},D null F1)-derivable by XBOOLE_1:4;
+then [h\/hp\/{phi}, nphi1] is (m1+m2+1,{},D)-derivable by FOMODEL0:48; then
+BB4: [h\/({phi} null hp), nphi1] is (m1+m2+1,{},D)-derivable
+by XBOOLE_1:4; [h null (phi1^phi2), xnot phi] is
+(1,{[h\/{phi},phi1], [h\/{phi}, nphi1]},{R8(S)})-derivable;
+then [h, xnot phi] is
+(M+1,e\/e,D\/D\/{R8(S)})-derivable by BB3, BB4, Lm40, B10; then
+[h,xnot phi] is (M+1,{},D null F8)-derivable;
+hence thesis by DefProvable3;
+end;
+
+Lm1: X is D-consistent iff
+(for Y being finite Subset of X holds Y is D-consistent)
+proof
+set N=TheNorSymbOf S;
+thus X is D-consistent implies for Y being finite Subset of X holds Y is D
+-consistent by Th16;
+assume C4: for Y being finite Subset of X holds Y is D-consistent;
+assume  X is D-inconsistent; then consider phi1, phi2 such that
+C0: phi1 is (X,D)-provable & <*N*>^phi1^phi2 is (X,D)-provable by DefInc;
+reconsider phi=<*N*>^phi1^phi2 as non exal non 0wff wff string of S;
+consider H1 being set, m1 being Nat such that
+C1: H1 c= X & [H1,phi1] is (m1,{},D)-derivable by DefProvable3, C0;
+consider H2 being set, m2 being Nat such that
+C2: H2 c= X & [H2,phi] is (m2,{},D)-derivable by DefProvable3, C0;
+reconsider seqt1=[H1,phi1], seqt2=[H2,phi] as S-sequent-like set by C1, C2;
+seqt1`1 \+\ H1={} & seqt2`1\+\H2={}; then reconsider
+H11=H1, H22=H2 as S-premises-like Subset of X by C1, C2, FOMODEL0:29;
+CC3: phi1 is (H1 null H2,D)-provable by C1, DefProvable3;
+phi is (H2 null H1,D)-provable by C2, DefProvable3; then
+H11\/H22 is D-inconsistent by CC3, DefInc; hence contradiction by C4;
+end;
+
+Lm8: (R0(S) in D & X is S-covering & X is D-consistent)
+implies (X is S-mincover & X is D-expanded)
+proof
+set G0=R0(S), E0={G0}; assume that B0: G0 in D and
+B1: X is S-covering & X is D-consistent;
+B2: E0 c= D by B0, ZFMISC_1:37;
+BBB3: for phi holds (phi in X implies not xnot phi in X) &
+((not phi in X) implies xnot phi in X)
+proof
+let phi;
+hereby
+assume phi in X; then phi is (X,{R0(S)})-provable by Lm2;
+then phi is (X,D)-provable by B2, Lm35; then not xnot phi is (X,D)-provable
+by B1, DefInc; then not xnot phi is (X,{R0(S)})-provable by B2, Lm35;
+hence not xnot phi in X by Lm2;
+end; assume not phi in X; hence xnot phi in X by B1, FOMODEL2:def 40;
+end; then
+ for phi holds (phi in X iff not xnot phi in X); hence
+ X is S-mincover by FOMODEL2:def 34;
+now
+let x; assume C0: x is (X,D)-provable; then reconsider
+phi=x as wff string of S by Lm33; not xnot phi is (X,D)-provable
+by C0, B1, DefInc; then not xnot phi is (X,E0)-provable by B2, Lm35; then
+not xnot phi in X by Lm2; hence x in X by BBB3;
+end; hence thesis by DefExpanded2;
+end;
+
+Lm3: D is isotone & R1(S) in D & R8(S) in D & phi is (X,D)-provable
+& X is D-consistent implies X\/{phi} is D-consistent
+proof
+assume B0: D is isotone & R1(S) in D & R8(S) in D;
+assume phi is (X,D)-provable & X is D-consistent; then
+not xnot phi is (X,D)-provable by DefInc; hence thesis by Lm2b, B0;
+end;
+
+Lm11: for I being Element of U-InterpretersOf S st
+D is Correct & X is I-satisfied holds X is D-consistent
+proof
+set N=TheNorSymbOf S; let I being Element of U-InterpretersOf S; assume
+B0: D is Correct & X is I-satisfied;
+now
+given phi1, phi2 such that
+C0: phi1 is (X,D)-provable & <*N*>^phi1^phi2 is (X,D)-provable; set
+nphi1=<*N*>^phi1^phi2; I-TruthEval phi1=1 & I-TruthEval nphi1=1
+by C0, B0, DefCorrect; hence contradiction by FOMODEL2:19;
+end; hence thesis by DefInc;
+end;
+
+registration
+let S, t1, t2;
+cluster SubTerms (<*TheEqSymbOf S*>^t1^t2) \+\ <*t1, t2*> -> empty set;
+coherence
+proof
+set E=TheEqSymbOf S; reconsider phi0=<*E*>^t1^t2 as 0wff string of S;
+set C=S-multiCat, F=S-firstChar, ST=SubTerms phi0, SS=AllSymbolsOf S,
+TT=AllTermsOf S;
+reconsider tt3=t1, tt4=t2 as Element of TT by FOMODEL1:def 32;
+B2: 2-tuples_on TT={<*tt1, tt2*>: not contradiction} by FINSEQ_2:119;
+B0: phi0=<*E*>^(t1^t2) & (<*E*>^(t1^t2)).1 \+\ E={} by FINSEQ_1:45; then
+B1: E = phi0.1 by FOMODEL0:29 .= F.phi0 by FOMODEL0:6; then
+<*E*>^(C.ST) = <*E*>^(t1^t2) by FOMODEL1:def 38, B0; then
+B4: C.ST=t1^t2 by FOMODEL0:41; abs ar E-2+2=0+2; then
+ST in 2-tuples_on TT by FOMODEL0:16, B1;
+then consider tt1, tt2 such that
+B3: ST=<*tt1, tt2*> by B2;
+tt1 is Element of SS* & tt2 is Element of SS* & tt3 is Element of SS* &
+tt4 is Element of SS* by TARSKI:def 3; then reconsider
+tt11=tt1, tt22=tt2, tt33=tt3, tt44=tt4 as SS-valued FinSequence;
+C.<*tt11, tt22*> \+\ tt11^tt22 = {}; then
+tt11^tt22 = tt33^tt44 by FOMODEL0:29, B3, B4; then
+tt11=tt33 & tt22=tt44 by FOMODEL0:def 20;
+hence thesis by FOMODEL0:29, B3;
+end;
+end;
+
+Lm36: for I being (S,U)-interpreter-like Function holds
+(I-AtomicEval (<*TheEqSymbOf S*>^t1^t2)=1 iff I-TermEval.t1=I-TermEval.t2)
+proof
+set E=TheEqSymbOf S, phi0=<*E*>^t1^t2, ST=SubTerms phi0, F=S-firstChar;
+phi0=<*E*>^(t1^t2) & (<*E*>^(t1^t2)).1 \+\ E={} by FINSEQ_1:45; then
+B0: E=phi0.1 by FOMODEL0:29 .= F.phi0 by FOMODEL0:6;
+ST\+\<*t1, t2*>={}; then ST=<*t1, t2*> by FOMODEL0:29; then
+ST.1=t1 & ST.2=t2 by FINSEQ_1:61; hence thesis by B0, FOMODEL2:15;
+end;
+
+definition
+let S; let R be Rule of S;
+attr R is Correct means :RuleCorr:
+X is S-correct implies R.X is S-correct;
+end;
+
+registration
+let S;
+cluster S-sequent-like -> S-null set;
+coherence;
+end;
+
+Lm60: R0(S) is Correct
+proof
+now
+set f=R0(S), R=P0(S), Q=S-sequents; let X; assume X is S-correct;
+now
+let U; set II=U-InterpretersOf S; let I be Element of II;
+let x be I-satisfied set; let phi; set s=[x,phi];
+ s`1 \+\ x={} & s`2 \+\ phi={}; then
+C0: dom R c= bool Q & s`1=x & s`2=phi by FOMODEL0:29; assume
+DD1: [x, phi] in f.X; then
+D1: s in Q & [X, s] in R by Lm1e; then X in dom R by RELAT_1:def 4;
+then reconsider XX=X as Subset of Q;
+reconsider seqt=s as Element of Q by DD1, Lm1e;
+seqt Rule0 XX by D1, DefP0; then phi in x by C0, Def0;
+hence I-TruthEval phi=1 by FOMODEL2:def 42;
+end; hence f.X is S-correct by FOMODEL2:def 44;
+end; hence thesis by RuleCorr;
+end;
+
+registration
+let S;
+cluster R0(S) -> Correct Rule of S;
+coherence by Lm60;
+end;
+
+registration
+let S;
+cluster Correct Rule of S;
+existence proof take R0(S); thus thesis; end;
+end;
+
+Lm61: R1(S) is Correct
+proof
+now
+set f=R1(S), R=P1(S), Q=S-sequents, E=TheEqSymbOf S, N=TheNorSymbOf S,
+FF=AllFormulasOf S, TT=AllTermsOf S, SS=AllSymbolsOf S, F=S-firstChar,
+C=S-multiCat;
+let X; assume
+B0: X is S-correct;
+now
+let U; set II=U-InterpretersOf S; let I be Element of II;
+let x be I-satisfied set; let psi; set s=[x,psi], TE=I-TermEval,
+d=U-deltaInterpreter;
+CC0: s`1 \+\ x={} & s`2 \+\ psi={}; then
+C0: dom R c= bool Q & s`1=x & s`2=psi by FOMODEL0:29; assume
+DD1: s in f.X; then
+D1: s in Q & [X, s] in R by Lm1e; then X in dom R by RELAT_1:def 4;
+then reconsider Seqts=X as S-correct Subset of Q by B0;
+reconsider seqt=s as Element of Q by DD1, Lm1e;
+seqt Rule1 Seqts by D1, DefP1; then consider y such that
+D2: y in Seqts & y`1 c= seqt`1 & seqt`2 = y`2 by Def1;
+reconsider H=y`1 as Subset of x by CC0, FOMODEL0:29, D2; [H, psi] in Seqts
+by D2, C0, MCART_1:23; hence I-TruthEval psi=1 by FOMODEL2:def 44;
+end; hence f.X is S-correct by FOMODEL2:def 44;
+end; hence thesis by RuleCorr;
+end;
+
+registration
+let S;
+cluster R1(S) -> Correct Rule of S;
+coherence by Lm61;
+end;
+
+Lm62: R2(S) is Correct
+proof
+now
+set f=R2(S), R=P2(S), Q=S-sequents, E=TheEqSymbOf S, N=TheNorSymbOf S,
+FF=AllFormulasOf S, TT=AllTermsOf S, SS=AllSymbolsOf S, F=S-firstChar,
+C=S-multiCat;
+let X; assume
+B0: X is S-correct;
+now
+let U; set II=U-InterpretersOf S; let I be Element of II;
+let x be I-satisfied set; let psi; set s=[x,psi], TE=I-TermEval,
+d=U-deltaInterpreter;
+CC0: s`1 \+\ x={} & s`2 \+\ psi={}; assume
+DD1: s in f.X; then
+D1: s in Q & [X, s] in R by Lm1e; then X in dom R by RELAT_1:def 4;
+then reconsider Seqts=X as S-correct Subset of Q by B0;
+reconsider seqt=s as Element of Q by DD1, Lm1e;
+seqt Rule2 Seqts by D1, DefP2; then consider t such that
+D2: seqt`2 = <* TheEqSymbOf S *> ^ t ^ t  by Def2;
+TE.t=TE.t; then I-AtomicEval (<*E*>^t^t) = 1 by Lm36;
+hence I-TruthEval psi=1 by CC0, FOMODEL0:29, D2;
+end; hence f.X is S-correct by FOMODEL2:def 44;
+end; hence thesis by RuleCorr;
+end;
+
+registration let S;
+cluster R2(S) -> Correct Rule of S;
+coherence by Lm62;
+end;
+
+Lm63a: R3a(S) is Correct
+proof
+now
+set f=R3a(S), R=P3a(S), Q=S-sequents, E=TheEqSymbOf S, N=TheNorSymbOf S,
+FF=AllFormulasOf S, TT=AllTermsOf S, SS=AllSymbolsOf S, F=S-firstChar,
+C=S-multiCat;
+let X; assume
+B0: X is S-correct;
+now
+let U; set II=U-InterpretersOf S; let I be Element of II;
+let x be I-satisfied set; let psi; set s=[x,psi], TE=I-TermEval,
+d=U-deltaInterpreter;
+CC0: s`1 \+\ x={} & s`2 \+\ psi={}; assume
+DD1: s in f.X; then
+D1: s in Q & [X, s] in R by Lm1e; then X in dom R by RELAT_1:def 4;
+then reconsider Seqts=X as S-correct Subset of Q by B0;
+reconsider seqt=s as Element of Q by DD1, Lm1e;
+seqt Rule3a Seqts by D1, DefP3a; then consider
+t,t1,t2 being termal string of S, y being set such that
+D2: (y in Seqts & seqt`1 = y`1 \/ { <* TheEqSymbOf S *> ^ t1 ^ t2 } &
+y`2 = <* TheEqSymbOf S *> ^ t ^ t1 & seqt`2 = <* TheEqSymbOf S *> ^ t ^ t2)
+by Def3a;
+reconsider phi1=<*E*>^t^t1, phi2=<*E*>^t^t2, phi=<*E*>^t1^t2 as
+0wff string of S;
+reconsider gamma=y`1 null {phi}, z={phi} null (y`1) as Subset of x
+by D2, CC0, FOMODEL0:29; [gamma, phi1] in Seqts by D2, MCART_1:23; then
+ I-TruthEval phi1=1 by FOMODEL2:def 44; then
+D3: phi2=psi & TE.t=TE.t1 by Lm36, CC0, FOMODEL0:29, D2; z={phi}; then
+I-TruthEval phi=1 by FOMODEL2:27; then TE.t2 = TE.t by D3, Lm36; then
+I-AtomicEval phi2=1 by Lm36;
+hence I-TruthEval psi=1 by CC0, FOMODEL0:29, D2;
+end; hence f.X is S-correct by FOMODEL2:def 44;
+end; hence thesis by RuleCorr;
+end;
+
+registration let S;
+cluster R3a(S) -> Correct Rule of S;
+coherence by Lm63a;
+end;
+
+Lm63b: R3b(S) is Correct
+proof
+now
+set f=R3b(S), R=P3b(S), Q=S-sequents, E=TheEqSymbOf S, N=TheNorSymbOf S,
+FF=AllFormulasOf S, TT=AllTermsOf S, SS=AllSymbolsOf S, F=S-firstChar,
+C=S-multiCat;
+let X; assume
+B0: X is S-correct;
+now
+let U; set II=U-InterpretersOf S; let I be Element of II;
+let x be I-satisfied set; let psi; set s=[x,psi], TE=I-TermEval,
+d=U-deltaInterpreter;
+CC0: s`1 \+\ x={} & s`2 \+\ psi={}; assume
+DD1: s in f.X; then
+D1: s in Q & [X, s] in R by Lm1e; then X in dom R by RELAT_1:def 4;
+then reconsider Seqts=X as S-correct Subset of Q by B0;
+reconsider seqt=s as Element of Q by DD1, Lm1e;
+seqt Rule3b Seqts by D1, DefP3b; then consider
+t1,t2 being termal string of S such that
+D2: seqt`1 = {<*TheEqSymbOf S*>^t1^t2} & seqt`2 = <*TheEqSymbOf S*>^t2^t1
+by Def3b; set phi1=<*E*>^t1^t2, phi2=<*E*>^t2^t1;
+{phi1} is I-satisfied by D2, CC0, FOMODEL0:29; then
+1 = I-AtomicEval phi1 by FOMODEL2:27;
+then TE.t1=TE.t2 by Lm36; then I-AtomicEval phi2=1
+& phi2=psi by D2, CC0, FOMODEL0:29, Lm36; hence I-TruthEval psi=1;
+end; hence f.X is S-correct by FOMODEL2:def 44;
+end; hence thesis by RuleCorr;
+end;
+
+registration let S;
+cluster R3b(S) -> Correct Rule of S;
+coherence by Lm63b;
+end;
+
+Lm63d: R3d(S) is Correct
+proof
+now
+set f=R3d(S), R=P3d(S), Q=S-sequents, E=TheEqSymbOf S, N=TheNorSymbOf S,
+FF=AllFormulasOf S, TT=AllTermsOf S, SS=AllSymbolsOf S, F=S-firstChar,
+C=S-multiCat;
+let X; assume
+B0: X is S-correct;
+now
+let U; set II=U-InterpretersOf S; let I be Element of II;
+let x be I-satisfied set; let psi; set s=[x,psi], TE=I-TermEval,
+d=U-deltaInterpreter;
+CC0: s`1 \+\ x={} & s`2 \+\ psi={}; assume
+DD1: s in f.X; then
+D1: s in Q & [X, s] in R by Lm1e; then X in dom R by RELAT_1:def 4;
+then reconsider Seqts=X as S-correct Subset of Q by B0;
+reconsider seqt=s as Element of Q by DD1, Lm1e;
+seqt Rule3d Seqts by D1, DefP3d; then consider
+r being low-compounding Element of S,
+T1, T2 being (abs ar r)-element Element of TT* such that
+D2: r is operational &
+seqt`1 = {<*E*>^(TT1.j)^(TT2.j) where j is Element of Seg (abs ar r),
+TT1,TT2 is Function of Seg (abs ar r), SS*\{{}} : TT1=T1 & TT2=T2}
+& seqt`2=<*E*>^(r-compound T1)^(r-compound T2) by Def3d;
+reconsider t1=r-compound T1, t2=r-compound T2 as termal string of S by D2;
+t1.1 \+\ r={} & t2.1 \+\ r={}; then t1.1=r & t2.1=r by FOMODEL0:29; then
+D3: F.t1=r & F.t2=r by FOMODEL0:6; then SubTerms t1=T1 & SubTerms t2=T2
+by FOMODEL1:def 37; then
+D4: TE.t1=I.r.(TE*T1) & TE.t2=I.r.(TE*T2) by FOMODEL2:21, D3;
+reconsider Fam={<*E*>^(TT1.j)^(TT2.j) where j is Element of Seg (abs ar r),
+TT1,TT2 is Function of Seg (abs ar r), SS*\{{}} : TT1=T1 & TT2=T2} null {}
+as Subset of x by D2, CC0, FOMODEL0:29;
+now
+set p=TE*T1, q=TE*T2; len p=abs ar r by CARD_1:def 13; hence
+len q= len p by CARD_1:def 13; let k; assume
+EE0: 1<=k & k<=len p; then
+E0: 1<=k & k<=abs ar r by CARD_1:def 13;
+then reconsider kk=k as Element of Seg (abs ar r) by FINSEQ_1:3;
+k-k <= abs ar r - k by E0, XREAL_1:11; then
+reconsider h=abs ar r - k as Nat; reconsider k1=k as non zero Nat
+by EE0;
+dom (T1 null 0)=Seg (abs ar r+0) & rng T1 c= SS*\{{}} &
+dom (T2 null 0)=Seg (abs ar r+0) & rng T2 c= SS*\{{}}
+by PARTFUN1:def 4, RELAT_1:def 19; then
+T1 is Element of Funcs (Seg abs ar r, SS*\{{}}) &
+T2 is Element of Funcs (Seg abs ar r, SS*\{{}}) by FUNCT_2:def 2; then
+reconsider TT1=T1, TT2=T2 as Function of Seg abs ar r, SS*\{{}};
+T1 is (k1+h)-element & T2 is (k1+h)-element; then
+{T1.k1}\TT={} & {T2.k1}\TT={}; then T1.k in TT & T2.k in TT by ZFMISC_1:68;
+then reconsider t1=T1.k, t2=T2.k as termal string of S;
+reconsider z=<*E*>^t1^t2 as 0wff string of S;
+TE.(TT1.kk) \+\ (TE*TT1).kk={} & TE.(TT2.kk)\+\(TE*TT2).kk={}; then
+E1: TE.(TT1.kk) = (TE*TT1).kk & TE.(TT2.kk) = (TE*TT2).kk by FOMODEL0:29;
+set ST=<*t1, t2*>;
+<*E*>^TT1.kk^TT2.kk in Fam; then I-TruthEval z=1 by FOMODEL2:def 42;
+hence p.k=q.k by E1, Lm36;
+end; then
+TE.t1=TE.t2 by D4, FINSEQ_1:18; then I-AtomicEval (<*E*>^t1^t2)=1 &
+psi=<*E*>^t1^t2 by Lm36, CC0, FOMODEL0:29, D2; hence I-TruthEval psi=1;
+end; hence f.X is S-correct by FOMODEL2:def 44;
+end; hence thesis by RuleCorr;
+end;
+
+registration
+let S;
+cluster R3d(S) -> Correct Rule of S;
+coherence by Lm63d;
+end;
+
+Lm63e: R3e(S) is Correct
+proof
+now
+set f=R3e(S), R=P3e(S), Q=S-sequents, E=TheEqSymbOf S, N=TheNorSymbOf S,
+FF=AllFormulasOf S, TT=AllTermsOf S, SS=AllSymbolsOf S, F=S-firstChar,
+C=S-multiCat;
+let X; assume
+B0: X is S-correct;
+now
+let U; set II=U-InterpretersOf S; let I be Element of II;
+let x be I-satisfied set; let psi; set s=[x,psi], TE=I-TermEval,
+d=U-deltaInterpreter;
+CC0: s`1 \+\ x={} & s`2 \+\ psi={}; assume
+DD1: s in f.X; then
+D1: s in Q & [X, s] in R by Lm1e; then X in dom R by RELAT_1:def 4;
+then reconsider Seqts=X as S-correct Subset of Q by B0;
+reconsider seqt=s as Element of Q by DD1, Lm1e;
+seqt Rule3e Seqts by D1, DefP3e; then consider
+r being relational Element of S,
+T1, T2 being (abs ar r)-element Element of TT* such that
+D2: (seqt`1={r-compound(T1)} \/
+{<*E*>^(TT1.j)^(TT2.j) where j is Element of Seg (abs ar r),
+TT1,TT2 is Function of Seg (abs ar r), SS*\{{}} : TT1=T1 & TT2=T2}
+& seqt`2=r-compound(T2)) by Def3e;
+reconsider psi0=psi as 0wff string of S by CC0, FOMODEL0:29, D2;
+reconsider phi1=r-compound(T1) as 0wff string of S;
+reconsider rr=F.psi0 as relational Element of S;
+reconsider Fam=
+{<*E*>^(TT1.j)^(TT2.j) where j is Element of Seg (abs ar r),
+TT1,TT2 is Function of Seg (abs ar r), SS*\{{}} : TT1=T1 & TT2=T2} null
+{phi1} as Subset of x by D2, CC0, FOMODEL0:29;
+(<*r*>^C.T1).1\+\r={} & (<*r*>^C.T2).1\+\r={}; then (<*r*>^C.T1).1=r &
+(<*r*>^C.T2).1=r & psi0=<*r*>^(C.T2) by D2, CC0, FOMODEL0:29; then
+D3: F.phi1=r & rr=r & psi0=<*r*>^C.T2 by FOMODEL0:6; then
+D4: T1=SubTerms phi1 & T2=SubTerms psi0 by FOMODEL1:def 38; reconsider
+y={phi1} null Fam as Subset of x by D2, CC0, FOMODEL0:29;
+DD6: {phi1}=y;
+DD5: now
+set p=TE*T1, q=TE*T2; len p=abs ar r by CARD_1:def 13; hence
+len q= len p by CARD_1:def 13; let k; assume
+EE0: 1<=k & k<=len p; then
+E0: 1<=k & k<=abs ar r by CARD_1:def 13;
+then reconsider kk=k as Element of Seg (abs ar r) by FINSEQ_1:3;
+k-k <= abs ar r - k by E0, XREAL_1:11; then
+reconsider h=abs ar r - k as Nat; reconsider k1=k as non zero Nat
+by EE0;
+dom (T1 null 0)=Seg (abs ar r+0) & rng T1 c= SS*\{{}} &
+dom (T2 null 0)=Seg (abs ar r+0) & rng T2 c= SS*\{{}}
+by PARTFUN1:def 4, RELAT_1:def 19; then
+T1 is Element of Funcs (Seg abs ar r, SS*\{{}}) &
+T2 is Element of Funcs (Seg abs ar r, SS*\{{}}) by FUNCT_2:def 2; then
+reconsider TT1=T1, TT2=T2 as Function of Seg abs ar r, SS*\{{}};
+T1 is (k1+h)-element & T2 is (k1+h)-element; then
+{T1.k1}\TT={} & {T2.k1}\TT={}; then T1.k in TT & T2.k in TT by ZFMISC_1:68;
+then reconsider t1=T1.k, t2=T2.k as termal string of S;
+reconsider z=<*E*>^t1^t2 as 0wff string of S;
+TE.(TT1.kk) \+\ (TE*TT1).kk={} & TE.(TT2.kk)\+\(TE*TT2).kk={}; then
+E1: TE.(TT1.kk) = (TE*TT1).kk & TE.(TT2.kk) = (TE*TT2).kk by FOMODEL0:29;
+set ST=<*t1, t2*>; <*E*>^TT1.kk^TT2.kk in Fam; then
+I-TruthEval z=1 by FOMODEL2:def 42; hence p.k=q.k by E1, Lm36;
+end;
+per cases;
+suppose  rr=E; I-AtomicEval psi0 =
+ I-AtomicEval phi1 by D3, DD5, D4, FINSEQ_1:18;
+hence I-TruthEval psi=1 by DD6, FOMODEL2:27;
+end;
+suppose  rr<>E; I-AtomicEval psi0 =
+I-AtomicEval phi1 by D3, DD5, D4, FINSEQ_1:18;
+hence I-TruthEval psi=1 by DD6, FOMODEL2:27;
+end;
+end; hence f.X is S-correct by FOMODEL2:def 44;
+end; hence thesis by RuleCorr;
+end;
+
+registration
+let S;
+cluster R3e(S) -> Correct Rule of S;
+coherence by Lm63e;
+end;
+
+Lm64: R4(S) is Correct
+proof
+now
+set f=R4(S), R=P4(S), Q=S-sequents, E=TheEqSymbOf S, N=TheNorSymbOf S,
+FF=AllFormulasOf S, TT=AllTermsOf S, SS=AllSymbolsOf S, F=S-firstChar;
+let X; assume
+B0: X is S-correct;
+now
+let U; set II=U-InterpretersOf S; let I be Element of II;
+let x be I-satisfied set; let psi;
+set s=[x,psi];
+CC0: s`1 \+\ x={} & s`2 \+\ psi={}; assume
+DD1: s in f.X; then
+D1: s in Q & [X, s] in R by Lm1e; then X in dom R by RELAT_1:def 4;
+then reconsider Seqts=X as S-correct Subset of Q by B0;
+reconsider seqt=s as Element of Q by DD1, Lm1e;
+seqt Rule4 Seqts by D1, DefP4; then consider
+l being literal Element of S, phi being wff string of S,
+t being termal string of S such that
+D2: seqt`1={(l,t) SubstIn phi} & seqt`2=<*l*>^phi by Def4;
+reconsider tt=t as Element of TT by FOMODEL1:def 32;
+reconsider phii=(l,tt) SubstIn phi as wff string of S;
+reconsider u=I-TermEval.tt as Element of U;
+reconsider I1=(l,u) ReassignIn I as Element of II;
+D3: x={phii} & psi=<*l*>^phi by D2, CC0, FOMODEL0:29; then
+1 = I-TruthEval phii by FOMODEL2:27 .= I1-TruthEval phi by FOMODEL3:10; hence
+I-TruthEval psi=1 by D3, FOMODEL2:19;
+end; hence f.X is S-correct by FOMODEL2:def 44;
+end; hence thesis by RuleCorr;
+end;
+
+registration
+let S;
+cluster R4(S) -> Correct Rule of S;
+coherence by Lm64;
+end;
+
+Lm65: R5(S) is Correct
+proof
+now
+set f=R5(S), R=P5(S), Q=S-sequents, E=TheEqSymbOf S, N=TheNorSymbOf S,
+FF=AllFormulasOf S, TT=AllTermsOf S, SS=AllSymbolsOf S, F=S-firstChar,
+O=OwnSymbolsOf S; let X; assume
+B0: X is S-correct;
+now
+let U; set II=U-InterpretersOf S; let I be Element of II;
+let x be I-satisfied set; let psi;
+set s=[x,psi];
+CC0: s`1 \+\ x={} & s`2 \+\ psi={}; then
+C0: dom R c= bool Q & s`1=x & s`2=psi by FOMODEL0:29; assume
+DD1: s in f.X; then
+D1: s in Q & [X, s] in R by Lm1e; then X in dom R by RELAT_1:def 4;
+then reconsider Seqts=X as S-correct Subset of Q by B0;
+reconsider seqt=s as Element of Q by DD1, Lm1e;
+seqt Rule5 Seqts by D1, DefP5; then consider v1,v2 being
+(literal Element of S), y,p such that
+D2: seqt`1=y \/ {<*v1*>^p} & v2 is (y\/{p}\/{seqt`2})-absent &
+[y\/{(v1 SubstWith v2).p},seqt`2] in Seqts by Def5;
+{<*v1*>^p} null y c= FF by D2, DefPremLike; then
+<*v1*>^p in FF by ZFMISC_1:37;
+then reconsider phi1=<*v1*>^p as wff string of S;
+v1 \+\ phi1.1={}; then
+D3: v1= phi1.1 by FOMODEL0:29 .= F.phi1 by FOMODEL0:6; then
+reconsider phi1 as non 0wff exal wff string of S by FOMODEL2:def 32;
+reconsider phi=head phi1 as wff string of S;
+{psi} null (y\/{phi})={psi}; then
+reconsider Psi={psi} as non empty Subset of y\/{phi}\/{psi};
+{phi} null (y\/{psi}) is Subset of y\/{phi}\/{psi}  by XBOOLE_1:4;
+then reconsider Phi={phi} as non empty Subset of y\/{phi}\/{psi};
+y \/ ({phi}\/{psi}) = y\/{phi}\/{psi} by XBOOLE_1:4; then
+y null ({phi}\/{psi}) c= y\/{phi}\/{psi}; then reconsider
+yyy=y as Subset of (y\/{phi}\/{psi});
+D5: phi1 = <*v1*>^phi^(tail phi1) by D3, FOMODEL2:23 .= <*v1*>^phi; then
+D4: phi=p by FOMODEL0:41; then
+D10: v2 is (Psi null (y\/{phi}\/{psi}))-absent &
+v2 is (Phi null (y\/{phi}\/{psi}))-absent &
+v2 is (yyy null (y\/{phi}\/{psi}))-absent by D2, C0;
+reconsider phi2=(v1, v2)-SymbolSubstIn phi as wff string of S;
+reconsider yy=y null {phi1}, z={phi1} null y as I-satisfied Subset of x
+by D2, CC0, FOMODEL0:29;
+z={phi1}; then I-TruthEval phi1=1 by FOMODEL2:27; then consider u such that
+D6: 1 = (v1,u) ReassignIn I-TruthEval phi by FOMODEL2:19, D5;
+set f2=v2.-->({}.-->u); reconsider
+I1 =(v1,u) ReassignIn I, I2=(v2,u) ReassignIn I as Element of II;
+not v2 in rng phi by D10, FOMODEL2:28; then
+I2-TruthEval phi2 = 1 by D6, FOMODEL3:9; then reconsider
+z2={phi2} as I2-satisfied set by FOMODEL2:27; not v2 in rng psi
+by D10, FOMODEL2:28; then {v2} misses rng psi by ZFMISC_1:56; then
+D8: dom f2 misses rng psi by FUNCOP_1:19;
+I2|(rng psi)=I|(rng psi) +* f2|(rng psi) by FUNCT_4:75 .=
+I|(rng psi) null {} by D8, RELAT_1:95; then
+D9: I|(rng psi/\O) = I2|(rng psi)|O by RELAT_1:100.= I2|(rng psi/\O)
+by RELAT_1:100; v2 is yyy-absent & yy is I-satisfied by D4, D2, C0;
+then reconsider
+yyyy=yyy as I2-satisfied Subset of x by FOMODEL3:14; reconsider
+zz = yyyy\/z2 as I2-satisfied set; [zz,psi] in Seqts
+by D2, D4, C0, FOMODEL0:def 23; hence 1 =
+I2-TruthEval psi by FOMODEL2:def 44 .= I-TruthEval psi by D9, FOMODEL3:13;
+end; hence f.X is S-correct by FOMODEL2:def 44;
+end; hence thesis by RuleCorr;
+end;
+
+registration
+let S;
+cluster R5(S) -> Correct Rule of S;
+coherence by Lm65;
+end;
+
+Lm66: R6(S) is Correct
+proof
+now
+set f=R6(S), R=P6(S), Q=S-sequents, E=TheEqSymbOf S, N=TheNorSymbOf S;
+let X; assume
+B0: X is S-correct;
+now
+let U; set II=U-InterpretersOf S; let I be Element of II;
+let x be I-satisfied set; let psi;
+set s=[x,psi];
+ s`1 \+\ x={} & s`2 \+\ psi={}; then
+C0: dom R c= bool Q & s`1=x & s`2=psi by FOMODEL0:29; assume
+DD1: s in f.X; then
+D1: s in Q & [X, s] in R by Lm1e; then X in dom R by RELAT_1:def 4;
+then reconsider Seqts=X as S-correct Subset of Q by B0;
+reconsider seqt=s as Element of Q by DD1, Lm1e;
+seqt Rule6 Seqts by D1, DefP6; then consider y1,y2 being set,
+phi1, phi2 being wff string of S such that
+D2: y1 in Seqts & y2 in Seqts & y1`1 = y2`1 & y2`1=seqt`1 &
+y1`2= <*TheNorSymbOf S*> ^ phi1 ^ phi1 &
+y2`2=  <*TheNorSymbOf S*> ^ phi2 ^ phi2 &
+seqt`2 = <*TheNorSymbOf S*> ^ phi1 ^ phi2 by Def6;
+[x,<*N*>^phi1^phi1] in Seqts & [x,<*N*>^phi2^phi2] in Seqts & psi =
+<*N*>^phi1^phi2 by D2, C0, MCART_1:23; then I-TruthEval
+(<*N*>^phi1^phi1)=1 & I-TruthEval (<*N*>^phi2^phi2)=1 by FOMODEL2:def 44;
+then I-TruthEval phi1=0 & I-TruthEval phi2=0 by FOMODEL2:19;
+hence I-TruthEval psi=1 by D2, C0, FOMODEL2:19;
+end; hence f.X is S-correct by FOMODEL2:def 44;
+end; hence thesis by RuleCorr;
+end;
+
+registration let S;
+cluster R6(S) -> Correct Rule of S;
+coherence by Lm66;
+end;
+
+Lm67: R7(S) is Correct
+proof
+now
+set f=R7(S), R=P7(S), Q=S-sequents, E=TheEqSymbOf S, N=TheNorSymbOf S;
+let X; assume
+B0: X is S-correct;
+now
+let U; set II=U-InterpretersOf S; let I be Element of II;
+let x be I-satisfied set; let psi;
+set s=[x,psi];
+ s`1 \+\ x={} & s`2 \+\ psi={}; then
+C0: dom R c= bool Q & s`1=x & s`2=psi by FOMODEL0:29; assume
+DD1: s in f.X; then
+D1: s in Q & [X, s] in R by Lm1e; then X in dom R by RELAT_1:def 4;
+then reconsider Seqts=X as S-correct Subset of Q by B0;
+reconsider seqt=s as Element of Q by DD1, Lm1e;
+seqt Rule7 Seqts by D1, DefP7; then consider y being set,
+phi1, phi2 being wff string of S such that
+D2: y in Seqts & y`1 = seqt`1 & y`2 =<* TheNorSymbOf S*> ^ phi1 ^ phi2 &
+seqt`2 = <* TheNorSymbOf S*> ^ phi2 ^ phi1 by Def7;
+ psi=<*N*>^phi2^phi1 & [x,<*N*>^phi1^phi2] in Seqts by C0, D2, MCART_1:23;
+then I-TruthEval (<*N*>^phi1^phi2)=1 by FOMODEL2:def 44; then
+I-TruthEval phi1=0 & I-TruthEval phi2=0 by FOMODEL2:19; hence
+I-TruthEval psi=1 by C0, D2, FOMODEL2:19;
+end; hence f.X is S-correct by FOMODEL2:def 44;
+end; hence thesis by RuleCorr;
+end;
+
+registration let S;
+cluster R7(S) -> Correct Rule of S;
+coherence by Lm67;
+end;
+
+Lm68: R8(S) is Correct
+proof
+now
+set f=R8(S), R=P8(S), Q=S-sequents, E=TheEqSymbOf S, N=TheNorSymbOf S;
+let X; assume
+B0: X is S-correct;
+now
+let U; set II=U-InterpretersOf S; let I be Element of II;
+let x be I-satisfied set; let psi;
+set s=[x,psi];
+CC0: s`1 \+\ x={} & s`2 \+\ psi={}; assume
+DD1: s in f.X; then
+D1: s in Q & [X, s] in R by Lm1e; then X in dom R by RELAT_1:def 4;
+then reconsider Seqts=X as S-correct Subset of Q by B0;
+reconsider seqt=s as Element of Q by DD1, Lm1e;
+seqt Rule8 Seqts by D1, DefP8; then consider y1,y2 being set,
+phi,phi1,phi2 being wff string of S such that
+D2: y1 in Seqts & y2 in Seqts & y1`1=y2`1 & y1`2=phi1 &
+y2`2 = <* TheNorSymbOf S *> ^ phi1 ^ phi2 &
+{phi}\/seqt`1=y1`1 & seqt`2= <* TheNorSymbOf S *> ^ phi ^ phi by Def8;
+reconsider Seqts as non empty Subset of Q by D2;
+reconsider seqt1=y1, seqt2=y2 as Element of Seqts by D2;
+reconsider H=seqt1`1 as S-premises-like set;
+D3: {phi}\/x=H & psi=<*N*>^phi^phi by D2, CC0, FOMODEL0:29;
+now
+assume I-TruthEval phi=1; then reconsider H1={phi} as I-satisfied set
+by FOMODEL2:27; H1\/x is I-satisfied; then reconsider H2=H as
+I-satisfied set by D2, CC0, FOMODEL0:29;
+[H2,phi1] in Seqts & [H2,<*N*>^phi1^phi2] in Seqts
+by D2, MCART_1:23; then I-TruthEval phi1=1 &
+I-TruthEval (<*N*>^phi1^phi2) = 1 by FOMODEL2:def 44;
+hence contradiction by FOMODEL2:19;
+end; then I-TruthEval phi=0 by FOMODEL0:39; hence
+I-TruthEval psi=1 by D3, FOMODEL2:19;
+end; hence f.X is S-correct by FOMODEL2:def 44;
+end; hence thesis by RuleCorr;
+end;
+
+registration let S;
+cluster R8(S) -> Correct Rule of S;
+coherence by Lm68;
+end;
+
+theorem Th17:
+(for R being Rule of S st R in D holds R is Correct) implies D is Correct
+proof
+set Q=S-sequents, O=OneStep D; {} null S is S-correct; then
+reconsider e={} null Q as S-correct Subset of Q;
+B1: dom O=bool Q by FUNCT_2:def 1;
+reconsider RO=rng O as Subset of bool Q by RELAT_1:def 19;
+assume
+B0: for R being Rule of S st R in D holds R is Correct;
+defpred P[Nat] means for X being S-correct Subset of Q holds
+($1,D)-derivables.X is S-correct;
+B10: P[0]
+proof
+set f=(0,D)-derivables;
+C0: f = id field O by FUNCT_7:70
+     .= id (bool Q\/RO) by B1
+     .= id bool Q;
+    let X be S-correct Subset of Q;
+(id(bool Q)).X \+\ X={}; hence thesis by C0, FOMODEL0:29;
+end;
+B11: for n st P[n] holds P[n+1]
+proof
+let n; assume
+C0: P[n]; let X be S-correct Subset of Q;
+set DM=(n+1,D)-derivables, Dm=(n,D)-derivables;
+C1: dom Dm=bool Q by FUNCT_2:def 1;
+reconsider oldSeqs=Dm.X as S-correct Subset of Q by C0;
+C2: DM=O*Dm by FUNCT_7:73;
+now
+let U; set II=U-InterpretersOf S; let I be Element of II;
+let H be I-satisfied set; let phi;
+assume
+D0: [H,phi] in DM.X;
+set Fam={R.:{oldSeqs} where R is Subset of [:bool Q, bool Q:]: R in D};
+DM.X=O.oldSeqs by C1, C2, FUNCT_1:23 .=
+union union Fam by Lm13; then consider x such that
+D1: [H,phi] in x & x in union Fam by D0, TARSKI:def 4; consider y such that
+D2: x in y & y in Fam by D1, TARSKI:def 4; consider R being Subset of
+[:bool Q, bool Q:] such that
+D3: y=R.:{oldSeqs} & R in D by D2; reconsider RR=R as Correct Rule of S
+by B0, D3; reconsider newSeqs=RR.oldSeqs as S-correct Subset of Q by RuleCorr;
+dom RR=bool Q by FUNCT_2:def 1; then
+y=Im(R,oldSeqs) & Im(RR,oldSeqs)= {RR.oldSeqs} by FUNCT_1:117, D3; then
+[H,phi] in newSeqs by D1, TARSKI:def 1, D2;
+hence I-TruthEval phi = 1 by FOMODEL2:def 44;
+end; hence thesis by FOMODEL2:def 44;
+end;
+B2: for n holds P[n] from NAT_1:sch 2(B10, B11);
+now
+let phi; let X; assume phi is (X,D)-provable; then
+consider H being set, m such that
+C0: H c= X & [H,phi] is (m,{},D)-derivable by DefProvable3;
+reconsider HH=H as Subset of X by C0;
+reconsider seqt=[H,phi] as Element of Q by DefSeqtLike, C0;
+reconsider okSeqs=(m,D)-derivables.e as S-correct Subset of Q by B2;
+hereby
+let U; set II=U-InterpretersOf S; let I be Element of II; assume
+X is I-satisfied; then reconsider XX=X as I-satisfied set;
+reconsider HHH=HH as I-satisfied Subset of XX;
+[HHH,phi] in okSeqs by C0, DefDerivable3;
+hence I-TruthEval phi=1 by FOMODEL2:def 44;
+end;
+end; hence D is Correct by DefCorrect;
+end;
+
+registration let S; let R be Correct Rule of S;
+cluster {R} -> Correct RuleSet of S;
+coherence
+proof
+set D={R};
+for P being Rule of S st P in D holds P is Correct by TARSKI:def 1;
+hence thesis by Th17;
+end;
+end;
+
+registration
+let S;
+cluster S-rules -> Correct RuleSet of S;
+coherence
+proof
+set A={R0(S), R1(S), R2(S), R3a(S), R3b(S), R3d(S), R3e(S), R4(S)},
+B={R5(S), R6(S), R7(S), R8(S)}, IT=S-rules;
+now
+let P be Rule of S; assume P in IT; then P in A or P in B by XBOOLE_0:def 3;
+hence P is Correct by ENUMSET1:def 6, def 2;
+end; hence thesis by Th17;
+end;
+end;
+
+registration let S;
+cluster R9(S) -> isotone Rule of S;
+coherence
+proof
+set R=R9(S), Q=S-sequents;
+now
+let Seqts, Seqts2; set X=Seqts, Y=Seqts2; assume
+B0: X c= Y;
+now
+let x; assume
+CC0: x in R.X; then
+C0: x in Q & [X,x] in P9(S) by Lm1e;
+reconsider seqt=x as Element of Q by CC0; seqt Rule9 X by C0, DefP9;
+then consider y being set, phi being wff string of S such that
+C1: y in Seqts & seqt`2=phi & y`1=seqt`1 & y`2=xnot (xnot phi) by Def9;
+seqt Rule9 Y by C1, Def9, B0; then [Y,seqt] in P9(S) by DefP9;
+hence x in R.Y by Th3;
+end;
+hence R.X c= R.Y by TARSKI:def 3;
+end;
+hence thesis by DefMonotonic1;
+end;
+end;
+
+registration let S,H,phi;
+cluster [H, phi] null 1 -> (1,{[H, xnot (xnot phi)]},{R9(S)})-derivable set;
+coherence
+proof
+set N=TheNorSymbOf S, nphi=xnot phi, phii=xnot nphi,
+y=[H,phii], SQ={y}, Sq=[H,phi], Q=S-sequents;
+reconsider seqt=Sq as Element of Q by DefSeqtLike;
+reconsider Seqts=SQ as Element of bool Q by DefSeqtLike2;
+seqt`2 \+\ phi={} & y`1\+\H={} & seqt`1\+\H={} & y`2 \+\ phii={}; then
+seqt`2=phi & y`1=H & seqt`1=H & y`2=phii by FOMODEL0:29; then
+y`1=seqt`1 & seqt`2=phi & y`2=phii & y in Seqts by TARSKI:def 1;
+then seqt Rule9 Seqts by Def9; then [Seqts,seqt] in P9(S) by DefP9;
+then Sq in (R9(S)).SQ by Th3; hence thesis by Lm22;
+end;
+end;
+
+registration
+let X, S;
+cluster X-implied (0-wff string of S);
+existence
+proof
+set E=TheEqSymbOf S, t=the termal string of S, phi=<*E*>^t^t; take phi;
+now
+let U; set II=U-InterpretersOf S; let I be Element of II; assume
+X is I-satisfied; set TE=I-TermEval; TE.t=TE.t;
+hence I-TruthEval phi=1 by Lm36;
+end; hence thesis by FOMODEL2:def 45;
+end;
+end;
+
+registration let X, S;
+cluster X-implied (wff string of S);
+existence proof take the X-implied (0-wff string of S); thus thesis; end;
+end;
+
+registration let S, X; let phi be X-implied (wff string of S);
+cluster xnot xnot phi -> X-implied (wff string of S);
+coherence
+proof
+now
+let U; set II=U-InterpretersOf S; let I be Element of II;
+set v=I-TruthEval phi, phi1=xnot phi, phi2=xnot phi1,
+v1=I-TruthEval phi1, v2=I-TruthEval phi2;
+'not' v \+\ v1={} & 'not' v1 \+\ v2={}; then
+CC0: v1='not' v & v2='not' v1 by FOMODEL0:29; assume X is I-satisfied;
+hence v2=1 by CC0, FOMODEL2:def 45;
+end; hence thesis by FOMODEL2:def 45;
+end;
+end;
+
+definition
+let X, S, phi;
+attr phi is X-provable means :DefProvable4:
+phi is (X,{R9(S)}\/S-rules)-provable;
+end;
+
+begin
+::# constructions for countable languages
+::# witness adjoining
+definition
+let X be functional set; let S,D;
+let num be Function of NAT, ExFormulasOf S;
+set SS=AllSymbolsOf S, EF=ExFormulasOf S, FF=AllFormulasOf S, Y=X\/FF,
+DD=bool Y;
+func (D,num) AddWitnessesTo X -> Function of NAT, bool (X\/AllFormulasOf S)
+means :DefWit3:
+it.0=X & for mm holds it.(mm+1)=(D, num.mm) AddAsWitnessTo (it.mm);
+existence
+proof
+reconsider Z=X null FF as Element of DD;
+deffunc F(Nat, Element of DD)= (Y typed/\ ((D,num.$1) AddAsWitnessTo $2));
+consider f being Function of NAT, DD such that
+B0: f.0=Z & for n holds f.(n+1)=F(n,f.n qua Element of DD)
+from NAT_1:sch 12; take f;
+now
+let n; reconsider nn=n as Element of NAT by ORDINAL1:def 13;
+C0: ((D,num.nn) AddAsWitnessTo f.nn) c= FF\/(f.nn) & FF\/(f.nn) c= FF\/Y
+by XBOOLE_1:9; FF\/Y=FF\/FF\/X by XBOOLE_1:4 .= Y; then reconsider A=
+(D,num.nn) AddAsWitnessTo f.nn as Subset of Y by XBOOLE_1:1, C0; f.(n+1)
+= A null Y by B0; hence f.(n+1)=(D,num.n) AddAsWitnessTo f.n;
+end; hence thesis by B0;
+end;
+uniqueness
+proof
+deffunc F(Nat, Element of DD) = (D,num.$1) AddAsWitnessTo $2;
+let IT1, IT2 be Function of NAT, DD; assume that
+B2: IT1.0=X and
+B13: for mm holds IT1.(mm+1)=F(mm,IT1.mm qua Element of DD) and
+B5: IT2.0=X and
+B16: for mm holds IT2.(mm+1)=F(mm,IT2.mm qua Element of DD);
+B3: for m holds IT1.(m+1)=F(m,IT1.m qua Element of DD)
+proof
+let m; reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+IT1.(mm+1)=F(mm,IT1.mm qua Element of DD) by B13; hence thesis;
+end;
+B6: for m holds IT2.(m+1)=F(m,IT2.m qua Element of DD)
+proof
+let m; reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+IT2.(mm+1)=F(mm,IT2.mm qua Element of DD) by B16; hence thesis;
+end;
+B1: dom IT1=NAT by FUNCT_2:def 1;
+B4: dom IT2=NAT by FUNCT_2:def 1;
+thus IT1=IT2 from NAT_1:sch 15(B1,B2,B3,B4,B5,B6);
+end;
+end;
+
+notation
+let X be functional set; let S,D;
+let num be Function of NAT, ExFormulasOf S;
+synonym (D,num) addw X for (D,num) AddWitnessesTo X;
+end;
+
+Lm30: D is isotone & R1(S) in D & R8(S) in D & R2(S) in D & R5(S) in D &
+X\/{(l1,l2)-SymbolSubstIn phi} is D-inconsistent &
+l2 is (X\/{phi})-absent implies X\/{<*l1*>^phi} is D-inconsistent
+proof
+set E=TheEqSymbOf S, L=LettersOf S, SS=AllSymbolsOf S, Q=S-sequents,
+psi=(l1,l2)-SymbolSubstIn phi, E1=R1(S), E2=R2(S), E5=R5(S);
+set ll = the Element of rng phi /\ L; ll in L by TARSKI:def 3; then
+reconsider l=ll as literal Element of S;
+reconsider t=<*l*> as termal string of S; set N=TheNorSymbOf S;
+reconsider yes=<*E*>^t^t as 0wff string of S;
+B8: rng yes=rng(<*E*>^t)\/ rng t by FINSEQ_1:44 .=
+rng <*E*> \/ rng t \/ rng t by FINSEQ_1:44 .= rng <*E*> \/ (rng t \/ rng t)
+by XBOOLE_1:4 .= {E} \/ rng t by FINSEQ_1:55 .= {E} \/ {l} by FINSEQ_1:55;
+reconsider lll=ll as Element of rng phi by XBOOLE_0:def 4;
+B9: {lll} \/ {E,N} c= rng phi \/ {E,N} by XBOOLE_1:9;
+reconsider no=xnot yes as wff string of S;
+BB10: rng no = rng (<*N*>^yes) \/ rng yes by FINSEQ_1:44 .=
+rng <*N*> \/ rng yes
+\/ rng yes by FINSEQ_1:44 .= rng <*N*> \/ (rng yes \/ rng yes)
+by XBOOLE_1:4 .= {N} \/ rng yes by FINSEQ_1:55 .=
+{E}\/{N}\/{l} by B8, XBOOLE_1:4 .= {E,N} \/ {l} by ENUMSET1:41; assume
+B6: D is isotone & R1(S) in D & R8(S) in D & R2(S) in D & R5(S) in D &
+X\/{psi} is D-inconsistent; then no is (X\/{psi},D)-provable by Th14;
+then consider H3 being set, m such that
+B0: H3 c= X\/{psi} & [H3,no] is (m,{},D)-derivable by DefProvable3;
+reconsider seqt1=[H3,no] as Element of Q by DefSeqtLike, B0;
+seqt1`1 \+\ H3={}; then reconsider
+H33=H3 as S-premises-like Subset of (X\/{psi}) by B0, FOMODEL0:29;
+reconsider H1=H33/\X as S-premises-like Subset of X;
+reconsider H2=H33/\{psi} as S-premises-like Subset of {psi};
+{phi} null X c= X\/{phi} & X null {phi} c= X\/{phi}; then
+reconsider XX=X, Phi={phi} as Subset of X\/{phi};
+reconsider H11=H1 as S-premises-like Subset of XX;
+reconsider NO={no}, Phii={phi} as Subset of SS*\{{}};
+assume
+BB11: l2 is (X\/{phi})-absent; then
+B11: l2 is XX-absent & l2 is Phi-absent; then not l2 in
+SymbolsOf ((SS*\{{}})/\Phii) by FOMODEL2:def 38; then
+not l2 in rng phi & not l2 in {E,N} by TARSKI:def 2, FOMODEL0:45; then
+not l2 in rng no by BB10, B9, XBOOLE_0:def 3; then
+not l2 in SymbolsOf ((SS*\{{}})/\NO) by FOMODEL0:45; then
+reconsider ln=l2 as {no}-absent (Element of S) by FOMODEL2:def 38;
+reconsider lN=ln as ({phi}\/{no})-absent literal Element of S by B11;
+lN is H11-absent by BB11; then
+reconsider lx=lN as (H11\/({phi}\/{no}))-absent literal Element of S;
+H11\/({phi}\/{no})= H1\/{phi}\/{no} by XBOOLE_1:4; then
+lx is (H1\/{phi}\/{no})-absent; then
+reconsider l22=l2 as (H1\/{phi}\/{no})-absent literal Element of S;
+reconsider F2={E2}, F1={E1}, F5={E5} as Subset of D by ZFMISC_1:37, B6;
+B5: D\/(F1\/F5)=D & F2 c= D & {} c= X\/{<*l1*>^phi} &
+H1\/{<*l1*>^phi} c= X\/{<*l1*>^phi} by XBOOLE_1:2,9;
+B3: H33 null (X\/{psi}) =  H1 \/ H2 by XBOOLE_1:23;
+B2: [(H1\/{<*l1*>^phi}) null l22, no] is
+(1,{[H1\/{psi}, no]},{R5(S)})-derivable;
+[H1\/H2\/{psi}, no] is (1,{[H1\/H2,no]},{R1(S)})-derivable; then
+[H1\/({psi} null H2),no] is (1,{[H33, no]},{R1(S)})-derivable
+by XBOOLE_1:4, B3; then
+[H1\/{<*l1*>^phi}, no] is (1+1,{[H33,no]},({R1(S)}\/{R5(S)}))-derivable
+by B2, Lm28; then
+[H1\/{<*l1*>^phi}, no] is (m+2,{},D)-derivable by B5, B6, Lm28, B0; then
+B7: no is (X\/{<*l1*>^phi},D)-provable by B5, DefProvable3;
+set seqt2=[{},yes]; {[{},<*E*>^t^t]} is {R2(S)}-derivable &
+seqt2`1 \+\ {}={} & seqt2`2 \+\ yes={}; then
+yes is ({},{R2(S)})-provable by DefProvable; then yes is
+(X\/{<*l1*>^phi},D)-provable by B5, Lm35; hence thesis by B7, DefInc;
+end;
+
+theorem Th18: for X being functional set,
+num being Function of NAT, ExFormulasOf S st
+D is isotone & R1(S) in D & R8(S) in D & R2(S) in D & R5(S) in D &
+LettersOf S\SymbolsOf (X/\((AllSymbolsOf S)*\{{}})) is infinite &
+X is D-consistent
+holds
+((D,num) addw X).k c= ((D,num) addw X).(k+m) &
+LettersOf S\SymbolsOf (((D,num) addw X).m/\((AllSymbolsOf S)*\{{}}))
+is infinite & ((D,num) addw X).m is D-consistent
+proof
+let X be functional set; set L=LettersOf S,F=S-firstChar,FF=
+AllFormulasOf S,SS=AllSymbolsOf S,strings=SS*\{{}},EF=ExFormulasOf S;
+let num be Function of NAT, EF; set f=(D,num) addw X; assume
+B1: D is isotone & R1(S) in D & R8(S) in D & R2(S) in D & R5(S) in D; assume
+B0: L\SymbolsOf (X/\strings) is infinite & X is D-consistent;
+defpred P[Nat] means f.k c= f.(k+$1) &
+L\SymbolsOf (f.$1 /\ strings) is infinite & f.$1 is D-consistent;
+B10: P[0] by B0, DefWit3;
+B11: for m st P[m] holds P[m+1]
+proof
+let m; reconsider mk=k+m, MM=m+1, mm=m as Element of NAT by ORDINAL1:def 13;
+reconsider phii=num.mm as Element of EF;
+reconsider phi=num.mm as exal wff string of S by TARSKI:def 3;
+reconsider phi1=head phi as wff string of S;
+reconsider l1=F.phi as literal Element of S;
+C2: phi=<*l1*>^phi1^(tail phi) by FOMODEL2:23 .= <*l1*>^phi1;
+reconsider fmk=(D, num.mk) AddAsWitnessTo (f.mk) as Subset of (f.mk\/FF);
+reconsider fmm=(D, num.mm) AddAsWitnessTo (f.mm) as Subset of (f.mm\/FF);
+ f.mk \ fmk = {}; then
+ f.mk c= fmk by XBOOLE_1:37; then
+C0: f.mk c= f.(mk+1) & f.MM=fmm by DefWit3; assume
+C1: P[m];
+hence f.k c= f.(k+(m+1)) by C0, XBOOLE_1:1; (f.mm)\fmm={}; then
+reconsider fm=f.mm as functional Subset of fmm by XBOOLE_1:37;
+reconsider sm=fm/\strings as Subset of (fmm/\strings) by XBOOLE_1:26;
+reconsider t=fmm\(f.mm) as trivial set;
+reconsider i=L\SymbolsOf sm as infinite set by C1;
+reconsider T=t/\strings as functional finite FinSequence-membered set;
+fmm=fm \/ t by XBOOLE_1:45; then
+SymbolsOf (fmm/\strings)=
+SymbolsOf (sm\/T) by XBOOLE_1:23 .=
+SymbolsOf sm \/ SymbolsOf T by FOMODEL0:47; then
+L\SymbolsOf (fmm/\strings)=i\SymbolsOf T by XBOOLE_1:41;
+hence L\SymbolsOf (f.(m+1)/\strings) is infinite by DefWit3;
+reconsider LF=L\SymbolsOf(strings/\(fm\/{head phii})) as Subset of L;
+per cases;
+suppose
+D0: fm \/ {phii} is D-consistent & LF<>{}; then
+reconsider LF as non empty Subset of L; set ll2=the Element of LF;
+reconsider l2=ll2 as literal Element of S
+by TARSKI:def 3; not ll2 in SymbolsOf(strings/\(fm\/{head phii}))
+by XBOOLE_0:def 5; then fm\/{<*l1*>^phi1} is D-consistent
+& l2 is (fm\/{phi1})-absent by D0, C2, FOMODEL2:def 38; then
+D1: fm\/{(l1,l2)-SymbolSubstIn phi1} is D-consistent by Lm30, B1;
+thus thesis by D0, DefWit2, D1, C0;
+end;
+suppose not (fm \/ {phii} is D-consistent & LF<>{});
+hence thesis by C1, C0, DefWit2;
+end;
+end;
+for n holds P[n] from NAT_1:sch 2(B10, B11); hence thesis;
+end;
+
+definition
+let X be functional set; let S,D;
+let num be Function of NAT, ExFormulasOf S;
+func X WithWitnessesFrom (D,num) -> Subset of (X\/AllFormulasOf S)
+equals union rng (D,num) AddWitnessesTo X;
+coherence
+proof
+set FF=AllFormulasOf S, Y=X\/FF, f=(D,num) AddWitnessesTo X;
+reconsider F=rng f as Subset of bool Y by RELAT_1:def 19;
+union F\Y={}; hence thesis;
+end;
+end;
+
+notation
+let X be functional set; let S,D;
+let num be Function of NAT, ExFormulasOf S;
+synonym X addw (D,num) for X WithWitnessesFrom (D,num);
+end;
+
+Lm6: for X being functional set, num being Function of NAT, ExFormulasOf S
+st D is isotone & R1(S) in D & R2(S) in D & R5(S) in D & R8(S) in D &
+LettersOf S\SymbolsOf (X/\((AllSymbolsOf S)*\{{}})) is infinite &
+X is D-consistent holds X addw (D,num) is D-consistent
+proof
+let X be functional set; set EF=ExFormulasOf S,L=LettersOf S,G1=R1(S);
+let num be Function of NAT, EF; set XX=X addw (D,num), f=(D,num) addw X,
+G2=R2(S), G5=R5(S), G8=R8(S), SS=AllSymbolsOf S, strings=SS*\{{}}; assume
+B0: D is isotone & G1 in D & G2 in D & G5 in D & G8 in D &
+L\SymbolsOf (X/\strings) is infinite & X is D-consistent;
+B1: for nn,mm st mm in dom f & nn in dom f & nn < mm holds f.nn c= f.mm
+proof
+let nn,mm; set m=mm, n=nn; assume m in dom f & n in dom f & n<m; then
+n-n<=m-n by XREAL_1:11; then 0 <= m-n; then reconsider k=m-n as Nat;
+f.n c= f.(n+k) by Th18, B0; hence thesis;
+end;
+now
+let Y be finite Subset of XX; consider kk such that
+C0: Y c= f.kk by B1, HENMODEL:3; f.kk is D-consistent by B0, Th18;
+hence Y is D-consistent by C0, Th16;
+end; hence thesis by Lm1;
+end;
+
+registration
+let X be functional set; let S,D;
+let num be Function of NAT, ExFormulasOf S;
+cluster X\ (X addw (D,num)) -> empty set;
+coherence
+proof
+set XX=X addw (D,num), f= (D,num) addw X, Y=rng f; reconsider ff=f as
+Function of NAT, Y by FUNCT_2:8; ff.0=X by DefWit3; then
+X c= XX by ZFMISC_1:92; hence thesis;
+end;
+end;
+
+theorem Th19: for X being functional set,
+num being Function of NAT, ExFormulasOf S st D is isotone &
+R1(S) in D & R8(S) in D & R2(S) in D & R5(S) in D &
+LettersOf S\SymbolsOf (X/\((AllSymbolsOf S)*\{{}})) is infinite &
+X addw (D,num) c= Z & Z is D-consistent & rng num = ExFormulasOf S
+holds Z is S-witnessed
+proof
+let X be functional set;set L=LettersOf S,F=S-firstChar,EF=ExFormulasOf S;
+let num be Function of NAT, EF; set f=(D,num) addw X, Y=X addw (D,num),
+SS=AllSymbolsOf S; X\Y ={}; then
+B9: X c= Y by XBOOLE_1:37; assume
+B8: D is isotone & R1(S) in D & R8(S) in D & R2(S) in D & R5(S) in D &
+LettersOf S\SymbolsOf (X/\((AllSymbolsOf S)*\{{}})) is infinite; assume
+B0: Y c= Z & Z is D-consistent; then X c= Z & Z is D-consistent
+by B9, XBOOLE_1:1; then
+B20: X is D-consistent by Th16; assume
+B1: rng num = EF; set strings=SS*\{{}};
+for l1, phi1 st <*l1*>^phi1 in Z ex l2 st
+((l1,l2)-SymbolSubstIn phi1 in Z & not l2 in rng phi1)
+proof
+let l1, phi1; set phi=<*l1*>^phi1;
+phi=<*l1*>^phi1^{} & not phi is 0wff; then
+B3: l1=F.phi & phi1=head phi by FOMODEL2:23;
+phi in EF; then
+reconsider phii=phi as Element of EF; consider x such that
+C0: x in dom num & num.x=phii by B1, FUNCT_1:def 5;
+reconsider mm=x as Element of NAT by C0;
+::#this works because of redefine func dom in relset_1
+reconsider MM=mm+1 as Element of NAT by ORDINAL1:def 13;
+reconsider Xm=f.mm as functional set;
+set no=SymbolsOf (strings/\(f.mm\/{phi1})); reconsider T=strings/\{phi1}
+as FinSequence-membered finite Subset of {phi1};
+reconsider t=SymbolsOf T as finite set;
+reconsider i=L\SymbolsOf (f.mm/\strings) as infinite Subset of L
+by Th18, B8, B20;
+B6: no= SymbolsOf ((strings/\f.mm)\/(strings/\{phi1})) by XBOOLE_1:23 .=
+SymbolsOf (strings/\f.mm) \/ SymbolsOf T by FOMODEL0:47; then
+L\no=i\t by XBOOLE_1:41;
+then reconsider yes=L\no as non empty Subset of L;
+set ll2=the Element of yes;
+reconsider l2=ll2 as literal Element of S by TARSKI:def 3;
+set psi1=(l1,l2)-SymbolSubstIn phi1;
+dom f=NAT by FUNCT_2:def 1; then
+B4: f.mm in rng f & f.MM in rng f by FUNCT_1:def 5; then
+f.mm c= Y by ZFMISC_1:92; then
+B5: f.mm c= Z by B0, XBOOLE_1:1;
+assume phi in Z; then {phi} c= Z by ZFMISC_1:37; then
+f.mm \/ {phi} c= Z by B5, XBOOLE_1:8;
+then f.mm \/ {phi} is D-consistent by B0, Th16; then
+f.mm \/ {(l1,l2)-SymbolSubstIn phi1}  =
+(D,phii) AddAsWitnessTo f.mm by DefWit2, B3 .=
+f.(mm+1) by DefWit3, C0; then {psi1} null (f.mm) c= f.MM; then
+psi1 in f.MM by ZFMISC_1:37; then
+B7: psi1 in Y by TARSKI:def 4, B4; take l2;
+thus (l1,l2)-SymbolSubstIn phi1 in Z by B0, B7;
+not l2 in no by XBOOLE_0:def 5; then
+not l2 in SymbolsOf {phi1} by B6, XBOOLE_0:def 3;
+hence thesis by FOMODEL0:45;
+end; hence
+Z is S-witnessed by DefWit1;
+end;
+
+begin
+::# constructions for countable languages
+::# Consistently maximizing a set of formulas of a countable language
+
+definition
+let X,S,D; let phi be Element of AllFormulasOf S;
+func (D,phi) AddFormulaTo X equals :DefAdd1: X\/{phi}
+if not xnot phi is (X,D)-provable otherwise X \/ {xnot phi};
+consistency;
+coherence;
+end;
+
+definition
+let X,S,D; let phi be Element of AllFormulasOf S;
+redefine func (D,phi) AddFormulaTo X -> Subset of (X\/AllFormulasOf S);
+coherence
+proof
+set F=S-firstChar, IT=(D,phi) AddFormulaTo X, FF=AllFormulasOf S;
+reconsider Y=X\/FF as non empty set;
+reconsider XX=X null FF as Subset of Y; reconsider
+FFF=FF null X as non empty Subset of Y;
+xnot phi is Element of FFF & phi is Element of FFF by FOMODEL2:16; then
+reconsider phii=phi, psii=xnot phi as Element of Y;
+reconsider Phi={phii}, Psi={psii} as Subset of Y;
+defpred P[] means xnot phi is (X,D)-provable;
+((not P[]) implies IT=XX\/Phi) & (P[] implies IT=XX\/Psi) by DefAdd1;
+hence thesis;
+end;
+end;
+
+registration
+let X,S,D; let phi be Element of AllFormulasOf S;
+cluster X \ ((D,phi) AddFormulaTo X) -> empty;
+coherence
+proof
+set Y=(D,phi) AddFormulaTo X, psi=xnot phi; defpred P[] means
+ xnot phi is (X,D)-provable;
+(not P[] implies Y=X\/{phi}) & (P[] implies Y=X\/{psi}) by DefAdd1; then
+X null {phi} c= Y or X null {psi} c= Y; hence thesis;
+end;
+end;
+
+definition
+let X,S,D; let num be Function of NAT, AllFormulasOf S;
+set SS=AllSymbolsOf S, FF=AllFormulasOf S, Y=X\/FF, DD=bool Y;
+func (D,num) AddFormulasTo X -> Function of NAT, bool (X\/AllFormulasOf S)
+means :DefAdd2:
+it.0=X & for m holds it.(m+1)=(D,num.m) AddFormulaTo (it.m);
+existence
+proof
+reconsider Z=X null FF as Element of DD;
+deffunc F(Nat, Element of DD)= Y typed/\((D,num.$1) AddFormulaTo $2);
+consider f being Function of NAT, DD such that
+B0: f.0=Z & for n holds f.(n+1)=F(n,f.n qua Element of DD)
+from NAT_1:sch 12; take f;
+now
+let n; reconsider nn=n as Element of NAT by ORDINAL1:def 13;
+C0: (D,num.nn) AddFormulaTo f.nn c= FF\/(f.nn) & FF\/(f.nn) c= FF\/Y
+by XBOOLE_1:9; FF\/Y=FF\/FF\/X by XBOOLE_1:4 .= Y; then reconsider A=
+(D,num.nn) AddFormulaTo f.nn as Subset of Y by XBOOLE_1:1, C0; f.(n+1)
+= A null Y by B0; hence f.(n+1)=(D,num.n) AddFormulaTo f.n;
+end; hence thesis by B0;
+end;
+uniqueness
+proof
+deffunc F(Nat, Element of DD) = (D,num.$1) AddFormulaTo $2;
+let IT1, IT2 be Function of NAT, DD; assume that
+B2: IT1.0=X and
+B13: for m holds IT1.(m+1)=F(m,IT1.m qua Element of DD) and
+B5: IT2.0=X and
+B16: for m holds IT2.(m+1)=F(m,IT2.m qua Element of DD);
+B3: for m holds IT1.(m+1)=F(m,IT1.m qua Element of DD)
+by B13;
+B6: for m holds IT2.(m+1)=F(m,IT2.m qua Element of DD)
+by B16;
+B1: dom IT1=NAT by FUNCT_2:def 1;
+B4: dom IT2=NAT by FUNCT_2:def 1;
+thus IT1=IT2 from NAT_1:sch 15(B1,B2,B3,B4,B5,B6);
+end;
+end;
+
+Lm4: for num being Function of NAT, AllFormulasOf S st
+D is isotone & R1(S) in D & R8(S) in D & X is D-consistent holds
+(((D,num) AddFormulasTo X).k c= ((D,num) AddFormulasTo X).(k+m) &
+((D, num) AddFormulasTo X).m is D-consistent)
+proof
+set FF=AllFormulasOf S; let num be Function of NAT, FF;
+set f=(D,num) AddFormulasTo X; assume
+B10: D is isotone & R1(S) in D & R8(S) in D; assume
+B11: X is D-consistent;
+defpred P[Nat] means f.k c= f.(k+$1) & f.$1 is D-consistent;
+B0: P[0] by B11, DefAdd2;
+B1: for n st P[n] holds P[n+1]
+proof
+let n; set fkn1=(D,num.(k+n)) AddFormulaTo (f.(k+n)),fkn=f.(k+n); assume
+C1: P[n];
+CC0: fkn\fkn1 = {};
+f.(k+(n+1)) = f.(k+n+1) .= fkn1 by DefAdd2; then fkn c= f.(k+(n+1))
+by CC0, XBOOLE_1:37;
+hence f.k c= f.(k+(n+1)) by XBOOLE_1:1, C1;
+reconsider phii=num.n as Element of FF; reconsider
+phi=phii as wff string of S; reconsider psi=xnot phi
+as wff string of S; reconsider psii=psi as Element of FF by FOMODEL2:16;
+set fn=f.n, fN=(D,num.n) AddFormulaTo fn;
+defpred P[] means xnot phii is (fn,D)-provable;
+C2: f.(n+1)=fN by DefAdd2;
+per cases;
+suppose
+D0: not P[]; then fn\/{phii} is D-consistent by B10, Lm2b;
+hence thesis by C2, D0, DefAdd1;
+end;
+suppose
+D0: P[]; then fn\/{xnot phii} is D-consistent by Lm3, B10, C1;
+hence thesis by C2, D0, DefAdd1;
+end;
+end;
+for n holds P[n] from NAT_1:sch 2(B0, B1); hence thesis;
+end;
+
+definition
+let X,S,D; let num be Function of NAT, AllFormulasOf S;
+func (D,num) CompletionOf X -> Subset of (X\/AllFormulasOf S) equals
+union rng ((D,num) AddFormulasTo X);
+coherence
+proof
+set FF=AllFormulasOf S, Y=X\/FF, f=(D,num) AddFormulasTo X;
+reconsider F=rng f as Subset of bool Y by RELAT_1:def 19;
+union F \ Y = {}; hence thesis;
+end;
+end;
+
+registration
+let X,S,D; let num be Function of NAT, AllFormulasOf S;
+cluster X\((D,num) CompletionOf X) -> empty set;
+coherence
+proof
+set f=(D,num) AddFormulasTo X, XX=(D,num) CompletionOf X; reconsider
+ff=f as Function of NAT, rng f by FUNCT_2:8; ff.0 in rng f; then
+f.0 c= XX by ZFMISC_1:92; then X c= XX by DefAdd2;
+hence thesis;
+end;
+end;
+
+Lm5: for num being Function of NAT, AllFormulasOf S st
+rng num=AllFormulasOf S holds (D,num) CompletionOf X is S-covering
+proof
+set FF=AllFormulasOf S; let num be Function of NAT, FF; set
+XX=(D,num) CompletionOf X, f=(D,num) AddFormulasTo X; assume
+BB0: rng num=FF; reconsider
+ff=f as Function of NAT, rng f by FUNCT_2:8;
+hereby
+let phi; reconsider phii=phi as Element of FF by FOMODEL2:16;
+consider x such that
+C0: x in dom num & num.x=phii by FUNCT_1:def 5, BB0;
+reconsider mm=x as Element of NAT by C0; reconsider MM=mm+1 as Element of
+NAT by ORDINAL1:def 13;
+f.(mm+1)=(D,num.mm) AddFormulaTo f.mm by DefAdd2; then
+f.(mm+1)=f.mm \/ {phi} or f.(mm+1)=f.mm \/ {xnot phi} by C0, DefAdd1; then
+C1: {phi} null f.mm c= f.MM or {xnot phi} null f.mm c= f.MM;
+ff.MM is Element of rng f; then f.(mm+1) c= XX by ZFMISC_1:92; then
+{phi} c= XX or {xnot phi} c= XX by C1, XBOOLE_1:1; hence
+phi in XX or xnot phi in XX by ZFMISC_1:37;
+end;
+end;
+
+Lm7: for num being Function of NAT, AllFormulasOf S st
+D is isotone & R1(S) in D & R8(S) in D & X is D-consistent holds
+(D,num) CompletionOf X is D-consistent ::Lindenbaum
+proof
+set EF=ExFormulasOf S,L=LettersOf S, FF=AllFormulasOf S;
+let num be Function of NAT, FF; set XX=(D,num) CompletionOf X, G1=R1(S),
+G8=R8(S), SS=AllSymbolsOf S, strings=SS*\{{}}, f=(D,num) AddFormulasTo X;
+assume B0: D is isotone & G1 in D & G8 in D & X is D-consistent;
+B1: for nn,mm st mm in dom f & nn in dom f & nn < mm holds f.nn c= f.mm
+proof
+let nn,mm; set m=mm, n=nn; assume m in dom f & n in dom f & n<m; then
+n-n<=m-n by XREAL_1:11; then 0 <= m-n; then reconsider k=m-n as Nat;
+f.n c= f.(n+k) by B0, Lm4; hence thesis;
+end;
+now
+let Y be finite Subset of XX; consider kk such that
+C0: Y c= f.kk by B1, HENMODEL:3; f.kk is D-consistent by B0, Lm4;
+hence Y is D-consistent by C0, Th16;
+end; hence XX is D-consistent by Lm1;
+end;
+
+theorem for R being Relation of bool (S-sequents), S-sequents holds ::Th20
+(y in (FuncRule R).X iff (y in S-sequents & [X,y] in R)) by Lm1e;
+
+reserve D2 for 2-ranked RuleSet of S;
+
+Lm37: for X being functional set st AllFormulasOf S is countable
+& LettersOf S \SymbolsOf (X/\((AllSymbolsOf S)*\{{}})) is infinite
+& X is D2-consistent & D2 is isotone
+ex U st ex I being Element of U-InterpretersOf S st X is I-satisfied
+proof
+let X be functional set; set EF=ExFormulasOf S, FF=AllFormulasOf S;
+set G0=R0(S), G2=R2(S), G3a=R3a(S), G3b=R3b(S), G3d=R3d(S), G3e=R3e(S),
+G1=R1(S), G4=R4(S), G5=R5(S), G6=R6(S), G7=R7(S), G8=R8(S), L=LettersOf S,
+SS=AllSymbolsOf S, strings=SS*\{{}}, no=SymbolsOf (X/\strings), D=D2;
+D2 is 1-ranked; then
+reconsider D1=D2 as 1-ranked (0-ranked RuleSet of S);
+assume FF is countable; then reconsider FFC=FF as countable set;
+consider numaa being Function of NAT, strings such that
+B10: FFC=rng numaa by SUPINF_2:def 14; reconsider numa=numaa as Function of
+NAT, FF by B10, FUNCT_2:8;
+EF \ FFC = {}; then reconsider EFC=EF as Subset of FFC by XBOOLE_1:37;
+consider numee being Function of NAT, FFC such that
+B6: EFC=rng numee by SUPINF_2:def 14; reconsider nume=numee as Function of
+NAT, EF by B6, FUNCT_2:8; assume
+B0: L\no is infinite & X is D2-consistent;
+B1:G0 in D1 & G1 in D & G2 in D1 & G4 in D & G5 in D & G6 in D &
+G7 in D & G8 in D by DefRank;
+set X1=X addw (D1,nume), X2=(D1,numa) CompletionOf X1;
+B3: X2 is S-covering by Lm5, B10; assume
+B2: D is isotone; then
+X1 is D-consistent by Lm6, B0, B1; then
+B4: X2 is D-consistent by Lm7, B2, B1; then
+B5: X2 is S-mincover & X2 is D-expanded by B1, Lm8, B3;
+reconsider X22=X2 as D1-expanded set by B1, Lm8, B3, B4;
+take U=Class (X22,D1)-termEq; reconsider I=
+D1 Henkin X22 as Element of U-InterpretersOf S;take I;X\X1={} & X1\X2={};then
+B7: X c= X1 & X1 c= X22 by XBOOLE_1:37; then
+BB9: X22 is S-witnessed by Th19, B0, B1, B2, B4, B6;
+hereby
+let phi; assume phi in X; then phi in X22 by TARSKI:def 3, B7;
+hence I-TruthEval phi=1 by BB9, Th15, B5, B1;
+end;
+end;
+
+Lm38: for X being functional set st X is finite &
+AllFormulasOf S is countable & X is D2-consistent & D2 is isotone
+ex U st (ex I being Element of U-InterpretersOf S st X is I-satisfied)
+proof
+let X be functional set; set SS=AllSymbolsOf S,L=LettersOf S,
+strings=SS*\{{}}, FF=AllFormulasOf S, no=SymbolsOf (X/\strings);
+assume X is finite; then reconsider XS=X/\strings as
+finite FinSequence-membered set; SymbolsOf XS is finite; then
+B0: L\no is infinite; assume FF is countable & X is D2-consistent & D2 is
+isotone; hence thesis by B0, Lm37;
+end;
+
+Lm39: for I1 being Element of U-InterpretersOf S1,
+I2 being Element of U-InterpretersOf S2 st S2 is S1-extending &
+X c= AllFormulasOf S1 & I1|(OwnSymbolsOf S1)=I2|(OwnSymbolsOf S1)
+holds (X is I1-satisfied iff X is I2-satisfied)
+proof
+set II1=U-InterpretersOf S1, II2=U-InterpretersOf S2, a1=the adicity of S1,
+a2=the adicity of S2, O1=OwnSymbolsOf S1, E1=TheEqSymbOf S1,
+E2=TheEqSymbOf S2, N1=TheNorSymbOf S1, N2=TheNorSymbOf S2,
+FF1=AllFormulasOf S1, AS1=AtomicFormulaSymbolsOf S1;
+dom a1=AS1 & O1 c= AS1 by FUNCT_2:def 1, FOMODEL1:1; then reconsider
+O11=O1 as Subset of dom a1;
+let I1 be Element of II1, I2 be Element of II2; assume
+B5: S2 is S1-extending; then a1 c= a2 by FOMODEL1:def 41; then
+a1|O1 = a2|(dom a1)|O1 by GRFUNC_1:64
+.= a2|(O11 null (dom a1)) by RELAT_1:100; then
+B1: a1|O1=a2|O1 & N1=N2 & E1=E2 by B5, FOMODEL1:def 41; assume
+B2: X c= FF1 & I1|O1=I2|O1;
+hereby
+assume
+B3: X is I1-satisfied;
+now
+let phi2 be wff string of S2; assume C0: phi2 in X; then phi2 in FF1
+by B2; then reconsider phi1=phi2 as wff string of S1;
+consider phi22 being wff string of S2 such that
+C1: phi1=phi22 & I1-TruthEval phi1= I2-TruthEval phi22
+by FOMODEL3:12, B1, B2;
+thus I2-TruthEval phi2=1 by C1, C0, FOMODEL2:def 42, B3;
+end; hence X is I2-satisfied by FOMODEL2:def 42;
+end;
+assume
+B4: X is I2-satisfied;
+now
+let phi1 be wff string of S1; assume
+C0: phi1 in X;
+consider phi2 being wff string of S2 such that
+C1: phi1=phi2 & I1-TruthEval phi1= I2-TruthEval phi2 by FOMODEL3:12,
+B1, B2; thus I1-TruthEval phi1 = 1 by C1, C0, FOMODEL2:def 42, B4;
+end; hence thesis by FOMODEL2:def 42;
+end;
+
+registration
+let S; let r1, r2 be isotone Rule of S;
+cluster {r1,r2} -> isotone RuleSet of S;
+coherence proof {r1,r2}={r1}\/{r2} by ENUMSET1:41; hence thesis; end;
+end;
+
+registration
+let S; let r1, r2, r3, r4 be isotone Rule of S;
+cluster {r1,r2,r3,r4} -> isotone RuleSet of S;
+coherence
+proof {r1,r2,r3,r4}={r1,r2}\/{r3,r4} by ENUMSET1:45; hence thesis; end;
+end;
+
+registration let S;
+cluster S-rules -> isotone RuleSet of S;
+coherence
+proof
+set A={R0(S), R1(S), R2(S), R3a(S), R3b(S), R3d(S), R3e(S), R4(S)},
+B={R5(S),R6(S),R7(S),R8(S)}, IT=S-rules; A={R0(S), R1(S), R2(S), R3a(S)}
+\/{R3b(S), R3d(S), R3e(S), R4(S)} by ENUMSET1:65; then reconsider AA=A as
+isotone RuleSet of S; AA\/B is isotone; hence thesis;
+end;
+end;
+
+registration let S;
+cluster Correct (isotone RuleSet of S);
+existence proof take S-rules; thus thesis; end;
+end;
+
+registration let S;
+cluster 2-ranked (Correct isotone RuleSet of S);
+existence proof take S-rules; thus thesis; end;
+end;
+
+registration
+let S be countable Language;
+cluster AllFormulasOf S -> countable;
+coherence;
+end;
+
+theorem Th21: for S being countable Language, D being RuleSet of S st
+D is 2-ranked & D is isotone & D is Correct & Z is D-consistent &
+Z c= AllFormulasOf S ex U being non empty set,
+I being Element of U-InterpretersOf S st Z is I-satisfied
+proof
+let S be countable Language; set S1=S; let D be RuleSet of S1;
+set FF1=AllFormulasOf S1; assume
+B4: D is 2-ranked & D is isotone & D is Correct
+& Z is D-consistent & Z c= FF1; then reconsider X=Z as Subset of FF1;
+set S2=S1 addLettersNotIn X, O1=OwnSymbolsOf S1, O2=OwnSymbolsOf S2,
+FF2=AllFormulasOf S2, SS1=AllSymbolsOf S1, SS2=AllSymbolsOf S2,
+strings2=SS2*\{{}}, L2=LettersOf S2;
+reconsider D1=D as 2-ranked Correct RuleSet of S1 by B4; O1\O2 ={}; then
+reconsider O11=O1 as non empty Subset of O2 by XBOOLE_1:37;
+reconsider D2=S2-rules as 2-ranked Correct isotone RuleSet of S2;
+reconsider sub1=X/\strings2 as Subset of X;
+reconsider sub2=SymbolsOf sub1 as Subset of SymbolsOf X by FOMODEL0:46;
+reconsider inf=L2\SymbolsOf X as Subset of L2\sub2 by XBOOLE_1:34;
+BB2: L2\sub2 null inf is infinite;
+now
+let Y be finite Subset of X; reconsider YY=Y as functional set;
+reconsider YYY=YY as functional Subset of FF1 by XBOOLE_1:1;
+YY is finite & FF1 is countable & YY is D1-consistent & D1 is isotone
+by B4, Th16; then consider U such that
+C1: ex I1 being Element of U-InterpretersOf S1 st YY is I1-satisfied
+by Lm38; set II1=U-InterpretersOf S1, II2=U-InterpretersOf S2,
+I02=the (S2,U)-interpreter-like Function;
+consider I1 being Element of II1 such that
+C2: YYY is I1-satisfied by C1;
+reconsider I2 = (I02 +* I1)|O2 as Element of II2 by FOMODEL2:2;
+I2|O1 = (I02 +* I1)|(O11 null O2) by RELAT_1:100
+.= I02|O1 +* (I1|O1) by FUNCT_4:75 .= I1|O1; then
+YYY is I2-satisfied by C2, Lm39; hence Y is D2-consistent by Lm11;
+end; then X is D2-consistent by Lm1; then consider U such that
+B1: ex I being Element of U-InterpretersOf S2 st X is I-satisfied
+by BB2, Lm37; set II1=U-InterpretersOf S1, II2=U-InterpretersOf S2;
+consider I2 being Element of II2 such that
+B3: X is I2-satisfied by B1; take U;
+reconsider I1=I2|O1 as Element of II1 by FOMODEL2:2;
+take I1; I1|O1=I2|O1 null O1;
+hence thesis by B3, Lm39;
+end;
+
+Lm55: for S being countable Language, phi being wff string of S
+st Z c= AllFormulasOf S & xnot phi is Z-implied holds
+xnot phi is (Z,S-rules)-provable
+proof
+let S be countable Language; set D=S-rules, FF=AllFormulasOf S;
+let phi be wff string of S; assume
+Z c= FF; then reconsider X=Z as Subset of FF;
+set psi=xnot phi; phi in FF by FOMODEL2:16; then
+reconsider Phi={phi} as non empty Subset of FF by ZFMISC_1:37;
+reconsider Y=X\/Phi as non empty Subset of FF;
+reconsider XX=X null Phi as Subset of Y; reconsider Phii=Phi null X
+as non empty Subset of Y; assume
+B2: psi is Z-implied; assume not psi is (Z,D)-provable; then
+D is isotone & R1(S) in D & R8(S) in D & not psi is (Z,D)-provable
+by DefRank; then
+consider
+U being non empty set, I being Element of U-InterpretersOf S such that
+B0: Y is I-satisfied by Th21, Lm2b;
+I-TruthEval psi \+\ 'not' (I-TruthEval phi)={}; then
+B3: I-TruthEval psi='not' (I-TruthEval phi) by FOMODEL0:29;
+BB1: Y/\XX is I-satisfied by B0; phi in Phii by TARSKI:def 1;
+then 1 = 'not' (I-TruthEval psi) by B3, B0, FOMODEL2:def 42;
+hence contradiction by BB1, B2, FOMODEL2:def 45;
+end;
+
+reserve C for countable Language, phi for wff string of C;
+
+theorem ::Goedel's completeness theorem
+(X c= AllFormulasOf C & phi is X-implied) implies phi is X-provable
+proof
+reconsider S=C as Language; reconsider DD={R9(S)} as RuleSet of S;
+set FF=AllFormulasOf C, D=C-rules; assume X c= FF; then
+reconsider Y=X as Subset of FF; assume phi is X-implied; then
+reconsider phii=phi as X-implied (wff string of C); set psi=xnot xnot phii;
+psi is (Y,D)-provable by Lm55; then consider H being set, m such that
+B0: H c= Y & [H, psi] is (m,{},D)-derivable by DefProvable3;
+reconsider seqt=[H, psi] as C-sequent-like set by B0;
+BB1: seqt`1 \+\ H={};
+reconsider HH=H as S-premises-like set by FOMODEL0:29, BB1;
+reconsider HC=H as C-premises-like set by FOMODEL0:29, BB1;
+reconsider a=phi as wff string of S;
+[HC, phi] null 1 is (1,{[HC, xnot (xnot phi)]}, {R9(C)})-derivable;
+then [HC, phi] is (m+1, {}, D\/{R9(C)})-derivable by Lm28, B0; then
+phi is (Y,D\/{R9(C)})-provable by B0, DefProvable3;
+hence thesis by DefProvable4;
+end;
+

@@ -33,7 +33,7 @@
 <ArticleID name="EXTPRO_1"/>
 <ArticleID name="AMISTD_1"/>
 <ArticleID name="AMISTD_2"/>
-<ArticleID name="AMI_3"/>
+<ArticleID name="SCMPDS_2"/>
 <ArticleID name="AMI_1"/>
 </Signature>
 <RCluster aid="AMI_1" nr="1">
@@ -325,7 +325,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="291">
+<Func kind="K" nr="290">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -345,7 +345,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="301">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -359,7 +359,7 @@
 </FCluster>
 <FCluster aid="AMI_1" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="302"/>
+<Func kind="K" nr="301"/>
 <Cluster>
 <Adjective nr="82">
 <Func kind="K" nr="1">

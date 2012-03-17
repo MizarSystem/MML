@@ -2,7 +2,15 @@
 ::  by Yatsuka Nakamura and Andrzej Trybulec
 ::
 :: Received October 14, 1992
-:: Copyright (c) 1992 Association of Mizar Users
+:: Copyright (c) 1992-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -11,30 +19,33 @@ environ
       GLIB_000, FINSET_1, CIRCUIT2, NAT_1, ARYTM_3, XXREAL_0, MSUALG_1,
       TURING_1, PARTFUN1, MCART_1, ZFMISC_1, GRAPHSP, ARYTM_1, FUNCT_7, AMI_1,
       PBOOLE, SCMNORM, GROUP_9, RECDEF_2, COMPOS_1, AMISTD_1, GOBOARD5,
-      AMISTD_2, CARD_5, UNIALG_1, AMI_2, AMI_3, FINSEQ_1, INT_1;
+      AMISTD_2, CARD_5, UNIALG_1, AMI_2, AMI_3, FINSEQ_1, INT_1, SCMPDS_2,
+      SCMPDS_1, COMPLEX1, FINSEQ_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, SETFAM_1, ORDINAL1,
       PBOOLE, CARD_1, XXREAL_0, XCMPLX_0, INT_1, NAT_1, NAT_D, NUMBERS,
-      FUNCT_7, CARD_3, RELAT_1, FUNCT_1, PARTFUN1,
-      FINSET_1, FUNCOP_1, FUNCT_4, FINSEQ_1, FUNCT_2, DOMAIN_1,
-      RECDEF_2, STRUCT_0, GROUP_9, COMPOS_1, EXTPRO_1, AMISTD_1,
-      AMISTD_2, AMI_2, AMI_3;
+      FUNCT_7, CARD_3, RELAT_1, FUNCT_1, PARTFUN1, INT_2,
+      FINSET_1, FUNCOP_1, FUNCT_4, FINSEQ_1, FINSEQ_2, FINSEQ_4,
+      FUNCT_2, DOMAIN_1,
+      RECDEF_2, STRUCT_0, COMPOS_1, EXTPRO_1, AMISTD_1,
+      AMISTD_2, AMI_2, AMI_3, SCMPDS_1, SCMPDS_2;
  constructors SETFAM_1, DOMAIN_1, FUNCT_4, XXREAL_0, FUNCT_7, GRAPH_2,
       RELSET_1, PRE_POLY, PBOOLE, RECDEF_2, COMPOS_1, EXTPRO_1, AMISTD_1,
-      AMISTD_2, AMI_2, AMI_3, NAT_D, FINSEQ_4, CAT_2, INT_1;
+      AMISTD_2, AMI_2, AMI_3, NAT_D, FINSEQ_4, CAT_2, INT_1, SCMPDS_1,
+      SCMPDS_2;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FUNCOP_1, FUNCT_4, FINSET_1, XREAL_0, FINSEQ_1, CARD_3, STRUCT_0, INT_1,
       RELSET_1, GRFUNC_1, PRE_POLY, PBOOLE, COMPOS_1, EXTPRO_1, AMISTD_1,
-      AMISTD_2, AMI_2, AMI_3;
+      AMISTD_2, AMI_2, AMI_3, SCMPDS_1, SCMPDS_2;
  registrations NUMBERS, XXREAL_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, STRUCT_0, FUNCOP_1, ORDINAL1, RELAT_1, PBOOLE, FUNCT_1,
       PARTFUN1, MCART_1, ZFMISC_1, COMPOS_1, EXTPRO_1, AMISTD_2,
-      AMI_2, AMI_3;
+      AMI_2, AMI_3, SCMPDS_1, SCMPDS_2;
  theorems ZFMISC_1, FUNCT_2, TARSKI, NAT_1, CQC_LANG, CARD_3, FINSEQ_1,
       FUNCT_4, FUNCOP_1, FINSET_1, FUNCT_1, GRFUNC_1, RELAT_1, RELSET_1,
       XBOOLE_0, XBOOLE_1, ORDINAL1, MCART_1, ENUMSET1, SUBSET_1, XXREAL_0,
       FUNCT_7, INT_1, PARTFUN1, PBOOLE, RECDEF_2, FUNCT_5, COMPOS_1, EXTPRO_1,
-      AMISTD_1, AMISTD_2, AMI_3, AMI_2;
+      AMISTD_1, AMISTD_2, AMI_3, AMI_2, SCMPDS_1, SCMPDS_2;
  schemes NAT_1, FRAENKEL;
 
 begin :: General concepts
@@ -341,10 +352,6 @@ registration
   proof
     set IT = STC N;
     set Ok = the Object-Kind of IT;
-A1: NAT in {NAT} by TARSKI:def 1;
-    dom (NAT .-->NAT) = {NAT} by FUNCOP_1:19;
-    then
-A2: NAT in dom (NAT .-->NAT) by TARSKI:def 1;
 A3: the Instructions of IT = III by AMISTD_1:def 11;
       let s be State of IT, i be Instruction of IT, l be Element of NAT;
       consider f being Function of product the Object-Kind of IT, product the
@@ -550,12 +557,12 @@ A14: o in D or o in {IC S} by A12,XBOOLE_0:def 3;
   then
 A15: D \/ {IC S} misses dom p by A1,XBOOLE_1:63;
   then s|(dom s \ I) = (s+*p)|(dom(s+*p) \ I) by A2,A3,A10,FUNCT_4:76;
-  then s, s+*p equal_outside I by FUNCT_7:def 2;
+  then NPP s = NPP(s+*p) by COMPOS_1:233;
   then
-A16: Exec(i,s), Exec(i,s+*p) equal_outside I by AMISTD_2:def 20;
+A16: NPP Exec(i,s) = NPP Exec(i,s+*p) by AMISTD_2:def 20;
 A17: (Exec(i,s) +* p) | (D \/ {IC S})
   = Exec(i,s) | (D \/ {IC S}) by A15,FUNCT_4:76
-    .= Exec(i,s +* p) | (D \/ {IC S}) by A4,A5,A10,A16,FUNCT_7:def 2;
+    .= Exec(i,s +* p) | (D \/ {IC S}) by A4,A5,A10,A16,COMPOS_1:233;
 A18: ProgramPart Exec (i, s +* p) = ProgramPart (s +* p) by Lm1
     .= ProgramPart s +* ProgramPart p by FUNCT_4:75
     .= ProgramPart Exec (i,s) +* ProgramPart p by Lm1
@@ -569,179 +576,209 @@ A18: ProgramPart Exec (i, s +* p) = ProgramPart (s +* p) by Lm1
     .= Exec (i,s) +* p by RELAT_1:98;
 end;
 
-reserve Y,K,T for Element of Segm 9,
-  a1,a2,a3 for Element of NAT,
-  b1,b2,c1,c2,
-  c3 for Element of SCM-Data-Loc;
+reserve d1,d2,d3,d4,d5 for Element of SCM-Data-Loc,
+  k1,k2,k3,k4,k5,k6 for
+  Integer;
+set S1={ [0,{},<*k1*>] where k1 is Element of INT: not contradiction},
+    S2={ [1,{},<*
+d1*>] : not contradiction},
+    S3={ [I1,{},<*d2,k2*>] where I1 is Element of Segm 14,
+d2 is Element of SCM-Data-Loc, k2 is Element of INT : I1 in {2,3}},
+    S4={ [I2,{},<*
+d3,k3,k4*>] where I2 is Element of Segm 14, d3 is Element of SCM-Data-Loc, k3,
+k4 is Element of INT: I2 in {4,5,6,7,8} },
+     S5={ [I3,{},<*d4,d5,k5,k6*>] where I3
+is Element of Segm 14, d4,d5 is Element of SCM-Data-Loc, k5,k6 is Element of
+INT: I3 in {9,10,11,12,13} };
 
-Lm5: for s being State of SCM, i being Instruction of SCM, l being
-Element of NAT holds Exec(i,s).l = s.l
+reserve I for Instruction of SCMPDS;
 
+Lm2: I in S1 or I in S2 or I in S3 or I in S4 or I in S5
 proof
-  let s be State of SCM, i be Instruction of SCM, l be Element of NAT;
+  I in S1 \/ S2 \/ S3 \/ S4 or I in S5 by XBOOLE_0:def 3;
+  then I in S1 \/ S2 \/ S3 or I in S4 or I in S5 by XBOOLE_0:def 3;
+  then I in S1 \/ S2 or I in S3 or I in S4 or I in S5 by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
+end;
 
-  reconsider c = i as Element of SCM-Instr;
-  reconsider S = s as Element of product SCM-OK by PBOOLE:155;
+theorem Th96:
+  for s being State of SCMPDS, i being Instruction of SCMPDS, l
+  being Element of NAT holds Exec(i,s).l = s.l
+proof
+  let s be State of SCMPDS, i be Instruction of SCMPDS, l be
+  Element of NAT;
+  reconsider c = i as Element of SCMPDS-Instr;
+  reconsider S = s as Element of product SCMPDS-OK by PBOOLE:155;
   reconsider l9 = l as Element of NAT;
-
-  c in { [SCM-Halt,{},{}] } \/ { [Y,<*a2*>,{}] : Y = 6 }
-   \/ { [K,<*a1*>,<*b1*>]: K
-  in { 7,8 } } or c in { [T,{},<*b2,c1*>] : T in { 1,2,3,4,5}
-   } by XBOOLE_0:def 3;
-
-  then
-A1: c in { [SCM-Halt,{},{}] } \/ { [Y,<*a2*>,{}] : Y = 6 }
- or c in { [K,<*a1*>,<*b1*>]
-  : K in { 7,8 } } or c in { [T,{},<*b2,c1*>] : T in { 1,2,3,4,5} } by
-XBOOLE_0:def 3;
-
   now
-    per cases by A1,XBOOLE_0:def 3;
+    per cases by Lm2;
     case
-      c in { [SCM-Halt,{},{}] };
-      then c = [SCM-Halt,{},{}] by TARSKI:def 1;
-      then
-A2:   c`3_3 = {} & c`2_3 = {} by RECDEF_2:def 2,def 3;
-
-      then
-A3:   ( not(ex mk, ml being Element of SCM-Data-Loc st c = [ 3, {}, <*mk, ml*>
-
-]))& not( ex mk, ml being Element of SCM-Data-Loc st c = [ 4, {}, <*mk, ml*>])
- by RECDEF_2:def 3;
-
-A4:   ( not(ex mk being Element of NAT, ml being Element of SCM-Data-Loc
-
-st c = [ 7, <*mk*>, <*ml*>]))& not(ex mk being Element of NAT,
- ml being Element of
-      SCM-Data-Loc st c = [ 8, <*mk*>, <*ml*>]) by A2,RECDEF_2:def 3;
-
-A5:   ( not(ex mk, ml being Element of SCM-Data-Loc st c = [ 5, {}, <*mk, ml*>
-
-]))& not( ex mk being Element of NAT st c = [ 6, <*mk*>, {}])
-     by A2,RECDEF_2:def 2,def 3;
-
-      ( not(ex mk, ml being Element of SCM-Data-Loc st c = [ 1, {}, <*mk, ml*>
-
-]))& not( ex mk, ml being Element of SCM-Data-Loc st c = [ 2, {}, <*mk, ml*>])
-       by A2,RECDEF_2:def 3;
-
-      hence SCM-Exec-Res(c,S).l9 = S.l9 by A3,A5,A4,AMI_2:def 16;
+      c in S1;
+      then ex k1 being Element of INT st c = [0,{},<*k1*>];
+      hence SCM-Exec-Res(c,S).l9 = SCM-Chg(S,jump_address(S,c const_INT )).l9
+      by SCMPDS_1:def 24
+        .= S.l9 by SCMPDS_1:28;
     end;
     case
-      c in { [Y,<*a2*>,{}] : Y = 6 };
-      then ex Y,a2 st c = [Y,<*a2*>,{}] & Y = 6;
-
-      hence SCM-Exec-Res(c,S).l9 = SCM-Chg(S,c jump_address).l9 by AMI_2:def 16
-
-        .= S.l9 by AMI_2:18;
+A1:   c in S2;
+      set SS=SCM-Chg(S,c address_1, S.Address_Add(S,c address_1,RetSP));
+      ex d1 st c = [1,{},<*d1*>] by A1;
+      hence SCM-Exec-Res(c,S).l9 = SCM-Chg(SS,PopInstrLoc(S,Address_Add(S,c
+      address_1,RetIC))).l9 by SCMPDS_1:def 24
+        .= SS.l9 by SCMPDS_1:28
+        .= S.l9 by SCMPDS_1:32;
     end;
     case
-      c in { [K,<*a1*>,<*b1*>]: K in { 7,8 } };
-      then consider K,a1,b1 such that
-A6:   c = [K,<*a1*>,<*b1*>]and
-A7:   K in { 7,8 };
+A2:   c in S3;
+      set SS=SCM-Chg(S, c P21address, c P22const);
+      consider I1 being Element of Segm 14, d1 being Element of SCM-Data-Loc,
+      k1 being Element of INT such that
+A3:   c = [I1,{},<*d1,k1*>] and
+A4:   I1 in { 2,3 } by A2;
       now
-        per cases by A7,TARSKI:def 2;
+        per cases by A4,TARSKI:def 2;
         case
-          K=7;
-
-          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(S,IFEQ(S.(c cond_address),0,c
-          cjump_address,succ IC S)).l9 by A6,AMI_2:def 16
-
-            .= S.l9 by AMI_2:18;
+          I1=2;
+          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(SS,succ IC S).l9 by A3,
+SCMPDS_1:def 24
+            .= SS.l9 by SCMPDS_1:28
+            .= S.l9 by SCMPDS_1:32;
         end;
         case
-          K=8;
-
-          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(S,IFGT(S.(c cond_address),0,c
-          cjump_address,succ IC S)).l9 by A6,AMI_2:def 16
-
-            .= S.l9 by AMI_2:18;
+A5:       I1=3;
+          set SS = SCM-Chg(S,Address_Add(S,c P21address,c P22const),IC S);
+          thus SCM-Exec-Res(c,S).l9 = SCM-Chg(SS,succ IC S).l9 by A3,A5,
+SCMPDS_1:def 24
+            .= SS.l9 by SCMPDS_1:28
+            .= S.l9 by SCMPDS_1:32;
         end;
       end;
       hence SCM-Exec-Res(c,S).l9 = S.l9;
     end;
     case
-      c in { [T,{},<*b2,c1*>] : T in { 1,2,3,4,5} };
-      then consider T,b2,c1 such that
-A8:   c = [T,{},<*b2,c1*>] and
-A9:   T in { 1,2,3,4,5};
+      c in S4;
+      then consider
+      I1 being Element of Segm 14, d1 being Element of SCM-Data-Loc,
+      k1,k2 being Element of INT such that
+A6:   c = [I1,{},<*d1,k1,k2*>] and
+A7:   I1 in { 4,5,6,7,8};
       now
-        per cases by A9,ENUMSET1:def 3;
+        per cases by A7,ENUMSET1:def 3;
         case
-          T = 1;
-
-          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(SCM-Chg(S, c address_1,S.(c
-          address_2)), succ IC S).l9 by A8,AMI_2:def 16
-
-            .= SCM-Chg(S, c address_1,S.(c address_2)).l9 by AMI_2:18
-            .= S.l9 by AMI_2:22;
+          I1 = 4;
+          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(S, IFEQ(S.Address_Add(S,c
+P31address,c P32const), 0, succ IC S,jump_address(S,c P33const ))).l9 by A6,
+SCMPDS_1:def 24
+            .= S.l9 by SCMPDS_1:28;
         end;
         case
-          T = 2;
-
-          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(SCM-Chg(S,c address_1, S.(c
-          address_1)+S.(c address_2)),succ IC S).l9 by A8,AMI_2:def 16
-
-            .= SCM-Chg(S,c address_1,S.(c address_1)+S.(c address_2)).l9 by
-AMI_2:18
-
-            .= S.l9 by AMI_2:22;
+          I1 = 5;
+          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(S, IFGT(S.Address_Add(S,c
+P31address,c P32const), 0, succ IC S,jump_address(S,c P33const ))).l9 by A6,
+SCMPDS_1:def 24
+            .= S.l9 by SCMPDS_1:28;
         end;
         case
-          T = 3;
-
-          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(SCM-Chg(S,c address_1, S.(c
-          address_1)-S.(c address_2)),succ IC S).l9 by A8,AMI_2:def 16
-
-            .= SCM-Chg(S,c address_1,S.(c address_1)-S.(c address_2)).l9 by
-AMI_2:18
-
-            .= S.l9 by AMI_2:22;
+          I1 = 6;
+          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(S,IFGT(0, S.Address_Add(S,c
+P31address,c P32const), succ IC S,jump_address(S,c P33const ))).l9 by A6,
+SCMPDS_1:def 24
+            .= S.l9 by SCMPDS_1:28;
         end;
         case
-          T = 4;
-
-          hence SCM-Exec-Res(c,S).l9 = SCM-Chg(SCM-Chg(S,c address_1, S.(c
-          address_1)*S.(c address_2)),succ IC S).l9 by A8,AMI_2:def 16
-
-            .= SCM-Chg(S,c address_1,S.(c address_1)*S.(c address_2)).l9 by
-AMI_2:18
-
-            .= S.l9 by AMI_2:22;
+A8:       I1 = 7;
+          set SS=SCM-Chg(S,Address_Add(S,c P31address,c P32const),c P33const);
+          thus SCM-Exec-Res(c,S).l9 =SCM-Chg(SS,succ IC S).l9 by A6,A8,
+SCMPDS_1:def 24
+            .= SS.l9 by SCMPDS_1:28
+            .= S.l9 by SCMPDS_1:32;
         end;
         case
-          T = 5;
-
-          hence
-          SCM-Exec-Res(c,S).l9 = SCM-Chg(SCM-Chg( SCM-Chg(S,c address_1,S
-
-.(c address_1) div S.(c address_2)), c address_2,S.(c address_1) mod S.(c
-          address_2)),succ IC S).l9 by A8,AMI_2:def 16
-
-            .= SCM-Chg( SCM-Chg(S,c address_1,S.(c address_1) div S.(c
-
-address_2)), c address_2,S.(c address_1) mod S.(c address_2)).l9 by AMI_2:18
-
-            .= SCM-Chg(S,c address_1,S.(c address_1) div S.(c address_2)).l9
-          by AMI_2:22
-
-            .= S.l9 by AMI_2:22;
+A9:       I1 = 8;
+          set SS=SCM-Chg(S,Address_Add(S,c P31address,c P32const), S.
+          Address_Add(S,c P31address,c P32const)+ (c P33const));
+          thus SCM-Exec-Res(c,S).l9 = SCM-Chg(SS,succ IC S).l9 by A6,A9,
+SCMPDS_1:def 24
+            .= SS.l9 by SCMPDS_1:28
+            .= S.l9 by SCMPDS_1:32;
+        end;
+      end;
+      hence SCM-Exec-Res(c,S).l9 = S.l9;
+    end;
+    case
+      c in S5;
+      then consider I1 being Element of Segm 14, d1,d2 being Element of
+      SCM-Data-Loc, k1,k2 being Element of INT such that
+A10:  c = [I1,{},<*d1,d2,k1,k2*>]and
+A11:  I1 in { 9,10,11,12,13 };
+      now
+        per cases by A11,ENUMSET1:def 3;
+        case
+A12:      I1 = 9;
+          set SS=SCM-Chg(S, Address_Add(S,c P41address,c P43const), S.
+Address_Add(S,c P41address,c P43const)+ S.Address_Add(S,c P42address,c P44const
+          ));
+          thus SCM-Exec-Res(c,S).l9 = SCM-Chg(SS,succ IC S).l9 by A10,A12,
+SCMPDS_1:def 24
+            .= SS.l9 by SCMPDS_1:28
+            .= S.l9 by SCMPDS_1:32;
+        end;
+        case
+A13:      I1 = 10;
+          set SS=SCM-Chg(S, Address_Add(S,c P41address,c P43const), S.
+Address_Add(S,c P41address,c P43const)- S.Address_Add(S,c P42address,c P44const
+          ));
+          thus SCM-Exec-Res(c,S).l9 = SCM-Chg(SS,succ IC S).l9 by A10,A13,
+SCMPDS_1:def 24
+            .= SS.l9 by SCMPDS_1:28
+            .= S.l9 by SCMPDS_1:32;
+        end;
+        case
+A14:      I1 = 11;
+          set SS=SCM-Chg(S, Address_Add(S,c P41address,c P43const), S.
+Address_Add(S,c P41address,c P43const)* S.Address_Add(S,c P42address,c P44const
+          ));
+          thus SCM-Exec-Res(c,S).l9 = SCM-Chg(SS,succ IC S).l9 by A10,A14,
+SCMPDS_1:def 24
+            .= SS.l9 by SCMPDS_1:28
+            .= S.l9 by SCMPDS_1:32;
+        end;
+        case
+A15:      I1 = 12;
+          set SA= SCM-Chg(S,Address_Add(S,c P41address,c P43const), S.
+Address_Add(S,c P41address,c P43const) div S.Address_Add(S,c P42address,c
+          P44const)), SB=SCM-Chg(SA, Address_Add(S,c P42address,c P44const), S.
+Address_Add(S,c P41address,c P43const) mod S.Address_Add(S,c P42address,c
+          P44const));
+          thus SCM-Exec-Res(c,S).l9 = SCM-Chg(SB,succ IC S).l9 by A10,A15,
+SCMPDS_1:def 24
+            .= SB.l9 by SCMPDS_1:28
+            .= SA.l9 by SCMPDS_1:32
+            .= S.l9 by SCMPDS_1:32;
+        end;
+        case
+A16:      I1 = 13;
+          set SS=SCM-Chg(S, Address_Add(S,c P41address,c P43const), S.
+          Address_Add(S,c P42address,c P44const));
+          thus SCM-Exec-Res(c,S).l9 = SCM-Chg(SS,succ IC S).l9 by A10,A16,
+SCMPDS_1:def 24
+            .= SS.l9 by SCMPDS_1:28
+            .= S.l9 by SCMPDS_1:32;
         end;
       end;
       hence SCM-Exec-Res(c,S).l9 = S.l9;
     end;
   end;
-  hence thesis by AMI_2:def 17;
+  hence thesis by SCMPDS_1:def 25;
 end;
 
 registration
-  cluster SCM -> steady-programmed;
+  cluster SCMPDS -> steady-programmed;
   coherence
   proof
-      let s be State of SCM, i be Instruction of SCM, l be
+      let s be State of SCMPDS, i be Instruction of SCMPDS, l be
       Element of NAT;
-      thus Exec(i,s).l = s.l by Lm5;
+      thus Exec(i,s).l = s.l by Th96;
   end;
 end;
 

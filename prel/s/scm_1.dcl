@@ -58,7 +58,7 @@
 <Adjective nr="4"/>
 <Adjective nr="7">
 <Func kind="U" nr="1">
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 </Func>
 </Adjective>
 <Adjective nr="9"/>
@@ -67,19 +67,19 @@
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 </Func>
 </Adjective>
 <Adjective nr="31">
 <Func kind="U" nr="1">
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 </Func>
 </Adjective>
 <Adjective nr="70">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 <LocusVar nr="2"/>
 </Adjective>
 </Cluster>

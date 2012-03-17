@@ -35,7 +35,7 @@
 </Signature>
 <FCluster aid="AMI_3" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 <Cluster>
 <Adjective nr="36" value="false"/>
 <Adjective nr="65">
@@ -57,7 +57,7 @@
 </FCluster>
 <FCluster aid="AMI_3" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 <Cluster>
 <Adjective nr="66">
 <Func kind="K" nr="1">
@@ -83,7 +83,7 @@
 </FCluster>
 <FCluster aid="AMI_3" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 <Cluster>
 <Adjective nr="82">
 <Func kind="K" nr="1">
@@ -99,7 +99,7 @@
 </FCluster>
 <FCluster aid="AMI_3" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 <Cluster>
 <Adjective nr="69">
 <Func kind="K" nr="1">
@@ -129,7 +129,7 @@
 <Adjective nr="4"/>
 <Adjective nr="7">
 <Func kind="U" nr="1">
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 </Func>
 </Adjective>
 <Adjective nr="9"/>

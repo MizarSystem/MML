@@ -2,25 +2,33 @@
 ::  by Artur Korni{\l}owicz and Yasunari Shidama
 ::
 :: Received February 6, 2004
-:: Copyright (c) 2004 Association of Mizar Users
+:: Copyright (c) 2004-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
  vocabularies ORDINAL1, SUBSET_1, NUMBERS, XBOOLE_0, SETFAM_1, SCMFSA7B,
       FUNCSDOM, AMI_3, AMI_1, FSM_1, STRUCT_0, AMI_2, FUNCT_1, TARSKI, RELAT_1,
       AMISTD_2, ARYTM_3, FUNCT_4, CIRCUIT2, CARD_1, GRAPHSP, ARYTM_1, SUPINF_2,
-      FUNCOP_1, ZFMISC_1, GLIB_000, PARTFUN1, SCMNORM, RELOC, NAT_1, AMISTD_5,
-      COMPOS_1, CARD_5, UNIALG_1, PBOOLE;
+      FUNCOP_1, ZFMISC_1, PARTFUN1, SCMNORM, RELOC, NAT_1, AMISTD_5, COMPOS_1,
+      PBOOLE;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, DOMAIN_1, ORDINAL1, RELAT_1,
       NUMBERS, FUNCT_1, PARTFUN1, STRUCT_0, ALGSTR_0, FUNCSDOM, FUNCOP_1,
-      XCMPLX_0, NAT_1, FUNCT_4, NAT_D, VALUED_1, PBOOLE, COMPOS_1, EXTPRO_1,
-      AMI_1, AMI_2, AMI_3, SCMRING1, SCMRING2, SCMRING3, AMISTD_2, AMISTD_5;
+      XCMPLX_0, NAT_1, FUNCT_4, FUNCT_7, NAT_D, VALUED_1, PBOOLE, COMPOS_1,
+      EXTPRO_1, AMI_2, AMI_3, SCMRING1, SCMRING2, SCMRING3, AMISTD_2, AMISTD_5;
  constructors XXREAL_0, REALSET2, AMI_3, AMISTD_2, SCMRING3, PRE_POLY, NAT_D,
-      AMI_1, AMISTD_1, AMISTD_5, PBOOLE;
+      AMISTD_1, AMISTD_5, PBOOLE, INT_3, FUNCT_7;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, XREAL_0, NAT_1,
-      CARD_3, STRUCT_0, AMI_1, AMI_3, SCMRING2, AMISTD_2, SCMRING3, FINSET_1,
-      ORDINAL1, RELSET_1, GRFUNC_1, FUNCT_2, VALUED_1, COMPOS_1, EXTPRO_1,
-      AMISTD_5, AMI_5, PBOOLE;
+      CARD_3, STRUCT_0, AMI_3, SCMRING2, AMISTD_2, SCMRING3, FINSET_1,
+      ORDINAL1, RELSET_1, GRFUNC_1, FUNCT_2, VALUED_1, FUNCT_4, COMPOS_1,
+      EXTPRO_1, AMISTD_5, AMI_5, PBOOLE, PRE_POLY, FUNCT_7;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -66,9 +74,9 @@ theorem :: SCMRING4:7
   s.a = (s +* Start-At(loc,SCM R)).a;
 
 theorem :: SCMRING4:8
-  IC(s1) = IC(s2) & (for a being Data-Location of R holds s1.a =
-  s2.a) & (for i being Element of NAT holds s1.i = s2.i) implies
-  s1 = s2;
+  for s1,s2 being State of SCM R st IC(s1) = IC(s2) &
+  (for a being Data-Location of R holds s1.a = s2.a)
+    holds NPP s1 = NPP s2;
 
 registration let R;
  cluster SCM R -> relocable;
@@ -89,17 +97,9 @@ registration let R be non trivial good Ring;
  cluster SCM R -> CurIns-recognized;
 end;
 
-reserve N for with_non-empty_elements non empty set,
-   S for relocable1 (relocable IC-recognized proper-halt
-    (regular homogeneous J/A-independent
-    Exec-preserving
-     halting realistic  steady-programmed
-   (standard-ins IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N))));
-
 theorem :: SCMRING4:9
   R is non trivial implies for p being autonomic non NAT-defined
-  FinPartState of SCM R st p c= s1 & p c= s2 &
+  FinPartState of SCM R st NPP p c= s1 & NPP p c= s2 &
   ProgramPart p c= P1 & ProgramPart p c= P2 &
   CurInstr(P1,Comput(P1,s1,n)) = a := b &
   a in dom p
@@ -107,7 +107,7 @@ theorem :: SCMRING4:9
 
 theorem :: SCMRING4:10
   R is non trivial implies for p being autonomic non NAT-defined
-  FinPartState of SCM R st p c= s1 & p c= s2 &
+  FinPartState of SCM R st NPP p c= s1 & NPP p c= s2 &
   ProgramPart p c= P1 & ProgramPart p c= P2 &
   CurInstr(P1,Comput(P1,s1,n)) =
   AddTo(a,b) & a in dom p holds Comput(P1,s1,n).a + Comput(P1,s1,n).b =
@@ -115,7 +115,7 @@ theorem :: SCMRING4:10
 
 theorem :: SCMRING4:11
   R is non trivial implies for p being autonomic non NAT-defined
-  FinPartState of SCM R st p c= s1 & p c= s2 &
+  FinPartState of SCM R st NPP p c= s1 & NPP p c= s2 &
   ProgramPart p c= P1 & ProgramPart p c= P2 &
   CurInstr(P1,Comput(P1,s1,n)) =
   SubFrom(a, b) & a in dom p holds Comput(P1,s1,n).a - Comput(
@@ -124,7 +124,7 @@ P1,s1,n).b =
 
 theorem :: SCMRING4:12
   R is non trivial implies for p being autonomic non NAT-defined
-  FinPartState of SCM R st p c= s1 & p c= s2 &
+  FinPartState of SCM R st NPP p c= s1 & NPP p c= s2 &
   ProgramPart p c= P1 & ProgramPart p c= P2 &
   CurInstr(P1,Comput(P1,s1,n)) =
   MultBy(a, b) & a in dom p holds Comput(P1,s1,n).a * Comput(
@@ -133,7 +133,7 @@ P1,s1,n).b =
 
 theorem :: SCMRING4:13
   R is non trivial implies for p being autonomic non NAT-defined
-  FinPartState of SCM R st p c= s1 & p c= s2 &
+  FinPartState of SCM R st NPP p c= s1 & NPP p c= s2 &
   ProgramPart p c= P1 & ProgramPart p c= P2 &
   CurInstr(P1,Comput(P1,s1,n)) = a
 =0_goto loc & loc <> succ (IC Comput(P1,s1,n)) holds Comput(
@@ -143,18 +143,16 @@ P1,s1,n).a = 0.
 begin :: Relocability
 
 theorem :: SCMRING4:14
-  R is non trivial implies for p being autonomic FinPartState of
-  SCM R st IC SCM R in dom p & p c= s1 & Relocated (p,k) c= s2
-for P1,P2 being (the Instructions of SCM R)-valued ManySortedSet of NAT
+ for p being autonomic FinPartState of
+  SCM R st IC SCM R in dom p &
+   NPP p c= s1 & NPP Relocated (p,k) c= s2
+ for P1,P2 being (the Instructions of SCM R)-valued ManySortedSet of NAT
   st ProgramPart p c= P1 & Reloc(ProgramPart p,k) c= P2
   for i being Element of NAT
-   holds IC Comput(P1,s1,i) + k = IC
-  Comput(P2,s2,i) & IncAddr(CurInstr(P1,
-  Comput(P1,s1,i)), k) =
-   CurInstr(P2,Comput(P2,s2,i))
-    & Comput(P1,s1,i)|dom (DataPart p)
-     = Comput(P2,s2,i)|dom(DataPart (Relocated (p,k))) &
-   DataPart Comput(P1,s1 +* DataPart s2,i) = DataPart Comput(P2,s2,i);
+   holds IC Comput(P1,s1,i) + k = IC Comput(P2,s2,i) &
+  IncAddr(CurInstr(P1,Comput(P1,s1,i)), k) = CurInstr(P2,Comput(P2,s2,i)) &
+  Comput(P1,s1,i)|dom (DataPart p) = Comput(P2,s2,i)|dom DataPart p &
+  DataPart Comput(P1,s1 +* DataPart s2,i) = DataPart Comput(P2,s2,i);
 
 registration let R be non trivial good Ring;
  cluster SCM R -> relocable1 relocable2;

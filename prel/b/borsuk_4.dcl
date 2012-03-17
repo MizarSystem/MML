@@ -91,6 +91,13 @@
 <Cluster>
 <Adjective nr="33" value="false"/>
 <Adjective nr="44"/>
+</Cluster>
+</FCluster>
+<FCluster aid="BORSUK_4" nr="2">
+<ArgTypes/>
+<Func kind="K" nr="367"/>
+<Cluster>
+<Adjective nr="44"/>
 <Adjective nr="106">
 <Func kind="K" nr="366"/>
 </Adjective>

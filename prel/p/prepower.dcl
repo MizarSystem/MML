@@ -69,7 +69,7 @@
 </Func>
 <Cluster>
 <Adjective nr="24"/>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster aid="PREPOWER" nr="2">

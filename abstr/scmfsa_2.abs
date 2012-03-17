@@ -2,7 +2,15 @@
 ::  by Andrzej Trybulec , Yatsuka Nakamura and Piotr Rudnicki
 ::
 :: Received February 7, 1996
-:: Copyright (c) 1996 Association of Mizar Users
+:: Copyright (c) 1996-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -10,18 +18,17 @@ environ
       TARSKI, AMI_3, ZFMISC_1, SUBSET_1, CARD_1, CAT_1, ORDINAL1, ARYTM_1,
       ARYTM_3, NAT_1, FINSET_1, FUNCT_1, AMI_2, XXREAL_0, FINSEQ_1, MCART_1,
       GRAPHSP, FSM_1, FUNCT_4, FUNCOP_1, INT_1, CARD_3, COMPLEX1, PARTFUN1,
-      FINSEQ_2, GLIB_000, SCMFSA_2, RECDEF_2, COMPOS_1, AMISTD_2;
+      FINSEQ_2, GLIB_000, SCMFSA_2, RECDEF_2, COMPOS_1, AMISTD_2, SCMNORM;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, ORDINAL1, XCMPLX_0,
       XXREAL_0, NAT_1, INT_1, RELAT_1, MCART_1, CARD_1, CARD_3, INT_2,
       FINSEQ_1, FUNCOP_1, STRUCT_0, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
       FINSET_1, FUNCT_4, FINSEQ_2, FUNCT_7, RECDEF_2, NUMBERS, COMPOS_1,
-      EXTPRO_1, AMI_1, AMI_2, AMI_3, SCMFSA_1;
+      EXTPRO_1, AMI_2, AMI_3, SCMFSA_1;
  constructors WELLORD2, DOMAIN_1, XXREAL_0, REAL_1, INT_2, FINSEQ_4, CAT_2,
-      AMI_3, SCMFSA_1, RELSET_1, PRE_POLY, RECDEF_2, AMI_1;
+      AMI_3, SCMFSA_1, RELSET_1, PRE_POLY, RECDEF_2;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      NUMBERS, XREAL_0, NAT_1, INT_1, CARD_3, STRUCT_0, AMI_1, AMI_2, AMI_3,
-      SCMFSA_1, CARD_1, FINSET_1, CARD_2, RELSET_1, FUNCT_2, COMPOS_1,
-      EXTPRO_1;
+      NUMBERS, XREAL_0, NAT_1, INT_1, CARD_3, STRUCT_0, AMI_2, AMI_3, SCMFSA_1,
+      CARD_1, FINSET_1, CARD_2, RELSET_1, FUNCT_2, COMPOS_1, EXTPRO_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -52,7 +59,7 @@ theorem :: SCMFSA_2:7
 begin :: The Memory Structure
 
 reserve k for Element of NAT,
-  J,K,L for Element of Segm 13,
+  J,K,L for Element of Segm 14,
   O,P,R for Element of Segm 9;
 
 definition
@@ -155,9 +162,9 @@ reserve la,lb for Element of NAT,
   I for Instruction of SCM,
   l for Element of NAT,
   LA,LB for Element of NAT,
-  dA,dB,dC for Element of SCM+FSA-Data-Loc,
+  dA,dB,dC,dD for Element of SCM+FSA-Data-Loc,
   DA,DB,DC for Element of SCM-Data-Loc,
-  fA,fB for Element of SCM+FSA-Data*-Loc,
+  fA,fB,fC for Element of SCM+FSA-Data*-Loc,
   f,g for FinSeq-Location,
   A,B for Data-Location,
   a,b,c,db for Int-Location;
@@ -176,7 +183,7 @@ theorem :: SCMFSA_2:34
   Instruction of SCM;
 
 theorem :: SCMFSA_2:35
-  for I being Instruction of SCM+FSA holds InsCode I <= 12;
+  for I being Instruction of SCM+FSA holds InsCode I <= 13;
 
 canceled;
 
@@ -249,6 +256,13 @@ definition
   func a:=<0,...,0>i -> Instruction of SCM+FSA equals
 :: SCMFSA_2:def 22
   [12,{},<*i,a*>];
+end;
+
+definition
+  let i be Int-Location;
+  func i:==1 -> Instruction of SCM+FSA equals
+:: SCMFSA_2:def 23
+  [13,{},<*i*>];
 end;
 
 canceled 3;
@@ -403,8 +417,7 @@ theorem :: SCMFSA_2:80
   S = s|SCM-Memory +* (NAT --> I) & A = a implies S.A = s.a;
 
 registration
-  cluster SCM+FSA -> proper-halt
-   realistic IC-Ins-separated definite steady-programmed;
+  cluster SCM+FSA -> proper-halt realistic IC-Ins-separated definite;
 end;
 
 theorem :: SCMFSA_2:81
@@ -515,6 +528,14 @@ theorem :: SCMFSA_2:104
   for I being Instruction of SCM+FSA st ex s st Exec(I,s).IC
   SCM+FSA = succ IC s holds I is non halting;
 
+registration let a,b;
+ cluster a := b -> non halting;
+ cluster AddTo(a,b) -> non halting;
+ cluster SubFrom(a,b) -> non halting;
+ cluster MultBy(a,b) -> non halting;
+ cluster Divide(a,b) -> non halting;
+end;
+
 theorem :: SCMFSA_2:105
   a := b is non halting;
 
@@ -530,8 +551,17 @@ theorem :: SCMFSA_2:108
 theorem :: SCMFSA_2:109
   Divide(a,b) is non halting;
 
+registration let la;
+ cluster goto la -> non halting;
+end;
+
 theorem :: SCMFSA_2:110
   goto la is non halting;
+
+registration let a,la;
+ cluster a=0_goto la -> non halting;
+ cluster a>0_goto la -> non halting;
+end;
 
 theorem :: SCMFSA_2:111
   a=0_goto la is non halting;
@@ -539,17 +569,31 @@ theorem :: SCMFSA_2:111
 theorem :: SCMFSA_2:112
   a>0_goto la is non halting;
 
+registration let c,f,a;
+ cluster c:=(f,a) -> non halting;
+ cluster (f,a):=c -> non halting;
+end;
+
 theorem :: SCMFSA_2:113
   c:=(f,a) is non halting;
 
 theorem :: SCMFSA_2:114
   (f,a):=c is non halting;
 
+registration let c,f;
+ cluster  c:=len f -> non halting;
+ cluster f:=<0,...,0>c -> non halting;
+end;
+
 theorem :: SCMFSA_2:115
   c:=len f is non halting;
 
 theorem :: SCMFSA_2:116
   f:=<0,...,0>c is non halting;
+
+registration let a;
+ cluster a:==1 -> non halting;
+end;
 
 canceled;
 
@@ -561,12 +605,16 @@ theorem :: SCMFSA_2:119
   for I be Instruction of SCM+FSA st InsCode I = 0 holds I = [0,{},{}];
 
 theorem :: SCMFSA_2:120
-  for I being set holds I is Instruction of SCM+FSA iff I = [0,{},{}]
-   or (ex a,b st I = a:=b) or (ex a,b st I = AddTo(a,b)) or (ex a,b st I =
-SubFrom(a,b)) or (ex a,b st I = MultBy(a,b)) or (ex a,b st I = Divide(a,b)) or
-(ex la st I = goto la) or (ex lb,da st I = da=0_goto lb) or (ex lb,da st I = da
->0_goto lb) or (ex b,a,fa st I = a:=(fa,b)) or (ex a,b,fa st I = (fa,a):=b) or
-  (ex a,f st I = a:=len f) or ex a,f st I = f:=<0,...,0>a;
+  for I being set holds I is Instruction of SCM+FSA iff
+   I = [0,{},{}]
+   or (ex a,b st I = a:=b) or (ex a,b st I = AddTo(a,b))
+   or (ex a,b st I = SubFrom(a,b)) or
+   (ex a,b st I = MultBy(a,b)) or (ex a,b st I = Divide(a,b)) or
+   (ex la st I = goto la) or (ex lb,da st I = da=0_goto lb) or
+   (ex lb,da st I = da>0_goto lb) or (ex b,a,fa st I = a:=(fa,b)) or
+   (ex a,b,fa st I = (fa,a):=b) or
+   (ex a,f st I = a:=len f) or (ex a,f st I = f:=<0,...,0>a)
+     or ex a st I = a:==1;
 
 registration
   cluster SCM+FSA -> halting;
@@ -598,4 +646,45 @@ theorem :: SCMFSA_2:127
 theorem :: SCMFSA_2:128
  for i,j being Nat st i <> j
   holds intloc i <> intloc j;
+
+reserve n for  Element of NAT,
+        I for  Program of SCM+FSA;
+
+theorem :: SCMFSA_2:129
+  I +* Start-At(n,SCM+FSA) c= s implies I c= s;
+
+theorem :: SCMFSA_2:130
+  not a in dom Start-At(l,SCM+FSA);
+
+theorem :: SCMFSA_2:131
+  not f in dom Start-At(l,SCM+FSA);
+
+theorem :: SCMFSA_2:132
+  not a in dom (I+*Start-At(l,SCM+FSA));
+
+theorem :: SCMFSA_2:133
+  not f in dom (I+*Start-At(l,SCM+FSA));
+
+begin :: Theorems related to the instruction x:==1
+
+theorem :: SCMFSA_2:134
+  for ins being Instruction of SCM+FSA st InsCode ins = 13 holds
+  ex a st ins = a:==1;
+
+theorem :: SCMFSA_2:135
+  a:==1 is non halting;
+
+theorem :: SCMFSA_2:136
+  Exec(c:==1, s).IC SCM+FSA = succ IC s & (Exec(c:==1, s).c = 1) &
+   (for b st b <> c holds Exec(c:==1, s).b = s.b) &
+   for f holds Exec(c:==1, s).f = s.f;
+
+theorem :: SCMFSA_2:137
+  InsCode (a:==1) = 13;
+
+theorem :: SCMFSA_2:138
+  for s1,s2 being State of SCM+FSA st IC(s1) = IC(s2) &
+  (for a being Int-Location holds s1.a = s2.a) &
+  (for f being FinSeq-Location holds s1.f = s2.f)
+    holds NPP s1 = NPP s2;
 

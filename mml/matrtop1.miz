@@ -2,7 +2,15 @@
 ::  by Karol P\kak
 :: 
 :: Received October 26, 2010
-:: Copyright (c) 2010 Association of Mizar Users
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -16,11 +24,12 @@ environ
       STRUCT_0, SUBSET_1, SUPINF_2, TARSKI, TOPS_1, TOPS_2, TREES_1, VALUED_0,
       VALUED_1, VECTSP_1, VECTSP10, XBOOLE_0, XREAL_0, XXREAL_0, ZFMISC_1,
       FUNCOP_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1,CARD_1, NUMBERS,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, CARD_1, NUMBERS,
       XXREAL_0, NAT_1, FINSET_1, TOPS_1, TOPS_2, FUNCT_1, PARTFUN1, VALUED_0,
       VALUED_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, BINOP_1, STRUCT_0,
-      VECTSP_1, MATRIX_1, FVSUM_1, MATRIX_3, VECTSP_4, VECTSP_7, VECTSP_9,
-      MATRIX13, SETWOP_2, XREAL_0, REAL_1, RVSUM_1, ALGSTR_0, RANKNULL,
+      VECTSP_1, MATRIX_1, MATRIX_3, VECTSP_4, VECTSP_7, VECTSP_9,
+      MATRIX13, SETWOP_2, XREAL_0, REAL_1, RVSUM_1, ALGSTR_0, FVSUM_1,
+      RANKNULL,
       MATRIX11, ORDINAL1, COMPLEX1, BINOP_2, FUNCOP_1, SQUARE_1, PRE_TOPC,
       PARTFUN3, MATRIX_6, MATRLIN, MATRLIN2, NAT_D, MATRIX15, CONNSP_2,
       METRIC_1, EUCLID, FINSOP_1, PNPROC_1, RUSUB_4, PRVECT_1;
@@ -35,7 +44,7 @@ environ
       XXREAL_0;
  requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
  definitions BORSUK_1, EUCLID, FINSEQ_1, MATRIX13, PARTFUN3, RANKNULL,
-      SQUARE_1, STRUCT_0, TARSKI, VECTSP_1, VECTSP_4, XBOOLE_0;
+      SQUARE_1, STRUCT_0, TARSKI, VECTSP_1, VECTSP_4, XBOOLE_0, FVSUM_1;
  theorems ABSVALUE, BINOP_2, CARD_1, CARD_2, CONNSP_2, EUCLID, EUCLID_2,
       FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSEQOP, FINSOP_1, FUNCOP_1,
       FUNCT_1, FUNCT_2, FVSUM_1, GOBOARD6, JORDAN2C, LAPLACE, MATRIX_1,
@@ -144,12 +153,8 @@ definition
   coherence;
 end;
 
-theorem Th1:
-  @rf1 + @rf2 = rf1 + rf2
-proof
-  thus @rf1+@rf2 = (the addF of F_Real).:(rf1,rf2) by FVSUM_1:def 3
-                .= rf1+rf2 by RVSUM_1:def 4;
-end;
+theorem
+  @rf1 + @rf2 = rf1 + rf2 by RVSUM_1:def 4;
 
 theorem Th2:
   sqrt (rf1^rf2) = (sqrt rf1) ^ (sqrt rf2)
@@ -1165,24 +1170,17 @@ proof
     set MP=M*P;
     A8: len M=n by A6,MATRIX13:1;
     A9: now let i be Nat;
-    A10: ((the multF of F_Real).:(f,Col(M,i)))=mlt(@f,Col(M,i))
-     by FVSUM_1:def 7;
     assume A11: 1<=i & i<=m;
     then i in Seg m by FINSEQ_1:3;
-    then Col(MP,i)=Col(M,i)*P by A7,Th15;
-    then A12: mlt(@fP,Col(MP,i))=(the multF of F_Real).:(fP,Col(M,i)*P) by
-     FVSUM_1:def 7
-    .=mlt(@f,Col(M,i))*P by A10,FUNCOP_1:31;
+    then A12: mlt(@fP,Col(MP,i))=(the multF of F_Real).:(fP,Col(M,i)*P)
+    by A7,Th15
+    .=mlt(@f,Col(M,i))*P by FUNCOP_1:31;
     len Col(M,i)=n by A8,CARD_1:def 13;
     then len mlt(@f,Col(M,i))=n by A1,MATRIX_3:8;
     then A13: dom mlt(@f,Col(M,i))=Seg n by FINSEQ_1:def 3;
     (Mx2Tran MP).fP.i=@fP"*"Col(MP,i) by A6,A5,A11,Th18
-     .=Sum mlt(@fP,Col(MP,i)) by FVSUM_1:def 10
-     .=(the addF of F_Real)"**"mlt(@fP,Col(MP,i)) by FVSUM_1:def 8;
-    hence (Mx2Tran MP).fP.i=(the addF of F_Real)"**"mlt(@f,Col(M,i)) by A13,
-     A12,FINSOP_1:8
-     .=Sum mlt(@f,Col(M,i)) by FVSUM_1:def 8
-     .=@f"*"Col(M,i) by FVSUM_1:def 10
+     .=(the addF of F_Real)"**"mlt(@fP,Col(MP,i));
+    hence (Mx2Tran MP).fP.i = @f"*"Col(M,i) by A13,A12,FINSOP_1:8
      .=(Mx2Tran M).f.i by A6,A11,Th18;
      end;
      len((Mx2Tran M).f)=m & len((Mx2Tran MP).fP)=m by A5,CARD_1:def 13;
@@ -1225,12 +1223,12 @@ proof
     then len(L1*M)=1 by A11,A4,MATRIX_3:def 4;
     then A14: [1,1] in Indices(L1*M) by A12,A3,MATRIX_1:37;
     A15: @(T.f1)=Line(L1*M,1) & @(T.f2)=Line(L2*M,1) by A1,Def3;
-    @f12=@f1+@f2 by Th1;
+    @f12=@f1+@f2 by RVSUM_1:def 4;
     then (LineVec2Mx@f12)*M=(L1+L2)*M by A10,A6,MATRIX15:27
      .=L1*M+L2*M by A1,A13,A5,A11,A7,A4,MATRIX_4:63;
     hence T.f12=Line(L1*M+L2*M,1) by A1,Def3
      .=Line(L1*M,1)+Line(L2*M,1) by A12,A9,A14,MATRIX_4:59
-     .=T.f1+T.f2 by A15,Th1;
+     .=T.f1+T.f2 by A15,RVSUM_1:def 4;
    end;
   end;
   suppose A16: n=0;
@@ -1318,7 +1316,7 @@ proof
     then len(L*M1)=1 by A4,A8,MATRIX_3:def 4;
     then A12: [1,1] in Indices(L*M1) by A10,A7,MATRIX_1:37;
     @(T1.f)=Line(L*M1,1) & @(T2.f)=Line(L*M2,1) by A1,Def3;
-    hence T1.f+T2.f=Line(L*M1,1)+Line(L*M2,1) by Th1
+    hence T1.f+T2.f=Line(L*M1,1)+Line(L*M2,1) by RVSUM_1:def 4
      .=Line(L*M1+L*M2,1) by A10,A6,A12,MATRIX_4:59
      .=Line(L*(M1+M2),1) by A1,A11,A4,A8,A9,A5,MATRIX_4:62
      .=T12.f by A1,Def3;
@@ -1516,7 +1514,7 @@ proof
   A3: [#]TOP-REAL n=dom Mx2Tran 1.(F_Real,n) by FUNCT_2:def 1
    .=[#]V by A2,FUNCT_2:def 1;
   thus Mx2Tran 1.(F_Real,n)
-   =Mx2Tran(AutMt(id V,Bn,Bn),Bn,Bn) by A1,MATRLIN2:28,Th20
+   =Mx2Tran(AutMt(id V,Bn,Bn),Bn,Bn) by A1,Th20,MATRLIN2:28
    .=id TOP-REAL n by A3,MATRLIN2:34;
 end;
 
@@ -1544,7 +1542,7 @@ theorem Th35:
   (Mx2Tran(B^A)).((k|->0)^f) = (Mx2Tran A).f
 proof
   let A be Matrix of n,m,F_Real,B be Matrix of k,m,F_Real;
-  reconsider k0=k|->0 as k-element FinSequence of REAL by FINSEQ_2:77;
+  reconsider k0=k|->0 as k-element FinSequence of REAL;
   A1: len B=k by MATRIX_1:def 3;
   set kf=k0^f;
   per cases;
@@ -1582,18 +1580,11 @@ proof
       mlt(@fk,Col(A^B,i))=mlt((@f)^(@k0),Col(A,i)^Col(B,i))
         by A3,A11,A14,MATRLIN:30
        .=mlt(@f,Col(A,i))^mlt(@k0,Col(B,i)) by A4,A16,MATRIX14:7;
-      then Sum(mlt(@fk,Col(A^B,i)))=
-       (the addF of F_Real)$$(mlt(@f,Col(A,i))^mlt(@k0,Col(B,i)))
-           by FVSUM_1:def 8
-       .=(the addF of F_Real).((the addF of F_Real)$$
-       mlt(@f,Col(A,i)),(the addF of F_Real)$$mlt(@k0,Col(B,i))) by FINSOP_1:6
-       .=(the addF of F_Real).(Sum mlt(@f,Col(A,i)),(the addF of F_Real)
-         $$mlt(@k0,Col(B,i))) by FVSUM_1:def 8
-       .=addreal.(Sum mlt(@f,Col(A,i)),Sum mlt(@k0,Col(B,i))) by FVSUM_1:def 8
+      then Sum(mlt(@fk,Col(A^B,i)))
+       =addreal.(Sum mlt(@f,Col(A,i)),Sum mlt(@k0,Col(B,i))) by FINSOP_1:6
        .=Sum mlt(@f,Col(A,i))+Sum mlt(@k0,Col(B,i)) by BINOP_2:def 9
-       .=@f"*"Col(A,i) by A15,FVSUM_1:def 10;
-      hence Ma.f.i=Sum(mlt(@fk,Col(A^B,i))) by A2,A13,Th18
-       .=@fk"*"Col(A^B,i) by FVSUM_1:def 10
+       .=@f"*"Col(A,i) by A15;
+      hence Ma.f.i=@fk"*"Col(A^B,i) by A2,A13,Th18
        .=Mab.fk.i by A2,A7,A13,Th18;
      end;
      len(Mab.fk)=m & len(Ma.f)=m by A7,CARD_1:def 13;
@@ -1623,17 +1614,11 @@ proof
      mlt(@kf,Col(B^A,i)) =mlt((@k0)^(@f),Col(B,i)^Col(A,i))
        by A3,A20,A23,MATRLIN:30
      .=mlt(@k0,Col(B,i))^mlt(@f,Col(A,i)) by A4,A25,MATRIX14:7;
-     then Sum(mlt(@kf,Col(B^A,i)))=(the addF of F_Real)$$
-           (mlt(@k0,Col(B,i))^mlt(@f,Col(A,i))) by FVSUM_1:def 8
-      .=(the addF of F_Real).((the addF of F_Real)$$
-        mlt(@k0,Col(B,i)),(the addF of F_Real)$$mlt(@f,Col(A,i))) by FINSOP_1:6
-      .=(the addF of F_Real).(Sum mlt(@k0,Col(B,i)),(the addF of F_Real)$$
-              mlt(@f,Col(A,i))) by FVSUM_1:def 8
-      .=addreal.(Sum mlt(@k0,Col(B,i)),Sum mlt(@f,Col(A,i))) by FVSUM_1:def 8
+     then Sum(mlt(@kf,Col(B^A,i)))
+      =addreal.(Sum mlt(@k0,Col(B,i)),Sum mlt(@f,Col(A,i))) by FINSOP_1:6
       .=Sum mlt(@f,Col(A,i))+0.F_Real by A24,BINOP_2:def 9
-      .=@f"*"Col(A,i) by FVSUM_1:def 10;
-     hence Ma.f.i=Sum(mlt(@kf,Col(B^A,i))) by A2,A22,Th18
-      .=@kf"*"Col(B^A,i) by FVSUM_1:def 10
+      .=@f"*"Col(A,i);
+     hence Ma.f.i=@kf"*"Col(B^A,i) by A2,A22,Th18
       .=Mba.kf.i by A2,A5,A22,Th18;
     end;
     len(Mba.kf)=m & len(Ma.f)=m by A5,CARD_1:def 13;
@@ -1662,15 +1647,15 @@ proof
   A1: len f=n by CARD_1:def 13;
   rng f c=REAL;
   then f is FinSequence of REAL by FINSEQ_1:def 4;
-  then reconsider F=f,n0=n|->0 as Element of n-tuples_on REAL by A1,FINSEQ_2:
-110,132;
+  then reconsider F=f,n0=n|->0 as Element of n-tuples_on REAL by A1,
+FINSEQ_2:110;
   let A be Matrix of n,m,F_Real,B be Matrix of k,m,F_Real;
   let g be k-element real-valued FinSequence;
   A2: len g=k by CARD_1:def 13;
   rng g c=REAL;
   then g is FinSequence of REAL by FINSEQ_1:def 4;
   then reconsider G=g,k0=k|->0 as Element of k-tuples_on REAL
-    by A2,FINSEQ_2:110,132;
+    by A2,FINSEQ_2:110;
   len(n|->0)=n by CARD_1:def 13;
   then len(n0^G)=n+k by A2,FINSEQ_1:35;
   then A3: n0^G is n+k-element by CARD_1:def 13;
@@ -1788,7 +1773,7 @@ proof
   A6: width M1=m by A1,MATRIX13:1;
   per cases;
   suppose A7: m=0;
-   A8: the carrier of TOP-REAL 0 ={0.TOP-REAL 0} by JORDAN2C:113,EUCLID:25;
+   A8: the carrier of TOP-REAL 0 ={0.TOP-REAL 0} by EUCLID:25,JORDAN2C:113;
    then rng MM c={0.TOP-REAL 0} by A7,RELAT_1:def 19;
    then rng MM={0.TOP-REAL 0} by ZFMISC_1:39;
    then card{0.TOP-REAL 0}=card{0.TOP-REAL 0} & MM is onto
@@ -1843,12 +1828,12 @@ proof
       let x1,x2 be set such that
        A18: x1 in dom MM & x2 in dom MM & MM.x1 = MM.x2;
       A19: dom MM = [#]TOP-REAL 0 by A16,FUNCT_2:def 1
-       .= {0.TOP-REAL 0} by JORDAN2C:113,EUCLID:25;
+       .= {0.TOP-REAL 0} by EUCLID:25,JORDAN2C:113;
       hence x1 = 0.TOP-REAL 0 by A18,TARSKI:def 1
        .= x2 by A18,A19,TARSKI:def 1;
     end;
     len M = n by MATRIX_1:def 3;
-    hence thesis by A17,A16,MATRIX13:74,FUNCT_1:def 8;
+    hence thesis by A17,A16,FUNCT_1:def 8,MATRIX13:74;
   end;
   suppose A20: n<>0 & m=0;
     reconsider x1 = n |-> 1 as Point of TOP-REAL n by Lm2;
@@ -1867,7 +1852,7 @@ proof
       hence contradiction by TARSKI:def 1;
     end;
     width M = m by A20,MATRIX13:1;
-    hence thesis by A23,A20,MATRIX13:74,A22,A21,FUNCT_1:def 8;
+    hence thesis by A23,A20,A22,A21,FUNCT_1:def 8,MATRIX13:74;
   end;
 end;
 
@@ -1932,7 +1917,7 @@ proof
     .=id TOP-REAL n by FUNCT_2:def 1
     .=Mx2Tran 1.(F_Real,n) by Th33;
    MB*MA=Mx2Tran(A*B) by A5,A4,A1,Th32;
-   then B is_reverse_of A by A3,MATRIX_6:39,A7,Th34;
+   then B is_reverse_of A by A3,A7,Th34,MATRIX_6:39;
    hence A~=B by A3,MATRIX_6:def 4;
   end;
   assume A8: A~=B;
@@ -1996,8 +1981,7 @@ for i be Nat st i in dom L holds L.i=|.@Col(M,i).|
     then A17: L.i=L(i) by A1;
     LM.i=LfM*(1,i) by A10,A14,MATRIX_1:def 8
      .=Line(Lf,1)"*"Col(M,i) by A5,A9,A16,MATRIX_3:def 4
-     .=@f"*"Col(M,i) by MATRIX15:25
-     .=Sum(mlt(@f,Col(M,i))) by FVSUM_1:def 10
+     .=Sum(mlt(@f,Col(M,i))) by MATRIX15:25
      .=Sum mlt(f,@Col(M,i)) by A8,A12,MATRPROB:35,36
      .=|(f,@Col(M,i))| by RVSUM_1:def 17;
     then aLM.i<=|.f.|*L(i) by A13,VALUED_1:18;
@@ -2006,8 +1990,8 @@ for i be Nat st i in dom L holds L.i=|.@Col(M,i).|
    then A18: Sum aLM<=Sum(|.f.|*L1) by RVSUM_1:112;
    sqr LM=LM(#)LM by VALUED_1:def 8;
    then sqrt Sum(sqr LM)<=Sum sqrt(sqr LM) by Th5;
-   then Sum(|.f.|*L1)=|.f.|*Sum L1 & sqrt Sum(sqr LM)<=Sum aLM by Th4,RVSUM_1:
-117;
+   then Sum(|.f.|*L1)=|.f.|*Sum L1 & sqrt Sum(sqr LM)<=Sum aLM by Th4,
+RVSUM_1:117;
    hence thesis by A7,A1,A18,XXREAL_0:2;
  end;
  suppose A19: n=0;
@@ -2195,7 +2179,7 @@ proof
   then A3: T"=Mx2Tran(A~) by Th43;
   A4: T is onto one-to-one by A2,Th40,Th42;
   then A5: rng T=[#]TOP-REAL n by FUNCT_2:def 3;
-  then dom T=[#]TOP-REAL n & T/"=T" by A4,FUNCT_2:def 1,TOPS_2:def 4;
+  dom T=[#]TOP-REAL n & T/"=T" by A4,FUNCT_2:def 1,TOPS_2:def 4;
   hence thesis by A4,A3,A1,A5,TOPS_2:def 5;
 end;
 end;

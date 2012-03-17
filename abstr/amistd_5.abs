@@ -2,28 +2,35 @@
 ::  by Andrzej Trybulec
 ::
 :: Received November 20, 2010
-:: Copyright (c) 2010 Association of Mizar Users
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
  vocabularies NUMBERS, ORDINAL1, SETFAM_1, ARYTM_1, ARYTM_3, CARD_1, SUBSET_1,
       AMI_1, XBOOLE_0, RELAT_1, TARSKI, FUNCOP_1, GLIB_000, GOBOARD5, AMISTD_1,
-      UNIALG_1, FUNCT_1, CARD_3, CARD_5, FRECHET, RCOMP_1, STRUCT_0, VALUED_1,
-      FSM_1, FUNCT_4, FUNCT_7, TURING_1, CIRCUIT2, AMISTD_2, PARTFUN1, CAT_1,
-      SCMNORM, NAT_1, RELOC, PBOOLE, AMISTD_5, COMPOS_1, MSUALG_1, FINSET_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, MCART_1, SETFAM_1, FINSET_1,
-      MEMBERED, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, PBOOLE, CARD_1,
-      NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, CARD_3, FINSEQ_1, FUNCOP_1, NAT_D,
-      FUNCT_7, VALUED_0, VALUED_1, AFINSQ_1, STRUCT_0, COMPOS_1, EXTPRO_1,
-      AMISTD_1, AMISTD_2, AMI_1;
+      UNIALG_1, FUNCT_1, CARD_5, STRUCT_0, VALUED_1, FSM_1, FUNCT_4, TURING_1,
+      CIRCUIT2, AMISTD_2, PARTFUN1, SCMNORM, NAT_1, RELOC, PBOOLE, AMISTD_5,
+      COMPOS_1, MSUALG_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, MCART_1, SETFAM_1, MEMBERED,
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, PBOOLE, CARD_1, NUMBERS,
+      XCMPLX_0, XXREAL_0, NAT_1, CARD_3, FINSEQ_1, FUNCOP_1, NAT_D, FUNCT_7,
+      VALUED_0, VALUED_1, AFINSQ_1, STRUCT_0, COMPOS_1, EXTPRO_1, AMISTD_1,
+      AMISTD_2;
  constructors WELLORD2, REALSET1, NAT_D, AMISTD_1, XXREAL_2, PRE_POLY,
-      AFINSQ_1, ORDINAL4, RECDEF_2, VALUED_1, AMISTD_2, AMI_1, PBOOLE,
-      RELSET_1;
+      AFINSQ_1, ORDINAL4, RECDEF_2, VALUED_1, AMISTD_2, PBOOLE, RELSET_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1,
       XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, CARD_3, REALSET1, FUNCT_7,
       STRUCT_0, AMISTD_1, CARD_1, FUNCT_4, XXREAL_2, RELSET_1, GRFUNC_1,
       FUNCT_2, ORDINAL1, AFINSQ_1, VALUED_1, VALUED_0, COMPOS_1, EXTPRO_1,
-      XCMPLX_0, REAL_1, PBOOLE, AMISTD_2, AMI_1;
+      XCMPLX_0, REAL_1, PBOOLE, AMISTD_2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
 
 
@@ -54,8 +61,8 @@ definition
   (non empty stored-program AMI-Struct over N)), I be Instruction of S;
   attr I is relocable means
 :: AMISTD_5:def 1
-  for j,k being natural number, s being State of S
-  holds Exec(IncAddr(I,j+k),IncIC(s,k)) = IncIC(Exec(IncAddr(I,j),s),k);
+  for j,k being natural number, s being State of S holds
+   NPP Exec(IncAddr(I,j+k),IncIC(s,k)) = NPP IncIC(Exec(IncAddr(I,j),s),k);
 end;
 
 registration
@@ -150,7 +157,7 @@ theorem :: AMISTD_5:4
    (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)))
   for INS being Instruction of S, s being State of S
-   holds Exec(IncAddr(INS,k),IncIC(s,k)) = IncIC(Exec(INS,s),k);
+   holds NPP Exec(IncAddr(INS,k),IncIC(s,k)) = NPP IncIC(Exec(INS,s),k);
 
 theorem :: AMISTD_5:5
   for N be with_non-empty_elements non empty set
@@ -161,19 +168,19 @@ theorem :: AMISTD_5:5
   (non empty stored-program AMI-Struct over N)))
   for INS being Instruction of S, s being State of S,
       j, k being Element of NAT st IC s = j+k
- holds Exec(INS, DecIC(s,k)) = DecIC(Exec(IncAddr(INS, k), s),k);
+ holds NPP Exec(INS, DecIC(s,k)) = NPP DecIC(Exec(IncAddr(INS, k), s),k);
 
 registration let N be with_non-empty_elements non empty set;
  cluster relocable IC-recognized proper-halt
   (regular homogeneous J/A-independent
-    Exec-preserving halting realistic     steady-programmed
+    Exec-preserving halting realistic
    (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)));
 end;
 
 reserve N for with_non-empty_elements non empty set,
    S for IC-recognized
-    (halting realistic steady-programmed
+    (halting realistic
    (standard-ins IC-Ins-separated definite realistic
   (non empty stored-program AMI-Struct over N)));
 
@@ -187,7 +194,7 @@ definition let N;
  attr S is CurIns-recognized means
 :: AMISTD_5:def 4
  for p being autonomic non NAT-defined FinPartState of S
-  for s being State of S st p c= s
+  for s being State of S st NPP p c= s
  for P being (the Instructions of S)-valued ManySortedSet of NAT
        st ProgramPart p c= P
   for i being Element of NAT
@@ -201,7 +208,7 @@ end;
 theorem :: AMISTD_5:7
  S is CurIns-recognized implies
  for p being autonomic non NAT-defined FinPartState of S,
-     s1,s2 being State of S st p c= s1 & p c= s2
+     s1,s2 being State of S st NPP p c= s1 & NPP p c= s2
  for P1,P2 being (the Instructions of S)-valued ManySortedSet of NAT
     st ProgramPart p c= P1 & ProgramPart p c= P2
  for i being Element of NAT
@@ -211,28 +218,30 @@ theorem :: AMISTD_5:7
 reserve S for relocable IC-recognized
     (regular homogeneous J/A-independent
     Exec-preserving
-     halting realistic  steady-programmed
+     halting realistic
    (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)));
 
 theorem :: AMISTD_5:8
  S is CurIns-recognized implies
   for k being Element of NAT for p being autonomic FinPartState of S
-  st IC S in dom p for s being State of S st p c= s
+  st IC S in dom p
+ for s being State of S st NPP p c= s
+ for P being (the Instructions of S)-valued ManySortedSet of NAT
+   st ProgramPart p c= P
   for i being Element of NAT
-   holds Comput(ProgramPart(s +* Relocated (p,k)),s +* Relocated (p,k),i) =
-    IncIC(Comput(ProgramPart(s),s,i),k) +* Reloc(ProgramPart p,k);
+   holds NPP Comput(P +* Reloc(ProgramPart p,k),s +* NPP Relocated (p,k),i) =
+    NPP IncIC(Comput(P,s,i),k);
 
 theorem :: AMISTD_5:9
  S is CurIns-recognized implies
   for k being Element of NAT
   for p being autonomic FinPartState of S st IC S in dom p
-  for s being State of S st Relocated(p,k) c= s holds
+  for s being State of S st NPP Relocated(p,k) c= s holds
   for P being (the Instructions of S)-valued ManySortedSet of NAT
    st Reloc(ProgramPart p,k) c= P
-  for i being Element of NAT holds Comput(P,s,i) =
-    IncIC(Comput(P+*ProgramPart p,s+*p,i),k) +* s|dom ProgramPart p
-       +* Reloc(ProgramPart p,k);
+  for i being Element of NAT holds NPP Comput(P,s,i) =
+    NPP IncIC(Comput(P+*ProgramPart p,s+*NPP p,i),k);
 
 reserve m,j for Element of NAT;
 
@@ -240,12 +249,11 @@ theorem :: AMISTD_5:10
  S is CurIns-recognized implies
   for k being Element of NAT for p being FinPartState of S st IC
   S in dom p
-   for s being State of S st p c= s & Relocated(p,k) is autonomic
+   for s being State of S st NPP p c= s & Relocated(p,k) is autonomic
    for P being (the Instructions of S)-valued ManySortedSet of NAT
     st ProgramPart p c= P
-  holds for i being Element of NAT holds Comput(P,s,i)
-   = DecIC(Comput(P+*Reloc(ProgramPart p,k),s+*Relocated(p,k),i),k)
- +* s|dom Reloc(ProgramPart p,k) +* ProgramPart (p);
+  holds for i being Element of NAT holds NPP Comput(P,s,i)
+   = NPP DecIC(Comput(P+*Reloc(ProgramPart p,k),s+*NPP Relocated(p,k),i),k);
 
 theorem :: AMISTD_5:11
  S is CurIns-recognized implies
@@ -256,8 +264,8 @@ definition let N,S;
  attr S is relocable1 means
 :: AMISTD_5:def 5
  for k being Element of NAT, p being autonomic FinPartState of S,
-      s1, s2 being State of S st IC S in dom p & p c= s1 &
-       Relocated(p,k) c= s2
+      s1, s2 being State of S st IC S in dom p & NPP p c= s1 &
+       NPP Relocated(p,k) c= s2
   for P1,P2 being (the Instructions of S)-valued ManySortedSet of NAT
    st ProgramPart p c= P1 & Reloc(ProgramPart p,k) c= P2
   for i being Element of NAT
@@ -266,13 +274,12 @@ definition let N,S;
  attr S is relocable2 means
 :: AMISTD_5:def 6
  for k being Element of NAT, p being autonomic FinPartState of S,
-      s1, s2 being State of S st IC S in dom p & p c= s1 &
-       Relocated(p,k) c= s2
+      s1, s2 being State of S st IC S in dom p &
+      NPP p c= s1 & NPP Relocated(p,k) c= s2
   for P1,P2 being (the Instructions of S)-valued ManySortedSet of NAT
    st ProgramPart p c= P1 & Reloc(ProgramPart p,k) c= P2
   for i being Element of NAT holds
-   Comput(P1,s1,i)|dom DataPart p =
-  Comput(P2,s2,i)|dom DataPart Relocated(p,k);
+   Comput(P1,s1,i)|dom DataPart p = Comput(P2,s2,i)|dom DataPart p;
 end;
 
 registration let N;
@@ -282,7 +289,7 @@ end;
 registration let N be with_non-empty_elements non empty set;
  cluster relocable1 (relocable IC-recognized proper-halt
   (regular homogeneous J/A-independent
-    Exec-preserving halting realistic     steady-programmed
+    Exec-preserving halting realistic
    (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N))));
 end;
@@ -290,7 +297,7 @@ end;
 reserve S for relocable1 (relocable IC-recognized proper-halt
     (regular homogeneous J/A-independent
     Exec-preserving
-     halting realistic  steady-programmed
+     halting realistic
    (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N))));
 
@@ -326,7 +333,7 @@ theorem :: AMISTD_5:14
 
 reserve S for
   IC-recognized
-    (halting realistic  steady-programmed
+    (halting realistic
    (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)));
 

@@ -2,7 +2,15 @@
 ::  by Andrzej Trybulec and Yatsuka Nakamura
 ::
 :: Received February 14, 1996
-:: Copyright (c) 1996 Association of Mizar Users
+:: Copyright (c) 1996-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -13,18 +21,18 @@ environ
       XXREAL_0, XCMPLX_0, MCART_1,
       NAT_1, NAT_D, VALUED_1, INT_1, INT_2, RELAT_1, FUNCT_1,
       PARTFUN1, FUNCT_2, FUNCT_4, FUNCOP_1, FUNCT_7, FINSEQ_1, FINSEQ_2,
-      STRUCT_0, COMPOS_1, EXTPRO_1, AMI_1, AMI_3, SCMFSA_2, AMISTD_2,
+      STRUCT_0, COMPOS_1, EXTPRO_1, AMI_3, SCMFSA_2, AMISTD_2,
       AMISTD_5;
  constructors DOMAIN_1, XXREAL_0, AMI_3, SCMFSA_2, NAT_D,
-      RELSET_1, VALUED_1, AMISTD_2, AMI_1, AMISTD_5, PBOOLE;
+      RELSET_1, VALUED_1, AMISTD_2, AMISTD_5, PBOOLE;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
       NUMBERS, XREAL_0, INT_1, CARD_3, SCMFSA_2, FINSET_1, VALUED_1,
-      FUNCT_4, RELAT_1, AMI_1, AMI_3, AMI_6, RELOC, XXREAL_0, SCMFSA10,
+      FUNCT_4, RELAT_1, AMI_3, AMI_6, RELOC, XXREAL_0, SCMFSA10,
       AMISTD_2, VALUED_0, COMPOS_1, EXTPRO_1, AMISTD_5;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, COMPOS_1, EXTPRO_1, AMI_1, AMI_3,
+ definitions TARSKI, COMPOS_1, EXTPRO_1, AMI_3,
       SCMFSA_2, FUNCOP_1, RELAT_1, AMISTD_2, FUNCT_1, AMISTD_5;
- theorems SCMFSA_2, ENUMSET1, NAT_1, TARSKI, AMI_1, SCMFSA_3, VALUED_1,
+ theorems SCMFSA_2, ENUMSET1, NAT_1, TARSKI, SCMFSA_3, VALUED_1,
       AMISTD_2, RECDEF_2, SCMFSA10, FINSEQ_1, ORDINAL1, COMPOS_1, EXTPRO_1;
 
 begin :: Incrementing addresses
@@ -206,6 +214,14 @@ registration
   end;
 end;
 
+registration let a be Int-Location;
+ cluster a:==1 -> ins-loc-free;
+ coherence
+  proof
+   thus JumpPart(a:==1) is empty by RECDEF_2:def 2;
+  end;
+end;
+
 reserve i for Instruction of SCM+FSA;
 
 begin :: Incrementing Addresses in a finite partial state
@@ -219,16 +235,7 @@ registration
 A1: IC IncIC(Exec(IncAddr(INS,j),s),k)
        = IC Exec(IncAddr(INS,j),s) + k by COMPOS_1:54
       .= IC Exec(IncAddr(INS,j+k),IncIC(s,k)) by AMISTD_2:def 18;
-         :: steady programmed
-A2: now
-    let l be Element of NAT;
-    thus Exec(IncAddr(INS,j+k),IncIC(s,k)).l
-       = IncIC(s,k).l by AMI_1:def 13
-      .= s.l by COMPOS_1:20
-      .= Exec(IncAddr(INS,j),s).l by AMI_1:def 13
-      .= IncIC(Exec(IncAddr(INS,j),s),k).l by COMPOS_1:20;
-  end;
-  per cases by SCMFSA_2:35,NAT_1:37;
+  per cases by SCMFSA_2:35,NAT_1:38;
   suppose InsCode INS = 0;
     then
 A3: INS = halt SCM+FSA by SCMFSA_2:122;
@@ -276,7 +283,7 @@ A8:     da <> d;
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by SCMFSA_3:11;
       end;
     end;
-   hence thesis by A2,A6,SCMFSA_2:86,A1;
+   hence thesis by A6,SCMFSA_2:138,A1;
   end;
   suppose InsCode INS = 2;
     then consider da,db being Int-Location such that
@@ -314,7 +321,7 @@ A12:     da <> d;
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by SCMFSA_3:11;
       end;
     end;
-   hence thesis by A2,A10,SCMFSA_2:86,A1;
+   hence thesis by A10,SCMFSA_2:138,A1;
   end;
   suppose InsCode INS = 3;
     then consider da,db being Int-Location such that
@@ -352,7 +359,7 @@ A16:     da <> d;
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by SCMFSA_3:11;
       end;
     end;
-    hence thesis by A2,A14,SCMFSA_2:86,A1;
+    hence thesis by A14,SCMFSA_2:138,A1;
   end;
   suppose InsCode INS = 4;
     then consider da,db being Int-Location such that
@@ -390,7 +397,7 @@ A20:     da <> d;
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by SCMFSA_3:11;
       end;
     end;
-    hence thesis by A2,A18,SCMFSA_2:86,A1;
+    hence thesis by A18,SCMFSA_2:138,A1;
   end;
   suppose InsCode INS = 5;
     then consider da,db being Int-Location such that
@@ -471,7 +478,7 @@ A29:        da <> d;
         end;
       end;
     end;
-    hence thesis by A2,A22,SCMFSA_2:86,A1;
+    hence thesis by A22,SCMFSA_2:138,A1;
   end;
   suppose InsCode INS = 6;
     then consider loc being Element of NAT such that
@@ -493,7 +500,7 @@ A33: now let f be FinSeq-Location;
           .= Exec(IncAddr(INS,j), s).d by A32,SCMFSA_2:95
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by SCMFSA_3:11;
     end;
-    hence thesis by A2,A33,SCMFSA_2:86,A1;
+    hence thesis by A33,SCMFSA_2:138,A1;
   end;
   suppose InsCode INS = 7;
     then consider loc being Element of NAT, da being Int-Location such that
@@ -515,7 +522,7 @@ A37: now let f be FinSeq-Location;
           .= Exec(IncAddr(INS,j), s).d by A36,SCMFSA_2:96
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by SCMFSA_3:11;
     end;
-   hence thesis by A2,A1,A37,SCMFSA_2:86;
+   hence thesis by A1,A37,SCMFSA_2:138;
   end;
   suppose InsCode INS = 8;
     then consider loc being Element of NAT, da being Int-Location such that
@@ -537,7 +544,7 @@ A41: now let f be FinSeq-Location;
           .= Exec(IncAddr(INS,j), s).d by A40,SCMFSA_2:97
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by SCMFSA_3:11;
      end;
-   hence thesis by A2,A41,SCMFSA_2:86,A1;
+   hence thesis by A41,SCMFSA_2:138,A1;
   end;
   suppose InsCode INS = 9;
     then consider db,da being Int-Location, f being FinSeq-Location such that
@@ -579,7 +586,7 @@ A49:     da <> d;
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by SCMFSA_3:11;
       end;
     end;
-   hence thesis by A2,A43,SCMFSA_2:86,A1;
+   hence thesis by A43,SCMFSA_2:138,A1;
   end;
   suppose InsCode INS = 10;
     then consider db,da being Int-Location, f being FinSeq-Location such that
@@ -622,7 +629,7 @@ A57:    f <> g;
           .= Exec(IncAddr(INS,j), s).d by A50,COMPOS_1:92
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by SCMFSA_3:11;
     end;
-   hence thesis by A2,A51,SCMFSA_2:86,A1;
+   hence thesis by A51,SCMFSA_2:138,A1;
   end;
   suppose InsCode INS = 11;
     then consider da being Int-Location, f being FinSeq-Location such that
@@ -659,7 +666,7 @@ A61:     da <> d;
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by SCMFSA_3:11;
       end;
     end;
-   hence thesis by A2,A59,SCMFSA_2:86,A1;
+   hence thesis by A59,SCMFSA_2:138,A1;
   end;
   suppose InsCode INS = 12;
     then consider da being Int-Location, f being FinSeq-Location such that
@@ -698,7 +705,43 @@ A67:    f <> g;
           .= Exec(IncAddr(INS,j), s).d by A62,COMPOS_1:92
           .= IncIC(Exec(IncAddr(INS,j),s),k).d by SCMFSA_3:11;
     end;
-   hence thesis by A2,A63,SCMFSA_2:86,A1;
+   hence thesis by A63,SCMFSA_2:138,A1;
+  end;
+  suppose InsCode INS = 13;
+    then consider da being Int-Location such that
+A62: INS = da:==1 by SCMFSA_2:134;
+A63: now let g be Int-Location;
+A64:  Exec(INS, s ).da = 1
+         & Exec (INS,IncIC(s,k)).da = 1 by A62,SCMFSA_2:136;
+      per cases;
+      suppose
+A65:    da = g;
+       thus Exec(IncAddr(INS,j+k),IncIC(s,k)).g
+         =  Exec(INS, IncIC(s,k)).g by A62,COMPOS_1:92
+        .= IncIC(Exec(INS, s),k).g by A64,A65,SCMFSA_3:11
+        .= IncIC(Exec(IncAddr(INS,j),s),k).g by A62,COMPOS_1:92;
+      end;
+      suppose
+A67:    da <> g;
+       thus Exec(IncAddr(INS,j+k),IncIC(s,k)).g
+           = Exec(INS,IncIC(s,k)).g by A62,COMPOS_1:92
+          .= IncIC(s,k).g by A62,A67,SCMFSA_2:136
+          .= s.g by SCMFSA_3:11
+          .= Exec(INS, s).g by A62,A67,SCMFSA_2:136
+          .= Exec(IncAddr(INS,j), s).g by A62,COMPOS_1:92
+          .= IncIC(Exec(IncAddr(INS,j),s),k).g by SCMFSA_3:11;
+     end;
+    end;
+    now let d be FinSeq-Location;
+       thus Exec(IncAddr(INS,j+k),IncIC(s,k)).d
+           = Exec(INS,IncIC(s,k)).d by A62,COMPOS_1:92
+          .= IncIC(s,k).d by A62,SCMFSA_2:136
+          .= s.d by SCMFSA_3:12
+          .= Exec(INS, s).d by A62,SCMFSA_2:136
+          .= Exec(IncAddr(INS,j), s).d by A62,COMPOS_1:92
+          .= IncIC(Exec(IncAddr(INS,j),s),k).d by SCMFSA_3:12;
+    end;
+   hence thesis by A63,SCMFSA_2:138,A1;
   end;
  end;
 end;
@@ -711,7 +754,7 @@ proof
  assume not InsCode i in {6,7,8};
   then
 A1: InsCode i <> 6 & InsCode i <> 7 & InsCode i <> 8 by ENUMSET1:def 1;
-  per cases by A1,SCMFSA_2:35,NAT_1:37;
+  per cases by A1,SCMFSA_2:35,NAT_1:38;
   suppose InsCode i = 0;
     then i = halt SCM+FSA by SCMFSA_2:122;
    hence thesis by COMPOS_1:93;
@@ -768,6 +811,12 @@ A9: i = da :=len f by SCMFSA_2:64;
     InsCode i = 12;
     then consider da being Int-Location, f being FinSeq-Location such that
 A10: i = f:=<0,...,0>da by SCMFSA_2:65;
+   thus thesis by A10,COMPOS_1:92;
+  end;
+  suppose
+    InsCode i = 13;
+    then consider da being Int-Location such that
+A10: i = da:==1 by SCMFSA_2:134;
    thus thesis by A10,COMPOS_1:92;
   end;
  end;

@@ -34,12 +34,11 @@
 <ArticleID name="EXTPRO_1"/>
 <ArticleID name="AMISTD_2"/>
 <ArticleID name="SCMFSA_2"/>
-<ArticleID name="AMI_1"/>
 <ArticleID name="AMISTD_5"/>
 </Signature>
 <FCluster aid="SCMFSA_5" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 <Cluster>
 <Adjective nr="82">
 <Func kind="K" nr="2">
@@ -49,7 +48,7 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="98">
+<Adjective nr="97">
 <Func kind="K" nr="2">
 <Func kind="K" nr="66"/>
 <Func kind="K" nr="133">
@@ -57,7 +56,7 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="99">
+<Adjective nr="98">
 <Func kind="K" nr="2">
 <Func kind="K" nr="66"/>
 <Func kind="K" nr="133">

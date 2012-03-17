@@ -2,7 +2,15 @@
 ::  by Andrzej Trybulec , Yatsuka Nakamura and Piotr Rudnicki
 ::
 :: Received February 3, 1996
-:: Copyright (c) 1996 Association of Mizar Users
+:: Copyright (c) 1996-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -18,7 +26,7 @@ environ
       WELLORD2, RELSET_1, AMI_2, FUNCT_7, RECDEF_2;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, FUNCOP_1, NUMBERS, XREAL_0, INT_1,
       FINSEQ_1, CARD_3, GR_CY_1, AMI_2, RELAT_1, FINSET_1, CARD_1, CARD_2,
-      RELSET_1;
+      RELSET_1, FUNCT_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
  definitions TARSKI, FUNCOP_1, CARD_1, AMI_2, FINSEQ_1, RELAT_1, MCART_1;
  theorems ZFMISC_1, FUNCT_2, TARSKI, CAT_2, FUNCOP_1, INT_1, CARD_3, FINSEQ_1,
@@ -80,7 +88,7 @@ registration
   end;
 end;
 
-reserve J,K for Element of Segm 13,
+reserve J,J1,K for Element of Segm 14,
   a for Element of NAT,
   b,b1,b2,c,c1,c2 for Element of SCM+FSA-Data-Loc,
   f,f1,f2 for Element of SCM+FSA-Data*-Loc;
@@ -88,15 +96,26 @@ reserve J,K for Element of Segm 13,
 definition
   func SCM+FSA-Instr -> non empty set equals
   SCM-Instr \/ { [J,{},<*c,f,b*>] : J in {9,10} }
-   \/ { [K,{},<*c1,f1*>] : K in {11,12} };
+   \/ { [K,{},<*c1,f1*>] : K in {11,12} }
+   \/ { [13,{},<*b1*>] : not contradiction };
   coherence;
 end;
 
 theorem Th2:
   SCM-Instr c= SCM+FSA-Instr
 proof
-A1: SCM-Instr c= SCM-Instr \/ { [J,{},<*c,f,b*>] : J in {9,10} } by XBOOLE_1:7;
-  SCM-Instr \/ { [J,{},<*c,f,b*>] : J in {9,10} } c= SCM+FSA-Instr
+A2: SCM-Instr c= SCM-Instr \/ { [J,{},<*c,f,b*>] : J in {9,10} }
+      by XBOOLE_1:7;
+   SCM-Instr \/ { [J,{},<*c,f,b*>] : J in {9,10} }
+     c= SCM-Instr \/ { [J1,{},<*c2,f2,b2*>] : J1 in {9,10} }
+   \/ { [K,{},<*c1,f1*>] : K in {11,12} } by XBOOLE_1:7;
+   then
+A1: SCM-Instr
+     c= SCM-Instr \/ { [J,{},<*c,f,b*>] : J in {9,10} }
+   \/ { [K,{},<*c1,f1*>] : K in {11,12} } by A2,XBOOLE_1:1;
+  SCM-Instr \/ { [J,{},<*c,f,b*>] : J in {9,10} }
+     \/ { [K,{},<*c1,f1*>] : K in {11,12} }
+   c= SCM+FSA-Instr
    by XBOOLE_1:7;
   hence thesis by A1,XBOOLE_1:1;
 end;
@@ -107,13 +126,18 @@ registration
 end;
 
 Lm1:
- SCM+FSA-Instr c= [:NAT,NAT*,proj2 SCM+FSA-Instr:] proof let x;
+ SCM+FSA-Instr c= [:NAT,NAT*,proj2 SCM+FSA-Instr:]
+proof let x;
   assume
 A1:  x in SCM+FSA-Instr;
   per cases by A1,XBOOLE_0:def 3;
   suppose
-A2: x in SCM-Instr \/ { [J,{},<*c,f,b*>] : J in {9,10} };
+A2: x in SCM-Instr \/ { [J,{},<*c,f,b*>] : J in {9,10} }
+        \/ { [K,{},<*c1,f1*>] : K in {11,12} };
   per cases by A2,XBOOLE_0:def 3;
+  suppose
+B2:  x in SCM-Instr \/ { [J,{},<*c,f,b*>] : J in {9,10} };
+  per cases by B2,XBOOLE_0:def 3;
   suppose x in SCM-Instr;
    then
 A3:  x in [:NAT,NAT*,proj2 SCM-Instr:] by AMI_2:34;
@@ -127,7 +151,7 @@ A3:  x in [:NAT,NAT*,proj2 SCM-Instr:] by AMI_2:34;
 A4:  x = [J,{},<*c,f,b*>] & J in {9,10};
 A5: {} in NAT* by FINSEQ_1:66;
    J in NAT & <*c,f,b*> in proj2 SCM+FSA-Instr by A1,A4,RELAT_1:def 5;
-  hence x in [:NAT,NAT*,proj2 SCM+FSA-Instr:] by A4,MCART_1:73,A5;
+  hence x in [:NAT,NAT*,proj2 SCM+FSA-Instr:] by A4,A5,MCART_1:73;
   end;
   end;
   suppose x in { [K,{},<*c1,f1*>] : K in {11,12} };
@@ -135,7 +159,15 @@ A5: {} in NAT* by FINSEQ_1:66;
 A6: x = [K,{},<*c1,f1*>] & K in {11,12};
 A7: {} in NAT* by FINSEQ_1:66;
    K in NAT & <*c1,f1*> in proj2 SCM+FSA-Instr by A1,A6,RELAT_1:def 5;
-  hence x in [:NAT,NAT*,proj2 SCM+FSA-Instr:] by A6,MCART_1:73,A7;
+  hence x in [:NAT,NAT*,proj2 SCM+FSA-Instr:] by A6,A7,MCART_1:73;
+  end;
+  end;
+  suppose x in { [13,{},<*b1*>] : not contradiction };
+   then consider b1 such that
+A6: x = [13,{},<*b1*>];
+A7: {} in NAT* by FINSEQ_1:66;
+   K in NAT & <*b1*> in proj2 SCM+FSA-Instr by A1,A6,RELAT_1:def 5;
+  hence x in [:NAT,NAT*,proj2 SCM+FSA-Instr:] by A6,A7,MCART_1:73;
   end;
  end;
 
@@ -175,9 +207,22 @@ A7: J in {9,10};
     then I`1_3 = 9 or I`1_3 = 10 by A7,TARSKI:def 2;
     hence contradiction by A1;
   end;
+B5: now
+    assume I in { [13,{},<*b1*>] : not contradiction };
+    then consider b1 such that
+A6: I = [13,{},<*b1*>];
+    I`1_3 = 13 by A6,RECDEF_2:def 1;
+    hence contradiction by A1;
+  end;
   I in SCM-Instr \/ { [J,{},<*c,f,b*>] : J in {9,10} }
-   or I in { [K,{},<*c1,f1*>] : K in {11,12} } by XBOOLE_0:def 3;
-  hence thesis by A2,A5,XBOOLE_0:def 3;
+   \/ { [K,{},<*c1,f1*>] : K in {11,12} }
+   or I in { [13,{},<*b1*>] : not contradiction }
+    by XBOOLE_0:def 3;
+  then I in SCM-Instr \/ { [J,{},<*c,f,b*>] : J in {9,10} }
+   or I in { [K,{},<*c1,f1*>] : K in {11,12} }
+   or I in { [13,{},<*b1*>] : not contradiction }
+    by XBOOLE_0:def 3;
+  hence thesis by A2,A5,B5,XBOOLE_0:def 3;
 end;
 
 theorem
@@ -287,7 +332,7 @@ A18:      (SCM-OK|NAT).u = e by FUNCT_1:def 5;
         end;
         then dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|NAT)) = dom(SCM-OK|NAT)
              by RELAT_1:46
-          .= NAT by A16,RELAT_1:91,Lm2;
+          .= NAT by A16,Lm2,RELAT_1:91;
         then not z in NAT by A12,XBOOLE_0:def 5;
         then z in {NAT} \/ SCM-Data-Loc by A15,XBOOLE_0:def 3;
         then
@@ -379,10 +424,13 @@ proof
   assume
 A1: x in {9,10};
   then x = 9 or x = 10 by TARSKI:def 2;
-  then reconsider x as Element of Segm 13 by NAT_1:45;
+  then reconsider x as Element of Segm 14 by NAT_1:45;
   [x,{},<*c,f,b*>] in { [K,{},<*c1,f1,b1*>] : K in {9,10}} by A1;
-  then [x,{},<*c,f,b*>] in SCM-Instr \/
-   { [K,{},<*c1,f1,b1*>] : K in {9,10}} by XBOOLE_0:def 3;
+  then [x,{},<*c,f,b*>] in SCM-Instr \/ { [J,{},<*c1,f1,b1*>] : J in {9,10}}
+    by XBOOLE_0:def 3;
+  then [x,{},<*c,f,b*>] in SCM-Instr \/ { [J,{},<*c1,f1,b1*>] : J in {9,10}}
+     \/ { [K,{},<*c2,f2*>] : K in {11,12} }
+    by XBOOLE_0:def 3;
   hence thesis by XBOOLE_0:def 3;
 end;
 
@@ -392,8 +440,13 @@ proof
   assume
 A1: x in {11,12};
   then x = 11 or x = 12 by TARSKI:def 2;
-  then reconsider x as Element of Segm 13 by NAT_1:45;
+  then reconsider x as Element of Segm 14 by NAT_1:45;
   [x,{},<*c,f*>] in { [K,{},<*c1,f1*>] : K in {11,12}} by A1;
+  then [x,{},<*c,f*>] in SCM-Instr \/ { [J,{},<*c2,f2,b*>] : J in {9,10} }
+    \/ { [K,{},<*c1,f1*>] : K in {11,12} }
+    by XBOOLE_0:def 3;
+  then [x,{},<*c,f*>] in SCM-Instr \/ { [J,{},<*c2,f2,b*>] : J in {9,10} }
+   \/ { [K,{},<*c1,f1*>] : K in {11,12} };
   hence thesis by XBOOLE_0:def 3;
 end;
 
@@ -669,8 +722,8 @@ A12:  (s|SCM-Memory +* (NAT --> I)).x = (s|SCM-Memory).x by A4,FUNCT_4:12
 A13:  pi(product SCM+FSA-OK,a) = SCM+FSA-OK.a by CARD_3:22
         .= INT by A11,Th10;
       s.a in pi(product SCM+FSA-OK,a) by CARD_3:def 6;
-      hence (s|SCM-Memory +* (NAT --> I)).x in SCM-OK.x by A11,A12,A13,AMI_2:10
-;
+      hence (s|SCM-Memory +* (NAT --> I)).x in SCM-OK.x
+       by A11,A12,A13,AMI_2:10;
     end;
     suppose
 A14:  x in NAT;
@@ -684,7 +737,7 @@ A15:  SCM-OK.x = SCM-Instr by AMI_2:11;
   dom(s|SCM-Memory +* (NAT --> I)) = dom(s|SCM-Memory) \/ dom(NAT --> I)
   by FUNCT_4:def 1
     .= SCM-Memory \/ NAT by A2,FUNCOP_1:19
-    .= SCM-Memory by XBOOLE_1:12,Lm2
+    .= SCM-Memory by Lm2,XBOOLE_1:12
     .= dom SCM-OK by FUNCT_2:def 1;
   hence thesis by A3,CARD_3:18;
 end;
@@ -696,8 +749,8 @@ proof
   let s be SCM+FSA-State, s9 be SCM-State;
 A1: dom SCM+FSA-OK = SCM+FSA-Memory by FUNCT_2:def 1;
   then reconsider
-  f = SCM+FSA-OK as non-empty ManySortedSet of SCM+FSA-Memory by PARTFUN1:def 4
-;
+  f = SCM+FSA-OK as non-empty ManySortedSet of SCM+FSA-Memory
+    by PARTFUN1:def 4;
 A2: dom s9 = dom SCM-OK by CARD_3:18
     .= SCM-Memory by FUNCT_2:def 1;
   now
@@ -729,8 +782,14 @@ A10:  pi(product SCM-OK,a) = SCM-OK.a by CARD_3:22;
     end;
     suppose
 A11:  x in NAT;
-      SCM+FSA-Instr = SCM-Instr \/ ({ [J,{},<*c,f2,b*>] : J in {9,10} } \/ {
-      [K,{},<*c1,f1*>] : K in {11,12} }) by XBOOLE_1:4;
+      SCM+FSA-Instr =
+       SCM-Instr \/ ({ [J,{},<*c,f2,b*>] : J in {9,10} }
+        \/ { [K,{},<*c1,f1*>] : K in {11,12} })
+        \/ { [13,{},<*b1*>] : not contradiction } by XBOOLE_1:4
+      .= SCM-Instr \/ ({ [J,{},<*c,f2,b*>] : J in {9,10} } \/ {
+      [K,{},<*c1,f1*>] : K in {11,12} }
+         \/ { [13,{},<*b1*>] : not contradiction })
+         by XBOOLE_1:4;
       then
 A12:  SCM-Instr c= SCM+FSA-Instr by XBOOLE_1:7;
       reconsider a = x as Element of SCM-Memory by A2,A3;
@@ -960,6 +1019,30 @@ end;
 
 definition
   let x be Element of SCM+FSA-Instr;
+  given c such that
+A1: x = [ 13,{}, <*c*>];
+  func x int_addr -> Element of SCM+FSA-Data-Loc means
+  ex c st <*c*> = x`3_3 & it = c;
+  existence
+  proof
+    take c,c;
+    thus thesis by A1,RECDEF_2:def 3;
+  end;
+  uniqueness
+  proof
+    let a1,a2 be Element of SCM+FSA-Data-Loc;
+    given c1 such that
+A2: <*c1*> = x`3_3 and
+A3: a1 = c1;
+    given c2 such that
+A4: <*c2*> = x`3_3 & a2 = c2;
+    thus a1 = <*c1*>/.1 by A3,FINSEQ_4:25
+      .= a2 by A2,A4,FINSEQ_4:25;
+  end;
+end;
+
+definition
+  let x be Element of SCM+FSA-Instr;
   given c,f,J such that
 A1: x = [ J,{}, <*c,f*>];
   func x int_addr3 -> Element of SCM+FSA-Data-Loc means
@@ -1018,17 +1101,30 @@ end;
 definition
   let x be Element of SCM+FSA-Instr, s be SCM+FSA-State;
   func SCM+FSA-Exec-Res(x,s) -> SCM+FSA-State means
-  ex x9 being Element of
-  SCM-Instr, s9 being SCM-State st x = x9 & s9 = s|SCM-Memory +* (NAT --> x9) &
-it = s +* SCM-Exec-Res(x9,s9) +* s|NAT if x`1_3 <= 8, ex i being Integer, k
-  st k = abs(s.(x int_addr2)) & i = (s.(x coll_addr1))/.k & it = SCM+FSA-Chg(
-  SCM+FSA-Chg(s,x int_addr1,i),succ IC s) if x`1_3 = 9, ex f being
-FinSequence of INT,k st k = abs(s.(x int_addr2)) & f = s.(x coll_addr1)+*(k,s.(
-  x int_addr1)) & it = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr1,f),succ IC s) if
-x`1_3 = 10, it = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr3,len(s.(x coll_addr2)
-)),succ IC s) if x`1_3 = 11, ex f being FinSequence of INT,k st k = abs(s.(
-  x int_addr3)) & f = k |-> 0 & it = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr2,f),
-  succ IC s) if x`1_3 = 12 otherwise it = s;
+    ex x9 being Element of SCM-Instr, s9 being SCM-State st
+     x = x9 & s9 = s|SCM-Memory +* (NAT --> x9) &
+     it = s +* SCM-Exec-Res(x9,s9) +* s|NAT
+              if x`1_3 <= 8,
+    ex i being Integer, k st
+     k = abs(s.(x int_addr2)) & i = (s.(x coll_addr1))/.k &
+        it = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr1,i),succ IC s)
+              if x`1_3 = 9,
+    ex f being FinSequence of INT,k st
+     k = abs(s.(x int_addr2)) & f = s.(x coll_addr1)+*(k,s.(x int_addr1)) &
+      it = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr1,f),succ IC s)
+              if x`1_3 = 10,
+    it =
+     SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr3,len(s.(x coll_addr2))),succ IC s)
+              if x`1_3 = 11,
+    ex f being FinSequence of INT,k st
+     k = abs(s.(x int_addr3)) & f = k |-> 0 &
+     it = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr2,f),succ IC s)
+              if x`1_3 = 12,
+    ex i being Integer st
+     i = 1 &
+     it = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr,i),succ IC s)
+              if x`1_3 = 13
+    otherwise it = s;
   existence
   proof
     hereby
@@ -1108,15 +1204,17 @@ A4:   {0} c= INT by ZFMISC_1:37;
       thus k = abs(s.(x int_addr3)) & f = k |-> 0 & s1 = SCM+FSA-Chg(
       SCM+FSA-Chg(s,x coll_addr2,f),succ IC s);
     end;
+    hereby
+      assume x`1_3 = 13;
+      reconsider i = 1 as Integer by FINSEQ_1:def 4;
+      take s1 = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr,i),succ IC s);
+      take i;
+      thus i = 1 & s1 = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr,i),succ IC s);
+    end;
     thus thesis;
   end;
   uniqueness;
   consistency;
-end;
-
-definition
-  let A be set, B be non empty set;
-  mode Action of A,B is Function of A, Funcs(B,B);
 end;
 
 definition
@@ -1330,6 +1428,10 @@ A1:   [y,f] in SCM+FSA-Instr by RELAT_1:def 5;
     set x = [y,f];
   per cases by A1,XBOOLE_0:def 3;
   suppose
+B1: x in  SCM-Instr \/ { [J,{},<*c,f2,b*>] : J in {9,10} }
+   \/ { [K,{},<*c1,f1*>] : K in {11,12} };
+  per cases by B1,XBOOLE_0:def 3;
+  suppose
 A2: x in SCM-Instr \/ { [J,{},<*c,f1,b*>] : J in {9,10} };
   per cases by A2,XBOOLE_0:def 3;
   suppose x in SCM-Instr;
@@ -1350,4 +1452,33 @@ A4: x = [K,{},<*c1,f1*>] & K in {11,12};
   hence f is FinSequence;
   end;
   end;
+  suppose x in { [13,{},<*b1*>] : not contradiction };
+   then consider b1 such that
+A4: x = [13,{},<*b1*>];
+  f = <*b1*> by A4,ZFMISC_1:33;
+  hence f is FinSequence;
+  end;
+  end;
 end;
+
+theorem
+  for s being SCM+FSA-State, t being Element of SCM+FSA-Data-Loc,
+      u being Integer, v being Element of NAT
+       holds SCM+FSA-Chg(s,t,u).v = s.v
+proof
+  let s be SCM+FSA-State, t be Element of SCM+FSA-Data-Loc,
+   u be Integer, v be Element of NAT;
+A1: {t} = dom(t .--> u) by FUNCOP_1:19;
+  SCM+FSA-OK.v = SCM+FSA-Instr & SCM+FSA-OK.t = INT by Th11,Th12,Th10;
+  then not v in dom(t .--> u) by A1,Th13,TARSKI:def 1;
+  hence thesis by FUNCT_4:12;
+end;
+
+theorem
+  [13,{},<*c*>] in SCM+FSA-Instr
+proof
+  reconsider x=13 as Element of Segm 14 by NAT_1:45;
+  [x,{},<*c*>] in { [13,{},<*b1*>] : not contradiction };
+  hence thesis by XBOOLE_0:def 3;
+end;
+

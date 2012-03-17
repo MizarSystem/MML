@@ -1,0 +1,625 @@
+:: Representation Theorem for Stacks
+::  by Grzegorz Bancerek
+:: 
+:: Received February 22, 2011
+:: Copyright (c) 2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies STACKS_1, XBOOLE_0, STRUCT_0, ZFMISC_1, SUBSET_1, FUNCT_1,
+      NUMBERS, NAT_1, TARSKI, ARYTM_3, RELAT_1, FINSEQ_1, FINSEQ_3, ORDINAL4,
+      FUNCOP_1, PARTFUN1, CARD_1, XXREAL_0, COMPLEX1, GLIB_000, RELAT_2,
+      EQREL_1, FILTER_1, BINOP_1, MCART_1, ORDERS_1, WELLORD1, ARYTM_1,
+      SETFAM_1, FUNCT_2, AOFA_000, PBOOLE, FUNCT_4, MATRIX_7, REWRITE1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
+      RELAT_2, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, DOMAIN_1, FUNCT_3,
+      FUNCOP_1, ORDERS_1, FUNCT_4, NUMBERS, XXREAL_0, NAT_1, NAT_D, FINSEQ_1,
+      FINSEQ_2, EQREL_1, FINSEQ_3, PBOOLE, FUNCT_7, STRUCT_0, FILTER_1,
+      REWRITE1, ABCMIZ_1, AOFA_000;
+ constructors BINOP_1, DOMAIN_1, XXREAL_0, RELSET_1, FILTER_1, FUNCT_7,
+      REWRITE1, ABCMIZ_1, POLYNOM3, NAT_D;
+ registrations XBOOLE_0, RELSET_1, STRUCT_0, RELAT_1, FUNCT_1, FINSEQ_1,
+      PARTFUN1, FUNCT_2, NAT_1, ORDINAL1, XXREAL_0, XREAL_0, CARD_1, EQREL_1,
+      SUBSET_1, REWRITE1;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+
+
+begin :: Preliminaries
+
+reserve i,j for Nat;
+reserve x,y for set;
+
+definition
+  let A be set;
+  let s1,s2 be FinSequence of A;
+  redefine func s1^s2 -> Element of A*;
+end;
+
+definition
+  let A be set;
+  let i be Nat;
+  let s be FinSequence of A;
+  redefine func Del(s,i) -> Element of A*;
+end;
+
+theorem :: STACKS_1:1
+  Del({},i) = {};
+
+theorem :: STACKS_1:2
+  for D being non empty set
+  for s being FinSequence of D st s <> {}
+  ex w being FinSequence of D, n being Element of D st s = <*n*>^w;
+
+scheme :: STACKS_1:sch 1
+ IndSeqD{D()->non empty set, P[set]}:
+  for p being FinSequence of D() holds P[p]
+  provided
+ P[<*> D()] and
+ for p being FinSequence of D() for x being Element of D() st P[p]
+    holds P[<*x*>^p];
+
+definition
+  let C,D be non empty set;
+  let R be Relation;
+  mode BinOp of C,D,R -> Function of [:C,D:],D means
+:: STACKS_1:def 1
+
+    for x being Element of C,y1,y2 being Element of D
+    st [y1,y2] in R holds [it.(x,y1),it.(x,y2)] in R;
+end;
+
+scheme :: STACKS_1:sch 2
+ LambdaD2{ A,B,C() -> non empty set, F(set,set) -> Element of C() }:
+  ex M being Function of [:A(),B():],C() st
+  for i being Element of A(), j being Element of B() holds M.(i,j) = F(i,j);
+
+definition
+  let C,D be non empty set;
+  let R be Equivalence_Relation of D;
+  let b be Function of [:C,D:],D;
+  assume
+ b is BinOp of C,D,R;
+  func b /\/ R -> Function of [:C, Class R:], Class R means
+:: STACKS_1:def 2
+
+  for x,y,y1 be set st x in C & y in Class R & y1 in y
+  holds it.(x,y) = Class(R,b.(x,y1));
+end;
+
+definition
+  let A,B be non empty set;
+  let C be Subset of A;
+  let D be Subset of B;
+  let f be Function of A,B;
+  let g be Function of C,D;
+  redefine func f+*g -> Function of A,B;
+end;
+
+begin :: Stack Algebra
+
+definition
+  struct(2-sorted) StackSystem(#
+    carrier -> set,  :: elements
+    carrier' -> set, :: stacks
+    s_empty -> Subset of the carrier',
+    s_push -> Function of [:the carrier, the carrier':], the carrier',
+    s_pop -> Function of the carrier', the carrier',
+    s_top -> Function of the carrier', the carrier
+  #);
+end;
+
+registration
+  let a1 be non empty set, a2 be set, a3 be Subset of a2,
+      a4 be Function of [:a1, a2:], a2,
+      a5 be Function of a2, a2,
+      a6 be Function of a2, a1;
+  cluster StackSystem(#a1,a2,a3,a4,a5,a6#) -> non empty;
+end;
+
+registration
+  let a1 be set, a2 be non empty set, a3 be Subset of a2,
+      a4 be Function of [:a1, a2:], a2,
+      a5 be Function of a2, a2,
+      a6 be Function of a2, a1;
+  cluster StackSystem(#a1,a2,a3,a4,a5,a6#) -> non void;
+end;
+
+registration
+  cluster non empty non void strict StackSystem;
+end;
+
+definition
+  let X be StackSystem;
+  mode stack of X is Element of the carrier' of X;
+end;
+
+definition
+  let X be non empty non void StackSystem;
+  let s be stack of X;
+  pred emp s means
+:: STACKS_1:def 3
+ s in the s_empty of X;
+  func pop s -> stack of X equals
+:: STACKS_1:def 4
+(the s_pop of X).s;
+  func top s -> Element of X equals
+:: STACKS_1:def 5
+(the s_top of X).s;
+  let e be Element of X;
+  func push(e,s) -> stack of X equals
+:: STACKS_1:def 6
+(the s_push of X).(e,s);
+end;
+
+definition
+  let A be non empty set;
+  func StandardStackSystem A -> non empty non void strict StackSystem means
+:: STACKS_1:def 7
+
+  the carrier of it = A &
+  the carrier' of it = A* &
+  for s being stack of it holds
+    (emp s iff s is empty) &
+  for g being FinSequence st g = s holds
+    (not emp s implies top s = g.1 & pop s = Del(g,1)) &
+    (emp s implies top s = the Element of it & pop s = {}) &
+  for e being Element of it holds
+    push(e,s) = <*e*>^g;
+end;
+
+reserve A for non empty set;
+reserve c for Element of StandardStackSystem A;
+reserve m for stack of StandardStackSystem A;
+
+registration
+  let A;
+  cluster -> Relation-like Function-like stack of StandardStackSystem A;
+end;
+
+registration
+  let A;
+  cluster -> FinSequence-like stack of StandardStackSystem A;
+end;
+::$H-
+
+reserve X for non empty non void StackSystem;
+reserve s,s1,s2 for stack of X;
+reserve e,e1,e2 for Element of X;
+
+definition
+  let X;
+  attr X is pop-finite means
+:: STACKS_1:def 8
+
+  for f being Function of NAT, the carrier' of X
+  ex i being Nat, s st f.i = s &
+  (not emp s implies f.(i+1) <> pop s);
+
+  attr X is push-pop means
+:: STACKS_1:def 9
+
+  not emp s implies s = push(top s, pop s);
+
+  attr X is top-push means
+:: STACKS_1:def 10
+
+  e = top push(e,s);
+
+  attr X is pop-push means
+:: STACKS_1:def 11
+
+  s = pop push(e,s);
+
+  attr X is push-non-empty means
+:: STACKS_1:def 12
+
+  not emp push(e,s);
+end;
+
+registration
+  let A be non empty set;
+  cluster StandardStackSystem A -> pop-finite;
+  cluster StandardStackSystem A -> push-pop;
+  cluster StandardStackSystem A -> top-push;
+  cluster StandardStackSystem A -> pop-push;
+  cluster StandardStackSystem A -> push-non-empty;
+end;
+
+registration
+  cluster pop-finite push-pop top-push pop-push push-non-empty
+  strict (non empty non void StackSystem);
+end;
+
+definition
+  mode StackAlgebra is pop-finite push-pop top-push pop-push push-non-empty
+  (non empty non void StackSystem);
+end;
+
+theorem :: STACKS_1:3
+  for X being non empty non void StackSystem st X is pop-finite
+  ex s being stack of X st emp s;
+
+registration
+  let X be pop-finite (non empty non void StackSystem);
+  cluster the s_empty of X -> non empty;
+end;
+
+theorem :: STACKS_1:4
+  X is top-push pop-push & push(e1,s1) = push(e2,s2) implies e1 = e2 & s1 = s2;
+
+theorem :: STACKS_1:5
+  X is push-pop & not emp s1 & not emp s2 &
+  pop s1 = pop s2 & top s1 = top s2 implies s1 = s2;
+
+begin :: Schemes of Induction
+
+scheme :: STACKS_1:sch 3
+
+  INDsch{X() -> StackAlgebra, s() -> stack of X(), P[set]}:
+  P[s()]
+  provided
+ for s being stack of X() st emp s holds P[s] and
+ for s being stack of X(), e being Element of X() st P[s]
+    holds P[push(e,s)];
+
+scheme :: STACKS_1:sch 4
+
+  EXsch{X() -> StackAlgebra,
+        s() -> stack of X(),
+        A() -> non empty set,
+        e() -> Element of A(),
+        d(set,set) -> Element of A()}:
+  ex a being Element of A() st
+  ex F being Function of the carrier' of X(), A() st
+  a = F.s() & (for s1 being stack of X() st emp s1 holds F.s1 = e()) &
+  for s1 being stack of X(), e being Element of X()
+  holds F.push(e,s1) = d(e,F.s1);
+
+scheme :: STACKS_1:sch 5
+
+  UNIQsch{X() -> StackAlgebra,
+        s() -> stack of X(),
+        A() -> non empty set,
+        e() -> Element of A(),
+        d(set,set) -> Element of A()}:
+  for a1,a2 being Element of A() st
+   (ex F being Function of the carrier' of X(), A() st
+    a1 = F.s() & (for s1 being stack of X() st emp s1 holds F.s1 = e()) &
+    for s1 being stack of X(), e being Element of X()
+    holds F.push(e,s1) = d(e,F.s1)) &
+   (ex F being Function of the carrier' of X(), A() st
+    a2 = F.s() & (for s1 being stack of X() st emp s1 holds F.s1 = e()) &
+    for s1 being stack of X(), e being Element of X()
+    holds F.push(e,s1) = d(e,F.s1))
+  holds a1 = a2;
+
+begin :: Stack Congruence
+
+reserve X for StackAlgebra;
+reserve s,s1,s2,s3 for stack of X;
+reserve e,e1,e2,e3 for Element of X;
+
+definition
+  let X,s;
+  func |.s.| -> Element of (the carrier of X)* means
+:: STACKS_1:def 13
+
+  ex F being Function of the carrier' of X, (the carrier of X)* st
+  it = F.s & (for s1 st emp s1 holds F.s1 = {}) &
+  for s1, e holds F.push(e,s1) = <*e*>^(F.s1);
+end;
+
+theorem :: STACKS_1:6
+  emp s implies |.s.| = {};
+
+theorem :: STACKS_1:7
+  not emp s implies |.s.| = <*top s*>^|.pop s.|;
+
+theorem :: STACKS_1:8
+  not emp s implies |.pop s.| = Del(|.s.|,1);
+
+theorem :: STACKS_1:9
+  |.push(e,s).| = <*e*>^|.s.|;
+
+theorem :: STACKS_1:10
+  not emp s implies top s = |.s.|.1;
+
+theorem :: STACKS_1:11
+  |.s.| = {} implies emp s;
+
+theorem :: STACKS_1:12
+  for s being stack of StandardStackSystem A holds |.s.| = s;
+
+theorem :: STACKS_1:13
+  for x being Element of (the carrier of X)*
+  ex s st |.s.| = x;
+
+definition
+  let X,s1,s2;
+  pred s1 == s2 means
+:: STACKS_1:def 14
+ |.s1.| = |.s2.|;
+  reflexivity;
+  symmetry;
+end;
+
+theorem :: STACKS_1:14
+  s1 == s2 & s2 == s3 implies s1 == s3;
+
+theorem :: STACKS_1:15
+  s1 == s2 & emp s1 implies emp s2;
+
+theorem :: STACKS_1:16
+  emp s1 & emp s2 implies s1 == s2;
+
+theorem :: STACKS_1:17
+  s1 == s2 implies push(e,s1) == push(e,s2);
+
+theorem :: STACKS_1:18
+  s1 == s2 & not emp s1 implies pop s1 == pop s2;
+
+theorem :: STACKS_1:19
+  s1 == s2 & not emp s1 implies top s1 = top s2;
+
+definition
+  let X;
+  attr X is proper-for-identity means
+:: STACKS_1:def 15
+
+  for s1,s2 st s1 == s2 holds s1 = s2;
+end;
+
+registration
+  let A;
+  cluster StandardStackSystem A -> proper-for-identity;
+end;
+
+definition
+  let X;
+  func ==_X -> Relation of the carrier' of X means
+:: STACKS_1:def 16
+
+  [s1,s2] in it iff s1 == s2;
+end;
+
+registration
+  let X;
+  cluster ==_X -> total symmetric transitive;
+end;
+
+theorem :: STACKS_1:20
+  emp s implies Class(==_X, s) = the s_empty of X;
+
+definition
+  let X,s;
+  func coset s -> Subset of the carrier' of X means
+:: STACKS_1:def 17
+
+  s in it &
+  (for e,s1 st s1 in it holds
+  push(e,s1) in it & (not emp s1 implies pop s1 in it)) &
+  for A being Subset of the carrier' of X st
+    s in A &
+    (for e,s1 st s1 in A holds
+    push(e,s1) in A & (not emp s1 implies pop s1 in A))
+  holds it c= A;
+end;
+
+theorem :: STACKS_1:21
+  (push(e,s) in coset s1 implies s in coset s1) &
+  (not emp s & pop s in coset s1 implies s in coset s1);
+
+theorem :: STACKS_1:22
+  s in coset push(e,s) & (not emp s implies s in coset pop s);
+
+theorem :: STACKS_1:23
+  ex s1 st emp s1 & s1 in coset s;
+
+registration
+  let A;
+  let R be Relation of A;
+  cluster A-valued RedSequence of R;
+end;
+
+definition
+  let X;
+  func ConstructionRed X -> Relation of the carrier' of X means
+:: STACKS_1:def 18
+
+  [s1,s2] in it iff (not emp s1 & s2 = pop s1) or ex e st s2 = push(e,s1);
+end;
+
+theorem :: STACKS_1:24
+  for R being Relation of A
+  for t being RedSequence of R holds t.1 in A iff t is A-valued;
+
+scheme :: STACKS_1:sch 6
+ PathIND{X() -> non empty set, x1,x2() -> Element of X(),
+  R() -> (Relation of X()), P[set]}:
+  P[x2()]
+  provided
+ P[x1()] and
+ R() reduces x1(),x2() and
+ for x,y being Element of X() st R() reduces x1(),x & [x,y] in R() &
+    P[x] holds P[y];
+
+theorem :: STACKS_1:25
+  for t being RedSequence of ConstructionRed X
+  st s = t.1 holds rng t c= coset s;
+
+theorem :: STACKS_1:26
+  coset s = {s1: ConstructionRed X reduces s,s1};
+
+definition
+  let X,s;
+  func core s -> stack of X means
+:: STACKS_1:def 19
+
+  emp it &
+  ex t being the carrier' of X-valued RedSequence of ConstructionRed X st
+  t.1 = s & t.len t = it &
+  for i st 1 <= i & i < len t holds not emp t/.i & t/.(i+1) = pop(t/.i);
+end;
+
+theorem :: STACKS_1:27
+  emp s implies core s = s;
+
+theorem :: STACKS_1:28
+  core push(e,s) = core s;
+
+theorem :: STACKS_1:29
+  not emp s implies core pop s = core s;
+
+theorem :: STACKS_1:30
+  core s in coset s;
+
+theorem :: STACKS_1:31
+  for x being Element of (the carrier of X)*
+  ex s1 st |.s1.| = x & s1 in coset s;
+
+theorem :: STACKS_1:32
+  s1 in coset s implies core s1 = core s;
+
+theorem :: STACKS_1:33
+  s1 in coset s & s2 in coset s & |.s1.| = |.s2.| implies s1 = s2;
+
+theorem :: STACKS_1:34
+  ex s st (coset s1)/\Class(==_X, s2) = {s};
+
+begin :: Quotient Stack System
+
+definition
+  let X;
+  func X/== -> strict StackSystem means
+:: STACKS_1:def 20
+
+  the carrier of it = the carrier of X &
+  the carrier' of it = Class(==_X) &
+  the s_empty of it = {the s_empty of X} &
+  the s_push of it = (the s_push of X)/\/==_X &
+  the s_pop of it = ((the s_pop of X)+*(id the s_empty of X))/\/==_X &
+  for f being Choice_Function of Class(==_X) holds the s_top of it
+  = ((the s_top of X)*f)+*(the s_empty of X,the Element of the carrier of X);
+end;
+
+registration
+  let X;
+  cluster X/== -> non empty non void;
+end;
+
+theorem :: STACKS_1:35
+  for S being stack of X/== ex s st S = Class(==_X, s);
+
+theorem :: STACKS_1:36
+  Class(==_X, s) is stack of X/==;
+
+theorem :: STACKS_1:37
+  for S being stack of X/== st S = Class(==_X, s) holds emp s iff emp S;
+
+theorem :: STACKS_1:38
+  for S being stack of X/== holds emp S iff S = the s_empty of X;
+
+theorem :: STACKS_1:39
+  for S being stack of X/==, E being Element of X/==
+  st S = Class(==_X, s) & E = e holds
+  push(e, s) in push(E, S) & Class(==_X, push(e, s)) = push(E, S);
+
+theorem :: STACKS_1:40
+  for S being stack of X/== st S = Class(==_X, s) & not emp s holds
+  pop s in pop S & Class(==_X, pop s) = pop S;
+
+theorem :: STACKS_1:41
+  for S being stack of X/== st S = Class(==_X, s) & not emp s holds
+  top S = top s;
+
+registration
+  let X;
+  cluster X/== -> pop-finite;
+  cluster X/== -> push-pop;
+  cluster X/== -> top-push;
+  cluster X/== -> pop-push;
+  cluster X/== -> push-non-empty;
+end;
+
+theorem :: STACKS_1:42
+  for S being stack of X/== st S = Class(==_X, s) holds |.S.| = |.s.|;
+
+registration
+  let X;
+  cluster X/== -> proper-for-identity;
+end;
+
+registration
+  cluster proper-for-identity StackAlgebra;
+end;
+
+begin :: Representation Theorem for Stacks
+
+definition
+  let X1,X2 be StackAlgebra;
+  let F,G be Function;
+  pred F,G form_isomorphism_between X1,X2 means
+:: STACKS_1:def 21
+
+  dom F = the carrier of X1 & rng F = the carrier of X2 & F is one-to-one &
+  dom G = the carrier' of X1 & rng G = the carrier' of X2 & G is one-to-one &
+  for s1 being stack of X1, s2 being stack of X2 st s2 = G.s1
+  holds (emp s1 iff emp s2) &
+  (not emp s1 implies pop s2 = G.pop s1 & top s2 = F.top s1) &
+  for e1 being Element of X1, e2 being Element of X2 st e2 = F.e1
+  holds push(e2,s2) = G.push(e1,s1);
+end;
+
+reserve X1,X2,X3 for StackAlgebra;
+reserve F,F1,F2,G,G1,G2 for Function;
+
+theorem :: STACKS_1:43
+  id the carrier of X, id the carrier' of X form_isomorphism_between X,X;
+
+theorem :: STACKS_1:44
+  F,G form_isomorphism_between X1,X2 implies
+  F",G" form_isomorphism_between X2,X1;
+
+theorem :: STACKS_1:45
+  F1,G1 form_isomorphism_between X1,X2 &
+  F2,G2 form_isomorphism_between X2,X3 implies
+  F2*F1,G2*G1 form_isomorphism_between X1,X3;
+
+theorem :: STACKS_1:46
+  F,G form_isomorphism_between X1,X2 implies
+  for s1 being stack of X1, s2 being stack of X2 st s2 = G.s1
+  holds |.s2.| = F*|.s1.|;
+
+definition
+  let X1,X2 be StackAlgebra;
+  pred X1,X2 are_isomorphic means
+:: STACKS_1:def 22
+  ex F,G being Function st F,G form_isomorphism_between X1,X2;
+  reflexivity;
+  symmetry;
+end;
+
+theorem :: STACKS_1:47
+  X1,X2 are_isomorphic & X2,X3 are_isomorphic implies X1,X3 are_isomorphic;
+
+theorem :: STACKS_1:48
+  X1,X2 are_isomorphic & X1 is proper-for-identity implies
+  X2 is proper-for-identity;
+
+theorem :: STACKS_1:49
+  for X being proper-for-identity StackAlgebra holds
+  ex G st (for s being stack of X holds G.s = |.s.|) &
+  id the carrier of X, G form_isomorphism_between
+  X, StandardStackSystem the carrier of X;
+
+theorem :: STACKS_1:50
+  for X being proper-for-identity StackAlgebra holds
+  X, StandardStackSystem the carrier of X are_isomorphic;

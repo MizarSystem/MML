@@ -2,7 +2,15 @@
 ::  by Artur Korni{\l}owicz
 ::
 :: Received February 22, 2005
-:: Copyright (c) 2005 Association of Mizar Users
+:: Copyright (c) 2005-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -25,7 +33,7 @@ environ
       INT_1, MEMBERED, FINSEQ_1, RCOMP_1, FCONT_3, RFINSEQ, STRUCT_0, PRE_TOPC,
       TOPS_1, METRIC_1, TOPMETR, MEASURE6, BORSUK_2, SPRECT_1, TOPREAL6,
       BORSUK_4, TOPALG_2, TOPREALB, FINSET_1, VALUED_0, XXREAL_2, CARD_1,
-      ZFMISC_1, REAL_1, BORSUK_6;
+      ZFMISC_1, REAL_1, BORSUK_6, XXREAL_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions FUNCT_1, TOPS_2, BORSUK_4, COMPTS_1, PRE_TOPC, RELAT_2, ORDERS_1,
       SEQ_4, TARSKI, XBOOLE_0, SEQM_3, CONNSP_1, TOPALG_2, SUBSET_1, WELLORD1,
@@ -53,7 +61,7 @@ registration
   proof
     let T be SubSpace of RealSpace;
     the carrier of T is Subset of RealSpace by TOPMETR:def 1;
-    hence the carrier of T is real-membered by METRIC_1:def 14;
+    hence the carrier of T is real-membered;
   end;
 end;
 
@@ -103,42 +111,48 @@ begin :: Intervals
 reserve a, b, r, s for real number;
 
 registration
-  let r, s;
-  cluster [.r,s.[ -> bounded Subset of REAL;
+  let r be real number, s be ext-real number;
+  cluster [.r,s.[ -> bounded_below;
   coherence
   proof
-A1: [.r,s.[ is bounded_above
-    proof
-      take s;
-      let x be ext-real number;
-      thus thesis by XXREAL_1:3;
-    end;
-    [.r,s.[ is bounded_below
-    proof
-      take r;
-      let x be ext-real number;
-      thus thesis by XXREAL_1:3;
-    end;
-    hence thesis by A1;
+    take r;
+    let x be ext-real number;
+    thus thesis by XXREAL_1:3;
   end;
-  cluster ].r,s.] -> bounded Subset of REAL;
+  cluster ].s,r.] -> bounded_above;
   coherence
   proof
-A2: ].r,s.] is bounded_above
+    take r;
+    let x be ext-real number;
+    thus thesis by XXREAL_1:2;
+  end;
+end;
+
+registration
+  let r, s;
+  cluster [.r,s.[ -> bounded;
+  coherence
+  proof
+    [.r,s.[ is bounded_above
     proof
       take s;
       let x be ext-real number;
-      thus thesis by XXREAL_1:2;
+      thus thesis by XXREAL_1:3;
     end;
+    hence thesis;
+  end;
+  cluster ].r,s.] -> bounded;
+  coherence
+  proof
     ].r,s.] is bounded_below
     proof
       take r;
       let x be ext-real number;
       thus thesis by XXREAL_1:2;
     end;
-    hence thesis by A2;
+    hence thesis;
   end;
-  cluster ].r,s.[ -> bounded Subset of REAL;
+  cluster ].r,s.[ -> bounded;
   coherence
   proof
 A3: ].r,s.[ is bounded_above
@@ -173,7 +187,6 @@ proof
   assume
 A1: r < s;
 A2: for a st a in X holds r <= a by XXREAL_1:3;
-  reconsider r, s as Real by XREAL_0:def 1;
 A3: (r+s)/2 < s by A1,XREAL_1:228;
 A4: r < (r+s)/2 by A1,XREAL_1:228;
 A5: for b st 0 < b ex a st a in X & a < r+b
@@ -181,7 +194,6 @@ A5: for b st 0 < b ex a st a in X & a < r+b
     let b such that
 A6: 0 < b and
 A7: for a st a in X holds a >= r+b;
-    reconsider b as Real by XREAL_0:def 1;
     per cases;
     suppose
       r + b > s;
@@ -212,7 +224,6 @@ proof
   assume
 A1: r < s;
 A2: for a st a in X holds a <= s by XXREAL_1:3;
-  reconsider r, s as Real by XREAL_0:def 1;
 A3: r < (r+s)/2 by A1,XREAL_1:228;
 A4: (r+s)/2 < s by A1,XREAL_1:228;
 A5: for b st 0 < b ex a st a in X & s-b < a
@@ -220,7 +231,6 @@ A5: for b st 0 < b ex a st a in X & s-b < a
     let b such that
 A6: 0 < b and
 A7: for a st a in X holds a <= s-b;
-    reconsider b as Real by XREAL_0:def 1;
     per cases;
     suppose
       s - b <= r;
@@ -251,7 +261,6 @@ proof
   assume
 A1: r < s;
 A2: for a st a in X holds r <= a by XXREAL_1:2;
-  reconsider r, s as Real by XREAL_0:def 1;
 A3: (r+s)/2 < s by A1,XREAL_1:228;
 A4: r < (r+s)/2 by A1,XREAL_1:228;
 A5: for b st 0 < b ex a st a in X & a < r+b
@@ -259,7 +268,6 @@ A5: for b st 0 < b ex a st a in X & a < r+b
     let b such that
 A6: 0 < b and
 A7: for a st a in X holds a >= r+b;
-    reconsider b as Real by XREAL_0:def 1;
     per cases;
     suppose
       r + b > s;
@@ -290,7 +298,6 @@ proof
   assume
 A1: r < s;
 A2: for a st a in X holds a <= s by XXREAL_1:2;
-  reconsider r, s as Real by XREAL_0:def 1;
 A3: r < (r+s)/2 by A1,XREAL_1:228;
 A4: (r+s)/2 < s by A1,XREAL_1:228;
 A5: for b st 0 < b ex a st a in X & s-b < a
@@ -298,7 +305,6 @@ A5: for b st 0 < b ex a st a in X & s-b < a
     let b such that
 A6: 0 < b and
 A7: for a st a in X holds a <= s-b;
-    reconsider b as Real by XREAL_0:def 1;
     per cases;
     suppose
       s - b <= r;
@@ -373,7 +379,7 @@ A3: a-1 < a-0 by XREAL_1:17;
   then b-1 < a-1-0 by A2,XREAL_1:17;
   then b-1 < a by A3,XXREAL_0:2;
   then b-1 in left_open_halfline(a) by XXREAL_1:233;
-  then b-0 <= b-1 by A2;
+  then b-0 <= b-1 by A1,XXREAL_2:def 2;
   hence contradiction by XREAL_1:17;
 end;
 
@@ -382,14 +388,13 @@ Lm2: now
   assume right_open_halfline(a) is bounded_above;
   then consider b such that
 A1: b is UpperBound of right_open_halfline(a) by XXREAL_2:def 10;
-A2: for r st r in right_open_halfline(a) holds r <= b by A1, XXREAL_2:def 1;
 A3: a+0 < a+1 by XREAL_1:8;
   then a+1 in right_open_halfline(a) by XXREAL_1:235;
-  then a+1 <= b by A2;
+  then a+1 <= b by A1,XXREAL_2:def 1;
   then a+1+0 <= b+1 by XREAL_1:9;
   then a < b+1 by A3,XXREAL_0:2;
   then b+1 in right_open_halfline(a) by XXREAL_1:235;
-  then b+1 <= b+0 by A2;
+  then b+1 <= b+0 by A1,XXREAL_2:def 1;
   hence contradiction by XREAL_1:8;
 end;
 
@@ -401,15 +406,10 @@ registration
     set A = left_closed_halfline(a);
     left_open_halfline a is not bounded_below by Lm1;
     hence A is non bounded_below by XXREAL_1:21,XXREAL_2:44;
-    thus A is bounded_above
-    proof
-      take a;
-      let x be ext-real number;
-      thus thesis by XXREAL_1:234;
-    end;
+    thus A is bounded_above;
     let r,s be ext-real number;
     assume
-A1:    r in A & s in A;
+A1: r in A & s in A;
      then reconsider rr=r, ss=s as Real;
 A2: s <= a by A1,XXREAL_1:234;
     let x be set;
@@ -449,17 +449,11 @@ A7: x in [.r,s.];
     then x < a by A6,XXREAL_0:2;
     hence thesis by XXREAL_1:233;
   end;
-  cluster right_closed_halfline(a) -> bounded_below non bounded_above
-    interval;
+  cluster right_closed_halfline(a) -> bounded_below non bounded_above interval;
   coherence
   proof
     set A = right_closed_halfline(a);
-    thus A is bounded_below
-    proof
-      take a;
-      let x be ext-real number;
-      thus thesis by XXREAL_1:236;
-    end;
+    thus A is bounded_below;
     right_open_halfline a is not bounded_above by Lm2;
     hence A is non bounded_above by XXREAL_1:22,XXREAL_2:43;
     let r, s be ext-real number;
@@ -717,7 +711,7 @@ A2: s in X & s < lower_bound X + (x - lower_bound X) by SEQ_4:def 5;
   then x - x < upper_bound X - x by XREAL_1:16;
   then consider r such that
 A3: r in X & upper_bound X - (upper_bound X - x) < r by SEQ_4:def 4;
-  [.s,r.] c= X & x in [.s,r.] by A2,A3,XXREAL_2:def 12,XXREAL_1:1;
+  [.s,r.] c= X & x in [.s,r.] by A2,A3,XXREAL_1:1,XXREAL_2:def 12;
   hence thesis;
 end;
 
@@ -799,7 +793,7 @@ A5: r in X & x > r by XXREAL_2:def 2;
   then x - x < upper_bound X - x by XREAL_1:16;
   then consider s such that
 A6: s in X & upper_bound X - (upper_bound X - x) < s by A2,SEQ_4:def 4;
-  [.r,s.] c= X & x in [.r,s.] by A5,A6,XXREAL_2:def 12,XXREAL_1:1;
+  [.r,s.] c= X & x in [.r,s.] by A5,A6,XXREAL_1:1,XXREAL_2:def 12;
   hence thesis;
 end;
 
@@ -881,7 +875,7 @@ A5: r in X & x < r by XXREAL_2:def 1;
   then consider s such that
 A6: s in X & s < lower_bound X + (x - lower_bound X) by A1,SEQ_4:def 5;
   reconsider r as real number by A5;
-  [.s,r.] c= X & x in [.s,r.] by A5,A6,XXREAL_2:def 12,XXREAL_1:1;
+  [.s,r.] c= X & x in [.s,r.] by A5,A6,XXREAL_1:1,XXREAL_2:def 12;
   hence thesis;
 end;
 
@@ -905,7 +899,7 @@ A3: r in X & r > x by XXREAL_2:def 1;
   then consider s being ext-real number such that
 A4: s in X & s < x by XXREAL_2:def 2;
   reconsider s as real number by A4;
-  [.s,r.] c= X & x in [.s,r.] by A3,A4,XXREAL_2:def 12,XXREAL_1:1;
+  [.s,r.] c= X & x in [.s,r.] by A3,A4,XXREAL_1:1,XXREAL_2:def 12;
   hence thesis;
 end;
 
@@ -3249,8 +3243,8 @@ A233:     m in dom IT by A229,A231,FINSEQ_3:27;
 A234:     IT/.n in X by A100;
           then
 A235:     IT/.n in G1 by A26;
-A236:     IT /.n is non empty bounded interval Subset of REAL by A9,A45,A16
-,A26,A234;
+A236:     IT /.n is non empty bounded interval Subset of REAL by A9,A45,A16,A26
+,A234;
 A237:     ex S being Element of X st S = IT.n & upper_bound S in IT.(n+1
           ) by A97,A99,A229,A231;
 A238:     1 < m+1 by A229,NAT_1:13;

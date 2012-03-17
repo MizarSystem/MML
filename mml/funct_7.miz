@@ -2,7 +2,15 @@
 ::  by Grzegorz Bancerek and Andrzej Trybulec
 ::
 :: Received January 12, 1996
-:: Copyright (c) 1996 Association of Mizar Users
+:: Copyright (c) 1996-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -4454,3 +4462,41 @@ A3:  rng(f+*(x,y)) c= rng f \/ {y} by Th102;
    hence rng(f+*(x,y)) c= V by A3,XBOOLE_1:1;
   end;
 end;
+
+theorem
+ f c= g & not x in dom f implies f c= g+*(x,y)
+ proof assume that
+A1: f c= g;
+  assume not x in dom f;
+  then
+A2: f c= f +*(x .--> y) by FUNCT_4:115;
+  per cases;
+  suppose x in dom g;
+   then g+*(x,y) = g+*(x.-->y) by Def3;
+   then f +*(x .--> y) c= g+*(x,y) by A1,FUNCT_4:131;
+  hence f c= g+*(x,y) by A2,XBOOLE_1:1;
+  end;
+  suppose not x in dom g;
+  hence f c= g+*(x,y) by A1,Def3;
+  end;
+ end;
+
+theorem
+ for I being non empty set, X being ManySortedSet of I,
+     l1,l2 being Element of I, i1,i2 being set
+ holds X +*((l1,l2) --> (i1, i2)) = X +* (l1,i1) +* (l2,i2)
+proof
+ let I be non empty set, X be ManySortedSet of I,
+     l1,l2 be Element of I, i1,i2 be set;
+A0: dom X = I by PARTFUN1:def 4;
+   then
+A1: l1 in dom X;
+   dom(X +* (l1,i1)) = I by A0,Th32;
+   then
+A2: l2 in dom(X +* (l1,i1));
+  thus X +*((l1,l2) --> (i1, i2)) =X +* ((l1 .--> i1) +* (l2 .--> i2))
+    .=X +* (l1 .--> i1) +* (l2 .--> i2) by FUNCT_4:15
+    .=X +* (l1,i1) +* (l2 .--> i2) by A1,Def3
+    .=X +* (l1,i1) +* (l2,i2) by A2,Def3;
+end;
+

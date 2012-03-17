@@ -2,7 +2,15 @@
 ::  by Piotr Rudnicki
 ::
 :: Received June 3, 1998
-:: Copyright (c) 1998 Association of Mizar Users
+:: Copyright (c) 1998-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -15,15 +23,15 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, FINSUB_1,
       FUNCOP_1, INT_1, ABIAN, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, PRE_FF,
       CARD_3, FUNCT_4, PBOOLE, VALUED_1, INT_2, XXREAL_0, NAT_1, COMPOS_1,
-      EXTPRO_1, AMI_1, AMISTD_2, SCMFSA_2, SCMFSA6A, SCMFSA6B, SF_MASTR,
-      SCMFSA6C, SCMFSA_7, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1;
+      EXTPRO_1, AMISTD_2, SCMFSA_2, SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C,
+      SCMFSA_7, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1;
  constructors NAT_D, PRE_FF, ABIAN, SCMFSA_7, SCMFSA6A, SCMFSA6B, SCMFSA6C,
       SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, AMISTD_2, RELSET_1, PRE_POLY,
-      XXREAL_2, PBOOLE, SCMFSA7B, AMI_1, SCMFSA8C;
+      XXREAL_2, PBOOLE, SCMFSA7B, SCMFSA8C;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FINSET_1,
       FINSUB_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, ABIAN,
       SCMFSA_2, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B,
-      SCMFSA_9, SFMASTR1, VALUED_1, FUNCT_2, RELAT_1, AMI_1, AFINSQ_1, FUNCT_4,
+      SCMFSA_9, SFMASTR1, VALUED_1, FUNCT_2, RELAT_1, AFINSQ_1, FUNCT_4,
       FUNCOP_1, SCMFSA10, AMISTD_2, SCMFSA6A, COMPOS_1, EXTPRO_1, PBOOLE,
       STRUCT_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -118,7 +126,7 @@ theorem :: SCMFSA9A:21  :: SCMFSA_9:25, corrected
     holds while=0(a,I) is_halting_on s,p & while=0(a,I) is_closed_on s,p;
 
 theorem :: SCMFSA9A:22  :: based on SCMFSA_9:10
-  Initialize while=0(a, I) c= s &
+  Start-At(0,SCM+FSA) c= s &
   while=0(a, I) c= p &
    s.a <> 0 implies
   LifeSpan(p,s) = 4 & for k being Element of NAT
@@ -126,12 +134,10 @@ theorem :: SCMFSA9A:22  :: based on SCMFSA_9:10
 
 theorem :: SCMFSA9A:23  :: based on SCMFSA_9:22
   I is_closed_on s,p & I is_halting_on s,p & s.a = 0 implies DataPart
-  Comput(p +* while=0(a,I),(s +* (
-Initialize while=0(a,I))),
-  (LifeSpan(p+* I,s +* (Initialize I)) + 3)) =
+  Comput(p +* while=0(a,I),(Initialize s),
+  (LifeSpan(p+* I,Initialize s) + 3)) =
 DataPart Comput(p +* I,
-   (s +* (Initialize I)
-  ), (LifeSpan(p+* I,s +* (Initialize I))));
+   (Initialize s), (LifeSpan(p+* I,Initialize s)));
 
 theorem :: SCMFSA9A:24  :: Step_eq0_0:
   (StepWhile=0(a,I,p,s).k).a <> 0 implies
@@ -167,9 +173,9 @@ definition let p;
     (for i being Element of NAT
      st (StepWhile=0(a,I,p,s).i).a <> 0 holds k <= i) &
     DataPart Comput(p +* while=0(a, I),
-      s +* (Initialize while=0(a, I)),
+      Initialize s,
        (LifeSpan(p +* while=0(a, I),
-       s +* (Initialize while=0(a, I)))))
+       Initialize s)))
      = DataPart StepWhile=0(a,I,p,s).k;
 end;
 
@@ -226,19 +232,17 @@ theorem :: SCMFSA9A:34  :: SCMFSA_9:43, corrected
     holds while>0(a,I) is_halting_on s,p & while>0(a,I) is_closed_on s,p;
 
 theorem :: SCMFSA9A:35  :: based on SCMFSA_9:32
-  Initialize while>0(a, I) c= s & while>0(a, I) c= p &
+  Start-At(0,SCM+FSA) c= s & while>0(a, I) c= p &
   s.a <= 0 implies
   LifeSpan(p,s) = 4 & for k being Element of NAT holds DataPart
 Comput(p,s,k) = DataPart s;
 
 theorem :: SCMFSA9A:36  :: based on SCMFSA_9:36
   I is_closed_on s,p & I is_halting_on s,p & s.a > 0 implies DataPart
-  Comput(p +* while>0(a,I),(s +* (
-Initialize while>0(a,I))),
-  (LifeSpan(p +* I,s +* (Initialize I)) + 3)) =
-DataPart Comput(p +* I,
-(s +* (Initialize I)
-  ), (LifeSpan(p +* I,s +* (Initialize I))));
+  Comput(p +* while>0(a,I),(Initialize s),
+  (LifeSpan(p +* I,Initialize s) + 3)) =
+DataPart Comput(p +* I,(Initialize s),
+ (LifeSpan(p +* I,Initialize s)));
 
 theorem :: SCMFSA9A:37  :: Step_gt0_0:
   (StepWhile>0(a,I,p,s).k).a <= 0 implies
@@ -275,9 +279,9 @@ definition let p;
     (for i being Element of NAT st (StepWhile>0(a,I,p,s).i).a <= 0
      holds k <= i) &
     DataPart Comput(p +* while>0(a, I),
-        s +* (Initialize while>0(a,I)),
+        Initialize s,
        (LifeSpan(p +* while>0(a, I),
-        s +* (Initialize while>0(a,I)))))
+        Initialize s)))
      = DataPart StepWhile>0(a,I,p,s).k;
 end;
 

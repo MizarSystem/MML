@@ -1,0 +1,1337 @@
+:: Sequent calculus, derivability, provability. Goedel's completeness theorem.
+::  by Marco B. Caminati
+:: 
+:: Received December 29, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
+      RELAT_2, FINSEQ_1, FUNCT_1, ARYTM_3, XCMPLX_0, CARD_1, ARYTM_1, FUNCT_2,
+      XXREAL_0, ORDINAL4, FUNCT_7, FINSEQ_2, EQREL_1, COMPLEX1, MCART_1,
+      PARTFUN1, MARGREL1, XBOOLEAN, FINSET_1, FUNCT_3, SETFAM_1, FUNCT_4,
+      FUNCOP_1, CARD_3, FOMODEL0, FOMODEL1, FOMODEL2, FOMODEL3, FOMODEL4;
+ notations TARSKI, MARGREL1, XBOOLE_0, ZFMISC_1, SETFAM_1, SUBSET_1, DOMAIN_1,
+      RELAT_1, RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, MCART_1, NAT_1, CARD_1,
+      NUMBERS, XCMPLX_0, RELAT_2, XXREAL_0, FUNCT_7, FINSEQ_1, LANG1, FINSEQ_2,
+      EQREL_1, INT_2, FINSET_1, FUNCT_4, FUNCOP_1, CARD_3, ORDERS_4, FOMODEL0,
+      FOMODEL1, FOMODEL2, FOMODEL3;
+ constructors NAT_1, CARD_1, ZFMISC_1, NUMBERS, INT_1, FINSEQ_1, XCMPLX_0,
+      MONOID_0, XXREAL_0, FUNCT_7, FINSEQ_2, ENUMSET1, EQREL_1, RELSET_1,
+      MCART_1, MARGREL1, FINSET_1, PARTFUN1, FINSEQOP, MATRIX_2, FUNCT_3,
+      RFUNCT_3, SETFAM_1, LANG1, PRE_POLY, FUNCT_1, FUNCT_4, FUNCOP_1, CARD_3,
+      ORDERS_4, FOMODEL0, FOMODEL1, FOMODEL2, FOMODEL3;
+ registrations ORDINAL1, XCMPLX_0, NAT_1, RELAT_1, NUMBERS, REAL_1, FUNCT_1,
+      INT_1, FINSEQ_1, XREAL_0, FUNCT_2, FINSEQ_2, SUBSET_1, RELSET_1,
+      PARTFUN1, EQREL_1, FINSEQ_6, PRE_POLY, CARD_1, XBOOLE_0, XXREAL_0,
+      ZFMISC_1, SETFAM_1, MARGREL1, SIMPLEX0, FINSET_1, RAMSEY_1, YELLOW12,
+      REALSET1, FUNCOP_1, CARD_3, FOMODEL0, FOMODEL1, FOMODEL2, FOMODEL3;
+ requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
+
+
+begin
+
+reserve k,m,n for Nat,
+        kk,mm,nn for Element of NAT, U for non empty set,
+        A,B,X,Y,Z,x,x1,x2,y,z for set, S for Language,
+        s, s1, s2 for Element of S, f,g for Function,
+        w for string of S, tt,tt1,tt2 for Element of AllTermsOf S,
+        psi,psi1,psi2,phi,phi1,phi2 for wff string of S,
+        u,u1,u2 for Element of U,
+        Phi,Phi1,Phi2 for Subset of AllFormulasOf S,
+        t,t1,t2 for termal string of S,
+r for relational Element of S, a for ofAtomicFormula Element of S,
+l, l1, l2 for literal Element of S, p for FinSequence,
+m1, n1 for non zero Nat, S1, S2 for Language;
+
+::#####################################################################
+::#Definitions and auxiliary lemmas
+definition let S be Language;
+func S-sequents equals
+:: FOMODEL4:def 1
+{[premises,conclusion] where premises is Subset of (AllFormulasOf S),
+conclusion is wff string of S: premises is finite};
+end;
+
+registration let S be Language;
+cluster S-sequents -> non empty;
+end;
+
+registration let S;
+cluster S-sequents -> Relation-like;
+end;
+
+definition
+let S be Language;
+let x be set;
+attr x is S-sequent-like means
+:: FOMODEL4:def 2
+x in S-sequents;
+end;
+
+definition ::def3 1
+let S,X;
+attr X is S-sequents-like means
+:: FOMODEL4:def 3
+X c= S-sequents;
+end;
+
+registration let S;
+cluster -> S-sequents-like Subset of S-sequents;
+cluster -> S-sequent-like Element of S-sequents;
+end;
+
+registration
+let S be Language;
+cluster S-sequent-like Element of S-sequents;
+cluster S-sequents-like Subset of S-sequents;
+end;
+
+registration let S;
+cluster S-sequent-like set;
+cluster S-sequents-like set;
+end;
+
+definition let S be Language;
+mode Rule of S is Element of Funcs (bool (S-sequents), bool (S-sequents));
+end;
+
+definition let S be Language;
+mode RuleSet of S is Subset of Funcs (bool (S-sequents), bool (S-sequents));
+end;
+
+reserve D,D1,D2,D3 for RuleSet of S, R for Rule of S,
+Seqts,Seqts1,Seqts2 for Subset of S-sequents,
+seqt,seqt1,seqt2 for Element of S-sequents,
+SQ,SQ1,SQ2 for S-sequents-like set, Sq,Sq1,Sq2 for S-sequent-like set;
+
+registration
+let A,B;
+let X be Subset of Funcs(A,B);
+cluster union X -> Relation-like;
+end;
+
+registration
+let S be Language; let D be RuleSet of S;
+cluster union D -> Relation-like;
+end;
+
+definition
+let S,D;
+func OneStep(D) -> Rule of S means
+:: FOMODEL4:def 4
+for Seqs being Element of bool (S-sequents) holds
+it.Seqs = union ((union D) .: {Seqs});
+end;
+
+definition let S,D,m;
+func (m,D)-derivables -> Rule of S equals
+:: FOMODEL4:def 5
+iter(OneStep D,m);
+end;
+
+definition
+let S be Language;
+let D be RuleSet of S;
+let Seqs1,Seqs2 be set;
+attr Seqs2 is (Seqs1,D)-derivable means
+:: FOMODEL4:def 6
+Seqs2 c= union (((OneStep D) [*]) .: {Seqs1});
+end;
+
+definition ::def7 1
+let m,S,D; let Seqts,seqt be set;
+attr seqt is (m,Seqts,D)-derivable means
+:: FOMODEL4:def 7
+seqt in (m,D)-derivables.Seqts;
+end;
+
+definition let S,D;
+func D-iterators -> Subset-Family of [:bool (S-sequents), bool (S-sequents):]
+equals
+:: FOMODEL4:def 8
+{iter(OneStep D,mm):not contradiction};
+end;
+
+definition let S,R;
+attr R is isotone means
+:: FOMODEL4:def 9
+Seqts1 c= Seqts2 implies R.Seqts1 c= R.Seqts2;
+end;
+
+registration let S;
+cluster isotone Rule of S;
+end;
+
+definition let S,D;
+attr D is isotone means
+:: FOMODEL4:def 10
+for Seqts1,Seqts2,f st
+Seqts1 c= Seqts2 & f in D ex g st (g in D & f.Seqts1 c= g.Seqts2);
+end;
+
+registration let S; let M be isotone Rule of S;
+cluster {M} -> isotone RuleSet of S;
+end;
+
+registration let S;
+cluster isotone RuleSet of S;
+end;
+
+reserve M,K,K1,K2 for isotone RuleSet of S;
+
+definition
+let S be Language;
+let D be RuleSet of S;
+let Seqts be set;
+attr Seqts is D-derivable means
+:: FOMODEL4:def 11
+Seqts is ({},D)-derivable;
+end;
+
+registration
+let S,D;
+cluster D-derivable -> ({},D)-derivable set;
+cluster ({},D)-derivable -> D-derivable set;
+end;
+
+registration
+let S,D; let Seqts be empty set;
+cluster (Seqts,D)-derivable -> D-derivable set;
+end;
+
+definition let S,D,X; let phi be set;
+attr phi is (X,D)-provable means
+:: FOMODEL4:def 12  ::Def13 1
+{[X,phi]} is D-derivable or ex seqt being set
+st (seqt`1 c= X & seqt`2 = phi & {seqt} is D-derivable);
+end;
+
+definition let S,D,X,x;
+redefine attr x is (X,D)-provable means
+:: FOMODEL4:def 13
+ex seqt being set st (seqt`1 c= X & seqt`2 = x & {seqt} is D-derivable);
+end;
+
+definition let S,D,R;
+attr R is D-macro means
+:: FOMODEL4:def 14
+for Seqs being Subset of S-sequents
+holds R.Seqs is (Seqs,D)-derivable;
+end;
+
+definition let S,D; let Phi be set;
+func (Phi,D)-termEq equals
+:: FOMODEL4:def 15
+{ [t1, t2] where t1,t2 is termal string of S:
+<* TheEqSymbOf S *> ^ t1 ^ t2 is (Phi,D)-provable};
+end;
+
+definition
+let S,D; let Phi be set; ::Def16 1
+attr Phi is D-expanded means
+:: FOMODEL4:def 16
+::#Deductively closed (cfr. Hedman)
+x is (Phi,D)-provable implies {x} c= Phi;
+end;
+
+definition
+let S,x; ::Def17 1
+attr x is S-null means
+:: FOMODEL4:def 17
+not contradiction;
+end;
+
+::#####################################################################
+::#####################################################################
+::#####################################################################
+::#Type Tuning
+
+definition
+let S,D; let Phi be set;
+redefine func (Phi,D)-termEq -> Relation of (AllTermsOf S);
+end;
+
+registration
+let S,phi;
+let Phi1,Phi2 be finite Subset of (AllFormulasOf S);
+cluster [Phi1 \/ Phi2, phi] -> S-sequent-like;
+end;
+
+definition
+let S;
+let x be empty set;
+let phi be wff string of S;
+redefine func [ x, phi ] -> Element of S-sequents;
+end;
+
+registration let S;
+cluster {} /\ S -> S-sequents-like set;
+end;
+
+registration let S;
+cluster S-null set;
+end;
+
+registration let S;
+cluster S-sequent-like -> S-null set;
+end;
+
+registration
+let S;
+cluster -> S-null Element of S-sequents;
+
+end;
+
+registration
+let m,S,D,X;
+cluster (m,D)-derivables.X -> S-sequents-like;
+end;
+
+registration let S,Y; let X be S-sequents-like set;
+cluster X/\Y -> S-sequents-like set;
+end;
+
+registration
+let S,D,m,X;
+cluster (m,X,D)-derivable -> S-sequent-like set;
+end;
+
+registration
+let S,D;
+let Phi1, Phi2 be set;
+cluster (Phi1\Phi2,D)-provable -> (Phi1,D)-provable set;
+end;
+
+registration
+let S,D;
+let Phi1, Phi2 be set;
+cluster (Phi1\Phi2,D)-provable -> (Phi1\/Phi2,D)-provable set;
+end;
+
+registration
+let S,D; let Phi1,Phi2 be set;
+cluster (Phi1/\Phi2,D)-provable -> (Phi1,D)-provable set;
+end;
+
+registration
+let S,D; let X be set, x be Subset of X;
+cluster (x,D)-provable -> (X,D)-provable set;
+end;
+
+registration
+let S; let premises be finite Subset of (AllFormulasOf S);
+let phi be wff string of S;
+cluster [premises,phi] -> S-sequent-like set;
+end;
+
+registration
+let S; let phi1,phi2 be wff string of S;
+cluster [{phi1},phi2] -> S-sequent-like set;
+let phi3 be wff string of S;
+cluster [{phi1,phi2},phi3] -> S-sequent-like set;
+end;
+
+registration
+let S, phi1, phi2; let Phi be finite Subset of AllFormulasOf S;
+cluster [Phi\/{phi1}, phi2] -> S-sequent-like set;
+end;
+
+registration
+let S,D;
+cluster D-expanded (Subset of AllFormulasOf S);
+end;
+
+registration
+let S,D;
+cluster D-expanded set;
+end;
+
+::############################################################################
+::# Encoding of modified Gentzen rules
+definition
+let Seqts be set; let S be Language; let seqt be S-null set;
+
+pred seqt Rule0 Seqts means
+:: FOMODEL4:def 18
+seqt`2 in seqt`1; ::Def18 1
+
+pred seqt Rule1 Seqts means
+:: FOMODEL4:def 19
+ex y being set st y in Seqts &
+y`1 c= seqt`1 & seqt`2 = y`2;
+
+pred seqt Rule2 Seqts means
+:: FOMODEL4:def 20
+seqt`1 is empty &
+ex t being termal string of S st seqt`2 = <* TheEqSymbOf S *> ^ t ^ t;
+
+pred seqt Rule3a Seqts means
+:: FOMODEL4:def 21
+ex t,t1,t2 being termal string of S, x being set st
+(x in Seqts & seqt`1 = x`1 \/ { <* TheEqSymbOf S *> ^ t1 ^ t2 } &
+x`2 = <* TheEqSymbOf S *> ^ t ^ t1 & seqt`2 = <* TheEqSymbOf S *> ^ t ^ t2);
+
+pred seqt Rule3b Seqts means
+:: FOMODEL4:def 22  ::Def22 1
+ex t1,t2 being termal string of S st seqt`1 = {<*TheEqSymbOf S*>^t1^t2} &
+seqt`2 = <*TheEqSymbOf S*>^t2^t1;
+
+pred seqt Rule3d Seqts means
+:: FOMODEL4:def 23  ::Def24 1
+ex s being low-compounding Element of S,
+T,U being (abs(ar(s)))-element Element of (AllTermsOf S)* st
+(s is operational & seqt`1=
+{<*TheEqSymbOf S*>^(TT.j)^(UU.j) where j is Element of Seg abs(ar(s)),
+TT,UU is Function of Seg abs(ar(s)), (AllSymbolsOf S)*\{{}} : TT=T & UU=U}
+& seqt`2=<*TheEqSymbOf S*>^(s-compound(T))^(s-compound(U)));
+
+pred seqt Rule3e Seqts means
+:: FOMODEL4:def 24
+ex s being relational Element of S,
+T,U being (abs(ar(s)))-element Element of (AllTermsOf S)* st
+(seqt`1={s-compound(T)} \/
+{<*TheEqSymbOf S*>^(TT.j)^(UU.j) where j is Element of Seg abs(ar(s)),
+TT,UU is Function of Seg abs(ar(s)), (AllSymbolsOf S)*\{{}} : TT=T & UU=U}
+& seqt`2=s-compound(U));
+
+pred seqt Rule4 Seqts means
+:: FOMODEL4:def 25
+ex l being literal Element of S, phi being wff string of S, t being
+termal string of S st seqt`1={(l,t) SubstIn phi} & seqt`2=<*l*>^phi;
+
+pred seqt Rule5 Seqts means
+:: FOMODEL4:def 26
+ex v1,v2 being
+(literal Element of S), x,p st
+seqt`1=x \/ {<*v1*>^p} & v2 is (x\/{p}\/{seqt`2})-absent &
+[x\/{(v1 SubstWith v2).p},seqt`2] in Seqts;
+
+pred seqt Rule6 Seqts means
+:: FOMODEL4:def 27  ::def28 1
+ex y1,y2 being set,phi1, phi2 being wff string of S st y1 in Seqts &
+y2 in Seqts & y1`1 = y2`1 & y2`1=seqt`1 &
+y1`2= <*TheNorSymbOf S*> ^ phi1 ^ phi1 &
+y2`2=  <*TheNorSymbOf S*> ^ phi2 ^ phi2 &
+seqt`2 = <*TheNorSymbOf S*> ^ phi1 ^ phi2;
+
+pred seqt Rule7 Seqts means
+:: FOMODEL4:def 28
+ex y being set, phi1, phi2 being wff string of S st y in Seqts &
+y`1 = seqt`1 & y`2 =<* TheNorSymbOf S*> ^ phi1 ^ phi2 &
+seqt`2 = <* TheNorSymbOf S*> ^ phi2 ^ phi1;
+
+pred seqt Rule8 Seqts means
+:: FOMODEL4:def 29
+ex y1,y2 being set, phi,phi1,phi2 being wff string of S st y1 in Seqts &
+y2 in Seqts & y1`1=y2`1 & y1`2=phi1 &
+y2`2 = <* TheNorSymbOf S *> ^ phi1 ^ phi2 &
+{phi}\/seqt`1=y1`1 & seqt`2= <* TheNorSymbOf S *> ^ phi ^ phi;
+
+pred seqt Rule9 Seqts means
+:: FOMODEL4:def 30
+ex y being set, phi being wff string of S st
+y in Seqts & seqt`2=phi & y`1=seqt`1 & y`2=xnot (xnot phi);
+end;
+
+definition
+let S be Language;
+func P0(S) -> Relation of bool (S-sequents), S-sequents means
+:: FOMODEL4:def 31
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule0 Seqts;
+
+func P1(S) -> Relation of bool (S-sequents), S-sequents means
+:: FOMODEL4:def 32  ::def32
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule1 Seqts;
+
+func P2(S) -> Relation of bool (S-sequents), S-sequents means
+:: FOMODEL4:def 33
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule2 Seqts;
+
+func P3a(S) -> Relation of bool (S-sequents), S-sequents means
+:: FOMODEL4:def 34
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule3a Seqts;
+
+func P3b(S) -> Relation of bool (S-sequents), S-sequents means
+:: FOMODEL4:def 35
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule3b Seqts;
+
+func P3d(S) -> Relation of bool (S-sequents), S-sequents means
+:: FOMODEL4:def 36
+for Seqts being Element of bool (S-sequents), seqt being ::Def37 1
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule3d Seqts;
+
+func P3e(S) -> Relation of bool (S-sequents), S-sequents means
+:: FOMODEL4:def 37
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule3e Seqts;
+
+func P4(S) -> Relation of bool (S-sequents), S-sequents means
+:: FOMODEL4:def 38
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule4 Seqts;
+
+func P5(S) -> Relation of bool (S-sequents), S-sequents means
+:: FOMODEL4:def 39
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule5 Seqts;
+
+func P6(S) -> Relation of bool (S-sequents), S-sequents means
+:: FOMODEL4:def 40
+for Seqts being Element of bool (S-sequents), seqt being ::def41 1
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule6 Seqts;
+
+func P7(S) -> Relation of bool (S-sequents), S-sequents means
+:: FOMODEL4:def 41
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule7 Seqts;
+
+func P8(S) -> Relation of bool (S-sequents), S-sequents means
+:: FOMODEL4:def 42
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule8 Seqts;
+
+func P9(S) -> Relation of bool (S-sequents), S-sequents means
+:: FOMODEL4:def 43
+for Seqts being Element of bool (S-sequents), seqt being
+Element of (S-sequents) holds [ Seqts, seqt ] in it iff seqt Rule9 Seqts;
+end;
+
+definition
+let S;
+let R be Relation of bool (S-sequents), S-sequents;
+func FuncRule(R) -> Rule of S means
+:: FOMODEL4:def 44
+for inseqs being set st inseqs in bool (S-sequents) holds it.inseqs =
+{ x where x is Element of S-sequents : [inseqs, x] in R};
+end;
+
+definition let S;
+func R0(S) -> Rule of S equals
+:: FOMODEL4:def 45
+FuncRule(P0(S));
+func R1(S) -> Rule of S equals
+:: FOMODEL4:def 46
+FuncRule(P1(S));
+func R2(S) -> Rule of S equals
+:: FOMODEL4:def 47
+FuncRule(P2(S));
+func R3a(S) -> Rule of S equals
+:: FOMODEL4:def 48
+FuncRule(P3a(S));
+func R3b(S) -> Rule of S equals
+:: FOMODEL4:def 49
+FuncRule(P3b(S));
+func R3d(S) -> Rule of S equals
+:: FOMODEL4:def 50
+FuncRule(P3d(S));
+func R3e(S) -> Rule of S equals
+:: FOMODEL4:def 51
+FuncRule(P3e(S));
+func R4(S) -> Rule of S equals
+:: FOMODEL4:def 52
+FuncRule(P4(S));
+func R5(S) -> Rule of S equals
+:: FOMODEL4:def 53
+FuncRule(P5(S));
+func R6(S) -> Rule of S equals
+:: FOMODEL4:def 54
+FuncRule(P6(S));
+func R7(S) -> Rule of S equals
+:: FOMODEL4:def 55
+FuncRule(P7(S));
+func R8(S) -> Rule of S equals
+:: FOMODEL4:def 56
+FuncRule(P8(S));
+func R9(S) -> Rule of S equals
+:: FOMODEL4:def 57
+FuncRule(P9(S));
+end;
+
+registration
+let S; let t be termal string of S;
+cluster {[{},<*TheEqSymbOf S*>^t^t]} -> {R2(S)}-derivable set;
+end;
+
+registration
+let S;
+cluster R2(S) -> isotone Rule of S;
+end;
+
+registration
+let S;
+cluster R3b(S) -> isotone Rule of S;
+end;
+
+registration
+let S; let t,t1,t2 be termal string of S;
+let premises be finite (Subset of AllFormulasOf S);
+cluster [premises\/{<*TheEqSymbOf S*>^t1^t2},<*TheEqSymbOf S*>^t^t2]
+-> (1,{[premises,<*TheEqSymbOf S*>^t^t1]},{R3a(S)})-derivable set;
+end;
+
+registration
+let S; let t,t1,t2 be termal string of S, phi be wff string of S;
+cluster [{phi,<*TheEqSymbOf S*>^t1^t2},<*TheEqSymbOf S*>^t^t2]
+-> (1,{[{phi},<*TheEqSymbOf S*>^t^t1]},{R3a(S)})-derivable set;
+end;
+
+registration
+let S; let phi be wff string of S, Phi be finite Subset of AllFormulasOf S;
+cluster [Phi \/ {phi}, phi] -> (1,{},{R0(S)})-derivable set;
+end;
+
+registration
+let S; let phi1,phi2 be wff string of S;
+cluster [{phi1,phi2},phi1] -> (1,{},{R0(S)})-derivable set;
+end;
+
+registration
+let S,phi;
+cluster [{phi},phi] -> (1,{},{R0(S)})-derivable set;
+end;
+
+registration
+let S; let phi be wff string of S;
+cluster {[{phi}, phi]} -> ({},{R0(S)})-derivable set;
+end;
+
+registration
+let S;
+cluster R0(S) -> isotone Rule of S;
+cluster R3a(S) -> isotone Rule of S;
+cluster R3d(S) -> isotone Rule of S;
+cluster R3e(S) -> isotone Rule of S;
+let K1,K2;
+cluster K1\/K2 -> isotone RuleSet of S;
+end;
+
+registration
+let S; let t1,t2 be termal string of S;
+cluster <*TheEqSymbOf S*>^t1^t2 -> 0-wff string of S;
+end;
+
+definition
+let S; let m be non zero Nat;
+let T,U be m-element (Element of ((AllTermsOf S)*));
+func PairWiseEq (T,U) equals
+:: FOMODEL4:def 58
+{<*TheEqSymbOf S*>^(TT.j)^(UU.j) where j is Element of Seg m,
+TT,UU is Function of Seg m, (AllSymbolsOf S)*\{{}} : TT=T & UU=U};
+end;
+
+definition
+let S; let m be non zero Nat, T1,T2 be m-element Element of ((AllTermsOf S)*);
+redefine func PairWiseEq (T1,T2) -> Subset of AllFormulasOf S;
+end;
+
+registration
+let S; let m be non zero Nat;
+let T,U be m-element (Element of ((AllTermsOf S)*));
+cluster PairWiseEq(T,U) -> finite;
+end;
+
+registration
+let S; let s be relational Element of S;
+let T1,T2 be abs(ar(s))-element Element of (AllTermsOf S)*;
+cluster {[PairWiseEq(T1,T2)\/{s-compound(T1)},s-compound(T2)]} ->
+({},{R3e(S)})-derivable;
+end;
+
+definition
+let m,S,D;
+attr D is m-ranked means
+:: FOMODEL4:def 59  ::def58 1
+R0(S) in D & R2(S) in D & R3a(S) in D & R3b(S) in D if m=0,
+R0(S) in D & R2(S) in D & R3a(S) in D & R3b(S) in D
+& R3d(S) in D & R3e(S) in D if m=1,
+R0(S) in D & R1(S) in D & R2(S) in D & R3a(S) in D & R3b(S) in D
+& R3d(S) in D & R3e(S) in D & R4(S) in D & R5(S) in D & R6(S) in D &
+R7(S) in D & R8(S) in D if m=2 otherwise D={};
+end;
+
+registration
+let S;
+cluster 1-ranked -> 0-ranked RuleSet of S;
+cluster 2-ranked -> 1-ranked RuleSet of S;
+end;
+
+definition
+let S;
+func S-rules -> RuleSet of S equals
+:: FOMODEL4:def 60
+{R0(S), R1(S), R2(S), R3a(S), R3b(S), R3d(S), R3e(S), R4(S)} \/
+{R5(S), R6(S), R7(S), R8(S)};
+end;
+
+registration let S;
+cluster S-rules -> 2-ranked RuleSet of S;
+end;
+
+registration let S;
+cluster 2-ranked RuleSet of S;
+end;
+
+registration let S;
+cluster 1-ranked RuleSet of S;
+end;
+
+registration let S;
+cluster 0-ranked RuleSet of S;
+end;
+
+registration
+let S; let D be 1-ranked RuleSet of S; let X be D-expanded set; let a;
+cluster X-freeInterpreter(a) -> ((X,D)-termEq)-respecting Interpreter of a
+,AllTermsOf S;
+end;
+
+registration
+let S; let D be 0-ranked RuleSet of S; let X be D-expanded set;
+cluster ((X,D)-termEq) ->
+total symmetric transitive Relation of (AllTermsOf S);
+end;
+
+registration let S;
+cluster 1-ranked (0-ranked RuleSet of S);
+end;
+
+theorem :: FOMODEL4:1
+D1 c= D2 & (D2 is isotone or D1 is isotone) &
+Y is (X,D1)-derivable implies Y is (X,D2)-derivable;
+
+registration let S, Sq;
+cluster {Sq} -> S-sequents-like;
+end;
+
+registration
+let S,SQ1,SQ2;
+cluster SQ1\/SQ2 -> S-sequents-like set;
+end;
+
+registration
+let S; let x,y be S-sequent-like set;
+cluster {x,y} -> S-sequents-like set;
+end;
+
+registration
+let S, phi1, phi2;
+cluster [{xnot phi1, xnot phi2},<*TheNorSymbOf S*>^phi1^phi2]
+-> (1,
+{[{xnot phi1,xnot phi2}, xnot phi1], [{xnot phi1, xnot phi2}, xnot phi2]},
+{R6(S)})-derivable set;
+end;
+
+registration
+let S,phi1,phi2;
+cluster [{phi1,phi2},phi2] -> (1,{},{R0(S)})-derivable set;
+end;
+
+theorem :: FOMODEL4:2
+for R being Relation of bool (S-sequents), S-sequents
+st [SQ, Sq] in R holds Sq in (FuncRule(R)).SQ;
+
+theorem :: FOMODEL4:3
+x in R.X implies x is (1,X,{R})-derivable;
+
+definition
+let S,D,X;
+redefine attr X is D-expanded means
+:: FOMODEL4:def 61  ::def59 1
+x is (X,D)-provable implies x in X;
+end;
+
+theorem :: FOMODEL4:4
+phi in X implies phi is (X,{R0(S)})-provable;
+
+theorem :: FOMODEL4:5
+(D1\/D2 is isotone & D1\/D2\/D3 is isotone &
+x is (m,SQ1,D1)-derivable & y is (m,SQ2,D2)-derivable &
+z is (n,{x,y},D3)-derivable) implies
+z is (m+n,SQ1\/SQ2,D1\/D2\/D3)-derivable; ::#generalizing Lm28
+
+theorem :: FOMODEL4:6
+(D1 is isotone & D1\/D2 is isotone &
+y is (m,X,D1)-derivable & z is (n,{y},D2)-derivable) implies
+z is (m+n,X,D1\/D2)-derivable;
+
+theorem :: FOMODEL4:7
+x is (m,X,D)-derivable implies {x} is (X,D)-derivable;
+
+registration let S;
+cluster R6(S) -> isotone Rule of S;
+end;
+
+theorem :: FOMODEL4:8
+(D1 c= D2 & (D1 is isotone or D2 is isotone) &
+x is (X,D1)-provable) implies x is (X,D2)-provable;
+
+theorem :: FOMODEL4:9
+X c= Y & x is (X,D)-provable implies x is (Y,D)-provable;
+
+registration let S;
+cluster R8(S) -> isotone Rule of S;
+end;
+
+registration
+let S;
+cluster R1(S) -> isotone Rule of S;
+end;
+
+theorem :: FOMODEL4:10 ::Th11
+{y} is (SQ,D)-derivable implies ex mm st y is (mm,SQ,D)-derivable;
+
+registration
+let S,D,X;
+cluster (X,D)-derivable -> S-sequents-like set;
+end;
+
+definition ::def64 4
+let S,D,X,x;
+redefine attr x is (X,D)-provable means
+:: FOMODEL4:def 62
+ex H being set, m st H c= X & [H,x] is (m,{},D)-derivable;
+end;
+
+theorem :: FOMODEL4:11
+D1 c= D2 & (D2 is isotone or D1 is isotone) & x is
+(m,X,D1)-derivable implies x is (m,X,D2)-derivable;
+
+registration
+let S;
+cluster R7(S) -> isotone Rule of S;
+end;
+
+theorem :: FOMODEL4:12
+x is (X,D)-provable implies x is wff string of S;
+
+reserve D,E,F for (RuleSet of S), D1 for 1-ranked (0-ranked RuleSet of S),
+D2 for 2-ranked RuleSet of S;
+
+registration
+let S, D1; let X be D1-expanded set;
+cluster (S,X)-freeInterpreter -> ((X,D1)-termEq)-respecting
+((S,AllTermsOf S)-interpreter-like Function);
+end;
+
+definition
+let S; let D be 0-ranked RuleSet of S; let X be D-expanded set;
+func D Henkin X -> Function equals
+:: FOMODEL4:def 63
+(S,X)-freeInterpreter quotient ((X,D)-termEq);
+end;
+
+registration
+let S; let D be 0-ranked RuleSet of S; let X be D-expanded set;
+cluster D Henkin X -> (OwnSymbolsOf S)-defined;
+end;
+
+registration
+let S, D1; let X be D1-expanded set;
+cluster D1 Henkin X -> (S,Class (X,D1)-termEq)-interpreter-like Function;
+end;
+
+definition
+let S, D1; let X be D1-expanded set;
+redefine func D1 Henkin X ->
+Element of (Class (X,D1)-termEq)-InterpretersOf S;
+end;
+
+registration
+let S, phi1, phi2;
+cluster <*TheNorSymbOf S*>^phi1^phi2 ->
+({xnot phi1, xnot phi2},{R0(S)}\/{R6(S)})-provable set;
+end;
+
+registration
+let S;
+cluster -> non empty (0-ranked RuleSet of S);
+end;
+
+definition ::def62 1
+let S,x;
+attr x is S-premises-like means
+:: FOMODEL4:def 64
+x c= AllFormulasOf S & x is finite;
+end;
+
+registration
+let S;
+cluster S-premises-like -> finite set;
+end;
+
+registration
+let S,phi;
+cluster {phi} -> S-premises-like set;
+end;
+
+registration
+let S; let e be empty set;
+cluster e null S -> S-premises-like set;
+end;
+
+registration
+let X,S;
+cluster S-premises-like Subset of X;
+end;
+
+registration
+let S;
+cluster S-premises-like set;
+end;
+
+registration
+let S; let X be S-premises-like set;
+cluster -> S-premises-like Subset of X;
+end;
+
+reserve H,H1,H2,H3 for (S-premises-like set);
+
+definition
+let S, H2, H1;
+redefine func H1 null H2 -> Subset of (AllFormulasOf S);
+end;
+
+registration
+let S,H,x;
+cluster H null x -> S-premises-like;
+end;
+
+registration
+let S, H1, H2;
+cluster H1\/H2 -> S-premises-like set;
+end;
+
+registration
+let S,H,phi;
+cluster [H,phi] -> S-sequent-like;
+end;
+
+registration
+let S, H1, H2, phi;
+cluster [H1\/H2, phi] -> (1,{[H1,phi]},{R1(S)})-derivable set;
+end;
+
+registration
+let S,H, phi, phi1, phi2;
+cluster [H null (phi1^phi2),xnot phi] -> (1,
+{[H\/{phi},phi1],[H\/{phi},<*TheNorSymbOf S*>^phi1^phi2]},
+{R8(S)})-derivable set;
+end;
+
+registration
+let S;
+cluster {} null S -> S-sequents-like set;
+end;
+
+registration
+let S,H,phi;
+cluster [H\/{phi}, phi] -> (1,{},{R0(S)})-derivable set;
+end;
+
+registration
+let S, H, phi1, phi2;
+cluster [H null phi2,xnot phi1] -> (2,
+{[H,<*TheNorSymbOf S*>^phi1^phi2]},{R0(S)}\/{R1(S)}\/{R8(S)})-derivable set;
+end;
+
+registration
+let S, H, phi1, phi2;
+cluster [H, <*TheNorSymbOf S*>^phi2^phi1] -> (1,
+{[H,<*TheNorSymbOf S*>^phi1^phi2]},{R7(S)})-derivable set;
+end;
+
+registration
+let S, H, phi1, phi2;
+cluster [H null phi1, xnot phi2] ->
+(3,{[H,<*TheNorSymbOf S*>^phi1^phi2]},{R0(S)}\/{R1(S)}\/{R8(S)}\/{R7(S)})
+-derivable set;
+end;
+
+registration
+let S,Sq;
+cluster Sq`1 -> S-premises-like set;
+end;
+
+definition
+let S,X,D;
+redefine func D null X -> RuleSet of S;
+end;
+
+registration
+let S,phi1,phi2,l1,H;
+let l2 be (H\/{phi1}\/{phi2})-absent literal Element of S;
+cluster [(H\/{<*l1*>^phi1}) null l2, phi2] ->
+(1,{[H\/{(l1,l2)-SymbolSubstIn phi1}, phi2]},{R5(S)})-derivable set;
+end;
+
+definition ::def63 2
+let S,D,X;
+attr X is D-inconsistent means
+:: FOMODEL4:def 65
+ex phi1,phi2 st
+(phi1 is (X,D)-provable & <*TheNorSymbOf S*>^phi1^phi2 is (X,D)-provable);
+end;
+
+registration
+let m1, S, H1, H2, phi;
+cluster [(H1\/H2) null m1, phi] -> (m1,{[H1,phi]},{R1(S)})-derivable set;
+end;
+
+registration
+let S;
+cluster non empty (isotone RuleSet of S);
+end;
+
+theorem :: FOMODEL4:13
+(X is D-inconsistent & D is isotone & R1(S) in D & R8(S) in D)
+implies xnot phi is (X,D)-provable;
+
+registration
+let S;
+cluster R5(S) -> isotone Rule of S;
+end;
+
+registration
+let S,l,t,phi;
+cluster [{(l,t) SubstIn phi}, <*l*>^phi] -> (1,{},{R4(S)})-derivable set;
+end;
+
+registration
+let S;
+cluster R4(S) -> isotone Rule of S;
+end;
+
+definition
+let S,X;
+attr X is S-witnessed means
+:: FOMODEL4:def 66
+for l1, phi1 st <*l1*>^phi1 in X ex l2 st (
+(l1,l2)-SymbolSubstIn phi1 in X & not l2 in rng phi1);
+end;
+
+theorem :: FOMODEL4:14
+for X being D1-expanded set st
+R1(S) in D1 & R4(S) in D1 & R6(S) in D1 & R7(S) in D1 &
+R8(S) in D1 & X is S-mincover & X is S-witnessed
+holds (D1 Henkin X)-TruthEval psi = 1 iff psi in X;
+
+notation
+let S,D,X;
+antonym X is D-consistent for X is D-inconsistent;
+end;
+
+theorem :: FOMODEL4:15
+for X being Subset of Y st X is D-inconsistent
+holds Y is D-inconsistent;
+
+definition
+let S,D; let X be functional set; let phi be Element of ExFormulasOf S;
+func (D,phi) AddAsWitnessTo X equals
+:: FOMODEL4:def 67
+X\/{
+(S-firstChar.phi, the Element of (
+LettersOf S \ SymbolsOf (((AllSymbolsOf S)*\{{}})/\(X\/{head phi}))
+))-SymbolSubstIn (head phi)
+} if X\/{phi} is D-consistent &
+LettersOf S \ SymbolsOf (((AllSymbolsOf S)*\{{}})/\(X\/{head phi}))<>{}
+otherwise X;
+end;
+
+registration
+let S,D; let X be functional set; let phi be Element of ExFormulasOf S;
+cluster X \ ((D,phi) AddAsWitnessTo X) -> empty set;
+end;
+
+registration
+let S,D; let X be functional set; let phi be Element of ExFormulasOf S;
+cluster ((D,phi) AddAsWitnessTo X)\X -> trivial set;
+end;
+
+definition
+let S,D; let X be functional set; let phi be Element of ExFormulasOf S;
+redefine func (D,phi) AddAsWitnessTo X -> Subset of (X\/AllFormulasOf S);
+end;
+
+definition ::def67 1
+let S,D;
+attr D is Correct means
+:: FOMODEL4:def 68
+for phi, X st
+phi is (X,D)-provable holds for U for I being Element of U-InterpretersOf S
+st X is I-satisfied holds I-TruthEval phi=1;
+end;
+
+registration
+let S, t1, t2;
+cluster SubTerms (<*TheEqSymbOf S*>^t1^t2) \+\ <*t1, t2*> -> empty set;
+end;
+
+definition
+let S; let R be Rule of S;
+attr R is Correct means
+:: FOMODEL4:def 69
+X is S-correct implies R.X is S-correct;
+end;
+
+registration
+let S;
+cluster S-sequent-like -> S-null set;
+end;
+
+registration
+let S;
+cluster R0(S) -> Correct Rule of S;
+end;
+
+registration
+let S;
+cluster Correct Rule of S;
+end;
+
+registration
+let S;
+cluster R1(S) -> Correct Rule of S;
+end;
+
+registration let S;
+cluster R2(S) -> Correct Rule of S;
+end;
+
+registration let S;
+cluster R3a(S) -> Correct Rule of S;
+end;
+
+registration let S;
+cluster R3b(S) -> Correct Rule of S;
+end;
+
+registration
+let S;
+cluster R3d(S) -> Correct Rule of S;
+end;
+
+registration
+let S;
+cluster R3e(S) -> Correct Rule of S;
+end;
+
+registration
+let S;
+cluster R4(S) -> Correct Rule of S;
+end;
+
+registration
+let S;
+cluster R5(S) -> Correct Rule of S;
+end;
+
+registration let S;
+cluster R6(S) -> Correct Rule of S;
+end;
+
+registration let S;
+cluster R7(S) -> Correct Rule of S;
+end;
+
+registration let S;
+cluster R8(S) -> Correct Rule of S;
+end;
+
+theorem :: FOMODEL4:16
+(for R being Rule of S st R in D holds R is Correct) implies D is Correct;
+
+registration let S; let R be Correct Rule of S;
+cluster {R} -> Correct RuleSet of S;
+end;
+
+registration
+let S;
+cluster S-rules -> Correct RuleSet of S;
+end;
+
+registration let S;
+cluster R9(S) -> isotone Rule of S;
+end;
+
+registration let S,H,phi;
+cluster [H, phi] null 1 -> (1,{[H, xnot (xnot phi)]},{R9(S)})-derivable set;
+end;
+
+registration
+let X, S;
+cluster X-implied (0-wff string of S);
+end;
+
+registration let X, S;
+cluster X-implied (wff string of S);
+end;
+
+registration let S, X; let phi be X-implied (wff string of S);
+cluster xnot xnot phi -> X-implied (wff string of S);
+end;
+
+definition
+let X, S, phi;
+attr phi is X-provable means
+:: FOMODEL4:def 70
+phi is (X,{R9(S)}\/S-rules)-provable;
+end;
+
+begin
+::# constructions for countable languages
+::# witness adjoining
+definition
+let X be functional set; let S,D;
+let num be Function of NAT, ExFormulasOf S;
+func (D,num) AddWitnessesTo X -> Function of NAT, bool (X\/AllFormulasOf S)
+means
+:: FOMODEL4:def 71
+it.0=X & for mm holds it.(mm+1)=(D, num.mm) AddAsWitnessTo (it.mm);
+end;
+
+notation
+let X be functional set; let S,D;
+let num be Function of NAT, ExFormulasOf S;
+synonym (D,num) addw X for (D,num) AddWitnessesTo X;
+end;
+
+theorem :: FOMODEL4:17
+for X being functional set,
+num being Function of NAT, ExFormulasOf S st
+D is isotone & R1(S) in D & R8(S) in D & R2(S) in D & R5(S) in D &
+LettersOf S\SymbolsOf (X/\((AllSymbolsOf S)*\{{}})) is infinite &
+X is D-consistent
+holds
+((D,num) addw X).k c= ((D,num) addw X).(k+m) &
+LettersOf S\SymbolsOf (((D,num) addw X).m/\((AllSymbolsOf S)*\{{}}))
+is infinite & ((D,num) addw X).m is D-consistent;
+
+definition
+let X be functional set; let S,D;
+let num be Function of NAT, ExFormulasOf S;
+func X WithWitnessesFrom (D,num) -> Subset of (X\/AllFormulasOf S)
+equals
+:: FOMODEL4:def 72
+union rng (D,num) AddWitnessesTo X;
+end;
+
+notation
+let X be functional set; let S,D;
+let num be Function of NAT, ExFormulasOf S;
+synonym X addw (D,num) for X WithWitnessesFrom (D,num);
+end;
+
+registration
+let X be functional set; let S,D;
+let num be Function of NAT, ExFormulasOf S;
+cluster X\ (X addw (D,num)) -> empty set;
+end;
+
+theorem :: FOMODEL4:18
+for X being functional set,
+num being Function of NAT, ExFormulasOf S st D is isotone &
+R1(S) in D & R8(S) in D & R2(S) in D & R5(S) in D &
+LettersOf S\SymbolsOf (X/\((AllSymbolsOf S)*\{{}})) is infinite &
+X addw (D,num) c= Z & Z is D-consistent & rng num = ExFormulasOf S
+holds Z is S-witnessed;
+
+begin
+::# constructions for countable languages
+::# Consistently maximizing a set of formulas of a countable language
+
+definition
+let X,S,D; let phi be Element of AllFormulasOf S;
+func (D,phi) AddFormulaTo X equals
+:: FOMODEL4:def 73
+X\/{phi}
+if not xnot phi is (X,D)-provable otherwise X \/ {xnot phi};
+end;
+
+definition
+let X,S,D; let phi be Element of AllFormulasOf S;
+redefine func (D,phi) AddFormulaTo X -> Subset of (X\/AllFormulasOf S);
+end;
+
+registration
+let X,S,D; let phi be Element of AllFormulasOf S;
+cluster X \ ((D,phi) AddFormulaTo X) -> empty;
+end;
+
+definition
+let X,S,D; let num be Function of NAT, AllFormulasOf S;
+func (D,num) AddFormulasTo X -> Function of NAT, bool (X\/AllFormulasOf S)
+means
+:: FOMODEL4:def 74
+it.0=X & for m holds it.(m+1)=(D,num.m) AddFormulaTo (it.m);
+end;
+
+definition
+let X,S,D; let num be Function of NAT, AllFormulasOf S;
+func (D,num) CompletionOf X -> Subset of (X\/AllFormulasOf S) equals
+:: FOMODEL4:def 75
+union rng ((D,num) AddFormulasTo X);
+end;
+
+registration
+let X,S,D; let num be Function of NAT, AllFormulasOf S;
+cluster X\((D,num) CompletionOf X) -> empty set;
+end;
+
+theorem :: FOMODEL4:19
+for R being Relation of bool (S-sequents), S-sequents holds ::Th20
+(y in (FuncRule R).X iff (y in S-sequents & [X,y] in R));
+
+reserve D2 for 2-ranked RuleSet of S;
+
+registration
+let S; let r1, r2 be isotone Rule of S;
+cluster {r1,r2} -> isotone RuleSet of S;
+end;
+
+registration
+let S; let r1, r2, r3, r4 be isotone Rule of S;
+cluster {r1,r2,r3,r4} -> isotone RuleSet of S;
+end;
+
+registration let S;
+cluster S-rules -> isotone RuleSet of S;
+end;
+
+registration let S;
+cluster Correct (isotone RuleSet of S);
+end;
+
+registration let S;
+cluster 2-ranked (Correct isotone RuleSet of S);
+end;
+
+registration
+let S be countable Language;
+cluster AllFormulasOf S -> countable;
+end;
+
+theorem :: FOMODEL4:20
+for S being countable Language, D being RuleSet of S st
+D is 2-ranked & D is isotone & D is Correct & Z is D-consistent &
+Z c= AllFormulasOf S ex U being non empty set,
+I being Element of U-InterpretersOf S st Z is I-satisfied;
+
+reserve C for countable Language, phi for wff string of C;
+
+theorem :: FOMODEL4:21 ::Goedel's completeness theorem
+(X c= AllFormulasOf C & phi is X-implied) implies phi is X-provable;
+

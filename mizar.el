@@ -516,6 +516,7 @@ common mizar editing functions."
   (define-key mizar-mode-map "\C-c\C-r" 'mizar-make-reserve-summary)
   (define-key mizar-mode-map "\C-cr" 'mizar-it-remote)
   (define-key mizar-mode-map "\C-ca" 'mizar-remote-solve-atp)
+  (define-key mizar-mode-map "\C-ch" 'mizar-browse-remote)
   (define-key mizar-mode-map "\C-ce" 'mizar-show-environ)
   (define-key mizar-mode-map "\C-cs" 'mizar-insert-skeleton)
   (define-key mizar-mode-map "\C-cu" 'mizar-run-all-irr-utils)
@@ -756,6 +757,8 @@ Used for exact completion.")
   "Indent if `mizar-semicolon-indents' and insert ARG semicolons."
   (interactive "*p")
   (self-insert-command (prefix-numeric-value arg))
+  (if mizar-atp-completion
+      (mizar-atp-autocomplete))
   (mizar-bubble-ref-incremental)
   (if mizar-semicolon-indents
     (mizar-indent-line)))
@@ -1319,6 +1322,42 @@ The variable `mizar-ref-table' might be modified by this function."
       (put-text-property (match-beginning 3) (match-end 3) 
 			 'help-echo 'mizar-get-ref-str))
     (set-buffer-modified-p mod)))))
+
+
+(defcustom mizar-atp-completion nil
+"*Semicolon following \"by\" calls ATP to provide justification."
+:type 'boolean
+:group 'mizar-proof-advisor)
+
+
+(defun mizar-atp-autocomplete ()
+"Replace \"by;\" with \"; :: ATP asked ...\" and call ATP to justify the current step.
+Used automatically if `mizar-atp-completion' is on."
+(save-excursion
+  (let* ((pos (point)) (pos1 (- pos 3)))
+    (forward-char -4) 
+    (if (looking-at " by;")
+	(progn 
+	  (replace-match " ; :: ATP asked ... ")
+	  ;; we leave one space in the beg and end without the added properties
+	  ;; not to get sticky behavior for unsuspecting users
+	  (mizar-mark-call-atp pos1 (- (point) 1)))))))
+
+(defun mizar-mark-call-atp (beg end)
+"Mark the region with the 'help-echo and 'atp-asked property and call ATP with pushback data."
+(save-excursion
+  (goto-char beg)
+  (let* ((mod (buffer-modified-p))
+	 (line (current-line))
+	 (col (current-column))
+	 (pos (concat (number-to-string line) ":" (number-to-string col)))
+	 (buf (buffer-name))
+	 (msg (concat "ATP was called on this step, awaiting response for position " pos)))
+    (put-text-property beg end 'help-echo msg)
+    (put-text-property beg end 'atp-asked (intern pos))
+    (mizar-remote-solve-atp pos (concat buf "__" pos) (list buf line col beg))
+    (message "Calling ATP on position %s " pos)
+    (set-buffer-modified-p mod))))
 
 
 (defvar mizar-bubble-ref-increment 10
@@ -4014,7 +4053,8 @@ Used to get the 'loaded' response from MoMM.")
     (set-keymap-parent map mizar-mode-map)
     (define-key map button_kword 'mizar-ask-momm)
     map)
-"Keymap used at MoMM-sendable errors.")
+"Keymap used at MoMM-sendable errors.
+It binds right-click to `mizar-ask-momm'")
 
 
 (defconst directivenbr 8
@@ -5645,7 +5685,7 @@ file suffix to use."
 
 ;; borrowed from somewhere - http-post code
 ;; the problem is to pass things to a browser
-(defun my-url-http-post (url args &optional output-buffer synchronous)
+(defun my-url-http-post (url args &optional output-buffer synchronous pushback)
       "Send ARGS to URL as a POST request."
       (let ((url-request-method "POST")
             (url-request-extra-headers
@@ -5662,44 +5702,109 @@ file suffix to use."
 	    (save-excursion
 	      (set-buffer (url-retrieve-synchronously url))
 	      (buffer-string))
-        (url-retrieve url 'my-switch-to-url-buffer))))
+        (url-retrieve url 'my-switch-to-url-buffer (list output-buffer pushback)))))
 
 (defun my-kill-url-buffer (status)
   "Kill the buffer returned by `url-retrieve'."
   (kill-buffer (current-buffer)))
 
-
-
-(defun add-invisible-overlay (start end)
+(defun add-invisible-overlay (start end sym)
   "Add an overlay from `start' to `end' in the current buffer."
   (let ((overlay (make-overlay start end)))
-    (overlay-put overlay 'invisible 'miz-ar4miz-invis)))
+    (overlay-put overlay 'invisible sym)))
 
 
-(defun my-switch-to-url-buffer (status)
-  "Switch to the buffer returned by `url-retreive'.
+(defun my-switch-to-url-buffer (status &optional output-buffer pushback)
+  "Switch to buffer returned by `url-retreive', rename it to OUTPUT-BUFFER or *atp-output*.
+   If PUSHBACK is given, it must be a list (buffer-name line column position) telling
+   where to insert the result.
     The buffer contains the raw HTTP response sent by the server."
-  (switch-to-buffer-other-window (current-buffer))
-  (let ((bufname "*atp-output*"))
+  (or pushback (switch-to-buffer-other-window (current-buffer)))
+  (let ((bufname (or output-buffer "*atp-output*")))
      (if (get-buffer bufname) (kill-buffer bufname))
      (rename-buffer bufname)
      (add-to-invisibility-spec 'miz-ar4miz-invis)
      (make-variable-buffer-local 'line-move-ignore-invisible)
      (setq line-move-ignore-invisible t)
-     (save-excursion
-       (goto-char (point-min))
-       (let* ((start-position (point-min))
-	      (search-text ".*\\(:::\\|Request took\\).*")
-	      (pos (re-search-forward search-text nil t)))
-	 (while pos
-	   (beginning-of-line)
-	   (add-invisible-overlay start-position (point))
-	   (forward-line 1)
-	   (setq start-position (point))
-	   (if (eq (point) (point-max))
-	       (setq pos nil)
-	     (setq pos (re-search-forward search-text nil t))))
-	 (add-invisible-overlay start-position (point-max))))))
+     (if pushback
+	 ;; put ATP result into the mizar buffer
+	 (save-excursion
+	   (goto-char (point-min))
+	   (let* ((mizbuf (car pushback)) (line (cadr pushback)) 
+		  (col (third pushback)) (mizpoint (fourth pushback))
+		  (colstr (int-to-string col)) (colstr1 (int-to-string (- col 1))) 
+		  (linestr (int-to-string line)) (atppos (concat linestr "_" colstr1)) 
+		  (mizpos (concat linestr ":" colstr))
+		  (regpos (concat atppos ":::\\(..*\\)"))
+		  (allrefs nil) (atpres "ATP-Unsolved"))
+	     (while (re-search-forward regpos (point-max) t)
+	       (setq allrefs (nconc allrefs (split-string (match-string 1) ","))))
+	     (setq allrefs (unique allrefs))
+	     (if allrefs (setq atpres (mapconcat 'identity allrefs ",")))
+	     (insert-atp-result mizbuf line col mizpoint mizpos atpres)
+	     (message "ATP answered for position %s with %s" mizpos atpres))))
+     (setup-atp-output-invisibility)))
+
+(defcustom mizar-atp-desync-limit 1000
+"*Character extent where we try to synchronize ATP output with original text."
+:type 'integer
+:group 'mizar-proof-advisor)
+
+
+(defun insert-atp-result (mizbuf line col mizpoint mizpos atpres)
+"Try to find text with property 'atp-asked set to MIZPOS around MIZPOINT and replace with ATPRES."
+(save-excursion
+  (set-buffer mizbuf)
+  (let* ((start (max (point-min) (- mizpoint mizar-atp-desync-limit)))
+	 (end (min (point-max) (+ mizpoint (* 4 mizar-atp-desync-limit))))
+	 (pos1 (text-property-any start end 'atp-asked (intern mizpos))))
+    (if (not pos1) (message "Position for ATP solution of %s not found" mizpos)
+      (goto-char pos1)
+      (if (not (looking-at "; :: ATP asked ... *"))
+	  (message "Position for ATP solution of %s user-edited. No inserting." mizpos)
+	(replace-match (concat "by " atpres ";")))))))
+
+(defvar mizar-invis-button-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "\C-m" 'mizar-toggle-atp-invis)
+    (define-key map [mouse-1] 'mizar-toggle-atp-invis)
+    map)
+"Keymap for the invisibility change button in atp-output buffer.
+Commands:
+\\{mizar-invis-button-map}")
+
+
+(defun mizar-toggle-atp-invis ()
+  "Toggle whether details in atp output are hidden."
+  (interactive)
+  (mmlquery-toggle-hiding 'miz-ar4miz-invis))
+
+
+(defun setup-atp-output-invisibility ()
+"Makes invisible all regions excluding the request time infos and
+the user-readable results (starting with at least three
+colons). Assumes that we are in the proper buffer. Adds the
+'Hide/Show details' button at the end of the buffer."
+(save-excursion
+  (goto-char (point-min))
+  (let* ((start-position (point-min))
+	 (search-text ".*\\(:::\\|Request took\\).*")
+	 (pos (re-search-forward search-text nil t))
+	 (expl-button "[Show/Hide details]")
+	 (props (list 'mouse-face 'highlight 'face 'underline
+		      local-map-kword mizar-invis-button-map)))
+    (while pos
+      (beginning-of-line)
+      (add-invisible-overlay start-position (point) 'miz-ar4miz-invis)
+      (forward-line 1)
+      (setq start-position (point))
+      (if (eq (point) (point-max))
+	  (setq pos nil)
+	(setq pos (re-search-forward search-text nil t))))
+    (add-invisible-overlay start-position (point-max) 'miz-ar4miz-invis)
+    (goto-char (point-max))
+    (add-text-properties 0 (length expl-button) props expl-button)
+    (insert "\n" expl-button "\n")  )))
 
 
 (defconst ar4mizar-separator "==========" "String used for separating parts of the ar4mizar response")
@@ -5713,17 +5818,17 @@ The value 1 is default - no parallelization."
 
 
 ;; frontend
-(defun mizar-remote-solve-atp (&optional positions output-buffer)
+(defun mizar-remote-solve-atp (&optional positions output-buffer pushback)
 "Send the current article to a remote server for verification and
 ask a remote ATP for solving of all Mizar-unsolved problems.
 Calls `mizar-remote-solve'.
 "
 (interactive "*P")
-(mizar-remote-solve t positions output-buffer))
+(mizar-remote-solve t positions output-buffer pushback))
 
 ;; this is good, but only for getting errors or other text info
 ;; it does not launch browser
-(defun mizar-remote-solve (&optional solve positions output-buffer)
+(defun mizar-remote-solve (&optional solve positions output-buffer pushback)
 "Send the current article to a remote server for verification and advice.
 If SOLVE is non-nil, ask a remote ATP for solving of all Mizar-unsolved problems.
 If SOLVE is nil, put errors directly into the .err file (as if it was done by local verification),
@@ -5736,7 +5841,9 @@ and put the verification message into OUTPUT-BUFFER.
        (dir (file-name-directory (buffer-file-name)))
        (errfile (concat (file-name-sans-extension (buffer-file-name)) ".err"))
        (vocfile (car (file-expand-wildcards (concat dir "../dict/*.voc") t)))
-       (solve-it (if solve '("ProveUnsolved" . "All")))
+       (solve-it (if solve
+		     (if (equal solve "Positions") '("ProveUnsolved" . "Positions")
+		       '("ProveUnsolved" . "All"))))
        (vocname (if vocfile (file-name-nondirectory vocfile)))
        (vocstring (if vocfile (with-temp-buffer
 				(insert-file-contents vocfile)
@@ -5750,12 +5857,14 @@ and put the verification message into OUTPUT-BUFFER.
        (concat ar4mizar-server ar4mizar-cgi) 
        `(("Formula" . ,(buffer-substring-no-properties (point-min) (point-max)))
 	 ("Name" . ,aname) ("MMLVersion" . "4.145.1096") ("Verify" . "1") 
-	 ("Parallelize" . ,(number-to-string mizar-remote-parallelization)) ("MODE" . "TEXT") ,solve-it 
+	 ("Parallelize" . ,(number-to-string mizar-remote-parallelization)) 
+	 ("MODE" . "TEXT") ,solve-it
+	 ,(if positions (cons "Positions" positions))
 	 ,(if vocfile (cons "VocSource" "CONTENT"))
 	 ,(if vocfile (cons "VocName" vocname))
 	 ,(if vocfile (cons "VocContent" vocstring)) 
 	 )
-       output-buffer (not solve)
+       output-buffer (not solve) pushback
        )
     
     (let* 

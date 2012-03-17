@@ -1,0 +1,497 @@
+:: Set of Points on Elliptic Curve in Projective Coordinates
+::  by Yuichi Futa , Hiroyuki Okazaki and Yasunari Shidama
+:: 
+:: Received December 21, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, CARD_1, FUNCT_1, RELAT_1, XBOOLE_0, ARYTM_3, NEWTON,
+      TARSKI, FINSET_1, MCART_1, CARD_3, FINSEQ_1, SUBSET_1, ARYTM_1, XXREAL_0,
+      FUNCT_2, PARTFUN1, INT_2, NAT_1, BINOP_1, BINOP_2, REALSET1, ZFMISC_1,
+      INT_3, SUPINF_2, ALGSTR_0, GROUP_1, MESFUNC1, INT_1, VECTSP_1, STRUCT_0,
+      GROUP_2, GRAPH_1, FINSEQ_2, EC_PF_1, RLVECT_1, LATTICES, EQREL_1,
+      RELAT_2, UNIROOTS, PROB_2, REAL_1, MOD_2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELAT_2,
+      RELSET_1, PARTFUN1, MCART_1, FUNCT_2, BINOP_1, DOMAIN_1, FINSET_1,
+      CARD_1, NUMBERS, XCMPLX_0, XXREAL_0, REAL_1, NAT_1, INT_1, NAT_D,
+      REALSET1, FINSEQ_1, FINSEQ_2, EQREL_1, RVSUM_1, NEWTON, WSIERP_1, MOD_2,
+      STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1, GROUP_2, GR_CY_1, INT_3,
+      UNIROOTS, PROB_2, BINOM;
+ constructors REAL_1, NAT_D, NAT_3, SEQ_1, REALSET1, GROUP_2, BINOP_1, GR_CY_1,
+      INT_3, WSIERP_1, UPROOTS, BINOP_2, RELSET_1, FUNCT_7, UNIROOTS, PROB_2,
+      GROUP_1, FINSET_1, BINOM, MOD_2;
+ registrations XBOOLE_0, STRUCT_0, XREAL_0, ORDINAL1, NAT_1, INT_1, GROUP_2,
+      FINSET_1, GR_CY_1, ALGSTR_0, VECTSP_1, INT_3, XXREAL_0, NEWTON, SUBSET_1,
+      CARD_1, VALUED_0, EQREL_1, RELSET_1, FINSEQ_2, UNIROOTS, NUMBERS,
+      ALGSTR_1, MOD_2, MEMBERED;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: 1.Finite Prime Field $\bf{GF}(p)$
+
+reserve x for set;
+reserve i,j for Integer;
+reserve n,n1,n2,n3 for Nat;
+reserve K,K1,K2,K3 for Field;
+
+definition
+  let K be Field;
+  mode Subfield of K -> Field means
+:: EC_PF_1:def 1
+  the carrier of it c= the carrier of K
+  & the addF of it = (the addF of K) || the carrier of it
+  & the multF of it = (the multF of K) || the carrier of it
+  & 1.it = 1.K & 0.it = 0.K;
+end;
+
+theorem :: EC_PF_1:1
+  K is Subfield of K;
+
+theorem :: EC_PF_1:2
+  for ST be non empty doubleLoopStr
+  st the carrier of ST is Subset of the carrier of K
+  & the addF of ST = (the addF of K) || (the carrier of ST)
+  & the multF of ST = (the multF of K) || (the carrier of ST)
+  & 1.ST = 1.K & 0.ST = 0.K
+  & ST is right_complementable commutative almost_left_invertible
+  non degenerated holds ST is Subfield of K;
+
+registration let K be Field;
+  cluster strict Subfield of K;
+end;
+
+reserve SK1,SK2 for Subfield of K;
+reserve ek,ek1,ek2 for Element of K;
+
+theorem :: EC_PF_1:3
+  K1 is Subfield of K2 implies for x st x in K1 holds x in K2;
+
+theorem :: EC_PF_1:4
+  for K1,K2 be strict Field st
+  K1 is Subfield of K2 & K2 is Subfield of K1 holds K1 = K2;
+
+theorem :: EC_PF_1:5
+  for K1, K2, K3 be strict Field st
+  K1 is Subfield of K2 & K2 is Subfield of K3 holds K1 is Subfield of K3;
+
+theorem :: EC_PF_1:6
+  SK1 is Subfield of SK2 iff the carrier of SK1 c= the carrier of SK2;
+
+theorem :: EC_PF_1:7
+  SK1 is Subfield of SK2 iff for x st x in SK1 holds x in SK2;
+
+theorem :: EC_PF_1:8
+  for SK1,SK2 be strict Subfield of K holds
+  SK1 = SK2 iff the carrier of SK1 = the carrier of SK2;
+
+theorem :: EC_PF_1:9
+  for SK1, SK2 be strict Subfield of K holds
+  (SK1 = SK2 iff for x holds x in SK1 iff x in SK2);
+
+registration
+  let K be finite Field;
+  cluster finite Subfield of K;
+end;
+
+definition
+  let K be finite Field;
+  redefine func card K -> Element of NAT;
+end;
+
+registration
+  cluster strict finite Field;
+end;
+
+theorem :: EC_PF_1:10
+  for K be strict finite Field,
+  SK1 be strict Subfield of K st
+  card K = card SK1 holds SK1 = K;
+
+definition let IT be Field;
+  attr IT is prime means
+:: EC_PF_1:def 2
+  K1 is strict Subfield of IT implies K1 = IT;
+end;
+
+notation let p be Prime;
+  synonym GF(p) for INT.Ring(p);
+end;
+
+registration let p be Prime;
+  cluster GF(p) -> finite;
+end;
+
+registration let p be Prime;
+  cluster GF(p) -> prime;
+end;
+
+registration
+  cluster prime Field;
+end;
+
+begin :: 2. Arithmetic in $\bf{GF}(p)$
+
+reserve p for Prime;
+reserve a,b,c for Element of GF(p);
+reserve F for FinSequence of GF(p);
+
+theorem :: EC_PF_1:11
+  0 = 0.(GF p);
+
+theorem :: EC_PF_1:12
+  1 = 1.(GF p);
+
+theorem :: EC_PF_1:13
+  ex n1 st a = n1 mod p;
+
+theorem :: EC_PF_1:14
+  ex a st a = i mod p;
+
+theorem :: EC_PF_1:15
+  a = i mod p & b = j mod p implies a+b = (i+j) mod p;
+
+theorem :: EC_PF_1:16
+  a = i mod p implies -a = (p-i) mod p;
+
+theorem :: EC_PF_1:17
+  a = i mod p & b = j mod p implies a-b = (i-j) mod p;
+
+theorem :: EC_PF_1:18
+  a = i mod p & b = j mod p implies a*b = (i*j) mod p;
+
+theorem :: EC_PF_1:19
+  a = i mod p & i*j mod p = 1 implies a" = j mod p;
+
+theorem :: EC_PF_1:20
+  a = 0 or b = 0 iff a*b = 0;
+
+theorem :: EC_PF_1:21
+  a |^ 0 = 1_GF(p) & a |^ 0 = 1;
+
+theorem :: EC_PF_1:22
+  a |^ 2 = a*a;
+
+theorem :: EC_PF_1:23
+  a = n1 mod p implies a|^n = n1|^n mod p;
+
+theorem :: EC_PF_1:24
+  a|^(n+1) = a|^n * a;
+
+theorem :: EC_PF_1:25
+  a <> 0 implies a |^ n <> 0;
+
+theorem :: EC_PF_1:26
+  for F being Abelian add-associative right_zeroed right_complementable
+  associative commutative well-unital almost_left_invertible distributive
+  (non empty doubleLoopStr), x,y being Element of F holds x*x=y*y
+    iff x=y or x=-y;
+
+theorem :: EC_PF_1:27
+  for p be Prime, x be Element of GF(p) st 2 < p & x+x = 0.(GF p)
+  holds x = 0.(GF(p));
+
+theorem :: EC_PF_1:28
+  a|^n * b|^n = (a*b) |^ n;
+
+theorem :: EC_PF_1:29
+  a <> 0 implies (a") |^n = (a|^n)";
+
+theorem :: EC_PF_1:30
+  a|^n1 * a|^n2 = a|^(n1+n2);
+
+theorem :: EC_PF_1:31
+  (a|^n1) |^ n2 = a|^(n1*n2);
+
+registration let p;
+  cluster MultGroup GF(p) -> cyclic;
+end;
+
+theorem :: EC_PF_1:32
+  for x be Element of MultGroup GF(p), x1 be Element of GF(p),
+  n be Nat st x = x1 holds x|^n = x1 |^n;
+
+theorem :: EC_PF_1:33
+  ex g be Element of GF(p) st
+  for a be Element of GF(p) st a <> 0.GF(p) holds
+  ex n be Nat st a = g|^n;
+
+begin :: 3.Relation between Legendre symbol and the number of roots in $\bf{GF}(p)$
+
+definition let p, a;
+  attr a is quadratic_residue means
+:: EC_PF_1:def 3
+  a <> 0 & ex x being Element of GF(p) st x|^2 = a;
+  attr a is not_quadratic_residue means
+:: EC_PF_1:def 4
+  a <> 0 & not ex x being Element of GF(p) st x|^2 = a;
+end;
+
+theorem :: EC_PF_1:34
+  a <> 0 implies a|^2 is quadratic_residue;
+
+registration let p be Prime;
+  cluster 1.(GF p) -> quadratic_residue;
+end;
+
+definition let p, a;
+  func Lege_p(a) -> Integer equals
+:: EC_PF_1:def 5
+  0 if a = 0,
+  1 if a is quadratic_residue
+  otherwise -1;
+end;
+
+theorem :: EC_PF_1:35
+  a is not_quadratic_residue iff Lege_p(a) = -1;
+
+theorem :: EC_PF_1:36
+  a is quadratic_residue iff Lege_p(a) = 1;
+
+theorem :: EC_PF_1:37
+  a = 0 iff Lege_p(a) = 0;
+
+theorem :: EC_PF_1:38
+  a <> 0 implies Lege_p(a|^2) = 1;
+
+theorem :: EC_PF_1:39
+  Lege_p(a*b) = Lege_p(a) * Lege_p(b);
+
+theorem :: EC_PF_1:40
+  a <> 0 & n mod 2 = 0 implies Lege_p(a|^n) = 1;
+
+theorem :: EC_PF_1:41
+  n mod 2 = 1 implies Lege_p(a|^n) = Lege_p(a);
+
+theorem :: EC_PF_1:42
+  2 < p implies card({b : b|^2 = a}) = 1 + Lege_p(a);
+
+begin :: 4.Set of points on an elliptic curve over $\bf{GF}(p)$
+
+definition let K be Field;
+  func ProjCo(K) -> non empty Subset of
+  [:the carrier of K, the carrier of K, the carrier of K:] equals
+:: EC_PF_1:def 6
+  [:the carrier of K, the carrier of K, the carrier of K:] \ {[0.K,0.K,0.K]};
+end;
+
+theorem :: EC_PF_1:43
+  ProjCo(GF(p)) = [:the carrier of GF(p),
+  the carrier of GF(p), the carrier of GF(p):] \ {[0,0,0]};
+
+reserve Px,Py,Pz for Element of GF(p);
+
+definition
+  let p be Prime;
+  let a, b be Element of GF(p);
+  func Disc(a,b,p) -> Element of GF(p) means
+:: EC_PF_1:def 7
+  for g4, g27 be Element of GF(p) st g4 = 4 mod p & g27 = 27 mod p
+  holds it = g4*a|^2 + g27*b|^3;
+end;
+
+definition
+  let p be Prime;
+  let a, b be Element of GF(p);
+  func EC_WEqProjCo(a,b,p) -> Function of
+  [:the carrier of GF(p), the carrier of GF(p), the carrier of GF(p):],
+    GF(p) means
+:: EC_PF_1:def 8
+  for P be Element of [:the carrier of GF(p),
+  the carrier of GF(p), the carrier of GF(p):] holds
+  it. P = ((P`2) |^2)*(P`3)-((P`1) |^3 +a*(P`1)*(P`3) |^2+b*(P`3) |^3);
+  end;
+
+theorem :: EC_PF_1:44
+  for X,Y,Z be Element of GF(p) holds
+  EC_WEqProjCo(a,b,p).([X,Y,Z]) = Y |^2*Z-(X|^3 +a*X*Z |^2+b*Z |^3);
+
+definition
+  let p be Prime;
+  let a, b be Element of GF(p);
+  func EC_SetProjCo(a,b,p) -> non empty Subset of ProjCo(GF(p)) equals
+:: EC_PF_1:def 9
+  {P where P is Element of ProjCo(GF(p)) : EC_WEqProjCo(a,b,p).P = 0.GF(p) };
+end;
+
+theorem :: EC_PF_1:45
+  [0,1,0] is Element of EC_SetProjCo(a,b,p);
+
+theorem :: EC_PF_1:46
+  for p be Prime, a, b, X, Y be Element of GF(p) holds
+  Y|^2 = X|^3 + a*X + b iff [X,Y,1] is Element of EC_SetProjCo(a,b,p);
+
+definition
+  let p be Prime;
+  let P,Q be Element of ProjCo(GF(p));
+  pred P _EQ_ Q means
+:: EC_PF_1:def 10
+    ex a be Element of GF(p) st a <> 0.GF(p)
+    & P`1 = a*Q`1 & P`2 = a*Q`2 & P`3 = a*Q`3;
+  reflexivity;
+  symmetry;
+end;
+
+theorem :: EC_PF_1:47
+  for p be Prime, P,Q,R be Element of ProjCo(GF(p)) holds
+  ( P _EQ_ Q & Q _EQ_ R implies P _EQ_ R);
+
+theorem :: EC_PF_1:48
+  for p be Prime, a, b be Element of GF(p),
+  P,Q be Element of [:the carrier of GF(p), the carrier of GF(p),
+  the carrier of GF(p):], d be Element of GF(p)
+  st p > 3 & Disc(a,b,p) <> 0.GF(p) &
+  P in EC_SetProjCo(a,b,p) & d <> 0.GF(p)
+  & Q`1 = d*P`1 & Q`2 = d*P`2 & Q`3 = d*P`3 holds
+  Q in EC_SetProjCo(a,b,p);
+
+definition
+  let p be Prime;
+  func R_ProjCo p -> Relation of ProjCo(GF(p)) equals
+:: EC_PF_1:def 11
+  {[P,Q] where P,Q is Element of ProjCo(GF(p)) : P _EQ_ Q};
+end;
+
+theorem :: EC_PF_1:49
+  for p be Prime, P,Q be Element of ProjCo(GF(p)) holds
+  P _EQ_ Q iff [P,Q] in R_ProjCo p;
+
+registration let p be Prime;
+  cluster R_ProjCo p -> total symmetric transitive;
+end;
+
+definition
+  let p be Prime;
+  let a, b be Element of GF(p);
+  func R_EllCur (a,b,p) -> Equivalence_Relation of EC_SetProjCo(a,b,p)
+  equals
+:: EC_PF_1:def 12
+  (R_ProjCo p) /\ nabla EC_SetProjCo(a,b,p);
+end;
+
+theorem :: EC_PF_1:50
+  for p be Prime, a, b be Element of GF(p),
+  P,Q be Element of ProjCo(GF(p))
+  st Disc(a,b,p) <> 0.GF(p) &
+  P in EC_SetProjCo(a,b,p) & Q in EC_SetProjCo(a,b,p) holds
+  ( P _EQ_ Q iff [P,Q] in R_EllCur (a,b,p));
+
+theorem :: EC_PF_1:51
+  for p be Prime, a, b be Element of GF(p),
+  P be Element of ProjCo(GF(p))
+  st p > 3 & Disc(a,b,p) <> 0.GF(p) &
+  P in EC_SetProjCo(a,b,p) & P`3 <> 0 holds
+  ex Q be Element of ProjCo(GF(p)) st Q in EC_SetProjCo(a,b,p)
+  & Q _EQ_ P & Q`3 = 1;
+
+theorem :: EC_PF_1:52
+  for p be Prime, a, b be Element of GF(p),
+  P be Element of ProjCo(GF(p))
+  st p > 3 & Disc(a,b,p) <> 0.GF(p) &
+  P in EC_SetProjCo(a,b,p) & P`3 = 0 holds
+  ex Q be Element of ProjCo(GF(p))
+  st Q in EC_SetProjCo(a,b,p) & Q _EQ_ P & Q`1 = 0 & Q`2= 1 & Q`3= 0;
+
+theorem :: EC_PF_1:53
+  for p be Prime, a, b be Element of GF(p), x be set st
+  p > 3 & Disc(a,b,p) <> 0.GF(p)
+  & x in Class (R_EllCur(a,b,p)) holds
+  ( ex P be Element of ProjCo(GF(p)) st P in EC_SetProjCo(a,b,p) & P=[0,1,0]
+  & x = Class(R_EllCur(a,b,p),P) ) or
+  ex P be Element of ProjCo(GF(p)), X,Y be Element of GF(p)
+  st P in EC_SetProjCo(a,b,p) & P=[X,Y,1]
+  & x = Class(R_EllCur(a,b,p),P);
+
+theorem :: EC_PF_1:54
+  for p be Prime, a, b be Element of GF(p) st
+  p > 3 & Disc(a,b,p) <> 0.GF(p) holds
+  Class (R_EllCur(a,b,p)) = {Class(R_EllCur(a,b,p),[0,1,0])}
+  \/ {Class(R_EllCur(a,b,p),P)
+  where P is Element of ProjCo(GF(p)):
+  P in EC_SetProjCo(a,b,p) & ex X,Y be Element of GF(p) st P=[X,Y,1]};
+
+theorem :: EC_PF_1:55
+  for p be Prime,
+  a, b,d1,Y1,d2,Y2 be Element of GF(p)
+  st p > 3 & Disc(a,b,p) <> 0.GF(p)
+  & [d1,Y1,1] in EC_SetProjCo(a,b,p)
+  & [d2,Y2,1] in EC_SetProjCo(a,b,p) holds
+  Class(R_EllCur(a,b,p),[d1,Y1,1]) = Class(R_EllCur(a,b,p),[d2,Y2,1])
+  iff d1=d2 & Y1=Y2;
+
+theorem :: EC_PF_1:56
+  for p be Prime, a, b be Element of GF(p),
+  F1,F2 be set st p > 3 & Disc(a,b,p) <> 0.GF(p)
+  & F1 = {Class(R_EllCur(a,b,p),[0,1,0])} & F2 = {Class(R_EllCur(a,b,p),P)
+  where P is Element of ProjCo(GF(p)):
+  P in EC_SetProjCo(a,b,p) &
+  ex X,Y be Element of GF(p) st P=[X,Y,1]} holds F1 misses F2;
+
+theorem :: EC_PF_1:57
+  for X be non empty finite set,
+  R be Equivalence_Relation of X,
+  S be Class(R)-valued Function, i be set st i in dom S holds
+  S.i is finite Subset of X;
+
+theorem :: EC_PF_1:58
+  for X be non empty set,
+  R be Equivalence_Relation of X,
+  S be Class(R)-valued Function st S is one-to-one
+  holds S is disjoint_valued;
+
+theorem :: EC_PF_1:59
+  for X be non empty set,
+  R be Equivalence_Relation of X,
+  S be Class(R)-valued Function st S is onto
+  holds union (rng S) = X;
+
+theorem :: EC_PF_1:60
+  for X be non empty finite set,
+  R be Equivalence_Relation of X,
+  S be Class(R)-valued Function,
+  L be FinSequence of NAT
+  st S is one-to-one onto
+  & dom S = dom L
+  & (for i be Nat st i in dom S holds L.i = card (S.i))
+  holds card (X) = Sum L;
+
+theorem :: EC_PF_1:61
+  for p be Prime, a, b,d be Element of GF(p), F,G be set st
+  p > 3 & Disc(a,b,p) <> 0.GF(p)
+  & F = {Y where Y is Element of GF(p) : Y|^2= d|^3 + a*d + b} & F <> {}
+  & G = {Class(R_EllCur(a,b,p),[d,Y,1])
+  where Y is Element of GF(p) : [d,Y,1] in EC_SetProjCo(a,b,p) } holds
+  ex I be Function of F,G st I is onto & I is one-to-one;
+
+theorem :: EC_PF_1:62
+  for p be Prime, a, b, d be Element of GF(p) st
+  p > 3 & Disc(a,b,p) <> 0.GF(p) holds
+  card ({Class(R_EllCur(a,b,p),[d,Y,1]) where Y is Element of GF(p)
+  : [d,Y,1] in EC_SetProjCo(a,b,p) }) = 1 + Lege_p(d|^3 + a*d + b);
+
+theorem :: EC_PF_1:63
+  for p be Prime, a, b be Element of GF(p)
+  st p > 3 & Disc(a,b,p) <> 0.GF(p) holds
+  ex F be FinSequence of NAT st len F = p
+  & (for n be Nat st n in Seg p
+  ex d be Element of GF(p) st d=n-1 & F.n = 1 + Lege_p(d|^3 + a*d + b))
+  & card {Class(R_EllCur(a,b,p),P)
+  where P is Element of ProjCo(GF(p)): P in EC_SetProjCo(a,b,p) &
+  ex X,Y be Element of GF(p) st P=[X,Y,1]} = Sum(F);
+
+theorem :: EC_PF_1:64
+  for p be Prime, a, b be Element of GF(p)
+  st p > 3 & Disc(a,b,p) <> 0.GF(p)
+  ex F be FinSequence of INT st len F = p &
+  (for n be Nat st n in Seg p ex d be Element of GF(p)
+  st d=n-1 & F.n = Lege_p(d|^3 + a*d + b)) &
+  card(Class(R_EllCur(a,b,p))) = 1 + p + Sum(F);
+

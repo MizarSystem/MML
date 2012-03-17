@@ -53,18 +53,18 @@
 </Adjective>
 <Adjective nr="15">
 <Func kind="U" nr="1">
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="16">
 <Func kind="U" nr="5">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="17"/>
@@ -72,11 +72,11 @@
 <Func kind="U" nr="7">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="22"/>
@@ -108,18 +108,18 @@
 </Adjective>
 <Adjective nr="15">
 <Func kind="U" nr="1">
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="16">
 <Func kind="U" nr="5">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="17"/>
@@ -127,11 +127,11 @@
 <Func kind="U" nr="7">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="22"/>
@@ -157,7 +157,7 @@
 <Adjective nr="12"/>
 <Adjective nr="15">
 <Func kind="U" nr="1">
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="17"/>
@@ -165,11 +165,11 @@
 <Func kind="U" nr="7">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="22"/>
@@ -198,18 +198,18 @@
 </Adjective>
 <Adjective nr="15">
 <Func kind="U" nr="1">
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="16">
 <Func kind="U" nr="5">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="17"/>
@@ -217,11 +217,11 @@
 <Func kind="U" nr="7">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="22"/>
@@ -246,7 +246,7 @@
 <Adjective nr="12"/>
 <Adjective nr="15">
 <Func kind="U" nr="1">
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="17"/>
@@ -254,11 +254,11 @@
 <Func kind="U" nr="7">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="22"/>
@@ -270,11 +270,11 @@
 <Func kind="K" nr="272">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 <Cluster>
 <Adjective nr="12"/>
@@ -283,18 +283,18 @@
 </Adjective>
 <Adjective nr="15">
 <Func kind="U" nr="1">
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="16">
 <Func kind="U" nr="5">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="17"/>
@@ -302,11 +302,11 @@
 <Func kind="U" nr="7">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="22"/>
@@ -335,7 +335,7 @@
 <Adjective nr="12"/>
 <Adjective nr="15">
 <Func kind="U" nr="1">
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="17"/>
@@ -343,11 +343,11 @@
 <Func kind="U" nr="7">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="22"/>
@@ -375,7 +375,7 @@
 <Adjective nr="12"/>
 <Adjective nr="15">
 <Func kind="U" nr="1">
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="17"/>
@@ -383,11 +383,11 @@
 <Func kind="U" nr="7">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="22"/>
@@ -404,18 +404,18 @@
 </Adjective>
 <Adjective nr="15">
 <Func kind="U" nr="1">
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="16">
 <Func kind="U" nr="5">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="17"/>
@@ -423,11 +423,11 @@
 <Func kind="U" nr="7">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="22"/>
@@ -446,18 +446,18 @@
 </Adjective>
 <Adjective nr="15">
 <Func kind="U" nr="1">
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="16">
 <Func kind="U" nr="5">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="17"/>
@@ -465,11 +465,11 @@
 <Func kind="U" nr="7">
 <Func kind="K" nr="21">
 <Func kind="K" nr="31"/>
-<Func kind="K" nr="300">
+<Func kind="K" nr="299">
 <Func kind="K" nr="31"/>
 </Func>
 </Func>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Adjective>
 <Adjective nr="22"/>

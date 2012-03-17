@@ -2,25 +2,33 @@
 ::  by Noriko Asamoto , Yatsuka Nakamura , Piotr Rudnicki and Andrzej Trybulec
 ::
 :: Received July 22, 1996
-:: Copyright (c) 1996 Association of Mizar Users
+:: Copyright (c) 1996-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
  vocabularies NUMBERS, SUBSET_1, AMI_1, SCMFSA_2, FSM_1, CARD_1, TARSKI,
       SCMFSA6A, FUNCT_4, RELAT_1, XBOOLE_0, FUNCT_1, INT_1, MSUALG_1, CIRCUIT2,
-      GLIB_000, AMI_3, ARYTM_3, FUNCT_7, XXREAL_0, NAT_1, SF_MASTR, GRAPHSP,
-      AMISTD_2, TURING_1, STRUCT_0, VALUED_1, FUNCOP_1, SCMFSA6B, PARTFUN1,
-      SCMNORM, RELOC, SCMFSA6C, PBOOLE, COMPOS_1;
+      GLIB_000, AMI_3, ARYTM_3, XXREAL_0, NAT_1, SF_MASTR, GRAPHSP, AMISTD_2,
+      TURING_1, STRUCT_0, VALUED_1, FUNCOP_1, SCMFSA6B, PARTFUN1, SCMNORM,
+      RELOC, SCMFSA6C, PBOOLE, COMPOS_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, CARD_1, NUMBERS, XCMPLX_0,
       XXREAL_0, NAT_1, FUNCT_7, INT_1, RELAT_1, FUNCT_1, PARTFUN1, PBOOLE,
       FINSEQ_1, FUNCOP_1, FUNCT_4, VALUED_1, STRUCT_0, COMPOS_1, EXTPRO_1,
-      AMI_1, SCMFSA_2, AMISTD_2, SCMFSA6A, SF_MASTR;
+      SCMFSA_2, AMISTD_2, SCMFSA6A, SF_MASTR;
  constructors XXREAL_0, SCMFSA6A, SF_MASTR, AMISTD_1, AMISTD_2, RELSET_1,
-      PRE_POLY, AMI_1, AMISTD_5, DOMAIN_1, PBOOLE, AMI_3;
+      PRE_POLY, AMISTD_5, DOMAIN_1, PBOOLE, AMI_3;
  registrations SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, SCMFSA_2, SCMFSA6A, SF_MASTR, XBOOLE_0,
-      FINSET_1, AMI_1, AMISTD_2, SCMFSA10, COMPOS_1, EXTPRO_1, SCMFSA_4,
-      PBOOLE, PRE_POLY, FUNCT_7, FUNCT_4, STRUCT_0;
+      FINSET_1, AMISTD_2, SCMFSA10, COMPOS_1, EXTPRO_1, SCMFSA_4, PBOOLE,
+      PRE_POLY, FUNCT_7, FUNCT_4, STRUCT_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -39,7 +47,8 @@ reserve m, n for Element of NAT,
 canceled 3;
 
 theorem :: SCMFSA6B:4
-  Start-At(0,SCM+FSA) c= Initialized I;
+ for p being PartState of SCM+FSA
+ holds Start-At(0,SCM+FSA) c= Initialized p;
 
 theorem :: SCMFSA6B:5
   I +* Start-At(n,SCM+FSA) c= s implies I c= s;
@@ -47,7 +56,7 @@ theorem :: SCMFSA6B:5
 canceled 2;
 
 theorem :: SCMFSA6B:8
-  Initialized I c= s implies Initialize I c= s;
+  Initialize((intloc 0).-->1) c= s implies Start-At(0,SCM+FSA) c= s;
 
 theorem :: SCMFSA6B:9
   not a in dom Start-At(l,SCM+FSA);
@@ -77,7 +86,7 @@ definition
   let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
   func IExec(I,P,s) -> State of SCM+FSA equals
 :: SCMFSA6B:def 1
-  Result(P+*I,s+*Initialized I) +* s|NAT;
+  Result(P+*I,s+*Initialize((intloc 0).-->1)) +* s|NAT;
 end;
 
 definition
@@ -88,16 +97,20 @@ definition
   for s being State of SCM+FSA,
       P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
     st I c= P
-  for n being Element of NAT st Initialize I c= s
+  for n being Element of NAT st Start-At(0,SCM+FSA) c= s
    holds IC Comput(P,s,n) in dom I;
   attr I is parahalting means
 :: SCMFSA6B:def 3
 
-  Initialize I is halting;
+:::  Initialize I is halting;
+  for s being State of SCM+FSA st Start-At(0,SCM+FSA) c= s
+  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
+   st I c= P
+  holds P halts_on s;
   attr I is keeping_0 means
 :: SCMFSA6B:def 4
 
-  for s being State of SCM+FSA st Initialize I c= s
+  for s being State of SCM+FSA st Start-At(0,SCM+FSA) c= s
   for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
    st I c= P
   for k being Element of NAT holds Comput(P,s,k).intloc 0 = s.intloc 0;
@@ -112,12 +125,13 @@ canceled 4;
 theorem :: SCMFSA6B:18
   for I being parahalting Program of SCM+FSA
   for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
-   st I c= P & Initialize I c= s
+   st I c= P & Start-At(0,SCM+FSA) c= s
   holds P halts_on s;
 
 theorem :: SCMFSA6B:19
   for s being State of SCM+FSA
-  for I being parahalting Program of SCM+FSA st Initialized I c= s
+  for I being parahalting Program of SCM+FSA
+   st Initialize((intloc 0).-->1) c= s
   for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
    st I c= P
   holds P halts_on s;
@@ -135,7 +149,7 @@ registration
   cluster keeping_0 -> paraclosed Program of SCM+FSA;
 end;
 
-canceled; :::AMISTD_2:66:
+canceled;
 
 theorem :: SCMFSA6B:22
   for I being parahalting Program of SCM+FSA, a being read-write
@@ -146,7 +160,7 @@ theorem :: SCMFSA6B:23
   I implies (IExec(I,P,s)).f = s.f;
 
 theorem :: SCMFSA6B:24
-  IC s = l & s.l = goto l implies not ProgramPart s halts_on s;
+  IC s = l & P.l = goto l implies not P halts_on s;
 
 registration
   cluster parahalting -> non empty Program of SCM+FSA;
@@ -157,7 +171,7 @@ canceled 2;
 theorem :: SCMFSA6B:27
  for P,Q being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
 for J being parahalting Program of SCM+FSA
-   st Initialize J c= s1 & J c= P
+   st Start-At(0,SCM+FSA) c= s1 & J c= P
  for n being Element of NAT
   st Reloc(J,n) c= Q
   & IC s2 = n & DataPart s1 = DataPart s2
@@ -168,22 +182,22 @@ for J being parahalting Program of SCM+FSA
 
 theorem :: SCMFSA6B:28
   for I being parahalting Program of SCM+FSA st
-    I c= P1 & I c= P2 & Initialize I c= s1 & Initialize I c= s2 &
-   s1,s2 equal_outside NAT holds
-  for k being Element of NAT holds Comput(P1,s1,k), Comput(P2,s2,k)
-     equal_outside NAT &
+    I c= P1 & I c= P2 & Start-At(0,SCM+FSA) c= s1 & Start-At(0,SCM+FSA) c= s2 &
+   NPP s1 = NPP s2 holds
+  for k being Element of NAT holds
+   NPP Comput(P1,s1,k) = NPP Comput(P2,s2,k) &
    CurInstr(P1,Comput(P1,s1,k)) = CurInstr(P2,Comput(P2,s2,k));
 
 theorem :: SCMFSA6B:29
   for I being parahalting Program of SCM+FSA st
-   I c= P1 & I c= P2 & Initialize I c= s1 & Initialize I c= s2 &
-   s1,s2 equal_outside NAT holds
+   I c= P1 & I c= P2 & Start-At(0,SCM+FSA) c= s1 & Start-At(0,SCM+FSA) c= s2 &
+   NPP s1 = NPP s2 holds
   LifeSpan(P1,s1) = LifeSpan(P2,s2) &
-  Result(P1,s1), Result(P2,s2) equal_outside NAT;
+  NPP Result(P1,s1) = NPP Result(P2,s2);
 
 theorem :: SCMFSA6B:30
   for I being parahalting Program of SCM+FSA holds IC IExec(I,P,s) =
-  IC Result(P+*I,s +* Initialized I);
+  IC Result(P+*I,s +* Initialize((intloc 0).-->1));
 
 theorem :: SCMFSA6B:31
   for I being non empty Program of SCM+FSA holds
@@ -195,7 +209,7 @@ theorem :: SCMFSA6B:33
   (Initialized Macro i). 0 = i & (Initialized Macro i). 1 = halt SCM+FSA;
 
 theorem :: SCMFSA6B:34
-  Initialized I c= s implies IC s =  0;
+  Initialize((intloc 0).-->1) c= s implies IC s =  0;
 
 registration
   cluster keeping_0 parahalting Program of SCM+FSA;
@@ -214,41 +228,41 @@ end;
 theorem :: SCMFSA6B:36
   for I being paraclosed Program of SCM+FSA, J being Program of SCM+FSA
   for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
-   st I c= P & Initialize I c= s & P halts_on s
+   st I c= P & Start-At(0,SCM+FSA) c= s & P halts_on s
  for m st m <= LifeSpan(P,s)
-  holds Comput(P,s,m),Comput(P+*(I ';' J),s+*(I ';'J),m) equal_outside NAT;
+  holds NPP Comput(P,s,m) = NPP Comput(P+*(I ';' J),s,m);
 
 theorem :: SCMFSA6B:37
  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
   for I being paraclosed Program of SCM+FSA
-   st P+*I halts_on s+*I &  Directed I c= s &
+   st P+*I halts_on s &
      Directed I c= P & Start-At(0,SCM+FSA) c= s
- holds IC Comput(P,s,LifeSpan(P+*I,s +*I) + 1) =  card I;
+ holds IC Comput(P,s,LifeSpan(P+*I,s) + 1) =  card I;
 
 theorem :: SCMFSA6B:38
   for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
   for I being paraclosed Program of SCM+FSA
-   st P+*I halts_on s+*I &
-       Directed I c= s & Directed I c= P &
+   st P+*I halts_on s &
+       Directed I c= P &
        Start-At(0,SCM+FSA) c= s
- holds DataPart Comput(P,s,LifeSpan(P+*I,s+*I))
-   = DataPart Comput(P,s,LifeSpan(P+*I,s +*I)+ 1);
+ holds DataPart Comput(P,s,LifeSpan(P+*I,s))
+   = DataPart Comput(P,s,LifeSpan(P+*I,s)+ 1);
 
 theorem :: SCMFSA6B:39
   for I being parahalting Program of SCM+FSA st
-   I c= P &  Initialized I c= s
+   I c= P & Initialize((intloc 0).-->1) c= s
 holds for k being Element of NAT st k <= LifeSpan(P,s)
  holds CurInstr(P+*Directed I,
- Comput(P+*Directed I,s+*Directed I,k)) <> halt SCM+FSA;
+ Comput(P+*Directed I,s,k)) <> halt SCM+FSA;
 
 theorem :: SCMFSA6B:40
   for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
   for I being paraclosed Program of SCM+FSA
-   st P+*I halts_on s +* (Initialize I)
+   st P+*I halts_on s +* Start-At(0,SCM+FSA)
  for J being Program of SCM+FSA, k being Element of NAT st
-  k <= LifeSpan(P+*I,s +* (Initialize I))
-   holds Comput(P+*I,s +* (Initialize I),k),
-    Comput(P+*(I ';' J), s +* (Initialize (I ';' J)),k) equal_outside NAT;
+  k <= LifeSpan(P+*I,s +* Start-At(0,SCM+FSA))
+   holds NPP Comput(P+*I,s +* Start-At(0,SCM+FSA),k)
+    = NPP Comput(P+*(I ';' J), s +* Start-At(0,SCM+FSA),k);
 
 registration
   let I, J be parahalting Program of SCM+FSA;
@@ -257,23 +271,20 @@ end;
 
 theorem :: SCMFSA6B:41
   for I being keeping_0 Program of SCM+FSA
-   st not P+* I halts_on s +* (Initialize I)
-   for J being Program of SCM+FSA, k being Element
-of NAT holds Comput(P+*I,s +* (Initialize I),k),
- Comput(P+*(I ';' J),s +* (Initialize (I ';' J)),k)
-  equal_outside NAT;
+   st not P+* I halts_on s +* Start-At(0,SCM+FSA)
+   for J being Program of SCM+FSA, k being Element of NAT holds
+   NPP Comput(P+*I,s +* Start-At(0,SCM+FSA),k)
+    = NPP Comput(P+*(I ';' J),s +* Start-At(0,SCM+FSA),k);
 
 theorem :: SCMFSA6B:42
-  for I being keeping_0 Program of SCM+FSA st P+*I halts_on s+*I
+  for I being keeping_0 Program of SCM+FSA st P+*I halts_on s
 for J being paraclosed Program of SCM+FSA st
-  I ';' J c= P & Initialize (I ';' J) c= s
+  I ';' J c= P & Start-At(0,SCM+FSA) c= s
  for k being Element of NAT holds
-  Comput(P+*I+*J,
-    Result(P+*I,s +*I) +* (Initialize J),k) +*
-    Start-At (IC (Comput(P+*I+*J,
-    (Result(P+*I,s +*I)) +* (Initialize J),k)) + card I,SCM+FSA),
-  Comput(P+*(I ';' J),s +* (I ';' J), (LifeSpan(P+*I,s +* I)+1+k))
-  equal_outside NAT;
+  NPP IncIC(Comput(P+*I+*J,
+    Result(P+*I,s) +* Start-At(0,SCM+FSA),k),card I)
+  = NPP Comput(P+*(I ';' J),s +* Start-At(0,SCM+FSA),
+   (LifeSpan(P+*I,s +* Start-At(0,SCM+FSA))+1+k));
 
 registration
   let I, J be keeping_0 Program of SCM+FSA;
@@ -284,9 +295,10 @@ theorem :: SCMFSA6B:43
   for I being keeping_0 parahalting Program of SCM+FSA, J being
   parahalting Program of SCM+FSA holds
    LifeSpan(P+*(I ';' J),
-     s +* Initialized (I ';' J)) =
-  LifeSpan(P+*I,s +* Initialized I) + 1 + LifeSpan(P+*I+*J,
-   Result(P+*I,s +* Initialized I) +* Initialized J);
+     s +* Initialize((intloc 0).-->1)) =
+  LifeSpan(P+*I,s +* Initialize((intloc 0).-->1)) + 1 + LifeSpan(P+*I+*J,
+   Result(P+*I,s +* Initialize((intloc 0).-->1)) +*
+    Initialize((intloc 0).-->1));
 
 theorem :: SCMFSA6B:44
   for I being keeping_0 parahalting Program of SCM+FSA,
@@ -297,3 +309,7 @@ theorem :: SCMFSA6B:44
 theorem :: SCMFSA6B:45
  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
    holds not P +*(IC s, goto IC s) halts_on s;
+
+theorem :: SCMFSA6B:46
+  Initialize((intloc 0).-->1) c= s implies Start-At(0,SCM+FSA) c= s;
+

@@ -2,7 +2,15 @@
 ::  by Artur Korni{\l}owicz
 ::
 :: Received April 14, 2000
-:: Copyright (c) 2000 Association of Mizar Users
+:: Copyright (c) 2000-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -10,7 +18,8 @@ environ
       AMI_1, XBOOLE_0, RELAT_1, TARSKI, FUNCOP_1, GLIB_000, GOBOARD5,
       AMISTD_1, UNIALG_1, FUNCT_1, CARD_3, CARD_5, FRECHET, RCOMP_1, STRUCT_0,
       VALUED_1, FSM_1, FUNCT_4, FUNCT_7, TURING_1, CIRCUIT2, AMISTD_2,
-      PARTFUN1, CAT_1, SCMNORM, NAT_1, RELOC, PBOOLE, XXREAL_0, COMPOS_1;
+      PARTFUN1, CAT_1, SCMNORM, NAT_1, RELOC, PBOOLE, XXREAL_0, COMPOS_1,
+      MSUALG_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, MCART_1, SETFAM_1,
       MEMBERED, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, PBOOLE,
       CARD_1,
@@ -31,7 +40,7 @@ environ
  theorems AMISTD_1, FUNCOP_1, FUNCT_1, FUNCT_4, GRFUNC_1, MCART_1,
       RELAT_1, SETFAM_1, TARSKI, ZFMISC_1, CARD_3, XBOOLE_0, XBOOLE_1, FUNCT_7,
       PBOOLE, PARTFUN1, RECDEF_2, VALUED_1, COMPOS_1, EXTPRO_1, ORDINAL1,
-      NAT_D, NAT_1;
+      NAT_D, NAT_1,XXREAL_0;
  schemes NAT_1;
 
 begin  :: Properties of AMI-Struct
@@ -479,7 +488,7 @@ end;
 
 definition
   let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent :::standard
+  S be regular homogeneous J/A-independent
   halting realistic
    (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N));
@@ -493,8 +502,8 @@ definition
   S be stored-program AMI-Struct over N, I be Instruction of S;
   attr I is Exec-preserving means
   :Def20:
-  for s1, s2 being State of S
-  st s1, s2 equal_outside NAT holds Exec(I,s1), Exec(I,s2) equal_outside NAT;
+  for s1, s2 being State of S st NPP s1 = NPP s2
+   holds NPP Exec(I,s1) = NPP Exec(I,s2);
 end;
 
 definition
@@ -507,7 +516,7 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent :::standard
+  S be regular homogeneous J/A-independent
   with_explicit_jumps
   (standard-ins IC-Ins-separated definite halting realistic
   (non empty stored-program AMI-Struct over N));
@@ -536,7 +545,7 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent ::: standard
+  S be regular homogeneous J/A-independent
   realistic with_explicit_jumps
   (standard-ins IC-Ins-separated definite halting realistic
   (non empty stored-program AMI-Struct over N));
@@ -567,7 +576,7 @@ proof
   let I be Instruction of S such that
 A1: for s being State of S holds Exec(I,s) = s;
   let s1, s2 be State of S such that
-A2: s1, s2 equal_outside NAT;
+A2: NPP s1 = NPP s2;
   Exec(I,s1) = s1 by A1;
   hence thesis by A1,A2;
 end;
@@ -622,7 +631,7 @@ A6:   InsCode I = 1;
       then
 A7:   I = [0,0,0] or I = [1,0,0] by TARSKI:def 2;
       let s1, s2 be State of STC N such that
-A8:   s1, s2 equal_outside NAT;
+A8:   NPP s1 = NPP s2;
       consider f being Function of product the Object-Kind of STC N,
       product the Object-Kind of STC N such that
 A9:   for s being Element of product the Object-Kind of STC N
@@ -661,7 +670,7 @@ A17:    x in dom Exec(I,s1) \ NAT;
         then
 A18:    not x in NAT by XBOOLE_0:def 5;
 A19:    s1.NAT = IC s1 by AMISTD_1:def 11
-          .= IC s2 by A8,COMPOS_1:24
+          .= IC s2 by A8,COMPOS_1:230
           .= s2.NAT by AMISTD_1:def 11;
         x in dom Exec(I,s1) by A17;
         then x in the carrier of STC N by PARTFUN1:def 4;
@@ -674,8 +683,9 @@ A21:    x in dom (NAT .-->succ(s2.NAT)) by FUNCOP_1:19;
         hence Exec(I,s1).x = (NAT .-->succ(s1.NAT)).x by A14,FUNCT_4:14
           .= Exec(I,s2).x by A15,A19,A21,FUNCT_4:14;
       end;
-      hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) =
-      Exec(I,s2)|(dom Exec(I,s2) \ NAT) by A16,FUNCT_1:165;
+      then Exec(I,s1)|(dom Exec(I,s1) \ NAT) =
+         Exec(I,s2)|(dom Exec(I,s2) \ NAT) by A16,FUNCT_1:165;
+     hence NPP Exec(I,s1) = NPP Exec(I,s2) by COMPOS_1:233;
     end;
     suppose InsCode I = 0;
       hence thesis by Th46,AMISTD_1:20;
@@ -722,7 +732,7 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be IC-relocable (regular homogeneous J/A-independent :::standard
+  S be IC-relocable (regular homogeneous J/A-independent
   (standard-ins IC-Ins-separated definite halting realistic
   (non empty stored-program AMI-Struct over N)));
   cluster -> IC-relocable Instruction of S;
@@ -738,7 +748,7 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be regular homogeneous J/A-independent :::standard
+  S be regular homogeneous J/A-independent
   realistic with_explicit_jumps
   (standard-ins IC-Ins-separated definite halting realistic
   (non empty stored-program AMI-Struct over N));
@@ -890,15 +900,14 @@ A35:    dom (m .--> G/.m) c= NAT by RELAT_1:def 18;
         hence thesis by FUNCT_4:12;
       end;
       then s1|(dom s1 \ NAT) = s3|(dom s3 \ NAT) by A33,A34,FUNCT_1:165;
-      then s1, s3 equal_outside NAT by FUNCT_7:def 2;
+      then NPP s1 = NPP s3 by COMPOS_1:233;
       then
-A36:  Exec(G/.m,s1), Exec(G/.m,s3)
-      equal_outside NAT by Def20;
+A36:  NPP Exec(G/.m,s1) = NPP Exec(G/.m,s3) by Def20;
       reconsider s3 as Element of product the Object-Kind of S by PBOOLE:155;
       reconsider k,m as Element of NAT;
 A37:  x = IC Exec(IncAddr(G/.m,k),s2) by A5,A17,A20,COMPOS_1:def 40
         .= IC Exec(G/.m, s1) + k by A30,Th47
-        .= IC Exec(G/.m, s3) + k by A36,COMPOS_1:24;
+        .= IC Exec(G/.m, s3) + k by A36,COMPOS_1:230;
       IC Exec(G/.m, s3) in NIC(G/.m,m) by A32;
       then IC Exec(G/.m, s3) in dom G by A18;
       then IC Exec(G/.m, s3) in dom IncAddr(G,k) by COMPOS_1:def 40;
@@ -917,7 +926,7 @@ theorem
   for T being InsType of Trivial-AMI N holds JumpParts T = {0} by Lm2;
 
 theorem
-  for S being Exec-preserving realistic
+  for S being Exec-preserving IC-Ins-separated definite realistic
    (stored-program non empty AMI-Struct over N)
   for s1,s2 being State of S
    st (s1 | (Data-Locations S \/ {IC S}))
@@ -926,14 +935,14 @@ for l being Instruction of S holds
  Exec (l,s1) | (Data-Locations S \/ {IC S})
   = Exec (l,s2) | (Data-Locations S \/ {IC S})
 proof
- let S be Exec-preserving realistic
+ let S be Exec-preserving IC-Ins-separated definite realistic
    (stored-program non empty AMI-Struct over N);
  let s1,s2 being State of S such that
 A1: (s1 | (Data-Locations S \/ {IC S}))
     = (s2 | (Data-Locations S \/ {IC S}));
  let l be Instruction of S;
-  s1,s2 equal_outside NAT by A1,COMPOS_1:175;
-  then Exec (l,s1), Exec (l,s2) equal_outside NAT by Def20;
+  NPP s1 = NPP s2 by A1,COMPOS_1:175;
+  then NPP Exec (l,s1) = NPP Exec (l,s2) by Def20;
  hence Exec (l,s1) | (Data-Locations S \/ {IC S})
   = Exec (l,s2) | (Data-Locations S \/ {IC S}) by COMPOS_1:175;
 end;
@@ -945,10 +954,10 @@ theorem
   (non empty stored-program AMI-Struct over N)
  for s1,s2 being State of S, I being Program of S
  for P1,P2 being (the Instructions of S)-valued ManySortedSet of NAT
-  st I c= P1 & I c= P2 & s1,s2 equal_outside NAT &
+  st I c= P1 & I c= P2 & NPP s1 = NPP s2 &
    (for m st m < n holds IC Comput(P2,s2,m) in dom I)
  for m st m <= n holds
-    Comput(P1,s1,m), Comput(P2,s2,m) equal_outside NAT
+    NPP Comput(P1,s1,m) = NPP Comput(P2,s2,m)
 proof
  let S be Exec-preserving IC-Ins-separated definite realistic
   (non empty stored-program AMI-Struct over N);
@@ -957,10 +966,10 @@ proof
  such that
 A1: I c= P1 & I c= P2;
   assume that
-A2: s1,s2 equal_outside NAT and
+A2: NPP s1 = NPP s2 and
 A3: for m st m < n holds IC Comput(P2,s2,m) in dom I;
   defpred X[Nat] means $1 <= n implies
-   Comput(P1,s1,$1),Comput(P2,s2,$1) equal_outside NAT;
+   NPP Comput(P1,s1,$1) = NPP Comput(P2,s2,$1);
 A4: for m st X[m] holds X[m+1]
   proof
     let m such that
@@ -973,7 +982,7 @@ A7: Comput(P1,s1,m+1) = Following(P1,Comput(P1,s1,m)) by EXTPRO_1:4
 A8: m+1 <= n;
     then m < n by NAT_1:13;
     then
-A9: IC Comput(P1,s1,m) = IC Comput(P2,s2,m) by A5,COMPOS_1:24;
+A9: IC Comput(P1,s1,m) = IC Comput(P2,s2,m) by A5,COMPOS_1:230;
     m < n by A8,NAT_1:13;
     then
 A10: IC Comput(P2,s2,m) in dom I by A3;
@@ -993,4 +1002,143 @@ A11:  IC Comput(P2,s2,m) in dom P2;
   then
 A12: X[0] by A2,EXTPRO_1:3;
   thus for m holds X[m] from NAT_1:sch 1(A12,A4);
+end;
+
+theorem ThX:
+ for S being Exec-preserving IC-Ins-separated definite realistic
+  halting (non empty stored-program AMI-Struct over N)
+ for s1,s2 being State of S
+   st NPP s1 = NPP s2
+ for P being (the Instructions of S)-valued ManySortedSet of NAT
+ holds NPP Following(P,s1) = NPP Following(P,s2)
+proof
+ let S being Exec-preserving IC-Ins-separated definite realistic
+  halting (non empty stored-program AMI-Struct over N);
+ let s1,s2 being State of S such that
+Z: NPP s1 = NPP s2;
+ let P being (the Instructions of S)-valued ManySortedSet of NAT;
+A: CurInstr(P,s1) = CurInstr(P,s2) by Z,COMPOS_1:230;
+ thus NPP Following(P,s1) = NPP Exec(CurInstr(P,s1),s1)
+     .= NPP Exec(CurInstr(P,s2),s2) by A,Z,Def20
+     .= NPP Following(P,s2);
+end;
+
+
+theorem ThY:
+ for S being Exec-preserving IC-Ins-separated definite realistic
+  halting (non empty stored-program AMI-Struct over N)
+ for s1,s2 being State of S
+   st NPP s1 = NPP s2
+ for P being (the Instructions of S)-valued ManySortedSet of NAT,
+     k being Nat
+ holds NPP Comput(P,s1,k) = NPP Comput(P,s2,k)
+proof
+ let S being Exec-preserving IC-Ins-separated definite realistic
+  halting (non empty stored-program AMI-Struct over N);
+ let s1,s2 being State of S such that
+Z: NPP s1 = NPP s2;
+ let P being (the Instructions of S)-valued ManySortedSet of NAT;
+  defpred P[Nat] means NPP Comput(P,s1,$1) = NPP Comput(P,s2,$1);
+  Comput(P,s1,0) = s1 & Comput(P,s2,0) = s2 by EXTPRO_1:3;
+  then
+A: P[0] by Z;
+B: now let k be Nat;
+    assume
+ZZ:  P[k];
+     NPP Comput(P,s1,k+1)
+        = NPP Following(P,Comput(P,s1,k)) by EXTPRO_1:4
+       .= NPP Following(P,Comput(P,s2,k)) by ZZ,ThX
+       .= NPP Comput(P,s2,k+1) by EXTPRO_1:4;
+    hence P[k+1];
+   end;
+ thus for k being Nat holds P[k] from NAT_1:sch 2(A,B);
+end;
+
+
+theorem Th69:
+ for S being Exec-preserving IC-Ins-separated definite realistic
+  halting (non empty stored-program AMI-Struct over N)
+ for s1,s2 being State of S
+   st NPP s1 = NPP s2
+ for P being (the Instructions of S)-valued ManySortedSet of NAT
+ holds P halts_on s1 implies P halts_on s2
+ proof let S be Exec-preserving IC-Ins-separated definite realistic
+  halting (non empty stored-program AMI-Struct over N);
+  let s1,s2 be State of S such that
+Z: NPP s1 = NPP s2;
+  let P be (the Instructions of S)-valued ManySortedSet of NAT;
+  assume P halts_on s1;
+  then consider k being Nat such that
+ IC Comput(P,s1,k) in dom P and
+W2: CurInstr(P,Comput(P,s1,k)) = halt S by EXTPRO_1:def 7;
+  take k;
+   dom P = NAT by PARTFUN1:def 4;
+  hence IC Comput(P,s2,k) in dom P;
+   NPP Comput(P,s1,k) = NPP Comput(P,s2,k) by Z,ThY;
+   then IC Comput(P,s1,k) = IC Comput(P,s2,k) by COMPOS_1:230;
+  hence CurInstr(P,Comput(P,s2,k)) = P/.IC Comput(P,s1,k)
+    .= halt S by W2;
+ end;
+
+theorem
+ for S being Exec-preserving IC-Ins-separated definite realistic
+  halting (non empty stored-program AMI-Struct over N),
+  P being (the Instructions of S)-valued ManySortedSet of NAT,
+  s being State of S st NPP s = NPP Following(P,s)
+  holds for n holds NPP Comput(P,s,n) = NPP s
+proof
+  let S be Exec-preserving IC-Ins-separated definite realistic
+  halting (non empty stored-program AMI-Struct over N),
+  P be (the Instructions of S)-valued ManySortedSet of NAT,
+  s be State of S;
+  defpred X[Element of NAT] means NPP Comput(P,s,$1) = NPP s;
+  assume
+Z:  NPP s = NPP Following(P,s);
+A1:
+  now let n;
+   assume
+ZZ:  X[n];
+    NPP Comput(P,s,n+1)
+     = NPP Following(P,Comput(P,s,n)) by EXTPRO_1:4
+    .= NPP s by Z,ThX,ZZ;
+   hence X[n+1];
+  end;
+A2: X[ 0] by EXTPRO_1:3;
+  thus for n holds X[n] from NAT_1:sch 1(A2, A1);
+end;
+
+theorem
+ for S being Exec-preserving IC-Ins-separated definite realistic
+  halting (non empty stored-program AMI-Struct over N)
+ for s1,s2 being State of S
+   st NPP s1 = NPP s2
+ for P being (the Instructions of S)-valued ManySortedSet of NAT
+   st P halts_on s1
+ holds NPP Result(P,s1) = NPP Result(P,s2)
+proof
+ let S be Exec-preserving IC-Ins-separated definite realistic
+  halting (non empty stored-program AMI-Struct over N);
+ let s1,s2 be State of S such that
+Z1: NPP s1 = NPP s2;
+ let P be (the Instructions of S)-valued ManySortedSet of NAT such that
+Z2: P halts_on s1;
+  consider k1 being Nat such that
+ IC Comput(P,s1,k1) in dom P and
+W2: CurInstr(P,Comput(P,s1,k1)) = halt S by Z2,EXTPRO_1:def 7;
+C: P halts_on s2 by Z1,Z2,Th69;
+  then consider k2 being Nat such that
+ IC Comput(P,s2,k2) in dom P and
+W4: CurInstr(P,Comput(P,s2,k2)) = halt S by EXTPRO_1:def 7;
+  reconsider k1,k2 as Element of NAT by ORDINAL1:def 13;
+  reconsider k = max(k1,k2) as Element of NAT by ORDINAL1:def 13;
+  k1 <= k by XXREAL_0:25;
+  then
+D: Comput(P,s1,k) = Comput(P,s1,k1) by W2,EXTPRO_1:6;
+  k2 <= k by XXREAL_0:25;
+  then
+E: Comput(P,s2,k2) = Comput(P,s2,k) by W4,EXTPRO_1:6;
+A: Result(P,s1) = Comput(P,s1,k) by Z2,W2,EXTPRO_1:def 8,D;
+F: Result(P,s2) = Comput(P,s2,k) by C,W4,EXTPRO_1:def 8,E;
+ NPP Comput(P,s1,k) = NPP Comput(P,s2,k) by Z1,ThY;
+ hence NPP Result(P,s1) = NPP Result(P,s2) by A,F;
 end;

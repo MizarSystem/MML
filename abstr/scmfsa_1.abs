@@ -2,7 +2,15 @@
 ::  by Andrzej Trybulec , Yatsuka Nakamura and Piotr Rudnicki
 ::
 :: Received February 3, 1996
-:: Copyright (c) 1996 Association of Mizar Users
+:: Copyright (c) 1996-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -18,7 +26,7 @@ environ
       WELLORD2, RELSET_1, AMI_2, FUNCT_7, RECDEF_2;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, FUNCOP_1, NUMBERS, XREAL_0, INT_1,
       FINSEQ_1, CARD_3, GR_CY_1, AMI_2, RELAT_1, FINSET_1, CARD_1, CARD_2,
-      RELSET_1;
+      RELSET_1, FUNCT_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
 
 
@@ -63,7 +71,7 @@ registration
   cluster SCM+FSA-Data*-Loc -> non empty;
 end;
 
-reserve J,K for Element of Segm 13,
+reserve J,J1,K for Element of Segm 14,
   a for Element of NAT,
   b,b1,b2,c,c1,c2 for Element of SCM+FSA-Data-Loc,
   f,f1,f2 for Element of SCM+FSA-Data*-Loc;
@@ -72,7 +80,8 @@ definition
   func SCM+FSA-Instr -> non empty set equals
 :: SCMFSA_1:def 4
   SCM-Instr \/ { [J,{},<*c,f,b*>] : J in {9,10} }
-   \/ { [K,{},<*c1,f1*>] : K in {11,12} };
+   \/ { [K,{},<*c1,f1*>] : K in {11,12} }
+   \/ { [13,{},<*b1*>] : not contradiction };
 end;
 
 theorem :: SCMFSA_1:2
@@ -212,13 +221,22 @@ end;
 
 definition
   let x be Element of SCM+FSA-Instr;
+  given c such that
+ x = [ 13,{}, <*c*>];
+  func x int_addr -> Element of SCM+FSA-Data-Loc means
+:: SCMFSA_1:def 13
+  ex c st <*c*> = x`3_3 & it = c;
+end;
+
+definition
+  let x be Element of SCM+FSA-Instr;
   given c,f,J such that
  x = [ J,{}, <*c,f*>];
   func x int_addr3 -> Element of SCM+FSA-Data-Loc means
-:: SCMFSA_1:def 13
+:: SCMFSA_1:def 14
   ex c,f st <*c,f*> = x`3_3 & it = c;
   func x coll_addr2 -> Element of SCM+FSA-Data*-Loc means
-:: SCMFSA_1:def 14
+:: SCMFSA_1:def 15
   ex c,f st <*c,f*> = x`3_3 & it = f;
   canceled;
 end;
@@ -226,35 +244,43 @@ end;
 definition
   let s be SCM+FSA-State;
   func IC(s) -> Element of NAT equals
-:: SCMFSA_1:def 16
+:: SCMFSA_1:def 17
   s.NAT;
 end;
 
 definition
   let x be Element of SCM+FSA-Instr, s be SCM+FSA-State;
   func SCM+FSA-Exec-Res(x,s) -> SCM+FSA-State means
-:: SCMFSA_1:def 17
-  ex x9 being Element of
-  SCM-Instr, s9 being SCM-State st x = x9 & s9 = s|SCM-Memory +* (NAT --> x9) &
-it = s +* SCM-Exec-Res(x9,s9) +* s|NAT if x`1_3 <= 8, ex i being Integer, k
-  st k = abs(s.(x int_addr2)) & i = (s.(x coll_addr1))/.k & it = SCM+FSA-Chg(
-  SCM+FSA-Chg(s,x int_addr1,i),succ IC s) if x`1_3 = 9, ex f being
-FinSequence of INT,k st k = abs(s.(x int_addr2)) & f = s.(x coll_addr1)+*(k,s.(
-  x int_addr1)) & it = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr1,f),succ IC s) if
-x`1_3 = 10, it = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr3,len(s.(x coll_addr2)
-)),succ IC s) if x`1_3 = 11, ex f being FinSequence of INT,k st k = abs(s.(
-  x int_addr3)) & f = k |-> 0 & it = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr2,f),
-  succ IC s) if x`1_3 = 12 otherwise it = s;
-end;
-
-definition
-  let A be set, B be non empty set;
-  mode Action of A,B is Function of A, Funcs(B,B);
+:: SCMFSA_1:def 18
+    ex x9 being Element of SCM-Instr, s9 being SCM-State st
+     x = x9 & s9 = s|SCM-Memory +* (NAT --> x9) &
+     it = s +* SCM-Exec-Res(x9,s9) +* s|NAT
+              if x`1_3 <= 8,
+    ex i being Integer, k st
+     k = abs(s.(x int_addr2)) & i = (s.(x coll_addr1))/.k &
+        it = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr1,i),succ IC s)
+              if x`1_3 = 9,
+    ex f being FinSequence of INT,k st
+     k = abs(s.(x int_addr2)) & f = s.(x coll_addr1)+*(k,s.(x int_addr1)) &
+      it = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr1,f),succ IC s)
+              if x`1_3 = 10,
+    it =
+     SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr3,len(s.(x coll_addr2))),succ IC s)
+              if x`1_3 = 11,
+    ex f being FinSequence of INT,k st
+     k = abs(s.(x int_addr3)) & f = k |-> 0 &
+     it = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr2,f),succ IC s)
+              if x`1_3 = 12,
+    ex i being Integer st
+     i = 1 &
+     it = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr,i),succ IC s)
+              if x`1_3 = 13
+    otherwise it = s;
 end;
 
 definition
   func SCM+FSA-Exec -> Action of SCM+FSA-Instr, product SCM+FSA-OK means
-:: SCMFSA_1:def 18
+:: SCMFSA_1:def 19
   for x being Element of SCM+FSA-Instr, y being
   SCM+FSA-State holds (it.x).y = SCM+FSA-Exec-Res(x,y);
 end;
@@ -325,3 +351,12 @@ theorem :: SCMFSA_1:34
 registration
  cluster proj2 SCM+FSA-Instr -> FinSequence-membered;
 end;
+
+theorem :: SCMFSA_1:35
+  for s being SCM+FSA-State, t being Element of SCM+FSA-Data-Loc,
+      u being Integer, v being Element of NAT
+       holds SCM+FSA-Chg(s,t,u).v = s.v;
+
+theorem :: SCMFSA_1:36
+  [13,{},<*c*>] in SCM+FSA-Instr;
+

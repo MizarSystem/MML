@@ -2,7 +2,15 @@
 ::  by Andrzej Trybulec , Yatsuka Nakamura and Noriko Asamoto
 ::
 :: Received June 20, 1996
-:: Copyright (c) 1996 Association of Mizar Users
+:: Copyright (c) 1996-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -13,13 +21,13 @@ environ
       TURING_1, SCMFSA6A, ORDINAL1, RELOC, SCMFSA6C;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, COMPLEX1,
       NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2,
-      FUNCOP_1, FINSET_1, FUNCT_4, DOMAIN_1, VALUED_1, AFINSQ_1, STRUCT_0,
-      COMPOS_1, EXTPRO_1, AMI_1, FUNCT_7, SCMFSA_2, AMISTD_2, XXREAL_0;
+      FINSET_1, FUNCT_4, DOMAIN_1, VALUED_1, AFINSQ_1, STRUCT_0, COMPOS_1,
+      EXTPRO_1, FUNCT_7, SCMFSA_2, AMISTD_2, FUNCOP_1, XXREAL_0;
  constructors WELLORD2, DOMAIN_1, XXREAL_0, INT_2, AMISTD_2, SCMFSA_2,
-      RELSET_1, VALUED_1, AMI_3, AMI_1, PRE_POLY, AMISTD_1;
+      RELSET_1, VALUED_1, AMI_3, PRE_POLY, AMISTD_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
-      FINSET_1, NUMBERS, XREAL_0, INT_1, STRUCT_0, AMI_1, SCMFSA_2, FUNCT_4,
-      RELAT_1, VALUED_1, SCMFSA10, AMISTD_2, COMPOS_1, EXTPRO_1;
+      FINSET_1, NUMBERS, XREAL_0, INT_1, STRUCT_0, SCMFSA_2, FUNCT_4, RELAT_1,
+      VALUED_1, SCMFSA10, AMISTD_2, COMPOS_1, EXTPRO_1, SCMFSA_4;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -77,6 +85,7 @@ definition
   func Initialized I -> PartState of SCM+FSA equals
 :: SCMFSA6A:def 4
   I +* Initialize ((intloc 0) .--> 1);
+ projectivity;
 end;
 
 registration
@@ -90,7 +99,8 @@ theorem :: SCMFSA6A:23
   InsCode i in {0,6,7,8} or Exec(i,s).IC SCM+FSA = succ IC s;
 
 theorem :: SCMFSA6A:24
-  IC SCM+FSA in dom Initialized I;
+ for p being PartState of SCM+FSA
+  holds IC SCM+FSA in dom Initialized p;
 
 theorem :: SCMFSA6A:25
   IC Initialized I =  0;
@@ -122,9 +132,7 @@ theorem :: SCMFSA6A:35
   Int-Location or x is FinSeq-Location or x = IC SCM+FSA or x is
   Element of NAT;
 
-theorem :: SCMFSA6A:36
-  for s1,s2 being State of SCM+FSA holds (for l being
-  Element of NAT holds s1.l = s2.l) iff s1 | NAT = s2 | NAT;
+canceled;
 
 theorem :: SCMFSA6A:37
   for i being Element of NAT holds not i in
@@ -154,7 +162,7 @@ theorem :: SCMFSA6A:44
   Initialized I holds x in dom I or x = intloc 0 or x = IC SCM+FSA;
 
 theorem :: SCMFSA6A:45
-  for I being Program of SCM+FSA holds intloc 0 in dom Initialized I;
+  for p being PartState of SCM+FSA holds intloc 0 in dom Initialized p;
 
 theorem :: SCMFSA6A:46
   for I being Program of SCM+FSA holds (Initialized I).intloc 0 =
@@ -183,9 +191,7 @@ theorem :: SCMFSA6A:52
   for I,J being Program of SCM+FSA for s being State of SCM+FSA st
   Initialized J c= s holds Initialized I c= s +* I;
 
-theorem :: SCMFSA6A:53
-  for I,J being Program of SCM+FSA for s being State of SCM+FSA holds s
-  +* Initialized I, s +* Initialized J equal_outside NAT;
+canceled;
 
 begin :: The composition of macroinstructions
 
@@ -309,3 +315,40 @@ theorem :: SCMFSA6A:76
 
 theorem :: SCMFSA6A:77
  card(i ';' j) = 4;
+
+theorem :: SCMFSA6A:78
+ for i,j being Nat
+ holds NPP ((intloc i) .--> j) = (intloc i) .--> j;
+
+theorem :: SCMFSA6A:79
+ NPP Initialized I = Initialize ((intloc 0) .--> 1);
+
+theorem :: SCMFSA6A:80 :: SCM_HALT:6
+  Initialize I c= Initialized I;
+
+theorem :: SCMFSA6A:81  :: from SCMFSA8C
+  for s being State of SCM+FSA st s.intloc 0 = 1 & IC s =  0
+  holds Initialized s = s;
+
+theorem :: SCMFSA6A:82  :: a part of SCMFSA6C:3
+ for p being PartState of SCM+FSA holds
+  IC Initialized p = 0 & (Initialized p).intloc 0 = 1;
+
+theorem :: SCMFSA6A:83
+ for p being PartState of SCM+FSA holds
+   Initialize Initialized p = Initialized p;
+
+theorem :: SCMFSA6A:84
+  for s being State of SCM+FSA, I being Program of SCM+FSA holds
+   s +* NPP Initialized I =
+    Initialized s +* Start-At(0,SCM+FSA);
+
+theorem :: SCMFSA6A:85
+ for p,q being PartState of SCM+FSA
+ holds IC SCM+FSA in dom(p +* Initialized q);
+
+theorem :: SCMFSA6A:86
+ intloc 0 in dom Initialize ((intloc 0).-->1);
+
+theorem :: SCMFSA6A:87
+ dom Initialize((intloc 0).-->1) misses NAT;

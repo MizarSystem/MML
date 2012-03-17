@@ -2,25 +2,34 @@
 ::  by Bo Li , Yanhong Men , Dailu Li and Xiquan Liang
 ::
 :: Received October 10, 2009
-:: Copyright (c) 2009 Association of Mizar Users
+:: Copyright (c) 2009-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
  vocabularies NUMBERS, XREAL_0, ORDINAL1, VALUED_0, FUNCT_1, NAT_1, CARD_1,
       RELAT_1, ARYTM_3, ARYTM_1, XBOOLE_0, TARSKI, VALUED_1, COMPLEX1,
       SQUARE_1, SIN_COS, PARTFUN1, REAL_1, SIN_COS4, FUNCOP_1, XCMPLX_0,
-      FUNCT_9;
- notations TARSKI, XBOOLE_0, COMPLEX1, XCMPLX_0, ORDINAL1, NUMBERS, XREAL_0,
+      FUNCT_9, INT_1, SUBSET_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1,
+      COMPLEX1, XCMPLX_0, ORDINAL1, NUMBERS, XREAL_0,
       REAL_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1, SIN_COS, VALUED_0,
-      VALUED_1, NAT_1, SQUARE_1, FDIFF_9;
+      VALUED_1, NAT_1, INT_1, SQUARE_1, FDIFF_9;
  constructors REAL_1, SEQ_1, EUCLID, SQUARE_1, PBOOLE, RFUNCT_1, SIN_COS,
       FDIFF_9, RELSET_1, COMPLEX1;
  registrations XXREAL_0, MEMBERED, XCMPLX_0, NUMBERS, VALUED_0, RELAT_1,
-      VALUED_1, NAT_1, SIN_COS6, FUNCOP_1, XREAL_0;
+      VALUED_1, NAT_1, SIN_COS6, FUNCOP_1, XREAL_0, INT_1;
  requirements NUMERALS, SUBSET, ARITHM, BOOLE;
  definitions XBOOLE_0, VALUED_1, SIN_COS, XCMPLX_0, SQUARE_1, FDIFF_9;
  theorems COMPLEX1, XBOOLE_0, XCMPLX_1, VALUED_1, XBOOLE_1, SIN_COS, RFUNCT_1,
-      FUNCT_1, TARSKI, FUNCOP_1, XREAL_0;
+      FUNCT_1, TARSKI, FUNCOP_1, XREAL_0, INT_1, NAT_1;
  schemes NAT_1;
 
 begin :: The Basic Properties of period function
@@ -28,6 +37,7 @@ begin :: The Basic Properties of period function
 reserve x,t,t1,t2,r,a,b for real number;
 reserve F,G for real-valued Function;
 reserve k for Nat;
+reserve i for non zero Integer;
 
 definition
   let t be real number;
@@ -83,7 +93,7 @@ A2:t<>0 &
    hence thesis by A2,Def1;
  end;
 
-theorem
+theorem Ta1:
   F is t-periodic & G is t-periodic implies F+G is t-periodic
 proof
   assume that
@@ -114,7 +124,21 @@ A9:   x+t in dom (F + G) & x-t in dom (F + G) by VALUED_1:def 1;
     hence thesis by A3,Th1;
 end;
 
-theorem
+Lm38:
+  t <> 0 implies REAL --> a is t -periodic
+proof
+  set F = REAL --> a;
+  assume t <> 0;
+  hence t <> 0;
+  let x;
+A1: x in REAL & x+t in REAL by XREAL_0:def 1;
+  hence x in dom F iff x+t in dom F by FUNCOP_1:19;
+  assume x in dom F;
+  thus F.x = a by A1,FUNCOP_1:13
+  .= F.(x+t) by A1,FUNCOP_1:13;
+end;
+
+theorem Ta2:
   F is t-periodic & G is t-periodic implies F-G is t-periodic
 proof
     assume that
@@ -145,7 +169,7 @@ A9:   x+t in dom (F - G) & x-t in dom (F - G) by VALUED_1:12;
     hence thesis by A3,Th1;
 end;
 
-theorem
+theorem Trazy:
   F is t-periodic & G is t-periodic implies F(#)G is t-periodic
 proof
   assume that
@@ -175,7 +199,7 @@ A9:    x+t in dom (F (#) G) & x-t in dom (F (#) G) by VALUED_1:def 4;
  hence thesis by A3,Th1;
 end;
 
-theorem
+theorem Ta4:
   F is t-periodic & G is t-periodic implies F /" G is t-periodic
 proof
    assume that
@@ -328,27 +352,8 @@ A6:     x+t in dom (F") & x-t in dom (F") by VALUED_1:def 7;
  hence thesis by A2,Th1;
 end;
 
-theorem Th12:
-  F is t-periodic implies F^2 is t-periodic
-proof
-assume
-A1: F is t-periodic;
-then A2: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
-    & F.x=F.(x+t) by Th1;
-   for x st x in dom F^2 holds (x+t in dom F^2 & x-t in dom F^2) &
-   (F^2).x=(F^2).(x+t)
-      proof
-        let x;
-        assume x in dom F^2; then
-A3:     x in dom F by VALUED_1:11; then
-A4:    x+t in dom F & x-t in dom F by A1,Th1;
-        (F^2).x=(F.x)^2 by VALUED_1:11
-                 .=(F.(x+t))^2 by A1,Th1,A3
-                 .=(F^2).(x+t) by VALUED_1:11;
-          hence thesis by A4,VALUED_1:11;
-      end;
- hence thesis by A2,Th1;
-end;
+theorem 
+  F is t-periodic implies F^2 is t-periodic by Trazy;
 
 theorem Th13:
   F is t-periodic implies for x st x in dom F holds F.x=F.(x-t)
@@ -363,7 +368,7 @@ A1: F is t-periodic;
     hence thesis;
 end;
 
-theorem
+theorem Th14:
   F is t-periodic implies F is -t -periodic
 proof
 assume
@@ -537,6 +542,31 @@ registration
   end;
 end;
 
+registration
+  let t be non zero (real number);
+  cluster REAL --> t -> t-periodic;
+  coherence by Lm38;
+  cluster t-periodic real-valued Function;
+  existence
+  proof
+    take REAL --> t;
+    thus thesis;
+  end;
+end;
+
+registration
+  let t be non zero (real number);
+  let F,G be t-periodic real-valued Function;
+  cluster F + G -> t-periodic;
+  coherence by Ta1;
+  cluster F - G -> t-periodic;
+  coherence by Ta2;
+  cluster F (#) G -> t-periodic;
+  coherence by Trazy;
+  cluster F /" G -> t-periodic;
+  coherence by Ta4;
+end;
+
 registration let F be periodic real-valued Function;
   cluster -F -> periodic;
   coherence
@@ -549,7 +579,7 @@ A1: F is t-periodic by Def2;
 end;
 
 registration let F be periodic real-valued Function;
-             let r be Real;
+             let r be real number;
   cluster r (#) F -> periodic;
   coherence
   proof
@@ -567,13 +597,7 @@ A2: F is t-periodic by Def2;
     hence thesis by Def2;
   end;
   cluster F-r -> periodic;
-  coherence
-  proof
-    consider t such that
-A3: F is t-periodic by Def2;
-    F-r is t-periodic by A3,Th8;
-    hence thesis by Def2;
-  end;
+  coherence;
 end;
 
 registration let F be periodic real-valued Function;
@@ -598,7 +622,7 @@ A2: F is t-periodic by Def2;
   proof
     consider t such that
 A3: F is t-periodic by Def2;
-    F^2 is t-periodic by A3,Th12;
+    F^2 is t-periodic by A3,Trazy;
     hence thesis by Def2;
   end;
 end;
@@ -619,7 +643,7 @@ registration
   coherence by Def2,Lm2;
 end;
 
-theorem
+Lmsin:
   sin is 2*PI*(k+1) -periodic
 proof
   defpred X[Nat] means sin is 2*PI*($1+1) -periodic;
@@ -650,6 +674,27 @@ A4:     x in dom sin;
 end;
 
 theorem
+  sin is (2*PI*i)-periodic
+  proof
+    i in INT by INT_1:def 2;
+    then consider k being Element of NAT such that
+a1: i = k or i = - k by INT_1:def 1;
+    per cases by a1;
+    suppose i = k;
+      then ex m being Nat st i = m + 1 by NAT_1:6;
+      hence thesis by Lmsin;
+    end;
+    suppose
+a2:   i = -k;
+      then consider m being Nat such that
+a3:   -i = m + 1 by NAT_1:6;
+      sin is 2*PI*(m+1)-periodic by Lmsin;
+      then sin is -2*PI*(m+1)-periodic by Th14;
+      hence thesis by a2,a3;
+    end;
+  end;
+
+Lmcos:
   cos is 2*PI*(k+1) -periodic
 proof
   defpred X[Nat] means cos is 2*PI*($1+1) -periodic;
@@ -678,6 +723,27 @@ A4:     x in dom cos;
   for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
   hence thesis;
 end;
+
+theorem
+  cos is (2*PI*i)-periodic
+  proof
+    i in INT by INT_1:def 2;
+    then consider k being Element of NAT such that
+a1: i = k or i = - k by INT_1:def 1;
+    per cases by a1;
+    suppose i = k;
+      then ex m being Nat st i = m + 1 by NAT_1:6;
+      hence thesis by Lmcos;
+    end;
+    suppose
+a2:   i = -k;
+      then consider m being Nat such that
+a3:   -i = m + 1 by NAT_1:6;
+      cos is 2*PI*(m+1)-periodic by Lmcos;
+      then cos is -2*PI*(m+1)-periodic by Th14;
+      hence thesis by a2,a3;
+    end;
+  end;
 
 Lm3: cosec is 2 * PI -periodic
  proof
@@ -748,7 +814,7 @@ registration
   coherence by Def2,Lm4;
 end;
 
-theorem
+Lmsec:
   sec is 2*PI*(k+1) -periodic
 proof
   defpred X[Nat] means sec is 2*PI*($1+1) -periodic;
@@ -799,6 +865,27 @@ then sec.(x+2*PI*(k+1+1))=(cos.(x+2*PI*(k+1)+2*PI))" by RFUNCT_1:def 8
 end;
 
 theorem
+  sec is (2*PI*i)-periodic
+  proof
+    i in INT by INT_1:def 2;
+    then consider k being Element of NAT such that
+a1: i = k or i = - k by INT_1:def 1;
+    per cases by a1;
+    suppose i = k;
+      then ex m being Nat st i = m + 1 by NAT_1:6;
+      hence thesis by Lmsec;
+    end;
+    suppose
+a2:   i = -k;
+      then consider m being Nat such that
+a3:   -i = m + 1 by NAT_1:6;
+      sec is 2*PI*(m+1)-periodic by Lmsec;
+      then sec is -2*PI*(m+1)-periodic by Th14;
+      hence thesis by a2,a3;
+    end;
+  end;
+
+Lmcosec:
   cosec is 2*PI*(k+1) -periodic
 proof
   defpred X[Nat] means cosec is 2*PI*($1+1) -periodic;
@@ -848,6 +935,27 @@ then cosec.(x+2*PI*(k+1+1))=(sin.(x+2*PI*(k+1)+2*PI))" by RFUNCT_1:def 8
   for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
   hence thesis;
 end;
+
+theorem
+  cosec is (2*PI*i)-periodic
+  proof
+    i in INT by INT_1:def 2;
+    then consider k being Element of NAT such that
+a1: i = k or i = - k by INT_1:def 1;
+    per cases by a1;
+    suppose i = k;
+      then ex m being Nat st i = m + 1 by NAT_1:6;
+      hence thesis by Lmcosec;
+    end;
+    suppose
+a2:   i = -k;
+      then consider m being Nat such that
+a3:   -i = m + 1 by NAT_1:6;
+      cosec is 2*PI*(m+1)-periodic by Lmcosec;
+      then cosec is -2*PI*(m+1)-periodic by Th14;
+      hence thesis by a2,a3;
+    end;
+  end;
 
 Lm5: tan is PI -periodic
  proof
@@ -932,7 +1040,7 @@ registration
   coherence by Def2,Lm6;
 end;
 
-theorem
+Lmtan:
   tan is PI*(k+1) -periodic
 proof
   defpred X[Nat] means tan is PI*($1+1) -periodic;
@@ -996,6 +1104,27 @@ A7:x-PI*(k+1+1) in dom sin /\ (dom cos \ cos"{0}) by XBOOLE_0:def 4; then
 end;
 
 theorem
+  tan is (PI*i)-periodic
+  proof
+    i in INT by INT_1:def 2;
+    then consider k being Element of NAT such that
+a1: i = k or i = - k by INT_1:def 1;
+    per cases by a1;
+    suppose i = k;
+      then ex m being Nat st i = m + 1 by NAT_1:6;
+      hence thesis by Lmtan;
+    end;
+    suppose
+a2:   i = -k;
+      then consider m being Nat such that
+a3:   -i = m + 1 by NAT_1:6;
+      tan is PI*(m+1)-periodic by Lmtan;
+      then tan is -PI*(m+1)-periodic by Th14;
+      hence thesis by a2,a3;
+    end;
+  end;
+
+Lmcot:
   cot is PI*(k+1) -periodic
 proof
   defpred X[Nat] means cot is PI*($1+1) -periodic;
@@ -1056,6 +1185,27 @@ A7:x-PI*(k+1+1) in dom cos /\ (dom sin \ sin"{0}) by XBOOLE_0:def 4; then
   hence thesis;
 end;
 
+theorem
+  cot is (PI*i)-periodic
+  proof
+    i in INT by INT_1:def 2;
+    then consider k being Element of NAT such that
+a1: i = k or i = - k by INT_1:def 1;
+    per cases by a1;
+    suppose i = k;
+      then ex m being Nat st i = m + 1 by NAT_1:6;
+      hence thesis by Lmcot;
+    end;
+    suppose
+a2:   i = -k;
+      then consider m being Nat such that
+a3:   -i = m + 1 by NAT_1:6;
+      cot is PI*(m+1)-periodic by Lmcot;
+      then cot is -PI*(m+1)-periodic by Th14;
+      hence thesis by a2,a3;
+    end;
+  end;
+
 Lm7: |. sin .| is PI-periodic
 proof
   for x st x in dom |. sin .| holds (x+PI in dom |. sin .|
@@ -1093,7 +1243,7 @@ A2: x+PI in dom cos & x-PI in dom cos by SIN_COS:27; then
   hence thesis by Th1;
   end;
 
-theorem
+Lmsinm:
   |. sin .| is PI*(k+1) -periodic
 proof
   defpred X[Nat] means |. sin .| is PI*($1+1) -periodic;
@@ -1129,6 +1279,27 @@ then |. sin .|.(x+PI*(k+1+1))=|. sin.(x+PI*(k+1)+PI) .| by VALUED_1:def 11
 end;
 
 theorem
+  |. sin .| is (PI*i)-periodic
+  proof
+    i in INT by INT_1:def 2;
+    then consider k being Element of NAT such that
+a1: i = k or i = - k by INT_1:def 1;
+    per cases by a1;
+    suppose i = k;
+      then ex m being Nat st i = m + 1 by NAT_1:6;
+      hence thesis by Lmsinm;
+    end;
+    suppose
+a2:   i = -k;
+      then consider m being Nat such that
+a3:   -i = m + 1 by NAT_1:6;
+      |. sin .| is PI*(m+1)-periodic by Lmsinm;
+      then |. sin .| is -PI*(m+1)-periodic by Th14;
+      hence thesis by a2,a3;
+    end;
+  end;
+
+Lmcosm:
   |. cos .| is PI*(k+1) -periodic
 proof
   defpred X[Nat] means |. cos .| is PI*($1+1) -periodic;
@@ -1163,6 +1334,27 @@ then |. cos .|.(x+PI*(k+1+1))=|. cos.(x+PI*(k+1)+PI) .| by VALUED_1:def 11
   hence thesis;
 end;
 
+theorem
+  |. cos .| is (PI*i)-periodic
+  proof
+    i in INT by INT_1:def 2;
+    then consider k being Element of NAT such that
+a1: i = k or i = - k by INT_1:def 1;
+    per cases by a1;
+    suppose i = k;
+      then ex m being Nat st i = m + 1 by NAT_1:6;
+      hence thesis by Lmcosm;
+    end;
+    suppose
+a2:   i = -k;
+      then consider m being Nat such that
+a3:   -i = m + 1 by NAT_1:6;
+      |. cos .| is PI*(m+1)-periodic by Lmcosm;
+      then |. cos .| is -PI*(m+1)-periodic by Th14;
+      hence thesis by a2,a3;
+    end;
+  end;
+
 Lm9:|. sin .| + |. cos .| is PI/2 -periodic
 proof
   for x st x in dom(|. sin .| + |. cos .|) holds
@@ -1195,7 +1387,7 @@ A3:   dom(|. sin .| + |. cos .|)=dom |. sin .| /\ dom |. cos .|
   hence thesis by Th1;
   end;
 
-theorem
+Lmsincosm:
   |. sin .| + |. cos .| is (PI/2)*(k+1) -periodic
 proof
   defpred X[Nat] means |. sin .| + |. cos .| is (PI/2)*($1+1) -periodic;
@@ -1246,6 +1438,27 @@ A6:    x in dom (|. sin .| + |. cos .|);
   hence thesis;
 end;
 
+theorem
+  |. sin .| + |. cos .| is (PI/2*i)-periodic
+  proof
+    i in INT by INT_1:def 2;
+    then consider k being Element of NAT such that
+a1: i = k or i = - k by INT_1:def 1;
+    per cases by a1;
+    suppose i = k;
+      then ex m being Nat st i = m + 1 by NAT_1:6;
+      hence thesis by Lmsincosm;
+    end;
+    suppose
+a2:   i = -k;
+      then consider m being Nat such that
+a3:   -i = m + 1 by NAT_1:6;
+      |. sin .| + |. cos .| is PI/2*(m+1)-periodic by Lmsincosm;
+      then |. sin .| + |. cos .| is -PI/2*(m+1)-periodic by Th14;
+      hence thesis by a2,a3;
+    end;
+  end;
+
 Lm10: sin^2 is PI-periodic
 proof
   for x st x in dom(sin^2) holds (x+PI in dom(sin^2)
@@ -1280,7 +1493,7 @@ A1: x+PI in dom cos & x-PI in dom cos by SIN_COS:27;
   hence thesis by Th1;
   end;
 
-theorem
+Lmsin2:
   sin^2 is PI*(k+1) -periodic
 proof
   defpred X[Nat] means sin^2 is PI*($1+1) -periodic;
@@ -1313,6 +1526,27 @@ A5:x+PI*(k+1+1) in dom sin & x-PI*(k+1+1) in dom sin by SIN_COS:27;
 end;
 
 theorem
+  sin^2 is (PI*i)-periodic
+  proof
+    i in INT by INT_1:def 2;
+    then consider k being Element of NAT such that
+a1: i = k or i = - k by INT_1:def 1;
+    per cases by a1;
+    suppose i = k;
+      then ex m being Nat st i = m + 1 by NAT_1:6;
+      hence thesis by Lmsin2;
+    end;
+    suppose
+a2:   i = -k;
+      then consider m being Nat such that
+a3:   -i = m + 1 by NAT_1:6;
+      sin^2 is PI*(m+1)-periodic by Lmsin2;
+      then sin^2 is -PI*(m+1)-periodic by Th14;
+      hence thesis by a2,a3;
+    end;
+  end;
+
+Lmcos2:
   cos^2 is PI*(k+1) -periodic
 proof
   defpred X[Nat] means cos^2 is PI*($1+1) -periodic;
@@ -1344,6 +1578,27 @@ A5:x+PI*(k+1+1) in dom cos & x-PI*(k+1+1) in dom cos by SIN_COS:27;
   hence thesis;
 end;
 
+theorem
+  cos^2 is (PI*i)-periodic
+  proof
+    i in INT by INT_1:def 2;
+    then consider k being Element of NAT such that
+a1: i = k or i = - k by INT_1:def 1;
+    per cases by a1;
+    suppose i = k;
+      then ex m being Nat st i = m + 1 by NAT_1:6;
+      hence thesis by Lmcos2;
+    end;
+    suppose
+a2:   i = -k;
+      then consider m being Nat such that
+a3:   -i = m + 1 by NAT_1:6;
+      cos^2 is PI*(m+1)-periodic by Lmcos2;
+      then cos^2 is -PI*(m+1)-periodic by Th14;
+      hence thesis by a2,a3;
+    end;
+  end;
+
 Lm12:sin (#) cos is PI-periodic
 proof
   for x st x in dom(sin (#) cos) holds (x+PI in dom(sin (#) cos)
@@ -1364,7 +1619,7 @@ A2: x+PI in dom sin /\ dom cos & x-PI in dom sin /\ dom cos by SIN_COS:27; then
   hence thesis by Th1;
   end;
 
-theorem
+Lmsincos:
   sin (#) cos is PI*(k+1) -periodic
 proof
   defpred X[Nat] means sin (#) cos is PI*($1+1) -periodic;
@@ -1402,6 +1657,27 @@ then (sin (#) cos).(x+PI*(k+1+1))
   for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
   hence thesis;
 end;
+
+theorem
+  sin (#) cos is (PI*i)-periodic
+  proof
+    i in INT by INT_1:def 2;
+    then consider k being Element of NAT such that
+a1: i = k or i = - k by INT_1:def 1;
+    per cases by a1;
+    suppose i = k;
+      then ex m being Nat st i = m + 1 by NAT_1:6;
+      hence thesis by Lmsincos;
+    end;
+    suppose
+a2:   i = -k;
+      then consider m being Nat such that
+a3:   -i = m + 1 by NAT_1:6;
+      sin(#)cos is PI*(m+1)-periodic by Lmsincos;
+      then sin(#)cos is -PI*(m+1)-periodic by Th14;
+      hence thesis by a2,a3;
+    end;
+  end;
 
 canceled;
 
@@ -1459,7 +1735,7 @@ then
   hence thesis by Th1;
   end;
 
-theorem Th34:
+Th34:
   b + a (#) sin is 2*PI*(k+1) -periodic
 proof
   defpred X[Nat] means b + a (#) sin is 2*PI*($1+1) -periodic;
@@ -1503,10 +1779,31 @@ then (b + a (#) sin).(x+2*PI*(k+1+1))
   hence thesis;
 end;
 
-theorem
-  a (#) sin - b is 2*PI*(k+1) -periodic by Th34;
+theorem Th35:
+  b + a (#) sin is (2*PI*i)-periodic
+  proof
+    i in INT by INT_1:def 2;
+    then consider k being Element of NAT such that
+a1: i = k or i = - k by INT_1:def 1;
+    per cases by a1;
+    suppose i = k;
+      then ex m being Nat st i = m + 1 by NAT_1:6;
+      hence thesis by Th34;
+    end;
+    suppose
+a2:   i = -k;
+      then consider m being Nat such that
+a3:   -i = m + 1 by NAT_1:6;
+      b+a(#)sin is 2*PI*(m+1)-periodic by Th34;
+      then b+a(#)sin is -2*PI*(m+1)-periodic by Th14;
+      hence thesis by a2,a3;
+    end;
+  end;
 
-theorem Th36:
+theorem
+  a (#) sin - b is (2*PI*i)-periodic by Th35;
+
+Th36:
   b + a (#) cos is 2*PI*(k+1) -periodic
 proof
   defpred X[Nat] means b + a (#) cos is 2*PI*($1+1) -periodic;
@@ -1550,22 +1847,32 @@ then (b + a (#) cos).(x+2*PI*(k+1+1))
   hence thesis;
 end;
 
-theorem
-  a (#) cos - b is 2*PI*(k+1) -periodic by Th36;
+theorem Th37:
+  b + a (#) cos is (2*PI*i)-periodic
+  proof
+    i in INT by INT_1:def 2;
+    then consider k being Element of NAT such that
+a1: i = k or i = - k by INT_1:def 1;
+    per cases by a1;
+    suppose i = k;
+      then ex m being Nat st i = m + 1 by NAT_1:6;
+      hence thesis by Th36;
+    end;
+    suppose
+a2:   i = -k;
+      then consider m being Nat such that
+a3:   -i = m + 1 by NAT_1:6;
+      b+a(#)cos is 2*PI*(m+1)-periodic by Th36;
+      then b+a(#)cos is -2*PI*(m+1)-periodic by Th14;
+      hence thesis by a2,a3;
+    end;
+  end;
 
-theorem Th38:
-  t <> 0 implies REAL --> a is t -periodic
-proof
-  set F = REAL --> a;
-  assume t <> 0;
-  hence t <> 0;
-  let x;
-A1: x in REAL & x+t in REAL by XREAL_0:def 1;
-  hence x in dom F iff x+t in dom F by FUNCOP_1:19;
-  assume x in dom F;
-  thus F.x = a by A1,FUNCOP_1:13
-  .= F.(x+t) by A1,FUNCOP_1:13;
-end;
+theorem
+  a (#) cos - b is (2*PI*i)-periodic by Th37;
+
+theorem
+  t <> 0 implies REAL --> a is t -periodic by Lm38;
 
 registration
   let a;
@@ -1573,7 +1880,7 @@ registration
   coherence
   proof
     take 1;
-    thus thesis by Th38;
+    thus thesis by Lm38;
   end;
 end;
 
@@ -1583,6 +1890,6 @@ registration
   existence
   proof
     take REAL --> the Real;
-    thus thesis by Th38;
+    thus thesis by Lm38;
   end;
 end;

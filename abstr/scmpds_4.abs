@@ -2,26 +2,33 @@
 ::  by JingChao Chen
 ::
 :: Received June 15, 1999
-:: Copyright (c) 1999 Association of Mizar Users
+:: Copyright (c) 1999-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
  vocabularies NUMBERS, SUBSET_1, AMI_1, SCMPDS_2, SCMFSA_7, CARD_1, FUNCOP_1,
-      RELAT_1, FUNCT_1, CAT_1, NAT_1, ARYTM_3, XBOOLE_0, TARSKI, VALUED_1,
-      SCMNORM, FSM_1, INT_1, FUNCT_4, GRAPHSP, AMI_3, FUNCT_7, AMI_2, STRUCT_0,
-      SCMPDS_1, COMPLEX1, XXREAL_0, ARYTM_1, TURING_1, AMISTD_2, SCMFSA6B,
-      MSUALG_1, CIRCUIT2, SCMPDS_4, ORDINAL1, PARTFUN1, AFINSQ_1, SCMFSA6C,
-      ORDINAL4, CARD_5, UNIALG_1, COMPOS_1;
+      RELAT_1, FUNCT_1, NAT_1, ARYTM_3, XBOOLE_0, TARSKI, VALUED_1, SCMNORM,
+      FSM_1, INT_1, FUNCT_4, GRAPHSP, AMI_3, AMI_2, STRUCT_0, SCMPDS_1,
+      COMPLEX1, XXREAL_0, ARYTM_1, TURING_1, AMISTD_2, SCMFSA6B, MSUALG_1,
+      CIRCUIT2, SCMPDS_4, ORDINAL1, PARTFUN1, SCMFSA6C, ORDINAL4, PBOOLE;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       RELAT_1, FUNCT_1, PARTFUN1, AFINSQ_1, VALUED_1, FUNCT_4, FUNCT_7, INT_1,
-      NAT_1, INT_2, XXREAL_0, STRUCT_0, COMPOS_1, EXTPRO_1, AMI_1, AMI_2,
-      SCMPDS_1, SCMPDS_2;
+      NAT_1, INT_2, XXREAL_0, PBOOLE, STRUCT_0, COMPOS_1, EXTPRO_1, AMI_2,
+      AMISTD_2, SCMPDS_1, SCMPDS_2;
  constructors WELLORD2, XXREAL_0, INT_2, SCMPDS_1, SCMPDS_3, DOMAIN_1,
-      RELSET_1, PRE_POLY, ORDINAL5, AMI_1, AMI_3;
+      RELSET_1, PRE_POLY, ORDINAL5, AMI_3, AMISTD_2, AMISTD_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, INT_1, AMI_1, SCMPDS_2, AMI_2, FINSET_1, CARD_1,
-      VALUED_1, FUNCT_4, RELAT_1, PRE_POLY, AFINSQ_1, COMPOS_1, ORDINAL5,
-      EXTPRO_1;
+      XREAL_0, NAT_1, INT_1, SCMPDS_2, AMI_2, FINSET_1, CARD_1, VALUED_1,
+      FUNCT_4, RELAT_1, PRE_POLY, AFINSQ_1, COMPOS_1, ORDINAL5, EXTPRO_1,
+      FUNCOP_1, FUNCT_7, SCMPDS_3, AMISTD_2, PBOOLE;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -45,21 +52,23 @@ canceled 4;
 
 theorem :: SCMPDS_4:11
   for s1,s2 being State of SCMPDS st IC s1 = IC s2 & for a being
-  Int_position holds s1.a = s2.a holds s1,s2 equal_outside NAT;
+  Int_position holds s1.a = s2.a holds NPP s1 = NPP s2;
 
 canceled;
 
 theorem :: SCMPDS_4:13
-  s1,s2 equal_outside NAT implies for a being Int_position holds
+  NPP s1 = NPP s2 implies for a being Int_position holds
   s1.a = s2.a;
 
 theorem :: SCMPDS_4:14
-  s1,s2 equal_outside NAT implies s1.DataLoc(s1.a,k1)=s2.DataLoc(
-  s2.a,k1);
+  NPP s1 = NPP s2 implies s1.DataLoc(s1.a,k1)=s2.DataLoc(s2.a,k1);
 
 theorem :: SCMPDS_4:15
-  s1,s2 equal_outside NAT implies Exec(i,s1),Exec(i,s2)
-  equal_outside NAT;
+  NPP s1 = NPP s2 implies NPP Exec(i,s1) = NPP Exec(i,s2);
+
+registration
+ cluster SCMPDS -> Exec-preserving;
+end;
 
 canceled;
 
@@ -198,10 +207,10 @@ end;
 definition
  canceled;
   let I be Program of SCMPDS, s be State of SCMPDS;
-  func IExec(I,s) -> State of SCMPDS equals
+  let P be (the Instructions of SCMPDS)-valued ManySortedSet of NAT;
+  func IExec(I,P,s) -> State of SCMPDS equals
 :: SCMPDS_4:def 8
-  Result(ProgramPart(Initialize s+*stop(I)),Initialize s+*stop(I)) +*
-  s|NAT;
+  Result(P+*stop I,Initialize s) +* s|NAT;
 end;
 
 definition
@@ -209,14 +218,17 @@ definition
   attr I is paraclosed means
 :: SCMPDS_4:def 9
 
-  for s being 0-started State of SCMPDS, n being Element of NAT
-   st stop(I) c= s
-   holds IC Comput(ProgramPart(s),s,n) in dom stop(I);
+  for s being 0-started State of SCMPDS, n being Element of NAT,
+      P being (the Instructions of SCMPDS)-valued ManySortedSet of NAT
+    st stop I c= P
+   holds IC Comput(P,s,n) in dom stop(I);
   attr I is parahalting means
 :: SCMPDS_4:def 10
 
-  for s being 0-started State of SCMPDS st stop(I) c= s
-    holds ProgramPart s halts_on s;
+  for s being 0-started State of SCMPDS,
+      P being (the Instructions of SCMPDS)-valued ManySortedSet of NAT
+    st stop I c= P
+    holds P halts_on s;
 end;
 
 registration
@@ -232,14 +244,18 @@ end;
 canceled 4;
 
 theorem :: SCMPDS_4:66
-  not ProgramPart(s2 +*((IC s2,succ IC s2) --> (goto 1, goto -1)))
-    halts_on s2 +*((IC s2,succ IC s2) --> (goto 1, goto -1));
+ for P,Q being (the Instructions of SCMPDS)-valued ManySortedSet of NAT
+  st Q = P +*((IC s,succ IC s) --> (goto 1, goto -1))
+ holds
+  not Q halts_on s;
 
 theorem :: SCMPDS_4:67
-  s1,s2 equal_outside NAT & I c= s1 & I c= s2 & (for m st m < n
-  holds IC (Comput(ProgramPart(s2),s2,m)) in dom I) implies for m st m <= n
+ for P1,P2 being (the Instructions of SCMPDS)-valued ManySortedSet of NAT
+  st NPP s1 = NPP s2 & I c= P1 & I c= P2 & (for m st m < n
+  holds IC (Comput(P2,s2,m)) in dom I)
+ for m st m <= n
 holds
-  Comput(ProgramPart(s1),s1,m), Comput(ProgramPart(s2),s2,m) equal_outside NAT;
+  NPP Comput(P1,s1,m) = NPP Comput(P2,s2,m);
 
 reserve l1,l2 for Element of NAT,
   i1,i2 for Instruction of SCMPDS;
@@ -401,14 +417,15 @@ being Instruction of SCMPDS holds IC s1= m & i valid_at m & InsCode i <>
   Exec(i,s1) + n = IC Exec(i,s2) & DataPart Exec(i,s1) = DataPart Exec(i,s2);
 
 theorem :: SCMPDS_4:84
+  for P1,P2 being (the Instructions of SCMPDS)-valued ManySortedSet of NAT
   for s1 being 0-started State of SCMPDS
-  for J being parahalting shiftable Program of SCMPDS st stop J c= s1
-  for n being Element of NAT st Shift(stop J,n) c= s2 &
+  for J being parahalting shiftable Program of SCMPDS st stop J c= P1
+  for n being Element of NAT st Shift(stop J,n) c= P2 &
     IC s2 = n & DataPart s1 = DataPart s2
   for i being Element of NAT holds
-   IC Comput(ProgramPart(s1),s1,i) + n = IC Comput(ProgramPart(s2),s2,i) &
-    CurInstr(ProgramPart(s1),Comput(ProgramPart(s1),s1,i)) =
-     CurInstr(ProgramPart(s2),Comput(ProgramPart(s2),s2,i)) &
-    DataPart Comput(ProgramPart(s1),s1,i) = DataPart
-       Comput(ProgramPart(s2),s2,i);
+   IC Comput(P1,s1,i) + n = IC Comput(P2,s2,i) &
+    CurInstr(P1,Comput(P1,s1,i)) =
+     CurInstr(P2,Comput(P2,s2,i)) &
+    DataPart Comput(P1,s1,i) = DataPart
+       Comput(P2,s2,i);
 

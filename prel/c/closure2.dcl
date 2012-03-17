@@ -276,29 +276,6 @@
 <FCluster aid="CLOSURE2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="4"/>
-<Adjective nr="9"/>
-</Cluster>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="4"/>
-<Adjective nr="9"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="2">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="12"/>
-</Cluster>
-</FCluster>
-<FCluster aid="CLOSURE2" nr="2">
-<ArgTypes>
-<Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Typ kind="M" nr="1">
@@ -324,7 +301,7 @@
 <Adjective nr="37"/>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="3">
+<FCluster aid="CLOSURE2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -342,7 +319,7 @@
 <Adjective nr="9"/>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="4">
+<FCluster aid="CLOSURE2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -388,7 +365,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="5">
+<FCluster aid="CLOSURE2" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -434,7 +411,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="6">
+<FCluster aid="CLOSURE2" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -472,7 +449,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="7">
+<FCluster aid="CLOSURE2" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -496,7 +473,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="8">
+<FCluster aid="CLOSURE2" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -526,7 +503,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="9">
+<FCluster aid="CLOSURE2" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -556,7 +533,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="10">
+<FCluster aid="CLOSURE2" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -586,7 +563,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="11">
+<FCluster aid="CLOSURE2" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -616,7 +593,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="12">
+<FCluster aid="CLOSURE2" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -646,7 +623,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="13">
+<FCluster aid="CLOSURE2" nr="12">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -676,7 +653,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="14">
+<FCluster aid="CLOSURE2" nr="13">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -724,7 +701,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="15">
+<FCluster aid="CLOSURE2" nr="14">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -775,7 +752,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="16">
+<FCluster aid="CLOSURE2" nr="15">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -826,7 +803,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="17">
+<FCluster aid="CLOSURE2" nr="16">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -877,7 +854,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="18">
+<FCluster aid="CLOSURE2" nr="17">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -928,7 +905,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="19">
+<FCluster aid="CLOSURE2" nr="18">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -979,7 +956,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="20">
+<FCluster aid="CLOSURE2" nr="19">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -1030,7 +1007,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="CLOSURE2" nr="21">
+<FCluster aid="CLOSURE2" nr="20">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -1120,18 +1097,6 @@
 </Cluster>
 </FCluster>
 <CCluster aid="CLOSURE2" nr="1">
-<ArgTypes/>
-<Cluster>
-<Adjective nr="1"/>
-</Cluster>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="12"/>
-</Cluster>
-</CCluster>
-<CCluster aid="CLOSURE2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -1171,7 +1136,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster aid="CLOSURE2" nr="3">
+<CCluster aid="CLOSURE2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -1211,7 +1176,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster aid="CLOSURE2" nr="4">
+<CCluster aid="CLOSURE2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -1251,7 +1216,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster aid="CLOSURE2" nr="5">
+<CCluster aid="CLOSURE2" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -1288,7 +1253,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster aid="CLOSURE2" nr="6">
+<CCluster aid="CLOSURE2" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -1328,7 +1293,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster aid="CLOSURE2" nr="7">
+<CCluster aid="CLOSURE2" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -1365,7 +1330,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster aid="CLOSURE2" nr="8">
+<CCluster aid="CLOSURE2" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -1433,7 +1398,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster aid="CLOSURE2" nr="9">
+<CCluster aid="CLOSURE2" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -1454,7 +1419,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster aid="CLOSURE2" nr="10">
+<CCluster aid="CLOSURE2" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -1475,7 +1440,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster aid="CLOSURE2" nr="11">
+<CCluster aid="CLOSURE2" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -1496,7 +1461,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster aid="CLOSURE2" nr="12">
+<CCluster aid="CLOSURE2" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>

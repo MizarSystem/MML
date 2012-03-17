@@ -2,7 +2,15 @@
 ::  by Noriko Asamoto
 ::
 :: Received August 27, 1996
-:: Copyright (c) 1996 Association of Mizar Users
+:: Copyright (c) 1996-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -11,19 +19,20 @@ environ
       CARD_1, FUNCOP_1, SCMFSA6A, ORDINAL4, AMI_3, FUNCT_4, INT_1, GRAPHSP,
       FSM_1, CIRCUIT2, SCMNORM, SCMFSA6B, GLIB_000, SF_MASTR, MSUALG_1,
       XBOOLE_0, PRE_POLY, UNIALG_2, AMISTD_2, SCMFSA7B, ORDINAL1, AFINSQ_1,
-      PBOOLE, SCMFSA6C;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, FUNCT_7, FINSEQ_1,
-      FINSEQ_2, NAT_D, FUNCOP_1, PBOOLE, AFINSQ_1, AFINSQ_2, COMPOS_1,
-      EXTPRO_1, AMI_1, SCMFSA_2, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B, INT_2,
-      XXREAL_0, PRE_POLY;
+      PBOOLE, SCMFSA6C, STRUCT_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, COMPLEX1,
+      NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2,
+      FUNCT_4, DOMAIN_1, VALUED_1, AFINSQ_1, STRUCT_0, COMPOS_1, EXTPRO_1,
+      FUNCT_7, SCMFSA_2, AMISTD_2, FUNCOP_1, XXREAL_0, ENUMSET1, NAT_D, PBOOLE,
+      AFINSQ_2, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B, INT_2, PRE_POLY;
  constructors ENUMSET1, XXREAL_0, REAL_1, SCMFSA_7, SCMFSA6A, SF_MASTR,
-      SCMFSA6B, NAT_D, RELSET_1, PRE_POLY, DOMAIN_1, AFINSQ_2, PARTFUN3, AMI_1,
-      PBOOLE;
+      SCMFSA6B, NAT_D, RELSET_1, PRE_POLY, DOMAIN_1, AFINSQ_2, PARTFUN3,
+      PBOOLE, AMISTD_1, AMISTD_2, AMI_3;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, NUMBERS,
-      XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, FUNCT_7, AMI_1, SCMFSA_2,
-      SF_MASTR, SCMFSA6B, ORDINAL1, FINSET_1, FINSEQ_2, CARD_1, AFINSQ_1,
-      COMPOS_1, AFINSQ_2, ORDINAL5, EXTPRO_1, PBOOLE, FUNCT_4;
+      XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, FUNCT_7, SCMFSA_2, SF_MASTR,
+      SCMFSA6B, ORDINAL1, FINSET_1, FINSEQ_2, CARD_1, AFINSQ_1, COMPOS_1,
+      AFINSQ_2, ORDINAL5, EXTPRO_1, PBOOLE, FUNCT_4, STRUCT_0, SCMFSA6A,
+      SCMFSA_4, VALUED_1, SCMFSA10, AMISTD_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -82,11 +91,11 @@ definition
   let a be Int-Location;
   pred i refers a means
 :: SCMFSA7B:def 1
-  not for b being Int-Location for l being
-Element of NAT for f being FinSeq-Location holds b := a <> i &
+  not for b being Int-Location, l being Element of NAT
+   for f being FinSeq-Location holds b := a <> i &
   AddTo(b,a) <> i & SubFrom(b,a) <> i & MultBy(b,a) <> i & Divide(b,a) <> i &
-Divide(a,b) <> i & a =0_goto l <> i & a >0_goto l <> i & b :=(f,a) <> i & (f,b)
-  := a <> i & (f,a):= b <> i & f :=<0,...,0> a <> i;
+  Divide(a,b) <> i & a =0_goto l <> i & a >0_goto l <> i & b :=(f,a) <> i &
+  (f,b) := a <> i & (f,a):= b <> i & f :=<0,...,0> a <> i;
 end;
 
 definition
@@ -105,8 +114,8 @@ definition
 
   not for b being Int-Location for f being
   FinSeq-Location holds a := b <> i & AddTo(a,b) <> i & SubFrom(a,b) <> i &
-  MultBy(a,b) <> i & Divide(a,b) <> i & Divide(b,a) <> i & a :=(f,b) <> i & a
-  :=len f <> i;
+  MultBy(a,b) <> i & Divide(a,b) <> i & Divide(b,a) <> i & a :=(f,b) <> i &
+  a :=len f <> i & a:==1 <> i;
 end;
 
 definition
@@ -171,7 +180,7 @@ theorem :: SCMFSA7B:21
 
 theorem :: SCMFSA7B:22
   for a,b being Int-Location, f being FinSeq-Location holds a <> b
-  implies not b :=len f destroy a;
+  implies b :=len f does not destroy a;
 
 theorem :: SCMFSA7B:23
   for a,b being Int-Location, f being FinSeq-Location holds
@@ -179,18 +188,18 @@ theorem :: SCMFSA7B:23
 
 definition
   canceled;
-  let I be FinPartState of SCM+FSA;
+  let I be Program of SCM+FSA;
   let s be State of SCM+FSA;
   let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
   pred I is_closed_on s,P means
 :: SCMFSA7B:def 7
 
   for k being Element of NAT holds
-   IC Comput(P+*ProgramPart I,s +* (Initialize I),k) in dom I;
+   IC Comput(P+*I,Initialize s,k) in dom I;
   pred I is_halting_on s,P means
 :: SCMFSA7B:def 8
 
-   P +* ProgramPart I halts_on s +* (Initialize I);
+   P +* I halts_on Initialize s;
 end;
 
 theorem :: SCMFSA7B:24
@@ -216,7 +225,7 @@ theorem :: SCMFSA7B:27
       I being Program of SCM+FSA, a being Int-Location
        st not I destroy a & I is_closed_on s,P
     for k being
-  Element of NAT holds Comput(P +* I,s +* Initialize I,k).a
+  Element of NAT holds Comput(P +* I,Initialize s,k).a
         = s.a;
 
 registration
@@ -250,3 +259,7 @@ registration
   let a be read-write Int-Location, k be Integer;
   cluster a := k -> keeping_0;
 end;
+
+theorem :: SCMFSA7B:31
+  for a,b being Int-Location holds a <> b
+  implies b :==1 does not destroy a;

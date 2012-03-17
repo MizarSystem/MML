@@ -1,0 +1,316 @@
+:: Borel-Cantelli Lemma
+::  by Peter Jaeger
+:: 
+:: Received January 31, 2011
+:: Copyright (c) 2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies BOR_CANT, REALSET1, ABIAN, SIN_COS, ARYTM_3, CARD_3, XREAL_0,
+      EQREL_1, COMPLEX1, NUMBERS, ORDINAL1, ZFMISC_1, CARD_1, XXREAL_0, NEWTON,
+      REAL_1, RELAT_1, PROB_1, SEQ_1, SEQ_2, ARYTM_1, ORDINAL2, RPR_1,
+      XBOOLE_0, SUBSET_1, PROB_2, SERIES_1, NAT_1, FUNCT_1, PROB_3, SERIES_3,
+      LIMFUNC1, SETLIM_1, XXREAL_2, FUNCOP_1;
+ notations XXREAL_0, XCMPLX_0, XREAL_0, SIN_COS, ORDINAL1, REAL_1, XBOOLE_0,
+      SUBSET_1, NUMBERS, NAT_1, COMPLEX1, SEQ_1, SEQ_2, FUNCT_1, RELSET_1,
+      PARTFUN1, FUNCT_2, FUNCOP_1, PROB_1, PROB_2, SETLIM_1, SERIES_1, PROB_3,
+      VALUED_0, VALUED_1, ZFMISC_1, LIMFUNC1, SERIES_3, NEWTON, ABIAN;
+ constructors RELSET_1, BINARITH, SQUARE_1, COMSEQ_3, RVSUM_1, SIN_COS, REAL_1,
+      LIMFUNC1, SETLIM_1, SEQ_2, SERIES_1, KURATO_2, RINFSUP1, SEQ_1, PROB_3,
+      SERIES_3, ABIAN, NEWTON, NUMBERS;
+ registrations FUNCT_2, FINSEQ_2, XCMPLX_0, XBOOLE_0, SUBSET_1, ORDINAL1,
+      NUMBERS, XREAL_0, NAT_1, MEMBERED, VALUED_0, VALUED_1, ABIAN, XXREAL_0,
+      RELAT_1, SEQ_4, FINSEQ_1, NEWTON, FUNCOP_1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+reserve Omega for non empty set,
+        Sigma for SigmaField of Omega,
+        Prob for Probability of Sigma,
+        A for SetSequence of Sigma,
+        n,n1,n2 for Element of NAT;
+
+definition
+  let D be set;
+  let x,y be ext-real number, a,b be Element of D;
+  redefine func IFGT(x,y,a,b) -> Element of D;
+end;
+
+theorem :: BOR_CANT:1
+for k being Element of NAT,x being Element of REAL st k is odd & x>0 & x<=1
+  holds ((-x) rExpSeq).(k+1) + ((-x) rExpSeq).(k+2) >= 0;
+
+theorem :: BOR_CANT:2
+for x being Element of REAL holds 1+x <= exp_R.x;
+
+definition let s be Real_Sequence;
+  func JSum(s) -> Real_Sequence means
+:: BOR_CANT:def 1
+  for d being Nat holds it.d = Sum( (-s.d) rExpSeq);
+end;
+
+theorem :: BOR_CANT:3
+  Partial_Product(JSum(Prob*A)).n = exp_R.(-Partial_Sums(Prob*A).n);
+
+theorem :: BOR_CANT:4
+  Partial_Product(Prob*(@Complement A)).n <=
+  Partial_Product(JSum(Prob*A)).n;
+
+definition
+  let n1,n2 be Element of NAT;
+  func Special_Function(n1,n2) -> sequence of NAT means
+:: BOR_CANT:def 2
+  for n being Element of NAT holds it.n = IFGT(n,n1,n+n2,n);
+end;
+
+definition let k be Element of NAT;
+  func Special_Function2(k) -> sequence of NAT means
+:: BOR_CANT:def 3
+  for n being Element of NAT holds it.n = n+k;
+end;
+
+definition let k be Element of NAT;
+  func Special_Function3(k) -> sequence of NAT means
+:: BOR_CANT:def 4
+  for n being Element of NAT holds it.n = IFGT(n,k,0,1);
+end;
+
+definition
+  let n1,n2 be Element of NAT;
+  func Special_Function4(n1,n2) -> sequence of NAT means
+:: BOR_CANT:def 5
+  for n being Element of NAT holds it.n = IFGT(n,n1+1,n+n2,n);
+end;
+
+registration
+  let n1,n2 be Element of NAT;
+  cluster Special_Function(n1,n2) -> one-to-one;
+  cluster Special_Function4(n1,n2) -> one-to-one;
+end;
+
+registration
+  let n be Element of NAT;
+  cluster Special_Function2(n) -> one-to-one;
+end;
+
+definition
+  let X be set, s be Element of NAT,
+  A be SetSequence of X;
+  func Shift_Seq(A,s) -> SetSequence of X equals
+:: BOR_CANT:def 6
+  A^\s;
+end;
+
+definition
+  let Omega be non empty set;
+  let Sigma be SigmaField of Omega;
+  let s be Element of NAT;
+  let A be SetSequence of Sigma;
+  func @Shift_Seq(A,s) -> SetSequence of Sigma equals
+:: BOR_CANT:def 7
+  Shift_Seq(A,s);
+end;
+
+theorem :: BOR_CANT:5
+( for A,B being SetSequence of Sigma
+    st n>n1 & B=A*Special_Function(n1,n2) holds
+    (Partial_Product (Prob*B)).n =
+    (Partial_Product (Prob*A)).n1 *
+     (Partial_Product (Prob*@Shift_Seq(A,n1+n2+1))).(n-n1-1) ) &
+( for A,B,C being SetSequence of Sigma,
+    e being sequence of NAT
+    st n>n1 & C = A*e & B=C*Special_Function(n1,n2) holds
+    (@Partial_Intersection B).n =
+    (@Partial_Intersection C).n1 /\
+     (@Partial_Intersection @Shift_Seq(C,n1+n2+1)).(n-n1-1) );
+
+definition
+  let Omega be non empty set, Sigma be SigmaField of Omega,
+      Prob be Probability of Sigma, A be SetSequence of Sigma;
+  pred A is_all_independent_wrt Prob means
+:: BOR_CANT:def 8
+   for B being SetSequence of Sigma st
+    (ex e being sequence of NAT st
+     (e is one-to-one &
+      (for n being Element of NAT holds A.(e.n) = B.n) )) holds
+     (for n being Element of NAT holds (Partial_Product(Prob*B)).n=
+      Prob.((@Partial_Intersection B).n) );
+end;
+
+theorem :: BOR_CANT:6
+  n>n1 & A is_all_independent_wrt Prob implies
+    Prob.( (@Partial_Intersection @Complement A).n1 /\
+           (@Partial_Intersection @Shift_Seq(A,n1+n2+1)).(n-n1-1)) =
+    (Partial_Product (Prob*@Complement A)).n1 *
+    (Partial_Product (Prob*@Shift_Seq(A,n1+n2+1))).(n-n1-1);
+
+theorem :: BOR_CANT:7
+  (@Partial_Intersection @Complement A).n = ((@Partial_Union A).n)`;
+
+theorem :: BOR_CANT:8
+  Prob.( (@Partial_Intersection @Complement A).n ) =
+  1-Prob.( (@Partial_Union A).n );
+
+definition
+  let X be set, A be SetSequence of X;
+  func Union_Shift_Seq A -> SetSequence of X means
+:: BOR_CANT:def 9
+  for n being Element of NAT holds it.n = Union Shift_Seq(A,n);
+end;
+
+definition
+  let Omega be non empty set,
+  Sigma be SigmaField of Omega,
+  A be SetSequence of Sigma;
+  func @Union_Shift_Seq A -> SetSequence of Sigma equals
+:: BOR_CANT:def 10
+  Union_Shift_Seq A;
+end;
+
+definition
+  let Omega be non empty set, Sigma be SigmaField of Omega,
+      A be SetSequence of Sigma;
+  func @lim_sup A -> Event of Sigma equals
+:: BOR_CANT:def 11
+  @Intersection @Union_Shift_Seq A;
+end;
+
+definition
+  let X be set, A be SetSequence of X;
+  func Intersect_Shift_Seq A -> SetSequence of X means
+:: BOR_CANT:def 12
+  for n being Element of NAT holds it.n = Intersection Shift_Seq(A,n);
+end;
+
+definition
+  let Omega be non empty set,
+  Sigma be SigmaField of Omega,
+  A be SetSequence of Sigma;
+  func @Intersect_Shift_Seq A -> SetSequence of Sigma equals
+:: BOR_CANT:def 13
+  Intersect_Shift_Seq A;
+end;
+
+definition
+  let Omega be non empty set, Sigma be SigmaField of Omega,
+      A be SetSequence of Sigma;
+  func @lim_inf A -> Event of Sigma equals
+:: BOR_CANT:def 14
+  Union @Intersect_Shift_Seq A;
+end;
+
+theorem :: BOR_CANT:9
+  (@Intersect_Shift_Seq @Complement A).n =
+  ((@Union_Shift_Seq A).n)`;
+
+theorem :: BOR_CANT:10
+  A is_all_independent_wrt Prob implies
+     Prob.((@Partial_Intersection @Complement A).n) =
+      Partial_Product(Prob*@Complement A).n;
+
+theorem :: BOR_CANT:11
+  for X being set, A being SetSequence of X holds
+  superior_setsequence A = Union_Shift_Seq A &
+  inferior_setsequence A = Intersect_Shift_Seq A;
+
+theorem :: BOR_CANT:12
+  superior_setsequence A = @Union_Shift_Seq A &
+  inferior_setsequence A = @Intersect_Shift_Seq A;
+
+definition
+  let Omega be non empty set;
+  let Sigma be SigmaField of Omega;
+  let Prob be Probability of Sigma;
+  let A be SetSequence of Sigma;
+  func Sum_Shift_Seq(Prob,A) -> Real_Sequence means
+:: BOR_CANT:def 15
+  for n being Element of NAT holds it.n = Sum( Prob*@Shift_Seq(A,n) );
+end;
+
+theorem :: BOR_CANT:13
+  Partial_Sums(Prob*A) is convergent
+implies (Prob.@lim_sup A = 0 & lim(Sum_Shift_Seq(Prob,A))=0 &
+       Sum_Shift_Seq(Prob,A) is convergent);
+
+theorem :: BOR_CANT:14
+( for X being set, A being SetSequence of X holds
+       for n being Element of NAT, x being set holds
+      ( (ex k being Element of NAT st x in Shift_Seq(A,n).k)
+         iff (ex k being Element of NAT st k>=n & x in A.k) ) ) &
+( for X being set, A being SetSequence of X holds
+      for x being set holds x in Intersection Union_Shift_Seq A iff
+      for m being Element of NAT holds
+       ex n being Element of NAT st n>=m & x in A.n ) &
+( for A being SetSequence of Sigma holds
+              for x being set holds
+           x in @Intersection @Union_Shift_Seq A iff
+           for m being Element of NAT holds
+            ex n being Element of NAT st n>=m & x in A.n ) &
+( for X being set, A being SetSequence of X holds
+        for x being set holds
+        ( (x in Union Intersect_Shift_Seq A ) iff
+         (ex n being Element of NAT st
+           for k being Element of NAT st k>=n holds x in A.k ) ) ) &
+( for A being SetSequence of Sigma holds
+             for x being set holds
+         ( (x in Union @Intersect_Shift_Seq A ) iff
+         (ex n being Element of NAT st
+           for k being Element of NAT st k>=n holds x in A.k ) ) ) &
+( for A being SetSequence of Sigma holds
+              for x being Element of Omega holds
+       ( (x in Union @Intersect_Shift_Seq (@Complement A) ) iff
+        (ex n being Element of NAT st
+          for k being Element of NAT st k>=n holds not x in A.k ) ) );
+
+theorem :: BOR_CANT:15
+  lim_sup A = @lim_sup A &
+  lim_inf A = @lim_inf A &
+  @lim_inf @Complement A = (@lim_sup A)` &
+  Prob.(@lim_inf @Complement A) + Prob.(@lim_sup A) = 1 &
+  Prob.(lim_inf @Complement A) + Prob.(lim_sup A) = 1;
+
+theorem :: BOR_CANT:16
+(Partial_Sums(Prob*A) is convergent
+ implies Prob.lim_sup A = 0 &
+         Prob.lim_inf @Complement A = 1 ) &
+(A is_all_independent_wrt Prob &
+ Partial_Sums(Prob*A) is divergent_to+infty
+  implies Prob.lim_inf @Complement A = 0 &
+          Prob.lim_sup A = 1);
+
+theorem :: BOR_CANT:17
+ (not Partial_Sums(Prob*A) is convergent &
+   A is_all_independent_wrt Prob) implies
+  (Prob.lim_inf @Complement A = 0 & Prob.lim_sup A = 1);
+
+theorem :: BOR_CANT:18
+A is_all_independent_wrt Prob implies
+  (Prob.lim_inf @Complement A = 0 or
+   Prob.lim_inf @Complement A = 1) &
+   (Prob.lim_sup A = 0 or Prob.lim_sup A = 1);
+
+theorem :: BOR_CANT:19
+(Partial_Sums(Prob*@Shift_Seq(A,n1+1))).n <=
+Partial_Sums(Prob*A).(n1+1+n) - Partial_Sums(Prob*A).n1;
+
+theorem :: BOR_CANT:20
+Prob.( (@Intersect_Shift_Seq @Complement A).n ) =
+  1-Prob.( (@Union_Shift_Seq A).n );
+
+theorem :: BOR_CANT:21
+( @Complement A is_all_independent_wrt Prob implies
+    Prob.((@Partial_Intersection A).n) =
+     Partial_Product(Prob*A).n ) &
+( A is_all_independent_wrt Prob implies
+    1-Prob.( (@Partial_Union A).n ) =
+     Partial_Product(Prob* @Complement A).n);

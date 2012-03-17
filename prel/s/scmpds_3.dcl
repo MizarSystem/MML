@@ -32,20 +32,19 @@
 <ArticleID name="COMPOS_1"/>
 <ArticleID name="EXTPRO_1"/>
 <ArticleID name="SCMPDS_2"/>
-<ArticleID name="AMI_1"/>
 <ArticleID name="AMISTD_2"/>
 <ArticleID name="AMISTD_5"/>
 </Signature>
 <FCluster aid="SCMPDS_3" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 <Cluster>
 <Adjective nr="82">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
 </Adjective>
-<Adjective nr="96">
+<Adjective nr="95">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
@@ -54,14 +53,14 @@
 </FCluster>
 <FCluster aid="SCMPDS_3" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="298"/>
+<Func kind="K" nr="297"/>
 <Cluster>
 <Adjective nr="82">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>
 </Adjective>
-<Adjective nr="97">
+<Adjective nr="96">
 <Func kind="K" nr="1">
 <Func kind="K" nr="66"/>
 </Func>

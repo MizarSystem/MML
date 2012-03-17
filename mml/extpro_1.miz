@@ -2,7 +2,15 @@
 ::  by Yatsuka Nakamura and Andrzej Trybulec
 ::
 :: Received June 30, 2010
-:: Copyright (c) 2010 Association of Mizar Users
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -14,7 +22,7 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, SETFAM_1, ORDINAL1,
       PBOOLE, NUMBERS, FUNCT_7, CARD_3, XCMPLX_0, RELAT_1, FUNCT_1, PARTFUN1,
       FINSET_1, NAT_1, FUNCOP_1, FUNCT_4, FINSEQ_1, FUNCT_2, DOMAIN_1,
-      RECDEF_2, STRUCT_0, GROUP_9, XXREAL_0, COMPOS_1;
+      RECDEF_2, STRUCT_0, XXREAL_0, COMPOS_1;
  constructors SETFAM_1, DOMAIN_1, FUNCT_4, XXREAL_0, FUNCT_7, GRAPH_2,
       RELSET_1, PRE_POLY, PBOOLE, RECDEF_2, COMPOS_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
@@ -597,7 +605,7 @@ definition
 :Def9:
   for P,Q being (the Instructions of S)-valued ManySortedSet of NAT
    st ProgramPart IT c= P & ProgramPart IT c= Q
-  for s1,s2 being State of S st IT c= s1 & IT c= s2
+  for s1,s2 being State of S st NPP IT c= s1 & NPP IT c= s2
   for i holds Comput(P,s1,i)|dom NPP IT = Comput(Q,s2,i)|dom NPP IT;
 end;
 
@@ -608,7 +616,7 @@ definition
   let IT be PartState of S;
   attr IT is halting means
 :Def10:
-  for s being State of S st IT c= s
+  for s being State of S st NPP IT c= s
   for P being (the Instructions of S)-valued ManySortedSet of NAT
    st ProgramPart IT c= P
   holds P halts_on s;
@@ -657,15 +665,15 @@ A1: l .--> halt S c= P;
    set h = halt S;
    set I = p +* P;
    let s be State of S such that
-A2: I c= s;
+A2: NPP I c= s;
    let Q be (the Instructions of S)-valued ManySortedSet of NAT such that
 A3: ProgramPart I c= Q;
 A4: P c= I by FUNCT_4:26;
    take 0;
-     IC Comput(Q,s,0) in NAT;
      dom Q = NAT by PARTFUN1:def 4;
-   hence IC Comput(Q,s,0) in dom Q by COMPOS_1:34;
+   hence IC Comput(Q,s,0) in dom Q;
     Start-At(l,S) c= I by COMPOS_1:151;
+    then Start-At(l,S) c= NPP I by COMPOS_1:204;
     then
 A5: Start-At(l,S) c= s by A2,XBOOLE_1:1;
     l.-->h c= I by A1,A4,XBOOLE_1:1;
@@ -745,15 +753,13 @@ A1: l .--> halt S c= P;
 A2: ProgramPart I c= Q1 & ProgramPart I c= Q2;
   let s1,s2 be State of S;
     assume that
-A3: I c= s1 and
-A4: I c= s2;
+A3: NPP I c= s1 and
+A4: NPP I c= s2;
     let i;
 A5: P|NAT = P by RELAT_1:209;
-A6: NPP I c= I by XBOOLE_1:36;
-    then
-A7: NPP I c= s1 by A3,XBOOLE_1:1;
-A8: NPP I c= s2 by A4,A5,XBOOLE_1:1;
-A9: P c= I by FUNCT_4:26;
+A7: NPP I c= s1 by A3;
+A8: NPP I c= s2 by A4;
+ P c= I by FUNCT_4:26;
     then P c= ProgramPart I by A5,RELAT_1:105;
     then P c= Q1 & P c= Q2 by A2,XBOOLE_1:1;
     then
@@ -835,58 +841,66 @@ definition
   assume
 A1: d is Autonomy of p & p = ProgramPart d;
   func Result(p,d) -> FinPartState of S means
+  for P being (the Instructions of S)-valued ManySortedSet of NAT
+   st p c= P
   for s being State of S st d c= s
-  holds it = (Result(ProgramPart s,s))|dom NPP d;
+  holds it = (Result(P,s))|dom NPP d;
   existence
   proof
     consider h being State of S such that
 A2:  d c= h by PBOOLE:156;
+B2:  NPP d c= h by A2,XBOOLE_1:1;
 A3: ProgramPart d c= ProgramPart h by A2,RELAT_1:105;
     d +* p = d by A1,FUNCT_4:80;
     then
 A4:  d is halting autonomic by A1,Def11;
-    then ProgramPart h halts_on h by A2,Def10,A3;
+    then ProgramPart h halts_on h by Def10,A3,B2;
     then consider k1 being Element of NAT such that
 A5: Result(ProgramPart(h),h) = Comput(ProgramPart h,h,k1) and
 A6: CurInstr(ProgramPart(h), Result(ProgramPart(h),h)) =
 halt S by Def8;
     reconsider R = (Result(ProgramPart(h),h))|dom NPP d as FinPartState of S;
     take R;
+    let P be (the Instructions of S)-valued ManySortedSet of NAT such that
+ZD:  p c= P;
     let s be State of S such that
 A7: d c= s;
-    ProgramPart d c= ProgramPart s by A7,RELAT_1:105;
-    then ProgramPart s halts_on s by A7,Def10,A4;
+B7: NPP d c= s by A7,XBOOLE_1:1;
+    then P halts_on s by Def10,A4,A1,ZD;
     then consider k2 being Element of NAT such that
-A8: Result(ProgramPart(s),s) = Comput(ProgramPart s,s,k2) and
-A9: CurInstr(ProgramPart(s), Result(ProgramPart(s),s)) = halt S by Def8;
+A8: Result(P,s) = Comput(P,s,k2) and
+A9: CurInstr(P, Result(P,s)) = halt S by Def8;
 A10: ProgramPart d c= ProgramPart h by A2,RELAT_1:105;
-A11: ProgramPart d c= ProgramPart s by A7,RELAT_1:105;
       per cases;
       suppose
         k1 <= k2;
         then Result(ProgramPart(h),h) = Comput(ProgramPart h,h,k2)
          by A5,A6,Th6;
-        hence R = (Result(ProgramPart s,s))|dom NPP d
-            by A2,A7,A8,Def9,A4,A10,A11;
+        hence R = (Result(P,s))|dom NPP d
+            by A8,Def9,A4,A10,A1,ZD,B2,B7;
       end;
       suppose
         k1 >= k2;
-        then Result(ProgramPart(s),s) = Comput(ProgramPart s,s,k1)
-         by A8,A9,Th6;
-        hence thesis by A2,A7,A5,Def9,A4,A10,A11;
+        then Result(P,s) = Comput(P,s,k1) by A8,A9,Th6;
+        hence thesis by A5,Def9,A4,A10,A1,ZD,B2,B7;
       end;
   end;
   correctness
   proof
     consider h being State of S such that
 A12:  d c= h by PBOOLE:156;
+B12:  ProgramPart d c= ProgramPart h by A12,RELAT_1:105;
     let p1,p2 be FinPartState of S such that
-A13: for s being State of S st d c= s
- holds p1 = (Result(ProgramPart(s),s))|dom NPP d and
-A14: for s being State of S st d c= s
- holds p2 = (Result(ProgramPart(s),s))|dom NPP d;
-    thus p1 = (Result(ProgramPart(h),h))|dom NPP d by A13,A12
-      .= p2 by A14,A12;
+A13:   for P being (the Instructions of S)-valued ManySortedSet of NAT
+    st p c= P
+  for s being State of S st d c= s
+  holds p1 = (Result(P,s))|dom NPP d and
+A14:   for P being (the Instructions of S)-valued ManySortedSet of NAT
+   st p c= P
+  for s being State of S st d c= s
+  holds p2 = (Result(P,s))|dom NPP d;
+    thus p1 = (Result(ProgramPart h,h))|dom NPP d by A1,A13,A12,B12
+      .= p2 by A1,A14,A12,B12;
   end;
 end;
 
@@ -1530,9 +1544,11 @@ A2:    x in rng ProgramPart p by XBOOLE_0:def 1;
 A3:  i <> halt S;
     reconsider s = (the State of S) +* (NAT --> i) +* p as State of S;
 A4:   p c= s by FUNCT_4:26;
+     then
+B4:   NPP p c= s by XBOOLE_1:1;
 A5:  ProgramPart p c= ProgramPart s by RELAT_1:105,FUNCT_4:26;
     ProgramPart p c= ProgramPart s by A4,RELAT_1:105;
-    then ProgramPart s halts_on s by A4,Def10;
+    then ProgramPart s halts_on s by Def10,B4;
     then consider k being Nat such that
  IC Comput(ProgramPart s,s,k) in dom ProgramPart s and
 A6: CurInstr(ProgramPart s,Comput(ProgramPart s,s,k)) = halt S by Def7;

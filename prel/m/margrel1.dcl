@@ -332,32 +332,4 @@
 <Adjective nr="42"/>
 </Cluster>
 </CCluster>
-<CCluster aid="MARGREL1" nr="4">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="9"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Cluster>
-<Adjective nr="6"/>
-</Cluster>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="21">
-<Func kind="K" nr="22">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="6"/>
-<Adjective nr="18"/>
-</Cluster>
-</CCluster>
 </Registrations>

@@ -36,15 +36,6 @@
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL2"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="ENUMSET1"/>
-<ArticleID name="DOMAIN_1"/>
-<ArticleID name="RELAT_2"/>
-<ArticleID name="EQREL_1"/>
-<ArticleID name="CONNSP_2"/>
-<ArticleID name="RELSET_1"/>
-<ArticleID name="BORSUK_1"/>
-<ArticleID name="TOPMETR"/>
 <ArticleID name="JORDAN6"/>
 </Signature>
 <FCluster aid="JORDAN6" nr="1">
@@ -63,7 +54,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="374">
+<Func kind="K" nr="294">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -91,7 +82,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="373">
+<Func kind="K" nr="293">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -103,17 +94,4 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster aid="JORDAN6" nr="1">
-<ArgTypes/>
-<Cluster/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="U" nr="1">
-<Func kind="K" nr="363"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="12"/>
-</Cluster>
-</CCluster>
 </Registrations>

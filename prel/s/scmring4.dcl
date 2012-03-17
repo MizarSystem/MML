@@ -39,7 +39,6 @@
 <ArticleID name="AMI_2"/>
 <ArticleID name="SCMRING1"/>
 <ArticleID name="SCMRING2"/>
-<ArticleID name="AMI_1"/>
 <ArticleID name="AMISTD_5"/>
 </Signature>
 <FCluster aid="SCMRING4" nr="1">
@@ -59,7 +58,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="361">
+<Func kind="K" nr="360">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -70,7 +69,7 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="159">
+<Adjective nr="158">
 <Func kind="K" nr="72">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -96,7 +95,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="361">
+<Func kind="K" nr="360">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -107,7 +106,7 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="160">
+<Adjective nr="159">
 <Func kind="K" nr="72">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -133,7 +132,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="361">
+<Func kind="K" nr="360">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -144,7 +143,7 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="161">
+<Adjective nr="160">
 <Func kind="K" nr="72">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -170,7 +169,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="361">
+<Func kind="K" nr="360">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -181,14 +180,14 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="162">
+<Adjective nr="161">
 <Func kind="K" nr="72">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="163">
+<Adjective nr="162">
 <Func kind="K" nr="72">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>

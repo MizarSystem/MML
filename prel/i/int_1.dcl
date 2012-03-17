@@ -142,17 +142,6 @@
 </CCluster>
 <CCluster aid="INT_1" nr="2">
 <ArgTypes/>
-<Cluster/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="32"/>
-</Typ>
-<Cluster>
-<Adjective nr="16"/>
-</Cluster>
-</CCluster>
-<CCluster aid="INT_1" nr="3">
-<ArgTypes/>
 <Cluster>
 <Adjective nr="10"/>
 </Cluster>
@@ -163,7 +152,7 @@
 <Adjective nr="16"/>
 </Cluster>
 </CCluster>
-<CCluster aid="INT_1" nr="4">
+<CCluster aid="INT_1" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="16"/>

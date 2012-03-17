@@ -2,7 +2,15 @@
 ::  by Grzegorz Bancerek
 ::
 :: Received April 4, 1989
-:: Copyright (c) 1990 Association of Mizar Users
+:: Copyright (c) 1990-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -82,42 +90,37 @@ end;
 
 definition
   let R,a;
-  defpred P[set] means $1 <> a & [$1,a] in R;
-  func R-Seg(a) -> set means
-  :Def1:
-  x in it iff x <> a & [x,a] in R;
-  existence
-  proof
-    consider X such that
-A1: x in X iff x in field R & P[x] from XBOOLE_0:sch 1;
-    take X;
-    let x;
-    thus x in X implies x <> a & [x,a] in R by A1;
-    assume that
-A2: x <> a and
-A3: [x,a] in R;
-    x in field R by A3,RELAT_1:30;
-    hence thesis by A1,A2,A3;
-  end;
-  uniqueness
-  proof
-    let X1,X2 be set such that
-A4: for b holds b in X1 iff P[b] and
-A5: for b holds b in X2 iff P[b];
-    thus thesis from XBOOLE_0:sch 2(A4,A5);
-  end;
+  func R-Seg(a) equals
+  Coim(R,a) \ {a};
+  coherence;
 end;
 
-canceled;
+theorem Th1:
+  x in R-Seg a iff x <> a & [x,a] in R
+proof
+  hereby
+    assume
+A1: x in R-Seg a;
+    hence x <> a by ZFMISC_1:64;
+    ex y st [x,y] in R & y in {a} by A1,RELAT_1:def 14;
+    hence [x,a] in R by TARSKI:def 1;
+  end;
+  assume that
+A2: x <> a and
+A3: [x,a] in R;
+  a in {a} by TARSKI:def 1;
+  then x in Coim(R,a) by A3,RELAT_1:def 14;
+  hence thesis by A2,ZFMISC_1:64;
+end;
 
 theorem Th2:
   x in field R or R-Seg(x) = {}
 proof
   assume
 A1: not x in field R;
-  set y =the  Element of R-Seg(x);
+  set y = the Element of R-Seg(x);
   assume R-Seg(x) <> {};
-  then [y,x] in R by Def1;
+  then [y,x] in R by Th1;
   hence contradiction by A1,RELAT_1:30;
 end;
 
@@ -202,7 +205,7 @@ A7: R-Seg(a) misses Y by A4,A5,Def3;
   assume
 A8: b in Y;
   then not b in R-Seg(a) by A7,XBOOLE_0:3;
-  then a = b or not [b,a] in R by Def1;
+  then a = b or not [b,a] in R by Th1;
   then a <> b implies [a,b] in R by A3,A4,A6,A8,RELAT_2:def 6;
   hence thesis by A2,A4,A6,RELAT_2:def 1;
 end;
@@ -230,7 +233,7 @@ A7: R-Seg(a) misses Y by A4,A5,Def2;
   assume
 A8: b in Y;
   then not b in R-Seg(a) by A7,XBOOLE_0:3;
-  then a = b or not [b,a] in R by Def1;
+  then a = b or not [b,a] in R by Th1;
   then a <> b implies [a,b] in R by A3,A4,A6,A8,Lm4;
   hence thesis by A2,A4,A6,Lm1;
 end;
@@ -287,7 +290,7 @@ theorem Th13:
 proof
   let b;
   assume b in R-Seg(a);
-  then [b,a] in R by Def1;
+  then [b,a] in R by Th1;
   hence thesis by RELAT_1:30;
 end;
 
@@ -349,15 +352,15 @@ end;
 theorem Th19:
   x in field(R |_2 X) implies x in field R & x in X
 proof
-A1: dom(X|R|X) = dom(X|R) /\ X & rng(X|(R|X)) = rng(R|X) /\ X by RELAT_1:90,
-  119;
+A1: dom(X|R|X) = dom(X|R) /\ X & rng(X|(R|X)) = rng(R|X) /\ X by RELAT_1:90,119
+;
   assume x in field(R |_2 X);
   then
 A2: x in dom(R |_2 X) or x in rng(R |_2 X) by XBOOLE_0:def 3;
 A3: dom(X|R) c= dom R & rng(R|X) c= rng R by Lm5,RELAT_1:99;
   R |_2 X = X|R|X & R |_2 X = X|(R|X) by Th17,Th18;
-  then x in dom(X|R) & x in X or x in rng(R|X) & x in X by A2,A1,XBOOLE_0:
-  def 4;
+  then x in dom(X|R) & x in X or x in rng(R|X) & x in X by A2,A1,XBOOLE_0:def 4
+;
   hence thesis by A3,XBOOLE_0:def 3;
 end;
 
@@ -375,11 +378,11 @@ proof
   let x;
   assume
 A1: x in (R |_2 X)-Seg(a);
-  then [x,a] in R |_2 X by Def1;
+  then [x,a] in R |_2 X by Th1;
   then
 A2: [x,a] in R by XBOOLE_0:def 4;
-  x <> a by A1,Def1;
-  hence thesis by A2,Def1;
+  x <> a by A1,Th1;
+  hence thesis by A2,Th1;
 end;
 
 theorem Th22:
@@ -547,11 +550,10 @@ theorem Th32:
   R is well-ordering implies R |_2 Y is well-ordering
 proof
   assume R is well-ordering;
-  then R is reflexive transitive connected antisymmetric well_founded by
-  Def4;
+  then R is reflexive transitive connected antisymmetric well_founded by Def4;
   hence
-  R |_2 Y is reflexive transitive antisymmetric connected well_founded by
-  Th22,Th23,Th24,Th25,Th31;
+  R |_2 Y is reflexive transitive antisymmetric connected well_founded by Th22
+,Th23,Th24,Th25,Th31;
 end;
 
 theorem Th33:
@@ -573,12 +575,12 @@ A5:     [b,a] in R;
           assume
 A6:       c in R-Seg(b);
           then
-A7:       [c,b] in R by Def1;
+A7:       [c,b] in R by Th1;
           then
 A8:       [c,a] in R by A1,A5,Lm2;
-          c <> b by A6,Def1;
+          c <> b by A6,Th1;
           then c <> a by A1,A5,A7,Lm3;
-          hence c in R-Seg(a) by A8,Def1;
+          hence c in R-Seg(a) by A8,Th1;
         end;
         hence R-Seg(b) c= R-Seg(a) by TARSKI:def 3;
       end;
@@ -590,12 +592,12 @@ A9:     [a,b] in R;
           assume
 A10:      c in R-Seg(a);
           then
-A11:      [c,a] in R by Def1;
+A11:      [c,a] in R by Th1;
           then
 A12:      [c,b] in R by A1,A9,Lm2;
-          c <> a by A10,Def1;
+          c <> a by A10,Th1;
           then c <> b by A1,A9,A11,Lm3;
-          hence c in R-Seg(b) by A12,Def1;
+          hence c in R-Seg(b) by A12,Th1;
         end;
         hence R-Seg(a) c= R-Seg(b) by TARSKI:def 3;
       end;
@@ -627,16 +629,16 @@ A3: R is transitive reflexive antisymmetric by A1,Def4;
     assume
 A4: c in R-Seg(b);
     then
-A5: [c,b] in R by Def1;
-A6: [b,a] in R by A2,Def1;
+A5: [c,b] in R by Th1;
+A6: [b,a] in R by A2,Th1;
     then
 A7: [c,a] in R by A3,A5,Lm2;
-A8: c <> b by A4,Def1;
+A8: c <> b by A4,Th1;
     then c <> a by A3,A5,A6,Lm3;
-    then c in R-Seg(a) by A7,Def1;
+    then c in R-Seg(a) by A7,Th1;
     then [c,b] in [:R-Seg(a),R-Seg(a):] by A2,ZFMISC_1:106;
     then [c,b] in S by A5,XBOOLE_0:def 4;
-    hence c in S-Seg(b) by A8,Def1;
+    hence c in S-Seg(b) by A8,Th1;
   end;
   then
 A9: R-Seg(b) c= S-Seg(b) by TARSKI:def 3;
@@ -644,11 +646,11 @@ A9: R-Seg(b) c= S-Seg(b) by TARSKI:def 3;
     let c;
     assume
 A10: c in S-Seg(b);
-    then [c,b] in S by Def1;
+    then [c,b] in S by Th1;
     then
 A11: [c,b] in R by XBOOLE_0:def 4;
-    c <> b by A10,Def1;
-    hence c in R-Seg(b) by A11,Def1;
+    c <> b by A10,Th1;
+    hence c in R-Seg(b) by A11,Th1;
   end;
   then S-Seg(b) c= R-Seg(b) by TARSKI:def 3;
   hence thesis by A9,XBOOLE_0:def 10;
@@ -670,13 +672,13 @@ A4: R is transitive by A1,Def4;
 A5: Y = R-Seg(a);
     let b such that
 A6: b in Y;
-A7: [b,a] in R by A5,A6,Def1;
+A7: [b,a] in R by A5,A6,Th1;
     let c such that
 A8: [c,b] in R;
 A9: [c,a] in R by A4,A8,A7,Lm2;
-    b <> a by A5,A6,Def1;
+    b <> a by A5,A6,Th1;
     then c <> a by A3,A8,A7,Lm3;
-    hence c in Y by A5,A9,Def1;
+    hence c in Y by A5,A9,Th1;
   end;
   hence Y = field R or (ex a st a in field R & Y = R-Seg(a) ) implies for a st
   a in Y for b st [b,a] in R holds b in Y by RELAT_1:30;
@@ -693,14 +695,14 @@ A13: now
     assume
 A14: b in R-Seg(a);
     then
-A15: [b,a] in R by Def1;
+A15: [b,a] in R by Th1;
     assume
 A16: not b in Y;
     b in field R by A15,RELAT_1:30;
     then b in field R \ Y by A16,XBOOLE_0:def 5;
     then
 A17: [a,b] in R by A12;
-    b <> a by A14,Def1;
+    b <> a by A14,Th1;
     hence contradiction by A3,A15,A17,Lm3;
   end;
   take a;
@@ -713,7 +715,7 @@ A19: not a in Y by A11,XBOOLE_0:def 5;
 A20: b in Y;
     assume not b in R-Seg(a);
     then
-A21: not [b,a] in R or a = b by Def1;
+A21: not [b,a] in R or a = b by Th1;
     a <> b by A11,A20,XBOOLE_0:def 5;
     then [a,b] in R by A2,A18,A11,A20,A21,Lm4;
     hence contradiction by A10,A20,A19;
@@ -739,12 +741,12 @@ A6: [a,b] in R;
     assume
 A7: c in R-Seg(a);
     then
-A8: [c,a] in R by Def1;
+A8: [c,a] in R by Th1;
     then
 A9: [c,b] in R by A5,A6,Lm2;
-    c <> a by A7,Def1;
+    c <> a by A7,Th1;
     then c <> b by A4,A6,A8,Lm3;
-    hence thesis by A9,Def1;
+    hence thesis by A9,Th1;
   end;
   assume
 A10: R-Seg(a) c= R-Seg(b);
@@ -754,8 +756,8 @@ A12: now
 A13: a <> b;
     assume not [a,b] in R;
     then [b,a] in R by A2,A3,A11,A13,Lm4;
-    then b in R-Seg(a) by A13,Def1;
-    hence contradiction by A10,Def1;
+    then b in R-Seg(a) by A13,Th1;
+    hence contradiction by A10,Th1;
   end;
   R is reflexive by A1,Def4;
   hence thesis by A2,A12,Lm1;
@@ -771,11 +773,11 @@ A1: R is well-ordering & a in field R & b in field R;
   proof
     assume R-Seg(a) c= R-Seg(b);
     then [a,b] in R by A1,Th37;
-    hence thesis by Def1;
+    hence thesis by Th1;
   end;
   now
     assume a in R-Seg(b);
-    then [a,b] in R by Def1;
+    then [a,b] in R by Th1;
     hence R-Seg(a) c= R-Seg(b) by A1,Th37;
   end;
   hence thesis;
@@ -823,7 +825,7 @@ A6: for b st [b,a] in R & a <> b holds b in Z;
     now
       let b;
       assume b in R-Seg(a);
-      then [b,a] in R & b <> a by Def1;
+      then [b,a] in R & b <> a by Th1;
       hence b in Z by A6;
     end;
     then R-Seg(a) c= Z by TARSKI:def 3;
@@ -859,7 +861,7 @@ A4: not [a,b] in R;
   R is reflexive by A1,Def4;
   then a <> b by A1,A4,Lm1;
   then [b,a] in R by A1,A3,A4,Lm4;
-  then b in R-Seg(a) by A4,Def1;
+  then b in R-Seg(a) by A4,Th1;
   hence contradiction by A2;
 end;
 
@@ -888,7 +890,7 @@ A8: now
 A9:   b in R-Seg(a);
       then
 A10:  [b,F.b] in R by A4,A7;
-A11:  [b,a] in R & b <> a by A9,Def1;
+A11:  [b,a] in R & b <> a by A9,Th1;
       then
 A12:  [F.b,F.a] in R by A2;
       hence [b,F.a] in R by A5,A10,Lm2;
@@ -1155,8 +1157,7 @@ A27:  b in field S by A23,RELAT_1:30;
 A28:  b = F.(F".b) by A3,A4,FUNCT_1:57;
 A29:  F".b in field R by A2,A3,A5,A27,FUNCT_1:def 5;
       F".a in field R by A2,A3,A5,A25,FUNCT_1:def 5;
-      then [F".a,F".b] in R & [F".b,F".a] in R by A1,A23,A24,A26,A28,A29,
-      Def7;
+      then [F".a,F".b] in R & [F".b,F".a] in R by A1,A23,A24,A26,A28,A29,Def7;
       hence a = b by A22,A26,A28,Lm3;
     end;
     hence thesis by Lm3;
@@ -1178,12 +1179,12 @@ A35: R-Seg(x) misses F"Z by A2,A3,A30,A31,A32,RELAT_1:174;
 A36: y in S-Seg(F.x) and
 A37: y in Z by XBOOLE_0:3;
 A38: F".y in dom F by A3,A5,A31,A37,FUNCT_1:def 5;
-A39: [y,F.x] in S by A36,Def1;
+A39: [y,F.x] in S by A36,Th1;
 A40: y = F.(F".y) by A3,A4,A31,A37,FUNCT_1:57;
   then F".y in F"Z by A37,A38,FUNCT_1:def 13;
   then not F".y in R-Seg(x) by A35,XBOOLE_0:3;
-  then not [F".y,x] in R or F".y = x by Def1;
-  hence contradiction by A1,A2,A33,A34,A36,A40,A38,A39,Def1,Def7;
+  then not [F".y,x] in R or F".y = x by Th1;
+  hence contradiction by A1,A2,A33,A34,A36,A40,A38,A39,Th1,Def7;
 end;
 
 theorem Th54:
@@ -1191,8 +1192,7 @@ theorem Th54:
 proof
   assume R is reflexive transitive antisymmetric connected well_founded & F
   is_isomorphism_of R,S;
-  hence S is reflexive transitive antisymmetric connected well_founded by
-  Th53;
+  hence S is reflexive transitive antisymmetric connected well_founded by Th53;
 end;
 
 theorem Th55:
@@ -1326,7 +1326,7 @@ A10: rng F = field S by A4,Def7;
   field S = R-Seg(a) by A1,Th40;
   then F.a in R-Seg(a) by A3,A5,A10,FUNCT_1:def 5;
   then
-A11: [F.a,a] in R & F.a <> a by Def1;
+A11: [F.a,a] in R & F.a <> a by Th1;
   rng F c= field R by A10,Th20;
   then [a,F.a] in R by A1,A3,A5,A7,Th43;
   hence contradiction by A2,A11,Lm3;
@@ -1351,10 +1351,10 @@ A8: field S = R-Seg(a) by A1,Th40;
 A9: b in R-Seg(a)
     proof
       assume not b in R-Seg(a);
-      then not [b,a] in R by A3,Def1;
+      then not [b,a] in R by A3,Th1;
       then [a,b] in R by A2,A3,A4,Lm4;
-      then a in R-Seg(b) by A3,Def1;
-      hence contradiction by A6,Def1;
+      then a in R-Seg(b) by A3,Th1;
+      hence contradiction by A6,Th1;
     end;
     then R-Seg(b) = S-Seg(b) by A1,Th35;
     hence thesis by A1,A8,A9,A7,Th32,Th57;
@@ -1369,10 +1369,10 @@ A13: field S = R-Seg(b) & S is well-ordering by A1,Th32,Th40;
 A14: a in R-Seg(b)
     proof
       assume not a in R-Seg(b);
-      then not [a,b] in R by A3,Def1;
+      then not [a,b] in R by A3,Th1;
       then [b,a] in R by A2,A3,A4,Lm4;
-      then b in R-Seg(a) by A3,Def1;
-      hence contradiction by A11,Def1;
+      then b in R-Seg(a) by A3,Th1;
+      hence contradiction by A11,Th1;
     end;
     then R-Seg(a) = S-Seg(a) by A1,Th35;
     hence thesis by A14,A12,A13,Th50,Th57;
@@ -1455,8 +1455,8 @@ A6: c in S-Seg(b) implies c in F.:(R-Seg(a))
     assume
 A7: c in S-Seg(b);
     then
-A8: c <> b by Def1;
-A9: [c,b] in S by A7,Def1;
+A8: c <> b by Th1;
+A9: [c,b] in S by A7,Th1;
     then
 A10: c in field S by RELAT_1:30;
     then
@@ -1465,7 +1465,7 @@ A11: c = F.(F".c) by A4,A5,FUNCT_1:57;
     then
 A12: F".c in field R by A2,A4,A10,FUNCT_1:def 5;
     then [F".c,a] in R by A1,A3,A9,A11,Def7;
-    then F".c in R-Seg(a) by A8,A11,Def1;
+    then F".c in R-Seg(a) by A8,A11,Th1;
     hence thesis by A2,A11,A12,FUNCT_1:def 12;
   end;
   c in F.:(R-Seg(a)) implies c in S-Seg(b)
@@ -1475,12 +1475,12 @@ A12: F".c in field R by A2,A4,A10,FUNCT_1:def 5;
 A13: d in dom F and
 A14: d in R-Seg(a) and
 A15: c = F.d by FUNCT_1:def 12;
-    [d,a] in R by A14,Def1;
+    [d,a] in R by A14,Th1;
     then
 A16: [c,b] in S by A1,A15,Def7;
-    d <> a by A14,Def1;
+    d <> a by A14,Th1;
     then c <> b by A3,A2,A5,A13,A15,FUNCT_1:def 8;
-    hence thesis by A16,Def1;
+    hence thesis by A16,Th1;
   end;
   hence thesis by A6,TARSKI:2;
 end;
@@ -1605,8 +1605,8 @@ A19: b in dom F & a = F.b by FUNCT_1:def 5;
 A20: S is reflexive by A2,Def4;
 A21: F is_isomorphism_of R |_2 (dom F),S |_2 (rng F)
   proof
-    thus dom F = field(R |_2 (dom F)) & rng F = field(S |_2 (rng F)) by A1,A2,
-    A7,A18,A13,Th39;
+    thus dom F = field(R |_2 (dom F)) & rng F = field(S |_2 (rng F)) by A1,A2
+,A7,A18,A13,Th39;
     thus
 A22: F is one-to-one
     proof
@@ -1634,8 +1634,7 @@ A29: field P = R-Seg(a) & P is well-ordering by A1,Th32,Th40;
       assume
 A30:  [a,b] in R |_2 (dom F);
       hence
-A31:  a in field(R |_2 (dom F)) & b in field(R |_2 (dom F)) by
-      RELAT_1:30;
+A31:  a in field(R |_2 (dom F)) & b in field(R |_2 (dom F)) by RELAT_1:30;
       then
 A32:  a in dom F by Th19;
       then
@@ -1663,10 +1662,10 @@ A44:  now
 A45:    field P = R-Seg(b) & P is well-ordering by A1,Th32,Th40;
         assume a <> b;
         then
-A46:    a in R-Seg(b) by A39,Def1;
+A46:    a in R-Seg(b) by A39,Th1;
         then P-Seg(a) = R-Seg(a) by A1,Th35;
-        then P |_2 (P-Seg(a)),S |_2 (S-Seg(F.a)) are_isomorphic by A43,A42,
-        Th29;
+        then P |_2 (P-Seg(a)),S |_2 (S-Seg(F.a)) are_isomorphic by A43,A42,Th29
+;
         then [F.a,F.b] in S by A2,A34,A38,A46,A45,Th62;
         hence thesis by A41,XBOOLE_0:def 4;
       end;
@@ -1690,8 +1689,7 @@ A52: [a,F.a] in F by FUNCT_1:8;
 A53: a in field R by A12;
     assume not [a,b] in R |_2 (dom F);
     then
-A54: not [a,b] in R or not [a,b] in [:dom F,dom F:] by XBOOLE_0:def
-    4;
+A54: not [a,b] in R or not [a,b] in [:dom F,dom F:] by XBOOLE_0:def 4;
     then
 A55: a <> b by A4,A51,A53,Lm1,ZFMISC_1:106;
 A56: b in dom F by A48,Th19;
@@ -1704,10 +1702,10 @@ A59: b in field R by A12,A57;
 A60: [b,a] in R by A5,A51,A56,A54,A53,A55,Lm4,ZFMISC_1:106;
     then
 A61: R-Seg(b) c= R-Seg(a) by A1,A53,A59,Th37;
-A62: b in R-Seg(a) by A51,A56,A54,A60,Def1,ZFMISC_1:106;
+A62: b in R-Seg(a) by A51,A56,A54,A60,Th1,ZFMISC_1:106;
     then P-Seg(b) = R-Seg(b) by A1,Th35;
     then
-A63: P |_2 (P-Seg(b)),S |_2 (S-Seg(F.b)) are_isomorphic by A58,A61, Th29;
+A63: P |_2 (P-Seg(b)),S |_2 (S-Seg(F.b)) are_isomorphic by A58,A61,Th29;
 A64: F.b in field S by A12,A57;
     F.a in field S & R |_2 (R-Seg(a)),S |_2 (S-Seg(F.a)) are_isomorphic
     by A12,A52;
@@ -1722,10 +1720,9 @@ A67: Z = R-Seg(a);
     given b such that
 A68: b in field S and
 A69: rng F = S-Seg(b);
-    R |_2 (R-Seg(a)),S |_2 (S-Seg(b)) are_isomorphic by A13,A21,A67,
-    A69,Def8;
+    R |_2 (R-Seg(a)),S |_2 (S-Seg(b)) are_isomorphic by A13,A21,A67,A69,Def8;
     then a in Z by A6,A66,A68;
-    hence contradiction by A67,Def1;
+    hence contradiction by A67,Th1;
   end;
 A70: now
     let a such that
@@ -1741,11 +1738,10 @@ A75: a in field R by A6,A71;
       set P = R |_2 (R-Seg(a));
       P is well-ordering by A1,Th32;
       then
-A76:  canonical_isomorphism_of(P,Q) is_isomorphism_of P,Q by A73,
-      Def9;
+A76:  canonical_isomorphism_of(P,Q) is_isomorphism_of P,Q by A73,Def9;
       assume a <> b;
       then
-A77:  b in R-Seg(a) by A74,Def1;
+A77:  b in R-Seg(a) by A74,Th1;
       then
 A78:  P-Seg(b) = R-Seg(b) by A1,Th35;
 A79:  b in field R by A74,RELAT_1:30;
@@ -1755,12 +1751,11 @@ A80:  P |_2 (R-Seg(b)) = R |_2 (R-Seg(b)) by Th29;
       field P = R-Seg(a) by A1,Th40;
       then consider d such that
 A81:  d in field Q and
-A82:  P |_2 (P-Seg(b)),Q |_2 (Q-Seg(d)) are_isomorphic by A1,A76,A77,
-      Th32,Th61;
+A82:  P |_2 (P-Seg(b)),Q |_2 (Q-Seg(d)) are_isomorphic by A1,A76,A77,Th32,Th61;
 A83:  S-Seg(c) = field Q by A2,Th40;
       then
 A84:  Q-Seg(d) = S-Seg(d) by A2,A81,Th35;
-      [d,c] in S by A81,A83,Def1;
+      [d,c] in S by A81,A83,Th1;
       then
 A85:  d in field S by RELAT_1:30;
       then S-Seg(d) c= S-Seg(c) by A2,A72,A81,A83,Th38;
@@ -1798,7 +1793,7 @@ A98: c in field R by A12,A94;
       set P = R |_2 (R-Seg(c));
       assume a <> b;
       then
-A99:  b in S-Seg(a) by A96,Def1;
+A99:  b in S-Seg(a) by A96,Th1;
       then
 A100: Q-Seg(b) = S-Seg(b) by A2,Th35;
 A101: b in field S by A96,RELAT_1:30;
@@ -1811,13 +1806,12 @@ A103: canonical_isomorphism_of(Q,P) is_isomorphism_of Q,P by Def9;
       field Q = S-Seg(a) by A2,Th40;
       then consider d such that
 A104: d in field P and
-A105: Q |_2 (Q-Seg(b)),P |_2 (P-Seg(d)) are_isomorphic by A2,A103,
-      A99,
-      Th32,Th61;
+A105: Q |_2 (Q-Seg(b)),P |_2 (P-Seg(d)) are_isomorphic by A2,A103,A99,Th32,Th61
+;
 A106: R-Seg(c) = field P by A1,Th40;
       then
 A107: P-Seg(d) = R-Seg(d) by A1,A104,Th35;
-      [d,c] in R by A104,A106,Def1;
+      [d,c] in R by A104,A106,Th1;
       then
 A108: d in field R by RELAT_1:30;
       then R-Seg(d) c= R-Seg(c) by A1,A98,A104,A106,Th38;
@@ -1872,16 +1866,15 @@ A8:   [c,b] in R & c <> b;
     end;
 A9: R is antisymmetric by A2,Def4;
 A10: field(R |_2 Y) = Y by A1,A2,Th39;
-    field((R |_2 Y) |_2 ((R |_2 Y)-Seg(a))) = (R |_2 Y)-Seg(a) by A2,Th32
-    ,Th40;
+    field((R |_2 Y) |_2 ((R |_2 Y)-Seg(a))) = (R |_2 Y)-Seg(a) by A2,Th32,Th40;
     then
 A11: rng F = (R |_2 Y)-Seg(a) by A6,Def7;
 A12: dom F = field R by A6,Def7;
     then
 A13: F.a in rng F by A1,A4,A10,FUNCT_1:def 5;
     then
-A14: F.a <> a by A11,Def1;
-    [F.a,a] in R |_2 Y by A11,A13,Def1;
+A14: F.a <> a by A11,Th1;
+    [F.a,a] in R |_2 Y by A11,A13,Th1;
     then
 A15: [F.a,a] in R by XBOOLE_0:def 4;
     (R |_2 Y)-Seg(a) c= Y by A10,Th13;

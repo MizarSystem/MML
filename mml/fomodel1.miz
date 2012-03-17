@@ -1,0 +1,2153 @@
+:: Definition of first order language with arbitrary alphabet. Syntax of 
+:: terms, atomic formulas and their subterms.
+::  by Marco B. Caminati
+:: 
+:: Received December 29, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, INT_1,
+      RELAT_1, FINSEQ_1, FUNCT_1, ARYTM_3, XCMPLX_0, CARD_1, MONOID_0,
+      ORDINAL1, ARYTM_1, STRUCT_0, XXREAL_0, XREAL_0, ORDINAL4, BINOP_1,
+      FINSEQ_2, COMPLEX1, PARTFUN1, FINSET_1, SUPINF_2, MESFUNC1, PRE_POLY,
+      SETFAM_1, FUNCT_4, FUNCOP_1, FUNCT_2, CARD_3, FOMODEL0, FOMODEL1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NAT_1, CARD_1, NUMBERS, INT_1, PRE_POLY,
+      FINSEQ_1, XCMPLX_0, RELAT_1, FUNCT_1, FUNCT_2, MONOID_0, ORDINAL1,
+      XXREAL_0, XREAL_0, BINOP_1, FINSEQ_2, PARTFUN1, INT_2, FINSET_1,
+      MATRIX_2, STRUCT_0, RELSET_1, SETFAM_1, FUNCT_4, FUNCOP_1, DOMAIN_1,
+      CARD_3, ORDERS_4, FOMODEL0;
+ constructors TARSKI, NAT_1, CARD_1, ZFMISC_1, NUMBERS, INT_1, ARYTM_3,
+      FINSEQ_1, MONOID_0, STRUCT_0, XXREAL_0, BINOP_1, FINSEQ_2, COMPLEX1,
+      RELSET_1, INT_2, FINSEQOP, DOMAIN_1, FINSET_1, MATRIX_2, REAL_1,
+      PRE_POLY, SETFAM_1, FUNCT_4, FUNCOP_1, RELAT_1, FUNCT_1, FUNCT_2, CARD_3,
+      ORDERS_4, FOMODEL0;
+ registrations XCMPLX_0, NAT_1, RELAT_1, NUMBERS, FUNCT_1, INT_1, FINSEQ_1,
+      STRUCT_0, FUNCT_2, FINSEQ_2, SUBSET_1, CARD_1, CARD_5, FINSET_1, PRALG_1,
+      PRE_POLY, FINSEQ_6, FOMODEL0, XBOOLE_0, XXREAL_0, XREAL_0, FUNCOP_1,
+      FUNCT_4, RELSET_1, RAMSEY_1, CARD_3, ORDINAL1;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
+ definitions XBOOLE_0, STRUCT_0, FUNCOP_1, FOMODEL0;
+ theorems TARSKI, XBOOLE_0, INT_1, FUNCT_1, FINSEQ_1, RELAT_1, XBOOLE_1,
+      STRUCT_0, ZFMISC_1, FUNCT_2, ENUMSET1, XXREAL_0, NAT_1, ORDINAL1,
+      FINSEQ_5, FUNCT_4, FINSEQ_2, COMPLEX1, FINSEQ_4, RELSET_1, GRFUNC_1,
+      FUNCOP_1, CARD_4, ORDERS_4, CARD_3, FOMODEL0, CARD_1;
+ schemes NAT_1, FUNCT_2, DOMAIN_1;
+
+begin
+
+reserve k,m,n for Nat, kk,mm,nn for Element of NAT, X,Y,x,y,z for set;
+
+registration
+let z be zero (integer number);
+cluster abs(z) -> zero (integer number);
+coherence by COMPLEX1:133;
+end;
+
+registration
+cluster negative integer (real number);
+existence
+proof take -1;thus thesis; end;
+cluster positive -> natural (integer number);
+coherence;
+end;
+
+registration
+let S be non degenerated ZeroOneStr;
+cluster (the carrier of S) \ {the OneF of S} -> non empty;
+coherence
+proof
+set z=the ZeroF of S, o=the OneF of S;
+z=0.S & 1.S <> 0.S & 1.S=o; then
+z <> o; then z in the carrier of S & not z in {o} by TARSKI:def 1;
+hence thesis by XBOOLE_0:def 5;
+end;
+end;
+
+::##########  First-order structure (theory) formalization  ###########
+::######################  basic definitions  ##########################
+::#####################################################################
+::#####################################################################
+
+definition
+struct (ZeroOneStr) Language-like
+(#carrier -> set, ZeroF, OneF -> Element of the carrier,
+adicity->Function of the carrier\{the OneF}, INT#);
+end;
+
+definition
+let S be Language-like;
+func AllSymbolsOf S equals the carrier of S;
+coherence;
+func LettersOf S equals (the adicity of S) " {0};
+coherence;
+func OpSymbolsOf S equals (the adicity of S) " (NAT \ {0});
+coherence;
+func RelSymbolsOf S equals (the adicity of S) " (INT \ NAT);
+coherence;
+func TermSymbolsOf S equals (the adicity of S) " NAT;
+coherence;
+func LowerCompoundersOf S equals (the adicity of S) " (INT \ {0});
+coherence;
+func TheEqSymbOf S equals the ZeroF of S;
+coherence;
+func TheNorSymbOf S equals the OneF of S;
+coherence;
+func OwnSymbolsOf S equals (the carrier of S)\{the ZeroF of S,the OneF of S};
+coherence;
+end;
+
+definition
+let S be Language-like;
+mode Element of S is Element of (AllSymbolsOf S);
+func AtomicFormulaSymbolsOf S equals (AllSymbolsOf S) \ {TheNorSymbOf S};
+coherence;
+func AtomicTermsOf S equals 1-tuples_on (LettersOf S); ::Def11
+coherence;
+attr S is operational means (OpSymbolsOf S) is non empty;
+attr S is relational means
+(RelSymbolsOf S) \ {TheEqSymbOf S} is non empty;
+end;
+
+definition
+let S be Language-like;
+let s be Element of S;
+attr s is literal means :DefLiteral: s in LettersOf S;
+attr s is low-compounding means :DefLowCompounding: s in LowerCompoundersOf S;
+attr s is operational means :DefOperational: s in OpSymbolsOf S;
+attr s is relational means :DefRelational: s in RelSymbolsOf S;
+attr s is termal means :DefTermal0: s in TermSymbolsOf S;
+attr s is own means :DefOwn: s in OwnSymbolsOf S; ::def19
+attr s is ofAtomicFormula means :DefOfAtomicFormula:
+s in AtomicFormulaSymbolsOf S;
+end;
+
+definition
+let S be ZeroOneStr;
+let s be Element of (the carrier of S)\{the OneF of S};
+func TrivialArity(s) -> integer number equals :DefTrivialArity1:
+-2 if s=the ZeroF of S otherwise 0;
+coherence;
+consistency;
+end;
+
+definition
+let S be ZeroOneStr;
+let s be Element of (the carrier of S)\{the OneF of S};
+redefine func TrivialArity(s) -> Element of INT;
+coherence by INT_1:def 2;
+end;
+
+definition
+let S be non degenerated ZeroOneStr;
+func S TrivialArity->Function of (the carrier of S)\{the OneF of S},INT means
+:DefTrivialArity2: for s being Element of (the carrier of S)\{the OneF of S}
+holds it.s=TrivialArity(s);
+existence
+proof
+set D=(the carrier of S)\{the OneF of S};
+deffunc F(Element of D) = TrivialArity($1);
+consider f being Function of D,INT such that B1:
+for x being Element of D holds f.x=F(x) from FUNCT_2:sch 4; take f;
+thus thesis by B1;
+end;
+uniqueness
+proof
+set D=(the carrier of S)\{the OneF of S}; let IT1,IT2 be Function of D,INT;
+Z0: dom IT1=D & dom IT2=D by FUNCT_2:def 1;
+assume B1: for s being Element of D holds IT1.s=TrivialArity(s);
+assume B2: for s being Element of D holds IT2.s=TrivialArity(s);
+now
+let x be set; assume x in dom IT1; then reconsider s=x as Element of D;
+IT1.s = TrivialArity(s) by B1 .= IT2.s by B2; hence IT1.x=IT2.x;
+end;
+hence thesis by Z0, FUNCT_1:9;
+end;
+end;
+
+registration
+cluster infinite (non degenerated ZeroOneStr);
+existence
+proof
+set X = the infinite set;
+set Z = the Element of X;
+set O = the Element of X\{Z};
+reconsider Y=X\{Z} as infinite set;
+not O in {Z} by XBOOLE_0:def 5; then B1: O<>Z by TARSKI:def 1;
+reconsider OO=O as Element of X;
+set S=ZeroOneStr(# X, Z, OO #); 1.S=OO & 0.S=Z;
+then reconsider SS=S as non degenerated ZeroOneStr by B1, STRUCT_0:def 8;
+take SS;
+thus thesis;
+end;
+end;
+
+registration
+let S be infinite (non degenerated ZeroOneStr);
+cluster (S TrivialArity)"{0} -> infinite;
+coherence
+proof
+set I=the carrier of S, F0={the ZeroF of S}, F1= {the OneF of S}
+, D1=I\F1, D0=D1\F0, f=S TrivialArity;
+B2: dom f=D1 by FUNCT_2:def 1;
+for x st x in D0 holds x in f"{0}
+proof
+let x; assume C1: x in D0; then ::watch
+reconsider xx=x as Element of D1;
+not xx in F0 by C1, XBOOLE_0:def 5;
+then xx<>the ZeroF of S by TARSKI:def 1;
+then TrivialArity(xx) = 0 & f.xx=TrivialArity(xx)
+by DefTrivialArity1, DefTrivialArity2; then
+xx in dom f & f.xx in {0} by TARSKI:def 1, B2;
+hence thesis by FUNCT_1:def 13;
+end;
+then
+Z1: D0 c= f"{0} by TARSKI:def 3;
+reconsider D11=D1 as infinite set;
+thus thesis by Z1;
+end;
+end;
+
+Lm6: for S being non degenerated ZeroOneStr holds
+(S TrivialArity).(the ZeroF of S)=-2
+proof
+let S be non degenerated ZeroOneStr; set f=S TrivialArity, x0=the ZeroF of S,
+x1=the OneF of S; x0=0.S & x1=1.S & 0.S<>1.S;
+then not x0 in {x1} by TARSKI:def 1; then reconsider
+x=x0 as Element of (the carrier of S)\{the OneF of S} by XBOOLE_0:def 5;
+f.x=TrivialArity(x) by DefTrivialArity2 .= -2 by DefTrivialArity1;
+hence thesis;
+end;
+
+definition
+let S be Language-like;
+attr S is eligible means :DefEligible: LettersOf S is infinite & ::Def23
+(the adicity of S).(TheEqSymbOf S)=-2;
+end;
+
+Lm7: ex S being Language-like st S is non degenerated & S is eligible
+proof
+set SS = the infinite (non degenerated ZeroOneStr);
+B10: 0.SS<>1.SS;
+set f=SS TrivialArity;
+take S=Language-like (# the carrier of SS, the ZeroF of SS, the OneF of SS,
+f#);
+0.S<>1.S by B10; hence S is non degenerated by STRUCT_0:def 8;
+set g=(the adicity of S); thus LettersOf S is infinite;
+thus thesis by Lm6;
+end;
+
+registration
+cluster non degenerated Language-like;
+existence by Lm7;
+end;
+
+registration
+cluster eligible (non degenerated Language-like);
+existence by Lm7;
+end;
+
+definition
+mode Language is eligible (non degenerated Language-like);
+end;
+
+reserve S,S1,S2 for Language, s,s1,s2 for Element of S;
+
+definition
+let S be non empty Language-like;
+redefine func AllSymbolsOf S -> non empty set;
+coherence;
+end;
+
+registration
+let S be eligible Language-like;
+cluster LettersOf S -> infinite;
+coherence by DefEligible;
+end;
+
+definition
+let S be Language;
+redefine func LettersOf S -> non empty Subset of (AllSymbolsOf S);
+coherence by XBOOLE_1:1;
+end;
+
+Lm5: for S being non degenerated Language-like holds
+TheEqSymbOf S in (AllSymbolsOf S) \ {TheNorSymbOf S}
+proof
+let S be non degenerated Language-like;
+set EQ=TheEqSymbOf S, NOR=TheNorSymbOf S, SS=AllSymbolsOf S;
+1.S <> 0.S & EQ=0.S & NOR=1.S;
+then EQ in SS & not EQ in {NOR} by TARSKI:def 1; hence thesis by
+XBOOLE_0:def 5;
+end;
+
+registration
+let S be Language;
+cluster TheEqSymbOf S -> relational Element of S;
+coherence
+proof
+set E=TheEqSymbOf S, R=RelSymbolsOf S,
+a=the adicity of S, D=(AllSymbolsOf S)\{TheNorSymbOf S};
+-2 in INT & not -2 in NAT by INT_1:def 2; then B1:
+-2 in INT\NAT by XBOOLE_0:def 5;
+E in D & dom a= D by FUNCT_2:def 1, Lm5; then
+E in dom a & a.E in (INT\NAT) by B1, DefEligible;
+then E in R by FUNCT_1:def 13; hence thesis by DefRelational;
+end;
+end;
+
+definition
+let S be non degenerated Language-like;
+redefine func AtomicFormulaSymbolsOf S
+-> non empty Subset of (AllSymbolsOf S);
+coherence;
+end;
+
+definition
+let S be non degenerated Language-like;
+redefine func TheEqSymbOf S -> Element of AtomicFormulaSymbolsOf S;
+coherence by Lm5;
+end;
+
+theorem Lm8: for S being Language holds ::Th1
+LettersOf S /\ OpSymbolsOf S ={} &
+TermSymbolsOf S /\ LowerCompoundersOf S = OpSymbolsOf S &
+RelSymbolsOf S \ OwnSymbolsOf S = {TheEqSymbOf S} &
+OwnSymbolsOf S c= AtomicFormulaSymbolsOf S &
+RelSymbolsOf S c= LowerCompoundersOf S &
+OpSymbolsOf S c= TermSymbolsOf S &
+LettersOf S c= TermSymbolsOf S &
+TermSymbolsOf S c= OwnSymbolsOf S &
+OpSymbolsOf S c= LowerCompoundersOf S &
+LowerCompoundersOf S c= AtomicFormulaSymbolsOf S
+proof
+let S be Language;
+set o=the OneF of S, z=the ZeroF of S, f=the adicity of S, R=RelSymbolsOf S,
+O=OwnSymbolsOf S, SS=AllSymbolsOf S, e=TheEqSymbOf S, n=TheNorSymbOf S,
+A=AtomicFormulaSymbolsOf S, D = (the carrier of S) \ {o},
+L=LowerCompoundersOf S, T=TermSymbolsOf S, OP=OpSymbolsOf S,
+B=LettersOf S;
+B3: {0} misses NAT\{0} by XBOOLE_1:79; thus B/\OP=f"({0}/\(NAT\{0}))
+by FUNCT_1:137 .= f"({}) by B3, XBOOLE_0:def 7 .= {} by RELAT_1:171;
+thus T/\L = f"(NAT /\ (INT \{0})) by FUNCT_1:137
+.= f"((NAT/\INT)\{0}) by XBOOLE_1:49 .= OP by XBOOLE_1:28, XBOOLE_1:7;
+Z0: TheEqSymbOf S in R by DefRelational;
+O = SS\({z} \/ {o}) by ENUMSET1:41 .= D \ {z} by XBOOLE_1:41; then
+R\O = (R\D) \/ (R /\ {z}) by XBOOLE_1:52 .=
+{} \/ R /\ {z} .= {z} by ZFMISC_1:52, Z0; hence R\O={TheEqSymbOf S}; thus
+OwnSymbolsOf S c= AtomicFormulaSymbolsOf S by XBOOLE_1:34, ZFMISC_1:12;
+f"{0} c= f"NAT & RelSymbolsOf S = f"INT \ (f"NAT) &
+LowerCompoundersOf S = f"INT \ (f"{0}) by FUNCT_1:138, RELAT_1:178;
+hence RelSymbolsOf S c= LowerCompoundersOf S by XBOOLE_1:34;
+OpSymbolsOf S = f"NAT \ (f"{0}) by FUNCT_1:138;
+hence OpSymbolsOf S c= TermSymbolsOf S;
+thus LettersOf S c= TermSymbolsOf S by RELAT_1:178;
+-2 = f.(TheEqSymbOf S) by DefEligible .= f.z;
+then not f.z in NAT; then not z in f"NAT by FUNCT_1:def 13; then
+f"NAT misses {z} & f"NAT c= (( the carrier of S) \ {o}) by ZFMISC_1:56;
+then f"NAT c= ((the carrier of S) \{o})\{z} by XBOOLE_1:86;
+then TermSymbolsOf S c= (the carrier of S)\({o}\/{z}) by XBOOLE_1:41;
+hence TermSymbolsOf S c= OwnSymbolsOf S by ENUMSET1:41;
+for x st x in NAT holds x in INT by INT_1:def 2;
+then NAT c= INT by TARSKI:def 3; then NAT \{0} c= INT\{0} by XBOOLE_1:33;
+hence OpSymbolsOf S c= LowerCompoundersOf S by RELAT_1:178;
+thus thesis;
+end;
+
+registration
+let S be Language;
+cluster TermSymbolsOf S -> non empty set;
+coherence proof LettersOf S c= TermSymbolsOf S by Lm8; hence thesis; end;
+cluster own -> ofAtomicFormula Element of S;
+coherence
+proof
+let s be Element of S; assume s is own; then s in OwnSymbolsOf S &
+OwnSymbolsOf S c= AtomicFormulaSymbolsOf S by Lm8, DefOwn;
+hence thesis by DefOfAtomicFormula;
+end;
+cluster relational -> low-compounding Element of S;
+coherence
+proof
+let s be Element of S; assume s is relational;
+then s in RelSymbolsOf S & RelSymbolsOf S c= LowerCompoundersOf S
+by DefRelational, Lm8;
+hence s is low-compounding by DefLowCompounding;
+end;
+cluster operational -> termal Element of S;
+coherence
+proof
+let s be Element of S; assume s is operational; then
+s in OpSymbolsOf S & OpSymbolsOf S c= TermSymbolsOf S by Lm8, DefOperational;
+hence thesis by DefTermal0;
+end;
+cluster literal -> termal Element of S;
+coherence
+proof
+let s be Element of S; assume s is literal; then
+LettersOf S c= TermSymbolsOf S & s in LettersOf S by DefLiteral, Lm8;
+hence thesis by DefTermal0;
+end;
+cluster termal -> own Element of S;
+coherence
+proof
+let s be Element of S; assume s is termal; then
+TermSymbolsOf S c= OwnSymbolsOf S & s in TermSymbolsOf S by DefTermal0, Lm8;
+hence thesis by DefOwn;
+end;
+cluster operational -> low-compounding Element of S;
+coherence
+proof
+let s be Element of S; assume s is operational; then
+s in OpSymbolsOf S & OpSymbolsOf S c= LowerCompoundersOf S
+by DefOperational, Lm8;
+hence thesis by DefLowCompounding;
+end;
+cluster low-compounding -> ofAtomicFormula Element of S;
+coherence
+proof
+let s be Element of S; assume s is low-compounding; then
+s in LowerCompoundersOf S & LowerCompoundersOf S c=
+AtomicFormulaSymbolsOf S by DefLowCompounding;
+hence thesis by DefOfAtomicFormula;
+end;
+cluster termal -> non relational Element of S;
+coherence
+proof
+set T=TermSymbolsOf S, R=RelSymbolsOf S,f=the adicity of S;
+T/\R= f"(NAT/\(INT\NAT)) by FUNCT_1:137 .=
+f"(NAT/\INT \ (NAT/\NAT))
+.= f"({}) .= {} by RELAT_1:171;
+then T misses R by XBOOLE_0:def 7; then B3: T\R=T by XBOOLE_1:83;
+let s be Element of S; assume s is termal;
+then s in T\R by B3, DefTermal0; then not s in R by XBOOLE_0:def 5;
+hence thesis by DefRelational;
+end;
+cluster literal -> non relational Element of S;
+coherence;
+cluster literal -> non operational Element of S;
+coherence
+proof
+set L=LettersOf S, P=OpSymbolsOf S; let s be Element of S; assume
+B0: s is literal; assume s is operational; then s in L & s in P
+by B0, DefLiteral, DefOperational; then
+s in L/\P by XBOOLE_0:def 4; hence contradiction by Lm8;
+end;
+end;
+
+registration
+let S be Language;
+cluster relational Element of S;
+existence proof take s=TheEqSymbOf S; thus thesis; end;
+cluster literal Element of S;
+existence
+proof
+take the Element of LettersOf S; 
+thus thesis by DefLiteral;
+end;
+end;
+
+registration
+let S be Language;
+cluster termal -> operational (low-compounding Element of S);
+coherence
+proof
+set L=LowerCompoundersOf S, T=TermSymbolsOf S, OP=OpSymbolsOf S;
+let s be low-compounding Element of S; B1: s in L by DefLowCompounding;
+assume s is termal; then s in T by DefTermal0; then
+s in L /\ T by XBOOLE_0:def 4, B1; then s in OP by Lm8;
+hence thesis by DefOperational;
+end;
+end;
+
+registration
+let S be Language;
+cluster ofAtomicFormula Element of S; existence
+proof take the literal Element of S; thus thesis; end;
+end;
+
+definition
+let S be Language;
+let s be ofAtomicFormula Element of S;
+func ar(s) -> Element of INT equals (the adicity of S).s;
+coherence
+proof
+set f=(the adicity of S);
+reconsider g=f as Function of AtomicFormulaSymbolsOf S, INT;
+reconsider ss=s as Element of AtomicFormulaSymbolsOf S by DefOfAtomicFormula;
+g.ss in INT; hence thesis;
+end;
+end;
+
+registration
+let S be Language; let s be literal Element of S;
+cluster ar(s) -> zero number;
+coherence
+proof
+set f=the adicity of S; s in LettersOf S by DefLiteral;
+then f.s in {0} by FUNCT_1:def 13;
+hence thesis;
+end;
+end;
+
+definition
+let S be Language;
+func S-cons -> BinOp of (AllSymbolsOf S)* :: Lisp-like
+equals (AllSymbolsOf S)-concatenation;
+coherence;
+end;
+
+definition
+let S be Language;
+func S-multiCat -> Function of (AllSymbolsOf S)**, (AllSymbolsOf S)*
+equals (AllSymbolsOf S)-multiCat;
+coherence;
+end;
+
+definition
+let S be Language;
+func S-firstChar -> Function of (AllSymbolsOf S)*\{{}}, AllSymbolsOf S equals
+(AllSymbolsOf S)-firstChar;
+coherence;
+end;
+
+definition ::def28 1
+let S be Language;
+let X be set;
+attr X is S-prefix means :DefSPrefix: X is (AllSymbolsOf S)-prefix;
+end;
+
+registration
+let S be Language;
+cluster S-prefix -> (AllSymbolsOf S)-prefix set;
+coherence by DefSPrefix;
+cluster (AllSymbolsOf S)-prefix -> S-prefix set;
+coherence by DefSPrefix;
+end;
+
+definition
+let S be Language;
+mode string of S is Element of ((AllSymbolsOf S)*\{{}});
+end;
+
+registration
+let S;
+cluster (AllSymbolsOf S)*\{{}} -> non empty set;
+coherence;
+end;
+
+registration
+let S;
+cluster -> non empty string of S;
+coherence by FOMODEL0:5;
+end;
+
+registration
+cluster -> infinite Language;
+coherence
+proof
+let S be Language; set SS=AllSymbolsOf S, L=LettersOf S;
+reconsider S0=S as 1-sorted;
+L \/ SS = SS by XBOOLE_1:12;
+hence thesis;
+end;
+end;
+
+registration
+let S be Language; cluster AllSymbolsOf S -> infinite; coherence;
+end;
+
+definition
+let S be Language;
+let s be ofAtomicFormula Element of S;
+let Strings be set;
+func Compound(s,Strings) equals
+{<*s*> ^ ((S-multiCat).StringTuple) where
+StringTuple is Element of (AllSymbolsOf S)**:
+rng StringTuple c= Strings & StringTuple is (abs(ar(s)))-element};
+coherence;
+end;
+
+definition
+let S be Language;
+let s be ofAtomicFormula Element of S;
+let Strings be set;
+redefine func Compound(s,Strings) -> Element of bool ((AllSymbolsOf S)*\{{}});
+coherence
+proof
+set Y=Compound(s,Strings), SS=AllSymbolsOf S;
+reconsider ss=s as Element of SS;
+now
+let x be set; assume x in Y;
+then consider StringTuple being Element of SS** such that C1:
+x=<*s*>^(S-multiCat.StringTuple) & rng StringTuple c= Strings &
+StringTuple is (abs(ar(s)))-element;
+reconsider head=<*ss*> as non empty FinSequence of SS;
+reconsider tail=(S-multiCat.StringTuple) as FinSequence of SS
+by FINSEQ_1:def 11;
+head ^ tail is non empty FinSequence of SS & x=head ^ tail by C1;
+hence x in SS*\{{}} by FOMODEL0:5;
+end;
+hence thesis by TARSKI:def 3;
+end;
+end;
+
+definition
+let S be Language;
+func S-termsOfMaxDepth -> Function means :DefTerm: dom it=NAT & ::Def30
+it.0 = (AtomicTermsOf S) & for n being Nat holds it.(n+1) =
+(union {Compound(s,it.n) where s is ofAtomicFormula Element of S:
+s is operational})
+\/ it.n;
+existence
+proof
+deffunc F(set,set)=(union {Compound(s,$2) where s is ofAtomicFormula
+Element of S: s is operational}) \/ $2;
+ex f being Function st dom f=NAT & f.0=(AtomicTermsOf S) &
+for n being Nat holds f.(n+1)=F(n,f.n) from NAT_1:sch 11;
+hence thesis;
+end;
+uniqueness
+proof
+deffunc F(set,set)=(union {Compound(s,$2) where s is ofAtomicFormula
+Element of S: s is operational}) \/ $2;
+let IT1,IT2 be Function;
+assume A1: dom IT1=NAT & IT1.0=(AtomicTermsOf S) &
+for n being Nat holds IT1.(n+1)=F(n,IT1.n);
+B1: dom IT1=NAT by A1; B2: IT1.0=(AtomicTermsOf S) by A1;
+B3: for n being Nat holds IT1.(n+1)=F(n,IT1.n) by A1;
+assume A2: dom IT2=NAT & IT2.0=(AtomicTermsOf S) &
+for n being Nat holds IT2.(n+1)=F(n,IT2.n);
+B4: dom IT2=NAT by A2; B5: IT2.0=(AtomicTermsOf S) by A2;
+B6: for n being Nat holds IT2.(n+1)=F(n,IT2.n) by A2;
+thus IT1=IT2 from NAT_1:sch 15(B1,B2,B3,B4,B5,B6);
+end;
+end;
+
+definition
+let S;
+redefine func AtomicTermsOf S -> Subset of (AllSymbolsOf S)*;
+coherence
+proof
+set SS=AllSymbolsOf S, A=AtomicTermsOf S;
+reconsider L=LettersOf S as Subset of SS;
+A c= L* by FINSEQ_2:154;
+hence thesis by XBOOLE_1:1;
+end;
+end;
+
+Lm9: S-termsOfMaxDepth.m c= (AllSymbolsOf S)*\{{}}
+proof
+set T=S-termsOfMaxDepth, SS=AllSymbolsOf S, L=LettersOf S;
+defpred P[Nat] means T.$1 c= SS*\{{}};
+B0: P[0]
+proof
+T.0=AtomicTermsOf S by DefTerm
+.= (0+1)-tuples_on L; then C1: T.0 c= L*\{{}} by FOMODEL0:9;
+ L*\{{}} c= SS*\{{}} by XBOOLE_1:33;
+hence thesis by C1, XBOOLE_1:1;
+end;
+B1: for n being Nat st P[n] holds P[n+1]
+proof
+let n be Nat; assume C0: P[n];
+set TM1 =
+{Compound(s,T.n) where s is ofAtomicFormula Element of S:s is operational};
+now
+let X be set; assume X in TM1; then
+consider s being ofAtomicFormula Element of S such that C1:
+X=Compound(s,T.n) & s is operational; thus X c= SS*\{{}} by C1;
+end;
+then union TM1 c= SS*\{{}} & T.(n+1)= union TM1 \/ T.n
+by DefTerm, ZFMISC_1:94; hence thesis by C0, XBOOLE_1:8;
+end;
+for n being Nat holds P[n] from NAT_1:sch 2(B0,B1); hence thesis;
+end;
+
+Lm2: S-termsOfMaxDepth.m c= S-termsOfMaxDepth.(m+n)
+proof
+set T=S-termsOfMaxDepth;
+defpred P[Nat] means T.(m) c= T.(m+$1);
+B1: P[0];
+B2: for n being Nat st P[n] holds P[n+1]
+proof
+let n be Nat; assume
+Z0: P[n];
+T.(m+n+1)=T.(m+n) \/
+(union {Compound(s,T.(m+n)) where s is ofAtomicFormula Element of S:
+s is operational}) by DefTerm; then T.(m+n) c= T.(m+n+1) by XBOOLE_1:7;
+hence thesis by Z0, XBOOLE_1:1;
+end;
+for n being Nat holds P[n] from NAT_1:sch 2(B1, B2);
+hence thesis;
+end;
+
+definition
+let S be Language;
+func AllTermsOf S equals union rng (S-termsOfMaxDepth);
+coherence;
+end;
+
+theorem Lm4: S-termsOfMaxDepth.mm c= AllTermsOf S ::Th2
+proof
+set T=S-termsOfMaxDepth; dom T=NAT by DefTerm;
+hence thesis by ZFMISC_1:92, FUNCT_1:12;
+end;
+
+Lm26: x in AllTermsOf S implies ex nn st x in S-termsOfMaxDepth.nn
+proof
+set T=S-termsOfMaxDepth;
+assume x in AllTermsOf S; then consider Y being set such that B1:
+x in Y & Y in rng T by TARSKI:def 4;
+consider mmm being set such that
+B2: mmm in dom T & Y=T.mmm by B1, FUNCT_1:def 5;
+reconsider mm=mmm as Element of NAT by B2, DefTerm;
+take nn=mm; thus thesis by B1,B2;
+end;
+
+definition
+let S be Language;
+let w be string of S;
+attr w is termal means :DefTermal2: w in AllTermsOf S; ::def32
+end;
+
+definition
+let m be Nat;
+let S be Language;
+let w be string of S;
+attr w is m-termal means :DefTermal: w in S-termsOfMaxDepth.m; ::def33
+end;
+
+registration
+let m be Nat;
+let S be Language;
+cluster m-termal -> termal string of S;
+coherence
+proof
+reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+let w be string of S; assume w is m-termal; then w in S-termsOfMaxDepth.m
+& S-termsOfMaxDepth.mm c= AllTermsOf S by Lm4, DefTermal;
+hence thesis by DefTermal2;
+end;
+end;
+
+definition let S;
+redefine func S-termsOfMaxDepth -> Function of NAT,bool((AllSymbolsOf S)*);
+coherence
+proof
+set SS=AllSymbolsOf S, T=S-termsOfMaxDepth;
+B1: dom T=NAT by DefTerm;
+now
+let y be set; assume y in rng T; then consider x being set such that C1:
+x in dom T & y=T.x by FUNCT_1:def 5;
+reconsider m=x as Element of NAT by DefTerm, C1; y=T.m by C1; then
+y c= SS*\{{}} & SS*\{{}} c= SS* by Lm9;
+then y c= SS* by XBOOLE_1:1; hence y in bool (SS*);
+end;
+then rng T c= bool (SS*) by TARSKI:def 3;
+hence thesis by B1, RELSET_1:11, FUNCT_2:130;
+end;
+end;
+
+definition
+let S;
+redefine func AllTermsOf S -> non empty Subset of (AllSymbolsOf S)*;
+coherence
+proof
+set A=AllTermsOf S, T=S-termsOfMaxDepth, SS=AllSymbolsOf S;
+Z0: now
+let x be set; assume x in A; then consider mm being Element of NAT
+such that C1: x in T.mm by Lm26;
+thus x in SS* by C1;
+end;
+A=T.0 \/ A by Lm4, XBOOLE_1:12 .= (AtomicTermsOf S) \/ A by DefTerm;
+hence thesis by Z0, TARSKI:def 3;
+end;
+end;
+
+registration
+let S;
+cluster AllTermsOf S -> non empty;
+coherence;
+end;
+
+registration
+let S,m;
+cluster S-termsOfMaxDepth.m -> non empty;
+coherence
+proof
+set T=S-termsOfMaxDepth, Z=AtomicTermsOf S, SS=AllSymbolsOf S;
+set x = the Element of Z; x in Z & Z=T.0 by DefTerm;
+then x in T.0 & T.0 c= T.(0+m) by Lm2;
+hence T.m is non empty;
+end;
+end;
+
+registration
+let S,m;
+cluster -> non empty (Element of S-termsOfMaxDepth.m);
+coherence
+proof
+set T=S-termsOfMaxDepth, SS=AllSymbolsOf S, A=AtomicTermsOf S;
+B0: T.m c= SS*\{{}} by Lm9; let w be Element of T.m;
+w in SS*\{{}} by B0, TARSKI:def 3;
+hence thesis;
+end;
+end;
+
+registration
+let S;
+cluster -> non empty (Element of AllTermsOf S);
+coherence
+proof
+set T=S-termsOfMaxDepth, SS=AllSymbolsOf S,
+A=AtomicTermsOf S, AA=AllTermsOf S; let t be Element of AA;
+consider mm such that B1: t in T.mm by Lm26; reconsider
+tt=t as Element of T.mm by B1; tt is non empty; hence thesis;
+end;
+end;
+
+registration
+let m be Nat, S be Language;
+cluster m-termal string of S;
+existence
+proof
+set T=S-termsOfMaxDepth, SS=AllSymbolsOf S, A=AtomicTermsOf S;
+set w = the Element of A;
+Z0: w in A; then
+ w in T.0 & T.0 c= SS*\{{}} by Lm9, DefTerm;
+then reconsider ww=w as string of S; take ww;
+ww in T.0 & T.0 c= T.(0+m) by Lm2, Z0, DefTerm;
+hence thesis by DefTermal;
+end;
+end;
+
+registration
+let S;
+cluster 0-termal -> 1-element (string of S);
+coherence
+proof
+set A=AtomicTermsOf S, L=LettersOf S, T=S-termsOfMaxDepth;
+let w be string of S; assume w is 0-termal; then w in T.0 by DefTermal;
+then w in A by DefTerm;
+then reconsider ww=w as Element of 1-tuples_on L;
+ww is 1-element; hence thesis;
+end;
+end;
+
+registration
+let S be Language; let w be 0-termal string of S;
+cluster S-firstChar.w -> literal Element of S;
+coherence
+proof
+set A=AllTermsOf S, T=S-termsOfMaxDepth, Z=AtomicTermsOf S,
+SS=AllSymbolsOf S, s=S-firstChar.w, ss=SS-firstChar.w, L=LettersOf S;
+reconsider ww=w as non empty FinSequence of SS by FOMODEL0:5;
+B1: ss=ww.1 by FOMODEL0:6;
+w in T.0 by DefTermal; then w in Z by DefTerm;
+then consider x such that C1: x in L & w=<*x*> by FINSEQ_2:155;
+w=<*x*>^{} by C1;
+then ss in L by FINSEQ_1:58,C1,B1;
+hence thesis by DefLiteral;
+end;
+end;
+
+Lm1: for w being (mm+1)-termal string of S st w is not mm-termal holds ex
+s being termal Element of S, T being Element of ((S-termsOfMaxDepth).mm)*
+st T is (abs(ar(s)))-element & w=<*s*>^((S-multiCat).T)
+proof
+set fam=
+{Compound(s,(S-termsOfMaxDepth).mm) where s is ofAtomicFormula Element of S:
+s is operational};
+let w be (mm+1)-termal string of S; assume w is not mm-termal; then
+w in (S-termsOfMaxDepth).(mm+1) & not w in (S-termsOfMaxDepth).mm
+by DefTermal; then w in (union fam)\/(S-termsOfMaxDepth).mm & not w in
+(S-termsOfMaxDepth).mm by DefTerm; then w in union fam by XBOOLE_0:def 3;
+then consider C being set such that C1: w in C & C in fam  by TARSKI:def 4;
+consider sss being ofAtomicFormula Element of S such that C2:
+C=Compound(sss,(S-termsOfMaxDepth).mm) & sss is operational by C1;
+reconsider ss=sss as termal Element of S by C2;
+take s=ss;
+consider StringTuple being Element of (AllSymbolsOf S)**
+such that C3:
+w=<*s*>^((S-multiCat).StringTuple) & rng StringTuple c=
+(S-termsOfMaxDepth).mm & StringTuple is (abs(ar(ss)))-element by C1, C2;
+reconsider TT=StringTuple as FinSequence of (S-termsOfMaxDepth).mm by C3
+, FINSEQ_1:def 4;
+reconsider TTT=TT as Element of ((S-termsOfMaxDepth).mm)*;
+take T=TTT; thus T is (abs(ar(s)))-element by C3;
+thus thesis by C3;
+end;
+
+Lm19: for w being (mm+1)-termal string of S ex s being
+termal Element of S, T being Element of ((S-termsOfMaxDepth).mm)*
+st T is (abs(ar(s)))-element & w=<*s*>^((S-multiCat).T)
+proof
+set TS=TermSymbolsOf S, T=S-termsOfMaxDepth, C=S-multiCat,
+L=LettersOf S;
+defpred P[Element of NAT] means
+for w being ($1+1)-termal string of S ex s being termal Element of S,
+T being Element of ((S-termsOfMaxDepth).$1)* st T is
+(abs(ar(s)))-element & w=<*s*>^((S-multiCat).T);
+defpred Q[Nat] means ex mm being Element of NAT st mm=$1 & P[mm];
+B1: Q[0]
+proof
+take 0; thus 0=0;
+thus P[0]
+proof
+let w be (0+1)-termal string of S;
+per cases;
+suppose w is 0-termal; then w in S-termsOfMaxDepth.0 by DefTermal; then
+w in AtomicTermsOf S by DefTerm; then
+w in {<*ss*> where ss is Element of (LettersOf S): not contradiction}
+by FINSEQ_2:116;
+then consider ss being Element of (LettersOf S) such that
+C1: w=<*ss*> & not contradiction;
+reconsider sss=ss as literal Element of S by DefLiteral;
+reconsider TT={} as FinSequence; rng TT={}; then
+rng TT c= (S-termsOfMaxDepth.0) by XBOOLE_1:2; then
+reconsider TTT=TT as FinSequence of S-termsOfMaxDepth.0 by FINSEQ_1:def 4;
+reconsider TTTT=TTT as Element of (S-termsOfMaxDepth.0)*;
+take s=sss; take T=TTTT;
+thus T is (abs(ar(s)))-element;
+reconsider s=sss as Element of TS by DefTermal0;
+S-multiCat.{}={} & <*sss*>^{} = <*sss*>;
+hence thesis by C1;
+end;
+suppose w is non 0-termal; hence thesis by Lm1;end;
+end;
+end;
+B2: for m being Nat st Q[m] holds Q[m+1]
+proof
+let m be Nat; reconsider mm=m, mmm=m+1 as Element of NAT by ORDINAL1:def 13;
+assume
+Z0: Q[m]; take mmm; thus mmm=m+1; :: ora devo mostrare P[mmm];
+let w be (mmm+1)-termal (string of S);
+per cases;
+suppose w is not mmm-termal; hence thesis by Lm1; end;
+suppose w is mmm-termal; then
+consider s being termal Element of S,
+T being Element of ((S-termsOfMaxDepth).mm)* such that
+D1: T is (abs(ar(s)))-element & w=<*s*>^((S-multiCat).T) by Z0;
+set high=(S-termsOfMaxDepth.mmm);
+reconsider low=(S-termsOfMaxDepth.mm) as Subset of high by Lm2;
+T in low* & low* is Subset of high*; then
+reconsider TT=T as Element of high*;
+take s,TT; thus thesis by D1;
+end;
+end;
+B3: for m being Nat holds Q[m] from NAT_1:sch 2(B1, B2);
+now
+let mm be Element of NAT;
+reconsider m=mm as Nat;
+consider nn being Element of NAT such that
+C1: nn=m & P[nn] by B3; thus P[mm] by C1;
+end;
+hence thesis;
+end;
+
+registration
+let S;
+let w be termal (string of S);
+cluster S-firstChar.w -> termal Element of S;
+coherence
+proof
+set A=AllTermsOf S, T=S-termsOfMaxDepth, Z=AtomicTermsOf S,
+SS=AllSymbolsOf S, s=S-firstChar.w, ss=SS-firstChar.w, L=LettersOf S;
+w in A by DefTermal2; then consider mm such that B0: w in T.mm by Lm26;
+reconsider ww=w as non empty FinSequence of SS by FOMODEL0:5;
+B1: ss=ww.1 by FOMODEL0:6;
+per cases;
+suppose mm=0; then
+reconsider www=w as 0-termal string of S by DefTermal, B0;
+S-firstChar.www is literal; hence thesis;
+end;
+suppose mm<>0; then consider n being Nat such that C1: mm=n+1 by NAT_1:6;
+reconsider nn=n as Element of NAT by ORDINAL1:def 13;
+reconsider www=w as (nn+1)-termal string of S by C1, B0, DefTermal;
+consider s1 being termal Element of S, T1 being Element of (T.nn)* such that
+C2: T1 is (abs(ar(s1)))-element & www=<*s1*>^((S-multiCat).T1) by Lm19;
+thus thesis by FINSEQ_1:58, C2, B1;
+end;
+end;
+end;
+
+definition
+let S; let t be termal string of S;
+func ar(t) -> Element of INT equals ar(S-firstChar.t); ::def34
+coherence;
+end;
+
+theorem Lm333: for w being (mm+1)-termal string of S ex T being Element of
+((S-termsOfMaxDepth).mm)* st T is (abs(ar(S-firstChar.w)))-element
+& w=<*S-firstChar.w*>^((S-multiCat).T)
+proof
+let w be (mm+1)-termal string of S; consider s being termal Element of S,
+T being Element of ((S-termsOfMaxDepth).mm)* such that B1:
+T is (abs(ar(s)))-element & w=<*s*>^((S-multiCat).T) by Lm19;
+reconsider ww=w as non empty FinSequence of (AllSymbolsOf S)
+by FINSEQ_1:def 11;
+s = w.1 by B1, FINSEQ_1:58 .= S-firstChar.w by FOMODEL0:6;
+hence thesis by B1;
+end;
+
+Lm27: S-termsOfMaxDepth.m is S-prefix
+proof
+set T=S-termsOfMaxDepth, SS=AllSymbolsOf S, L=LettersOf S, S1=1-tuples_on SS,
+f=S-cons, F=S-multiCat, ff=SS-concatenation, FF=SS-multiCat;
+B10: dom FF=SS** by FUNCT_2:def 1;
+reconsider LS=L as non empty Subset of SS;
+set L1=1-tuples_on LS;
+defpred P[Nat] means T.$1 is S-prefix;
+B1: P[0]
+proof
+L1 /\ S1 = 1-tuples_on (LS /\ SS) by FOMODEL0:3
+.= 1-tuples_on LS by XBOOLE_1:28;
+then reconsider L11=1-tuples_on LS as Subset of S1;
+T.0 = (AtomicTermsOf S) by DefTerm .= L11; hence thesis;
+end;
+B2: for m being Nat st P[m] holds P[m+1]
+proof
+let m be Nat;
+assume
+Z5: P[m];
+reconsider mm=m, mm1=m+1 as Element of NAT by ORDINAL1:def 13;
+now
+let t1,t2,w1,w2 be set; assume
+Z0: t1 in (T.(m+1))/\(SS*) &
+t2 in T.(m+1)/\ (SS*) & w1 in SS* & w2 in SS*;
+t1 in T.mm1 & not t1 in {{}} & t2 in T.mm1 & not t2 in {{}} by Z0; then
+reconsider t11=t1,t22=t2 as (mm+1)-termal (string of S)
+by DefTermal, XBOOLE_0:def 5;
+reconsider t111=t11, t222=t22 as FinSequence of SS by FINSEQ_1:def 11;
+consider T1 being Element of (T.mm)* such that C1: T1 is
+(abs(ar(S-firstChar.t11)))-element & t11=<*S-firstChar.t11*>^(F.T1) by Lm333;
+consider T2 being Element of (T.mm)* such that C2: T2 is
+(abs(ar(S-firstChar.t22)))-element & t22=<*S-firstChar.t22*>^(F.T2) by Lm333;
+reconsider T11=T1, T22=T2 as FinSequence of T.mm by FINSEQ_1:def 11;
+reconsider w11=w1, w22=w2 as Element of SS* by Z0;
+reconsider head1=F.T1, head2=F.T2, tail1=w11, tail2=w22 as
+FinSequence of SS by FINSEQ_1:def 11;
+assume f.(t1,w1)=f.(t2,w2);
+then t111^w11=f.(t222,w22) by FOMODEL0:4; then
+(<*S-firstChar.t11*>^(F.T1))^w11=t222^w22 by FOMODEL0:4, C1; then
+<*S-firstChar.t11*>^((F.T1)^w11)=(<*S-firstChar.t22*>^(F.T2))^w22
+by C2, FINSEQ_1:45; then
+<*S-firstChar.t11*>^(head1^tail1)=<*S-firstChar.t22*>^(head2^tail2)
+by FINSEQ_1:45; then
+Z1: f.(<*S-firstChar.t11*>,head1^tail1)=<*S-firstChar.t22*>^(head2^tail2)
+by FOMODEL0:4;
+1-tuples_on SS c= 1-tuples_on SS;then reconsider
+S1=1-tuples_on SS as Subset of 1-tuples_on SS;
+C4: S1 is f-unambiguous by FOMODEL0:def 3;
+ S1 /\ (SS*) = S1 by FINSEQ_2:154, XBOOLE_1:28;
+then
+<*S-firstChar.t11*> in S1 /\ (SS*) & <*S-firstChar.t22*> in S1 /\ (SS*) &
+head1^tail1 in SS* & head2^tail2 in SS* &
+f.(<*S-firstChar.t11*>, head1^tail1) =
+f.(<*S-firstChar.t22*>,head2^tail2) by Z1, FOMODEL0:4; then
+Z3: <*S-firstChar.t11*>=<*S-firstChar.t22*> & head1^tail1=head2^tail2 &
+head1^tail1=ff.(head1, tail1) by C4, FOMODEL0:4, def 9;
+C6: S-firstChar.t11=S-firstChar.t22 by FINSEQ_1:97, Z3;
+set n=abs(ar(S-firstChar.t11));
+len T11=n & len T22=n by C1, CARD_1:def 13,C6,C2; then
+T11 in n-tuples_on (T.m) & T22 in n-tuples_on (T.m) &
+T11 in dom FF & T22 in dom FF by FINSEQ_2:153, B10;
+then FF.T11 in FF.:(n-tuples_on (T.m)) & FF.T22 in FF.:(n-tuples_on (T.m))
+& FF.T1 in SS* & FF.T2 in SS* by FUNCT_1:def 12; then
+C9: FF.T1 in (FF.:(n-tuples_on (T.m))) /\ (SS*) &
+FF.T2 in (FF.:(n-tuples_on (T.m))) /\ (SS*) & w11 in SS* & w22 in SS*
+& ff.(FF.T1, w11)=ff.(FF.T2, w22) by FOMODEL0:4, Z3, XBOOLE_0:def 4;
+T.m is SS-prefix & (T.m is SS-prefix implies
+(SS-multiCat).:(n-tuples_on (T.m)) is SS-prefix) by Z5, DefSPrefix;
+then (SS-multiCat).:(n-tuples_on (T.m)) is ff-unambiguous by FOMODEL0:def 3;
+hence t1=t2 & w1=w2 by C1, C2, Z3, C9, FOMODEL0:def 9;
+end; then
+T.(m+1) is ff-unambiguous by FOMODEL0:def 9; then
+T.(m+1) is SS-prefix by FOMODEL0:def 3; hence thesis;
+end;
+for m being Nat holds P[m] from NAT_1:sch 2(B1, B2); hence thesis;
+end;
+
+registration
+let S,m;
+cluster S-termsOfMaxDepth.m -> S-prefix;
+coherence by Lm27;
+end;
+
+registration
+let S; let V be Element of (AllTermsOf S)*;
+cluster S-multiCat.V -> Relation-like;
+coherence;
+end;
+
+registration
+let S; let V be Element of (AllTermsOf S)*;
+cluster S-multiCat.V -> Function-like Relation;
+coherence;
+end;
+
+definition
+let S;
+let phi be string of S;
+attr phi is 0wff means :DefAtomic: ex s being relational ::def35
+Element of S, V being abs(ar(s))-element Element of (AllTermsOf S)* st
+phi=<*s*>^(S-multiCat.V);
+end;
+
+registration
+let S;
+cluster 0wff string of S;
+existence
+proof
+set SS=AllSymbolsOf S;
+set s = the relational Element of S;
+set V = the abs(ar(s))-element Element of (AllTermsOf S)*;
+reconsider ss=s as Element of SS; reconsider
+tail=S-multiCat.V as FinSequence of SS by FINSEQ_1:def 11; reconsider
+IT=<*ss*>^tail as Element of SS*\{{}} by FOMODEL0:5; take IT;
+thus thesis by DefAtomic;
+end;
+end;
+
+registration
+let S; let phi be 0wff string of S;
+cluster S-firstChar.phi -> relational Element of S;
+coherence
+proof
+set SS=AllSymbolsOf S, A=AllTermsOf S, C=S-multiCat, F=S-firstChar;
+consider s be relational Element of S,
+V being abs(ar(s))-element Element of A* such that B1:
+phi=<*s*>^(C.V) by DefAtomic;
+reconsider ss=s as Element of SS;
+reconsider head=<*ss*> as FinSequence of SS;
+reconsider tail=C.V as FinSequence of SS by FINSEQ_1:def 11; F.phi =
+(head^tail).1 by B1, FOMODEL0:6 .= s by FINSEQ_1:58; hence thesis;
+end;
+end;
+
+definition
+let S; func AtomicFormulasOf S equals ::def36
+{phi where phi is string of S: phi is 0wff};
+coherence;
+end;
+
+definition
+let S;
+redefine func AtomicFormulasOf S -> Subset of (AllSymbolsOf S)*\{{}};
+coherence
+proof
+set SS=AllSymbolsOf S, AF=AtomicFormulasOf S;
+defpred P[Element of SS*\{{}}] means $1 is 0wff;
+{phi where phi is Element of SS*\{{}}: P[phi]} is Subset of SS*\{{}} from
+DOMAIN_1:sch 7; hence thesis;
+end;
+end;
+
+registration
+let S;
+cluster AtomicFormulasOf S -> non empty;
+coherence
+proof
+set AF=AtomicFormulasOf S;
+set phi = the 0wff string of S; phi in AF; hence thesis;
+end;
+end;
+
+registration
+let S;
+cluster -> 0wff (Element of AtomicFormulasOf S);
+coherence
+proof
+set AF=AtomicFormulasOf S;
+let phi be Element of AF; phi in AF; then consider x being string of S
+such that B1: phi=x & x is 0wff; thus thesis by B1;
+end;
+end;
+
+Lm3: AllTermsOf S is S-prefix
+proof
+set SS=AllSymbolsOf S, f=SS-concatenation, F=SS-multiCat, TT=AllTermsOf S,
+T=S-termsOfMaxDepth;
+now
+let t1,t2,w1,w2 be set; assume
+C3: t1 in TT/\(SS*) & t2 in TT/\(SS*) &
+w1 in SS* & w2 in SS* & f.(t1,w1)=f.(t2,w2);
+consider mm being Element of NAT such that C1: t1 in T.mm by Lm26, C3;
+consider nn being Element of NAT such that C2: t2 in T.nn by Lm26, C3;
+set p=mm+nn;
+C4: T.p is f-unambiguous by FOMODEL0:def 3;
+T.mm c= T.p & T.nn c= T.p by Lm2;
+then t1 in T.p /\ (SS*) & t2 in T.p /\ (SS*) &
+w1 in SS* & w2 in SS* & f.(t1,w1)=f.(t2,w2) by C3,XBOOLE_0:def 4, C1, C2;
+hence t1=t2 & w1=w2 by C4, FOMODEL0:def 9;
+end;
+then TT is f-unambiguous by FOMODEL0:def 9; then
+TT is SS-prefix by FOMODEL0:def 3;
+hence thesis;
+end;
+
+registration
+let S;
+cluster AllTermsOf S -> S-prefix;
+coherence by Lm3;
+end;
+
+definition
+let S; let t be termal string of S;
+func SubTerms(t) -> Element of (AllTermsOf S)* means :DefSubTerms1:
+it is (abs(ar(S-firstChar.t)))-element &
+t=<*S-firstChar.t*>^(S-multiCat.it);
+::# this yields the subterms of a non0wff term;
+::# for an 0wff terms it returns the empty finsequence;
+existence
+proof
+set SS=AllSymbolsOf S, T=S-termsOfMaxDepth,
+TT=AllTermsOf S, s=S-firstChar.t,n=abs(ar(s));
+t in TT by DefTermal2; then
+consider mmm being Element of NAT such that B1: t in T.mmm by Lm26;
+reconsider tt=t as mmm-termal string of S by B1, DefTermal;
+reconsider tttt=t as non empty FinSequence of SS by FOMODEL0:5;
+per cases;
+suppose mmm=0; then reconsider ttt=tt as 0-termal string of S;
+reconsider e={} as Element of (AllTermsOf S)* by FINSEQ_1:66; take e;
+abs(ar(S-firstChar.ttt)) is zero;
+hence e is n-element; C1: len ttt=1 by CARD_1:def 13; then
+tttt=<*tttt /. 1*> by FINSEQ_5:15 .= <*tttt.1*> by FINSEQ_4:24, C1
+.=  <*SS-firstChar.t*> ^ {} by FOMODEL0:6
+.= <*SS-firstChar.t*>^(S-multiCat.e); hence thesis;
+end;
+suppose mmm<>0; then consider m being Nat such that C1: mmm=m+1 by NAT_1:6;
+reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+reconsider ttt=tt as (mm+1)-termal string of S by C1;
+consider ST being Element of (T.mm)* such that C2:
+ST is n-element & ttt=<*S-firstChar.ttt*>^((S-multiCat).ST) by Lm333;
+reconsider TM=T.mm as Subset of TT by Lm4; ST in TM* & TM* c= TT*; then
+reconsider STT=ST as Element of TT*;
+take STT; thus thesis by C2;
+end;
+end;
+uniqueness
+proof
+set SS=AllSymbolsOf S, T=S-termsOfMaxDepth, TT=AllTermsOf S,
+s=S-firstChar.t, n=abs(ar(s));
+C11: SS-multiCat is (n-tuples_on TT)-one-to-one by FOMODEL0:8;
+C0: dom (SS-multiCat) = SS** by FUNCT_2:def 1;
+let IT1,IT2 be Element of TT*;
+reconsider IT11=IT1, IT22=IT2 as FinSequence of TT by FINSEQ_1:def 11;
+assume C1: IT1 is n-element & t=<*s*>^((S-multiCat).IT1);
+then len IT11=n by CARD_1:def 13; then
+reconsider IT111=IT11 as Element of n-tuples_on TT by FINSEQ_2:153;
+assume C2: IT2 is n-element & t=<*s*>^((S-multiCat).IT2);
+then len IT22=n by CARD_1:def 13; then
+reconsider IT222=IT22 as Element of n-tuples_on TT by FINSEQ_2:153;
+C3: (SS-multiCat).IT111=(SS-multiCat).IT222 by FINSEQ_1:46, C1, C2;
+IT111 in (n-tuples_on TT) /\ dom (SS-multiCat) &
+IT222 in (n-tuples_on TT) /\ dom (SS-multiCat) by XBOOLE_0:def 4, C0;
+hence thesis by C3, C11, FOMODEL0:def 5;
+end;
+end;
+
+registration
+let S; let t be termal string of S;
+cluster SubTerms(t) -> (abs(ar(t)))-element Element of (AllTermsOf S)*;
+coherence by DefSubTerms1;
+end;
+
+registration
+let S; let t0 be 0-termal string of S;
+cluster SubTerms(t0) -> empty Element of (AllTermsOf S)*;
+coherence
+proof abs(ar(t0))=0; hence thesis; end;
+end;
+
+registration
+let mm,S; let t be (mm+1)-termal string of S;
+cluster SubTerms(t) ->
+(S-termsOfMaxDepth.mm)-valued (Element of (AllTermsOf S)*);
+coherence
+proof
+set T=S-termsOfMaxDepth, F=S-firstChar, C=S-multiCat, A=AllTermsOf S,
+SS=AllSymbolsOf S; consider TT being Element of (T.mm)*
+such that B1: TT is abs(ar(t))-element & t=<*F.t*> ^ (C.TT) by Lm333;
+reconsider X=T.mm as Subset of A by Lm4; reconsider
+Y=X* as non empty Subset of A*; reconsider TTTT=TT as Element of Y;
+reconsider TTT=TTTT as Element of A*;
+TTT=SubTerms(t) by DefSubTerms1, B1;
+hence thesis;
+end;
+end;
+
+definition ::def38 1
+let S; let phi be 0wff string of S;
+func SubTerms(phi) -> abs(ar(S-firstChar.phi))-element
+Element of (AllTermsOf S)* means :DefSubTerms2:
+phi=<*S-firstChar.phi*>^(S-multiCat.it);
+existence
+proof
+set SS=AllSymbolsOf S, A=AllTermsOf S, C=S-multiCat, F=S-firstChar;
+consider s be relational Element of S,
+V being abs(ar(s))-element Element of A* such that B1:
+phi=<*s*>^(C.V) by DefAtomic;
+reconsider ss=s as Element of SS;
+reconsider head=<*ss*> as FinSequence of SS;
+reconsider tail=C.V as FinSequence of SS by FINSEQ_1:def 11;
+Z0: F.phi = (head^tail).1 by B1, FOMODEL0:6 .= s by FINSEQ_1:58;
+reconsider VV=V as abs(ar(F.phi))-element Element of A* by Z0;
+take VV;
+thus thesis by Z0, B1;
+end;
+uniqueness
+proof
+set SS=AllSymbolsOf S, A=AllTermsOf S, C=S-multiCat, F=S-firstChar; set
+n=abs(ar(S-firstChar.phi));
+Z1: dom C = SS** & A* c= SS** by FUNCT_2:def 1;
+reconsider s=F.phi as Element of SS; reconsider head=<*s*> as FinSequence of
+SS;
+let IT1, IT2 be n-element Element of A*;
+reconsider I1=IT1, I2=IT2 as FinSequence of A by FINSEQ_1:def 11;
+len IT1=n & len IT2=n by CARD_1:def 13; then reconsider
+I11=I1, I22=I2 as Element of n-tuples_on A by FINSEQ_2:153;
+reconsider tail1=C.IT1, tail2=C.IT2 as FinSequence of SS by FINSEQ_1:def 11;
+assume
+Z2: phi=<*F.phi*>^(C.IT1) & phi=<*F.phi*>^(C.IT2);
+IT1 in dom C & I11 in n-tuples_on A & IT2 in dom C & I22 in n-tuples_on A
+by Z1; then B3: IT1 in (n-tuples_on A) /\ dom C &
+IT2 in (n-tuples_on A) /\ dom C & C.IT1=C.IT2
+by Z2, FINSEQ_1:46, XBOOLE_0:def 4;
+C is (n-tuples_on A)-one-to-one by FOMODEL0:8;
+hence thesis by FOMODEL0:def 5, B3;
+end;
+end;
+
+registration
+let S; let phi be 0wff string of S;
+cluster SubTerms phi -> abs(ar(S-firstChar.phi))-element FinSequence;
+coherence;
+end;
+
+definition
+let S;
+redefine func AllTermsOf S -> Element of
+bool ((AllSymbolsOf S)*\{{}});
+coherence
+proof
+set SS=AllSymbolsOf S, A=AllTermsOf S;
+now
+let x be set; assume C1: x in A; then reconsider t=x as Element of A;
+not x in {{}} & x in SS* by C1; hence
+x in SS*\{{}} by XBOOLE_0:def 5;
+end;
+hence thesis by TARSKI:def 3;
+end;
+end;
+
+registration
+let S;
+cluster -> termal Element of AllTermsOf S;
+coherence by DefTermal2;
+end;
+
+definition
+let S;
+func S-subTerms -> Function of (AllTermsOf S), (AllTermsOf S)* means ::def39
+for t being Element of AllTermsOf S holds it.t=SubTerms(t);
+existence
+proof
+set SS=AllSymbolsOf S, A=AllTermsOf S;
+deffunc F(Element of A)=SubTerms($1);
+consider f being Function of A,A* such that B1:
+for t being Element of A holds f.t=F(t) from FUNCT_2:sch 4; take f;
+thus thesis by B1;
+end;
+uniqueness
+proof
+set A=AllTermsOf S;
+let IT1,IT2 be Function of A,A*;
+assume B1: for t being Element of A holds IT1.t=SubTerms(t);
+assume B2: for t being Element of A holds IT2.t=SubTerms(t);
+now
+let t be Element of A; thus IT1.t=SubTerms(t) by B1 .= IT2.t by B2;
+end;
+hence thesis by FUNCT_2:113;
+end;
+end;
+
+theorem S-termsOfMaxDepth.m c= S-termsOfMaxDepth.(m+n) by Lm2; ::Th4
+
+theorem
+x in AllTermsOf S implies ex nn st x in S-termsOfMaxDepth.nn by Lm26;
+
+theorem AllTermsOf S c= (AllSymbolsOf S)*\{{}};
+
+theorem AllTermsOf S is S-prefix;
+
+theorem x in AllTermsOf S implies x is string of S;
+
+theorem (AtomicFormulaSymbolsOf S) \ OwnSymbolsOf S={TheEqSymbOf S}
+proof
+set o=the OneF of S, z=the ZeroF of S, f=the adicity of S, R=RelSymbolsOf S,
+O=OwnSymbolsOf S, SS=AllSymbolsOf S, e=TheEqSymbOf S, n=TheNorSymbOf S,
+A=AtomicFormulaSymbolsOf S, D = (the carrier of S) \ {o};
+Z0: e in A;
+A\O = A \ (SS\({z} \/ {o})) by ENUMSET1:41.= A \ (A \ {z})
+by XBOOLE_1:41 .= (A \ A) \/ (A /\ {z}) by XBOOLE_1:52
+.= {z} by ZFMISC_1:52, Z0; hence thesis;
+end;
+
+theorem TermSymbolsOf S\(LettersOf S) = OpSymbolsOf S by FUNCT_1:138;
+
+theorem Th11: (AtomicFormulaSymbolsOf S) \ (RelSymbolsOf S)=TermSymbolsOf S
+proof
+set R=RelSymbolsOf S, SSS=AtomicFormulaSymbolsOf S, f=the adicity of S;
+f"INT=SSS by FUNCT_2:48; hence SSS\R =
+f"(INT\(INT\NAT)) by FUNCT_1:138.=
+f"(INT\INT \/ (INT /\ NAT)) by XBOOLE_1:52
+.= TermSymbolsOf S by XBOOLE_1:7, XBOOLE_1:28;
+end;
+
+registration let S;
+cluster non relational -> termal (ofAtomicFormula Element of S);
+coherence
+proof
+set R=RelSymbolsOf S, SSS=AtomicFormulaSymbolsOf S, T=TermSymbolsOf S;
+let s be ofAtomicFormula Element of S; assume s is non relational;
+then s in SSS & not s in R by DefRelational, DefOfAtomicFormula;
+then s in SSS\R by XBOOLE_0:def 5; then s in T by Th11;
+hence thesis by DefTermal0;
+end;
+end;
+
+definition let S;
+redefine func OwnSymbolsOf S -> Subset of AllSymbolsOf S;
+coherence;
+end;
+
+registration let S;
+cluster non literal -> operational (termal Element of S);
+coherence
+proof
+set L=LettersOf S, P=OpSymbolsOf S, T=TermSymbolsOf S, f=the adicity of S;
+let s be termal Element of S; B1: s in T by DefTermal0;
+assume not s is literal; then not s in L by DefLiteral; then
+s in T\L & T\L=P by FUNCT_1:138, B1, XBOOLE_0:def 5;
+hence thesis by DefOperational;
+end;
+end;
+
+theorem Th12:
+x is string of S iff x is non empty Element of ((AllSymbolsOf S)*)
+proof
+set SS=AllSymbolsOf S;
+x is string of S iff (x in SS* & not x in {{}}) by XBOOLE_0:def 5;
+hence thesis;
+end;
+
+theorem ::Th13
+x is string of S iff x is non empty FinSequence of (AllSymbolsOf S) by Th12;
+
+theorem S-termsOfMaxDepth is Function of NAT,bool((AllSymbolsOf S)*);
+
+registration let S;
+cluster -> literal Element of (LettersOf S);
+coherence by DefLiteral;
+end;
+
+registration
+let S;
+cluster TheNorSymbOf S -> non low-compounding Element of S;
+coherence
+proof
+set N=TheNorSymbOf S, f=the adicity of S, Low=LowerCompoundersOf S, SS
+=AllSymbolsOf S;
+Z0: dom f = SS\{N} & N in {N} by FUNCT_2:def 1, TARSKI:def 1;
+not N in Low by XBOOLE_0:def 5, Z0;
+hence thesis by DefLowCompounding;
+end;
+end;
+
+registration let S;
+cluster TheNorSymbOf S -> non own Element of S;
+coherence
+proof
+set N=TheNorSymbOf S,f=the adicity of S,O=OwnSymbolsOf S,SS=AllSymbolsOf S;
+N in {the ZeroF of S,N} by TARSKI:def 2; then not N in O by XBOOLE_0:def 5;
+hence thesis by DefOwn;
+end;
+end;
+
+theorem ::Th15
+s<>TheNorSymbOf S & s<>TheEqSymbOf S implies s in OwnSymbolsOf S
+proof
+set O=OwnSymbolsOf S, R=RelSymbolsOf S, E=TheEqSymbOf S, X=R\O,
+N=TheNorSymbOf S, SS=AllSymbolsOf S; assume s<>N & s<>E;then
+not s in {N} & not s in {E} by TARSKI:def 1; then not s in {N}\/{E}
+by XBOOLE_0:def 3; then not s in {N,E} by ENUMSET1:41;
+hence thesis by XBOOLE_0:def 5;
+end;
+
+reserve l,l1,l2 for literal Element of S, a for ofAtomicFormula Element of S,
+r for relational Element of S, w,w1,w2 for string of S,
+t,t1,t2 for termal string of S, tt,tt1, tt2 for Element of AllTermsOf S;
+
+definition ::def40 1
+let S, t;
+func Depth t -> Nat means :DefDepth2:
+t is it-termal & for n st t is n-termal holds it <= n;
+existence
+proof
+defpred P[Nat] means t is $1-termal;
+set TT=AllTermsOf S, T=S-termsOfMaxDepth; reconsider TF=T as Function;
+t in TT by DefTermal2; then consider mm such that
+B0: t in TF.mm by Lm26; t is mm-termal by DefTermal, B0; then
+B1: ex n being Nat st P[n];
+consider IT being Nat such that
+B2: P[IT] & for n st P[n] holds IT <= n from NAT_1:sch 5(B1); take IT;
+thus thesis by B2;
+end;
+uniqueness
+proof
+let IT1, IT2 be Nat; set phi=t; assume
+B1: phi is IT1-termal & for n st phi is n-termal holds IT1 <= n; assume
+B2: phi is IT2-termal & for n st phi is n-termal holds IT2 <= n;
+B3: IT2 <= IT1 by B2, B1;
+IT1 <= IT2 by B1, B2; hence thesis by B3, XXREAL_0:1;
+end;
+end;
+
+registration
+let S; let m0 be zero number; let t be m0-termal string of S;
+cluster Depth t -> zero number;
+coherence by DefDepth2;
+end;
+
+registration
+let S; let s be low-compounding Element of S;
+cluster ar(s) -> non zero number;
+coherence
+proof
+set f=the adicity of S, SS=AllSymbolsOf S, N=TheNorSymbOf S;
+s in LowerCompoundersOf S by DefLowCompounding;
+then s in dom f & f.s in INT\{0} by FUNCT_1:def 13; then not f.s in {0}
+by XBOOLE_0:def 5;
+hence thesis by TARSKI:def 1;
+end;
+end;
+
+registration
+let S; let s be termal Element of S;
+cluster ar s -> non negative ext-real;
+coherence
+proof
+set f=the adicity of S, T=TermSymbolsOf S; s in T by DefTermal0; then
+reconsider nn=ar s as Element of NAT by FUNCT_1:def 13;
+nn is non negative; hence thesis;
+end;
+end;
+
+registration
+let S; let s be relational Element of S;
+cluster ar s -> negative ext-real;
+coherence
+proof
+set f=the adicity of S, R=RelSymbolsOf S; s in R by DefRelational; then
+s in dom f & f.s in INT\NAT by FUNCT_1:def 13; then
+B0: ar s in INT & not ar s in NAT by XBOOLE_0:def 5;
+reconsider IT=ar s as Element of INT;
+thus thesis by B0, INT_1:16;
+end;
+end;
+
+theorem Th16:
+t is non 0-termal implies S-firstChar.t is operational &
+SubTerms t <> {}
+proof
+set T=S-termsOfMaxDepth, m=Depth t, ST=SubTerms t, TT=AllTermsOf S; assume
+t is non 0-termal; then m <> 0 by DefDepth2; then consider n such that
+B0: m=n+1 by NAT_1:6; set F=S-firstChar, C=S-multiCat, Fam=
+{Compound(s,T.n) where s is ofAtomicFormula Element of S:s is operational};
+n < m by B0, NAT_1:16; then not t is n-termal & t is m-termal by DefDepth2;
+then not t in T.n & t in T.(n+1) by B0, DefTermal; then
+(t in (union Fam) \/ T.n) & not t in T.n by DefTerm;
+then t in (union Fam) by XBOOLE_0:def 3; then consider x being set such that
+B1: t in x & x in Fam by TARSKI:def 4;
+consider s being ofAtomicFormula Element of S such that
+B2: x=Compound(s,T.n) & s is operational by B1; set k=abs ar s;
+consider StringTuple being Element of (AllSymbolsOf S)** such that
+B3: t=<*s*>^(C.StringTuple) & rng StringTuple c= T.n
+& StringTuple is (abs ar s)-element by B1, B2;
+B4: F.t = (<*s*>^(C.StringTuple)).1 by FOMODEL0:6, B3 .=
+<*s*>.1 by FOMODEL0:28 .= s by FINSEQ_1:57; hence F.t is operational by B2;
+reconsider k1=k as non zero Nat by B2; reconsider STT=ST as (k1+0)-element
+Element of TT* by B4; STT <>{}; hence thesis;
+end;
+
+registration let S;
+cluster S-multiCat -> FinSequence-yielding Function;
+coherence;
+end;
+
+registration
+let S; let W be non empty ((AllSymbolsOf S)*\{{}})-valued FinSequence;
+cluster S-multiCat.W -> non empty set;
+coherence
+proof
+set C=S-multiCat, SS=AllSymbolsOf S, g=SS-concatenation, G=MultPlace g;
+consider m such that
+B0: m+1=len W by NAT_1:6; reconsider WW=W as
+(m+1+0)-element FinSequence by B0, CARD_1:def 13;
+Z0: {WW.(m+1)} \ (SS*\{{}})={}; then
+B1: WW.(m+1) in SS*\{{}} by ZFMISC_1:68;
+reconsider last=WW.(m+1) as string of S by Z0, ZFMISC_1:68;
+reconsider lastt=WW.(m+1) as Element of SS* by B1;
+set VV=WW|Seg m;
+reconsider VVV=VV as SS*-valued FinSequence;
+VV ^ <*WW.(m+1)*> \+\ WW ={}; then
+B2: G.W = G.(VVV^<*lastt*>) by FOMODEL0:29;
+per cases;
+suppose VVV is empty; then G.W=G.(<*lastt*>) by B2, FINSEQ_1:47
+.= last by FOMODEL0:31; hence thesis by FOMODEL0:32;
+end;
+suppose C0: VVV is non empty; then reconsider
+VVVV=VVV as Element of SS**\{{}} by FOMODEL0:30;
+G.W = g.(G.VVV, lastt) by C0, B2, FOMODEL0:31 .= (G.VVVV)^last by FOMODEL0:4;
+hence thesis by FOMODEL0:32;
+end;
+end;
+end;
+
+registration let S, l;
+cluster <*l*> -> 0-termal string of S;
+coherence
+proof
+set w=<*l*>, L=LettersOf S, AT=AtomicTermsOf S, T=S-termsOfMaxDepth;
+reconsider ll=l as Element of L by DefLiteral;
+w=<*ll*>; then w in AT; then w in T.0 by DefTerm;
+hence thesis by DefTermal;
+end;
+end;
+
+registration let S, m, n;
+cluster (m+0*n)-termal -> (m+n)-termal string of S;
+coherence
+proof
+set T=S-termsOfMaxDepth; let t be string of S; assume t is (m+0*n)-termal;
+then t in T.m & T.m c= T.(m+n) by DefTermal, Lm2;
+hence thesis by DefTermal;
+end;
+end;
+
+registration let S;
+cluster non low-compounding -> literal (own Element of S);
+coherence
+proof
+set L=LettersOf S, P=OpSymbolsOf S, O=OwnSymbolsOf S, T=TermSymbolsOf S;
+B0: T\L=P by FUNCT_1:138; let s be own Element of S; reconsider ss=s as
+ofAtomicFormula Element of S; assume
+B1: s is non low-compounding; then not ss is relational; then
+reconsider sss=ss as termal (ofAtomicFormula Element of S); assume
+not s is literal; then sss in T & not s in L by DefTermal0;
+then s in T\L by XBOOLE_0:def 5; then s is operational & not s is operational
+by B1, B0, DefOperational; hence contradiction;
+end;
+end;
+
+registration let S, t;
+cluster SubTerms t -> (rng t)*-valued Relation;
+coherence
+proof
+set SS=AllSymbolsOf S, C=S-multiCat, F=S-firstChar, ST=SubTerms t,
+T=S-termsOfMaxDepth, TT=AllTermsOf S; reconsider TTT=TT as Subset of SS*
+by XBOOLE_1:1;
+t=<*F.t*>^(C.ST) by DefSubTerms1; then rng (C.ST) c= rng t by FINSEQ_1:43;
+then C.ST is (rng t)-valued by RELAT_1:def 19;
+hence thesis by FOMODEL0:42;
+end;
+end;
+
+registration
+let S; let phi0 be 0wff string of S;
+cluster SubTerms phi0 -> (rng phi0)*-valued Relation;
+coherence
+proof
+set SS=AllSymbolsOf S, C=S-multiCat, F=S-firstChar, ST=SubTerms phi0,
+T=S-termsOfMaxDepth, TT=AllTermsOf S; reconsider TTT=TT as non empty
+Subset of SS* by XBOOLE_1:1;
+phi0=<*F.phi0*>^(C.ST) by DefSubTerms2; then rng (C.ST) c= rng phi0
+by FINSEQ_1:43; then C.ST is (rng phi0)-valued by RELAT_1:def 19;
+hence thesis by FOMODEL0:42;
+end;
+end;
+
+definition let S;
+redefine func S-termsOfMaxDepth ->
+Function of NAT,bool((AllSymbolsOf S)*\{{}});
+coherence
+proof
+set T=S-termsOfMaxDepth, SS=AllSymbolsOf S;
+now
+let y; assume y in rng T; then consider x such that
+C1: x in dom T & T.x=y by FUNCT_1:def 5;
+reconsider mm=x as Element of NAT by C1;
+(T.mm) misses {{}}
+proof
+assume (T.mm) meets {{}}; then T.mm /\ {{}} <> {} by XBOOLE_0:def 7; then
+consider z such that D1: z in T.mm /\ {{}} by XBOOLE_0:def 1;
+thus contradiction by D1;
+end;
+then T.mm c= SS*\{{}} by XBOOLE_1:86; hence y in bool(SS*\{{}}) by C1;
+end;
+then rng T c= bool(SS*\{{}}) by TARSKI:def 3; hence thesis by FUNCT_2:8;
+end;
+end;
+
+registration let S,mm;
+cluster S-termsOfMaxDepth.mm -> with_non-empty_elements;
+coherence;
+end;
+
+Lm11: S-termsOfMaxDepth.m c= (TermSymbolsOf S)*
+proof
+set TS=TermSymbolsOf S, F=S-firstChar, C=S-multiCat,
+P=OpSymbolsOf S, T=S-termsOfMaxDepth, SS=AllSymbolsOf S,
+CC=TS-multiCat;
+defpred P[Nat] means T.$1 c= TS*;
+B0: P[0]
+proof
+now
+let x; assume x in T.0; then reconsider t=x as 0-termal string of S
+by DefTermal; reconsider s=F.t as termal Element of S;
+set sub=SubTerms t; reconsider ss=s as Element of TS by DefTermal0;
+t=<*s*>^(C.sub) by DefSubTerms1 .= <*s*>^{} .= <*ss*>;
+then t is FinSequence of TS; hence x in TS*;
+end; hence thesis by TARSKI:def 3;
+end;
+B1: for n st P[n] holds P[n+1]
+proof
+let n; reconsider nn=n, NN=n+1 as Element of NAT by ORDINAL1:def 13; assume
+P[n]; then reconsider Tn=T.nn as non empty Subset of TS*;
+now
+let x; assume x in T.(n+1); then x in T.NN; then reconsider t=x as
+(n+1)-termal string of S by DefTermal;
+set s=F.t, m=abs ar s; reconsider tt=t as (nn+1)-termal string of S;
+per cases;
+suppose not t is 0-termal; then D0: s is operational by Th16; then
+s in P & P c= TS by DefOperational, Lm8;
+then reconsider ss=s as Element of TS;
+reconsider m1=m as non zero Nat by D0; SubTerms tt is (T.nn)-valued; then
+reconsider sub=SubTerms t as (m1+0)-element FinSequence of Tn by FOMODEL0:26;
+sub in Tn* & Tn* c= TS**; then reconsider subb=sub as
+(m1+0)-element Element of TS**;
+sub is Tn-valued & Tn c= TS* & TS c= SS by XBOOLE_1:1; then
+<*ss*>^(CC.subb) = <*F.t*>^(C.(SubTerms t))
+by FOMODEL0:53 .= t by DefSubTerms1;
+then reconsider tt=t as FinSequence of TS by FOMODEL0:26;
+tt in TS*; hence x in TS*;
+end;
+suppose
+t is 0-termal; then x in T.0 by DefTermal; hence x in TS* by B0;
+end;
+end;
+hence thesis by TARSKI:def 3;
+end;
+for n holds P[n] from NAT_1:sch 2(B0, B1); hence thesis;
+end;
+
+registration
+let S,m; let t be termal string of S;
+cluster t null m -> (Depth t+m)-termal string of S;
+coherence
+proof set d=Depth t; t is (d+0*m)-termal by DefDepth2; hence thesis; end;
+end;
+
+registration
+let S;
+cluster termal -> (TermSymbolsOf S)-valued string of S;
+coherence
+proof
+set T=S-termsOfMaxDepth, TS=TermSymbolsOf S; let w; assume w is termal;
+then reconsider tt=w as termal string of S; set d=Depth tt; reconsider
+t=tt null 0 as (d+0)-termal string of S;
+t in T.d & T.d c= TS* by Lm11, DefTermal; hence thesis;
+end;
+end;
+
+registration
+let S;
+cluster AllTermsOf S\((TermSymbolsOf S)*) -> empty set;
+coherence
+proof
+set TT=AllTermsOf S, TS=TermSymbolsOf S;
+now
+let x; assume x in TT; then reconsider t=x as termal string of S;
+t is FinSequence of TS by FOMODEL0:26; hence x in TS*;
+end; then TT c= TS* by TARSKI:def 3; hence thesis;
+end;
+end;
+
+registration
+let S; let phi0 be 0wff string of S;
+cluster SubTerms phi0 -> (TermSymbolsOf S)*-valued;
+coherence
+proof
+set sub=SubTerms phi0, TS=TermSymbolsOf S, TT=AllTermsOf S;
+TT\(TS*)={}; then reconsider TTT=TT as non empty Subset of TS*
+by XBOOLE_1:37; sub is TTT-valued; hence thesis;
+end;
+end;
+
+registration
+let S;
+cluster 0wff -> (AtomicFormulaSymbolsOf S)-valued string of S;
+coherence
+proof
+set TS=TermSymbolsOf S, AS=AtomicFormulaSymbolsOf S, F=S-firstChar,
+C=S-multiCat, TT=AllTermsOf S, CC=TS-multiCat, SS=AllSymbolsOf S;
+let w; assume w is 0wff; then reconsider phi=w as 0wff string of S;
+reconsider r=F.phi as relational Element of S; set m=abs ar r;
+reconsider rr=r as Element of AS by DefOfAtomicFormula;
+reconsider sub=SubTerms phi as (m+0)-element Element of TT*;
+TT\TS*={}; then
+TS c= SS & TT c= TS* & sub is TT-valued by XBOOLE_1:1, 37; then
+<*rr*>^(CC.sub) = <*r*>^(C.sub) by FOMODEL0:53 .= phi by DefSubTerms2;
+hence thesis;
+end;
+end;
+
+registration
+let S;
+cluster OwnSymbolsOf S -> non empty set;
+coherence;
+end;
+
+reserve phi0 for 0wff string of S;
+
+theorem S-firstChar.phi0<>TheEqSymbOf S implies
+phi0 is (OwnSymbolsOf S)-valued
+proof
+set O=OwnSymbolsOf S, F=S-firstChar, r=F.phi0, C=S-multiCat, sub=
+SubTerms phi0, E=TheEqSymbOf S, R=RelSymbolsOf S; reconsider
+TS=TermSymbolsOf S as non empty Subset of O by Lm8; assume r<>E; then
+not r in {E} by TARSKI:def 1; then not r in R\O by Lm8; then
+r in O or not r in R by XBOOLE_0:def 5; then
+reconsider rr=r as Element of O by DefRelational;
+C.sub is TS-valued by FOMODEL0:54; then
+reconsider tail=C.sub as O-valued FinSequence;
+phi0=<*rr*>^tail by DefSubTerms2; hence thesis;
+end;
+
+registration
+cluster strict non empty Language-like;
+existence
+proof
+set a=the Function of NAT\{0}, INT;
+take IT=Language-like(#NAT,0,0,a#); thus thesis;
+end;
+end;
+
+definition ::def41 1
+let S1, S2 be Language-like;
+attr S2 is S1-extending means :DefExt0:
+the adicity of S1 c= the adicity of S2 & TheEqSymbOf S1=TheEqSymbOf S2 &
+TheNorSymbOf S1 = TheNorSymbOf S2;
+end;
+
+registration
+let S;
+cluster S null -> S-extending Language-like;
+coherence
+proof
+set E=TheEqSymbOf S, N=TheNorSymbOf S, f=the adicity of S;
+f c= f & E=E & N=N; hence thesis by DefExt0;
+end;
+end;
+
+registration
+let S;
+cluster S-extending Language;
+existence
+proof
+reconsider SS=S null as Language; take SS; thus thesis;
+end;
+end;
+
+registration
+let S1; let S2 be S1-extending Language;
+cluster OwnSymbolsOf S1 \ OwnSymbolsOf S2 -> empty;
+coherence
+proof
+set O1=OwnSymbolsOf S1, O2=OwnSymbolsOf S2, f1=the adicity of S1,
+f2=the adicity of S2, A1=AtomicFormulaSymbolsOf S1, SS1=AllSymbolsOf S1,
+SS2=AllSymbolsOf S2, z1=the ZeroF of S1, o1=the OneF of S1,
+z2=the ZeroF of S2, o2=the OneF of S2,
+E1=TheEqSymbOf S1, E2=TheEqSymbOf S2, N1=TheNorSymbOf S1,
+N2=TheNorSymbOf S2;
+B0: dom f1=SS1\{o1} & dom f2=SS2\{o2} by FUNCT_2:def 1;
+f1 c= f2 by DefExt0; then
+SS1\{o1} c= SS2\{o2} by B0, GRFUNC_1:8; then
+(SS1\{N1}) \ {E1} c= SS2\{N2} \ {E1} by XBOOLE_1:33;
+then SS1\({N1}\/{E1}) c= SS2\{N2}\{E1} by XBOOLE_1:41;
+then SS1\({N1, E1}) c= SS2\{N2}\{E1} by ENUMSET1:41;
+then SS1\({N1, E1}) c= SS2\({N2}\/{E1}) by XBOOLE_1:41;
+then SS1\({N1, E1}) c= SS2\({N2}\/{E2}) by DefExt0;
+then SS1\({N1, E1}) c= SS2\({N2, E2}) by ENUMSET1:41;
+hence thesis;
+end;
+end;
+
+definition
+let f be (INT)-valued Function; let L be non empty Language-like;
+set C=the carrier of L, z=the ZeroF of L, o=the OneF of L,
+a=the adicity of L, X=dom f, g=f|(X\{o}), a1=g +* a, C1=(C\/X);
+func L extendWith f -> strict non empty Language-like means :DefExt1:
+the adicity of it = f|(dom f \ {the OneF of L}) +* (the adicity of L) &
+the ZeroF of it = the ZeroF of L &
+the OneF of it = the OneF of L;
+existence
+proof
+z is Element of C null X; then
+reconsider z1=z as Element of C1 by TARSKI:def 3;
+o is Element of C null X; then
+reconsider o1=o as Element of C1 by TARSKI:def 3;
+B1: dom a=C\{o} by FUNCT_2:def 1;
+B2: dom g=X /\ (X\{o}) by RELAT_1:90 .= X\{o} null X;
+dom a1 = X\{o} \/ (C\{o}) by FUNCT_4:def 1, B1, B2 .= (X\/C)\{o}
+by XBOOLE_1:42; then
+dom a1 = C1\{o1} & rng a1 c= INT by RELAT_1:def 19; then
+a1 is Element of Funcs(C1\{o1}, INT) by FUNCT_2:def 2; then
+reconsider a11=a1 as Function of C1\{o1}, INT;
+set new=Language-like(# C1, z1, o1, a11 #);
+reconsider new as strict non empty Language-like; take new; thus thesis;
+end;
+uniqueness
+proof
+let IT1, IT2 be strict non empty Language-like;
+set c1=the carrier of IT1, z1=the ZeroF of IT1, o1=the OneF of IT1,
+a1=the adicity of IT1;
+set c2=the carrier of IT2, z2=the ZeroF of IT2, o2=the OneF of IT2,
+a2=the adicity of IT2;
+set ITT1=Language-like(#c1,z1,o1,a1#), ITT2=Language-like(#c2,z2,o2,a2#);
+reconsider ITT1, ITT2 as non empty Language-like;
+defpred P[Language-like] means the adicity of $1 = f|(dom f \ {o}) +* a
+& the ZeroF of $1 = z & the OneF of $1 = o;
+assume
+Z0: P[IT1] & P[IT2];
+dom a1 = c2\{o1} by FUNCT_2:def 1, Z0;
+then c1\{o1}\/({o1} null c1) = c2\{o2}\/({o2} null c2) by Z0, FUNCT_2:def 1
+.= c2 by FOMODEL0:48;
+hence thesis by Z0, FOMODEL0:48;
+end;
+end;
+
+registration
+let S be non empty Language-like; let f be (INT)-valued Function;
+cluster S extendWith f -> S-extending;
+coherence
+proof
+set S1=S, S2=S1 extendWith f, a1=the adicity of S1, a2=the adicity of S2,
+o1=the OneF of S1;
+B0: TheEqSymbOf S1=TheEqSymbOf S2 & TheNorSymbOf S1=TheNorSymbOf S2
+by DefExt1; a2=f|(dom f\{o1}) +* a1 by DefExt1; then a1 c= a2
+by FUNCT_4:26; hence thesis by B0, DefExt0;
+end;
+end;
+
+registration
+let S be non degenerated Language-like;
+cluster S-extending -> non degenerated (Language-like);
+coherence
+proof
+set S1=S; let S2 be Language-like; assume S2 is S-extending; then
+TheEqSymbOf S1=TheEqSymbOf S2 & TheNorSymbOf S1=TheNorSymbOf S2
+by DefExt0; then 0.S1=0.S2 & 1.S1=1.S2;
+hence thesis by STRUCT_0:def 8;
+end;
+end;
+
+registration
+let S be eligible Language-like;
+cluster S-extending -> eligible (Language-like);
+coherence
+proof
+set S1=S; let S2 be Language-like; set L1=LettersOf S1, L2=LettersOf S2,
+AS1=AtomicFormulaSymbolsOf S1, AS2=AtomicFormulaSymbolsOf S2,
+a1=the adicity of S1, a2=the adicity of S2, E1=TheEqSymbOf S1,
+E2=TheEqSymbOf S2; assume
+Z0: S2 is S1-extending; then
+B0: dom a1=AS1 & dom a2=AS2 & E1=E2 & a1 c= a2 by FUNCT_2:def 1, DefExt0;
+reconsider a11=a1 as Subset of a2 by Z0, DefExt0;
+a11"{0} c= a2"{0} by RELAT_1:179; then
+reconsider L11=L1 as Subset of L2; L2 null L11 is infinite;
+hence L2 is infinite;
+a1.E1=-2 by DefEligible; then E1 in dom a1 by FUNCT_1:def 4; then
+a1.E1=(a2 +* a11).E1 by FUNCT_4:14 .= a2.E2 by FUNCT_4:104, B0;
+hence a2.E2=-2 by DefEligible;
+end;
+end;
+
+registration
+let E be empty Relation; let X;
+cluster X|E -> empty;
+coherence by RELAT_1:138;
+end;
+
+Lm12: for S1 being non empty Language-like, f being (INT)-valued Function
+holds (
+LettersOf(S1 extendWith f)=(f|(dom f\AllSymbolsOf S1))"{0}\/ LettersOf S1
+& (the adicity of (S1 extendWith f))|(OwnSymbolsOf S1) =
+(the adicity of S1)|(OwnSymbolsOf S1))
+proof
+let S1 be non empty Language-like; let f be (INT)-valued Function;
+set S2=S1 extendWith f, L1=LettersOf S1, a1=the adicity of S1, a2=
+the adicity of S2, z1=the ZeroF of S1, o1=the OneF of S1, X=dom f\{o1},
+C1=the carrier of S1, O1=OwnSymbolsOf S1, L2=LettersOf S2,
+f1=f|(X\dom a1), SS1=AllSymbolsOf S1;
+C1=C1\{o1}\/({o1} null C1) by FOMODEL0:48
+.= dom a1\/{o1} by FUNCT_2:def 1; then
+f1=f|(dom f \ C1) by XBOOLE_1:41; then
+B0: f|(dom f \ C1) \/ a1 = f|X +* a1 by FOMODEL0:57 .= a2 by DefExt1;
+hence L2=(f|(dom f \ SS1))"{0} \/ L1 by FOMODEL0:23;
+reconsider Y=O1/\dom f as Subset of C1 by XBOOLE_1:1;
+thus a2|O1 = a1|O1 \/ (f|(dom f \ C1)|O1) by B0, FOMODEL0:56 .=
+a1|O1 \/ (f|(O1/\(dom f\C1))) by RELAT_1:100 .=
+a1|O1 \/ (f|((O1/\dom f)\C1)) by XBOOLE_1:49 .=
+a1|O1 \/ (f|(Y\C1)) .= a1|O1;
+end;
+
+registration
+let X; let m be integer number;
+cluster X --> m -> (INT)-valued;
+coherence
+proof
+reconsider mm=m as Element of INT by INT_1:def 2;
+X-->m is {mm}-valued; hence thesis;
+end;
+end;
+
+definition
+let S; let X be functional set;
+func S addLettersNotIn X -> S-extending Language equals S extendWith (
+(((AllSymbolsOf S)\/(SymbolsOf X))-freeCountableSet --> 0)
+ qua ((INT)-valued Function));
+coherence;
+end;
+
+registration
+let S1; let X be functional set;
+cluster (LettersOf (S1 addLettersNotIn X)) \ SymbolsOf X -> infinite;
+coherence
+proof
+set L1=LettersOf S1, S2=S1 addLettersNotIn X, no=SymbolsOf X,
+L2=LettersOf S2, IT=L2\no, a1=the adicity of S1, a2=the adicity of S2,
+ SS1=AllSymbolsOf S1, fresh = (SS1\/no)-freeCountableSet;
+reconsider f=fresh --> 0 as (INT)-valued Function;
+B0: 0 in {0} & dom (fresh-->0)=fresh by FUNCT_2:def 1, TARSKI:def 1;
+fresh /\ (SS1\/no)={}; then
+fresh misses (SS1\/no) by XBOOLE_0:def 7; then fresh misses (SS1 null no)
+& fresh misses (no null SS1) by XBOOLE_1:63; then
+B1: fresh\SS1=fresh & fresh\no=fresh by XBOOLE_1:83;
+L2=(f|(dom f\SS1))"{0} \/ L1 by Lm12; then
+IT = ((f null {})|({}\/dom f))"{0}\no \/ (L1\no)
+by XBOOLE_1:42, B1, B0 .= fresh \/ (L1\no) by FUNCOP_1:20, B0, B1;
+hence thesis;
+end;
+end;
+
+registration
+cluster countable Language;
+existence
+proof
+reconsider z=0, o=1 as Element of NAT;
+set D=NAT\{o}; z in NAT & not z in {o} by TARSKI:def 1; then
+reconsider zz=z as Element of D by XBOOLE_0:def 5;
+reconsider f=D-->0, g=zz.-->(-2) as (INT)-valued Function;
+set a= f+*g;
+B0: zz in {zz} & dom g={zz} & dom f = D by FUNCOP_1:19, TARSKI:def 1; then
+dom a = D null {zz} by FUNCT_4:def 1; then
+rng a c= INT & dom a=D by RELAT_1:def 19; then a is Element of
+Funcs(D, INT) by FUNCT_2:def 2; then
+reconsider aa=a as Function of D, INT;
+set IT=Language-like(#NAT, z, o, aa#);
+Z2: 0.IT<>1.IT;
+aa.z = g.zz by B0, FUNCT_4:14 .= -2 by B0, FUNCOP_1:13; then
+B1: aa.(TheEqSymbOf IT)=-2;
+now
+let x; assume
+Z1: x in D\{z}; then
+C0: x in D & not x in {zz} by XBOOLE_0:def 5; then
+ x in dom aa & not x in dom g by FUNCT_2:def 1; then
+aa.x=f.x by FUNCT_4:12 .= 0 by FUNCOP_1:13, Z1; then
+x in dom aa & aa.x in {0} by TARSKI:def 1, C0, FUNCT_2:def 1;
+hence x in aa"{0} by FUNCT_1:def 13;
+end;
+then reconsider E=D\{z} as Subset of aa"{0} by TARSKI:def 3;
+E is infinite & aa"{0}\/E=aa"{0} null E;
+then LettersOf IT is infinite;
+then reconsider IT as Language by Z2, STRUCT_0:def 8, B1, DefEligible;
+take IT;
+thus thesis by ORDERS_4:def 2;
+end;
+end;
+
+registration
+let S be countable Language;
+cluster AllSymbolsOf S -> countable;
+coherence by ORDERS_4:def 2;
+end;
+
+registration
+let S be countable Language;
+cluster (AllSymbolsOf S)*\{{}} -> countable;
+coherence
+proof
+set SS=AllSymbolsOf S; reconsider C=SS* as countable set by CARD_4:65;
+reconsider IT=C\{{}} as Subset of C; IT is countable; hence thesis;
+end;
+end;
+
+registration
+let L be non empty Language-like; let f be (INT)-valued Function;
+cluster AllSymbolsOf (L extendWith f) \+\ (dom f \/ AllSymbolsOf L)
+-> empty set;
+coherence
+proof
+set L1=L, a1=the adicity of L1, SS1=AllSymbolsOf L1, L2=L extendWith f,
+SS2=AllSymbolsOf L2, a2=the adicity of L2, X=dom f, E1=TheEqSymbOf L1,
+N1=TheNorSymbOf L1, E2=TheEqSymbOf L2, N2=TheNorSymbOf L2;
+reconsider Y=X\{N1} as Subset of X;
+B0: dom (f|(X\{N1}))= X /\ Y by RELAT_1:90 .= Y;
+a2=f|(X\{N1}) +* a1 by DefExt1; then dom a2=dom (f|Y) \/ dom a1 by
+FUNCT_4:def 1; then
+B1: SS2\{N2}=Y\/(dom a1) by FUNCT_2:def 1, B0 .= Y\/(SS1\{N1})
+by FUNCT_2:def 1;
+reconsider NN1={N1} as non empty Subset of SS1 by ZFMISC_1:37;
+reconsider NN2={N2} as non empty Subset of SS2 by ZFMISC_1:37;
+NN1 c= SS1 & SS1 null X c= SS1\/X; then
+reconsider NN11=NN1 as non empty Subset of SS1\/X by XBOOLE_1:1;
+SS2=NN2 \/ (SS2\NN2) & SS1=NN1\/(SS1\NN1) by XBOOLE_1:45; then
+SS2 = NN2\/(SS1\NN1)\/Y by XBOOLE_1:4, B1 .=
+NN1\/(SS1\NN1)\/Y by DefExt0 .= NN1\/((SS1\NN1)\/Y) by XBOOLE_1:4 .=
+NN11\/((SS1\/X)\NN11) by XBOOLE_1:42 .= SS1\/X by XBOOLE_1:45;
+hence thesis;
+end;
+end;
+
+registration
+let S be countable Language; let X be functional set;
+cluster S addLettersNotIn X -> countable 1-sorted;
+coherence
+proof
+set S1=S,SS1=AllSymbolsOf S1,SX=SymbolsOf X, add=(SS1\/SX)-freeCountableSet,
+f=add --> 0, S2=S1 extendWith f, SS2=AllSymbolsOf S2;
+SS2 \+\ (dom f \/ SS1) = {}; then SS2=dom f \/ SS1 by FOMODEL0:29 .=
+add \/ SS1 by FUNCOP_1:19; then SS2 is countable by CARD_3:128;
+hence thesis by ORDERS_4:def 2;
+end;
+end;
+

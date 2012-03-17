@@ -1,0 +1,756 @@
+:: Free interpretation, quotient interpretation and substitution of a letter 
+:: with a term for first order languages.
+::  by Marco B. Caminati
+:: 
+:: Received December 29, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
+      FUNCT_2, FINSEQ_1, FUNCT_1, ARYTM_3, XCMPLX_0, CARD_1, MONOID_0,
+      ORDINAL1, ARYTM_1, XXREAL_0, ORDINAL4, PARTFUN1, FINSEQ_2, EQREL_1,
+      COMPLEX1, FUNCT_3, FINSET_1, FUNCT_4, FUNCOP_1, MARGREL1, PRE_POLY,
+      RELAT_2, RELSET_2, MATROID0, XBOOLEAN, FOMODEL0, FOMODEL1, FOMODEL2,
+      FOMODEL3;
+ notations TARSKI, FINSET_1, MARGREL1, PRE_POLY, RELAT_2, MATROID0, MONOID_0,
+      XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELSET_2, RELAT_1, RELSET_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1, FUNCT_4, ORDINAL1, CARD_1, NUMBERS,
+      XCMPLX_0, XXREAL_0, NAT_1, INT_2, FINSEQ_1, EQREL_1, FINSEQ_2, FINSEQOP,
+      XBOOLEAN, FOMODEL0, FOMODEL1, FOMODEL2;
+ constructors TARSKI, XBOOLE_0, ZFMISC_1, CARD_1, NAT_1, NUMBERS, INT_1,
+      FINSEQ_1, XCMPLX_0, FUNCT_1, MONOID_0, XXREAL_0, RELAT_2, FUNCT_2,
+      FUNCT_4, FUNCOP_1, FINSEQ_2, EQREL_1, RELSET_1, MCART_1, PARTFUN1,
+      FINSEQOP, MATRIX_2, FUNCT_3, SETFAM_1, FINSET_1, MARGREL1, RELSET_2,
+      MATROID0, LEXBFS, BINOP_1, XBOOLEAN, FOMODEL0, FOMODEL1, FOMODEL2;
+ registrations ORDINAL1, XCMPLX_0, NAT_1, RELAT_1, NUMBERS, FUNCT_1, INT_1,
+      FINSEQ_1, XREAL_0, FUNCT_2, FINSEQ_2, SUBSET_1, FUNCOP_1, RELSET_1,
+      FUNCT_4, PARTFUN1, EQREL_1, FINSEQ_6, PRE_POLY, CARD_1, XBOOLE_0,
+      XXREAL_0, ZFMISC_1, SETFAM_1, MARGREL1, SIMPLEX0, FINSET_1, RAMSEY_1,
+      CARD_5, FOMODEL0, FOMODEL1, FOMODEL2;
+ requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
+
+
+begin
+
+reserve A,B,C,X,Y,Z,x,x1,x2,y,z for set, U,U1,U2,U3 for non empty set,
+u,u1,u2 for (Element of U), P,Q,R for Relation, f,g for Function,
+k,m,n for Nat, m1, n1 for non zero Nat, kk,mm,nn for Element of NAT,
+p, p1, p2 for FinSequence, q, q1, q2 for U-valued FinSequence;
+reserve S, S1, S2 for Language, s,s1,s2 for Element of S,
+l,l1,l2 for literal Element of S, a for ofAtomicFormula Element of S,
+r for relational Element of S, w,w1,w2 for string of S,
+t,t1,t2 for termal string of S;
+reserve phi0 for 0wff string of S,
+psi, psi1, psi2, phi,phi1,phi2 for wff string of S,
+I for (S,U)-interpreter-like Function;
+reserve tt,tt0,tt1,tt2 for Element of AllTermsOf S;
+
+definition
+let S,s;
+let V be Element of ((AllSymbolsOf S)*\{{}})*;
+func s-compound(V) -> string of S equals
+:: FOMODEL3:def 1
+ <*s*>^(S-multiCat.V);
+end;
+
+registration
+let S,mm; let s be termal Element of S;
+let V be (abs(ar(s)))-element Element of (S-termsOfMaxDepth.mm)*;
+cluster s-compound(V) -> (mm+1)-termal string of S;
+end;
+
+registration
+let S; let s be termal Element of S;
+let V be (abs(ar(s)))-element Element of (AllTermsOf S)*;
+cluster s-compound(V) -> termal string of S;
+end;
+
+registration
+let S; let s be relational Element of S;
+let V be (abs(ar(s)))-element Element of (AllTermsOf S)*;
+cluster s-compound(V) -> 0wff string of S;
+end;
+
+definition
+let S,s;
+func s-compound -> Function of ((AllSymbolsOf S)*\{{}})*,
+(AllSymbolsOf S)*\{{}} means
+:: FOMODEL3:def 2  ::Def2
+for V being Element of ((AllSymbolsOf S)*\{{}})* holds it.V = s-compound(V);
+end;
+
+registration
+let S; let s be termal Element of S;
+cluster s-compound | ((abs(ar(s)))-tuples_on (AllTermsOf S)) ->
+(AllTermsOf S)-valued;
+end;
+
+registration
+let S; let s be relational Element of S;
+cluster s-compound | ((abs(ar(s)))-tuples_on (AllTermsOf S)) ->
+(AtomicFormulasOf S)-valued;
+end;
+
+definition
+let S; let s be ofAtomicFormula Element of S; let X be set;
+func X-freeInterpreter(s) equals
+:: FOMODEL3:def 3  ::Def3
+s-compound | ((abs(ar(s)))-tuples_on (AllTermsOf S)) if not s is relational
+otherwise
+(s-compound | ((abs(ar(s)))-tuples_on (AllTermsOf S))) *
+(chi(X,AtomicFormulasOf S) qua Relation);
+end;
+
+definition
+let S; let s be ofAtomicFormula Element of S; let X be set;
+redefine func X-freeInterpreter(s) -> Interpreter of s,(AllTermsOf S);
+end;
+
+definition
+let S,X;
+func (S,X)-freeInterpreter -> Function means
+:: FOMODEL3:def 4
+dom it=OwnSymbolsOf S & ::Def4 1
+for s being own Element of S holds it.s=X-freeInterpreter(s);
+end;
+
+registration
+let S,X;
+cluster (S,X)-freeInterpreter -> Function-yielding Function;
+end;
+
+definition
+let S,X;
+redefine func (S,X)-freeInterpreter -> Interpreter of S,AllTermsOf S;
+end;
+
+registration
+let S,X;
+cluster (S,X)-freeInterpreter -> (S,AllTermsOf S)-interpreter-like Function;
+end;
+
+definition
+let S,X;
+redefine func (S,X)-freeInterpreter ->
+Element of (AllTermsOf S)-InterpretersOf S;
+end;
+
+definition
+let X,Y be non empty set; let R be Relation of X,Y; let n be Nat;
+func n-placesOf R -> Relation of n-tuples_on X,n-tuples_on Y
+equals
+:: FOMODEL3:def 5
+{[p,q] where p is Element of n-tuples_on X, q is Element of n-tuples_on Y
+: for j being set st j in Seg n holds [p.j,q.j] in R};
+end;
+
+registration
+let X,Y be non empty set;
+let R be total Relation of X,Y;
+let n be non zero Nat;
+cluster n-placesOf R -> total Relation of n-tuples_on X,n-tuples_on Y;
+end;
+
+registration
+let X,Y be non empty set;
+let R be total Relation of X,Y;
+let n be Nat;
+cluster n-placesOf R -> total Relation of n-tuples_on X,n-tuples_on Y;
+end;
+
+registration
+let X,Y be non empty set; let R be Relation of X,Y; let n be zero Nat;
+cluster n-placesOf R -> Function-like
+Relation of n-tuples_on X, n-tuples_on Y;
+end;
+
+definition
+let X be non empty set; let R be Relation of X; let n be Nat;
+func n-placesOf R -> Relation of n-tuples_on X equals
+:: FOMODEL3:def 6
+n-placesOf (R qua
+Relation of X,X);
+end;
+
+definition
+let X be non empty set; let R be Relation of X; let n be zero Nat;
+redefine func n-placesOf R -> Relation of n-tuples_on X equals
+:: FOMODEL3:def 7
+  {[{},{}]};
+end;
+
+registration
+let X be non empty set; let R be symmetric total Relation of X; let n;
+cluster n-placesOf R -> total Relation of n-tuples_on X;
+end;
+
+registration
+let X be non empty set; let R be symmetric total Relation of X; let n;
+cluster n-placesOf R -> symmetric Relation of n-tuples_on X;
+end;
+
+registration
+let X be non empty set; let R be symmetric total Relation of X; let n;
+cluster n-placesOf R -> symmetric total Relation of n-tuples_on X;
+end;
+
+registration
+let X be non empty set; let R be transitive total Relation of X; let n;
+cluster n-placesOf R -> transitive total Relation of n-tuples_on X;
+end;
+
+registration
+let X be non empty set; let R be Equivalence_Relation of X; let n;
+cluster n-placesOf R -> total symmetric transitive Relation of n-tuples_on X;
+end;
+
+definition
+let X,Y be non empty set; let E be Equivalence_Relation of X;
+let F be Equivalence_Relation of Y; let R be Relation;
+func R quotient (E,F) equals
+:: FOMODEL3:def 8
+{[e,f] where e is Element of Class E, f is Element of Class F:
+ex x, y being set st x in e & y in f & [x,y] in R};
+end;
+
+definition
+let X,Y be non empty set; let E be Equivalence_Relation of X;
+let F be Equivalence_Relation of Y; let R be Relation;
+redefine func R quotient (E,F) -> Relation of Class E, Class F;
+end;
+
+definition ::# cfr Congruence definition in alg_1
+let E be Relation; let F be Relation; let f be Function;
+attr f is (E,F)-respecting means
+:: FOMODEL3:def 9
+for x1,x2 being set holds
+([x1,x2] in E) implies [f.x1, f.x2] in F; ::def9
+end;
+
+definition
+let S,U; let s be ofAtomicFormula Element of S;
+let E be Relation of U; let f be Interpreter of s,U;
+attr f is E-respecting means
+:: FOMODEL3:def 10  ::def10 1
+f is ((abs(ar(s)))-placesOf E, E)-respecting if s is not relational
+otherwise f is ((abs(ar(s)))-placesOf E, id BOOLEAN)-respecting;
+end;
+
+registration
+let X,Y be non empty set; let E be Equivalence_Relation of X;
+let F be Equivalence_Relation of Y;
+cluster (E,F)-respecting Function of X,Y;
+end;
+
+registration
+let S,U; let s be ofAtomicFormula Element of S;
+let E be Equivalence_Relation of U;
+cluster E-respecting Interpreter of s,U;
+end;
+
+registration
+let X,Y be non empty set; let E be Equivalence_Relation of X;
+let F be Equivalence_Relation of Y;
+cluster (E,F)-respecting Function;
+end;
+
+definition
+let X be non empty set; let E be Equivalence_Relation of X; let n;
+redefine func n-placesOf E -> Equivalence_Relation of n-tuples_on X;
+end;
+
+definition
+let X be non empty set, x be Element of SmallestPartition X;
+func DeTrivial(x) -> Element of X means
+:: FOMODEL3:def 11
+x={it};
+end;
+
+definition
+let X be non empty set;
+func peeler(X) -> Function of {_{X}_},X means
+:: FOMODEL3:def 12
+for x being Element of {_{X}_} holds it.x=DeTrivial(x);
+end;
+
+registration
+let X be non empty set, EqR be Equivalence_Relation of X;
+cluster -> non empty Element of Class EqR;
+end;
+
+registration
+let X,Y be non empty set; let E be Equivalence_Relation of X;
+let F be Equivalence_Relation of Y; let f be (E,F)-respecting Function;
+cluster f quotient (E,F) -> Function-like Relation;
+end;
+
+registration
+let X,Y be non empty set; let E be Equivalence_Relation of X;
+let F be Equivalence_Relation of Y; let R be total Relation of X,Y;
+cluster R quotient (E,F) -> total Relation of Class E, Class F;
+end;
+
+definition
+let X,Y be non empty set; let E be Equivalence_Relation of X;
+let F be Equivalence_Relation of Y;
+let f be (E,F)-respecting Function of X,Y;
+redefine func f quotient (E,F) -> Function of Class E, Class F;
+end;
+
+definition
+let X be non empty set, E be Equivalence_Relation of X;
+func E-class -> Function of X,Class E means
+:: FOMODEL3:def 13
+for x being Element of X holds it.x=EqClass(E,x);
+end;
+
+registration
+let X be non empty set, E be Equivalence_Relation of X;
+cluster E-class -> onto Function of X, Class E;
+end;
+
+registration
+let X,Y be non empty set;
+cluster onto Relation of X,Y;
+end;
+
+registration
+let Y be non empty set;
+cluster onto (Y-valued Relation);
+end;
+
+registration
+let Y be non empty set, R be Y-valued Relation;
+cluster R~ -> Y-defined Relation;
+end;
+
+registration
+let Y be non empty set, R be onto (Y-valued Relation);
+cluster R~ -> total (Y-defined Relation);
+end;
+
+registration
+let X,Y be non empty set, R be onto Relation of X,Y;
+cluster R~ -> total Relation of Y,X;
+end;
+
+registration
+let Y be non empty set; let R be onto (Y-valued Relation);
+cluster R~ -> total (Y-defined Relation);
+end;
+
+definition
+let U,n; let E be Equivalence_Relation of U;
+func n-tuple2Class E
+-> Relation of n-tuples_on (Class E), Class (n-placesOf E) equals
+:: FOMODEL3:def 14
+n-placesOf ((E-class qua Relation of U, Class E)~)*((n-placesOf E)-class);
+end;
+
+registration
+let U,n; let E be Equivalence_Relation of U;
+cluster n-tuple2Class E -> Function-like
+Relation of n-tuples_on (Class E), Class (n-placesOf E);
+end;
+
+registration
+let U,n; let E be Equivalence_Relation of U;
+cluster n-tuple2Class E -> total Relation of n-tuples_on (Class E),
+Class (n-placesOf E);
+end;
+
+definition
+let U,n; let E be Equivalence_Relation of U;
+redefine func n-tuple2Class E ->
+Function of n-tuples_on (Class E), Class (n-placesOf E);
+end;
+
+definition
+let S,U; let s be ofAtomicFormula Element of S;
+let E be Equivalence_Relation of U; let f be Interpreter of s,U;
+func f quotient E equals
+:: FOMODEL3:def 15  ::def15 1
+ ((abs(ar(s)))-tuple2Class E) *
+(f quotient ((abs(ar(s)))-placesOf E,E))
+if not s is relational otherwise
+((abs(ar(s)))-tuple2Class E) *
+(f quotient ((abs(ar(s)))-placesOf E, id BOOLEAN))*(peeler(BOOLEAN));
+end;
+
+definition
+let S,U; let s be ofAtomicFormula Element of S; let E be
+Equivalence_Relation of U; let f be E-respecting Interpreter of s,U;
+redefine func f quotient E -> Interpreter of s,Class E;
+end;
+
+theorem :: FOMODEL3:1
+for X being non empty set, E being Equivalence_Relation of X,
+C1, C2 being Element of Class E st C1 meets C2 holds C1=C2;
+
+registration let S;
+cluster -> own Element of (OwnSymbolsOf S);
+cluster -> ofAtomicFormula Element of (OwnSymbolsOf S);
+end;
+
+registration
+let S, U; let o be non relational (ofAtomicFormula Element of S);
+let E be Relation of U;
+cluster E-respecting ->
+((abs(ar(o)))-placesOf E, E)-respecting Interpreter of o, U;
+end;
+
+registration
+let S, U; let r be relational Element of S; let E be Relation of U;
+cluster E-respecting ->
+((abs(ar(r)))-placesOf E, id BOOLEAN)-respecting Interpreter of r, U;
+end;
+
+registration
+let n; let U1, U2 be non empty set;
+let f be Function-like (Relation of U1, U2);
+cluster n-placesOf f -> Function-like Relation;
+end;
+
+registration
+let U1, U2; let n be (zero Nat), R be Relation of U1, U2;
+cluster (n-placesOf R) \+\ (id {{}}) -> empty;
+end;
+
+registration
+::# this is automatic thanks to
+::# cluster -> functional Subset of (functional set) registration in FUNCT_1;
+let X; let Y be functional set;
+cluster X/\Y -> functional;
+end;
+
+theorem :: FOMODEL3:2
+for V being Element of (AllTermsOf S)* ex mm being ::Th2
+Element of NAT st V is Element of (S-termsOfMaxDepth.mm)*;
+
+definition
+let S,U; let E be Equivalence_Relation of U;
+let I be (S,U)-interpreter-like Function;
+attr I is E-respecting means
+:: FOMODEL3:def 16
+for s being
+own Element of S holds (I.s) qua Interpreter of s,U is E-respecting;
+end;
+
+definition
+let S,U; let E be Equivalence_Relation of U;
+let I be (S,U)-interpreter-like Function;
+func I quotient E -> Function means
+:: FOMODEL3:def 17
+dom it=OwnSymbolsOf S & for o being Element of OwnSymbolsOf S holds
+it.o = (I.o) quotient E;
+end;
+
+definition
+let S,U; let E be Equivalence_Relation of U;
+let I be (S,U)-interpreter-like Function;
+redefine func I quotient E means
+:: FOMODEL3:def 18
+dom it=OwnSymbolsOf S & for o being own Element of S holds
+it.o = (I.o) quotient E;
+end;
+
+registration
+let S,U; let I be (S,U)-interpreter-like Function;
+let E be Equivalence_Relation of U;
+cluster I quotient E -> (OwnSymbolsOf S)-defined;
+end;
+
+registration
+let S,U; let E be Equivalence_Relation of U;
+cluster E-respecting (Element of U-InterpretersOf S);
+end;
+
+registration
+let S,U; let E be Equivalence_Relation of U;
+cluster E-respecting ((S,U)-interpreter-like Function);
+end;
+
+registration
+let S,U; let E be Equivalence_Relation of U; let o be own Element of S;
+let I be E-respecting ((S,U)-interpreter-like Function);
+cluster I.o -> E-respecting Interpreter of o,U;
+end;
+
+registration
+let S,U; let E be Equivalence_Relation of U;
+let I be E-respecting ((S,U)-interpreter-like Function);
+cluster I quotient E -> (S,Class E)-interpreter-like Function;
+end;
+
+definition
+let S,U;let E be Equivalence_Relation of U;
+let I be E-respecting ((S,U)-interpreter-like Function);
+redefine func I quotient E ->
+Element of (Class E)-InterpretersOf S;
+end;
+
+theorem :: FOMODEL3:3
+for E being Equivalence_Relation of U,
+I being E-respecting ((S,U)-interpreter-like Function) holds
+(I quotient E)-TermEval=(E-class)*(I-TermEval);
+
+theorem :: FOMODEL3:4
+(S,X)-freeInterpreter-TermEval=id(AllTermsOf S); ::Th4
+
+theorem :: FOMODEL3:5
+for R being Equivalence_Relation of U1, phi being 0wff
+string of S, i being R-respecting ((S,U1)-interpreter-like Function) st
+S-firstChar.phi <> TheEqSymbOf S holds
+(i quotient R)-AtomicEval phi = i-AtomicEval phi;
+
+definition let S, x, s, w;
+redefine func (x,s)-SymbolSubstIn w -> string of S;
+end;
+
+registration
+let S,l1,l2,m; let t be m-termal string of S;
+cluster (l1, l2)-SymbolSubstIn t -> m-termal string of S;
+end;
+
+registration let S, t, l1, l2;
+cluster (l1,l2)-SymbolSubstIn t -> termal string of S;
+end;
+
+registration let S, l1, l2; let phi be 0wff string of S;
+cluster (l1,l2)-SymbolSubstIn phi -> 0wff string of S;
+end;
+
+registration
+let S; let m0 be zero number; let phi be m0-wff string of S;
+cluster Depth phi -> zero number;
+end;
+
+definition let S,m,w;
+redefine func w null m -> string of S;
+end;
+
+registration let S, phi, m;
+cluster phi null m -> ((Depth phi) + m)-wff string of S;
+end;
+
+registration
+let S,m; let phi be m-wff string of S;
+cluster m - (Depth phi) -> non negative (ext-real number);
+end;
+
+registration
+let S,l1,l2,m; let phi be m-wff string of S;
+cluster (l1,l2)-SymbolSubstIn phi -> m-wff string of S;
+end;
+
+registration
+let S,l1,l2,phi;
+cluster (l1, l2)-SymbolSubstIn phi -> wff string of S;
+end;
+
+registration
+let S, l1, l2, phi;
+cluster Depth (l1,l2)-SymbolSubstIn phi \+\ Depth phi -> empty set;
+end;
+
+theorem :: FOMODEL3:6
+for T being abs(ar(a))-element Element of (AllTermsOf S)* holds
+(a is not relational implies (X-freeInterpreter(a)).T = a-compound T) &
+(a is relational implies
+(X-freeInterpreter(a)).T = (chi(X,AtomicFormulasOf S)).(a-compound T));
+
+registration
+let S be Language;
+cluster termal string of S;
+cluster 0wff string of S;
+end;
+
+theorem :: FOMODEL3:7
+((I-TermEval)*
+((((l,tt0) ReassignIn ((S,X)-freeInterpreter),tt0)-TermEval).n))|
+(S-termsOfMaxDepth.n)=
+((((l,I-TermEval.tt0) ReassignIn I,I-TermEval.tt0)-TermEval).n)|
+(S-termsOfMaxDepth.n);
+
+definition
+let S,l,tt,phi0;
+func (l,tt) AtomicSubst phi0 -> FinSequence equals
+:: FOMODEL3:def 19
+<*S-firstChar.phi0*>^(S-multiCat.
+(((l,tt) ReassignIn (S,{})-freeInterpreter)-TermEval*(SubTerms phi0)));
+end;
+
+definition
+let S,l,tt,phi0;
+redefine func (l,tt) AtomicSubst phi0 -> string of S;
+end;
+
+registration
+let S,l,tt,phi0;
+cluster (l,tt) AtomicSubst phi0 -> 0wff (string of S);
+end;
+
+theorem :: FOMODEL3:8
+I-AtomicEval ((l,tt) AtomicSubst phi0) =
+((l,I-TermEval.tt) ReassignIn I)-AtomicEval phi0;
+
+registration
+let S, l1, l2, m;
+cluster (l1 SubstWith l2)|(S-termsOfMaxDepth.m) ->
+(S-termsOfMaxDepth.m)-valued Relation;
+end;
+
+registration
+let S, l1, l2;
+cluster (l1 SubstWith l2)|(AllTermsOf S) -> (AllTermsOf S)-valued Relation;
+end;
+
+theorem :: FOMODEL3:9
+(not l2 in rng psi) implies for I being Element of
+U-InterpretersOf S holds (l1,u1) ReassignIn I-TruthEval psi=
+(l2,u1) ReassignIn I-TruthEval (l1,l2)-SymbolSubstIn psi;
+
+definition
+let S; let l, t, n; let f be FinSequence-yielding Function; let phi;
+func (l,t,n,f) Subst2 phi -> FinSequence equals
+:: FOMODEL3:def 20
+<*TheNorSymbOf S*>^(f.(head phi))^(f.(tail phi))
+if Depth phi=n+1 & not phi is exal,
+<* the Element of (LettersOf S\(rng t \/ (rng head phi)\/{l}))*>^(f.(
+((S-firstChar.phi, the Element of
+(LettersOf S\(rng t\/(rng head phi)\/{l})))-SymbolSubstIn (head phi))))
+if Depth phi=n+1 & phi is exal & S-firstChar.phi<>l
+otherwise f.phi;
+end;
+
+registration let S;
+cluster -> FinSequence-yielding
+(Element of Funcs(AllFormulasOf S, AllFormulasOf S));
+end;
+
+definition
+let S; let l, t, n;
+let f be Element of Funcs(AllFormulasOf S, AllFormulasOf S); let phi;
+redefine func (l,t,n,f) Subst2 phi -> wff string of S;
+end;
+
+registration
+let S; let l, t, n;
+let f be Element of Funcs(AllFormulasOf S, AllFormulasOf S); let phi;
+cluster (l,t,n,f) Subst2 phi -> wff string of S;
+end;
+
+definition
+let S; let l, t, nn;
+let f be Element of Funcs(AllFormulasOf S, AllFormulasOf S); let phi;
+redefine func (l,t,nn,f) Subst2 phi -> Element of (AllFormulasOf S);
+end;
+
+definition
+let S,l,t,n; let f be Element of Funcs(AllFormulasOf S, AllFormulasOf S);
+func (l,t,n,f) Subst3 -> Element of Funcs (AllFormulasOf S, AllFormulasOf S)
+means
+:: FOMODEL3:def 21
+for phi holds it.phi=(l,t,n,f) Subst2 phi;
+end;
+
+definition
+let S,l,t; let f be Element of Funcs(AllFormulasOf S, AllFormulasOf S);
+func (l,t) Subst4 f ->
+Function of NAT, Funcs(AllFormulasOf S, AllFormulasOf S) means
+:: FOMODEL3:def 22
+it.0=f & for m holds it.(m+1)=(l,t,m,it.m) Subst3;
+end;
+
+definition ::def22 1
+let S,l,t;
+
+func l AtomicSubst t -> Function of AtomicFormulasOf S, AtomicFormulasOf S
+means
+:: FOMODEL3:def 23
+for phi0, tt st tt=t holds it.phi0=(l,tt) AtomicSubst phi0;
+end;
+
+definition let S,l,t;
+func l Subst1 t -> Function equals
+:: FOMODEL3:def 24
+id (AllFormulasOf S) +* (l AtomicSubst t);
+end;
+
+definition
+let S,l,t;
+redefine func l Subst1 t -> Element of
+Funcs(AllFormulasOf S, (AllSymbolsOf S)*);
+end;
+
+definition let S,l,t;
+redefine func l Subst1 t ->
+  Element of Funcs(AllFormulasOf S, AllFormulasOf S);
+end;
+
+definition
+let S,l,t,phi;
+func (l,t) SubstIn phi -> wff string of S equals
+:: FOMODEL3:def 25
+((l,t) Subst4 (l Subst1 t)).(Depth phi).phi;
+end;
+
+registration let S,l,t, phi;
+cluster (l,t) SubstIn phi -> wff string of S;
+end;
+
+registration
+let S,l,tt,phi0;
+identify (l,tt) SubstIn phi0 with (l,tt) AtomicSubst phi0;
+identify (l,tt) AtomicSubst phi0 with (l,tt) SubstIn phi0;
+end;
+
+theorem :: FOMODEL3:10
+Depth (l,tt) SubstIn psi=Depth psi &
+for I being Element of U-InterpretersOf S holds
+I-TruthEval (l,tt) SubstIn psi=(l,I-TermEval.tt) ReassignIn I-TruthEval psi;
+
+registration
+let m,S,l,t; let phi be m-wff string of S;
+cluster (l,t) SubstIn phi -> m-wff string of S;
+end;
+
+theorem :: FOMODEL3:11
+for I1 being Element of U-InterpretersOf S1,
+I2 being Element of U-InterpretersOf S2 st
+I1|X = I2|X & (the adicity of S1)|X = (the adicity of S2)|X holds
+I1-TermEval|(X*) = I2-TermEval|(X*);
+
+theorem :: FOMODEL3:12
+TheNorSymbOf S1 = TheNorSymbOf S2 & ::Th12
+TheEqSymbOf S1 = TheEqSymbOf S2 &
+(the adicity of S1)|(OwnSymbolsOf S1) =
+(the adicity of S2)|(OwnSymbolsOf S1) implies
+for I1 being Element of U-InterpretersOf S1,
+I2 being Element of U-InterpretersOf S2, phi1 being wff string of S1
+st I1|(OwnSymbolsOf S1) = I2|(OwnSymbolsOf S1) ex
+phi2 being wff string of S2 st
+((phi2=phi1 & I2-TruthEval phi2=I1-TruthEval phi1));
+
+theorem :: FOMODEL3:13
+for I1, I2 being Element of U-InterpretersOf S st
+I1|(rng phi/\OwnSymbolsOf S)=I2|(rng phi/\OwnSymbolsOf S) holds
+I1-TruthEval phi=I2-TruthEval phi;
+
+theorem :: FOMODEL3:14
+for I being Element of U-InterpretersOf S st l is X-absent &
+X is I-satisfied holds X is (l,u) ReassignIn I-satisfied;
+
+theorem :: FOMODEL3:15
+for E being Equivalence_Relation of U,
+i being E-respecting Element of U-InterpretersOf S holds
+(l,E-class.u) ReassignIn (i quotient E) = ((l,u) ReassignIn i) quotient E;

@@ -123,6 +123,30 @@
 </Cluster>
 </FCluster>
 <FCluster aid="GR_CY_1" nr="4">
+<ArgTypes/>
+<Func kind="U" nr="1">
+<Func kind="K" nr="276"/>
+</Func>
+<Cluster>
+<Adjective nr="55"/>
+</Cluster>
+</FCluster>
+<FCluster aid="GR_CY_1" nr="5">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="12"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="115">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="56"/>
+</Cluster>
+</FCluster>
+<FCluster aid="GR_CY_1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -142,7 +166,7 @@
 <Adjective nr="112"/>
 </Cluster>
 </FCluster>
-<FCluster aid="GR_CY_1" nr="5">
+<FCluster aid="GR_CY_1" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -160,7 +184,7 @@
 <Adjective nr="116"/>
 </Cluster>
 </FCluster>
-<FCluster aid="GR_CY_1" nr="6">
+<FCluster aid="GR_CY_1" nr="8">
 <ArgTypes/>
 <Func kind="K" nr="276"/>
 <Cluster>
@@ -171,7 +195,7 @@
 <Adjective nr="116"/>
 </Cluster>
 </FCluster>
-<FCluster aid="GR_CY_1" nr="7">
+<FCluster aid="GR_CY_1" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -192,38 +216,6 @@
 </Cluster>
 </FCluster>
 <CCluster aid="GR_CY_1" nr="1">
-<ArgTypes/>
-<Cluster/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="U" nr="1">
-<Func kind="K" nr="276"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="27"/>
-</Cluster>
-</CCluster>
-<CCluster aid="GR_CY_1" nr="2">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="12"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Cluster/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="116">
-<LocusVar nr="1"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="12"/>
-</Cluster>
-</CCluster>
-<CCluster aid="GR_CY_1" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="63" value="false"/>

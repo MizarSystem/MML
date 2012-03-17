@@ -2,24 +2,32 @@
 ::  by J\'ozef Bia{\l}as
 ::
 :: Received June 20, 1990
-:: Copyright (c) 1990 Association of Mizar Users
+:: Copyright (c) 1990-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
  vocabularies BINOP_1, CARD_1, FUNCOP_1, FUNCT_4, RELAT_1, XBOOLE_0, ZFMISC_1,
       TARSKI, FUNCT_7, SUBSET_1, FUNCT_1, ALGSTR_0, ARYTM_3, SUPINF_2,
       REALSET1, VECTSP_1, STRUCT_0, MESFUNC1, RLVECT_1, LATTICES, ORDINAL1,
-      ARYTM_1, REALSET2;
+      ARYTM_1, REALSET2, MEMBERED;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
       NUMBERS, REALSET1, FUNCOP_1, FUNCT_2, BINOP_1, FUNCT_4, FUNCT_7,
-      ORDINAL1, STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1;
+      ORDINAL1, MEMBERED, STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1;
  constructors RLVECT_1, BINOP_1, FUNCT_4, REALSET1, FUNCT_7, VECTSP_1,
-      RELSET_1;
+      RELSET_1, MEMBERED;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, REALSET1, STRUCT_0, RLVECT_1,
       VECTSP_1, ORDINAL1, ALGSTR_0, ZFMISC_1;
  requirements SUBSET, BOOLE, NUMERALS;
- definitions RLVECT_1, TARSKI, REALSET1, BINOP_1, STRUCT_0, FUNCOP_1, VECTSP_1,
-      GROUP_1, ALGSTR_0;
+ definitions RLVECT_1, TARSKI, REALSET1, BINOP_1, MEMBERED, STRUCT_0, FUNCOP_1,
+      VECTSP_1, GROUP_1, ALGSTR_0;
  theorems TARSKI, FUNCT_1, FUNCT_2, ZFMISC_1, ENUMSET1, REALSET1, VECTSP_1,
       RELSET_1, XBOOLE_0, RLVECT_1, FUNCT_4, FUNCOP_1, CARD_1, XBOOLE_1,
       FUNCT_7, STRUCT_0, GROUP_1, ALGSTR_0;
@@ -30,8 +38,7 @@ begin
 definition
   canceled 7;
   func add_2 -> BinOp of 2 equals
-  ((0,0) .--> 0) +* ((0,1).-->1) +* ((1,0).-->
-  1) +* ((1,1).-->0);
+  ((0,0) .--> 0) +* ((0,1).-->1) +* ((1,0).-->1) +* ((1,1).-->0);
   coherence
   proof
     set f2 = ((0,0).-->0) +* ((0,1).-->1), f1 = f2 +* ((1,0).-->1), f = f1 +*(
@@ -371,8 +378,7 @@ end;
 
 definition
   func dL-Z_2 -> doubleLoopStr equals
-  doubleLoopStr(#2,add_2,mult_2,In(1,2),In
-    (0,2)#);
+  doubleLoopStr(#2,add_2,mult_2,In(1,2),In(0,2)#);
   coherence;
 end;
 
@@ -418,8 +424,12 @@ registration
 end;
 
 registration
-  cluster -> natural Element of dL-Z_2;
-  coherence by CARD_1:88,TARSKI:def 2;
+  cluster the carrier of dL-Z_2 -> natural-membered;
+  coherence
+  proof
+    let x be set;
+    thus thesis by CARD_1:88,TARSKI:def 2;
+  end;
 end;
 
 registration

@@ -1,8 +1,17 @@
-:: Banach Algebra of Continuous Functionals
-::  by Kanazashi Katuhiko , Noboru Endou and Yasunari Shidama
+:: Banach Algebra of Continuous Functionals and Space of Real-valued
+:: Continuous Functionals with Bounded Support
+::  by Katuhiko Kanazashi, Noboru Endou and Yasunari Shidama
 ::
 :: Received October 20, 2009
-:: Copyright (c) 2009 Association of Mizar Users
+:: Copyright (c) 2009-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -13,23 +22,25 @@ environ
       RSSPACE, POLYALG1, BINOP_1, VECTSP_1, SUPINF_2, GROUP_1, REALSET1,
       ZFMISC_1, RSSPACE4, XXREAL_2, XXREAL_0, LOPBAN_2, NORMSP_1, REWRITE1,
       NAT_1, RSSPACE3, SEQ_2, PARTFUN1, SEQFUNC, C0SP2, LOPBAN_1, METRIC_1,
-      RELAT_2;
+      RELAT_2, PRE_POLY, RLSUB_1, SEQ_4, TOPMETR;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, RELAT_1,
       XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, XXREAL_0, REALSET1, FUNCT_1,
       FUNCT_2, STRUCT_0, ALGSTR_0, IDEAL_1, BINOP_1, DOMAIN_1, RELSET_1,
       PRE_TOPC, COMPTS_1, PSCOMP_1, RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM,
       PARTFUN1, SEQFUNC, RSSPACE3, RCOMP_1, SEQ_2, NORMSP_0, NORMSP_1,
-      NFCONT_1, LOPBAN_1, LOPBAN_2, C0SP1, CONNSP_2, FUNCOP_1, PARTFUN3;
- constructors REAL_1, REALSET1, RSSPACE3, COMPLEX1, RCOMP_1, IDEAL_1, COMPTS_1,
-      SEQ_1, C0SP1, NFCONT_1, SEQFUNC, JORDAN_A, PARTFUN3, BINOP_2, SEQ_2,
-      MEASURE6;
+      NFCONT_1, LOPBAN_1, LOPBAN_2, C0SP1, CONNSP_2, FUNCOP_1, PRE_POLY,
+      XXREAL_2, VALUED_1, SEQ_4, RLSUB_1, RSSPACE, TOPMETR;
+ constructors REAL_1, REALSET1, RSSPACE3, COMPLEX1, RCOMP_1, IDEAL_1, SEQ_1,
+      C0SP1, NFCONT_1, SEQFUNC, PARTFUN3, MEASURE6, PRE_POLY, TOPMETR, RLSUB_1,
+      SEQ_4, NAGATA_1, JGRAPH_2, COMPTS_1;
  registrations XBOOLE_0, SUBSET_1, STRUCT_0, PRE_TOPC, XREAL_0, REALSET1,
       ALGSTR_0, NUMBERS, ORDINAL1, MEMBERED, FUNCSDOM, RELAT_1, VECTSP_1,
-      VECTSP_2, VALUED_0, LOPBAN_2, PSCOMP_1, RCOMP_1, C0SP1;
- requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+      VECTSP_2, VALUED_0, LOPBAN_2, PSCOMP_1, RCOMP_1, C0SP1, COMPTS_1,
+      XXREAL_0, FUNCT_2, VALUED_1, XXREAL_2, TOPMETR;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
 
 
-begin
+begin :: Banach Algebra of Continuous Functionals
 
 definition
   let X be 1-sorted, y be real number;
@@ -44,50 +55,53 @@ registration
 end;
 
 theorem :: C0SP2:1
-for X being non empty TopSpace, f be RealMap of X holds f is continuous iff
-   for x being Point of X,V being Subset of REAL st
-    f.x in V & V is open holds
-     ex W being Subset of X st x in W & W is open & f.:W c= V;
+  for X being non empty TopSpace, f be RealMap of X holds f is continuous iff
+  for x being Point of X,V being Subset of REAL st
+  f.x in V & V is open holds
+  ex W being Subset of X st x in W & W is open & f.:W c= V;
 
-reserve X for non empty TopSpace;
-
-definition let X;
+definition let X be non empty TopSpace;
   func ContinuousFunctions(X) -> Subset of RAlgebra the carrier of X equals
 :: C0SP2:def 2
   { f where f is continuous RealMap of X : not contradiction };
 end;
 
-registration let X;
+registration
+  let X be non empty TopSpace;
   cluster ContinuousFunctions(X) -> non empty;
 end;
 
-registration let X;
-  cluster ContinuousFunctions X -> additively-linearly-closed
-                                multiplicatively-closed;
+registration
+  let X be non empty TopSpace;
+  cluster ContinuousFunctions(X) -> additively-linearly-closed
+                                   multiplicatively-closed;
 end;
 
-definition let X be non empty TopSpace;
-  func R_Algebra_of_ContinuousFunctions X -> AlgebraStr equals
+definition
+  let X be non empty TopSpace;
+  func R_Algebra_of_ContinuousFunctions(X) -> AlgebraStr equals
 :: C0SP2:def 3
-  AlgebraStr (# ContinuousFunctions X, mult_(ContinuousFunctions X,
-  RAlgebra the carrier of X),
-   Add_(ContinuousFunctions X,RAlgebra the carrier of X),
-   Mult_(ContinuousFunctions X,RAlgebra the carrier of X),
-   One_(ContinuousFunctions X,RAlgebra the carrier of X),
-   Zero_(ContinuousFunctions X,RAlgebra the carrier of X)
-  #);
+  AlgebraStr (# ContinuousFunctions(X),
+    mult_(ContinuousFunctions(X),RAlgebra the carrier of X),
+    Add_(ContinuousFunctions(X),RAlgebra the carrier of X),
+    Mult_(ContinuousFunctions(X),RAlgebra the carrier of X),
+    One_(ContinuousFunctions(X),RAlgebra the carrier of X),
+    Zero_(ContinuousFunctions(X),RAlgebra the carrier of X) #);
 end;
 
 theorem :: C0SP2:2
-  R_Algebra_of_ContinuousFunctions X
-   is Subalgebra of RAlgebra the carrier of X;
+  for X being non empty TopSpace holds
+  R_Algebra_of_ContinuousFunctions(X)
+    is Subalgebra of RAlgebra the carrier of X;
 
-registration let X;
-  cluster R_Algebra_of_ContinuousFunctions X -> strict non empty;
+registration
+  let X be non empty TopSpace;
+  cluster R_Algebra_of_ContinuousFunctions(X) -> strict non empty;
 end;
 
-registration let X;
-  cluster R_Algebra_of_ContinuousFunctions X -> Abelian add-associative
+registration
+  let X be non empty TopSpace;
+  cluster R_Algebra_of_ContinuousFunctions(X) -> Abelian add-associative
     right_zeroed right_complementable vector-distributive scalar-distributive
     scalar-associative scalar-unital
     commutative associative right_unital right-distributive
@@ -95,74 +109,83 @@ registration let X;
     vector-associative;
 end;
 
-reserve F,G,H for VECTOR of R_Algebra_of_ContinuousFunctions X;
-reserve f,g,h for RealMap of X;
-reserve a for Real;
-
 theorem :: C0SP2:3
-f=F & g=G & h=H implies ( H = F+G iff (for x be Element of the carrier of X
-  holds h.x = f.x + g.x) );
+  for X being non empty TopSpace
+  for F,G,H being VECTOR of R_Algebra_of_ContinuousFunctions(X)
+  for f,g,h being RealMap of X holds
+  (f=F & g=G & h=H implies ( H = F+G iff (for x be Element of the carrier of X
+  holds h.x = f.x + g.x)));
 
 theorem :: C0SP2:4
-f=F & g=G implies ( G = a*F iff for x be Element of X holds g.x = a*f.x );
+  for X being non empty TopSpace
+  for F,G,H being VECTOR of R_Algebra_of_ContinuousFunctions(X)
+  for f,g,h being RealMap of X
+  for a being Real
+    holds
+  (f=F & g=G implies ( G = a*F iff for x be Element of X holds g.x = a*f.x ));
 
 theorem :: C0SP2:5
-f=F & g=G & h=H implies ( H = F*G iff (for x be Element of the carrier of X
-  holds h.x = f.x * g.x) );
+  for X being non empty TopSpace
+  for F,G,H being VECTOR of R_Algebra_of_ContinuousFunctions(X)
+  for f,g,h being RealMap of X holds
+  (f=F & g=G & h=H implies ( H = F*G iff (for x be Element of the carrier of X
+  holds h.x = f.x * g.x)));
 
 theorem :: C0SP2:6
-0.R_Algebra_of_ContinuousFunctions X = X --> 0;
+  for X being non empty TopSpace holds
+  0.R_Algebra_of_ContinuousFunctions(X) = X --> 0;
 
 theorem :: C0SP2:7
-1_R_Algebra_of_ContinuousFunctions X = X --> 1;
-
-reserve X for compact non empty TopSpace;
-
-reserve f,g,h for RealMap of X;
+  for X being non empty TopSpace holds
+  1_R_Algebra_of_ContinuousFunctions(X) = X --> 1;
 
 theorem :: C0SP2:8
-for A being Algebra, A1,A2 being Subalgebra of A holds
+  for A being Algebra, A1,A2 being Subalgebra of A holds
   the carrier of A1 c= the carrier of A2 implies A1 is Subalgebra of A2;
 
 theorem :: C0SP2:9
-R_Algebra_of_ContinuousFunctions X is
-  Subalgebra of R_Algebra_of_BoundedFunctions the carrier of X;
+  for X being compact non empty TopSpace holds
+  (R_Algebra_of_ContinuousFunctions(X) is
+    Subalgebra of R_Algebra_of_BoundedFunctions the carrier of X);
 
-definition let X;
-  func ContinuousFunctionsNorm X -> Function of (ContinuousFunctions X),REAL
-  equals
+definition
+  let X be compact non empty TopSpace;
+  func ContinuousFunctionsNorm(X) -> Function of (ContinuousFunctions(X)),REAL
+    equals
 :: C0SP2:def 4
-  (BoundedFunctionsNorm the carrier of X)|(ContinuousFunctions X);
+  (BoundedFunctionsNorm the carrier of X)|(ContinuousFunctions(X));
 end;
 
-definition let X;
- func R_Normed_Algebra_of_ContinuousFunctions X -> Normed_AlgebraStr equals
+definition
+  let X be compact non empty TopSpace;
+  func R_Normed_Algebra_of_ContinuousFunctions(X) -> Normed_AlgebraStr equals
 :: C0SP2:def 5
-  Normed_AlgebraStr (# ContinuousFunctions X,
-    mult_(ContinuousFunctions X,RAlgebra the carrier of X),
-    Add_(ContinuousFunctions X,RAlgebra the carrier of X),
-    Mult_(ContinuousFunctions X,RAlgebra the carrier of X),
-    One_(ContinuousFunctions X,RAlgebra the carrier of X),
-    Zero_(ContinuousFunctions X,RAlgebra the carrier of X),
-    ContinuousFunctionsNorm X #);
+    Normed_AlgebraStr (# ContinuousFunctions(X),
+      mult_(ContinuousFunctions(X),RAlgebra the carrier of X),
+      Add_(ContinuousFunctions(X),RAlgebra the carrier of X),
+      Mult_(ContinuousFunctions(X),RAlgebra the carrier of X),
+      One_(ContinuousFunctions(X),RAlgebra the carrier of X),
+      Zero_(ContinuousFunctions(X),RAlgebra the carrier of X),
+      ContinuousFunctionsNorm(X) #);
 end;
 
-registration let X;
-  cluster R_Normed_Algebra_of_ContinuousFunctions X -> strict non empty;
+registration
+  let X be compact non empty TopSpace;
+  cluster R_Normed_Algebra_of_ContinuousFunctions(X) -> strict non empty;
 end;
 
-registration let X;
-  cluster R_Normed_Algebra_of_ContinuousFunctions X -> unital;
+registration
+  let X be compact non empty TopSpace;
+  cluster R_Normed_Algebra_of_ContinuousFunctions(X) -> unital;
 end;
 
 theorem :: C0SP2:10
-for W be Normed_AlgebraStr, V be Algebra st
- the AlgebraStr of W = V holds W is Algebra;
+  for W be Normed_AlgebraStr, V be Algebra st
+    the AlgebraStr of W = V holds W is Algebra;
 
-reserve F,G,H for Point of R_Normed_Algebra_of_ContinuousFunctions X;
-
-registration let X;
-  cluster R_Normed_Algebra_of_ContinuousFunctions X ->
+registration
+  let X be compact non empty TopSpace;
+  cluster R_Normed_Algebra_of_ContinuousFunctions(X) ->
           Abelian add-associative right_zeroed right_complementable
           commutative associative right_unital right-distributive
           vector-distributive scalar-distributive scalar-associative
@@ -170,63 +193,219 @@ registration let X;
 end;
 
 theorem :: C0SP2:11
-(Mult_(ContinuousFunctions X, RAlgebra the carrier of X)).(1,F) = F;
+  for X being compact non empty TopSpace
+  for F being Point of R_Normed_Algebra_of_ContinuousFunctions(X) holds
+  (Mult_(ContinuousFunctions(X), RAlgebra the carrier of X)).(1,F) = F;
 
-registration let X;
-  cluster R_Normed_Algebra_of_ContinuousFunctions X -> vector-distributive
+registration
+  let X be compact non empty TopSpace;
+  cluster R_Normed_Algebra_of_ContinuousFunctions(X) -> vector-distributive
   scalar-distributive scalar-associative scalar-unital;
 end;
 
 theorem :: C0SP2:12
-  X --> 0 = 0.R_Normed_Algebra_of_ContinuousFunctions X;
+  for X being compact non empty TopSpace holds
+  X --> 0 = 0.R_Normed_Algebra_of_ContinuousFunctions(X);
 
 theorem :: C0SP2:13
-0 <= ||.F.||;
+  for X be compact non empty TopSpace
+  for F be Point of R_Normed_Algebra_of_ContinuousFunctions(X)
+    holds 0 <= ||.F.||;
 
 theorem :: C0SP2:14
-F = 0.R_Normed_Algebra_of_ContinuousFunctions X implies 0 = ||.F.||;
+  for X being compact non empty TopSpace
+  for F be Point of R_Normed_Algebra_of_ContinuousFunctions(X) holds
+  F = 0.R_Normed_Algebra_of_ContinuousFunctions(X) implies 0 = ||.F.||;
 
 theorem :: C0SP2:15
-f=F & g=G & h=H implies
- (H = F+G iff for x be Element of X holds h.x = f.x + g.x);
+  for X being compact non empty TopSpace
+  for F,G,H being Point of R_Normed_Algebra_of_ContinuousFunctions(X)
+  for f,g,h be RealMap of X
+    holds
+  (f=F & g=G & h=H implies
+  (H = F+G iff for x be Element of X holds h.x = f.x + g.x));
 
 theorem :: C0SP2:16
-f=F & g=G implies ( G = a*F iff for x be Element of X holds g.x = a*f.x );
+  for a be Real
+  for X being compact non empty TopSpace
+  for F,G being Point of R_Normed_Algebra_of_ContinuousFunctions(X)
+  for f,g being RealMap of X holds
+  (f=F & g=G implies ( G = a*F iff for x be Element of X holds g.x = a*f.x ));
 
 theorem :: C0SP2:17
- f=F & g=G & h=H implies
-(H = F*G iff for x be Element of X holds h.x = f.x * g.x);
+  for X being compact non empty TopSpace
+  for F,G,H being Point of R_Normed_Algebra_of_ContinuousFunctions(X)
+  for f,g,h being RealMap of X holds
+  (f=F & g=G & h=H implies
+  (H = F*G iff for x be Element of X holds h.x = f.x * g.x));
 
 theorem :: C0SP2:18
-( ||.F.|| = 0 iff F = 0.R_Normed_Algebra_of_ContinuousFunctions X ) &
-||.a*F.|| = abs a * ||.F.|| & ||.F+G.|| <= ||.F.|| + ||.G.||;
+  for a being Real
+  for X being compact non empty TopSpace
+  for F,G being Point of R_Normed_Algebra_of_ContinuousFunctions(X) holds
+( ||.F.|| = 0 iff F = 0.R_Normed_Algebra_of_ContinuousFunctions(X)) &
+(||.a*F.|| = abs a * ||.F.|| & ||.F+G.|| <= ||.F.|| + ||.G.||);
 
-registration let X;
-  cluster R_Normed_Algebra_of_ContinuousFunctions X ->
-   reflexive discerning RealNormSpace-like;
+registration
+  let X be compact non empty TopSpace;
+  cluster R_Normed_Algebra_of_ContinuousFunctions(X) ->
+    reflexive discerning RealNormSpace-like;
 end;
 
 theorem :: C0SP2:19
- f=F & g=G & h=H implies
+  for X be compact non empty TopSpace
+  for F,G,H be Point of R_Normed_Algebra_of_ContinuousFunctions(X)
+  for f,g,h be RealMap of X holds
+  f=F & g=G & h=H implies
   (H = F-G iff (for x be Element of X holds h.x = f.x - g.x));
 
 theorem :: C0SP2:20
-for X be RealBanachSpace, Y be Subset of X, seq be sequence of X st
-  Y is closed & rng seq c= Y & seq is Cauchy_sequence_by_Norm holds
-    seq is convergent & lim seq in Y;
+  for X be RealBanachSpace, Y be Subset of X, seq be sequence of X st
+    Y is closed & rng seq c= Y & seq is Cauchy_sequence_by_Norm holds
+  seq is convergent & lim seq in Y;
 
 theorem :: C0SP2:21
-for Y be Subset of R_Normed_Algebra_of_BoundedFunctions the carrier of X st
-  Y = ContinuousFunctions X holds Y is closed;
+  for X be compact non empty TopSpace
+  for Y be Subset of R_Normed_Algebra_of_BoundedFunctions the carrier of X st
+  Y = ContinuousFunctions(X) holds Y is closed;
 
 theorem :: C0SP2:22
-for seq be sequence of R_Normed_Algebra_of_ContinuousFunctions X st
- seq is Cauchy_sequence_by_Norm holds seq is convergent;
+  for X be compact non empty TopSpace
+  for seq be sequence of R_Normed_Algebra_of_ContinuousFunctions(X) st
+    seq is Cauchy_sequence_by_Norm holds seq is convergent;
 
-registration let X;
-  cluster R_Normed_Algebra_of_ContinuousFunctions X -> complete;
+registration
+  let X be compact non empty TopSpace;
+  cluster R_Normed_Algebra_of_ContinuousFunctions(X) -> complete;
 end;
 
-registration let X;
-  cluster R_Normed_Algebra_of_ContinuousFunctions X -> Banach_Algebra-like;
+registration
+  let X be compact non empty TopSpace;
+  cluster R_Normed_Algebra_of_ContinuousFunctions(X) -> Banach_Algebra-like;
 end;
+
+begin :: Some properties of support
+
+theorem :: C0SP2:23
+  for X be non empty TopSpace
+  for f,g be RealMap of X holds
+    support(f+g) c= support(f) \/ support(g);
+
+theorem :: C0SP2:24
+  for X be non empty TopSpace
+  for a be Real,f be RealMap of X holds
+    support(a(#)f) c= support(f);
+
+theorem :: C0SP2:25
+  for X be non empty TopSpace
+  for f,g be RealMap of X holds support(f(#)g) c= support(f) \/ support(g);
+
+begin :: Space of Real-valued Continuous Functionals with Bounded Support
+
+definition
+  let X be non empty TopSpace;
+  func C_0_Functions(X) -> non empty Subset of RealVectSpace the carrier of X
+    equals
+:: C0SP2:def 6
+  { f where f is RealMap of X : f is continuous &
+    ex Y be non empty Subset of X st (Y is compact &
+    (for A being Subset of X st A=support(f) holds Cl(A) is Subset of Y))};
+end;
+
+theorem :: C0SP2:26
+  for X be non empty TopSpace holds
+  C_0_Functions(X) is non empty Subset of RAlgebra the carrier of X;
+
+theorem :: C0SP2:27
+  for X be non empty TopSpace
+  for W be non empty Subset of RAlgebra the carrier of X
+      st W = C_0_Functions(X) holds W is additively-linearly-closed;
+
+theorem :: C0SP2:28
+  for X be non empty TopSpace holds
+  C_0_Functions(X) is linearly-closed;
+
+registration
+  let X be non empty TopSpace;
+  cluster C_0_Functions(X) -> non empty linearly-closed;
+end;
+
+definition
+  let X be non empty TopSpace;
+  func R_VectorSpace_of_C_0_Functions(X) -> RealLinearSpace equals
+:: C0SP2:def 7
+  RLSStruct (# C_0_Functions(X),
+  Zero_(C_0_Functions(X), RealVectSpace(the carrier of X)),
+  Add_(C_0_Functions(X), RealVectSpace(the carrier of X)),
+  Mult_(C_0_Functions(X), RealVectSpace(the carrier of X)) #);
+end;
+
+theorem :: C0SP2:29
+  for X be non empty TopSpace holds
+  R_VectorSpace_of_C_0_Functions(X)
+  is Subspace of RealVectSpace(the carrier of X);
+
+theorem :: C0SP2:30
+  for X be non empty TopSpace
+  for x being set st x in C_0_Functions(X) holds
+  x in BoundedFunctions the carrier of X;
+
+definition
+  let X be non empty TopSpace;
+  func C_0_FunctionsNorm X -> Function of (C_0_Functions(X)),REAL equals
+:: C0SP2:def 8
+  (BoundedFunctionsNorm the carrier of X)|(C_0_Functions(X));
+end;
+
+definition
+  let X be non empty TopSpace;
+  func R_Normed_Space_of_C_0_Functions(X) -> non empty NORMSTR equals
+:: C0SP2:def 9
+  NORMSTR (# C_0_Functions(X),
+  Zero_(C_0_Functions(X), RealVectSpace(the carrier of X)),
+  Add_(C_0_Functions(X), RealVectSpace(the carrier of X)),
+  Mult_(C_0_Functions(X), RealVectSpace(the carrier of X)),
+        C_0_FunctionsNorm X #);
+end;
+
+registration
+  let X be non empty TopSpace;
+  cluster R_Normed_Space_of_C_0_Functions(X) -> strict non empty;
+end;
+
+theorem :: C0SP2:31
+  for X be non empty TopSpace
+  for x being set st x in C_0_Functions(X) holds
+  x in ContinuousFunctions(X);
+
+theorem :: C0SP2:32
+  for X be non empty TopSpace holds
+  0.R_VectorSpace_of_C_0_Functions(X) = X -->0;
+
+theorem :: C0SP2:33
+  for X be non empty TopSpace holds
+  0.R_Normed_Space_of_C_0_Functions(X) = X --> 0;
+
+theorem :: C0SP2:34
+  for a be Real
+  for X be non empty TopSpace
+  for F,G be Point of R_Normed_Space_of_C_0_Functions(X) holds
+  (||.F.|| = 0 iff F = 0.R_Normed_Space_of_C_0_Functions(X) ) &
+  ||.a*F.|| = abs a * ||.F.|| & ||.F+G.|| <= ||.F.|| + ||.G.||;
+
+theorem :: C0SP2:35
+  for X be non empty TopSpace holds
+  R_Normed_Space_of_C_0_Functions(X) is RealNormSpace-like;
+
+registration
+  let X be non empty TopSpace;
+  cluster R_Normed_Space_of_C_0_Functions(X) ->
+  reflexive discerning RealNormSpace-like
+  vector-distributive scalar-distributive scalar-associative scalar-unital
+  Abelian add-associative right_zeroed right_complementable;
+end;
+
+theorem :: C0SP2:36
+  for X be non empty TopSpace holds
+    R_Normed_Space_of_C_0_Functions(X) is RealNormSpace;
+

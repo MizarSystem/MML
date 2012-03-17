@@ -2,7 +2,15 @@
 ::  by Adam Grabowski
 ::
 :: Received August 7, 2002
-:: Copyright (c) 2002 Association of Mizar Users
+:: Copyright (c) 2002-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
@@ -11,7 +19,7 @@ environ
       TOPREAL1, XREAL_0, ORDINAL1, XXREAL_0, ARYTM_3, CARD_1, ARYTM_1,
       BORSUK_1, XXREAL_1, TOPMETR, CONNSP_1, INTEGRA1, REAL_1, RELAT_2,
       RCOMP_1, XXREAL_2, ORDINAL2, SEQ_4, T_0TOPSP, TOPS_2, RLTOPSP1, TREAL_1,
-      VALUED_1, JORDAN2C, BORSUK_4;
+      VALUED_1, JORDAN2C, BORSUK_4, FUNCT_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_2,
       XREAL_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, REALSET1,
       MEMBERED, DOMAIN_1, RCOMP_1, FUNCT_4, XXREAL_0, STRUCT_0, PRE_TOPC,
@@ -750,22 +758,30 @@ end;
 begin :: Decompositions of Simple Closed Curves
 
 definition
-  func I(01) -> strict non empty SubSpace of I[01] means
+  func I(01) -> strict SubSpace of I[01] means
   :Def1:
   the carrier of it = ]. 0,1 .[;
   existence
   proof
-    reconsider E = ]. 0,1 .[ as non empty Subset of I[01] by BORSUK_1:83
-,XXREAL_1:25,33;
+    reconsider E = ]. 0,1 .[ as Subset of I[01] by BORSUK_1:83,XXREAL_1:25;
     take I[01] | E;
     thus thesis by PRE_TOPC:29;
   end;
   uniqueness by TSEP_1:5;
 end;
 
+registration
+  cluster I(01) -> non empty;
+  coherence
+  proof
+    the carrier of I(01) = ]. 0,1 .[ by Def1;
+    hence the carrier of I(01) is non empty by XXREAL_1:33;
+  end;
+end;
+
 theorem
-  for A being Subset of I[01] st A = the carrier of I(01) holds I(01) =
-  I[01] | A by PRE_TOPC:29,TSEP_1:5;
+  for A being Subset of I[01] st A = the carrier of I(01) holds
+  I(01) = I[01] | A by PRE_TOPC:29,TSEP_1:5;
 
 theorem Th58:
   the carrier of I(01) = (the carrier of I[01]) \ {0,1}
@@ -906,6 +922,7 @@ A15: I(01) = I[01] | K0 by PRE_TOPC:29,TSEP_1:5;
 FUNCT_2:38;
 A16: dom fD = the carrier of I(01) by A6,BORSUK_1:35,RELAT_1:91;
   rng f = [#]((TOP-REAL n)|D) by A2,TOPS_2:def 5;
+  then f is onto by FUNCT_2:def 3;
   then
 A17: f" = (f qua Function)" by A9,TOPS_2:def 4;
 A18: rng fD = f .: the carrier of I(01) by RELAT_1:148;
@@ -914,10 +931,11 @@ A19: rng fD = the carrier of ((TOP-REAL n)|(D \ {p1,p2})) by A10,PRE_TOPC:29;
   then reconsider fD as Function of I(01), (TOP-REAL n)|(D \ {p1,p2}) by A16,
 FUNCT_2:3;
 A20: dom fD = [#]I(01) by A6,BORSUK_1:35,RELAT_1:91;
+B1: fD is onto by A19,FUNCT_2:def 3;
   f is one-to-one by A2,TOPS_2:def 5;
   then
 A21: fD is one-to-one by FUNCT_1:84;
-  then fD" = (fD qua Function)" by A19,TOPS_2:def 4;
+  then fD" = (fD qua Function)" by B1,TOPS_2:def 4;
   then
 A22: fD" is continuous by A9,A10,A15,A14,A17,RFUNCT_2:40,TOPMETR:9;
   fD1 is continuous by A9,TOPMETR:10;
@@ -1176,6 +1194,8 @@ A23: [#] ((TOP-REAL n)|(A \ {p})) = rng sX by RELAT_1:148;
   rng (s|E) = the carrier of (TOP-REAL n)|(A \ {p}) by A22,RELAT_1:148;
   then reconsider sX as Function of I(01)|E, (TOP-REAL n)|(A \ {p}) by A19,
 FUNCT_2:3;
+B1: s is onto by A20,A21,FUNCT_2:def 3;
+B2: sX is onto by A23,A21,FUNCT_2:def 3;
   b in X by A2,XXREAL_1:2;
   then
 A24: sX.b = q by A7,FUNCT_1:72;
@@ -1184,9 +1204,9 @@ A24: sX.b = q by A7,FUNCT_1:72;
   then
 A25: sX is continuous by A11,A14,Th69;
 A26: sX is one-to-one by A11,FUNCT_1:84;
-  then sX" = (sX qua Function)" by A23,TOPS_2:def 4
+  then sX" = (sX qua Function)" by B2,TOPS_2:def 4
     .= (s qua Function)" | (s.:X) by A11,RFUNCT_2:40
-    .= s" | [#] ((TOP-REAL n)|(A \ {p})) by A11,A20,A22,TOPS_2:def 4
+    .= s" | [#] ((TOP-REAL n)|(A \ {p})) by B1,A11,A22,TOPS_2:def 4
     .= s" | Ap by PRE_TOPC:def 10;
   then sX" is continuous by A12,A17,A18,Th69;
   then sX is being_homeomorphism by A23,A19,A25,A26,TOPS_2:def 5;
@@ -1253,6 +1273,8 @@ A23: [#] ((TOP-REAL n)|(A \ {q})) = rng sX by RELAT_1:148;
   rng (s|E) = the carrier of (TOP-REAL n)|(A \ {q}) by A22,RELAT_1:148;
   then reconsider sX as Function of I(01)|E, (TOP-REAL n)|(A \ {q}) by A19,
 FUNCT_2:3;
+B1:sX is onto by A23,FUNCT_2:def 3;
+B2:s is onto by A20,A22,FUNCT_2:def 3;
   a in X by A2,XXREAL_1:3;
   then
 A24: sX.a = p by A6,FUNCT_1:72;
@@ -1261,9 +1283,9 @@ A24: sX.a = p by A6,FUNCT_1:72;
   then
 A25: sX is continuous by A11,A14,Th69;
 A26: sX is one-to-one by A11,FUNCT_1:84;
-  then sX" = (sX qua Function)" by A23,TOPS_2:def 4
+  then sX" = (sX qua Function)" by B1,TOPS_2:def 4
     .= (s qua Function)" | (s.:X) by A11,RFUNCT_2:40
-    .= s" | [#] ((TOP-REAL n)|(A \ {q})) by A11,A20,A22,TOPS_2:def 4
+    .= s" | [#] ((TOP-REAL n)|(A \ {q})) by B2,A11,A22,TOPS_2:def 4
     .= s" | Ap by PRE_TOPC:def 10;
   then sX" is continuous by A12,A17,A18,Th69;
   then sX is being_homeomorphism by A23,A19,A25,A26,TOPS_2:def 5;
@@ -1320,6 +1342,7 @@ A18: U1 is SubSpace of S by A17,TSEP_1:4;
 A19: rng ty = [#] ((TOP-REAL n)|(B \ {p})) by A6,TOPS_2:def 5;
   then
 A20: rng ty = B \ {p} by PRE_TOPC:def 10;
+B2: ty is onto by A19,FUNCT_2:def 3;
 A21: rng sx = [#] ((TOP-REAL n)|(A \ {p})) by A9,TOPS_2:def 5;
   then
 A22: rng sx = A \ {p} by PRE_TOPC:def 10;
@@ -1404,7 +1427,7 @@ A48: g is continuous by PRE_TOPC:56;
 A49: f is continuous by PRE_TOPC:56;
 A50: ty9 is one-to-one by A6,TOPS_2:def 5;
   then
-A51: ty" = (ty qua Function)" by A19,TOPS_2:def 4;
+A51: ty" = (ty qua Function)" by B2,TOPS_2:def 4;
 A52: dom sx9 = [#] T1 by FUNCT_2:def 1;
   then
 A53: dom sx9 /\ dom ty9 = { b } by A27,A16,A35,XXREAL_1:138;
@@ -1418,9 +1441,10 @@ A53: dom sx9 /\ dom ty9 = { b } by A27,A16,A35,XXREAL_1:138;
   then
 A54: rng F = rng sx9 \/ rng ty9 by A31,FRECHET:39
     .= [#] S by A22,A20,PRE_TOPC:def 10;
+B3: sx is onto by A21,FUNCT_2:def 3;
 A55: sx9 is one-to-one by A9,TOPS_2:def 5;
   then
-A56: sx" = (sx qua Function)" by A21,TOPS_2:def 4;
+A56: sx" = (sx qua Function)" by B3,TOPS_2:def 4;
 A57: for r being set st r in ([#] U1) /\ ([#] U2) holds f.r = g.r
   proof
     let r be set;
@@ -1439,8 +1463,9 @@ A59: f.q = b by A10,A55,A56,FUNCT_1:56;
   then
 A60: ex h being Function of S,T st h = f+*g & h is continuous by A18,A14,A43
 ,A38,A49,A48,A57,JGRAPH_2:9;
+VV: F is onto by A54,FUNCT_2:def 3;
 A61: F is one-to-one by A31,A55,A50,A53,A23,Th5;
-  then F" = (F qua Function)" by A54,TOPS_2:def 4;
+  then F" = (F qua Function)" by VV,TOPS_2:def 4;
   then F" = sx" +* ty" by A10,A7,A31,A55,A50,A53,A23,A56,A51,Th6;
   then F is being_homeomorphism by A32,A37,A61,A54,A60,TOPS_2:def 5;
   hence thesis by T_0TOPSP:def 1;
@@ -1569,10 +1594,12 @@ A12: rng g = f".:E by RELAT_1:148
 A13: f" is one-to-one by TOPS_2:def 5;
   then
 A14: g is one-to-one by FUNCT_1:84;
+V1:  f is onto by A7,FUNCT_2:def 3;
+  g is onto by A12,FUNCT_2:def 3;
   then
-A15: g" = (g qua Function)" by A12,TOPS_2:def 4
+A15: g" = (g qua Function)" by A14,TOPS_2:def 4
     .= ((f" qua Function)")|((f").:E) by A13,RFUNCT_2:40
-    .= ((f qua Function)"")|((f").:E) by A8,A7,TOPS_2:def 4
+    .= ((f qua Function)"")|((f").:E) by A8,TOPS_2:def 4,V1
     .= f|C by A8,A9,FUNCT_1:65;
   then reconsider t = f|C as Function of (TOP-REAL 2) | C, I(01)|E;
   dom (f") = the carrier of I(01) by FUNCT_2:def 1;

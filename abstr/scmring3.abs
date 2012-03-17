@@ -2,30 +2,38 @@
 ::  by Artur Korni{\l}owicz
 ::
 :: Received April 14, 2000
-:: Copyright (c) 2000 Association of Mizar Users
+:: Copyright (c) 2000-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
 
 environ
 
  vocabularies NUMBERS, SCMFSA7B, FUNCSDOM, SUBSET_1, AMI_3, AMI_1, FSM_1,
       ORDINAL1, INT_3, FINSET_1, STRUCT_0, AMI_2, TARSKI, ZFMISC_1, RELAT_1,
-      FUNCOP_1, XBOOLE_0, CAT_1, FUNCT_7, FUNCT_1, CARD_1, GRAPHSP, FINSEQ_1,
-      AMISTD_2, CARD_3, AMISTD_1, CIRCUIT2, FUNCT_4, SETFAM_1, SUPINF_2,
-      ARYTM_3, XXREAL_0, GOBOARD5, ARYTM_1, GROUP_1, FRECHET, UNIALG_1, CARD_5,
+      FUNCOP_1, XBOOLE_0, CAT_1, FUNCT_1, CARD_1, GRAPHSP, FINSEQ_1, AMISTD_2,
+      CARD_3, AMISTD_1, CIRCUIT2, FUNCT_4, SETFAM_1, SUPINF_2, ARYTM_3,
+      XXREAL_0, GOBOARD5, ARYTM_1, GROUP_1, PBOOLE, FRECHET, UNIALG_1, CARD_5,
       PARTFUN1, RECDEF_2, SCMNORM, COMPOS_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, FINSET_1, ENUMSET1, ZFMISC_1, MCART_1,
-      SETFAM_1, RELAT_1, FUNCT_1, XXREAL_0, RECDEF_2, VALUED_1, STRUCT_0,
-      ALGSTR_0, FUNCSDOM, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0, NAT_1, FUNCOP_1,
-      FINSEQ_1, PARTFUN1, FUNCT_4, CARD_3, FUNCT_7, GROUP_1, COMPOS_1,
-      EXTPRO_1, AMI_1, AMI_2, AMI_3, SCMRING1, SCMRING2, INT_3, NAT_D,
+      SETFAM_1, RELAT_1, FUNCT_1, XXREAL_0, RECDEF_2, VALUED_1, PBOOLE,
+      STRUCT_0, ALGSTR_0, FUNCSDOM, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0, NAT_1,
+      FUNCOP_1, FINSEQ_1, PARTFUN1, FUNCT_4, CARD_3, FUNCT_7, GROUP_1,
+      COMPOS_1, EXTPRO_1, AMI_2, AMI_3, SCMRING1, SCMRING2, INT_3, NAT_D,
       AMISTD_1, AMISTD_2, FUNCT_2;
  constructors XXREAL_0, NAT_1, FINSEQ_4, VECTSP_2, REALSET2, INT_3, AMI_3,
-      SCMRING2, AMISTD_2, BINOP_2, RELSET_1, RECDEF_2, VALUED_1, GCD_1, AMI_1,
-      NAT_D, XCMPLX_0, REAL_1, AMISTD_1;
+      SCMRING2, AMISTD_2, BINOP_2, RELSET_1, RECDEF_2, VALUED_1, GCD_1, NAT_D,
+      XCMPLX_0, REAL_1, AMISTD_1, PBOOLE, FUNCT_7, PRE_POLY;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      XREAL_0, INT_1, FINSEQ_1, CARD_3, STRUCT_0, VECTSP_1, INT_3, AMI_1,
-      AMI_3, SCMRING1, SCMRING2, AMISTD_2, NUMBERS, RELSET_1, ZFMISC_1, CARD_2,
+      XREAL_0, INT_1, FINSEQ_1, CARD_3, STRUCT_0, VECTSP_1, INT_3, AMI_3,
+      SCMRING1, SCMRING2, AMISTD_2, NUMBERS, RELSET_1, ZFMISC_1, CARD_2,
       FUNCT_2, FUNCT_4, ALGSTR_0, ALGSTR_1, GCD_1, VALUED_1, VALUED_0,
-      COMPOS_1, EXTPRO_1, XCMPLX_0, REAL_1, NAT_1;
+      COMPOS_1, EXTPRO_1, XCMPLX_0, REAL_1, NAT_1, PBOOLE, FUNCT_7, PRE_POLY;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -74,7 +82,7 @@ theorem :: SCMRING3:5
 canceled;
 
 theorem :: SCMRING3:7
-  s1,s2 equal_outside NAT implies s1.a = s2.a;
+  NPP s1 = NPP s2 implies s1.a = s2.a;
 
 theorem :: SCMRING3:8
   InsCode halt SCM R = 0;
@@ -160,53 +168,50 @@ theorem :: SCMRING3:51
 
 canceled;
 
-theorem :: SCMRING3:53
-  NIC(halt SCM R, il) = {il};
-
 registration
   let R;
   cluster JUMP halt SCM R -> empty;
 end;
 
-theorem :: SCMRING3:54
-  NIC(a := b, il) = {succ il};
+registration
+  let R, a, b;
+  cluster a:=b -> sequential;
+  cluster AddTo(a,b) -> sequential;
+  cluster SubFrom(a,b) -> sequential;
+  cluster MultBy(a,b) -> sequential;
+end;
+
+registration
+  let R, a, r;
+  cluster a:=r -> sequential;
+end;
 
 registration
   let R, a, b;
   cluster JUMP (a := b) -> empty;
 end;
 
-theorem :: SCMRING3:55
-  NIC(AddTo(a,b), il) = {succ il};
-
 registration
   let R, a, b;
   cluster JUMP AddTo(a, b) -> empty;
 end;
-
-theorem :: SCMRING3:56
-  NIC(SubFrom(a,b), il) = {succ il};
 
 registration
   let R, a, b;
   cluster JUMP SubFrom(a, b) -> empty;
 end;
 
-theorem :: SCMRING3:57
-  NIC(MultBy(a,b), il) = {succ il};
-
 registration
   let R, a, b;
   cluster JUMP MultBy(a,b) -> empty;
 end;
 
-theorem :: SCMRING3:58
-  NIC(a := r, il) = {succ il};
-
 registration
   let R, a, r;
   cluster JUMP (a := r) -> empty;
 end;
+
+canceled 6;
 
 theorem :: SCMRING3:59
   NIC(goto(i1,R), il) = {i1};
@@ -220,8 +225,7 @@ registration
 end;
 
 theorem :: SCMRING3:61
-  i1 in NIC(a=0_goto i1, il) & NIC(a=0_goto i1, il) c= {i1, succ
-  il};
+  i1 in NIC(a=0_goto i1, il) & NIC(a=0_goto i1, il) c= {i1, succ il};
 
 theorem :: SCMRING3:62
   for R being non trivial good Ring, a being Data-Location of R, il, i1
@@ -338,31 +342,6 @@ end;
 registration
   let S, p, w;
   cluster p:=w -> non jump-only;
-end;
-
-registration
-  let R, a, b;
-  cluster a:=b -> sequential;
-end;
-
-registration
-  let R, a, b;
-  cluster AddTo(a,b) -> sequential;
-end;
-
-registration
-  let R, a, b;
-  cluster SubFrom(a,b) -> sequential;
-end;
-
-registration
-  let R, a, b;
-  cluster MultBy(a,b) -> sequential;
-end;
-
-registration
-  let R, a, r;
-  cluster a:=r -> sequential;
 end;
 
 registration

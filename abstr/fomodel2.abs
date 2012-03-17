@@ -1,0 +1,1217 @@
+:: First order languages: syntax, part two; semantics.
+::  by Marco B. Caminati
+:: 
+:: Received December 29, 2010
+:: Copyright (c) 2010-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
+      FUNCT_2, FINSEQ_1, FUNCT_1, ARYTM_3, XCMPLX_0, CARD_1, MONOID_0,
+      ORDINAL1, ARYTM_1, XXREAL_0, ORDINAL4, PARTFUN1, FINSEQ_2, EQREL_1,
+      COMPLEX1, FUNCT_3, MCART_1, FUNCT_4, FUNCOP_1, MARGREL1, XBOOLEAN,
+      RFINSEQ, FUNCT_5, FINSET_1, FOMODEL0, FOMODEL1, FOMODEL2;
+ notations TARSKI, XBOOLEAN, MARGREL1, MONOID_0, XBOOLE_0, ZFMISC_1, SUBSET_1,
+      DOMAIN_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, RFUNCT_3,
+      FUNCOP_1, FUNCT_4, MCART_1, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0,
+      XXREAL_0, NAT_1, INT_2, FINSEQ_1, EQREL_1, FINSEQ_2, RELSET_1, RFINSEQ,
+      FINSEQOP, FUNCT_5, FINSET_1, FOMODEL0, FOMODEL1;
+ constructors TARSKI, XBOOLE_0, ZFMISC_1, CARD_1, NAT_1, NUMBERS, INT_1,
+      ARYTM_3, FINSEQ_1, XCMPLX_0, FUNCT_1, MONOID_0, XXREAL_0, RELAT_2,
+      RFINSEQ, FUNCT_2, FUNCT_4, FUNCT_7, FUNCOP_1, FINSEQ_2, EQREL_1,
+      COMPLEX1, RELSET_1, MCART_1, PARTFUN1, FINSEQOP, MATRIX_2, FUNCT_3,
+      SETFAM_1, PRE_POLY, FINSET_1, BINOP_1, FUNCT_5, RFUNCT_3, STRUCT_0,
+      FOMODEL0, FOMODEL1;
+ registrations XCMPLX_0, NAT_1, RELAT_1, NUMBERS, REAL_1, FUNCT_1, INT_1,
+      FINSEQ_1, XREAL_0, FUNCT_2, FINSEQ_2, SUBSET_1, FUNCOP_1, RELSET_1,
+      FUNCT_4, PARTFUN1, EQREL_1, FINSEQ_6, PRE_POLY, CARD_1, XBOOLE_0,
+      XXREAL_0, ZFMISC_1, SETFAM_1, MARGREL1, FINSET_1, RAMSEY_1, CARD_5,
+      XBOOLEAN, FOMODEL0, FOMODEL1, ORDINAL1;
+ requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
+
+
+begin
+
+reserve k,m,n for Nat, kk,mm,nn for Element of NAT, A,B,X,Y,Z,x,y,z for set,
+S, S1, S2 for Language, s for (Element of S), w,w1,w2 for (string of S),
+U,U1,U2 for non empty set, f,g for Function, p,p1,p2 for FinSequence;
+
+definition let S;
+redefine func TheNorSymbOf S -> Element of S;
+end;
+
+definition let U be non empty set;
+func U-deltaInterpreter -> Function of (2-tuples_on U), BOOLEAN equals
+:: FOMODEL2:def 1
+chi((U-concatenation) .: (id (1-tuples_on U)), 2-tuples_on U);
+end;
+
+definition let X be set;
+redefine func id X -> Equivalence_Relation of X;
+end;
+
+definition
+let S be Language; let U be non empty set;
+let s be ofAtomicFormula Element of S;
+mode Interpreter of s, U means
+:: FOMODEL2:def 2  ::Def2
+it is Function of (abs(ar(s)))-tuples_on U, BOOLEAN if s is relational
+otherwise it is Function of (abs(ar(s)))-tuples_on U, U;
+end;
+
+definition
+let S,U; let s be ofAtomicFormula Element of S;
+redefine mode Interpreter of s,U ->
+Function of (abs(ar(s)))-tuples_on U, U\/BOOLEAN;
+end;
+
+registration
+let S,U; let s be termal Element of S;
+cluster -> U-valued (Interpreter of s,U);
+end;
+
+registration
+let S be Language;
+cluster literal -> own Element of S;
+end;
+
+::###############################################################
+::###############################################################
+::###############################################################
+::# Interpreter of a Language.
+
+definition
+let S, U; ::def3 1
+mode Interpreter of S, U -> Function means
+:: FOMODEL2:def 3
+for s being own Element of S holds it.s is Interpreter of s, U;
+end;
+
+definition
+let S, U, f;
+attr f is (S,U)-interpreter-like means
+:: FOMODEL2:def 4
+f is Interpreter of S,U & f is Function-yielding;
+end;
+
+registration
+let S; let U be non empty set;
+cluster (S,U)-interpreter-like -> Function-yielding Function;
+end;
+
+registration
+let S,U; let s be own Element of S;
+cluster -> non empty Interpreter of s,U;
+end;
+
+registration
+let S be Language;
+let U be non empty set;
+cluster (S,U)-interpreter-like Function;
+end;
+
+definition
+let S,U;
+let I be (S,U)-interpreter-like Function;
+let s be own Element of S;
+redefine func I.s -> Interpreter of s,U;
+end;
+
+registration
+let S be Language, U be non empty set;
+let I be (S,U)-interpreter-like Function;
+let x be own Element of S, f be Interpreter of x, U;
+cluster I +* (x .--> f) -> (S,U)-interpreter-like;
+end;
+
+definition
+let f,x,y;
+func (x,y) ReassignIn f -> Function equals
+:: FOMODEL2:def 5
+f +* (x .--> ({} .--> y));
+end;
+
+registration
+let S be Language,U be non empty set,I be (S,U)-interpreter-like Function;
+let x be literal Element of S, u be Element of U;
+cluster (x,u) ReassignIn I -> (S,U)-interpreter-like;
+end;
+
+::###############################################################
+::###############################################################
+::###############################################################
+
+registration
+let S be Language;
+cluster (AllSymbolsOf S) -> non empty;
+end;
+
+registration
+let Y be set;
+let X,Z be non empty set;
+cluster -> Function-yielding (Function of X, Funcs(Y,Z));
+end;
+
+registration
+let X,Y,Z be non empty set;
+cluster Function-yielding Function of X, Funcs(Y,Z);
+end;
+
+definition
+let f be Function-yielding Function, g be Function;
+func ^^^ g, f __ -> Function means
+:: FOMODEL2:def 6
+dom it=dom f & for x st x in dom f holds it.x=g*(f.x);
+end;
+
+registration
+let f be empty Function, g be Function;
+cluster ^^^ g, f __ -> empty;
+end;
+
+definition
+let f be Function-yielding Function, g be Function;
+func ^^^ f,g __ -> Function means
+:: FOMODEL2:def 7
+dom it = dom f /\ dom g &
+for x being set st x in dom it holds it.x=(f.x).(g.x);
+end;
+
+registration
+let f be Function-yielding Function, g be empty Function;
+cluster ^^^ f, g __ -> empty;
+end;
+
+registration
+let X be FinSequence-membered set;
+cluster X-valued -> Function-yielding Function;
+end;
+
+registration
+let E, D be non empty set, p be D-valued FinSequence, h be Function of D,E;
+cluster h*p -> (len p)-element FinSequence;
+end;
+
+registration
+let X,Y be non empty set;
+let f be Function of X,Y; let p be X-valued FinSequence;
+cluster f*p -> FinSequence-like;
+end;
+
+registration
+let E, D be non empty set, n be Nat,
+p be n-element D-valued FinSequence, h be Function of D,E;
+cluster h*p -> n-element FinSequence of E;
+end;
+
+theorem :: FOMODEL2:1
+for t0 being 0-termal string of S holds t0=<*S-firstChar.t0*>;
+
+definition ::def9 1
+let S; let U be non empty set, u be Element of U;
+let I be (S,U)-interpreter-like Function;
+func (I,u)-TermEval -> Function of NAT, Funcs(AllTermsOf S, U)
+means
+:: FOMODEL2:def 8
+it.0=(AllTermsOf S) --> u & for mm holds
+it.(mm+1)=^^^ I*(S-firstChar), ^^^ it.mm qua Function, S-subTerms __ __;
+end;
+
+definition
+let S, U; let I be (S,U)-interpreter-like Function;
+let t be Element of (AllTermsOf S);
+func I-TermEval(t) -> Element of U means
+:: FOMODEL2:def 9
+for u1 being Element of U, mm st t in S-termsOfMaxDepth.mm holds
+it=((I,u1)-TermEval.(mm+1)).t;
+end;
+
+definition ::def11 1
+let S,U; let I be (S,U)-interpreter-like Function;
+func I-TermEval -> Function of AllTermsOf S,U means
+:: FOMODEL2:def 10
+for t being Element of AllTermsOf S holds it.t=I-TermEval(t);
+end;
+
+::###############  Semantics of 0wff formulas (propositions) ############
+::#########################################################################
+
+definition
+let S,U; let I be (S,U)-interpreter-like Function;
+func I=== -> Function equals
+:: FOMODEL2:def 11
+I +* ((TheEqSymbOf S) .--> (U-deltaInterpreter));
+end;
+
+definition
+let S,U; let I be (S,U)-interpreter-like Function; let x be set;
+attr x is I-extension means
+:: FOMODEL2:def 12
+x = I===; ::def13 1
+end;
+
+registration
+let S,U; let I be (S,U)-interpreter-like Function;
+cluster I=== -> I-extension Function;
+cluster I-extension -> Function-like set;
+end;
+
+registration
+let S,U; let I be (S,U)-interpreter-like Function;
+cluster I-extension Function;
+end;
+
+registration
+let S,U; let I be (S,U)-interpreter-like Function;
+cluster I=== -> (S,U)-interpreter-like;
+end;
+
+definition
+let S,U; let I be (S,U)-interpreter-like Function;
+let f be I-extension Function, s be ofAtomicFormula Element of S;
+redefine func f.s -> Interpreter of s,U;
+end;
+
+definition
+let S,U; let I be (S,U)-interpreter-like Function;
+let phi be 0wff string of S;
+func I-AtomicEval(phi) equals
+:: FOMODEL2:def 13
+((I===).(S-firstChar.phi)).((I-TermEval)*(SubTerms(phi)));
+end;
+
+definition
+let S,U; let I be (S,U)-interpreter-like Function;
+let phi be 0wff string of S;
+redefine func I-AtomicEval(phi) -> Element of BOOLEAN;
+end;
+
+::###### Semantics of formulas (evaluation of any wff string) ##########
+::######################################################################
+
+registration
+let S,U; let I be (S,U)-interpreter-like Function;
+cluster I|(OwnSymbolsOf S) -> PFuncs(U*, U\/BOOLEAN)-valued Function;
+cluster I|(OwnSymbolsOf S) -> (S,U)-interpreter-like Function;
+end;
+
+registration
+let S,U; let I be (S,U)-interpreter-like Function;
+cluster I|(OwnSymbolsOf S) -> total ((OwnSymbolsOf S)-defined Relation);
+end;
+
+definition
+let S,U;
+func U-InterpretersOf S equals
+:: FOMODEL2:def 14
+{f where f is Element of Funcs(OwnSymbolsOf S, PFuncs(U*,U\/BOOLEAN)):
+f is (S,U)-interpreter-like};
+end;
+
+definition
+let S,U;
+redefine func U-InterpretersOf S -> Subset of
+Funcs(OwnSymbolsOf S, PFuncs(U*,U\/BOOLEAN));
+end;
+
+registration
+let S,U;
+cluster U-InterpretersOf S -> non empty;
+end;
+
+registration
+let S,U;
+cluster -> (S,U)-interpreter-like Element of U-InterpretersOf S;
+end;
+
+definition
+let S,U;
+func S-TruthEval(U) ->
+Function of [: U-InterpretersOf S, AtomicFormulasOf S :],BOOLEAN
+means
+:: FOMODEL2:def 15
+for I being Element of U-InterpretersOf S,
+phi being Element of AtomicFormulasOf S holds it.(I,phi)=I-AtomicEval(phi);
+end;
+
+definition
+let S,U; let I be Element of U-InterpretersOf S;
+let f be PartFunc of [:U-InterpretersOf S, (AllSymbolsOf S)*\{{}}:], BOOLEAN;
+let phi be Element of(AllSymbolsOf S)*\{{}};
+func f-ExFunctor(I,phi) -> Element of BOOLEAN equals
+:: FOMODEL2:def 16
+TRUE if
+ex u being Element of U, v being literal Element of S st
+(phi.1=v & f.((v,u) ReassignIn I, phi/^1)=TRUE) otherwise FALSE;
+end;
+
+definition ::def18 1
+let S,U;
+let g be
+Element of PFuncs([:U-InterpretersOf S, (AllSymbolsOf S)*\{{}}:], BOOLEAN);
+func ExIterator(g) ->
+PartFunc of [:U-InterpretersOf S, (AllSymbolsOf S)*\{{}}:],BOOLEAN means
+:: FOMODEL2:def 17
+ (for x being Element of U-InterpretersOf S,
+y being Element of (AllSymbolsOf S)*\{{}} holds
+([x,y] in dom it iff (
+ex v being literal Element of S, w being string of S st
+[x,w] in dom g & y=<*v*>^w))) &
+(for x being Element of U-InterpretersOf S,
+y being Element of (AllSymbolsOf S)*\{{}} st [x,y] in dom it holds
+it.(x,y)=g-ExFunctor(x,y));
+end;
+
+definition
+let S,U;
+let f be PartFunc of [:U-InterpretersOf S, (AllSymbolsOf S)*\{{}}:], BOOLEAN;
+let I be Element of U-InterpretersOf S;
+let phi be Element of(AllSymbolsOf S)*\{{}};
+func f-NorFunctor(I,phi) -> Element of BOOLEAN equals
+:: FOMODEL2:def 18
+TRUE if ex w1, w2 being Element of (AllSymbolsOf S)*\{{}} st
+([I,w1] in dom f & f.(I,w1)=FALSE & f.(I,w2)=FALSE &
+phi=<*TheNorSymbOf S*>^w1^w2)
+otherwise FALSE;
+end;
+::# The inelegant specification [I,w1] in dom f above is needed because
+::# of a general problem with the . functor Despite the ideal policy of
+::# separating the definition of well-formedness and truth value respectively
+::# in NorIterator and -NorFunctor, one is obliged to repeat the specification
+::# because the . functor adopts {} as return value for indefinite arguments
+::# (see FUNCT_1:def 4) Sadly, {} is also the set conventionally chosen to
+::# represent FALSE (and many other things), so we cannot resolve ambiguity
+::# between a meaningless argument and a false argument, and are forced to
+::# add the statement about the argument effectively belonging to the domain.
+::# An alternative could have been to recode truth values in e.g. 1=true,
+::# 2=false, but that could have been too much of a breakthrough.  Thus in
+::# general, when one has to choose an arbitrary convention to represent
+::# things, I feel it would be better to avoid functions with 0={} in their
+::# ranges; sadly this does not happen in many cases (see eg the chi functor),
+::# probably because of the load of intuitive, symbolic, representative
+::# imagery that 0 and emptiness symbols convey.
+
+definition
+let S,U;
+let g be
+Element of PFuncs([:U-InterpretersOf S, (AllSymbolsOf S)*\{{}}:], BOOLEAN);
+func NorIterator(g) ->
+PartFunc of [:U-InterpretersOf S, (AllSymbolsOf S)*\{{}}:],BOOLEAN
+means
+:: FOMODEL2:def 19
+(for x being Element of U-InterpretersOf S,
+y being Element of (AllSymbolsOf S)*\{{}} holds
+([x,y] in dom it iff (
+ex phi1, phi2 being Element of (AllSymbolsOf S)*\{{}} st
+(y=<*TheNorSymbOf S*>^phi1^phi2 & [x,phi1] in dom g & [x,phi2] in dom g)
+))) &
+(for x being Element of U-InterpretersOf S,
+y being Element of (AllSymbolsOf S)*\{{}} st [x,y] in dom it holds
+it.(x,y)=g-NorFunctor(x,y));
+end;
+
+definition
+let S,U; ::def21
+func (S,U)-TruthEval -> Function of NAT,
+PFuncs([:U-InterpretersOf S, (AllSymbolsOf S)*\{{}}:], BOOLEAN) means
+:: FOMODEL2:def 20
+ it.0=S-TruthEval(U) & for mm holds
+it.(mm+1)=ExIterator(it.mm) +* NorIterator(it.mm) +* it.mm;
+end;
+
+theorem :: FOMODEL2:2
+for I being (S,U)-interpreter-like Function holds
+I|(OwnSymbolsOf S) in U-InterpretersOf S;
+
+definition ::def22
+let S be Language, m be Nat, U be non empty set;
+func (S,U)-TruthEval m -> Element of
+PFuncs([:U-InterpretersOf S, (AllSymbolsOf S)*\{{}}:], BOOLEAN)
+means
+:: FOMODEL2:def 21
+for mm st m=mm holds it=(S,U)-TruthEval.mm;
+end;
+
+definition ::def23 1
+let S,U,m; let I be Element of U-InterpretersOf S;
+func (I,m)-TruthEval -> Element of PFuncs((AllSymbolsOf S)*\{{}},BOOLEAN)
+equals
+:: FOMODEL2:def 22
+(curry ((S,U)-TruthEval m)).I;
+end;
+
+definition
+let S,m;
+func S-formulasOfMaxDepth m -> Subset of ((AllSymbolsOf S)*\{{}}) means
+:: FOMODEL2:def 23
+
+for U being non empty set, I being Element of U-InterpretersOf S,
+mm being Element of NAT st m=mm holds it=dom (I,mm)-TruthEval;
+end;
+
+definition
+let S,m,w; ::def25
+attr w is m-wff means
+:: FOMODEL2:def 24
+w in S-formulasOfMaxDepth m;
+end;
+
+definition
+let S,w; ::Def26
+attr w is wff means
+:: FOMODEL2:def 25
+ex m st w is m-wff;
+end;
+
+registration
+let S;
+cluster 0-wff -> 0wff string of S;
+cluster 0wff -> 0-wff string of S;
+let m;
+cluster m-wff -> wff string of S;
+let n;
+cluster (m+0*n)-wff -> (m+n)-wff (string of S);
+end;
+
+registration
+let S,m;
+cluster m-wff string of S;
+end;
+
+registration
+let S,m;
+cluster S-formulasOfMaxDepth m -> non empty;
+end;
+
+registration
+let S;
+cluster wff string of S;
+end;
+
+definition ::def27 1
+let S,U; let I be Element of U-InterpretersOf S, w be wff string of S;
+func I-TruthEval w -> Element of BOOLEAN means
+:: FOMODEL2:def 26
+for m being Nat st w is m-wff holds it=((I,m)-TruthEval).w;
+end;
+
+definition
+let S;
+func AllFormulasOf S equals
+:: FOMODEL2:def 27
+{w where w is string of S: ex m st w is m-wff};
+end;
+
+registration
+let S;
+cluster AllFormulasOf S -> non empty;
+end;
+
+reserve u,u1,u2 for Element of U, t for termal string of S,
+I for (S,U)-interpreter-like Function,
+l, l1, l2 for literal (Element of S), m1, n1 for non zero Nat,
+phi0 for 0wff string of S, psi,phi,phi1,phi2 for wff string of S;
+
+theorem :: FOMODEL2:3
+((I,u)-TermEval.(m+1)).t =
+(I.(S-firstChar.t)).(((I,u)-TermEval.m)*(SubTerms(t))) &
+(t is 0-termal implies ((I,u)-TermEval.(m+1)).t = (I.(S-firstChar.t)).{});
+
+theorem :: FOMODEL2:4
+for t being m-termal string of S holds
+((I,u1)-TermEval.(m+1)).t = ((I,u2)-TermEval.(m+1+n)).t;
+
+theorem :: FOMODEL2:5
+curry ((S,U)-TruthEval m) is Function of
+U-InterpretersOf S, PFuncs((AllSymbolsOf S)*\{{}},BOOLEAN);
+
+theorem :: FOMODEL2:6
+x in X\/Y\/Z iff x in X or x in Y or x in Z; ::Th6
+
+theorem :: FOMODEL2:7
+S-formulasOfMaxDepth 0 = AtomicFormulasOf S;
+
+definition ::def29 1
+let S,m;
+redefine func S-formulasOfMaxDepth m means
+:: FOMODEL2:def 28
+for U being non empty set, I being Element of U-InterpretersOf S
+holds it=dom (I,m)-TruthEval;
+end;
+
+theorem :: FOMODEL2:8
+(S,U)-TruthEval m in ::Th8
+Funcs([:U-InterpretersOf S, S-formulasOfMaxDepth m:], BOOLEAN) &
+(S,U)-TruthEval.m in
+Funcs([:U-InterpretersOf S, S-formulasOfMaxDepth m:], BOOLEAN);
+
+definition
+let S,m;
+func m-ExFormulasOf S equals
+:: FOMODEL2:def 29
+{<*v*>^phi where v is Element of LettersOf S,
+phi is Element of S-formulasOfMaxDepth m: not contradiction};
+func m-NorFormulasOf S equals
+:: FOMODEL2:def 30
+{<*TheNorSymbOf S*>^phi1^phi2 where
+phi1 is Element of S-formulasOfMaxDepth m,
+phi2 is Element of S-formulasOfMaxDepth m: not contradiction};
+end;
+
+definition
+let S; let w1,w2 be string of S;
+redefine func w1^w2 -> string of S;
+end;
+
+definition
+let S,s;
+redefine func <*s*> -> string of S;
+end;
+
+theorem :: FOMODEL2:9
+S-formulasOfMaxDepth(m+1) = ::Th9
+m-ExFormulasOf S \/ m-NorFormulasOf S \/ S-formulasOfMaxDepth m;
+
+theorem :: FOMODEL2:10
+AtomicFormulasOf S is S-prefix;
+
+registration
+let S;
+cluster AtomicFormulasOf S -> S-prefix set;
+end;
+
+registration
+let S;
+cluster S-formulasOfMaxDepth 0 -> S-prefix set;
+end;
+
+definition ::def32 1
+let S, phi;
+func Depth phi -> Nat means
+:: FOMODEL2:def 31
+phi is it-wff & for n st phi is n-wff holds it <= n;
+end;
+
+registration
+let S, m; let phi1, phi2 be m-wff string of S;
+cluster <*TheNorSymbOf S*>^phi1^phi2 -> (m+1)-wff string of S;
+end;
+
+registration
+let S, phi1, phi2;
+cluster <*TheNorSymbOf S*>^phi1^phi2 -> wff string of S;
+end;
+
+registration
+let S, m; let phi be m-wff string of S, v be literal Element of S;
+cluster <*v*>^phi -> (m+1)-wff string of S;
+end;
+
+registration
+let S,l,phi;
+cluster <*l*>^phi -> wff string of S;
+end;
+
+registration
+let S, w; let s be non relational Element of S;
+cluster <*s*>^w -> non 0wff string of S;
+end;
+
+registration
+let S, w1, w2; let s be non relational Element of S;
+cluster <*s*>^w1^w2 -> non 0wff string of S;
+end;
+
+registration
+let S;
+cluster TheNorSymbOf S -> non relational (Element of S);
+end;
+
+registration
+let S, w;
+cluster <*TheNorSymbOf S*>^w -> non 0wff string of S;
+end;
+
+registration
+let S,l,w;
+cluster <*l*>^w -> non 0wff string of S;
+end;
+
+definition ::short for existential, which is already in use by ZF_LANG
+let S, w;
+attr w is exal means
+:: FOMODEL2:def 32
+S-firstChar.w is literal;
+end;
+
+registration
+let S,w,l;
+cluster <*l*>^w -> exal string of S;
+end;
+
+registration
+let S,m1;
+cluster exal (m1-wff string of S);
+end;
+
+registration
+let S;
+cluster exal -> non 0wff string of S;
+end;
+
+registration
+let S,m1;
+cluster non 0wff (exal m1-wff string of S);
+end;
+
+registration
+let S;
+cluster non 0wff (exal wff string of S);
+end;
+
+registration
+let S; let phi be non 0wff (wff string of S);
+cluster Depth phi -> non zero Nat;
+end;
+
+registration
+let S; let w be non 0wff (wff string of S);
+cluster S-firstChar.w -> non relational Element of S;
+end;
+
+registration
+let S, m;
+cluster S-formulasOfMaxDepth m -> S-prefix set;
+end;
+
+definition
+let S;
+redefine func AllFormulasOf S -> Subset of (AllSymbolsOf S)*\{{}};
+end;
+
+registration
+let S;
+cluster -> wff Element of AllFormulasOf S;
+end;
+
+registration
+let S;
+cluster AllFormulasOf S -> S-prefix set;
+end;
+
+theorem :: FOMODEL2:11
+dom NorIterator((S,U)-TruthEval m) =
+[:U-InterpretersOf S, m-NorFormulasOf S:];
+
+theorem :: FOMODEL2:12
+dom ExIterator((S,U)-TruthEval m)= ::Th12
+[:U-InterpretersOf S, m-ExFormulasOf S:];
+
+theorem :: FOMODEL2:13
+U-deltaInterpreter"{1} =
+{<*u,u*> where u is Element of U: not contradiction};
+
+definition
+let S;
+redefine func TheEqSymbOf S -> Element of S;
+end;
+
+registration
+let S;
+cluster ar(TheEqSymbOf S) + 2 -> zero number;
+cluster abs(ar(TheEqSymbOf S)) - 2 -> zero number;
+end;
+
+theorem :: FOMODEL2:14
+for phi being 0wff string of S, I being (S,U)-interpreter-like Function
+holds (S-firstChar.phi <> TheEqSymbOf S implies
+I-AtomicEval phi=(I.(S-firstChar.phi)).((I-TermEval)*(SubTerms phi)))
+& (S-firstChar.phi=TheEqSymbOf S implies
+I-AtomicEval phi = (U-deltaInterpreter).((I-TermEval)*(SubTerms phi)));
+
+theorem :: FOMODEL2:15
+for I being (S,U)-interpreter-like Function,
+phi being 0wff string of S st (S-firstChar.phi)=TheEqSymbOf S holds
+(I-AtomicEval phi = 1 iff
+(I-TermEval.((SubTerms phi).1) = I-TermEval.((SubTerms phi).2)));
+
+registration
+let S,m;
+cluster m-ExFormulasOf S -> non empty set;
+end;
+
+registration
+let S,m;
+cluster m-NorFormulasOf S -> non empty set;
+end;
+
+definition
+let S,m;
+redefine func m-NorFormulasOf S -> Subset of (AllSymbolsOf S)*\{{}};
+end;
+
+registration
+let S; let w be exal string of S;
+cluster S-firstChar.w -> literal Element of S;
+end;
+
+registration
+let S,m;
+cluster -> non exal (Element of m-NorFormulasOf S);
+end;
+
+definition
+let S,m;
+redefine func m-ExFormulasOf S -> Subset of (AllSymbolsOf S)*\{{}};
+end;
+
+registration
+let S,m;
+cluster -> exal Element of m-ExFormulasOf S;
+end;
+
+registration
+let S;
+cluster non literal Element of S;
+end;
+
+registration
+let S, w; let s be non literal Element of S;
+cluster <*s*>^w -> non exal string of S;
+end;
+
+registration
+let S,w1,w2; let s be non literal Element of S;
+cluster <*s*>^w1^w2 -> non exal string of S;
+end;
+
+registration
+let S;
+cluster TheNorSymbOf S -> non literal Element of S;
+end;
+
+theorem :: FOMODEL2:16
+phi in AllFormulasOf S;
+
+notation let S,m,w;
+antonym w is m-nonwff for w is m-wff;
+end;
+
+registration let m, S;
+::# cluster m-nonwff -> (non ((m)-wff)) string of S; coherence by DefWff3;
+::# The clustering above gives a nasty misterious error, as all the schemes
+::# cluster xxx -> non (yyy-attribute) type;
+::# this is the reason why introduced attribute -nonwff itself, indeed :)
+cluster non m-wff -> m-nonwff string of S;
+end;
+
+registration let S, phi1, phi2;
+cluster <*TheNorSymbOf S*>^phi1^phi2 ->
+(max(Depth phi1, Depth phi2))-nonwff string of S;
+end;
+
+registration
+let S,phi,l;
+cluster <*l*>^phi -> (Depth phi)-nonwff string of S;
+end;
+
+registration
+let S,phi,l;
+cluster <*l*>^phi -> (1+Depth phi)-wff string of S;
+end;
+
+registration
+let S,U;
+cluster -> (OwnSymbolsOf S)-defined (Element of U-InterpretersOf S);
+end;
+
+registration
+let S,U;
+cluster (OwnSymbolsOf S)-defined (Element of U-InterpretersOf S);
+end;
+
+registration
+let S,U;
+cluster -> total ((OwnSymbolsOf S)-defined (Element of U-InterpretersOf S));
+end;
+
+definition
+let S, U; let I be Element of U-InterpretersOf S;
+let x be literal Element of S, u be Element of U;
+redefine func (x,u) ReassignIn I -> Element of U-InterpretersOf S;
+end;
+
+reserve I for Element of U-InterpretersOf S;
+
+definition
+let S, w;
+func xnot w -> string of S equals
+:: FOMODEL2:def 33
+<*TheNorSymbOf S*>^w^w;
+end;
+
+registration
+let S, m; let phi be m-wff string of S;
+cluster xnot phi -> (m+1)-wff string of S;
+end;
+
+registration
+let S, phi;
+cluster xnot phi -> wff string of S;
+end;
+
+registration
+let S;
+cluster TheEqSymbOf S -> non own Element of S;
+end;
+
+definition ::def36 1
+let S,X;
+attr X is S-mincover means
+:: FOMODEL2:def 34
+for phi holds (phi in X iff not xnot phi in X);
+end;
+
+theorem :: FOMODEL2:17
+Depth(<*TheNorSymbOf S*>^phi1^phi2)=1+max(Depth phi1, Depth phi2) &
+Depth (<*l*>^phi1) = Depth phi1 + 1;
+
+theorem :: FOMODEL2:18
+(Depth phi=m+1) implies ((phi is exal iff phi in m-ExFormulasOf S)
+& (phi is non exal iff phi in m-NorFormulasOf S)); ::Th18
+
+theorem :: FOMODEL2:19
+(I-TruthEval (<*l*>^phi) = TRUE iff       ::Th19
+(ex u st ((l,u) ReassignIn I)-TruthEval phi=1) ) &
+(I-TruthEval (<*TheNorSymbOf S*>^phi1^phi2) = TRUE iff
+(I-TruthEval phi1 = FALSE & I-TruthEval phi2 = FALSE));
+
+reserve I for (S,U)-interpreter-like Function;
+
+theorem :: FOMODEL2:20
+(I,u)-TermEval.(m+1)|(S-termsOfMaxDepth.m) =I-TermEval|(S-termsOfMaxDepth.m);
+
+theorem :: FOMODEL2:21
+I-TermEval.t = (I.(S-firstChar.t)).((I-TermEval)*(SubTerms t));
+
+definition ::def37 1
+let S,phi;
+func SubWffsOf phi means
+:: FOMODEL2:def 35
+ex phi1, p st p is (AllSymbolsOf S)-valued
+& it=[phi1,p] & phi=<*S-firstChar.phi*>^phi1^p if phi is non 0wff
+otherwise it=[phi,{}];
+end;
+
+definition
+let S,phi;
+
+func head phi -> wff string of S equals
+:: FOMODEL2:def 36
+(SubWffsOf phi)`1;
+func tail phi -> Element of (AllSymbolsOf S)* equals
+:: FOMODEL2:def 37
+(SubWffsOf phi)`2;
+end;
+
+registration
+let S,m;
+cluster (S-formulasOfMaxDepth m) \ (AllFormulasOf S) -> empty set;
+end;
+
+registration
+let S;
+cluster (AtomicFormulasOf S) \ (AllFormulasOf S) -> empty set;
+end;
+
+theorem :: FOMODEL2:22
+Depth (<*l*>^phi1) > Depth phi1 &
+Depth (<*TheNorSymbOf S*>^phi1^phi2) > Depth phi1 &
+Depth (<*TheNorSymbOf S*>^phi1^phi2) > Depth phi2;
+
+theorem :: FOMODEL2:23
+(not phi is 0wff) implies
+(phi=<*x*>^phi2^p2 iff (x=S-firstChar.phi & phi2=head phi & p2=tail phi));
+
+registration
+let S, m1;
+cluster non exal (non 0wff m1-wff string of S);
+end;
+
+registration
+let S; let phi be exal wff string of S;
+cluster tail phi -> empty set;
+end;
+
+definition
+let S; let phi be non exal (non 0wff wff string of S);
+redefine func tail phi -> wff string of S;
+end;
+
+registration
+let S; let phi be non exal (non 0wff wff string of S);
+cluster tail phi -> wff (string of S);
+end;
+
+registration
+let S, phi0;
+identify head phi0 with phi0 null;
+end;
+
+registration
+let S; let phi be non 0wff non exal wff string of S;
+cluster S-firstChar.phi \+\ TheNorSymbOf S -> empty set;
+end;
+
+registration
+let m,S; let phi be (m+1)-wff string of S;
+cluster head phi -> m-wff string of S;
+end;
+
+registration
+let m, S; let phi be (m+1)-wff non exal non 0wff string of S;
+cluster tail phi -> m-wff string of S;
+end;
+
+theorem :: FOMODEL2:24
+for I being Element of U-InterpretersOf S holds
+(I,m)-TruthEval in Funcs(S-formulasOfMaxDepth m, BOOLEAN);
+
+registration
+let S, U; let I be Element of U-InterpretersOf S; let phi0;
+identify I-TruthEval phi0 with I-AtomicEval phi0;
+identify I-AtomicEval phi0 with I-TruthEval phi0;
+end;
+
+registration
+let S;
+cluster non literal (ofAtomicFormula Element of S);
+end;
+
+theorem :: FOMODEL2:25 ::Th25
+not l2 in rng p implies (l2,u) ReassignIn I-TermEval.p= I-TermEval.p;
+
+definition ::def40 2
+let X,S,s;
+attr s is X-occurring means
+:: FOMODEL2:def 38
+s in SymbolsOf (((AllSymbolsOf S*)\{{}}) /\ X);
+end;
+
+definition let S,s; let X;
+attr X is s-containing means
+:: FOMODEL2:def 39
+s in SymbolsOf ((AllSymbolsOf S*)\{{}} /\ X);
+end;
+
+notation let X,S,s;
+antonym s is X-absent for s is X-occurring;
+end;
+
+notation let S,s,X;
+antonym X is s-free for X is s-containing;
+end;
+
+registration let X be finite set; let S;
+cluster X-absent (literal Element of S);
+end;
+
+registration
+let S,t;
+cluster rng t /\ LettersOf S -> non empty set;
+end;
+
+registration
+let S, phi;
+cluster rng phi /\ LettersOf S -> non empty set;
+end;
+
+registration
+let B,S; let A be Subset of B;
+cluster A-occurring -> B-occurring (Element of S);
+end;
+
+registration
+let A,B,S;
+cluster (A null B)-absent -> (A/\B)-absent (Element of S);
+end;
+
+registration
+let F be finite set; let A,S;
+cluster A-absent -> (A\/F)-absent (F-absent Element of S);
+end;
+
+registration
+let S,U; let I be (S,U)-interpreter-like Function;
+cluster (OwnSymbolsOf S)\(dom I) -> empty set;
+end;
+
+theorem :: FOMODEL2:26
+ex u st u=I.l.{} & (l,u) ReassignIn I = I;
+
+definition
+let S,X;
+attr X is S-covering means
+:: FOMODEL2:def 40
+for phi holds (phi in X or xnot phi in X);
+end;
+
+registration
+let S;
+cluster S-mincover -> S-covering set;
+end;
+
+registration
+let U, S; let phi be non 0wff non exal wff string of S;
+let I be Element of U-InterpretersOf S;
+cluster (I-TruthEval phi) \+\ I-TruthEval head phi
+'nor' (I-TruthEval (tail phi)) -> empty set;
+end;
+
+definition
+let S;
+func ExFormulasOf S -> Subset of (AllSymbolsOf S)*\{{}} equals
+:: FOMODEL2:def 41
+{phi where phi is string of S: phi is wff & phi is exal};
+end;
+
+registration
+let S;
+cluster ExFormulasOf S -> non empty set;
+end;
+
+registration
+let S;
+cluster -> exal wff Element of ExFormulasOf S;
+end;
+
+registration
+let S;
+cluster -> wff Element of ExFormulasOf S;
+end;
+
+registration
+let S;
+cluster -> exal Element of ExFormulasOf S;
+end;
+
+registration
+let S;
+cluster ExFormulasOf S \ (AllFormulasOf S) -> empty set;
+end;
+
+registration
+let U,S1; let S2 be S1-extending Language;
+cluster (S2,U)-interpreter-like -> (S1,U)-interpreter-like Function;
+end;
+
+registration
+let U, S1; let S2 be S1-extending Language;
+let I be (S2,U)-interpreter-like Function;
+cluster I|OwnSymbolsOf S1 -> (S1,U)-interpreter-like Function;
+end;
+
+registration
+let U, S1; let S2 be S1-extending Language, I1 be Element of
+U-InterpretersOf S1, I2 be (S2,U)-interpreter-like Function;
+cluster I2 +* I1 -> (S2,U)-interpreter-like;
+end;
+
+definition ::def44 1
+let U,S; let I be Element of U-InterpretersOf S; let X;
+attr X is I-satisfied means
+:: FOMODEL2:def 42
+for phi st phi in X holds I-TruthEval phi=1;
+end;
+
+definition ::def45 1
+let S, U, X; let I be Element of U-InterpretersOf S;
+attr I is X-satisfying means
+:: FOMODEL2:def 43
+X is I-satisfied;
+end;
+
+registration
+let U,S; let e be empty set; let I be Element of U-InterpretersOf S;
+cluster e null I -> I-satisfied;
+end;
+
+registration
+let X,U,S; let I be Element of U-InterpretersOf S;
+cluster I-satisfied Subset of X;
+end;
+
+registration
+let U,S; let I be Element of U-InterpretersOf S;
+cluster I-satisfied set;
+end;
+
+registration
+let U,S; let I be Element of U-InterpretersOf S;
+let X be I-satisfied set;
+cluster -> I-satisfied (Subset of X);
+end;
+
+registration
+let U,S; let I be Element of U-InterpretersOf S; let X,Y be I-satisfied set;
+cluster X\/Y -> I-satisfied;
+end;
+
+registration
+let U,S; let I be Element of U-InterpretersOf S; let X be I-satisfied set;
+cluster I null X -> X-satisfying (Element of U-InterpretersOf S);
+end;
+
+definition :: correctness of a SET of sequents
+let S, X;
+attr X is S-correct means
+:: FOMODEL2:def 44
+for U being non empty set, I being
+(Element of U-InterpretersOf S), x being I-satisfied set, phi st
+[x,phi] in X holds I-TruthEval phi=1;
+end;
+
+registration
+let S;
+cluster {} null S -> S-correct;
+end;
+
+registration
+let S,X;
+cluster S-correct Subset of X;
+end;
+
+theorem :: FOMODEL2:27
+for I being Element of U-InterpretersOf S holds
+I-TruthEval phi=1 iff {phi} is I-satisfied;
+
+theorem :: FOMODEL2:28
+s is {w}-occurring iff s in rng w;
+
+registration
+let U, S; let phi1, phi2; let I be Element of U-InterpretersOf S;
+cluster (I-TruthEval (<*TheNorSymbOf S*>^phi1^phi2)) \+\
+I-TruthEval phi1 'nor' (I-TruthEval phi2) -> empty set;
+end;
+
+registration
+let S, phi, U; let I be Element of U-InterpretersOf S;
+cluster I-TruthEval xnot phi \+\ ('not' (I-TruthEval phi)) -> empty set;
+end;
+
+definition
+let X, S, phi;
+attr phi is X-implied means
+:: FOMODEL2:def 45
+for U being non empty set, I being
+Element of U-InterpretersOf S st X is I-satisfied holds I-TruthEval phi=1;
+end;
+
