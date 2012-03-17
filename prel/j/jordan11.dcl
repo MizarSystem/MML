@@ -38,14 +38,14 @@
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="201">
+<Func kind="K" nr="202">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="210">
+<Func kind="K" nr="211">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>

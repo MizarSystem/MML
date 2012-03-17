@@ -15,7 +15,6 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -81,7 +80,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="118">
+<Func kind="K" nr="112">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -98,7 +97,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="118">
+<Func kind="K" nr="112">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -114,7 +113,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="122">
+<Func kind="K" nr="116">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

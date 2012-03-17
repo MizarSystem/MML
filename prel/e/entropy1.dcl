@@ -102,7 +102,7 @@
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="125">
+<Func kind="K" nr="126">
 <Func kind="K" nr="42"/>
 </Func>
 </Typ>
@@ -119,7 +119,7 @@
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="125">
+<Func kind="K" nr="126">
 <Func kind="K" nr="42"/>
 </Func>
 </Typ>

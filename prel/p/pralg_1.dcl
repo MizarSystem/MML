@@ -14,11 +14,11 @@
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
@@ -37,7 +37,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="145">
+<Func kind="K" nr="146">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -129,7 +129,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="182">
+<Func kind="K" nr="183">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -157,7 +157,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="187">
+<Func kind="K" nr="188">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -179,7 +179,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="106">
+<Func kind="K" nr="100">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>

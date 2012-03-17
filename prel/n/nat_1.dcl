@@ -13,6 +13,8 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
@@ -28,6 +30,8 @@
 <Adjective nr="15"/>
 <Adjective nr="16"/>
 <Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -58,6 +62,8 @@
 <Adjective nr="15"/>
 <Adjective nr="16"/>
 <Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 <FCluster>

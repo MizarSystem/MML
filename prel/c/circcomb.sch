@@ -134,7 +134,7 @@
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="176">
+<Func kind="K" nr="177">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -151,7 +151,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="160">
+<Func kind="K" nr="161">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -207,7 +207,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="160">
+<Func kind="K" nr="161">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -240,8 +240,8 @@
 <Cluster>
 <Adjective nr="5"/>
 <Adjective nr="15">
-<Func kind="K" nr="161">
-<Func kind="K" nr="136">
+<Func kind="K" nr="162">
+<Func kind="K" nr="137">
 <Var nr="2"/>
 </Func>
 <Func kind="K" nr="117"/>
@@ -249,8 +249,8 @@
 <Func kind="K" nr="117"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="161">
-<Func kind="K" nr="136">
+<Func kind="K" nr="162">
+<Func kind="K" nr="137">
 <Var nr="2"/>
 </Func>
 <Func kind="K" nr="117"/>

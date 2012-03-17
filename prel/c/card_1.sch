@@ -10,7 +10,6 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="FINSET_1"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="CARD_1"/>
 </Signature>
 <Scheme>
@@ -41,7 +40,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="50">
+<Func kind="K" nr="43">
 <Var nr="1"/>
 </Func>
 </Pred>

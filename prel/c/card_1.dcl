@@ -10,7 +10,6 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="FINSET_1"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="CARD_1"/>
 </Signature>
 <RCluster>
@@ -43,7 +42,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="51">
+<Func kind="K" nr="44">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -58,7 +57,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="49">
+<Func kind="K" nr="42">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -80,10 +79,11 @@
 </CCluster>
 <CCluster>
 <ArgTypes/>
+<Cluster>
+<Adjective nr="13"/>
+</Cluster>
+<Typ kind="M" nr="1">
 <Cluster/>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="46"/>
 </Typ>
 <Cluster>
 <Adjective nr="17"/>
@@ -94,7 +94,7 @@
 <Cluster/>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="22"/>
 </Typ>
 <Cluster>
 <Adjective nr="15"/>

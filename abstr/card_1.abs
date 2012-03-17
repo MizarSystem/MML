@@ -7,15 +7,14 @@
 environ
 
  vocabularies ORDINAL1, RELAT_1, FUNCT_1, BOOLE, WELLORD1, TARSKI, WELLORD2,
-      ORDINAL2, FINSET_1, CARD_1, FUNCOP_1, COMPLEX1, GR_CY_1, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
-      RELAT_1, ENUMSET1, FUNCT_1, FUNCOP_1, WELLORD1, ORDINAL1, ORDINAL2,
-      WELLORD2, FINSET_1, XXREAL_0;
+      ORDINAL2, FINSET_1, CARD_1, FUNCOP_1, COMPLEX1, GR_CY_1, ARYTM, CAT_1,
+      FUNCT_4;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, ENUMSET1, FUNCT_1,
+      FUNCOP_1, FUNCT_4, WELLORD1, ORDINAL1, ORDINAL2, WELLORD2, FINSET_1;
  constructors ENUMSET1, WELLORD1, WELLORD2, FUNCOP_1, ORDINAL2, FINSET_1,
-      XXREAL_0, XREAL_0, NAT_1;
- registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1,
-      XREAL_0, NAT_1;
- requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+      FUNCT_4;
+ registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1;
+ requirements NUMERALS, SUBSET, BOOLE;
 
 
 begin
@@ -24,7 +23,11 @@ begin
          X,X1,Y,Y1,Z,a,b,b1,b2,x,y,z for set,
          R for Relation,
          f,g,h for Function,
-         k,m,n for Nat;
+         k,m,n for natural number;
+
+notation
+ synonym 0 for {};
+end;
 
 definition let IT be set;
  attr IT is cardinal means
@@ -148,7 +151,7 @@ end;
 definition let A;
  func alef A -> set means
 :: CARD_1:def 8
-   ex S st it = last S & dom S = succ A & S.{} = Card NAT &
+  ex S st it = last S & dom S = succ A & S.{} = Card omega &
         (for B st succ B in succ A holds S.succ B = nextcard union { S.B }) &
          for B st B in succ A & B <> {} & B is_limit_ordinal
                 holds S.B = Card sup(S|B);
@@ -161,7 +164,7 @@ end;
 canceled;
 
 theorem :: CARD_1:38
-      alef 0 = Card NAT;
+      alef 0 = Card omega;
 
 theorem :: CARD_1:39
   alef succ A = nextcard alef A;
@@ -205,15 +208,7 @@ theorem :: CARD_1:50
 theorem :: CARD_1:51
    0 = {};
 
-theorem :: CARD_1:52
- for n being natural number holds succ n = n + 1;
-
-canceled 3;
-
-theorem :: CARD_1:56
-  n <= m iff n c= m;
-
-canceled;
+canceled 6;
 
 theorem :: CARD_1:58
   X misses X1 & Y misses Y1 & X,Y are_equipotent &
@@ -229,7 +224,11 @@ theorem :: CARD_1:61
   X,Y are_equipotent & x in X & y in Y implies
        X \ { x },Y \ { y } are_equipotent;
 
-canceled 2;
+theorem :: CARD_1:62
+ succ X, succ Y are_equipotent implies X, Y are_equipotent;
+
+theorem :: CARD_1:63
+ n = {} or ex m st n = succ m;
 
 theorem :: CARD_1:64
    n,m are_equipotent implies n = m;
@@ -237,11 +236,11 @@ theorem :: CARD_1:64
 theorem :: CARD_1:65
   x in omega implies x is cardinal;
 
-registration cluster -> cardinal Element of NAT;
+registration cluster natural -> cardinal number;
 end;
 
 theorem :: CARD_1:66
-  for n being Nat holds n = Card n;
+  for n being natural number holds n = Card n;
 
 canceled;
 
@@ -257,10 +256,10 @@ theorem :: CARD_1:71
   Card n = Card m implies n = m;
 
 theorem :: CARD_1:72
-  Card n <=` Card m iff n <= m;
+  Card n <=` Card m iff n c= m;
 
 theorem :: CARD_1:73
-  Card n <` Card m iff n < m;
+  Card n <` Card m iff n in m;
 
 theorem :: CARD_1:74
   X is finite implies ex n st X,n are_equipotent;
@@ -268,12 +267,10 @@ theorem :: CARD_1:74
 canceled;
 
 theorem :: CARD_1:76
-  nextcard Card n = Card(n+1);
+  nextcard Card n = Card succ n;
 
 definition let n be natural number;
- redefine func succ n equals
-:: CARD_1:def 9
-n+1;
+ redefine func succ n -> Element of omega;
 end;
 
 notation let X be finite set;
@@ -281,9 +278,9 @@ notation let X be finite set;
 end;
 
 definition let X be finite set;
- redefine  canceled 2;
+ redefine  canceled 3;
 
-func card X -> Element of NAT;
+func card X -> Element of omega;
   end;
 
 canceled;
@@ -294,9 +291,7 @@ theorem :: CARD_1:78
 theorem :: CARD_1:79
       card { x } = 1;
 
-theorem :: CARD_1:80
-     for X,Y being finite set holds
-   X c= Y implies card X <= card Y;
+canceled;
 
 theorem :: CARD_1:81
            for X,Y being finite set holds
@@ -330,7 +325,7 @@ theorem :: CARD_1:85
    Card omega is_limit_cardinal;
 
 registration
- cluster -> finite Element of NAT;
+ cluster -> finite Element of omega;
 end;
 
 registration
@@ -392,23 +387,13 @@ definition let n;
     n;
 end;
 
-reserve l for Element of NAT;
+reserve l for Element of omega;
 
 definition let n;
-  redefine func Segm n -> Subset of NAT;
+  redefine func Segm n -> Subset of omega;
 end;
 
-theorem :: CARD_1:98
-  k in n iff k < n;
-
-theorem :: CARD_1:99
-  n in n+1;
-
-theorem :: CARD_1:100
-  n <= m iff n c= m;
-
-theorem :: CARD_1:101
-   k <= n implies k = k /\ n;
+canceled 4;
 
 :: from CARD_4, 2007.08.16, A.T.
 

@@ -10,10 +10,11 @@ environ
       TARSKI, SGRAPH1, CARD_1, LATTICES, BINOP_1, ORDINAL1, ORDINAL2, LATTICE3,
       FILTER_0, FILTER_1, WELLORD1, RELAT_2, ORDERS_1, BHSP_3, SEQM_3, KNASTER,
       ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, NAT_1,
+      RELAT_1,
       RELAT_2, ORDERS_1, STRUCT_0, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
       BINOP_1, FUNCOP_1, SETFAM_1, FUNCT_4, WELLORD1, ORDINAL1, ORDINAL2,
-      CARD_1, COHSP_1, LATTICES, LATTICE3, QUANTAL1, ORDERS_2, ABIAN;
+      COHSP_1, LATTICES, LATTICE3, QUANTAL1, ORDERS_2, ABIAN;
  constructors SETFAM_1, WELLORD1, WELLORD2, BINOP_1, DOMAIN_1, ORDINAL2, NAT_1,
       ABIAN, BOOLEALG, QUANTAL1, COHSP_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, CARD_1,
@@ -24,47 +25,15 @@ environ
  theorems TARSKI, SETFAM_1, ZFMISC_1, RELAT_1, FUNCT_1, FUNCOP_1, FUNCT_2,
       FUNCT_4, CARD_1, COHSP_1, LATTICES, LATTICE3, QUANTAL1, FILTER_0,
       FILTER_1, BOOLEALG, WELLORD1, RELSET_1, ORDERS_2, RELAT_2, ORDINAL1,
-      CARD_3, CARD_4, XBOOLE_0, XBOOLE_1, FUNCT_7, PARTFUN1, ORDERS_1, ABIAN;
+      CARD_3, CARD_4, XBOOLE_0, XBOOLE_1, FUNCT_7, PARTFUN1, ORDERS_1, ABIAN,
+      NAT_1;
  schemes NAT_1, FUNCT_1, FUNCT_2, DOMAIN_1, ORDINAL2;
 
 begin :: Preliminaries
 
 reserve f, g, h for Function;
 
-theorem Th1:
- f is one-to-one & g is one-to-one & rng f misses rng g
-  implies f+*g is one-to-one
-proof assume
-A1: f is one-to-one & g is one-to-one & rng f misses rng g;
- set fg = f+*g;
- let x1,x2 be set; assume
-A2: x1 in dom fg & x2 in dom fg & fg.x1 = fg.x2;
-then A3: (x1 in dom f or x1 in dom g) & (x2 in dom f or x2 in dom g)
- by FUNCT_4:13;
- per cases;
- suppose A4: x1 in dom g & x2 in dom g;
-   then fg.x1 = g.x1 & fg.x2 = g.x2 by FUNCT_4:14;
-  hence x1 = x2 by A1,A2,A4,FUNCT_1:def 8;
- end;
- suppose A5: x1 in dom g & not x2 in dom g;
-then A6: x2 in dom f by A2,FUNCT_4:13;
-A7: fg.x1 = g.x1 & fg.x2 = f.x2 by A5,FUNCT_4:12,14;
-           g.x1 in rng g & f.x2 in rng f by A5,A6,FUNCT_1:def 5;
-  hence x1 = x2 by A1,A2,A7,XBOOLE_0:3;
- end;
- suppose A8: not x1 in dom g & x2 in dom g;
-then A9: x1 in dom f by A2,FUNCT_4:13;
-A10: fg.x1 = f.x1 & fg.x2 = g.x2 by A8,FUNCT_4:12,14;
-           g.x2 in rng g & f.x1 in rng f by A8,A9,FUNCT_1:def 5;
-  hence x1 = x2 by A1,A2,A10,XBOOLE_0:3;
- end;
- suppose A11: not x1 in dom g & not x2 in dom g;
-    then fg.x1 = f.x1 & fg.x2 = f.x2 by FUNCT_4:12;
-  hence x1 = x2 by A1,A2,A3,A11,FUNCT_1:def 8;
-end;
-end;
-
-canceled;
+canceled 2;
 
 theorem
        h = f \/ g & dom f misses dom g implies
@@ -110,7 +79,7 @@ A15:  x1 in dom h & x2 in dom h by A2,A11,A12,XBOOLE_0:def 2;
  assume
 A16: f is one-to-one & g is one-to-one & rng f misses rng g;
          f \/ g = f+*g by A1,FUNCT_4:32;
- hence h is one-to-one by A1,A16,Th1;
+ hence h is one-to-one by A1,A16,FUNCT_4:98;
 end;
 
 begin :: Fix points in general
@@ -360,7 +329,7 @@ then A13: rng h = Y by A2,A5,A12,RELAT_1:26;
   then reconsider h as Function of X, Y by A11,FUNCT_2:def 1,RELSET_1:11;
   take h;
         gYb" is one-to-one by A9,FUNCT_1:62;
-then A14: h is one-to-one by A2,A5,A6,A12,Th1;
+then A14: h is one-to-one by A2,A5,A6,A12,FUNCT_4:98;
        h is onto by A13,FUNCT_2:def 3;
  hence h is bijective by A14,FUNCT_2:def 4;
 end;
@@ -597,7 +566,7 @@ then A6:  dom iter(f, n) = dom f by A1,FUNCT_7:76;
          iter(f, n+1).x = (f*iter(f, n)).x by FUNCT_7:73
          .= f.(f, n)+.x by A1,A5,A6,FUNCT_1:23
          .= (f, succ n)+.x by Th18
-         .= (f, n+1)+.x by CARD_1:52;
+         .= (f, n+1)+.x by NAT_1:39;
          hence P[n+1];
     end;
         for n being Element of NAT holds P[n] from NAT_1:sch 1(A3, A4);
@@ -620,7 +589,7 @@ then A6:   dom iter(f, n) = dom f by A1,FUNCT_7:76;
          iter(f, n+1).x = (f*iter(f, n)).x by FUNCT_7:73
          .= f.(f, n)-.x by A1,A5,A6,FUNCT_1:23
          .= (f, succ n)-.x by Th19
-         .= (f, n+1)-.x by CARD_1:52;
+         .= (f, n+1)-.x by NAT_1:39;
          hence P[n+1];
     end;
         for n being Element of NAT holds P[n] from NAT_1:sch 1(A3, A4);

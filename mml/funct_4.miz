@@ -14,7 +14,7 @@ environ
  constructors PARTFUN1, BINOP_1, FUNCOP_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCOP_1;
  requirements BOOLE, SUBSET;
- definitions TARSKI, FUNCT_2, PARTFUN1, XBOOLE_0, BINOP_1, FUNCOP_1;
+ definitions TARSKI, FUNCT_2, PARTFUN1, XBOOLE_0, BINOP_1, FUNCOP_1, FUNCT_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, GRFUNC_1, PARTFUN1, FUNCOP_1, ZFMISC_1,
       RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, ENUMSET1;
  schemes FUNCT_1, PARTFUN1, XBOOLE_0;
@@ -1628,5 +1628,40 @@ then A2: not x in dom mn by A1,TARSKI:def 1;
 then A3: not x in dom nm by A1,TARSKI:def 1;
     thus (f +* nm +* mn).x=(f +* nm).x by A2,Th12
        .=f.x by A3,Th12;
+end;
+
+:: from KNASTER, 2007.010.28, A.T.
+
+theorem Th1:
+ f is one-to-one & g is one-to-one & rng f misses rng g
+  implies f+*g is one-to-one
+proof assume
+A1: f is one-to-one & g is one-to-one & rng f misses rng g;
+ set fg = f+*g;
+ let x1,x2 be set; assume
+A2: x1 in dom fg & x2 in dom fg & fg.x1 = fg.x2;
+then A3: (x1 in dom f or x1 in dom g) & (x2 in dom f or x2 in dom g)
+ by Th13;
+ per cases;
+ suppose A4: x1 in dom g & x2 in dom g;
+   then fg.x1 = g.x1 & fg.x2 = g.x2 by Th14;
+  hence x1 = x2 by A1,A2,A4,FUNCT_1:def 8;
+ end;
+ suppose A5: x1 in dom g & not x2 in dom g;
+then A6: x2 in dom f by A2,Th13;
+A7: fg.x1 = g.x1 & fg.x2 = f.x2 by A5,Th12,Th14;
+           g.x1 in rng g & f.x2 in rng f by A5,A6,FUNCT_1:def 5;
+  hence x1 = x2 by A1,A2,A7,XBOOLE_0:3;
+ end;
+ suppose A8: not x1 in dom g & x2 in dom g;
+then A9: x1 in dom f by A2,Th13;
+A10: fg.x1 = f.x1 & fg.x2 = g.x2 by A8,Th12,Th14;
+           g.x2 in rng g & f.x1 in rng f by A8,A9,FUNCT_1:def 5;
+  hence x1 = x2 by A1,A2,A10,XBOOLE_0:3;
+ end;
+ suppose A11: not x1 in dom g & not x2 in dom g;
+    then fg.x1 = f.x1 & fg.x2 = f.x2 by Th12;
+  hence x1 = x2 by A1,A2,A3,A11,FUNCT_1:def 8;
+end;
 end;
 

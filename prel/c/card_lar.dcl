@@ -9,7 +9,6 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CLASSES1"/>
@@ -65,7 +64,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="58">
+<Func kind="K" nr="52">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

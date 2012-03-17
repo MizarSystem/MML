@@ -24,11 +24,11 @@
 <ArticleID name="LATTICE3"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
@@ -263,7 +263,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="298">
+<Func kind="K" nr="299">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -294,7 +294,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="298">
+<Func kind="K" nr="299">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

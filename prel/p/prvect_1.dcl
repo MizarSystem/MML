@@ -14,11 +14,11 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="FUNCT_6"/>
@@ -61,7 +61,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="189">
+<Func kind="K" nr="190">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -97,7 +97,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="191">
+<Func kind="K" nr="192">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -131,7 +131,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="191">
+<Func kind="K" nr="192">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

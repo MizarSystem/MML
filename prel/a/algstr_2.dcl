@@ -47,7 +47,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="140"/>
+<Func kind="K" nr="141"/>
 <Cluster>
 <Adjective nr="53"/>
 <Adjective nr="74"/>

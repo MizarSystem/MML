@@ -12,9 +12,9 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -110,7 +110,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="249">
+<Func kind="K" nr="250">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -129,7 +129,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="249">
+<Func kind="K" nr="250">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -155,7 +155,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="252">
+<Func kind="K" nr="253">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -181,7 +181,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="252">
+<Func kind="K" nr="253">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

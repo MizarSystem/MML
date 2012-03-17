@@ -36,10 +36,10 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="73">
+<Func kind="K" nr="74">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="71">
+<Func kind="K" nr="72">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -53,7 +53,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="71">
+<Func kind="K" nr="72">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -91,7 +91,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="71">
+<Func kind="K" nr="72">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -124,7 +124,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="71">
+<Func kind="K" nr="72">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -166,7 +166,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="72">
+<Func kind="K" nr="73">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -181,7 +181,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="71">
+<Func kind="K" nr="72">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -240,9 +240,9 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="76">
+<Func kind="K" nr="77">
 <Var nr="1"/>
-<Func kind="K" nr="78">
+<Func kind="K" nr="79">
 <Var nr="2"/>
 </Func>
 </Func>
@@ -290,7 +290,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="3"/>
-<Func kind="K" nr="82">
+<Func kind="K" nr="83">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -321,7 +321,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="3"/>
-<Func kind="K" nr="82">
+<Func kind="K" nr="83">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -372,10 +372,10 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="73">
+<Func kind="K" nr="74">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="71">
+<Func kind="K" nr="72">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>
@@ -389,7 +389,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="71">
+<Func kind="K" nr="72">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>
@@ -419,7 +419,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="71">
+<Func kind="K" nr="72">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>

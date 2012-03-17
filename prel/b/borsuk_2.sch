@@ -9,7 +9,6 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 </Signature>
@@ -28,7 +27,7 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="3">
-<Func kind="K" nr="49">
+<Func kind="K" nr="42">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -48,7 +47,7 @@
 </And>
 </Fraenkel>
 </Func>
-<Func kind="K" nr="49">
+<Func kind="K" nr="42">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>

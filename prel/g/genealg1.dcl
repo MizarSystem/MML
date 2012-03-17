@@ -9,7 +9,6 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -25,7 +24,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="57">
+<Func kind="K" nr="51">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

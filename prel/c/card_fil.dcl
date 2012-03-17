@@ -13,7 +13,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -64,7 +63,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="94">
+<Func kind="K" nr="87">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -107,7 +106,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="95">
+<Func kind="K" nr="88">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -125,7 +124,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="115">
+<Func kind="K" nr="109">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
