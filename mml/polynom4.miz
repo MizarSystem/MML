@@ -10,24 +10,25 @@ environ
       BINOP_1, VECTSP_1, LATTICES, REALSET1, ALGSTR_2, NORMSP_1, POLYNOM3,
       ARYTM_3, ALGSEQ_1, POLYNOM1, FUNCOP_1, SQUARE_1, FINSEQ_4, FUNCT_4,
       GROUP_1, POLYNOM2, VECTSP_2, PRE_TOPC, ENDALG, GRCAT_1, COHSP_1,
-      QUOFIELD, POLYNOM4;
- notation TARSKI, XBOOLE_0, NUMBERS, XCMPLX_0, XREAL_0, STRUCT_0, NAT_1,
-      SQUARE_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1, FINSEQ_2,
+      QUOFIELD, POLYNOM4, ALGSTR_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, STRUCT_0,
+      NAT_1, SQUARE_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1, FINSEQ_2,
       FINSEQ_4, FINSOP_1, RFINSEQ, TOPREAL1, BINARITH, PRE_TOPC, NORMSP_1,
-      RLVECT_1, VECTSP_1, VECTSP_2, FVSUM_1, REALSET1, GROUP_1, GRCAT_1,
-      ENDALG, QUOFIELD, POLYNOM1, ALGSEQ_1, POLYNOM3;
+      RLVECT_1, VECTSP_1, VECTSP_2, FVSUM_1, REALSET1, GROUP_1,
+      ALGSTR_1, GRCAT_1, ENDALG, QUOFIELD, POLYNOM1, ALGSEQ_1, POLYNOM3;
  constructors REAL_1, SQUARE_1, FINSOP_1, SETWOP_2, RFINSEQ, TOPREAL1,
       BINARITH, QUOFIELD, FVSUM_1, ALGSTR_2, ALGSEQ_1, GRCAT_1, ENDALG,
-      POLYNOM1, POLYNOM3, FINSEQOP, MEMBERED;
+      POLYNOM1, POLYNOM3, FINSEQOP, ALGSTR_1, MEMBERED;
  clusters STRUCT_0, RELSET_1, ALGSTR_1, FINSEQ_1, FINSEQ_2, VECTSP_2, VECTSP_1,
-      POLYNOM1, POLYNOM3, INT_1, MONOID_0, XREAL_0, MEMBERED, ORDINAL2;
+      POLYNOM1, POLYNOM3, INT_1, MONOID_0, XREAL_0, MEMBERED, ORDINAL2,
+      GCD_1;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
  definitions ALGSEQ_1, QUOFIELD, ENDALG, GRCAT_1;
  theorems AXIOMS, REAL_1, NAT_1, SQUARE_1, FUNCT_2, FUNCT_7, FUNCOP_1,
       FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSEQ_5, RFINSEQ, BINARITH,
-      RLVECT_1, VECTSP_1, VECTSP_2, TOPREAL1, FVSUM_1, NORMSP_1, ALGSEQ_1,
-      GOBOARD9, AMI_5, GROUP_1, POLYNOM2, POLYNOM3, INT_1, NAT_2, MATRIX_3,
-      XCMPLX_0, XCMPLX_1;
+      PRE_TOPC, RLVECT_1, VECTSP_1, VECTSP_2, TOPREAL1, FVSUM_1, NORMSP_1,
+      ALGSEQ_1, GOBOARD9, AMI_5, GROUP_1, POLYNOM2, POLYNOM3, INT_1, NAT_2,
+      MATRIX_3, XCMPLX_0, XCMPLX_1, ALGSTR_1;
  schemes NAT_1, FINSEQ_2, POLYNOM3, FUNCT_2;
 
 begin  :: Preliminaries
@@ -62,17 +63,57 @@ canceled;
     hence p = (p|(n-'1))^<*p.n*>^(p/^n) by RFINSEQ:21;
    end;
 
-  definition
-   cluster add-associative right_zeroed right_complementable Abelian
-    commutative associative left_unital right_unital distributive Field-like
-    non trivial strict (non empty doubleLoopStr);
-   existence
-   proof
-    consider F be non degenerated strict Field;
-    take F;
-    thus thesis;
+BINOM'2:
+for R being left_zeroed add-right-cancelable
+            right-distributive (non empty doubleLoopStr),
+    a being Element of R
+holds a * 0.R = 0.R
+proof
+let R be left_zeroed add-right-cancelable
+            right-distributive (non empty doubleLoopStr),
+    a be Element of R;
+  a * 0.R = a * (0.R + 0.R) by ALGSTR_1:def 5
+          .= a * 0.R + a * 0.R by VECTSP_1:def 11;
+then a * 0.R + a * 0.R = 0.R + a * 0.R by ALGSTR_1:def 5;
+hence thesis by ALGSTR_1:def 7;
+end;
+
+definition
+cluster Field-like -> domRing-like
+           (left_zeroed add-right-cancelable right-distributive
+            left_unital commutative associative (non empty doubleLoopStr));
+coherence
+ proof
+ let L be left_zeroed add-right-cancelable right-distributiveleft_unital
+          commutative associative (non empty doubleLoopStr);
+ assume A1: L is Field-like;
+   now let x,y be Element of L;
+   assume A2: x * y = 0.L;
+   thus x = 0.L or y = 0.L
+     proof
+     assume x <> 0.L;
+     then consider z being Element of L such that
+     A3: x * z = 1_ L by A1,VECTSP_1:def 20;
+       z * 0.L = 1_ L * y by A2,A3,VECTSP_1:def 16
+            .= y by VECTSP_1:def 19;
+     hence y = 0.L by BINOM'2;
+     end;
    end;
-  end;
+ hence thesis by VECTSP_2:def 5;
+ end;
+end;
+
+definition
+ cluster strict Abelian add-associative right_zeroed right_complementable
+         associative commutative distributive well-unital
+         domRing-like Field-like
+         non degenerated non trivial (non empty doubleLoopStr);
+  existence proof
+      consider F be non degenerated strict Field;
+      take F;
+      thus thesis;
+     end;
+end;
 
 begin  :: About Polynomials
 
@@ -288,17 +329,26 @@ canceled;
    end;
 
   theorem
-     for L be add-associative right_zeroed right_complementable distributive
-    commutative associative left_unital Field-like (non empty doubleLoopStr)
-   for p,q be Polynomial of L st len p > 0 & len q > 0 holds
-    len (p*'q) = len p + len q - 1
+for L be add-associative right_zeroed right_complementable distributive
+         commutative associative left_unital (non empty doubleLoopStr),
+    p,q be Polynomial of L
+ st p.(len p -'1) * q.(len q -'1) <> 0.L holds len (p*'q) = len p + len q - 1
    proof
     let L be add-associative right_zeroed right_complementable distributive
-     commutative associative left_unital Field-like (non empty doubleLoopStr);
+     commutative associative left_unital (non empty doubleLoopStr);
     let p,q be Polynomial of L;
     assume that
-     A1: len p > 0 and
-     A2: len q > 0;
+PA: p.(len p -'1) * q.(len q -'1) <> 0.L;
+  A1: now assume A2: len p <= 0; len p >= 0 by NAT_1:18;
+       then len p = 0 by A2, AXIOMS:21; then p = 0_. L by Th8;
+       then p.(len p -'1) = 0.L by POLYNOM3:28; 
+       hence contradiction by PA, VECTSP_1:39;
+      end;
+  A2: now assume A2: len q <= 0; len q >= 0 by NAT_1:18;
+       then len q = 0 by A2, AXIOMS:21; then q = 0_. L by Th8;
+       then q.(len q -'1) = 0.L by POLYNOM3:28; 
+       hence contradiction by PA,VECTSP_1:36;
+      end;
       len p + len q > 0+0 by A1,A2,REAL_1:67;
     then len p + len q >= 0+1 by NAT_1:38;
     then A3: len p + len q - 1 >= 1-1 by REAL_1:49;
@@ -441,7 +491,7 @@ canceled;
         .= r/.(len p) by RLVECT_1:61
         .= r.(len p) by A37,FINSEQ_4:def 4
         .= p.(len p-'1) * q.(len q-'1) by A18,A37,A38;
-     hence contradiction by A23,A39,VECTSP_1:44;
+     hence contradiction by A23,A39,PA;
     end;
     then len (p*'q) = len p + len q -' 1 by A4,ALGSEQ_1:def 4;
     hence thesis by A3,BINARITH:def 3;
@@ -684,7 +734,7 @@ begin  :: Evaluation of Polynomials
   definition
    let L be unital (non empty doubleLoopStr);
    let p be Polynomial of L;
-   let x be Element of L;
+   let x be Element of the carrier of L;
    func eval(p,x) -> Element of L means :Def2:
     ex F be FinSequence of the carrier of L st
      it = Sum F &
@@ -727,11 +777,11 @@ begin  :: Evaluation of Polynomials
 
   theorem Th20:
    for L be unital (non empty doubleLoopStr)
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval(0_.(L),x) = 0.L
    proof
     let L be unital (non empty doubleLoopStr);
-    let x be Element of L;
+    let x be Element of the carrier of L;
     consider F be FinSequence of the carrier of L such that
      A1: eval(0_.(L),x) = Sum F and
      A2: len F = len 0_.(L) and
@@ -745,12 +795,12 @@ begin  :: Evaluation of Polynomials
   theorem Th21:
    for L be well-unital add-associative right_zeroed right_complementable
     associative non degenerated (non empty doubleLoopStr)
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval(1_.(L),x) = 1_(L)
    proof
     let L be well-unital add-associative right_zeroed right_complementable
      associative non degenerated (non empty doubleLoopStr);
-    let x be Element of L;
+    let x be Element of the carrier of L;
     consider F be FinSequence of the carrier of L such that
      A1: eval(1_.(L),x) = Sum F and
      A2: len F = len 1_.(L) and
@@ -773,11 +823,11 @@ begin  :: Evaluation of Polynomials
   Lm1:
    for F be add-associative right_zeroed right_complementable
             left-distributive (non empty doubleLoopStr)
-   for x be Element of F holds (0.F)*x = 0.F
+   for x be Element of the carrier of F holds (0.F)*x = 0.F
    proof
     let F be add-associative right_zeroed right_complementable
              left-distributive (non empty doubleLoopStr);
-    let x be Element of F;
+    let x be Element of the carrier of F;
       (0.F)*x+(0.F) = ((0.F)+(0.F))*x+(0.F) by RLVECT_1:10
        .= ((0.F)+(0.F))*x by RLVECT_1:10
        .= (0.F)*x+(0.F)*x by VECTSP_1:def 12;
@@ -788,13 +838,13 @@ begin  :: Evaluation of Polynomials
    for L be Abelian add-associative right_zeroed right_complementable unital
     left-distributive (non empty doubleLoopStr)
    for p,q be Polynomial of L
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval(p+q,x) = eval(p,x) + eval(q,x)
    proof
     let L be Abelian add-associative right_zeroed right_complementable unital
      left-distributive (non empty doubleLoopStr);
     let p,q be Polynomial of L;
-    let x be Element of L;
+    let x be Element of the carrier of L;
     consider F1 be FinSequence of the carrier of L such that
      A1: eval(p,x) = Sum F1 and
      A2: len F1 = len p and
@@ -1018,13 +1068,13 @@ begin  :: Evaluation of Polynomials
    for L be Abelian add-associative right_zeroed right_complementable unital
     distributive (non empty doubleLoopStr)
    for p be Polynomial of L
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval(-p,x) = -eval(p,x)
    proof
     let L be Abelian add-associative right_zeroed right_complementable unital
      distributive (non empty doubleLoopStr);
     let p be Polynomial of L;
-    let x be Element of L;
+    let x be Element of the carrier of L;
     consider F1 be FinSequence of the carrier of L such that
      A1: eval(p,x) = Sum F1 and
      A2: len F1 = len p and
@@ -1038,7 +1088,7 @@ begin  :: Evaluation of Polynomials
     A7: len F2 = len F1 by A2,A5,Th11;
     then A8: dom F2 = dom F1 by FINSEQ_3:31;
       now let n be Nat;
-        let v be Element of L;
+        let v be Element of the carrier of L;
      assume that
       A9: n in dom F2 and
       A10: v = F1.n;
@@ -1054,13 +1104,13 @@ begin  :: Evaluation of Polynomials
      for L be Abelian add-associative right_zeroed right_complementable unital
     distributive (non empty doubleLoopStr)
    for p,q be Polynomial of L
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval(p-q,x) = eval(p,x) - eval(q,x)
    proof
     let L be Abelian add-associative right_zeroed right_complementable unital
      distributive (non empty doubleLoopStr);
     let p,q be Polynomial of L;
-    let x be Element of L;
+    let x be Element of the carrier of L;
     thus eval(p-q,x) = eval(p+-q,x) by POLYNOM3:def 8
        .= eval(p,x) + eval(-q,x) by Th22
        .= eval(p,x) +- eval(q,x) by Th23
@@ -1071,13 +1121,13 @@ begin  :: Evaluation of Polynomials
    for L be add-associative right_zeroed right_complementable right_zeroed
     distributive unital (non empty doubleLoopStr)
    for p be Polynomial of L
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval(Leading-Monomial(p),x) = p.(len p-'1) * (power L).(x,len p-'1)
    proof
     let L be add-associative right_zeroed right_complementable right_zeroed
      distributive unital (non empty doubleLoopStr);
     let p be Polynomial of L;
-    let x be Element of L;
+    let x be Element of the carrier of L;
     set LMp=Leading-Monomial(p);
     consider F be FinSequence of the carrier of L such that
      A1: eval(LMp,x) = Sum F and
@@ -1121,7 +1171,7 @@ begin  :: Evaluation of Polynomials
    for L be add-associative right_zeroed right_complementable well-unital
     distributive associative (non empty doubleLoopStr)
    for p,q be Polynomial of L st len p > 0 & len q > 0
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval((Leading-Monomial(p))*'(Leading-Monomial(q)),x) =
     p.(len p-'1)*q.(len q-'1)*(power L).(x,len p+len q-'2)
    proof
@@ -1129,7 +1179,7 @@ begin  :: Evaluation of Polynomials
      distributive associative (non empty doubleLoopStr);
     let p,q be Polynomial of L;
     assume A1: len p > 0 & len q > 0;
-    let x be Element of L;
+    let x be Element of the carrier of L;
     set LMp=Leading-Monomial(p), LMq=Leading-Monomial(q);
     consider F be FinSequence of the carrier of L such that
      A2: eval(LMp*'LMq,x) = Sum F and
@@ -1296,7 +1346,7 @@ VECTSP_1:39;
    for L be add-associative right_zeroed right_complementable left_unital
     distributive commutative associative non trivial (non empty doubleLoopStr)
    for p,q be Polynomial of L
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval((Leading-Monomial(p))*'(Leading-Monomial(q)),x) =
     eval(Leading-Monomial(p),x)*eval(Leading-Monomial(q),x)
    proof
@@ -1304,7 +1354,7 @@ VECTSP_1:39;
      distributive commutative associative non trivial
      (non empty doubleLoopStr);
     let p,q be Polynomial of L;
-    let x be Element of L;
+    let x be Element of the carrier of L;
     per cases;
      suppose len p <> 0 & len q <> 0;
       then A1: len p > 0 & len q > 0 by NAT_1:19;
@@ -1356,14 +1406,14 @@ VECTSP_1:39;
     left_unital distributive commutative associative non trivial
     (non empty doubleLoopStr)
    for p,q be Polynomial of L
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval((Leading-Monomial(p))*'q,x) = eval(Leading-Monomial(p),x) * eval(q,x)
    proof
     let L be add-associative right_zeroed right_complementable Abelian
      left_unital distributive commutative associative non trivial
      (non empty doubleLoopStr);
     let p1,q be Polynomial of L;
-    let x be Element of L;
+    let x be Element of the carrier of L;
     set p=Leading-Monomial(p1);
     defpred P[Nat] means for q be Polynomial of L holds
      len q = $1 implies eval(p*'q,x) = eval(p,x)*eval(q,x);
@@ -1405,14 +1455,14 @@ VECTSP_1:39;
     left_unital distributive commutative associative non trivial
     (non empty doubleLoopStr)
    for p,q be Polynomial of L
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval(p*'q,x) = eval(p,x) * eval(q,x)
    proof
     let L be add-associative right_zeroed right_complementable Abelian
      left_unital distributive commutative associative non trivial
      (non empty doubleLoopStr);
     let p,q be Polynomial of L;
-    let x be Element of L;
+    let x be Element of the carrier of L;
     defpred P[Nat] means for p be Polynomial of L holds
      len p = $1 implies eval(p*'q,x) = eval(p,x)*eval(q,x);
     A1: for k be Nat st for n be Nat st n < k holds P[n] holds P[k]
@@ -1453,17 +1503,17 @@ begin  :: Evaluation Homomorphism
   definition
    let L be add-associative right_zeroed right_complementable distributive
     unital (non empty doubleLoopStr);
-   let x be Element of L;
+   let x be Element of the carrier of L;
    func Polynom-Evaluation(L,x) -> map of Polynom-Ring L,L means :Def3:
     for p be Polynomial of L holds it.p = eval(p,x);
    existence
    proof
     defpred P[set,set] means
      ex p be Polynomial of L st p = $1 & $2 = eval(p,x);
-    A1: for y be Element of Polynom-Ring L
-     ex z be Element of L st P[y,z]
+    A1: for y be Element of the carrier of Polynom-Ring L
+     ex z be Element of the carrier of L st P[y,z]
     proof
-     let y be Element of Polynom-Ring L;
+     let y be Element of the carrier of Polynom-Ring L;
      reconsider p=y as Polynomial of L by POLYNOM3:def 12;
      take eval(p,x);
      take p;
@@ -1471,7 +1521,7 @@ begin  :: Evaluation Homomorphism
     end;
     consider f be Function of the carrier of Polynom-Ring L,the carrier of L
       such that
-     A2: for y be Element of Polynom-Ring L holds P[y,f.y]
+     A2: for y be Element of the carrier of Polynom-Ring L holds P[y,f.y]
                                                             from FuncExD(A1);
     reconsider f as map of Polynom-Ring L,L;
     take f;
@@ -1487,7 +1537,7 @@ begin  :: Evaluation Homomorphism
     let f1,f2 be map of Polynom-Ring L,L such that
      A5: for p be Polynomial of L holds f1.p = eval(p,x) and
      A6: for p be Polynomial of L holds f2.p = eval(p,x);
-      now let y be Element of Polynom-Ring L;
+      now let y be Element of the carrier of Polynom-Ring L;
      reconsider p=y as Polynomial of L by POLYNOM3:def 12;
      thus f1.y = eval(p,x) by A5
         .= f2.y by A6;
@@ -1499,7 +1549,7 @@ begin  :: Evaluation Homomorphism
   definition
    let L be add-associative right_zeroed right_complementable distributive
     associative well-unital non degenerated (non empty doubleLoopStr);
-   let x be Element of L;
+   let x be Element of the carrier of L;
    cluster Polynom-Evaluation(L,x) -> unity-preserving;
    coherence
    proof
@@ -1513,11 +1563,11 @@ begin  :: Evaluation Homomorphism
   definition
    let L be Abelian add-associative right_zeroed right_complementable
     distributive unital (non empty doubleLoopStr);
-   let x be Element of L;
+   let x be Element of the carrier of L;
    cluster Polynom-Evaluation(L,x) -> additive;
    coherence
    proof
-    let a,b be Element of Polynom-Ring L;
+    let a,b be Element of the carrier of Polynom-Ring L;
     reconsider p=a,q=b as Polynomial of L by POLYNOM3:def 12;
     thus (Polynom-Evaluation(L,x)).(a+b) = (Polynom-Evaluation(L,x)).(p+q)
                                                           by POLYNOM3:def 12
@@ -1532,11 +1582,11 @@ begin  :: Evaluation Homomorphism
    let L be add-associative right_zeroed right_complementable Abelian
     left_unital distributive commutative associative non trivial
     (non empty doubleLoopStr);
-   let x be Element of L;
+   let x be Element of the carrier of L;
    cluster Polynom-Evaluation(L,x) -> multiplicative;
    coherence
    proof
-    let a,b be Element of Polynom-Ring L;
+    let a,b be Element of the carrier of Polynom-Ring L;
     reconsider p=a,q=b as Polynomial of L by POLYNOM3:def 12;
     thus (Polynom-Evaluation(L,x)).(a*b) = (Polynom-Evaluation(L,x)).(p*'q)
                                                           by POLYNOM3:def 12
@@ -1551,7 +1601,7 @@ begin  :: Evaluation Homomorphism
    let L be add-associative right_zeroed right_complementable Abelian
     left_unital distributive commutative associative non degenerated
     (non empty doubleLoopStr);
-   let x be Element of L;
+   let x be Element of the carrier of L;
    cluster Polynom-Evaluation(L,x) -> RingHomomorphism;
    coherence
    proof

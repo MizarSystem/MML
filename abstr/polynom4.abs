@@ -10,17 +10,17 @@ environ
       BINOP_1, VECTSP_1, LATTICES, REALSET1, ALGSTR_2, NORMSP_1, POLYNOM3,
       ARYTM_3, ALGSEQ_1, POLYNOM1, FUNCOP_1, SQUARE_1, FINSEQ_4, FUNCT_4,
       GROUP_1, POLYNOM2, VECTSP_2, PRE_TOPC, ENDALG, GRCAT_1, COHSP_1,
-      QUOFIELD, POLYNOM4;
- notation TARSKI, XBOOLE_0, NUMBERS, XCMPLX_0, XREAL_0, STRUCT_0, NAT_1,
-      SQUARE_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1, FINSEQ_2,
+      QUOFIELD, POLYNOM4, ALGSTR_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, STRUCT_0,
+      NAT_1, SQUARE_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1, FINSEQ_2,
       FINSEQ_4, FINSOP_1, RFINSEQ, TOPREAL1, BINARITH, PRE_TOPC, NORMSP_1,
-      RLVECT_1, VECTSP_1, VECTSP_2, FVSUM_1, REALSET1, GROUP_1, GRCAT_1,
-      ENDALG, QUOFIELD, POLYNOM1, ALGSEQ_1, POLYNOM3;
+      RLVECT_1, VECTSP_1, VECTSP_2, FVSUM_1, REALSET1, GROUP_1, ALGSTR_1,
+      GRCAT_1, ENDALG, QUOFIELD, POLYNOM1, ALGSEQ_1, POLYNOM3;
  constructors REAL_1, SQUARE_1, FINSOP_1, SETWOP_2, RFINSEQ, TOPREAL1,
       BINARITH, QUOFIELD, FVSUM_1, ALGSTR_2, ALGSEQ_1, GRCAT_1, ENDALG,
-      POLYNOM1, POLYNOM3, FINSEQOP, MEMBERED;
+      POLYNOM1, POLYNOM3, FINSEQOP, ALGSTR_1, MEMBERED;
  clusters STRUCT_0, RELSET_1, ALGSTR_1, FINSEQ_1, FINSEQ_2, VECTSP_2, VECTSP_1,
-      POLYNOM1, POLYNOM3, INT_1, MONOID_0, XREAL_0, MEMBERED, ORDINAL2;
+      POLYNOM1, POLYNOM3, INT_1, MONOID_0, XREAL_0, MEMBERED, ORDINAL2, GCD_1;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
 
 
@@ -37,11 +37,18 @@ canceled;
    for n be Nat st 1 <= n & n <= len p holds
     p = (p|(n-'1))^<*p.n*>^(p/^n);
 
-  definition
-   cluster add-associative right_zeroed right_complementable Abelian
-    commutative associative left_unital right_unital distributive Field-like
-    non trivial strict (non empty doubleLoopStr);
-  end;
+definition
+cluster Field-like -> domRing-like
+           (left_zeroed add-right-cancelable right-distributive
+            left_unital commutative associative (non empty doubleLoopStr));
+end;
+
+definition
+ cluster strict Abelian add-associative right_zeroed right_complementable
+         associative commutative distributive well-unital
+         domRing-like Field-like
+         non degenerated non trivial (non empty doubleLoopStr);
+end;
 
 begin  :: About Polynomials
 
@@ -92,10 +99,10 @@ canceled;
     n >= len (p-q);
 
   theorem :: POLYNOM4:13
-     for L be add-associative right_zeroed right_complementable distributive
-    commutative associative left_unital Field-like (non empty doubleLoopStr)
-   for p,q be Polynomial of L st len p > 0 & len q > 0 holds
-    len (p*'q) = len p + len q - 1;
+for L be add-associative right_zeroed right_complementable distributive
+         commutative associative left_unital (non empty doubleLoopStr),
+    p,q be Polynomial of L
+ st p.(len p -'1) * q.(len q -'1) <> 0.L holds len (p*'q) = len p + len q - 1;
 
 begin  :: Leading Monomials
 
@@ -150,7 +157,7 @@ begin  :: Evaluation of Polynomials
   definition
    let L be unital (non empty doubleLoopStr);
    let p be Polynomial of L;
-   let x be Element of L;
+   let x be Element of the carrier of L;
    func eval(p,x) -> Element of L means
 :: POLYNOM4:def 2
     ex F be FinSequence of the carrier of L st
@@ -161,41 +168,41 @@ begin  :: Evaluation of Polynomials
 
   theorem :: POLYNOM4:20
    for L be unital (non empty doubleLoopStr)
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval(0_.(L),x) = 0.L;
 
   theorem :: POLYNOM4:21
    for L be well-unital add-associative right_zeroed right_complementable
     associative non degenerated (non empty doubleLoopStr)
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval(1_.(L),x) = 1_(L);
 
   theorem :: POLYNOM4:22
    for L be Abelian add-associative right_zeroed right_complementable unital
     left-distributive (non empty doubleLoopStr)
    for p,q be Polynomial of L
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval(p+q,x) = eval(p,x) + eval(q,x);
 
   theorem :: POLYNOM4:23
    for L be Abelian add-associative right_zeroed right_complementable unital
     distributive (non empty doubleLoopStr)
    for p be Polynomial of L
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval(-p,x) = -eval(p,x);
 
   theorem :: POLYNOM4:24
      for L be Abelian add-associative right_zeroed right_complementable unital
     distributive (non empty doubleLoopStr)
    for p,q be Polynomial of L
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval(p-q,x) = eval(p,x) - eval(q,x);
 
   theorem :: POLYNOM4:25
    for L be add-associative right_zeroed right_complementable right_zeroed
     distributive unital (non empty doubleLoopStr)
    for p be Polynomial of L
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval(Leading-Monomial(p),x) = p.(len p-'1) * (power L).(x,len p-'1);
 
   theorem :: POLYNOM4:26
@@ -203,7 +210,7 @@ begin  :: Evaluation of Polynomials
     left_unital distributive commutative associative non trivial
     (non empty doubleLoopStr)
    for p,q be Polynomial of L
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval((Leading-Monomial(p))*'q,x) = eval(Leading-Monomial(p),x) * eval(q,x);
 
   theorem :: POLYNOM4:27
@@ -211,7 +218,7 @@ begin  :: Evaluation of Polynomials
     left_unital distributive commutative associative non trivial
     (non empty doubleLoopStr)
    for p,q be Polynomial of L
-   for x be Element of L holds
+   for x be Element of the carrier of L holds
     eval(p*'q,x) = eval(p,x) * eval(q,x);
 
 begin  :: Evaluation Homomorphism
@@ -219,7 +226,7 @@ begin  :: Evaluation Homomorphism
   definition
    let L be add-associative right_zeroed right_complementable distributive
     unital (non empty doubleLoopStr);
-   let x be Element of L;
+   let x be Element of the carrier of L;
    func Polynom-Evaluation(L,x) -> map of Polynom-Ring L,L means
 :: POLYNOM4:def 3
     for p be Polynomial of L holds it.p = eval(p,x);
@@ -228,14 +235,14 @@ begin  :: Evaluation Homomorphism
   definition
    let L be add-associative right_zeroed right_complementable distributive
     associative well-unital non degenerated (non empty doubleLoopStr);
-   let x be Element of L;
+   let x be Element of the carrier of L;
    cluster Polynom-Evaluation(L,x) -> unity-preserving;
   end;
 
   definition
    let L be Abelian add-associative right_zeroed right_complementable
     distributive unital (non empty doubleLoopStr);
-   let x be Element of L;
+   let x be Element of the carrier of L;
    cluster Polynom-Evaluation(L,x) -> additive;
   end;
 
@@ -243,7 +250,7 @@ begin  :: Evaluation Homomorphism
    let L be add-associative right_zeroed right_complementable Abelian
     left_unital distributive commutative associative non trivial
     (non empty doubleLoopStr);
-   let x be Element of L;
+   let x be Element of the carrier of L;
    cluster Polynom-Evaluation(L,x) -> multiplicative;
   end;
 
@@ -251,6 +258,6 @@ begin  :: Evaluation Homomorphism
    let L be add-associative right_zeroed right_complementable Abelian
     left_unital distributive commutative associative non degenerated
     (non empty doubleLoopStr);
-   let x be Element of L;
+   let x be Element of the carrier of L;
    cluster Polynom-Evaluation(L,x) -> RingHomomorphism;
   end;

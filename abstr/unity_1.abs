@@ -1,0 +1,419 @@
+:: Primitive Roots of Unity and Cyclotomic Polynomials
+::  by Broderic Arneson and Piotr Rudnicki
+:: 
+:: Received December 30, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_1, ARYTM, SQUARE_1, ARYTM_3, FINSEQ_1, RELAT_1, FUNCT_1,
+      RLVECT_1, BOOLE, FINSEQ_2, FINSEQ_4, HAHNBAN1, COMPLEX1, BINOP_1,
+      VECTSP_1, NORMSP_1, COMPLFLD, GROUP_1, REALSET1, POWER, POLYNOM1, INT_1,
+      INT_2, NAT_1, RAT_1, TARSKI, CARD_1, CARD_3, ALGSEQ_1, POLYNOM3,
+      POLYNOM2, FUNCT_4, VECTSP_2, COMPTRIG, ABSVALUE, POLYNOM5, UNITY_1,
+      COMPLSP1, SIN_COS, PREPOWER, FINSET_1, SGRAPH1, MOD_2, GRAPH_2, ANPROJ_1,
+      GROUP_2, UPROOTS;
+ notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, NUMBERS, ARYTM_0, XCMPLX_0,
+      XREAL_0, ZFMISC_1, REAL_1, SQUARE_1, INT_1, INT_2, NAT_1, ABSVALUE,
+      POWER, RLVECT_1, VECTSP_1, VECTSP_2, BINOP_1, RELAT_1, FUNCT_1, FUNCT_2,
+      FINSEQ_1, RAT_1, FINSEQ_2, FINSEQ_4, FINSOP_1, PARTFUN1, TOPREAL1,
+      COMPLEX1, NORMSP_1, BINARITH, RVSUM_1, ALGSEQ_1, COMPLFLD, HAHNBAN1,
+      POLYNOM3, POLYNOM4, POLYNOM5, COMPTRIG, CARD_1, COMPLSP1, GROUP_2,
+      SIN_COS, PREPOWER, FINSET_1, GROUP_1, MOD_2, ENUMSET1, GRAPH_2, ORDINAL1,
+      RLVECT_2, POLYNOM1, FVSUM_1, UPROOTS;
+ constructors ARYTM_0, REAL_1, FINSOP_1, POWER, WELLORD2, INT_2, TOPREAL1,
+      COMPLSP1, BINARITH, HAHNBAN1, POLYNOM4, COMPTRIG, COMPLEX1, FVSUM_1,
+      SIN_COS, POLYNOM5, PREPOWER, SETWOP_2, WELLFND1, PRE_CIRC, FINSEQOP,
+      ALGSTR_1, MOD_2, GRAPH_2, RLVECT_2, CQC_LANG, GROUP_6, UPROOTS, ARYTM_3;
+ clusters XREAL_0, STRUCT_0, RELSET_1, SEQ_1, BINARITH, VECTSP_2, GROUP_1,
+      FINSEQ_2, COMPLFLD, POLYNOM1, POLYNOM3, MONOID_0, NAT_1, INT_1, COMPLEX1,
+      POLYNOM5, FINSEQ_1, FINSET_1, CARD_1, FSM_1, MEMBERED, ORDINAL2, ARYTM_3,
+      ORDINAL1, WSIERP_1, RFINSEQ, PRALG_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+
+begin :: Preliminaries
+
+theorem :: UNITY_1:1  ::Nat012:
+for n being Nat holds n = 0 or n = 1 or n >= 2;
+
+scheme Comp_Ind_NE { P[non empty Nat] } :
+ for k being non empty Nat holds P[k]
+provided
+ for k being non empty Nat
+    st for n being non empty Nat st n < k holds P[n]
+     holds P[k];
+
+theorem :: UNITY_1:2  ::FS1:
+for f being FinSequence st 1 <= len f holds f | Seg 1 = <*f.1*>;
+
+theorem :: UNITY_1:3  :: Prmod:
+for f being FinSequence of F_Complex, g being FinSequence of REAL
+ st len f = len g & for i being Nat st i in dom f holds |. f/.i .| = g.i
+  holds |. Product f .| = Product g;
+
+theorem :: UNITY_1:4
+for s being non empty finite Subset of F_Complex,
+    x being Element of F_Complex,
+    r being FinSequence of REAL st len r = card s &
+ for i being Nat, c being Element of F_Complex
+  st i in dom r & c = (canFS(s)).i holds r.i = |.x-c.|
+  holds |.eval(poly_with_roots((s,1)-bag),x).| = Product(r);
+
+theorem :: UNITY_1:5  ::FSSum:
+for f being FinSequence of F_Complex
+ st for i being Nat st i in dom f holds f.i is integer
+  holds Sum f is integer;
+
+theorem :: UNITY_1:6    :: WEDDWITT ::RC:   :: WEDDWITT
+for r being Real holds ex z being Element of COMPLEX st z = r & z = [*r,0*];
+
+theorem :: UNITY_1:7  ::Help2a:
+for x, y being Element of F_Complex, r1, r2 being Real
+ st r1=x & r2=y holds r1*r2 = x*y & r1+r2=x+y;
+
+theorem :: UNITY_1:8  ::Helper1:
+for q being Real st q is Integer & q > 0
+for r being Element of F_Complex
+ st |.r.| = 1 & r <> [**1,0**] holds |.[**q, 0**] - r.| > q - 1;
+
+theorem :: UNITY_1:9  ::FinProduct:
+for ps being non empty FinSequence of REAL, x being Real
+ st x >= 1 & for i being Nat st i in dom ps holds ps.i > x
+  holds Product(ps) > x;
+
+theorem :: UNITY_1:10  ::Th0:
+for n being Nat holds 1_(F_Complex) = (power F_Complex).(1_(F_Complex),n);
+
+theorem :: UNITY_1:11  ::sincos1:
+for n being non empty Nat for i being Nat holds
+  cos((2*PI*i)/n) = cos((2*PI*(i mod n))/n) &
+  sin((2*PI*i)/n) = sin((2*PI*(i mod n))/n);
+
+theorem :: UNITY_1:12  ::Th4:
+for n being non empty Nat for i being Nat holds
+   [** cos((2*PI*i)/n), sin((2*PI*i)/n)**] =
+   [** cos((2*PI*(i mod n))/n), sin((2*PI*(i mod n))/n) **];
+
+theorem :: UNITY_1:13  ::Th5:
+for n being non empty Nat, i, j being Nat holds
+[** cos((2*PI*i)/n),sin((2*PI*i)/n) **]*[** cos((2*PI*j)/n),sin((2*PI*j)/n) **]
+ = [** cos((2*PI*((i+j) mod n))/n), sin((2*PI*((i+j)mod n))/n)**];
+
+theorem :: UNITY_1:14  ::Power1:
+for L being unital associative (non empty HGrStr),
+    x being Element of L, n,m being Nat
+ holds (power L).(x,n*m) = (power L).((power L).(x,n),m);
+
+theorem :: UNITY_1:15  ::Help2b:
+for n being Nat, x being Element of F_Complex st x is Integer
+  holds (power F_Complex).(x,n) is Integer;
+
+theorem :: UNITY_1:16  ::Help2c:
+for F being FinSequence of F_Complex
+ st for i being Nat st i in dom F holds F.i is Integer
+  holds Sum F is Integer;
+
+theorem :: UNITY_1:17  ::G_Th5H2:
+for a being Real st 0 <= a & a < 2*PI & cos(a) = 1 holds a = 0;
+
+definition
+  cluster finite Field;
+  cluster finite Skew-Field;
+end;
+
+begin :: Multiplicative group of a skew field
+
+definition
+  let R be Skew-Field;
+  func MultGroup R -> strict Group means
+:: UNITY_1:def 1
+    the carrier of it = (the carrier of R) \ {0.R} &
+    the mult of it = (the mult of R)|[:the carrier of it, the carrier of it:];
+end;
+
+theorem :: UNITY_1:18 :: MultG00:  :: WEDDWITT
+for R being Skew-Field
+ holds the carrier of R = (the carrier of MultGroup R) \/ {0.R};
+
+theorem :: UNITY_1:19  ::MGmult:
+for R being Skew-Field,
+    a, b being Element of R, c, d being Element of MultGroup R
+ st a = c & b = d holds c*d = a*b;
+
+theorem :: UNITY_1:20  ::MultG01:
+for R being Skew-Field  holds 1_ R = 1.(MultGroup R);
+
+definition let R be finite Skew-Field;
+  cluster MultGroup R -> finite;
+end;
+
+theorem :: UNITY_1:21 :: MultG1 WEDDWITT
+for R being finite Skew-Field
+  holds ord MultGroup R = card (the carrier of R) - 1;
+
+theorem :: UNITY_1:22  ::MultG2:
+for R being Skew-Field, s being set
+  st s in the carrier of MultGroup R holds s in the carrier of R;
+
+theorem :: UNITY_1:23  ::MultG3:
+for R being Skew-Field holds the carrier of MultGroup R c= the carrier of R;
+
+begin :: Roots of 1
+
+definition let n be non empty Nat;
+  func n-roots_of_1 -> Subset of F_Complex equals
+:: UNITY_1:def 2
+       { x where x is Element of F_Complex : x is CRoot of n,1_(F_Complex) };
+end;
+
+theorem :: UNITY_1:24  ::Th1:
+for n being non empty Nat, x being Element of  F_Complex
+  holds x in n-roots_of_1 iff x is CRoot of n,1_(F_Complex);
+
+theorem :: UNITY_1:25   ::Th2:
+for n being non empty Nat holds 1_(F_Complex) in n-roots_of_1;
+
+theorem :: UNITY_1:26  ::Th3a:
+for n being non empty Nat, x being Element of F_Complex
+ st x in n-roots_of_1 holds |.x.| = 1;
+
+theorem :: UNITY_1:27  ::Th3:
+for n being non empty Nat for x being Element of F_Complex
+ holds x in n-roots_of_1
+  iff ex k being Nat st x = [** cos((2*PI*k)/n), sin((2*PI*k)/n) **];
+
+theorem :: UNITY_1:28  :: Th7
+for n being non empty Nat for x,y being Element of COMPLEX
+ st x in n-roots_of_1 & y in n-roots_of_1 holds x*y in n-roots_of_1;
+
+theorem :: UNITY_1:29  ::CRU0a:
+for n being non empty Nat holds
+ n-roots_of_1 = {[**cos((2*PI*k)/n),sin((2*PI*k)/n)**] where k is Nat: k < n };
+
+theorem :: UNITY_1:30  ::CRU0:
+for n being non empty Nat holds Card (n-roots_of_1) = n;
+
+definition let n be non empty Nat;
+  cluster n-roots_of_1 -> non empty;
+  cluster n-roots_of_1 -> finite;
+end;
+
+theorem :: UNITY_1:31  ::Th8:
+for n, ni being non empty Nat
+ st ni divides n holds ni-roots_of_1 c= n-roots_of_1;
+
+theorem :: UNITY_1:32  ::G_Th5H_MGFC:
+for R being Skew-Field, x being Element of MultGroup R, y being Element of R
+ st y = x
+  for k being Nat holds (power (MultGroup R)).(x,k) = (power R).(y,k);
+
+theorem :: UNITY_1:33  ::G_Th5_0:
+for n being non empty Nat, x being Element of MultGroup F_Complex
+ st x in n-roots_of_1 holds x is_not_of_order_0;
+
+theorem :: UNITY_1:34  ::G_Th5_MGCF:
+for n being non empty Nat, k being Nat, x being Element of MultGroup F_Complex
+ st x = [** cos((2*PI*k)/n), sin((2*PI*k)/n) **] holds ord x = n div (k gcd n);
+
+theorem :: UNITY_1:35  ::ORDCF0:
+for n being non empty Nat
+ holds n-roots_of_1 c= the carrier of MultGroup F_Complex;
+
+theorem :: UNITY_1:36  ::G_Th4b:
+for n being non empty Nat
+ holds ex x being Element of MultGroup F_Complex st ord x = n;
+
+theorem :: UNITY_1:37  ::G_Th4c:
+for n being non empty Nat, x being Element of MultGroup F_Complex
+ holds ord x divides n iff x in n-roots_of_1;
+
+theorem :: UNITY_1:38  ::ORDCF1:
+for n being non empty Nat holds
+n-roots_of_1 = { x where x is Element of MultGroup F_Complex : ord x divides n}
+;
+
+theorem :: UNITY_1:39  ::ORDCF2:
+for n being non empty Nat, x being set
+ holds x in n-roots_of_1
+   iff ex y being Element of MultGroup F_Complex st x = y & ord y divides n;
+
+definition let n be non empty Nat;
+  func n-th_roots_of_1 -> strict Group means
+:: UNITY_1:def 3
+    the carrier of it = n-roots_of_1 &
+    the mult of it =
+      (the mult of F_Complex) | [: n-roots_of_1, n-roots_of_1 :];
+end;
+
+theorem :: UNITY_1:40
+for n being non empty Nat
+ holds n-th_roots_of_1 is Subgroup of MultGroup F_Complex;
+
+begin :: The unital polynomial x^n -1
+
+definition let n be non empty Nat, L be left_unital (non empty doubleLoopStr);
+ func unital_poly(L,n) -> Polynomial of L equals
+:: UNITY_1:def 4
+  0_.(L)+*(0,-(1_(L)))+*(n,1_(L));
+end;
+
+theorem :: UNITY_1:41
+unital_poly(F_Complex,1) = <%-1_ F_Complex, 1_ F_Complex %>;
+
+theorem :: UNITY_1:42  ::Unit0:
+for L being left_unital (non empty doubleLoopStr) for n being non empty Nat
+  holds unital_poly(L,n).0 = -1_(L) & unital_poly(L,n).n = 1_(L);
+
+theorem :: UNITY_1:43  ::Unit1:
+for L being left_unital (non empty doubleLoopStr)
+for n being non empty Nat, i being Nat st i <> 0 & i <> n
+  holds unital_poly(L,n).i = 0.L;
+
+theorem :: UNITY_1:44  :: Unit2:
+for L being non degenerated left_unital (non empty doubleLoopStr),
+    n being non empty Nat
+ holds len unital_poly(L,n) = n+1;
+
+definition
+  let L be non degenerated left_unital (non empty doubleLoopStr),
+      n be non empty Nat;
+ cluster unital_poly(L,n) -> non-zero;
+end;
+
+theorem :: UNITY_1:45  ::Unit3:
+for n being non empty Nat for x being Element of F_Complex
+  holds eval(unital_poly(F_Complex,n), x) = (power F_Complex).(x,n) - 1;
+
+theorem :: UNITY_1:46  ::Unit3a:
+for n being non empty Nat holds Roots unital_poly(F_Complex, n) = n-roots_of_1;
+
+theorem :: UNITY_1:47  ::Unit4H:
+for n being Nat, z being Element of F_Complex
+ st z is Real ex x being Real st x = z & (power F_Complex).(z,n) = x |^ n;
+
+theorem :: UNITY_1:48  ::Unit4:
+for n being non empty Nat for x being Real ex y being Element of F_Complex
+ st y = x & eval(unital_poly(F_Complex,n),y) = (x |^ n) - 1;
+
+theorem :: UNITY_1:49  ::Unit5a:
+for n being non empty Nat
+ holds BRoots unital_poly(F_Complex, n) = (n-roots_of_1, 1)-bag;
+
+theorem :: UNITY_1:50  ::Unit5:
+for n being non empty Nat
+ holds unital_poly(F_Complex, n) = poly_with_roots((n-roots_of_1, 1)-bag);
+
+definition let i be Integer,n be Nat;
+  redefine func i |^ n -> Integer;
+end;
+
+theorem :: UNITY_1:51  ::Unit6:
+for n being non empty Nat, i being Element of F_Complex
+ st i is Integer holds eval(unital_poly(F_Complex, n), i) is Integer;
+
+begin :: Cyclotomic Polynomials
+
+definition let d be non empty Nat;
+ func cyclotomic_poly d -> Polynomial of F_Complex means
+:: UNITY_1:def 5
+   ex s being non empty finite Subset of F_Complex
+    st s = { y where y is Element of MultGroup F_Complex : ord y = d } &
+       it = poly_with_roots((s,1)-bag);
+end;
+
+theorem :: UNITY_1:52  ::Cyclo01:
+cyclotomic_poly(1) = <%-1_ F_Complex, 1_ F_Complex %>;
+
+theorem :: UNITY_1:53  ::Cyclo5:
+for n being non empty Nat,
+    f being FinSequence of (the carrier of Polynom-Ring F_Complex)
+ st len f = n &
+    for i being non empty Nat st i in dom f
+     holds (not i divides n implies f.i = <%1_(F_Complex)%>) &
+           (i divides n implies f.i = cyclotomic_poly(i))
+  holds unital_poly(F_Complex,n) = Product(f);
+
+theorem :: UNITY_1:54   ::Cyclo7aa:
+for n being non empty Nat
+ ex f being FinSequence of (the carrier of Polynom-Ring F_Complex),
+    p being Polynomial of F_Complex
+   st p = Product(f) & dom f = Seg n &
+     (for i being non empty Nat st i in Seg n holds
+       (not i divides n or i = n implies f.i = <%1_(F_Complex)%>) &
+       (i divides n & i <> n implies f.i = cyclotomic_poly(i)))  &
+     unital_poly(F_Complex,n) = (cyclotomic_poly n)*'p;
+
+theorem :: UNITY_1:55  ::Cyclo1:
+for d being non empty Nat, i being Nat
+  holds ((cyclotomic_poly d).0 = 1 or (cyclotomic_poly d).0 = -1) &
+        (cyclotomic_poly d).i is integer;
+
+theorem :: UNITY_1:56   :: WEDDWITT ::Cyclo2:  :: WEDDWITT
+for d being non empty Nat, z being Element of F_Complex
+ st z is Integer holds eval(cyclotomic_poly(d),z) is Integer;
+
+theorem :: UNITY_1:57  ::Cyclo6:
+for n, ni being non empty Nat,
+    f being FinSequence of (the carrier of Polynom-Ring F_Complex),
+    s being finite Subset of F_Complex
+ st s = {y where y is Element of MultGroup F_Complex :
+              ord y divides n & not ord y divides ni & ord y <> n} &
+  dom f = Seg n &
+  for i being non empty Nat st i in dom f holds
+   (not i divides n or i divides ni or i = n implies f.i = <%1_(F_Complex)%>) &
+   (i divides n & not i divides ni & i <> n implies f.i = cyclotomic_poly(i))
+ holds Product(f) = poly_with_roots((s,1)-bag);
+
+theorem :: UNITY_1:58  ::Cyclo7:
+for n, ni being non empty Nat st ni < n & ni divides n
+ex f being FinSequence of (the carrier of Polynom-Ring F_Complex),
+    p being Polynomial of F_Complex
+ st p = Product(f) & dom f = Seg n &
+  (for i being non empty Nat st i in Seg n holds
+   (not i divides n or i divides ni or i = n implies f.i = <%1_(F_Complex)%>) &
+   (i divides n & not i divides ni & i <> n implies f.i = cyclotomic_poly(i)))
+ & unital_poly(F_Complex,n) = unital_poly(F_Complex,ni)*'(cyclotomic_poly n)*'p
+;
+
+theorem :: UNITY_1:59  ::Cyclo7a:
+for i being Integer, c being Element of F_Complex,
+    f being FinSequence of (the carrier of Polynom-Ring F_Complex),
+    p being Polynomial of F_Complex
+ st p = Product(f) & c = i &
+    for i being non empty Nat st i in dom f
+     holds f.i = <%1_(F_Complex)%> or f.i = cyclotomic_poly(i)
+  holds eval(p,c) is integer;
+
+theorem :: UNITY_1:60   ::Cyclo8a:
+for n being non empty Nat, j, k, q being Integer, qc being Element of F_Complex
+ st qc = q &
+    j = eval(cyclotomic_poly(n),qc) & k = eval(unital_poly(F_Complex, n),qc)
+  holds j divides k;
+
+theorem :: UNITY_1:61   ::Cyclo8:
+for n,ni being non empty Nat, q being Integer st ni < n & ni divides n
+for qc being Element of cFC st qc = q
+for j,k,l being Integer
+ st j = eval(cyclotomic_poly(n),qc) &
+    k = eval(unital_poly(F_Complex, n),qc) &
+    l = eval(unital_poly(F_Complex, ni),qc)
+  holds j divides (k div l);
+
+theorem :: UNITY_1:62 :: WEDDWITT ECD1 :::: WEDDWITT ECD1
+for n,q being non empty Nat, qc being Element of F_Complex st qc = q
+for j being Integer st j = eval(cyclotomic_poly(n),qc)
+ holds j divides (q |^ n - 1);
+
+theorem :: UNITY_1:63 :: WEDDWITT ECD2 :::: WEDDWITT ECD2
+for n,ni,q being non empty Nat st ni < n & ni divides n
+for qc being Element of F_Complex st qc = q
+for j being Integer st j = eval(cyclotomic_poly(n),qc)
+  holds j divides ((q |^ n - 1) div (q |^ ni - 1));
+
+theorem :: UNITY_1:64 ::WEDDWITT ECD3 ::::WEDDWITT ECD3
+for n being non empty Nat st 1 < n
+for q being Nat st 1 < q
+for qc being Element of F_Complex st qc = q
+for i being Integer st i = eval(cyclotomic_poly(n),qc) holds abs(i) > q - 1;
+

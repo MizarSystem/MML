@@ -1,0 +1,296 @@
+:: Witt's Proof of the {W}edderburn Theorem
+::  by Broderic Arneson , Matthias Baaz and Piotr Rudnicki
+:: 
+:: Received December 30, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary WEDDWITT, ARYTM_1, ARYTM_3, FINSEQ_1, RELAT_1, FUNCT_1, RLVECT_1,
+      BOOLE, FINSEQ_2, FINSEQ_4, COMPLEX1, BINOP_1, VECTSP_1, LATTICES,
+      COMPLFLD, GROUP_1, REALSET1, INT_1, NAT_1, TARSKI, CARD_1, GROUP_2,
+      POLYNOM2, FUNCT_4, VECTSP_2, FUNCOP_1, SEQ_1, FUNCT_2, ABSVALUE, UNITY_1,
+      PREPOWER, FINSET_1, CAT_1, RLSUB_1, GROUP_5, RLVECT_2, SETFAM_1,
+      VECTSP_9, RLVECT_3, MATRLIN, SUBSET_1, EQREL_1, GROUP_3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, NUMBERS, ARYTM_0, XREAL_0,
+      ZFMISC_1, REAL_1, INT_1, INT_2, NAT_1, RLVECT_1, VECTSP_1, VECTSP_2,
+      BINOP_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_4,
+      BINARITH, RVSUM_1, COMPLFLD, POLYNOM4, CARD_1, GROUP_2, PREPOWER,
+      FINSET_1, GROUP_1, FUNCT_4, CQC_LANG, WSIERP_1, UNITY_1, SETFAM_1,
+      VECTSP_6, VECTSP_7, GROUP_3, GROUP_5, VECTSP_9, EQREL_1, FRAENKEL,
+      FUNCOP_1, VECTSP_4, EULER_2;
+ constructors ARYTM_0, REAL_1, MONOID_0, WELLORD2, INT_2, COMPLSP1, BINARITH,
+      POLYNOM4, COMPLEX1, POLYNOM5, PREPOWER, DOMAIN_1, PRE_CIRC, FINSEQOP,
+      ALGSTR_1, RLVECT_2, CQC_LANG, WSIERP_1, UPROOTS, UNITY_1, BINOP_1,
+      VECTSP_6, VECTSP_7, VECTSP_9, GROUP_5, EQREL_1, EULER_2;
+ clusters STRUCT_0, RELSET_1, BINARITH, VECTSP_1, VECTSP_2, FINSEQ_2, POLYNOM1,
+      MONOID_0, NAT_1, INT_1, POLYNOM5, FINSEQ_1, FINSET_1, CARD_1, FSM_1,
+      FUNCT_1, NUMBERS, SUBSET_1, ORDINAL2, CQC_LANG, UNITY_1, GROUP_2, REAL_1,
+      FUNCOP_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+
+begin :: Preliminaries
+
+theorem :: WEDDWITT:1  :: Th1:
+for a being Nat, q being Real st 1 < q & q |^ a = 1 holds a = 0;
+
+theorem :: WEDDWITT:2  :: Th2:
+for a, k, r being Nat, x being Real
+ st 1 < x & 0 < k holds x |^ (a*k + r) = (x |^ a)*(x |^ (a*(k-'1)+r));
+
+theorem :: WEDDWITT:3  :: Th3:
+for q, a, b being Nat
+  st 0 < a & 1 < q & (q |^ a) -' 1 divides (q |^ b)-'1 holds a divides b;
+
+theorem :: WEDDWITT:4  :: Lm1:
+for n, q being Nat st 0 < q holds Card Funcs(n,q) = q |^ n;
+
+theorem :: WEDDWITT:5   :: SumDivision:
+for f being FinSequence of NAT, i being Nat
+ st for j being Nat st j in dom f holds i divides f/.j holds i divides Sum f;
+
+theorem :: WEDDWITT:6   :: Partition1:
+for X being finite set, Y being a_partition of X,
+    f being FinSequence of Y st f is one-to-one & rng f = Y
+for c being FinSequence of NAT st len c = len f &
+      for i being Nat st i in dom c holds c.i = Card (f.i)
+holds card X = Sum c;
+
+begin :: Class formula for groups
+
+definition
+  cluster finite Group;
+end;
+
+definition
+  let G be finite Group;
+  cluster center G -> finite;
+end;
+
+definition let G be Group, a be Element of G;
+  func Centralizer a -> strict Subgroup of G means
+:: WEDDWITT:def 1
+     the carrier of it = { b where b is Element of G : a*b = b*a };
+end;
+
+definition let G be finite Group;
+  let a be Element of G;
+  cluster Centralizer a -> finite;
+end;
+
+theorem :: WEDDWITT:7   :: GCTR2:
+for G being Group, a being Element of G, x being set
+ st x in Centralizer a holds x in G;
+
+theorem :: WEDDWITT:8   :: GCTR1:
+for G being Group, a, x being Element of G
+ holds a*x = x*a iff x is Element of Centralizer a;
+
+definition
+  let G be Group, a be Element of G;
+  cluster con_class a -> non empty;
+end;
+
+definition let G be Group, a be Element of G;
+  func a-con_map -> Function of the carrier of G, con_class a means
+:: WEDDWITT:def 2
+   for x being Element of G holds it.x = a |^ x;
+end;
+
+theorem :: WEDDWITT:9   :: Br1:
+for G being finite Group, a being Element of G, x being Element of con_class a
+ holds card (a-con_map"{x}) = ord Centralizer a;
+
+theorem :: WEDDWITT:10   :: Br2:
+for G being Group, a being Element of G, x, y being Element of con_class a
+ st x<>y holds (a-con_map"{x}) misses (a-con_map"{y});
+
+theorem :: WEDDWITT:11   :: Br3:
+for G being Group, a being Element of G
+ holds { a-con_map"{x} where x is Element of con_class a : not contradiction }
+         is a_partition of the carrier of G;
+
+theorem :: WEDDWITT:12   :: Br4:
+for G being finite Group, a being Element of G
+  holds Card { a-con_map"{x} where x is Element of con_class a :
+                               not contradiction} = card con_class a;
+
+theorem :: WEDDWITT:13   :: OrdGroup1:
+for G being finite Group, a being Element of G
+  holds ord G = card con_class a * ord Centralizer a;
+
+definition let G be Group;
+  func conjugate_Classes G -> a_partition of the carrier of G equals
+:: WEDDWITT:def 3
+  {S where S is Subset of G :
+                 ex a being Element of G st S = con_class a };
+end;
+
+theorem :: WEDDWITT:14   :: Conj1:
+for G being Group, x being set
+ holds x in conjugate_Classes G iff ex a being Element of G st con_class a = x;
+
+theorem :: WEDDWITT:15   :: :: ClassFormula Class formula for finite groups
+for G being finite Group, f being FinSequence of conjugate_Classes G
+ st f is one-to-one & rng f = conjugate_Classes G
+  for c being FinSequence of NAT
+   st len c = len f & for i being Nat st i in dom c holds c.i = Card (f.i)
+    holds ord G = Sum c;
+
+begin :: Centers and centralizers of skew fields
+
+theorem :: WEDDWITT:16   :: DIM:
+for F being finite Field, V being VectSp of F, n, q being Nat
+ st V is finite-dimensional & n = dim V & q = Card the carrier of F
+  holds Card the carrier of V = q |^ n;
+
+definition
+  let R be Skew-Field;
+  func center R -> strict Field means
+:: WEDDWITT:def 4
+   the carrier of it = {x where x is Element of R:
+                    for s being Element of R holds x*s = s*x} &
+   the add of it =  (the add of R) | [:the carrier of it,the carrier of it:] &
+   the mult of it =  (the mult of R) | [:the carrier of it,the carrier of it:]&
+   the Zero of it = the Zero of R &
+   the unity of it = the unity of R;
+end;
+
+theorem :: WEDDWITT:17   :: Center0:
+for R being Skew-Field holds the carrier of center R c= the carrier of R;
+
+definition let R be finite Skew-Field;
+  cluster center R -> finite;
+end;
+
+theorem :: WEDDWITT:18   :: Center1:
+for R being Skew-Field, y being Element of R
+ holds y in center R iff for s being Element of R holds y*s = s*y;
+
+theorem :: WEDDWITT:19   :: Center1a:
+for R being Skew-Field holds 0.R in center R;
+
+theorem :: WEDDWITT:20   :: Center1b:
+for R being Skew-Field holds 1_ R in center R;
+
+theorem :: WEDDWITT:21   :: Center2:
+for R being finite Skew-Field holds 1 < card (the carrier of center R);
+
+theorem :: WEDDWITT:22   :: Center3:
+for R being finite Skew-Field holds
+  card the carrier of center R = card the carrier of R iff R is commutative;
+
+theorem :: WEDDWITT:23   :: Center4:
+for R being Skew-Field
+ holds the carrier of center R = (the carrier of center MultGroup R) \/ {0.R};
+
+definition
+  let R be Skew-Field, s be Element of R;
+  func centralizer s -> strict Skew-Field means
+:: WEDDWITT:def 5
+   the carrier of it = {x where x is Element of R: x*s = s*x} &
+   the add of it =  (the add of R) | [:the carrier of it,the carrier of it:] &
+   the mult of it =  (the mult of R) | [:the carrier of it,the carrier of it:]&
+   the Zero of it = the Zero of R &
+   the unity of it = the unity of R;
+end;
+
+theorem :: WEDDWITT:24   :: Central00:
+for R be Skew-Field, s be Element of R
+ holds the carrier of centralizer s c= the carrier of R;
+
+theorem :: WEDDWITT:25   :: Central02a:
+for R be Skew-Field, s, a be Element of R
+ holds a in the carrier of centralizer s iff a*s = s*a;
+
+theorem :: WEDDWITT:26  :: Central02b:
+for R be Skew-Field, s be Element of R
+  holds the carrier of center R c= the carrier of centralizer s;
+
+theorem :: WEDDWITT:27   :: Central02:
+for R be Skew-Field, s, a, b be Element of R
+ st a in the carrier of center R & b in the carrier of centralizer s
+  holds a*b in the carrier of centralizer s;
+
+theorem :: WEDDWITT:28   :: Central0:
+for R be Skew-Field, s be Element of R
+  holds 0.R is Element of centralizer s & 1_ R is Element of centralizer s;
+
+definition let R be finite Skew-Field;
+  let s be Element of R;
+  cluster centralizer s -> finite;
+end;
+
+theorem :: WEDDWITT:29   :: Central1:
+for R be finite Skew-Field, s be Element of R
+  holds 1 < card (the carrier of centralizer s);
+
+theorem :: WEDDWITT:30   :: Central2a:
+for R being Skew-Field, s being Element of R, t being Element of MultGroup R
+ st t = s
+  holds the carrier of centralizer s = (the carrier of Centralizer t) \/ {0.R};
+
+theorem :: WEDDWITT:31   :: Central2:
+for R being finite Skew-Field, s being Element of R,
+    t being Element of MultGroup R st t = s
+  holds ord Centralizer t = card (the carrier of centralizer s) - 1;
+
+begin :: Vector spaces over centers of skew fields
+
+definition
+  let R be Skew-Field;
+  func VectSp_over_center R -> strict VectSp of center R means
+:: WEDDWITT:def 6
+  the LoopStr of it = the LoopStr of R &
+  the lmult of it = (the mult of R )
+                     | [:the carrier of center R, the carrier of R:];
+end;
+
+theorem :: WEDDWITT:32   :: CardCenter1:
+for R being finite Skew-Field
+ holds card the carrier of R =
+                 (card (the carrier of center R)) |^ (dim VectSp_over_center R)
+;
+
+theorem :: WEDDWITT:33   :: DimCenter:
+for R being finite Skew-Field holds 0 < dim VectSp_over_center R;
+
+definition let R be Skew-Field, s be Element of R;
+  func VectSp_over_center s -> strict VectSp of center R means
+:: WEDDWITT:def 7
+  the LoopStr of it = the LoopStr of centralizer s &
+  the lmult of it = (the mult of R)
+                 | [:the carrier of center R, the carrier of centralizer s:];
+end;
+
+theorem :: WEDDWITT:34   :: CardCentral:
+for R being finite Skew-Field, s being Element of R
+  holds card the carrier of (centralizer s) =
+        (card (the carrier of center R)) |^ (dim VectSp_over_center s);
+
+theorem :: WEDDWITT:35   :: DimCentral:
+for R being finite Skew-Field, s being Element of R
+  holds 0 < dim VectSp_over_center s;
+
+theorem :: WEDDWITT:36   :: Skew1:
+for R being finite Skew-Field, r being Element of R
+ st r is Element of MultGroup R
+  holds
+((card (the carrier of center R)) |^ (dim VectSp_over_center r) - 1) divides
+((card (the carrier of center R)) |^ (dim VectSp_over_center R) - 1);
+
+theorem :: WEDDWITT:37   :: Skew2:
+for R being finite Skew-Field, s being Element of R
+ st s is Element of MultGroup R
+  holds (dim VectSp_over_center s) divides (dim VectSp_over_center R);
+
+theorem :: WEDDWITT:38   :: MGC1:
+for R being finite Skew-Field holds
+  card the carrier of center MultGroup R = card (the carrier of center R) - 1;
+
+begin :: Witt's proof of Wedderburn's theorem
+
+theorem :: WEDDWITT:39
+for R being finite Skew-Field holds R is commutative;
+
