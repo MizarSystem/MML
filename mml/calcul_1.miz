@@ -10,7 +10,8 @@ environ
       ZF_MODEL, BOOLE, FUNCT_1, FUNCT_4, CALCUL_1, FINSET_1, VALUAT_1, CAT_1,
       MCART_1, QMAX_1, ORDINAL2, FINSEQ_2, CARD_1, TARSKI, SUBSTUT1, SUBLEMMA;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1, FUNCT_1, QC_LANG1,
-      NUMBERS, ORDINAL1, FINSEQ_2, CARD_1, XXREAL_0, NAT_1, CQC_LANG, RELAT_1,
+      NUMBERS, ORDINAL1, FINSEQ_2, CARD_1, XCMPLX_0,
+      XXREAL_0, NAT_1, CQC_LANG, RELAT_1,
       FINSET_1, VALUAT_1, CQC_THE1, RELSET_1, FUNCT_2, FRAENKEL, DOMAIN_1,
       MCART_1, SUBSTUT1, SUBSTUT2, SUBLEMMA;
  constructors WELLORD2, DOMAIN_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2, CQC_THE1,
@@ -23,13 +24,13 @@ environ
       RELAT_1, QC_LANG3, QC_LANG2, SUBSTUT1, FUNCT_4, SUBLEMMA, NAT_1,
       FINSEQ_1, FINSEQ_3, VALUAT_1, FINSEQ_2, SUBSTUT2, FUNCOP_1, CQC_THE1,
       FINSET_1, CARD_2, CQC_SIM1, CARD_1, CARD_4, GRFUNC_1, GRAPH_2, GRAPH_5,
-      XREAL_1;
+      XREAL_1, ORDINAL1;
  schemes XBOOLE_0, NAT_1, FUNCT_1;
 
 begin :: Preliminaries
 
  reserve a,b,c,d for set,
-         i,j,k,l,m,n for Nat,
+         i,j,k,l,m,n for Element of NAT,
          p,q,r for Element of CQC-WFF,
          x,y,y0 for bound_QC-variable,
          X for Subset of CQC-WFF,
@@ -56,7 +57,8 @@ A1:  len f > 0 implies ex g being FinSequence of D st
         for i st len f = i+1 holds g = f|(Seg i)
     proof
       assume len f > 0; then
-      consider j such that A2: len f = j+1 by NAT_1:22;
+      consider j being Nat such that A2: len f = j+1 by NAT_1:22;
+      reconsider j as Element of NAT by ORDINAL1:def 13;
       take g = f|(Seg j);
       reconsider g as FinSequence by FINSEQ_1:19;
       now let a such that A3: a in rng g;
@@ -85,7 +87,8 @@ A1:  len f > 0 implies ex g being FinSequence of D st
     proof
       assume A4: len f > 0 & (for i st len f = i+1 holds g = f|(Seg i)) &
                          (for i st len f = i+1 holds h = f|(Seg i)); then
-      consider j such that A5: len f = j+1 by NAT_1:22;
+      consider j being Nat such that A5: len f = j+1 by NAT_1:22;
+      reconsider j as Element of NAT by ORDINAL1:def 13;
        g = f|(Seg j) & h = f|(Seg j) by A4,A5;
        hence thesis;
     end;
@@ -145,7 +148,8 @@ theorem Th2:
   len f > 0 implies len Ant(f)+1 = len f & len Ant(f) < len f
    proof
      assume  len f > 0; then
-     consider i such that A1: len f = i+1 by NAT_1:22;
+     consider i being Nat such that A1: len f = i+1 by NAT_1:22;
+     reconsider i as Element of NAT by ORDINAL1:def 13;
      Ant(f) = f|(Seg i) by A1,Def1; then
      dom Ant(f) = dom f /\ Seg i by FUNCT_1:68; then
      Seg (len Ant(f)) = dom f /\ Seg i by FINSEQ_1:def 3; then
@@ -320,7 +324,7 @@ A2: now let b such that A3: b in f;
       consider c,d such that A4: b = [c,d] by A3,RELAT_1:def 1;
 A5:   c in dom f & d = f.c by A3,A4,FUNCT_1:8;
       now let b such that A6: b in N;
-        reconsider i = b as Nat by A6;
+        reconsider i = b as Element of NAT by A6;
 A7:     now assume i in Seg n; then
 A8:       1 <= i & i <= n by FINSEQ_1:3;
           f1 = Ant(f)^(g^<*Suc(f)*>) by FINSEQ_1:45; then
@@ -348,7 +352,7 @@ A12:  dom Sgm (dom f2) = Seg (n+1) by A11,Th12;
       end; then
       for b holds b in dom f iff b in Seg (n+1); then
 A13:  dom Sgm (dom f2) = dom f by A12,TARSKI:2;
-      reconsider i = c as Nat by A5;
+      reconsider i = c as Element of NAT by A5;
 A14:  0+1 <= m+1 by NAT_1:38;
       m+1 <= n+(m+1) by NAT_1:29; then
       1 <= n+(m+1) by A14,XREAL_1:2; then
@@ -485,7 +489,7 @@ end;
  reserve PR,PR1,PR2,PR3 for
                     FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
 
-definition let PR; let n be Nat;
+definition let PR; let n be Element of NAT;
   pred PR,n is_a_correct_step means
   :Def7: ex f st Suc(f) is_tail_of Ant(f) & (PR.n)`1 = f if (PR.n)`2 = 0,
   ex f st (PR.n)`1 = f^<*VERUM*>                         if (PR.n)`2 = 1,
@@ -854,7 +858,8 @@ theorem
     consider f such that A1: rng Ant(f) c= X & Suc(f) = p & |- f by Def10;
     consider PR such that A2: PR is a_proof & f = (PR.(len PR))`1 by A1,Def9;
     let A,J,v such that A3: J,v |= X;
-      defpred P[Nat] means $1 <= len PR implies for m st 1 <= m & m <= $1 holds
+      defpred P[Element of NAT] means
+       $1 <= len PR implies for m st 1 <= m & m <= $1 holds
                                     ex g st g = (PR.m)`1 & Ant(g) |= Suc(g);
 A4:   P[0];
 A5:   for k holds P[k] implies P[k+1]
@@ -2502,7 +2507,7 @@ A8: now let b such that A9: b in rng F;
       b in rng F2 by A4,A5,A6,A9,RELAT_1:47; then
       consider a being set such that
 A10:  a in dom F2 & b = F2.a by FUNCT_1:def 5;
-      reconsider a as Nat by A4,A10;
+      reconsider a as Element of NAT by A4,A10;
       a in dom f & P[a,F2.a] by A4,A10;
       hence b in X by A10;
     end;

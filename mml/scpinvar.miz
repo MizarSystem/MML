@@ -29,18 +29,18 @@ environ
       SCMPDS_3, ABSVALUE, GRFUNC_1, SCMPDS_4, SCMPDS_5, REAL_2, SCMPDS_6,
       ENUMSET1, INT_2, SCMPDS_8, RELAT_1, SCMP_GCD, SCMPDS_7, FUNCT_1,
       SCMFSA6B, SCM_1, SQUARE_1, FINSEQ_1, RVSUM_1, FINSEQ_2, PRE_FF, SCPISORT,
-      XBOOLE_1, XREAL_1, COMPLEX1, XXREAL_0, PREPOWER;
+      XBOOLE_1, XREAL_1, COMPLEX1, XXREAL_0, PREPOWER, ORDINAL1;
  schemes NAT_1, SCMPDS_8, FUNCT_2;
 
 begin :: Preliminaries
 
-reserve m,n for Nat,
+reserve m,n for Element of NAT,
         i,j for Instruction of SCMPDS,
         I for Program-block,
         a for Int_position;
 
 theorem
- for n,m,l be Nat st n divides m & n divides l holds n divides m-l
+ for n,m,l be Element of NAT st n divides m & n divides l holds n divides m-l
             by PREPOWER:108;
 
 theorem
@@ -154,7 +154,7 @@ set A = the Instruction-Locations of SCMPDS,
 
 begin :: Computing directly the result of "while<0" program by loop-invariant
 
-scheme WhileLEnd { F(State of SCMPDS)-> Nat,
+scheme WhileLEnd { F(State of SCMPDS)-> Element of NAT,
  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
  a() -> Int_position,i() -> Integer,P[set]}:
    F(Dstate IExec(while<0(a(),i(),I()),s()))=0 &
@@ -173,7 +173,7 @@ proof
    set b=DataLoc(s().a(),i()),
        WHL=while<0(a(),i(),I());
 
-    defpred Q[Nat] means
+    defpred Q[Element of NAT] means
        for t be State of SCMPDS st F(Dstate t) <= $1 &
         t.a()=s().a() & P[Dstate t]
       holds F(Dstate IExec(WHL,t))=0 & P[Dstate IExec(WHL,t)];
@@ -189,7 +189,7 @@ then A7:  F(Dstate t)=0 by A6,XREAL_1:1;
       by A6,A7,SCPISORT:5;
    end;
 A8: now
-       let k be Nat;
+       let k be Element of NAT;
        assume A9:Q[k];
             now
          let u be State of SCMPDS;
@@ -227,7 +227,7 @@ A8: now
       end;
       hence Q[k+1];
    end;
-    for k being Nat holds Q[k] from NAT_1:sch 1(A5,A8);
+    for k being Element of NAT holds Q[k] from NAT_1:sch 1(A5,A8);
        then Q[F(Dstate s())];
      hence thesis by A3;
 end;
@@ -241,7 +241,7 @@ begin :: An Example : Summing directly n integers by loop-invariant
 :: sum=Sum=x1+x2+...+xn
 
 definition
- let n, p0 be Nat;
+ let n, p0 be Element of NAT;
  func sum(n,p0) -> Program-block equals
 
   (GBP:=0) ';' (intpos 1:=0) ';'
@@ -253,39 +253,41 @@ end;
 
 theorem Th8:        :: SCMPDS_7:73
   for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
-  a,b,c being Int_position,n,i,p0 be Nat,f be FinSequence of INT
+  a,b,c being Int_position,n,i,p0 be Element of NAT,f be FinSequence of INT
   st card I >0 & f is_FinSequence_on s,p0 & len f=n & s.b=0 & s.a=0 &
   s.intpos i=-n & s.c = p0+1 &
   (for t be State of SCMPDS st
        (ex g be FinSequence of INT st g is_FinSequence_on s,p0 &
        len g=t.intpos i+n & t.b=Sum g & t.c = p0+1+len g) & t.a=0 &
-       t.intpos i < 0 & for i be Nat st i > p0 holds t.intpos i=s.intpos i
+       t.intpos i < 0 & for i be Element of NAT st i > p0
+       holds t.intpos i=s.intpos i
     holds IExec(I,t).a=0 & I is_closed_on t & I is_halting_on t &
        IExec(I,t).intpos i=t.intpos i+1 &
        (ex g be FinSequence of INT st g is_FinSequence_on s,p0 &
        len g=t.intpos i+n+1 & IExec(I,t).c = p0+1+len g &
        IExec(I,t).b=Sum g) &
-       for i be Nat st i > p0 holds IExec(I,t).intpos i=s.intpos i)
+       for i be Element of NAT st i > p0 holds IExec(I,t).intpos i=s.intpos i)
 holds IExec(while<0(a,i,I),s).b=Sum f & while<0(a,i,I) is_closed_on s &
       while<0(a,i,I) is_halting_on s
 proof
      let s be State of SCMPDS,I be No-StopCode shiftable Program-block,
-     a,b,c be Int_position,n,i,p0 be Nat,f be FinSequence of INT;
+     a,b,c be Int_position,n,i,p0 be Element of NAT,f be FinSequence of INT;
      assume A1: card I > 0;
      assume A2: f is_FinSequence_on s,p0 & len f=n & s.b=0 &
           s.a=0 & s.intpos i=-n & s.c = p0+1;
      assume A3: for t be State of SCMPDS st
        (ex g be FinSequence of INT st g is_FinSequence_on s,p0 &
        len g=t.intpos i+n & t.b=Sum g & t.c = p0+1+len g) & t.a=0 &
-       t.intpos i < 0 & for i be Nat st i > p0 holds t.intpos i=s.intpos i
+       t.intpos i < 0 & for i be Element of NAT st i > p0
+       holds t.intpos i=s.intpos i
      holds IExec(I,t).a=0 & I is_closed_on t & I is_halting_on t &
        IExec(I,t).intpos i=t.intpos i+1 &
        (ex g be FinSequence of INT st g is_FinSequence_on s,p0 &
        len g=t.intpos i+n+1 & IExec(I,t).c = p0+1+len g &
        IExec(I,t).b=Sum g) &
-       for i be Nat st i > p0 holds IExec(I,t).intpos i=s.intpos i;
+       for i be Element of NAT st i > p0 holds IExec(I,t).intpos i=s.intpos i;
      defpred P[State of SCMPDS] means
-      (for i be Nat st i > p0 holds $1.intpos i=s.intpos i) &
+      (for i be Element of NAT st i > p0 holds $1.intpos i=s.intpos i) &
      (ex g be FinSequence of INT st g is_FinSequence_on s,p0 &
    len g=$1.intpos i+n & $1.b=Sum g & $1.intpos i <= 0 & $1.c = p0+1+len g);
 
@@ -312,7 +314,8 @@ A5: now
 A8: P[Dstate s]
     proof
         set Ds=Dstate s;
-      thus for i be Nat st i > p0 holds Ds.intpos i=s.intpos i by SCMPDS_8:4;
+      thus for i be Element of NAT st i > p0
+      holds Ds.intpos i=s.intpos i by SCMPDS_8:4;
          consider h be FinSequence of INT such that
      A9: len h=0 & h is_FinSequence_on s,p0 by SCPISORT:3;
          take h;
@@ -329,7 +332,7 @@ A10: now
       set Dt=Dstate t;
       assume A11: P[Dstate t] & t.a=s.a & t.DataLoc(s.a,i) < 0;
     A12: now
-          let i be Nat;
+          let i be Element of NAT;
           assume A13: i > p0;
           thus t.intpos i=Dt.intpos i by SCMPDS_8:4
           .=s.intpos i by A11,A13;
@@ -369,7 +372,7 @@ A15: len h=t.intpos i+n & t.b=Sum h & t.c = p0+1+len h by A14,SCMPDS_8:4;
 g by A2,A3,A11,A12,A14,A15,A16;
       thus P[Dstate IExec(I,t)]
        proof
-        hereby let i be Nat;
+        hereby let i be Element of NAT;
           assume A21: i > p0;
           thus Dit.intpos i=It.intpos i by SCMPDS_8:4
           .=s.intpos i by A2,A3,A11,A12,A14,A15,A16,A21;
@@ -395,7 +398,7 @@ A23:  g is_FinSequence_on s,p0 & len g=Dw.intpos i+n & Dw.b=Sum g &
       .=Iw.da by A2,SCMP_GCD:5;
      then Dw.intpos i >= 0 by A5,A22;
      then A24: Dw.intpos i=0 by A23,XREAL_1:1;
-          now let i be Nat;
+          now let i be Element of NAT;
           assume i in Seg n;
    then A25:    1 <= i & i <= n by FINSEQ_1:3;
           hence f.i = s.intpos(p0+i) by A2,SCPISORT:def 1
@@ -417,12 +420,12 @@ end;
      WB= j1 ';' j2 ';' j3,
      WH= while<0(GBP,2,WB);
 Lm1:
-  for s being State of SCMPDS,m be Nat st s.GBP=0 & s.a3=m holds
+  for s being State of SCMPDS,m be Element of NAT st s.GBP=0 & s.a3=m holds
    IExec(WB,s).GBP=0 & IExec(WB,s).a1=s.a1+s.intpos m &
    IExec(WB,s).a2=s.a2+1 & IExec(WB,s).a3=m+1 &
-   for i be Nat st i >3 holds IExec(WB,s).intpos i=s.intpos i
+   for i be Element of NAT st i >3 holds IExec(WB,s).intpos i=s.intpos i
 proof
-     let s be State of SCMPDS,m be Nat;
+     let s be State of SCMPDS,m be Element of NAT;
      set a=GBP;
      assume A1: s.a=0 & s.a3=m;
    set t0=Initialized s,
@@ -470,7 +473,7 @@ A21:  a2<>DataLoc(t2.a,3) by A18,SCMP_GCD:4;
      .=s.a2+1 by A15,A21,SCMPDS_2:60;
   thus t1.a3=Exec(j3,t2).a3 by SCMPDS_5:46
      .=m+1 by A17,A18,SCMPDS_2:60;
-   hereby let i be Nat;
+   hereby let i be Element of NAT;
      assume A22: i >3;
       then A23: intpos i <> DataLoc(t2.a,3) by A18,SCMP_GCD:4;
                 i > 2 by A22,XREAL_1:2;
@@ -495,13 +498,13 @@ proof
 end;
 
 Lm3:
-  for s being State of SCMPDS,n,p0 be Nat,f be FinSequence of INT
+  for s being State of SCMPDS,n,p0 be Element of NAT,f be FinSequence of INT
   st p0 >= 3 & f is_FinSequence_on s,p0 &
   len f=n & s.a1=0 & s.GBP=0 & s.a2=-n & s.a3=p0+1
 holds IExec(WH,s).a1=Sum f & WH is_closed_on s & WH is_halting_on s
 proof
    set a=GBP;
-   let s be State of SCMPDS,n,p0 be Nat,f be FinSequence of INT;
+   let s be State of SCMPDS,n,p0 be Element of NAT,f be FinSequence of INT;
    assume A1: p0 >= 3 & f is_FinSequence_on s,p0 &
     len f=n & s.a1=0 & s.a=0 & s.a2=-n & s.a3=p0+1;
          now
@@ -510,7 +513,8 @@ proof
     A2:  g is_FinSequence_on s,p0 & len g=t.a2+n &
          t.a1=Sum g & t.a3 = p0+1+len g;
        assume A3: t.a=0 & t.a2 < 0;
-       assume A4: for i be Nat st i > p0 holds t.intpos i=s.intpos i;
+       assume A4: for i be Element of NAT st i > p0
+       holds t.intpos i=s.intpos i;
       thus IExec(WB,t).a=0 by A2,A3,Lm1;
       thus WB is_closed_on t & WB is_halting_on t by SCMPDS_6:34,35;
       thus IExec(WB,t).a2=t.a2+1 by A2,A3,Lm1;
@@ -526,7 +530,7 @@ proof
                .=p0+1+len h by A5;
            set m=len h;
            reconsider q = h.m as Element of INT by INT_1:def 2;
-       A6: now let i be Nat;
+       A6: now let i be Element of NAT;
              assume A7: 1 <= i & i <= len h;
             per cases;
                 suppose i=len h;
@@ -554,7 +558,7 @@ proof
                .=Sum h by A2,A10,RVSUM_1:104;
       end;
       hereby
-         let i be Nat;
+         let i be Element of NAT;
          assume A14: i > p0;
             then i > 3 by A1,XREAL_1:2;
             hence IExec(WB,t).intpos i=t.intpos i by A2,A3,Lm1
@@ -565,11 +569,11 @@ proof
 end;
 
 Lm4:
-  for s being State of SCMPDS,n,p0 be Nat,f be FinSequence of INT
+  for s being State of SCMPDS,n,p0 be Element of NAT,f be FinSequence of INT
   st p0 >= 3 & f is_FinSequence_on s,p0 & len f=n
   holds IExec(sum(n,p0),s).a1=Sum f & sum(n,p0) is_halting_on s
 proof
-    let s be State of SCMPDS,n,p0 be Nat,f be FinSequence of INT;
+    let s be State of SCMPDS,n,p0 be Element of NAT,f be FinSequence of INT;
     assume A1: p0 >= 3 & f is_FinSequence_on s,p0 & len f=n;
  set a=GBP,
        i1=a:=0,
@@ -608,7 +612,7 @@ A16: t1.a2=Exec(i4, t2).a2 by SCMPDS_5:46
 A17: t1.a3=Exec(i4, t2).a3 by SCMPDS_5:46
      .=p0+1 by SCMPDS_2:57;
           now
-        let i be Nat;
+        let i be Element of NAT;
         assume A18: 1 <= i & i <= len f;
        A19: p0+1 >= 3+1 by A1,XREAL_1:8;
                 p0+i >= p0+ 1 by A18,XREAL_1:8;
@@ -639,11 +643,12 @@ then A25:  IExec(WH,t1).a1=Sum f & WH is_closed_on t1 & WH is_halting_on t1
 end;
 
 theorem
-       for s being State of SCMPDS,n,p0 be Nat,f be FinSequence of INT
+       for s being State of SCMPDS,n,p0 be Element of NAT,
+       f be FinSequence of INT
   st p0 >= 3 & f is_FinSequence_on s,p0 & len f=n
   holds IExec(sum(n,p0),s).intpos 1=Sum f & sum(n,p0) is parahalting
 proof
-    let s be State of SCMPDS,n,p0 be Nat,f be FinSequence of INT;
+    let s be State of SCMPDS,n,p0 be Element of NAT,f be FinSequence of INT;
     assume A1: p0 >= 3 & f is_FinSequence_on s,p0 & len f=n;
     hence IExec(sum(n,p0),s).a1=Sum f by Lm4;
          now
@@ -657,7 +662,7 @@ end;
 
 begin :: Computing directly the result of "while>0" program by loop-invariant
 
-scheme WhileGEnd { F(State of SCMPDS)-> Nat,
+scheme WhileGEnd { F(State of SCMPDS)-> Element of NAT,
  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
  a() -> Int_position,i() -> Integer,P[set]}:
    F(Dstate IExec(while>0(a(),i(),I()),s()))=0 &
@@ -675,7 +680,7 @@ A4: for t be State of SCMPDS st
 proof
    set b=DataLoc(s().a(),i()),
        WHL=while>0(a(),i(),I());
-    defpred Q[Nat] means
+    defpred Q[Element of NAT] means
        for t be State of SCMPDS st F(Dstate t) <= $1 &
         t.a()=s().a() & P[Dstate t]
       holds F(Dstate IExec(WHL,t))=0 & P[Dstate IExec(WHL,t)];
@@ -691,7 +696,7 @@ then A7:  F(Dstate t)=0 by A6,XREAL_1:1;
 SCPISORT:5;
    end;
 A8: now
-       let k be Nat;
+       let k be Element of NAT;
        assume A9:Q[k];
             now
          let u be State of SCMPDS;
@@ -729,7 +734,7 @@ A8: now
       end;
       hence Q[k+1];
    end;
-    for k being Nat holds Q[k] from NAT_1:sch 1(A5,A8);
+    for k being Element of NAT holds Q[k] from NAT_1:sch 1(A5,A8);
        then Q[F(Dstate s())];
      hence thesis by A3;
 end;
@@ -737,7 +742,7 @@ end;
 begin :: An Example : Computing directly Fibonacci sequence by loop-invariant
 
 definition
- let n be Nat;
+ let n be Element of NAT;
  func Fib-macro(n) -> Program-block equals
 
   (GBP:=0) ';' (intpos 1:=0) ';'
@@ -749,9 +754,9 @@ end;
 
 theorem Th10:
   for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
-  a,f0,f1 being Int_position,n,i be Nat
+  a,f0,f1 being Int_position,n,i be Element of NAT
   st card I >0 & s.a=0 & s.f0=0 & s.f1=1 & s.intpos i=n &
-  (for t be State of SCMPDS,k be Nat st
+  (for t be State of SCMPDS,k be Element of NAT st
      n=t.intpos i+k & t.f0=Fib k & t.f1 = Fib (k+1) & t.a=0 & t.intpos i > 0
     holds IExec(I,t).a=0 & I is_closed_on t & I is_halting_on t &
      IExec(I,t).intpos i=t.intpos i-1 &
@@ -761,10 +766,10 @@ theorem Th10:
     while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s
 proof
      let s be State of SCMPDS,I be No-StopCode shiftable Program-block,
-     a,f0,f1 be Int_position,n,i be Nat;
+     a,f0,f1 be Int_position,n,i be Element of NAT;
      assume A1: card I > 0;
      assume A2: s.a=0 & s.f0=0 & s.f1=1 & s.intpos i=n;
-     assume A3: for t be State of SCMPDS,k be Nat st
+     assume A3: for t be State of SCMPDS,k be Element of NAT st
        n=t.intpos i+k & t.f0=Fib k & t.f1 = Fib (k+1) & t.a=0 &
        t.intpos i > 0
     holds IExec(I,t).a=0 & I is_closed_on t & I is_halting_on t &
@@ -773,7 +778,7 @@ proof
 
      defpred P[State of SCMPDS] means
       $1.intpos i >= 0 &
-     ex k be Nat st n=$1.intpos i+k & $1.f0=Fib k & $1.f1=Fib (k+1);
+     ex k be Element of NAT st n=$1.intpos i+k & $1.f0=Fib k & $1.f1=Fib (k+1);
 
     set da=DataLoc(s.a,i);
     consider ff be Function of product the Object-Kind of SCMPDS,NAT such that
@@ -808,7 +813,7 @@ A8: now
       let t be State of SCMPDS;
       set Dt=Dstate t;
       assume A9: P[Dstate t] & t.a=s.a & t.DataLoc(s.a,i) > 0;
-       then consider k be Nat such that
+       then consider k be Element of NAT such that
    A10: n=Dt.intpos i+k & Dt.f0=Fib k & Dt.f1=Fib (k+1);
    A11: n=t.intpos i+k & t.f0=Fib k & t.f1=Fib (k+1) by A10,SCMPDS_8:4;
    A12: intpos (0+i)=da by A2,SCMP_GCD:5;
@@ -856,7 +861,7 @@ A16: F(Dw)=0 & P[Dw]
       .=Iw.da by A2,SCMP_GCD:5;
      then Dw.intpos i <= 0 by A5,A16;
 then A17:  Dw.intpos i=0 by A16,XREAL_1:1;
-     consider k be Nat such that
+     consider k be Element of NAT such that
 A18:  n=Dw.intpos i+k & Dw.f0=Fib k & Dw.f1=Fib (k+1) by A16;
      thus Iw.f0=Fib n & Iw.f1=Fib (n+1) by A17,A18,SCMPDS_8:4;
 A19:  for t be State of SCMPDS st P[Dstate t] & F(Dstate(t))=0 holds
@@ -961,16 +966,16 @@ proof
 end;
 
 Lm7:
-  for s being State of SCMPDS,n be Nat st
+  for s being State of SCMPDS,n be Element of NAT st
    s.GBP=0 & s.a1=0 & s.a2=1 & s.a3=n
 holds IExec(WH,s).a1=Fib n & IExec(WH,s).a2=Fib (n+1) &
       WH is_closed_on s & WH is_halting_on s
 proof
    set a=GBP;
-   let s be State of SCMPDS,n be Nat;
+   let s be State of SCMPDS,n be Element of NAT;
    assume A1: s.GBP=0 & s.a1=0 & s.a2=1 & s.a3=n;
          now
-       let t be State of SCMPDS,k be Nat;
+       let t be State of SCMPDS,k be Element of NAT;
        assume A2: n=t.a3+k & t.a1=Fib k & t.a2 = Fib (k+1) & t.a=0 &
         t.a3 > 0;
     hence IExec(WB,t).a=0 by Lm5;
@@ -985,11 +990,11 @@ proof
 end;
 
 Lm8:
-  for s being State of SCMPDS,n be Nat holds
+  for s being State of SCMPDS,n be Element of NAT holds
    IExec(Fib-macro(n),s).a1=Fib n & IExec(Fib-macro(n),s).a2=Fib (n+1) &
    Fib-macro(n) is_halting_on s
 proof
-    let s be State of SCMPDS,n be Nat;
+    let s be State of SCMPDS,n be Element of NAT;
  set a=GBP,
      i1=a:=0,
      i2=a1:=0,
@@ -1033,11 +1038,11 @@ then A16:  IExec(WH,t1).a1=Fib n & IExec(WH,t1).a2=Fib (n+1) &
 end;
 
 theorem
-       for s being State of SCMPDS,n be Nat
+       for s being State of SCMPDS,n be Element of NAT
   holds IExec(Fib-macro(n),s).intpos 1=Fib n &
   IExec(Fib-macro(n),s).intpos 2=Fib (n+1) & Fib-macro(n) is parahalting
 proof
-    let s be State of SCMPDS,n be Nat;
+    let s be State of SCMPDS,n be Element of NAT;
     thus IExec(Fib-macro(n),s).a1=Fib n &
          IExec(Fib-macro(n),s).a2=Fib (n+1) by Lm8;
          for t be State of SCMPDS holds
@@ -1086,10 +1091,11 @@ proof
 end;
 
 theorem Th13:
- for a be Int_position,i be Integer,m be Nat,I be Program-block holds
+ for a be Int_position,i be Integer,m be Element of NAT,I be Program-block
+ holds
    m < card I+3 iff inspos m in dom while<>0(a,i,I)
 proof
-   let a be Int_position,i be Integer,m be Nat,I be Program-block;
+   let a be Int_position,i be Integer,m be Element of NAT,I be Program-block;
         card while<>0(a,i,I)=card I + 3 by Th12;
    hence thesis by SCMPDS_4:1;
 end;
@@ -1195,7 +1201,7 @@ A17:  IC s5 = s5.IC SCMPDS by AMI_1:def 15
      .=halt SCMPDS by A15,SCMPDS_6:25;
 then A18:  CurInstr s5 = halt SCMPDS by A17,AMI_1:def 17;
           now
-       let k be Nat;
+       let k be Element of NAT;
              k = 0 or 0 < k by NAT_1:19;
         then A19: k = 0 or 0 + 1 <= k by INT_1:20;
        per cases by A19,REAL_1:def 5;
@@ -1384,7 +1390,7 @@ end;
 
 begin :: Computing directly the result of "while<>0" program by loop-invariant
 
-scheme WhileNHalt { F(State of SCMPDS)-> Nat,
+scheme WhileNHalt { F(State of SCMPDS)-> Element of NAT,
  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
  a() -> Int_position,i() -> Integer,P[set]}:
    while<>0(a(),i(),I()) is_closed_on s() &
@@ -1409,7 +1415,7 @@ proof
    set i1=(a(),i())<>0_goto 2,
        i2=goto (card I()+2),
        i3=goto -(card I()+2);
-    defpred Q[Nat] means
+    defpred Q[Element of NAT] means
        for t be State of SCMPDS st F(Dstate(t)) <= $1 & P[Dstate t] &
        t.a()=s().a()
        holds WHL is_closed_on t & WHL is_halting_on t;
@@ -1422,9 +1428,9 @@ A5:  Q[0]
         then t.b = 0 by A2,A6;
         hence WHL is_closed_on t & WHL is_halting_on t by A6,Th16;
       end;
-A7:  for k be Nat st Q[k] holds Q[k + 1]
+A7:  for k be Element of NAT st Q[k] holds Q[k + 1]
      proof
-     let k be Nat;
+     let k be Element of NAT;
      assume A8: Q[k];
            now
         let t be State of SCMPDS;
@@ -1527,7 +1533,7 @@ then A44:    Dstate(t7)=Dstate(t6) by A41,SCMPDS_8:3
 then A46:    WHL is_closed_on t7 & WHL is_halting_on t7 by A8,A13,A43,A44;
 A47:    t7 +* iWH=t7 by A42,SCMPDS_7:37;
             now
-          let k be Nat;
+          let k be Element of NAT;
           per cases;
           suppose k < m3+1;
            then A48: k <= m3 by INT_1:20;
@@ -1543,12 +1549,13 @@ A47:    t7 +* iWH=t7 by A42,SCMPDS_7:37;
                  suppose k<>0;
                   then consider kn be Nat such that
               A50: k=kn+1 by NAT_1:22;
-                       kn < k by A50,XREAL_1:31;
+                  reconsider kn as Element of NAT by ORDINAL1:def 13;
+                  kn < k by A50,XREAL_1:31;
                   then kn < m2 by A49,XREAL_1:2;
               then A51: IC (Computation t2).kn + 2 = IC (Computation t4).kn
                   by A1,A14,A16,A17,A25,A27,A33,SCMPDS_7:34;
               A52: IC (Computation t2).kn in dom pI by A13,SCMPDS_6:def 2;
-                  consider lm be Nat such that
+                  consider lm be Element of NAT such that
               A53: IC (Computation t2).kn=inspos lm by SCMPDS_3:32;
                        lm < card pI by A52,A53,SCMPDS_4:1;
                   then lm < card I()+1 by SCMPDS_5:7;
@@ -1564,7 +1571,7 @@ AMI_1:51
                end;
               end;
               suppose A56:k=m3;
-                    l2 in dom pWH by A30,SCMPDS_6:18;
+               l2 in dom pWH by A30,SCMPDS_6:18;
                hence IC (Computation t3).k in dom pWH by A1,A14,A16,A17,A25,A27
 ,A33,A39,A56,SCMPDS_7:36;
             end;
@@ -1573,25 +1580,26 @@ AMI_1:51
           suppose k >= m3+1;
           then consider nn be Nat such that
          A57: k=m3+1+nn by NAT_1:28;
-                  C3.k=(Computation (t7 +* iWH)).nn by A47,A57,AMI_1:51;
+           reconsider nn as Element of NAT by ORDINAL1:def 13;
+           C3.k=(Computation (t7 +* iWH)).nn by A47,A57,AMI_1:51;
            hence IC (Computation t3).k in dom pWH by A46,SCMPDS_6:def 2;
        end;
        end;
        hence WHL is_closed_on t by SCMPDS_6:def 2;
-            t7 is halting by A46,A47,SCMPDS_6:def 3;
+       t7 is halting by A46,A47,SCMPDS_6:def 3;
        then t3 is halting by SCM_1:27;
        hence WHL is_halting_on t by SCMPDS_6:def 3;
      end;
      end;
      hence Q[k+1];
      end;
-A58:  for k being Nat holds Q[k] from NAT_1:sch 1(A5,A7);
+A58:  for k being Element of NAT holds Q[k] from NAT_1:sch 1(A5,A7);
      set n=F(Dstate s());
         Q[n] by A58;
      hence WHL is_closed_on s() & WHL is_halting_on s() by A3;
 end;
 
-scheme WhileNExec { F(State of SCMPDS)-> Nat,
+scheme WhileNExec { F(State of SCMPDS)-> Element of NAT,
  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
  a() -> Int_position,i() -> Integer,P[set]}:
    IExec(while<>0(a(),i(),I()),s()) =
@@ -1734,9 +1742,10 @@ then A46: C1.m1=s2 by A42,A43,SCMPDS_7:7;
     then CurInstr C1.m1=i1 by A20,SCMPDS_6:22;
 then A47: CurInstr C1.m1 <> halt SCMPDS by SCMPDS_6:29;
     set m0=LifeSpan s1;
-         m0 > m1 by A9,A47,SCMPDS_6:2;
+    m0 > m1 by A9,A47,SCMPDS_6:2;
     then consider nn be Nat such that
 A48: m0=m1+nn by NAT_1:28;
+    reconsider nn as Element of NAT by ORDINAL1:def 13;
 A49: C1.m0 = C2.nn by A46,A48,AMI_1:51;
     then CurInstr C2.nn =halt SCMPDS by A9,SCM_1:def 2;
 then A50: nn >= m2 by A44,SCM_1:def 2;
@@ -1754,7 +1763,7 @@ A52: IExec(I(),s()) | A= (Result sI +* ps) | A by SCMPDS_4:def 8
     .= IExec(WHL,IExec(I(),s())) by SCMPDS_4:def 8;
 end;
 
-scheme WhileNEnd { F(State of SCMPDS)-> Nat,
+scheme WhileNEnd { F(State of SCMPDS)-> Element of NAT,
  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
  a() -> Int_position,i() -> Integer,P[set]}:
    F(Dstate IExec(while<>0(a(),i(),I()),s()))=0 &
@@ -1773,7 +1782,7 @@ proof
    set b=DataLoc(s().a(),i()),
        WHL=while<>0(a(),i(),I());
 
-    defpred Q[Nat] means
+    defpred Q[Element of NAT] means
        for t be State of SCMPDS st F(Dstate t) <= $1 &
         t.a()=s().a() & P[Dstate t]
       holds F(Dstate IExec(WHL,t))=0 & P[Dstate IExec(WHL,t)];
@@ -1789,7 +1798,7 @@ then t.DataLoc(t.a(),i()) = 0 by A2,A6;
 SCPISORT:5;
    end;
 A8: now
-       let k be Nat;
+       let k be Element of NAT;
        assume A9:Q[k];
             now
          let u be State of SCMPDS;
@@ -1826,7 +1835,7 @@ A8: now
       end;
       hence Q[k+1];
    end;
-      for k being Nat holds Q[k] from NAT_1:sch 1(A5,A8);
+      for k being Element of NAT holds Q[k] from NAT_1:sch 1(A5,A8);
      then Q[F(Dstate s())];
     hence thesis by A3;
 end;

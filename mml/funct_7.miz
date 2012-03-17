@@ -10,27 +10,29 @@ environ
       CAT_4, FUNCT_4, INT_1, FINSEQ_1, CARD_1, SETFAM_1, SUBSET_1, PRALG_1,
       ZF_REFLE, FINSEQ_2, MCART_1, TARSKI, FINSEQ_4, REWRITE1, FUNCT_5,
       FUNCT_2, FUNCT_7, PARTFUN1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0, NAT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS,
+      XCMPLX_0, XXREAL_0, NAT_1,
       SETFAM_1, PBOOLE, DOMAIN_1, CARD_1, RELAT_1, FUNCT_1, RELSET_1, BINOP_1,
       FINSEQ_1, FINSET_1, CQC_LANG, PARTFUN1, FUNCOP_1, FUNCT_2, FINSEQ_2,
       FUNCT_4, FUNCT_5, FINSEQ_4, REWRITE1;
  constructors SETFAM_1, PARTFUN1, WELLORD2, DOMAIN_1, BINOP_1, FUNCT_4,
       XXREAL_0, NAT_1, INT_1, FUNCT_5, CQC_LANG, PBOOLE, FINSEQ_4, REWRITE1;
  registrations NUMBERS, SUBSET_1, RELAT_1, FUNCT_1, FINSEQ_1, RELSET_1, CARD_1,
-      FUNCOP_1, FUNCT_4, CQC_LANG, PARTFUN1, INT_1, ORDINAL1, XREAL_0;
+      FUNCOP_1, FUNCT_4, CQC_LANG, PARTFUN1, INT_1, ORDINAL1, XREAL_0,
+      NAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, XBOOLE_0, FUNCOP_1, BINOP_1, CQC_LANG, FINSEQ_2;
  theorems FINSEQ_1, RELAT_1, CARD_5, TARSKI, AXIOMS, ZFMISC_1, INT_1, FUNCT_1,
       FINSEQ_2, FUNCT_4, SUBSET_1, FINSET_1, CQC_LANG, CARD_1, NAT_1, FUNCT_2,
       FUNCOP_1, PBOOLE, SETFAM_1, MCART_1, FINSEQ_3, REAL_1, ENUMSET1,
       REWRITE1, TREES_1, FUNCT_5, FINSEQ_4, RELSET_1, XBOOLE_0, XBOOLE_1,
-      PARTFUN1, GRFUNC_1, XREAL_1, XXREAL_0;
+      PARTFUN1, GRFUNC_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes NAT_1, DOMAIN_1, ZFREFLE1, FRAENKEL, FINSEQ_1, RECDEF_1, FUNCT_2;
 
 begin :: Preliminaries
 
  reserve a,x,y,A,B for set,
-         l,m,n for Nat;
+         l,m,n for Element of NAT;
 
 theorem
    for f being Function, X being set st rng f c= X holds (id X)*f = f
@@ -370,9 +372,9 @@ A1: for n,m st n in A & m < n holds m in A;
  suppose that
 A2: A <> {} and
 A3: ex m st for n st n in A holds n <= m;
-  defpred P[Nat] means $1 in A;
+  defpred P[Element of NAT] means $1 in A;
 A4: ex m st P[m] by A2,SUBSET_1:10;
-  consider M being Nat such that
+  consider M being Element of NAT such that
 A5: for n st P[n] holds n <= M by A3;
   consider m such that
 A6: P[m] and
@@ -383,14 +385,14 @@ A7: for n st P[n] holds n <= m from NAT_1:sch 6(A5,A4);
       proof let x be set;
        assume
 A8:     x in A;
-        then reconsider l = x as Nat;
+        then reconsider l = x as Element of NAT;
              l <= m by A7,A8;
         then l < m+1 by NAT_1:38;
        hence thesis;
       end;
      let x be set;
      assume x in { l : l < m+1 };
-      then consider l being Nat such that
+      then consider l being Element of NAT such that
 A9:    x = l and
 A10:    l < m+1;
            l <= m by A10,NAT_1:38;
@@ -404,7 +406,7 @@ A11: for m ex n st n in A & n > m;
        NAT c= A
    proof let x be set;
      assume x in NAT;
-      then reconsider m = x as Nat;
+      then reconsider m = x as Element of NAT;
       consider n such that
 A12:    n in A & n > m by A11;
     thus thesis by A1,A12;
@@ -435,11 +437,11 @@ A3: B c= C;
 
 theorem Th24:
  for p,q being FinSequence st len p = len q+1
- for i being Nat holds i in dom q iff i in dom p & i+1 in dom p
+ for i being Element of NAT holds i in dom q iff i in dom p & i+1 in dom p
   proof let p,q be FinSequence;
    assume
 A1:  len p = len q+1;
-   let i be Nat;
+   let i be Element of NAT;
    hereby assume
           i in dom q;
 then A2:   i >= 1 & i <= len q & len q <= len p by A1,FINSEQ_3:27,NAT_1:29;
@@ -500,12 +502,12 @@ registration
   end;
 end;
 
-registration let n be Nat, f be Function;
+registration let n be Element of NAT, f be Function;
  cluster n|->f -> Function-yielding;
  coherence
   proof let x be set; assume
 A1:  x in dom (n|->f);
-   then reconsider i = x as Nat;
+   then reconsider i = x as Element of NAT;
    i in Seg n by A1,FUNCOP_1:19;
    hence thesis by FUNCOP_1:13;
   end;
@@ -517,13 +519,13 @@ registration
  coherence
   proof let x be set; assume
 A1:  x in dom (p^q);
-   then reconsider i = x as Nat;
+   then reconsider i = x as Element of NAT;
    per cases; suppose i in dom p;
      then p.i is Function & p.i = (p^q).i by FINSEQ_1:def 7;
     hence thesis;
    end;
    suppose not i in dom p;
-    then consider j being Nat such that
+    then consider j being Element of NAT such that
 A2:   j in dom q & i = len p+j by A1,FINSEQ_1:38;
     q.j = (p^q).i by A2,FINSEQ_1:def 7;
     hence thesis;
@@ -543,7 +545,7 @@ A1:  for x being set st x in dom (p^q) holds (p^q).x is Function;
    end;
    let x be set; assume
 A2:  x in dom q;
-   then reconsider i = x as Nat;
+   then reconsider i = x as Element of NAT;
          (p^q).(len p+i) = q.x & len p+i in dom (p^q) by A2,FINSEQ_1:41,def 7;
    hence q.x is Function by A1;
   end;
@@ -1005,7 +1007,8 @@ registration let f be FinSequence, i,x be set;
  end;
 end;
 
-definition let D be set, f be FinSequence of D, i be Nat, d be Element of D;
+definition
+ let D be set, f be FinSequence of D, i be Element of NAT, d be Element of D;
  redefine func f+*(i,d) -> FinSequence of D;
  coherence
  proof per cases;
@@ -1028,11 +1031,12 @@ end;
 
 theorem
       for D be non empty set, f be FinSequence of D, d be Element of D, i be
-Nat
+Element of NAT
    st i in dom f
   holds (f+*(i,d))/.i = d
 proof
- let D be non empty set, f be FinSequence of D, d be Element of D, i be Nat;
+ let D be non empty set, f be FinSequence of D, d be Element of D,
+     i be Element of NAT;
  assume
 A1: i in dom f;
   then i in dom(f+*(i,d)) by Th32;
@@ -1042,11 +1046,12 @@ end;
 
 theorem
       for D be non empty set, f be FinSequence of D, d be Element of D, i,j be
-Nat
+Element of NAT
    st i <> j & j in dom f
   holds (f+*(i,d))/.j = f/.j
 proof
- let D be non empty set, f be FinSequence of D, d be Element of D, i,j be Nat
+ let D be non empty set, f be FinSequence of D, d be Element of D,
+     i,j be Element of NAT
  such that
 A1: i <> j and
 A2: j in dom f;
@@ -1058,10 +1063,11 @@ end;
 
 theorem
       for D be non empty set, f be FinSequence of D, d,e be Element of D, i be
-Nat
+Element of NAT
  holds f+*(i,f/.i) = f
  proof
-  let D be non empty set, f be FinSequence of D, d,e be Element of D, i be Nat;
+  let D be non empty set, f be FinSequence of D, d,e be Element of D,
+      i be Element of NAT;
   per cases;
   suppose i in dom f;
   hence f+*(i,f/.i) = f+*(i,f.i) by FINSEQ_4:def 4 .= f by Th37;
@@ -1079,24 +1085,24 @@ definition
  func compose(p,X) -> Function means:
 Def4:
   ex f being ManySortedFunction of NAT st it = f.len p & f.0 = id X &
-   for i being Nat st i+1 in dom p
+   for i being Element of NAT st i+1 in dom p
     for g,h being Function st g = f.i & h = p.(i+1) holds f.(i+1) = h*g;
  uniqueness
   proof let g1,g2 be Function;
    given f1 being ManySortedFunction of NAT such that
 A1: g1 = f1.len p & f1.0 = id X and
-A2: for i being Nat st i+1 in dom p
+A2: for i being Element of NAT st i+1 in dom p
      for g,h being Function st g = f1.i & h = p.(i+1) holds f1.(i+1) = h*g;
    given f2 being ManySortedFunction of NAT such that
 A3: g2 = f2.len p & f2.0 = id X and
-A4: for i being Nat st i+1 in dom p
+A4: for i being Element of NAT st i+1 in dom p
      for g,h being Function st g = f2.i & h = p.(i+1)
      holds f2.(i+1) = h*g;
-    defpred R[Nat] means
+    defpred R[Element of NAT] means
        $1 <= len p implies f1.$1 = f2.$1 & f1.$1 is Function;
 A5: R[ 0 ] by A1,A3;
-A6: for i being Nat st R[i] holds R[i+1]
-    proof let i be Nat such that
+A6: for i being Element of NAT st R[i] holds R[i+1]
+    proof let i be Element of NAT such that
 A7:   i <= len p implies f1.i = f2.i & f1.i is Function and
 A8:   i+1 <= len p;
      reconsider g = f1.i as Function;
@@ -1106,16 +1112,16 @@ then A9:   i+1 in dom p by A8,FINSEQ_3:27;
            f1.(i+1) = h*g by A2,A9;
      hence f1.(i+1) = f2.(i+1) & f1.(i+1) is Function by A4,A7,A8,A9,NAT_1:38;
     end;
-        for i being Nat holds R[i] from NAT_1:sch 1(A5,A6);
+        for i being Element of NAT holds R[i] from NAT_1:sch 1(A5,A6);
    hence thesis by A1,A3;
   end;
  correctness
   proof reconsider e = 0 as Function;
-   defpred P[Nat,set,set] means
+   defpred P[Element of NAT,set,set] means
     not $2 is Function & $3 = e or $2 is Function &
     for g,h being Function st g = $2 & h = p.($1+1) holds $3 = h*g;
-A10: for n being Nat for x being set ex y being set st P[n,x,y]
-    proof let n be Nat, x be set;
+A10: for n being Element of NAT for x being set ex y being set st P[n,x,y]
+    proof let n be Element of NAT, x be set;
      reconsider h = p.(n+1) as Function;
      per cases; suppose x is Function;
       then reconsider g = x as Function;
@@ -1129,8 +1135,9 @@ A11:    x is not Function; take y = 0;
         for g,h being Function st g = x & h = p.(n+1) holds y = h*g by A11;
     end;
     end;
-A12: for n being Nat for x,y1,y2 being set st P[n,x,y1] & P[n,x,y2] holds y1=y2
-    proof let n be Nat, x,y1,y2 be set; assume
+A12: for n being Element of NAT for x,y1,y2 being set st P[n,x,y1] & P[n,x,y2]
+ holds y1=y2
+    proof let n be Element of NAT, x,y1,y2 be set; assume
 A13:   P[n,x,y1] & P[n,x,y2];
      reconsider h = p.(n+1) as Function;
      per cases; suppose x is Function; then reconsider g = x as Function;
@@ -1142,17 +1149,18 @@ A13:   P[n,x,y1] & P[n,x,y2];
     end;
    consider f being Function such that
 A14:  dom f = NAT & f.0 = id X and
-A15:  for n being Nat holds P[n,f.n,f.(n+1)] from RECDEF_1:sch 1(A10,A12);
-    defpred P[Nat] means f.$1 is Function;
+A15:  for n being Element of NAT holds P[n,f.n,f.(n+1)]
+ from RECDEF_1:sch 1(A10,A12);
+    defpred P[Element of NAT] means f.$1 is Function;
 A16: P[ 0] by A14;
-A17: for i being Nat st P[i] holds P[i+1]
-     proof let i be Nat; assume
+A17: for i being Element of NAT st P[i] holds P[i+1]
+     proof let i be Element of NAT; assume
            f.i is Function; then reconsider g = f.i as Function;
      reconsider h = p.(i+1) as Function;
            f.(i+1) = h*g by A15;
      hence f.(i+1) is Function;
     end;
-A18:  for i being Nat holds P[i] from NAT_1:sch 1(A16,A17);
+A18:  for i being Element of NAT holds P[i] from NAT_1:sch 1(A16,A17);
    then reconsider F = f.len p as Function;
    take F;
          f is Function-yielding
@@ -1162,7 +1170,7 @@ A18:  for i being Nat holds P[i] from NAT_1:sch 1(A16,A17);
    then reconsider f as ManySortedFunction of NAT by A14,PBOOLE:def 3;
    take f;
    thus F = f.len p & f.0 = id X by A14;
-   let i be Nat;
+   let i be Element of NAT;
    thus thesis by A15;
   end;
 end;
@@ -1173,28 +1181,28 @@ definition
  func apply(p,x) -> FinSequence means:
 Def5:
   len it = len p+1 & it.1 = x &
-  for i being Nat, f being Function st i in dom p & f = p.i
+  for i being Element of NAT, f being Function st i in dom p & f = p.i
    holds it.(i+1) = f.(it.i);
  existence
   proof
-    defpred P[Nat,set,set] means
+    defpred P[Element of NAT,set,set] means
       ex f being Function st f = p.$1 & $3 = f.$2;
-A1: for i being Nat st 1 <= i & i < len p+1
+A1: for i being Element of NAT st 1 <= i & i < len p+1
      for x being set ex y being set st P[i,x,y]
-     proof let i be Nat; assume 1 <= i;
+     proof let i be Element of NAT; assume 1 <= i;
       assume i < len p+1;
       reconsider f = p.i as Function;
       let x be set; take f.x, f; thus thesis;
      end;
-A2: for n being Nat st 1 <= n & n < len p+1
+A2: for n being Element of NAT st 1 <= n & n < len p+1
      for x,y1,y2 being set st P[n,x,y1] & P[n,x,y2] holds y1 = y2;
    consider q being FinSequence such that
 A3:  len q = len p+1 and
 A4:  q.1 = x or len p+1 = 0 and
-A5:  for i being Nat st 1 <= i & i < len p+1 holds
+A5:  for i being Element of NAT st 1 <= i & i < len p+1 holds
       P[i,q.i,q.(i+1)] from RECDEF_1:sch 5(A1,A2);
    take q; thus len q = len p+1 & q.1 = x by A3,A4;
-   let i be Nat, f be Function; assume i in dom p;
+   let i be Element of NAT, f be Function; assume i in dom p;
     then i >= 1 & i <= len p by FINSEQ_3:27;
     then i >= 1 & i < len p+1 by NAT_1:38;
     then ex f being Function st f = p.i & q.(i+1) = f.(q.i) by A5;
@@ -1203,16 +1211,16 @@ A5:  for i being Nat st 1 <= i & i < len p+1 holds
  correctness
   proof let q1, q2 be FinSequence such that
 A6: len q1 = len p+1 & q1.1 = x and
-A7: for i being Nat, f being Function st i in dom p & f = p.i
+A7: for i being Element of NAT, f being Function st i in dom p & f = p.i
      holds q1.(i+1) = f.(q1.i) and
 A8: len q2 = len p+1 & q2.1 = x and
-A9: for i being Nat, f being Function st i in dom p & f = p.i
+A9: for i being Element of NAT, f being Function st i in dom p & f = p.i
      holds q2.(i+1) = f.(q2.i);
 A10:  dom q1 = dom q2 by A6,A8,FINSEQ_3:31;
-    defpred P[Nat] means $1 in dom q1 implies q1.$1 = q2.$1;
+    defpred P[Element of NAT] means $1 in dom q1 implies q1.$1 = q2.$1;
 A11:  P[ 0] by FINSEQ_3:27;
-A12: for i being Nat st P[i] holds P[i+1]
-     proof let i be Nat such that
+A12: for i being Element of NAT st P[i] holds P[i+1]
+     proof let i be Element of NAT such that
 A13:   i in dom q1 implies q1.i = q2.i and
 A14:   i+1 in dom q1;
            i+1 <= len q1 by A14,FINSEQ_3:27;
@@ -1228,7 +1236,7 @@ then A16:    i in dom p by A15,FINSEQ_3:27;
                    .= q2.(i+1) by A9,A16;
     end;
     end;
-         for i being Nat holds P[i] from NAT_1:sch 1(A11,A12);
+         for i being Element of NAT holds P[i] from NAT_1:sch 1(A11,A12);
    hence thesis by A10,FINSEQ_1:17;
   end;
 end;
@@ -1241,7 +1249,7 @@ theorem Th41:
   proof len {} = 0 by FINSEQ_1:25;
     then ex f being ManySortedFunction of NAT st
      compose({},X) = f.0 & f.0 = id X &
-     for i being Nat st i+1 in dom {}
+     for i being Element of NAT st i+1 in dom {}
       for g,h being Function st g = f.i & h = {} .(i+1) holds f.(i+1) = h*g
        by Def4;
    hence thesis;
@@ -1259,12 +1267,12 @@ theorem Th43:
  compose(p^<*f*>,X) = f*compose(p,X)
   proof consider ff being ManySortedFunction of NAT such that
 A1:  compose(p^<*f*>,X) = ff.len (p^<*f*>) & ff.0 = id X and
-A2:  for i being Nat st i+1 in dom (p^<*f*>)
+A2:  for i being Element of NAT st i+1 in dom (p^<*f*>)
      for g,h being Function st g = ff.i & h = (p^<*f*>).(i+1)
       holds ff.(i+1) = h*g by Def4;
 A3:  dom p c= dom(p^<*f*>) by FINSEQ_1:39;
      reconsider g = ff.len p as Function;
-         now let i be Nat; assume
+         now let i be Element of NAT; assume
 A4:    i+1 in dom p;
      let g,h be Function; assume
 A5:    g = ff.i & h = p.(i+1);
@@ -1283,10 +1291,11 @@ theorem Th44:
  apply(p^<*f*>,x) = apply(p,x)^<*f.(apply(p,x).(len p+1))*>
   proof
 A1:  len apply(p^<*f*>,x) = len (p^<*f*>)+1 & apply(p^<*f*>,x).1 = x &
-    for i being Nat, g being Function st i in dom (p^<*f*>) & g = (p^<*f*>).i
+    for i being Element of NAT, g being Function
+     st i in dom (p^<*f*>) & g = (p^<*f*>).i
      holds apply(p^<*f*>,x).(i+1) = g.(apply(p^<*f*>,x).i) by Def5;
 A2:  len apply(p,x) = len p+1 & apply(p,x).1 = x &
-    for i being Nat, f being Function st i in dom p & f = p.i
+    for i being Element of NAT, f being Function st i in dom p & f = p.i
      holds apply(p,x).(i+1) = f.(apply(p,x).i) by Def5;
          len <*f*> = 1 by FINSEQ_1:57;
 then A3:  len (p^<*f*>) = len p+1 & len <*f.(apply(p,x).(len p+1))*> = 1
@@ -1297,11 +1306,11 @@ A5: (p^<*f*>).(len p+1) = f by FINSEQ_1:59;
          len p+1 >= 1 by NAT_1:29;
 then A6: len p+1 in dom (p^<*f*>) & len p+1 in dom apply(p,x) by A2,A3,
 FINSEQ_3:27;
-    defpred P[Nat] means $1 in dom apply(p,x)
+    defpred P[Element of NAT] means $1 in dom apply(p,x)
      implies apply(p^<*f*>,x).$1 = apply(p,x).$1;
 A7: P[ 0] by FINSEQ_3:27;
-A8: for i being Nat st P[i] holds P[i+1]
-    proof let i be Nat such that
+A8: for i being Element of NAT st P[i] holds P[i+1]
+    proof let i be Element of NAT such that
 A9:   i in dom apply(p,x) implies apply(p^<*f*>,x).i = apply(p,x).i and
 A10:   i+1 in dom apply(p,x);
            i <= i+1 & i+1 <= len apply(p,x) by A10,FINSEQ_3:27,NAT_1:38;
@@ -1321,8 +1330,9 @@ then A13:    i in dom apply(p,x) & i in dom p by A11,FINSEQ_3:27;
 ;
     end;
     end;
-A14:  for i being Nat holds P[i] from NAT_1:sch 1(A7,A8);
-         now let i be Nat; assume i in dom <*f.(apply(p,x).(len p+1))*>;
+A14:  for i being Element of NAT holds P[i] from NAT_1:sch 1(A7,A8);
+         now let i be Element of NAT;
+          assume i in dom <*f.(apply(p,x).(len p+1))*>;
       then i in Seg 1 by FINSEQ_1:55;
 then A15:   i = 1 by FINSEQ_1:4,TARSKI:def 1;
 then A16:   f.(apply(p^<*f*>,x).(len p+i)) = apply(p^<*f*>,x).((len apply(p,x))
@@ -1625,7 +1635,7 @@ definition let IT be FinSequence;
  attr IT is FuncSeq-like means:
 Def8:
   ex p being FinSequence st len p = len IT+1 &
-   for i being Nat st i in dom IT holds IT.i in Funcs(p.i, p.(i+1));
+   for i being Element of NAT st i in dom IT holds IT.i in Funcs(p.i, p.(i+1));
 end;
 
 theorem Th62:
@@ -1634,7 +1644,8 @@ theorem Th62:
   proof let p,q be FinSequence;
    given pq being FinSequence such that
 A1:  len pq = len (p^q)+1 and
-A2:  for i being Nat st i in dom (p^q) holds (p^q).i in Funcs(pq.i, pq.(i+1));
+A2:  for i being Element of NAT st i in dom (p^q)
+ holds (p^q).i in Funcs(pq.i, pq.(i+1));
 A3:  len (p^q) = len p+len q by FINSEQ_1:35;
    reconsider p1 = pq|Seg (len p+1), p2 = pq|Seg len p
      as FinSequence by FINSEQ_1:19;
@@ -1643,7 +1654,7 @@ A3:  len (p^q) = len p+len q by FINSEQ_1:35;
      then len p+1 <= len pq by A1,XREAL_1:8;
     hence
 A4:   len p1 = len p+1 by FINSEQ_1:21;
-    let i be Nat; assume
+    let i be Element of NAT; assume
           i in dom p;
      then (p^q).i = p.i & i in dom (p^q) & i in dom p1 & i+1 in dom p1
       by A4,Th24,FINSEQ_1:def 7,FINSEQ_3:24;
@@ -1661,7 +1672,7 @@ then A6:  len p2 = len p & len pq = len p2+len q2 by A5,FINSEQ_1:21,35
     then len p+(len q+1) = len p+len q2 by A1,A3;
    hence
 A7:  len q2 = len q+1;
-   let x be Nat; assume
+   let x be Element of NAT; assume
           x in dom q;
     then (p^q).(len p+x) = q.x & x in dom q2 & x+1 in dom q2 & len p+x in dom
 (p^q)
@@ -1677,10 +1688,10 @@ registration
   proof let q be FinSequence;
    given p being FinSequence such that
          len p = len q+1 and
-A1:  for i being Nat st i in dom q holds q.i in Funcs(p.i, p.(i+1));
+A1:  for i being Element of NAT st i in dom q holds q.i in Funcs(p.i, p.(i+1));
    let i be set; assume
 A2:  i in dom q;
-    then reconsider i as Nat;
+    then reconsider i as Element of NAT;
          q.i in Funcs(p.i, p.(i+1)) by A1,A2;
     then ex f being Function st q.i = f & dom f = p.i & rng f c= p.(i+1)
      by FUNCT_2:def 2;
@@ -1705,7 +1716,7 @@ registration let f be Function;
  coherence
   proof set p = <*f*>; take q = <*dom f, rng f*>;
    thus len q = 1+1 by FINSEQ_1:61 .= len p+1 by FINSEQ_1:57;
-   let i be Nat; assume i in dom p;
+   let i be Element of NAT; assume i in dom p;
     then i in {1} by FINSEQ_1:4,55;
     then i = 1 by TARSKI:def 1;
     then p.i = f & q.i = dom f & q.(i+1) = rng f by FINSEQ_1:57,61;
@@ -1764,7 +1775,7 @@ A8:    q = <*y*>^s & len q = len s+1 by A6,REWRITE1:5;
 then A9:    firstdom (q^<*f*>) = proj1 y & firstdom q = proj1 y by A8,Def6;
       consider p being FinSequence such that
             len p = len (q^<*f*>)+1 and
-A10:    for i being Nat st i in dom (q^<*f*>)
+A10:    for i being Element of NAT st i in dom (q^<*f*>)
         holds (q^<*f*>).i in Funcs(p.i, p.(i+1)) by A4,Def8;
             len <*f*> = 1 by FINSEQ_1:57;
 then A11:    len (q^<*f*>) = len q+1 by FINSEQ_1:35;
@@ -1816,7 +1827,8 @@ theorem
 A1:  rng f c= firstdom p;
    consider q being FinSequence such that
 A2:  len q = len p+1 and
-A3:  for i being Nat st i in dom p holds p.i in Funcs(q.i, q.(i+1)) by Def8;
+A3:  for i being Element of NAT st i in dom p
+ holds p.i in Funcs(q.i, q.(i+1)) by Def8;
    set r = <*dom f*>^q;
 A4:  len <*dom f*> = 1 & len <*f*> = 1 by FINSEQ_1:57;
 then A5:  len (<*f*>^p) = len p+1 & len r = 1+len q by FINSEQ_1:35;
@@ -1834,7 +1846,7 @@ A8:    p.1 = g & dom g = q.1 & rng g c= q.2 by FUNCT_2:def 2;
          <*f*>^p is FuncSeq-like
      proof take r;
       thus len r = len (<*f*>^p)+1 by A2,A5;
-      let i be Nat; assume
+      let i be Element of NAT; assume
             i in dom (<*f*>^p);
 then A9:    i <= len p+1 & i >= 1 by A5,FINSEQ_3:27;
             1 <= len q by A2,NAT_1:29;
@@ -1871,7 +1883,8 @@ theorem
 A1:  lastrng p c= dom f;
    consider q being FinSequence such that
 A2:  len q = len p+1 and
-A3:  for i being Nat st i in dom p holds p.i in Funcs(q.i, q.(i+1)) by Def8;
+A3:  for i being Element of NAT st i in dom p
+ holds p.i in Funcs(q.i, q.(i+1)) by Def8;
          q <> {} by A2,FINSEQ_1:25;
    then consider q' being FinSequence, x being set such that
 A4: q = q'^<*x*> by FINSEQ_1:63;
@@ -1897,7 +1910,7 @@ A10:    p.len p = g & dom g = q.len p & rng g c= q.(len p+1) by FUNCT_2:def 2;
          p^<*f*> is FuncSeq-like
      proof take r;
       thus len r = len (p^<*f*>)+1 by A2,A5;
-      let i be Nat; assume
+      let i be Element of NAT; assume
             i in dom (p^<*f*>);
 then A11:    i <= len p+1 & i >= 1 by A5,FINSEQ_3:27;
 then A12:    i = len p+1 or len p >= i by NAT_1:26;
@@ -2010,19 +2023,19 @@ end;
 
 definition
  let q be non-empty non empty FinSequence;
- mode FuncSequence of q -> FinSequence means:
-Def10:
+ mode FuncSequence of q -> FinSequence means :Def10:
   len it+1 = len q &
-  for i being Nat st i in dom it holds it.i in Funcs(q.i,q.(i+1));
+  for i being Element of NAT st i in dom it holds it.i in Funcs(q.i,q.(i+1));
  existence
   proof len q <> 0 by FINSEQ_1:25;
    then consider n being Nat such that
 A1:  len q = n+1 by NAT_1:22;
+   reconsider n as Element of NAT by ORDINAL1:def 13;
    defpred P[set,set] means
-     ex i being Nat st i = $1 & $2 in Funcs(q.i,q.(i+1));
+     ex i being Element of NAT st i = $1 & $2 in Funcs(q.i,q.(i+1));
 A2:  for x being set st x in Seg n ex y being set st P[x,y]
      proof let x be set; assume
-A3:    x in Seg n; then reconsider i = x as Nat;
+A3:    x in Seg n; then reconsider i = x as Element of NAT;
             i <= n & n <= n+1 by A3,FINSEQ_1:3,NAT_1:29;
        then i >= 1 & i+1 >= 1 & i+1 <= n+1 & i <= n+1
         by A3,XXREAL_0:2,XREAL_1:8,FINSEQ_1:3,NAT_1:29;
@@ -2033,13 +2046,13 @@ A3:    x in Seg n; then reconsider i = x as Nat;
      end;
    consider f being Function such that
 A4:  dom f = Seg n and
-A5:  for x being set st x in Seg n holds P[x,f.x]
-      from ZFREFLE1:sch 1(A2);
+A5:  for x being set st x in Seg n holds P[x,f.x] from ZFREFLE1:sch 1(A2);
    reconsider f as FinSequence by A4,FINSEQ_1:def 2;
    take f;
    thus len f+1 = len q by A1,A4,FINSEQ_1:def 3;
-   let i be Nat; assume i in dom f;
-    then ex j being Nat st j = i & f.i in Funcs(q.j,q.(j+1)) by A4,A5;
+   let i be Element of NAT; assume i in dom f;
+    then ex j being Element of NAT
+     st j = i & f.i in Funcs(q.j,q.(j+1)) by A4,A5;
    hence thesis;
   end;
 end;
@@ -2052,7 +2065,7 @@ registration
    thus p is FuncSeq-like
      proof take q; thus thesis by Def10; end;
    let x be set; assume
-A1:  x in dom p; then reconsider i = x as Nat;
+A1:  x in dom p; then reconsider i = x as Element of NAT;
          len q = len p+1 by Def10;
     then i in dom q & i+1 in dom q by A1,Th24;
    then reconsider X = q.i, Y = q.(i+1) as non empty set by FUNCT_1:def 15;
@@ -2128,19 +2141,19 @@ A2: p2.0 = id(dom f \/ rng f) &
      for k being Element of NAT
       ex g being Function st g = p2.k & p2.(k+1) = g * f;
   set FX = PFuncs(dom f \/ rng f,dom f \/ rng f);
-  defpred P[Nat,set,set] means
+  defpred P[Element of NAT,set,set] means
     ex g being Function st g = $2 & $3 = g*f;
   reconsider ID = id(dom f \/ rng f) as Element of FX by PARTFUN1:119;
 A3: p1.0 = ID &
-     for k being Nat holds P[k,p1.k,p1.(k+1)] by A1;
+     for k being Element of NAT holds P[k,p1.k,p1.(k+1)] by A1;
 A4: p2.0 = ID &
-     for k being Nat holds P[k,p2.k,p2.(k+1)] by A2;
-A5: for k being Nat for x,y1,y2 being Element of FX
+     for k being Element of NAT holds P[k,p2.k,p2.(k+1)] by A2;
+A5: for k being Element of NAT for x,y1,y2 being Element of FX
       st P[k,x,y1] & P[k,x,y2] holds y1 = y2;
      p1 = p2 from RECDEF_1:sch 10(A3,A4,A5);
   hence thesis; end;
 
-definition let f be Function; let n be Element of NAT;
+definition let f be Function; let n be Nat;
   func iter (f,n) -> Function means :Def11:
   ex p being Function of NAT,PFuncs(dom f \/ rng f,dom f \/ rng f) st
    it = p.n & p.0 = id(dom f \/ rng f) &
@@ -2148,11 +2161,11 @@ definition let f be Function; let n be Element of NAT;
 existence
  proof
   set FX = PFuncs(dom f \/ rng f,dom f \/ rng f);
-  defpred P[Nat,set,set] means
+  defpred P[Element of NAT,set,set] means
   ex g being Function st g = $2 & $3 = g * f;
-A1: for n being Nat for x being Element of FX
+A1: for n being Element of NAT for x being Element of FX
       ex y being Element of FX st P[n,x,y]
-  proof let n be Nat; let x be Element of FX;
+  proof let n be Element of NAT; let x be Element of FX;
    reconsider g = x as PartFunc of dom f \/ rng f,dom f \/
  rng f by PARTFUN1:120;
         dom f c= dom f \/ rng f & rng f c= dom f \/ rng f by XBOOLE_1:7;
@@ -2165,13 +2178,14 @@ RELSET_1:11;
   consider p being Function of NAT,FX such that
 A2: p.0 = ID & for n being Element of NAT holds P[n,p.n,p.(n+1)]
      from RECDEF_1:sch 2(A1);
-       p.n is PartFunc of dom f \/ rng f,dom f \/ rng f by PARTFUN1:120;
+   reconsider n'=n as Element of NAT by ORDINAL1:def 13;
+   p.n' is PartFunc of dom f \/ rng f,dom f \/ rng f by PARTFUN1:120;
   hence thesis by A2;
  end;
 uniqueness by Lm2;
 end;
 
-reserve m,n,k for Nat;
+reserve m,n,k for Element of NAT;
 
 Lm3: id(dom f \/ rng f)*f = f & f*id(dom f \/ rng f) = f
  proof dom f c= dom f \/ rng f & rng f c= dom f \/ rng f by XBOOLE_1:7;
@@ -2192,8 +2206,10 @@ Lm4: rng f c= dom f implies iter (f,0) = id(dom f)
   hence thesis by Th70; end;
 
 theorem Th71:
-   iter(f,n+1) = iter(f,n)*f
+  for n be Nat holds iter(f,n+1) = iter(f,n)*f
 proof
+  let n be Nat;
+  reconsider n as Element of NAT by ORDINAL1:def 13;
   consider p being Function of NAT,PFuncs(dom f \/ rng f,dom f \/ rng f)
     such that
 A1:  p.(n+1) = iter(f,n+1) and
@@ -2213,27 +2229,29 @@ theorem Th72:
  end;
 
 theorem Th73:
-   iter(f,n+1) = f*iter(f,n)
+  for n being Nat holds iter(f,n+1) = f*iter(f,n)
  proof
+   let n be Nat;
     defpred P[Nat] means iter(f,$1+1) = f*iter(f,$1);
-       iter(f,0+1) = f by Th72
+    iter(f,0+1) = f by Th72
                 .= f*id(dom f \/ rng f) by Lm3
                 .= f*iter(f,0) by Th70;
 then A1: P[ 0];
-A2:  P[k] implies P[k+1]
-   proof assume
+A2:  for k be Nat st P[k] holds P[k+1]
+   proof
+    let k be Nat; assume
 A3:  iter(f,k+1) = f*iter(f,k);
     thus f*iter(f,k+1) = f*(iter(f,k)*f) by Th71
                       .= f*iter(f,k)*f by RELAT_1:55
                       .= iter(f,k+1+1) by A3,Th71;
    end;
-       P[k] from NAT_1:sch 1(A1,A2);
+   for k be Nat holds P[k] from NAT_1:sch 2(A1,A2);
   hence thesis; end;
 
 theorem Th74:
    dom iter(f,n) c= dom f \/ rng f & rng iter(f,n) c= dom f \/ rng f
  proof
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
     dom iter(f,$1) c= dom f \/ rng f & rng iter(f,$1) c= dom f \/ rng f;
        iter(f,0) = id(dom f \/ rng f) &
   dom id(dom f \/ rng f) = dom f \/ rng f & rng id(dom f \/ rng f) = dom f \/
@@ -2252,26 +2270,28 @@ A3:  dom iter(f,k) c= dom f \/ rng f & rng iter(f,k) c= dom f \/ rng f;
   hence thesis; end;
 
 theorem
-        n <> 0 implies dom iter(f,n) c= dom f & rng iter(f,n) c= rng f
+  n <> 0 implies dom iter(f,n) c= dom f & rng iter(f,n) c= rng f
  proof
-  defpred P[Nat] means dom iter(f,$1+1) c= dom f & rng iter(f,$1+1) c= rng f;
+  defpred P[Nat] means
+   dom iter(f,$1+1) c= dom f & rng iter(f,$1+1) c= rng f;
  A1:  P[ 0] by Th72;
-A2:  P[k] implies P[k+1]
-  proof assume
-       dom iter(f,k+1) c= dom f & rng iter(f,k+1) c= rng f;
-      iter(f,k+1+1) = f*iter(f,k+1) & iter(f,k+1+1) = iter(f,k+1)*f by Th71
-,Th73
-;
+A2:  for k be Nat st P[k] holds P[k+1]
+  proof let k be Nat;
+   assume dom iter(f,k+1) c= dom f & rng iter(f,k+1) c= rng f;
+   iter(f,k+1+1) = f*iter(f,k+1) & iter(f,k+1+1) = iter(f,k+1)*f by Th71
+,Th73;
    hence thesis by RELAT_1:44,45;
   end;
-A3:  P[k] from NAT_1:sch 1(A1,A2);
-  assume n <> 0; then ex k st n = k+1 by NAT_1:22;
-  hence thesis by A3; end;
+A3:  for k be Nat holds P[k] from NAT_1:sch 2(A1,A2);
+  assume n <> 0; then consider k be Nat such that AA:n = k+1 by NAT_1:22;
+  reconsider k as Element of NAT by ORDINAL1:def 13;
+  thus thesis by AA,A3; end;
 
 theorem Th76:
    rng f c= dom f implies dom iter(f,n) = dom f & rng iter(f,n) c= dom f
  proof
-  defpred P[Nat] means dom iter(f,$1) = dom f & rng iter(f,$1) c= dom f;
+  defpred P[Element of NAT] means
+   dom iter(f,$1) = dom f & rng iter(f,$1) c= dom f;
  assume rng f c= dom f;
    then iter(f,0) = id dom f by Lm4;
    then A1:  P[ 0] by RELAT_1:71;
@@ -2283,7 +2303,7 @@ A3:  dom iter(f,k) = dom f & rng iter(f,k) c= dom f;
         rng iter(f,k+1) c= rng iter(f,k) by A3,RELAT_1:45,46;
    hence thesis by A3,XBOOLE_1:1;
   end;
-     P[k] from NAT_1:sch 1(A1,A2);
+  P[k] from NAT_1:sch 1(A1,A2);
   hence thesis; end;
 
 theorem Th77:
@@ -2293,14 +2313,14 @@ theorem Th77:
  end;
 
 theorem
-         id(dom f \/ rng f)*iter(f,n) = iter(f,n)
+  id(dom f \/ rng f)*iter(f,n) = iter(f,n)
  proof rng iter(f,n) c= dom f \/ rng f by Th74;
  hence thesis by RELAT_1:79; end;
 
 theorem Th79:
    iter(f,n)*iter(f,m) = iter(f,n+m)
  proof
-   defpred P[Nat] means iter(f,n)*iter(f,$1) = iter(f,n+$1);
+   defpred P[Element of NAT] means iter(f,n)*iter(f,$1) = iter(f,n+$1);
       iter(f,n)*iter(f,0) = iter(f,n)*id(dom f \/ rng f) by Th70
                         .= iter(f,n+0) by Th77;
 then A1: P[ 0];
@@ -2311,7 +2331,7 @@ A2:  P[k] implies P[k+1]
                                .= iter(f,n+k+1) by A3,Th71
                                .= iter(f,n+(k+1));
    end;
-       P[k] from NAT_1:sch 1(A1,A2);
+   P[k] from NAT_1:sch 1(A1,A2);
   hence thesis; end;
 
 Lm5: iter(iter(f,m),k) = iter(f,m*k) implies
@@ -2325,17 +2345,19 @@ Lm5: iter(iter(f,m),k) = iter(f,m*k) implies
 theorem
         n <> 0 implies iter(iter(f,m),n) = iter(f,m*n)
  proof
-    defpred P[Nat] means iter(iter(f,m),$1+1) = iter(f,m*($1+1));
+    defpred P[Element of NAT] means iter(iter(f,m),$1+1) = iter(f,m*($1+1));
 A1: P[ 0] by Th72;
 A2: P[k] implies P[k+1] by Lm5;
 A3: P[k] from NAT_1:sch 1(A1,A2);
-  assume n <> 0; then ex k st n = k+1 by NAT_1:22;
+  assume n <> 0; then consider k be Nat such that AA:n = k+1 by NAT_1:22;
+  reconsider k as Element of NAT by ORDINAL1:def 13;
+  n=k+1 by AA;
   hence thesis by A3; end;
 
 theorem Th81:
    rng f c= dom f implies iter(iter(f,m),n) = iter(f,m*n)
  proof
-    defpred P[Nat] means iter(iter(f,m),$1) = iter(f,m*$1);
+    defpred P[Element of NAT] means iter(iter(f,m),$1) = iter(f,m*$1);
  assume
 A1:   rng f c= dom f;
    then dom iter(f,m) = dom f & rng iter(f,m) c= dom f by Th76;
@@ -2345,14 +2367,14 @@ then iter(iter(f,m),0) = id(dom f) by Th70
                      .= iter(f,m*0) by Th70;
 then A2: P[ 0];
 A3: P[k] implies P[k+1] by Lm5;
-       P[k] from NAT_1:sch 1(A2,A3);
+  P[k] from NAT_1:sch 1(A2,A3);
   hence thesis; end;
 
 theorem
-        iter({},n) = {}
+  iter({},n) = {}
  proof
-   defpred P[Nat] means iter({},$1) = {};
-        iter({},0) = id (dom {} \/ rng {}) by Th70
+   defpred P[Element of NAT] means iter({},$1) = {};
+   iter({},0) = id (dom {} \/ rng {}) by Th70
                .= {} by RELAT_1:81;
 then A1:  P[0 ];
 A2:  P[k] implies P[k+1]
@@ -2363,17 +2385,17 @@ A2:  P[k] implies P[k+1]
   hence thesis; end;
 
 theorem
-        iter(id(X),n) = id(X)
+  iter(id(X),n) = id(X)
  proof dom id X = X & rng id X = X by RELAT_1:71;
 then A1: id(dom id X \/ rng id X) = id X;
-  defpred P[Nat] means iter(id(X),$1) = id(X);
+  defpred P[Element of NAT] means iter(id(X),$1) = id(X);
 A2:  P[ 0] by A1,Th70;
 A3:  P[k] implies P[k+1]
    proof assume A4: P[k];
     thus iter(id(X),k+1) = iter(id(X),k)*id(X) by Th71
                         .= id(X) by A4,FUNCT_2:23;
    end;
-       P[k] from NAT_1:sch 1(A2,A3);
+   P[k] from NAT_1:sch 1(A2,A3);
   hence thesis; end;
 
 theorem
@@ -2387,7 +2409,7 @@ A1:  rng f misses dom f;
  end;
 
 theorem
-        for f being Function of X,X holds iter(f,n) is Function of X,X
+  for f being Function of X,X holds iter(f,n) is Function of X,X
  proof let f be Function of X,X;
 A1:  X = {} implies X = {};
    then A2: dom f = X & rng f c= X by FUNCT_2:def 1;
@@ -2405,12 +2427,12 @@ theorem
   hence thesis; end;
 
 theorem
-        for f being Function of X,X holds iter(iter(f,m),n) = iter(f,m*n)
+  for f being Function of X,X holds iter(iter(f,m),n) = iter(f,m*n)
  proof let f be Function of X,X;    rng f c= dom f by Lm1;
   hence thesis by Th81; end;
 
 theorem
-        for f being PartFunc of X,X holds iter(f,n) is PartFunc of X,X
+  for f being PartFunc of X,X holds iter(f,n) is PartFunc of X,X
  proof let f be PartFunc of X,X;
        dom f \/ rng f c= X &
    dom iter(f,n) c= dom f \/ rng f & rng iter(f,n) c= dom f \/ rng f
@@ -2425,7 +2447,7 @@ theorem
 A1:   n <> 0 and
 A2:   a in X and
 A3:   f = X --> a;
-      defpred P[Nat] means iter(f,$1+1) = f;
+      defpred P[Element of NAT] means iter(f,$1+1) = f;
 A4:   P[ 0] by Th72;
 A5:   now let k such that
 A6:    P[k];
@@ -2443,25 +2465,28 @@ then A10:    f.x = a by A3,A7,FUNCOP_1:13;
        hence P[k+1] by A8,FUNCT_1:9;
       end;
 A11:  P[k] from NAT_1:sch 1(A4,A5);
-        ex k st n = k+1 by A1,NAT_1:22;
+     consider k be Nat such that AA:n = k+1 by A1,NAT_1:22;
+     reconsider k as Element of NAT by ORDINAL1:def 13;
+     n = k + 1 by AA;
    hence thesis by A11; end;
 
 theorem
-      for f being Function, n being Nat
+  for f being Function, n being Element of NAT
   holds iter(f,n) = compose(n|->f,dom f \/ rng f)
   proof let f be Function;
-    defpred P[Nat] means iter(f,$1) = compose($1|->f,dom f \/ rng f);
+    defpred P[Element of NAT] means
+     iter(f,$1) = compose($1|->f,dom f \/ rng f);
        iter(f,0) = id (dom f \/ rng f) by Th70
       .= compose({},dom f \/ rng f) by Th41
       .= compose(0|->f,dom f \/ rng f) by FINSEQ_2:72;
 then A1:  P[ 0];
-A2:  now let n be Nat; assume P[n];
+A2:  now let n be Element of NAT; assume P[n];
      then iter(f,n+1) = f*compose(n|->f,dom f \/ rng f) by Th73
        .= compose((n|->f)^<*f*>,dom f \/ rng f) by Th43
        .= compose((n+1)|->f,dom f \/ rng f) by FINSEQ_2:74;
       hence P[n+1];
     end;
-   thus for n being Nat holds P[n] from NAT_1:sch 1(A1,A2);
+   thus for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
   end;
 
 begin :: Addenda

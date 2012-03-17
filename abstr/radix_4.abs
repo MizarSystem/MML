@@ -8,8 +8,9 @@ environ
 
  vocabularies INT_1, NAT_1, ARYTM_1, POWER, MIDSP_3, FINSEQ_1, FUNCT_1,
       RELAT_1, RLVECT_1, RADIX_1, FINSEQ_4, RADIX_3, RADIX_4, GROUP_1;
- notations TARSKI, SUBSET_1, XCMPLX_0, INT_1, NAT_1, FUNCT_1, POWER, XXREAL_0,
-      FINSEQ_1, FINSEQ_4, BINARITH, TREES_4, WSIERP_1, RADIX_1, RADIX_3;
+ notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, INT_1, NAT_1, FUNCT_1, POWER,
+      XXREAL_0, FINSEQ_1, FINSEQ_4, BINARITH, TREES_4, WSIERP_1, RADIX_1,
+      RADIX_3;
  constructors XXREAL_0, MEMBERED, FINSEQ_4, POWER, BINARITH, RADIX_3;
  registrations INT_1, RELSET_1, MEMBERED, XREAL_0;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
@@ -17,16 +18,16 @@ environ
 
 begin :: Some Useful Theorems
 
-reserve i,n,m,k,x,y for Nat,
+reserve i,n,m,k,x,y for Element of NAT,
         i1 for Integer;
 
 theorem :: RADIX_4:1
-  for k be Nat st 2 <= k holds 2 < Radix(k);
+  for k be Element of NAT st 2 <= k holds 2 < Radix(k);
 
 begin :: Carry operation at n+1 digits Radix-2^k SD_Sub number
 
 theorem :: RADIX_4:2
-  for x,y be Integer, k be Nat st 3 <= k holds
+  for x,y be Integer, k be Element of NAT st 3 <= k holds
     SDSub_Add_Carry( SDSub_Add_Carry(x,k) + SDSub_Add_Carry(y,k), k ) = 0;
 
 theorem :: RADIX_4:3
@@ -39,7 +40,7 @@ theorem :: RADIX_4:4
     DigA_SDSub(SD2SDSub(DecSD(m,1,k)),1+1) = SDSub_Add_Carry(m, k);
 
 theorem :: RADIX_4:5
-  for k,x,n be Nat st
+  for k,x,n be Element of NAT st
     n >= 1 & k >= 3 & x is_represented_by (n+1),k holds
       DigA_SDSub(SD2SDSub(DecSD(x mod (Radix(k) |^ n),n,k)),n+1)
         = SDSub_Add_Carry(DigA(DecSD(x,n,k),n),k);
@@ -49,7 +50,7 @@ theorem :: RADIX_4:6
     DigA_SDSub(SD2SDSub(DecSD(m,1,k)),1) = m - SDSub_Add_Carry(m,k)*Radix(k);
 
 theorem :: RADIX_4:7
-  for k,x,n be Nat st
+  for k,x,n be Element of NAT st
     n >= 1 & k >= 2 & x is_represented_by (n+1),k holds
       (Radix(k) |^ n) * DigA_SDSub(SD2SDSub(DecSD(x,n+1,k)),n+1)
       = (Radix(k) |^ n) * DigA(DecSD(x,n+1,k),n+1)
@@ -59,7 +60,7 @@ theorem :: RADIX_4:7
 begin :: Definition for adder operation on Radix-2^k SD-Sub number
 
 definition
-  let i,n,k be Nat,
+  let i,n,k be Element of NAT,
       x be Tuple of n,(k-SD_Sub), y be Tuple of n,(k-SD_Sub);
   assume i in Seg n & k >= 2;
   func SDSubAddDigit(x,y,i,k) -> Element of k-SD_Sub equals
@@ -69,7 +70,7 @@ definition
       + SDSub_Add_Carry( DigA_SDSub(x,i -'1) + DigA_SDSub(y,i -'1), k);
 end;
 
-definition let n,k be Nat,x,y be Tuple of n,(k-SD_Sub);
+definition let n,k be Element of NAT,x,y be Tuple of n,(k-SD_Sub);
   func x '+' y -> Tuple of n,(k-SD_Sub) means
 :: RADIX_4:def 2
 

@@ -10,15 +10,15 @@ environ
       AMI_1, CARD_3, QC_LANG1, ZF_REFLE, MOD_4, ALG_1, TDGROUP, FUNCT_4,
       REWRITE1, FINSEQ_1, FUNCT_7, FUNCT_2, MSUALG_4, CIRCUIT2, EQREL_1,
       MCART_1, MSUALG_5, MSUALG_6, FINSEQ_4, PARTFUN1, RELAT_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, MCART_1, STRUCT_0,
-      RELAT_1, RELAT_2, RELSET_1, EQREL_1, REWRITE1, FUNCT_1, PARTFUN1,
-      FUNCT_2, FINSEQ_1, CARD_3, FINSEQ_4, PBOOLE, FUNCOP_1, MSUALG_1,
-      MSUALG_3, MSUALG_4, MSUALG_5, FUNCT_7, XXREAL_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
+      MCART_1, STRUCT_0, RELAT_1, RELAT_2, RELSET_1, EQREL_1, REWRITE1,
+      FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, CARD_3, FINSEQ_4, PBOOLE, FUNCOP_1,
+      MSUALG_1, MSUALG_3, MSUALG_4, MSUALG_5, FUNCT_7, XXREAL_0;
  constructors FRAENKEL, XXREAL_0, NAT_1, FINSEQ_4, REWRITE1, FUNCT_7, MSUALG_3,
       MSUALG_5;
  registrations FUNCT_1, PBOOLE, RELSET_1, STRUCT_0, MSUALG_1, REWRITE1,
       MSUALG_3, MSUALG_4, MSUALG_5, ALTCAT_1, FUNCT_7, FINSEQ_1, XREAL_0,
-      ARYTM_3, FUNCT_2, PARTFUN1, FUNCOP_1, FRAENKEL, XXREAL_0;
+      ARYTM_3, FUNCT_2, PARTFUN1, FUNCOP_1, FRAENKEL, XXREAL_0, NAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -64,7 +64,7 @@ theorem :: MSUALG_6:3
  for S being non empty non void ManySortedSign
  for o being OperSymbol of S
  for A being MSAlgebra over S holds
-  Args(o,A) <> {} iff for i being Nat st i in dom the_arity_of o
+  Args(o,A) <> {} iff for i being Element of NAT st i in dom the_arity_of o
     holds (the Sorts of A).((the_arity_of o)/.i) <> {};
 
 registration
@@ -114,25 +114,26 @@ definition
 
   for s1,s2 being SortSymbol of S holds [s1,s2] in it iff
    ex o being OperSymbol of S st the_result_sort_of o = s2 &
-   ex i being Nat st i in dom the_arity_of o & (the_arity_of o)/.i = s1;
+   ex i being Element of NAT st i in dom the_arity_of o &
+    (the_arity_of o)/.i = s1;
 end;
 
 theorem :: MSUALG_6:7
  for S being non empty non void ManySortedSign, o being OperSymbol of S
  for A being MSAlgebra over S, a being Function st a in Args(o,A)
- for i being Nat, x being Element of A,(the_arity_of o)/.i holds
+ for i being (Element of NAT), x being Element of A,(the_arity_of o)/.i holds
   a+*(i,x) in Args(o,A);
 
 theorem :: MSUALG_6:8
  for A1,A2 being MSAlgebra over S, h being ManySortedFunction of A1,A2
  for o being OperSymbol of S st Args(o,A1) <> {} & Args(o,A2) <> {}
- for i being Nat st i in dom the_arity_of o
+ for i being Element of NAT st i in dom the_arity_of o
  for x being Element of A1,(the_arity_of o)/.i holds
   h.((the_arity_of o)/.i).x in (the Sorts of A2).((the_arity_of o)/.i);
 
 theorem :: MSUALG_6:9
  for S being non empty non void ManySortedSign, o being OperSymbol of S
- for i being Nat st i in dom the_arity_of o
+ for i being Element of NAT st i in dom the_arity_of o
  for A1,A2 being MSAlgebra over S
  for h being ManySortedFunction of A1,A2
  for a,b being Element of Args(o,A1) st a in Args(o,A1) & h#a in Args(o,A2)
@@ -143,7 +144,7 @@ theorem :: MSUALG_6:9
 
 definition
  let S be non empty non void ManySortedSign, o be OperSymbol of S;
- let i be Nat;
+ let i be Element of NAT;
  let A be MSAlgebra over S;
  let a be Function;
  func transl(o,i,a,A) -> Function means
@@ -156,7 +157,7 @@ end;
 
 theorem :: MSUALG_6:10
  for S being non empty non void ManySortedSign, o being OperSymbol of S
- for i being Nat st i in dom the_arity_of o
+ for i being Element of NAT st i in dom the_arity_of o
  for A being feasible MSAlgebra over S, a being Function
   st a in Args(o,A) holds
   transl(o,i,a,A) is Function of (the Sorts of A).((the_arity_of o)/.i),
@@ -170,7 +171,8 @@ definition
 :: MSUALG_6:def 5
 
   ex o being OperSymbol of S st the_result_sort_of o = s2 &
-  ex i being Nat st i in dom the_arity_of o & ((the_arity_of o)/.i) = s1 &
+  ex i being Element of NAT st i in dom the_arity_of o &
+   ((the_arity_of o)/.i) = s1 &
   ex a being Function st a in Args(o,A) & f = transl(o,i,a,A);
 end;
 
@@ -199,7 +201,8 @@ theorem :: MSUALG_6:14
  for q being RedSequence of TranslationRel S,
      p being Function-yielding FinSequence st
    len q = len p+1 & s1 = q.1 & s2 = q.len q &
-   for i being Nat, f being Function, s1,s2 being SortSymbol of S st
+   for i being (Element of NAT), f being Function,
+   s1,s2 being SortSymbol of S st
       i in dom p & f = p.i & s1 = q.i & s2 = q.(i+1)
      holds f is_e.translation_of A,s1,s2
  holds compose(p, (the Sorts of A).s1) is
@@ -219,7 +222,8 @@ definition
      p being Function-yielding FinSequence st
    it = compose(p, (the Sorts of A).s1) &
    len q = len p+1 & s1 = q.1 & s2 = q.len q &
-   for i being Nat, f being Function, s1,s2 being SortSymbol of S st
+   for i being (Element of NAT), f being Function,
+   s1,s2 being SortSymbol of S st
       i in dom p & f = p.i & s1 = q.i & s2 = q.(i+1)
      holds f is_e.translation_of A,s1,s2;
 end;
@@ -231,7 +235,8 @@ theorem :: MSUALG_6:15
  for q being RedSequence of TranslationRel S,
      p being Function-yielding FinSequence st
    len q = len p+1 & s1 = q.1 & s2 = q.len q &
-   for i being Nat, f being Function, s1,s2 being SortSymbol of S st
+   for i being (Element of NAT), f being Function,
+   s1,s2 being SortSymbol of S st
       i in dom p & f = p.i & s1 = q.i & s2 = q.(i+1)
      holds f is_e.translation_of A,s1,s2
  holds compose(p, (the Sorts of A).s1) is Translation of A,s1,s2;
@@ -284,14 +289,14 @@ scheme :: MSUALG_6:sch 1
 theorem :: MSUALG_6:21
  for A1,A2 being non-empty MSAlgebra over S
  for h being ManySortedFunction of A1,A2 st h is_homomorphism A1,A2
- for o being OperSymbol of S, i being Nat st i in dom the_arity_of o
+ for o being OperSymbol of S, i being Element of NAT st i in dom the_arity_of o
  for a being Element of Args(o,A1) holds
   (h.the_result_sort_of o)*transl(o,i,a,A1) =
      transl(o,i,h#a,A2)*(h.((the_arity_of o)/.i));
 
 theorem :: MSUALG_6:22
      for h being Endomorphism of A
- for o being OperSymbol of S, i being Nat st i in dom the_arity_of o
+ for o being OperSymbol of S, i being Element of NAT st i in dom the_arity_of o
  for a being Element of Args(o,A) holds
   (h.the_result_sort_of o)*transl(o,i,a,A) =
      transl(o,i,h#a,A)*(h.((the_arity_of o)/.i));
@@ -336,7 +341,7 @@ definition
 
   for o being OperSymbol of S, a,b being Function st
    a in Args(o,A) & b in Args(o,A) &
-   (for n be Nat st n in dom the_arity_of o
+   (for n be Element of NAT st n in dom the_arity_of o
      holds [a.n,b.n] in R.((the_arity_of o)/.n))
   holds [Den(o,A).a,Den(o,A).b] in R.(the_result_sort_of o);
 

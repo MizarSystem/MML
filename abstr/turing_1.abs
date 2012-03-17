@@ -23,7 +23,7 @@ environ
 
 begin :: Preliminaries
 
-reserve n,i,j,k for Nat;
+reserve n,i,j,k for Element of NAT;
 
 definition
  let A,B be non empty set, f be Function of A,B, g be PartFunc of A,B;
@@ -67,18 +67,18 @@ theorem :: TURING_1:5
 theorem :: TURING_1:6
   Sum<*i1,i2,i3,i4*>=i1+i2+i3+i4;
 
-definition let f be FinSequence of NAT,i be Nat;
+definition let f be FinSequence of NAT,i be Element of NAT;
  func Prefix(f,i) -> FinSequence of INT equals
 :: TURING_1:def 2
      f| Seg i;
 end;
 
 theorem :: TURING_1:7
- for x1,x2 being Nat holds Sum Prefix(<*x1,x2*>,1)=x1 &
+ for x1,x2 being Element of NAT holds Sum Prefix(<*x1,x2*>,1)=x1 &
  Sum Prefix(<*x1,x2*>,2)=x1+x2;
 
 theorem :: TURING_1:8
- for x1,x2,x3 being Nat holds Sum Prefix(<*x1,x2,x3*>,1)=x1 &
+ for x1,x2,x3 being Element of NAT holds Sum Prefix(<*x1,x2,x3*>,1)=x1 &
    Sum Prefix(<*x1,x2,x3*>,2)=x1+x2 & Sum Prefix(<*x1,x2,x3*>,3)=x1+x2+x3;
 
 begin :: Definitions and terminology for TURING Machine
@@ -197,8 +197,8 @@ end;
 
 theorem :: TURING_1:16
  for T being TuringStr,s be All-State of T st s is Accept-Halt holds
-  ex k being Nat st ((Computation s).k)`1 = the AcceptS of T &
-   Result s = (Computation s).k & for i be Nat st i < k
+  ex k being Element of NAT st ((Computation s).k)`1 = the AcceptS of T &
+   Result s = (Computation s).k & for i be Element of NAT st i < k
   holds ((Computation s).i)`1 <> the AcceptS of T;
 
 definition
@@ -242,50 +242,54 @@ definition
  let f be FinSequence of NAT, T be TuringStr, t be Tape of T;
  pred t storeData f means
 :: TURING_1:def 14
- for i be Nat st 1 <= i & i < len f holds
+ for i be Element of NAT st 1 <= i & i < len f holds
      t is_1_between Sum Prefix(f,i)+2*(i-1),Sum Prefix(f,i+1)+2*i;
 end;
 
 theorem :: TURING_1:18
- for T being TuringStr,t be Tape of T, s,n be Nat st t storeData <*s,n*>
+ for T being TuringStr,t be Tape of T, s,n be Element of NAT
+  st t storeData <*s,n*>
  holds t is_1_between s,s+n+2;
 
 theorem :: TURING_1:19
- for T being TuringStr, t be Tape of T, s,n be Nat st t is_1_between s,s+n+2
+ for T being TuringStr, t be Tape of T, s,n be Element of NAT
+  st t is_1_between s,s+n+2
  holds t storeData <*s,n*>;
 
 theorem :: TURING_1:20
-  for T being TuringStr, t be Tape of T, s,n be Nat st
+  for T being TuringStr, t be Tape of T, s,n be Element of NAT st
   t storeData <*s,n *> holds
   t.s=0 & t.(s+n+2)=0 & for i be Integer st s < i & i < s+n+2 holds t.i=1;
 
 theorem :: TURING_1:21
- for T being TuringStr,t be Tape of T,s,n1,n2 be Nat st
+ for T being TuringStr,t be Tape of T,s,n1,n2 be Element of NAT st
  t storeData <*s,n1,n2*>
  holds t is_1_between s,s+n1+2 & t is_1_between s+n1+2,s+n1+n2+4;
 
 theorem :: TURING_1:22
-  for T being TuringStr, t be Tape of T, s,n1,n2 be Nat
+  for T being TuringStr, t be Tape of T, s,n1,n2 be Element of NAT
  st t storeData <*s,n1,n2 *> holds
   t.s=0 & t.(s+n1+2)=0 & t.(s+n1+n2+4)=0 &
  (for i be Integer st s < i & i < s+n1+2 holds t.i=1) &
  for i be Integer st s+n1+2 < i & i < s+n1+n2+4 holds t.i=1;
 
 theorem :: TURING_1:23
- for f being FinSequence of NAT,s being Nat st len f >= 1
+ for f being FinSequence of NAT,s being Element of NAT st len f >= 1
   holds Sum Prefix(<*s*>^f,1)=s & Sum Prefix(<*s*>^f,2)=s+f/.1;
 
 theorem :: TURING_1:24
- for f being FinSequence of NAT,s being Nat st len f >= 3
+ for f being FinSequence of NAT,s being Element of NAT st len f >= 3
   holds Sum Prefix(<*s*>^f,1)=s & Sum Prefix(<*s*>^f,2)=s+f/.1 &
    Sum Prefix(<*s*>^f,3)=s+f/.1+f/.2 & Sum Prefix(<*s*>^f,4)=s+f/.1+f/.2+f/.3;
 
 theorem :: TURING_1:25
- for T being TuringStr,t be Tape of T, s be Nat,f be FinSequence of NAT st
+ for T being TuringStr,t be Tape of T, s be Element of NAT,
+ f be FinSequence of NAT st
  len f >=1 & t storeData <*s*>^f holds t is_1_between s,s+ f/.1+2;
 
 theorem :: TURING_1:26
- for T being TuringStr,t be Tape of T, s be Nat,f be FinSequence of NAT st
+ for T being TuringStr,t be Tape of T, s be Element of NAT,
+ f be FinSequence of NAT st
  len f >=3 & t storeData <*s*>^f holds
    t is_1_between s,s+ f/.1+2 &
    t is_1_between s+f/.1+2, s+f/.1+f/.2+4 &
@@ -323,7 +327,7 @@ theorem :: TURING_1:30
 
 theorem :: TURING_1:31
  for s being All-State of SumTuring, t be Tape of SumTuring,
-  head,n1,n2 be Nat
+  head,n1,n2 be Element of NAT
  st s=[0,head,t] & t storeData <*head,n1,n2 *> holds
   s is Accept-Halt & (Result s)`2=1+head &
   (Result s)`3 storeData <*1+head,n1+n2 *>;
@@ -332,10 +336,10 @@ definition
  let T be TuringStr,F be Function;
   pred T computes F means
 :: TURING_1:def 16
-  for s being All-State of T,t being Tape of T, a being Nat,
+  for s being All-State of T,t being Tape of T, a being Element of NAT,
    x being FinSequence of NAT st x in dom F &
    s=[the InitS of T,a,t] & t storeData <*a*>^x holds
-   s is Accept-Halt & ex b, y being Nat st (Result s)`2=b &
+   s is Accept-Halt & ex b, y being Element of NAT st (Result s)`2=b &
    y=F.x & (Result s)`3 storeData <*b*>^<* y *>;
 end;
 
@@ -380,7 +384,8 @@ end;
 canceled;
 
 theorem :: TURING_1:36
- for s being All-State of SuccTuring, t be Tape of SuccTuring,head,n be Nat
+ for s being All-State of SuccTuring, t be Tape of SuccTuring,
+ head,n be Element of NAT
  st s=[0,head,t] & t storeData <*head,n*> holds
   s is Accept-Halt & (Result s)`2=head & (Result s)`3 storeData <*head,n+1*>;
 
@@ -417,7 +422,8 @@ definition
 end;
 
 theorem :: TURING_1:39
- for s being All-State of ZeroTuring, t be Tape of ZeroTuring, head be Nat,
+ for s being All-State of ZeroTuring, t be Tape of ZeroTuring,
+  head be Element of NAT,
  f be FinSequence of NAT st len f >= 1 & s=[0,head,t] &
  t storeData <*head*>^f holds
  s is Accept-Halt & (Result s)`2=head & (Result s)`3 storeData <*head,0*>;
@@ -455,7 +461,8 @@ definition
 end;
 
 theorem :: TURING_1:42
- for s being All-State of U3(n)Turing, t be Tape of U3(n)Turing, head be Nat,
+ for s being All-State of U3(n)Turing, t be Tape of U3(n)Turing,
+  head be Element of NAT,
  f be FinSequence of NAT st len f >= 3 & s=[0,head,t] &
  t storeData <*head*>^f holds
   s is Accept-Halt & (Result s)`2=head+f/.1+f/.2+4 &
@@ -590,7 +597,8 @@ theorem :: TURING_1:49
      = [[the AcceptS of T1,g`1], g`2, g`3];
 
 theorem :: TURING_1:50
- for T1,T2 being TuringStr,s1 be All-State of T1,h be Nat,t be Tape of T1,
+ for T1,T2 being TuringStr,s1 be All-State of T1,h be Element of NAT,
+ t be Tape of T1,
  s2 be All-State of T2,s3 be All-State of (T1 ';' T2)
  st s1 is Accept-Halt & s1=[the InitS of T1,h,t] &
     s2 is Accept-Halt & s2=[the InitS of T2,(Result s1)`2,(Result s1)`3] &
@@ -614,7 +622,7 @@ theorem :: TURING_1:53
 theorem :: TURING_1:54
     for s being All-State of ZeroTuring ';' SuccTuring, t be Tape of ZeroTuring
 ,
- head,n be Nat st s=[[0,0],head,t] & t storeData <*head,n*>
+ head,n be Element of NAT st s=[[0,0],head,t] & t storeData <*head,n*>
  holds s is Accept-Halt &
  (Result s)`2=head & (Result s)`3 storeData <*head,1*>;
 

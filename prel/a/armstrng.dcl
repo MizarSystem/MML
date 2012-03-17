@@ -26,7 +26,6 @@
 <ArticleID name="MARGREL1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="FINSEQ_4"/>
 <ArticleID name="RLVECT_1"/>
@@ -246,7 +245,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="256">
+<Func kind="K" nr="248">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -260,7 +259,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="259">
+<Func kind="K" nr="251">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -274,7 +273,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="259">
+<Func kind="K" nr="251">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -283,10 +282,10 @@
 <Adjective nr="75"/>
 <Adjective nr="79"/>
 <Adjective nr="80">
-<Func kind="K" nr="256">
+<Func kind="K" nr="248">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="256">
+<Func kind="K" nr="248">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -314,7 +313,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="260">
+<Func kind="K" nr="252">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -341,7 +340,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="261">
+<Func kind="K" nr="253">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

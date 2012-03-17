@@ -209,4 +209,18 @@
 <Adjective nr="10"/>
 </Cluster>
 </CCluster>
+<CCluster>
+<ArgTypes/>
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="8"/>
+<Adjective nr="9"/>
+<Adjective nr="10"/>
+</Cluster>
+</CCluster>
 </Registrations>

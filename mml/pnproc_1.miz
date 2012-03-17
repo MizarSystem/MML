@@ -28,7 +28,7 @@ environ
 
 begin :: Preliminaries
 
-reserve i,j,k,l for Nat,
+reserve i,j,k,l for Element of NAT,
         x,x1,x2,y1,y2 for set;
 
 theorem Th1:
@@ -66,7 +66,7 @@ A1:  Seq p = {};
 theorem Th2:
   for q being FinSubsequence holds q = {} iff Seq q = {}
    proof let q be FinSubsequence;
-     consider k be Nat such that
+     consider k be Element of NAT such that
 A1:  dom q c= Seg k by FINSEQ_1:def 12;
      thus q = {} implies Seq q = {}
       proof assume
@@ -86,7 +86,7 @@ theorem Th3:
 A1:   q = {[i,x]};
       then [i,x] in q by TARSKI:def 1;
 then A2:   i in dom q by RELAT_1:20;
-      consider k be Nat such that
+      consider k be Element of NAT such that
 A3:    dom q c= Seg k by FINSEQ_1:def 12;
          i >= 0+1 by A2,A3,FINSEQ_1:3;
 then A4:   i > 0 by NAT_1:38;
@@ -103,7 +103,7 @@ registration
   cluster -> finite FinSubsequence;
   coherence
    proof let q be FinSubsequence;
-     consider n being Nat such that
+     consider n being Element of NAT such that
 A1:  dom q c= Seg n by FINSEQ_1:def 12;
         dom q is finite by A1,FINSET_1:13;
      hence thesis by FINSET_1:29;
@@ -123,7 +123,7 @@ A4:   Seq q = q* Sgm(dom q) by FINSEQ_1:def 14;
          rng Sgm(dom q) = dom q by FINSEQ_1:71;
 then A5:   {1} = dom Sgm(dom q) &
       rng Seq q = rng q by A2,A4,RELAT_1:46,47;
-      consider n being Nat such that
+      consider n being Element of NAT such that
 A6:   dom q c= Seg n by FINSEQ_1:def 12;
          Seg card dom q = {1} by A5,A6,FINSEQ_3:45;
       then Card dom q = Card {1} by FINSEQ_1:78;
@@ -131,7 +131,7 @@ A6:   dom q c= Seg n by FINSEQ_1:def 12;
 A7:   dom q = {y} by CARD_1:49;
          y in dom q by A7,TARSKI:def 1;
       then y in Seg n by A6;
-      then reconsider y as Nat;
+      then reconsider y as Element of NAT;
          q = {[y,x]} by A3,A5,A7,PRE_CIRC:2;
       hence thesis;
     end;
@@ -213,7 +213,7 @@ A1: 1 <= j & j <= l or l+1 <= j & j <= l+k;
 theorem Th7:
  for p being FinSubsequence holds Card p = len Seq p
   proof let p be FinSubsequence;
-    consider k being Nat such that
+    consider k being Element of NAT such that
 A1: dom p c= Seg k by FINSEQ_1:def 12;
 A2: Seq p = p*(Sgm dom p) by FINSEQ_1:def 14;
 A3: rng Sgm dom p = dom p by FINSEQ_1:71;
@@ -352,7 +352,7 @@ end;
 
 reserve P,p,x,y,x1,x2,y1,y2 for set,
         m1,m2,m3,m4,m for marking of P,
-        i,j,j1,j2,k,k1,k2,l,l1,l2 for Nat;
+        i,j,j1,j2,k,k1,k2,l,l1,l2 for Element of NAT;
 
 notation
  let P be set;
@@ -365,7 +365,7 @@ definition
  let P be set;
  let m be marking of P;
  let p be set;
- redefine func m multitude_of p -> Nat;
+ redefine func m multitude_of p -> Element of NAT;
  coherence
   proof
 A1:   rng m c= NAT by Def1;
@@ -373,7 +373,7 @@ A1:   rng m c= NAT by Def1;
      then m.p in rng m or m.p = {} by FUNCT_1:12,def 4;
     hence m.p is Element of NAT by A1,CARD_1:51;
   end;
- redefine func m.p -> Nat;
+ redefine func m.p -> Element of NAT;
  coherence
   proof
 A2:   rng m c= NAT by Def1;
@@ -383,7 +383,7 @@ A2:   rng m c= NAT by Def1;
   end;
  end;
 
-scheme MarkingLambda { P() -> set, F(set) -> Nat }:
+scheme MarkingLambda { P() -> set, F(set) -> Element of NAT }:
  ex m being marking of P() st
   for p st p in P() holds m multitude_of p = F(p)
 proof
@@ -919,19 +919,21 @@ definition
   ex F being Function-yielding FinSequence st
      it = compose(F, Funcs(P, NAT)) &
      len F = len C &
-     for i being Nat st i in dom C holds F.i = fire (C /. i qua Element of N);
+     for i being Element of NAT st i in dom C
+      holds F.i = fire (C /. i qua Element of N);
   existence
    proof
      deffunc G(set) = fire (C/.$1 qua Element of N);
      consider F being FinSequence such that
 A1:  len F = len C and
-A2:  for k being Nat st k in Seg len C holds F.k = G(k) from FINSEQ_1:sch 2;
+A2:  for k being Element of NAT st k in Seg len C holds F.k = G(k)
+ from FINSEQ_1:sch 2;
 A3:  dom F = Seg len F & dom C = Seg len C by FINSEQ_1:def 3;
         F is Function-yielding
       proof
         let x be set; assume
 A4:     x in dom F;
-        then reconsider i = x as Nat;
+        then reconsider i = x as Element of NAT;
            F.x = fire (C/.i qua Element of N) by A1,A2,A3,A4;
         hence thesis;
       end;
@@ -939,7 +941,8 @@ A4:     x in dom F;
      take f = compose(F, Funcs(P, NAT)), F;
      thus f = compose(F, Funcs(P, NAT));
      thus len F = len C &
-     for i being Nat st i in dom C holds F.i = fire (C /. i qua Element of N)
+     for i being Element of NAT st i in dom C
+      holds F.i = fire (C /. i qua Element of N)
         by A1,A2,A3;
    end;
   uniqueness
@@ -948,15 +951,17 @@ A4:     x in dom F;
      given F1 being Function-yielding FinSequence such that
 A5:  f1 = compose(F1, Funcs(P, NAT)) and
 A6:  len F1 = len C and
-A7:  for i being Nat st i in dom C holds F1.i = fire (C/.i qua Element of N);
+A7:  for i being Element of NAT st i in dom C
+ holds F1.i = fire (C/.i qua Element of N);
      given F2 being Function-yielding FinSequence such that
 A8:  f2 = compose(F2, Funcs(P, NAT)) and
 A9:  len F2 = len C and
-A10:  for i being Nat st i in dom C holds F2.i = fire (C/.i qua Element of N);
+A10:  for i being Element of NAT st i in dom C
+ holds F2.i = fire (C/.i qua Element of N);
 A11:  dom F1 = Seg len F1 & dom F2 = Seg len F2 & dom C = Seg len C
       by FINSEQ_1:def 3;
         now
-       let i be Nat; assume
+       let i be Element of NAT; assume
 A12:    i in dom C;
        then F1.i = fire (C/.i qua Element of N) by A7;
        hence F1.i = F2.i by A10,A12;
@@ -972,7 +977,7 @@ theorem
      consider F being Function-yielding FinSequence such that
 A1:  fire(<*>N) = compose(F, Funcs(P, NAT)) and
 A2:  len F = len <*>N and
-        for i being Nat st i in dom <*>N holds
+        for i being Element of NAT st i in dom <*>N holds
          F.i = fire ((<*>N)/.i qua Element of N) by Def11;
         len F = 0 by A2,FINSEQ_1:32;
      then F = {} by FINSEQ_1:25;
@@ -986,7 +991,7 @@ theorem Th37:
      consider F being Function-yielding FinSequence such that
 A1:  fire <*e*> = compose(F, Funcs(P, NAT)) and
 A2:  len F = len <*e*> and
-A3:  for i being Nat st i in dom <*e*> holds
+A3:  for i being Element of NAT st i in dom <*e*> holds
          F.i = fire (<*e*>/.i qua Element of N) by Def11;
 A4:  len <*e*> = 1 & <*e*>.1 = e by FINSEQ_1:57;
         dom <*e*> = {1} by FINSEQ_1:4,def 8;
@@ -1014,7 +1019,7 @@ theorem
      consider F being Function-yielding FinSequence such that
 A1:  fire <*e1,e2*> = compose(F, Funcs(P, NAT)) and
 A2:  len F = len <*e1,e2*> and
-A3:  for i being Nat st i in dom <*e1,e2*> holds
+A3:  for i being Element of NAT st i in dom <*e1,e2*> holds
          F.i = fire (<*e1,e2*>/.i qua Element of N) by Def11;
 A4:  len <*e1,e2*> = 2 & <*e1,e2*>.1 = e1 & <*e1,e2*>.2 = e2 by FINSEQ_1:61;
 then A5:  dom <*e1,e2*> = {1,2} by FINSEQ_1:4,def 3;
@@ -1033,7 +1038,7 @@ then A8:  F.1 = fire e1 by A3,A4,A5,A6;
 theorem Th40:
   dom fire C = Funcs(P, NAT) & rng fire C c= Funcs(P, NAT)
    proof
-     defpred P[Nat] means
+     defpred P[Element of NAT] means
         for F being Function-yielding FinSequence st
           len F = $1 &
           for i st i in dom F ex t st F.i = fire t
@@ -1093,7 +1098,7 @@ A13:  P[k] from NAT_1:sch 1(A1,A2);
      consider F being Function-yielding FinSequence such that
 A14:  fire C = compose(F, Funcs(P, NAT)) and
 A15:  len F = len C and
-A16:  for i being Nat st i in dom C holds
+A16:  for i being Element of NAT st i in dom C holds
          F.i = fire (C/.i qua Element of N) by Def11;
         for i st i in dom F ex t st F.i = fire t
       proof
@@ -1114,17 +1119,17 @@ theorem Th41:
      consider F being Function-yielding FinSequence such that
 A1:  fire (C1^C2) = compose(F, Funcs(P, NAT)) and
 A2:  len F = len (C1^C2) and
-A3:  for i being Nat st i in dom (C1^C2) holds
+A3:  for i being Element of NAT st i in dom (C1^C2) holds
          F.i = fire ((C1^C2)/.i qua Element of N) by Def11;
      consider F1 being Function-yielding FinSequence such that
 A4:  fire C1 = compose(F1, Funcs(P, NAT)) and
 A5:  len F1 = len C1 and
-A6:  for i being Nat st i in dom C1 holds
+A6:  for i being Element of NAT st i in dom C1 holds
          F1.i = fire (C1/.i qua Element of N) by Def11;
      consider F2 being Function-yielding FinSequence such that
 A7:  fire C2 = compose(F2, Funcs(P, NAT)) and
 A8:  len F2 = len C2 and
-A9:  for i being Nat st i in dom C2 holds
+A9:  for i being Element of NAT st i in dom C2 holds
          F2.i = fire (C2/.i qua Element of N) by Def11;
 A10:  rng fire C1 c= Funcs(P, NAT) by Th40;
         len F = len C1 + len C2 by A2,FINSEQ_1:35;
@@ -1570,15 +1575,15 @@ A8:  C = C1^fs1 & C1 in R1 & fs1 in R2 by A5,A6;
 
 definition
   let p be FinSubsequence;
-  let i be Nat;
-     set X = {i+k where k is Nat: k in dom p};
+  let i be Element of NAT;
+     set X = {i+k where k is Element of NAT: k in dom p};
   func i Shift p -> FinSubsequence means
 :Def15:
-   dom it = {i+k where k is Nat: k in dom p} &
-   for j being Nat st j in dom p holds it.(i+j) = p.j;
+   dom it = {i+k where k is Element of NAT: k in dom p} &
+   for j being Element of NAT st j in dom p holds it.(i+j) = p.j;
    existence
    proof
-     consider K being Nat such that
+     consider K being Element of NAT such that
 A1:  dom p c= Seg K by FINSEQ_1:def 12;
      defpred P[set,set] means ex k st $1 = i+k & $2 = p.k;
 A2:  for x,y1,y2 st x in X & P[x,y1] & P[x,y2] holds y1 = y2;
@@ -1613,9 +1618,9 @@ A7:     x = i+k & k in dom p;
    proof
      let f1,f2 be FinSubsequence such that
 A8:  dom f1 = X and
-A9:  for j being Nat st j in dom p holds f1.(i+j) = p.j and
+A9:  for j being Element of NAT st j in dom p holds f1.(i+j) = p.j and
 A10:  dom f2 = X and
-A11:  for j being Nat st j in dom p holds f2.(i+j) = p.j;
+A11:  for j being Element of NAT st j in dom p holds f2.(i+j) = p.j;
         now let x be set; assume x in X;
        then consider k such that
 A12:    x = i+k & k in dom p;
@@ -1630,7 +1635,7 @@ reserve q,q1,q2,q3,q4 for FinSubsequence;
 theorem Th52:
   0 Shift q = q
    proof
-     set X = {0+k where k is Nat: k in dom q};
+     set X = {0+k where k is Element of NAT: k in dom q};
 A1:  dom (0 Shift q) = X by Def15;
 A2:  X = dom q
       proof
@@ -1644,10 +1649,10 @@ A3:        x = 0+k & k in dom q;
          end;
         let x; assume
 A4:     x in dom q;
-        consider l being Nat such that
+        consider l being Element of NAT such that
 A5:     dom q c= Seg l by FINSEQ_1:def 12;
            x in Seg l by A4,A5;
-        then reconsider k = x as Nat;
+        then reconsider k = x as Element of NAT;
        x = 0+k;
         hence x in X by A4;
       end;
@@ -1666,9 +1671,9 @@ theorem
      set Sj = j Shift q;
      set Sij = (i+j) Shift q;
      set Si = i Shift Sj;
-     set Xj = {j+k where k is Nat: k in dom q};
-     set Xi = {i+k where k is Nat: k in dom Sj};
-     set Xij = {(i+j)+k where k is Nat: k in dom q};
+     set Xj = {j+k where k is Element of NAT: k in dom q};
+     set Xi = {i+k where k is Element of NAT: k in dom Sj};
+     set Xij = {(i+j)+k where k is Element of NAT: k in dom q};
 A1:  dom Sj = Xj & dom Si = Xi & dom Sij = Xij by Def15;
 A2:  Xi = Xij
       proof
@@ -1677,8 +1682,9 @@ A2:  Xi = Xij
            let x; assume x in Xi;
            then consider k such that
 A3:        x = i+k & k in dom Sj;
-              dom (j Shift q) = {j+K where K is Nat: K in dom q} by Def15;
-           then consider K being Nat such that
+              dom (j Shift q) = {j+K where K is Element of NAT: K in dom q}
+               by Def15;
+           then consider K being Element of NAT such that
 A4:        k = j+K & K in dom q by A3;
               x = i+j+K & K in dom q by A3,A4;
            hence x in Xij;
@@ -1686,8 +1692,8 @@ A4:        k = j+K & K in dom q by A3;
         let x; assume x in Xij;
         then consider k such that
 A5:     x = (i+j)+k & k in dom q;
-        reconsider K = j+k as Nat;
-       dom Sj = {j+l where l is Nat: l in dom q} by Def15;
+        reconsider K = j+k as Element of NAT;
+       dom Sj = {j+l where l is Element of NAT: l in dom q} by Def15;
         then x = i+K & K in dom Sj by A5;
         hence x in Xi;
       end;
@@ -1729,10 +1735,11 @@ A4:    k1 = k & 1 <= k & k <= len p by A1,A3;
 A5:  x = j1 & i+1 <= j1 & j1 <= i+(len p);
         i+0 <= i+1 by XREAL_1:9;
      then i <= j1 by A5,XXREAL_0:2;
-     then consider k2 such that
+     then consider k2 being Nat such that
 A6: j1 = i+k2 by NAT_1:28;
+a1: k2 in NAT by ORDINAL1:def 13;
         1 <= k2 & k2 <= len p by A5,A6,XREAL_1:8;
-     then k2 in dom p by A1;
+     then k2 in dom p by A1,a1;
      hence x in dom (i Shift p) by A2,A5,A6;
   end;
 
@@ -1766,7 +1773,7 @@ A6:   (i Shift q) = {};
 A7:    x in dom q by XBOOLE_0:def 1;
 A8:    x in rng Sgm dom q by A7,FINSEQ_1:71;
           rng Sgm dom q c= NAT by FINSEQ_1:def 4;
-       then reconsider x as Nat by A8;
+       then reconsider x as Element of NAT by A8;
        consider k such that
 A9:    k = i+x & x in dom q by A7;
           k in dom (i Shift q) by A1,A9;
@@ -1780,7 +1787,7 @@ theorem Th56:
      dom ss = dom q & rng ss = dom (i Shift q) &
         (for k st k in dom q holds ss.k = i+k) & ss is one-to-one
    proof let q be FinSubsequence;
-     consider n being Nat such that
+     consider n being Element of NAT such that
 A1:  dom q c= Seg n by FINSEQ_1:def 12;
 A2:  Seg n = {k: 1 <= k & k <= n} by FINSEQ_1:def 1;
      defpred P[set,set] means ex k st k = $1 & $2 = i+k;
@@ -1790,7 +1797,7 @@ A4:  for x st x in dom q ex y st P[x,y]
         then x in Seg n by A1;
         then consider k1 such that
 A5:     x = k1 & 1 <= k1 & k1 <= n by A2;
-        reconsider x as Nat by A5;
+        reconsider x as Element of NAT by A5;
         take i+x;
         thus thesis;
       end;
@@ -1811,7 +1818,7 @@ A11:        k1 = x & ss.x = i+k1 by A6,A7,A10;
          end; let y; assume y in dom (i Shift q);
         then consider k2 such that
 A12:     y = i+k2 & k2 in dom q by A8;
-        consider k3 being Nat such that
+        consider k3 being Element of NAT such that
 A13:     k3 = k2 & ss.k2 = i+k3 by A7,A12;
         thus thesis by A6,A12,A13,FUNCT_1:def 5;
       end;
@@ -1897,9 +1904,9 @@ A4:  rng fs = rng Sgm dom (i Shift p) by A2,FINSEQ_1:71;
         k1 = fs.n & k2 = fs.m) holds k1 < k2
       proof let n,m,k1,k2 be natural number; assume
 A5:     1 <= n & n < m & m <= len fs & k1 = fs.n & k2 = fs.m;
-        reconsider n,m as Nat by ORDINAL1:def 13;
+        reconsider n,m as Element of NAT by ORDINAL1:def 13;
 A6:     dom fs = Seg len fs by FINSEQ_1:def 3
-              .= {n1 where n1 is Nat: 1 <= n1 & n1 <= len fs}
+              .= {n1 where n1 is Element of NAT: 1 <= n1 & n1 <= len fs}
                     by FINSEQ_1:def 1;
            n+1 <= m by A5,INT_1:20;
         then n+1 <= len fs by A5,XXREAL_0:2;
@@ -1979,10 +1986,10 @@ A10:   dom ((len p1) Shift p2) = {k1: len p1 + 1 <= k1 & k1 <= len p1 + len p2}
        proof let x; assume x in dom (p1 \/ ((len p1) Shift p2));
          then x in dom p1 or x in dom ((len p1) Shift p2) by A8,XBOOLE_0:def 2
 ;
-         then consider k3 being Nat such that
+         then consider k3 being Element of NAT such that
 A11:      x = k3 & 1 <= k3 & k3 <= len p1 or
          x = k3 & len p1 + 1 <= k3 & k3 <= len p1 + len p2 by A9,A10;
-         reconsider x as Nat by A11;
+         reconsider x as Element of NAT by A11;
             1 <= x & x <= len p1 + len p2 by A11,Lm2;
          hence thesis by A7;
        end; let x; assume
@@ -2013,14 +2020,15 @@ A5:     x in dom p1 & x in dom (i Shift p2) by A4,XBOOLE_0:def 3;
 A6:     x = k1 & 1 <= k1 & k1 <= len p1 by A2;
         consider k2 such that
 A7:     x = i+k2 & k2 in dom p2 by A3,A5;
-        consider n being Nat such that
+        consider n being Element of NAT such that
 A8:     dom p2 c= Seg n by FINSEQ_1:def 12;
 A9:     k2 in Seg n by A7,A8;
-           Seg n = {m where m is Nat: 1 <= m & m <= n} by FINSEQ_1:def 1;
-        then consider m being Nat such that
+           Seg n = {m where m is Element of NAT: 1 <= m & m <= n}
+            by FINSEQ_1:def 1;
+        then consider m being Element of NAT such that
 A10:     k2 = m & 1 <= m & m <= n by A9;
         A11: 1-1 < k2-0 by A10,REAL_1:92;
-        reconsider x as Nat by A6;
+        reconsider x as Element of NAT by A6;
            len p1 + k2 <= i+k2 by A1,XREAL_1:9;
         then (len p1 + k2) - k2 < x - 0 by A7,A11,REAL_1:92;
         hence contradiction by A6;
@@ -2090,7 +2098,7 @@ A3:     Seq q1 = C2 & ex q3,q4 st C2 = q3 \/ q4 & q3 misses q4 & Seq q3 in R1 &
                       Seq q4 in R2 by A2;
         consider q3,q4 such that
 A4:     C2 = q3 \/ q4 & q3 misses q4 & Seq q3 in R1 & Seq q4 in R2 by A3;
-        consider n1 being Nat such that
+        consider n1 being Element of NAT such that
 A5:     dom q1 c= Seg n1 by FINSEQ_1:def 12;
 A6:    q3 c= Seq q1 & q4 c= Seq q1 by A3,A4,XBOOLE_1:7;
 then A7:     dom q3 misses dom q4 by A4,Th10;
@@ -2250,7 +2258,7 @@ A54:  Seq q2 = C2 & ex q3,q4 st C2 = q3 \/ q4 & q3 misses q4 & Seq q3 in R2 &
                    Seq q4 in R3 by A53;
      consider q3,q4 such that
 A55:  C2 = q3 \/ q4 & q3 misses q4 & Seq q3 in R2 & Seq q4 in R3 by A54;
-     consider n1 being Nat such that
+     consider n1 being Element of NAT such that
 A56:  dom q2 c= Seg n1 by FINSEQ_1:def 12;
 A57: q3 c= Seq q2 & q4 c= Seq q2 by A54,A55,XBOOLE_1:7;
 then A58:  dom q3 misses dom q4 by A55,Th10;
@@ -2664,7 +2672,7 @@ A7:     l1 in dom Seq q;
 A8:     (Sgm dom q).l1 in rng Sgm dom q by A5,A7,FUNCT_1:def 5;
 then A9:     (Sgm dom q).l1 in dom q by FINSEQ_1:71;
            rng Sgm dom q c= NAT by FINSEQ_1:def 4;
-        then reconsider j1 = (Sgm dom q).l1 as Nat by A8;
+        then reconsider j1 = (Sgm dom q).l1 as Element of NAT by A8;
            (Seq ss).l1 = (ss*Sgm dom ss).l1 by FINSEQ_1:def 14
                    .= ss.j1 by A2,A5,A7,FUNCT_1:23
                    .= i+j1 by A2,A9;
@@ -2683,9 +2691,9 @@ A12: dom Seq ss = dom (ss*Sgm dom ss) by FINSEQ_1:def 14
         k1 = fs.n & k2 = fs.m) holds k1 < k2
       proof let n,m,k1,k2 be natural number; assume
 A13:     1 <= n & n < m & m <= len fs & k1 = fs.n & k2 = fs.m;
-        reconsider n,m as Nat by ORDINAL1:def 13;
+        reconsider n,m as Element of NAT by ORDINAL1:def 13;
 A14:     dom fs = Seg len fs by FINSEQ_1:def 3
-                  .= {l3 where l3 is Nat: 1 <= l3 & l3 <= len fs}
+                  .= {l3 where l3 is Element of NAT: 1 <= l3 & l3 <= len fs}
                         by FINSEQ_1:def 1;
            n+1 <= m by A13,INT_1:20;
         then n+1 <= len fs by A13,XXREAL_0:2;
@@ -2696,11 +2704,11 @@ then A15:     n <= (len fs) - 1 by XREAL_1:21;
 then A16:     n in dom Seq q by A5,A12,A13,A14;
            1 <= m by A13,XXREAL_0:2;
 then A17:     m in dom Seq q by A5,A12,A13,A14;
-        consider j2 being Nat such that
+        consider j2 being Element of NAT such that
 A18:     j2 = (Sgm dom q).n & fs.n = i+j2 by A6,A16;
-        consider j3 being Nat such that
+        consider j3 being Element of NAT such that
 A19:     j3 = (Sgm dom q).m & fs.m = i+j3 by A6,A17;
-        consider l3 being Nat such that
+        consider l3 being Element of NAT such that
 A20:     dom q c= Seg l3 by FINSEQ_1:def 12;
            dom Seq ss = Seg len fs & dom Sgm dom q = Seg len Sgm dom q
            by FINSEQ_1:def 3;
@@ -2801,9 +2809,10 @@ A1:  q2 <> {} & q1 c= p1 & q2 c= p2;
 A2:  dom q1 c= Seg k1 by FINSEQ_1:def 12;
      consider k2 such that
 A3:  dom (len p1 Shift q2) c= Seg k2 by FINSEQ_1:def 12;
-        for m,n being Nat st m in dom q1 & n in dom (len p1 Shift q2) holds m <
+        for m,n being Element of NAT
+         st m in dom q1 & n in dom (len p1 Shift q2) holds m <
 n
-       proof let m,n be Nat such that
+       proof let m,n be Element of NAT such that
 A4:     m in dom q1 and
 A5:     n in dom (len p1 Shift q2);
 A6:     dom p1 = Seg len p1 by FINSEQ_1:def 3
@@ -2816,9 +2825,9 @@ A9:     dom q1 c= dom p1 by A1,GRFUNC_1:8;
 A10:     dom (len p1 Shift q2) c= dom (len p1 Shift p2) by A1,Lm10;
 A11:     m in dom p1 by A4,A9;
 A12:     n in dom (len p1 Shift p2) by A5,A10;
-        consider k3 being Nat such that
+        consider k3 being Element of NAT such that
 A13:     k3 = m & 1 <= k3 & k3 <= len p1 by A6,A11;
-        consider k4 being Nat such that
+        consider k4 being Element of NAT such that
 A14:     k4 = n & len p1 + 1 <= k4 & k4 <= len p1 + len p2 by A8,A12;
            len p1 < len p1 + 1 by XREAL_1:31;
         then k3 <= len p1 + 1 by A13,XXREAL_0:2;

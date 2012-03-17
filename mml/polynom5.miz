@@ -37,17 +37,17 @@ environ
       SEQ_1, SEQ_2, SEQM_3, SEQ_4, COMSEQ_1, COMSEQ_2, COMSEQ_3, CFUNCT_1,
       FVSUM_1, GROUP_1, CQC_THE1, JORDAN8, ALGSEQ_1, COMPLEX1, COMPLFLD,
       HAHNBAN1, POLYNOM1, POLYNOM2, POLYNOM3, POLYNOM4, COMPTRIG, XBOOLE_0,
-      XCMPLX_0, XCMPLX_1, VECTSP_2, XREAL_1, XXREAL_0, FINSOP_1;
+      XCMPLX_0, XCMPLX_1, VECTSP_2, XREAL_1, XXREAL_0, FINSOP_1, ORDINAL1;
  schemes NAT_1, FUNCT_2, FINSEQ_2, FINSEQ_1, BINOP_1, BINARITH, GOBOARD2,
       SEQ_1, CFCONT_1, DOMAIN_1;
 
 begin :: Preliminaries
 
   theorem Th1:
-   for n,m be Nat st n <> 0 & m <> 0 holds
+   for n,m be Element of NAT st n <> 0 & m <> 0 holds
     n*m - n - m + 1 >= 0
    proof
-    let n,m be Nat;
+    let n,m be Element of NAT;
     assume that
      A1: n <> 0 and
      A2: m <> 0;
@@ -157,26 +157,28 @@ A2: c is Real by XREAL_0:def 1;
 end;
 
   theorem Th4:
-   for p be FinSequence of REAL st for n be Nat st n in dom p holds p.n >= 0
-   for i be Nat st i in dom p holds
+   for p be FinSequence of REAL st for n be Element of NAT st n in dom p
+    holds p.n >= 0
+   for i be Element of NAT st i in dom p holds
     Sum p >= p.i
    proof
     defpred Q[FinSequence of REAL] means
-     (for n be Nat st n in dom $1 holds $1.n >= 0) implies
-      for i be Nat st i in dom $1 holds Sum $1 >= $1.i;
+     (for n be Element of NAT st n in dom $1 holds $1.n >= 0) implies
+      for i be Element of NAT st i in dom $1 holds Sum $1 >= $1.i;
     A1: Q[<*>(REAL)] by FINSEQ_1:26;
     A2: for p be FinSequence of REAL for x be Element of REAL st Q[p] holds
      Q[p^<*x*>]
     proof
      let p be FinSequence of REAL;
      let x be Element of REAL;
-     assume A3: (for n be Nat st n in dom p holds p.n >= 0) implies
-      for i be Nat st i in dom p holds Sum p >= p.i;
-     assume A4: for n be Nat st n in dom (p^<*x*>) holds (p^<*x*>).n >= 0;
-     let i be Nat;
+     assume A3: (for n be Element of NAT st n in dom p holds p.n >= 0) implies
+      for i be Element of NAT st i in dom p holds Sum p >= p.i;
+     assume A4: for n be Element of NAT st n in dom (p^<*x*>)
+      holds (p^<*x*>).n >= 0;
+     let i be Element of NAT;
      assume A5: i in dom (p^<*x*>);
      A6: dom p c= dom (p^<*x*>) by FINSEQ_1:39;
-     A7: now let n be Nat;
+     A7: now let n be Element of NAT;
       assume A8: n in dom p;
       then (p^<*x*>).n >= 0 by A4,A6;
       hence p.n >= 0 by A8,FINSEQ_1:def 7;
@@ -192,11 +194,11 @@ end;
      then (p^<*x*>).(len p+1) >= 0 by FINSEQ_2:19;
      then x >= 0 by FINSEQ_1:59;
      then A10: p.i + x >= p.i + 0 by XREAL_1:8;
-     defpred P[Nat] means Sum (p|$1) >= 0;
+     defpred P[Element of NAT] means Sum (p|$1) >= 0;
      A11: P[0] by RVSUM_1:102;
-     A12: for j be Nat st P[j] holds P[j+1]
+     A12: for j be Element of NAT st P[j] holds P[j+1]
      proof
-      let j be Nat;
+      let j be Element of NAT;
       assume A13: Sum (p|j) >= 0;
       per cases;
        suppose A14: j+1 <= len p;
@@ -215,7 +217,7 @@ end;
         hence Sum (p|(j+1)) >= 0 by A13;
      end;
      end;
-     A18: for j be Nat holds P[j] from NAT_1:sch 1(A11,A12);
+     A18: for j be Element of NAT holds P[j] from NAT_1:sch 1(A11,A12);
         p|(len p) = p by FINSEQ_1:79;
      then A19: Sum p >= 0 by A18;
      per cases by A5,A9,XBOOLE_0:def 2;
@@ -262,21 +264,22 @@ canceled;
 
   theorem Th8:
    for z be Element of F_Complex st z <> 0.F_Complex
-   for n be Nat holds
+   for n be Element of NAT holds
     |.(power F_Complex).(z,n).| = |.z.| to_power n
    proof
     let z be Element of F_Complex;
     assume z <> 0.F_Complex;
     then A1: |.z.| <> 0 by COMPLFLD:94;
      A2: |.z.| >= 0 by COMPLEX1:132;
-    defpred P[Nat] means |.(power F_Complex).(z,$1).| = |.z.| to_power $1;
+    defpred P[Element of NAT] means |.(power F_Complex).(z,$1).|
+     = |.z.| to_power $1;
      |.(power F_Complex).(z,0).| = |.1.F_Complex.| by GROUP_1:def 8
        .= 1 by COMPLEX1:134,COMPLFLD:10
        .= |.z.| to_power 0 by POWER:29;
     then A3: P[0];
-    A4: for n be Nat st P[n] holds P[n+1]
+    A4: for n be Element of NAT st P[n] holds P[n+1]
     proof
-     let n be Nat;
+     let n be Element of NAT;
      assume A5: |.(power F_Complex).(z,n).| = |.z.| to_power n;
      thus |.(power F_Complex).(z,n+1).| = |.(power F_Complex).(z,n)*z.|
                                                             by GROUP_1:def 8
@@ -284,20 +287,21 @@ canceled;
         .= (|.z.| to_power n)*(|.z.| to_power 1) by POWER:30
         .= |.z.| to_power (n+1) by A1,A2,POWER:32;
     end;
-    thus for n be Nat holds P[n] from NAT_1:sch 1(A3,A4);
+    thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A3,A4);
    end;
 
   definition
    let p be FinSequence of the carrier of F_Complex;
    func |.p.| -> FinSequence of REAL means :Def1:
     len it = len p &
-    for n be Nat st n in dom p holds it/.n = |.p/.n.|;
+    for n be Element of NAT st n in dom p holds it/.n = |.p/.n.|;
    existence
    proof
-    deffunc F(Nat) = |.p/.$1.|;
+    deffunc F(Element of NAT) = |.p/.$1.|;
     consider q be FinSequence of REAL such that
      A1: len q = len p and
-     A2: for n be Nat st n in dom q holds q/.n = F(n) from GOBOARD2:sch 1;
+     A2: for n be Element of NAT st n in dom q holds q/.n = F(n)
+      from GOBOARD2:sch 1;
     take q;
        dom p = dom q by A1,FINSEQ_3:31;
     hence thesis by A1,A2;
@@ -306,11 +310,11 @@ canceled;
    proof
     let q1,q2 be FinSequence of REAL such that
      A3: len q1 = len p and
-     A4: for n be Nat st n in dom p holds q1/.n = |.p/.n.| and
+     A4: for n be Element of NAT st n in dom p holds q1/.n = |.p/.n.| and
      A5: len q2 = len p and
-     A6: for n be Nat st n in dom p holds q2/.n = |.p/.n.|;
+     A6: for n be Element of NAT st n in dom p holds q2/.n = |.p/.n.|;
     A7: dom q1 = dom p & dom q2 = dom p by A3,A5,FINSEQ_3:31;
-       now let n be Nat;
+       now let n be Element of NAT;
      assume A8: n in dom p;
      hence q1/.n = |.p/.n.| by A4
         .= q2/.n by A6,A8;
@@ -340,7 +344,7 @@ canceled;
     then A3: 1 in dom <*x*> by FINSEQ_1:55;
        len |.<*x*>.| = len <*x*> by Def1;
     then A4: 1 in dom |.<*x*>.| by A3,FINSEQ_3:31;
-       now let n be Nat;
+       now let n be Element of NAT;
      assume n in Seg 1;
      then A5: n = 1 by FINSEQ_1:4,TARSKI:def 1;
      hence |.<*x*>.|.n = |.<*x*>.|/.1 by A4,FINSEQ_4:def 4
@@ -359,7 +363,7 @@ canceled;
     A1: len |.<*x,y*>.| = len <*x,y*> by Def1
        .= 2 by FINSEQ_1:61;
     A2: len <*|.x.|,|.y.|*> = 2 by FINSEQ_1:61;
-       now let n be Nat;
+       now let n be Element of NAT;
      assume A3: n in Seg 2;
      per cases by A3,FINSEQ_1:4,TARSKI:def 2;
       suppose A4: n = 1;
@@ -392,7 +396,7 @@ canceled;
     A1: len |.<*x,y,z*>.| = len <*x,y,z*> by Def1
        .= 3 by FINSEQ_1:62;
     A2: len <*|.x.|,|.y.|,|.z.|*> = 3 by FINSEQ_1:62;
-       now let n be Nat;
+       now let n be Element of NAT;
      assume A3: n in Seg 3;
      per cases by A3,ENUMSET1:def 1,FINSEQ_3:1;
       suppose A4: n = 1;
@@ -436,7 +440,7 @@ canceled;
        .= len p + len |.q.| by Def1
        .= len |.p.| + len |.q.| by Def1
        .= len (|.p.|^|.q.|) by FINSEQ_1:35;
-       now let n be Nat;
+       now let n be Element of NAT;
      assume A2: n in Seg len |.p^q.|;
      then A3: n >= 1 & n <= len |.p^q.| by FINSEQ_1:3;
      A4: n in dom |.p^q.| by A2,FINSEQ_1:def 3;
@@ -525,7 +529,7 @@ begin  :: Operations on Polynomials
    let L be Abelian add-associative right_zeroed right_complementable
     right_unital commutative distributive (non empty doubleLoopStr);
    let p be Polynomial of L;
-   let n be Nat;
+   let n be Element of NAT;
    func p`^n -> sequence of L equals
     (power Polynom-Ring L).(p,n);
    coherence
@@ -542,7 +546,7 @@ begin  :: Operations on Polynomials
    let L be Abelian add-associative right_zeroed right_complementable
     right_unital commutative distributive (non empty doubleLoopStr);
    let p be Polynomial of L;
-   let n be Nat;
+   let n be Element of NAT;
    cluster p`^n -> finite-Support;
    coherence
    proof
@@ -630,13 +634,13 @@ begin  :: Operations on Polynomials
    for L be Abelian add-associative right_zeroed right_complementable
     right_unital commutative distributive (non empty doubleLoopStr)
    for p be Polynomial of L
-   for n be Nat holds
+   for n be Element of NAT holds
     p`^(n+1) = (p`^n)*'p
    proof
     let L be Abelian add-associative right_zeroed right_complementable
      right_unital commutative distributive (non empty doubleLoopStr);
     let p be Polynomial of L;
-    let n be Nat;
+    let n be Element of NAT;
     reconsider p1=p as Element of Polynom-Ring L
                                                          by POLYNOM3:def 12;
     thus p`^(n+1) = (power Polynom-Ring L).(p1,n+1)
@@ -647,12 +651,12 @@ begin  :: Operations on Polynomials
   theorem Th21:
    for L be Abelian add-associative right_zeroed right_complementable
     right_unital commutative distributive (non empty doubleLoopStr)
-   for n be Nat holds
+   for n be Element of NAT holds
     0_.(L)`^(n+1) = 0_.(L)
    proof
     let L be Abelian add-associative right_zeroed right_complementable
      right_unital commutative distributive (non empty doubleLoopStr);
-    let n be Nat;
+    let n be Element of NAT;
     thus 0_.(L)`^(n+1) = (0_.(L)`^n)*'0_.(L) by Th20
        .= 0_.(L) by POLYNOM3:35;
    end;
@@ -660,45 +664,45 @@ begin  :: Operations on Polynomials
   theorem
       for L be Abelian add-associative right_zeroed right_complementable
     right_unital commutative distributive (non empty doubleLoopStr)
-   for n be Nat holds
+   for n be Element of NAT holds
     1_.(L)`^n = 1_.(L)
    proof
     let L be Abelian add-associative right_zeroed right_complementable
      right_unital commutative distributive (non empty doubleLoopStr);
-    defpred P[Nat] means 1_.(L)`^$1 = 1_.(L);
+    defpred P[Element of NAT] means 1_.(L)`^$1 = 1_.(L);
     A1: P[0] by Th16;
-    A2: now let n be Nat;
+    A2: now let n be Element of NAT;
      assume P[n];
      then 1_.(L)`^(n+1) = (1_.(L))*'1_.(L) by Th20
         .= 1_.(L) by POLYNOM3:36;
      hence P[n+1];
     end;
-    thus for n be Nat holds P[n] from NAT_1:sch 1(A1,A2);
+    thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
    end;
 
   theorem Th23:
    for L be Field
    for p be Polynomial of L
    for x be Element of L
-   for n be Nat holds
+   for n be Element of NAT holds
     eval(p`^n,x) = (power L).(eval(p,x),n)
    proof
     let L be Field;
     let p be Polynomial of L;
     let x be Element of L;
-    defpred P[Nat] means eval(p`^$1,x) = (power L).(eval(p,x),$1);
+    defpred P[Element of NAT] means eval(p`^$1,x) = (power L).(eval(p,x),$1);
      eval(p`^0,x) = eval(1_.(L),x) by Th16
        .= 1.(L) by POLYNOM4:21
        .= (power L).(eval(p,x),0) by GROUP_1:def 8;
     then A1: P[0];
-    A2: now let n be Nat;
+    A2: now let n be Element of NAT;
      assume A3: P[n];
       eval(p`^(n+1),x) = eval((p`^n)*'p,x) by Th20
         .= (power L).(eval(p,x),n)*eval(p,x) by A3,POLYNOM4:27
         .= (power L).(eval(p,x),n+1) by GROUP_1:def 8;
      hence P[n+1];
     end;
-    thus for n be Nat holds P[n] from NAT_1:sch 1(A1,A2);
+    thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
    end;
 
 Lm2:  ::this is as a theorem in UPROOTS
@@ -714,17 +718,17 @@ end;
   theorem Th24:
    for L be domRing
    for p be Polynomial of L st len p <> 0
-   for n be Nat holds
+   for n be Element of NAT holds
     len(p`^n) = n*len p-n+1
    proof
     let L be domRing;
     let p be Polynomial of L;
     assume A1: len p <> 0;
-    defpred P[Nat] means len(p`^$1) = $1*len p-$1+1;
+    defpred P[Element of NAT] means len(p`^$1) = $1*len p-$1+1;
      len(p`^0) = len(1_.(L)) by Th16
        .= 0*len p-0+1 by POLYNOM4:7;
     then A2: P[0];
-    A3: now let n be Nat;
+    A3: now let n be Element of NAT;
      assume A4: P[n];
      A5: len p > 0 by A1;
      then len p >= 0+1 by NAT_1:38;
@@ -739,7 +743,7 @@ end;
         .= (n+1)*len p - (n+1) + 1;
      hence P[n+1];
     end;
-    thus for n be Nat holds P[n] from NAT_1:sch 1(A2,A3);
+    thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
    end;
 
   definition
@@ -747,21 +751,21 @@ end;
    let p be sequence of L;
    let v be Element of L;
    func v*p -> sequence of L means :Def3:
-    for n be Nat holds it.n = v*p.n;
+    for n be Element of NAT holds it.n = v*p.n;
    existence
    proof
-    deffunc F(Nat) = v*p.$1;
+    deffunc F(Element of NAT) = v*p.$1;
     consider r be sequence of L such that
-A1: for n be Nat holds r.n = F(n) from FUNCT_2:sch 4;
+A1: for n be Element of NAT holds r.n = F(n) from FUNCT_2:sch 4;
     take r;
     thus thesis by A1;
    end;
    uniqueness
    proof
     let p1,p2 be sequence of L such that
-A2: for n be Nat holds p1.n = v*p.n and
-A3: for n be Nat holds p2.n = v*p.n;
-    now let k be Nat;
+A2: for n be Element of NAT holds p1.n = v*p.n and
+A3: for n be Element of NAT holds p2.n = v*p.n;
+    now let k be Element of NAT;
      thus p1.k = v*p.k by A2
               .= p2.k by A3;
     end;
@@ -778,7 +782,7 @@ registration
    coherence
    proof
     take s = len p;
-    let i be Nat;
+    let i be Element of NAT;
      assume A1: i >= s;
      thus (v*p).i = v*p.i by Def3
         .= v*0.L by A1,ALGSEQ_1:22
@@ -797,12 +801,12 @@ end;
     let p be Polynomial of L;
     A1: 0 is_at_least_length_of (0.L*p)
     proof
-     let i be Nat;
+     let i be Element of NAT;
      assume i>=0;
      thus (0.L*p).i = 0.L*p.i by Def3
         .= 0.L by VECTSP_1:39;
     end;
-       for n be Nat st n is_at_least_length_of (0.L*p) holds 0<=n;
+       for n be Element of NAT st n is_at_least_length_of (0.L*p) holds 0<=n;
     hence thesis by A1,ALGSEQ_1:def 4;
    end;
 
@@ -820,17 +824,17 @@ end;
     assume A1: v <> 0.L;
     A2: len p is_at_least_length_of (v*p)
     proof
-     let i be Nat;
+     let i be Element of NAT;
      assume A3: i >= len p;
      thus (v*p).i = v*p.i by Def3
         .= v*0.L by A3,ALGSEQ_1:22
         .= 0.L by VECTSP_1:36;
     end;
-       now let n be Nat;
+       now let n be Element of NAT;
      assume A4: n is_at_least_length_of v*p;
         n is_at_least_length_of p
      proof
-      let i be Nat;
+      let i be Element of NAT;
       assume i >= n;
       then (v*p).i = 0.L by A4,ALGSEQ_1:def 3;
       then v*p.i = 0.L by Def3;
@@ -850,7 +854,7 @@ end;
     let L be add-associative right_zeroed right_complementable
      left-distributive (non empty doubleLoopStr);
     let p be sequence of L;
-       now let n be Nat;
+       now let n be Element of NAT;
      thus (0_.(L)).n = 0.L by FUNCOP_1:13
         .= 0.L*p.n by VECTSP_1:39;
     end;
@@ -864,7 +868,7 @@ end;
    proof
     let L be left_unital (non empty multLoopStr);
     let p be sequence of L;
-       for n be Nat holds p.n = 1.L*p.n by VECTSP_1:def 19;
+       for n be Element of NAT holds p.n = 1.L*p.n by VECTSP_1:def 19;
     hence thesis by Def3;
    end;
 
@@ -877,7 +881,7 @@ end;
     let L be add-associative right_zeroed right_complementable
      right-distributive (non empty doubleLoopStr);
     let v be Element of L;
-       now let n be Nat;
+       now let n be Element of NAT;
      thus (0_.(L)).n = 0.L by FUNCOP_1:13
         .= v*0.L by VECTSP_1:36
         .= v*(0_.(L)).n by FUNCOP_1:13;
@@ -894,7 +898,7 @@ end;
     let L be add-associative right_zeroed right_complementable right_unital
      right-distributive (non empty doubleLoopStr);
     let v be Element of L;
-       now let n be Nat;
+       now let n be Element of NAT;
      per cases;
       suppose A1: n=0;
        hence <%v%>.n = v by ALGSEQ_1:def 6
@@ -928,12 +932,12 @@ end;
     consider F1 be FinSequence of the carrier of L such that
      A1: eval(p,x) = Sum F1 and
      A2: len F1 = len p and
-     A3: for n be Nat st n in dom F1 holds
+     A3: for n be Element of NAT st n in dom F1 holds
          F1.n = p.(n-'1) * (power L).(x,n-'1) by POLYNOM4:def 2;
     consider F2 be FinSequence of the carrier of L such that
      A4: eval(v*p,x) = Sum F2 and
      A5: len F2 = len (v*p) and
-     A6: for n be Nat st n in dom F2 holds
+     A6: for n be Element of NAT st n in dom F2 holds
          F2.n = (v*p).(n-'1) * (power L).(x,n-'1) by POLYNOM4:def 2;
     per cases;
      suppose v <> 0.L;
@@ -941,7 +945,7 @@ end;
       then A7: dom F1 = dom F2 by FINSEQ_3:31;
          now let i be set;
        assume A8: i in dom F1;
-       then reconsider i1=i as Nat by FINSEQ_3:25;
+       then reconsider i1=i as Element of NAT by FINSEQ_3:25;
        A9: p.(i1-'1) * (power L).(x,i1-'1) = F1.i by A3,A8
           .= F1/.i by A8,FINSEQ_4:def 4;
        thus F2/.i = F2.i by A7,A8,FINSEQ_4:def 4
@@ -971,13 +975,14 @@ end;
     consider F be FinSequence of the carrier of L such that
      A1: eval(p,0.L) = Sum F and
      A2: len F = len p and
-     A3: for n be Nat st n in dom F holds F.n = p.(n-'1) * (power L).(0.L,n-'1)
+     A3: for n be Element of NAT st n in dom F
+      holds F.n = p.(n-'1) * (power L).(0.L,n-'1)
                                                            by POLYNOM4:def 2;
     per cases;
      suppose len F > 0;
       then 0+1 <= len F by NAT_1:38;
       then A4: 1 in dom F by FINSEQ_3:27;
-         now let i be Nat;
+         now let i be Element of NAT;
        assume that
         A5: i in dom F and
         A6: i <> 1;
@@ -1017,12 +1022,12 @@ end;
    for L be non empty ZeroStr
    for z0 be Element of L holds
     <%z0%>.0 = z0 &
-    for n be Nat st n >= 1 holds <%z0%>.n = 0.L
+    for n be Element of NAT st n >= 1 holds <%z0%>.n = 0.L
    proof
     let L be non empty ZeroStr;
     let z0 be Element of L;
     thus <%z0%>.0 = z0 by ALGSEQ_1:def 6;
-    let n be Nat;
+    let n be Element of NAT;
     assume A1: n >= 1;
        len <%z0%> <= 1 by ALGSEQ_1:def 6;
     then len <%z0%> <= n by A1,XXREAL_0:2;
@@ -1077,7 +1082,8 @@ end;
       consider r be FinSequence of the carrier of L such that
        A5: len r = 0+1 and
        A6: (<%x%>*'<%y%>).0 = Sum r and
-       A7: for k be Nat st k in dom r holds r.k = <%x%>.(k-'1) * <%y%>.(0+1-'k)
+       A7: for k be Element of NAT st k in dom r
+        holds r.k = <%x%>.(k-'1) * <%y%>.(0+1-'k)
                                                          by POLYNOM3:def 11;
          1 in dom r by A5,FINSEQ_3:27;
       then r.1 = <%x%>.(1-'1) * <%y%>.(0+1-'1) by A7
@@ -1086,7 +1092,7 @@ end;
          .= <%x%>.0 * y by ALGSEQ_1:def 6
          .= x*y by ALGSEQ_1:def 6;
       then A8: r = <*x*y*> by A5,FINSEQ_1:57;
-      A9: now let n be Nat;
+      A9: now let n be Element of NAT;
        assume n < 1;
        then n < 0+1;
        then n <= 0 by NAT_1:38;
@@ -1125,28 +1131,28 @@ end;
     right_unital associative commutative distributive Field-like
     (non empty doubleLoopStr)
    for x be Element of L
-   for n be Nat holds
+   for n be Element of NAT holds
     <%x%>`^n = <%(power L).(x,n)%>
    proof
     let L be Abelian add-associative right_zeroed right_complementable
      right_unital associative commutative distributive Field-like
      (non empty doubleLoopStr);
     let x be Element of L;
-    defpred P[Nat] means <%x%>`^$1 = <%(power L).(x,$1)%>;
+    defpred P[Element of NAT] means <%x%>`^$1 = <%(power L).(x,$1)%>;
      <%x%>`^0 = 1_.(L) by Th16
        .= 1.L*1_.(L) by Th28
        .= <%1.L%> by Th30
        .= <%(power L).(x,0)%> by GROUP_1:def 8;
     then A1: P[0];
-    A2: for n be Nat st P[n] holds P[n+1]
+    A2: for n be Element of NAT st P[n] holds P[n+1]
     proof
-     let n be Nat;
+     let n be Element of NAT;
      assume <%x%>`^n = <%(power L).(x,n)%>;
      hence <%x%>`^(n+1) = <%(power L).(x,n)%>*'<%x%> by Th20
         .= <%(power L).(x,n)*x%> by Th36
         .= <%(power L).(x,n+1)%> by GROUP_1:def 8;
     end;
-    thus for n be Nat holds P[n] from NAT_1:sch 1(A1,A2);
+    thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
    end;
 
   theorem
@@ -1161,7 +1167,7 @@ end;
     consider F be FinSequence of the carrier of L such that
      A1: eval(<%z0%>,x) = Sum F and
      A2: len F = len <%z0%> and
-     A3: for n be Nat st n in dom F holds
+     A3: for n be Element of NAT st n in dom F holds
       F.n = <%z0%>.(n-'1) * (power L).(x,n-'1) by POLYNOM4:def 2;
     A4: len F <= 1 by A2,ALGSEQ_1:def 6;
     per cases by A4,CQC_THE1:2;
@@ -1190,7 +1196,7 @@ end;
    for z0,z1 be Element of L holds
     <%z0,z1%>.0 = z0 &
     <%z0,z1%>.1 = z1 &
-    for n be Nat st n >= 2 holds <%z0,z1%>.n = 0.L
+    for n be Element of NAT st n >= 2 holds <%z0,z1%>.n = 0.L
    proof
     let L be non empty ZeroStr;
     let z0,z1 be Element of L;
@@ -1203,7 +1209,7 @@ end;
        .= z0 by A1,FUNCT_7:33;
     thus <%z0,z1%>.1 = (0_.(L)+*(0,z0)+*(1,z1)).1
        .= z1 by A2,FUNCT_7:33;
-    let n be Nat;
+    let n be Element of NAT;
     assume n >= 2;
     then A3: n >= 1+1;
     then A4: n > 0+1 by NAT_1:38;
@@ -1221,7 +1227,7 @@ end;
    coherence
    proof
     take 2;
-    let n be Nat;
+    let n be Element of NAT;
     assume n >= 2;
     hence thesis by Th39;
    end;
@@ -1236,7 +1242,7 @@ end;
     let z0,z1 be Element of L;
        2 is_at_least_length_of <%z0,z1%>
     proof
-     let n be Nat;
+     let n be Element of NAT;
      assume n >= 2;
      hence <%z0,z1%>.n = 0.L by Th39;
     end;
@@ -1254,11 +1260,11 @@ end;
     then A1: <%z0,z1%>.1 <> 0.L by Th39;
     A2: 2 is_at_least_length_of <%z0,z1%>
     proof
-     let n be Nat;
+     let n be Element of NAT;
      assume n >= 2;
      hence <%z0,z1%>.n = 0.L by Th39;
     end;
-       now let n be Nat;
+       now let n be Element of NAT;
      assume n is_at_least_length_of <%z0,z1%>;
      then 1 < n by A1,ALGSEQ_1:def 3;
      hence 1+1 <= n by NAT_1:38;
@@ -1277,7 +1283,7 @@ end;
     then A1: <%z0,0.L%>.0 <> 0.L by Th39;
     A2: 1 is_at_least_length_of <%z0,0.L%>
     proof
-     let n be Nat;
+     let n be Element of NAT;
      assume A3: n >= 1;
      per cases by A3,REAL_1:def 5;
       suppose n = 1;
@@ -1288,7 +1294,7 @@ end;
        hence <%z0,0.L%>.n = 0.L by Th39;
     end;
     end;
-       now let n be Nat;
+       now let n be Element of NAT;
      assume n is_at_least_length_of <%z0,0.L%>;
      then 0 < n by A1,ALGSEQ_1:def 3;
      hence 0+1 <= n by NAT_1:38;
@@ -1303,7 +1309,7 @@ end;
     let L be non empty ZeroStr;
     A1: 0 is_at_least_length_of <%0.L,0.L%>
     proof
-     let n be Nat;
+     let n be Element of NAT;
      assume n >= 0;
      per cases;
       suppose n = 0;
@@ -1323,7 +1329,8 @@ end;
        hence <%0.L,0.L%>.n = 0.L;
     end;
     end;
-       for n be Nat st n is_at_least_length_of <%0.L,0.L%> holds 0 <= n;
+       for n be Element of NAT st n is_at_least_length_of <%0.L,0.L%>
+        holds 0 <= n;
     then len <%0.L,0.L%> = 0 by A1,ALGSEQ_1:def 4;
     hence thesis by POLYNOM4:8;
    end;
@@ -1343,7 +1350,7 @@ end;
      suppose A2: z0 <> 0.L;
       then A3: len <%z0%> = 0+1 by Th34;
       A4: len <%z0,0.L%> = 1 by A2,Th42;
-         now let n be Nat;
+         now let n be Element of NAT;
        assume n < len <%z0%>;
        then n <= 0 by A3,NAT_1:38;
        then A5: n = 0;
@@ -1366,7 +1373,7 @@ end;
     consider F be FinSequence of the carrier of L such that
      A1: eval(<%z0,z1%>,x) = Sum F and
      A2: len F = len <%z0,z1%> and
-     A3: for n be Nat st n in dom F holds
+     A3: for n be Element of NAT st n in dom F holds
       F.n = <%z0,z1%>.(n-'1) * (power L).(x,n-'1) by POLYNOM4:def 2;
     A4: len F <= 2 by A2,Th40;
     per cases by A4,CQC_THE1:3;
@@ -1477,12 +1484,12 @@ begin  :: Substitution in Polynomials
     ex F be FinSequence of the carrier of Polynom-Ring L st
      it = Sum F &
      len F = len p &
-     for n be Nat st n in dom F holds F.n = p.(n-'1)*(q`^(n-'1));
+     for n be Element of NAT st n in dom F holds F.n = p.(n-'1)*(q`^(n-'1));
    existence
    proof
     set k = len p;
-    defpred P[Nat,set] means $2 = p.($1-'1)*(q`^($1-'1));
-    A1: now let n be Nat;
+    defpred P[Element of NAT,set] means $2 = p.($1-'1)*(q`^($1-'1));
+    A1: now let n be Element of NAT;
      assume n in Seg k;
      reconsider x = p.(n-'1)*(q`^(n-'1)) as
                 Element of Polynom-Ring L by POLYNOM3:def 12;
@@ -1491,7 +1498,8 @@ begin  :: Substitution in Polynomials
     end;
     consider F being FinSequence of the carrier of Polynom-Ring L such that
      A2: dom F = Seg k and
-     A3: for n be Nat st n in Seg k holds P[n,F.n] from FINSEQ_1:sch 5(A1);
+     A3: for n be Element of NAT st n in Seg k holds P[n,F.n]
+      from FINSEQ_1:sch 5(A1);
     reconsider r=Sum F as Polynomial of L by POLYNOM3:def 12;
     take r,F;
     thus thesis by A2,A3,FINSEQ_1:def 3;
@@ -1502,12 +1510,14 @@ begin  :: Substitution in Polynomials
     given F1 be FinSequence of the carrier of Polynom-Ring L such that
      A4: y1 = Sum F1 and
      A5: len F1 = len p and
-     A6: for n be Nat st n in dom F1 holds F1.n = p.(n-'1)*(q`^(n-'1));
+     A6: for n be Element of NAT st n in dom F1
+      holds F1.n = p.(n-'1)*(q`^(n-'1));
     given F2 be FinSequence of the carrier of Polynom-Ring L such that
      A7: y2 = Sum F2 and
      A8: len F2 = len p and
-     A9: for n be Nat st n in dom F2 holds F2.n = p.(n-'1)*(q`^(n-'1));
-       now let n be Nat;
+     A9: for n be Element of NAT st n in dom F2
+      holds F2.n = p.(n-'1)*(q`^(n-'1));
+       now let n be Element of NAT;
      assume n in Seg len F1;
      then A10: n in dom F1 & n in dom F2 by A5,A8,FINSEQ_1:def 3;
      hence F1.n = p.(n-'1)*(q`^(n-'1)) by A6
@@ -1529,9 +1539,10 @@ begin  :: Substitution in Polynomials
     consider F be FinSequence of the carrier of Polynom-Ring L such that
      A1: Subst(0_.(L),p) = Sum F and
         len F = len (0_.(L)) and
-     A2: for n be Nat st n in dom F holds F.n = (0_.(L)).(n-'1)*(p`^(n-'1))
+     A2: for n be Element of NAT st n in dom F
+      holds F.n = (0_.(L)).(n-'1)*(p`^(n-'1))
                                                                  by Def5;
-       now let n be Nat;
+       now let n be Element of NAT;
      assume n in dom F;
      hence F.n = (0_.(L)).(n-'1)*(p`^(n-'1)) by A2
         .= 0.L*(p`^(n-'1)) by FUNCOP_1:13
@@ -1554,14 +1565,15 @@ begin  :: Substitution in Polynomials
     consider F be FinSequence of the carrier of Polynom-Ring L such that
      A1: Subst(p,0_.(L)) = Sum F and
      A2: len F = len p and
-     A3: for n be Nat st n in dom F holds F.n = p.(n-'1)*((0_.(L))`^(n-'1))
+     A3: for n be Element of NAT st n in dom F
+      holds F.n = p.(n-'1)*((0_.(L))`^(n-'1))
                                                                  by Def5;
     per cases;
      suppose len F <> 0;
       then len F > 0;
       then 0+1 <= len F by NAT_1:38;
       then A4: 1 in dom F by FINSEQ_3:27;
-         now let n be Nat;
+         now let n be Element of NAT;
        assume that
         A5: n in dom F and
         A6: n <> 1;
@@ -1612,9 +1624,11 @@ begin  :: Substitution in Polynomials
         consider F be FinSequence of the carrier of Polynom-Ring L such that
          A1: Subst(p,<%x%>) = Sum F and
             len F = len p and
-         A2: for n be Nat st n in dom F holds F.n = p.(n-'1)*(<%x%>`^(n-'1))
+         A2: for n be Element of NAT st n in dom F
+          holds F.n = p.(n-'1)*(<%x%>`^(n-'1))
                                                                  by Def5;
-        defpred P[Nat] means for p be Polynomial of L st p = Sum(F|$1) holds
+        defpred P[Element of NAT] means for p be Polynomial of L
+         st p = Sum(F|$1) holds
          len p <= 1;
         A3: P[0]
         proof
@@ -1626,14 +1640,14 @@ begin  :: Substitution in Polynomials
          then len p = 0 by POLYNOM4:6;
          hence len p <= 1;
         end;
-        A5: for n be Nat st P[n] holds P[n+1]
+        A5: for n be Element of NAT st P[n] holds P[n+1]
         proof
-         let n be Nat;
+         let n be Element of NAT;
          assume A6: for q be Polynomial of L st q = Sum(F|n) holds len q <= 1;
          let q be Polynomial of L;
          assume A7: q = Sum(F|(n+1));
          reconsider F1 = Sum(F|n) as Polynomial of L by POLYNOM3:def 12;
-         reconsider maxFq = max(len F1,len (p.n*(<%x%>`^n))) as Nat
+         reconsider maxFq = max(len F1,len (p.n*(<%x%>`^n))) as Element of NAT
                                                                by FINSEQ_2:1;
          A8: len F1 <= 1 by A6;
             len (p.n*(<%x%>`^n)) <= 1
@@ -1673,7 +1687,7 @@ begin  :: Substitution in Polynomials
          end;
          hence len q <= 1;
         end;
-        A15: for n be Nat holds P[n] from NAT_1:sch 1(A3,A5);
+        A15: for n be Element of NAT holds P[n] from NAT_1:sch 1(A3,A5);
            F|(len F) = F by FINSEQ_1:79;
         hence len Subst(p,<%x%>) <= 1 by A1,A15;
       end;
@@ -1696,14 +1710,16 @@ begin  :: Substitution in Polynomials
     consider F be FinSequence of the carrier of Polynom-Ring L such that
      A4: Subst(p,q) = Sum F and
      A5: len F = len p and
-     A6: for n be Nat st n in dom F holds F.n = p.(n-'1)*(q`^(n-'1))
+     A6: for n be Element of NAT st n in dom F holds F.n = p.(n-'1)*(q`^(n-'1))
                                                                  by Def5;
        len p * len q - len p - len q + 1 >= 0 by A1,A3,Th1;
-    then reconsider k = len p * len q - len p - len q + 1 as Nat by INT_1:16;
+    then reconsider k = len p * len q - len p - len q + 1 as Element of NAT
+     by INT_1:16;
        len F > 0 by A1,A5;
     then A7: 0+1 <= len F by NAT_1:38;
     then A8: 1 in dom F by FINSEQ_3:27;
-    defpred P[Nat] means for F1 be Polynomial of L st F1 = Sum(F|$1) holds
+    defpred P[Element of NAT] means for F1 be Polynomial of L
+     st F1 = Sum(F|$1) holds
      len F1 <= len (q`^($1-'1));
     A9: P[1]
     proof
@@ -1723,9 +1739,9 @@ begin  :: Substitution in Polynomials
      then len F1 <= len (q`^0) by Th16;
      hence len F1 <= len (q`^(1-'1)) by BINARITH:51;
     end;
-    A11: for n be non empty Nat st P[n] holds P[n+1]
+    A11: for n be non empty Element of NAT st P[n] holds P[n+1]
     proof
-     let n be non empty Nat;
+     let n be non empty Element of NAT;
      assume A12: for F1 be Polynomial of L st F1 = Sum(F|n) holds
       len F1 <= len (q`^(n-'1));
      let F1 be Polynomial of L;
@@ -1752,7 +1768,8 @@ begin  :: Substitution in Polynomials
        then A19: n+1 in dom F by A18,FINSEQ_3:27;
           F|(n+1) = F|n ^ <*F/.(n+1)*> by A18,JORDAN8:2;
        then A20: F1 = Sum(F|n) + F/.(n+1) by A13,FVSUM_1:87;
-       reconsider maxFq = max(len F2,len (p.n*(q`^n))) as Nat by FINSEQ_2:1;
+       reconsider maxFq = max(len F2,len (p.n*(q`^n))) as Element of NAT
+        by FINSEQ_2:1;
        A21: maxFq >= len F2 & maxFq >= len (p.n*(q`^n)) by XXREAL_0:25;
           F/.(n+1) = F.(n+1) by A19,FINSEQ_4:def 4
           .= p.(n+1-'1)*(q`^(n+1-'1)) by A6,A19
@@ -1785,7 +1802,8 @@ begin  :: Substitution in Polynomials
        hence len F1 <= len (q`^(n+1-'1)) by BINARITH:39;
     end;
     end;
-    A25: for n be non empty Nat holds P[n] from BINARITH:sch 1(A9,A11);
+    A25: for n be non empty Element of NAT holds P[n]
+     from BINARITH:sch 1(A9,A11);
        len p > 0 by A1;
     then len p >= 0+1 by NAT_1:38;
     then A26: len p-1 >=0 by XREAL_1:21;
@@ -1813,7 +1831,8 @@ begin  :: Substitution in Polynomials
        then len F1 > 0;
        then 0+1 <= len F1 by NAT_1:38;
        then A36: 1 in dom F1 by FINSEQ_3:27;
-       defpred P[Nat] means for F2 be Polynomial of L st F2 = Sum(F1|$1) holds
+       defpred P[Element of NAT] means for F2 be Polynomial of L
+        st F2 = Sum(F1|$1) holds
         len F2 <= $1*len q-len q-$1+2;
        A37: P[1]
        proof
@@ -1831,9 +1850,9 @@ begin  :: Substitution in Polynomials
            .= <%p.0%> by Th30;
         hence len F2 <= 1*len q-len q-1+2 by A38,ALGSEQ_1:def 6;
        end;
-       A39: for n be non empty Nat st P[n] holds P[n+1]
+       A39: for n be non empty Element of NAT st P[n] holds P[n+1]
        proof
-        let n be non empty Nat;
+        let n be non empty Element of NAT;
         assume A40: for F2 be Polynomial of L st F2 = Sum(F1|n) holds
          len F2 <= n*len q-len q-n+2;
         let F2 be Polynomial of L;
@@ -1859,7 +1878,8 @@ begin  :: Substitution in Polynomials
              .= p.(n+1-'1)*(q`^(n+1-'1)) by A6,A48
              .= p.n*(q`^(n+1-'1)) by BINARITH:39
              .= p.n*(q`^n) by BINARITH:39;
-          reconsider maxFq = max(len F3,len (p.n*(q`^n))) as Nat by FINSEQ_2:1;
+          reconsider maxFq = max(len F3,len (p.n*(q`^n))) as Element of NAT
+           by FINSEQ_2:1;
           A50: maxFq >= len F3 & maxFq >= len (p.n*(q`^n)) by XXREAL_0:25;
              F1|(n+1) = F1|n ^ <*F1/.(n+1)*> by A45,JORDAN8:2;
           then F2 = Sum(F1|n) + F1/.(n+1) by A41,FVSUM_1:87
@@ -1897,7 +1917,8 @@ begin  :: Substitution in Polynomials
         end;
         hence len F2 <= (n+1)*len q-len q-(n+1)+2;
        end;
-       A56: for n be non empty Nat holds P[n] from BINARITH:sch 1(A37,A39);
+       A56: for n be non empty Element of NAT holds P[n]
+        from BINARITH:sch 1(A37,A39);
           F1|(len F1) = F1 by FINSEQ_1:79;
        then A57: len sF1 <= (len F1)*(len q)-len q-len F1+2 by A35,A56;
         0+len q >= 1+1 by A2,NAT_1:38;
@@ -1952,14 +1973,15 @@ begin  :: Substitution in Polynomials
     consider F be FinSequence of the carrier of Polynom-Ring L such that
      A1: Subst(p,q) = Sum F and
      A2: len F = len p and
-     A3: for n be Nat st n in dom F holds F.n = p.(n-'1)*(q`^(n-'1))
+     A3: for n be Element of NAT st n in dom F holds F.n = p.(n-'1)*(q`^(n-'1))
                                                                  by Def5;
     consider F1 be FinSequence of the carrier of L such that
      A4: eval(p,eval(q,x)) = Sum F1 and
      A5: len F1 = len p and
-     A6: for n be Nat st n in dom F1 holds
+     A6: for n be Element of NAT st n in dom F1 holds
       F1.n = p.(n-'1)*(power L).(eval(q,x),n-'1) by POLYNOM4:def 2;
-    defpred P[Nat] means for r be Polynomial of L st r = Sum(F|$1) holds
+    defpred P[Element of NAT] means for r be Polynomial of L
+     st r = Sum(F|$1) holds
      eval(r,x) = Sum(F1|$1);
     A7: P[0]
     proof
@@ -1972,9 +1994,9 @@ begin  :: Substitution in Polynomials
      hence eval(r,x) = 0.L by POLYNOM4:20
         .= Sum(F1|0) by A9,RLVECT_1:60;
     end;
-    A10: for n be Nat st P[n] holds P[n+1]
+    A10: for n be Element of NAT st P[n] holds P[n+1]
     proof
-     let n be Nat;
+     let n be Element of NAT;
      assume A11: for r be Polynomial of L st r = Sum(F|n) holds
       eval(r,x) = Sum(F1|n);
      let r be Polynomial of L;
@@ -2010,7 +2032,7 @@ begin  :: Substitution in Polynomials
        hence eval(r,x) = Sum(F1|(n+1)) by A11,A12;
     end;
     end;
-    A20: for n be Nat holds P[n] from NAT_1:sch 1(A7,A10);
+    A20: for n be Element of NAT holds P[n] from NAT_1:sch 1(A7,A10);
        F|(len F) = F & F1|(len F1) = F1 by FINSEQ_1:79;
     hence thesis by A1,A2,A4,A5,A20;
    end;
@@ -2136,21 +2158,21 @@ begin  :: Fundamental Theorem of Algebra
     (non empty doubleLoopStr);
    let p be Polynomial of L;
    func NormPolynomial(p) -> sequence of L means :Def10:
-    for n be Nat holds it.n = p.n / p.(len p-'1);
+    for n be Element of NAT holds it.n = p.n / p.(len p-'1);
    existence
    proof
-    deffunc F(Nat) = p.$1 / p.(len p-'1);
+    deffunc F(Element of NAT) = p.$1 / p.(len p-'1);
     consider q be sequence of L such that
-     A1: for n be Nat holds q.n = F(n) from FUNCT_2:sch 4;
+     A1: for n be Element of NAT holds q.n = F(n) from FUNCT_2:sch 4;
     take q;
     thus thesis by A1;
    end;
    uniqueness
    proof
     let p1,p2 be sequence of L such that
-     A2: for n be Nat holds p1.n = p.n / p.(len p-'1) and
-     A3: for n be Nat holds p2.n = p.n / p.(len p-'1);
-       now let n be Nat;
+     A2: for n be Element of NAT holds p1.n = p.n / p.(len p-'1) and
+     A3: for n be Element of NAT holds p2.n = p.n / p.(len p-'1);
+       now let n be Element of NAT;
      thus p1.n = p.n / p.(len p-'1) by A2
               .= p2.n by A3;
     end;
@@ -2165,7 +2187,7 @@ begin  :: Fundamental Theorem of Algebra
    cluster NormPolynomial(p) -> finite-Support;
    coherence
    proof
-       now let n be Nat;
+       now let n be Element of NAT;
      assume A1: n >= len p;
      thus (NormPolynomial(p)).n = p.n / p.(len p-'1) by Def10
         .= 0.L / p.(len p-'1) by A1,ALGSEQ_1:22
@@ -2210,18 +2232,18 @@ begin  :: Fundamental Theorem of Algebra
     then A1: (p.(len p-'1))" <> 0.L by VECTSP_1:74;
     A2: len p is_at_least_length_of NormPolynomial(p)
     proof
-     let n be Nat;
+     let n be Element of NAT;
      assume A3: n >= len p;
      thus (NormPolynomial(p)).n = p.n / p.(len p-'1) by Def10
         .= 0.L / p.(len p-'1) by A3,ALGSEQ_1:22
         .= 0.L * (p.(len p-'1))" by VECTSP_1:def 23
         .= 0.L by VECTSP_1:39;
     end;
-       now let n be Nat;
+       now let n be Element of NAT;
      assume A4: n is_at_least_length_of NormPolynomial(p);
         n is_at_least_length_of p
      proof
-      let i be Nat;
+      let i be Element of NAT;
       assume i >= n;
       then (NormPolynomial(p)).i = 0.L by A4,ALGSEQ_1:def 3;
       then p.i / p.(len p-'1) = 0.L by Def10;
@@ -2247,18 +2269,18 @@ begin  :: Fundamental Theorem of Algebra
     consider F1 be FinSequence of the carrier of L such that
      A2: eval(p,x) = Sum F1 and
      A3: len F1 = len p and
-     A4: for n be Nat st n in dom F1 holds
+     A4: for n be Element of NAT st n in dom F1 holds
          F1.n = p.(n-'1) * (power L).(x,n-'1) by POLYNOM4:def 2;
     consider F2 be FinSequence of the carrier of L such that
      A5: eval(NPp,x) = Sum F2 and
      A6: len F2 = len NPp and
-     A7: for n be Nat st n in dom F2 holds
+     A7: for n be Element of NAT st n in dom F2 holds
          F2.n = NPp.(n-'1) * (power L).(x,n-'1) by POLYNOM4:def 2;
          len F1 = len F2 by A1,A3,A6,Th58;
       then A8: dom F1 = dom F2 by FINSEQ_3:31;
          now let i be set;
        assume A9: i in dom F1;
-       then reconsider i1=i as Nat by FINSEQ_3:25;
+       then reconsider i1=i as Element of NAT by FINSEQ_3:25;
        A10: p.(i1-'1) * (power L).(x,i1-'1) = F1.i by A4,A9
           .= F1/.i by A9,FINSEQ_4:def 4;
        thus F2/.i = F2.i by A8,A9,FINSEQ_4:def 4
@@ -2411,7 +2433,7 @@ VECTSP_1:def 23
   definition
    let L be unital (non empty HGrStr);
    let x be Element of L;
-   let n be Nat;
+   let n be Element of NAT;
    func FPower(x,n) -> Function of L,L means :Def11:
     for y be Element of L holds it.y = x*(power L).(y,n);
    existence
@@ -2536,12 +2558,12 @@ VECTSP_1:def 23
 
   theorem Th70:
    for x be Element of F_Complex
-   for n be Nat
+   for n be Element of NAT
    ex f be Function of COMPLEX,COMPLEX st
     f = FPower(x,n) & FPower(x,n+1) = f(#)id(COMPLEX)
    proof
     let x be Element of F_Complex;
-    let n be Nat;
+    let n be Element of NAT;
     A1: the carrier of F_Complex = COMPLEX by COMPLFLD:def 1;
     then reconsider f=FPower(x,n) as Function of COMPLEX,COMPLEX;
     take f;
@@ -2561,13 +2583,13 @@ VECTSP_1:def 23
 
   theorem Th71:
    for x be Element of F_Complex
-   for n be Nat
+   for n be Element of NAT
    ex f be Function of COMPLEX,COMPLEX st
     f = FPower(x,n) & f is_continuous_on COMPLEX
    proof
     let x be Element of F_Complex;
     A1: the carrier of F_Complex = COMPLEX by COMPLFLD:def 1;
-    defpred P[Nat] means ex f be Function of COMPLEX,COMPLEX st
+    defpred P[Element of NAT] means ex f be Function of COMPLEX,COMPLEX st
      f = FPower(x,$1) & f is_continuous_on COMPLEX;
     A2: P[0]
     proof
@@ -2577,9 +2599,9 @@ VECTSP_1:def 23
         f = (the carrier of F_Complex) --> x by Th67;
      hence f is_continuous_on COMPLEX by A1,Th64;
     end;
-    A3: for n be Nat st P[n] holds P[n+1]
+    A3: for n be Element of NAT st P[n] holds P[n+1]
     proof
-     let n be Nat;
+     let n be Element of NAT;
      given f be Function of COMPLEX,COMPLEX such that
       A4: f = FPower(x,n) and
       A5: f is_continuous_on COMPLEX;
@@ -2591,7 +2613,7 @@ VECTSP_1:def 23
       A7: FPower(x,n+1) = f1(#)id(COMPLEX) by Th70;
      thus g is_continuous_on COMPLEX by A4,A5,A6,A7,Th63,CFCONT_1:65;
     end;
-    thus for n be Nat holds P[n] from NAT_1:sch 1(A2,A3);
+    thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
    end;
 
   definition
@@ -2686,8 +2708,8 @@ BINOP_1:sch 4;
     end;
     then reconsider L as add-associative right_zeroed right_complementable
      (non empty LoopStr) by A3,A6,RLVECT_1:def 6,def 7,def 8;
-    defpred P[Nat,set] means $2 = FPower(p.($1-'1),$1-'1);
-    A9: now let n be Nat;
+    defpred P[Element of NAT,set] means $2 = FPower(p.($1-'1),$1-'1);
+    A9: now let n be Element of NAT;
      assume n in Seg len p;
      reconsider x = FPower(p.(n-'1),n-'1) as Element of L
                                                             by A1,FUNCT_2:12;
@@ -2696,10 +2718,11 @@ BINOP_1:sch 4;
     end;
     consider F be FinSequence of the carrier of L such that
      A10: dom F = Seg len p and
-     A11: for n be Nat st n in Seg len p holds P[n,F.n]
+     A11: for n be Element of NAT st n in Seg len p holds P[n,F.n]
           from FINSEQ_1:sch 5(A9);
     A12: F|len F = F by FINSEQ_1:79;
-    defpred P[Nat] means for g be PartFunc of COMPLEX,COMPLEX st g = Sum (F|$1)
+    defpred P[Element of NAT] means for g be PartFunc of COMPLEX,COMPLEX
+     st g = Sum (F|$1)
      holds g is_continuous_on COMPLEX;
     A13: P[0]
     proof
@@ -2710,9 +2733,9 @@ BINOP_1:sch 4;
         .= COMPLEX --> 0c by RLVECT_1:def 2;
      hence g is_continuous_on COMPLEX by Th64;
     end;
-    A15: for k be Nat st P[k] holds P[k+1]
+    A15: for k be Element of NAT st P[k] holds P[k+1]
     proof
-     let k be Nat;
+     let k be Element of NAT;
      assume A16: for g be PartFunc of COMPLEX,COMPLEX st g = Sum (F|k) holds
       g is_continuous_on COMPLEX;
      let g be PartFunc of COMPLEX,COMPLEX;
@@ -2747,17 +2770,17 @@ BINOP_1:sch 4;
        hence g is_continuous_on COMPLEX by A16,A17;
     end;
     end;
-    A26: for k be Nat holds P[k] from NAT_1:sch 1(A13,A15);
+    A26: for k be Element of NAT holds P[k] from NAT_1:sch 1(A13,A15);
     reconsider SF = Sum F as Function of COMPLEX,COMPLEX by FUNCT_2:121;
        now let x be Element of COMPLEX;
      reconsider x1=x as Element of F_Complex by COMPLFLD:def 1;
     consider H be FinSequence of the carrier of F_Complex such that
      A27: eval(p,x1) = Sum H and
      A28: len H = len p and
-     A29: for n be Nat st n in dom H holds
+     A29: for n be Element of NAT st n in dom H holds
                H.n = p.(n-'1)*(power F_Complex).(x1,n-'1) by POLYNOM4:def 2;
      A30: len F = len p by A10,FINSEQ_1:def 3;
-     defpred P[Nat] means for SFk be Function of COMPLEX,COMPLEX st
+     defpred P[Element of NAT] means for SFk be Function of COMPLEX,COMPLEX st
       SFk = Sum (F|$1) holds Sum (H|$1) = SFk.x;
      A31: P[0]
      proof
@@ -2771,9 +2794,9 @@ BINOP_1:sch 4;
       hence Sum (H|0) = 0.F_Complex by RLVECT_1:60
          .= SFk.x by A33,COMPLFLD:9,FUNCOP_1:13;
      end;
-     A34: for k be Nat st P[k] holds P[k+1]
+     A34: for k be Element of NAT st P[k] holds P[k+1]
      proof
-      let k be Nat;
+      let k be Element of NAT;
       assume A35: for SFk be Function of COMPLEX,COMPLEX st SFk = Sum
  (F|k) holds
        Sum (H|k) = SFk.x;
@@ -2818,7 +2841,7 @@ BINOP_1:sch 4;
         hence Sum (H|(k+1)) = SFk.x by A35,A36,A46;
      end;
      end;
-     A47: for k be Nat holds P[k] from NAT_1:sch 1(A31,A34);
+     A47: for k be Element of NAT holds P[k] from NAT_1:sch 1(A31,A34);
      A48: Sum(F|len F) = SF by FINSEQ_1:79;
      thus f.x = Sum H by A27,Def12
         .= Sum (H|len H) by FINSEQ_1:79
@@ -2832,7 +2855,7 @@ BINOP_1:sch 4;
    for p be Polynomial of F_Complex st len p > 2 & |.p.(len p-'1).|=1
    for F be FinSequence of REAL st
     len F = len p &
-    for n be Nat st n in dom F holds F.n = |.p.(n-'1).|
+    for n be Element of NAT st n in dom F holds F.n = |.p.(n-'1).|
    for z be Element of F_Complex st |.z.| > Sum F holds
     |.eval(p,z).| > |.p.0 .|+1
    proof
@@ -2844,7 +2867,7 @@ BINOP_1:sch 4;
     let F be FinSequence of REAL;
     assume that
      A4: len F = len p and
-     A5: for n be Nat st n in dom F holds F.n = |.p.(n-'1).|;
+     A5: for n be Element of NAT st n in dom F holds F.n = |.p.(n-'1).|;
     let z be Element of F_Complex;
     assume A6: |.z.| > Sum F;
     set lF1 = len F-'1;
@@ -2852,7 +2875,7 @@ BINOP_1:sch 4;
     consider G be FinSequence of the carrier of F_Complex such that
      A7: eval(p,z) = Sum G and
      A8: len G = len p and
-     A9: for n be Nat st n in dom G holds
+     A9: for n be Element of NAT st n in dom G holds
       G.n = p.(n-'1)*(power F_Complex).(z,n-'1) by POLYNOM4:def 2;
     A10: lF1+1 = len F by A3,A4,BINARITH:53;
     A11: len F >= 1+1+0 by A1,A4;
@@ -2877,14 +2900,14 @@ BINOP_1:sch 4;
     then len (F|lF1) = lF1 by FINSEQ_1:80;
     then A20: 1 in dom (F|lF1) by A12,FINSEQ_3:27;
     A21: 0.F_Complex = the Zero of F_Complex by RLVECT_1:def 2;
-    defpred P[Nat] means |.Sum(G|lF1|$1).| <=
+    defpred P[Element of NAT] means |.Sum(G|lF1|$1).| <=
      (Sum (F|lF1|$1))*|.(power F_Complex).(z,lF2).|;
      G|lF1|0 = <*>the carrier of F_Complex & F|lF1|0 = <*>REAL;
     then A22: P[0] by A21,COMPLFLD:93,RLVECT_1:60,RVSUM_1:102;
     A23: len (F|lF1) = lF1 by A19,FINSEQ_1:80
        .= len (G|lF1) by A4,A8,A19,FINSEQ_1:80;
     then A24: dom (F|lF1) = dom (G|lF1) by FINSEQ_3:31;
-    A25: now let n be Nat;
+    A25: now let n be Element of NAT;
      assume A26: n in dom (F|lF1);
      A27: dom(F|lF1) c= dom F by FINSEQ_5:20;
         (F|lF1).n = (F|lF1)/.n by A26,FINSEQ_4:def 4
@@ -2911,9 +2934,9 @@ BINOP_1:sch 4;
     then A33: len F-1 >= 0 by A3,A4,XREAL_1:21;
     A34: lF2+1 = len F-2+1 by A32,BINARITH:def 3
        .= lF1 by A33,BINARITH:def 3;
-    A35: for n be Nat st P[n] holds P[n+1]
+    A35: for n be Element of NAT st P[n] holds P[n+1]
     proof
-     let n be Nat;
+     let n be Element of NAT;
      assume A36: |.Sum(G|lF1|n).| <= (Sum
  (F|lF1|n))*|.(power F_Complex).(z,lF2).|;
      then A37: |.Sum(G|lF1|n).|+|.(G|lF1)/.(n+1).| <=
@@ -2969,7 +2992,7 @@ BINOP_1:sch 4;
         (Sum (F|lF1|(n+1)))*|.(power F_Complex).(z,lF2).| by A36;
     end;
     end;
-    A47: for n be Nat holds P[n] from NAT_1:sch 1(A22,A35);
+    A47: for n be Element of NAT holds P[n] from NAT_1:sch 1(A22,A35);
        F|lF1|(len (F|lF1)) = F|lF1 & G|lF1|(len (F|lF1)) = G|lF1
                                                           by A23,FINSEQ_1:79;
     then |.Sum(G|lF1).| <= (Sum (F|lF1))*|.(power F_Complex).(z,lF2).| by A47;
@@ -3028,11 +3051,11 @@ BINOP_1:sch 4;
       A5: b = |.eval(np,z).|;
      thus 0 <= b by A5,COMPLEX1:132;
     end;
-    defpred P[Nat,set] means ex g1 be Element of F_Complex st
+    defpred P[Element of NAT,set] means ex g1 be Element of F_Complex st
      g1 = $2 & |.eval(np,g1).| < q+1/($1+1);
-    A6: for n be Nat ex g be Element of COMPLEX st P[n,g]
+    A6: for n be Element of NAT ex g be Element of COMPLEX st P[n,g]
     proof
-     let n be Nat;
+     let n be Element of NAT;
      consider r be real number such that
       A7: r in D and
       A8: r < q+1/(n+1) by A3,A4,SEQ_4:def 5;
@@ -3044,21 +3067,22 @@ BINOP_1:sch 4;
      thus |.eval(np,g1).| < q+1/(n+1) by A8,A9;
     end;
     consider G be Complex_Sequence such that
-     A10: for n be Nat holds P[n,G.n] from CFCONT_1:sch 1(A6);
-    deffunc G(Nat) = |.np.($1-'1).|;
+     A10: for n be Element of NAT holds P[n,G.n] from CFCONT_1:sch 1(A6);
+    deffunc G(Element of NAT) = |.np.($1-'1).|;
     consider F be FinSequence of REAL such that
      A11: len F = len np and
-     A12: for n be Nat st n in Seg len np holds F.n = G(n) from FINSEQ_2:sch 1;
+     A12: for n be Element of NAT st n in Seg len np holds F.n = G(n)
+      from FINSEQ_2:sch 1;
     A13: Seg len np = dom F by A11,FINSEQ_1:def 3;
     A14: len p <> 0 by A1;
        len p = len p-'1+1 by A2,BINARITH:53;
     then A15: p.(len p-'1) <> 0.F_Complex by ALGSEQ_1:25;
     then A16: p.(len p-'1) <> the Zero of F_Complex by RLVECT_1:def 2;
     A17: |.p.(len p-'1).| > 0 by A15,COMPLFLD:96;
-       ex r be Real st for n be Nat holds |.G.n.| < r
+       ex r be Real st for n be Element of NAT holds |.G.n.| < r
     proof
      take r = Sum F + 1;
-     let n be Nat;
+     let n be Element of NAT;
      consider Gn be Element of F_Complex such that
       A18: Gn = G.n and
       A19: |.eval(np,Gn).| < q+1/(n+1) by A10;
@@ -3090,11 +3114,11 @@ BINOP_1:sch 4;
                                                           by COMPLFLD:def 1;
     take z0;
     let z be Element of F_Complex;
-    defpred P[Nat,set] means ex G1n be Element of F_Complex st
+    defpred P[Element of NAT,set] means ex G1n be Element of F_Complex st
      G1n = G1.$1 & $2 = eval(np,G1n);
-    A27: for n be Nat ex g be Element of COMPLEX st P[n,g]
+    A27: for n be Element of NAT ex g be Element of COMPLEX st P[n,g]
     proof
-     let n be Nat;
+     let n be Element of NAT;
      reconsider G1n = G1.n as Element of F_Complex
                                                           by COMPLFLD:def 1;
      reconsider g = eval(np,G1n) as Element of COMPLEX by COMPLFLD:def 1;
@@ -3103,12 +3127,13 @@ BINOP_1:sch 4;
      thus g = eval(np,G1n);
     end;
     consider H be Complex_Sequence such that
-     A28: for n be Nat holds P[n,H.n] from CFCONT_1:sch 1(A27);
-    deffunc F(Nat) = 1/($1+1);
+     A28: for n be Element of NAT holds P[n,H.n] from CFCONT_1:sch 1(A27);
+    deffunc F(Element of NAT) = 1/($1+1);
     consider R be Real_Sequence such that
-     A29: for n be Nat holds R.n = F(n) from SEQ_1:sch 1;
+     A29: for n be Element of NAT holds R.n = F(n) from SEQ_1:sch 1;
     reconsider Rcons = NAT --> |.eval(np,z).| as Real_Sequence;
-     A30: for n be Nat holds Rcons.n = |.eval(np,z).| by FUNCOP_1:13;
+     A30: for n be Element of NAT holds Rcons.n = |.eval(np,z).|
+      by FUNCOP_1:13;
     A31: for H' be convergent Complex_Sequence holds |.H'.| is convergent;
     consider Nseq be increasing Seq_of_Nat such that
      A32: G1 = G*Nseq by A25,COMSEQ_3:def 9;
@@ -3116,8 +3141,9 @@ BINOP_1:sch 4;
     then A33: |.eval(np,z).| >= q by A4,SEQ_4:def 5;
     consider g be Element of COMPLEX such that
      A34: for p be Real st 0 < p
-      ex n be Nat st
-      for m be Nat st n <= m holds |.G1.m-g.| < p by A26,COMSEQ_2:def 4;
+      ex n be Element of NAT st
+      for m be Element of NAT st n <= m holds |.G1.m-g.| < p
+       by A26,COMSEQ_2:def 4;
     reconsider g1 = g as Element of F_Complex
                                                           by COMPLFLD:def 1;
     reconsider eg = eval(np,g1) as Element of COMPLEX by COMPLFLD:def 1;
@@ -3130,10 +3156,10 @@ BINOP_1:sch 4;
       A38: 0 < p1 and
       A39: for x1 be Element of COMPLEX st x1 in COMPLEX & |.x1-g.| < p1 holds
        |.fPF/.x1 - fPF/.g.| < p by A35,A37,CFCONT_1:61;
-     consider n be Nat such that
-      A40: for m be Nat st n <= m holds |.G1.m-g.| < p1 by A34,A38;
+     consider n be Element of NAT such that
+      A40: for m be Element of NAT st n <= m holds |.G1.m-g.| < p1 by A34,A38;
      take n;
-     let m be Nat;
+     let m be Element of NAT;
      assume n <= m;
      then A41: |.G1.m-g.| < p1 by A40;
      consider G1m be Element of F_Complex such that
@@ -3152,7 +3178,7 @@ BINOP_1:sch 4;
     then A49: |.H.|-R is convergent by A47,SEQ_2:25;
     A50: Rcons is convergent by SEQ_4:39;
     A51: Rcons.0 = |.eval(np,z).| by A30;
-       now let n be Nat;
+       now let n be Element of NAT;
      A52: Rcons.n = |.eval(np,z).| by A30;
      consider G1n be Element of F_Complex such that
       A53: G1n = G1.n and
@@ -3190,11 +3216,11 @@ BINOP_1:sch 4;
       A63: for x1 be Element of COMPLEX st
        x1 in COMPLEX & |.x1-lim G1.| < s holds |.PF/.x1 - PF/.lim G1.| < a
                                                           by A61,CFCONT_1:61;
-     consider n be Nat such that
-      A64: for m be Nat st n <= m holds |.G1.m-lim G1.| < s
+     consider n be Element of NAT such that
+      A64: for m be Element of NAT st n <= m holds |.G1.m-lim G1.| < s
                                                   by A26,A62,COMSEQ_2:def 5;
      take n;
-     let m be Nat;
+     let m be Element of NAT;
      assume n <= m;
      then A65: |.G1.m-lim G1.| < s by A64;
      consider G1m be Element of F_Complex such that
@@ -3246,34 +3272,35 @@ BINOP_1:sch 4;
       then len <%z0,1.F_Complex%> = 2 by Th41;
       then A7: len q = 2*len p - len p - 2 + 2 by A6,Th53
          .= len p;
-      defpred P[Nat] means $1 >= 1 & q.$1 <> 0.F_Complex;
-      A8: ex k be Nat st P[k]
+      defpred P[Element of NAT] means $1 >= 1 & q.$1 <> 0.F_Complex;
+      A8: ex k be Element of NAT st P[k]
       proof
           len q-1 >= 1-1 by A1,A7,XREAL_1:11;
        then len q-1 = len q-'1 by BINARITH:def 3;
-       then reconsider k=len q-1 as Nat;
+       then reconsider k=len q-1 as Element of NAT;
        take k;
           len q >= 1+1 by A1,A7,NAT_1:38;
        hence k >= 1 by XREAL_1:21;
           len q = k+1;
        hence q.k <> 0.F_Complex by ALGSEQ_1:25;
       end;
-      consider k be Nat such that
+      consider k be Element of NAT such that
        A9: P[k] and
-       A10: for n be Nat st P[n] holds k <= n from NAT_1:sch 5(A8);
+       A10: for n be Element of NAT st P[n] holds k <= n from NAT_1:sch 5(A8);
       A11: k+1 > 1 by A9,NAT_1:38;
-      reconsider k1=k as non empty Nat by A9;
+      reconsider k1=k as non empty Element of NAT by A9;
        k < len q by A9,ALGSEQ_1:22;
       then A12: k+1+0 <= len q by NAT_1:38;
       consider sq be CRoot of k1,-(q.0/q.k);
-      deffunc O(Nat) = q.(k+$1)*(power F_Complex).(sq,k+$1);
+      deffunc O(Element of NAT) = q.(k+$1)*(power F_Complex).(sq,k+$1);
       consider F2 be FinSequence of the carrier of F_Complex such that
        A13: len F2 = len q-'(k+1) and
-       A14: for n be Nat st n in Seg (len q-'(k+1)) holds F2.n = O(n)
+       A14: for n be Element of NAT st n in Seg (len q-'(k+1))
+        holds F2.n = O(n)
         from FINSEQ_2:sch 1;
          len q-(k+1) >= 0 by A12,XREAL_1:21;
       then A15: len F2 = len q-(k+1) by A13,BINARITH:def 3;
-      A16: now let n be Nat;
+      A16: now let n be Element of NAT;
        assume n in dom F2;
        then n in Seg (len q-'(k+1)) by A13,FINSEQ_1:def 3;
        hence F2.n = q.(k+n)*(power F_Complex).(sq,k+n) by A14;
@@ -3284,7 +3311,7 @@ BINOP_1:sch 4;
        consider F1 be FinSequence of the carrier of F_Complex such that
         A18: eval(q,z1) = Sum F1 and
         A19: len F1 = len q and
-        A20: for n be Nat st n in dom F1 holds
+        A20: for n be Element of NAT st n in dom F1 holds
          F1.n = q.(n-'1)*(power F_Complex).(z1,n-'1) by POLYNOM4:def 2;
           k+1 in Seg len F1 by A11,A12,A19,FINSEQ_1:3;
        then A21: k+1 in dom F1 by FINSEQ_1:def 3;
@@ -3294,7 +3321,7 @@ BINOP_1:sch 4;
        then 1 in Seg len (F1|k) by A23,FINSEQ_1:80;
        then A24: 1 in dom (F1|k) by FINSEQ_1:def 3;
        A25: dom (F1|k) c= dom F1 by FINSEQ_5:20;
-          now let i be Nat;
+          now let i be Element of NAT;
         assume that
          A26: i in dom (F1|k) and
          A27: i <> 1;
@@ -3408,7 +3435,7 @@ then A39: [**c to_power (k+1),0**] <> the Zero of F_Complex by RLVECT_1:def 2;
           .= len (F1/^(k+1)) by A45,FINSEQ_3:31
           .= len F1-(k+1) by A12,A19,RFINSEQ:def 2
           .= len |.F2.| by A15,A19,Def1;
-          now let i be Nat;
+          now let i be Element of NAT;
         assume A47: i in dom |.(F1/^(k+1))*[**c to_power (k+1),0**]".|;
         then A48: i in Seg len |.(F1/^(k+1))*[**c to_power (k+1),0**]".|
                                                           by FINSEQ_1:def 3;
@@ -3478,7 +3505,7 @@ then A39: [**c to_power (k+1),0**] <> the Zero of F_Complex by RLVECT_1:def 2;
                                                   by A52,A53,FINSEQ_4:def 4;
        end;
        then Sum|.(F1/^(k+1))*[**c to_power (k+1),0**]".| <= Sum|.F2.|
-                                                           by A46,INTEGRA5:3;
+                                                      by A46,INTEGRA5:3;
        then |.gc.| <= Sum|.F2.| by A44,XXREAL_0:2;
        then c*|.gc.| <= c*Sum|.F2.| by A17,XREAL_1:66;
        hence c*Sum|.F2.| >= |.q.0 .| by A43,XXREAL_0:2;
@@ -3499,7 +3526,7 @@ then A39: [**c to_power (k+1),0**] <> the Zero of F_Complex by RLVECT_1:def 2;
          1.F_Complex <> 0.F_Complex by VECTSP_1:def 21;
       then A66: len <%np.0,1.F_Complex%> = 2 by Th41;
       A67: len p-'1 = 2-1 by A64,BINARITH:def 3;
-         now let k be Nat;
+         now let k be Element of NAT;
        assume A68: k < len np;
        per cases by A64,A65,A68,NAT_1:71;
         suppose k=0;

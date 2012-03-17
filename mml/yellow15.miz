@@ -12,6 +12,7 @@ environ
       ORDINAL2, WAYBEL_0, WAYBEL_3, WAYBEL_8, COMPTS_1, TSP_1, PRE_TOPC,
       YELLOW15, RLVECT_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, SETFAM_1, DOMAIN_1,
+      NUMBERS,
       STRUCT_0, FINSET_1, MARGREL1, VALUAT_1, GROUP_1, RELAT_1, FUNCT_1,
       RELSET_1, FUNCT_2, REALSET1, FINSEQ_1, FINSEQ_2, FINSEQ_4, EQREL_1,
       CQC_LANG, CARD_1, CARD_3, PRE_TOPC, TSP_1, TOPS_2, CANTOR_1, ORDERS_2,
@@ -28,7 +29,7 @@ environ
       FINSEQ_4, EQREL_1, CATALG_1, CQC_LANG, CARD_1, CARD_4, T_0TOPSP, GROUP_1,
       PRE_TOPC, TOPS_2, CANTOR_1, MSSCYC_1, YELLOW_0, YELLOW_8, YELLOW_9,
       WAYBEL_0, WAYBEL_3, WAYBEL_8, WAYBEL23, RELSET_1, XBOOLE_0, XBOOLE_1,
-      SUBSET_1, FUNCOP_1;
+      SUBSET_1, FUNCOP_1, ORDINAL1;
  schemes FUNCT_2, PRE_CIRC, FINSEQ_1, FRAENKEL;
 
 begin  :: Preliminaries
@@ -44,18 +45,26 @@ begin  :: Preliminaries
      (C[i] implies F(i) in D()) & (not C[i] implies G(i) in D())
 proof
     A2: for x be set st x in Seg i() holds
-     (C[x] implies F(x) in D()) & (not C[x] implies G(x) in D()) by A1;
+     (C[x] implies F(x) in D()) & (not C[x] implies G(x) in D())
+     proof
+       let x be set;
+       assume
+A5:    x in Seg i();
+       then reconsider x as Element of NAT;
+       x is Nat;
+       hence thesis by A1,A5;
+     end;
     consider p be Function of Seg i(),D() such that
      A3: for x be set st x in Seg i() holds
      (C[x] implies p.x = F(x)) & (not C[x] implies p.x = G(x))
-                                                           from FUNCT_2:sch 5
-(A2);
+     from FUNCT_2:sch 5(A2);
+A6:  i() is Element of NAT by ORDINAL1:def 13;
     A4: dom p = Seg i() by FUNCT_2:def 1;
-    then reconsider p as FinSequence by FINSEQ_1:def 2;
+    then reconsider p as FinSequence by A6,FINSEQ_1:def 2;
         rng p c= D() by RELSET_1:12;
     then reconsider p as FinSequence of D() by FINSEQ_1:def 4;
     take p;
-    thus thesis by A3,A4,FINSEQ_1:def 3;
+    thus thesis by A3,A4,A6,FINSEQ_1:def 3;
    end;
 
   registration
@@ -72,9 +81,10 @@ canceled;
    proof
     let i be Nat;
     let D be finite set;
+X0: i is Element of NAT by ORDINAL1:def 13;
     per cases;
      suppose D is non empty;
-      then A1: product (i |-> D) = i-tuples_on D by FUNCT_6:9;
+      then A1: product (i |-> D) = i-tuples_on D by X0,FUNCT_6:9;
           now let x be set;
        assume x in dom (i |-> D);
        then x in Seg i by FUNCOP_1:19;
@@ -85,7 +95,7 @@ canceled;
      suppose A2: D is empty;
           now per cases;
        suppose i <> 0;
-        hence i-tuples_on D is finite by A2,CATALG_1:7;
+        hence i-tuples_on D is finite by A2,X0,CATALG_1:7;
        end;
        suppose i = 0;
         then i-tuples_on D = { <*>D } by FINSEQ_2:112;
@@ -159,12 +169,13 @@ begin  :: Components
    proof deffunc F(Nat) = IFEQ(q.$1,TRUE,p.$1,X\p.$1);
     consider r be FinSequence such that
      A1: len r = len p and
-     A2: for i be Nat st i in Seg len p holds r.i = F(i) from FINSEQ_1:sch 2;
-        rng r c= bool X
+     A2: for i be Element of NAT st i in Seg len p holds r.i = F(i)
+     from FINSEQ_1:sch 2;
+     rng r c= bool X
     proof
      let z be set;
      assume z in rng r;
-     then consider i be Nat such that
+     then consider i be Element of NAT such that
       A3: i in dom r and
       A4: r.i = z by FINSEQ_2:11;
      A5: i in Seg len p by A1,A3,FINSEQ_1:def 3;
@@ -195,7 +206,7 @@ begin  :: Components
      A9: for i be Nat st i in dom p holds r1.i = IFEQ(q.i,TRUE,p.i,X\p.i) and
      A10: len r2 = len p and
      A11: for i be Nat st i in dom p holds r2.i = IFEQ(q.i,TRUE,p.i,X\p.i);
-        now let i be Nat;
+     now let i be Element of NAT;
      assume i in Seg len p;
      then A12: i in dom p by FINSEQ_1:def 3;
      hence r1.i = IFEQ(q.i,TRUE,p.i,X\p.i) by A9
@@ -563,7 +574,7 @@ end;
         proof
          let z be set;
          assume z in rng MergeSequence(p1,q);
-         then consider j be Nat such that
+         then consider j be Element of NAT such that
           A29: j in dom MergeSequence(p1,q) and
           A30: MergeSequence(p1,q).j = z by FINSEQ_2:11;
              j in Seg len MergeSequence(p1,q) by A29,FINSEQ_1:def 3;
@@ -579,7 +590,7 @@ end;
          A36: j in dom (q1*(p2"*p1)) by A27,A31,FINSEQ_1:def 3;
          A37: q.j = (q1*(p2"*p1)).j by A18,RELAT_1:55
             .= q1.((p2"*p1).j) by A36,FUNCT_1:22;
-         reconsider pj = (p2"*p1).j as Nat by A34;
+         reconsider pj = (p2"*p1).j as Element of NAT by A34;
              now per cases;
           suppose A38: q.j = TRUE;
            hence MergeSequence(p2,q1).((p2"*p1).j) = p2.pj by A37,Th6
@@ -606,7 +617,7 @@ end;
         proof
          let z be set;
          assume z in rng MergeSequence(p2,q1);
-         then consider j be Nat such that
+         then consider j be Element of NAT such that
           A40: j in dom MergeSequence(p2,q1) and
           A41: MergeSequence(p2,q1).j = z by FINSEQ_2:11;
              j in Seg len MergeSequence(p2,q1) by A40,FINSEQ_1:def 3;
@@ -622,7 +633,7 @@ end;
          A47: j in dom (q*(p1"*p2)) by A21,A42,FINSEQ_1:def 3;
          A48: q1.j = (q*(p1"*p2)).j by RELAT_1:55
             .= q.((p1"*p2).j) by A47,FUNCT_1:22;
-         reconsider pj = (p1"*p2).j as Nat by A45;
+         reconsider pj = (p1"*p2).j as Element of NAT by A45;
              now per cases;
           suppose A49: q1.j = TRUE;
            hence MergeSequence(p1,q).((p1"*p2).j) = p1.pj by A48,Th6
@@ -691,7 +702,7 @@ XBOOLE_0:def 10;
         proof
          let z be set;
          assume z in rng MergeSequence(p2,q);
-         then consider j be Nat such that
+         then consider j be Element of NAT such that
           A67: j in dom MergeSequence(p2,q) and
           A68: MergeSequence(p2,q).j = z by FINSEQ_2:11;
              j in Seg len MergeSequence(p2,q) by A67,FINSEQ_1:def 3;
@@ -707,7 +718,7 @@ XBOOLE_0:def 10;
          A74: j in dom (q1*(p1"*p2)) by A65,A69,FINSEQ_1:def 3;
          A75: q.j = (q1*(p1"*p2)).j by A56,RELAT_1:55
             .= q1.((p1"*p2).j) by A74,FUNCT_1:22;
-         reconsider pj = (p1"*p2).j as Nat by A72;
+         reconsider pj = (p1"*p2).j as Element of NAT by A72;
              now per cases;
           suppose A76: q.j = TRUE;
            hence MergeSequence(p1,q1).((p1"*p2).j) = p1.pj by A75,Th6
@@ -734,7 +745,7 @@ XBOOLE_0:def 10;
         proof
          let z be set;
          assume z in rng MergeSequence(p1,q1);
-         then consider j be Nat such that
+         then consider j be Element of NAT such that
           A78: j in dom MergeSequence(p1,q1) and
           A79: MergeSequence(p1,q1).j = z by FINSEQ_2:11;
              j in Seg len MergeSequence(p1,q1) by A78,FINSEQ_1:def 3;
@@ -750,7 +761,7 @@ XBOOLE_0:def 10;
          A85: j in dom (q*(p2"*p1)) by A59,A80,FINSEQ_1:def 3;
          A86: q1.j = (q*(p2"*p1)).j by RELAT_1:55
             .= q.((p2"*p1).j) by A85,FUNCT_1:22;
-         reconsider pj = (p2"*p1).j as Nat by A83;
+         reconsider pj = (p2"*p1).j as Element of NAT by A83;
              now per cases;
           suppose A87: q1.j = TRUE;
            hence MergeSequence(p2,q).((p2"*p1).j) = p2.pj by A86,Th6
@@ -903,7 +914,7 @@ XBOOLE_0:def 10;
      proof
       let z be set;
       assume z in rng MergeSequence(p1,q1);
-      then consider i be Nat such that
+      then consider i be Element of NAT such that
        A14: i in dom MergeSequence(p1,q1) and
        A15: MergeSequence(p1,q1).i = z by FINSEQ_2:11;
       A16: i in dom p1 by A14,Th5;
@@ -911,7 +922,7 @@ XBOOLE_0:def 10;
       then (p"*p1).i in rng (p"*p1) by FUNCT_1:def 5;
       then A18: (p"*p1).i in rng (p") by FUNCT_1:25;
       then A19: (p"*p1).i in dom p by A9,FUNCT_1:55;
-      then reconsider j = (p"*p1).i as Nat;
+      then reconsider j = (p"*p1).i as Element of NAT;
       A20: q.j = (q*(p"*p1)).i by A17,FUNCT_1:23
          .= q1.i by RELAT_1:55;
       A21: p1 is Function of dom p1,rng p by A1,A3,A5,FUNCT_2:4;
@@ -972,7 +983,7 @@ XBOOLE_0:def 10;
        (not C[i] implies q.i = F(i)) from SeqLambda1C(A3);
          now let Z be set;
       assume Z in rng MergeSequence(p,q);
-      then consider i be Nat such that
+      then consider i be Element of NAT such that
        A6: i in dom MergeSequence(p,q) and
        A7: MergeSequence(p,q).i = Z by FINSEQ_2:11;
       A8: dom MergeSequence(p,q) = dom p by Th5;
@@ -1027,7 +1038,7 @@ XBOOLE_0:def 10;
     A8: z in A & z in B by A7,XBOOLE_0:def 3;
     A9: len MergeSequence(p,q1) = len p & len MergeSequence(p,q2) = len p
                                                                      by Def1;
-        now let i be Nat;
+        now let i be Element of NAT;
      assume i in Seg len p;
      then A10: i in dom p by FINSEQ_1:def 3;
      then i in dom MergeSequence(p,q1) & i in dom MergeSequence(p,q2) by Th5;
@@ -1139,7 +1150,7 @@ XBOOLE_0:def 10;
      proof
       let z be set;
       assume z in rng MergeSequence(p,q);
-      then consider i be Nat such that
+      then consider i be Element of NAT such that
        A23: i in dom MergeSequence(p,q) and
        A24: MergeSequence(p,q).i = z by FINSEQ_2:11;
           i in Seg len MergeSequence(p,q) by A23,FINSEQ_1:def 3;
@@ -1149,7 +1160,7 @@ XBOOLE_0:def 10;
       then (p1"*p).i in rng (p1"*p) by FUNCT_1:def 5;
       then A27: (p1"*p).i in rng (p1") by FUNCT_1:25;
       then A28: (p1"*p).i in dom p1 by A11,FUNCT_1:55;
-      then reconsider j = (p1"*p).i as Nat;
+      then reconsider j = (p1"*p).i as Element of NAT;
       A29: j in dom MergeSequence(p1,q1) by A28,Th5;
       A30: j in Seg len p1 by A28,FINSEQ_1:def 3;
       A31: j in dom p1 by A11,A27,FUNCT_1:55;
@@ -1438,7 +1449,7 @@ begin  :: About basis of Topological Spaces
     proof
      let z be set;
      assume A15: z in Y;
-     consider i be Nat such that
+     consider i be Element of NAT such that
       A16: i in dom p and
       A17: p.i = b by A6,A9,A12,FINSEQ_2:11;
      A18: i in dom MergeSequence(p,q) by A16,Th5;

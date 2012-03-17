@@ -8,10 +8,11 @@ environ
 
  vocabularies CQC_LANG, QC_LANG1, QMAX_1, CQC_THE1, BOOLE, ZF_LANG, PRE_TOPC,
       FINSEQ_1, FUNCT_1, CAT_1, QC_LANG3, CQC_THE3;
- notations TARSKI, XBOOLE_0, SUBSET_1, DOMAIN_1, NAT_1, FUNCT_1, FINSEQ_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, DOMAIN_1,
+  NUMBERS, NAT_1, FUNCT_1, FINSEQ_1,
       QC_LANG1, QC_LANG3, CQC_LANG, CQC_THE1, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, XREAL_0, NAT_1, MEMBERED, QC_LANG3, CQC_THE1;
- registrations RELSET_1, CQC_LANG, ARYTM_3, MEMBERED;
+ registrations RELSET_1, CQC_LANG, ARYTM_3, MEMBERED, ORDINAL1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI;
  theorems TARSKI, ZFMISC_1, SUBSET_1, CQC_THE1, CQC_THE2, LUKASI_1, NAT_1,
@@ -24,7 +25,7 @@ reserve p, q, r, s, p1, q1 for Element of CQC-WFF,
         X, Y, Z, X1, X2 for Subset of CQC-WFF,
         h for QC-formula,
         x, y for bound_QC-variable,
-        n for Nat;
+        n for Element of NAT;
 
 theorem Th1:
   p in X implies X |- p
@@ -552,9 +553,9 @@ end;
 definition let p, q be Element of CQC-WFF;
   pred p is_an_universal_closure_of q means :Def6:
     p is closed &
-    ex n being Nat st 1 <= n &
+    ex n being Element of NAT st 1 <= n &
     ex L being FinSequence st len L = n & L.1 = q & L.n = p &
-      for k being Nat st 1 <= k & k < n holds
+      for k being Element of NAT st 1 <= k & k < n holds
         ex x being bound_QC-variable st
           ex r being Element of CQC-WFF st r = L.k & L.(k+1) = All(x,r);
 end;
@@ -563,22 +564,22 @@ theorem Th38:
   p is_an_universal_closure_of q implies p |-| q
 proof
   assume p is_an_universal_closure_of q;
-  then consider n being Nat such that A1: 1 <= n &
+  then consider n being Element of NAT such that A1: 1 <= n &
     ex L being FinSequence st len L = n & L.1 = q & L.n = p &
-      for k being Nat st 1 <= k & k < n holds
+      for k being Element of NAT st 1 <= k & k < n holds
         ex x, r st r = L.k & L.(k+1) = All(x,r) by Def6;
   consider L being FinSequence such that len L = n
     and A2: L.1 = q and A3: L.n = p
-    and A4: for k being Nat st 1 <= k & k < n holds
+    and A4: for k being Element of NAT st 1 <= k & k < n holds
         ex x, r st r = L.k & L.(k+1) = All(x,r) by A1;
-     for k being Nat st 1 <= k & k <= n holds ex r st r = L.k & q |-| r
+     for k being Element of NAT st 1 <= k & k <= n ex r st r = L.k & q |-| r
     proof
-      defpred P[Nat] means
+      defpred P[Element of NAT] means
         1 <= $1 & $1 <= n implies ex r st r = L.$1 & q |-| r;
       A5: P[0];
-      A6: for k being Nat st P[k] holds P[k+1]
+      A6: for k being Element of NAT st P[k] holds P[k+1]
         proof
-          let k be Nat such that A7: P[k];
+          let k be Element of NAT such that A7: P[k];
              now
             assume that 1 <= k+1 and A8: k+1 <= n;
             per cases by A8,NAT_1:38,39;
@@ -597,7 +598,7 @@ proof
           end;
           hence P[k+1];
         end;
-      thus for k being Nat holds P[k] from NAT_1:sch 1(A5,A6);
+      thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A5,A6);
     end;
   then ex r st r = L.n & q |-| r by A1;
   hence p |-| q by A3;
@@ -923,11 +924,11 @@ end;
 canceled;
 
 theorem Th61:
-  for k being Nat, l being QC-variable_list of k,
+  for k being Element of NAT, l being QC-variable_list of k,
   a being free_QC-variable, x being bound_QC-variable holds
   still_not-bound_in l c= still_not-bound_in Subst(l,a .--> x)
 proof
-  let k be Nat, l be QC-variable_list of k,
+  let k be Element of NAT, l be QC-variable_list of k,
   a be free_QC-variable, x be bound_QC-variable;
      now
     let y be set;
@@ -954,11 +955,11 @@ proof
 end;
 
 theorem Th62:
-  for k being Nat, l being QC-variable_list of k,
+  for k being Element of NAT, l being QC-variable_list of k,
   a being free_QC-variable, x being bound_QC-variable holds
   still_not-bound_in Subst(l,a .--> x) c= still_not-bound_in l \/ {x}
 proof
-  let k be Nat, l be QC-variable_list of k,
+  let k be Element of NAT, l be QC-variable_list of k,
   a be free_QC-variable, x be bound_QC-variable;
     let y be set;
     A1: still_not-bound_in l
@@ -993,10 +994,11 @@ theorem Th63:
 proof
   defpred P[QC-formula] means
     still_not-bound_in $1 c= still_not-bound_in ($1.x);
-  A1: for k being Nat, P being (QC-pred_symbol of k),
+  A1: for k being Element of NAT, P being (QC-pred_symbol of k),
     ll being QC-variable_list of k holds P[P!ll]
     proof
-      let k be Nat, P be (QC-pred_symbol of k), ll be QC-variable_list of k;
+      let k be Element of NAT, P be (QC-pred_symbol of k),
+          ll be QC-variable_list of k;
       A2: still_not-bound_in ll
         c= still_not-bound_in Subst(ll,a.0.-->x) by Th61;
          still_not-bound_in ((P!ll).x)
@@ -1052,10 +1054,11 @@ theorem Th64:
 proof
   defpred P[QC-formula] means
     still_not-bound_in ($1.x) c= still_not-bound_in $1 \/ {x};
-  A1: for k being Nat, P being (QC-pred_symbol of k),
+  A1: for k being Element of NAT, P being (QC-pred_symbol of k),
     ll being QC-variable_list of k holds P[P!ll]
     proof
-      let k be Nat, P be (QC-pred_symbol of k), ll be QC-variable_list of k;
+      let k be Element of NAT, P be (QC-pred_symbol of k),
+          ll be QC-variable_list of k;
       A2: still_not-bound_in ((P!ll).x)
         = still_not-bound_in (P!Subst(ll,a.0.-->x)) by CQC_LANG:30
        .= still_not-bound_in Subst(ll,a.0.-->x) by QC_LANG3:9;

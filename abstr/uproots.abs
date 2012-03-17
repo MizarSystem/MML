@@ -38,22 +38,23 @@ for n being natural number holds n is non empty iff n = 1 or n > 1;
 
 theorem :: UPROOTS:2
 for f being FinSequence of NAT
- st for i being Nat st i in dom f holds f.i <> 0
+ st for i being Element of NAT st i in dom f holds f.i <> 0
   holds Sum f = len f iff f = (len f) |-> 1;
 
 :: Stolen from POLYNOM2
 scheme :: UPROOTS:sch 1
  IndFinSeq0 { F() -> FinSequence, P[set, set]} :
-for i being Nat st 1 <= i & i <= len F() holds P[i, F().i]
+for i being Element of NAT st 1 <= i & i <= len F() holds P[i, F().i]
 provided
   P[1, F().1] and
-  for i being Nat st 1 <= i & i < len F()
+  for i being Element of NAT st 1 <= i & i < len F()
       holds P[i, F().i] implies P[i+1, F().(i+1)];
 
 theorem :: UPROOTS:3
 for L be add-associative right_zeroed right_complementable (non empty LoopStr),
     r be FinSequence of L
- st len r >= 2 & for k being Nat st 2 < k & k in dom r holds r.k = 0.L
+ st len r >= 2 & for k being Element of NAT st 2 < k & k in dom r
+  holds r.k = 0.L
   holds Sum r = r/.1 + r/.2;
 
 begin :: Canonical ordering of a finite set into a finite sequence
@@ -65,10 +66,10 @@ definition
    len it = card A &
    ex f being FinSequence st len f = card A &
     (f.1 = [choose A, A \ {choose A}] or card A = 0) &
-    (for i being Nat st 1 <= i & i < card A
+    (for i being Element of NAT st 1 <= i & i < card A
       for x being set
        st f.i = x holds f.(i+1) = [choose x`2, x`2 \ {choose x`2}]) &
-    for i being Nat st i in dom it holds it.i = (f.i)`1;
+    for i being Element of NAT st i in dom it holds it.i = (f.i)`1;
 end;
 
 theorem :: UPROOTS:4
@@ -86,30 +87,32 @@ for A being finite set holds (canFS A)" is Function of A, Seg card A;
 begin :: More about bags
 
 definition
-let X be set, S be finite Subset of X, n be Nat;
+let X be set, S be finite Subset of X, n be Element of NAT;
 func (S, n)-bag -> Element of Bags X equals
 :: UPROOTS:def 2
  (EmptyBag X) +* (S --> n);
 end;
 
 theorem :: UPROOTS:8
-for X being set, S being finite Subset of X, n being Nat, i being set
+for X being set, S being finite Subset of X, n being Element of NAT,
+i being set
  st not i in S holds (S, n)-bag.i = 0;
 
 theorem :: UPROOTS:9
-for X being set, S being finite Subset of X, n being Nat, i being set
+for X being set, S being finite Subset of X, n being Element of NAT,
+i being set
  st i in S holds (S, n)-bag.i = n;
 
 theorem :: UPROOTS:10
-for X being set, S being finite Subset of X, n being Nat
+for X being set, S being finite Subset of X, n being Element of NAT
  st n <> 0 holds support (S, n)-bag = S;
 
 theorem :: UPROOTS:11
-   for X being set, S being finite Subset of X, n being Nat
+   for X being set, S being finite Subset of X, n being Element of NAT
  st S is empty or n = 0 holds (S, n)-bag = EmptyBag X;
 
 theorem :: UPROOTS:12
-for X being set, S, T being finite Subset of X, n being Nat
+for X being set, S, T being finite Subset of X, n being Element of NAT
  st S misses T holds (S \/ T, n)-bag = (S,n)-bag + (T,n)-bag;
 
 definition
@@ -131,8 +134,9 @@ end;
 
 definition
   let A be set, b be bag of A;
-  redefine func degree b -> Nat means
+  redefine func degree b -> Element of NAT means
 :: UPROOTS:def 4
+
   ex f being FinSequence of NAT st it = Sum f & f = b*canFS(support b);
 end;
 
@@ -258,11 +262,11 @@ for L being Abelian add-associative right_zeroed right_complementable
  st p <> 0_. L & p*'q = p*'r holds q = r;
 
 theorem :: UPROOTS:31
-for L being domRing, n being Nat, p being Polynomial of L
+for L being domRing, n being Element of NAT, p being Polynomial of L
  st p <> 0_. L holds p`^n <> 0_. L;
 
 theorem :: UPROOTS:32
-for L being comRing, i, j being Nat, p being Polynomial of L
+for L being comRing, i, j being Element of NAT, p being Polynomial of L
  holds (p`^i) *' (p`^j) = p `^(i+j);
 
 theorem :: UPROOTS:33
@@ -303,7 +307,7 @@ for L being add-associative right_zeroed right_complementable
             left-distributive (non empty doubleLoopStr),
     a, b being Element of L, p being Polynomial of L
  holds (<%a, b%>*'p).0 = a*p.0 &
-       for i being Nat holds (<%a, b%>*'p).(i+1) = a*p.(i+1)+b*p.i;
+       for i being Element of NAT holds (<%a, b%>*'p).(i+1) = a*p.(i+1)+b*p.i;
 
 theorem :: UPROOTS:40
 for L being add-associative right_zeroed right_complementable distributive
@@ -313,17 +317,18 @@ for L being add-associative right_zeroed right_complementable distributive
  holds len (<%r, 1.L%>*'q) = len q + 1;
 
 theorem :: UPROOTS:41
-for L being non degenerated comRing, x being Element of L, i being Nat
+for L being non degenerated comRing, x being Element of L,
+i being Element of NAT
  holds len (<%x, 1.L%>`^i) = i+1;
 
 registration
-  let L be non degenerated comRing, x be Element of L, n be Nat;
+  let L be non degenerated comRing, x be Element of L, n be Element of NAT;
   cluster <%x, 1.L%>`^n -> non-zero;
 end;
 
 theorem :: UPROOTS:42
 for L being non degenerated comRing, x being Element of L,
-    q being non-zero (Polynomial of L),  i being Nat
+    q being non-zero (Polynomial of L),  i being Element of NAT
  holds len ((<%x, 1.L%>`^i)*'q) = i + len q;
 
 theorem :: UPROOTS:43
@@ -336,10 +341,10 @@ for L being add-associative right_zeroed right_complementable distributive
 begin :: Little Bezout theorem
 
 definition
-  let L be non empty ZeroStr, p be Polynomial of L; let n be Nat;
+  let L be non empty ZeroStr, p be Polynomial of L; let n be Element of NAT;
   func poly_shift(p,n) -> Polynomial of L means
 :: UPROOTS:def 6
-    for i being Nat holds it.i = p.(n + i);
+    for i being Element of NAT holds it.i = p.(n + i);
 end;
 
 theorem :: UPROOTS:44
@@ -347,17 +352,17 @@ for L being non empty ZeroStr,p being Polynomial of L holds poly_shift(p,0) = p
 ;
 
 theorem :: UPROOTS:45
-for L being non empty ZeroStr,  n being Nat, p being Polynomial of L
+for L being non empty ZeroStr,  n being Element of NAT, p being Polynomial of L
  st n >= len p holds poly_shift(p,n) = 0_. L;
 
 theorem :: UPROOTS:46
 for L being non degenerated (non empty multLoopStr_0),
-    n being Nat, p being Polynomial of L
+    n being Element of NAT, p being Polynomial of L
  st n <= len p holds len poly_shift(p,n) + n = len p;
 
 theorem :: UPROOTS:47
 for L being  non degenerated comRing,
-    x being Element of L, n being Nat, p being Polynomial of L
+    x being Element of L, n being Element of NAT, p being Polynomial of L
  st n < len p holds eval(poly_shift(p,n),x) = x*eval(poly_shift(p,n+1),x) + p.n
 ;
 
@@ -371,7 +376,8 @@ definition
   func poly_quotient(p,r) -> Polynomial of L means
 :: UPROOTS:def 7
      len it + 1 = len p &
-     for i being Nat holds it.i = eval(poly_shift(p, i+1),r) if len p > 0
+     for i being Element of NAT holds it.i = eval(poly_shift(p, i+1),r)
+      if len p > 0
   otherwise it = 0_. L;
 end;
 
@@ -411,10 +417,11 @@ end;
 definition
   let L be non degenerated comRing, x be Element of L,
       p be non-zero (Polynomial of L);
-  func multiplicity(p,x) -> Nat means
+  func multiplicity(p,x) -> Element of NAT means
 :: UPROOTS:def 8
+
   ex F being finite non empty Subset of NAT
-   st F = {k where k is Nat : ex q being Polynomial of L
+   st F = {k where k is Element of NAT : ex q being Polynomial of L
                       st p = (<%-x, 1.L%>`^k) *' q} &
       it = max F;
 end;
@@ -453,7 +460,7 @@ for L being domRing, p being non-zero Polynomial of L
  st len p = 1 holds degree BRoots p = 0;
 
 theorem :: UPROOTS:60
-for L being domRing, x be Element of L, n being Nat
+for L being domRing, x be Element of L, n being Element of NAT
  holds degree BRoots (<%-x, 1.L%>`^n) = n;
 
 theorem :: UPROOTS:61
@@ -463,11 +470,11 @@ theorem :: UPROOTS:61
 definition
   let L be add-associative right_zeroed right_complementable distributive
                                                 (non empty doubleLoopStr),
-      c be Element of L, n be Nat;
+      c be Element of L, n be Element of NAT;
   func fpoly_mult_root(c,n) -> FinSequence of Polynom-Ring L means
 :: UPROOTS:def 10
     len it = n &
-    for i being Nat st i in dom it holds it.i = <% -c, 1.L%>;
+    for i being Element of NAT st i in dom it holds it.i = <% -c, 1.L%>;
 end;
 
 definition
@@ -480,7 +487,8 @@ definition
  ex f being FinSequence of (the carrier of Polynom-Ring L)*,
     s being FinSequence of L
   st len f = card support b & s = canFS(support b) &
-     (for i being Nat st i in dom f holds f.i = fpoly_mult_root(s/.i,b.(s/.i)))
+     (for i being Element of NAT st i in dom f
+     holds f.i = fpoly_mult_root(s/.i,b.(s/.i)))
    & it = Product FlattenSeq f;
 end;
 
@@ -502,7 +510,8 @@ for L being add-associative right_zeroed right_complementable distributive
     f being FinSequence of (the carrier of Polynom-Ring L)*,
     s being FinSequence of L
  st len f = card support b & s = canFS(support b) &
-    (for i being Nat st i in dom f holds f.i = fpoly_mult_root(s/.i,b.(s/.i)))
+    (for i being Element of NAT st i in dom f
+    holds f.i = fpoly_mult_root(s/.i,b.(s/.i)))
   holds len FlattenSeq f = degree b;
 
 theorem :: UPROOTS:65
@@ -513,7 +522,8 @@ for L being add-associative right_zeroed right_complementable distributive
     s being FinSequence of L,
     c being Element of L
  st len f = card support b & s = canFS(support b) &
-    (for i being Nat st i in dom f holds f.i = fpoly_mult_root(s/.i,b.(s/.i)))
+    (for i being Element of NAT st i in dom f
+    holds f.i = fpoly_mult_root(s/.i,b.(s/.i)))
   holds (c in support b implies card ((FlattenSeq f)"{<% -c, 1.L%>}) = b.c) &
         (not c in support b implies card ((FlattenSeq f)"{<% -c, 1.L%>}) = 0);
 
@@ -530,7 +540,7 @@ theorem :: UPROOTS:68
    for L being comRing, s being non empty finite Subset of L,
     f being FinSequence of Polynom-Ring L
  st len f = card s &
-    for i being Nat, c being Element of L
+    for i being Element of NAT, c being Element of L
      st i in dom f & c = (canFS(s)).i holds f.i = <% -c, 1.L %>
   holds poly_with_roots((s,1)-bag) = Product(f);
 
@@ -538,6 +548,6 @@ theorem :: UPROOTS:69
    for L being non trivial comRing, s being non empty finite Subset of L,
     x being Element of L, f being FinSequence of L
  st len f = card s &
-    for i being Nat, c being Element of L
+    for i being Element of NAT, c being Element of L
      st i in dom f & c = (canFS(s)).i holds f.i = eval(<% -c, 1.L %>,x)
   holds eval(poly_with_roots((s,1)-bag),x) = Product(f);

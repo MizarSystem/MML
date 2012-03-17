@@ -21,13 +21,13 @@ environ
  definitions TARSKI;
  theorems ZFMISC_1, FUNCT_2, TARSKI, NAT_1, CAT_2, CQC_LANG, GR_CY_1, SCHEME1,
       ENUMSET1, INT_1, CARD_3, FINSEQ_1, FINSEQ_4, MCART_1, FUNCT_4, AMI_1,
-      XBOOLE_0, XBOOLE_1, NUMBERS;
+      XBOOLE_0, XBOOLE_1, NUMBERS, ORDINAL1;
  schemes FUNCT_2, BINOP_1;
 
 begin :: A small concrete machine
 
  reserve x for set;
- reserve i,j,k for Nat;
+ reserve i,j,k for Element of NAT;
 
 definition
  func SCM-Halt -> Element of Segm 9 equals
@@ -190,7 +190,15 @@ now let k;
 A1:     k = 2*i or k = 2*i+1 by SCHEME1:1;
      now assume
 A2:  k = 2*i;
-A3:  i = 0 or ex j st i = j + 1 by NAT_1:22;
+A3:  i = 0 or ex j being Element of NAT st i = j + 1
+     proof
+       assume i <> 0;
+       then consider j being Nat such that
+a1:    i = j + 1 by NAT_1:22;
+       reconsider j as Element of NAT by ORDINAL1:def 13;
+       take j;
+       thus thesis by a1;
+   end;
        now given j such that
 A4:    i = j + 1;
      take j;
@@ -228,14 +236,14 @@ end;
 definition
  func SCM-OK -> Function of NAT, {INT} \/ { SCM-Instr, SCM-Instr-Loc } means
 :Def5:  it.0 = SCM-Instr-Loc &
-  for k being Nat holds it.(2*k+1) = INT & it.(2*k+2) = SCM-Instr;
+  for k being Element of NAT holds it.(2*k+1) = INT & it.(2*k+2) = SCM-Instr;
  existence
   proof
    defpred P[set,set] means
     ($1 = 0 & $2 = SCM-Instr-Loc)or
     ((ex j st $1 = 2*j+1) & $2 = INT)or
     ((ex j st $1 = 2*j+2) & $2 = SCM-Instr);
-A1:  now let k be Nat;
+A1:  now let k be Element of NAT;
         {INT} \/ { SCM-Instr, SCM-Instr-Loc } = {INT, SCM-Instr, SCM-Instr-Loc
 }
      by ENUMSET1:42;
@@ -252,7 +260,7 @@ A3:   for a being Element of NAT holds P[a,h.a] from FUNCT_2:sch 3(A1);
    take h;
        P[0,h.0] by A3;
    hence h.0 = SCM-Instr-Loc;
-   let k be Nat;
+   let k be Element of NAT;
        P[2*k+1,h.(2*k+1)] & P[2*k+2,h.(2*k+2)] by A3;
    hence h.(2*k+1) = INT & h.(2*k+2) = SCM-Instr by Lm2;
   end;
@@ -260,10 +268,11 @@ A3:   for a being Element of NAT holds P[a,h.a] from FUNCT_2:sch 3(A1);
   proof let f,g be Function of NAT, {INT} \/ { SCM-Instr, SCM-Instr-Loc }
   such that
 A4: f.0 = SCM-Instr-Loc &
-    for k being Nat holds f.(2*k+1) = INT & f.(2*k+2) = SCM-Instr and
+    for k being Element of NAT holds f.(2*k+1) = INT & f.(2*k+2) = SCM-Instr
+    and
 A5: g.0 = SCM-Instr-Loc &
-    for k being Nat holds g.(2*k+1) = INT & g.(2*k+2) = SCM-Instr;
-       now let k be Nat;
+    for k being Element of NAT holds g.(2*k+1) = INT & g.(2*k+2) = SCM-Instr;
+       now let k be Element of NAT;
          now per cases by Lm1;
        suppose
          k = 0;
@@ -367,8 +376,9 @@ theorem Th11:
        a in { 2*k : k > 0 };
     then consider k such that
 A1:   a = 2*k & k > 0;
-    consider j such that
+    consider j being Nat such that
 A2:  k = j+1 by A1,NAT_1:22;
+     reconsider j as Element of NAT by ORDINAL1:def 13;
        a = 2*j + 2*1 by A1,A2;
   hence SCM-OK.a = SCM-Instr by Th9;
  end;

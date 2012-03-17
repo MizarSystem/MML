@@ -14,16 +14,16 @@ environ
       CARD_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FINSOP_1,
       RELAT_2, RELSET_1, FUNCT_1, FINSET_1, ORDINAL1, PARTFUN1, FUNCT_2,
-      BINOP_1, FUNCT_4, REAL_1, NAT_1, ALGSTR_1, ORDERS_1, RLVECT_1, FINSEQ_1,
-      POLYNOM1, STRUCT_0, FINSEQ_4, CQC_LANG, VECTSP_1, GROUP_1, GROUP_4,
-      QUOFIELD, FINSEQ_5, CARD_1, GRCAT_1, ENDALG, TRIANG_1, RFINSEQ, YELLOW_1,
-      GROUP_6, XXREAL_0;
+      BINOP_1, FUNCT_4, XCMPLX_0, REAL_1, NAT_1, ALGSTR_1, ORDERS_1, RLVECT_1,
+      FINSEQ_1, POLYNOM1, STRUCT_0, FINSEQ_4, CQC_LANG, VECTSP_1, GROUP_1,
+      GROUP_4, QUOFIELD, FINSEQ_5, CARD_1, GRCAT_1, ENDALG, TRIANG_1, RFINSEQ,
+      YELLOW_1, GROUP_6, XXREAL_0;
  constructors XXREAL_0, REAL_1, BINOP_2, FINSOP_1, RFINSEQ, FINSEQ_5, ALGSTR_1,
       GROUP_4, GRCAT_1, GROUP_6, MONOID_0, ENDALG, TRIANG_1, YELLOW_1,
-      QUOFIELD, POLYNOM1;
+      QUOFIELD, POLYNOM1, NAT_1;
  registrations STRUCT_0, FUNCT_1, FINSET_1, RELSET_1, FINSEQ_1, CQC_LANG,
       INT_1, ALGSTR_1, POLYNOM1, ARYTM_3, MONOID_0, VECTSP_1, XREAL_0,
-      MEMBERED, ORDINAL1, XXREAL_0;
+      MEMBERED, ORDINAL1, XXREAL_0, NAT_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
 
 
@@ -32,71 +32,75 @@ begin :: Preliminaries ---------------------------------------------------------
 
 scheme :: POLYNOM2:sch 1
  SeqExD{D() -> non empty set,
-              N() -> Nat, P[set,set]}:
+              N() -> Element of NAT, P[set,set]}:
   ex p being FinSequence of D()
   st dom p = Seg N() &
-     for k being Nat st k in Seg N() holds P[k,p/.k]
+     for k being Element of NAT st k in Seg N() holds P[k,p/.k]
  provided
-  for k being Nat st k in Seg N() ex x being Element of D() st P[k,x];
+  for k being Element of NAT st k in Seg N()
+   ex x being Element of D() st P[k,x];
 
 scheme :: POLYNOM2:sch 2
  FinRecExD2{D() -> non empty set,A() -> (Element of D()),
-                  N() -> Nat, P[set,set,set]}:
+                  N() -> Element of NAT, P[set,set,set]}:
 ex p being FinSequence of D()
 st len p = N() &
    (p/.1 = A() or N() = 0) &
-   for n being Nat st 1 <= n & n <= N()-1 holds P[n,p/.n,p/.(n+1)]
+   for n being Element of NAT st 1 <= n & n <= N()-1 holds P[n,p/.n,p/.(n+1)]
 provided
- for n being Nat
+ for n being Element of NAT
      st 1 <= n & n <= N()-1
      holds for x being Element of D()
            ex y being Element of D() st P[n,x,y];
 
 scheme :: POLYNOM2:sch 3
  FinRecUnD2{D() -> set, A() -> Element of D(),
-                  N() -> Nat,
+                  N() -> Element of NAT,
                   F,G() -> FinSequence of D(),
                   P[set,set,set]}:
 F() = G()
 provided
- for n being Nat st 1 <= n & n <= N()-1
+ for n being Element of NAT st 1 <= n & n <= N()-1
      for x,y1,y2 being Element of D() st P[n,x,y1] & P[n,x,y2]
      holds y1 = y2 and
  len F() = N() & (F()/.1 = A() or N() = 0) &
-     for n being Nat st 1 <= n & n <= N()-1 holds P[n,F()/.n,F()/.(n+1)] and
+     for n being Element of NAT st 1 <= n & n <= N()-1
+      holds P[n,F()/.n,F()/.(n+1)] and
  len G() = N() & (G()/.1 = A() or N() = 0) &
-     for n being Nat st 1 <= n & n <= N()-1 holds P[n,G()/.n,G()/.(n+1)];
+     for n being Element of NAT st 1 <= n & n <= N()-1
+      holds P[n,G()/.n,G()/.(n+1)];
 
 scheme :: POLYNOM2:sch 4
- FinInd{M, N() -> Nat, P[Nat]} :
-for i being Nat st M() <= i & i <= N() holds P[i]
+ FinInd{M, N() -> Element of NAT, P[Nat]} :
+for i being Element of NAT st M() <= i & i <= N() holds P[i]
 provided
   P[M()] and
-  for j being Nat st M() <= j & j < N() holds P[j] implies P[j+1];
+  for j being Element of NAT st M() <= j & j < N() holds P[j] implies P[j+1];
 
 scheme :: POLYNOM2:sch 5
- FinInd2{M,N() -> Nat, P[Nat]} :
-for i being Nat st M() <= i & i <= N() holds P[i]
+ FinInd2{M,N() -> Element of NAT, P[Nat]} :
+for i being Element of NAT st M() <= i & i <= N() holds P[i]
 provided
   P[M()] and
-  for j being Nat st M() <= j & j < N() holds
-     (for j' being Nat st M() <= j' & j' <= j holds P[j']) implies P[j+1];
+  for j being Element of NAT st M() <= j & j < N() holds
+     (for j' being Element of NAT st M() <= j' & j' <= j
+      holds P[j']) implies P[j+1];
 
 scheme :: POLYNOM2:sch 6
  IndFinSeq {D() -> set,
                   F() -> FinSequence of D(),
                   P[set]} :
-for i being Nat st 1 <= i & i <= len F() holds P[F().i]
+for i being Element of NAT st 1 <= i & i <= len F() holds P[F().i]
 provided
   P[F().1] and
-  for i being Nat st 1 <= i & i < len F()
+  for i being Element of NAT st 1 <= i & i < len F()
       holds P[F().i] implies P[F().(i+1)];
 
 canceled;
 
 theorem :: POLYNOM2:2
 for L being unital associative (non empty HGrStr), a being Element of L,
-    n,m being Nat
+    n,m being Element of NAT
  holds power(L).(a,n+m) = power(L).(a,n) * power(L).(a,m);
 
 registration
@@ -111,21 +115,22 @@ canceled;
 
 theorem :: POLYNOM2:4
 for p being FinSequence,
-    k being Nat st k in dom p
-for i being Nat st 1 <= i & i <= k holds i in dom p;
+    k being Element of NAT st k in dom p
+for i being Element of NAT st 1 <= i & i <= k holds i in dom p;
 
 theorem :: POLYNOM2:5
 for L being left_zeroed right_zeroed (non empty LoopStr),
     p being FinSequence of the carrier of L,
-    i being Nat
-    st i in dom p & for i' being Nat st i' in dom p & i' <> i holds p/.i' = 0.L
+    i being Element of NAT
+    st i in dom p & for i' being Element of NAT st i' in dom p & i' <> i
+     holds p/.i' = 0.L
 holds Sum p = p/.i;
 
 theorem :: POLYNOM2:6
     for L being add-associative right_zeroed right_complementable
             distributive unital (non empty doubleLoopStr),
     p being FinSequence of the carrier of L
-    st ex i being Nat st i in dom p & p/.i = 0.L
+    st ex i being Element of NAT st i in dom p & p/.i = 0.L
 holds Product p = 0.L;
 
 theorem :: POLYNOM2:7
@@ -133,9 +138,10 @@ for L being Abelian add-associative (non empty LoopStr),
     a being Element of L,
     p,q being FinSequence of the carrier of L
     st len p = len q &
-       ex i being Nat
+       ex i being Element of NAT
        st i in dom p & q/.i = a + p/.i &
-          for i' being Nat st i' in dom p & i' <> i holds q/.i' = p/.i'
+          for i' being Element of NAT st i' in dom p & i' <> i
+           holds q/.i' = p/.i'
 holds Sum q = a + Sum p;
 
 theorem :: POLYNOM2:8
@@ -143,9 +149,10 @@ for L being commutative associative (non empty doubleLoopStr),
     a being Element of L,
     p,q being FinSequence of the carrier of L
     st len p = len q &
-       ex i being Nat
+       ex i being Element of NAT
        st i in dom p & q/.i = a * p/.i &
-          for i' being Nat st i' in dom p & i' <> i holds q/.i' = p/.i'
+          for i' being Element of NAT st i' in dom p & i' <> i
+           holds q/.i' = p/.i'
 holds Product q = a * Product p;
 
 theorem :: POLYNOM2:9
@@ -158,7 +165,7 @@ theorem :: POLYNOM2:10
 for X being set,
     A being finite Subset of X,
     R be Order of X st R linearly_orders A
-for i,j being Nat st i in dom(SgmX(R,A)) & j in dom(SgmX(R,A))
+for i,j being Element of NAT st i in dom(SgmX(R,A)) & j in dom(SgmX(R,A))
 holds SgmX(R,A)/.i = SgmX(R,A)/.j implies i = j;
 
 theorem :: POLYNOM2:11
@@ -167,8 +174,8 @@ for X being set,
     a being Element of X st not(a in A)
 for B being finite Subset of X st B = {a} \/ A
 for R being Order of X st R linearly_orders B
-for k being Nat st k in dom(SgmX(R,B)) & SgmX(R,B)/.k = a
-for i being Nat st 1 <= i & i <= k - 1
+for k being Element of NAT st k in dom(SgmX(R,B)) & SgmX(R,B)/.k = a
+for i being Element of NAT st 1 <= i & i <= k - 1
 holds SgmX(R,B)/.i = SgmX(R,A)/.i;
 
 theorem :: POLYNOM2:12
@@ -177,8 +184,8 @@ for X being set,
     a being Element of X st not(a in A)
 for B being finite Subset of X st B = {a} \/ A
 for R being Order of X st R linearly_orders B
-for k being Nat st k in dom(SgmX(R,B)) & SgmX(R,B)/.k = a
-for i being Nat st k <= i & i <= len(SgmX(R,A))
+for k being Element of NAT st k in dom(SgmX(R,B)) & SgmX(R,B)/.k = a
+for i being Element of NAT st k <= i & i <= len(SgmX(R,A))
 holds SgmX(R,B)/.(i+1) = SgmX(R,A)/.i;
 
 theorem :: POLYNOM2:13
@@ -187,7 +194,7 @@ for X being non empty set,
     a being Element of X st not(a in A)
 for B being finite Subset of X st B = {a} \/ A
 for R being Order of X st R linearly_orders B
-for k being Nat st k + 1 in dom(SgmX(R,B)) & SgmX(R,B)/.(k+1) = a
+for k being Element of NAT st k + 1 in dom(SgmX(R,B)) & SgmX(R,B)/.(k+1) = a
 holds SgmX(R,B) = Ins(SgmX(R,A),k,a);
 
 begin :: Evaluation of Bags -------------------------------------------------------
@@ -238,7 +245,7 @@ func eval(b,x) -> Element of L means
 ex y being FinSequence of the carrier of L
 st len y = len SgmX(RelIncl n, support b) &
    it = Product y &
-   for i being Nat st 1 <= i & i <= len y holds
+   for i being Element of NAT st 1 <= i & i <= len y holds
         y/.i = power(L).((x * SgmX(RelIncl n, support b))/.i,
                          (b * SgmX(RelIncl n, support b))/.i);
 end;
@@ -321,7 +328,7 @@ func eval(p,x) -> Element of L means
 ex y being FinSequence of the carrier of L
 st len y = len SgmX(BagOrder n, Support p) &
    it = Sum y &
-   for i being Nat st 1 <= i & i <= len y holds
+   for i being Element of NAT st 1 <= i & i <= len y holds
         y/.i = (p * SgmX(BagOrder n, Support p))/.i *
                eval(((SgmX(BagOrder n, Support p))/.i)@,x);
 end;

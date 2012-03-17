@@ -529,16 +529,16 @@ end;
 
 scheme LambdaRec2Ex { A,B() -> set, F(set,set,set) -> set }:
   ex f being Function st dom f = NAT & f.0 = A() & f.1 = B() &
-     for n being Nat holds f.(n+2) = F(n,f.n,f.(n+1))
+     for n being Element of NAT holds f.(n+2) = F(n,f.n,f.(n+1))
 proof
   set r03 = F(0,A(),B());
   set r13 = F(1,B(),r03);
-  deffunc G(Nat,set) = [$2`2_3, $2`3_3, F($1+1,$2`2_3,$2`3_3)];
-  deffunc H(Nat,set) = G($1+1,$2);
+  deffunc G(Element of NAT,set) = [$2`2_3, $2`3_3, F($1+1,$2`2_3,$2`3_3)];
+  deffunc H(Element of NAT,set) = G($1+1,$2);
   consider h being Function such that
      dom h = NAT and
 A1: h.0 = [ B(), r03, r13 ] and
-A2: for n being Nat holds h.(n+1) = H(n,h.n) from RECDEF_1:sch 3;
+A2: for n being Element of NAT holds h.(n+1) = H(n,h.n) from RECDEF_1:sch 3;
   defpred C[set] means $1 = 0;
   deffunc X(set) = [ A(), B(), r03 ];
   deffunc Y(Element of NAT) = h.($1-'1);
@@ -550,9 +550,9 @@ A3: for x being Element of NAT holds
 A4: g.0 = [ A(), B(), r03 ] by A3;
 A5: g.1 = Y(1) by A3
        .= [ B(), r03, r13 ] by A1,BINARITH:51;
-A6: for n being Nat holds g.(n+2) = G(n+1,g.(n+1))
+A6: for n being Element of NAT holds g.(n+2) = G(n+1,g.(n+1))
     proof
-      let n be Nat;
+      let n be Element of NAT;
 A7:   g.(n+1) = Y(n+1) by A3
         .= h.n by BINARITH:39;
 A8:   n+2-1 = n+(2-1);
@@ -573,7 +573,7 @@ A12:f.0 = (g.0)`1_3 by A11
   thus
 A13:f.1 = (g.1)`1_3 by A11
       .= B() by A5,Def1;
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
   f.($1+2) = (g.($1+1))`2_3 &
   (g.($1+1))`1_3 = (g.$1)`2_3 &
   (g.($1+2))`1_3 = (g.$1)`3_3 &
@@ -598,9 +598,9 @@ A15: f.(0+2) = (g.(0+2))`1_3 by A11
       .= (g.(0+1))`3_3 by Def2;
     thus f.(0+2) = F(0,f.0,f.(0+1)) by A5,A12,A13,A15,Def2;
   end;
-A16: for x being Nat st P[x] holds P[x+1]
+A16: for x being Element of NAT st P[x] holds P[x+1]
   proof
-    let x be Nat;
+    let x be Element of NAT;
     assume
 A17:   P[x];
     thus
@@ -636,19 +636,20 @@ A24: x-'1+1 = x by A21,BINARITH:53;
       .= F(x+1,f.(x+1),f.(x+1+1)) by A17,A19,A24,Def3;
     end;
   end;
-   for x being Nat holds P[x] from NAT_1:sch 1(A14,A16);
+   for x being Element of NAT holds P[x] from NAT_1:sch 1(A14,A16);
   hence thesis;
 end;
 
 scheme LambdaRec2ExD { X() -> non empty set, A,B() -> Element of X(),
                        F(set,set,set) -> Element of X() }:
   ex f being Function of NAT,X() st f.0 = A() & f.1 = B() &
-     for n being Nat holds f.(n+2) = F(n,f.n,f.(n+1))
+     for n being Element of NAT holds f.(n+2) = F(n,f.n,f.(n+1))
 proof
   consider f being Function such that
 A1:  dom f = NAT and
 A2:  f.0 = A() & f.1 = B() and
-A3:  for n being Nat holds f.(n+2) = F(n,f.n,f.(n+1)) from LambdaRec2Ex;
+A3:  for n being Element of NAT holds f.(n+2) = F(n,f.n,f.(n+1))
+ from LambdaRec2Ex;
    rng f c= X()
   proof
     let y be set;
@@ -656,7 +657,7 @@ A3:  for n being Nat holds f.(n+2) = F(n,f.n,f.(n+1)) from LambdaRec2Ex;
     then consider n being set such that
 A4:   n in dom f and
 A5:   f.n = y by FUNCT_1:def 5;
-    reconsider n as Nat by A1,A4;
+    reconsider n as Element of NAT by A1,A4;
     per cases;
     suppose n <= 1;
     then n = 0 or n = 1 by CQC_THE1:2;
@@ -664,7 +665,7 @@ A5:   f.n = y by FUNCT_1:def 5;
     end;
     suppose n > 1;
     then 1+1 <= n by NAT_1:38;
-    then n-2 is Nat by INT_1:18;
+    then n-2 is Element of NAT by INT_1:18;
     then f.(n-2+2) = F(n-2,f.(n-2),f.(n-2+1)) by A3;
     hence y in X() by A5;
     end;
@@ -679,19 +680,19 @@ scheme LambdaRec2Un { A,B() -> set, F,G() -> Function,
 provided
 A1: dom F() = NAT and
 A2: F().0 = A() & F().1 = B() and
-A3: for n being Nat holds F().(n+2) = F(n,F().n,F().(n+1)) and
+A3: for n being Element of NAT holds F().(n+2) = F(n,F().n,F().(n+1)) and
 A4: dom G() = NAT and
 A5: G().0 = A() & G().1 = B() and
-A6: for n being Nat holds G().(n+2) = F(n,G().n,G().(n+1))
+A6: for n being Element of NAT holds G().(n+2) = F(n,G().n,G().(n+1))
 proof
   assume F() <> G();
   then consider x being set such that
 A7: x in NAT & F().x <> G().x by A1,A4,FUNCT_1:9;
-  defpred Q[Nat] means F().$1 <> G().$1;
-A8: ex k being Nat st Q[k] by A7;
-  consider m being Nat such that
+  defpred Q[Element of NAT] means F().$1 <> G().$1;
+A8: ex k being Element of NAT st Q[k] by A7;
+  consider m being Element of NAT such that
 A9: Q[m] and
-A10: for n being Nat st Q[n] holds m <= n from NAT_1:sch 5(A8);
+A10: for n being Element of NAT st Q[n] holds m <= n from NAT_1:sch 5(A8);
    now
     set k = m-'2;
     assume m <> 0 & m <> 1;
@@ -713,9 +714,9 @@ scheme LambdaRec2UnD { X() -> non empty set, A,B() -> Element of X(),
   F() = G()
 provided
 A1: F().0 = A() & F().1 = B() and
-A2: for n being Nat holds F().(n+2) = F(n,F().n,F().(n+1)) and
+A2: for n being Element of NAT holds F().(n+2) = F(n,F().n,F().(n+1)) and
 A3: G().0 = A() & G().1 = B() and
-A4: for n being Nat holds G().(n+2) = F(n,G().n,G().(n+1))
+A4: for n being Element of NAT holds G().(n+2) = F(n,G().n,G().(n+1))
 proof
 A5: dom F() = NAT by FUNCT_2:def 1;
 A6: dom G() = NAT by FUNCT_2:def 1;
@@ -726,18 +727,18 @@ end;
 
 scheme LambdaRec3Ex { A,B,C() -> set, F(set,set,set,set) -> set }:
   ex f being Function st dom f = NAT & f.0 = A() & f.1 = B() & f.2 = C() &
-     for n being Nat holds f.(n+3) = F(n,f.n,f.(n+1),f.(n+2))
+     for n being Element of NAT holds f.(n+3) = F(n,f.n,f.(n+1),f.(n+2))
 proof
   set r04 = F(0,A(),B(),C());
   set r14 = F(1,B(),C(),r04);
   set r24 = F(2,C(),r04,r14);
-  deffunc G(Nat,set) =
+  deffunc G(Element of NAT,set) =
     [$2`2_4, $2`3_4, $2`4_4, F($1+1,$2`2_4,$2`3_4,$2`4_4)];
-  deffunc H(Nat,set) = G($1+2,$2);
+  deffunc H(Element of NAT,set) = G($1+2,$2);
   consider h being Function such that
      dom h = NAT and
 A1: h.0 = [ C(), r04, r14, r24 ] and
-A2: for n being Nat holds h.(n+1) = H(n,h.n) from RECDEF_1:sch 3;
+A2: for n being Element of NAT holds h.(n+1) = H(n,h.n) from RECDEF_1:sch 3;
   defpred C1[set] means $1 = 0;
   defpred C2[set] means $1 = 1;
   defpred C3[set] means In($1,NAT) > 1;
@@ -770,9 +771,9 @@ A7: g.1 = [ B(), C(), r04, r14 ] by A5;
 A8: In(2,NAT) = 2 by FUNCT_7:def 1; then
 A9: g.2 = X3(2) by A5
        .= [ C(), r04, r14, r24 ] by A1,A8,BINARITH:51;
-A10: for n being Nat holds g.(n+3) = G(n+2,g.(n+2))
+A10: for n being Element of NAT holds g.(n+3) = G(n+2,g.(n+2))
     proof
-      let n be Nat;
+      let n be Element of NAT;
 A11:   In(n+2,NAT) = n+2 & In(n+3,NAT) = n+3 by FUNCT_7:def 1;
 A12:  0 <= n by NAT_1:18;
       then 0+1 < n+2 by XREAL_1:10;
@@ -800,7 +801,7 @@ A19:f.1 = (g.1)`1_4 by A17
   thus
 A20:f.2 = (g.2)`1_4 by A17
       .= C() by A9,Def4;
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
   f.($1+3) = (g.($1+2))`2_4 &
   (g.$1)`2_4 = (g.($1+1))`1_4 &
   (g.$1)`3_4 = (g.($1+1))`2_4 &
@@ -832,9 +833,9 @@ A22: f.(0+3) = (g.(0+3))`1_4 by A17
       .= (g.(0+3))`1_4 by A10;
     thus f.(0+3) = F(0,f.0,f.(0+1),f.(0+2)) by A9,A18,A19,A20,A22,Def5;
   end;
-A23: for x being Nat st P[x] holds P[x+1]
+A23: for x being Element of NAT st P[x] holds P[x+1]
   proof
-    let x be Nat;
+    let x be Element of NAT;
     assume
 A24:   P[x];
 A25: x+1+2 = x+(1+2);
@@ -900,19 +901,19 @@ A37: x+1 = x-1+2;
       .= F(x+1,f.(x+1),f.(x+1+1),f.(x+1+2)) by A17,A24,A27;
     end;
   end;
-   for x being Nat holds P[x] from NAT_1:sch 1(A21,A23);
+   for x being Element of NAT holds P[x] from NAT_1:sch 1(A21,A23);
   hence thesis;
 end;
 
 scheme LambdaRec3ExD { X() -> non empty set, A,B,C() -> Element of X(),
                        F(set,set,set,set) -> Element of X() }:
   ex f being Function of NAT,X() st f.0 = A() & f.1 = B() & f.2 = C() &
-     for n being Nat holds f.(n+3) = F(n,f.n,f.(n+1),f.(n+2))
+     for n being Element of NAT holds f.(n+3) = F(n,f.n,f.(n+1),f.(n+2))
 proof
   consider f being Function such that
 A1:  dom f = NAT and
 A2:  f.0 = A() & f.1 = B() & f.2 = C() and
-A3:  for n being Nat holds f.(n+3) = F(n,f.n,f.(n+1),f.(n+2))
+A3:  for n being Element of NAT holds f.(n+3) = F(n,f.n,f.(n+1),f.(n+2))
      from LambdaRec3Ex;
    rng f c= X()
   proof
@@ -921,7 +922,7 @@ A3:  for n being Nat holds f.(n+3) = F(n,f.n,f.(n+1),f.(n+2))
     then consider n being set such that
 A4:   n in dom f and
 A5:   f.n = y by FUNCT_1:def 5;
-    reconsider n as Nat by A1,A4;
+    reconsider n as Element of NAT by A1,A4;
     per cases;
     suppose n <= 2;
     then n = 0 or n = 1 or n = 2 by CQC_THE1:3;
@@ -929,7 +930,7 @@ A5:   f.n = y by FUNCT_1:def 5;
     end;
     suppose n > 2;
     then 2+1 <= n by NAT_1:38;
-    then n-3 is Nat by INT_1:18;
+    then n-3 is Element of NAT by INT_1:18;
     then f.(n-3+3) = F(n-3,f.(n-3),f.(n-3+1),f.(n-3+2)) by A3;
     hence y in X() by A5;
     end;
@@ -944,19 +945,20 @@ scheme LambdaRec3Un { A,B,C() -> set, F,G() -> Function,
 provided
 A1: dom F() = NAT and
 A2: F().0 = A() & F().1 = B() & F().2 = C() and
-A3: for n being Nat holds F().(n+3) = F(n,F().n,F().(n+1),F().(n+2)) and
+A3: for n being Element of NAT
+ holds F().(n+3) = F(n,F().n,F().(n+1),F().(n+2)) and
 A4: dom G() = NAT and
 A5: G().0 = A() & G().1 = B() & G().2 = C() and
-A6: for n being Nat holds G().(n+3) = F(n,G().n,G().(n+1),G().(n+2))
+A6: for n being Element of NAT holds G().(n+3) = F(n,G().n,G().(n+1),G().(n+2))
 proof
   assume F() <> G();
   then consider x being set such that
 A7: x in NAT & F().x <> G().x by A1,A4,FUNCT_1:9;
-  defpred Q[Nat] means F().$1 <> G().$1;
-A8: ex k being Nat st Q[k] by A7;
-  consider m being Nat such that
+  defpred Q[Element of NAT] means F().$1 <> G().$1;
+A8: ex k being Element of NAT st Q[k] by A7;
+  consider m being Element of NAT such that
 A9: Q[m] and
-A10: for n being Nat st Q[n] holds m <= n from NAT_1:sch 5(A8);
+A10: for n being Element of NAT st Q[n] holds m <= n from NAT_1:sch 5(A8);
    now
     set k = m-'3;
     assume m <> 0 & m <> 1 & m <> 2;
@@ -980,9 +982,10 @@ scheme LambdaRec3UnD { X() -> non empty set, A,B,C() -> Element of X(),
   F() = G()
 provided
 A1: F().0 = A() & F().1 = B() & F().2 = C() and
-A2: for n being Nat holds F().(n+3) = F(n,F().n,F().(n+1),F().(n+2)) and
+A2: for n being Element of NAT
+ holds F().(n+3) = F(n,F().n,F().(n+1),F().(n+2)) and
 A3: G().0 = A() & G().1 = B() & G().2 = C() and
-A4: for n being Nat holds G().(n+3) = F(n,G().n,G().(n+1),G().(n+2))
+A4: for n being Element of NAT holds G().(n+3) = F(n,G().n,G().(n+1),G().(n+2))
 proof
 A5: dom F() = NAT by FUNCT_2:def 1;
 A6: dom G() = NAT by FUNCT_2:def 1;
@@ -994,20 +997,20 @@ end;
 scheme LambdaRec4Ex { A,B,C,D() -> set, F(set,set,set,set,set) -> set }:
   ex f being Function st dom f = NAT &
    f.0 = A() & f.1 = B() & f.2 = C() & f.3 = D() &
-    for n being Nat holds f.(n+4) = F(n,f.n,f.(n+1),f.(n+2),f.(n+3))
+    for n being Element of NAT holds f.(n+4) = F(n,f.n,f.(n+1),f.(n+2),f.(n+3))
 proof
   set r05 = F(0,A(),B(),C(),D());
   set r15 = F(1,B(),C(),D(),r05);
   set r25 = F(2,C(),D(),r05,r15);
   set r35 = F(3,D(),r05,r15,r25);
-  deffunc G(Nat,set) =
+  deffunc G(Element of NAT,set) =
     [$2`2_5, $2`3_5, $2`4_5, $2`5_5, F($1+1,$2`2_5,$2`3_5,$2`4_5,$2`5_5)];
-  deffunc H(Nat,set) = G($1+3,$2);
+  deffunc H(Element of NAT,set) = G($1+3,$2);
   consider h being Function such that
      dom h = NAT and
 A1: h.0 = [ D(), r05, r15, r25, r35 ]
      and
-A2: for n being Nat holds h.(n+1) = H(n,h.n) from RECDEF_1:sch 3;
+A2: for n being Element of NAT holds h.(n+1) = H(n,h.n) from RECDEF_1:sch 3;
   defpred C1[set] means $1 = 0;
   defpred C2[set] means $1 = 1;
   defpred C3[set] means $1 = 2;
@@ -1046,9 +1049,9 @@ A8: g.2 = [ C(), D(), r05, r15, r25 ] by A5;
 A9: In (3,NAT) = 3 by FUNCT_7:def 1; then
 A10: g.3 = X4(3) by A5
        .= [ D(), r05, r15, r25, r35 ] by A1,A9,BINARITH:51;
-A11: for n being Nat holds g.(n+4) = G(n+3,g.(n+3))
+A11: for n being Element of NAT holds g.(n+4) = G(n+3,g.(n+3))
     proof
-      let n be Nat;
+      let n be Element of NAT;
 A12:   In (n+3,NAT) = n+3 & In (n+4,NAT) = n+4 &
       In (n,NAT) = n & In (n+1,NAT) = n+1 by FUNCT_7:def 1;
 A13:  0 <= n by NAT_1:18;
@@ -1080,7 +1083,7 @@ A21:f.2 = (g.2)`1_5 by A18
   thus
 A22:f.3 = (g.3)`1_5 by A18
       .= D() by A10,Def8;
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
   f.($1+4) = (g.($1+3))`2_5 &
   (g.$1)`2_5 = (g.($1+1))`1_5 &
   (g.$1)`3_5 = (g.($1+1))`2_5 &
@@ -1140,9 +1143,9 @@ A24: f.(0+4) = (g.(0+4))`1_5 by A18
     thus f.(0+4) = F(0,f.0,f.(0+1),f.(0+2),f.(0+3)) by A10,A19,A20,A21,A22,A24,
 Def9;
   end;
-A25: for x being Nat st P[x] holds P[x+1]
+A25: for x being Element of NAT st P[x] holds P[x+1]
   proof
-    let x be Nat;
+    let x be Element of NAT;
     assume
 A26:   P[x];
     thus
@@ -1252,7 +1255,7 @@ A48: x-'2+3 = x-2+3 by A43,BINARITH:def 3
       .= F(x+1,f.(x+1),f.(x+1+1),f.(x+1+2),f.(x+1+3)) by A18,A26,A28,A29;
     end;
   end;
-   for x being Nat holds P[x] from NAT_1:sch 1(A23,A25);
+   for x being Element of NAT holds P[x] from NAT_1:sch 1(A23,A25);
   hence thesis;
 end;
 
@@ -1260,12 +1263,14 @@ scheme LambdaRec4ExD { X() -> non empty set, A,B,C,D() -> Element of X(),
                        F(set,set,set,set,set) -> Element of X() }:
   ex f being Function of NAT,X() st
     f.0 = A() & f.1 = B() & f.2 = C() & f.3 = D() &
-     for n being Nat holds f.(n+4) = F(n,f.n,f.(n+1),f.(n+2),f.(n+3))
+     for n being Element of NAT
+      holds f.(n+4) = F(n,f.n,f.(n+1),f.(n+2),f.(n+3))
 proof
   consider f being Function such that
 A1:  dom f = NAT and
 A2:  f.0 = A() & f.1 = B() & f.2 = C() & f.3 = D() and
-A3:  for n being Nat holds f.(n+4) = F(n,f.n,f.(n+1),f.(n+2),f.(n+3))
+A3:  for n being Element of NAT
+ holds f.(n+4) = F(n,f.n,f.(n+1),f.(n+2),f.(n+3))
      from LambdaRec4Ex;
    rng f c= X()
   proof
@@ -1274,7 +1279,7 @@ A3:  for n being Nat holds f.(n+4) = F(n,f.n,f.(n+1),f.(n+2),f.(n+3))
     then consider n being set such that
 A4:   n in dom f and
 A5:   f.n = y by FUNCT_1:def 5;
-    reconsider n as Nat by A1,A4;
+    reconsider n as Element of NAT by A1,A4;
     per cases;
     suppose n <= 3;
     then n = 0 or n = 1 or n = 2 or n = 3 by CQC_THE1:4;
@@ -1282,7 +1287,7 @@ A5:   f.n = y by FUNCT_1:def 5;
     end;
     suppose n > 3;
     then 3+1 <= n by NAT_1:38;
-    then n-4 is Nat by INT_1:18;
+    then n-4 is Element of NAT by INT_1:18;
     then f.(n-4+4) = F(n-4,f.(n-4),f.(n-4+1),f.(n-4+2),f.(n-4+3)) by A3;
     hence y in X() by A5;
     end;
@@ -1297,20 +1302,22 @@ scheme LambdaRec4Un { A,B,C,D() -> set, F,G() -> Function,
 provided
 A1: dom F() = NAT and
 A2: F().0 = A() & F().1 = B() & F().2 = C() & F().3 = D() and
-A3: for n being Nat holds F().(n+4) = F(n,F().n,F().(n+1),F().(n+2),F().(n+3))
+A3: for n being Element of NAT
+ holds F().(n+4) = F(n,F().n,F().(n+1),F().(n+2),F().(n+3))
     and
 A4: dom G() = NAT and
 A5: G().0 = A() & G().1 = B() & G().2 = C() & G().3 = D() and
-A6: for n being Nat holds G().(n+4) = F(n,G().n,G().(n+1),G().(n+2),G().(n+3))
+A6: for n being Element of NAT
+ holds G().(n+4) = F(n,G().n,G().(n+1),G().(n+2),G().(n+3))
 proof
   assume F() <> G();
   then consider x being set such that
 A7: x in NAT & F().x <> G().x by A1,A4,FUNCT_1:9;
-  defpred Q[Nat] means F().$1 <> G().$1;
-A8: ex k being Nat st Q[k] by A7;
-  consider m being Nat such that
+  defpred Q[Element of NAT] means F().$1 <> G().$1;
+A8: ex k being Element of NAT st Q[k] by A7;
+  consider m being Element of NAT such that
 A9: Q[m] and
-A10: for n being Nat st Q[n] holds m <= n from NAT_1:sch 5(A8);
+A10: for n being Element of NAT st Q[n] holds m <= n from NAT_1:sch 5(A8);
    now
     set k = m-'4;
     assume m <> 0 & m <> 1 & m <> 2 & m <> 3;
@@ -1336,10 +1343,12 @@ scheme LambdaRec4UnD { X() -> non empty set, A,B,C,D() -> Element of X(),
   F() = G()
 provided
 A1: F().0 = A() & F().1 = B() & F().2 = C() & F().3 = D() and
-A2: for n being Nat holds F().(n+4) = F(n,F().n,F().(n+1),F().(n+2),F().(n+3))
+A2: for n being Element of NAT
+ holds F().(n+4) = F(n,F().n,F().(n+1),F().(n+2),F().(n+3))
     and
 A3: G().0 = A() & G().1 = B() & G().2 = C() & G().3 = D() and
-A4: for n being Nat holds G().(n+4) = F(n,G().n,G().(n+1),G().(n+2),G().(n+3))
+A4: for n being Element of NAT
+ holds G().(n+4) = F(n,G().n,G().(n+1),G().(n+2),G().(n+3))
 proof
 A5: dom F() = NAT by FUNCT_2:def 1;
 A6: dom G() = NAT by FUNCT_2:def 1;

@@ -11,7 +11,8 @@ environ
       CAT_1, PREPOWER, POWER, SERIES_1, BHSP_3, RSSPACE3, LOPBAN_1, LOPBAN_2,
       LOPBAN_3, SUPINF_2, GROUP_1, FUNCOP_1, FRECHET2;
  notations TARSKI, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, PRE_TOPC,
-      DOMAIN_1, BINOP_1, FUNCOP_1, STRUCT_0, XREAL_0, XXREAL_0, ORDINAL1,
+      DOMAIN_1, BINOP_1, FUNCOP_1, STRUCT_0,
+      XCMPLX_0, XREAL_0, XXREAL_0, ORDINAL1,
       NUMBERS, REAL_1, NAT_1, COMPLEX1, RLVECT_1, GROUP_1, VECTSP_1, NORMSP_1,
       RSSPACE3, SEQ_1, SEQ_2, SEQM_3, SERIES_1, PREPOWER, POWER, BHSP_3,
       LOPBAN_1, LOPBAN_2;
@@ -24,7 +25,7 @@ environ
  theorems ABSVALUE, RLVECT_1, VECTSP_1, FUNCSDOM, RELAT_1, SEQ_1, SEQ_2,
       SEQM_3, SERIES_1, FUNCT_1, NAT_1, INT_1, FUNCT_2, NORMSP_1, SEQ_4,
       RSSPACE3, LOPBAN_1, PREPOWER, LOPBAN_2, GROUP_1, FUNCOP_1, BHSP_3,
-      XREAL_1, COMPLEX1, XXREAL_0;
+      XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1;
  schemes SEQ_1, RECDEF_1, NAT_1, FUNCT_2;
 
 begin :: Basic Properties of Sequences of Norm Space
@@ -33,31 +34,31 @@ definition
   let X be non empty NORMSTR;
   let seq be sequence of X;
    func Partial_Sums seq -> sequence of X means :Def1:
-  it.0 = seq.0 & for n be Nat
+  it.0 = seq.0 & for n be Element of NAT
   holds it.(n+1) = it.n + seq.(n+1);
 existence
 proof
-      deffunc G(Nat,set)= (the add of X).($2,seq.($1+1));
+      deffunc G(Element of NAT,set)= (the add of X).($2,seq.($1+1));
       consider g be Function such that
       A1:   dom g = NAT & g.0 = seq.0
       & for n being Element of NAT holds g.(n+1) = G(n,g.n)
       from RECDEF_1:sch 3;
-      defpred P[Nat] means g.$1 in the carrier of X;
+      defpred P[Element of NAT] means g.$1 in the carrier of X;
        A2: P[0] by A1;
-       A3:  for k be Nat st P[k] holds P[k+1]
+       A3:  for k be Element of NAT st P[k] holds P[k+1]
        proof
-       let k be Nat such that
+       let k be Element of NAT such that
          A4: P[k];
          reconsider gk=g.k as Element of X by A4;
           g.(k+1)=(the add of X).(gk,seq.(k+1)) by A1;
          hence thesis;
        end;
-         for n be Nat holds P[n] from NAT_1:sch 1(A2,A3);
+         for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
        then for n be set st n in NAT
           holds g.n in the carrier of X;
          then reconsider g0=g as sequence of X by A1,FUNCT_2:5;
            take g0;
-          now let n be Nat;
+          now let n be Element of NAT;
           thus g0.(n+1) = (the add of X).(g0.n,seq.(n+1)) by A1
             .=g0.n+seq.(n+1);
         end;
@@ -66,19 +67,19 @@ end;
 uniqueness
 proof
  let seq1,seq2 be sequence of X;
- assume that A5: seq1.0=seq.0 & for n be Nat holds
+ assume that A5: seq1.0=seq.0 & for n be Element of NAT holds
                 seq1.(n+1)=seq1.n + seq.(n+1) and
-             A6: seq2.0=seq.0 & for n be Nat holds
+             A6: seq2.0=seq.0 & for n be Element of NAT holds
                 seq2.(n+1)=seq2.n + seq.(n+1);
-   defpred P[Nat] means seq1.$1 = seq2.$1;
+   defpred P[Element of NAT] means seq1.$1 = seq2.$1;
  A7: P[0] by A5,A6;
- A8: for k be Nat st P[k] holds P[k+1]
-     proof let k be Nat;
+ A8: for k be Element of NAT st P[k] holds P[k+1]
+     proof let k be Element of NAT;
       assume P[k];
       hence seq1.(k+1) = seq2.k + seq.(k+1) by A5
                       .= seq2.(k+1) by A6;
       end;
-    for n be Nat holds P[n] from NAT_1:sch 1(A7,A8);
+    for n be Element of NAT holds P[n] from NAT_1:sch 1(A7,A8);
  hence seq1 = seq2 by FUNCT_2:113;
 end;
 end;
@@ -86,23 +87,23 @@ end;
 theorem Th1:
 for X be add-associative right_zeroed right_complementable (non empty NORMSTR)
  for seq be sequence of X st
-   ( for n be Nat holds seq.n = 0.X)
-     holds for m be Nat holds (Partial_Sums seq).m = 0.X
+   ( for n be Element of NAT holds seq.n = 0.X)
+     holds for m be Element of NAT holds (Partial_Sums seq).m = 0.X
  proof
 let X be add-associative right_zeroed right_complementable (non empty NORMSTR);
    let seq be sequence of X such that
-    A1:   for n be Nat holds seq.n = 0.X;
-    let m be Nat;
-    defpred P[Nat] means seq.$1 = (Partial_Sums seq).$1;
+    A1:   for n be Element of NAT holds seq.n = 0.X;
+    let m be Element of NAT;
+    defpred P[Element of NAT] means seq.$1 = (Partial_Sums seq).$1;
 A2: P[0] by Def1;
-A3: for k be Nat st P[k] holds P[k+1]
-    proof let k be Nat such that
+A3: for k be Element of NAT st P[k] holds P[k+1]
+    proof let k be Element of NAT such that
 A4:   P[k];
       thus seq.(k+1) = 0.X + seq.(k+1) by RLVECT_1:10
                     .= (Partial_Sums seq).k + seq.(k+1) by A1,A4
                     .= (Partial_Sums seq).(k+1) by Def1;
     end;
-       for n be Nat holds P[n] from NAT_1:sch 1(A2,A3);
+       for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
     then seq = Partial_Sums seq by FUNCT_2:113;
     hence (Partial_Sums seq).m = 0.X by A1;
   end;
@@ -120,12 +121,12 @@ cluster summable sequence of X;
 existence
   proof
     reconsider C = NAT --> 0.X as sequence of X by FUNCOP_1:57;
-A1:   for n be Nat holds C.n = 0.X by FUNCOP_1:13;
+A1:   for n be Element of NAT holds C.n = 0.X by FUNCOP_1:13;
     take C, 0.X;
     let p be Real such that
 A2:   0<p;
     take 0;
-    let m be Nat such that 0<=m;
+    let m be Element of NAT such that 0<=m;
       ||.Partial_Sums C.m-0.X.|| = ||.0.X-0.X.|| by A1,Th1
     .=0 by NORMSP_1:10;
     hence ||.Partial_Sums C.m-0.X.||<p by A2;
@@ -150,11 +151,11 @@ end;
 theorem Th2:
 for X be RealNormSpace
   for seq be sequence of X
-      for m be Nat holds  0 <= ||.seq.||.m
+      for m be Element of NAT holds  0 <= ||.seq.||.m
   proof
   let X be RealNormSpace;
   let seq be sequence of X;
-  let m be Nat;
+  let m be Element of NAT;
       ||.seq.||.m = ||.seq.m.|| by NORMSP_1:def 10;
   hence thesis by NORMSP_1:8;
   end;
@@ -177,22 +178,23 @@ theorem Th4:
 for X be RealNormSpace
   for seq be sequence of X holds
         seq is convergent implies
-         for s be Real st 0<s ex n be Nat
-         st for m be Nat st n<=m holds ||.seq.m -seq.n.||<s
+         for s be Real st 0<s ex n be Element of NAT
+         st for m be Element of NAT st n<=m holds ||.seq.m -seq.n.||<s
     proof
     let X be RealNormSpace;
     let seq be sequence of X;
      assume seq is convergent;
      then consider g1 be Element of X such that
   A1: for s be Real st 0<s
-     ex n be Nat st for m be Nat st n<=m holds ||.seq.m -g1.||<s
+     ex n be Element of NAT st for m be Element of NAT st n<=m
+     holds ||.seq.m -g1.||<s
      by NORMSP_1:def 9;
      let s be Real; assume 0<s;
      then 0<s/2 by SEQ_2:3;
-     then consider n be Nat such that
-  A2: for m be Nat st n<=m holds ||.seq.m -g1.||<s/2 by A1;
+     then consider n be Element of NAT such that
+  A2: for m be Element of NAT st n<=m holds ||.seq.m -g1.||<s/2 by A1;
         now
-        let m be Nat such that A3: n<=m;
+        let m be Element of NAT such that A3: n<=m;
            ||.seq.n -g1.||<s/2 by A2;
      then A4: ||.g1-seq.n.||<s/2 by NORMSP_1:11;
         ||.seq.m -g1.||<s/2 by A2,A3;
@@ -211,7 +213,7 @@ for X be RealNormSpace
         seq is Cauchy_sequence_by_Norm
         iff
        for p be Real st p > 0 holds
-           ex n be Nat st for m be Nat st n <= m
+           ex n be Element of NAT st for m be Element of NAT st n <= m
             holds ||.seq.m-seq.n.||< p
     proof
     let X be RealNormSpace;
@@ -219,29 +221,29 @@ for X be RealNormSpace
    A1: now assume
       A2:      seq is Cauchy_sequence_by_Norm;
       thus for p be Real st p > 0 holds
-           ex n be Nat st for m be Nat st n <= m
+           ex n be Element of NAT st for m be Element of NAT st n <= m
             holds ||.seq.m-seq.n.||< p
         proof
         let p be Real such that
            A3: p >0;
-           consider n be Nat such that
-           A4: for m,k be Nat st n <= m & n <=k
+           consider n be Element of NAT such that
+           A4: for m,k be Element of NAT st n <= m & n <=k
             holds ||.seq.m-seq.k.||< p by A2,A3,RSSPACE3:10;
-             for m be Nat st n <= m holds ||.seq.m-seq.n.||<p by A4;
+             for m be Element of NAT st n <= m holds ||.seq.m-seq.n.||<p by A4;
          hence thesis;
       end;
      end;
     now assume
    A5:     for p be Real st p > 0 holds
-               ex n be Nat st for m be Nat st n <= m
+               ex n be Element of NAT st for m be Element of NAT st n <= m
              holds ||.seq.m-seq.n.||< p;
       now let s be Real;
       assume 0<s;
      then 0<s/2 by SEQ_2:3;
-          then consider k be Nat such that
-  A6: for m be Nat st k<=m holds ||.seq.m -seq.k.||<s/2 by A5;
+          then consider k be Element of NAT such that
+  A6: for m be Element of NAT st k<=m holds ||.seq.m -seq.k.||<s/2 by A5;
         now
-         let m,n be Nat such
+         let m,n be Element of NAT such
           that A7: k<=m & k<=n;
           A8:   ||.seq.m -seq.k.||<s/2 by A6,A7;
              ||.seq.n -seq.k.||<s/2 by A6,A7;
@@ -254,8 +256,8 @@ for X be RealNormSpace
               =||.seq.m -seq.n.|| by Th3;
           hence ||.seq.m -seq.n.|| < s  by A9,A10,XXREAL_0:2;
        end;
-       hence ex k be Nat st
-        for m,n be Nat st k <= m & k <=n holds ||.seq.m-seq.n.||< s;
+       hence ex k be Element of NAT st
+        for m,n be Element of NAT st k <= m & k <=n holds ||.seq.m-seq.n.||< s;
            end;
        hence seq is Cauchy_sequence_by_Norm by RSSPACE3:10;
     end;
@@ -265,17 +267,17 @@ end;
 theorem Th6:
 for X be RealNormSpace
   for seq be sequence of X
-  st (for n be Nat holds seq.n = 0.X)
-    holds for m be Nat holds (Partial_Sums ||.seq.||).m = 0
+  st (for n be Element of NAT holds seq.n = 0.X)
+    holds for m be Element of NAT holds (Partial_Sums ||.seq.||).m = 0
   proof
   let X be RealNormSpace;
   let seq be sequence of X such that
-A1:   for n be Nat holds seq.n = 0.X;
-    let m be Nat;
-    defpred P[Nat] means ||.seq.||.$1 = (Partial_Sums ||.seq.||).$1;
+A1:   for n be Element of NAT holds seq.n = 0.X;
+    let m be Element of NAT;
+    defpred P[Element of NAT] means ||.seq.||.$1 = (Partial_Sums ||.seq.||).$1;
 A2: P[0] by SERIES_1:def 1;
-A3: for k be Nat st P[k] holds P[k+1]
-    proof let k be Nat such that
+A3: for k be Element of NAT st P[k] holds P[k+1]
+    proof let k be Element of NAT such that
 A4:   P[k];
       thus ||.seq.||.(k+1) =0 +  ||.seq.||.(k+1)
                                .=  ||.0.X.|| + ||.seq.||.(k+1) by NORMSP_1:5
@@ -284,7 +286,7 @@ A4:   P[k];
 NORMSP_1:def 10
                         .= (Partial_Sums ||.seq.||).(k+1) by SERIES_1:def 1;
     end;
-       for n be Nat  holds  P[n] from NAT_1:sch 1(A2,A3);
+       for n be Element of NAT  holds  P[n] from NAT_1:sch 1(A2,A3);
     hence (Partial_Sums ||.seq.||).m = ||.seq.||.m
                                   .= ||.seq.m.|| by NORMSP_1:def 10
                                   .= ||.0.X.|| by A1
@@ -295,20 +297,20 @@ definition
 let X be RealNormSpace;
 let seq be sequence of X;
   redefine attr seq is constant means   :Def5:
-  ex r be Element of X st for n be Nat holds seq.n=r;
+  ex r be Element of X st for n be Element of NAT holds seq.n=r;
  compatibility
   proof
 A1:dom seq = NAT by FUNCT_2:def 1;
    hereby assume
 A2:   seq is constant;
-    consider n0 being Nat;
+    consider n0 being Element of NAT;
     reconsider r = seq.n0 as Element of X;
     take r;
-    let n be Nat;
+    let n be Element of NAT;
     thus seq.n = r by A1,A2,FUNCT_1:def 16;
    end;
    given r be Element of X such that
-A3:  for n be Nat holds seq.n=r;
+A3:  for n be Element of NAT holds seq.n=r;
  for n1,n2 being set st n1 in dom seq & n2 in dom seq
    holds seq.n1=seq.n2
    proof
@@ -324,20 +326,20 @@ end;
 definition
 let X be RealNormSpace;
 let seq be sequence of X;
-let k be Nat;
+let k be Element of NAT;
 func seq ^\k -> sequence of X means :Def6:
-  for n be Nat holds it.n=seq.(n+k);
+  for n be Element of NAT holds it.n=seq.(n+k);
 existence
- proof deffunc U(Nat) = seq.($1+k);
+ proof deffunc U(Element of NAT) = seq.($1+k);
   thus ex f being sequence of X st
-   for n be Nat holds f.n=U(n) from FUNCT_2:sch 4;
+   for n be Element of NAT holds f.n=U(n) from FUNCT_2:sch 4;
  end;
 uniqueness
  proof
   let seq1,seq2 be sequence of X;
-  assume that A1:for n be Nat holds seq1.n=seq.(n+k) and
-              A2:for n be Nat holds seq2.n=seq.(n+k);
-      now let n be Nat;
+  assume that A1:for n be Element of NAT holds seq1.n=seq.(n+k) and
+              A2:for n be Element of NAT holds seq2.n=seq.(n+k);
+      now let n be Element of NAT;
        seq1.n=seq.(n+k) & seq2.n=seq.(n+k) by A1,A2;
     hence seq1.n=seq2.n;
    end;
@@ -375,12 +377,12 @@ theorem Th7:
 for X be non empty 1-sorted
   for seq be sequence of X
    for Nseq be increasing Seq_of_Nat holds
-      for n be Nat holds (seq*Nseq).n=seq.(Nseq.n)
+      for n be Element of NAT holds (seq*Nseq).n=seq.(Nseq.n)
   proof
  let X be non empty 1-sorted;
  let seq be sequence of X;
  let Nseq be increasing Seq_of_Nat;
- let n be Nat;
+ let n be Element of NAT;
      dom (seq*Nseq)=NAT by FUNCT_2:def 1;
     hence (seq*Nseq).n=seq.(Nseq.n) by FUNCT_1:22;
   end;
@@ -392,7 +394,7 @@ for X be RealNormSpace
   proof
   let X be RealNormSpace;
   let seq be sequence of X;
-     now let n be Nat;
+     now let n be Element of NAT;
     thus (seq ^\0).n=seq.(n+0) by Def6
                   .=seq.n;
    end;
@@ -402,13 +404,13 @@ for X be RealNormSpace
 theorem
  for X be RealNormSpace
   for seq be sequence of X
-    for k, m be Nat holds
+    for k, m be Element of NAT holds
    (seq ^\k)^\m=(seq ^\m)^\k
   proof
      let X be RealNormSpace;
      let seq be sequence of X;
-     let k,m be Nat;
-       now let n be Nat;
+     let k,m be Element of NAT;
+       now let n be Element of NAT;
      thus ((seq ^\k)^\m).n=(seq ^\k).(n+m) by Def6
       .=seq.(n+m+k) by Def6
       .=seq.(n+k+m)
@@ -421,13 +423,13 @@ theorem
 theorem Th10:
 for X be RealNormSpace
   for seq be sequence of X
-   for k, m be Nat holds
+   for k, m be Element of NAT holds
    (seq ^\k)^\m=seq ^\(k+m)
   proof
      let X be RealNormSpace;
      let seq be sequence of X;
-     let k,m be Nat;
-       now let n be Nat;
+     let k,m be Element of NAT;
+       now let n be Element of NAT;
      thus ((seq ^\k)^\m).n=(seq ^\k).(n+m) by Def6
       .=seq.(n+m+k) by Def6
       .=seq.(n+(k+m))
@@ -448,16 +450,17 @@ for X be RealNormSpace
    assume that A1:seq1 is subsequence of seq and
                A2:seq is convergent;
    consider g1 be Element of X such that
-   A3:for p be Real st 0<p ex n be Nat st for m be Nat st n<=m holds
+   A3:for p be Real st 0<p ex n be Element of NAT st
+   for m be Element of NAT st n<=m holds
      ||.(seq.m)-g1.||< p by A2,NORMSP_1:def 9;
    consider Nseq be increasing Seq_of_Nat such that
 A4:seq1=seq*Nseq by A1,BHSP_3:def 4;
    take g=g1;
    let p be Real; assume 0<p;
-   then consider n1 be Nat such that
-     A5:for m be Nat st n1<=m holds ||.(seq.m)-g1.||<p by A3;
+   then consider n1 be Element of NAT such that
+     A5:for m be Element of NAT st n1<=m holds ||.(seq.m)-g1.||<p by A3;
    take n=n1;
-   let m be Nat such that A6:n<=m;
+   let m be Element of NAT such that A6:n<=m;
       m<=Nseq.m by SEQM_3:33;
    then A7:n<=Nseq.m by A6,XXREAL_0:2;
       seq1.m=seq.(Nseq.m) by A4,Th7;
@@ -478,11 +481,11 @@ for X be RealNormSpace
    consider Nseq be increasing Seq_of_Nat such that
 A4:  seq1=seq*Nseq by A1,BHSP_3:def 4;
        now let p be Real; assume 0<p;
-     then consider n1 be Nat such that
-      A5:for m be Nat st n1<=m
+     then consider n1 be Element of NAT such that
+      A5:for m be Element of NAT st n1<=m
       holds ||.(seq.m)-(lim seq).||<p by A2,NORMSP_1:def 11;
      take n=n1;
-     let m be Nat such
+     let m be Element of NAT such
      that A6:n<=m;
         m<=Nseq.m by SEQM_3:33;
      then A7:n<=Nseq.m by A6,XXREAL_0:2;
@@ -494,50 +497,51 @@ A4:  seq1=seq*Nseq by A1,BHSP_3:def 4;
 
 Lm1:
 for n,m be Nat holds
-n<m implies ex k be Nat st m=n+1+k
+n<m implies ex k be Element of NAT st m=n+1+k
  proof
  let n,m be Nat;
   assume A1: n<m;
   then consider k1 be Nat such that A2:m=n+k1 by NAT_1:28;
    k1 <> 0 by A1,A2;
   then consider n1 be Nat such that A3:k1=n1+1 by NAT_1:22;
-  take k=n1;
-  thus m=n+1+k by A2,A3;
+  reconsider n1 as Element of NAT by ORDINAL1:def 13;
+  take n1;
+  thus m=n+1+n1 by A2,A3;
  end;
 
 Lm2:
   for seq be Real_Sequence holds
-     ((for n be Nat holds seq.n<seq.(n+1)) implies
-              for n,k be Nat holds seq.n<seq.(n+1+k)) &
-      ((for n,k be Nat holds seq.n<seq.(n+1+k)) implies
-              for n,m be Nat st n<m holds seq.n<seq.m) &
-      ((for n,m be Nat st n<m holds seq.n<seq.m) implies
-              for n be Nat holds seq.n<seq.(n+1))
+     ((for n be Element of NAT holds seq.n<seq.(n+1)) implies
+              for n,k be Element of NAT holds seq.n<seq.(n+1+k)) &
+      ((for n,k be Element of NAT holds seq.n<seq.(n+1+k)) implies
+              for n,m be Element of NAT st n<m holds seq.n<seq.m) &
+      ((for n,m be Element of NAT st n<m holds seq.n<seq.m) implies
+              for n be Element of NAT holds seq.n<seq.(n+1))
  proof
   let seq be Real_Sequence;
-  thus (for n be Nat holds seq.n<seq.(n+1)) implies
-                    for n,k be Nat holds seq.n<seq.(n+1+k)
+  thus (for n be Element of NAT holds seq.n<seq.(n+1)) implies
+                    for n,k be Element of NAT holds seq.n<seq.(n+1+k)
    proof
-    assume A1:for n be Nat holds seq.n<seq.(n+1);
-    let n be Nat;
-     defpred X[Nat] means seq.n<seq.(n+1+$1);
+    assume A1:for n be Element of NAT holds seq.n<seq.(n+1);
+    let n be Element of NAT;
+     defpred X[Element of NAT] means seq.n<seq.(n+1+$1);
     A2: X[0] by A1;
-     A3:now let k be Nat such that A4: X[k];
+     A3:now let k be Element of NAT such that A4: X[k];
          seq.(n+1+k)<seq.(n+1+k+1) by A1;
       hence X[k+1] by A4,XXREAL_0:2;
      end;
-    thus for k be Nat holds X[k] from NAT_1:sch 1(A2,A3);
+    thus for k be Element of NAT holds X[k] from NAT_1:sch 1(A2,A3);
    end;
-  thus (for n,k be Nat holds seq.n<seq.(n+1+k)) implies
-                     for n,m be Nat st n<m holds seq.n<seq.m
+  thus (for n,k be Element of NAT holds seq.n<seq.(n+1+k)) implies
+                     for n,m be Element of NAT st n<m holds seq.n<seq.m
    proof
-    assume A5:for n,k be Nat holds seq.n<seq.(n+1+k);
-    let n,m be Nat; assume n<m;
-    then ex k be Nat st m=n+1+k by Lm1;
+    assume A5:for n,k be Element of NAT holds seq.n<seq.(n+1+k);
+    let n,m be Element of NAT; assume n<m;
+    then ex k be Element of NAT st m=n+1+k by Lm1;
     hence seq.n<seq.m by A5;
    end;
-  assume A6:for n,m be Nat st n<m holds seq.n<seq.m;
-  let n be Nat;
+  assume A6:for n,m be Element of NAT st n<m holds seq.n<seq.m;
+  let n be Element of NAT;
      n<n+1 by NAT_1:38;
   hence seq.n<seq.(n+1) by A6;
  end;
@@ -545,23 +549,23 @@ Lm2:
 Lm3:
  for f be Real_Sequence
    holds
-( f is increasing iff (for n being Nat holds f.n < f.(n+1)))
+( f is increasing iff (for n being Element of NAT holds f.n < f.(n+1)))
   proof
    let f be Real_Sequence;
-    thus f is increasing implies for n being Nat holds f.n < f.(n+1)
+    thus f is increasing implies for n being Element of NAT holds f.n < f.(n+1)
     proof
       assume A1: f is increasing;
-      let n be Nat;
+      let n be Element of NAT;
 A2:   dom f = NAT by FUNCT_2:def 1;
          n < n+1 by NAT_1:38;
       hence thesis by A1,A2,SEQM_3:def 1;
     end;
-    assume A3:for n being Nat holds f.n < f.(n+1);
-  for m,n be Nat st m in dom f & n in dom f & m < n holds f.m < f.n
+    assume A3:for n being Element of NAT holds f.n < f.(n+1);
+  for m,n be Element of NAT st m in dom f & n in dom f & m < n holds f.m < f.n
         proof
-        let m,nn be Nat such that
+        let m,nn be Element of NAT such that
         A4:   m in dom f & nn in dom f & m < nn;
-        consider k be Nat such that
+        consider k be Element of NAT such that
         A5: nn = m+1+k by A4,Lm1;
     thus thesis by A3,A5,Lm2;
     end;
@@ -571,28 +575,28 @@ A2:   dom f = NAT by FUNCT_2:def 1;
 theorem Th13:
 for X be RealNormSpace
   for seq be sequence of X
-   for k be Nat holds
+   for k be Element of NAT holds
    seq ^\k is subsequence of seq
   proof
    let X be RealNormSpace;
    let seq be sequence of X;
-   let k be Nat;
-  deffunc U(Nat) = $1+k;
+   let k be Element of NAT;
+  deffunc U(Element of NAT) = $1+k;
    consider seq1 be Real_Sequence such that
-   A1:for n be Nat holds seq1.n=U(n) from SEQ_1:sch 1;
-       now let n be Nat;
+   A1:for n be Element of NAT holds seq1.n=U(n) from SEQ_1:sch 1;
+       now let n be Element of NAT;
      A2:seq1.n=n+k & seq1.(n+1)=n+1+k by A1;
         n+k<n+k+1 by NAT_1:38;
      hence seq1.n<seq1.(n+1) by A2;
     end;
    then A3:seq1 is increasing by Lm3;
-       now let n be Nat;
-        n+k is Nat;
-     hence seq1.n is Nat by A1;
+       now let n be Element of NAT;
+        n+k is Element of NAT;
+     hence seq1.n is Element of NAT by A1;
     end;
    then reconsider seq1 as increasing Seq_of_Nat by A3,SEQM_3:29;
    take Nseq=seq1;
-       now let n be Nat;
+       now let n be Element of NAT;
      thus (seq*Nseq).n=seq.(Nseq.n) by Th7
        .=seq.(n+k) by A1
        .=(seq ^\k).n by Def6;
@@ -605,12 +609,12 @@ for X be RealNormSpace
 theorem Th14:
 for X be RealNormSpace
   for seq,seq1 be sequence of X
-    for k be Nat holds
+    for k be Element of NAT holds
   seq is convergent implies ((seq ^\k) is convergent & lim (seq ^\k)=lim seq)
   proof
    let X be RealNormSpace;
    let seq,seq1 be sequence of X;
-   let k be Nat;
+   let k be Element of NAT;
    assume A1:seq is convergent;
    A2:seq^\k is subsequence of seq by Th13;
    hence seq^\k is convergent by A1,Th11;
@@ -621,37 +625,37 @@ theorem Th15:
 for X be RealNormSpace
   for seq,seq1 be sequence of X
   holds
-  seq is convergent & (ex k be Nat st seq=seq1 ^\k)
+  seq is convergent & (ex k be Element of NAT st seq=seq1 ^\k)
      implies seq1 is convergent
   proof
   let X be RealNormSpace;
   let seq,seq1 be sequence of X;
   assume that
  A1: seq is convergent and
- A2: ex k be Nat st seq=seq1 ^\k;
-     consider k be Nat such that
+ A2: ex k be Element of NAT st seq=seq1 ^\k;
+     consider k be Element of NAT such that
  A3: seq=seq1 ^\k by A2;
      consider g1 be Element of X  such that
- A4: for p be Real st 0<p ex n be Nat
-       st for m be Nat st n<=m holds ||.seq.m-g1.||<p
+ A4: for p be Real st 0<p ex n be Element of NAT
+       st for m be Element of NAT st n<=m holds ||.seq.m-g1.||<p
      by A1,NORMSP_1:def 9;
      take g=g1;
      let p be Real; assume 0<p;
-     then consider n1 be Nat such that
- A5: for m be Nat st n1<=m holds ||.seq.m-g1.||<p by A4;
+     then consider n1 be Element of NAT such that
+ A5: for m be Element of NAT st n1<=m holds ||.seq.m-g1.||<p by A4;
      take n=n1+k;
-     let m be Nat; assume
+     let m be Element of NAT; assume
  A6: n<=m;
-     then consider l be Nat such that
+   then consider l be Nat such that
  A7: m=n1+k+l by NAT_1:28;
+     reconsider l as Element of NAT by ORDINAL1:def 13;
       m-k=n1+l+k+-k by A7;
-     then consider m1 be Nat such that
- A8: m1=m-k;
+     then reconsider m1=m-k as Element of NAT;
  A9:  now assume not n1<=m1;
         then m1+k<n1+k by XREAL_1:8;
-        hence contradiction by A6,A8;
+        hence contradiction by A6;
       end;
- A10:  m1+k=m by A8;
+ A10:  m1+k=m;
        ||.seq.m1-g1.||<p by A5,A9;
    hence ||.seq1.m-g.||<p by A3,A10,Def6;
  end;
@@ -660,34 +664,34 @@ theorem Th16:
 for X be RealNormSpace
   for seq,seq1 be sequence of X
   holds
-   seq is convergent & (ex k be Nat st seq=seq1 ^\k)
+   seq is convergent & (ex k be Element of NAT st seq=seq1 ^\k)
        implies lim seq1 =lim seq
   proof
   let X be RealNormSpace;
   let seq,seq1 be sequence of X;
      assume that
  A1: seq is convergent and
- A2: ex k be Nat st seq=seq1 ^\k;
+ A2: ex k be Element of NAT st seq=seq1 ^\k;
  A3: seq1 is convergent by A1,A2,Th15;
-     consider k be Nat such that
+     consider k be Element of NAT such that
  A4: seq=seq1 ^\k by A2;
          now let p be Real; assume 0<p;
-       then consider n1 be Nat such that
- A5:   for m be Nat st n1<=m holds ||.seq.m-(lim seq).||<p
+       then consider n1 be Element of NAT such that
+ A5:   for m be Element of NAT st n1<=m holds ||.seq.m-(lim seq).||<p
  by A1,NORMSP_1:def 11;
        take n=n1+k;
-       let m be Nat; assume
+       let m be Element of NAT; assume
  A6:   n<=m;
        then consider l be Nat such that
  A7:    m=n1+k+l by NAT_1:28;
+ reconsider l as Element of NAT by ORDINAL1:def 13;
         m-k=n1+l+k+-k by A7;
-       then consider m1 be Nat such that
- A8:     m1=m-k;
+       then reconsider m1=m-k as Element of NAT;
  A9:    now assume not n1<=m1;
          then m1+k<n1+k by XREAL_1:8;
-         hence contradiction by A6,A8;
+         hence contradiction by A6;
         end;
- A10:   m1+k=m by A8;
+ A10:   m1+k=m;
          ||.seq.m1-(lim seq) .||<p by A5,A9;
       hence ||.seq1.m-(lim seq).||<p by A4,A10,Def6;
      end;
@@ -704,11 +708,11 @@ for X be RealNormSpace
   let seq be sequence of X;
    assume seq is constant;
    then consider r be Element of X such that
-   A1:for n be Nat holds seq.n=r by Def5;
+   A1:for n be Element of NAT holds seq.n=r by Def5;
    take g=r;
    let p be Real such that A2:0<p;
    take n=0;
-   let m be Nat such that n<=m;
+   let m be Element of NAT such that n<=m;
       ||.(seq.m)-g.||=||.r-g.|| by A1
     .=||.0.X.|| by RLVECT_1:28
     .=0 by NORMSP_1:5;
@@ -718,18 +722,18 @@ for X be RealNormSpace
 theorem Th18:
 for X be RealNormSpace
   for seq be sequence of X
-  st (for n be Nat holds seq.n = 0.X)
+  st (for n be Element of NAT holds seq.n = 0.X)
   holds seq is norm_summable
   proof
   let X be RealNormSpace;
   let seq be sequence of X
   such that
-A1:   for n be Nat holds seq.n = 0.X;
+A1:   for n be Element of NAT holds seq.n = 0.X;
        take 0;
     let p be real number such that
 A2:   0<p;
     take 0;
-    let m be Nat such that 0<=m;
+    let m be Element of NAT such that 0<=m;
        abs((Partial_Sums ||.seq.||).m-0) = abs(0-0) by A1,Th6
        .= 0 by ABSVALUE:def 1;
     hence abs((Partial_Sums ||.seq.||).m-0)<p by A2;
@@ -741,7 +745,7 @@ let X be RealNormSpace;
  existence
   proof
     reconsider C = NAT --> 0.X as sequence of X by FUNCOP_1:57;
-A1:   for n be Nat holds C.n = 0.X by FUNCOP_1:13;
+A1:   for n be Element of NAT holds C.n = 0.X by FUNCOP_1:13;
     take C;
     thus thesis by A1,Th18;
   end;
@@ -766,7 +770,7 @@ proof
     .= 0.X by RLVECT_1:28;
  A4: s ^\1 = Partial_Sums(s) ^\1 - Partial_Sums(s)
     proof
-     now let n be Nat;
+     now let n be Element of NAT;
          (Partial_Sums(s)).(n+1) = (Partial_Sums(s)).n
         + s.(n+1) by Def1;
       then (Partial_Sums(s)).(n+1) = (Partial_Sums(s)).n + (s ^\1).n
@@ -800,7 +804,7 @@ proof
  .= s1.0 + Partial_Sums(s2).0 by Def1
  .= s1.0 + s2.0 by Def1
  .= (s1+s2).0 by NORMSP_1:def 5;
-     now let n be Nat;
+     now let n be Element of NAT;
     thus (Partial_Sums(s1) + Partial_Sums(s2)).(n+1)
    = Partial_Sums(s1).(n+1) + Partial_Sums(s2).(n+1) by NORMSP_1:def 5
   .= Partial_Sums(s1).n + s1.(n+1) + Partial_Sums(s2).(n+1) by Def1
@@ -829,7 +833,7 @@ Partial_Sums(s1)-Partial_Sums(s2) = Partial_Sums(s1-s2)
  .= s1.0 - Partial_Sums(s2).0 by Def1
  .= s1.0 - s2.0 by Def1
  .= (s1-s2).0 by NORMSP_1:def 6;
-     now let n be Nat; thus
+     now let n be Element of NAT; thus
       (Partial_Sums(s1) - Partial_Sums(s2)).(n+1)
    = Partial_Sums(s1).(n+1) - Partial_Sums(s2).(n+1)
      by NORMSP_1:def 6
@@ -928,7 +932,8 @@ proof
 let X be RealNormSpace;
 let seq be sequence of X;
 let z be Real;
-defpred P[Nat] means Partial_Sums(z * seq).$1 = (z * Partial_Sums(seq)).$1;
+defpred P[Element of NAT] means
+ Partial_Sums(z * seq).$1 = (z * Partial_Sums(seq)).$1;
 A1:P[0]
 proof
  thus Partial_Sums(z * seq).0 = (z * seq).0 by Def1
@@ -936,7 +941,7 @@ proof
 .=z * Partial_Sums(seq).0 by Def1
 .=(z * Partial_Sums(seq)).0 by NORMSP_1:def 8;
 end;
-A2:now let n be Nat;
+A2:now let n be Element of NAT;
 assume
 A3: P[n];
 thus P[n+1]
@@ -950,7 +955,7 @@ thus Partial_Sums(z * seq).(n+1)
 .= (z * Partial_Sums(seq)).(n+1) by NORMSP_1:def 8;
 end;
 end;
-     for n be Nat holds P[n] from NAT_1:sch 1(A1,A2);
+     for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
 hence thesis by FUNCT_2:113;
 end;
 
@@ -984,12 +989,12 @@ end;
 theorem Th26:
   for X be RealNormSpace
   for s,s1 be sequence of X
-    st for n be Nat holds s1.n=s.0 holds
+    st for n be Element of NAT holds s1.n=s.0 holds
 Partial_Sums(s^\1) = (Partial_Sums(s)^\1) - s1
 proof
   let X be RealNormSpace;
   let s,s1 be sequence of X;
- assume A1: for n be Nat holds s1.n=s.0;
+ assume A1: for n be Element of NAT holds s1.n=s.0;
  A2: ((Partial_Sums(s)^\1) - s1).0 = (Partial_Sums(s)^\1).0 - s1.0
     by NORMSP_1:def 6
  .= (Partial_Sums(s)^\1).0 - s.0 by A1
@@ -1000,7 +1005,7 @@ proof
  .= s.(0+1) + 0.X  by RLVECT_1:28
  .=s.(0+1) by RLVECT_1:10
  .= (s^\1).0 by Def6;
-    now let k be Nat;
+    now let k be Element of NAT;
    thus ((Partial_Sums(s)^\1) - s1).(k+1)
   = (Partial_Sums(s)^\1).(k+1) - s1.(k+1) by NORMSP_1:def 6
   .= (Partial_Sums(s)^\1).(k+1) - s.0 by A1
@@ -1018,33 +1023,33 @@ end;
 theorem Th27:
   for X be RealNormSpace
   for s be sequence of X holds
-    s is summable implies for n be Nat holds s^\n is summable
+    s is summable implies for n be Element of NAT holds s^\n is summable
 proof
   let X be RealNormSpace;
   let s be sequence of X;
-defpred X[Nat] means s^\$1 is summable;
+defpred X[Element of NAT] means s^\$1 is summable;
  assume s is summable;
  then A1: X[0] by Th8;
- A2: for n be Nat st X[n] holds X[n+1]
+ A2: for n be Element of NAT st X[n] holds X[n+1]
  proof
-   let n be Nat;
+   let n be Element of NAT;
   assume s^\n is summable; then Partial_Sums(s^\n) is convergent
   by Def2;
   then A3: Partial_Sums(s^\n)^\1 is convergent by Th14;
   A4: s^\(n+1)=(s^\n)^\1 by Th10;
   reconsider s1 = NAT --> (s^\n).0 as sequence of X by FUNCOP_1:57;
-A5: for k be Nat holds s1.k = (s^\n).0 by FUNCOP_1:13;
+A5: for k be Element of NAT holds s1.k = (s^\n).0 by FUNCOP_1:13;
 A6: s1 is convergent by Th17;
      Partial_Sums(s^\n^\1) = (Partial_Sums(s^\n)^\1) - s1 by A5,Th26;
   then Partial_Sums(s^\n^\1) is convergent by A3,A6,NORMSP_1:35;
   hence thesis by A4,Def2;
  end;
- thus for n be Nat holds X[n] from NAT_1:sch 1(A1,A2);
+ thus for n be Element of NAT holds X[n] from NAT_1:sch 1(A1,A2);
 end;
 
 registration
   let X be RealNormSpace;
-  let seq be summable sequence of X, n be Nat;
+  let seq be summable sequence of X, n be Element of NAT;
   cluster seq^\n -> summable;
   coherence by Th27;
 end;
@@ -1056,7 +1061,7 @@ Partial_Sums ||.seq.|| is bounded_above iff seq is norm_summable
 proof
   let X be RealNormSpace;
   let seq be sequence of X;
-   for n be Nat holds 0 <=||.seq.||.n by Th2;
+   for n be Element of NAT holds 0 <=||.seq.||.n by Th2;
    then Partial_Sums(||.seq.||) is bounded_above
    iff ||.seq.|| is summable by SERIES_1:20;
   hence thesis by Def4;
@@ -1072,18 +1077,20 @@ end;
 theorem Th29:
 for X be RealBanachSpace
 for seq be sequence of X holds
-seq is summable iff (for p be Real st 0 <p holds ex n be Nat st
- for m be Nat st n <= m holds ||.Partial_Sums(seq).m-Partial_Sums(seq).n.||<p)
+seq is summable iff (for p be Real st 0 <p holds ex n be Element of NAT st
+ for m be Element of NAT st n <= m
+ holds ||.Partial_Sums(seq).m-Partial_Sums(seq).n.||<p)
 proof
   let X be RealBanachSpace;
   let seq be sequence of X;
 A1:now assume seq is summable;
     then Partial_Sums(seq) is convergent by Def2;
-    hence for p be Real st 0<p holds ex n be Nat st for m be Nat st n <= m
+    hence for p be Real st 0<p holds ex n be Element of NAT st
+    for m be Element of NAT st n <= m
     holds ||.Partial_Sums(seq).m-Partial_Sums(seq).n.||<p by Th4;
     end;
    now assume for p be Real st 0<p
-     holds ex n be Nat st for m be Nat st n <= m
+     holds ex n be Element of NAT st for m be Element of NAT st n <= m
     holds ||.Partial_Sums(seq).m-Partial_Sums(seq).n.||< p;
     then Partial_Sums(seq) is Cauchy_sequence_by_Norm by Th5;
     then Partial_Sums(seq) is convergent by LOPBAN_1:def 16;
@@ -1095,27 +1102,28 @@ end;
 theorem Th30:
   for X be RealNormSpace
   for s be sequence of X
-   for n,m be Nat st n<=m
+   for n,m be Element of NAT st n<=m
 holds ||.Partial_Sums(s).m - Partial_Sums(s).n.||
       <= abs(Partial_Sums(||.s.||).m - Partial_Sums(||.s.||).n)
 proof
   let X be RealNormSpace;
   let s be sequence of X;
-  let n,m be Nat such that
+  let n,m be Element of NAT such that
   A1: n<=m;
  set s1=Partial_Sums(s);
  set s2=Partial_Sums(||.s.||);
-  defpred X[Nat] means ||.s1.(n+$1) - s1.n.|| <= abs(s2.(n+$1) - s2.n);
+  defpred X[Element of NAT] means
+   ||.s1.(n+$1) - s1.n.|| <= abs(s2.(n+$1) - s2.n);
     ||.s1.(n+0) - s1.n.|| = ||.0.X.|| by RLVECT_1:28
 .= 0 by NORMSP_1:5;
  then A2: X[0] by COMPLEX1:132;
-    now let k be Nat;
+    now let k be Element of NAT;
     ||.s.k.|| >=0 by NORMSP_1:8;
   hence ||.s.||.k >= 0 by NORMSP_1:def 10;
  end;
  then A3: s2 is non-decreasing by SERIES_1:19;
- A4: for k be Nat st X[k] holds X[k+1]
-  proof let k be Nat;
+ A4: for k be Element of NAT st X[k] holds X[k+1]
+  proof let k be Element of NAT;
   assume A5: ||. s1.(n+k) - s1.n.|| <= abs(s2.(n+k) - s2.n);
        ||. s1.(n+(k+1)) - s1.n.|| = ||. s.(n+k+1) + s1.(n+k) - s1.n .|| by Def1
     .= ||. s.(n+k+1) + (s1.(n+k) - s1.n).|| by RLVECT_1:def 6;
@@ -1139,8 +1147,8 @@ proof
   hence ||.s1.(n+(k+1))-s1.n.|| <= abs(s2.(n+(k+1))-s2.n)
   by A9,A10,ABSVALUE:def 1;
   end;
-  A11: for k be Nat holds X[k] from NAT_1:sch 1(A2,A4);
-     reconsider k=m-n as Nat by A1,INT_1:18;
+  A11: for k be Element of NAT holds X[k] from NAT_1:sch 1(A2,A4);
+     reconsider k=m-n as Element of NAT by A1,INT_1:18;
       n+k = m;
    hence thesis by A11;
   end;
@@ -1157,12 +1165,12 @@ proof
   then A1:  Partial_Sums(||.seq.||) is convergent by SERIES_1:def 2;
    now let p be Real;
     assume 0<p;
-    then consider n be Nat such that
-    A2: for m be Nat st n <= m holds
+    then consider n be Element of NAT such that
+    A2: for m be Element of NAT st n <= m holds
     abs(Partial_Sums(||.seq.||).m-Partial_Sums(||.seq.||).n)< p
     by A1,SEQ_4:58;
    take n;
-let m be Nat; assume A3:  n <= m;
+let m be Element of NAT; assume A3:  n <= m;
     then A4: abs(Partial_Sums(||.seq.||).m-Partial_Sums(||.seq.||).n)< p by A2;
        ||.Partial_Sums(seq).m-Partial_Sums(seq).n.||
     <= abs(Partial_Sums(||.seq.||).m-Partial_Sums(||.seq.||).n)
@@ -1177,7 +1185,8 @@ theorem
    for rseq1 be Real_Sequence
      for seq2 be sequence of X holds
        rseq1 is summable &
-       (ex m be Nat st for n be Nat st m<=n holds ||.seq2.n.|| <= rseq1.n )
+       (ex m be Element of NAT st
+       for n be Element of NAT st m<=n holds ||.seq2.n.|| <= rseq1.n )
        implies seq2 is norm_summable
 proof
  let X be RealNormSpace;
@@ -1185,15 +1194,16 @@ proof
  let seq2 be sequence of X;
 assume
 A1:rseq1 is summable
-& (ex m be Nat st for n be Nat st  m<=n holds ||.seq2.n.|| <= rseq1.n );
-then consider m be Nat such that
-A2:  for n be Nat st m<=n holds ||.seq2.n.|| <= rseq1.n;
-A3:now let n be Nat; assume m <= n;
+& (ex m be Element of NAT st for n be Element of NAT st  m<=n
+holds ||.seq2.n.|| <= rseq1.n );
+then consider m be Element of NAT such that
+A2:  for n be Element of NAT st m<=n holds ||.seq2.n.|| <= rseq1.n;
+A3:now let n be Element of NAT; assume m <= n;
       then ||.seq2.n.|| <= rseq1.n by A2;
    hence ||.seq2.||.n <= rseq1.n by NORMSP_1:def 10;
 end;
    now
-   let n be Nat;
+   let n be Element of NAT;
     ||.seq2.n.||=||.seq2.||.n by NORMSP_1:def 10;
    hence 0 <= ||.seq2.||.n by NORMSP_1:8;
 end;
@@ -1204,14 +1214,16 @@ theorem
   for X be RealNormSpace
      for seq1,seq2 be sequence of X
 holds
-  (for n be Nat holds 0 <= ||.seq1.||.n & ||.seq1.||.n <= ||.seq2.||.n)
+  (for n be Element of NAT
+  holds 0 <= ||.seq1.||.n & ||.seq1.||.n <= ||.seq2.||.n)
  & seq2 is norm_summable implies
   seq1 is norm_summable & Sum ||.seq1.|| <= Sum ||.seq2.||
 proof
 let X be RealNormSpace;
 let seq1,seq2 be sequence of X;
 assume A1:
- (for n be Nat holds 0 <= ||.seq1.||.n & ||.seq1.||.n <= ||.seq2.||.n)
+ (for n be Element of NAT
+ holds 0 <= ||.seq1.||.n & ||.seq1.||.n <= ||.seq2.||.n)
 & seq2 is norm_summable;
 then ||.seq2.|| is summable by Def4;
 hence ||.seq1.|| is summable & Sum(||.seq1.||)
@@ -1222,15 +1234,16 @@ theorem
   for X be RealNormSpace
      for seq be sequence of X
 holds
-  (for n be Nat  holds ||.seq.||.n>0) &
- (ex m be Nat st for n be Nat st n >=m
+  (for n be Element of NAT  holds ||.seq.||.n>0) &
+ (ex m be Element of NAT st for n be Element of NAT st n >=m
  holds ||.seq.||.(n+1)/||.seq.||.n >= 1)
   implies not seq is norm_summable
 proof
  let X be RealNormSpace;
  let seq be sequence of X;
-assume (for n be Nat holds ||.seq.||.n>0)
-  & (ex m be Nat st for n be Nat st n >=m holds ||.seq.||.(n+1)/
+assume (for n be Element of NAT holds ||.seq.||.n>0)
+  & (ex m be Element of NAT st for n be Element of NAT st n >=m
+  holds ||.seq.||.(n+1)/
 ||.seq.||.n >= 1);
 hence ||.seq.|| is not summable by SERIES_1:31;
 end;
@@ -1239,7 +1252,8 @@ theorem
    for X be RealNormSpace
        for seq be sequence of X
         for rseq1 be Real_Sequence holds
-  (for n be Nat holds rseq1.n = n-root (||.seq.||.n)) & rseq1 is convergent &
+  (for n be Element of NAT
+  holds rseq1.n = n-root (||.seq.||.n)) & rseq1 is convergent &
   lim rseq1 < 1
 implies seq is norm_summable
 proof
@@ -1247,9 +1261,9 @@ let X be RealNormSpace;
 let seq be sequence of X;
 let rseq1 be Real_Sequence;
 assume
-A1:(for n be Nat holds rseq1.n = n-root (||.seq.||.n)) &
+A1:(for n be Element of NAT holds rseq1.n = n-root (||.seq.||.n)) &
 rseq1 is convergent & lim rseq1 < 1;
-   for n be Nat holds ||.seq.||.n >=0 by Th2;
+   for n be Element of NAT holds ||.seq.||.n >=0 by Th2;
 hence ||.seq.|| is summable by A1,SERIES_1:32;
 end;
 
@@ -1258,18 +1272,19 @@ theorem
   for seq be sequence of X
   for rseq1 be Real_Sequence
 holds
- (for n be Nat holds rseq1.n = n-root (||.seq.||.n))
- & (ex m be Nat st
- for n be Nat st m<=n holds rseq1.n>= 1)
+ (for n be Element of NAT holds rseq1.n = n-root (||.seq.||.n))
+ & (ex m be Element of NAT st
+ for n be Element of NAT st m<=n holds rseq1.n>= 1)
   implies ||.seq.|| is not summable
 proof
 let X be RealNormSpace;
 let seq be sequence of X;
 let rseq1 be Real_Sequence;
 assume
-A1:(for n be Nat holds rseq1.n = n-root (||.seq.||.n))
-& (ex m be Nat st for n be Nat st m<=n holds rseq1.n>= 1);
-   for n be Nat holds ||.seq.||.n >=0 by Th2;
+A1:(for n be Element of NAT holds rseq1.n = n-root (||.seq.||.n))
+& (ex m be Element of NAT st for n be Element of NAT st m<=n
+holds rseq1.n>= 1);
+   for n be Element of NAT holds ||.seq.||.n >=0 by Th2;
 hence ||.seq.|| is not summable by A1,SERIES_1:33;
 end;
 
@@ -1278,7 +1293,7 @@ theorem
   for seq be sequence of X
   for rseq1 be Real_Sequence
 holds
-  (for n be Nat holds rseq1.n = n-root (||.seq.||.n))
+  (for n be Element of NAT holds rseq1.n = n-root (||.seq.||.n))
  & rseq1 is convergent & lim rseq1 > 1
 implies seq is not norm_summable
 proof
@@ -1286,9 +1301,9 @@ let X be RealNormSpace;
 let seq be sequence of X;
 let rseq1 be Real_Sequence;
 assume
-A1:(for n be Nat holds rseq1.n = n-root (||.seq.||.n))
+A1:(for n be Element of NAT holds rseq1.n = n-root (||.seq.||.n))
 & rseq1 is convergent & lim rseq1 > 1;
-   for n be Nat holds ||.seq.||.n >=0 by Th2;
+   for n be Element of NAT holds ||.seq.||.n >=0 by Th2;
 hence ||.seq.|| is not summable by A1,SERIES_1:34;
 end;
 
@@ -1297,7 +1312,7 @@ theorem
 for seq be sequence of X
 for rseq1 be Real_Sequence
    st ( ||.seq.|| is non-increasing )
-            & (for n be Nat holds rseq1.n = 2
+            & (for n be Element of NAT holds rseq1.n = 2
             to_power n *||.seq.||.(2 to_power n))
  holds
       ( seq is norm_summable iff rseq1 is summable)
@@ -1305,9 +1320,10 @@ proof
 let X be RealNormSpace;
 let seq be sequence of X;
 let rseq1 be Real_Sequence;
-assume ||.seq.|| is non-increasing & (for n be Nat holds rseq1.n
+assume ||.seq.|| is non-increasing & (for n be Element of NAT holds rseq1.n
  = 2 to_power n *||.seq.||.(2 to_power n));
-then for n be Nat holds ( ||.seq.|| is non-increasing & ||.seq.||.n >= 0
+then for n be Element of NAT
+holds ( ||.seq.|| is non-increasing & ||.seq.||.n >= 0
 & rseq1.n = 2 to_power n *||.seq.||.(2 to_power n) ) by Th2;
 then ||.seq.|| is summable iff rseq1 is summable by SERIES_1:35;
 hence seq is norm_summable iff rseq1 is summable by Def4;
@@ -1317,14 +1333,15 @@ theorem
  for X be RealNormSpace
 for seq be sequence of X
 for p be Real st
-        (p>1 & (for n be Nat st n >=1 holds
+        (p>1 & (for n be Element of NAT st n >=1 holds
         ||.seq.||.n = 1/ (n to_power p) ))
 holds seq is norm_summable
 proof
 let X be RealNormSpace;
 let seq be sequence of X;
 let p be Real;
-assume p>1 & (for n be Nat st n >=1 holds ||. seq .|| .n = 1/n to_power p);
+assume p>1 & (for n be Element of NAT st n >=1
+holds ||. seq .|| .n = 1/n to_power p);
 then ||.seq.|| is summable by SERIES_1:36;
 hence thesis by Def4;
 end;
@@ -1333,13 +1350,14 @@ theorem
  for X be RealNormSpace
 for seq be sequence of X
 for p be Real holds
-  p<=1 & (for n be Nat st n >=1 holds ||.seq.||.n=1/n to_power p)
+  p<=1 & (for n be Element of NAT st n >=1 holds ||.seq.||.n=1/n to_power p)
  implies not seq is norm_summable
 proof
 let X be RealNormSpace;
 let seq be sequence of X;
 let p be Real;
-assume p<=1 & (for n be Nat  st n  >=1 holds ||.seq.||.n=1/n to_power p);
+assume p<=1 & (for n be Element of NAT  st n  >=1
+holds ||.seq.||.n=1/n to_power p);
 then not ||.seq.|| is summable by SERIES_1:37;
 hence thesis by Def4;
 end;
@@ -1349,7 +1367,8 @@ theorem
 for seq be sequence of X
 for rseq1 be Real_Sequence
 holds
-  (for n be Nat holds seq.n<>0.X & rseq1.n=||.seq.||.(n+1)/||.seq.||.n) &
+  (for n be Element of NAT
+  holds seq.n<>0.X & rseq1.n=||.seq.||.(n+1)/||.seq.||.n) &
  rseq1 is convergent & lim rseq1 < 1 implies
   seq is norm_summable
 proof
@@ -1357,9 +1376,10 @@ let X be RealNormSpace;
 let seq be sequence of X;
 let rseq1 be Real_Sequence;
  assume
-A1:(for n be Nat  holds seq.n<>0.X & rseq1.n=||.seq.||.(n+1)/||.seq.||.n)
+A1:(for n be Element of NAT
+holds seq.n<>0.X & rseq1.n=||.seq.||.(n+1)/||.seq.||.n)
 & rseq1 is convergent & lim rseq1 < 1;
-   now let n be Nat;
+   now let n be Element of NAT;
   A2:seq.n<>0.X & rseq1.n=||.seq.||.(n+1)/||.seq.||.n by A1;
   A3:0 <=||.seq.||.n  & 0 <=||.seq.||.(n+1) by Th2;
  A4:  abs((||.seq.||)).n =abs((||.seq.||).n) by SEQ_1:16
@@ -1373,7 +1393,7 @@ A1:(for n be Nat  holds seq.n<>0.X & rseq1.n=||.seq.||.(n+1)/||.seq.||.n)
 end;
 then ||.seq.|| is absolutely_summable  by A1,SERIES_1:42;
 then A6:abs(||.seq.||) is summable by SERIES_1:def 5;
-     now let n be Nat;
+     now let n be Element of NAT;
  A7:0 <=||.seq.||.n by Th2;
  thus
       abs((||.seq.||)).n =abs((||.seq.||).n) by SEQ_1:16
@@ -1387,25 +1407,26 @@ theorem
  for X be RealNormSpace
 for seq be sequence of X
 holds
-  (for n be Nat  holds seq.n<>0.X)
- & (ex m be Nat st for n be Nat
+  (for n be Element of NAT  holds seq.n<>0.X)
+ & (ex m be Element of NAT st for n be Element of NAT
  st n >=m holds ||.seq.||.(n+1)/||.seq.||.n >= 1)
   implies seq is not norm_summable
 proof
 let X be RealNormSpace;
 let seq be sequence of X;
  assume
-A1: (for n be Nat holds seq.n <> 0.X )
-& (ex m be Nat st for n be Nat
+A1: (for n be Element of NAT holds seq.n <> 0.X )
+& (ex m be Element of NAT st for n be Element of NAT
 st n  >=m holds ||.seq.||.(n+1)/||.seq.||.n >= 1);
-A2:now let n be Nat;
+A2:now let n be Element of NAT;
       seq.n <> 0.X  by A1;
    then ||.seq.n.||<>0 by NORMSP_1:def 2;
    hence ||.seq.||.n <>0 by NORMSP_1:def 10;
 end;
- consider m be Nat such that
-A3:for n be Nat st n >=m holds ||.seq.||.(n+1)/||.seq.||.n >= 1 by A1;
-   now let n be Nat such that
+ consider m be Element of NAT such that
+A3:for n be Element of NAT st n >=m
+holds ||.seq.||.(n+1)/||.seq.||.n >= 1 by A1;
+   now let n be Element of NAT such that
  A4:n>=m;
  A5:0 <=||.seq.||.n
    & 0 <=||.seq.||.(n+1) by Th2;
@@ -1568,23 +1589,23 @@ definition let X be non empty Normed_AlgebraStr;
   let S be sequence of X;
   let a be Element of X;
   func a * S -> sequence of X means
-   for n be Nat holds it.n = a * S.n;
+   for n be Element of NAT holds it.n = a * S.n;
 existence
   proof
-  deffunc F(Nat) = a * S.$1;
+  deffunc F(Element of NAT) = a * S.$1;
    ex S being sequence of X st
-    for n be Nat holds S.n = F(n) from FUNCT_2:sch 4;
+    for n be Element of NAT holds S.n = F(n) from FUNCT_2:sch 4;
   hence thesis;
 end;
 uniqueness
   proof
        let S1, S2 be sequence of X;
        assume that
-  A1:  ( for n be Nat holds S1.n = a * S.n ) and
-  A2:  ( for n be Nat holds S2.n = a * S.n );
-          for n be Nat holds S1.n = S2.n
+  A1:  ( for n be Element of NAT holds S1.n = a * S.n ) and
+  A2:  ( for n be Element of NAT holds S2.n = a * S.n );
+          for n be Element of NAT holds S1.n = S2.n
        proof
-           let n be Nat;
+           let n be Element of NAT;
             S1.n = a * S.n by A1;
            hence thesis by A2;
        end;
@@ -1596,23 +1617,23 @@ definition let X be non empty Normed_AlgebraStr;
           let S be sequence of X;
           let a be Element of X;
           func S*a -> sequence of X means
- for n be Nat holds it.n = S.n*a;
+ for n be Element of NAT holds it.n = S.n*a;
 existence
   proof
-  deffunc F(Nat) = S.$1 *a;
+  deffunc F(Element of NAT) = S.$1 *a;
    ex S being sequence of X st
-    for n be Nat holds S.n = F(n) from FUNCT_2:sch 4;
+    for n be Element of NAT holds S.n = F(n) from FUNCT_2:sch 4;
   hence thesis;
 end;
 uniqueness
   proof
        let S1, S2 be sequence of X;
        assume that
-  A1:  ( for n be Nat holds S1.n = S.n *a) and
-  A2:  ( for n be Nat holds S2.n = S.n *a);
-          for n be Nat holds S1.n = S2.n
+  A1:  ( for n be Element of NAT holds S1.n = S.n *a) and
+  A2:  ( for n be Element of NAT holds S2.n = S.n *a);
+          for n be Element of NAT holds S1.n = S2.n
        proof
-            let n be Nat;
+            let n be Element of NAT;
             S1.n =  S.n *a by A1;
             hence thesis by A2;
        end;
@@ -1623,23 +1644,23 @@ end;
 definition let X be non empty Normed_AlgebraStr;
           let seq1,seq2 be sequence of X;
           func seq1 * seq2 -> sequence of X means
- for n be Nat holds it.n = seq1.n * seq2.n;
+ for n be Element of NAT holds it.n = seq1.n * seq2.n;
 existence
   proof
-  deffunc F(Nat) = seq1.$1 * seq2.$1;
+  deffunc F(Element of NAT) = seq1.$1 * seq2.$1;
    ex S being sequence of X st
-    for n be Nat holds S.n = F(n) from FUNCT_2:sch 4;
+    for n be Element of NAT holds S.n = F(n) from FUNCT_2:sch 4;
   hence thesis;
 end;
 uniqueness
           proof
                let S1, S2 be sequence of X;
                assume that
-          A1:  ( for n be Nat holds S1.n = seq1.n * seq2.n ) and
-          A2:  ( for n be Nat holds S2.n = seq1.n * seq2.n );
-                  for n be Nat holds S1.n = S2.n
+          A1:  ( for n be Element of NAT holds S1.n = seq1.n * seq2.n ) and
+          A2:  ( for n be Element of NAT holds S2.n = seq1.n * seq2.n );
+                  for n be Element of NAT holds S1.n = S2.n
                proof
-                  let n be Nat;
+                  let n be Element of NAT;
                    S1.n = seq1.n * seq2.n by A1;
                   hence thesis by A2;
                end;
@@ -1670,7 +1691,7 @@ definition
   let X be Banach_Algebra;
   let z be Element of X;
   func z GeoSeq -> sequence of X means :Def13:
-  it.0 = 1.X & for n be Nat  holds it.(n+1) = it.n * z;
+  it.0 = 1.X & for n be Element of NAT  holds it.(n+1) = it.n * z;
   existence
    proof
       deffunc G(set,set)=(the mult of X).[$2,z];
@@ -1678,22 +1699,22 @@ definition
       A1:   dom g = NAT & g.0 = 1.X
       & for n being Element of NAT holds g.(n+1) = G(n,g.n)
       from RECDEF_1:sch 3;
-      defpred P[Nat] means g.$1 in the carrier of X;
+      defpred P[Element of NAT] means g.$1 in the carrier of X;
        A2: P[0] by A1;
-       A3:  for k be Nat st P[k] holds P[k+1]
+       A3:  for k be Element of NAT st P[k] holds P[k+1]
        proof
-       let k be Nat such that
+       let k be Element of NAT such that
          A4: P[k];
          reconsider gk=g.k as Element of X by A4;
           g.(k+1)=(the mult of X).[gk,z] by A1;
          hence thesis;
        end;
-         for n be Nat holds P[n]  from NAT_1:sch 1(A2,A3);
+         for n be Element of NAT holds P[n]  from NAT_1:sch 1(A2,A3);
        then for n be set st n in NAT
           holds g.n in the carrier of X;
          then reconsider g0=g as sequence of X by A1,FUNCT_2:5;
            take g0;
-          now let n be Nat;
+          now let n be Element of NAT;
           thus g0.(n+1) = (the mult of X).[g0.n,z] by A1
             .=(the mult of X).(g0.n,z)
             .=g0.n * z by GROUP_1:def 1;
@@ -1703,26 +1724,26 @@ end;
 uniqueness
 proof
  let seq1,seq2 be sequence of X;
- assume that A5: seq1.0=1.X & for n be Nat holds
+ assume that A5: seq1.0=1.X & for n be Element of NAT holds
                 seq1.(n+1)=seq1.n * z and
-                    A6: seq2.0=1.X  & for n be Nat  holds
+                    A6: seq2.0=1.X  & for n be Element of NAT  holds
                 seq2.(n+1)=seq2.n * z;
-defpred P[Nat] means seq1.$1 = seq2.$1;
+defpred P[Element of NAT] means seq1.$1 = seq2.$1;
  A7: P[0] by A5,A6;
- A8: for k be Nat st P[k] holds P[k+1]
-     proof let k be Nat;
+ A8: for k be Element of NAT st P[k] holds P[k+1]
+     proof let k be Element of NAT;
       assume P[k];
       hence seq1.(k+1) = seq2.k * z by A5
                     .= seq2.(k+1) by A6;
       end;
-    for n be Nat holds P[n] from NAT_1:sch 1(A7,A8);
+    for n be Element of NAT holds P[n] from NAT_1:sch 1(A7,A8);
  hence seq1 = seq2 by FUNCT_2:113;
 end;
 end;
 
 definition
   let X be Banach_Algebra;
-  let z be Element of X, n be Nat;
+  let z be Element of X, n be Element of NAT;
   func z #N n -> Element of X equals
   z GeoSeq.n;
   correctness;
@@ -1744,19 +1765,19 @@ assume
 A1:  ||.z.|| < 1;
  0<=  ||.z.|| by NORMSP_1:8;
 then A2:  abs( ||.z.||)  < 1 by A1,ABSVALUE:def 1;
-A3:  for n be Nat holds (   0 <= ||.z GeoSeq.||.n
+A3:  for n be Element of NAT holds (   0 <= ||.z GeoSeq.||.n
                                   &   ||.z GeoSeq.||.n  <=(||.z.||  GeoSeq).n )
   proof
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
      0 <= ||.z GeoSeq.||.$1 & ||.z GeoSeq.||.$1 <= (  ||.z.||  GeoSeq ).$1;
    A4:  ||.(z GeoSeq).||.0 = ||.(z GeoSeq).0 .|| by NORMSP_1:def 10;
       ||.(z GeoSeq).0 .|| = ||.1.X.|| by Def13
                         .= 1 by LOPBAN_2:def 10
                         .= ( ||.z.||  GeoSeq ).0 by PREPOWER:4;
     then A5: P[0] by A4,NORMSP_1:8;
-    A6: for k be Nat st P[k] holds P[k+1]
+    A6: for k be Element of NAT st P[k] holds P[k+1]
        proof
-        let k be Nat;
+        let k be Element of NAT;
         assume
         A7: P[k];
         A8: 0 <=  ||.z.|| by NORMSP_1:8;
@@ -1775,7 +1796,7 @@ A3:  for n be Nat holds (   0 <= ||.z GeoSeq.||.n
              ||.z GeoSeq.||.(k+1)  <=  ( ||.z.||  GeoSeq ).(k+1)
               by A9,NORMSP_1:8,PREPOWER:4;
         end;
-      for n be Nat holds P[n] from NAT_1:sch 1(A5,A6);
+      for n be Element of NAT holds P[n] from NAT_1:sch 1(A5,A6);
      hence thesis;
    end;
    ||.z.|| GeoSeq is summable by A2,SERIES_1:28;
@@ -1828,7 +1849,7 @@ Lm6:
      for seq be Real_Sequence st
     ( seq is convergent
       & lim seq=0
-      & for n be Nat holds ||.x-y.|| <=seq.n )
+      & for n be Element of NAT holds ||.x-y.|| <=seq.n )
     holds x=y
 proof
     let X be RealNormSpace;
@@ -1836,14 +1857,14 @@ proof
     let seq be Real_Sequence such that
      A1: seq is convergent and
      A2:lim seq=0 and
-    A3:  for n be Nat holds ||.x-y.|| <=seq.n;
+    A3:  for n be Element of NAT holds ||.x-y.|| <=seq.n;
 
  now
 let e be Real
   such that
   A4: 0 < e;
-  consider n be Nat such that
-  A5:for m be Nat st n<=m holds
+  consider n be Element of NAT such that
+  A5:for m be Element of NAT st n<=m holds
      abs( seq.m - 0  ) < e by A1,A2,A4,SEQ_2:def 7;
 A6:  abs( seq.n -0 ) < e by A5;
     seq.n <=abs( seq.n ) by ABSVALUE:11;
@@ -1867,10 +1888,10 @@ theorem
     set seq = (1.X - x)GeoSeq;
     A2: seq is summable by A1,Th45;
     reconsider y=Sum(seq) as Element of X;
-    A3:for n be Nat holds
+    A3:for n be Element of NAT holds
          (Partial_Sums(seq).n)*(1.X -x)=(Partial_Sums(seq)^\1).n-seq.0
          proof
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
    (Partial_Sums(seq).$1)*(1.X -x)=(Partial_Sums(seq)^\1).$1-seq.0;
   A4:  (Partial_Sums(seq).0)*(1.X -x)
     =(seq.0)*(1.X -x) by Def1
@@ -1887,8 +1908,8 @@ theorem
   .=1.X * (1.X -x) by Def13
   .=1.X -x by Th43;
  then A5: P[0] by A4;
- A6: for k be Nat st P[k] holds P[k+1]
-     proof let k be Nat;
+ A6: for k be Element of NAT st P[k] holds P[k+1]
+     proof let k be Element of NAT;
       assume
     A7:  P[k];
   A8:  (Partial_Sums(seq).(k+1))*(1.X -x)
@@ -1905,14 +1926,14 @@ theorem
       hence (Partial_Sums(seq).(k+1))*(1.X -x)
       =(Partial_Sums(seq)^\1).(k+1)-seq.0 by A8;
       end;
-    for n be Nat holds P[n] from NAT_1:sch 1(A5,A6);
+    for n be Element of NAT holds P[n] from NAT_1:sch 1(A5,A6);
     hence thesis;
          end;
 
 A9:
-for n be Nat holds (1.X -x)*seq.n=seq.(n+1)
+for n be Element of NAT holds (1.X -x)*seq.n=seq.(n+1)
 proof
- defpred P[Nat] means (1.X -x)*seq.$1=seq.($1+1);
+ defpred P[Element of NAT] means (1.X -x)*seq.$1=seq.($1+1);
        A10:  (1.X -x)*seq.0
              =(1.X -x)*1.X by Def13
             .=(1.X -x) by Th43;
@@ -1921,22 +1942,22 @@ proof
              .=1.X * (1.X -x) by Def13
              .=(1.X -x) by Th43;
        then A11: P[0] by A10;
-       A12:  for k be Nat st P[k] holds P[k+1]
+       A12:  for k be Element of NAT st P[k] holds P[k+1]
        proof
-       let k be Nat such that
+       let k be Element of NAT such that
          A13: P[k];
         thus (1.X -x)*seq.(k+1)
         = (1.X -x)*(seq.(k)*(1.X -x)) by Def13
         .=(1.X -x)*seq.(k)*(1.X -x) by Th43
         .=seq.((k+1)+1) by A13,Def13;
        end;
-         for n be Nat holds P[n] from NAT_1:sch 1(A11,A12);
+         for n be Element of NAT holds P[n] from NAT_1:sch 1(A11,A12);
        hence thesis;
 end;
-  A14:for n be Nat holds
+  A14:for n be Element of NAT holds
         (1.X -x)* (Partial_Sums(seq).n)=(Partial_Sums(seq)^\1).n-seq.0
          proof
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
   (1.X -x)* (Partial_Sums(seq).$1)=(Partial_Sums(seq)^\1).$1-seq.0;
   A15:  (1.X -x)*(Partial_Sums(seq).0)
     =(1.X -x)*(seq.0) by Def1
@@ -1953,8 +1974,8 @@ end;
   .=1.X * (1.X -x) by Def13
   .=1.X -x by Th43;
  then A16: P[0] by A15;
- A17: for k be Nat st P[k] holds P[k+1]
-     proof let k be Nat;
+ A17: for k be Element of NAT st P[k] holds P[k+1]
+     proof let k be Element of NAT;
       assume
     A18:  P[k];
   A19:  (1.X -x)*(Partial_Sums(seq).(k+1))
@@ -1971,10 +1992,10 @@ end;
       hence (1.X -x)*(Partial_Sums(seq).(k+1))
       =(Partial_Sums(seq)^\1).(k+1)-seq.0 by A19;
       end;
-    for n be Nat holds P[n] from NAT_1:sch 1(A16,A17);
+    for n be Element of NAT holds P[n] from NAT_1:sch 1(A16,A17);
     hence thesis;
          end;
-    A20:    now let n be Nat;
+    A20:    now let n be Element of NAT;
            reconsider yn=Partial_Sums(seq).n  as Element of X;
          A21:  1.X -y*x =1.X -  0.X -y*x by RLVECT_1:26
           .=1.X - (yn*x-yn*x) -y*x by RLVECT_1:28
@@ -2029,7 +2050,7 @@ then A23:  (1.X-yn*x) =1.X -(1.X - seq.(n+1) ) by Th43
                <=( ||. (seq^\1).||
                +  ||. x .|| (#) ||. Partial_Sums(seq)-y.||).n  by SEQ_1:11;
     end;
- A26:    now let n be Nat;
+ A26:    now let n be Element of NAT;
            reconsider yn=Partial_Sums(seq).n  as Element of X;
          A27:  1.X -x*y
           =1.X -  0.X -x*y by RLVECT_1:26

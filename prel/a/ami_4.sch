@@ -50,7 +50,7 @@
 <Func kind="F" nr="1">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="65">
+<Func kind="K" nr="67">
 <Func kind="F" nr="3"/>
 <Func kind="F" nr="4"/>
 </Func>
@@ -125,7 +125,7 @@
 <Num nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="61">
+<Func kind="K" nr="63">
 <Func kind="F" nr="1">
 <Var nr="1"/>
 </Func>

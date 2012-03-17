@@ -8,7 +8,8 @@ environ
 
  vocabularies RELAT_1, FUNCT_1, FINSEQ_1, ARYTM_1, ARYTM_3, INT_1, NAT_1,
       PARTFUN1, GROUP_1, PRGCOR_1, FUNCOP_1;
- notations TARSKI, XCMPLX_0, XXREAL_0, RELAT_1, FUNCT_1, FINSEQ_1, INT_1,
+ notations TARSKI, SUBSET_1, NUMBERS,
+ XCMPLX_0, XXREAL_0, RELAT_1, FUNCT_1, FINSEQ_1, INT_1,
       BINARITH, RELSET_1, FUNCOP_1, PARTFUN1, NAT_1, WSIERP_1;
  constructors XXREAL_0, REAL_1, NAT_1, BINARITH, WSIERP_1;
  registrations RELSET_1, XREAL_0, ARYTM_3, INT_1, ORDINAL1, FUNCOP_1, XXREAL_0;
@@ -16,7 +17,7 @@ environ
  definitions TARSKI;
  theorems FINSEQ_1, REAL_1, NAT_1, FUNCT_1, XCMPLX_1, PRE_FF, INT_1, NEWTON,
       BINARITH, CARD_4, HEINE, JORDAN3, JORDAN1D, FINSEQ_3, FUNCOP_1, TARSKI,
-      XREAL_1, XXREAL_0;
+      XREAL_1, XXREAL_0, ORDINAL1;
  schemes NAT_1, FINSEQ_1;
 
 begin
@@ -113,8 +114,8 @@ begin
 ::-------------------------
 ::-------------------------
 
-theorem Th1: for n,m,k being Nat holds (n+k)-'(m+k)=n-'m
-proof let n,m,k be Nat;
+theorem Th1: for n,m,k being Element of NAT holds (n+k)-'(m+k)=n-'m
+proof let n,m,k be Element of NAT;
   A1: n+k-(m+k)=n-m;
   per cases;
   suppose n-m>=0;
@@ -127,16 +128,15 @@ proof let n,m,k be Nat;
 end;
 end;
 
-reserve t for Nat;
-
-theorem Th2: for n,k being Nat st k>0 & n mod (2*k)>=k holds
+theorem Th2: for n,k being Element of NAT st k>0 & n mod (2*k)>=k holds
   n mod (2*k)-k= n mod k & (n mod k) +k = n mod (2*k)
-proof let n,k be Nat;
+proof let n,k be Element of NAT;
  assume A1: k>0 & n mod (2*k)>=k;
-     ( ex t st n = 2*k * t + (n mod (2*k)) & n mod (2*k) < 2*k )
+     ( ex t be Nat st n = 2*k * t + (n mod (2*k)) & n mod (2*k) < 2*k )
             or n mod (2*k) = 0 & 2*k = 0 by NAT_1:def 2;
-  then consider t such that
+  then consider t be Nat such that
   A2: n=2*k*t + (n mod (2*k)) by A1;
+  reconsider t as Element of NAT by ORDINAL1:def 13;
       (n mod (2*k))-k>=0 by A1,XREAL_1:50;
   then A3: (n mod (2*k))-'k=(n mod (2*k))-k by BINARITH:def 3;
   then A4: n=k*(2*t+1)+((n mod (2*k))-'k) by A2;
@@ -147,9 +147,9 @@ proof let n,k be Nat;
  hence thesis;
 end;
 
-theorem Th3: for n,k being Nat st k>0 & n mod (2*k)>=k holds
+theorem Th3: for n,k being Element of NAT st k>0 & n mod (2*k)>=k holds
   n div k= (n div (2*k))*2+1
-proof let n,k be Nat;assume
+proof let n,k be Element of NAT;assume
  A1: k>0 & n mod (2*k)>=k;
  then 2*k>2*0 by XREAL_1:70;
  then A2: n=2*k*( n div (2*k))+ (n mod (2*k)) by NAT_1:47
@@ -159,22 +159,23 @@ proof let n,k be Nat;assume
  hence thesis by A2,NAT_1:def 1;
 end;
 
-theorem Th4: for n,k being Nat st k>0 & n mod (2*k)<k holds
+theorem Th4: for n,k being Element of NAT st k>0 & n mod (2*k)<k holds
   n mod (2*k)= n mod k
-proof let n,k be Nat;
+proof let n,k be Element of NAT;
  assume A1: k>0 & n mod (2*k)<k;
   then A2: 2*k>2*0 by XREAL_1:70;
-     ( ex t st n = 2*k * t + (n mod (2*k)) & n mod (2*k) < 2*k )
+     ( ex t be Nat st n = 2*k * t + (n mod (2*k)) & n mod (2*k) < 2*k )
             or n mod (2*k) = 0 & 2*k = 0 by NAT_1:def 2;
-  then consider t such that
+  then consider t be Nat such that
   A3: n=2*k*t + (n mod (2*k)) by A2;
+  reconsider t as Element of NAT by ORDINAL1:def 13;
       n=k*(2*t)+ (n mod (2*k)) by A3;
  hence thesis by A1,NAT_1:def 2;
 end;
 
-theorem Th5: for n,k being Nat st k>0 & n mod (2*k)<k holds
+theorem Th5: for n,k being Element of NAT st k>0 & n mod (2*k)<k holds
   n div k= (n div (2*k))*2
-proof let n,k be Nat;assume
+proof let n,k be Element of NAT;assume
   A1: k>0 & n mod (2*k)<k;
   then 2*k>2*0 by XREAL_1:70;
   then A2: n=2*k*( n div (2*k))+ (n mod (2*k)) by NAT_1:47
@@ -198,10 +199,11 @@ registration let C be set, f be PartFunc of C, INT, x be set;
  end;
 end;
 
-theorem Th6: for m,n being Nat st m>0 holds ex i being Nat st
- (for k2 being Nat st k2<i holds m*(2|^k2)<=n)
+theorem Th6: for m,n being Element of NAT st m>0
+ex i being Element of NAT st
+ (for k2 being Element of NAT st k2<i holds m*(2|^k2)<=n)
  & m*(2|^i)>n
-proof let m,n be Nat;
+proof let m,n be Element of NAT;
  assume A1: m>0;
       2|^(n+1-'1)>n+1-'1 by HEINE:8;
   then A2: m*(2|^(n+1-'1))>m*(n+1-'1) by A1,XREAL_1:70;
@@ -210,14 +212,15 @@ A4: n+1-'1=n by A3,BINARITH:def 3;
       m>=0+1 by A1,NAT_1:38;
   then m*n>=1*n by XREAL_1:66;
   then A5: m*(2|^(n+1-'1))> n by A2,A4,XXREAL_0:2;
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
       m*(2|^($1))> n;
-  A6: ex k being Nat st P[k] by A5;
-      ex k being Nat st P[k] & for j being Nat st P[j] holds k<=j
+  A6: ex k being Element of NAT st P[k] by A5;
+      ex k being Element of NAT st P[k] & for j being Element of NAT st P[j]
+       holds k<=j
                    from NAT_1:sch 5(A6);
-  then consider k being Nat such that
-  A7: P[k] & for j being Nat st P[j] holds k<=j;
-      for k2 being Nat st k2<k holds m*(2|^(k2))<=n by A7;
+  then consider k being Element of NAT such that
+  A7: P[k] & for j being Element of NAT st P[j] holds k<=j;
+      for k2 being Element of NAT st k2<k holds m*(2|^(k2))<=n by A7;
  hence thesis by A7;
 end;
 
@@ -226,7 +229,7 @@ holds i in dom f
 proof let i be Integer,f be FinSequence;
  assume A1: 1<=i & i<=len f;
   then i>=0;
-  then i is Nat by INT_1:16;
+  then i is Element of NAT by INT_1:16;
  hence i in dom f by A1,FINSEQ_3:27;
 end;
 
@@ -296,13 +299,13 @@ func idiv1_prg(n,m) -> Integer means   :Def1:
     );
 existence
 proof
-  reconsider n2=n,m2=m as Nat by A1,INT_1:16;
+  reconsider n2=n,m2=m as Element of NAT by A1,INT_1:16;
   per cases;
   suppose A2: n<m;
    set ssm = Seg (n2+1) --> 1;
 A3: dom ssm = Seg (n2+1) by FUNCOP_1:19;
    then reconsider ssm as FinSequence by FINSEQ_1:def 2;
-   A4: len ssm=n+1 & for k2 being Nat st k2 in Seg (n2+1) holds
+   A4: len ssm=n+1 & for k2 being Element of NAT st k2 in Seg (n2+1) holds
         ssm.k2=1 by A3,FINSEQ_1:def 3, FUNCOP_1:13;
 A5: rng ssm c= {1} by FUNCOP_1:19;
        rng ssm c= INT
@@ -346,12 +349,12 @@ A5: rng ssm c= {1} by FUNCOP_1:19;
    then n2>=0+1 by NAT_1:38;
    then 1< n2+1 by NAT_1:38;
    then A7: 1 in Seg (n2+1) by FINSEQ_1:3;
-   deffunc F1(Nat) = m2*(2|^($1-'1));
+   deffunc F1(Element of NAT) = m2*(2|^($1-'1));
        ex ssm being FinSequence st len ssm=n2+1 &
-                for k2 being Nat st k2 in (Seg (n2+1)) holds
+                for k2 being Element of NAT st k2 in (Seg (n2+1)) holds
    ssm.k2=F1(k2) from FINSEQ_1:sch 2;
    then consider ssm being FinSequence such that
-   A8: len ssm=n+1 & for k2 being Nat st k2 in (Seg (n2+1)) holds
+   A8: len ssm=n+1 & for k2 being Element of NAT st k2 in (Seg (n2+1)) holds
         ssm.k2=m*(2|^(k2-'1));
        rng ssm c= INT
    proof let y be set;assume
@@ -359,42 +362,42 @@ A5: rng ssm c= {1} by FUNCOP_1:19;
      then consider x being set such that
      A9: x in dom ssm & y=ssm.x by FUNCT_1:def 5;
      A10: dom ssm=Seg len ssm by FINSEQ_1:def 3;
-     reconsider n=x as Nat by A9;
+     reconsider n=x as Element of NAT by A9;
          ssm.n=m*(2|^(n-'1)) by A8,A9,A10;
     hence y in INT by A9,INT_1:def 2;
    end;
    then reconsider ssm as FinSequence of INT by FINSEQ_1:def 4;
-   deffunc F(Nat) = n2 mod (m2*(2|^($1-'1)));
+   deffunc F(Element of NAT) = n2 mod (m2*(2|^($1-'1)));
        ex ssn being FinSequence st len ssn=n2+1 &
-   for k2 being Nat st k2 in (Seg (n2+1)) holds
+   for k2 being Element of NAT st k2 in (Seg (n2+1)) holds
    ssn.k2=F(k2) from FINSEQ_1:sch 2;
    then consider ssn being FinSequence such that
-   A11: len ssn=n+1 & for k2 being Nat st k2 in (Seg (n2+1)) holds
+   A11: len ssn=n+1 & for k2 being Element of NAT st k2 in (Seg (n2+1)) holds
         ssn.k2=n2 mod (m2*(2|^(k2-'1)));
        rng ssn c= INT
    proof let y be set;assume y in rng ssn;
      then consider x being set such that
      A12: x in dom ssn & y=ssn.x by FUNCT_1:def 5;
      A13: dom ssn=Seg len ssn by FINSEQ_1:def 3;
-     reconsider n3=x as Nat by A12;
+     reconsider n3=x as Element of NAT by A12;
          ssn.n3=n2 mod (m2*(2|^(n3-'1))) by A11,A12,A13;
     hence y in INT by A12,INT_1:def 2;
    end;
    then reconsider ssn as FinSequence of INT by FINSEQ_1:def 4;
-   deffunc F3(Nat)= n2 div (m2*(2|^($1-'1)));
+   deffunc F3(Element of NAT)= n2 div (m2*(2|^($1-'1)));
        ex ppn being FinSequence st len ppn=n2+1 &
-     for k2 being Nat st k2 in (Seg (n2+1)) holds
+     for k2 being Element of NAT st k2 in (Seg (n2+1)) holds
    ppn.k2= F3(k2) from FINSEQ_1:sch 2;
    then consider ppn being FinSequence such that
    A14: len ppn=n+1 &
-   for k2 being Nat st k2 in (Seg (n2+1)) holds
+   for k2 being Element of NAT st k2 in (Seg (n2+1)) holds
         ppn.k2= n2 div (m2*(2|^(k2-'1)));
        rng ppn c= INT
    proof let y be set;assume y in rng ppn;
      then consider x being set such that
      A15: x in dom ppn & y=ppn.x by FUNCT_1:def 5;
      A16: dom ppn=Seg len ppn by FINSEQ_1:def 3;
-     reconsider n3=x as Nat by A15;
+     reconsider n3=x as Element of NAT by A15;
          ppn.n3=n2 div (m2*(2|^(n3-'1))) by A14,A15,A16;
     hence y in INT by A15,INT_1:def 2;
    end;
@@ -406,8 +409,8 @@ A17:m2*(2 |^ 0) = m2*1 by NEWTON:9 .= m2;
    A19: ssm.1=m*(2|^(1-'1)) by A7,A8 .=m*(2|^0) by BINARITH:51
             .=m*1 by NEWTON:9
             .=m;
-    consider ii0 being Nat such that
-    A20: (for k2 being Nat st k2<ii0 holds m*(2|^(k2))<=n2)
+    consider ii0 being Element of NAT such that
+    A20: (for k2 being Element of NAT st k2<ii0 holds m*(2|^(k2))<=n2)
       & m2*(2|^(ii0))>n2 by A1,Th6;
     reconsider i0=ii0 as Integer;
         now assume i0=0;
@@ -437,9 +440,9 @@ A17:m2*(2 |^ 0) = m2*1 by NEWTON:9 .= m2;
     then A29: ssm.(i0+1)
               =m*(2|^(ii0-'1))*2 by A28
               .=(ssm.i0)*2 by A8,A27;
-    A30: for k being Nat st 1<=k & k<i0 holds
+    A30: for k being Element of NAT st 1<=k & k<i0 holds
             ssm.(k+1)=ssm.(k)*2 & not(ssm.(k+1)>n)
-     proof let k be Nat;
+     proof let k be Element of NAT;
       assume A31: 1<=k & k<i0;
         then A32: k<=n2 by A23,XXREAL_0:2;
         A33: k-1>=0 by A31,XREAL_1:50;
@@ -460,7 +463,7 @@ A17:m2*(2 |^ 0) = m2*1 by NEWTON:9 .= m2;
             ssm.(k+1)=ssm.(k)*2 & not(ssm.(k+1)>n)
     proof let k be Integer;
      assume A39: 1<=k & k<i0; then 0<=k;
-      then reconsider kk=k as Nat by INT_1:16;
+      then reconsider kk=k as Element of NAT by INT_1:16;
           ssm.(kk+1)=ssm.(kk)*2 & not(ssm.(kk+1)>n) by A30,A39;
      hence ssm.(k+1)=ssm.(k)*2 & not(ssm.(k+1)>n);
     end;
@@ -474,7 +477,7 @@ A17:m2*(2 |^ 0) = m2*1 by NEWTON:9 .= m2;
      0+1<=i0+1 by XREAL_1:9;
      then ii0+1 in Seg (n2+1) by A44,FINSEQ_1:3;
      then A45: ssn.(i0+1)=n2 mod (m2*(2|^(ii0+1-'1))) by A11;
-     reconsider k5=m2*(2|^(ii0+1-'1)) as Nat;
+     reconsider k5=m2*(2|^(ii0+1-'1)) as Element of NAT;
      A46: k5>n2 by A20,BINARITH:39;
          n2 div (m2*(2|^(ii0+1-'1)))=0 by A20,A41,NAT_1:80;
      then A47:  ppn.(i0+1)=0 & ssn.(i0+1)=n by A14,A42,A45,A46,NAT_1:76;
@@ -492,7 +495,7 @@ A17:m2*(2 |^ 0) = m2*1 by NEWTON:9 .= m2;
       proof let j be Integer;
        assume A48: 1<=j & j<=i0;
         then 0<=j;
-        then reconsider jj=j as Nat by INT_1:16;
+        then reconsider jj=j as Element of NAT by INT_1:16;
         A49: i0-j>=0 by A48,XREAL_1:50;
         then A50: ii0-' jj=i0-j by BINARITH:def 3;
         A51: j-1>=0 by A48,XREAL_1:50;
@@ -809,25 +812,25 @@ proof
        )&
        t2=pn2.1 by A112,A113;
          i1>=0 by A114;
-     then reconsider ii1=i1 as Nat by INT_1:16;
+     then reconsider ii1=i1 as Element of NAT by INT_1:16;
          i2>=0 by A115;
-     then reconsider ii2=i2 as Nat by INT_1:16;
+     then reconsider ii2=i2 as Element of NAT by INT_1:16;
      A116: now assume A117: i1<i2;
        A118: for k being Integer st 1<=k & k<=i1+1 holds sm1.k=sm2.k
        proof let k be Integer;
         assume A119: 1<=k & k<=i1+1;
          then 0<=k;
-         then reconsider kh=k as Nat by INT_1:16;
+         then reconsider kh=k as Element of NAT by INT_1:16;
              k-1>=0 by A119,XREAL_1:50;
          then A120: kh-' 1=k-1 by BINARITH:def 3;
          then A121: kh-' 1+1=k;
             A122: k-1<=i1+1-1 by A119,XREAL_1:11;
              ii1<ii1+1 by NAT_1:38;
          then A123: kh-' 1<i1+1 by A120,A122,XXREAL_0:2;
-         defpred P[Nat] means $1<i1+1 implies sm1.($1+1)=sm2.($1+1);
+         defpred P[Element of NAT] means $1<i1+1 implies sm1.($1+1)=sm2.($1+1);
          A124: P[0] by A111,A112,A113;
-         A125: for e being Nat st P[e] holds P[e+1]
-         proof let e be Nat;
+         A125: for e being Element of NAT st P[e] holds P[e+1]
+         proof let e be Element of NAT;
           assume A126: P[e];
            per cases;
            suppose e+1<i1+1;
@@ -850,7 +853,7 @@ proof
             hence P[e+1];
          end;
          end;
-             for e being Nat holds P[e] from NAT_1:sch 1(A124,A125);
+             for e being Element of NAT holds P[e] from NAT_1:sch 1(A124,A125);
         hence sm1.k=sm2.k by A121,A123;
        end;
            0<=ii1;
@@ -863,17 +866,17 @@ proof
        proof let k be Integer;
         assume A135: 1<=k & k<=i2+1;
          then 0<=k;
-         then reconsider kh=k as Nat by INT_1:16;
+         then reconsider kh=k as Element of NAT by INT_1:16;
              k-1>=0 by A135,XREAL_1:50;
          then A136: kh-'1=k-1 by BINARITH:def 3;
          then A137: kh-'1+1=k;
             A138: k-1<=i2+1-1 by A135,XREAL_1:11;
              ii2<ii2+1 by NAT_1:38;
          then A139: kh-'1<i2+1 by A136,A138,XXREAL_0:2;
-         defpred P[Nat] means $1<i2+1 implies sm2.($1+1)=sm1.($1+1);
+         defpred P[Element of NAT] means $1<i2+1 implies sm2.($1+1)=sm1.($1+1);
          A140: P[0] by A111,A112,A113;
-         A141: for e being Nat st P[e] holds P[e+1]
-         proof let e be Nat;
+         A141: for e being Element of NAT st P[e] holds P[e+1]
+         proof let e be Element of NAT;
           assume A142: P[e];
            per cases;
            suppose e+1<i2+1;
@@ -896,7 +899,7 @@ proof
             hence P[e+1];
          end;
          end;
-             for e being Nat holds P[e] from NAT_1:sch 1(A140,A141);
+             for e being Element of NAT holds P[e] from NAT_1:sch 1(A140,A141);
         hence sm2.k=sm1.k by A137,A139;
        end;
            0<=ii2;
@@ -906,10 +909,10 @@ proof
      end;
      then A148: i1=i2 by A116,XXREAL_0:1;
      A149: ii1<ii1+1 by NAT_1:38;
-     defpred P2[Nat] means 1<=$1 & $1<=i1+1 implies sm1.$1=sm2.$1;
+     defpred P2[Element of NAT] means 1<=$1 & $1<=i1+1 implies sm1.$1=sm2.$1;
      A150: P2[0];
-     A151: for kk being Nat st P2[kk] holds P2[kk+1]
-     proof let kk be Nat;
+     A151: for kk being Element of NAT st P2[kk] holds P2[kk+1]
+     proof let kk be Element of NAT;
       assume A152: P2[kk];
            1<=kk+1 & kk+1<=i1+1 implies sm1.(kk+1)=sm2.(kk+1)
        proof
@@ -946,19 +949,20 @@ XXREAL_0:2
        end;
       hence P2[kk+1];
      end;
-     A158: for jj being Nat holds P2[jj] from NAT_1:sch 1(A150,A151);
+     A158: for jj being Element of NAT holds P2[jj]
+      from NAT_1:sch 1(A150,A151);
      A159: for jj being Integer st 1<=jj & jj<=i1+1 holds sm1.jj=sm2.jj
       proof let jj be Integer;
        assume A160: 1<=jj & jj<=i1+1; then 0<jj;
-        then reconsider jj2=jj as Nat by INT_1:16;
+        then reconsider jj2=jj as Element of NAT by INT_1:16;
             sm1.(jj2)=sm2.(jj2) by A158,A160;
        hence sm1.jj=sm2.jj;
       end;
-     defpred P3[Nat] means 1<=$1 & $1<=i1+1 implies
+     defpred P3[Element of NAT] means 1<=$1 & $1<=i1+1 implies
                sn1.(ii1+1+1-'$1)=sn2.(ii1+1+1-'$1);
      A161: P3[0];
-     A162: for kk being Nat st P3[kk] holds P3[kk+1]
-     proof let kk be Nat;
+     A162: for kk being Element of NAT st P3[kk] holds P3[kk+1]
+     proof let kk be Element of NAT;
       assume A163: P3[kk];
            1<=kk+1 & kk+1<=i1+1 implies
                   sn1.(ii1+1+1-'(kk+1))=sn2.(ii1+1+1-'(kk+1))
@@ -1028,12 +1032,13 @@ XXREAL_0:2
        end;
       hence P3[kk+1];
      end;
-     A178: for jj being Nat holds P3[jj] from NAT_1:sch 1(A161,A162);
-     defpred P4[Nat] means 1<=$1 & $1<=i1+1 implies
+     A178: for jj being Element of NAT holds P3[jj]
+      from NAT_1:sch 1(A161,A162);
+     defpred P4[Element of NAT] means 1<=$1 & $1<=i1+1 implies
                pn1.(ii1+1+1-'$1)=pn2.(ii1+1+1-'$1);
      A179: P4[0];
-     A180: for kk being Nat st P4[kk] holds P4[kk+1]
-     proof let kk be Nat;
+     A180: for kk being Element of NAT st P4[kk] holds P4[kk+1]
+     proof let kk be Element of NAT;
       assume A181: P4[kk];
            1<=kk+1 & kk+1<=i1+1 implies
                   pn1.(ii1+1+1-'(kk+1))=pn2.(ii1+1+1-'(kk+1))
@@ -1107,12 +1112,13 @@ XXREAL_0:2
        end;
       hence P4[kk+1];
      end;
-     A198: for jj being Nat holds P4[jj] from NAT_1:sch 1(A179,A180);
+     A198: for jj being Element of NAT holds P4[jj]
+      from NAT_1:sch 1(A179,A180);
      A199: for jj being Integer st 1<=jj & jj<=i1+1 holds
                   pn1.(i1+1+1- jj)=pn2.(i1+1+1- jj)
       proof let jj be Integer;
        assume A200: 1<=jj & jj<=i1+1; then 0<=jj;
-        then reconsider j2=jj as Nat by INT_1:16;
+        then reconsider j2=jj as Element of NAT by INT_1:16;
             ii1+1<ii1+1+1 by NAT_1:38;
         then jj<ii1+1+1 by A200,XXREAL_0:2;
         then ii1+1+1-j2>=0 by XREAL_1:50;
@@ -1213,7 +1219,7 @@ proof let n,m be Integer;
        )& idiv1_prg(n,m)=pn.1
      )
     );
-    reconsider n2=n as Nat by A1,INT_1:16;
+    reconsider n2=n as Element of NAT by A1,INT_1:16;
         (not (n<m) implies
     1 in dom sm & sm.1=m &
      ( 1<=i & i<=n &
@@ -1272,7 +1278,7 @@ proof let n,m be Integer;
          then i+1-(j-1)<=i+1+(j-1)-(j-1) by XREAL_1:11;
          then A11: i+1-(j-1)<=n2+1 by A10,XXREAL_0:2;
              0<i-j+1 by A6,A8,XREAL_1:50;
-         then reconsider ij=i-j+1 as Nat by INT_1:16;
+         then reconsider ij=i-j+1 as Element of NAT by INT_1:16;
             A12: 0+1<=ij by A7,A8,NAT_1:38;
          A13: i+1<=n2+1 by A2,A3,XREAL_1:9;
              j>=0 by A6;
@@ -1282,7 +1288,7 @@ proof let n,m be Integer;
         hence thesis by A2,A3,A6,A9,A11,A12,Th7;
        end;
           i>=0 by A2,A3;
-      then reconsider i2=i as Nat by INT_1:16;
+      then reconsider i2=i as Element of NAT by INT_1:16;
       A14: i2+1<=n2+1 by A2,A3,XREAL_1:9;
           1<=i2+1 by NAT_1:37;
       then A15: i2+1 in Seg (n2+1) by A14,FINSEQ_1:3;
@@ -1293,7 +1299,7 @@ proof let n,m be Integer;
         proof let k be Integer;
          assume A18: 1<=k & k<i;
           then 0<=k;
-          then reconsider k2=k as Nat by INT_1:16;
+          then reconsider k2=k as Element of NAT by INT_1:16;
           A19: k2<n2+1 by A16,A18,XXREAL_0:2;
           then A20: k in Seg (n2+1) by A18,FINSEQ_1:3;
           A21: k2+1<=n2+1 by A19,NAT_1:38;
@@ -1307,9 +1313,9 @@ proof let n,m be Integer;
     hence thesis by A1,A2,Def1;
 end;
 
-theorem Th9: for n,m being Nat st m>0 holds
+theorem Th9: for n,m being Element of NAT st m>0 holds
  idiv1_prg(n qua Integer,m qua Integer)=n div m
-proof let n2,m2 be Nat;
+proof let n2,m2 be Element of NAT;
  assume A1: m2>0;
   then A2: n2>=0 & m2>0;
   reconsider n=n2,m=m2 as Integer;
@@ -1319,7 +1325,7 @@ proof let n2,m2 be Nat;
    set ssm = Seg (n2+1) --> 1;
 A5: dom ssm = Seg (n2+1) by FUNCOP_1:19;
    then reconsider ssm as FinSequence by FINSEQ_1:def 2;
-   A6: len ssm=n+1 & for k2 being Nat st k2 in Seg (n2+1) holds
+   A6: len ssm=n+1 & for k2 being Element of NAT st k2 in Seg (n2+1) holds
         ssm.k2=1 by A5,FINSEQ_1:def 3, FUNCOP_1:13;
 A7: rng ssm c= {1} by FUNCOP_1:19;
        rng ssm c= INT
@@ -1390,12 +1396,12 @@ A7: rng ssm c= {1} by FUNCOP_1:19;
    then n2>=0+1 by NAT_1:38;
    then 1< n2+1 by NAT_1:38;
    then A9: 1 in Seg (n2+1) by FINSEQ_1:3;
-   deffunc F1(Nat) = m2*(2|^($1-'1));
+   deffunc F1(Element of NAT) = m2*(2|^($1-'1));
        ex ssm being FinSequence st len ssm=n2+1 &
-                for k2 being Nat st k2 in (Seg (n2+1)) holds
+                for k2 being Element of NAT st k2 in (Seg (n2+1)) holds
    ssm.k2=F1(k2) from FINSEQ_1:sch 2;
    then consider ssm being FinSequence such that
-   A10: len ssm=n+1 & for k2 being Nat st k2 in (Seg (n2+1)) holds
+   A10: len ssm=n+1 & for k2 being Element of NAT st k2 in (Seg (n2+1)) holds
         ssm.k2=m*(2|^(k2-'1));
        rng ssm c= INT
    proof let y be set;assume
@@ -1403,17 +1409,17 @@ A7: rng ssm c= {1} by FUNCOP_1:19;
      then consider x being set such that
      A11: x in dom ssm & y=ssm.x by FUNCT_1:def 5;
      A12: dom ssm=Seg len ssm by FINSEQ_1:def 3;
-     reconsider n=x as Nat by A11;
+     reconsider n=x as Element of NAT by A11;
          ssm.n=m*(2|^(n-'1)) by A10,A11,A12;
     hence y in INT by A11,INT_1:def 2;
    end;
    then reconsider ssm as FinSequence of INT by FINSEQ_1:def 4;
-   deffunc F(Nat) = n2 mod (m2*(2|^($1-'1)));
+   deffunc F(Element of NAT) = n2 mod (m2*(2|^($1-'1)));
        ex ssn being FinSequence st len ssn=n2+1 &
-   for k2 being Nat st k2 in (Seg (n2+1)) holds
+   for k2 being Element of NAT st k2 in (Seg (n2+1)) holds
    ssn.k2=F(k2) from FINSEQ_1:sch 2;
    then consider ssn being FinSequence such that
-   A13: len ssn=n+1 & for k2 being Nat st k2 in (Seg (n2+1)) holds
+   A13: len ssn=n+1 & for k2 being Element of NAT st k2 in (Seg (n2+1)) holds
         ssn.k2=n2 mod (m2*(2|^(k2-'1)));
        rng ssn c= INT
    proof let y be set;assume
@@ -1421,18 +1427,18 @@ A7: rng ssm c= {1} by FUNCOP_1:19;
      then consider x being set such that
      A14: x in dom ssn & y=ssn.x by FUNCT_1:def 5;
      A15: dom ssn=Seg len ssn by FINSEQ_1:def 3;
-     reconsider n3=x as Nat by A14;
+     reconsider n3=x as Element of NAT by A14;
          ssn.n3=n2 mod (m2*(2|^(n3-'1))) by A13,A14,A15;
     hence y in INT by A14,INT_1:def 2;
    end;
    then reconsider ssn as FinSequence of INT by FINSEQ_1:def 4;
-   deffunc F3(Nat)= n2 div (m2*(2|^($1-'1)));
+   deffunc F3(Element of NAT)= n2 div (m2*(2|^($1-'1)));
        ex ppn being FinSequence st len ppn=n2+1 &
-     for k2 being Nat st k2 in (Seg (n2+1)) holds
+     for k2 being Element of NAT st k2 in (Seg (n2+1)) holds
    ppn.k2= F3(k2) from FINSEQ_1:sch 2;
    then consider ppn being FinSequence such that
    A16: len ppn=n+1 &
-   for k2 being Nat st k2 in (Seg (n2+1)) holds
+   for k2 being Element of NAT st k2 in (Seg (n2+1)) holds
         ppn.k2= n2 div (m2*(2|^(k2-'1)));
        rng ppn c= INT
    proof let y be set;assume
@@ -1440,7 +1446,7 @@ A7: rng ssm c= {1} by FUNCOP_1:19;
      then consider x being set such that
      A17: x in dom ppn & y=ppn.x by FUNCT_1:def 5;
      A18: dom ppn=Seg len ppn by FINSEQ_1:def 3;
-     reconsider n3=x as Nat by A17;
+     reconsider n3=x as Element of NAT by A17;
          ppn.n3=n2 div (m2*(2|^(n3-'1))) by A16,A17,A18;
     hence y in INT by A17,INT_1:def 2;
    end;
@@ -1451,8 +1457,8 @@ A7: rng ssm c= {1} by FUNCOP_1:19;
    A20: ssm.1=m*(2|^(1-'1)) by A9,A10 .=m*(2|^(0)) by BINARITH:51
             .=m*1 by NEWTON:9
             .=m;
-    consider ii0 being Nat such that
-    A21: (for k2 being Nat st k2<ii0 holds m*(2|^(k2))<=n2)
+    consider ii0 being Element of NAT such that
+    A21: (for k2 being Element of NAT st k2<ii0 holds m*(2|^(k2))<=n2)
       & m2*(2|^(ii0))>n2 by A1,Th6;
     reconsider i0=ii0 as Integer;
         now assume i0=0;
@@ -1481,9 +1487,9 @@ A7: rng ssm c= {1} by FUNCOP_1:19;
     A31: ssm.(i0+1)=m*(2|^(ii0+1-'1)) by A10,A29
               .=m*(2|^(ii0-'1))*2 by A30
               .=(ssm.i0)*2 by A10,A28;
-    A32: for k being Nat st 1<=k & k<i0 holds
+    A32: for k being Element of NAT st 1<=k & k<i0 holds
             ssm.(k+1)=ssm.(k)*2 & not(ssm.(k+1)>n)
-     proof let k be Nat;
+     proof let k be Element of NAT;
       assume A33: 1<=k & k<i0;
         then A34: k<=n2 by A24,XXREAL_0:2;
         A35: k-1>=0 by A33,XREAL_1:50;
@@ -1504,7 +1510,7 @@ A7: rng ssm c= {1} by FUNCOP_1:19;
             ssm.(k+1)=ssm.(k)*2 & not(ssm.(k+1)>n)
     proof let k be Integer;
      assume A41: 1<=k & k<i0; then 0<=k;
-      then reconsider kk=k as Nat by INT_1:16;
+      then reconsider kk=k as Element of NAT by INT_1:16;
           ssm.(kk+1)=ssm.(kk)*2 & not(ssm.(kk+1)>n) by A32,A41;
      hence ssm.(k+1)=ssm.(k)*2 & not(ssm.(k+1)>n);
     end;
@@ -1518,7 +1524,7 @@ A7: rng ssm c= {1} by FUNCOP_1:19;
      0+1<=i0+1 by XREAL_1:9;
      then ii0+1 in Seg (n2+1) by A46,FINSEQ_1:3;
      then A47: ssn.(i0+1)=n2 mod (m2*(2|^(ii0+1-'1))) by A13;
-     reconsider k5=m2*(2|^(ii0+1-'1)) as Nat;
+     reconsider k5=m2*(2|^(ii0+1-'1)) as Element of NAT;
      A48: k5>n2 by A21,BINARITH:39;
          n2 div (m2*(2|^(ii0+1-'1)))=0 by A21,A43,NAT_1:80;
      then A49:  ppn.(i0+1)=0 & ssn.(i0+1)=n by A16,A44,A47,A48,NAT_1:76;
@@ -1536,7 +1542,7 @@ A7: rng ssm c= {1} by FUNCOP_1:19;
       proof let j be Integer;
        assume A50: 1<=j & j<=i0;
         then 0<=j;
-        then reconsider jj=j as Nat by INT_1:16;
+        then reconsider jj=j as Element of NAT by INT_1:16;
         A51: i0-j>=0 by A50,XREAL_1:50;
         then A52: ii0-' jj=i0-j by BINARITH:def 3;
         A53: j-1>=0 by A50,XREAL_1:50;
@@ -1713,12 +1719,12 @@ theorem Th10: for n,m being Integer st n>=0 & m>0 holds
  idiv1_prg(n,m)=n div m
 proof let n,m be Integer;
  assume A1: n>=0 & m>0;
-  then reconsider n2=n,m2=m as Nat by INT_1:16;
+  then reconsider n2=n,m2=m as Element of NAT by INT_1:16;
       idiv1_prg(n,m)=n2 div m2 by A1,Th9;
  hence idiv1_prg(n,m)=n div m by NEWTON:101;
 end;
 
-theorem Th11: for n,m being Integer,n2,m2 being Nat holds
+theorem Th11: for n,m being Integer,n2,m2 being Element of NAT holds
  (m=0 & n2=n & m2=m implies n div m=0 & n2 div m2=0)&
  (n>=0 & m>0 & n2=n & m2=m implies n div m =n2 div m2)&
  (n>=0 & m<0 & n2=n & m2= -m implies
@@ -1728,7 +1734,7 @@ theorem Th11: for n,m being Integer,n2,m2 being Nat holds
     (m2*(n2 div m2)=n2 implies n div m =-(n2 div m2))
     &(m2*(n2 div m2)<>n2 implies n div m =-(n2 div m2)-1))&
  (n<0 & m<0 & n2= -n & m2= -m implies n div m =n2 div m2)
-proof let n,m be Integer,n2,m2 be Nat;
+proof let n,m be Integer,n2,m2 be Element of NAT;
  thus (m=0 & n2=n & m2=m implies n div m=0 & n2 div m2=0)
                              by INT_1:75,NAT_1:def 1;
  thus (n>=0 & m>0 & n2=n & m2=m implies n div m =n2 div m2) by NEWTON:101;
@@ -1874,7 +1880,7 @@ proof
      end;
      case A3: m<0;
        then A4: -m>0 by XREAL_1:60;
-       then reconsider n2=n,m2=-m as Nat by A2,INT_1:16;
+       then reconsider n2=n,m2=-m as Element of NAT by A2,INT_1:16;
            now per cases;
        case A5: (-m)* idiv1_prg(n,-m)=n;
          A6: idiv1_prg(n,-m)=n div (-m) by A2,A4,Th10;
@@ -1907,7 +1913,7 @@ proof
       hence ex i being Integer st P[i];
      end;
      case A13: m>0;
-       then reconsider n2= -n,m2=m as Nat by A10,INT_1:16;
+       then reconsider n2= -n,m2=m as Element of NAT by A10,INT_1:16;
            now per cases;
        case A14: (m)* idiv1_prg(-n,m)= -n;
          A15: idiv1_prg(-n,m)=(-n) div (m) by A10,A13,Th10;
@@ -1956,7 +1962,7 @@ proof let n,m be Integer;
             now per cases;
         case A6: (-m)*(idiv1_prg(n,-m))=n;
           A7: -m>0 by A5,XREAL_1:60;
-         then reconsider m2= -m,n2= n as Nat by A3,INT_1:16;
+         then reconsider m2= -m,n2= n as Element of NAT by A3,INT_1:16;
          A8: idiv_prg(n,m)= - (idiv1_prg(n,-m))
                 by A3,A5,A6,Def2;
             idiv1_prg(n,-m)=n2 div m2 by A7,Th9;
@@ -1966,7 +1972,7 @@ proof let n,m be Integer;
         end;
         case A9: (-m)*(idiv1_prg(n,-m))<>n;
           A10: -m>0 by A5,XREAL_1:60;
-         then reconsider m2= -m,n2= n as Nat by A3,INT_1:16;
+         then reconsider m2= -m,n2= n as Element of NAT by A3,INT_1:16;
          A11: idiv_prg(n,m)= - (idiv1_prg(n,-m))-1
                 by A3,A5,A9,Def2;
             idiv1_prg(n,-m)=n2 div m2 by A10,Th9;
@@ -1994,7 +2000,7 @@ proof let n,m be Integer;
       case A17: m>0;
             now per cases;
         case A18: (m)*(idiv1_prg(-n,m))= -n;
-         reconsider m2= m,n2= -n as Nat by A13,A17,INT_1:16;
+         reconsider m2= m,n2= -n as Element of NAT by A13,A17,INT_1:16;
          A19: idiv_prg(n,m)= - (idiv1_prg(-n,m))
                 by A12,A17,A18,Def2;
             idiv1_prg(-n,m)=n2 div m2 by A17,Th9;
@@ -2003,7 +2009,7 @@ proof let n,m be Integer;
          hence idiv_prg(n,m)=n div m by A13,A17,A19,Th10;
         end;
         case A20: (m)*(idiv1_prg(-n,m))<> -n;
-         reconsider m2= m,n2= -n as Nat by A13,A17,INT_1:16;
+         reconsider m2= m,n2= -n as Element of NAT by A13,A17,INT_1:16;
          A21: idiv_prg(n,m)= - (idiv1_prg(-n,m))-1
                 by A12,A17,A20,Def2;
             idiv1_prg(-n,m)=n2 div m2 by A17,Th9;

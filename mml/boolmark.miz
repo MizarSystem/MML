@@ -10,7 +10,8 @@ environ
  vocabularies FUNCT_1, FUNCT_4, FUNCOP_1, RELAT_1, BOOLE, SUBSET_1, FINSEQ_1,
       PETRI, FRAENKEL, NET_1, MARGREL1, FUNCT_2, ARYTM_3, ARYTM_1, BOOLMARK,
       FINSEQ_4;
- notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, NAT_1, RELAT_1, FUNCT_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1,
+ NUMBERS,XCMPLX_0, NAT_1, RELAT_1, FUNCT_1,
       FUNCT_2, DOMAIN_1, FRAENKEL, FUNCOP_1, FINSEQ_1, FINSEQ_4, FUNCT_4,
       MARGREL1, PETRI, XXREAL_0;
  constructors DOMAIN_1, FUNCT_4, XXREAL_0, XREAL_0, NAT_1, MARGREL1, FINSEQ_4,
@@ -21,7 +22,7 @@ environ
  definitions PETRI, XBOOLE_0;
  theorems SUBSET_1, TARSKI, ZFMISC_1, MARGREL1, PETRI, FUNCT_1, FUNCOP_1,
       FUNCT_2, FUNCT_4, FINSEQ_1, FINSEQ_4, NAT_1, FINSEQ_2, FINSEQ_3, RELAT_1,
-      RELSET_1, GOBOARD2, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0;
+      RELSET_1, GOBOARD2, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes FINSEQ_2, NAT_1;
 
 begin
@@ -178,7 +179,7 @@ definition
     ex M being FinSequence of Bool_marks_of PTN st len Q = len M
       & Q/.1 is_firable_on M0
       & M/.1 = Firing(Q/.1,M0)
-      & for i being Nat st i < len Q & i > 0
+      & for i being Element of NAT st i < len Q & i > 0
         holds Q/.(i+1) is_firable_on M/.i & M/.(i+1)
           = Firing(Q/.(i+1),M/.i);
   end;
@@ -202,11 +203,11 @@ definition
       st len Q = len M
          & it = M/.len M
          & M/.1 = Firing(Q/.1,M0)
-         & for i being Nat st i < len Q & i > 0
+         & for i being Element of NAT st i < len Q & i > 0
            holds M/.(i+1) = Firing(Q/.(i+1),M/.i);
   existence
    proof
-   defpred P2[Nat] means
+   defpred P2[Element of NAT] means
    for Q being FinSequence of the Transitions of PTN
         st $1 = len Q
       holds (Q = {} implies ex M1 being Boolean_marking of PTN st M1 = M0)
@@ -214,11 +215,11 @@ definition
           st ex M being FinSequence of Bool_marks_of PTN st len Q = len M
              & M2 = M/.len M
              & M/.1 = Firing(Q/.1,M0)
-             & for i being Nat st i < len Q & i > 0
+             & for i being Element of NAT st i < len Q & i > 0
                holds M/.(i+1) = Firing(Q/.(i+1),M/.i));
 
 A1:   P2[0] by FINSEQ_1:25;
-A2:    now let n be Nat;
+A2:    now let n be Element of NAT;
       assume
         A3: P2[n];
       thus P2[n+1]
@@ -232,7 +233,7 @@ A2:    now let n be Nat;
             st len Q = len M
                & M2 = M/.len M
                & M/.1 = Firing(Q/.1,M0)
-               & for i being Nat st i < len Q & i > 0
+               & for i being Element of NAT st i < len Q & i > 0
                  holds M/.(i+1) = Firing(Q/.(i+1),M/.i)
             proof
               assume Q <> {};
@@ -258,7 +259,7 @@ A2:    now let n be Nat;
                 then Q/.1 = t by FINSEQ_4:25;
                 hence M/.1 = Firing(Q/.1,M0) by FINSEQ_4:25;
 
-                let i be Nat; assume i < len Q & i > 0;
+                let i be Element of NAT; assume i < len Q & i > 0;
                 hence M/.(i+1) = Firing(Q/.(i+1),M/.i) by A8,NAT_1:38;
 
               end;
@@ -268,7 +269,8 @@ A2:    now let n be Nat;
                   such that A10:len Q1 = len B
                             and A11: B2 = B/.len B
                             and A12: B/.1 = Firing(Q1/.1,M0)
-                            and A13: for i being Nat st i < len Q1 & i > 0
+                            and
+A13: for i being Element of NAT st i < len Q1 & i > 0
                                holds B/.(i+1) = Firing(Q1/.(i+1),B/.i)
                                       by A3,A6;
                 take M2 = Firing(t,B2);
@@ -292,7 +294,7 @@ A2:    now let n be Nat;
                 thus M/.1 = B/.1 by A18,FINSEQ_4:83
                 .= Firing(Q/.1,M0) by A5,A12,A19,FINSEQ_4:83;
 
-                let i be Nat such that A20:i < len Q and A21:i > 0;
+                let i be Element of NAT such that A20:i < len Q and A21:i > 0;
                 thus M/.(i+1) = Firing(Q/.(i+1),M/.i)
                   proof
                     A22: Seg (len Q1 + 1) = Seg (len Q1) \/ {len Q1 + 1}
@@ -334,7 +336,7 @@ A2:    now let n be Nat;
         end;
       end;
 
-         for n being Nat holds P2[n] from NAT_1:sch 1(A1,A2);
+         for n being Element of NAT holds P2[n] from NAT_1:sch 1(A1,A2);
       hence thesis;
     end;
   uniqueness
@@ -346,18 +348,18 @@ A2:    now let n be Nat;
         such that A35: len Q = len M1
           and A36: B1 = M1/.len M1
           and A37: M1/.1 = Firing(Q/.1,M0)
-          and A38: for i being Nat st i < len Q & i > 0
+          and A38: for i being Element of NAT st i < len Q & i > 0
                   holds M1/.(i+1) = Firing(Q/.(i+1),M1/.i);
       given M2 being FinSequence of Bool_marks_of PTN
         such that A39: len Q = len M2
           and A40: B2 = M2/.len M2
           and A41: M2/.1 = Firing(Q/.1,M0)
-          and A42: for i being Nat st i < len Q & i > 0
+          and A42: for i being Element of NAT st i < len Q & i > 0
                   holds M2/.(i+1) = Firing(Q/.(i+1),M2/.i);
-      defpred P2[Nat] means $1 in Seg len Q implies M1/.$1 = M2/.$1;
+      defpred P2[Element of NAT] means $1 in Seg len Q implies M1/.$1 = M2/.$1;
 A43:  P2[0] by FINSEQ_1:3;
 A44:    now
-        let j be Nat;
+        let j be Element of NAT;
         assume A45: P2[j];
          now
         assume A46: j + 1 in Seg len Q;
@@ -377,9 +379,9 @@ A44:    now
         end;
         end; hence P2[j+1];
      end;
-     A51: for j being Nat holds P2[j] from NAT_1:sch 1(A43,A44);
+     A51: for j being Element of NAT holds P2[j] from NAT_1:sch 1(A43,A44);
         now
-       let j be Nat;
+       let j be Element of NAT;
        assume A52: j in Seg len Q;
        then A53: j in dom M1 & j in dom M2 by A35,A39,FINSEQ_1:def 3;
        hence M1.j = M1/.j by FINSEQ_4:def 4
@@ -536,10 +538,10 @@ theorem
 
 theorem Th8:
  for D being non empty set
- for Q0,Q1 being FinSequence of D, i being Nat st 1<=i & i<=len Q0
+ for Q0,Q1 being FinSequence of D, i being Element of NAT st 1<=i & i<=len Q0
   holds (Q0^Q1)/.i=Q0/.i
   proof let D be non empty set;
-   let Q0,Q1 be FinSequence of D, i be Nat;
+   let Q0,Q1 be FinSequence of D, i be Element of NAT;
        len Q0<=len Q0+len Q1 by NAT_1:29;
       then A1: i<=len Q0 implies i<=len Q0 + len Q1 by XXREAL_0:2;
        i in dom Q0 implies i in Seg(len Q0) by FINSEQ_1:def 3;
@@ -583,7 +585,7 @@ theorem Th10:
 
         end;
         case A5:  Q0 <> {} & Q1 <> {};
-          let i be Nat;
+          let i be Element of NAT;
 
           A6: len Q0 <> 0 by A5,FINSEQ_1:25;
           A7: len Q1 <> 0 by A5,FINSEQ_1:25;
@@ -594,30 +596,31 @@ theorem Th10:
             such that A8: len (Q0^Q1) = len M
             and A9: Firing(Q0^Q1,M0) = M/.len M
             and A10: M/.1 = Firing((Q0^Q1)/.1,M0)
-            and A11: for i being Nat st i < len (Q0^Q1) & i > 0
+            and A11: for i being Element of NAT st i < len (Q0^Q1) & i > 0
               holds M/.(i+1) = Firing((Q0^Q1)/.(i+1),M/.i) by Def5;
           consider M3 being FinSequence of Bool_marks_of PTN
             such that A12: len Q0 = len M3
             and A13: Firing(Q0,M0) = M3/.len M3
             and A14: M3/.1 = Firing(Q0/.1,M0)
-            and A15: for i being Nat st i < len Q0 & i > 0
+            and A15: for i being Element of NAT st i < len Q0 & i > 0
               holds M3/.(i+1) = Firing(Q0/.(i+1),M3/.i) by A5,Def5;
 
           consider M4 being FinSequence of Bool_marks_of PTN
             such that A16: len Q1 = len M4
             and A17: Firing(Q1,Firing(Q0,M0)) = M4/.len M4
             and A18: M4/.1 = Firing(Q1/.1,Firing(Q0,M0))
-            and A19: for i being Nat st i < len Q1 & i > 0
+            and A19: for i being Element of NAT st i < len Q1 & i > 0
               holds M4/.(i+1) = Firing(Q1/.(i+1),M4/.i) by A5,Def5;
           A20: len Q0 > 0 by A6,NAT_1:19;
           A21: len Q1 > 0 by A7,NAT_1:19;
-          defpred P2[Nat] means 1+$1<=len Q0 implies M/.(1+$1)=M3/.(1+$1);
+          defpred P2[Element of NAT] means
+           1+$1<=len Q0 implies M/.(1+$1)=M3/.(1+$1);
           A22: P2[0] by A10,A14,Th8;
              0<len Q1 by A7,NAT_1:19;
             then 0+len Q0<len Q0 + len Q1 by XREAL_1:8;
             then A23: len Q0<len (Q0^Q1) by FINSEQ_1:35;
 
-          A24: now let k be Nat;
+          A24: now let k be Element of NAT;
              A25: 0<=k by NAT_1:18;
                then A26: 0<1+k by NAT_1:38;
              assume A27: P2[k];
@@ -633,18 +636,20 @@ theorem Th10:
              hence M/.(1+(k+1)) = M3/.(1+(k+1)) by A15,A26,A30;
              end; hence P2[k+1];
           end;
-          A31: for k being Nat holds P2[k] from NAT_1:sch 1(A22,A24);
+          A31: for k being Element of NAT holds P2[k]
+           from NAT_1:sch 1(A22,A24);
 
 A32:            0+1<=len Q1 by A21,NAT_1:38;
 
-          reconsider m = len Q0 - 1 as Nat by A20,NAT_1:60;
-      defpred P2[Nat] means 1+$1<=len Q1 implies M/.(len Q0+1+$1)=M4/.(1+$1);
+          reconsider m = len Q0 - 1 as Element of NAT by A20,NAT_1:60;
+      defpred P2[Element of NAT] means
+       1+$1<=len Q1 implies M/.(len Q0+1+$1)=M4/.(1+$1);
              M/.(len Q0+1+0)=
 Firing((Q0^Q1)/.(len Q0+1),M/.(1+m)) by A11,A20,A23
            .=Firing((Q0^Q1)/.(len Q0+1),Firing(Q0,M0)) by A12,A13,A31
            .=M4/.(1+0) by A18,A32,GOBOARD2:5;
           then A33: P2[0];
-          A34: now let k be Nat;
+          A34: now let k be Element of NAT;
              A35: len Q0 + 1+k+1
                    = len Q0 + 1 + (k+1);
                 0<=k by NAT_1:18;
@@ -656,8 +661,7 @@ Firing((Q0^Q1)/.(len Q0+1),M/.(1+m)) by A11,A20,A23
              assume A39: 1+(k+1)<=len Q1;
                   1<=1+(k+1) by NAT_1:29;
                then A40: (Q0^Q1)/.(len Q0+(1+(k+1)))=Q1/.(1+(k+1)) by A39,
-GOBOARD2:5
-;
+GOBOARD2:5;
              A41: 1+k<len Q1 by A39,NAT_1:38;
                then len Q0+(1+k) < len Q0+ len Q1 by XREAL_1:8;
                then len Q0+1+k < len (Q0^Q1) by FINSEQ_1:35;
@@ -667,9 +671,11 @@ NAT_1:38;
              hence M/.(len Q0+1+(k+1)) = M4/.(1+(k+1)) by A19,A36,A41;
              end; hence P2[k+1];
           end;
-          A42: for k being Nat holds P2[k] from NAT_1:sch 1(A33,A34);
+          A42: for k being Element of NAT holds P2[k]
+           from NAT_1:sch 1(A33,A34);
           consider k being Nat such that
 A43:         len M4 = k + 1 by A7,A16,NAT_1:22;
+             reconsider k as Element of NAT by ORDINAL1:def 13;
              M/.len M = M/.(len Q0 +(1+k)) by A8,A16,A43,FINSEQ_1:35
             .= M/.(len Q0 +1+k)
             .= M4/.len M4 by A16,A42,A43;
@@ -709,7 +715,7 @@ A1:      Q0^Q1 is_firable_on M0;
 
         end;
         case A4:  Q0 <> {} & Q1 <> {};
-          let i be Nat;
+          let i be Element of NAT;
           A5: len Q0 <> 0 by A4,FINSEQ_1:25;
           A6: len Q1 <> 0 by A4,FINSEQ_1:25;
           then len Q0 + len Q1 <> 0 by NAT_1:23;
@@ -720,7 +726,7 @@ A1:      Q0^Q1 is_firable_on M0;
             such that len (Q0^Q1) = len M
             and A7: (Q0^Q1)/.1 is_firable_on M0
             and A8: M/.1 = Firing((Q0^Q1)/.1,M0)
-            and A9: for i being Nat st i < len (Q0^Q1) & i > 0 holds
+            and A9: for i being Element of NAT st i < len (Q0^Q1) & i > 0 holds
               (Q0^Q1)/.(i+1) is_firable_on M/.i &
               M/.(i+1) = Firing((Q0^Q1)/.(i+1),M/.i) by A1,Def4;
 
@@ -728,25 +734,26 @@ A1:      Q0^Q1 is_firable_on M0;
             such that A10: len Q0 = len M3
             and A11: Firing(Q0,M0) = M3/.len M3
             and A12: M3/.1 = Firing(Q0/.1,M0)
-            and A13: for i being Nat st i < len Q0 & i > 0
+            and A13: for i being Element of NAT st i < len Q0 & i > 0
               holds M3/.(i+1) = Firing(Q0/.(i+1),M3/.i) by A4,Def5;
 
           consider M4 being FinSequence of Bool_marks_of PTN
             such that A14: len Q1 = len M4
             and Firing(Q1,Firing(Q0,M0)) = M4/.len M4
             and A15: M4/.1 = Firing(Q1/.1,Firing(Q0,M0))
-            and A16: for i being Nat st i < len Q1 & i > 0
+            and A16: for i being Element of NAT st i < len Q1 & i > 0
               holds M4/.(i+1) = Firing(Q1/.(i+1),M4/.i) by A4,Def5;
           A17: len Q0 > 0 by A5,NAT_1:19;
           A18: len Q1 > 0 by A6,NAT_1:19;
           A19: 0+1<=len Q0 by A17,NAT_1:38;
-          defpred P2[Nat] means 1+$1<=len Q0 implies M/.(1+$1)=M3/.(1+$1);
+          defpred P2[Element of NAT] means
+           1+$1<=len Q0 implies M/.(1+$1)=M3/.(1+$1);
           A20: P2[0] by A8,A12,Th8;
              0<len Q1 by A6,NAT_1:19;
             then 0+len Q0<len Q0 + len Q1 by XREAL_1:8;
             then A21: len Q0<len (Q0^Q1) by FINSEQ_1:35;
 
-          A22: now let k be Nat;
+          A22: now let k be Element of NAT;
              A23: 0<=k by NAT_1:18;
                then A24: 0<1+k by NAT_1:38;
              assume A25: P2[k];
@@ -761,18 +768,19 @@ A1:      Q0^Q1 is_firable_on M0;
              hence M/.(1+(k+1)) = M3/.(1+(k+1)) by A13,A24,A28;
              end; hence P2[k+1];
           end;
-          A29: for k being Nat holds P2[k] from NAT_1:sch 1(A20,A22);
+          A29: for k being Element of NAT holds P2[k]
+           from NAT_1:sch 1(A20,A22);
 
 A30:            0+1<=len Q1 by A18,NAT_1:38;
-          reconsider m = len Q0 - 1 as Nat by A17,NAT_1:60;
-          defpred P2[Nat] means 1+$1<=len Q1 implies
+          reconsider m = len Q0 - 1 as Element of NAT by A17,NAT_1:60;
+          defpred P2[Element of NAT] means 1+$1<=len Q1 implies
                            M/.(len Q0+1+$1)=M4/.(1+$1);
              M/.(len Q0+1+0)=
 Firing((Q0^Q1)/.(len Q0+1),M/.(1+m)) by A9,A17,A21
            .=Firing((Q0^Q1)/.(len Q0+1),Firing(Q0,M0)) by A10,A11,A29
            .=M4/.(1+0) by A15,A30,GOBOARD2:5;
           then A31: P2[0];
-          A32: now let k be Nat;
+          A32: now let k be Element of NAT;
              A33: len Q0 + 1+k+1 = len Q0 + 1 + (k+1);
                 0<=k by NAT_1:18;
                then A34: 0<1+k by NAT_1:38;
@@ -783,8 +791,7 @@ Firing((Q0^Q1)/.(len Q0+1),M/.(1+m)) by A9,A17,A21
              assume A37: 1+(k+1)<=len Q1;
                   1<=1+(k+1) by NAT_1:29;
                then A38: (Q0^Q1)/.(len Q0+(1+(k+1)))=Q1/.(1+(k+1)) by A37,
-GOBOARD2:5
-;
+GOBOARD2:5;
              A39: 1+k<len Q1 by A37,NAT_1:38;
                then len Q0+(1+k) < len Q0+ len Q1 by XREAL_1:8;
                then len Q0+1+k < len (Q0^Q1) by FINSEQ_1:35;
@@ -793,15 +800,19 @@ GOBOARD2:5
              hence M/.(len Q0+1+(k+1)) = M4/.(1+(k+1)) by A16,A34,A39;
              end; hence P2[k+1];
           end;
-          A40: for k being Nat holds P2[k] from NAT_1:sch 1(A31,A32);
+          A40: for k being Element of NAT holds P2[k]
+           from NAT_1:sch 1(A31,A32);
           consider j being Nat
             such that A41: len M3 = j + 1 by A5,A10,NAT_1:22;
+            reconsider j as Element of NAT by ORDINAL1:def 13;
+            len M3 = j + 1 by A41;
+            then
           A42: M/.len M3 = M3/.len M3 by A10,A29,A41;
              Q1/.1 = (Q0^Q1)/.(len Q0 + 1) by A30,GOBOARD2:5;
          then A43: Q1/.1 is_firable_on M3/.len M3 by A9,A10,A17,A21,A42;
 
              now
-            let i be Nat such that A44: i < len Q1 & i > 0;
+            let i be Element of NAT such that A44: i < len Q1 & i > 0;
                len (Q0^Q1) = len Q0 + len Q1 by FINSEQ_1:35;
             then A45: len Q0 + i < len (Q0^Q1) by A44,XREAL_1:8;
                i < len Q0 + i by A17,XREAL_1:31;
@@ -813,8 +824,10 @@ GOBOARD2:5
             then A47: i + 1 in dom Q1 by FINSEQ_3:27;
             A48: (Q0^Q1)/.(len Q0+i+1) = (Q0^Q1)/.(len Q0+(i+1))
               .= Q1/.(i+1) by A47,FINSEQ_4:84;
-            consider j being Nat such that A49: i = j + 1 by A44,NAT_1:22;
-                len Q0 + 1 + j = len Q0 + (j + 1);
+            consider j being Nat such that
+            A49: i = j + 1 by A44,NAT_1:22;
+            reconsider j as Element of NAT by ORDINAL1:def 13;
+             len Q0 + 1 + j = len Q0 + (j + 1);
             then A50: M/.(len Q0 + i) = M4/.i by A40,A44,A49;
             A51: len Q0 + 1 + i = len Q0 + i + 1;
                i + 1 <= len Q1 by A44,NAT_1:38;
@@ -826,14 +839,18 @@ GOBOARD2:5
 
           A52: Q0/.1 is_firable_on M0 by A7,A19,Th8;
              now
-            let i be Nat; assume A53: i < len Q0 & i > 0;
+            let i be Element of NAT; assume A53: i < len Q0 & i > 0;
             then i < len (Q0^Q1) by A21,XXREAL_0:2;
             then A54: (Q0^Q1)/.(i+1) is_firable_on M/.i &
             M/.(i+1) = Firing((Q0^Q1)/.(i+1),M/.i) by A9,A53;
                i + 1 >= 1 & i + 1 <= len Q0 by A53,NAT_1:29,38;
             then i + 1 in dom Q0 by FINSEQ_3:27;
             then A55: (Q0^Q1)/.(i+1) = Q0/.(i+1) by FINSEQ_4:83;
-            consider j being Nat such that A56: i = j + 1 by A53,NAT_1:22;
+            consider j being Nat such that
+            A56: i = j + 1 by A53,NAT_1:22;
+            reconsider j as Element of NAT by ORDINAL1:def 13;
+            i = j+1 by A56;
+            then
             A57: M/.i = M3/.i by A29,A53,A56;
                i + 1 <= len Q0 by A53,NAT_1:38;
             hence Q0/.(i+1) is_firable_on M3/.i & M3/.(i+1)
@@ -863,7 +880,7 @@ theorem Th12:
         A4: M/.1 = Firing(<*t*>/.1,M0) by FINSEQ_4:25;
 
            now
-          let i be Nat such that A5: i < len <*t*> & i > 0;
+          let i be Element of NAT such that A5: i < len <*t*> & i > 0;
              len <*t*> = 0 + 1 by FINSEQ_1:56;
           hence <*t*>/.(i+1) is_firable_on M/.i & M/.(i+1)
             = Firing(<*t*>/.(i+1),M/.i) by A5,NAT_1:38;
@@ -875,7 +892,7 @@ theorem Th12:
         such that len <*t*> = len M
           and A6: <*t*>/.1 is_firable_on M0
           and M/.1 = Firing(<*t*>/.1,M0)
-              & for i being Nat st i < len <*t*> & i > 0
+              & for i being Element of NAT st i < len <*t*> & i > 0
                 holds <*t*>/.(i+1) is_firable_on M/.i
                   & M/.(i+1) = Firing(<*t*>/.(i+1),M/.i) by Def4;
       thus t is_firable_on M0 by A6,FINSEQ_4:25;
@@ -898,7 +915,7 @@ theorem Th13:
       A3: <*t*>/.1 = t by FINSEQ_4:25;
       A4: M/.1 = Firing(<*t*>/.1,M0) by FINSEQ_4:25;
          now
-        let i be Nat such that A5: i < len <*t*> & i > 0;
+        let i be Element of NAT such that A5: i < len <*t*> & i > 0;
            len <*t*> = 0 + 1 by FINSEQ_1:56;
         hence M/.(i+1) = Firing(<*t*>/.(i+1),M/.i) by A5,NAT_1:38;
       end;
@@ -943,7 +960,7 @@ defpred P[FinSequence of the Transitions of PTN] means
                such that A8: len <*x*> = len M
                and A9: Firing(Q^<*x*>,M0) = M/.len M
                and A10: M/.1 = Firing(<*x*>/.1,Firing(Q,M0))
-               and for i being Nat st i < len <*x*> & i > 0
+               and for i being Element of NAT st i < len <*x*> & i > 0
                   holds M/.(i+1) = Firing(<*x*>/.(i+1),M/.i)
                     by Def5;
                  <*x*>/.1 = x by FINSEQ_4:25;

@@ -9,7 +9,8 @@ environ
  vocabularies INT_1, NAT_1, ARYTM_3, ARYTM_1, ABSVALUE, FUNCT_1, CQC_LANG,
       AMI_3, AMI_1, CAT_1, FUNCT_4, RELAT_1, BOOLE, AMI_2, INT_2, PARTFUN1,
       FUNCOP_1, AMI_4;
- notations TARSKI, XBOOLE_0, ENUMSET1, NUMBERS, XCMPLX_0, RELAT_1, FUNCT_1,
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1,
+ NUMBERS, XCMPLX_0, RELAT_1, FUNCT_1,
       FUNCT_2, INT_1, NAT_1, CQC_LANG, INT_2, STRUCT_0, PARTFUN1, AMI_1, AMI_3,
       XXREAL_0;
  constructors ENUMSET1, FRAENKEL, XXREAL_0, REAL_1, NAT_1, INT_2, AMI_3;
@@ -19,7 +20,8 @@ environ
  definitions AMI_1, TARSKI, AMI_3;
  theorems AMI_1, INT_1, ABSVALUE, INT_2, TARSKI, ENUMSET1, NAT_1, CQC_LANG,
       REAL_2, PARTFUN1, FUNCT_4, FUNCT_1, GRFUNC_1, ZFMISC_1, AMI_3, CQC_THE1,
-      RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, NEWTON, XREAL_1, XXREAL_0;
+      RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, NEWTON, XREAL_1, XXREAL_0,
+      ORDINAL1;
  schemes NAT_1, RECDEF_1, FUNCT_1, AMI_3;
 
 begin :: Preliminaries
@@ -47,7 +49,7 @@ per cases by A2;
 suppose A3:j > 0;
 then A4: i = abs(i) & j = abs(j) by A1,ABSVALUE:def 1;
      i mod j >= 0 & i div j >= 0 by A1,A3,Th1,NEWTON:78;
-  then reconsider n = i mod j, m = i div j as Nat by INT_1:16;
+  then reconsider n = i mod j, m = i div j as Element of NAT by INT_1:16;
 A5: n < j by A3,NEWTON:79;
      n = i - m * j by A3,INT_1:def 8;
   then i = j * m + n;
@@ -62,9 +64,10 @@ A5: n < j by A3,NEWTON:79;
  end;
 end;
 
-reserve i,j,k for Nat;
+reserve i,j,k for Element of NAT;
 
-scheme Euklides' { F(Nat)->Nat,G(Nat)->Nat,a()->Nat,b()->Nat } :
+scheme Euklides' { F(Element of NAT)->Element of NAT,G(Element of NAT)->
+Element of NAT,a()->Element of NAT,b()->Element of NAT } :
   ex k st F(k) = a() hcf b() & G(k) = 0
    provided
 A1: 0 < b() and
@@ -75,26 +78,27 @@ A5: for k st G(k) > 0 holds F(k+1) = G(k) & G(k+1) = F(k) mod G(k)
 proof
 
 A6: 0 < b() & b() < a() by A1,A2;
-   deffunc F(Nat,set) = IFEQ($2,0,0,G($1));
+   deffunc F(Element of NAT,set) = IFEQ($2,0,0,G($1));
    consider q being Function of NAT,NAT such that
 A7: q.0 = a() and
 A8: for i holds q.(i+1) = F(i,q.i) from RECDEF_1:sch 4;
-   deffunc Q(Nat) = q.$1;
+   deffunc Q(Element of NAT) = q.$1;
       q.(0+1) = IFEQ(q.0,0,0,G(0)) by A8
      .= G(0) by A2,A7,CQC_LANG:def 1;
 then A9: Q(0) = a() & Q(1) = b() by A4,A7;
-A10: for k st q.k qua Nat > 0 holds q.k = F(k)
+A10: for k st q.k qua Element of NAT > 0 holds q.k = F(k)
     proof let k such that
-A11:    q.k qua Nat > 0;
+A11:    q.k qua Element of NAT > 0;
         now per cases;
       case k = 0;
        hence q.k = F(k) by A3,A7;
       end;
       case k <> 0;
-       then consider i such that
+       then consider i being Nat such that
 A12:       k = i+1 by NAT_1:22;
+           reconsider i as Element of NAT by ORDINAL1:def 13;
 A13:      now assume
-A14:        q.i qua Nat = 0;
+A14:        q.i qua Element of NAT = 0;
              q.k = IFEQ(q.i,0,0,G(i)) by A8,A12
              .= 0 by A14,CQC_LANG:def 1;
          hence contradiction by A11;
@@ -130,7 +134,7 @@ A22:         q.k = 0;
             .= 0 by A22,CQC_LANG:def 1;
           hence contradiction by A16;
          end;
-then A23:       q.k qua Nat > 0;
+then A23:       q.k qua Element of NAT > 0;
             q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
             .= G(k) by A21,CQC_LANG:def 1;
         hence q.(k+2) = q.(k) mod q.(k+1) by A10,A20,A23;
@@ -393,7 +397,7 @@ Lm2:
 A1: IC s = il.0 and
 A2:  Euclide-Algorithm c= s and
 A3:  s.a > 0 & s.b > 0;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
 (Computation s).(4*$1).a > 0 &
    ((Computation s).(4*$1).b > 0 & IC (Computation s).(4*$1) = il.0 or
    (Computation s).(4*$1).b = 0 & IC (Computation s).(4*$1) = il.4);
@@ -488,11 +492,11 @@ A2: Euclide-Algorithm c= s;
 A3: s.a = x & s.b = y and
 A4: x > y & y > 0;
     x >= 0 & y >= 0 by A4;
-   then reconsider x' = x, y' = y as Nat by INT_1:16;
+   then reconsider x' = x, y' = y as Element of NAT by INT_1:16;
 A5: 0 < y' by A4;
 A6: y' < x' by A4;
-   deffunc F(Nat) = abs((Computation s).(4*$1).a);
-   deffunc G(Nat) = abs((Computation s).(4*$1).b);
+   deffunc F(Element of NAT) = abs((Computation s).(4*$1).a);
+   deffunc G(Element of NAT) = abs((Computation s).(4*$1).b);
 A7: F(0) = abs(x) by A3,AMI_1:def 19
       .= x' by ABSVALUE:def 1;
 A8: G(0) = abs(y) by A3,AMI_1:def 19
@@ -543,7 +547,7 @@ A6: y > 0;
    case
 A7:  x = y;
      take s' = (Computation s).4;
-     reconsider x' = x, y' = y as Nat by A5,A6,INT_1:16;
+     reconsider x' = x, y' = y as Element of NAT by A5,A6,INT_1:16;
        abs(x) = x' & abs(y) = y' by ABSVALUE:def 1;
     then A8:  x mod y = x' mod y' by Th2
            .= 0 by A7,NAT_1:77;
@@ -560,7 +564,7 @@ A9:  s = (Computation s).(4*0) & s' = (Computation s).(4*(0+1)) by AMI_1:def 19
    case
 A10:  y > x;
      take s' = (Computation s).4;
-     reconsider x' = x, y' = y as Nat by A5,A6,INT_1:16;
+     reconsider x' = x, y' = y as Element of NAT by A5,A6,INT_1:16;
        abs(x) = x' & abs(y) = y' by ABSVALUE:def 1;
     then A11:  x mod y = x' mod y' by Th2
            .= x' by A10,NAT_1:76;
@@ -571,7 +575,7 @@ then A13:  s'.a = y & s'.b = x by A1,A2,A3,A4,A5,A6,A11,Lm3;
      then IC s' = il.0 by A1,A2,A3,A4,A5,A6,A12,Lm2;
 then A14: s' starts_at il.0 by AMI_3:def 14;
 A15: Euclide-Algorithm c= s' by A2,AMI_3:43;
-     then consider k0 being Nat such that
+     then consider k0 being Element of NAT such that
 A16:   s' halts_at IC (Computation s').k0 by A5,A10,A13,A14,Lm4;
         (Computation s).(k0+4) = (Computation s').k0 by AMI_1:51;
 then A17:  s halts_at IC (Computation s).(k0+4) by A16,AMI_3:48;
@@ -760,7 +764,7 @@ A28:  Euclide-Algorithm c= Cs2.k by A25,AMI_3:43;
       .= (Cs2.k)|C by A28,Th4,GRFUNC_1:64;
 A30: dom(Cs.k) = the carrier of SCM by AMI_3:36
      .= dom(Cs2.k) by AMI_3:36;
-    defpred P[Nat] means  (Cs.$1).IC SCM = (Cs2.$1).IC SCM &
+    defpred P[Element of NAT] means  (Cs.$1).IC SCM = (Cs2.$1).IC SCM &
     (Cs.$1).a = (Cs2.$1).a & (Cs.$1).b = (Cs2.$1).b;
 A31: P[0] proof
 A32:   Cs.0 = s1 & Cs2.0 = s2 by AMI_1:def 19;
@@ -850,7 +854,7 @@ A61:    p +* s c= t;
 then A62:   q c= t by A10,XBOOLE_1:1;
 A63:   t starts_at il.0 by A11,A61,AMI_3:49;
 A64:   t.a = i1 & t.b = i2 by A16,A61;
-     reconsider i1' = i1, i2' = i2 as Nat by A1,INT_1:16;
+     reconsider i1' = i1, i2' = i2 as Element of NAT by A1,INT_1:16;
      set t' = (Computation t).4;
   per cases by XXREAL_0:1;
    suppose i1 > i2;
@@ -882,7 +886,9 @@ AMI_1:def 19;
      then IC t' = il.0 by A1,A62,A63,A64,A70,Lm2;
 then A72: t' starts_at il.0 by AMI_3:def 14;
         Euclide-Algorithm c= t' by A62,AMI_3:43;
-     then consider k0 being Nat such that
+     then consider k0 being Element of NAT
+
+      such that
 A73:   t' halts_at IC (Computation t').k0 by A1,A68,A71,A72,Lm4;
         (Computation t).(k0+4) = (Computation t').k0 by AMI_1:51;
      then t halts_at IC (Computation t).(k0+4) by A73,AMI_3:48;

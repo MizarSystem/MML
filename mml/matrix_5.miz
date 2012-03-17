@@ -15,7 +15,7 @@ environ
  constructors BINOP_1, XXREAL_0, NAT_1, BINARITH, COMPLFLD, FVSUM_1, MATRIX_3,
       MATRIX_4;
  registrations STRUCT_0, INT_1, RELSET_1, VECTSP_1, NUMBERS, COMPLFLD,
-      COMPLEX1, XREAL_0, XCMPLX_0;
+      COMPLEX1, XREAL_0, XCMPLX_0, NAT_1, ARYTM_3;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions MATRIX_4;
  theorems FINSEQ_1, FUNCT_1, NAT_1, RLVECT_1, MATRIX_3, VECTSP_1, MATRIX_1,
@@ -177,7 +177,7 @@ theorem Th13:
       width (a*M + b*M)=width (a*M) by MATRIX_3:def 3;
   A3: len (a*M)=len (M) &
       width (a*M)=width (M) by MATRIX_3:def 5;
-  for i,j being Nat st [i,j] in Indices ((a+b)*M)
+  for i,j be Nat st [i,j] in Indices ((a+b)*M)
    holds ((a+b)*M)*(i,j)=(a*M + b*M)*(i,j)
   proof let i,j be Nat;
     assume A4: [i,j] in Indices ((a+b)*M);
@@ -246,7 +246,7 @@ definition let n,m be Nat;
 end;
 
 theorem
-  for n,m being Nat holds
+  for n,m being Element of NAT holds
     COMPLEX2Field 0_Cx(n,m)=0.(F_Complex,n,m);
 
 theorem
@@ -302,7 +302,8 @@ proof let M1,M2 be Matrix of COMPLEX;
 end;
 
 theorem
-  for n,m being Nat st n > 0 holds -(0_Cx(n,m))=0_Cx(n,m) by MATRIX_4:9;
+  for n,m being Element of NAT st n > 0 holds -(0_Cx(n,m))=0_Cx(n,m)
+  by MATRIX_4:9;
 
 theorem :: MATRIX_4:10
   for M1,M2 being Matrix of COMPLEX st
@@ -517,45 +518,46 @@ definition let s be FinSequence of COMPLEX, k be set;
 end;
 
 theorem
-  for i,j being Nat,M1,M2 being Matrix of COMPLEX st
+  for i,j being Element of NAT,M1,M2 being Matrix of COMPLEX st
   len M1>0 & len M2>0 & width M1=len M2
    & 1<=i & i<= len M1 & 1<=j & j<=width M2 holds
 (ex s being FinSequence of COMPLEX
  st len s = len M2
  & s.1=(M1*(i,1))*(M2*(1,j))
- & (for k be Nat st 1<=k & k < len M2
+ & (for k be Element of NAT st 1<=k & k < len M2
  holds s.(k+1)=s.k + (M1*(i,k+1))*(M2*(k+1,j))))
-proof let i,j be Nat,M1,M2 be Matrix of COMPLEX;
+proof let i,j be Element of NAT,M1,M2 be Matrix of COMPLEX;
  assume A1: len M1>0 & len M2>0 & width M1=len M2
    & 1<=i & i<= len M1 & 1<=j & j<=width M2;
  0+1<=len M2 by A1,NAT_1:26;then
  0+1-1<=len M2-1 by XREAL_1:11;then
  A2: len M2-'1=len M2-1 by BINARITH:def 3;then
  A3: 0+1<=(len M2)-'1+1 by A1,NAT_1:26;
- defpred P[Nat] means ex q being FinSequence of COMPLEX st
+ defpred P[Element of NAT] means ex q being FinSequence of COMPLEX st
  1<=$1+1 & $1+1<=len M2 implies
  ( len q=$1 +1 & q.1=(M1*(i,1))*(M2*(1,j))
- & (for k be Nat st 1<=k & k<$1+1
+ & (for k be Element of NAT st 1<=k & k<$1+1
  holds q.(k+1)=q.k+(M1*(i,k+1))*(M2*(k+1,j))));
  set q0=<*(M1*(i,1))*(M2*(1,j))*>;
  A4: len q0 = 1 by FINSEQ_1:56;
  A5: q0.1=(M1*(i,1))*(M2*(1,j)) by FINSEQ_1:def 8;
- for k be Nat st 1<=k & k<1 holds q0.(k+1)=q0.k+(M1*(i,k+1))*(M2*(k+1,j));then
+ for k be Element of NAT st 1<=k & k<1
+ holds q0.(k+1)=q0.k+(M1*(i,k+1))*(M2*(k+1,j));then
  A6: P[0] by A4,A5;
- A7: for i2 being Nat st P[i2] holds P[i2+1]
- proof let i2 be Nat;
+ A7: for i2 being Element of NAT st P[i2] holds P[i2+1]
+ proof let i2 be Element of NAT;
    assume P[i2]; then
    consider q2 being FinSequence of COMPLEX such that
    A8: 1<=i2+1 & i2+1<=len M2 implies
    ( len q2=i2+1 & q2.1=(M1*(i,1))*(M2*(1,j))
-   & (for k2 being Nat st 1<=k2 & k2<i2+1
+   & (for k2 being Element of NAT st 1<=k2 & k2<i2+1
    holds q2.(k2+1)=q2.k2+(M1*(i,k2+1))*(M2*(k2+1,j))));
    set k0=i2;
    set q3=q2^<* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j)) *>;
    1<=i2+1+1 & i2+1+1<=len M2 implies
    ( len q3 = i2+1+1
    & q3.1=(M1*(i,1))*(M2*(1,j))
-   & (for k be Nat st 1<=k & k< i2+1+1
+   & (for k be Element of NAT st 1<=k & k< i2+1+1
    holds q3.(k+1)=q3.k+(M1*(i,k+1))*(M2*(k+1,j))))
    proof
      assume A9: 1<=i2+1+1 & i2+1+1<=len M2;
@@ -571,9 +573,9 @@ A11: len q3 = len q2+len (<* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j)) *>)
         1 < len q2 + 1 by FINSEQ_1:56;then
         1 <= len q2 by NAT_1:38; then
 A12:    1 in dom q2 by FINSEQ_3:27;
-        for k2 being Nat st 1<=k2 & k2<i2+1+1
+        for k2 being Element of NAT st 1<=k2 & k2<i2+1+1
           holds q3.(k2+1)=q3.k2+(M1*(i,k2+1))*(M2*(k2+1,j))
-        proof let k2 be Nat;
+        proof let k2 be Element of NAT;
          assume A13: 1<=k2 & k2<i2+1+1;then
          A14: k2<=i2+1 by NAT_1:38;
           per cases by REAL_1:def 5,A14;
@@ -619,6 +621,6 @@ A12:    1 in dom q2 by FINSEQ_3:27;
     end;
     hence thesis;
  end;
- for j being Nat holds P[j] from NAT_1:sch 1(A6,A7);
+ for j being Element of NAT holds P[j] from NAT_1:sch 1(A6,A7);
  hence thesis by A3,A2;
 end;

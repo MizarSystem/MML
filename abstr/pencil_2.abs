@@ -10,13 +10,13 @@ environ
       FINSEQ_4, PRALG_1, PBOOLE, MSUALG_2, RLVECT_2, FUNCT_4, PENCIL_1, CARD_3,
       INTEGRA1, SUBSET_1, PRE_TOPC, REALSET1, CARD_1, SGRAPH1, CAT_1, AMI_1,
       RELAT_2, TARSKI, PENCIL_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, NAT_1, RELAT_1,
-      BINARITH, REALSET1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, POLYNOM1,
-      STRUCT_0, XXREAL_0, REALSET2, RFINSEQ, CARD_1, FINSEQ_1, CARD_3,
-      PRE_TOPC, PBOOLE, PZFMISC1, TOPS_2, T_0TOPSP, GRCAT_1, PRALG_1, FINSEQ_4,
-      PENCIL_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
+      RELAT_1, BINARITH, REALSET1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
+      POLYNOM1, STRUCT_0, XXREAL_0, REALSET2, RFINSEQ, CARD_1, FINSEQ_1,
+      CARD_3, PRE_TOPC, PBOOLE, PZFMISC1, TOPS_2, T_0TOPSP, GRCAT_1, PRALG_1,
+      FINSEQ_4, PENCIL_1;
  constructors XXREAL_0, REAL_1, RFINSEQ, BINARITH, PZFMISC1, TOPS_2, GRCAT_1,
-      T_0TOPSP, POLYNOM1, PENCIL_1;
+      T_0TOPSP, POLYNOM1, PENCIL_1, NAT_1;
  registrations STRUCT_0, RELSET_1, SUBSET_1, FINSEQ_5, BORSUK_2, PENCIL_1,
       XREAL_0, TREES_9, FUNCT_2, PARTFUN1, XBOOLE_0, REALSET1, NAT_1, XXREAL_0;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
@@ -27,34 +27,34 @@ begin :: Preliminaries on finite sequences
 definition
  let D be set;
  let p be FinSequence of D;
- let i,j be Nat;
+ let i,j be Element of NAT;
 func Del(p,i,j) -> FinSequence of D equals
 :: PENCIL_2:def 1
  (p|(i -' 1))^(p/^j);
 end;
 
 theorem :: PENCIL_2:1
-for D being set,p being FinSequence of D,i,j being Nat
+for D being set,p being FinSequence of D,i,j being Element of NAT
 holds rng Del(p,i,j) c= rng p;
 
 theorem :: PENCIL_2:2
-for D being set,p being FinSequence of D,i,j being Nat st
+for D being set,p being FinSequence of D,i,j being Element of NAT st
 i in dom p & j in dom p holds len Del(p,i,j) = len p - j + i - 1;
 
 theorem :: PENCIL_2:3
-for D being set,p being FinSequence of D,i,j being Nat st
+for D being set,p being FinSequence of D,i,j being Element of NAT st
 i in dom p & j in dom p holds len Del(p,i,j) = 0 implies i=1 & j=len p;
 
 theorem :: PENCIL_2:4
-for D being set,p being FinSequence of D,i,j,k being Nat st
+for D being set,p being FinSequence of D,i,j,k being Element of NAT st
 i in dom p & 1 <= k & k <= i-1 holds Del(p,i,j).k = p.k;
 
 theorem :: PENCIL_2:5
-for p,q being FinSequence, k being Nat holds
+for p,q being FinSequence, k being Element of NAT holds
 len p + 1 <= k implies (p^q).k=q.(k-len p);
 
 theorem :: PENCIL_2:6
-for D being set,p being FinSequence of D,i,j,k being Nat st
+for D being set,p being FinSequence of D,i,j,k being Element of NAT st
 i in dom p & j in dom p & i <= j & i <= k & k <= len p - j + i - 1
 holds Del(p,i,j).k = p.(j -'i + k + 1);
 
@@ -62,10 +62,10 @@ scheme :: PENCIL_2:sch 1
  FinSeqOneToOne{X,Y,D()->set,f()-> FinSequence of D(),P[set,set]}:
  ex g being one-to-one FinSequence of D() st
  X() = g.1 & Y()=g.len g & rng g c= rng f() &
- for j being Nat st 1 <= j & j < len g holds P[g.j,g.(j+1)]
+ for j being Element of NAT st 1 <= j & j < len g holds P[g.j,g.(j+1)]
 provided
   X() = f().1 & Y()=f().len f() and
-  for i being Nat, d1,d2 being set
+  for i being Element of NAT, d1,d2 being set
  st 1 <= i & i < len f() & d1 =f().i & d2 = f().(i+1) holds P[d1,d2];
 
 begin :: Segre cosets
@@ -101,7 +101,7 @@ pred X,Y are_joinable means
  X = f.1 & Y = f.(len f) &
  (for W being Subset of S st W in rng f holds
  W is closed_under_lines strong) &
- for i being Nat st 1 <= i & i < len f holds
+ for i being Element of NAT st 1 <= i & i < len f holds
  2 c= Card((f.i) /\ (f.(i+1)));
 end;
 
@@ -113,7 +113,8 @@ ex f being one-to-one FinSequence of bool the carrier of S st
 (X = f.1 & Y = f.(len f) &
 (for W being Subset of S st W in rng f holds
 W is closed_under_lines strong) &
-for i being Nat st 1 <= i & i < len f holds 2 c= Card((f.i) /\ (f.(i+1))));
+for i being Element of NAT st 1 <= i & i < len f
+ holds 2 c= Card((f.i) /\ (f.(i+1))));
 
 theorem :: PENCIL_2:10
 for S being TopStruct

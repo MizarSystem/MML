@@ -8,7 +8,8 @@ environ
 
  vocabularies RELAT_1, CARD_1, FUNCT_1, BOOLE, FUNCT_2, FINSEQ_1, ARYTM_1,
       SQUARE_1, PROB_1, RFINSEQ, RFINSEQ2, CQC_LANG;
- notations TARSKI, XBOOLE_0, NUMBERS, XXREAL_0, RELAT_1, FUNCT_1, FUNCT_2,
+ notations TARSKI, XBOOLE_0, SUBSET_1,
+ NUMBERS, XCMPLX_0,XXREAL_0, RELAT_1, FUNCT_1, FUNCT_2,
       FINSEQ_1, CARD_1, REAL_1, NAT_1, SQUARE_1, SEQ_1, RVSUM_1, CQC_LANG,
       RFINSEQ, INTEGRA2;
  constructors REAL_1, SQUARE_1, NAT_1, BINOP_2, CQC_LANG, SEQ_1, SETWOP_2,
@@ -24,43 +25,48 @@ environ
 
 begin
 
-reserve n,m for Nat;
+reserve n,m for Element of NAT;
 
 definition let f be FinSequence of REAL;
-func max_p f -> Nat means
+func max_p f -> Element of NAT means
  :Def1: (len f=0 implies it=0) &
  (len f>0 implies
  it in dom f &
- (for i being Nat,r1,r2 being Real st i in dom f & r1=f.i & r2=f.it
- holds r1<=r2) & (for j being Nat st j in dom f & f.j=f.it holds it<=j));
+ (for i being Element of NAT,r1,r2 being Real st i in dom f & r1=f.i & r2=f.it
+ holds r1<=r2) & (for j being Element of NAT st j in dom f & f.j=f.it
+  holds it<=j));
  existence
  proof
   A1: dom f=Seg len f by FINSEQ_1:def 3;
   per cases;
   suppose len f=0;
-  hence ex n being Nat st
+  hence ex n being Element of NAT st
  (len f=0 implies n=0) & (len f>0 implies n in dom f &
- (for i be Nat,r1,r2 be Real st i in dom f & r1=f.i & r2=f.n
- holds r1<=r2) & (for j being Nat st j in dom f & f.j=f.n holds n<=j));
+ (for i be Element of NAT,r1,r2 be Real st i in dom f & r1=f.i & r2=f.n
+ holds r1<=r2) & (for j being Element of NAT st j in dom f & f.j=f.n
+  holds n<=j));
   end;
   suppose A2: len f<>0;
-  defpred P[Nat] means (ex n being Nat st ($1<>0 implies n<=$1 &
+  defpred P[Element of NAT] means
+   (ex n being Element of NAT st ($1<>0 implies n<=$1 &
    n in dom f) &
-   (for i being Nat,r1,r2 being Real st i<=$1 & i in dom f
+   (for i being Element of NAT,r1,r2 being Real st i<=$1 & i in dom f
    & r1=f.i & r2=f.n holds r1<=r2) &
-   (for j being Nat st j<=$1 & j in dom f & f.j=f.n holds n<=j));
-    A3: for i being Nat,r1,r2 being Real st i<=0 & i in dom f
+   (for j being Element of NAT st j<=$1 & j in dom f & f.j=f.n holds n<=j));
+    A3: for i being Element of NAT,r1,r2 being Real st i<=0 & i in dom f
      & r1=f.i & r2=f.1 holds r1<=r2 by A1,FINSEQ_1:3;
-      for j being Nat st j<=0 & j in dom f & f.j=f.1 holds 1<=j by FINSEQ_3:27;
+      for j being Element of NAT st j<=0 & j in dom f & f.j=f.1 holds 1<=j
+       by FINSEQ_3:27;
     then A4: P[0] by A3;
-   A5: for k being Nat st P[k] holds P[k+1]
-   proof let k be Nat;
+   A5: for k being Element of NAT st P[k] holds P[k+1]
+   proof let k be Element of NAT;
     assume P[k];
-     then consider n1 being Nat such that
+     then consider n1 being Element of NAT such that
      A6: (k<>0 implies n1<=k & n1 in dom f) &
-      (for i being Nat,r1,r2 being Real st i<=k & i in dom f
+      (for i being Element of NAT,r1,r2 being Real st i<=k & i in dom f
       & r1=f.i & r2=f.n1
-      holds r1<=r2) & (for j being Nat st j<=k & j in dom f & f.j=f.n1
+      holds r1<=r2) & (for j being Element of NAT
+       st j<=k & j in dom f & f.j=f.n1
       holds n1<=j);
       per cases;
       suppose A7: k=0;
@@ -68,14 +74,14 @@ func max_p f -> Nat means
           len f>0 by A2;
         then len f>=0+1 by NAT_1:38;
         then A9: 1<=1 & 1 in dom f by A8,FINSEQ_1:3;
-        A10: for i being Nat,r1,r2 being Real st i<=1 & i in dom f
+        A10: for i being Element of NAT,r1,r2 being Real st i<=1 & i in dom f
         & r1=f.i & r2=f.1 holds r1<=r2
-        proof let i be Nat,r1,r2 be Real;
+        proof let i be Element of NAT,r1,r2 be Real;
          assume A11: i<=1 & i in dom f & r1=f.i & r2=f.1;
            then 1<=i & i<=len f by FINSEQ_3:27;
          hence r1<=r2 by A11,XXREAL_0:1;
         end;
-          for j being Nat st j<=1 & j in dom f & f.j=f.1
+          for j being Element of NAT st j<=1 & j in dom f & f.j=f.1
           holds 1<=j by A8,FINSEQ_1:3;
        hence P[k+1] by A7,A9,A10;
       end;
@@ -84,10 +90,10 @@ func max_p f -> Nat means
        case A13: f.n1>=f.(k+1);
       A14: n1<=k+1 by A6,A12,NAT_1:38;
       A15: k+1<>0 implies n1<=k+1 & n1 in dom f by A6,A12,NAT_1:38;
-      A16: for i being Nat,r1,r2 being Real st i<=k+1 & i in dom f
+      A16: for i being Element of NAT,r1,r2 being Real st i<=k+1 & i in dom f
        & r1=f.i & r2=f.n1
       holds r1<=r2
-      proof let i be Nat,r1,r2 be Real;
+      proof let i be Element of NAT,r1,r2 be Real;
        assume A17: i<=k+1 & i in dom f
        & r1=f.i & r2=f.n1;
         per cases;
@@ -98,9 +104,9 @@ func max_p f -> Nat means
          hence r1<=r2 by A13,A17,XXREAL_0:1;
       end;
       end;
-        for j being Nat st j<=k+1 & j in dom f & f.j=f.n1
+        for j being Element of NAT st j<=k+1 & j in dom f & f.j=f.n1
        holds n1<=j
-       proof let j be Nat;
+       proof let j be Element of NAT;
         assume A18: j<=k+1 & j in dom f & f.j=f.n1;
           now per cases;
         case j<k+1; then j<=k by NAT_1:38;
@@ -120,18 +126,18 @@ func max_p f -> Nat means
         then A21: k>=len f by NAT_1:38;
           1<=n1 & n1<=len f by A1,A6,A12,FINSEQ_1:3;
         then A22: k+1<>0 implies n1<=k+1 & n1 in dom f by A6,A20,XXREAL_0:2;
-        A23: for i being Nat,r1,r2 being Real st i<=k+1 & i in dom f
+        A23: for i being Element of NAT,r1,r2 being Real st i<=k+1 & i in dom f
            & r1=f.i & r2=f.n1 holds r1<=r2
-         proof let i be Nat,r1,r2 be Real;
+         proof let i be Element of NAT,r1,r2 be Real;
           assume A24: i<=k+1 & i in dom f
            & r1=f.i & r2=f.n1;
            then 1<=i & i<=len f by A1,FINSEQ_1:3;
            then i<=k by A21,XXREAL_0:2;
           hence r1<=r2 by A6,A24;
          end;
-           for j being Nat st j<=k+1 & j in dom f & f.j=f.n1
+           for j being Element of NAT st j<=k+1 & j in dom f & f.j=f.n1
            holds n1<=j
-          proof let j be Nat;
+          proof let j be Element of NAT;
            assume A25: j<=k+1 & j in dom f & f.j=f.n1;
             per cases;
             suppose j<k+1;
@@ -150,9 +156,9 @@ A27:     1<=1+k by NAT_1:37;
        set n2=k+1;
       A28: (k+1<>0 implies n2<=k+1 &
       n2 in dom f) by A1,A26,A27,FINSEQ_1:3;
-     A29: for i being Nat,r1,r2 being Real st i<=k+1 & i in dom f
+     A29: for i being Element of NAT,r1,r2 being Real st i<=k+1 & i in dom f
        & r1=f.i & r2=f.n2 holds r1<=r2
-      proof let i be Nat,r1,r2 be Real;
+      proof let i be Element of NAT,r1,r2 be Real;
        assume A30: i<=k+1 & i in dom f & r1=f.i & r2=f.n2;
         per cases;
         suppose i<k+1;
@@ -165,8 +171,9 @@ A27:     1<=1+k by NAT_1:37;
          hence r1<=r2 by A30,XXREAL_0:1;
       end;
       end;
-        for j being Nat st j<=k+1 & j in dom f & f.j=f.n2 holds n2<=j
-       proof let j be Nat;
+        for j being Element of NAT st j<=k+1 & j in dom f & f.j=f.n2
+         holds n2<=j
+       proof let j be Element of NAT;
         assume A32: j<=k+1 & j in dom f & f.j=f.n2;
         per cases;
         suppose j<k+1;
@@ -186,59 +193,68 @@ A27:     1<=1+k by NAT_1:37;
     hence P[k+1];
    end;
    end;
-     for k being Nat holds P[k] from NAT_1:sch 1(A4,A5);
-   then consider n1 being Nat such that
+     for k being Element of NAT holds P[k] from NAT_1:sch 1(A4,A5);
+   then consider n1 being Element of NAT such that
    A33: (len f<>0 implies n1<=len f &
    n1 in dom f) &
-   (for i being Nat,r1,r2 being Real st i<=len f & i in dom f
+   (for i being Element of NAT,r1,r2 being Real st i<=len f & i in dom f
    & r1=f.i & r2=f.n1
- holds r1<=r2) & (for j being Nat st j<=len f & j in dom f & f.j=f.n1
+ holds r1<=r2) & (for j being Element of NAT
+  st j<=len f & j in dom f & f.j=f.n1
       holds n1<=j);
-   A34: for i being Nat,r1,r2 being Real st i in dom f & r1=f.i & r2=f.n1
+   A34: for i being Element of NAT,r1,r2 being Real
+    st i in dom f & r1=f.i & r2=f.n1
     holds r1<=r2
-   proof let i be Nat,r1,r2 be Real;
+   proof let i be Element of NAT,r1,r2 be Real;
     assume A35: i in dom f & r1=f.i & r2=f.n1;
      then 1<=i & i<=len f by FINSEQ_3:27;
     hence r1<=r2 by A33,A35;
    end;
-     for j being Nat st j in dom f & f.j=f.n1 holds n1<=j
-   proof let j be Nat;
+     for j being Element of NAT st j in dom f & f.j=f.n1 holds n1<=j
+   proof let j be Element of NAT;
     assume A36: j in dom f & f.j=f.n1;
      then 1<=j & j<=len f by FINSEQ_3:27;
     hence n1<=j by A33,A36;
    end;
-  hence ex n being Nat st
+  hence ex n being Element of NAT st
  (len f=0 implies n=0) &
  (len f>0 implies n in dom f &
- (for i being Nat,r1,r2 being Real st i in dom f & r1=f.i & r2=f.n
- holds r1<=r2) & (for j being Nat st j in dom f & f.j=f.n holds n<=j))
+ (for i being Element of NAT,r1,r2 being Real st i in dom f & r1=f.i & r2=f.n
+ holds r1<=r2) & (for j being Element of NAT st j in dom f & f.j=f.n
+  holds n<=j))
               by A2,A33,A34;
  end;
  end;
  uniqueness
  proof
- thus (for m1,m2 being Nat st ((len f=0 implies m1=0) &
+ thus (for m1,m2 being Element of NAT st ((len f=0 implies m1=0) &
  (len f>0 implies
  m1 in dom f &
- (for i being Nat,r1,r2 being Real st i in dom f & r1=f.i & r2=f.m1
- holds r1<=r2) & (for j being Nat st j in dom f & f.j=f.m1 holds m1<=j)))
+ (for i being Element of NAT,r1,r2 being Real st i in dom f & r1=f.i & r2=f.m1
+ holds r1<=r2) & (for j being Element of NAT st j in dom f & f.j=f.m1
+  holds m1<=j)))
  &
   ((len f=0 implies m2=0) &
  (len f>0 implies m2 in dom f &
- (for i being Nat,r1,r2 being Real st i in dom f & r1=f.i & r2=f.m2
- holds r1<=r2) & (for j being Nat st j in dom f & f.j=f.m2 holds m2<=j)))
+ (for i being Element of NAT,r1,r2 being Real st i in dom f & r1=f.i & r2=f.m2
+ holds r1<=r2) & (for j being Element of NAT st j in dom f & f.j=f.m2
+  holds m2<=j)))
  holds m1=m2)
- proof let m1,m2 be Nat;
+ proof let m1,m2 be Element of NAT;
   assume A37: ((len f=0 implies m1=0) &
    (len f>0 implies
    m1 in dom f &
-   (for i being Nat,r1,r2 being Real st i in dom f & r1=f.i & r2=f.m1
-   holds r1<=r2) & (for j being Nat st j in dom f & f.j=f.m1 holds m1<=j)))
+   (for i being Element of NAT,r1,r2 being Real st i in dom f & r1=f.i &
+    r2=f.m1
+   holds r1<=r2) & (for j being Element of NAT st j in dom f & f.j=f.m1
+    holds m1<=j)))
    &
     ((len f=0 implies m2=0) &
    (len f>0 implies m2 in dom f &
-   (for i being Nat,r1,r2 being Real st i in dom f & r1=f.i & r2=f.m2
-   holds r1<=r2) & (for j being Nat st j in dom f & f.j=f.m2 holds m2<=j)));
+   (for i being Element of NAT,r1,r2 being Real st i in dom f & r1=f.i &
+    r2=f.m2
+   holds r1<=r2) & (for j being Element of NAT st j in dom f & f.j=f.m2
+    holds m2<=j)));
      then A38: f.m2<=f.m1;
        f.m1<=f.m2 by A37;
      then A39: f.m1=f.m2 by A38,XXREAL_0:1;
@@ -250,44 +266,48 @@ A27:     1<=1+k by NAT_1:37;
 end;
 
 definition let f be FinSequence of REAL;
-func min_p f -> Nat means
+func min_p f -> Element of NAT means
  :Def2: (len f=0 implies it=0) &
  (len f>0 implies
  it in dom f &
- (for i being Nat,r1,r2 being Real st i in dom f & r1=f.i & r2=f.it
- holds r1>=r2) & (for j being Nat st j in dom f & f.j=f.it holds it<=j));
+ (for i being Element of NAT,r1,r2 being Real st i in dom f & r1=f.i & r2=f.it
+ holds r1>=r2) & (for j being Element of NAT st j in dom f & f.j=f.it
+  holds it<=j));
  existence
  proof
   A1: dom f=Seg len f by FINSEQ_1:def 3;
     now per cases;
   case len f=0;
-  hence ex n being Nat st
+  hence ex n being Element of NAT st
  (len f=0 implies n=0) & (len f>0 implies n in dom f &
- (for i be Nat,r1,r2 be Real st i in dom f & r1=f.i & r2=f.n
- holds r1>=r2) & (for j being Nat st j in dom f & f.j=f.n holds n<=j));
+ (for i be Element of NAT,r1,r2 be Real st i in dom f & r1=f.i & r2=f.n
+ holds r1>=r2) & (for j being Element of NAT st j in dom f & f.j=f.n
+  holds n<=j));
   end;
   case A2: len f<>0;
-  defpred P[Nat] means (ex n being Nat st ($1<>0 implies n<=$1 &
+  defpred P[Element of NAT] means
+   (ex n being Element of NAT st ($1<>0 implies n<=$1 &
    n in dom f) &
-   (for i being Nat,r1,r2 being Real st i<=$1 & i in dom f
+   (for i being Element of NAT,r1,r2 being Real st i<=$1 & i in dom f
    & r1=f.i & r2=f.n
- holds r1>=r2) & (for j being Nat st j<=$1 & j in dom f & f.j=f.n
+ holds r1>=r2) & (for j being Element of NAT st j<=$1 & j in dom f & f.j=f.n
       holds n<=j));
-    A3: for i being Nat,r1,r2 being Real st i<=0 & i in dom f
+    A3: for i being Element of NAT,r1,r2 being Real st i<=0 & i in dom f
      & r1=f.i & r2=f.1
      holds r1>=r2 by A1,FINSEQ_1:3;
-      for j being Nat st j<=0 & j in dom f & f.j=f.1
+      for j being Element of NAT st j<=0 & j in dom f & f.j=f.1
       holds 1<=j by FINSEQ_3:27;
    then A4: P[0] by A3;
-   A5: for k being Nat st P[k] holds P[k+1]
-   proof let k be Nat;
+   A5: for k being Element of NAT st P[k] holds P[k+1]
+   proof let k be Element of NAT;
     assume P[k];
-     then consider n1 being Nat such that
+     then consider n1 being Element of NAT such that
      A6: (k<>0 implies n1<=k &
       n1 in dom f) &
-      (for i being Nat,r1,r2 being Real st i<=k & i in dom f
+      (for i being Element of NAT,r1,r2 being Real st i<=k & i in dom f
       & r1=f.i & r2=f.n1
-      holds r1>=r2) & (for j being Nat st j<=k & j in dom f & f.j=f.n1
+      holds r1>=r2) & (for j being Element of NAT
+       st j<=k & j in dom f & f.j=f.n1
       holds n1<=j);
         now per cases;
       case A7: k=0;
@@ -295,15 +315,15 @@ func min_p f -> Nat means
           len f>0 by A2;
         then len f>=0+1 by NAT_1:38;
         then A9: 1<=1 & 1 in dom f by A8,FINSEQ_1:3;
-        A10: for i being Nat,r1,r2 being Real st i<=1 & i in dom f
+        A10: for i being Element of NAT,r1,r2 being Real st i<=1 & i in dom f
         & r1=f.i & r2=f.1 holds r1>=r2
-        proof let i be Nat,r1,r2 be Real;
+        proof let i be Element of NAT,r1,r2 be Real;
          assume A11: i<=1 & i in dom f
            & r1=f.i & r2=f.1;
            then 1<=i & i<=len f by FINSEQ_3:27;
          hence r1>=r2 by A11,XXREAL_0:1;
         end;
-          for j being Nat st j<=1 & j in dom f & f.j=f.1
+          for j being Element of NAT st j<=1 & j in dom f & f.j=f.1
           holds 1<=j by A8,FINSEQ_1:3;
        hence P[k+1] by A7,A9,A10;
       end;
@@ -312,9 +332,9 @@ func min_p f -> Nat means
        case A13: f.n1<=f.(k+1);
       A14: n1<=k+1 by A6,A12,NAT_1:38;
       A15: k+1<>0 implies n1<=k+1 & n1 in dom f by A6,A12,NAT_1:38;
-      A16: for i being Nat,r1,r2 being Real st i<=k+1 & i in dom f
+      A16: for i being Element of NAT,r1,r2 being Real st i<=k+1 & i in dom f
        & r1=f.i & r2=f.n1 holds r1>=r2
-      proof let i be Nat,r1,r2 be Real;
+      proof let i be Element of NAT,r1,r2 be Real;
        assume A17: i<=k+1 & i in dom f & r1=f.i & r2=f.n1;
         per cases;
         suppose i<k+1; then i<=k by NAT_1:38;
@@ -324,8 +344,9 @@ func min_p f -> Nat means
          hence r1>=r2 by A13,A17,XXREAL_0:1;
       end;
       end;
-        for j being Nat st j<=k+1 & j in dom f & f.j=f.n1 holds n1<=j
-       proof let j be Nat;
+        for j being Element of NAT st j<=k+1 & j in dom f & f.j=f.n1
+         holds n1<=j
+       proof let j be Element of NAT;
         assume A18: j<=k+1 & j in dom f & f.j=f.n1;
         per cases;
         suppose j<k+1; then j<=k by NAT_1:38;
@@ -343,18 +364,18 @@ func min_p f -> Nat means
         then A21: k>=len f by NAT_1:38;
           1<=n1 & n1<=len f by A1,A6,A12,FINSEQ_1:3;
         then A22: k+1<>0 implies n1<=k+1 & n1 in dom f by A6,A20,XXREAL_0:2;
-        A23: for i being Nat,r1,r2 being Real st i<=k+1 & i in dom f
+        A23: for i being Element of NAT,r1,r2 being Real st i<=k+1 & i in dom f
            & r1=f.i & r2=f.n1 holds r1>=r2
-         proof let i be Nat,r1,r2 be Real;
+         proof let i be Element of NAT,r1,r2 be Real;
           assume A24: i<=k+1 & i in dom f
            & r1=f.i & r2=f.n1;
            then 1<=i & i<=len f by A1,FINSEQ_1:3;
            then i<=k by A21,XXREAL_0:2;
           hence r1>=r2 by A6,A24;
          end;
-           for j being Nat st j<=k+1 & j in dom f & f.j=f.n1
+           for j being Element of NAT st j<=k+1 & j in dom f & f.j=f.n1
            holds n1<=j
-          proof let j be Nat;
+          proof let j be Element of NAT;
            assume A25: j<=k+1 & j in dom f & f.j=f.n1;
             per cases;
             suppose j<k+1;
@@ -373,9 +394,9 @@ A27:     1<=1+k by NAT_1:37;
        set n2=k+1;
       A28: (k+1<>0 implies n2<=k+1 &
       n2 in dom f) by A1,A26,A27,FINSEQ_1:3;
-     A29: for i being Nat,r1,r2 being Real st i<=k+1 & i in dom f
+     A29: for i being Element of NAT,r1,r2 being Real st i<=k+1 & i in dom f
        & r1=f.i & r2=f.n2 holds r1>=r2
-      proof let i be Nat,r1,r2 be Real;
+      proof let i be Element of NAT,r1,r2 be Real;
        assume A30: i<=k+1 & i in dom f & r1=f.i & r2=f.n2;
         per cases;
         suppose i<k+1;
@@ -388,9 +409,9 @@ A27:     1<=1+k by NAT_1:37;
          hence r1>=r2 by A30,XXREAL_0:1;
       end;
       end;
-        for j being Nat st j<=k+1 & j in dom f & f.j=f.n2
+        for j being Element of NAT st j<=k+1 & j in dom f & f.j=f.n2
        holds n2<=j
-       proof let j be Nat;
+       proof let j be Element of NAT;
         assume A32: j<=k+1 & j in dom f & f.j=f.n2;
         per cases;
         suppose j<k+1;
@@ -412,63 +433,73 @@ A27:     1<=1+k by NAT_1:37;
     end;
     hence P[k+1];
    end;
-     for k being Nat holds P[k] from NAT_1:sch 1(A4,A5);
-   then consider n1 being Nat such that
+     for k being Element of NAT holds P[k] from NAT_1:sch 1(A4,A5);
+   then consider n1 being Element of NAT such that
    A33: (len f<>0 implies n1<=len f & n1 in dom f) &
-   (for i being Nat,r1,r2 being Real st i<=len f & i in dom f
+   (for i being Element of NAT,r1,r2 being Real st i<=len f & i in dom f
    & r1=f.i & r2=f.n1
- holds r1>=r2) & (for j being Nat st j<=len f & j in dom f & f.j=f.n1
+ holds r1>=r2) & (for j being Element of NAT
+  st j<=len f & j in dom f & f.j=f.n1
       holds n1<=j);
-   A34: for i being Nat,r1,r2 being Real st i in dom f & r1=f.i & r2=f.n1
+   A34: for i being Element of NAT,r1,r2 being Real
+    st i in dom f & r1=f.i & r2=f.n1
     holds r1>=r2
-   proof let i be Nat,r1,r2 be Real;
+   proof let i be Element of NAT,r1,r2 be Real;
     assume A35: i in dom f & r1=f.i & r2=f.n1;
      then 1<=i & i<=len f by FINSEQ_3:27;
     hence r1>=r2 by A33,A35;
    end;
-     for j being Nat st j in dom f & f.j=f.n1 holds n1<=j
-   proof let j be Nat;
+     for j being Element of NAT st j in dom f & f.j=f.n1 holds n1<=j
+   proof let j be Element of NAT;
     assume A36: j in dom f & f.j=f.n1;
      then 1<=j & j<=len f by FINSEQ_3:27;
     hence n1<=j by A33,A36;
    end;
-  hence ex n being Nat st (len f=0 implies n=0) &
+  hence ex n being Element of NAT st (len f=0 implies n=0) &
  (len f>0 implies n in dom f &
- (for i being Nat,r1,r2 being Real st i in dom f & r1=f.i & r2=f.n
- holds r1>=r2) & (for j being Nat st j in dom f & f.j=f.n holds n<=j))
+ (for i being Element of NAT,r1,r2 being Real st i in dom f & r1=f.i & r2=f.n
+ holds r1>=r2) & (for j being Element of NAT st j in dom f & f.j=f.n
+  holds n<=j))
               by A2,A33,A34;
   end;
   end;
-  hence ex n being Nat st
+  hence ex n being Element of NAT st
  (len f=0 implies n=0) & (len f>0 implies n in dom f &
- (for i be Nat,r1,r2 be Real st i in dom f & r1=f.i & r2=f.n
- holds r1>=r2) & (for j being Nat st j in dom f & f.j=f.n holds n<=j));
+ (for i be Element of NAT,r1,r2 be Real st i in dom f & r1=f.i & r2=f.n
+ holds r1>=r2) & (for j being Element of NAT st j in dom f & f.j=f.n
+  holds n<=j));
  end;
  uniqueness
  proof
- thus (for m1,m2 being Nat st ((len f=0 implies m1=0) &
+ thus (for m1,m2 being Element of NAT st ((len f=0 implies m1=0) &
  (len f>0 implies
  m1 in dom f &
- (for i being Nat,r1,r2 being Real st i in dom f & r1=f.i & r2=f.m1
- holds r1>=r2) & (for j being Nat st j in dom f & f.j=f.m1 holds m1<=j)))
+ (for i being Element of NAT,r1,r2 being Real st i in dom f & r1=f.i & r2=f.m1
+ holds r1>=r2) & (for j being Element of NAT st j in dom f & f.j=f.m1
+  holds m1<=j)))
  &
   ((len f=0 implies m2=0) &
  (len f>0 implies
  m2 in dom f &
- (for i being Nat,r1,r2 being Real st i in dom f & r1=f.i & r2=f.m2
- holds r1>=r2) & (for j being Nat st j in dom f & f.j=f.m2 holds m2<=j)))
+ (for i being Element of NAT,r1,r2 being Real st i in dom f & r1=f.i & r2=f.m2
+ holds r1>=r2) & (for j being Element of NAT st j in dom f & f.j=f.m2
+  holds m2<=j)))
  holds m1=m2)
- proof let m1,m2 be Nat;
+ proof let m1,m2 be Element of NAT;
   assume A37: ((len f=0 implies m1=0) &
    (len f>0 implies
    m1 in dom f &
-   (for i being Nat,r1,r2 being Real st i in dom f & r1=f.i & r2=f.m1
-   holds r1>=r2) & (for j being Nat st j in dom f & f.j=f.m1 holds m1<=j)))
+   (for i being Element of NAT,r1,r2 being Real st i in dom f & r1=f.i &
+    r2=f.m1
+   holds r1>=r2) & (for j being Element of NAT st j in dom f & f.j=f.m1
+    holds m1<=j)))
    &
     ((len f=0 implies m2=0) &
    (len f>0 implies m2 in dom f &
-   (for i being Nat,r1,r2 being Real st i in dom f & r1=f.i & r2=f.m2
-   holds r1>=r2) & (for j being Nat st j in dom f & f.j=f.m2 holds m2<=j)));
+   (for i being Element of NAT,r1,r2 being Real st i in dom f & r1=f.i &
+    r2=f.m2
+   holds r1>=r2) & (for j being Element of NAT st j in dom f & f.j=f.m2
+    holds m2<=j)));
      then A38: f.m2>=f.m1;
        f.m1>=f.m2 by A37;
      then A39: f.m1=f.m2 by A38,XXREAL_0:1;
@@ -488,9 +519,9 @@ func min f -> Real equals
 correctness;
 end;
 
-theorem Th1: for f being FinSequence of REAL,i being Nat
+theorem Th1: for f being FinSequence of REAL,i being Element of NAT
  st 1<=i & i<=len f holds f.i<=f.(max_p f) & f.i<=max f
-proof let f be FinSequence of REAL,i be Nat;
+proof let f be FinSequence of REAL,i be Element of NAT;
  assume A1: 1<=i & i<=len f;
   then A2: i in dom f by FINSEQ_3:27;
     0<len f by A1;
@@ -498,9 +529,9 @@ proof let f be FinSequence of REAL,i be Nat;
  hence f.i<=max f;
 end;
 
-theorem Th2: for f being FinSequence of REAL,i being Nat
+theorem Th2: for f being FinSequence of REAL,i being Element of NAT
  st 1<=i & i<=len f holds f.i>=f.(min_p f) & f.i>=min f
-proof let f be FinSequence of REAL,i be Nat;
+proof let f be FinSequence of REAL,i be Element of NAT;
  assume A1: 1<=i & i<=len f;
   then A2: i in dom f by FINSEQ_3:27;
     0<len f by A1;
@@ -801,10 +832,10 @@ proof let f be FinSequence of REAL;
  hence min (-f)=-(max f) & min_p (-f)=max_p f by A6,A15,XXREAL_0:1;
 end;
 
-theorem   for f being FinSequence of REAL,n being Nat st
+theorem   for f being FinSequence of REAL,n being Element of NAT st
  1<=n & n<len f
 holds max (f/^n)<= max f & min (f/^n)>= min f
-proof let f be FinSequence of REAL,n be Nat;
+proof let f be FinSequence of REAL,n be Element of NAT;
  assume A1: 1<=n & n<len f;
   then A2: 0<len f;
     A3: len (f/^n)=len f -n by A1,RFINSEQ:def 2;
@@ -852,7 +883,7 @@ proof let f,g be FinSequence of REAL;
     then dom g <>{} by A3,A8,FINSEQ_1:3;
     then dom P=dom g by FUNCT_2:def 1;
     then A10: P.(max_p f) in rng P by A2,A3,A5,FUNCT_1:def 5;
-    then reconsider n=P.(max_p f) as Nat by A9;
+    then reconsider n=P.(max_p f) as Element of NAT by A9;
       1<=n & n<=len g by A7,A9,A10,FINSEQ_1:3;
     then g.n <= max g by Th1;
    hence max f<=max g by A2,A6;
@@ -892,7 +923,7 @@ proof let f,g be FinSequence of REAL;
      then dom g <>{} by A3,A9,FINSEQ_1:3;
     then dom P=dom g by FUNCT_2:def 1;
     then A11: P.(min_p f) in rng P by A7,FUNCT_1:def 5;
-    then reconsider n=P.(min_p f) as Nat by A10;
+    then reconsider n=P.(min_p f) as Element of NAT by A10;
       1<=n & n<=len g by A8,A10,A11,FINSEQ_1:3;
     then g.n >= min g by Th2;
    hence min f>=min g by A2,A6;
@@ -956,13 +987,14 @@ theorem Th17:
 for R be FinSequence of REAL holds
                       R is non-decreasing
                               iff
-            for n,m be Nat st n in dom R & m in dom R & n<m holds R.n<=R.m
+            for n,m be Element of NAT st n in dom R & m in dom R & n<m
+             holds R.n<=R.m
 proof let R be FinSequence of REAL;
   thus R is non-decreasing implies
    for n,m st n in dom R & m in dom R & n<m holds R.n<=R.m
    proof assume
     A1: R is non-decreasing;
-    defpred P[Nat] means $1 in dom R implies
+    defpred P[Element of NAT] means $1 in dom R implies
       for n st n in dom R & n<$1 holds R.n<=R.$1;
     A2: P[0];
     A3: for m st P[m] holds P[m+1]
@@ -1057,7 +1089,7 @@ for f,g be non-decreasing FinSequence of REAL, n st
  end;
 
 theorem Th18:
-for R be non-decreasing FinSequence of REAL, n be Nat holds
+for R be non-decreasing FinSequence of REAL, n be Element of NAT holds
   R|n is non-decreasing FinSequence of REAL
  proof let f be non-decreasing FinSequence of REAL, n;
   set fn = f|n;
@@ -1094,7 +1126,7 @@ Lm4:
 for n holds for g1,g2 be non-decreasing FinSequence of REAL st
   n = len g1 & g1,g2 are_fiberwise_equipotent holds g1 = g2
  proof
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
    for g1,g2 be non-decreasing FinSequence of REAL st $1 = len g1 &
      g1,g2 are_fiberwise_equipotent holds g1 = g2;
    A1: P[0]
@@ -1171,9 +1203,9 @@ theorem Th24: for f being FinSequence of REAL st f is non-increasing
 holds -f is non-decreasing
 proof let f be FinSequence of REAL;
  assume A1: f is non-increasing;
-    for n being Nat st n in dom (-f) & n+1 in dom (-f) holds
+    for n being Element of NAT st n in dom (-f) & n+1 in dom (-f) holds
          (-f).n <= (-f).(n+1)
-  proof let n be Nat;
+  proof let n be Element of NAT;
    assume A2: n in dom (-f) & n+1 in dom (-f);
       dom (-f)=dom f by RVSUM_1:34;
     then A3: f.n >= f.(n+1) by A1,A2,RFINSEQ:def 4;
@@ -1188,9 +1220,9 @@ theorem Th25: for f being FinSequence of REAL st f is non-decreasing
 holds -f is non-increasing
 proof let f be FinSequence of REAL;
  assume A1: f is non-decreasing;
-    for n being Nat st n in dom (-f) & n+1 in dom (-f) holds
+    for n being Element of NAT st n in dom (-f) & n+1 in dom (-f) holds
          (-f).n >= (-f).(n+1)
-  proof let n be Nat;
+  proof let n be Element of NAT;
    assume A2: n in dom (-f) & n+1 in dom (-f);
       dom (-f)=dom f by RVSUM_1:34;
     then A3: f.n <= f.(n+1) by A1,A2,INTEGRA2:def 1;
@@ -1218,11 +1250,11 @@ proof let f,g be FinSequence of REAL,P be Permutation of dom g;
   A10: rng (-g) c= REAL by FINSEQ_1:def 4;
     (-g)*P is FinSequence by A3,A4,A7,A8,FINSEQ_1:def 2;
   then reconsider k=(-g)*P as FinSequence of REAL by A9,A10,FINSEQ_1:def 4;
-    for i being Nat st i in dom (-f) holds (-f).i=k.i
-  proof let i be Nat;
+    for i being Element of NAT st i in dom (-f) holds (-f).i=k.i
+  proof let i be Element of NAT;
    assume A11: i in dom (-f);
     then P.i in rng P by A7,FUNCT_1:12;
-    then reconsider j=P.i as Nat by A2;
+    then reconsider j=P.i as Element of NAT by A2;
       (-f).i=-(f.i) by RVSUM_1:35
     .=-(g.(P.i)) by A1,A6,A11,FUNCT_1:22
     .=(-g).(j) by RVSUM_1:35 .=((-g)*P).i by A8,A11,FUNCT_1:22;
@@ -1304,10 +1336,10 @@ proof let f be FinSequence of REAL;
    A3: len (sort_d f)=len f by Th30;
    then 1 in Seg len (sort_d f) by A1,FINSEQ_1:3;
    then A4: 1 in dom (sort_d f) by FINSEQ_1:def 3;
-   A5: for i being Nat,r1,r2 being Real st
+   A5: for i being Element of NAT,r1,r2 being Real st
    i in dom (sort_d f) & r1=(sort_d f).i & r2=(sort_d f).1
    holds r1<=r2
-   proof let i be Nat,r1,r2 be Real;
+   proof let i be Element of NAT,r1,r2 be Real;
     assume A6: i in dom (sort_d f) & r1=(sort_d f).i & r2=(sort_d f).1;
      then i in Seg len (sort_d f) by FINSEQ_1:def 3;
      then A7: 1<=i by FINSEQ_1:3;
@@ -1321,9 +1353,9 @@ proof let f be FinSequence of REAL;
      end;
     hence r1<=r2;
    end;
-   A8: for j being Nat st j in dom (sort_d f)
+   A8: for j being Element of NAT st j in dom (sort_d f)
         & (sort_d f).j=(sort_d f).1 holds 1<=j
-    proof let j be Nat;
+    proof let j be Element of NAT;
      assume j in dom (sort_d f) & (sort_d f).j=(sort_d f).1;
       then j in Seg len (sort_d f) by FINSEQ_1:def 3;
      hence 1<=j by FINSEQ_1:3;
@@ -1333,10 +1365,10 @@ proof let f be FinSequence of REAL;
   A11: (sort_d f).1=max (sort_d f) by A9.=max f by A10,Th14;
    A12: len (sort_a f)=len f by Th31;
    then A13: 1 in dom (sort_a f) by A1,FINSEQ_3:27;
-   A14: for i being Nat,r1,r2 being Real st
+   A14: for i being Element of NAT,r1,r2 being Real st
    i in dom (sort_a f) & r1=(sort_a f).i & r2=(sort_a f).1
    holds r1>=r2
-   proof let i be Nat,r1,r2 be Real;
+   proof let i be Element of NAT,r1,r2 be Real;
     assume A15: i in dom (sort_a f) & r1=(sort_a f).i & r2=(sort_a f).1;
      then A16: 1<=i by FINSEQ_3:27;
      per cases;
@@ -1347,7 +1379,7 @@ proof let f be FinSequence of REAL;
       hence r1>=r2 by A13,A15,Th17;
    end;
    end;
-A17: for j being Nat st j in dom (sort_a f)
+A17: for j being Element of NAT st j in dom (sort_a f)
         & (sort_a f).j=(sort_a f).1 holds 1<=j by FINSEQ_3:27;
   then A18: min_p(sort_a f)=1 by A2,A12,A13,A14,Def2;
   A19: f,(sort_a f) are_fiberwise_equipotent by Def6;

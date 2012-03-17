@@ -29,9 +29,8 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="78"/>
 <Func kind="K" nr="82"/>
 </Typ>
 <Typ kind="M" nr="1">
@@ -53,7 +52,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="105">
+<Func kind="K" nr="107">
 <Var nr="1"/>
 </Func>
 <Func kind="K" nr="91">

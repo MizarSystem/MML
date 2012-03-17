@@ -13,8 +13,10 @@ environ
       FINSET_1, CLOSURE2, TARSKI, FINSEQ_1, PRALG_3, FUNCT_4, FUNCOP_1,
       ZF_LANG, MCART_1, ZF_MODEL, WELLORD1, MSUALG_4, BORSUK_1, EQUATION;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
-      RELSET_1, PARTFUN1, STRUCT_0, FUNCT_2, MCART_1, FINSET_1, FINSEQ_1,
-      FUNCT_4, FUNCT_6, PZFMISC1, CARD_3, PBOOLE, MSUALG_1, PRALG_2, FINSEQ_4,
+      RELSET_1, PARTFUN1, STRUCT_0, FUNCT_2, MCART_1, FINSET_1, NAT_1,
+      FINSEQ_1,
+      FUNCT_4, FUNCT_6, PZFMISC1, CARD_3,
+      PBOOLE, MSUALG_1, PRALG_2, FINSEQ_4,
       PRE_CIRC, MSUALG_2, PRALG_3, MSUALG_3, MSUALG_4, EXTENS_1, MSAFREE,
       MSAFREE2, CLOSURE2, MSUALG_6;
  constructors FUNCT_4, FINSEQ_4, PRE_CIRC, PZFMISC1, MSSUBFAM, MSUALG_3,
@@ -22,7 +24,7 @@ environ
  registrations MSUALG_6, FINSET_1, EXTENS_1, FUNCT_1, MSAFREE, MSUALG_1,
       MSUALG_2, MSUALG_9, PBOOLE, PRALG_2, PRALG_3, STRUCT_0, CLOSURE2,
       MSUALG_4, FINSEQ_1, RELSET_1, SUBSET_1, ORDINAL2, FUNCOP_1, FUNCT_2,
-      ORDINAL1;
+      ORDINAL1, ARYTM_3;
  requirements SUBSET, BOOLE;
  definitions TARSKI, PBOOLE, PRALG_2, MSUALG_2, MSUALG_3, PRE_CIRC, MSAFREE,
       MSAFREE2, MSUALG_1, XBOOLE_0, PZFMISC1;
@@ -30,7 +32,8 @@ environ
       FUNCT_1, FUNCT_2, MCART_1, MSAFREE, FINSEQ_1, CLOSURE2, FINSET_1,
       MSUALG_2, MSUALG_3, MSUALG_4, MSUALG_9, PBOOLE, FINSEQ_4, PARTFUN1,
       MSUALG_6, AUTALG_1, MSSUBFAM, INSTALG1, PRALG_2, PRALG_3, RELAT_1,
-      TARSKI, ZFMISC_1, RELSET_1, XBOOLE_0, XBOOLE_1, FUNCT_6, PZFMISC1;
+      TARSKI, ZFMISC_1, RELSET_1, XBOOLE_0, XBOOLE_1, FUNCT_6, PZFMISC1,
+      ORDINAL1;
  schemes MSSUBFAM, PBOOLE, FUNCT_2, XBOOLE_0;
 
 begin  :: On the Functions and Many Sorted Functions
@@ -632,21 +635,25 @@ A7: dom hx = dom ar & dom gy = dom ar by MSUALG_3:6;
        now
       let n be set; assume
 A8:     n in dom ar;
-then A9:   ar.n in the carrier of S by PARTFUN1:27;
+       then n in Seg len ar by FINSEQ_1:def 3;
+       then reconsider n'=n as Nat by ORDINAL1:def 13;
+A9:   ar.n in the carrier of S by A8,PARTFUN1:27;
       then reconsider hn = h.(ar.n) as
        Function of (the Sorts of A).(ar.n), (the Sorts of U0).(ar.n)
         by PBOOLE:def 18;
-A10:   g.(ar.n) = hn | (D.(ar.n)) by A2,A9,MSAFREE:def 1;
+A10:   g.(ar.n') = hn | (D.(ar.n)) by A2,A9,MSAFREE:def 1;
          rng ar c= the carrier of S;
       then rng ar c= dom (the Sorts of C) by PBOOLE:def 3;
       then dom ((the Sorts of C)*(the_arity_of o)) = dom ar by RELAT_1:46;
       then xx.n in ((the Sorts of C) * ar).n by A3,A4,A8,MSUALG_3:6;
 then A11:   xx.n in D.(ar.n) by A1,A8,FUNCT_1:23;
-      thus hx.n = (h.(ar/.n)).(xx.n) by A5,A6,A8,MSUALG_3:24
+      thus hx.n = hx.n'
+               .= (h.(ar/.n)).(xx.n) by A5,A6,A8,MSUALG_3:24
                .= (h.(ar.n)).(xx.n) by A8,FINSEQ_4:def 4
                .= (g.(ar.n)).(xx.n) by A10,A11,FUNCT_1:72
                .= (g.(ar/.n)).(yy.n) by A4,A8,FINSEQ_4:def 4
-               .= gy.n by A3,A6,A8,MSUALG_3:24;
+               .= gy.n' by A3,A6,A8,MSUALG_3:24
+               .= gy.n;
     end;
     hence h#x = g#y by A7,FUNCT_1:9;
   end;
@@ -1750,6 +1757,10 @@ A103:    for n being set st n in dom ((commute k).iA)
           let n be set; assume
 A104:        n in dom ((commute k).iA);
           then reconsider arn = ar.n as SortSymbol of SG by A101,PARTFUN1:27;
+          set fs = ((commute k).iA);
+          reconsider fs as Element of Args(o,MAX) by A99;
+          n in Seg len fs by A104,FINSEQ_1:def 3;
+          then reconsider n'=n as Nat by ORDINAL1:def 13;
           consider kn being Function,
                    Ki being strict non-empty finitely-generated
                       MSSubAlgebra of AG such that
@@ -1764,7 +1775,7 @@ then A109:      Ki is MSSubAlgebra of MAX by A97,MSUALG_2:7;
 
              dom k = domar by A100,FUNCT_2:169;
           hence (BA#k).n
-             = (BA.(ar/.n)).(k.n) by A101,A104,MSUALG_3:def 8
+             = (BA.(ar/.n')).(k.n) by A101,A104,MSUALG_3:def 8
             .= kn.(KK.n) by A101,A104,A105,A107,A108,FINSEQ_4:def 4
             .= kn.iA by A106,A108,A109
             .= ((commute k).iA).n by A98,A101,A104,A105,PRALG_3:22;

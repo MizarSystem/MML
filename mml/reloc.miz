@@ -9,7 +9,8 @@ environ
  vocabularies AMI_1, AMI_3, ARYTM_1, CAT_1, QC_LANG1, AMI_2, AMI_5, RELAT_1,
       FUNCT_1, NAT_1, FINSET_1, ARYTM_3, FUNCT_4, BOOLE, CARD_3, PARTFUN1,
       RELOC;
- notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, CARD_3, INT_1, NAT_1, RELAT_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1,
+ NUMBERS,XCMPLX_0, CARD_3, INT_1, NAT_1, RELAT_1,
       FUNCT_1, FUNCT_2, PARTFUN1, FUNCT_4, CQC_LANG, FINSET_1, STRUCT_0, AMI_1,
       AMI_2, AMI_3, BINARITH, AMI_5, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, BINARITH, AMI_5;
@@ -24,16 +25,16 @@ environ
 
 begin  :: Relocatability
 
-reserve j, k, m for Nat;
+reserve j, k, m for Element of NAT;
 
 definition
-let loc be Instruction-Location of SCM , k be Nat;
+let loc be Instruction-Location of SCM , k be Element of NAT;
 func loc + k -> Instruction-Location of SCM means
 :Def1:
-ex m being Nat st loc = il.m & it = il.(m+k);
+ex m being Element of NAT st loc = il.m & it = il.(m+k);
 existence
  proof
-  consider m being Nat such that A1: loc = il.m by AMI_5:19;
+  consider m being Element of NAT such that A1: loc = il.m by AMI_5:19;
   take IT = il.(m+k);
   take m;
   thus loc = il.m & IT = il.(m+k) by A1;
@@ -42,10 +43,10 @@ uniqueness;
 
 func loc -' k -> Instruction-Location of SCM means
 :Def2:
-ex m being Nat st loc = il.m & it = il.(m -' k);
+ex m being Element of NAT st loc = il.m & it = il.(m -' k);
 existence
  proof
-  consider m being Nat such that A2: loc = il.m by AMI_5:19;
+  consider m being Element of NAT such that A2: loc = il.m by AMI_5:19;
   take IT = il.(m -' k);
   take m;
   thus loc = il.m & IT = il.(m -' k) by A2;
@@ -54,12 +55,12 @@ uniqueness;
 end;
 
 theorem Th1:
- for loc being Instruction-Location of SCM ,k being Nat
+ for loc being Instruction-Location of SCM ,k being Element of NAT
   holds loc + k -' k = loc
   proof
    let loc be Instruction-Location of SCM,
-       k   be Nat;
-   consider m being Nat such that
+       k   be Element of NAT;
+   consider m being Element of NAT such that
 A1:  il.m = loc by AMI_5:19;
    thus loc + k -' k = il.(m + k) -' k by A1,Def1
                      .= il.(m + k -' k) by Def2
@@ -67,11 +68,11 @@ A1:  il.m = loc by AMI_5:19;
   end;
 
 theorem Th2:
- for l1,l2 being Instruction-Location of SCM , k being Nat
+ for l1,l2 being Instruction-Location of SCM , k being Element of NAT
   holds
     Start-At(l1 + k) = Start-At(l2 +k) iff Start-At l1 = Start-At l2
   proof
-   let l1,l2 be Instruction-Location of SCM, k be Nat;
+   let l1,l2 be Instruction-Location of SCM, k be Element of NAT;
    hereby
     assume
 A1: Start-At(l1 + k) = Start-At(l2 + k);
@@ -92,12 +93,12 @@ A2: Start-At(l1 + k) = IC SCM .--> (l1 + k) &
   end;
 
 theorem Th3:
- for l1,l2 being Instruction-Location of SCM , k being Nat
+ for l1,l2 being Instruction-Location of SCM , k being Element of NAT
   st Start-At l1 = Start-At l2
   holds
     Start-At(l1 -' k) = Start-At(l2 -' k)
    proof
-   let l1,l2 be Instruction-Location of SCM, k be Nat;
+   let l1,l2 be Instruction-Location of SCM, k be Element of NAT;
    assume Start-At l1 = Start-At l2;
             then {[IC SCM, l1]} = Start-At l2 by AMI_5:35;
             then {[IC SCM, l1]} = {[IC SCM, l2]} by AMI_5:35;
@@ -106,7 +107,7 @@ theorem Th3:
   end;
 
 definition
-  let I be Instruction of SCM , k be Nat;
+  let I be Instruction of SCM , k be Element of NAT;
   func IncAddr (I,k) -> Instruction of SCM equals
 :Def3:
    goto (((@I) jump_address )@ +k) if InsCode I = 6,
@@ -119,63 +120,64 @@ definition
 end;
 
 theorem
-     for k being Nat holds IncAddr(halt SCM,k) = halt SCM by Def3,AMI_5:37;
+     for k being Element of NAT holds IncAddr(halt SCM,k) = halt SCM
+     by Def3,AMI_5:37;
 
 theorem Th5:
-  for k being Nat, a,b being Data-Location
+  for k being Element of NAT, a,b being Data-Location
    holds IncAddr(a:=b ,k) = a:=b
    proof
-    let k be Nat,
+    let k be Element of NAT,
        a,b be Data-Location;
       InsCode (a := b) = 1 by MCART_1:7;
     hence IncAddr(a:=b ,k) = a:=b by Def3;
    end;
 
 theorem Th6:
-  for k being Nat, a,b being Data-Location
+  for k being Element of NAT, a,b being Data-Location
    holds IncAddr(AddTo(a,b),k) = AddTo(a,b)
    proof
-    let k be Nat,
+    let k be Element of NAT,
        a,b be Data-Location;
       InsCode (AddTo(a,b)) = 2 by MCART_1:7;
     hence IncAddr(AddTo(a,b),k) = AddTo(a,b) by Def3;
    end;
 
 theorem Th7:
-  for k being Nat, a,b being Data-Location
+  for k being Element of NAT, a,b being Data-Location
    holds IncAddr(SubFrom(a,b),k) = SubFrom(a,b)
    proof
-    let k be Nat,
+    let k be Element of NAT,
        a,b be Data-Location;
       InsCode (SubFrom(a,b)) = 3 by MCART_1:7;
     hence IncAddr(SubFrom(a,b),k) = SubFrom(a,b) by Def3;
    end;
 
 theorem Th8:
-  for k being Nat, a,b being Data-Location
+  for k being Element of NAT, a,b being Data-Location
    holds IncAddr(MultBy(a,b),k) = MultBy(a,b)
    proof
-    let k be Nat,
+    let k be Element of NAT,
        a,b be Data-Location;
       InsCode (MultBy(a,b)) = 4 by MCART_1:7;
     hence IncAddr(MultBy(a,b),k) = MultBy(a,b) by Def3;
    end;
 
 theorem Th9:
-  for k being Nat, a,b being Data-Location
+  for k being Element of NAT, a,b being Data-Location
    holds IncAddr(Divide(a,b),k) = Divide(a,b)
    proof
-    let k be Nat,
+    let k be Element of NAT,
        a,b be Data-Location;
       InsCode (Divide(a,b)) = 5 by MCART_1:7;
     hence IncAddr(Divide(a,b),k) = Divide(a,b) by Def3;
    end;
 
 theorem Th10:
-  for k being Nat,loc being Instruction-Location of SCM
+  for k being Element of NAT,loc being Instruction-Location of SCM
    holds IncAddr(goto loc,k) = goto (loc + k)
     proof
-     let k be Nat, loc be Instruction-Location of SCM;
+     let k be Element of NAT, loc be Instruction-Location of SCM;
      A1: InsCode (goto loc) = 6 by MCART_1:7;
          ((@(goto loc)) jump_address )@ = (@(goto loc)) jump_address
                                    .= loc by AMI_5:55;
@@ -183,11 +185,11 @@ theorem Th10:
     end;
 
 theorem Th11:
-  for k being Nat,loc being Instruction-Location of SCM,
+  for k being Element of NAT,loc being Instruction-Location of SCM,
       a being Data-Location
    holds IncAddr(a=0_goto loc,k) = a=0_goto (loc + k)
     proof
-     let k be Nat, loc be Instruction-Location of SCM,
+     let k be Element of NAT, loc be Instruction-Location of SCM,
          a be Data-Location;
      A1: InsCode (a=0_goto loc) = 7 by MCART_1:7;
 A2:  ((@(a=0_goto loc)) cond_address)@ = (@(a=0_goto loc)) cond_address
@@ -198,11 +200,11 @@ A2:  ((@(a=0_goto loc)) cond_address)@ = (@(a=0_goto loc)) cond_address
     end;
 
 theorem Th12:
-  for k being Nat,loc being Instruction-Location of SCM,
+  for k being Element of NAT,loc being Instruction-Location of SCM,
       a being Data-Location
    holds IncAddr(a>0_goto loc,k) = a>0_goto (loc + k)
    proof
-     let k be Nat, loc be Instruction-Location of SCM,
+     let k be Element of NAT, loc be Instruction-Location of SCM,
          a be Data-Location;
      A1: InsCode (a>0_goto loc) = 8 by MCART_1:7;
 A2:  ((@(a>0_goto loc)) cond_address)@ = (@(a>0_goto loc)) cond_address
@@ -213,10 +215,10 @@ A2:  ((@(a>0_goto loc)) cond_address)@ = (@(a>0_goto loc)) cond_address
     end;
 
 theorem Th13:
- for I being Instruction of SCM, k being Nat
+ for I being Instruction of SCM, k being Element of NAT
   holds InsCode (IncAddr (I, k)) = InsCode I
    proof
-    let I be Instruction of SCM, k be Nat;
+    let I be Instruction of SCM, k be Element of NAT;
 A1: InsCode(I) <= 8 by AMI_5:36;
     per cases by A1,CQC_THE1:9;
     suppose InsCode I = 0;
@@ -261,11 +263,11 @@ A7:        I = da>0_goto loc by AMI_5:54;
 
 theorem Th14:
  for II, I being Instruction of SCM,
-     k being Nat st
+     k being Element of NAT st
   (InsCode I = 0 or InsCode I = 1 or InsCode I = 2 or InsCode I = 3 or
    InsCode I = 4 or InsCode I = 5) & IncAddr (II, k) = I holds II = I
  proof
-  let II, I be Instruction of SCM, k be Nat;
+  let II, I be Instruction of SCM, k be Element of NAT;
   assume
 A1: (InsCode I = 0 or InsCode I = 1 or InsCode I = 2 or InsCode I = 3 or
      InsCode I = 4 or InsCode I = 5) & IncAddr (II, k) = I;
@@ -274,7 +276,7 @@ A1: (InsCode I = 0 or InsCode I = 1 or InsCode I = 2 or InsCode I = 3 or
  end;
 
 definition
- let p be programmed FinPartState of SCM , k be Nat;
+ let p be programmed FinPartState of SCM , k be Element of NAT;
  func Shift ( p , k ) -> programmed FinPartState of SCM means
 :Def4:
  dom it = { il.(m+k):il.m in dom p } &
@@ -331,7 +333,7 @@ then A14:   il.m in dom p by A13;
 AMI_1:def 16;
         p is finite by AMI_1:def 24;
 then A15: dom p is finite by FINSET_1:29;
-    deffunc F(Nat) = (($1 -' 2) div 2);
+    deffunc F(Element of NAT) = (($1 -' 2) div 2);
 A16: {F(j) : j in dom p}  is finite from FRAENKEL:sch 21(A15);
         B = C
      proof
@@ -356,7 +358,7 @@ A21:    j in dom p;
        set m = (j -' 2) div 2;
           dom p c= the Instruction-Locations of SCM by AMI_3:def 13;
       then j in SCM-Instr-Loc by A21,AMI_3:def 1;
-      then consider l being Nat such that
+      then consider l being Element of NAT such that
 A22:       j = 2*l and
 A23:       l > 0 by AMI_2:def 3;
           ex i being Nat st l = i + 1 by A23,NAT_1:22;
@@ -371,24 +373,24 @@ then A25:   2 divides (j -' 2) by NAT_1:57;
     hence x in B by A20;
    end;
 then A26:  B is finite by A16;
-   deffunc F(Nat) = il.($1+k);
+   deffunc F(Element of NAT) = il.($1+k);
 A27: {F(m):m in B} is finite from FRAENKEL:sch 21(A26);
-    defpred T[Nat] means il.$1 in dom p;
+    defpred T[Element of NAT] means il.$1 in dom p;
       {F(m): m in B } = A
     proof
       thus {F(m): m in B } c= A
       proof
         let x be set;
         assume x in {F(m): m in B };
-        then consider m3 being Nat such that
-A28:     x = F(m3) & m3 in { m5 where m5 is Nat:T[m5]};
-        consider m4 being Nat such that
+        then consider m3 being Element of NAT such that
+A28:     x = F(m3) & m3 in { m5 where m5 is Element of NAT:T[m5]};
+        consider m4 being Element of NAT such that
 A29:     m4 = m3 & T[m4] by A28;
         thus thesis by A28,A29;
       end;
       let x be set;
       assume x in A;
-      then consider m2 being Nat such that
+      then consider m2 being Element of NAT such that
 A30:   x = F(m2) & il.m2 in dom p;
         m2 in B by A30;
       hence thesis by A30;
@@ -438,28 +440,28 @@ A38:         il.m in dom p;
 end;
 
 theorem Th15:
- for l being Instruction-Location of SCM , k being Nat,
+ for l being Instruction-Location of SCM , k being Element of NAT,
      p being programmed FinPartState of SCM st l in dom p
    holds Shift(p,k).(l + k) = p.l
    proof
-    let l be Instruction-Location of SCM , k be Nat,
+    let l be Instruction-Location of SCM , k be Element of NAT,
         p be programmed FinPartState of SCM such that A1: l in dom p;
-    consider m being Nat such that A2: l = il.m by AMI_5:19;
+    consider m being Element of NAT such that A2: l = il.m by AMI_5:19;
     thus Shift(p,k).(l + k) = Shift(p,k).(il.(m+k)) by A2,Def1
                            .= p.l by A1,A2,Def4;
    end;
 
 theorem
-     for p being programmed FinPartState of SCM, k being Nat
+     for p being programmed FinPartState of SCM, k being Element of NAT
   holds dom Shift(p,k) =
          { il+k where il is Instruction-Location of SCM: il in dom p}
     proof
-     let p be programmed FinPartState of SCM, k be Nat;
+     let p be programmed FinPartState of SCM, k be Element of NAT;
 A1: dom Shift(p,k) = { il.(m+k):il.m in dom p } by Def4;
      hereby
       let e be set;
       assume e in dom Shift(p,k);
-      then consider m being Nat such that
+      then consider m being Element of NAT such that
 A2:       e = il.(m+k) and
 A3:       il.m in dom p by A1;
           (il.m)+k = il.(m+k) by Def1;
@@ -471,17 +473,17 @@ A3:       il.m in dom p by A1;
    then consider il being Instruction-Location of SCM such that
 A4:     e = il+k and
 A5:     il in dom p;
-    consider m being Nat such that
+    consider m being Element of NAT such that
 A6:     il = il.m and
 A7:     il+k = il.(m+k) by Def1;
    thus e in dom Shift(p,k) by A1,A4,A5,A6,A7;
   end;
 
 theorem
-     for p being programmed FinPartState of SCM, k being Nat
+     for p being programmed FinPartState of SCM, k being Element of NAT
  holds dom Shift(p,k) c= the Instruction-Locations of SCM
   proof
-   let p be programmed FinPartState of SCM, k be Nat;
+   let p be programmed FinPartState of SCM, k be Element of NAT;
 A1: dom Shift(p,k) = { il.(m+k):il.m in dom p } by Def4;
     let e be set;
     assume e in dom Shift(p,k);
@@ -492,7 +494,7 @@ A2:     e = il.(m+k) and
   end;
 
 definition
- let p be programmed FinPartState of SCM, k be Nat;
+ let p be programmed FinPartState of SCM, k be Element of NAT;
  func IncAddr ( p , k ) -> programmed FinPartState of SCM means
 :Def5:
  dom it = dom p &
@@ -573,23 +575,23 @@ A15:  for m st il.m in dom p holds IT2.il.m = IncAddr(pi(p,il.m) ,k);
 end;
 
 theorem Th18:
-  for p being programmed FinPartState of SCM , k being Nat
+  for p being programmed FinPartState of SCM , k being Element of NAT
   for l being Instruction-Location of SCM st l in dom p
     holds IncAddr (p,k).l = IncAddr(pi(p,l),k)
    proof
-    let p be programmed FinPartState of SCM , k be Nat;
+    let p be programmed FinPartState of SCM , k be Element of NAT;
     let l be Instruction-Location of SCM such that A1: l in dom p;
-    consider m being Nat such that A2: l = il.m by AMI_5:19;
+    consider m being Element of NAT such that A2: l = il.m by AMI_5:19;
     thus IncAddr (p,k).l = IncAddr(pi(p,l),k) by A1,A2,Def5;
    end;
 
 theorem Th19:
- for i being Nat,
+ for i being Element of NAT,
      p being programmed FinPartState of SCM
    holds
     Shift(IncAddr(p,i),i) = IncAddr(Shift(p,i),i)
     proof
-     let i be Nat,
+     let i be Element of NAT,
          p be programmed FinPartState of SCM;
 
 A1: dom(IncAddr(Shift(p,i),i)) = dom (Shift(p,i)) by Def5;
@@ -604,13 +606,15 @@ A3:  dom (Shift(IncAddr(p,i),i)) c= the Instruction-Locations of SCM
      assume
 A4:   x in dom (Shift(IncAddr(p,i),i));
      then reconsider x'=x as Instruction-Location of SCM by A3;
-         x in { il.(m+i) where m is Nat:il.m in dom IncAddr(p,i) }
+         x in { il.(m+i) where m is Element of NAT:il.m in dom IncAddr(p,i) }
                                             by A4,Def4;
-     then consider m being Nat such that
+     then consider m being Element of NAT such that
 A5:     x = il.(m+i) & il.m in dom IncAddr(p,i);
 A6:     x = il.m + i by A5,Def1;
 A7:     il.m in dom p by A5,Def5;
-      dom Shift(p,i) = { il.(mm+i) where mm is Nat : il.mm in dom p} by Def4;
+      dom Shift(p,i) =
+       { il.(mm+i) where mm is Element of NAT : il.mm in dom p}
+      by Def4;
       then A8:     x' in dom Shift(p,i) by A5,A7;
 A9:   pi(p,il.m) = p.(il.m) by A7,AMI_5:def 5
                .= Shift(p,i).(il.m+i) by A7,Th15
@@ -625,7 +629,7 @@ A9:   pi(p,il.m) = p.(il.m) by A7,AMI_5:def 5
   end;
 
 definition
- let p be FinPartState of SCM , k be Nat;
+ let p be FinPartState of SCM , k be Element of NAT;
  func Relocated ( p, k ) -> FinPartState of SCM equals
 
  Start-At ((IC p)+k)+* IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p;
@@ -647,10 +651,10 @@ theorem Th20:
  end;
 
 theorem Th21:
- for p being FinPartState of SCM,k being Nat
+ for p being FinPartState of SCM,k being Element of NAT
   holds DataPart(Relocated(p,k)) = DataPart(p)
   proof
-   let p be FinPartState of SCM,k be Nat;
+   let p be FinPartState of SCM,k be Element of NAT;
      set X = (Start-At ((IC p)+k)) | SCM-Data-Loc;
      consider x being Element of dom X;
          now assume dom X <> {};
@@ -684,10 +688,10 @@ A4: dom DataPart p c= SCM-Data-Loc by AMI_5:69;
   end;
 
 theorem Th22:
- for p being FinPartState of SCM,k being Nat
+ for p being FinPartState of SCM,k being Element of NAT
   holds ProgramPart(Relocated(p,k)) = IncAddr(Shift(ProgramPart(p),k),k)
   proof
-   let p be FinPartState of SCM,k be Nat;
+   let p be FinPartState of SCM,k be Element of NAT;
      set X = (Start-At ((IC p)+k)) | the Instruction-Locations of SCM;
      consider x being Element of dom X;
          now assume dom X <> {};
@@ -738,11 +742,11 @@ theorem Th23:
   end;
 
 theorem Th24:
- for p being FinPartState of SCM, k being Nat,
+ for p being FinPartState of SCM, k being Element of NAT,
      l being Instruction-Location of SCM
   holds l in dom p iff l+k in dom Relocated(p,k)
    proof
-    let p be FinPartState of SCM,k be Nat,
+    let p be FinPartState of SCM,k be Element of NAT,
         l be Instruction-Location of SCM;
     consider m such that
 A1:      l = il.m by AMI_5:19;
@@ -771,10 +775,10 @@ then A7: dom ProgramPart p c= dom p by GRFUNC_1:8;
   end;
 
 theorem Th25:
- for p being FinPartState of SCM , k being Nat
+ for p being FinPartState of SCM , k being Element of NAT
   holds IC SCM in dom Relocated (p,k)
   proof
-   let p be FinPartState of SCM, k be Nat;
+   let p be FinPartState of SCM, k be Element of NAT;
 A1:Relocated (p,k)
     = Start-At ((IC p)+k) +* IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p
    .= Start-At ((IC p)+k) +* (IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p)
@@ -785,10 +789,10 @@ A1:Relocated (p,k)
   end;
 
 theorem Th26:
- for p being FinPartState of SCM, k being Nat
+ for p being FinPartState of SCM, k being Element of NAT
   holds IC Relocated (p,k) = (IC p) + k
    proof
-    let p be FinPartState of SCM, k be Nat;
+    let p be FinPartState of SCM, k be Element of NAT;
 A1:  Relocated (p,k) = Start-At ((IC p)+k)
       +* IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p
     .= Start-At ((IC p)+k)
@@ -807,19 +811,19 @@ then A2: not IC SCM in dom(IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p)
 
 theorem Th27:
  for p being FinPartState of SCM,
-     k being Nat,
+     k being Element of NAT,
      loc being Instruction-Location of SCM,
      I being Instruction of SCM
   st loc in dom ProgramPart p & I = p.loc
   holds IncAddr(I, k) = (Relocated (p, k)).(loc + k)
 proof
  let p be FinPartState of SCM,
-     k be Nat,
+     k be Element of NAT,
      loc be Instruction-Location of SCM,
      I be Instruction of SCM such that
 A1: loc in dom ProgramPart p & I = p.loc;
 A2: ProgramPart p c= p by RELAT_1:88;
-   consider i being Nat such that
+   consider i being Element of NAT such that
 A3:  loc = il.i by AMI_5:19;
         il.(i+k) in { il.(j+k) : il.j in dom ProgramPart(p) } by A1,A3;
   then il.(i+k) in dom ProgramPart(Relocated(p,k)) by Th23;
@@ -842,11 +846,11 @@ A6: I = (ProgramPart p).loc by A1,A2,GRFUNC_1:8;
 end;
 
 theorem Th28:
- for p being FinPartState of SCM,k being Nat
+ for p being FinPartState of SCM,k being Element of NAT
   holds Start-At (IC p + k) c= Relocated (p,k)
   proof
    let p be FinPartState of SCM,
-       k be Nat;
+       k be Element of NAT;
 A1:   Start-At (IC p + k) = {[IC SCM,IC p + k]} by AMI_5:35;
 A2:   IC SCM in dom (Relocated(p,k)) by Th25;
 A3:   IC Relocated(p,k) = IC p + k by Th26;
@@ -863,13 +867,13 @@ then A4:   [IC SCM,IC p + k] in Relocated(p,k) by A2,A3,FUNCT_1:def 4;
 theorem Th29:
  for s being data-only FinPartState of SCM,
      p being FinPartState of SCM,
-     k being Nat st IC SCM in dom p
+     k being Element of NAT st IC SCM in dom p
   holds
    Relocated((p +* s), k) = Relocated (p,k) +* s
    proof
      let s be data-only FinPartState of SCM,
          p be FinPartState of SCM,
-         k be Nat; assume
+         k be Element of NAT; assume
 A1: IC SCM in dom p;
 then A2: IC SCM in dom p \/ dom s by XBOOLE_0:def 2;
 A3: not IC SCM in SCM-Data-Loc
@@ -902,13 +906,13 @@ A9: DataPart (p +* s)
    end;
 
 theorem Th30:
- for k being Nat,
+ for k being Element of NAT,
      p being autonomic FinPartState of SCM ,
      s1, s2 being State of SCM
     st p c= s1 & Relocated (p,k) c= s2
   holds p c= s1 +* s2|SCM-Data-Loc
   proof
-   let k be Nat,
+   let k be Element of NAT,
        p be autonomic FinPartState of SCM ,
        s1, s2 be State of SCM such that
 A1:  p c= s1 & Relocated (p,k) c= s2;
@@ -977,9 +981,9 @@ theorem Th31:
    let s be State of SCM;
    set INS = CurInstr s;
 
-     consider m being Nat such that
+     consider m being Element of NAT such that
 A1:     IC s = il.m by AMI_5:19;
-     consider m1 being Nat such that
+     consider m1 being Element of NAT such that
 A2:     IC s = il.m1 & IC s + k = il.(m1 + k) by Def1;
 
 A3:  Next IC (s +* Start-At (IC s + k))
@@ -1441,14 +1445,14 @@ A70:   now let d be Data-Location;
 theorem Th32:
  for INS being Instruction of SCM,
      s being State of SCM,
-     j, k being Nat
+     j, k being Element of NAT
   st IC s = il.(j+k)
  holds Exec(INS, s +* Start-At (IC s -' k))
      = Exec(IncAddr(INS, k), s) +* Start-At (IC Exec(IncAddr(INS,k), s) -' k)
  proof
   let INS be Instruction of SCM,
         s be State of SCM,
-        j, k be Nat;
+        j, k be Element of NAT;
   assume
 A1: IC s = il.(j+k);
 then A2: Next (IC s -' k)
@@ -1859,16 +1863,16 @@ end;
 begin :: Main theorems of Relocatability
 
 theorem
-     for k being Nat
+     for k being Element of NAT
  for p being autonomic FinPartState of SCM st IC SCM in dom p
  for s being State of SCM st
      p c= s
- for i being Nat
+ for i being Element of NAT
   holds (Computation (s +* Relocated (p,k))).i
        = (Computation s).i +* Start-At (IC (Computation s ).i + k)
         +* ProgramPart (Relocated (p,k))
    proof
-    let k be Nat;
+    let k be Element of NAT;
     let p be autonomic FinPartState of SCM such that
         A1: IC SCM in dom p;
     let s be State of SCM such that
@@ -1901,7 +1905,7 @@ A7:    IC p = p.IC SCM by A1,AMI_3:def 16
            DataPart p c= p by RELAT_1:88;
 then A8:    DataPart p c= s by A2,XBOOLE_1:1;
 A9:    (Computation s).0 = s by AMI_1:def 19;
-      defpred P[Nat] means (Computation (s +* Relocated (p,k))).$1
+      defpred P[Element of NAT] means (Computation (s +* Relocated (p,k))).$1
         = (Computation (s)).$1+* Start-At (IC (Computation (s)).$1 + k)
          +* ProgramPart (Relocated (p,k));
 
@@ -1918,7 +1922,7 @@ A9:    (Computation s).0 = s by AMI_1:def 19;
         .= (Computation s).0 +* Start-At (IC (Computation s).0 + k)
                     +* ProgramPart (Relocated (p,k)) by A7,A8,A9,FUNCT_4:79;
 then A10:     P[0];
-A11:     for i being Nat st P[i] holds P[i+1]
+A11:     for i being Element of NAT st P[i] holds P[i+1]
 ::        (Computation (s +* Relocated (p,k))).i
 ::     = (Computation s).i +* Start-At (IC (Computation s).i + k)
 ::        +* ProgramPart (Relocated (p,k))
@@ -1927,7 +1931,7 @@ A11:     for i being Nat st P[i] holds P[i+1]
 ::        +* Start-At (IC (Computation s).(i+1) + k)
 ::        +* ProgramPart (Relocated (p,k))
   proof
-   let i be Nat
+   let i be Element of NAT
    such that
 A12: (Computation (s +* Relocated (p,k))).i
      = (Computation (s)).i +* Start-At (IC (Computation (s)).i + k)
@@ -1997,23 +2001,23 @@ A23:  Exec(IncAddr(CurInstr (Computation (s)).i,k),
           +* ProgramPart (Relocated (p,k)) by A12,A13,A23,AMI_5:77;
     end;
 
-    thus for i being Nat holds P[i] from NAT_1:sch 1(A10,A11);
+    thus for i being Element of NAT holds P[i] from NAT_1:sch 1(A10,A11);
    end;
 
 theorem Th34:
- for k being Nat,
+ for k being Element of NAT,
      p being autonomic FinPartState of SCM ,
      s1, s2, s3 being State of SCM
     st IC SCM in dom p & p c= s1 & Relocated (p,k) c= s2 &
        s3 = s1 +* s2|SCM-Data-Loc
-    holds for i being Nat holds
+    holds for i being Element of NAT holds
      IC (Computation s1).i + k = IC (Computation s2).i &
      IncAddr(CurInstr((Computation s1).i), k) = CurInstr((Computation s2).i) &
      (Computation s1).i|dom (DataPart p)
           = (Computation s2).i|dom (DataPart (Relocated (p,k))) &
      (Computation s3).i|SCM-Data-Loc = (Computation s2).i|SCM-Data-Loc
  proof
-  let k be Nat,
+  let k be Element of NAT,
       p be autonomic FinPartState of SCM,
       s1,s2,s3 be State of SCM such that
 A1:   IC SCM in dom p and
@@ -2029,7 +2033,7 @@ then A7:   DataPart p c= s1 by A2,XBOOLE_1:1;
 then A8:   DataPart (Relocated(p,k)) c= s2 by A3,XBOOLE_1:1;
 A9:   p is non programmed by A1,AMI_5:76;
 A10:   p c= s3 by A2,A3,A4,Th30;
-   defpred Z[Nat] means
+   defpred Z[Element of NAT] means
    IC (Computation s1).$1 + k = IC (Computation s2).$1 &
    IncAddr(CurInstr((Computation s1).$1), k) = CurInstr((Computation s2).$1) &
     (Computation s1).$1|dom (DataPart p)
@@ -2084,7 +2088,7 @@ A18: dom (s2|SCM-Data-Loc) = SCM-Data-Loc by AMI_5:29;
     end;
 then A19: Z[0];
 
-   now let i be Nat such that
+   now let i be Element of NAT such that
 A20: IC (Computation s1).i + k = IC (Computation s2).i and
 A21:
     IncAddr(CurInstr((Computation s1).i), k) = CurInstr((Computation s2).i) and
@@ -2204,7 +2208,7 @@ A61: Cs2i1 = Following Cs2i by AMI_1:def 19
 A62: CurInstr Cs3i = CurInstr Cs1i by A2,A9,A10,AMI_5:87;
 A63: Cs3i1 = Following Cs3i by AMI_1:def 19
             .= Exec (CurInstr Cs1i, Cs3i) by A62;
-  consider j being Nat such that
+  consider j being Element of NAT such that
 A64: IC Cs1i = il.j by AMI_5:19;
 A65: Next (IC Cs1i + k) = Next (il.(j + k)) by A64,Def1
                        .= il.(j+k+1) by AMI_3:54
@@ -2832,20 +2836,20 @@ GRFUNC_1:8;
                                     by A40,A41,GRFUNC_1:9;
     end;
     end;
-then A177: for i be Nat st Z[i] holds Z[i+1];
+then A177: for i be Element of NAT st Z[i] holds Z[i+1];
    thus
-        for i being Nat holds Z[i] from NAT_1:sch 1(A19,A177);
+        for i being Element of NAT holds Z[i] from NAT_1:sch 1(A19,A177);
 end;
 
 theorem Th35:
  for p being autonomic FinPartState of SCM ,
-     k being Nat
+     k being Element of NAT
   st IC SCM in dom p
   holds
   p is halting iff Relocated (p,k) is halting
   proof
    let p be autonomic FinPartState of SCM ,
-       k be Nat;
+       k be Element of NAT;
    assume
 A1: IC SCM in dom p;
 
@@ -2859,7 +2863,7 @@ A3:  Relocated(p,k) c= t;
      reconsider s = t +* p as State of SCM;
 A4: p c= t +* p by FUNCT_4:26;
      then s is halting by A2,AMI_1:def 26;
-     then consider u being Nat such that
+     then consider u being Element of NAT such that
 A5:  CurInstr((Computation s).u) = halt SCM by AMI_1:def 20;
       reconsider s3 = s +* t|SCM-Data-Loc as State of SCM by AMI_5:82;
           s3 = s3;
@@ -2879,7 +2883,7 @@ A8: p c= t;
     reconsider s = t +* Relocated(p, k) as State of SCM;
 A9: Relocated (p,k) c= t +* Relocated (p,k) by FUNCT_4:26;
      then s is halting by A7,AMI_1:def 26;
-     then consider u being Nat such that
+     then consider u being Element of NAT such that
 A10:  CurInstr((Computation s).u) = halt SCM by AMI_1:def 20;
       reconsider s3 = t +* s|SCM-Data-Loc as State of SCM by AMI_5:82;
           s3 = s3;
@@ -2890,16 +2894,16 @@ then A11:  IncAddr(CurInstr((Computation t).u), k) = halt SCM
   end;
 
 theorem Th36:
- for k being Nat
+ for k being Element of NAT
  for p being autonomic FinPartState of SCM st IC SCM in dom p
  for s being State of SCM st Relocated(p,k) c= s
   holds
-  for i being Nat holds
+  for i being Element of NAT holds
     (Computation s).i
      = (Computation(s +* p)).i +* Start-At (IC(Computation(s +* p)).i + k)
        +* s|dom ProgramPart p +* ProgramPart (Relocated (p,k))
  proof
-   let k be Nat;
+   let k be Element of NAT;
    let p be autonomic FinPartState of SCM such that
 A1:  IC SCM in dom p;
    let s be State of SCM such that
@@ -2933,7 +2937,7 @@ A14:   {IC SCM} misses dom ProgramPart p by AMI_5:68;
  set DP = DataPart p;
  set PR = ProgramPart (Relocated (p,k));
 
- defpred Z[Nat] means (Computation s).$1
+ defpred Z[Element of NAT] means (Computation s).$1
      = (Computation(s +* p)).$1 +* Start-At (IC(Computation(s +* p)).$1 + k)
       +* s|dom ProgramPart p +* ProgramPart (Relocated (p,k));
   (Computation s).0
@@ -2960,9 +2964,9 @@ A14:   {IC SCM} misses dom ProgramPart p by AMI_5:68;
   .= (Computation (s +* p)).0 +* Start-At (IC(Computation (s +* p)).0 + k)
        +* s|dom ProgramPart p +* ProgramPart (Relocated (p,k)) by AMI_1:def 19;
 then A15: Z[0];
-A16:     for i being Nat st Z[i] holds Z[i+1]
+A16:     for i being Element of NAT st Z[i] holds Z[i+1]
   proof
-   let i be Nat
+   let i be Element of NAT
    such that
 A17: (Computation s).i
     = (Computation (s +* p)).i +* Start-At (IC (Computation (s +* p)).i + k)
@@ -3067,21 +3071,21 @@ A31: CurInstr (Computation (s)).i
           +* s|dom ProgramPart p +* ProgramPart (Relocated (p,k)) by A19,Th31;
     end;
 
-    thus for i being Nat holds Z[i] from NAT_1:sch 1 (A15,A16);
+    thus for i being Element of NAT holds Z[i] from NAT_1:sch 1 (A15,A16);
   end;
 
 theorem Th37:
-  for k being Nat
+  for k being Element of NAT
   for p being FinPartState of SCM st IC SCM in dom p
   for s being State of SCM st p c= s & Relocated(p,k) is autonomic
  holds
-  for i being Nat holds
+  for i being Element of NAT holds
    (Computation s).i
     = (Computation(s +* Relocated(p,k))).i
       +* Start-At (IC(Computation(s +* Relocated(p,k))).i -' k)
       +* s|dom ProgramPart Relocated(p,k) +* ProgramPart (p)
   proof
-   let k be Nat;
+   let k be Element of NAT;
    let p be FinPartState of SCM such that
 A1:IC SCM in dom p;
    let s be State of SCM such that
@@ -3123,7 +3127,7 @@ A17: dom ProgramPart Relocated(p,k) =
  set PP = ProgramPart p;
  set DP = DataPart p;
  set PR = ProgramPart Relocated (p,k);
- defpred Z[Nat] means
+ defpred Z[Element of NAT] means
     (Computation s).$1
      = (Computation(s +* Relocated(p,k))).$1
      +* Start-At (IC(Computation(s +* Relocated(p,k))).$1 -' k)
@@ -3158,9 +3162,9 @@ A17: dom ProgramPart Relocated(p,k) =
      +* s|(dom ProgramPart Relocated(p,k))
      +* ProgramPart p by AMI_1:def 19;
 then A18: Z[0];
-A19:     for i being Nat st Z[i] holds Z[i+1]
+A19:     for i being Element of NAT st Z[i] holds Z[i+1]
   proof
-   let i be Nat
+   let i be Element of NAT
    such that
 A20: (Computation s).i
     = (Computation (s +* Relocated(p,k))).i
@@ -3223,12 +3227,12 @@ then A29:  IC (Computation (s +* Relocated(p,k))).i
        in dom ProgramPart(Relocated(p,k)) by A3,A28,AMI_5:86;
 A30:  ProgramPart(Relocated(p,k)) c= (Computation (s +* Relocated(p,k))).i
                                          by A28,AMI_5:64;
-   consider jk being Nat such that
+   consider jk being Element of NAT such that
 A31: IC (Computation (s +* Relocated(p,k))).i = il.jk by AMI_5:19;
 
         il.jk in { il.(j+k) : il.j in dom ProgramPart(p) }
                    by A29,A31,Th23;
-   then consider j being Nat such that
+   then consider j being Element of NAT such that
 A32: il.jk = il.(j+k) & il.j in dom ProgramPart(p);
 
 A33: il.(j+k) -' k + k = il.j + k -'k + k by Def1
@@ -3297,25 +3301,25 @@ then A37:
      +* Start-At (IC (Computation (s +* Relocated(p,k))).(i+1) -' k)
      +* s|dom ProgramPart Relocated(p,k) +* ProgramPart p by A22,A37,AMI_5:77;
     end;
-   thus for i being Nat holds Z[i] from NAT_1:sch 1 (A18,A19);
+   thus for i being Element of NAT holds Z[i] from NAT_1:sch 1 (A18,A19);
   end;
 
 theorem Th38:
  for p being FinPartState of SCM st IC SCM in dom p
- for k being Nat
+ for k being Element of NAT
    holds
   p is autonomic iff Relocated (p,k) is autonomic
   proof
    let p be FinPartState of SCM such that
 A1:IC SCM in dom p;
-   let k be Nat;
+   let k be Element of NAT;
    hereby assume
 A2: p is autonomic;
    thus Relocated (p,k) is autonomic
    proof
     let s1,s2 be State of SCM such that
 A3:   Relocated (p,k) c= s1 & Relocated (p,k) c= s2;
-    let i be Nat;
+    let i be Element of NAT;
 A4:  (Computation s1).i
      = (Computation(s1 +* p)).i +* Start-At (IC(Computation(s1 +* p)).i + k)
         +* s1|dom ProgramPart p +* ProgramPart (Relocated (p,k))
@@ -3436,7 +3440,7 @@ A27: Relocated (p,k) is autonomic;
    proof
     let s1,s2 be State of SCM such that
 A28:   p c= s1 & p c= s2;
-    let i be Nat;
+    let i be Element of NAT;
 A29:  (Computation s1).i
      = (Computation(s1 +* Relocated (p,k))).i
      +* Start-At (IC(Computation(s1 +* Relocated (p,k))).i -' k)
@@ -3568,16 +3572,16 @@ A51:    (Computation s1).i|dom (Start-At (IC p) +* ProgramPart p)
 
 theorem Th39:
  for p being halting autonomic FinPartState of SCM st IC SCM in dom p
- for k being Nat holds
+ for k being Element of NAT holds
   DataPart(Result(p)) = DataPart(Result(Relocated(p,k)))
   proof
    let p be halting autonomic FinPartState of SCM such that
 A1: IC SCM in dom p;
-   let k be Nat;
+   let k be Element of NAT;
    consider s being State of SCM such that
 A2: p c= s by AMI_3:39;
         s is halting by A2,AMI_1:def 26;
-   then consider j1 being Nat such that
+   then consider j1 being Element of NAT such that
 A3: Result(s) = (Computation s).j1 and
 A4: CurInstr(Result(s)) = halt SCM by AMI_1:def 22;
    consider t being State of SCM such that
@@ -3613,7 +3617,7 @@ A9: Relocated(p,k) is halting & Relocated(p,k) is autonomic
 theorem
      for F being PartFunc of FinPartSt SCM, FinPartSt SCM,
      p being FinPartState of SCM st IC SCM in dom p & F is data-only
- for k being Nat
+ for k being Element of NAT
    holds
  p computes F iff Relocated ( p,k) computes F
   proof
@@ -3621,7 +3625,7 @@ theorem
       p be FinPartState of SCM such that
 A1: IC SCM in dom p and
 A2: F is data-only;
-  let k be Nat;
+  let k be Element of NAT;
   hereby assume A3: p computes F;
    thus Relocated ( p,k) computes F
     proof

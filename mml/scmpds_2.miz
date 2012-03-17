@@ -43,20 +43,21 @@ registration
 end;
 
 theorem Th1:
-  (ex k st x = 2*k+2) iff x in SCM-Instr-Loc
+  (ex k being Element of NAT st x = 2*k+2) iff x in SCM-Instr-Loc
 proof
-  thus (ex k st x = 2*k+2) implies x in SCM-Instr-Loc
-  proof given k such that
-    A1: x=2*k+2;
-        x=2*k+2*1 by A1;
+  thus (ex k being Element of NAT st x = 2*k+2) implies x in SCM-Instr-Loc
+  proof given k be Element of NAT such that
+A1: x=2*k+2;
+    x=2*k+2*1 by A1;
     then x = 2*(k + 1) & k + 1 > 0 by NAT_1:19;
     hence thesis by AMI_2:def 3;
   end;
   assume x in SCM-Instr-Loc;
-    then consider k such that
+    then consider k being Element of NAT such that
     A2:x = 2*k & k > 0 by AMI_2:def 3;
-    consider j such that
+    consider j being Nat such that
  A3:k=j+1 by A2,NAT_1:22;
+    reconsider j as Element of NAT by ORDINAL1:def 13;
  A4:x=2*j+2*1 by A2,A3;
     take j;
     thus thesis by A4;
@@ -68,12 +69,13 @@ proof
   set A = SCMPDS;
   let x be set;
   assume A1: x in (the Object-Kind of A)"{ the Instructions of A };
-  then reconsider x as Nat by FUNCT_2:46;
-      SCMPDS-OK.x in { SCMPDS-Instr } by A1,FUNCT_2:46;
+  then reconsider x as Element of NAT by FUNCT_2:46;
+  SCMPDS-OK.x in { SCMPDS-Instr } by A1,FUNCT_2:46;
   then SCMPDS-OK.x = SCMPDS-Instr by TARSKI:def 1;
-  then consider k such that
+  then consider k being Nat such that
 A2: x = 2*k+2 by SCMPDS_1:20;
-   thus thesis by A2,Th1;
+   k in NAT by ORDINAL1:def 13;
+   hence thesis by A2,Th1;
 end;
 
 theorem Th3:
@@ -88,10 +90,9 @@ registration
  cluster SCMPDS -> IC-Ins-separated data-oriented definite;
  coherence
   proof
-      SCMPDS is IC-Ins-separated
- proof
-        ObjectKind IC SCMPDS
-     = SCMPDS-OK.IC SCMPDS
+   SCMPDS is IC-Ins-separated
+   proof
+     ObjectKind IC SCMPDS = SCMPDS-OK.IC SCMPDS
     .= the Instruction-Locations of SCMPDS by SCMPDS_1:def 4;
   hence thesis by AMI_1:def 11;
  end;
@@ -100,7 +101,7 @@ registration
 end;
 
 theorem
-      the Instruction-Locations of SCMPDS <> INT &
+  the Instruction-Locations of SCMPDS <> INT &
    the Instructions of SCMPDS <> INT &
    the Instruction-Locations of SCMPDS <> the Instructions of SCMPDS
    by AMI_2:6,SCMPDS_1:17;
@@ -112,7 +113,8 @@ proof
       D2=SCM-Instr-Loc;
 A1: now let x;
     assume x in NAT;
-    then x= 0 or (ex j st x = 2*j+1) or (ex j st x = 2*j+2) by SCMPDS_1:14;
+    then x= 0 or (ex j being Element of NAT st x = 2*j+1) or
+      (ex j being Element of NAT st x = 2*j+2) by SCMPDS_1:14;
     then x in{0} or x in D1 or x in D2 by Th1,AMI_2:def 2,TARSKI:def 1;
     then x in {0} \/ D1 or x in D2 by XBOOLE_0:def 2;
     hence x in {0} \/ D1 \/ D2 by XBOOLE_0:def 2;
@@ -160,20 +162,18 @@ end;
 canceled;
 
 theorem
-    x in SCM-Data-Loc implies x is Int_position by Def2;
+  x in SCM-Data-Loc implies x is Int_position by Def2;
 
 theorem
-     SCM-Data-Loc misses the Instruction-Locations of SCMPDS by AMI_5:33;
+  SCM-Data-Loc misses the Instruction-Locations of SCMPDS by AMI_5:33;
 
 theorem
-     the Instruction-Locations of SCMPDS is infinite by AMI_3:def 1
-,AMI_5:32
-;
+  the Instruction-Locations of SCMPDS is infinite by AMI_3:def 1,AMI_5:32;
 
 theorem
-     for I being Int_position holds I is Data-Location
+  for I being Int_position holds I is Data-Location
 proof let I be Int_position;
-     I in SCM-Data-Loc by Def2; hence I is Data-Location by AMI_3:def 1,def 2;
+  I in SCM-Data-Loc by Def2; hence I is Data-Location by AMI_3:def 1,def 2;
 end;
 
 theorem Th13:
@@ -185,19 +185,19 @@ A1:  l in SCM-Data-Loc by Def2;
 end;
 
 theorem
-     for x being set st x in SCM-Instr-Loc
+  for x being set st x in SCM-Instr-Loc
   holds x is Instruction-Location of SCMPDS;
 
 begin :: The Instruction Structure
-reserve
-        d1,d2,d3,d4,d5 for Element of SCM-Data-Loc,
+
+reserve d1,d2,d3,d4,d5 for Element of SCM-Data-Loc,
         k1,k2,k3,k4,k5,k6 for Integer;
 
 registration let I be Instruction of SCMPDS;
  cluster InsCode I -> natural;
  coherence
   proof
-       InsCode I in Segm 14;
+   InsCode I in Segm 14;
    hence thesis by ORDINAL1:def 13;
   end;
 end;
@@ -227,7 +227,7 @@ proof
 end;
 
 theorem
-     for I being Instruction of SCMPDS holds InsCode I <= 13
+  for I being Instruction of SCMPDS holds InsCode I <= 13
 proof let I be Instruction of SCMPDS;
 A1:  InsCode I = I`1 by AMI_5:def 1;
     per cases by Lm1;
@@ -1392,14 +1392,14 @@ theorem
 
 definition let s be State of SCMPDS,c be Integer;
  func ICplusConst(s,c) -> Instruction-Location of SCMPDS means
-:Def20: ex m be Nat st m = IC s & it = abs(m-2+2*c)+2;
+:Def20: ex m be Element of NAT st m = IC s & it = abs(m-2+2*c)+2;
  existence
   proof reconsider m1=IC s as Element of SCM-Instr-Loc;
-        reconsider n=m1 as Nat;
-          m1 in { 2*k: k>0} by AMI_2:def 3;
-    then consider k such that
+        reconsider n=m1 as Element of NAT;
+          m1 in { 2*k where k is Element of NAT : k>0} by AMI_2:def 3;
+    then consider k being Element of NAT such that
 A1: m1 = 2*k & k > 0;
-    consider j such that
+    consider j being Nat such that
 A2: k = j+1 by A1,NAT_1:22;
      IC s = 2*j + 2*1 by A1,A2;
 then A3: abs(n-2+2*c)+2 =abs(2*j+2*c)+2
@@ -1425,9 +1425,9 @@ A1:  I = [ i, <*k1*>];
 A2: Exec(goto k1, s) = SCM-Exec-Res(I,S) by Th56
    .=SCM-Chg(S,jump_address(S,I const_INT)) by SCMPDS_1:def 24;
 A3: I const_INT = k1 by A1,SCMPDS_1:34;
-   reconsider m=IC S as Nat;
+   reconsider m=IC S as Element of NAT;
 A4: m=IC s by Th7;
-   consider n be Nat such that
+   consider n be Element of NAT such that
 A5: n=IC s & ICplusConst(s,k1)=abs(n-2+2*k1)+2 by Def20;
    thus Exec(goto k1, s).IC SCMPDS = jump_address(S,k1)
          by A2,A3,SCMPDS_1:26
@@ -1457,14 +1457,14 @@ A1:  I = [ i, <*da,k1,k2*>];
 A2: Exec((a,k1)<>0_goto k2, s) = SCM-Exec-Res(I,S) by Th56
    .=SCM-Chg(S,IF) by A1,SCMPDS_1:def 24;
 A3: I P31address = da & I P32const = k1 & I P33const = k2 by A1,SCMPDS_1:36;
-   consider n be Nat such that
+   consider n be Element of NAT such that
 A4: n=IC s & ICplusConst(s,k2)=abs(n-2+2*k2)+2 by Def20;
 A5: A2=2*abs((s.a+k1))+1 by A3,SCMPDS_1:def 8
      .=Da;
   thus s.Da <> 0 implies
          Exec((a,k1)<>0_goto k2,s).IC SCMPDS = ICplusConst(s,k2)
   proof assume A6: s.Da <> 0;
-   reconsider m=IC S as Nat;
+   reconsider m=IC S as Element of NAT;
 A7: m=IC s by Th7;
     thus Exec((a,k1)<>0_goto k2, s).IC SCMPDS = IF by A2,SCMPDS_1:26
       .= jump_address(S,k2) by A3,A5,A6,CQC_LANG:def 1
@@ -1502,14 +1502,14 @@ A1:  I = [ i, <*da,k1,k2*>];
 A2: Exec((a,k1)<=0_goto k2, s) = SCM-Exec-Res(I,S) by Th56
    .=SCM-Chg(S,IF) by A1,SCMPDS_1:def 24;
 A3: I P31address = da & I P32const = k1 & I P33const = k2 by A1,SCMPDS_1:36;
-   consider n be Nat such that
+   consider n be Element of NAT such that
 A4: n=IC s & ICplusConst(s,k2)=abs(n-2+2*k2)+2 by Def20;
 A5: A2=2*abs((s.a+k1))+1 by A3,SCMPDS_1:def 8
      .=Da;
   thus s.Da <= 0 implies
          Exec((a,k1)<=0_goto k2,s).IC SCMPDS = ICplusConst(s,k2)
   proof assume A6: s.Da <= 0;
-   reconsider m=IC S as Nat;
+   reconsider m=IC S as Element of NAT;
 A7: m=IC s by Th7;
     thus Exec((a,k1)<=0_goto k2, s).IC SCMPDS = IF by A2,SCMPDS_1:26
       .= jump_address(S,k2) by A3,A5,A6,AMI_2:def 14
@@ -1547,14 +1547,14 @@ A1:  I = [ i, <*da,k1,k2*>];
 A2: Exec((a,k1)>=0_goto k2, s) = SCM-Exec-Res(I,S) by Th56
    .=SCM-Chg(S,IF) by A1,SCMPDS_1:def 24;
 A3: I P31address = da & I P32const = k1 & I P33const = k2 by A1,SCMPDS_1:36;
-   consider n be Nat such that
+   consider n be Element of NAT such that
 A4: n=IC s & ICplusConst(s,k2)=abs(n-2+2*k2)+2 by Def20;
 A5: A2=2*abs((s.a+k1))+1 by A3,SCMPDS_1:def 8
      .=Da;
   thus s.Da >= 0 implies
          Exec((a,k1)>=0_goto k2,s).IC SCMPDS = ICplusConst(s,k2)
   proof assume A6: s.Da >= 0;
-   reconsider m=IC S as Nat;
+   reconsider m=IC S as Element of NAT;
 A7: m=IC s by Th7;
     thus Exec((a,k1)>=0_goto k2, s).IC SCMPDS = IF by A2,SCMPDS_1:26
       .= jump_address(S,k2) by A3,A5,A6,AMI_2:def 14
@@ -1614,7 +1614,7 @@ proof
   reconsider da = a as Element of SCM-Data-Loc by Def2;
   reconsider I = saveIC(a,k1) as Element of SCMPDS-Instr;
   reconsider S = s as SCMPDS-State;
-  reconsider m = IC S as Nat;
+  reconsider m = IC S as Element of NAT;
   set A1=Address_Add(S,I P21address,I P22const),
       S1=SCM-Chg(S, A1,m);
   reconsider i = 3 as Element of Segm 14 by GR_CY_1:10;
@@ -1738,10 +1738,10 @@ A10:   t.x =loc by A3,A9;
     take s;
     thus s.0=loc by A3;
     hereby let d be Int_position;
-          d in SCM-Data-Loc by Def2;
-       then consider j be Nat such that
-A11:   d=2*j+1 & (not contradiction) by AMI_2:def 2;
-          not d in dom (0.--> loc) by A2,A11,TARSKI:def 1;
+       d in SCM-Data-Loc by Def2;
+       then consider j be Element of NAT such that
+A11:   d=2*j+1 & not contradiction by AMI_2:def 2;
+      not d in dom (0.--> loc) by A2,A11,TARSKI:def 1;
       hence s.d=s1.d by FUNCT_4:12
       .=k by A1;
     end;
@@ -1760,32 +1760,33 @@ A2: now let x be set;
      assume A3: x in dom s;
      per cases by A1,A3,SCMPDS_1:14;
      suppose A4:x=0;
-       consider m be Nat such that
+       consider m be Element of NAT such that
      A5: m=IC s & ICplusConst(s,0)=abs(m-2+2*0)+2 by Def20;
        reconsider n=IC s as Element of SCM-Instr-Loc;
-            n in { 2*k : k > 0 } by AMI_2:def 3;
-        then consider k such that
+        n in { 2*k where k is Element of NAT : k > 0 } by AMI_2:def 3;
+        then consider k being Element of NAT such that
      A6: n=2*k & k>0;
        consider n0 be Nat such that
      A7: k=n0+1 by A6,NAT_1:22;
+        reconsider n0 as Element of NAT by ORDINAL1:def 13;
      A8: n=2*n0+2*1 by A6,A7;
      A9: 2*n0 >= 0 by NAT_1:18;
        thus Es.x=abs(2*n0)+2 by A4,A5,A6,A7,Th66
         .=n by A8,A9,ABSVALUE:def 1
         .=S.x by A4;
      end;
-     suppose ex j st x = 2*j+1;
+     suppose ex j being Element of NAT st x = 2*j+1;
          then x in SCM-Data-Loc by AMI_2:def 2;
          then reconsider d=x as Int_position by Def2;
          thus Es.x=s.d by Th66
          .=S.x;
      end;
-     suppose ex j st x = 2*j+2;
-         then consider j such that
+     suppose ex j being Element of NAT st x = 2*j+2;
+         then consider j being Element of NAT such that
       A10: x=2*j+2;
       A11: x=2*j+2*1 by A10
           .=2*(j+1);
-              j+1>0 by NAT_1:19;
+         j+1>0 by NAT_1:19;
          then x in SCM-Instr-Loc by A11,AMI_2:def 3;
          then reconsider v=x as Element of SCM-Instr-Loc;
          reconsider I0=I as Element of SCMPDS-Instr;
@@ -1818,23 +1819,22 @@ A4: Exec(I,s).IC SCMPDS = s.IC SCMPDS by A2,AMI_1:def 8
     reconsider w = t.0 as Instruction-Location of SCMPDS by A3;
     consider mj being Element of SCM-Instr-Loc such that
 A5:   mj = w & Next w = Next mj by Def19;
-        Next w = mj + 2 by A5,AMI_2:def 15; hence contradiction by A1,A4
-,A5;
+    Next w = mj + 2 by A5,AMI_2:def 15; hence contradiction by A1,A4,A5;
   end;
 
 theorem Th77:
- a:=k1 is non halting
+  a:=k1 is non halting
 proof
-    consider s being State of SCMPDS;
-        Exec(a:=k1, s).IC SCMPDS = Next IC s by Th57;
-    hence thesis by Th76;
+  consider s being State of SCMPDS;
+  Exec(a:=k1, s).IC SCMPDS = Next IC s by Th57;
+  hence thesis by Th76;
 end;
 
 theorem Th78:
  (a,k1):=k2 is non halting
 proof
     consider s being State of SCMPDS;
-        Exec((a,k1):=k2, s).IC SCMPDS = Next IC s by Th58;
+    Exec((a,k1):=k2, s).IC SCMPDS = Next IC s by Th58;
     hence thesis by Th76;
 end;
 
@@ -1842,7 +1842,7 @@ theorem Th79:
  (a,k1):=(b,k2) is non halting
 proof
     consider s being State of SCMPDS;
-        Exec((a,k1):=(b,k2), s).IC SCMPDS = Next IC s by Th59;
+    Exec((a,k1):=(b,k2), s).IC SCMPDS = Next IC s by Th59;
     hence thesis by Th76;
 end;
 
@@ -1850,7 +1850,7 @@ theorem Th80:
  AddTo(a,k1,k2) is non halting
 proof
     consider s being State of SCMPDS;
-        Exec(AddTo(a,k1,k2), s).IC SCMPDS = Next IC s by Th60;
+    Exec(AddTo(a,k1,k2), s).IC SCMPDS = Next IC s by Th60;
     hence thesis by Th76;
 end;
 
@@ -1858,7 +1858,7 @@ theorem Th81:
  AddTo(a,k1,b,k2) is non halting
 proof
     consider s being State of SCMPDS;
-        Exec(AddTo(a,k1,b,k2), s).IC SCMPDS = Next IC s by Th61;
+    Exec(AddTo(a,k1,b,k2), s).IC SCMPDS = Next IC s by Th61;
     hence thesis by Th76;
 end;
 
@@ -1866,7 +1866,7 @@ theorem Th82:
  SubFrom(a,k1,b,k2) is non halting
 proof
     consider s being State of SCMPDS;
-        Exec(SubFrom(a,k1,b,k2), s).IC SCMPDS = Next IC s by Th62;
+    Exec(SubFrom(a,k1,b,k2), s).IC SCMPDS = Next IC s by Th62;
     hence thesis by Th76;
 end;
 
@@ -1874,7 +1874,7 @@ theorem Th83:
  MultBy(a,k1,b,k2) is non halting
 proof
     consider s being State of SCMPDS;
-        Exec(MultBy(a,k1,b,k2), s).IC SCMPDS = Next IC s by Th63;
+    Exec(MultBy(a,k1,b,k2), s).IC SCMPDS = Next IC s by Th63;
     hence thesis by Th76;
 end;
 
@@ -1882,7 +1882,7 @@ theorem Th84:
  Divide(a,k1,b,k2) is non halting
 proof
     consider s being State of SCMPDS;
-        Exec(Divide(a,k1,b,k2), s).IC SCMPDS = Next IC s by Th64;
+    Exec(Divide(a,k1,b,k2), s).IC SCMPDS = Next IC s by Th64;
     hence thesis by Th76;
 end;
 
@@ -1891,7 +1891,7 @@ theorem Th85:
 proof
    assume A1: k1<>0;
    set n=abs(k1);
-       n+1>0 by NAT_1:19;
+   n+1>0 by NAT_1:19;
    then 2*(n+1) in SCM-Instr-Loc by AMI_2:def 3;
    then reconsider loc=2*(n+1) as Instruction-Location of SCMPDS;
    consider s be State of SCMPDS such that
@@ -1900,7 +1900,7 @@ A3: loc=IC s by A2;
          -n<=k1 by ABSVALUE:11;
      then 0-n<=k1;
 then A4:  n+k1>=0 by XREAL_1:22;
-     consider m be Nat such that
+     consider m be Element of NAT such that
 A5:  m=IC s & ICplusConst(s,k1)=abs(m-2+2*k1)+2 by Def20;
 A6: Exec(goto k1, s).IC SCMPDS =abs(2*(n+1)-2+2*k1)+2 by A3,A5,Th66
     .=abs(2*(n+k1))+2
@@ -1908,8 +1908,7 @@ A6: Exec(goto k1, s).IC SCMPDS =abs(2*(n+1)-2+2*k1)+2 by A3,A5,Th66
     .=2*abs((n+k1))+2 by ABSVALUE:def 1
     .=2*(n+k1)+2 by A4,ABSVALUE:def 1
     .=2*n+2+2*k1;
-     assume
-       goto k1 is halting;
+     assume goto k1 is halting;
 then Exec(goto k1,s).IC SCMPDS = 2*n+2*1 by A2,AMI_1:def 8;
     then 2*k1=(2*n+2)-(2*n+2) by A6; hence contradiction by A1;
 end;
@@ -1919,7 +1918,7 @@ theorem Th86:
 proof
     consider s being State of SCMPDS such that
 A1: for d being Int_position holds s.d = 0 by Th73;
-        s.DataLoc(s.a,k1) = 0 by A1;
+    s.DataLoc(s.a,k1) = 0 by A1;
     then Exec((a,k1)<>0_goto k2, s).IC SCMPDS = Next IC s by Th67;
     hence thesis by Th76;
 end;
@@ -1929,7 +1928,7 @@ theorem Th87:
 proof
     consider s being State of SCMPDS such that
 A1: for d being Int_position holds s.d = 1 by Th73;
-        s.DataLoc(s.a,k1) = 1 by A1;
+    s.DataLoc(s.a,k1) = 1 by A1;
     then Exec((a,k1)<=0_goto k2, s).IC SCMPDS = Next IC s by Th68;
     hence thesis by Th76;
 end;
@@ -1939,7 +1938,7 @@ theorem Th88:
 proof
     consider s being State of SCMPDS such that
 A1: for d being Int_position holds s.d = -1 by Th73;
-        s.DataLoc(s.a,k1) = -1 by A1;
+    s.DataLoc(s.a,k1) = -1 by A1;
     then Exec((a,k1)>=0_goto k2, s).IC SCMPDS = Next IC s by Th69;
     hence thesis by Th76;
 end;
@@ -1947,7 +1946,7 @@ end;
 theorem Th89:
  return a is non halting
 proof
-       2*1 in SCM-Instr-Loc by AMI_2:def 3;
+   2*1 in SCM-Instr-Loc by AMI_2:def 3;
    then reconsider loc=2 as Instruction-Location of SCMPDS;
    consider s be State of SCMPDS such that
 A1: s.0=loc & for d being Int_position holds s.d = 0 by Th74;
@@ -1968,7 +1967,7 @@ theorem Th90:
  saveIC(a,k1) is non halting
 proof
     consider s being State of SCMPDS;
-        Exec(saveIC(a,k1), s).IC SCMPDS = Next IC s by Th71;
+    Exec(saveIC(a,k1), s).IC SCMPDS = Next IC s by Th71;
     hence thesis by Th76;
 end;
 
@@ -2012,14 +2011,14 @@ theorem Th91:
       suppose I in S1;
          then consider k1 being Element of INT such that
 A1:      I = [0,<*k1*>];
-             I = goto k1 by A1;
+         I = goto k1 by A1;
          hence thesis;
       end;
       suppose I in S2;
          then consider d1 such that
 A2:      I = [1,<*d1*>];
         reconsider a=d1 as Int_position by Def2;
-             I = return a by A2;
+         I = return a by A2;
          hence thesis;
       end;
       suppose I in S3;
@@ -2028,7 +2027,7 @@ A2:      I = [1,<*d1*>];
                k2 being Element of INT such that
 A3:     I = [I2,<*d2,k2*>] & I2 in {2,3};
         reconsider a=d2 as Int_position by Def2;
-            I2 = 2 or I2 = 3 by A3,TARSKI:def 2;
+        I2 = 2 or I2 = 3 by A3,TARSKI:def 2;
         then I = saveIC(a,k2) or I = a:=k2 by A3;
       hence thesis;
       end;
@@ -2038,7 +2037,7 @@ A3:     I = [I2,<*d2,k2*>] & I2 in {2,3};
              k1,k2 being Element of INT such that
 A4:     I=[I3,<*d3,k1,k2*>] & I3 in {4,5,6,7,8};
         reconsider a=d3 as Int_position by Def2;
-            I3 = 4 or I3 = 5 or I3 = 6 or I3 = 7 or I3 = 8 by A4,ENUMSET1:def 3
+        I3 = 4 or I3 = 5 or I3 = 6 or I3 = 7 or I3 = 8 by A4,ENUMSET1:def 3
 ;
          then I = (a,k1)<>0_goto k2 or I=(a,k1)<=0_goto k2 or I= (a,k1)
 >=0_goto k2
@@ -2126,7 +2125,7 @@ proof
     let I be Instruction of SCMPDS such that
 A1:   I is halting;
     consider K being Instruction of SCMPDS such that
-          K is halting and
+    K is halting and
 A2:   for J being Instruction of SCMPDS st J is halting holds K = J
        by AMI_1:def 9;
     thus I = K by A1,A2
@@ -2134,7 +2133,7 @@ A2:   for J being Instruction of SCMPDS st J is halting holds K = J
   end;
 
 theorem
-     halt SCMPDS = goto 0 by Th75,Th92;
+  halt SCMPDS = goto 0 by Th75,Th92;
 
 canceled 2;
 
@@ -2147,7 +2146,7 @@ proof let s be State of SCMPDS, i be Instruction of SCMPDS,
     reconsider c = i as Element of SCMPDS-Instr;
     reconsider S = s as Element of product SCMPDS-OK;
     reconsider l' = l as Element of SCM-Instr-Loc;
-        now per cases by Lm1;
+    now per cases by Lm1;
     case c in S1;
      then consider k1 being Element of INT such that
 A1:    c = [0,<*k1*>];
@@ -2180,7 +2179,7 @@ A3:    c = [I1,<*d1,k1*>] & I1 in { 2,3 };
            .= S.l' by SCMPDS_1:32;
        end;
        case A4:I1=3;
-       consider m be Nat such that
+       consider m be Element of NAT such that
        A5: m=IC S;
     set SS = SCM-Chg(S,Address_Add(S,c P21address,c P22const),m);
         thus SCM-Exec-Res(c,S).l'
@@ -2299,13 +2298,13 @@ A9:     c = [I1,<*d1,d2,k1,k2*>] & I1 in { 9,10,11,12,13 };
  end;
 
 theorem
-    SCMPDS is realistic by AMI_1:def 21,SCMPDS_1:17;
+  SCMPDS is realistic by AMI_1:def 21,SCMPDS_1:17;
 
 registration
  cluster SCMPDS -> steady-programmed realistic;
  coherence
   proof
-         SCMPDS is steady-programmed
+     SCMPDS is steady-programmed
      proof let s be State of SCMPDS, i be Instruction of SCMPDS,
       l be Instruction-Location of SCMPDS;
       thus Exec(i,s).l = s.l by Th96;
@@ -2315,19 +2314,21 @@ registration
 end;
 
 theorem
-     IC SCMPDS <> dl.i & IC SCMPDS <> il.i
+  for i being Element of NAT holds
+  IC SCMPDS <> dl.i & IC SCMPDS <> il.i
  proof
+   let i be Element of NAT;
   hereby assume IC SCMPDS = dl.i;
     then 0 = 2*i + 1 by AMI_3:def 19;
    hence contradiction;
   end;
   assume IC SCMPDS = il.i;
-    then 0 = 2*i + (1 + 1) by AMI_3:def 20
+   then 0 = 2*i + (1 + 1) by AMI_3:def 20
       .= 2*i + 1 + 1;
   hence contradiction;
  end;
 
 theorem
-     for I being Instruction of SCMPDS st I = goto 0 holds
+  for I being Instruction of SCMPDS st I = goto 0 holds
  I is halting by Th75;
 

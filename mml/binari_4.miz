@@ -22,13 +22,13 @@ environ
  theorems POWER, NAT_1, PRE_FF, ABSVALUE, REAL_1, BINARI_3, INT_1, BINARITH,
       NAT_2, BINARI_2, JORDAN2B, FINSEQ_1, FINSEQ_2, FINSEQ_4, MARGREL1,
       EUCLID, FUNCOP_1, RVSUM_1, FUNCT_2, ZFMISC_1, CQC_LANG, INT_3, EULER_2,
-      PEPIN, PREPOWER, XCMPLX_1, XREAL_1, NEWTON, XXREAL_0;
+      PEPIN, PREPOWER, XCMPLX_1, XREAL_1, NEWTON, XXREAL_0, ORDINAL1;
  schemes NAT_1, BINARITH;
 
 begin :: Preliminaries
 
-reserve n for non empty Nat,
-        j,k,l,m for Nat,
+reserve n for non empty Element of NAT,
+        j,k,l,m for Element of NAT,
         g,h,i for Integer;
 
 theorem Th1:
@@ -41,12 +41,12 @@ proof
 end;
 
 theorem Th2:
-  for m being Nat holds 2 to_power m >= m
+  for m being Element of NAT holds 2 to_power m >= m
 proof
-    defpred P[Nat] means 2 to_power $1 >= $1;
+    defpred P[Element of NAT] means 2 to_power $1 >= $1;
 A1:P[0];
-A2:for m being Nat st P[m] holds P[m+1]  proof
-    let m be Nat such that
+A2:for m being Element of NAT st P[m] holds P[m+1]  proof
+    let m be Element of NAT such that
 A3:   2 to_power m >= m;
        now per cases;
       suppose
@@ -65,13 +65,13 @@ then A7:      2 to_power (m+1) >= m * 2 by A6,POWER:32;
     end;
     hence thesis;
   end;
-  thus for m being Nat holds P[m] from NAT_1:sch 1(A1,A2);
+  thus for m being Element of NAT holds P[m] from NAT_1:sch 1(A1,A2);
 end;
 
 theorem
-     for m be Nat holds 0*m + 0*m = 0*m
+     for m be Element of NAT holds 0*m + 0*m = 0*m
 proof
-  let m be Nat;
+  let m be Element of NAT;
 A1:dom addreal = [:REAL,REAL:] by FUNCT_2:def 1;
      rng 0*m c= REAL by FINSEQ_1:def 4;
 then A2:[:rng 0*m, rng 0*m:] c= dom addreal by A1,ZFMISC_1:119;
@@ -81,9 +81,9 @@ A3:dom(0*m + 0*m) = dom(addreal.:(0*m,0*m)) by RVSUM_1:def 4
     .= Seg m by FUNCOP_1:19;
 A4:dom(0*m) = dom(m |-> (0 qua Real)) by EUCLID:def 4
    .= Seg m by FUNCOP_1:19;
-     for k be Nat st k in dom(0*m) holds (0*m).k = (0*m+0*m).k
+     for k be Element of NAT st k in dom(0*m) holds (0*m).k = (0*m+0*m).k
   proof
-    let k be Nat such that
+    let k be Element of NAT such that
 A5:   k in dom(0*m);
 A6:  (0*m).k = (m |-> (0 qua Real)).k by EUCLID:def 4
      .= 0 qua Real by A4,A5,FUNCOP_1:13;
@@ -94,14 +94,14 @@ A6:  (0*m).k = (m |-> (0 qua Real)).k by EUCLID:def 4
 end;
 
 theorem Th4:
-  for k be Nat holds
+  for k be Element of NAT holds
    k <= l & l <= m implies k = l or (k + 1 <= l & l <= m)
 proof
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
      $1 <= l & l <= m implies $1 = l or ($1 + 1 <= l & l <= m);
 A1: P[0]   by NAT_1:38;
-A2:for k be Nat st P[k] holds P[k+1]  proof
-    let k be Nat such that
+A2:for k be Element of NAT st P[k] holds P[k+1]  proof
+    let k be Element of NAT such that
         k <= l & l <= m implies k = l or (k + 1 <= l & l <= m);
     assume that
 A3:  k+1 <= l and
@@ -109,26 +109,26 @@ A4:  l <= m;
         k+1 = l or k+1 < l by A3,XXREAL_0:1;
     hence thesis by A4,NAT_1:38;
   end;
-  thus for k being Nat holds P[k] from NAT_1:sch 1(A1,A2);
+  thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
 end;
 
 theorem Th5:
-  for n be non empty Nat holds
+  for n be non empty Element of NAT holds
    for x,y be Tuple of n,BOOLEAN st x = 0*n & y = 0*n
      holds carry(x,y) = 0*n
 proof
-  let n be non empty Nat;
+  let n be non empty Element of NAT;
   let x,y be Tuple of n,BOOLEAN such that
 A1: x = 0*n & y = 0*n;
      len carry(x,y) = n by FINSEQ_2:109;
   then 1 <= len carry(x,y) by NAT_1:39;
 then A2:carry(x,y).1 = carry(x,y)/.1 by FINSEQ_4:24
    .= 0 by BINARITH:def 5,MARGREL1:36;
-A3:for j be Nat st 1 < j & j <= n holds carry(x,y).j = 0
+A3:for j be Element of NAT st 1 < j & j <= n holds carry(x,y).j = 0
   proof
-    let j be Nat such that
+    let j be Element of NAT such that
 A4:  1 < j & j <= n;
-    reconsider k = j - 1 as Nat by A4,INT_1:18;
+    reconsider k = j - 1 as Element of NAT by A4,INT_1:18;
        k + 1 = j;
 then A5: 1 <= k & k < n & j = k + 1 by A4,NAT_1:38;
 then A6: k in Seg n & k <= len x & k <= len y by FINSEQ_1:3,FINSEQ_2:109;
@@ -149,9 +149,9 @@ then A7: x/.k = (0*n).k by A1,A5,FINSEQ_4:24
      .= FALSE by BINARITH:7;
     hence thesis by MARGREL1:36;
   end;
-     for l be Nat st l in Seg n holds carry(x,y).l = (0*n).l
+     for l be Element of NAT st l in Seg n holds carry(x,y).l = (0*n).l
   proof
-    let l be Nat such that
+    let l be Element of NAT such that
 A8:   l in Seg n;
 A9:  1 <= l & l <= n by A8,FINSEQ_1:3;
 A10:  (0*n).l = (n |-> (0 qua Real)).l by EUCLID:def 4
@@ -171,15 +171,15 @@ A10:  (0*n).l = (n |-> (0 qua Real)).l by EUCLID:def 4
 end;
 
 theorem
-     for n be non empty Nat holds
+     for n be non empty Element of NAT holds
    for x,y be Tuple of n,BOOLEAN st x = 0*n & y = 0*n holds x + y = 0*n
 proof
-  let n be non empty Nat;
+  let n be non empty Element of NAT;
   let x,y be Tuple of n,BOOLEAN such that
 A1: x = 0*n & y = 0*n;
-     for k be Nat st k in Seg n holds (x+y).k = (0*n).k
+     for k be Element of NAT st k in Seg n holds (x+y).k = (0*n).k
   proof
-    let k be Nat such that
+    let k be Element of NAT such that
 A2:   k in Seg n;
 A3:  (0*n).k = (n |-> (0 qua Real)).k by EUCLID:def 4
      .= FALSE by A2,FUNCOP_1:13,MARGREL1:36;
@@ -200,11 +200,11 @@ A6:  carry(x,y)/.k = carry(x,y).k by A4,FINSEQ_4:24
 end;
 
 theorem
-     for n be non empty Nat
+     for n be non empty Element of NAT
   for F be Tuple of n,BOOLEAN st F = 0*n holds
    Intval F = 0
 proof
-  let n be non empty Nat;
+  let n be non empty Element of NAT;
   let F be Tuple of n,BOOLEAN such that
 A1:F = 0*n;
 A2:1 <= n & n <= len F by FINSEQ_2:109,NAT_1:39;
@@ -271,11 +271,11 @@ A6:2 to_power n > 2 to_power n - 1 by XREAL_1:148;
 end;
 
 theorem Th11:
-  for n be non empty Nat, l,m be Nat st
+  for n be non empty Element of NAT, l,m be Element of NAT st
   l + m <= 2 to_power n - 1 holds
   Absval(n-BinarySequence(l) + n-BinarySequence(m)) = l + m
 proof
-  let n be non empty Nat, l,m be Nat such that
+  let n be non empty Element of NAT, l,m be Element of NAT such that
 A1: l + m <= 2 to_power n - 1;
   set L = n-BinarySequence(l), M = n-BinarySequence(m);
 A2:l < 2 to_power n & m < 2 to_power n by A1,Th8;
@@ -287,11 +287,11 @@ A2:l < 2 to_power n & m < 2 to_power n by A1,Th8;
 end;
 
 theorem Th12:
-  for n be non empty Nat holds
+  for n be non empty Element of NAT holds
    (for z be Tuple of n,BOOLEAN st z/.n = TRUE holds
     Absval(z) >= 2 to_power (n-'1))
 proof
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
      (for z be Tuple of $1,BOOLEAN st z/.$1 = TRUE holds
       Absval(z) >= 2 to_power ($1-'1));
 A1: P[1] proof
@@ -304,8 +304,8 @@ then A4: Absval(z) = 1 by BINARITH:42;
        2 to_power (1-'1) = 2 to_power (1-1) by BINARITH:def 3;
     hence thesis by A4,POWER:29;
   end;
-A5:for n be non empty Nat st P[n] holds P[n+1] proof
-    let n be non empty Nat such that P[n];
+A5:for n be non empty Element of NAT st P[n] holds P[n+1] proof
+    let n be non empty Element of NAT such that P[n];
     let z be Tuple of (n+1),BOOLEAN such that
 A6:  z/.(n+1) = TRUE;
     consider x be (Tuple of n,BOOLEAN), a be Element of BOOLEAN such that
@@ -320,7 +320,8 @@ then A10: z/.(n+1) = (x^<*a*>).(n+1) by A7,A8,FINSEQ_4:24
      .= Absval(x) + 2 to_power n by A6,A10,CQC_LANG:def 1,MARGREL1:38;
     hence thesis by A9,NAT_1:29;
   end;
-  thus for n being non empty Nat holds P[n] from BINARITH:sch 1(A1,A5);
+  thus for n being non empty Element of NAT holds P[n]
+   from BINARITH:sch 1(A1,A5);
 end;
 
 theorem Th13:
@@ -362,10 +363,10 @@ then A8:Absval(L+M) >= 2 to_power (n-'1) by Th12;
 end;
 
 theorem Th14:
-  for n be non empty Nat st l + m <= 2 to_power (n-'1) - 1 holds
+  for n be non empty Element of NAT st l + m <= 2 to_power (n-'1) - 1 holds
    Intval(n-BinarySequence(l) + n-BinarySequence(m)) = l + m
 proof
-  let n be non empty Nat such that
+  let n be non empty Element of NAT such that
 A1: l + m <= 2 to_power (n-'1) - 1;
   set L = n-BinarySequence(l), M = n-BinarySequence(m),
    F = FALSE, T = TRUE;
@@ -436,17 +437,17 @@ proof
 end;
 
 theorem
-     for n be non empty Nat holds 0 <= 2 to_power (n-'1) - 1 &
+     for n be non empty Element of NAT holds 0 <= 2 to_power (n-'1) - 1 &
       -(2 to_power (n-'1)) <= 0
 proof
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
     0 <= 2 to_power ($1-'1) - 1 & -(2 to_power ($1-'1)) <= 0;
      1 - 1 = 0;
   then 2 to_power (1-'1) = 2 to_power 0 by BINARITH:def 3
    .= 1 by POWER:29;
 then A1: P[1];
-A2:for k be non empty Nat st P[k] holds P[k+1]  proof
-    let k be non empty Nat such that
+A2:for k be non empty Element of NAT st P[k] holds P[k+1]  proof
+    let k be non empty Element of NAT such that
 A3:   0 <= 2 to_power (k-'1) - 1 & -(2 to_power (k-'1)) <= 0;
        (k+1)-'1
      = k by BINARITH:39;
@@ -454,7 +455,8 @@ A3:   0 <= 2 to_power (k-'1) - 1 & -(2 to_power (k-'1)) <= 0;
 then 2 to_power (k-'1) < 2 to_power ((k+1)-'1) by POWER:44;
     hence thesis by A3,XREAL_1:11;
   end;
-  thus for n being non empty Nat holds P[n] from BINARITH:sch 1(A1,A2);
+  thus for n being non empty Element of NAT holds P[n]
+   from BINARITH:sch 1(A1,A2);
 end;
 
 theorem
@@ -492,38 +494,39 @@ end;
 begin :: Majorant Power
 
 definition
-  let m, j be Nat;
-  func MajP(m, j) -> Nat means
+  let m, j be Element of NAT;
+  func MajP(m, j) -> Element of NAT means
 :Def1:
   2 to_power it >= j & it >= m &
-    for k be Nat st 2 to_power k >= j & k >= m holds
+    for k be Element of NAT st 2 to_power k >= j & k >= m holds
       k >= it;
   existence
   proof
     per cases;
       suppose
 A1:     2 to_power m >= j;
-           for k be Nat st 2 to_power k >= j & k >= m holds k >= m;
+           for k be Element of NAT st 2 to_power k >= j & k >= m holds k >= m;
         hence thesis by A1;
       end;
       suppose
 A2:     2 to_power m < j;
-        defpred P[Nat] means 2 to_power $1 >= j & $1 >= m;
+        defpred P[Element of NAT] means 2 to_power $1 >= j & $1 >= m;
            2 to_power m >= m by Th2;
         then 2 to_power j >= j & j >= m by A2,Th2,XXREAL_0:2;
-then A3: ex k be Nat st P[k];
-     ex k be Nat st P[k] & for l be Nat st P[l] holds l >= k from NAT_1:sch 5
+then A3: ex k be Element of NAT st P[k];
+     ex k be Element of NAT st P[k] &
+      for l be Element of NAT st P[l] holds l >= k from NAT_1:sch 5
 (A3);
         hence thesis;
   end;
   end;
   uniqueness
   proof
-    let p, q be Nat such that
+    let p, q be Element of NAT such that
 A4:    2 to_power p >= j & p >= m &
-        for k be Nat st 2 to_power k >= j & k >= m holds k >= p and
+        for k be Element of NAT st 2 to_power k >= j & k >= m holds k >= p and
 A5:    2 to_power q >= j & q >= m &
-        for k be Nat st 2 to_power k >= j & k >= m holds k >= q;
+        for k be Element of NAT st 2 to_power k >= j & k >= m holds k >= q;
        p >= q & q >= p by A4,A5;
     hence thesis by XXREAL_0:1;
   end;
@@ -556,7 +559,7 @@ proof
   then m >= 0 + 1;
   then 2 > 1 & m > 0;
 then A1:2 to_power m >= 1 & m >= m by POWER:40;
-     for k be Nat st 2 to_power k >= 1 & k >= m holds k >= m;
+     for k be Element of NAT st 2 to_power k >= 1 & k >= m holds k >= m;
   hence thesis by A1,Def1;
 end;
 
@@ -565,7 +568,7 @@ theorem Th24:
 proof
   assume
 A1:  j <= 2 to_power m;
-       for k be Nat st 2 to_power k >= j & k >= m holds k >= m;
+       for k be Element of NAT st 2 to_power k >= j & k >= m holds k >= m;
     hence thesis by A1,Def1;
 end;
 
@@ -582,7 +585,7 @@ end;
 begin :: 2's Complement
 
 definition
-  let m be Nat;
+  let m be Element of NAT;
   let i be Integer;
   func 2sComplement( m, i ) -> Tuple of m, BOOLEAN equals
 :Def2:
@@ -593,9 +596,9 @@ definition
 end;
 
 theorem
-     for m be Nat holds 2sComplement(m,0) = 0*m
+     for m be Element of NAT holds 2sComplement(m,0) = 0*m
 proof
-  let m be Nat;
+  let m be Element of NAT;
      2sComplement(m,0) = m-BinarySequence( abs(0) ) by Def2
    .= m-BinarySequence(0) by ABSVALUE:7;
   hence thesis by BINARI_3:26;
@@ -612,7 +615,7 @@ A2:n >= 1 by NAT_1:39;
      now per cases;
    suppose
    i >= 0;
-     then reconsider i as Nat by INT_1:16;
+     then reconsider i as Element of NAT by INT_1:16;
 A3:  2sComplement(n,i) = n-BinarySequence(abs(i)) by Def2
       .= n-BinarySequence(i) by ABSVALUE:def 1;
         i + 1 <= 2 to_power (n-'1) - 1 + 1 by A1,XREAL_1:8;
@@ -644,7 +647,7 @@ then A8:  2 to_power n >= 2 to_power (n-'1) by POWER:44;
      then -(2 to_power n) - i <= i-i by XREAL_1:11;
      then -(2 to_power n + i) <= 0;
 then   2 to_power n + i >= -0 by XREAL_1:26;
-     then reconsider k = 2 to_power n + i as Nat by INT_1:16;
+     then reconsider k = 2 to_power n + i as Element of NAT by INT_1:16;
         abs(i) <= 2 to_power n by A7,A8,XXREAL_0:2;
 then MajP(n,abs(i)) = n by Th24;
 then A9:  2sComplement(n,i) = n-BinarySequence(abs(k)) by A6,Def2
@@ -732,10 +735,11 @@ A4:     l = k + t*n by A1,Lm1;
 end;
 
 Lm3:
-  for k,l,m be Nat st m < n & k mod 2 to_power n = l mod 2 to_power n holds
+  for k,l,m be Element of NAT
+   st m < n & k mod 2 to_power n = l mod 2 to_power n holds
    (k div 2 to_power m) mod 2 = (l div 2 to_power m) mod 2
 proof
-  let k,l,m be Nat such that
+  let k,l,m be Element of NAT such that
 A1: m < n & k mod 2 to_power n = l mod 2 to_power n;
      2 to_power n = 2 |^ n by POWER:46;
   then 2 to_power n is non empty by PREPOWER:12;
@@ -743,6 +747,7 @@ A1: m < n & k mod 2 to_power n = l mod 2 to_power n;
 A2: k = l + s*(2 to_power n) by A1,Lm2;
   consider j be Nat such that
 A3: n = m + j by A1,NAT_1:28;
+    reconsider j as Element of NAT by ORDINAL1:def 13;
   set M = 2 to_power m, J = 2 to_power j;
   reconsider L = l as Integer;
 A4:M > 0 by POWER:39;
@@ -781,6 +786,7 @@ A1: h mod 2 to_power n = i mod 2 to_power n;
      n <= MajP(n,abs h) by Def1;
   then consider x be Nat such that
 A2: MajP(n,abs h) = n + x by NAT_1:28;
+    reconsider x as Element of NAT by ORDINAL1:def 13;
      M = (2 to_power n)*(2 to_power x) by A2,POWER:32;
 then A3:M mod 2 to_power n =
    ((2 to_power n)*(2 to_power x)) mod 2 to_power n by NEWTON:101
@@ -792,6 +798,7 @@ then A3:M mod 2 to_power n =
      n <= MajP(n,abs i) by Def1;
   then consider y be Nat such that
 A4: MajP(n,abs i) = n + y by NAT_1:28;
+     reconsider y as Element of NAT by ORDINAL1:def 13;
      L = (2 to_power n)*(2 to_power y) by A4,POWER:32;
 then A5:L mod 2 to_power n =
    ((2 to_power n)*(2 to_power y)) mod 2 to_power n by NEWTON:101
@@ -817,10 +824,10 @@ proof
 A1: h >= 0 & i >= 0 & h mod 2 to_power n = i mod 2 to_power n;
 A2:2sComplement(n,h) = n-BinarySequence(abs(h)) by A1,Def2;
 A3:2sComplement(n,i) = n-BinarySequence(abs(i)) by A1,Def2;
-      for j be Nat st j in Seg n holds
+      for j be Element of NAT st j in Seg n holds
    (n-BinarySequence(abs(h))).j = (n-BinarySequence(abs(i))).j
    proof
-     let j be Nat such that
+     let j be Element of NAT such that
 A4:    j in Seg n;
 A5:  1 <= j & j <= n by A4,FINSEQ_1:3;
      then j - 1 >= 1 - 1 by XREAL_1:11;
@@ -864,19 +871,22 @@ A3:2sComplement(n,i) =
      abs h = -h by A1,ABSVALUE:def 1;
   then 2 to_power MajP(n,abs h) >= -h by Def1;
   then  2 to_power MajP(n,abs h) + h >= -h+h by XREAL_1:8;
-  then reconsider H = 2 to_power MajP(n,abs h) + h as Nat by INT_1:16;
+  then reconsider H = 2 to_power MajP(n,abs h) + h as Element of NAT
+   by INT_1:16;
      abs i = -i by A1,ABSVALUE:def 1;
   then 2 to_power MajP(n,abs i) >= -i by Def1;
   then  2 to_power MajP(n,abs i) + i >= -i+i by XREAL_1:8;
-  then reconsider I = 2 to_power MajP(n,abs i) + i as Nat by INT_1:16;
+  then reconsider I = 2 to_power MajP(n,abs i) + i as Element of NAT
+   by INT_1:16;
      H mod (2 to_power n) = (H qua Integer) mod (2 to_power n) &
   I mod (2 to_power n) = (I qua Integer) mod (2 to_power n) by NEWTON:101;
-then A4:(H qua Nat) mod (2 to_power n) = (I qua Nat) mod (2 to_power n) by A1,
+then A4:(H qua Element of NAT) mod (2 to_power n)
+ = (I qua Element of NAT) mod (2 to_power n) by A1,
 Lm4;
-     for j be Nat st j in Seg n holds
+     for j be Element of NAT st j in Seg n holds
    (n-BinarySequence(abs H)).j = (n-BinarySequence(abs I)).j
   proof
-    let j be Nat such that
+    let j be Element of NAT such that
 A5:   j in Seg n;
 A6: 1 <= j & j <= n by A5,FINSEQ_1:3;
 A7: len(n-BinarySequence(H)) = n &
@@ -917,10 +927,10 @@ A1: ((h >= 0 & i >= 0) or (h < 0 & i < 0)) & h,i are_congruent_mod 2 to_power n
 end;
 
 theorem Th30:
-  for l,m be Nat st l mod 2 to_power n = m mod 2 to_power n holds
+  for l,m be Element of NAT st l mod 2 to_power n = m mod 2 to_power n holds
     n-BinarySequence(l) = n-BinarySequence(m)
 proof
-  let l,m be Nat such that
+  let l,m be Element of NAT such that
 A1:l mod 2 to_power n = m mod 2 to_power n;
 A2:(l qua Integer) mod 2 to_power n
     = l mod 2 to_power n by NEWTON:101
@@ -932,10 +942,10 @@ A2:(l qua Integer) mod 2 to_power n
 end;
 
 theorem
-     for l,m be Nat st l,m are_congruent_mod 2 to_power n holds
+     for l,m be Element of NAT st l,m are_congruent_mod 2 to_power n holds
     n-BinarySequence(l) = n-BinarySequence(m)
 proof
-  let l,m be Nat such that
+  let l,m be Element of NAT such that
 A1:l,m are_congruent_mod 2 to_power n;
  (l qua Integer) mod 2 to_power n
    = (m qua Integer) mod 2 to_power n by A1,INT_3:12;
@@ -946,10 +956,10 @@ A1:l,m are_congruent_mod 2 to_power n;
 end;
 
 theorem Th32:
- for j be Nat st 1 <= j & j <= n holds
+ for j be Element of NAT st 1 <= j & j <= n holds
   2sComplement(n+1,i)/.j = 2sComplement(n,i)/.j
 proof
-  let j be Nat such that
+  let j be Element of NAT such that
 A1: 1 <= j & j <= n;
 A2:j in Seg n by A1,FINSEQ_1:3;
      n <= n+1 by NAT_1:29;
@@ -966,6 +976,7 @@ A5:  i < 0;
     then MajP(n+1,abs(i)) >= MajP(n,abs(i)) by Th22;
     then consider m be Nat such that
 A6:  MajP(n+1,abs(i)) = MajP(n,abs(i)) + m by NAT_1:28;
+     reconsider m as Element of NAT by ORDINAL1:def 13;
     set P = MajP(n,abs(i));
     set Q = 2 to_power P;
        2 to_power (MajP(n+1,abs(i))) >= abs i by Def1;
@@ -1001,7 +1012,7 @@ j -' 1 = j - 1 by A13,BINARITH:def 3;
   per cases;
    suppose
   i >= 0;
-    then reconsider i as Nat by INT_1:16;
+    then reconsider i as Element of NAT by INT_1:16;
 A15: 2sComplement(n+1,i)/.j = ((n+1)-BinarySequence(abs i))/.j by Def2
      .= ((n+1)-BinarySequence(i))/.j by ABSVALUE:def 1
      .= IFEQ((i div 2 to_power (j-'1)) mod 2,0,FALSE,TRUE) by A3,BINARI_3:def 1
@@ -1032,11 +1043,11 @@ proof
 A1: 2sComplement(m+1,i) = a^<*b*> by FINSEQ_2:137;
      now per cases;
   suppose m > 0;
-    then reconsider m as non empty Nat;
-       for j be Nat st j in Seg m holds
+    then reconsider m as non empty Element of NAT;
+       for j be Element of NAT st j in Seg m holds
      2sComplement(m,i).j = a.j
     proof
-      let j be Nat such that
+      let j be Element of NAT such that
 A2:     j in Seg m;
 A3:    len 2sComplement(m+1,i) = m+1 & len 2sComplement(m,i) = m &
        len a = m by FINSEQ_2:109;
@@ -1080,12 +1091,12 @@ A2:abs l = l by ABSVALUE:def 1;
 end;
 
 theorem Th35:
-  for n be non empty Nat holds
+  for n be non empty Element of NAT holds
    -2 to_power n <= h+i & h < 0 & i < 0 &
    -2 to_power (n-'1) <= h & -2 to_power (n-'1) <= i implies
    carry(2sComplement(n+1,h),2sComplement(n+1,i))/.(n+1) = TRUE
 proof
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
     -2 to_power $1 <= h+i & h < 0 & i < 0 &
     -2 to_power ($1-'1) <= h & -2 to_power ($1-'1) <= i implies
     carry(2sComplement($1+1,h),2sComplement($1+1,i))/.($1+1) = TRUE;
@@ -1137,9 +1148,9 @@ A11:(2sComplement(2,h))/.1 = (2-BinarySequence(3))/.1 by A2,A8,Def2
      .= T 'or' (carry(H,I)/.1) by Th17;
     hence thesis by Th17;
   end;
-A12:for n be non empty Nat st P[n] holds P[n+1]
+A12:for n be non empty Element of NAT st P[n] holds P[n+1]
   proof
-    let n be non empty Nat such that P[n];
+    let n be non empty Element of NAT such that P[n];
     assume
 A13:  -2 to_power (n+1) <= h+i & h < 0 & i < 0 &
        -2 to_power (n+1-'1) <= h & -2 to_power (n+1-'1) <= i;
@@ -1167,7 +1178,7 @@ A20:   2 to_power (N-'1) <= 2 to_power N + h &
        by A13,A18,XREAL_1:8;
       0 <= 2 to_power N + h & 0 <= 2 to_power N + i by A20;
       then reconsider NH = 2 to_power N + h,
-       NI = 2 to_power N + i as Nat by INT_1:16;
+       NI = 2 to_power N + i as Element of NAT by INT_1:16;
 A21:   1 <= N & len (N-BinarySequence(NH)) = N & len(N-BinarySequence(NI)) = N
        by FINSEQ_2:109,NAT_1:29;
 A22:   2 to_power N + h < 0 + 2 to_power N &
@@ -1191,19 +1202,20 @@ A25:  H1/.N = H/.N & I1/.N = I/.N by A21,Th32;
        .= T 'or' (carry(H1,I1)/.N) by Th17;
       hence thesis by Th17;
   end;
-  thus for n being non empty Nat holds P[n] from BINARITH:sch 1(A1,A12);
+  thus for n being non empty Element of NAT holds P[n]
+   from BINARITH:sch 1(A1,A12);
 end;
 
 theorem
-     for n be non empty Nat st
+     for n be non empty Element of NAT st
    -(2 to_power (n-'1)) <= h + i & h + i <= 2 to_power (n-'1) - 1 &
      h >= 0 & i >= 0 holds
       Intval(2sComplement(n,h) + 2sComplement(n,i)) = h+i
 proof
-  let n be non empty Nat such that
+  let n be non empty Element of NAT such that
 A1: -(2 to_power (n-'1)) <= h + i & h + i <= 2 to_power (n-'1) - 1 &
    h >= 0 & i >= 0;
-  reconsider h,i as Nat by A1,INT_1:16;
+  reconsider h,i as Element of NAT by A1,INT_1:16;
 A2: 2sComplement(n,h) = n-BinarySequence(abs h) by Def2
    .= n-BinarySequence(h) by ABSVALUE:def 1;
       2sComplement(n,i) = n-BinarySequence(abs i) by Def2
@@ -1212,12 +1224,12 @@ A2: 2sComplement(n,h) = n-BinarySequence(abs h) by Def2
 end;
 
 theorem
-     for n be non empty Nat st
+     for n be non empty Element of NAT st
    -2 to_power ((n+1)-'1) <= h + i & h + i <= 2 to_power ((n+1)-'1) - 1 &
    h < 0 & i < 0 & -2 to_power (n-'1) <= h & -2 to_power (n-'1) <= i holds
     Intval(2sComplement(n+1,h) + 2sComplement(n+1,i)) = h+i
 proof
-  let n be non empty Nat such that
+  let n be non empty Element of NAT such that
 A1: -2 to_power ((n+1)-'1) <= h + i & h + i <= 2 to_power ((n+1)-'1) - 1 &
   h < 0 & i < 0 & -2 to_power (n-'1) <= h & -2 to_power (n-'1) <= i;
   set H = 2sComplement(n,h), I = 2sComplement(n,i),
@@ -1243,7 +1255,7 @@ then A7:2 to_power n <= 2 to_power (n+1) + h &
    0 <= 2 to_power (n+1) + h &
    0 <= 2 to_power (n+1) + i by A7;
   then reconsider NH = 2 to_power (n+1) + h,
-   NI = 2 to_power (n+1) + i as Nat by INT_1:16;
+   NI = 2 to_power (n+1) + i as Element of NAT by INT_1:16;
   consider a be Element of BOOLEAN such that
 A8: H1 = H^<*a*> by Th33;
   consider a be Element of BOOLEAN such that
@@ -1288,14 +1300,14 @@ then A19:  Int_add_ovfl(H1,I1)
 end;
 
 theorem
-     for n be non empty Nat holds
+     for n be non empty Element of NAT holds
    -(2 to_power (n-'1)) <= h & h <= 2 to_power (n-'1) - 1 &
     -(2 to_power (n-'1)) <= i & i <= 2 to_power (n-'1) - 1 &
      -(2 to_power (n-'1)) <= h+i & h+i <= 2 to_power (n-'1) - 1 &
       ((h >= 0 & i < 0) or (h < 0 & i >= 0)) implies
       Intval(2sComplement(n,h) + 2sComplement(n,i)) = h+i
 proof
-   defpred P[non empty Nat] means
+   defpred P[non empty Element of NAT] means
     -(2 to_power ($1-'1)) <= h & h <= 2 to_power ($1-'1) - 1 &
     -(2 to_power ($1-'1)) <= i & i <= 2 to_power ($1-'1) - 1 &
      -(2 to_power ($1-'1)) <= h+i & h+i <= 2 to_power ($1-'1) - 1 &
@@ -1316,7 +1328,8 @@ A4: 2sComplement(1,0) = 1-BinarySequence(abs 0) by Def2
      .= 0*1 by BINARI_3:26
      .= 1 |-> (0 qua Real) by EUCLID:def 4
      .= <* FALSE *> by FINSEQ_2:73,MARGREL1:36;
-A5:2 to_power 1 = 2 & (for k be Nat st 2 to_power k >= 1 & k >= 1 holds
+A5:2 to_power 1 = 2 & (for k be Element of NAT
+ st 2 to_power k >= 1 & k >= 1 holds
       k >= 1) by POWER:30;
        abs(-1) = --1 by ABSVALUE:def 1
      .= 1;
@@ -1347,8 +1360,8 @@ then A11:  h = -1 by A3,XXREAL_0:1;
     end;
     hence thesis;
   end;
-A12:for n be non empty Nat st P[n] holds P[n+1]  proof
-    let n be non empty Nat such that
+A12:for n be non empty Element of NAT st P[n] holds P[n+1]  proof
+    let n be non empty Element of NAT such that
         -(2 to_power (n-'1)) <= h & h <= 2 to_power (n-'1) - 1 &
      -(2 to_power (n-'1)) <= i & i <= 2 to_power (n-'1) - 1 &
      -(2 to_power (n-'1)) <= h+i & h+i <= 2 to_power (n-'1) - 1 &
@@ -1372,7 +1385,7 @@ A16:  I1 = I^<*b*> by Th33;
        now per cases by A13;
      suppose
 A17:    h >= 0 & i < 0;
-      then reconsider h as Nat by INT_1:16;
+      then reconsider h as Element of NAT by INT_1:16;
 A18:   H1 = (n+1)-BinarySequence(abs h) by Def2
        .= (n+1)-BinarySequence(h) by ABSVALUE:def 1;
 A19:   len H1 = n+1 & len I1 = n+1 & 1 <= n + 1 by FINSEQ_2:109,NAT_1:29;
@@ -1392,7 +1405,7 @@ A24:   2 to_power (n+1) + i < 2 to_power (n+1) + 0 by A17,XREAL_1:10;
        .= 2 to_power n;
 then A25:  2 to_power n <= 2 to_power (n+1) + i by A14,XREAL_1:8;
 then   0 < 2 to_power (n+1) + i by POWER:39;
-      then reconsider NI = 2 to_power (n+1) + i as Nat by INT_1:16;
+      then reconsider NI = 2 to_power (n+1) + i as Element of NAT by INT_1:16;
 A26:  I1.(n+1) = ((n+1)-BinarySequence(abs(2 to_power (n+1)+i))).(n+1)
        by A17,A23,Def2
        .= ((n+1)-BinarySequence(NI)).(n+1) by ABSVALUE:def 1
@@ -1428,7 +1441,7 @@ A33:  Int_add_ovfl(H1,I1) = 'not' F '&' 'not' T '&' (carry(H1,I1)/.(n+1))
      end;
      suppose
 A34:    h < 0 & i >= 0;
-      then reconsider i as Nat by INT_1:16;
+      then reconsider i as Element of NAT by INT_1:16;
 A35:   I1 = (n+1)-BinarySequence(abs i) by Def2
        .= (n+1)-BinarySequence(i) by ABSVALUE:def 1;
 A36:   len I1 = n+1 & len H1 = n+1 & 1 <= n + 1 by FINSEQ_2:109,NAT_1:29;
@@ -1448,7 +1461,7 @@ A41:   2 to_power (n+1) + h < 2 to_power (n+1) + 0 by A34,XREAL_1:10;
        .= 2 to_power n;
 then A42:  2 to_power n <= 2 to_power (n+1) + h by A14,XREAL_1:8;
 then   0 < 2 to_power (n+1) + h by POWER:39;
-      then reconsider NH = 2 to_power (n+1) + h as Nat by INT_1:16;
+      then reconsider NH = 2 to_power (n+1) + h as Element of NAT by INT_1:16;
 A43:  H1.(n+1) = ((n+1)-BinarySequence(abs(2 to_power (n+1)+h))).(n+1)
        by A34,A40,Def2
        .= ((n+1)-BinarySequence(NH)).(n+1) by ABSVALUE:def 1
@@ -1484,5 +1497,6 @@ A50:  Int_add_ovfl(H1,I1) = 'not' T '&' 'not' F '&' (carry(H1,I1)/.(n+1))
     end;
     hence thesis;
   end;
-  thus for n being non empty Nat holds P[n] from BINARITH:sch 1(A1,A12);
+  thus for n being non empty Element of NAT holds P[n]
+   from BINARITH:sch 1(A1,A12);
 end;

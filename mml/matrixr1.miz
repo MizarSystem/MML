@@ -21,7 +21,7 @@ environ
  definitions BINOP_1, RLVECT_1, VECTSP_1, MATRIX_1;
  theorems MATRIX_3, VECTSP_1, MATRIX_1, MATRIX_4, BINOP_2, GROUP_1, MATRIX_5,
       XREAL_0, FUNCT_1, FINSEQ_1, MATRIX_2, FINSEQ_2, TARSKI, FVSUM_1,
-      ZFMISC_1, EUCLID_2, RVSUM_1, EUCLID, FINSEQ_3, XXREAL_0;
+      ZFMISC_1, EUCLID_2, RVSUM_1, EUCLID, FINSEQ_3, XXREAL_0, ORDINAL1;
  schemes FINSEQ_1, MATRIX_1;
 
 begin :: Preliminaries
@@ -220,8 +220,8 @@ proof let r be Real, fr be Element of F_Real,
      assume A1: r=fr & p=fp;
 A2: len (r*p)=len fp by A1,EUCLID_2:8;then
 A3:  len (r*p)=len (fr*fp) by Th16;
-     for i st 1<=i & i<=len (r*p) holds (r*p).i=(fr*fp).i
-     proof let i;
+     for i be Element of NAT st 1<=i & i<=len (r*p) holds (r*p).i=(fr*fp).i
+     proof let i be Element of NAT;
        assume A4: 1<=i & i<=len (r*p);
 A5:    i in Seg len fp by A4,A2,FINSEQ_1:3;then
        i in dom fp by FINSEQ_1:def 3;then
@@ -575,8 +575,8 @@ A14: qq=(a*A).i & len qq=n2 by A10;
 A15: qq0=A.i & len qq0=n3 by A11;
 A16: len (a*q)=width A by A6,A15,A9,A13,EUCLID_2:8;
 A17: width A=len qq by Th27,A8,A14,A12;
-   for j being Nat st 1<=j & j<=len (a*q) holds qq.j=(a*q).j
-   proof let j be Nat;
+   for j being Element of NAT st 1<=j & j<=len (a*q) holds qq.j=(a*q).j
+   proof let j be Element of NAT;
     assume 1<=j & j<=len (a*q);then
 A18: j in Seg width A by A16,FINSEQ_1:3;
 A19:  [i,j] in Indices A by A18,A1,ZFMISC_1:106;
@@ -794,16 +794,18 @@ definition let x be FinSequence of REAL;
 existence
 proof
    deffunc F(Nat) = <*x.$1*>;
-   reconsider n=len x as Nat;
+   reconsider n=len x as Element of NAT;
    consider C being FinSequence such that
-A2:len C=n & for j st j in Seg n holds C.j = F(j) from FINSEQ_1:sch 2;
+A2:len C=n & for j be Element of NAT st j in Seg n holds C.j = F(j)
+   from FINSEQ_1:sch 2;
+AA:for j be Nat st j in Seg n holds C.j = F(j) by A2;
    for y being set st y in rng C ex p being FinSequence of REAL
      st y = p & len p = 1
    proof let y be set;
      assume y in rng C;
      then consider z be set such that A3: z in dom C & y=C.z
        by FUNCT_1:def 5;
-     reconsider z as Nat by A3;
+     reconsider z as Element of NAT by A3;
      z in Seg len C by A3,FINSEQ_1:def 3;then
 A4:  C.z = <*x.z*> by A2;
      len <*x.z*>=1 by FINSEQ_1:56;
@@ -814,7 +816,8 @@ A4:  C.z = <*x.z*> by A2;
    proof
      let p be FinSequence of REAL;
      assume p in rng B;
-     then consider i such that A5:i in dom B and A6:B.i =p by FINSEQ_2:11;
+     then consider i be Element of NAT such that
+A5:  i in dom B and A6:B.i =p by FINSEQ_2:11;
 A7:  i in Seg len B by A5,FINSEQ_1:def 3;
      len <*x.i*>=1 by FINSEQ_1:56;
      hence thesis by A6,A2,A7;
@@ -822,7 +825,7 @@ A7:  i in Seg len B by A5,FINSEQ_1:def 3;
    reconsider A=B as Matrix of len B,1,REAL by MATRIX_1:def 3;
 A8: width A = 1 by MATRIX_1:24,A2,A1;
    Seg len x = dom x by FINSEQ_1:def 3;
-   hence thesis by A2,A8;
+   hence thesis by AA,A2,A8;
  end;
 uniqueness
  proof
@@ -833,7 +836,7 @@ A10: for k being Nat st k in dom x holds A.k =<*x.k*> and
 A11: len B = len x & width B = 1 and
 A12: for k being Nat st k in dom x holds B.k =<*x.k*>;
 A13:dom A = dom x & dom B = dom x by A11,A9,FINSEQ_3:31;
-  now let k be Nat;
+  now let k be Element of NAT;
     assume A14:k in dom x;
     hence A.k=<*x.k*> by A10
             .=B.k by A12,A14;
@@ -854,12 +857,13 @@ A4:  dom M = dom x by FINSEQ_3:31;
      for j st j in dom M holds x.j = M*(j,1)
      proof let j;
        assume A5: j in dom M;then
-A6:    M.j=<*x.j*> by Def9,A1,A4,A2;then
-       reconsider q=M.j as FinSequence of REAL;
+       reconsider j as Element of NAT;
+A6:    M.j=<*x.j*> by Def9,A1,A4,A2,A5;
+       then reconsider q=M.j as FinSequence of REAL;
 A7:   q.1=x.j by FINSEQ_1:57,A6;
        1 in Seg width M by A3,FINSEQ_1:3;then
        [j,1] in Indices M by A5,ZFMISC_1:106;
-       hence x.j = M*(j,1) by MATRIX_1:def 6,A7;
+       hence thesis by MATRIX_1:def 6,A7;
      end;
      hence thesis by MATRIX_1:def 9,A3;
    end;
@@ -951,7 +955,8 @@ A3:width (a*ColVec2Mx x)=width ColVec2Mx x by Th27
                       .=1 by Def9,A1;
 A4:len (a*x)=len x by EUCLID_2:8; then
 A5:dom (a*x)=dom x by FINSEQ_3:31;
-   for j st j in dom (a*x) holds (a*ColVec2Mx x).j =<*(a*x).j*>
+   for j st j in dom (a*x) holds
+   (a*ColVec2Mx x).j =<*(a*x).j*>
    proof let j;
      assume A6: j in dom (a*x); then
 A7:  j in dom x by A4,FINSEQ_3:31;
@@ -985,19 +990,20 @@ A17: p = (a*ColVec2Mx x).j & (a*ColVec2Mx x)*(j,1) = p.1 by MATRIX_1:def 6;
      consider p3 being FinSequence of REAL such that
 A18: p3 = (ColVec2Mx x).j & (ColVec2Mx x)*(j,1) = p3.1 by MATRIX_1:def 6,A10;
 A19:(ColVec2Mx x).j=<*x.j*> by Def9,A6,A1,A5;
+    reconsider j as Element of NAT by ORDINAL1:def 13;
 A20: q.1= a*((ColVec2Mx x)*(j,1)) by Th29,A10,A17
        .= a*(x.j) by FINSEQ_1:57,A18,A19
        .= (a*x).j by RVSUM_1:66
        .= (<*(a*x).j*>).1 by FINSEQ_1:57;
-     for i st 1<=i & i<=len (<*(a*x).j*>) holds
+     for i be Element of NAT st 1<=i & i<=len (<*(a*x).j*>) holds
        q.i= (<*(a*x).j*>).i
-     proof let i;
+     proof let i be Element of NAT;
        assume A21: 1<=i & i<=len (<*(a*x).j*>);
        len (<*(a*x).j*>)=1 by FINSEQ_1:57;then
        i=1 by A21,XXREAL_0:1;
        hence q.i= (<*(a*x).j*>).i by A20;
      end;
-     hence (a*ColVec2Mx x).j =<*(a*x).j*> by FINSEQ_1:18,A16;
+     hence thesis by FINSEQ_1:18,A16;
    end;
    hence ColVec2Mx (a*x)=a*ColVec2Mx x by Def9,A2,A3,A1,A4;
 end;
@@ -1018,20 +1024,21 @@ A2:len B=1 & B.1=x by FINSEQ_1:57;
       hence thesis;
     end;then
     reconsider C=B as Matrix of REAL by MATRIX_1:9;
+    take C;
     for p being FinSequence of REAL
       st p in rng C holds len p = len x by A1,TARSKI:def 1;then
-    C is Matrix of 1,len x,REAL by A1,MATRIX_1:def 3;then
+    C is Matrix of 1,len x,REAL by A1,MATRIX_1:def 3;
+    hence
 A3: width C=len x by MATRIX_1:20,A2;
-A4: len C=1 by FINSEQ_1:57;
-    for j st j in dom x holds C*(1,j) = x.j
-    proof let j be Nat; assume A5: j in dom x;
-      dom C=Seg 1 by A1,FINSEQ_1:def 3;then
-A6:   1 in dom C by FINSEQ_1:3;
-      j in Seg len x by A5,FINSEQ_1:def 3; then
-      [1,j] in Indices C by A6,ZFMISC_1:def 2,A3;
-      hence C*(1,j) = x.j by MATRIX_1:def 6,A2;
-    end;
-    hence thesis by A4,A3;
+    thus len C=1 by FINSEQ_1:57;
+    let j be Nat; assume A5: j in dom x;
+    dom C=Seg 1 by A1,FINSEQ_1:def 3;then
+A6: 1 in dom C by FINSEQ_1:3;
+    j in Seg len x by A5,FINSEQ_1:def 3; then
+A7: [1,j] in Indices C by A6,ZFMISC_1:def 2,A3;
+    reconsider j1=j as Element of NAT by ORDINAL1:def 13;
+    x.j1 is Element of REAL;
+    hence C*(1,j) =x.j by MATRIX_1:def 6,A2,A7;
 end;
 uniqueness
 proof
@@ -1196,6 +1203,7 @@ A9:  [1,j] in Indices (a*LineVec2Mx x) by A6,ZFMISC_1:106,A7,A8;then
       consider p being FinSequence of REAL such that
 A10:  p = (a*LineVec2Mx x).1 & (a*LineVec2Mx x)*(1,j) =p.j
         by MATRIX_1:def 6;
+      reconsider j as Element of NAT by ORDINAL1:def 13;
       q.j = a*((LineVec2Mx x)*(1,j)) by Th29,A8,A9,A10
          .= a*(x.j) by Def10,A5,A4
          .= (a*x).j by RVSUM_1:66;
@@ -1272,6 +1280,7 @@ A8:dom A=dom B by FINSEQ_3:31,A1;
       j in Seg len (A+B) by FINSEQ_1:def 3;then
 A10:   j in dom A by A5,FINSEQ_1:def 3; then
 A11:   [j,i] in Indices A by A2,ZFMISC_1:106;
+       reconsider j as Element of NAT by ORDINAL1:def 13;
 A12:   Col(A,i).j=A*(j,i) by A10,MATRIX_1:def 9;
       Col(B,i).j=B*(j,i) by A10,A8,MATRIX_1:def 9;then
       Col(A,i).j+Col(B,i).j=(A+B)*(j,i) by Th25,A11,A12;
@@ -1302,6 +1311,7 @@ A7:  dom (Line(A,i)+Line(B,i))=Seg width A by A3,FINSEQ_1:def 3;
 A9:    j in Seg width A by Th25,A8; then
 A10:    [i,j] in Indices A by A2,ZFMISC_1:106;
 A11:    Line(A,i).j=A*(i,j) by A9,MATRIX_1:def 8;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
        Line(B,i).j=B*(i,j) by A9,A1,MATRIX_1:def 8;then
        Line(A,i).j+Line(B,i).j=(A+B)*(i,j) by Th25,A10,A11;
        hence thesis by RVSUM_1:26,A8,A7,A5;
@@ -1459,10 +1469,10 @@ A6:len ((LineVec2Mx x)*A)=len LineVec2Mx x by MATRIX_3:def 4,A1,A2
 end;
 
 theorem
-  for n,m being Nat, x being FinSequence of REAL st
+  for n,m being Element of NAT, x being FinSequence of REAL st
     len x=m & n>0 & m>0 holds
       (0_Rmatrix(n,m))*x=0*n
-proof let n,m be Nat, x be FinSequence of REAL;
+proof let n,m be Element of NAT, x be FinSequence of REAL;
    assume A1: len x=m & n>0 & m>0;then
 A2:len 0_Rmatrix(n,m) = n & width 0_Rmatrix(n,m)=m
                            by MATRIX_1:24;then
@@ -1476,10 +1486,10 @@ A3:len ((0_Rmatrix(n,m))*x)=len (0_Rmatrix(n,m)) by Th61,A1;
 end;
 
 theorem
-  for n,m being Nat, x being FinSequence of REAL st
+  for n,m being Element of NAT, x being FinSequence of REAL st
     len x=n & n>0 & m>0 holds
       x*(0_Rmatrix(n,m))=0*m
-proof let n,m be Nat,x be FinSequence of REAL;
+proof let n,m be Element of NAT,x be FinSequence of REAL;
    assume A1: len x=n & n>0 & m>0;then
 A2:width (0_Rmatrix(n,m))=m & len (0_Rmatrix(n,m))=n by MATRIX_1:24;then
 A3:len (x*(0_Rmatrix(n,m)))=width (0_Rmatrix(n,m)) by Th62,A1;

@@ -10,7 +10,8 @@ environ
       BINOP_1, VECTSP_1, ARYTM_1, RELAT_1, PARTFUN1, RFUNCT_3, FINSEQ_1,
       FINSEQ_4, BOOLE, FINSET_1, CARD_1, SGRAPH1, RFINSEQ, SQUARE_1, CONVFUN1,
       FUNCOP_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XXREAL_0, REAL_1, FUNCT_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS,
+ XCMPLX_0,XXREAL_0, REAL_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, RLVECT_1, CONVEX1, SUPINF_1, ZFMISC_1,
       MEASURE6, BINOP_1, SEQ_1, DOMAIN_1, BINOP_2, STRUCT_0, EXTREAL1,
       FINSET_1, CARD_1, RFINSEQ, SUPINF_2, RFUNCT_3, MESFUNC1, NAT_1, RVSUM_1,
@@ -470,21 +471,21 @@ registration
 end;
 
 theorem Th3:
-for X,Y being RealLinearSpace, n being Nat,
+for X,Y being RealLinearSpace, n being Element of NAT,
     x being FinSequence of the carrier of X,
     y being FinSequence of the carrier of Y,
     z being FinSequence of the carrier of Prod_of_RLS(X,Y) st
     len x = n & len y = n & len z = n &
-    (for i being Nat st i in Seg n holds z.i = [x.i,y.i]) holds
+    (for i being Element of NAT st i in Seg n holds z.i = [x.i,y.i]) holds
     Sum z = [Sum x, Sum y]
  proof
   let X, Y be RealLinearSpace;
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
    for x being FinSequence of the carrier of X,
        y being FinSequence of the carrier of Y,
        z being FinSequence of the carrier of Prod_of_RLS(X,Y) st
     len x = $1 & len y = $1 & len z = $1 &
-    (for i being Nat st i in Seg $1 holds z.i = [x.i,y.i]) holds
+    (for i being Element of NAT st i in Seg $1 holds z.i = [x.i,y.i]) holds
     Sum z = [Sum x, Sum y];
   A1: P[0]
    proof
@@ -493,16 +494,16 @@ for X,Y being RealLinearSpace, n being Nat,
         z be FinSequence of the carrier of Prod_of_RLS(X,Y);
     assume that
     A2: len x = 0 & len y = 0 & len z = 0 and
-      for i being Nat st i in Seg 0 holds z.i = [x.i,y.i];
+      for i being Element of NAT st i in Seg 0 holds z.i = [x.i,y.i];
       x = <*>(the carrier of X) & y = <*>(the carrier of Y) &
     z = <*>(the carrier of Prod_of_RLS(X,Y)) by A2,FINSEQ_1:32;
     then Sum x = 0.X & Sum y = 0.Y & Sum z = 0.Prod_of_RLS(X,Y) by RLVECT_1:60
 ;
     hence thesis by Lm1;
    end;
-  A3: for n being Nat st P[n] holds P[n+1]
+  A3: for n being Element of NAT st P[n] holds P[n+1]
    proof
-    let n be Nat; assume
+    let n be Element of NAT; assume
     A4: P[n];
     thus P[n+1]
      proof
@@ -511,11 +512,11 @@ for X,Y being RealLinearSpace, n being Nat,
           z be FinSequence of the carrier of Prod_of_RLS(X,Y);
       assume that
       A5: len x = n+1 & len y = n+1 & len z = n+1 and
-      A6: for i being Nat st i in Seg(n+1) holds z.i = [x.i,y.i];
-      A7: for i being Nat st i in Seg(n+1) holds
+      A6: for i being Element of NAT st i in Seg(n+1) holds z.i = [x.i,y.i];
+      A7: for i being Element of NAT st i in Seg(n+1) holds
        x/.i = x.i & y/.i = y.i & z/.i = z.i
        proof
-        let i be Nat;
+        let i be Element of NAT;
         assume i in Seg(n+1);
         then 1<=i & i<=n+1 by FINSEQ_1:3;
         hence thesis by A5,FINSEQ_4:24;
@@ -527,9 +528,10 @@ for X,Y being RealLinearSpace, n being Nat,
       A10: 0+n <= 1+n by XREAL_1:8;
       then A11: len(x|n) = n & len(y|n) = n & len(z|n) = n by A5,FINSEQ_1:80;
       A12: Seg n c= Seg(n+1) by A10,FINSEQ_1:7;
-        for i being Nat st i in Seg n holds (z|n).i = [(x|n).i,(y|n).i]
+        for i being Element of NAT st i in Seg n
+         holds (z|n).i = [(x|n).i,(y|n).i]
        proof
-        let i be Nat; assume
+        let i be Element of NAT; assume
         A13: i in Seg n;
         then i <= n by FINSEQ_1:3;
         then (x|n).i = x.i & (y|n).i = y.i & (z|n).i = z.i by FINSEQ_3:121;
@@ -554,7 +556,7 @@ for X,Y being RealLinearSpace, n being Nat,
       hence thesis by A9,A14,A15,A16,Th2;
      end;
    end;
-  thus for n being Nat holds P[n] from NAT_1:sch 1(A1,A3);
+  thus for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A3);
  end;
 
 begin :: Real Linear Space of Real Numbers
@@ -721,28 +723,28 @@ Lm6:
  for a being FinSequence of the carrier of RLS_Real,
      b being FinSequence of REAL st
      len a = len b &
-     (for i being Nat st i in dom a holds a.i = b.i) holds
+     (for i being Element of NAT st i in dom a holds a.i = b.i) holds
      Sum a = Sum b
  proof
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
    for a be FinSequence of the carrier of RLS_Real,
        b be FinSequence of REAL st
      len a = $1 & len b = $1 &
-     (for i being Nat st i in dom a holds a.i = b.i) holds
+     (for i being Element of NAT st i in dom a holds a.i = b.i) holds
      Sum a = Sum b;
   A1: P[0]
    proof
     let a be FinSequence of the carrier of RLS_Real,
         b be FinSequence of REAL;
     assume len a = 0 & len b = 0 &
-     (for i being Nat st i in dom a holds a.i = b.i);
+     (for i being Element of NAT st i in dom a holds a.i = b.i);
     then a = <*>(the carrier of RLS_Real) & b = <*> REAL by FINSEQ_1:32;
     then Sum a = 0.RLS_Real & Sum b = 0 by RLVECT_1:60,RVSUM_1:102;
     hence thesis by RLVECT_1:def 2;
    end;
-  A2: for n being Nat st P[n] holds P[n+1]
+  A2: for n being Element of NAT st P[n] holds P[n+1]
    proof
-    let n be Nat; assume
+    let n be Element of NAT; assume
     A3: P[n];
     thus P[n+1]
      proof
@@ -750,11 +752,12 @@ Lm6:
           b be FinSequence of REAL;
       assume that
       A4: len a = n+1 & len b = n+1 and
-      A5: for i being Nat st i in dom a holds a.i = b.i;
+      A5: for i being Element of NAT st i in dom a holds a.i = b.i;
       A6: dom a = Seg(n+1) by A4,FINSEQ_1:def 3;
-      A7: for i being Nat st i in Seg(n+1) holds a.i = a/.i & a/.i = b.i
+      A7: for i being Element of NAT st i in Seg(n+1)
+       holds a.i = a/.i & a/.i = b.i
        proof
-        let i be Nat; assume
+        let i be Element of NAT; assume
         A8: i in Seg(n+1);
         then 1<=i & i<=n+1 by FINSEQ_1:3;
         then a/.i = a.i by A4,FINSEQ_4:24;
@@ -764,9 +767,9 @@ Lm6:
       A10: 0+n <= 1+n by XREAL_1:8;
       then A11: len(a|n) = n & len(b|n) = n by A4,FINSEQ_1:80;
       A12: Seg n c= Seg(n+1) by A10,FINSEQ_1:7;
-        for i being Nat st i in dom(a|n) holds (a|n).i = (b|n).i
+        for i being Element of NAT st i in dom(a|n) holds (a|n).i = (b|n).i
        proof
-        let i be Nat;
+        let i be Element of NAT;
         assume i in dom(a|n);
         then A13: i in Seg n by A11,FINSEQ_1:def 3;
         then i <= n by FINSEQ_1:3;
@@ -788,7 +791,7 @@ Lm6:
    end;
   let a be FinSequence of the carrier of RLS_Real,
       b be FinSequence of REAL;
-    for n being Nat holds P[n] from NAT_1:sch 1(A1,A2);
+    for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
   hence thesis;
  end;
 
@@ -799,20 +802,20 @@ definition
  func Sum(F) -> R_eal means  :Def5:
   ex f being Function of NAT, ExtREAL st
   it = f.(len F) & f.0 = 0. &
-    for i being Nat st i < len F holds f.(i+1)=f.i+F.(i+1);
+    for i being Element of NAT st i < len F holds f.(i+1)=f.i+F.(i+1);
  existence
   proof
    defpred P[FinSequence of ExtREAL] means
     ex f being Function of NAT, ExtREAL st
     f.0 = 0. &
-    for i being Nat st i < len $1 holds f.(i+1) = f.i+$1.(i+1);
+    for i being Element of NAT st i < len $1 holds f.(i+1) = f.i+$1.(i+1);
    A1: P[<*> ExtREAL]
     proof
      reconsider f = NAT --> 0. as Function of NAT, ExtREAL by FUNCOP_1:57;
-     A2: for i being Nat holds f.i = 0. by FUNCOP_1:13;
+     A2: for i being Element of NAT holds f.i = 0. by FUNCOP_1:13;
      take f;
      thus f.0 = 0. by A2;
-     thus for i being Nat st i < len(<*> ExtREAL) holds
+     thus for i being Element of NAT st i < len(<*> ExtREAL) holds
       f.(i+1) = f.i+(<*> ExtREAL).(i+1) by FINSEQ_1:32;
     end;
    A3: for F being FinSequence of ExtREAL for x being Element of ExtREAL
@@ -823,13 +826,13 @@ definition
      assume P[F];
      then consider f being Function of NAT, ExtREAL such that
      A4: f.0 = 0. and
-     A5: for i being Nat st i < len F holds f.(i+1) = f.i+F.(i+1);
-      defpred R[Nat,set] means
+     A5: for i being Element of NAT st i < len F holds f.(i+1) = f.i+F.(i+1);
+      defpred R[Element of NAT,set] means
          ($1 <= len F implies $2 = f.$1) &
          ($1 = (len F)+1 implies $2 = f.(len F) + x);
-     A6: for i being Nat ex g being Element of ExtREAL st R[i,g]
+     A6: for i being Element of NAT ex g being Element of ExtREAL st R[i,g]
       proof
-       let i be Nat;
+       let i be Element of NAT;
        per cases;
        suppose
         A7: i <> (len F)+1;
@@ -843,15 +846,15 @@ definition
       end;
       end;
      consider f' being Function of NAT, ExtREAL such that
-     A9: for i being Nat holds R[i,f'.i] from FUNCT_2:sch 3(A6);
+     A9: for i being Element of NAT holds R[i,f'.i] from FUNCT_2:sch 3(A6);
      thus P[F^<*x*>]
       proof
        take f';
        thus f'.0 = 0. by A4,A9;
-       thus for i being Nat st i < len(F^<*x*>) holds
+       thus for i being Element of NAT st i < len(F^<*x*>) holds
         f'.(i+1)=f'.i+(F^<*x*>).(i+1)
         proof
-         let i be Nat;
+         let i be Element of NAT;
          assume i < len(F^<*x*>);
          then i < (len F)+(len <*x*>) by FINSEQ_1:35;
          then i < (len F)+1 by FINSEQ_1:56;
@@ -879,7 +882,7 @@ definition
      for F being FinSequence of ExtREAL holds P[F] from FINSEQ_2:sch 2(A1,A3);
    then consider f being Function of NAT, ExtREAL such that
    A16: f.0 = 0. &
-    for i being Nat st i < len F holds f.(i+1) = f.i+F.(i+1);
+    for i being Element of NAT st i < len F holds f.(i+1) = f.i+F.(i+1);
    take f.(len F);
    thus thesis by A16;
   end;
@@ -889,16 +892,16 @@ definition
    given f1 being Function of NAT, ExtREAL such that
    A17: g1 = f1.(len F) and
    A18: f1.0 = 0. and
-   A19: for i being Nat st i < len F holds f1.(i+1) = f1.i+F.(i+1);
+   A19: for i being Element of NAT st i < len F holds f1.(i+1) = f1.i+F.(i+1);
    given f2 being Function of NAT, ExtREAL such that
    A20: g2 = f2.(len F) and
    A21: f2.0 = 0. and
-   A22: for i being Nat st i < len F holds f2.(i+1) = f2.i+F.(i+1);
-   defpred P[Nat] means $1 <= len F implies f1.$1 = f2.$1;
+   A22: for i being Element of NAT st i < len F holds f2.(i+1) = f2.i+F.(i+1);
+   defpred P[Element of NAT] means $1 <= len F implies f1.$1 = f2.$1;
    A23: P[0] by A18,A21;
-   A24: for i being Nat st P[i] holds P[i+1]
+   A24: for i being Element of NAT st P[i] holds P[i+1]
     proof
-     let i be Nat; assume
+     let i be Element of NAT; assume
      A25: P[i];
      thus P[i+1]
       proof
@@ -909,7 +912,7 @@ definition
        hence thesis;
       end;
     end;
-     for i being Nat holds P[i] from NAT_1:sch 1(A23,A24);
+     for i being Element of NAT holds P[i] from NAT_1:sch 1(A23,A24);
    hence g1 = g2 by A17,A20;
   end;
 end;
@@ -920,7 +923,8 @@ theorem Th4:
   set F = <*> ExtREAL;
     ex f being Function of NAT, ExtREAL st
   Sum F = f.(len F) & f.0 = 0. &
-    for i being Nat st i < len F holds f.(i+1) = f.i+F.(i+1) by Def5;
+    for i being Element of NAT st i < len F holds f.(i+1) = f.i+F.(i+1)
+     by Def5;
   hence thesis by FINSEQ_1:25;
  end;
 
@@ -932,7 +936,8 @@ theorem Th5:
    consider f being Function of NAT, ExtREAL such that
    A1: Sum F = f.(len F) and
    A2: f.0 = 0. and
-   A3: for i being Nat st i < len F holds f.(i+1) = f.i+F.(i+1) by Def5;
+   A3: for i being Element of NAT st i < len F holds f.(i+1) = f.i+F.(i+1)
+    by Def5;
      len F = 1 by FINSEQ_1:56;
    then Sum F = f.1 & f.(0+1) = f.0+F.(0+1) by A1,A3;
    then Sum F = F.1 by A2,SUPINF_2:18
@@ -949,13 +954,14 @@ Lm7:
    consider f being Function of NAT, ExtREAL such that
    A1: Sum(F^<*x*>) = f.(len(F^<*x*>)) and
    A2: f.0 = 0. and
-   A3: for i being Nat st i < len (F^<*x*>) holds f.(i+1)=f.i+(F^<*x*>).(i+1)
+   A3: for i being Element of NAT st i < len (F^<*x*>)
+    holds f.(i+1)=f.i+(F^<*x*>).(i+1)
     by Def5;
    A4: len(F^<*x*>) = (len F)+(len <*x*>) by FINSEQ_1:35
                    .= (len F)+1 by FINSEQ_1:56;
-     for i being Nat st i < len F holds f.(i+1)=f.i+F.(i+1)
+     for i being Element of NAT st i < len F holds f.(i+1)=f.i+F.(i+1)
     proof
-     let i be Nat; assume
+     let i be Element of NAT; assume
      A5: i < len F;
      then i < len(F^<*x*>) by A4,NAT_1:38;
      then A6: f.(i+1)=f.i+(F^<*x*>).(i+1) by A3;
@@ -1045,40 +1051,40 @@ Lm9:
 Lm10:
  for a being FinSequence of ExtREAL, b being FinSequence of REAL st
      len a = len b &
-     (for i being Nat st i in dom a holds a.i = b.i) holds
+     (for i being Element of NAT st i in dom a holds a.i = b.i) holds
      Sum a = Sum b
  proof
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
    for a be FinSequence of ExtREAL, b be FinSequence of REAL st
      len a = $1 & len b = $1 &
-     (for i being Nat st i in dom a holds a.i = b.i) holds
+     (for i being Element of NAT st i in dom a holds a.i = b.i) holds
      Sum a = Sum b;
   A1: P[0]
    proof
     let a be FinSequence of ExtREAL, b be FinSequence of REAL;
     assume len a = 0 & len b = 0 &
-     (for i being Nat st i in dom a holds a.i = b.i);
+     (for i being Element of NAT st i in dom a holds a.i = b.i);
     then Sum a = 0. & Sum b = 0 by Th4,FINSEQ_1:32,RVSUM_1:102;
     hence thesis by SUPINF_2:def 1;
    end;
-  A2: for n being Nat st P[n] holds P[n+1]
+  A2: for n being Element of NAT st P[n] holds P[n+1]
    proof
-    let n be Nat; assume
+    let n be Element of NAT; assume
     A3: P[n];
     thus P[n+1]
      proof
       let a be FinSequence of ExtREAL, b be FinSequence of REAL;
       assume that
       A4: len a = n+1 & len b = n+1 and
-      A5: for i being Nat st i in dom a holds a.i = b.i;
+      A5: for i being Element of NAT st i in dom a holds a.i = b.i;
       A6: dom a = Seg(n+1) by A4,FINSEQ_1:def 3;
       A7: n+1 in Seg(n+1) by FINSEQ_1:6;
       A8: 0+n <= 1+n by XREAL_1:8;
       then A9: len(a|n) = n & len(b|n) = n by A4,FINSEQ_1:80;
       A10: Seg n c= Seg(n+1) by A8,FINSEQ_1:7;
-        for i being Nat st i in dom(a|n) holds (a|n).i = (b|n).i
+        for i being Element of NAT st i in dom(a|n) holds (a|n).i = (b|n).i
        proof
-        let i be Nat;
+        let i be Element of NAT;
         assume i in dom(a|n);
         then A11: i in Seg n by A9,FINSEQ_1:def 3;
         then i <= n by FINSEQ_1:3;
@@ -1097,27 +1103,28 @@ Lm10:
      end;
    end;
   let a be FinSequence of ExtREAL, b be FinSequence of REAL;
-    for n being Nat holds P[n] from NAT_1:sch 1(A1,A2);
+    for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
   hence thesis;
  end;
 
 Lm11:
- for n being Nat, a being FinSequence of ExtREAL,
+ for n being Element of NAT, a being FinSequence of ExtREAL,
      b being FinSequence of the carrier of RLS_Real st
      len a = n & len b = n &
-     (for i being Nat st i in Seg n holds a.i = b.i) holds
+     (for i being Element of NAT st i in Seg n holds a.i = b.i) holds
      Sum a = Sum b
   proof
-   let n be Nat, a be FinSequence of ExtREAL,
+   let n be Element of NAT, a be FinSequence of ExtREAL,
        b be FinSequence of the carrier of RLS_Real;
    assume that
    A1: len a = n & len b = n and
-   A2: for i being Nat st i in Seg n holds a.i = b.i;
+   A2: for i being Element of NAT st i in Seg n holds a.i = b.i;
    A3: dom a = Seg n & dom b = Seg n by A1,FINSEQ_1:def 3;
    set c = b;
    reconsider c as FinSequence of REAL;
    A4: Sum a = Sum c by A1,A2,A3,Lm10;
-     len b = len c & (for i being Nat st i in dom b holds b.i = c.i);
+     len b = len c & (for i being Element of NAT st i in dom b
+      holds b.i = c.i);
    hence thesis by A4,Lm6;
   end;
 
@@ -1165,18 +1172,19 @@ theorem Th7:
   end;
 
 Lm12:
- for n,q being Nat st q in Seg(n+1) ex p being Permutation of Seg(n+1) st
- for i being Nat st i in Seg(n+1) holds
+ for n,q being Element of NAT st q in Seg(n+1)
+  ex p being Permutation of Seg(n+1) st
+ for i being Element of NAT st i in Seg(n+1) holds
   (i<q implies p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.i=i-1)
   proof
-   let n,q be Nat; assume
+   let n,q be Element of NAT; assume
    A1: q in Seg(n+1);
-    defpred R[Nat,set] means
+    defpred R[Element of NAT,set] means
     ($1<q implies $2=$1) & ($1=q implies $2=n+1) & ($1>q implies $2=$1-1);
-   A2: for i being Nat st i in Seg(n+1)
+   A2: for i being Element of NAT st i in Seg(n+1)
     ex p being Element of NAT st R[i,p]
     proof
-     let i be Nat;
+     let i be Element of NAT;
      assume i in Seg(n+1);
      per cases by XREAL_1:1;
      suppose
@@ -1193,19 +1201,20 @@ Lm12:
       A5: i>q;
         1 <= q by A1,FINSEQ_1:3;
       then 1 <= i by A5,XREAL_1:2;
-      then reconsider p=i-1 as Nat by INT_1:18;
+      then reconsider p=i-1 as Element of NAT by INT_1:18;
       take p;
       thus thesis by A5;
     end;
     end;
    consider p being FinSequence of NAT such that
     A6: dom p = Seg(n+1) and
-    A7: for i being Nat st i in Seg(n+1) holds R[i,p/.i] from POLYNOM2:sch 1
+    A7: for i being Element of NAT st i in Seg(n+1) holds R[i,p/.i]
+     from POLYNOM2:sch 1
 (A2);
-    A8: for i being Nat st i in Seg(n+1) holds
+    A8: for i being Element of NAT st i in Seg(n+1) holds
     (i<q implies p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.i=i-1)
      proof
-      let i be Nat; assume
+      let i be Element of NAT; assume
       A9: i in Seg(n+1);
       then p/.i = p.i by A6,FINSEQ_4:def 4;
       hence thesis by A7,A9;
@@ -1219,7 +1228,7 @@ Lm12:
        then consider j being set such that
        A10: j in Seg(n+1) and
        A11: p.j = i by A6,FUNCT_1:def 5;
-       reconsider j as Nat by A10;
+       reconsider j as Element of NAT by A10;
        per cases by XREAL_1:1;
        suppose j<q;
         hence thesis by A8,A10,A11;
@@ -1233,7 +1242,7 @@ Lm12:
         then A13: i = j-1 by A8,A10,A11;
           1 <= q by A1,FINSEQ_1:3;
         then A14: 1 < j by A12,XREAL_1:2;
-        then reconsider i as Nat by A13,INT_1:18;
+        then reconsider i as Element of NAT by A13,INT_1:18;
           1 < i+1 by A13,A14;
         then A15: 1 <= i by NAT_1:38;
           j <= n+1 by A10,FINSEQ_1:3;
@@ -1246,7 +1255,7 @@ Lm12:
       proof
        assume
        A16: i in Seg(n+1);
-       then reconsider i as Nat;
+       then reconsider i as Element of NAT;
          1 <= i & i <= n+1 by A16,FINSEQ_1:3;
        then A17: i = n+1 or i < n+1 by XREAL_1:1;
        per cases by A17,NAT_1:38; suppose
@@ -1271,9 +1280,9 @@ Lm12:
       end;
     end;
    then A21: rng p = Seg(n+1) by TARSKI:2;
-   A22: for i being Nat st i in Seg(n+1) holds i=q iff p/.i=n+1
+   A22: for i being Element of NAT st i in Seg(n+1) holds i=q iff p/.i=n+1
     proof
-     let i be Nat; assume
+     let i be Element of NAT; assume
      A23: i in Seg(n+1);
      hence i=q implies p/.i=n+1 by A7;
      thus p/.i=n+1 implies i=q
@@ -1296,9 +1305,10 @@ Lm12:
       end;
       end;
     end;
-   A25: for i being Nat st i in Seg(n+1) & p/.i<>n+1 holds i<q iff p/.i<q
+   A25: for i being Element of NAT st i in Seg(n+1) & p/.i<>n+1
+    holds i<q iff p/.i<q
     proof
-     let i be Nat; assume that
+     let i be Element of NAT; assume that
      A26: i in Seg(n+1) and
      A27: p/.i<>n+1;
      thus i<q implies p/.i<q by A7,A26;
@@ -1327,8 +1337,8 @@ Lm12:
      A30: i1 in Seg(n+1) and
      A31: i2 in Seg(n+1) and
      A32: p.i1 = p.i2;
-     reconsider i1 as Nat by A30;
-     reconsider i2 as Nat by A31;
+     reconsider i1 as Element of NAT by A30;
+     reconsider i2 as Element of NAT by A31;
      A33: p/.i1 = p.i1 & p/.i2 = p.i2 by A6,A30,A31,FINSEQ_4:def 4;
      per cases;
      suppose p/.i1 = n+1;
@@ -1357,19 +1367,19 @@ Lm12:
   end;
 
 Lm13:
- for n,q being Nat, s,p being Permutation of Seg(n+1),
+ for n,q being Element of NAT, s,p being Permutation of Seg(n+1),
      s' being FinSequence of Seg(n+1) st
   s'=s & q=s.(n+1) &
-  for i being Nat st i in Seg(n+1) holds
+  for i being Element of NAT st i in Seg(n+1) holds
    (i<q implies p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.i=i-1)
   holds p*s'|n is Permutation of Seg n
   proof
-   let n,q be Nat, s,p be Permutation of Seg(n+1),
+   let n,q be Element of NAT, s,p be Permutation of Seg(n+1),
        s' be FinSequence of Seg(n+1);
    assume that
    A1: s'=s and
    A2: q=s.(n+1) and
-   A3: for i being Nat st i in Seg(n+1) holds
+   A3: for i being Element of NAT st i in Seg(n+1) holds
     (i<q implies p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.i=i-1);
    A4: Seg(n+1) <> {} by FINSEQ_1:6;
    then A5: dom s = Seg(n+1) & rng s = Seg(n+1)
@@ -1395,7 +1405,7 @@ Lm13:
        then consider j being set such that
        A12: j in Seg n and
        A13: r.j = i by A9,FUNCT_1:def 5;
-       reconsider j as Nat by A12;
+       reconsider j as Element of NAT by A12;
        A14: j <= n by A12,FINSEQ_1:3;
        then (s'|n).j = s.j by A1,FINSEQ_3:121;
        then A15: i = p.(s.j) by A9,A12,A13,FUNCT_1:22;
@@ -1403,10 +1413,10 @@ Lm13:
        A17: j in dom s & n+1 in dom s by A5,A10,A12,FINSEQ_1:6;
        A18: s.j in Seg(n+1) & s.j in dom p
         by A5,A7,A10,A12,FUNCT_1:12;
-       then reconsider q1 = s.j as Nat;
+       then reconsider q1 = s.j as Element of NAT;
        A19: p.(s.j) in rng p by A18,FUNCT_1:12;
        then i in Seg(n+1) by A15;
-       then reconsider i as Nat;
+       then reconsider i as Element of NAT;
        A20: q1 <> q by A2,A16,A17,FUNCT_1:def 8;
        per cases by A20,XREAL_1:1;
        suppose q1 < q;
@@ -1424,7 +1434,7 @@ Lm13:
       end;
      assume
       A22: i in Seg n;
-      then reconsider i as Nat;
+      then reconsider i as Element of NAT;
       per cases; suppose
        A23: i < q;
        then A24: p.i = i by A3,A10,A22;
@@ -1432,7 +1442,7 @@ Lm13:
        A25: j in dom s and
        A26: i = s.j by A5,A10,A22,FUNCT_1:def 5;
          j in Seg(n+1) by A25;
-       then reconsider j as Nat;
+       then reconsider j as Element of NAT;
          j <= n+1 by A25,FINSEQ_1:3;
        then j < n+1 by A2,A23,A26,XREAL_1:1;
        then A27: 1 <= j & j <= n by A25,FINSEQ_1:3,NAT_1:38;
@@ -1453,7 +1463,7 @@ Lm13:
        A35: p.(i+1) = i+1-1 by A3,A31,A32
                    .= i;
          j in Seg(n+1) by A33;
-       then reconsider j as Nat;
+       then reconsider j as Element of NAT;
        A36: j <> n+1 by A2,A30,A34,NAT_1:38;
          j <= n+1 by A33,FINSEQ_1:3;
        then j < n+1 by A36,XREAL_1:1;
@@ -1473,21 +1483,21 @@ Lm13:
   end;
 
 Lm14:
- for n,q being Nat, p being Permutation of Seg(n+1),
+ for n,q being Element of NAT, p being Permutation of Seg(n+1),
      F,H being FinSequence of ExtREAL st
      F=H*p & q in Seg(n+1) & len H = n+1 & not -infty in rng H &
-     for i being Nat st i in Seg(n+1) holds
+     for i being Element of NAT st i in Seg(n+1) holds
       (i<q implies p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.i=i-1)
      holds Sum F = Sum H
   proof
-   let n,q be Nat, p be Permutation of Seg(n+1),
+   let n,q be Element of NAT, p be Permutation of Seg(n+1),
        F,H be FinSequence of ExtREAL;
    assume that
    A1: F=H*p and
    A2: q in Seg(n+1) and
    A3: len H = n+1 and
    A4: not -infty in rng H and
-   A5: for i being Nat st i in Seg(n+1) holds
+   A5: for i being Element of NAT st i in Seg(n+1) holds
       (i<q implies p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.i=i-1);
    A6: 1 <= q & q <= n+1 by A2,FINSEQ_1:3;
    then q-1 >= 1-1 by XREAL_1:11;
@@ -1509,9 +1519,10 @@ Lm14:
    then A18: len H1 = n by A3,FINSEQ_1:80;
    then A19: len(F|(q-'1)) = q-'1 & len(H1|(q-'1)) = q-'1
     by A9,A11,A16,FINSEQ_1:80;
-   A20: for i being Nat st 1 <= i & i <= q-'1 holds (F|(q-'1)).i=(H1|(q-'1)).i
+   A20: for i being Element of NAT st 1 <= i & i <= q-'1
+    holds (F|(q-'1)).i=(H1|(q-'1)).i
     proof
-     let i be Nat; assume
+     let i be Element of NAT; assume
      A21: 1 <= i & i <= q-'1;
      then A22: (F|(q-'1)).i = F.i & (H1|(q-'1)).i = H1.i by FINSEQ_3:121;
      A23: i <= n by A8,A21,XREAL_1:2;
@@ -1526,11 +1537,12 @@ Lm14:
    then A27: F.q = H.(n+1) by A1,A2,A17,FUNCT_1:22;
    A28: len(F/^q) = n+1-q by A6,A16,RFINSEQ:def 2;
    A29: len(H1/^(q-'1)) = n-(q-1) by A7,A8,A18,RFINSEQ:def 2;
-     for i being Nat st 1 <= i & i <= n+1-q holds (F/^q).i=(H1/^(q-'1)).i
+     for i being Element of NAT st 1 <= i & i <= n+1-q
+      holds (F/^q).i=(H1/^(q-'1)).i
     proof
-     let i be Nat; assume
+     let i be Element of NAT; assume
      A30: 1 <= i & i <= n+1-q;
-     reconsider n1 = n+1-q as Nat by A6,INT_1:18;
+     reconsider n1 = n+1-q as Element of NAT by A6,INT_1:18;
      A31: i in Seg n1 by A30,FINSEQ_1:3;
        dom(F/^q) = Seg n1 by A28,FINSEQ_1:def 3;
      then A32: (F/^q).i = F.(i+q) by A6,A16,A31,RFINSEQ:def 2;
@@ -1606,9 +1618,9 @@ theorem Th8:
      then G.1 in rng F by A3,FUNCT_1:25;
      hence thesis by A4,A5,A9,TARSKI:def 1;
     end;
-   A10: for n being non empty Nat st P[n] holds P[n+1]
+   A10: for n being non empty Element of NAT st P[n] holds P[n+1]
     proof
-     let n be non empty Nat; assume
+     let n be non empty Element of NAT; assume
      A11: P[n];
      thus P[n+1]
       proof
@@ -1629,9 +1641,9 @@ theorem Th8:
        then A21: dom G = Seg(n+1) by FINSEQ_1:def 3;
          n+1 in dom s by A17,FINSEQ_1:6;
        then A22: s.(n+1) in Seg(n+1) by A17,FUNCT_1:def 5;
-       then reconsider q=s.(n+1) as Nat;
+       then reconsider q=s.(n+1) as Element of NAT;
        consider p being Permutation of Seg(n+1) such that
-       A23: for i being Nat st i in Seg(n+1) holds
+       A23: for i being Element of NAT st i in Seg(n+1) holds
         (i<q implies p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.i=i-1)
         by A22,Lm12;
        A24: dom p = Seg(n+1) by A16,FUNCT_2:def 1;
@@ -1659,9 +1671,10 @@ theorem Th8:
 FINSEQ_2:36;
            len p1' = n by A28,FINSEQ_1:def 3;
          then A35: len H1 = n by A34,FINSEQ_2:37;
-           for i being Nat st 1 <= i & i <= n holds (G|n).i=((H|n)*p1).i
+           for i being Element of NAT st 1 <= i & i <= n
+            holds (G|n).i=((H|n)*p1).i
           proof
-           let i be Nat; assume
+           let i be Element of NAT; assume
            A36: 1 <= i & i <= n;
            then A37: (G|n).i = G.i by FINSEQ_3:121;
            A38: i in Seg n by A36,FINSEQ_1:3;
@@ -1671,7 +1684,7 @@ FINSEQ_2:36;
            then A40: p1.i = p.(s.i) by A28,A38,FUNCT_1:22;
              rng p1 = Seg n by FUNCT_2:def 3;
            then A41: p1.i in Seg n by A28,A38,FUNCT_1:12;
-           then reconsider a = p1.i as Nat;
+           then reconsider a = p1.i as Element of NAT;
              a <= n by A41,FINSEQ_1:3;
            then A42: ((H|n)*p1).i = H.(p1.i) by A39,FINSEQ_3:121;
            A43: H.(p1.i) = F.(p2.(p1.i)) by A26,A30,A41,FUNCT_1:22;
@@ -1701,7 +1714,8 @@ FUNCT_1:22;
        hence thesis by A22,A23,A25,A45,A46,A47,A48,A49,Lm14;
       end;
     end;
-   A50: for n being non empty Nat holds P[n] from BINARITH:sch 1(A1,A10);
+   A50: for n being non empty Element of NAT holds P[n]
+    from BINARITH:sch 1(A1,A10);
    A51: P[0]
     proof
      let F,G be FinSequence of ExtREAL, s be Permutation of Seg 0;
@@ -2273,18 +2287,20 @@ theorem Th12:
 for X being RealLinearSpace,
     M being Subset of X holds
     M is convex iff
-    (for n being non empty Nat, p being FinSequence of REAL,
+    (for n being non empty Element of NAT, p being FinSequence of REAL,
      y,z being FinSequence of the carrier of X st
      len p = n & len y = n & len z = n & Sum p = 1 &
-     (for i being Nat st i in Seg n holds p.i>0 & z.i=p.i*y/.i & y/.i in M)
+     (for i being Element of NAT st i in Seg n
+      holds p.i>0 & z.i=p.i*y/.i & y/.i in M)
      holds Sum(z) in M)
  proof
   let X be RealLinearSpace, M be Subset of X;
   thus M is convex implies
-  (for n being non empty Nat, p being FinSequence of REAL,
+  (for n being non empty Element of NAT, p being FinSequence of REAL,
      y,z being FinSequence of the carrier of X st
      len p = n & len y = n & len z = n & Sum p = 1 &
-     (for i being Nat st i in Seg n holds p.i>0 & z.i=p.i*y/.i & y/.i in M)
+     (for i being Element of NAT st i in Seg n
+      holds p.i>0 & z.i=p.i*y/.i & y/.i in M)
      holds Sum(z) in M)
    proof assume
     A1: M is convex;
@@ -2292,7 +2308,8 @@ for X being RealLinearSpace,
     for p being FinSequence of REAL,
      y,z being FinSequence of the carrier of X st
      len p = $1 & len y = $1 & len z = $1 & Sum p = 1 &
-     (for i being Nat st i in Seg $1 holds p.i>0 & z.i=p.i*y/.i & y/.i in M)
+     (for i being Element of NAT st i in Seg $1
+      holds p.i>0 & z.i=p.i*y/.i & y/.i in M)
      holds Sum(z) in M;
     A2: P[1]
      proof
@@ -2301,7 +2318,7 @@ for X being RealLinearSpace,
       assume that
       A3: len p = 1 & len y = 1 & len z = 1 and
       A4: Sum p = 1 and
-      A5: for i being Nat st i in Seg 1 holds
+      A5: for i being Element of NAT st i in Seg 1 holds
        p.i>0 & z.i=p.i*y/.i & y/.i in M;
       A6: p = <*p.1*> & z = <*z.1*> by A3,FINSEQ_1:57;
         1 in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
@@ -2310,14 +2327,14 @@ for X being RealLinearSpace,
       then z.1 = y/.1 by A7,RLVECT_1:def 9;
       hence thesis by A6,A7,RLVECT_1:61;
      end;
-    A8: for n being non empty Nat st P[n] holds P[n+1]
+    A8: for n being non empty Element of NAT st P[n] holds P[n+1]
      proof
-      let n be non empty Nat; assume
+      let n be non empty Element of NAT; assume
       A9: P[n];
       thus for p being FinSequence of REAL,
        y,z being FinSequence of the carrier of X st
        len p = n+1 & len y = n+1 & len z = n+1 & Sum p = 1 &
-       (for i being Nat st i in Seg(n+1) holds
+       (for i being Element of NAT st i in Seg(n+1) holds
         p.i>0 & z.i=p.i*y/.i & y/.i in M)
        holds Sum(z) in M
        proof
@@ -2326,7 +2343,7 @@ for X being RealLinearSpace,
         assume that
         A10: len p = n+1 & len y = n+1 & len z = n+1 and
         A11: Sum p = 1 and
-        A12: for i being Nat st i in Seg(n+1) holds
+        A12: for i being Element of NAT st i in Seg(n+1) holds
               p.i>0 & z.i=p.i*y/.i & y/.i in M;
         set q = 1-p.(n+1);
           n+1 in Seg(n+1) by FINSEQ_1:6;
@@ -2339,9 +2356,9 @@ for X being RealLinearSpace,
         then A17: len(p|n) = n by A10,FINSEQ_1:80;
         then A18: dom(p|n) = Seg n by FINSEQ_1:def 3;
         A19: Seg n c= Seg(n+1) by A16,FINSEQ_1:7;
-        A20: for i being Nat st i in dom (p|n) holds 0 <= (p|n).i
+        A20: for i being Element of NAT st i in dom (p|n) holds 0 <= (p|n).i
          proof
-          let i be Nat; assume
+          let i be Element of NAT; assume
           A21: i in dom (p|n);
           then A22: i <= n by A18,FINSEQ_1:3;
             p.i > 0 by A12,A18,A19,A21;
@@ -2354,10 +2371,10 @@ for X being RealLinearSpace,
         then A25: q>0 by A15,A18,A20,A24,RVSUM_1:115;
         set p' = (1/q)*(p|n);
         set y' = y|n;
-        deffunc f(Nat) = p'.$1*y'/.$1;
+        deffunc f(Element of NAT) = p'.$1*y'/.$1;
         consider z' being FinSequence of the carrier of X such that
         A26: len z' = n and
-        A27: for i being Nat st i in Seg n holds z'.i = f(i)
+        A27: for i being Element of NAT st i in Seg n holds z'.i = f(i)
          from FINSEQ_2:sch 1;
           dom p' = Seg len p' & dom(p|n) = Seg len(p|n) by FINSEQ_1:def 3;
         then Seg len p' = Seg len(p|n) by RVSUM_1:65;
@@ -2366,10 +2383,10 @@ for X being RealLinearSpace,
         then A30: dom y' = Seg n by FINSEQ_1:def 3;
         A31: Sum p' = (1/q)*q by A15,RVSUM_1:117
                    .= 1 by A25,XCMPLX_1:107;
-          for i being Nat st i in Seg n holds
+          for i being Element of NAT st i in Seg n holds
          p'.i>0 & z'.i=p'.i*y'/.i & y'/.i in M
          proof
-          let i be Nat;
+          let i be Element of NAT;
           assume
           A32: i in Seg n;
           then A33: i <= n by FINSEQ_1:3;
@@ -2389,10 +2406,10 @@ for X being RealLinearSpace,
         then A37: Sum z = Sum(z|n)+Sum<*p.(n+1)*y/.(n+1)*> by A13,RLVECT_1:58
                   .= Sum(z|n)+(1-q)*y/.(n+1) by RLVECT_1:61;
         A38: len(z|n) = n by A10,A16,FINSEQ_1:80;
-          for i being Nat, v being VECTOR of X st
+          for i being Element of NAT, v being VECTOR of X st
          i in dom z' & v = (z|n).i holds z'.i = (1/q)*v
          proof
-          let i be Nat, v be VECTOR of X;
+          let i be Element of NAT, v be VECTOR of X;
           assume that
           A39: i in dom z' and
           A40: v = (z|n).i;
@@ -2414,20 +2431,23 @@ for X being RealLinearSpace,
         hence thesis by A1,A13,A14,A25,A36,A37,CONVEX1:def 2;
        end;
      end;
-    thus for n being non empty Nat holds P[n] from BINARITH:sch 1(A2,A8);
+    thus for n being non empty Element of NAT holds P[n]
+     from BINARITH:sch 1(A2,A8);
    end;
-  thus (for n being non empty Nat, p being FinSequence of REAL,
+  thus (for n being non empty Element of NAT, p being FinSequence of REAL,
      y,z being FinSequence of the carrier of X st
      len p = n & len y = n & len z = n & Sum p = 1 &
-     (for i being Nat st i in Seg n holds p.i>0 & z.i=p.i*y/.i & y/.i in M)
+     (for i being Element of NAT st i in Seg n
+      holds p.i>0 & z.i=p.i*y/.i & y/.i in M)
      holds Sum(z) in M) implies
    M is convex
    proof
     assume
-     A45: for n being non empty Nat, p being FinSequence of REAL,
+     A45: for n being non empty Element of NAT, p being FinSequence of REAL,
       y,z being FinSequence of the carrier of X st
       len p = n & len y = n & len z = n & Sum p = 1 &
-      (for i being Nat st i in Seg n holds p.i>0 & z.i=p.i*y/.i & y/.i in M)
+      (for i being Element of NAT st i in Seg n
+       holds p.i>0 & z.i=p.i*y/.i & y/.i in M)
       holds Sum(z) in M;
        for x1,x2 being VECTOR of X, r be Real st
       0 < r & r < 1 & x1 in M & x2 in M holds  r*x1+(1-r)*x2 in M
@@ -2442,10 +2462,10 @@ for X being RealLinearSpace,
        A48: len p = 2 & len y = 2 & len z = 2 by FINSEQ_1:61;
        A49: Sum p = r+(1-r) by RVSUM_1:107
                 .= 1;
-         for i being Nat st i in Seg 2 holds
+         for i being Element of NAT st i in Seg 2 holds
         p.i>0 & z.i=p.i*y/.i & y/.i in M
         proof
-         let i be Nat; assume
+         let i be Element of NAT; assume
          A50: i in Seg 2;
          per cases by A50,FINSEQ_1:4,TARSKI:def 2;
          suppose i=1;
@@ -2470,30 +2490,30 @@ begin :: Jensen's Inequality
 Lm20:
 for X being RealLinearSpace,
     f being Function of the carrier of X,ExtREAL,
-    n being non empty Nat, p being FinSequence of REAL,
+    n being non empty Element of NAT, p being FinSequence of REAL,
     F being FinSequence of ExtREAL,
     y being FinSequence of the carrier of X st
     len p = n & len F = n & len y = n &
      (for x being VECTOR of X holds f.x <> -infty) &
-     (for i being Nat st i in Seg n holds
+     (for i being Element of NAT st i in Seg n holds
        p.i>=0 & F.i = R_EAL(p.i)*f.(y/.i)) holds
     not -infty in rng F
  proof
   let X be RealLinearSpace,
     f be Function of the carrier of X,ExtREAL,
-    n be non empty Nat, p being FinSequence of REAL,
+    n be non empty Element of NAT, p being FinSequence of REAL,
     F be FinSequence of ExtREAL,
     y be FinSequence of the carrier of X;
   assume that
   A1: len p = n & len F = n & len y = n and
   A2: for x being VECTOR of X holds f.x <> -infty and
-  A3: for i being Nat st i in Seg n holds
+  A3: for i being Element of NAT st i in Seg n holds
        p.i>=0 & F.i = R_EAL(p.i)*f.(y/.i);
     for i being set st i in dom F holds F.i <> -infty
    proof
     let i be set; assume
     A4: i in dom F;
-    then reconsider i as Nat;
+    then reconsider i as Element of NAT;
       i in Seg n by A1,A4,FINSEQ_1:def 3;
     then A5: p.i>=0 & F.i = R_EAL(p.i)*f.(y/.i) by A3;
     A6: f.(y/.i) <> -infty by A2;
@@ -2523,11 +2543,11 @@ for X being RealLinearSpace,
     f being Function of the carrier of X,ExtREAL st
     (for x being VECTOR of X holds f.x <> -infty) holds
     f is convex iff
-    (for n being non empty Nat, p being FinSequence of REAL,
+    (for n being non empty Element of NAT, p being FinSequence of REAL,
          F being FinSequence of ExtREAL,
          y,z being FinSequence of the carrier of X st
      len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
-     (for i being Nat st i in Seg n holds
+     (for i being Element of NAT st i in Seg n holds
        p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
      f.Sum(z) <= Sum F)
  proof
@@ -2536,41 +2556,41 @@ for X being RealLinearSpace,
  assume
  A1: for x being VECTOR of X holds f.x <> -infty;
  thus f is convex implies
-    (for n being non empty Nat, p being FinSequence of REAL,
+    (for n being non empty Element of NAT, p being FinSequence of REAL,
          F being FinSequence of ExtREAL,
          y,z being FinSequence of the carrier of X st
      len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
-     (for i being Nat st i in Seg n holds
+     (for i being Element of NAT st i in Seg n holds
        p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
      f.Sum(z) <= Sum F)
   proof
    assume
    A2: f is convex;
-   let n be non empty Nat, p be FinSequence of REAL,
+   let n be non empty Element of NAT, p be FinSequence of REAL,
        F be FinSequence of ExtREAL,
        y,z be FinSequence of the carrier of X;
    assume that
    A3: len p = n & len F = n & len y = n & len z = n and
    A4: Sum p = 1 and
-   A5: for i being Nat st i in Seg n holds
+   A5: for i being Element of NAT st i in Seg n holds
         p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i);
-   A6: for i being Nat st i in Seg n holds 0. < R_EAL(p.i)
+   A6: for i being Element of NAT st i in Seg n holds 0. < R_EAL(p.i)
    proof
-    let i being Nat;
+    let i being Element of NAT;
     assume i in Seg n;
     then A7: p.i>0 by A5;
       p.i = R_EAL(p.i) by MEASURE6:def 1;
     hence thesis by A7,EXTREAL1:18;
    end;
-     for i being Nat st i in Seg n holds
+     for i being Element of NAT st i in Seg n holds
     p.i>=0 & F.i = R_EAL(p.i)*f.(y/.i) by A5;
    then A8: not -infty in rng F by A1,A3,Lm20;
    per cases;
    suppose
-    A9: for i being Nat st i in Seg n holds f.(y/.i) <> +infty;
-    A10: for i being Nat st i in Seg n holds f.(y/.i) in REAL
+    A9: for i being Element of NAT st i in Seg n holds f.(y/.i) <> +infty;
+    A10: for i being Element of NAT st i in Seg n holds f.(y/.i) in REAL
      proof
-      let i be Nat;
+      let i be Element of NAT;
       assume i in Seg n;
       then A11: f.(y/.i) <> +infty by A9;
         f.(y/.i) <> -infty by A1;
@@ -2578,10 +2598,10 @@ for X being RealLinearSpace,
      end;
     reconsider V = Prod_of_RLS(X,RLS_Real) as RealLinearSpace;
      defpred P[set,set] means $2 = [y/.$1, f.(y/.$1)];
-    A12: for i being Nat st i in Seg n
+    A12: for i being Element of NAT st i in Seg n
      ex v being Element of V st P[i,v]
      proof
-      let i be Nat;
+      let i be Element of NAT;
       assume i in Seg n;
       then reconsider w = f.(y/.i) as Real by A10;
       set v = [y/.i, w];
@@ -2591,17 +2611,20 @@ for X being RealLinearSpace,
      end;
     consider g being FinSequence of the carrier of V such that
     A13: dom g = Seg n and
-    A14: for i being Nat st i in Seg n holds P[i,g/.i] from POLYNOM2:sch 1
+    A14: for i being Element of NAT st i in Seg n holds P[i,g/.i]
+     from POLYNOM2:sch 1
 (A12);
     A15: len g = n by A13,FINSEQ_1:def 3;
-    deffunc f(Nat) = p.$1*g/.$1;
+    deffunc f(Element of NAT) = p.$1*g/.$1;
     consider G being FinSequence of the carrier of V such that
     A16: len G = n and
-    A17: for i being Nat st i in Seg n holds G.i = f(i) from FINSEQ_2:sch 1;
+    A17: for i being Element of NAT st i in Seg n holds G.i = f(i)
+     from FINSEQ_2:sch 1;
     reconsider M = epigraph f as Subset of V;
-    A18: for i being Nat st i in Seg n holds p.i>0 & G.i=p.i*g/.i & g/.i in M
+    A18: for i being Element of NAT st i in Seg n
+     holds p.i>0 & G.i=p.i*g/.i & g/.i in M
      proof
-      let i be Nat; assume
+      let i be Element of NAT; assume
       A19: i in Seg n;
       hence p.i>0 by A5;
       thus G.i=p.i*g/.i by A17,A19;
@@ -2616,10 +2639,10 @@ for X being RealLinearSpace,
       M is convex by A2,Def7;
     then A20: Sum(G) in M by A3,A4,A15,A16,A18,Th12;
     defpred P[set,set] means $2 = F.$1;
-    A21: for i being Nat st i in Seg n
+    A21: for i being Element of NAT st i in Seg n
      ex w being Element of RLS_Real st P[i,w]
     proof
-     let i be Nat; assume
+     let i be Element of NAT; assume
      A22: i in Seg n;
      then A23: F.i = R_EAL(p.i)*f.(y/.i) by A5;
      reconsider a = f.(y/.i) as Real by A10,A22;
@@ -2630,20 +2653,21 @@ for X being RealLinearSpace,
     end;
     consider F1 being FinSequence of the carrier of RLS_Real such that
     A24: dom F1 = Seg n and
-    A25: for i being Nat st i in Seg n holds P[i,F1/.i] from POLYNOM2:sch 1
+    A25: for i being Element of NAT st i in Seg n holds P[i,F1/.i]
+     from POLYNOM2:sch 1
 (A21);
-    A26: for i being Nat st i in Seg n holds F1.i = F.i
+    A26: for i being Element of NAT st i in Seg n holds F1.i = F.i
      proof
-      let i be Nat;
+      let i be Element of NAT;
       assume
       A27: i in Seg n;
       then F1/.i = F1.i by A24,FINSEQ_4:def 4;
       hence thesis by A25,A27;
      end;
     A28: len F1 = n by A24,FINSEQ_1:def 3;
-      for i being Nat st i in Seg n holds G.i = [z.i, F1.i]
+      for i being Element of NAT st i in Seg n holds G.i = [z.i, F1.i]
     proof
-     let i be Nat; assume
+     let i be Element of NAT; assume
      A29: i in Seg n;
      then reconsider a = f.(y/.i) as Real by A10;
        g/.i = [y/.i, a] by A14,A29;
@@ -2665,8 +2689,8 @@ for X being RealLinearSpace,
       x = Sum z & w = Sum F by A31,ZFMISC_1:33;
     hence thesis by A32,MEASURE6:def 1;
    end;
-   suppose ex i being Nat st i in Seg n & f.(y/.i) = +infty;
-    then consider i being Nat such that
+   suppose ex i being Element of NAT st i in Seg n & f.(y/.i) = +infty;
+    then consider i being Element of NAT such that
     A33: i in Seg n and
     A34: f.(y/.i) = +infty;
     A35: p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i) by A5,A33;
@@ -2679,21 +2703,21 @@ for X being RealLinearSpace,
   end;
   end;
  thus
-      (for n being non empty Nat, p being FinSequence of REAL,
+      (for n being non empty Element of NAT, p being FinSequence of REAL,
          F being FinSequence of ExtREAL,
          y,z being FinSequence of the carrier of X st
      len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
-     (for i being Nat st i in Seg n holds
+     (for i being Element of NAT st i in Seg n holds
        p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
      f.Sum(z) <= Sum F) implies
  f is convex
   proof
    assume
-   A37: for n being non empty Nat, p being FinSequence of REAL,
+   A37: for n being non empty Element of NAT, p being FinSequence of REAL,
          F being FinSequence of ExtREAL,
          y,z being FinSequence of the carrier of X st
      len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
-     (for i being Nat st i in Seg n holds
+     (for i being Element of NAT st i in Seg n holds
        p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
      f.Sum(z) <= Sum F;
      for x1, x2 being VECTOR of X,
@@ -2711,10 +2735,10 @@ for X being RealLinearSpace,
      A39: len p = n & len F = n & len y = n & len z = n by FINSEQ_1:61;
      A40: Sum p = q+(1-q) by RVSUM_1:107
                .= 1;
-     A41: for i being Nat st i in Seg n holds
+     A41: for i being Element of NAT st i in Seg n holds
        p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)
      proof
-      let i be Nat; assume
+      let i be Element of NAT; assume
       A42: i in Seg n;
       per cases by A42,FINSEQ_1:4,TARSKI:def 2;
        suppose i=1;
@@ -2738,8 +2762,8 @@ for X being RealLinearSpace,
 
 Lm21:
  for F being FinSequence of REAL
- ex s being Permutation of dom F,n being Nat st
- (for i being Nat st i in dom F holds i in Seg n iff F.(s.i) <> 0)
+ ex s being Permutation of dom F,n being Element of NAT st
+ (for i being Element of NAT st i in dom F holds i in Seg n iff F.(s.i) <> 0)
  proof
   let F be FinSequence of REAL;
   defpred P[Nat] means F.$1 <> 0;
@@ -2801,7 +2825,7 @@ Lm21:
    end;
   set n = len(Sgm A);
   A13: for x being Element of NAT st x in dom F & not x in Seg n
-   ex k being Nat st x=k+n & k in dom(Sgm B) & s.x=(Sgm B).k
+   ex k being Element of NAT st x=k+n & k in dom(Sgm B) & s.x=(Sgm B).k
   proof
    let x be Element of NAT;
    assume x in dom F & not x in Seg n;
@@ -2810,7 +2834,7 @@ Lm21:
    then n+1 <= x by INT_1:20;
    then A15: n+1-n <= x-n by XREAL_1:11;
    then 0 <= x-n;
-   then reconsider k=x-n as Nat by INT_1:16;
+   then reconsider k=x-n as Element of NAT by INT_1:16;
    take k;
    A16: x=k+n;
      len s = n + len(Sgm B) by FINSEQ_1:35;
@@ -2829,7 +2853,7 @@ Lm21:
     s is onto by A18,FUNCT_2:def 3;
   then reconsider s as Permutation of dom F by A17,FUNCT_2:def 4;
   take s,n;
-  let i be Nat;
+  let i be Element of NAT;
   assume
   A19: i in dom F;
   thus i in Seg n implies F.(s.i) <> 0
@@ -2847,7 +2871,7 @@ Lm21:
    assume
    A22: F.(s.i) <> 0;
    assume not i in Seg n;
-   then consider k being Nat such that
+   then consider k being Element of NAT such that
    A23: i=k+n & k in dom(Sgm B) & s.i=(Sgm B).k by A13,A19;
      s.i in rng(Sgm B) by A23,FUNCT_1:12;
    then consider j being Element of NAT such that
@@ -2861,11 +2885,11 @@ theorem
     f being Function of the carrier of X,ExtREAL st
     (for x being VECTOR of X holds f.x <> -infty) holds
     f is convex iff
-    (for n being non empty Nat, p being FinSequence of REAL,
+    (for n being non empty Element of NAT, p being FinSequence of REAL,
          F being FinSequence of ExtREAL,
          y,z being FinSequence of the carrier of X st
      len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
-     (for i being Nat st i in Seg n holds
+     (for i being Element of NAT st i in Seg n holds
        p.i>=0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
      f.Sum(z) <= Sum F)
  proof
@@ -2874,26 +2898,27 @@ theorem
   assume
   A1: for x being VECTOR of X holds f.x <> -infty;
   thus f is convex implies
-    (for n being non empty Nat, p being FinSequence of REAL,
+    (for n being non empty Element of NAT, p being FinSequence of REAL,
          F being FinSequence of ExtREAL,
          y,z being FinSequence of the carrier of X st
      len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
-     (for i being Nat st i in Seg n holds
+     (for i being Element of NAT st i in Seg n holds
        p.i>=0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
      f.Sum(z) <= Sum F)
   proof
    assume
    A2: f is convex;
-   let n be non empty Nat, p be FinSequence of REAL,
+   let n be non empty Element of NAT, p be FinSequence of REAL,
        F be FinSequence of ExtREAL,
        y,z be FinSequence of the carrier of X;
    assume that
    A3: len p = n & len F = n & len y = n & len z = n and
    A4: Sum p = 1 and
-   A5: for i being Nat st i in Seg n holds
+   A5: for i being Element of NAT st i in Seg n holds
         p.i>=0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i);
-   consider s being Permutation of dom p,k being Nat such that
-   A6: for i being Nat st i in dom p holds i in Seg k iff p.(s.i) <> 0 by Lm21;
+   consider s being Permutation of dom p,k being Element of NAT such that
+   A6: for i being Element of NAT st i in dom p holds i in Seg k
+    iff p.(s.i) <> 0 by Lm21;
      1 <= n by NAT_1:39;
    then A7: Seg n <> {} by FINSEQ_1:3;
    A8: dom p = Seg n by A3,FINSEQ_1:def 3;
@@ -2917,15 +2942,16 @@ theorem
    then A21: F is Function of Seg n, ExtREAL by FINSEQ_2:30;
    then reconsider F'=F*s1 as FinSequence of ExtREAL by FINSEQ_2:36;
    A22: len F' = n by A10,A21,FINSEQ_2:37;
-     for i being Nat st i in Seg n holds
+     for i being Element of NAT st i in Seg n holds
     p.i>=0 & F.i = R_EAL(p.i)*f.(y/.i) by A5;
    then A23: not -infty in rng F by A1,A3,Lm20;
    then A24: Sum(F') = Sum(F) by A8,A20,Th8;
      p' = (p'|k)^(p'/^k) by RFINSEQ:21;
    then A25: Sum(p') = Sum(p'|k) + Sum(p'/^k) by RVSUM_1:105;
-   A26: for i being Nat st 1<=i & i<=n-k holds i+k in Seg n & p.(s.(i+k))=0
+   A26: for i being Element of NAT st 1<=i & i<=n-k
+    holds i+k in Seg n & p.(s.(i+k))=0
    proof
-    let i be Nat;
+    let i be Element of NAT;
     assume that
     A27: 1<=i and
     A28: i<=n-k;
@@ -2953,8 +2979,8 @@ theorem
         then consider i being set such that
         A34: i in dom(p'/^k) and
         A35: (p'/^k).i = w by FUNCT_1:def 5;
-        reconsider i as Nat by A34;
-        reconsider k1=n-k as Nat by A33,INT_1:18;
+        reconsider i as Element of NAT by A34;
+        reconsider k1=n-k as Element of NAT by A33,INT_1:18;
           len(p'/^k)=k1 by A12,A33,RFINSEQ:def 2;
         then i in Seg k1 by A34,FINSEQ_1:def 3;
         then 1 <= i & i <= n-k by FINSEQ_1:3;
@@ -2988,8 +3014,8 @@ theorem
         then consider i being set such that
         A40: i in dom(z'/^k) and
         A41: (z'/^k).i = w by FUNCT_1:def 5;
-        reconsider i as Nat by A40;
-        reconsider k1=n-k as Nat by A39,INT_1:18;
+        reconsider i as Element of NAT by A40;
+        reconsider k1=n-k as Element of NAT by A39,INT_1:18;
           len(z'/^k)=k1 by A15,A39,RFINSEQ:def 2;
         then i in Seg k1 by A40,FINSEQ_1:def 3;
         then 1 <= i & i <= n-k by FINSEQ_1:3;
@@ -3028,8 +3054,8 @@ theorem
         then consider i being set such that
         A48: i in dom(F'/^k) and
         A49: (F'/^k).i = w by FUNCT_1:def 5;
-        reconsider i as Nat by A48;
-        reconsider k1=n-k as Nat by A47,INT_1:18;
+        reconsider i as Element of NAT by A48;
+        reconsider k1=n-k as Element of NAT by A47,INT_1:18;
           len(F'/^k)=k1 by A22,A47,RFINSEQ:def 2;
         then i in Seg k1 by A48,FINSEQ_1:def 3;
         then 1 <= i & i <= n-k by FINSEQ_1:3;
@@ -3050,18 +3076,19 @@ theorem
     end;
    then A52: Sum(F'|k) = Sum(F) by A24,A46,SUPINF_2:18;
    set k' = min(k,n);
-   reconsider k' as Nat;
+   reconsider k' as Element of NAT;
    A53: p'|k = p'|(Seg k) & y'|k = y'|(Seg k) &
    z'|k = z'|(Seg k) & F'|k = F'|(Seg k)
     by FINSEQ_1:def 15;
    then A54: len(p'|k) = k' & len(y'|k) = k' & len(z'|k) = k' & len(F'|k) = k'
     by A12,A15,A19,A22,FINSEQ_2:24;
-   then reconsider k' as non empty Nat by A37,FINSEQ_1:25,RVSUM_1:102;
-     for i being Nat st i in Seg k' holds
+   then reconsider k' as non empty Element of NAT
+    by A37,FINSEQ_1:25,RVSUM_1:102;
+     for i being Element of NAT st i in Seg k' holds
          (p'|k).i>0 & (z'|k).i=(p'|k).i*(y'|k)/.i &
          (F'|k).i = R_EAL((p'|k).i)*f.((y'|k)/.i)
     proof
-     let i be Nat;
+     let i be Element of NAT;
      assume
      A55: i in Seg k';
      then A56: i in dom(p'|k) & i in dom(y'|k) &
@@ -3090,39 +3117,39 @@ theorem
    hence thesis by A1,A2,A37,A44,A52,A54,Th13;
   end;
   thus
-      (for n being non empty Nat, p being FinSequence of REAL,
+      (for n being non empty Element of NAT, p being FinSequence of REAL,
          F being FinSequence of ExtREAL,
          y,z being FinSequence of the carrier of X st
      len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
-     (for i being Nat st i in Seg n holds
+     (for i being Element of NAT st i in Seg n holds
        p.i>=0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
      f.Sum(z) <= Sum F) implies
   f is convex
   proof
    assume
-   A64: for n being non empty Nat, p being FinSequence of REAL,
+   A64: for n being non empty Element of NAT, p being FinSequence of REAL,
          F being FinSequence of ExtREAL,
          y,z being FinSequence of the carrier of X st
      len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
-     (for i being Nat st i in Seg n holds
+     (for i being Element of NAT st i in Seg n holds
        p.i>=0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
      f.Sum(z) <= Sum F;
-     for n being non empty Nat, p being FinSequence of REAL,
+     for n being non empty Element of NAT, p being FinSequence of REAL,
        F being FinSequence of ExtREAL,
        y,z being FinSequence of the carrier of X st
      len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
-     (for i being Nat st i in Seg n holds
+     (for i being Element of NAT st i in Seg n holds
        p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
      f.Sum(z) <= Sum F
     proof
-     let n be non empty Nat, p be FinSequence of REAL,
+     let n be non empty Element of NAT, p be FinSequence of REAL,
          F be FinSequence of ExtREAL,
          y,z be FinSequence of the carrier of X;
      assume that
      A65: len p = n & len F = n & len y = n & len z = n & Sum p = 1 and
-     A66: for i being Nat st i in Seg n holds
+     A66: for i being Element of NAT st i in Seg n holds
           p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i);
-       for i being Nat st i in Seg n holds
+       for i being Element of NAT st i in Seg n holds
           p.i>=0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i) by A66;
      hence thesis by A64,A65;
     end;

@@ -36,7 +36,6 @@
 <ArticleID name="EUCLID"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="GOBOARD1"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="FINSEQ_4"/>
 <ArticleID name="MATRLIN"/>
 <ArticleID name="FINSUB_1"/>
@@ -136,7 +135,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="335"/>
+<Func kind="K" nr="327"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="97"/>
@@ -160,10 +159,10 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="321">
+<Func kind="K" nr="313">
 <Func kind="K" nr="69"/>
 <LocusVar nr="1"/>
-<Func kind="K" nr="335"/>
+<Func kind="K" nr="327"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
@@ -192,7 +191,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="329">
+<Func kind="K" nr="321">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -220,7 +219,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="329">
+<Func kind="K" nr="321">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

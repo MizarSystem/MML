@@ -58,6 +58,9 @@
 <Func kind="K" nr="60"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
+<Adjective nr="8"/>
+<Adjective nr="9"/>
+<Adjective nr="10"/>
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>

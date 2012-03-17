@@ -31,14 +31,14 @@ environ
       FINSEQ_1, RELSET_1, TARSKI, INT_1, PARTFUN1, GRFUNC_1, BINARITH, RFINSEQ,
       SCMFSA_2, SCMFSA6B, SCMFSA7B, SCMFSA8B, SCMFSA8A, SCMFSA8C, SCMFSA_4,
       SCMFSA6C, SCM_HALT, ABSVALUE, FINSEQ_4, FINSEQ_2, CQC_THE1, XBOOLE_0,
-      XBOOLE_1, SCMFSA9A, XREAL_1;
+      XBOOLE_1, SCMFSA9A, XREAL_1, ORDINAL1;
  schemes AMI_3, FUNCT_1, NAT_1;
 
 begin :: Preliminaries
 
 reserve p for programmed FinPartState of SCM+FSA,
         ic for Instruction of SCM+FSA,
-        i,j,k for Nat,
+        i,j,k for Element of NAT,
         fa,f for FinSeq-Location,
         a,b,da,db for Int-Location,
         la,lb for Instruction-Location of SCM+FSA;
@@ -213,7 +213,7 @@ theorem Th8:
  for s be State of SCM+FSA,f be FinSeq-Location,a,b be Int-Location
  holds Exec(b:=(f,a), s).b = (s.f)/.abs(s.a)
 proof let s be State of SCM+FSA,f be FinSeq-Location,a,b be Int-Location;
-    consider k be Nat such that
+    consider k be Element of NAT such that
 A1:  k = abs(s.a) & Exec(b:=(f,a), s).b = (s.f)/.k by SCMFSA_2:98;
     thus thesis by A1;
 end;
@@ -222,17 +222,19 @@ theorem Th9:
 for s be State of SCM+FSA,f be FinSeq-Location,a,b be Int-Location
 holds Exec((f,a):=b, s).f = s.f+*(abs(s.a),s.b)
 proof let s be State of SCM+FSA,f be FinSeq-Location,a,b be Int-Location;
-    consider k be Nat such that
+    consider k be Element of NAT such that
 A1:  k = abs(s.a) & Exec((f,a):=b, s).f = s.f+*(k,s.b) by SCMFSA_2:99;
     thus thesis by A1;
 end;
 
 theorem Th10:
- for s be State of SCM+FSA,f be FinSeq-Location,m,n be Nat,a be Int-Location
+ for s be State of SCM+FSA,f be FinSeq-Location,m,n be Element of NAT,
+ a be Int-Location
  st m<>n+1 holds Exec(intloc m:=(f,a), Initialize s).intloc (n+1)
  =s.intloc (n+1)
 proof
- let s be State of SCM+FSA,f be FinSeq-Location,m,n be Nat,a be Int-Location;
+ let s be State of SCM+FSA,f be FinSeq-Location,m,n be Element of NAT,
+ a be Int-Location;
    assume m<>n+1;
    then intloc m<>intloc (n+1) by SCMFSA_2:16;
    hence Exec(intloc m:=(f,a), Initialize s).intloc (n+1)
@@ -241,11 +243,11 @@ proof
 end;
 
 theorem Th11:
- for s be State of SCM+FSA,m,n be Nat,a be Int-Location
+ for s be State of SCM+FSA,m,n be Element of NAT,a be Int-Location
  st m<>n+1 holds Exec(intloc m:=a, Initialize s).intloc (n+1)
  =s.intloc (n+1)
 proof
- let s be State of SCM+FSA,m,n be Nat,a be Int-Location;
+ let s be State of SCM+FSA,m,n be Element of NAT,a be Int-Location;
    assume m<>n+1;
    then intloc m<>intloc (n+1) by SCMFSA_2:16;
    hence Exec(intloc m:=a, Initialize s).intloc (n+1)
@@ -432,7 +434,8 @@ end;
 canceled;
 
 theorem Th25:
- for i,k being Nat,t being FinPartState of SCM+FSA,p being Macro-Instruction,
+ for i,k being Element of NAT,t being FinPartState of SCM+FSA,
+ p being Macro-Instruction,
   s1,s2 being State of SCM+FSA
   st k <= i & p c= s1 & p c= s2 &
   dom t c= Int-Locations \/ FinSeq-Locations &
@@ -458,14 +461,16 @@ proof
   (Computation s1).k |Dloc = (Computation s2).k|Dloc;
     then consider m being Nat such that
 A2: i=k+m by NAT_1:28;
+    reconsider m as Element of NAT by ORDINAL1:def 13;
+AA: i=k+m by A2;
 A3: UsedIntLoc p c= Dloc by XBOOLE_1:7;
-       Dloc=dom t \/ UsedIntLoc p \/ UsedInt*Loc p by XBOOLE_1:4;
+    Dloc=dom t \/ UsedIntLoc p \/ UsedInt*Loc p by XBOOLE_1:4;
 then A4: UsedInt*Loc p c= Dloc by XBOOLE_1:7;
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
   (Computation s1).(k+$1).IC SCM+FSA = (Computation s2).(k+$1).IC SCM+FSA &
   (Computation s1).(k+$1) |Dloc = (Computation s2).(k+$1)|Dloc;
 A5: P[0] by A1;
-A6: now let m be Nat;
+A6: now let m be Element of NAT;
        assume A7: P[m];
        set sk1=(Computation s1).(k+m);
        set sk11=(Computation s1).(k+(m+1));
@@ -824,10 +829,10 @@ A114:        sk11.IC SCM+FSA= Next IC sk2 by A8,A14,A113,SCMFSA_2:98
                   now
                 per cases;
                 case A117:x = b;
-                  consider k1 being Nat such that
+                  consider k1 being Element of NAT such that
 A118:               k1=abs(sk1.a) & Exec(b:=(fa,a), sk1).b=(sk1.fa)/.k1
                   by SCMFSA_2:98;
-                  consider k2 being Nat such that
+                  consider k2 being Element of NAT such that
 A119:               k2=abs(sk2.a) & Exec(b:=(fa,a), sk2).b=(sk2.fa)/.k2
                   by SCMFSA_2:98;
                   A120: a in UsedIntLoc p by A11,A113,Th18;
@@ -868,10 +873,10 @@ A128:        sk11.IC SCM+FSA= Next IC sk2 by A8,A14,A127,SCMFSA_2:99
                   now
                 per cases;
                 case A131:x = fa;
-                  consider k1 being Nat such that
+                  consider k1 being Element of NAT such that
 A132:               k1=abs(sk1.a) & Exec((fa,a):=b,sk1).fa=sk1.fa+*(k1,sk1.b)
                   by SCMFSA_2:99;
-                  consider k2 being Nat such that
+                  consider k2 being Element of NAT such that
 A133:               k2=abs(sk2.a) & Exec((fa,a):=b,sk2).fa=sk2.fa+*(k2,sk2.b)
                   by SCMFSA_2:99;
                   A134: a in UsedIntLoc p by A11,A127,Th18;
@@ -952,10 +957,10 @@ A155:        sk11.IC SCM+FSA=Next IC sk2 by A8,A14,A154,SCMFSA_2:101
                   now
                 per cases;
                 case A158:x = fa;
-                  consider k1 being Nat such that
+                  consider k1 being Element of NAT such that
 A159:               k1 = abs(sk1.a) & Exec(fa:=<0,...,0>a, sk1).fa = k1 |-> 0
                   by SCMFSA_2:101;
-                  consider k2 being Nat such that
+                  consider k2 being Element of NAT such that
 A160:               k2 = abs(sk2.a) & Exec(fa:=<0,...,0>a, sk2).fa = k2 |-> 0
                   by SCMFSA_2:101;
                   A161: a in UsedIntLoc p by A11,A154,Th20;
@@ -982,12 +987,13 @@ then A165:              sk12.x=sk2.x by A13,A15,A154,SCMFSA_2:101;
             hence P[m+1] by A16,A155,Th15;
     end;
     end;
-       for m being Nat holds P[m] from NAT_1:sch 1(A5,A6);
-    hence thesis by A2;
+    for m being Element of NAT holds P[m] from NAT_1:sch 1(A5,A6);
+    hence thesis by A2,AA;
 end;
 
 theorem Th26:
- for i,k being Nat,p being Macro-Instruction, s1,s2 being State of SCM+FSA
+ for i,k being Element of NAT,p being Macro-Instruction,
+ s1,s2 being State of SCM+FSA
   st k <= i & p c= s1 & p c= s2 &
   (for j holds IC (Computation s1).j in dom p &
   IC (Computation s2).j in dom p) &
@@ -999,7 +1005,7 @@ theorem Th26:
   (Computation s1).i |(UsedInt*Loc p \/ UsedIntLoc p) =
   (Computation s2).i |(UsedInt*Loc p \/ UsedIntLoc p)
 proof
-  let i,k be Nat,p be Macro-Instruction,s1,s2 be State of SCM+FSA;
+  let i,k be Element of NAT,p be Macro-Instruction,s1,s2 be State of SCM+FSA;
   set Cs1=Computation s1,Cs2=Computation s2,
       D= UsedInt*Loc p \/ UsedIntLoc p;
   assume A1:k <= i & p c= s1 & p c= s2 &
@@ -1200,7 +1206,7 @@ theorem Th38:
   for t be FinSequence of INT holds t is FinSequence of REAL
 proof
    let t be FinSequence of INT;
-   for i be Nat st i in dom t holds t.i in REAL;
+   for i be Element of NAT st i in dom t holds t.i in REAL;
    hence thesis by FINSEQ_2:14;
 end;
 
@@ -1349,11 +1355,12 @@ then A6:     not IC SCM+FSA in dom s by A1,XBOOLE_0:3;
 end;
 
 theorem Th48:
- for I,J being Macro-Instruction, k being Nat,i being Instruction of SCM+FSA
+ for I,J being Macro-Instruction, k being Element of NAT,
+ i being Instruction of SCM+FSA
  st k< card J & i = J.insloc k holds
   (I ';' J).(insloc (card I +k)) =IncAddr( i, card I )
 proof
-    let I,J be Macro-Instruction, k be Nat,
+    let I,J be Macro-Instruction, k be Element of NAT,
      i be Instruction of SCM+FSA such that
 A1: k< card J and
 A2: i = J.insloc k;
@@ -1372,14 +1379,18 @@ theorem Th49:
   by SCMFSA_2:42,43,44,45,46,47,48,49,50,51,52,53,124;
 
 theorem Th50:
- for I,J be Macro-Instruction,k be Nat,i be Instruction of SCM+FSA st
- (for n be Nat holds IncAddr( i, n)=i) & i <> halt SCM+FSA & k= card I
+ for I,J be Macro-Instruction,k be Element of NAT,
+ i be Instruction of SCM+FSA st
+ (for n be Element of NAT holds IncAddr( i, n)=i) & i <> halt SCM+FSA &
+ k= card I
  holds (I ';' i ';' J).(insloc k) = i &
         (I ';' i ';' J).(insloc (k+1)) = goto insloc (card I+2)
 proof
-    let I,J be Macro-Instruction, k be Nat,i be Instruction of SCM+FSA;
+    let I,J be Macro-Instruction, k be Element of NAT,
+    i be Instruction of SCM+FSA;
     assume A1:
-  (for n be Nat holds IncAddr( i, n)=i) & i <> halt SCM+FSA & k= card I;
+  (for n be Element of NAT holds IncAddr( i, n)=i) & i <> halt SCM+FSA &
+  k= card I;
     set x1=insloc k;
 A2: I ';' i =I ';' Macro i by SCMFSA6A:def 6;
 then A3: card (I ';' i) = card I + card Macro i by SCMFSA6A:61
@@ -1404,25 +1415,25 @@ then A9: (I ';' i).x2 =IncAddr( halt SCM+FSA, card I ) by A1,A2,A6,Th48
 end;
 
 theorem Th51:
- for I,J being Macro-Instruction, k being Nat holds
+ for I,J being Macro-Instruction, k being Element of NAT holds
      k= card I implies (I ';'(a:=b) ';' J).(insloc k) = a:= b
      & (I ';'(a:=b) ';' J).(insloc (k+1)) = goto insloc (card I+2)
-proof let I,J be Macro-Instruction,k be Nat;
+proof let I,J be Macro-Instruction,k be Element of NAT;
      assume A1:k= card I;
      set i=a:=b;
-A2:  for n be Nat holds IncAddr(i, n)=i by SCMFSA_4:9;
+A2:  for n be Element of NAT holds IncAddr(i, n)=i by SCMFSA_4:9;
         i <> halt SCM+FSA by Th49;
      hence thesis by A1,A2,Th50;
 end;
 
 theorem Th52:
- for I,J being Macro-Instruction, k being Nat holds
+ for I,J being Macro-Instruction, k being Element of NAT holds
      k= card I implies (I ';'(a:=len f) ';' J).(insloc k) = a:=len f
      & (I ';'(a:=len f) ';' J).(insloc (k+1)) = goto insloc (card I+2)
-proof let I,J be Macro-Instruction,k be Nat;
+proof let I,J be Macro-Instruction,k be Element of NAT;
      assume A1:k= card I;
      set i=a:=len f;
-A2:  for n be Nat holds IncAddr(i, n)=i by SCMFSA_4:19;
+A2:  for n be Element of NAT holds IncAddr(i, n)=i by SCMFSA_4:19;
         i <> halt SCM+FSA by Th49;
      hence thesis by A1,A2,Th50;
 end;
@@ -2041,10 +2052,10 @@ A5:     Ct=39 +12 by A3,Th44;
 end;
 
 theorem Th63:
- for f being FinSeq-Location, k being Nat st
+ for f being FinSeq-Location, k being Element of NAT st
    k < 63 holds insloc k in dom (bubble-sort f)
 proof
-    let f be FinSeq-Location, k be Nat;
+    let f be FinSeq-Location, k be Element of NAT;
     assume A1: k < 63;
        card (bubble-sort f) = 63 by Th62;
     hence thesis by A1,SCMFSA6A:15;
@@ -2084,7 +2095,7 @@ proof
      let s be State of SCM+FSA such that
 A1:  q c= s;
      A2: q=q0 by Def2;
-A3:  now let i be Nat;
+A3:  now let i be Element of NAT;
        assume i< 63;
        then insloc i in dom q0 by Th63;
        hence q0.insloc i= s.insloc i by A1,A2,GRFUNC_1:8;
@@ -2530,8 +2541,8 @@ then A5:  s.b3-1<=len (s.f0) by A1,XREAL_1:2;
 A6:  s.b3>= 1 by A1,XREAL_1:2;
 A7:  s.b3>= 0 by A1;
 then A8:  abs(s.b3)=s.b3 by ABSVALUE:def 1;
-     reconsider k1=s.b3-1 as Nat by A3,INT_1:16;
-     reconsider k2=s.b3 as Nat by A7,INT_1:16;
+     reconsider k1=s.b3-1 as Element of NAT by A3,INT_1:16;
+     reconsider k2=s.b3 as Element of NAT by A7,INT_1:16;
 A9:  k1 in dom (s.f0) by A2,A5,FINSEQ_3:27;
      then s.f0.k1 in INT by FINSEQ_2:13;
      then reconsider n1=s.f0.k1 as Integer by INT_1:def 2;
@@ -2653,30 +2664,31 @@ end;
 
 Lm12:
 for s be State of SCM+FSA st s.b2>=0 & s.b2<s.b3 & s.b3 <= len (s.f0)
-holds ex k be Nat st k<=s.b3 & k>=s.b3-s.b2 & IExec(T2,s).f0.k = s.f0.(s.b3)
+holds ex k be Element of NAT st k<=s.b3 & k>=s.b3-s.b2 &
+IExec(T2,s).f0.k = s.f0.(s.b3)
 proof
   let s be State of SCM+FSA;
   assume A1:s.b2>=0 & s.b2<s.b3 & s.b3 <= len (s.f0);
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
    for t be State of SCM+FSA st t.b2=$1 & t.b2<t.b3 & t.b3 <= len (t.f0)
-   holds (for m be Nat st m>t.b3 & m <= len (t.f0) holds
+   holds (for m be Element of NAT st m>t.b3 & m <= len (t.f0) holds
           t.f0.m=IExec(T2,t).f0.m) &
-   ex n be Nat st n<=t.b3 &
+   ex n be Element of NAT st n<=t.b3 &
      n>=t.b3-$1 & IExec(T2,t).f0.n = t.f0.(t.b3);
 A2: P[0]
     proof let t be State of SCM+FSA;
        assume A3:t.b2=0 & t.b2<t.b3 & t.b3 <= len (t.f0);
        set If0=IExec(T2,t).f0;
-       thus (for m be Nat st m>t.b3 & m <= len (t.f0) holds
+       thus (for m be Element of NAT st m>t.b3 & m <= len (t.f0) holds
           t.f0.m=If0.m) by A3,SCM_HALT:80;
-        reconsider n=t.b3 as Nat by A3,INT_1:16;
+        reconsider n=t.b3 as Element of NAT by A3,INT_1:16;
         take n;
         thus n<=t.b3;
         thus n>=t.b3-0;
         thus IExec(T2,t).f0.n = t.f0.(t.b3) by A3,SCM_HALT:80;
     end;
      set sb2=SubFrom(b2,a0);
-A4: now let k be Nat;
+A4: now let k be Element of NAT;
         assume A5:P[k];
            now let t be State of SCM+FSA;
             assume A6:t.b2=k+1 & t.b2<t.b3 & t.b3 <= len (t.f0);
@@ -2707,9 +2719,9 @@ A4: now let k be Nat;
         A20: IExec(T2,t).f0=t2.f0 by A6,Lm3,SCM_HALT:82;
         A21: IB.f0 =Exec(sb2, IB).f0 by SCMFSA_2:91
            .=t1.f0 by SCM_HALT:34;
-         thus for m be Nat st m>t.b3 & m <= len (t.f0) holds
+         thus for m be Element of NAT st m>t.b3 & m <= len (t.f0) holds
              t.f0.m=IExec(T2,t).f0.m
-         proof let m be Nat;
+         proof let m be Element of NAT;
             assume A22: m>t.b3 & m <= len (t.f0);
               A23: t.b3>t.b3-1 by XREAL_1:148;
           then A24: m > t1.b3 by A12,A22,XREAL_1:2;
@@ -2722,7 +2734,7 @@ A4: now let k be Nat;
          end;
          hereby
                 t.b3>=0 by A11;
-             then reconsider n=t.b3 as Nat by INT_1:16;
+             then reconsider n=t.b3 as Element of NAT by INT_1:16;
            per cases by A6,A11,Lm11;
            suppose A26: t.f0.(t.b3)=IExec(body2,t).f0.(t.b3);
              take n;
@@ -2733,7 +2745,7 @@ A4: now let k be Nat;
               by A5,A6,A8,A12,A13,A17,A18,A19,A20,A21,A26;
            end;
            suppose A27: t.f0.(t.b3)=IExec(body2,t).f0.(t.b3-1);
-             consider m be Nat such that
+             consider m be Element of NAT such that
              A28: m<=t1.b3 & m>=t1.b3-k &
                  IExec(T2,t1).f0.m = t1.f0.(t1.b3) by A5,A6,A8,A14,A19;
              take m;
@@ -2746,41 +2758,47 @@ A4: now let k be Nat;
        end;
         hence P[k+1];
     end;
-A29: for k be Nat holds P[k] from NAT_1:sch 1(A2,A4);
-    reconsider i=s.b2 as Nat by A1,INT_1:16;
+A29: for k be Element of NAT holds P[k] from NAT_1:sch 1(A2,A4);
+    reconsider i=s.b2 as Element of NAT by A1,INT_1:16;
        P[i] by A29;
     hence thesis by A1;
 end;
 
 Lm13:
-for k be Nat holds (
+for k be Element of NAT holds (
  for t be State of SCM+FSA st k=t.b2 & k< t.b3 & t.b3 <= len (t.f0) holds
     (t.f0, IExec(T2,t).f0 are_fiberwise_equipotent) &
-    (for m be Nat st m <(t.b3-k) & m>=1 or (m>t.b3 & m in dom (t.f0)) holds
+    (for m be Element of NAT
+    st m <(t.b3-k) & m>=1 or (m>t.b3 & m in dom (t.f0)) holds
       t.f0.m=IExec(T2,t).f0.m) &
-    (for m be Nat st m >= (t.b3-k) & m<=t.b3 holds (ex x1,x2 be Integer st
+    (for m be Element of NAT st m >= (t.b3-k) & m<=t.b3 holds
+    (ex x1,x2 be Integer st
     x1 =IExec(T2,t).f0.(t.b3-k) & x2=IExec(T2,t).f0.m & x1 >= x2)) &
-     for i be Nat st i>=t.b3-k & i<=t.b3 holds
-                ex n be Nat st n>=t.b3-k & n<=t.b3 &
+     for i be Element of NAT st i>=t.b3-k & i<=t.b3 holds
+                ex n be Element of NAT st n>=t.b3-k & n<=t.b3 &
                 IExec(T2,t).f0.i=t.f0.n
 )
 proof
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
  for t be State of SCM+FSA st $1=t.b2 & $1 < t.b3 & t.b3 <= len (t.f0) holds
     (t.f0, IExec(T2,t).f0 are_fiberwise_equipotent) &
-    (for m be Nat st m <(t.b3-$1) & m>=1 or (m>t.b3 & m in dom (t.f0)) holds
+    (for m be Element of NAT
+    st m <(t.b3-$1) & m>=1 or (m>t.b3 & m in dom (t.f0)) holds
       t.f0.m=IExec(T2,t).f0.m) &
-    (for m be Nat st m >= (t.b3-$1) & m<=t.b3 holds (ex x1,x2 be Integer st
+    (for m be Element of NAT st m >= (t.b3-$1) & m<=t.b3 holds
+    (ex x1,x2 be Integer st
     x1 =IExec(T2,t).f0.(t.b3-$1) & x2=IExec(T2,t).f0.m & x1 >= x2)) &
-     for i be Nat st i>=t.b3-$1 & i<=t.b3 holds
-          ex n be Nat st n>=t.b3-$1 & n<=t.b3 & IExec(T2,t).f0.i=t.f0.n;
+     for i be Element of NAT st i>=t.b3-$1 & i<=t.b3 holds
+          ex n be Element of NAT st n>=t.b3-$1 & n<=t.b3 &
+          IExec(T2,t).f0.i=t.f0.n;
        now let t be State of SCM+FSA;
       assume A1: 0=t.b2 & 0 < t.b3 & t.b3 <= len (t.f0);
       set If0=IExec(T2,t).f0;
         thus t.f0, If0 are_fiberwise_equipotent by A1,SCM_HALT:80;
-       thus for m be Nat st m < (t.b3-0) & m>=1 or (m>t.b3 & m in dom (t.f0))
+       thus for m be Element of NAT
+       st m < (t.b3-0) & m>=1 or (m>t.b3 & m in dom (t.f0))
          holds t.f0.m=IExec(T2,t).f0.m by A1,SCM_HALT:80;
-        hereby let m be Nat;
+        hereby let m be Element of NAT;
          assume m >= (t.b3-0) & m<=t.b3;
         then A2: m=t.b3 by XREAL_1:1;
           then m>=0+1 by A1,INT_1:20;
@@ -2792,7 +2810,7 @@ proof
          thus x2=If0.m by A1,SCM_HALT:80;
          thus x1 >= x2;
         end;
-        let i be Nat;
+        let i be Element of NAT;
            assume A3:i>=t.b3-0 & i<=t.b3;
            take n=i;
            thus n>=t.b3-0 & n<=t.b3 by A3;
@@ -2800,7 +2818,7 @@ proof
     end;
 then A4: P[0];
      set sb2=SubFrom(b2,a0);
-A5: now let k be Nat;
+A5: now let k be Element of NAT;
        assume A6: P[k];
             now let t be State of SCM+FSA;
            set t1=IExec(body2 ';'sb2,t),
@@ -2831,12 +2849,13 @@ A5: now let k be Nat;
         then A19: t1.b3 <= len (t1.f0) by A7,A17,XREAL_1:2;
         A20: t.b3=t1.b3+1 by A13;
         A21: (t1.f0, t2.f0 are_fiberwise_equipotent) &
-            (for m be Nat st m < (t1.b3-k) & m>=1 or (m>t1.b3
+            (for m be Element of NAT st m < (t1.b3-k) & m>=1 or (m>t1.b3
               & m in dom (t1.f0)) holds t1.f0.m=t2.f0.m) &
-            (for m be Nat st m >= (t1.b3-k) & m<=t1.b3 holds (ex x1,x2
+            (for m be Element of NAT st m >= (t1.b3-k) & m<=t1.b3
+            holds (ex x1,x2
              be Integer st x1 =t2.f0.(t1.b3-k) & x2=t2.f0.m & x1 >= x2)) &
-              for i be Nat st i>=t1.b3-k & i<=t1.b3 holds
-                ex n be Nat st n>=t1.b3-k & n<=t1.b3 &
+              for i be Element of NAT st i>=t1.b3-k & i<=t1.b3 holds
+                ex n be Element of NAT st n>=t1.b3-k & n<=t1.b3 &
                 t2.f0.i=t1.f0.n by A6,A9,A13,A14,A19;
         A22: IExec(T2,t).f0=t2.f0 by A7,Lm3,SCM_HALT:82;
            t1.f0, IExec(T2,t).f0 are_fiberwise_equipotent by A8,A21,Lm3,
@@ -2849,10 +2868,10 @@ SCM_HALT:82;
        A25: IB.f0 =Exec(sb2, IB).f0 by SCMFSA_2:91
            .=t1.f0 by SCM_HALT:34;
             A26: t.b3 >= 0 by A12;
-       then A27:  t.b3 is Nat by INT_1:16;
+       then A27:  t.b3 is Element of NAT by INT_1:16;
        A28: t.b3 >= 1 by A12,XREAL_1:2;
        then A29:  t.b3 in dom (t1.f0) by A7,A17,A27,FINSEQ_3:27;
-       hereby let m be Nat;
+       hereby let m be Element of NAT;
             assume A30: m <(t.b3-(k+1)) & m>=1 or (m>t.b3 & m in dom (t.f0));
               per cases by A30;
               suppose A31: m < (t.b3-(k+1)) & m>=1;
@@ -2880,9 +2899,9 @@ SCM_HALT:82;
                   .=IExec(T2,t).f0.m by A6,A9,A13,A14,A19,A22,A39,A41;
             end;
             end;
-            hereby let m be Nat;
+            hereby let m be Element of NAT;
               assume A42: m >= (t.b3-(k+1)) & m<=t.b3;
-                  consider nn be Nat such that
+                  consider nn be Element of NAT such that
               A43: nn<=t1.b3 & nn>=t1.b3-t1.b2 & t2.f0.nn = t1.f0.(t1.b3)
                    by A9,A13,A14,A19,Lm12;
                    consider y1,y2 be Integer such that
@@ -2910,10 +2929,10 @@ SCM_HALT:82;
                  thus y1>=y2 by A47;
             end;
             end;
-            thus for i be Nat st i>=t.b3-(k+1) & i<=t.b3 holds
-                ex n be Nat st n>=t.b3-(k+1) & n<=t.b3 &
+            thus for i be Element of NAT st i>=t.b3-(k+1) & i<=t.b3 holds
+                ex n be Element of NAT st n>=t.b3-(k+1) & n<=t.b3 &
                 IExec(T2,t).f0.i=t.f0.n
-            proof let i be Nat;
+            proof let i be Element of NAT;
               assume A48:i>=t.b3-(k+1) & i<=t.b3;
               per cases;
               suppose A49:i=t.b3;
@@ -2922,7 +2941,7 @@ SCM_HALT:82;
                  hereby
                    per cases by A7,A12,Lm11;
                    suppose A52: t.f0.(t.b3)=IExec(body2,t).f0.(t.b3);
-                    reconsider n=t.b3 as Nat by A26,INT_1:16;
+                    reconsider n=t.b3 as Element of NAT by A26,INT_1:16;
                     take n;
                     thus n>=t.b3-(k+1) & n<=t.b3 by A48,A49;
                     thus IExec(T2,t).f0.i=t.f0.n by A6,A9,A13,A14,A19,A22,A25
@@ -2930,7 +2949,7 @@ SCM_HALT:82;
                   end;
                   suppose A53: t.f0.(t.b3-1)=IExec(body2,t).f0.(t.b3);
                        t.b3-1>=1-1 by A28,XREAL_1:11;
-                    then reconsider n=t.b3-1 as Nat by INT_1:16;
+                    then reconsider n=t.b3-1 as Element of NAT by INT_1:16;
                     take n;
                           n<=n+k by NAT_1:29;
                     hence n>=t.b3-(k+1) by A23,XREAL_1:22;
@@ -2944,10 +2963,10 @@ SCM_HALT:82;
                  then i < t.b3 by A48,REAL_1:def 5;
                  then i+1 <= t.b3 by INT_1:20;
               then i<=t1.b3 by A13,XREAL_1:21;
-              then consider n be Nat such that
+              then consider n be Element of NAT such that
               A54: n>=t1.b3-k & n<=t1.b3 & t2.f0.i=t1.f0.n by A6,A9,A13,A14
 ,A19,A48;
-              thus ex n be Nat st n>=t.b3-(k+1) & n<=t.b3 &
+              thus ex n be Element of NAT st n>=t.b3-(k+1) & n<=t.b3 &
                    IExec(T2,t).f0.i=t.f0.n
               proof
                 per cases;
@@ -2955,7 +2974,7 @@ SCM_HALT:82;
                   hereby
                   per cases by A7,A12,Lm11;
                    suppose A56: t.f0.(t.b3)=IExec(body2,t).f0.(t.b3-1);
-                    reconsider m=t.b3 as Nat by A26,INT_1:16;
+                    reconsider m=t.b3 as Element of NAT by A26,INT_1:16;
                     take m;
                        m <= m +(k+1) by NAT_1:29;
                     hence m >= t.b3-(k+1) by XREAL_1:22;
@@ -2992,7 +3011,7 @@ Lm3,SCM_HALT:82;
        end;
        hence P[k + 1];
     end;
-       for k be Nat holds P[k] from NAT_1:sch 1(A4,A5);
+       for k be Element of NAT holds P[k] from NAT_1:sch 1(A4,A5);
     hence thesis;
 end;
 
@@ -3027,7 +3046,7 @@ end;
 Lm15:
  for s be State of SCM+FSA st s.b1=len (s.f0) holds
     (s.f0, IExec(T1,s).f0 are_fiberwise_equipotent) &
-    (for i,j be Nat st i>=1 & j<=len (s.f0) & i<j
+    (for i,j be Element of NAT st i>=1 & j<=len (s.f0) & i<j
      for x1,x2 be Integer st x1 =IExec(T1,s).f0.i &
         x2=IExec(T1,s).f0.j holds x1 >= x2)
 proof
@@ -3040,15 +3059,16 @@ proof
      thus thesis by A2;
     end;
     suppose A3:len (s.f0)<>0;
-     defpred P[Nat] means
+     defpred P[Element of NAT] means
      for t be State of SCM+FSA st t.b1=$1+1 & t.b1<=len (t.f0) holds
        (t.f0, IExec(T1,t).f0 are_fiberwise_equipotent) &
-    (for i,j be Nat st i>=len(t.f0)-$1 & j<=len (t.f0) & i<j
+    (for i,j be Element of NAT st i>=len(t.f0)-$1 & j<=len (t.f0) & i<j
        for x1,x2 be Integer st x1 =IExec(T1,t).f0.i & x2=IExec(T1,t).f0.j
          holds x1 >= x2) &
-    (for i be Nat st i<len(t.f0)-$1 & i>=1 holds IExec(T1,t).f0.i=t.f0.i) &
-    (for i be Nat st i>=len(t.f0)-$1 & i<=len (t.f0) holds
-      ex n be Nat st n>=len(t.f0)-$1 & n<=len (t.f0) &
+    (for i be Element of NAT st i<len(t.f0)-$1 & i>=1
+    holds IExec(T1,t).f0.i=t.f0.i) &
+    (for i be Element of NAT st i>=len(t.f0)-$1 & i<=len (t.f0) holds
+      ex n be Element of NAT st n>=len(t.f0)-$1 & n<=len (t.f0) &
           IExec(T1,t).f0.i=t.f0.n);
      set B11=SubFrom(b1,a0);
 A4: P[0]
@@ -3065,18 +3085,18 @@ A4: P[0]
        .=IExec(Sb,t).f0 by A7,SCM_HALT:80
        .=t.f0 by Lm14;
        hence t.f0, IExec(T1,t).f0 are_fiberwise_equipotent;
-       thus for i,j be Nat st i>=len(t.f0)-0 & j<=len (t.f0) & i<j
+       thus for i,j be Element of NAT st i>=len(t.f0)-0 & j<=len (t.f0) & i<j
          for x1,x2 be Integer st x1 =IExec(T1,t).f0.i &
          x2=IExec(T1,t).f0.j holds x1 >= x2 by XREAL_1:2;
-      thus for i be Nat st i<len(t.f0)-0 & i>=1 holds
+      thus for i be Element of NAT st i<len(t.f0)-0 & i>=1 holds
           IExec(T1,t).f0.i=t.f0.i by A8;
-      let i be Nat;
+      let i be Element of NAT;
        assume A9:i>=len(t.f0)-0 & i<=len (t.f0);
        take n=i;
        thus n>=len(t.f0)-0 & n<=len (t.f0) by A9;
        thus IExec(T1,t).f0.i=t.f0.n by A8;
     end;
-A10: now let k be Nat;
+A10: now let k be Element of NAT;
        assume A11: P[k];
             now let t be State of SCM+FSA;
            set t1=IExec(body1 ';'B11,t),
@@ -3101,13 +3121,14 @@ A10: now let k be Nat;
               A20: k+1 < len (t.f0) by A12,A18,XREAL_1:2;
            A21: k+1 < Ts.b3 by A12,A16,A19,XREAL_1:2;
           A22:(Ts.f0, IExec(T2,Ts).f0 are_fiberwise_equipotent) &
-       (for m be Nat st m <(Ts.b3-(k+1)) & m>=1 or (m>Ts.b3 & m in dom (Ts.f0))
+       (for m be Element of NAT
+       st m <(Ts.b3-(k+1)) & m>=1 or (m>Ts.b3 & m in dom (Ts.f0))
           holds Ts.f0.m=IExec(T2,Ts).f0.m) &
-    (for m be Nat st m >= (Ts.b3-(k+1)) & m<=Ts.b3 holds
+    (for m be Element of NAT st m >= (Ts.b3-(k+1)) & m<=Ts.b3 holds
       (ex x1,x2 be Integer st x1 =IExec(T2,Ts).f0.(Ts.b3-(k+1)) &
      x2=IExec(T2,Ts).f0.m & x1 >= x2)) &
-      for i be Nat st i>=Ts.b3-(k+1) & i<=Ts.b3 holds
-                ex n be Nat st n>=Ts.b3-(k+1) & n<=Ts.b3 &
+      for i be Element of NAT st i>=Ts.b3-(k+1) & i<=Ts.b3 holds
+                ex n be Element of NAT st n>=Ts.b3-(k+1) & n<=Ts.b3 &
                 IExec(T2,Ts).f0.i=Ts.f0.n by A15,A16,A17,A20,Lm13;
           A23: Ts.f0=t.f0 by Lm14;
           A24: t1.f0= Exec(B11,IB).f0 by Lm7,SCM_HALT:34
@@ -3117,12 +3138,13 @@ A10: now let k be Nat;
           A26: len (t.f0) = len (t1.f0) by A22,A23,A24,RFINSEQ:16;
            A27: t1.b1 <= len (t1.f0) by A14,A25,RFINSEQ:16;
           A28: (t1.f0, IExec(T1,t1).f0 are_fiberwise_equipotent) &
-    (for i,j be Nat st i>=len(t1.f0)-k & j<=len (t1.f0) & i<j
+    (for i,j be Element of NAT st i>=len(t1.f0)-k & j<=len (t1.f0) & i<j
        for x1,x2 be Integer st x1 =IExec(T1,t1).f0.i & x2=IExec(T1,t1).f0.j
        holds x1 >= x2) &
-   (for i be Nat st i<len(t1.f0)-k & i>=1 holds IExec(T1,t1).f0.i=t1.f0.i)&
-    (for i be Nat st i>=len(t1.f0)-k & i<=len (t1.f0) holds
-      ex n be Nat st n>=len(t1.f0)-k & n<=len (t1.f0) &
+   (for i be Element of NAT
+   st i<len(t1.f0)-k & i>=1 holds IExec(T1,t1).f0.i=t1.f0.i)&
+    (for i be Element of NAT st i>=len(t1.f0)-k & i<=len (t1.f0) holds
+      ex n be Element of NAT st n>=len(t1.f0)-k & n<=len (t1.f0) &
           IExec(T1,t1).f0.i=t1.f0.n) by A11,A13,A14,A26;
              0 <t.b1 by A12;
          then A29: IExec(T1,t).f0=t2.f0 by Lm6,Lm7,SCM_HALT:82;
@@ -3130,14 +3152,15 @@ A10: now let k be Nat;
           by A25,A28,RFINSEQ:2;
           set lk=len(t.f0)-(k+1);
           A30:lk+1=len (t1.f0)-k by A26;
-          thus for i,j be Nat st i>=len(t.f0)-(k+1) & j<=len (t.f0) & i<j
+          thus for i,j be Element of NAT
+          st i>=len(t.f0)-(k+1) & j<=len (t.f0) & i<j
                 for x1,x2 be Integer st x1 =IExec(T1,t).f0.i &
                 x2=IExec(T1,t).f0.j holds x1 >= x2
-           proof let i,j be Nat;
+           proof let i,j be Element of NAT;
                assume A31:i>=lk & j<=len (t.f0) & i<j;
                then j > lk by XREAL_1:2;
                then j >= len (t1.f0)-k by A30,INT_1:20;
-                  then consider n be Nat such that
+                  then consider n be Element of NAT such that
                A32: n>=len(t1.f0)-k & n<=len (t1.f0) &
                    IExec(T1,t1).f0.j=t1.f0.n by A11,A13,A14,A26,A31;
                   lk < lk +1 by XREAL_1:31;
@@ -3162,25 +3185,26 @@ A10: now let k be Nat;
               end;
               end;
             end;
-           thus for i be Nat st i<len(t.f0)-(k+1) & i>=1 holds
+           thus for i be Element of NAT st i<len(t.f0)-(k+1) & i>=1 holds
                   IExec(T1,t).f0.i=t.f0.i
-          proof let i be Nat;
+          proof let i be Element of NAT;
              assume A40:i<lk & i>=1;
                  lk < lk+1 by XREAL_1:31;
            then i < len (t1.f0)-k by A26,A40,XREAL_1:2;
              hence IExec(T1,t).f0.i=t1.f0.i by A11,A13,A27,A29,A40
              .=t.f0.i by A15,A16,A21,A23,A24,A40,Lm13;
           end;
-          thus for i be Nat st i>=len(t.f0)-(k+1) & i<=len (t.f0) holds
-                ex n be Nat st n>=len(t.f0)-(k+1) & n<=len (t.f0) &
+          thus for i be Element of NAT
+          st i>=len(t.f0)-(k+1) & i<=len (t.f0) holds
+                ex n be Element of NAT st n>=len(t.f0)-(k+1) & n<=len (t.f0) &
                 IExec(T1,t).f0.i=t.f0.n
-          proof let i be Nat;
+          proof let i be Element of NAT;
             assume A41:i>=len(t.f0)-(k+1) & i<=len (t.f0);
            per cases;
            suppose A42:i=lk;
             then A43:i < len(t1.f0)-k by A30,XREAL_1:31;
             A44:i >= 1 by A12,A42,XREAL_1:21;
-            consider n be Nat such that
+            consider n be Element of NAT such that
             A45:n>=Ts.b3-(k+1) & n<=Ts.b3 & IExec(T2,Ts).f0.i=Ts.f0.n
                   by A15,A16,A17,A20,A41,Lm13;
             take n;
@@ -3192,12 +3216,12 @@ A10: now let k be Nat;
           suppose i<>lk;
                then i >lk by A41,REAL_1:def 5;
             then i >= len (t1.f0)-k by A30,INT_1:20;
-            then consider m be Nat such that
+            then consider m be Element of NAT such that
             A46: m>=len(t1.f0)-k & m<=len (t1.f0) & IExec(T1,t1).f0.i=t1.f0.m
                 by A11,A13,A14,A26,A41;
               lk+1 > lk by XREAL_1:31;
             then m>Ts.b3-(k+1) by A16,A26,A46,XREAL_1:2;
-            then consider n be Nat such that
+            then consider n be Element of NAT such that
             A47:n>=Ts.b3-(k+1) & n<=Ts.b3 & IExec(T2,Ts).f0.m=Ts.f0.n
                   by A15,A16,A17,A20,A26,A46,Lm13;
             take n;
@@ -3209,10 +3233,10 @@ A10: now let k be Nat;
         end;
         hence P[k+1];
      end;
-A48:  for k be Nat holds P[k] from NAT_1:sch 1(A4,A10);
+A48:  for k be Element of NAT holds P[k] from NAT_1:sch 1(A4,A10);
         len (s.f0)>0 by A3;
      then s.b1>=1+0 by A1,INT_1:20;
-     then reconsider m=s.b1-1 as Nat by INT_1:18;
+     then reconsider m=s.b1-1 as Element of NAT by INT_1:18;
 A49:  m+1=s.b1;
      hence s.f0, IExec(T1,s).f0 are_fiberwise_equipotent by A1,A48;
      len (s.f0)-m=1 by A1;
@@ -3223,7 +3247,7 @@ end;
 theorem Th65:
 for s be State of SCM+FSA holds
     (s.f0, IExec(bubble-sort f0,s).f0 are_fiberwise_equipotent) &
-    (for i,j be Nat st i>=1 & j<=len (s.f0) & i<j
+    (for i,j be Element of NAT st i>=1 & j<=len (s.f0) & i<j
      for x1,x2 be Integer st x1 =IExec(bubble-sort f0,s).f0.i &
         x2=IExec(bubble-sort f0,s).f0.j holds x1 >= x2)
 proof let s be State of SCM+FSA;
@@ -3253,19 +3277,20 @@ A4:  IExec(bubble-sort f0,s).f0=IExec(W27 ';' T1,s).f0 by Def1
      .=IExec(T1,s6).f0 by Lm8,SCM_HALT:31;
      hence s.f0, IExec(bubble-sort f0,s).f0 are_fiberwise_equipotent by A2,A3,
 Lm15;
-     let i,j be Nat;
+     let i,j be Element of NAT;
        assume i>=1 & j<=len (s.f0) & i<j;
        hence thesis by A2,A3,A4,Lm15;
 end;
 
 theorem Th66:
- for i being Nat, s being State of SCM+FSA,w being FinSequence of INT
+ for i being Element of NAT, s being State of SCM+FSA,
+ w being FinSequence of INT
   st Initialized Bubble-Sort-Algorithm +* ((fsloc 0) .--> w) c= s
   holds IC (Computation s).i in dom Bubble-Sort-Algorithm
 proof
    set Ba=Bubble-Sort-Algorithm,
        Ib=Initialized Ba;
-   let i be Nat, s be State of SCM+FSA,w be FinSequence of INT;
+   let i be Element of NAT, s be State of SCM+FSA,w be FinSequence of INT;
    set x=((fsloc 0) .--> w);
    assume A1: Ib +* x c= s;
       dom Ib misses dom x by Th46;
@@ -3295,13 +3320,13 @@ then A3: s.f0=(p+*x).f0 by A1,GRFUNC_1:8
     .=x.f0 by A2,FUNCT_4:14
     .=t by CQC_LANG:6;
 A4: (s.f0, z are_fiberwise_equipotent) &
-    (for i,j be Nat st i>=1 & j<=len (s.f0) & i<j
+    (for i,j be Element of NAT st i>=1 & j<=len (s.f0) & i<j
      for x1,x2 be Integer st x1 =z.i & x2=z.j holds x1 >= x2) by Th65;
      reconsider u=z as FinSequence of REAL by Th38;
      take u;
      thus t, u are_fiberwise_equipotent by A3,Th65;
 A5:  dom (s.f0) = dom u by A4,RFINSEQ:16;
-        now let i,j be Nat;
+        now let i,j be Element of NAT;
         assume A6:i in dom u & j in dom u & i<j;
         then A7: i>=1 by FINSEQ_3:27;
         A8: j<=len (s.f0) by A5,A6,FINSEQ_3:27;
@@ -3444,12 +3469,12 @@ A22: UsedInt*Loc q = UsedInt*Loc bubble-sort fsloc 0 by Def2
     A23: UsedIntLoc q = UsedIntLoc bubble-sort fsloc 0 by Def2
     .={a0,a1,a2,a3,a4,a5,a6} by Th58;
 then A24: Us = UD by A22,ENUMSET1:62;
-A25:   for i being Nat,s1,s2 being State of SCM+FSA
+A25:   for i being Element of NAT,s1,s2 being State of SCM+FSA
        st 11 <= i & p c= s1 & p c= s2
        holds (Computation s1).i | Us = (Computation s2).i | Us &
     (Computation s1).i.IC SCM+FSA = (Computation s2).i.IC SCM+FSA
     proof
-     let i be Nat,s1,s2 be State of SCM+FSA such that
+     let i be Element of NAT,s1,s2 be State of SCM+FSA such that
 A26:  11 <= i and
 A27:  p c= s1 and
 A28:  p c= s2;

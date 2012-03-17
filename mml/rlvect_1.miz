@@ -9,7 +9,8 @@ environ
  vocabularies BINOP_1, FUNCT_1, ARYTM_1, RELAT_1, FINSEQ_1, BOOLE, RLVECT_1,
       ANPROJ_1, ORDINAL2, ARYTM, FUNCOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS,
-      XXREAL_0, DOMAIN_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FUNCOP_1, REAL_1,
+      XCMPLX_0, XXREAL_0, DOMAIN_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1,
+      FUNCOP_1, REAL_1,
       FINSEQ_1, NAT_1, STRUCT_0;
  constructors DOMAIN_1, BINOP_1, FUNCOP_1, XXREAL_0, XREAL_0, REAL_1, NAT_1,
       FINSEQ_1, STRUCT_0, ORDINAL2;
@@ -18,7 +19,7 @@ environ
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FUNCT_1, TARSKI, STRUCT_0, BINOP_1;
  theorems FUNCT_1, NAT_1, REAL_1, TARSKI, RELAT_1, STRUCT_0, XBOOLE_0,
-      XBOOLE_1, FINSEQ_1, XCMPLX_0, FUNCOP_1, XREAL_1, XXREAL_0;
+      XBOOLE_1, FINSEQ_1, XCMPLX_0, FUNCOP_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes BINOP_1, FINSEQ_1, FUNCT_2, NAT_1;
 
 begin
@@ -841,7 +842,7 @@ reserve V for non empty LoopStr;
 reserve F,G,H for FinSequence of the carrier of V;
 reserve f,f',g for Function of NAT, the carrier of V;
 reserve v,u for Element of V;
-reserve j,k,n for Nat;
+reserve j,k,n for Element of NAT;
 
 definition let V; let F;
  func Sum(F) -> Element of V means
@@ -870,7 +871,7 @@ A3:    for j being Element of NAT holds f.j = 0.V by FUNCOP_1:13;
     end;
     hence thesis;
     end;
-  A4: for n be Nat st P[n] holds P[n+1]
+  A4: for n be Element of NAT st P[n] holds P[n+1]
   proof
      now let n;
       assume A5: for F st len F = n
@@ -962,7 +963,7 @@ A24:  ex f st u = f.(len F) & f.0 = 0.V &
      A27: for j,v st j < len F & v = F.(j + 1) holds f.(j + 1) = f.j + v;
     given f' such that A28: v2 = f'.(len F) and A29: f'.0 = 0.V and
      A30: for j,v st j < len F & v = F.(j + 1) holds f'.(j + 1) = f'.j + v;
-     defpred P[Nat] means $1 <= len F implies f.$1 = f'.$1;
+     defpred P[Element of NAT] means $1 <= len F implies f.$1 = f'.$1;
       A31: P[0] by A26,A29;
       A32: for k st P[k] holds P[k+1]
       proof
@@ -1023,7 +1024,7 @@ theorem Th55:
      consider g such that A7: Sum(G) = g.(len G) and A8: g.0 = 0.V and
       A9: for j,v st j < len G & v = G.(j + 1) holds
           g.(j + 1) = g.j + v by Def12;
-      defpred P[Nat] means for H holds len H = $1 & H = F | (Seg $1)
+      defpred P[Element of NAT] means for H holds len H = $1 & H = F | (Seg $1)
              & len H <= len G implies f.(len H) = g.(len H);
       A10:  P[0] by A5,A8;
       A11: for k st P[k] holds P[k+1]
@@ -1263,7 +1264,7 @@ holds Sum(F ^ G) = Sum(F) + Sum(G)
 XBOOLE_1:28;
              now let x be set;
             assume A17: x in dom(F ^ p);
-             then reconsider n = x as Nat;
+             then reconsider n = x as Element of NAT;
               A18: now assume n in dom F;
                 then (F ^ p).n = F.n & (F ^ H).n = F.n by FINSEQ_1:def 7;
                hence (F ^ p).x = (F ^ H).x;
@@ -1272,7 +1273,8 @@ XBOOLE_1:28;
                  then A19: not n in Seg(len F) by FINSEQ_1:def 3;
 A20:                 1 <= n by A13,A17,FINSEQ_1:3;
                  then len F <= n by A19,FINSEQ_1:3;
-                then consider j such that A21: n = len F + j by NAT_1:28;
+                then consider j being Nat such that A21: n = len F + j
+                by NAT_1:28;
                  A22: now assume not 1 <= j;
                    then j = 0 by Lm7;
                   hence contradiction by A19,A20,A21,FINSEQ_1:3;
@@ -1310,7 +1312,7 @@ A25:      dom p = Seg len p by FINSEQ_1:def 3;
              right_complementable (non empty LoopStr);
  reserve F for FinSequence of the carrier of V;
  reserve v,v1,v2,u,w for Element of V;
- reserve i,j,k,n for Nat;
+ reserve i,j,k,n for Element of NAT;
  reserve p,q for FinSequence;
 
 Lm8:
@@ -1382,15 +1384,18 @@ A5:     for H,I being FinSequence of the carrier of V
         then consider x such that A12: x in dom I and A13: H.(k + 1) = I.x
                                                              by FUNCT_1:def 5;
          A14: x in Seg(k + 1) by A6,A10,A12,FINSEQ_1:def 3;
-        reconsider n = x as Nat by A12;
+        reconsider n = x as Element of NAT by A12;
         reconsider v = H.(k + 1) as Element of V by A6,A11,Th54;
          A15: 1 <= n by A14,FINSEQ_1:3;
-        then consider m1 being Nat such that A16: 1 + m1 = n by NAT_1:28;
+        then consider m1 being Nat such that A16: 1 + m1 = n
+         by NAT_1:28;
          A17: n <= k + 1 by A14,FINSEQ_1:3;
-        then consider m2 being Nat such that A18: n + m2 = k + 1 by NAT_1:28;
+        then consider m2 being Nat such that
+        A18: n + m2 = k + 1 by NAT_1:28;
+        reconsider m2 as Element of NAT by ORDINAL1:def 13;
         reconsider q1 = I | (Seg m1) as FinSequence of the carrier of V
          by FINSEQ_1:23;
-        defpred P[Nat,set] means $2 = I.(n + $1);
+        defpred P[Element of NAT,set] means $2 = I.(n + $1);
          A19: for j,y1,y2 st j in Seg m2 & P[j,y1] & P[j,y2] holds y1 = y2;
          A20: for j st j in Seg m2 ex x st P[j,x];
         consider q2 being FinSequence such that A21: dom q2 = Seg m2 and
@@ -1401,7 +1406,7 @@ A5:     for H,I being FinSequence of the carrier of V
            assume x in rng q2;
             then consider y such that A23: y in dom q2 and A24: x = q2.y
                  by FUNCT_1:def 5;
-            reconsider y as Nat by A23;
+            reconsider y as Element of NAT by A23;
                 1 <= y & y <= n + y by A21,A23,FINSEQ_1:3,NAT_1:37;
              then A25: 1 <= n + y by XXREAL_0:2;
                 y <= m2 by A21,A23,FINSEQ_1:3;
@@ -1472,7 +1477,7 @@ A42:             y in {v} by A40,XBOOLE_0:def 3;
                then consider y1 such that A45: y1 in dom q1 and A46: y = q1.y1
                                                            by FUNCT_1:def 5;
                 A47: y1 in Seg m1 by A6,A10,A27,A45,FINSEQ_1:21;
-               reconsider y1 as Nat by A45;
+               reconsider y1 as Element of NAT by A45;
                 A48: q1.y1 = I.y1 by A45,FUNCT_1:70;
                 A49: y1 <= m1 by A47,FINSEQ_1:3;
                 A50: y1 <> n by A39,A47,FINSEQ_1:3;
@@ -1487,7 +1492,7 @@ A42:             y in {v} by A40,XBOOLE_0:def 3;
                then consider y1 such that A51: y1 in dom q2 and A52: y = q2.y1
                                                                  by
 FUNCT_1:def 5;
-               reconsider y1 as Nat by A51;
+               reconsider y1 as Element of NAT by A51;
                 A53: I.n = I.(n + y1) by A21,A22,A43,A51,A52;
                 A54: 1 <= n + y1 by A15,NAT_1:37;
                    y1 <= m2 by A21,A51,FINSEQ_1:3;
@@ -1514,7 +1519,7 @@ A63:         q is one-to-one
           proof let y1,y2 be set;
             assume that A64: y1 in dom q and A65: y2 in dom q and A66: q.y1 = q
 .y2;
-               reconsider x1 = y1, x2 = y2 as Nat by A64,A65;
+               reconsider x1 = y1, x2 = y2 as Element of NAT by A64,A65;
               A67: q1 is one-to-one by A9,FUNCT_1:84;
               A68: now assume A69: x1 in dom q1 & x2 in dom q1;
                 then q1.x1 = q.x1 & q1.x2 = q.x2 by FINSEQ_1:def 7;
@@ -1559,9 +1564,9 @@ A63:         q is one-to-one
                hence thesis by A9,A85,A89,FUNCT_1:def 8;
               end;
                  now
-                given j1 being Nat such that A90: j1 in dom q2 and
+                given j1 being Element of NAT such that A90: j1 in dom q2 and
                                              A91: x1 = len q1 + j1;
-                given j2 being Nat such that A92: j2 in dom q2 and
+                given j2 being Element of NAT such that A92: j2 in dom q2 and
                                              A93: x2 = len q1 + j2;
                  A94: q2.j1 = I.(n + j1) & q2.j2 = I.(n + j2) by A21,A22,A90
 ,A92;

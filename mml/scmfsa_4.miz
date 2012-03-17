@@ -9,7 +9,8 @@ environ
  vocabularies AMI_1, FINSET_1, AMI_3, BOOLE, RELAT_1, FUNCT_1, FUNCT_4,
       SCMFSA_2, ARYTM_1, CAT_1, RELOC, AMI_5, AMI_2, NAT_1, ABSVALUE, FINSEQ_1,
       FINSEQ_2, SCMFSA_4, CARD_3, FINSEQ_4;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, XCMPLX_0, NAT_1,
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1,
+ NUMBERS,XCMPLX_0, NAT_1,
       BINARITH, INT_1, INT_2, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, CQC_LANG,
       FUNCT_7, FINSEQ_1, FINSET_1, FINSEQ_2, FINSEQ_4, STRUCT_0, AMI_1, AMI_3,
       AMI_5, RELOC, SCMFSA_2, XXREAL_0;
@@ -90,16 +91,16 @@ end;
 
 begin  :: Incrementing and decrementing the instruction locations
 
-reserve j, k, l, m, n, p, q for Nat;
+reserve j, k, l, m, n, p, q for Element of NAT;
 
 definition
-let loc be Instruction-Location of SCM+FSA , k be Nat;
+let loc be Instruction-Location of SCM+FSA , k be Element of NAT;
 func loc + k -> Instruction-Location of SCM+FSA means
 :Def1:
-ex m being Nat st loc = insloc m & it = insloc(m+k);
+ex m being Element of NAT st loc = insloc m & it = insloc(m+k);
 existence
  proof
-  consider m being Nat such that A1: loc = insloc m by SCMFSA_2:21;
+  consider m being Element of NAT such that A1: loc = insloc m by SCMFSA_2:21;
   take IT = insloc(m+k);
   take m;
   thus loc = insloc m & IT = insloc(m+k) by A1;
@@ -108,10 +109,10 @@ uniqueness by SCMFSA_2:18;
 
 func loc -' k -> Instruction-Location of SCM+FSA means
 :Def2:
-ex m being Nat st loc = insloc m & it = insloc(m -' k);
+ex m being Element of NAT st loc = insloc m & it = insloc(m -' k);
 existence
  proof
-  consider m being Nat such that A2: loc = insloc m by SCMFSA_2:21;
+  consider m being Element of NAT such that A2: loc = insloc m by SCMFSA_2:21;
   take IT = insloc(m -' k);
   take m;
   thus loc = insloc m & IT = insloc(m -' k) by A2;
@@ -123,7 +124,7 @@ theorem Th3:
  for l being Instruction-Location of SCM+FSA, m,n
    holds l+m+n = l+(m+n)
 proof let l be Instruction-Location of SCM+FSA, m,n;
-  consider i being Nat such that
+  consider i being Element of NAT such that
 A1:  l = insloc i and
 A2:  l+m = insloc(i+m) by Def1;
      l+m+n = insloc(i+m+n) by A2,Def1
@@ -132,12 +133,12 @@ A2:  l+m = insloc(i+m) by Def1;
 end;
 
 theorem Th4:
- for loc being Instruction-Location of SCM+FSA ,k being Nat
+ for loc being Instruction-Location of SCM+FSA ,k being Element of NAT
   holds loc + k -' k = loc
   proof
    let loc be Instruction-Location of SCM+FSA,
-       k   be Nat;
-   consider m being Nat such that
+       k   be Element of NAT;
+   consider m being Element of NAT such that
 A1:  insloc m = loc by SCMFSA_2:21;
    thus loc + k -' k = insloc(m + k) -' k by A1,Def1
                      .= insloc(m + k -' k) by Def2
@@ -153,9 +154,9 @@ theorem Th5:
   holds l+k = L+k
 proof let l be Instruction-Location of SCM+FSA, L such that
 A1: L = l;
-  consider m being Nat such that
+  consider m being Element of NAT such that
 A2: l = insloc m & l+k = insloc(m+k) by Def1;
-  consider M being Nat such that
+  consider M being Element of NAT such that
 A3: L = il.M & L+k = il.(M+k) by RELOC:def 1;
      il.m = il.M by A1,A2,A3,SCMFSA_2:def 7;
   then M = m;
@@ -163,11 +164,11 @@ A3: L = il.M & L+k = il.(M+k) by RELOC:def 1;
 end;
 
 theorem
-    for l1,l2 being Instruction-Location of SCM+FSA , k being Nat
+    for l1,l2 being Instruction-Location of SCM+FSA , k being Element of NAT
   holds
     Start-At(l1 + k) = Start-At(l2 +k) iff Start-At l1 = Start-At l2
   proof
-   let l1,l2 be Instruction-Location of SCM+FSA, k be Nat;
+   let l1,l2 be Instruction-Location of SCM+FSA, k be Element of NAT;
    hereby
     assume
 A1: Start-At(l1 + k) = Start-At(l2 + k);
@@ -188,12 +189,12 @@ A2: Start-At(l1 + k) = IC SCM+FSA .--> (l1 + k) &
   end;
 
 theorem
-    for l1,l2 being Instruction-Location of SCM+FSA , k being Nat
+    for l1,l2 being Instruction-Location of SCM+FSA , k being Element of NAT
   st Start-At l1 = Start-At l2
   holds
     Start-At(l1 -' k) = Start-At(l2 -' k)
    proof
-   let l1,l2 be Instruction-Location of SCM+FSA, k be Nat;
+   let l1,l2 be Instruction-Location of SCM+FSA, k be Element of NAT;
    assume Start-At l1 = Start-At l2;
             then {[IC SCM+FSA, l1]} = Start-At l2 by AMI_5:35;
             then {[IC SCM+FSA, l1]} = {[IC SCM+FSA, l2]} by AMI_5:35;
@@ -204,7 +205,7 @@ theorem
 begin :: Incrementing addresses
 
 definition
-  let i be Instruction of SCM+FSA , k be Nat;
+  let i be Instruction of SCM+FSA , k be Element of NAT;
   func IncAddr (i,k) -> Instruction of SCM+FSA means
 :Def3:
    ex I being Instruction of SCM st I = i & it = IncAddr(I,k)
@@ -225,7 +226,7 @@ definition
 end;
 
 theorem Th8:
-  for k being Nat
+  for k being Element of NAT
    holds IncAddr(halt SCM+FSA,k) = halt SCM+FSA
    proof
        not 0 in {6,7,8} by ENUMSET1:def 1;
@@ -234,10 +235,10 @@ theorem Th8:
    end;
 
 theorem Th9:
-  for k being Nat, a,b being Int-Location
+  for k being Element of NAT, a,b being Int-Location
    holds IncAddr(a:=b ,k) = a:=b
    proof
-    let k be Nat,
+    let k be Element of NAT,
        a,b be Int-Location;
 A1:  InsCode (a := b) = 1 by SCMFSA_2:42;
        not 1 in {6,7,8} by ENUMSET1:def 1;
@@ -245,10 +246,10 @@ A1:  InsCode (a := b) = 1 by SCMFSA_2:42;
    end;
 
 theorem Th10:
-  for k being Nat, a,b being Int-Location
+  for k being Element of NAT, a,b being Int-Location
    holds IncAddr(AddTo(a,b),k) = AddTo(a,b)
    proof
-    let k be Nat,
+    let k be Element of NAT,
        a,b be Int-Location;
 A1:  InsCode (AddTo(a,b)) = 2 by SCMFSA_2:43;
        not 2 in {6,7,8} by ENUMSET1:def 1;
@@ -256,10 +257,10 @@ A1:  InsCode (AddTo(a,b)) = 2 by SCMFSA_2:43;
    end;
 
 theorem Th11:
-  for k being Nat, a,b being Int-Location
+  for k being Element of NAT, a,b being Int-Location
    holds IncAddr(SubFrom(a,b),k) = SubFrom(a,b)
    proof
-    let k be Nat,
+    let k be Element of NAT,
        a,b be Int-Location;
 A1:  InsCode (SubFrom(a,b)) = 3 by SCMFSA_2:44;
        not 3 in {6,7,8} by ENUMSET1:def 1;
@@ -267,10 +268,10 @@ A1:  InsCode (SubFrom(a,b)) = 3 by SCMFSA_2:44;
    end;
 
 theorem Th12:
-  for k being Nat, a,b being Int-Location
+  for k being Element of NAT, a,b being Int-Location
    holds IncAddr(MultBy(a,b),k) = MultBy(a,b)
    proof
-    let k be Nat,
+    let k be Element of NAT,
        a,b be Int-Location;
 A1:  InsCode (MultBy(a,b)) = 4 by SCMFSA_2:45;
        not 4 in {6,7,8} by ENUMSET1:def 1;
@@ -278,10 +279,10 @@ A1:  InsCode (MultBy(a,b)) = 4 by SCMFSA_2:45;
    end;
 
 theorem Th13:
-  for k being Nat, a,b being Int-Location
+  for k being Element of NAT, a,b being Int-Location
    holds IncAddr(Divide(a,b),k) = Divide(a,b)
    proof
-    let k be Nat,
+    let k be Element of NAT,
        a,b be Int-Location;
 A1:  InsCode (Divide(a,b)) = 5 by SCMFSA_2:46;
        not 5 in {6,7,8} by ENUMSET1:def 1;
@@ -289,10 +290,10 @@ A1:  InsCode (Divide(a,b)) = 5 by SCMFSA_2:46;
    end;
 
 theorem Th14:
-  for k being Nat,loc being Instruction-Location of SCM+FSA
+  for k being Element of NAT,loc being Instruction-Location of SCM+FSA
    holds IncAddr(goto loc,k) = goto (loc + k)
     proof
-     let k be Nat, loc be Instruction-Location of SCM+FSA;
+     let k be Element of NAT, loc be Instruction-Location of SCM+FSA;
         InsCode (goto loc) = 6 by SCMFSA_2:47;
      then InsCode (goto loc) in {6,7,8} by ENUMSET1:def 1;
      then consider I being Instruction of SCM such that
@@ -308,11 +309,11 @@ A5:    L+k = loc+k by A3,Th5;
     end;
 
 theorem Th15:
-  for k being Nat,loc being Instruction-Location of SCM+FSA,
+  for k being Element of NAT,loc being Instruction-Location of SCM+FSA,
       a being Int-Location
    holds IncAddr(a=0_goto loc,k) = a=0_goto (loc + k)
     proof
-     let k be Nat, loc be Instruction-Location of SCM+FSA,
+     let k be Element of NAT, loc be Instruction-Location of SCM+FSA,
          a be Int-Location;
         InsCode (a=0_goto loc) = 7 by SCMFSA_2:48;
      then InsCode (a=0_goto loc) in {6,7,8} by ENUMSET1:def 1;
@@ -329,11 +330,11 @@ A5:    L+k = loc+k by A3,Th5;
     end;
 
 theorem Th16:
-  for k being Nat,loc being Instruction-Location of SCM+FSA,
+  for k being Element of NAT,loc being Instruction-Location of SCM+FSA,
       a being Int-Location
    holds IncAddr(a>0_goto loc,k) = a>0_goto (loc + k)
    proof
-     let k be Nat, loc be Instruction-Location of SCM+FSA,
+     let k be Element of NAT, loc be Instruction-Location of SCM+FSA,
          a be Int-Location;
         InsCode (a>0_goto loc) = 8 by SCMFSA_2:49;
      then InsCode (a>0_goto loc) in {6,7,8} by ENUMSET1:def 1;
@@ -350,10 +351,10 @@ A5:    L+k = loc+k by A3,Th5;
     end;
 
 theorem Th17:
-  for k being Nat, a,b being Int-Location, f being FinSeq-Location
+  for k being Element of NAT, a,b being Int-Location, f being FinSeq-Location
    holds IncAddr(b:=(f,a),k) = b:=(f,a)
    proof
-    let k be Nat,
+    let k be Element of NAT,
        a,b be Int-Location,
        f be FinSeq-Location;
 A1:  InsCode (b:=(f,a)) = 9 by SCMFSA_2:50;
@@ -362,10 +363,10 @@ A1:  InsCode (b:=(f,a)) = 9 by SCMFSA_2:50;
    end;
 
 theorem Th18:
-  for k being Nat, a,b being Int-Location, f being FinSeq-Location
+  for k being Element of NAT, a,b being Int-Location, f being FinSeq-Location
    holds IncAddr((f,a):=b,k) = (f,a):=b
    proof
-    let k be Nat,
+    let k be Element of NAT,
        a,b be Int-Location,
        f be FinSeq-Location;
 A1:  InsCode ((f,a):=b) = 10 by SCMFSA_2:51;
@@ -374,10 +375,10 @@ A1:  InsCode ((f,a):=b) = 10 by SCMFSA_2:51;
    end;
 
 theorem Th19:
-  for k being Nat, a being Int-Location, f being FinSeq-Location
+  for k being Element of NAT, a being Int-Location, f being FinSeq-Location
    holds IncAddr(a:=len f,k) = a:=len f
    proof
-    let k be Nat,
+    let k be Element of NAT,
        a be Int-Location,
        f be FinSeq-Location;
 A1:  InsCode (a:=len f) = 11 by SCMFSA_2:52;
@@ -386,10 +387,10 @@ A1:  InsCode (a:=len f) = 11 by SCMFSA_2:52;
    end;
 
 theorem Th20:
-  for k being Nat, a being Int-Location, f being FinSeq-Location
+  for k being Element of NAT, a being Int-Location, f being FinSeq-Location
    holds IncAddr(f:=<0,...,0>a,k) = f:=<0,...,0>a
    proof
-    let k be Nat,
+    let k be Element of NAT,
        a be Int-Location,
        f be FinSeq-Location;
 A1:  InsCode (f:=<0,...,0>a) = 12 by SCMFSA_2:53;
@@ -419,10 +420,10 @@ end;
 end;
 
 theorem Th22:
- for I being Instruction of SCM+FSA, k being Nat
+ for I being Instruction of SCM+FSA, k being Element of NAT
   holds InsCode (IncAddr (I, k)) = InsCode I
    proof
-    let I be Instruction of SCM+FSA, k be Nat;
+    let I be Instruction of SCM+FSA, k be Element of NAT;
    A1: InsCode I <= 11+1 by SCMFSA_2:35;
 A2: InsCode I <= 10+1 implies InsCode I <= 10 or InsCode I = 11 by NAT_1:26;
 A3: InsCode I <= 9+1 implies InsCode I <= 8+1 or InsCode I = 10 by NAT_1:26;
@@ -560,7 +561,7 @@ end;
 begin :: Incrementing Addresses in a finite partial state
 
 definition
- let p be programmed FinPartState of SCM+FSA, k be Nat;
+ let p be programmed FinPartState of SCM+FSA, k be Element of NAT;
  func IncAddr(p,k) -> programmed FinPartState of SCM+FSA means
 :Def6:
  dom it = dom p &
@@ -646,13 +647,13 @@ k);
 end;
 
 theorem Th24:
-  for p being programmed FinPartState of SCM+FSA , k being Nat
+  for p being programmed FinPartState of SCM+FSA , k being Element of NAT
   for l being Instruction-Location of SCM+FSA st l in dom p
     holds IncAddr (p,k).l = IncAddr(pi(p,l),k)
    proof
-    let p be programmed FinPartState of SCM+FSA , k be Nat;
+    let p be programmed FinPartState of SCM+FSA , k be Element of NAT;
     let l be Instruction-Location of SCM+FSA such that A1: l in dom p;
-    consider m being Nat such that A2: l = insloc m by SCMFSA_2:21;
+    consider m being Element of NAT such that A2: l = insloc m by SCMFSA_2:21;
     thus IncAddr (p,k).l = IncAddr(pi(p,l),k) by A1,A2,Def6;
    end;
 
@@ -805,9 +806,9 @@ A1: Following(s) +* Start-At (IC Following(s) + k)
     = Exec(INS, s) +* Start-At (IC Following(s) + k) by AMI_1:def 18
    .= Exec(INS, s) +* Start-At (IC Exec(INS, s) + k) by AMI_1:def 18;
 
-     consider m being Nat such that
+     consider m being Element of NAT such that
 A2:     IC s = insloc m by SCMFSA_2:21;
-     consider m1 being Nat such that
+     consider m1 being Element of NAT such that
 A3:     IC s = insloc m1 & IC s + k = insloc(m1 + k) by Def1;
 
 A4:  Next IC (s +* Start-At (IC s + k))
@@ -1391,10 +1392,10 @@ A89:  now let d be FinSeq-Location;
            by SCMFSA_3:12;
      end;
        now let d be Int-Location;
-     consider m being Nat such that
+     consider m being Element of NAT such that
 A90:   m = abs(s.db) and
 A91:   Exec(INS, s).da = (s.f)/.m by A85,SCMFSA_2:98;
-     consider m' being Nat such that
+     consider m' being Element of NAT such that
 A92:   m' = abs((s +* Start-At (IC s + k)).db) and
 A93:   Exec(INS,s +* Start-At (IC s + k)).da
            = ((s +* Start-At (IC s + k)).f)/.m' by A85,SCMFSA_2:98;
@@ -1443,10 +1444,10 @@ A100:  now let d be Int-Location;
            by SCMFSA_3:11;
      end;
        now let g be FinSeq-Location;
-     consider m being Nat such that
+     consider m being Element of NAT such that
 A101:   m = abs(s.db) and
 A102:   Exec(INS, s).f = s.f+*(m,s.da) by A96,SCMFSA_2:99;
-     consider m' being Nat such that
+     consider m' being Element of NAT such that
 A103:   m' = abs((s +* Start-At (IC s + k)).db) and
 A104:   Exec(INS,s +* Start-At (IC s + k)).f
            = (s +* Start-At (IC s + k)).f
@@ -1543,10 +1544,10 @@ A119:  now let d be Int-Location;
            by SCMFSA_3:11;
      end;
        now let g be FinSeq-Location;
-     consider m being Nat such that
+     consider m being Element of NAT such that
 A120:   m = abs(s.da) and
 A121:   Exec(INS, s).f = m |-> 0 by A115,SCMFSA_2:101;
-     consider m' being Nat such that
+     consider m' being Element of NAT such that
 A122:   m' = abs((s +* Start-At (IC s + k)).da) and
 A123:   Exec(INS,s +* Start-At (IC s + k)).f = m' |-> 0 by A115,SCMFSA_2:101;
      per cases;
@@ -1578,7 +1579,7 @@ theorem
     for INS being Instruction of SCM+FSA,
      s being State of SCM+FSA,
      p being FinPartState of SCM+FSA,
-     i, j, k being Nat
+     i, j, k being Element of NAT
   st IC s = insloc(j+k)
  holds Exec(INS, s +* Start-At (IC s -' k))
      = Exec(IncAddr(INS, k), s) +* Start-At (IC Exec(IncAddr(INS,k), s) -' k)
@@ -1586,7 +1587,7 @@ theorem
   let INS be Instruction of SCM+FSA,
         s be State of SCM+FSA,
         p be FinPartState of SCM+FSA,
-        i, j, k be Nat;
+        i, j, k be Element of NAT;
   assume
 A1: IC s = insloc(j+k);
 then A2: Next (IC s -' k)
@@ -2100,10 +2101,10 @@ A82: now let d be FinSeq-Location;
      per cases;
      suppose
 A83:         da = d;
-     consider m being Nat such that
+     consider m being Element of NAT such that
 A84:   m = abs(s.db) and
 A85:   Exec(IncAddr(INS,k), s).da = (s.f)/.m by A79,SCMFSA_2:98;
-     consider m' being Nat such that
+     consider m' being Element of NAT such that
 A86:   m' = abs((s +* Start-At (IC s -' k)).db) and
 A87:   Exec(INS,s +* Start-At (IC s -' k)).da
            = ((s +* Start-At (IC s -' k)).f)/.m' by A78,SCMFSA_2:98;
@@ -2152,10 +2153,10 @@ A93: now let d be Int-Location;
      per cases;
      suppose
 A94:         f = d;
-     consider m being Nat such that
+     consider m being Element of NAT such that
 A95:   m = abs(s.db) and
 A96:   Exec(IncAddr(INS,k), s).f = s.f+*(m,s.da) by A90,SCMFSA_2:99;
-     consider m' being Nat such that
+     consider m' being Element of NAT such that
 A97:   m' = abs((s +* Start-At (IC s -' k)).db) and
 A98:   Exec(INS,s +* Start-At (IC s -' k)).f
            = (s +* Start-At (IC s -' k)).f
@@ -2251,10 +2252,10 @@ A112: now let d be Int-Location;
      per cases;
      suppose
 A113:         f = d;
-     consider m being Nat such that
+     consider m being Element of NAT such that
 A114:   m = abs(s.da) and
 A115:   Exec(IncAddr(INS,k), s).f = m |-> 0 by A109,SCMFSA_2:101;
-     consider m' being Nat such that
+     consider m' being Element of NAT such that
 A116:   m' = abs((s +* Start-At (IC s -' k)).da) and
 A117:   Exec(INS,s +* Start-At (IC s -' k)).f
            = m' |-> 0 by A108,SCMFSA_2:101;
@@ -2281,7 +2282,7 @@ end;
 begin :: Shifting the finite partial state
 
 definition
- let p be FinPartState of SCM+FSA , k be Nat;
+ let p be FinPartState of SCM+FSA , k be Element of NAT;
  func Shift(p,k) -> programmed FinPartState of SCM+FSA means
 :Def7:
  dom it = { insloc(m+k):insloc m in dom p } &
@@ -2289,8 +2290,8 @@ definition
 
  existence
   proof
-   deffunc U(Nat) = insloc $1;
-   deffunc V(Nat) = insloc($1+k);
+   deffunc U(Element of NAT) = insloc $1;
+   deffunc V(Element of NAT) = insloc($1+k);
    set A = { V(m): U(m) in dom p };
    defpred P [set,set] means ex m st $1 = insloc(m+k) & $2 = p.insloc m;
    A1:for e being set st e in A ex u being set st P[e,u]
@@ -2340,7 +2341,7 @@ then A14:   insloc m in dom p by A13;
     then reconsider f as Element of sproduct the Object-Kind of SCM+FSA
               by A6,AMI_1:def 16;
 A15: dom p is finite;
-A16: for m1,m2 being Nat st U(m1) = U(m2) holds m1 = m2
+A16: for m1,m2 being Element of NAT st U(m1) = U(m2) holds m1 = m2
             by SCMFSA_2:18;
        A is finite from FUNCT_7:sch 2(A15,A16);
     then f is finite by A3,FINSET_1:29;
@@ -2388,28 +2389,28 @@ A24:         insloc m in dom p;
 end;
 
 theorem Th30:
- for l being Instruction-Location of SCM+FSA , k being Nat,
+ for l being Instruction-Location of SCM+FSA , k being Element of NAT,
      p being FinPartState of SCM+FSA st l in dom p
    holds Shift(p,k).(l + k) = p.l
  proof
-  let l be Instruction-Location of SCM+FSA , k be Nat,
+  let l be Instruction-Location of SCM+FSA , k be Element of NAT,
       p be FinPartState of SCM+FSA such that A1: l in dom p;
-   consider m being Nat such that A2: l = insloc m by SCMFSA_2:21;
+   consider m being Element of NAT such that A2: l = insloc m by SCMFSA_2:21;
   thus Shift(p,k).(l + k) = Shift(p,k).(insloc(m+k)) by A2,Def1
                          .= p.l by A1,A2,Def7;
  end;
 
 theorem
-    for p being FinPartState of SCM+FSA, k being Nat
+    for p being FinPartState of SCM+FSA, k being Element of NAT
   holds dom Shift(p,k) =
          { il+k where il is Instruction-Location of SCM+FSA: il in dom p}
     proof
-     let p be FinPartState of SCM+FSA, k be Nat;
+     let p be FinPartState of SCM+FSA, k be Element of NAT;
 A1: dom Shift(p,k) = { insloc(m+k):insloc m in dom p } by Def7;
      hereby
       let e be set;
       assume e in dom Shift(p,k);
-      then consider m being Nat such that
+      then consider m being Element of NAT such that
 A2:       e = insloc(m+k) and
 A3:       insloc m in dom p by A1;
          (insloc m)+k = insloc(m+k) by Def1;
@@ -2423,7 +2424,7 @@ A3:       insloc m in dom p by A1;
    then consider il being Instruction-Location of SCM+FSA such that
 A4:     e = il+k and
 A5:     il in dom p;
-    consider m being Nat such that
+    consider m being Element of NAT such that
 A6:     il = insloc m and
 A7:     il+k = insloc(m+k) by Def1;
    thus e in dom Shift(p,k) by A1,A4,A5,A6,A7;
@@ -2557,10 +2558,10 @@ then A14:  insloc m in dom I by A10,XBOOLE_0:def 2;
 end;
 
 theorem
-    for i,j being Nat, p being programmed FinPartState of SCM+FSA
+    for i,j being Element of NAT, p being programmed FinPartState of SCM+FSA
    holds Shift(IncAddr(p,i),j) = IncAddr(Shift(p,j),i)
   proof
-     let i,j be Nat, p be programmed FinPartState of SCM+FSA;
+     let i,j be Element of NAT, p be programmed FinPartState of SCM+FSA;
 A1: dom(IncAddr(Shift(p,j),i)) = dom (Shift(p,j)) by Def6;
    dom(IncAddr(p,i)) = dom p by Def6;
     then A2: dom(Shift(p,j))
@@ -2573,13 +2574,15 @@ A3:  dom (Shift(IncAddr(p,i),j)) c= the Instruction-Locations of SCM+FSA
      assume
 A4:   x in dom (Shift(IncAddr(p,i),j));
      then reconsider x'=x as Instruction-Location of SCM+FSA by A3;
-        x in { insloc(m+j) where m is Nat:insloc m in dom IncAddr(p,i) }
+        x in { insloc(m+j) where m
+         is Element of NAT:insloc m in dom IncAddr(p,i) }
                                             by A4,Def7;
-     then consider m being Nat such that
+     then consider m being Element of NAT such that
 A5:     x = insloc(m+j) & insloc m in dom IncAddr(p,i);
 A6:     x = insloc m+j by A5,Def1;
 A7:     insloc m in dom p by A5,Def6;
-     dom Shift(p,j) = { insloc(mm+j) where mm is Nat : insloc mm in dom p}
+     dom Shift(p,j) = { insloc(mm+j)
+      where mm is Element of NAT : insloc mm in dom p}
                                                        by Def7;
 then A8:     x' in dom Shift(p,j) by A5,A7;
 A9:   pi(p,insloc m) = p.(insloc m) by A7,AMI_5:def 5

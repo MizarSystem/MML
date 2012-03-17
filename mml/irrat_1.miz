@@ -16,18 +16,19 @@ environ
       SQUARE_1, LIMFUNC1, INT_2, PEPIN, NEWTON;
  constructors FUNCOP_1, ARYTM_0, REAL_1, NAT_1, RAT_1, BINOP_2, SEQ_2,
       FINSEQ_4, RVSUM_1, LIMFUNC1, SERIES_1, COMSEQ_3, RFINSEQ, SIN_COS, PEPIN;
- registrations RELSET_1, XREAL_0, INT_1, NEWTON, MEMBERED, ORDINAL1, XXREAL_0;
+ registrations RELSET_1, XREAL_0, INT_1, NEWTON, MEMBERED, ORDINAL1, XXREAL_0,
+   NAT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions SEQ_2, SQUARE_1;
  theorems SEQ_1, REAL_2, POWER, NEWTON, NAT_1, SEQ_2, SEQ_4, ABSVALUE, SEQM_3,
       RVSUM_1, FINSEQ_2, SERIES_1, RFINSEQ, FINSEQ_3, FINSEQ_4, FINSEQ_5,
       FINSEQ_1, SIN_COS, SQUARE_1, INT_1, RAT_1, INT_2, FUNCT_2, XCMPLX_0,
-      XCMPLX_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0;
+      XCMPLX_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1;
  schemes SEQ_1, NAT_1;
 
 begin :: Square roots of primes are irrational
 
- reserve k, m, n, p, K, N for Nat;
+ reserve k, m, n, p, K, N for Element of NAT;
  reserve i for Integer;
  reserve x, y, eps for real number;
  reserve seq, seq1, seq2 for Real_Sequence;
@@ -49,12 +50,12 @@ proof
  then A3: p>0;
  assume sqrt p is rational;
  then consider i, n such that A4: n<>0 & sqrt p=i/n &
-   for i1 being Integer, n1 being Nat st n1<>0 & sqrt p=i1/n1 holds n<=n1
-  by RAT_1:25;
+   for i1 being Integer, n1 being Element of NAT st n1<>0 & sqrt p=i1/n1
+    holds n<=n1 by RAT_1:25;
  A5: i=sqrt p*n by A4,XCMPLX_1:88;
      sqrt p>=0 & n>=0 by SQUARE_1:def 4;
  then i>=0 by A5,REAL_2:121;
- then reconsider m = i as Nat by INT_1:16;
+ then reconsider m = i as Element of NAT by INT_1:16;
  A6: m^2 = (sqrt p)^2*n^2 by A5
   .= p*n^2 by SQUARE_1:def 4;
  then p divides m^2 by NAT_1:def 3;
@@ -70,11 +71,12 @@ proof
  then p divides n*n;
  then p divides n by A1,NEWTON:98;
  then consider n1 being Nat such that A8: n=p*n1 by NAT_1:def 3;
+b1: n1 in NAT by ORDINAL1:def 13;
  A9: n1<>0 by A4,A8;
  then A10: n1>0;
  A11: m1/n1 = sqrt p by A3,A4,A7,A8,XCMPLX_1:92;
      p*n1>1*n1 by A2,A10,REAL_2:199;
- hence contradiction by A4,A8,A9,A11;
+ hence contradiction by A4,A8,A9,A11,b1;
 end;
 
 theorem
@@ -121,12 +123,12 @@ definition let k;
   :Def1: for n holds it.n=(n-k)/n;
  correctness
   proof
-    deffunc F(Nat)=($1-k)/$1;
+    deffunc F(Element of NAT)=($1-k)/$1;
    thus (ex seq being Real_Sequence st
-   for n being Nat holds seq.n=F(n)) &
+   for n being Element of NAT holds seq.n=F(n)) &
   (for seq1, seq2 being Real_Sequence st
-  (for n being Nat holds seq1.n=F(n)) &
-  (for n being Nat holds seq2.n=F(n)) holds seq1=seq2)
+  (for n being Element of NAT holds seq1.n=F(n)) &
+  (for n being Element of NAT holds seq2.n=F(n)) holds seq1=seq2)
   from LambdaRealSeq;
   end;
 end;
@@ -137,12 +139,12 @@ definition
   :Def2: for n holds it.n=(n choose k)*(n.^.(-k));
  correctness
   proof
-    deffunc F(Nat)=($1 choose k)*($1.^.(-k));
+    deffunc F(Element of NAT)=($1 choose k)*($1.^.(-k));
    thus (ex seq being Real_Sequence st
-   for n being Nat holds seq.n=F(n)) &
+   for n being Element of NAT holds seq.n=F(n)) &
   (for seq1, seq2 being Real_Sequence st
-  (for n being Nat holds seq1.n=F(n)) &
-  (for n being Nat holds seq2.n=F(n)) holds seq1=seq2)
+  (for n being Element of NAT holds seq1.n=F(n)) &
+  (for n being Element of NAT holds seq2.n=F(n)) holds seq1=seq2)
   from LambdaRealSeq;
   end;
 end;
@@ -153,12 +155,12 @@ definition
   :Def3: for k holds it.k=(n choose k)*(n.^.(-k));
  correctness
   proof
-    deffunc F(Nat)=(n choose $1)*(n.^.(-$1));
+    deffunc F(Element of NAT)=(n choose $1)*(n.^.(-$1));
    thus (ex seq being Real_Sequence st
-   for n being Nat holds seq.n=F(n)) &
+   for n being Element of NAT holds seq.n=F(n)) &
   (for seq1, seq2 being Real_Sequence st
-  (for n being Nat holds seq1.n=F(n)) &
-  (for n being Nat holds seq2.n=F(n)) holds seq1=seq2)
+  (for n being Element of NAT holds seq1.n=F(n)) &
+  (for n being Element of NAT holds seq2.n=F(n)) holds seq1=seq2)
   from LambdaRealSeq;
   end;
 end;
@@ -175,12 +177,12 @@ definition
   :Def4: for n holds it.n=(1+(1/n)).^.n;
  correctness
   proof
-    deffunc F(Nat)=(1+(1/$1)).^.$1;
+    deffunc F(Element of NAT)=(1+(1/$1)).^.$1;
    thus (ex seq being Real_Sequence st
-   for n being Nat holds seq.n=F(n)) &
+   for n being Element of NAT holds seq.n=F(n)) &
   (for seq1, seq2 being Real_Sequence st
-  (for n being Nat holds seq1.n=F(n)) &
-  (for n being Nat holds seq2.n=F(n)) holds seq1=seq2)
+  (for n being Element of NAT holds seq1.n=F(n)) &
+  (for n being Element of NAT holds seq2.n=F(n)) holds seq1=seq2)
   from LambdaRealSeq;
   end;
 end;
@@ -190,12 +192,12 @@ definition
   :Def5: for k holds it.k=1/(k!);
  correctness
   proof
-    deffunc F(Nat)=1/($1!);
+    deffunc F(Element of NAT)=1/($1!);
    thus (ex seq being Real_Sequence st
-   for n being Nat holds seq.n=F(n)) &
+   for n being Element of NAT holds seq.n=F(n)) &
   (for seq1, seq2 being Real_Sequence st
-  (for n being Nat holds seq1.n=F(n)) &
-  (for n being Nat holds seq2.n=F(n)) holds seq1=seq2)
+  (for n being Element of NAT holds seq1.n=F(n)) &
+  (for n being Element of NAT holds seq2.n=F(n)) holds seq1=seq2)
   from LambdaRealSeq;
   end;
 end;
@@ -222,9 +224,9 @@ theorem Th6:
 proof
  per cases;
  suppose A1: k+1<=n;
-  then reconsider l = n-(k+1) as Nat by INT_1:18;
+  then reconsider l = n-(k+1) as Element of NAT by INT_1:18;
    l+1 = n-k;
-  then reconsider l1 = n-k as Nat;
+  then reconsider l1 = n-k as Element of NAT;
       k <= k+1 by NAT_1:29; then A2: k <= n by A1,XXREAL_0:2;
   thus (n choose (k+1)) = n!/((k+1)!*(l!)) by A1,NEWTON:def 3
    .= n!/((k!*(k+1))*(l!)) by NEWTON:21
@@ -330,7 +332,8 @@ end;
 theorem Th13:
  bseq(k) is convergent & lim(bseq(k))=1/(k!) & lim(bseq(k))=eseq.k
 proof
-  defpred P[Nat] means bseq($1) is convergent & lim(bseq($1))=1/($1!);
+  defpred P[Element of NAT] means bseq($1) is convergent &
+   lim(bseq($1))=1/($1!);
  A1: P[0]
  proof
   reconsider bseq0 = NAT --> 1 as Real_Sequence by FUNCOP_1:57;
@@ -350,7 +353,7 @@ proof
   assume A6: P[k];
   thus P[k+1]
   proof
-    deffunc F(Nat)=(1/(k+1))*(bseq(k).$1);
+    deffunc F(Element of NAT)=(1/(k+1))*(bseq(k).$1);
    consider seq such that
     A7: for n holds seq.n = F(n) from SEQ_1:sch 1;
    A8: seq = (1/(k+1))(#)(bseq(k)) by A7,SEQ_1:13;
@@ -360,7 +363,7 @@ proof
     thus lim(seq) = (1/(k+1))*(1/(k!)) by A6,A8,SEQ_2:22
      .= 1/((k+1)!) by Th12;
    end;
-   deffunc G(Nat)=seq.$1*(aseq(k).$1);
+   deffunc G(Element of NAT)=seq.$1*(aseq(k).$1);
    consider seq1 such that
     A10: for n holds seq1.n=G(n) from SEQ_1:sch 1;
    A11: seq1=seq(#)(aseq(k)) by A10,SEQ_1:12;
@@ -412,7 +415,7 @@ proof
  A2: bseq(k).n=(n choose k)*(n.^.(-k)) by Def2;
      n.^.(-k)>0 by A1,POWER:39;
  hence A3: 0<=bseq(k).n by A2,REAL_2:121;
- defpred P[Nat] means bseq($1).n<=1/($1!);
+ defpred P[Element of NAT] means bseq($1).n<=1/($1!);
  A4: P[0] by Th11,NEWTON:18;
  A5: now let k;
   assume A6: P[k];
@@ -494,7 +497,7 @@ theorem Th19:
    (for k st k>=n holds seq.k=0) holds
     seq is summable & Sum(seq)=Sum(sq)
 proof
-defpred P[Nat] means
+defpred P[Element of NAT] means
   for seq, sq st
    len(sq)=$1 &
    (for k st k<$1 holds seq.k=sq.(k+1)) &
@@ -507,7 +510,7 @@ defpred P[Nat] means
    (for k st k>=0 holds seq.k=0);
   then sq is Element of 0-tuples_on REAL by FINSEQ_2:110;
   then A2: Sum(sq)=0 by RVSUM_1:109;
-  defpred P[Nat] means Partial_Sums(seq).$1=0;
+  defpred P[Element of NAT] means Partial_Sums(seq).$1=0;
   A3: for k holds seq.k = 0 by A1;
   then seq.0=0;
   then A4: P[0] by SERIES_1:def 1;
@@ -566,8 +569,8 @@ theorem Th20:
 proof
  assume A1: x<>0 & y<>0 & k<=n;
  A2: k+1>=0+1 by XREAL_1:8;
- reconsider i1 = (k+1)-1 as Nat;
- reconsider l = n-i1 as Nat by A1,INT_1:18;
+ reconsider i1 = (k+1)-1 as Element of NAT;
+ reconsider l = n-i1 as Element of NAT by A1,INT_1:18;
  A3: len((x,y) In_Power n)=n+1 by NEWTON:def 4;
      1<=k+1 & k+1<=n+1 by A1,A2,XREAL_1:8;
  then k+1 in dom((x,y) In_Power n) by A3,FINSEQ_3:27;
@@ -653,7 +656,7 @@ theorem Th25:
    for n holds dseqK.n=Partial_Sums(cseq(n)).K holds
     dseqK is convergent & lim(dseqK)=Partial_Sums(eseq).K
 proof
-defpred P[Nat] means
+defpred P[Element of NAT] means
   for dseqK being Real_Sequence st
    for n holds dseqK.n=Partial_Sums(cseq(n)).$1 holds
     dseqK is convergent & lim(dseqK)=Partial_Sums(eseq).$1;
@@ -675,7 +678,7 @@ defpred P[Nat] means
    A4: for dseqK being Real_Sequence st
     for n holds dseqK.n=Partial_Sums(cseq(n)).K holds
      dseqK is convergent & lim(dseqK)=Partial_Sums(eseq).K;
-     deffunc F(Nat)=Partial_Sums(cseq($1)).K;
+     deffunc F(Element of NAT)=Partial_Sums(cseq($1)).K;
   consider dseqK being Real_Sequence such that
    A5: for n holds dseqK.n=F(n) from SEQ_1:sch 1;
   A6: dseqK is convergent & lim(dseqK)=Partial_Sums(eseq).K by A4,A5;
@@ -729,9 +732,9 @@ proof
  proof
   let eps be real number;
   assume A3: eps>0;
-  then consider N1 being Nat such that
+  then consider N1 being Element of NAT such that
    A4: for n st n>=N1 holds seq.n>x-eps by A1;
-  consider N2 being Nat such that
+  consider N2 being Element of NAT such that
    A5: for n st n>=N2 holds seq.n<=x by A1;
   take N = max(N1,N2);
   let n;
@@ -801,7 +804,7 @@ proof
   then A1: eps/2>0 by REAL_2:127;
   then consider K such that
    A2: Partial_Sums(eseq).K>Sum(eseq)-eps/2 by Th24,Th28;
-   deffunc F(Nat)=Partial_Sums(cseq($1)).K;
+   deffunc F(Element of NAT)=Partial_Sums(cseq($1)).K;
   consider dseqK being Real_Sequence such that
    A3: for n holds dseqK.n=F(n) from SEQ_1:sch 1;
        dseqK is convergent & lim(dseqK)=Partial_Sums(eseq).K by A3,Th25;
@@ -862,7 +865,7 @@ proof
   take n;
   thus n>=2 by A3;
       n>=1 by A3,XXREAL_0:2;
-  then reconsider m = n-1 as Nat by INT_1:18;
+  then reconsider m = n-1 as Element of NAT by INT_1:18;
    n!*x = (m+1)*(m!)*x by NEWTON:21
    .= (n*x)*(m!)
    .= i*(m!) by A1,XCMPLX_1:88;
@@ -920,8 +923,8 @@ theorem Th37:
  k<=n implies (n!)/(k!) is integer
 proof
  assume k<=n;
- then reconsider m = n-k as Nat by INT_1:18;
-   defpred P[Nat] means (($1+k)!)/(k!) is integer;
+ then reconsider m = n-k as Element of NAT by INT_1:18;
+   defpred P[Element of NAT] means (($1+k)!)/(k!) is integer;
  A1: n=m+k;
      for m holds ((m+k)!)/(k!) is integer
  proof
@@ -936,8 +939,9 @@ proof
     .= (m+k+1)*(((m+k)!)*(k!)")
     .= (m+k+1)*(((m+k)!)/(k!)) by XCMPLX_0:def 9;
    hence (((m+1)+k)!)/(k!) is integer by A3;
-  end; then A4: for n being Nat holds P[n] implies P[n+1];
-    for n being Nat holds P[n] from NAT_1:sch 1(A2,A4); hence thesis;
+  end; then A4: for n being Element of NAT holds P[n] implies P[n+1];
+    for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A4);
+    hence thesis;
  end;
  hence (n!)/(k!) is integer by A1;
 end;
@@ -945,7 +949,8 @@ end;
 theorem Th38:
  n!*Partial_Sums(eseq).n is integer
 proof
-  defpred P[Nat] means $1<=n implies n!*Partial_Sums(eseq).$1 is integer;
+  defpred P[Element of NAT] means $1<=n implies
+   n!*Partial_Sums(eseq).$1 is integer;
      for k st k<=n holds n!*Partial_Sums(eseq).k is integer
  proof
     now assume  0<=n;
@@ -975,7 +980,7 @@ theorem Th39:
  x=1/(n+1) implies (n!)/((n+k+1)!)<=x.^.(k+1)
 proof
  assume A1: x=1/(n+1);
- defpred P[Nat] means (n!)/((n+$1+1)!)<=x.^.($1+1);
+ defpred P[Element of NAT] means (n!)/((n+$1+1)!)<=x.^.($1+1);
      for k holds (n!)/((n+k+1)!)<=x.^.(k+1)
  proof
   A2: now
@@ -1016,7 +1021,7 @@ proof
  then A2:n+1>0+1 by XREAL_1:8;
  A3:0<1/(n+1) by REAL_2:127;
  A4: 0<x & x<1 by A1,A2,REAL_2:127,SQUARE_1:2;
- deffunc F(Nat)=x.^.($1+1);
+ deffunc F(Element of NAT)=x.^.($1+1);
  consider seq being Real_Sequence such that
   A5: for k holds seq.k=F(k) from SEQ_1:sch 1;
  A6: seq.0 = x.^.(0+1) by A5

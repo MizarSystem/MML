@@ -11,10 +11,11 @@ environ
       FUNCT_4, SCMPDS_3, RELAT_1, AMI_2, SCMFSA_9, ARYTM_1, RELOC, SCM_1,
       FUNCT_7, BOOLE, FUNCOP_1, CARD_3, SCMPDS_8, FINSEQ_1, RFUNCT_2, RFINSEQ,
       FUNCT_2, SCPISORT, SCMP_GCD, SCPQSORT;
- notations TARSKI, XBOOLE_0, FUNCT_2, NUMBERS, XCMPLX_0, XXREAL_0, RELAT_1,
-      FUNCT_1, FUNCT_4, RECDEF_1, INT_1, NAT_1, AMI_1, AMI_2, AMI_3, AMI_5,
-      FUNCT_7, SCMPDS_2, SCMPDS_3, CARD_1, SCMPDS_4, SCM_1, SCMPDS_5, SCMPDS_6,
-      SCMP_GCD, CARD_3, FINSEQ_1, SCMPDS_8, SFMASTR3, RFINSEQ, SCPISORT;
+ notations TARSKI, XBOOLE_0, FUNCT_2, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
+      RELAT_1, FUNCT_1, FUNCT_4, RECDEF_1, INT_1, NAT_1, AMI_1, AMI_2, AMI_3,
+      AMI_5, FUNCT_7, SCMPDS_2, SCMPDS_3, CARD_1, SCMPDS_4, SCM_1, SCMPDS_5,
+      SCMPDS_6, SCMP_GCD, CARD_3, FINSEQ_1, SCMPDS_8, SFMASTR3, RFINSEQ,
+      SCPISORT;
  constructors XXREAL_0, NAT_1, RAT_1, RECDEF_1, RFINSEQ, SCM_1, AMI_5,
       SFMASTR3, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD, SCMPDS_8, SCPISORT;
  registrations AMI_1, INT_1, FUNCT_1, RELSET_1, FINSEQ_1, SCMPDS_2, SCMFSA_4,
@@ -26,7 +27,7 @@ environ
 begin :: The Several Properties of "while" Program and Finite Sequence
 
 reserve x for Int_position,
-        n,p0 for Nat;
+        n,p0 for Element of NAT;
 
 registration
    let I,J be shiftable Program-block,
@@ -42,7 +43,8 @@ theorem :: SCPQSORT:1      :: see SCMPDS_6:87
 
 theorem :: SCPQSORT:2
  for s,sm be State of SCMPDS,I be No-StopCode shiftable Program-block,
- a be Int_position,i be Integer, m be Nat st card I>0 & I is_closed_on s &
+ a be Int_position,i be Integer, m be Element of NAT
+ st card I>0 & I is_closed_on s &
  I is_halting_on s & s.DataLoc(s.a,i) > 0 &
  m=LifeSpan (s +* Initialized stop I)+2 &
  sm=(Computation(s +* Initialized stop while>0(a,i,I))).m holds
@@ -102,10 +104,10 @@ theorem :: SCPQSORT:7
      IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)) );
 
 theorem :: SCPQSORT:8
-  for f being FinSequence of INT,m,k1,k,n be Nat st m<=k & k <= n &
+  for f being FinSequence of INT,m,k1,k,n be Element of NAT st m<=k & k <= n &
   k1=k-1 & f is_non_decreasing_on m,k1 & f is_non_decreasing_on k+1,n &
-  (for i be Nat st m <= i & i < k holds f.i <= f.k) &
-  (for i be Nat st k < i & i <= n holds f.k <= f.i)
+  (for i be Element of NAT st m <= i & i < k holds f.i <= f.k) &
+  (for i be Element of NAT st k < i & i <= n holds f.k <= f.i)
   holds
    f is_non_decreasing_on m,n;
 
@@ -118,10 +120,11 @@ theorem :: SCPQSORT:10    ::RFINSEQ:14
    f,g are_fiberwise_equipotent iff h^f, h^g are_fiberwise_equipotent;
 
 theorem :: SCPQSORT:11
- for f,g be FinSequence,m,n,j be Nat st f,g are_fiberwise_equipotent &
- m<=n & n <= len f & (for i be Nat st 1<=i & i<=m holds f.i=g.i) &
- (for i be Nat st n<i & i<=len f holds f.i=g.i) & (m<j & j<=n)
-holds ex k be Nat st m<k & k<=n & f.j=g.k;
+ for f,g be FinSequence,m,n,j be Element of NAT
+ st f,g are_fiberwise_equipotent &
+ m<=n & n <= len f & (for i be Element of NAT st 1<=i & i<=m holds f.i=g.i) &
+ (for i be Element of NAT st n<i & i<=len f holds f.i=g.i) & (m<j & j<=n)
+holds ex k be Element of NAT st m<k & k<=n & f.j=g.k;
 
 begin :: Program Partition is to split a sequence into a "smaller" and
 ::       a "larger" subsequence
@@ -166,7 +169,7 @@ begin :: The Construction of Quick Sort
 :: a0=global, a1=stack, a2=stack depth
 
 definition
- let n,p0 be Nat;
+ let n,p0 be Element of NAT;
  func QuickSort(n,p0) -> Program-block equals
 :: SCPQSORT:def 2
 
@@ -197,12 +200,12 @@ theorem :: SCPQSORT:12
   card Partition=38;
 
 theorem :: SCPQSORT:13
- for s be State of SCMPDS,md,p0 be Nat st s.GBP=0 &
+ for s be State of SCMPDS,md,p0 be Element of NAT st s.GBP=0 &
  s.intpos 4-s.intpos 2 > 0 & s.intpos 2=md & md >= p0+1 & p0 >= 7
  holds Partition is_closed_on s & Partition is_halting_on s;
 
 theorem :: SCPQSORT:14
- for s be State of SCMPDS,md,p0,n be Nat,f,f1 be FinSequence of INT
+ for s be State of SCMPDS,md,p0,n be Element of NAT,f,f1 be FinSequence of INT
  st s.GBP=0 & s.intpos 4-s.intpos 2 > 0 & s.intpos 2=md &
  md >= p0+1 & s.intpos 4 <= p0+n & p0 >= 7 &
  f is_FinSequence_on s,p0 & len f=n &
@@ -210,13 +213,14 @@ theorem :: SCPQSORT:14
 holds IExec(Partition,s).GBP=0 &
    IExec(Partition,s).intpos 1=s.intpos 1 &
    f,f1 are_fiberwise_equipotent &
-   ex m4 be Nat st m4=IExec(Partition,s).intpos 4 &
+   ex m4 be Element of NAT st m4=IExec(Partition,s).intpos 4 &
    md <= m4 & m4 <= s.intpos 4 &
-   (for i be Nat st md<=i & i < m4 holds
+   (for i be Element of NAT st md<=i & i < m4 holds
    IExec(Partition,s).intpos m4 >= IExec(Partition,s).intpos i) &
-   (for i be Nat st m4 < i & i <= s.intpos 4 holds
+   (for i be Element of NAT st m4 < i & i <= s.intpos 4 holds
    IExec(Partition,s).intpos m4 <= IExec(Partition,s).intpos i) &
-   (for i be Nat st i >= p0+1 & (i < s.intpos 2 or i > s.intpos 4) holds
+   (for i be Element of NAT st i >= p0+1 & (i < s.intpos 2 or i > s.intpos 4)
+   holds
          IExec(Partition,s).intpos i = s.intpos i);
 
 theorem :: SCPQSORT:15
@@ -228,10 +232,11 @@ theorem :: SCPQSORT:16
          card QuickSort(n,p0)=57;
 
 theorem :: SCPQSORT:17
-      for p0,n being Nat st p0 >= 7 holds QuickSort(n,p0) is parahalting;
+      for p0,n being Element of NAT st p0 >= 7
+      holds QuickSort(n,p0) is parahalting;
 
 theorem :: SCPQSORT:18
-      for s being State of SCMPDS,p0,n being Nat st p0 >= 7 holds
+      for s being State of SCMPDS,p0,n being Element of NAT st p0 >= 7 holds
     ex f,g be FinSequence of INT st len f=n & f is_FinSequence_on s,p0 &
     len g = n & g is_FinSequence_on IExec(QuickSort(n,p0),s),p0 &
     f,g are_fiberwise_equipotent & g is_non_decreasing_on 1,n;

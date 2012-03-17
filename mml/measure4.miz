@@ -8,7 +8,8 @@ environ
 
  vocabularies SUPINF_1, MEASURE1, RLVECT_1, ARYTM_1, SETFAM_1, FUNCT_1, BOOLE,
       TARSKI, RELAT_1, SUPINF_2, PROB_1, MEASURE3, MEASURE4;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0,
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0,
+   XXREAL_0,
       RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, REAL_1, NAT_1, SETFAM_1,
       PROB_1, SUPINF_1, SUPINF_2, MEASURE1, MEASURE3;
  constructors ENUMSET1, PARTFUN1, REAL_1, NAT_1, PROB_2, SUPINF_1, MEASURE3;
@@ -18,7 +19,7 @@ environ
  definitions TARSKI, MEASURE3, XBOOLE_0;
  theorems TARSKI, ENUMSET1, FUNCT_1, FUNCT_2, ZFMISC_1, NAT_1, SUPINF_1,
       SUPINF_2, MEASURE1, MEASURE2, MEASURE3, XBOOLE_0, XBOOLE_1, XXREAL_0,
-      PROB_1;
+      PROB_1, ORDINAL1;
  schemes NAT_1, FUNCT_2, XBOOLE_0;
 
 begin :: Some theorems about R_eal numbers
@@ -216,7 +217,8 @@ A3:for n being Element of NAT holds H.n c= F.n
          (ex k being Nat st n = k + 1) implies H.n c= F.n
       proof
          given k being Nat such that
-      A5:n = k + 1;
+         A5:n = k + 1;
+         reconsider k as Element of NAT by ORDINAL1:def 13;
             H.n = F.n \ G.k by A2,A5;
          hence thesis;
       end;
@@ -246,23 +248,24 @@ A9:    E c= F.s by A3,A8;
       reconsider s as Element of NAT by A11;
          ex s1 being Element of NAT st r in H.s1
       proof
-        defpred P[Nat] means r in F.$1;
+        defpred P[Element of NAT] means r in F.$1;
             r in F.s by A10,A11;
-     then A12:ex k being Nat st P[k];
-            ex k being Nat st P[k] &
-         for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A12);
-         then consider k being Nat such that
-     A13:r in F.k & for n being Nat st r in F.n holds k <= n;
+     then A12:ex k being Element of NAT st P[k];
+            ex k being Element of NAT st P[k] &
+         for n being Element of NAT st P[n] holds k <= n from NAT_1:sch 5(A12);
+         then consider k being Element of NAT such that
+     A13:r in F.k & for n being Element of NAT st r in F.n holds k <= n;
      A14:k=0 implies ex s1 being Element of NAT st r in H.s1 by A2,A13;
             (ex l being Nat st k = l + 1) implies
          (ex s1 being Element of NAT st r in H.s1)
          proof
             given l being Nat such that
-        A15:k = l + 1;
+            A15:k = l + 1;
+            reconsider l as Element of NAT by ORDINAL1:def 13;
         A16:not r in G.l
             proof
                assume r in G.l;
-               then consider i being Nat such that
+               then consider i being Element of NAT such that
            A17:i <= l & r in F.i by A1,MEASURE2:6;
                   k <= i by A13,A17;
                hence thesis by A15,A17,NAT_1:38;
@@ -360,9 +363,9 @@ A5:for F being Function of NAT,bool X holds M.(union rng F) <= SUM(M*F)
       let F be Function of NAT,bool X;
    A6:M.(union rng F) = 0.by A1;
    A7:M*F is nonnegative by A3,MEASURE1:54;
-   A8:for r being Nat st 0 <= r holds (M*F).r = 0.
+   A8:for r being Element of NAT st 0 <= r holds (M*F).r = 0.
       proof
-         let r be Nat;
+         let r be Element of NAT;
         dom (M*F) = NAT by FUNCT_2:def 1;
      then (M*F).r = M.(F.r) by FUNCT_1:22;
          hence thesis by A1;
@@ -469,7 +472,8 @@ proof
    reconsider P = {} as Subset of X by XBOOLE_1:2;
    consider F being Function of NAT,bool X such that
 A1:rng F = {W,Z,P} &
-   F.0 = W & F.1 = Z & for n being Nat st 1 < n holds F.n = P by MEASURE1:38;
+   F.0 = W & F.1 = Z &
+    for n being Element of NAT st 1 < n holds F.n = P by MEASURE1:38;
 A2: union {W,Z,P} = W \/ Z
    proof
       thus union {W,Z,P} c= W \/ Z
@@ -498,9 +502,9 @@ A2: union {W,Z,P} = W \/ Z
    end;
       C is nonnegative by Def2;
 then A7:C*F is nonnegative by MEASURE1:54;
-A8:for r being Nat st 2 <= r holds (C*F).r = 0.
+A8:for r being Element of NAT st 2 <= r holds (C*F).r = 0.
    proof
-      let r be Nat;
+      let r be Element of NAT;
       assume 2 <= r;
       then 1 + 1 <= r;
       then 1 < r by NAT_1:38;
@@ -722,11 +726,11 @@ A2:C is nonnegative by Def2;
          consider G being Function of NAT,S such that
       A7:G.0 = F.0 & for n being Element of NAT holds
          G.(n+1) = F.(n+1) \/ G.n by MEASURE2:5;
-     defpred P[Nat] means G.$1 in sigma_Field(C);
+     defpred P[Element of NAT] means G.$1 in sigma_Field(C);
      A8: P[0] by A6,A7;
-    A9: for k being Nat st P[k] holds P[k+1]
+    A9: for k being Element of NAT st P[k] holds P[k+1]
          proof
-           let k be Nat;
+           let k be Element of NAT;
            assume
        A10:G.k in sigma_Field(C);
        A11:G.(k+1) = F.(k+1) \/ G.k by A7;
@@ -749,7 +753,7 @@ A18:       C*Q is nonnegative by A2,MEASURE1:54;
      A19:QQ.0 = W /\ F.0 by A13,A15,A17;
      A20:F.0 in sigma_Field(C) by A6;
      A21:QQ.0 c= F.0 by A19,XBOOLE_1:17;
-     defpred P[Nat] means  C.(Z \/ QQ.$1) = C.Z + Ser(C*Q).$1;
+     defpred P[Element of NAT] means  C.(Z \/ QQ.$1) = C.Z + Ser(C*Q).$1;
       F.0 in rng F by FUNCT_2:6;
          then F.0 c= union rng F by ZFMISC_1:92;
          then X \ union rng F c= X \ F.0 by XBOOLE_1:34;
@@ -757,9 +761,9 @@ A18:       C*Q is nonnegative by A2,MEASURE1:54;
             Ser(C*Q).0 = (C*Q).0 by SUPINF_2:63
                    .= C.(QQ.0) by A17,FUNCT_2:21;
     then A23: P[0] by A20,A21,A22,Th14;
-    A24: for k being Nat st P[k] holds P[k+1]
+    A24: for k being Element of NAT st P[k] holds P[k+1]
          proof
-            let k be Nat;
+            let k be Element of NAT;
             assume
         A25:C.(Z \/ QQ.k) = C.Z + Ser(C*Q).k;
 A26:        QQ.(k+1) = QQ.k \/ Q.(k+1) by A17;
@@ -774,14 +778,14 @@ A26:        QQ.(k+1) = QQ.k \/ Q.(k+1) by A17;
             then F.(k+1) \ G.k c= union rng F by A29,XBOOLE_1:1;
             then X \ union rng F c= X \ (F.(k+1) \ G.k) by XBOOLE_1:34;
         then A30:Z c= X \ (F.(k+1) \ G.k) by A4,A5,XBOOLE_1:1;
-        defpred P[Nat] means QQ.$1 c= G.$1;
+        defpred P[Element of NAT] means QQ.$1 c= G.$1;
                QQ.0 = W /\ F.0 by A13,A15,A17;
        then A31: P[0] by A7,XBOOLE_1:17;
-          for n being Nat holds QQ.n misses (F.(n+1) \ G.n)
+          for n being Element of NAT holds QQ.n misses (F.(n+1) \ G.n)
             proof
-               let n be Nat;
-          A32: for n being Nat st P[n] holds P[n+1]
-            proof let n be Nat;
+               let n be Element of NAT;
+          A32: for n being Element of NAT st P[n] holds P[n+1]
+            proof let n be Element of NAT;
                   assume
               A33:QQ.n c= G.n;
               A34:QQ.(n+1) = Q.(n+1) \/ QQ.n by A17
@@ -796,7 +800,8 @@ A26:        QQ.(k+1) = QQ.k \/ Q.(k+1) by A17;
                   then QQ.(n+1) c= F.(n+1) \/ G.n by A33,A34,XBOOLE_1:13;
                   hence QQ.(n+1) c= G.(n+1) by A7;
                end;
-                  for n being Nat holds P[n] from NAT_1:sch 1(A31,A32);
+                  for n being Element of NAT holds P[n]
+                   from NAT_1:sch 1(A31,A32);
            then A36:QQ.n c= G.n;
                   G.n misses (F.(n+1) \ G.n) by XBOOLE_1:79;
                hence thesis by A36,XBOOLE_1:63;
@@ -824,12 +829,12 @@ FUNCT_2:21
             hence thesis;
          end;
      A41:for n being Element of NAT holds P[n] from NAT_1:sch 1(A23,A24);
-     defpred Q[Nat] means QQ.$1 c= W;
+     defpred Q[Element of NAT] means QQ.$1 c= W;
             QQ.0 = W /\ B.0 by A15,A17;
     then A42: Q[0] by XBOOLE_1:17;
-    A43: for n being Nat st Q[n] holds Q[n+1]
+    A43: for n being Element of NAT st Q[n] holds Q[n+1]
          proof
-            let n be Nat;
+            let n be Element of NAT;
             assume
         A44:QQ.n c= W;
         A45:QQ.(n+1) = Q.(n+1) \/ QQ.n by A17
@@ -838,7 +843,7 @@ FUNCT_2:21
             then QQ.(n+1) c= W \/ W by A44,A45,XBOOLE_1:13;
             hence thesis;
          end;
-A46:     for n being Nat holds Q[n] from NAT_1:sch 1(A42,A43);
+A46:     for n being Element of NAT holds Q[n] from NAT_1:sch 1(A42,A43);
      A47:union rng Q = W by A4,A5,A14,A16,XBOOLE_1:28;
      A48:for n being Element of NAT holds Ser(C*Q).n + C.Z <= C.(Z \/ W)
          proof
@@ -884,9 +889,9 @@ Z
             P[x,R.x] from FUNCT_2:sch 1(A55);
             then consider R being Function of NAT,ExtREAL such that
         A56:for x being set st x in NAT holds P[x,R.x];
-               for n being Nat holds 0. <= R.n
+               for n being Element of NAT holds 0. <= R.n
             proof
-               let n be Nat;
+               let n be Element of NAT;
                per cases;
                suppose
            A57:n = 0;
@@ -905,15 +910,15 @@ Z
             end;
             end;
         then A61:R is nonnegative by SUPINF_2:58;
-A62:        for n being Nat holds Ser(C*Q).n <= Ser(R).n
+A62:        for n being Element of NAT holds Ser(C*Q).n <= Ser(R).n
             proof
-              defpred P[Nat] means Ser(R).$1 = C.(Z \/ W) - C.Z;
-               let n be Nat;
+              defpred P[Element of NAT] means Ser(R).$1 = C.(Z \/ W) - C.Z;
+               let n be Element of NAT;
                   Ser(R).0 = R.0 by SUPINF_2:63;
           then A63: P[0] by A56;
 
-A64:      for k being Nat st P[k] holds P[k+1]
-           proof let k be Nat;
+A64:      for k being Element of NAT st P[k] holds P[k+1]
+           proof let k be Element of NAT;
                   assume
               A65:Ser(R).k = C.(Z \/ W) - C.Z;
                   set y = Ser(R).k;
@@ -921,11 +926,11 @@ A64:      for k being Nat st P[k] holds P[k+1]
                               .= y + 0. by A56
                               .= C.(Z \/ W) - C.Z by A65,SUPINF_2:18;
                end;
-          for k being Nat holds P[k] from NAT_1:sch 1(A63,A64);
+          for k being Element of NAT holds P[k] from NAT_1:sch 1(A63,A64);
                then Ser(R).n = C.(Z \/ W) - C.Z;
                hence thesis by A54;
             end;
-               now let k be Nat;
+               now let k be Element of NAT;
                assume 1 <= k;
                then k <> 0;
                hence R.k = 0. by A56;

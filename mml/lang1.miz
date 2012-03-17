@@ -8,7 +8,8 @@ environ
 
  vocabularies RELAT_1, FINSEQ_1, TDGROUP, BOOLE, FUNCT_1, FINSET_1, LANG1,
       MONOID_0;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, DOMAIN_1, RELAT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1,
+   NUMBERS,XCMPLX_0,NAT_1, DOMAIN_1, RELAT_1,
       STRUCT_0, FUNCT_1, FINSEQ_1, FINSET_1, RELSET_1, PARTFUN1, FUNCT_2,
       FINSEQ_2, XXREAL_0;
  constructors PARTFUN1, FUNCT_2, DOMAIN_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2,
@@ -18,7 +19,8 @@ environ
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions XBOOLE_0, TARSKI, RELAT_1, STRUCT_0;
  theorems TARSKI, ZFMISC_1, RELAT_1, FINSEQ_1, NAT_1, REAL_1, RELSET_1,
-      TREES_2, FUNCT_2, FINSEQ_3, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0;
+      TREES_2, FUNCT_2, FINSEQ_3, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0,
+      ORDINAL1;
  schemes NAT_1, FUNCT_2;
 
 begin
@@ -199,7 +201,7 @@ definition let G, n, m;
   pred m is_derivable_from n means :Def5:
     ex p being FinSequence st
        len p >= 1 & p.1 = n & p.len p = m &
-       for i being Nat st i >= 1 & i < len p
+       for i being Element of NAT st i >= 1 & i < len p
        ex a,b being String of G st p.i = a & p.(i+1) = b & a ==> b;
 end;
 
@@ -209,7 +211,7 @@ theorem Th6:
     take p = <*n*>;
     len p = 1 & p.1 = n by FINSEQ_1:57;
     hence len p >= 1 & p.1 = n & p.len p = n;
-    let i be Nat;
+    let i be Element of NAT;
     assume i >= 1 & i < len p;
     hence thesis by FINSEQ_1:57;
   end;
@@ -221,7 +223,7 @@ theorem Th7:
     take p = <*n,m*>;
 A2: len p = 2 & p.1 = n & p.2 = m by FINSEQ_1:61;
     hence len p >= 1 & p.1 = n & p.(len p) = m;
-    let i be Nat;
+    let i be Element of NAT;
     assume A3: i >= 1 & i < len p;
     2 = 1 + 1; then i <= 1 by A2,A3,NAT_1:38;
     then A4: i = 1 by A3,XXREAL_0:1;
@@ -237,11 +239,11 @@ theorem Th8:
   proof
     given p1 being FinSequence such that
     A1: len p1 >= 1 & p1.1 = n2 & p1.(len p1) = n1 &
-    for i being Nat st i >= 1 & i < len p1
+    for i being Element of NAT st i >= 1 & i < len p1
     ex a,b being String of G st p1.i = a & p1.(i+1) = b & a ==> b;
     given p2 being FinSequence such that
     A2: len p2 >= 1 & p2.1 = n3 & p2.(len p2) = n2 &
-    for i being Nat st i >= 1 & i < len p2
+    for i being Element of NAT st i >= 1 & i < len p2
     ex a,b being String of G st p2.i = a & p2.(i+1) = b & a ==> b;
     len p2 <> 0 by A2;
     then p2 <> {} by FINSEQ_1:25;
@@ -271,7 +273,7 @@ theorem Th8:
         hence p.1 = n3;
         len p1 in dom p1 by A1,FINSEQ_3:27;
         hence p.(len p) = n1 by A1,A4,FINSEQ_1:def 7;
-        let i be Nat such that A5: i >= 1 & i < len p;
+        let i be Element of NAT such that A5: i >= 1 & i < len p;
         now per cases by XXREAL_0:1;
           suppose A6: i+1 = len p2;
            then A7: i = len q & i < len p2 by A4,NAT_1:38;
@@ -287,6 +289,7 @@ theorem Th8:
            then i >= len p2 & i+1 <= len p by A5,NAT_1:38;
            then consider j being Nat such that
            A9: i = len p2 + j by NAT_1:28;
+           reconsider j as Element of NAT by ORDINAL1:def 13;
            A10: i = len q +(1+j) & 1+j >= 1 by A4,A9,NAT_1:29;
            then A11: 1+j < len p1 by A4,A5,XREAL_1:8;
            then consider a,b being String of G such that
@@ -548,7 +551,7 @@ A4:     c = p & rng p c= Terminals E &
        p is_derivable_from <*the InitialSym of E*>;
       consider q being FinSequence such that
 A5:     len q >= 1 & q.1 = <*the InitialSym of E*> & q.(len q) = p &
-       for i being Nat st i >= 1 & i < len q
+       for i being Element of NAT st i >= 1 & i < len q
        ex a,b being String of E st q.i = a & q.(i+1) = b & a ==> b by A4,Def5;
        now assume p = <*x*>;
          then rng p = {x} by FINSEQ_1:55;
@@ -625,15 +628,16 @@ A3:     a = p & rng p c= Terminals T &
 A4:  the carrier of T = {a,b} & the InitialSym of T = a &
     the Rules of T = {[a,<*b,a*>],[a,{}]} by Def9;
    set I = <*the InitialSym of T*>;
-   defpred X[Nat] means for p being String of T st len p = $1 & p in {b}* holds
+   defpred X[Element of NAT] means for p being String of T
+    st len p = $1 & p in {b}* holds
       p^I is_derivable_from I;
 A5: X[0]
      proof let p be String of T; assume len p = 0;
        then p = {} by FINSEQ_1:25; then p^I = I by FINSEQ_1:47;
       hence thesis by Th6;
      end;
-A6:  for k being Nat st X[k] holds X[k+1]
-    proof let k be Nat such that
+A6:  for k being Element of NAT st X[k] holds X[k+1]
+    proof let k be Element of NAT such that
 A7:   for p being String of T st len p = k & p in {b}* holds
         p^I is_derivable_from I;
      let p be String of T; assume
@@ -660,7 +664,7 @@ A12:   {c} c= {b} & {c} c= the carrier of T by A10,FINSEQ_1:def 4;
       then p^I is_derivable_from q^I by Th7;
      hence p^I is_derivable_from I by A11,Th8;
     end;
-A13:  for k being Nat holds X[k] from NAT_1:sch 1(A5,A6);
+A13:  for k being Element of NAT holds X[k] from NAT_1:sch 1(A5,A6);
    let c; assume
 A14:  c in {b}*;
    then reconsider c as FinSequence of {b} by FINSEQ_1:def 11;
@@ -729,15 +733,16 @@ A3:  the carrier of T = D \/ {D} & the InitialSym of T = D &
     the Rules of T = {[D,<*d,D*>] where d is Element of D: d = d} \/ {[D,{}]}
       by Def10;
    set I = <*the InitialSym of T*>;
-   defpred X[Nat] means for p being String of T st len p = $1 & p in D* holds
+   defpred X[Element of NAT] means for p being String of T
+    st len p = $1 & p in D* holds
       p^I is_derivable_from I;
 A4: X[0]
      proof let p be String of T; assume len p = 0;
        then p = {} by FINSEQ_1:25; then p^I = I by FINSEQ_1:47;
       hence thesis by Th6;
      end;
-A5:  for k being Nat st X[k] holds X[k+1]
-    proof let k be Nat such that
+A5:  for k being Element of NAT st X[k] holds X[k+1]
+    proof let k be Element of NAT such that
 A6:   for p being String of T st len p = k & p in D* holds
         p^I is_derivable_from I;
      let p be String of T; assume
@@ -765,7 +770,7 @@ A11:   {a} c= D & {a} c= the carrier of T by A9,FINSEQ_1:def 4;
       then p^I is_derivable_from q^I by Th7;
      hence p^I is_derivable_from I by A10,Th8;
     end;
-A12:  for k being Nat holds X[k] from NAT_1:sch 1(A4,A5);
+A12:  for k being Element of NAT holds X[k] from NAT_1:sch 1(A4,A5);
    let a; assume
 A13:  a in D*;
    then reconsider a as FinSequence of D by FINSEQ_1:def 11;
@@ -877,7 +882,7 @@ theorem
 A1:  [x,y] in R;
 then A2:  x in field R & y in field R by RELAT_1:30;
 A3:  len <*x,y*> = 2 & 2 >= 1 & <*x,y*>.1 = x & <*x,y*>.2 = y by FINSEQ_1:61;
-       now let i be Nat such that
+       now let i be Element of NAT such that
 A4:    i >= 1 & i < 2;  1+1 = 2; then i <= 1 by A4,NAT_1:38;
       then i = 1 by A4,XXREAL_0:1;
      hence [<*x,y*>.i,<*x,y*>.(i+1)] in R by A1,A3;

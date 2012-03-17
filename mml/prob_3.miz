@@ -20,14 +20,14 @@ environ
       COMPLEX1, SEQ_2, SEQM_3, SEQ_4, PROB_2, FINSOP_1, RVSUM_1, SERIES_1,
       PCOMPS_1, KURATO_2, SETLIM_1, RINFSUP1, SETLIM_2;
  registrations SEQ_1, SUBSET_1, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, ORDINAL1,
-      FUNCT_1, PROB_1;
+      FUNCT_1, PROB_1, NAT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems FUNCT_1, FUNCT_2, SEQ_1, ABSVALUE, SEQ_2, SUBSET_1, NAT_1, TARSKI,
       XBOOLE_0, XBOOLE_1, PROB_2, SETLIM_2, RINFSUP1, RELAT_1, SETFAM_1,
       ZFMISC_1, SEQM_3, CARD_3, SETLIM_1, PROB_1, FINSUB_1, SERIES_1, FINSEQ_1,
       FINSEQ_2, FINSEQ_3, RVSUM_1, FINSOP_1, SETWISEO, BINOP_2, XREAL_1,
-      XXREAL_0;
+      XXREAL_0, ORDINAL1;
  schemes FUNCT_1, NAT_1, RECDEF_1, FINSEQ_1, FINSEQ_2, PARTFUN1;
 
 begin
@@ -78,11 +78,12 @@ proof
 A1: for n st k<=n holds f.n=g;
 A2: now let p such that
 A3: 0 < p;
-  take k;
-  thus for m st k<=m holds abs(f.m-g)<p
-  proof let m such that
-A4: k<=m;
-    f.m = g by A4,A1;
+    reconsider k1=k as Element of NAT by ORDINAL1:def 13;
+    take k1;
+  thus for m being Element of NAT st k1<=m holds abs(f.m-g)<p
+  proof let m be Element of NAT;
+    assume k1<=m;
+    then f.m = g by A1;
     hence thesis by A3,ABSVALUE:7;
   end;
  end;
@@ -93,9 +94,11 @@ end;
 theorem Th4:
   (P * ASeq).n >= 0
 proof
+X0: n in NAT by ORDINAL1:def 13;
+  then
 A1: ASeq.n is Event of Sigma by PROB_1:57;
   dom (P * ASeq) = NAT by SEQ_1:3;then
-  (P * ASeq).n = P.(ASeq.n) by FUNCT_1:22;
+  (P * ASeq).n = P.(ASeq.n) by X0,FUNCT_1:22;
   hence thesis by A1,PROB_1:def 13;
 end;
 
@@ -104,11 +107,13 @@ theorem Th5:
 proof
   assume
 A1: ASeq.n c= BSeq.n;
+X0: n in NAT by ORDINAL1:def 13;
+  then
   ASeq.n in Sigma & BSeq.n in Sigma by PROB_1:def 9;then
   ASeq.n is Event of Sigma & BSeq.n is Event of Sigma by PROB_1:def 10;then
   P.(ASeq.n) <= P.(BSeq.n) by A1,PROB_1:70;then
-  (P * ASeq).n <= P.(BSeq.n) by PROB_2:11;
-  hence thesis by PROB_2:11;
+  (P * ASeq).n <= P.(BSeq.n) by X0,PROB_2:11;
+  hence thesis by X0,PROB_2:11;
 end;
 
 theorem Th6:
@@ -116,7 +121,7 @@ theorem Th6:
 proof assume
 A1: ASeq is non-decreasing;
 A2: dom (P * ASeq) = NAT by SEQ_1:3;
- now let n,m such that
+ now let n,m be Element of NAT such that
 A3: n <= m;
 A4: ASeq.n is Event of Sigma & ASeq.m is Event of Sigma by PROB_1:57;
 A5: ASeq.n c= ASeq.m by A3,A1,PROB_1:def 7;
@@ -131,7 +136,7 @@ theorem Th7:
 proof assume
 A1: ASeq is non-increasing;
 A2: dom (P * ASeq) = NAT by SEQ_1:3;
- now let n,m such that
+ now let n,m be Element of NAT such that
 A3: n <= m;
 A4: ASeq.n is Event of Sigma & ASeq.m is Event of Sigma by PROB_1:57;
 A5: ASeq.m c= ASeq.n by A3,A1,PROB_1:def 6;
@@ -151,19 +156,24 @@ proof
    defpred P[set,set,set] means
      for x,y being Subset of X,s being Nat holds
        s = $1 & x = $2 & y = $3 implies y = x /\ A1.(s+1);
-A1:for n being Nat for x being Subset of X
+A1:for n being Element of NAT for x being Subset of X
       ex y being Subset of X st P[n,x,y]
    proof
-     let n be Nat;
+     let n be Element of NAT;
      let x be Subset of X;
      take y = x /\ A1.(n+1);
      thus thesis;
    end;
    consider F being SetSequence of X such that
-A2:F.0 = A1.0 & for n being Element of NAT holds P[n,F.n,F.(n+1)]
+A2:F.0 = A1.0 and
+A3: for n being Element of NAT holds P[n,F.n,F.(n+1)]
    from RECDEF_1:sch 2(A1);
    take F;
-   thus thesis by A2;
+   thus F.0 = A1.0 by A2;
+   let n be Nat;
+   reconsider n as Element of NAT by ORDINAL1:def 13;
+   P[n,F.n,F.(n+1)] by A3;
+   hence thesis;
 end;
 
 theorem Th9:
@@ -176,19 +186,24 @@ proof
    defpred P[set,set,set] means
    for x,y being Subset of X,s being Nat holds
    (s = $1 & x = $2 & y = $3 implies y = x \/ A1.(s+1));
-A1:for n being Nat for x being Subset of X
+A1:for n being Element of NAT for x being Subset of X
       ex y being Subset of X st P[n,x,y]
    proof
-     let n be Nat;
+     let n be Element of NAT;
      let x be Subset of X;
      take y = x \/ A1.(n+1);
      thus thesis;
    end;
    consider F being SetSequence of X such that
-A2:F.0 = A1.0 & for n being Element of NAT holds P[n,F.n,F.(n+1)]
+A2:F.0 = A1.0 and
+A3:for n being Element of NAT holds P[n,F.n,F.(n+1)]
    from RECDEF_1:sch 2(A1);
    take F;
-   thus thesis by A2;
+   thus F.0 = A1.0 by A2;
+   let n be Nat;
+   reconsider n as Element of NAT by ORDINAL1:def 13;
+   P[n,F.n,F.(n+1)] by A3;
+   hence thesis;
 end;
 
 definition
@@ -206,7 +221,7 @@ A2:S2.0 = A1.0 &
    defpred P[set] means S1.$1 = S2.$1;
    for n being set holds n in NAT implies P[n]
    proof let n be set; assume n in NAT;then
-     reconsider n as Nat;
+     reconsider n as Element of NAT;
 A3:  P[0] by A1,A2;
 A4:  for k st P[k] holds P[k+1]
      proof
@@ -215,7 +230,7 @@ A4:  for k st P[k] holds P[k+1]
        hence S1.(k+1) = S2.k /\ A1.(k+1) by A1
             .= S2.(k+1) by A2;
      end;
-     for k being Nat holds P[k] from NAT_1:sch 1(A3,A4);
+     for k being Nat holds P[k] from NAT_1:sch 2(A3,A4);
      then S1.n = S2.n;
      hence thesis;
    end;
@@ -239,7 +254,7 @@ A2:S2.0 = A1.0 &
    for n being set holds n in NAT implies P[n]
    proof
      let n be set; assume n in NAT;then
-     reconsider n as Nat;
+     reconsider n as Element of NAT;
 A3:  P[0] by A1,A2;
 A4:  for k st P[k] holds P[k+1]
      proof
@@ -248,7 +263,7 @@ A4:  for k st P[k] holds P[k+1]
        hence S1.(k+1) = S2.k \/ A1.(k+1) by A1
             .= S2.(k+1) by A2;
      end;
-     for k being Nat holds P[k] from NAT_1:sch 1(A3,A4);
+     for k being Nat holds P[k] from NAT_1:sch 2(A3,A4);
      then S1.n = S2.n;
      hence thesis;
    end;
@@ -263,7 +278,7 @@ proof
   suppose n = 0;
     hence thesis by Def1;
   end;
-  suppose ex k st n = k+1;then
+  suppose ex k being Nat st n = k+1;then
     consider k such that
 A1: n = k+1;
     (Partial_Intersection A1).(k+1) = (Partial_Intersection A1).k /\ A1.(k+1)
@@ -279,7 +294,7 @@ proof
   suppose n = 0;
     hence thesis by Def2;
   end;
-  suppose ex k st n = k+1;then
+  suppose ex k being Nat st n = k+1;then
     consider k such that
 A1: n = k+1;
     (Partial_Union A1).(k+1) = (Partial_Union A1).k \/ A1.(k+1) by Def2;
@@ -290,7 +305,7 @@ end;
 theorem Th12:
   Partial_Intersection A1 is non-increasing
 proof
- now let n;
+ now let n be Element of NAT;
  (Partial_Intersection A1).(n+1) = (Partial_Intersection A1).n /\ A1.(n+1)
   by Def1;
  hence (Partial_Intersection A1).(n+1) c= (Partial_Intersection A1).n
@@ -302,7 +317,7 @@ end;
 theorem Th13:
   Partial_Union A1 is non-decreasing
 proof
-  now let n;
+  now let n be Element of NAT;
     (Partial_Union A1).(n+1) = (Partial_Union A1).n \/ A1.(n+1) by Def2;
     hence (Partial_Union A1).n c= (Partial_Union A1).(n+1) by XBOOLE_1:7;
   end;
@@ -318,9 +333,10 @@ A1: x in (Partial_Intersection A1).n;
     for k st k <= n holds x in A1.k
     proof let k such that
 A2:   k <= n;
+X0:   n in NAT & k in NAT by ORDINAL1:def 13;
       Partial_Intersection A1 is non-increasing by Th12;then
 A3:   (Partial_Intersection A1).n c= (Partial_Intersection A1).k
-        by A2,PROB_1:def 6;
+        by A2,PROB_1:def 6,X0;
       (Partial_Intersection A1).k c= A1.k by Th10;then
       (Partial_Intersection A1).n c= A1.k by A3,XBOOLE_1:1;
       hence thesis by A1;
@@ -349,7 +365,7 @@ A8:   now let k such that
         (Partial_Intersection A1).i /\ A1.(i+1) by Def1;
       hence thesis by A6,A8,A10,XBOOLE_0:def 3;
     end;
-   for n holds P[n] from NAT_1:sch 1(A4,A5);
+   for n holds P[n] from NAT_1:sch 2(A4,A5);
    hence thesis;
 end;
 
@@ -383,15 +399,16 @@ A6: (Partial_Union A1).(i+1) = (Partial_Union A1).i \/ A1.(i+1) by Def2;
     end;
      hence thesis;
     end;
-  for n holds P[n] from NAT_1:sch 1(A1,A3);
+  for n holds P[n] from NAT_1:sch 2(A1,A3);
   hence x in (Partial_Union A1).n implies ex k st k <= n & x in A1.k;
   given i such that
 A8: i <= n and
 A9: x in A1.i;
     A1.i c= (Partial_Union A1).i by Th11;then
 A10: x in (Partial_Union A1).i by A9;
+X0:  n in NAT & i in NAT by ORDINAL1:def 13;
      Partial_Union A1 is non-decreasing by Th13;then
-     (Partial_Union A1).i c= (Partial_Union A1).n by A8,PROB_1:def 7;
+     (Partial_Union A1).i c= (Partial_Union A1).n by A8,PROB_1:def 7,X0;
  hence thesis by A10;
 end;
 
@@ -402,8 +419,8 @@ proof
  proof
    let x; assume
 A1: x in Intersection Partial_Intersection A1;
-   for n holds x in A1.n
-   proof let n;
+   for n be Element of NAT holds x in A1.n
+   proof let n be Element of NAT;
      x in (Partial_Intersection A1).n by A1,PROB_1:29;
      hence thesis by Th14;
    end;
@@ -411,9 +428,14 @@ A1: x in Intersection Partial_Intersection A1;
  end;
     let x; assume
 A2: x in Intersection A1;
-    for n holds x in (Partial_Intersection A1).n
-    proof let n;
-      for k st k <= n holds x in A1.k by A2,PROB_1:29;
+    for n be Element of NAT holds x in (Partial_Intersection A1).n
+    proof let n be Element of NAT;
+      for k st k <= n holds x in A1.k
+      proof
+        let k;
+        k in NAT by ORDINAL1:def 13;
+        hence thesis by A2,PROB_1:29;
+      end;
       hence thesis by Th14;
     end;
     hence thesis by PROB_1:29;
@@ -425,15 +447,16 @@ proof
   thus Union Partial_Union A1 c= Union A1
   proof
     let x be set; assume x in Union Partial_Union A1;then
-    consider n such that
+    consider n being Element of NAT such that
 A1: x in (Partial_Union A1).n by PROB_1:25;
     consider k such that
 A2: k <= n & x in A1.k by A1,Th15;
-    thus thesis by A2,PROB_1:25;
+    k in NAT by ORDINAL1:def 13;
+    hence thesis by A2,PROB_1:25;
   end;
     let x be set;
     assume x in Union A1;then
-    consider n such that
+    consider n being Element of NAT such that
 A3: x in A1.n by PROB_1:25;
     x in (Partial_Union A1).n by A3,Th15;
     hence thesis by PROB_1:25;
@@ -449,23 +472,25 @@ proof
    defpred P[set,set,set] means
    for x,y being Subset of X,s being Nat holds
    (s = $1 & x = $2 & y = $3 implies y = A1.(s+1) \ (Partial_Union A1).s);
-A1:for n being Nat for x being Subset of X
+A1:for n being Element of NAT for x being Subset of X
      ex y being Subset of X st P[n,x,y]
    proof
-     let n be Nat;
+     let n be Element of NAT;
      let x be Subset of X;
      take y = A1.(n+1) \ (Partial_Union A1).n;
      thus thesis;
    end;
    set A = A1.0;
    consider F being SetSequence of X such that
-A2:(F.0 = A & for n being Element of NAT holds P[n,F.n,F.(n+1)])
+A2: F.0 = A & for n being Element of NAT holds P[n,F.n,F.(n+1)]
      from RECDEF_1:sch 2(A1);
    for n holds F.(n+1) = A1.(n+1) \ (Partial_Union A1).n
    proof let n;
+     reconsider n1 = n as Element of NAT by ORDINAL1:def 13;
      for x,y being Subset of X,s being Nat holds
-     (s = n & x = F.n & y = F.(n+1) implies
-     y = A1.(s+1) \ (Partial_Union A1).s) by A2;
+     s = n1 & x = F.n1 & y = F.(n1+1) implies
+     y = A1.(s+1) \ (Partial_Union A1).s by A2;
+     then F.(n1+1) = A1.(n1+1) \ (Partial_Union A1).n1;
      hence thesis;
    end;
    hence thesis by A2;
@@ -486,14 +511,14 @@ A2:S2.0 = A1.0 &
    defpred P[set] means S1.$1 = S2.$1;
    for n being set holds n in NAT implies P[n]
    proof let n be set; assume n in NAT;then
-     reconsider n as Nat;
+     reconsider n as Element of NAT;
  A3: P[0] by A1,A2;
  A4: for k st P[k] holds P[k+1]
      proof let k; assume S1.k = S2.k;
        thus S1.(k+1) = A1.(k+1) \ (Partial_Union A1).k by A1
              .= S2.(k+1) by A2;
      end;
-     for k being Nat holds P[k] from NAT_1:sch 1(A3,A4);
+     for k being Nat holds P[k] from NAT_1:sch 2(A3,A4);
      then S1.n = S2.n;
      hence thesis;
    end;
@@ -523,7 +548,7 @@ A4: x in A1.n & not x in (Partial_Union A1).n1 by A2,XBOOLE_0:def 4;
        k <= n1 by A2,NAT_1:38;
        hence thesis by A4,Th15;
      end;
-     hence thesis by A3,A2,XBOOLE_0:def 4;
+     hence thesis by A3,A2;
    end;
    end;
   hence thesis;
@@ -568,7 +593,7 @@ end;
 theorem Th22:
   Partial_Union (Partial_Diff_Union A1) = Partial_Union A1
 proof
- for n holds (Partial_Union (Partial_Diff_Union A1)).n
+ for n being Element of NAT holds (Partial_Union (Partial_Diff_Union A1)).n
     = (Partial_Union A1).n
  proof
    set A2 = Partial_Diff_Union A1;
@@ -577,8 +602,8 @@ proof
    (Partial_Union (Partial_Diff_Union A1)).0 = A2.0 by Def2
        .= A1.0 by Def3 .= (Partial_Union A1).0 by Def2; then
 A1:P[0];
-A2:for k st P[k] holds P[k+1]
-   proof let k such that
+A2:for k be Element of NAT st P[k] holds P[k+1]
+   proof let k be Element of NAT such that
 A3:  (Partial_Union A2).k = (Partial_Union A1).k;
      thus (Partial_Union A2).(k+1)
        = A2.(k+1) \/ (Partial_Union A2).k by Def2
@@ -586,7 +611,7 @@ A3:  (Partial_Union A2).k = (Partial_Union A1).k;
       .= A1.(k+1) \/ (Partial_Union A1).k by XBOOLE_1:39
       .= (Partial_Union A1).(k+1) by Def2;
    end;
-   thus for k being Nat holds P[k] from NAT_1:sch 1(A1,A2);
+   thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
  end;
  hence thesis by FUNCT_2:113;
 end;
@@ -610,6 +635,7 @@ definition let X,A1;
     now let x,y; assume A2:x <> y;
       per cases;
       suppose x in dom A1 & y in dom A1;
+        then x is Nat & y is Nat by ORDINAL1:def 13;
         hence A1.x misses A1.y by A1,A2;
       end;
       suppose not (x in dom A1 & y in dom A1);
@@ -657,8 +683,9 @@ definition
     defpred P[set] means (Partial_Intersection XSeq).$1 in Si;
     (Partial_Intersection XSeq).0 = XSeq.0 by Def1; then
 A1: P[0] by PROB_1:def 9;
-A2: for k st P[k] holds P[k+1]
-    proof let k; assume (Partial_Intersection XSeq).k in Si;then
+A2: for k be Element of NAT st P[k] holds P[k+1]
+    proof let k be Element of NAT;
+      assume (Partial_Intersection XSeq).k in Si;then
   A3: (Partial_Intersection XSeq).k is Event of Si by PROB_1:def 10;
       XSeq.(k+1) in Si by PROB_1:def 9;then
       XSeq.(k+1) is Event of Si by PROB_1:def 10;then
@@ -667,7 +694,7 @@ A2: for k st P[k] holds P[k+1]
       (Partial_Intersection XSeq).k /\ XSeq.(k+1) in Si by PROB_1:def 10;
       hence thesis by Def1;
     end;
-    for k being Nat holds P[k] from NAT_1:sch 1(A1,A2);
+    for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
     hence thesis by PROB_1:def 9;
   end;
 end;
@@ -682,8 +709,8 @@ definition let X be set,
     defpred P[set] means (Partial_Union XSeq).$1 in Si;
     (Partial_Union XSeq).0 = XSeq.0 by Def2; then
 A1: P[0] by PROB_1:def 9;
-A2: for k st P[k] holds P[k+1]
-    proof let k; assume (Partial_Union XSeq).k in Si;then
+A2: for k be Element of NAT st P[k] holds P[k+1]
+    proof let k be Element of NAT; assume (Partial_Union XSeq).k in Si;then
   A3: (Partial_Union XSeq).k is Event of Si by PROB_1:def 10;
       XSeq.(k+1) in Si by PROB_1:def 9;then
       XSeq.(k+1) is Event of Si by PROB_1:def 10;then
@@ -692,7 +719,7 @@ A2: for k st P[k] holds P[k+1]
       (Partial_Union XSeq).k \/ XSeq.(k+1) in Si by PROB_1:def 10;
       hence thesis by Def2;
     end;
-    for k being Nat holds P[k] from NAT_1:sch 1(A1,A2);
+    for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
     hence thesis by PROB_1:def 9;
   end;
 end;
@@ -709,15 +736,16 @@ A1: (Partial_Diff_Union XSeq).0 in Si
       (Partial_Diff_Union XSeq).0 = XSeq.0 by Def3;
       hence thesis by PROB_1:def 9;
     end;
-    for m being Nat holds (Partial_Diff_Union XSeq).m in Si
-    proof let m be Nat;
+    for m being Element of NAT holds (Partial_Diff_Union XSeq).m in Si
+    proof let m be Element of NAT;
       now per cases by NAT_1:22;
         case m = 0;
           hence thesis by A1;
         end;
-        case ex k st m = k+1;then
-          consider k such that
+        case ex k being Nat st m = k+1;then
+          consider k being Nat such that
 A2:       m = k+1;
+          reconsider k as Element of NAT by ORDINAL1:def 13;
           Partial_Union XSeq = @Partial_Union XSeq;then
           (Partial_Union XSeq).k in Si &
           XSeq.(k+1) in Si by PROB_1:def 9;then
@@ -805,7 +833,11 @@ end;
 theorem
   Partial_Sums(P * ASeq) is non-decreasing
 proof
-  for n holds (P * ASeq).n >= 0 by Th4;
+  for n being Element of NAT holds (P * ASeq).n >= 0
+  proof
+    let n be Element of NAT;
+    thus thesis by Th4;
+  end;
   hence thesis by SERIES_1:19;
 end;
 
@@ -849,7 +881,8 @@ A2: n < m;
 A3: x in (@Partial_Union ASeq).n & x in ASeq.m by XBOOLE_0:3;
     consider k being Nat such that
 A4: k <= n & x in ASeq.k by A3,Th15;
-    ASeq.k misses ASeq.m by A2,A4,A1,PROB_2:def 4;then
+    m in NAT & k in NAT by ORDINAL1:def 13;
+    then ASeq.k misses ASeq.m by A2,A4,A1,PROB_2:def 4;then
     ASeq.k /\ ASeq.m = {} by XBOOLE_0:def 7;
     hence contradiction by A3,A4,XBOOLE_0:def 3;
   end;
@@ -868,6 +901,7 @@ A4: for k st P[k] holds P[k+1]
 A5:  (P * @Partial_Union ASeq).k = Partial_Sums(P * ASeq).k;
       k < k+1 by NAT_1:38;then
 A6:  (@Partial_Union ASeq).k misses ASeq.(k+1) by A1,Th47;
+     reconsider k as Element of NAT by ORDINAL1:def 13;
 A7:  ASeq.(k+1) is Event of Sigma &
          (@Partial_Union ASeq).k is Event of Sigma by PROB_1:57;
 A8:  (P * @Partial_Union ASeq).(k+1)
@@ -881,17 +915,22 @@ A8:  (P * @Partial_Union ASeq).(k+1)
          .=Partial_Sums(P * ASeq).k + P.(ASeq.(k+1)) by A2,FUNCT_1:22;
       hence thesis by A8,A5;
     end;
-    for k holds P[k] from NAT_1:sch 1(A3,A4);
+    for k holds P[k] from NAT_1:sch 2(A3,A4);
     hence thesis;
   end;
 
 theorem Th49:
   ASeq is disjoint_valued implies
     (P * @Partial_Union ASeq) = Partial_Sums(P * ASeq)
-proof assume ASeq is disjoint_valued;then
-  (P * @Partial_Union ASeq).n = Partial_Sums(P * ASeq).n by Th48;
-  hence thesis by FUNCT_2:113;
-end;
+    proof
+      assume
+A1:   ASeq is disjoint_valued;
+      now
+        let n be Element of NAT;
+        thus (P * @Partial_Union ASeq).n = Partial_Sums(P * ASeq).n by A1,Th48;
+      end;
+      hence thesis by FUNCT_2:113;
+    end;
 
 theorem Th50:
   ASeq is disjoint_valued implies
@@ -929,26 +968,30 @@ end;
 theorem Th52:
   ex F1 being FinSequence of bool X st
     for k st k in dom F1 holds F1.k = X
-  proof now let n;
-    deffunc P(Nat) = X;
-    ex F being FinSequence st len F = n &
-      for k st k in Seg n holds F.k = P(k) from FINSEQ_1:sch 2;then
-    consider F1 being FinSequence such that
-A1: len F1 = n & for k st k in Seg n holds F1.k = X;
-A2: Seg len F1 = dom F1 by FINSEQ_1:def 3;
-    rng F1 c= bool X
-    proof let x; assume x in rng F1;then
-      consider i such that
-A3:   i in dom F1 & F1.i = x by FINSEQ_2:11;
-      x = X by A1,A2,A3;
-      hence thesis by ZFMISC_1:def 1;
-    end;then
-    F1 is FinSequence of bool X by FINSEQ_1:def 4;
-    hence thesis by A1,A2;
+  proof
+    now let n be Element of NAT;
+      deffunc P(Nat) = X;
+      ex F being FinSequence st len F = n &
+      for k being Element of NAT st k in Seg n holds F.k = P(k)
+      from FINSEQ_1:sch 2;then
+      consider F1 being FinSequence such that
+A1:   len F1 = n & for k being Element of NAT st k in Seg n holds F1.k = X;
+A2:   Seg len F1 = dom F1 by FINSEQ_1:def 3;
+      rng F1 c= bool X
+      proof let x; assume x in rng F1;then
+        consider i be Element of NAT such that
+A3:     i in dom F1 & F1.i = x by FINSEQ_2:11;
+        x = X by A1,A2,A3;
+        hence thesis by ZFMISC_1:def 1;
+      end;
+      then
+A5:   F1 is FinSequence of bool X by FINSEQ_1:def 4;
+      for k st k in Seg n holds F1.k = X by A1;
+      hence thesis by A1,A2,A5;
+    end;
+    hence thesis;
   end;
-  hence thesis;
-end;
-
+  
 theorem
   for F1 being FinSequence of bool X holds union rng F1 is Subset of X;
 
@@ -974,7 +1017,7 @@ A1: for x holds x in Y iff ex k st k in dom F1 & x in F1.k
       proof assume x in Y;
         then consider Z such that
 A2:     x in Z & Z in rng F1 by TARSKI:def 4;
-        consider i such that
+        consider i being Element of NAT such that
 A3:     i in dom F1 & Z = F1.i by A2,FINSEQ_2:11;
         thus thesis by A2,A3;
       end;
@@ -998,7 +1041,8 @@ existence
    deffunc F(Nat) = (F1.$1)`;
    consider f being FinSequence of bool X such that
 A1:len f = len F1 &
-   for n st n in Seg len F1 holds f.n = F(n) from FINSEQ_2:sch 1;
+   for n being Element of NAT st n in Seg len F1 holds f.n = F(n)
+   from FINSEQ_2:sch 1;
    take f;
   Seg len F1 = dom f by A1,FINSEQ_1:def 3;
   hence thesis by A1;
@@ -1007,16 +1051,15 @@ A1:len f = len F1 &
     proof let F2,F3 be FinSequence of bool X such that
 A2: len F2 = len F1 & for n st n in dom F2 holds F2.n = (F1.n)` and
 A3: len F3 = len F1 & for n st n in dom F3 holds F3.n = (F1.n)`;
-    dom F2 = dom F3 & (for k st k in dom F2 holds F2.k = F3.k)
+    dom F2 = dom F3 &
+    for k being Element of NAT st k in dom F2 holds F2.k = F3.k
     proof
+      thus 
 A4:   dom F2 = Seg len F3 by FINSEQ_1:def 3,A2,A3
               .= dom F3 by FINSEQ_1:def 3;
-      for k st k in dom F2 holds F2.k = F3.k
-      proof let k; assume
-A5:     k in dom F2;
-        hence F2.k = (F1.k)` by A2 .= F3.k by A5,A4,A3;
-      end;
-      hence thesis by A4;
+      let k be Element of NAT; assume
+A5:   k in dom F2;
+      hence F2.k = (F1.k)` by A2 .= F3.k by A5,A4,A3;
     end;
     hence thesis by FINSEQ_1:17;
   end;
@@ -1074,7 +1117,7 @@ A9: n in dom F1;
     hence x in F1.n by A9,A3;
     end;
     assume A10:for n st n in dom F1 holds x in F1.n;
-A11:  now let n such that
+A11:  now let n be Element of NAT such that
    A12: n in dom F1;
        x in F1.n by A12,A10;
        then x in X \ (Complement F1).n by A12,A3;
@@ -1106,8 +1149,10 @@ A2: now let x; assume
        now let Y;
         assume Y in rng F1;
         then consider n be set such that
-A6:    n in dom F1 & Y = F1.n by FUNCT_1:def 5;
-        thus x in Y by A5,A6;
+A6:     n in dom F1 & Y = F1.n by FUNCT_1:def 5;
+        reconsider n as Element of NAT by A6;
+        n in dom F1 & Y = F1.n by A6;
+        hence x in Y by A5;
        end;
      hence x in meet rng F1 by A1,SETFAM_1:def 1;
     end;
@@ -1168,7 +1213,10 @@ A3:   F1.x in rng F1 by FUNCT_1:12;
     end;
     then reconsider f as SetSequence of X by A1,FUNCT_2:5;
     take f;
-    thus thesis by A1;
+    thus for k st k in dom F1 holds f.k = F1.k by A1;
+    let k;
+    k in NAT by ORDINAL1:def 13;
+    hence thesis by A1;
   end;
 
 theorem Th60:
@@ -1189,7 +1237,7 @@ A1: (for k st k in dom F1 holds A1.k = F1.k) &
     proof
       thus Union A1 c= Union F1
       proof let x;assume x in Union A1;then
-        consider n such that
+        consider n being Element of NAT such that
 A2:     x in A1.n by PROB_1:25;
 A3:     n in dom F1 by A1,A2;then
         x in F1.n by A2,A1;
@@ -1198,8 +1246,9 @@ A3:     n in dom F1 by A1,A2;then
       let x;assume x in Union F1;then
       consider n such that
 A4:   n in dom F1 & x in F1.n by Th54;
+X0:   n in NAT by ORDINAL1:def 13;
       x in A1.n by A4,A1;
-      hence thesis by PROB_1:25;
+      hence thesis by X0,PROB_1:25;
     end;
   end;
 
@@ -1247,8 +1296,8 @@ proof let FSi be FinSequence of Si;
   consider A1 being SetSequence of X such that
 A1: (for k st k in dom FSi holds A1.k = FSi.k) &
     (for k st not k in dom FSi holds A1.k = {}) by Th59;
-  for n holds A1.n in Si
-  proof let n;
+    for n being Element of NAT holds A1.n in Si
+  proof let n be Element of NAT;
     per cases;
     suppose not n in dom FSi;then
       A1.n = {} by A1;
@@ -1316,7 +1365,7 @@ proof
            by FUNCT_1:21;
     assume
 A1: x in dom FSeq;then
-    reconsider k=x as Nat;
+    reconsider k=x as Element of NAT;
     FSeq.k in Sigma by A1,Def10;then
     FSeq.k in dom P by FUNCT_2:def 1;
     hence thesis by A1,FUNCT_1:21;
@@ -1328,7 +1377,7 @@ theorem Th65:
   P * FSeq is FinSequence of REAL
   proof
     dom (P * FSeq) = dom FSeq by Th64;then
-    ex n st dom (P * FSeq) = Seg n by FINSEQ_1:def 2;then
+    ex n being Element of NAT st dom (P * FSeq) = Seg n by FINSEQ_1:def 2;then
     reconsider RSeq = P * FSeq as FinSequence by FINSEQ_1:def 2;
     rng (P * FSeq) c= REAL; then
     rng RSeq c= REAL;
@@ -1364,16 +1413,18 @@ theorem Th68:
   proof assume len RFin >= 1;then
     consider f be Function of NAT,REAL such that
 A1: f.1 = RFin.1 &
-    (for n st 0 <> n & n < len RFin holds
+    (for n being Element of NAT st 0 <> n & n < len RFin holds
       f.(n+1) = addreal.(f.n,RFin.(n+1))) &
       addreal "**" RFin = f.(len RFin) by FINSOP_1:2;
 A2: for n st 0 <> n & n < len RFin holds f.(n+1) = f.n+ RFin.(n+1)
-    proof let n; assume
+    proof let n;
+      reconsider n1=n as Element of NAT by ORDINAL1:def 13;
+      assume
 A3:   0 <> n & n < len RFin; then
       n+1 in Seg len RFin by FINSEQ_3:12;then
       n+1 in dom RFin by FINSEQ_1:def 3;then
-A4:   f.n is Real & RFin.(n+1) is Real by FINSEQ_2:13;
-      thus f.(n+1) = addreal.(f.n,RFin.(n+1)) by A3,A1
+A4:   f.n1 is Real & RFin.(n1+1) is Real by FINSEQ_2:13;
+      thus f.(n+1) = addreal.(f.n1,RFin.(n1+1)) by A3,A1
                   .= f.n+ RFin.(n+1) by A4,BINOP_2:def 9;
     end;
     take f;
@@ -1400,20 +1451,22 @@ A3: (P * ASeq).0 = 0 & for m being Nat holds (P * ASeq).((len FSeq + 1) + m)=0
     thus for m being Nat holds (P * ASeq).((len FSeq + 1) + m)=0
     proof
      let m be Nat;
+     reconsider m1=m as Element of NAT by ORDINAL1:def 13;
      set k=len FSeq + 1;
      k + m >= k by NAT_1:29;then
      len FSeq + 1 + m > len FSeq by Lm1;then
      not len FSeq + 1 + m in dom FSeq by FINSEQ_3:27;then
 A4: ASeq.((len FSeq + 1) + m) = {} by A1;
      thus (P * ASeq).((len FSeq + 1) + m)
-            = P.(ASeq.((len FSeq + 1) + m)) by PROB_2:11
+            = P.(ASeq.((len FSeq + 1) + m1)) by PROB_2:11
            .= 0 by A4,PROB_1:64;
      end;
     end;
 A5: for k st k in dom FSeq holds (P * ASeq).k = (P * FSeq).k
     proof let k such that
 A6:  k in dom FSeq;
-      thus (P * ASeq).k = P.(ASeq.k) by PROB_2:11
+     k in NAT by ORDINAL1:def 13;
+     hence (P * ASeq).k = P.(ASeq.k) by PROB_2:11
                  .= P.(FSeq.k) by A6,A1
                  .= (P * FSeq).k by A6,FUNCT_1:23;
     end;
@@ -1433,8 +1486,9 @@ A9:  1 in dom FSeq by Th2;
       proof let m; assume m <> 0 & m < len FSeq; then
         m+1 in Seg len FSeq by FINSEQ_3:12;then
 A10:    m+1 in dom FSeq by FINSEQ_1:def 3;
+        reconsider m1 = m as Element of NAT by ORDINAL1:def 13;
         thus Partial_Sums(P*ASeq).(m+1)
-          = Partial_Sums(P*ASeq).m+(P*ASeq).(m+1) by SERIES_1:def 1
+          = Partial_Sums(P*ASeq).m1+(P*ASeq).(m1+1) by SERIES_1:def 1
          .= Partial_Sums(P*ASeq).m+(P*FSeq).(m+1) by A10,A5;
       end;
     end;
@@ -1449,13 +1503,14 @@ A12: for k st P[k] holds P[k+1]
     proof let k such that
 A13:  Partial_Sums(P * ASeq).((len FSeq + 1) + k)
         = Partial_Sums(P * ASeq).(len FSeq);
+        reconsider k1 = k as Element of NAT by ORDINAL1:def 13;
       Partial_Sums(P * ASeq).((len FSeq + 1 + k)+1)
-        = Partial_Sums(P * ASeq).(len FSeq + 1 + k) +
-          (P * ASeq).((len FSeq + 1) + (k+1)) by SERIES_1:def 1
+        = Partial_Sums(P * ASeq).(len FSeq + 1 + k1) +
+          (P * ASeq).((len FSeq + 1) + (k1+1)) by SERIES_1:def 1
        .= Partial_Sums(P * ASeq).(len FSeq + 1 + k) + 0 by A3;
       hence thesis by A13;
     end;
-A14: for k holds P[k] from NAT_1:sch 1(A11,A12);
+A14: for k holds P[k] from NAT_1:sch 2(A11,A12);
 A15: Partial_Sums(P * ASeq) is convergent &
     Sum(P * ASeq) = Partial_Sums(P * ASeq).(len FSeq)
     proof
@@ -1463,7 +1518,7 @@ A15: Partial_Sums(P * ASeq) is convergent &
         Partial_Sums(P * ASeq).m = Partial_Sums(P * ASeq).(len FSeq)
       proof let m such that
 A16:     len FSeq + 1 <= m;
-        consider k such that
+        consider k being Nat such that
    A17:  m = (len FSeq + 1) + k by A16,NAT_1:28;
         thus thesis by A17,A14;
       end;then
@@ -1500,7 +1555,7 @@ A24:     seq1.1 = (P * FSeq).1 &
         proof
 A25:       for x st x in NAT ex y st P[x,y]
           proof let x be set; assume x in NAT;then
-            reconsider n=x as Nat;
+            reconsider n=x as Element of NAT;
             now per cases;
             case n=0;
               hence P[x,0];
@@ -1530,7 +1585,8 @@ A27:  dom f=NAT &
      reconsider f as Real_Sequence by A27,SEQ_1:3;
      take seq=f;
      let n;
-     ex k st k=n &
+     n in NAT by ORDINAL1:def 13;
+     then ex k st k=n &
      (k=0 implies seq.n=0) &
        (k<>0 & k <= len (P * FSeq) implies seq.n=seq1.k) &
        (k<>0 & k > len (P * FSeq) implies
@@ -1558,18 +1614,17 @@ A27:  dom f=NAT &
             case A33: k <> 0 & k <= len (P * FSeq) -1;then
        A34: k + 0 < (len (P * FSeq) - 1) + 1 by XREAL_1:10;then
        A35: k < len FSeq by Th66;
-       A36: k+1 <> 0 by NAT_1:21;
             k+1 <= len (P * FSeq) -1 +1 by A33,XREAL_1:9;
-            hence seq2.(k+1) = seq1.(k+1) by A36,A28
+            hence seq2.(k+1) = seq1.(k+1) by A28
               .= seq1.k + (P * FSeq).(k+1) by A33,A34,A24
               .= Partial_Sums(P * ASeq).k + (P * FSeq).(k+1) by A32,A33,A34,A28
               .= Partial_Sums(P * ASeq).(k+1) by A21,NAT_1:39,A33,A35,A8;
             end;
             case k <> 0 & not k <= len (P * FSeq) - 1; then
          A37: k+1 <> 0 & k+1 > len (P * FSeq) - 1 + 1
-                by NAT_1:21,XREAL_1:10;then
+                by XREAL_1:10;then
               k+1 >= len (P * FSeq) + 1 by NAT_1:38;then
-              consider i such that
+              consider i being Nat such that
          A38: k+1 = len (P * FSeq) + 1 + i by NAT_1:28;
               thus seq2.(k+1)
                 = Partial_Sums(P * ASeq).(len (P * FSeq)) by A37,A28
@@ -1580,7 +1635,7 @@ A27:  dom f=NAT &
           end;
           hence thesis;
         end;
-        for k holds P[k] from NAT_1:sch 1(A30,A31);
+        for k holds P[k] from NAT_1:sch 2(A30,A31);
         hence Sum(P * FSeq) = Partial_Sums(P * ASeq).(len (P * FSeq)) by A29
                    .= Sum(P * ASeq) by Th66,A15;
      end;
@@ -1589,11 +1644,12 @@ A27:  dom f=NAT &
   end;
 A39: @Partial_Diff_Union ASeq is disjoint_valued by Th24;
 A40: Partial_Sums(P * @Partial_Diff_Union ASeq) is convergent by A39,Th50;
-  now let n;
+  now let n be Element of NAT;
     (@Partial_Diff_Union ASeq).n c= ASeq.n by Th20;
     hence (P * @Partial_Diff_Union ASeq).n <= (P * ASeq).n by Th5;
   end; then
-  for n holds (Partial_Sums(P * @Partial_Diff_Union ASeq)).n
+  for n being Element of NAT holds
+  (Partial_Sums(P * @Partial_Diff_Union ASeq)).n
      <= (Partial_Sums(P * ASeq)).n by SERIES_1:17;then
   lim Partial_Sums(P * @Partial_Diff_Union ASeq)
      <= lim Partial_Sums(P * ASeq) by A15,A40,SEQ_2:32;then
@@ -1617,8 +1673,8 @@ A1:(for k st k in dom FSeq holds ASeq.k = FSeq.k) &
 A2: FSeq is disjoint_valued implies ASeq is disjoint_valued
   proof assume
 A3: FSeq is disjoint_valued;
-    for m,n st m <> n holds ASeq.m misses ASeq.n
-    proof let m,n such that
+    for m,n being Element of NAT st m <> n holds ASeq.m misses ASeq.n
+    proof let m,n be Element of NAT such that
 A4:   m <> n;
       per cases;
       suppose A5: m in dom FSeq & n in dom FSeq;
@@ -1789,29 +1845,34 @@ proof let F be Field_Subset of X;
   proof assume F is SigmaField of X;then
       reconsider F as SigmaField of X;
       for A1 being SetSequence of X st A1 is non-decreasing &
-       (for n holds A1.n in F) holds Union A1 in F
+      (for n holds A1.n in F) holds Union A1 in F
       proof let A1 be SetSequence of X; assume that
       A1: A1 is non-decreasing & for n holds A1.n in F;
-          reconsider A2=A1 as SetSequence of F by A1,PROB_1:def 9;
+      for n being Element of NAT holds A1.n in F by A1;
+      then reconsider A2=A1 as SetSequence of F by PROB_1:def 9;
           Union A2 in F by PROB_1:46;
           hence thesis;
       end;then
   A2: F is non-decreasing-closed by Def12;
-      for A1 being SetSequence of X st A1 is non-increasing &
-       (for n holds A1.n in F) holds Intersection A1 in F
-       by PROB_1:def 8;then
-      F is non-increasing-closed by Def13;
+      F is non-increasing-closed
+      proof
+        let A1 be SetSequence of X such that
+        A1 is non-increasing;
+        assume for n  holds A1.n in F;
+        then for n being Element of NAT holds A1.n in F;
+        hence Intersection A1 in F by PROB_1:def 8;
+      end;
    hence thesis by A2,Def14;
   end; assume F is MonotoneClass of X;then
 A3: F is non-increasing-closed & F is non-decreasing-closed by Def14;
   (for A1 being SetSequence of X st
-  (for n holds A1.n in F) holds Intersection A1 in F) &
+  (for n being Element of NAT holds A1.n in F) holds Intersection A1 in F) &
   (for A being Subset of X st A in F holds A` in F)
   proof
-    thus (for A1 being SetSequence of X st
-      (for n holds A1.n in F) holds Intersection A1 in F)
+    thus for A1 being SetSequence of X st
+    (for n being Element of NAT holds A1.n in F) holds Intersection A1 in F
     proof let A1 such that
-A4:   for n holds A1.n in F;
+A4:   for n being Element of NAT holds A1.n in F;
       set A2 = Partial_Intersection A1;
       defpred P[Nat] means A2.$1 in F;
       A2.0 = A1.0 by Def1; then
@@ -1819,11 +1880,13 @@ A5:   P[0] by A4;
 A6:   for k st P[k] holds P[k+1]
       proof let k;assume
 A7:     A2.k in F;
+        k+1 in NAT by ORDINAL1:def 13;
+        then
 A8:     A1.(k+1) in F by A4;
         A2.(k+1) = A2.k /\ A1.(k+1) by Def1;
         hence A2.(k+1) in F by A7,A8,FINSUB_1:def 2;
       end;
-A9:   for k holds P[k] from NAT_1:sch 1(A5,A6);
+A9:   for k holds P[k] from NAT_1:sch 2(A5,A6);
       A2 is non-increasing by Th12;then
       Intersection A2 in F by A3,A9,Def13;
       hence thesis by Th16;
@@ -1951,25 +2014,28 @@ A11:       A1 is convergent by A8,SETLIM_1:71;
 A12:       A1 (\) y is monotone by A8,SETLIM_2:32;
           for n holds (A1 (\) y).n in Z1
           proof let n;
+X0:         n in NAT by ORDINAL1:def 13;
             A1.n in Y by A9;then
             A1.n \ y in Z1 by A6,A2;
-            hence thesis by SETLIM_2:def 8;
+            hence thesis by X0,SETLIM_2:def 8;
           end;then
 A13:       lim (A1 (\) y) in Z1 by A12,Th74;
 A14:       y (\) A1 is monotone by A8,SETLIM_2:29;
-          for n holds (y (\) A1).n in Z1
+          for n  holds (y (\) A1).n in Z1
           proof let n;
+X0:         n in NAT by ORDINAL1:def 13;
             A1.n in Y by A9;then
             y \ A1.n in Z1 by A6,A2;
-            hence thesis by SETLIM_2:def 7;
+            hence thesis by X0,SETLIM_2:def 7;
           end;then
 A15:      lim (y (\) A1) in Z1 by A14,Th74;
 A16:      y (/\) A1 is monotone by A8,SETLIM_2:23;
           for n holds (y (/\) A1).n in Z1
           proof let n;
+X0:         n in NAT by ORDINAL1:def 13;
             A1.n in Y by A9;then
             y /\ A1.n in Z1 by A6,A2;
-            hence thesis by SETLIM_2:def 5;
+            hence thesis by X0,SETLIM_2:def 5;
           end;then
           lim (y (/\) A1) in Z1 by A16,Th74;then
           lim A1 is Element of Z1 & lim A1 \ y in Z1 & y \ lim A1 in Z1 &

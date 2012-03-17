@@ -12,12 +12,13 @@ environ
       FUNCOP_1, UNIALG_2, MSATERM, PRELAMB, REALSET1, FUNCT_6, CARD_1,
       FINSET_1, SQUARE_1, PRALG_2, SEQM_3, CIRCUIT2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
-      FUNCT_2, FUNCT_4, NAT_1, FINSEQ_1, FINSET_1, TREES_2, TREES_3, TREES_4,
+      FUNCT_2, FUNCT_4, XCMPLX_0,
+      NAT_1, FINSEQ_1, FINSET_1, TREES_2, TREES_3, TREES_4,
       GROUP_1, CARD_1, CARD_3, FINSEQ_4, FUNCT_6, LANG1, DTCONSTR, PBOOLE,
       FUNCOP_1, STRUCT_0, PRALG_1, MSUALG_1, MSUALG_2, MSUALG_3, MSAFREE,
       PRE_CIRC, MSAFREE2, CIRCUIT1, MSATERM, XXREAL_0;
  constructors FRAENKEL, XXREAL_0, NAT_1, FINSEQ_4, PRALG_1, MSUALG_3, MSATERM,
-      CIRCUIT1;
+      CIRCUIT1, ARYTM_3;
  registrations MSUALG_1, DTCONSTR, PRE_CIRC, MSAFREE, MSAFREE2, CIRCUIT1,
       TREES_3, PRALG_1, FUNCT_1, MSUALG_3, RELSET_1, STRUCT_0, FINSEQ_1,
       FINSET_1, ARYTM_3, MEMBERED, XREAL_0, ORDINAL2, FUNCOP_1, PBOOLE,
@@ -68,7 +69,7 @@ A5:    dom HHp = dom HH by PRALG_1:def 17;
 A6:    rng the_arity_of av c= the carrier of IIG by FINSEQ_1:def 4;
       then A7:      rng the_arity_of av c= dom H by PBOOLE:def 3;
       then H * the_arity_of av is FinSequence by FINSEQ_1:20;
-      then consider n being Nat such that
+      then consider n being Element of NAT such that
 A8:      dom HH = Seg n by A4,FINSEQ_1:def 2;
       reconsider HHp as FinSequence by A5,A8,FINSEQ_1:def 2;
 
@@ -79,7 +80,7 @@ A9:   the_result_sort_of av = v by A1,MSAFREE2:def 7;
         assume
 A10:        x' in dom HHp;
         set x = HHp.x';
-        reconsider k = x' as Nat by A10;
+        reconsider k = x' as Element of NAT by A10;
         reconsider g = HH.x' as Function;
         reconsider HH' = HH as FinSequence by A4,A7,FINSEQ_1:20;
          len HH' = len the_arity_of av by A4,A7,FINSEQ_2:33;
@@ -114,7 +115,8 @@ then A17:     dom p = dom (the_arity_of av) by FINSEQ_3:31;
         let x be set;
         assume
 A18:       x in dom f;
-        then A19:       x in dom (the_arity_of av) by A6,A15,RELAT_1:46;
+        then reconsider n = x as Element of NAT by A16,ORDINAL1:def 13;
+A19:     n in dom (the_arity_of av) by A6,A15,RELAT_1:46,A18;
            (the_arity_of av).x in rng the_arity_of av by A16,A18,FUNCT_1:def 5;
         then reconsider s = (the_arity_of av).x as SortSymbol of IIG by A6;
           ((the Sorts of FreeMSA X)*(the_arity_of av)).x
@@ -178,7 +180,7 @@ A32:   dom Hx = dom HH by A16,MSUALG_3:6;
         let x' be set;
         assume
 A33:       x' in dom HH;
-        then reconsider n = x' as Nat by A16;
+        then reconsider n = x' as Element of NAT by A16;
            (the_arity_of av).n in rng the_arity_of av by A16,A33,FUNCT_1:def 5;
         then reconsider s = (the_arity_of av).n as SortSymbol of IIG by A6;
        Hx.n = (H.((the_arity_of av)/.n)).(p.n) by A16,A17,A33,MSUALG_3:def 8
@@ -199,7 +201,7 @@ A36:     ((the Sorts of FreeMSA X)*(the_arity_of av)).x
         reconsider g = HH.x as Function;
         A37: g = H.s by A4,A16,A35,FUNCT_1:23;
 A38:     the_result_sort_of av = v by A1,MSAFREE2:def 7;
-        reconsider x' = x as Nat by A16,A35;
+        reconsider x' = x as Element of NAT by A16,A35;
 A39:     p.x' in (the Sorts of FreeMSA X).s by A2,A16,A35,A38,MSAFREE2:14;
            HHp.x = g.(p.x) by A16,A35,PRALG_1:def 17;
         hence HHp.x in f.x by A36,A37,A39,FUNCT_2:7;
@@ -656,7 +658,7 @@ theorem Th4:
     p, q being DTree-yielding FinSequence
       st v in InnerVertices IIG & e = [action_at v,the carrier of IIG]-tree p
        & dom p = dom q
-       & for k being Nat st k in dom p
+       & for k being Element of NAT st k in dom p
           holds q.k = (Fix_inp_ext iv).((the_arity_of action_at v)/.k).(p.k)
     holds (Fix_inp_ext iv).v.e = [action_at v,the carrier of IIG]-tree q
     proof let A be non-empty Circuit of IIG, iv be InputValues of A,
@@ -666,8 +668,11 @@ theorem Th4:
 A1:   v in InnerVertices IIG and
 A2:   e = [action_at v,the carrier of IIG]-tree p and
 A3:   dom p = dom q and
-A4:   for k being Nat st k in dom p
+A4:   for k being Element of NAT st k in dom p
           holds q.k = (Fix_inp_ext iv).((the_arity_of action_at v)/.k).(p.k);
+B4:   for k being Nat st k in dom p
+          holds q.k = (Fix_inp_ext iv).((the_arity_of action_at v)/.k).(p.k)
+           by A4;
 A5:    FreeEnv A =
          MSAlgebra (# FreeSort the Sorts of A, FreeOper the Sorts of A #)
             by MSAFREE:def 16;
@@ -703,7 +708,7 @@ FUNCT_2:7;
       then A17:    q in Args(o,FreeEnv A) by A12,MSAFREE2:7;
       reconsider y = q as Element of Args(o,FreeEnv A) by A12,A13,MSAFREE2:7;
       reconsider x = p as Element of Args(o,FreeEnv A) by A7,A8,MSAFREE2:7;
-A18:    y = (Fix_inp_ext iv)#x by A4,MSUALG_3:def 8;
+A18:    y = (Fix_inp_ext iv)#x by B4,MSUALG_3:def 8;
        reconsider pp = p as FinSequence of TS(DTConMSA(the Sorts of A))
         by A10,A11,MSAFREE:8;
 A19:   (Sym(o,the Sorts of A)) ==> roots pp by A10,A11,MSAFREE:10;
@@ -835,7 +840,7 @@ theorem Th6:
       set FX = the Sorts of FreeEnv A;
 A1:     FreeMSA X = MSAlgebra (# FreeSort(X), FreeOper(X) #)
           by MSAFREE:def 16;
-defpred P[Nat] means for v being Vertex of IIG,
+defpred P[Element of NAT] means for v being Vertex of IIG,
         e, e1 being Element of FX.v, t, t1 being DecoratedTree st t = e
           & t1 = e1 & depth(v,A) <= $1 & e1 = (Fix_inp_ext iv).v.e
         holds dom t = dom t1;
@@ -914,9 +919,9 @@ A32:        (Fix_inp_ext iv).v.a = root-tree[action_at v,the carrier of IIG]
       end;
       end;
 
-A33:   for k be Nat st P[k] holds P[k+1]
+A33:   for k be Element of NAT st P[k] holds P[k+1]
       proof
-        let k be Nat;
+        let k be Element of NAT;
         assume
 A34:       P[k];
         let v be Vertex of IIG, e, e1 be Element of FX.v,
@@ -982,11 +987,11 @@ A56:        the_result_sort_of o = v by A54;
 A57:         o = action_at v by A53,A56,MSAFREE2:def 7;
          then consider p being DTree-yielding FinSequence such that
 A58:       e = [action_at v,the carrier of IIG]-tree p by A38,A55,CIRCUIT1:10;
-         deffunc F(Nat) =
+         deffunc F(Element of NAT) =
           (Fix_inp_ext iv).((the_arity_of action_at v)/.$1).(p.$1);
          consider q being FinSequence such that
 A59:       len q = len p and
-A60:       for k being Nat st k in Seg len p holds
+A60:       for k being Element of NAT st k in Seg len p holds
             q.k = F(k) from FINSEQ_1:sch 2;
           A61: dom p = Seg len p by FINSEQ_1:def 3;
              len p = len the_arity_of action_at v by A56,A57,A58,MSAFREE2:13
@@ -997,7 +1002,7 @@ A64:       dom p = dom q by A59,FINSEQ_3:31;
              now let x be set;
            assume
 A65:        x in dom q;
-            then reconsider i = x as Nat;
+            then reconsider i = x as Element of NAT;
             set v1 = (the_arity_of action_at v)/.i;
             A66: i in dom p by A59,A65,FINSEQ_3:31;
               v1 = (the_arity_of o).i by A57,A62,A64,A65,FINSEQ_4:def 4;
@@ -1011,7 +1016,7 @@ A65:        x in dom q;
 A67:    (Fix_inp_ext iv).v.e = [action_at v,the carrier of IIG]-tree q
                                          by A53,A58,A60,A61,A64,Th4;
 A68:       dom q = dom doms q by TREES_3:39;
-             now let i be Nat;
+             now let i be Element of NAT;
            set v1 = (the_arity_of action_at v)/.i;
            assume
 A69:          i in dom doms p;
@@ -1086,7 +1091,7 @@ A3:     size(v,SCS) = card e by A1;
   uniqueness
     proof
       let it1, it2 be Element of (the Sorts of FreeEnv SCS).v;
-      defpred P[Nat] means
+      defpred P[Element of NAT] means
         ex v being Vertex of IIG,
           it1, it2 being Element of (the Sorts of FreeEnv SCS).v
           st size(v,SCS) = $1
@@ -1098,10 +1103,10 @@ A3:     size(v,SCS) = card e by A1;
                 st card e2 = size(v,SCS) & it2 = (Fix_inp_ext iv).v.e2)
                   & it1 <> it2;
          now
-        assume A4: ex n being Nat st P[n];
-        consider n being Nat such that
+        assume A4: ex n being Element of NAT st P[n];
+        consider n being Element of NAT such that
 A5:        P[n] and
-A6:        for k being Nat st P[k]
+A6:        for k being Element of NAT st P[k]
             holds n <= k from NAT_1:sch 5(A4);
         consider v being Vertex of IIG,
           it1, it2 being Element of (the Sorts of FreeEnv SCS).v such that
@@ -1174,7 +1179,7 @@ A30:     dom p1 = dom Ht & dom p2 = dom Ht by A26,A28,PRALG_1:def 17;
         then A31: dom (the_arity_of action_at v) = dom Ht by RELAT_1:46;
 
            len p1 = len p2 by A30,FINSEQ_3:31;
-        then consider i being Nat such that
+        then consider i being Element of NAT such that
 A32:        i in Seg len p1 and
 A33:        p1.i <> p2.i by A10,A27,A29,FINSEQ_2:10;
 A34:     i in dom p1 by A32,FINSEQ_1:def 3;
@@ -1253,7 +1258,7 @@ theorem Th9:
     iv being InputValues of SCS,
     p being DTree-yielding FinSequence st v in InnerVertices IIG
       & dom p = dom the_arity_of action_at v
-      & for k being Nat st k in dom p
+      & for k being Element of NAT st k in dom p
           holds p.k = IGTree((the_arity_of action_at v)/.k, iv)
     holds IGTree(v,iv) = [action_at v,the carrier of IIG]-tree p
     proof
@@ -1261,7 +1266,7 @@ theorem Th9:
         iv be InputValues of SCS, p be DTree-yielding FinSequence;
       assume
 A1:      v in InnerVertices IIG & dom p = dom the_arity_of action_at v
-        & for k being Nat st k in dom p
+        & for k being Element of NAT st k in dom p
             holds p.k = IGTree((the_arity_of action_at v)/.k, iv);
       set X = the Sorts of SCS;
       set o = action_at v;
@@ -1300,7 +1305,7 @@ A9:   dom the ResultSort of IIG = the OperSymbols of IIG by FUNCT_2:def 1;
       then reconsider t = [action_at v,the carrier of IIG]-tree p
            as Element of (the Sorts of FreeMSA X).v by A7,A8;
          now
-        let k be Nat;
+        let k be Element of NAT;
         assume
 A10:       k in dom p;
         set v1 = (the_arity_of action_at v)/.k;
@@ -1316,7 +1321,7 @@ A12:       card e1 = size(v1,SCS) & ek = (Fix_inp_ext iv).v1.e1
       end;
       then A13:      card t = size(v,SCS) by A1,CIRCUIT1:17;
          now
-        let k be Nat;
+        let k be Element of NAT;
         assume k in dom p;
         then p.k = IGTree((the_arity_of action_at v)/.k, iv) by A1;
         hence p.k = (Fix_inp_ext iv).((the_arity_of action_at v)/.k).(p.k)
@@ -1628,20 +1633,20 @@ definition
     means
 :Def9:
     it.0 = InitialComp(s,InpFs)
-      & for i being Nat
+      & for i being Element of NAT
         holds it.(i+1) = Following(it.i,(i+1)-th_InputValues InpFs);
   correctness
     proof
-      deffunc F(Nat,State of SCS) =
+      deffunc F(Element of NAT,State of SCS) =
        Following($2,($1+1)-th_InputValues InpFs);
        thus (ex IT being Function of NAT, product the Sorts of SCS
         st IT.0 = InitialComp(s,InpFs)
-        & for i being Nat holds IT.(i+1) = F(i,IT.i))
+        & for i being Element of NAT holds IT.(i+1) = F(i,IT.i))
         & for IT1, IT2 being Function of NAT, product the Sorts of SCS
             st (IT1.0 = InitialComp(s,InpFs)
-            & for i being Nat holds IT1.(i+1) = F(i,IT1.i))
+            & for i being Element of NAT holds IT1.(i+1) = F(i,IT1.i))
                   & (IT2.0 = InitialComp(s,InpFs)
-            & for i being Nat holds IT2.(i+1) = F(i,IT2.i))
+            & for i being Element of NAT holds IT2.(i+1) = F(i,IT2.i))
             holds IT1 = IT2 from PRE_CIRC:sch 3;
     end;
 end;
@@ -1651,14 +1656,14 @@ reserve s for State of SCS;
 reserve iv for InputValues of SCS;
 
 theorem Th13:
-  for k being Nat
+  for k being Element of NAT
     st for v being Vertex of IIG st depth(v,SCS) <= k
          holds s.v = IGValue(v,iv)
     holds
       for v1 being Vertex of IIG st depth(v1,SCS) <= k+1
         holds (Following s).v1 = IGValue(v1,iv)
     proof
-      let k be Nat such that
+      let k be Element of NAT such that
 A1:      for v being Vertex of IIG st depth(v,SCS) <= k
           holds s.v = IGValue(v,iv);
       let v be Vertex of IIG such that
@@ -1680,10 +1685,10 @@ A6:      v in InnerVertices IIG;
       set F = Eval SCS;
       set taofo =the_arity_of o;
    A7: dom the Arity of IIG = the OperSymbols of IIG by FUNCT_2:def 1;
-     deffunc F(Nat) = IGTree((taofo/.$1) qua Vertex of IIG, iv);
+     deffunc F(Element of NAT) = IGTree((taofo/.$1) qua Vertex of IIG, iv);
       consider p being FinSequence such that
 A8:      len p = len the_arity_of o and
-A9:     for k being Nat st k in Seg len (the_arity_of o)
+A9:     for k being Element of NAT st k in Seg len (the_arity_of o)
           holds p.k = F(k) from FINSEQ_1:sch 2;
         A10: dom the_arity_of o = Seg len (the_arity_of o) by FINSEQ_1:def 3;
 A11:   dom p = dom the_arity_of o by A8,FINSEQ_3:31;
@@ -1738,7 +1743,7 @@ A17:   ((the Sorts of SCS)# * the Arity of IIG).o
 A19:       x in dom the_arity_of o;
         reconsider v1 = (the_arity_of o)/.x as Element of
           the carrier of IIG;
-        reconsider x' = x as Nat by A19;
+        reconsider x' = x as Element of NAT by A19;
 A20:     v1 = (the_arity_of o).x' by A19,FINSEQ_4:def 4;
         then v1 in rng the_arity_of o by A19,FUNCT_1:def 5;
         then depth(v1,SCS) < depth(v,SCS) by A6,CIRCUIT1:20;
@@ -1771,7 +1776,7 @@ theorem Th14:
   commute InpFs is constant & InputVertices IIG is non empty
     implies
       for s, iv st iv = (commute InpFs).0
-      for k being Nat
+      for k being Element of NAT
         holds iv c= (Computation(s,InpFs)).k
     proof
       assume
@@ -1780,7 +1785,7 @@ A1:      commute InpFs is constant & InputVertices IIG is non empty;
       let s, iv;
       assume
 A3:      iv = (commute InpFs).0;
-      let k be Nat;
+      let k be Element of NAT;
       set Ck = (Computation(s,InpFs)).k;
 A4:   dom commute InpFs = NAT by A1,PRE_CIRC:8;
 A5:   k-th_InputValues InpFs = (commute InpFs).k by A2,CIRCUIT1:def 2
@@ -1799,6 +1804,7 @@ A8:      k = 0;
       suppose ex n being Nat st k=n+1;
       then consider n being Nat such that
 A9:      k=n+1;
+         reconsider n as Element of NAT by ORDINAL1:def 13;
       reconsider Cn = (Computation(s,InpFs)).n as State of SCS;
 A10:    Ck = Following(Cn,k-th_InputValues InpFs) by A9,Def9
         .= Following(Cn+*iv) by A5;
@@ -1808,20 +1814,20 @@ A10:    Ck = Following(Cn,k-th_InputValues InpFs) by A9,Def9
     end;
 
 theorem
-     for n being Nat st commute InpFs is constant
+     for n being Element of NAT st commute InpFs is constant
     & InputVertices IIG is non empty
     & (Computation(s,InpFs)).n is stable
-  for m being Nat st n <= m
+  for m being Element of NAT st n <= m
     holds (Computation(s,InpFs)).n = (Computation(s,InpFs)).m
     proof
-      let n be Nat such that
+      let n be Element of NAT such that
 A1:      commute InpFs is constant & InputVertices IIG is non empty
         & (Computation(s,InpFs)).n is stable;
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
    n <= $1 implies (Computation(s,InpFs)).n = (Computation(s,InpFs)).$1;
 A2:  P[0] by NAT_1:19;
 A3:   now
-        let m be Nat;
+        let m be Element of NAT;
         assume
 A4:       P[m];
         thus P[m+1]
@@ -1852,13 +1858,13 @@ by A1,Th14;
         end;
         end;
       end;
-      thus for m being Nat holds P[m] from NAT_1:sch 1(A2,A3);
+      thus for m being Element of NAT holds P[m] from NAT_1:sch 1(A2,A3);
     end;
 
 theorem Th16:
   commute InpFs is constant & InputVertices IIG is non empty
     implies for s, iv st iv = (commute InpFs).0
-      for k being Nat, v being Vertex of IIG
+      for k being Element of NAT, v being Vertex of IIG
         st depth(v,SCS) <= k
         holds ((Computation(s,InpFs)).k
           qua Element of product the Sorts of SCS).v = IGValue(v,iv)
@@ -1869,7 +1875,8 @@ A1:      commute InpFs is constant & InputVertices IIG is non empty;
       let s, iv;
       assume
 A3:      iv = (commute InpFs).0;
- defpred P[Nat] means for v being Vertex of IIG st depth(v,SCS) <= $1
+ defpred P[Element of NAT] means
+  for v being Vertex of IIG st depth(v,SCS) <= $1
       holds ((Computation(s,InpFs)).$1 qua State of SCS).v = IGValue(v,iv);
 A4:   P[0] proof
         let v be Vertex of IIG; assume
@@ -1902,9 +1909,9 @@ A10:        v in SortsWithConstants IIG;
       end;
       end;
 
-A11:   for k be Nat st P[k] holds P[k+1]
+A11:   for k be Element of NAT st P[k] holds P[k+1]
        proof
-        let k be Nat;
+        let k be Element of NAT;
         reconsider Ck = (Computation(s,InpFs)).k as State of SCS;
         assume
 A12:        P[k];
@@ -1921,7 +1928,7 @@ A16:        depth(v,SCS) <= k+1;
          .= (Following Ck).v by A15,FUNCT_4:79
          .= IGValue(v,iv) by A12,A16,Th13;
       end;
-      thus for k being Nat holds P[k] from NAT_1:sch 1(A4,A11);
+      thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A4,A11);
     end;
 
 theorem Th17:

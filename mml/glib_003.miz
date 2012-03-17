@@ -11,22 +11,26 @@ environ
       FINSET_1, FUNCOP_1, FUNCT_1, FUNCT_4, GRAPH_1, GRAPH_5, GLIB_000,
       GLIB_001, GLIB_002, GLIB_003, MSAFREE2, PARTFUN1, PBOOLE, REALSET1,
       RELAT_1, RELAT_2, RLVECT_1, SEQ_1, TREES_1;
- notations TARSKI, XBOOLE_0, NUMBERS, SUBSET_1, XREAL_0, DOMAIN_1, REAL_1,
+ notations TARSKI, XBOOLE_0, NUMBERS, SUBSET_1,
+ XCMPLX_0,XREAL_0, DOMAIN_1, REAL_1,
       RELAT_1, PARTFUN1, FUNCT_1, SEQ_1, CARD_1, GRAPH_2, PBOOLE, FUNCT_2,
       GRAPH_5, RVSUM_1, FINSEQ_5, ORDINAL1, POLYNOM1, RELSET_1, FINSEQ_1,
       FINSET_1, NAT_1, CQC_LANG, FUNCT_4, GLIB_000, GLIB_001, GLIB_002,
       XXREAL_0;
  constructors DOMAIN_1, FUNCT_4, XXREAL_0, REAL_1, BINOP_2, CQC_LANG, SETWOP_2,
-      RVSUM_1, FINSEQ_5, GRAPH_2, POLYNOM1, GRAPH_5, GLIB_001, GLIB_002;
+      RVSUM_1, FINSEQ_5, GRAPH_2, POLYNOM1, GRAPH_5, GLIB_001, GLIB_002,
+      NAT_1;
  registrations RELSET_1, FINSET_1, PNPROC_1, INT_1, FINSEQ_1, SEQ_1, FUNCT_1,
-      MEMBERED, ORDINAL1, GLIB_000, GLIB_002, POLYNOM1, CIRCCMB3, XREAL_0;
+      MEMBERED, ORDINAL1, GLIB_000, GLIB_002, POLYNOM1, CIRCCMB3, XREAL_0,
+      NAT_1;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
  definitions GLIB_000;
  theorems CARD_1, CARD_2, CQC_LANG, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_5,
       FINSET_1, FUNCOP_1, FUNCT_1, FUNCT_2, FUNCT_4, GLIB_000, GLIB_001,
       GLIB_002, GRAPH_2, GRAPH_5, INT_1, NAT_1, PARTFUN1, PBOOLE, POLYNOM3,
       REAL_1, RELAT_1, RELSET_1, RVSUM_1, SEQ_1, TARSKI, XBOOLE_0, XBOOLE_1,
-      XREAL_0, ZFMISC_1, PRE_CIRC, XREAL_1, XXREAL_0, ENUMSET1, ORDERS_1;
+      XREAL_0, ZFMISC_1, PRE_CIRC, XREAL_1, XXREAL_0, ENUMSET1, ORDERS_1,
+      ORDINAL1;
  schemes NAT_1, FINSEQ_1, FUNCT_1;
 
 begin :: Preliminaries
@@ -37,8 +41,8 @@ definition let D be set, fs be FinSequence of D, fss be FinSubsequence of fs;
     now let y be set; assume y in rng Seq fss; then
         consider x being set such that
     A1: x in dom Seq fss & (Seq fss).x = y by FUNCT_1:def 5;
-        reconsider x as Nat by A1;
-        consider n being Nat such that
+        reconsider x as Element of NAT by A1;
+        consider n being Element of NAT such that
     A2: n in dom fs & x <= n & y = fs.n by A1, GLIB_001:4;
         y in rng fs by A2, FUNCT_1:def 5;
         hence y in D;
@@ -77,46 +81,50 @@ end;
 
 theorem Th2:
    for fs being FinSequence of REAL, fss being FinSubsequence of fs holds
-   (for i being Nat st i in dom fs holds 0 <= fs.i ) implies
+   (for i being Element of NAT st i in dom fs holds 0 <= fs.i ) implies
    Sum (Seq fss) <= Sum fs proof
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
      for fs being FinSequence of REAL, fss being FinSubsequence of fs
-      st (for i being Nat st i in dom fs holds 0 <= fs.i) & len Seq fss = $1
+      st (for i being Element of NAT st i in dom fs holds 0 <= fs.i) &
+      len Seq fss = $1
         holds Sum (Seq fss) <= Sum fs;
     now let fs be FinSequence of REAL, fss be FinSubsequence of fs; assume
-    A1: (for i being Nat st i in dom fs holds 0 <= fs.i) & len Seq fss=0;then
+    A1: (for i being Element of NAT st i in dom fs holds 0 <= fs.i) &
+    len Seq fss=0;then
         Seq fss = <*> REAL by FINSEQ_1:25;
         hence Sum (Seq fss) <= Sum fs by A1, RVSUM_1:114, RVSUM_1:102;
     end; then
 A2: P[0];
-    now let k be Nat; assume
+    now let k be Element of NAT; assume
     A3: P[k];
         let fs be FinSequence of REAL, fss be FinSubsequence of fs; assume
-    A4: (for i being Nat st i in dom fs holds 0 <= fs.i) & len Seq fss = k+1;
-        defpred P2[Nat] means $1 in dom fss;
-        consider L being Nat such that
+    A4: (for i being Element of NAT st i in dom fs holds 0 <= fs.i) &
+    len Seq fss = k+1;
+        defpred P2[Element of NAT] means $1 in dom fss;
+        consider L being Element of NAT such that
     A5: dom fss c= Seg L by FINSEQ_1:def 12;
-    A6: for n being Nat st P2[n] holds n <= L by A5,FINSEQ_1:3;
+    A6: for n being Element of NAT st P2[n] holds n <= L by A5,FINSEQ_1:3;
     A7: fss c= fs by GRAPH_2:def 5;
         card fss = k + 1 by A4, GLIB_001:5; then
         dom fss <> {} by CARD_1:47,RELAT_1:64; then
         consider d being set such that
     A8: d in dom fss by XBOOLE_0:def 1;
     A9: dom fss c= dom fs by GRAPH_2:27; then
-        d in dom fs by A8; then reconsider d as Nat;
+        d in dom fs by A8; then reconsider d as Element of NAT;
         d in dom fss by A8; then
-    A10: ex d being Nat st P2[d];
-        consider x being Nat such that
-    A11: P2[x] & for n being Nat st P2[n] holds n <= x from NAT_1:sch 6(A6,A10)
-;
+    A10: ex d being Element of NAT st P2[d];
+        consider x being Element of NAT such that
+    A11: P2[x] & for n being Element of NAT st P2[n] holds n <= x
+    from NAT_1:sch 6(A6,A10);
         set y = fs.x;
     A12: 1 <= x & x <= len fs by A9,A11,FINSEQ_3:27; then
-        reconsider xx1 = x-1 as Nat by INT_1:18;
+        reconsider xx1 = x-1 as Element of NAT by INT_1:18;
         set fssq = fss | Seg xx1;
         reconsider fssq as FinSubsequence of fs by GRAPH_2:29;
         consider j being Nat such that
     A13: x + j = len fs by A12, NAT_1:28;
-        consider fsD, fsC being FinSequence of REAL such that
+    j in NAT by ORDINAL1:def 13;
+    then consider fsD, fsC being FinSequence of REAL such that
     A14: len fsD = x & len fsC = j & fs = fsD ^ fsC by A13, FINSEQ_2:26;
     A15: xx1 + 1 = x; then
         consider fsA, fsB being FinSequence of REAL such that
@@ -129,7 +137,7 @@ A2: P[0];
     A19: Sum fs = Sum fsD + Sum fsC by A14, RVSUM_1:105
               .= Sum fsA + Sum <*y*> + Sum fsC by A18, A16, RVSUM_1:105
               .= Sum fsA + y + Sum fsC by RVSUM_1:103;
-        now let i be Nat; assume
+        now let i be Element of NAT; assume
         A20: i in dom fsC; then
         A21: fs.(x+i) = fsC.i by A14, FINSEQ_1:def 7;
             x+i in dom fs by A14, A20, FINSEQ_1:41;
@@ -142,7 +150,7 @@ A2: P[0];
     A24: len Seq fss = len q + len <*z*> by A23, FINSEQ_1:35; then
     A25: k + 1 = len q + 1 by A4, FINSEQ_1:56; then
     A26: len q = k;
-    A27: now let i be Nat; assume
+    A27: now let i be Element of NAT; assume
         A28: i in dom fsA; then
         A29: fsA.i = fsD.i by A16, FINSEQ_1:def 7;
         A30: dom fsA c= dom fsD by A16, FINSEQ_1:39; then
@@ -155,7 +163,7 @@ A2: P[0];
         A33: z in fssq; then consider a,b being set such that
         A34: z = [a,b] by RELAT_1:def 1;
         A35: a in Seg xx1 & [a,b] in fss by A33,A34,RELAT_1:def 11; then
-            reconsider a as Nat;
+            reconsider a as Element of NAT;
         A36: 1 <= a & a <= xx1 by A35, FINSEQ_1:3; then
         A37: a in dom fsA by A16, FINSEQ_3:27;
         A38: a in dom fs & b = fs.a by A7,A35,FUNCT_1:8;
@@ -181,7 +189,7 @@ A2: P[0];
                 A45: z in fssq; then consider a,b being set such that
                 A46: z = [a,b] by RELAT_1:def 1;
                 A47: z in fss & a in Seg xx1 by A45, A46, RELAT_1:def 11; then
-                    reconsider a as Nat;
+                    reconsider a as Element of NAT;
                     a <= xx1 by A47, FINSEQ_1:3; then
                     a < x by A15, NAT_1:38; then
                     [a,b] <> [x,y] by ZFMISC_1:33; then
@@ -195,7 +203,7 @@ A2: P[0];
             A50: z = [a,b] by A48,RELAT_1:def 1;
             A51: a in dom fss by A48,A50,FUNCT_1:8;
             A52: a in dom fs by A50,A7,A49,FUNCT_1:8; then
-                reconsider a as Nat;
+                reconsider a as Element of NAT;
             A53: 1 <= a by A52, FINSEQ_3:27;
             A54: a <= x by A11, A51;
             A55: a <> x or b <> y by A50, A49, TARSKI:def 1;
@@ -214,7 +222,7 @@ A2: P[0];
                      .= k;
             hence
         A57: len q = len Seq(fssq) by A25,A39;
-            let n be Nat;
+            let n be Element of NAT;
             set x1 = Sgm(dom fss).n, x2 = Sgm(dom fssq).n; assume
         A58: 1 <= n & n <= len q; then
             n in dom q by FINSEQ_3:27; then
@@ -226,7 +234,7 @@ A2: P[0];
         A62: n in dom Seq fssq by A57, A58, FINSEQ_3:27;
             Seq fssq = fssq * Sgm(dom fssq) by FINSEQ_1:def 14; then
         A63: (Seq fssq).n = fssq.x2 by A62, FUNCT_1:22;
-            consider lk being Nat such that
+            consider lk being Element of NAT such that
         A64: dom fssq c= Seg lk by FINSEQ_1:def 12;
             len Sgm (dom fssq) = card dom fssq by A64, FINSEQ_3:44
                               .= k by A56,PRE_CIRC:21; then
@@ -241,7 +249,7 @@ A2: P[0];
                 A67: z in dom fss; then
                 A68: [z, fss.z] in fss by FUNCT_1:8; then
                 A69: z in dom fs by A7,FUNCT_1:8; then
-                    reconsider z' = z as Nat;
+                    reconsider z' = z as Element of NAT;
                 A70: z' <= x by A11, A67;
                 A71: 1 <= z' by A69, FINSEQ_3:27;
                     now assume not z in {x}; then
@@ -274,7 +282,7 @@ A2: P[0];
                 hence z in Seg len fs by A12, FINSEQ_1:3;
             end; then
         A74: {x} c= Seg len fs by TARSKI:def 3;
-            now let m,n be Nat; assume
+            now let m,n be Element of NAT; assume
             A75: m in dom fssq & n in {x};
             A76: n = x by A75, TARSKI:def 1;
                 [m,fssq.m] in fssq by A75, FUNCT_1:8; then
@@ -303,14 +311,14 @@ A2: P[0];
             A83: rng g = dom fss by A5, FINSEQ_1:def 13; then
                 consider v being set such that
             A84: v in dom g & g.v = x by A11,FUNCT_1:def 5;
-                reconsider v as Nat by A84;
+                reconsider v as Element of NAT by A84;
             A85: 1 <= v & v <= len g by A84, FINSEQ_3:27; then
             A86: v < len g by REAL_1:def 5,A81,A82,A84;
                 set k2 = g.(len g);
                 1 <= len g by A4, A81, NAT_1:37; then
                 len g in dom g by FINSEQ_3:27; then
             A87: k2 in rng g by FUNCT_1:def 5;
-                reconsider k2 as Nat;
+                reconsider k2 as Element of NAT;
                 x < k2 by A5, A84, A85, A86, FINSEQ_1:def 13;
                 hence contradiction by A11,A87,A83;
             end; then
@@ -323,10 +331,10 @@ A2: P[0];
         Sum (Seq fss) <= Sum fsA + y by XREAL_1:8;
         hence Sum (Seq fss) <= Sum fs by A22, XXREAL_0:2;
     end; then
-A88: for k being Nat st P[k] holds P[k+1];
-A89: for k being Nat holds P[k] from NAT_1:sch 1(A2,A88);
+A88: for k being Element of NAT st P[k] holds P[k+1];
+A89: for k being Element of NAT holds P[k] from NAT_1:sch 1(A2,A88);
     let fs be FinSequence of REAL, fss be FinSubsequence of fs; assume
-A90: for i being Nat st i in dom fs holds 0 <= fs.i;
+A90: for i being Element of NAT st i in dom fs holds 0 <= fs.i;
     len Seq fss = len Seq fss;
     hence Sum (Seq fss) <= Sum fs by A89, A90;
 end;
@@ -334,11 +342,11 @@ end;
 begin :: Definitions
 
 definition
-  func WeightSelector -> Nat equals  ::dSELW
+  func WeightSelector -> Element of NAT equals  ::dSELW
     5; coherence;
-  func ELabelSelector -> Nat equals  ::dSELEL
+  func ELabelSelector -> Element of NAT equals  ::dSELEL
     6; coherence;
-  func VLabelSelector -> Nat equals  ::dSELVL
+  func VLabelSelector -> Element of NAT equals  ::dSELVL
     7; coherence;
 end;
 
@@ -1726,28 +1734,29 @@ end;
 definition let G be WGraph, W be Walk of G;
   func W.weightSeq() -> FinSequence means :Def18: ::dWWSEQ
     len it = len W.edgeSeq() &
-    for n being Nat st 1 <= n & n <= len it
+    for n being Element of NAT st 1 <= n & n <= len it
       holds it.n = (the_Weight_of G).(W.edgeSeq().n);
   existence proof
-    deffunc F(Nat) = (the_Weight_of G).(W.edgeSeq().$1);
+    deffunc F(Element of NAT) = (the_Weight_of G).(W.edgeSeq().$1);
     consider IT being FinSequence such that
-A1: len IT =len W.edgeSeq() & for k being Nat st k in Seg len W.edgeSeq()
+A1: len IT =len W.edgeSeq() & for k being Element of NAT
+st k in Seg len W.edgeSeq()
       holds IT.k = F(k) from FINSEQ_1:sch 2;
     take IT;
     thus len IT = len W.edgeSeq() by A1;
-    let n be Nat; assume 1 <= n & n <= len IT; then
+    let n be Element of NAT; assume 1 <= n & n <= len IT; then
     n in Seg len W.edgeSeq() by A1, FINSEQ_1:3;
     hence IT.n = (the_Weight_of G).(W.edgeSeq().n) by A1;
   end;
   uniqueness proof
     let IT1, IT2 be FinSequence such that
 A2: len IT1 = len W.edgeSeq() &
-    for n being Nat st 1 <= n & n <= len IT1 holds
+    for n being Element of NAT st 1 <= n & n <= len IT1 holds
       IT1.n = (the_Weight_of G).(W.edgeSeq().n) and
 A3: len IT2 = len W.edgeSeq() &
-    for n being Nat st 1 <= n & n <= len IT2 holds
+    for n being Element of NAT st 1 <= n & n <= len IT2 holds
       IT2.n = (the_Weight_of G).(W.edgeSeq().n);
-    now let n be Nat; assume
+    now let n be Element of NAT; assume
     A4: 1 <= n & n <= len IT1;
         hence IT1.n = (the_Weight_of G).(W.edgeSeq().n) by A2
                    .= IT2.n by A2,A3,A4;
@@ -1760,7 +1769,7 @@ definition let G be real-weighted WGraph, W be Walk of G;
   redefine func W.weightSeq() -> FinSequence of REAL;
   coherence proof
     now let y be set; assume y in rng W.weightSeq(); then
-        consider x being Nat such that
+        consider x being Element of NAT such that
     A1: x in dom W.weightSeq() & y = W.weightSeq().x by FINSEQ_2:11;
         1 <= x & x <= len W.weightSeq() by A1, FINSEQ_3:27; then
         y = (the_Weight_of G).(W.edgeSeq().x) by A1, Def18;
@@ -2328,11 +2337,11 @@ end;
 :: Attributes over GraphSeq
 definition let GSq be GraphSeq;
   attr GSq is [Weighted] means :Def24: ::dGSEQWEIGHT
-    for x being Nat holds GSq.->x is [Weighted];
+    for x being Element of NAT holds GSq.->x is [Weighted];
   attr GSq is [ELabeled] means :Def25: ::dGSEQELABEL
-    for x being Nat holds GSq.->x is [ELabeled];
+    for x being Element of NAT holds GSq.->x is [ELabeled];
   attr GSq is [VLabeled] means :Def26: ::dGSEQVLABEL
-    for x being Nat holds GSq.->x is [VLabeled];
+    for x being Element of NAT holds GSq.->x is [VLabeled];
 end;
 registration
   cluster [Weighted] [ELabeled] [VLabeled] GraphSeq;
@@ -2343,13 +2352,13 @@ registration
     set F = NAT --> G;
 A1: dom F = NAT by FUNCOP_1:19; then
     reconsider F as ManySortedSet of NAT by PBOOLE:def 3;
-    now let x be Nat;
+    now let x be Element of NAT;
         F.x in rng F by A1, FUNCT_1:12; then
         F.x in {G} by FUNCOP_1:14;
         hence F.x is _Graph by TARSKI:def 1;
     end; then reconsider F as GraphSeq by GLIB_000:def 55;
     take F;
-    now let x be Nat;
+    now let x be Element of NAT;
         F.x in rng F by A1, FUNCT_1:12; then
         F.x in {G} by FUNCOP_1:14; then
         F.x = G by TARSKI:def 1;
@@ -2370,51 +2379,54 @@ definition
   mode WEVGraphSeq is [Weighted] [ELabeled] [VLabeled] GraphSeq;
 end;
 
-registration let GSq be WGraphSeq, x be Nat;
+registration let GSq be WGraphSeq, x be Element of NAT;
   cluster GSq.->x -> [Weighted]; coherence by Def24;
 end;
-registration let GSq be EGraphSeq, x be Nat;
+registration let GSq be EGraphSeq, x be Element of NAT;
   cluster GSq.->x -> [ELabeled]; coherence by Def25;
 end;
-registration let GSq be VGraphSeq, x be Nat;
+registration let GSq be VGraphSeq, x be Element of NAT;
   cluster GSq.->x -> [VLabeled]; coherence by Def26;
 end;
 
 definition let GSq be WGraphSeq;
   attr GSq is real-weighted means :Def27: ::dGSEQWREALWL
-    for x being Nat holds GSq.->x is real-weighted;
+    for x being Element of NAT holds GSq.->x is real-weighted;
   attr GSq is nonnegative-weighted means :Def28: ::dGSEQWNNWEIGHT
-    for x being Nat holds GSq.->x is nonnegative-weighted;
+    for x being Element of NAT holds GSq.->x is nonnegative-weighted;
 end;
 definition let GSq be EGraphSeq;
   attr GSq is real-elabeled means :Def29: ::dGSEQEREALEL
-    for x being Nat holds GSq.->x is real-elabeled;
+    for x being Element of NAT holds GSq.->x is real-elabeled;
 end;
 definition let GSq be VGraphSeq;
   attr GSq is real-vlabeled means :Def30: ::dGSEQVREALVL
-    for x being Nat holds GSq.->x is real-vlabeled;
+    for x being Element of NAT holds GSq.->x is real-vlabeled;
 end;
 definition let GSq be WEVGraphSeq;
   attr GSq is real-WEV means :Def31: ::dGSEQWEVREAL
-    for x being Nat holds GSq.->x is real-WEV;
+    for x being Element of NAT holds GSq.->x is real-WEV;
 end;
 
 registration
   cluster real-WEV -> real-weighted real-elabeled real-vlabeled WEVGraphSeq;
   coherence proof
     let GSq be [Weighted] [ELabeled] [VLabeled] GraphSeq; assume
-A1: for x being Nat holds GSq.->x is real-WEV;
-    now let x be Nat; reconsider G = GSq.->x as real-WEV WEVGraph by A1;
+A1: for x being Element of NAT holds GSq.->x is real-WEV;
+    now let x be Element of NAT; reconsider G = GSq.->x as real-WEV WEVGraph
+    by A1;
         G is real-WEV;
         hence GSq.->x is real-weighted;
     end;
     hence GSq is real-weighted by Def27;
-    now let x be Nat; reconsider G = GSq.->x as real-WEV WEVGraph by A1;
+    now let x be Element of NAT; reconsider G = GSq.->x as real-WEV WEVGraph
+    by A1;
         G is real-WEV;
         hence GSq.->x is real-elabeled;
     end;
     hence GSq is real-elabeled by Def29;
-    now let x be Nat; reconsider G = GSq.->x as real-WEV WEVGraph by A1;
+    now let x be Element of NAT; reconsider G = GSq.->x as real-WEV WEVGraph
+    by A1;
         G is real-WEV;
         hence GSq.->x is real-vlabeled;
     end;
@@ -2424,7 +2436,7 @@ A1: for x being Nat holds GSq.->x is real-WEV;
   coherence proof
     let GSq be [Weighted] [ELabeled] [VLabeled] GraphSeq; assume
 A2: GSq is real-weighted & GSq is real-elabeled & GSq is real-vlabeled;
-    let x be Nat;
+    let x be Element of NAT;
     reconsider G = GSq.->x as real-weighted real-elabeled real-vlabeled
                    WEVGraph by A2,Def27,Def29,Def30;
     G is real-WEV;
@@ -2442,12 +2454,12 @@ registration
     set F = NAT --> G;
 A1: dom F = NAT by FUNCOP_1:19; then
     reconsider F as ManySortedSet of NAT by PBOOLE:def 3;
-    now let x be Nat;
+    now let x be Element of NAT;
         F.x in rng F by A1, FUNCT_1:12; then
         F.x in {G} by FUNCOP_1:14;
         hence F.x is _Graph by TARSKI:def 1;
     end; then reconsider F as GraphSeq by GLIB_000:def 55;
-    now let x be Nat;
+    now let x be Element of NAT;
         F.x in rng F by A1, FUNCT_1:12; then
         F.x in {G} by FUNCOP_1:14; then
         F.x = G by TARSKI:def 1;
@@ -2460,7 +2472,7 @@ A1: dom F = NAT by FUNCOP_1:19; then
     F.1 in {G} & F.(1+1) in {G} by FUNCOP_1:14; then
     F.1 = G & F.(1+1) = G by TARSKI:def 1;
     hence F is halting by GLIB_000:def 56;
-    now let x be Nat;
+    now let x be Element of NAT;
         F.x in rng F by A1, FUNCT_1:12; then
         F.x in {G} by FUNCOP_1:14; then
         F.x = G by TARSKI:def 1;
@@ -2474,16 +2486,16 @@ A1: dom F = NAT by FUNCOP_1:19; then
   end;
 end;
 
-registration let GSq be real-weighted WGraphSeq, x be Nat;
+registration let GSq be real-weighted WGraphSeq, x be Element of NAT;
   cluster GSq.->x -> real-weighted; coherence by Def27;
 end;
-registration let GSq be nonnegative-weighted WGraphSeq, x be Nat;
+registration let GSq be nonnegative-weighted WGraphSeq, x be Element of NAT;
   cluster GSq.->x -> nonnegative-weighted; coherence by Def28;
 end;
-registration let GSq be real-elabeled EGraphSeq, x be Nat;
+registration let GSq be real-elabeled EGraphSeq, x be Element of NAT;
   cluster GSq.->x -> real-elabeled; coherence by Def29;
 end;
-registration let GSq be real-vlabeled VGraphSeq, x be Nat;
+registration let GSq be real-vlabeled VGraphSeq, x be Element of NAT;
   cluster GSq.->x -> real-vlabeled; coherence by Def30;
 end;
 
@@ -2492,7 +2504,7 @@ begin :: Theorems
 reserve G for _Graph;
 reserve W for Walk of G;
 reserve E,V,W,X,Y for set;
-reserve n for Nat;
+reserve n for Element of NAT;
 
 theorem  ::tSELECT02;
   WeightSelector = 5 & ELabelSelector = 6 & VLabelSelector = 7;
@@ -2622,7 +2634,7 @@ A1: W.edgeSeq() = <*e*> by GLIB_001:84; then
     len W.edgeSeq() = 1 by FINSEQ_1:56; then
 A2: len W.weightSeq() = 1 by Def18; then
 A3: len W.weightSeq() = len <* (the_Weight_of G).e *> by FINSEQ_1:56;
-    now let n be Nat; assume
+    now let n be Element of NAT; assume
     A4: 1 <= n & n <= len W.weightSeq(); then
     A5: n = 1 by A2,XXREAL_0:1;
         hence W.weightSeq().n = (the_Weight_of G).(<*e*>.1) by A1,A4,Def18
@@ -2644,7 +2656,7 @@ theorem Th22: ::tWWSEQ04
 A1: len W1 = len W.edgeSeq() by Def18;
 A2: len W.weightSeq() = len W.edgeSeq() by Def18; then
 A3: len W1 = len W2 by A1, FINSEQ_5:def 3;
-    now let n be Nat; assume
+    now let n be Element of NAT; assume
     A4: 1 <= n & n <= len W1; then
     A5: W1.n = (the_Weight_of G).(W.reverse().edgeSeq().n) by Def18
             .= (the_Weight_of G).(Rev (W.edgeSeq()).n) by GLIB_001:85;
@@ -2652,7 +2664,7 @@ A3: len W1 = len W2 by A1, FINSEQ_5:def 3;
     A6: W1.n = (the_Weight_of G).(W.edgeSeq().(len W.edgeSeq()-n+1))
           by A5,FINSEQ_5:61;
         set rn = len W.weightSeq() - n + 1;
-        reconsider rn as Nat by A1,A2,A4,FINSEQ_5:1;
+        reconsider rn as Element of NAT by A1,A2,A4,FINSEQ_5:1;
         n in Seg len W.weightSeq() by A1,A2,A4,FINSEQ_1:3; then
         rn in Seg len W.weightSeq() by FINSEQ_5:2; then
     A7: 1 <= rn & rn <= len W.weightSeq() by FINSEQ_1:3;
@@ -2676,7 +2688,7 @@ A2: len W3.weightSeq() = len W1.edgeSeq() + len W2.edgeSeq() by Def18
                       .= len W1.weightSeq() + len W2.edgeSeq() by Def18
                       .= len W1.weightSeq() + len W2.weightSeq() by Def18
                       .= len W4 by FINSEQ_1:35;
-    now let n be Nat; assume
+    now let n be Element of NAT; assume
     A3: 1 <= n & n <= len W3.weightSeq(); then
     A4: W3.weightSeq().n = (the_Weight_of G).(W3.edgeSeq().n) by Def18
                         .= (the_Weight_of G).((W1.edgeSeq()^W2.edgeSeq()).n)
@@ -2691,9 +2703,9 @@ A2: len W3.weightSeq() = len W1.edgeSeq() + len W2.edgeSeq() by Def18
             n <= len W1.edgeSeq() by A7, Def18; then
             n in dom W1.edgeSeq() by A7, FINSEQ_3:27;
             hence W3.weightSeq().n = W4.n by A4,A8,FINSEQ_1:def 7; end;
-        suppose ex k being Nat st k in dom W2.weightSeq() &
+        suppose ex k being Element of NAT st k in dom W2.weightSeq() &
                 n = len W1.weightSeq()+k; then
-            consider k being Nat such that
+            consider k being Element of NAT such that
         A9: k in dom W2.weightSeq() & n = len W1.weightSeq() + k;
         A10: 1 <= k & k <= len W2.weightSeq() by A9, FINSEQ_3:27;
         A11: W4.n = W2.weightSeq().k by A9, FINSEQ_1:def 7
@@ -2734,7 +2746,7 @@ A1: W2.edgeSeq() = Seq es by GLIB_001:def 32;
     consider ws being Function such that
 A2: dom ws = dom es &
       for x being set st x in dom es holds ws.x = F(x) from FUNCT_1:sch 3;
-    consider k being Nat such that
+    consider k being Element of NAT such that
 A3: dom ws c= Seg k by A2, FINSEQ_1:def 12;
 A4: es c= W1.edgeSeq() by GRAPH_2:def 5;
     reconsider ws as FinSubsequence by A3, FINSEQ_1:def 12;
@@ -2743,7 +2755,8 @@ A4: es c= W1.edgeSeq() by GRAPH_2:def 5;
     A6: z = [x,y] by RELAT_1:def 1;
     A7: x in dom es & ws.x = y by A2,A5,A6,FUNCT_1:8; then
     A8: [x,es.x] in es by FUNCT_1:8; then
-    A9: x in dom W1.edgeSeq() by A4,FUNCT_1:8; then reconsider x as Nat;
+    A9: x in dom W1.edgeSeq() by A4,FUNCT_1:8;
+    then reconsider x as Element of NAT;
     A10: 1 <= x & x <= len W1.edgeSeq() by A9, FINSEQ_3:27; then
     A11: x <= len W1.weightSeq() by Def18; then
         x in dom W1.weightSeq() by A10, FINSEQ_3:27; then
@@ -2760,7 +2773,7 @@ A14: len Seq es = card es by GLIB_001:5
               .= card ws by PRE_CIRC:21
               .= len Seq ws by GLIB_001:5; then
 A15: len W2.weightSeq() = len Seq ws by A1,Def18;
-    now let n be Nat; assume
+    now let n be Element of NAT; assume
     A16: 1 <= n & n <= len W2.weightSeq();
     A17: Seq ws = ws * Sgm(dom es) by A2, FINSEQ_1:def 14;
     A18: Seq es = es * Sgm(dom es) by FINSEQ_1:def 14;
@@ -2789,7 +2802,7 @@ A2: W1.edgeSeq() = W2.edgeSeq() by GLIB_001:87;
         thus
     A3: len WS2 = len W1.edgeSeq() by A2, Def18
                .= len WS1 by Def18;
-        let x be Nat; assume x in Seg len WS1; then
+        let x be Element of NAT; assume x in Seg len WS1; then
         x in dom WS1 by FINSEQ_1:def 3; then
     A4: 1 <= x & x <= len WS1 & x <= len WS2 by A3, FINSEQ_3:27;
         hence WS2.x = (the_Weight_of G2).(W2.edgeSeq().x) by Def18
@@ -2811,7 +2824,7 @@ A1: W1.edgeSeq() = W2.edgeSeq() by GLIB_001:87;
         thus
     A2: len WS2 = len W1.edgeSeq() by A1, Def18
                .= len WS1 by Def18;
-        let x be Nat; assume x in Seg len WS1; then
+        let x be Element of NAT; assume x in Seg len WS1; then
         x in dom WS1 by FINSEQ_1:def 3; then
     A3: 1 <= x & x <= len WS1 & x <= len WS2 by A2, FINSEQ_3:27; then
         x <= len W2.edgeSeq() by Def18; then
@@ -2893,8 +2906,9 @@ theorem
 :: Theorems regarding nonnegative-weighted WGraphs
 theorem Th35: ::tWNNWEIGHT01
   for G being nonnegative-weighted WGraph, W being Walk of G,
-      n being Nat st n in dom W.weightSeq() holds 0 <= (W.weightSeq()).n proof
-    let G be nonnegative-weighted WGraph, W be Walk of G, n be Nat;
+      n being Element of NAT st n in dom W.weightSeq()
+      holds 0 <= (W.weightSeq()).n proof
+    let G be nonnegative-weighted WGraph, W be Walk of G, n be Element of NAT;
     set WS = W.weightSeq(); assume n in dom W.weightSeq(); then
 A1: 1 <= n & n <= len WS by FINSEQ_3:27; then
 A2: WS.n = (the_Weight_of G).(W.edgeSeq().n) by Def18;
@@ -2914,7 +2928,8 @@ theorem
   for G being nonnegative-weighted WGraph, W being Walk of G
     holds 0 <= W.cost() proof
     let G be nonnegative-weighted WGraph, W be Walk of G;
-    for i being Nat st i in dom W.weightSeq() holds 0 <= (W.weightSeq()).i
+    for i being Element of NAT st i in dom W.weightSeq()
+    holds 0 <= (W.weightSeq()).i
       by Th35; then
     0 <= Sum (W.weightSeq()) by RVSUM_1:114;
     hence 0 <= W.cost();
@@ -2928,7 +2943,8 @@ theorem
     consider ws being FinSubsequence of W1.weightSeq() such that
 A1: W2.weightSeq() = Seq ws by Th25;
     reconsider ws'=ws as FinSubsequence of W1.weightSeq();
-    for i being Nat st i in dom W1.weightSeq() holds 0 <= (W1.weightSeq()).i
+    for i being Element of NAT st i in dom W1.weightSeq()
+    holds 0 <= (W1.weightSeq()).i
       by Th35; then
     Sum (W2.weightSeq()) <= Sum (W1.weightSeq()) by A1,Th2; then
     W2.cost() <= Sum (W1.weightSeq());

@@ -11,7 +11,8 @@ environ
       PRELAMB, ALG_1, FINSEQ_1, QC_LANG1, LANG1, DTCONSTR, TREES_4, TREES_2,
       TREES_3, FUNCT_6, UNIALG_2, GROUP_6, MSUALG_3, MSAFREE, FINSEQ_4,
       MCART_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, RELAT_1, RELSET_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS,
+      NAT_1, RELAT_1, RELSET_1,
       STRUCT_0, FUNCT_1, MCART_1, FUNCT_2, FINSEQ_1, TREES_2, CARD_3, FINSEQ_4,
       LANG1, TREES_3, FUNCT_6, TREES_4, DTCONSTR, PBOOLE, MSUALG_1, MSUALG_2,
       MSUALG_3, XXREAL_0;
@@ -25,7 +26,7 @@ environ
  theorems TARSKI, FUNCT_1, FUNCT_2, MCART_1, ZFMISC_1, PBOOLE, CARD_3,
       MSUALG_1, MSUALG_2, MSUALG_3, RELAT_1, LANG1, DTCONSTR, FINSEQ_1,
       TREES_4, FINSEQ_4, TREES_1, TREES_2, ALG_1, DOMAIN_1, RELSET_1, XBOOLE_0,
-      XBOOLE_1, FUNCOP_1, TREES_3;
+      XBOOLE_1, FUNCOP_1, TREES_3, ORDINAL1;
  schemes ZFREFLE1, FUNCT_1, RELSET_1, DTCONSTR, WELLORD2, XBOOLE_0;
 
 begin
@@ -824,7 +825,7 @@ A4:   the carrier of S = x2 by TARSKI:def 1;
       let x;
       assume A24: x in dom b;
       then A25: f.x = root-tree (b.x) by A18;
-      reconsider i = x as Nat by A24;
+      reconsider i = x as Nat by A24,ORDINAL1:def 13;
       consider T be DecoratedTree such that
       A26: T = f.i & (roots f).i = T.{} by A18,A24,TREES_3:def 18;
       thus thesis by A25,A26,TREES_4:3;
@@ -1025,7 +1026,7 @@ for S be non void non empty ManySortedSign,
      then consider b be set such that
      A5: b in dom f & f.b = a by FUNCT_1:def 5;
      A6: a in ((FreeSort X) * ar).b by A2,A5;
-     reconsider b as Nat by A5;
+     reconsider b as Nat by A5,ORDINAL1:def 13;
         ((FreeSort X) * ar).b = (FreeSort X).(ar.b) by A2,A5,FUNCT_1:22
      .= (FreeSort X). (ar/.b) by A2,A4,A5,FINSEQ_4:def 4
      .= FreeSort(X,ar/.b) by Def13
@@ -1093,7 +1094,7 @@ holds p in ((FreeSort X)# * (the Arity of S)).o iff
     proof
      let x be set;
      assume A11: x in dom ((FreeSort X) * ar);
-     then reconsider n = x as Nat by A10;
+     then reconsider n = x as Nat by A10,ORDINAL1:def 13;
         FreeSort(X,ar/.n) = (FreeSort X). (ar/.n) by Def13
      .= (FreeSort X).(ar.n) by A7,A10,A11,FINSEQ_4:def 4
      .= ((FreeSort X) * ar).x by A11,FUNCT_1:22;
@@ -1194,7 +1195,7 @@ A13:      x2 = the carrier of S by TARSKI:def 1;
      proof
       let x be set;
       assume A21: x in dom r;
-      then reconsider n = x as Nat;
+      then reconsider n = x as Nat by ORDINAL1:def 13;
       set s = ar/.n,
           A = {a where a is Element of TS D:
               (ex x be set st x in X.s & a = root-tree [x,s]) or
@@ -1451,17 +1452,19 @@ for p be FinSequence of TS(DTConMSA(X)) st Sym(o,X) ==> roots p holds
        ex o1 be OperSymbol of S st
           [o1,the carrier of S] = a.{} & the_result_sort_of o1 = rs};
      A4: A = AX by A3;
-        Sym(o,X) ==> roots p by A2,Th10;
-     then reconsider a = (Sym(o,X))-tree p as Element of TS D by DTCONSTR:def 4
-;
-        (ex q being DTree-yielding FinSequence st p = q & dom a = tree doms q)
-&
-      a.{} = Sym(o,X) & for n be Nat st n < len p holds a|<*n*> = p.(n+1)
+     Sym(o,X) ==> roots p by A2,Th10;
+     then
+     reconsider a = (Sym(o,X))-tree p as Element of TS D by DTCONSTR:def 4;
+     (ex q being DTree-yielding FinSequence st p = q & dom a = tree doms q)
+     &
+      a.{} = Sym(o,X) &
+      for n be Element of NAT st n < len p holds a|<*n*> = p.(n+1)
                                             by TREES_4:def 4;
      then consider q being DTree-yielding FinSequence such that
      A5: p = q & dom a = tree doms q &
      a.{} = Sym(o,X) &
-     for n be Nat st n < len p holds a|<*n*> = p.(n+1);
+     for n be Element of NAT st n < len p holds
+     a|<*n*> = p.(n+1);
      thus y in AX by A4,A5;
      thus P[x,y];
     end;
@@ -1812,7 +1815,7 @@ A15:      x2 = the carrier of S by TARSKI:def 1;
          proof
           let x;
           assume A27: x in dom (B * ar);
-          then reconsider n = x as Nat by A22;
+          then reconsider n = x as Nat by A22,ORDINAL1:def 13;
           A28: rng ts c= TS D by FINSEQ_1:def 4;
           A29: ts.n in rng ts by A22,A23,A24,A25,A27,FUNCT_1:def 5;
           then reconsider T = ts.x as Element of TS(D) by A28;
@@ -2350,7 +2353,7 @@ proof
      proof
       let x;
       assume A30: x in dom (S1 * ar);
-      then reconsider n = x as Nat by A25;
+      then reconsider n = x as Nat by A25,ORDINAL1:def 13;
       A31: p.n = G.(ts.n) by A29,A30,ALG_1:1;
       A32: rng ts c= TS D by FINSEQ_1:def 4;
       A33: ts.n in rng ts by A21,A25,A27,A28,A30,FUNCT_1:def 5;
@@ -2476,7 +2479,7 @@ then A63: @(X,Sym(o,X)) = o by ZFMISC_1:33;
     proof
      let a be set;
      assume A72: a in dom p;
-     then reconsider n = a as Nat;
+     then reconsider n = a as Nat by ORDINAL1:def 13;
      A73: (G*p).n = G.(x.n) by A70,A72;
      A74: (h#x).n = (h.(ar/.n)).(x.n) by A72,MSUALG_3:def 8;
      A75: h.(ar/.n) = G | (SA.(ar/.n)) by A3;
@@ -2490,8 +2493,8 @@ then A63: @(X,Sym(o,X)) = o by ZFMISC_1:33;
      reconsider rt as Element of OU* by A79,ZFMISC_1:106;
      A80: len rt = len ar by A79,Th5;
      A81: Seg len rt = dom rt & Seg len ar = dom ar by FINSEQ_1:def 3;
-     then A82: p.n in ((FreeSort X) * ar).n by A72,A76,A77,A78,A80,CARD_3:18
-;
+     then
+A82: p.n in ((FreeSort X) * ar).n by A72,A76,A77,A78,A80,CARD_3:18;
         ((FreeSort X) * ar).n = SA.(ar.n) by A72,A77,A78,A80,A81,FUNCT_1:22
      .= SA.(ar/.n) by A72,A78,A80,A81,FINSEQ_4:def 4;
      hence thesis by A73,A74,A75,A82,FUNCT_1:72;

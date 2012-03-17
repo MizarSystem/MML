@@ -33,7 +33,7 @@ theorem :: SCMFSA_9:2
      card if>0(a, I ';' Goto insloc 0, SCM+FSA-Stop) = card I + 6;
 
 :: WHILE  Statement
- reserve m, n for Nat;
+ reserve m, n for Element of NAT;
 
 definition
  let a be Int-Location;
@@ -105,11 +105,11 @@ theorem :: SCMFSA_9:11
    while>0(a,I).insloc 1 = goto insloc 2;
 
 theorem :: SCMFSA_9:12
- for a being Int-Location, I being Macro-Instruction,k being Nat st
+ for a being Int-Location, I being Macro-Instruction,k being Element of NAT st
    k < 6 holds insloc k in dom while=0(a,I);
 
 theorem :: SCMFSA_9:13
- for a being Int-Location, I being Macro-Instruction,k being Nat st
+ for a being Int-Location, I being Macro-Instruction,k being Element of NAT st
    k < 6 holds insloc (card I +k) in dom while=0(a,I);
 
 theorem :: SCMFSA_9:14
@@ -125,7 +125,8 @@ theorem :: SCMFSA_9:16
      while=0(a,I).insloc 2 = goto insloc 3;
 
 theorem :: SCMFSA_9:17
-    for a being Int-Location, I being Macro-Instruction,k being Nat st
+    for a being Int-Location, I being Macro-Instruction,k being Element of NAT
+    st
    k < card I +6 holds insloc k in dom while=0(a,I);
 
 theorem :: SCMFSA_9:18
@@ -135,7 +136,7 @@ theorem :: SCMFSA_9:18
 
 theorem :: SCMFSA_9:19
  for a being Int-Location, I being Macro-Instruction,
- s being State of SCM+FSA,k being Nat st
+ s being State of SCM+FSA,k being Element of NAT st
    I is_closed_on s & I is_halting_on s &
    k < LifeSpan (s +* (I +* Start-At insloc 0)) &
    IC (Computation (s +* (while=0(a,I) +* Start-At insloc 0))).(1 + k) =
@@ -176,7 +177,8 @@ theorem :: SCMFSA_9:22
  st I is_closed_on s & I is_halting_on s & s.a =0 holds
     IC (Computation (s +* (while=0(a,I) +* Start-At insloc 0))).
     (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) = insloc 0 &
-    for k being Nat st k <= LifeSpan (s +* (I +* Start-At insloc 0)) + 3
+    for k being Element of NAT st k <=
+     LifeSpan (s +* (I +* Start-At insloc 0)) + 3
     holds IC (Computation (s +* (while=0(a,I) +* Start-At insloc 0))).k
     in dom while=0(a,I);
 
@@ -191,12 +193,12 @@ definition
 :: SCMFSA_9:def 4
 
    it.0 = s &
-   for i being Nat
+   for i being Element of NAT
     holds it.(i+1)=(Computation (it.i +* (while=0(a,I) +* sl0))).
       (LifeSpan (it.i +* (I +* sl0)) + 3);
 end;
 
- reserve i,k,m,n for Nat;
+ reserve i,k,m,n for Element of NAT;
 
 canceled 2;
 
@@ -204,7 +206,7 @@ theorem :: SCMFSA_9:25
  StepWhile=0(a,I,s).(k+1)=StepWhile=0(a,I,StepWhile=0(a,I,s).k).1;
 
 scheme :: SCMFSA_9:sch 1
- MinIndex { F(Nat)->Nat,j() -> Nat} :
+ MinIndex { F(Element of NAT)->Element of NAT,j() -> Element of NAT} :
   ex k st F(k)=0 & for n st F(n)=0 holds k <= n
    provided
  F(0) = j() and
@@ -237,7 +239,7 @@ theorem :: SCMFSA_9:30
 
 theorem :: SCMFSA_9:31
   for I being Macro-Instruction,a being read-write Int-Location,
-   s being State of SCM+FSA,k,n being Nat st
+   s being State of SCM+FSA,k,n being Element of NAT st
 IC StepWhile=0(a,I,s).k =insloc 0 & StepWhile=0(a,I,s).k=
 (Computation (s +* (while=0(a,I) +* Start-At insloc 0))).n holds
 StepWhile=0(a,I,s).k = StepWhile=0(a,I,s).k +* (while=0(a,I)+*
@@ -248,11 +250,11 @@ Start-At insloc 0))).
 
 theorem :: SCMFSA_9:32
   for I being Macro-Instruction,a being read-write Int-Location,
-    s being State of SCM+FSA st (for k being Nat holds
+    s being State of SCM+FSA st (for k being Element of NAT holds
      I is_closed_on StepWhile=0(a,I,s).k &
      I is_halting_on StepWhile=0(a,I,s).k) &
     ex f being Function of product the Object-Kind of SCM+FSA,NAT st
-      (for k being Nat holds (f.(StepWhile=0(a,I,s).(k+1)) <
+      (for k being Element of NAT holds (f.(StepWhile=0(a,I,s).(k+1)) <
       f.(StepWhile=0(a,I,s).k)
       or f.(StepWhile=0(a,I,s).k) = 0) &
       ( f.(StepWhile=0(a,I,s).k)=0 iff (StepWhile=0(a,I,s).k).a <> 0 ) )
@@ -263,7 +265,7 @@ theorem :: SCMFSA_9:33
   for I being parahalting Macro-Instruction, a being read-write
     Int-Location, s being State of SCM+FSA st
     ex f being Function of product the Object-Kind of SCM+FSA,NAT st
-      (for k being Nat holds (f.(StepWhile=0(a,I,s).(k+1)) <
+      (for k being Element of NAT holds (f.(StepWhile=0(a,I,s).(k+1)) <
       f.(StepWhile=0(a,I,s).k) or f.(StepWhile=0(a,I,s).k) = 0) &
       ( f.(StepWhile=0(a,I,s).k)=0 iff (StepWhile=0(a,I,s).k).a <> 0 ) )
      holds
@@ -299,11 +301,11 @@ end;
 :: WHILE>0  Statement
 
 theorem :: SCMFSA_9:37
- for a being Int-Location, I being Macro-Instruction,k being Nat st
+ for a being Int-Location, I being Macro-Instruction,k being Element of NAT st
  k < 6 holds insloc k in dom while>0(a,I);
 
 theorem :: SCMFSA_9:38
- for a being Int-Location, I being Macro-Instruction,k being Nat st
+ for a being Int-Location, I being Macro-Instruction,k being Element of NAT st
   k < 6 holds insloc (card I +k) in dom while>0(a,I);
 
 theorem :: SCMFSA_9:39
@@ -319,7 +321,8 @@ theorem :: SCMFSA_9:41
      while>0(a,I).insloc 2 = goto insloc 3;
 
 theorem :: SCMFSA_9:42
-    for a being Int-Location, I being Macro-Instruction,k being Nat st
+    for a being Int-Location, I being Macro-Instruction,
+    k being Element of NAT st
  k < card I +6 holds insloc k in dom while>0(a,I);
 
 theorem :: SCMFSA_9:43
@@ -330,7 +333,7 @@ theorem :: SCMFSA_9:43
 
 theorem :: SCMFSA_9:44
  for a being Int-Location, I being Macro-Instruction,
- s being State of SCM+FSA,k being Nat st
+ s being State of SCM+FSA,k being Element of NAT st
    I is_closed_on s & I is_halting_on s &
    k < LifeSpan (s +* (I +* Start-At insloc 0)) &
    IC (Computation (s +* (while>0(a,I) +* Start-At insloc 0))).(1 + k) =
@@ -369,7 +372,8 @@ theorem :: SCMFSA_9:47
  st I is_closed_on s & I is_halting_on s & s.a >0 holds
     IC (Computation (s +* (while>0(a,I) +* Start-At insloc 0))).
     (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) = insloc 0 &
-    for k being Nat st k <= LifeSpan (s +* (I +* Start-At insloc 0)) + 3
+    for k being Element of NAT
+     st k <= LifeSpan (s +* (I +* Start-At insloc 0)) + 3
     holds IC (Computation (s +* (while>0(a,I) +* Start-At insloc 0))).k
     in dom while>0(a,I);
 
@@ -382,7 +386,7 @@ definition
  func StepWhile>0(a,I,s) -> Function of NAT,product the Object-Kind of SCM+FSA
   means
 :: SCMFSA_9:def 5
-   it.0 = s & for i being Nat holds
+   it.0 = s & for i being Element of NAT holds
     it.(i+1)=(Computation (it.i +* (while>0(a,I) +* sl0))).
       (LifeSpan (it.i +* (I +* sl0)) + 3);
 end;
@@ -400,7 +404,7 @@ theorem :: SCMFSA_9:51
 
 theorem :: SCMFSA_9:52
   for I being Macro-Instruction,a being read-write Int-Location,
-   s being State of SCM+FSA,k,n being Nat st
+   s being State of SCM+FSA,k,n being Element of NAT st
 IC StepWhile>0(a,I,s).k =insloc 0 & StepWhile>0(a,I,s).k=
 (Computation (s +* (while>0(a,I) +* Start-At insloc 0))).n holds
 StepWhile>0(a,I,s).k = StepWhile>0(a,I,s).k +* (while>0(a,I)+*
@@ -411,11 +415,11 @@ Start-At insloc 0))).
 
 theorem :: SCMFSA_9:53
   for I being Macro-Instruction,a being read-write Int-Location,
-    s being State of SCM+FSA st (for k being Nat holds
+    s being State of SCM+FSA st (for k being Element of NAT holds
      I is_closed_on StepWhile>0(a,I,s).k &
      I is_halting_on StepWhile>0(a,I,s).k) &
     ex f being Function of product the Object-Kind of SCM+FSA,NAT st
-      (for k being Nat holds (f.(StepWhile>0(a,I,s).(k+1)) <
+      (for k being Element of NAT holds (f.(StepWhile>0(a,I,s).(k+1)) <
       f.(StepWhile>0(a,I,s).k)
       or f.(StepWhile>0(a,I,s).k) = 0) &
       ( f.(StepWhile>0(a,I,s).k)=0 iff (StepWhile>0(a,I,s).k).a <= 0 ) )
@@ -426,7 +430,7 @@ theorem :: SCMFSA_9:54
   for I being parahalting Macro-Instruction, a being read-write
     Int-Location, s being State of SCM+FSA st
     ex f being Function of product the Object-Kind of SCM+FSA,NAT st
-      (for k being Nat holds (f.(StepWhile>0(a,I,s).(k+1)) <
+      (for k being Element of NAT holds (f.(StepWhile>0(a,I,s).(k+1)) <
       f.(StepWhile>0(a,I,s).k) or f.(StepWhile>0(a,I,s).k) = 0) &
       ( f.(StepWhile>0(a,I,s).k)=0 iff (StepWhile>0(a,I,s).k).a <= 0 ) )
      holds

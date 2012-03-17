@@ -13,12 +13,13 @@ environ
       FINSET_1, INT_1, NAT_1, FINSEQ_3, XXREAL_0;
  constructors ENUMSET1, WELLORD2, FUNCT_2, XXREAL_0, NAT_1, INT_1, MEMBERED,
       FINSEQ_3, ORDINAL2;
- registrations FINSEQ_1, FUNCT_1, INT_1, FINSET_1, RELSET_1, MEMBERED, ARYTM_3;
+ registrations FINSEQ_1, FUNCT_1, INT_1, FINSET_1, RELSET_1, MEMBERED, ARYTM_3,
+  ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions FUNCT_1, TARSKI, XBOOLE_0, FINSEQ_1;
  theorems CARD_1, CARD_2, ENUMSET1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FUNCT_1,
       FUNCT_2, INT_1, NAT_1, PARTFUN1, REAL_1, TARSKI, WELLORD2, ZFMISC_1,
-      RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0;
+      RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes FINSEQ_1, FINSET_1, NAT_1;
 
 begin
@@ -26,7 +27,7 @@ begin
 reserve f for Function;
 reserve p,q for FinSequence;
 reserve A,B,C,x,x1,x2,y,z for set;
-reserve i,k,l,m,m1,m2,n for Nat;
+reserve i,k,l,m,m1,m2,n for Element of NAT;
 reserve a for natural number;
 
 definition let f,x;
@@ -382,7 +383,7 @@ theorem
   end;
 
 definition let p; let x;
- func x..p -> Nat equals
+ func x..p -> Element of NAT equals
     Sgm(p " {x}).1;
  coherence
   proof set q = Sgm(p " {x});
@@ -434,7 +435,7 @@ theorem Th31:
   end;
 
 theorem Th32:
- x in rng p implies x..p - 1 is Nat & len p - x..p is Nat
+ x in rng p implies x..p - 1 is Element of NAT & len p - x..p is Element of NAT
   proof assume x in rng p;
     then len p is Integer & x..p is Integer & 1 is Integer &
          1 <= x..p & x..p <= len p by Th31;
@@ -460,7 +461,7 @@ theorem Th34:
       then consider y such that A5: y in dom q and A6: q.y = k by FUNCT_1:def 5
 ;
        A7: dom q = Seg(len q) by FINSEQ_1:def 3;
-      reconsider y as Nat by A5;
+      reconsider y as Element of NAT by A5;
           now assume not 1 < y;
          then 1 = y or y < 1 by REAL_1:def 5;
          then 1 = y or y = 0 by NAT_1:39;
@@ -663,7 +664,7 @@ definition let p; let x;
  func p -| x -> FinSequence means
   :Def6: ex n st n = x..p - 1 & it = p | Seg n;
  existence
-  proof reconsider n = x..p - 1 as Nat by A1,Th32;
+  proof reconsider n = x..p - 1 as Element of NAT by A1,Th32;
     reconsider q = p | Seg n as FinSequence by FINSEQ_1:19;
    take q;
    thus thesis;
@@ -707,12 +708,12 @@ theorem Th48:
 theorem Th49:
  x in rng p implies not x in rng(p -| x)
   proof assume that A1: x in rng p and A2: x in rng(p -| x);
-    reconsider n = x..p - 1 as Nat by A1,Th32; set r = p | Seg n;
+    reconsider n = x..p - 1 as Element of NAT by A1,Th32; set r = p | Seg n;
      A3: r = p -| x by A1,Th45;
     then consider y such that A4: y in dom r and A5: r.y = x by A2,
 FUNCT_1:def 5;
      A6: dom r = Seg n by A1,A3,Th47;
-    then reconsider y as Nat by A4;
+    then reconsider y as Element of NAT by A4;
 A7:  dom r c= dom p by RELAT_1:89;
         y <= n by A4,A6,FINSEQ_1:3;
      then y + 1 <= x..p & y < y + 1 by XREAL_1:31,XREAL_1:21;
@@ -764,8 +765,8 @@ definition let p; let x;
   :Def7: len it = len p - x..p &
          for k st k in dom it holds it.k = p.(k + x..p);
  existence
-  proof reconsider n = len p - x..p as Nat by A1,Th32;
-    deffunc F(Nat) = p.($1 + x..p);
+  proof reconsider n = len p - x..p as Element of NAT by A1,Th32;
+    deffunc F(Element of NAT) = p.($1 + x..p);
     consider q such that A2: len q = n and
      A3: for k st k in Seg n holds q.k = F(k) from FINSEQ_1:sch 2;
    take q;
@@ -802,7 +803,7 @@ theorem Th58:
   proof assume that A1: x in rng p and A2: n in dom(p |-- x);
         1 <= n & n <= n + x..p by A2,FINSEQ_3:27,NAT_1:37;
      then A3: 1 <= n + x..p by XXREAL_0:2;
-    reconsider m = len p - x..p as Nat by A1,Th32;
+    reconsider m = len p - x..p as Element of NAT by A1,Th32;
         n in Seg m by A1,A2,Th57;
      then n <= len p - x..p by FINSEQ_1:3;
      then n + x..p <= len p by XREAL_1:21;
@@ -816,7 +817,7 @@ theorem
     assume y in rng(p |-- x);
      then consider z such that A2: z in dom(p |-- x) and A3: (p |-- x).z = y
                                                               by FUNCT_1:def 5;
-      reconsider z as Nat by A2;
+      reconsider z as Element of NAT by A2;
        A4: y = p.(z + x..p) by A1,A2,A3,Def7;
           z + x..p in dom p by A1,A2,Th58;
    hence thesis by A4,FUNCT_1:def 5;
@@ -832,7 +833,7 @@ theorem Th60:
        then consider z such that A3: z in dom(p |-- x) and A4: (p |-- x).z = x
                                                                 by
 FUNCT_1:def 5;
-       reconsider z as Nat by A3;
+       reconsider z as Element of NAT by A3;
         A5: (p |-- x).z = p.(z + x..p) by A2,A3,Def7;
            z + x..p in dom p by A2,A3,Th58;
         then z + x..p = 0 + x..p by A1,A4,A5,Th36;
@@ -853,7 +854,7 @@ FUNCT_1:def 5;
           hence contradiction by A6,Th49;
          end;
          suppose A12: x..p < k;
-           then consider m such that A13: k = x..p + m by NAT_1:28;
+           then consider m be Nat such that A13: k = x..p + m by NAT_1:28;
                x..p + 0 < x..p + m by A12,A13;
             then 0 < m by XREAL_1:8;
             then A14: 0 + 1 <= m by NAT_1:38;
@@ -877,7 +878,7 @@ theorem Th61:
     consider y such that A4: y in dom(p |-- x) and A5: (p |-- x).y = x
                                                             by A3,FUNCT_1:def 5
 ;
-    reconsider y as Nat by A4;
+    reconsider y as Element of NAT by A4;
      A6: (p |-- x).y = p.(y + x..p) by A1,A4,Def7;
      A7: x..p in dom p & p.(x..p) = x by A1,Th29,Th30;
         1 <= x..p & x..p <= y + x..p by A1,Th31,NAT_1:37;
@@ -946,7 +947,7 @@ theorem
                                                                  by
 FUNCT_1:def 5;
          A5: dom(p |-- x) = Seg(len(p |-- x)) by FINSEQ_1:def 3;
-        reconsider z as Nat by A3;
+        reconsider z as Element of NAT by A3;
          A6: y = p.(z + x..p) by A1,A3,A4,Def7;
             1 <= x..p & x..p <= z + x..p by A1,Th31,NAT_1:37;
          then A7: 1 <= z + x..p by XXREAL_0:2;
@@ -1047,7 +1048,7 @@ theorem Th69:
          now let k;
         assume A8: k in dom s;
           then A9: s.k = p.(k + x..p) by A2,Def7;
-         reconsider m = x..p - 1 as Nat by A2,Th32;
+         reconsider m = x..p - 1 as Element of NAT by A2,Th32;
          set z = k + m;
           A10: dom s = Seg(len s) by FINSEQ_1:def 3;
           then A11: 1 <= k & 1 <= x..p by A2,A8,Th31,FINSEQ_1:3;
@@ -1109,7 +1110,7 @@ theorem Th71:
                      A3: p - {x} = (p -| x) ^ (p |-- x);
     let x1,x2; set q = p - {x};
      assume that A4: x1 in dom p and A5: x2 in dom p and A6: p.x1 = p.x2;
-      reconsider k1 = x1, k2 = x2 as Nat by A4,A5;
+      reconsider k1 = x1, k2 = x2 as Element of NAT by A4,A5;
        A7: p just_once_values x by A1,A3,Th69;
 
           now per cases by XXREAL_0:1;
@@ -1130,10 +1131,11 @@ theorem Th71:
         end;
         suppose A8: k1 < x..p & x..p < k2;
            then k2 <> 0 by NAT_1:18;
-          then consider m2 such that A9: k2 = m2 + 1 by NAT_1:22;
-              k1 in Seg(len p) by A4,FINSEQ_1:def 3;
+          then consider m2 be Nat such that A9: k2 = m2 + 1 by NAT_1:22;
+          reconsider m2 as Element of NAT by ORDINAL1:def 13;
+           k1 in Seg(len p) by A4,FINSEQ_1:def 3;
            then A10: 1 <= k1 by FINSEQ_1:3;
-              x..p <= len p by A1,Th31;
+           x..p <= len p by A1,Th31;
            then k1 < len p by A8,XXREAL_0:2;
            then k1 + 1 <= len p by NAT_1:38;
            then k1 <= len p - 1 by XREAL_1:21;
@@ -1141,9 +1143,9 @@ theorem Th71:
            then k1 in Seg(len q) by A10;
            then A11: k1 in dom q by FINSEQ_1:def 3;
            A12: x..p <= m2 by A8,A9,NAT_1:38;
-              1 <= x..p by A1,Th31;
+           1 <= x..p by A1,Th31;
            then A13: 1 <= m2 by A12,XXREAL_0:2;
-              k2 in Seg(len p) by A5,FINSEQ_1:def 3;
+           k2 in Seg(len p) by A5,FINSEQ_1:def 3;
            then k2 <= len p by FINSEQ_1:3;
            then m2 <= len p - 1 by A9,XREAL_1:21;
            then m2 <= len q by A7,Th40;
@@ -1167,12 +1169,13 @@ theorem Th71:
         end;
         suppose A18: x..p < k1 & x..p < k2;
            then A19: k1 <> 0 & k2 <> 0 by NAT_1:18;
-          then consider m1 such that A20: k1 = m1 + 1 by NAT_1:22;
-          consider m2 such that A21: k2 = m2 + 1 by A19,NAT_1:22;
+          then consider m1 be Nat such that A20: k1 = m1 + 1 by NAT_1:22;
+          consider m2 be Nat such that A21: k2 = m2 + 1 by A19,NAT_1:22;
+          reconsider m1, m2 as Element of NAT by ORDINAL1:def 13;
            A22: x..p <= m1 & x..p <= m2 by A18,A20,A21,NAT_1:38;
-              1 <= x..p by A1,Th31;
+           1 <= x..p by A1,Th31;
            then A23: 1 <= m1 & 1 <= m2 by A22,XXREAL_0:2;
-              k1 in Seg(len p) & k2 in Seg(len p) by A4,A5,FINSEQ_1:def 3;
+           k1 in Seg(len p) & k2 in Seg(len p) by A4,A5,FINSEQ_1:def 3;
            then k1 <= len p & k2 <= len p by FINSEQ_1:3;
            then m1 <= len p - 1 & m2 <= len p - 1 by A20,A21,XREAL_1:21;
            then m1 <= len q & m2 <= len q by A7,Th40;
@@ -1188,7 +1191,8 @@ theorem Th71:
         end;
         suppose A25: x..p < k1 & k2 < x..p;
            then k1 <> 0 by NAT_1:18;
-          then consider m2 such that A26: k1 = m2 + 1 by NAT_1:22;
+          then consider m2 be Nat such that A26: k1 = m2 + 1 by NAT_1:22;
+           reconsider m2 as Element of NAT by ORDINAL1:def 13;
               k2 in Seg(len p) by A5,FINSEQ_1:def 3;
            then A27: 1 <= k2 by FINSEQ_1:3;
               x..p <= len p by A1,Th31;
@@ -1199,13 +1203,13 @@ theorem Th71:
            then k2 in Seg(len q) by A27;
            then A28: k2 in dom q by FINSEQ_1:def 3;
            A29: x..p <= m2 by A25,A26,NAT_1:38;
-              1 <= x..p by A1,Th31;
+           1 <= x..p by A1,Th31;
            then A30: 1 <= m2 by A29,XXREAL_0:2;
-              k1 in Seg(len p) by A4,FINSEQ_1:def 3;
+           k1 in Seg len p by A4,FINSEQ_1:def 3;
            then k1 <= len p by FINSEQ_1:3;
            then m2 <= len p - 1 by A26,XREAL_1:21;
            then m2 <= len q by A7,Th40;
-           then m2 in Seg(len q) by A30;
+           then m2 in Seg len q by A30;
            then A31: m2 in dom(p - {x}) by FINSEQ_1:def 3;
            then q.k2 = p.k2 & q.m2 = p.k1 by A7,A25,A26,A28,A29,Th41;
          hence thesis by A2,A6,A25,A28,A29,A31,FUNCT_1:def 8;
@@ -1248,7 +1252,7 @@ then A2: P[{}];
          proof let x,y;
            assume that A8: x in dom q and A9: y in dom q and A10: q.x = q.y;
                 x in Seg(len q) & y in Seg(len q) by A8,A9,FINSEQ_1:def 3;
-            then reconsider k = x, l = y as Nat;
+            then reconsider k = x, l = y as Element of NAT;
              A11: now assume A12: k in dom p & l in dom p;
                then q.k = p.k & q.l = p.l by FINSEQ_1:def 7;
               hence thesis by A4,A10,A12,FUNCT_1:def 8;
@@ -1271,9 +1275,11 @@ then A2: P[{}];
                 then B = p.l by A22,FINSEQ_1:def 8;
               hence thesis by A3,A7,A19,FUNCT_1:def 5;
              end;
-                now given m1 being Nat such that A23: m1 in dom<* B *> and
+                now given m1 being Element of NAT such that
+                A23: m1 in dom<* B *> and
                                               A24: k = len p + m1;
-               given m2 being Nat such that A25: m2 in dom<* B *> and
+               given m2 being Element of NAT such that
+               A25: m2 in dom<* B *> and
                                             A26: l = len p + m2;
                    m1 in {1} & m2 in {1} by A23,A25,FINSEQ_1:4,def 8;
                 then m1 = 1 & m2 = 1 by TARSKI:def 1;
@@ -1291,7 +1297,7 @@ then A27: for B,C being set st B in A & C c= A & P[C] holds P[C \/ {B}];
 theorem Th74:
  rng p c= dom p & p is one-to-one implies rng p = dom p
   proof
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
       for q st len q = $1 & rng q c= dom q & q is one-to-one holds
         rng q = dom q;
      now let q;
@@ -1312,7 +1318,7 @@ then A2: P[0];
           dom q c= rng q
         proof let x;
           assume A8: x in dom q;
-           then reconsider n = x as Nat;
+           then reconsider n = x as Element of NAT;
              per cases;
              suppose A9: k + 1 in rng q;
                   now per cases;
@@ -1357,7 +1363,7 @@ then A2: P[0];
                 then q.(k + 1) in rng q by A7,FUNCT_1:def 5;
                 then consider x such that A23: x in dom r and
                 A24: r.x = q.(k + 1) by A18,A19,A21,FUNCT_1:def 5;
-               reconsider n = x as Nat by A23;
+               reconsider n = x as Element of NAT by A23;
 A25:           dom r c= dom q by RELAT_1:89;
                 A26: r.x = q.x by A18,A23,FUNCT_1:72;
                    n <= k & k < k + 1 by A18,A23,FINSEQ_1:3,XREAL_1:31;
@@ -1375,7 +1381,7 @@ A28: for k holds P[k] from NAT_1:sch 1(A2,A27);
 theorem Th75:
  rng p = dom p implies p is one-to-one
   proof
-    defpred P[Nat] means for p st len p = $1 & rng p = dom p
+    defpred P[Element of NAT] means for p st len p = $1 & rng p = dom p
          holds p is one-to-one;
     A1: P[0] by FINSEQ_1:25;
     A2: now let k;

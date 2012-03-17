@@ -8,7 +8,8 @@ environ
 
  vocabularies ORDINAL1, RELAT_1, FUNCT_1, BOOLE, WELLORD1, TARSKI, WELLORD2,
       ORDINAL2, FINSET_1, CARD_1, FUNCOP_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0,
+   NAT_1, RELAT_1,
       FUNCT_1, FUNCOP_1, WELLORD1, ORDINAL1, ORDINAL2, WELLORD2, FINSET_1,
       XXREAL_0;
  constructors WELLORD1, WELLORD2, FUNCOP_1, FINSET_1, XXREAL_0, XREAL_0, NAT_1,
@@ -28,7 +29,7 @@ begin
          X,X1,Y,Y1,Z,a,b,b1,b2,x,y,z for set,
          R for Relation,
          f,g,h for Function,
-         k,m,n for Nat;
+         k,m,n for Element of NAT;
 
  Lm1: A c= B implies succ A c= succ B
   proof assume
@@ -791,7 +792,7 @@ canceled 3;
 theorem
  Th56: n <= m iff n c= m
   proof
-defpred P[Nat] means for m holds $1 <= m iff $1 c= m;
+defpred P[Element of NAT] means for m holds $1 <= m iff $1 c= m;
 A1:  P[0] by NAT_1:18,XBOOLE_1:2;
 A2:  for n st P[n] holds P[n+1]
      proof let n such that
@@ -799,8 +800,9 @@ A3:    P[n];
       let m;
       thus n+1 <= m implies (n+1) c= m
         proof assume n+1 <= m;
-         then consider k such that
+         then consider k being Nat such that
 A4:       m = n+1+k by NAT_1:28;
+          reconsider k as Element of NAT by ORDINAL1:def 13;
              n <= n+k by NAT_1:29;
           then n c= (n+k) by A3;
       then succ n c= succ (n+k) & (n+1) = succ n &
@@ -987,7 +989,7 @@ canceled 2;
 theorem Th64:
    n,m are_equipotent implies n = m
   proof
-    defpred P[Nat] means ex n st n,$1 are_equipotent & n <> $1;
+    defpred P[Element of NAT] means ex n st n,$1 are_equipotent & n <> $1;
     assume
        n,m are_equipotent & n <> m;
 then A1:  ex m st P[m];
@@ -1001,6 +1003,7 @@ A5:  f is one-to-one & dom f = n & rng f = m by A4,WELLORD2:def 4;
         m <> 0 by A4,A5,RELAT_1:65;
    then consider m1 being Nat such that
 A6:  m = m1+1 by NAT_1:22;
+     reconsider m1 as Element of NAT by ORDINAL1:def 13;
 A7: not m1 in m1;
 A8: m1 \/ {m1} = succ m1 by ORDINAL1:def 1 .= m by A6,Th52;
     then A9:  m \ {m1} = m1 \ {m1} by XBOOLE_1:40
@@ -1008,6 +1011,7 @@ A8: m1 \/ {m1} = succ m1 by ORDINAL1:def 1 .= m by A6,Th52;
        n <> 0 by A4,A5,RELAT_1:65;
    then consider n1 being Nat such that
 A10:  n = n1+1 by NAT_1:22;
+      reconsider n1 as Element of NAT by ORDINAL1:def 13;
 A11: not n1 in n1;
 A12: n1 \/ {n1} = succ n1 by ORDINAL1:def 1 .= n by A10,Th52;
 then A13:  n \ {n1} = n1 \ {n1} by XBOOLE_1:40
@@ -1032,12 +1036,12 @@ A3:  B,A are_equipotent & not A c= B by A2;
     hence contradiction by A1,A3,Th64;
   end;
 
-registration cluster -> cardinal Nat;
+registration cluster -> cardinal Element of NAT;
   correctness by Th65;
 end;
 
 theorem
- Th66: for n being Nat holds n = Card n by Def5;
+ Th66: for n being Element of NAT holds n = Card n by Def5;
 
 canceled;
 
@@ -1161,7 +1165,7 @@ end;
 definition let X be finite set;
  redefine  canceled 2;
 
-func card X -> Nat means
+func card X -> Element of NAT means
             Card it = Card X;
   coherence
    proof consider n such that
@@ -1314,14 +1318,14 @@ A4:   N = n by A2;
   end;
 
 registration
- cluster -> finite Nat;
+ cluster -> finite Element of NAT;
  coherence by Th69;
 end;
 
 registration
  cluster finite Cardinal;
  existence
-  proof consider n being Nat;
+  proof consider n being Element of NAT;
    take n;
    thus thesis;
   end;

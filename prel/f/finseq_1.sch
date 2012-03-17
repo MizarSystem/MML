@@ -18,9 +18,8 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="56"/>
 <Func kind="K" nr="60"/>
 </Typ>
 </ArgTypes>
@@ -44,9 +43,8 @@
 </Func>
 </Pred>
 <For>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="56"/>
 <Func kind="K" nr="60"/>
 </Typ>
 <Not>
@@ -74,9 +72,8 @@
 </For>
 </Not>
 <For>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="56"/>
 <Func kind="K" nr="60"/>
 </Typ>
 <For>
@@ -115,9 +112,8 @@
 </For>
 </For>
 <For>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="56"/>
 <Func kind="K" nr="60"/>
 </Typ>
 <Not>
@@ -145,9 +141,8 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="56"/>
 <Func kind="K" nr="60"/>
 </Typ>
 <Typ kind="M" nr="1">
@@ -172,9 +167,8 @@
 <Func kind="F" nr="1"/>
 </Pred>
 <For>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="56"/>
 <Func kind="K" nr="60"/>
 </Typ>
 <Not>
@@ -357,9 +351,8 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="56"/>
 <Func kind="K" nr="60"/>
 </Typ>
 </ArgTypes>
@@ -380,9 +373,8 @@
 </Func>
 </Pred>
 <For>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="56"/>
 <Func kind="K" nr="60"/>
 </Typ>
 <Not>
@@ -410,9 +402,8 @@
 </For>
 </Not>
 <For>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="56"/>
 <Func kind="K" nr="60"/>
 </Typ>
 <Not>
@@ -441,14 +432,12 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="56"/>
 <Func kind="K" nr="60"/>
 </Typ>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="56"/>
 <Func kind="K" nr="60"/>
 </Typ>
 <Typ kind="M" nr="1">
@@ -457,9 +446,8 @@
 </ArgTypes>
 <Pred kind="V" nr="18">
 <Fraenkel>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="56"/>
 <Func kind="K" nr="60"/>
 </Typ>
 <Func kind="F" nr="3">

@@ -33,9 +33,8 @@
 </Pred>
 </For>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="72"/>
 <Func kind="K" nr="76"/>
 </Typ>
 <For>
@@ -924,9 +923,8 @@
 </Func>
 </Typ>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="72"/>
 <Func kind="K" nr="76"/>
 </Typ>
 <For>

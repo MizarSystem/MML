@@ -13,7 +13,7 @@ environ
       MCART_1, TDGROUP, QC_LANG1, FACIRC_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, ENUMSET1, ZFMISC_1, RELAT_1,
       FUNCT_1, FINSET_1, ORDINAL1, ORDINAL2,
-      CLASSES1, FUNCT_2, XXREAL_0, NAT_1,
+      CLASSES1, FUNCT_2, XCMPLX_0, XXREAL_0, NAT_1,
       PARTFUN1, LIMFUNC1, REWRITE1, STRUCT_0, FINSEQ_1, FINSEQ_2, FINSEQ_4,
       FINSEQOP, PBOOLE, GROUP_1, MSUALG_1, FACIRC_1, MSAFREE2, CIRCUIT1,
       CIRCUIT2, CIRCCOMB, PRE_CIRC, MCART_1, BINARITH, FUNCT_5, SEQM_3,
@@ -24,7 +24,7 @@ environ
  registrations MSUALG_1, CIRCCOMB, PRE_CIRC, FINSET_1, CIRCTRM1, RELSET_1,
       FINSEQ_1, FINSEQ_2, STRUCT_0, FSM_1, XBOOLE_0, ORDINAL1, YELLOW_6,
       MSAFREE, FACIRC_1, MEMBERED, SEQM_3, ORDINAL2, FUNCOP_1, PBOOLE,
-      FRAENKEL, CARD_3, XXREAL_0, FINSEQ_4;
+      FRAENKEL, CARD_3, XXREAL_0, FINSEQ_4, NAT_1;
  requirements BOOLE, SUBSET, NUMERALS, REAL;
  definitions TARSKI, XBOOLE_0, RELAT_1, SEQM_3, REWRITE1, PRE_CIRC, MSAFREE2,
       CIRCUIT2, CIRCCOMB, FACIRC_1;
@@ -42,21 +42,21 @@ theorem Th1:
  for S being non void Circuit-like (non empty ManySortedSign)
  for A being non-empty Circuit of S
  for s being State of A, x being set st x in InputVertices S
- for n being Nat holds Following(s,n).x = s.x
+ for n being Element of NAT holds Following(s,n).x = s.x
   proof let S be non void Circuit-like (non empty ManySortedSign);
    let A be non-empty Circuit of S;
    let s be State of A, x be set such that
 A1: x in InputVertices S;
-defpred P[Nat] means Following(s,$1).x = s.x;
+defpred P[Element of NAT] means Following(s,$1).x = s.x;
 A2: P[0] by FACIRC_1:11;
-A3: now let n be Nat; assume
+A3: now let n be Element of NAT; assume
 A4:   P[n];
        Following(s,n+1).x
         = (Following Following(s,n)).x by FACIRC_1:12
        .= s.x by A1,A4,CIRCUIT2:def 5;
       hence P[n+1];
     end;
-   thus for n be Nat holds P[n] from NAT_1:sch 1(A2,A3);
+   thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
   end;
 
 definition
@@ -64,7 +64,7 @@ definition
  let A be non-empty Circuit of S;
  let s be State of A;
  attr s is stabilizing means :Def1:
- ex n being Nat st Following(s,n) is stable;
+ ex n being Element of NAT st Following(s,n) is stable;
 end;
 
 definition
@@ -73,7 +73,7 @@ definition
  attr A is stabilizing means :Def2:
  for s being State of A holds s is stabilizing;
  attr A is with_stabilization-limit means
-    ex n being Nat st
+    ex n being Element of NAT st
  for s being State of A holds Following(s,n) is stable;
 end;
 
@@ -82,7 +82,7 @@ registration
  cluster with_stabilization-limit -> stabilizing (non-empty Circuit of S);
  coherence
   proof let A be non-empty Circuit of S;
-   given n being Nat such that
+   given n being Element of NAT such that
 A1: for s being State of A holds Following(s,n) is stable;
    let s be State of A; take n; thus thesis by A1;
   end;
@@ -93,10 +93,10 @@ definition
  let A be non-empty Circuit of S;
  let s be State of A such that A1: s is stabilizing;
  func Result s -> State of A means :Def4:
- it is stable & ex n being Nat st it = Following(s,n);
+ it is stable & ex n being Element of NAT st it = Following(s,n);
  existence
   proof
-   consider n being Nat such that
+   consider n being Element of NAT such that
 A2: Following(s,n) is stable by A1,Def1;
    take Following(s,n);
    thus thesis by A2;
@@ -104,11 +104,11 @@ A2: Following(s,n) is stable by A1,Def1;
  uniqueness
   proof
    let s1,s2 be State of A; assume that
-A3: s1 is stable & ex n being Nat st s1 = Following(s,n) and
-A4: s2 is stable & ex n being Nat st s2 = Following(s,n);
-   consider n1 being Nat such that
+A3: s1 is stable & ex n being Element of NAT st s1 = Following(s,n) and
+A4: s2 is stable & ex n being Element of NAT st s2 = Following(s,n);
+   consider n1 being Element of NAT such that
 A5: s1 = Following(s,n1) by A3;
-   consider n2 being Nat such that
+   consider n2 being Element of NAT such that
 A6: s2 = Following(s,n2) by A4;
    per cases;
    suppose n1<=n2;
@@ -124,25 +124,25 @@ definition
  let S be non void Circuit-like (non empty ManySortedSign);
  let A be non-empty Circuit of S;
  let s be State of A such that A1: s is stabilizing;
- func stabilization-time s -> Nat means :Def5:
- Following(s,it) is stable & for n being Nat st n < it holds
+ func stabilization-time s -> Element of NAT means :Def5:
+ Following(s,it) is stable & for n being Element of NAT st n < it holds
  not Following(s,n) is stable;
  existence
   proof
-    defpred P[Nat] means Following(s,$1) is stable;
-A2: ex k being Nat st P[k] by A1,Def1;
-   consider m being Nat such that
+    defpred P[Element of NAT] means Following(s,$1) is stable;
+A2: ex k being Element of NAT st P[k] by A1,Def1;
+   consider m being Element of NAT such that
 A3: P[m] &
-   for n being Nat st P[n] holds m <= n from NAT_1:sch 5(A2);
+   for n being Element of NAT st P[n] holds m <= n from NAT_1:sch 5(A2);
    take m;
    thus thesis by A3;
   end;
  uniqueness
   proof
-   let n1,n2 be Nat such that
-A4: Following(s,n1) is stable & for n being Nat st n < n1 holds
+   let n1,n2 be Element of NAT such that
+A4: Following(s,n1) is stable & for n being Element of NAT st n < n1 holds
    not Following(s,n) is stable and
-A5: Following(s,n2) is stable & for n being Nat st n < n2 holds
+A5: Following(s,n2) is stable & for n being Element of NAT st n < n2 holds
    not Following(s,n) is stable;
    assume A6: n1<>n2;
    per cases by A6,XXREAL_0:1;
@@ -171,12 +171,12 @@ theorem Th2:
 theorem
     for S being non void Circuit-like (non empty ManySortedSign)
  for A being non-empty Circuit of S
- for s being State of A, n being Nat st Following(s,n) is stable
+ for s being State of A, n being Element of NAT st Following(s,n) is stable
   holds stabilization-time s <= n
   proof
    let S be non void Circuit-like (non empty ManySortedSign);
    let A be non-empty Circuit of S;
-   let s be State of A, n be Nat; assume
+   let s be State of A, n be Element of NAT; assume
 A1: Following(s,n) is stable;
     then s is stabilizing by Def1;
    hence thesis by A1,Def5;
@@ -185,12 +185,12 @@ A1: Following(s,n) is stable;
 theorem Th4:
  for S being non void Circuit-like (non empty ManySortedSign)
  for A being non-empty Circuit of S
- for s being State of A, n being Nat st Following(s,n) is stable
+ for s being State of A, n being Element of NAT st Following(s,n) is stable
   holds Result s = Following(s, n)
   proof
    let S be non void Circuit-like (non empty ManySortedSign);
    let A be non-empty Circuit of S;
-   let s be State of A, n be Nat; assume
+   let s be State of A, n be Element of NAT; assume
 A1: Following(s,n) is stable;
     then s is stabilizing by Def1;
    hence thesis by A1,Def4;
@@ -199,13 +199,13 @@ A1: Following(s,n) is stable;
 theorem Th5:
  for S being non void Circuit-like (non empty ManySortedSign)
  for A being non-empty Circuit of S
- for s being State of A, n being Nat
+ for s being State of A, n being Element of NAT
   st s is stabilizing & n >= stabilization-time s
   holds Result s = Following(s, n)
   proof
    let S be non void Circuit-like (non empty ManySortedSign);
    let A be non-empty Circuit of S;
-   let s be State of A, n be Nat; assume
+   let s be State of A, n be Element of NAT; assume
 A1: s is stabilizing & n >= stabilization-time s;
     then Result s is stable by Def4;
     then Following(s, stabilization-time s) is stable by A1,Th2;
@@ -261,9 +261,9 @@ A4: A = A1 +* A2;
    assume
 A5: s1=s|the carrier of S1 & s2=s|the carrier of S2 &
    s1 is stabilizing & s2 is stabilizing;
-   then consider n1 being Nat such that
+   then consider n1 being Element of NAT such that
 A6: Following(s1,n1) is stable by Def1;
-   consider n2 being Nat such that
+   consider n2 being Element of NAT such that
 A7: Following(s2,n2) is stable by A5,Def1;
       Following(s,max(n1,n2)) is stable by A1,A2,A3,A4,A5,A6,A7,CIRCCMB2:23;
    hence s is stabilizing by Def1;
@@ -306,7 +306,7 @@ A7: s is stabilizing by A1,A2,A3,A4,A5,A6,Th8;
    then A8: Following(s,max(st1,st2)) is stable by A1,A2,A3,A4,A5,A6,
 CIRCCMB2:23;
       now
-    let n be Nat such that
+    let n be Element of NAT such that
 A9:  n < max(st1,st2);
     per cases;
     suppose st1<=st2;
@@ -397,12 +397,13 @@ A7: s is stabilizing by A1,A2,A3,A4,A5,A6,Th10;
 A8: Following(s1,st1) is stable & Following(s2,st2) is stable by A5,A6,Def5;
    then A9: Following(s,st1+st2) is stable by A1,A2,A3,A4,A5,A6,CIRCCMB2:20;
       now
-    let n be Nat such that
+    let n be Element of NAT such that
 A10:  n < st1+st2;
     per cases;
     suppose st1 <= n;
      then consider m being Nat such that
 A11:   n = st1+m by NAT_1:28;
+       reconsider m as Element of NAT by ORDINAL1:def 13;
          m < st2 by A10,A11,XREAL_1:8;
 then A12:   Following(s2,m) is not stable by A6,Def5;
          Following(s1,st1) = Following(s,st1)|the carrier of S1
@@ -459,14 +460,14 @@ begin :: One-gate circuits
 
 theorem Th13:
  for x being set, X being non empty finite set
- for n being Nat
+ for n being Element of NAT
  for p being FinSeqLen of n
  for g being Function of n-tuples_on X, X
  for s being State of 1GateCircuit(p,g) holds
  s*p is Element of n-tuples_on X
   proof
    let x be set, X be non empty finite set;
-   let n being Nat;
+   let n being Element of NAT;
    let p being FinSeqLen of n;
    let g be Function of n-tuples_on X, X;
    let s be State of 1GateCircuit(p,g);
@@ -610,7 +611,8 @@ end;
 definition
  let S be ManySortedSign;
  attr S is one-gate means :Def6:
-  ex X being non empty finite set, n being Nat, p being FinSeqLen of n,
+  ex X being non empty finite set, n being Element of NAT,
+  p being FinSeqLen of n,
   f being Function of n-tuples_on X,X st
   S = 1GateCircStr(p,f);
 end;
@@ -619,7 +621,8 @@ definition
  let S be non empty ManySortedSign;
  let A be MSAlgebra over S;
  attr A is one-gate means :Def7:
-  ex X being non empty finite set, n being Nat, p being FinSeqLen of n,
+  ex X being non empty finite set, n being Element of NAT,
+  p being FinSeqLen of n,
   f being Function of n-tuples_on X,X st
   S = 1GateCircStr(p,f) & A = 1GateCircuit(p,f);
 end;
@@ -641,7 +644,8 @@ registration
   proof
    let S be ManySortedSign;
    assume S is one-gate;
-   then ex X being non empty finite set, n being Nat, p being FinSeqLen of n,
+   then ex X being non empty finite set, n being Element of NAT,
+   p being FinSeqLen of n,
    f being Function of n-tuples_on X,X st S = 1GateCircStr(p,f) by Def6;
    hence thesis;
   end;
@@ -653,7 +657,8 @@ registration
   proof
    let S be non empty ManySortedSign;
    assume S is one-gate;
-   then ex X being non empty finite set, n being Nat, p being FinSeqLen of n,
+   then ex X being non empty finite set, n being Element of NAT,
+   p being FinSeqLen of n,
    f being Function of n-tuples_on X,X st S = 1GateCircStr(p,f) by Def6;
    hence thesis;
   end;
@@ -661,7 +666,7 @@ end;
 
 registration
  let X be non empty finite set,
-     n be Nat, p be FinSeqLen of n,
+     n be Element of NAT, p be FinSeqLen of n,
      f be Function of n-tuples_on X,X;
  cluster 1GateCircStr(p,f) -> one-gate;
  coherence by Def6;
@@ -671,7 +676,8 @@ registration
  cluster one-gate ManySortedSign;
  existence
   proof
-   consider X being non empty finite set, n being Nat, p being FinSeqLen of n,
+   consider X being non empty finite set, n being Element of NAT,
+   p being FinSeqLen of n,
    f being Function of n-tuples_on X,X;
    take 1GateCircStr(p,f);
    thus thesis;
@@ -685,7 +691,8 @@ registration
   proof
    let A be Circuit of S;
    assume A is one-gate;
-   then ex X being non empty finite set, n being Nat, p being FinSeqLen of n,
+   then ex X being non empty finite set, n being Element of NAT,
+   p being FinSeqLen of n,
    f being Function of n-tuples_on X,X st
    S = 1GateCircStr(p,f) & A = 1GateCircuit(p,f) by Def7;
    hence thesis;
@@ -694,7 +701,7 @@ end;
 
 registration
  let X be non empty finite set,
-     n be Nat, p be FinSeqLen of n,
+     n be Element of NAT, p be FinSeqLen of n,
      f be Function of n-tuples_on X,X;
  cluster 1GateCircuit(p,f) -> one-gate;
  coherence by Def7;
@@ -705,7 +712,8 @@ registration
  cluster one-gate non-empty Circuit of S;
  existence
   proof
-   consider X being non empty finite set, n being Nat, p being FinSeqLen of n,
+   consider X being non empty finite set, n being Element of NAT,
+   p being FinSeqLen of n,
    f being Function of n-tuples_on X,X such that
  A1: S = 1GateCircStr(p,f) by Def6;
    reconsider A = 1GateCircuit(p,f) as locally-finite MSAlgebra over S by A1;
@@ -719,7 +727,8 @@ definition
  func Output S -> Vertex of S equals  union the OperSymbols of S;
  coherence
   proof
-   consider X being non empty finite set, n being Nat, p being FinSeqLen of n,
+   consider X being non empty finite set, n being Element of NAT,
+   p being FinSeqLen of n,
    f being Function of n-tuples_on X,X such that
  A1: S = 1GateCircStr(p,f) by Def6;
       the OperSymbols of S = {[p,f]} by A1,CIRCCOMB:def 6;
@@ -735,7 +744,8 @@ registration
  cluster Output S -> pair;
  coherence
   proof
-   consider X being non empty finite set, n being Nat, p being FinSeqLen of n,
+   consider X being non empty finite set, n being Element of NAT,
+   p being FinSeqLen of n,
    f being Function of n-tuples_on X,X such that
 A1: S = 1GateCircStr(p,f) by Def6;
 A2: the OperSymbols of S = {[p,f]} by A1,CIRCCOMB:def 6;
@@ -760,7 +770,8 @@ theorem Th17:
  for S being one-gate ManySortedSign holds InnerVertices S = {Output S}
   proof
    let S be one-gate ManySortedSign;
-   consider X being non empty finite set, n being Nat, p being FinSeqLen of n,
+   consider X being non empty finite set, n being Element of NAT,
+   p being FinSeqLen of n,
    f being Function of n-tuples_on X,X such that
 A1: S = 1GateCircStr(p,f) by Def6;
       Output S = [p,f] by A1,Th16;
@@ -770,18 +781,18 @@ A1: S = 1GateCircStr(p,f) by Def6;
 theorem
     for S being one-gate ManySortedSign
  for A being one-gate Circuit of S
- for n being Nat
+ for n being Element of NAT
  for X being finite non empty set
  for f being Function of n-tuples_on X, X, p being FinSeqLen of n st
  A = 1GateCircuit(p,f) holds S = 1GateCircStr(p,f)
   proof
    let S be one-gate ManySortedSign;
    let A be one-gate Circuit of S;
-   let n be Nat;
+   let n be Element of NAT;
    let X be finite non empty set;
    let f be Function of n-tuples_on X, X, p be FinSeqLen of n such that
 A1: A = 1GateCircuit(p,f);
-   consider X1 being non empty finite set, n1 being Nat,
+   consider X1 being non empty finite set, n1 being Element of NAT,
    p1 being FinSeqLen of n1,
    f1 being Function of n1-tuples_on X1,X1 such that
 A2: S = 1GateCircStr(p1,f1) & A = 1GateCircuit(p1,f1) by Def7;
@@ -796,13 +807,13 @@ A2: S = 1GateCircStr(p1,f1) & A = 1GateCircuit(p1,f1) by Def7;
   end;
 
 theorem
-    for n being Nat
+    for n being Element of NAT
  for X being finite non empty set
  for f being Function of n-tuples_on X, X, p being FinSeqLen of n
  for s being State of 1GateCircuit(p,f) holds
  (Following s).Output 1GateCircStr(p,f) = f.(s*p)
   proof
-   let n be Nat;
+   let n be Element of NAT;
    let X be finite non empty set;
    let f be Function of n-tuples_on X, X, p be FinSeqLen of n;
    let s be State of 1GateCircuit(p,f);
@@ -818,7 +829,7 @@ theorem Th20:
    let S be one-gate ManySortedSign;
    let A be one-gate Circuit of S;
    let s be State of A;
-      ex X being non empty finite set, n being Nat,
+      ex X being non empty finite set, n being Element of NAT,
    p being FinSeqLen of n, f being Function of n-tuples_on X,X st
    S = 1GateCircStr(p,f) & A = 1GateCircuit(p,f) by Def7;
    hence Following s is stable by CIRCCMB2:2;
@@ -831,7 +842,8 @@ registration
   proof
    let A be non-empty Circuit of S;
    assume A1: A is one-gate;
-   then consider X being non empty finite set, n being Nat, p being FinSeqLen
+   then consider X being non empty finite set, n being Element of NAT,
+   p being FinSeqLen
 of n,
    f being Function of n-tuples_on X,X such that
 A2: S = 1GateCircStr(p,f) & A = 1GateCircuit(p,f) by Def7;
@@ -1081,12 +1093,12 @@ then ((dom f) --> the_value_of f).x = the_value_of f by FUNCOP_1:13;
   end;
 
 theorem Th24:
- for X,Y being non empty set, n,m being Nat st
+ for X,Y being non empty set, n,m being Element of NAT st
  n<>0 & n-tuples_on X = m-tuples_on Y
  holds X=Y & n=m
   proof
    let X,Y be non empty set;
-   let n,m be Nat;
+   let n,m be Element of NAT;
    assume
 A1: n<>0 & n-tuples_on X = m-tuples_on Y;
 then A2: Seg n <> {} by FINSEQ_1:5;
@@ -1167,11 +1179,11 @@ CIRCCOMB:def 14
 end;
 
 theorem Th27:
- for n being Nat, X being non empty finite set
+ for n being Element of NAT, X being non empty finite set
  for f being Function of n-tuples_on X, X
  for p being FinSeqLen of n
   holds 1GateCircStr(p,f) is Signature of X
-  proof let n be Nat, X be non empty finite set;
+  proof let n be Element of NAT, X be non empty finite set;
    let f be Function of n-tuples_on X, X;
    let p being FinSeqLen of n;
    take A = 1GateCircuit(p,f);
@@ -1192,7 +1204,7 @@ registration
   end;
 end;
 
-definition let n be Nat; let X be non empty finite set;
+definition let n be Element of NAT; let X be non empty finite set;
  let f be Function of n-tuples_on X, X;
  let p be FinSeqLen of n;
  redefine func 1GateCircStr(p,f) -> strict Signature of X;
@@ -1232,11 +1244,11 @@ A1: dom the Sorts of A = the carrier of S by PBOOLE:def 3;
 end;
 
 theorem Th28:
- for n being Nat, X being non empty finite set
+ for n being Element of NAT, X being non empty finite set
  for f being Function of n-tuples_on X, X
  for p being FinSeqLen of n
   holds 1GateCircuit(p,f) is Circuit of X, 1GateCircStr(p,f)
-  proof let n be Nat, X be non empty finite set;
+  proof let n be Element of NAT, X be non empty finite set;
    let f be Function of n-tuples_on X, X;
    let p being FinSeqLen of n;
    set A = 1GateCircuit(p,f);
@@ -1267,7 +1279,8 @@ then B is gate`2=den &
    by A1,CIRCCOMB:def 10,PBOOLE:def 3,RELAT_1:60;
    then reconsider B as Circuit of X,S by Def10;
    take B;
-   consider Y being non empty finite set, n being Nat, p being FinSeqLen of n,
+   consider Y being non empty finite set, n being Element of NAT,
+   p being FinSeqLen of n,
    f being Function of n-tuples_on Y,Y such that
 A3: S = 1GateCircStr(p,f) by Def6;
    set C = 1GateCircuit(p,f);
@@ -1367,7 +1380,7 @@ A1: the Sorts of A is constant &
   end;
 end;
 
-definition let n be Nat; let X be non empty finite set;
+definition let n be Element of NAT; let X be non empty finite set;
  let f be Function of n-tuples_on X, X;
  let p be FinSeqLen of n;
  redefine func 1GateCircuit(p,f) -> strict Circuit of X,1GateCircStr(p,f);
@@ -1598,8 +1611,8 @@ A2: for a,b being set holds [a,b] in R iff
       a in the carrier of S & b in the carrier of S & P[a,b]
        from RELAT_1:sch 1;
    defpred P[set] means
-    $1 in the carrier of S implies ex n being Nat st
-     for s being State of A, m being Nat st m >= n
+    $1 in the carrier of S implies ex n being Element of NAT st
+     for s being State of A, m being Element of NAT st m >= n
        holds Following(s,m).$1 = Following(s,n).$1;
 A3: R is co-well_founded
      proof let Y be set; assume
@@ -1666,15 +1679,15 @@ A24:  RS c= the carrier of S
        proof let o be set; assume o in RS; hence thesis by A19,A22; end;
 then A25:  RS is finite by FINSET_1:13;
        defpred P[set,set] means
-       ex n being Nat st $2 = n &
-       for s being State of A, m being Nat st m >= n
+       ex n being Element of NAT st $2 = n &
+       for s being State of A, m being Element of NAT st m >= n
        holds Following(s,m).$1 = Following(s,n).$1;
 A26:  for b being set st b in RS ex z being set st P[b,z]
        proof
         let b be set; assume A27: b in RS;
         then b in field R & a <> b & [a,b] in R by A22;
-        then ex n being Nat st
-        for s being State of A, m being Nat st m >= n
+        then ex n being Element of NAT st
+        for s being State of A, m being Element of NAT st m >= n
         holds Following(s,m).b = Following(s,n).b by A21,A24,A27;
         hence thesis;
        end;
@@ -1688,19 +1701,20 @@ A29:  for x being set st x in RS holds P[x,f.x] from ZFREFLE1:sch 1(A26);
         let o be set; assume o in rng f;
         then consider l being set such that
 A31:      l in dom f & o = f.l by FUNCT_1:def 5;
-        consider n being Nat such that
-A32:      f.l = n & for s being State of A, m being Nat st m >= n
+        consider n being Element of NAT such that
+A32:      f.l = n & for s being State of A, m being Element of NAT st m >= n
         holds Following(s,m).l = Following(s,n).l by A28,A29,A31;
         thus thesis by A31,A32;
        end;
       then reconsider C = rng f as finite non empty Subset of NAT by A25,A28
 ,A30,FINSET_1:26,RELAT_1:60,64;
-      reconsider mC = max C as Nat by ORDINAL1:def 13;
+      reconsider mC = max C as Element of NAT by ORDINAL1:def 13;
       take n = mC + 1;
       let s be State of A;
-      let m be Nat;
+      let m be Element of NAT;
       assume m >= n; then consider k being Nat such that
 A33:    m = n + k by NAT_1:28;
+        reconsider k as Element of NAT by ORDINAL1:def 13;
       consider b being Element of RS;
          b in field R & a <> b & [a,b] in R by A22,A30;
       then reconsider a1=a as Gate of S by A2;
@@ -1720,14 +1734,14 @@ then A38:     x <> a;
         then [a1,x] in R by A2,A23;
         then x in field R & [a,x] in R by RELAT_1:30;
 then A39:    x in RS by A22,A38;
-        then consider l being Nat such that
+        then consider l being Element of NAT such that
 A40:      f.x = l &
-        for s being State of A, m being Nat st m >= l
+        for s being State of A, m being Element of NAT st m >= l
         holds Following(s,m).x = Following(s,l).x by A29;
            l in rng f by A28,A39,A40,FUNCT_1:12;
 then A41:     max C >= l by PRE_CIRC:def 1;
            now
-         let k be Nat;
+         let k be Element of NAT;
             mC + k >= max C by NAT_1:29;
 then A42:      mC + k >= l by A41,XXREAL_0:2;
          thus (Following(Following(s,mC),k)).x =
@@ -1744,9 +1758,10 @@ then A42:      mC + k >= l by A41,XXREAL_0:2;
       suppose A43: RS = {};
       take n=1;
       let s be State of A;
-      let m be Nat;
+      let m be Element of NAT;
       assume m >= n; then consider k being Nat such that
 A44:    m = n + k by NAT_1:28;
+        reconsider k as Element of NAT by ORDINAL1:def 13;
       A45: the carrier of S = InputVertices S \/ InnerVertices S
       by XBOOLE_1:45;
 A46:   now assume a in InputVertices S;
@@ -1786,14 +1801,14 @@ then A52:      x <> a;
 A53: for a being set st a in field R holds P[a]
      from REWRITE1:sch 2(A3,A20);
         defpred A[set,set] means
-     ex n being Nat st $2 = n &
-     for s being State of A, m being Nat st m >= n
+     ex n being Element of NAT st $2 = n &
+     for s being State of A, m being Element of NAT st m >= n
        holds Following(s,m).$1 = Following(s,n).$1;
 A54: for a being set st a in field R ex b being set st A[a,b]
         proof
          let a be set; assume a in field R;
-         then ex n being Nat st
-         for s being State of A, m being Nat st m >= n
+         then ex n being Element of NAT st
+         for s being State of A, m being Element of NAT st m >= n
          holds Following(s,m).a = Following(s,n).a by A17,A53;
          hence thesis;
         end;
@@ -1805,22 +1820,22 @@ A56: for x being set st x in field R holds A[x,f.x] from ZFREFLE1:sch 1(A54);
      let o be set; assume o in rng f;
      then consider l being set such that
 A57:   l in dom f & o = f.l by FUNCT_1:def 5;
-     consider n being Nat such that
-A58:   f.l = n & for s being State of A, m being Nat st m >= n
+     consider n being Element of NAT such that
+A58:   f.l = n & for s being State of A, m being Element of NAT st m >= n
      holds Following(s,m).l = Following(s,n).l by A55,A56,A57;
      thus thesis by A57,A58;
     end;
    then reconsider C = rng f as finite non empty Subset of NAT by A19,A55,
 FINSET_1:26,RELAT_1:60,64;
-   reconsider N = max C as Nat by ORDINAL1:def 13;
+   reconsider N = max C as Element of NAT by ORDINAL1:def 13;
    take N;
    let s be State of A;
 A59: dom Following(s,N) = the carrier of S &
     dom Following Following(s,N) = the carrier of S by CIRCUIT1:4;
        now let x be set; assume A60: x in the carrier of S;
-     then consider n being Nat such that
+     then consider n being Element of NAT such that
 A61:  f.x = n &
-     for s being State of A, m being Nat st m >= n
+     for s being State of A, m being Element of NAT st m >= n
      holds Following(s,m).x = Following(s,n).x by A18,A56;
         n in C by A18,A55,A60,A61,FUNCT_1:12;
 then A62:  N >= n by PRE_CIRC:def 1;
@@ -1954,10 +1969,11 @@ A1: x1 in dom f & x2 in dom f & x3 in dom f & x4 in dom f;
     end;
    then reconsider p=<*x1,x2,x3,x4*> as FinSequence of D by FINSEQ_1:def 4;
 A2: dom(g*p) = dom p & len (g*p) = len p &
-  for n being Nat st n in dom (g*p) holds (g*p).n = g.(p.n) by ALG_1:1;
+  for n being Element of NAT st n in dom (g*p) holds (g*p).n = g.(p.n)
+   by ALG_1:1;
 then A3: dom (g*p) = Seg 4 by FINSEQ_4:92
             .= dom <*f.x1,f.x2,f.x3,f.x4*> by FINSEQ_4:92;
-     now let k be Nat;
+     now let k be Element of NAT;
    assume A4: k in dom (g*p);
    then A5: k in Seg 4 by A2,FINSEQ_4:92;
    per cases by A5,ENUMSET1:def 2,FINSEQ_3:2;
@@ -1999,10 +2015,11 @@ A1: x1 in dom f & x2 in dom f & x3 in dom f & x4 in dom f & x5 in dom f;
     end;
    then reconsider p=<*x1,x2,x3,x4,x5*> as FinSequence of D by FINSEQ_1:def 4;
 A2: dom(g*p) = dom p & len (g*p) = len p &
-  for n being Nat st n in dom (g*p) holds (g*p).n = g.(p.n) by ALG_1:1;
+  for n being Element of NAT st n in dom (g*p) holds (g*p).n = g.(p.n)
+   by ALG_1:1;
 then A3: dom (g*p) = Seg 5 by FINSEQ_4:94
             .= dom <*f.x1,f.x2,f.x3,f.x4,f.x5*> by FINSEQ_4:94;
-     now let k be Nat;
+     now let k be Element of NAT;
    assume A4: k in dom (g*p);
    then A5: k in Seg 5 by A2,FINSEQ_4:94;
    per cases by A5,ENUMSET1:def 3,FINSEQ_3:3;
@@ -2179,7 +2196,7 @@ then A3: s*<*x1(),x2(),x3(),x4(),x5()*> = <*a1,a2,a3,a4,a5*> by A2,Th38;
 begin :: Input of a compound circuit
 
 theorem Th39:
- for n being Nat, X being non empty finite set
+ for n being Element of NAT, X being non empty finite set
  for f being Function of n-tuples_on X, X
  for p being FinSeqLen of n
  for S being Signature of X
@@ -2187,7 +2204,7 @@ theorem Th39:
      not Output 1GateCircStr(p,f) in InputVertices S
   holds
    InputVertices (S +* 1GateCircStr(p,f)) = InputVertices S
-  proof let n be Nat, X be non empty finite set;
+  proof let n be Element of NAT, X be non empty finite set;
    let f be Function of n-tuples_on X, X;
    let p be FinSeqLen of n;
    let S be Signature of X such that
@@ -2210,7 +2227,7 @@ then A3: (rng p)\InnerVertices S c= InputVertices S by A1,XBOOLE_1:43;
   end;
 
 theorem Th40:
- for X1,X2 being set, X being non empty finite set, n be Nat
+ for X1,X2 being set, X being non empty finite set, n be Element of NAT
  for f being Function of n-tuples_on X, X
  for p being FinSeqLen of n
  for S being Signature of X
@@ -2218,7 +2235,7 @@ theorem Th40:
      not Output 1GateCircStr(p,f) in InputVertices S
   holds
    InputVertices (S +* 1GateCircStr(p,f)) = (InputVertices S) \/ X2
-  proof let x1,x2 be set, X be non empty finite set, n be Nat;
+  proof let x1,x2 be set, X be non empty finite set, n be Element of NAT;
    let f be Function of n-tuples_on X, X;
    let p be FinSeqLen of n;
    let S be Signature of X such that
@@ -2480,7 +2497,7 @@ theorem Th52:
  for X being non empty finite set
  for S being finite Signature of X
  for A being Circuit of X,S
- for n being Nat, f being Function of n-tuples_on X, X
+ for n being Element of NAT, f being Function of n-tuples_on X, X
  for p being FinSeqLen of n
   st not Output 1GateCircStr(p,f) in InputVertices S
  for s being State of A +* 1GateCircuit(p,f)
@@ -2489,7 +2506,7 @@ theorem Th52:
   proof let X be non empty finite set;
    let S be finite Signature of X;
    let A be Circuit of X,S;
-   let n be Nat, f be Function of n-tuples_on X, X;
+   let n be Element of NAT, f be Function of n-tuples_on X, X;
    let p be FinSeqLen of n such that
 A1: not Output 1GateCircStr(p,f) in InputVertices S;
    let s be State of A +* 1GateCircuit(p,f);
@@ -3056,7 +3073,7 @@ registration
  cluster NAT -> without_pairs;
  coherence
   proof let x be pair set; assume x in NAT;
-    then x is Nat;
+    then x is Element of NAT;
    hence thesis;
   end;
  let X be without_pairs set;
@@ -3075,7 +3092,7 @@ registration
 A1: rng f c= NAT;
    let x be set; assume x in dom f;
     then f.x in rng f by FUNCT_1:def 5;
-    then f.x is Nat by A1;
+    then f.x is Element of NAT by A1;
    hence thesis;
   end;
 end;
@@ -3097,7 +3114,7 @@ registration
 end;
 
 registration
- let n be Nat;
+ let n be Element of NAT;
  cluster one-to-one natural-yielding FinSeqLen of n;
  existence
   proof set p = id Seg n;
@@ -3124,7 +3141,7 @@ end;
 registration
  cluster with_nonpair_inputs (one-gate ManySortedSign);
  existence
-  proof consider n being Nat, X being non empty finite set;
+  proof consider n being Element of NAT, X being non empty finite set;
    consider f being Function of n-tuples_on X, X;
    consider p being natural-yielding FinSeqLen of n;
    take 1GateCircStr(p,f); thus thesis;
@@ -3132,7 +3149,7 @@ registration
  let X be non empty finite set;
  cluster with_nonpair_inputs (one-gate Signature of X);
  existence
-  proof consider n being Nat;
+  proof consider n being Element of NAT;
    consider f being Function of n-tuples_on X, X;
    consider p being natural-yielding FinSeqLen of n;
    take 1GateCircStr(p,f); thus thesis;

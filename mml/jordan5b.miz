@@ -11,7 +11,8 @@ environ
       TREAL_1, SEQ_1, FUNCT_4, COMPTS_1, TARSKI, ORDINAL2, PCOMPS_1, METRIC_1,
       JORDAN3, RFINSEQ, FINSEQ_5, GROUP_2, SEQM_3, GOBOARD5, GOBOARD2, TREES_1,
       TOPREAL4, GOBOARD1, MATRIX_1, FINSEQ_4, ARYTM;
- notations TARSKI, XBOOLE_0, ORDINAL1, XCMPLX_0, XREAL_0, REAL_1, NAT_1,
+ notations TARSKI, XBOOLE_0, ORDINAL1, SUBSET_1, NUMBERS,
+ XCMPLX_0, XREAL_0, REAL_1, NAT_1,
       BINARITH, RCOMP_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
       FINSEQ_1, TOPMETR, FINSEQ_4, JORDAN3, STRUCT_0, TOPREAL1, RFINSEQ,
       PRE_TOPC, TOPS_2, COMPTS_1, BORSUK_1, EUCLID, TREAL_1, METRIC_1,
@@ -22,7 +23,7 @@ environ
       GOBOARD2, GOBOARD5, JORDAN3;
  registrations BORSUK_1, FUNCT_1, PRE_TOPC, RELSET_1, GOBOARD5, GOBOARD2,
       STRUCT_0, TOPMETR, TOPREAL1, METRIC_1, INT_1, XREAL_0, MEMBERED,
-      XXREAL_0, FUNCT_2;
+      XXREAL_0, FUNCT_2, ORDINAL1, ARYTM_3;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, JORDAN3, TOPREAL4, XBOOLE_0;
  theorems BORSUK_1, COMPTS_1, EUCLID, FINSEQ_3, FINSEQ_4, FUNCT_1, FUNCT_2,
@@ -37,26 +38,26 @@ environ
 begin :: Preliminaries
 
 theorem Th1:
- for i1 being Nat st 1 <= i1 holds i1-'1<i1
-proof let i1 be Nat;
+ for i1 being Element of NAT st 1 <= i1 holds i1-'1<i1
+proof let i1 be Element of NAT;
  assume A1: 1 <= i1;
      i1 - 1 < i1 - 0 by REAL_1:92;
  hence thesis by A1,BINARITH:50;
 end;
 
 theorem
-  for i, k being Nat holds i+1 <= k implies 1 <= k-'i
+  for i, k being Element of NAT holds i+1 <= k implies 1 <= k-'i
 proof
- let i, k be Nat;
+ let i, k be Element of NAT;
  assume i+1 <= k;
  then i+1 -' i <= k -' i by JORDAN3:5;
  hence thesis by BINARITH:39;
 end;
 
 theorem
-  for i, k being Nat holds 1 <= i & 1 <= k implies (k-'i)+1 <= k
+  for i, k being Element of NAT holds 1 <= i & 1 <= k implies (k-'i)+1 <= k
 proof
- let i, k be Nat;
+ let i, k be Element of NAT;
  assume A1: 1 <= i & 1 <= k;
  then (k-'i) <= k -' 1 by JORDAN3:4;
  then (k-'i)+1 <= k -' 1+1 by XREAL_1:8;
@@ -152,7 +153,7 @@ theorem Th7:
  for f being FinSequence of TOP-REAL 2,
      P being non empty Subset of TOP-REAL 2,
      F being Function of I[01], (TOP-REAL 2) | P,
-     i being Nat st 1 <= i & i+1 <= len f & f is_S-Seq & P = L~f &
+     i being Element of NAT st 1 <= i & i+1 <= len f & f is_S-Seq & P = L~f &
        F is_homeomorphism & F.0 = f/.1 & F.1 = f/.len f
       ex p1, p2 being Real st p1 < p2 &
        0 <= p1 & p1 <= 1 & 0 <= p2 & p2 <= 1 &
@@ -161,7 +162,7 @@ proof
  let f be FinSequence of TOP-REAL 2,
      P be non empty Subset of TOP-REAL 2,
      Ff be Function of I[01], (TOP-REAL 2)|P,
-     i be Nat;
+     i be Element of NAT;
  assume A1: 1 <= i & i+1 <= len f & f is_S-Seq & P = L~f &
             Ff is_homeomorphism & Ff.0 = f/.1 & Ff.1 = f/.len f;
 then A2: f is one-to-one by TOPREAL1:def 10;
@@ -171,12 +172,12 @@ A3: the carrier of Closed-Interval-TSpace(0, 1/2) = [.0,1/2.] &
 then A4: [#]Closed-Interval-TSpace(0, 1/2) = [.0,1/2.] &
       [#]Closed-Interval-TSpace(1/2,1) = [.1/2,1.] by PRE_TOPC:12;
 A5: len f >= 2 by A1,TOPREAL1:def 10;
- deffunc Q(Nat) = L~(f|($1+2));
+ deffunc Q(Element of NAT) = L~(f|($1+2));
 
- defpred ARC[Nat] means
+ defpred ARC[Element of NAT] means
  1 <= $1 + 2 & $1 + 2 <= len f implies
  ex NE being non empty Subset of TOP-REAL 2 st NE = Q($1) &
-  for j be Nat
+  for j be Element of NAT
     for F being Function of I[01], (TOP-REAL 2)|NE st
      1 <= j & j+1 <= $1+2 &
      F is_homeomorphism & F.0 = f/.1 & F.1 = f/.($1+2)
@@ -184,7 +185,7 @@ A5: len f >= 2 by A1,TOPREAL1:def 10;
     0 <= p1 & p1 <= 1 & 0 <= p2 & p2 <= 1 & LSeg (f, j) = F.:[.p1, p2.]
      & F.p1 = f/.j & F.p2 = f/.(j+1);
 
-  reconsider h1 = len f - 2 as Nat by A5,INT_1:18;
+  reconsider h1 = len f - 2 as Element of NAT by A5,INT_1:18;
      A6: f|(len f) = f|(Seg len f) by FINSEQ_1:def 15
            .= f|(dom f) by FINSEQ_1:def 3
            .= f by RELAT_1:97;
@@ -196,7 +197,7 @@ then A9: 1 <= len (f|2) & 2 <= len (f|2) by FINSEQ_1:80;
 by TOPREAL1:29;
   take NE;
   thus NE = Q(0);
-  let j be Nat;
+  let j be Element of NAT;
   let F be Function of I[01], (TOP-REAL 2)|NE;
   assume
 A10:   1 <= j & j+1 <= 0+2 &
@@ -217,16 +218,16 @@ A17: rng F = [#]((TOP-REAL 2)|NE) by A10,TOPS_2:def 5
  take 0, 1;
  thus thesis by A10,A11,A17,BORSUK_1:83,FUNCT_2:45;
 end;
-A18: for n being Nat st ARC[n] holds ARC[n+1]
+A18: for n being Element of NAT st ARC[n] holds ARC[n+1]
 proof
- let n be Nat; assume
+ let n be Element of NAT; assume
 A19: ARC[n];
  assume A20: 1 <= n + 1 + 2 & n + 1 + 2 <= len f;
      A21: 2 <= n + 2 by NAT_1:29;
        n+2 <= n+2+1 by NAT_1:29;
  then consider NE being non empty Subset of TOP-REAL 2 such that
 A22: NE = Q(n) &
-  for j be Nat
+  for j be Element of NAT
     for F being Function of I[01], (TOP-REAL 2)|NE st
      1 <= j & j+1 <= n+2 &
      F is_homeomorphism & F.0 = f/.1 & F.1 = f/.(n+2)
@@ -246,7 +247,7 @@ A30: len (f|(n+3)) >= 2 by A23,NAT_1:29;
 by TOPREAL1:29;
   take NE1;
   thus NE1 = Q(n+1);
-  let j be Nat, G be Function of I[01], (TOP-REAL 2)|NE1;
+  let j be Element of NAT, G be Function of I[01], (TOP-REAL 2)|NE1;
   assume
 A31:  1 <= j & j+1 <= n+1+2 &
        G is_homeomorphism & G.0 = f/.1 & G.1 = f/.(n+1+2);
@@ -367,15 +368,15 @@ A76:    for x being set holds x in Q(n) /\ LSeg(pn,pn1) iff x = pn
           proof
            assume x in Q(n) /\ LSeg(pn,pn1);
            then A77: x in LSeg(pn,pn1) & x in Q(n) by XBOOLE_0:def 3;
-           then x in union { LSeg(f|(n+2),k) where k is Nat :
+           then x in union { LSeg(f|(n+2),k) where k is Element of NAT :
              1 <= k & k+1 <= len(f|(n+2)) }
             by TOPREAL1:def 6;
            then consider X being set such that
           A78: x in X and
-          A79: X in { LSeg(f|(n+2),k) where k is Nat :
+          A79: X in { LSeg(f|(n+2),k) where k is Element of NAT :
                    1 <= k & k+1 <= len(f|(n+2)) }
              by TARSKI:def 4;
-           consider k be Nat such that
+           consider k be Element of NAT such that
           A80: X = LSeg(f|(n+2),k) and
           A81: 1 <= k & k+1 <= len(f|(n+2)) by A79;
          A82: len(f|(n+2)) = n+(1+1) by A26,FINSEQ_1:80;
@@ -439,9 +440,10 @@ FINSEQ_1:def 3;
                1 <= 1 + n & n + 1 + 1 <= n + (1 + 1) & n+2 <= len f
               by A25,XXREAL_0:2,NAT_1:29;
             then 1 <= n+1 & n+1+1 <= len(f|(n+2)) by FINSEQ_1:80;
-            then LSeg(f|(n+2),n+1) in {LSeg(f|(n+2),k) where k is Nat :
+            then LSeg(f|(n+2),n+1) in {LSeg(f|(n+2),k)
+            where k is Element of NAT :
                    1 <= k & k+1 <= len(f|(n+2))};
-          then x in union {LSeg(f|(n+2),k) where k is Nat :
+          then x in union {LSeg(f|(n+2),k) where k is Element of NAT :
                    1 <= k & k+1 <= len(f|(n+2))}
            by A107,TARSKI:def 4;
           then x in Q(n) by TOPREAL1:def 6;
@@ -807,11 +809,11 @@ then A197:j = n+3-1;
  end;
  hence thesis;
 end;
-A198:  for n be Nat holds ARC[n] from NAT_1:sch 1(A7,A18);
+A198:  for n be Element of NAT holds ARC[n] from NAT_1:sch 1(A7,A18);
       1 <= h1 + 2 & h1 + 2 <= len f by A5,XXREAL_0:2;
  then consider NE being non empty Subset of TOP-REAL 2 such that
 A199:  NE = Q(h1) &
-  for j be Nat
+  for j be Element of NAT
     for F being Function of I[01], (TOP-REAL 2)|NE st
      1 <= j & j+1 <= h1+2 &
      F is_homeomorphism & F.0 = f/.1 & F.1 = f/.(h1+2)
@@ -825,7 +827,7 @@ theorem
      for f being FinSequence of TOP-REAL 2,
      Q, R being non empty Subset of TOP-REAL 2,
      F being Function of I[01], (TOP-REAL 2)|Q,
-     i being Nat,
+     i being Element of NAT,
      P being non empty Subset of I[01] st
      f is_S-Seq & F is_homeomorphism & F.0 = f/.1 & F.1 = f/.len f &
        1 <= i & i+1 <= len f & F.:P = LSeg (f,i) & Q = L~f & R = LSeg(f,i)
@@ -835,7 +837,7 @@ proof
  let f be FinSequence of TOP-REAL 2,
      Q, R be non empty Subset of TOP-REAL 2,
      F be Function of I[01], (TOP-REAL 2)|Q,
-     i be Nat,
+     i be Element of NAT,
      P be non empty Subset of I[01]; assume
 A1: f is_S-Seq & F is_homeomorphism & F.0 = f/.1 & F.1 = f/.len f &
        1 <= i & i+1 <= len f & F.:P = LSeg (f,i) & Q = L~f & R = LSeg(f,i);
@@ -1038,12 +1040,12 @@ A3:    a' = a & LE p, a', p, q & LE a', q, p, q;
 end;
 
 theorem
- for n being Nat,
+ for n being Element of NAT,
      P being Subset of TOP-REAL n,
      p1, p2 being Point of TOP-REAL n st
     P is_an_arc_of p1,p2 holds P is_an_arc_of p2,p1
 proof
- let n be Nat,
+ let n be Element of NAT,
      P be Subset of TOP-REAL n,
      p1,p2 be Point of TOP-REAL n;
  assume
@@ -1074,13 +1076,13 @@ A11: g.0 = p2 by A2,A5,A9,BORSUK_1:def 17,FUNCT_1:22,TREAL_1:8;
 end;
 
 theorem
-  for i being Nat,
+  for i being Element of NAT,
      f being FinSequence of TOP-REAL 2,
      P being Subset of TOP-REAL 2 st
   f is_S-Seq & 1 <= i & i+1 <= len f & P = LSeg(f,i) holds
    P is_an_arc_of f/.i, f/.(i+1)
 proof
- let i be Nat,
+ let i be Element of NAT,
      f be FinSequence of TOP-REAL 2,
      P be Subset of TOP-REAL 2;
  assume A1: f is_S-Seq & 1 <= i & i+1 <= len f & P = LSeg(f,i);
@@ -1099,16 +1101,17 @@ end;
 begin :: Cutting off sequences
 
 theorem
-  for g1 being FinSequence of TOP-REAL 2, i being Nat st 1 <= i & i <= len g1
+  for g1 being FinSequence of TOP-REAL 2, i being Element of NAT
+   st 1 <= i & i <= len g1
    & g1 is_S-Seq holds
   g1/.1 in L~mid(g1, i, len g1) implies i = 1
 proof
- let g1 be FinSequence of TOP-REAL 2, i be Nat;
+ let g1 be FinSequence of TOP-REAL 2, i be Element of NAT;
  assume that
 A1: 1 <= i & i <= len g1 and
 A2: g1 is_S-Seq;
  assume g1/.1 in L~mid(g1, i, len g1);
- then consider j being Nat such that
+ then consider j being Element of NAT such that
 A3: 1 <= j & j+1 <= len mid(g1, i, len g1) &
     g1/.1 in LSeg(mid(g1, i, len g1),j) by SPPOL_2:13;
 A4: j in dom mid(g1, i, len g1) & j+1 in dom mid(g1, i, len g1)
@@ -1401,12 +1404,12 @@ Lm4:
   now per cases by A3;
    case Index(p,f)<Index(q,f);
     then q in L~(L_Cut(f,p)) by A1,A2,JORDAN3:64;
-    hence ex i1 being Nat st 1<=i1 & i1+1<=len L_Cut(f,p) &
+    hence ex i1 being Element of NAT st 1<=i1 & i1+1<=len L_Cut(f,p) &
      q in LSeg(L_Cut(f,p),i1) by SPPOL_2:13;
    end;
    case Index(p,f)=Index(q,f) & LE p,q,f/.Index(p,f),f/.(Index(p,f)+1);
     then q in L~(L_Cut(f,p)) by A1,A2,A4,JORDAN3:66;
-    hence ex i1 being Nat st 1<=i1 & i1+1<=len L_Cut(f,p) &
+    hence ex i1 being Element of NAT st 1<=i1 & i1+1<=len L_Cut(f,p) &
      q in LSeg(L_Cut(f,p),i1) by SPPOL_2:13;
    end;
   end;
@@ -1474,12 +1477,12 @@ end;
 
 theorem
   for f being non constant standard special_circular_sequence,
-     i, j being Nat st 1 <= i & j <= len GoB f & i < j holds
+     i, j being Element of NAT st 1 <= i & j <= len GoB f & i < j holds
    LSeg((GoB f)*(1,width GoB f), (GoB f)*(i,width GoB f)) /\
    LSeg((GoB f)*(j,width GoB f), (GoB f)*(len GoB f,width GoB f)) = {}
 proof
  let f be non constant standard special_circular_sequence,
-     i, j be Nat;
+     i, j be Element of NAT;
  assume A1: 1 <= i & j <= len GoB f & i < j;
  set A = LSeg((GoB f)*(1,width GoB f), (GoB f)*(i,width GoB f)),
      B = LSeg((GoB f)*(j,width GoB f), (GoB f)*(len GoB f,width GoB f));
@@ -1523,12 +1526,12 @@ end;
 
 theorem
      for f being non constant standard special_circular_sequence,
-     i, j being Nat st 1 <= i & j <= width GoB f & i < j holds
+     i, j being Element of NAT st 1 <= i & j <= width GoB f & i < j holds
    LSeg((GoB f)*(len GoB f,1), (GoB f)*(len GoB f,i)) /\
    LSeg((GoB f)*(len GoB f,j), (GoB f)*(len GoB f,width GoB f)) = {}
 proof
  let f be non constant standard special_circular_sequence,
-     i, j be Nat;
+     i, j be Element of NAT;
  assume A1: 1 <= i & j <= width GoB f & i < j;
  set A = LSeg((GoB f)*(len GoB f,1), (GoB f)*(len GoB f,i)),
      B = LSeg((GoB f)*(len GoB f,j), (GoB f)*(len GoB f,width GoB f));
@@ -1625,12 +1628,12 @@ end;
 
 theorem
    for f be FinSequence of TOP-REAL 2
-   for i be Nat st
+   for i be Element of NAT st
    f is unfolded s.n.c. one-to-one & len f >= 2 & f/.1 in LSeg (f,i) holds
    i = 1
 proof
  let f be FinSequence of TOP-REAL 2,
-     i be Nat;
+     i be Element of NAT;
  assume
 A1: f is unfolded s.n.c. one-to-one & 2 <= len f;
    then 1 <= len f by XXREAL_0:2;
@@ -1669,7 +1672,7 @@ end;
 
 theorem
  for f be non constant standard special_circular_sequence,
-     j be Nat,
+     j be Element of NAT,
      P be Subset of TOP-REAL 2 st
      1 <= j & j <= width GoB f &
      P = LSeg ((GoB f)*(1,j), (GoB f)*(len (GoB f),j)) holds
@@ -1677,7 +1680,7 @@ theorem
                       (GoB f)*(len (GoB f),j)
 proof
  let f be non constant standard special_circular_sequence,
-     j be Nat,
+     j be Element of NAT,
      P be Subset of TOP-REAL 2;
  assume A1: 1 <= j & j <= width GoB f &
            P = LSeg ((GoB f)*(1,j), (GoB f)*(len (GoB f),j));
@@ -1726,7 +1729,7 @@ end;
 
 theorem
  for f be non constant standard special_circular_sequence,
-     j be Nat,
+     j be Element of NAT,
      P be Subset of TOP-REAL 2 st
      1 <= j & j <= len GoB f &
      P = LSeg ((GoB f)*(j,1), (GoB f)*(j,width GoB f)) holds
@@ -1734,7 +1737,7 @@ theorem
                       (GoB f)*(j,width GoB f)
 proof
  let f be non constant standard special_circular_sequence,
-     j be Nat,
+     j be Element of NAT,
      P be Subset of TOP-REAL 2;
  assume A1: 1 <= j & j <= len GoB f &
            P = LSeg ((GoB f)*(j,1),

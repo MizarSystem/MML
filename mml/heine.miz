@@ -28,7 +28,7 @@ environ
 
 begin
 
-reserve a,b,x,y,z for real number, i,k,n,m for Nat;
+reserve a,b,x,y,z for real number, i,k,n,m for Element of NAT;
 reserve p,q,w for Real;
 
 theorem Th1: for A being SubSpace of RealSpace, p,q being Point of A
@@ -89,7 +89,7 @@ reserve seq for Real_Sequence;
 theorem Th6:
  seq is increasing & rng seq c= NAT implies n <= seq.n
  proof
-  defpred P[Nat] means $1 <= seq.$1;
+  defpred P[Element of NAT] means $1 <= seq.$1;
   assume that A1: seq is increasing and A2: rng seq c= NAT;
        0 in NAT;
    then 0 in dom seq by FUNCT_2:def 1;
@@ -102,7 +102,7 @@ A4: for k st P[k] holds P[k+1]
           k+1 in NAT;
       then k+1 in dom seq by FUNCT_2:def 1;
       then seq.(k+1) in rng seq by FUNCT_1:def 5;
-      then reconsider k' = seq.(k+1) as Nat by A2;
+      then reconsider k' = seq.(k+1) as Element of NAT by A2;
           seq.k < seq.(k+1) by A1,SEQM_3:def 11;
       then k < k' by A5,XXREAL_0:2;
       hence k+1 <= seq.(k+1) by NAT_1:38;
@@ -116,7 +116,7 @@ definition let seq,k;
   :Def1: for n holds it.n = k to_power (seq.n);
  existence
   proof
-   deffunc F(Nat) = k to_power (seq.$1);
+   deffunc F(Element of NAT) = k to_power (seq.$1);
    thus ex s being Real_Sequence st for n holds
    s.n = F(n) from SEQ_1:sch 1;
   end;
@@ -130,7 +130,7 @@ definition let seq,k;
   end;
 end;
 
-  defpred P[Nat] means 2|^$1 >= $1 + 1;
+  defpred P[Element of NAT] means 2|^$1 >= $1 + 1;
   Lm3: P[0] by NEWTON:9;
   Lm4: for n st P[n] holds P[n+1]
       proof
@@ -161,7 +161,7 @@ Th9: seq is divergent_to+infty implies 2 to_power seq is divergent_to+infty
  proof
   assume A1: seq is divergent_to+infty;
   let r be Real;
-   consider p being Nat such that A2: p > r by SEQ_4:10;
+   consider p being Element of NAT such that A2: p > r by SEQ_4:10;
    consider n such that A3: for m st n <= m holds p < seq.m by A1,
 LIMFUNC1:def 4;
     take n; let m; assume m >= n;
@@ -235,7 +235,8 @@ theorem
          let n;   P[n,f.n,f.(n+1)] by A11;
          hence thesis;
         end;
-       defpred Q[Nat] means a <= f.$1 - r/2|^($1+1) & f.$1 + r/2|^($1+1) <= b;
+        defpred Q[Element of NAT] means
+        a <= f.$1 - r/2|^($1+1) & f.$1 + r/2|^($1+1) <= b;
        A13: f.0 - r/2|^(0+1) = (a+b)/2 - r/2 by A10,NEWTON:10
            .= a;
         A14: f.0 + r/2|^(0+1) = (a+b)/2 + r/2 by A10,NEWTON:10
@@ -284,7 +285,7 @@ theorem
       let y be set; assume y in rng f;
       then consider x being set such that
      A26: x in dom f & y = f.x by FUNCT_1:def 5;
-      reconsider n = x as Nat by A26,FUNCT_2:def 1;
+      reconsider n = x as Element of NAT by A26,FUNCT_2:def 1;
           2|^(n+1) > 0 & r >= 0 by A1,NEWTON:102,XREAL_1:50;
       then r/2|^(n+1) >= 0 & a <= f.n - r/2|^(n+1) & f.n + r/2|^(n+1) <= b
        by A24,REAL_2:125;
@@ -292,7 +293,7 @@ theorem
       then y in { y1 where y1 is Real: a <= y1 & y1 <= b} by A26;
       hence y in [. a,b .] by RCOMP_1:def 1;
      end;
-     defpred R[Nat] means not ex G being Subset-Family of M st
+     defpred R[Element of NAT] means not ex G being Subset-Family of M st
        (G c= F & [. f.$1 - r/2|^($1+1), f.$1 + r/2|^($1+1) .] c= union G &
         G is finite);
      A27: R[0]
@@ -377,13 +378,15 @@ TARSKI:def 4;
      consider Nseq being increasing Seq_of_Nat such that
    A55: s = f*Nseq by A49,SEQM_3:def 10;
      A56: r1/2 > 0 by A54,REAL_2:127;
-     then consider n being Nat such that
-   A57: for m being Nat st m >= n holds abs( s.m - lim s ) < r1/2
+     then consider n being Element of NAT such that
+   A57: for m being Element of NAT st m >= n holds abs( s.m - lim s ) < r1/2
       by A50,SEQ_2:def 7;
-   A58: for m being Nat for q being Point of M st s.m = q & m >= n holds
+      A58: for m being Element of NAT
+      for q being Point of M st s.m = q & m >= n holds
          dist(ls, q) < r1/2
         proof
-         let m be Nat, q be Point of M; assume A59: s.m = q & m >= n;
+          let m be Element of NAT, q be Point of M;
+          assume A59: s.m = q & m >= n;
          then abs( s.m - lim s ) < r1/2 by A57;
          then A60: abs( -(s.m - lim s) ) < r1/2 by COMPLEX1:138;
              dist(ls, q)
@@ -392,9 +395,10 @@ TARSKI:def 4;
             .= abs( lim s - s.m ) by A59,METRIC_1:def 13,def 14;
          hence thesis by A60;
         end;
-    A61: for m being Nat st m >= n holds (f*Nseq).m in Ball(ls, r1/2)
+        A61: for m being Element of NAT st m >= n holds
+        (f*Nseq).m in Ball(ls, r1/2)
         proof
-          let m be Nat such that A62: m >= n;
+          let m be Element of NAT such that A62: m >= n;
 A63:           dom f = NAT by FUNCT_2:def 1;
                s.m = f.(Nseq.m) by A55,SEQM_3:31;
            then s.m in rng f by A63,FUNCT_1:def 5;
@@ -405,7 +409,7 @@ A63:           dom f = NAT by FUNCT_2:def 1;
          not Nseq is bounded_above
       proof
        let r be real number;
-       consider n being Nat such that A64: n > r by SEQ_4:10;
+       consider n being Element of NAT such that A64: n > r by SEQ_4:10;
             rng Nseq c= NAT by SEQM_3:def 8;
         then n <= Nseq.n by Th6;
         then r <= Nseq.n by A64,XXREAL_0:2;
@@ -449,8 +453,7 @@ A63:           dom f = NAT by FUNCT_2:def 1;
          then reconsider x' = x as Point of M;
              s.l <= r*(2|^(Nseq.l+1))" + x & x - s.l <= r*(2|^(Nseq.l+1))"
            by A69,XREAL_1:22;
-         then s.l - x <= r*(2|^(Nseq.l+1))" & -(x - s.l) >= -r*(2|^(Nseq.l+1))
-"
+         then s.l - x <= r*(2|^(Nseq.l+1))" & -(x - s.l)>=-r*(2|^(Nseq.l+1))"
           by XREAL_1:26,XREAL_1:22;
          then A70: abs( s.l - x ) <= r*(2|^(Nseq.l+1))" by ABSVALUE:12;
              abs( lim s - x ) = abs( (lim s - s.l) + (s.l - x) );

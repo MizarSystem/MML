@@ -12,7 +12,7 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, STRUCT_0, NAT_1, GROUP_1, GROUP_4, BINOP_1, RLVECT_1, VECTSP_1,
       FINSEQ_1, MATRIX_1, FINSET_1, FINSUB_1, FINSEQ_2, FINSEQ_3, FINSEQ_4,
-      FINSEQOP, XXREAL_0;
+      FINSEQOP, NUMBERS, XCMPLX_0, XXREAL_0;
  constructors RELAT_2, PARTFUN1, BINOP_1, FINSUB_1, XXREAL_0, NAT_1, FINSEQOP,
       FINSEQ_4, GROUP_4, MATRIX_1;
  registrations GROUP_1, MATRIX_1, FINSET_1, RELSET_1, STRUCT_0, FINSEQ_1,
@@ -21,7 +21,7 @@ environ
  definitions STRUCT_0, FINSEQ_2;
  theorems FINSEQ_1, FINSEQ_2, FINSEQ_3, TARSKI, GROUP_1, FUNCT_1, FUNCT_2,
       ZFMISC_1, NAT_1, BINOP_1, FINSUB_1, FINSET_1, GROUP_4, FRAENKEL,
-      MATRIX_1, RELAT_1, XBOOLE_0, FUNCOP_1;
+      MATRIX_1, RELAT_1, XBOOLE_0, FUNCOP_1, ORDINAL1;
  schemes BINOP_1, MATRIX_1, XBOOLE_0;
 
 begin :: Some Examples of Matrices
@@ -50,6 +50,7 @@ end;
 theorem Th1:
   [i,j] in Indices ((n,m)-->a) implies ((n,m)-->a) *(i,j)=a
   proof
+    reconsider m1=m as Element of NAT by ORDINAL1:def 13;
     set M=((n,m)-->a);
     assume A1:[i,j] in Indices M;
     then [i,j] in [:dom M,Seg width M:] by MATRIX_1:def 5;
@@ -58,7 +59,7 @@ theorem Th1:
     then A3: i in Seg n by MATRIX_1:def 3;
     then n > 0 by FINSEQ_1:4,NAT_1:19;
     then A4: j in Seg m by A2,MATRIX_1:24;
-    M.i=m|->a & (m|->a).j = a by A3,A4,FUNCOP_1:13;
+    M.i=m1|->a & (m1|->a).j = a by A3,A4,FUNCOP_1:13;
     hence M*(i,j)=a by A1,MATRIX_1:def 6;
   end;
 
@@ -159,22 +160,24 @@ definition let n;let K be Field;
           (i>j implies it*(i,j) = 0.K );
   existence
   proof
+    reconsider n1=n as Element of NAT by ORDINAL1:def 13;
     defpred P[Nat,Nat,Element of K] means
      ($1 <= $2 implies $3= 1_ K) & ($1 > $2 implies $3 = 0.K );
-A1:  for i,j st [i,j] in [:Seg n, Seg n:]
+A1:  for i,j st [i,j] in [:Seg n1, Seg n1:]
      for x1,x2 being Element of K st P[i,j,x1] & P[i,j,x2]
        holds x1 = x2;
-A2:  for i,j st [i,j] in [:Seg n, Seg n:]
+A2:  for i,j st [i,j] in [:Seg n1, Seg n1:]
      ex x being Element of K st P[i,j,x]
      proof
        let i,j;
-       assume [i,j] in [:Seg n, Seg n:];
+       assume [i,j] in [:Seg n1, Seg n1:];
        (i<=j implies P[i,j,1_ K]) & (i>j implies P[i,j,0.K]);
        hence thesis;
      end;
-     consider M being Matrix of n,K such that
+     consider M being Matrix of n1,K such that
   A3:for i,j st [i,j] in Indices M holds P[i,j,M*(i,j)]
        from MATRIX_1:sch 2(A1,A2);
+       reconsider M as Matrix of n,K;
      take M;
      thus thesis by A3;
    end;
@@ -288,13 +291,15 @@ definition let i; let K;
         for k st k in dom M holds N.k=Del(Line(M,k),i) by A1,FINSEQ_1:4;
     end;
     suppose n1>0;
-      then consider m such that A3:n1=m+1 by NAT_1:22;
+      then consider m being Nat such that A3:n1=m+1 by NAT_1:22;
+      reconsider m as Element of NAT by ORDINAL1:def 13;
      A4:for k st k in dom M holds len (Del(Line(M,k),i))=m
       proof let k;
       assume k in dom M;
        A5:len (Line(M,k))= n1 by MATRIX_1:def 8;
        then i in dom (Line(M,k)) by A1,FINSEQ_1:def 3;
-       then ex l st len (Line(M,k))=l+1 & len Del(Line(M,k),i)=l
+       then ex l being Nat st
+       len (Line(M,k))=l+1 & len Del(Line(M,k),i)=l
           by FINSEQ_3:113;
         hence thesis by A3,A5;
       end;
@@ -341,7 +346,7 @@ A13:   for k,l st k in dom M & l in Seg m holds N*(k,l)=Del(Line(M,k),i).l
          then reconsider s=N.k as FinSequence;
          A16:len s= m by A12,A15,MATRIX_1:def 8;
          A17:len (Del(Line(M,k),i))=m by A4,A14;
-         now let j;
+         now let j be Element of NAT;
            assume A18:j in Seg m;
            then Line(N,k).j=N*(k,j) by A12,MATRIX_1:def 8;
            hence s.j=Del(Line(M,k),i).j by A13,A14,A15,A18;
@@ -361,7 +366,7 @@ A13:   for k,l st k in dom M & l in Seg m holds N*(k,l)=Del(Line(M,k),i).l
      A20:for k st k in dom M holds M1.k=Del(Line(M,k),i) and
     A21: len M2=len M and
       A22:for k st k in dom M holds M2.k=Del(Line(M,k),i);
-A23: now let k;
+A23: now let k be Element of NAT;
     assume A24:k in dom M;
     hence M1.k=Del(Line(M,k),i) by A20
              .=M2.k by A22,A24;
@@ -416,7 +421,7 @@ proof
         proof
           assume A4:[i,j]in [:dom (M@),Seg width (M@):];
           then i in dom (M@)& j in Seg width (M@) by ZFMISC_1:106;
-          then reconsider i,j as Nat;
+          then reconsider i,j as Nat by ORDINAL1:def 13;
           [i,j] in Indices (M@) by A4,MATRIX_1:def 5;
           then A5:[j,i] in Indices M by MATRIX_1:def 7;
           reconsider i,j as set;
@@ -425,7 +430,7 @@ proof
         end;
         assume A6:[i,j] in [:Seg width M,dom M:];
         then i in Seg width M & j in dom M by ZFMISC_1:106;
-        then reconsider i,j as Nat;
+        then reconsider i,j as Nat by ORDINAL1:def 13;
         [j,i] in [:dom M,Seg width M:] by A6,ZFMISC_1:107;
         then A7:[j,i] in Indices M by MATRIX_1:def 5;
         reconsider i,j as set;
@@ -521,7 +526,7 @@ theorem Th16:
     for j st j in dom (M@) holds Col(M@,i).j = M@*(j,i) by MATRIX_1:def 9;
  A4:len (M@)=width M by MATRIX_1:def 7;
  A5:len Col(M@,i)=width M by A3,MATRIX_1:def 7;
-    now let j;
+    now let j be Element of NAT;
       assume A6:j in Seg width M;
       then A7:Line(M,i).j=M*(i,j) by MATRIX_1:def 8;
       Indices M=[:dom M,Seg width M:] by MATRIX_1:def 5;
@@ -584,7 +589,7 @@ A5:for j st j in Seg (width M) holds M*(i,j) =p.j
    end;
 A6:len Line(M,i)= width M &
      for j st j in Seg width M holds (Line(M,i)).j=M*(i,j) by MATRIX_1:def 8;
-   now let j;
+   now let j be Element of NAT;
      assume A7:j in Seg width M;
      hence (Line(M,i)).j=M*(i,j) by MATRIX_1:def 8
                        .=p.j by A5,A7;
@@ -621,14 +626,16 @@ definition let i; let K;let M be Matrix of K;
         end;
         suppose A3:len M>0;
         now
-          consider m such that A4:len M=m+1 by A3,NAT_1:22;
+          consider m being Nat such that A4:len M=m+1 by A3,NAT_1:22;
+          reconsider m as Element of NAT by ORDINAL1:def 13;
        A5:for k st k in Seg width M holds len Del(Col(M,k),i)=m
           proof let k;
             assume k in Seg width M;
          A6:len Col(M,k) = len M by MATRIX_1:def 9;
             dom Col(M,k) = Seg len Col(M,k) by FINSEQ_1:def 3;
             then i in dom (Col(M,k)) by A1,A6,FINSEQ_1:def 3;
-            then ex l st len Col(M,k)=l+1 & len Del(Col(M,k),i)=l
+            then ex l be Nat st
+            len Col(M,k)=l+1 & len Del(Col(M,k),i)=l
                     by FINSEQ_3:113;
             hence thesis by A4,A6;
           end;
@@ -676,7 +683,7 @@ A10:        len p= m by A5,A9;
                reconsider s=Col(N,k) as FinSequence;
                A18:len s= m by A12,MATRIX_1:def 9;
                A19:len (Del(Col(M,k),i))=m by A5,A17;
-                  now let j;
+                  now let j be Element of NAT;
                  assume A20:j in Seg m;
                  dom N = Seg len N by FINSEQ_1:def 3;
                  then Col(N,k).j=N*(j,k) by A12,A20,MATRIX_1:def 9;
@@ -691,11 +698,9 @@ A10:        len p= m by A5,A9;
           Seg width M holds Col(N,k)=Del(Col(M,k),i) by A14,A16,MATRIX_1:24;
         end;
         end;
-      hence ex N being Matrix of K st width N=width M &
-         for k st k in Seg width M holds Col(N,k)=Del(Col(M,k),i);
-      end;
-     hence ex N being Matrix of K st width N=width M &
-       for k st k in Seg width M holds Col(N,k)=Del(Col(M,k),i);
+      hence thesis;
+    end;
+     hence thesis;
    end;
  end;
 end;
@@ -723,7 +728,7 @@ uniqueness
         A26:len (M1@)= width M1 by MATRIX_1:def 7;
         A27:len (M2@)= width M2 by MATRIX_1:def 7;
         A28:len (M2@) =width M by A23,MATRIX_1:def 7;
-          now let j;
+          now let j be Element of NAT;
         assume A29:j in Seg(width M);
 A30:    dom (M2@) = Seg len (M2@) by FINSEQ_1:def 3;
         dom (M1@) = Seg len (M1@) by FINSEQ_1:def 3;
@@ -784,6 +789,7 @@ definition let P be permutational non empty set;
     consider x being Element of P;
     consider n such that
 A1: for y st y in P holds y is Permutation of Seg n by Def9;
+    reconsider n as Element of NAT by ORDINAL1:def 13;
     reconsider q = x as Permutation of Seg n by A1;
 A2: dom q=Seg n by FUNCT_2:67;
     then reconsider q as FinSequence by FINSEQ_1:def 2;
@@ -797,14 +803,20 @@ A2: dom q=Seg n by FUNCT_2:67;
      given s2 such that A4:s2 in P & n2=len s2;
      consider n such that
 A5:  for y st y in P holds y is Permutation of Seg n by Def9;
+A8:  n in NAT by ORDINAL1:def 13;
      A6:s1 is Permutation of Seg n & s2 is Permutation of Seg n by A3,A4,A5;
      s1 is Function of Seg n,Seg n by A3,A5;
      then A7:dom s1=Seg n by FUNCT_2:67;
      dom s2=Seg n by A6,FUNCT_2:67;
-     then len s1=n & len s2=n by A7,FINSEQ_1:def 3;
+     then len s1=n & len s2=n by A7,A8,FINSEQ_1:def 3;
      hence thesis by A3,A4;
     end;
  end;
+
+definition let P be permutational non empty set;
+  redefine func len P -> Element of NAT;
+  coherence by ORDINAL1:def 13;
+end;
 
 definition let P be permutational non empty set;
   redefine mode Element of P -> Permutation of Seg len P;
@@ -813,6 +825,7 @@ definition let P be permutational non empty set;
     let x be Element of P;
     consider n such that
 A1: for y st y in P holds y is Permutation of Seg n by Def9;
+    reconsider n as Element of NAT by ORDINAL1:def 13;
     reconsider q=x as Permutation of Seg n by A1;
     A2:dom q=Seg n by FUNCT_2:67;
     then reconsider q as FinSequence by FINSEQ_1:def 2;
@@ -839,11 +852,12 @@ theorem
  A1:len P= n
     proof
       consider x being Element of P;
+A3:   n in NAT by ORDINAL1:def 13;
       reconsider y=x as Function of Seg n,Seg n by TARSKI:def 1;
    A2:dom y=Seg n by FUNCT_2:67;
-      then reconsider s=y as FinSequence by FINSEQ_1:def 2;
+      then reconsider s=y as FinSequence by FINSEQ_1:def 2,A3;
       len P= len s by Def10;
-      hence thesis by A2,FINSEQ_1:def 3;
+      hence thesis by A2,FINSEQ_1:def 3,A3;
     end;
     take P;
     thus thesis by A1;
@@ -915,9 +929,10 @@ theorem
  proof
   consider x being Element of Permutations(n);
   reconsider q=x as Permutation of Seg n by Def11;
+A3: n in NAT by ORDINAL1:def 13;
   A1:dom q=Seg n by FUNCT_2:67;
-  then reconsider q as FinSequence by FINSEQ_1:def 2;
-  len q=n by A1,FINSEQ_1:def 3;
+  then reconsider q as FinSequence by FINSEQ_1:def 2,A3;
+  len q=n by A1,FINSEQ_1:def 3,A3;
   hence thesis by Def10;
  end;
 
@@ -947,30 +962,11 @@ theorem
     hence thesis by A4,XBOOLE_0:def 10;
    end;
 
-definition let n;let p be Element of Permutations(n);
-  func len p -> Nat means :Def12:
-    ex s being FinSequence st s=p & it=len s;
-  existence
- proof
-  reconsider p as Permutation of Seg n by Def11;
-  A1:dom p=Seg n by FUNCT_2:67;
-  then reconsider q=p as FinSequence by FINSEQ_1:def 2;
-  take n,q;
-  thus thesis by A1,FINSEQ_1:def 3;
-  end;
-  uniqueness;
+definition 
+  canceled;
 end;
 
-theorem
-  for p being Element of Permutations(n) holds len p= n
- proof
-  let p be Element of Permutations(n);
-  reconsider q=p as Permutation of Seg n by Def11;
-A1:dom q=Seg n by FUNCT_2:67;
-  then reconsider q as FinSequence by FINSEQ_1:def 2;
-  len q=n by A1,FINSEQ_1:def 3;
-  hence thesis by Def12;
- end;
+canceled;
 
 begin :: Group of Permutations
 

@@ -9,7 +9,8 @@ environ
  vocabularies PRE_TOPC, EUCLID, ARYTM_1, COMPTS_1, TOPREAL2, PSCOMP_1, JORDAN6,
       TOPREAL1, JORDAN3, BOOLE, BORSUK_1, RELAT_1, TOPS_2, ORDINAL2, FUNCT_1,
       SUBSET_1, RCOMP_1, FINSEQ_1, TBSP_1, GOBRD10, FINSEQ_4;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, REAL_1, NAT_1, RCOMP_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS,
+ XCMPLX_0,REAL_1, NAT_1, RCOMP_1,
       RELAT_1, BINARITH, FINSEQ_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
       FINSEQ_4, TOPREAL1, TOPREAL2, TBSP_1, GOBOARD1, GOBRD10, PRE_TOPC,
       TOPS_2, STRUCT_0, COMPTS_1, EUCLID, JORDAN3, PSCOMP_1, JORDAN5C, JORDAN6,
@@ -35,8 +36,8 @@ reserve p,p1,p2,p3,q for Point of TOP-REAL 2;
 Lm1: 2-'1 = 2-1 by BINARITH:50 .=1;
 
 Lm2:
- for i, j, k be Nat holds i-'k <= j implies i <= j + k
-proof let i, j, k be Nat; assume
+ for i, j, k be Element of NAT holds i-'k <= j implies i <= j + k
+proof let i, j, k be Element of NAT; assume
 A1: i-'k <= j;
  per cases;
  suppose
@@ -51,8 +52,8 @@ A3: i <= k;
 end;
 end;
 
-Lm3: for i, j, k be Nat holds j + k <= i implies k <= i -' j
-proof let i, j, k be Nat; assume
+Lm3: for i, j, k be Element of NAT holds j + k <= i implies k <= i -' j
+proof let i, j, k be Element of NAT; assume
 A1: j + k <= i;
  per cases by A1,XXREAL_0:1;
  suppose j + k = i;
@@ -550,7 +551,7 @@ end;
 
 begin :: A function to divide the simple closed curve
 
-reserve n for Nat;
+reserve n for Element of NAT;
 
 theorem Th15:
   for P being non empty Subset of TOP-REAL n,
@@ -631,7 +632,7 @@ registration
  proof let f be FinSequence of REAL;
    assume A1:f is increasing;
     let x,y be set;assume A2: x in dom f & y in dom f & f.x=f.y;
-      then reconsider nx=x,ny=y as Nat;
+      then reconsider nx=x,ny=y as Element of NAT;
       A3: nx<=ny by A1,A2,GOBOARD1:def 1;
            nx>=ny by A1,A2,GOBOARD1:def 1;
      hence x=y by A3,REAL_1:def 5;
@@ -649,7 +650,7 @@ theorem Th17:
  end;
 
 Lm4: now
-  let h2 be Nat;
+  let h2 be Element of NAT;
      h2<h2+1 by NAT_1:38;
   then h2-1<h2+1-1 by XREAL_1:11;
   then h2-1-1<h2-1 & h2-1<h2 by XREAL_1:11;
@@ -730,20 +731,21 @@ theorem :: Dividing simple closed curve into segments.
    st P is_simple_closed_curve & e > 0
    ex h being FinSequence of the carrier of TOP-REAL 2
    st h.1=W-min(P) & h is one-to-one & 8<=len h & rng h c= P
-   &(for i being Nat st 1<=i & i<len h holds LE h/.i,h/.(i+1),P)
-   &(for i being Nat,W being Subset of Euclid 2
+   &(for i being Element of NAT st 1<=i & i<len h holds LE h/.i,h/.(i+1),P)
+   &(for i being Element of NAT,W being Subset of Euclid 2
    st 1<=i & i<len h & W=Segment(h/.i,h/.(i+1),P) holds
    diameter(W)<e)
    & (for W being Subset of Euclid 2 st
    W=Segment(h/.len h,h/.1,P)  holds diameter(W)<e)
-   & (for i being Nat st 1<=i & i+1<len h holds
+   & (for i being Element of NAT st 1<=i & i+1<len h holds
     Segment(h/.i,h/.(i+1),P)/\ Segment(h/.(i+1),h/.(i+2),P)={h/.(i+1)})
    & Segment(h/.len h,h/.1,P)/\ Segment(h/.1,h/.2,P)={h/.1}
    & Segment(h/.(len h-' 1),h/.len h,P)/\ Segment(h/.len h,h/.1,P)={h/.len h}
    & Segment(h/.(len h-'1),h/.len h,P) misses Segment(h/.1,h/.2,P)
-  &(for i,j being Nat st 1<=i & i < j & j < len h & not(i,j are_adjacent1)
+  &(for i,j being Element of NAT st 1<=i & i < j & j < len h &
+   not(i,j are_adjacent1)
     holds Segment(h/.i,h/.(i+1),P) misses Segment(h/.j,h/.(j+1),P))
-  & (for i being Nat st 1 < i & i+1 < len h holds
+  & (for i being Element of NAT st 1 < i & i+1 < len h holds
       Segment(h/.len h,h/.1,P) misses Segment(h/.i,h/.(i+1),P))
  proof
    let P be compact non empty Subset of TOP-REAL 2, e be Real;
@@ -760,7 +762,7 @@ A8: E-max P in Upper_Arc P & W-min P in Upper_Arc P by A1,Th1;
    consider h1 being FinSequence of REAL such that
    A9: h1.1=0 & h1.len h1=1 & 5<=len h1 & rng h1 c= the carrier of I[01]
     & h1 is increasing
-    &(for i being Nat,Q being Subset of I[01],
+    &(for i being Element of NAT,Q being Subset of I[01],
     W being Subset of Euclid 2
     st 1<=i & i<len h1 & Q=[.h1/.i,h1/.(i+1).]
     & W=g1.:Q holds diameter(W)<e) by A1,A3,A5,UNIFORM1:15;
@@ -774,7 +776,7 @@ A15: dom g2 = [.0,1.] by BORSUK_1:83,FUNCT_2:def 1;
    consider h2 being FinSequence of REAL such that
    A16: h2.1=0 & h2.len h2=1 & 5<=len h2 & rng h2 c= the carrier of I[01]
     & h2 is increasing
-    &(for i being Nat,Q being Subset of I[01],
+    &(for i being Element of NAT,Q being Subset of I[01],
     W being Subset of Euclid 2
     st 1<=i & i<len h2 & Q=[.h2/.i,h2/.(i+1).]
     & W=g2.:Q holds diameter(W)<e) by A1,A12,A14,UNIFORM1:15;
@@ -853,7 +855,7 @@ A65: h0/.1=W-min(P) by A39,A63,FINSEQ_4:def 4;
 A68:  h0 is one-to-one
      proof let x,y be set;assume
      A69: x in dom h0 & y in dom h0 & h0.x=h0.y;
-       then reconsider nx=x,ny=y as Nat;
+       then reconsider nx=x,ny=y as Element of NAT;
        A70:1<=nx & nx<=len h0 by A69,FINSEQ_3:27;
        A71:1<=ny & ny<=len h0 by A69,FINSEQ_3:27;
        per cases;
@@ -1020,8 +1022,9 @@ then A125: h0/.len h0 <> W-min P by A24,A39,A51,A53,A54,A63,FUNCT_1:def 8;
                  by A4,A13,A127,XBOOLE_1:13;
      then rng h0 c=Upper_Arc(P) \/ Lower_Arc(P) by FINSEQ_1:44;
    hence rng h0 c= P by A1,JORDAN6:def 9;
-   thus for i being Nat st 1<=i & i<len h0 holds LE h0/.i,h0/.(i+1),P
-     proof let i be Nat;assume A129: 1<=i & i<len h0;
+   thus for i being Element of NAT st 1<=i & i<len h0
+    holds LE h0/.i,h0/.(i+1),P
+     proof let i be Element of NAT;assume A129: 1<=i & i<len h0;
        then A130:i+1<=len h0 by NAT_1:38;
        A131:1<i+1 by A129,NAT_1:38;
        A132:i<i+1 by NAT_1:38;
@@ -1168,10 +1171,10 @@ A202:      h2.(j+1) in rng h2 by A200,FUNCT_1:def 5;
          end;
        end;
      end;
-    thus for i being Nat,W being Subset of Euclid 2
+    thus for i being Element of NAT,W being Subset of Euclid 2
       st 1<=i & i<len h0 & W=Segment(h0/.i,h0/.(i+1),P) holds
       diameter(W)<e
-     proof let i be Nat,W be Subset of Euclid 2;
+     proof let i be Element of NAT,W be Subset of Euclid 2;
       assume
        A206:1<=i & i<len h0 & W=Segment(h0/.i,h0/.(i+1),P);
        then A207:i+1<=len h0 by NAT_1:38;
@@ -1863,9 +1866,9 @@ A459:        LE h0/.i,p1,Lower_Arc(P),E-max(P),W-min(P)
          then W=g2.:Q1 by A413,A442,XBOOLE_0:def 10;
         hence diameter(W)<e by A16,A420,A427,Lm1;
       end;
-      A460: for i being Nat st 1<=i & i+1<len h0 holds
+      A460: for i being Element of NAT st 1<=i & i+1<len h0 holds
          LE h0/.(i+1),h0/.(i+2),P
-            proof let i be Nat;assume
+            proof let i be Element of NAT;assume
             A461: 1<=i & i+1<len h0;
               then A462:i+1+1<=len h0 by NAT_1:38;
               A463:1<i+1 by A461,NAT_1:38;
@@ -2035,9 +2038,9 @@ A545:             h0/.(i+1+1) <> W-min P
                 end;
               end;
             end;
-      A546: for i being Nat st 1<=i & i+1<=len h0 holds
+      A546: for i being Element of NAT st 1<=i & i+1<=len h0 holds
          LE h0/.i,h0/.(i+1),P & h0/.(i+1)<>W-min(P) & h0/.i<>h0/.(i+1)
-       proof let i be Nat such that
+       proof let i be Element of NAT such that
 A547:    1<=i and
 A548:    i+1<=len h0;
 A549:    1<i+1 by A547,NAT_1:38;
@@ -2206,10 +2209,10 @@ A639:            h0/.(i+1) <> W-min P
                 end;
               end;
        end;
-   thus for i being Nat st 1<=i & i+1<len h0 holds
+   thus for i being Element of NAT st 1<=i & i+1<len h0 holds
          Segment(h0/.i,h0/.(i+1),P)/\ Segment(h0/.(i+1),h0/.(i+2),P)
          ={h0/.(i+1)}
-      proof let i be Nat;assume
+      proof let i be Element of NAT;assume
         A640: 1<=i & i+1<len h0;
 then A641:LE h0/.i,h0/.(i+1),P & h0/.(i+1)<>W-min(P) & h0/.i<>h0/.(i+1)
              by A546;
@@ -2253,13 +2256,13 @@ then A651:             0+2<=len h0-'len h11 +2 by XREAL_1:8;
                 then h11.2=E-max(P) by A62,A643,A646,TARSKI:def 2;
              hence contradiction by A20,A35,A37,A58,A59,A66,FUNCT_1:def 8;
             end;
-      defpred P[Nat] means
+      defpred P[Element of NAT] means
       $1+2<=len h0 implies LE h0/.2,h0/.($1+2),P;
            Upper_Arc(P) \/ Lower_Arc(P)= P by A1,JORDAN6:65;
         then h0/.2 in P by A647,XBOOLE_0:def 2;
         then A657: P[0] by A1,JORDAN6:71;
-        A658:for k being Nat st P[k] holds P[k+1]
-         proof let k be Nat;assume
+        A658:for k being Element of NAT st P[k] holds P[k+1]
+         proof let k be Element of NAT;assume
           A659: k+2<=len h0 implies LE h0/.2,h0/.(k+2),P;
               now assume A660:k+1+2<=len h0;
              A661:k+1+2=k+2+1;
@@ -2272,7 +2275,7 @@ then A651:             0+2<=len h0-'len h11 +2 by XREAL_1:8;
            end;
           hence (k+1+2<=len h0 implies LE h0/.2,h0/.(k+1+2),P);
          end;
-        A664:for i being Nat holds P[i] from NAT_1:sch 1(A657,A658);
+        A664:for i being Element of NAT holds P[i] from NAT_1:sch 1(A657,A658);
                len h0 -'2=len h0-2 by A60,BINARITH:50;
             then len h0-'2+2=len h0;
            then LE h0/.2,h0/.len h0,P & h0/.2<>h0/.len h0
@@ -2432,11 +2435,11 @@ h11
           end;
      hence Segment(h0/.i,h0/.len h0,P) misses Segment(h0/.1,h0/.2,P)
            by A1,A665,A674,A675,A677,A683,Th13;
-     thus for i,j being Nat
+     thus for i,j being Element of NAT
            st 1<=i & i < j & j < len h0 & not i,j are_adjacent1
          holds Segment(h0/.i,h0/.(i+1),P) misses Segment(h0/.j,h0/.(j+1),P)
      proof
-      let i,j be Nat;assume that
+      let i,j be Element of NAT;assume that
 A736:    1<=i and
 A737:    i < j and
 A738:    j < len h0 and
@@ -2802,7 +2805,7 @@ h11
      hence Segment(h0/.i,h0/.(i+1),P) misses Segment(h0/.j,h0/.(j+1),P)
                    by A1,A744,A745,A750,A753,Th13;
     end;
-   let i be Nat such that
+   let i be Element of NAT such that
 A884: 1 < i and
 A885: i+1 < len h0;
 A886:  i<len h0 by A885,NAT_1:38;

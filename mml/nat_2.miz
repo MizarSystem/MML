@@ -9,12 +9,13 @@ environ
  vocabularies FINSEQ_1, FUNCT_1, INT_1, ARYTM_1, ARYTM_3, NAT_1, POWER,
       MATRIX_2, FINSEQ_4, ORDINAL2, REALSET1, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XCMPLX_0, XREAL_0, REALSET1,
-      INT_1, NAT_1, POWER, ABIAN, SERIES_1, FUNCT_1, FINSEQ_1, FINSEQ_4,
+      NUMBERS, INT_1, NAT_1, POWER, ABIAN, SERIES_1, FUNCT_1, FINSEQ_1,
+      FINSEQ_4,
       BINARITH, ORDINAL2, XXREAL_0;
  constructors XXREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_4, REALSET1, SERIES_1,
       BINARITH, ABIAN, ORDINAL2;
  registrations XREAL_0, RELSET_1, ABIAN, INT_1, REALSET1, MEMBERED, NAT_1,
-      XXREAL_0;
+      XXREAL_0, ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions REALSET1;
  theorems AXIOMS, REAL_1, REAL_2, INT_1, NAT_1, ABIAN, POWER, FINSEQ_1,
@@ -25,19 +26,19 @@ environ
 begin :: Preliminaries
 
   scheme NonUniqPiFinRecExD{D() -> non empty set, A() -> Element of D(),
-                          N() -> Nat, P[set,set,set]}:
+                          N() -> Element of NAT, P[set,set,set]}:
    ex p be FinSequence of D() st len p = N() & (p/.1 = A() or N() = 0) &
-    for n be Nat st 1 <= n & n < N() holds P[n,p/.n,p/.(n+1)]
+    for n be Element of NAT st 1 <= n & n < N() holds P[n,p/.n,p/.(n+1)]
    provided
-    A1: for n be Nat st 1 <= n & n < N() holds for x be Element of D()
+    A1: for n be Element of NAT st 1 <= n & n < N() for x be Element of D()
          ex y be Element of D() st P[n,x,y]
 proof
-  A2: for n be Nat st 1 <= n & n < N() holds for x be Element of D()
+  A2: for n be Element of NAT st 1 <= n & n < N() holds for x be Element of D()
          ex y be Element of D() st P[n,x,y] by A1;
     consider p be FinSequence of D() such that
      A3: len p = N() and
      A4: (p.1 = A() or N() = 0) and
-     A5: for n be Nat st 1 <= n & n < N() holds P[n,p.n,p.(n+1)]
+     A5: for n be Element of NAT st 1 <= n & n < N() holds P[n,p.n,p.(n+1)]
                                                    from RECDEF_1:sch 6(A2);
     take p;
     thus len p = N() by A3;
@@ -47,7 +48,7 @@ proof
      hence p/.1 = A() by A3,A4,FINSEQ_4:24;
     end;
     hence p/.1 = A() or N() = 0;
-    let n be Nat;
+    let n be Element of NAT;
     assume that
      A6: 1 <= n and
      A7: n < N();
@@ -100,17 +101,17 @@ canceled;
    end;
 
   theorem
-     for n be non empty Nat holds n div n = 1
+     for n be non empty Element of NAT holds n div n = 1
    proof
-    let n be non empty Nat;
+    let n be non empty Element of NAT;
       n*1 div n = 1 by NAT_1:68;
     hence thesis;
    end;
 
   theorem
-       for n be Nat holds n div 1 = n
+       for n be Element of NAT holds n div 1 = n
    proof
-    let n be Nat;
+    let n be Element of NAT;
         n = 1 * n + 0 & 0 < 1;
     hence n div 1 = n by NAT_1:def 1;
    end;
@@ -200,10 +201,10 @@ canceled;
    end;
 
   theorem
-       for n,k be Nat st k <= n holds
+       for n,k be Element of NAT st k <= n holds
     2 to_power k divides 2 to_power n
    proof
-    let n,k be Nat;
+    let n,k be Element of NAT;
     assume k <= n;
     then 2 to_power n = (2 to_power k) * (2 to_power (n-'k)) by Th12;
     hence thesis by NAT_1:def 3;
@@ -281,10 +282,10 @@ canceled;
    end;
 
   theorem
-       for n,k be Nat st k <= n holds
+       for n,k be Element of NAT st k <= n holds
     (2 to_power n) div (2 to_power k) = 2 to_power (n -' k)
    proof
-    let n,k be Nat;
+    let n,k be Element of NAT;
 A1: 2 to_power k > 0 by POWER:39;
     assume k <= n;
     then 2 to_power n = (2 to_power k) * (2 to_power (n-'k)) by Th12;
@@ -293,10 +294,10 @@ A1: 2 to_power k > 0 by POWER:39;
    end;
 
   theorem
-       for n be Nat st n > 0 holds
+       for n be Element of NAT st n > 0 holds
     2 to_power n mod 2 = 0
    proof
-    let n be Nat;
+    let n be Element of NAT;
     assume n > 0;
     then A1: n >= 0 + 1 by NAT_1:38;
         2 to_power n
@@ -308,10 +309,10 @@ A1: 2 to_power k > 0 by POWER:39;
    end;
 
   theorem
-       for n be Nat st n > 0 holds
+       for n be Element of NAT st n > 0 holds
     n mod 2 = 0 iff (n -' 1) mod 2 = 1
    proof
-    let n be Nat;
+    let n be Element of NAT;
     assume A1: n > 0;
     thus n mod 2 = 0 implies (n -' 1) mod 2 = 1
     proof
@@ -367,13 +368,13 @@ A1: 2 to_power k > 0 by POWER:39;
    end;
 
   theorem Th23:
-   for n be Nat holds n is even iff n mod 2 = 0
+   for n be Element of NAT holds n is even iff n mod 2 = 0
    proof
-    let n be Nat;
+    let n be Element of NAT;
     thus n is even implies n mod 2 = 0
     proof
      assume n is even;
-     then consider k be Nat such that
+     then consider k be Element of NAT such that
       A1: n = 2*k by ABIAN:def 2;
          n = 2*k + 0 by A1;
      hence n mod 2 = 0 by NAT_1:def 2;
@@ -385,18 +386,18 @@ A1: 2 to_power k > 0 by POWER:39;
    end;
 
   theorem
-       for n be Nat holds n is odd iff n mod 2 = 1
+       for n be Element of NAT holds n is odd iff n mod 2 = 1
    proof
-    let n be Nat;
+    let n be Element of NAT;
         n is odd iff not n mod 2 = 0 by Th23;
     hence n is odd iff n mod 2 = 1 by NAT_1:62;
    end;
 
   theorem
-       for n,k,t be Nat st 1 <= t & k <= n & 2*t divides k holds
+       for n,k,t be Element of NAT st 1 <= t & k <= n & 2*t divides k holds
     n div t is even iff (n-'k) div t is even
    proof
-    let n,k,t be Nat;
+    let n,k,t be Element of NAT;
     assume that
      A1: 1 <= t and
      A2: k <= n and
@@ -404,7 +405,7 @@ A1: 2 to_power k > 0 by POWER:39;
     thus n div t is even implies (n-'k) div t is even
     proof
      assume n div t is even;
-     then consider p be Nat such that
+     then consider p be Element of NAT such that
       A4: n div t = 2 * p by ABIAN:def 2;
          t >= 0 + 1 by A1;
      then A5: t > 0;
@@ -441,7 +442,7 @@ A1: 2 to_power k > 0 by POWER:39;
      hence (n-'k) div t is even by A7,NAT_1:def 1;
     end;
     assume (n-'k) div t is even;
-    then consider p be Nat such that
+    then consider p be Element of NAT such that
      A14: (n-'k) div t = 2 * p by ABIAN:def 2;
         t >= 0 + 1 by A1;
     then t > 0;
@@ -457,10 +458,10 @@ A1: 2 to_power k > 0 by POWER:39;
    end;
 
   theorem Th26:
-   for n,m,k be Nat st n <= m holds
+   for n,m,k be Element of NAT st n <= m holds
     n div k <= m div k
    proof
-    let n,m,k be Nat;
+    let n,m,k be Element of NAT;
     assume that
      A1: n <= m and
      A2: n div k > m div k;
@@ -495,10 +496,10 @@ A1: 2 to_power k > 0 by POWER:39;
    end;
 
   theorem
-       for n,k be Nat st k <= 2 * n holds
+       for n,k be Element of NAT st k <= 2 * n holds
     (k+1) div 2 <= n
    proof
-    let n,k be Nat;
+    let n,k be Element of NAT;
     assume k <= 2 * n;
     then k + 1 <= 2 * n + 1 by XREAL_1:8;
     then (k + 1) div 2 <= (2 * n + 1) div 2 by Th26;
@@ -506,20 +507,20 @@ A1: 2 to_power k > 0 by POWER:39;
    end;
 
   theorem
-       for n be even Nat holds
+       for n be even Element of NAT holds
     n div 2 = (n + 1) div 2
    proof
-    let n be even Nat;
+    let n be even Element of NAT;
         n = 2 * (n div 2) + (n mod 2) by NAT_1:47
      .= 2 * (n div 2) + 0 by Th23;
     hence n div 2 = (n + 1) div 2 by NAT_1:def 1;
    end;
 
   theorem
-       for n,k,i be Nat holds
+       for n,k,i be Element of NAT holds
     (n div k) div i = n div (k*i)
    proof
-    let n,k,i be Nat;
+    let n,k,i be Element of NAT;
         now per cases;
      suppose A1: i = 0;
       hence (n div k) div i = 0 by NAT_1:def 1
@@ -566,8 +567,8 @@ A1:     n is trivial;
        assume
 A2:     n <> 0 & n <> 1;
         then A3:       n > 1+0 by CQC_THE1:2;
-        reconsider n as Nat by ORDINAL1:def 13;
-A4:      n = { k where k is Nat : k < n } by AXIOMS:30;
+        reconsider n as Element of NAT by ORDINAL1:def 13;
+A4:      n = { k where k is Element of NAT : k < n } by AXIOMS:30;
         A5:       0 in n & 1 in n by A3,A4;
         consider x being set such that
 A6:        n = {x} by A1,A2,REALSET1:def 4;
@@ -582,18 +583,19 @@ A7:    n = 0 or n = 1;
      end;
      suppose
 A8:    n = 1;
-A9:    for x being set holds x in { k where k is Nat : k < 1 } iff x in { 0 }
+A9:    for x being set holds x in { k where k is Element of NAT : k < 1 }
+ iff x in { 0 }
       proof let x be set;
-       hereby assume x in { k where k is Nat : k < 1 };
-         then ex k being Nat st x = k & k < 1;
+       hereby assume x in { k where k is Element of NAT : k < 1 };
+         then ex k being Element of NAT st x = k & k < 1;
          then x = 0 by NAT_1:39;
         hence x in {0 } by TARSKI:def 1;
        end;
        assume x in {0};
         then x = 0 by TARSKI:def 1;
-       hence x in { k where k is Nat : k < 1 };
+       hence x in { k where k is Element of NAT : k < 1 };
       end;
-          1 = { k where k is Nat : k < 1 } by AXIOMS:30;
+          1 = { k where k is Element of NAT : k < 1 } by AXIOMS:30;
       then n = {0} by A8,A9,TARSKI:2;
      hence n is empty or ex x being set st n = {x};
     end;
@@ -601,7 +603,7 @@ A9:    for x being set holds x in { k where k is Nat : k < 1 } iff x in { 0 }
   end;
 
   registration
-   cluster non trivial Nat;
+   cluster non trivial Element of NAT;
    existence
    proof
     take 2;
@@ -630,15 +632,15 @@ A9:    for x being set holds x in { k where k is Nat : k < 1 } iff x in { 0 }
     hence thesis;
    end;
 
-  scheme Indfrom2 { P[Nat] } :
-   for k be non trivial Nat holds P[k]
+  scheme Indfrom2 { P[Element of NAT] } :
+   for k be non trivial Element of NAT holds P[k]
    provided
     A1: P[2] and
-    A2: for k be non trivial Nat st P[k] holds P[k + 1]
+    A2: for k be non trivial Element of NAT st P[k] holds P[k + 1]
 proof
-    defpred P[non empty Nat] means $1 is non trivial implies P[$1];
+    defpred P[non empty Element of NAT] means $1 is non trivial implies P[$1];
     A3: P[1] by Def1;
-    A4: now let k be non empty Nat;
+    A4: now let k be non empty Element of NAT;
      assume A5: P[k];
        now
      assume k + 1 is non trivial;
@@ -652,6 +654,7 @@ proof
      end;
      end; hence P[k+1];
     end;
-        for k be non empty Nat holds P[k] from BINARITH:sch 1(A3,A4);
+        for k be non empty Element of NAT holds P[k]
+         from BINARITH:sch 1(A3,A4);
     hence thesis;
    end;

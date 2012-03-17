@@ -12,12 +12,13 @@ environ
       MARGREL1, MATRLIN, BINARITH, BINARI_3, ZF_LANG, MIDSP_3, POWER, EUCLID,
       FINSEQ_4, CONLAT_1, FINSUB_1, PARTFUN1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSET_1, FINSUB_1, RELAT_1,
-      RELAT_2, RELSET_1, SETFAM_1, PARTFUN1, NUMBERS, NAT_1, FUNCT_4, FUNCT_1,
+      RELAT_2, RELSET_1, SETFAM_1, PARTFUN1, NUMBERS,
+      XCMPLX_0, NAT_1, FUNCT_4, FUNCT_1,
       ORDERS_2, MCART_1, EQREL_1, CARD_3, PBOOLE, STRUCT_0, WAYBEL_4, CARD_1,
       FINSEQ_1, PRE_CIRC, MARGREL1, FUNCT_2, FINSEQ_2, MATRLIN, BINARITH,
       BINARI_3, FINSEQ_4, SERIES_1, EUCLID, XXREAL_0;
  constructors SETFAM_1, FINSUB_1, XXREAL_0, CARD_3, FINSEQOP, SERIES_1,
-      BINARITH, PRE_CIRC, EUCLID, MATRLIN, WAYBEL_4, BINARI_3;
+      BINARITH, PRE_CIRC, EUCLID, MATRLIN, WAYBEL_4, BINARI_3, NAT_1;
  registrations FINSET_1, SUBSET_1, ALTCAT_1, PBOOLE, FINSEQ_1, FINSEQ_2,
       GOBRD13, FUNCT_1, ORDERS_2, RELSET_1, EQREL_1, MARGREL1, XBOOLE_0,
       MATRLIN, PRALG_1, FRAENKEL, XREAL_0, NUMBERS, ORDINAL1, FUNCOP_1, NAT_1,
@@ -30,12 +31,13 @@ environ
       POLYNOM1, FINSET_1, SUBSET_1, SETFAM_1, MSSUBFAM, TREES_1, FUNCT_1,
       FINSEQ_4, FINSEQ_1, FINSEQ_2, FUNCOP_1, MARGREL1, CARD_3, BINARI_3,
       NAT_1, EUCLID, PBOOLE, FUNCT_2, MATRLIN, BINARITH, POWER, REAL_1,
-      FUNCT_4, FINSUB_1, PARTFUN1, NUMBERS, XREAL_1, ORDERS_1, XXREAL_0;
+      FUNCT_4, FINSUB_1, PARTFUN1, NUMBERS, XREAL_1, ORDERS_1, XXREAL_0,
+      ORDINAL1;
  schemes FINSET_1, NAT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, XBOOLE_0, FUNCT_1;
 
 begin
 
-Lm1: now let n be Nat, X be non empty set, t be Tuple of n,X;
+Lm1: now let n be Element of NAT, X be non empty set, t be Tuple of n,X;
      len t = n by FINSEQ_2:109;
  hence dom t = Seg n by FINSEQ_1:def 3;
 end;
@@ -227,19 +229,20 @@ proof
  given x being set such that
 A3: x in X() and
 A4: not P[x];
- defpred R[Nat] means ex s being Element of X() st Card U(s) = $1 & not P[s];
+ defpred R[Element of NAT] means ex s being Element of X()
+  st Card U(s) = $1 & not P[s];
           U(x) c= X() proof let x1 be set; assume x1 in U(x);
            then ex xx being Element of X() st x1 = xx & x c= xx;
         hence x1 in X();
        end; then reconsider Ux = U(x) as finite set by FINSET_1:13;
-A5: ex k being Nat st R[k]
+A5: ex k being Element of NAT st R[k]
     proof
      take k = card Ux;
      reconsider x as Element of X() by A3;
      take x; thus Card U(x) = k; thus not P[x] by A4;
-   end; consider k being Nat such that
+   end; consider k being Element of NAT such that
 A6: R[k] and
-A7: for n being Nat st R[n] holds k <= n from NAT_1:sch 5(A5);
+A7: for n being Element of NAT st R[n] holds k <= n from NAT_1:sch 5(A5);
    consider s being Element of X() such that
 A8: Card U(s) = k and
 A9: not P[s] by A6;
@@ -428,7 +431,7 @@ A19: S = {} or S = f & Intersect f <> x by A2,Def2;
 end;
 
 registration
-  let X, D be non empty set, n be Nat;
+  let X, D be non empty set, n be Element of NAT;
   cluster -> FinSequence-yielding Function of X, n-tuples_on D;
   coherence proof let f be Function of X, n-tuples_on D;
    let x be set; assume x in dom f;
@@ -454,14 +457,15 @@ end;
 definition
   :: cannot redefine from VALUAT for I need to use functions from
   :: BINARI* and they are on Tuple of
- let n be Nat, p, q be Tuple of n, BOOLEAN;
+ let n be Element of NAT, p, q be Tuple of n, BOOLEAN;
  func p '&' q -> Tuple of n, BOOLEAN means :Def5:
  for i being set st i in Seg n holds it.i = (p/.i) '&' (q/.i);
  existence proof
   deffunc F(set) = (p/.$1) '&' (q/.$1);
   consider z being FinSequence of BOOLEAN such that
 A1: len z = n and
-A2: for j being Nat st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
+A2: for j being Element of NAT st j in Seg n holds z.j = F(j)
+ from FINSEQ_2:sch 1;
       z in BOOLEAN* by FINSEQ_1:def 11; then z in n-tuples_on BOOLEAN by A1;
    then reconsider z as Element of n-tuples_on BOOLEAN;
    take z; thus thesis by A2;
@@ -482,9 +486,9 @@ A4: for i being set st i in Seg n holds it2.i = (p/.i) '&' (q/.i);
 end;
 
 theorem Th5:
-for n being Nat, p being Tuple of n, BOOLEAN
+for n being Element of NAT, p being Tuple of n, BOOLEAN
  holds (n-BinarySequence 0) '&' p = n-BinarySequence 0
-proof let n be Nat, p be Tuple of n, BOOLEAN;
+proof let n be Element of NAT, p be Tuple of n, BOOLEAN;
 set B = n-BinarySequence 0;
      now let x be set;
   A1: dom (B '&' p) = Seg n by Lm1;
@@ -502,9 +506,9 @@ set B = n-BinarySequence 0;
 end;
 
 theorem
-   for n being Nat, p being Tuple of n, BOOLEAN
+   for n being Element of NAT, p being Tuple of n, BOOLEAN
  holds 'not' (n-BinarySequence 0) '&' p = p
-proof let n be Nat, p be Tuple of n, BOOLEAN;
+proof let n be Element of NAT, p be Tuple of n, BOOLEAN;
 set B = n-BinarySequence 0; set nB = 'not' B;
      now let x be set;
   A1: dom (nB '&' p) = Seg n by Lm1;
@@ -527,17 +531,17 @@ end;
 canceled;
 
 theorem Th8:
-for n, i being Nat st i < n
+for n, i being Element of NAT st i < n
  holds (n-BinarySequence 2 to_power i).(i+1) = 1 &
-       for j being Nat st j in Seg n & j<>i+1
+       for j being Element of NAT st j in Seg n & j<>i+1
         holds (n-BinarySequence 2 to_power i).j = 0
-proof let n, i be Nat; assume
+proof let n, i be Element of NAT; assume
 A1: i < n;
  set B = n-BinarySequence 2 to_power i;
  deffunc B(Nat) = $1-BinarySequence 2 to_power i;
  defpred P[Nat] means i < $1 implies B($1).(i+1) = TRUE;
 A2: P[0];
-A3: now let n be Nat such that
+A3: now let n be Element of NAT such that
  A4: P[n];
      now assume
       i < n+1;
@@ -563,7 +567,7 @@ FINSEQ_1:55;
         .= <*TRUE*>.1 by A10,A11,A12,FINSEQ_1:def 7 .= TRUE by FINSEQ_1:57;
     end;
     suppose A13: n > 0 & n > i;
-      then reconsider n' = n as non empty Nat;
+      then reconsider n' = n as non empty Element of NAT;
     A14: 2 to_power i < 2 to_power n by A13,POWER:44;
     A15: 0+1 <= i+1 by XREAL_1:8;  i+1 <= n by A13,NAT_1:38;
         then i+1 in Seg n by A15,FINSEQ_1:3;
@@ -573,15 +577,16 @@ FINSEQ_1:55;
     end;
     end; hence P[n+1];
     end;
-A17: for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
-     defpred P[Nat] means
-  i < $1 implies for j being Nat st i+1 <=j & j <= $1 holds B($1).(j+1)= FALSE;
+A17: for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
+     defpred P[Element of NAT] means
+  i < $1 implies for j being Element of NAT st i+1 <=j & j <= $1
+   holds B($1).(j+1)= FALSE;
 A18: P[0];
-A19: now let n be Nat such that
+A19: now let n be Element of NAT such that
  A20: P[n];
      now assume
     A21: i < n+1;
-        let j be Nat such that
+        let j be Element of NAT such that
     A22: i+1 <=j & j <= n+1;
     A23: i <= n by A21,NAT_1:38;
     A24: 0+1 <= i+1 by XREAL_1:8;
@@ -598,7 +603,7 @@ A19: now let n be Nat such that
      hence B(n+1).(j+1) = FALSE by FUNCT_1:def 4,MARGREL1:def 13;
     end;
     suppose A29: n > 0 & n > i;
-      then reconsider n' = n as non empty Nat;
+      then reconsider n' = n as non empty Element of NAT;
     A30: 2 to_power i < 2 to_power n by A29,POWER:44;
       thus B(n+1).(j+1) = FALSE proof j<n+1 or j=n+1 by A22,REAL_1:def 5;
       then A31: j <= n or j = n+1 by NAT_1:38;
@@ -626,15 +631,16 @@ A19: now let n be Nat such that
     end;
     end; hence P[n+1];
     end;
-A40: for n being Nat holds P[n] from NAT_1:sch 1(A18,A19);
-     defpred P[Nat] means
-     i < $1 implies for j being Nat st 1 <=j & j < i+1 holds B($1).j = FALSE;
+A40: for n being Element of NAT holds P[n] from NAT_1:sch 1(A18,A19);
+     defpred P[Element of NAT] means
+     i < $1 implies for j being Element of NAT st 1 <=j & j < i+1
+      holds B($1).j = FALSE;
 A41: P[0];
-A42: now let n be Nat such that
+A42: now let n be Element of NAT such that
  A43: P[n];
        now assume
  A44: i < n+1;
-     let j be Nat such that
+     let j be Element of NAT such that
  A45: 1 <=j & j < i+1;
  A46: i <= n by A44,NAT_1:38;
    per cases by A46,REAL_1:def 5;
@@ -643,7 +649,7 @@ A42: now let n be Nat such that
     hence B(n+1).j = FALSE by A45;
    end;
    suppose A47: n > 0 & i < n;
-      then reconsider n' = n as non empty Nat;
+      then reconsider n' = n as non empty Element of NAT;
    A48: dom B(n) = Seg n by Lm1;  j <= i & i <= n by A44,A45,NAT_1:38;
        then j <= n by XXREAL_0:2;
    then A49: j in dom B(n) by A45,A48,FINSEQ_1:3;
@@ -662,8 +668,8 @@ A42: now let n be Nat such that
      end;
      end; hence P[n+1];
    end;
-A54: for n being Nat holds P[n] from NAT_1:sch 1(A41,A42);
- thus B.(i+1) = 1 by A1,A17,MARGREL1:def 14; let j be Nat such that
+A54: for n being Element of NAT holds P[n] from NAT_1:sch 1(A41,A42);
+ thus B.(i+1) = 1 by A1,A17,MARGREL1:def 14; let j be Element of NAT such that
 A55: j in Seg n and
 A56: j<>i+1;
 A57: 1 <= j & j <= n by A55,FINSEQ_1:3;
@@ -674,12 +680,15 @@ A57: 1 <= j & j <= n by A55,FINSEQ_1:3;
  suppose A58: j > i+1 & j < n;
    then j <> 0; then consider k being Nat such that
  A59: j = k+1 by NAT_1:22;
+  reconsider k as Element of NAT by ORDINAL1:def 13;
  A60: i+1 <= k by A58,A59,NAT_1:38;  k <= n by A58,A59,NAT_1:38;
   hence B.j = 0 by A1,A40,A59,A60,MARGREL1:def 13;
  end;
  suppose A61: j > i+1 & j = n;
   then consider m being Nat such that
- A62: n = m+1 by NAT_1:22;  i < m by A61,A62,XREAL_1:8;
+ A62: n = m+1 by NAT_1:22;
+  reconsider m as Element of NAT by ORDINAL1:def 13;
+  i < m by A61,A62,XREAL_1:8;
      then 2 to_power i < 2 to_power m by POWER:44;
   hence B.j = 0 by A61,A62,BINARI_3:27,MARGREL1:def 13;
 end;
@@ -2540,17 +2549,18 @@ then A8: X --> 0 is Element of product D by CARD_3:def 5;
    hence F = Dependency-str BD by TARSKI:2;
   end;
   suppose A12: G is non empty;
-   then reconsider n =len H as non empty Nat by A4,FINSEQ_1:25,RELAT_1:60;
+   then reconsider n =len H as non empty Element of NAT
+    by A4,FINSEQ_1:25,RELAT_1:60;
 A13: dom H = Seg n by FINSEQ_1:def 3;
      defpred R[set, Element of n-tuples_on BOOLEAN ] means
-     for i being Nat st i in Seg n holds
+     for i being Element of NAT st i in Seg n holds
       ($1 in H.i implies ($2).i = 0) & (not $1 in H.i implies ($2).i = 1);
 A14: now let x be Element of X;
      defpred P[set,set] means
        (x in H.$1 implies $2 = 0) & (not x in H.$1 implies $2 = 1);
-   A15: for i being Nat st i in Seg n ex x being Element of BOOLEAN
+   A15: for i being Element of NAT st i in Seg n ex x being Element of BOOLEAN
          st P[i,x]
-      proof let i be Nat; assume i in Seg n;
+      proof let i be Element of NAT; assume i in Seg n;
        per cases;
        suppose A16: x in H.i;
         reconsider b = FALSE as Element of BOOLEAN;
@@ -2564,7 +2574,8 @@ A14: now let x be Element of X;
        end;
        end; consider y being FinSequence of BOOLEAN such that
    A18: dom y = Seg n and
-   A19: for i being Nat st i in Seg n holds P[i,y.i] from FINSEQ_1:sch 5(A15);
+   A19: for i being Element of NAT st i in Seg n holds P[i,y.i]
+    from FINSEQ_1:sch 5(A15);
    A20: y in BOOLEAN* by FINSEQ_1:def 11;
           len y = n by A18,FINSEQ_1:def 3;
        then y in { s where s is Element of BOOLEAN*: len s = n } by A20;
@@ -2575,7 +2586,7 @@ A14: now let x be Element of X;
 A21: for x being Element of X holds
   R[x,(M.x) qua Element of n-tuples_on BOOLEAN] from FUNCT_2:sch 3(A14);
    set R = {f where f is Element of product D :
-              ex i being Nat st for x being Element of X holds
+              ex i being Element of NAT st for x being Element of X holds
                                f.x = Absval ((n-BinarySequence i) '&' (M.x)) };
       now set f = X --> 0;
      take i = 0; let x be Element of X;
@@ -2587,7 +2598,7 @@ A21: for x being Element of X holds
 then A23: X --> 0 in R by A8;
       R c= product D proof let x be set; assume x in R;
        then ex f being Element of product D st x = f &
-         ex i being Nat st for x being Element of X holds
+         ex i being Element of NAT st for x being Element of X holds
                 f.x = Absval ((n-BinarySequence i) '&' (M.x));
      hence thesis;
    end; then reconsider R as non empty Subset of product D by A23;
@@ -2607,16 +2618,16 @@ then A23: X --> 0 in R by A8;
        A26: f|A' = g|A';  f in R;
            then consider Rf being Element of product D such that
        A27: f = Rf and
-       A28: ex i being Nat st for x being Element of X holds
+       A28: ex i being Element of NAT st for x being Element of X holds
                 Rf.x = Absval ((n-BinarySequence i) '&' (M.x));
               g in R; then consider Rg being Element of product D such that
        A29: g = Rg and
-       A30: ex i being Nat st for x being Element of X holds
+       A30: ex i being Element of NAT st for x being Element of X holds
                 Rg.x = Absval ((n-BinarySequence i) '&' (M.x));
-           consider fi being Nat such that
+           consider fi being Element of NAT such that
        A31: for x being Element of X holds
                 Rf.x = Absval ((n-BinarySequence fi) '&' (M.x)) by A28;
-           consider gi being Nat such that
+           consider gi being Element of NAT such that
        A32: for x being Element of X holds
                 Rg.x = Absval ((n-BinarySequence gi) '&' (M.x)) by A30;
        A33: dom g = dom D by A29,CARD_3:18 .= dom f by A27,CARD_3:18;
@@ -2690,12 +2701,13 @@ then A23: X --> 0 in R by A8;
         consider bx being set such that
     A56: bx in B & not bx in gg by A55,TARSKI:def 3;
         reconsider bx as Element of X by A56;
-        consider i being Nat such that
+        consider i being Element of NAT such that
     A57: i in dom H and
     A58: H.i = gg by A4,A12,FINSEQ_2:11;
     A59: 1 <= i & i <= n by A13,A57,FINSEQ_1:3;  i <> 0 by A13,A57,FINSEQ_1:3;
         then consider k being Nat such that
     A60: i = k+1 by NAT_1:22;
+    reconsider k as Element of NAT by ORDINAL1:def 13;
     A61: k < n by A59,A60,NAT_1:38;
         deffunc F(Element of X) = Absval ((n-BinarySequence 0) '&' (M.$1));
         consider f being Function of X, NAT such that
@@ -2739,7 +2751,8 @@ A63
                 now thus dom L = Seg n by Lm1 .= dom R by Lm1;
                let j be set; assume
              A72: j in dom L;
-             then A73: j in Seg n by Lm1; reconsider nj = j as Nat by A72;
+             then A73: j in Seg n by Lm1;
+              reconsider nj = j as Element of NAT by A72;
              A74: bs0 = 0*n by BINARI_3:26 .= n |-> 0 by EUCLID:def 4;
                      dom bs0 = Seg n by Lm1;
              then A75:  bs0/.nj = bs0.nj by A73,FINSEQ_4:def 4

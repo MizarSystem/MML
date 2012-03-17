@@ -12,17 +12,18 @@ environ
       MARGREL1, ZF_LANG, NAT_1, MATRIX_2, FUNCOP_1, RELAT_2, PRE_TOPC, FUNCT_2,
       SUBSET_1, BINOP_1, UNIALG_1, COMPLEX1, VECTSP_1, GROUP_1, GROUP_2,
       VECTMETR, FINSEQ_4, PARTFUN1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, MCART_1, COMPLEX1,
-      REAL_1, RELAT_2, NAT_1, INT_1, POWER, ABIAN, SERIES_1, RELAT_1, RELSET_1,
-      MARGREL1, BINOP_1, DOMAIN_1, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0,
-      PRE_TOPC, FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSEQOP, BINARITH,
-      TREES_1, TREES_2, TREES_4, BINTREE1, BINTREE2, RVSUM_1, RLVECT_1,
-      GROUP_1, GROUP_2, TOPS_2, GRCAT_1, METRIC_1, EUCLID, XXREAL_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, MCART_1, XCMPLX_0,
+      COMPLEX1, REAL_1, RELAT_2, NAT_1, INT_1, POWER, ABIAN, SERIES_1, RELAT_1,
+      RELSET_1, MARGREL1, BINOP_1, DOMAIN_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      STRUCT_0, PRE_TOPC, FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSEQOP,
+      BINARITH, TREES_1, TREES_2, TREES_4, BINTREE1, BINTREE2, RVSUM_1,
+      RLVECT_1, GROUP_1, GROUP_2, TOPS_2, GRCAT_1, METRIC_1, EUCLID, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, MEMBERED, COMPLEX1, FINSEQOP,
       FINSEQ_4, REALSET1, SERIES_1, BINARITH, TREES_9, ABIAN, TOPS_2, GROUP_2,
       GRCAT_1, EUCLID, BINTREE2;
  registrations SUBSET_1, STRUCT_0, RELSET_1, FUNCT_1, BINTREE1, BINTREE2,
-      GROUP_1, GROUP_2, METRIC_1, TREES_2, MARGREL1, NAT_1, MEMBERED, FUNCT_2;
+      GROUP_1, GROUP_2, METRIC_1, TREES_2, MARGREL1, NAT_1, MEMBERED, FUNCT_2,
+      ARYTM_3, REAL_1, ORDINAL1, XREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -46,10 +47,11 @@ begin  :: Convex and Internal Metric Spaces
     for p,q be Real st p > 0 & q > 0
     ex f be FinSequence of the carrier of V st
      f/.1 = x & f/.len f = y &
-     (for i be Nat st 1 <= i & i <=
+     (for i be Element of NAT st 1 <= i & i <=
  len f - 1 holds dist(f/.i,f/.(i+1)) < p) &
      for F be FinSequence of REAL st len F = len f - 1 &
-      for i be Nat st 1 <= i & i <= len F holds F/.i = dist(f/.i,f/.(i+1))
+      for i be Element of NAT st 1 <= i & i <= len F
+      holds F/.i = dist(f/.i,f/.(i+1))
      holds abs(dist(x,y) - Sum F) < q;
   end;
 
@@ -59,9 +61,11 @@ begin  :: Convex and Internal Metric Spaces
    for p be Real st p > 0
    ex f be FinSequence of the carrier of V st
     f/.1 = x & f/.len f = y &
-    (for i be Nat st 1 <= i & i <= len f - 1 holds dist(f/.i,f/.(i+1)) < p) &
+    (for i be Element of NAT st 1 <= i & i <= len f - 1
+    holds dist(f/.i,f/.(i+1)) < p) &
     for F be FinSequence of REAL st len F = len f - 1 &
-     for i be Nat st 1 <= i & i <= len F holds F/.i = dist(f/.i,f/.(i+1))
+     for i be Element of NAT st 1 <= i & i <= len F
+      holds F/.i = dist(f/.i,f/.(i+1))
     holds dist(x,y) = Sum F;
 
   registration
@@ -217,7 +221,7 @@ end;
     dist(v,w) = Norm (w - v);
 
   definition
-   let n be Nat;
+   let n be Element of NAT;
    func RLMSpace n -> strict RealLinearMetrSpace means
 :: VECTMETR:def 8
     the carrier of it = REAL n &
@@ -229,14 +233,14 @@ end;
   end;
 
   theorem :: VECTMETR:9
-       for n be Nat
+       for n be Element of NAT
    for f be isometric Function of RLMSpace n,RLMSpace n holds
     rng f = REAL n;
 
 begin  :: Groups of Isometric Functions
 
   definition
-   let n be Nat;
+   let n be Element of NAT;
    func IsomGroup n -> strict HGrStr means
 :: VECTMETR:def 9
     the carrier of it = ISOM RLMSpace n &
@@ -245,27 +249,27 @@ begin  :: Groups of Isometric Functions
   end;
 
   registration
-   let n be Nat;
+   let n be Element of NAT;
    cluster IsomGroup n -> non empty;
   end;
 
   registration
-   let n be Nat;
+   let n be Element of NAT;
    cluster IsomGroup n -> associative Group-like;
   end;
 
   theorem :: VECTMETR:10
-   for n be Nat holds
+   for n be Element of NAT holds
     1.(IsomGroup n) = id (RLMSpace n);
 
   theorem :: VECTMETR:11
-   for n be Nat
+   for n be Element of NAT
    for f be Element of IsomGroup n
    for g be Function of RLMSpace n,RLMSpace n st f = g holds
     f" = g";
 
   definition
-   let n be Nat;
+   let n be Element of NAT;
    let G be Subgroup of IsomGroup n;
    func SubIsomGroupRel G -> Relation of the carrier of RLMSpace n means
 :: VECTMETR:def 10
@@ -275,7 +279,7 @@ begin  :: Groups of Isometric Functions
   end;
 
   registration
-   let n be Nat;
+   let n be Element of NAT;
    let G be Subgroup of IsomGroup n;
    cluster SubIsomGroupRel G -> total symmetric transitive;
   end;

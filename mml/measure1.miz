@@ -20,7 +20,8 @@ environ
  definitions SUPINF_2, TARSKI, FINSUB_1, PROB_2, PROB_1, XBOOLE_0, SUBSET_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, ENUMSET1, ZFMISC_1, NAT_1, SETFAM_1,
       SUPINF_2, CQC_THE1, RELAT_1, RELSET_1, FUNCOP_1, FINSUB_1, PROB_2,
-      PROB_1, SUBSET_1, XBOOLE_0, XBOOLE_1, XXREAL_0, CARD_3, CARD_4;
+      PROB_1, SUBSET_1, XBOOLE_0, XBOOLE_1, XXREAL_0, CARD_3, CARD_4,
+      ORDINAL1;
  schemes FUNCT_2, XBOOLE_0;
 
 begin :: Some useful theorems about sets and R_eal numbers
@@ -745,7 +746,7 @@ end;
 theorem Th35:
    for A being set
    ex F being Function of NAT,{A} st
-   for n being Nat holds F.n = A
+   for n being Element of NAT holds F.n = A
 proof
    let A be set;
       A in {A} by TARSKI:def 1;
@@ -776,13 +777,13 @@ canceled 2;
 theorem Th38:
    for A,B,C being Subset of X
    ex F being Function of NAT,bool X st rng F = {A,B,C} &
-   F.0 = A & F.1 = B & for n being Nat st 1 < n holds F.n = C
+   F.0 = A & F.1 = B & for n being Element of NAT st 1 < n holds F.n = C
 proof
    let A,B,C be Subset of X;
-   defpred P0[Nat,set] means ($1 = 0 implies $2 = A) &
+   defpred P0[Element of NAT,set] means ($1 = 0 implies $2 = A) &
                           ($1 = 1 implies $2 = B) &
                           (1 < $1 implies $2 = C);
-   defpred P[set] means ex n being Nat st
+   defpred P[set] means ex n being Element of NAT st
                      ex X being set st
                      ($1 = [n,X] & P0[n,X]);
       ex GRAF being set st for x being set holds x in GRAF iff
@@ -791,23 +792,25 @@ proof
 A1:for x being set holds x in GRAF iff
    x in [:NAT,bool X:] & P[x];
 A2:for x being set holds x in GRAF iff (x = [0,A] or x = [1,B] or
-   (ex n being Nat st (x = [n,C] & 1 < n)))
+   (ex n being Element of NAT st (x = [n,C] & 1 < n)))
    proof
       let x be set;
    A3:x in GRAF implies (x = [0,A] or x = [1,B] or
-      (ex n being Nat st (x = [n,C] & 1 < n)))
+      (ex n being Element of NAT st (x = [n,C] & 1 < n)))
       proof
          assume x in GRAF;
-         then consider n being Nat such that
+         then consider n being Element of NAT such that
       A4:ex X0 being set st x = [n,X0] & P0[n,X0] by A1;
             n = 0 or n = 1 or 1 < n by CQC_THE1:2;
          hence thesis by A4;
       end;
-         (x = [0,A] or x = [1,B] or (ex n being Nat st (x = [n,C] & 1 < n)))
+         (x = [0,A] or x = [1,B] or
+          (ex n being Element of NAT st (x = [n,C] & 1 < n)))
       implies x in GRAF
       proof
          assume
-      A5:x = [0,A] or x = [1,B] or (ex n being Nat st (x = [n,C] & 1 < n));
+      A5:x = [0,A] or x = [1,B] or
+       (ex n being Element of NAT st (x = [n,C] & 1 < n));
       A6:x = [0,A] implies x in GRAF
          proof
             assume x = [0,A];
@@ -820,9 +823,9 @@ A2:for x being set holds x in GRAF iff (x = [0,A] or x = [1,B] or
             then x in [:NAT,bool X:] & P[x] by ZFMISC_1:106;
             hence thesis by A1;
          end;
-         (ex n being Nat st (x = [n,C] & 1 < n)) implies x in GRAF
+         (ex n being Element of NAT st (x = [n,C] & 1 < n)) implies x in GRAF
          proof
-            given n being Nat such that A8: x = [n,C] & 1 < n;
+            given n being Element of NAT such that A8: x = [n,C] & 1 < n;
                P0[n,C] by A8;
             then x in [:NAT,bool X:] & P[x] by A8,ZFMISC_1:106;
             hence thesis by A1;
@@ -835,7 +838,8 @@ A9:for p being set st p in GRAF ex x,y being set st [x,y] = p
    proof
       let p be set;
       assume p in GRAF;
-      then p = [0,A] or p = [1,B] or (ex n being Nat st p = [n,C] & 1 < n)
+      then p = [0,A] or p = [1,B] or
+       (ex n being Element of NAT st p = [n,C] & 1 < n)
       by A2;
       hence thesis;
    end;
@@ -846,7 +850,7 @@ A9:for p being set st p in GRAF ex x,y being set st [x,y] = p
    A10:[x,y1] in GRAF & [x,y2] in GRAF;
    then A11:[x,y1] in [:NAT,bool X:] & P[[x,y1]] by A1;
    A12:[x,y2] in [:NAT,bool X:] & P[[x,y2]] by A1,A10;
-      then reconsider x as Nat by ZFMISC_1:106;
+      then reconsider x as Element of NAT by ZFMISC_1:106;
     per cases by CQC_THE1:2;
     suppose
 A13:   x = 0;
@@ -872,7 +876,7 @@ A16:dom F = NAT
          let x be set;
          thus x in NAT implies ex y being set st [x,y] in F
          proof
-            assume x in NAT; then reconsider x as Nat;
+            assume x in NAT; then reconsider x as Element of NAT;
         A17:x = 0 implies ex y being set st [x,y] in F
             proof
                assume A18:x = 0;
@@ -933,7 +937,7 @@ A24:       y in {A,B,C};
          end;
          given x being set such that
      A28:x in dom F & y = F.x;
-         reconsider x as Nat by A16,A28;
+         reconsider x as Element of NAT by A16,A28;
          per cases by CQC_THE1:2;
          suppose
             A29:x = 0;  [0,A] in F by A2; then A = F.x by A29,FUNCT_1:8;
@@ -958,13 +962,13 @@ A24:       y in {A,B,C};
    end;
    then reconsider F as Function of NAT,bool X by A16,FUNCT_2:4;
    take F;
-      F.0 = A & F.1 = B & for n being Nat st 1 < n holds F.n = C
+      F.0 = A & F.1 = B & for n being Element of NAT st 1 < n holds F.n = C
    proof
 A31:   [0,A] in F by A2;
 A32:   [1,B] in F by A2;
-          for n being Nat st 1 < n holds F.n = C
+          for n being Element of NAT st 1 < n holds F.n = C
        proof
-          let n be Nat;
+          let n be Element of NAT;
           assume 1 < n; then [n,C] in F by A2;
           hence thesis by FUNCT_1:8;
        end;
@@ -982,24 +986,26 @@ proof
    then consider C being Subset of X such that
 A1:C = {};
       ex F being Function of NAT,bool X st rng F = {A,B,C} &
-   F.0 = A & F.1 = B & for n being Nat st 1 < n holds F.n = C by Th38;
+   F.0 = A & F.1 = B & for n being Element of NAT st 1 < n holds F.n = C
+   by Th38;
    hence thesis by A1,SUPINF_2:def 14;
 end;
 
 theorem Th40:
    for A,B being Subset of X
    ex F being Function of NAT,bool X st rng F = {A,B} &
-   F.0 = A & for n being Nat st 0 < n holds F.n = B
+   F.0 = A & for n being Element of NAT st 0 < n holds F.n = B
 proof
    let A,B be Subset of X;
    consider F being Function of NAT,bool X such that
 A1:rng F = {A,B,B} &
-   F.0 = A & F.1 = B & for n being Nat st 1 < n holds F.n = B by Th38;
+   F.0 = A & F.1 = B & for n being Element of NAT st 1 < n holds F.n = B
+   by Th38;
 A2:{A,B,B} = {B,B,A} by ENUMSET1:100
           .= {A,B} by ENUMSET1:70;
-A3:for n being Nat st 0 < n holds F.n = B
+A3:for n being Element of NAT st 0 < n holds F.n = B
    proof
-      let n be Nat;
+      let n be Element of NAT;
       assume 0 < n;
       then n = 1 or 1 < n by CQC_THE1:2;
       hence thesis by A1;
@@ -1014,7 +1020,7 @@ theorem
 proof
    let A,B be Subset of X;
       ex F being Function of NAT,bool X st (rng F = {A,B} &
-   F.0 = A & for n being Nat st 0 < n holds F.n = B) by Th40;
+   F.0 = A & for n being Element of NAT st 0 < n holds F.n = B) by Th40;
    hence thesis by SUPINF_2:def 14;
 end;
 
@@ -1138,8 +1144,9 @@ A3: M c= F;
     consider f being SetSequence of X such that
 A4:  M = rng f by SUPINF_2:def 14;
 A5:  (Intersection Complement f)` = union M by A4, CARD_3:def 4;
-    for n being Nat holds (Complement f).n in F
-     proof let n be Nat;
+    for n being Element of NAT holds (Complement f).n in F
+     proof let n be Element of NAT;
+       reconsider n as Element of NAT by ORDINAL1:def 13;
 A6:     f.n in M by A4,FUNCT_2:6;
        (Complement f).n = (f.n)` by PROB_1:def 4;
       hence thesis by A6,A1,A3,PROB_1:def 1;
@@ -1154,7 +1161,7 @@ A6:     f.n in M by A4,FUNCT_2:6;
 A7: F is compl-closed and
 A8: F is sigma-additive;
    let f be SetSequence of X such that
-A9: for n being Nat holds f.n in F;
+A9: for n being Element of NAT holds f.n in F;
     dom Complement f = NAT by FUNCT_2:def 1;
     then
     reconsider M = rng Complement f as non empty countable Subset-Family of X
@@ -1251,7 +1258,7 @@ registration
 existence
 proof
    consider F being Function of NAT,{{}} such that
-A1:for n being Nat holds F.n = {} by Th35;
+A1:for n being Element of NAT holds F.n = {} by Th35;
       {} in S by PROB_1:10; then {{}} c= S by ZFMISC_1:37;
    then reconsider F as Function of NAT,S by FUNCT_2:9;
    take F;
@@ -1414,9 +1421,9 @@ A1:for A being Element of S holds M.A = 0. by Th57;
       union rng F is Element of S by Th53;
 then A3:M.(union rng F) = 0.by A1;
 A4:M*F is nonnegative by A2,Th54;
-A5:for r being Nat st 0 <= r holds (M*F).r = 0.
+A5:for r being Element of NAT st 0 <= r holds (M*F).r = 0.
    proof
-      let r be Nat;
+      let r be Element of NAT;
          dom (M*F) = NAT by FUNCT_2:def 1;
       then (M*F).r = M.(F.r) by FUNCT_1:22;
       hence thesis by A1;
@@ -1471,7 +1478,8 @@ A4:   {} is Subset of X by XBOOLE_1:2;
       reconsider A,B as Subset of X;
       consider F being Function of NAT,bool X such that
    A5:rng F = {A,B,{}} &
-      F.0 = A & F.1 = B & for n being Nat st 1 < n holds F.n = {} by A4,Th38;
+      F.0 = A & F.1 = B & for n being Element of NAT st 1 < n holds F.n = {}
+       by A4,Th38;
          F is Function of NAT,S
       proof
             {A,B,{}} c= S
@@ -1482,9 +1490,9 @@ A4:   {} is Subset of X by XBOOLE_1:2;
          end;
          hence thesis by A5,FUNCT_2:8;
       end; then reconsider F as Function of NAT,S;
-A6:    for n,m being Nat st n <> m holds F.n misses F.m
+A6:    for n,m being Element of NAT st n <> m holds F.n misses F.m
       proof
-         let n,m be Nat;
+         let n,m be Element of NAT;
          assume
       A7: n <> m;
 A8:      (n = 0 or n = 1 or 1 < n) & (m = 0 or m = 1 or 1 < m) by CQC_THE1:2;
@@ -1544,13 +1552,13 @@ A8:      (n = 0 or n = 1 or 1 < n) & (m = 0 or m = 1 or 1 < m) by CQC_THE1:2;
             union {A,B,{}} = union {A,B} by Th1;
          hence thesis by A5,ZFMISC_1:93;
       end;
-   A15:for r being Nat holds (M*F).0 = M.A & (M*F).1 = M.B &
+   A15:for r being Element of NAT holds (M*F).0 = M.A & (M*F).1 = M.B &
       (1+1 <= r implies (M*F).r = 0.)
       proof
-         let r be Nat;
-     A16:for r being Nat holds (M*F).r = M.(F.r)
+         let r be Element of NAT;
+     A16:for r being Element of NAT holds (M*F).r = M.(F.r)
          proof
-            let r be Nat;
+            let r be Element of NAT;
                dom (M*F) = NAT by FUNCT_2:def 1;
             hence thesis by FUNCT_1:22;
          end;

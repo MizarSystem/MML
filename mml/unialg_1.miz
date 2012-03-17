@@ -13,10 +13,11 @@ environ
  constructors PARTFUN1, FUNCOP_1, XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED,
       FINSEQ_1, STRUCT_0;
  registrations SUBSET_1, RELSET_1, STRUCT_0, PARTFUN1, FUNCOP_1, ARYTM_3,
-      MEMBERED, ORDINAL1;
+      MEMBERED, ORDINAL1, XXREAL_0;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, STRUCT_0, FUNCT_1;
- theorems TARSKI, FUNCT_1, PARTFUN1, FINSEQ_1, FUNCOP_1, RELAT_1, RELSET_1;
+ theorems TARSKI, FUNCT_1, PARTFUN1, FINSEQ_1, FUNCOP_1, RELAT_1, RELSET_1,
+      ORDINAL1;
  schemes FINSEQ_1;
 
 begin
@@ -223,7 +224,7 @@ cluster homogeneous quasi_total non-empty PFuncFinSequence of A;
     proof
      let n be set; assume
      A3: n in dom <*f*>;
-     then reconsider n as Nat;
+     then reconsider n as Element of NAT;
         n in {1} by A3,FINSEQ_1:4,def 8;
      then n = 1 by TARSKI:def 1;
    then <*f*>.n=f by FINSEQ_1:def 8;
@@ -327,7 +328,7 @@ reserve U1 for partial non-empty non empty UAStr;
 definition
   let A;
   let f be homogeneous non empty PartFunc of A*,A;
-func arity(f) -> Nat means
+  func arity(f) -> Nat means
     x in dom f implies it = len x;
  existence
   proof
@@ -358,12 +359,19 @@ A3:   dom f <> {} by RELAT_1:64;
   end;
 end;
 
+definition
+  let A;
+  let f be homogeneous non empty PartFunc of A*,A;
+  redefine func arity(f) -> Element of NAT;
+  coherence by ORDINAL1:def 13;
+end;
+
 theorem Th5:
-for U1 holds for n st n in dom the charact of(U1) holds
-  (the charact of(U1)).n is
+  n in dom the charact of U1 implies
+  (the charact of U1).n is
    PartFunc of (the carrier of U1)*,the carrier of U1
- proof let U1,n;
-  set o = the charact of(U1); assume
+ proof
+  set o = the charact of U1; assume
       n in dom o;
   then o.n in rng o & rng o c= PFuncs((the carrier of U1)*, the carrier of U1)
    by FINSEQ_1:def 4,FUNCT_1:def 5;
@@ -372,34 +380,35 @@ hence thesis by PARTFUN1:121;
 
 definition let U1;
 func signature U1 ->FinSequence of NAT means
-    len it = len the charact of(U1) &
- for n st n in dom it holds
-   for h be homogeneous non empty
-   PartFunc of (the carrier of U1 )*,the carrier of U1
-     st h = (the charact of(U1)).n
+    len it = len the charact of U1 &
+    for n st n in dom it holds
+    for h be homogeneous non empty
+    PartFunc of (the carrier of U1 )*,the carrier of U1
+     st h = (the charact of U1).n
     holds it.n = arity(h);
  existence
   proof
    defpred P[Nat,set] means
    for h be homogeneous non empty
-      PartFunc of (the carrier of U1 )*,the carrier of U1
-       st h = (the charact of(U1)).$1
+      PartFunc of (the carrier of U1)*,the carrier of U1
+       st h = (the charact of U1).$1
         holds $2 = arity(h);
-   A1: now let m; assume
-           m in Seg len the charact of(U1);
-        then m in dom the charact of(U1) by FINSEQ_1:def 3;
-        then reconsider H=(the charact of(U1)).m as homogeneous non empty
+   A1: now let m be Element of NAT; assume
+           m in Seg len the charact of U1;
+        then m in dom the charact of U1 by FINSEQ_1:def 3;
+        then reconsider H=(the charact of U1).m as homogeneous non empty
          PartFunc of (the carrier of U1 )*,the carrier of U1
                 by Def4,Th5,FUNCT_1:def 15;
-        take n=arity(H);
+        reconsider n=arity(H) as Element of NAT by ORDINAL1:def 13;
+        take n;
         thus P[m,n];
        end;
    consider p be FinSequence of NAT such that
-   A2: dom p = Seg(len the charact of(U1)) and
-   A3: for m st m in
- Seg(len the charact of(U1)) holds P[m,p.m] from FINSEQ_1:sch 5(A1);
+   A2: dom p = Seg(len the charact of U1) and
+   A3: for m being Element of NAT st m in
+ Seg(len the charact of U1) holds P[m,p.m] from FINSEQ_1:sch 5(A1);
    take p;
-thus len p = len the charact of(U1) by A2,FINSEQ_1:def 3;
+thus len p = len the charact of U1 by A2,FINSEQ_1:def 3;
    let n; assume
    A4: n in dom p;
    let h be homogeneous non empty
@@ -410,22 +419,22 @@ thus len p = len the charact of(U1) by A2,FINSEQ_1:def 3;
  uniqueness
   proof
    let x,y be FinSequence of NAT; assume that
-   A5: len x = len the charact of(U1) and
+   A5: len x = len the charact of U1 and
    A6: for n st n in dom x holds for h be homogeneous non empty
         PartFunc of (the carrier of U1 )*,the carrier of U1
-         st h = (the charact of(U1)).n
+         st h = (the charact of U1).n
          holds x.n = arity(h) and
-   A7: len y = len the charact of(U1) and
+   A7: len y = len the charact of U1 and
    A8: for n st n in dom y holds for h be homogeneous non empty
          PartFunc of (the carrier of U1 )*,the carrier of U1
-          st h = (the charact of(U1)).n
+          st h = (the charact of U1).n
           holds y.n = arity(h);
-       now let m; assume
+       now let m be Element of NAT; assume
         1<=m & m<=len x;
      then m in Seg len x by FINSEQ_1:3;
-then A9: m in dom the charact of(U1) & m in dom x & m in dom y by A5,A7,
+then A9: m in dom the charact of U1 & m in dom x & m in dom y by A5,A7,
 FINSEQ_1:def 3;
-     then reconsider h=(the charact of(U1)).m
+     then reconsider h=(the charact of U1).m
        as homogeneous non empty
         PartFunc of (the carrier of U1 )*,the carrier of U1
           by Def4,Th5,FUNCT_1:def 15;

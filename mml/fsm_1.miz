@@ -9,35 +9,38 @@ environ
  vocabularies FINSEQ_1, ARYTM_1, INT_1, FUNCT_1, RELAT_1, SGRAPH1, EQREL_1,
       TARSKI, FINSET_1, BOOLE, CARD_1, BORSUK_1, SETFAM_1, AMI_1, MATRIX_2,
       MCART_1, RELAT_2, FUNCOP_1, FUNCT_4, FSM_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, NAT_1, INT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1,
+      NUMBERS, XCMPLX_0, NAT_1, INT_1,
       SETFAM_1, STRUCT_0, FINSET_1, GROUP_1, MCART_1, DOMAIN_1, RELAT_1,
       FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, XXREAL_0, FUNCT_4, FINSEQ_1,
       FINSEQ_3, CARD_1, EQREL_1, BORSUK_1;
  constructors SETFAM_1, FUNCT_4, XXREAL_0, NAT_1, MEMBERED, FINSEQ_3, GROUP_1,
       BORSUK_1;
  registrations SUBSET_1, INT_1, FINSET_1, XBOOLE_0, RELSET_1, STRUCT_0,
-      BORSUK_1, XREAL_0, MEMBERED, FUNCT_2, PARTFUN1, EQREL_1, XXREAL_0;
+      BORSUK_1, XREAL_0, MEMBERED, FUNCT_2, PARTFUN1, EQREL_1, XXREAL_0,
+      NAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SETFAM_1, XBOOLE_0, BINOP_1;
  theorems TARSKI, SUBSET_1, SETFAM_1, MCART_1, FINSET_1, FUNCOP_1, RELSET_1,
       REAL_1, NAT_1, INT_1, CARD_1, CARD_2, FINSEQ_1, FINSEQ_2, FINSEQ_3,
       FINSEQ_4, FUNCT_1, FUNCT_2, FUNCT_4, EQREL_1, BORSUK_1, ZFMISC_1,
       STRUCT_0, GROUP_1, XBOOLE_0, XBOOLE_1, RELAT_1, XREAL_1, BINOP_1,
-      XXREAL_0;
+      XXREAL_0, ORDINAL1;
  schemes NAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, RECDEF_1, EQREL_1, BINOP_1;
 
 begin :: Preliminaries
 
- reserve m, n, i, k for Nat;
+ reserve m, n, i, k for Element of NAT;
 
 theorem Th1:
   for m, n being Nat holds
-   m < n implies ex p being Nat st n = m+p & 1 <= p
+   m < n implies ex p being Element of NAT st n = m+p & 1 <= p
 proof
   let m, n be Nat;
 assume
 A1: m < n; then consider p being Nat such that
 A2: n=m+p by NAT_1:28;
+   reconsider p as Element of NAT by ORDINAL1:def 13;
   take p; thus n = m+p by A2;
  assume p < 1; then p < 0+1; then p <= 0 & 0 <= p by NAT_1:38;
    then p = 0; hence contradiction by A1,A2;
@@ -314,12 +317,12 @@ definition let IAlph be non empty set; let fsm be non empty FSM over IAlph;
    ex wi being Element of IAlph, qi, qi1 being State of fsm st
     wi = w.i & qi = it.i & qi1 = it.(i+1) & wi-succ_of qi = qi1;
  existence proof set D = the carrier of fsm; set N = len w + 1;
- defpred P[Nat, set, set] means
+ defpred P[Element of NAT, set, set] means
        ex wn being Element of IAlph, q', q'' being Element of D st
            w.$1 = wn & q' = $2 & q'' = $3 & wn-succ_of q' = q'';
-A1: for n being Nat st 1 <= n & n < N holds
+A1: for n being Element of NAT st 1 <= n & n < N holds
      for x being Element of D ex y being Element of D st P[n, x, y] proof
- let n be Nat; assume
+ let n be Element of NAT; assume
 A2: 1 <= n;
   assume n < N;
   then n <= len w by NAT_1:38; then n in dom w by A2,FINSEQ_3:27;
@@ -329,28 +332,28 @@ A2: 1 <= n;
 end;
  consider p being FinSequence of D such that
 A3:  len p = N & (p.1 = q or N = 0) &
-     for n being Nat st 1 <= n & n < N holds P[n, p.n, p.(n+1)]
+     for n being Element of NAT st 1 <= n & n < N holds P[n, p.n, p.(n+1)]
                                 from RECDEF_1:sch 6 (A1);
  take p; thus p.1 = q by A3;
  thus len p = len w + 1 by A3;
- let i be Nat; assume
+ let i be Element of NAT; assume
 A4: 1 <= i;
   assume i <= len w;
   then i < N by NAT_1:38; hence thesis by A3,A4;
  end;
  uniqueness proof let qs1, qs2 be FinSequence of the carrier of fsm such that
 A5: qs1.1 = q & len qs1 = len w + 1 &
-    for i being Nat st 1 <= i & i <= len w
+    for i being Element of NAT st 1 <= i & i <= len w
      ex wi being Element of IAlph, qs1i, qs1i1 being State of fsm
      st wi=w.i & qs1i=qs1.i & qs1i1 = qs1.(i+1) & wi-succ_of qs1i = qs1i1
  and
 A6: qs2.1 = q & len qs2 = len w + 1 &
-    for i being Nat st 1 <= i & i <= len w
+    for i being Element of NAT st 1 <= i & i <= len w
      ex wi being Element of IAlph, qs2i, qs2i1 being State of fsm
      st wi = w.i & qs2i = qs2.i & qs2i1 = qs2.(i+1) & wi-succ_of qs2i = qs2i1;
-   defpred P[Nat] means 1<=$1 & $1<=len qs1 implies qs1.$1 = qs2.$1;
+   defpred P[Element of NAT] means 1<=$1 & $1<=len qs1 implies qs1.$1 = qs2.$1;
 A7:  P[0];
-A8: now let k be Nat; assume
+A8: now let k be Element of NAT; assume
 A9:    P[k];
        thus P[k+1]
        proof
@@ -374,7 +377,7 @@ A15:   i2 = w.k & qs2i = qs2.k & qs2i1 = qs2.(k+1) &
      end;
      end;
     end;
-     for k being Nat holds P[k] from NAT_1:sch 1 (A7,A8);
+     for k being Element of NAT holds P[k] from NAT_1:sch 1 (A7,A8);
   hence qs1 = qs2 by A5,A6,FINSEQ_1:18;
  end;
 end;
@@ -384,7 +387,7 @@ theorem Th16:
 A1:  len eis = 0 by FINSEQ_1:25;
 then A2:  len <*q*> = len eis + 1 by FINSEQ_1:57;
 A3:  <*q*>.1 = q by FINSEQ_1:57;
-      for i being Nat st 1 <= i & i <= len eis
+      for i being Element of NAT st 1 <= i & i <= len eis
    ex wi being Element of IAlph, qi, qi1 being State of fsm st
     wi=eis.i & qi=<*q*>.i & qi1=<*q*>.(i+1)& wi-succ_of qi=qi1 by A1;
  hence thesis by A2,A3,Def2;
@@ -441,7 +444,7 @@ theorem Th19:
    ((q, w)-admissible).(len (q, w)-admissible) = q' iff q, w-leads_to q' proof
  hereby set qs = (q, w)-admissible; assume
 A1: qs.(len qs) = q';   qs.1 = q & len qs = len w + 1 &
-  for i being Nat st 1 <= i & i <= len w
+  for i being Element of NAT st 1 <= i & i <= len w
    ex wi being Element of IAlph, qi, qi1 being State of fsm st
     wi=w.i & qi = qs.i & qi1 = qs.(i+1) & wi-succ_of qi = qi1 by Def2;
   hence q, w-leads_to q' by A1,Def3;
@@ -454,9 +457,10 @@ theorem Th20:
  for k st 1 <= k & k <= len w1
    holds (q1,w1^w2)-admissible.k = (q1,w1)-admissible.k
 proof set q1w = (q1,w1^w2)-admissible; set q1w1 = (q1,w1)-admissible;
-  defpred P[Nat] means 1 <= $1 & $1 <= len w1 implies q1w.$1 = q1w1.$1;
+  defpred P[Element of NAT] means
+   1 <= $1 & $1 <= len w1 implies q1w.$1 = q1w1.$1;
 A1: P[0];
-A2:now let k be Nat; assume
+A2:now let k be Element of NAT; assume
 A3:  P[k];
      thus P[k+1] proof assume
 A4:  1 <= k+1 & k+1 <= len w1; A5: 0 = k or 0 < k & 0 + 1= 1;
@@ -482,7 +486,7 @@ A9:  w1k = w1.k & qw1k = q1w1.k & qw1k1 = q1w1.(k+1) &
      end;
      end;
     end;
-    thus for k being Nat holds P[k] from NAT_1:sch 1 (A1,A2);
+    thus for k being Element of NAT holds P[k] from NAT_1:sch 1 (A1,A2);
 end;
 
 theorem Th21:
@@ -526,11 +530,11 @@ theorem Th22:
 A1: q1,w1-leads_to q2;
     set q1w = (q1,w1^w2)-admissible;
     set q2w2 = (q2,w2)-admissible;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
       1 <= $1 & $1 <= len w2 + 1 implies q1w.(len w1 + $1) = q2w2.$1;
 A2: P[0];
-A3: for k being Nat st P[k] holds P[k+1]
-    proof let k be Nat; assume
+A3: for k being Element of NAT st P[k] holds P[k+1]
+    proof let k be Element of NAT; assume
 A4:   1 <= k & k <= len w2 + 1 implies q1w.(len w1 + k) = q2w2.k; assume
 A5:   1 <= k+1 & k+1 <= len w2 + 1;
       per cases;
@@ -559,7 +563,7 @@ FINSEQ_1:def 7,NAT_1:38
 ;
     end;
     end;
-    thus for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
+    thus for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
 end;
 
 theorem Th23:
@@ -571,13 +575,14 @@ A1: q1,w1-leads_to q2;
   set q2w2 = (q2,w2)-admissible; set Dw1 = Del ((q1,w1)-admissible,(len w1+1));
 A2: len q1w1 = len w1 + 1 by Def2;
      dom q1w1 = Seg (len q1w1) by FINSEQ_1:def 3;
- then len w1+1 in dom q1w1 by A2,FINSEQ_1:5; then consider m be Nat such that
+ then len w1+1 in dom q1w1 by A2,FINSEQ_1:5;
+  then consider m be Nat such that
 A3:  len q1w1 = m + 1 & len Dw1 = m by FINSEQ_3:113;
 A4:  len q1w1 = len w1 + 1 by Def2;
 A5: len q1w = len (w1^w2) +1 by Def2 .= len w1 + len w2 +1 by FINSEQ_1:35
      .= len Dw1 +(len w2 +1) by A3,A4 .=len Dw1 + len q2w2 by Def2
      .= len (Dw1^q2w2) by FINSEQ_1:35;
-        now let k be Nat; assume A6: 1 <= k & k <= len q1w;
+        now let k be Element of NAT; assume A6: 1 <= k & k <= len q1w;
       per cases by A6,NAT_1:38;
       suppose
 A7:     1 <= k & k <= len w1;
@@ -589,7 +594,7 @@ A9:     1 <= k & k < len w1 + 1 by A7,NAT_1:38;
       suppose
 A10:   len w1+1 <= k & k <= len q1w;
        then len w1 + 1 - len w1 <= k - len w1 by XREAL_1:11;
-       then reconsider i = k - len w1 as Nat by INT_1:16;
+       then reconsider i = k - len w1 as Element of NAT by INT_1:16;
 A11:   k = len w1 + i;   len q1w = len (w1^w2) + 1 by Def2;
        then len w1+1 <= k & k <= len w1 + len w2 +1 by A10,FINSEQ_1:35;
        then len w1+1 <= k & k <= len w1 + (len w2 +1);
@@ -685,14 +690,15 @@ definition let IAlph, OAlph, tfsm, qt, w;
      it.i = (the OFun of tfsm).[(qt, w)-admissible.i, w.i];
  existence proof set qs = (qt, w)-admissible;
 A1:   Seg len w = dom w by FINSEQ_1:def 3;
-   deffunc F(Nat) = (the OFun of tfsm).[qs.$1, w.$1];
+   deffunc F(Element of NAT) = (the OFun of tfsm).[qs.$1, w.$1];
    consider p being FinSequence such that
 A2: len p = len w &
-   for i being Nat st i in Seg len w holds p.i = F(i) from FINSEQ_1:sch 2;
+   for i being Element of NAT st i in Seg len w holds p.i = F(i)
+    from FINSEQ_1:sch 2;
        rng p c= OAlph proof
     let y be set; assume y in rng p; then consider x being set such that
 A3:   x in dom p & y = p.x by FUNCT_1:def 5;
-     reconsider x as Nat by A3;
+     reconsider x as Element of NAT by A3;
 A4:   dom p = Seg len p by FINSEQ_1:def 3;
 A5:   1 <= x & x <= len p by A3,FINSEQ_3:27;
 A6:  len qs = len p + 1 by A2,Def2;   x <= len p + 1 by A5,NAT_1:37;
@@ -705,21 +711,21 @@ A6:  len qs = len p + 1 by A2,Def2;   x <= len p + 1 by A5,NAT_1:37;
    end;
    then reconsider p' = p as FinSequence of OAlph by FINSEQ_1:def 4;
        len p' = len w &
-   for i being Nat st i in dom w holds
+   for i being Element of NAT st i in dom w holds
      p'.i = (the OFun of tfsm).[qs.i, w.i] by A1,A2;
   hence thesis;
  end;
  uniqueness proof set qs = (qt, w)-admissible;
   let it1, it2 be FinSequence of OAlph; assume
 A7: len it1 = len w &
-   for i being Nat st i in dom w holds
+   for i being Element of NAT st i in dom w holds
      it1.i = (the OFun of tfsm).[qs.i, w.i]; assume
 A8: len it2 = len w &
-   for i being Nat st i in dom w holds
+   for i being Element of NAT st i in dom w holds
      it2.i = (the OFun of tfsm).[qs.i, w.i];
 then A9:  dom w = dom it1 & dom it1 = dom it2 by A7,FINSEQ_3:31;
        now thus len it1 = len it2 by A7,A8;
-    let i be Nat; assume
+    let i be Element of NAT; assume
          1 <= i & i <= len it1; then i in dom it1 by FINSEQ_3:27;
      then it1.i = (the OFun of tfsm).[qs.i, w.i] &
      it2.i = (the OFun of tfsm).[qs.i, w.i] by A7,A8,A9;
@@ -743,15 +749,15 @@ definition let IAlph, OAlph, sfsm, qs, w;
      it.i = (the OFun of sfsm).((qs, w)-admissible.i);
  existence proof set qs' = (qs, w)-admissible;
 A1:  Seg len qs' = dom qs' by FINSEQ_1:def 3;
-   deffunc F(Nat) = (the OFun of sfsm).(qs'.$1);
+   deffunc F(Element of NAT) = (the OFun of sfsm).(qs'.$1);
    consider p being FinSequence such that
 A2: len p = len qs' &
-   for i being Nat st i in Seg len qs' holds
+   for i being Element of NAT st i in Seg len qs' holds
      p.i = F(i) from FINSEQ_1:sch 2;
        rng p c= OAlph proof
     let y be set; assume y in rng p; then consider x being set such that
 A3:   x in dom p & y = p.x by FUNCT_1:def 5;
-     reconsider x as Nat by A3;
+     reconsider x as Element of NAT by A3;
 A4:   dom p = Seg len p by FINSEQ_1:def 3;
     then reconsider qsx = qs'.x as State of sfsm by A1,A2,A3,FINSEQ_2:13;
          p.x = (the OFun of sfsm).qsx by A2,A3,A4;
@@ -760,20 +766,20 @@ A4:   dom p = Seg len p by FINSEQ_1:def 3;
    then reconsider p' = p as FinSequence of OAlph by FINSEQ_1:def 4;
 A5: len qs' = len w + 1 by Def2;
        len p' = len qs' &
-   for i being Nat st i in dom qs' holds
+   for i being Element of NAT st i in dom qs' holds
                                    p'.i = (the OFun of sfsm).(qs'.i) by A1,A2;
   hence thesis by A1,A5;
  end;
  uniqueness proof set qs' = (qs, w)-admissible;
   let it1, it2 be FinSequence of OAlph; assume
 A6: len it1 = len w + 1 &
-   for i being Nat st i in Seg (len w + 1) holds
+   for i being Element of NAT st i in Seg (len w + 1) holds
      it1.i = (the OFun of sfsm).(qs'.i); assume
 A7: len it2 = len w + 1 &
-   for i being Nat st i in Seg (len w + 1) holds
+   for i being Element of NAT st i in Seg (len w + 1) holds
      it2.i = (the OFun of sfsm).(qs'.i);
        now thus len it1 = len it2 by A6,A7;
-    let i be Nat; assume 1 <= i & i <= len it1;
+    let i be Element of NAT; assume 1 <= i & i <= len it1;
      then i in Seg len it1 by FINSEQ_1:3;
      then it1.i = (the OFun of sfsm).(qs'.i) &
      it2.i = (the OFun of sfsm).(qs'.i) by A6,A7;
@@ -804,12 +810,11 @@ A1:  q1t,w1-leads_to q2t;
 A2:  len q1w1w2 = len (w1^w2) by Def6 .= len w1 + len w2 by FINSEQ_1:35
        .= len q1w1 + len w2 by Def6 .= len q1w1 + len q2w2 by Def6
        .= len (q1w1 ^ q2w2) by FINSEQ_1:35;
-        now let k be Nat; assume
+        now let k be Element of NAT; assume
 A3:    1 <= k & k <= len q1w1w2;
 A4:    len (q1t,w1)-admissible = len w1 + 1 by Def2;
            dom (q1t,w1)-admissible =Seg (len (q1t,w1)-admissible)by
-FINSEQ_1:def 3
-;
+FINSEQ_1:def 3;
        then dom (q1t,w1)-admissible = Seg (len w1 + 1) by Def2;
     then len w1 + 1 in dom (q1t,w1)-admissible by FINSEQ_1:5;
       then consider m being Nat such that
@@ -858,7 +863,7 @@ A22:  q1w1w2.k = OF.[(q1t,w1^w2)-admissible.k,(w1^w2).k] by A16,Def6
     .= OF.[(q2t,w2)-admissible.(k - len w1 ),w2.(k-len w1)] by A5,A6,A21,
 FINSEQ_1:36;
          A23: len q1w1 + 1 - len q1w1 <= k - len q1w1 by A15,XREAL_1:11;
-      then reconsider p = k - len q1w1 as Nat by INT_1:16;
+      then reconsider p = k - len q1w1 as Element of NAT by INT_1:16;
           k <= len q1w1 + len w2 by A15,A20,Def6;
       then k - len q1w1 <= len q1w1 + len w2 - len q1w1 by XREAL_1:11;
 then A24:   p in dom w2 by A23,FINSEQ_3:27;
@@ -886,7 +891,7 @@ A2: (q11,w1^w2)-response = (q21,w1^w2)-response;
     set r11 = (q11,w)-response; set r21 = (q21,w)-response;
 A3: len r2w1 = len w1 & len r1w1 = len w1 by Def6;
 A4: len r12 = len w2 & len r22 = len w2 by Def6;
-    then consider j being Nat such that
+    then consider j being Element of NAT such that
 A5: j in Seg len w2 & r12.j <> r22.j by A1,FINSEQ_2:10;
 A6: j in dom r12 & j in dom r22 by A4,A5,FINSEQ_1:def 3;
         r11 = r1w1 ^ r12 & r21 = r2w1 ^ r22 by A1,Th26;
@@ -924,10 +929,11 @@ A1: for q being Element of S, s be Element of IAlph
  let tw be FinSequence of IAlph;
   set tIS = the InitS of tfsm; set twa = (tIS, tw)-admissible;
   set swa = (IS, tw)-admissible;
-    defpred P[Nat] means $1 in Seg (len tw + 1) implies twa.$1 = swa.$1;
+    defpred P[Element of NAT] means
+     $1 in Seg (len tw + 1) implies twa.$1 = swa.$1;
 A2: P[0] by FINSEQ_1:3;
-A3: for i being Nat st P[i] holds P[i+1]
-    proof let i be Nat; assume
+A3: for i being Element of NAT st P[i] holds P[i+1]
+    proof let i be Element of NAT; assume
 A4:   i in Seg (len tw + 1) implies twa.i = swa.i;
      assume (i+1) in Seg (len tw + 1);
 then A5:  i+1 <= len tw + 1 by FINSEQ_1:3;
@@ -950,12 +956,12 @@ A9:   twi = tw.i & tqi = twa.i & tqi1 = twa.(i+1) & twi-succ_of tqi = tqi1
      hence twa.(i+1) = swa.(i+1) by A4,A8,A9,FINSEQ_1:3;
     end;
     end;
-A10: for i being Nat holds P[i] from NAT_1:sch 1( A2, A3 );
+A10: for i being Element of NAT holds P[i] from NAT_1:sch 1( A2, A3 );
      now thus len (<*sOF.IS*>^((tIS, tw)-response))
          = len <*sOF.IS*> + len ((tIS, tw)-response) by FINSEQ_1:35
         .= 1+len ((tIS, tw)-response) by FINSEQ_1:57 .=len tw +1 by Def6;
   thus len ((IS, tw)-response) = len tw + 1 by Def7;
-  let i be Nat; assume
+  let i be Element of NAT; assume
 A11: i in Seg (len tw + 1);
 then A12: 1 <= i & i <= len tw + 1 by FINSEQ_1:3;
   per cases by A12,REAL_1:def 5;
@@ -965,7 +971,7 @@ A13: i = 1; then i in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
   hence (<*sOF.IS*>^((tIS, tw)-response)).i = <*sOF.IS*>.i by FINSEQ_1:def 7
       .= sOF.IS by A13,FINSEQ_1:57 .= ((IS, tw)-response).i by A13,Th25;
   end;
-  suppose 1 < i; then consider j being Nat such that
+  suppose 1 < i; then consider j being Element of NAT such that
 A14: j = i - 1 & 1 <= j by INT_1:78; A15: i = j + 1 by A14;
 A16: len <*sOF.IS*> = 1 by FINSEQ_1:57; A17: j <= len tw by A12,A15,XREAL_1:8;
 then A18: j in Seg len tw by A14,FINSEQ_1:3;
@@ -1015,10 +1021,11 @@ A2: for q being Element of S, r being Element of OAlphf
   thus tfsmf is_similar_to sfsmf proof let tw be FinSequence of IAlph;
   set twa = (the InitS of tfsmf, tw)-admissible;
   set swa = (the InitS of sfsmf, tw)-admissible;
-    defpred P[Nat] means $1 in Seg (len tw + 1) implies twa.$1 = (swa.$1)`1;
+    defpred P[Element of NAT] means
+     $1 in Seg (len tw + 1) implies twa.$1 = (swa.$1)`1;
 A3: P[0] by FINSEQ_1:3;
-A4: for i being Nat st P[i] holds P[i+1]
-    proof let i be Nat; assume
+A4: for i being Element of NAT st P[i] holds P[i+1]
+    proof let i be Element of NAT; assume
 A5:   P[i];
     assume i+1 in Seg (len tw +1);
 then A6: i+1 <= len tw +1 by FINSEQ_1:3;
@@ -1044,12 +1051,12 @@ A11:   swi = tw.i & sqi = swa.i & sqi1 = swa.(i+1) & swi-succ_of sqi = sqi1
      hence twa.(i+1) = (swa.(i+1))`1 by A5,A9,A11,FINSEQ_1:3,MCART_1:def 1,A10;
     end;
     end;
-A12: for i being Nat holds P[i] from NAT_1:sch 1 ( A3, A4 );
+A12: for i being Element of NAT holds P[i] from NAT_1:sch 1 ( A3, A4 );
      now thus len (<*sOF.sI*>^((IS, tw)-response))
      = len <*sOF.sI*> + len ((IS, tw)-response) by FINSEQ_1:35
     .= 1 + len ((IS, tw)-response) by FINSEQ_1:57 .= len tw + 1 by Def6;
   thus len ((SI, tw)-response) = len tw + 1 by Def7;
-  let i be Nat; assume
+  let i be Element of NAT; assume
 A13: i in Seg (len tw + 1);
 then A14: 1 <= i & i <= len tw + 1 by FINSEQ_1:3;
   per cases by A14,REAL_1:def 5;
@@ -1059,7 +1066,7 @@ A15: i = 1; then i in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
   hence (<*sOF.sI*>^((IS, tw)-response)).i = <*sOF.sI*>.i by FINSEQ_1:def 7
          .= sOF.sI by A15,FINSEQ_1:57 .= ((SI, tw)-response).i by A15,Th25;
   end;
-  suppose 1 < i; then consider j being Nat such that
+  suppose 1 < i; then consider j being Element of NAT such that
 A16:j = i-1 & 1 <= j by INT_1:78; A17: i = j + 1 by A16;
 A18:len <*sOF.sI*> = 1 by FINSEQ_1:57;
     A19: j <= len tw by A14,A17,XREAL_1:8;
@@ -1120,7 +1127,7 @@ end;
 canceled 2;
 
 theorem
-      q1, q2-are_equivalent & q2, q3-are_equivalent implies q1, q3
+  q1, q2-are_equivalent & q2, q3-are_equivalent implies q1, q3
 -are_equivalent
  proof assume
 A1:  q1, q2-are_equivalent & q2, q3-are_equivalent;
@@ -1137,12 +1144,12 @@ theorem Th34: qa' = (the Tran of tfsm).[qa, s]
 A1: qa' = (the Tran of tfsm).[qa, s]; set sw = (<*s*>^w);
 A2: len sw = len <*s*> + len w by FINSEQ_1:35 .= len w + 1 by FINSEQ_1:57;
 A3: sw.1 = s by FINSEQ_1:58;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
      $1 in Seg (len w + 1) implies
       (qa, <*s*>^w)-admissible.($1+1) = (qa', w)-admissible.$1;
 A4: P[0] by FINSEQ_1:3;
-A5: for j being Nat st P[j] holds P[j+1]
-    proof let j be Nat; assume
+A5: for j being Element of NAT st P[j] holds P[j+1]
+    proof let j be Element of NAT; assume
 A6:  j in Seg (len w + 1) implies
         (qa, <*s*>^w)-admissible.(j+1) = (qa', w)-admissible.j; assume
 A7:  j+1 in Seg (len w + 1);
@@ -1177,7 +1184,7 @@ A17:  wj = w.j & aj' = aadm'.j & aj1' = aadm'.(j+1) &
         by A6,A7,A12,A16,A17,FINSEQ_1:82,FINSEQ_3:112;
  end;
  end;
- thus for i being Nat holds P[i] from NAT_1:sch 1(A4,A5);
+ thus for i being Element of NAT holds P[i] from NAT_1:sch 1(A4,A5);
 end;
 
 theorem Th35:  qa' = (the Tran of tfsm).[qa, s] implies
@@ -1192,7 +1199,7 @@ A2:len (<*s*>^w) = len <*s*> + len w by FINSEQ_1:35
 A3:   len (<*asresp*>^(qa', w)-response)
        = len <*asresp*> + len ((qa', w)-response) by FINSEQ_1:35
       .= 1 + len ((qa', w)-response) by FINSEQ_1:57 .= 1 + len w by Def6;
-      let j be Nat; assume
+      let j be Element of NAT; assume
 A4:   j in Seg (1 + len w);
 then A5:   1 <= j & j <= 1 + len w by FINSEQ_1:3;
 A6:   j in dom(<*s*>^w) by A2,A4,FINSEQ_1:def 3;
@@ -1203,7 +1210,7 @@ A6:   j in dom(<*s*>^w) by A2,A4,FINSEQ_1:def 3;
        .= (<*asresp*>^(qa', w)-response).j by A7,FINSEQ_1:58;
       end;
       suppose
-A8:   j > 1; then consider i being Nat such that
+A8:   j > 1; then consider i being Element of NAT such that
 A9:    i = j - 1 & 1 <= i by INT_1:78;
 A10:   len <*asresp*> = 1 by FINSEQ_1:57;   j <= len w + 1 by A4,FINSEQ_1:3;
        then j - 1 <= len w + 1-1 by XREAL_1:11;
@@ -1276,13 +1283,13 @@ theorem   qa, qb-are_equivalent implies
                   qai, qbi-are_equivalent proof assume
 A1: qa, qb-are_equivalent;
    let w be FinSequence of IAlph;
-   defpred P[Nat] means $1 in Seg len w implies
+   defpred P[Element of NAT] means $1 in Seg len w implies
            ex qai, qbi being Element of tfsm
            st qai = (qa, w)-admissible.$1 & qbi = ((qb, w)-admissible.$1) &
               qai, qbi-are_equivalent;
 A2:  P[0] by FINSEQ_1:3;
-A3:  for i being Nat st P[i] holds P[i+1]
-     proof let i be Nat; assume
+A3:  for i being Element of NAT st P[i] holds P[i+1]
+     proof let i be Element of NAT; assume
 A4:    i in Seg len w implies
        ex qai, qbi being Element of tfsm st
        qai = (qa, w)-admissible.i & qbi = (qb, w)-admissible.i &
@@ -1322,26 +1329,31 @@ A13: wi' = w.i & qbi' = (qb, w)-admissible.i & qbi1' = (qb, w)-admissible.(i+1)
   end;
   end;
 A14: Seg len w = dom w by FINSEQ_1:def 3;
-       for i being Nat holds P[i] from NAT_1:sch 1 (A2, A3);
+  for i being Element of NAT holds P[i] from NAT_1:sch 1 (A2, A3);
   hence thesis by A14;
 end;
 
-definition let IAlph, OAlph,tfsm, qa, qb, k;
+definition let IAlph, OAlph,tfsm, qa, qb; let k be Nat;
  pred k-equivalent qa, qb means
 :Def11: for w st len w<=k holds (qa,w)-response = (qb,w)-response;
 end;
 
-theorem Th38: k-equivalent qa, qa proof let w be FinSequence of IAlph;
+theorem Th38: for k be Nat holds k-equivalent qa, qa
+  proof let k be Nat; let w be FinSequence of IAlph;
   assume len w <= k; thus thesis; end;
 
-theorem Th39: k-equivalent qa, qb implies k-equivalent qb, qa proof assume
+theorem Th39:
+  for k be Nat st k-equivalent qa, qb holds k-equivalent qb, qa
+proof let k be Nat; assume
 A1: k-equivalent qa, qb; thus k-equivalent qb, qa proof
    let w be FinSequence of IAlph; assume len w <= k;
 hence thesis by A1,Def11; end; end;
 
 theorem Th40:
-  k-equivalent qa, qb & k-equivalent qb, qc implies k-equivalent qa, qc
- proof assume
+  for k be Nat st k-equivalent qa, qb & k-equivalent qb, qc holds
+    k-equivalent qa, qc
+ proof
+  let k be Nat; assume
 A1: k-equivalent qa, qb & k-equivalent qb, qc;
   thus k-equivalent qa, qc proof
    let w be FinSequence of IAlph; assume len w <= k;
@@ -1363,19 +1375,20 @@ then A1: w = <*>IAlph by FINSEQ_1:32;
 end;
 
 theorem Th43:
- (k+m)-equivalent qa, qb implies k-equivalent qa, qb proof assume
+ for k, m be Nat st (k+m)-equivalent qa, qb holds k-equivalent qa, qb
+ proof let k, m be Nat; assume
 A1: (k+m)-equivalent qa, qb;
 A2: k <= k+m by NAT_1:29;let w be FinSequence of IAlph; assume
       len w <= k; then len w <= k+m by A2,XXREAL_0:2;
   hence thesis by A1,Def11; end;
 
 theorem Th44:
- 1 <= k implies
+ for k be Nat st 1 <= k holds
  (k-equivalent qa, qb iff
   1-equivalent qa, qb &
-  for s being Element of IAlph, k1 being Nat st k1 = k - 1
+  for s being Element of IAlph, k1 being Element of NAT st k1 = k - 1
     holds k1-equivalent (the Tran of tfsm).[qa, s], (the Tran of tfsm).[qb, s])
- proof set OF = the OFun of tfsm; assume
+ proof let k be Nat; set OF = the OFun of tfsm; assume
 A1: 1 <= k;
  hereby assume
 A2: k-equivalent qa, qb;
@@ -1384,7 +1397,7 @@ A3: (1-equivalent qa, qb) proof let w be FinSequence of IAlph;
      assume len w <= 1; then len w <= k by A1,XXREAL_0:2;
      hence (qa, w)-response = (qb, w)-response by A2,Def11;
     end;
-  let s be Element of IAlph, k1 be Nat such that
+  let s be Element of IAlph, k1 be Element of NAT such that
 A4: k1 = k - 1;
   set qa' = (the Tran of tfsm).[qa, s]; set qb' = (the Tran of tfsm).[qb, s];
   thus k1-equivalent qa', qb' proof let w be FinSequence of IAlph; assume
@@ -1408,7 +1421,7 @@ A11: OF.[qa, s] = OF.[(qa, <*s*>)-admissible.1, s] by Def2
  end;
  assume that
 A12: (1-equivalent qa, qb) and
-A13: for s being Element of IAlph, k1 being Nat st k1 = k - 1
+A13: for s being Element of IAlph, k1 being Element of NAT st k1 = k - 1
      holds k1-equivalent (the Tran of tfsm).[qa, s],(the Tran of tfsm).[qb, s];
  thus k-equivalent qa, qb proof let w be FinSequence of IAlph such that
 A14: len w <= k;
@@ -1433,18 +1446,17 @@ A20: OF.[qa, s] = OF.[(qa, <*s*>)-admissible.1, s] by Def2
              .= OF.[(qb, <*s*>)-admissible.1, <*s*>.1] by A19,Def6
              .= OF.[(qb, <*s*>)-admissible.1, s] by FINSEQ_1:def 8
              .= OF.[qb, s] by Def2;
-      reconsider k1 = k-1 as Nat by A1,INT_1:18;
+      reconsider k1 = k-1 as Element of NAT by A1,INT_1:18;
 A21:  k1-equivalent qa', qb' by A13;
       len w = len <*s*> + len w' by A16,FINSEQ_1:35 .= len w' + 1 by
-FINSEQ_1:57
-;
+FINSEQ_1:57;
     then len w' + 1 - 1 <= k1 by A14,XREAL_1:11;
 hence (qa, w)-response = (qb, w)-response by A17,A20,A21,Def11;
  end;
  end;
 end;
 
-definition let IAlph, OAlph, tfsm, i;
+definition let IAlph, OAlph, tfsm; let i be Nat;
  func i-eq_states_EqR tfsm -> Equivalence_Relation of the carrier of tfsm
  means
 :Def12: for qa, qb holds [qa, qb] in it iff i-equivalent qa, qb;
@@ -1457,7 +1469,8 @@ A1: now let x be set; assume x in S; then reconsider q = x as Element of S;
 A2: now let x, y be set;
      assume P[x,y];
      then consider qa, qb being Element of S such that
-A3:  qa=x & qb=y & i-equivalent qa, qb;   i-equivalent qb, qa by A3,Th39;
+A3:  qa=x & qb=y & i-equivalent qa, qb;
+     i-equivalent qb, qa by A3,Th39;
      hence P[y, x] by A3;
     end;
 A4: now let x, y, z be set;
@@ -1508,7 +1521,7 @@ end;
 
 definition let IAlph, OAlph;
            let tfsm be non empty Mealy-FSM over IAlph, OAlph;
-           let i;
+           let i be Nat;
  func i-eq_states_partition tfsm ->
                   non empty a_partition of the carrier of tfsm equals
   Class (i-eq_states_EqR tfsm);
@@ -1542,15 +1555,19 @@ then A6:  [x', q] in k-eq_states_EqR tfsm by EQREL_1:12;
 A7:  Q in S & Y' = Class (k-eq_states_EqR tfsm, Q) by EQREL_1:def 5;
     reconsider Q as Element of S by A7;   q in Y by BORSUK_1:def 1;
     then Class(k-eq_states_EqR tfsm,Q)=Class(k-eq_states_EqR tfsm,q)by A7,
-EQREL_1:31
-;
+EQREL_1:31;
    hence thesis by A6,A7,EQREL_1:27;
 end;
 
 theorem Th46:
+ for k be Nat holds
  Class (k-eq_states_EqR tfsm) = Class ((k+1)-eq_states_EqR tfsm)implies
-   for m holds Class ((k+m)-eq_states_EqR tfsm) = Class (k-eq_states_EqR tfsm)
- proof set S = the carrier of tfsm; set CEk = Class (k-eq_states_EqR tfsm);
+   for m be Nat holds
+   Class ((k+m)-eq_states_EqR tfsm) = Class (k-eq_states_EqR tfsm)
+ proof
+  let k be Nat;
+  reconsider k'=k as Element of NAT by ORDINAL1:def 13;
+  set S = the carrier of tfsm; set CEk = Class (k-eq_states_EqR tfsm);
   set Ek = (k-eq_states_EqR tfsm); set CEk1 = Class ((k+1)-eq_states_EqR tfsm);
   set Ek1 = ((k+1)-eq_states_EqR tfsm);
  assume CEk = CEk1;
@@ -1564,17 +1581,17 @@ A3: for m being Nat st P[m] holds P[m+1]
  set Ekm1 = ((k+(m+1))-eq_states_EqR tfsm);
      assume CEkm = CEk;
 then A4:  Ekm = Ek by Th8;
-         now let x be set;
+     now let x be set;
       hereby assume
 A5:      x in CEkm1; then reconsider x' = x as Subset of S;
 A6:     x' c= S; consider qa being set such that
 A7:      qa in S & x' = Class (Ekm1, qa) by A5,EQREL_1:def 5;
         reconsider qa as Element of S by A7;
-            now let y be set;
+        now let y be set;
          hereby assume
 A8:         y in x;
            then reconsider y' = y as Element of S by A6;
-               [y, qa] in Ekm1 by A7,A8,EQREL_1:27;
+           [y, qa] in Ekm1 by A7,A8,EQREL_1:27;
            then (k+(m+1))-equivalent y', qa by Def12;
            then k-equivalent y', qa by Th43;
            then [y', qa] in Ek by Def12;
@@ -1585,12 +1602,13 @@ A9:        y in Class (Ek, qa);
 A10:       [y', qa] in Ek by A9,EQREL_1:27;
 A11:        1 <= k+m+1 by NAT_1:29;
 A12:       (k+1)-equivalent y', qa by A1,A10,Def12;
-A13:       1 <= k+1 by NAT_1:29;
-then A14:        1-equivalent y', qa by A12,Th44;
-              now let s be Element of IAlph, k1 be Nat; assume
+A13:       1 <= k+1 by NAT_1:29;then
+A14:        1-equivalent y', qa by A12,Th44;
+              now let s be Element of IAlph, k1 be Element of NAT; assume
              A15: k1 = k+m+1-1;
     set Sy' = (the Tran of tfsm).[y', s]; set Sqa = (the Tran of tfsm).[qa, s];
-                k = k+1-1; then k-equivalent Sy', Sqa by A12,A13,Th44;
+AA:         k in NAT by ORDINAL1:def 13;
+            k = k+1-1; then k-equivalent Sy', Sqa by AA,A12,A13,Th44;
             then [Sy', Sqa] in Ek by Def12;
             hence k1-equivalent Sy', Sqa by A4,A15,Def12;
           end; then (k+m+1)-equivalent y', qa by A11,A14,Th44;
@@ -1612,10 +1630,11 @@ A20:       1 <= k+m+1 by NAT_1:29;
 A21:       (k+1)-equivalent y', qa by A1,A19,Def12;
 A22:       1 <= k+1 by NAT_1:29;
 then A23:       1-equivalent y', qa by A21,Th44;
-              now let s be Element of IAlph, k1 be Nat; assume
+              now let s be Element of IAlph, k1 be Element of NAT; assume
               A24: k1 = k+m+1-1;
     set Sy' = (the Tran of tfsm).[y', s]; set Sqa = (the Tran of tfsm).[qa, s];
-                k = k+1-1; then k-equivalent Sy', Sqa by A21,A22,Th44;
+AA:         k in NAT by ORDINAL1:def 13;
+                k = k+1-1; then k-equivalent Sy', Sqa by AA,A21,A22,Th44;
             then [Sy', Sqa] in Ek by Def12;
             hence k1-equivalent Sy', Sqa by A4,A24,Def12;
           end; then (k+m+1)-equivalent y', qa by A20,A23,Th44;
@@ -1624,7 +1643,7 @@ then A23:       1-equivalent y', qa by A21,Th44;
         end; assume
 A25:       y in Class (Ekm1, qa);
          then reconsider y' = y as Element of S;
-             [y, qa] in Ekm1 by A25,EQREL_1:27;
+         [y, qa] in Ekm1 by A25,EQREL_1:27;
          then (k+(m+1))-equivalent y', qa by Def12;
          then k-equivalent y', qa by Th43;
          then [y', qa] in Ek by Def12;
@@ -1633,7 +1652,7 @@ A25:       y in Class (Ekm1, qa);
       hence x in CEkm1 by EQREL_1:def 5;
      end; hence CEkm1 = CEk by TARSKI:2;
     end;
-thus for m being Nat holds P[m] from NAT_1:sch 1(A2,A3);
+thus for m being Nat holds P[m] from NAT_1:sch 2(A2,A3);
 end;
 
 theorem
@@ -1644,18 +1663,21 @@ theorem
 theorem Th48:
  (k+1)-eq_states_partition tfsm <> k-eq_states_partition tfsm implies
   for i st i <= k holds
-         (i+1)-eq_states_partition tfsm <> i-eq_states_partition tfsm proof
+     (i+1)-eq_states_partition tfsm <> i-eq_states_partition tfsm
+proof
   assume
 A1: (k+1)-eq_states_partition tfsm <> k-eq_states_partition tfsm;
- let i be Nat such that
+ let i be Element of NAT such that
 A2: i <= k; assume
 A3: (i+1)-eq_states_partition tfsm = i-eq_states_partition tfsm;
  consider d being Nat such that
 A4: k = i+d by A2,NAT_1:28;
+  reconsider d as Element of NAT by ORDINAL1:def 13;
 A5: k-eq_states_partition tfsm = i-eq_states_partition tfsm by A3,A4,Th46;
       i <= k+1 by A2,NAT_1:37; then consider e being Nat such that
 A6: k+1 = i+e by NAT_1:28;
-  thus contradiction by A1,A3,A5,A6,Th46;
+  e in NAT by ORDINAL1:def 13;
+  hence contradiction by A1,A3,A5,A6,Th46;
 end;
 
 theorem Th49:
@@ -1677,7 +1699,7 @@ theorem Th50: Class (0-eq_states_EqR tfsm, q) = the carrier of tfsm proof
      now let z be set;
   thus z in Class (0e, q) implies z in S;
   assume z in S; then reconsider z' = z as Element of S;
-       0-equivalent z', q by Th42; then [z,q] in 0e by Def12;
+  0-equivalent z', q by Th42; then [z,q] in 0e by Def12;
   hence z in Class (0e, q) by EQREL_1:27;
  end;
  hence thesis by TARSKI:2;
@@ -1708,15 +1730,15 @@ proof
 assume
 A1: n+1 = card the carrier of tfsm; assume
 A2: (n+1)-eq_states_partition tfsm <> n-eq_states_partition tfsm;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
     $1 <= n+1 implies card ($1-eq_states_partition tfsm) > $1;
 A3: P[0]
     proof assume 0 <= n+1;
      0-eq_states_partition tfsm = { the carrier of tfsm } by Th51;
      hence card (0-eq_states_partition tfsm) > 0 by CARD_1:79;
     end;
-A4: for k being Nat st P[k] holds P[k+1]
-     proof let k be Nat; assume
+A4: for k being Element of NAT st P[k] holds P[k+1]
+     proof let k be Element of NAT; assume
 A5:   k <= n+1 implies card (k-eq_states_partition tfsm) > k;
      assume A6: k+1 <= n+1;
 then A7:  k <= n by XREAL_1:8;
@@ -1726,7 +1748,7 @@ A8:  k+1 <= card (k-eq_states_partition tfsm) by A5,A6,NAT_1:38;
 by Th49;
      hence card ((k+1)-eq_states_partition tfsm) > k+1 by A8,XXREAL_0:2;
     end;
-       for k being Nat holds P[k] from NAT_1:sch 1(A3, A4);
+       for k being Element of NAT holds P[k] from NAT_1:sch 1(A3, A4);
  then card ((n+1)-eq_states_partition tfsm) > n+1;
    hence contradiction by A1,Th12;
 end;
@@ -1785,14 +1807,14 @@ then A5: [qc,qb] in keq by EQREL_1:12;   [qa,qc] in keq by A3,A4,EQREL_1:27;
 then A6: [qa,qb] in keq by A5,EQREL_1:13;
 then A7: k-equivalent qa,qb by Def12;
     thus qa,qb-are_equivalent proof let w be FinSequence of IAlph;
-      consider n being Nat such that
+      consider n being Element of NAT such that
 A8:    dom w=Seg n by FINSEQ_1:def 2; A9:
           n = len w by A8,FINSEQ_1:def 3;
           per cases;
           suppose n <= k;
           hence (qa,w)-response = (qb,w)-response by A7,A9,Def11;
           end;
-          suppose n > k; then consider m be Nat such that
+          suppose n > k; then consider m be Element of NAT such that
 A10:      n=k+m & 1 <= m by Th1;
 A11:      n-eq_states_partition tfsm = kpart by A1,A10,Th46;
           [qa,qb] in n-eq_states_EqR tfsm by A6,Th8,A11;
@@ -1807,7 +1829,7 @@ A11:      n-eq_states_partition tfsm = kpart by A1,A10,Th46;
 theorem
     for tfsm being finite non empty Mealy-FSM over IAlph, OAlph st
 n+1 = card the carrier of tfsm holds
-     ex k being Nat st k <= n & k-eq_states_partition tfsm is final
+     ex k being Element of NAT st k <= n & k-eq_states_partition tfsm is final
  proof
  let tfsm be finite non empty Mealy-FSM over IAlph, OAlph;
  assume A1: n+1 = card the carrier of tfsm;
@@ -1822,10 +1844,11 @@ definition let IAlph, OAlph;
  func final_states_partition tfsm -> a_partition of the carrier of tfsm
  means
 :Def15: it is final;
- existence proof reconsider n = card the carrier of tfsm as Nat;
-       card the carrier of tfsm <> 0 by CARD_2:59;
+ existence proof reconsider n = card the carrier of tfsm as Element of NAT;
+   card the carrier of tfsm <> 0 by CARD_2:59;
    then consider m being Nat such that
 A1: n=m+1 by NAT_1:22;
+   reconsider m as Element of NAT by ORDINAL1:def 13;
 A2: m-eq_states_partition tfsm=(m+1)-eq_states_partition tfsm by A1,Th52;
    take (m-eq_states_partition tfsm); thus thesis by A2,Th54;
  end;
@@ -1847,9 +1870,8 @@ A7:  qx in Z & Z in it2 by TARSKI:def 4;
      set XZ= X\Z, ZX= Z\X, Y'= XZ \/ ZX;
          Y' <> {} proof assume Y' = {};
       then X\Z = {} & Z\X = {} by XBOOLE_1:15;
-      then X c= Z & Z c= X by XBOOLE_1:37
-; hence contradiction by A5,A7,XBOOLE_0:def 10
-;
+      then X c= Z & Z c= X by XBOOLE_1:37;
+      hence contradiction by A5,A7,XBOOLE_0:def 10;
      end; then consider qy be Element of tfsm such that
 A8:  qy in Y' by SUBSET_1:10;
      reconsider X as Element of it1 by A5;
@@ -1955,26 +1977,27 @@ definition let IAlph, OAlph be non empty set;
            let s be Element of IAlph;
  func (s,qf)-succ_class -> Element of final_states_partition tfsm means
 :Def16:
-  ex q being State of tfsm, n being Nat st
+  ex q being State of tfsm, n being Element of NAT st
    q in qf & (n+1) = card the carrier of tfsm &
              it = Class(n-eq_states_EqR tfsm, (the Tran of tfsm).[q,s]);
  existence proof set m = card the carrier of tfsm;
         card the carrier of tfsm <> 0 by CARD_2:59;
     then consider n being Nat such that
-A1:  m=n+1 by NAT_1:22; consider q1 be Element of tfsm such that
+A1:  m=n+1 by NAT_1:22;
+     reconsider n as Element of NAT by ORDINAL1:def 13;
+     consider q1 be Element of tfsm such that
 A2: q1 in qf by Th11;
-A3:  final_states_partition tfsm = n-eq_states_partition tfsm
-                 by A1,Th56;
+A3:  final_states_partition tfsm = n-eq_states_partition tfsm by A1,Th56;
     set q' = (the Tran of tfsm).[q1,s];
     reconsider IT = Class(n-eq_states_EqR tfsm,q')
               as Element of final_states_partition tfsm by A3,EQREL_1:def 5;
     take IT; thus thesis by A1,A2;
  end;
  uniqueness proof let it1, it2 be Element of final_states_partition tfsm;
-   given q1 be Element of tfsm, n1 being Nat such that
+   given q1 be Element of tfsm, n1 being Element of NAT such that
 A4: q1 in qf & (n1+1) = card the carrier of tfsm &
    it1 = Class(n1-eq_states_EqR tfsm, (the Tran of tfsm).[q1,s]);
-   given q2 be Element of tfsm, n2 being Nat such that
+   given q2 be Element of tfsm, n2 being Element of NAT such that
 A5: q2 in qf & (n2+1) = card the carrier of tfsm &
    it2 = Class(n2-eq_states_EqR tfsm, (the Tran of tfsm).[q2,s]);
    set m = n1 + 1;
@@ -2014,10 +2037,11 @@ definition let IAlph, OAlph, tfsm;
          (the OFun of tfsm).(q, s) = (the OFun of it).(Q, s)) &
   the InitS of tfsm in the InitS of it;
  existence proof set TR = the Tran of tfsm;
-   reconsider m = card the carrier of tfsm as Nat;
+   reconsider m = card the carrier of tfsm as Element of NAT;
        card the carrier of tfsm <> 0 by CARD_2:59;
    then consider n be Nat such that
 A1: m = n+1 by NAT_1:22;
+  reconsider n as Element of NAT by ORDINAL1:def 13;
   set IS = Class(n-eq_states_EqR tfsm, the InitS of tfsm);
   set part=final_states_partition tfsm;
   deffunc F(Element of part,Element of IAlph) = ($2,$1)-succ_class;
@@ -2034,7 +2058,7 @@ then reconsider IS as Element of part by EQREL_1:def 5;
     now let Q be Element of IT, s, q such that
 A4:  q in Q; reconsider Q' = Q as Element of final_states_partition tfsm;
      reconsider s' = s as Element of IAlph;
-     consider Q1 being Element of tfsm, n1 being Nat such that
+     consider Q1 being Element of tfsm, n1 being Element of NAT such that
 A5:  Q1 in Q' & (n1+1) = card the carrier of tfsm &
    (s',Q')-succ_class = Class(n1-eq_states_EqR tfsm, TR.[Q1,s']) by Def16;
 A6:  (the Tran of IT).(Q',s')=Class(n1-eq_states_EqR tfsm,TR.(Q1,s')) by A2,A5;
@@ -2121,17 +2145,17 @@ end;
 theorem Th57:
 for qr being State of rtfsm st
  rtfsm = the_reduction_of tfsm & q in qr holds
-  for k being Nat st k in Seg (len w +1) holds
+  for k being Element of NAT st k in Seg (len w +1) holds
    (q,w)-admissible.k in (qr,w)-admissible.k
 proof
  let qr be State of rtfsm;
 set TR = the Tran of tfsm; assume
 A1:  rtfsm = the_reduction_of tfsm & q in qr;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
       $1 in Seg(len w +1) implies (q,w)-admissible.$1 in (qr,w)-admissible.$1;
 A2: P[0] by FINSEQ_1:3;
-A3: for k being Nat st P[k] holds P[k + 1]
-    proof let k be Nat; assume
+A3: for k being Element of NAT st P[k] holds P[k + 1]
+    proof let k be Element of NAT; assume
 A4:    k in Seg (len w + 1) implies
        (q,w)-admissible.k in (qr,w)-admissible.k; assume
 A5:    (k+1) in Seg (len w + 1); A6: k = 0 or 0 < k & 0+1 = 1;
@@ -2159,7 +2183,7 @@ Def18,FINSEQ_1:3;
      thus (q,w)-admissible.(k+1) in (qr,w)-admissible.(k+1) by A12,A13,A14;
     end;
     end;
-   thus for k being Nat holds P[k] from NAT_1:sch 1(A2,A3);
+   thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A2,A3);
 end;
 
 theorem Th58:
@@ -2170,7 +2194,7 @@ set ad2 = (the InitS of rtfsm, w1)-admissible;
 set r1=(the InitS of tfsm,w1)-response;set r2=(the InitS of rtfsm,w1)-response;
 A1: the InitS of tfsm in the InitS of rtfsm by Def18;
 A2:  len r1 = len w1 by Def6 .= len r2 by Def6;
-         now let k be Nat; assume 1 <= k & k <= len r1;
+         now let k be Element of NAT; assume 1 <= k & k <= len r1;
          then 1 <= k & k <= len w1 by Def6;
 then A3:    k in Seg len w1 by FINSEQ_1:3;
 then A4:    k in Seg (len w1 + 1) by FINSEQ_2:9;
@@ -2286,12 +2310,12 @@ theorem Th60: (for q being State of tfsm1, s
 proof assume
 A1: for q being State of tfsm1, s
     holds Tf.((the Tran of tfsm1).(q,s)) = (the Tran of tfsm2).(Tf.q,s);
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
     1 <= $1 & $1 <= len w + 1 implies
           Tf.((q11,w)-admissible.$1) = (Tf.q11,w)-admissible.$1;
 A2: P[0];
-A3: for k being Nat st P[k] holds P[k + 1]
-    proof let k be Nat; assume
+A3: for k being Element of NAT st P[k] holds P[k + 1]
+    proof let k be Element of NAT; assume
 A4:   1 <= k & k <= len w + 1 implies
           Tf.((q11,w)-admissible.k) = (Tf.q11,w)-admissible.k; assume
 A5:   1<=k+1 & k+1<=len w+1;
@@ -2319,7 +2343,7 @@ XXREAL_0:2
          .= (Tf.q11,w)-admissible.(k+1) by A12;
     end;
     end;
-    thus for k being Nat holds P[k] from NAT_1:sch 1(A2,A3);
+    thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A2,A3);
 end;
 
 theorem Th61:
@@ -2341,7 +2365,7 @@ A2: q11,q12-are_equivalent;
    reconsider Tq2 = Tf.q12 as Element of Stfsm2;
        now let w be FinSequence of IAlph;
 A3:len(Tq1,w)-response=len w by Def6.=len (Tq2,w)-response by Def6;
-         now let k be Nat; assume
+         now let k be Element of NAT; assume
 A4:    1 <= k & k <= len (Tq1,w)-response;
            len (Tq1,w)-response = len w by Def6;
 then A5:    k in Seg len w by A4,FINSEQ_1:3;
@@ -2373,7 +2397,7 @@ A9:  Tf.q11, Tf.q12-are_equivalent;
         now let w be FinSequence of IAlph;
 A10:   len (q11,w)-response = len w by Def6
                          .= len (q12,w)-response by Def6;
-          now let k be Nat; assume
+          now let k be Element of NAT; assume
 A11:    1 <= k & k <= len (q11,w)-response;
            len (q11,w)-response = len w by Def6;
 then A12:    k in Seg len w by A11,FINSEQ_1:3;
@@ -2426,7 +2450,7 @@ A8: (x,w)-response <> (y,w)-response by Def10;
     set xresp = (x,w)-response, yresp = (y,w)-response;
     set xadm = (x,w)-admissible, yadm = (y,w)-admissible;
         len xresp = len w by Def6 .= len yresp by Def6;
-    then consider k be Nat such that
+    then consider k be Element of NAT such that
 A9: 1 <= k & k <= len xresp & xresp.k <> yresp.k by A8,FINSEQ_1:18;
 A10: k in Seg len xresp by A9,FINSEQ_1:3;
     set q1resp = (qr1,w)-response, q2resp = (qr2,w)-response;
@@ -2728,10 +2752,11 @@ A3:  cInitS = the InitS of M;
   let w be FinSequence of IAlph;
 set ma= (the InitS of M,w)-admissible;set cma= (the InitS of cm, w)-admissible;
 A4: now thus len ma = len w + 1 & len cma = len w + 1 by Def2;
-    defpred P[Nat] means $1 in Seg (len w + 1) implies ma.$1 = cma.$1;
+    defpred P[Element of NAT] means
+     $1 in Seg (len w + 1) implies ma.$1 = cma.$1;
 A5: P[0] by FINSEQ_1:3;
-A6: for k being Nat st P[k] holds P[k + 1]
-    proof let j be Nat such that
+A6: for k being Element of NAT st P[k] holds P[k + 1]
+    proof let j be Element of NAT such that
 A7:  j in Seg (len w + 1) implies ma.j = cma.j;
      assume j+1 in Seg (len w + 1);
       then 1<=j+1 & j+1<=len w + 1 by FINSEQ_1:3;
@@ -2752,12 +2777,12 @@ A12:     mwj = w.j & mqj = ma.j & mqj1 = ma.(j+1) & mwj-succ_of mqj = mqj1
      hence ma.(j+1) = cma.(j+1) by A1,A7,A8,A11,A12,FINSEQ_1:3,FUNCT_1:72;
     end;
     end;
-    thus for j be Nat holds P[j] from NAT_1:sch 1 (A5, A6);
+    thus for j be Element of NAT holds P[j] from NAT_1:sch 1 (A5, A6);
   end;
 then A13: ma = cma by FINSEQ_2:10;
 set mr = (the InitS of M, w)-response; set cmr = (the InitS of cm, w)-response;
      now thus len mr = len w & len cmr = len w by Def6;
-  let j be Nat; assume
+  let j be Element of NAT; assume
 A14: j in Seg len w;
 then A15: j in dom w by FINSEQ_1:def 3;
 A16: j in Seg (len w + 1) by A14,FINSEQ_2:9;
@@ -2794,10 +2819,11 @@ A1: now let w be FinSequence of IAlph;
  set ma= (the InitS of M,w)-admissible;
  set cma= (the InitS of cm,w)-admissible;
       now thus len ma = len w + 1 & len cma = len w + 1 by Def2;
-    defpred P[Nat] means $1 in Seg (len w + 1) implies ma.$1 = cma.$1;
+    defpred P[Element of NAT] means
+     $1 in Seg (len w + 1) implies ma.$1 = cma.$1;
 A2: P[0] by FINSEQ_1:3;
-A3: for k being Nat st P[k] holds P[k + 1]
-    proof let j be Nat such that
+A3: for k being Element of NAT st P[k] holds P[k + 1]
+    proof let j be Element of NAT such that
 A4:  j in Seg (len w + 1) implies ma.j = cma.j;
   assume j+1 in Seg(len w +1);
     then 1<=j+1&j+1<=len w +1 by FINSEQ_1:3;
@@ -2820,7 +2846,7 @@ A9:     mwj = w.j & mqj = ma.j & mqj1 = ma.(j+1) & mwj-succ_of mqj = mqj1
      hence ma.(j+1) = cma.(j+1) by A4,A5,A8,A9,FINSEQ_1:3,FUNCT_1:72;
     end;
     end;
-    thus for j be Nat holds P[j] from NAT_1:sch 1 (A2, A3);
+    thus for j be Element of NAT holds P[j] from NAT_1:sch 1 (A2, A3);
   end; hence ma = cma by FINSEQ_2:10;
   end;
       now let q be State of cm;   q in accessibleStates M &
@@ -2842,7 +2868,8 @@ A10:  the InitS of M, w-leads_to q' by Def21;
 set ma= (the InitS of M,w)-admissible; set cma= (the InitS of cm,w)-admissible;
 A11: len ma = len w + 1 & len cma = len w + 1 by Def2;
 set mr = (the InitS of M, w)-response; set cmr = (the InitS of cm, w)-response;
-     now thus len mr = len w & len cmr = len w by Def6;let j be Nat; assume
+     now thus len mr = len w & len cmr = len w by Def6;let j be Element of NAT;
+      assume
 A12: j in Seg len w;
 then A13: j in Seg (len w + 1) by FINSEQ_2:9;
 A14: [ma.j, w.j] = [cma.j, w.j] by A1;
@@ -2921,10 +2948,11 @@ A1: tfsm = tfsm1-Mealy_union tfsm2 &
   (the carrier of tfsm1) misses (the carrier of tfsm2) & q11 = q;
    set ad1 = (q11,w)-admissible, ad = (q,w)-admissible;
 A2: len ad1 = len w + 1 by Def2 .= len ad by Def2;
-    defpred P[Nat] means 1 <= $1 & $1 <= len ad1 implies ad1.$1 = ad.$1;
+    defpred P[Element of NAT] means
+     1 <= $1 & $1 <= len ad1 implies ad1.$1 = ad.$1;
 A3: P[0];
-A4: for k being Nat st P[k] holds P[k + 1]
-    proof let k be Nat; assume
+A4: for k being Element of NAT st P[k] holds P[k + 1]
+    proof let k be Element of NAT; assume
 A5:   1 <= k & k <= len ad1 implies ad1.k = ad.k; assume
 A6:   1 <= (k+1) & (k+1) <= len ad1;
       A7: k = 0 or 0 < k & 0 + 1 = 1;
@@ -2957,7 +2985,7 @@ then A15:   not [q1k,w1k] in [:the carrier of tfsm2,IAlph:] by XBOOLE_0:3;
            .= ad.(k+1) by A1,A5,A9,A11,A12,A13,Def2,Def24;
    end;
    end;
-       for k being Nat holds P[k] from NAT_1:sch 1(A3, A4);
+       for k being Element of NAT holds P[k] from NAT_1:sch 1(A3, A4);
    hence thesis by A2,FINSEQ_1:18;
 end;
 
@@ -2971,7 +2999,7 @@ A1: tfsm = tfsm1-Mealy_union tfsm2 &
    set ad1 = (q1,w)-admissible;
 A2: len res1 = len w by Def6 .= len res by Def6;
 A3: len res1 = len w by Def6;
-       now let k be Nat; assume 1 <= k & k <= len res1;
+       now let k be Element of NAT; assume 1 <= k & k <= len res1;
 then A4:  k in Seg len w by A3,FINSEQ_1:3;
 then A5:  k in dom w by FINSEQ_1:def 3;
          k in Seg (len w + 1) by A4,FINSEQ_2:9;
@@ -3006,10 +3034,10 @@ A1: tfsm = tfsm1-Mealy_union tfsm2 &
    (the carrier of tfsm1) /\ (the carrier of tfsm2) = {} & q' = q;
    set ad' = (q',w)-admissible, ad = (q,w)-admissible;
 A2: len ad' = len w + 1 by Def2 .= len ad by Def2;
-   defpred P[Nat] means 1<=$1 & $1 <= len ad' implies ad'.$1= ad.$1;
+   defpred P[Element of NAT] means 1<=$1 & $1 <= len ad' implies ad'.$1= ad.$1;
 A3: P[0];
-A4: for k being Nat st P[k] holds P[k + 1]
-    proof let k be Nat; assume
+A4: for k being Element of NAT st P[k] holds P[k + 1]
+    proof let k be Element of NAT; assume
 A5:   1 <= k & k <= len ad' implies ad'.k = ad.k; assume
 A6:   1 <= (k+1) & (k+1) <= len ad';
       A7: k = 0 or 0 < k & 0 + 1 = 1;
@@ -3039,7 +3067,7 @@ A14:dom (the Tran of tfsm2) = [:the carrier of tfsm2,IAlph:]by FUNCT_2:def 1;
    .= ad.(k+1) by A1,A5,A9,A11,A12,A13,Def2,Def24;
    end;
    end;
-    for k being Nat holds P[k] from NAT_1:sch 1(A3, A4);
+    for k being Element of NAT holds P[k] from NAT_1:sch 1(A3, A4);
    hence thesis by A2,FINSEQ_1:18;
 end;
 
@@ -3053,7 +3081,7 @@ A1: tfsm = tfsm1-Mealy_union tfsm2 &
    set ad' = (q',w)-admissible;
 A2: len res' = len w by Def6 .= len res by Def6;
 A3: len res' = len w by Def6;
-       now let k be Nat; assume 1 <= k & k <= len res';
+       now let k be Element of NAT; assume 1 <= k & k <= len res';
 then A4:   k in Seg len w by A3,FINSEQ_1:3;
 then A5:  k in dom w by FINSEQ_1:def 3;
          k in Seg (len w + 1) by A4,FINSEQ_2:9;
@@ -3666,12 +3694,13 @@ A1:  Tf is bijective & Tf.the InitS of tfsm1 = the InitS of tfsm2 &
       set rw2 = (the InitS of tfsm2, w1)-response;
       set aw1 = (the InitS of tfsm1,w1)-admissible;
       set aw2 = (the InitS of tfsm2,w1)-admissible;
-A2:for k being Nat st 1<=k & k<= len w1 +1 holds Tf.(aw1.k) = aw2.k proof
-   defpred P[Nat] means
+A2:for k being Element of NAT st 1<=k & k<= len w1 +1 holds Tf.(aw1.k) = aw2.k
+ proof
+   defpred P[Element of NAT] means
      1 <= $1 & $1 <= len w1 + 1 implies Tf.(aw1.$1) = aw2.$1;
 A3:   P[0];
-A4:   for k being Nat st P[k] holds P[k + 1]
-      proof let k be Nat; assume
+A4:   for k being Element of NAT st P[k] holds P[k + 1]
+      proof let k be Element of NAT; assume
 A5:      1 <= k & k <= len w1 + 1 implies Tf.(aw1.k) = aw2.k; assume
 A6:      1 <= (k+1) & (k+1) <= len w1 + 1;
          A7: 0 = k or 0 < k & 0+1 = 1;
@@ -3699,10 +3728,10 @@ XXREAL_0:2
                   .= aw2.(k+1) by A11;
        end;
        end;
-       thus for i being Nat holds P[i] from NAT_1:sch 1 (A3, A4);
+       thus for i being Element of NAT holds P[i] from NAT_1:sch 1 (A3, A4);
       end;
 A13:   len rw1 = len w1 by Def6 .= len rw2 by Def6;
-          now let k be Nat; assume 1 <= k & k <= len rw1;
+          now let k be Element of NAT; assume 1 <= k & k <= len rw1;
          then 1 <= k & k <= len w1 by Def6;
 then A14:      k in dom w1 by FINSEQ_3:27;
          then k in Seg len w1 by FINSEQ_1:def 3;

@@ -35,7 +35,7 @@ begin :: SCM+FSA preliminaries
          f for FinSeq-Location,
          I for Macro-Instruction,
          J for good Macro-Instruction,
-         k, m for Nat;
+         k, m for Element of NAT;
 
  set D = Int-Locations \/ FinSeq-Locations;
  set SAt = Start-At insloc 0;
@@ -399,7 +399,7 @@ definition
  let s be State of SCM+FSA, a be Int-Location, I be Macro-Instruction;
  pred ProperTimesBody a, I, s means
 :Def3:
-  for k being Nat st k < s.a
+  for k being Element of NAT st k < s.a
     holds I is_closed_on StepTimes(a,I,s).k &
           I is_halting_on StepTimes(a,I,s).k;
 end;
@@ -408,7 +408,7 @@ theorem Th15: :: timespara:
  I is parahalting implies ProperTimesBody a, I, s
 proof assume
 A1:  I is parahalting;
- let k be Nat; assume k < s.a;
+ let k be Element of NAT; assume k < s.a;
    reconsider I' = I as parahalting Macro-Instruction by A1;
       I' is paraclosed;
  hence I is_closed_on StepTimes(a,I,s).k by SCMFSA7B:24;
@@ -422,7 +422,7 @@ proof set I = J; assume
 A1: ProperTimesBody a, I, s;
  set ST = StepTimes(a, I, s); set au = 1-stRWNotIn ({a} \/ UsedIntLoc I);
  set Is = Initialize s;
-    defpred X[Nat] means $1 <= s.a implies ST.$1.intloc 0 = 1;
+    defpred X[Element of NAT] means $1 <= s.a implies ST.$1.intloc 0 = 1;
 A2: X[0]
     proof assume 0 <= s.a;
      thus ST.0.intloc 0
@@ -430,11 +430,11 @@ A2: X[0]
        .= Is.intloc 0 by SCMFSA_2:89
        .= 1 by SCMFSA6C:3;
     end;
-A3: for k being Nat st X[k] holds X[k+1]
-  proof let k be Nat; assume that
+A3: for k being Element of NAT st X[k] holds X[k+1]
+  proof let k be Element of NAT; assume that
   A4: k <= s.a implies ST.k.intloc 0 = 1 and
   A5: k+1 <= s.a;
-      reconsider sa = s.a as Nat by A5,INT_1:16;
+      reconsider sa = s.a as Element of NAT by A5,INT_1:16;
   A6: k < sa by A5,NAT_1:38;
       then I is_closed_on ST.k & I is_halting_on ST.k by A1,Def3;
       hence ST.(k+1).intloc 0 = 1 by A4,A6,Th12;
@@ -453,18 +453,19 @@ A2: ProperTimesBody a, I, s;
  set Is = Initialize s;
  set SW = StepWhile>0 (au, I ';' SubFrom(au, intloc 0), Exec(au := a, Is));
 A3: a = intloc 0 or a is read-write by SF_MASTR:def 5;
-    defpred X[Nat] means $1 <= s.a implies StepTimes(a, I, s).$1.au+$1 = s.a;
+    defpred X[Element of NAT] means
+     $1 <= s.a implies StepTimes(a, I, s).$1.au+$1 = s.a;
 A4: X[0]
   proof assume 0 <= s.a;
      thus ST.0.au+0 = Exec(au := a, Is).au by SCMFSA_9:def 5
        .= Is.a by SCMFSA_2:89
        .= s.a by A1,A3,SCMFSA6C:3;
     end;
-A5: for k being Nat st X[k] holds X[k+1]
-  proof let k be Nat such that
+A5: for k being Element of NAT st X[k] holds X[k+1]
+  proof let k be Element of NAT such that
  A6: k <= s.a implies ST.k.au+k = s.a and
  A7: k+1 <= s.a;
-     reconsider sa = s.a as Nat by A7,INT_1:16;
+     reconsider sa = s.a as Element of NAT by A7,INT_1:16;
  A8: k < sa by A7,NAT_1:38;
  then A9:  ST.k.intloc 0 = 1 by A2,Th16;
  A10:  I is_closed_on ST.k by A2,A8,Def3;
@@ -512,7 +513,8 @@ A3: s.intloc 0 = 1 or a is read-write;
  set ST = StepTimes(a, I, s); set au = 1-stRWNotIn ({a} \/ UsedIntLoc I);
  set SW = StepWhile>0 (au, I ';' SubFrom(au, intloc 0),
  Exec(au := a, Initialize s));
-   defpred X[Nat] means $1 >= s.a implies ST.$1.au = 0 & ST.$1.intloc 0 = 1;
+   defpred X[Element of NAT] means
+    $1 >= s.a implies ST.$1.au = 0 & ST.$1.intloc 0 = 1;
 A4: X[0]
    proof assume 0 >= s.a;
   then A5:  s.a = 0 by A2;
@@ -523,7 +525,7 @@ A6: for k st X[k] holds X[k+1]
    proof let k such that
   A7: k >= s.a implies ST.k.au = 0 & ST.k.intloc 0 = 1 and
   A8: (k+1) >= s.a;
-      reconsider sa = s.a as Nat by A2,INT_1:16;
+      reconsider sa = s.a as Element of NAT by A2,INT_1:16;
      per cases by A8,REAL_1:def 5;
      suppose A9: k+1 = sa;
            then ST.(k+1).au+(k+1) = s.a by A1,A3,Th17;
@@ -714,7 +716,7 @@ A5: ST = SW;
      then A6: Is1 | D = s1 | D by SCMFSA8C:27;
 
 A7: ProperBodyWhile>0 au, ISu, s1 proof
-      let k be Nat; assume
+      let k be Element of NAT; assume
        SW.k.au > 0;
   then A8:  k < s.a by A2,A3,A4,A5,Th18;
   then A9: I is_closed_on ST.k by A2,Def3;
@@ -735,7 +737,7 @@ SCMFSA7B:25
       thus ISu is_halting_on SW.k by A12,A17,A18,SCMFSA8B:8;
      end;
 A19: ProperBodyWhile>0 au, ISu, Is1 proof
-       let k be Nat; assume
+       let k be Element of NAT; assume
    A20: ISW.k.au > 0;
    A21: ISW.k | D = SW.k | D by A6,A7,SCMFSA9A:40;
        then SW.k.au = ISW.k.au by SCMFSA6A:38;
@@ -751,8 +753,8 @@ A23: WithVariantWhile>0 au, ISu, Is1 proof
    A24: for x being Element of product the Object-Kind of SCM+FSA
          holds f.x = U(x) from FUNCT_2:sch 4;
       take f;
-       reconsider sa = s.a as Nat by A1;
-      let k be Nat;
+       reconsider sa = s.a as Element of NAT by A1;
+      let k be Element of NAT;
            ISW.k | D = SW.k | D by A6,A7,SCMFSA9A:40;
    then A25: ISW.k.au = SW.k.au by SCMFSA6A:38;
           ISW.(k+1) | D = SW.(k+1) | D by A6,A7,SCMFSA9A:40;
@@ -786,10 +788,10 @@ then A39: WH is_halting_on s1 by A6,A37,SCMFSA8B:8;
 A40: IExec(WH, s1) | D = ISW.ExitsAtWhile>0(au, ISu, Is1) | D
       by A19,A23,SCMFSA9A:42;
 
-  consider K being Nat such that
+  consider K being Element of NAT such that
 A41: ExitsAtWhile>0(au, ISu, Is1) = K and
 A42: ISW.K.au <= 0 and
-A43: (for i being Nat st ISW.i.au <= 0 holds K <= i) and
+A43: (for i being Element of NAT st ISW.i.au <= 0 holds K <= i) and
       (Computation (Is1 +* (WH +* SAt))).
                          (LifeSpan (Is1 +* (WH +* SAt))) | D
      = ISW.K | D by A19,A23,SCMFSA9A:def 6;
@@ -858,7 +860,7 @@ A14:  taI is_closed_on Initialize s by A5,A6,A7,A8,A12,SFMASTR1:3;
  suppose
  A15: 0 <= s.a;
 A16: ProperBodyWhile>0 au, ISu, s1 proof
-      let k be Nat; assume
+      let k be Element of NAT; assume
        SW.k.au > 0;
   then A17:  k < s.a by A1,A2,A3,A15,Th18;
   then A18: I is_closed_on ST.k by A2,Def3;
@@ -879,7 +881,7 @@ SCMFSA7B:25
       thus ISu is_halting_on SW.k by A21,A26,A27,SCMFSA8B:8;
      end;
 A28: ProperBodyWhile>0 au, ISu, Is1 proof
-       let k be Nat; assume
+       let k be Element of NAT; assume
    A29: ISW.k.au > 0;
    A30: ISW.k | D = SW.k | D by A4,A16,SCMFSA9A:40;
        then SW.k.au = ISW.k.au by SCMFSA6A:38;
@@ -896,8 +898,8 @@ A32: WithVariantWhile>0 au, ISu, Is1 proof
    A33: for x being Element of product the Object-Kind of SCM+FSA
          holds f.x = U(x) from FUNCT_2:sch 4;
       take f;
-       reconsider sa = s.a as Nat by A15,INT_1:16;
-      let k be Nat;
+       reconsider sa = s.a as Element of NAT by A15,INT_1:16;
+      let k be Element of NAT;
            ISW.k | D = SW.k | D by A4,A16,SCMFSA9A:40;
    then A34: ISW.k.au = SW.k.au by SCMFSA6A:38;
           ISW.(k+1) | D = SW.(k+1) | D by A4,A16,SCMFSA9A:40;
@@ -987,7 +989,7 @@ A2: I = I1 ';' Macro i2 by SCMFSA6A:def 6;
 then A3: a in UsedIntLoc I by SF_MASTR:34;
 
      set ST = StepTimes(a, I, s);
-    defpred X[Nat] means ($1 < s.a implies
+    defpred X[Element of NAT] means ($1 < s.a implies
           I is_closed_on ST.$1 & I is_halting_on ST.$1 & ST.$1.intloc 0 = 1) &
      ($1 <= s.a implies ST.$1.a+$1 = s.a & ST.$1.au = ST.$1.a)
 ;
@@ -1046,7 +1048,7 @@ A15: for k st X[k] holds X[k+1]
    hereby assume
   A28:   k+1 < s.a;
         then 0 <= s.a;
-        then reconsider sa = s.a as Nat by INT_1:16;
+        then reconsider sa = s.a as Element of NAT by INT_1:16;
   A29:  k < sa by A28,NAT_1:37;
   then A30:  ST.(k+1).intloc 0 = 1 by A16,Th12;
          ST.(k+1).a <> 0 by A18,A28,A29;
@@ -1076,7 +1078,7 @@ A15: for k st X[k] holds X[k+1]
 A41: for k holds X[k] from NAT_1:sch 1(A4, A15);
 
 A42: ProperTimesBody a, I, s proof let k; thus thesis by A41; end;
-   reconsider k = s.a as Nat by A1,INT_1:16;
+   reconsider k = s.a as Element of NAT by A1,INT_1:16;
 A43: IExec(times(a, I), s) | D = StepTimes(a, I, s).k | D by A42,Th23;
       StepTimes(a, I, s).k.a+k = s.a by A41;
    then StepTimes(a, I, s).k.a = 0;
@@ -1110,7 +1112,7 @@ end;
 theorem  :: Fib, new times
    for N, result being read-write Int-Location
  st N <> result
-  for n being Nat st n = s.N
+  for n being Element of NAT st n = s.N
    holds IExec(Fib-macro(N, result), s).result = Fib n &
          IExec(Fib-macro(N, result), s).N = s.N
 proof let N, result be read-write Int-Location such that
@@ -1186,7 +1188,7 @@ A18: s1.N
   .= (Initialize s).N by A11,SCMFSA_2:89
   .= s.N by SCMFSA6C:3;
  set ST = StepTimes(N, I301, s1);
- defpred P[Nat] means
+ defpred P[Element of NAT] means
     $1 <= s1.N implies ST.$1.result = Fib $1 & ST.$1.next = Fib ($1+1);
 A19: P[0]
     proof assume 0 <= s1.N;
@@ -1194,7 +1196,7 @@ A19: P[0]
      hence ST.0.result = Fib 0 by A5,A16,Th7;
      thus ST.0.next = Fib (0+1) by A6,A17,A20,Th7;
     end;
-A21: now let k be Nat such that
+A21: now let k be Element of NAT such that
   A22: P[k];
       thus P[k+1]
       proof assume
@@ -1217,8 +1219,8 @@ A21: now let k be Nat such that
        .= Fib ((k+1)+1) by A22,A23,A24,XXREAL_0:2,PRE_FF:1;
       end;
     end;
-A26: for n being Nat holds P[n] from NAT_1:sch 1(A19, A21);
- let n be Nat; assume
+A26: for n being Element of NAT holds P[n] from NAT_1:sch 1(A19, A21);
+ let n be Element of NAT; assume
 A27: n = s.N;
 then A28: IExec(I3, s1) | D = ST.n | D by A18,Th23;
 A29: i02 is_halting_on Initialize s by SCMFSA7B:25;

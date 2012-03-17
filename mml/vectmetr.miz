@@ -12,7 +12,8 @@ environ
       MARGREL1, ZF_LANG, NAT_1, MATRIX_2, FUNCOP_1, RELAT_2, PRE_TOPC, FUNCT_2,
       SUBSET_1, BINOP_1, UNIALG_1, COMPLEX1, VECTSP_1, GROUP_1, GROUP_2,
       VECTMETR, FINSEQ_4, PARTFUN1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, MCART_1, COMPLEX1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, MCART_1,
+ XCMPLX_0,COMPLEX1,
       REAL_1, RELAT_2, NAT_1, INT_1, POWER, ABIAN, SERIES_1, RELAT_1, RELSET_1,
       MARGREL1, BINOP_1, DOMAIN_1, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0,
       PRE_TOPC, FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSEQOP, BINARITH,
@@ -22,7 +23,8 @@ environ
       FINSEQ_4, REALSET1, SERIES_1, BINARITH, TREES_9, ABIAN, TOPS_2, GROUP_2,
       GRCAT_1, EUCLID, BINTREE2;
  registrations SUBSET_1, STRUCT_0, RELSET_1, FUNCT_1, BINTREE1, BINTREE2,
-      GROUP_1, GROUP_2, METRIC_1, TREES_2, MARGREL1, NAT_1, MEMBERED, FUNCT_2;
+      GROUP_1, GROUP_2, METRIC_1, TREES_2, MARGREL1, NAT_1, MEMBERED, FUNCT_2,
+      ARYTM_3, REAL_1, ORDINAL1, XREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions STRUCT_0, TARSKI, XBOOLE_0, BINOP_1;
  theorems STRUCT_0, TARSKI, MCART_1, REAL_1, REAL_2, NAT_1, NAT_2, MARGREL1,
@@ -51,10 +53,11 @@ begin  :: Convex and Internal Metric Spaces
     for p,q be Real st p > 0 & q > 0
     ex f be FinSequence of the carrier of V st
      f/.1 = x & f/.len f = y &
-     (for i be Nat st 1 <= i & i <=
+     (for i be Element of NAT st 1 <= i & i <=
  len f - 1 holds dist(f/.i,f/.(i+1)) < p) &
      for F be FinSequence of REAL st len F = len f - 1 &
-      for i be Nat st 1 <= i & i <= len F holds F/.i = dist(f/.i,f/.(i+1))
+      for i be Element of NAT st 1 <= i & i <= len F
+      holds F/.i = dist(f/.i,f/.(i+1))
      holds abs(dist(x,y) - Sum F) < q;
   end;
 
@@ -64,9 +67,11 @@ begin  :: Convex and Internal Metric Spaces
    for p be Real st p > 0
    ex f be FinSequence of the carrier of V st
     f/.1 = x & f/.len f = y &
-    (for i be Nat st 1 <= i & i <= len f - 1 holds dist(f/.i,f/.(i+1)) < p) &
+    (for i be Element of NAT st 1 <= i & i <= len f - 1
+    holds dist(f/.i,f/.(i+1)) < p) &
     for F be FinSequence of REAL st len F = len f - 1 &
-     for i be Nat st 1 <= i & i <= len F holds F/.i = dist(f/.i,f/.(i+1))
+     for i be Element of NAT st 1 <= i & i <= len F
+      holds F/.i = dist(f/.i,f/.(i+1))
     holds dist(x,y) = Sum F
    proof
     let V be non empty MetrSpace;
@@ -114,10 +119,11 @@ begin  :: Convex and Internal Metric Spaces
      then dist(x,y)/p >= 1 by A2,REAL_2:143;
      then log(2,dist(x,y)/p) >= log(2,1) by PRE_FF:12;
      then log(2,dist(x,y)/p) >= 0 by POWER:59;
-     then reconsider n1 = [\ log(2,dist(x,y)/p) /] as Nat by INT_1:80;
-     reconsider n = n1 + 1 as non empty Nat;
+     then reconsider n1 = [\ log(2,dist(x,y)/p) /] as Element of NAT
+      by INT_1:80;
+     reconsider n = n1 + 1 as non empty Element of NAT;
      A14: 2 to_power n > 0 by POWER:39;
-     reconsider N = 2 to_power n as non empty Nat by POWER:39;
+     reconsider N = 2 to_power n as non empty Element of NAT by POWER:39;
      set r = dist(x,y) / N;
          log(2,dist(x,y)/p) < n * 1 by INT_1:52;
      then log(2,dist(x,y)/p) < n * log(2,2) by POWER:60;
@@ -129,22 +135,24 @@ begin  :: Convex and Internal Metric Spaces
      then dist(x,y)/N < p/N*N by XCMPLX_1:75;
      then A15: r < p by XCMPLX_1:88;
      reconsider FSL = FinSeqLevel(n,dD) as FinSequence of dom D;
-     deffunc G(Nat) = D.(FSL/.$1);
+     deffunc G(Element of NAT) = D.(FSL/.$1);
      consider g be FinSequence of [:A,A:] such that
       A16: len g = N and
-      A17: for k be Nat st k in Seg N holds g.k = G(k) from FINSEQ_2:sch 1;
-     deffunc F(Nat) = (g/.$1)`1;
+      A17: for k be Element of NAT st k in Seg N holds g.k = G(k)
+       from FINSEQ_2:sch 1;
+     deffunc F(Element of NAT) = (g/.$1)`1;
      consider h be FinSequence of the carrier of V such that
       A18: len h = N and
-      A19: for k be Nat st k in Seg N holds h.k = F(k) from FINSEQ_2:sch 1;
+      A19: for k be Element of NAT st k in Seg N holds h.k = F(k)
+       from FINSEQ_2:sch 1;
      take f = h^<*y*>;
-     defpred P[Nat] means (D.(0*$1))`1 = x;
+     defpred P[Element of NAT] means (D.(0*$1))`1 = x;
         (D.(0*0))`1 = (D.(0 |-> (0 qua Real)))`1 by EUCLID:def 4
         .= [x,y]`1 by A12,FINSEQ_2:72;
      then A20: P[0] by MCART_1:7;
-     A21: for j be Nat st P[j] holds P[j+1]
+     A21: for j be Element of NAT st P[j] holds P[j+1]
      proof
-      let j be Nat;
+      let j be Element of NAT;
       reconsider zj = 0*j as Node of D by A11,BINARI_3:5,MARGREL1:def 12;
       consider a,b be set such that
        A22: a in A and
@@ -161,8 +169,8 @@ begin  :: Convex and Internal Metric Spaces
          .= a1 by A25,MCART_1:7
          .= x by A24,A26,MCART_1:7;
      end;
-     A27: for j be Nat holds P[j] from NAT_1:sch 1(A20,A21);
-     defpred Q[Nat] means
+     A27: for j be Element of NAT holds P[j] from NAT_1:sch 1(A20,A21);
+     defpred Q[Element of NAT] means
       for t be Tuple of $1,BOOLEAN st t = 0*$1 holds (D.'not' t)`2 = y;
      A28: Q[1]
      proof
@@ -180,9 +188,9 @@ begin  :: Convex and Internal Metric Spaces
                                        by BINARI_3:15,FINSEQ_1:47,MARGREL1:36
          .= y by A29,MCART_1:7;
      end;
-     A30: for j be non empty Nat st Q[j] holds Q[j+1]
+     A30: for j be non empty Element of NAT st Q[j] holds Q[j+1]
      proof
-      let j be non empty Nat;
+      let j be non empty Element of NAT;
       assume A31: for t be Tuple of j,BOOLEAN st t = 0*j holds (D.'not'
 t)`2 = y;
       let t be Tuple of j+1,BOOLEAN;
@@ -215,7 +223,8 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
       thus (D.'not' t)`2 = b1 by A35,A39,MCART_1:7
          .= y by A38,A40,MCART_1:7;
      end;
-     A41: for j be non empty Nat holds Q[j] from BINARITH:sch 1(A28,A30);
+     A41: for j be non empty Element of NAT holds Q[j]
+      from BINARITH:sch 1(A28,A30);
      A42: len f = len h + len <*y*> by FINSEQ_1:35
               .= len h + 1 by FINSEQ_1:56;
      A43: 1 <= N by NAT_1:39;
@@ -236,10 +245,10 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
      then len f in dom f by FINSEQ_1:def 3;
      hence A47: f/.len f = (h^<*y*>).(len h + 1) by A42,FINSEQ_4:def 4
                      .= y by FINSEQ_1:59;
-     A48: for i be Nat st 1 <= i & i <= len f - 1 holds
+     A48: for i be Element of NAT st 1 <= i & i <= len f - 1 holds
       dist(f/.i,f/.(i+1)) = r
      proof
-      let i be Nat;
+      let i be Element of NAT;
       assume that
        A49: 1 <= i and
        A50: i <= len f - 1;
@@ -263,12 +272,12 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
         then i + 1 <= len f-'1 by NAT_1:38;
         then A57: i + 1 <= len f - 1 by A54,BINARITH:50;
         then A58: i + 1 - 1 <= (2 to_power n) - 1 by A18,A42,XREAL_1:11;
-        defpred R[non empty Nat] means
-         for i be Nat st 1 <= i & i <= (2 to_power $1) - 1 holds
+        defpred R[non empty Element of NAT] means
+         for i be Element of NAT st 1 <= i & i <= (2 to_power $1) - 1 holds
           (D.(FinSeqLevel($1,dD).(i+1)))`1 = (D.(FinSeqLevel($1,dD).i))`2;
         A59: R[1]
         proof
-         let i be Nat;
+         let i be Element of NAT;
          assume that
           A60: 1 <= i and
           A61: i <= (2 to_power 1) - 1;
@@ -290,12 +299,13 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
             .= (D.<* 0 *>)`2 by FINSEQ_1:47
             .= (D.(FinSeqLevel(1,dD).i))`2 by A62,BINTREE2:22;
         end;
-        A65: for n be non empty Nat st R[n] holds R[n+1]
+        A65: for n be non empty Element of NAT st R[n] holds R[n+1]
         proof
-         let n be non empty Nat;
-         assume A66: for i be Nat st 1 <= i & i <= (2 to_power n) - 1 holds
+         let n be non empty Element of NAT;
+         assume A66: for i be Element of NAT
+          st 1 <= i & i <= (2 to_power n) - 1 holds
           (D.(FinSeqLevel(n,dD).(i+1)))`1 = (D.(FinSeqLevel(n,dD).i))`2;
-         let i be Nat;
+         let i be Element of NAT;
          assume that
           A67: 1 <= i and
           A68: i <= (2 to_power (n+1)) - 1;
@@ -409,7 +419,7 @@ t1 as Node of D by A11,FINSEQ_1:def 11,MARGREL1:def 12;
          hence (D.(FinSeqLevel(n+1,dD).(i+1)))`1 =
           (D.(FinSeqLevel(n+1,dD).i))`2;
         end;
-        A102: for n be non empty Nat holds R[n]
+        A102: for n be non empty Element of NAT holds R[n]
                                                       from BINARITH:sch 1
 (A59,A65);
         A103: 1 <= 1 + i by NAT_1:29;
@@ -431,14 +441,14 @@ FINSEQ_4:24
       end;
           i >= 0 + 1 by A49;
       then A106: i > 0 by NAT_1:38;
-      defpred S[non empty Nat] means
-        for j be non empty Nat st j <= 2 to_power $1
+      defpred S[non empty Element of NAT] means
+        for j be non empty Element of NAT st j <= 2 to_power $1
        for DF1,DF2 be Element of V st
        DF1 = (D.(FinSeqLevel($1,dD).j))`1 & DF2 = (D.(FinSeqLevel($1,dD).j))`2
         holds dist(DF1,DF2) = dist(x,y) / 2 to_power $1;
       A107: S[1]
       proof
-       let j be non empty Nat;
+       let j be non empty Element of NAT;
        A108: 2 to_power 1 = 2 by POWER:30;
        A109: j >= 1 by NAT_1:39;
        assume A110: j <= 2 to_power 1;
@@ -481,14 +491,14 @@ FINSEQ_4:24
        end;
        hence dist(DF1,DF2) = dist(x,y) / 2 to_power 1 by POWER:30;
       end;
-      A122: for l be non empty Nat st S[l] holds S[l+1]
+      A122: for l be non empty Element of NAT st S[l] holds S[l+1]
       proof
-       let l be non empty Nat;
-       assume A123: for j be non empty Nat st j <= 2 to_power l
+       let l be non empty Element of NAT;
+       assume A123: for j be non empty Element of NAT st j <= 2 to_power l
         for DF1,DF2 be Element of V st
          DF1 = (D.(FinSeqLevel(l,dD).j))`1 & DF2 = (D.(FinSeqLevel(l,dD).j))`2
           holds dist(DF1,DF2) = dist(x,y) / 2 to_power l;
-       let j be non empty Nat;
+       let j be non empty Element of NAT;
        assume A124: j <= 2 to_power (l+1);
        let DF1,DF2 be Element of V;
        assume that
@@ -501,7 +511,7 @@ FINSEQ_4:24
         then j < 1 by XREAL_1:8;
         hence contradiction by NAT_1:39;
        end;
-       then reconsider j1 = (j+1) div 2 as non empty Nat;
+       then reconsider j1 = (j+1) div 2 as non empty Element of NAT;
        A127: j1 >= 1 by NAT_1:39;
            j <= (2 to_power l) * (2 to_power 1) by A124,POWER:32;
        then j <= (2 to_power l) * 2 by POWER:30;
@@ -566,14 +576,15 @@ FINSEQ_4:24
        end;
        hence dist(DF1,DF2) = dist(x,y) / 2 to_power (l+1);
       end;
-          for l be non empty Nat holds S[l] from BINARITH:sch 1(A107,A122);
+          for l be non empty Element of NAT holds S[l]
+           from BINARITH:sch 1(A107,A122);
       hence dist(f/.i,f/.(i+1)) = r by A18,A42,A50,A53,A56,A106;
      end;
-     hence for i be Nat st 1 <= i & i <= len f - 1 holds
+     hence for i be Element of NAT st 1 <= i & i <= len f - 1 holds
       dist(f/.i,f/.(i+1)) < p by A15;
      let F be FinSequence of REAL such that
       A142: len F = len f - 1 and
-      A143: for i be Nat st 1 <= i & i <= len F holds
+      A143: for i be Element of NAT st 1 <= i & i <= len F holds
        F/.i = dist(f/.i,f/.(i+1));
      A144: dom F = Seg len F by FINSEQ_1:def 3;
          rng F = {r}
@@ -586,8 +597,9 @@ FINSEQ_4:24
         A145: c in dom F and
         A146: F.c = a by FUNCT_1:def 5;
            c in Seg len F by A145,FINSEQ_1:def 3;
-       then c in { t where t is Nat : 1 <= t & t <= len F } by FINSEQ_1:def 1;
-       then consider c1 be Nat such that
+       then c in { t where t is Element of NAT : 1 <= t & t <= len F }
+        by FINSEQ_1:def 1;
+       then consider c1 be Element of NAT such that
         A147: c1 = c and
         A148: 1 <= c1 and
         A149: c1 <= len F;
@@ -618,10 +630,10 @@ FINSEQ_4:24
      hence f/.len f = y by FINSEQ_4:26;
      A154: len f - 1 = 1 + 1 - 1 by FINSEQ_1:61
         .= 1;
-     thus for i be Nat st 1 <= i & i <= len f - 1 holds
+     thus for i be Element of NAT st 1 <= i & i <= len f - 1 holds
       dist(f/.i,f/.(i+1)) < p
      proof
-      let i be Nat;
+      let i be Element of NAT;
       assume that
        A155: 1 <= i and
        A156: i <= len f - 1;
@@ -632,7 +644,7 @@ FINSEQ_4:24
      let F be FinSequence of REAL;
      assume that
       A157: len F = len f - 1 and
-      A158: for i be Nat st 1 <= i & i <= len F holds
+      A158: for i be Element of NAT st 1 <= i & i <= len F holds
        F/.i = dist(f/.i,f/.(i+1));
          F/.1 = dist(f/.1,f/.(1+1)) by A154,A157,A158
         .= dist(x,y) by A153,FINSEQ_4:26;
@@ -654,18 +666,20 @@ FINSEQ_4:24
     consider f be FinSequence of the carrier of V such that
      A4: f/.1 = x and
      A5: f/.len f = y and
-     A6: for i be Nat st 1 <= i & i <= len f - 1 holds
+     A6: for i be Element of NAT st 1 <= i & i <= len f - 1 holds
       dist(f/.i,f/.(i+1)) < p and
      A7: for F be FinSequence of REAL st len F = len f - 1 &
-      for i be Nat st 1 <= i & i <= len F holds F/.i = dist(f/.i,f/.(i+1))
+      for i be Element of NAT st 1 <= i & i <= len F
+       holds F/.i = dist(f/.i,f/.(i+1))
        holds dist(x,y) = Sum F by A1,A2,Th1;
     take f;
     thus f/.1 = x & f/.len f = y &
-     for i be Nat st 1 <= i & i <= len f - 1 holds dist(f/.i,f/.(i+1)) < p
+     for i be Element of NAT st 1 <= i & i <= len f - 1
+      holds dist(f/.i,f/.(i+1)) < p
                                                                  by A4,A5,A6;
     let F be FinSequence of REAL such that
      A8: len F = len f - 1 and
-     A9: for i be Nat st 1 <= i & i <= len F holds
+     A9: for i be Element of NAT st 1 <= i & i <= len F holds
       F/.i = dist(f/.i,f/.(i+1));
          dist(x,y) = Sum F by A7,A8,A9;
      hence abs(dist(x,y) - Sum F) < q by A3,ABSVALUE:7;
@@ -1173,7 +1187,7 @@ RLVECT_1:def 3
    end;
 
   definition
-   let n be Nat;
+   let n be Element of NAT;
    func RLMSpace n -> strict RealLinearMetrSpace means :Def8:
     the carrier of it = REAL n &
     the distance of it = Pitag_dist n &
@@ -1401,11 +1415,11 @@ METRIC_1:1,2,3,4;
   end;
 
   theorem
-       for n be Nat
+       for n be Element of NAT
    for f be isometric Function of RLMSpace n,RLMSpace n holds
     rng f = REAL n
    proof
-    let n be Nat;
+    let n be Element of NAT;
     let f be isometric Function of RLMSpace n,RLMSpace n;
     thus rng f = the carrier of RLMSpace n by Def3
        .= REAL n by Def8;
@@ -1414,7 +1428,7 @@ METRIC_1:1,2,3,4;
 begin  :: Groups of Isometric Functions
 
   definition
-   let n be Nat;
+   let n be Element of NAT;
    func IsomGroup n -> strict HGrStr means :Def9:
     the carrier of it = ISOM RLMSpace n &
     (for f,g be Function st f in ISOM RLMSpace n &
@@ -1483,7 +1497,7 @@ begin  :: Groups of Isometric Functions
   end;
 
   registration
-   let n be Nat;
+   let n be Element of NAT;
    cluster IsomGroup n -> non empty;
    coherence
    proof
@@ -1493,7 +1507,7 @@ begin  :: Groups of Isometric Functions
   end;
 
   registration
-   let n be Nat;
+   let n be Element of NAT;
    cluster IsomGroup n -> associative Group-like;
    coherence
    proof
@@ -1579,10 +1593,10 @@ begin  :: Groups of Isometric Functions
   end;
 
   theorem Th10:
-   for n be Nat holds
+   for n be Element of NAT holds
     1.(IsomGroup n) = id (RLMSpace n)
    proof
-    let n be Nat;
+    let n be Element of NAT;
         id(RLMSpace n) is isometric by Th5;
     then A1: id(RLMSpace n) in ISOM RLMSpace n by Def4;
     then reconsider e = id(RLMSpace n) as
@@ -1606,12 +1620,12 @@ begin  :: Groups of Isometric Functions
    end;
 
   theorem Th11:
-   for n be Nat
+   for n be Element of NAT
    for f be Element of IsomGroup n
    for g be Function of RLMSpace n,RLMSpace n st f = g holds
     f" = g"
    proof
-    let n be Nat;
+    let n be Element of NAT;
     let f be Element of IsomGroup n;
     let g be Function of RLMSpace n,RLMSpace n;
     assume A1: f = g;
@@ -1644,7 +1658,7 @@ begin  :: Groups of Isometric Functions
    end;
 
   definition
-   let n be Nat;
+   let n be Element of NAT;
    let G be Subgroup of IsomGroup n;
    func SubIsomGroupRel G -> Relation of the carrier of RLMSpace n means :Def10
 :
@@ -1690,7 +1704,7 @@ begin  :: Groups of Isometric Functions
   end;
 
   registration
-   let n be Nat;
+   let n be Element of NAT;
    let G be Subgroup of IsomGroup n;
    cluster SubIsomGroupRel G -> total symmetric transitive;
    coherence

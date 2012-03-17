@@ -19,7 +19,7 @@ environ
       VECTSP_1, NORMSP_1, POLYNOM1, ALGSEQ_1, XXREAL_0;
  constructors DOMAIN_1, BINOP_1, SQUARE_1, FINSEQOP, FINSOP_1, SETWOP_2,
       RFINSEQ, BINARITH, FINSEQ_5, WSIERP_1, NORMSP_1, ALGSEQ_1, DTCONSTR,
-      TRIANG_1, POLYNOM1;
+      TRIANG_1, POLYNOM1, NAT_1;
  registrations XREAL_0, SUBSET_1, FINSEQ_1, STRUCT_0, RELSET_1, VECTSP_1,
       FINSEQ_2, FINSEQ_5, INT_1, FINSET_1, POLYNOM1, GOBRD13, FUNCT_2,
       MEMBERED, ORDINAL1, NAT_1, XXREAL_0;
@@ -32,7 +32,7 @@ begin  :: Preliminaries
    for L be add-associative right_zeroed right_complementable
     (non empty LoopStr)
    for p be FinSequence of the carrier of L st
-    for i be Nat st i in dom p holds p.i = 0.L holds
+    for i be Element of NAT st i in dom p holds p.i = 0.L holds
      Sum p = 0.L;
 
   theorem :: POLYNOM3:2
@@ -46,12 +46,12 @@ begin  :: Preliminaries
 
   theorem :: POLYNOM3:4
    for p be FinSequence of NAT
-   for i be Nat st i in dom p holds
+   for i be Element of NAT st i in dom p holds
     Sum p >= p.i;
 
   definition
    let D be non empty set;
-   let i be Nat;
+   let i be Element of NAT;
    let p be FinSequence of D;
    redefine func Del(p,i) -> FinSequence of D;
   end;
@@ -64,7 +64,7 @@ begin  :: Preliminaries
 
   definition
    let D be non empty set;
-   let k,n be Nat;
+   let k,n be Element of NAT;
    let p be Element of k-tuples_on D;
    let q be Element of n-tuples_on D;
    redefine func p^q -> Element of (k+n)-tuples_on D;
@@ -72,48 +72,49 @@ begin  :: Preliminaries
 
   registration
    let D be non empty set;
-   let n be Nat;
+   let n be Element of NAT;
    cluster -> FinSequence-yielding FinSequence of n-tuples_on D;
   end;
 
   definition
    let D be non empty set;
-   let k,n be Nat;
+   let k,n be Element of NAT;
    let p be FinSequence of (k-tuples_on D);
    let q be FinSequence of (n-tuples_on D);
    redefine func p ^^ q -> Element of ((k+n)-tuples_on D)*;
   end;
 
   scheme :: POLYNOM3:sch 1
- SeqOfSeqLambdaD{D()->non empty set,A()->Nat,T(Nat)->Nat,
+ SeqOfSeqLambdaD{D()->non empty set,A()->Element of NAT,
+  T(Element of NAT)->Element of NAT,
                          F(set,set)->Element of D()}:
    ex p be FinSequence of D()* st
     len p = A() &
-    for k be Nat st k in Seg A() holds
+    for k be Element of NAT st k in Seg A() holds
      len (p/.k) = T(k) &
-     for n be Nat st n in dom (p/.k) holds
+     for n be Element of NAT st n in dom (p/.k) holds
       (p/.k).n = F(k,n);
 
 begin  :: The Lexicographic Order of Finite Sequences
 
   definition
-   let n be Nat;
+   let n be Element of NAT;
    let p,q be Element of n-tuples_on NAT;
    pred p < q means
 :: POLYNOM3:def 1
-    ex i be Nat st i in Seg n & p.i < q.i &
-     for k be Nat st 1 <= k & k < i holds p.k = q.k;
+    ex i be Element of NAT st i in Seg n & p.i < q.i &
+     for k be Element of NAT st 1 <= k & k < i holds p.k = q.k;
    asymmetry;
    end;
 
 notation
-   let n be Nat;
+   let n be Element of NAT;
    let p,q be Element of n-tuples_on NAT;
    synonym q > p for p < q;
 end;
 
   definition
-   let n be Nat;
+   let n be Element of NAT;
    let p,q be Element of n-tuples_on NAT;
    pred p <= q means
 :: POLYNOM3:def 2
@@ -122,45 +123,45 @@ end;
    end;
 
 notation
-   let n be Nat;
+   let n be Element of NAT;
    let p,q be Element of n-tuples_on NAT;
    synonym q >= p for p <= q;
 end;
 
   theorem :: POLYNOM3:5
-   for n be Nat
+   for n be Element of NAT
    for p,q,r be Element of n-tuples_on NAT holds
     (p < q & q < r implies p < r) &
     ((p < q & q <= r) or (p <= q & q < r) or (p <= q & q <= r) implies p <= r);
 
   theorem :: POLYNOM3:6
-   for n be Nat
+   for n be Element of NAT
    for p,q be Element of n-tuples_on NAT holds
-    p <> q implies ex i be Nat st i in Seg n & p.i <> q.i &
-     for k be Nat st 1 <= k & k < i holds p.k = q.k;
+    p <> q implies ex i be Element of NAT st i in Seg n & p.i <> q.i &
+     for k be Element of NAT st 1 <= k & k < i holds p.k = q.k;
 
   theorem :: POLYNOM3:7
-   for n be Nat
+   for n be Element of NAT
    for p,q be Element of n-tuples_on NAT holds
     p <= q or p > q;
 
   definition
-   let n be Nat;
+   let n be Element of NAT;
    func TuplesOrder n -> Order of n-tuples_on NAT means
 :: POLYNOM3:def 3
     for p,q be Element of n-tuples_on NAT holds [p,q] in it iff p <= q;
   end;
 
   registration
-   let n be Nat;
+   let n be Element of NAT;
    cluster TuplesOrder n -> being_linear-order;
   end;
 
-begin  :: Decomposition of Natural Numbers
+begin  :: Decomposition of Element of NATural Numbers
 
   definition
-   let i be non empty Nat;
-   let n be Nat;
+   let i be non empty Element of NAT;
+   let n be Element of NAT;
    func Decomp(n,i) -> FinSequence of i-tuples_on NAT means
 :: POLYNOM3:def 4
     ex A be finite Subset of i-tuples_on NAT st
@@ -169,33 +170,34 @@ begin  :: Decomposition of Natural Numbers
   end;
 
   registration
-   let i be non empty Nat;
-   let n be Nat;
+   let i be non empty Element of NAT;
+   let n be Element of NAT;
    cluster Decomp(n,i) -> non empty one-to-one FinSequence-yielding;
   end;
 
   theorem :: POLYNOM3:8
-   for n be Nat holds len Decomp(n,1) = 1;
+   for n be Element of NAT holds len Decomp(n,1) = 1;
 
   theorem :: POLYNOM3:9
-   for n be Nat holds len Decomp(n,2) = n+1;
+   for n be Element of NAT holds len Decomp(n,2) = n+1;
 
   theorem :: POLYNOM3:10
-       for n be Nat holds Decomp(n,1) = <*<*n*>*>;
+       for n be Element of NAT holds Decomp(n,1) = <*<*n*>*>;
 
   theorem :: POLYNOM3:11
-   for i,j,n,k1,k2 be Nat st Decomp(n,2).i = <*k1,n-'k1*> &
+   for i,j,n,k1,k2 be Element of NAT st Decomp(n,2).i = <*k1,n-'k1*> &
     Decomp(n,2).j = <*k2,n-'k2*> holds i<j iff k1<k2;
 
   theorem :: POLYNOM3:12
-   for i,n,k1,k2 be Nat st Decomp(n,2).i = <*k1,n-'k1*> &
+   for i,n,k1,k2 be Element of NAT st Decomp(n,2).i = <*k1,n-'k1*> &
     Decomp(n,2).(i+1) = <*k2,n-'k2*> holds k2=k1+1;
 
   theorem :: POLYNOM3:13
-   for n be Nat holds Decomp(n,2).1 = <*0,n*>;
+   for n be Element of NAT holds Decomp(n,2).1 = <*0,n*>;
 
   theorem :: POLYNOM3:14
-   for n,i be Nat st i in Seg (n+1) holds Decomp(n,2).i = <*i-'1,n+1-'i*>;
+   for n,i be Element of NAT st i in Seg (n+1)
+    holds Decomp(n,2).i = <*i-'1,n+1-'i*>;
 
   definition
    let L be non empty HGrStr;
@@ -204,7 +206,7 @@ begin  :: Decomposition of Natural Numbers
    func prodTuples(p,q,r,t) -> Element of (the carrier of L)* means
 :: POLYNOM3:def 5
     len it = len t &
-    for k be Nat st k in dom t holds
+    for k be Element of NAT st k in dom t holds
      it.k = (p.((t/.k)/.1))*(q.((t/.k)/.2))*(r.((t/.k)/.3));
   end;
 
@@ -219,34 +221,34 @@ begin  :: Decomposition of Natural Numbers
   theorem :: POLYNOM3:16
    for D be set
    for f be FinSequence of D*
-   for i be Nat holds
+   for i be Element of NAT holds
     Card (f|i) = (Card f)|i;
 
   theorem :: POLYNOM3:17
    for p be FinSequence of REAL
    for q be FinSequence of NAT st p=q
-   for i be Nat holds
+   for i be Element of NAT holds
     p|i = q|i;
 
   theorem :: POLYNOM3:18
    for p be FinSequence of NAT
-   for i,j be Nat st i <= j holds
+   for i,j be Element of NAT st i <= j holds
     Sum (p|i) <= Sum (p|j);
 
   theorem :: POLYNOM3:19
    for D being set,
        p be FinSequence of D
-   for i be Nat st i < len p holds
+   for i be Element of NAT st i < len p holds
     p|(i+1) = p|i ^ <*p.(i+1)*>;
 
   theorem :: POLYNOM3:20
    for p be FinSequence of REAL
-   for i be Nat st i < len p holds
+   for i be Element of NAT st i < len p holds
     Sum (p|(i+1)) = Sum (p|i) + p.(i+1);
 
   theorem :: POLYNOM3:21
    for p be FinSequence of NAT
-   for i,j,k1,k2 be Nat st i < len p & j < len p &
+   for i,j,k1,k2 be Element of NAT st i < len p & j < len p &
     1 <= k1 & 1 <= k2 & k1 <= p.(i+1) & k2 <= p.(j+1) &
     (Sum (p|i)) + k1 = (Sum (p|j)) + k2 holds
      i = j & k1 = k2;
@@ -255,7 +257,7 @@ begin  :: Decomposition of Natural Numbers
    for D1,D2 be set
    for f1 be FinSequence of D1*
    for f2 be FinSequence of D2*
-   for i1,i2,j1,j2 be Nat st
+   for i1,i2,j1,j2 be Element of NAT st
     i1 in dom f1 & i2 in dom f2 & j1 in dom (f1.i1) & j2 in dom (f2.i2) &
     Card f1 = Card f2 &
     (Sum ((Card f1)|(i1-'1))) + j1 = (Sum ((Card f2)|(i2-'1))) + j2 holds
@@ -271,21 +273,21 @@ begin  :: Polynomials
   theorem :: POLYNOM3:23
    for L be non empty ZeroStr
    for p be Polynomial of L
-   for n be Nat holds
+   for n be Element of NAT holds
     n >= len p iff n is_at_least_length_of p;
 
   scheme :: POLYNOM3:sch 2
- PolynomialLambdaF{R()->non empty LoopStr, A()->Nat,
-                           F(Nat)->Element of R()}:
+ PolynomialLambdaF{R()->non empty LoopStr, A()->Element of NAT,
+                           F(Element of NAT)->Element of R()}:
    ex p be Polynomial of R() st
-    len p <= A() & for n be Nat st n < A() holds p.n=F(n);
+    len p <= A() & for n be Element of NAT st n < A() holds p.n=F(n);
 
   definition
    let L be non empty LoopStr;
    let p,q be sequence of L;
    func p+q -> sequence of L means
 :: POLYNOM3:def 6
-    for n be Nat holds it.n = p.n + q.n;
+    for n be Element of NAT holds it.n = p.n + q.n;
   end;
 
   registration
@@ -297,7 +299,7 @@ begin  :: Polynomials
   theorem :: POLYNOM3:24
    for L be right_zeroed (non empty LoopStr)
    for p,q be Polynomial of L
-   for n be Nat holds
+   for n be Element of NAT holds
     (n is_at_least_length_of p & n is_at_least_length_of q) implies
      n is_at_least_length_of p+q;
 
@@ -323,7 +325,7 @@ begin  :: Polynomials
    let p be sequence of L;
    func -p -> sequence of L means
 :: POLYNOM3:def 7
-    for n be Nat holds it.n = -p.n;
+    for n be Element of NAT holds it.n = -p.n;
   end;
 
   registration
@@ -351,7 +353,7 @@ begin  :: Polynomials
   theorem :: POLYNOM3:27
    for L be non empty LoopStr
    for p,q be sequence of L
-   for n be Nat holds
+   for n be Element of NAT holds
     (p-q).n = p.n - q.n;
 
   definition
@@ -368,7 +370,7 @@ begin  :: Polynomials
 
   theorem :: POLYNOM3:28
    for L be non empty ZeroStr
-   for n be Nat holds
+   for n be Element of NAT holds
     (0_.(L)).n = 0.L;
 
   theorem :: POLYNOM3:29
@@ -397,17 +399,17 @@ begin  :: Polynomials
   theorem :: POLYNOM3:31
    for L be non empty multLoopStr_0 holds
     (1_.(L)).0 = 1.L &
-    for n be Nat st n <> 0 holds (1_.(L)).n = 0.L;
+    for n be Element of NAT st n <> 0 holds (1_.(L)).n = 0.L;
 
   definition
    let L be non empty doubleLoopStr;
    let p,q be sequence of L;
    func p*'q -> sequence of L means
 :: POLYNOM3:def 11
-    for i be Nat
+    for i be Element of NAT
     ex r be FinSequence of the carrier of L st
      len r = i+1 & it.i = Sum r &
-     for k be Nat st k in dom r holds r.k = p.(k-'1) * q.(i+1-'k);
+     for k be Element of NAT st k in dom r holds r.k = p.(k-'1) * q.(i+1-'k);
   end;
 
   registration

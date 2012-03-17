@@ -10,24 +10,26 @@ environ
       SCMFSA_7, SCMPDS_3, RELOC, CARD_1, SCMFSA6A, FUNCT_4, BOOLE, SCMFSA6B,
       FUNCT_7, SCM_1, AMI_2, AMI_5, SCMPDS_1, ABSVALUE, NAT_1, ARYTM_1,
       SCMPDS_5;
- notations TARSKI, XBOOLE_0, SETFAM_1, ENUMSET1, XCMPLX_0, RELAT_1, FUNCT_1,
+ notations TARSKI, XBOOLE_0, SETFAM_1, ENUMSET1, SUBSET_1,
+ NUMBERS,XCMPLX_0, RELAT_1, FUNCT_1,
       FUNCT_4, INT_1, NAT_1, STRUCT_0, AMI_1, AMI_2, AMI_3, AMI_5, FUNCT_7,
       SCMPDS_1, SCMPDS_2, INT_2, SCMPDS_3, CARD_1, SCMPDS_4, SCM_1, XXREAL_0;
  constructors ENUMSET1, XXREAL_0, NAT_1, MEMBERED, INT_2, SCM_1, AMI_5,
       SCMFSA_4, SCMPDS_1, SCMPDS_4;
  registrations AMI_1, INT_1, FUNCT_1, SCMPDS_2, TREES_2, SCMFSA_4, SCMPDS_4,
-      FRAENKEL, MEMBERED, SETFAM_1, CARD_3;
+      FRAENKEL, MEMBERED, SETFAM_1, CARD_3, ORDINAL1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions AMI_1, SCMPDS_4;
  theorems AMI_1, AMI_3, NAT_1, REAL_1, CQC_LANG, TARSKI, FUNCT_4, FUNCT_1,
       INT_1, RELAT_1, AMI_5, SCMPDS_2, FUNCT_7, SCMPDS_3, CARD_1, PRE_CIRC,
       ENUMSET1, ABSVALUE, SCMFSA6A, GRFUNC_1, SCM_1, SCMFSA6B, SCMPDS_4,
-      LATTICE2, NAT_2, CQC_THE1, XBOOLE_0, XBOOLE_1, XREAL_1;
+      LATTICE2, NAT_2, CQC_THE1, XBOOLE_0, XBOOLE_1, XREAL_1, ORDINAL1;
  schemes NAT_1;
 
 begin :: Preliminaries
+
 reserve x for set,
-        m,n for Nat,
+        m,n for Element of NAT,
         a,b,c for Int_position,
         i for Instruction of SCMPDS,
         s,s1,s2 for State of SCMPDS,
@@ -47,7 +49,7 @@ proof
     s be State of S;
     assume
 A1: s = Following s;
-  defpred X[Nat] means (Computation s).$1 = s;
+  defpred X[Element of NAT] means (Computation s).$1 = s;
 A2: X[0] by AMI_1:def 19;
 A3: for n st X[n] holds X[n+1] by A1,AMI_1:def 19;
    thus for n holds X[n] from NAT_1:sch 1(A2, A3);
@@ -264,7 +266,7 @@ theorem Th20: ::T13
  for I being parahalting Program-block st
      Initialized stop I c= s1 & Initialized stop I c= s2 &
      s1,s2 equal_outside the Instruction-Locations of SCMPDS holds
- for k being Nat holds
+ for k being Element of NAT holds
      (Computation s1).k, (Computation s2).k
          equal_outside the Instruction-Locations of SCMPDS &
      CurInstr (Computation s1).k = CurInstr (Computation s2).k
@@ -277,8 +279,9 @@ A2: Initialized SI c= s2 and
 A3: s1,s2 equal_outside the Instruction-Locations of SCMPDS;
 A4: SI c= s1 by A1,SCMPDS_4:57;
 A5: SI c= s2 by A2,SCMPDS_4:57;
-   hereby let k be Nat;
-         for m being Nat st m < k holds IC((Computation s2).m) in dom SI
+   hereby let k be Element of NAT;
+         for m being Element of NAT st m < k
+         holds IC((Computation s2).m) in dom SI
           by A2,SCMPDS_4:def 9;
       hence (Computation s1).k, (Computation s2).k equal_outside
           the Instruction-Locations of SCMPDS by A3,A4,A5,SCMPDS_4:67;
@@ -309,7 +312,7 @@ A1: Initialized SI c= s1 and
 A2: Initialized SI c= s2 and
 A3: s1,s2 equal_outside the Instruction-Locations of SCMPDS;
 A4: s1 is halting by A1,SCMPDS_4:63;
-A5: now let l be Nat; assume
+A5: now let l be Element of NAT; assume
    A6: CurInstr (Computation s2).l = halt SCMPDS;
       CurInstr (Computation s1).l = CurInstr (Computation s2).l by A1,A2,A3,
 Th20
@@ -357,7 +360,7 @@ proof let I be parahalting Program-block, J be Program-block;
  assume
 A1: Initialized SI c= s;
 then A2: s is halting by SCMPDS_4:63;
-  defpred X[Nat] means
+  defpred X[Element of NAT] means
    $1 <= LifeSpan s implies (Computation s).$1,(Computation(s+*(I ';' J))).$1
     equal_outside IL;
       (Computation s).0 = s &
@@ -912,11 +915,11 @@ then n=card I by A8,XREAL_1:1;
 end;
 
 theorem Th28:
- for I being parahalting Program-block,k be Nat
+ for I being parahalting Program-block,k be Element of NAT
  st k < LifeSpan (s +* Initialized stop(I))
  holds IC (Computation (s +* Initialized stop(I))).k in dom I
 proof
- let I be parahalting Program-block,k be Nat;
+ let I be parahalting Program-block,k be Element of NAT;
   set IsI=Initialized stop(I),
       ss= s +* IsI,
       m=LifeSpan ss,
@@ -949,14 +952,14 @@ then A7: n <= card I by INT_1:20;
 end;
 
 theorem Th29:
- for I being parahalting Program-block,k be Nat
+ for I being parahalting Program-block,k be Element of NAT
  st Initialized I c= s &
     k <= LifeSpan (s +* Initialized stop(I))
  holds
     (Computation s).k,(Computation (s +* Initialized stop(I))).k
     equal_outside the Instruction-Locations of SCMPDS
 proof
- let I be parahalting Program-block,k be Nat;
+ let I be parahalting Program-block,k be Element of NAT;
   set II=Initialized I,
       IsI=Initialized stop(I),
       IL=the Instruction-Locations of SCMPDS,
@@ -967,7 +970,7 @@ A2: k <= m;
     set Sp=SCMPDS-Stop,
         Cs1=Computation s,
         Cs2=Computation (s +* IsI);
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
        $1 <= m implies
        Cs1.$1,Cs2.$1 equal_outside IL;
 A3: s = s +* II by A1,FUNCT_4:79
@@ -980,7 +983,7 @@ A5: P[0]
        Cs2.0=s +* IsI by AMI_1:def 19;
         hence Cs1.0,Cs2.0 equal_outside IL by A4,A6,SCMFSA6A:27;
     end;
-A7: now let k be Nat;
+A7: now let k be Element of NAT;
       assume A8: P[k];
          now assume A9:k+1 <= m;
        A10: k < k+1 by XREAL_1:31;
@@ -1005,7 +1008,7 @@ XREAL_1:2,SCMPDS_4:15;
       end;
       hence P[k+1];
    end;
-      for k be Nat holds P[k] from NAT_1:sch 1(A5,A7);
+      for k be Element of NAT holds P[k] from NAT_1:sch 1(A5,A7);
    hence thesis by A2;
 end;
 
@@ -1081,11 +1084,11 @@ A8: inspos n= Ik by SCMPDS_3:32;
 end;
 
 theorem Th32: :: Th39
- for I being parahalting No-StopCode Program-block,k being Nat
+ for I being parahalting No-StopCode Program-block,k being Element of NAT
  st Initialized I c= s & k < LifeSpan (s +* Initialized stop(I))
  holds CurInstr (Computation s).k <> halt SCMPDS
 proof
-  let I be parahalting No-StopCode Program-block,k be Nat;
+  let I be parahalting No-StopCode Program-block,k be Element of NAT;
   set sI=s +* Initialized stop(I),
       s1=(Computation s).k,
       s2=(Computation sI).k;
@@ -1103,12 +1106,12 @@ end;
 
 theorem Th33: ::Th40
  for I being parahalting Program-block,J being Program-block,
-  k being Nat st k <= LifeSpan (s +* Initialized stop(I))
+  k being Element of NAT st k <= LifeSpan (s +* Initialized stop(I))
  holds (Computation (s +* Initialized stop I )).k,
        (Computation (s +* ((I ';' J) +* Start-At inspos 0))).k
         equal_outside the Instruction-Locations of SCMPDS
 proof
-    let I be parahalting Program-block,J be Program-block,k be Nat;
+    let I be parahalting Program-block,J be Program-block,k be Element of NAT;
     set SA0=Start-At inspos 0,
         spI= stop I,
         IsI=Initialized spI;
@@ -1126,13 +1129,14 @@ A4: s2 = s +* (I ';' J) +* SA0 by FUNCT_4:15
      set Cs1 = Computation s1, Cs2 = Computation s2;
         s +* SA0, s +* SA0 +* spI equal_outside IL by SCMFSA6A:27;
 then A5:  s +* SA0 +* spI, s +* SA0 equal_outside IL by FUNCT_7:28;
-   defpred X[Nat] means $1 <= n implies Cs1.$1, Cs2.$1 equal_outside IL;
+   defpred X[Element of NAT] means
+    $1 <= n implies Cs1.$1, Cs2.$1 equal_outside IL;
      A6: s +* SA0, s +* SA0 +* (I ';' J) equal_outside IL by SCMFSA6A:27;
         Cs1.0 = s1 & Cs2.0 = s2 by AMI_1:def 19;
 then A7: X[0] by A3,A4,A5,A6,FUNCT_7:29
 ;
-A8: for n being Nat st X[n] holds X[n+1]
-   proof let m be Nat;
+A8: for n being Element of NAT st X[n] holds X[n+1]
+   proof let m be Element of NAT;
     assume
 A9:  m <= n implies Cs1.m, Cs2.m equal_outside IL;
     assume A10: m+1 <= n;
@@ -1157,18 +1161,18 @@ then A17:    IC Cs1.m in dom (I ';' J) by FUNCT_4:13;
     hence Cs1.(m+1),Cs2.(m+1) equal_outside IL by A9,A10,A12,A13,NAT_1:38
 ,SCMPDS_4:15;
    end;
-      for k being Nat holds X[k] from NAT_1:sch 1(A7, A8);
+      for k being Element of NAT holds X[k] from NAT_1:sch 1(A7, A8);
   hence thesis by A1;
 end;
 
 theorem Th34:    ::Th41B
  for I being parahalting Program-block,J being Program-block,
-  k being Nat st k <= LifeSpan (s +* Initialized stop(I))
+  k being Element of NAT st k <= LifeSpan (s +* Initialized stop(I))
  holds (Computation (s +* Initialized stop I )).k,
        (Computation (s +* Initialized stop (I ';' J))).k
         equal_outside the Instruction-Locations of SCMPDS
 proof
-    let I be parahalting Program-block,J be Program-block,k be Nat;
+    let I be parahalting Program-block,J be Program-block,k be Element of NAT;
     assume A1: k <= LifeSpan (s +* Initialized stop I);
        Initialized stop (I ';' J) =
     (I ';' (J ';' SCMPDS-Stop)) +* Start-At inspos 0 by Th14;
@@ -1233,7 +1237,7 @@ A13:   s3 is halting by A9,AMI_1:def 26;
        thus CurInstr s4 = halt SCMPDS by A15;
      end;
      suppose A16:IC s4 = inspos card I;
-        reconsider m = m1 + m3 as Nat;
+        reconsider m = m1 + m3 as Element of NAT;
            sIJ = I ';' J ';' SCMPDS-Stop
         .= I ';' (J ';' SCMPDS-Stop) by SCMPDS_4:46
         .= I ';' spJ
@@ -1285,7 +1289,7 @@ proof
    assume A1:s=(Computation s2).m;
    set i = CurInstr s,
        ss=s +* Start-At (IC s + n);
-     consider k being Nat such that
+     consider k being Element of NAT such that
 A2:  IC s = inspos k by SCMPDS_3:32;
 A3:  IC s + n = inspos (k + n) by A2,SCMPDS_3:def 3;
      reconsider Nl=Next IC s as Instruction-Location of SCMPDS;
@@ -1303,7 +1307,7 @@ A6:  now let d be Instruction-Location of SCMPDS;
          .= Exec(i, s).d by AMI_1:def 13
          .= (Exec(i, s) +* Start-At IEn).d by AMI_5:81;
      end;
-     consider n1 be Nat such that
+     consider n1 be Element of NAT such that
 A7:  IC s=inspos n1 by SCMPDS_3:32;
 A8:  IsJ c= s2 by FUNCT_4:26;
      then A9: IC s in dom pJ by A1,SCMPDS_4:def 9;
@@ -1708,7 +1712,7 @@ begin :: Computation of two consecutive program blocks
 
 theorem    ::Th42
     for I being parahalting No-StopCode Program-block,J being parahalting
- shiftable Program-block,k being Nat
+ shiftable Program-block,k being Element of NAT
  st Initialized stop (I ';' J) c= s
  holds
  (Computation (Result(s +*Initialized stop I) +* Initialized stop J )).k
@@ -1720,7 +1724,7 @@ theorem    ::Th42
             equal_outside the Instruction-Locations of SCMPDS
 proof
  let I be parahalting No-StopCode Program-block,J be parahalting
- shiftable Program-block,k be Nat;
+ shiftable Program-block,k be Element of NAT;
 set IsI = Initialized stop I,
     sIsI = s +* IsI,
     RI = Result sIsI,
@@ -1762,13 +1766,13 @@ A8: (Computation sIsI).m1,(Computation sIsIJ).m1 equal_outside IL by Th34;
          .= s2.a by A8,SCMPDS_4:13;
      end;
   end;
-  defpred X[Nat] means
+  defpred X[Element of NAT] means
     (Computation RIJ).$1 +* Start-At (IC (Computation RIJ).$1 + card I),
     (Computation sIsIJ).(LifeSpan sIsI+$1) equal_outside IL;
        (Computation RIJ).0 = RIJ by AMI_1:def 19;
 then A10: X[0] by A7,SCMPDS_4:11;
-A11: for k being Nat st X[k] holds X[k+1]
-    proof let k be Nat;
+A11: for k being Element of NAT st X[k] holds X[k+1]
+    proof let k be Element of NAT;
     set k1 = k+1,
         CRk = (Computation RIJ).k,
         CRSk = CRk +* Start-At (IC CRk + card I),
@@ -1833,7 +1837,7 @@ then A22: IC CRSk1=IC (Following(CRk) +* Start-At (IC Following(CRk) + card I))
       (Computation sIsIJ).(LifeSpan sIsI+k1)
     equal_outside IL by A22,SCMPDS_4:11;
    end;
-    for k being Nat holds X[k] from NAT_1:sch 1(A10,A11);
+    for k being Element of NAT holds X[k] from NAT_1:sch 1(A10,A11);
   hence thesis;
 end;
 
@@ -1898,7 +1902,7 @@ then A14:  Initialized I c= s by A1,XBOOLE_1:1;
 A15:   IC s4 = inspos card I by A1,Th30;
       thus
 A16:   s4 | D = s3 | D by A11,A12,SCMPDS_4:24;
-        reconsider m = m1 + m3 as Nat;
+        reconsider m = m1 + m3 as Element of NAT;
            sIJ = I ';' J ';' SCMPDS-Stop
         .= I ';' (J ';' SCMPDS-Stop) by SCMPDS_4:46
         .= I ';' spJ
@@ -1907,7 +1911,7 @@ A16:   s4 | D = s3 | D by A11,A12,SCMPDS_4:24;
         then Shift(spJ, card I) c= s by A3,XBOOLE_1:1;
      hence
         A17: Shift(spJ, card I) c= s4 by AMI_3:38;
-A18:  now let k be Nat;
+A18:  now let k be Element of NAT;
       assume m1 + k < m;
 then A19:    k < m3 by XREAL_1:8;
       assume
@@ -1923,7 +1927,7 @@ A20:    CurInstr (Computation s).(m1 + k) = halt SCMPDS;
           = CurInstr (Computation s).(m1 + m3) by AMI_1:51;
 then A21:  CurInstr (Computation s).m = halt SCMPDS by A13,SCM_1:def 2;
 
-        now let k be Nat;
+        now let k be Element of NAT;
       assume
 A22:    k < m;
       per cases;
@@ -1932,19 +1936,20 @@ A22:    k < m;
       end;
       suppose m1 <= k;
        then consider kk being Nat such that
-A23:         m1 + kk = k by NAT_1:28;
-       thus CurInstr (Computation s).k <> halt SCMPDS by A18,A22,A23;
+A23:   m1 + kk = k by NAT_1:28;
+       kk in NAT by ORDINAL1:def 13;
+       hence CurInstr (Computation s).k <> halt SCMPDS by A18,A22,A23;
      end;
      end;
-then A24:  for k being Nat st CurInstr (Computation s).k = halt SCMPDS
+then A24:  for k being Element of NAT
+st CurInstr (Computation s).k = halt SCMPDS
      holds m <= k;
         s is halting by A1,SCMPDS_4:63;
 then A25: LifeSpan s = m by A21,A24,SCM_1:def 2;
        IsI c= s1 by A1,FUNCT_4:26;
     then s1 is halting by SCMPDS_4:63;
    hence
-      LifeSpan s = LifeSpan s1 + LifeSpan (Result s1 +* IsJ) by A25,SCMFSA6B:16
-;
+   LifeSpan s = LifeSpan s1 + LifeSpan (Result s1 +* IsJ) by A25,SCMFSA6B:16;
 end;
 
 theorem Th37: ::Th43

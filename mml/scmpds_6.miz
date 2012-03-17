@@ -10,7 +10,8 @@ environ
       SCM_1, FUNCT_1, FUNCT_7, SCMFSA6A, FUNCT_4, SCMPDS_3, CARD_1, SCMFSA_7,
       ABSVALUE, ARYTM_1, RELOC, SCMFSA6B, SCMPDS_5, AMI_5, SCMFSA8A, CAT_1,
       UNIALG_2, SCMFSA7B, SCMFSA8B, SCMPDS_6;
- notations TARSKI, XBOOLE_0, XCMPLX_0, RELAT_1, FUNCT_1, COMPLEX1, FUNCT_4,
+ notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1,
+ NUMBERS,COMPLEX1, FUNCT_4,
       INT_1, NAT_1, STRUCT_0, AMI_1, AMI_2, AMI_3, AMI_5, FUNCT_7, SCMPDS_2,
       SCMPDS_3, CARD_1, SCMPDS_4, SCM_1, SCMPDS_5, XXREAL_0;
  constructors XXREAL_0, NAT_1, INT_2, SCM_1, AMI_5, SCMFSA_4, SCMPDS_4,
@@ -21,12 +22,12 @@ environ
  theorems AMI_1, AMI_3, NAT_1, REAL_1, CQC_LANG, TARSKI, FUNCT_4, FUNCT_1,
       INT_1, AMI_5, SCMPDS_2, SCMPDS_3, ABSVALUE, SCMFSA6A, GRFUNC_1, SCM_1,
       SCMFSA6B, SCMPDS_4, CQC_THE1, SCMFSA8A, SCMPDS_5, RELAT_1, XBOOLE_0,
-      XBOOLE_1, XREAL_1;
+      XBOOLE_1, XREAL_1, ORDINAL1;
  schemes NAT_1;
 
 begin :: Preliminaries
 
-reserve m,n for Nat,
+reserve m,n for Element of NAT,
         a for Int_position,
         i,j for Instruction of SCMPDS,
         s,s1,s2 for State of SCMPDS,
@@ -48,33 +49,33 @@ proof
    .= A by XBOOLE_1:21;
 end;
 
-theorem Th2: ::S8A_Th4
+theorem Th2:
  for s being State of SCMPDS st s is halting
- for k being Nat st LifeSpan s <= k holds
+ for k being Element of NAT st LifeSpan s <= k holds
      CurInstr (Computation s).k = halt SCMPDS
  proof
    let s be State of SCMPDS;
    assume A1: s is halting;
-   let k be Nat;
+   let k be Element of NAT;
    assume A2: LifeSpan s <= k;
       CurInstr (Computation s).LifeSpan s = halt SCMPDS by A1,SCM_1:def 2;
    hence thesis by A2,AMI_1:52;
  end;
 
-theorem Th3: ::S8A_Th5
+theorem Th3:
  for s being State of SCMPDS st s is halting
- for k being Nat st LifeSpan s <= k holds
+ for k being Element of NAT st LifeSpan s <= k holds
      IC (Computation s).k = IC (Computation s).LifeSpan s
  proof
    let s be State of SCMPDS;
    assume A1: s is halting;
-   let k be Nat;
+   let k be Element of NAT;
    assume A2: LifeSpan s <= k;
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
        LifeSpan s <= $1 implies
            IC (Computation s).$1 = IC (Computation s).LifeSpan s;
 A3: P[0] by XREAL_1:1;
-A4: now let k be Nat;
+A4: now let k be Element of NAT;
       assume A5: P[k];
          now assume A6: LifeSpan s <= k + 1;
         per cases by A6,REAL_1:def 5;
@@ -92,7 +93,7 @@ A4: now let k be Nat;
         end;
       hence P[k + 1];
      end;
-      for k being Nat holds P[k] from NAT_1:sch 1(A3,A4);
+      for k being Element of NAT holds P[k] from NAT_1:sch 1(A3,A4);
    hence thesis by A2;
 end;
 
@@ -111,7 +112,7 @@ proof
        by A1,SCMPDS_4:11;
 end;
 
-theorem     ::S8A_TI8
+theorem
     for s being State of SCMPDS, I being Program-block holds
      Initialized s +* Initialized I = s +* Initialized I
 proof
@@ -130,7 +131,7 @@ proof
    .= s +* Initialized I by SCMPDS_4:def 2;
 end;
 
-theorem  ::S8A_Th9
+theorem
     for I being Program-block, l being Instruction-Location of SCMPDS holds
      I c= I +* Start-At l
 proof
@@ -186,7 +187,7 @@ theorem Th9:
  holds s | SCM-Data-Loc = (s +* Initialized I) | SCM-Data-Loc
 proof
   let s be State of SCMPDS,I be Program-block;
-     Initialized I =I +* Start-At(inspos 0) by SCMPDS_4:def 2;
+  Initialized I =I +* Start-At(inspos 0) by SCMPDS_4:def 2;
   hence thesis by Th8;
 end;
 
@@ -345,10 +346,10 @@ A4:  inspos 0 in dom Load i by SCMPDS_5:2;
 end;
 
 theorem Th23:
- for s being State of SCMPDS,m1,m2 being Nat st IC s=inspos m1
+ for s being State of SCMPDS,m1,m2 being Element of NAT st IC s=inspos m1
  holds ICplusConst(s,m2)=inspos (m1+m2)
 proof
-    let s be State of SCMPDS,m1,m2 be Nat;
+    let s be State of SCMPDS,m1,m2 be Element of NAT;
     assume A1: IC s=inspos m1;
      consider m such that
 A2:  m = IC s & ICplusConst(s,m2) = abs(m-2+2*m2)+2 by SCMPDS_2:def 20;
@@ -467,7 +468,7 @@ definition
 end;
 
 registration
-   let n be Nat;
+   let n be Element of NAT;
    cluster goto (n+1) -> No-StopCode;
    correctness by SCMPDS_5:25;
 
@@ -480,7 +481,7 @@ registration
 end;
 
 registration
-   let n be Nat;
+   let n be Element of NAT;
    cluster Goto (n+1) -> No-StopCode;
    correctness;
    cluster Goto -(n+1) -> No-StopCode;
@@ -513,7 +514,7 @@ definition
  let I be Program-block;
  let s be State of SCMPDS;
  pred I is_closed_on s means
-:Def2:     for k being Nat holds
+:Def2:     for k being Element of NAT holds
      IC (Computation (s +* Initialized stop I )).k in dom stop I;
  pred I is_halting_on s means
 :Def3:    s +* Initialized stop I is halting;
@@ -534,7 +535,7 @@ theorem Th34: ::S7B_Th24
      end;
    assume A2: for s being State of SCMPDS holds I is_closed_on s;
       now let s be State of SCMPDS;
-      let k be Nat;
+      let k be Element of NAT;
       assume IsI c= s;
       then I is_closed_on s & s = s +* IsI by A2,FUNCT_4:79;
       hence IC (Computation s).k in dom stop I by Def2;
@@ -577,7 +578,7 @@ proof
        C2 = Computation (s2 +* IsI);
    assume A1: s1 | D = s2 | D;
    assume A2: I is_closed_on s1;
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
        IC C1.$1 = IC C2.$1 &
        CurInstr C1.$1 = CurInstr C2.$1 &
        C1.$1 | D = C2.$1 | D;
@@ -599,7 +600,7 @@ A10: CurInstr C1.0 = C1.0.IC C1.0 by AMI_1:def 17
         C1.0 | D = s1 | D by A4,Th9
      .= C2.0 | D by A1,A4,Th9;
 then A11:  P[0] by A5,A6,A10;
-A12:  now let k be Nat;
+A12:  now let k be Element of NAT;
        assume
 A13:   P[k];
        then for a holds C1.k.a = C2.k.a by SCMPDS_4:23;
@@ -632,9 +633,9 @@ A23:  IC C1.(k + 1) in dom pI by A2,Def2;
       thus C1.(k + 1) | D = C2.(k + 1) | D by A14,A19,A20,A21,SCMPDS_4:24;
       end;
      end;
-      now let k be Nat;
+      now let k be Element of NAT;
    A24: IC C1.k in dom pI by A2,Def2;
-         for k being Nat holds P[k] from NAT_1:sch 1(A11,A12);
+         for k being Element of NAT holds P[k] from NAT_1:sch 1(A11,A12);
       hence IC C2.k in dom pI by A24;
      end;
    hence I is_closed_on s2 by Def2;
@@ -657,7 +658,7 @@ proof
     then s1 +* IsI is halting by Def3;
     then consider m such that
 A3: CurInstr C1.m = halt SCMPDS by AMI_1:def 20;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
        IC C1.$1 = IC C2.$1 &
        CurInstr C1.$1 = CurInstr C2.$1 &
        C1.$1 | D = C2.$1 | D;
@@ -678,7 +679,7 @@ A11: CurInstr C1.0 = C1.0.IC C1.0 by AMI_1:def 17
      .= CurInstr C2.0 by AMI_1:def 17;
         C1.0,C2.0 equal_outside A by A1,A5,Th12;
 then A12:  P[0] by A6,A7,A11,SCMPDS_4:24;
-A13:  now let k be Nat;
+A13:  now let k be Element of NAT;
       assume A14: P[k];
         then for a holds C1.k.a = C2.k.a by SCMPDS_4:23;
         then C1.k,C2.k equal_outside A by A14,SCMPDS_4:11;
@@ -709,12 +710,12 @@ A24:   IC C1.(k + 1) in dom pI by A2,Def2;
       thus C1.(k + 1) | D = C2.(k + 1) | D by A15,A20,A21,A22,SCMPDS_4:24;
       end;
      end;
-        for k being Nat holds P[k] from NAT_1:sch 1(A12,A13);
+        for k being Element of NAT holds P[k] from NAT_1:sch 1(A12,A13);
      then CurInstr C2.m = halt SCMPDS by A3;
 then A25: s2 +* IsI is halting by AMI_1:def 20;
-        now let k be Nat;
+        now let k be Element of NAT;
 A26:   IC C1.k in dom pI by A2,Def2;
-          for k being Nat holds P[k] from NAT_1:sch 1(A12,A13);
+          for k being Element of NAT holds P[k] from NAT_1:sch 1(A12,A13);
        hence IC C2.k in dom pI by A26;
      end;
      hence I is_closed_on s2 by Def2;
@@ -733,7 +734,7 @@ end;
 theorem Th39:
  for I,J being Program-block,s being State of SCMPDS
  st I is_closed_on s & I is_halting_on s holds
- (for k being Nat st k <= LifeSpan (s +* Initialized stop I) holds
+ (for k being Element of NAT st k <= LifeSpan (s +* Initialized stop I) holds
      IC (Computation (s +* Initialized stop I)).k =
          IC (Computation (s +* Initialized stop (I ';' J))).k) &
  (Computation (s +* Initialized stop I)).
@@ -754,7 +755,7 @@ A3: s1 is halting by A2,Def3;
 A4: IsI=pI +* Start-At inspos 0 by SCMPDS_4:def 2;
 A5: IsI c= s1 by FUNCT_4:26;
 then A6: s1 +* IsJ = s1 +* pIJ by SCMPDS_4:34;
-    defpred X[Nat] means $1 <= LifeSpan s1 implies
+    defpred X[Element of NAT] means $1 <= LifeSpan s1 implies
        (Computation s1).$1,(Computation (s1+*IsJ)).$1 equal_outside IL;
        (Computation s1).0 = s1 &
     (Computation (s1+*IsJ)).0 = s1+*IsJ by AMI_1:def 19;
@@ -802,7 +803,7 @@ A22: s1+*IsJ=s +* (IsI +* IsJ) by FUNCT_4:15
      .=s+*IsJ by SCMPDS_5:17;
 A23: for m holds X[m] from NAT_1:sch 1(A7,A8);
      hereby
-        let k be Nat;
+        let k be Element of NAT;
         assume k <= LifeSpan s1;
          then (Computation s1).k,(Computation (s1 +* IsJ)).k
          equal_outside IL by A23;
@@ -818,11 +819,11 @@ SCMPDS_4:24
 end;
 
 theorem Th40:
- for I being Program-block,k be Nat st I is_closed_on s &
+ for I being Program-block,k be Element of NAT st I is_closed_on s &
  I is_halting_on s & k < LifeSpan (s +* Initialized stop(I))
  holds IC (Computation (s +* Initialized stop(I))).k in dom I
 proof
- let I be Program-block,k be Nat;
+ let I be Program-block,k be Element of NAT;
   set IsI=Initialized stop(I),
       ss= s +* IsI,
       m=LifeSpan ss,
@@ -856,13 +857,13 @@ then A8: n <= card I by INT_1:20;
 end;
 
 theorem Th41:
- for I,J being Program-block,s being State of SCMPDS,k being Nat
+ for I,J being Program-block,s being State of SCMPDS,k being Element of NAT
  st I is_closed_on s & I is_halting_on s &
    k < LifeSpan (s +* Initialized stop I) holds
      CurInstr (Computation (s +* Initialized stop I)).k =
      CurInstr (Computation (s +* Initialized stop (I ';' J))).k
 proof
-   let I,J be Program-block,s be State of SCMPDS,k be Nat;
+   let I,J be Program-block,s be State of SCMPDS,k be Element of NAT;
    set IsI=Initialized stop I,
        IsJ=Initialized stop (I ';' J),
        s1=s+*IsI,
@@ -896,11 +897,11 @@ end;
 
 theorem Th42:     ::SCMPDS_5:32
  for I being No-StopCode Program-block,s being State of SCMPDS,
- k being Nat st I is_closed_on s & I is_halting_on s &
+ k being Element of NAT st I is_closed_on s & I is_halting_on s &
     k < LifeSpan (s +* Initialized stop I)
  holds CurInstr (Computation (s +* Initialized stop I)).k <> halt SCMPDS
 proof
-  let I be No-StopCode Program-block,s be State of SCMPDS,k be Nat;
+  let I be No-StopCode Program-block,s be State of SCMPDS,k be Element of NAT;
   set IsI=Initialized stop(I),
       ss=s +* IsI,
       s2=(Computation ss).k;
@@ -961,7 +962,8 @@ Lm2:
          (LifeSpan (s +* Initialized stop I)) | D =
      (Computation (s +* Initialized stop (I ';' Goto (card J + 1) ';' J))).
          (LifeSpan (s +* Initialized stop I) + 1) | D &
-     (for k being Nat st k <= LifeSpan (s +* Initialized stop I) holds
+     (for k being Element of NAT st k <= LifeSpan (s +* Initialized stop I)
+     holds
          CurInstr (Computation (s +*Initialized stop
          (I ';' Goto (card J + 1) ';' J ))).k <> halt SCMPDS) &
      IC (Computation (s +* Initialized stop
@@ -1052,7 +1054,7 @@ then A21: CurInstr (Computation s2).(LifeSpan s1 + 1)
    hence (Computation s1).(LifeSpan s1) | D
        = (Computation s2).(LifeSpan s1 + 1) | D by A14,SCMPDS_4:23;
    thus
-A22: now let k be Nat;
+A22: now let k be Element of NAT;
       assume
 A23:  k <= LifeSpan s1;
       per cases;
@@ -1067,7 +1069,7 @@ then k = LifeSpan s1 by A23,XREAL_1:1;
        hence CurInstr (Computation s2).k <> halt SCMPDS by A16,SCMPDS_2:85;
      end;
      end;
-A25: now let k be Nat;
+A25: now let k be Element of NAT;
       assume CurInstr (Computation s2).k = halt SCMPDS;
          then LifeSpan s1 < k by A22;
          hence LifeSpan s1+1 <= k by INT_1:20;
@@ -1138,7 +1140,7 @@ A17:    halt SCMPDS=CurInstr s3 by A4,SCM_1:def 2
        .=CurInstr s4 by AMI_1:def 17;
 then A18:    s2 is halting by AMI_1:def 20;
        hence IJ is_halting_on s by A3,Def3;
-          now let k be Nat;
+          now let k be Element of NAT;
            set C1k=IC (Computation s1).k,
                C2k=IC (Computation s2).k;
            per cases;
@@ -1207,7 +1209,7 @@ then A37:   CurInstr (Computation s2).(m + 1)
 then A38:  s2 is halting by AMI_1:def 20;
      hence IJ is_halting_on s by A3,Def3;
         now
-       let k be Nat;
+       let k be Element of NAT;
        set C1k=IC (Computation s1).k,
            C2k=IC (Computation s2).k;
          per cases;
@@ -1233,9 +1235,9 @@ end;
 theorem Th45:  :: SP4_88,Th27
  for I being shiftable Program-block st
  Initialized stop I c= s1 & I is_closed_on s1
- for n being Nat st Shift(stop I,n) c= s2 &
+ for n being Element of NAT st Shift(stop I,n) c= s2 &
    IC s2 = inspos n & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc
-   for i being Nat holds
+   for i being Element of NAT holds
      IC (Computation s1).i + n = IC (Computation s2).i &
      CurInstr ((Computation s1).i) = CurInstr ((Computation s2).i) &
      (Computation s1).i | SCM-Data-Loc = (Computation s2).i | SCM-Data-Loc
@@ -1245,15 +1247,15 @@ proof
        II = Initialized SI;
     assume
 A1: II c= s1 & I is_closed_on s1;
-   let n be Nat; assume that
+   let n be Element of NAT; assume that
 A2: Shift(SI,n) c= s2 and
 A3: IC s2 = inspos n and
 A4: s1 | SCM-Data-Loc = s2 | SCM-Data-Loc;
 A5: s1=s1 +* II by A1,FUNCT_4:79;
    set C1 = Computation s1;
    set C2 = Computation s2;
-   let i be Nat;
-   defpred P[Nat] means
+   let i be Element of NAT;
+   defpred P[Element of NAT] means
        IC C1.$1 + n = IC C2.$1 &
        CurInstr (C1.$1) = CurInstr (C2.$1) &
        C1.$1 | SCM-Data-Loc = C2.$1 | SCM-Data-Loc;
@@ -1290,9 +1292,9 @@ A13: s1.IC s1 = s1.(s1.IC SCMPDS) by AMI_1:def 15
        = s2 | SCM-Data-Loc by A4,AMI_1:def 19
       .= C2.0 | SCM-Data-Loc by AMI_1:def 19;
      end;
-A14: for k being Nat st P[k] holds P[k + 1]
+A14: for k being Element of NAT st P[k] holds P[k + 1]
      proof
-       let k be Nat;
+       let k be Element of NAT;
        assume A15: P[k];
       set i = CurInstr C1.k;
   A16: C1.(k + 1) = Following C1.k by AMI_1:def 19
@@ -1325,15 +1327,16 @@ A14: for k being Nat st P[k] holds P[k + 1]
       thus C1.(k + 1) | SCM-Data-Loc
        = C2.(k + 1) | SCM-Data-Loc by A15,A16,A17,A20,A21,SCMPDS_4:83;
      end;
-      for k being Nat holds P[k] from NAT_1:sch 1(A10,A14);
+      for k being Element of NAT holds P[k] from NAT_1:sch 1(A10,A14);
    hence thesis;
 end;
 
 Lm3:  ::SHIFT
- for s being State of SCMPDS, I,J being shiftable Program-block,n being Nat
+ for s being State of SCMPDS, I,J being shiftable Program-block,
+ n being Element of NAT
  holds I ';' Goto n ';' J is shiftable
 proof
-  let s be State of SCMPDS, I,J be shiftable Program-block,n be Nat;
+  let s be State of SCMPDS, I,J be shiftable Program-block,n be Element of NAT;
       I ';' Goto n ';' J = I ';' Load (goto n) ';' J;
    hence thesis;
 end;
@@ -1589,12 +1592,13 @@ then A21: s2 | D = s4 | D by SCMPDS_4:23;
           by A4,A7,A17,A18,A19,A21,Th45
     .= halt SCMPDS by A5,SCM_1:def 2;
 then A22: s3 is halting by AMI_1:def 20;
-        now let k be Nat;
+        now let k be Element of NAT;
       per cases;
       suppose
        0 < k;
         then consider k1 being Nat such that
 A23:    k1 + 1 = k by NAT_1:22;
+       reconsider k1 as Element of NAT by ORDINAL1:def 13;
        consider m such that
 A24:   inspos m = IC (Computation s2).k1 by SCMPDS_3:32;
 A25:   card pIF = card pI2+1 by A16,SCMPDS_5:7;
@@ -1680,11 +1684,12 @@ A20: IC s4 = s4.IC SCMPDS by AMI_1:def 15
     .= halt SCMPDS by A5,SCM_1:def 2;
 then A21: s3 is halting by AMI_1:def 20;
         now
-       let k be Nat;
+       let k be Element of NAT;
        per cases;
        suppose 0 < k;
           then consider k1 being Nat such that
 A22:      k1 + 1 = k by NAT_1:22;
+          reconsider k1 as Element of NAT by ORDINAL1:def 13;
           consider m such that
 A23:      inspos m = IC (Computation s1).k1 by SCMPDS_3:32;
 A24:      card pJ = card J + 1 by SCMPDS_5:7;
@@ -1770,7 +1775,7 @@ A20: CurInstr (Computation s3).(LifeSpan s2 + 1)
           by A4,A6,A15,A16,A17,A19,Th45
      .= halt SCMPDS by A5,SCM_1:def 2;
 then A21: s3 is halting by AMI_1:def 20;
-   now let l be Nat;
+   now let l be Element of NAT;
       assume
 A22:   l < LifeSpan s2 + 1;
       per cases;
@@ -1780,8 +1785,9 @@ then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
       end;
       suppose
         l <> 0;
-         then consider n such that
+         then consider n be Nat such that
 A23:     l = n + 1 by NAT_1:22;
+         reconsider n as Element of NAT by ORDINAL1:def 13;
 A24:     n < LifeSpan s2 by A22,A23,XREAL_1:8;
         assume
 A25:       CurInstr (Computation s3).l = halt SCMPDS;
@@ -1792,7 +1798,8 @@ A25:       CurInstr (Computation s3).l = halt SCMPDS;
         hence contradiction by A5,A24,SCM_1:def 2;
      end;
      end;
-     then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS holds
+     then for l be Element of NAT st CurInstr (Computation s3).l = halt SCMPDS
+     holds
        LifeSpan s2 + 1 <= l;
 then A26: LifeSpan s3 = LifeSpan s2 + 1 by A20,A21,SCM_1:def 2;
 A27: (Result s2) | D = (Computation s2).(LifeSpan s2) | D by A5,SCMFSA6B:16
@@ -1919,18 +1926,18 @@ A22:  CurInstr (Computation s3).(LifeSpan s1 + 1)
           by A4,A6,A18,A19,A21,Th45
       .= halt SCMPDS by A5,SCM_1:def 2;
 then A23:  s3 is halting by AMI_1:def 20;
-    now let l be Nat;
+    now let l be Element of NAT;
        assume
 A24:    l < LifeSpan s1 + 1;
        per cases;
        suppose l = 0;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A9,Th29;
-
        end;
        suppose l <> 0;
-       then consider n such that
+       then consider n be Nat such that
 A25:     l = n + 1 by NAT_1:22;
+         reconsider n as Element of NAT by ORDINAL1:def 13;
 A26:     n < LifeSpan s1 by A24,A25,XREAL_1:8;
          assume
 A27:       CurInstr (Computation s3).l = halt SCMPDS;
@@ -1940,7 +1947,7 @@ A27:       CurInstr (Computation s3).l = halt SCMPDS;
          hence contradiction by A5,A26,SCM_1:def 2;
       end;
       end;
-      then for l be Nat st
+      then for l be Element of NAT st
         CurInstr (Computation s3).l = halt SCMPDS holds
         LifeSpan s1 + 1 <= l;
       then A28:  LifeSpan s3 = LifeSpan s1 + 1 by A22,A23,SCM_1:def 2;
@@ -2168,12 +2175,13 @@ then A18: s2 | D = s4 | D by SCMPDS_4:23;
           by A4,A6,A15,A16,A18,Th45
     .= halt SCMPDS by A5,SCM_1:def 2;
 then A19: s3 is halting by AMI_1:def 20;
-        now let k be Nat;
+        now let k be Element of NAT;
       per cases;
       suppose
        0 < k;
         then consider k1 being Nat such that
 A20:    k1 + 1 = k by NAT_1:22;
+        reconsider k1 as Element of NAT by ORDINAL1:def 13;
        consider m such that
 A21:   inspos m = IC (Computation s2).k1 by SCMPDS_3:32;
 A22:   card pIF = card pI+1 by A14,SCMPDS_5:7;
@@ -2231,7 +2239,7 @@ A11: IC s4 = s4.IC SCMPDS by AMI_1:def 15
      .=halt SCMPDS by A9,Th25;
 then A12: CurInstr s4 = halt SCMPDS by A11,AMI_1:def 17;
         now
-       let k be Nat;
+       let k be Element of NAT;
        per cases;
        suppose 0 < k;
          then 1+0 <= k by INT_1:20;
@@ -2299,7 +2307,7 @@ A18: CurInstr (Computation s3).(LifeSpan s2 + 1)
           by A4,A6,A14,A15,A17,Th45
      .= halt SCMPDS by A5,SCM_1:def 2;
 then A19: s3 is halting by AMI_1:def 20;
-   now let l be Nat;
+   now let l be Element of NAT;
       assume
 A20:   l < LifeSpan s2 + 1;
       per cases;
@@ -2309,8 +2317,9 @@ then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
       end;
       suppose
         l <> 0;
-         then consider n such that
+         then consider n be Nat such that
 A21:     l = n + 1 by NAT_1:22;
+         reconsider n as Element of NAT by ORDINAL1:def 13;
 A22:     n < LifeSpan s2 by A20,A21,XREAL_1:8;
         assume
 A23:       CurInstr (Computation s3).l = halt SCMPDS;
@@ -2321,7 +2330,7 @@ A23:       CurInstr (Computation s3).l = halt SCMPDS;
         hence contradiction by A5,A22,SCM_1:def 2;
      end;
      end;
-     then for l be Nat st
+     then for l be Element of NAT st
        CurInstr (Computation s3).l = halt SCMPDS
        holds LifeSpan s2 + 1 <= l;
 then A24: LifeSpan s3 = LifeSpan s2 + 1 by A18,A19,SCM_1:def 2;
@@ -2422,7 +2431,7 @@ A12: IC s4 = s4.IC SCMPDS by AMI_1:def 15
      .=halt SCMPDS by A10,Th25;
 then A13: CurInstr s4 = halt SCMPDS by A12,AMI_1:def 17;
 then A14:  s3 is halting by AMI_1:def 20;
-    now let l be Nat;
+    now let l be Element of NAT;
        assume l < 1;
         then l <1+0;
 then l <= 0 by NAT_1:38;
@@ -2430,7 +2439,7 @@ then l <= 0 by NAT_1:38;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A3,Th29;
       end;
-      then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
+      then for l be Element of NAT st CurInstr (Computation s3).l = halt SCMPDS
         holds 1 <= l;
       then LifeSpan s3 = 1 by A13,A14,SCM_1:def 2;
 then A15:  s4 = Result s3 by A14,SCMFSA6B:16;
@@ -2666,12 +2675,13 @@ then A18: s2 | D = s4 | D by SCMPDS_4:23;
           by A4,A6,A15,A16,A18,Th45
     .= halt SCMPDS by A5,SCM_1:def 2;
 then A19: s3 is halting by AMI_1:def 20;
-        now let k be Nat;
+        now let k be Element of NAT;
       per cases;
       suppose
        0 < k;
         then consider k1 being Nat such that
 A20:    k1 + 1 = k by NAT_1:22;
+        reconsider k1 as Element of NAT by ORDINAL1:def 13;
        consider m such that
 A21:   inspos m = IC (Computation s2).k1 by SCMPDS_3:32;
 A22:   card pIF = 1+ card IF by SCMPDS_5:7
@@ -2749,7 +2759,7 @@ A18:  IC s5 = s5.IC SCMPDS by AMI_1:def 15
      .=halt SCMPDS by A16,Th25;
 then A19: CurInstr s5 = halt SCMPDS by A18,AMI_1:def 17;
         now
-       let k be Nat;
+       let k be Element of NAT;
            k = 0 or 0 < k;
         then A20: k = 0 or 0 + 1 <= k by INT_1:20;
        per cases by A20,REAL_1:def 5;
@@ -2824,7 +2834,7 @@ A18: CurInstr (Computation s3).(LifeSpan s2 + 1)
           by A4,A6,A14,A15,A17,Th45
      .= halt SCMPDS by A5,SCM_1:def 2;
 then A19: s3 is halting by AMI_1:def 20;
-   now let l be Nat;
+   now let l be Element of NAT;
       assume
 A20:   l < LifeSpan s2 + 1;
       per cases;
@@ -2832,10 +2842,10 @@ A20:   l < LifeSpan s2 + 1;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A9,Th29;
       end;
-      suppose
-        l <> 0;
-         then consider n such that
+      suppose l <> 0;
+         then consider n be Nat such that
 A21:     l = n + 1 by NAT_1:22;
+         reconsider n as Element of NAT by ORDINAL1:def 13;
 A22:     n < LifeSpan s2 by A20,A21,XREAL_1:8;
         assume
 A23:       CurInstr (Computation s3).l = halt SCMPDS;
@@ -2846,7 +2856,7 @@ A23:       CurInstr (Computation s3).l = halt SCMPDS;
         hence contradiction by A5,A22,SCM_1:def 2;
      end;
      end;
-     then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
+     then for l be Element of NAT st CurInstr (Computation s3).l = halt SCMPDS
        holds LifeSpan s2 + 1 <= l;
 then A24: LifeSpan s3 = LifeSpan s2 + 1 by A18,A19,SCM_1:def 2;
 A25: (Result s2) | D = (Computation s2).(LifeSpan s2) | D by A5,SCMFSA6B:16
@@ -2892,7 +2902,6 @@ A37:   IC Result s2 = (Result s2).IC SCMPDS by AMI_1:def 15
        .= (Start-At (inspos (card I) + 2)).IC SCMPDS by A37,AMI_3:50
        .= SAl.IC SCMPDS by SCMPDS_3:def 3
        .= (IExec(I,s) +* SAl).x by A34,A35,FUNCT_4:14;
-
       end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (IExec(I,s) +* SAl).x by Th26;
@@ -2957,7 +2966,7 @@ A18:  IC s5 = s5.IC SCMPDS by AMI_1:def 15
      .=halt SCMPDS by A16,Th25;
 then A19: CurInstr s5 = halt SCMPDS by A18,AMI_1:def 17;
 then A20:  s3 is halting by AMI_1:def 20;
-    now let l be Nat;
+    now let l be Element of NAT;
        assume l < 1+1;
         then A21: l <= 1 by NAT_1:38;
         per cases by A21,CQC_THE1:2;
@@ -2969,7 +2978,7 @@ then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A13,SCMPDS_2:85;
       end;
       end;
-      then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
+      then for l be Element of NAT st CurInstr (Computation s3).l = halt SCMPDS
         holds 2 <= l;
   then LifeSpan s3 = 2 by A19,A20,SCM_1:def 2;
 then A22:  s5 = Result s3 by A20,SCMFSA6B:16;
@@ -3179,12 +3188,12 @@ then A20: s2 | D = s4 | D by SCMPDS_4:23;
           by A4,A7,A16,A17,A18,A20,Th45
     .= halt SCMPDS by A5,SCM_1:def 2;
 then A21: s3 is halting by AMI_1:def 20;
-        now let k be Nat;
+        now let k be Element of NAT;
       per cases;
-      suppose
-       0 < k;
+      suppose 0 < k;
         then consider k1 being Nat such that
 A22:    k1 + 1 = k by NAT_1:22;
+        reconsider k1 as Element of NAT by ORDINAL1:def 13;
        consider m such that
 A23:   inspos m = IC (Computation s2).k1 by SCMPDS_3:32;
 A24:   card pIF = card pI2+1 by A15,SCMPDS_5:7;
@@ -3269,11 +3278,12 @@ A19: IC s4 = s4.IC SCMPDS by AMI_1:def 15
     .= halt SCMPDS by A5,SCM_1:def 2;
 then A20: s3 is halting by AMI_1:def 20;
         now
-       let k be Nat;
+       let k be Element of NAT;
        per cases;
        suppose 0 < k;
           then consider k1 being Nat such that
 A21:      k1 + 1 = k by NAT_1:22;
+          reconsider k1 as Element of NAT by ORDINAL1:def 13;
           consider m such that
 A22:      inspos m = IC (Computation s1).k1 by SCMPDS_3:32;
 A23:      card pJ = card J + 1 by SCMPDS_5:7;
@@ -3359,7 +3369,7 @@ A19: CurInstr (Computation s3).(LifeSpan s2 + 1)
           by A4,A6,A14,A15,A16,A18,Th45
      .= halt SCMPDS by A5,SCM_1:def 2;
 then A20: s3 is halting by AMI_1:def 20;
-   now let l be Nat;
+   now let l be Element of NAT;
       assume
 A21:   l < LifeSpan s2 + 1;
       per cases;
@@ -3367,10 +3377,10 @@ A21:   l < LifeSpan s2 + 1;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A9,Th30;
       end;
-      suppose
-        l <> 0;
-         then consider n such that
+      suppose l <> 0;
+         then consider n be Nat such that
 A22:     l = n + 1 by NAT_1:22;
+         reconsider n as Element of NAT by ORDINAL1:def 13;
 A23:     n < LifeSpan s2 by A21,A22,XREAL_1:8;
         assume
 A24:       CurInstr (Computation s3).l = halt SCMPDS;
@@ -3381,7 +3391,7 @@ A24:       CurInstr (Computation s3).l = halt SCMPDS;
         hence contradiction by A5,A23,SCM_1:def 2;
      end;
      end;
-     then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
+     then for l be Element of NAT st CurInstr (Computation s3).l = halt SCMPDS
        holds LifeSpan s2 + 1 <= l;
 then A25: LifeSpan s3 = LifeSpan s2 + 1 by A19,A20,SCM_1:def 2;
 A26: (Result s2) | D = (Computation s2).(LifeSpan s2) | D by A5,SCMFSA6B:16
@@ -3429,7 +3439,6 @@ A38:   IC Result s2 = (Result s2).IC SCMPDS by AMI_1:def 15
        .= (Start-At inspos (card I + card J + 1 + 1)).IC SCMPDS
            by SCMPDS_3:def 3
        .= (IExec(I2,s) +* SAl).x by A35,A36,FUNCT_4:14;
-
       end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (IExec(I2,s) +* SAl).x by Th26;
@@ -3507,18 +3516,18 @@ A22:  CurInstr (Computation s3).(LifeSpan s1 + 1)
           by A4,A6,A18,A19,A21,Th45
       .= halt SCMPDS by A5,SCM_1:def 2;
 then A23:  s3 is halting by AMI_1:def 20;
-    now let l be Nat;
+    now let l be Element of NAT;
        assume
 A24:    l < LifeSpan s1 + 1;
        per cases;
        suppose l = 0;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A9,Th30;
-
        end;
        suppose l <> 0;
-       then consider n such that
+       then consider n be Nat such that
 A25:     l = n + 1 by NAT_1:22;
+         reconsider n as Element of NAT by ORDINAL1:def 13;
 A26:     n < LifeSpan s1 by A24,A25,XREAL_1:8;
          assume
 A27:       CurInstr (Computation s3).l = halt SCMPDS;
@@ -3528,7 +3537,7 @@ A27:       CurInstr (Computation s3).l = halt SCMPDS;
          hence contradiction by A5,A26,SCM_1:def 2;
       end;
       end;
-     then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
+     then for l be Element of NAT st CurInstr (Computation s3).l = halt SCMPDS
        holds LifeSpan s1 + 1 <= l;
 then A28:  LifeSpan s3 = LifeSpan s1 + 1 by A22,A23,SCM_1:def 2;
 A29:  (Result s1) | D = (Computation s1).(LifeSpan s1) | D by A5,SCMFSA6B:16
@@ -3755,12 +3764,12 @@ then A17: s2 | D = s4 | D by SCMPDS_4:23;
           by A4,A6,A14,A15,A17,Th45
     .= halt SCMPDS by A5,SCM_1:def 2;
 then A18: s3 is halting by AMI_1:def 20;
-        now let k be Nat;
+    now let k be Element of NAT;
       per cases;
-      suppose
-       0 < k;
+      suppose 0 < k;
         then consider k1 being Nat such that
 A19:    k1 + 1 = k by NAT_1:22;
+        reconsider k1 as Element of NAT by ORDINAL1:def 13;
        consider m such that
 A20:   inspos m = IC (Computation s2).k1 by SCMPDS_3:32;
 A21:   card pIF = card pI+1 by A13,SCMPDS_5:7;
@@ -3817,7 +3826,7 @@ A10: IC s4 = s4.IC SCMPDS by AMI_1:def 15
      .=halt SCMPDS by A8,Th25;
 then A11: CurInstr s4 = halt SCMPDS by A10,AMI_1:def 17;
         now
-       let k be Nat;
+       let k be Element of NAT;
        per cases;
        suppose 0 < k;
          then 1+0 <= k by INT_1:20;
@@ -3885,7 +3894,7 @@ A17: CurInstr (Computation s3).(LifeSpan s2 + 1)
           by A4,A6,A13,A14,A16,Th45
      .= halt SCMPDS by A5,SCM_1:def 2;
 then A18: s3 is halting by AMI_1:def 20;
-   now let l be Nat;
+   now let l be Element of NAT;
       assume
 A19:   l < LifeSpan s2 + 1;
       per cases;
@@ -3893,13 +3902,13 @@ A19:   l < LifeSpan s2 + 1;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A8,Th30;
       end;
-      suppose
-        l <> 0;
-         then consider n such that
+      suppose l <> 0;
+         then consider n be Nat such that
 A20:     l = n + 1 by NAT_1:22;
+         reconsider n as Element of NAT by ORDINAL1:def 13;
 A21:     n < LifeSpan s2 by A19,A20,XREAL_1:8;
         assume
-A22:       CurInstr (Computation s3).l = halt SCMPDS;
+A22:    CurInstr (Computation s3).l = halt SCMPDS;
            CurInstr (Computation s2).n
         = CurInstr (Computation s4).n
            by A4,A6,A13,A14,A16,Th45
@@ -3907,7 +3916,7 @@ A22:       CurInstr (Computation s3).l = halt SCMPDS;
         hence contradiction by A5,A21,SCM_1:def 2;
      end;
      end;
-     then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
+     then for l be Element of NAT st CurInstr (Computation s3).l = halt SCMPDS
        holds LifeSpan s2 + 1 <= l;
 then A23: LifeSpan s3 = LifeSpan s2 + 1 by A17,A18,SCM_1:def 2;
 A24: (Result s2) | D = (Computation s2).(LifeSpan s2) | D by A5,SCMFSA6B:16
@@ -3999,7 +4008,7 @@ A11: IC s4 = s4.IC SCMPDS by AMI_1:def 15
      .=halt SCMPDS by A9,Th25;
 then A12: CurInstr s4 = halt SCMPDS by A11,AMI_1:def 17;
 then A13:  s3 is halting by AMI_1:def 20;
-    now let l be Nat;
+    now let l be Element of NAT;
        assume l < 1;
         then l <1+0;
 then l <= 0 by NAT_1:38;
@@ -4007,7 +4016,7 @@ then l <= 0 by NAT_1:38;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A3,Th30;
       end;
-     then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
+     then for l be Element of NAT st CurInstr (Computation s3).l = halt SCMPDS
        holds 1 <= l;
   then LifeSpan s3 = 1 by A12,A13,SCM_1:def 2;
 then A14:  s4 = Result s3 by A13,SCMFSA6B:16;
@@ -4200,12 +4209,12 @@ then A17: s2 | D = s4 | D by SCMPDS_4:23;
           by A4,A6,A14,A15,A17,Th45
     .= halt SCMPDS by A5,SCM_1:def 2;
 then A18: s3 is halting by AMI_1:def 20;
-        now let k be Nat;
+        now let k be Element of NAT;
       per cases;
-      suppose
-       0 < k;
+      suppose 0 < k;
         then consider k1 being Nat such that
 A19:    k1 + 1 = k by NAT_1:22;
+         reconsider k1 as Element of NAT by ORDINAL1:def 13;
        consider m such that
 A20:   inspos m = IC (Computation s2).k1 by SCMPDS_3:32;
 A21:   card pIF = 1+ card IF by SCMPDS_5:7
@@ -4283,7 +4292,7 @@ A18:  IC s5 = s5.IC SCMPDS by AMI_1:def 15
      .=halt SCMPDS by A16,Th25;
 then A19: CurInstr s5 = halt SCMPDS by A18,AMI_1:def 17;
         now
-       let k be Nat;
+       let k be Element of NAT;
            k = 0 or 0 < k;
         then A20: k = 0 or 0 + 1 <= k by INT_1:20;
        per cases by A20,REAL_1:def 5;
@@ -4358,7 +4367,7 @@ A18: CurInstr (Computation s3).(LifeSpan s2 + 1)
           by A4,A6,A14,A15,A17,Th45
      .= halt SCMPDS by A5,SCM_1:def 2;
 then A19: s3 is halting by AMI_1:def 20;
-   now let l be Nat;
+   now let l be Element of NAT;
       assume
 A20:   l < LifeSpan s2 + 1;
       per cases;
@@ -4366,10 +4375,10 @@ A20:   l < LifeSpan s2 + 1;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A9,Th30;
       end;
-      suppose
-        l <> 0;
-         then consider n such that
+      suppose l <> 0;
+         then consider n be Nat such that
 A21:     l = n + 1 by NAT_1:22;
+         reconsider n as Element of NAT by ORDINAL1:def 13;
 A22:     n < LifeSpan s2 by A20,A21,XREAL_1:8;
         assume
 A23:       CurInstr (Computation s3).l = halt SCMPDS;
@@ -4380,7 +4389,7 @@ A23:       CurInstr (Computation s3).l = halt SCMPDS;
         hence contradiction by A5,A22,SCM_1:def 2;
      end;
      end;
-     then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
+     then for l be Element of NAT st CurInstr (Computation s3).l = halt SCMPDS
        holds LifeSpan s2 + 1 <= l;
 then A24: LifeSpan s3 = LifeSpan s2 + 1 by A18,A19,SCM_1:def 2;
 A25: (Result s2) | D = (Computation s2).(LifeSpan s2) | D by A5,SCMFSA6B:16
@@ -4489,7 +4498,7 @@ A18:  IC s5 = s5.IC SCMPDS by AMI_1:def 15
      .=halt SCMPDS by A16,Th25;
 then A19: CurInstr s5 = halt SCMPDS by A18,AMI_1:def 17;
 then A20:  s3 is halting by AMI_1:def 20;
-    now let l be Nat;
+    now let l be Element of NAT;
        assume l < 1+1;
         then A21: l <= 1 by NAT_1:38;
         per cases by A21,CQC_THE1:2;
@@ -4501,7 +4510,8 @@ then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A13,SCMPDS_2:85;
       end;
       end;
-     then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS holds
+     then for l be Element of NAT st CurInstr (Computation s3).l = halt SCMPDS
+     holds
        2 <= l;
   then LifeSpan s3 = 2 by A19,A20,SCM_1:def 2;
 then A22:  s5 = Result s3 by A20,SCMFSA6B:16;
@@ -4711,12 +4721,12 @@ then A20: s2 | D = s4 | D by SCMPDS_4:23;
           by A4,A7,A16,A17,A18,A20,Th45
     .= halt SCMPDS by A5,SCM_1:def 2;
 then A21: s3 is halting by AMI_1:def 20;
-        now let k be Nat;
+        now let k be Element of NAT;
       per cases;
-      suppose
-       0 < k;
+      suppose 0 < k;
         then consider k1 being Nat such that
 A22:    k1 + 1 = k by NAT_1:22;
+       reconsider k1 as Element of NAT by ORDINAL1:def 13;
        consider m such that
 A23:   inspos m = IC (Computation s2).k1 by SCMPDS_3:32;
 A24:   card pIF = card pI2+1 by A15,SCMPDS_5:7;
@@ -4801,11 +4811,12 @@ A19: IC s4 = s4.IC SCMPDS by AMI_1:def 15
     .= halt SCMPDS by A5,SCM_1:def 2;
 then A20: s3 is halting by AMI_1:def 20;
         now
-       let k be Nat;
+       let k be Element of NAT;
        per cases;
        suppose 0 < k;
           then consider k1 being Nat such that
 A21:      k1 + 1 = k by NAT_1:22;
+          reconsider k1 as Element of NAT by ORDINAL1:def 13;
           consider m such that
 A22:      inspos m = IC (Computation s1).k1 by SCMPDS_3:32;
 A23:      card pJ = card J + 1 by SCMPDS_5:7;
@@ -4822,8 +4833,8 @@ A24:      card pIF = card IF+1 by SCMPDS_5:7
          hence IC C3.k in dom pIF by A24,A25,SCMPDS_4:1;
       end;
       suppose k = 0;
-          then C3.k = s3 by AMI_1:def 19;
-         hence IC C3.k in dom pIF by A8,SCMPDS_4:75;
+        then C3.k = s3 by AMI_1:def 19;
+        hence IC C3.k in dom pIF by A8,SCMPDS_4:75;
      end;
      end;
      hence IF is_closed_on s by Def2;
@@ -4891,7 +4902,7 @@ A19: CurInstr (Computation s3).(LifeSpan s2 + 1)
           by A4,A6,A14,A15,A16,A18,Th45
      .= halt SCMPDS by A5,SCM_1:def 2;
 then A20: s3 is halting by AMI_1:def 20;
-   now let l be Nat;
+   now let l be Element of NAT;
       assume
 A21:   l < LifeSpan s2 + 1;
       per cases;
@@ -4900,8 +4911,9 @@ then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A9,Th31;
       end;
       suppose l <> 0;
-         then consider n such that
+         then consider n be Nat such that
 A22:     l = n + 1 by NAT_1:22;
+         reconsider n as Element of NAT by ORDINAL1:def 13;
 A23:     n < LifeSpan s2 by A21,A22,XREAL_1:8;
         assume
 A24:       CurInstr (Computation s3).l = halt SCMPDS;
@@ -4912,7 +4924,8 @@ A24:       CurInstr (Computation s3).l = halt SCMPDS;
         hence contradiction by A5,A23,SCM_1:def 2;
      end;
      end;
-     then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS holds
+     then for l be Element of NAT st CurInstr (Computation s3).l = halt SCMPDS
+     holds
        LifeSpan s2 + 1 <= l;
 then A25: LifeSpan s3 = LifeSpan s2 + 1 by A19,A20,SCM_1:def 2;
 A26: (Result s2) | D = (Computation s2).(LifeSpan s2) | D by A5,SCMFSA6B:16
@@ -5037,18 +5050,18 @@ A22:  CurInstr (Computation s3).(LifeSpan s1 + 1)
           by A4,A6,A18,A19,A21,Th45
       .= halt SCMPDS by A5,SCM_1:def 2;
 then A23:  s3 is halting by AMI_1:def 20;
-    now let l be Nat;
+    now let l be Element of NAT;
        assume
 A24:    l < LifeSpan s1 + 1;
        per cases;
        suppose l = 0;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A9,Th31;
-
        end;
        suppose l <> 0;
-       then consider n such that
+       then consider n be Nat such that
 A25:     l = n + 1 by NAT_1:22;
+         reconsider n as Element of NAT by ORDINAL1:def 13;
 A26:     n < LifeSpan s1 by A24,A25,XREAL_1:8;
          assume
 A27:       CurInstr (Computation s3).l = halt SCMPDS;
@@ -5058,7 +5071,8 @@ A27:       CurInstr (Computation s3).l = halt SCMPDS;
          hence contradiction by A5,A26,SCM_1:def 2;
       end;
       end;
-     then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS holds
+     then for l be Element of NAT st CurInstr (Computation s3).l = halt SCMPDS
+     holds
        LifeSpan s1 + 1 <= l;
 then A28:  LifeSpan s3 = LifeSpan s1 + 1 by A22,A23,SCM_1:def 2;
 A29:  (Result s1) | D = (Computation s1).(LifeSpan s1) | D by A5,SCMFSA6B:16
@@ -5285,12 +5299,12 @@ then A17: s2 | D = s4 | D by SCMPDS_4:23;
           by A4,A6,A14,A15,A17,Th45
     .= halt SCMPDS by A5,SCM_1:def 2;
 then A18: s3 is halting by AMI_1:def 20;
-        now let k be Nat;
+        now let k be Element of NAT;
       per cases;
-      suppose
-       0 < k;
+      suppose 0 < k;
         then consider k1 being Nat such that
 A19:    k1 + 1 = k by NAT_1:22;
+       reconsider k1 as Element of NAT by ORDINAL1:def 13;
        consider m such that
 A20:   inspos m = IC (Computation s2).k1 by SCMPDS_3:32;
 A21:   card pIF = card pI+1 by A13,SCMPDS_5:7;
@@ -5310,7 +5324,7 @@ then A22:  m+1 < card pIF by A21,XREAL_1:8;
      thus IF is_halting_on s by A18,Def3;
 end;
 
-theorem Th123: ::L,S8B_16
+theorem Th123:
  for s being State of SCMPDS,I being Program-block, a being Int_position,
  k1 being Integer st s.DataLoc(s.a,k1) >= 0 holds
      if<0(a,k1,I) is_closed_on s & if<0(a,k1,I) is_halting_on s
@@ -5347,7 +5361,7 @@ A10: IC s4 = s4.IC SCMPDS by AMI_1:def 15
      .=halt SCMPDS by A8,Th25;
 then A11: CurInstr s4 = halt SCMPDS by A10,AMI_1:def 17;
         now
-       let k be Nat;
+       let k be Element of NAT;
        per cases;
        suppose 0 < k;
          then 1+0 <= k by INT_1:20;
@@ -5415,7 +5429,7 @@ A17: CurInstr (Computation s3).(LifeSpan s2 + 1)
           by A4,A6,A13,A14,A16,Th45
      .= halt SCMPDS by A5,SCM_1:def 2;
 then A18: s3 is halting by AMI_1:def 20;
-   now let l be Nat;
+   now let l be Element of NAT;
       assume
 A19:   l < LifeSpan s2 + 1;
       per cases;
@@ -5423,10 +5437,10 @@ A19:   l < LifeSpan s2 + 1;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A8,Th31;
       end;
-      suppose
-        l <> 0;
-         then consider n such that
+      suppose l <> 0;
+         then consider n be Nat such that
 A20:     l = n + 1 by NAT_1:22;
+         reconsider n as Element of NAT by ORDINAL1:def 13;
 A21:     n < LifeSpan s2 by A19,A20,XREAL_1:8;
         assume
 A22:       CurInstr (Computation s3).l = halt SCMPDS;
@@ -5437,7 +5451,8 @@ A22:       CurInstr (Computation s3).l = halt SCMPDS;
         hence contradiction by A5,A21,SCM_1:def 2;
      end;
      end;
-     then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS holds
+     then for l be Element of NAT st CurInstr (Computation s3).l = halt SCMPDS
+     holds
        LifeSpan s2 + 1 <= l;
 then A23: LifeSpan s3 = LifeSpan s2 + 1 by A17,A18,SCM_1:def 2;
 A24: (Result s2) | D = (Computation s2).(LifeSpan s2) | D by A5,SCMFSA6B:16
@@ -5529,7 +5544,7 @@ A11: IC s4 = s4.IC SCMPDS by AMI_1:def 15
      .=halt SCMPDS by A9,Th25;
 then A12: CurInstr s4 = halt SCMPDS by A11,AMI_1:def 17;
 then A13:  s3 is halting by AMI_1:def 20;
-    now let l be Nat;
+    now let l be Element of NAT;
        assume l < 1;
         then l <1+0;
 then l <= 0 by NAT_1:38;
@@ -5537,7 +5552,7 @@ then l <= 0 by NAT_1:38;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A3,Th31;
       end;
-      then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
+      then for l be Element of NAT st CurInstr (Computation s3).l = halt SCMPDS
         holds 1 <= l;
   then LifeSpan s3 = 1 by A12,A13,SCM_1:def 2;
 then A14:  s4 = Result s3 by A13,SCMFSA6B:16;
@@ -5730,12 +5745,12 @@ then A17: s2 | D = s4 | D by SCMPDS_4:23;
           by A4,A6,A14,A15,A17,Th45
     .= halt SCMPDS by A5,SCM_1:def 2;
 then A18: s3 is halting by AMI_1:def 20;
-        now let k be Nat;
+        now let k be Element of NAT;
       per cases;
-      suppose
-       0 < k;
+      suppose 0 < k;
         then consider k1 being Nat such that
 A19:    k1 + 1 = k by NAT_1:22;
+       reconsider k1 as Element of NAT by ORDINAL1:def 13;
        consider m such that
 A20:   inspos m = IC (Computation s2).k1 by SCMPDS_3:32;
 A21:   card pIF = 1+ card IF by SCMPDS_5:7
@@ -5813,7 +5828,7 @@ A18:  IC s5 = s5.IC SCMPDS by AMI_1:def 15
      .=halt SCMPDS by A16,Th25;
 then A19: CurInstr s5 = halt SCMPDS by A18,AMI_1:def 17;
         now
-       let k be Nat;
+       let k be Element of NAT;
            k = 0 or 0 < k;
         then A20: k = 0 or 0 + 1 <= k by INT_1:20;
        per cases by A20,REAL_1:def 5;
@@ -5888,7 +5903,7 @@ A18: CurInstr (Computation s3).(LifeSpan s2 + 1)
           by A4,A6,A14,A15,A17,Th45
      .= halt SCMPDS by A5,SCM_1:def 2;
 then A19: s3 is halting by AMI_1:def 20;
-   now let l be Nat;
+   now let l be Element of NAT;
       assume
 A20:   l < LifeSpan s2 + 1;
       per cases;
@@ -5896,10 +5911,10 @@ A20:   l < LifeSpan s2 + 1;
 then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A9,Th31;
       end;
-      suppose
-        l <> 0;
-         then consider n such that
+      suppose l <> 0;
+         then consider n be Nat such that
 A21:     l = n + 1 by NAT_1:22;
+         reconsider n as Element of NAT by ORDINAL1:def 13;
 A22:     n < LifeSpan s2 by A20,A21,XREAL_1:8;
         assume
 A23:       CurInstr (Computation s3).l = halt SCMPDS;
@@ -5910,7 +5925,7 @@ A23:       CurInstr (Computation s3).l = halt SCMPDS;
         hence contradiction by A5,A22,SCM_1:def 2;
      end;
      end;
-     then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
+     then for l be Element of NAT st CurInstr (Computation s3).l = halt SCMPDS
        holds LifeSpan s2 + 1 <= l;
 then A24: LifeSpan s3 = LifeSpan s2 + 1 by A18,A19,SCM_1:def 2;
 A25: (Result s2) | D = (Computation s2).(LifeSpan s2) | D by A5,SCMFSA6B:16
@@ -5956,7 +5971,6 @@ A37:   IC Result s2 = (Result s2).IC SCMPDS by AMI_1:def 15
        .= (Start-At (inspos (card I) + 2)).IC SCMPDS by A37,AMI_3:50
        .= SAl.IC SCMPDS by SCMPDS_3:def 3
        .= (IExec(I,s) +* SAl).x by A34,A35,FUNCT_4:14;
-
       end;
       suppose x is Instruction-Location of SCMPDS;
        hence IExec(IF,s).x = (IExec(I,s) +* SAl).x by Th26;
@@ -6021,7 +6035,7 @@ A18:  IC s5 = s5.IC SCMPDS by AMI_1:def 15
      .=halt SCMPDS by A16,Th25;
 then A19: CurInstr s5 = halt SCMPDS by A18,AMI_1:def 17;
 then A20:  s3 is halting by AMI_1:def 20;
-    now let l be Nat;
+    now let l be Element of NAT;
        assume l < 1+1;
         then A21: l <= 1 by NAT_1:38;
         per cases by A21,CQC_THE1:2;
@@ -6033,7 +6047,7 @@ then CurInstr (Computation s3).l = CurInstr s3 by AMI_1:def 19;
          hence CurInstr (Computation s3).l <> halt SCMPDS by A13,SCMPDS_2:85;
       end;
       end;
-     then for l be Nat st CurInstr (Computation s3).l = halt SCMPDS
+     then for l be Element of NAT st CurInstr (Computation s3).l = halt SCMPDS
        holds 2 <= l;
   then LifeSpan s3 = 2 by A19,A20,SCM_1:def 2;
 then A22:  s5 = Result s3 by A20,SCMFSA6B:16;

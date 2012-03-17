@@ -9,7 +9,8 @@ environ
  vocabularies FINSEQ_1, TREES_3, RELAT_1, FUNCT_1, FINSET_1, TREES_2, BOOLE,
       TREES_4, FUNCT_3, MCART_1, LANG1, TDGROUP, PROB_1, TARSKI, TREES_1,
       FUNCT_6, BINOP_1, FINSOP_1, FINSEQ_2, DTCONSTR, SETWISEO;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELSET_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0,
+      NAT_1, RELSET_1,
       RELAT_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSET_1,
       MCART_1, CARD_3, DOMAIN_1, BINOP_1, FINSOP_1, LANG1, TREES_1, TREES_2,
       FINSEQ_4, TREES_3, TREES_4, SETWISEO, FINSEQOP, XXREAL_0;
@@ -22,7 +23,7 @@ environ
  theorems TARSKI, NAT_1, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_6, MCART_1,
       FINSOP_1, BINOP_1, LANG1, FINSEQ_1, FINSEQ_2, FINSEQ_3, CARD_5, TREES_1,
       TREES_2, TREES_3, TREES_4, STRUCT_0, CARD_3, RELSET_1, XBOOLE_0,
-      XBOOLE_1, MEASURE2, XXREAL_0, SETWISEO;
+      XBOOLE_1, MEASURE2, XXREAL_0, SETWISEO, ORDINAL1;
  schemes NAT_1, RECDEF_1, CQC_SIM1, FINSEQ_1, BINOP_1, RELSET_1, FRAENKEL,
       FUNCT_2, WELLORD2;
 
@@ -87,7 +88,7 @@ definition
    let x be set; assume x in rng roots p;
      then consider k being set such that
   A1: k in dom roots p & x = (roots p).k by FUNCT_1:def 5;
-     reconsider k as Nat by A1,FINSEQ_3:25;
+     reconsider k as Element of NAT by A1,FINSEQ_3:25;
   A2: dom roots p = dom p by TREES_3:def 18;
      then consider t being DecoratedTree such that
   A3: t = p.k & (roots p).k = t.{} by A1,TREES_3:def 18;
@@ -108,7 +109,7 @@ for T being DecoratedTree holds roots <*T*> = <*T.{}*>
 proof let T be DecoratedTree;
 A1: dom <*T*> = Seg 1 & dom <*T.{}*> = Seg 1 & <*T*> is DTree-yielding &
    <*T*>.1 = T & <*T.{}*>.1 = T.{} by FINSEQ_1:def 8;
-      now let i be Nat; assume
+      now let i be Element of NAT; assume
 A2:   i in dom <*T*>;
     take t = T;
     thus t = <*T*>.i & <*T.{}*>.i = t.{} by A1,A2,FINSEQ_1:4,TARSKI:def 1;
@@ -139,7 +140,7 @@ A1: len <*T1, T2*> = 2 & len <*T1.{}, T2.{}*> = 2 &
    <*T1, T2*>.2 = T2 & <*T1.{}, T2.{}*>.2 = T2.{} by FINSEQ_1:61;
 then A2: dom <*T1, T2*> = Seg 2 & dom <*T1.{}, T2.{}*> = Seg 2
      by FINSEQ_1:def 3;
-      now let i be Nat; assume i in dom <*T1, T2*>;
+      now let i be Element of NAT; assume i in dom <*T1, T2*>;
      then i in Seg 2 by A1,FINSEQ_1:def 3;
      then i = 1 or i = 2 by FINSEQ_1:4,TARSKI:def 2;
     hence ex t being DecoratedTree st
@@ -306,7 +307,7 @@ A2:  f().0 = { root-tree [t, d] where t is Symbol of G(),
                                   d is Element of D() :
            t in Terminals G() & d = TermVal(t) or
            t ==> {} & d = NTermVal(t, {}, {}) } and
-A3:  for n being Nat holds f().(n+1) =
+A3:  for n being Element of NAT holds f().(n+1) =
      f().n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G(), p is Element of (f().n)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
@@ -321,7 +322,7 @@ deffunc
    let u be set; assume u in Union f;
     then consider k being set such that
 A4: k in NAT & u in f.k by A1,CARD_5:10;
-  defpred P[Nat] means for u being set st u in f.$1 holds
+  defpred P[Element of NAT] means for u being set st u in f.$1 holds
    u in FinTrees [:the carrier of G, D:];
 A5: P[0] proof let u be set; assume
          u in f.0;
@@ -331,7 +332,7 @@ A5: P[0] proof let u be set; assume
                t ==> {} & d = NTermVal(t, {}, {})) by A2;
      hence u in FinTrees [:the carrier of G, D:];
     end;
-A6: now let n be Nat such that
+A6: now let n be Element of NAT such that
 A7:   P[n];
      thus P[n+1]
      proof
@@ -358,7 +359,7 @@ A10:     u = [o, NTV(o, p)]-tree p &
      hence contradiction by A9;
      end;
     end;
-     for n being Nat holds P[n] from NAT_1:sch 1(A5,A6);
+     for n being Element of NAT holds P[n] from NAT_1:sch 1(A5,A6);
     hence thesis by A4;
   end;
  then reconsider X = Union f as Subset of FinTrees [:the carrier of G, D:];
@@ -375,8 +376,9 @@ A11: o ==> pr1 roots p;
    set s = pr1 roots p, v = pr2 roots p;
 A12: dom p = Seg len p by FINSEQ_1:def 3;
      defpred P[set,set] means p.$1 in f.($2);
-A13: for x being Nat st x in Seg len p ex n being Nat st P[x,n] proof
-     let x be Nat; assume
+A13: for x being Element of NAT st x in Seg len p
+          ex n being Element of NAT st P[x,n] proof
+     let x be Element of NAT; assume
         x in Seg len p;
      then p.x in rng p & rng p c= X by A12,FINSEQ_1:def 4,FUNCT_1:def 5;
      then ex n being set st n in NAT & p.x in f.n by A1,CARD_5:10;
@@ -384,46 +386,49 @@ A13: for x being Nat st x in Seg len p ex n being Nat st P[x,n] proof
    end;
   consider pn being FinSequence of NAT such that
 A14: dom pn = Seg len p &
-     for k being Nat st k in Seg len p holds P[k,pn.k]
+     for k being Element of NAT st k in Seg len p holds P[k,pn.k]
       from FINSEQ_1:sch 5(A13);
 A15: now
-defpred P[Nat,Nat] means $1 >= $2;
+defpred P[Element of NAT,Element of NAT] means $1 >= $2;
   assume rng pn <> {};
 then A16: rng pn is finite & rng pn <> {} & rng pn c= NAT by FINSEQ_1:def 4;
-A17: for x, y being Nat holds P[x,y] or P[y,x];
-A18: for x, y, z being Nat st P[x,y] & P[y,z] holds P[x,z] by XXREAL_0:2;
-   consider n being Nat such that
-A19:  n in rng pn & for y being Nat st y in rng pn holds P[n,y]
+A17: for x, y being Element of NAT holds P[x,y] or P[y,x];
+A18: for x, y, z being Element of NAT st P[x,y] & P[y,z] holds P[x,z]
+ by XXREAL_0:2;
+   consider n being Element of NAT such that
+A19:  n in rng pn & for y being Element of NAT st y in rng pn holds P[n,y]
                                 from CQC_SIM1:sch 4 ( A16, A17, A18 );
    take n;
    thus rng p c= f.n proof
     let t be set; assume t in rng p;
      then consider k being set such that
 A20:  k in dom p & t = p.k by FUNCT_1:def 5;
-     reconsider k as Nat by A20,FINSEQ_3:25;
+     reconsider k as Element of NAT by A20,FINSEQ_3:25;
 A21:  pn.k in rng pn by A12,A14,A20,FUNCT_1:def 5;
-    then reconsider pnk = pn.k as Nat by A16;
+    then reconsider pnk = pn.k as Element of NAT by A16;
        n >= pnk by A19,A21;
     then consider s being Nat such that
-A22:   n = pnk + s by NAT_1:28;
+aA22:   n = pnk + s by NAT_1:28;
+       reconsider s as Element of NAT by ORDINAL1:def 13;
+A22:   n = pnk + s by aA22;
     deffunc H(set,set) =
     { [o1, NTermVal(o1, pr1 roots p1, pr2 roots p1)]-tree p1
            where o1 is Symbol of G(), p1 is Element of (f.$1)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
                                p1 = q & o1 ==> pr1 roots q };
-A23: for n being Nat holds f.n c= f.(n+1)
+A23: for n being Element of NAT holds f.n c= f.(n+1)
     proof
-      let n be Nat;
+      let n be Element of NAT;
       f.(n+1) = f.n \/ H(n, f.n) by A3;
       hence thesis by XBOOLE_1:7;
     end;
-    for k, s being Nat holds f.k c= f.(k+s)
+    for k, s being Element of NAT holds f.k c= f.(k+s)
     proof
-      let k, s be Nat;
+      let k, s be Element of NAT;
       k <= k+s by NAT_1:29;
       hence thesis by A23,MEASURE2:22;
     end;
-then A24:  f.pnk c= f.n by A22;
+    then A24:  f.pnk c= f.n by A22;
        t in f.(pn.k) by A12,A14,A20;
     hence thesis by A24;
    end;
@@ -433,11 +438,11 @@ then A24:  f.pnk c= f.n by A22;
    then dom pn = {} by FINSEQ_1:26;
    then p = {} by A12,A14,FINSEQ_1:26;
 then A25:   rng p = {} by FINSEQ_1:27;
-   consider n being Nat;
+   consider n being Element of NAT;
    take n;
    thus rng p c= f.n by A25,XBOOLE_1:2;
   end;
-then consider n being Nat such that
+then consider n being Element of NAT such that
 A26: rng p c= f.n by A15;
       X = union rng f & f.n in rng f by A1,FUNCT_1:def 5,CARD_3:def 4;
    then f.n c= X by ZFMISC_1:92;
@@ -464,7 +469,7 @@ A27: (for d being Symbol of G st d in Terminals G
                               holds root-tree [d, TermVal(d)] in F) &
    (for o being Symbol of G, p being FinSequence of F st o ==> pr1 roots p
          holds [o, NTV(o, p)]-tree p in F);
-         defpred P[Nat] means f.$1 c= F;
+         defpred P[Element of NAT] means f.$1 c= F;
    A28:P[0] proof let x be set;
        reconsider p = {} as FinSequence of F by FINSEQ_1:29;
        assume x in f.0;
@@ -475,7 +480,7 @@ A27: (for d being Symbol of G st d in Terminals G
             [t, d]-tree p = root-tree [t, d] by TREES_4:20;
         hence x in F by A27,A29;
        end;
-   A30: now let n be Nat such that
+   A30: now let n be Element of NAT such that
     A31:  P[n];
        thus P[n+1] proof let x be set; assume
     A32:   x in f.(n+1) & not x in F;
@@ -499,7 +504,7 @@ A27: (for d being Symbol of G st d in Terminals G
          hence contradiction by A27,A32,A33;
         end;
        end;
-    A34: for n being Nat holds P[n] from NAT_1:sch 1 (A28, A30);
+    A34: for n being Element of NAT holds P[n] from NAT_1:sch 1 (A28, A30);
   thus X c= F proof
        let x be set; assume x in X;
            then consider n being set such that
@@ -530,7 +535,7 @@ A2:  f().0 = { root-tree [t, d] where t is Symbol of G(),
                                   d is Element of D() :
            t in Terminals G() & d = TermVal(t) or
            t ==> {} & d = NTermVal(t, {}, {}) } and
-A3:  for n being Nat holds f().(n+1) =
+A3:  for n being Element of NAT holds f().(n+1) =
      f().n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G(), p is Element of (f().n)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
@@ -547,7 +552,7 @@ A4:  f().0 = { root-tree [t, d] where t is Symbol of G(),
                                   d is Element of D() :
            t in Terminals G() & d = TermVal(t) or
            t ==> {} & d = NTermVal(t, {}, {}) } by A2;
-A5:  for n being Nat
+A5:  for n being Element of NAT
     holds f().(n+1) =
      f().n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G(), p is Element of (f().n)* :
@@ -598,10 +603,10 @@ A11: dom ts = Seg len ts by FINSEQ_1:def 3;
     defpred P[set,set] means
      ex dt being DecoratedTree of [:the carrier of G(), D():] st
            dt = $2 & dt`1 = ts.$1 & dt in Union f;
-A12: for k being Nat st k in Seg len ts
+A12: for k being Element of NAT st k in Seg len ts
      ex x being Element of FinTrees [:the carrier of G, D:] st P[k,x]
       proof
-    let k be Nat; assume
+    let k be Element of NAT; assume
         k in Seg len ts;
      then ts.k in rng ts & rng ts c= X1 by A11,FINSEQ_1:def 4,FUNCT_1:def 5;
      then ts.k in X1;
@@ -612,14 +617,14 @@ A12: for k being Nat st k in Seg len ts
  consider dts being FinSequence of FinTrees [:the carrier of G, D:]
    such that
 A13: dom dts = Seg len ts and
-A14: for k being Nat st k in Seg len ts holds P[k,dts.k]
+A14: for k being Element of NAT st k in Seg len ts holds P[k,dts.k]
           from FINSEQ_1:sch 5(A12);
        rng dts c= Union f proof
      let x be set; assume
         x in rng dts;
       then consider k being set such that
 A15:  k in dom ts & x = dts.k by A11,A13,FUNCT_1:def 5;
-      reconsider k as Nat by A15,FINSEQ_3:25;
+      reconsider k as Element of NAT by A15,FINSEQ_3:25;
         ex dt being DecoratedTree of [:the carrier of G(), D():]
        st dt = x & dt`1 = ts.k & dt in Union f by A11,A14,A15;
      hence thesis;
@@ -630,7 +635,7 @@ A17: dom pr1 roots dts = dom roots dts & dom pr2 roots dts = dom roots dts
                     by MCART_1:def 12,def 13;
 then A18: dom pr1 roots dts = dom ts & dom pr2 roots dts = dom ts
                     by A11,A13,TREES_3:def 18;
-        now let k be Nat; assume
+        now let k be Element of NAT; assume
 A19:    k in dom ts;
         then consider dt being DecoratedTree of [:the carrier of G(), D():]
            such that
@@ -660,7 +665,7 @@ A24: rng ts c= FinTrees the carrier of G() by FINSEQ_1:def 4;
     then rng ts c= Trees the carrier of G() by A24,XBOOLE_1:1;
     then reconsider ts' = ts as FinSequence of Trees the carrier of G()
                                    by FINSEQ_1:def 4;
-      now let i be Nat; assume i in dom dts;
+      now let i be Element of NAT; assume i in dom dts;
     then consider dt being DecoratedTree of [:the carrier of G, D:] such that
 A25: dt = dts.i & dt`1 = ts.i & dt in Union f by A13,A14;
     let T be DecoratedTree of [:the carrier of G(), D():]; assume
@@ -696,14 +701,14 @@ then A30:   root-tree d in F by A26;
 A31: o ==> pr1 roots p;
      consider p1 being FinSequence of FinTrees S such that
 A32:  dom p1 = dom p and
-A33:  for i being Nat st i in dom p
+A33:  for i being Element of NAT st i in dom p
       ex T being Element of FinTrees SxD st T = p.i & p1.i = T`1 and
 A34:  ([o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p)`1 = o-tree p1
                                                   by TREES_4:31;
         rng p1 c= F proof let x be set; assume
           x in rng p1; then consider k being set such that
  A35:  k in dom p1 & x = p1.k by FUNCT_1:def 5;
-       reconsider k as Nat by A35,FINSEQ_3:25;
+       reconsider k as Element of NAT by A35,FINSEQ_3:25;
  A36:  p.k in rng p by A32,A35,FUNCT_1:def 5;
        consider dt being Element of FinTrees SxD such that
  A37:  dt = p.k & x = dt`1 by A32,A33,A35;
@@ -717,7 +722,7 @@ A34:  ([o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p)`1 = o-tree p1
      A38: dom roots p1 = dom p1 by TREES_3:def 18;
      A39: dom pr1 roots p = dom roots p by MCART_1:def 12;
      then A40: dom pr1 roots p = dom p1 by A32,TREES_3:def 18;
-        now let k be Nat; assume
+        now let k be Element of NAT; assume
      A41:  k in dom p1;
      then A42:  p.k in rng p by A32,FUNCT_1:def 5;
           consider dt being Element of FinTrees SxD such that
@@ -752,7 +757,8 @@ scheme DTCHeight { f() -> Function,
                    G() -> non empty DTConstrStr, D() -> non empty set,
                    TermVal(set) -> Element of D(),
                    NTermVal(set, set, set) -> Element of D()}:
-for n being Nat, dt being Element of FinTrees [:the carrier of G(), D():]
+for n being Element of NAT,
+    dt being Element of FinTrees [:the carrier of G(), D():]
  st dt in Union f() holds dt in f().n iff height dom dt <= n
 provided
 A1:  dom f() = NAT and
@@ -760,7 +766,7 @@ A2:  f().0 = { root-tree [t, d] where t is Symbol of G(),
                                   d is Element of D() :
            t in Terminals G() & d = TermVal(t) or
            t ==> {} & d = NTermVal(t, {}, {}) } and
-A3:  for n being Nat holds f().(n+1) =
+A3:  for n being Element of NAT holds f().(n+1) =
      f().n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G(), p is Element of (f().n)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
@@ -772,7 +778,7 @@ set D = D();
 set SxD = [:the carrier of G, D:];
 deffunc
  NTV(Symbol of G, FinSequence) =NTermVal($1, pr1 roots $2, pr2 roots $2);
- defpred R[Nat] means
+ defpred R[Element of NAT] means
 for dt being Element of FinTrees SxD st dt in Union f
               holds dt in f.$1 iff height dom dt <= $1;
  A4: R[0]
@@ -790,10 +796,10 @@ for dt being Element of FinTrees SxD st dt in Union f
      assume height dom dt <= 0;
        then height dom dt = 0;
   then A6:  dom dt = elementary_tree 0 by TREES_1:80;
-  defpred P[Nat] means not dt in f.$1;
+  defpred P[Element of NAT] means not dt in f.$1;
      assume
   A7:  P[0];
-  A8: now let n be Nat; assume
+  A8: now let n be Element of NAT; assume
    A9: P[n];
         thus P[n+1]
         proof
@@ -817,11 +823,11 @@ then A12:         p = {} by A10,TREES_4:17;
         hence contradiction by A2,A7,A10,A12,Th3,Th7;
         end;
        end;
-  A13:  for n being Nat holds P[n] from NAT_1:sch 1 (A7, A8);
+  A13:  for n being Element of NAT holds P[n] from NAT_1:sch 1 (A7, A8);
           ex n being set st n in NAT & dt in f.n by A1,A5,CARD_5:10;
      hence contradiction by A13;
     end;
-A14: now let n be Nat; assume
+A14: now let n be Element of NAT; assume
   A15: R[n];
     thus R[n+1]
     proof
@@ -867,25 +873,26 @@ A14: now let n be Nat; assume
      end;
      assume
    A25: height dom dt <= n+1;
-   defpred P[Nat] means dt in f.$1;
+   defpred P[Element of NAT] means dt in f.$1;
           ex k being set st k in NAT & dt in f.k by A1,A16,CARD_5:10;
-   then A26: ex k being Nat st P[k];
-       consider mk being Nat such that
-   A27: P[mk] & for kk being Nat st P[kk] holds mk <= kk from NAT_1:sch 5
+   then A26: ex k being Element of NAT st P[k];
+       consider mk being Element of NAT such that
+   A27: P[mk] & for kk being Element of NAT st P[kk] holds mk <= kk
+    from NAT_1:sch 5
  (A26);
    deffunc F(set,set) = { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G(), p is Element of (f.$1)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
                                p = q & o ==> pr1 roots q };
-A28: for n being Nat holds f.n c= f.(n+1)
+A28: for n being Element of NAT holds f.n c= f.(n+1)
    proof
-     let n be Nat;
+     let n be Element of NAT;
      f.(n+1) = f.n \/ F(n, f.n) by A3;
      hence thesis by XBOOLE_1:7;
    end;
-A29: for k, s being Nat holds f.k c= f.(k+s)
+A29: for k, s being Element of NAT holds f.k c= f.(k+s)
      proof
-       let k, s be Nat;
+       let k, s be Element of NAT;
        k <= k+s by NAT_1:29;
        hence thesis by MEASURE2:22,A28;
      end;
@@ -897,6 +904,7 @@ A29: for k, s being Nat holds f.k c= f.(k+s)
      suppose ex k being Nat st mk = k+1;
       then consider k being Nat such that
    A30: mk = k+1;
+   reconsider k as Element of NAT by ORDINAL1:def 13;
 A31:       k < k+1 by NAT_1:38;
           f.mk = f.k \/ {[o, NTV(o, p)]-tree p
            where o is Symbol of G, p is Element of (f.k)* :
@@ -945,7 +953,7 @@ A31:       k < k+1 by NAT_1:38;
      end;
      end;
     end;
-thus for n being Nat holds R[n] from NAT_1:sch 1 (A4, A14);
+thus for n being Element of NAT holds R[n] from NAT_1:sch 1 (A4, A14);
 end;
 
 scheme DTCUniq { f() -> Function,
@@ -960,7 +968,7 @@ A2:  f().0 = { root-tree [t, d] where t is Symbol of G(),
                                   d is Element of D() :
            t in Terminals G() & d = TermVal(t) or
            t ==> {} & d = NTermVal(t, {}, {}) } and
-A3:  for n being Nat holds f().(n+1) =
+A3:  for n being Element of NAT holds f().(n+1) =
      f().n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G(), p is Element of (f().n)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
@@ -977,13 +985,13 @@ A4:  f().0 = { root-tree [t, d] where t is Symbol of G(),
                                   d is Element of D() :
            t in Terminals G() & d = TermVal(t) or
            t ==> {} & d = NTermVal(t, {}, {}) } by A2;
-A5:  for n being Nat
+A5:  for n being Element of NAT
     holds f().(n+1) =
      f().n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G(), p is Element of (f().n)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
                                p = q & o ==> pr1 roots q } by A3;
- defpred R[Nat] means
+ defpred R[Element of NAT] means
 for dt1, dt2 being DecoratedTree of SxD
       st dt1 in f.$1 & dt2 in f.$1 & dt1`1 = dt2`1 holds dt1 = dt2;
 A6: R[0] proof let dt1,dt2 be DecoratedTree of SxD; assume
@@ -1007,7 +1015,7 @@ A6: R[0] proof let dt1,dt2 be DecoratedTree of SxD; assume
        end;
      hence dt1 = dt2 by A8,A9,A10;
     end;
-A11: now let n be Nat such that
+A11: now let n be Element of NAT such that
 A12: R[n];
     thus R[n+1]
     proof
@@ -1031,7 +1039,7 @@ A15: dt1 in Union f & dt2 in Union f by A1,A13,CARD_5:10;
        holds X c= F ) from DTCMin(A1, A4, A5);
      then reconsider dt1' = dt1, dt2' = dt2 as Element of FinTrees SxD
              by A15;
-A16: for n being Nat,
+A16: for n being Element of NAT,
            dt being Element of FinTrees [:the carrier of G(), D():]
          st dt in Union f() holds dt in f().n iff height dom dt <= n
                    from DTCHeight (A1, A4, A5);
@@ -1072,17 +1080,17 @@ A16: for n being Nat,
       reconsider p1 as FinSequence of FinTrees SxD by A20;
       consider p11 being FinSequence of FinTrees S such that
  A23: dom p11 = dom p1 &
-      (for i being Nat st i in dom p1 holds
+      (for i being Element of NAT st i in dom p1 holds
            ex T being Element of FinTrees SxD st T = p1.i & p11.i = T`1) &
       ([o1, NTV(o1,p1)]-tree p1)`1 = o1-tree p11 by TREES_4:31;
       reconsider p2 as FinSequence of FinTrees SxD by A22;
       consider p21 being FinSequence of FinTrees S such that
  A24: dom p21 = dom p2 &
-      (for i being Nat st i in dom p2 holds
+      (for i being Element of NAT st i in dom p2 holds
            ex T being Element of FinTrees SxD st T = p2.i & p21.i = T`1) &
       ([o2, NTV(o2,p2)]-tree p2)`1 = o2-tree p21 by TREES_4:31;
       A25: o1 = o2 & p11 = p21 by A13,A20,A22,A23,A24,TREES_4:15;
-         now let k be Nat; assume
+         now let k be Element of NAT; assume
  A26:  k in dom p11;
        then consider p1k being Element of FinTrees SxD such that
  A27:  p1k = p1.k & p11.k = p1k`1 by A23;
@@ -1096,32 +1104,33 @@ A16: for n being Nat,
       end;
       end;
     end;
-A29: for n be Nat holds R[n] from NAT_1:sch 1 (A6, A11);
+A29: for n be Element of NAT holds R[n] from NAT_1:sch 1 (A6, A11);
   let dt1, dt2 be DecoratedTree of SxD; assume
 A30: dt1 in Union f & dt2 in Union f & dt1`1 = dt2`1;
     then consider n1 being set such that
 A31:  n1 in NAT & dt1 in f.n1 by A1,CARD_5:10;
     consider n2 being set such that
 A32:  n2 in NAT & dt2 in f.n2 by A1,A30,CARD_5:10;
-    reconsider n1, n2 as Nat by A31,A32;
+    reconsider n1, n2 as Element of NAT by A31,A32;
     deffunc F(set,set) = { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G(), p is Element of (f.$1)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
                                p = q & o ==> pr1 roots q };
-A33: for n being Nat holds f.n c= f.(n+1)
-   proof let n be Nat;
+A33: for n being Element of NAT holds f.n c= f.(n+1)
+   proof let n be Element of NAT;
      f.(n+1) = f.n \/ F(n, f.n) by A3;
      hence thesis by XBOOLE_1:7;
    end;
 A34: for k, s being Nat holds f.k c= f.(k+s)
    proof
      let k, s be Nat;
+     reconsider k, s as Element of NAT by ORDINAL1:def 13;
      k <= k+s by NAT_1:29;
      hence thesis by MEASURE2:22,A33;
    end;
     n1 <= n2 or n1 >= n2;
-    then (ex s being Nat st n2 = n1 + s) or (ex s being Nat st n1 = n2 + s)
-                                  by NAT_1:28;
+    then (ex s being Nat st n2 = n1 + s) or
+    (ex s being Nat st n1 = n2 + s) by NAT_1:28;
     then f.n1 c= f.n2 or f.n2 c= f.n1 by A34; hence dt1 = dt2 by A29,A30,A31
 ,A32;
 end;
@@ -1148,11 +1157,11 @@ where o is Symbol of G, p is Element of $2* :
                                p = q & o ==> pr1 roots q };
      consider f being Function such that
 A1:  dom f = NAT and
-A2:  f.0 = { root-tree [t, d] where t is Symbol of G, d is Nat :
+A2:  f.0 = { root-tree [t, d] where t is Symbol of G, d is Element of NAT :
            t in Terminals G & d = T(t) or
            t ==> {} & d = A(t,{},{}) } and
-A3: for n being Nat holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 3;
-A4:  for n being Nat
+A3: for n being Element of NAT holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 3;
+A4:  for n being Element of NAT
      holds f.(n+1) =
       f.n \/ { [o, A(o, pr1 roots p, pr2 roots p)]-tree p
             where o is Symbol of G, p is Element of (f.n)* :
@@ -1196,11 +1205,11 @@ proof deffunc F(set,set) =
 consider f being Function such that
           :: 0 and NAT used for D() from FThn
 A3: dom f = NAT and
-A4: f.0 = { root-tree [t, d] where t is Symbol of G(), d is Nat :
+A4: f.0 = { root-tree [t, d] where t is Symbol of G(), d is Element of NAT :
            t in Terminals G() & d = T(t) or
            t ==> {} & d = A(t,{},{}) } and
-A5: for n being Nat holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 3;
-A6:  for n being Nat
+A5: for n being Element of NAT holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 3;
+A6:  for n being Element of NAT
     holds f.(n+1) =
      f.n \/ { [o, A(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G(), p is Element of (f.n)* :
@@ -1233,12 +1242,13 @@ A11: for F being Subset of FinTrees the carrier of G() st
            holds o-tree p in F)
      holds TSG c= F from DTCSymbols (A3, A4, A6);
 A12: TSG = TS(G()) by A9,A10,A11,Def4;
-defpred R[Nat] means for t being DecoratedTree of [:the carrier of G(), NAT:]
+defpred R[Element of NAT] means
+  for t being DecoratedTree of [:the carrier of G(), NAT:]
        st t in f.$1 holds P[t`1];
  A13: R[0] proof let tt be DecoratedTree of [:the carrier of G(),NAT:];
          reconsider p = {} as FinSequence of TS(G()) by FINSEQ_1:29;
         assume tt in f.0;
-         then consider t being Symbol of G(), d being Nat such that
+         then consider t being Symbol of G(), d being Element of NAT such that
     A14: tt = root-tree [t, d] & (t in Terminals G() & d = 0 or
            t ==> roots p & d = 0) by A4,Th3;
     A15:  tt`1 = root-tree t & t-tree p = root-tree t by A14,TREES_4:20,25;
@@ -1246,7 +1256,7 @@ defpred R[Nat] means for t being DecoratedTree of [:the carrier of G(), NAT:]
            T in rng p holds P[T] by FINSEQ_1:27;
         hence P[tt`1] by A1,A2,A14,A15;
        end;
-   A16: now let n be Nat; assume
+   A16: now let n be Element of NAT; assume
    A17:   R[n];
        thus R[n+1]
        proof
@@ -1273,10 +1283,10 @@ that
      defpred P[set,set] means
       ex dt being Element of FinTrees [:the carrier of G(), NAT:] st
               dt = p.$1 & dt`1 = $2 & dt in Union f;
-     A22: for k being Nat st k in Seg len p
+     A22: for k being Element of NAT st k in Seg len p
           ex x being Element of FinTrees the carrier of G() st P[k,x]
           proof
-          let k be Nat; assume
+          let k be Element of NAT; assume
              k in Seg len p;
           then A23: p.k in rng p & rng p c= Union f
             by A20,A21,FUNCT_1:def 5,XBOOLE_1:1;
@@ -1296,14 +1306,14 @@ that
          consider p1 being FinSequence of FinTrees the carrier of G()
                such that
      A24:  dom p1 = Seg len p and
-     A25:  for k being Nat st k in Seg len p holds P[k,p1.k]
+     A25:  for k being Element of NAT st k in Seg len p holds P[k,p1.k]
                 from FINSEQ_1:sch 5(A22);
          reconsider p as FinSequence of Trees [:the carrier of G(), NAT:]
                by A19,Th1;
      A26: dom roots p1 = dom p1 by TREES_3:def 18;
      A27: dom pr1 roots p = dom roots p by MCART_1:def 12;
      then A28: dom pr1 roots p = dom p1 by A21,A24,TREES_3:def 18;
-        now let k be Nat; assume
+        now let k be Element of NAT; assume
      A29:    k in dom p1;
         then consider dt being Element of FinTrees [:the carrier of G(), NAT:]
            such that
@@ -1322,7 +1332,7 @@ that
           let x be set; assume
               x in rng p1; then consider k being set such that
          A33: k in dom p1 & x = p1.k by FUNCT_1:def 5;
-           reconsider k as Nat by A33,FINSEQ_3:25;
+           reconsider k as Element of NAT by A33,FINSEQ_3:25;
               ex dt being Element of FinTrees [:the carrier of G(), NAT:] st
               dt = p.k & dt`1 = p1.k & dt in Union f by A24,A25,A33;
           hence thesis by A8,A12,A33;
@@ -1331,7 +1341,7 @@ that
             now let t be DecoratedTree of the carrier of G(); assume
               t in rng p1; then consider k being set such that
       A34:  k in dom p1 & t = p1.k by FUNCT_1:def 5;
-           reconsider k as Nat by A34,FINSEQ_3:25;
+           reconsider k as Element of NAT by A34,FINSEQ_3:25;
            consider dt being Element of FinTrees [:the carrier of G(), NAT:]
              such that
       A35:  dt = p.k & dt`1 = p1.k & dt in Union f by A24,A25,A34;
@@ -1341,7 +1351,7 @@ that
      then A36: P[o-tree p1] by A2,A19,A32;
          reconsider p1 as FinSequence of Trees the carrier of G()
                by Th1;
-            now let k be Nat; assume k in dom p;
+            now let k be Element of NAT; assume k in dom p;
            then ex dt being Element of FinTrees [:the carrier of G(), NAT:] st
               dt = p.k & dt`1 = p1.k & dt in Union f by A21,A25;
            hence for T being DecoratedTree of [:the carrier of G(), NAT:] st
@@ -1350,7 +1360,7 @@ that
          hence contradiction by A18,A19,A21,A24,A36,TREES_4:27;
          end;
        end;
-A37: for n being Nat holds R[n] from NAT_1:sch 1 (A13, A16);
+A37: for n being Element of NAT holds R[n] from NAT_1:sch 1 (A13, A16);
  let t be DecoratedTree of the carrier of G(); assume
      t in TS(G());
   then consider tt being Element of FinTrees[:the carrier of G(), NAT:] such
@@ -1383,8 +1393,8 @@ A2: f.0 = { root-tree [t, d] where t is Symbol of G,
                                   d is Element of D() :
            t in Terminals G & d = TermVal(t) or
            t ==> {} & d = NTermVal(t, {}, {}) } and
-A3: for n being Nat holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 3;
-A4:  for n being Nat
+A3: for n being Element of NAT holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 3;
+A4:  for n being Element of NAT
     holds f.(n+1) =
      f.n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G, p is Element of (f.n)* :
@@ -1466,10 +1476,10 @@ A18: dom ts = Seg len ts by FINSEQ_1:def 3;
 defpred P[set,set] means
  ex dt being DecoratedTree of [:the carrier of G, D():] st
            dt = $2 & dt`1 = ts.$1 & dt in Union f;
-A19: for k being Nat st k in Seg len ts
+A19: for k being Element of NAT st k in Seg len ts
      ex x being Element of FinTrees [:(the carrier of G), D():] st P[k,x]
       proof
-    let k be Nat; assume
+    let k be Element of NAT; assume
         k in Seg len ts;
      then ts.k in rng ts & rng ts c= TS(G) by A18,FINSEQ_1:def 4,FUNCT_1:def 5
 ;
@@ -1481,14 +1491,14 @@ A19: for k being Nat st k in Seg len ts
  consider dts being FinSequence of FinTrees [:(the carrier of G), D():]
    such that
 A20: dom dts = Seg len ts and
-A21: for k being Nat st k in Seg len ts holds P[k,dts.k]
+A21: for k being Element of NAT st k in Seg len ts holds P[k,dts.k]
             from FINSEQ_1:sch 5(A19);
        rng dts c= X proof
      let x be set; assume
         x in rng dts;
       then consider k being set such that
 A22:  k in dom ts & x = dts.k by A18,A20,FUNCT_1:def 5;
-      reconsider k as Nat by A22,FINSEQ_3:25;
+      reconsider k as Element of NAT by A22,FINSEQ_3:25;
         ex dt being DecoratedTree of [:the carrier of G, D():]
        st dt = x & dt`1 = ts.k & dt in Union f by A18,A21,A22;
      hence thesis by A11;
@@ -1499,7 +1509,7 @@ A24: dom pr1 roots dts = dom roots dts & dom pr2 roots dts = dom roots dts
                     by MCART_1:def 12,def 13;
 then A25: dom pr1 roots dts = dom ts & dom pr2 roots dts = dom ts
                     by A18,A20,TREES_3:def 18;
-        now let k be Nat; assume
+        now let k be Element of NAT; assume
 A26:    k in dom ts;
         then consider dt being DecoratedTree of [:the carrier of G, D():]
            such that
@@ -1528,7 +1538,7 @@ A32: rng ts c= FinTrees the carrier of G by FINSEQ_1:def 4;
     then rng ts c= Trees the carrier of G by A32,XBOOLE_1:1;
     then reconsider ts' = ts as FinSequence of Trees the carrier of G
                                    by FINSEQ_1:def 4;
-      now let i be Nat; assume i in dom dts;
+      now let i be Element of NAT; assume i in dom dts;
     then consider dt being DecoratedTree of [:the carrier of G, D():] such that
 A33: dt = dts.i & dt`1 = ts.i & dt in Union f by A20,A21;
     let T be DecoratedTree of [:the carrier of G, D():]; assume
@@ -1539,7 +1549,7 @@ then A34:  ([nt, NTV(nt, dts)]-tree dts')`1
                 = nt-tree ts' by A18,A20,TREES_4:27;
 A35: rng ts c= dom ff by A9,FINSEQ_1:def 4;
 then A36: dom (ff * ts) = dom ts by RELAT_1:46;
-     now let k be Nat; assume
+     now let k be Element of NAT; assume
 A37: k in dom ts;
      then consider dt being DecoratedTree of [:the carrier of G, D():] such
 that
@@ -1728,7 +1738,7 @@ proof
 then A1: nt = S by Lm13,TARSKI:def 1;
   take p;
 A2: dom <*rO*> = Seg 1 & dom <*O*> = Seg 1 by FINSEQ_1:55;
-      now let i be Nat; assume
+      now let i be Element of NAT; assume
 A3:  i in dom p;
     reconsider rO as DecoratedTree;
     take rO;
@@ -1962,15 +1972,15 @@ end;
 definition
  let x be FinSequence of NAT such that
 A1: x <> {};
- func plus-one x -> Nat means
-:Def10:  ex n being Nat st it = n+1 & x.1 = n;
+ func plus-one x -> Element of NAT means
+:Def10:  ex n being Element of NAT st it = n+1 & x.1 = n;
  existence proof
      len x <> 0 by A1,FINSEQ_1:25;
   then len x > 0;
   then len x >= 0+1 by NAT_1:38;
   then 1 in dom x by FINSEQ_3:27;
   then x.1 in rng x & rng x c= NAT by FINSEQ_1:def 4,FUNCT_1:def 5;
-  then reconsider n = x.1 as Nat;
+  then reconsider n = x.1 as Element of NAT;
   take n+1, n; thus thesis;
  end;
  correctness;
@@ -2029,10 +2039,11 @@ end;
 definition
  func NAT-to-PN -> Function of NAT, TS(PeanoNat) means
 :Def13:   it.0 = root-tree 0 &
-  for n being Nat holds it.(n+1) = PNsucc it.n;
+  for n being Element of NAT holds it.(n+1) = PNsucc it.n;
  existence proof
    ex f being Function of NAT, TS(PeanoNat) st f.0 = root-tree O &
-  for n being Nat holds f.(n+1) = F(n,f.n qua Element of TS(PeanoNat))
+  for n being Element of NAT
+   holds f.(n+1) = F(n,f.n qua Element of TS(PeanoNat))
   from RECDEF_1:sch 4;
   hence thesis;
  end;
@@ -2040,10 +2051,11 @@ definition
  assume
 A1:   not thesis;
 then A2:   it1.0 = root-tree O &
-  for n being Nat holds it1.(n+1) = F(n,it1.n qua Element of TS(PeanoNat));
+  for n being Element of NAT
+   holds it1.(n+1) = F(n,it1.n qua Element of TS(PeanoNat));
 A3:   it2.0 = root-tree O &
-  for n being Nat holds it2.(n+1) = F(n,it2.n qua Element of TS(PeanoNat))
-  by A1;
+  for n being Element of NAT
+   holds it2.(n+1) = F(n,it2.n qua Element of TS(PeanoNat)) by A1;
      it1 = it2 from RECDEF_1:sch 12 (A2, A3);
   hence thesis by A1;
  end;
@@ -2076,9 +2088,9 @@ A6:  ts = <*dt*> & dt in TS(PN) by Th5;
       then dt in rng ts by TARSKI:def 1;
 then A7: dt = NAT-to-PN.(PN-to-NAT.dt) by A4;
 A8: PN-to-NAT * ts = <*PN-to-NAT.dt*> by A6,FINSEQ_2:39;
-      reconsider N = PN-to-NAT.dt as Nat;
+      reconsider N = PN-to-NAT.dt as Element of NAT;
       reconsider x = <*N*> as FinSequence of NAT;
-     consider n being Nat such that
+     consider n being Element of NAT such that
 A9:  plus-one(x) = n+1 & <*N*>.1 = n by Def10;
          N = n by A9,FINSEQ_1:57;
       then NAT-to-PN.(n+1) = PNsucc dt by A7,Def13
@@ -2093,7 +2105,7 @@ end;
 Lm16: 0 = PN-to-NAT.(root-tree O) by Def11
      .= PN-to-NAT.(NAT-to-PN.0) by Def13;
 
-Lm17: now let n be Nat; assume
+Lm17: now let n be Element of NAT; assume
 A1: n = PN-to-NAT.(NAT-to-PN.n);
       reconsider dt = NAT-to-PN.n as Element of TS(PN);
       reconsider r = {} as Node of dt by TREES_1:47;
@@ -2101,7 +2113,7 @@ A2:  dt.r = O or dt.r = S by Lm2,TARSKI:def 2;
 A3:  NAT-to-PN.(n+1) = PNsucc (NAT-to-PN.n) by Def13
                     .= S-tree <*NAT-to-PN.n*>;
       A4:  S ==> roots <*NAT-to-PN.n*> by A2,Lm3,Th4;
-      consider k being Nat such that
+      consider k being Element of NAT such that
 A5:  plus-one <*n*> = k+1 & <*n*>.1 = k by Def10;
          <*PN-to-NAT.(NAT-to-PN.n)*> = PN-to-NAT * <*NAT-to-PN.n*>
                           by FINSEQ_2:39;
@@ -2112,12 +2124,12 @@ A5:  plus-one <*n*> = k+1 & <*n*>.1 = k by Def10;
     end;
 
 theorem
-   for n being Nat holds n = PN-to-NAT.(NAT-to-PN.n)
+   for n being Element of NAT holds n = PN-to-NAT.(NAT-to-PN.n)
   proof
-    defpred P[Nat] means $1 = PN-to-NAT.(NAT-to-PN.$1);
+    defpred P[Element of NAT] means $1 = PN-to-NAT.(NAT-to-PN.$1);
     A1: P[0] by Lm16;
-    A2: for n being Nat st P[n] holds P[n+1] by Lm17;
-    thus for n being Nat holds P[n] from NAT_1:sch 1 (A1,A2);
+    A2: for n being Element of NAT st P[n] holds P[n+1] by Lm17;
+    thus for n being Element of NAT holds P[n] from NAT_1:sch 1 (A1,A2);
   end;
 
 begin
@@ -2609,7 +2621,7 @@ end;
 theorem  for nt being Symbol of PeanoNat holds
           (nt = 0 implies PreTraversalLanguage nt = {<*0*>}) &
           (nt = 1 implies PreTraversalLanguage nt = { (n|->1)^<*0*>
-                                                  where n is Nat : n <> 0 })
+                            where n is Element of NAT : n <> 0 })
           proof
 let nt be Symbol of PeanoNat;
    reconsider rtO = root-tree O as Element of TS PN;
@@ -2645,15 +2657,17 @@ A8:   ts = <*t*> & t in TS PN by Th5;
      then dom tsg = ^dom t by TREES_4:13;
      then height dom tsg = (height dom t) + 1 by TREES_3:83;
      then height dom tsg<>0 & x=((height dom tsg)|->1)^<*0*> by A6,Th16;
-   hence x in { (n|->1)^<*0*> where n is Nat : n <> 0 };
+   hence x in { (n|->1)^<*0*> where n is Element of NAT : n <> 0 };
   end;
-  let x be set; assume x in { (n|->1)^<*0*> where n is Nat : n <> 0 };
-   then consider n being Nat such that
+  let x be set;
+  assume x in { (n|->1)^<*0*> where n is Element of NAT : n <> 0 };
+   then consider n being Element of NAT such that
 A9: x = (n |-> 1)^<*0*> & n <> 0;
-defpred P[Nat] means $1 <> 0 implies ex tsg being Element of TS PN st
+defpred P[Element of NAT] means
+ $1 <> 0 implies ex tsg being Element of TS PN st
    tsg.{} = S & PreTraversal tsg = ($1|->1)^<*0*>;
   A10: P[0];
-A11: now let n be Nat; assume
+A11: now let n be Element of NAT; assume
 A12:  P[n];
      thus P[n+1]
      proof
@@ -2685,7 +2699,7 @@ A17:   tsg' = S-tree <*rtO*> by TREES_4:def 5;
      end;
      end;
     end;
-      for n being Nat holds P[n] from NAT_1:sch 1 (A10, A11);
+      for n being Element of NAT holds P[n] from NAT_1:sch 1 (A10, A11);
 then ex tsg being Element of TS PN st
  tsg.{} = S & PreTraversal tsg = (n|->1)^<*0*> by A9;
   hence x in PreTraversalLanguage nt by A5,A9;
@@ -2757,7 +2771,7 @@ end;
 theorem  for nt being Symbol of PeanoNat holds
           (nt = 0 implies PostTraversalLanguage nt = {<*0*>}) &
           (nt = 1 implies PostTraversalLanguage nt = { <*0*>^(n|->1)
-                                                  where n is Nat : n <> 0 })
+                      where n is Element of NAT : n <> 0 })
         proof
 let nt be Symbol of PeanoNat;
    reconsider rtO = root-tree O as Element of TS PN;
@@ -2793,15 +2807,17 @@ A8:   ts = <*t*> & t in TS PN by Th5;
      then dom tsg = ^dom t by TREES_4:13;
      then height dom tsg = (height dom t) + 1 by TREES_3:83;
      then height dom tsg<>0 & x=<*0*>^((height dom tsg)|->1) by A6,Th18;
-   hence x in { <*0*>^(n|->1) where n is Nat : n <> 0 };
+   hence x in { <*0*>^(n|->1) where n is Element of NAT : n <> 0 };
   end;
-  let x be set; assume x in { <*0*>^(n|->1) where n is Nat : n <> 0 };
-   then consider n being Nat such that
+  let x be set;
+  assume x in { <*0*>^(n|->1) where n is Element of NAT : n <> 0 };
+   then consider n being Element of NAT such that
 A9: x = <*0*>^(n |-> 1) & n <> 0;
-defpred P[Nat] means $1 <> 0 implies ex tsg being Element of TS PN st
+defpred P[Element of NAT] means
+ $1 <> 0 implies ex tsg being Element of TS PN st
    tsg.{} = S & PostTraversal tsg = <*0*>^($1|->1);
 A10: P[0];
-A11: now let n be Nat; assume
+A11: now let n be Element of NAT; assume
 A12:  P[n];
     thus P[n+1]
     proof
@@ -2833,7 +2849,7 @@ A17:   tsg' = S-tree <*rtO*> by TREES_4:def 5;
       end;
       end;
     end;
-      for n being Nat holds P[n] from NAT_1:sch 1 (A10, A11);
+      for n being Element of NAT holds P[n] from NAT_1:sch 1 (A10, A11);
 then ex tsg being Element of TS PN st
  tsg.{} = S & PostTraversal tsg = <*0*>^(n|->1) by A9;
   hence x in PostTraversalLanguage nt by A5,A9;

@@ -9,14 +9,15 @@ environ
  vocabularies CLASSES2, ZF_LANG, FUNCT_1, ZF_MODEL, ORDINAL1, TARSKI, ORDINAL2,
       BOOLE, ZFMODEL1, RELAT_1, CARD_1, ORDINAL4, PROB_1, CLASSES1, ZFMISC_1,
       QC_LANG1, FUNCT_2, ARYTM_3, ZF_REFLE;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0,
+      NAT_1, RELAT_1,
       FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FRAENKEL, ZF_MODEL, ZFMODEL1,
       ORDINAL1, ORDINAL2, CARD_1, CARD_3, CLASSES1, CLASSES2, ZF_LANG,
       ORDINAL4, ZF_LANG1, XXREAL_0;
  constructors ENUMSET1, PARTFUN1, WELLORD2, FRAENKEL, XXREAL_0, XREAL_0, NAT_1,
       ZF_MODEL, CLASSES1, CARD_3, ORDINAL4, ZFMODEL1, ZF_LANG1;
  registrations SUBSET_1, FUNCT_1, ZF_LANG, ORDINAL1, ORDINAL2, CLASSES2,
-      ZF_LANG1, RELSET_1, CARD_1;
+      ZF_LANG1, RELSET_1, CARD_1, NAT_1;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, FUNCT_1, ZF_LANG, ZF_MODEL, WELLORD2, ORDINAL2, RELAT_1,
       XBOOLE_0;
@@ -563,7 +564,7 @@ A2:       x in X & X in W by A1,TARSKI:def 4;
  end;
 
  reserve L for DOMAIN-Sequence of W,
-         n,j for Nat,
+         n,j for Element of NAT,
          f for Function of VAR,L.a;
 
 canceled 5;
@@ -583,12 +584,18 @@ theorem
 
 theorem
  Th25: NAT,VAR are_equipotent
-  proof deffunc F(Nat,set) = 5+($1+1);
+  proof deffunc F(Element of NAT,set) = 5+($1+1);
     consider f being Function of NAT,NAT such that
 A1:  f.0 = 5+0 & for n holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 4;
 A2:  dom f = NAT by FUNCT_2:def 1;
 A3:  now let n;
-       (ex j st n = j+1) implies f.n = 5+n by A1;
+      (ex j be Nat st n = j+1) implies f.n = 5+n
+      proof
+        given j be Nat such that
+B1:     n = j+1;
+        j in NAT by ORDINAL1:def 13;
+        hence thesis by A1,B1;
+      end;
       then n = 0 or f.n = 5+n by NAT_1:22;
      hence f.n = 5+n by A1;
     end;
@@ -596,24 +603,25 @@ A3:  now let n;
      proof reconsider g = f as Function; take g;
       thus g is one-to-one
         proof let x,y; assume x in dom g & y in dom g;
-         then reconsider n1 = x, n2 = y as Nat by FUNCT_2:def 1;
-             f.n1 = 5+n1 & f.n2 = 5+n2 by A3;
+         then reconsider n1 = x, n2 = y as Element of NAT by FUNCT_2:def 1;
+         f.n1 = 5+n1 & f.n2 = 5+n2 by A3;
          hence thesis by XCMPLX_1:2;
         end;
       thus dom g = NAT by FUNCT_2:def 1;
       thus rng g c= VAR
         proof let x; assume x in rng g;
          then consider y such that
-A4:        y in dom f & x = f.y by FUNCT_1:def 5;
-         reconsider y as Nat by A4;
-             x = 5+y & 5+y >= 5 by A3,A4,NAT_1:29;
+A4:      y in dom f & x = f.y by FUNCT_1:def 5;
+         reconsider y as Element of NAT by A4;
+         x = 5+y & 5+y >= 5 by A3,A4,NAT_1:29;
          hence thesis by ZF_LANG:def 1;
         end;
       let x; assume x in VAR;
-       then ex n st x = n & 5 <= n by ZF_LANG:def 1;
-      then consider n such that
-A5:     x = 5+n by NAT_1:28;
-          f.n = x & n in NAT by A3,A5;
+      then ex n st x = n & 5 <= n by ZF_LANG:def 1;
+      then consider n be Nat such that
+A5:   x = 5+n by NAT_1:28;
+      n in NAT by ORDINAL1:def 13; then
+      f.n = x & n in NAT by A3,A5;
       hence thesis by A2,FUNCT_1:def 5;
      end;
   end;
@@ -623,11 +631,11 @@ canceled;
 theorem
  Th27: sup X c= succ union On X
   proof reconsider A = union On X as Ordinal by ORDINAL3:7;
-       On X c= succ A
+     On X c= succ A
      proof let x; assume
-A1:     x in On X;
+A1:   x in On X;
       then reconsider a = x as Ordinal by ORDINAL1:def 10;
-          a c= A by A1,ZFMISC_1:92;
+      a c= A by A1,ZFMISC_1:92;
       hence x in succ A by ORDINAL1:34;
      end;
    hence thesis by ORDINAL2:def 7;

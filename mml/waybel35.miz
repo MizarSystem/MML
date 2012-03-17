@@ -10,20 +10,22 @@ environ
       YELLOW_1, YELLOW_0, FUNCT_1, SEQM_3, ORDINAL2, TARSKI, WAYBEL_4,
       REALSET1, WAYBEL35, LATTICE7, GROUP_4, WAYBEL_1, ORDERS_2, WELLORD1,
       WELLORD2, BHSP_3;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, REALSET1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS,
+      XCMPLX_0, NAT_1, REALSET1,
       RELAT_1, RELAT_2, FUNCT_1, RELSET_1, FUNCT_2, DOMAIN_1, STRUCT_0,
       WELLORD1, ORDERS_2, ORDERS_1, LATTICE3, YELLOW_0, YELLOW_1, ALG_1,
       YELLOW_2, WAYBEL_0, WAYBEL_1, WAYBEL_4, LATTICE7;
  constructors WELLORD1, DOMAIN_1, NAT_1, MEMBERED, REALSET1, ORDERS_3,
-      WAYBEL_1, WAYBEL_4, LATTICE7;
+      WAYBEL_1, WAYBEL_4, LATTICE7, XXREAL_0;
  registrations LATTICE3, RELSET_1, STRUCT_0, WAYBEL_0, YELLOW_1, YELLOW_2,
-      SUBSET_1, TEX_2, WAYBEL_4, YELLOW_0, FINSEQ_5, MEMBERED, ORDINAL1;
+      SUBSET_1, TEX_2, WAYBEL_4, YELLOW_0, FINSEQ_5, MEMBERED, ORDINAL1,
+      ARYTM_3, NAT_1;
  requirements SUBSET, BOOLE, NUMERALS;
  definitions TARSKI, XBOOLE_0, ORDERS_1, LATTICE3, WAYBEL_1, WAYBEL_4;
  theorems WAYBEL_4, YELLOW_8, STRUCT_0, FUNCT_2, YELLOW_1, TARSKI, ORDERS_2,
       YELLOW_0, LATTICE3, YELLOW_4, WAYBEL_0, XBOOLE_0, LATTICE7, WAYBEL_1,
       XBOOLE_1, REALSET1, RELAT_1, WELLORD2, ORDERS_1, RELAT_2, ZFMISC_1,
-      TEX_2, FUNCT_1;
+      TEX_2, FUNCT_1, ORDINAL1;
  schemes XBOOLE_0, FUNCT_2, RECDEF_1, NAT_1;
 
 begin :: Preliminaries
@@ -1212,11 +1214,11 @@ A11:   p < x1 by A1,A4,A5,A6,A8,Th16;
     defpred P[set,set,set] means
      ex a, b being Element of L st
       $2 = a & $3 = b & $3 in C & [$2,$3] in R & b <= w;
-A12:  for n being Nat,
+A12:  for n being Element of NAT,
          x being Element of D
       ex y being Element of D st P[n,x,y]
     proof
-      let n be Nat;
+      let n be Element of NAT;
       let x be Element of D;
            x in D;
       then reconsider t = x as Element of L;
@@ -1241,8 +1243,8 @@ A17:     x = w;
     reconsider g = x1 as Element of D by A9,A10,Th18;
     consider f being Function of NAT, D such that
 A18:   f.0 = g and
-A19:   for n being Element of NAT holds P[n,f.n,f.(n+1)] from RECDEF_1:sch 2
-(A12);
+A19:   for n being Element of NAT holds P[n,f.n,f.(n+1)]
+       from RECDEF_1:sch 2(A12);
     reconsider f as Function of NAT, the carrier of L by FUNCT_2:9;
     take y = sup rng f;
 A20: ex_sup_of rng f,L by YELLOW_0:17;
@@ -1285,18 +1287,19 @@ A31:     ex a, b being Element of L st
          f.n = a & f.(n+1) = b & f.(n+1) in C &
           [f.n,f.(n+1)] in R & b <= w by A19;
         defpred P[Nat] means f.$1 in C;
-             for n being Element of NAT holds P[n]
+             for n being Nat holds P[n]
         proof
 A32:       P[0] by A9,A18;
-A33:       for k being Element of NAT st P[k] holds P[k+1]
+A33:       for k being Nat st P[k] holds P[k+1]
           proof
-            let k be Element of NAT;
-                 ex a, b being Element of L st
+            let k be Nat;
+            k is Element of NAT by ORDINAL1:def 13;
+            then ex a, b being Element of L st
              f.k = a & f.(k+1) = b & f.(k+1) in C &
               [f.k,f.(k+1)] in R & b <= w by A19;
             hence thesis;
          end;
-         thus thesis from NAT_1:sch 1(A32,A33);
+         thus thesis from NAT_1:sch 2(A32,A33);
         end;
         then A34:     f.n in C;
 A35:     f.n <= f.n;

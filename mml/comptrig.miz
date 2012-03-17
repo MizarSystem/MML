@@ -10,7 +10,8 @@ environ
       COMPLFLD, HAHNBAN1, GROUP_1, FUNCT_1, BINOP_1, POWER, RAT_1, PREPOWER,
       RCOMP_1, SIN_COS, ARYTM_3, RFUNCT_2, FDIFF_1, PRE_TOPC, BOOLE, RELAT_1,
       FCONT_1, PARTFUN1, COMPTRIG, ARYTM, XCMPLX_0;
- notations TARSKI, XBOOLE_0, STRUCT_0, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0,
+ notations TARSKI, XBOOLE_0, SUBSET_1,
+ STRUCT_0, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0,
       XREAL_0, REAL_1, SQUARE_1, NAT_1, RAT_1, COMPLEX1, NEWTON, PREPOWER,
       POWER, RLVECT_1, VECTSP_1, BINOP_1, RELAT_1, FUNCT_1, RFUNCT_2, FCONT_1,
       FDIFF_1, SEQ_1, PARTFUN1, PARTFUN2, BINARITH, RCOMP_1, GROUP_1, SIN_COS,
@@ -27,7 +28,7 @@ environ
       RELAT_1, FUNCT_1, RFUNCT_2, PARTFUN1, FCONT_1, FCONT_2, CARD_1, TOPREAL3,
       RLVECT_1, VECTSP_1, GROUP_1, RCOMP_1, FDIFF_1, ROLLE, COMPLEX1, SIN_COS,
       SIN_COS2, COMPLFLD, HAHNBAN1, XBOOLE_0, XCMPLX_1, ARYTM_0, XREAL_1,
-      XXREAL_0;
+      XXREAL_0, ORDINAL1;
  schemes NAT_1;
 
 begin
@@ -50,28 +51,32 @@ Lm5: for z being complex number holds
 scheme Regrwithout0 { P[Nat] } :
   P[1]
   provided
-A1: ex k be non empty Nat st P[k] and
-A2: for k be non empty Nat st k <> 1 & P[k]
-    ex n be non empty Nat st n < k & P[n]
+A1: ex k be non empty Element of NAT st P[k] and
+A2: for k be non empty Element of NAT st k <> 1 & P[k]
+    ex n be non empty Element of NAT st n < k & P[n]
 proof
-  defpred R[Nat] means P[$1+1];
-   consider t be non empty Nat such that
+  defpred R[Element of NAT] means P[$1+1];
+   consider t be non empty Element of NAT such that
 A3: P[t] by A1;
    consider s be Nat such that
 A4: t = s+1 by NAT_1:22;
-A5: ex k be Nat st R[k] by A3,A4;
-A6: now let k be Nat;
+    reconsider s as Element of NAT by ORDINAL1:def 13;
+    t=s+1 by A4;
+    then
+A5: ex k be Element of NAT st R[k] by A3;
+A6: now let k be Element of NAT;
     assume that
 A7: k <> 0 and
 A8: R[k];
-    reconsider k1=k+1 as non empty Nat;
+    reconsider k1=k+1 as non empty Element of NAT;
     k > 0 by A7;
     then k+1 > 0+1 by XREAL_1:8;
-    then consider n be non empty Nat such that
+    then consider n be non empty Element of NAT such that
 A9: n < k1 and
 A10: P[n] by A2,A8;
     consider l be Nat such that
 A11: n = l+1 by NAT_1:22;
+    reconsider l as Element of NAT by ORDINAL1:def 13;
     take l;
     thus l < k by A9,A11,XREAL_1:8;
     thus R[l] by A10,A11;
@@ -171,12 +176,12 @@ theorem
 theorem Th14:
   for L be add-associative right_zeroed right_complementable
             right-distributive unital (non empty doubleLoopStr)
-  for n be Nat st n > 0 holds
+  for n be Element of NAT st n > 0 holds
     (power L).(0.L,n) = 0.L
    proof
     let L be add-associative right_zeroed right_complementable
              right-distributive unital (non empty doubleLoopStr);
-    let n be Nat;
+    let n be Element of NAT;
     assume n > 0;
     then n >= 0+1 by NAT_1:38;
     then A1: n-1 >= 0 by XREAL_1:21;
@@ -189,19 +194,19 @@ theorem Th14:
 theorem Th15:
   for L be associative commutative unital (non empty HGrStr)
   for x,y be Element of L
-  for n be Nat holds
+  for n be Element of NAT holds
     (power L).(x*y,n) = (power L).(x,n) * (power L).(y,n)
    proof
     let L be associative commutative unital (non empty HGrStr);
     let x,y be Element of L;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
      (power L).(x*y,$1) = (power L).(x,$1) * (power L).(y,$1);
       (power L).(x*y,0) = 1.L by GROUP_1:def 8
        .= 1.L * 1.L by GROUP_1:def 5
        .= (power L).(x,0) * 1.L by GROUP_1:def 8
        .= (power L).(x,0) * (power L).(y,0) by GROUP_1:def 8;
     then A1: P[0];
-    A2: now let n be Nat;
+    A2: now let n be Element of NAT;
      assume P[n];
      then (power L).(x*y,n+1) = (power L).(x,n) * (power L).(y,n) * (x*y) by
 GROUP_1:def 8
@@ -212,24 +217,24 @@ GROUP_1:def 8
         .= (power L).(x,n+1) * (power L).(y,n+1) by GROUP_1:def 8;
       hence P[n+1];
     end;
-    thus for n be Nat holds P[n] from NAT_1:sch 1(A1,A2);
+    thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
    end;
 
   theorem Th16:
    for x be Real st x > 0
-   for n be Nat holds
+   for n be Element of NAT holds
     (power F_Complex).([**x,0**],n) = [**x to_power n,0**]
    proof
     let x be Real;
     assume A1: x > 0;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
       (power F_Complex).([**x,0**],$1) = [**x to_power $1,0**];
       (power F_Complex).([**x,0**],0)
         = 1+0*<i> by COMPLFLD:10, GROUP_1:def 8
        .= [**1,0**]
        .= [**x to_power 0,0**] by POWER:29;
      then A2:   P[0];
-    A3: now let n be Nat;
+    A3: now let n be Element of NAT;
      assume P[n];
      then (power F_Complex).([**x,0**],n+1) = [**x to_power n,0**]*[**x,0**]
                                                             by GROUP_1:def 8
@@ -238,14 +243,14 @@ GROUP_1:def 8
         .= [**x to_power (n+1),0**] by A1,POWER:32;
       hence P[n+1];
     end;
-    thus for n be Nat holds P[n] from NAT_1:sch 1(A2,A3);
+    thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
    end;
 
   theorem Th17:
-   for n be Nat st x >= 0 & n <> 0 holds
+   for n be Element of NAT st x >= 0 & n <> 0 holds
     (n-root x) to_power n = x
    proof
-    let n be Nat;
+    let n be Element of NAT;
     assume that
      A1: x >= 0 and
      A2: n <> 0;
@@ -1663,17 +1668,17 @@ A2: z <> 0;
    end;
 
 theorem Th71:
-  for x be Real, n be Nat holds
+  for x be Real, n be Element of NAT holds
     (power F_Complex).([**cos x,sin x**],n) = [**cos (n*x),sin (n*x)**]
    proof
      let x be Real;
-     defpred P[Nat] means
+     defpred P[Element of NAT] means
      (power F_Complex).([**cos x,sin x**],$1) = [**cos ($1*x),sin ($1*x)**];
       (power F_Complex).([**cos x,sin x**],0)
        = 1+0*<i> by COMPLFLD:10,GROUP_1:def 8
        .= [**cos (0*x),sin (0*x)**] by SIN_COS:34;
     then A1: P[0];
-    A2: now let n be Nat;
+    A2: now let n be Element of NAT;
      assume P[n];
      then (power F_Complex).([**cos x,sin x**],n+1) =
            [**cos(n*x),sin(n*x)**]*[**cos x,sin x**] by GROUP_1:def 8
@@ -1683,17 +1688,17 @@ theorem Th71:
         .= [**cos((n+1)*x),sin((n+1)*x)**] by SIN_COS:80;
       hence P[n+1];
     end;
-    thus for n be Nat holds P[n] from NAT_1:sch 1(A1,A2);
+    thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
    end;
 
   theorem
    for z be Element of F_Complex
-   for n be Nat st z <> 0.F_Complex or n <> 0 holds
+   for n be Element of NAT st z <> 0.F_Complex or n <> 0 holds
     (power F_Complex).(z,n) =
     [**(|.z.| to_power n)*cos (n*Arg z),(|.z.| to_power n)*sin (n*Arg z)**]
    proof
     let z be Element of F_Complex;
-    let n be Nat;
+    let n be Element of NAT;
     assume A1: z <> 0.F_Complex or n <> 0;
     per cases by A1;
      suppose A2: z <> 0.F_Complex;
@@ -1725,12 +1730,12 @@ theorem Th71:
    end;
 
   theorem Th73:
-   for x be Real, n,k be Nat st n <> 0 holds
+   for x be Real, n,k be Element of NAT st n <> 0 holds
     (power F_Complex).([**cos((x+2*PI*k)/n),sin((x+2*PI*k)/n)**],n) =
      [**cos x,sin x**]
    proof
     let x be Real;
-    let n,k be Nat;
+    let n,k be Element of NAT;
     assume A1: n <> 0;
     thus (power F_Complex).([**cos((x+2*PI*k)/n),sin((x+2*PI*k)/n)**],n) =
           [**cos(n*((x+2*PI*k)/n)),sin(n*((x+2*PI*k)/n))**] by Th71
@@ -1746,12 +1751,12 @@ theorem Th71:
 
   theorem Th74:
    for z be Element of F_Complex
-   for n,k be Nat st n <> 0 holds
+   for n,k be Element of NAT st n <> 0 holds
     z = (power F_Complex).([**(n-root |.z.|)*cos((Arg z+2*PI*k)/n),
                               (n-root |.z.|)*sin((Arg z+2*PI*k)/n)**],n)
    proof
     let z be Element of F_Complex;
-    let n,k be Nat;
+    let n,k be Element of NAT;
     assume A1: n <> 0;
     then A2: n > 0;
     then A3: n >= 0+1 by NAT_1:38;
@@ -1792,7 +1797,7 @@ A7:   z <> 0 by A4,Lm3;
 
   definition
    let x be Element of F_Complex;
-   let n be non empty Nat;
+   let n be non empty Element of NAT;
    mode CRoot of n,x -> Element of F_Complex means :Def2:
     (power F_Complex).(it,n) = x;
    existence
@@ -1805,14 +1810,14 @@ A7:   z <> 0 by A4,Lm3;
 
   theorem
    for x be Element of F_Complex
-   for n be non empty Nat
-   for k be Nat holds
+   for n be non empty Element of NAT
+   for k be Element of NAT holds
     [**(n-root |.x.|)*cos((Arg x+2*PI*k)/n),
        (n-root |.x.|)*sin((Arg x+2*PI*k)/n)**] is CRoot of n,x
    proof
     let x be Element of F_Complex;
-    let n be non empty Nat;
-    let k be Nat;
+    let n be non empty Element of NAT;
+    let k be Element of NAT;
     (power F_Complex).([**(n-root |.x.|)*cos((Arg x+2*PI*k)/n),
     (n-root |.x.|)*sin((Arg x+2*PI*k)/n)**],n) = x by Th74;
     hence thesis by Def2;
@@ -1830,25 +1835,26 @@ A7:   z <> 0 by A4,Lm3;
    end;
 
   theorem
-   for n be non empty Nat
+   for n be non empty Element of NAT
    for v be CRoot of n,0.F_Complex holds
     v = 0.F_Complex
    proof
-    let n be non empty Nat;
+    let n be non empty Element of NAT;
     let v be CRoot of n,0.F_Complex;
-    defpred P[Nat] means (power F_Complex).(v,$1) = 0.F_Complex;
-    A1: ex n be non empty Nat st P[n]
+    defpred P[Element of NAT] means (power F_Complex).(v,$1) = 0.F_Complex;
+    A1: ex n be non empty Element of NAT st P[n]
     proof
      take n;
      thus thesis by Def2;
     end;
-A2: now let k be non empty Nat;
+A2: now let k be non empty Element of NAT;
      assume that
 A3:  k <> 1 and
 A4:  P[k];
      consider t be Nat such that
       A5: k = t+1 by NAT_1:22;
-     reconsider t as non empty Nat by A3,A5,CARD_1:51;
+      reconsider t as Element of NAT by ORDINAL1:def 13;
+     reconsider t as non empty Element of NAT by A3,A5,CARD_1:51;
      take t;
      thus t < k by A5,NAT_1:38;
      (power F_Complex).(v,k) = (power F_Complex).(v,t)*v by A5,GROUP_1:def 8;
@@ -1861,12 +1867,12 @@ A4:  P[k];
    end;
 
   theorem
-   for n be non empty Nat
+   for n be non empty Element of NAT
    for x be Element of F_Complex
    for v be CRoot of n,x st v = 0.F_Complex holds
     x = 0.F_Complex
    proof
-    let n be non empty Nat;
+    let n be non empty Element of NAT;
     let x be Element of F_Complex;
     let v be CRoot of n,x;
     assume v = 0.F_Complex;

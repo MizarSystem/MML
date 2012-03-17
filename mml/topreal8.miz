@@ -10,7 +10,8 @@ environ
       GRAPH_2, REALSET1, FINSEQ_4, FINSEQ_6, MATRIX_1, FUNCT_1, TOPREAL1,
       EUCLID, SEQM_3, RLSUB_2, ARYTM_1, PRE_TOPC, ABSVALUE, MCART_1, TARSKI,
       SETFAM_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, NAT_1, BINARITH, COMPLEX1,
+ notations TARSKI, XBOOLE_0, SUBSET_1,
+ NUMBERS,XCMPLX_0, NAT_1, BINARITH, COMPLEX1,
       SETFAM_1, FUNCT_1, FINSEQ_5, FINSEQ_6, RFINSEQ, GRAPH_2, MATRIX_1,
       RELSET_1, FINSEQ_1, REALSET1, STRUCT_0, PRE_TOPC, EUCLID, TOPREAL1,
       GOBOARD1, GOBOARD5, FINSEQ_4, XXREAL_0;
@@ -19,7 +20,7 @@ environ
       GRAPH_2, SPRECT_1;
  registrations RELSET_1, FINSEQ_6, FINSEQ_5, GOBOARD9, INT_1, REVROT_1,
       SPRECT_1, SPRECT_3, FINSEQ_1, SPPOL_2, MEMBERED, ORDINAL1, REALSET1,
-      XREAL_0, XXREAL_0;
+      XREAL_0, XXREAL_0, NAT_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions FINSEQ_6, GOBOARD1, GOBOARD5, TOPREAL1, TARSKI;
  theorems GRAPH_2, GOBOARD1, FINSEQ_3, NAT_1, FINSEQ_5, TOPREAL1, FINSEQ_1,
@@ -27,7 +28,7 @@ environ
       RFINSEQ, INT_1, MSSCYC_1, JORDAN3, REVROT_1, BINARITH, SPRECT_3,
       GOBOARD2, TOPREAL3, GOBOARD3, SPPOL_2, CQC_THE1, JORDAN8, GOBOARD5,
       GOBOARD7, ENUMSET1, SETFAM_1, XBOOLE_0, XBOOLE_1, REALSET1, XREAL_1,
-      CARD_1, XXREAL_0;
+      CARD_1, XXREAL_0, ORDINAL1;
 
 begin
 
@@ -66,7 +67,7 @@ end;
 begin :: FinSequences
 
 reserve G for Go-board,
-        i,j,k,m,n for Nat;
+        i,j,k,m,n for Element of NAT;
 
 registration
  cluster non constant FinSequence;
@@ -102,8 +103,8 @@ A1: len f <= 2;
   suppose
 A2: len f = 2;
 then A3: dom f = {1,2} by FINSEQ_1:4,def 3;
-      for n,m being Nat st n in dom f & m in dom f holds f.n=f.m
-    proof let n,m be Nat such that
+      for n,m being Element of NAT st n in dom f & m in dom f holds f.n=f.m
+    proof let n,m be Element of NAT such that
 A4:    n in dom f & m in dom f;
      per cases by A3,A4,TARSKI:def 2;
      suppose n = 1 & m = 1 or n = 2 & m = 2;
@@ -286,8 +287,9 @@ A9:  f/.n = M*(i,j) by A2,GOBOARD1:def 11;
    end;
    suppose
 A10:  n > len f;
-    then consider k such that
+    then consider k be Nat such that
 A11:  n = len f + k by NAT_1:28;
+   reconsider k as Element of NAT by ORDINAL1:def 13;
        len f + 1 <= n by A10,NAT_1:38;
     then A12: 1 <= k by A11,XREAL_1:8;
 A13: 1 <= k+1 by NAT_1:29;
@@ -328,6 +330,7 @@ A29: f/.n = M*(m,k) by A21,A23,A24,GRAPH_2:61;
 A30: n > len f;
    then consider k0 being Nat such that
 A31: n = len f + k0 by NAT_1:28;
+   reconsider k0 as Element of NAT by ORDINAL1:def 13;
       len f + 1 <= n by A30,NAT_1:38;
    then A32: 1 <= k0 by A31,XREAL_1:8;
 A33: 1 <= k0+1 by NAT_1:29;
@@ -363,11 +366,12 @@ end;
 end;
 
 Lm1:
- for p be FinSequence, m, n be Nat
+ for p be FinSequence, m, n be Element of NAT
   st 1<=m & m<=n+1 & n<=len p
  holds len (m, n)-cut p +m = n+1 &
- for i being Nat st i<len (m, n)-cut p holds ((m, n)-cut p).(i+1)=p.(m+i)
- proof let p be FinSequence, m, n be Nat such that
+ for i being Element of NAT st i<len (m, n)-cut p
+  holds ((m, n)-cut p).(i+1)=p.(m+i)
+ proof let p be FinSequence, m, n be Element of NAT such that
 A1: 1<=m & m<=n+1 & n<=len p;
    m <= n+1 by A1;
    then m = n+1 or m < n+1 by XXREAL_0:1;
@@ -419,12 +423,13 @@ A6: k+1 <= len f + 1 by A4,XREAL_1:8;
        .= len IT + k+1;
    then len f = len IT + k;
    then A7: len IT = len f - k;
-      for m be Nat st m in dom IT holds IT.m = f.(m+k)
-    proof let m be Nat such that
+      for m be Element of NAT st m in dom IT holds IT.m = f.(m+k)
+    proof let m be Element of NAT such that
 A8:    m in dom IT;
          1 <= m by A8,FINSEQ_3:27;
-      then consider i such that
+      then consider i be Nat such that
 A9:     m = 1+i by NAT_1:28;
+      reconsider i as Element of NAT by ORDINAL1:def 13;
          m <= len IT by A8,FINSEQ_3:27;
       then i < len IT by A9,NAT_1:38;
      hence IT.m = f.(k+1+i) by A5,A6,A9,Lm1
@@ -452,8 +457,8 @@ A4:  f|0 = {};
   suppose
 A5: 1 <= k;
 A6: len(f|k)+1 = k+1 by A1,FINSEQ_1:80;
-      for i being Nat st i<len(f|k) holds (f|k).(i+1)= f.(1+i)
-    proof let i be Nat;
+      for i being Element of NAT st i<len(f|k) holds (f|k).(i+1)= f.(1+i)
+    proof let i be Element of NAT;
      assume i<len(f|k);
       then i+1 <= k by A6,NAT_1:38;
      hence (f|k).(i+1)= f.(1+i) by FINSEQ_3:121;
@@ -474,7 +479,7 @@ proof
 A1: p..f = len f;
       len f <>0 by FINSEQ_1:25;
    then A2: 1 <= len f by NAT_1:39;
-  then reconsider i = len f - 1 as Nat by INT_1:18;
+  then reconsider i = len f - 1 as Element of NAT by INT_1:18;
       len f <> 0 by FINSEQ_1:25;
    then A3: p in rng f by A1,Th4;
   then A4: p..(f^g) = p..f by FINSEQ_6:8;
@@ -670,9 +675,9 @@ theorem Th22:
 proof let f be circular s.c.c. FinSequence of TOP-REAL 2,n such that
 A1: n < len f and
 A2: len f > 4;
-     for c1,c2 being Nat
+     for c1,c2 being Element of NAT
    st c1 in dom(f|n) & c2 in dom(f|n) & (f|n)/.c1 = (f|n)/.c2 holds c1 = c2
-   proof let c1,c2 being Nat such that
+   proof let c1,c2 being Element of NAT such that
 A3:  c1 in dom(f|n) and
 A4:  c2 in dom(f|n) and
 A5:  (f|n)/.c1 = (f|n)/.c2;
@@ -702,10 +707,10 @@ end;
 
 theorem Th23:
  for f being circular s.c.c. FinSequence of TOP-REAL 2 st len f > 4
-  for i,j being Nat st 1 < i & i < j & j <= len f holds f/.i <> f/.j
+  for i,j being Element of NAT st 1 < i & i < j & j <= len f holds f/.i <> f/.j
 proof let f be circular s.c.c. FinSequence of TOP-REAL 2 such that
 A1: len f > 4;
- let i,j be Nat such that
+ let i,j be Element of NAT such that
 A2: 1 < i and
 A3: i < j and
 A4: j <= len f;
@@ -727,9 +732,9 @@ theorem Th24:
 proof let f be circular s.c.c. FinSequence of TOP-REAL 2,n such that
 A1: 1 <= n and
 A2: len f > 4;
-     for c1,c2 being Nat
+     for c1,c2 being Element of NAT
    st c1 in dom(f/^n) & c2 in dom(f/^n) & (f/^n)/.c1 = (f/^n)/.c2 holds c1 = c2
-   proof let c1,c2 being Nat such that
+   proof let c1,c2 being Element of NAT such that
 A3:  c1 in dom(f/^n) and
 A4:  c2 in dom(f/^n) and
 A5:  (f/^n)/.c1 = (f/^n)/.c2;
@@ -1081,9 +1086,9 @@ A13: x <> f/.i & x <> f/.(i+1) by A12,TARSKI:def 2;
 A14: j in dom f and
 A15: x = f.j by FUNCT_1:def 5;
 A16:  x = f/.j by A14,A15,FINSEQ_4:def 4;
-  reconsider j as Nat by A14;
+  reconsider j as Element of NAT by A14;
 A17:  1 <= j by A14,FINSEQ_3:27;
-   reconsider j as Nat;
+   reconsider j as Element of NAT;
 A18: x in LSeg(f,i) by A11,XBOOLE_0:def 3;
 A19: j <> i & j <> i+1 by A13,A14,A15,FINSEQ_4:def 4;
      now per cases by A19,XXREAL_0:1;
@@ -1092,8 +1097,9 @@ A19: j <> i & j <> i+1 by A13,A14,A15,FINSEQ_4:def 4;
         j <= len f by A14,FINSEQ_3:27;
      then A21:    j = len f by A20,XXREAL_0:1;
 A22:   1 < len f by A3,A7,XXREAL_0:2;
-     then consider k such that
+     then consider k be Nat such that
 A23:   len f = 1 + k by NAT_1:28;
+      reconsider k as Element of NAT by ORDINAL1:def 13;
         1 <= k by A22,A23,NAT_1:38;
      then A24:    x in LSeg(f,k) by A16,A21,A23,TOPREAL1:27;
         i <= k by A2,A23,NAT_1:38;
@@ -1196,8 +1202,9 @@ A2: j+1 < len(f^'g);
 A3: x in LSeg(f^'g,i) /\ LSeg(f^'g,j);
  assume that
 A4: x = g/.len g;
-  consider k such that
+  consider k be Nat such that
 A5: j = len f + k by A1,NAT_1:28;
+   reconsider k as Element of NAT by ORDINAL1:def 13;
       len(f^'g)+1 = len f + len g by GRAPH_2:13;
    then A6:  j+1+1 < len f + len g by A2,XREAL_1:8;
       j+1+1 = len f+(k+1+1) by A5;
@@ -1263,11 +1270,12 @@ A14: j < len f;
  end;
  suppose
 A16: i >= len f;
-   then consider m such that
+   then consider m be Nat such that
 A17:  i = len f + m by NAT_1:28;
       len f < j by A6,A16,XXREAL_0:2;
-   then consider n such that
+   then consider n be Nat such that
 A18:  j = len f + n by NAT_1:28;
+      reconsider m,n as Element of NAT by ORDINAL1:def 13;
 A19:  m < n by A6,A17,A18,XREAL_1:8;
        j+1 < len f + len g by A7,A8,XREAL_1:8;
     then len f + (n+1) < len f + len g by A18;
@@ -1292,8 +1300,9 @@ A26: 1 <= i;
   then consider x being set such that
 A27: x in LSeg(f^'g,i) /\ LSeg(f^'g,j) by XBOOLE_0:4;
 A28: LSeg(f^'g,i) = LSeg(f,i) by A25,Th28;
-  consider k such that
+  consider k be Nat such that
 A29:  j = len f + k by A24,NAT_1:28;
+  reconsider k as Element of NAT by ORDINAL1:def 13;
      j+1 < len f+ len g by A7,A8,XREAL_1:8;
   then len f + (k +1) < len f+ len g by A29;
   then k+1 < len g by XREAL_1:8;
@@ -1462,13 +1471,15 @@ A5:len g > 1 by A2,Th2;
 end;
 
 theorem
-   (for n st n in dom f ex i,j st [i,j] in Indices G & f/.n=G*(i,j)) &
+   (for n be Nat st n in dom f
+    ex i,j be Nat st [i,j] in Indices G & f/.n=G*(i,j)) &
  f is non constant circular unfolded s.c.c. special & len f > 4
 implies
  ex g st g is_sequence_on G & g is unfolded s.c.c. special &
   L~f = L~g & f/.1 = g/.1 & f/.len f = g/.len g & len f <= len g
 proof assume that
-A1: for n st n in dom f ex i,j st [i,j] in Indices G & f/.n=G*(i,j) and
+A1: for n be Nat st n in dom f ex i,j be Nat
+    st [i,j] in Indices G & f/.n=G*(i,j) and
 A2: f is non constant circular unfolded and
 A3: f is s.c.c. and
 A4: f is special and
@@ -1492,14 +1503,15 @@ A13: f = h1^(f/^(1+1)) by RFINSEQ:21
      .= h1^(2, len h2)-cut h2 by A12,FINSEQ_6:87
      .= h1^'h2 by GRAPH_2:def 2;
 A14: dom h1 c= dom f by FINSEQ_5:20;
-A15: for n st n in dom h1
-     ex i,j st [i,j] in Indices G & h1/.n=G*(i,j)
-   proof let n;
+A15: for n being Element of NAT st n in dom h1
+     ex i,j be Element of NAT st [i,j] in Indices G & h1/.n=G*(i,j)
+   proof let n be Element of NAT;
      assume
-A16:    n in dom h1;
-      then consider i,j such that
-A17:    [i,j] in Indices G and
-A18:    f/.n=G*(i,j) by A1,A14;
+A16: n in dom h1;
+      then consider i,j be Nat such that
+A17:  [i,j] in Indices G and
+A18:  f/.n=G*(i,j) by A1,A14;
+    reconsider i, j as Element of NAT by ORDINAL1:def 13;
     take i,j;
     thus [i,j] in Indices G by A17;
     thus h1/.n=G*(i,j) by A16,A18,FINSEQ_4:85;
@@ -1507,21 +1519,23 @@ A18:    f/.n=G*(i,j) by A1,A14;
 A19: h1 is one-to-one by A5,A6,Th22;
      h1 is s.n.c. by A6,Th20;
   then consider g1 such that
-A20:  g1 is_sequence_on G and
+A20: g1 is_sequence_on G and
 A21: g1 is one-to-one unfolded s.n.c. special and
 A22: L~h1 = L~g1 and
 A23: h1/.1 = g1/.1 and
 A24: h1/.len h1 = g1/.len g1 and
 A25: len h1 <= len g1 by A15,A19,GOBOARD3:1;
   reconsider g1 as non trivial FinSequence of TOP-REAL 2 by A7,A25,REALSET1:13;
-A26: for n st n in dom h2 ex i,j st [i,j] in Indices G & h2/.n=G*(i,j)
-   proof let n;
+A26: for n being Element of NAT st n in dom h2
+   ex i,j be Element of NAT st [i,j] in Indices G & h2/.n=G*(i,j)
+   proof let n be Element of NAT;
     assume
-A27:   n in dom h2;
+A27: n in dom h2;
      then n+1 in dom f by FINSEQ_5:29;
-     then consider i,j such that
-A28:    [i,j] in Indices G and
-A29:    f/.(n+1)=G*(i,j) by A1;
+     then consider i,j be Nat such that
+A28: [i,j] in Indices G and
+A29: f/.(n+1)=G*(i,j) by A1;
+    reconsider i, j as Element of NAT by ORDINAL1:def 13;
     take i,j;
     thus [i,j] in Indices G by A28;
     thus h2/.n=G*(i,j) by A27,A29,FINSEQ_5:30;

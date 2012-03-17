@@ -12,22 +12,24 @@ environ
       SUBSET_1, PRE_TOPC, REALSET1, CARD_1, SGRAPH1, CAT_1, AMI_1, RELAT_2,
       PENCIL_2, FINSET_1, FUNCT_2, PARSP_1, WAYBEL_3, VECTSP_1, FDIFF_1,
       GRAPH_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, XCMPLX_0, XXREAL_0, NAT_1, RELAT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, XCMPLX_0, XXREAL_0,
+      NUMBERS, NAT_1, RELAT_1,
       SUBSET_1, REALSET1, FUNCT_1, FUNCT_2, FUNCOP_1, RELSET_1, REALSET2,
       CARD_1, FINSET_1, FINSEQ_1, CARD_3, POLYNOM1, DOMAIN_1, STRUCT_0,
       PRE_TOPC, PBOOLE, PZFMISC1, T_0TOPSP, PRALG_1, WAYBEL_3, PENCIL_1,
       PENCIL_2, TOPS_2, GRAPH_2;
  constructors DOMAIN_1, XXREAL_0, PZFMISC1, TOPS_2, T_0TOPSP, GRAPH_2,
-      POLYNOM1, PENCIL_2;
+      POLYNOM1, PENCIL_2, NAT_1;
  registrations STRUCT_0, RELSET_1, SUBSET_1, PENCIL_1, XREAL_0, ARYTM_3,
-      TREES_9, FUNCT_2, XBOOLE_0, REALSET1, FINSET_1, TEX_1, PBOOLE, XXREAL_0;
+      TREES_9, FUNCT_2, XBOOLE_0, REALSET1, FINSET_1, TEX_1, PBOOLE, XXREAL_0,
+      NAT_1;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
  definitions TARSKI, XBOOLE_0, PBOOLE, FUNCT_1, FUNCT_2, PENCIL_2, T_0TOPSP;
  theorems XBOOLE_0, ZFMISC_1, FUNCT_1, FINSEQ_1, FINSEQ_3, NAT_1, CARD_3,
       PBOOLE, REALSET2, PRE_TOPC, FUNCT_7, PRALG_1, PZFMISC1, TARSKI, FUNCT_2,
       REALSET1, TOPS_2, PENCIL_1, PENCIL_2, CARD_1, XBOOLE_1, PUA2MSS1,
       FINSET_1, CARD_2, GRAPH_2, FUNCOP_1, RELAT_1, RELSET_1, XREAL_1,
-      XXREAL_0;
+      XXREAL_0, ORDINAL1;
  schemes TRANSGEO, NAT_1, FINSEQ_2, PENCIL_2, FINSEQ_1, PBOOLE, FUNCT_1;
 
 begin :: Preliminaries
@@ -1374,17 +1376,18 @@ theorem Th22:
     defpred P[set,set] means
     for a,b being Point of A.i st $1=a & $2=b holds a,b are_collinear;
 
-    A8: for j being Nat, x,y being set st
+    A8: for j being Element of NAT, x,y being set st
     1 <= j & j < len f & x=f.j & y=f.(j+1) holds P[x,y] by A7;
     consider F being one-to-one FinSequence of the carrier of A.i such that
     A9: p=F.1 & q=F.len F & rng F c= rng f &
-    for j being Nat st 1 <= j & j < len F holds P[F.j,F.(j+1)]
+    for j being Element of NAT st 1 <= j & j < len F holds P[F.j,F.(j+1)]
     from PENCIL_2:sch 1(A6,A8);
 
     deffunc H(set) = product (b2+*(i,{F.$1}));
 
     consider G being FinSequence such that
-    A10: len G = len F & for j being Nat st j in Seg (len F) holds G.j=H(j)
+    A10: len G = len F &
+    for j being Element of NAT st j in Seg (len F) holds G.j=H(j)
     from FINSEQ_1:sch 2;
     rng G c= bool the carrier of Segre_Product A
     proof
@@ -1392,7 +1395,7 @@ theorem Th22:
       assume a in rng G; then
       consider o being set such that
       A11: o in dom G & G.o=a by FUNCT_1:def 5;
-      reconsider o as Nat by A11;
+      reconsider o as Element of NAT by A11;
       o in Seg (len F) by A10,A11,FINSEQ_1:def 3; then
       A12: G.o = product (b2+*(i,{F.o})) by A10;
       dom G = dom F by A10,FINSEQ_3:31; then
@@ -1455,6 +1458,7 @@ theorem Th22:
       assume A23: 1<=j & j<len D;
       let Di,Di1 be Segre-Coset of A such that
       A24: Di=D.j & Di1=D.(j+1);
+      reconsider j as Element of NAT by ORDINAL1:def 13;
       j in dom D by A23,FINSEQ_3:27; then
       j in Seg (len F) by A10,FINSEQ_1:def 3; then
       j in dom F by FINSEQ_1:def 3; then
@@ -1703,12 +1707,16 @@ theorem Th23:
               suppose D.i in rng E; then
                 consider i0 being set such that
                 A32: i0 in dom E & D.i = E.i0 by FUNCT_1:def 5;
-                thus D.i is Segre-Coset of A by A24,A32;
+                reconsider i0 as Element of NAT by A32,ORDINAL1:def 13;
+                i0 is Nat;
+                hence thesis by A24,A32;
               end;
               suppose D.i in rng F; then
                 consider i0 being set such that
                 A33: i0 in dom F & D.i = F.i0 by FUNCT_1:def 5;
-                thus D.i is Segre-Coset of A by A26,A33;
+                reconsider i0 as Element of NAT by A33,ORDINAL1:def 13;
+                i0 is Nat;
+                hence thesis by A26,A33;
               end;
             end;
             thus for i being Nat st 1<=i & i<len D for Di,Di1 being Segre-Coset
@@ -1718,7 +1726,7 @@ theorem Th23:
               assume A34: 1<=i & i<len D;
               let Di,Di1 be Segre-Coset of A such that
               A35: Di=D.i & Di1=D.(i+1);
-
+              reconsider i as Element of NAT by ORDINAL1:def 13;
               per cases;
               suppose A36: i<len E; then
                 A37: Di=E.i by A34,A35,GRAPH_2:14;
@@ -1730,6 +1738,7 @@ theorem Th23:
               suppose i>=len E; then
                 consider k being Nat such that
                 A38: i=len E+k by NAT_1:28;
+                reconsider k as Element of NAT by ORDINAL1:def 13;
                 len F > 0 by A29; then
                 F <> {} by FINSEQ_1:25; then
                 A39: len D + 1 = len E + len F by GRAPH_2:13;
@@ -1770,7 +1779,7 @@ theorem Th23:
           end;
         end;
       end;
-      for n being Nat holds P[n] from NAT_1:sch 1(A5,A9); then
+      for n being Nat holds P[n] from NAT_1:sch 2(A5,A9); then
       P[diff(b1,b2)]; then
       consider D being FinSequence of bool the carrier of Segre_Product A
       such that
@@ -1836,8 +1845,8 @@ theorem Th23:
         end;
       end;
     end;
-    A60: for n being Nat holds P[n] from NAT_1:sch 1(A50,A52);
-    thus indx(b1) = indx(b2) by A3,A49,A60;
+    for n being Nat holds P[n] from NAT_1:sch 2(A50,A52);
+    hence indx(b1) = indx(b2) by A3,A49;
   end;
 
 theorem Th24:
@@ -1879,7 +1888,8 @@ theorem Th24:
       deffunc F(Nat)=f.:(D.$1);
       consider E being FinSequence of bool the carrier of Segre_Product A
       such that
-      A7: len E = len D & for j being Nat st j in Seg len D holds E.j = F(j)
+      A7: len E = len D &
+      for j being Element of NAT st j in Seg len D holds E.j = F(j)
       from FINSEQ_2:sch 1;
       1 in dom D by A3,A6,FUNCT_1:def 4; then
       1 in Seg len D by FINSEQ_1:def 3; then
@@ -3309,7 +3319,7 @@ theorem Th27:
           end;
         end;
       end;
-      for n being Nat holds P[n] from NAT_1:sch 1(A5,A6); then
+      for n being Nat holds P[n] from NAT_1:sch 2(A5,A6); then
       A15: P[len D];
       1 in dom D by A4,FUNCT_1:def 4; then
       1 <= len D by FINSEQ_3:27; then

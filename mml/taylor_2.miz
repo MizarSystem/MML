@@ -11,7 +11,8 @@ environ
       RCOMP_1, SIN_COS, FDIFF_1, SERIES_1, GROUP_1, SUPINF_2, TAYLOR_1,
       TAYLOR_2, RFUNCT_2, MATRIX_2;
  notations XBOOLE_0, SUBSET_1, RELAT_1, PARTFUN1, RFUNCT_2, RCOMP_1, XXREAL_0,
-      XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1, COMPLEX1, SEQ_1, SEQ_2,
+      XCMPLX_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1, COMPLEX1, SEQ_1,
+      SEQ_2,
       SERIES_1, FDIFF_1, SEQFUNC, PREPOWER, SIN_COS, TAYLOR_1, ABIAN;
  constructors ARYTM_0, REAL_1, NAT_1, SEQ_2, RCOMP_1, RFUNCT_2, FDIFF_1,
       LIMFUNC1, PREPOWER, SERIES_1, COMSEQ_3, SIN_COS, ABIAN, TAYLOR_1;
@@ -21,33 +22,33 @@ environ
  theorems XBOOLE_1, ABSVALUE, REAL_2, PARTFUN1, XCMPLX_1, RELAT_1, RCOMP_1,
       SEQ_1, SEQ_2, SIN_COS, SERIES_1, FUNCT_1, RFUNCT_2, NAT_1, NEWTON, POWER,
       FDIFF_1, FDIFF_2, TAYLOR_1, SIN_COS2, XREAL_1, RFUNCT_1, ABIAN, COMPLEX1,
-      XXREAL_0;
+      XXREAL_0, ORDINAL1;
  schemes NAT_1;
 
 begin
 
 theorem Th1:
-  for x be Real, n be Nat holds
+  for x be Real, n be Element of NAT holds
     abs(x |^ n) = abs(x) |^ n
 proof
-  let x be Real, n be Nat;
-  defpred P[Nat] means abs(x |^ $1) = abs(x) |^ $1;
+  let x be Real, n be Element of NAT;
+  defpred P[Element of NAT] means abs(x |^ $1) = abs(x) |^ $1;
 A1: P[0]
   proof
     abs(x |^ 0) = abs(1) by NEWTON:9
               .= 1 by ABSVALUE:def 1;
     hence thesis by NEWTON:9;
   end;
-A2: for k be Nat st P[k] holds P[k+1]
+A2: for k be Element of NAT st P[k] holds P[k+1]
   proof
-    let k be Nat such that
+    let k be Element of NAT such that
 A3: P[k];
     abs(x |^ (k+1)) = abs(x * x |^ k) by NEWTON:11
                    .= abs(x) * abs(x |^ k) by COMPLEX1:151
                    .= abs(x) |^ (k+1) by NEWTON:11,A3;
   hence thesis;
   end;
-  for n be Nat holds P[n] from NAT_1:sch 1(A1,A2);
+  for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
   hence thesis;
 end;
 
@@ -61,7 +62,7 @@ definition
 end;
 
 theorem Th2:
-  for n be Nat, f be PartFunc of REAL,REAL, r be Real st
+  for n be Element of NAT, f be PartFunc of REAL,REAL, r be Real st
   ( 0 < r & f is_differentiable_on n+1, ].-r,r.[ )
     for x be Real st x in ].-r, r.[ holds
       ex s be Real st 0 < s & s < 1 &
@@ -69,7 +70,7 @@ theorem Th2:
                + (diff(f,].-r,r.[).(n+1)).(s*x)
                * x |^ (n+1) / ((n+1)!)
 proof
-  let n be Nat,
+  let n be Element of NAT,
       f be PartFunc of REAL,REAL,
       r be Real such that
 A1: 0 < r and
@@ -86,7 +87,7 @@ A5: f.x=Partial_Sums(Taylor(f, ].0-r,0+r.[,0,x)).n
 end;
 
 theorem
-  for n be Nat, f be PartFunc of REAL,REAL, x0, r be Real st
+  for n be Element of NAT, f be PartFunc of REAL,REAL, x0, r be Real st
   ( 0 < r & f is_differentiable_on n+1, ].x0-r,x0+r.[ )
     for x be Real st x in ].x0-r, x0+r.[ holds
       ex s be Real st 0 < s & s < 1 &
@@ -94,7 +95,7 @@ theorem
         = abs( (diff(f,].x0-r,x0+r.[).(n+1)).(x0+s*(x-x0))
                * (x-x0) |^ (n+1) / ((n+1)!) )
 proof
-  let n be Nat;
+  let n be Element of NAT;
   let f be PartFunc of REAL,REAL;
   let x0,r be Real such that
 A1: 0 < r and
@@ -110,7 +111,7 @@ A5: f.x=Partial_Sums(Taylor(f, ].x0-r,x0+r.[,x0,x)).n
 end;
 
 theorem Th4:
-  for n be Nat, f be PartFunc of REAL,REAL, r be Real st
+  for n be Element of NAT, f be PartFunc of REAL,REAL, r be Real st
   ( 0 < r & f is_differentiable_on n+1, ].-r,r.[ )
     for x be Real st x in ].-r, r.[ holds
       ex s be Real st 0 < s & s < 1 &
@@ -118,7 +119,7 @@ theorem Th4:
                = abs( (diff(f,].-r,r.[).(n+1)).(s*x)
                * x |^ (n+1) / ((n+1)!) )
 proof
-  let n be Nat;
+  let n be Element of NAT;
   let f be PartFunc of REAL,REAL;
   let r be Real such that
 A1: 0 < r and
@@ -156,14 +157,15 @@ A4:x in ].-r,r.[;
 end;
 
 theorem Th6:
-  for n be Nat, r be Real holds diff(exp_R,].-r,r.[).n=exp_R | ].-r,r.[
+  for n be Element of NAT, r be Real
+   holds diff(exp_R,].-r,r.[).n=exp_R | ].-r,r.[
 proof
-  let n be Nat, r be Real;
-  defpred P[Nat] means diff(exp_R,].-r,r.[).$1 =exp_R | ].-r,r.[;
+  let n be Element of NAT, r be Real;
+  defpred P[Element of NAT] means diff(exp_R,].-r,r.[).$1 =exp_R | ].-r,r.[;
   A1: P[0] by TAYLOR_1:def 4;
-  A2: for k be Nat st P[k] holds P[k+1]
+  A2: for k be Element of NAT st P[k] holds P[k+1]
    proof
-   let k be Nat such that
+   let k be Element of NAT such that
     A3: P[k];
     A4: exp_R is_differentiable_on ].-r,r.[ by FDIFF_1:34,TAYLOR_1:16;
     diff(exp_R,].-r,r.[).(k+1)=(diff(exp_R,].-r,r.[).k) `| ].-r,r.[
@@ -172,15 +174,15 @@ proof
                    .=exp_R | ].-r,r.[ by Th5;
    hence thesis;
    end;
-  for n be Nat holds P[n] from NAT_1:sch 1(A1,A2);
+  for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
   hence thesis;
 end;
 
 theorem Th7:
-  for n be Nat, r, x be Real st x in ].-r,r.[ holds
+  for n be Element of NAT, r, x be Real st x in ].-r,r.[ holds
     (diff(exp_R,].-r,r.[).n).x = exp_R.x
 proof
-  let n be Nat;
+  let n be Element of NAT;
   let r,x be Real such that
 A1: x in ].-r,r.[;
 A2: x in dom(exp_R | ].-r,r.[) by Th5,A1;
@@ -190,10 +192,10 @@ A2: x in dom(exp_R | ].-r,r.[) by Th5,A1;
 end;
 
 theorem
-  for n be Nat, r,x be Real st 0 < r holds
+  for n be Element of NAT, r,x be Real st 0 < r holds
     Maclaurin(exp_R, ].-r,r.[,x).n = x |^ n / (n!)
 proof
-  let n be Nat;
+  let n be Element of NAT;
   let r,x be Real such that
 A1: r > 0;
 A2: abs(0-0)=0 by ABSVALUE:7;
@@ -208,12 +210,12 @@ A4: 0 in dom(exp_R | ].-r,r.[) by A3,Th5;
 end;
 
 theorem
-  for n be Nat, r,x,s be Real st
+  for n be Element of NAT, r,x,s be Real st
     x in ].-r,r.[ & 0 < s & s < 1 holds
       abs((diff(exp_R,].-r,r.[).(n+1)).(s*x) * x |^ (n+1) / ((n+1)!) )
                <= abs(exp_R.(s*x)) * abs(x) |^ (n+1) / ((n+1)!)
 proof
-  let n be Nat;
+  let n be Element of NAT;
   let r,x,s be Real such that
 A1:x in ].-r,r.[ and
 A2: 0 < s & s < 1;
@@ -236,11 +238,12 @@ A6: abs((n+1)!) = ((n+1)!) by ABSVALUE:def 1;
 end;
 
 theorem Th10:
-  for r be Real, n be Nat holds
+  for r be Real, n be Element of NAT holds
     exp_R is_differentiable_on n, ].-r,r.[
 proof
-  let r be Real, n be Nat;
-  let i be Nat such that i <= n-1;
+  let r be Real, n be Element of NAT;
+  let i be Element of NAT such that i <= n-1;
+   reconsider i as Element of NAT by ORDINAL1:def 13;
   A1: dom(diff(exp_R,].-r,r.[).i) = dom(exp_R | ].-r,r.[) by Th6
                                .= ].-r,r.[ by Th5;
   for x be Real st x in ].-r,r.[ holds
@@ -259,7 +262,7 @@ end;
 theorem Th11:
   for r be Real st 0 < r
    ex M,L be Real st 0 <= M & 0 <= L &
-    for n be Nat holds
+    for n be Element of NAT holds
      for x,s be Real st x in ].-r,r.[ & 0 < s & s < 1 holds
       abs((diff(exp_R,].-r,r.[).n).(s*x) * x |^ n /(n!))
        <= M * L |^ n / (n!)
@@ -268,7 +271,7 @@ theorem Th11:
   A1: r > 0;
   take M = exp_R.r;
   take L = r;
-  now let n be Nat;
+  now let n be Element of NAT;
     now let x,s be Real such that
       A2: x in ].-r,r.[ & 0 < s & s < 1;
       x in ].0-r,0+r.[ by A2; then
@@ -293,21 +296,21 @@ theorem Th11:
       A12: abs(x |^ n /(n!)) =abs(x |^ n) / abs(n!) by COMPLEX1:153
                            .=abs(x |^ n) / (n!) by A11,ABSVALUE:def 1
                            .=abs(x) |^ n /(n!) by Th1;
-      A13: for a,b be Real st 0 <=a & a<=b for n be Nat holds
+      A13: for a,b be Real st 0 <=a & a<=b for n be Element of NAT holds
                      0<= a |^ n  & a |^ n <= b |^ n
       proof
         let a,b be Real such that
         A14: 0 <= a & a <= b;
-        defpred P[Nat] means 0 <= a |^ $1 & a |^ $1 <= b |^ $1;
+        defpred P[Element of NAT] means 0 <= a |^ $1 & a |^ $1 <= b |^ $1;
         A15: P[0]
         proof
           A16: b |^ 0 = 1 by NEWTON:9;
           thus 0 <= a |^ 0 by NEWTON:9;
           thus thesis by A16,NEWTON:9;
         end;
-        A17: for k be Nat st P[k] holds P[k+1]
+        A17: for k be Element of NAT st P[k] holds P[k+1]
         proof
-          let k be Nat such that
+          let k be Element of NAT such that
           A18: P[k];
           A19: b |^ (k+1) = b |^ k*b by NEWTON:11;
           0*a <= a |^ k*a by A14,A18,XREAL_1:68;
@@ -315,7 +318,7 @@ theorem Th11:
           a |^ k*a <= b |^ k*b by A14,A18,XREAL_1:68;
           hence thesis by NEWTON:11,A19;
         end;
-        for n be Nat holds P[n] from NAT_1:sch 1(A15,A17);
+        for n be Element of NAT holds P[n] from NAT_1:sch 1(A15,A17);
         hence thesis;
       end;
       abs(x) >= 0 by COMPLEX1:132; then
@@ -344,14 +347,14 @@ end;
 theorem Th12:
   for M,L be Real st M >= 0 & L >= 0
     for e be Real st e > 0 holds
-       ex n be Nat st for m be Nat st n <= m holds
+       ex n be Element of NAT st for m be Element of NAT st n <= m holds
           (M*L |^ m / (m!)) < e
 proof
   let M,L be Real such that
   A1: M >=0 & L >= 0;
-  A2: for n be Nat holds M*(L |^ n /(n!))=(M(#)(L ExpSeq)).n
+  A2: for n be Element of NAT holds M*(L |^ n /(n!))=(M(#)(L ExpSeq)).n
   proof
-    let n be Nat;
+    let n be Element of NAT;
     M*(L |^ n /(n!)) = M*((L ExpSeq).n) by SIN_COS:def 9
                      .= (M(#)(L ExpSeq)).n by SEQ_1:13;
     hence thesis;
@@ -363,11 +366,11 @@ proof
                            by SEQ_2:21,SEQ_2:22;
   let p be Real such that
     A4: p > 0;
-    consider n be Nat such that
-    A5: for m be Nat st n<=m holds abs((M(#)(L ExpSeq)).m - 0) < p
+    consider n be Element of NAT such that
+    A5: for m be Element of NAT st n<=m holds abs((M(#)(L ExpSeq)).m - 0) < p
                            by A4,SEQ_2:def 7,A3;
     take n;
-    now let m be Nat such that
+    now let m be Element of NAT such that
       A6: n <= m;
       A7: L |^ m >= 0 by POWER:3,A1;
       A8: m! > 0 by NEWTON:23;
@@ -387,8 +390,8 @@ end;
 
 theorem Th13:
   for r, e be Real st 0 < r & 0 < e holds
-    ex n be Nat st
-      for m be Nat st n <= m holds
+    ex n be Element of NAT st
+      for m be Element of NAT st n <= m holds
         for x,s be Real st x in ].-r,r.[ & 0 < s & s < 1 holds
           abs((diff(exp_R,].-r,r.[).m).(s*x) * x |^ m / (m!))< e
 proof
@@ -397,14 +400,15 @@ proof
   A2: 0 < e;
   consider M, L be Real such that
   A3: M >= 0 & L >= 0 and
-  A4: for n be Nat holds
+  A4: for n be Element of NAT holds
           for x,s be Real st x in ].-r,r.[ & 0 < s & s < 1 holds
              abs((diff(exp_R,].-r,r.[).n).(s*x) * x |^ n / (n!))
                      <= M*L |^ n / (n!) by Th11,A1;
-   consider n be Nat such that
-A5: for m be Nat st n <= m holds (M*L |^ m / (m!)) < e by A3,A2,Th12;
+   consider n be Element of NAT such that
+A5: for m be Element of NAT st n <= m holds (M*L |^ m / (m!)) < e
+ by A3,A2,Th12;
    take n;
-     let m be Nat such that
+     let m be Element of NAT such that
 A6: n <= m;
      let x,s be Real such that
 A7: x in ].-r,r.[ & 0 < s & s < 1;
@@ -417,20 +421,20 @@ end;
 
 theorem
   for r, e be Real st 0 < r & 0 < e holds
-  ex n be Nat st for m be Nat st n <= m holds
+  ex n be Element of NAT st for m be Element of NAT st n <= m holds
     for x being real number st x in ].-r,r.[ holds
       abs(exp_R.x-Partial_Sums(Maclaurin(exp_R,].-r,r.[,x)).m) < e
 proof
   let r, e be Real such that
 A1: r > 0 and
 A2: e > 0;
-    consider n be Nat such that
-    A3: for m be Nat st n <= m holds
+    consider n be Element of NAT such that
+    A3: for m be Element of NAT st n <= m holds
             for x,s be Real st x in ].-r,r.[ & 0 < s & s < 1 holds
                 abs( (diff(exp_R,].-r,r.[).m).(s*x)
                  * x |^ m / (m!) )< e  by Th13,A1,A2;
     take n;
-    let m be Nat such that
+    let m be Element of NAT such that
     A4: n <= m;
     A5: exp_R is_differentiable_on m+1, ].-r,r.[ by Th10;
     now let x be Real such that
@@ -452,9 +456,9 @@ theorem Th15:
   for x be Real holds x ExpSeq is absolutely_summable
 proof
   let x be Real;
-  for n be Nat holds abs(x ExpSeq.n) = (abs(x) ExpSeq).n
+  for n be Element of NAT holds abs(x ExpSeq.n) = (abs(x) ExpSeq).n
   proof
-    let n be Nat;
+    let n be Element of NAT;
 A1: n! > 0 by NEWTON:23;
     abs(x ExpSeq.n) = abs(x |^ n / (n!)) by SIN_COS:def 9
                    .= abs(x |^ n) / abs(n!) by COMPLEX1:153
@@ -483,7 +487,7 @@ proof
   proof
     now let t be set such that
       A3: t in NAT;
-      reconsider n=t as Nat by A3;
+      reconsider n=t as Element of NAT by A3;
       thus Maclaurin(exp_R,].-r,r.[,x).t
                          = Taylor(exp_R,].-r,r.[,0,x).n
                         .= (diff(exp_R,].-r,r.[).n).0 * (x-0) |^ n / (n!)
@@ -563,16 +567,16 @@ A2: Z is open Subset of REAL by A1,FDIFF_1:17;
 end;
 
 theorem Th19:
-  for r be Real, n be Nat holds
+  for r be Real, n be Element of NAT holds
     diff(sin,].-r,r.[).(2*n) = (-1) |^ n (#) sin | ].-r,r.[ &
     diff(sin,].-r,r.[).(2*n+1) = (-1) |^ n (#) cos | ].-r,r.[ &
     diff(cos,].-r,r.[).(2*n) = (-1) |^ n (#)cos | ].-r,r.[ &
     diff(cos,].-r,r.[).(2*n+1) = (-1) |^ (n+1) (#)sin | ].-r,r.[
 proof
-  let r be Real, n be Nat;
+  let r be Real, n be Element of NAT;
 A1: sin is_differentiable_on ].-r,r.[ by FDIFF_1:34,SIN_COS:73;
 A2: cos is_differentiable_on ].-r,r.[ by FDIFF_1:34,SIN_COS:72;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
       diff(sin,].-r,r.[).(2*$1) = (-1) |^ $1 (#) sin | ].-r,r.[ &
       diff(sin,].-r,r.[).(2*$1+1) = (-1) |^ $1 (#) cos | ].-r,r.[ &
       diff(cos,].-r,r.[).(2*$1) = (-1) |^ $1 (#) cos | ].-r,r.[ &
@@ -609,9 +613,9 @@ A3: P[0]
                 .= (-1) |^ (0+1) (#) sin | ].-r,r.[ by NEWTON:11;
       hence thesis by A4,A5,A6;
     end;
-    A7: for k be Nat st P[k] holds P[k+1]
+    A7: for k be Element of NAT st P[k] holds P[k+1]
     proof
-      let k be Nat such that
+      let k be Element of NAT such that
       A8: P[k];
       A9: (sin | ].-r,r.[) is_differentiable_on ].-r,r.[ &
            (cos | ].-r,r.[) is_differentiable_on ].-r,r.[
@@ -659,18 +663,18 @@ A3: P[0]
                   .= (-1) |^ ((k+1)+1) (#) sin | ].-r,r.[ by NEWTON:11;
       hence thesis by A10,A11,A12;
     end;
-    for n be Nat holds P[n] from NAT_1:sch 1(A3,A7);
+    for n be Element of NAT holds P[n] from NAT_1:sch 1(A3,A7);
     hence thesis;
 end;
 
 theorem Th20:
-  for n be Nat, r,x be Real st r > 0 holds
+  for n be Element of NAT, r,x be Real st r > 0 holds
   Maclaurin(sin, ].-r,r.[,x).(2*n) = 0 &
   Maclaurin(sin, ].-r,r.[,x).(2*n+1) = (-1) |^ n * x |^ (2*n+1) / ((2*n+1)!) &
   Maclaurin(cos, ].-r,r.[,x).(2*n) = (-1) |^ n * x |^ (2*n) / ((2*n)!) &
   Maclaurin(cos, ].-r,r.[,x).(2*n+1) = 0
 proof
-  let n be Nat, r,x be Real such that
+  let n be Element of NAT, r,x be Real such that
   A1: r > 0;
   abs(0-0)=0 by ABSVALUE:7; then
   A2: 0 in ].0-r,0+r.[ by A1,RCOMP_1:8;
@@ -727,15 +731,15 @@ proof
 end;
 
 theorem Th21:
-  for r be Real, n be Nat holds
+  for r be Real, n be Element of NAT holds
     sin is_differentiable_on n, ].-r,r.[ &
     cos is_differentiable_on n, ].-r,r.[
 proof
-  let r be Real, n be Nat;
-  now let i be Nat such that i <= n-1;
+  let r be Real, n be Element of NAT;
+  now let i be Element of NAT such that i <= n-1;
     A1: now per cases;
       suppose i is even; then
-        consider j be Nat such that
+        consider j be Element of NAT such that
         A2: i=2*j by ABIAN:def 2;
         thus dom(diff(sin,].-r,r.[).i)
                     = dom((-1) |^ j (#) sin | ].-r,r.[) by Th19,A2
@@ -743,7 +747,7 @@ proof
                    .= ].-r,r.[ by Th17;
       end;
       suppose i is odd; then
-        consider j be Nat such that
+        consider j be Element of NAT such that
         A3: i=2*j+1 by ABIAN:9;
         thus dom(diff(sin,].-r,r.[).i)
                     = dom((-1) |^ j (#) cos | ].-r,r.[) by Th19,A3
@@ -758,7 +762,7 @@ proof
       A4: x in ].-r,r.[;
       now per cases;
         suppose i is even; then
-          consider j be Nat such that
+          consider j be Element of NAT such that
           A5: i = 2*j by ABIAN:def 2;
           A6: diff(sin,].-r,r.[).i
                   = (-1) |^ j (#) sin | ].-r,r.[ by Th19,A5;
@@ -767,7 +771,7 @@ proof
           hence diff(sin,].-r,r.[).i is_differentiable_in x by A6,FDIFF_1:23;
         end;
         suppose i is odd; then
-          consider j be Nat such that
+          consider j be Element of NAT such that
           A7: i = 2*j+1 by ABIAN:9;
           A8: diff(sin,].-r,r.[).i
                   = (-1) |^ j (#) cos | ].-r,r.[ by Th19,A7;
@@ -783,10 +787,10 @@ proof
                         by A1,FDIFF_1:def 7;
   end;
   hence sin is_differentiable_on n, ].-r,r.[ by TAYLOR_1:def 5;
-  now let i be Nat such that i <= n-1;
+  now let i be Element of NAT such that i <= n-1;
     A9: now per cases;
       suppose i is even; then
-        consider j be Nat such that
+        consider j be Element of NAT such that
         A10: i = 2*j by ABIAN:def 2;
         thus dom(diff(cos,].-r,r.[).i)
                     = dom((-1) |^ j (#) cos | ].-r,r.[) by Th19,A10
@@ -794,7 +798,7 @@ proof
                    .= ].-r,r.[ by Th17;
       end;
       suppose i is odd; then
-        consider j be Nat such that
+        consider j be Element of NAT such that
         A11: i = 2*j+1 by ABIAN:9;
         thus dom(diff(cos,].-r,r.[).i)
                     = dom((-1) |^ (j+1) (#) sin | ].-r,r.[) by Th19,A11
@@ -809,7 +813,7 @@ proof
       A12: x in ].-r,r.[;
       now per cases;
         suppose i is even; then
-          consider j be Nat such that
+          consider j be Element of NAT such that
           A13: i = 2*j by ABIAN:def 2;
           A14: diff(cos,].-r,r.[).i
                    = (-1) |^ j (#) cos | ].-r,r.[ by Th19,A13;
@@ -819,7 +823,7 @@ proof
           hence diff(cos,].-r,r.[).i is_differentiable_in x by A14,FDIFF_1:23;
         end;
         suppose i is odd; then
-          consider j be Nat such that
+          consider j be Element of NAT such that
           A15: i = 2*j+1 by ABIAN:9;
           A16: diff(cos,].-r,r.[).i
                   = (-1) |^ (j+1) (#) sin | ].-r,r.[ by Th19,A15;
@@ -841,7 +845,7 @@ end;
 theorem Th22:
   for r be Real st r > 0
    ex r1,r2 be Real st r1 >= 0 & r2 >= 0 &
-  for n be Nat holds
+  for n be Element of NAT holds
     for x,s be Real st x in ].-r,r.[ & 0 < s & s < 1 holds
         abs((diff(sin,].-r,r.[).n).(s*x) * x |^ n / (n!))
                 <= r1 * r2 |^ n / (n!) &
@@ -852,7 +856,7 @@ proof
   A1: r > 0;
   take r1 = 1;
   take r2 = r;
-  now let n be Nat;
+  now let n be Element of NAT;
     let x,s be Real such that
       A2: x in ].-r,r.[ & s > 0 & s < 1;
       x in ].0-r,0+r.[ by A2; then
@@ -883,12 +887,12 @@ proof
       A9: abs((diff(sin,].-r,r.[).n).(s*x)) >= 0 by COMPLEX1:132;
       A10: abs((diff(cos,].-r,r.[).n).(s*x)) >= 0 by COMPLEX1:132;
       A11: abs(x) |^ n / (n!) >= 0 by A6,COMPLEX1:132;
-      A12: for k be Nat holds abs((-1) |^ k) = 1
+      A12: for k be Element of NAT holds abs((-1) |^ k) = 1
       proof
-        let k be Nat;
+        let k be Element of NAT;
         per cases;
           suppose k is even; then
-            consider j be Nat such that
+            consider j be Element of NAT such that
             A13: k = 2*j by ABIAN:def 2;
             thus abs((-1) |^ k) = abs(((-1) |^ (1+1)) |^ j) by NEWTON:14,A13
                                .= abs(((-1) |^ 1 * (-1)) |^ j) by NEWTON:11
@@ -897,7 +901,7 @@ proof
                                .= 1 by ABSVALUE:def 1;
           end;
           suppose k is odd; then
-            consider j be Nat such that
+            consider j be Element of NAT such that
             A14: k = 2*j+1 by ABIAN:9;
             thus abs((-1) |^ k) = abs((-1) |^ (2*j) * (-1))
                                                by NEWTON:11,A14
@@ -913,7 +917,7 @@ proof
       proof
         per cases;
           suppose n is even; then
-            consider k be Nat such that
+            consider k be Element of NAT such that
             A16: n = 2*k by ABIAN:def 2;
             A17: dom(((-1) |^ k) (#) (sin | ].-r,r.[))
                    = dom(sin | ].-r,r.[) by SEQ_1:def 6
@@ -931,7 +935,7 @@ proof
             hence thesis by A19,SIN_COS:def 21;
           end;
           suppose n is odd; then
-            consider k be Nat such that
+            consider k be Element of NAT such that
             A20: n = 2*k+1 by ABIAN:9;
             A21: dom(((-1) |^ k) (#) (cos | ].-r,r.[))
                    = dom(cos | ].-r,r.[) by SEQ_1:def 6
@@ -953,7 +957,7 @@ proof
       proof
         per cases;
           suppose n is even; then
-            consider k be Nat such that
+            consider k be Element of NAT such that
             A25: n = 2*k by ABIAN:def 2;
             A26: dom(((-1) |^ k) (#) (cos | ].-r,r.[))
                    = dom(cos | ].-r,r.[) by SEQ_1:def 6
@@ -971,7 +975,7 @@ proof
             hence thesis by A28,SIN_COS:def 23;
           end;
           suppose n is odd; then
-            consider k be Nat such that
+            consider k be Element of NAT such that
             A29: n = 2*k+1 by ABIAN:9;
             A30: dom(((-1) |^ (k+1)) (#) (sin | ].-r,r.[))
                    = dom(sin | ].-r,r.[) by SEQ_1:def 6
@@ -992,16 +996,17 @@ proof
       end;
  A33: abs(x) |^ n / (n!) <= r2 |^ n / (n!)
       proof
-        defpred P[Nat] means abs(x) |^ $1 / ($1!) <= r2 |^ $1 / ($1!);
+        defpred P[Element of NAT] means
+         abs(x) |^ $1 / ($1!) <= r2 |^ $1 / ($1!);
    A34: P[0]
         proof
           abs(x) |^ 0 / (0!) = 1 / (0!) by NEWTON:9
                             .= r2 |^ 0 / (0!) by NEWTON:9;
           hence thesis;
         end;
-   A35: for k be Nat st P[k] holds P[k+1]
+   A35: for k be Element of NAT st P[k] holds P[k+1]
         proof
-          let k be Nat such that
+          let k be Element of NAT such that
      A36: P[k];
      A37: abs(x) |^ (k+1) / ((k+1)!)
                  = abs(x) |^ k * abs(x) / ((k+1)!) by NEWTON:11
@@ -1039,7 +1044,7 @@ proof
                           by A36,A41,A3,XREAL_1:68;
           hence thesis by A37,A38,XREAL_1:74;
         end;
-        for i be Nat holds P[i] from NAT_1:sch 1(A34,A35);
+        for i be Element of NAT holds P[i] from NAT_1:sch 1(A34,A35);
         hence thesis;
       end;
       abs((diff(sin,].-r,r.[).n).(s*x)) * (abs(x) |^ n / (n!))
@@ -1056,7 +1061,7 @@ end;
 
 theorem Th23:
   for r, e be Real st 0 < r & 0 < e holds
-    ex n be Nat st for m be Nat st n <= m holds
+    ex n be Element of NAT st for m be Element of NAT st n <= m holds
        for x,s be Real st x in ].-r,r.[ & 0 < s & s < 1 holds
        abs((diff(sin,].-r,r.[).m).(s*x) * x |^ m / (m!)) < e &
        abs((diff(cos,].-r,r.[).m).(s*x) * x |^ m / (m!)) < e
@@ -1066,17 +1071,17 @@ proof
   A2: e > 0;
   consider r1,r2 be Real such that
   A3: r1 >= 0 & r2 >= 0 &
-       for n be Nat holds
+       for n be Element of NAT holds
           for x,s be Real st x in ].-r,r.[ & 0 < s & s < 1 holds
              abs((diff(sin,].-r,r.[).n).(s*x) * x |^ n / (n!))
                      <= r1*r2 |^ n / (n!) &
              abs((diff(cos,].-r,r.[).n).(s*x) * x |^ n / (n!))
                      <= r1*r2 |^ n / (n!) by Th22,A1;
-  consider n be Nat such that
-  A4: for m be Nat st n <= m holds
+  consider n be Element of NAT such that
+  A4: for m be Element of NAT st n <= m holds
      (r1 * r2 |^ m / (m!)) < e by Th12,A2,A3;
   take n;
-  let m be Nat such that
+  let m be Element of NAT such that
 A5: n <= m;
     let x,s be Real such that
 A6: x in ].-r,r.[ & 0 < s & s < 1;
@@ -1091,7 +1096,7 @@ end;
 
 theorem
   for r, e be Real st 0 < r & 0 < e holds
-   ex n be Nat st for m be Nat st n <= m holds
+   ex n be Element of NAT st for m be Element of NAT st n <= m holds
       for x being real number st x in ].-r,r.[ holds
         abs(sin.x-Partial_Sums(Maclaurin(sin,].-r,r.[,x)).m) < e &
         abs(cos.x-Partial_Sums(Maclaurin(cos,].-r,r.[,x)).m) < e
@@ -1099,13 +1104,13 @@ proof
   let r, e be Real such that
   A1: r > 0 and
   A2: e > 0;
-    consider n be Nat such that
-A3: for m be Nat st n <= m holds
+    consider n be Element of NAT such that
+A3: for m be Element of NAT st n <= m holds
       for x,s be Real st x in ].-r,r.[ & 0 < s & s < 1 holds
       abs((diff(sin,].-r,r.[).m).(s*x) * x |^ m /(m!) )< e &
       abs((diff(cos,].-r,r.[).m).(s*x) * x |^ m /(m!))< e by Th23,A1,A2;
     take n;
-    let m be Nat such that
+    let m be Element of NAT such that
 A4:n <= m;
 A5: sin is_differentiable_on m+1, ].-r,r.[ &
         cos is_differentiable_on m+1, ].-r,r.[ by Th21;
@@ -1132,18 +1137,18 @@ A11: abs(cos.x-Partial_Sums(Maclaurin(cos,].-r,r.[,x)).m)
 end;
 
 theorem Th25:
-  for r, x be Real, m be Nat st 0 < r holds
+  for r, x be Real, m be Element of NAT st 0 < r holds
     Partial_Sums(Maclaurin(sin,].-r,r.[,x)).(2*m+1)
        = Partial_Sums(x P_sin).m &
     Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*m+1)
        = Partial_Sums(x P_cos).m
 proof
-  let r, x be Real, m be Nat such that
+  let r, x be Real, m be Element of NAT such that
   A1: r > 0;
   thus Partial_Sums(Maclaurin(sin,].-r,r.[,x)).(2*m+1)
                  = Partial_Sums(x P_sin).m
   proof
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
        Partial_Sums(Maclaurin(sin,].-r,r.[,x)).(2*$1+1)
           = Partial_Sums(x P_sin).$1;
     A2: P[0]
@@ -1159,9 +1164,9 @@ proof
            .= Partial_Sums(x P_sin).0 by SERIES_1:def 1;
       hence thesis;
     end;
-A3: for k be Nat st P[k] holds P[k+1]
+A3: for k be Element of NAT st P[k] holds P[k+1]
     proof
-      let k be Nat such that
+      let k be Element of NAT such that
       A4: P[k];
       Partial_Sums(Maclaurin(sin,].-r,r.[,x)).(2*(k+1)+1)
              = Partial_Sums(Maclaurin(sin,].-r,r.[,x)).(2*k+2)
@@ -1179,10 +1184,10 @@ A3: for k be Nat st P[k] holds P[k+1]
             .= Partial_Sums(x P_sin).(k+1) by SERIES_1:def 1,A4;
       hence thesis;
     end;
-    for n be Nat holds P[n] from NAT_1:sch 1(A2,A3);
+    for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
     hence thesis;
   end;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
              Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*$1+1)
                  = Partial_Sums(x P_cos).$1;
 A5: P[0]
@@ -1198,9 +1203,9 @@ A5: P[0]
            .= Partial_Sums(x P_cos).0 by SERIES_1:def 1;
       hence thesis;
     end;
-A6: for k be Nat st P[k] holds P[k+1]
+A6: for k be Element of NAT st P[k] holds P[k+1]
     proof
-      let k be Nat such that
+      let k be Element of NAT such that
  A7: P[k];
       Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*(k+1)+1)
              = Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*k+2)
@@ -1217,23 +1222,23 @@ A6: for k be Nat st P[k] holds P[k+1]
             .= Partial_Sums(x P_cos).(k+1) by SERIES_1:def 1;
       hence thesis;
     end;
-    for n be Nat holds P[n] from NAT_1:sch 1(A5,A6);
+    for n be Element of NAT holds P[n] from NAT_1:sch 1(A5,A6);
     hence thesis;
 end;
 
 theorem Th26:
-  for r, x be Real, m being Nat st 0 < r & m > 0 holds
+  for r, x be Real, m being Element of NAT st 0 < r & m > 0 holds
     Partial_Sums(Maclaurin(sin,].-r,r.[,x)).(2*m)
           = Partial_Sums(x P_sin).(m-1) &
     Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*m)
           = Partial_Sums(x P_cos).m
 proof
-  let r, x be Real, m be Nat such that
+  let r, x be Real, m be Element of NAT such that
   A1: r > 0 and
   A2: m > 0;
   2*m > 2*0 by A2,XREAL_1:70; then
-  A3: 2*m-1 is Nat by NAT_1:60;
-  A4: m-1 is Nat by NAT_1:60,A2;
+  A3: 2*m-1 is Element of NAT by NAT_1:60;
+  A4: m-1 is Element of NAT by NAT_1:60,A2;
   A5: Partial_Sums(Maclaurin(sin,].-r,r.[,x)).(2*m)
          = Partial_Sums(Maclaurin(sin,].-r,r.[,x)).(2*m-1)
            + Maclaurin(sin,].-r,r.[,x).((2*m-1)+1) by SERIES_1:def 1,A3
@@ -1255,12 +1260,12 @@ proof
 end;
 
 theorem Th27:
-  for r, x be Real, m be Nat st 0 < r holds
+  for r, x be Real, m be Element of NAT st 0 < r holds
     Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*m) = Partial_Sums(x P_cos).m
 proof
-  let r, x be Real, m be Nat such that
+  let r, x be Real, m be Element of NAT such that
   A1: r > 0;
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
              Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*$1)
                  = Partial_Sums(x P_cos).$1;
   A2: P[0]
@@ -1271,9 +1276,9 @@ proof
                  .= (x P_cos).0 by SIN_COS:def 25
                  .= Partial_Sums(x P_cos).0 by SERIES_1:def 1;
   end;
-  A3: for k be Nat st P[k] holds P[k+1]
+  A3: for k be Element of NAT st P[k] holds P[k+1]
   proof
-    let k be Nat such that P[k];
+    let k be Element of NAT such that P[k];
     thus Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*(k+1))
       = Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*k+1)
         + Maclaurin(cos,].-r,r.[,x).((2*k+1)+1) by SERIES_1:def 1
@@ -1284,7 +1289,7 @@ proof
      .= Partial_Sums(x P_cos).k + (x P_cos).(k+1) by SIN_COS:def 25
      .= Partial_Sums(x P_cos).(k+1) by SERIES_1:def 1;
   end;
-  for n be Nat holds P[n] from NAT_1:sch 1(A2,A3);
+  for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
   hence thesis;
 end;
 
@@ -1302,34 +1307,34 @@ A2: lim Partial_Sums(x P_sin) = sin.x by SERIES_1:def 3;
 A3: Partial_Sums(x P_sin) is convergent by SIN_COS:39;
   set g = sin.x;
   A4: for p being real number st p>0 holds
-       ex n1 being Nat st for m1 be Nat st m1>=n1 holds
+       ex n1 being Element of NAT st for m1 be Element of NAT st m1>=n1 holds
          abs(Partial_Sums(Maclaurin(sin,].-r,r.[,x)).m1-g)<p
   proof
   let p be real number such that
 A5: p > 0;
-    consider n be Nat such that
-A6: for m being Nat st n<=m holds abs(Partial_Sums(x P_sin).m-g) < p
+    consider n be Element of NAT such that
+A6: for m being Element of NAT st n<=m holds abs(Partial_Sums(x P_sin).m-g) < p
       by SEQ_2:def 7,A2,A3,A5;
     set n1=2*n+2;
-    for m1 be Nat st m1>=n1 holds
+    for m1 be Element of NAT st m1>=n1 holds
       abs(Partial_Sums(Maclaurin(sin,].-r,r.[,x)).m1-g) < p
     proof
-    let m1 be Nat such that
+    let m1 be Element of NAT such that
     A7: m1>=n1;
     per cases;
       suppose m1 is even; then
-        consider j be Nat such that
+        consider j be Element of NAT such that
         A8: m1=2*j by ABIAN:def 2;
         A9: ((n+1)*2)/2 <= (j*2)/2 by XREAL_1:74,A7,A8;
         A10: n+1 >= 0+1 by XREAL_1:8;
-        A11: j-1 is Nat by NAT_1:60,A9,A10;
+        A11: j-1 is Element of NAT by NAT_1:60,A9,A10;
         (n+1)-1 <= j-1 by A9,XREAL_1:11; then
         abs(Partial_Sums(x P_sin).(j-1)-g) < p by A6,A11;
         hence abs(Partial_Sums(Maclaurin(sin,].-r,r.[,x)).m1-g)<p
                    by A8,Th26,A1,A9;
       end;
       suppose m1 is odd; then
-        consider j be Nat such that
+        consider j be Element of NAT such that
    A12: m1=2*j+1 by ABIAN:9;
    A13: n*2+0 <= n*2+1 by XREAL_1:8;
         (n*2+2)-1 <= (2*j+1)-1 by XREAL_1:11,A7,A12; then
@@ -1340,7 +1345,8 @@ A6: for m being Nat st n<=m holds abs(Partial_Sums(x P_sin).m-g) < p
                       by Th25,A1,A12;
       end;
     end;
-    hence ex n1 being Nat st for m1 be Nat st m1>=n1 holds
+    hence ex n1 being Element of NAT
+     st for m1 be Element of NAT st m1>=n1 holds
      abs(Partial_Sums(Maclaurin(sin,].-r,r.[,x)).m1-g)<p;
   end; then
   A14: Partial_Sums(Maclaurin(sin,].-r,r.[,x)) is convergent by SEQ_2:def 6;
@@ -1351,23 +1357,24 @@ A6: for m being Nat st n<=m holds abs(Partial_Sums(x P_sin).m-g) < p
   A17: Partial_Sums(x P_cos) is convergent by SIN_COS:39;
   set g = cos.x;
   A18: for p being real number st p>0 holds
-       (ex n1 being Nat st for m1 be Nat st m1>=n1 holds
+       (ex n1 being Element of NAT st for m1 be Element of NAT st m1>=n1 holds
          abs(Partial_Sums(Maclaurin(cos,].-r,r.[,x)).m1-g)<p)
   proof
   let p be real number such that
 A19: p > 0;
-    consider n be Nat such that
-A20: for m being Nat st n<=m holds abs(Partial_Sums(x P_cos).m-g) < p
+    consider n be Element of NAT such that
+A20: for m being Element of NAT
+ st n<=m holds abs(Partial_Sums(x P_cos).m-g) < p
         by SEQ_2:def 7,A16,A17,A19;
     set n1=2*n+1;
-    for m1 be Nat st m1>=n1 holds
+    for m1 be Element of NAT st m1>=n1 holds
       abs(Partial_Sums(Maclaurin(cos,].-r,r.[,x)).m1-g)<p
     proof
-    let m1 be Nat such that
+    let m1 be Element of NAT such that
 A21: m1>=n1;
     per cases;
       suppose m1 is even; then
-        consider j be Nat such that
+        consider j be Element of NAT such that
    A22: m1=2*j by ABIAN:def 2;
     A23: (n*2)+1 >= n*2 by XREAL_1:31;
         n*2 <= j*2 by A23,XXREAL_0:2,A21,A22; then
@@ -1377,7 +1384,7 @@ A21: m1>=n1;
                           by A22,Th27,A1;
       end;
       suppose m1 is odd; then
-        consider j be Nat such that
+        consider j be Element of NAT such that
         A24: m1=2*j+1 by ABIAN:9;
         (n*2+1)-1 <= (j*2+1)-1 by XREAL_1:11,A21,A24; then
         (n*2)/2 <= (j*2)/2 by XREAL_1:74; then
@@ -1386,7 +1393,8 @@ A21: m1>=n1;
                       by Th25,A1,A24;
       end;
     end;
-    hence ex n1 being Nat st for m1 be Nat st m1>=n1 holds
+    hence ex n1 being Element of NAT
+     st for m1 be Element of NAT st m1>=n1 holds
         abs(Partial_Sums(Maclaurin(cos,].-r,r.[,x)).m1-g)<p;
   end; then
   Partial_Sums(Maclaurin(cos,].-r,r.[,x)) is convergent by SEQ_2:def 6;then

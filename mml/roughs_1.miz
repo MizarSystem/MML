@@ -9,8 +9,9 @@ environ
  vocabularies ROUGHS_1, ARYTM_3, RCOMP_1, SQUARE_1, ARYTM_1, FUNCT_1, BOOLE,
       TARSKI, RELAT_1, RELAT_2, SUBSET_1, ORDERS_1, PARTFUN1, EQREL_1, CARD_1,
       FINSET_1, TOLER_1, NATTRA_1, REALSET1, FUNCT_3, PROB_2, FINSEQ_1, PROB_1,
-      RLVECT_1, FINSEQ_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, CARD_1, XXREAL_0,
+      RLVECT_1, FINSEQ_2, ARYTM;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS,
+      XCMPLX_0, CARD_1, XXREAL_0, XREAL_0,
       REAL_1, NAT_1, SQUARE_1, FINSET_1, FUNCOP_1, RELAT_1, RELAT_2, FUNCT_1,
       FINSEQ_1, RVSUM_1, FINSEQ_2, RELSET_1, PARTFUN1, CARD_3, PROB_2, FUNCT_2,
       FUNCT_3, REALSET1, DOMAIN_1, STRUCT_0, REALSET2, PRE_TOPC, GROUP_1,
@@ -19,7 +20,7 @@ environ
       PROB_2, RCOMP_1, RVSUM_1, FUNCT_6, PRE_TOPC, REALSET2, ORDERS_3;
  registrations RELSET_1, STRUCT_0, SUBSET_1, MEMBERED, PARTFUN1, XREAL_0,
       FINSET_1, ARYTM_3, FSM_1, ORDERS_2, EQREL_1, FINSEQ_1, FUNCOP_1,
-      REALSET1, XXREAL_0;
+      REALSET1, XXREAL_0, NAT_1;
  requirements BOOLE, SUBSET, ARITHM, NUMERALS, REAL;
  definitions TARSKI, XBOOLE_0, PROB_2, FINSEQ_2, SUBSET_1, PRE_TOPC, CARD_3,
       FINSEQ_1;
@@ -28,7 +29,7 @@ environ
       TARSKI, ZFMISC_1, RELAT_1, RELAT_2, ORDERS_3, CHAIN_1, FUNCT_2, FUNCT_3,
       RVSUM_1, CARD_3, FUNCT_6, FINSEQ_1, FINSEQ_3, PROB_2, FUNCT_1, GRFUNC_1,
       FINSEQ_6, FINSEQ_2, REALSET2, ORDERS_2, RELSET_1, SYSREL, FUNCOP_1,
-      REALSET1, ORDERS_1, RCOMP_1;
+      REALSET1, ORDERS_1, RCOMP_1, XREAL_0;
  schemes FUNCT_2, BINOP_2, FINSEQ_2;
 
 begin :: Preliminaries
@@ -47,7 +48,7 @@ A1: Total X c= id X;
     assume X is non trivial;
     then consider x, y being set such that
 A2: x in X & y in X & x <> y by REALSET1:14;
-     [x,y] in Total X by A2,TOLER_1:15;
+    [x,y] in Total X by A2,TOLER_1:15;
     hence thesis by A1,A2,RELAT_1:def 10;
   end;
 
@@ -252,7 +253,7 @@ registration let A be set;
 end;
 
 Lm3: :: move to FINSEQ_2
-  for a being set, k being Nat holds dom (k |-> a) = Seg k
+  for a being set, k being Element of NAT holds dom (k |-> a) = Seg k
     by FUNCOP_1:19;
 
 registration let A be non empty set;
@@ -284,7 +285,7 @@ end;
 
 definition let A be set;
            let X be FinSequence of bool A;
-           let n be Nat;
+           let n be Element of NAT;
   redefine func X.n -> Subset of A;
   coherence
   proof
@@ -401,7 +402,7 @@ registration let A be Approximation_Space;
   coherence by Def2;
 end;
 
-definition let A be Tolerance_Space;
+definition let A be non empty RelStr;
            let X be Subset of A;
   func LAp X -> Subset of A equals
     { x where x is Element of A : Class (the InternalRel of A, x) c= X };
@@ -437,21 +438,21 @@ A2:   y = x & Class (the InternalRel of A, x) meets X;
   end;
 end;
 
-definition let A be Tolerance_Space;
+definition let A be non empty RelStr;
            let X be Subset of A;
   func BndAp X -> Subset of A equals
     UAp X \ LAp X;
   coherence;
 end;
 
-definition let A be Tolerance_Space;
+definition let A be non empty RelStr;
            let X be Subset of A;
   attr X is rough means :Def7:
     BndAp X <> {};
   end;
 
-notation let A be Tolerance_Space;
-           let X be Subset of A;
+notation let A be non empty RelStr;
+         let X be Subset of A;
   antonym X is exact for X is rough;
 end;
 
@@ -1053,7 +1054,7 @@ end;
 
 definition let A be Approximation_Space; let X be Subset of A;
   mode RoughSet of X means
-     it = [LAp X, UAp X];
+    it = [LAp X, UAp X];
   existence;
 end;
 
@@ -1063,7 +1064,7 @@ registration let A be finite Tolerance_Space, x be Element of A;
   cluster card Class (the InternalRel of A, x) -> non empty;
   coherence
   proof
-     x in Class (the InternalRel of A, x) by EQREL_1:28;
+    x in Class (the InternalRel of A, x) by EQREL_1:28;
     hence thesis by CARD_2:59;
   end;
 end;
@@ -1078,7 +1079,14 @@ definition let A be finite Tolerance_Space;
   proof
     deffunc F(set) = card (X /\ Class (the InternalRel of A, $1)) /
              (card Class (the InternalRel of A, $1));
-A1: for x being set st x in the carrier of A holds F(x) in REAL;
+A1: for x being set st x in the carrier of A holds F(x) in REAL
+    proof
+      let x be set;
+      assume x in the carrier of A;
+      F(x) is real; then
+      F(x) in REAL by XREAL_0:def 1;
+      hence thesis;
+    end;
      ex f being Function of the carrier of A, REAL st
       for x being set st x in the carrier of A holds f.x = F(x)
         from FUNCT_2:sch 2(A1);
@@ -1398,19 +1406,22 @@ definition let A be finite Tolerance_Space;
            let x be Element of A;
   func FinSeqM (x,X) -> FinSequence of REAL means :Def10:
     dom it = dom X &
-     for n being Nat st n in dom X holds it.n = MemberFunc (X.n, A).x;
+     for n being Element of NAT st n in dom X
+      holds it.n = MemberFunc (X.n, A).x;
   existence
   proof
-    deffunc F(Nat) = MemberFunc (X.$1, A).x;
+    deffunc F(Element of NAT) = MemberFunc (X.$1, A).x;
      ex z being FinSequence of REAL st len z = len X &
-    for j being Nat st j in Seg len X holds z.j = F(j) from FINSEQ_2:sch 1
+    for j being Element of NAT st j in Seg len X holds z.j = F(j)
+     from FINSEQ_2:sch 1
 ;
     then consider z being FinSequence of REAL such that
-A1: len z = len X & for j being Nat st j in Seg len X holds z.j = F(j);
+A1: len z = len X & for j being Element of NAT st j in Seg len X
+ holds z.j = F(j);
     take z;
     thus dom z = Seg len z by FINSEQ_1:def 3
               .= dom X by A1,FINSEQ_1:def 3;
-    let n be Nat;
+    let n be Element of NAT;
     assume n in dom X;
     then n in Seg len X by FINSEQ_1:def 3;
     hence thesis by A1;
@@ -1419,12 +1430,14 @@ A1: len z = len X & for j being Nat st j in Seg len X holds z.j = F(j);
   proof
     let A1, A2 be FinSequence of REAL such that
 A2: dom A1 = dom X &
-    for n being Nat st n in dom X holds A1.n = MemberFunc (X.n, A).x and
+    for n being Element of NAT st n in dom X
+     holds A1.n = MemberFunc (X.n, A).x and
 A3: dom A2 = dom X &
-    for n being Nat st n in dom X holds A2.n = MemberFunc (X.n, A).x;
-     for n being Nat st n in dom A1 holds A1.n = A2.n
+    for n being Element of NAT st n in dom X
+     holds A2.n = MemberFunc (X.n, A).x;
+     for n being Element of NAT st n in dom A1 holds A1.n = A2.n
     proof
-      let n be Nat;
+      let n be Element of NAT;
       assume
 A4:   n in dom A1;
       then A1.n = MemberFunc (X.n, A).x by A2
@@ -1456,9 +1469,9 @@ A2: dom p = dom (X^<*y*>) by Def10
 A3: dom q = Seg (len FinSeqM (x, X) + len <* MemberFunc (y, A).x *>)
             by FINSEQ_1:def 7
       .= Seg (len X + 1) by A1,FINSEQ_1:56;
-     for k being Nat st k in dom p holds p.k = q.k
+     for k being Element of NAT st k in dom p holds p.k = q.k
     proof
-      let k be Nat;
+      let k be Element of NAT;
       assume
 A4:   k in dom p;
       then k in dom (X^<*y*>) by Def10;
@@ -1533,7 +1546,7 @@ A8:       x in Union p & x in y by XBOOLE_0:3;
 A9:      x in X & X in rng p by TARSKI:def 4;
           consider m being set such that
 A10:      m in dom p & X = p.m by A9,FUNCT_1:def 5;
-          reconsider m as Nat by A10;
+          reconsider m as Element of NAT by A10;
 A11:      p.m meets y by A8,A9,A10,XBOOLE_0:3;
 A12:      (p^<*y*>).m = p.m by A10,FINSEQ_1:def 7;
 A13:      (p^<*y*>).(len p + 1) = y by FINSEQ_1:59;

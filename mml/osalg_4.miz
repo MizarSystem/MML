@@ -13,6 +13,7 @@ environ
       YELLOW15, SETFAM_1, COH_SP, QUANTAL1, OSALG_4, FUNCOP_1;
  notations ZFMISC_1, TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
       RELSET_1, PARTFUN1, EQREL_1, SETFAM_1, XCMPLX_0, ORDERS_2, ORDERS_3,
+      NUMBERS,
       NAT_1, FUNCT_2, FINSEQ_1, CARD_3, FINSEQ_4, FINSEQ_5, PBOOLE, STRUCT_0,
       WAYBEL_0, MSUALG_1, MSUALG_3, OSALG_1, OSALG_3, MSUALG_4, XXREAL_0;
  constructors XXREAL_0, NAT_1, EQREL_1, FINSEQ_4, FINSEQ_5, PRALG_2, MSUALG_3,
@@ -27,7 +28,7 @@ environ
       RELSET_1, EQREL_1, MSUALG_3, MSUALG_6, MSAFREE, TARSKI, SYSREL, ORDERS_2,
       FINSEQ_1, FINSEQ_3, ENUMSET1, FINSEQ_5, REAL_1, INT_1, ORDERS_3,
       PARTFUN1, WAYBEL_0, TOLER_1, GRFUNC_1, MSUALG_9, MSUALG_4, FINSEQ_2,
-      ORDERS_1, FUNCOP_1, XREAL_1, XXREAL_0;
+      ORDERS_1, FUNCOP_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes FUNCT_1, ZFREFLE1, WELLORD2, NAT_1, FUNCT_2;
 
 begin
@@ -314,7 +315,7 @@ registration
       proof
        let a be set;
        assume A8: a in dom (the_arity_of o);
-       then reconsider n = a as Nat;
+       then reconsider n = a as Nat by ORDINAL1:def 13;
        A9: (the_arity_of o)/.n = (the_arity_of o).n
              by A8,FINSEQ_4:def 4;
        set ao = the_arity_of o;
@@ -444,7 +445,7 @@ proof
       A16: 1 <= n1 by A15,XXREAL_0:2;
       A17: 2 - 1 <= n1 - 1 by A15,XREAL_1:11;
       then 0 <= n1 - 1 by XXREAL_0:2;
-      then reconsider n11 = n1 - 1 as Nat by INT_1:16;
+      then reconsider n11 = n1 - 1 as Element of NAT by INT_1:16;
          n1 - 1 <= len F - 0 by A15,REAL_1:92;
       then A18: n11 in dom p by A14,A17,FINSEQ_3:27;
       then A19: n1 in dom p & (n1 - 1) in dom p
@@ -457,7 +458,7 @@ proof
          len p - n1 <= len p - 2 by A15,REAL_1:92;
       then A22: (len p - n1) + 2 <= len p - 2 + 2 by XREAL_1:8;
          0 <= n2 by A21,XXREAL_0:2;
-      then reconsider n2 = (len p - n1) + 2 as Nat by INT_1:16;
+      then reconsider n2 = (len p - n1) + 2 as Element of NAT by INT_1:16;
          p.(n2-1) =
       p.((len p - n1) + (2 - 1)) .= F.n1 by A19,FINSEQ_5:61;
       hence [F.n1,F.(n1-1)] in the InternalRel of R or
@@ -493,7 +494,7 @@ proof
       A29: 1 <= n1 by A28,XXREAL_0:2;
       A30: 2 - 1 <= n1 - 1 by A28,XREAL_1:11;
       then 0 <= n1 - 1 by XXREAL_0:2;
-      then reconsider n11 = n1 - 1 as Nat by INT_1:16;
+      then reconsider n11 = n1 - 1 as Element of NAT by INT_1:16;
       A31: n1 - 1 <= len F - 0 by A28,REAL_1:92;
       A32: len p1 + 1 <= n1 implies len p1 + 1 = n1 or len p1 + 1 < n1
       by REAL_1:def 5;
@@ -512,7 +513,7 @@ proof
          (len p1 + 1) - 1 < n1 - 1 by A35,XREAL_1:11;
       then A37: F.n11 = p2.(n11 - len p1) by A31,FINSEQ_1:37;
          0 <= n1 - len p1 by A36,XREAL_1:50;
-      then reconsider k = n1 - len p1 as Nat by INT_1:16;
+      then reconsider k = n1 - len p1 as Element of NAT by INT_1:16;
       A38: F.n1 = p2.k & F.(n1 - 1) = p2.(k - 1) by A28,A36,A37,FINSEQ_1:37;
          1 < n1 - len p1 by A35,XREAL_1:22;
       then A39: 1 + 1 <= n1 - len p1 by INT_1:20;
@@ -727,15 +728,24 @@ proof
   proof let n1 be Nat such that A2: 1 <= n1 & n1 <= len p;
     defpred P[Nat] means p.$1 <> x & 1 <= $1;
     assume A3: p.n1 <> x;
-    then A4: ex k being Nat st P[k] by A2;
-    consider k being Nat such that
-    A5: P[k] & for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A4);
-       1 < k by A1,A5,REAL_1:def 5;
+    A4: ex k being Element of NAT st P[k]
+    proof
+      consider k being Nat such that
+A1:   P[k] by A2,A3;
+      reconsider k as Element of NAT by ORDINAL1:def 13;
+      take k;
+      thus thesis by A1;
+    end;
+    consider k being Element of NAT such that
+    A5: P[k] & for n being Element of NAT st P[n] holds k <= n
+    from NAT_1:sch 5(A4);
+    1 < k by A1,A5,REAL_1:def 5;
     then A6: 1 + 1 <= k by INT_1:20;
     then A7: 1 + 1 - 1 <= k - 1 by XREAL_1:11;
     then 0 <= k - 1 by XXREAL_0:2;
-    then reconsider k1 = k - 1 as Nat by INT_1:16;
-       k <= n1 by A2,A3,A5;
+    then reconsider k1 = k - 1 as Element of NAT by INT_1:16;
+    n1 in NAT by ORDINAL1:def 13;
+    then k <= n1 by A2,A3,A5;
     then A8: k <= len p by A2,XXREAL_0:2;
     then k in dom p by A5,FINSEQ_3:27;
     then reconsider pk = p.k as Element of R by PARTFUN1:27;
@@ -1316,7 +1326,7 @@ func R #_os x -> Element of product ((OSClass R) * (the_arity_of o)) means
     proof
      let k be set;
      assume A2: k in da;
-     then reconsider n = k as Nat;
+     then reconsider n = k as Nat by ORDINAL1:def 13;
      reconsider y = x.n as
      Element of (the Sorts of A).((the_arity_of o)/.n) by A2,MSUALG_6:2;
      take OSClass(R,y);
@@ -1334,7 +1344,7 @@ func R #_os x -> Element of product ((OSClass R) * (the_arity_of o)) means
       then A6: ((OSClass R) * ar).y = (OSClass R).(ar.y) by FUNCT_1:22;
          ar.y in rng ar by A4,A5,FUNCT_1:def 5;
       then reconsider s = ar.y as Element of S;
-      reconsider n = y as Nat by A5;
+      reconsider n = y as Nat by A5,ORDINAL1:def 13;
       consider z being Element of (the Sorts of A).((the_arity_of o)/.n)
       such that A7: z = x.n & f.n = OSClass(R, z) by A3,A4,A5;
           ((ar)/.n) = ar.n by A4,A5,FINSEQ_4:def 4;
@@ -1366,7 +1376,7 @@ uniqueness
     proof
      let y be set;
      assume A11: y in dom (the_arity_of o);
-     then reconsider n = y as Nat;
+     then reconsider n = y as Nat by ORDINAL1:def 13;
      consider z being Element of (the Sorts of A).((the_arity_of o)/.n)
         such that A12: z = x.n & F.n = OSClass(R, z) by A8,A11;
      consider z1 being Element of (the Sorts of A).((the_arity_of o)/.n)
@@ -1687,7 +1697,7 @@ for A be non-empty OSAlgebra of S,
   A8: for a be set st a in dom f ex b be set st P[a,b]
    proof
     let a be set;
-    assume A9: a in dom f; then reconsider n = a as Nat by A3;
+    assume A9: a in dom f; then reconsider n = a as Nat by A3,ORDINAL1:def 13;
     reconsider s = ((ar)/.a) as Element of S;
         f.n in OSClass (R,s) by A5,A9;
      then consider x being set such that A10: x in (the Sorts of A).s &
@@ -1710,7 +1720,7 @@ for A be non-empty OSAlgebra of S,
    proof
     let y be set;
     assume A14: y in dom ((the Sorts of A) * ar);
-    then reconsider n = y as Nat;
+    then reconsider n = y as Nat by ORDINAL1:def 13;
     A15: ar.n = ((ar)/.n) by A3,A4,A11,A13,A14,FINSEQ_4:def 4;
     reconsider s = ((ar)/.n) as Element of S;
         g.n in (the Sorts of A).s by A11,A13,A14;
@@ -1723,7 +1733,7 @@ for A be non-empty OSAlgebra of S,
   proof
     let x be set;
     assume A17: x in dom ar;
-    then reconsider n = x as Nat;
+    then reconsider n = x as Nat by ORDINAL1:def 13;
     reconsider s = ((ar)/.n) as Element of S;
     consider z being Element of (the Sorts of A).((the_arity_of o)/.n)
     such that A18:  z = g.n & (R #_os g).n = OSClass(R, z) by A17,Def15;
@@ -2067,7 +2077,7 @@ theorem
      proof
       let a be set;
       assume A6: a in dom ar;
-      then reconsider n = a as Nat;
+      then reconsider n = a as Nat by ORDINAL1:def 13;
       set Fo = OSNat_Hom(U1,R,((ar)/.n)),
            s = ((ar)/.n);
       A7: n in dom ((the Sorts of U1) * ar) by A6,PBOOLE:def 3;
@@ -2376,7 +2386,7 @@ for U1,U2 be non-empty OSAlgebra of S,
      A10: now
       let y be set;
       assume A11: y in dom ar;
-      then reconsider n = y as Nat;
+      then reconsider n = y as Nat by ORDINAL1:def 13;
       A12: ar/.n = ar.n by A11,FINSEQ_4:def 4;
          ar.n in rng ar by A11,FUNCT_1:def 5;
       then reconsider s = ar.n as SortSymbol of S;
@@ -3024,7 +3034,7 @@ theorem
      A10: now
       let y be set;
       assume A11: y in dom ar;
-      then reconsider n = y as Nat;
+      then reconsider n = y as Nat by ORDINAL1:def 13;
       A12: ar/.n = ar.n by A11,FINSEQ_4:def 4;
          ar.n in rng ar by A11,FUNCT_1:def 5;
       then reconsider s = ar.n as SortSymbol of S;

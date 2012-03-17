@@ -1102,41 +1102,39 @@ begin :: Some theorems of Lin, Sum, Carrier
 
 theorem Th16:
 for V being RealUnitarySpace, L being Linear_Combination of V,
- A being Subset of V, F being FinSequence of the carrier of V st
+ A being Subset of V, F being FinSequence of V st
   rng F c= the carrier of Lin(A) holds
    ex K being Linear_Combination of A st Sum(L (#) F) = Sum(K)
 proof
    let V be RealUnitarySpace;
    let L be Linear_Combination of V;
    let A be Subset of V;
-   defpred P[Nat] means
-   for F being FinSequence of the carrier of V st
-    rng F c= the carrier of Lin(A) & len F = $1
-     holds
+   defpred P[Element of NAT] means
+   for F being FinSequence of V st
+    rng F c= the carrier of Lin(A) & len F = $1 holds
       ex K being Linear_Combination of A st Sum(L (#) F) = Sum(K);
 A1:P[0]
    proof
-     let F be FinSequence of the carrier of V;
+     let F be FinSequence of V;
      assume rng F c= the carrier of Lin(A) & len F = 0;
      then F = <*>(the carrier of V) by FINSEQ_1:25;
      then L (#) F = <*>(the carrier of V) by RLVECT_2:41;
 then A2:  Sum(L (#) F) = 0.V by RLVECT_1:60
               .= Sum(ZeroLC(V)) by RLVECT_2:48;
-         ZeroLC(V) is Linear_Combination of A by RLVECT_2:34;
+     ZeroLC(V) is Linear_Combination of A by RLVECT_2:34;
      hence thesis by A2;
    end;
-A3:for n being Nat st P[n] holds P[n + 1]
+A3:for n being Element of NAT st P[n] holds P[n + 1]
    proof
-     let n be Nat;
+     let n be Element of NAT;
      assume
 A4:  P[n];
-     let F be FinSequence of the carrier of V such that
+     let F be FinSequence of V such that
 A5:  rng F c= the carrier of Lin(A) and
 A6:  len F = n + 1;
      consider G being FinSequence, x being set such that
 A7:  F = G^<*x*> by A6,FINSEQ_2:21;
-     reconsider G, x'= <*x*> as FinSequence of the carrier of V
-       by A7,FINSEQ_1:50;
+     reconsider G, x'= <*x*> as FinSequence of V by A7,FINSEQ_1:50;
          rng(G^<*x*>) = rng G \/ rng <*x*> by FINSEQ_1:44
                  .= rng G \/ {x} by FINSEQ_1:55;
      then rng G c= rng F & {x} c= rng F by A7,XBOOLE_1:7;
@@ -1146,31 +1144,28 @@ then A8:  rng G c= the carrier of Lin(A) & {x} c= the carrier of Lin(A)
 then A9:  x in Lin(A) by RLVECT_1:def 1,TARSKI:def 1;
      then consider LA1 being Linear_Combination of A such that
 A10: x = Sum(LA1) by Th1;
-         x in V by A9,RUSUB_1:2;
+     x in V by A9,RUSUB_1:2;
      then reconsider x as VECTOR of V by RLVECT_1:def 1;
-         len(G^<*x*>) = len G + len <*x*> by FINSEQ_1:35
+     len(G^<*x*>) = len G + len <*x*> by FINSEQ_1:35
                  .= len G + 1 by FINSEQ_1:56;
      then len G = n by A6,A7;
      then consider LA2 being Linear_Combination of A such that
 A11: Sum(L (#) G) = Sum(LA2) by A4,A8;
-
 A12: Sum(L (#) F) = Sum((L (#) G) ^ (L (#) x')) by A7,RLVECT_3:41
             .= Sum(LA2) + Sum(L (#) x') by A11,RLVECT_1:58
             .= Sum(LA2) + Sum(<*L.x * x*>) by RLVECT_2:42
             .= Sum(LA2) + L.x * Sum(LA1) by A10,RLVECT_1:61
             .= Sum(LA2) + Sum(L.x * LA1) by RLVECT_3:2
             .= Sum(LA2 + L.x * LA1) by RLVECT_3:1;
-
-         L.x * LA1 is Linear_Combination of A by RLVECT_2:67;
+     L.x * LA1 is Linear_Combination of A by RLVECT_2:67;
      then LA2 + L.x * LA1 is Linear_Combination of A by RLVECT_2:59;
      hence thesis by A12;
    end;
-A13:
-  for n being Nat holds P[n] from NAT_1:sch 1(A1, A3);
-  let F be FinSequence of the carrier of V;
+A13: for n being Element of NAT holds P[n] from NAT_1:sch 1(A1, A3);
+  let F be FinSequence of V;
   assume
 A14: rng F c= the carrier of Lin(A);
-      len F is Nat;
+  len F is Nat;
   hence thesis by A13,A14;
 end;
 
@@ -1182,7 +1177,7 @@ proof
    let V be RealUnitarySpace;
    let L be Linear_Combination of V,
        A be Subset of V;
-   consider F being FinSequence of the carrier of V such that
+   consider F being FinSequence of V such that
        F is one-to-one and
 A1: rng F = Carrier(L) and
 A2: Sum(L) = Sum(L (#) F) by RLVECT_2:def 10;
@@ -1201,23 +1196,19 @@ for V being RealUnitarySpace, W being Subspace of V,
 proof
    let V be RealUnitarySpace;
    let W be Subspace of V;
-
    let L be Linear_Combination of V such that
 A1:Carrier(L) c= the carrier of W;
    let K be Linear_Combination of W such that
 A2:K = L|the carrier of W;
-
 A3:the carrier of W c= the carrier of V by RUSUB_1:def 1;
-
 A4:dom K = the carrier of W by FUNCT_2:def 1;
-
-       now
+   now
      let x be set;
      assume x in Carrier(K);
      then consider w being VECTOR of W such that
 A5:  x = w and
 A6:  K.w <> 0;
-         L.w <> 0 & w is VECTOR of V by A2,A4,A6,FUNCT_1:70,RUSUB_1:3;
+     L.w <> 0 & w is VECTOR of V by A2,A4,A6,FUNCT_1:70,RUSUB_1:3;
      hence x in Carrier(L) by A5;
    end;
 then A7:Carrier(K) c= Carrier(L) by TARSKI:def 3;
@@ -1233,18 +1224,15 @@ A10: L.v <> 0;
    end;
 then A11:Carrier(L) c= Carrier(K) by TARSKI:def 3;
 then A12:Carrier(K) = Carrier(L) by A7,XBOOLE_0:def 10;
-
-   consider F being FinSequence of the carrier of V such that
+   consider F being FinSequence of V such that
 A13:F is one-to-one and
 A14:rng F = Carrier(L) and
 A15:Sum(L) = Sum(L (#) F) by RLVECT_2:def 10;
-
-   consider G being FinSequence of the carrier of W such that
+   consider G being FinSequence of W such that
 A16:G is one-to-one and
 A17:rng G = Carrier(K) and
 A18:Sum(K) = Sum(K (#) G) by RLVECT_2:def 10;
-
-       F,G are_fiberwise_equipotent by A12,A13,A14,A16,A17,RFINSEQ:39;
+   F,G are_fiberwise_equipotent by A12,A13,A14,A16,A17,RFINSEQ:39;
    then consider P being Permutation of dom G such that
 A19: F = G*P by RFINSEQ:17;
 
@@ -1256,61 +1244,57 @@ then A20:dom p = dom G & dom G = dom F by FINSEQ_3:31;
        len(K (#) G) = len G by RLVECT_2:def 9;
 then A21:dom(K (#) G) = dom G by FINSEQ_3:31;
    then reconsider q = (K (#) G)*P
-   as FinSequence of the carrier of W by FINSEQ_2:51;
+   as FinSequence of W by FINSEQ_2:51;
 
-       len q = len (K (#) G) by A21,FINSEQ_2:48;
+   len q = len (K (#) G) by A21,FINSEQ_2:48;
    then dom q = dom(K (#) G) & len q = len G by FINSEQ_3:31,RLVECT_2:def 9;
 then A22:dom q = dom(K (#) G) & dom q = dom G by FINSEQ_3:31;
 
-       now
-     let i be Nat;
+   now
+     let i be Element of NAT;
      assume
 A23: i in dom p;
      set v = F/.i;
 A24: F/.i = F.i by A20,A23,FINSEQ_4:def 4;
      set j = P.i;
-         dom P = dom G & rng P = dom G by FUNCT_2:67,def 3;
+     dom P = dom G & rng P = dom G by FUNCT_2:67,def 3;
 then A25: j in dom G by A20,A23,FUNCT_1:def 5;
-     then j in Seg (card G) by FINSEQ_1:def 3;
-     then reconsider j as Nat;
+     then j in Seg card G by FINSEQ_1:def 3;
+     then reconsider j as Element of NAT by ORDINAL1:def 13;
 
 A26: G/.j = G.(P.i) by A25,FINSEQ_4:def 4
             .= v by A19,A20,A23,A24,FUNCT_1:22;
          v in rng F by A20,A23,A24,FUNCT_1:def 5;
      then reconsider w = v as VECTOR of W by A12,A14;
-         q.i = (K (#) G).j by A20,A22,A23,FUNCT_1:22
+     q.i = (K (#) G).j by A20,A22,A23,FUNCT_1:22
         .= K.w * w by A22,A25,A26,RLVECT_2:def 9
         .= L.v * w by A2,A4,FUNCT_1:70
         .= L.v * v by RUSUB_1:7;
      hence p.i = q.i by A23,RLVECT_2:def 9;
    end;
 then A27:L (#) F = (K (#) G)*P by A20,A22,FINSEQ_1:17;
-
-       len G = len (K (#) G) by RLVECT_2:def 9;
+   len G = len (K (#) G) by RLVECT_2:def 9;
    then dom G = dom (K (#) G) by FINSEQ_3:31;
    then reconsider P as Permutation of dom (K (#) G);
-       q = (K (#) G)*P;
+   q = (K (#) G)*P;
 then A28:Sum(K (#) G) = Sum(q) by RLVECT_2:9;
-
-       rng q c= the carrier of W by FINSEQ_1:def 4;
+   rng q c= the carrier of W by FINSEQ_1:def 4;
    then rng q c= the carrier of V by A3,XBOOLE_1:1;
-   then reconsider q'= q as FinSequence of the carrier of V by FINSEQ_1:def 4;
+   then reconsider q'= q as FinSequence of V by FINSEQ_1:def 4;
 
    consider f being Function of NAT, the carrier of W such that
 A29: Sum(q) = f.(len q) and
 A30: f.0 = 0.W and
-A31: for i being Nat, w being VECTOR of W st
+A31: for i being Element of NAT, w being VECTOR of W st
      i < len q & w = q.(i + 1) holds f.(i + 1) = f.i + w by RLVECT_1:def 12;
-
-       dom f = NAT & rng f c= the carrier of W by FUNCT_2:def 1,RELSET_1:12;
+   dom f = NAT & rng f c= the carrier of W by FUNCT_2:def 1,RELSET_1:12;
    then dom f = NAT & rng f c= the carrier of V by A3,XBOOLE_1:1;
    then reconsider f'= f as Function of NAT, the carrier of V by FUNCT_2:4;
 A32: f'.0 = 0.V by A30,RUSUB_1:4;
-A33: for i being Nat, v being VECTOR of V st
+A33: for i being Element of NAT, v being VECTOR of V st
    i < len q' & v = q'.(i + 1) holds f'.(i + 1) = f'.i + v
    proof
-     let i be Nat,
-         v be VECTOR of V;
+     let i be Element of NAT, v be VECTOR of V;
      assume
 A34: i < len q' & v = q'.(i + 1);
      then 1 <= i + 1 & i + 1 <= len q by NAT_1:29,38;
@@ -1319,7 +1303,7 @@ A34: i < len q' & v = q'.(i + 1);
     f.(i + 1) = f.i + v' by A31,A34;
      hence f'.(i + 1) = f'.i + v by RUSUB_1:6;
    end;
-       f'.len q' is Element of V;
+   f'.len q' is Element of V;
    hence thesis
      by A7,A11,A15,A18,A27,A28,A29,A32,A33,RLVECT_1:def 12,XBOOLE_0:def 10;
 end;
@@ -1333,10 +1317,8 @@ proof
    let V be RealUnitarySpace;
    let W be Subspace of V;
    let K be Linear_Combination of W;
-
-  defpred P[set, set] means
-   ($1 in W & $2 = K.$1) or (not $1 in W & $2 = 0);
-
+   defpred P[set, set] means
+    ($1 in W & $2 = K.$1) or (not $1 in W & $2 = 0);
 A1: for x being set st x in the carrier of V
       ex y being set st y in REAL & P[x, y]
   proof
@@ -1344,20 +1326,17 @@ A1: for x being set st x in the carrier of V
     assume x in the carrier of V;
     then reconsider x as VECTOR of V;
     per cases;
-
     suppose
-  A2: x in W;
+A2: x in W;
     then reconsider x as VECTOR of W by RLVECT_1:def 1;
-        P[x, K.x] by A2;
+    P[x, K.x] by A2;
     hence thesis;
-
     end;
     suppose not x in W;
     hence thesis;
   end;
   end;
-
-      ex L being Function of the carrier of V, REAL st
+  ex L being Function of the carrier of V, REAL st
    for x being set st x in the carrier of V holds
      P[x, L.x] from FUNCT_2:sch 1(A1);
   then consider L being Function of the carrier of V, REAL such that
@@ -2487,7 +2466,7 @@ A1:W1 is Subspace of W2;
    then consider u being VECTOR of V such that
 A2:u in W1 and
 A3:x = v + u by RUSUB_2:63;
-       u in W2 by A1,A2,RUSUB_1:1;
+   u in W2 by A1,A2,RUSUB_1:1;
    hence thesis by A3,RUSUB_2:63;
 end;
 

@@ -17,10 +17,10 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="52"/>
-<Func kind="K" nr="56"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -49,10 +49,10 @@
 <Func kind="F" nr="1"/>
 </Pred>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="52"/>
-<Func kind="K" nr="56"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
 <Not>
 <And>
@@ -112,10 +112,10 @@
 </For>
 </Not>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="52"/>
-<Func kind="K" nr="56"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
 <Not>
 <And>

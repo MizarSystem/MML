@@ -23,7 +23,7 @@ environ
  theorems FUNCT_2, RELAT_1, FUNCT_7, FUNCT_4, FUNCT_1, ZFMISC_1, CQC_LANG,
       AMI_3, AMI_5, TARSKI, NAT_1, SCMFSA_4, AMI_1, SCMFSA_2, CARD_1, PRE_CIRC,
       WELLORD2, CARD_2, ENUMSET1, INT_1, CQC_THE1, SCMFSA_5, GRFUNC_1, CARD_3,
-      FINSEQ_1, RELSET_1, XBOOLE_0, XBOOLE_1, FINSET_1, XREAL_1;
+      FINSEQ_1, RELSET_1, XBOOLE_0, XBOOLE_1, FINSET_1, XREAL_1, ORDINAL1;
  schemes DOMAIN_1, FRAENKEL, FUNCT_7, ZFREFLE1;
 
 begin :: Preliminaries
@@ -276,7 +276,7 @@ definition
  mode Macro-Instruction is initial programmed FinPartState of SCM+FSA;
 end;
 
-reserve l, m, n for Nat,
+reserve l, m, n for Element of NAT,
         i,j,k for Instruction of SCM+FSA,
         I,J,K for Macro-Instruction;
 
@@ -501,20 +501,21 @@ for I being programmed FinPartState of SCM+FSA
 proof let I be programmed FinPartState of SCM+FSA;
    deffunc U(Element of NAT) = insloc $1;
   set B = { l : U(l) in dom I};
-A1: for x being set st x in dom I ex d being Nat st x = U(d)
+A1: for x being set st x in dom I ex d being Element of NAT st x = U(d)
      proof let x be set;
      dom I c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
       hence thesis by SCMFSA_2:21;
      end;
-A2: for d1,d2 being Nat st U(d1) = U(d2) holds d1 = d2 by SCMFSA_2:18;
+A2: for d1,d2 being Element of NAT st U(d1) = U(d2) holds d1 = d2
+by SCMFSA_2:18;
 A3: dom I,B are_equipotent from FUNCT_7:sch 3(A1,A2);
    defpred X[Element of NAT] means U($1) in dom I;
    set D = { l : X[l]};
        D is Subset of NAT from DOMAIN_1:sch 7;
 then A4: B c= NAT;
-   deffunc V(Nat) = insloc($1+m);
+   deffunc V(Element of NAT) = insloc($1+m);
    set C = { V(l): l in B };
-A5: now let d1,d2 be Nat;
+A5: now let d1,d2 be Element of NAT;
      assume V(d1) = V(d2);
       then d1+m = d2+m by SCMFSA_2:18;
      hence d1 = d2;
@@ -522,7 +523,7 @@ A5: now let d1,d2 be Nat;
 A6: B,C are_equipotent from FUNCT_7:sch 4(A4,A5);
    defpred X[set] means not contradiction;
    defpred Y[set] means $1 in B;
-   defpred Z[Nat] means insloc $1 in dom I;
+   defpred Z[Element of NAT] means insloc $1 in dom I;
    set C = { V(l): l in { n : Z[n]} & X[l] },
        A = { V(l): Z[l] & X[l] };
 A7: C = A from FRAENKEL:sch 14; :: brak symetrii dla rownosci w tym schemacie
@@ -1334,7 +1335,7 @@ scheme SCMFSAEx{ F(set) -> Element of the Instructions of SCM+FSA,
                  G(set) -> Integer, H(set) -> FinSequence of INT,
                  I() -> Instruction-Location of SCM+FSA }:
  ex S being State of SCM+FSA st IC S = I() &
-  for i being Nat holds
+  for i being Element of NAT holds
     S.insloc i = F(i) & S.intloc i = G(i) & S.fsloc i = H(i)
 proof
  defpred P[set,set] means ex m st
@@ -1356,11 +1357,11 @@ A1: for e being set st e in the carrier of SCM+FSA
       end;
       case e in Int-Locations;
         then e is Int-Location by SCMFSA_2:11;
-       hence ex m st e = intloc m by SCMFSA_2:19;
+       hence ex m being Element of NAT st e = intloc m by SCMFSA_2:19;
       end;
       case e in FinSeq-Locations;
        then e is FinSeq-Location by SCMFSA_2:12;
-       hence ex m st e = fsloc m by SCMFSA_2:20;
+       hence ex m being Element of NAT st e = fsloc m by SCMFSA_2:20;
       end;
       case e in the Instruction-Locations of SCM+FSA;
        hence ex m st e = insloc m by SCMFSA_2:21;
@@ -1443,7 +1444,7 @@ A18: IC SCM+FSA = IC SCM+FSA & f.IC SCM+FSA = I() or
     IC SCM+FSA = intloc m & f.IC SCM+FSA = G(m) or
     IC SCM+FSA = fsloc m & f.IC SCM+FSA = H(m) by A9;
  thus IC f = I() by A18,AMI_1:48,def 15,SCMFSA_2:81,82;
- let i be Nat;
+ let i be Element of NAT;
   consider m such that
 A19: insloc i = IC SCM+FSA & f.insloc i = I() or
     insloc i = insloc m & f.insloc i = F(m) or
@@ -1614,7 +1615,7 @@ A4: now let x be set;
  end;
 
 theorem  ::Lemma
-    for s1,s2 being State of SCM+FSA, n being Nat,
+    for s1,s2 being State of SCM+FSA, n being Element of NAT,
      i being Instruction of SCM+FSA holds
      IC s1 + n = IC s2 &
      s1 | (Int-Locations \/ FinSeq-Locations) =
@@ -1625,13 +1626,14 @@ theorem  ::Lemma
      Exec(IncAddr(i,n),s2) | (Int-Locations \/ FinSeq-Locations)
  proof
    let s1,s2 be State of SCM+FSA;
-   let n be Nat;
+   let n be Element of NAT;
    let i be Instruction of SCM+FSA; assume that
 A1: IC s1 + n = IC s2 and
 A2: s1 | (Int-Locations \/ FinSeq-Locations) =
        s2 | (Int-Locations \/ FinSeq-Locations);
    set D = Int-Locations \/ FinSeq-Locations;
-   consider k1 being Nat such that A3: IC s1 = insloc k1 by SCMFSA_2:21;
+   consider k1 being Element of NAT such that A3: IC s1 = insloc k1
+   by SCMFSA_2:21;
 A4: Next IC s1 + n = Next IC s2
      proof
       thus Next IC s1 + n = insloc (k1 + 1) + n by A3,SCMFSA_2:32
@@ -1921,10 +1923,10 @@ A69:  IncAddr(i,n) = i by A68,SCMFSA_4:17;
 A70:  now let c be Int-Location;
        per cases;
        suppose A71: c = da;
-        then consider m being Nat such that
+        then consider m being Element of NAT such that
 A72:     m = abs(s1.db) and
 A73:     Exec(da:=(f,db), s1).c = (s1.f)/.m by SCMFSA_2:98;
-        consider m2 being Nat such that
+        consider m2 being Element of NAT such that
 A74:     m2 = abs(s2.db) and
 A75:     Exec(da:=(f,db), s2).c = (s2.f)/.m2 by A71,SCMFSA_2:98;
            m = m2 & s1.f = s2.f by A2,A72,A74,Th38;
@@ -1957,10 +1959,10 @@ A80:  now let c be Int-Location;
        now let g be FinSeq-Location;
        per cases;
        suppose A81: g = f;
-        consider m1 being Nat such that
+        consider m1 being Element of NAT such that
 A82:     m1 = abs(s1.db) and
 A83:     Exec((f,db):=da, s1).f = s1.f+*(m1,s1.da) by SCMFSA_2:99;
-        consider m2 being Nat such that
+        consider m2 being Element of NAT such that
 A84:     m2 = abs(s2.db) and
 A85:     Exec((f,db):=da, s2).f = s2.f+*(m2,s2.da) by SCMFSA_2:99;
            m1 = m2 & s1.da = s2.da & s1.f = s2.f by A2,A82,A84,Th38;
@@ -2013,10 +2015,10 @@ A96:  now let c be Int-Location;
        now let g be FinSeq-Location;
       per cases;
      suppose A97: g = f;
-      consider m1 being Nat such that
+      consider m1 being Element of NAT such that
 A98:   m1 = abs(s1.da) and
 A99:   Exec(f:=<0,...,0>da, s1).f = m1 |-> 0 by SCMFSA_2:101;
-      consider m2 being Nat such that
+      consider m2 being Element of NAT such that
 A100:   m2 = abs(s2.da) and
 A101:   Exec(f:=<0,...,0>da, s2).f = m2 |-> 0 by SCMFSA_2:101;
       thus Exec(i,s1).g = Exec(IncAddr(i,n),s2).g by A2,A94,A95,A97,A98,A99
@@ -2351,8 +2353,9 @@ A7:      n = l+card I by A5,SCMFSA_2:18;
          end;
          case m >= card I;
           then consider l1 being Nat such that
-A8:         m = card I + l1 by NAT_1:28; :: przemiennosc tu nie dziala!
-            l1 < l by A2,A7,A8,XREAL_1:8;
+A8:       m = card I + l1 by NAT_1:28;
+          reconsider l1 as Element of NAT by ORDINAL1:def 13;
+          l1 < l by A2,A7,A8,XREAL_1:8;
          then insloc l1 in dom ProgramPart J by A6,SCMFSA_4:def 4;
         hence insloc m in D by A8;
        end;

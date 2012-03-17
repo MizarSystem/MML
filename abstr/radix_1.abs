@@ -7,18 +7,19 @@
 environ
 
  vocabularies INT_1, NAT_1, ARYTM_1, ARYTM_3, POWER, MIDSP_3, FINSEQ_1,
-      FUNCT_1, RELAT_1, RLVECT_1, RADIX_1, FINSEQ_4, GROUP_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, INT_1, NAT_1, FUNCT_1, POWER,
-      FINSEQ_1, FINSEQ_4, BINARITH, TREES_4, WSIERP_1, XXREAL_0;
+      FUNCT_1, RELAT_1, RLVECT_1, RADIX_1, FINSEQ_4, GROUP_1, ORDINAL2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, ORDINAL1, INT_1,
+      NAT_1, FUNCT_1, POWER, FINSEQ_1, FINSEQ_4, BINARITH, TREES_4, WSIERP_1,
+      XXREAL_0;
  constructors XXREAL_0, NAT_1, MEMBERED, FINSEQ_4, FINSOP_1, POWER, BINARITH,
       WSIERP_1;
- registrations INT_1, RELSET_1, FINSET_1, XREAL_0, MEMBERED, XXREAL_0;
+ registrations INT_1, RELSET_1, FINSET_1, XREAL_0, MEMBERED, XXREAL_0, NAT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin :: Some Useful Theorems
 
-reserve i,k,m,n,p,x,y for Nat,
+reserve i,k,m,n for Nat,
         i1,i2,i3 for Integer,
         e for set;
 
@@ -36,6 +37,8 @@ theorem :: RADIX_1:4
 theorem :: RADIX_1:5
      k <> 0 implies (n+1) mod k = 0 or (n+1) mod k = (n mod k) + 1;
 
+reserve i,k,m,n,p,x,y for Element of NAT;
+
 theorem :: RADIX_1:6
   i <> 0 & k <> 0 implies (n mod (i |^ k)) div (i |^ (k -'1)) < i;
 
@@ -43,21 +46,19 @@ theorem :: RADIX_1:7
   k <= n implies m |^ k divides m |^ n;
 
 theorem :: RADIX_1:8
-     i2 > 0 & i3 >= 0 implies (i1 mod (i2*i3)) mod i3 = i1 mod i3;
+  i2 > 0 & i3 >= 0 implies (i1 mod (i2*i3)) mod i3 = i1 mod i3;
 
 begin :: Definition for Radix-2^k, k-SD
 
-definition let n;
-  func Radix(n) -> Nat equals
+definition let n be Nat;
+  func Radix(n) -> Element of NAT equals
 :: RADIX_1:def 1
-
     2 to_power n;
 end;
 
 definition let k;
   func k-SD -> set equals
 :: RADIX_1:def 2
-
     {e where e is Element of INT:e <= Radix(k)-1 & e >= -Radix(k)+1};
 end;
 
@@ -103,7 +104,7 @@ canceled;
 theorem :: RADIX_1:18
   i in Seg n implies a.i is Element of k-SD;
 
-definition let i,k,n be Nat, x be Tuple of n,(k-SD);
+definition let i,k,n be Element of NAT, x be Tuple of n,(k-SD);
   func DigA(x,i) -> Integer equals
 :: RADIX_1:def 3
 
@@ -111,7 +112,7 @@ definition let i,k,n be Nat, x be Tuple of n,(k-SD);
     0 if i = 0;
 end;
 
-definition let i,k,n be Nat, x be Tuple of n,(k-SD);
+definition let i,k,n be Element of NAT, x be Tuple of n,(k-SD);
   func DigB(x,i) -> Element of INT equals
 :: RADIX_1:def 4
 
@@ -124,39 +125,39 @@ theorem :: RADIX_1:19
 theorem :: RADIX_1:20
   for x be Tuple of 1,INT st x/.1 = m holds x = <*m*>;
 
-definition let i,k,n be Nat, x be Tuple of n,(k-SD);
+definition let i,k,n be Element of NAT, x be Tuple of n,(k-SD);
   func SubDigit(x,i,k) -> Element of INT equals
 :: RADIX_1:def 5
 
     (Radix(k) |^ (i -'1))*DigB(x,i);
 end;
 
-definition let n,k be Nat, x be Tuple of n,(k-SD);
+definition let n,k be Element of NAT, x be Tuple of n,(k-SD);
   func DigitSD(x) -> Tuple of n,INT means
 :: RADIX_1:def 6
 
-    for i be Nat st i in Seg n holds it/.i = SubDigit(x,i,k);
+    for i be Element of NAT st i in Seg n holds it/.i = SubDigit(x,i,k);
 end;
 
-definition let n,k be Nat, x be Tuple of n,(k-SD);
+definition let n,k be Element of NAT, x be Tuple of n,(k-SD);
   func SDDec(x) -> Integer equals
 :: RADIX_1:def 7
 
     Sum DigitSD(x);
 end;
 
-definition let i,k,x be Nat;
+definition let i,k,x be Element of NAT;
   func DigitDC(x,i,k) -> Element of k-SD equals
 :: RADIX_1:def 8
 
     (x mod (Radix(k) |^ i)) div (Radix(k) |^ (i -'1));
 end;
 
-definition let k,n,x be Nat;
+definition let k,n,x be Element of NAT;
   func DecSD(x,n,k) -> Tuple of n,(k-SD) means
 :: RADIX_1:def 9
 
-    for i be Nat st i in Seg n holds DigA(it,i) = DigitDC(x,i,k);
+    for i be Element of NAT st i in Seg n holds DigA(it,i) = DigitDC(x,i,k);
 end;
 
 begin :: Definition for carry & data components of Addition
@@ -173,7 +174,7 @@ end;
 theorem :: RADIX_1:21
   SD_Add_Carry(0) = 0;
 
-definition let x be Integer, k be Nat;
+definition let x be Integer, k be Element of NAT;
   func SD_Add_Data(x,k) -> Integer equals
 :: RADIX_1:def 11
 
@@ -190,7 +191,7 @@ theorem :: RADIX_1:23
 begin :: Definition for checking whether or not a natural number can be
       :: expressed as n digits Radix-2^k SD number
 
-definition let n,x,k be Nat;
+definition let n,x,k be Element of NAT;
   pred x is_represented_by n,k means
 :: RADIX_1:def 12
 
@@ -216,7 +217,7 @@ theorem :: RADIX_1:27
 begin :: Definition for Addition operation for a high-speed adder algorithm
       :: on Radix-2^k SD number
 
-definition let k,i,n be Nat, x,y be Tuple of n,(k-SD);
+definition let k,i,n be Element of NAT, x,y be Tuple of n,(k-SD);
   assume i in Seg n & k >= 2;
   func Add(x,y,i,k) -> Element of k-SD equals
 :: RADIX_1:def 13
@@ -225,7 +226,7 @@ definition let k,i,n be Nat, x,y be Tuple of n,(k-SD);
       + SD_Add_Carry(DigA(x,i -'1)+DigA(y,i -'1));
 end;
 
-definition let n,k be Nat,x,y be Tuple of n,(k-SD);
+definition let n,k be Element of NAT,x,y be Tuple of n,(k-SD);
   func x '+' y -> Tuple of n,(k-SD) means
 :: RADIX_1:def 14
 

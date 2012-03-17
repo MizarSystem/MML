@@ -43,7 +43,6 @@
 <ArticleID name="VECTSP_2"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="REALSET2"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="SEQM_3"/>
@@ -54,6 +53,7 @@
 <ArticleID name="MATRLIN"/>
 <ArticleID name="POLYNOM1"/>
 <ArticleID name="ALGSEQ_1"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="POLYNOM3"/>
 <ArticleID name="COMPLFLD"/>
 <ArticleID name="POLYNOM5"/>
@@ -138,7 +138,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="465">
+<Func kind="K" nr="467">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <Func kind="K" nr="255">
@@ -182,7 +182,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="458">
+<Func kind="K" nr="460">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -261,7 +261,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="456">
+<Func kind="K" nr="458">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -318,9 +318,9 @@
 <Func kind="K" nr="87"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="463">
-<LocusVar nr="1"/>
 <Func kind="K" nr="465">
+<LocusVar nr="1"/>
+<Func kind="K" nr="467">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <Func kind="K" nr="255">
@@ -393,7 +393,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="467">
+<Func kind="K" nr="469">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

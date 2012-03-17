@@ -31,7 +31,7 @@ begin :: Preliminaries
 
 reserve p for programmed FinPartState of SCM+FSA,
         ic for Instruction of SCM+FSA,
-        i,j,k for Nat,
+        i,j,k for Element of NAT,
         fa,f for FinSeq-Location,
         a,b,da,db for Int-Location,
         la,lb for Instruction-Location of SCM+FSA;
@@ -67,12 +67,13 @@ for s be State of SCM+FSA,f be FinSeq-Location,a,b be Int-Location
 holds Exec((f,a):=b, s).f = s.f+*(abs(s.a),s.b);
 
 theorem :: SCMBSORT:10
- for s be State of SCM+FSA,f be FinSeq-Location,m,n be Nat,a be Int-Location
+ for s be State of SCM+FSA,f be FinSeq-Location,m,n be Element of NAT,
+ a be Int-Location
  st m<>n+1 holds Exec(intloc m:=(f,a), Initialize s).intloc (n+1)
  =s.intloc (n+1);
 
 theorem :: SCMBSORT:11
- for s be State of SCM+FSA,m,n be Nat,a be Int-Location
+ for s be State of SCM+FSA,m,n be Element of NAT,a be Int-Location
  st m<>n+1 holds Exec(intloc m:=a, Initialize s).intloc (n+1)
  =s.intloc (n+1);
 
@@ -137,7 +138,8 @@ theorem :: SCMBSORT:23
 canceled;
 
 theorem :: SCMBSORT:25
- for i,k being Nat,t being FinPartState of SCM+FSA,p being Macro-Instruction,
+ for i,k being Element of NAT,t being FinPartState of SCM+FSA,
+ p being Macro-Instruction,
   s1,s2 being State of SCM+FSA
   st k <= i & p c= s1 & p c= s2 &
   dom t c= Int-Locations \/ FinSeq-Locations &
@@ -152,7 +154,8 @@ theorem :: SCMBSORT:25
   (Computation s2).i |(dom t \/ UsedInt*Loc p \/ UsedIntLoc p);
 
 theorem :: SCMBSORT:26
- for i,k being Nat,p being Macro-Instruction, s1,s2 being State of SCM+FSA
+ for i,k being Element of NAT,p being Macro-Instruction,
+ s1,s2 being State of SCM+FSA
   st k <= i & p c= s1 & p c= s2 &
   (for j holds IC (Computation s1).j in dom p &
   IC (Computation s2).j in dom p) &
@@ -243,7 +246,8 @@ theorem :: SCMBSORT:47
 holds Initialized I +* (f .--> w) starts_at insloc 0;
 
 theorem :: SCMBSORT:48
- for I,J being Macro-Instruction, k being Nat,i being Instruction of SCM+FSA
+ for I,J being Macro-Instruction, k being Element of NAT,
+ i being Instruction of SCM+FSA
  st k< card J & i = J.insloc k holds
   (I ';' J).(insloc (card I +k)) =IncAddr( i, card I );
 
@@ -254,18 +258,20 @@ theorem :: SCMBSORT:49
  ic = a :=len f or ic = f :=<0,...,0>a implies ic <> halt SCM+FSA;
 
 theorem :: SCMBSORT:50
- for I,J be Macro-Instruction,k be Nat,i be Instruction of SCM+FSA st
- (for n be Nat holds IncAddr( i, n)=i) & i <> halt SCM+FSA & k= card I
+ for I,J be Macro-Instruction,k be Element of NAT,
+ i be Instruction of SCM+FSA st
+ (for n be Element of NAT holds IncAddr( i, n)=i) & i <> halt SCM+FSA &
+ k= card I
  holds (I ';' i ';' J).(insloc k) = i &
         (I ';' i ';' J).(insloc (k+1)) = goto insloc (card I+2);
 
 theorem :: SCMBSORT:51
- for I,J being Macro-Instruction, k being Nat holds
+ for I,J being Macro-Instruction, k being Element of NAT holds
      k= card I implies (I ';'(a:=b) ';' J).(insloc k) = a:= b
      & (I ';'(a:=b) ';' J).(insloc (k+1)) = goto insloc (card I+2);
 
 theorem :: SCMBSORT:52
- for I,J being Macro-Instruction, k being Nat holds
+ for I,J being Macro-Instruction, k being Element of NAT holds
      k= card I implies (I ';'(a:=len f) ';' J).(insloc k) = a:=len f
      & (I ';'(a:=len f) ';' J).(insloc (k+1)) = goto insloc (card I+2);
 
@@ -363,7 +369,7 @@ theorem :: SCMBSORT:62
  for f being FinSeq-Location holds card (bubble-sort f) = 63;
 
 theorem :: SCMBSORT:63
- for f being FinSeq-Location, k being Nat st
+ for f being FinSeq-Location, k being Element of NAT st
    k < 63 holds insloc k in dom (bubble-sort f);
 
 theorem :: SCMBSORT:64
@@ -372,12 +378,13 @@ theorem :: SCMBSORT:64
 theorem :: SCMBSORT:65
 for s be State of SCM+FSA holds
     (s.f0, IExec(bubble-sort f0,s).f0 are_fiberwise_equipotent) &
-    (for i,j be Nat st i>=1 & j<=len (s.f0) & i<j
+    (for i,j be Element of NAT st i>=1 & j<=len (s.f0) & i<j
      for x1,x2 be Integer st x1 =IExec(bubble-sort f0,s).f0.i &
         x2=IExec(bubble-sort f0,s).f0.j holds x1 >= x2);
 
 theorem :: SCMBSORT:66
- for i being Nat, s being State of SCM+FSA,w being FinSequence of INT
+ for i being Element of NAT, s being State of SCM+FSA,
+ w being FinSequence of INT
   st Initialized Bubble-Sort-Algorithm +* ((fsloc 0) .--> w) c= s
   holds IC (Computation s).i in dom Bubble-Sort-Algorithm;
 

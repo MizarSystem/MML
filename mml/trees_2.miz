@@ -10,6 +10,7 @@ environ
       ORDINAL1, TARSKI, FINSET_1, CARD_1, ARYTM_1, FUNCOP_1, TREES_2, HAHNBAN,
       PRELAMB, FUNCT_3, MCART_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, RELAT_1, MCART_1,
+      XCMPLX_0,
       FUNCT_1, REAL_1, NAT_1, NUMBERS, FINSEQ_1, FINSET_1, CARD_1, RELSET_1,
       FUNCT_2, FUNCOP_1, FUNCT_3, TREES_1, XXREAL_0;
  constructors WELLORD2, FUNCT_3, FUNCOP_1, XXREAL_0, XREAL_0, REAL_1, NAT_1,
@@ -33,7 +34,7 @@ begin
          w,w' for Element of W,
          f for Function,
          D,D' for non empty set,
-         i,k,k1,k2,l,m,n for Nat,
+         i,k,k1,k2,l,m,n for Element of NAT,
          v,v1,v2 for FinSequence,
          p,q,r,r1,r2 for FinSequence of NAT;
 
@@ -133,7 +134,7 @@ A6:     t = v^<*x*> & len v = k by Th4;
       reconsider v as Element of T() by A6,TREES_1:46;
           rng <*x*> c= rng t & rng t c= NAT by A6,FINSEQ_1:43;
        then rng <*x*> = {x} & rng <*x*> c= NAT by FINSEQ_1:56,XBOOLE_1:1;
-      then reconsider x as Nat by ZFMISC_1:37;
+      then reconsider x as Element of NAT by ZFMISC_1:37;
           P[v] & x = x by A5,A6;
       hence P[t] by A2,A6;
      end;
@@ -392,7 +393,7 @@ A1:  w = {};
 A2:     x = w' & len w' = 1;
 A3:     w' = <*w'.1*> by A2,FINSEQ_1:57;
        then rng w' c= NAT & rng w' = {w'.1} by FINSEQ_1:56;
-      then reconsider n = w'.1 as Nat by ZFMISC_1:37;
+      then reconsider n = w'.1 as Element of NAT by ZFMISC_1:37;
           w' = w^<*n*> & w' in W by A1,A3,FINSEQ_1:47;
       hence x in succ w by A2;
      end;
@@ -706,7 +707,8 @@ theorem
  Th25: for C being finite Chain of W st card C > n
      ex p st p in C & len p >= n
   proof let C be finite Chain of W;
-   defpred X[Nat] means $1 < card C implies ex p st p in C & len p >= $1;
+   defpred X[Element of NAT] means
+    $1 < card C implies ex p st p in C & len p >= $1;
 A1: X[0]
      proof assume A2: 0 < card C;
 then A3:   C <> {} by CARD_1:47;
@@ -925,7 +927,7 @@ then A27:    Z in X by A1,A23,A24;
    take Y; thus thesis by A1,A17;
   end;
 
-scheme FuncExOfMinNat { P[set,Nat], X()->set }:
+scheme FuncExOfMinNat { P[set,Element of NAT], X()->set }:
  ex f st dom f = X() & for x st x in X() ex n st f.x = n & P[x,n] &
    for m st P[x,m] holds n <= m
   provided
@@ -943,7 +945,7 @@ A4:    z = l & P[x,l] & for m st P[x,m] holds l <= m;
      end;
 A5:  for x st x in X() ex y st Q[x,y]
      proof let x;
-       defpred X[Nat] means P[x,$1];
+       defpred X[Element of NAT] means P[x,$1];
       assume x in X();
 then A6:    ex n st X[n] by A1;
           ex n st X[n] & for m st X[m] holds n <= m from NAT_1:sch 5(A6);
@@ -957,7 +959,7 @@ Lm2: X is finite implies ex n st for k st k in X holds k <= n
  proof assume
 A1: X is finite;
   defpred P[set,set] means
-   ex k1,k2 being Nat st $1 = k1 & $2 = k2 & k1 >= k2;
+   ex k1,k2 being Element of NAT st $1 = k1 & $2 = k2 & k1 >= k2;
       now per cases;
     suppose
 A2:    X /\ NAT = {};
@@ -973,17 +975,17 @@ A3:  X /\ NAT <> {};
 A4:    XN <> {} by A3;
 A5:    for x,y holds P[x,y] & P[y,x] implies x = y by XXREAL_0:1;
 A6:   now let x,y,z; assume P[x,y];
-       then consider k1,k2 be Nat such that
+       then consider k1,k2 be Element of NAT such that
 A7:     x = k1 & y = k2 & k1 >= k2;
        assume P[y,z];
-       then consider k3,k4 be Nat such that
+       then consider k3,k4 be Element of NAT such that
 A8:     y = k3 & z = k4 & k3 >= k4;
        thus P[x,z] proof take k1, k4; thus thesis by A7,A8,XXREAL_0:2; end;
       end;
     consider x such that
 A9:   x in XN & for y st y in XN & y <> x holds not P[y,x]
         from CARD_3:sch 2(A4,A5,A6);
-    reconsider n = x as Nat by A9,XBOOLE_0:def 3;
+    reconsider n = x as Element of NAT by A9,XBOOLE_0:def 3;
     take n; let k; assume
       k in X; then k in X /\ NAT by XBOOLE_0:def 3;
     hence k <= n by A9;
@@ -1016,7 +1018,7 @@ A7:   dom f = NAT & f.0 = a() & for n holds f.(n+1) = U(n,f.n)
        from RECDEF_1:sch 3;
     take f;
     thus dom f = NAT by A7;
-    defpred X[Nat] means f.$1 in Y;
+    defpred X[Element of NAT] means f.$1 in Y;
 A8:  X[0] by A1,A3,A7;
 A9:  X[k] implies X[k+1]
       proof assume f.k in Y;
@@ -1028,7 +1030,7 @@ A10: X[k] from NAT_1:sch 1(A8,A9);
       proof let x; assume x in rng f;
        then consider y such that
 A11:     y in dom f & x = f.y by FUNCT_1:def 5;
-       reconsider y as Nat by A7,A11;
+       reconsider y as Element of NAT by A7,A11;
            f.y in Y by A10;
        hence thesis by A3,A11;
       end;
@@ -1054,7 +1056,7 @@ A3:  for x being Element of T st P[x] ex n st x^<*n*> in T & P[x^<*n*>]
 A4:    P[x] and
 A5:    for n st x^<*n*> in T holds not P[x^<*n*>];
 A6:    succ x is finite by A2;
-   defpred X[set,Nat] means for B being Branch of T,p,q st
+   defpred X[set,Element of NAT] means for B being Branch of T,p,q st
          p = $1 & $1 in B & q in B holds len p + $2 > len q;
 A7:    for y st y in succ x ex n st X[y,n]
         proof let y; assume y in succ x;
@@ -1095,7 +1097,7 @@ A20:     dom r = Seg len r by FINSEQ_1:def 3;
         by A15,FINSEQ_1:21,NAT_1:29;
        then len x + 1 in dom r by A20,FINSEQ_1:3;
       then j.1 in rng r & rng r c= NAT by A18,A19,FUNCT_1:def 5;
-      then reconsider l = j.1 as Nat;
+      then reconsider l = j.1 as Element of NAT;
        A21:    x^<*l*> in succ x by A17,A18,A19;
       then consider n such that
 A22:    f.(x^<*l*>) = n & (for B being Branch of T,p,q st
@@ -1144,44 +1146,48 @@ A32:    t^<*n*> in T & P[t^<*n*>] by A3,A31;
     for k holds PP[f.k,f.(k+1)] & QQ[f.k] from InfiniteChain(A29,A30);
    then consider f such that
 A33: dom f = NAT & rng f c= T & f.0 = e and
-A34: for k holds (ex p,n st f.k = p & p^<*n*> in T & f.(k+1) = p^<*n*>) &
+A34: for k holds
+     (ex p,n st f.k = p & p^<*n*> in T & f.(k+1) = p^<*n*>) &
       ex t being Element of T st t = f.k & P[t];
    reconsider C = rng f as Subset of T by A33;
-A35:  now let k;
+A35:  now let k be Nat;
        defpred X[Nat] means
         for p,q st p = f.k & q = f.(k+$1) holds p is_a_prefix_of q;
 A36:   X[0];
-A37:   X[n] implies X[n+1]
-       proof assume
-A38:      for p,q st p = f.k & q = f.(k+n) holds p is_a_prefix_of q;
+A37:   for n be Nat st X[n] holds X[n+1]
+       proof
+       let n be Nat; assume
+A38:    for p,q st p = f.k & q = f.(k+n) holds p is_a_prefix_of q;
         let p,q such that
-A39:      p = f.k & q = f.(k+(n+1));
+A39:    p = f.k & q = f.(k+(n+1));
+        reconsider k,n as Element of NAT by ORDINAL1:def 13;
         consider r,l such that
-A40:      f.(k+n) = r & r^<*l*> in T & f.((k+n)+1) = r^<*l*> by A34;
-            k+n+1 = k+(n+1) & p is_a_prefix_of r & r is_a_prefix_of r^<*l*>
+A40:    f.(k+n) = r & r^<*l*> in T & f.((k+n)+1) = r^<*l*> by A34;
+        k+n+1 = k+(n+1) & p is_a_prefix_of r & r is_a_prefix_of r^<*l*>
           by A38,A39,A40,TREES_1:8;
         hence thesis by A39,A40,XBOOLE_1:1;
        end;
-     thus X[n] from NAT_1:sch 1(A36,A37);
+     thus for n be Nat holds X[n] from NAT_1:sch 2(A36,A37);
     end;
 A41:  now let k,l; assume k <= l;
-       then ex n st l = k+n by NAT_1:28;
-      hence for p,q st p = f.k & q = f.l holds p is_a_prefix_of q by A35;
+       then consider n be Nat such that Z: l = k+n by NAT_1:28;
+       reconsider n as Element of NAT by ORDINAL1:def 13;
+      thus for p,q st p = f.k & q = f.l holds p is_a_prefix_of q by A35,Z;
     end;
-       C is Chain of T
+     C is Chain of T
      proof let p,q; assume
-A42:    p in C & q in C;
+A42:  p in C & q in C;
       then consider x such that
-A43:    x in NAT & p = f.x by A33,FUNCT_1:def 5;
+A43:  x in NAT & p = f.x by A33,FUNCT_1:def 5;
       consider y such that
-A44:    y in NAT & q = f.y by A33,A42,FUNCT_1:def 5;
-      reconsider x, y as Nat by A43,A44;
-          x <= y or y <= x;
+A44:  y in NAT & q = f.y by A33,A42,FUNCT_1:def 5;
+      reconsider x, y as Element of NAT by A43,A44;
+      x <= y or y <= x;
       hence p is_a_prefix_of q or q is_a_prefix_of p by A41,A43,A44;
      end;
    then reconsider C as Chain of T;
    take C;
-   defpred X[Nat] means for p st p = f.$1 holds len p = $1;
+   defpred X[Element of NAT] means for p st p = f.$1 holds len p = $1;
 A45: X[0]  by A33,FINSEQ_1:25;
 A46: X[k] implies X[k+1]
      proof assume
@@ -1197,7 +1203,7 @@ A49:    f.k = q & q^<*n*> in T & f.(k+1) = q^<*n*> by A34;
 A50:  X[k] from NAT_1:sch 1(A45,A46);
        f is one-to-one
      proof let x,y; assume x in dom f & y in dom f;
-      then reconsider x' = x, y' = y as Nat by A33;
+      then reconsider x' = x, y' = y as Element of NAT by A33;
       consider p,n such that
 A51:    f.x' = p & p^<*n*> in T & f.(x'+1) = p^<*n*> by A34;
       consider q,k such that
@@ -1622,7 +1628,7 @@ scheme DTreeStructEx
   provided
 A1: for d being Element of D(), k1,k2 st k1 <= k2 & k2 in F(d) holds k1 in F(d)
 
-proof defpred P[Nat] means
+proof defpred P[Element of NAT] means
     ex T being DecoratedTree of D() st T.{} = d() &
      for t being Element of dom T holds len t <= $1 &
       (len t < $1 implies succ t = { t^<*k*>: k in F(T.t)} &
@@ -1652,7 +1658,8 @@ A4:    T.{} = d() & for t being Element of dom T holds len t <= k &
 then A5:          x in { t^<*n*> where t is Element of dom T: n in F(T.t) } or
              x in dom T & dom T c= NAT* by TREES_1:def 5,XBOOLE_0:def 2;
             assume A6:not x in NAT*;
-             then ex n be Nat,t being Element of dom T st x = t^<*n*> & n in F
+             then ex n be Element of NAT,t being Element of dom T
+              st x = t^<*n*> & n in F
 (T.t)
  by A5;
             hence thesis by A6,FINSEQ_1:def 11;
@@ -1663,7 +1670,8 @@ then A7:          p in { t^<*n*> where t is Element of dom T: n in F(T.t) } or
              p in dom T by XBOOLE_0:def 2;
                 now assume
                   p in { t^<*n*> where t is Element of dom T: n in F(T.t) };
-              then consider n be Nat, t be Element of dom T such that
+              then consider n be Element of NAT, t be Element of dom T
+              such that
 A8:            p = t^<*n*> & n in F(T.t);
                A9: ProperPrefixes t c= dom T & dom T c= M & t in dom T
                 by TREES_1:def 5,XBOOLE_1:7;
@@ -1684,7 +1692,7 @@ or
          assume
 A12:       n <= m & not p^<*n*> in M;
           then not p^<*n*> in dom T by XBOOLE_0:def 2;
-         then consider l be Nat, t be Element of dom T such that
+         then consider l be Element of NAT, t be Element of dom T such that
 A13:       p^<*m*> = t^<*l*> & l in F(T.t) by A11,A12,TREES_1:def 5;
              len (p^<*m*>) = len p + len <*m*> & len <*m*> = 1 &
           len (t^<*l*>) = len t + len <*l*> & len <*l*> = 1 &
@@ -1703,7 +1711,7 @@ then A15:       p in { t^<*l*> where t is Element of dom T: l in F(T.t) } or
           p in dom T by XBOOLE_0:def 2;
              now assume
 A16:         not p in dom T;
-           then consider l be Nat, t be Element of dom T such that
+           then consider l be Element of NAT, t be Element of dom T such that
 A17:         p = t^<*l*> & l in F(T.t) by A15;
            take x = S().[T.t,l];
            thus p in dom T & x = T.p or
@@ -1731,7 +1739,7 @@ A22:         not y in dom T;
 A23:         y = q^<*n*> & T'.y = S().[T.q,n] by A18;
                y in { t^<*l*> where t is Element of dom T: l in F(T.t) }
              by A18,A22,XBOOLE_0:def 2;
-           then consider l be Nat, t be Element of dom T such that
+           then consider l be Element of NAT, t be Element of dom T such that
 A24:         y = t^<*l*> & l in F(T.t);
                len <*n*> = 1 & len <*l*> = 1 by FINSEQ_1:56;
             then len (q^<*n*>) = len q + 1 & len (t^<*l*>) = len t + 1 &
@@ -1749,7 +1757,7 @@ A24:         y = t^<*l*> & l in F(T.t);
       hence T'. {} = d() by A4,A18;
       let t be Element of dom T';
 A25:    now assume t in { s^<*l*> where s is Element of dom T: l in F(T.s) };
-        then consider l be Nat, s being Element of dom T such that
+        then consider l be Element of NAT, s being Element of dom T such that
 A26:      t = s^<*l*> & l in F(T.s);
             len s <= k & len <*l*> = 1 by A4,FINSEQ_1:56;
          then len s + 1 <= k+1 & len s + 1 = len t by A26,FINSEQ_1:35,XREAL_1:9
@@ -1768,7 +1776,7 @@ A28:    now assume
 A29:      not t in dom T;
          then t in { s^<*l*> where s is Element of dom T: l in F(T.s) }
           by A18,XBOOLE_0:def 2;
-        then consider l be Nat, s be Element of dom T such that
+        then consider l be Element of NAT, s be Element of dom T such that
 A30:      t = s^<*l*> & l in F(T.s);
             len t = len s + len <*l*> & len <*l*> = 1 & 0 < 1
           by A30,FINSEQ_1:35,56;
@@ -1801,7 +1809,7 @@ TREES_1:46
              then t^<*n*> in { s^<*l*> where s is Element of dom T: l in F(T.s
 ) }
               by A18,A32,XBOOLE_0:def 2;
-            then consider l be Nat, s be Element of dom T such that
+            then consider l be Element of NAT, s be Element of dom T such that
 A34:          t^<*n*> = s^<*l*> & l in F(T.s);
                 n = l & t = s by A34,FINSEQ_2:20;
             hence thesis by A31,A32,A34;
@@ -1850,7 +1858,7 @@ A41:  P[k] from NAT_1:sch 1(A2,A3);
         for n,x st x = T.t & n in F(x) holds T.(t^<*n*>) = S().[x,n]);
 A42:  for x st x in NAT ex y st P[x,y]
      proof let x; assume x in NAT;
-      then reconsider n = x as Nat;
+      then reconsider n = x as Element of NAT;
       consider T being DecoratedTree of D() such that
 A43:    T.{} = d() & for t being Element of dom T holds len t <= n &
         (len t < n implies succ t = { t^<*k*>: k in F(T.t)} &
@@ -1875,7 +1883,7 @@ A46:    y in dom f & x = f.y by FUNCT_1:def 5;
      end;
 A47: for T1,T2,k1,k2 st T1 = f.k1 & T2 = f.k2 & k1 <= k2 holds
       T1 c= T2
-     proof let T1,T2; let x,y be Nat such that
+     proof let T1,T2; let x,y be Element of NAT such that
 A48:    T1 = f.x & T2 = f.y & x <= y;
       consider T1' being DecoratedTree of D(), k1 such that
 A49:    x = k1 & f.x = T1' & T1'.{} = d() &
@@ -1889,7 +1897,7 @@ A50:    y = k2 & f.y = T2' & T2'.{} = d() &
         (len t < k2 implies succ t = { t^<*i*>: i in F(T2'.t)} &
          for n,x st x = T2'.t & n in F(x) holds T2'.(t^<*n*>) = S().[x,n])
           by A44;
-      defpred I[Nat] means
+      defpred I[Element of NAT] means
        for t being Element of dom T1 st len t <= $1 holds
         t in dom T2 & T1.t = T2.t;
 A51:    I[0]
@@ -1924,7 +1932,7 @@ then A60:         p = q by A57,TREES_1:19;
                <*x*> is FinSequence of NAT by A59,FINSEQ_1:50;
             then rng <*x*> c= NAT & rng <*x*> = {x} & x in {x}
              by FINSEQ_1:55,def 4,TARSKI:def 1;
-           then reconsider x as Nat;
+           then reconsider x as Element of NAT;
                p^<*x*> in succ p & succ p = { p^<*i*>: i in F(T1.p)}
              by A48,A49,A57,A59,A60;
            then consider i such that
@@ -1958,7 +1966,7 @@ A68:    x in dom f & T1 = f.x by FUNCT_1:def 5;
       then consider y such that
 A70:    y in dom f & T2 = f.y by FUNCT_1:def 5;
 A71:   T1 is DecoratedTree & T2 is DecoratedTree by A45,A67,A69;
-      reconsider x,y as Nat by A44,A68,A70;
+      reconsider x,y as Element of NAT by A44,A68,A70;
           x <= y or y <= x;
       hence T1 c= T2 or T2 c= T1 by A47,A68,A70,A71;
      end;
@@ -2011,7 +2019,7 @@ succ t'
 A79: [t,T.t] in X & X in E by TARSKI:def 4;
    consider y such that
 A80: y in NAT & X = f.y by A44,A79,FUNCT_1:def 5;
-   reconsider y as Nat by A80;
+   reconsider y as Element of NAT by A80;
    consider T1 being DecoratedTree of D(), k1 such that
 A81: y = k1 & f.y = T1 & T1.{} = d() &
     for t being Element of dom T1 holds len t <= k1 &
@@ -2050,12 +2058,12 @@ A90:  n in F(T.t);
   end;
 
 scheme DTreeStructFinEx
-     { D() -> non empty set, d() -> Element of D(), F(set) -> Nat,
+     { D() -> non empty set, d() -> Element of D(), F(set) -> Element of NAT,
        S() -> Function of [:D(),NAT:],D()}:
  ex T being DecoratedTree of D() st T.{} = d() &
   for t being Element of dom T holds succ t = { t^<*k*>: k < F(T.t)} &
    for n st n < F(T.t) holds T.(t^<*n*>) = S().[T.t,n]
-proof deffunc FF(Nat) = { i: i < $1};
+proof deffunc FF(Element of NAT) = { i: i < $1};
     deffunc U(set) = FF(F($1));
 A1: for d being Element of D(), k1,k2 st k1 <= k2 & k2 in U(d) holds
       k1 in U(d)

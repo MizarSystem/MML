@@ -9,7 +9,8 @@ environ
  vocabularies COMPLEX1, COMSEQ_1, PARTFUN1, ORDINAL2, SEQM_3, SEQ_1, RELAT_1,
       FUNCT_1, CFUNCT_1, FCONT_1, SEQ_2, FINSEQ_4, ARYTM_1, ANPROJ_1, BOOLE,
       FINSEQ_1, ARYTM_3, COMPTS_1, ARYTM, FRECHET2;
- notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, NUMBERS, XREAL_0,
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, NUMBERS,
+   XCMPLX_0, XREAL_0,
       REAL_1, NAT_1, PARTFUN1, FUNCT_2, SEQ_1, RELSET_1, SEQM_3, COMPLEX1,
       FINSEQ_4, CFUNCT_1, COMSEQ_1, COMSEQ_2, COMSEQ_3, XXREAL_0;
  constructors PARTFUN1, XXREAL_0, REAL_1, NAT_1, SEQ_1, FINSEQ_4, COMSEQ_1,
@@ -21,12 +22,12 @@ environ
  theorems TARSKI, NAT_1, REAL_1, FUNCT_1, COMPLEX1, SEQ_1, SEQM_3, SEQ_4,
       COMSEQ_1, COMSEQ_2, COMSEQ_3, PARTFUN1, CFUNCT_1, RELAT_1, FUNCT_2,
       FINSEQ_4, PARTFUN2, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, XREAL_1,
-      XXREAL_0;
+      XXREAL_0, ORDINAL1;
  schemes NAT_1, RECDEF_1, SEQ_1, FUNCT_2;
 
 begin
 
- reserve n,n1,m,m1,l,k for Nat;
+ reserve n,n1,m,m1,l,k for Element of NAT;
  reserve x,y,X,X1 for set;
  reserve g,g1,g2,t,x0,x1,x2 for Element of COMPLEX;
  reserve s1,s2,q1,seq,seq1,seq2,seq3 for Complex_Sequence;
@@ -94,7 +95,7 @@ rng (seq^\n) c= rng seq
 proof
  let x; assume x in rng (seq^\n); then consider y such that
 A1: y in dom (seq^\n) & (seq^\n).y = x by FUNCT_1:def 5;
- reconsider y as Nat by A1;
+ reconsider y as Element of NAT by A1;
 A2: (seq^\n).y = seq.(y+n) by COMSEQ_3:def 6;
     y+n in NAT; then y+n in dom seq by COMSEQ_1:2;
  hence x in rng seq by A1,A2,FUNCT_1:def 5;
@@ -115,7 +116,7 @@ proof
 thus x in rng seq implies ex n st x = seq.n
  proof assume x in rng seq;
   then consider y such that A1: y in dom seq & x = seq.y by FUNCT_1:def 5;
-  reconsider m=y as Nat by A1;
+  reconsider m=y as Element of NAT by A1;
   take m; thus thesis by A1;
  end;
  given n such that A2: x = seq.n;
@@ -505,9 +506,9 @@ attr seq is constant means :Def4: ex g st for n holds seq.n=g;
 A1:   dom seq = NAT by COMSEQ_1:2;
    hereby assume
 A2:   seq is constant;
-    consider n0 being Nat;
+    consider n0 being Element of NAT;
     take r = seq.n0;
-    let n be Nat;
+    let n be Element of NAT;
     thus seq.n = r by A1,A2,FUNCT_1:def 16;
    end;
    given g such that
@@ -570,7 +571,7 @@ Lm1:((ex g st for n holds seq.n=g) implies ex g st rng seq={g}) &
     proof
      assume A8:for n holds seq.n=seq.(n+1);
      let n;
-     defpred P[Nat] means seq.n=seq.(n+$1);
+     defpred P[Element of NAT] means seq.n=seq.(n+$1);
      A9:P[0];
       A10:now let k such that A11:P[k];
           seq.(n+k)=seq.(n+k+1) by A8;
@@ -584,12 +585,16 @@ Lm1:((ex g st for n holds seq.n=g) implies ex g st rng seq={g}) &
      assume A12:for n,k holds seq.n=seq.(n+k);
      let n,m;
       A13:now assume n<=m;
-        then ex k st m=n+k by NAT_1:28;
-       hence seq.n=seq.m by A12;
+        then consider k being Nat such that
+a1:     m=n+k by NAT_1:28;
+        k in NAT by ORDINAL1:def 13;
+       hence seq.n=seq.m by A12,a1;
       end;
          now assume m<=n;
-        then ex k st n=m+k by NAT_1:28;
-       hence seq.n=seq.m by A12;
+        then consider k being Nat such that
+a1:     n=m+k by NAT_1:28;
+        k in NAT by ORDINAL1:def 13;
+       hence seq.n=seq.m by A12,a1;
       end;
      hence seq.n=seq.m by A13;
     end;
@@ -663,7 +668,7 @@ theorem
 theorem Th38:
  seq ^\k is subsequence of seq
 proof
-  deffunc f(Nat) = $1+k;
+  deffunc f(Element of NAT) = $1+k;
     consider Rseq1 such that A1:for n holds Rseq1.n=f(n) from SEQ_1:sch 1;
         now let n;
       A2:Rseq1.n=n+k & Rseq1.(n+1)=n+1+k by A1;
@@ -672,8 +677,8 @@ proof
      end;
     then A3:Rseq1 is increasing by SEQM_3:def 11;
         now let n;
-         n+k is Nat;
-      hence Rseq1.n is Nat by A1;
+         n+k is Element of NAT;
+      hence Rseq1.n is Element of NAT by A1;
      end;
     then reconsider Rseq1 as increasing Seq_of_Nat by A3,SEQM_3:29;
     take Rseq=Rseq1;
@@ -817,8 +822,9 @@ proof
      take n=n1+k;
      let m; assume
  A6: n<=m;
-     then consider l such that
+     then consider l being Nat such that
  A7: m=n1+k+l by NAT_1:28;
+ reconsider l as Element of NAT by ORDINAL1:def 13;
       m-k=n1+l+k+-k by A7;
      then consider m1 such that
  A8: m1=m-k;
@@ -848,9 +854,10 @@ theorem
        take n=n1+k;
        let m; assume
  A6:   n<=m;
-       then consider l such that
+       then consider l being Nat such that
  A7:    m=n1+k+l by NAT_1:28;
-        m-k=n1+l+k+-k by A7;
+ reconsider l as Element of NAT by ORDINAL1:def 13;
+ m-k=n1+l+k+-k by A7;
        then consider m1 such that
  A8:     m1=m-k;
  A9:    now assume not n1<=m1;
@@ -1024,7 +1031,7 @@ hence x0 in dom f;
 let s2 such that A2: rng s2 c=dom f & s2 is convergent & lim s2=x0;
    now per cases;
 suppose ex n st for m st n<=m holds s2.m=x0;
- then consider N be Nat such that A3: for m st N<=m holds s2.m=x0;
+ then consider N be Element of NAT such that A3: for m st N<=m holds s2.m=x0;
  A4: for n holds (s2^\N).n=x0
  proof let n;
      N<=n+N by NAT_1:37; then s2.(n+N)=x0 by A3;
@@ -1047,8 +1054,8 @@ suppose ex n st for m st n<=m holds s2.m=x0;
  hence thesis by Th43;
 end;
 suppose A9: for n ex m st n<=m & s2.m<>x0;
- then consider m1 be Nat such that A10: 0<=m1 & s2.m1<>x0;
- defpred P[Nat] means s2.$1<>x0;
+ then consider m1 be Element of NAT such that A10: 0<=m1 & s2.m1<>x0;
+ defpred P[Element of NAT] means s2.$1<>x0;
  A11: ex m st P[m] by A10;
  consider M be Element of NAT such that
  A12: P[M] & for n st P[n] holds M<=n from NAT_1:sch 5(A11);
@@ -1060,9 +1067,9 @@ suppose A9: for n ex m st n<=m & s2.m<>x0;
  defpred R[set,set,set] means P[$2,$3];
  A15: for n for x be Element of NAT ex y be Element of NAT st R[n,x,y]
  proof let n; let x be Element of NAT;
-   defpred P[Nat] means x<$1 & s2.$1<>x0;
+   defpred P[Element of NAT] means x<$1 & s2.$1<>x0;
   A16: ex m st P[m] by A13;
-  consider l be Nat such that A17: P[l] &
+  consider l be Element of NAT such that A17: P[l] &
    for k st P[k] holds l<=k from NAT_1:sch 5(A16);
    take l; thus thesis by A17;
  end;
@@ -1073,19 +1080,20 @@ RECDEF_1:sch 2(A15);
  A19: dom F=NAT & rng F c= NAT by FUNCT_2:def 1;
     for n holds F.n is real;
  then reconsider F as Real_Sequence by A19,SEQ_1:4;
- A20: now let n;  F.n in rng F by A19,FUNCT_1:def 5;hence F.n is Nat by A19;
+ A20: now let n;  F.n in rng F by A19,FUNCT_1:def 5;
+ hence F.n is Element of NAT by A19;
  end;
-    now let n;  F.n is Nat & F.(n+1) is Nat by A20;
+    now let n;  F.n is Element of NAT & F.(n+1) is Element of NAT by A20;
   hence F.n<F.(n+1) by A18;
  end;
  then reconsider F as increasing Seq_of_Nat by A19,SEQM_3:def 8,def 11;
 A21: for n st s2.n<>x0 ex m st F.m=n
  proof
-   defpred P[Nat] means s2.$1<>x0 & for m holds F.m<>$1;
+   defpred P[Element of NAT] means s2.$1<>x0 & for m holds F.m<>$1;
    assume A22: ex n st P[n];
-  consider M1 be Nat such that A23: P[M1] &
+  consider M1 be Element of NAT such that A23: P[M1] &
   for n st P[n] holds M1<=n from NAT_1:sch 5(A22);
-  defpred E[Nat] means $1<M1 & s2.$1<>x0 & ex m st F.m=$1;
+  defpred E[Element of NAT] means $1<M1 & s2.$1<>x0 & ex m st F.m=$1;
   A24: ex n st E[n]
   proof take M;
    A25: M<=M1 by A12,A23;
@@ -1095,7 +1103,7 @@ A21: for n st s2.n<>x0 ex m st F.m=n
    take 0; thus thesis by A18;
   end;
   A26: for n st E[n] holds n <= M1;
-  consider MX be Nat such that A27: E[MX] &
+  consider MX be Element of NAT such that A27: E[MX] &
   for n st E[n] holds n<=MX from NAT_1:sch 6(A26,A24);
   A28: for k st MX<k & k<M1 holds s2.k=x0
   proof given k such that A29: MX<k & k<M1 & s2.k<>x0;
@@ -1114,7 +1122,7 @@ A21: for n st s2.n<>x0 ex m st F.m=n
 hence contradiction by A28,A31;
   end;hence contradiction by A23;
  end;
-   defpred P[Nat] means (s2*F).$1<>x0;
+   defpred P[Element of NAT] means (s2*F).$1<>x0;
   A33: P[0] by A12,A18,FUNCT_2:21;
   A34: for k st P[k] holds P[k+1]
   proof let k such that (s2*F).k<>x0;
@@ -1138,7 +1146,8 @@ A40: now let p; assume A41: 0<p;
    .=0 by COMPLEX1:130;
    hence |.(f*s2).m-f/.x0.|<p by A41;
   end;
-  suppose s2.m<>x0; then consider l be Nat such that A44: m=F.l by A21;
+  suppose s2.m<>x0; then consider l be Element of NAT such that
+  A44: m=F.l by A21;
       n<=l by A43,A44,SEQM_3:7;
    then |.(f*(s2*F)).l-f/.x0.|<p by A42;
    then |.f/.((s2*F).l)-f/.x0.|<p by A38,Th16;
@@ -1165,7 +1174,7 @@ proof
   hence x0 in dom f by Def2;
   given r such that A2: 0<r & for s holds not 0<s or ex x1 st x1 in dom f &
   |.x1-x0.|<s & not |.f/.x1-f/.x0.|<r;
-  defpred P[Nat,Element of COMPLEX] means $2 in dom f &
+  defpred P[Element of NAT,Element of COMPLEX] means $2 in dom f &
     |.$2-x0.| < 1/($1+1) & not |.f/.$2-f/.x0.|<r;
   A3: for n ex g st P[n,g]
    proof let n;

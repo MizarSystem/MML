@@ -9,12 +9,13 @@ environ
  vocabularies AMI_1, SCMFSA_2, AMI_3, SCMFSA6B, SCMFSA6A, FUNCT_1, FUNCT_4,
       CARD_1, RELAT_1, FUNCOP_1, BOOLE, AMI_2, SF_MASTR, CAT_1, FUNCT_7, AMI_5,
       ARYTM_1, NAT_1, ABSVALUE, FINSEQ_1, FINSEQ_2, SCMFSA6C, FINSEQ_4;
- notations TARSKI, XBOOLE_0, SUBSET_1, ENUMSET1, XCMPLX_0, NAT_1, INT_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, ENUMSET1,
+      ORDINAL1, NUMBERS, XCMPLX_0, NAT_1, INT_1,
       COMPLEX1, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, CARD_1,
       CQC_LANG, FUNCT_4, DOMAIN_1, STRUCT_0, AMI_1, AMI_3, AMI_5, FUNCT_7,
       SCMFSA_2, SCMFSA_4, SCMFSA6A, SF_MASTR, SCMFSA6B, XXREAL_0;
  constructors DOMAIN_1, SETWISEO, XXREAL_0, NAT_1, FINSEQ_4, INT_2, AMI_5,
-      SCMFSA6A, SF_MASTR, SCMFSA6B;
+      SCMFSA6A, SF_MASTR, SCMFSA6B, ORDINAL1;
  registrations AMI_1, SCMFSA_2, FUNCT_1, FINSET_1, RELSET_1, SCMFSA6A,
       SF_MASTR, SCMFSA6B, INT_1, CQC_LANG, FRAENKEL, XBOOLE_0, NUMBERS,
       SETFAM_1, CARD_3, STRUCT_0;
@@ -29,7 +30,6 @@ begin :: Consequences of the main theorem from SCMFSA6B
  reserve m, n for Nat,
          x for set,
          i for Instruction of SCM+FSA,
-
          a,b for Int-Location, f for FinSeq-Location,
          l, l1 for Instruction-Location of SCM+FSA,
          s,s1,s2 for State of SCM+FSA;
@@ -117,7 +117,7 @@ Lm2: Macro halt SCM+FSA is keeping_0 parahalting proof
   set Mi = Macro halt SCM+FSA;
    hereby let s be State of SCM+FSA; assume
 A1:  Mi +* Start-At insloc 0 c= s;
-   let k be Nat;
+   let k be Element of NAT;
 A2:  insloc 0 in dom (Mi +* Start-At insloc 0) by SCMFSA6B:31;
 A3:  CurInstr((Computation s).0)
      = CurInstr s by AMI_1:def 19
@@ -126,7 +126,7 @@ A3:  CurInstr((Computation s).0)
     .= (Mi +* Start-At insloc 0).insloc 0 by A1,A2,GRFUNC_1:8
     .= halt SCM+FSA by SCMFSA6B:33;
 A4: s = (Computation s).0 by AMI_1:def 19;
-       0 <= k by NAT_1:18;
+    0 <= k by NAT_1:18;
    hence ((Computation s).k).intloc 0 = s.intloc 0 by A3,A4,AMI_1:52;
   end;
   thus Mi is parahalting by Lm1;
@@ -368,7 +368,7 @@ A49: IC Exec((f,a):=b, s) = Exec((f,a):=b, s).IC SCM+FSA
  thus (f,a) := b is keeping_0 proof
   let s; assume
 A50: Macro ((f,a):=b) +* Start-At insloc 0 c= s;
-  let k be Nat;
+  let k be Element of NAT;
   set Ma = Macro ((f,a):=b);
        SA0 c= Macro ((f,a):=b) +* Start-At insloc 0 by FUNCT_4:26;
 then A51:  SA0 c= s by A50,XBOOLE_1:1;
@@ -468,7 +468,7 @@ A14:IC Exec(f:=<0,...,0>a, s) = Exec(f:=<0,...,0>a, s).IC SCM+FSA
 thus (f:=<0,...,0>a) is keeping_0 proof
   let s; assume
 A15: Macro (f:=<0,...,0>a) +* Start-At insloc 0 c= s;
-  let k be Nat;
+  let k be Element of NAT;
   set Ma = Macro (f:=<0,...,0>a);
        SA0 c= Macro (f:=<0,...,0>a) +* Start-At insloc 0 by FUNCT_4:26;
 then A16:  SA0 c= s by A15,XBOOLE_1:1;
@@ -498,7 +498,7 @@ then A23: CurInstr((Computation s).1)
   end;
   suppose
   A24: 1 <= k;
-       (Computation s).1.intloc 0 = s.intloc 0 by A22,SCMFSA_2:101;
+   (Computation s).1.intloc 0 = s.intloc 0 by A22,SCMFSA_2:101;
    hence ((Computation s).k).intloc 0 = s.intloc 0 by A23,A24,AMI_1:52;
  end;
  end;
@@ -511,7 +511,7 @@ registration
  coherence proof
   let s; assume
 A1: Macro (a:=b) +* Start-At insloc 0 c= s;
-  let k be Nat;
+  let k be Element of NAT;
   set Ma = Macro (a:=b);
        SA0 c= Macro (a:=b) +* Start-At insloc 0 by FUNCT_4:26;
 then A2:  SA0 c= s by A1,XBOOLE_1:1;
@@ -549,7 +549,7 @@ then A9: CurInstr((Computation s).1)
  coherence proof
   let s; assume
 A11: Macro (AddTo(a,b)) +* Start-At insloc 0 c= s;
-  let k be Nat;
+  let k be Element of NAT;
   set Ma = Macro (AddTo(a,b));
        SA0 c= Macro (AddTo(a,b)) +* Start-At insloc 0 by FUNCT_4:26;
 then A12:  SA0 c= s by A11,XBOOLE_1:1;
@@ -587,7 +587,7 @@ then A19: CurInstr((Computation s).1)
  coherence proof
   let s; assume
 A21: Macro (SubFrom(a,b)) +* Start-At insloc 0 c= s;
-  let k be Nat;
+  let k be Element of NAT;
   set Ma = Macro (SubFrom(a,b));
        SA0 c= Macro (SubFrom(a,b)) +* Start-At insloc 0 by FUNCT_4:26;
 then A22:  SA0 c= s by A21,XBOOLE_1:1;
@@ -625,7 +625,7 @@ then A29: CurInstr((Computation s).1)
  coherence proof
   let s; assume
 A31: Macro (MultBy(a,b)) +* Start-At insloc 0 c= s;
-  let k be Nat;
+  let k be Element of NAT;
   set Ma = Macro (MultBy(a,b));
        SA0 c= Macro (MultBy(a,b)) +* Start-At insloc 0 by FUNCT_4:26;
 then A32:  SA0 c= s by A31,XBOOLE_1:1;
@@ -666,7 +666,7 @@ registration
  coherence proof
   let s; assume
 A1: Macro (Divide(a,b)) +* Start-At insloc 0 c= s;
-  let k be Nat;
+  let k be Element of NAT;
   set Ma = Macro (Divide(a,b));
        SA0 c= Macro (Divide(a,b)) +* Start-At insloc 0 by FUNCT_4:26;
 then A2:  SA0 c= s by A1,XBOOLE_1:1;
@@ -707,7 +707,7 @@ registration
  coherence proof
   let s; assume
 A1: Macro (b:=(f,a)) +* Start-At insloc 0 c= s;
-  let k be Nat;
+  let k be Element of NAT;
   set Ma = Macro (b:=(f,a));
        SA0 c= Macro (b:=(f,a)) +* Start-At insloc 0 by FUNCT_4:26;
 then A2:  SA0 c= s by A1,XBOOLE_1:1;
@@ -748,7 +748,7 @@ registration
  coherence proof
   let s; assume
 A1: Macro (b:=len f) +* Start-At insloc 0 c= s;
-  let k be Nat;
+  let k be Element of NAT;
   set Ma = Macro (b:=len f);
        SA0 c= Macro (b:=len f) +* Start-At insloc 0 by FUNCT_4:26;
 then A2:  SA0 c= s by A1,XBOOLE_1:1;
@@ -851,9 +851,9 @@ definition
  coherence proof
      {} in sproduct the Object-Kind of SCM+FSA by AMI_1:26;
   then reconsider EI = {} as FinPartState of SCM+FSA by AMI_1:def 24;
-  A1: for m,n st insloc n in dom EI & m < n holds insloc m in dom EI by
-RELAT_1:60;
-       dom EI c= the Instruction-Locations of SCM+FSA by RELAT_1:60,XBOOLE_1:2;
+  A1: for m,n be Element of NAT st
+    insloc n in dom EI & m < n holds insloc m in dom EI by RELAT_1:60;
+  dom EI c= the Instruction-Locations of SCM+FSA by RELAT_1:60,XBOOLE_1:2;
   then reconsider EI as Macro-Instruction by A1,AMI_3:def 13,SCMFSA_4:def 4;
 A2: Initialized EI = EI +* ((intloc 0) .--> 1) +* Start-At(insloc 0)
                                                   by SCMFSA6A:def 3;
@@ -1567,10 +1567,10 @@ A104:      a <> db by A103,TARSKI:def 1;
   by A99,A100,FUNCT_1:9;
        da in Int-Locations by SCMFSA_2:9;
  then A106: da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
- consider k1 being Nat such that
+ consider k1 being Element of NAT such that
 A107: k1 = abs(s1.da) and
 A108: Exec(l, s1).db = (s1.fa)/.k1 by A97,SCMFSA_2:98;
- consider k2 being Nat such that
+ consider k2 being Element of NAT such that
 A109: k2 = abs(s2.da) and
 A110: Exec(l, s2).db = (s2.fa)/.k2 by A97,SCMFSA_2:98;
 A111: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
@@ -1643,10 +1643,10 @@ A120:      a <> fa by A119,TARSKI:def 1;
   by A115,A116,FUNCT_1:9;
        da in Int-Locations by SCMFSA_2:9;
  then A122: da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
- consider k1 being Nat such that
+ consider k1 being Element of NAT such that
 A123: k1 = abs(s1.da) and
 A124: Exec(l, s1).fa = s1.fa+*(k1,s1.db) by A113,SCMFSA_2:99;
- consider k2 being Nat such that
+ consider k2 being Element of NAT such that
 A125: k2 = abs(s2.da) and
 A126: Exec(l, s2).fa = s2.fa+*(k2,s2.db) by A113,SCMFSA_2:99;
 A127: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
@@ -1791,10 +1791,10 @@ A148:      a <> fa by A147,TARSKI:def 1;
   by A143,A144,FUNCT_1:9;
        da in Int-Locations by SCMFSA_2:9;
  then A150: da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
- consider k1 being Nat such that
+ consider k1 being Element of NAT such that
 A151: k1 = abs(s1.da) and
 A152: Exec(l, s1).fa = k1 |->0 by A141,SCMFSA_2:101;
- consider k2 being Nat such that
+ consider k2 being Element of NAT such that
 A153: k2 = abs(s2.da) and
 A154: Exec(l, s2).fa = k2 |->0 by A141,SCMFSA_2:101;
     s1.da = (s1 | (Int-Locations \/ FinSeq-Locations )).da
@@ -1995,7 +1995,7 @@ A37: now let f;
 then A41: sI = Exec(i, sI) by A32,A33,A37,SCMFSA_2:86;
     A42: Following sI = Following (Computation sI).0 by AMI_1:def 19
                 .= Exec(i, sI) by A23,AMI_1:def 19;
-       now let n;
+       now let n be Element of NAT;
        (Computation sI).n = sI by A41,A42,SCMFSA6B:15
                        .= Following (Computation sI).0 by A41,A42,AMI_1:def 19
                        .= (Computation sI).(0+1) by AMI_1:def 19;

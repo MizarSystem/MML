@@ -49,14 +49,15 @@ theorem Th2:
     set A = {[0,1],[1,0],[1,2],[2,1],[2,3],[3,2]},
         B = the InternalRel of Necklace 4;
     A1: B =
-    {[i,i+1] where i is Nat:i+1 < 4} \/ {[i+1,i] where i is Nat:i+1 < 4}
+    {[i,i+1] where i is Element of NAT:i+1 < 4} \/
+    {[i+1,i] where i is Element of NAT:i+1 < 4}
     by NECKLACE:19;
-     A2: [0,0+1] in {[i,i+1] where i is Nat:i+1 < 4};
-     A3: [0+1,0] in {[i+1,i] where i is Nat:i+1 < 4};
-     A4: [0+1,1+1] in {[i,i+1] where i is Nat:i+1 < 4};
-     A5: [1+1,0+1] in {[i+1,i] where i is Nat:i+1 < 4};
-     A6: [1+1,2+1] in {[i,i+1] where i is Nat:i+1 < 4};
-     A7: [2+1,1+1] in {[i+1,i] where i is Nat:i+1 < 4};
+     A2: [0,0+1] in {[i,i+1] where i is Element of NAT:i+1 < 4};
+     A3: [0+1,0] in {[i+1,i] where i is Element of NAT:i+1 < 4};
+     A4: [0+1,1+1] in {[i,i+1] where i is Element of NAT:i+1 < 4};
+     A5: [1+1,0+1] in {[i+1,i] where i is Element of NAT:i+1 < 4};
+     A6: [1+1,2+1] in {[i,i+1] where i is Element of NAT:i+1 < 4};
+     A7: [2+1,1+1] in {[i+1,i] where i is Element of NAT:i+1 < 4};
     A8: A c= B
       proof
         let x be set;
@@ -88,8 +89,8 @@ theorem Th2:
         then consider y,z being set such that
         A11: x = [y,z] by RELAT_1:def 1;
         per cases by A1,A10,XBOOLE_0:def 2;
-        suppose x in {[i,i+1] where i is Nat: i+1<4};
-         then consider i be Nat such that
+        suppose x in {[i,i+1] where i is Element of NAT: i+1<4};
+         then consider i be Element of NAT such that
          A12: [y,z] = [i,i+1] & i+1 < 4 by A11;
          A13: y = i & z = i+1 by A12,ZFMISC_1:33;
                i + 1 < 1 + 3 by A12;
@@ -98,8 +99,8 @@ theorem Th2:
            then y = 0 or y = 1 or y = 2 by A13,CQC_THE1:3;
          hence thesis by A11,A13,ENUMSET1:def 4;
         end;
-        suppose x in {[i+1,i] where i is Nat: i+1<4};
-         then consider i be Nat such that
+        suppose x in {[i+1,i] where i is Element of NAT: i+1<4};
+         then consider i be Element of NAT such that
          A14: [y,z] = [i+1,i] & i+1 < 4 by A11;
          A15: y = i+1 & z = i by A14,ZFMISC_1:33;
                i + 1 < 1 + 3 by A14;
@@ -117,7 +118,7 @@ registration let n be natural number;
   coherence
   proof
     let x be Element of Rank n;
-    reconsider m = n as Nat by ORDINAL1:def 13;
+    reconsider m = n as Element of NAT by ORDINAL1:def 13;
     per cases;
     suppose Rank n = {}; then
       x = {} by SUBSET_1:def 2;
@@ -609,17 +610,20 @@ theorem Th6:
      proof
        let i being Nat;
        let x be set such that A7: x in f.i;
-          f.(i+1) = f.i \/ {b where b is Element of fin_RelStr_sp:
+       i in NAT by ORDINAL1:def 13;
+       then  f.(i+1) = f.i \/ {b where b is Element of fin_RelStr_sp:
           ex R1,R2 being strict RelStr st
           (the carrier of R1) misses (the carrier of R2) &
           R1 in f.i & R2 in f.i &
           (b = union_of(R1,R2) or b = sum_of(R1,R2))} by A5;
        hence thesis by A7,XBOOLE_0:def 2;
      end;
-    A8: for i,j being Nat st i <= j holds f.i c= f.j
+    A8: for i,j being Element of NAT st i <= j holds f.i c= f.j
        proof
-         let i,j being Nat; assume i <= j;
-         then consider k being Nat such that A9: j=i+k by NAT_1:28;
+         let i,j being Element of NAT; assume i <= j;
+         then consider k being Nat such that
+         A9:      j=i+k by NAT_1:28;
+         reconsider k as Element of NAT by ORDINAL1:def 13;
          defpred P[Nat] means f.i c= f.(i+$1);
          A10: P[0];
          A11: for k being Nat st P[k] holds P[k+1]
@@ -628,7 +632,7 @@ theorem Th6:
            f.(i+k) c= f.(i+k+1) by A6;
            hence thesis by A12,XBOOLE_1:1;
          end;
-         for k being Nat holds P[k] from NAT_1:sch 1(A10,A11);
+         for k being Nat holds P[k] from NAT_1:sch 2(A10,A11);
          hence thesis by A9;
        end;
     A13: Union f c= fin_RelStr_sp
@@ -649,7 +653,9 @@ theorem Th6:
        A17: for k being Nat st P[k] holds P[k+1]
         proof
           let k be Nat such that A18: P[k];
-          A19: f.(k+1) = f.k \/ {a where a is Element of fin_RelStr_sp:
+          k in NAT by ORDINAL1:def 13;
+          then
+A19:      f.(k+1) = f.k \/ {a where a is Element of fin_RelStr_sp:
           ex R1,R2 being strict RelStr st
           (the carrier of R1) misses (the carrier of R2) &
           R1 in f.k & R2 in f.k &
@@ -675,9 +681,10 @@ theorem Th6:
             end;
           hence thesis by A18,A19,XBOOLE_1:8;
         end;
-        for k being Nat holds P[k] from NAT_1:sch 1(A16,A17);
+        reconsider x as Element of NAT by A3,A14;
+        for k being Nat holds P[k] from NAT_1:sch 2(A16,A17);
         then f.x c= fin_RelStr_sp by A3,A14;
-      hence thesis by A15;
+        hence thesis by A15;
      end;
      then reconsider M = Union f as Subset of fin_RelStr by XBOOLE_1:1;
      A21: for R be strict RelStr st the carrier of R is non empty trivial &
@@ -707,10 +714,10 @@ theorem Th6:
         A29: x1 in dom f and A30: H1 in f.x1 by A27,CARD_5:10;
         consider x2 being set such that
         A31: x2 in dom f and A32: H2 in f.x2 by A28,CARD_5:10;
-        A33: x1 is Nat by A3,A29;
-             x2 is Nat by A3,A31;
-        then reconsider x1,x2 as real number by A33;
-        A34: max(x1,x2) is Nat by A3,A29,A31,FINSEQ_2:1;
+        reconsider x1, x2 as Element of NAT by A3,A29,A31;
+        max(x1,x2) is Nat by A3,A29,A31,FINSEQ_2:1;
+        then
+A34:    max(x1,x2) in NAT by ORDINAL1:def 13;
          then A35: (max(x1,x2) + 1) in dom f by A3,AXIOMS:28;
               x1 <= max(x1,x2) by XXREAL_0:25;
           then A36: f.x1 c= f.max(x1,x2) by A3,A8,A29,A34;
@@ -762,8 +769,9 @@ and
           (the carrier of R1) misses (the carrier of R2) &
           R1 in f.n & R2 in f.n &
           (a = union_of(R1,R2) or a = sum_of(R1,R2))};
-          A49: f.(n+1) = f.n \/ W by A5;
           assume A50: X in f.(n+1);
+          reconsider n as Element of NAT by ORDINAL1:def 13;
+          A49: f.(n+1) = f.n \/ W by A5;
           per cases by A49,A50,XBOOLE_0:def 2;
           suppose X in f.n;
           hence thesis by A48;
@@ -783,8 +791,9 @@ and
           hence thesis by A53,A54;
         end;
         end;
-        for n being Nat holds P[n] from NAT_1:sch 1(A44,A47);
-        hence thesis by A3,A42,A43;
+AA:     y is Nat by A3,A42,ORDINAL1:def 13;
+        for n being Nat holds P[n] from NAT_1:sch 2(A44,A47);
+        hence thesis by A3,A42,A43,AA;
      end;
     hence thesis;
   end;
@@ -806,14 +815,15 @@ theorem
     Card (the carrier of S) = $1 & S embeds N4;
     reconsider C = the carrier of R as Element of FinSETS by A2,A3;
     set k = card C;
-    A5: ex i being Nat st P[i]
+    A5: ex i being Element of NAT st P[i]
     proof
       P[k] by A1,A4;
       hence thesis;
     end;
-    A6: for m being Nat st m <> 0 & P[m] ex n being Nat st n < m & P[n]
+    A6: for m being Element of NAT st m <> 0 & P[m]
+    ex n being Element of NAT st n < m & P[n]
     proof
-      let m be Nat such that m <> 0 and A7: P[m];
+      let m be Element of NAT such that m <> 0 and A7: P[m];
       consider S being non empty strict RelStr such that
       A8: S in fin_RelStr_sp and A9: Card (the carrier of S) = m and
       A10: S embeds N4 by A7;
@@ -1886,7 +1896,7 @@ Def2;
        hence thesis by A20,A21;
     end;
     end;
-          P[0] from NAT_1:sch 7(A5,A6);
+    P[0] from NAT_1:sch 7(A5,A6);
     then consider S being strict non empty RelStr such that
           S in fin_RelStr_sp and A221: Card (the carrier of S) = 0 and
           S embeds N4;

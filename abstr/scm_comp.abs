@@ -27,14 +27,14 @@ begin
 theorem :: SCM_COMP:1
 for I1, I2 being FinSequence of the Instructions of SCM,
     D being FinSequence of INT,
-    il, ps, ds being Nat,
+    il, ps, ds being Element of NAT,
     s being State-consisting of il, ps, ds, I1^I2, D
  holds s is State-consisting of il, ps, ds, I1, D &
        s is State-consisting of il, (ps+len I1), ds, I2, D;
 
 theorem :: SCM_COMP:2
  for I1, I2 being FinSequence of the Instructions of SCM,
-     il, ps, ds, k, il1 being Nat,
+     il, ps, ds, k, il1 being Element of NAT,
      s being State-consisting of il, ps, ds, I1^I2, <*>INT,
      u being State of SCM st u = (Computation s).k & il.il1 = IC u
   holds u is State-consisting of il1, (ps + len I1), ds, I2, <*>INT;
@@ -167,7 +167,7 @@ theorem :: SCM_COMP:8 :: PRE_COMP_8:
    (tl div tr)@s = (tl@s) div (tr@s) & (tl mod tr)@s = (tl@s) mod (tr@s);
 
 definition
- let nt be NonTerminal of SCM-AE, n be Nat;
+ let nt be NonTerminal of SCM-AE, n be Element of NAT;
  func Selfwork(nt, n) -> Element of ((the Instructions of SCM) qua set)*
  equals
 :: SCM_COMP:def 10
@@ -180,7 +180,7 @@ definition
 end;
 
 definition
- let term be bin-term, aux be Nat;
+ let term be bin-term, aux be Element of NAT;
  func SCM-Compile(term, aux) -> FinSequence of the Instructions of SCM means
 :: SCM_COMP:def 11
 
@@ -191,22 +191,23 @@ st it = (f.term qua
     (for t being Terminal of SCM-AE
        ex g being Function of NAT, ((the Instructions of SCM) qua set)*
         st g = f.(root-tree t) &
-        for n being Nat holds g.n = <*dl.n:=@t*>) &
+        for n being Element of NAT holds g.n = <*dl.n:=@t*>) &
     for nt being NonTerminal of SCM-AE, t1, t2 being bin-term,
         rtl, rtr being Symbol of SCM-AE
         st rtl = root-label t1 & rtr = root-label t2 & nt ==> <*rtl, rtr*>
       ex g, f1, f2 being Function of NAT, ((the Instructions of SCM) qua set)
 *
      st g = f.(nt-tree (t1, t2)) & f1 = f.t1 & f2 = f.t2 &
-     for n being Nat holds g.n = (f1.n)^(f2.(n+1))^Selfwork(nt, n);
+     for n being Element of NAT holds g.n = (f1.n)^(f2.(n+1))^Selfwork(nt, n);
 end;
 
 theorem :: SCM_COMP:9
- for t being Terminal of SCM-AE, n being Nat holds
+ for t being Terminal of SCM-AE, n being Element of NAT holds
   SCM-Compile(root-tree t, n) = <* dl.n:=@t *>;
 
 theorem :: SCM_COMP:10
- for nt being NonTerminal of SCM-AE, t1, t2 being bin-term, n being Nat,
+ for nt being NonTerminal of SCM-AE, t1, t2 being bin-term,
+ n being Element of NAT,
         rtl, rtr being Symbol of SCM-AE
         st rtl = root-label t1 & rtr = root-label t2 & nt ==> <*rtl, rtr*>
   holds SCM-Compile(nt-tree(t1,t2), n) =
@@ -214,14 +215,14 @@ theorem :: SCM_COMP:10
 
 definition
  let t be Terminal of SCM-AE;
- func d".t -> Nat means
+ func d".t -> Element of NAT means
 :: SCM_COMP:def 12
 dl.it = t;
 end;
 
 definition
  let term be bin-term;
- func max_Data-Loc_in term -> Nat means
+ func max_Data-Loc_in term -> Element of NAT means
 :: SCM_COMP:def 13
 
   ex f being Function of TS SCM-AE, NAT st
@@ -230,7 +231,7 @@ definition
     (for nt being NonTerminal of SCM-AE, tl, tr being bin-term,
        rtl, rtr being Symbol of SCM-AE
      st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
-     for xl, xr being Nat st xl = f.tl & xr = f.tr
+     for xl, xr being Element of NAT st xl = f.tl & xr = f.tr
          holds f.(nt-tree (tl, tr)) = max(xl, xr));
 end;
 
@@ -245,23 +246,24 @@ theorem :: SCM_COMP:12
 theorem :: SCM_COMP:13
 for term being bin-term,
     s1, s2 being State of SCM
- st for dn being Nat st dn <= max_Data-Loc_in term holds s1.dl.dn = s2.dl.dn
+ st for dn being Element of NAT st dn <= max_Data-Loc_in term
+ holds s1.dl.dn = s2.dl.dn
   holds term @ s1 = term @ s2;
 
 theorem :: SCM_COMP:14
 for term being bin-term
-  for aux, n, k being Nat,
+  for aux, n, k being Element of NAT,
    s being State-consisting of n, n, k, SCM-Compile(term, aux), <*>INT
    st aux > max_Data-Loc_in term
-   ex i being Nat, u being State of SCM st
+   ex i being Element of NAT, u being State of SCM st
       u = (Computation s).(i+1) & i+1 = len SCM-Compile(term, aux) &
       IC (Computation s).i = il.(n+i) & IC u = il.(n+(i+1)) &
                                                           u.dl.aux = term@s &
-      for dn being Nat st dn < aux holds s.dl.dn = u.dl.dn;
+      for dn being Element of NAT st dn < aux holds s.dl.dn = u.dl.dn;
 
 theorem :: SCM_COMP:15
       for term being bin-term,
-   aux, n, k being Nat,
+   aux, n, k being Element of NAT,
    s being State-consisting of n, n, k, SCM-Compile(term, aux)^<*halt SCM*>,
              <*>INT
    st aux > max_Data-Loc_in term

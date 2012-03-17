@@ -9,17 +9,19 @@ environ
  vocabularies SUPINF_1, ARYTM_1, RLVECT_1, BOOLE, ORDINAL2, SEQ_2, FUNCT_1,
       RELAT_1, LATTICES, CARD_4, FUNCT_4, FUNCOP_1, SUPINF_2, FUNCT_3,
       PARTFUN1;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XXREAL_0, REAL_1, SUPINF_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XXREAL_0, XCMPLX_0,
+      REAL_1, SUPINF_1,
       RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, FUNCOP_1,
       FUNCT_4, NAT_1, CARD_4;
  constructors FUNCT_3, FUNCOP_1, FUNCT_4, REAL_1, NAT_1, SUPINF_1, CARD_4;
  registrations SUPINF_1, RELSET_1, FUNCOP_1, FUNCT_1, ARYTM_3, FINSET_1,
-      MEMBERED, ORDINAL1, NUMBERS, XREAL_0, XXREAL_0, FUNCT_2, RELAT_1;
+      MEMBERED, ORDINAL1, NUMBERS, XREAL_0, XXREAL_0, FUNCT_2, RELAT_1,
+      NAT_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, SUPINF_1, XBOOLE_0, XXREAL_0;
  theorems TARSKI, SUPINF_1, FUNCT_1, FUNCT_2, NAT_1, RELSET_1, CARD_4,
       SUBSET_1, FUNCT_4, FUNCOP_1, RELAT_1, ZFMISC_1, XBOOLE_0, XBOOLE_1,
-      XREAL_1, XXREAL_0, XREAL_0, PARTFUN1;
+      XREAL_1, XXREAL_0, XREAL_0, PARTFUN1, ORDINAL1;
  schemes SUPINF_1, FUNCT_2, RECDEF_1, NAT_1;
 
 begin :: operations " + "," - " in R_eal numbers
@@ -567,7 +569,7 @@ theorem Th21:
 proof
    let x be R_eal;
    assume x in NAT;
-   then reconsider x as Nat;
+   then reconsider x as Element of NAT;
    0 <= x by NAT_1:18;
    hence thesis;
 end;
@@ -1876,19 +1878,20 @@ theorem Th53:
    for N being Num of D holds
    ex F being Function of NAT,ExtREAL st
    F.0 = N.0 &
-   for n being Nat,
+   for n being Element of NAT,
    y being R_eal st y = F.n holds
    F.(n + 1) = y + N.(n+1)
 proof
    let D be Denum_Set_of_R_EAL;
    let N be Num of D;
    defpred P[set,set,set] means
-   for a,b being R_eal,s being Nat holds (s = $1 & a = $2 & b = $3 implies
+   for a,b being R_eal,s being Element of NAT
+    holds (s = $1 & a = $2 & b = $3 implies
    b = a + N.(s+1));
-A1:for n being Nat for x being Element of ExtREAL
+A1:for n being Element of NAT for x being Element of ExtREAL
    ex y being Element of ExtREAL st P[n,x,y]
    proof
-     let n be Nat;
+     let n be Element of NAT;
      let x be Element of ExtREAL;
      reconsider y = x + N.(n+1) as R_eal;
      take y;
@@ -1907,7 +1910,7 @@ definition
    let N be Num of D;
    func Ser(D,N) -> Function of NAT,ExtREAL means
 :Def17:it.0 = N.0 &
-   for n being Nat holds
+   for n being Element of NAT holds
    for y being R_eal st y = it.n holds
    it.(n + 1) = y + N.(n + 1);
 existence by Th53;
@@ -1915,11 +1918,11 @@ uniqueness
 proof
    let S1,S2 be Function of NAT,ExtREAL such that
 A1:S1.0 = N.0 &
-   for n being Nat holds
+   for n being Element of NAT holds
    for y being R_eal st y = S1.n holds
    S1.(n + 1) = y + N.(n + 1) and
 A2:S2.0 = N.0 &
-   for n being Nat holds
+   for n being Element of NAT holds
    for y being R_eal st y = S2.n holds
    S2.(n + 1) = y + N.(n + 1);
    defpred P[set] means S1.$1 = S2.$1;
@@ -1929,20 +1932,20 @@ A2:S2.0 = N.0 &
      assume
   A3:n in NAT;
      then reconsider n as Element of REAL;
-     reconsider n as Nat by A3;
-     for n being Nat holds S1.n = S2.n
+     reconsider n as Element of NAT by A3;
+     for n being Element of NAT holds S1.n = S2.n
      proof
    A4: P[0] by A1,A2;
-   A5: for k being Nat st P[k] holds P[k+1]
+   A5: for k being Element of NAT st P[k] holds P[k+1]
        proof
-         let k be Nat;
+         let k be Element of NAT;
          assume
       A6:S1.k = S2.k;
          reconsider y1 = S1.k, y2 = S2.k as R_eal;
          thus S1.(k + 1) = y2 + N.(k + 1) by A1,A6
                     .= S2.(k + 1) by A2;
        end;
-       thus for k being Nat holds P[k] from NAT_1:sch 1(A4,A5);
+       thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A4,A5);
      end;
      then S1.n = S2.n;
      hence thesis;
@@ -1954,11 +1957,11 @@ end;
 theorem Th54:
   for D being Pos_Denum_Set_of_R_EAL,
       N being Num of D,
-      n being Nat holds 0. <= N.n
+      n being Element of NAT holds 0. <= N.n
 proof
   let D be Pos_Denum_Set_of_R_EAL,
       N be Num of D,
-      n be Nat;
+      n be Element of NAT;
   D = rng N by Def16;
   then N.n in D by FUNCT_2:6;
   hence thesis by Def15;
@@ -1967,18 +1970,18 @@ end;
 theorem Th55:
   for D being Pos_Denum_Set_of_R_EAL,
       N being Num of D,
-      n being Nat holds
+      n being Element of NAT holds
   Ser(D,N).n <= Ser(D,N).(n + 1) & 0. <= Ser(D,N).n
 proof
    let D be Pos_Denum_Set_of_R_EAL,
        N be Num of D,
-       n be Nat;
+       n be Element of NAT;
    set F = Ser(D,N);
 A1:F.0 = N.0 &
-   for n being Nat,
+   for n being Element of NAT,
        y being R_eal st y = F.n holds
    F.(n + 1) = y + N.(n + 1) by Def17;
-   defpred P[Nat] means F.$1 <= F.($1 + 1) & 0. <= F.$1;
+   defpred P[Element of NAT] means F.$1 <= F.($1 + 1) & 0. <= F.$1;
 A2:P[0]
    proof
   A3:F.(0 + 1) = F.0 + N.(1) by Def17;
@@ -1986,9 +1989,9 @@ A2:P[0]
      0. <= N.(1) by Th54;
      hence thesis by A3,A4,Th20;
    end;
-A5:for k being Nat st P[k] holds P[k + 1]
+A5:for k being Element of NAT st P[k] holds P[k + 1]
    proof
-     let k be Nat;
+     let k be Element of NAT;
      assume
   A6:F.k <= F.(k + 1) & 0. <= F.k;
   A7:F.((k+1) + 1) = F.(k + 1) + N.((k+1) + 1) by Def17;
@@ -1996,31 +1999,31 @@ A5:for k being Nat st P[k] holds P[k + 1]
      0. <= F.(k+1) by A6,SUPINF_1:29;
      hence thesis by A7,A8,Th20;
    end;
-   for n being Nat holds P[n] from NAT_1:sch 1(A2,A5);
+   for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A5);
    hence thesis;
 end;
 
 theorem Th56:
   for D being Pos_Denum_Set_of_R_EAL,
       N being Num of D,
-      n,m being Nat holds
+      n,m being Element of NAT holds
     Ser(D,N).n <= Ser(D,N).(n + m)
 proof
   let D be Pos_Denum_Set_of_R_EAL,
       N be Num of D,
-      n,m be Nat;
-   defpred P[Nat] means Ser(D,N).n <= Ser(D,N).(n + $1);
+      n,m be Element of NAT;
+   defpred P[Element of NAT] means Ser(D,N).n <= Ser(D,N).(n + $1);
 A1: P[0];
-A2: for k being Nat st P[k] holds P[k + 1]
+A2: for k being Element of NAT st P[k] holds P[k + 1]
    proof
-     let k be Nat;
+     let k be Element of NAT;
      assume
   A3:Ser(D,N).n <= Ser(D,N).(n + k);
      Ser(D,N).(n + (k+1)) = Ser(D,N).((n + k) + 1);
      then Ser(D,N).(n + k) <= Ser(D,N).(n + (k+1)) by Th55;
      hence thesis by A3,SUPINF_1:29;
    end;
-   for n being Nat holds P[n] from NAT_1:sch 1(A1,A2);
+   for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
    hence thesis;
 end;
 
@@ -2143,10 +2146,10 @@ A3: x in dom F & y = F.x by FUNCT_1:def 5;
 
 theorem Th59:
    for F being Function of NAT,ExtREAL,
-       n being Nat st
+       n being Element of NAT st
    F is nonnegative holds (Ser F).n <= (Ser F).(n + 1) & 0. <= (Ser F).n
 proof
-   let F be Function of NAT,ExtREAL, n be Nat;
+   let F be Function of NAT,ExtREAL, n be Element of NAT;
    assume
 A1:F is nonnegative;
    F is Num of rng F by Def16;
@@ -2159,12 +2162,12 @@ end;
 theorem Th60:
    for F being Function of NAT,ExtREAL st
    F is nonnegative holds
-   for n,m being Nat holds Ser(F).n <= Ser(F).(n + m)
+   for n,m being Element of NAT holds Ser(F).n <= Ser(F).(n + m)
 proof
    let F be Function of NAT,ExtREAL;
    assume
 A1:F is nonnegative;
-   let n,m be Nat;
+   let n,m be Element of NAT;
    F is Num of rng F by Def16;
    then reconsider N = F as Num of rng F;
 A2:Ser(F) = Ser(rng F,N) by Def21;
@@ -2175,31 +2178,31 @@ end;
 theorem Th61:
    for F1,F2 being Function of NAT,ExtREAL st
    F1 is nonnegative &
-   (for n being Nat holds F1.n <= F2.n) holds
-   for n being Nat holds Ser(F1).n <= Ser(F2).n
+   (for n being Element of NAT holds F1.n <= F2.n) holds
+   for n being Element of NAT holds Ser(F1).n <= Ser(F2).n
 proof
    let F1,F2 be Function of NAT,ExtREAL;
    assume
 A1:F1 is nonnegative;
    assume
-A2:for n being Nat holds F1.n <= F2.n;
+A2:for n being Element of NAT holds F1.n <= F2.n;
    F1 is Num of rng F1 by Def16;
    then reconsider N1 = F1 as Num of rng F1;
 A3:Ser(F1) = Ser(rng F1,N1) by Def21;
    F2 is Num of rng F2 by Def16;
    then reconsider N2 = F2 as Num of rng F2;
 A4:Ser(F2) = Ser(rng F2,N2) by Def21;
-   let n be Nat;
-   defpred P[Nat] means Ser(F1).$1 <= Ser(F2).$1;
+   let n be Element of NAT;
+   defpred P[Element of NAT] means Ser(F1).$1 <= Ser(F2).$1;
 A5: P[0]
    proof
   A6:Ser(F1).0 = F1.0 by A3,Def17;
      Ser(F2).0 = F2.0 by A4,Def17;
      hence thesis by A2,A6;
    end;
-A7: for k being Nat st P[k] holds P[k+1]
+A7: for k being Element of NAT st P[k] holds P[k+1]
    proof
-     let k be Nat;
+     let k be Element of NAT;
      assume
  A8:Ser(F1).k <= Ser(F2).k;
  A9:Ser(F1).(k+1) = Ser(F1).k + F1.(k+1) by A3,Def17;
@@ -2209,20 +2212,20 @@ A7: for k being Nat st P[k] holds P[k+1]
      0. <= F1.(k+1) by A1,Th58;
      hence thesis by A8,A9,A10,A11,A12,Lm3;
    end;
-   for n being Nat holds P[n] from NAT_1:sch 1(A5,A7);
+   for n being Element of NAT holds P[n] from NAT_1:sch 1(A5,A7);
    hence thesis;
 end;
 
 theorem Th62:
    for F1,F2 being Function of NAT,ExtREAL st
    F1 is nonnegative &
-   (for n being Nat holds F1.n <= F2.n) holds SUM(F1) <= SUM(F2)
+   (for n being Element of NAT holds F1.n <= F2.n) holds SUM(F1) <= SUM(F2)
 proof
    let F1,F2 be Function of NAT,ExtREAL;
    assume
 A1:F1 is nonnegative;
    assume
-A2:for n being Nat holds F1.n <= F2.n;
+A2:for n being Element of NAT holds F1.n <= F2.n;
    for x being R_eal st x in rng Ser(F1) holds
    ex y being R_eal st y in rng Ser(F2) & x <= y
    proof
@@ -2233,7 +2236,7 @@ A2:for n being Nat holds F1.n <= F2.n;
        by FUNCT_2:def 1;
      then consider n being set such that
   A5:n in NAT & x = Ser(F1).n by A3,FUNCT_1:def 5;
-     reconsider n as Nat by A5;
+     reconsider n as Element of NAT by A5;
      reconsider y = Ser(F2).n as R_eal;
      take y;
      thus thesis by A1,A2,A4,A5,Th61,FUNCT_1:def 5;
@@ -2244,7 +2247,7 @@ end;
 theorem Th63:
    for F being Function of NAT,ExtREAL holds
    Ser(F).0 = F.0 &
-   for n being Nat, y being R_eal st y = Ser(F).n holds
+   for n being Element of NAT, y being R_eal st y = Ser(F).n holds
      Ser(F).(n + 1) = y + F.(n + 1)
 proof
    let F be Function of NAT,ExtREAL;
@@ -2256,12 +2259,12 @@ end;
 
 theorem Th64:
    for F being Function of NAT,ExtREAL st F is nonnegative holds
-   (ex n being Nat st F.n = +infty) implies SUM(F) = +infty
+   (ex n being Element of NAT st F.n = +infty) implies SUM(F) = +infty
 proof
    let F be Function of NAT,ExtREAL;
    assume
 A1:F is nonnegative;
-   given n being Nat such that
+   given n being Element of NAT such that
 A2:F.n = +infty;
 A3:n = 0 implies SUM(F) = +infty
    proof
@@ -2277,6 +2280,7 @@ A3:n = 0 implies SUM(F) = +infty
    proof
      given k being Nat such that
   A6:n = k + 1;
+     reconsider k as Element of NAT by ORDINAL1:def 13;
   A7:Ser(F).k <> -infty
      proof
        0. <= Ser(F).k by A1,Th59;
@@ -2285,8 +2289,8 @@ A3:n = 0 implies SUM(F) = +infty
      reconsider y = Ser(F).k as R_eal;
 A8: Ser(F).(k + 1) = y + F.(k + 1) by Th63;
      reconsider x = Ser(F).(k + 1) as R_eal;
- A9:x = +infty by A2,A6,A7,A8,Def2;
- A10:x in rng Ser(F) by FUNCT_2:6;
+  A9:x = +infty by A2,A6,A7,A8,Def2;
+ A10:x in rng Ser F by FUNCT_2:6;
      x is majorant of rng Ser(F) by A9,SUPINF_1:33;
      then sup rng Ser F = +infty by A9,A10,SUPINF_1:80;
      hence thesis;
@@ -2301,26 +2305,26 @@ end;
 
 theorem
    for F being Function of NAT,ExtREAL st F is nonnegative holds
-   (ex n being Nat st F.n = +infty) implies F is not summable
+   (ex n being Element of NAT st F.n = +infty) implies F is not summable
 proof
    let F be Function of NAT,ExtREAL;
    assume
 A1:F is nonnegative;
-   assume ex n being Nat st F.n = +infty;
+   assume ex n being Element of NAT st F.n = +infty;
    then not SUM(F) in REAL by A1,Th64,SUPINF_1:1;
    hence thesis by Def24;
 end;
 
 theorem
   for F1,F2 being Function of NAT,ExtREAL st
-    F1 is nonnegative & (for n being Nat holds F1.n <= F2.n) holds
+    F1 is nonnegative & (for n being Element of NAT holds F1.n <= F2.n) holds
       (F2 is summable implies F1 is summable)
 proof
    let F1,F2 be Function of NAT,ExtREAL;
    assume
 A1:F1 is nonnegative;
    assume
-A2:for n being Nat holds F1.n <= F2.n;
+A2:for n being Element of NAT holds F1.n <= F2.n;
    assume F2 is summable;
    then A3:SUM(F2) in REAL by Def24;
    SUM(F1) <= SUM(F2) by A1,A2,Th62;
@@ -2337,18 +2341,20 @@ end;
 
 theorem Th67:
    for F being Function of NAT,ExtREAL st F is nonnegative holds
-   for n being Nat st (for r being Nat st n <= r holds F.r = 0.)
+   for n being Nat
+    st (for r being Element of NAT st n <= r holds F.r = 0.)
    holds SUM(F) = Ser(F).n
 proof
    let F be Function of NAT,ExtREAL;
    assume
 A1:F is nonnegative;
    let n be Nat;
+   reconsider n'=n as Element of NAT by ORDINAL1:def 13;
    assume
-A2:for r being Nat st n <= r holds F.r = 0.;
-A3:for r being Nat st n <= r holds Ser(F).r <= Ser(F).n
+A2:for r being Element of NAT st n <= r holds F.r = 0.;
+A3:for r being Element of NAT st n <= r holds Ser(F).r <= Ser(F).n
    proof
-     let r be Nat;
+     let r be Element of NAT;
      assume n <= r;
      then A4: ex m being Nat st r = n + m by NAT_1:28;
      defpred P[Nat] means Ser(F).(n + $1) <= Ser(F).n;
@@ -2358,26 +2364,30 @@ A3:for r being Nat st n <= r holds Ser(F).r <= Ser(F).n
    A6: for s being Nat st P[s] holds P[s+1]
        proof
          let s be Nat;
+         reconsider s'=s as Element of NAT by ORDINAL1:def 13;
          assume
       A7:Ser(F).(n + s) <= Ser(F).n;
-      A8:n + (s + 1) = (n + s) + 1;
+      A8:n' + (s' + 1) = (n' + s') + 1;
          reconsider y = Ser(F).(n + s) as R_eal;
-     A9:Ser(F).(n + (s + 1)) = y + F.(n + (s + 1)) by A8,Th63;
+     A9:Ser(F).(n' + (s' + 1)) = y + F.(n' + (s' + 1)) by A8,Th63;
          0 <= s+1 by NAT_1:18;
          then n + 0 <= n + (s+1) by XREAL_1:9;
-         then F.(n + (s+1)) = 0. by A2;
+         then F.(n' + (s'+1)) = 0. by A2;
          hence thesis by A7,A9,Th18;
        end;
-       thus for m being Nat holds P[m] from NAT_1:sch 1(A5,A6);
+       thus for m being Nat holds P[m] from NAT_1:sch 2(A5,A6);
      end;
      hence thesis by A4;
    end;
-A10:for r being Nat st r <= n holds Ser(F).r <= Ser(F).n
+A10:for r being Element of NAT st r <= n holds Ser(F).r <= Ser(F).n
    proof
-     let r be Nat;
+     let r be Element of NAT;
      assume r <= n;
-     then ex m being Nat st n = r + m by NAT_1:28;
-     hence thesis by A1,Th60;
+     then consider m being Nat such that
+X1:  n = r + m by NAT_1:28;
+     reconsider m as Element of NAT by ORDINAL1:def 13;
+     n = r + m by X1;
+     hence thesis by X1,A1,Th60;
    end;
    for y being R_eal st y in rng Ser(F) holds y <= Ser(F).n
    proof
@@ -2386,31 +2396,31 @@ A10:for r being Nat st r <= n holds Ser(F).r <= Ser(F).n
   A11:y in rng Ser(F);
       dom Ser(F) = NAT & rng Ser(F) c= ExtREAL by FUNCT_2:def 1;
       then consider m being set such that
-   A12:m in NAT & y = Ser(F).m by A11,FUNCT_1:def 5;
-      reconsider m as Nat by A12;
+  A12:m in NAT & y = Ser(F).m by A11,FUNCT_1:def 5;
+      reconsider m as Element of NAT by A12;
       m <= n or n <= m;
       hence thesis by A3,A10,A12;
    end;
    then A13:Ser(F).n is majorant of rng Ser(F) by SUPINF_1:def 9;
-   Ser(F).n in rng Ser(F) by FUNCT_2:6;
+   Ser(F).n' in rng Ser(F) by FUNCT_2:6;
    then sup(rng Ser(F)) = Ser(F).n by A13,SUPINF_1:80;
    hence thesis;
 end;
 
 theorem Th68:
    for F being Function of NAT,ExtREAL st
-   (for n being Nat holds F.n in REAL) holds
-   (for n being Nat holds Ser(F).n in REAL)
+   (for n being Element of NAT holds F.n in REAL) holds
+   (for n being Element of NAT holds Ser(F).n in REAL)
 proof
    let F be Function of NAT,ExtREAL;
    assume
-A1:for n being Nat holds F.n in REAL;
+A1:for n being Element of NAT holds F.n in REAL;
    defpred P[Element of NAT] means Ser(F).$1 in REAL;
    Ser(F).0 = F.0 by Th63;
    then A2: P[0] by A1;
-A3:for s being Nat st P[s] holds P[s+1]
+A3:for s being Element of NAT st P[s] holds P[s+1]
    proof
-     let s be Nat;
+     let s be Element of NAT;
      assume
   A4:Ser(F).s in REAL;
      reconsider y = Ser(F).s as R_eal;
@@ -2420,25 +2430,26 @@ A3:for s being Nat st P[s] holds P[s+1]
      y + F.(s+1) = a + b by Th1;
      hence thesis by A5;
    end;
-   thus for s being Nat holds P[s] from NAT_1:sch 1(A2,A3);
+   thus for s being Element of NAT holds P[s] from NAT_1:sch 1(A2,A3);
 end;
 
 theorem
   for F being Function of NAT,ExtREAL st F is nonnegative &
-   (ex n being Nat st (for k being Nat st n <= k holds F.k = 0.) &
-   (for k being Nat st k <= n holds F.k <> +infty))
+   (ex n being Element of NAT
+    st (for k being Element of NAT st n <= k holds F.k = 0.) &
+   (for k being Element of NAT st k <= n holds F.k <> +infty))
    holds F is summable
 proof
    let F be Function of NAT,ExtREAL;
    assume
 A1:F is nonnegative;
-   given n being Nat such that
-A2:for k being Nat st n <= k holds F.k = 0. and
-A3:for k being Nat st k <= n holds F.k <> +infty;
+   given n being Element of NAT such that
+A2:for k being Element of NAT st n <= k holds F.k = 0. and
+A3:for k being Element of NAT st k <= n holds F.k <> +infty;
 A4:SUM(F) = Ser(F).n by A1,A2,Th67;
-   for s being Nat holds F.s in REAL
+   for s being Element of NAT holds F.s in REAL
    proof
-     let s be Nat;
+     let s be Element of NAT;
   A5:s <= n implies F.s in REAL
      proof
        assume s <= n;then

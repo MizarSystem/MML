@@ -27,13 +27,13 @@ environ
       NAT_1, GOBOARD2, RFINSEQ, TARSKI, GOBOARD1, CARD_1, FINSEQ_5, FINSEQ_3,
       FINSEQ_4, JORDAN7, JORDAN3, BINARITH, INTEGRA2, RELAT_1, XREAL_0,
       FUNCT_2, XBOOLE_0, XBOOLE_1, RCOMP_1, XREAL_1, COMPLEX1, XXREAL_0,
-      FINSOP_1;
+      FINSOP_1, ORDINAL1;
  schemes FINSEQ_2, NAT_1, BINARITH;
 
 begin :: Lemmas of Division
 
 reserve a,b,d,e,x,y for Real,
-        i,j,k,n,m for Nat,
+        i,j,k,n,m for Element of NAT,
         x1 for set,
         p,q for FinSequence of REAL;
 
@@ -41,7 +41,7 @@ Lm1: a in dom p implies 1<=a & a<=len p
 proof
   assume
 A1: a in dom p;
-  reconsider a as Nat by A1;
+  reconsider a as Element of NAT by A1;
   1<=a & a<=len p by A1,FINSEQ_3:27;
   hence thesis;
 end;
@@ -141,8 +141,8 @@ A7:  a <= b & a=inf divset(D,j) & b=sup divset(D,j) by INTEGRA1:4;
     hence thesis by A3;
     end;
     suppose A8:not x in rng D;
-    defpred MIN[Nat] means x < sup divset(D,$1) & $1 in dom D;
-    defpred MAX[Nat] means x >= inf divset(D,$1) & $1 in dom D;
+    defpred MIN[Element of NAT] means x < sup divset(D,$1) & $1 in dom D;
+    defpred MAX[Element of NAT] means x >= inf divset(D,$1) & $1 in dom D;
 A9:len D in dom D by FINSEQ_5:6;
        sup divset(D,len D)=D.(len D)
      proof
@@ -532,13 +532,13 @@ then A1:j in Seg len D1 by FINSEQ_1:def 3;
   hence thesis by INTEGRA1:def 19;
 end;
 
-Lm8:for A be closed-interval Subset of REAL, j1 be Nat,
+Lm8:for A be closed-interval Subset of REAL, j1 be Element of NAT,
           D1,D2 be Element of divs A st
     j1 = len D1 - 1 & x in divset(D1,len D1) & len D1 >= 2 &
     D1 <= D2 & rng D2 = rng D1 \/ {x}
     holds rng (D2|indx(D2,D1,j1)) = rng (D1|j1)
     proof
-    let A be closed-interval Subset of REAL, j1 be Nat,
+    let A be closed-interval Subset of REAL, j1 be Element of NAT,
         D1,D2 be Element of divs A;
     assume A1:j1 = len D1 - 1 & x in divset(D1,len D1) & len D1 >= 2;
     assume A2:D1<=D2 & rng D2 = rng D1 \/ {x};
@@ -769,7 +769,7 @@ then A54:  inf divset(D1,k)=inf A & sup divset(D1,k)=D1.k by A51,INTEGRA1:def 5
 then A56:  inf divset(D1,k)=D1.(k-1) & sup divset(D1,k)=D1.k
       by A51,INTEGRA1:def 5;
 A57:  k-1 in dom D1 & D1.(k-1) in A & k-1 in NAT by A51,A55,INTEGRA1:9;
-      reconsider k1=k-1 as Nat by A51,A55,INTEGRA1:9;
+      reconsider k1=k-1 as Element of NAT by A51,A55,INTEGRA1:9;
          k <= k+1 by NAT_1:29;
       then k1 <= k by XREAL_1:22;
 then A58:  k1 <= j1 by A46,XXREAL_0:2;
@@ -1306,7 +1306,7 @@ then A53:   inf divset(D1,k)=inf A&sup divset(D1,k)=D1.k by A50,INTEGRA1:def 5;
 then A55:   inf divset(D1,k)=D1.(k-1) & sup divset(D1,k)=D1.k
        by A50,INTEGRA1:def 5;
 A56:   k-1 in dom D1 & D1.(k-1) in A & k-1 in NAT by A50,A54,INTEGRA1:9;
-       reconsider k1=k-1 as Nat by A50,A54,INTEGRA1:9;
+       reconsider k1=k-1 as Element of NAT by A50,A54,INTEGRA1:9;
          k <= k+1 by NAT_1:29;
       then k1 <= k by XREAL_1:22;
 then A57:  k1 <= j1 by A45,XXREAL_0:2;
@@ -1374,8 +1374,8 @@ then A71: 1 <= indx(D2,D1,j1)+1 & indx(D2,D1,j1)+1 <= len upper_volume(g,D2)
 A72:indx(D2,D1,j)-indx(D2,D1,j1) <= 2
     proof
      assume A73:indx(D2,D1,j)-indx(D2,D1,j1) > 2;
-     reconsider ID1=indx(D2,D1,j1)+1 as Nat;
-     reconsider ID2=ID1+1 as Nat;
+     reconsider ID1=indx(D2,D1,j1)+1 as Element of NAT;
+     reconsider ID2=ID1+1 as Element of NAT;
 A74:indx(D2,D1,j1) < ID1 & ID1 < ID2 & ID2 < indx(D2,D1,j)
      proof
       thus indx(D2,D1,j1) < ID1 by NAT_1:38;
@@ -1753,7 +1753,8 @@ A9:    len D3 in dom D3 by A3,FINSEQ_1:def 3;
 then A10:    len D3 > 1 by A5,A7,A8,A9,GOBOARD2:18;
         then reconsider D=D3/^1 as increasing FinSequence of REAL by
 INTEGRA1:36;
-A11:    len D = len D3 - 1 & for m be Nat st m in dom D holds D.m = D3.(m+1)
+A11:    len D = len D3 - 1 & for m be Element of NAT st m in dom D
+ holds D.m = D3.(m+1)
         by A10,RFINSEQ:def 2;
         then len D <> 0 by A10;
        then reconsider D as non empty increasing FinSequence of REAL by
@@ -1879,7 +1880,8 @@ then A42:    D.1=D3.(1+1) by A10,RFINSEQ:def 2 .=D3.2;
 
 theorem Th11:
 for A be closed-interval Subset of REAL, D be Element of divs A,
-r be Real, i,j be Nat st i in dom D & j in dom D & i<=j & r < mid(D,i,j).1
+r be Real, i,j be Element of NAT
+ st i in dom D & j in dom D & i<=j & r < mid(D,i,j).1
 holds ex B be closed-interval Subset of REAL
 st r=inf B & sup B=mid(D,i,j).(len mid(D,i,j))
 & len mid(D,i,j)=j-i+1 & mid(D,i,j) is DivisionPoint of B
@@ -1887,7 +1889,7 @@ proof
    let A be closed-interval Subset of REAL;
    let D be Element of divs A;
    let r be Real;
-   let i,j be Nat;
+   let i,j be Element of NAT;
    assume A1:i in dom D;
    assume A2:j in dom D;
    assume A3:i <= j;
@@ -2663,7 +2665,7 @@ end;
 
 theorem Th14:
 for A be closed-interval Subset of REAL, D1,D2 be Element of divs A,
-r be Real, i,j be Nat st i in dom D1 & j in dom D1 & i<=j & D1 <= D2
+r be Real, i,j be Element of NAT st i in dom D1 & j in dom D1 & i<=j & D1 <= D2
 & r < mid(D2,indx(D2,D1,i),indx(D2,D1,j)).1
 holds ex B be closed-interval Subset of REAL, MD1,MD2 be Element of divs B
 st r=inf B & sup B=MD2.(len MD2) & sup B=MD1.(len MD1) & MD1 <= MD2
@@ -2714,9 +2716,9 @@ A21: rng MD1 c= rng D1 by JORDAN3:28;
         rng D1 c= rng D2 by A4,INTEGRA1:def 20;
 then A22:  rng MD1 c= rng D2 by A21,XBOOLE_1:1;
       let x1;assume A23:x1 in rng MD1;
-      then consider k2 being Nat such that
+      then consider k2 being Element of NAT such that
 A24:  k2 in dom D2 & D2.k2=x1 by A22,PARTFUN1:26;
-      consider k1 being Nat such that
+      consider k1 being Element of NAT such that
 A25:  k1 in dom MD1 & MD1.k1=x1 by A23,PARTFUN1:26;
 A26:  1 <= k1 & k1 <= len MD1 by A25,FINSEQ_3:27;
       then 1 <= len MD1 by XXREAL_0:2;
@@ -2732,7 +2734,8 @@ D1,i)
          indx(D2,D1,i) <= k2+1 by A28,NAT_1:37;
       then consider k3 being Nat such that
 A30:  k2+1 = indx(D2,D1,i)+k3 by NAT_1:28;
-       MD2.k3 = D2.(k3+indx(D2,D1,i)-1) by A8,A11,A29,A30,JORDAN3:31;
+      k3 in NAT by ORDINAL1:def 13;
+      then MD2.k3 = D2.(k3+indx(D2,D1,i)-1) by A8,A11,A29,A30,JORDAN3:31;
 then A31:  MD2.k3=D2.k2 by A30;
        k3 in dom MD2 by A9,A29,A30,FINSEQ_3:27;
       hence thesis by A24,A31,FUNCT_1:def 5;
@@ -2779,7 +2782,7 @@ then A11:i <= j by A9,XXREAL_0:2;
 then len mid(p,i,j) = j-'i+1 by A7,A8,JORDAN3:27;
 then A12:len mid(p,i,j) = j-i+1 by A11,BINARITH:50;
       i <= k+1 by A9,NAT_1:37;
-   then consider n such that
+   then consider n being Nat such that
 A13:k+1=i+n by NAT_1:28;
 A14:n=k+1-i by A13 .=k-i+1;
       k-i >= 0 by A9,XREAL_1:50;
@@ -2787,7 +2790,9 @@ then A15:k-i+1 >= 0+1 by XREAL_1:8;
       k-i <= j-i by A10,XREAL_1:11;
 then A16:k-i+1 <= j-i+1 by XREAL_1:8;
 then A17:n in dom mid(p,i,j) by A12,A14,A15,FINSEQ_3:27;
-      mid(p,i,j).n = p.(n+i-1) by A7,A8,A11,A14,A15,A16,JORDAN3:31
+     n in NAT by ORDINAL1:def 13;
+     then mid(p,i,j).n = p.(n+i-1)
+     by A7,A8,A11,A14,A15,A16,JORDAN3:31
    .=p.k by A13;
    hence thesis by A17,FUNCT_1:def 5;
 end;
@@ -2974,7 +2979,7 @@ PRE_CIRC:def 4;
        hence contradiction by A20;
       end;
 
-      defpred P[non empty Nat] means
+      defpred P[non empty Element of NAT] means
       $1 in dom D implies ex j st j in dom D1 & D.$1 in divset(D1,j)
       & PLf(D2,indx(D2,D1,j))-PLf(D1,j)<=$1*(sup rng f-inf rng f)*delta(D1);
 A43: P[1]
@@ -3179,7 +3184,7 @@ then A110:        inf divset(D1,k)=D1.(k-1) & sup divset(D1,k)=D1.k
             by A105,INTEGRA1:def 5;
 A111:        k-1 in dom D1 & D1.(k-1) in A & k-1 in NAT
              by A105,A109,INTEGRA1:9;
-            reconsider k1=k-1 as Nat by A105,A109,INTEGRA1:9;
+            reconsider k1=k-1 as Element of NAT by A105,A109,INTEGRA1:9;
                k <= k+1 by NAT_1:29;
             then k1 <= k by XREAL_1:22;
 then A112:       k1 <= j1 by A100,XXREAL_0:2;
@@ -3250,8 +3255,8 @@ D2)
 A127:     indx(D2,D1,j)-indx(D2,D1,j1) <= 2
          proof
           assume A128:indx(D2,D1,j)-indx(D2,D1,j1) > 2;
-          reconsider ID1=indx(D2,D1,j1)+1 as Nat;
-          reconsider ID2=ID1+1 as Nat;
+          reconsider ID1=indx(D2,D1,j1)+1 as Element of NAT;
+          reconsider ID2=ID1+1 as Element of NAT;
 A129:     indx(D2,D1,j1) < ID1 & ID1 < ID2 & ID2 < indx(D2,D1,j)
           proof
            thus indx(D2,D1,j1) < ID1 by NAT_1:38;
@@ -3629,9 +3634,9 @@ then A195:      j1 < j by XREAL_1:21;
        end;
        hence thesis by A45;
       end;
-A196: for i being non empty Nat st P[i] holds P[i+1]
+A196: for i being non empty Element of NAT st P[i] holds P[i+1]
       proof
-       let i be non empty Nat;
+       let i be non empty Element of NAT;
        assume A197:P[i];
 A198:    i>=1 by NAT_1:39;
 
@@ -3646,7 +3651,7 @@ A201:     1 <= i+1 & i+1 <= len D by A199,FINSEQ_3:27;
         then i <= len D by A201,XXREAL_0:2;
 then A202:    i in Seg len D by A198,FINSEQ_1:3;
 then A203:    i in dom D by FINSEQ_1:def 3;
-        consider n1 being Nat such that
+        consider n1 being Element of NAT such that
 A204:     n1 in dom D1 & D.i in divset(D1,n1)
         & PLf(D2,indx(D2,D1,n1))-PLf(D1,n1)<=i*(sup rng f-inf rng f)*delta(D1)
         by A197,A202,FINSEQ_1:def 3;
@@ -3780,7 +3785,7 @@ A251:     D2.(indx(D2,D1,n1)+1) in rng D
              not( D2.(indx(D2,D1,n1)+1) in rng D1 )
           proof
            assume D2.(indx(D2,D1,n1)+1) in rng D1;
-           then consider k1 being Nat such that
+           then consider k1 being Element of NAT such that
 A253:       k1 in dom D1 & D2.(indx(D2,D1,n1)+1) = D1.k1 by PARTFUN1:26;
               D2.indx(D2,D1,n1) < D2.(indx(D2,D1,n1)+1)
            & D2.(indx(D2,D1,n1)+1) < D2.indx(D2,D1,j)
@@ -3814,7 +3819,7 @@ A257:     D2.(indx(D2,D1,n1)+2) in rng D
              not D2.(indx(D2,D1,n1)+2) in rng D1
           proof
            assume D2.(indx(D2,D1,n1)+2) in rng D1;
-           then consider k1 being Nat such that
+           then consider k1 being Element of NAT such that
 A259:       k1 in dom D1 & D2.(indx(D2,D1,n1)+2) = D1.k1 by PARTFUN1:26;
               D2.indx(D2,D1,n1) < D2.(indx(D2,D1,n1)+2)
            & D2.(indx(D2,D1,n1)+2) < D2.indx(D2,D1,j)
@@ -4088,11 +4093,12 @@ then A330:       1 <= k-n1 & k-n1 <= len MD1 by A303,XREAL_1:11,XREAL_1:21;
 then A331:       k-n1 <= j-(n1+1)+1 by A329,XREAL_1:11;
               n1 <= n1+1 by NAT_1:29;
            then n1 <= k by A329,XXREAL_0:2;
-           then consider n such that
+           then consider n being Nat such that
 A332:       k=n1+n by NAT_1:28;
             n in dom MD1 by A330,A332,FINSEQ_3:27;
 then A333:       MD1.n in rng MD1 by FUNCT_1:def 5;
-              MD1.n = D1.(k-n1-1+(n1+1)) by A219,A222,A223,A300,A330,A331,A332,
+      n in NAT by ORDINAL1:def 13;
+      then MD1.n = D1.(k-n1-1+(n1+1)) by A219,A222,A223,A300,A330,A331,A332,
 JORDAN3:31
            .= D1.k;
            hence x1 in (rng MD1 \/ {D.(i+1)}) by A328,A333,XBOOLE_0:def 2;
@@ -4179,12 +4185,13 @@ A351:       indx(D2,D1,n1+1)<=k & k<=indx(D2,D1,j)
 then A353:      k-indx(D2,D1,n1+1)+1<=indx(D2,D1,j)-indx(D2,D1,n1+1)+1 by
 XREAL_1:8;
               indx(D2,D1,n1+1)<=k+1 by A351,NAT_1:37;
-           then consider n such that
+           then consider n being Nat such that
 A354:       k+1 = indx(D2,D1,n1+1)+n by NAT_1:28;
 A355:        n=k+1-indx(D2,D1,n1+1) by A354
            .=k-indx(D2,D1,n1+1)+1;
            then A356: n in dom MD2 by A321,A352,A353,FINSEQ_3:27;
-              MD2.n=D2.(n+indx(D2,D1,n1+1)-1)
+           n in NAT by ORDINAL1:def 13;
+           then MD2.n=D2.(n+indx(D2,D1,n1+1)-1)
            by A227,A228,A229,A300,A352,A353,A355,JORDAN3:31
            .=D2.k by A354;
            hence x1 in rng MD2 by A350,A356,FUNCT_1:def 5;
@@ -4200,7 +4207,7 @@ A359:       k in dom D2 & x1 = D2.k by A357,A358,PARTFUN1:26;
 then A360:       D1.(j-1) <= x1 & x1 <= D1.j by A200,A207,A221,A357,
 INTEGRA1:def 5;
 A361:       j-1 in dom D1 & j-1 in NAT by A200,A207,A221,INTEGRA1:9;
-           reconsider j1 = j-1 as Nat by A200,A207,A221,INTEGRA1:9;
+           reconsider j1 = j-1 as Element of NAT by A200,A207,A221,INTEGRA1:9;
            n1<j1 by A297,XREAL_1:22;
            then n1+1 <= j1 by NAT_1:38;
            then D1.(n1+1) <= D1.(j-1) by A224,A361,GOBOARD2:18;
@@ -4369,7 +4376,7 @@ A407:     indx(D2,D1,n1)+1 in dom D2 by A401,A403,FINSEQ_3:27;
          then A408: D2.(indx(D2,D1,n1)+1) in rng D2 by FUNCT_1:def 5;
             now per cases by A21,A408,XBOOLE_0:def 2;
           suppose D2.(indx(D2,D1,n1)+1) in rng D1;
-          then consider n2 being Nat such that
+          then consider n2 being Element of NAT such that
 A409:      n2 in dom D1 & D2.(indx(D2,D1,n1)+1) = D1.n2 by PARTFUN1:26;
              D2.indx(D2,D1,n1) < D2.(indx(D2,D1,n1)+1)
           by A205,A400,A407,GOBOARD1:def 1;
@@ -4379,7 +4386,7 @@ then A410:      n1+1 <= n2 by NAT_1:38;
           hence contradiction by A224,A409,A410,GOBOARD2:18;
           end;
           suppose D2.(indx(D2,D1,n1)+1) in rng D;
-          then consider n2 being Nat such that
+          then consider n2 being Element of NAT such that
 A411:      n2 in dom D & D2.(indx(D2,D1,n1)+1) = D.n2 by PARTFUN1:26;
 A412:      D1.n1 < D.n2 by A205,A400,A407,A411,GOBOARD1:def 1;
 A413:      D.i <= sup divset(D1,n1) by A204,INTEGRA2:1;
@@ -4441,7 +4448,7 @@ then A428:       k+(indx(D2,D1,n1)+1)-1 <= len LVf(D2) by A421,XXREAL_0:2;
               1<=indx(D2,D1,n1)+1 by NAT_1:37;
            then 1+1<=k+(indx(D2,D1,n1)+1) by A424,XREAL_1:9;
 then A429:       1 <= k+(indx(D2,D1,n1)+1)-1 by XREAL_1:21;
-           consider k2 being Nat such that
+           consider k2 being Element of NAT such that
 A430:       indx(D2,D1,n1)+1=1+k2;
 A431:       k2=(indx(D2,D1,n1)+1)-1 by A430;
             k+k2 in Seg len LVf(D2) by A428,A429,A430,FINSEQ_1:3;
@@ -4516,7 +4523,7 @@ then A450:      lower_volume(g,MD1).k
            =(inf rng(g|divset(MD1,k)))*vol(divset(MD1,k)) by INTEGRA1:def 8;
               k <= j-((n1+1)-1) by A444,A448;
 then A451:      k+((n1+1)-1) <= j by XREAL_1:21;
-           consider k2 being Nat such that
+           consider k2 being Element of NAT such that
 A452:       n1+1=1+k2;
 A453:      k2=(n1+1)-1 by A452;
 A454:      1 <= k+k2 by A448,NAT_1:37;
@@ -4623,9 +4630,10 @@ A474:    (PLf(D2,indx(D2,D1,n1))-PLf(D1,n1))+
        end;
        hence thesis;
       end;
-A475: for k being non empty Nat holds P[k] from BINARITH:sch 1(A43,A196);
+A475: for k being non empty Element of NAT holds P[k]
+ from BINARITH:sch 1(A43,A196);
          i in Seg len D by A23,FINSEQ_1:def 3;
-      then reconsider i as non empty Nat by BINARITH:5;
+      then reconsider i as non empty Element of NAT by BINARITH:5;
          P[i] by A475;
       hence thesis by A23;
      end;
@@ -4692,13 +4700,13 @@ A490: D in dom lower_sum_set(f) & y=(lower_sum_set(f)).D & D.1>inf A
      set p=len D;
      set H=sup rng f;
      set h=inf rng f;
-     deffunc F(Nat)=vol(divset(D,$1));
+     deffunc F(Element of NAT)=vol(divset(D,$1));
      consider v being FinSequence of REAL such that
 A492:len v = len D & for j st j in Seg len D holds v.j=F(j)
      from FINSEQ_2:sch 1;
      consider v1 being non-decreasing FinSequence of REAL such that
 A493: v,v1 are_fiberwise_equipotent by INTEGRA2:3;
-     defpred P[Nat] means $1 in dom v1 & v1.$1>0;
+     defpred P[Element of NAT] means $1 in dom v1 & v1.$1>0;
 A494:ex k st P[k]
      proof
        consider H being Function such that
@@ -5036,7 +5044,7 @@ PRE_CIRC:def 4;
        end;
        hence contradiction by A19;
       end;
-      defpred P[non empty Nat] means
+      defpred P[non empty Element of NAT] means
       $1 in dom D implies
       ex j st j in dom D1 & D.$1 in divset(D1,j)
       & PUf(D1,j)-PUf(D2,indx(D2,D1,j))<=$1*(sup rng f-inf rng f)*delta(D1);
@@ -5244,7 +5252,7 @@ then A110:       inf divset(D1,k)=D1.(k-1) & sup divset(D1,k)=D1.k
             by A105,INTEGRA1:def 5;
 A111:       k-1 in dom D1 & D1.(k-1) in A & k-1 in NAT
             by A105,A109,INTEGRA1:9;
-            reconsider k1=k-1 as Nat by A105,A109,INTEGRA1:9;
+            reconsider k1=k-1 as Element of NAT by A105,A109,INTEGRA1:9;
                k <= k+1 by NAT_1:29;
             then k1 <= k by XREAL_1:22;
 then A112:       k1 <= j1 by A100,XXREAL_0:2;
@@ -5314,8 +5322,8 @@ then A126:    1 <= indx(D2,D1,j1)+1 & indx(D2,D1,j1)+1 <= len upper_volume(f,D2
 A127:     indx(D2,D1,j)-indx(D2,D1,j1) <= 2
          proof
           assume A128:indx(D2,D1,j)-indx(D2,D1,j1) > 2;
-          reconsider ID1=indx(D2,D1,j1)+1 as Nat;
-          reconsider ID2=ID1+1 as Nat;
+          reconsider ID1=indx(D2,D1,j1)+1 as Element of NAT;
+          reconsider ID2=ID1+1 as Element of NAT;
 A129:     indx(D2,D1,j1) < ID1 & ID1 < ID2 & ID2 < indx(D2,D1,j)
           proof
            thus indx(D2,D1,j1) < ID1 by NAT_1:38;
@@ -5682,9 +5690,9 @@ then A197:    j1 < j by XREAL_1:21;
        end;
        hence thesis by A45;
       end;
-A198: for i being non empty Nat st P[i] holds P[i+1]
+A198: for i being non empty Element of NAT st P[i] holds P[i+1]
       proof
-       let i be non empty Nat;
+       let i be non empty Element of NAT;
        assume A199:P[i];
 A200:  i>=1 by NAT_1:39;
        P[i+1]
@@ -5700,7 +5708,7 @@ then A203:   1 <= i+1 & i+1 <= len D by FINSEQ_1:3;
 then A204:   i in Seg len D by A200,FINSEQ_1:3;
 then A205:   i in dom D by FINSEQ_1:def 3;
 
-        consider n1 being Nat such that
+        consider n1 being Element of NAT such that
 A206:     n1 in dom D1 & D.i in divset(D1,n1)
         & PUf(D1,n1)-PUf(D2,indx(D2,D1,n1))<=i*(sup rng f-inf rng f)*delta(D1)
         by A199,A204,FINSEQ_1:def 3;
@@ -5827,7 +5835,7 @@ A254:    D2.(indx(D2,D1,n1)+1) in rng D
              not D2.(indx(D2,D1,n1)+1) in rng D1
           proof
            assume D2.(indx(D2,D1,n1)+1) in rng D1;
-           then consider k1 being Nat such that
+           then consider k1 being Element of NAT such that
 A256:       k1 in dom D1 & D2.(indx(D2,D1,n1)+1) = D1.k1 by PARTFUN1:26;
               D2.indx(D2,D1,n1) < D2.(indx(D2,D1,n1)+1)
            & D2.(indx(D2,D1,n1)+1) < D2.indx(D2,D1,j)
@@ -5861,7 +5869,7 @@ A260:     D2.(indx(D2,D1,n1)+2) in rng D
              not D2.(indx(D2,D1,n1)+2) in rng D1
           proof
            assume D2.(indx(D2,D1,n1)+2) in rng D1;
-           then consider k1 being Nat such that
+           then consider k1 being Element of NAT such that
 A262:       k1 in dom D1 & D2.(indx(D2,D1,n1)+2) = D1.k1 by PARTFUN1:26;
               D2.indx(D2,D1,n1) < D2.(indx(D2,D1,n1)+2)
            & D2.(indx(D2,D1,n1)+2) < D2.indx(D2,D1,j)
@@ -6139,11 +6147,12 @@ XREAL_1:21;
            A338: j-(n1+1)+1=j-n1;
               n1 <= n1+1 by NAT_1:29;
            then n1 <= k by A335,XXREAL_0:2;
-           then consider n such that
+           then consider n being Nat such that
 A339:      k=n1+n by NAT_1:28;
-            n in dom MD1 by A337,A339,FINSEQ_3:27;
-then A340:      MD1.n in rng MD1 by FUNCT_1:def 5;
-              MD1.n = D1.(k-n1-1+(n1+1))
+           n in dom MD1 by A337,A339,FINSEQ_3:27;
+           then A340:      MD1.n in rng MD1 by FUNCT_1:def 5;
+           n in NAT by ORDINAL1:def 13;
+           then MD1.n = D1.(k-n1-1+(n1+1))
              by A221,A224,A225,A303,A336,A338,A339,JORDAN3:31
            .= D1.k;
            hence x1 in (rng MD1 \/ {D.(i+1)}) by A334,A340,XBOOLE_0:def 2;
@@ -6229,15 +6238,16 @@ A359:       indx(D2,D1,n1+1)<=k & k<=indx(D2,D1,j)
 then A361:   k-indx(D2,D1,n1+1)+1<=indx(D2,D1,j)-indx(D2,D1,n1+1)+1 by
 XREAL_1:8;
               indx(D2,D1,n1+1)<=k+1 by A359,NAT_1:37;
-           then consider n such that
+           then consider n being Nat such that
 A362:      k+1 = indx(D2,D1,n1+1)+n by NAT_1:28;
+a1:        n in NAT by ORDINAL1:def 13;
       n=k+1-indx(D2,D1,n1+1) by A362
            .=k-indx(D2,D1,n1+1)+1;
              then n in dom MD2 by A325,A360,A361,FINSEQ_3:27;
 then A363:      MD2.n in rng MD2 by FUNCT_1:def 5;
         n+indx(D2,D1,n1+1)-1=k by A362;
            hence x1 in rng MD2 by A229,A230,A231,A303,A358,A360,A361,A363,
-JORDAN3:31;
+JORDAN3:31,a1;
            end;
            suppose x1 in {D.(i+1)};
 then A364:       x1 = D.(i+1) by TARSKI:def 1;
@@ -6250,7 +6260,7 @@ A366:       k in dom D2 & x1 = D2.k by A364,A365,PARTFUN1:26;
 then A367:       D1.(j-1) <= x1 & x1 <= D1.j by A202,A209,A223,A364,
 INTEGRA1:def 5;
 A368:       j-1 in dom D1 & j-1 in NAT by A202,A209,A223,INTEGRA1:9;
-           reconsider j1 = j-1 as Nat by A202,A209,A223,INTEGRA1:9;
+           reconsider j1 = j-1 as Element of NAT by A202,A209,A223,INTEGRA1:9;
               n1<j1 by A300,XREAL_1:22;
            then n1+1 <= j1 by NAT_1:38;
            then D1.(n1+1) <= D1.(j-1) by A226,A368,GOBOARD2:18;
@@ -6418,7 +6428,7 @@ A414:    indx(D2,D1,n1)+1 in dom D2 by A408,A410,FINSEQ_3:27;
          then A415: D2.(indx(D2,D1,n1)+1) in rng D2 by FUNCT_1:def 5;
             now per cases by A20,A415,XBOOLE_0:def 2;
           suppose D2.(indx(D2,D1,n1)+1) in rng D1;
-          then consider n2 being Nat such that
+          then consider n2 being Element of NAT such that
 A416:     n2 in dom D1 & D2.(indx(D2,D1,n1)+1) = D1.n2 by PARTFUN1:26;
              D2.indx(D2,D1,n1) < D2.(indx(D2,D1,n1)+1)
           by A207,A407,A414,GOBOARD1:def 1;
@@ -6428,7 +6438,7 @@ then A417:     n1+1 <= n2 by NAT_1:38;
           hence contradiction by A226,A416,A417,GOBOARD2:18;
           end;
           suppose D2.(indx(D2,D1,n1)+1) in rng D;
-          then consider n2 being Nat such that
+          then consider n2 being Element of NAT such that
 A418:     n2 in dom D & D2.(indx(D2,D1,n1)+1) = D.n2 by PARTFUN1:26;
 A419:     D1.n1 < D.n2 by A207,A407,A414,A418,GOBOARD1:def 1;
 A420:     D.i <= sup divset(D1,n1) by A206,INTEGRA2:1;
@@ -6492,7 +6502,7 @@ then A436:       k+(indx(D2,D1,n1)+1)-1 <= len UVf(D2) by A428,XXREAL_0:2;
               1<=indx(D2,D1,n1)+1 by NAT_1:37;
            then 1+1<=k+(indx(D2,D1,n1)+1) by A431,XREAL_1:9;
 then A437:       1 <= k+(indx(D2,D1,n1)+1)-1 by XREAL_1:21;
-           consider k2 being Nat such that
+           consider k2 being Element of NAT such that
 A438:       indx(D2,D1,n1)+1=1+k2;
 A439:       k2=(indx(D2,D1,n1)+1)-1 by A438;
             k+k2 in Seg len UVf(D2) by A436,A437,A438,FINSEQ_1:3;
@@ -6567,7 +6577,7 @@ then A460:      upper_volume(g,MD1).k
            =(sup rng(g|divset(MD1,k)))*vol(divset(MD1,k)) by INTEGRA1:def 7;
               k <= j-((n1+1)-1) by A454,A458;
 then A461:      k+((n1+1)-1) <= j by XREAL_1:21;
-           consider k2 being Nat such that
+           consider k2 being Element of NAT such that
 A462:       n1+1=1+k2;
 A463:      k2=(n1+1)-1 by A462;
 A464:      1 <= k+k2 by A458,NAT_1:37;
@@ -6665,9 +6675,10 @@ A484:    (PUf(D1,n1)-PUf(D2,indx(D2,D1,n1)))+
        end;
        hence thesis;
       end;
-A485: for k being non empty Nat holds P[k] from BINARITH:sch 1(A43,A198);
+A485: for k being non empty Element of NAT holds P[k]
+ from BINARITH:sch 1(A43,A198);
       i in Seg len D by A22,FINSEQ_1:def 3;
-      then reconsider i as non empty Nat by BINARITH:5;
+      then reconsider i as non empty Element of NAT by BINARITH:5;
       P[i] by A485;
       hence thesis by A22;
      end;
@@ -6761,7 +6772,8 @@ A507:   len D3 in dom D3 by A501,FINSEQ_1:def 3;
 then A508:   len D3 > 1 by A503,A505,A506,A507,GOBOARD2:18;
         then reconsider D=D3/^1 as increasing FinSequence of REAL
          by INTEGRA1:36;
-A509:   len D = len D3 - 1 & for m be Nat st m in dom D holds D.m = D3.(m+1)
+A509:   len D = len D3 - 1 &
+ for m be Element of NAT st m in dom D holds D.m = D3.(m+1)
         by A508,RFINSEQ:def 2;
 then A510:   len D <> 0 by A508;
         then reconsider D as non empty increasing FinSequence of REAL
@@ -6880,13 +6892,13 @@ then A542:   D.1=D3.(1+1) by A508,RFINSEQ:def 2 .=D3.2;
 A543: D in dom upper_sum_set(f) & y=(upper_sum_set(f)).D & D.1>inf A;
        A544: y=upper_sum(f,D) by A543,INTEGRA1:def 11;
      set p=len D, H=sup rng f, h=inf rng f;
-     deffunc F(Nat)=vol(divset(D,$1));
+     deffunc F(Element of NAT)=vol(divset(D,$1));
      consider v being FinSequence of REAL such that
 A545: len v = len D & for j st j in Seg len D holds v.j=F(j)
      from FINSEQ_2:sch 1;
      consider v1 being non-decreasing FinSequence of REAL such that
 A546: v,v1 are_fiberwise_equipotent by INTEGRA2:3;
-defpred P[Nat] means $1 in dom v1 & v1.$1 > 0;
+defpred P[Element of NAT] means $1 in dom v1 & v1.$1 > 0;
 A547: ex k st P[k]
      proof
        consider H being Function such that

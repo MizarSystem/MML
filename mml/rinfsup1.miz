@@ -19,12 +19,13 @@ environ
  definitions TARSKI, XBOOLE_0, PARTFUN3;
  theorems FUNCT_1, FUNCT_2, SEQ_1, SEQ_2, NAT_1, TARSKI, XBOOLE_0, XREAL_0,
       SEQ_4, PSCOMP_1, SEQM_3, SETLIM_1, LIMFUNC1, SPRECT_1, PREPOWER,
-      TOPMETR3, COMPLSP1, REAL_2, RFUNCT_2, PARTFUN3, XREAL_1, XXREAL_0;
+      TOPMETR3, COMPLSP1, REAL_2, RFUNCT_2, PARTFUN3, XREAL_1, XXREAL_0,
+      ORDINAL1;
  schemes FUNCT_2, NAT_1;
 
 begin
 
- reserve n,m,k,k1,k2 for Nat;
+ reserve n,m,k,k1,k2 for Element of NAT;
  reserve r,r1,r2,s,t,p for real number;
  reserve seq,seq1,seq2 for Real_Sequence;
  reserve x,y for set;
@@ -448,7 +449,7 @@ definition
 A2: for n holds f.n >= 0;
     let r be real number;
     assume r in rng f; then
-    consider x being Nat such that
+    consider x being Element of NAT such that
 A3: r = f.x by RFUNCT_2:9;
     thus thesis by A3,A2;
   end;
@@ -592,7 +593,7 @@ theorem Th29:
    assume x in Y;
    then consider z1 be set such that
    A1: z1 = x & z1 in Y;
-   consider k1 being Nat such that
+   consider k1 being Element of NAT such that
    A2: z1 = seq.k1 & n <= k1 by A1;
    thus x in REAL by A1,A2;
    end;
@@ -607,10 +608,11 @@ proof
     set Z = {seq.m : k <= m};
      now let x;
       assume x in Z;
-       then consider k1 being Nat such that
+       then consider k1 being Element of NAT such that
        A2: x=seq.k1 & k <= k1;
        consider k2 being Nat such that
        A3: k1 = k + k2 by A2,NAT_1:28;
+       reconsider k2 as Element of NAT by ORDINAL1:def 13;
        x = seq1.k2 by A2,A3,SEQM_3:def 9;
       hence x in rng seq1 by FUNCT_2:6;
      end;then
@@ -619,7 +621,7 @@ A4: Z c= rng seq1 by TARSKI:def 3;
     assume y in rng seq1;
     then consider m1 be set such that
     A5: m1 in NAT & y = seq1.m1 by A1,FUNCT_1:def 5;
-    reconsider m1 as Nat by A5;
+    reconsider m1 as Element of NAT by A5;
     y = seq.(k+m1) by SEQM_3:def 9,A5;
     hence y in Z by SETLIM_1:4;
    end;then
@@ -684,10 +686,10 @@ A5: for r st r in R holds seq.n <=r
        A6: r = r1 & r1 in {seq.k : n <= k};
        consider k1 such that
        A7: r1 = seq.k1 & n <= k1 by A6;
-       ex k st n + k =k1 by A7,NAT_1:28;then
-       consider k2 being Nat such that
-       A8: r1=seq.(n + k2) by A7;
-       thus seq.n <= r by A1,SEQM_3:11,A8,A6;
+       consider k being Nat such that
+A8:    n + k =k1 by A7,NAT_1:28;
+       k in NAT by ORDINAL1:def 13;
+       hence seq.n <= r by A1,SEQM_3:11,A8,A6,A7;
       end;
      hence thesis by A3;
     end;
@@ -716,7 +718,7 @@ proof
    let R be Subset of REAL;
    assume A3: R = {seq.k : n <= k};
 A4: R <> {} & R is bounded_above by A3,SETLIM_1:3,A2,Th31;
-A5: (for r st r in R holds r <= seq.n)
+A5: for r st r in R holds r <= seq.n
     proof
       now let r;
        assume r in {seq.k : n <= k};
@@ -724,10 +726,10 @@ A5: (for r st r in R holds r <= seq.n)
        A6: r = r1 & r1 in {seq.k : n <= k};
        consider k1 such that
        A7: r1 = seq.k1 & n <= k1 by A6;
-       ex k st n + k =k1 by A7,NAT_1:28;
-       then consider k2 being Nat such that
-       A8: r1=seq.(n + k2) by A7;
-       thus r <= seq.n by A6,A1,SEQM_3:13,A8;
+       consider k being Nat such that
+A8:    n + k =k1 by A7,NAT_1:28;
+       k in NAT by ORDINAL1:def 13;
+       hence r <= seq.n by A6,A1,SEQM_3:13,A8,A7;
       end;
      hence thesis by A3;
     end;
@@ -762,7 +764,7 @@ A1:for n being Element of NAT ex y being Element of REAL st P[n,y]
      hence thesis;
     end;
   ex f being Function of NAT,REAL st
-  for n being Nat holds P[n, f.n] from FUNCT_2:sch 3(A1);
+  for n being Element of NAT holds P[n, f.n] from FUNCT_2:sch 3(A1);
   hence thesis;
  end;
 
@@ -783,7 +785,7 @@ A1:for n being Element of NAT ex y being Element of REAL st P[n,y]
      hence thesis;
     end;
  ex f being Function of NAT,REAL st
-  for n being Nat holds P[n, f.n] from FUNCT_2:sch 3(A1);
+  for n being Element of NAT holds P[n, f.n] from FUNCT_2:sch 3(A1);
   hence thesis;
  end;
 
@@ -802,7 +804,7 @@ proof let seq1,seq2 be Real_Sequence such that
        proof
         let y;
         assume y in NAT;
-        then reconsider y as Nat;
+        then reconsider y as Element of NAT;
         reconsider Y = {seq.k: y <= k} as Subset of REAL by Th29;
         seq1.y = inf Y by A1;
        hence thesis by A2;
@@ -827,7 +829,7 @@ proof let seq1,seq2 be Real_Sequence such that
        proof
         let y;
         assume y in NAT;
-        then reconsider y as Nat;
+        then reconsider y as Element of NAT;
         reconsider Y = {seq.k: y <= k} as Subset of REAL by Th29;
         seq1.y = sup Y by A1;
        hence thesis by A2;
@@ -898,7 +900,8 @@ proof assume
        A7: r1=seq.k1 & n <= k1 by A6;
            consider k2 being Nat such that
        A8: k1 = n + k2 by A7,NAT_1:28;
-        thus thesis by A6,A7,A8;
+       k2 in NAT by ORDINAL1:def 13;
+        hence thesis by A6,A7,A8;
         end;
        hence thesis by A4;
       end;
@@ -912,7 +915,8 @@ proof assume
           A13: r1=seq.k1 & n <= k1 by A12;
               consider k2 being Nat such that
           A14: k1 = n + k2 by A13,NAT_1:28;
-             thus thesis by A9,A13,A14;
+          k2 in NAT by ORDINAL1:def 13;
+          hence thesis by A9,A13,A14;
           end;
           for s st 0<s ex r1 st r1 in Y1 & r1<r+s
           proof let s such that
@@ -954,7 +958,8 @@ proof assume
        A7: r1=seq.k1 & n <= k1 by A6;
            consider k2 being Nat such that
        A8: k1 = n + k2 by A7,NAT_1:28;
-        thus thesis by A6,A7,A8;
+       k2 in NAT by ORDINAL1:def 13;
+        hence thesis by A6,A7,A8;
         end;
        hence thesis by A4;
       end;
@@ -968,7 +973,8 @@ proof assume
           A13: r1=seq.k1 & n <= k1 by A12;
               consider k2 being Nat such that
           A14: k1 = n + k2 by A13,NAT_1:28;
-             thus thesis by A9,A13,A14;
+          k2 in NAT by ORDINAL1:def 13;
+          hence thesis by A9,A13,A14;
           end;
           for s st 0<s ex r1 st r1 in Y1 & r-s<r1
           proof let s such that
@@ -996,15 +1002,16 @@ theorem Th44:
   thus ((for k holds r <= seq.(n+k)) implies
    r <= (inferior_realsequence seq).n)
   proof assume A4: for k holds r <= seq.(n+k);
-    now let n1 being Nat;
+    now let n1 being Element of NAT;
      seq1.n1 in rng seq1 by FUNCT_2:6;
      then consider r1 such that
      A5: seq1.n1= r1 & r1 in Y1 by A2;
-     consider k1 being Nat such that
+     consider k1 being Element of NAT such that
      A6: r1 = seq.k1 & n <= k1 by A5;
      consider k2 being Nat such that
      A7: k1 = n + k2 by A6,NAT_1:28;
-    thus r <= seq1.n1 by A5,A6,A7,A4;
+     k2 in NAT by ORDINAL1:def 13;
+     hence r <= seq1.n1 by A5,A6,A7,A4;
     end;
    then r <= inf seq1 by Th10;
    then r <= inf rng seq1;
@@ -1015,13 +1022,13 @@ theorem Th44:
   then r <= inf Y1 by Def4;
    then r <= inf rng seq1 by Th30;
    then A8: r <= inf seq1;
-   now let m1 be Nat;
+   now let m1 be Element of NAT;
      A9: n <= n+m1 by NAT_1:29;
      seq.(n+m1) in Y1 by A9;
      then seq.(n+m1) in rng seq1 by Th30;
      then consider k being set such that
      A10: k in dom seq1 & seq1.k = seq.(n+m1) by FUNCT_1:def 5;
-     reconsider k as Nat by A10;
+     reconsider k as Element of NAT by A10;
      thus r <= seq.(n+m1) by A10,A8,A3,Th10;
    end;
  hence thesis;
@@ -1046,9 +1053,10 @@ proof assume
       A3: r <= (inferior_realsequence seq).n;
       now let m such that
      A4: n<=m;
-         consider k such that
+         consider k being Nat such that
      A5: m = n + k by A4,NAT_1:28;
-         thus r <= seq.m by A5,A3,A1,Th44;
+     k in NAT by ORDINAL1:def 13;
+     hence r <= seq.m by A5,A3,A1,Th44;
       end;
     hence thesis;
 end;
@@ -1064,15 +1072,16 @@ seq is bounded_above implies
   thus ((for k holds seq.(n+k) <= r) implies
     (superior_realsequence seq).n <= r)
   proof assume A4: (for k holds seq.(n+k) <= r);
-    now let n1 being Nat;
+    now let n1 being Element of NAT;
      seq1.n1 in rng seq1 by FUNCT_2:6;
      then consider r1 such that
      A5: seq1.n1= r1 & r1 in Y1 by A2;
-    consider k1 being Nat such that
+    consider k1 being Element of NAT such that
      A6: r1 = seq.k1 & n <= k1 by A5;
     consider k2 being Nat such that
      A7: k1 = n + k2 by A6,NAT_1:28;
-    thus seq1.n1 <= r by A5,A6,A7,A4;
+     k2 in NAT by ORDINAL1:def 13;
+    hence seq1.n1 <= r by A5,A6,A7,A4;
    end;
    then sup seq1 <= r by Th9;
    then sup rng seq1 <= r;
@@ -1083,13 +1092,13 @@ seq is bounded_above implies
     sup Y1 <= r by Def5;then
     sup rng seq1 <= r by Th30;then
   A8: sup seq1 <= r;
-   now let m1 being Nat;
+   now let m1 being Element of NAT;
      A9: n <= n+m1 by NAT_1:29;
          seq.(n+m1) in Y1 by A9;then
          seq.(n+m1) in rng seq1 by Th30;then
          consider k being set such that
      A10: k in dom seq1 & seq1.k = seq.(n+m1) by FUNCT_1:def 5;
-         reconsider k as Nat by A10;
+         reconsider k as Element of NAT by A10;
       thus seq.(n+m1) <= r by A3,A8,Th9,A10;
     end;
  hence thesis;
@@ -1114,9 +1123,10 @@ proof assume
       A3: (superior_realsequence seq).n <= r;
       now let m such that
        A4: n<=m;
-           consider k such that
+           consider k being Nat such that
        A5: m = n + k by A4,NAT_1:28;
-        thus seq.m <= r by A5,A3,A1,Th46;
+       k in NAT by ORDINAL1:def 13;
+        hence seq.m <= r by A5,A3,A1,Th46;
       end;
     hence thesis;
 end;
@@ -1429,8 +1439,8 @@ theorem Th69:
     (superior_realsequence seq) is constant
 proof
   assume A1: seq is non-decreasing bounded_above;
-  defpred P[Nat] means (superior_realsequence seq).$1 = sup seq;
-  for n being Nat holds (superior_realsequence seq).n = sup seq
+  defpred P[Element of NAT] means (superior_realsequence seq).$1 = sup seq;
+  for n being Element of NAT holds (superior_realsequence seq).n = sup seq
   proof
    A2: P[0] by A1,Th41;
    A3: for k st P[k] holds P[k+1] by A1,Th68;
@@ -1513,8 +1523,8 @@ theorem Th75:
       (inferior_realsequence seq) is constant
 proof
   assume A1: seq is non-increasing & seq is bounded_below;
-  defpred P[Nat] means (inferior_realsequence seq).$1 = inf seq;
-  for n being Nat holds (inferior_realsequence seq).n = inf seq
+  defpred P[Element of NAT] means (inferior_realsequence seq).$1 = inf seq;
+  for n being Element of NAT holds (inferior_realsequence seq).n = inf seq
   proof
 A2: P[0] by A1,Th40;
 A3: for k st P[k] holds P[k+1] by A1,Th74;
@@ -1732,7 +1742,7 @@ A3: seq1 is bounded_below bounded_above by SEQ_2:def 5;
           A5: 0<s;
               ex n st for k holds r-s<seq.(n+k)
               proof
-               consider n1 be Nat such that
+               consider n1 be Element of NAT such that
            A6: seq1.n1 > sup seq1-s by A3,A5,Th7;
                seq1.n1 + sup seq1 > r + (sup seq1-s) by A6,A4,XREAL_1:10;then
                seq1.n1 + sup seq1 > r - s + sup seq1;then
@@ -1752,7 +1762,7 @@ A8: for s st 0<s holds ex n st for k holds r-s<seq.(n+k);
     for s st 0<s holds r-s<=lim_inf seq
     proof let s such that
     A9: 0<s;
-        consider n1 be Nat such that
+        consider n1 be Element of NAT such that
     A10: for k holds r-s<seq.(n1+k) by A9,A8;
         for k holds r-s<=seq.(n1+k) by A10;then
     A11: r-s <= seq1.n1 by A2,Th44;
@@ -1843,7 +1853,7 @@ A3: seq1 is bounded_below bounded_above by SEQ_2:def 5;
           A5: 0<s;
               ex n st for k holds seq.(n+k)<r+s
               proof
-               consider n1 be Nat such that
+               consider n1 be Element of NAT such that
            A6: seq1.n1 < inf seq1+s by A3,A5,Th8;
                seq1.n1 + inf seq1 < r + (inf seq1+s) by A6,A4,XREAL_1:10;then
                seq1.n1 + inf seq1 < r + s + inf seq1;then
@@ -1865,7 +1875,7 @@ A8: for s st 0<s holds (ex n st for k holds seq.(n+k)<r+s);
     for s st 0<s holds lim_sup seq<=r+s
     proof let s such that
     A9: 0<s;
-        consider n1 be Nat such that
+        consider n1 be Element of NAT such that
     A10: for k holds seq.(n1+k)<r+s by A9,A8;
         for k holds seq.(n1+k)<=r+s by A10;then
     A11: seq1.n1<=r+s by A2,Th46;
@@ -1918,11 +1928,11 @@ proof
     proof
        let s such that
    A7: 0 < s;
-       consider k1 be Nat such that
+       consider k1 be Element of NAT such that
    A8: r - s < (inferior_realsequence seq).k1 by A7,A1,A5,Th7;
-       consider k2 be Nat such that
+       consider k2 be Element of NAT such that
    A9: (superior_realsequence seq).k2 < r + s by A7,A4,Th8;
-       reconsider k = max(k1,k2) as Nat;
+       reconsider k = max(k1,k2) as Element of NAT;
        k1 <= k & k2 <= k by XXREAL_0:25;then
    A10: (inferior_realsequence seq).k1 <= (inferior_realsequence seq).k &
         (superior_realsequence seq).k <= (superior_realsequence seq).k2
@@ -1934,7 +1944,8 @@ proof
       A11: k <= m;
           consider k3 being Nat such that
       A12: m = k + k3 by A11,NAT_1:28;
-          (inferior_realsequence seq).k <= seq.m &
+      k3 in NAT by ORDINAL1:def 13;
+      then (inferior_realsequence seq).k <= seq.m &
           seq.m <= (superior_realsequence seq).k by A2,A12,Th43,Th42;then
           (inferior_realsequence seq).k1 <= seq.m &
           seq.m <= (superior_realsequence seq).k2 by A10,XXREAL_0:2;
@@ -2148,9 +2159,9 @@ A1: for seq1,seq2 st (seq1 is bounded & seq2 is bounded) holds
        proof let s such that
       A4: 0<s;
       A5: 0<s/2 by A4,SEQ_2:3;
-           consider n1 being Nat such that
+           consider n1 being Element of NAT such that
       A6: for k holds r1-s/2 < seq1.(n1+k) by A2,A5,Th84;
-           consider n2 being Nat such that
+           consider n2 being Element of NAT such that
       A7: for k holds r2-s/2 < seq2.(n2+k) by A2,A5,Th84;
            for k holds r1+r2-s < (seq1+seq2).(n1+n2+k)
            proof let k;
@@ -2190,9 +2201,9 @@ A12: for seq1,seq2 st seq1 is bounded & seq2 is bounded holds
        proof let s such that
       A15: 0<s;
       A16: 0<s/2 by A15,SEQ_2:3;
-           consider n1 being Nat such that
+           consider n1 being Element of NAT such that
       A17: for k holds seq1.(n1+k) < r1+s/2 by A13,A16,Th87;
-           consider n2 being Nat such that
+           consider n2 being Element of NAT such that
       A18: for k holds seq2.(n2+k) < r2+s/2 by A13,A16,Th87;
            for k holds (seq1+seq2).(n1+n2+k) < r1+r2+s
            proof let k;

@@ -29,7 +29,7 @@ environ
 
 begin :: Preliminaries
 
-reserve n,i,j,k for Nat;
+reserve n,i,j,k for Element of NAT;
 
 definition
  let A,B be non empty set, f be Function of A,B, g be PartFunc of A,B;
@@ -93,7 +93,7 @@ registration let n be natural number;
  cluster SegM n -> finite non empty;
  coherence
  proof
-A1: n is Nat by ORDINAL1:def 13;
+A1: n is Element of NAT by ORDINAL1:def 13;
    thus SegM n is finite by A1,CQC_THE1:12;
       0 <= n by NAT_1:18;
  then 0 in {k : k <= n};
@@ -172,7 +172,7 @@ proof
    .=i1+i2+i3+i4 by GROUP_4:def 2;
 end;
 
-definition let f be FinSequence of NAT,i be Nat;
+definition let f be FinSequence of NAT,i be Element of NAT;
  func Prefix(f,i) -> FinSequence of INT equals
      f| Seg i;
  coherence
@@ -180,7 +180,7 @@ definition let f be FinSequence of NAT,i be Nat;
      set p=f|Seg i;
   A1: p is FinSequence by FINSEQ_1:19;
        now
-        let j be Nat;
+        let j be Element of NAT;
         assume A2: j in dom p;
         then A3:p.j=f.j by FUNCT_1:70;
               j in dom f by A2,RELAT_1:86;
@@ -192,10 +192,10 @@ definition let f be FinSequence of NAT,i be Nat;
 end;
 
 theorem Th7:
- for x1,x2 being Nat holds Sum Prefix(<*x1,x2*>,1)=x1 &
+ for x1,x2 being Element of NAT holds Sum Prefix(<*x1,x2*>,1)=x1 &
  Sum Prefix(<*x1,x2*>,2)=x1+x2
 proof
-    let x1,x2 be Nat;
+    let x1,x2 be Element of NAT;
 A1: Prefix(<*x1,x2*>,1)=<*x1,x2*> | Seg 1
     .=<* x1 *> by FINSEQ_6:5;
     reconsider y1=x1 as Element of INT by INT_1:def 2;
@@ -210,10 +210,10 @@ A3: Prefix(<*x1,x2*>,2)=<*x1,x2*> | Seg 2
 end;
 
 theorem Th8:
- for x1,x2,x3 being Nat holds Sum Prefix(<*x1,x2,x3*>,1)=x1 &
+ for x1,x2,x3 being Element of NAT holds Sum Prefix(<*x1,x2,x3*>,1)=x1 &
    Sum Prefix(<*x1,x2,x3*>,2)=x1+x2 & Sum Prefix(<*x1,x2,x3*>,3)=x1+x2+x3
 proof
-    let x1,x2,x3 be Nat;
+    let x1,x2,x3 be Element of NAT;
 A1: Prefix(<*x1,x2,x3*>,1)=<*x1,x2,x3*> | Seg 1
     .=<* x1 *> by FINSEQ_6:6;
     reconsider y1=x1 as Element of INT by INT_1:def 2;
@@ -375,7 +375,7 @@ end;
 theorem Th13:
  (Computation s).(i+k) = (Computation (Computation s).i).k
  proof
-   defpred X[Nat] means
+   defpred X[Element of NAT] means
       (Computation s).(i+$1) = (Computation (Computation s).i).$1;
 A1: X[0] by Def8;
 A2: for k st X[k] holds X[k+1]
@@ -397,9 +397,10 @@ theorem Th14:
  proof
    assume
 A1: i <= j & Following (Computation s).i = (Computation s).i;
-     then consider k such that
+     then consider k be Nat such that
 A2:   j = i + k by NAT_1:28;
-   defpred X[Nat] means (Computation s).(i+$1) = (Computation s).i;
+AA: k in NAT by ORDINAL1:def 13;
+   defpred X[Element of NAT] means (Computation s).(i+$1) = (Computation s).i;
 A3: X[0];
 A4: for k st X[k] holds X[k+1]
    proof let k;
@@ -408,8 +409,8 @@ A5:  (Computation s).(i+k) = (Computation s).i;
     thus (Computation s).(i+(k+1)) = (Computation s).(i+k+1)
          .= (Computation s).i by A1,A5,Def8;
    end;
-      for k holds X[k] from NAT_1:sch 1(A3,A4);
-  hence (Computation s).j = (Computation s).i by A2;
+   for k holds X[k] from NAT_1:sch 1(A3,A4);
+  hence (Computation s).j = (Computation s).i by AA,A2;
 end;
 
 theorem Th15:
@@ -436,29 +437,29 @@ A1: s is Accept-Halt;
          ((Computation s).k)`1 = the AcceptS of T;
  uniqueness
   proof let s1,s2 be All-State of T;
-   given k1 being Nat such that
+   given k1 being Element of NAT such that
 A2: s1 = (Computation s).k1 & ((Computation s).k1)`1 = the AcceptS of T;
-   given k2 being Nat such that
+   given k2 being Element of NAT such that
 A3: s2 = (Computation s).k2 & ((Computation s).k2)`1 = the AcceptS of T;
        k1 <= k2 or k2 <= k1;
    hence s1 = s2 by A2,A3,Th15;
   end;
  correctness
   proof
-       ex k st ((Computation s).k)`1 = the AcceptS of T by A1,Def9;
+   ex k st ((Computation s).k)`1 = the AcceptS of T by A1,Def9;
    hence thesis;
   end;
 end;
 
 theorem Th16:
  for T being TuringStr,s be All-State of T st s is Accept-Halt holds
-  ex k being Nat st ((Computation s).k)`1 = the AcceptS of T &
-   Result s = (Computation s).k & for i be Nat st i < k
+  ex k being Element of NAT st ((Computation s).k)`1 = the AcceptS of T &
+   Result s = (Computation s).k & for i be Element of NAT st i < k
   holds ((Computation s).i)`1 <> the AcceptS of T
 proof
     let T be TuringStr,s be All-State of T;
     assume A1: s is Accept-Halt;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
       ((Computation s).$1)`1 = the AcceptS of T;
 A2: ex k st P[k] by A1,Def9;
     consider k such that
@@ -468,7 +469,7 @@ A4: Result s = (Computation s).j &
     ((Computation s).j)`1 = the AcceptS of T by A1,Def10;
     take k;
     thus P[k] by A3;
-       k <= j by A3,A4;
+    k <= j by A3,A4;
     hence Result s=(Computation s).k by A3,A4,Th15;
     thus thesis by A3;
 end;
@@ -633,15 +634,16 @@ end;
 definition
  let f be FinSequence of NAT, T be TuringStr, t be Tape of T;
  pred t storeData f means
-:Def14: for i be Nat st 1 <= i & i < len f holds
+:Def14: for i be Element of NAT st 1 <= i & i < len f holds
      t is_1_between Sum Prefix(f,i)+2*(i-1),Sum Prefix(f,i+1)+2*i;
 end;
 
 theorem Th18:
- for T being TuringStr,t be Tape of T, s,n be Nat st t storeData <*s,n*>
+ for T being TuringStr,t be Tape of T, s,n be Element of NAT
+  st t storeData <*s,n*>
  holds t is_1_between s,s+n+2
 proof
-    let T be TuringStr,t be Tape of T,s,n be Nat;
+    let T be TuringStr,t be Tape of T,s,n be Element of NAT;
     set f=<*s,n*>;
     assume A1: t storeData f;
 A2: Sum Prefix(f,1)+2*(1-1)=s by Th7;
@@ -651,15 +653,16 @@ A3: Sum Prefix(f,1+1)+2*1=s+n+2 by Th7;
 end;
 
 theorem Th19:
- for T being TuringStr, t be Tape of T, s,n be Nat st t is_1_between s,s+n+2
+ for T being TuringStr, t be Tape of T, s,n be Element of NAT
+  st t is_1_between s,s+n+2
  holds t storeData <*s,n*>
 proof
-    let T be TuringStr,t be Tape of T,s,n be Nat;
+    let T be TuringStr,t be Tape of T,s,n be Element of NAT;
     set f=<*s,n*>;
     assume A1: t is_1_between s,s+n+2;
 A2: Sum Prefix(f,1+1)+2*1=s+n+2 by Th7;
        now
-       let i be Nat;
+       let i be Element of NAT;
        assume A3:1 <= i & i < len f;
           len f=2 by FINSEQ_1:61;
         then i+1 <= 1+1 by A3,INT_1:20;
@@ -672,11 +675,11 @@ A2: Sum Prefix(f,1+1)+2*1=s+n+2 by Th7;
 end;
 
 theorem Th20:
-  for T being TuringStr, t be Tape of T, s,n be Nat st
+  for T being TuringStr, t be Tape of T, s,n be Element of NAT st
   t storeData <*s,n *> holds
   t.s=0 & t.(s+n+2)=0 & for i be Integer st s < i & i < s+n+2 holds t.i=1
 proof
-    let T be TuringStr, t be Tape of T, s,n be Nat;
+    let T be TuringStr, t be Tape of T, s,n be Element of NAT;
     assume t storeData <*s,n*>;
 then A1:  t is_1_between s,s+n+2 by Th18;
      hence t.s=0 & t.(s+n+2)=0 by Def13;
@@ -684,11 +687,11 @@ then A1:  t is_1_between s,s+n+2 by Th18;
 end;
 
 theorem Th21:
- for T being TuringStr,t be Tape of T,s,n1,n2 be Nat st
+ for T being TuringStr,t be Tape of T,s,n1,n2 be Element of NAT st
  t storeData <*s,n1,n2*>
  holds t is_1_between s,s+n1+2 & t is_1_between s+n1+2,s+n1+n2+4
 proof
-    let T be TuringStr,t be Tape of T,s,n1,n2 be Nat;
+    let T be TuringStr,t be Tape of T,s,n1,n2 be Element of NAT;
     set f=<*s,n1,n2*>;
     assume A1: t storeData f;
 A2: Sum Prefix(f,1)+2*(1-1)=s by Th8;
@@ -701,13 +704,13 @@ A6: len f=3 by FINSEQ_1:62;
 end;
 
 theorem Th22:
-  for T being TuringStr, t be Tape of T, s,n1,n2 be Nat
+  for T being TuringStr, t be Tape of T, s,n1,n2 be Element of NAT
  st t storeData <*s,n1,n2 *> holds
   t.s=0 & t.(s+n1+2)=0 & t.(s+n1+n2+4)=0 &
  (for i be Integer st s < i & i < s+n1+2 holds t.i=1) &
  for i be Integer st s+n1+2 < i & i < s+n1+n2+4 holds t.i=1
 proof
-    let T be TuringStr, t be Tape of T, s,n1,n2 be Nat;
+    let T be TuringStr, t be Tape of T, s,n1,n2 be Element of NAT;
     assume t storeData <*s,n1,n2 *>;
 then A1:  t is_1_between s,s+n1+2 & t is_1_between s+n1+2,s+n1+n2+4 by Th21;
      hence t.s=0 & t.(s+n1+2)=0 & t.(s+n1+n2+4)=0 by Def13;
@@ -715,10 +718,10 @@ then A1:  t is_1_between s,s+n1+2 & t is_1_between s+n1+2,s+n1+n2+4 by Th21;
 end;
 
 theorem Th23:
- for f being FinSequence of NAT,s being Nat st len f >= 1
+ for f being FinSequence of NAT,s being Element of NAT st len f >= 1
   holds Sum Prefix(<*s*>^f,1)=s & Sum Prefix(<*s*>^f,2)=s+f/.1
 proof
-   let f be FinSequence of NAT,s be Nat;
+   let f be FinSequence of NAT,s be Element of NAT;
    assume A1: len f >= 1;
    set g=<*s*>, h=g^f;
 A2: h.1=s by FINSEQ_1:58;
@@ -730,10 +733,11 @@ then A5: g =h | Seg 1 by FINSEQ_1:33
     .=Prefix(h,1);
     consider n being Nat such that
 A6: len f=1+n by A1,NAT_1:28;
+AA: n in NAT by ORDINAL1:def 13;
    len h=1+len f by A3,FINSEQ_1:35
     .=2+n by A6;
     then consider p2,q2 being FinSequence of NAT such that
-A7: len p2 = 2 & len q2 = n & h = p2^q2 by FINSEQ_2:26;
+A7: len p2 = 2 & len q2 = n & h = p2^q2 by AA,FINSEQ_2:26;
        Seg 2=dom p2 by A7,FINSEQ_1:def 3;
 then A8: p2 =h | Seg 2 by A7,FINSEQ_1:33
     .=Prefix(h,2);
@@ -748,11 +752,11 @@ A9: p2.1=s by A2,A7,FINSEQ_1:85;
 end;
 
 theorem Th24:
- for f being FinSequence of NAT,s being Nat st len f >= 3
+ for f being FinSequence of NAT,s being Element of NAT st len f >= 3
   holds Sum Prefix(<*s*>^f,1)=s & Sum Prefix(<*s*>^f,2)=s+f/.1 &
    Sum Prefix(<*s*>^f,3)=s+f/.1+f/.2 & Sum Prefix(<*s*>^f,4)=s+f/.1+f/.2+f/.3
 proof
-   let f be FinSequence of NAT,s be Nat;
+   let f be FinSequence of NAT,s be Element of NAT;
    assume A1: len f >= 3;
    set g=<*s*>,
        h=g^f;
@@ -769,6 +773,7 @@ A8: f/.3=f.3 by A1,FINSEQ_4:24
     .=h.(1+3) by A1,A4,FINSEQ_7:3;
     consider n being Nat such that
 A9: len f=3+n by A1,NAT_1:28;
+    reconsider n as Element of NAT by ORDINAL1:def 13;
 A10: len h=1+len f by A4,FINSEQ_1:35
     .=4+n by A9;
 then len h=3+(1+n);
@@ -787,7 +792,7 @@ then A14: p4 =h | Seg 4 by A13,FINSEQ_1:33
    reconsider x3=f/.2 as Element of INT by INT_1:def 2;
 A15: p3.1=s by A3,A11,FINSEQ_1:85;
 A16: p3.2=f/.1 by A5,A11,FINSEQ_1:85;
-       p3.3=f/.2 by A7,A11,FINSEQ_1:85;
+     p3.3=f/.2 by A7,A11,FINSEQ_1:85;
     then p3=<*s,f/.1,f/.2*> by A11,A15,A16,FINSEQ_1:62;
   hence Sum Prefix(h,3)=x1+x2+x3 by A12,Th5
     .=s+f/.1+f/.2;
@@ -802,10 +807,12 @@ A19: p4.3=f/.2 by A7,A13,FINSEQ_1:85;
 end;
 
 theorem Th25:
- for T being TuringStr,t be Tape of T, s be Nat,f be FinSequence of NAT st
+ for T being TuringStr,t be Tape of T, s be Element of NAT,
+ f be FinSequence of NAT st
  len f >=1 & t storeData <*s*>^f holds t is_1_between s,s+ f/.1+2
 proof
-    let T be TuringStr,t be Tape of T,s be Nat,f be FinSequence of NAT;
+    let T be TuringStr,t be Tape of T,s be Element of NAT,
+    f be FinSequence of NAT;
     set g=<*s*>^f;
     assume A1:len f >=1 & t storeData g;
 then A2: Sum Prefix(g,1)+2*(1-1)=s by Th23;
@@ -818,13 +825,15 @@ A3: Sum Prefix(g,1+1)+2*1=s+f/.1+2 by A1,Th23;
 end;
 
 theorem Th26:
- for T being TuringStr,t be Tape of T, s be Nat,f be FinSequence of NAT st
+ for T being TuringStr,t be Tape of T, s be Element of NAT,
+ f be FinSequence of NAT st
  len f >=3 & t storeData <*s*>^f holds
    t is_1_between s,s+ f/.1+2 &
    t is_1_between s+f/.1+2, s+f/.1+f/.2+4 &
    t is_1_between s+f/.1+f/.2+4, s+f/.1+f/.2+f/.3+6
 proof
-    let T be TuringStr,t be Tape of T, s be Nat,f be FinSequence of NAT;
+    let T be TuringStr,t be Tape of T, s be Element of NAT,
+    f be FinSequence of NAT;
     set g=<*s*>^f;
     assume A1:len f >=3 & t storeData g;
     then 1 <= len f by XREAL_1:2;
@@ -863,9 +872,9 @@ definition
 end;
 
 Lm1:
- for n be Nat st n <= 5 holds n is State of SumTuring
+ for n be Element of NAT st n <= 5 holds n is State of SumTuring
 proof
-    let n be Nat;
+    let n be Element of NAT;
     assume A1: n <= 5;
        the States of SumTuring=SegM 5 by Def15;
     hence thesis by A1,Th1;
@@ -935,22 +944,22 @@ end;
 
 Lm4:
   for tm being TuringStr,s be All-State of tm, p be State of tm,
-  h be Element of INT,t be Tape of tm, m,d be Nat st
+  h be Element of INT,t be Tape of tm, m,d be Element of NAT st
   d=h & 1 is Symbol of tm & s=[p,h,t] & (the Tran of tm).[p,1]=[p,1,1]
    & p <> the AcceptS of tm & (for i be Integer
     st d <= i & i < d+m holds t.i=1) holds (Computation s).m=[p,d+m,t]
 proof
    let tm be TuringStr,s be All-State of tm, p be State of tm,
-    h be Element of INT,t be Tape of tm, m,d be Nat;
+    h be Element of INT,t be Tape of tm, m,d be Element of NAT;
   assume A1: d=h & 1 is Symbol of tm & s=[p,h,t] &
      (the Tran of tm).[p,1]=[p,1,1] & p <> the AcceptS of tm &
      (for i be Integer st d <= i & i < d+m holds t.i=1);
-    defpred Q[Nat] means
+    defpred Q[Element of NAT] means
      $1 <= m implies (Computation s).$1=[p,d+$1,t];
 A2: Q[0] by A1,Def8;
-A3: for k being Nat st Q[k] holds Q[k+1]
+A3: for k being Element of NAT st Q[k] holds Q[k+1]
     proof
-      let k be Nat;
+      let k be Element of NAT;
       assume A4: Q[k];
          now
         assume A5: k+1 <= m;
@@ -989,12 +998,13 @@ end;
 
 theorem Th31:
  for s being All-State of SumTuring, t be Tape of SumTuring,
-  head,n1,n2 be Nat
+  head,n1,n2 be Element of NAT
  st s=[0,head,t] & t storeData <*head,n1,n2 *> holds
   s is Accept-Halt & (Result s)`2=1+head &
   (Result s)`3 storeData <*1+head,n1+n2 *>
 proof
-   let s be All-State of SumTuring, t be Tape of SumTuring,h,n1,n2 be Nat;
+   let s be All-State of SumTuring, t be Tape of SumTuring,
+   h,n1,n2 be Element of NAT;
    assume A1: s=[0,h,t] & t storeData <*h,n1,n2 *>;
    reconsider s3=s`3 as Tape of SumTuring;
    reconsider F=0 as Symbol of SumTuring by Lm2;
@@ -1220,12 +1230,12 @@ by A57,Lm3
       .= [4, Head(sp3)+ offset TRAN(sp3), t3] by A53,MCART_1:68
       .= sp4 by A58,A59,Th27;
     end;
-    defpred R[Nat] means
+    defpred R[Element of NAT] means
      h+$1 < j2 implies (Computation sp4).$1=[4,j2-$1,t3];
 A61: R[0] by Def8;
-A62: for k being Nat st R[k] holds R[k+1]
+A62: for k being Element of NAT st R[k] holds R[k+1]
     proof
-      let k be Nat;
+      let k be Element of NAT;
       assume A63: R[k];
          now
         assume A64: h+(k+1) < j2;
@@ -1238,7 +1248,7 @@ A62: for k being Nat st R[k] holds R[k+1]
         then A66: h1-0 < j2-k by XREAL_1:23;
            h1 >= 0 by NAT_1:18;
         then 0 <= j2-k by A66,XREAL_1:2;
-        then reconsider ii=j2-k as Nat by INT_1:16;
+        then reconsider ii=j2-k as Element of NAT by INT_1:16;
            j2 <= j2+k by INT_1:19;
 then A67:     j2 -k <= j2 by XREAL_1:22;
            j2 < j3 by XREAL_1:148;
@@ -1273,7 +1283,7 @@ A71:     offset TRAN(sk)=(TRAN sk)`3
  j2-1=h+j1;
 then A72: h+j1 < j2 by XREAL_1:148;
     set sp5=[p4, h1, t3];
-       for k being Nat holds R[k] from NAT_1:sch 1(A61,A62);
+       for k being Element of NAT holds R[k] from NAT_1:sch 1(A61,A62);
 then A73: (Computation sp4).j1=[4,j2-j1,t3] by A72
     .=sp5;
 A74:  now
@@ -1327,10 +1337,10 @@ end;
 definition
  let T be TuringStr,F be Function;
   pred T computes F means
-:Def16:  for s being All-State of T,t being Tape of T, a being Nat,
+:Def16:  for s being All-State of T,t being Tape of T, a being Element of NAT,
    x being FinSequence of NAT st x in dom F &
    s=[the InitS of T,a,t] & t storeData <*a*>^x holds
-   s is Accept-Halt & ex b, y being Nat st (Result s)`2=b &
+   s is Accept-Halt & ex b, y being Element of NAT st (Result s)`2=b &
    y=F.x & (Result s)`3 storeData <*b*>^<* y *>;
 end;
 
@@ -1346,7 +1356,8 @@ theorem
       SumTuring computes [+]
 proof
      now
-      let s be All-State of SumTuring,t be Tape of SumTuring,h1 be Nat,
+      let s be All-State of SumTuring,t be Tape of SumTuring,
+      h1 be Element of NAT,
       x be FinSequence of NAT;
       assume A1: x in dom [+] & s=[the InitS of SumTuring,h1,t] &
        t storeData <*h1*>^x;
@@ -1487,9 +1498,9 @@ definition
 end;
 
 Lm5:
- for n be Nat st n <= 4 holds n is State of SuccTuring
+ for n be Element of NAT st n <= 4 holds n is State of SuccTuring
 proof
-    let n be Nat;
+    let n be Element of NAT;
     assume A1: n <= 4;
        the States of SuccTuring=SegM 4 by Def18;
     hence thesis by A1,Th1;
@@ -1516,11 +1527,13 @@ end;
 canceled;
 
 theorem Th36:
- for s being All-State of SuccTuring, t be Tape of SuccTuring,head,n be Nat
+ for s being All-State of SuccTuring, t be Tape of SuccTuring,
+ head,n be Element of NAT
  st s=[0,head,t] & t storeData <*head,n*> holds
   s is Accept-Halt & (Result s)`2=head & (Result s)`3 storeData <*head,n+1*>
 proof
-   let s be All-State of SuccTuring,t be Tape of SuccTuring,h,n be Nat;
+   let s be All-State of SuccTuring,t be Tape of SuccTuring,
+   h,n be Element of NAT;
    assume A1: s=[0,h,t] & t storeData <*h,n *>;
 then A2: t.h=0 & t.(h+n+2)=0 &
     for i be Integer st h < i & i < h+n+2 holds t.i=1 by Th20;
@@ -1688,12 +1701,12 @@ A40: t3.h=0 & t3.(h+(n+1)+2)=0 &
           .=1 by A25,A41,A42;
        end;
     end;
-    defpred R[Nat] means
+    defpred R[Element of NAT] means
      h+$1 <= nk implies (Computation sp3).$1=[3,nk-$1,t3];
 A43: R[0] by Def8;
-A44: for k being Nat st R[k] holds R[k+1]
+A44: for k being Element of NAT st R[k] holds R[k+1]
     proof
-      let k be Nat;
+      let k be Element of NAT;
       assume A45: R[k];
          now
         assume A46: h+(k+1) <= nk;
@@ -1706,7 +1719,7 @@ A44: for k being Nat st R[k] holds R[k+1]
         then A48: h-0 < nk-k by XREAL_1:23;
            h >= 0 by NAT_1:18;
         then 0 <= nk-k by A48,XREAL_1:2;
-        then reconsider ii=nk-k as Nat by INT_1:16;
+        then reconsider ii=nk-k as Element of NAT by INT_1:16;
            nk <= nk+k by INT_1:19;
         then A49: nk -k <= nk by XREAL_1:22;
            now h+n+2 < h+n+2+1 by XREAL_1:31;
@@ -1743,7 +1756,7 @@ A53:     offset TRAN(sk)=(TRAN sk)`3
     set j1=1+1+n,
         sp5=[p3,hh, t3];
 A54: h+j1 =nk;
-       for k being Nat holds R[k] from NAT_1:sch 1(A43,A44);
+       for k being Element of NAT holds R[k] from NAT_1:sch 1(A43,A44);
 then A55: (Computation sp3).j1=[3,nk-j1,t3] by A54
     .=sp5;
 A56:  now
@@ -1787,7 +1800,8 @@ theorem
       SuccTuring computes 1 succ 1
 proof
      now
-      let s be All-State of SuccTuring,t be Tape of SuccTuring,h be Nat,
+      let s be All-State of SuccTuring,t be Tape of SuccTuring,
+      h be Element of NAT,
       x be FinSequence of NAT;
       set sc=1 succ 1;
       assume A1: x in dom sc & s=[the InitS of SuccTuring,h,t] &
@@ -1904,9 +1918,9 @@ definition
 end;
 
 Lm8:
- for n be Nat st n <= 4 holds n is State of ZeroTuring
+ for n be Element of NAT st n <= 4 holds n is State of ZeroTuring
 proof
-    let n be Nat;
+    let n be Element of NAT;
     assume A1: n <= 4;
        the States of ZeroTuring=SegM 4 by Def20;
     hence thesis by A1,Th1;
@@ -1931,12 +1945,14 @@ proof
 end;
 
 theorem Th39:
- for s being All-State of ZeroTuring, t be Tape of ZeroTuring, head be Nat,
+ for s being All-State of ZeroTuring, t be Tape of ZeroTuring,
+  head be Element of NAT,
  f be FinSequence of NAT st len f >= 1 & s=[0,head,t] &
  t storeData <*head*>^f holds
  s is Accept-Halt & (Result s)`2=head & (Result s)`3 storeData <*head,0*>
 proof
-   let s be All-State of ZeroTuring, t be Tape of ZeroTuring,h be Nat,
+   let s be All-State of ZeroTuring, t be Tape of ZeroTuring,
+   h be Element of NAT,
    f be FinSequence of NAT;
    assume A1: len f >= 1 & s=[0,h,t] & t storeData <*h*>^f;
     set m=f/.1,
@@ -2075,7 +2091,8 @@ theorem
 proof
   assume A1: n>=1;
      now
-      let s be All-State of ZeroTuring,t be Tape of ZeroTuring,h be Nat,
+      let s be All-State of ZeroTuring,t be Tape of ZeroTuring,
+      h be Element of NAT,
       x be FinSequence of NAT;
       set cs=n const 0;
       assume A2: x in dom cs & s=[the InitS of ZeroTuring,h,t] &
@@ -2193,9 +2210,9 @@ definition
 end;
 
 Lm11:
- for n be Nat st n <= 3 holds n is State of U3(n)Turing
+ for n be Element of NAT st n <= 3 holds n is State of U3(n)Turing
 proof
-    let n be Nat;
+    let n be Element of NAT;
     assume A1: n <= 3;
        the States of U3(n)Turing=SegM 3 by Def22;
     hence thesis by A1,Th1;
@@ -2221,7 +2238,7 @@ end;
 
 Lm14:
   for tm being TuringStr,s be All-State of tm, p be State of tm,
-  h be Element of INT,t be Tape of tm, m,d be Nat st
+  h be Element of INT,t be Tape of tm, m,d be Element of NAT st
   d=h & 0 is Symbol of tm & s=[p,h,t] & (the Tran of tm).[p,1]=[p,0,1]
    & p <> the AcceptS of tm & (for i be Integer
     st d <= i & i < d+m holds t.i=1) holds
@@ -2230,11 +2247,11 @@ Lm14:
      (for i be Integer st d > i or i >= d+m holds t1.i=t.i)
 proof
    let tm be TuringStr,s be All-State of tm, p be State of tm,
-    h be Element of INT,t be Tape of tm, m,d be Nat;
+    h be Element of INT,t be Tape of tm, m,d be Element of NAT;
   assume A1: d=h & 0 is Symbol of tm & s=[p,h,t] &
      (the Tran of tm).[p,1]=[p,0,1] & p <> the AcceptS of tm &
      (for i be Integer st d <= i & i < d+m holds t.i=1);
-    defpred Q[Nat] means
+    defpred Q[Element of NAT] means
      $1 <= m implies
       ex t1 being Tape of tm st (Computation s).$1=[p,d+$1,t1] &
      (for i be Integer st d <= i & i < d+$1 holds t1.i=0) &
@@ -2247,9 +2264,9 @@ A2: Q[0]
       thus for i be Integer st d <= i & i < d+0 holds t1.i=0;
      thus for i be Integer st d > i or i >= d+0 holds t1.i=t.i;
      end;
-A3: for k being Nat st Q[k] holds Q[k+1]
+A3: for k being Element of NAT st Q[k] holds Q[k+1]
     proof
-      let k be Nat;
+      let k be Element of NAT;
       assume A4: Q[k];
          now
         assume A5: k+1 <= m;
@@ -2325,13 +2342,15 @@ A13:     offset TRAN(sk)=(TRAN sk)`3
 end;
 
 theorem Th42:
- for s being All-State of U3(n)Turing, t be Tape of U3(n)Turing, head be Nat,
+ for s being All-State of U3(n)Turing, t be Tape of U3(n)Turing,
+  head be Element of NAT,
  f be FinSequence of NAT st len f >= 3 & s=[0,head,t] &
  t storeData <*head*>^f holds
   s is Accept-Halt & (Result s)`2=head+f/.1+f/.2+4 &
  (Result s)`3 storeData <*head+f/.1+f/.2+4,f/.3*>
 proof
-   let s be All-State of U3(n)Turing, t be Tape of U3(n)Turing,h be Nat,
+   let s be All-State of U3(n)Turing, t be Tape of U3(n)Turing,
+   h be Element of NAT,
    f be FinSequence of NAT;
    assume A1: len f >= 3 & s=[0,h,t] & t storeData <*h*>^f;
     set n1=h+ f/.1+2,
@@ -2477,7 +2496,8 @@ theorem
 proof
   assume A1: n >= 3;
      now
-      let s be All-State of U3(n)Turing,t be Tape of U3(n)Turing,h be Nat,
+      let s be All-State of U3(n)Turing,t be Tape of U3(n)Turing,
+      h be Element of NAT,
       x be FinSequence of NAT;
       set pj=n proj 3;
       assume A2: x in dom pj & s=[the InitS of U3(n)Turing,h,t] &
@@ -2826,7 +2846,8 @@ A4: SecondTuringSymbol(xx)=xx`2 by Def29
 end;
 
 theorem Th50:
- for T1,T2 being TuringStr,s1 be All-State of T1,h be Nat,t be Tape of T1,
+ for T1,T2 being TuringStr,s1 be All-State of T1,h be Element of NAT,
+ t be Tape of T1,
  s2 be All-State of T2,s3 be All-State of (T1 ';' T2)
  st s1 is Accept-Halt & s1=[the InitS of T1,h,t] &
     s2 is Accept-Halt & s2=[the InitS of T2,(Result s1)`2,(Result s1)`3] &
@@ -2834,7 +2855,7 @@ theorem Th50:
  holds s3 is Accept-Halt & (Result s3)`2=(Result s2)`2 &
  (Result s3)`3=(Result s2)`3
 proof
-    let tm1,tm2 be TuringStr,s1 be All-State of tm1,h be Nat,
+    let tm1,tm2 be TuringStr,s1 be All-State of tm1,h be Element of NAT,
     t be Tape of tm1, s2 be All-State of tm2,
     s3 be All-State of (tm1 ';' tm2);
     set p0=the InitS of tm1,
@@ -2846,9 +2867,10 @@ proof
         qF=the AcceptS of tm2;
     consider k such that
 A2: ((Computation s1).k)`1 = pF & Result s1 = (Computation s1).k &
-    for i be Nat st i < k holds ((Computation s1).i)`1 <> pF by A1,Th16;
+    for i be Element of NAT st i < k holds ((Computation s1).i)`1 <> pF
+     by A1,Th16;
 A3: s3=[[p0,q0],h,t] by A1,Def32;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
       $1 <= k implies
         [((Computation s1).$1)`1,q0]=((Computation s3).$1)`1 &
         ((Computation s1).$1)`2=((Computation s3).$1)`2 &
@@ -2930,10 +2952,11 @@ XREAL_1:2
          s3k=(Computation s3).k;
         for i holds P[i] from NAT_1:sch 1(A4,A6);
 then A18: [s1k`1,q0]=s3k`1 & s1k`2=s3k`2 & s1k`3=s3k`3;
-    consider m be Nat such that
+    consider m be Element of NAT such that
 A19: ((Computation s2).m)`1 = qF & Result s2 = (Computation s2).m &
-    for i be Nat st i < m holds ((Computation s2).i)`1 <> qF by A1,Th16;
-    defpred Q[Nat] means
+    for i be Element of NAT st i < m holds ((Computation s2).i)`1 <> qF
+     by A1,Th16;
+    defpred Q[Element of NAT] means
       $1 <= m implies
         [pF,((Computation s2).$1)`1]=((Computation s3k).$1)`1 &
         ((Computation s2).$1)`2=((Computation s3k).$1)`2 &
@@ -3054,7 +3077,7 @@ theorem Th53:
    t2 be Tape of tm2;
    assume A1: t1=t2 & t1 storeData f;
       now
-     let i be Nat;
+     let i be Element of NAT;
      assume A2:1 <= i & i < len f;
      set m=Sum Prefix(f,i)+2*(i-1),
          n=Sum Prefix(f,i+1)+2*i;
@@ -3067,11 +3090,13 @@ theorem Th53:
 end;
 
 Lm15:
- for s being All-State of ZeroTuring, t be Tape of ZeroTuring, head,n be Nat st
+ for s being All-State of ZeroTuring, t be Tape of ZeroTuring, head,
+ n be Element of NAT st
  s=[0,head,t] & t storeData <*head,n*> holds
  s is Accept-Halt & (Result s)`2=head & (Result s)`3 storeData <*head,0*>
 proof
-  let s be All-State of ZeroTuring, t be Tape of ZeroTuring, h,n be Nat;
+  let s be All-State of ZeroTuring, t be Tape of ZeroTuring,
+   h,n be Element of NAT;
   assume A1: s=[0,h,t] & t storeData <*h,n*>;
   set f=<*n*>;
 A2: t storeData <*h*>^f by A1,FINSEQ_1:def 9;
@@ -3082,12 +3107,12 @@ end;
 theorem
     for s being All-State of ZeroTuring ';' SuccTuring, t be Tape of ZeroTuring
 ,
- head,n be Nat st s=[[0,0],head,t] & t storeData <*head,n*>
+ head,n be Element of NAT st s=[[0,0],head,t] & t storeData <*head,n*>
  holds s is Accept-Halt &
  (Result s)`2=head & (Result s)`3 storeData <*head,1*>
 proof
   let s be All-State of ZeroTuring ';' SuccTuring, t be Tape of ZeroTuring,
-  h,n be Nat;
+  h,n be Element of NAT;
     assume A1:s=[[0,0],h,t] & t storeData <*h,n*>;
    reconsider h1=h as Element of INT by INT_1:def 2;
     set s1=[the InitS of ZeroTuring,h1,t];

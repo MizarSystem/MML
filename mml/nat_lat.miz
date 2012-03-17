@@ -17,8 +17,9 @@ environ
  registrations FINSET_1, STRUCT_0, RELSET_1, LATTICES, NAT_1, MEMBERED,
       ARYTM_3, ORDINAL2, ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE;
- definitions LATTICES, BINOP_1, REALSET1;
- theorems NEWTON, ZFMISC_1, LATTICES, FUNCT_1, FUNCT_2, XBOOLE_1, RELAT_1;
+ definitions TARSKI, XBOOLE_0, LATTICES, BINOP_1, REALSET1;
+ theorems NEWTON, ZFMISC_1, LATTICES, FUNCT_1, FUNCT_2, XBOOLE_1, RELAT_1,
+   ORDINAL1, BINOP_1;
  schemes BINOP_1, BINOP_2, SUBSET_1;
 
 begin :: Auxiliary Theorems
@@ -32,37 +33,51 @@ definition
  :Def3: it.(m,n)=m hcf n;
  existence proof
    deffunc O(Nat,Nat)= $1 hcf $2;
-  thus ex o being BinOp of NAT st
-    for a,b being Element of NAT holds o.(a,b) = O(a,b) from BINOP_1:sch 4;
+   consider o being BinOp of NAT such that
+A1: for a,b being Element of NAT holds o.(a,b) = O(a,b) from BINOP_1:sch 4;
+    take o;
+    let m,n;
+    m in NAT & n in NAT by ORDINAL1:def 13;
+   hence thesis by A1;
  end;
  uniqueness proof
     deffunc O(Nat,Nat)= $1 hcf $2;
-  thus for o1,o2 being BinOp of NAT st
-    (for a,b being Element of NAT holds o1.(a,b) = O(a,b)) &
-    (for a,b being Element of NAT holds o2.(a,b) = O(a,b))
-  holds o1 = o2 from BINOP_2:sch 2;
+    let f1,f2 be BinOp of NAT such that
+A1: f1.(m,n)=m hcf n and
+A2: f2.(m,n)=m hcf n;
+    now let m,n be Element of NAT;
+      thus f1.(m,n) = m hcf n by A1 .= f2.(m,n) by A2;
+    end;
+  hence thesis by BINOP_1:2;
  end;
 
  func lcmlat -> BinOp of NAT means
  :Def4: it.(m,n)=m lcm n;
  existence proof
    deffunc O(Nat,Nat)= $1 lcm $2;
-  thus ex o being BinOp of NAT st
-    for a,b being Element of NAT holds o.(a,b) = O(a,b) from BINOP_1:sch 4;
+   consider o being BinOp of NAT such that
+A1: for a,b being Element of NAT holds o.(a,b) = O(a,b) from BINOP_1:sch 4;
+    take o;
+    let m,n;
+    m in NAT & n in NAT by ORDINAL1:def 13;
+   hence thesis by A1;
  end;
  uniqueness proof
-    deffunc O(Nat,Nat)= $1 lcm $2;
-  thus for o1,o2 being BinOp of NAT st
-    (for a,b being Element of NAT holds o1.(a,b) = O(a,b)) &
-    (for a,b being Element of NAT holds o2.(a,b) = O(a,b))
-  holds o1 = o2 from BINOP_2:sch 2;
+ deffunc O(Nat,Nat)= $1 lcm $2;
+    let f1,f2 be BinOp of NAT such that
+A1: f1.(m,n)=m lcm n and
+A2: f2.(m,n)=m lcm n;
+    now let m,n be Element of NAT;
+      thus f1.(m,n) = m lcm n by A1 .= f2.(m,n) by A2;
+    end;
+  hence thesis by BINOP_1:2;
  end;
 end;
 
  reserve p,q,r for Element of LattStr (# NAT, lcmlat, hcflat #);
 
 definition let m be Element of LattStr (# NAT, lcmlat, hcflat #);
-  func @m -> Nat equals
+  func @m -> Element of NAT equals
   m;
   coherence;
 end;
@@ -315,16 +330,30 @@ existence
  proof
   defpred P[Nat] means 0 < $1;
   consider X being Subset of NAT such that
-A1: for n being Nat holds n in X iff P[n] from SUBSET_1:sch 3;
+A1: for n being Element of NAT holds n in X iff P[n] from SUBSET_1:sch 3;
   take X;
-  thus thesis by A1;
+  let n be Nat;
+  thus n in X implies 0 < n by A1;
+  n in NAT by ORDINAL1:def 13;
+  hence thesis by A1;
   end;
 uniqueness proof
-    defpred P[Nat] means 0 < $1;
-thus for X1,X2 being Subset of NAT st
-   (for y being Element of NAT holds y in X1 iff P[y]) &
-   (for y being Element of NAT holds y in X2 iff P[y]) holds
-  X1 = X2 from SUBSET_1:sch 2;
+let X, Y be Subset of NAT such that
+A1: for n being Nat holds n in X iff 0 < n and
+A2: for n being Nat holds n in Y iff 0 < n;
+    thus X c= Y
+    proof
+      let x be set;assume
+A3:   x in X;
+      then reconsider x as Nat by ORDINAL1:def 13;
+      0 < x by A1,A3;
+      hence thesis by A2;
+    end;
+    let x be set; assume
+A3: x in Y;
+    then reconsider x as Nat by ORDINAL1:def 13;
+    0 < x by A2,A3;
+    hence thesis by A1;
   end;
 end;
 
@@ -514,7 +543,7 @@ Lm11:
   set l=b"/\"c;
   set k=a"/\"b;
 A2:@a hcf @b=k & @k=k by Th70;
-A1:(@b hcf @c)=l & @l=l by Th70;
+   (@b hcf @c)=l & @l=l by Th70;
   hence a"/\"(b"/\"c) = @a hcf (@b hcf @c) by Th70
                 .= @k hcf @c by A2,NEWTON:61
                 .= (a"/\"b)"/\"c by Th70;
@@ -638,7 +667,7 @@ A4:  dom lcmlat = [:NAT,NAT:] by FUNCT_2:def 1;
     then A5: x in [:NATPLUS,NATPLUS:] by FUNCT_2:def 1;
     then consider y1,y2 being set such that A6: [y1,y2]=x by ZFMISC_1:102;
     y1 in NATPLUS & y2 in NATPLUS by A5,A6,ZFMISC_1:106;
-    then reconsider n=y1,k=y2 as Nat;
+    then reconsider n=y1,k=y2 as Nat by ORDINAL1:def 13;
     A7: lcmlat.(n,k) = n lcm k by Def4;
     reconsider n=y1,k=y2 as NatPlus by A5,A6,ZFMISC_1:106;
     lcmlatplus.(n,k)= lcmlat.(n,k) by A7,Def13;
@@ -661,7 +690,7 @@ A10: dom hcflat = [:NAT,NAT:] by FUNCT_2:def 1;
     then A11: x in [:NATPLUS,NATPLUS:] by FUNCT_2:def 1;
     then consider y1,y2 being set such that A12: [y1,y2]=x by ZFMISC_1:102;
     y1 in NATPLUS & y2 in NATPLUS by A11,A12,ZFMISC_1:106;
-    then reconsider n=y1,k=y2 as Nat;
+    then reconsider n=y1,k=y2 as Nat by ORDINAL1:def 13;
     A13: hcflat.(n,k) = n hcf k by Def3;
     reconsider n=y1,k=y2 as NatPlus by A11,A12,ZFMISC_1:106;
     hcflatplus.(n,k)= hcflat.(n,k) by A13,Def12;

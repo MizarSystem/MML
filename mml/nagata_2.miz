@@ -37,7 +37,7 @@ environ
       SEQM_3, SEQFUNC, PARTFUN1, JGRAPH_2, URYSOHN1, FINSEQ_3, FINSEQ_4,
       FINSOP_1, CANTOR_1, SETWISEO, PROB_1, URYSOHN3, WELLORD1, WELLORD2,
       TBSP_1, RELAT_1, RELAT_2, YELLOW_9, FUNCT_7, RSSPACE2, RSSPACE, BHSP_5,
-      XREAL_1, COMPLEX1, XXREAL_0;
+      XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1;
  schemes FUNCT_2, NAT_1, SEQFUNC, FRAENKEL, BINOP_1, PCOMPS_2;
 
 begin
@@ -50,7 +50,7 @@ definition
 coherence by FUNCT_2:7,TOPMETR:24;
 end;
 
- reserve i, j, k, m, n for Nat,
+ reserve i, j, k, m, n for Element of NAT,
    r, s, t for Real,
    rn for real number,
    x, y, z, xy, X for set,
@@ -70,7 +70,7 @@ theorem Th1:
   for i st i>0 ex n,m st i=(2|^n)*(2*m+1)
 proof
   let i such that A1:i>0;
-  defpred N[Nat] means
+  defpred N[Element of NAT] means
   for k st 1<=k & k<=$1 ex n,m st k=(2|^n)*(2*m+1);
 A2:N[0];
 A3:for i st N[i] holds N[i + 1]
@@ -85,15 +85,17 @@ A3:for i st N[i] holds N[i + 1]
       suppose A7:k=i+1 & i>0;
         per cases by NAT_1:62;
         suppose k mod 2=1;
-          then consider m such that
+          then consider m being Nat such that
        A8:k = 2 * m + 1 & 1<2 by NAT_1:def 2;
+          reconsider m as Element of NAT by ORDINAL1:def 13;
           1=2|^0 by NEWTON:9;
           then k=(2|^0)*(2*m+1) by A8;
           hence ex n,m st k=(2|^n)*(2*m+1);
         end;
         suppose k mod 2=0;
-          then consider j such that
+          then consider j being Nat such that
 A9:       k = 2 * j + 0 & 0<2 by NAT_1:def 2;
+          reconsider j as Element of NAT by ORDINAL1:def 13;
           j<>0 by A7,A9;
           then A10:j>=1 by NAT_1:39;
           j<=i
@@ -131,7 +133,7 @@ A1:for n,m be Element of NAT holds (2|^n)*(2*m+1)-1 in NAT
     let n,m be Element of NAT;
     0 < 2|^n & 0< 2*m+1 by NEWTON:102;
     then 0<((2|^n)*(2*m+1)) by REAL_2:122;
-    then ((2|^n)*(2*m+1))-1 is Nat by NAT_1:60;
+    then ((2|^n)*(2*m+1))-1 is Element of NAT by NAT_1:60;
     hence thesis;
   end;
   consider NN being Function of [:NAT,NAT:],NAT such that
@@ -170,7 +172,7 @@ proof
    A2:n1 in NAT & m1 in NAT & [n1,m1]=nm1 by ZFMISC_1:def 2;
       consider n2,m2 be set such that
    A3:n2 in NAT & m2 in NAT & [n2,m2]=nm2 by A1,ZFMISC_1:def 2;
-      reconsider n1,n2,m1,m2 as Nat by A2,A3;
+      reconsider n1,n2,m1,m2 as Element of NAT by A2,A3;
       (2|^n1)*(2*m1+1)-1=PairFunc.nm1 & (2|^n2)*(2*m2+1)-1=PairFunc.nm2
         by A2,A3,Def1;
       then n1=n2 & m1=m2 by A1,CARD_4:52;
@@ -181,8 +183,8 @@ proof
   thus PairFunc is onto
   proof
     now let i be set; assume i in NAT; then
-      reconsider i'=i as Nat;
-      consider n, m be Nat such that
+      reconsider i'=i as Element of NAT;
+      consider n, m be Element of NAT such that
 A4:   i'+1=(2|^n) *(2*m+1) by Th1;
       i'-0=((2|^n) *(2*m+1))-1 & dom PairFunc = [:NAT,NAT:]
         by FUNCT_2:def 1,A4;
@@ -832,7 +834,7 @@ theorem Th12:
     for m st m<=n holds Partial_Sums(seq).m <= r * (m+1)
 proof
   let n,seq such that A1:for m st m<=n holds seq.m<=r;
-  defpred P[Nat] means $1<=n implies Partial_Sums(seq).$1<=r*($1+1);
+  defpred P[Element of NAT] means $1<=n implies Partial_Sums(seq).$1<=r*($1+1);
 A2:P[0]
   proof
     Partial_Sums(seq).0=seq.0& 0<=n by SERIES_1:def 1;
@@ -855,7 +857,7 @@ theorem Th13:
   for k holds abs(Partial_Sums(seq).k)<=Partial_Sums(abs(seq)).k
   proof
     set PS=Partial_Sums(seq),absPS=Partial_Sums(abs(seq));
-    defpred P[Nat] means abs(PS.$1)<=absPS.$1;
+    defpred P[Element of NAT] means abs(PS.$1)<=absPS.$1;
 A1: P[0]
   proof
     absPS.0=(abs seq).0 & (abs seq).0=abs(seq.0) by SEQ_1:16,SERIES_1:def 1;
@@ -953,7 +955,7 @@ A15:  for k being set st k in {0}\/Seg(n)
         proof
           let k be set; assume k in {0}\/Seg(n);then
           k in Seg(n) or k in {0} by XBOOLE_0:def 2;
-          then reconsider k as Nat by TARSKI:def 1;
+          then reconsider k as Element of NAT by TARSKI:def 1;
           consider f1 such that
 A16:      FS1.k=f1 & f1 is continuous & for p holds f1.p>=0 by A1;
           reconsider f1'=f1 as Function of T,R^1 by TOPMETR:24;
@@ -1088,7 +1090,7 @@ theorem Th15:
       FS2.n=pmet & pmet is_a_pseudometric_of cT & (for pq holds pmet.pq<=s)
       & for pmet' st pmet=pmet' holds pmet' is continuous;
     let pmet such that A2:for pq holds pmet.pq=Sum(Geo(#)(FS2#pq));
-    deffunc GF(Nat)=(Geo.$1)(#)(FS2.$1);
+    deffunc GF(Element of NAT)=(Geo.$1)(#)(FS2.$1);
     consider GeoF be Functional_Sequence of [:cT,cT:],REAL such that
 A3: for n holds GeoF.n = GF(n) from SEQFUNC:sch 1;
 A4: for n ex pmet1 st GeoF.n=pmet1 & pmet1 is_a_pseudometric_of cT
@@ -1173,7 +1175,7 @@ A17: for pq holds pmet.pq=Sum(GeoF#pq)
     proof
       let pq;
       now let z; assume z in NAT;then
-        reconsider k=z as Nat;
+        reconsider k=z as Element of NAT;
         consider pmet1 such that
 A18:    FS2.k=pmet1 & pmet1 is_a_pseudometric_of cT &
         (for pq holds pmet1.pq<=s)
@@ -1194,7 +1196,7 @@ A19: for pq,pq' st pq=pq' holds GeoF#pq=GeoF'#pq'
     proof
       let pq,pq' such that A20:pq=pq';
       now let x such that A21:x in NAT;
-        reconsider k=x as Nat by A21;
+        reconsider k=x as Element of NAT by A21;
         (GeoF#pq).k=GeoF.k.pq & (GeoF'#pq').k=GeoF'.k.pq' by SEQFUNC:def 11;
         hence (GeoF#pq).x=(GeoF'#pq').x by A20;
       end;
@@ -1348,7 +1350,8 @@ A10: for p,q holds pmet.(p,q)=0 implies p=q
       then s(#)Geo is summable & pmet.pq=pmet.(p,q) &
       for n holds 0<=(Geo(#)(FS2#pq)).n &
         (Geo(#)(FS2#pq)).n<=(s(#)Geo).n by A7,SERIES_1:13;
-      then A12:Geo(#)(FS2#pq) is summable & Sum(Geo(#)(FS2#pq))=0
+        then
+A12:    Geo(#)(FS2#pq) is summable & Sum(Geo(#)(FS2#pq))=0
         & for n holds 0<=(Geo(#)(FS2#pq)).n by A5,A11,SERIES_1:24;
       set Q={q};
       Q is closed & not p in Q by A1,A11,TARSKI:def 1,URYSOHN1:27;
@@ -1364,7 +1367,12 @@ A14:  FS2.n=pmet1 & pmet1 is_a_pseudometric_of cT &
         & dist(pmet1,p).:Q is non empty bounded_below
         by A14,Def3,Lm1,FUNCT_1:def 12;
       then A15:dist(pmet1,p).q>0 by SEQ_4:def 5;
-      (Geo(#)(FS2#pq)).n=0 & (1/2)|^n>0 by A12,NEWTON:102,RSSPACE:21;
+      now
+        let n be Nat;
+        n in NAT by ORDINAL1:def 13;
+        hence 0<=(Geo(#)(FS2#pq)).n by A12;
+      end;
+      then (Geo(#)(FS2#pq)).n=0 & (1/2)|^n>0 by A12,NEWTON:102,RSSPACE:21;
       then Geo.n *(FS2#pq).n=0 & Geo.n<>0 by PREPOWER:def 1,SEQ_1:12;
       then (FS2#pq).n=0 & FS2.n.pq=pmet1.(p,q) & pmet1.(p,q)=dist(pmet1,p).q
         by A14,Def2,XCMPLX_1:6;
@@ -1421,10 +1429,15 @@ FUNCT_1:def 12;
         then Geo is summable by SERIES_1:28;
         then s(#)Geo is summable & for k holds 0<=(Geo(#)(FS2#pa)).k &
           (Geo(#)(FS2#pa)).k<=(s(#)Geo).k by A7,SERIES_1:13;
-        then Geo(#)(FS2#pa) is summable & pmet.pa=pmet.(p,a)
+        then
+XX:     Geo(#)(FS2#pa) is summable & pmet.pa=pmet.(p,a)
           & for k holds 0<=(Geo(#)(FS2#pa)).k by SERIES_1:24;
+          now let k be Nat;
+            k in NAT by ORDINAL1:def 13;
+            hence 0<=(Geo(#)(FS2#pa)).k by XX;
+          end;
         then (Geo(#)(FS2#pa)).n <=Sum(Geo(#)(FS2#pa)) & rn=pmet.pa &
-          pmet is bounded_below by A26,A28,Def2,Lm1,RSSPACE2:4;
+          pmet is bounded_below by A26,A28,Def2,Lm1,RSSPACE2:4,XX;
         then rn>=(Geo(#)(FS2#pa)).n & inf(dist(pmet,p).:A)=0 by A5,A21,Def3;
         then A29:(Geo(#)(FS2#pa)).n <r/2 by A27,XXREAL_0:2;
         A c= Cl A by PRE_TOPC:48;
@@ -1858,7 +1871,8 @@ A66:   for f be FinSequence of Funcs(cTT,REAL),p,q,p1,q1 be Point of T
 A70:         F.1 = f.1 & (for n st 0 <> n & n < len f holds
              F.(n + 1) = ADD.(F.n,f.(n + 1))) & ADD"**"f = F.(len f)
                by FINSOP_1:def 1;
-             defpred R[Nat] means $1<>0 & $1<=len f implies F.$1.pq=0;
+             defpred R[Element of NAT] means
+              $1<>0 & $1<=len f implies F.$1.pq=0;
 A71:         R[0];
 A72:         for k holds R[k] implies R[k+1]
              proof
@@ -1987,7 +2001,7 @@ A97:   ANoNoiS2.(p1,q1)>=0
 A100:       F.1 = N.1 & (for n st 0 <> n & n < len N holds
              F.(n + 1) = ADD.(F.n,N.(n + 1))) & ADD "**" N=F.(len N)
               by FINSOP_1:def 1;
-           defpred R[Nat] means $1<>0 & $1<=len N implies
+           defpred R[Element of NAT] means $1<>0 & $1<=len N implies
              for Fn be RealMap of [:T,T:] st Fn=F.$1 holds Fn.(p1,q1)>=0;
        A101:R[0];
        A102:for k holds R[k] implies R[k+1]
@@ -2093,7 +2107,8 @@ A112:      SumFdist1=SumFdist.pq1 & SumFdist2 = SumFdist.pq2;then
           A116:F.1 = SF.1 & (for n st 0 <> n & n < len SF holds
               F.(n + 1) = ADD.(F.n,SF.(n + 1))) & ADD"**"SF = F.(len SF)
                 by FINSOP_1:def 1;
-              defpred R[Nat] means $1<>0 & $1<=len SF implies F.$1.pp=0;
+              defpred R[Element of NAT] means
+               $1<>0 & $1<=len SF implies F.$1.pp=0;
           A117:R[0];
           A118:for k holds R[k] implies R[k+1]
               proof
@@ -2156,7 +2171,7 @@ ABSVALUE:7;
           A128:F.1 = SFpr.1 & (for n st 0 <> n & n < len SFpr holds
                    F.(n+1)=ADD.(F.n,SFpr.(n+1))) & ADD"**"SFpr=F.(len SFpr)
                    by FINSOP_1:def 1;
-              defpred T[Nat] means $1<>0 & $1<=len SFpr implies
+              defpred T[Element of NAT] means $1<>0 & $1<=len SFpr implies
                 for F' be RealMap of [:T,T:] st F'=F.$1 holds
                                                      F'.pr<=F'.pq+F'.rq;
           A129:T[0];
@@ -2265,7 +2280,7 @@ A149:    for k st k <>0 & k <=len SF
           then f.(p,q)=abs(fd.p-fd.q) by A29;
           hence thesis by COMPLEX1:132;
         end;
-        defpred P[Nat] means
+        defpred P[Element of NAT] means
           for k st k<>0 & k<=$1 & $1<=len SF
             for fk,Fn be RealMap of [:T,T:] st fk=SF.k & Fn=F.$1
               holds fk.pq<=Fn.pq;
@@ -2326,7 +2341,7 @@ A162:    for i holds P[i] from NAT_1:sch 1(A153,A154);
         consider k be set such that
 A164:    k in dom SF & SF.k=Fdist.FnB by A147,FUNCT_1:def 5;
 A165:    k in Seg(len SF) by A164,FINSEQ_1:def 3;
-        then reconsider k as Nat;
+        then reconsider k as Element of NAT;
         k<>0 & k <=len SF & FdistFnB = SF.k & ASF=F.(len SF) by A148,A164
 ,A165,FINSEQ_1:3;
         hence thesis by A142,A143,A162,A163;
@@ -2369,7 +2384,7 @@ A173:  NN[n,m,pmet'] by A6,A172;
       thus pmet' in Funcs(cTT,REAL) by FUNCT_2:11;
       take pm = pmet';
       thus pm = pmet';
-      let n1,m1 be Nat; assume PairFunc".k=[n1,m1];then
+      let n1,m1 be Element of NAT; assume PairFunc".k=[n1,m1];then
       [n1,m1]=[n,m] by A170,A171,A172,FUNCT_1:54;
       then n1=n & m1=m by ZFMISC_1:33;
       hence thesis by A173;
@@ -2514,8 +2529,8 @@ A8:   y in W & W in {Ball(c,1/2) where c is Point of PM:
      hence thesis;
    end;
    then reconsider UB as Subset-Family of PM;
-   deffunc F1(Point of PM,Nat)=Ball($1,1/(2|^($2+1)));
-   defpred Q1[Point of PM,Subset of PM,Nat] means
+   deffunc F1(Point of PM,Element of NAT)=Ball($1,1/(2|^($2+1)));
+   defpred Q1[Point of PM,Subset of PM,Element of NAT] means
    $1 in $2\PartUnion($2,Mn) & Ball($1,3/(2|^($3+1)))c= $2;
    defpred P1[set] means $1 in FX;
    consider Un be Function of NAT,bool bool cPM such that
@@ -2558,7 +2573,8 @@ A11:       A=union{Ball(c,1/2) where c is Point of PM:
            hence A is open by PRE_TOPC:def 5;
          end;
          suppose n>0;
-           then consider m such that A12:n=m+1 by NAT_1:22;
+           then consider m being Nat such that A12:n=m+1 by NAT_1:22;
+           reconsider m as Element of NAT by ORDINAL1:def 13;
            A in {union{F1(c,m) where c is Point of PM:Q1[c,V,m]&
                        not c in union{union (Un.k): k <= m}}
                  where V is Subset of PM: P1[V]} by A9,A10,A12;
@@ -2606,8 +2622,8 @@ A14:Mn well_orders FX by A5,A6,PCOMPS_2:5;
          reconsider x'=x as Element of PM by A1,A16,PCOMPS_2:8;
          consider r such that
      A20:r>0 & Ball(x',r) c= X by A18,A19,PCOMPS_1:def 5;
-         defpred P3[Nat] means 3/(2 |^ $1) <= r;
-     A21:ex k be Nat st P3[k] by A20,PREPOWER:106;
+         defpred P3[Element of NAT] means 3/(2 |^ $1) <= r;
+     A21:ex k be Element of NAT st P3[k] by A20,PREPOWER:106;
          consider k such that
      A22:P3[k] & for i st P3[i] holds k <= i from NAT_1:sch 5(A21);
      A23:2|^(k+1)=2|^k*2 & 2|^k > 0 by NEWTON:11,PREPOWER:13;
@@ -2615,9 +2631,9 @@ A14:Mn well_orders FX by A5,A6,PCOMPS_2:5;
          then 3/2 |^(k+1) <= 3/2|^k by A23,REAL_2:201;
          then A24:3/2 |^(k+1) <= r by A22,XXREAL_0:2;
          assume A25:not x in union Union Un';
-     A26:for V be set,n be Nat st V in Un'.n holds not x in V
+     A26:for V be set,n be Element of NAT st V in Un'.n holds not x in V
          proof
-           let V be set,n be Nat; assume V in Un'.n;then
+           let V be set,n be Element of NAT; assume V in Un'.n;then
            V in Union Un by PROB_1:25;
            hence thesis by A25,TARSKI:def 4;
          end;
@@ -2666,7 +2682,7 @@ WELLORD1:def 5;
            hence thesis by A30,TARSKI:def 4;
          end;
          W in {union{F1(y,k)where y is Point of PM: Q1[y,V,k] &
-                 not y in union {union(Un.q) where q is Nat: q <= k}}
+         not y in union {union(Un.q) where q is Element of NAT: q <= k}}
                  where V is Subset of PM: V in FX} by A18;
          then W in Un'.(k+1) by A9;
          hence thesis by A26,A29;
@@ -2708,7 +2724,8 @@ WELLORD1:def 5;
             hence thesis;
           end;
           suppose n>0;
-            then consider m such that A41:n=m+1 by NAT_1:22;
+            then consider m being Nat such that A41:n=m+1 by NAT_1:22;
+            reconsider m as Element of NAT by ORDINAL1:def 13;
             X in {union{F1(c,m) where c is Point of PM:Q1[c,V,m] &
                         not c in union{union (Un.k): k <= m}}
                   where V is Subset of PM: P1[V]} by A9,A38,A41;
@@ -2823,7 +2840,8 @@ A56:            Bb=Ball(cb,1/2) & cb in W\PartUnion(W,Mn) &
                 hence A=B by A51,A54;
               end;
               suppose n>0;
-                then consider m such that A59:n=m+1 by NAT_1:22;
+                then consider m being Nat such that A59:n=m+1 by NAT_1:22;
+                reconsider m as Element of NAT by ORDINAL1:def 13;
                 A in {union{F1(c,m) where c is Point of PM:Q1[c,V,m]
                             & not c in union{union (Un.k): k <= m}}
                       where V is Subset of PM: P1[V]} by A9,A45,A59;
@@ -2911,7 +2929,7 @@ A3: TPM = TopStruct (#the carrier of PM,Family_open_set PM#)
   A5:for k be set st k in NAT holds BALL(k) in bool bool the carrier of T
      proof
        let k be set; assume k in NAT;then
-       reconsider k as Nat;
+       reconsider k as Element of NAT;
        BALL(k) c= bool the carrier of T
        proof
          let B be set such that A6:B in BALL(k);
@@ -2983,7 +3001,7 @@ A16:for n be Element of NAT holds U[n,Un.n] from FUNCT_2:sch 3(A9);
 A17:for k be set st k in NAT ex Ux be set st Ux in bbcT & X[k,Ux]
   proof
     let k be set; assume k in NAT;then
-    reconsider k'=k as Nat;
+    reconsider k'=k as Element of NAT;
 A18:PairFunc is onto one-to-one by Th2,FUNCT_2:def 4;
     then NAT =rng PairFunc by FUNCT_2:def 3;
     then consider nm be set such that
@@ -2993,7 +3011,7 @@ A20:n in NAT & m in NAT & nm=[n,m] by A19,ZFMISC_1:def 2;
     Un.n in Funcs(NAT,bbcT) by A20,FUNCT_2:7;
     then reconsider Unn=Un.n as FamilySequence of T by FUNCT_2:121;
     take Ux=Unn.m;
-    now let n1,m1 be Nat such that A21:PairFunc.[n1,m1]=k;
+    now let n1,m1 be Element of NAT such that A21:PairFunc.[n1,m1]=k;
       now let Unn be FamilySequence of T such that A22:Unn=Un.n1;
         [n,m]=[n1,m1] by A18,A19,A20,A21,FUNCT_2:25;
         then n1=n & m=m1 by ZFMISC_1:33;

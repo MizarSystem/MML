@@ -24,13 +24,13 @@ environ
  theorems TARSKI, REAL_1, NAT_1, ABSVALUE, SEQ_1, SEQ_2, SEQM_3, SEQ_4,
       SQUARE_1, RFUNCT_1, RFUNCT_2, PROB_1, RCOMP_1, FUNCT_1, FUNCT_2, XREAL_0,
       XBOOLE_0, XBOOLE_1, REAL_2, FINSEQ_2, XCMPLX_0, XCMPLX_1, XREAL_1,
-      FUNCOP_1, COMPLEX1, XXREAL_0;
+      FUNCOP_1, COMPLEX1, XXREAL_0, ORDINAL1;
  schemes SEQ_1, RCOMP_1;
 
 begin
 
  reserve r,r1,r2,g,g1,g2 for real number,
-         n,m,k for Nat,
+         n,m,k for Element of NAT,
          seq,seq1,seq2 for Real_Sequence,
          f,f1,f2 for PartFunc of REAL,REAL;
 
@@ -55,7 +55,7 @@ proof assume A1: rng seq c=dom(f1(#)f2);
 end;
 
 definition let n,m;
-  redefine func max(n,m) -> Nat;
+  redefine func max(n,m) -> Element of NAT;
   coherence by FINSEQ_2:1;
 end;
 
@@ -406,7 +406,7 @@ proof assume that
  A1: seq is_not_0 & seq is convergent & lim seq=0 & seq is non-decreasing and
  A2: ex n st not seq.n<0; consider n such that A3: not seq.n<0 by A2;
      now per cases by A3;
- suppose A4: 0<seq.n; then consider n1 be Nat such that
+ suppose A4: 0<seq.n; then consider n1 be Element of NAT such that
   A5: for m st n1<=m holds abs(seq.m-0)<seq.n by A1,SEQ_2:def 7;
       n1<=n1+n by NAT_1:37; then A6: abs(seq.(n1+n)-0)<seq.n by A5;
   A7: n<=n1+n by NAT_1:37; then 0<seq.(n1+n) by A1,A4,SEQM_3:12;
@@ -426,7 +426,7 @@ proof assume that
  A2: ex n st not 0<seq.n; consider n such that A3: not 0<seq.n by A2;
      now per cases by A3;
  suppose A4: seq.n<0; then -0<-seq.n by XREAL_1:26;
-  then consider n1 be Nat such that
+  then consider n1 be Element of NAT such that
   A5: for m st n1<=m holds abs(seq.m-0)<-seq.n by A1,SEQ_2:def 7;
       n1<=n1+n by NAT_1:37; then A6: abs(seq.(n1+n)-0)<-seq.n by A5;
   A7: n<=n1+n by NAT_1:37; then seq.(n1+n)<0 by A1,A4,SEQM_3:14;
@@ -515,19 +515,21 @@ theorem Th34:
 proof
 thus seq^\k is divergent_to+infty implies seq is divergent_to+infty
  proof assume A1: seq^\k is divergent_to+infty; let r be Real;
-  consider n1 be Nat such that
+  consider n1 be Element of NAT such that
   A2: for m st n1<=m holds r<(seq^\k).m by A1,Def4;
   take n=n1+k; let m; assume n<=m; then consider n2 be Nat such that
   A3: m=n+n2 by NAT_1:28;
-  A4: n1+n2+k=m by A3;   n1<=n1+n2 by NAT_1:37
-; then r<(seq^\k).(n1+n2) by A2;
+  reconsider n2 as Element of NAT by ORDINAL1:def 13;
+  A4: n1+n2+k=m by A3;   n1<=n1+n2 by NAT_1:37;
+  then r<(seq^\k).(n1+n2) by A2;
   hence r<seq.m by A4,SEQM_3:def 9;
  end;
  assume A5: seq^\k is divergent_to-infty; let r be Real;
- consider n1 be Nat such that
+ consider n1 be Element of NAT such that
  A6: for m st n1<=m holds (seq^\k).m<r by A5,Def5;
  take n=n1+k; let m; assume n<=m; then consider n2 be Nat such that
  A7: m=n+n2 by NAT_1:28;
+ reconsider n2 as Element of NAT by ORDINAL1:def 13;
  A8: n1+n2+k=m by A7;   n1<=n1+n2 by NAT_1:37;
  then (seq^\k).(n1+n2)< r by A6;
  hence seq.m<r by A8,SEQM_3:def 9;
@@ -538,8 +540,10 @@ seq1 is divergent_to+infty & seq2 is divergent_to+infty implies
 seq1+seq2 is divergent_to+infty
 proof assume A1: seq1 is divergent_to+infty & seq2 is divergent_to+infty;
 let r be Real;
- consider n1 be Nat such that A2: for m st n1<=m holds r/2<seq1.m by A1,Def4;
- consider n2 be Nat such that A3: for m st n2<=m holds r/2<seq2.m by A1,Def4;
+ consider n1 be Element of NAT such that A2: for m st n1<=m holds r/2<seq1.m
+  by A1,Def4;
+ consider n2 be Element of NAT such that
+ A3: for m st n2<=m holds r/2<seq2.m by A1,Def4;
  take n=max(n1,n2); let m such that A4: n<=m;
  n1<=n by XXREAL_0:25; then n1<=m by A4,XXREAL_0:2; then
  A5: r/2<seq1.m by A2;
@@ -567,9 +571,11 @@ seq1 is divergent_to+infty & seq2 is divergent_to+infty implies
 seq1(#)seq2 is divergent_to+infty
 proof assume A1: seq1 is divergent_to+infty & seq2 is divergent_to+infty;
 let r be Real;
- consider n1 be Nat such that A2: for m st n1<=m holds sqrt abs(r)<seq1.m
+ consider n1 be Element of NAT such that
+ A2: for m st n1<=m holds sqrt abs(r)<seq1.m
   by A1,Def4;
- consider n2 be Nat such that A3: for m st n2<=m holds sqrt abs(r)<seq2.m
+ consider n2 be Element of NAT such that
+ A3: for m st n2<=m holds sqrt abs(r)<seq2.m
   by A1,Def4; take n=max(n1,n2); let m such that A4: n<=m;
      n1<=n by XXREAL_0:25; then n1<=
 m by A4,XXREAL_0:2; then A5: sqrt abs(r)<seq1.m by A2;
@@ -588,8 +594,10 @@ seq1 is divergent_to-infty & seq2 is divergent_to-infty implies
 seq1+seq2 is divergent_to-infty
 proof assume A1: seq1 is divergent_to-infty & seq2 is divergent_to-infty;
 let r be Real;
- consider n1 be Nat such that A2: for m st n1<=m holds seq1.m<r/2 by A1,Def5;
- consider n2 be Nat such that A3: for m st n2<=m holds seq2.m<r/2 by A1,Def5;
+ consider n1 be Element of NAT such that
+ A2: for m st n1<=m holds seq1.m<r/2 by A1,Def5;
+ consider n2 be Element of NAT such that
+ A3: for m st n2<=m holds seq2.m<r/2 by A1,Def5;
  take n=max(n1,n2); let m such that A4: n<=m;
      n1<=n by XXREAL_0:25; then n1<=m by A4,XXREAL_0:2; then A5: seq1.m<r/2 by
 A2;
@@ -839,7 +847,7 @@ theorem
 seq1(#)seq2 is divergent_to+infty
 proof assume A1: seq1 is divergent_to+infty &
  seq2 is convergent & 0<lim seq2;
- then consider n1 be Nat such that
+ then consider n1 be Element of NAT such that
  A2: for m st n1<=m holds (lim seq2)/2<seq2.m by Th30;
      seq1^\n1 is subsequence of seq1 by SEQM_3:47;
  then A3: seq1^\n1 is divergent_to+infty by A1,Th53;
@@ -966,7 +974,7 @@ seq" is divergent_to+infty
 proof assume A1: seq is_not_0 & seq is convergent & lim seq=0;
  given k such that A2: for n st k<=n holds 0<seq.n; let r; set l=abs(r)+1;
      0<=abs(r) by COMPLEX1:132; then 0<l by Lm2;
-  then 0<l" by XREAL_1:124; then consider o be Nat such that
+  then 0<l" by XREAL_1:124; then consider o be Element of NAT such that
  A3: for n st o<=n holds abs(seq.n-0)<l" by A1,SEQ_2:def 7;
      r<=abs(r) by ABSVALUE:11;
  then A4: r<l by Lm2; take m=max(k,o); let n;
@@ -986,7 +994,7 @@ seq" is divergent_to-infty
 proof assume A1: seq is_not_0 & seq is convergent & lim seq=0;
  given k such that A2: for n st k<=n holds seq.n<0; let r; set l=abs(r)+1;
      0<=abs(r) by COMPLEX1:132; then 0<l by Lm2;
-  then 0<l" by XREAL_1:124; then consider o be Nat such that
+  then 0<l" by XREAL_1:124; then consider o be Element of NAT such that
  A3: for n st o<=n holds abs(seq.n-0)<l" by A1,SEQ_2:def 7;
      -abs(r)<=r by ABSVALUE:11;
  then A4: -abs(r)-1<r by Lm2; take m=max(k,o); let n;
@@ -1112,7 +1120,7 @@ proof thus f is convergent_in+infty implies
   ex r1 st r<r1 & r1 in dom f & abs(f.r1-g)>=g1;
   then consider g such that
   A3: 0<g & for r ex r1 st r<r1 & r1 in dom f & abs(f.r1-g2)>=g by A1,Def6;
-  defpred X[Nat,real number] means
+  defpred X[Element of NAT,real number] means
    $1<$2 & $2 in dom f & abs(f.$2-g2)>=g;
   A4: now let n; consider r such that A5: n<r & r in dom f &
   abs(f.r-g2)>=g by A3;
@@ -1166,7 +1174,7 @@ proof thus f is convergent_in-infty implies
   ex r1 st r1<r & r1 in dom f & abs(f.r1-g)>=g1;
   then consider g such that
   A3: 0<g & for r ex r1 st r1<r & r1 in dom f & abs(f.r1-g2)>=g by A1,Def9;
-  defpred X[Nat,real number] means
+  defpred X[Element of NAT,real number] means
    $2<-$1 & $2 in dom f & abs(f.$2-g2)>=g;
   A4: now let n; consider r such that
   A5: r<-n & r in dom f & abs(f.r-g2)>=g by A3;
@@ -1174,7 +1182,7 @@ proof thus f is convergent_in-infty implies
    take r; thus X[n,r] by A5;
   end; consider s be Real_Sequence such that
   A6: for n holds X[n,s.n] from RCOMP_1:sch 1(A4);
- deffunc U(Nat) = -$1;
+ deffunc U(Element of NAT) = -$1;
   consider s1 be Real_Sequence such that
   A7: for n holds s1.n=U(n) from SEQ_1:sch 1;
   A8: s1 is divergent_to-infty by A7,Th48;
@@ -1219,7 +1227,7 @@ proof thus f is divergent_in+infty_to+infty implies
   ex g st for r ex r1 st
   r<r1 & r1 in dom f & g>=f.r1; then consider g such that
   A2: for r ex r1 st r<r1 & r1 in dom f & g>=f.r1 by A1,Def7;
-  defpred X[Nat,real number] means
+  defpred X[Element of NAT,real number] means
    $1<$2 & $2 in dom f & g >= f.$2;
   A3: now let n; consider r such that
   A4: n<r & r in dom f & g>=f.r by A2;
@@ -1264,7 +1272,7 @@ proof thus f is divergent_in+infty_to-infty implies
   ex g st for r ex r1 st r<r1 & r1 in dom f & f.r1>=g;
   then consider g such that
   A2: for r ex r1 st r<r1 & r1 in dom f & f.r1>=g by A1,Def8;
-  defpred X[Nat,real number] means
+  defpred X[Element of NAT,real number] means
    $1<$2 & $2 in dom f & g <= f.$2;
   A3: now let n; consider r such that A4: n<r & r in dom f & f.r>=g by A2;
    reconsider r as real number;
@@ -1308,7 +1316,7 @@ proof thus f is divergent_in-infty_to+infty implies
   ex g st for r ex r1 st r1<r & r1 in dom f & g>=f.r1;
   then consider g such that
   A2: for r ex r1 st r1<r & r1 in dom f & g>=f.r1 by A1,Def10;
-  defpred X[Nat,real number] means
+  defpred X[Element of NAT,real number] means
    $2<-$1 & $2 in dom f & g >= f.$2;
   A3: now let n; consider r such that
   A4: r<-n & r in dom f & g>=f.r by A2;
@@ -1316,7 +1324,7 @@ proof thus f is divergent_in-infty_to+infty implies
    take r; thus X[n,r] by A4;
   end; consider s be Real_Sequence such that
   A5: for n holds X[n,s.n] from RCOMP_1:sch 1(A3);
- deffunc U(Nat) = -$1;
+ deffunc U(Element of NAT) = -$1;
   consider s1 be Real_Sequence such that
   A6: for n holds s1.n=U(n) from SEQ_1:sch 1;
   A7: s1 is divergent_to-infty by A6,Th48;
@@ -1356,7 +1364,7 @@ proof thus f is divergent_in-infty_to-infty implies
   ex g st for r ex r1 st r1<r & r1 in dom f & f.r1>=g;
   then consider g such that
   A2: for r ex r1 st r1<r & r1 in dom f & f.r1>=g by A1,Def11;
-  defpred X[Nat,real number] means
+  defpred X[Element of NAT,real number] means
    $2<-$1 & $2 in dom f & g <= f.$2;
   A3: now let n; consider r such that
   A4: r<-n & r in dom f & f.r>=g by A2;
@@ -1364,7 +1372,7 @@ proof thus f is divergent_in-infty_to-infty implies
    take r; thus X[n,r] by A4;
   end; consider s be Real_Sequence such that
   A5: for n holds X[n,s.n] from RCOMP_1:sch 1(A3);
- deffunc U(Nat) = -$1;
+ deffunc U(Element of NAT) = -$1;
   consider s1 be Real_Sequence such that
   A6: for n holds s1.n=U(n) from SEQ_1:sch 1;
   A7: s1 is divergent_to-infty by A6,Th48;
@@ -2304,7 +2312,7 @@ proof let g1,g2 such that
  f*seq is convergent & lim(f*seq)=g1 and
  A3: for seq st seq is divergent_to+infty & rng seq c= dom f holds
  f*seq is convergent & lim(f*seq)=g2;
-  defpred X[Nat,real number] means
+  defpred X[Element of NAT,real number] means
    $1<$2 & $2 in dom f;
  A4: now let n; consider g such that A5: n<g & g in dom f by A1,Def6;
    reconsider g as real number;
@@ -2335,7 +2343,7 @@ proof let g1,g2 such that
  f*seq is convergent & lim(f*seq)=g1 and
  A3: for seq st seq is divergent_to-infty & rng seq c= dom f holds
  f*seq is convergent & lim(f*seq)=g2;
-  defpred X[Nat,real number] means
+  defpred X[Element of NAT,real number] means
    $2<-$1 & $2 in dom f;
  A4: now let n; consider g such that A5: g<-n & g in dom f by A1,Def9;
    reconsider g as real number;
@@ -2343,7 +2351,7 @@ proof let g1,g2 such that
  end;
  consider s1 be Real_Sequence such that
  A6: for n holds X[n,s1.n] from RCOMP_1:sch 1(A4);
- deffunc U(Nat) = -$1;
+ deffunc U(Element of NAT) = -$1;
  consider s2 be Real_Sequence such that
  A7: for n holds s2.n=U(n) from SEQ_1:sch 1;
  A8: s2 is divergent_to-infty by A7,Th48;
@@ -2368,7 +2376,7 @@ for g1 st 0<g1 ex r st for r1 st r1<r & r1 in dom f holds abs(f.r1-g)<g1
  proof assume A2: lim_in-infty f=g;
   given g1 such that
   A3: 0<g1 & for r ex r1 st r1<r & r1 in dom f & abs(f.r1-g)>=g1;
-  defpred X[Nat,real number] means
+  defpred X[Element of NAT,real number] means
    $2<-$1 & $2 in dom f & abs(f.$2-g)>=g1;
   A4: now let n; consider r such that
   A5: r<-n & r in dom f & abs(f.r-g)>=g1 by A3;
@@ -2376,7 +2384,7 @@ for g1 st 0<g1 ex r st for r1 st r1<r & r1 in dom f holds abs(f.r1-g)<g1
    take r; thus X[n,r] by A5;
   end; consider s be Real_Sequence such that
   A6: for n holds X[n,s.n] from RCOMP_1:sch 1(A4);
- deffunc U(Nat) = -$1;
+ deffunc U(Element of NAT) = -$1;
   consider s1 be Real_Sequence such that
   A7: for n holds s1.n=U(n) from SEQ_1:sch 1;
   A8: s1 is divergent_to-infty by A7,Th48;
@@ -2418,7 +2426,7 @@ for g1 st 0<g1 ex r st for r1 st r<r1 & r1 in dom f holds abs(f.r1-g)<g1
  proof assume A2: lim_in+infty f=g;
   given g1 such that
   A3: 0<g1 & for r ex r1 st r<r1 & r1 in dom f & abs(f.r1-g)>=g1;
-  defpred X[Nat,real number] means
+  defpred X[Element of NAT,real number] means
    $1<$2 & $2 in dom f & abs(f.$2-g)>=g1;
   A4: now let n; consider r such that
   A5: n<r & r in dom f & abs(f.r-g)>=g1 by A3;
@@ -3213,7 +3221,7 @@ proof assume A1: f1 is convergent_in+infty & f2 is convergent_in+infty;
      now per cases by A2;
  suppose A3: dom f1/\right_open_halfline(r)c=dom f2/\right_open_halfline(r) &
   for g st g in dom f1/\right_open_halfline(r) holds f1.g<=f2.g;
-  defpred X[Nat,real number] means
+  defpred X[Element of NAT,real number] means
    $1<$2 & $2 in dom f1/\right_open_halfline r;
   A4: now let n; consider g such that A5: n+abs(r)<g & g in dom f1 by A1,Def6;
    reconsider g as real number;
@@ -3250,7 +3258,7 @@ RFUNCT_2:21;
  end;
  suppose A16: dom f2/\right_open_halfline(r)c=dom f1/\right_open_halfline(r) &
   for g st g in dom f2/\right_open_halfline(r) holds f1.g<=f2.g;
-  defpred X[Nat,real number] means
+  defpred X[Element of NAT,real number] means
    $1<$2 & $2 in dom f2/\right_open_halfline r;
   A17: now let n; consider g such that
   A18: n+abs(r)<g & g in dom f2 by A1,Def6;
@@ -3306,7 +3314,7 @@ proof assume A1: f1 is convergent_in-infty & f2 is convergent_in-infty;
      now per cases by A2;
  suppose A3: dom f1/\left_open_halfline(r)c=dom f2/\left_open_halfline(r) &
   for g st g in dom f1/\left_open_halfline(r) holds f1.g<=f2.g;
-  defpred X[Nat,real number] means
+  defpred X[Element of NAT,real number] means
    $2<-$1 & $2 in dom f1/\left_open_halfline r;
   A4: now let n; consider g such that A5: g<-n-abs(r) & g in dom f1 by A1,Def9;
    reconsider g as real number;
@@ -3319,7 +3327,7 @@ proof assume A1: f1 is convergent_in-infty & f2 is convergent_in-infty;
    hence X[n,g] by A5,A6,XXREAL_0:2,XBOOLE_0:def 3;
   end; consider s2 be Real_Sequence such that
   A8: for n holds X[n,s2.n] from RCOMP_1:sch 1(A4);
- deffunc U(Nat) = -$1;
+ deffunc U(Element of NAT) = -$1;
   consider s1 be Real_Sequence such that
   A9: for n holds s1.n=U(n) from SEQ_1:sch 1;
   A10: s1 is divergent_to-infty by A9,Th48;
@@ -3346,7 +3354,7 @@ RFUNCT_2:21;
  end;
  suppose A17: dom f2/\left_open_halfline(r)c=dom f1/\left_open_halfline(r) &
   for g st g in dom f2/\left_open_halfline(r) holds f1.g<=f2.g;
-  defpred X[Nat,real number] means
+  defpred X[Element of NAT,real number] means
    $2<-$1 & $2 in dom f2/\left_open_halfline r;
   A18: now let n; consider g such that
   A19: g<-n-abs(r) & g in dom f2 by A1,Def9;
@@ -3360,7 +3368,7 @@ in {g2: g2<r};
    hence X[n,g] by A19,A20,XXREAL_0:2,XBOOLE_0:def 3;
   end; consider s2 be Real_Sequence such that
   A22: for n holds X[n,s2.n] from RCOMP_1:sch 1(A18);
- deffunc U(Nat) = -$1;
+ deffunc U(Element of NAT) = -$1;
   consider s1 be Real_Sequence such that
   A23: for n holds s1.n=U(n) from SEQ_1:sch 1;
   A24: s1 is divergent_to-infty by A23,Th48;

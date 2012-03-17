@@ -14,36 +14,36 @@ environ
  constructors XXREAL_0, NAT_1, RAT_1, SEQ_1, FINSEQ_4, POWER, BINARITH,
       EULER_2, RADIX_1;
  registrations INT_1, RELSET_1, XREAL_0, WSIERP_1, MEMBERED, ORDINAL1,
-      XXREAL_0;
+      XXREAL_0, NAT_1, NEWTON;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin :: Some Useful Theorems
 
-reserve k for Nat;
+reserve k for Element of NAT;
 
 theorem :: RADIX_2:1
-  for a be Nat holds a mod 1 = 0;
+  for a be Element of NAT holds a mod 1 = 0;
 
 theorem :: RADIX_2:2
-  for a,b be Integer, n be Nat st n>0 holds
+  for a,b be Integer, n be Element of NAT st n>0 holds
     ((a mod n)+(b mod n)) mod n = (a + (b mod n)) mod n;
 
 theorem :: RADIX_2:3
-  for a,b be Integer, n be Nat st n>0 holds
+  for a,b be Integer, n be Element of NAT st n>0 holds
     (a*b) mod n = (a*(b mod n)) mod n;
 
 theorem :: RADIX_2:4
-  for a,b,i be Nat st 1 <= i & 0 < b holds
+  for a,b,i be Element of NAT st 1 <= i & 0 < b holds
     (a mod (b |^ i)) div (b |^ (i -'1)) = (a div (b |^ (i -'1))) mod b;
 
 theorem :: RADIX_2:5
-  for i,n be Nat st i in Seg n holds i+1 in Seg (n+1);
+  for i,n be Element of NAT st i in Seg n holds i+1 in Seg (n+1);
 
 begin :: Properties of Addition operation using radix-2^k SD numbers
 
 theorem :: RADIX_2:6
-  for k be Nat holds Radix(k) > 0;
+  for k be Element of NAT holds Radix(k) > 0;
 
 theorem :: RADIX_2:7
   for x be Tuple of 1,k-SD holds SDDec(x) = DigA(x,1);
@@ -53,19 +53,19 @@ theorem :: RADIX_2:8
     SD_Add_Data(x,k) + SD_Add_Carry(x)*Radix(k) = x;
 
 theorem :: RADIX_2:9
-  for n be Nat
+  for n be Element of NAT
     for x be Tuple of (n+1),k-SD, xn be Tuple of n,k-SD st
-      (for i be Nat st i in Seg n holds x.i = xn.i) holds
+      (for i be Element of NAT st i in Seg n holds x.i = xn.i) holds
         Sum DigitSD(x) = Sum(DigitSD(xn)^<*SubDigit(x,n+1,k)*>);
 
 theorem :: RADIX_2:10
-  for n be Nat
+  for n be Element of NAT
     for x be Tuple of (n+1),k-SD, xn be Tuple of n,k-SD st
-      (for i be Nat st i in Seg n holds x.i = xn.i) holds
+      (for i be Element of NAT st i in Seg n holds x.i = xn.i) holds
         SDDec(xn) + (Radix(k) |^ n)*DigA(x,n+1) = SDDec(x);
 
 theorem :: RADIX_2:11
-     for n be Nat st n >= 1 holds
+     for n be Element of NAT st n >= 1 holds
     for x,y be Tuple of n,k-SD st k >= 2 holds
       SDDec(x '+' y) + SD_Add_Carry(DigA(x,n) + DigA(y,n))
         *(Radix(k) |^ n) = SDDec(x) + SDDec(y);
@@ -73,81 +73,75 @@ theorem :: RADIX_2:11
 begin :: Definitions on the relation between a FinSequence of k-SD and
       :: a FinSequence of NAT and some properties about them
 
-definition let i,k,n be Nat, x be Tuple of n,NAT;
+definition let i,k,n be Element of NAT, x be Tuple of n,NAT;
   func SubDigit2(x,i,k) -> Element of NAT equals
 :: RADIX_2:def 1
-
     (Radix(k) |^ (i -'1))*(x.i);
 end;
 
-definition let n,k be Nat, x be Tuple of n,NAT;
+definition let n,k be Element of NAT, x be Tuple of n,NAT;
   func DigitSD2(x,k) -> Tuple of n,NAT means
 :: RADIX_2:def 2
-
-    for i be Nat st i in Seg n holds it/.i = SubDigit2(x,i,k);
+    for i be Element of NAT st i in Seg n holds it/.i = SubDigit2(x,i,k);
 end;
 
-definition let n,k be Nat, x be Tuple of n,NAT;
-  func SDDec2(x,k) -> Nat equals
+definition let n,k be Element of NAT, x be Tuple of n,NAT;
+  func SDDec2(x,k) -> Element of NAT equals
 :: RADIX_2:def 3
-
     Sum DigitSD2(x,k);
 end;
 
-definition let i,k,x be Nat;
-  func DigitDC2(x,i,k) -> Nat equals
+definition let i,k,x be Element of NAT;
+  func DigitDC2(x,i,k) -> Element of NAT equals
 :: RADIX_2:def 4
-
     (x mod (Radix(k) |^ i)) div (Radix(k) |^ (i -'1));
 end;
 
-definition let k,n,x be Nat;
+definition let k,n,x be Element of NAT;
   func DecSD2(x,n,k) -> Tuple of n,NAT means
 :: RADIX_2:def 5
-
-    for i be Nat st i in Seg n holds it.i = DigitDC2(x,i,k);
+    for i be Element of NAT st i in Seg n holds it.i = DigitDC2(x,i,k);
 end;
 
 theorem :: RADIX_2:12
-  for n,k be Nat, x be Tuple of n,NAT, y be Tuple of n,k-SD
+  for n,k be Element of NAT, x be Tuple of n,NAT, y be Tuple of n,k-SD
     st x = y holds DigitSD2(x,k) = DigitSD(y);
 
 theorem :: RADIX_2:13
-  for n,k be Nat, x be Tuple of n,NAT, y be Tuple of n,k-SD
+  for n,k be Element of NAT, x be Tuple of n,NAT, y be Tuple of n,k-SD
     st x = y holds SDDec2(x,k) = SDDec(y);
 
 theorem :: RADIX_2:14
-  for x,n,k be Nat holds DecSD2(x,n,k) = DecSD(x,n,k);
+  for x,n,k be Element of NAT holds DecSD2(x,n,k) = DecSD(x,n,k);
 
 theorem :: RADIX_2:15
-  for n be Nat st n >= 1 holds
-    for m,k be Nat st m is_represented_by n,k holds
+  for n be Element of NAT st n >= 1 holds
+    for m,k be Element of NAT st m is_represented_by n,k holds
       m = SDDec2(DecSD2(m,n,k),k);
 
 begin :: Algorithm of calculation of (a*b) mod c based on
       :: radix-2^k SD numbers and its correctness
 
-definition let q be Integer, f,j,k,n be Nat, c be Tuple of n,k-SD;
+definition let q be Integer, f,j,k,n be Element of NAT, c be Tuple of n,k-SD;
   func Table1(q,c,f,j) -> Integer equals
 :: RADIX_2:def 6
-
     (q*DigA(c,j)) mod f;
 end;
 
-definition let q be Integer, k,f,n be Nat, c be Tuple of n,k-SD;
+definition let q be Integer, k,f,n be Element of NAT, c be Tuple of n,k-SD;
   assume n >= 1;
   func Mul_mod(q,c,f,k) -> Tuple of n,INT means
 :: RADIX_2:def 7
 
     it.1 = Table1(q,c,f,n) &
-    for i be Nat st 1 <= i & i <= n - 1 holds
+    for i be Element of NAT st 1 <= i & i <= n - 1 holds
       ex I1,I2 be Integer st I1 = it.i & I2 = it.(i+1) &
         I2 = (Radix(k)*I1+Table1(q,c,f,n -'i)) mod f;
 end;
 
 theorem :: RADIX_2:16
-  for n be Nat st n >= 1 holds
-    for q be Integer, ic,f,k be Nat
+  for n be Element of NAT st n >= 1 holds
+    for q be Integer, ic,f,k be Element of NAT
       st ic is_represented_by n,k & f > 0 holds
        for c be Tuple of n,k-SD st c = DecSD(ic,n,k) holds
          Mul_mod(q,c,f,k).n = (q * ic) mod f;
@@ -155,27 +149,27 @@ theorem :: RADIX_2:16
 begin :: Algorithm of calculation of (a^b) mod c based on
       :: radix-2^k SD numbers and its correctness
 
-definition let n,f,j,m be Nat, e be Tuple of n,NAT;
-  func Table2(m,e,f,j) -> Nat equals
+definition let n,f,j,m be Element of NAT, e be Tuple of n,NAT;
+  func Table2(m,e,f,j) -> Element of NAT equals
 :: RADIX_2:def 8
 
     (m |^ (e/.j)) mod f;
 end;
 
-definition let k,f,m,n be Nat, e be Tuple of n,NAT;
+definition let k,f,m,n be Element of NAT, e be Tuple of n,NAT;
   assume n >= 1;
   func Pow_mod(m,e,f,k) -> Tuple of n,NAT means
 :: RADIX_2:def 9
 
     it.1 = Table2(m,e,f,n) &
-    for i be Nat st 1 <= i & i <= n - 1 holds
-      ex i1,i2 be Nat st i1 = it.i & i2 = it.(i+1) &
+    for i be Element of NAT st 1 <= i & i <= n - 1 holds
+      ex i1,i2 be Element of NAT st i1 = it.i & i2 = it.(i+1) &
         i2 = (((i1 |^ Radix(k)) mod f) * Table2(m,e,f,n-'i)) mod f;
 end;
 
 theorem :: RADIX_2:17
-  for n be Nat st n >= 1 holds
-    for m,k,f,ie be Nat st ie is_represented_by n,k & f>0 holds
+  for n be Element of NAT st n >= 1 holds
+    for m,k,f,ie be Element of NAT st ie is_represented_by n,k & f>0 holds
       for e be Tuple of n,NAT st e = DecSD2(ie,n,k) holds
         Pow_mod(m,e,f,k).n = (m |^ ie) mod f;
 

@@ -9,9 +9,9 @@ environ
  vocabularies AMI_3, SCMPDS_2, AMI_1, SCMPDS_4, ARYTM_3, NAT_1, INT_1, INT_2,
       ABSVALUE, SCMPDS_3, AMI_2, ARYTM_1, CARD_1, SCMFSA6A, SCMFSA_7, FUNCT_1,
       RELAT_1, SCMPDS_1, FUNCOP_1, FUNCT_4, BOOLE, SCMP_GCD;
- notations XBOOLE_0, ENUMSET1, XCMPLX_0, RELAT_1, FUNCT_1, INT_1, NAT_1,
-      DOMAIN_1, STRUCT_0, FUNCT_4, AMI_1, AMI_2, AMI_3, SCMPDS_1, SCMPDS_2,
-      SCMPDS_3, CARD_1, SCMPDS_4, INT_2, XXREAL_0;
+ notations XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1, FUNCT_1,
+      INT_1, NAT_1, DOMAIN_1, STRUCT_0, FUNCT_4, AMI_1, AMI_2, AMI_3, SCMPDS_1,
+      SCMPDS_2, SCMPDS_3, CARD_1, SCMPDS_4, INT_2, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, SCMPDS_1, SCMPDS_4;
  registrations AMI_1, INT_1, SCMPDS_2, SCMFSA_4, FRAENKEL, NUMBERS, SETFAM_1,
       CARD_3, STRUCT_0;
@@ -20,7 +20,7 @@ environ
 
 begin :: Preliminaries
 
-reserve m,n for Nat,
+reserve m,n for Element of NAT,
         a,b for Int_position,
         i,j for Instruction of SCMPDS,
         s,s1,s2 for State of SCMPDS,
@@ -34,23 +34,23 @@ theorem :: SCMP_GCD:2
       i gcd j= j gcd (i mod j);
 
 theorem :: SCMP_GCD:3
-  for m being Nat,j being Integer st inspos m=j holds
+  for m being Element of NAT,j being Integer st inspos m=j holds
      inspos(m+2) = 2*(abs(j) div 2)+4;
 
-definition let k be Nat;
+definition let k be Element of NAT;
  func intpos k -> Int_position equals
 :: SCMP_GCD:def 1
   dl.k;
 end;
 
 theorem :: SCMP_GCD:4
- for n1,n2 be Nat st n1 <> n2 holds intpos n1 <> intpos n2;
+ for n1,n2 be Element of NAT st n1 <> n2 holds intpos n1 <> intpos n2;
 
 theorem :: SCMP_GCD:5
- for n1,n2 be Nat holds DataLoc(n1,n2) = intpos(n1+n2);
+ for n1,n2 be Element of NAT holds DataLoc(n1,n2) = intpos(n1+n2);
 
 theorem :: SCMP_GCD:6
- for s being State of SCMPDS,m1,m2 being Nat st IC s=inspos (m1+m2)
+ for s being State of SCMPDS,m1,m2 being Element of NAT st IC s=inspos (m1+m2)
  holds ICplusConst(s,-m2)=inspos m1;
 
 :: GBP:Global Base Pointer
@@ -143,7 +143,7 @@ theorem :: SCMP_GCD:16
   ex n st CurInstr (Computation s).n = return SBP &
    s.SBP=(Computation s).n.SBP & (Computation s).n.DataLoc(s.SBP,2)
    =s.DataLoc(s.SBP,2) gcd s.DataLoc(s.SBP,3) &
-   (for j be Nat st 1<j & j <= s.SBP+1 holds
+   (for j be Element of NAT st 1<j & j <= s.SBP+1 holds
        s.intpos j=(Computation s).n.intpos j);
 
 theorem :: SCMP_GCD:17
@@ -154,7 +154,7 @@ theorem :: SCMP_GCD:17
   ex n st CurInstr (Computation s).n = return SBP &
    s.SBP=(Computation s).n.SBP & (Computation s).n.DataLoc(s.SBP,2)
    =s.DataLoc(s.SBP,2) gcd s.DataLoc(s.SBP,3) &
-    (for j be Nat st 1<j & j <= s.SBP+1 holds
+    (for j be Element of NAT st 1<j & j <= s.SBP+1 holds
         s.intpos j=(Computation s).n.intpos j);
 
 begin :: The Correctness of Recursive Euclide Algorithm

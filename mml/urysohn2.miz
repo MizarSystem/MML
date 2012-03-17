@@ -20,7 +20,7 @@ environ
  definitions TARSKI, XBOOLE_0, PROB_1, LIMFUNC1;
  theorems TARSKI, NAT_1, REAL_1, REAL_2, SEQ_4, ABSVALUE, URYSOHN1, XREAL_0,
       SUPINF_1, SUPINF_2, MEASURE5, MEASURE6, INT_1, HEINE, INTEGRA2, XBOOLE_0,
-      XBOOLE_1, XCMPLX_0, XCMPLX_1, XREAL_1, XXREAL_0, NEWTON;
+      XBOOLE_1, XCMPLX_0, XCMPLX_1, XREAL_1, XXREAL_0, NEWTON, ORDINAL1;
  schemes REAL_1, NAT_1;
 
 begin
@@ -3004,12 +3004,12 @@ canceled 2;
 
 theorem Th23:
    for eps being Real st 0 < eps holds
-   ex n being Nat st 1 < 2|^n * eps
+   ex n being Element of NAT st 1 < 2|^n * eps
 proof
    let eps be Real;
    assume
 A1:0 < eps;
-   consider n being Nat such that
+   consider n being Element of NAT such that
 A2:1 / eps < n by SEQ_4:10;
       n <= 2|^n by HEINE:8;
    then 1/eps < 2|^n by A2,XXREAL_0:2;
@@ -3020,12 +3020,12 @@ end;
 
 theorem Th24:
    for a,b being Real st 0 <= a & 1 < b - a holds
-   ex n being Nat st a < n & n < b
+   ex n being Element of NAT st a < n & n < b
 proof
    let a,b be Real;
    assume
 A1:0 <= a & 1 < b - a;
-      assume A2: not ex n being Nat st a < n & n < b;
+      assume A2: not ex n being Element of NAT st a < n & n < b;
       defpred W1[Real] means $1 <= a & $1 in NAT;
       defpred W2[Real] means b <= $1 & $1 in NAT;
       consider N being Subset of REAL such that
@@ -3033,38 +3033,38 @@ A1:0 <= a & 1 < b - a;
       consider M being Subset of REAL such that
    A4:for n being Real holds n in M iff W2[n] from REAL_1:sch 1;
    A5:N \/ M c= REAL;
-         N c= NAT
+      N c= NAT
       proof
-            for n being set holds n in N implies n in NAT by A3;
+         for n being set holds n in N implies n in NAT by A3;
          hence thesis by TARSKI:def 3;
       end;
       then reconsider N as Subset of NAT;
-         M c= NAT
+      M c= NAT
       proof
-            for n being set holds n in M implies n in NAT by A4;
+         for n being set holds n in M implies n in NAT by A4;
          hence thesis by TARSKI:def 3;
       end;
       then reconsider M as Subset of NAT;
    A6:NAT = N \/ M
       proof
-            NAT c= N \/ M
+         NAT c= N \/ M
          proof
             consider A being Subset of REAL such that
          A7:A = N \/ M by A5;
-               0 in A & for x being Real st x in A holds x + 1 in A
+BB:         0 in A & for x being Real st x in A holds x + 1 in A
             proof
-               A8: 0 in N by A1,A3;
-                  for x being Real st x in A holds x + 1 in A
+           A8: 0 in N by A1,A3;
+               for x being Real st x in A holds x + 1 in A
                proof
                   let x be Real;
                   assume
-              A9:x in A;
-                     x + 1 in A
+               A9:x in A;
+                  x + 1 in A
                   proof
                      per cases by A7,A9,XBOOLE_0:def 2;
                      suppose x in N;
-                        then reconsider x as Nat;
-                           now per cases by A2;
+                      then reconsider x as Element of NAT;
+                       now per cases by A2;
                         case x + 1 <= a;
                            then x + 1 in N by A3;
                            hence thesis by A7,XBOOLE_0:def 2;
@@ -3077,8 +3077,8 @@ A1:0 <= a & 1 < b - a;
                         hence thesis;
                      end;
                      suppose x in M;
-                        then reconsider x as Nat;
-                           now per cases by A2;
+                        then reconsider x as Element of NAT;
+                        now per cases by A2;
                         case x + 1 <= a;
                            then x + 1 in N by A3;
                            hence thesis by A7,XBOOLE_0:def 2;
@@ -3095,16 +3095,22 @@ A1:0 <= a & 1 < b - a;
                end;
                hence thesis by A7,A8,XBOOLE_0:def 2;
             end;
-            then for k being set holds k in NAT implies k in A by NAT_1:2;
+            NAT c= A
+            proof
+              let x be set; assume x in NAT; then
+              reconsider x as Nat by ORDINAL1:def 13;
+              x in A by NAT_1:2,BB;
+              hence thesis;
+            end;
             hence thesis by A7,TARSKI:def 3;
          end;
          hence thesis by XBOOLE_0:def 10;
       end;
-         ex n being Nat st n in N & not n + 1 in N
+      ex n being Element of NAT st n in N & not n + 1 in N
       proof
          set n = [\ a /];
       A10:n <= a & a - 1 < n by INT_1:def 4;
-      A11:n is Nat
+      A11:n is Element of NAT
          proof
             per cases;
             suppose a < 1;
@@ -3119,7 +3125,7 @@ A1:0 <= a & 1 < b - a;
                end;
                case
                A13:0 < n;
-                  consider k being Nat such that
+                  consider k being Element of NAT such that
                A14:n = k or n = - k by INT_1:8;
                      now per cases by A14;
                   case n = k; hence thesis;
@@ -3136,11 +3142,11 @@ A1:0 <= a & 1 < b - a;
          end;
          end;
          A15: a +(- 1) + 1 < n + 1 by A10,XREAL_1:8;
-         reconsider n as Nat by A11;
+         reconsider n as Element of NAT by A11;
          take n;
          thus thesis by A3,A10,A15;
       end;
-      then consider n being Nat such that
+      then consider n being Element of NAT such that
    A16:n in N & not n + 1 in N;
    A17:n + 1 in M by A6,A16,XBOOLE_0:def 2;
 A18:  n + 1 - n = 1;
@@ -3152,12 +3158,11 @@ end;
 canceled 2;
 
 theorem
-      for n being Nat holds dyadic(n) c= DYADIC
+  for n being Element of NAT holds dyadic(n) c= DYADIC
 proof
-   let n be Nat;
-      for x being set holds x in dyadic(n) implies x in DYADIC by
-URYSOHN1:def 4
-;
+  let n be Element of NAT;
+  for x being set holds x in dyadic(n) implies x in DYADIC by
+URYSOHN1:def 4;
    hence thesis by TARSKI:def 3;
 end;
 
@@ -3170,13 +3175,13 @@ proof
 A1:a < b & 0 <= a & b <= 1;
    set eps = b - a;
   0 < eps by A1,XREAL_1:52;
-   then consider n being Nat such that
+   then consider n being Element of NAT such that
 A2:1 < 2|^n * eps by Th23;
    set aa = 2|^n * a, bb = 2|^n * b;
 A3:1 < bb - aa by A2;
 A4:0 < 2|^n by NEWTON:102;
    then 0 <= 2|^n * a by A1,REAL_2:121;
-   then consider m being Nat such that
+   then consider m being Element of NAT such that
 A5:aa < m & m < bb by A3,Th24;
   a < m / 2|^n & m / 2|^n < b by A4,A5,REAL_2:178;
     then m / 2|^n < 1 by A1,XXREAL_0:2;
@@ -3317,7 +3322,7 @@ A1:a = 0 & b = 1;
    assume
 A2:x in DYADIC;
    then reconsider x as Real;
-   consider n being Nat such that
+   consider n being Element of NAT such that
 A3:x in dyadic(n) by A2,URYSOHN1:def 4;
 A4:0 <= x & x <= 1 by A3,URYSOHN1:5;
    reconsider x as R_eal by XXREAL_0:def 1;
@@ -3326,29 +3331,31 @@ A4:0 <= x & x <= 1 by A3,URYSOHN1:5;
 end;
 
 theorem
-      for n,k being Nat st n <= k holds
+  for n,k being Element of NAT st n <= k holds
    dyadic(n) c= dyadic(k)
 proof
-   let n,k be Nat;
+   let n,k be Element of NAT;
    assume
 A1:n <= k;
-A2:for s being Nat holds dyadic(n) c= dyadic(n+s)
+A2:for s being Element of NAT holds dyadic(n) c= dyadic(n+s)
    proof
-   defpred P[Nat] means dyadic(n) c= dyadic(n+$1);
+   defpred P[Element of NAT] means dyadic(n) c= dyadic(n+$1);
    A3: P[0];
-   A4:for k being Nat st P[k] holds P[(k+1)]
+   A4:for k being Element of NAT st P[k] holds P[(k+1)]
       proof
-         let k be Nat;
+         let k be Element of NAT;
          assume
       A5:dyadic(n) c= dyadic(n+k);
       dyadic(n+k) c= dyadic(n+k+1) by URYSOHN1:11;
          hence thesis by A5,XBOOLE_1:1;
       end;
-       for k be Nat holds P[k] from NAT_1:sch 1(A3,A4);
+       for k be Element of NAT holds P[k] from NAT_1:sch 1(A3,A4);
       hence thesis;
    end;
-      ex s being Nat st k = n + s by A1,NAT_1:28;
-   hence thesis by A2;
+   consider s being Nat such that
+AA:  k = n + s by A1,NAT_1:28;
+   s in NAT by ORDINAL1:def 13;
+   hence thesis by AA,A2;
 end;
 
 theorem Th34: :: JGRAPH_1:31

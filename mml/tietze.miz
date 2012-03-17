@@ -141,7 +141,7 @@ registration
     set f = NAT --> 0;
     reconsider f as Real_Sequence by FUNCOP_1:57;
     take f;
-    for n being Nat holds f.n = 0 by FUNCOP_1:13;
+    for n being Element of NAT holds f.n = 0 by FUNCOP_1:13;
     hence f is summable by RSSPACE:20;
     thus f is constant proof take r = 0; thus thesis by FUNCOP_1:13; end;
     hence thesis by SEQ_4:39;
@@ -161,16 +161,16 @@ theorem
 
 theorem
   for f,g being summable Real_Sequence
-  st for n being Nat holds f.n <= g.n
+  st for n being Element of NAT holds f.n <= g.n
   holds Sum f <= Sum g
   proof
     let f,g be summable Real_Sequence;
 A1: Partial_Sums f is convergent & Partial_Sums g is convergent
     by SERIES_1:def 2;
 A2: Sum f = lim Partial_Sums f & Sum g = lim Partial_Sums g by SERIES_1:def 3;
-    assume for n being Nat holds f.n <= g.n; then
-    for n being Nat holds (Partial_Sums f).n <= (Partial_Sums g).n
-    by SERIES_1:17;
+    assume for n being Element of NAT holds f.n <= g.n; then
+    for n being Element of NAT holds
+      (Partial_Sums f).n <= (Partial_Sums g).n by SERIES_1:17;
     hence Sum f <= Sum g by A1,A2,SEQ_2:32;
   end;
 
@@ -184,11 +184,12 @@ theorem Th8:
 A1: Partial_Sums abs f is convergent & Partial_Sums f is convergent
     by SERIES_1:def 2; then
 A2: abs Partial_Sums f is convergent by SEQ_4:26;
-    defpred P[Nat] means (abs Partial_Sums f).$1 <= (Partial_Sums abs f).$1;
+    defpred P[Element of NAT] means
+       (abs Partial_Sums f).$1 <= (Partial_Sums abs f).$1;
     (abs Partial_Sums f).0 = abs ((Partial_Sums f).0) by SEQ_1:16
     .= abs (f.0) by SERIES_1:def 1 .= (abs f).0 by SEQ_1:16; then
 A3: P[0] by SERIES_1:def 1;
-A4: now let n be Nat;
+A4: now let n be Element of NAT;
       assume P[n]; then
       |.(Partial_Sums f).n.| <= (Partial_Sums abs f).n by SEQ_1:16; then
       |.(Partial_Sums f).n+f.(n+1).| <= |.(Partial_Sums f).n.|+|.f.(n+1).| &
@@ -204,7 +205,7 @@ A4: now let n be Nat;
       by SEQ_1:16;
       hence P[n+1] by SERIES_1:def 1;
     end;
-    for n being Nat holds P[n] from NAT_1:sch 1(A3,A4); then
+    for n being Element of NAT holds P[n] from NAT_1:sch 1(A3,A4); then
     lim abs Partial_Sums f <= lim Partial_Sums abs f by A1,A2,SEQ_2:32; then
     abs lim Partial_Sums f <= lim Partial_Sums abs f by A1,SEQ_4:27; then
     abs lim Partial_Sums f <= Sum abs f by SERIES_1:def 3;
@@ -226,9 +227,10 @@ A1: r < 1;
 A2: for n being natural number holds |.f.n-f.(n+1).| <= a*(r to_power n);
     deffunc S(Nat, Real) = f.($1+1)-f.$1;
     consider g being Function of NAT, REAL such that
-A3: g.0 = f.0 & for n being Nat holds g.(n+1) = S(n,g.n) from RECDEF_1:sch 4;
+A3: g.0 = f.0 & for n being Element of NAT holds
+      g.(n+1) = S(n,g.n) from RECDEF_1:sch 4;
     now
-      let n be Nat;
+      let n be Element of NAT;
       thus f.(n+1) = f.(n+1)-f.n+f.n
       .= f.n+g.(n+1) by A3;
     end; then
@@ -237,14 +239,15 @@ A5: |.r.| = r by COMPLEX1:129; then
 A6: r GeoSeq is summable by A1,SERIES_1:28; then
 A7: (a*r")(#)(r GeoSeq) is summable by SERIES_1:13;
 A8: now
-      let n be Nat;
+      let n be Element of NAT;
       (abs g).n = abs (g.n) by SEQ_1:16;
       hence 0 <= (abs g).n by COMPLEX1:132;
     end;
     now set m = 1;
-      let n be Nat; assume m <= n; then
+      let n be Element of NAT; assume m <= n; then
       consider k being Nat such that
 A9:   n = 1+k by NAT_1:28;
+      k in NAT by ORDINAL1:def 13; then
       g.n = S(k,g.k) by A3,A9; then
       (abs g).n = |.f.n-f.k.| by A9,SEQ_1:16
       .= |.f.k-f.n.| by COMPLEX1:146; then
@@ -262,11 +265,11 @@ A10:   (abs g).n <= a*(r to_power k) by A2,A9;
 A11: g is summable by SERIES_1:40;
     hence f is convergent by A4,SERIES_1:def 2;
     let n be natural number;
-    reconsider n' = n as Nat by ORDINAL1:def 13;
+    reconsider n' = n as Element of NAT by ORDINAL1:def 13;
     lim f = Sum g by A4,SERIES_1:def 3; then
 A12: lim f = f.n+Sum(g^\(n'+1)) by A11,A4,SERIES_1:18;
 A13: (a*(r to_power n))(#)(r GeoSeq) is summable by A6,SERIES_1:13;
-    now let k be Nat;
+    now let k be Element of NAT;
       (abs (g^\(n'+1))).k = |.(g^\(n'+1)).k.| by SEQ_1:16;
       hence 0 <= (abs (g^\(n'+1))).k by COMPLEX1:132;
       (abs (g^\(n'+1))).k = |.(g^\(n'+1)).k.| by SEQ_1:16
@@ -346,7 +349,7 @@ A6:   1-r > 0 by A2,XREAL_1:52; then
       p*(1-r) > 0 by A5,XREAL_1:131; then
 A7:   p*(1-r)/a > 0 by XREAL_1:141;
       1+log(r, p*(1-r)/a) is Real by XREAL_0:def 1; then
-      consider k being Nat such that
+      consider k being Element of NAT such that
 A8:   k >= 1+log(r, p*(1-r)/a) by MESFUNC1:11;
       k > log(r, p*(1-r)/a) by A8,XREAL_1:41; then
       r to_power k < r to_power log(r, p*(1-r)/a) by A2,POWER:45; then
@@ -356,7 +359,7 @@ A8:   k >= 1+log(r, p*(1-r)/a) by MESFUNC1:11;
       a*(r to_power k)/(1-r) < (p*(1-r))/(1-r) by A6,XREAL_1:76; then
 A9:   a*(r to_power k)/(1-r) < p by A6,XCMPLX_1:90;
       take k;
-      let n be Nat, x be Element of X;
+      let n be Element of NAT, x be Element of X;
       assume
 A10:   n>=k & x in Z; then
       n = k or n > k by XXREAL_0:1; then
@@ -366,7 +369,7 @@ A10:   n>=k & x in Z; then
 A11:   a*(r to_power n)/(1-r) <= a*(r to_power k)/(1-r) by XREAL_1:74;
       now
         let n be natural number;
-A12:     n is Nat & n+1 is Nat by ORDINAL1:def 13; then
+A12:     n in NAT & n+1 in NAT by ORDINAL1:def 13; then
         Z c= dom (F.n) & Z c= dom (F.(n+1)) by A1,SEQFUNC:def 10; then
         x in dom (F.n) /\ dom (F.(n+1)) by A10,XBOOLE_0:def 3; then
         x in dom ((F.n)-(F.(n+1))) by SEQ_1:def 4; then
@@ -388,14 +391,14 @@ A13:   |.(lim (F#x)) - ((F#x).n).| <= a*(r to_power k)/(1-r) by A11,XXREAL_0:2;
     end; then
 A14: F is_point_conv_on Z by SEQFUNC:23;
     let n' be natural number, z being set;
-    reconsider n = n' as Nat by ORDINAL1:def 13;
+    reconsider n = n' as Element of NAT by ORDINAL1:def 13;
     assume z in Z /\ dom (lim(F,Z)-(F.n')); then
 A15: z in Z' & z in dom (lim(F,Z)-(F.n')) by XBOOLE_0:def 3; then
     reconsider x = z as Element of X;
 A16: Z = dom lim(F,Z) by A14,SEQFUNC:def 14;
     now
       let n be natural number;
-A17:   n is Nat & n+1 is Nat by ORDINAL1:def 13; then
+A17:   n in NAT & n+1 in NAT by ORDINAL1:def 13; then
       Z c= dom (F.n) & Z c= dom (F.(n+1)) by A1,SEQFUNC:def 10; then
       z in dom (F.n) /\ dom (F.(n+1)) by A15,XBOOLE_0:def 3; then
       x in dom ((F.n)-(F.(n+1))) &
@@ -483,7 +486,7 @@ A8:   1-r > 0 by A2,XREAL_1:52; then
       p*(1-r) > 0 by A7,XREAL_1:131; then
 A9:   p*(1-r)/a > 0 by XREAL_1:141;
       1+log(r, p*(1-r)/a) is Real by XREAL_0:def 1; then
-      consider k being Nat such that
+      consider k being Element of NAT such that
 A10:   k >= 1+log(r, p*(1-r)/a) by MESFUNC1:11;
       k > log(r, p*(1-r)/a) by A10,XREAL_1:41; then
       r to_power k < r to_power log(r, p*(1-r)/a) by A2,POWER:45; then
@@ -493,7 +496,7 @@ A10:   k >= 1+log(r, p*(1-r)/a) by MESFUNC1:11;
       a*(r to_power k)/(1-r) < (p*(1-r))/(1-r) by A8,XREAL_1:76; then
 A11:   a*(r to_power k)/(1-r) < p by A8,XCMPLX_1:90;
       take k;
-      let n be Nat; assume n >= k; then
+      let n be Element of NAT; assume n >= k; then
       n = k or n > k by XXREAL_0:1; then
       r to_power n <= r to_power k by A2,POWER:45; then
       a*(r to_power n) <= a*(r to_power k) & 1-r > 1-1
@@ -526,15 +529,16 @@ A14: F is_point_conv_on Z
       assume
 A15:   x in dom g; then
 A16:   F#x is convergent by A14,A4,SEQFUNC:21;
-      for p being real number st 0 < p ex n being Nat st
-      for m being Nat st n <= m holds abs((F#x).m-g.x) < p
+      for p being real number st 0 < p ex n being Element of NAT st
+      for m being Element of NAT st n <= m holds abs((F#x).m-g.x) < p
       proof
         let p be real number;
         reconsider p' = p as Real by XREAL_0:def 1;
         assume 0 < p; then
-        consider n being Nat such that
-A17:     for m being Nat st n <= m holds abs((F.m).x-g.x) < p' by A4,A15,A5;
-        take n; let m be Nat;
+        consider n being Element of NAT such that
+A17:     for m being Element of NAT st n <= m holds
+         abs((F.m).x-g.x) < p' by A4,A15,A5;
+        take n; let m be Element of NAT;
         (F.m).x = (F#x).m by SEQFUNC:def 11;
         hence n <= m implies abs((F#x).m-g.x) < p by A17;
       end;
@@ -1004,16 +1008,17 @@ A11:    H is open & x in H &
 theorem Th22:
   for F being Functional_Sequence of the carrier of T, REAL
   st F is_unif_conv_on the carrier of T &
-  for i being Nat holds F.i is continuous Function of T, R^1
+  for i being Element of NAT holds F.i is continuous Function of T, R^1
   holds lim(F, the carrier of T) is continuous Function of T, R^1
   proof
     let F be Functional_Sequence of the carrier of T, REAL such that
     A1: F is_unif_conv_on the carrier of T &
-    for i being Nat holds F.i is continuous Function of T, R^1;
+    for i being Element of NAT holds F.i is continuous Function of T, R^1;
     the carrier of T common_on_dom F & F is_point_conv_on the carrier of T &
     for r being Real st 0<r
-    ex k being Nat st
-    for n being Nat for x being Point of T st n>=k & x in the carrier of T
+    ex k being Element of NAT st
+    for n being Element of NAT
+    for x being Point of T st n>=k & x in the carrier of T
     holds abs((F.n).x-(lim(F,the carrier of T)).x)<r by A1,SEQFUNC:44; then
 A2:  dom lim(F, the carrier of T) = the carrier of T &
     for x being Element of the carrier of T
@@ -1028,8 +1033,9 @@ A2:  dom lim(F, the carrier of T) = the carrier of T &
         A3: e>0;
         reconsider e3=e/3 as Real by XREAL_0:def 1;
         A4: e3>0 by A3,XREAL_1:141;
-        consider k being Nat such that
-A5:      for n being Nat for x being Point of T st n>=k & x in the carrier of T
+        consider k being Element of NAT such that
+A5:     for n being Element of NAT
+        for x being Point of T st n>=k & x in the carrier of T
         holds abs((F.n).x-(lim(F,the carrier of T)).x)<e3 by A1,SEQFUNC:44,A4;
         reconsider Fk=F.k as continuous Function of T, R^1 by A1;
         Fk is_continuous_at p by TMAP_1:49; then
@@ -1189,10 +1195,10 @@ A9:   f1-g0,A is_absolutely_bounded_by 2*1/3 by A1,Th19;
       ex g being continuous Function of T,R^1 st $3 = E2+g &
       g,the carrier of T is_absolutely_bounded_by 1/3*(2/3)|^($1+1) &
       f-E2-g,A is_absolutely_bounded_by 2/3*(2/3)|^($1+1));
-A10:   for n being Nat for x being Element of D
+A10:   for n being Element of NAT for x being Element of D
       ex y being Element of D st Z[n,x,y]
       proof
-        let n be Nat, x be Element of D;
+        let n be Element of NAT, x be Element of D;
         x in D;
         then consider E2 being Element of DF such that
 A11:     E2 = x & E2 is continuous Function of T, R^1;
@@ -1271,14 +1277,14 @@ A27:   dom F = NAT by FUNCT_2:def 1;
 A28:   the carrier of RealSpace = REAL & the carrier of R^1 = REAL
       by TOPMETR:16,METRIC_1:def 14,TOPMETR:def 7;
       now
-        let n be Nat;
+        let n be Element of NAT;
         Z[n,F.n,F.(n+1)] by A26;
         hence F.n is PartFunc of the carrier of T,REAL by A28;
       end; then
       reconsider F as Functional_Sequence of the carrier of T,REAL
       by A27,SEQFUNC:1;
       now
-        let n be Nat;
+        let n be Element of NAT;
         Z[n,F.n,F.(n+1)] by A26;
         hence the carrier of T c= dom(F.n) by FUNCT_2:def 1;
       end; then
@@ -1321,7 +1327,7 @@ A37:   dom (g1+E2-E2) = dom (g1+E2) /\ dom E2 by SEQ_1:def 4
         by A34,A31,A33,FUNCT_1:9,A37; then
 A39:    P[0] by A25,A9,A32,Th24,A33;
 A40:    now
-        let n be Nat;
+        let n be Element of NAT;
         consider E2 being continuous Function of T,R^1 such that
         A41: E2 = F.n &
         (f-E2,A is_absolutely_bounded_by 2/3*(2/3)|^n implies
@@ -1404,16 +1410,16 @@ A59:     dom (gx+E3-E3) = dom (gx+E3) /\ dom E3 by SEQ_1:def 4
         F.((n+1)+1)-F.(n+1) = gx by A55,A45,A59,FUNCT_1:9;
         hence P[n+1] by A44,A54,Th24,A55,A56;
       end;
-A61:    for n being Nat holds P[n] from NAT_1:sch 1(A39,A40);
-A62:   now let n be natural number; n is Nat by ORDINAL1:def 13;
+A61:  for n being Element of NAT holds P[n] from NAT_1:sch 1(A39,A40);
+A62:   now let n be natural number; n in NAT by ORDINAL1:def 13;
         hence (F.n)-(F.(n+1)), the carrier of T
         is_absolutely_bounded_by (2/9)*((2/3) to_power n) by A61;
       end; then
-A63:    F is_unif_conv_on the carrier of T by A29,A30,Th11; then
+A63:  F is_unif_conv_on the carrier of T by A29,A30,Th11; then
       reconsider h = lim(F, the carrier of T) as continuous Function of T, R^1
       by A61,Th22;
 A64:   now let n be natural number;
-        n is Nat by ORDINAL1:def 13;
+        n in NAT by ORDINAL1:def 13;
         hence (F.n)-f, A1 is_absolutely_bounded_by (2/3)*((2/3) to_power n)
         by A61;
       end;

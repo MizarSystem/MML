@@ -10,7 +10,8 @@ environ
       AMI_3, BOOLE, FUNCOP_1, SCMFSA6B, FUNCT_7, SF_MASTR, FINSEQ_1, INT_1,
       AMI_5, RELOC, SCM_1, CARD_1, SCMFSA6C, SCMFSA7B, SCMFSA_4, UNIALG_2,
       SCMFSA8B, ARYTM_1, SCMFSA8C, SCMFSA8A, SCM_HALT, CARD_3;
- notations TARSKI, XBOOLE_0, ENUMSET1, NUMBERS, XCMPLX_0, NAT_1, RELAT_1,
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1,
+ NUMBERS, XCMPLX_0, NAT_1, RELAT_1,
       FINSEQ_1, FUNCT_1, FUNCT_4, FUNCT_7, STRUCT_0, AMI_1, AMI_3, AMI_5,
       SCMFSA_2, CQC_LANG, CARD_1, SCM_1, SCMFSA_4, SCMFSA6B, SCMFSA_5,
       SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCMFSA7B, BINARITH,
@@ -28,12 +29,12 @@ environ
       FUNCT_4, AMI_5, ENUMSET1, AMI_3, REAL_1, NAT_1, TARSKI, INT_1, GRFUNC_1,
       BINARITH, SCMFSA_2, SCMFSA6B, SCMFSA7B, SCMFSA8B, SCMFSA8A, SCMFSA8C,
       SCMFSA_4, SCM_1, SCMFSA_5, LATTICE2, SCMFSA_3, SCMFSA6C, PRE_CIRC, FSM_1,
-      XBOOLE_0, XBOOLE_1, XREAL_1;
+      XBOOLE_0, XBOOLE_1, XREAL_1, ORDINAL1;
  schemes NAT_1, SCMFSA6A;
 
 begin
 
-reserve m,n for Nat,
+ reserve m,n for Element of NAT,
          I for Macro-Instruction,
          s,s1,s2 for State of SCM+FSA,
          a for Int-Location,
@@ -42,7 +43,7 @@ reserve m,n for Nat,
 definition let I be Macro-Instruction;
  attr I is InitClosed means
 :Def1:
- for s being State of SCM+FSA, n being Nat
+ for s being State of SCM+FSA, n being Element of NAT
     st Initialized I c= s
    holds IC (Computation s).n in dom I;
 
@@ -53,15 +54,15 @@ Initialized I is halting;
  attr I is keepInt0_1 means
 :Def3:  ::def5
  for s being State of SCM+FSA st Initialized I c= s
-  for k being Nat holds ((Computation s).k).intloc 0 = 1;
+  for k being Element of NAT holds ((Computation s).k).intloc 0 = 1;
 end;
 
 theorem Th1:  ::TM001
-for x being set,i,m,n being Nat st
+for x being set,i,m,n being Element of NAT st
 x in dom (((intloc i) .--> m) +* Start-At insloc n) holds
   x=intloc i or x=IC SCM+FSA
 proof
-    let x be set,i,m,n be Nat;
+    let x be set,i,m,n be Element of NAT;
     set iS = ((intloc i) .--> m) +* Start-At insloc n;
     assume A1:x in dom iS;
 A2: dom ((intloc i) .--> m) ={intloc i } by CQC_LANG:5;
@@ -72,10 +73,10 @@ A2: dom ((intloc i) .--> m) ={intloc i } by CQC_LANG:5;
 end;
 
 theorem Th2:  ::TM002
-for I being Macro-Instruction,i,m,n being Nat holds
+for I being Macro-Instruction,i,m,n being Element of NAT holds
    dom I misses dom (((intloc i) .--> m) +* Start-At insloc n)
 proof
-   let I be Macro-Instruction,i,m,n be Nat;
+   let I be Macro-Instruction,i,m,n be Element of NAT;
    set iS = ((intloc i) .--> m) +* Start-At insloc n;
    assume dom I /\ dom iS <> {};
    then consider x being set such that
@@ -179,7 +180,7 @@ registration
      set SA=Start-At insloc 0;
 A2: I +* SA c= Initialized I by Th6;
         now
-      let s be State of SCM+FSA, n be Nat;
+      let s be State of SCM+FSA, n be Element of NAT;
       assume Initialized I c= s;
       then I +* SA c=s by A2,XBOOLE_1:1;
       hence IC (Computation s).n in dom I by A1,SCMFSA6B:def 2;
@@ -204,9 +205,9 @@ registration
  coherence proof
   let I be Macro-Instruction;
   assume A1: I is InitHalting;
-  let s be State of SCM+FSA, n be Nat;
+  let s be State of SCM+FSA, n be Element of NAT;
  assume A2: Initialized I c= s;
-  defpred X[Nat] means not IC (Computation s).$1 in dom I;
+  defpred X[Element of NAT] means not IC (Computation s).$1 in dom I;
  assume not IC (Computation s).n in dom I;
 then A3: ex n st X[n];
   consider n such that
@@ -247,10 +248,10 @@ A15:  s|the Instruction-Locations of SCM+FSA
  coherence proof
   let I be Macro-Instruction;
   assume A17: I is keepInt0_1;
-  let s be State of SCM+FSA, n be Nat;
+  let s be State of SCM+FSA, n be Element of NAT;
   assume A18: Initialized I c= s;
  A19: dom I c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
-  defpred X[Nat] means not IC (Computation s).$1 in dom I;
+  defpred X[Element of NAT] means not IC (Computation s).$1 in dom I;
      assume not IC (Computation s).n in dom I;
  then A20: ex n st X[n];
     consider n such that
@@ -334,7 +335,7 @@ then A42: s02.IC s02 = intloc 0 := FI by A39,AMI_1:54;
 then A45:  s.intloc 0=1 by Th7;
         I +* Start-At insloc 0 c= Initialized I by SCMFSA8C:19;
      then I +* Start-At insloc 0 c= s by A44,XBOOLE_1:1;
-     hence for k being Nat holds ((Computation s).k).intloc 0 = 1
+     hence for k being Element of NAT holds ((Computation s).k).intloc 0 = 1
      by A43,A45,SCMFSA6B:def 4;
   end;
   hence thesis by Def3;
@@ -402,12 +403,12 @@ registration
 A1: I is InitHalting and
 A2: I is empty;
     reconsider I as InitHalting Macro-Instruction by A1;
-   deffunc U(Nat) = goto insloc 0;
-   deffunc V(Nat) = 1;
-   deffunc W(Nat) = <*>INT;
+   deffunc U(Element of NAT) = goto insloc 0;
+   deffunc V(Element of NAT) = 1;
+   deffunc W(Element of NAT) = <*>INT;
    consider S be State of SCM+FSA such that
 A3: IC S = insloc 0 and
-A4:  for i being Nat holds
+A4:  for i being Element of NAT holds
      S.insloc i = U(i) & S.intloc i = V(i) & S.fsloc i = W(i) from
 SCMFSA6A:sch 1;
 A5:  I c= S by A2,XBOOLE_1:2;
@@ -433,13 +434,14 @@ theorem Th10:   ::TM012=SCMFSA6B:25
 proof
    let I be InitHalting Macro-Instruction;
    assume A1: dom I = {};
-   defpred P[set,set] means ex k being Nat st k = $1 & $2 = goto insloc 0;
-   deffunc U(Nat) = goto insloc 0;
-   deffunc V(Nat) = 1;
-   deffunc W(Nat) = <*>INT;
+   defpred P[set,set] means ex k being Element of NAT
+   st k = $1 & $2 = goto insloc 0;
+   deffunc U(Element of NAT) = goto insloc 0;
+   deffunc V(Element of NAT) = 1;
+   deffunc W(Element of NAT) = <*>INT;
    consider s be State of SCM+FSA such that
 A2: IC s = insloc 0 and
-A3: for i being Nat holds
+A3: for i being Element of NAT holds
        s.insloc i = U(i) &
        s.intloc i = V(i) & s.fsloc i = W(i) from SCMFSA6A:sch 1;
 A4: dom s = Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
@@ -483,26 +485,28 @@ theorem Th11:  ::TM014=SCMFSA6B:26
  for I being InitHalting Macro-Instruction holds insloc 0 in dom I
 proof
    let I be InitHalting Macro-Instruction;
-      dom I is non empty by Th10;
+   dom I is non empty by Th10;
    then consider x being set such that A1: x in dom I by XBOOLE_0:def 1;
-      dom I c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
-   then consider n being Nat such that A2: insloc n = x by A1,SCMFSA_2:21;
-   per cases;
+   dom I c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+   then consider n being Element of NAT such that
+A2:insloc n = x by A1,SCMFSA_2:21;
+AA:n in NAT by ORDINAL1:def 13;
+   per cases by AA,NAT_1:19;
    suppose n = 0;
     hence insloc 0 in dom I by A1,A2;
    end;
    suppose 0 < n;
-    hence insloc 0 in dom I by A1,A2,SCMFSA_4:def 4;
+    hence insloc 0 in dom I by AA,A1,A2,SCMFSA_4:def 4;
  end;
  end;
 
 theorem Th12:  ::TM016=SCMFSA6B:27 ::T0
  for J being InitHalting Macro-Instruction st Initialized J c= s1
- for n being Nat st ProgramPart Relocated(J,n) c= s2 &
+ for n being Element of NAT st ProgramPart Relocated(J,n) c= s2 &
      IC s2 = insloc n &
      s1 | (Int-Locations \/ FinSeq-Locations)
      = s2 | (Int-Locations \/ FinSeq-Locations)
- for i being Nat holds
+ for i being Element of NAT holds
      IC (Computation s1).i + n = IC (Computation s2).i &
      IncAddr(CurInstr ((Computation s1).i),n) = CurInstr ((Computation s2).i) &
      (Computation s1).i | (Int-Locations \/ FinSeq-Locations)
@@ -511,7 +515,7 @@ proof
    let J be InitHalting Macro-Instruction;
    set JAt = Initialized J;
    assume A1: JAt c= s1;
-   let n be Nat; assume that
+   let n be Element of NAT; assume that
 A2: ProgramPart Relocated(J,n) c= s2 and
 A3: IC s2 = insloc n and
 A4: s1 | (Int-Locations \/ FinSeq-Locations)
@@ -522,8 +526,8 @@ A4: s1 | (Int-Locations \/ FinSeq-Locations)
 A5: J c= JAt by SCMFSA6A:26;
 then A6: dom J c= dom JAt by GRFUNC_1:8;
 
-   let i be Nat;
-   defpred P[Nat] means
+   let i be Element of NAT;
+   defpred P[Element of NAT] means
        IC C1.$1 + n = IC C2.$1 &
        IncAddr(CurInstr (C1.$1),n) = CurInstr (C2.$1) &
        C1.$1 | (Int-Locations \/ FinSeq-Locations)
@@ -565,9 +569,9 @@ A8: P[0]
       .= C2.0 | (Int-Locations \/ FinSeq-Locations) by AMI_1:def 19;
      end;
 
-A14: for k being Nat st P[k] holds P[k + 1]
+A14: for k being Element of NAT st P[k] holds P[k + 1]
      proof
-      let k be Nat;
+      let k be Element of NAT;
       assume A15: P[k];
   A16: C1.(k + 1) = Following C1.k by AMI_1:def 19
       .= Exec(CurInstr C1.k,C1.k);
@@ -602,7 +606,7 @@ A14: for k being Nat st P[k] holds P[k + 1]
        = C2.(k + 1) | (Int-Locations \/ FinSeq-Locations) by A15,A16,A17,
 SCMFSA6A:41;
      end;
-      for k being Nat holds P[k] from NAT_1:sch 1(A8,A14);
+      for k being Element of NAT holds P[k] from NAT_1:sch 1(A8,A14);
    hence thesis;
 end;
 
@@ -620,7 +624,7 @@ theorem Th14:   :: TM020=SCMFSA6B:28 ::T13
  for I being InitHalting Macro-Instruction st
      Initialized I c= s1 & Initialized I c= s2 &
      s1,s2 equal_outside the Instruction-Locations of SCM+FSA holds
- for k being Nat holds
+ for k being Element of NAT holds
      (Computation s1).k, (Computation s2).k
          equal_outside the Instruction-Locations of SCM+FSA &
      CurInstr (Computation s1).k = CurInstr (Computation s2).k
@@ -631,8 +635,9 @@ A2: Initialized I c= s2 and
 A3: s1,s2 equal_outside the Instruction-Locations of SCM+FSA;
 A4: I c= s1 by A1,Th13;
 A5: I c= s2 by A2,Th13;
-   hereby let k be Nat;
-         for m being Nat st m < k holds IC((Computation s2).m) in dom I
+   hereby let k be Element of NAT;
+         for m being Element of NAT st m < k
+         holds IC((Computation s2).m) in dom I
           by A2,Def1;
       hence (Computation s1).k, (Computation s2).k equal_outside
           the Instruction-Locations of SCM+FSA by A3,A4,A5,SCMFSA6B:21;
@@ -661,7 +666,7 @@ A1: Initialized I c= s1 and
 A2: Initialized I c= s2 and
 A3: s1,s2 equal_outside the Instruction-Locations of SCM+FSA;
 A4: s1 is halting by A1,Th5;
-A5: now let l be Nat; assume
+A5: now let l be Element of NAT; assume
    A6: CurInstr (Computation s2).l = halt SCM+FSA;
     CurInstr (Computation s1).l = CurInstr (Computation s2).l by A1,A2,A3,Th14;
       hence LifeSpan s1 <= l by A4,A6,SCM_1:def 2;
@@ -730,7 +735,7 @@ proof let I be InitClosed Macro-Instruction, J be Macro-Instruction;
  assume that
 A1: Initialized I c= s and
 A2: s is halting;
-  defpred X[Nat] means
+  defpred X[Element of NAT] means
     $1 <= LifeSpan s implies (Computation s).$1,(Computation(s+*(I ';' J))).$1
     equal_outside the Instruction-Locations of SCM+FSA;
       (Computation s).0 = s &
@@ -776,11 +781,11 @@ A15:   CurInstr(Cs.m) = (Cs.m).IC(Cs.m)
 end;
 
 theorem Th19:  ::TM030=IScommute:
-for i,m,n being Nat holds
+for i,m,n being Element of NAT holds
  s+*I+*(((intloc i) .--> m) +* Start-At insloc n) =
  s+*(((intloc i) .--> m) +* Start-At insloc n)+* I
 proof
-   let i,m,n be Nat;
+   let i,m,n be Element of NAT;
    set iS = ((intloc i) .--> m) +* Start-At insloc n;
 A1:  dom I misses dom iS by Th2;
 then I +* iS = I \/ iS by FUNCT_4:32
@@ -834,21 +839,21 @@ A6: s2 = s +*Directed I by A3,Th20
 
    set m = LifeSpan sISA0;
    set A = the Instruction-Locations of SCM+FSA;
-        now let k be Nat;
+        now let k be Element of NAT;
       set s1 = sISA0 +* (I ';' I);
       assume A7: k <= m;
  then A8: (Computation sISA0).k, (Computation s1).k equal_outside A by A1,A4,A5
 ,Th18;
   A9: Directed I, I ';' I equal_outside A by SCMFSA6A:42;
-  defpred X[Nat] means
+  defpred X[Element of NAT] means
    $1 <= k implies (Computation s1).$1, (Computation s2).$1 equal_outside A;
   A10: (Computation s1).0 = s1 by AMI_1:def 19;
          (Computation s2).0 = s2 by AMI_1:def 19;
       then (Computation s2).0, (Computation s1).0 equal_outside A
             by A9,A10,SCMFSA6A:12;
  then A11: X[0] by FUNCT_7:28;
- A12:  for n being Nat st X[n] holds X[n+1]
-   proof let n be Nat;
+ A12:  for n being Element of NAT st X[n] holds X[n+1]
+   proof let n be Element of NAT;
     A13: dom I c= dom (I ';' I) by SCMFSA6A:56;
    A14: Directed I c= I ';' I by SCMFSA6A:55;
          assume A15: n <= k implies
@@ -884,7 +889,7 @@ AMI_1:def 19
              equal_outside A by A15,A16,A17,A19,A21,A22,A23,XREAL_1:2
 ,SCMFSA6A:32;
         end;
-         for n being Nat holds X[n] from NAT_1:sch 1(A11,A12);
+         for n being Element of NAT holds X[n] from NAT_1:sch 1(A11,A12);
       then (Computation s1).k, (Computation s2).k equal_outside A;
       hence (Computation sISA0).k, (Computation s2).k equal_outside A
           by A8,FUNCT_7:29;
@@ -954,21 +959,21 @@ A6: s2 = s +*Directed I by A3,Th20
 
    set m = LifeSpan sISA0;
    set A = the Instruction-Locations of SCM+FSA;
-        now let k be Nat;
+        now let k be Element of NAT;
       set s1 = sISA0 +* (I ';' I);
       assume A7: k <= m;
  then A8: (Computation sISA0).k, (Computation s1).k equal_outside A by A1,A4,A5
 ,Th18;
   A9: Directed I, I ';' I equal_outside A by SCMFSA6A:42;
   A10: (Computation s1).0 = s1 by AMI_1:def 19;
-  defpred X[Nat] means
+  defpred X[Element of NAT] means
     $1 <= k implies (Computation s1).$1, (Computation s2).$1 equal_outside A;
          (Computation s2).0 = s2 by AMI_1:def 19;
       then (Computation s2).0, (Computation s1).0 equal_outside A
                                              by A9,A10,SCMFSA6A:12;
  then A11: X[0] by FUNCT_7:28;
- A12:  for n being Nat st X[n] holds X[n+1]
-   proof let n be Nat;
+ A12:  for n being Element of NAT st X[n] holds X[n+1]
+   proof let n be Element of NAT;
     A13: dom I c= dom (I ';' I) by SCMFSA6A:56;
    A14: Directed I c= I ';' I by SCMFSA6A:55;
          assume A15: n <= k implies
@@ -1004,7 +1009,7 @@ AMI_1:def 19
              equal_outside A by A15,A16,A17,A19,A21,A22,A23,XREAL_1:2
 ,SCMFSA6A:32;
         end;
-         for n being Nat holds X[n] from NAT_1:sch 1(A11,A12);
+         for n being Element of NAT holds X[n] from NAT_1:sch 1(A11,A12);
       then (Computation s1).k, (Computation s2).k equal_outside A;
       hence (Computation sISA0).k, (Computation s2).k equal_outside A
           by A8,FUNCT_7:29;
@@ -1058,7 +1063,7 @@ end;
 theorem Th23: ::TM036=Lemma0
  for I being InitHalting Macro-Instruction
  st Initialized I c= s holds
-     for k being Nat st k <= LifeSpan s holds
+     for k being Element of NAT st k <= LifeSpan s holds
          CurInstr (Computation (s +* Directed I)).k <> halt SCM+FSA
 proof
    let I be InitHalting Macro-Instruction;
@@ -1067,21 +1072,21 @@ then A2: s is halting by AMI_1:def 26;
    set s2 = s +* Directed I;
    set m = LifeSpan s;
    set A = the Instruction-Locations of SCM+FSA;
-A3: now let k be Nat;
+A3: now let k be Element of NAT;
       set s1 = s +* (I ';' I);
       assume A4: k <= m;
    then A5: (Computation s).k, (Computation s1).k equal_outside A by A1,A2,Th18
 ;
   A6: Directed I, I ';' I equal_outside A by SCMFSA6A:42;
   A7: (Computation s1).0 = s1 by AMI_1:def 19;
-  defpred X[Nat] means
+  defpred X[Element of NAT] means
    $1 <= k implies (Computation s1).$1, (Computation s2).$1 equal_outside A;
          (Computation s2).0 = s2 by AMI_1:def 19;
       then (Computation s2).0, (Computation s1).0 equal_outside A
                             by A6,A7,SCMFSA6A:12;
  then A8: X[0] by FUNCT_7:28;
- A9:  for n being Nat st X[n] holds X[n+1]
-  proof let n be Nat;
+ A9:  for n being Element of NAT st X[n] holds X[n+1]
+  proof let n be Element of NAT;
     A10: dom I c= dom (I ';' I) by SCMFSA6A:56;
    A11: Directed I c= I ';' I by SCMFSA6A:55;
          assume A12: n <= k implies
@@ -1116,13 +1121,13 @@ AMI_1:def 19
              equal_outside A by A12,A13,A14,A16,A18,A19,A20,XREAL_1:2
 ,SCMFSA6A:32;
         end;
-         for n being Nat holds X[n] from NAT_1:sch 1(A8,A9);
+         for n being Element of NAT holds X[n] from NAT_1:sch 1(A8,A9);
       then (Computation s1).k, (Computation s2).k equal_outside A;
       hence (Computation s).k, (Computation s2).k equal_outside A
           by A5,FUNCT_7:29;
      end;
    set l1 = IC (Computation s).m;
-   hereby let k be Nat;
+   hereby let k be Element of NAT;
       assume A21: k <= LifeSpan s;
       set lk = IC (Computation s).k;
   A22: (Computation s).k, (Computation s2).k equal_outside A by A3,A21;
@@ -1141,7 +1146,7 @@ end;
 
 theorem Th24:
  for I being InitClosed Macro-Instruction st s +* Initialized I is halting
-   for J being Macro-Instruction, k being Nat
+   for J being Macro-Instruction, k being Element of NAT
     st k <= LifeSpan (s +* Initialized I ) holds
     (Computation (s +* Initialized I)).k,
     (Computation (s +* Initialized (I ';' J))).k
@@ -1159,7 +1164,7 @@ A4: s1 = s +* (I +* iS) by Th3
 A5: s2 = s +* ((I ';' J) +* iS) by Th3
        .=s +* (I ';' J) +* iS by FUNCT_4:15
        .= s+*iS+*(I ';' J) by Th19;
-   defpred X[Nat] means
+   defpred X[Element of NAT] means
    $1 <= LifeSpan s1 implies (Computation s1).$1,(Computation(s2)).$1
            equal_outside the Instruction-Locations of SCM+FSA;
         s+*iS, s+*iS+*I
@@ -1204,7 +1209,7 @@ A20:   CurInstr(Cs.m) = (Cs.m).IC(Cs.m)
       equal_outside the Instruction-Locations of SCM+FSA by A10,A11,A13,A14,
 NAT_1:38,SCMFSA6A:32;
    end;
- thus for k being Nat holds X[k] from NAT_1:sch 1(A8, A9);
+ thus for k being Element of NAT holds X[k] from NAT_1:sch 1(A8, A9);
 end;
 
 theorem Th25: ::TM040=Th1:
@@ -1301,7 +1306,7 @@ A23:    IC (Computation s).(LifeSpan (s +* I) + 1) = insloc card I
       thus
 A24:  (Computation s).(m1 + 1) | D = s3 | D
                       by A5,A7,A16,A22,Th22;
-      reconsider m = m1 + 1 + m3 as Nat;
+      reconsider m = m1 + 1 + m3 as Element of NAT;
       set s4 = (Computation s).(m1 + 1);
 A25:  Initialized J c= s3 by FUNCT_4:26;
          I ';' J c= Initialized (I ';' J) by SCMFSA6A:26;
@@ -1320,7 +1325,7 @@ A28:  intloc 0 in dom Initialized J by SCMFSA6A:45;
       .= s3.intloc 0 by A29,FUNCT_1:72
       .= (Initialized J).intloc 0 by A28,FUNCT_4:14
       .= 1 by SCMFSA6A:46;
-A30: now let k be Nat;
+A30: now let k be Element of NAT;
       assume m1 + 1 + k < m;
    then A31: k < m3 by XREAL_1:8;
       assume A32: CurInstr (Computation s).(m1 + 1 + k) = halt SCM+FSA;
@@ -1339,18 +1344,22 @@ A30: now let k be Nat;
 then A33: CurInstr((Computation s).m)
        = IncAddr (halt SCM+FSA,card I) by A17,SCM_1:def 2
       .= halt SCM+FSA by SCMFSA_4:8;
-        now let k be Nat; assume A34: k < m;
+        now let k be Element of NAT; assume A34: k < m;
       per cases;
       suppose k <= m1;
        hence CurInstr (Computation s).k <> halt SCM+FSA by A2,A21,Th23;
       end;
       suppose m1 < k;
        then m1 + 1 <= k by NAT_1:38;
-       then consider kk being Nat such that A35: m1 + 1 + kk = k by NAT_1:28;
-       thus CurInstr (Computation s).k <> halt SCM+FSA by A30,A34,A35;
+       then consider kk being Nat such that
+       A35: m1 + 1 + kk = k by NAT_1:28;
+       reconsider kk as Element of NAT by ORDINAL1:def 13;
+       m1+1+kk=k by A35;
+       hence CurInstr (Computation s).k <> halt SCM+FSA by A30,A34,A35;
      end;
      end;
-then A36: for k being Nat st CurInstr (Computation s).k = halt SCM+FSA
+then A36: for k being Element of NAT
+st CurInstr (Computation s).k = halt SCM+FSA
      holds m <= k;
    thus
 A37: s is halting by A33,AMI_1:def 20;
@@ -1460,7 +1469,7 @@ then A26:    IC (Computation s).(LifeSpan (s +* I) + 1) = insloc card I
                              by A5,A8,Th21;
 A27:  (Computation s).(m1 + 1) | D = s3 | D
                          by A5,A8,A19,A25,Th22;
-      reconsider m = m1 + 1 + m3 as Nat;
+      reconsider m = m1 + 1 + m3 as Element of NAT;
       set s4 = (Computation s).(m1 + 1);
   A28: JAt c= s3 by FUNCT_4:26;
   A29: I ';' J c= s by A1,A23,XBOOLE_1:1;
@@ -1485,7 +1494,7 @@ theorem Th26: ::TM042=Keep3
   st s +* I is halting
    for J being InitClosed Macro-Instruction
     st Initialized (I ';' J) c= s
-     for k being Nat holds
+     for k being Element of NAT holds
      (Computation (Result(s +*I) +* Initialized J )).k +* Start-At (IC
      (Computation (Result(s +*I) +* Initialized J )).k + card I),
      (Computation (s +* (I ';' J))).(LifeSpan (s +* I)+1+k)
@@ -1563,15 +1572,15 @@ A16: (Computation s).(LifeSpan sISA0) | (Int-Locations \/ FinSeq-Locations) =
        .= (Computation sIJSA0).(LifeSpan sISA0).f by A15,SCMFSA6A:31
        .= s2.f by A3,A16,SCMFSA6A:38;
   end;
-  defpred X[Nat] means
+  defpred X[Element of NAT] means
    (Computation RIJ).$1 +* Start-At (IC (Computation RIJ).$1 + card I),
    (Computation sIJSA0).(LifeSpan sISA0+1+$1)
          equal_outside the Instruction-Locations of SCM+FSA;
       (Computation RIJ).0 = RIJ by AMI_1:def 19;
 then A21: X[0] by A14,SCMFSA6A:28;
 
-A22: for k being Nat st X[k] holds X[k+1]
-    proof let k be Nat; assume
+A22: for k being Element of NAT st X[k] holds X[k+1]
+    proof let k be Element of NAT; assume
  A23: (Computation RIJ).k +* Start-At (IC (Computation RIJ).k + card I),
      (Computation sIJSA0).(LifeSpan sISA0+1+k)
       equal_outside the Instruction-Locations of SCM+FSA;
@@ -1659,8 +1668,8 @@ set CIJk1 = (Computation sIJSA0).(LifeSpan sISA0+1+k1);
       (Computation sIJSA0).(LifeSpan sISA0+1+k1)
     equal_outside the Instruction-Locations of SCM+FSA by A35,A36,SCMFSA6A:28;
    end;
-    for k being Nat holds X[k] from NAT_1:sch 1(A21, A22);
- hence for k being Nat
+    for k being Element of NAT holds X[k] from NAT_1:sch 1(A21, A22);
+ hence for k being Element of NAT
      holds (Computation (Result(s +*I) +* Initialized J)).k +* Start-At (IC
            (Computation (Result(s +*I) +* Initialized J)).k + card I),
            (Computation (s +* (I ';' J))).(LifeSpan (s +* I)+1+k)
@@ -1670,7 +1679,7 @@ end;
 theorem Th27:   ::Keep1
  for I being keepInt0_1 Macro-Instruction
   st not s +* Initialized I is halting
-   for J being Macro-Instruction, k being Nat
+   for J being Macro-Instruction, k being Element of NAT
     holds (Computation (s +* Initialized I)).k,
           (Computation (s +* Initialized (I ';' J))).k
            equal_outside the Instruction-Locations of SCM+FSA
@@ -1692,7 +1701,7 @@ A5: s2 = s +* ((I ';' J) +* iS) by Th3
       equal_outside the Instruction-Locations of SCM+FSA by SCMFSA6A:27;
 then A6:  s+*iS+*I, s+*iS
       equal_outside the Instruction-Locations of SCM+FSA by FUNCT_7:28;
-   defpred X[Nat] means (Computation s1).$1,(Computation(s2)).$1
+   defpred X[Element of NAT] means (Computation s1).$1,(Computation(s2)).$1
            equal_outside the Instruction-Locations of SCM+FSA;
      A7: s+*iS, s+*iS+*(I ';' J)
        equal_outside the Instruction-Locations of SCM+FSA by SCMFSA6A:27;
@@ -1728,7 +1737,7 @@ A18:   CurInstr(Cs.m) = (Cs.m).IC(Cs.m)
       equal_outside the Instruction-Locations of SCM+FSA by A10,A11,A12,
 SCMFSA6A:32;
    end;
- thus for k being Nat holds X[k] from NAT_1:sch 1(A8, A9);
+ thus for k being Element of NAT holds X[k] from NAT_1:sch 1(A8, A9);
 end;
 
 theorem Th28: ::TM044=T22
@@ -1988,7 +1997,7 @@ per cases;
         .= s +*I +* iS by FUNCT_4:15
         .= s +* iS +* I by Th19
         .= s +* I by A4,FUNCT_4:79;
-   let k be Nat;
+   let k be Element of NAT;
   hereby
    per cases;
    suppose A9: k <= LifeSpan(s +* Initialized I);
@@ -2001,10 +2010,11 @@ per cases;
    end;
    suppose A11: k > LifeSpan(s +* Initialized I);
       set LS = LifeSpan(s +* Initialized I);
-          consider p being Nat such that
+          consider p being Element of NAT such that
       A12: k = LS + p & 1 <= p by A11,FSM_1:1;
          consider r being Nat such that
      A13: p = 1 + r by A12,NAT_1:28;
+       reconsider r as Element of NAT by ORDINAL1:def 13;
        Initialized J c= Result(s +* I) +* Initialized J by FUNCT_4:26;
   then A14: (Computation (Result(s +*I ) +* Initialized J)).r.intloc 0 = 1 by
 Def3;
@@ -2022,7 +2032,7 @@ set Sr = Start-At (IC ((Computation (Result(s +* I)
   end;
   end;
   suppose A16: not s +* Initialized I is halting;
-    let k be Nat;
+    let k be Element of NAT;
        Initialized I c= s +* Initialized I by FUNCT_4:26;
 then A17:  (Computation (s +* Initialized I)).k.intloc 0 = 1 by Def3;
        (Computation (s +* Initialized I)).k,
@@ -2201,7 +2211,7 @@ definition
  let s be State of SCM+FSA;
  pred I is_closed_onInit s means
 :Def4: ::def3=D18
- for k being Nat holds
+ for k being Element of NAT holds
      IC (Computation (s +* Initialized I )).k in dom I;
  pred I is_halting_onInit s means
 :Def5: ::def4=D18'
@@ -2216,14 +2226,14 @@ proof
    hereby assume A1: I is InitClosed;
       let s be State of SCM+FSA;
          Initialized I c= s +* Initialized I by FUNCT_4:26;
-      then for k being Nat holds
+      then for k being Element of NAT holds
           IC (Computation (s +* Initialized I)).k in dom I
           by A1,Def1;
       hence I is_closed_onInit s by Def4;
      end;
    assume A2: for s being State of SCM+FSA holds I is_closed_onInit s;
       now let s be State of SCM+FSA;
-      let k be Nat;
+      let k be Element of NAT;
       assume Initialized I c= s;
       then I is_closed_onInit s & s = s +* Initialized I by A2,FUNCT_4:79;
       hence IC (Computation s).k in dom I by Def4;
@@ -2256,7 +2266,7 @@ proof
 theorem Th37:  ::TM055=TQ9''(SCMFSA7B)
 for s being State of SCM+FSA, I being Macro-Instruction, a being Int-Location
  st I does_not_destroy a & I is_closed_onInit s & Initialized I c= s
-holds for k being Nat holds (Computation s).k.a = s.a
+holds for k being Element of NAT holds (Computation s).k.a = s.a
 proof
    let s be State of SCM+FSA,I be Macro-Instruction,a be Int-Location;
    assume A1: I does_not_destroy a;
@@ -2264,9 +2274,9 @@ proof
    assume A3: Initialized I c= s;
 then A4:  s +* Initialized I = s by FUNCT_4:79;
 A5: I c= s by A3,Th13;
-   defpred P[Nat] means (Computation s).$1.a = s.a;
+   defpred P[Element of NAT] means (Computation s).$1.a = s.a;
 A6: P[0] by AMI_1:def 19;
-A7: now let k be Nat;
+A7: now let k be Element of NAT;
       assume A8: P[k];
       set l = IC (Computation s).k;
   A9: l in dom I by A2,A4,Def4;
@@ -2283,7 +2293,7 @@ A7: now let k be Nat;
       .= s.a by A8,A10,SCMFSA7B:26;
       end;
      end;
-   thus for k being Nat holds P[k] from NAT_1:sch 1(A6,A7);
+   thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A6,A7);
  end;
 
 registration
@@ -2304,7 +2314,7 @@ registration
 then A2: I does_not_destroy intloc 0 by SCMFSA7B:def 5;
       now let s be State of SCM+FSA;
       assume A3: Initialized I c= s;
-      let k be Nat;
+      let k be Element of NAT;
          I is_closed_onInit s by A1,Th35;
       hence (Computation s).k.intloc 0 = s.intloc 0 by A2,A3,Th37
       .=1 by A3,Th7;
@@ -2357,7 +2367,7 @@ proof
        s2=Initialize s +* (I +* Start-At insloc 0);
 A1: s1 = s2 by SCMFSA8A:13;
       I is_closed_onInit s iff
-     for k be Nat holds IC (Computation s1).k in dom I by Def4;
+     for k be Element of NAT holds IC (Computation s1).k in dom I by Def4;
    hence thesis by A1,SCMFSA7B:def 7;
 end;
 
@@ -2879,11 +2889,11 @@ proof
 
 theorem Th62: ::TM208=TMP29
  for s being State of SCM+FSA, I being InitHalting Macro-Instruction,
-     a being Int-Location,k being Nat st I does_not_destroy a holds
+     a being Int-Location,k being Element of NAT st I does_not_destroy a holds
  IExec(I,s).a = (Computation (Initialize s +* (I +* Start-At insloc 0))).k.a
 proof
    let s be State of SCM+FSA,I be InitHalting Macro-Instruction;
-   let a be Int-Location,k be Nat;
+   let a be Int-Location,k be Element of NAT;
    assume A1: I does_not_destroy a;
 A2: I is_halting_on Initialize s by Th59;
       I is_closed_on Initialize s by Th60;
@@ -2938,14 +2948,14 @@ end;
 theorem Th65: ::MAI1
  for s being State of SCM+FSA, I being InitClosed Macro-Instruction
      st Initialized I c= s & s is halting
- for m being Nat st m <= LifeSpan s
+ for m being Element of NAT st m <= LifeSpan s
      holds (Computation s).m,(Computation (s +* loop I)).m
          equal_outside the Instruction-Locations of SCM+FSA
 proof
    let s be State of SCM+FSA,I be InitClosed Macro-Instruction;
    assume A1: Initialized I c= s;
    assume A2: s is halting;
-    defpred X[Nat] means
+    defpred X[Element of NAT] means
      $1 <= LifeSpan s implies (Computation s).$1,(Computation(s+*loop I)).$1
     equal_outside the Instruction-Locations of SCM+FSA;
       (Computation s).0 = s &
@@ -2980,12 +2990,13 @@ A15:   CurInstr(Cs.m) = (Cs.m).IC(Cs.m)
      equal_outside the Instruction-Locations of SCM+FSA by A5,A6,A8,A9,NAT_1:38
 ,SCMFSA6A:32;
    end;
- thus for m being Nat holds X[m] from NAT_1:sch 1(A3,A4);
+ thus for m being Element of NAT holds X[m] from NAT_1:sch 1(A3,A4);
 end;
 
 theorem
     for s being State of SCM+FSA, I being InitHalting Macro-Instruction
- st Initialized I c= s holds for k being Nat st k <= LifeSpan s holds
+ st Initialized I c= s holds for k being Element of NAT st k <= LifeSpan s
+ holds
          CurInstr (Computation (s +* loop I)).k <> halt SCM+FSA
 proof
    let s be State of SCM+FSA;
@@ -2995,7 +3006,7 @@ then A2: s is halting by AMI_1:def 26;
    set s2 = s +* loop I;
    set m = LifeSpan s;
    set l1 = IC (Computation s).m;
-   hereby let k be Nat;
+   hereby let k be Element of NAT;
       assume A3: k <= LifeSpan s;
       set lk = IC (Computation s).k;
   A4: (Computation s).k, (Computation s2).k equal_outside A by A1,A2,A3,Th65;
@@ -3023,7 +3034,7 @@ end;
 theorem Th68: ::TMP24
  for s being State of SCM+FSA, I being Macro-Instruction
      st I is_closed_onInit s & I is_halting_onInit s
- for m being Nat st m <= LifeSpan (s +* Initialized I)
+ for m being Element of NAT st m <= LifeSpan (s +* Initialized I)
      holds (Computation (s +* Initialized I)).m,
          (Computation(s +* Initialized (loop I))).m
          equal_outside the Instruction-Locations of SCM+FSA
@@ -3036,7 +3047,7 @@ proof
    set C2 = Computation s2;
    assume A1: I is_closed_onInit s;
    assume A2: I is_halting_onInit s;
-    defpred X[Nat] means $1 <= LifeSpan s1 implies
+    defpred X[Element of NAT] means $1 <= LifeSpan s1 implies
      (Computation s1).$1,(Computation s2).$1 equal_outside A;
 A3: X[0]
     proof assume 0 <= LifeSpan s1;
@@ -3054,8 +3065,8 @@ A3: X[0]
 AMI_1:def 19;
      end;
 A5: s1 is halting by A2,Def5;
-A6: for m being Nat st X[m] holds X[m+1]
-  proof let m be Nat;
+A6: for m being Element of NAT st X[m] holds X[m+1]
+  proof let m be Element of NAT;
       assume A7: m <= LifeSpan s1 implies C1.m,C2.m equal_outside A;
       assume A8: m + 1 <= LifeSpan s1;
   then A9: m < LifeSpan s1 by NAT_1:38;
@@ -3079,13 +3090,13 @@ A11:    C2.(m + 1) = Following C2.m by AMI_1:def 19
       hence C1.(m + 1),C2.(m + 1) equal_outside A by A7,A8,A10,A11,NAT_1:38
 ,SCMFSA6A:32;
      end;
-   thus for m being Nat holds X[m] from NAT_1:sch 1(A3,A6);
+   thus for m being Element of NAT holds X[m] from NAT_1:sch 1(A3,A6);
  end;
 
 theorem Th69: ::TMP25
  for s being State of SCM+FSA, I being Macro-Instruction
      st I is_closed_onInit s & I is_halting_onInit s
- for m being Nat st m < LifeSpan (s +* Initialized I) holds
+ for m being Element of NAT st m < LifeSpan (s +* Initialized I) holds
      CurInstr (Computation (s +* Initialized I)).m =
          CurInstr (Computation(s +* Initialized(loop I))).m
 proof
@@ -3096,7 +3107,7 @@ proof
    set C1 = Computation s1;
    set C2 = Computation s2;
    assume A1: I is_closed_onInit s & I is_halting_onInit s;
-   let m be Nat;
+   let m be Element of NAT;
    assume A2: m < LifeSpan (s +* Initialized I);
        then (Computation (s +* Initialized I)).m,
          (Computation(s +* Initialized(loop I))).m
@@ -3132,7 +3143,7 @@ theorem Th71:  ::_TMP23
      st I is_closed_onInit s & I is_halting_onInit s holds
  (CurInstr (Computation (s +* Initialized (loop I))).
       LifeSpan (s +* Initialized I) = goto insloc 0 &
- for m being Nat st m <= LifeSpan (s +* Initialized I) holds
+ for m being Element of NAT st m <= LifeSpan (s +* Initialized I) holds
      CurInstr (Computation (s +* Initialized (loop I))).m <> halt SCM+FSA)
 proof
    let s be State of SCM+FSA,I be Macro-Instruction;
@@ -3177,7 +3188,7 @@ A12: now thus CurInstr C2.LifeSpan s1 = C2.k.IC C1.k by A4
        goto insloc 0)).halt SCM+FSA by A3,A6,A8,FUNCT_1:23
    .= goto insloc 0 by A10,A11,FUNCT_4:14;
    end;
-   let m be Nat;
+   let m be Element of NAT;
    assume A13: m <= LifeSpan s1;
    per cases by A13,REAL_1:def 5;
    suppose A14: m < LifeSpan s1;
@@ -3209,21 +3220,21 @@ proof
    set P = if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0));
    reconsider I1 = I ';' SubFrom(a,intloc 0) as InitHalting Macro-Instruction;
    set i = a =0_goto insloc (card I1 + 3);
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
    for s being State of SCM+FSA st s.intloc 0 = 1 & s.a = $1 & s.a > 0 holds
        ((Computation (s +* Initialized (loop P))).
            (LifeSpan (s +* Initialized P) + 1)).a = s.a - 1 &
        ((Computation (s +* Initialized (loop P) )).
            (LifeSpan (s +* Initialized P) + 1)).intloc 0 = 1 &
-   ex k being Nat st
+   ex k being Element of NAT st
      IC (Computation (s +* Initialized(loop P))).k =
          insloc card ProgramPart loop P &
-     for n being Nat st n < k holds
+     for n being Element of NAT st n < k holds
          IC (Computation (s +* Initialized (loop P))).n in dom loop P;
 A4: P[0];
-A5: for k being Nat holds P[k] implies P[k + 1]
+A5: for k being Element of NAT holds P[k] implies P[k + 1]
      proof
-      let k be Nat;
+      let k be Element of NAT;
       assume A6: P[k];
       let ss be State of SCM+FSA;
       assume A7: ss.intloc 0 = 1;
@@ -3370,7 +3381,7 @@ AMI_1:def 19
            by A34;
        thus IC C2.m = C2.m.IC SCM+FSA
        .= insloc card ProgramPart loop P by A35,SCMFSA_2:95;
-       hereby let n be Nat;
+       hereby let n be Element of NAT;
           assume n < m;
           then n <= LifeSpan s1 + 1 + 1 by NAT_1:38;
       then A36: n <= LifeSpan s1 + 1 or n = LifeSpan s1 + 1 + 1 by NAT_1:26;
@@ -3395,10 +3406,10 @@ AMI_1:def 19
        consider Is3 being State of SCM+FSA such that A41: Is3 = Initialize s3;
    A42: Is3.intloc 0 = 1 by A41,SCMFSA6C:3;
           Is3.a = k & Is3.a > 0 by A8,A16,A40,A41,SCMFSA6C:3;
-       then consider m0 being Nat such that
+       then consider m0 being Element of NAT such that
    A43: IC (Computation (Is3 +* Initialized (loop P))).m0 =
            insloc card ProgramPart loop P and
-   A44: for n being Nat st n < m0 holds
+   A44: for n being Element of NAT st n < m0 holds
            IC (Computation (Is3 +* Initialized (loop P))).n
            in dom loop P by A6,A42;
        take m = LifeSpan s1 + 1 + m0;
@@ -3419,7 +3430,7 @@ AMI_1:def 19
             .= s3 by A46,FUNCT_4:79;
        end;
        hence IC C2.m = insloc card ProgramPart loop P by A41,A43,AMI_1:51;
-       hereby let n be Nat;
+       hereby let n be Element of NAT;
           assume A47: n < m;
          I1 is_closed_onInit ss & I1 is_halting_onInit ss by Th35,Th36;
       then A48: P is_closed_onInit ss & P is_halting_onInit ss by A9,Th45;
@@ -3431,7 +3442,7 @@ AMI_1:def 19
            hence IC C2.n in dom loop P by A49,SCMFSA8C:106;
           end;
           suppose A50: LifeSpan s1 + 1 <= n;
-           consider mm being Nat such that
+           consider mm being Element of NAT such that
        A51: mm = n -' (LifeSpan s1 + 1);
               mm + (LifeSpan s1 + 1) = n by A50,A51,BINARITH:53;
        then A52: IC C2.n = IC (Computation s3).mm by AMI_1:51;
@@ -3445,13 +3456,13 @@ AMI_1:def 19
        end;
        end;
      end;
-   reconsider sa = s.a as Nat by A3,INT_1:16;
-      for k being Nat holds P[k] from NAT_1:sch 1(A4,A5);
+   reconsider sa = s.a as Element of NAT by A3,INT_1:16;
+      for k being Element of NAT holds P[k] from NAT_1:sch 1(A4,A5);
    then P[sa];
-   then A53: ex k being Nat st
+   then A53: ex k being Element of NAT st
      IC (Computation (s +* Initialized(loop P))).k =
          insloc card ProgramPart loop P &
-     for n being Nat st n < k holds
+     for n being Element of NAT st n < k holds
          IC (Computation (s +* Initialized(loop P))).n in dom loop P
    by A2,A3;
       s +* Initialized(loop P)= s +* (loop P +* Start-At insloc 0)
@@ -3561,7 +3572,7 @@ theorem Th77: ::TMP22'
  for s being State of SCM+FSA, I being good InitHalting Macro-Instruction,
      a being read-write Int-Location st I does_not_destroy a &
      s.a > 0 holds
- ex s2 being State of SCM+FSA, k being Nat st
+ ex s2 being State of SCM+FSA, k being Element of NAT st
      s2 = s +* Initialized (loop if=0(a,Goto insloc 2,
      I ';' SubFrom(a,intloc 0))) &
      k = LifeSpan (s +* Initialized (if=0(a,Goto insloc 2,
@@ -3572,7 +3583,7 @@ theorem Th77: ::TMP22'
       (Computation s2).k.b = IExec(I,s).b) &
    (for f being FinSeq-Location holds (Computation s2).k.f = IExec(I,s).f) &
    IC (Computation s2).k = insloc 0 &
-   for n being Nat st n <= k holds
+   for n being Element of NAT st n <= k holds
        IC (Computation s2).n in
            dom loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0))
 proof
@@ -3656,7 +3667,7 @@ SCMFSA6A:31
       .= IExec(I,s).f by SCMFSA_2:91;
      end;
    thus IC (Computation s2).k = insloc 0 by A5;
-   hereby let n be Nat;
+   hereby let n be Element of NAT;
       assume A16: n <= k;
       per cases by A16,NAT_1:26;
       suppose A17: n <= LifeSpan s1;
@@ -3750,7 +3761,7 @@ proof
 A3: Times(a,I) = if>0(a,loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0)),
        SCM+FSA-Stop) by SCMFSA8C:def 5;
 A4: s0.intloc 0 = 1 & s0.a > 0 by A2,SCMFSA6C:3;
-   then consider s2 be State of SCM+FSA, k be Nat such that
+   then consider s2 be State of SCM+FSA, k be Element of NAT such that
 A5: s2 = s0 +* Initialized loop P and
       k = LifeSpan (s0 +* Initialized P) + 1 and
 A6: (Computation s2).k.a = s0.a - 1 and
@@ -3760,7 +3771,7 @@ A8: (for b being read-write Int-Location st b <> a holds
 A9: (for f being FinSeq-Location holds (Computation s2).k.f = IExec(I,s0).f)
    and
 A10: IC (Computation s2).k = insloc 0 and
-A11: for n being Nat st n <= k holds
+A11: for n being Element of NAT st n <= k holds
        IC (Computation s2).n in dom loop P by A1,Th77;
 A12: s2= Initialize s0 +* (loop P +* Start-At insloc 0) by A5,SCMFSA8A:13
       .= s0 +* (loop P +* Start-At insloc 0) by SCMFSA8C:15;
@@ -3855,7 +3866,7 @@ A40: C2.(k + (1 + 1)) = C2.(k + 1 + 1)
 A41: IC C2.(k + 2) = C2.(k + 2).IC SCM+FSA
     .= insloc (card I1 + 5) by A39,A40,SCMFSA_2:95
     .= insloc card ProgramPart loop P by A34,AMI_5:72;
-       now let n be Nat;
+       now let n be Element of NAT;
        assume A42: not IC (Computation s2).n in dom loop P;
        then k < n by A11;
     then k + 1 <= n by INT_1:20;
@@ -4106,10 +4117,11 @@ registration
 end;
 
 registration
- let n be Nat;
+ let n be Element of NAT;
  cluster intloc (n+1) -> read-write;
- coherence proof
-      intloc (n+1) <> intloc 0 by SCMFSA_2:16;
+ coherence
+ proof
+   intloc (n+1) <> intloc 0 by SCMFSA_2:16;
    hence thesis by SF_MASTR:def 5;
  end;
 end;

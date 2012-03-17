@@ -18,19 +18,19 @@ environ
       REALSET1, ABIAN, EUCLID, MOD_4;
  registrations FINSET_1, SUBSET_1, RELSET_1, ABIAN, FINSEQ_1, VECTSP_1,
       STRUCT_0, AFINSQ_1, REALSET1, FINSEQ_5, NAT_1, MEMBERED, GROUP_1,
-      XXREAL_0;
+      XXREAL_0, XREAL_0;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
  definitions REALSET1, TARSKI, FUNCT_1, RLVECT_1, SUBSET_1;
  theorems TARSKI, ZFMISC_1, FINSEQ_1, SUBSET_1, XBOOLE_0, CARD_1, FINSEQ_2,
       FUNCT_2, EUCLID, NAT_1, XBOOLE_1, CARD_2, MCART_1, RLVECT_1, FUNCT_1,
       DOMAIN_1, ENUMSET1, CARD_3, MSSCYC_1, FINSET_1, FRECHET2, CARD_4, MOD_4,
-      XREAL_0, REALSET1, XREAL_1, XXREAL_0;
+      XREAL_0, REALSET1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes ZFREFLE1, FRAENKEL, FUNCT_2, FINSET_1, LMOD_7, BINOP_1;
 
 begin :: stuff I could not find in MML
 
  reserve X,x,y,z for set;
- reserve n,m,k,k',d' for Nat;
+ reserve n,m,k,k',d' for Element of NAT;
 
 theorem Th1:
  for x,y being real number st x < y ex z being Real st x < z & z < y
@@ -76,14 +76,14 @@ end;
 :: non-zero numbers
 
 definition
- let d be real Nat;
+ let d be real Element of NAT;
  redefine attr d is zero means
   not d > 0;
  compatibility;
 end;
 
 definition
- let d be Nat;
+ let d be Element of NAT;
  redefine attr d is zero means :Def2:
   not d >= 1;
  compatibility
@@ -95,7 +95,7 @@ definition
 end;
 
 registration
- cluster non zero Nat;
+ cluster non zero Element of NAT;
  existence
  proof
   take 1;
@@ -103,7 +103,7 @@ registration
  end;
 end;
 
- reserve d for non zero Nat;
+ reserve d for non zero Element of NAT;
 
 registration let d;
  cluster Seg d -> non empty;
@@ -323,34 +323,34 @@ theorem Th7:
 proof
  per cases;
  suppose m is even;
-  then reconsider m as even Nat;
+  then reconsider m as even Element of NAT;
   thus thesis
   proof
    per cases;
    suppose n is even;
-    then reconsider n as even Nat;
+    then reconsider n as even Element of NAT;
        m + n is even;
     hence thesis;
    end;
    suppose n is odd;
-    then reconsider n as odd Nat;
+    then reconsider n as odd Element of NAT;
        m + n is odd;
     hence thesis;
   end;
   end;
  end;
  suppose m is odd;
-  then reconsider m as odd Nat;
+  then reconsider m as odd Element of NAT;
   thus thesis
   proof
    per cases;
    suppose n is even;
-    then reconsider n as even Nat;
+    then reconsider n as even Element of NAT;
        m + n is odd;
     hence thesis;
    end;
    suppose n is odd;
-    then reconsider n as odd Nat;
+    then reconsider n as odd Element of NAT;
        m + n is even;
     hence thesis;
   end;
@@ -2370,7 +2370,8 @@ A2: for i holds r.i < l.i & [l.i,r.i] is Gap of G.i;
 end;
 
 scheme ChainInd
-  { d()->non zero Nat, G()->Grating of d(), k()->Nat, C()->Chain of k(),G(),
+  { d()->non zero Element of NAT, G()->Grating of d(),
+    k()->Element of NAT, C()->Chain of k(),G(),
     P[set] } : P[C()]
 provided
 A1: P[0_(k(),G())] and
@@ -3380,9 +3381,10 @@ A1: k = 0;
       card C = 2* 0 by CARD_1:78;
    hence thesis by A1;
   end;
-  suppose ex k' st k = k' + 1;
-   then consider k' such that
+  suppose ex k' being Nat st k = k' + 1;
+   then consider k' being Nat such that
 A2: k = k' + 1;
+    reconsider k' as Element of NAT by ORDINAL1:def 13;
    take C' = 0_(k,G);
       now
     take k';
@@ -3417,8 +3419,9 @@ proof
  assume
 A1: k > d;
  let C be Chain of k,G;
- consider k' such that
+ consider k' being Nat such that
 A2: k = k' + 1 by A1,NAT_1:22;
+    reconsider k' as Element of NAT by ORDINAL1:def 13;
  reconsider C' = C as Chain of (k' + 1),G by A2;
     C' = C & del C' = 0_(k',G) by A1,A2,Th53;
  hence thesis by A2,Def15;
@@ -3458,9 +3461,10 @@ A1: k = 0;
       {} = 0_(k,G) & card {} = 2* 0 by CARD_1:78;
    hence thesis by A1,Def15;
   end;
-  suppose ex k' st k = k' + 1;
-   then consider k' such that
+  suppose ex k' being Nat st k = k' + 1;
+   then consider k' being Nat such that
 A2: k = k' + 1;
+    reconsider k' as Element of NAT by ORDINAL1:def 13;
       del 0_(k' + 1,G) = 0_(k',G) by Th61;
    hence thesis by A2,Def15;
  end;
@@ -3472,8 +3476,9 @@ definition
  redefine func Omega(G) -> Cycle of d,G;
  coherence
  proof
-  consider d' such that
+  consider d' being Nat such that
 A1: d = d' + 1 by NAT_1:22;
+    reconsider d' as Element of NAT by ORDINAL1:def 13;
   reconsider G as Grating of d' + 1 by A1;
      del Omega(G) = 0_(d',G) by Th62;
   hence thesis by A1,Def15;
@@ -3493,9 +3498,10 @@ A1: k = 0;
    then card(C1 + C2) is even by Th9;
    hence C1 + C2 is Cycle of k,G by A1,Th68;
   end;
-  suppose ex k' st k = k' + 1;
-   then consider k' such that
+  suppose ex k' being Nat st k = k' + 1;
+   then consider k' being Nat such that
 A2: k = k' + 1;
+    reconsider k' as Element of NAT by ORDINAL1:def 13;
    reconsider C1,C2 as Cycle of (k' + 1),G by A2;
       del C1 = 0_(k',G) & del C2 = 0_(k',G);
    then del(C1 + C2) = 0_(k',G) + 0_(k',G) by Th63
@@ -3509,8 +3515,9 @@ theorem
     for C being Cycle of d,G holds C` is Cycle of d,G
 proof
  let C be Cycle of d,G;
- consider d' such that
+ consider d' being Nat such that
 A1: d = d' + 1 by NAT_1:22;
+    reconsider d' as Element of NAT by ORDINAL1:def 13;
  reconsider G as Grating of d' + 1 by A1;
  reconsider C as Cycle of (d' + 1),G by A1;
     del C = 0_(d',G);
@@ -3548,9 +3555,10 @@ A4: for C1,C2 being Chain of (k + 1),G st C1 c= C & C2 c= C &
    end;
    thus P[C] from ChainInd(A2,A3,A4);
   end;
-  suppose ex k' st k = k' + 1;
-   then consider k' such that
+  suppose ex k' being Nat st k = k' + 1;
+   then consider k' being Nat such that
 A5: k = k' + 1;
+    reconsider k' as Element of NAT by ORDINAL1:def 13;
    reconsider C as Chain of (k' + 1 + 1),G by A5;
    del (del C) = 0_(k',G) by Th65;
    hence thesis by A5,Th66;

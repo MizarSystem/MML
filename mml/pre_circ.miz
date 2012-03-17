@@ -422,19 +422,21 @@ A9:          i in dom F & x = F.i by FUNCT_1:def 5;
 
 scheme LambdaRecCorrD {D() -> non empty set,
                   A() -> Element of D(),
-                  F(Nat, Element of D()) -> Element of D() } :
+                  F(Element of NAT, Element of D()) -> Element of D() } :
     (ex f being Function of NAT, D() st f.0 = A()
-      & for i being Nat holds f.(i+1) = F(i, f.i))
+      & for i being Element of NAT holds f.(i+1) = F(i, f.i))
       & for f1, f2 being Function of NAT, D() st (f1.0 = A()
-          & for i being Nat holds f1.(i+1) = F(i, f1.i))
-          & (f2.0 = A() & for i being Nat holds f2.(i+1) = F(i,f2.i))
+          & for i being Element of NAT holds f1.(i+1) = F(i, f1.i))
+          & (f2.0 = A() &
+           for i being Element of NAT holds f2.(i+1) = F(i,f2.i))
           holds f1 = f2
 proof
     thus ex f being Function of NAT, D() st f.0 = A()
-      & for i being Nat holds f.(i+1) = F(i,f.i) from RECDEF_1:sch 4;
+      & for i being Element of NAT holds f.(i+1) = F(i,f.i)
+       from RECDEF_1:sch 4;
      let f1, f2 be Function of NAT, D() such that
-A1:   f1.0 = A() & for i being Nat holds f1.(i+1) = F(i,f1.i) and
-A2:   f2.0 = A() & for i being Nat holds f2.(i+1) = F(i,f2.i);
+A1:   f1.0 = A() & for i being Element of NAT holds f1.(i+1) = F(i,f1.i) and
+A2:   f2.0 = A() & for i being Element of NAT holds f2.(i+1) = F(i,f2.i);
      thus f1 = f2 from RECDEF_1:sch 12(A1,A2);
     end;
 
@@ -590,9 +592,9 @@ then A5:      y in dom g & g.y in dom M by FUNCT_1:21;
     end;
 
 theorem
-      for n being Nat, a being set
+      for n being Element of NAT, a being set
     holds product ( n |-> {a} ) = { n |-> a }
-    proof let n be Nat, a be set;
+    proof let n be Element of NAT, a be set;
           now let i;
        hereby assume i in product ( n |-> {a} );
         then consider g being Function such that
@@ -604,7 +606,7 @@ A4:       dom g = Seg n by A2,FUNCOP_1:19;
              now let x;
           assume
 A5:         x in dom g;
-           then g.x in ( n |-> {a} ).x & x is Nat by A2,A3;
+           then g.x in ( n |-> {a} ).x & x is Element of NAT by A2,A3;
            then g.x in {a} by A4,A5,FUNCOP_1:13;
           hence g.x = a by TARSKI:def 1;
          end;
@@ -764,9 +766,9 @@ A3: T with-replacement (p,T1) =
   end;
 
 theorem Th16:
- for p being Tree-yielding FinSequence, k being Nat st k+1 in dom p
+ for p being Tree-yielding FinSequence, k being Element of NAT st k+1 in dom p
   holds (tree p)|<*k*> = p.(k+1)
-  proof let p be Tree-yielding FinSequence, k be Nat; assume
+  proof let p be Tree-yielding FinSequence, k be Element of NAT; assume
      k+1 in dom p;
    then k+1 <= len p by FINSEQ_3:27;
    then k < len p by NAT_1:38;
@@ -774,10 +776,11 @@ theorem Th16:
   end;
 
 theorem
-      for q being DTree-yielding FinSequence, k being Nat st k+1 in dom q
+      for q being DTree-yielding FinSequence, k being Element of NAT
+       st k+1 in dom q
         holds <*k*> in tree doms q
     proof
-     let q be DTree-yielding FinSequence, k be Nat;
+     let q be DTree-yielding FinSequence, k be Element of NAT;
       assume
 A1:      k+1 in dom q;
 then A2:    k+1 <= len q by FINSEQ_3:27;
@@ -793,15 +796,15 @@ A4:    dom doms q = dom q & doms q is Tree-yielding by TREES_3:39;
     end;
 
 theorem Th18:
- for p,q being Tree-yielding FinSequence, k being Nat
+ for p,q being Tree-yielding FinSequence, k being Element of NAT
    st len p = len q & k+1 in dom p &
-      for i being Nat st i in dom p & i <> k+1 holds p.i = q.i
+      for i being Element of NAT st i in dom p & i <> k+1 holds p.i = q.i
  for t being Tree st q.(k+1) = t
   holds tree(q) = tree(p) with-replacement (<*k*>, t)
- proof let p,q be Tree-yielding FinSequence, k be Nat such that
+ proof let p,q be Tree-yielding FinSequence, k be Element of NAT such that
 A1:  len p = len q and
 A2:  k+1 in dom p and
-A3:  for i being Nat st i in dom p & i <> k+1 holds p.i = q.i;
+A3:  for i being Element of NAT st i in dom p & i <> k+1 holds p.i = q.i;
   set o = <*k*>;
       k+1 <= len p by A2,FINSEQ_3:27;
 then A4: k < len p by NAT_1:38;
@@ -821,9 +824,9 @@ A8:   s in tree(q);
       ex r being FinSequence of NAT st r in
  t & s = o^r by TREES_1:47,XBOOLE_1:115;
     end;
-    suppose ex n being Nat, r being FinSequence
+    suppose ex n being Element of NAT, r being FinSequence
       st n < len q & r in q.(n+1) & s = <*n*>^r;
-     then consider n being Nat, r being FinSequence such that
+     then consider n being Element of NAT, r being FinSequence such that
 A9:    n < len q & r in q.(n+1) & s = <*n*>^r;
          now per cases;
       case
@@ -863,9 +866,9 @@ A16: not o is_a_proper_prefix_of s;
       hence s in tree(q) by TREES_1:47;
      end;
      suppose
-          ex n being Nat, r being FinSequence
+          ex n being Element of NAT, r being FinSequence
         st n < len p & r in p.(n+1) & s = <*n*>^r;
-       then consider n being Nat, r being FinSequence such that
+       then consider n being Element of NAT, r being FinSequence such that
 A17:     n < len p & r in p.(n+1) & s = <*n*>^r;
           now per cases;
        suppose
@@ -905,29 +908,31 @@ A23:    r in t & s = o^r;
  end;
 
 theorem
-      for e1,e2 being finite DecoratedTree, x being set, k being Nat,
+      for e1,e2 being finite DecoratedTree, x being set,
+           k being Element of NAT,
       p being DTree-yielding FinSequence st
        <*k*> in dom e1 & e1 = x-tree p
   ex q being DTree-yielding FinSequence st
    e1 with-replacement (<*k*>,e2) = x-tree q &
     len q = len p & q.(k+1) = e2 &
-    for i being Nat st i in dom p & i <> k+1 holds q.i = p.i
+    for i being Element of NAT st i in dom p & i <> k+1 holds q.i = p.i
   proof
-   let e1,e2 be finite DecoratedTree, x be set, k be Nat,
+   let e1,e2 be finite DecoratedTree, x be set, k be Element of NAT,
       p be DTree-yielding FinSequence such that
 A1: <*k*> in dom e1 and
 A2: e1 = x-tree p;
     set o = <*k*>;
-    deffunc F(Nat) = IFEQ($1,k+1,e2,p.$1);
+    deffunc F(Element of NAT) = IFEQ($1,k+1,e2,p.$1);
     consider q being FinSequence such that
 A3:  len q = len p and
-A4:  for i being Nat st i in Seg len p holds q.i = F(i) from FINSEQ_1:sch 2;
+A4:  for i being Element of NAT st i in Seg len p holds q.i = F(i)
+ from FINSEQ_1:sch 2;
 A5:  dom p = Seg len p by FINSEQ_1:def 3;
 A6:    dom q = dom p by A3,FINSEQ_3:31;
         now let x;
      assume
 A7:    x in dom q;
-      then reconsider i = x as Nat;
+      then reconsider i = x as Element of NAT;
 A8:    q.i = IFEQ(i,k+1,e2,p.i) by A4,A5,A6,A7;
           i = k+1 or i <> k+1;
       then q.i = e2 or q.i = p.i by A8,CQC_LANG:def 1;
@@ -936,9 +941,10 @@ A8:    q.i = IFEQ(i,k+1,e2,p.i) by A4,A5,A6,A7;
     then reconsider q as DTree-yielding FinSequence by TREES_3:26;
    take q;
        <*k*> = {} or
-   ex i being Nat, T being DecoratedTree, q being Node of T st
+   ex i being Element of NAT, T being DecoratedTree, q being Node of T st
     i < len p & T = p.(i+1) & <*k*> = <*i*>^q by A1,A2,TREES_4:11;
-   then consider j being Nat, T being DecoratedTree, w being Node of T
+   then consider j being Element of NAT, T being DecoratedTree,
+   w being Node of T
     such that
 A9:  j < len p and T = p.(j+1) and
 A10:   <*k*> = <*j*>^w;
@@ -958,7 +964,7 @@ A16:  len doms pp = len p by A15,TREES_3:40 .= len doms qq
             by A3,A14,TREES_3:40;
 A17: dom doms pp = dom p by A15,TREES_3:39;
 
-A18: now let i be Nat;
+A18: now let i be Element of NAT;
      assume
 A19:    i in dom doms pp & i <> k+1;
 then A20:    q.i = IFEQ(i,k+1,e2,p.i) by A4,A5,A17
@@ -992,9 +998,9 @@ A25:        f = {};
            .= e1.f by A2,A25,TREES_4:def 4;
         end;
         suppose
-              ex w being Nat, u being FinSequence
+              ex w being Element of NAT, u being FinSequence
             st w < len(dqq) & u in (dqq).(w+1) & f = <*w*>^u;
-        then consider w be Nat, u being FinSequence such that
+        then consider w be Element of NAT, u being FinSequence such that
 A26:      w < len(doms q) and
 A27:      u in (doms q).(w+1) and
 A28:       f = <*w*>^u by A14;
@@ -1044,7 +1050,7 @@ A42:   r in (dom(x-tree q))|o by A1,A21,A40,TREES_1:66;
    hence e1 with-replacement (o,e2) = x-tree q by A1,A21,TREES_2:def 12;
    thus len q = len p by A3;
    thus q.(k+1) = e2 by A13;
-   let i be Nat;
+   let i be Element of NAT;
    assume i in dom p;
     then q.i = IFEQ(i,k+1,e2,p.i) by A4,A5;
    hence thesis by CQC_LANG:def 1;

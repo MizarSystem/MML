@@ -29,7 +29,7 @@ environ
       COMSEQ_3, FCONT_2, FINSEQ_4, RCOMP_1, FUNCT_1, FDIFF_1, FDIFF_2, FCONT_1,
       FCONT_3, TARSKI, FUNCT_2, RFUNCT_1, SUBSET_1, RFUNCT_2, POWER, PARTFUN1,
       ROLLE, NEWTON, RELAT_1, XREAL_0, BINARITH, XBOOLE_0, XBOOLE_1, XCMPLX_0,
-      XCMPLX_1, ARYTM_0, FUNCOP_1, XREAL_1, XXREAL_0;
+      XCMPLX_1, ARYTM_0, FUNCOP_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes NAT_1, SEQ_1, COMSEQ_1, RECDEF_1, FUNCT_1, PARTFUN2, BINOP_2;
 
 begin
@@ -37,7 +37,7 @@ begin
  reserve q,th,th1,th2,th3,r for Real,
          a,b,p for real number,
          w,z,z1,z2 for Element of COMPLEX,
-         k,l,m,n,n1,n2 for Nat,
+         k,l,m,n,n1,n2 for Element of NAT,
          seq,seq1,seq2,cq1 for Complex_Sequence,
          rseq,rseq1,rseq2 for Real_Sequence,
          rr for set,
@@ -45,7 +45,7 @@ begin
 
 :: Some definitions and properties of complex sequence
 
-definition let m,k be Nat;
+definition let m,k be Element of NAT;
  canceled;
 
   func CHK(m,k) -> Element of COMPLEX equals :Def2:
@@ -53,7 +53,7 @@ definition let m,k be Nat;
   correctness by COMPLEX1:def 6, def 7;
 end;
 
-registration let m,k be Nat;
+registration let m,k be Element of NAT;
  cluster CHK(m,k) -> real;
 coherence
  proof
@@ -62,7 +62,7 @@ coherence
  end;
 end;
 
-scheme ExComplexCASE{F(Nat,Nat)->Element of COMPLEX}:
+scheme ExComplexCASE{F(Element of NAT,Element of NAT)->Element of COMPLEX}:
 for k holds
  ex seq st for n holds ((n <= k implies seq.n=F(k,n)) &
                         (n > k implies seq.n=0))
@@ -101,12 +101,12 @@ A7: for x be set st x in NAT holds P[x,f.x] from FUNCT_1:sch 2(A5,A1);
    then reconsider f as Complex_Sequence by A6,COMSEQ_1:1;
    take seq=f;
    let n;
-   ex l be Nat st l=n &
+   ex l be Element of NAT st l=n &
     (l <= k implies seq.n=F(k,l)) & (l > k implies seq.n=0c) by A7;
    hence ((n <= k implies seq.n=F(k,n)) & (n > k implies seq.n=0));
   end;
 
-scheme ExRealCASE{F(Nat,Nat)->real number}:
+scheme ExRealCASE{F(Element of NAT,Element of NAT)->real number}:
 for k holds
  ex rseq st for n holds ((n <= k implies rseq.n=F(k,n)) &
                         (n > k implies rseq.n=0))
@@ -145,7 +145,7 @@ A7: for x be set st x in NAT holds P[x,f.x] from FUNCT_1:sch 2(A5,A1);
    then reconsider f as Real_Sequence by A6,SEQ_1:3;
    take rseq=f;
    let n;
-    ex l be Nat st l=n &
+    ex l be Element of NAT st l=n &
     (l <= k implies rseq.n=F(k,l)) & (l > k implies rseq.n=0) by A7;
    hence ((n <= k implies rseq.n=F(k,n)) & (n > k implies rseq.n=0));
   end;
@@ -156,13 +156,14 @@ definition
 func Prod_complex_n -> Complex_Sequence means :Def4:
  it.0 = 1 & for n holds it.(n+1) = it.n * (n+1);
 existence
-proof deffunc U(Nat,Element of COMPLEX) = $2 * [*$1+1,0*];
+proof deffunc U(Element of NAT,Element of COMPLEX) = $2 * [*$1+1,0*];
  consider f being Function of NAT,COMPLEX such that
-A1: f.0 = 1r & for n being Nat holds f.(n+1) = U(n,f.n) from RECDEF_1:sch 4;
+A1: f.0 = 1r & for n being Element of NAT holds f.(n+1) = U(n,f.n)
+ from RECDEF_1:sch 4;
  reconsider f as Complex_Sequence;
  take f;
  thus f.0 = 1 by A1,COMPLEX1:def 7;
- let n be Nat;
+ let n be Element of NAT;
  n+1 = [*n+1,0*] by ARYTM_0:def 7;
  hence thesis by A1;
 end;
@@ -172,10 +173,10 @@ proof
  assume that
 A2: seq1.0=1 & for n holds seq1.(n+1)=seq1.n * (n+1) and
 A3: seq2.0=1 & for n holds seq2.(n+1)=seq2.n * (n+1);
-  defpred X[Nat] means seq1.$1 = seq2.$1;
+  defpred X[Element of NAT] means seq1.$1 = seq2.$1;
 A4: X[0] by A2,A3;
-A5: for k be Nat st X[k] holds X[k+1]
-     proof let k be Nat;
+A5: for k be Element of NAT st X[k] holds X[k+1]
+     proof let k be Element of NAT;
       assume seq1.k =seq2.k;
       hence seq1.(k+1) = seq2.k * (k+1) by A2
                       .= seq2.(k+1) by A3;
@@ -189,9 +190,10 @@ definition
 func Prod_real_n -> Real_Sequence means :Def5:
  it.0 = 1 & for n holds it.(n+1) = it.n * (n+1);
 existence
-proof deffunc U(Nat,Element of REAL) = $2 * ($1+1);
+proof deffunc U(Element of NAT,Element of REAL) = $2 * ($1+1);
  consider f being Function of NAT,REAL such that
- A1: f.0 = 1 & for n being Nat holds f.(n+1) = U(n,f.n) from RECDEF_1:sch 4;
+ A1: f.0 = 1 & for n being Element of NAT holds f.(n+1) = U(n,f.n)
+  from RECDEF_1:sch 4;
  reconsider f as Real_Sequence;
  take f;
  thus thesis by A1;
@@ -202,10 +204,10 @@ proof
  assume that
 A2: rseq1.0=1 & for n holds rseq1.(n+1)=rseq1.n * (n+1) and
 A3: rseq2.0=1 & for n holds rseq2.(n+1)=rseq2.n * (n+1);
-  defpred X[Nat] means rseq1.$1 = rseq2.$1;
+  defpred X[Element of NAT] means rseq1.$1 = rseq2.$1;
  A4: X[0] by A2,A3;
- A5: for k be Nat st X[k] holds X[k+1]
-     proof let k be Nat;
+ A5: for k be Element of NAT st X[k] holds X[k+1]
+     proof let k be Element of NAT;
       assume rseq1.k =rseq2.k;
       hence rseq1.(k+1) = rseq2.k * (k+1) by A2
                     .= rseq2.(k+1) by A3;
@@ -215,33 +217,33 @@ A3: rseq2.0=1 & for n holds rseq2.(n+1)=rseq2.n * (n+1);
 end;
 end;
 
-definition let n be Nat;
+definition let n be Element of NAT;
   func n !c -> Element of COMPLEX equals
     Prod_complex_n.n;
   coherence;
 end;
 
-definition let n be Nat;
+definition let n be Element of NAT;
   redefine func n! -> Real equals
     Prod_real_n.n;
   coherence;
   compatibility
 proof
-  defpred X[Nat] means Prod_real_n.$1 = $1!;
+  defpred X[Element of NAT] means Prod_real_n.$1 = $1!;
 A1:  X[0] by Def5,NEWTON:18;
-A2:  now let l be Nat;
+A2:  now let l be Element of NAT;
       assume A3: X[l];
       Prod_real_n.(l+1) = Prod_real_n.l * (l+1) by Def5
        .= (l+1)! by A3,NEWTON:21;
       hence X[l+1];
      end;
-    for k be Nat holds X[k] from NAT_1:sch 1(A1,A2);
+    for k be Element of NAT holds X[k] from NAT_1:sch 1(A1,A2);
   hence thesis;
 end;
 end;
 
 definition let z be complex number;
-  deffunc U(Nat) = z #N $1 /($1!c);
+  deffunc U(Element of NAT) = z #N $1 /($1!c);
   func z ExpSeq -> Complex_Sequence means :Def8:
     for n holds it.n = z #N n / (n!c);
   existence
@@ -252,14 +254,14 @@ definition let z be complex number;
   uniqueness
   proof
     thus for s1,s2 being Complex_Sequence st
-     (for x being Nat holds s1.x = U(x)) &
-     (for x being Nat holds s2.x = U(x)) holds s1 = s2
+     (for x being Element of NAT holds s1.x = U(x)) &
+     (for x being Element of NAT holds s2.x = U(x)) holds s1 = s2
         from BINOP_2:sch 1;
   end;
 end;
 
 definition let a be real number;
-  deffunc U(Nat) = a |^ $1 /($1!);
+  deffunc U(Element of NAT) = a |^ $1 /($1!);
   func a ExpSeq -> Real_Sequence means :Def9:
    for n holds it.n = a |^ n /(n!);
   existence
@@ -270,8 +272,8 @@ definition let a be real number;
   uniqueness
    proof
     thus for s1,s2 being Real_Sequence st
-     (for x being Nat holds s1.x = U(x)) &
-     (for x being Nat holds s2.x = U(x)) holds s1 = s2
+     (for x being Element of NAT holds s1.x = U(x)) &
+     (for x being Element of NAT holds s2.x = U(x)) holds s1 = s2
       from BINOP_2:sch 1;
    end;
 end;
@@ -281,7 +283,7 @@ theorem Th1:
   n!c <> 0 &
   (n+1)!c = n!c * (n+1)
 proof
-  defpred X[Nat] means $1!c <> 0;
+  defpred X[Element of NAT] means $1!c <> 0;
   thus 0!c = Prod_complex_n.0
      .= 1 by Def4;
 then A1: X[0];
@@ -328,14 +330,14 @@ A1: now let k; assume 0 < k;
  hence thesis by A1;
 end;
 
-definition let n be Nat;
+definition let n be Element of NAT;
   func Coef(n) -> Complex_Sequence means :Def10:
-   for k be Nat holds
+   for k be Element of NAT holds
      (k <= n implies it.k = n!c /( (k!c ) * ((n-'k)!c ))) &
      (k > n implies it.k=0);
 existence
 proof
- deffunc U(Nat,Nat) = $1!c /( ($2!c ) * (($1-'$2)!c));
+ deffunc U(Element of NAT,Element of NAT) = $1!c /( ($2!c ) * (($1-'$2)!c));
     for n holds ex seq st for k holds
 (k <= n implies seq.k = U(n,k)) &
 (k > n implies seq.k=0 ) from ExComplexCASE;
@@ -366,14 +368,14 @@ hence seq1=seq2 by COMSEQ_1:6;
 end;
 end;
 
-definition let n be Nat;
+definition let n be Element of NAT;
   func Coef_e(n) -> Complex_Sequence means :Def11:
-  for k be Nat holds
+  for k be Element of NAT holds
      (k <= n implies it.k = 1r/((k!c ) * ((n-'k)!c )))
     & (k > n implies it.k=0);
 existence
 proof
- deffunc U(Nat,Nat) = 1r/(($2!c ) * (($1-'$2)!c ));
+ deffunc U(Element of NAT,Element of NAT) = 1r/(($2!c ) * (($1-'$2)!c ));
     for n holds ex seq st for k holds
  (k <= n implies seq.k = U(n,k)) &
 (k > n implies seq.k=0) from ExComplexCASE;
@@ -408,11 +410,12 @@ end;
 
 definition let seq;
 func Sift seq -> Complex_Sequence means :Def12:
-  it.0=0 & for k be Nat holds it.(k+1) = seq.k;
+  it.0=0 & for k be Element of NAT holds it.(k+1) = seq.k;
 existence
-proof deffunc U(Nat,Element of COMPLEX) = seq.$1;
+proof deffunc U(Element of NAT,Element of COMPLEX) = seq.$1;
  consider f being Function of NAT,COMPLEX such that
- A1: f.0 = 0c & for n being Nat holds f.(n+1)=U(n,f.n) from RECDEF_1:sch 4;
+ A1: f.0 = 0c & for n being Element of NAT holds f.(n+1)=U(n,f.n)
+  from RECDEF_1:sch 4;
  reconsider f as Complex_Sequence;
  take f;
  thus thesis by A1;
@@ -424,10 +427,10 @@ proof
                 seq1.(n+1)=seq.n and
              A3: seq2.0=0 & for n holds
                 seq2.(n+1)=seq.n;
-  defpred X[Nat] means seq1.$1 = seq2.$1;
+  defpred X[Element of NAT] means seq1.$1 = seq2.$1;
  A4: X[0] by A2,A3;
- A5: for k be Nat st X[k] holds X[k+1]
-     proof let k be Nat;
+ A5: for k be Element of NAT st X[k] holds X[k+1]
+     proof let k be Element of NAT;
       assume seq1.k =seq2.k;
       thus seq1.(k+1) = seq.k by A2
                     .= seq2.(k+1) by A3;
@@ -440,13 +443,14 @@ end;
 definition let n;
   let z,w be Element of COMPLEX;
   func Expan(n,z,w) -> Complex_Sequence means :Def13:
-  for k be Nat holds
+  for k be Element of NAT holds
    ( k <= n implies
        it.k=((Coef(n)).k) * (z |^ k) * (w |^ (n-'k)) ) &
    (n < k implies it.k=0);
 existence
 proof
- deffunc U(Nat,Nat) = ((Coef($1)).$2) * (z #N $2) * (w #N ($1-'$2));
+ deffunc U(Element of NAT,Element of NAT)
+  = ((Coef($1)).$2) * (z #N $2) * (w #N ($1-'$2));
     for n holds ex seq st for k holds
 (k <= n implies seq.k = U(n,k)) &
 (k > n implies seq.k=0) from ExComplexCASE;
@@ -482,13 +486,14 @@ end;
 definition let n;
 let z,w be Element of COMPLEX;
 func Expan_e(n,z,w) -> Complex_Sequence means :Def14:
-  for k be Nat holds
+  for k be Element of NAT holds
    ( k <= n implies
        it.k=((Coef_e(n)).k) * (z |^ k) * (w |^ (n-'k)) ) &
    (n < k implies it.k=0);
 existence
 proof
- deffunc U(Nat,Nat) = ((Coef_e($1)).$2) * (z #N $2) * (w #N ($1-'$2));
+ deffunc U(Element of NAT,Element of NAT)
+  = ((Coef_e($1)).$2) * (z #N $2) * (w #N ($1-'$2));
     for n holds
 ex seq st for k holds
 (k <= n implies seq.k = U(n,k)) &
@@ -524,13 +529,14 @@ end;
 definition let n;
 let z,w be Element of COMPLEX;
 func Alfa(n,z,w) -> Complex_Sequence means :Def15:
-   for k be Nat holds
+   for k be Element of NAT holds
    ( k <= n implies
        it.k= (z ExpSeq).k * Partial_Sums(w ExpSeq).(n-'k) ) &
    ( n < k implies it.k=0);
 existence
 proof
- deffunc U(Nat,Nat) = (z ExpSeq).$2 * Partial_Sums(w ExpSeq).($1-'$2);
+ deffunc U(Element of NAT,Element of NAT)
+  = (z ExpSeq).$2 * Partial_Sums(w ExpSeq).($1-'$2);
     for n holds
 ex seq st for k holds
 (k <= n implies seq.k = U(n,k)) &
@@ -567,16 +573,17 @@ end;
 
 definition
 let a,b be real number;
-let n be Nat;
+let n be Element of NAT;
 func Conj(n,a,b) -> Real_Sequence means
-      for k be Nat holds
+      for k be Element of NAT holds
   ( k <= n implies
      it.k= (a ExpSeq).k * (Partial_Sums(b ExpSeq).n
                           -Partial_Sums(b ExpSeq).(n-'k)))
    & (n < k implies it.k=0);
 existence
 proof
- deffunc U(Nat,Nat) = (a ExpSeq).$2 * (Partial_Sums(b ExpSeq).$1
+ deffunc U(Element of NAT,Element of NAT)
+  = (a ExpSeq).$2 * (Partial_Sums(b ExpSeq).$1
                           -Partial_Sums(b ExpSeq).($1-'$2));
     for n holds ex rseq st for k holds
 (k <= n implies rseq.k = U(n,k) ) &
@@ -616,16 +623,17 @@ end;
 
 definition
 let z, w be Element of COMPLEX;
-let n be Nat;
+let n be Element of NAT;
 func Conj(n,z,w) -> Complex_Sequence means :Def17:
-  for k be Nat holds
+  for k be Element of NAT holds
   ( k <= n implies
      it.k= (z ExpSeq).k * (Partial_Sums(w ExpSeq).n
                           -Partial_Sums(w ExpSeq).(n-'k)))
    & (n < k implies it.k=0);
 existence
 proof
- deffunc U(Nat,Nat) = (z ExpSeq).$2 * (Partial_Sums(w ExpSeq).$1
+ deffunc U(Element of NAT,Element of NAT)
+  = (z ExpSeq).$2 * (Partial_Sums(w ExpSeq).$1
                           -Partial_Sums(w ExpSeq).($1-'$2));
     for n holds
 ex seq st for k holds
@@ -686,7 +694,7 @@ theorem Th4:
 proof
  A1:
   now
-  let n be Nat;
+  let n be Element of NAT;
  thus (z ExpSeq).(n+1)=z |^ (n+1) / ((n+1) !c ) by Def8
                .=(z GeoSeq).(n+1) / ((n+1)!c )
                .=(z GeoSeq).n * z /((n+1)!c ) by COMSEQ_3:def 1
@@ -699,7 +707,7 @@ proof
  A2:(z ExpSeq).0=z |^ 0 /(0!c ) by Def8
             .=(z GeoSeq).0 /(0!c )
             .=1 by Th1,COMSEQ_3:def 1,COMPLEX1:def 7;
-  defpred X[Nat] means |. ((z ExpSeq)).$1 .| =( |.z.| ExpSeq ).$1;
+  defpred X[Element of NAT] means |. ((z ExpSeq)).$1 .| =( |.z.| ExpSeq ).$1;
       ( |.z.| ExpSeq ).0 = ((|.z .|) |^ 0)/ (0!) by Def9
             .= 1/(0!) by NEWTON:9
             .= 1/((Prod_real_n).0)
@@ -731,17 +739,19 @@ proof
  assume
   A1:  0 < k;
   then A2:  0+1 <= k by INT_1:20;
-  consider m such that
+  consider m be Nat such that
   A3:   m+1=k by A1,NAT_1:22;
   A4: m=k-1 by A3;
-  thus (Sift(seq)).k=seq.m by A3,Def12
+  m in NAT by ORDINAL1:def 13;
+  hence (Sift seq).k=seq.m by A3,Def12
              .=seq.(k-'1) by A2,A4,BINARITH:50;
 end;
 
 theorem Th6:
 Partial_Sums(seq).k=Partial_Sums(Sift(seq)).k+seq.k
 proof
-  defpred X[Nat] means Partial_Sums(seq).$1=Partial_Sums(Sift(seq)).$1+seq.$1;
+  defpred X[Element of NAT] means
+   Partial_Sums(seq).$1=Partial_Sums(Sift(seq)).$1+seq.$1;
    Partial_Sums(seq).0=0c + seq.0 by COMSEQ_3:def 7
                    .=(Sift(seq)).0 + seq.0 by Def12
                    .=Partial_Sums(Sift(seq)).0+seq.0 by COMSEQ_3:def 7;
@@ -764,7 +774,7 @@ proof
   A1:(z+w) |^ 0 =((z+w) GeoSeq).0
             .=1r by COMSEQ_3:def 1;
   A2:0-'0=0 by BINARITH:51;
-  defpred X[Nat] means (z+w) |^ $1 = Partial_Sums(Expan($1,z,w)).$1;
+  defpred X[Element of NAT] means (z+w) |^ $1 = Partial_Sums(Expan($1,z,w)).$1;
        Partial_Sums(Expan(0,z,w)).0 = Expan(0,z,w).0 by COMSEQ_3:def 7
                 .= (Coef(0)).0 * (z |^ 0) * (w |^ 0) by A2,Def13
                 .= 1/(1 * 1) * z |^ 0 * w |^ 0 by A2,Def10,Th1
@@ -783,7 +793,7 @@ proof
              .=(Partial_Sums((z+w) (#) Expan(n,z,w))).n by COMSEQ_3:29;
         (z+w) (#) Expan(n,z,w)=(z (#) Expan(n,z,w))+(w (#) Expan(n,z,w))
      proof
-     now let k be Nat;
+     now let k be Element of NAT;
       thus ((z+w) (#) Expan(n,z,w)).k=(z+w) * Expan(n,z,w).k by COMSEQ_1:def 7
                .=z * Expan(n,z,w).k+w * Expan(n,z,w).k
                .=(z (#) Expan(n,z,w)).k+w * Expan(n,z,w).k by COMSEQ_1:def 7
@@ -807,7 +817,7 @@ proof
  by COMSEQ_3:def 7
           .=Partial_Sums((z (#) Expan(n,z,w))).n
            +z * Expan(n,z,w).(n+1) by COMSEQ_1:def 7;
-               n < n+1 & n+1 is Nat by XREAL_1:31;
+               n < n+1 & n+1 is Element of NAT by XREAL_1:31;
            then Expan(n,z,w).(n+1)=0c by Def13;
            hence Partial_Sums((z (#) Expan(n,z,w))).(n+1)
             =Partial_Sums((z (#) Expan(n,z,w))).n by A9,COMPLEX1:def 6;
@@ -820,7 +830,7 @@ proof
  by COMSEQ_3:def 7
           .=Partial_Sums((w (#) Expan(n,z,w))).n
            +w * Expan(n,z,w).(n+1) by COMSEQ_1:def 7;
-               n < n+1 & n+1 is Nat by XREAL_1:31;
+               n < n+1 & n+1 is Element of NAT by XREAL_1:31;
             then Expan(n,z,w).(n+1)=0c by Def13;
            hence Partial_Sums((w (#) Expan(n,z,w))).(n+1)
             =Partial_Sums((w (#) Expan(n,z,w))).n by A11,COMPLEX1:def 6;
@@ -842,7 +852,7 @@ proof
     A14:(w (#) Expan(n,z,w))+Sift((z (#) Expan(n,z,w)))
          =Expan(n+1,z,w)
      proof
-         now let k be Nat;
+         now let k be Element of NAT;
       A15: now assume
        A16:  n+1 < k;
        A17:  n < k & 1 <= k & 1 <k & 0 <k & n <k-1 & n < k-'1
@@ -1047,7 +1057,7 @@ theorem Th8:
   Expan_e(n,z,w)=(1r/(n!c )) (#) Expan(n,z,w)
   proof
     now
-      let k be Nat;
+      let k be Element of NAT;
   A1: now assume A2:n <k;
         hence Expan_e(n,z,w).k
                  =(1r/(n!c )) * 0c by Def14
@@ -1162,7 +1172,7 @@ A6:             ((z ExpSeq).n * z)/(n+1+0*<i>)=0c by A5,Th4;
                 hence contradiction by A4;
             end;
          end;
-     deffunc U(Nat) = |.(z ExpSeq).|.($1+1)/|.(z ExpSeq).|.$1;
+     deffunc U(Element of NAT) = |.(z ExpSeq).|.($1+1)/|.(z ExpSeq).|.$1;
      thus
      A7:  for n holds X[n] from NAT_1:sch 1(A2,A3);
          ex rseq st for n holds rseq.n= U(n) from SEQ_1:sch 1;
@@ -1243,7 +1253,7 @@ Partial_Sums((Alfa(k+1,z,w))).k
    = (Partial_Sums(( Alfa(k,z,w)))).k
      + (Partial_Sums(( Expan_e(k+1,z,w) ))).k
 proof
-   now let l be Nat; assume l <= k;
+   now let l be Element of NAT; assume l <= k;
          hence (Alfa(k+1,z,w)).l = (Alfa(k,z,w)).l + Expan_e(k+1,z,w).l
  by Th12
               .= ( (Alfa(k,z,w)) + Expan_e(k+1,z,w)).l by COMSEQ_1:def 4;
@@ -1275,7 +1285,7 @@ proof
     A1:Partial_Sums((z+w) ExpSeq).0
         =((z+w) ExpSeq).0 by COMSEQ_3:def 7
         .=1 by Th11;
-      defpred X[Nat] means
+      defpred X[Element of NAT] means
        Partial_Sums((z+w) ExpSeq).$1=Partial_Sums(Alfa($1,z,w)).$1;
     A2: 0-'0=0 by BINARITH:51;
           Partial_Sums(Alfa(0,z,w)).0
@@ -1342,12 +1352,12 @@ A1:
        -Partial_Sums(Alfa(k,z,w))).k by COMSEQ_1:def 10
   .=Partial_Sums((((Partial_Sums(w ExpSeq).k) (#) (z ExpSeq)))
        -(Alfa(k,z,w))).k by COMSEQ_3:28;
-      for l be Nat st l <= k holds
+      for l be Element of NAT st l <= k holds
      ((Partial_Sums(w ExpSeq).k) (#) (z ExpSeq)
        - (Alfa(k,z,w))).l
       =Conj(k,z,w).l
       proof
-      let l be Nat such that
+      let l be Element of NAT such that
             A2:l <= k;
             thus ( ( Partial_Sums(w ExpSeq).k) (#) (z ExpSeq)
            - (Alfa(k,z,w)) ).l
@@ -1379,7 +1389,7 @@ theorem Th17:
  Partial_Sums((|.z.| ExpSeq)).k <= Sum(|.z.| ExpSeq) &
   |. Partial_Sums(( z ExpSeq)).k .| <= Sum(|.z.| ExpSeq)
 proof
-  defpred X[Nat] means |. Partial_Sums(( z ExpSeq)).$1 .|
+  defpred X[Element of NAT] means |. Partial_Sums(( z ExpSeq)).$1 .|
        <= Partial_Sums((|.z.| ExpSeq)).$1;
 A1: |. Partial_Sums(( z ExpSeq)).0 .|
     = |. ((z ExpSeq)).0 .| by COMSEQ_3:def 7
@@ -1504,12 +1514,12 @@ A9: dom (|.z.| ExpSeq) = NAT by FUNCT_2:def 1;
   then |. (z ExpSeq).| = |.z.| ExpSeq by A9,COMSEQ_1:def 14;
    then Partial_Sums(( |.z.| ExpSeq )) is convergent by SERIES_1:def 2;
   then consider n1 such that
-  A10: for k,l be Nat st n1 <= k & n1 <= l holds
+  A10: for k,l be Element of NAT st n1 <= k & n1 <= l holds
         abs(Partial_Sums(( |.z.| ExpSeq )).k
         - Partial_Sums(( |.z.| ExpSeq )).l)
         < p1 by A7,COMSEQ_3:4;
   consider n2 such that
-  A11:for k,l be Nat st n2 <= k & n2 <= l holds
+  A11:for k,l be Element of NAT st n2 <= k & n2 <= l holds
         |.Partial_Sums(( w ExpSeq )).k
         - Partial_Sums(( w ExpSeq )).l.|
         < p1 by A7,COMSEQ_3:47;
@@ -1517,7 +1527,7 @@ A9: dom (|.z.| ExpSeq) = NAT by FUNCT_2:def 1;
   take n4 = n3+n3;
   A12:now let n;
  let k;
-      now let l be Nat such that
+      now let l be Element of NAT such that
       A13: l <= k;
      thus |.Conj(k,z,w).|.l =|.( Conj(k,z,w).l) .| by COMSEQ_1:def 14
                       .=|.(z ExpSeq).l * (Partial_Sums(w ExpSeq).k
@@ -1529,12 +1539,12 @@ A9: dom (|.z.| ExpSeq) = NAT by FUNCT_2:def 1;
                       .=(|.z.| ExpSeq).l * |.(Partial_Sums(w ExpSeq).k
                           -Partial_Sums(w ExpSeq).(k-'l)).| by Th4;
     end;
-    hence for l be Nat st l <= k holds
+    hence for l be Element of NAT st l <= k holds
     |.Conj(k,z,w).|.l =(|.z.| ExpSeq).l * |.(Partial_Sums(w ExpSeq).k
                           -Partial_Sums(w ExpSeq).(k-'l)).|;
   end;
   A14: now let k;
-      now let l be Nat; assume l <= k;
+      now let l be Element of NAT; assume l <= k;
      then A15:|.Conj(k,z,w).|.l
           =(|.z .| ExpSeq).l * |.Partial_Sums(w ExpSeq).k
                           -Partial_Sums(w ExpSeq).(k-'l).| by A12;
@@ -1563,7 +1573,7 @@ A9: dom (|.z.| ExpSeq) = NAT by FUNCT_2:def 1;
             |.Conj(k,z,w).|.l <= (|.z .| ExpSeq).l * (2 * Sum(|.w.| ExpSeq))
  by A15,A18,XREAL_1:66;
      end;
-    hence for l be Nat st l <= k holds
+    hence for l be Element of NAT st l <= k holds
     |.Conj(k,z,w).|.l <= (|.z .| ExpSeq).l * (2 * Sum(|.w.| ExpSeq));
     end;
       now let k such that
@@ -1572,7 +1582,7 @@ A9: dom (|.z.| ExpSeq) = NAT by FUNCT_2:def 1;
       then A20:n3 <= k by A19,XXREAL_0:2;
 A21:      n1+0 <= n1+n2 by XREAL_1:8;
       then A22:n1 <= k by A20,XXREAL_0:2;
-         now let l be Nat; assume
+         now let l be Element of NAT; assume
           A23:l <= n3;
           then A24:l <= k by A20,XXREAL_0:2;
           then A25:k-'l=k-l by BINARITH:50;
@@ -1616,7 +1626,7 @@ A27:    n4-l <= k-l by A19,XREAL_1:11;
           < p/2 by A34,XXREAL_0:2;
          k-'n3=k-n3 by A20,BINARITH:50;
       then A36:k=(k-'n3)+n3;
-          for l be Nat st l <= k holds
+          for l be Element of NAT st l <= k holds
     |.Conj(k,z,w).|.l <= (2 * Sum(|.w.| ExpSeq)) * (|.z .| ExpSeq).l
  by A14;
       then A37:Partial_Sums(|.Conj(k,z,w).|).(k)
@@ -1670,7 +1680,7 @@ proof
              |.seq.k.|=|.Partial_Sums((Conj(k,z,w))).k.| by A1;
          hence |.seq.k.| <= Partial_Sums(|.Conj(k,z,w).|).k by COMSEQ_3:30;
          end;
-     deffunc U(Nat) = Partial_Sums(|.Conj($1,z,w).|).$1;
+     deffunc U(Element of NAT) = Partial_Sums(|.Conj($1,z,w).|).$1;
         ex rseq  be Real_Sequence st for k
            holds rseq.k = U(k) from SEQ_1:sch 1;
    then consider rseq be Real_Sequence such that
@@ -1704,7 +1714,7 @@ end;
 
 Lm2:
 Sum(z ExpSeq) * Sum(w ExpSeq) = Sum((z+w) ExpSeq)
-proof deffunc U(Nat) = Partial_Sums(Conj($1,z,w)).$1;
+proof deffunc U(Element of NAT) = Partial_Sums(Conj($1,z,w)).$1;
      ex seq st
    for k holds seq.k= U(k) from COMSEQ_1:sch 1;
    then consider seq such that
@@ -1998,7 +2008,8 @@ proof
    proof
      A2:for n holds (([*0,th*] ExpSeq).n)*' = ((-[*0,th*]) ExpSeq).n
        proof
-     defpred X[Nat] means (([*0,th*] ExpSeq).$1)*' = ((-[*0,th*]) ExpSeq).$1;
+     defpred X[Element of NAT] means
+      (([*0,th*] ExpSeq).$1)*' = ((-[*0,th*]) ExpSeq).$1;
          (([*0,th*] ExpSeq).0)*'
               =1r by Th4,COMPLEX1:def 7,115
              .=((-[*0,th*]) ExpSeq).0 by Th4, COMPLEX1:def 7;
@@ -2024,7 +2035,7 @@ A6:       (n+1+0*<i>) = [*n+1,0*] by COMPLEX1:27;
        end;
         thus for n holds X[n] from NAT_1:sch 1(A3,A4);
        end;
-      defpred X[Nat] means (Partial_Sums(([*0,th*] ExpSeq))*').$1
+      defpred X[Element of NAT] means (Partial_Sums(([*0,th*] ExpSeq))*').$1
              =Partial_Sums((-[*0,th*]) ExpSeq).$1;
         (Partial_Sums([*0,th*] ExpSeq)*').0
         =(Partial_Sums([*0,th*] ExpSeq).0)*' by COMSEQ_2:def 2
@@ -2159,7 +2170,7 @@ theorem
     cos(-th)=cos(th) & sin(-th)=-sin(th) by Th33;
 
 definition let th be real number;
-  deffunc U(Nat) = (-1)|^ $1 * (th)|^ (2*$1+1)/((2*$1+1)!);
+  deffunc U(Element of NAT) = (-1)|^ $1 * (th)|^ (2*$1+1)/((2*$1+1)!);
   func th P_sin -> Real_Sequence means :Def24:
   for n holds it.n= (-1)|^ n * (th)|^ (2*n+1)/((2*n+1)!);
   existence
@@ -2170,12 +2181,12 @@ definition let th be real number;
   uniqueness
    proof
     thus for s1,s2 being Real_Sequence st
-     (for x being Nat holds s1.x = U(x)) &
-     (for x being Nat holds s2.x = U(x)) holds s1 = s2
+     (for x being Element of NAT holds s1.x = U(x)) &
+     (for x being Element of NAT holds s2.x = U(x)) holds s1 = s2
       from BINOP_2:sch 1;
    end;
 
- deffunc U(Nat) = (-1)|^ $1 * (th)|^ (2*$1)/((2*$1)!);
+ deffunc U(Element of NAT) = (-1)|^ $1 * (th)|^ (2*$1)/((2*$1)!);
 func th P_cos -> Real_Sequence means :Def25:
  for n holds it.n = (-1)|^ n * (th)|^ (2*n)/((2*n)!);
   existence
@@ -2186,8 +2197,8 @@ func th P_cos -> Real_Sequence means :Def25:
   uniqueness
    proof
     thus for s1,s2 being Real_Sequence st
-     (for x being Nat holds s1.x = U(x)) &
-     (for x being Nat holds s2.x = U(x)) holds s1 = s2
+     (for x being Element of NAT holds s1.x = U(x)) &
+     (for x being Element of NAT holds s2.x = U(x)) holds s1 = s2
       from BINOP_2:sch 1;
    end;
 end;
@@ -2238,7 +2249,8 @@ theorem Th35: for z, k holds z|^ (2*k) = (z|^ k)|^ 2&
        z|^ (2*k)= (z|^ 2)|^ k
   proof
     let z,k;
-     defpred X[Nat] means z|^ (2*$1) = (z|^ $1)|^ 2 & z|^ (2*$1)= (z|^ 2)|^ $1;
+     defpred X[Element of NAT] means
+      z|^ (2*$1) = (z|^ $1)|^ 2 & z|^ (2*$1)= (z|^ 2)|^ $1;
 A1: z|^ (2*0) =1*1 by NEWTON:9
       .= 1|^1*1 by NEWTON:10
       .= 1|^(1+1) by NEWTON:11
@@ -2304,7 +2316,8 @@ A3: [*0, th*] |^ (2*0+1)=[*0, th*] GeoSeq.(0+1)
                          .=[*1,0*]*[*0,th*] by Lm10,COMSEQ_3:def 1
                          .=[*-0* th,1*th*] by Lm9
                          .=[*0,th*];
-      defpred X[Nat] means [*0, th*] |^ (2*$1)=[*(-1)|^ $1* (th |^ (2*$1)),0*]
+      defpred X[Element of NAT] means
+       [*0, th*] |^ (2*$1)=[*(-1)|^ $1* (th |^ (2*$1)),0*]
      & [*0, th*] |^ (2*$1+1)=[*0,(-1)|^ $1* (th |^ (2*$1+1))*];
        [*0,(-1)|^ 0 * (th |^ (2*0+1))*]=[*0,(-1)|^ 0 * (th GeoSeq.(2*0+1))*]
  by PREPOWER:def 1
@@ -2376,11 +2389,11 @@ end;
 
 theorem Th37: for n holds n!c=[*n!,0*]
 proof
-   defpred X[Nat] means $1!c=[*$1!,0*];
+   defpred X[Element of NAT] means $1!c=[*$1!,0*];
  A1: X[0] by Th1,ARYTM_0:def 7,NEWTON:18;
  A2: for k st X[k] holds X[k+1]
   proof
-    let k be Nat;
+    let k be Element of NAT;
 A3:   [*(k+1),0*] = k+1+0*<i> by COMPLEX1:27;
     assume k!c=[*k!,0*]; hence
         (k+1)!c=[*k!,0*]*[*(k+1),0*] by Th1,A3
@@ -2422,7 +2435,7 @@ A7: [*0, th*] = 0+th*<i> by COMPLEX1:27;
         .=0 + Im ((([*0, th*] ExpSeq).0)* [*0, th*] /(0+1+0*<i>)) by Th4
         .= Im (1* [*0, th*] /1) by Th4
         .=th by COMPLEX1:28,A7;
-     defpred X[Nat] means
+     defpred X[Element of NAT] means
      Partial_Sums(th P_sin).$1 = Partial_Sums(Im ([*0, th*] ExpSeq)).(2*$1+1) &
      Partial_Sums(th P_cos).$1 = Partial_Sums(Re ([*0, th*] ExpSeq)).(2*$1);
         Partial_Sums(Re ([*0, th*] ExpSeq)).(2*0)
@@ -2432,7 +2445,7 @@ A7: [*0, th*] = 0+th*<i> by COMPLEX1:27;
 then A9: X[0] by A1,A2,A3,A4,A5,A8;
 A10: for k st X[k] holds X[k+1]
  proof
-    let k be Nat;
+    let k be Element of NAT;
     assume
 A11: Partial_Sums(th P_sin).k = Partial_Sums(Im ([*0, th*] ExpSeq)).(2*k+1) &
      Partial_Sums(th P_cos).k = Partial_Sums(Re ([*0, th*] ExpSeq)).(2*k);
@@ -2678,10 +2691,10 @@ proof
      end;
      hence thesis by SEQM_3:7;
    end;
-   for n holds bq.n is Nat
+   for n holds bq.n is Element of NAT
    proof
     let n;
-    2*n+1 is Nat;
+    2*n+1 is Element of NAT;
     hence thesis by Lm11;
    end;
  hence thesis by A1,SEQM_3:29;
@@ -2737,7 +2750,7 @@ proof
     0+1<= m+1 by XREAL_1:8;
     hence 1<= m+1;
   end;
-   deffunc U(Nat) = $1!;
+   deffunc U(Element of NAT) = $1!;
   consider rseq such that
   A3:for l holds rseq.l=U(l) from SEQ_1:sch 1;
   A4: rseq is non-decreasing
@@ -2745,7 +2758,7 @@ proof
     for l holds rseq.l<=rseq.(l+1)& rseq.l>0
     proof
      let l;
-      defpred X[Nat] means rseq.$1<=rseq.($1+1)& rseq.$1>0;
+      defpred X[Element of NAT] means rseq.$1<=rseq.($1+1)& rseq.$1>0;
      A5: rseq.(0+1)=(0+1)! by A3
               .=0!*1 by NEWTON:21
               .=1 by NEWTON:18;
@@ -2783,7 +2796,8 @@ proof
      for m holds th GeoSeq.(m+1)<=th GeoSeq.m& th GeoSeq.m >=0
      proof
        let m;
-      defpred X[Nat] means th GeoSeq.($1+1)<=th GeoSeq.$1 &th GeoSeq.$1 >=0;
+      defpred X[Element of NAT] means
+       th GeoSeq.($1+1)<=th GeoSeq.$1 &th GeoSeq.$1 >=0;
           th GeoSeq.(0+1)=th GeoSeq.0 * th by PREPOWER:4
                                .= 1*th by PREPOWER:4
                                .=th;
@@ -2811,7 +2825,7 @@ end;
 theorem Th44: for th being Real holds [*th,0*]|^ n=[* th |^ n,0 *]
 proof
   let th be Real;
-      defpred X[Nat] means [*th,0*]|^ $1 =[* th |^ $1,0 *];
+      defpred X[Element of NAT] means [*th,0*]|^ $1 =[* th |^ $1,0 *];
      [*th,0*]|^ 0=[* 1,0 *] by Lm10,COMSEQ_3:11
                  .=[* th |^ 0,0 *] by Lm12;
     then A1:  X[0];
@@ -2848,7 +2862,7 @@ let p be Real;
 A1: for n holds (Partial_Sums(Im([*p,0*] ExpSeq))).n=0
  proof
    let n;
-    defpred X[Nat] means (Partial_Sums(Im([*p,0*] ExpSeq))).$1=0;
+    defpred X[Element of NAT] means (Partial_Sums(Im([*p,0*] ExpSeq))).$1=0;
       (Partial_Sums(Im([*p,0*] ExpSeq))).0=Im([*p,0*] ExpSeq).0
  by SERIES_1:def 1
           .=Im([*p,0*] ExpSeq.0 ) by COMSEQ_3:def 4
@@ -2904,7 +2918,7 @@ SEQ_4:30;
        for n holds ((Partial_Sums(1 P_cos))*bq).n >=1/2
      proof
        let n;
-      defpred X[Nat] means ((Partial_Sums(1 P_cos))*bq).$1 >= 1/2;
+      defpred X[Element of NAT] means ((Partial_Sums(1 P_cos))*bq).$1 >= 1/2;
            ((Partial_Sums(1 P_cos))*bq).0=(Partial_Sums(1 P_cos)).(bq.0)
  by SEQM_3:31
                          .= (Partial_Sums(1 P_cos)).(2*0+1) by Lm11
@@ -2985,7 +2999,7 @@ k
         for n holds ((Partial_Sums(1 P_sin))*bq).n >=5/6
       proof
         let n;
-        defpred X[Nat] means ((Partial_Sums(1 P_sin))*bq).$1 >= 5/6;
+        defpred X[Element of NAT] means ((Partial_Sums(1 P_sin))*bq).$1 >= 5/6;
             ((Partial_Sums(1 P_sin))*bq).0=(Partial_Sums(1 P_sin)).(bq.0)
  by SEQM_3:31
                           .= (Partial_Sums(1 P_sin)).(2*0+1) by Lm11
@@ -3121,7 +3135,7 @@ A4: z ExpSeq.0=z|^ 0/ (0!c) by Def8
           .=1r by Th1,COMSEQ_3:11;
    |.z |^ n.|=|.z.||^ n
    proof
-     defpred X[Nat] means |.z |^ $1.|=|.z.||^ $1;
+     defpred X[Element of NAT] means |.z |^ $1.|=|.z.||^ $1;
      |.z |^ 0 .|=|.z GeoSeq.0 .|
               .=1 by COMPLEX1:134,COMSEQ_3:def 1;
      then A5: X[0] by Lm12;
@@ -3147,7 +3161,7 @@ proof
  let th be Real;
  A1: for n holds Im(Partial_Sums([*th,0*] ExpSeq)).n=0
  proof
-   defpred X[Nat] means Im(Partial_Sums([*th,0*] ExpSeq)).$1=0;
+   defpred X[Element of NAT] means Im(Partial_Sums([*th,0*] ExpSeq)).$1=0;
       Im(Partial_Sums([*th,0*] ExpSeq)).0
    =Im(Partial_Sums([*th,0*] ExpSeq).0) by COMSEQ_3:def 4
    .=Im(([*th,0*] ExpSeq).0) by COMSEQ_3:def 7
@@ -3338,7 +3352,7 @@ proof
  A1: th >0;
  A2:for n holds Partial_Sums(th ExpSeq).n>=1
  proof
-   defpred X[Nat] means Partial_Sums(th ExpSeq).$1>=1;
+   defpred X[Element of NAT] means Partial_Sums(th ExpSeq).$1>=1;
         Partial_Sums(th ExpSeq).0=(th ExpSeq).0 by SERIES_1:def 1
       .=th |^ 0 /(0!) by Def9
       .=1 by Lm12,NEWTON:18;
@@ -3408,7 +3422,7 @@ theorem exp_R(th)>0 by Th59;
 begin :: Differential of sin, cos, and Exponential Function
 
 definition let z be Element of COMPLEX;
- deffunc U(Nat) = (z#N($1+1))/(($1+2)!c);
+ deffunc U(Element of NAT) = (z#N($1+1))/(($1+2)!c);
   func z P_dt -> Complex_Sequence means :Def28:
     for n holds it.n = (z|^(n+1))/((n+2)!c);
  existence
@@ -3418,12 +3432,12 @@ definition let z be Element of COMPLEX;
  uniqueness
     proof
     thus for s1,s2 being Complex_Sequence st
-     (for x being Nat holds s1.x = U(x)) &
-     (for x being Nat holds s2.x = U(x)) holds s1 = s2
+     (for x being Element of NAT holds s1.x = U(x)) &
+     (for x being Element of NAT holds s2.x = U(x)) holds s1 = s2
         from BINOP_2:sch 1;
    end;
 
-deffunc U(Nat) = (z#N($1))/(($1+2)!c);
+deffunc U(Element of NAT) = (z#N($1))/(($1+2)!c);
 func z P_t -> Complex_Sequence means
      for n holds it.n = (z#N(n))/((n+2)!c);
  existence
@@ -3433,8 +3447,8 @@ func z P_t -> Complex_Sequence means
  uniqueness
     proof
     thus for s1,s2 being Complex_Sequence st
-     (for x being Nat holds s1.x = U(x)) &
-     (for x being Nat holds s2.x = U(x)) holds s1 = s2
+     (for x being Element of NAT holds s1.x = U(x)) &
+     (for x being Element of NAT holds s2.x = U(x)) holds s1 = s2
         from BINOP_2:sch 1;
    end;
 end;
@@ -3507,7 +3521,7 @@ proof
       then A3: Partial_Sums(|.z ExpSeq.|).(0+1)-Partial_Sums(|.z P_dt.|).0
        =1+(|.z .| - |.z.|/2) by A2;
        A4: 1+|.z.|/2>|.z.|/2 by XREAL_1:31;
-      defpred X[Nat] means
+      defpred X[Element of NAT] means
        Partial_Sums(|.z P_dt.|).$1 <Partial_Sums(|.z ExpSeq.|).($1+1);
           0 <= |.z.| by COMPLEX1:132; then |.z.|/2>=0 by REAL_2:125;
       then A5: X[0] by A3,A4,REAL_2:106;
@@ -3857,7 +3871,7 @@ A3:dom Cr=REAL
      deffunc U(Real) = -Im((Sum([*0,(hy1.$1)*] P_dt))* [*cos.p,sin.p*]);
            consider rseq such that
            A10: for n holds rseq.n= U(n) from SEQ_1:sch 1;
-     deffunc U(Nat) = (Sum([*0,(hy1.$1)*] P_dt))* [*cos.p,sin.p*];
+     deffunc U(Element of NAT) = (Sum([*0,(hy1.$1)*] P_dt))* [*cos.p,sin.p*];
           consider cq1 such that
            A11: for n holds
            cq1.n=U(n) from COMSEQ_1:sch 1;
@@ -4059,7 +4073,8 @@ PARTFUN2:sch 2;
            deffunc U(Real) = Re((Sum([*0,hy1.$1*] P_dt))* [*cos.p,sin.p*]);
            consider rseq such that
            A10: for n holds rseq.n= U(n) from SEQ_1:sch 1;
-           deffunc U(Nat) = (Sum([*0,(hy1.$1)*] P_dt))* [*cos.p,sin.p*];
+           deffunc U(Element of NAT)
+            = (Sum([*0,(hy1.$1)*] P_dt))* [*cos.p,sin.p*];
            consider cq1 such that
            A11: for n holds
            cq1.n= U(n) from COMSEQ_1:sch 1;
@@ -4235,7 +4250,7 @@ A3:dom Cr=REAL
        deffunc U(Real) = exp_R.p*Re((Sum([*(hy1.$1),0*] P_dt)));
        consider rseq such that
   A10: for n holds rseq.n= U(n) from SEQ_1:sch 1;
-       deffunc U(Nat) = (Sum([*(hy1.$1),0*] P_dt))*[*exp_R.p,0*];
+       deffunc U(Element of NAT) = (Sum([*(hy1.$1),0*] P_dt))*[*exp_R.p,0*];
        consider cq1 such that
   A11: for n holds cq1.n= U(n) from COMSEQ_1:sch 1;
    A12:cq1 is convergent & lim(cq1)=0c
@@ -4438,7 +4453,7 @@ proof
      .= 1-(th*th)/2
      .= 1-(th^2)/2;
 A7:        1 - 1/2 = 1/2;
-      defpred X[Nat] means ((Partial_Sums(th P_cos))*bq).$1 >= 1/2;
+      defpred X[Element of NAT] means ((Partial_Sums(th P_cos))*bq).$1 >= 1/2;
               th^2 <= 1^2 by A1,SQUARE_1:77;
           then th^2 <=1*1;
           then (th^2)/2<=1/2 by REAL_1:73;
@@ -4604,7 +4619,7 @@ A2:    th is Real by XREAL_0:def 1;
           = lim ((sin/cos)*rseq) by A6,A7,FCONT_1:def 1;
              ((sin/cos)|[.0,1 .])*rseq =(sin/cos)*rseq
           proof
-            now let k1 be Nat;
+            now let k1 be Element of NAT;
                  dom (rseq) = NAT by SEQ_1:3;
              then rseq.k1 in rng rseq by FUNCT_1:def 5;
             then A10: ((sin/cos)|[.0,1 .]).(rseq.k1)=(sin/cos).(rseq.k1) by A7,

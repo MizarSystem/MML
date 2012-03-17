@@ -18,13 +18,15 @@ environ
  constructors SETFAM_1, DOMAIN_1, BINOP_1, XXREAL_0, REAL_1, FINSOP_1, RFINSEQ,
       BINARITH, ALGSTR_1, VECTSP_4, NORMSP_1, POLYNOM1, POLYNOM3, POLYNOM5;
  registrations SUBSET_1, FUNCT_1, STRUCT_0, RELSET_1, VECTSP_1, ALGSTR_2,
-      FINSEQ_5, ARYTM_3, BINOM, POLYNOM3, POLYNOM5, MEMBERED, REALSET1;
+      FINSEQ_5, ARYTM_3, BINOM, POLYNOM3, POLYNOM5, MEMBERED, REALSET1,
+      XXREAL_0, NAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, RLVECT_1, GROUP_1, VECTSP_1, VECTSP_4, BINOP_1, REALSET1;
  theorems TARSKI, NAT_1, RLVECT_1, VECTSP_1, BINARITH, FUNCT_1, FUNCT_2,
       FUNCOP_1, FINSEQ_1, FINSEQ_3, FINSEQ_4, FINSEQ_5, RFINSEQ, BINOP_1,
       POLYNOM1, POLYNOM3, STRUCT_0, ZFMISC_1, POLYNOM5, BINOM, RELAT_1,
-      VECTSP_4, SETFAM_1, ALGSTR_1, XBOOLE_0, XBOOLE_1, GROUP_1, XREAL_1;
+      VECTSP_4, SETFAM_1, ALGSTR_1, XBOOLE_0, XBOOLE_1, GROUP_1, XREAL_1,
+      ORDINAL1;
  schemes SUBSET_1, BINOP_1;
 
 begin :: Preliminaries
@@ -434,15 +436,17 @@ end;
      let D be non empty set;
      let f be non empty FinSequence of D;
      consider i be Nat such that A1: i+1 = len f by FINSEQ_5:7;
+     reconsider i as Element of NAT by ORDINAL1:def 13;
 A2:  1 <= len f by A1,NAT_1:29;
-         (len (f/^1) = len Del(f,1)) & for k be Nat st 1 <=k & k <= len (f/^1)
+     (len (f/^1) = len Del(f,1)) &
+     for k be Element of NAT st 1 <=k & k <= len (f/^1)
      holds (f/^1).k=Del(f,1).k
       proof
 A3:    1 in dom f by FINSEQ_5:6;
 A4:    len (f/^1) = (i+1)-1 by A1,A2,RFINSEQ:def 2
                  .= i;
        hence len (f/^1) = len Del(f,1) by A1,A3,FINSEQ_3:118;
-       let k be Nat such that
+       let k be Element of NAT such that
 A5:    1 <=k & k <= len (f/^1);
 A6:    1 in dom f & 1<=k & k<=i by A4,A5,FINSEQ_5:6;
        k in dom (f/^1) by A5,FINSEQ_3:27;
@@ -474,11 +478,12 @@ A6:    1 in dom f & 1<=k & k<=i by A4,A5,FINSEQ_5:6;
     let L be add-associative right_zeroed left_unital right_complementable
      left-distributive (non empty doubleLoopStr);
     let p be sequence of L;
-        now let i be Nat;
+        now let i be Element of NAT;
      consider r be FinSequence of the carrier of L such that
       A1: len r = i+1 and
       A2: ((1_.(L))*'p).i = Sum r and
-      A3: for k be Nat st k in dom r holds r.k = (1_.(L)).(k-'1)*p.(i+1-'k)
+      A3: for k be Element of NAT st k in dom r holds
+      r.k = (1_.(L)).(k-'1)*p.(i+1-'k)
       by POLYNOM3:def 11;
           i >=0 by NAT_1:18;
       then i+1>0 by NAT_1:38;
@@ -488,7 +493,7 @@ A6:    1 in dom f & 1<=k & k<=i by A4,A5,FINSEQ_5:6;
       .= <*r/.1*>^Del(r,1) by A5,FINSEQ_4:def 4;
      then A6: Sum r = Sum <*r/.1*> + Sum Del(r,1) by RLVECT_1:58
         .= r/.1 + Sum Del(r,1)by RLVECT_1:61;
-         now let k be Nat;
+         now let k be Element of NAT;
        assume A7: k in dom Del(r,1);
             len Del(r,1) = i by A1,A5,FINSEQ_3:118;
        then A8: 0+1 <= k & k <= i by A7,FINSEQ_3:27;
@@ -698,18 +703,18 @@ theorem Th10:
        consider f1 be FinSequence of the carrier of L such that
 A1:    len f1 = i+1 and
 A2:    (p*'q).i = Sum f1 and
-A3:    for k be Nat st k in dom f1 holds f1.k = p.(k-'1) * q.(i+1-'k) by
-POLYNOM3:def 11;
+A3:    for k be Element of NAT st k in dom f1 holds
+       f1.k = p.(k-'1) * q.(i+1-'k) by POLYNOM3:def 11;
        consider f2 be FinSequence of the carrier of L such that
 A4:    len f2 = i+1 and
 A5:    ((a*p)*'q).i = Sum f2 and
-A6:    for k be Nat st k in dom f2 holds f2.k = (a*p).(k-'1) * q.(i+1-'k) by
-POLYNOM3:def 11;
+A6:    for k be Element of NAT st k in dom f2 holds
+       f2.k = (a*p).(k-'1) * q.(i+1-'k) by POLYNOM3:def 11;
 A7:    dom (a*f1) = dom f1 by POLYNOM1:def 2
          .= dom f2 by A1,A4,FINSEQ_3:31;
-A8:    for k be Nat st k in dom f2 holds f2.k = (a*f1).k
+A8:    for k be Element of NAT st k in dom f2 holds f2.k = (a*f1).k
         proof
-         let k be Nat such that
+         let k be Element of NAT such that
 A9:      k in dom f2;
 A10:      k in dom f1 by A1,A4,A9,FINSEQ_3:31;
 then A11:    p.(k-'1) * q.(i+1-'k) = f1.k by A3

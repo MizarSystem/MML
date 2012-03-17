@@ -38,7 +38,6 @@
 <ArticleID name="TREES_4"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="STRUCT_0"/>
@@ -98,9 +97,9 @@
 <Func kind="K" nr="89"/>
 <Func kind="K" nr="93"/>
 </Typ>
-<Func kind="K" nr="473">
+<Func kind="K" nr="466">
 <Var nr="5"/>
-<Func kind="K" nr="469">
+<Func kind="K" nr="462">
 <Var nr="3"/>
 <Var nr="5"/>
 </Func>
@@ -113,7 +112,7 @@
 </Fraenkel>
 </Pred>
 <Pred kind="R" nr="3">
-<Func kind="K" nr="480">
+<Func kind="K" nr="473">
 <Func kind="K" nr="118">
 <Var nr="4"/>
 </Func>
@@ -167,9 +166,9 @@
 <Func kind="K" nr="89"/>
 <Func kind="K" nr="93"/>
 </Typ>
-<Func kind="K" nr="473">
+<Func kind="K" nr="466">
 <Var nr="5"/>
-<Func kind="K" nr="469">
+<Func kind="K" nr="462">
 <Var nr="3"/>
 <Var nr="5"/>
 </Func>
@@ -183,9 +182,9 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="473">
+<Func kind="K" nr="466">
 <Var nr="1"/>
-<Func kind="K" nr="469">
+<Func kind="K" nr="462">
 <Var nr="3"/>
 <Var nr="1"/>
 </Func>
@@ -195,8 +194,8 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="469">
-<Func kind="K" nr="480">
+<Func kind="K" nr="462">
+<Func kind="K" nr="473">
 <Func kind="K" nr="118">
 <Var nr="4"/>
 </Func>
@@ -253,9 +252,9 @@
 <Func kind="K" nr="89"/>
 <Func kind="K" nr="93"/>
 </Typ>
-<Func kind="K" nr="473">
+<Func kind="K" nr="466">
 <Var nr="5"/>
-<Func kind="K" nr="469">
+<Func kind="K" nr="462">
 <Var nr="3"/>
 <Var nr="5"/>
 </Func>
@@ -268,9 +267,9 @@
 </Fraenkel>
 </Pred>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="473">
+<Func kind="K" nr="466">
 <Var nr="1"/>
-<Func kind="K" nr="469">
+<Func kind="K" nr="462">
 <Var nr="3"/>
 <Var nr="1"/>
 </Func>
@@ -279,15 +278,15 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="469">
-<Func kind="K" nr="480">
+<Func kind="K" nr="462">
+<Func kind="K" nr="473">
 <Func kind="K" nr="118">
 <Var nr="4"/>
 </Func>
 </Func>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="469">
+<Func kind="K" nr="462">
 <Var nr="3"/>
 <Var nr="1"/>
 </Func>

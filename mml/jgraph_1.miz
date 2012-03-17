@@ -13,7 +13,8 @@ environ
       GOBOARD4, COMPLEX1, METRIC_1, RLVECT_1, RVSUM_1, PCOMPS_1, COMPTS_1,
       WEIERSTR, NAT_1, ARYTM_3, BORSUK_1, TOPS_2, ORDINAL2, RCOMP_1, TBSP_1,
       SUBSET_1, PSCOMP_1, LATTICES, JGRAPH_1, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS,
+ XCMPLX_0,XREAL_0,
       COMPLEX1, REAL_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FINSEQ_1,
       FINSEQ_2, FINSET_1, CARD_1, NAT_1, GRAPH_1, STRUCT_0, BINARITH, GRAPH_2,
       FINSEQ_4, GRAPH_4, TOPREAL1, GOBOARD5, PRE_TOPC, GOBOARD1, GOBOARD4,
@@ -23,7 +24,8 @@ environ
       BINARITH, TOPS_2, COMPTS_1, TBSP_1, TOPRNS_1, GOBOARD1, GOBOARD4,
       GOBOARD5, PSCOMP_1, GRAPH_2, WEIERSTR, GRAPH_4;
  registrations STRUCT_0, RELSET_1, GRAPH_4, EUCLID, PRE_TOPC, BORSUK_1,
-      XREAL_0, FINSEQ_1, METRIC_1, ARYTM_3, MEMBERED, XXREAL_0;
+      XREAL_0, FINSEQ_1, METRIC_1, ARYTM_3, MEMBERED, XXREAL_0, ORDINAL1,
+      NAT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, FUNCT_1, EUCLID, SQUARE_1;
  theorems TARSKI, FUNCT_1, FINSEQ_1, NAT_1, JORDAN3, ZFMISC_1, REAL_1, REAL_2,
@@ -33,7 +35,7 @@ environ
       TOPS_2, PRE_TOPC, TBSP_1, HEINE, COMPTS_1, TOPMETR, PSCOMP_1, BORSUK_1,
       RCOMP_1, ABSVALUE, METRIC_1, RVSUM_1, FINSEQ_2, FUNCT_2, JORDAN6,
       XBOOLE_0, XBOOLE_1, TOPRNS_1, XCMPLX_0, XCMPLX_1, COMPLEX1, XREAL_1,
-      XXREAL_0;
+      XXREAL_0, ORDINAL1;
  schemes FINSEQ_1;
 
 begin :: GRAPHS BY CARTESIAN PRODUCT
@@ -42,7 +44,7 @@ reserve x,y for set;
 reserve G for Graph;
 reserve vs,vs' for FinSequence of the Vertices of G;
 reserve IT for oriented Chain of G;
-reserve n,m,k,i,j for Nat;
+reserve n,m,k,i,j for Element of NAT;
 reserve r,r1,r2 for Real;
 
 canceled;
@@ -116,17 +118,17 @@ theorem
 definition let f be FinSequence;
  func PairF(f) -> FinSequence means
  :Def2: len it=len f-'1 &
-   for i being Nat st 1<=i & i<len f holds it.i=[f.i,f.(i+1)];
+   for i being Element of NAT st 1<=i & i<len f holds it.i=[f.i,f.(i+1)];
  existence
   proof
-    deffunc F(Nat)=[f.$1,f.($1+1)];
+    deffunc F(Element of NAT)=[f.$1,f.($1+1)];
        ex p being FinSequence st len p = len f-'1
-   & for k being Nat st k in Seg (len f-'1) holds p.k=F(k)
+   & for k being Element of NAT st k in Seg (len f-'1) holds p.k=F(k)
                                 from FINSEQ_1:sch 2;
    then consider p being FinSequence such that A1: len p = len f-'1
-   & for k being Nat st k in Seg (len f-'1) holds p.k=[f.k,f.(k+1)];
-       for i being Nat st 1<=i & i<len f holds p.i=[f.i,f.(i+1)]
-   proof let i be Nat;assume A2:1<=i & i<len f;
+   & for k being Element of NAT st k in Seg (len f-'1) holds p.k=[f.k,f.(k+1)];
+       for i being Element of NAT st 1<=i & i<len f holds p.i=[f.i,f.(i+1)]
+   proof let i be Element of NAT;assume A2:1<=i & i<len f;
      then len f>1 by XXREAL_0:2;
      then A3:len f-1=len f-'1 by BINARITH:50;
          i+1<=len f by A2,NAT_1:38;
@@ -139,13 +141,13 @@ definition let f be FinSequence;
  uniqueness
  proof let g1,g2 be FinSequence;
    assume A4:(len g1=len f-'1 &
-   for i being Nat st 1<=i & i<len f holds g1.i=[f.i,f.(i+1)])&
+   for i being Element of NAT st 1<=i & i<len f holds g1.i=[f.i,f.(i+1)])&
     (len g2=len f-'1 &
-   for i being Nat st 1<=i & i<len f holds g2.i=[f.i,f.(i+1)]);
+   for i being Element of NAT st 1<=i & i<len f holds g2.i=[f.i,f.(i+1)]);
    per cases;
    suppose A5:len f>=1;
-         for j being Nat st 1<=j & j<=len g1 holds g1.j=g2.j
-     proof let j be Nat;assume A6:1<=j & j<=len g1;
+         for j being Element of NAT st 1<=j & j<=len g1 holds g1.j=g2.j
+     proof let j be Element of NAT;assume A6:1<=j & j<=len g1;
            len f<len f+1 by NAT_1:38;
        then len f-1<len f by XREAL_1:21;
        then len g1<len f by A4,A5,BINARITH:50;
@@ -182,7 +184,7 @@ proof let f be FinSequence of X;
      then consider x being set such that
           A2:x in dom PairF(f) & y=(PairF(f)).x by FUNCT_1:def 5;
      A3:x in Seg len PairF(f) by A2,FINSEQ_1:def 3;
-     reconsider n=x as Nat by A2;
+     reconsider n=x as Element of NAT by A2;
      A4:1<=n & n<=len PairF(f) by A3,FINSEQ_1:3;
      A5:len PairF(f)=len f-'1 by Def2;
      then 1<=len f-'1 by A4,XXREAL_0:2;
@@ -206,10 +208,10 @@ definition let X be non empty set,f be FinSequence of X;
  coherence by Th8;
 end;
 
-theorem Th9:for n being Nat,f being FinSequence of X
+theorem Th9:for n being Element of NAT,f being FinSequence of X
   st 1 <= n & n <= len PairF(f) holds
   (PairF(f)).n in the Edges of PGraph(X)
-proof let n be Nat,f be FinSequence of X;
+proof let n be Element of NAT,f be FinSequence of X;
  assume A1:1 <= n & n <= len PairF(f);
   A2:len PairF(f)=len f-'1 by Def2;
   then 1<=len f-'1 by A1,XXREAL_0:2;
@@ -433,7 +435,7 @@ proof let f,g be FinSequence of X;assume
     then consider x being set such that
     A2: x in dom PairF(g) & y=(PairF(g)).x by FUNCT_1:def 5;
     A3:x in Seg len PairF(g) by A2,FINSEQ_1:def 3;
-    reconsider n=x as Nat by A2;
+    reconsider n=x as Element of NAT by A2;
     A4:1<=n & n<=len PairF(g) by A3,FINSEQ_1:3;
     A5:len PairF(g)=len g-'1 by Def2;
         1<=len PairF(g) by A4,XXREAL_0:2;
@@ -456,7 +458,7 @@ then A14: (sc.n) orientedly_joins g1/.n, g1/.(n+1) by A1,A4,GRAPH_4:def 5;
     then consider z being set such that
     A15: z in dom PairF(f) & (PairF(f)).z=sc.n by A12,FUNCT_1:def 5;
     A16:z in Seg len PairF(f) by A15,FINSEQ_1:def 3;
-    reconsider m=z as Nat by A15;
+    reconsider m=z as Element of NAT by A15;
 A17: 1<=m & m<=len PairF(f) by A16,FINSEQ_1:3;
     then A18:1<=m & m<=len f -'1 by Def2;
     then 1<=len f-'1 by XXREAL_0:2;
@@ -502,7 +504,7 @@ proof let f,g be FinSequence of X;
       sc is Simple by GRAPH_4:20;
   then consider vs being FinSequence of the Vertices of PGraph(X)
    such that A4: vs is_oriented_vertex_seq_of sc &
-     (for n,m being Nat st 1<=n & n<m & m<=len vs & vs.n=vs.m
+     (for n,m being Element of NAT st 1<=n & n<m & m<=len vs & vs.n=vs.m
      holds n=1 & m=len vs) by GRAPH_4:def 7;
      A5:len g1 = len sc + 1 &
      for n st 1<=n & n<=len sc holds sc.n orientedly_joins g1/.n,g1/.(n+1)
@@ -516,9 +518,9 @@ proof let f,g be FinSequence of X;
     let x,y be set;assume
 A7: x in dom g & y in dom g & g.x=g.y;
     then A8:x in Seg len g by FINSEQ_1:def 3;
-    reconsider i1=x as Nat by A7;
+    reconsider i1=x as Element of NAT by A7;
     A9:y in Seg len g by A7,FINSEQ_1:def 3;
-    reconsider i2=y as Nat by A7;
+    reconsider i2=y as Element of NAT by A7;
     A10:1<=i1 & i1<=len g by A8,FINSEQ_1:3;
     A11:1<=i2 & i2<=len g by A9,FINSEQ_1:3;
     assume A12:x<>y;
@@ -1005,7 +1007,7 @@ proof let f be FinSequence of X;
          for x,y st x in dom f & y in dom f & f.x=f.y holds x=y
       proof let x,y;assume A7:x in dom f & y in dom f & f.x=f.y;
         A8:dom f=Seg len f by FINSEQ_1:def 3;
-        reconsider i=x,j=y as Nat by A7;
+        reconsider i=x,j=y as Element of NAT by A7;
         A9:1<=i & i<=len f by A7,A8,FINSEQ_1:3;
         A10:1<=j & j<=len f by A7,A8,FINSEQ_1:3;
             now assume A11:i<>j;
@@ -1172,7 +1174,7 @@ end;
 
 theorem Th25: for f,g being FinSequence of TOP-REAL 2,i st
  g is_Shortcut_of f & 1 <= i & i+1 <= len g holds
- ex k1 being Nat st 1<=k1 & k1+1<=len f & f/.k1=g/.i &
+ ex k1 being Element of NAT st 1<=k1 & k1+1<=len f & f/.k1=g/.i &
    f/.(k1+1)=g/.(i+1)
     & f.k1=g.i & f.(k1+1)=g.(i+1)
    proof let f,g be FinSequence of TOP-REAL 2,i;assume that
@@ -1192,7 +1194,7 @@ theorem Th25: for f,g being FinSequence of TOP-REAL 2,i st
      then consider x such that
      A10:x in dom PairF(f) & (PairF(f)).x=[g.i,g.(i+1)] by A5,FUNCT_1:def 5;
      A11:x in Seg len PairF(f) by A10,FINSEQ_1:def 3;
-     reconsider k=x as Nat by A10;
+     reconsider k=x as Element of NAT by A10;
      A12:1<=k & k<=len PairF(f) by A11,FINSEQ_1:3;
      A13:len PairF(f)=len f-'1 by Def2;
      A14:1<len g by A2,A6,XXREAL_0:2;
@@ -1219,11 +1221,11 @@ proof let f,g be FinSequence of TOP-REAL 2;
    then consider z being set such that
    A2:z in dom g & x=g.z by FUNCT_1:def 5;
    A3:z in Seg len g by A2,FINSEQ_1:def 3;
-   reconsider i=z as Nat by A2;
+   reconsider i=z as Element of NAT by A2;
    A4:1<=i & i<=len g by A3,FINSEQ_1:3;
    per cases;
    suppose i<len g; then i+1<=len g by NAT_1:38;
-     then consider k1 being Nat such that
+     then consider k1 being Element of NAT such that
      A5:1<=k1 & k1+1<=len f & f/.k1=g/.i
      & f/.(k1+1)=g/.(i+1) & f.k1=g.i & f.(k1+1)=g.(i+1) by A1,A4,Th25;
          k1<len f by A5,NAT_1:38;
@@ -1237,7 +1239,7 @@ proof let f,g be FinSequence of TOP-REAL 2;
        then A9:0+1<=i-'1 by NAT_1:38;
           A10: i-'1=i-1 by A8,BINARITH:50;
        then A11:i-'1+1=len g by A4,A6,XXREAL_0:1;
-       consider k1 being Nat such that
+       consider k1 being Element of NAT such that
        A12:1<=k1 & k1+1<=len f & f/.k1=g/.(i-'1)
          & f/.(k1+1)=g/.(i-'1+1) & f.k1=g.(i-'1)
          & f.(k1+1)=g.(i-'1+1) by A1,A4,A9,A10,Th25;
@@ -1268,7 +1270,7 @@ proof let f,g be FinSequence of TOP-REAL 2;
                     by TARSKI:def 4;
     consider i such that A3: y=LSeg(g,i) &(1<=i & i+1<=len g) by A2;
     A4:x in LSeg(g/.i,g/.(i+1)) by A2,A3,TOPREAL1:def 5;
-    consider k1 being Nat such that
+    consider k1 being Element of NAT such that
         A5:  1<=k1 & k1+1<=len f & f/.k1=g/.i & f/.(k1+1)=g/.(i+1)
         & f.k1=g.i & f.(k1+1)=g.(i+1) by A1,A3,Th25;
     A6:x in LSeg(f,k1) by A4,A5,TOPREAL1:def 5;
@@ -1299,7 +1301,7 @@ proof let f,g be FinSequence of TOP-REAL 2;assume
      then consider x such that
      A10:x in dom PairF(f) & (PairF(f)).x=[g.i,g.(i+1)] by A5,FUNCT_1:def 5;
      A11:x in Seg len PairF(f) by A10,FINSEQ_1:def 3;
-     reconsider k=x as Nat by A10;
+     reconsider k=x as Element of NAT by A10;
      A12:1<=k & k<=len PairF(f) by A11,FINSEQ_1:3;
      A13:len PairF(f)=len f-'1 by Def2;
      A14:1<len g by A2,A6,XXREAL_0:2;
@@ -1384,7 +1386,7 @@ proof let f1,f2 be FinSequence of TOP-REAL 2;
 FUNCT_1:def 5;
     then consider y being set such that
     A15:y in dom f1 & g1.i=f1.y by A2,FUNCT_1:def 5;
-    reconsider j=y as Nat by A15;
+    reconsider j=y as Element of NAT by A15;
         f1.j=f1/.j by A15,FINSEQ_4:def 4;
     then A16:j in dom f1 & g1/.i=f1/.j by A14,A15,FINSEQ_4:def 4;
         j in Seg len f1 by A15,FINSEQ_1:def 3;
@@ -1432,7 +1434,7 @@ FUNCT_1:def 5;
 FUNCT_1:def 5;
     then consider y being set such that
     A36:y in dom f2 & g2.i=f2.y by A3,FUNCT_1:def 5;
-    reconsider j=y as Nat by A36;
+    reconsider j=y as Element of NAT by A36;
         f2.j=f2/.j by A36,FINSEQ_4:def 4;
     then A37:j in dom f2 & g2/.i=f2/.j by A35,A36,FINSEQ_4:def 4;
         j in Seg len f2 by A36,FINSEQ_1:def 3;
@@ -1480,7 +1482,7 @@ FUNCT_1:def 5;
 FUNCT_1:def 5;
     then consider y being set such that
     A57:y in dom f1 & g1.i=f1.y by A2,FUNCT_1:def 5;
-    reconsider j=y as Nat by A57;
+    reconsider j=y as Element of NAT by A57;
         f1.j=f1/.j by A57,FINSEQ_4:def 4;
     then A58:j in dom f1 & g1/.i=f1/.j by A56,A57,FINSEQ_4:def 4;
         j in Seg len f1 by A57,FINSEQ_1:def 3;
@@ -1522,7 +1524,7 @@ FUNCT_1:def 5;
 FUNCT_1:def 5;
     then consider y being set such that
     A76:y in dom f2 & g2.i=f2.y by A3,FUNCT_1:def 5;
-    reconsider j=y as Nat by A76;
+    reconsider j=y as Element of NAT by A76;
         f2.j=f2/.j by A76,FINSEQ_4:def 4;
     then A77:j in dom f2 & g2/.i=f2/.j by A75,A76,FINSEQ_4:def 4;
         j in Seg len f2 by A76,FINSEQ_1:def 3;
@@ -1541,15 +1543,17 @@ FUNCT_1:def 5;
    end;
    then A83:Y_axis(g2) lies_between (Y_axis(g2)).1, (Y_axis(g2)).(len g2)
                                   by GOBOARD4:def 1;
-A84:for k being Nat st k in dom g1 & k+1 in dom g1 holds g1/.k <> g1/.(k+1)
-    proof let k be Nat;assume A85:k in dom g1 & k+1 in dom g1;
+A84:for k being Element of NAT st k in dom g1 & k+1 in dom g1
+ holds g1/.k <> g1/.(k+1)
+    proof let k be Element of NAT;assume A85:k in dom g1 & k+1 in dom g1;
           k<k+1 by NAT_1:38;
       then A86:g1.k<>g1.(k+1) by A2,A85,FUNCT_1:def 8;
           g1.k=g1/.k by A85,FINSEQ_4:def 4;
      hence thesis by A85,A86,FINSEQ_4:def 4;
     end;
-       for k being Nat st k in dom g2 & k+1 in dom g2 holds g2/.k <> g2/.(k+1)
-    proof let k be Nat;assume A87:k in dom g2 & k+1 in dom g2;
+       for k being Element of NAT st k in dom g2 & k+1 in dom g2
+        holds g2/.k <> g2/.(k+1)
+    proof let k be Element of NAT;assume A87:k in dom g2 & k+1 in dom g2;
           k<k+1 by NAT_1:38;
       then A88:g2.k<>g2.(k+1) by A3,A87,FUNCT_1:def 8;
           g2.k=g2/.k by A87,FINSEQ_4:def 4;
@@ -1584,7 +1588,7 @@ theorem Th31: for a,b,r1,r2 being Real
  end;
  end;
 
-definition let n;let p be Point of TOP-REAL n;
+definition let n be Element of NAT; let p be Point of TOP-REAL n;
  redefine func |. p .| means
 :Def5: for w being Element of REAL n st p=w holds it=|.w.|;
  compatibility
@@ -1787,7 +1791,7 @@ A3:   k in Seg (2*(len f)-'1);
       then A4:1<=k & k<=(2*(len f)-'1) by FINSEQ_1:3;
       per cases by NAT_1:62;
       suppose A5:k mod 2=0;
-       consider i such that
+       consider i being Nat such that
        A6: k=2*i+ (k mod 2) & k mod 2<2 by NAT_1:def 2;
            for j st k=2*j or k=2*j -'1 holds
         (k =2*j implies |[(f/.i)`1,(f/.(i+1))`2]|
@@ -1824,7 +1828,7 @@ A3:   k in Seg (2*(len f)-'1);
        hence thesis;
       end;
       suppose A15:k mod 2=1;
-       consider i such that
+       consider i being Nat such that
        A16: k=2*i+ (k mod 2) & k mod 2<2 by NAT_1:def 2;
            for j st k=2*j or k=2*j -'1 holds
         (k =2*j implies f/.(i+1)=|[(f/.j)`1,(f/.(j+1))`2]|)
@@ -1858,9 +1862,9 @@ A3:   k in Seg (2*(len f)-'1);
      hence thesis;
     end;
     end;
-   A23:for k being Nat,y1,y2 being set st k in Seg (2*(len f)-'1) &
+   A23:for k being Element of NAT,y1,y2 being set st k in Seg (2*(len f)-'1) &
    P[k,y1] & P[k,y2] holds y1=y2
-    proof let k be Nat,y1,y2 be set;
+    proof let k be Element of NAT,y1,y2 be set;
       assume A24: k in Seg (2*(len f)-'1) &
        (for j st k=2*j or k=2*j -'1 holds
         (k =2*j implies y1=|[(f/.j)`1,(f/.(j+1))`2]|)
@@ -1870,14 +1874,16 @@ A3:   k in Seg (2*(len f)-'1);
                      &(k =2*j-'1 implies y2=f/.j));
       per cases by NAT_1:62;
       suppose A25:k mod 2=0;
-       consider i such that
+       consider i being Nat such that
        A26: k=2*i+ (k mod 2) & k mod 2<2 by NAT_1:def 2;
+       reconsider i as Element of NAT by ORDINAL1:def 13;
           y1=|[(f/.i)`1,(f/.(i+1))`2]| by A24,A25,A26;
       hence thesis by A24,A25,A26;
      end;
      suppose A27:k mod 2=1;
-       consider i such that
+       consider i being Nat such that
        A28: k=2*i+ (k mod 2) & k mod 2<2 by NAT_1:def 2;
+       reconsider i as Element of NAT by ORDINAL1:def 13;
            1<=1+i by NAT_1:37;
        then 2*1<=2*(i+1) by XREAL_1:66;
        then 1<=2*(i+1) by XXREAL_0:2;
@@ -1901,18 +1907,20 @@ A3:   k in Seg (2*(len f)-'1);
       then consider x such that
       A32:x in dom p & y=p.x by FUNCT_1:def 5;
       A33:x in Seg len p by A32,FINSEQ_1:def 3;
-      reconsider i=x as Nat by A32;
+      reconsider i=x as Element of NAT by A32;
       A34:1 <= i & i <= len p by A33,FINSEQ_1:3;
       per cases by NAT_1:62;
       suppose A35:i mod 2=0;
-        consider j such that
+        consider j being Nat such that
         A36: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
+       reconsider j as Element of NAT by ORDINAL1:def 13;
             p.i=|[(f/.j)`1,(f/.(j+1))`2]| by A30,A32,A35,A36;
        hence thesis by A32;
       end;
       suppose A37:i mod 2=1;
-        consider j such that
+        consider j being Nat such that
         A38: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
+       reconsider j as Element of NAT by ORDINAL1:def 13;
            A39: i=2*j+2*1-1 by A37,A38;
          2*(j+1)-'1 =2*(j+1)-1 by A34,A37,A38,JORDAN3:1;
         then p.i=f/.(j+1) by A30,A32,A39;
@@ -1931,8 +1939,9 @@ A44:    i in Seg (2*(len f)-'1) by A31,A40,A41,FINSEQ_1:3;
       A46:g1.(i+1)=g1/.(i+1) by A40,A42,FINSEQ_4:24;
       per cases by NAT_1:62;
       suppose A47:i mod 2=0;
-        consider j such that
+        consider j being Nat such that
         A48: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
+       reconsider j as Element of NAT by ORDINAL1:def 13;
         A49:g1.i=|[(f/.j)`1,(f/.(j+1))`2]| by A30,A44,A47,A48;
            A50: i+1=2*j+1+1-1 by A47,A48
         .=2*j+2*1-1;
@@ -1942,8 +1951,9 @@ A44:    i in Seg (2*(len f)-'1) by A31,A40,A41,FINSEQ_1:3;
        hence thesis by A45,A46,A49,EUCLID:56;
       end;
       suppose A51:i mod 2=1;
-        consider j such that
+        consider j being Nat such that
         A52: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
+       reconsider j as Element of NAT by ORDINAL1:def 13;
          2*(j+1)-'1 =2*(j+1)-1 by A40,A51,A52,JORDAN3:1;
         then A53: g1.i=f/.(j+1) by A30,A44,A51,A52;
             i+1=2*(j+1) by A51,A52;
@@ -1978,8 +1988,9 @@ then A64:   i in Seg len (X_axis(g1)) by FINSEQ_1:def 3;
       A69:g1/.i=(g1.i) by A65,FINSEQ_4:24;
       per cases by NAT_1:62;
       suppose A70:i mod 2=0;
-        consider j such that
+        consider j being Nat such that
         A71: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
             g1.i=|[(f/.j)`1,(f/.(j+1))`2]| by A30,A31,A66,A70,A71;
         then A72:(g1/.i)`1=(f/.j)`1 by A69,EUCLID:56;
             j<>0 by A64,A70,A71,FINSEQ_1:3;
@@ -1994,8 +2005,9 @@ then A73:     j>=0+1 by NAT_1:38;
        hence thesis by A1,A67,A72,A74,GOBOARD4:def 1;
       end;
       suppose A75:i mod 2=1;
-        consider j such that
+        consider j being Nat such that
         A76: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
          2*(j+1)-'1 =2*(j+1)-1 by A65,A75,A76,JORDAN3:1;
         then A77:(g1/.i)`1=(f/.(j+1))`1 by A30,A31,A66,A69,A75,A76;
         A78:1<=j+1 by NAT_1:29;
@@ -2024,8 +2036,9 @@ then A82:   i in Seg len (Y_axis(g1)) by FINSEQ_1:def 3;
       A87:g1/.i=(g1.i) by A83,FINSEQ_4:24;
       per cases by NAT_1:62;
       suppose A88:i mod 2=0;
-        consider j such that
+        consider j being Nat such that
         A89: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
             g1.i=|[(f/.j)`1,(f/.(j+1))`2]| by A30,A31,A84,A88,A89;
         then A90:(g1/.i)`2=(f/.(j+1))`2 by A87,EUCLID:56;
         A91:1<=j+1 by NAT_1:29;
@@ -2039,8 +2052,9 @@ then A82:   i in Seg len (Y_axis(g1)) by FINSEQ_1:def 3;
        hence thesis by A1,A85,A90,A92,GOBOARD4:def 1;
       end;
       suppose A93:i mod 2=1;
-        consider j such that
+        consider j being Nat such that
         A94: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
          2*(j+1)-'1 =2*(j+1)-1 by A83,A93,A94,JORDAN3:1;
         then A95:(g1/.i)`2=(f/.(j+1))`2 by A30,A31,A84,A87,A93,A94;
         A96:1<=j+1 by NAT_1:29;
@@ -2063,8 +2077,9 @@ then A101:   i in Seg len g1 by FINSEQ_1:def 3;
       then A103:g1.i=g1/.i by FINSEQ_4:24;
       per cases by NAT_1:62;
       suppose A104:i mod 2=0;
-        consider j such that
+        consider j being Nat such that
         A105: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
         A106:g1.i=|[(f/.j)`1,(f/.(j+1))`2]| by A30,A100,A104,A105;
         then A107:(g1/.i)`1=(f/.j)`1 by A103,EUCLID:56;
         A108:(g1/.i)`2=(f/.(j+1))`2 by A103,A106,EUCLID:56;
@@ -2095,8 +2110,9 @@ then A101:   i in Seg len g1 by FINSEQ_1:def 3;
        hence thesis by A113;
       end;
       suppose A114:i mod 2=1;
-        consider j such that
+        consider j being Nat such that
         A115: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
          2*(j+1)-'1 =2*(j+1)-1 by A102,A114,A115,JORDAN3:1;
         then g1.i=f/.(j+1) by A30,A100,A114,A115;
         then A116:|.g1/.i-f/.(j+1).|=|.0.REAL 2.| by A103,EUCLID:46
@@ -2122,8 +2138,9 @@ then A122:    i+1 in Seg (2*(len f)-'1) by A31,A118,FINSEQ_1:3;
       A124:g1.i=g1/.i by A120,FINSEQ_4:24;
       per cases by NAT_1:62;
       suppose A125:i mod 2=0;
-        consider j such that
+        consider j being Nat such that
         A126: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
         A127:g1.i=|[(f/.j)`1,(f/.(j+1))`2]| by A30,A31,A119,A125,A126;
            A128: i+1=2*j+1+1-1 by A125,A126
         .=2*j+2*1-1;
@@ -2160,8 +2177,9 @@ then A122:    i+1 in Seg (2*(len f)-'1) by A31,A118,FINSEQ_1:3;
         hence thesis by A135,XXREAL_0:2;
       end;
       suppose A137:i mod 2=1;
-        consider j such that
+        consider j being Nat such that
         A138: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
         A139:   2*(j+1)-'1 =2*(j+1)-1 by A118,A137,A138,JORDAN3:1;
         i+1=2*(j+1) by A137,A138;
         then A140:g1/.(i+1)=|[(f/.(j+1))`1,(f/.(j+1+1))`2]| by A30,A122,A123;
@@ -2221,7 +2239,7 @@ A2: for k st k in Seg (2*(len f)-'1) ex x st P[k,x]
       then A4:1<=k & k<=2*(len f)-'1 by FINSEQ_1:3;
       per cases by NAT_1:62;
       suppose A5:k mod 2=0;
-       consider i such that
+       consider i being Nat such that
        A6: k=2*i+ (k mod 2) & k mod 2<2 by NAT_1:def 2;
            for j st k=2*j or k=2*j -'1 holds
         (k =2*j implies |[(f/.i)`1,(f/.(i+1))`2]|
@@ -2259,7 +2277,7 @@ A2: for k st k in Seg (2*(len f)-'1) ex x st P[k,x]
        hence thesis;
       end;
       suppose A15:k mod 2=1;
-       consider i such that
+       consider i being Nat such that
        A16: k=2*i+ (k mod 2) & k mod 2<2 by NAT_1:def 2;
            for j st k=2*j or k=2*j -'1 holds
         (k =2*j implies f/.(i+1)=|[(f/.j)`1,(f/.(j+1))`2]|)
@@ -2294,9 +2312,9 @@ A2: for k st k in Seg (2*(len f)-'1) ex x st P[k,x]
        hence thesis;
     end;
     end;
-   A23:for k being Nat,y1,y2 being set st k in Seg (2*(len f)-'1) &
+   A23:for k being Element of NAT,y1,y2 being set st k in Seg (2*(len f)-'1) &
    P[k,y1] & P[k,y2] holds y1=y2
-    proof let k be Nat,y1,y2 be set;
+    proof let k be Element of NAT,y1,y2 be set;
       assume A24: k in Seg (2*(len f)-'1) &
        (for j st k=2*j or k=2*j -'1 holds
         (k =2*j implies y1=|[(f/.j)`1,(f/.(j+1))`2]|)
@@ -2306,15 +2324,17 @@ A2: for k st k in Seg (2*(len f)-'1) ex x st P[k,x]
                      &(k =2*j-'1 implies y2=f/.j));
       per cases by NAT_1:62;
       suppose A25:k mod 2=0;
-       consider i such that
+       consider i being Nat such that
        A26: k=2*i+ (k mod 2) & k mod 2<2 by NAT_1:def 2;
+       reconsider i as Element of NAT by ORDINAL1:def 13;
            y1=|[(f/.i)`1,(f/.(i+1))`2]| by A24,A25,A26;
       hence thesis by A24,A25,A26;
      end;
      suppose A27:k mod 2=1;
-       consider i such that
+       consider i being Nat such that
        A28: k=2*i+ (k mod 2) & k mod 2<2 by NAT_1:def 2;
-           1<=1+i by NAT_1:37;
+       reconsider i as Element of NAT by ORDINAL1:def 13;
+       1<=1+i by NAT_1:37;
        then 2*1<=2*(i+1) by XREAL_1:66;
        then 1<=2*(i+1) by XXREAL_0:2;
        then A29:2*(i+1)-'1= 2*(i+1)-1 by BINARITH:50;
@@ -2337,18 +2357,20 @@ A2: for k st k in Seg (2*(len f)-'1) ex x st P[k,x]
       then consider x such that
       A32:x in dom p & y=p.x by FUNCT_1:def 5;
       A33:x in Seg len p by A32,FINSEQ_1:def 3;
-      reconsider i=x as Nat by A32;
+      reconsider i=x as Element of NAT by A32;
       A34:1 <= i & i <= len p by A33,FINSEQ_1:3;
       per cases by NAT_1:62;
       suppose A35:i mod 2=0;
-        consider j such that
+        consider j being Nat such that
         A36: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
-            p.i=|[(f/.j)`1,(f/.(j+1))`2]| by A30,A32,A35,A36;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
+        p.i=|[(f/.j)`1,(f/.(j+1))`2]| by A30,A32,A35,A36;
        hence thesis by A32;
       end;
       suppose A37:i mod 2=1;
-        consider j such that
+        consider j being Nat such that
         A38: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
 A39:    i=2*(j+1)-1 by A37,A38;
          2*(j+1)-1=2*(j+1)-'1 by A34,A37,A38,JORDAN3:1;
         then p.i=f/.(j+1) by A30,A32,A39;
@@ -2367,8 +2389,9 @@ A44:  i in Seg (2*(len f)-'1) by A31,A40,A41,FINSEQ_1:3;
       A46:g1/.(i+1)=g1.(i+1) by A40,A42,FINSEQ_4:24;
       per cases by NAT_1:62;
       suppose A47:i mod 2=0;
-        consider j such that
+        consider j being Nat such that
         A48: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
         A49:g1/.i=|[(f/.j)`1,(f/.(j+1))`2]| by A30,A44,A45,A47,A48;
 A50:    i+1=2*j+1+1-1 by A47,A48
           .=2*(j+1)-1;
@@ -2378,8 +2401,9 @@ A50:    i+1=2*j+1+1-1 by A47,A48
        hence thesis by A49,EUCLID:56;
       end;
       suppose A51:i mod 2=1;
-        consider j such that
+        consider j being Nat such that
         A52: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
          2*(j+1)-'1 =2*(j+1)-1 by A40,A51,A52,JORDAN3:1;
         then A53:g1/.i=f/.(j+1) by A30,A44,A45,A51,A52;
             i+1=2*(j+1) by A51,A52;
@@ -2414,8 +2438,9 @@ then A63:   i in Seg len (Y_axis(g1)) by FINSEQ_1:def 3;
       A68:g1/.i=(g1.i) by A64,FINSEQ_4:24;
       per cases by NAT_1:62;
       suppose A69:i mod 2=0;
-        consider j such that
+        consider j being Nat such that
         A70: i=2*j+ (i mod 2) & (i mod 2)<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
             g1/.i=|[(f/.j)`1,(f/.(j+1))`2]| by A30,A31,A65,A68,A69,A70;
         then A71:(g1/.i)`2=(f/.(j+1))`2 by EUCLID:56;
         A72:1<=j+1 by NAT_1:29;
@@ -2429,8 +2454,9 @@ then A63:   i in Seg len (Y_axis(g1)) by FINSEQ_1:def 3;
        hence thesis by A1,A66,A71,A73,GOBOARD4:def 1;
       end;
       suppose A74:i mod 2=1;
-        consider j such that
+        consider j being Nat such that
         A75: i=2*j+ (i mod 2) & (i mod 2)<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
          2*(j+1)-'1 =2*(j+1)-1 by A64,A74,A75,JORDAN3:1;
         then A76:(g1/.i)`2=(f/.(j+1))`2 by A30,A31,A65,A68,A74,A75;
         A77:1<=j+1 by NAT_1:29;
@@ -2458,8 +2484,9 @@ then A63:   i in Seg len (Y_axis(g1)) by FINSEQ_1:def 3;
       A86:g1/.i=(g1.i) by A83,FINSEQ_4:24;
       per cases by NAT_1:62;
       suppose A87:i mod 2=0;
-        consider j such that
+        consider j being Nat such that
         A88: i=2*j+ (i mod 2) & (i mod 2)<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
             g1/.i=|[(f/.j)`1,(f/.(j+1))`2]| by A30,A31,A82,A86,A87,A88;
         then A89:(g1/.i)`1=(f/.j)`1 by EUCLID:56;
             j<>0 by A81,A87,A88,FINSEQ_1:3;
@@ -2474,8 +2501,9 @@ then A90:     j>=0+1 by NAT_1:38;
        hence thesis by A1,A84,A89,A91,GOBOARD4:def 1;
       end;
       suppose A92:i mod 2=1;
-        consider j such that
+        consider j being Nat such that
         A93: i=2*j+ (i mod 2) & (i mod 2)<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
          2*(j+1)-'1 =2*(j+1)-1 by A83,A92,A93,JORDAN3:1;
         then A94:(g1/.i)`1=(f/.(j+1))`1 by A30,A31,A82,A86,A92,A93;
         A95:1<=j+1 by NAT_1:29;
@@ -2498,8 +2526,9 @@ A99: i in dom g1;
       then A101:g1.i=g1/.i by FINSEQ_4:24;
       per cases by NAT_1:62;
       suppose A102:i mod 2=0;
-        consider j such that
+        consider j being Nat such that
         A103: i=2*j+ (i mod 2) & (i mod 2)<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
         A104:g1/.i=|[(f/.j)`1,(f/.(j+1))`2]| by A30,A99,A101,A102,A103;
         then A105:(g1/.i)`1=(f/.j)`1 by EUCLID:56;
         A106:g1/.i-f/.j
@@ -2510,8 +2539,7 @@ A99: i in dom g1;
         then |.g1/.i-f/.j.|=
           sqrt((((g1/.i-f/.j)`1))^2+(((g1/.i)`2-(f/.j)`2))^2)
                         by Th47
-         .= sqrt((((f/.(j+1))`2-(f/.j)`2))^2) by A104,A107,EUCLID:56
-;
+         .= sqrt((((f/.(j+1))`2-(f/.j)`2))^2) by A104,A107,EUCLID:56;
         then |.g1/.i-f/.j.|=abs((f/.(j+1))`2-(f/.j)`2) by COMPLEX1:158
                       .=abs((f/.j)`2 -(f/.(j+1))`2) by UNIFORM1:13;
         then A108:|.g1/.i-f/.j.|
@@ -2529,8 +2557,9 @@ A99: i in dom g1;
        hence thesis by A111;
       end;
       suppose A112:i mod 2=1;
-        consider j such that
+        consider j being Nat such that
         A113: i=2*j+ (i mod 2) & (i mod 2)<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
          2*(j+1)-'1 =2*(j+1)-1 by A100,A112,A113,JORDAN3:1;
         then g1/.i=f/.(j+1) by A30,A99,A101,A112,A113;
         then A114:|.g1/.i-f/.(j+1).|=|.0.REAL 2.| by EUCLID:46 .=0 by
@@ -2556,8 +2585,9 @@ then A120: i+1 in Seg (2*(len f)-'1) by A31,A116,FINSEQ_1:3;
       A122:g1.i=g1/.i by A118,FINSEQ_4:24;
       per cases by NAT_1:62;
       suppose A123:i mod 2=0;
-        consider j such that
+        consider j being Nat such that
         A124: i=2*j+ (i mod 2) & (i mod 2)<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
         A125:g1/.i=|[(f/.j)`1,(f/.(j+1))`2]| by A30,A31,A117,A122,A123,A124;
            A126: i+1=2*j+1+1-1 by A123,A124
         .=2*j+2*1-1;
@@ -2589,8 +2619,9 @@ Th47,SQUARE_1:60
         hence thesis by A131,XXREAL_0:2;
       end;
       suppose A133:i mod 2=1;
-        consider j such that
+        consider j being Nat such that
         A134: i=2*j+ (i mod 2) & i mod 2<2 by NAT_1:def 2;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
          2*(j+1)-'1 =2*(j+1)-1 by A116,A133,A134,JORDAN3:1;
         then A135:g1/.i=f/.(j+1) by A30,A31,A117,A122,A133,A134;
         i+1=2*(j+1) by A133,A134;
@@ -2713,11 +2744,11 @@ A15: e>0/5 by A14,REAL_1:73;
      then consider h being FinSequence of REAL such that
      A16: h.1=0 & h.len h=1 & 5<=len h & rng h c= the carrier of I[01]
      & h is increasing
-     &(for i being Nat,R being Subset of I[01],
+     &(for i being Element of NAT,R being Subset of I[01],
      W being Subset of Euclid 2
       st 1<=i & i<len h & R=[.h/.i,h/.(i+1).] & W=f1.:(R) holds
      diameter(W)<e) by A8,A10,UNIFORM1:15;
-     deffunc F(Nat)=f1.(h.$1);
+     deffunc F(Element of NAT)=f1.(h.$1);
          ex h1' being FinSequence st len h1'=len h &
      for i st i in Seg len h holds h1'.i=F(i) from FINSEQ_1:sch 2;
      then consider h1' being FinSequence such that
@@ -2728,7 +2759,7 @@ A15: e>0/5 by A14,REAL_1:73;
         then consider x such that
         A18:x in dom h1' & y=h1'.x by FUNCT_1:def 5;
         A19:dom h1'=Seg len h1' by FINSEQ_1:def 3;
-        reconsider i=x as Nat by A18;
+        reconsider i=x as Element of NAT by A18;
         A20: h1'.i=f1.(h.i) by A17,A18,A19;
             i in dom h by A17,A18,A19,FINSEQ_1:def 3;
         then A21:h.i in rng h by FUNCT_1:def 5;
@@ -2837,14 +2868,14 @@ A37:    dom f1= [#](I[01]) by A8,A10,TOPS_2:def 5
       such that
      A66: hb.1=0 & hb.len hb=1 & 5<=len hb & rng hb c= the carrier of I[01]
      & hb is increasing
-     &(for i being Nat,R being Subset of I[01],
+     &(for i being Element of NAT,R being Subset of I[01],
      W being Subset of Euclid 2
       st 1<=i & i<len hb & R=[.hb/.i,hb/.(i+1).] & W=g1.:(R) holds
      diameter(W)<e) by A9,A11,A15,UNIFORM1:15;
      A67: 1<=len hb by A66,XXREAL_0:2;
      then A68:1 in dom hb by FINSEQ_3:27;
      A69:len hb in dom hb by A67,FINSEQ_3:27;
-     deffunc F(Nat)=g1.(hb.$1);
+     deffunc F(Element of NAT)=g1.(hb.$1);
          ex h2' being FinSequence st len h2'=len hb &
      for i st i in Seg len hb holds h2'.i=F(i) from FINSEQ_1:sch 2;
      then consider h2' being FinSequence such that
@@ -2855,7 +2886,7 @@ A37:    dom f1= [#](I[01]) by A8,A10,TOPS_2:def 5
         then consider x such that
         A71:x in dom h2' & y=h2'.x by FUNCT_1:def 5;
         A72:dom h2'=Seg len h2' by FINSEQ_1:def 3;
-        reconsider i=x as Nat by A71;
+        reconsider i=x as Element of NAT by A71;
         A73: h2'.i=g1.(hb.i) by A70,A71,A72;
             i in dom hb by A70,A71,A72,FINSEQ_1:def 3;
         then A74:hb.i in rng hb by FUNCT_1:def 5;
@@ -3203,7 +3234,7 @@ A78:   i in dom hb;
                          by A205,A206,NAT_1:38,TOPREAL1:def 5;
      then j in Seg len g2 by FINSEQ_1:3;
      then j in dom g2 by FINSEQ_1:def 3;
-     then consider k' being Nat such that
+     then consider k' being Element of NAT such that
      A208: k' in dom h2 & |.((g2/.j) - h2/.k').|<e by A161;
      A209:|.ps-(g2/.j).|<=|.(g2/.j)-g2/.(j+1).| by A207,Th53;
          |.(g2/.j)-g2/.(j+1).|<e by A161,A206;

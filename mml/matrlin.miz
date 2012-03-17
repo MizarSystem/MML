@@ -11,7 +11,8 @@ environ
       SUBSET_1, FUNCOP_1, MEASURE6, VECTSP_1, RLVECT_2, RLVECT_3, RLVECT_1,
       FINSET_1, RLSUB_1, BINOP_1, LATTICES, QC_LANG1, SEQ_1, SQUARE_1, RVSUM_1,
       RLSUB_2, CAT_3, MATRLIN;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, NAT_1, MOD_2,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS,
+      XCMPLX_0, NAT_1, MOD_2,
       FINSEQ_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, STRUCT_0,
       MATRIX_1, MATRIX_3, FVSUM_1, RLVECT_1, GROUP_1, VECTSP_1, VECTSP_4,
       VECTSP_6, VECTSP_7, FINSET_1, FINSEQ_4, FUNCOP_1, FINSEQ_3, CARD_1,
@@ -26,7 +27,7 @@ environ
       VECTSP_4, VECTSP_6, VECTSP_7, RLVECT_1, FUNCT_1, FUNCT_2, FUNCT_3,
       MATRIX_1, MATRIX_2, MATRIX_3, MOD_2, ZFMISC_1, NAT_1, FVSUM_1, SUBSET_1,
       CARD_2, FINSEQOP, FUNCOP_1, RELAT_1, RELSET_1, PARTFUN2, XBOOLE_0,
-      XBOOLE_1, RLVECT_2, GROUP_1, XREAL_1, NEWTON;
+      XBOOLE_1, RLVECT_2, GROUP_1, XREAL_1, NEWTON, ORDINAL1;
  schemes FINSEQ_1, FINSEQ_2, FUNCT_2, MATRIX_1, GOBOARD2, NAT_1, ZFREFLE1;
 
 begin :: Preliminaries
@@ -143,15 +144,17 @@ theorem Th6:
     then M <> {} by FINSEQ_1:25;
     then consider q be FinSequence,x such that
 A2: M = q ^ <*x*> by FINSEQ_1:63;
+    reconsider n as Element of NAT by ORDINAL1:def 13;
+X0: n+1 = n+1;
 A3: len M = len q + len <*x*> by A2,FINSEQ_1:35
          .= len q + 1 by FINSEQ_1:56;
     then A4: M.(len M) = x by A2,FINSEQ_1:59;
 A5: len Del(M,len M) = len q by A3,Th3;
-    now let i; assume A6: i in Seg len q;
+    now let i be Element of NAT; assume A6: i in Seg len q;
      then A7: i in dom q by FINSEQ_1:def 3;
      1<=i & i<=len q by A6,FINSEQ_1:3;
      then 1<=i & i<len M by A3,NAT_1:38;
-     hence Del(M,len M).i = M.i by A1,FINSEQ_3:119
+     hence Del(M,len M).i = M.i by X0,A1,FINSEQ_3:119
               .= q.i by A2,A7,FINSEQ_1:def 7;
     end;
     hence thesis by A2,A4,A5,FINSEQ_2:10;
@@ -536,6 +539,7 @@ A11:   now let k; let v be Element of K;
       then H.k = v * a by A7,A12,A13,A14;
       hence p.k = v * a by A12,FUNCT_1:70;
      end;
+     reconsider n as Element of NAT by ORDINAL1:def 13;
      n + 1 in Seg(n + 1) by FINSEQ_1:6; then
 A15: n + 1 in dom H by A6,FINSEQ_1:def 3;
      then reconsider v1 = H.(n + 1) as Element of V1 by FINSEQ_2:13;
@@ -547,7 +551,7 @@ A16: v1 = v2 * a by A7,A15;
               .= (Sum(q) + v2) * a by VECTSP_1:def 26
               .= Sum(I) * a by A5,A6,A9,A10,RLVECT_1:55;
     end;
-    for n holds P[n] from NAT_1:sch 1(A1,A3);
+    for n holds P[n] from NAT_1:sch 2(A1,A3);
     hence thesis;
   end;
 
@@ -596,8 +600,9 @@ A6:   for k st k in dom p holds p/.k = 0.V1
       proof
         let k such that A7: k in dom p;
 A8:     dom p c= dom(p^<*x*>) by FINSEQ_1:39;
+        reconsider k1=k as Element of NAT by ORDINAL1:def 13;
         thus p/.k = p.k by A7,FINSEQ_4:def 4
-                 .= (p^<*x*>).k by A7,FINSEQ_1:def 7
+                 .= (p^<*x*>).k1 by A7,FINSEQ_1:def 7
                  .= (p^<*x*>)/.k by A7,A8,FINSEQ_4:def 4
                  .= 0.V1 by A5,A7,A8;
       end;
@@ -649,7 +654,8 @@ definition
     deffunc F(Nat) = Sum (M/.$1);
     consider F being FinSequence of V1 such that
 A1: len F = len M &
-    for k st k in Seg len M holds F.k = F(k) from FINSEQ_2:sch 1;
+    for k be Element of NAT st k in Seg len M holds F.k = F(k)
+    from FINSEQ_2:sch 1;
     take F;
     thus len F = len M by A1;
     hereby let k; assume A2: k in dom F;
@@ -665,7 +671,7 @@ A4: len F1 = len M and
 A5: for k st k in dom F1 holds F1/.k = Sum (M/.k) and
 A6: len F2 = len M and
 A7: for k st k in dom F2 holds F2/.k = Sum (M/.k);
-    now let k; assume A8: k in Seg len F1;
+    now let k be Element of NAT; assume A8: k in Seg len F1;
       then A9: k in dom F1 by FINSEQ_1:def 3;
 A10:  k in dom F2 by A4,A6,A8,FINSEQ_1:def 3;
       thus F1.k = F1/.k by A9,FINSEQ_4:def 4
@@ -693,9 +699,10 @@ theorem Th18:
     for k st k in dom Sum M holds (Sum M)/.k = 0.V1
     proof
       let k such that A2: k in dom Sum M;
+      reconsider k1=k as Element of NAT by ORDINAL1:def 13;
       len M = len Sum M by Def8;then
       dom M = dom Sum M by FINSEQ_3:31; then
-      M/.k in rng M by A2,PARTFUN2:4;
+      M/.k1 in rng M by A2,PARTFUN2:4;
       then len (M/.k) = 0 by MATRIX_1:def 3;
       then A5: M/.k = <*>(the carrier of V1) by FINSEQ_1:32;
       thus (Sum M)/.k = Sum (M/.k) by A2,Def8
@@ -773,7 +780,7 @@ A3: dom p = dom a by A1,FINSEQ_3:31;
                  .= dom lmlt(a,f*p) by A3,A4,Th16;
     then len lmlt(a,p) = len lmlt(a,f*p) by FINSEQ_3:31;
     then A5: len (f*lmlt(a,p)) = len lmlt(a,f*p) by FINSEQ_2:37;
-    now let k; assume k in Seg len (f*lmlt(a,p));
+    now let k be Element of NAT; assume k in Seg len (f*lmlt(a,p));
      then A6: k in dom (f*lmlt(a,p)) by FINSEQ_1:def 3;
      dom (f*lmlt(a,p)) c= dom lmlt(a,p) by RELAT_1:44;
      then A7: k in dom lmlt(a,p) by A6;
@@ -826,11 +833,11 @@ theorem Th23:
 A3: dom (KL (#) F1) = dom ((KL (#) F) * p) by FINSEQ_3:31;
     len (KL (#) F1) = len F1 by VECTSP_6:def 8; then
 A4: dom (KL (#) F1) = dom F1 by FINSEQ_3:31;
-    now let k; assume A5: k in dom (KL (#) F1);
+    now let k be Element of NAT; assume A5: k in dom (KL (#) F1);
      then k in dom p by A3,FUNCT_1:21;
      then p.k in rng p by FUNCT_1:def 5;
      then A6: p.k in dom F by FUNCT_2:def 3;
-     then reconsider k1 = p.k as Nat by FINSEQ_3:25;
+     then reconsider k1 = p.k as Element of NAT by FINSEQ_3:25;
      F1/.k = F1.k by A4,A5,FINSEQ_4:def 4
           .= F.(p.k) by A1,A4,A5,FUNCT_1:22
           .= F/.(p.k) by A6,FINSEQ_4:def 4;
@@ -863,8 +870,9 @@ A6:   dom (KL (#) G2) = dom G2 by FINSEQ_3:31;
       then G2.k in rng F \ Carrier KL by FINSEQ_3:72;
       then not G2.k in Carrier KL by XBOOLE_0:def 4;
       then A7: not G2/.k in Carrier KL by A5,A6,FINSEQ_4:def 4;
+      reconsider k1=k as Element of NAT by ORDINAL1:def 13;
       thus (KL (#) G2)/.k = (KL (#) G2).k by A5,FINSEQ_4:def 4
-            .= KL.(G2/.k) * (G2/.k) by A5,VECTSP_6:def 8
+            .= KL.(G2/.k1) * (G2/.k1) by A5,VECTSP_6:def 8
             .= 0.K * (G2/.k) by A7,VECTSP_6:20
             .= 0.V1 by VECTSP_1:59;
     end;
@@ -956,7 +964,8 @@ A6:  Carrier KL c= rng b1 by VECTSP_6:def 7;
      set p = KL (#) b1;
 A7:  rng p c= A
      proof let x; assume x in rng p;
-       then consider i such that A8: i in dom p & p.i = x by FINSEQ_2:11;
+       then consider i be Element of NAT such that
+A8: i in dom p & p.i = x by FINSEQ_2:11;
        dom p = Seg len p by FINSEQ_1:def 3;
        then i in Seg len b1 by A8,VECTSP_6:def 8;
        then A9: i in dom b1 by FINSEQ_1:def 3;
@@ -1004,9 +1013,9 @@ definition
   redefine func F^^G -> Matrix of D;
   coherence
   proof
-    ex i st dom (F^^G) = Seg i
+    ex i be Element of NAT st dom (F^^G) = Seg i
     proof
-      reconsider i = min(len F,len G) as Nat by FINSEQ_2:1;
+      reconsider i = min(len F,len G) as Element of NAT by FINSEQ_2:1;
       take i;
       thus dom (F^^G) = dom F /\ dom G by Def2
             .= dom F /\ Seg len G by FINSEQ_1:def 3
@@ -1130,9 +1139,10 @@ theorem
   proof
     let M1 be Matrix of n,k,D;
     let M2 be Matrix of m,k,D such that A1: i in dom M1;
+    reconsider i1=i as Element of NAT by ORDINAL1:def 13;
     dom M1 c= dom (M1^M2) by FINSEQ_1:39;
     hence Line(M1^M2,i) = (M1^M2).i by A1,MATRIX_2:18
-           .= M1.i by A1,FINSEQ_1:def 7
+           .= M1.i1 by A1,FINSEQ_1:def 7
            .= Line(M1,i) by A1,MATRIX_2:18;
   end;
 
@@ -1186,9 +1196,11 @@ theorem
   proof
     let M1 be Matrix of t,k,D;
     let M2 be Matrix of m,k,D; assume A1: n in dom M2 & i = len M1 + n;
-    then i in dom (M1^M2) by FINSEQ_1:41;
+    reconsider n1=n as Element of NAT by ORDINAL1:def 13;
+    i = len M1 + n1 by A1;
+    then i in dom (M1^M2) by A1,FINSEQ_1:41;
     hence Line(M1^M2,i) = (M1^M2).i by MATRIX_2:18
-                      .= M2.n by A1,FINSEQ_1:def 7
+                      .= M2.n1 by A1,FINSEQ_1:def 7
                       .= Line(M2,n) by A1,MATRIX_2:18;
   end;
 
@@ -1206,7 +1218,7 @@ A3: len Col(M1^M2,i) = len (M1^M2) by MATRIX_1:def 9
                .= len M1 + len Col(M2,i) by MATRIX_1:def 9
                .= len Col(M1,i) + len Col(M2,i) by MATRIX_1:def 9
                .= len (Col(M1,i)^Col(M2,i)) by FINSEQ_1:35;
-        now let j; assume A4: j in Seg len (Col(M1,i)^Col(M2,i));
+    now let j be Element of NAT; assume A4: j in Seg len (Col(M1,i)^Col(M2,i));
      then A5: j in dom (Col(M1,i)^Col(M2,i)) by FINSEQ_1:def 3;
      j in Seg len (M1^M2) by A3,A4,MATRIX_1:def 9;then
 A6:  j in dom (M1^M2) by FINSEQ_1:def 3;
@@ -1229,8 +1241,9 @@ A7:    P = (M1^M2).j & (M1^M2)*(j,i) = P.i by MATRIX_1:def 6;
                          .= Col(M1,i).j by A9,MATRIX_1:def 9
                          .= (Col(M1,i)^Col(M2,i)).j by A8,FINSEQ_1:def 7;
      end;
-     suppose ex n st n in dom Col(M2,i) & j = len Col(M1,i) + n;
-      then consider n such that
+     suppose ex n be Element of NAT
+       st n in dom Col(M2,i) & j = len Col(M1,i) + n;
+      then consider n be Element of NAT such that
 A11:    n in dom Col(M2,i) & j = len Col(M1,i) + n;
       n in Seg len Col(M2,i) by A11,FINSEQ_1:def 3;
       then n in Seg len M2 by MATRIX_1:def 9;
@@ -1265,7 +1278,7 @@ A1:  len Sum(M1^M2) = len (M1^M2) by Def8
                  .= len Sum M1 + len M2 by Def8
                  .= len Sum M1 + len Sum M2 by Def8
                  .= len ((Sum M1)^(Sum M2)) by FINSEQ_1:35;
-   now let i; assume A2: i in Seg len Sum(M1^M2);
+    now let i be Element of NAT; assume A2: i in Seg len Sum(M1^M2);
 then A3:  i in dom Sum(M1^M2) by FINSEQ_1:def 3;
     i in Seg len (M1^M2) by A2,Def8;
     then A4: i in dom (M1^M2) by FINSEQ_1:def 3;
@@ -1280,8 +1293,9 @@ A6:   dom M1 = dom Sum M1 by FINSEQ_3:31;
                     .= (Sum M1).i by A5,A6,FINSEQ_4:def 4
                     .= ((Sum M1)^(Sum M2)).i by A5,A6,FINSEQ_1:def 7;
     end;
-    suppose ex n st n in dom M2 & i = len M1 + n;
-     then consider n such that A7: n in dom M2 & i = len M1 + n;
+    suppose ex n be Element of NAT st n in dom M2 & i = len M1 + n;
+     then consider n be Element of NAT such that
+A7: n in dom M2 & i = len M1 + n;
 A8:    len M1 = len Sum M1 by Def8;
      len M2 = len Sum M2 by Def8; then
 A9:    dom M2 = dom Sum M2 by FINSEQ_3:31;
@@ -1315,7 +1329,8 @@ A2:   Seg len (M1@ ^^ M2@) = dom (M1@ ^^ M2@) by FINSEQ_1:def 3
 A3:   len ((M1^M2)@) = width (M1^M2) by MATRIX_1:def 7
                   .= width M1 by A1,Th28
                   .= len (M1@ ^^ M2@) by A2,FINSEQ_1:8;
-    now let i; assume A4: i in Seg len ((M1^M2)@);
+    now let i be Element of NAT;
+      assume A4: i in Seg len ((M1^M2)@);
 A5:    Seg len ((M1^M2)@) = dom ((M1^M2)@) by FINSEQ_1:def 3;
 A6:    i in Seg width (M1^M2) by A4,MATRIX_1:def 7;
 A7:    i in dom (M1@ ^^ M2@) by A3,A4,FINSEQ_1:def 3;
@@ -1343,7 +1358,7 @@ theorem Th33:
    Sum M1 + Sum M2 = Sum(M1 ^^ M2)
   proof
     let M1,M2 be Matrix of the carrier of V1;
-    reconsider m = min(len M1,len M2) as Nat by FINSEQ_2:1;
+    reconsider m = min(len M1,len M2) as Element of NAT by FINSEQ_2:1;
 A1:   Seg m = Seg len M1 /\ Seg len M2 by FINSEQ_2:2
          .= Seg len M1 /\ dom M2 by FINSEQ_1:def 3
          .= dom M1 /\ dom M2 by FINSEQ_1:def 3
@@ -1354,7 +1369,8 @@ A2:   len (Sum M1+Sum M2) = min(len Sum M1,len Sum M2) by FINSEQ_2:85
             .= min(len M1,len M2) by Def8
             .= len (M1 ^^ M2) by A1,FINSEQ_1:8
             .= len Sum(M1 ^^ M2) by Def8;
-    now let i; assume A3: i in Seg len (Sum M1+Sum M2);
+    now let i be Element of NAT;
+      assume A3: i in Seg len (Sum M1+Sum M2);
 then A4:   i in dom (Sum M1+Sum M2) by FINSEQ_1:def 3;
 A5:    i in dom Sum(M1 ^^ M2) by A2,A3,FINSEQ_1:def 3;
      i in Seg len (M1 ^^ M2) by A2,A3,Def8;
@@ -1441,7 +1457,7 @@ A6:    Sum Sum <*P*> = Sum Sum (<*P*>@);
                 .= Seg 1;
      then A7: len (<*P*> ^^ <*<*x*>*>) = 1 by FINSEQ_1:8
            .= len <*P^<*x*>*> by FINSEQ_1:56;
-A8:  now let i; assume A9: i in Seg len <*P^<*x*>*>;
+A8:  now let i be Element of NAT; assume A9: i in Seg len <*P^<*x*>*>;
       then A10: i in dom (<*P*> ^^ <*<*x*>*>) by A7,FINSEQ_1:def 3;
 A11:  i in Seg 1 by A9,FINSEQ_1:57;
       i in { 1 } by A9,FINSEQ_1:4,57;
@@ -1557,7 +1573,7 @@ A40:    len (W@) = width W by MATRIX_1:def 7
      end;
     end;
     let M be Matrix of the carrier of V1;
-    for n holds X[n] from NAT_1:sch 1(A28,A31);
+    for n holds X[n] from NAT_1:sch 2(A28,A31);
     then X[len M];
     hence thesis;
   end;
@@ -1581,8 +1597,9 @@ A2: len p = n & len d = m &
 A3:   len b = m & len c = n &
     for i st i in dom c holds c/.i = Sum lmlt(Line(M,i),b);
    deffunc V(Nat,Nat) = (p/.$1) * (M*($1,$2)) * (b/.$2);
-    consider M1 being Matrix of n,m,the carrier of V1 such that A4:
-      for i,j st [i,j] in Indices M1 holds M1*(i,j) = V(i,j)
+   reconsider n1=n, m1=m as Element of NAT by ORDINAL1:def 13;
+   consider M1 being Matrix of n1,m1,the carrier of V1 such that A4:
+    for i,j st [i,j] in Indices M1 holds M1*(i,j) = V(i,j)
         from MATRIX_1:sch 1;
     A5: len M1 = n by A1,MATRIX_1:24;
     A6: width M1 = m by A1,MATRIX_1:24;
@@ -1592,11 +1609,12 @@ A3:   len b = m & len c = n &
 then A10:  len lmlt(p,c) = len p by FINSEQ_3:31
                      .= len M1 by A2,MATRIX_1:def 3
                      .= len Sum M1 by Def8;
-A11: now let i such that A12: i in dom Sum M1;
+A11: now let i be Element of NAT such that A12: i in dom Sum M1;
      deffunc V(Nat) = (p/.i) * (lmlt(Line(M,i),b)/.$1);
      consider F be FinSequence of V1 such that A13:
       len F = len b &
-      for j st j in Seg len b holds F.j = V(j) from FINSEQ_2:sch 1;
+      for j be Element of NAT st j in Seg len b holds F.j = V(j)
+      from FINSEQ_2:sch 1;
 A14: len F = width M1 by A1,A3,A13,MATRIX_1:24;
 A15: len F = width M by A1,A3,A13,MATRIX_1:24;
 A16: len Line(M1,i) = len F by A14,MATRIX_1:def 8;
@@ -1607,7 +1625,7 @@ A17: dom Line(M,i) = Seg len Line(M,i) by FINSEQ_1:def 3
     then i in Seg len M1 by Def8;
 then A18:  i in dom M1 by FINSEQ_1:def 3;
 then A19:  M1/.i = M1.i by FINSEQ_4:def 4 .= Line(M1,i) by A18,MATRIX_2:18;
-A20: now let j; assume A21: j in Seg len F;
+A20: now let j be Element of NAT; assume A21: j in Seg len F;
 then A22:     j in dom b by A13,FINSEQ_1:def 3;
       then A23: j in dom (lmlt(Line(M,i),b)) by A17,Th16;
 A25:  b.j = b/.j by A22,FINSEQ_4:def 4;
@@ -1629,7 +1647,7 @@ A32: i in dom ((the lmult of V1).:(p,c)) by A10,A12,FINSEQ_3:31;
 A33: dom lmlt(Line(M,i),b) = dom b by A17,Th16;
 then A34:    len F = len lmlt(Line(M,i),b) by A13,FINSEQ_3:31;
 A35:   dom F = dom lmlt(Line(M,i),b) by A13,A33,FINSEQ_3:31;
-A36:    now let j; assume j in dom F;
+A36:    now let j be Element of NAT; assume j in dom F;
        then j in Seg len F by FINSEQ_1:def 3;
       hence F.j = (p/.i) * (lmlt(Line(M,i),b)/.j) by A13;
      end;
@@ -1648,14 +1666,16 @@ A40:  width M1 = len (M1@) by MATRIX_1:def 7
             .= len Sum (M1@) by Def8;
 A41:  len lmlt(d,b) = len b by A39,FINSEQ_3:31
                  .= len Sum (M1@) by A1,A3,A40,MATRIX_1:24;
-A42: now let j such that
+A42: now let j be Element of NAT such that
 A43:   j in Seg len Sum(M1@);
 A44:   Seg len Sum(M1@) = dom Sum(M1@) by FINSEQ_1:def 3;
      reconsider H = mlt(p,Col(M,j)) as FinSequence of K;
      deffunc V(Nat) = (H/.$1) * (b/.j);
      consider G be FinSequence of V1 such that
 A45:   len G = len p &
-     for i st i in Seg len p holds G.i = V(i) from FINSEQ_2:sch 1;
+     for i be Element of NAT st i in Seg len p holds G.i = V(i)
+     from FINSEQ_2:sch 1;
+XX:  for i st i in Seg len p holds G.i = V(i) by A45;
 A46:   Seg len p = dom p by FINSEQ_1:def 3;
 A47:   dom p = dom G by A45,FINSEQ_3:31;
 A48:   len Line(M1@,j) = width (M1@) by MATRIX_1:def 8
@@ -1663,7 +1683,7 @@ A48:   len Line(M1@,j) = width (M1@) by MATRIX_1:def 8
                       .= len G by A1,A2,A5,A6,A45,MATRIX_2:15;
 A49:   len p = len Col(M,j) by A2,A7,MATRIX_1:def 9; then
 A50:   len ((the mult of K).:(p,Col(M,j))) = len p by FINSEQ_2:86;
-A51:   now let i; assume A52: i in Seg len G;
+A51:   now let i be Element of NAT; assume A52: i in Seg len G;
      then A53: i in Seg width (M1@) by A48,MATRIX_1:def 8;
 A54:   Seg len G = dom G by FINSEQ_1:def 3;
       dom M1 = dom G by A2,A5,A45,FINSEQ_3:31;
@@ -1701,7 +1721,7 @@ A71:   M1@/.j = M1@.j by A62,FINSEQ_4:def 4 .= Line(M1@,j)
      thus lmlt(d,b).j = (the lmult of V1).(d.j,b.j) by A63,FUNCOP_1:28
           .= (d/.j) * (b/.j) by A65,A66,VECTSP_1:def 24
           .= Sum H * (b/.j) by A2,A67
-          .= Sum G by A45,A46,A47,A50,A69,Th14
+          .= Sum G by XX,A45,A46,A47,A50,A69,Th14
           .= Sum (M1@/.j) by A48,A51,A71,FINSEQ_2:10
           .= Sum (M1@)/.j by A62,Def8
           .= (Sum (M1@)).j by A43,A44,FINSEQ_4:def 4;
@@ -1732,7 +1752,8 @@ A2: Carrier KL c= b2 by Th12;
     deffunc V(Nat) = KL.(b1/.$1);
     consider A be FinSequence of K such that
 A3: len A = len b1 and
-A4: for k st k in Seg len b1 holds A.k = V(k) from FINSEQ_2:sch 1;
+A4: for k be Element of NAT st k in Seg len b1 holds A.k = V(k)
+    from FINSEQ_2:sch 1;
     take A;
     thus len A = len b1 by A3;
     take KL;
@@ -1759,9 +1780,9 @@ A12: Carrier(KL2) c= rng b1 and
 A13: for k st 1<=k & k<=len F2 holds F2/.k=KL2.(b1/.k);
     reconsider b = rng b1 as Basis of V by Def4;
 A14: b is linearly-independent by VECTSP_7:def 3;
-    for k st 1<=k & k<=len F1 holds F1.k = F2.k
+    for k be Element of NAT st 1<=k & k<=len F1 holds F1.k = F2.k
     proof
-      let k be Nat; assume A15: 1<=k & k<=len F1;
+      let k be Element of NAT; assume A15: 1<=k & k<=len F1;
       then A16: k in dom F1 by FINSEQ_3:27;
 A17:  k in dom F2 by A6,A10,A15,FINSEQ_3:27;
       thus F1.k = F1/.k by A16,FINSEQ_4:def 4
@@ -1838,7 +1859,7 @@ then A2:   dom (v|--b1) = dom b1 by FINSEQ_3:31;
 then A3:   dom b1 = dom lmlt(v|--b1,b1) by Th16;
 A4:   len (KL (#) b1) = len b1 by VECTSP_6:def 8
                      .= len lmlt(v|--b1,b1) by A3,FINSEQ_3:31;
-A5:  now let t; assume A6: t in dom lmlt(v|--b1,b1);
+A5:  now let t be Element of NAT; assume A6: t in dom lmlt(v|--b1,b1);
      then A7: t in dom (KL (#) b1) by A4,FINSEQ_3:31;
      t in dom (v|--b1) by A2,A6,Th16;
      then A8: 1<=t & t<=len (v|--b1) by FINSEQ_3:27;
@@ -1868,7 +1889,7 @@ A2: for v ex u being Element of K st X[v,u]
       per cases;
       suppose
        A3: v in rng b1;
-       then consider k such that
+       then consider k be Element of NAT such that
 A4:    k in dom b1 & b1/.k = v by PARTFUN2:4;
        take u = d/.k;
        now let i;
@@ -1923,7 +1944,7 @@ A17:   dom d = dom b1 by A1,FINSEQ_3:31;
 then A18:   dom lmlt(d,b1) = dom b1 by Th16;
 then A19:   len lmlt(d,b1) = len b1 by FINSEQ_3:31
                    .= len (KL1 (#) b1) by VECTSP_6:def 8;
-    now let k; assume A20: k in dom lmlt(d,b1);then
+    now let k be Element of NAT; assume A20: k in dom lmlt(d,b1);then
       A22: d/.k = d.k by A17,A18,FINSEQ_4:def 4;
       A23: b1/.k = b1.k by A18,A20,FINSEQ_4:def 4;
       A24: k in dom (KL1 (#) b1) by A19,A20,FINSEQ_3:31;
@@ -1967,7 +1988,12 @@ A6:   for i,j st [i,j] in Indices M holds M*(i,j) = V(i,j)
     deffunc W(Nat) = Sum mlt(a,Col(M,$1));
     consider dd being FinSequence of K such that
 A7:    len dd = len b2 &
-      for j st j in dom dd holds dd/.j = W(j) from GOBOARD2:sch 1;
+      for j be Element of NAT st j in dom dd holds dd/.j = W(j)
+      from GOBOARD2:sch 1;
+XX:   now let j;
+        j in NAT by ORDINAL1:def 13;
+        hence j in dom dd implies dd/.j = W(j) by A7;
+      end;
          len M = len b1 by MATRIX_1:def 3;
 then A8:    dom M = dom b1 by FINSEQ_3:31;
 A9:   len b1 = len B3 by FINSEQ_2:37;
@@ -1977,7 +2003,7 @@ A11:  len Col(M,j) = len M by MATRIX_1:def 9
 A12:   Seg len b2 = dom b2 by FINSEQ_1:def 3;
 A13:  width M = len b2 by A5,MATRIX_1:24;
 A14:  j in Seg width M by A2,A5,A12,MATRIX_1:24;
-A15:   now let i; assume i in dom d;
+A15:   now let i be Element of NAT; assume i in dom d;
 then A16:   i in dom b1 by A4,FINSEQ_3:31;
 then A17:   B3/.i = B3.i by A10,FINSEQ_4:def 4
           .= f.(b1.i) by A16,FUNCT_1:23
@@ -1991,7 +2017,7 @@ then A18:   [i,j] in Indices M by MATRIX_1:def 5;
 A19:   now let i such that A20: i in dom B3;
 A21:   len Line(M,i) = width M by MATRIX_1:def 8
                   .= len ((B3/.i)|--b2) by A13,Def9;
-A22:   now let j; assume
+A22:   now let j be Element of NAT; assume
 A23:    j in dom ((B3/.i)|--b2);
       then j in Seg len ((B3/.i)|--b2) by FINSEQ_1:def 3;
 then A24:    j in Seg width M by A13,Def9;
@@ -2006,9 +2032,9 @@ then A24:    j in Seg width M by A13,Def9;
     end;
     A26: j in dom dd by A2,A7,FINSEQ_3:31;
     thus (Sum(lmlt(a,f*b1))|--b2)/.j = (Sum(lmlt(dd,b2))|--b2)/.j
-                                                by A1,A3,A5,A7,A9,A19,Th38
+                                                by XX,A1,A3,A5,A7,A9,A19,Th38
                          .= dd/.j by A7,Th41
-                         .= Sum(mlt(a,Col(M,j))) by A7,A26
+                         .= Sum(mlt(a,Col(M,j))) by XX,A26
                          .= Sum(mlt(a,d)) by A11,A15,NEWTON:3;
   end;
 
@@ -2028,7 +2054,8 @@ definition
     deffunc V(Nat) = f.(b1/.$1)|--b2;
     consider M be FinSequence such that
 A1:   len M = len b1 and
-A2:   for k st k in Seg len b1 holds M.k = V(k) from FINSEQ_1:sch 2;
+A2:   for k be Element of NAT st k in Seg len b1 holds M.k = V(k)
+      from FINSEQ_1:sch 2;
     ex n being Nat st for x st x in rng M
     ex s st s=x & len s = n
     proof
@@ -2075,9 +2102,9 @@ A8: len K1 = len b1 and
 A9: for k st k in dom b1 holds K1/.k = f.(b1/.k)|--b2 and
 A10:len K2 = len b1 and
 A11:for k st k in dom b1 holds K2/.k = f.(b1/.k)|--b2;
-    for k st 1 <= k & k <= len K1 holds K1.k = K2.k
+    for k be Element of NAT st 1 <= k & k <= len K1 holds K1.k = K2.k
     proof
-      let k be Nat; assume A12: 1 <= k & k <= len K1;
+      let k be Element of NAT; assume A12: 1 <= k & k <= len K1;
       then A13: k in dom b1 by A8,FINSEQ_3:27;
 A14:  k in dom K2 by A8,A10,A12,FINSEQ_3:27;
       k in dom K1 by A12,FINSEQ_3:27;
@@ -2112,7 +2139,7 @@ theorem Th44:
     then len AutMt(f,b1,b2) > 0 by Def10;
     then consider s being FinSequence such that
 A1: s in rng AutMt(f,b1,b2) & len s = width AutMt(f,b1,b2) by MATRIX_1:def 4;
-    consider i such that
+    consider i be Element of NAT such that
 A2: i in dom AutMt(f,b1,b2) & AutMt(f,b1,b2).i = s by A1,FINSEQ_2:11;
     len AutMt(f,b1,b2) = len b1 by Def10;
     then A3: i in dom b1 by A2,FINSEQ_3:31;
@@ -2193,8 +2220,9 @@ A18:    p1 = (AutMt(g*f,b1,b3))/.i by A11,A14,FINSEQ_4:def 4
     then A19: j in dom p1 by A18,FINSEQ_1:def 3;
     deffunc V(Nat) = (g.((b2/.$1))|--b3)/.j;
     consider d be FinSequence of K such that
-A20:    len d = len b2 & for k st k in Seg len b2 holds
+A20:    len d = len b2 & for k be Element of NAT st k in Seg len b2 holds
         d.k = V(k) from FINSEQ_2:sch 1;
+XX:     for k st k in Seg len b2 holds d.k = V(k) by A20;
 A21:    Seg len b2 = dom b2 by FINSEQ_1:def 3;
         len AutMt(f,b1,b2) = len b1 by Def10;
 then A22:  i in dom AutMt(f,b1,b2) by A11,A12,FINSEQ_3:31;
@@ -2203,7 +2231,7 @@ then A23:   Line(AutMt(f,b1,b2),i) = AutMt(f,b1,b2).i by MATRIX_2:18
                           .= f.(b1/.i)|--b2 by A13,Def10;
 A24:  len Col(AutMt(g,b2,b3),j) = len AutMt(g,b2,b3) by MATRIX_1:def 9
                              .= len d by A20,Def10;
-A25:   now let k; assume A26: 1 <=k & k <= len d;
+A25:   now let k be Element of NAT; assume A26: 1 <=k & k <= len d;
 then A27:    k in dom d by FINSEQ_3:27;
 A28:    dom d = Seg len d by FINSEQ_1:def 3;
 A29:    len AutMt(g,b2,b3) = len b2 by Def10;
@@ -2232,7 +2260,7 @@ A37:len (f.(b1/.i)|--b2) = len b2 by Def9;
      .= (g.(f.(b1/.i))|--b3)/.j by A36,FUNCT_1:23
      .= (g.Sum(lmlt(f.(b1/.i)|--b2,b2))|--b3)/.j by Th40
      .= (Sum(lmlt(f.(b1/.i)|--b2,g*b2))|--b3)/.j by A1,A37,Th22
-     .= Sum(mlt(f.(b1/.i)|--b2,d)) by A2,A17,A20,A21,A37,Th42
+     .= Sum(mlt(f.(b1/.i)|--b2,d)) by XX,A2,A17,A20,A21,A37,Th42
      .= Line(AutMt(f,b1,b2),i) "*" Col(AutMt(g,b2,b3),j)
        by A23,A24,A25,FINSEQ_1:18
      .= (AutMt(f,b1,b2) * AutMt(g,b2,b3))*(i,j) by A3,A10,MATRIX_3:def 4;

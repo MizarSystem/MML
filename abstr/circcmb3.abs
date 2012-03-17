@@ -12,18 +12,18 @@ environ
       SQUARE_1, REWRITE1, CLASSES1, ORDINAL2, CATALG_1, YELLOW_6, FUNCT_5,
       MCART_1, TDGROUP, QC_LANG1, FACIRC_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, ENUMSET1, ZFMISC_1, RELAT_1,
-      FUNCT_1, FINSET_1, ORDINAL1, ORDINAL2, CLASSES1, FUNCT_2, XXREAL_0,
-      NAT_1, PARTFUN1, LIMFUNC1, REWRITE1, STRUCT_0, FINSEQ_1, FINSEQ_2,
-      FINSEQ_4, FINSEQOP, PBOOLE, GROUP_1, MSUALG_1, FACIRC_1, MSAFREE2,
-      CIRCUIT1, CIRCUIT2, CIRCCOMB, PRE_CIRC, MCART_1, BINARITH, FUNCT_5,
-      SEQM_3, YELLOW_6;
+      FUNCT_1, FINSET_1, ORDINAL1, ORDINAL2, CLASSES1, FUNCT_2, XCMPLX_0,
+      XXREAL_0, NAT_1, PARTFUN1, LIMFUNC1, REWRITE1, STRUCT_0, FINSEQ_1,
+      FINSEQ_2, FINSEQ_4, FINSEQOP, PBOOLE, GROUP_1, MSUALG_1, FACIRC_1,
+      MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, PRE_CIRC, MCART_1, BINARITH,
+      FUNCT_5, SEQM_3, YELLOW_6;
  constructors DOMAIN_1, FUNCT_5, CLASSES1, FINSEQOP, SEQM_3, FINSEQ_4,
       LIMFUNC1, BINARITH, REWRITE1, CIRCUIT1, CIRCUIT2, FACIRC_1, YELLOW_6,
       ORDINAL2;
  registrations MSUALG_1, CIRCCOMB, PRE_CIRC, FINSET_1, CIRCTRM1, RELSET_1,
       FINSEQ_1, FINSEQ_2, STRUCT_0, FSM_1, XBOOLE_0, ORDINAL1, YELLOW_6,
       MSAFREE, FACIRC_1, MEMBERED, SEQM_3, ORDINAL2, FUNCOP_1, PBOOLE,
-      FRAENKEL, CARD_3, XXREAL_0, FINSEQ_4;
+      FRAENKEL, CARD_3, XXREAL_0, FINSEQ_4, NAT_1;
  requirements BOOLE, SUBSET, NUMERALS, REAL;
 
 
@@ -33,7 +33,7 @@ theorem :: CIRCCMB3:1
  for S being non void Circuit-like (non empty ManySortedSign)
  for A being non-empty Circuit of S
  for s being State of A, x being set st x in InputVertices S
- for n being Nat holds Following(s,n).x = s.x;
+ for n being Element of NAT holds Following(s,n).x = s.x;
 
 definition
  let S be non void Circuit-like (non empty ManySortedSign);
@@ -41,7 +41,7 @@ definition
  let s be State of A;
  attr s is stabilizing means
 :: CIRCCMB3:def 1
- ex n being Nat st Following(s,n) is stable;
+ ex n being Element of NAT st Following(s,n) is stable;
 end;
 
 definition
@@ -52,7 +52,7 @@ definition
  for s being State of A holds s is stabilizing;
  attr A is with_stabilization-limit means
 :: CIRCCMB3:def 3
-    ex n being Nat st
+    ex n being Element of NAT st
  for s being State of A holds Following(s,n) is stable;
 end;
 
@@ -67,16 +67,16 @@ definition
  let s be State of A such that  s is stabilizing;
  func Result s -> State of A means
 :: CIRCCMB3:def 4
- it is stable & ex n being Nat st it = Following(s,n);
+ it is stable & ex n being Element of NAT st it = Following(s,n);
 end;
 
 definition
  let S be non void Circuit-like (non empty ManySortedSign);
  let A be non-empty Circuit of S;
  let s be State of A such that  s is stabilizing;
- func stabilization-time s -> Nat means
+ func stabilization-time s -> Element of NAT means
 :: CIRCCMB3:def 5
- Following(s,it) is stable & for n being Nat st n < it holds
+ Following(s,it) is stable & for n being Element of NAT st n < it holds
  not Following(s,n) is stable;
 end;
 
@@ -89,19 +89,19 @@ theorem :: CIRCCMB3:2
 theorem :: CIRCCMB3:3
     for S being non void Circuit-like (non empty ManySortedSign)
  for A being non-empty Circuit of S
- for s being State of A, n being Nat st Following(s,n) is stable
+ for s being State of A, n being Element of NAT st Following(s,n) is stable
   holds stabilization-time s <= n;
 
 theorem :: CIRCCMB3:4
  for S being non void Circuit-like (non empty ManySortedSign)
  for A being non-empty Circuit of S
- for s being State of A, n being Nat st Following(s,n) is stable
+ for s being State of A, n being Element of NAT st Following(s,n) is stable
   holds Result s = Following(s, n);
 
 theorem :: CIRCCMB3:5
  for S being non void Circuit-like (non empty ManySortedSign)
  for A being non-empty Circuit of S
- for s being State of A, n being Nat
+ for s being State of A, n being Element of NAT
   st s is stabilizing & n >= stabilization-time s
   holds Result s = Following(s, n);
 
@@ -191,7 +191,7 @@ begin :: One-gate circuits
 
 theorem :: CIRCCMB3:13
  for x being set, X being non empty finite set
- for n being Nat
+ for n being Element of NAT
  for p being FinSeqLen of n
  for g being Function of n-tuples_on X, X
  for s being State of 1GateCircuit(p,g) holds
@@ -216,7 +216,8 @@ definition
  let S be ManySortedSign;
  attr S is one-gate means
 :: CIRCCMB3:def 6
-  ex X being non empty finite set, n being Nat, p being FinSeqLen of n,
+  ex X being non empty finite set, n being Element of NAT,
+  p being FinSeqLen of n,
   f being Function of n-tuples_on X,X st
   S = 1GateCircStr(p,f);
 end;
@@ -226,7 +227,8 @@ definition
  let A be MSAlgebra over S;
  attr A is one-gate means
 :: CIRCCMB3:def 7
-  ex X being non empty finite set, n being Nat, p being FinSeqLen of n,
+  ex X being non empty finite set, n being Element of NAT,
+  p being FinSeqLen of n,
   f being Function of n-tuples_on X,X st
   S = 1GateCircStr(p,f) & A = 1GateCircuit(p,f);
 end;
@@ -247,7 +249,7 @@ end;
 
 registration
  let X be non empty finite set,
-     n be Nat, p be FinSeqLen of n,
+     n be Element of NAT, p be FinSeqLen of n,
      f be Function of n-tuples_on X,X;
  cluster 1GateCircStr(p,f) -> one-gate;
 end;
@@ -263,7 +265,7 @@ end;
 
 registration
  let X be non empty finite set,
-     n be Nat, p be FinSeqLen of n,
+     n be Element of NAT, p be FinSeqLen of n,
      f be Function of n-tuples_on X,X;
  cluster 1GateCircuit(p,f) -> one-gate;
 end;
@@ -296,13 +298,13 @@ theorem :: CIRCCMB3:17
 theorem :: CIRCCMB3:18
     for S being one-gate ManySortedSign
  for A being one-gate Circuit of S
- for n being Nat
+ for n being Element of NAT
  for X being finite non empty set
  for f being Function of n-tuples_on X, X, p being FinSeqLen of n st
  A = 1GateCircuit(p,f) holds S = 1GateCircStr(p,f);
 
 theorem :: CIRCCMB3:19
-    for n being Nat
+    for n being Element of NAT
  for X being finite non empty set
  for f being Function of n-tuples_on X, X, p being FinSeqLen of n
  for s being State of 1GateCircuit(p,f) holds
@@ -376,7 +378,7 @@ theorem :: CIRCCMB3:23
  holds f = (dom f) --> the_value_of f;
 
 theorem :: CIRCCMB3:24
- for X,Y being non empty set, n,m being Nat st
+ for X,Y being non empty set, n,m being Element of NAT st
  n<>0 & n-tuples_on X = m-tuples_on Y
  holds X=Y & n=m;
 
@@ -399,7 +401,7 @@ definition
 end;
 
 theorem :: CIRCCMB3:27
- for n being Nat, X being non empty finite set
+ for n being Element of NAT, X being non empty finite set
  for f being Function of n-tuples_on X, X
  for p being FinSeqLen of n
   holds 1GateCircStr(p,f) is Signature of X;
@@ -409,7 +411,7 @@ registration
  cluster strict one-gate Signature of X;
 end;
 
-definition let n be Nat; let X be non empty finite set;
+definition let n be Element of NAT; let X be non empty finite set;
  let f be Function of n-tuples_on X, X;
  let p be FinSeqLen of n;
  redefine func 1GateCircStr(p,f) -> strict Signature of X;
@@ -431,7 +433,7 @@ registration
 end;
 
 theorem :: CIRCCMB3:28
- for n being Nat, X being non empty finite set
+ for n being Element of NAT, X being non empty finite set
  for f being Function of n-tuples_on X, X
  for p being FinSeqLen of n
   holds 1GateCircuit(p,f) is Circuit of X, 1GateCircStr(p,f);
@@ -448,7 +450,7 @@ registration
  cluster strict Circuit of X,S;
 end;
 
-definition let n be Nat; let X be non empty finite set;
+definition let n be Element of NAT; let X be non empty finite set;
  let f be Function of n-tuples_on X, X;
  let p be FinSeqLen of n;
  redefine func 1GateCircuit(p,f) -> strict Circuit of X,1GateCircStr(p,f);
@@ -635,7 +637,7 @@ provided
 begin :: Input of a compound circuit
 
 theorem :: CIRCCMB3:39
- for n being Nat, X being non empty finite set
+ for n being Element of NAT, X being non empty finite set
  for f being Function of n-tuples_on X, X
  for p being FinSeqLen of n
  for S being Signature of X
@@ -645,7 +647,7 @@ theorem :: CIRCCMB3:39
    InputVertices (S +* 1GateCircStr(p,f)) = InputVertices S;
 
 theorem :: CIRCCMB3:40
- for X1,X2 being set, X being non empty finite set, n be Nat
+ for X1,X2 being set, X being non empty finite set, n be Element of NAT
  for f being Function of n-tuples_on X, X
  for p being FinSeqLen of n
  for S being Signature of X
@@ -772,7 +774,7 @@ theorem :: CIRCCMB3:52
  for X being non empty finite set
  for S being finite Signature of X
  for A being Circuit of X,S
- for n being Nat, f being Function of n-tuples_on X, X
+ for n being Element of NAT, f being Function of n-tuples_on X, X
  for p being FinSeqLen of n
   st not Output 1GateCircStr(p,f) in InputVertices S
  for s being State of A +* 1GateCircuit(p,f)
@@ -932,7 +934,7 @@ registration
 end;
 
 registration
- let n be Nat;
+ let n be Element of NAT;
  cluster one-to-one natural-yielding FinSeqLen of n;
 end;
 

@@ -9,7 +9,8 @@ environ
  vocabularies FINSEQ_1, ARYTM_1, FUNCT_1, RELAT_1, BOOLE, AMI_1, MATRIX_2,
       CARD_5, FSM_1, FSM_2, ZFMISC_1, PARTFUN1, BINOP_1, FUNCOP_1, SQUARE_1,
       ABSVALUE, REALSET1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0, REAL_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS,
+ XCMPLX_0,XXREAL_0, REAL_1,
       ABSVALUE, NAT_1, DOMAIN_1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1,
       FINSEQ_1, FINSEQ_3, FINSEQ_4, STRUCT_0, BORSUK_1, FSM_1, SQUARE_1,
       REALSET1;
@@ -28,7 +29,7 @@ environ
 begin :: Calculating type
 
 reserve x,y for Real,
-        i, j, h for non empty Nat,
+        i, j, h for non empty Element of NAT,
         I, O for non empty set,
         s,s1,s2,s3 for Element of I,
         w, w1, w2 for FinSequence of I,
@@ -148,7 +149,7 @@ then A4: dom GEN(w1, the InitS of S) = Seg(1+len w1) &
   dom GEN(w2, the InitS of S) = Seg(1+len w2) by FINSEQ_1:def 3;
      now let x be set; assume
 A5: x in A;
-    then reconsider i = x as Nat;
+    then reconsider i = x as Element of NAT;
 A6: i >= 1 & i <= 1+len w1 & i <= 1+len w2 by A3,A5,FINSEQ_1:3;
        i <> 0 by A3,A5,FINSEQ_1:3;
     hence GEN(w1, the InitS of S).x = GEN(w2, the InitS of S).x
@@ -392,23 +393,23 @@ end;
 
 theorem
     S is calculating_type & q is_accessible_via s implies
-  ex m being non empty Nat st
+  ex m being non empty Element of NAT st
    for w st len w+1 >= m & w.1 = s holds q = GEN(w, the InitS of S).m &
       for i st i < m holds GEN(w, the InitS of S).i <> q
   proof assume
 A1: S is calculating_type;
    given w being FinSequence of I such that
 A2: the InitS of S, <*s*>^w-leads_to q;
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
      q = GEN(<*s*>^w, the InitS of S).$1 & $1 >= 1 & $1 <= len(<*s*>^w)+1;
        len(<*s*>^w)+1 >= 1 & q = GEN(<*s*>^w, the InitS of S).(len(<*s*>^w)+1)
      by A2,FSM_1:def 3,NAT_1:29;
-then A3: ex m being Nat st P[m];
-   consider m being Nat such that
+then A3: ex m being Element of NAT st P[m];
+   consider m being Element of NAT such that
 A4: P[m] and
-A5: for k being Nat st P[k] holds m <= k from NAT_1:sch 5(A3);
+A5: for k being Element of NAT st P[k] holds m <= k from NAT_1:sch 5(A3);
        m <> 0 by A4;
-    then reconsider m as non empty Nat;
+    then reconsider m as non empty Element of NAT;
    take m; let w1 such that
 A6: len w1+1 >= m & w1.1 = s;
        (<*s*>^w).1 = s by FINSEQ_1:58;
@@ -467,7 +468,7 @@ proof
     let j;
     let w1,w2;
     assume A2: w1.1 = w2.1 & j <= len(w1)+1 & j <= len(w2)+1;
-      defpred P[Nat] means for w1,w2 st w1.1 = w2.1 &
+      defpred P[Element of NAT] means for w1,w2 st w1.1 = w2.1 &
       $1 <= len(w1) + 1 & $1 <= len(w2) + 1
       holds GEN(w1, the InitS of S).$1 = GEN(w2, the InitS of S).$1;
     A3: P[1]
@@ -535,7 +536,7 @@ A2: for j st j >= 2 holds for w1 st j <= len(w1)+1 holds
     assume j >= 2;
      then j <> 0 & j <> 1;
     then A3: j is non trivial by NAT_2:def 1;
-    defpred P[Nat] means for w1 st $1 <= len w1 + 1 holds
+    defpred P[Element of NAT] means for w1 st $1 <= len w1 + 1 holds
         GEN(w1, the InitS of S).$1 <> the InitS of S;
     A4: P[2]
     proof
@@ -554,9 +555,9 @@ A2: for j st j >= 2 holds for w1 st j <= len(w1)+1 holds
         .= (the Tran of S).[the InitS of S, WI];
       hence thesis by A1;
     end;
-    A6: for h being non trivial Nat st P[h] holds P[h+1]
+    A6: for h being non trivial Element of NAT st P[h] holds P[h+1]
     proof
-      let h be non trivial Nat;
+      let h be non trivial Element of NAT;
       assume for w1 st h <= len(w1)+1 holds
         GEN(w1, the InitS of S).h <> the InitS of S;
       let w1;
@@ -573,7 +574,8 @@ A2: for j st j >= 2 holds for w1 st j <= len(w1)+1 holds
          = (the Tran of S).[QI, WI] by A9;
       hence thesis by A1;
     end;
-       for h being non trivial Nat holds P[h] from NAT_2:sch 2(A4,A6);
+       for h being non trivial Element of NAT holds P[h]
+       from NAT_2:sch 2(A4,A6);
    hence thesis by A3;
   end;
      for j holds for w1,w2 st w1.1 = w2.1 & j <= len(w1)+1 &
@@ -583,7 +585,7 @@ A2: for j st j >= 2 holds for w1 st j <= len(w1)+1 holds
     let j;
     let w1,w2;
     assume A10: w1.1 = w2.1 & j <= len(w1)+1 & j <= len(w2)+1;
-      defpred P[Nat] means
+      defpred P[Element of NAT] means
       for w1,w2 st w1.1 = w2.1 &
       $1 <= len(w1) + 1 & $1 <= len(w2) + 1
       holds GEN(w1, the InitS of S).$1 = GEN(w2, the InitS of S).$1;
@@ -723,7 +725,7 @@ proof
   set w1=<*s1*>;
   set w2=<*s2*>;
   A3: len w1 = 0+1 by FINSEQ_1:56;
-  reconsider j = len w1 as non empty Nat by FINSEQ_1:56;
+  reconsider j = len w1 as non empty Element of NAT by FINSEQ_1:56;
   consider WI being Element of I,
     QI, QI1 being State of S such that
     A4:WI = w1.j &
@@ -733,7 +735,7 @@ proof
      WI = s1 by A3,A4,FINSEQ_1:def 8;
   then A5: QI1 = s1-succ_of q by A3,A4,FSM_1:def 2;
   A6: len w2 = 0+1 by FINSEQ_1:56;
-  reconsider h = len w2 as non empty Nat by FINSEQ_1:56;
+  reconsider h = len w2 as non empty Element of NAT by FINSEQ_1:56;
   consider WI2 being Element of I,
     QI2, QI12 being State of S such that
     A7:WI2 = w2.h &
@@ -918,7 +920,7 @@ A1: 1 < j;
 A2: the InitS of M = i &
     the carrier of M = {i, f} by Def7;
 A3: the Tran of M = [:{i, f}, I:] --> f by Def7;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
      $1 <= len w + 1 implies
       GEN(w, the InitS of I-TwoStatesMooreSM(i,f,o)).$1 = f;
 A4: P[2]
@@ -936,9 +938,9 @@ A5:  WI = w.1 &
      .= f by A2,A3,FUNCOP_1:13;
     hence thesis;
   end;
-A6: for k be non trivial Nat st P[k] holds P[k+1]
+A6: for k be non trivial Element of NAT st P[k] holds P[k+1]
    proof
-     let k be non trivial Nat; assume that
+     let k be non trivial Element of NAT; assume that
          k <= len w + 1 implies GEN(w, the InitS of M).k = f and
 A7:   k+1 <= len w + 1;
         1 <= k & k <= len w by A7,NAT_2:21,XREAL_1:8;
@@ -952,8 +954,8 @@ A8:   WI = w.k &
       .= f by A2,A3,FUNCOP_1:13;
      hence thesis;
    end;
-A9: j is non trivial Nat by A1,NAT_2:def 1;
-      for k be non trivial Nat holds P[k] from NAT_2:sch 2(A4,A6);
+A9: j is non trivial Element of NAT by A1,NAT_2:def 1;
+      for k be non trivial Element of NAT holds P[k] from NAT_2:sch 2(A4,A6);
    hence thesis by A9;
 end;
 
@@ -975,7 +977,7 @@ A1:   w1.1 = w2.1 & len w1 = len w2;
 A2:  p.1 = the InitS of M by FSM_1:def 2
       .= q.1 by FSM_1:def 2;
 A3:  len p = len w1 + 1 & len q = len w1 + 1 by A1,FSM_1:def 2;
-        now let j be Nat; assume
+        now let j be Element of NAT; assume
 A4:   1 <= j;
        then A5: j <> 0;
           j = 1 or j > 1 by A4,XXREAL_0:1;
@@ -1012,7 +1014,7 @@ registration
   end;
 end;
 
-reserve n, m, o, p for non empty Nat,
+reserve n, m, o, p for non empty Element of NAT,
         M for non empty Moore-SM_Final over I, O,
         q for State of M;
 
@@ -1020,7 +1022,7 @@ theorem Th18:
  M is calculating_type & s leads_to_final_state_of M &
  not the InitS of M in the FinalS of M
  implies
-  ex m being non empty Nat st
+  ex m being non empty Element of NAT st
    (for w st len w+1 >= m & w.1 = s holds
       GEN(w, the InitS of M).m in the FinalS of M) &
    (for w,j st j <= len w +1 & w.1 = s & j < m holds
@@ -1032,17 +1034,17 @@ A2: q is_accessible_via s & q in the FinalS of M;
    consider w such that
 A3: the InitS of M,<*s*>^w-leads_to q by A2,Def2;
     assume not the InitS of M in the FinalS of M;
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
      GEN(<*s*>^w, the InitS of M).$1 in the FinalS of M &
     $1 >= 1 & $1 <= len(<*s*>^w)+1;
        len(<*s*>^w)+1 >= 1 & q = GEN(<*s*>^w, the InitS of M).(len(<*s*>^w)+1)
      by A3,FSM_1:def 3,NAT_1:29;
-then A4: ex m being Nat st P[m] by A2;
-   consider m being Nat such that
+then A4: ex m being Element of NAT st P[m] by A2;
+   consider m being Element of NAT such that
 A5: P[m] and
-A6: for k being Nat st P[k] holds m <= k from NAT_1:sch 5(A4);
+A6: for k being Element of NAT st P[k] holds m <= k from NAT_1:sch 5(A4);
        m <> 0 by A5;
-   then reconsider m as non empty Nat;
+   then reconsider m as non empty Element of NAT;
    take m;
    hereby
    let w1 such that
@@ -1132,7 +1134,7 @@ A2: q is_accessible_via s & q in the FinalS of M by Def5;
    consider w such that
 A3: the InitS of M,<*s*>^w-leads_to q by A2,Def2;
 A4:GEN(<*s*>^w, the InitS of M).(len(<*s*>^w)+1) = q by A3,FSM_1:def 3;
-   consider m being non empty Nat such that
+   consider m being non empty Element of NAT such that
 A5: (for w st len w+1 >= m & w.1 = s holds
      GEN(w, the InitS of M).m in the FinalS of M) &
     (for w,j st j <= len w +1 & w.1 = s & j < m holds
@@ -1260,10 +1262,10 @@ A6:    WI = W.1 &
    end;
  let x,y be Element of X;
       [x,y] leads_to_final_state_of M by A3;
-  then consider m being non empty Nat such that
+  then consider m being non empty Element of NAT such that
 A7: for w being FinSequence of [:X, X:] st len w+1 >= m & w.1 = [x,y] holds
       GEN(w, the InitS of M).m in the FinalS of M and
-A8: for w being FinSequence of [:X, X:], i being non empty Nat
+A8: for w being FinSequence of [:X, X:], i being non empty Element of NAT
       st i <= len w + 1 & w.1 = [x,y] & i < m holds
        not GEN(w, the InitS of M).i in the FinalS of M by A1,A2,Th18;
    take m;
@@ -1561,7 +1563,7 @@ proof
 A1:s leads_to_final_state_of M by Def6;
 A2:the InitS of M = 0 & the FinalS of M = {1} & not 0 in {1} &
    the OFun of M = f by Def7,TARSKI:def 1;
-  then consider m being non empty Nat such that
+  then consider m being non empty Element of NAT such that
 A3:for w st len w+1 >= m & w.1 = s holds
       GEN(w, the InitS of M).m in the FinalS of M and
 A4:for w,j st j <= len w +1 & w.1 = s & j < m holds

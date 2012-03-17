@@ -8,7 +8,8 @@ environ
 
  vocabularies ARYTM, SEQ_1, PARTFUN1, ORDINAL2, FUNCT_1, PROB_1, RELAT_1,
       ARYTM_1, SEQ_2, LATTICES, ABSVALUE, SEQM_3, FUNCOP_1, FUNCT_3, FRECHET2;
- notations TARSKI, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, RELAT_1, PARTFUN1,
+ notations TARSKI,
+      SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, RELAT_1, PARTFUN1,
       FUNCT_1, FUNCT_3, SEQ_1, SEQ_2, COMPLEX1, NAT_1, FUNCOP_1, XXREAL_0;
  constructors PARTFUN1, FUNCT_3, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1,
       SEQ_2;
@@ -17,12 +18,13 @@ environ
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SEQ_2, FUNCT_1;
  theorems FUNCT_1, SEQ_1, SEQ_2, ABSVALUE, NAT_1, TARSKI, FUNCT_2, RELAT_1,
-      RELSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0;
+      RELSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0,
+      ORDINAL1;
  schemes NAT_1, SEQ_1;
 
 begin
 
-  reserve n,n1,m,k,k1 for Nat;
+  reserve n,n1,m,k,k1 for Element of NAT;
   reserve r,r1,r2 for real number;
   reserve f,seq,seq1,seq2 for Real_Sequence;
   reserve x,y for set;
@@ -30,9 +32,10 @@ begin
 Lm1:n<m implies ex k st m=n+1+k
  proof
   assume A1: n<m;
-  then consider k1 such that A2:m=n+k1 by NAT_1:28;
-       k1 <> 0 by A1,A2;
-  then consider n1 such that A3:k1=n1+1 by NAT_1:22;
+  then consider k1 be Nat such that A2:m=n+k1 by NAT_1:28;
+  k1 <> 0 by A1,A2;
+  then consider n1 be Nat such that A3:k1=n1+1 by NAT_1:22;
+  reconsider n1 as Element of NAT by ORDINAL1:def 13;
   take k=n1;
   thus m=n+1+k by A2,A3;
  end;
@@ -49,7 +52,7 @@ Lm1:n<m implies ex k st m=n+1+k
    proof
     assume A1:for n holds seq.n<seq.(n+1);
     let n;
-     defpred X[Nat] means seq.n<seq.(n+1+$1);
+     defpred X[Element of NAT] means seq.n<seq.(n+1+$1);
     A2: X[0] by A1;
      A3:now let k such that A4: X[k];
          seq.(n+1+k)<seq.(n+1+k+1) by A1;
@@ -83,7 +86,7 @@ Lm1:n<m implies ex k st m=n+1+k
      proof
       assume A1:for n holds seq.(n+1)<seq.n;
       let n;
-      defpred X[Nat] means seq.(n+1+$1)<seq.n;
+      defpred X[Element of NAT] means seq.(n+1+$1)<seq.n;
       A2: X[0] by A1;
        A3:now let k such that A4: X[k];
            seq.(n+1+k+1)<seq.(n+1+k) by A1;
@@ -117,7 +120,7 @@ Lm1:n<m implies ex k st m=n+1+k
      proof
       assume A1:for n holds seq.n<=seq.(n+1);
       let n;
-      defpred X[Nat] means seq.n<=seq.(n+$1);
+      defpred X[Element of NAT] means seq.n<=seq.(n+$1);
       A2: X[0];
        A3:now let k such that A4: X[k];
            seq.(n+k)<=seq.(n+k+1) by A1;
@@ -130,12 +133,14 @@ Lm1:n<m implies ex k st m=n+1+k
      proof
       assume A5:for n,k holds seq.n<=seq.(n+k);
       let n,m; assume n<=m;
-      then ex k1 st m=n+k1 by NAT_1:28;
-      hence seq.n<=seq.m by A5;
+      then consider k1 be Nat such that
+AA:   m=n+k1 by NAT_1:28;
+      k1 in NAT by ORDINAL1:def 13;
+      hence seq.n<=seq.m by A5,AA;
      end;
     assume A6:for n,m st n<=m holds seq.n<=seq.m;
     let n;
-       n<=n+1 by NAT_1:38;
+    n<=n+1 by NAT_1:38;
     hence seq.n<=seq.(n+1) by A6;
    end;
 
@@ -151,7 +156,7 @@ Lm1:n<m implies ex k st m=n+1+k
      proof
       assume A1:for n holds seq.(n+1)<=seq.n;
       let n;
-      defpred X[Nat] means seq.(n+$1)<=seq.n;
+      defpred X[Element of NAT] means seq.(n+$1)<=seq.n;
       A2: X[0];
        A3:now let k such that A4: X[k];
            seq.(n+k+1)<=seq.(n+k) by A1;
@@ -164,12 +169,14 @@ Lm1:n<m implies ex k st m=n+1+k
      proof
       assume A5:for n,k holds seq.(n+k)<=seq.n;
       let n,m; assume n<=m;
-      then ex k1 st m=n+k1 by NAT_1:28;
-      hence seq.m<=seq.n by A5;
+      then consider k1 be Nat such that
+AA:   m=n+k1 by NAT_1:28;
+      k1 in NAT by ORDINAL1:def 13;
+      hence seq.m<=seq.n by AA,A5;
      end;
     assume A6:for n,m st n<=m holds seq.m<=seq.n;
     let n;
-       n<=n+1 by NAT_1:38;
+    n<=n+1 by NAT_1:38;
     hence seq.(n+1)<=seq.n by A6;
    end;
 
@@ -188,72 +195,76 @@ definition let f be PartFunc of NAT, REAL;
 :Def4: for m,n st m in dom f & n in dom f & m <= n holds f.m >= f.n;
 end;
 
-Lm6: f is increasing iff for n being Nat holds f.n < f.(n+1)
+Lm6: f is increasing iff for n being Element of NAT holds f.n < f.(n+1)
   proof
-    thus f is increasing implies for n being Nat holds f.n < f.(n+1)
+    thus f is increasing implies for n being Element of NAT holds f.n < f.(n+1)
     proof
       assume A1: f is increasing;
-      let n be Nat;
+      let n be Element of NAT;
 A2:   dom f = NAT by FUNCT_2:def 1;
-         n < n+1 by NAT_1:38;
+      n < n+1 by NAT_1:38;
       hence thesis by A1,A2,Def1;
     end;
-    assume A3:for n being Nat holds f.n < f.(n+1);
+    assume A3:for n being Element of NAT holds f.n < f.(n+1);
     let m,n; assume m in dom f & n in dom f & m < n;
     then consider k such that
 A4: n = m+1+k by Lm1;
     thus thesis by A3,A4,Lm2;
   end;
 
-Lm7: f is decreasing iff for n being Nat holds f.n > f.(n+1)
+Lm7: f is decreasing iff for n being Element of NAT holds f.n > f.(n+1)
   proof
-    thus f is decreasing implies for n being Nat holds f.n > f.(n+1)
+    thus f is decreasing implies for n being Element of NAT holds f.n > f.(n+1)
     proof
       assume A1: f is decreasing;
-      let n be Nat;
+      let n be Element of NAT;
 A2:   dom f = NAT by FUNCT_2:def 1;
-         n < n+1 by NAT_1:38;
+      n < n+1 by NAT_1:38;
       hence thesis by A1,A2,Def2;
     end;
-    assume A3:for n being Nat holds f.n > f.(n+1);
+    assume A3:for n being Element of NAT holds f.n > f.(n+1);
     let m,n; assume m in dom f & n in dom f & m < n;
     then consider k such that
 A4: n = m+1+k by Lm1;
     thus thesis by A3,A4,Lm3;
   end;
 
-Lm8: f is non-decreasing iff for n being Nat holds f.n <= f.(n+1)
+Lm8: f is non-decreasing iff for n being Element of NAT holds f.n <= f.(n+1)
   proof
-    thus f is non-decreasing implies for n being Nat holds f.n <= f.(n+1)
+    thus f is non-decreasing implies
+     for n being Element of NAT holds f.n <= f.(n+1)
     proof
       assume A1: f is non-decreasing;
-      let n be Nat;
+      let n be Element of NAT;
 A2:   dom f = NAT by FUNCT_2:def 1;
-         n < n+1 by NAT_1:38;
+      n < n+1 by NAT_1:38;
       hence thesis by A1,A2,Def3;
     end;
-    assume A3:for n being Nat holds f.n <= f.(n+1);
+    assume A3:for n being Element of NAT holds f.n <= f.(n+1);
     let m,n; assume m in dom f & n in dom f & m <= n;
-    then consider k such that
+    then consider k be Nat such that
 A4: n = m+k by NAT_1:28;
-    thus thesis by A3,A4,Lm4;
+    k in NAT by ORDINAL1:def 13;
+    hence thesis by A3,A4,Lm4;
   end;
 
-Lm9: f is non-increasing iff for n being Nat holds f.n >= f.(n+1)
+Lm9: f is non-increasing iff for n being Element of NAT holds f.n >= f.(n+1)
   proof
-    thus f is non-increasing implies for n being Nat holds f.n >= f.(n+1)
+    thus f is non-increasing implies
+     for n being Element of NAT holds f.n >= f.(n+1)
     proof
       assume A1: f is non-increasing;
-      let n be Nat;
+      let n be Element of NAT;
 A2:   dom f = NAT by FUNCT_2:def 1;
-         n < n+1 by NAT_1:38;
+      n < n+1 by NAT_1:38;
       hence thesis by A1,A2,Def4;
     end;
-    assume A3:for n being Nat holds f.n >= f.(n+1);
+    assume A3:for n being Element of NAT holds f.n >= f.(n+1);
     let m,n; assume m in dom f & n in dom f & m <= n;
-    then consider k such that
+    then consider k be Nat such that
 A4: n = m+k by NAT_1:28;
-    thus thesis by A3,A4,Lm5;
+    k in NAT by ORDINAL1:def 13;
+    hence thesis by A3,A4,Lm5;
   end;
 
 definition let seq;
@@ -265,10 +276,10 @@ definition let seq;
 A1:dom seq = NAT by FUNCT_2:def 1;
    hereby assume
 A2:   seq is constant;
-    consider n0 being Nat;
+    consider n0 being Element of NAT;
     reconsider r = seq.n0 as real number;
     take r;
-    let n be Nat;
+    let n be Element of NAT;
     thus seq.n = r by A1,A2,FUNCT_1:def 16;
    end;
    given r such that
@@ -412,19 +423,19 @@ theorem
     proof
      given r1 such that A1:for n holds seq.n=r1;
      take r=r1;
-         now let y; assume y in rng seq;
+     now let y; assume y in rng seq;
        then consider x such that A2:x in dom seq and
                             A3:seq.x=y by FUNCT_1:def 5;
-          x in NAT by A2,FUNCT_2:def 1;
+       x in NAT by A2,FUNCT_2:def 1;
        then y=r1 by A1,A3;
        hence y in {r} by TARSKI:def 1;
       end;
      then A4:rng seq c={r} by TARSKI:def 3;
-         now let y; assume y in {r};
+      now let y; assume y in {r};
        then A5:y=r by TARSKI:def 1;
-           now assume A6:not y in rng seq;
-             now let n;
-              n in NAT;
+        now assume A6:not y in rng seq;
+          now let n;
+           n in NAT;
            then n in dom seq by FUNCT_2:def 1;
            then seq.n<>r by A5,A6,FUNCT_1:def 5;
            hence contradiction by A1;
@@ -440,7 +451,7 @@ theorem
     proof
      given r1 such that A7:rng seq={r1};
      let n;
-        n in NAT & n+1 in NAT;
+     n in NAT & n+1 in NAT;
      then n in dom seq & n+1 in dom seq by FUNCT_2:def 1;
      then seq.n in{r1} & seq.(n+1) in{r1} by A7,FUNCT_1:def 5;
      then seq.n=r1 & seq.(n+1)=r1 by TARSKI:def 1;
@@ -451,7 +462,7 @@ theorem
     proof
      assume A8:for n holds seq.n=seq.(n+1);
      let n;
-      defpred X[Nat] means seq.n=seq.(n+$1);
+      defpred X[Element of NAT] means seq.n=seq.(n+$1);
      A9: X[0];
       A10:now let k such that A11: X[k];
           seq.(n+k)=seq.(n+k+1) by A8;
@@ -465,19 +476,23 @@ theorem
      assume A12:for n,k holds seq.n=seq.(n+k);
      let n,m;
       A13:now assume n<=m;
-        then ex k st m=n+k by NAT_1:28;
-       hence seq.n=seq.m by A12;
+       then consider k be Nat such that
+AA:    m=n+k by NAT_1:28;
+       k in NAT by ORDINAL1:def 13;
+       hence seq.n=seq.m by AA,A12;
       end;
-         now assume m<=n;
-        then ex k st n=m+k by NAT_1:28;
-       hence seq.n=seq.m by A12;
+      now assume m<=n;
+       then consider k be Nat such that
+AA:    n=m+k by NAT_1:28;
+       k in NAT by ORDINAL1:def 13;
+       hence seq.n=seq.m by AA,A12;
       end;
      hence seq.n=seq.m by A13;
     end;
    assume that A14:for n,m holds seq.n=seq.m and
                A15:for r ex n st seq.n<>r;
-       now let n;
-         ex n1 st seq.n1<>seq.n by A15;
+    now let n;
+     ex n1 st seq.n1<>seq.n by A15;
      hence contradiction by A14;
     end;
    hence thesis;
@@ -624,7 +639,7 @@ A8: f is non-decreasing non-increasing;
    assume
 A9: x in dom f & y in dom f;
     dom f c= NAT by RELSET_1:12;
-    then reconsider m = x, n = y as Nat by A9;
+    then reconsider m = x, n = y as Element of NAT by A9;
     m <= n or n <= m;
     then f.m <= f.n & f.n <= f.m by A8,A9,Def3,Def4;
    hence thesis by XXREAL_0:1;
@@ -715,7 +730,7 @@ definition
 func seq ^\k ->Real_Sequence means :Def9:
   for n holds it.n=seq.(n+k);
 existence
- proof deffunc U(Nat) = seq.($1+k);
+ proof deffunc U(Element of NAT) = seq.($1+k);
   thus ex f being Real_Sequence st
    for n holds f.n=U(n) from SEQ_1:sch 1;
  end;
@@ -738,10 +753,10 @@ canceled;
 
 theorem
  Th29:seq is increasing Seq_of_Nat iff seq is increasing &
-        for n holds seq.n is Nat
+        for n holds seq.n is Element of NAT
   proof
    thus seq is increasing Seq_of_Nat implies seq is increasing &
-         for n holds seq.n is Nat
+         for n holds seq.n is Element of NAT
     proof
      assume A1:seq is increasing Seq_of_Nat;
      hence seq is increasing;
@@ -750,17 +765,17 @@ theorem
         n in NAT;
      then n in dom seq by FUNCT_2:def 1;
      then seq.n in rng seq by FUNCT_1:def 5;
-     hence seq.n is Nat by A2;
+     hence seq.n is Element of NAT by A2;
     end;
    assume that A3:seq is increasing and
-               A4:for n holds seq.n is Nat;
+               A4:for n holds seq.n is Element of NAT;
       seq is natural-yielding
      proof
           now let y; assume y in rng seq;
         then consider x such that A5:x in dom seq and
                              A6:seq.x=y by FUNCT_1:def 5;
            x in NAT by A5,FUNCT_2:def 1;
-        then seq.x is Nat by A4;
+        then seq.x is Element of NAT by A4;
         hence y in NAT by A6;
        end;
       hence rng seq c= NAT by TARSKI:def 3;
@@ -782,7 +797,7 @@ theorem
   end;
 
 definition let Nseq,n;
-  redefine func Nseq.n -> Nat;
+  redefine func Nseq.n -> Element of NAT;
 coherence by Th29;
 end;
 
@@ -824,7 +839,7 @@ registration let Nseq,k;
   proof
    A1:now let n;
        (Nseq ^\k).n=Nseq.(n+k) by Def9;
-    hence (Nseq ^\k).n is Nat;
+    hence (Nseq ^\k).n is Element of NAT;
    end;
       now let n;
        Nseq.(n+k)<Nseq.(n+k+1) by Lm6;
@@ -853,16 +868,16 @@ end;
 
 definition let f be Real_Sequence;
   redefine attr f is increasing means
-      for n being Nat holds f.n < f.(n+1);
+      for n being Element of NAT holds f.n < f.(n+1);
   compatibility by Lm6;
   redefine attr f is decreasing means
-      for n being Nat holds f.n > f.(n+1);
+      for n being Element of NAT holds f.n > f.(n+1);
   compatibility by Lm7;
   redefine attr f is non-decreasing means
-      for n being Nat holds f.n <= f.(n+1);
+      for n being Element of NAT holds f.n <= f.(n+1);
   compatibility by Lm8;
   redefine attr f is non-increasing means
-      for n being Nat holds f.n >= f.(n+1);
+      for n being Element of NAT holds f.n >= f.(n+1);
   compatibility by Lm9;
 end;
 
@@ -871,7 +886,7 @@ canceled;
 theorem
     for n holds n<=Nseq.n
   proof
-      defpred X[Nat] means $1<=Nseq.$1;
+      defpred X[Element of NAT] means $1<=Nseq.$1;
    A1: X[0] by NAT_1:18;
     A2:now let k such that A3: X[k];
         Nseq.k<Nseq.(k+1) by Lm6;
@@ -1027,7 +1042,7 @@ theorem
      hence seq1.n<seq1.(n+1) by NAT_1:38;
     end;
    then A1:seq1 is increasing by Lm6;
-       for n holds seq1.n is Nat by FUNCT_1:35;
+       for n holds seq1.n is Element of NAT by FUNCT_1:35;
    then reconsider seq1 as increasing Seq_of_Nat by A1,Th29;
    take Nseq=seq1;
        now let n;
@@ -1039,7 +1054,7 @@ theorem
 
 theorem
     seq ^\k is subsequence of seq
-  proof deffunc U(Nat) = $1+k;
+  proof deffunc U(Element of NAT) = $1+k;
    consider seq1 such that A1:for n holds seq1.n=U(n) from SEQ_1:sch 1;
        now let n;
      A2:seq1.n=n+k & seq1.(n+1)=n+1+k by A1;
@@ -1048,8 +1063,8 @@ theorem
     end;
    then A3:seq1 is increasing by Lm6;
        now let n;
-        n+k is Nat;
-     hence seq1.n is Nat by A1;
+        n+k is Element of NAT;
+     hence seq1.n is Element of NAT by A1;
     end;
    then reconsider seq1 as increasing Seq_of_Nat by A3,Th29;
    take Nseq=seq1;
@@ -1190,7 +1205,7 @@ theorem
   A3:for n holds seq.n<r1 by A1,SEQ_2:def 3;
   consider Nseq such that A4:seq1=seq*Nseq by A2,Def10;
   take r=r1;
-  let n;
+  let n be Element of NAT;
      seq1.n=seq.(Nseq.n) by A4,Th31;
   hence seq1.n<r by A3;
  end;
@@ -1205,7 +1220,7 @@ theorem
   A3:for n holds r1<seq.n by A1,SEQ_2:def 4;
   consider Nseq such that A4:seq1=seq*Nseq by A2,Def10;
   take r=r1;
-  let n;
+  let n be Element of NAT;
      seq1.n=seq.(Nseq.n) by A4,Th31;
   hence r<seq1.n by A3;
  end;
@@ -1505,7 +1520,7 @@ theorem
     consider r1 such that
     A3:for n holds seq.n<r1 by A1,SEQ_2:def 3;
     take p=r*abs r1;
-    let n;
+    let n be Element of NAT;
     A4:r1<=abs r1 by ABSVALUE:11;
        seq.n<r1 by A3;
     then seq.n<abs r1 by A4,XXREAL_0:2;
@@ -1521,7 +1536,7 @@ theorem
      end;
     hence r(#)seq is bounded_above by SEQ_2:def 3;
     take p=-1;
-    let n;
+    let n be Element of NAT;
     A6:-1<0;
        r*seq.n=0 by A5;
     hence p<(r(#)seq).n by A6,SEQ_1:13;
@@ -1531,7 +1546,7 @@ theorem
   consider r1 such that
   A9:for n holds seq.n<r1 by A7,SEQ_2:def 3;
   take p=r*abs r1;
-  let n;
+  let n be Element of NAT;
   A10:r1<=abs r1 by ABSVALUE:11;
      seq.n<r1 by A9;
   then seq.n<abs r1 by A10,XXREAL_0:2;
@@ -1550,7 +1565,7 @@ theorem
     consider r1 such that
     A3:for n holds r1<seq.n by A1,SEQ_2:def 4;
     take p=r*r1;
-    let n;
+    let n be Element of NAT;
        r1<seq.n by A3;
     then r*r1<r*seq.n by A2,XREAL_1:70;
     hence p<(r(#)seq).n by SEQ_1:13;
@@ -1560,7 +1575,7 @@ theorem
   consider r1 such that
   A6:for n holds r1<seq.n by A4,SEQ_2:def 4;
   take p=r*(-abs r1);
-  let n;
+  let n be Element of NAT;
   A7:-abs r1<=r1 by ABSVALUE:11;
      r1<seq.n by A6;
   then -abs r1<seq.n by A7,XXREAL_0:2;
@@ -1612,8 +1627,8 @@ theorem Th70:
     assume
   abs seq is bounded;
     then consider r be real number such that
-A9: 0<r & for n be Nat holds abs(abs seq.n)<r by SEQ_2:15;
-     now let n be Nat;
+A9: 0<r & for n be Element of NAT holds abs(abs seq.n)<r by SEQ_2:15;
+     now let n be Element of NAT;
        abs(abs seq .n)=abs(abs(seq.n)) by SEQ_1:16
                      .=abs(seq.n);
       hence abs(seq.n) < r by A9;
@@ -1638,7 +1653,7 @@ theorem
      consider r2 such that
      A5:for n holds seq1.n<r2 by A3,SEQ_2:def 3;
      take r=r1+r2;
-     let n;
+     let n be Element of NAT;
      A6:seq.n<r1 by A4;
         seq1.n<r2 by A5;
      then seq.n+seq1.n<r1+r2 by A6,XREAL_1:10;
@@ -1654,7 +1669,7 @@ theorem
      consider r2 such that
      A11:for n holds r2<seq1.n by A9,SEQ_2:def 4;
      take r=r1+r2;
-     let n;
+     let n be Element of NAT;
      A12:r1<seq.n by A10;
         r2<seq1.n by A11;
      then r1+r2<seq.n+seq1.n by A12,XREAL_1:10;
@@ -1810,7 +1825,7 @@ theorem
    consider r1 such that
    A3:for n holds seq.n<r1 by A1,SEQ_2:def 3;
    take r=r1+seq1.0;
-   let n;
+   let n be Element of NAT;
    A4:seq1.n<=seq1.0 by A2,Th22;
       seq.n<r1 by A3;
    then seq.n+seq1.n<r1+seq1.0 by A4,XREAL_1:10;
@@ -1826,7 +1841,7 @@ theorem
    consider r1 such that
    A3:for n holds r1<seq.n by A1,SEQ_2:def 4;
    take r=r1+seq1.0;
-   let n;
+   let n be Element of NAT;
    A4:seq1.0<=seq1.n by A2,Th21;
       r1<seq.n by A3;
    then r1+seq1.0<seq.n+seq1.n by A4,XREAL_1:10;

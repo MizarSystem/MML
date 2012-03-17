@@ -11,7 +11,8 @@ environ
       REALSET1, REWRITE1, CARD_1, FINSEQ_1, ARYTM_1, FINSEQ_5, MSUALG_5,
       TARSKI, EQREL_1, WELLORD1, FUNCT_4, FUNCOP_1, SEQM_3;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ZFMISC_1, RELAT_1, RELAT_2,
-      RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, XCMPLX_0, XXREAL_0,
+      RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, NUMBERS,
+      XCMPLX_0, XXREAL_0,
       NAT_1, CARD_1, REALSET1, DOMAIN_1, STRUCT_0, ORDERS_2, WAYBEL_1,
       PRE_TOPC, CQC_LANG, INCPROJ, CLASSES2, NECKLACE, WAYBEL_0, FUNCOP_1,
       REALSET2, FUNCT_4, GROUP_1, REWRITE1, FINSEQ_1, FINSEQ_5, EQREL_1,
@@ -31,7 +32,7 @@ environ
       RELAT_1, SYSREL, INCPROJ, GROUP_1, PARTFUN1, GROUP_6, REALSET2, CARD_2,
       CARD_4, REWRITE1, FINSEQ_1, FINSEQ_3, FINSEQ_5, NAT_1, EQREL_1, MSUALG_6,
       MSUALG_5, CARD_1, REAL_1, GRAPH_5, NAT_2, CQC_THE1, FUNCT_4, KNASTER,
-      FUNCT_3, WAYBEL_1, YELLOW_6, REALSET1, XREAL_1, XXREAL_0;
+      FUNCT_3, WAYBEL_1, YELLOW_6, REALSET1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes BINARITH, NAT_1;
 
 begin :: Preliminaries
@@ -3198,9 +3199,9 @@ proof
    then A6: len p in dom p by FINSEQ_3:27;
    defpred P[Nat] means $1 in dom p implies [p.1,p.$1] in IR;
    A7: P[1] by A2,A4,RELAT_2:def 1;
-   A8: for k be non empty Nat st P[k] holds P[k+1]
+   A8: for k be non empty Element of NAT st P[k] holds P[k+1]
      proof
-      let k be non empty Nat such that A9: P[k];
+      let k be non empty Element of NAT such that A9: P[k];
       assume A10: k+1 in dom p;
       A11: k <=  k+1 by NAT_1:29;
       A12: 0 + 1 <= k by NAT_1:81;
@@ -3212,7 +3213,7 @@ proof
       [p.k,p.(k+1)] in IR by A9,A13,FINSEQ_3:27,ZFMISC_1:106;
       hence thesis by A3,RELAT_2:def 8;
      end;
-      for k be non empty Nat holds P[k] from BINARITH:sch 1(A7,A8);
+     for k be non empty Element of NAT holds P[k] from BINARITH:sch 1(A7,A8);
   hence thesis by A4,A5,A6;
 end;
 
@@ -3843,10 +3844,11 @@ proof
  defpred P[Nat] means for G being irreflexive RelStr st
    Card the carrier of G = $1 & G in fin_RelStr_sp
         holds ComplRelStr G in fin_RelStr_sp;
- A2: for k being Nat st for n being Nat st n < k holds P[n] holds P[k]
+ A2: for k being Element of NAT st
+ for n being Element of NAT st n < k holds P[n] holds P[k]
   proof
-   let k be Nat such that
-   A3: for n being Nat st n < k holds P[n];
+   let k be Element of NAT such that
+   A3: for n being Element of NAT st n < k holds P[n];
    let G be irreflexive RelStr;
    assume that A4: Card the carrier of G = k and
                A5: G in fin_RelStr_sp;
@@ -3865,13 +3867,13 @@ proof
     A8: G1 is non empty finite by A6,NECKLA_2:4;
     then the carrier of G1 is non empty finite
              by GROUP_1:def 14,STRUCT_0:def 1;
-    then consider n1 being Nat such that
+    then consider n1 being Element of NAT such that
     A9: Card the carrier of G1 = card n1 by CARD_4:4;
     A10: Card the carrier of G1 = n1 by A9,FINSEQ_1:78;
     A11: G2 is non empty finite by A6,NECKLA_2:4;
     then the carrier of G2 is non empty finite
              by GROUP_1:def 14,STRUCT_0:def 1;
-    then consider n2 being Nat such that
+    then consider n2 being Element of NAT such that
     A12: Card the carrier of G2 = card n2 by CARD_4:4;
     A13: Card the carrier of G2 = n2 by A12,FINSEQ_1:78;
    thus thesis
@@ -3953,10 +3955,10 @@ GROUP_1:def 14,STRUCT_0:def 1;
     end;
   end;
   end;
- A30: for k being Nat holds P[k] from NAT_1:sch 4(A2);
+ A30: for k being Element of NAT holds P[k] from NAT_1:sch 4(A2);
     G is finite by A1,NECKLA_2:4;
  then the carrier of G is finite by GROUP_1:def 14;
- then consider n being Nat such that
+ then consider n being Element of NAT such that
  A31: Card the carrier of G = card n by CARD_4:4;
  thus thesis by A1,A30,A31;
 end;
@@ -4146,6 +4148,7 @@ end;
   let k be Nat such that A15: P[k];
   let Y be non empty RelStr such that
   A16: not Y is trivial & Y in fin_RelStr_sp;
+  reconsider k1=k as Element of NAT by ORDINAL1:def 13;
   set cY = the carrier of Y;
   consider R be strict RelStr such that
   A17: Y = R & the carrier of R in FinSETS by A16,NECKLA_2:def 4;
@@ -4165,8 +4168,8 @@ end;
   reconsider cH2 as finite set by A22,NECKLA_2:3;
   A23: card cY = card cH1 + card cH2 by A18,A20,CARD_2:53;
   assume Card (the carrier of Y) <=` k+1;
-  then Card cY <=` Card (k+1) by CARD_1:66;
-  then card cY <= card (k+1) by CARD_2:57;
+  then Card cY <=` Card (k1+1) by CARD_1:66;
+  then card cY <= card (k1+1) by CARD_2:57;
   then A24:  card cY <= k+1 by CARD_1:66;
   A25: H1 is non empty & H2 is non empty by A18,NECKLA_2:4;
   then cH1 is non empty & cH2 is non empty by STRUCT_0:def 1;
@@ -4174,9 +4177,9 @@ end;
   then A26: card cH1 >= 1 & card cH2 >= 1 by NAT_1:39;
   per cases by A23,A24,A26,NAT_1:26,REAL_1:def 5;
   suppose card cY <= k;
-   then card cY <= card k by CARD_1:66;
+   then card cY <= card k1 by CARD_1:66;
    then Card (the carrier of Y) <=` Card k by CARD_2:57;
-   then Card (the carrier of Y) <=` k by CARD_1:66;
+   then Card (the carrier of Y) <=` k1 by CARD_1:66;
   hence thesis by A15,A16;
   end;
   suppose A27: card cY = k+1 & k = 0;
@@ -4208,9 +4211,9 @@ end;
    then reconsider H1 as symmetric RelStr by NECKLACE:def 4;
       card cH2 < k+1 by A33,NAT_1:38;
    then card cH2 <= k by NAT_1:38;
-   then card cH2 <= card k by CARD_1:66;
+   then card cH2 <= card k1 by CARD_1:66;
    then Card cH2 <=` Card k by CARD_2:57;
-   then A35: Card cH2 <=` k by CARD_1:66;
+   then A35: Card cH2 <=` k1 by CARD_1:66;
    card cH2 is non trivial by A33,NAT_2:30;
    then card cH2 >= 2 by NAT_2:31;
    then cH2 is non empty non trivial by A25,REALSET1:13,STRUCT_0:def 1;
@@ -4227,9 +4230,9 @@ end;
    then reconsider H2 as symmetric RelStr by NECKLACE:def 4;
       card cH1 < k+1 by A36,NAT_1:38;
    then card cH1 <= k by NAT_1:38;
-   then card cH1 <= card k by CARD_1:66;
+   then card cH1 <= card k1 by CARD_1:66;
    then Card cH1 <=` Card k by CARD_2:57;
-   then A38: Card cH1 <=` k by CARD_1:66;
+   then A38: Card cH1 <=` k1 by CARD_1:66;
    card cH1 is non trivial by A36,NAT_2:30;
    then card cH1 >= 2 by NAT_2:31;
    then cH1 is non empty non trivial by A25,REALSET1:13,STRUCT_0:def 1;
@@ -4246,9 +4249,9 @@ end;
       hence thesis by A39,NAT_1:38;
      end;
    then card cH1 <= k by NAT_1:38;
-   then card cH1 <= card k by CARD_1:66;
+   then card cH1 <= card k1 by CARD_1:66;
    then Card cH1 <=` Card k by CARD_2:57;
-   then A40: Card cH1 <=` k by CARD_1:66;
+   then A40: Card cH1 <=` k1 by CARD_1:66;
    card cH1 is non trivial by A39,NAT_2:30;
    then card cH1 >= 2 by NAT_2:31;
    then cH1 is non empty non trivial by A25,REALSET1:13,STRUCT_0:def 1;
@@ -4261,9 +4264,9 @@ end;
       hence thesis by A39,NAT_1:38;
      end;
    then card cH2 <= k by NAT_1:38;
-   then card cH2 <= card k by CARD_1:66;
+   then card cH2 <= card k1 by CARD_1:66;
    then Card cH2 <=` Card k by CARD_2:57;
-   then A41: Card cH2 <=` k by CARD_1:66;
+   then A41: Card cH2 <=` k1 by CARD_1:66;
    card cH2 is non trivial by A39,NAT_2:30;
    then card cH2 >= 2 by NAT_2:31;
    then cH2 is non empty non trivial by A25,REALSET1:13,STRUCT_0:def 1;
@@ -4273,12 +4276,12 @@ end;
   hence thesis by A19;
  end;
  end;
- A42: for k being Nat holds P[k] from NAT_1:sch 1(A10,A14);
+ A42: for k being Nat holds P[k] from NAT_1:sch 2(A10,A14);
  consider R be strict RelStr such that
  A43: X = R & the carrier of R in FinSETS by A1,NECKLA_2:def 4;
  reconsider X as non empty RelStr by A1,NECKLA_2:4;
     the carrier of X is finite by A43,NECKLA_2:3;
- then consider n be Nat such that
+ then consider n be Element of NAT such that
  A44: Card (the carrier of X) = Card n by CARD_4:4;
    Card n = n by CARD_1:66;
  hence thesis by A1,A9,A42,A44;
@@ -4379,12 +4382,12 @@ proof
  then (the InternalRel of G) reduces x,a by A3,A8,Def2;
  then consider p being FinSequence such that
  A9: len p > 0 & p.1 = x & p.len p = a and
- A10: for i being Nat st i in dom p & i+1 in dom p
+A10: for i being Element of NAT st i in dom p & i+1 in dom p
            holds [p.i, p.(i+1)] in (the InternalRel of G) by REWRITE1:12;
  defpred P[Nat] means p.$1 in the carrier of R1 & $1 in dom p &
     for k being Nat st k > $1 holds
         k in dom p implies p.k in the carrier of R1;
- A11: ex k being Nat st P[k]
+ A11: ex k being Element of NAT st P[k]
   proof
       P[len p]
     proof
@@ -4397,11 +4400,11 @@ proof
     end;
    hence thesis;
   end;
-     ex n0 being Nat st P[n0] &
-     for n being Nat st P[n] holds n >= n0 from NAT_1:sch 5(A11);
-  then consider n0 being Nat such that
+     ex n0 being Element of NAT st P[n0] &
+     for n being Element of NAT st P[n] holds n >= n0 from NAT_1:sch 5(A11);
+  then consider n0 being Element of NAT such that
   A12: P[n0] and
-  A13: for n being Nat st P[n] holds n >= n0;
+  A13: for n being Element of NAT st P[n] holds n >= n0;
      n0 <> 0
    proof
     assume not thesis;
@@ -5141,7 +5144,7 @@ proof
      then (the InternalRel of ComplRelStr G) reduces x,a by A41,A42,Def2;
      then consider p being FinSequence such that
      A45: len p > 0 & p.1 = x & p.len p = a and
-     A46: for i being Nat st i in dom p & i+1 in dom p holds
+     A46: for i being Element of NAT st i in dom p & i+1 in dom p holds
          [p.i, p.(i+1)] in (the InternalRel of ComplRelStr G) by REWRITE1:12;
      A47: 0 + 1 <= len p by A45,NAT_1:81;
       then len p > 1 by A42,A45,REAL_1:def 5;
@@ -5210,12 +5213,12 @@ of G
     then (the InternalRel of G) reduces a,b by A3,Def2;
     then consider p being FinSequence such that
     A59: len p > 0 & p.1 = a & p.len p = b and
-    A60: for i being Nat st i in dom p & i+1 in dom p
+    A60: for i being Element of NAT st i in dom p & i+1 in dom p
         holds [p.i, p.(i+1)] in (the InternalRel of G) by REWRITE1:12;
     defpred P[Nat] means p.$1 in Y1 & $1 in dom p &
       for k being Nat st k > $1 holds
           k in dom p implies p.k in Y1;
-    A61: ex k being Nat st P[k]
+    A61: ex k being Element of NAT st P[k]
      proof
          P[len p]
       proof
@@ -5236,11 +5239,11 @@ of G
      end;
     hence thesis;
     end;
-       ex n0 being Nat st P[n0] &
-     for n being Nat st P[n] holds n >= n0 from NAT_1:sch 5(A61);
-    then consider n0 being Nat such that
+    ex n0 being Element of NAT st P[n0] &
+     for n being Element of NAT st P[n] holds n >= n0 from NAT_1:sch 5(A61);
+    then consider n0 being Element of NAT such that
     A64: P[n0] and
-    A65: for n being Nat st P[n] holds n >= n0;
+    A65: for n being Element of NAT st P[n] holds n >= n0;
        n0 <> 0
      proof
       assume not thesis;
@@ -5579,11 +5582,11 @@ XBOOLE_0:def 2;
     then (the InternalRel of G) reduces b,c by A3,Def2;
     then consider p being FinSequence such that
     A139: len p > 0 & p.1 = b & p.len p = c and
-    A140: for i being Nat st i in dom p & i+1 in dom p
+    A140: for i being Element of NAT st i in dom p & i+1 in dom p
     holds [p.i, p.(i+1)] in (the InternalRel of G) by REWRITE1:12;
     defpred P[Nat] means p.$1 in Y2 & $1 in dom p &
      for k being Nat st k > $1 holds k in dom p implies p.k in Y2;
-    A141: ex k being Nat st P[k]
+    A141: ex k being Element of NAT st P[k]
      proof
          P[len p]
       proof
@@ -5603,11 +5606,11 @@ XBOOLE_0:def 2;
       end;
       hence thesis;
      end;
-       ex n0 being Nat st P[n0] &
-       for n being Nat st P[n] holds n >= n0 from NAT_1:sch 5(A141);
-    then consider n0 being Nat such that
+     ex n0 being Element of NAT st P[n0] &
+       for n being Element of NAT st P[n] holds n >= n0 from NAT_1:sch 5(A141);
+    then consider n0 being Element of NAT such that
     A144: P[n0] and
-    A145: for n being Nat st P[n] holds n >= n0;
+    A145: for n being Element of NAT st P[n] holds n >= n0;
        n0 <> 0
      proof
       assume not thesis;
@@ -5929,9 +5932,11 @@ proof
  for G be non empty strict finite irreflexive symmetric RelStr
  st G is N-free & Card the carrier of G = $1 & the carrier of G in FinSETS
   holds (the RelStr of G) in fin_RelStr_sp;
-A1: for n be Nat st for k be Nat st k < n holds P[k] holds P[n]
+A1: for n be Element of NAT st
+    for k be Element of NAT st k < n holds P[k] holds P[n]
  proof
-  let n be Nat such that A2: for k be Nat st k < n holds P[k];
+  let n be Element of NAT such that
+A2: for k be Element of NAT st k < n holds P[k];
   let G be non empty strict finite irreflexive symmetric RelStr;
   set CG = ComplRelStr G;
   assume A3: G is N-free & Card (the carrier of G) = n &
@@ -6156,10 +6161,10 @@ proof
  end;
 end;
 end;
-A52: for k be Nat holds P[k] from NAT_1:sch 4(A1);
+A52: for k be Element of NAT holds P[k] from NAT_1:sch 4(A1);
  let R be non empty strict finite irreflexive symmetric RelStr;
  assume A53: R is N-free;
- consider n be Nat such that
+ consider n be Element of NAT such that
 A54: Card (the carrier of R) = Card n by CARD_4:4;
     Card n = n by CARD_1:66;
  hence thesis by A52,A53,A54;

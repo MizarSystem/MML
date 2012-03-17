@@ -23,7 +23,7 @@ environ
 
 begin
 
-reserve m for Nat;
+reserve m for Element of NAT;
 
 registration
  cluster -> finite FinPartState of SCM+FSA;
@@ -68,7 +68,8 @@ theorem :: SCMFSA_7:17
      p c= q holds ex p' being FinSequence of D st p ^ p' = q;
 
 theorem :: SCMFSA_7:18
- for D being non empty set, p,q being FinSequence of D, i being Nat st
+ for D being non empty set, p,q being FinSequence of D,
+ i being Element of NAT st
      p c= q & 1 <= i & i <= len p holds q.i = p.i;
 
 theorem :: SCMFSA_7:19
@@ -95,7 +96,8 @@ definition
  func Load f->FinPartState of SCM+FSA means
 :: SCMFSA_7:def 1
  dom it = {insloc (m-'1): m in dom f} &
-     for k being Nat st insloc k in dom it holds it.insloc k = f/.(k+1);
+     for k being Element of NAT st insloc k in dom it
+     holds it.insloc k = f/.(k+1);
  end;
 
 canceled;
@@ -105,17 +107,19 @@ theorem :: SCMFSA_7:25
      card Load f = len f;
 
 theorem :: SCMFSA_7:26
- for p being FinSequence of the Instructions of SCM+FSA, k being Nat holds
+ for p being FinSequence of the Instructions of SCM+FSA,
+ k being Element of NAT holds
      insloc k in dom Load p iff k + 1 in dom p;
 
 canceled;
 
 theorem :: SCMFSA_7:28
- for k, n being Nat holds
+ for k, n being Element of NAT holds
      k < n iff 1 <= k + 1 & k + 1 <= n;
 
 theorem :: SCMFSA_7:29
- for p being FinSequence of the Instructions of SCM+FSA, k being Nat holds
+ for p being FinSequence of the Instructions of SCM+FSA,
+ k being Element of NAT holds
      insloc k in dom Load p iff k < len p;
 
 theorem :: SCMFSA_7:30
@@ -135,13 +139,13 @@ definition
  let k be Integer;
  func a := k -> FinPartState of SCM+FSA means
 :: SCMFSA_7:def 2
-   ex k1 being Nat st k1 + 1 = k &
+   ex k1 being Element of NAT st k1 + 1 = k &
    it = Load(<* a:= intloc 0 *> ^
              ( k1 |-> AddTo(a,intloc 0) ) ^
              <* halt SCM+FSA *> )
  if k > 0
  otherwise
-   ex k1 being Nat st k1 + k = 1 &
+   ex k1 being Element of NAT st k1 + k = 1 &
    it = Load(<* a:= intloc 0 *> ^
              ( k1 |-> SubFrom(a,intloc 0) ) ^
              <* halt SCM+FSA *> );
@@ -152,11 +156,11 @@ definition
  let k be Integer;
  func aSeq(a,k) -> FinSequence of the Instructions of SCM+FSA means
 :: SCMFSA_7:def 3
-   ex k1 being Nat st k1 + 1 = k &
+   ex k1 being Element of NAT st k1 + 1 = k &
    it = <* a:= intloc 0 *> ^ (k1 |-> AddTo(a,intloc 0))
  if k > 0
  otherwise
-   ex k1 being Nat st k1 + k = 1 &
+   ex k1 being Element of NAT st k1 + k = 1 &
    it = <* a:= intloc 0 *> ^ (k1 |-> SubFrom(a,intloc 0));
 end;
 
@@ -171,7 +175,7 @@ definition
 :: SCMFSA_7:def 4
  ex pp being FinSequence of (the Instructions of SCM+FSA)* st
      len pp = len p &
-     (for k being Nat st 1 <= k & k <= len p holds
+     (for k being Element of NAT st 1 <= k & k <= len p holds
          ex i being Integer st
          i = p.k &
          pp.k = (aSeq(intloc 1,k) ^
@@ -201,14 +205,14 @@ theorem :: SCMFSA_7:35
 
 theorem :: SCMFSA_7:36
  for s being State of SCM+FSA st s.intloc 0 = 1
- for c0 being Nat st IC s = insloc c0
+ for c0 being Element of NAT st IC s = insloc c0
  for a being Int-Location,
      k being Integer st
      a <> intloc 0 &
-     (for c being Nat st c in dom aSeq(a,k) holds
+     (for c being Element of NAT st c in dom aSeq(a,k) holds
          aSeq(a,k).c = s.insloc (c0 + c -' 1))
  holds
-     (for i being Nat st i <= len aSeq(a,k) holds
+     (for i being Element of NAT st i <= len aSeq(a,k) holds
          IC (Computation s).i = insloc (c0 + i) &
          (for b being Int-Location st b <> a holds (Computation s).i.b = s.b) &
          (for f being FinSeq-Location holds (Computation s).i.f = s.f)) &
@@ -219,7 +223,7 @@ theorem :: SCMFSA_7:37
  for a being Int-Location
  for k being Integer st Load aSeq(a,k) c= s & a<>intloc 0
  holds
-     (for i being Nat st i <= len aSeq(a,k) holds
+     (for i being Element of NAT st i <= len aSeq(a,k) holds
          IC (Computation s).i = insloc i &
          (for b being Int-Location st b <> a holds (Computation s).i.b = s.b) &
          (for f being FinSeq-Location holds (Computation s).i.f = s.f)) &

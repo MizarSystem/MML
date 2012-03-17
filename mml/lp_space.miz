@@ -17,13 +17,13 @@ environ
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, SEQ_2, SEQM_3,
       REALSET1, PREPOWER, SERIES_1, RLSUB_1, RSSPACE3, LOPBAN_1;
  registrations SUBSET_1, RELSET_1, STRUCT_0, ORDINAL1, RLVECT_1, XREAL_0,
-      MEMBERED, SEQ_1, RSSPACE3, LOPBAN_1, REALSET1, XXREAL_0;
+      MEMBERED, SEQ_1, RSSPACE3, LOPBAN_1, REALSET1, XXREAL_0, ARYTM_3;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions TARSKI, REALSET1;
  theorems XBOOLE_0, RELAT_1, TARSKI, ABSVALUE, ZFMISC_1, REAL_1, SEQ_1, SEQM_3,
       SERIES_1, COMSEQ_3, FUNCT_1, NAT_1, SEQ_2, FUNCT_2, RLVECT_1, RLSUB_1,
       NORMSP_1, XREAL_0, RSSPACE2, XCMPLX_1, SEQ_4, REAL_2, POWER, RSSPACE,
-      RSSPACE3, LOPBAN_1, HOLDER_1, XREAL_1, COMPLEX1, XXREAL_0;
+      RSSPACE3, LOPBAN_1, HOLDER_1, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1;
  schemes NAT_1, SEQ_1, FUNCT_2, XBOOLE_0;
 
 begin :: The Real Norm Space of l^p Real Sequences
@@ -32,14 +32,14 @@ definition
   let x be Real_Sequence;
   let p be Real;
   func x rto_power p -> Real_Sequence means :Def1:
-  for n be Nat holds it.n = abs(x.n) to_power p;
+  for n be Element of NAT holds it.n = abs(x.n) to_power p;
      existence
      proof
     deffunc F(set)=( abs(x.$1) ) to_power p;
 A1:     ex q1 be  Real_Sequence st
-        for n be Nat holds q1.n=F(n) from SEQ_1:sch 1;
+        for n be Element of NAT holds q1.n=F(n) from SEQ_1:sch 1;
         consider q1 be Real_Sequence such that
-A2:    for n be Nat holds
+A2:    for n be Element of NAT holds
         q1.n= abs(x.n) to_power p by A1;
         take IT=q1;
         thus thesis by A2;
@@ -48,8 +48,8 @@ A2:    for n be Nat holds
      proof
       let a1,a2 be Real_Sequence;
       assume that
-A3:   for n be Nat holds a1.n = abs(x.n) to_power p and
-A4:   for n be Nat holds a2.n = abs(x.n) to_power p;
+A3:   for n be Element of NAT holds a1.n = abs(x.n) to_power p and
+A4:   for n be Element of NAT holds a2.n = abs(x.n) to_power p;
         for s be set st s in NAT holds a1.s = a2.s
        proof
         let s be set such that
@@ -82,7 +82,7 @@ A3:IT is non empty
       proof
 A4:    p > 0 by A1;
          reconsider rseq=seq_id(Zeroseq) rto_power p as Real_Sequence;
-         now let n be Nat;
+         now let n be Element of NAT;
          thus rseq.n =abs((seq_id(Zeroseq)).n) to_power p by Def1
                     .=abs(0) to_power p by RSSPACE:def 6
                     .=0 to_power p by ABSVALUE:7
@@ -176,7 +176,7 @@ end;
 Lm3:
  for p be Real st 1 = p
  for a,b be Real_Sequence
- for n be Nat holds
+ for n be Element of NAT holds
   (Partial_Sums((a + b) rto_power p).n) to_power (1/p) <=
   (Partial_Sums(a rto_power p).n) to_power (1/p) +
   (Partial_Sums(b rto_power p).n) to_power (1/p)
@@ -184,8 +184,8 @@ Lm3:
       let p be Real such that
 A1:p=1;
       let a,b be Real_Sequence;
-      let n be Nat;
-A2: now let n be Nat;
+      let n be Element of NAT;
+A2: now let n be Element of NAT;
       thus ((a + b) rto_power p).n = abs((a + b).n) to_power p by Def1
       .=abs((a + b).n) by A1,POWER:30;thus
     (a rto_power p).n = abs(a .n) to_power p by Def1
@@ -202,21 +202,21 @@ A7: (Partial_Sums(a rto_power p).n) to_power (1/p)
       =(Partial_Sums(abs(a)).n) by A1,A4,POWER:30;
 A8: (Partial_Sums(b rto_power p).n) to_power (1/p)
       =(Partial_Sums(abs(b)).n) by A1,A5,POWER:30;
-A9:for n be Nat holds abs((a + b).n) <= abs(b .n) + abs(a .n)
+A9:for n be Element of NAT holds abs((a + b).n) <= abs(b .n) + abs(a .n)
    proof
-    let n be Nat;
+    let n be Element of NAT;
     abs((a + b).n)=abs(a.n + b.n) by SEQ_1:11;
     hence thesis by COMPLEX1:142;
     end;
-   deffunc F(Nat) =abs(a .($1)) + abs(b .($1));
+   deffunc F(Element of NAT) =abs(a .($1)) + abs(b .($1));
    consider c be Real_Sequence such that
-A10:for n be Nat holds c.n= F(n) from SEQ_1:sch 1;
-A11:now let n be Nat;
+A10:for n be Element of NAT holds c.n= F(n) from SEQ_1:sch 1;
+A11:now let n be Element of NAT;
 A12:abs((a + b).n) <= abs(b .n) + abs(a .n) by A9;
 A13:abs((a + b).n)=abs(a+b).n by SEQ_1:16;
    thus abs(a+b).n <= c.n by A10,A12,A13;
  end;
-A14:now let n be Nat;
+A14:now let n be Element of NAT;
 A15: abs(b.n)=abs (b).n by SEQ_1:16;
 A16: abs(a.n)=abs (a).n by SEQ_1:16;
     thus c.n=abs (a).n + abs (b).n by A10,A15,A16
@@ -242,7 +242,7 @@ A18: Partial_Sums(abs(a+b)).n <=
 theorem Th2:
  for p be Real st 1 <= p
  for a,b be Real_Sequence
- for n be Nat holds
+ for n be Element of NAT holds
   (Partial_Sums((a + b) rto_power p).n) to_power (1/p) <=
   (Partial_Sums(a rto_power p).n) to_power (1/p) +
   (Partial_Sums(b rto_power p).n) to_power (1/p)
@@ -253,11 +253,11 @@ theorem Th2:
    set ap = a rto_power p;
    set bp = b rto_power p;
    set ab= ((a + b) rto_power p);
-   let n be Nat;
+   let n be Element of NAT;
    now per cases by A1,REAL_1:def 5;
    case
    A2:p > 1;
-now let n be Nat;
+now let n be Element of NAT;
 A3:  (a rto_power p).n =abs(a .n) to_power p by Def1;
 A4:  ((a + b) rto_power p).n =abs((a + b).n) to_power p by Def1
       .=abs(a.n+b.n) to_power p by SEQ_1:11;
@@ -292,7 +292,7 @@ proof
 A1:p=1 and
 A2:a rto_power p is summable and
 A3:b rto_power p is summable;
-A4: now let n be Nat;thus
+A4: now let n be Element of NAT;thus
        ((a + b) rto_power p).n = abs((a + b).n) to_power p by Def1
       .=abs((a + b).n) by A1,POWER:30;thus
       (a rto_power p).n = abs(a .n) to_power p by Def1
@@ -335,10 +335,10 @@ A24: Sum(abs(a+b)) <= Sum(abs(a)) + Sum(abs(b)) by A21,A22,A23;
 A25:(abs(a) + abs(b) is summable) &
        Sum(abs(a) + abs(b))=Sum(abs(a))+Sum(abs(b))
      by A11,A12,SERIES_1:10;
-    deffunc F(Nat) =abs(a .($1)) + abs(b .($1));
+    deffunc F(Element of NAT) =abs(a .($1)) + abs(b .($1));
     consider c be Real_Sequence such that
-A26:for n be Nat holds c.n= F(n) from SEQ_1:sch 1;
-A27:now let n be Nat;
+A26:for n be Element of NAT holds c.n= F(n) from SEQ_1:sch 1;
+A27:now let n be Element of NAT;
 A28:abs(a+b).n=abs((a+b).n) by SEQ_1:16;
     hence abs(a+b).n>= 0 by COMPLEX1:132;
     abs((a+b).n) =abs((a.n)+(b.n)) by SEQ_1:11; then
@@ -374,7 +374,7 @@ A3:((b rto_power p) is summable);
     set ap = a rto_power p;
     set bp = b rto_power p;
     set ab= ((a + b) rto_power p);
-A4:now let n be Nat;
+A4:now let n be Element of NAT;
       A5:  (a rto_power p).n =abs(a .n) to_power p by Def1;
       A6:  (b rto_power p).n =abs(b .n) to_power p by Def1;
       A7:  ((a + b) rto_power p).n =abs((a + b).n) to_power p by Def1
@@ -429,7 +429,7 @@ A10:  p * (1/p) = (p*1)/p by XCMPLX_1:75
 A11:  vp is summable by A5;
 A12:  up is summable by A6;
 A13: now
-        let n be Nat;
+        let n be Element of NAT;
      thus A14: vp.n=abs((seq_id(v)).n) to_power p by Def1; thus
            A15: up.n=abs((seq_id(u)).n) to_power p by Def1; thus
            A16: 0 <= abs((seq_id(v)).n) by COMPLEX1:132; thus
@@ -449,7 +449,7 @@ A21: Partial_Sums(up) is bounded_above by A12,A13,SERIES_1:20;
        A24:now
           let n be set such that A25:n in dom Partial_Sums(up);
           A26:Partial_Sums(up).n<r1 by A22,A25;
-          reconsider n1=n as Nat by A23,A25;
+          reconsider n1=n as Element of NAT by A23,A25;
           A27:Partial_Sums(up).n1<r1 by A26;
    A28: Partial_Sums(up).0<=Partial_Sums(up).n1 by A20,SEQM_3:21;
    0<=up.0 by A13;
@@ -470,7 +470,7 @@ A33: dom Partial_Sums(vp)=NAT by SEQ_1:4;
 A34:now
 let n be set such that A35:n in dom Partial_Sums(vp);
 A36:Partial_Sums(vp).n<r by A32,A35;
-reconsider n1=n as Nat by A33,A35;
+reconsider n1=n as Element of NAT by A33,A35;
 A37:Partial_Sums(vp).n1<r by A36;
    A38: Partial_Sums(vp).0<=Partial_Sums(vp).n1 by A30,SEQM_3:21;
    0<=vp.0 by A13;
@@ -493,12 +493,12 @@ u in the_set_of_RealSequences by A1,A3,Def2;then
 reconsider uq=u as Real_Sequence by RSSPACE:def 1;
 A42:  vp = vq rto_power p by RSSPACE:3;
 A43:  up = uq rto_power p by RSSPACE:3;
-A44:  for n be Nat holds
+A44:  for n be Element of NAT holds
  (Partial_Sums((vq + uq) rto_power p).n) to_power (1/p) <=
  (Partial_Sums(up).n) to_power (1/p) +
  (Partial_Sums(vp).n) to_power (1/p) by A1,A42,A43,Th2;
 A45: now
-let n be Nat;
+let n be Element of NAT;
     NAT=dom Partial_Sums(up) by SEQ_1:4; then
 A46:(Partial_Sums(up).n) to_power p1 <q1 by A41;
    NAT=dom Partial_Sums(vp) by SEQ_1:4; then
@@ -525,7 +525,7 @@ hence (Partial_Sums((vq + uq) rto_power p).n) to_power (1/p) to_power p =
    .= (Partial_Sums((vq + uq) rto_power p).n) by A7,A51,POWER:def 2;
 end;
 thus A52: now
-     let n be Nat;
+     let n be Element of NAT;
 A53:((vq + uq) rto_power p).n =abs((vq + uq).n) to_power p by Def1;
 thus
 A54:0 < abs((vq + uq).n) or 0=abs((vq + uq).n) by COMPLEX1:132;
@@ -546,7 +546,8 @@ hence (Partial_Sums((vq + uq) rto_power p).n) < g to_power p
              by A7,A48,A49,A50,A56,Th1;
 end;
 
-for n be Nat holds (Partial_Sums((vq + uq) rto_power p) is bounded_above &
+for n be Element of NAT holds (Partial_Sums((vq + uq) rto_power p)
+is bounded_above &
  0 <= ((vq + uq) rto_power p).n ) by A45,SEQ_2:def 3; then
 A58:((vq + uq) rto_power p) is summable by SERIES_1:20;
 A59:seq_id(v)=vq by RSSPACE:3;
@@ -580,7 +581,7 @@ A64: p > 0;
 A65:  1 <= p by A1;
 A66:  0 <  p by A65;
 A67:now
-let n be Nat;
+let n be Element of NAT;
 A68:vp.n=abs((seq_id(v)).n) to_power p by Def1;thus
 A69:  0 <= abs((seq_id(v)).n) by COMPLEX1:132; thus
 A70:  0 < abs((seq_id(v)).n) or 0=abs((seq_id(v)).n) by A69;
@@ -598,12 +599,12 @@ A72: ex r be real number st for n be set st n in dom Partial_Sums(vp)
      by A1,A62,Def2;
 A73:  seq_id(a*v)= seq_id(a(#)seq_id(v)) by RSSPACE:5,def 7
                 .=(a(#)seq_id(v)) by RSSPACE:3;
-A74:  for n be Nat holds
+A74:  for n be Element of NAT holds
     Partial_Sums(seq_id(a*v) rto_power p).n
     = (abs(a) to_power p)* Partial_Sums(seq_id(v) rto_power p).n
 proof
 A75:now
-let n be Nat;
+let n be Element of NAT;
 A76: abs(a)>=0 by COMPLEX1:132;
 A77: abs((seq_id(v)).n) >= 0 by COMPLEX1:132;
 A78:     (seq_id(a*v) rto_power p).n
@@ -636,7 +637,7 @@ A81:Partial_Sums(((abs(a) to_power p)
                        by SERIES_1:12;
 A82:Partial_Sums(seq_id(a*v) rto_power p) = ((abs(a) to_power p)
                  (#)Partial_Sums( ((seq_id(v)) rto_power p))) by A80,A81;
-let n be Nat;
+let n be Element of NAT;
 thus Partial_Sums(seq_id(a*v) rto_power p).n
                =(abs(a) to_power p)
                 * Partial_Sums ((seq_id(v)) rto_power p).n by A82,SEQ_1:13;
@@ -675,7 +676,7 @@ A91:(abs(a) to_power p)
      ( ((abs(a) to_power p) *
               Partial_Sums(seq_id(v) rto_power p).n )
                 = (abs(a) to_power p) * r ) by A85;
-reconsider n1=n as Nat by A90;
+reconsider n1=n as Element of NAT by A90;
 Partial_Sums(seq_id(a*v) rto_power p).n1
        <(abs(a) to_power p) * r or
      Partial_Sums(seq_id(a*v) rto_power p).n1
@@ -698,7 +699,7 @@ A93:for n be set st
         let n be set such that
 A94:n in dom Partial_Sums(seq_id(a*v) rto_power p);
 A95: n in NAT by A94,SEQ_1:3;
-reconsider n1=n as Nat by A95;
+reconsider n1=n as Element of NAT by A95;
 A96:(abs(a) to_power p) * r <(abs(a) to_power p) * r +1 by XREAL_1:31;
 A97:Partial_Sums(seq_id(a*v) rto_power p).n1
        <(abs(a) to_power p) * r implies
@@ -712,9 +713,9 @@ A97:Partial_Sums(seq_id(a*v) rto_power p).n1
      end;
 thus thesis by A93;
 end;
-A98:for n be Nat holds (seq_id(a*v) rto_power p).n >= 0
+A98:for n be Element of NAT holds (seq_id(a*v) rto_power p).n >= 0
  proof
-   let n be Nat;
+   let n be Element of NAT;
 A99:     (seq_id(a*v) rto_power p).n
        = ((a(#)seq_id(v)) rto_power p).n by A73;
 A100:    (a(#)seq_id(v)).n = a * (seq_id(v)).n by SEQ_1:13;
@@ -997,7 +998,7 @@ end;
 theorem Th11:
 for p be Real st p>=1 holds
 for rseq be Real_Sequence
-   st (for n be Nat holds rseq.n=0) holds
+   st (for n be Element of NAT holds rseq.n=0) holds
     (rseq rto_power p is summable
  &  ( Sum(rseq rto_power p) ) to_power (1/p)=0 )
 proof
@@ -1006,44 +1007,44 @@ A1:      p>=1;
 A2: p>0 by A1;
 A3:  1/p > 0 by A2,REAL_2:127;
      let rseq be Real_Sequence such that
-A4: for n be Nat holds rseq.n=0;
-A5: for n be Nat holds (rseq rto_power p).n=0
+A4: for n be Element of NAT holds rseq.n=0;
+A5: for n be Element of NAT holds (rseq rto_power p).n=0
    proof
-       let n be Nat;
+       let n be Element of NAT;
        rseq.n=0 by A4;then
        abs((rseq).n) =0 by ABSVALUE:7;then
  abs((rseq).n) to_power p =0 by A2,POWER:def 2;
        hence thesis by Def1;
      end;
-A6:  for m be Nat holds Partial_Sums (rseq rto_power p).m = 0
+A6:  for m be Element of NAT holds Partial_Sums (rseq rto_power p).m = 0
      proof
-       let m be Nat;
-       defpred P[Nat] means (rseq rto_power p).$1
+       let m be Element of NAT;
+       defpred P[Element of NAT] means (rseq rto_power p).$1
        = (Partial_Sums(rseq rto_power p)).$1;
 A7:    P[0] by SERIES_1:def 1;
-A8:    for k be Nat st P[k] holds P[k+1]
+A8:    for k be Element of NAT st P[k] holds P[k+1]
        proof
-         let k be Nat such that
+         let k be Element of NAT such that
 A9:      (rseq rto_power p).k
              = (Partial_Sums (rseq rto_power p)).k;
          thus (rseq rto_power p).(k+1) = 0 + (rseq rto_power p).(k+1)
           .= (rseq rto_power p).k + (rseq rto_power p).(k+1) by A5
           .= (Partial_Sums ((rseq rto_power p))).(k+1) by A9,SERIES_1:def 1;
        end;
-       for n be Nat holds P[n] from NAT_1:sch 1(A7,A8);
+       for n be Element of NAT holds P[n] from NAT_1:sch 1(A7,A8);
        hence (Partial_Sums ((rseq rto_power p))).m
                 = (rseq rto_power p).m .= 0 by A5;
      end;
   Sum(rseq rto_power p) =0 & (rseq rto_power p) is summable
      proof
 A10:    for e be real number st 0<e
-        ex n be Nat st for m be Nat st n<=m holds
+        ex n be Element of NAT st for m be Element of NAT st n<=m holds
          abs((Partial_Sums (rseq rto_power p)).m-0)<e
        proof
          let e be real number such that
 A11:   0<e;
          take 0;
-         let m be Nat such that 0<=m;
+         let m be Element of NAT such that 0<=m;
          abs((Partial_Sums (rseq rto_power p)).m-0)
             = abs(0-0) by A6
            .= 0 by ABSVALUE:def 1;
@@ -1063,7 +1064,7 @@ theorem Th12:
   for rseq be Real_Sequence st
   (rseq rto_power p is summable
    & ( Sum(rseq rto_power p) ) to_power (1/p)=0 ) holds
-  for n be Nat holds rseq.n = 0
+  for n be natural number holds rseq.n = 0
 proof
    let p be Real such that
 A1: 1 <=p;
@@ -1073,15 +1074,16 @@ A4:  1/p > 0 by A2,REAL_2:127;
    let rseq being Real_Sequence such that
 A5:rseq rto_power p is summable and
 A6: Sum(rseq rto_power p) to_power (1/p)=0;
-A7:  for i be Nat holds ((rseq) rto_power p).i >= 0
+A7:  for i be Element of NAT holds ((rseq) rto_power p).i >= 0
         proof
-         let i be Nat;
+          let i be Element of NAT;
 A8:      ( (rseq) rto_power p).i
            =abs((rseq).i) to_power p by Def1;
        abs((rseq).i) >=0 by COMPLEX1:132;
           hence ((rseq) rto_power p).i >= 0 by A2,A8,Lm1;
-        end;
- A9:(Sum(rseq rto_power p) ) >= 0 by A5,A7,SERIES_1:21;
+        end; then
+    for i be Element of NAT holds ((rseq) rto_power p).i >= 0; then
+ A9:(Sum(rseq rto_power p) ) >= 0 by A5,SERIES_1:21;
 A10: ( (Sum(rseq rto_power p) ) to_power (1/p)) to_power p
       =(Sum(rseq rto_power p) ) to_power((1/p)*p)
     by A2,A4,A9,HOLDER_1:2
@@ -1089,11 +1091,12 @@ A10: ( (Sum(rseq rto_power p) ) to_power (1/p)) to_power p
      .=(Sum(rseq rto_power p) ) by POWER:30;
  0 to_power p =0 by A2,POWER:def 2; then
 A11: (Sum(rseq rto_power p) ) = 0 by A6,A10;
-A12: for n be Nat holds (rseq rto_power p).n =0
+A12: for n be Element of NAT holds (rseq rto_power p).n =0
      by A5,A7,A11,RSSPACE:21;
      now
-       let n be Nat;
-       (rseq rto_power p).n =abs(rseq.n) to_power p by Def1; then
+       let n be natural number;
+       reconsider n'=n as Element of NAT by ORDINAL1:def 13;
+       (rseq rto_power p).n' =abs(rseq.n') to_power p by Def1; then
  A13: abs(rseq.n) to_power p =0 by A12;
  A14: abs(rseq.n) >= 0 by COMPLEX1:132;
  A15: (abs(rseq.n) to_power p) to_power (1/p)
@@ -1130,7 +1133,7 @@ A3:  lp = NORMSTR (# the_set_of_RealSequences_l^p,
    let x be Point of lp;
    let a be Real;
 now let n1 be set such that A4:n1 in NAT;
-reconsider n =n1 as Nat by A4;
+reconsider n =n1 as Element of NAT by A4;
  A5:abs(a) >=0 & abs((seq_id(x)).n) >=0 by COMPLEX1:132;
  A6:(seq_id(a *(x)) rto_power p ).n
   =abs(((seq_id(a*x)).n)) to_power p by Def1
@@ -1204,7 +1207,7 @@ proof
   let x be Point of lp;
    let a be Real;
  A7: (seq_id(x) rto_power p) is summable by A1,A2,Th10;
-A8: now let n be Nat;
+A8: now let n be Element of NAT;
  A9: (seq_id(x) rto_power p).n =abs((seq_id(x)).n) to_power p by Def1;
 abs((seq_id(x)).n)>=0 by COMPLEX1:132;
 hence (seq_id(x) rto_power p).n >= 0 by A4,A9,Lm1;
@@ -1259,7 +1262,7 @@ A7: ||.x.|| = 0;
 A8: ||.x.|| = (the norm of lp). x by NORMSP_1:def 1
             .= ( Sum(seq_id(x) rto_power p) ) to_power (1/p) by A2,Def3;
 A9:  seq_id(x) rto_power p is summable by A1,A2,Th10;
-A10: for n be Nat holds 0 = (seq_id(x)).n by A1,A7,A8,A9,Th12;
+A10: for n be Element of NAT holds 0 = (seq_id(x)).n by A1,A7,A8,A9,Th12;
      x in the_set_of_RealSequences by A1,A2,Def2;
      hence x = Zeroseq by A10,RSSPACE:def 6
      .=0.lp by A1,A2,Th10;
@@ -1267,14 +1270,14 @@ A10: for n be Nat holds 0 = (seq_id(x)).n by A1,A7,A8,A9,Th12;
 A11:now assume
 A12:x=0.lp;
     x=Zeroseq by A1,A2,A12,Th10; then
-A13: for n be Nat holds (seq_id(x)).n=0 by RSSPACE:def 6;
+A13: for n be Element of NAT holds (seq_id(x)).n=0 by RSSPACE:def 6;
 thus ||.x.|| = (the norm of lp). x by NORMSP_1:def 1
             .=  ( Sum(seq_id(x) rto_power p) ) to_power (1/p) by A2,Def3
             .= 0 by A1,A13,Th11;
    end;
-A14:for n be Nat holds 0 <= (seq_id(x) rto_power p).n
+A14:for n be Element of NAT holds 0 <= (seq_id(x) rto_power p).n
 proof
- let n be Nat;
+ let n be Element of NAT;
  set xp=seq_id(x) rto_power p;
  A15:   xp.n=abs((seq_id(x)).n) to_power p by Def1;
  A16:  0 <= abs((seq_id(x)).n) by COMPLEX1:132;
@@ -1353,14 +1356,14 @@ theorem Th15:
 Lm9:
 for c be Real, seq be Real_Sequence st seq is convergent
 for rseq be Real_Sequence st
- ( for i be Nat holds rseq .i = abs(seq.i-c) ) holds
+ ( for i be Element of NAT holds rseq .i = abs(seq.i-c) ) holds
  ( rseq is convergent & lim rseq = abs(lim seq-c) ) by RSSPACE3:1;
 
 Lm10:
 for p be Real st 0 < p
 for c be Real, seq be Real_Sequence st seq is convergent
 for rseq be Real_Sequence st
- ( for i be Nat holds rseq .i = (abs(seq.i -c)) to_power p )
+ ( for i be Element of NAT holds rseq .i = (abs(seq.i -c)) to_power p )
  holds
  ( rseq is convergent & lim rseq = (abs(lim seq-c)) to_power p )
 proof
@@ -1370,21 +1373,21 @@ A1:0 <p;
   let seq be Real_Sequence such that
 A2:seq is convergent;
   let rseq be Real_Sequence such that
-A3: ( for i be Nat holds rseq .i = (abs(seq.i -c)) to_power p );
+A3: ( for i be Element of NAT holds rseq .i = (abs(seq.i -c)) to_power p );
  deffunc F(set) = abs(seq.$1-c);
    consider b be Real_Sequence such that
-A4:for n be Nat holds b.n=F(n) from SEQ_1:sch 1;
+A4:for n be Element of NAT holds b.n=F(n) from SEQ_1:sch 1;
 A5:b is convergent by A2,A4,Lm9;
 A6:lim b = abs(lim seq - c) by A2,A4,Lm9;
-A7:for n be Nat holds 0 <=b.n
+A7:for n be Element of NAT holds 0 <=b.n
   proof
-  let n be Nat;
+  let n be Element of NAT;
   b.n=abs(seq.n-c) by A4;
   hence thesis by COMPLEX1:132;
   end;
-  for n be Nat holds rseq.n=(b.n) to_power p
+  for n be Element of NAT holds rseq.n=(b.n) to_power p
   proof
-    let n be Nat;
+    let n be Element of NAT;
     rseq.n=(abs(seq.n -c)) to_power p by A3
          .=(b.n) to_power p by A4;
     hence thesis;
@@ -1397,7 +1400,7 @@ for p be Real st 0 < p
 for c be Real, seq, seq1 be Real_Sequence st (seq is convergent
 & seq1 is convergent)
 for rseq be Real_Sequence st
- ( for i be Nat holds rseq .i = (abs(seq.i -c)) to_power p +seq1.i )
+ ( for i be Element of NAT holds rseq .i = (abs(seq.i -c)) to_power p +seq1.i )
  holds
  ( rseq is convergent & lim rseq = (abs(lim seq-c)) to_power p + lim seq1 )
 proof
@@ -1408,13 +1411,14 @@ A1:0 < p;
 A2:seq is convergent and
 A3:seq1 is convergent;
   let rseq be Real_Sequence such that
-A4:  for i be Nat holds rseq .i =( (abs(seq.i -c)) to_power p ) + seq1.i;
+  A4:  for i be Element of NAT holds rseq .i =( (abs(seq.i -c)) to_power p )
+  + seq1.i;
  deffunc F(set) = abs(seq.$1-c) to_power p;
    consider b be Real_Sequence such that
-A5:for n be Nat holds b.n=F(n) from  SEQ_1:sch 1;
+A5:for n be Element of NAT holds b.n=F(n) from  SEQ_1:sch 1;
 A6:b is convergent by A1,A2,A5,Lm10;
 A7:lim b = (abs(lim seq-c)) to_power p by A1,A2,A5,Lm10;
-now let n be Nat;thus
+now let n be Element of NAT;thus
   rseq .n = ( (abs(seq.n -c)) to_power p ) + seq1.n by A4
            .=b.n + seq1.n by A5;
   end; then
@@ -1427,14 +1431,15 @@ end;
 
 Lm12:
  for e be Real, seq be Real_Sequence st ( seq is convergent &
-  ex k be Nat st (for i be Nat st k <= i holds seq.i <=e )) holds
+ ex k be Element of NAT st (for i be Element of NAT
+ st k <= i holds seq.i <=e )) holds
    lim seq <=e by RSSPACE2:6;
 
 Lm13:
 for a,b be Real_Sequence holds a=a+b-b
 proof
  let a,b be Real_Sequence;
- now let n be Nat;
+ now let n be Element of NAT;
  A1: a+b-b = a+b+-b by SEQ_1:15
    .=a+(b+(-b)) by SEQ_1:20;
    (a+(b+(-b))).n=a.n+(b+(-b)).n by SEQ_1:11
@@ -1503,33 +1508,33 @@ proof
  let vseq be sequence of lp such that
  A7:vseq is Cauchy_sequence_by_Norm;
    defpred P[set,set] means
-        ex i be Nat st $1=i &
+        ex i be Element of NAT st $1=i &
      ex rseqi be Real_Sequence st
-      (for n be Nat holds rseqi.n=(seq_id(vseq.n)).i) &
+      (for n be Element of NAT holds rseqi.n=(seq_id(vseq.n)).i) &
      rseqi is convergent & $2 = lim rseqi;
 A8:for x be set st x in NAT ex y be set st y in REAL & P[x,y]
    proof
      let x be set such that
 A9: x in NAT;
-     reconsider i=x as Nat by A9;
-     deffunc F(Nat) = (seq_id(vseq.$1)).i;
+     reconsider i=x as Element of NAT by A9;
+     deffunc F(Element of NAT) = (seq_id(vseq.$1)).i;
      consider rseqi be Real_Sequence such that
-A10:  for n be Nat holds rseqi.n= F(n) from SEQ_1:sch 1;
+A10:  for n be Element of NAT holds rseqi.n= F(n) from SEQ_1:sch 1;
 A11:  rseqi is convergent
       proof
       now
          let e1 be real number such that
 A12:     e1 > 0;
          reconsider e=e1 as Real by XREAL_0:def 1;
-    thus ex k be Nat st
-          for m be Nat st k <= m holds abs(rseqi.m -rseqi.k) < e1
+    thus ex k be Element of NAT st
+          for m be Element of NAT st k <= m holds abs(rseqi.m -rseqi.k) < e1
           proof
-           consider k be Nat such that
-A13:       for n, m be Nat st ( n >= k & m >= k ) holds
+           consider k be Element of NAT such that
+A13:       for n, m be Element of NAT st ( n >= k & m >= k ) holds
            ||.(vseq.n) - (vseq.m).|| < e by A7,A12,RSSPACE3:10;
- for m being Nat st k <= m holds abs(rseqi.m-rseqi.k) < e
+ for m being Element of NAT st k <= m holds abs(rseqi.m-rseqi.k) < e
            proof
-            let m be Nat such that
+            let m be Element of NAT such that
 A14:        k<=m;
 A15:        0 <= ||.(vseq.m) - (vseq.k).|| by NORMSP_1:8;
 A16:       ||.(vseq.m) - (vseq.k).||
@@ -1544,14 +1549,16 @@ A17:        (( Sum(seq_id((vseq.m)-(vseq.k)) rto_power p) ) to_power
  A18: (seq_id((vseq.m)-(vseq.k)) rto_power p) is summable by A1,A6,Th10;
 
 A19:now
- let i be Nat;
+let i be Element of NAT;
    A20:  (seq_id((vseq.m)-(vseq.k)) rto_power p).i
              =abs((seq_id((vseq.m)-(vseq.k))).i) to_power p
            by Def1;
   abs((seq_id((vseq.m)-(vseq.k))).i) >=0 by COMPLEX1:132;
  hence (seq_id((vseq.m)-(vseq.k)) rto_power p).i >= 0 by A2,A20,Lm1;
-end;
-A21:0<=Sum(seq_id((vseq.m)-(vseq.k)) rto_power p) by A18,A19,SERIES_1:21;
+end; then
+for i be Element of NAT holds
+ (seq_id((vseq.m)-(vseq.k)) rto_power p).i >= 0; then
+A21:0<=Sum(seq_id((vseq.m)-(vseq.k)) rto_power p) by A18,SERIES_1:21;
 A22:    (( Sum(seq_id((vseq.m)-(vseq.k)) rto_power p) ) to_power
                                 (1/p)) to_power p
          =( Sum(seq_id((vseq.m)-(vseq.k)) rto_power p) )
@@ -1629,20 +1636,20 @@ end;
 A42:for x be set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A8);
    reconsider tseq=f as Real_Sequence;
 A43:now
-      let i be Nat;
+      let i be Element of NAT;
       reconsider x=i as set;
-      ex i0 be Nat st x=i0 &
+      ex i0 be Element of NAT st x=i0 &
        ex rseqi be Real_Sequence st
-        ( for n be Nat holds rseqi.n=(seq_id(vseq.n)).i0 ) &
+        ( for n be Element of NAT holds rseqi.n=(seq_id(vseq.n)).i0 ) &
        rseqi is convergent &
        f.x=lim rseqi by A42;
        hence ex rseqi be Real_Sequence st
-        ( for n be Nat holds rseqi.n=(seq_id(vseq.n)).i ) &
+        ( for n be Element of NAT holds rseqi.n=(seq_id(vseq.n)).i ) &
         rseqi is convergent &
         tseq.i=lim rseqi;
       end;
 A44:for e be Real st e >0
-   ex k be Nat st for n be Nat st n >= k holds
+   ex k be Element of NAT st for n be Element of NAT st n >= k holds
     ((seq_id(tseq)-seq_id(vseq.n)) rto_power p ) is summable &
       Sum((seq_id(tseq)-seq_id(vseq.n)) rto_power p) < e
    proof
@@ -1653,20 +1660,22 @@ A46: e >0 by A45,SEQ_2:3;
 A47: e2 >e by A45,XREAL_1:218;
        set e1=e to_power (1/p);
 A48: e1>0 by A46,POWER:39;
-       consider k be Nat such that
-A49: for n, m be Nat st ( n >= k & m >= k ) holds
+       consider k be Element of NAT such that
+A49: for n, m be Element of NAT st ( n >= k & m >= k ) holds
          ||.(vseq.n) - (vseq.m).|| < e1 by A7,A48,RSSPACE3:10;
-A50: for m,n be Nat st ( n >= k & m >= k ) holds
+A50: for m,n be Element of NAT st ( n >= k & m >= k ) holds
         ((seq_id((vseq.m)-(vseq.n)) rto_power p) is summable &
            Sum( (seq_id((vseq.m)-(vseq.n)) rto_power p) ) < e &
-    for i be Nat holds 0 <=  ((seq_id((vseq.m)-(vseq.n))) rto_power p).i)
+           for i be Element of NAT holds 0 <=  ((seq_id((vseq.m)-(vseq.n)))
+           rto_power p).i)
         proof
-        let m,n be Nat such that
+        let m,n be Element of NAT such that
 A51:  n >= k & m >= k;
 A52:  (seq_id((vseq.m)-(vseq.n)) rto_power p) is summable by A1,A6,Th10;
-A53:       for i be Nat holds (seq_id((vseq.m)-(vseq.n)) rto_power p).i >= 0
+A53:       for i be Element of NAT holds
+(seq_id((vseq.m)-(vseq.n)) rto_power p).i >= 0
        proof
-         let i be Nat;
+         let i be Element of NAT;
 A54:      (seq_id((vseq.m)-(vseq.n)) rto_power p).i
          =abs((seq_id((vseq.m)-(vseq.n))).i) to_power p by Def1;
       abs((seq_id((vseq.m)-(vseq.n))).i) >=0 by COMPLEX1:132;
@@ -1693,25 +1702,25 @@ A55:  (( Sum(seq_id((vseq.m)-(vseq.n)) rto_power p) )
  then ( Sum(seq_id((vseq.m)-(vseq.n)) rto_power p) ) < e by A2,A55,A58,A59,Th1;
 hence thesis by A52,A53;
  end;
-A60:  for n be Nat for i be Nat holds
+A60:  for n be Element of NAT for i be Element of NAT holds
       for rseq be Real_Sequence st
-       ( for m be Nat holds
+       ( for m be Element of NAT holds
          rseq.m = Partial_Sums ((seq_id((vseq.m)-(vseq.n))) rto_power p).i )
       holds
        ( rseq is convergent & lim rseq =
               Partial_Sums ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) .i )
      proof
-       let n be Nat;
-A61:   for m,k be Nat holds
+       let n be Element of NAT;
+A61:   for m,k be Element of NAT holds
          seq_id((vseq.m) - (vseq.k)) = seq_id(vseq.m)-seq_id(vseq.k)
          proof
-             let m,k be Nat;
+             let m,k be Element of NAT;
              seq_id((vseq.m) - (vseq.k))
               = seq_id(seq_id((vseq.m))-seq_id((vseq.k))) by A1,A6,Th10;
              hence thesis by RSSPACE:3;
           end;
-         defpred P[Nat] means
-         for rseq be Real_Sequence st for m be Nat holds
+         defpred P[Element of NAT] means
+         for rseq be Real_Sequence st for m be Element of NAT holds
          rseq.m= Partial_Sums
                  ((seq_id((vseq.m)-(vseq.n))) rto_power p).$1 holds
          rseq is convergent &
@@ -1721,7 +1730,7 @@ A62:  P[0]
        proof
          now
            let rseq be Real_Sequence such that
-A63:     for m be Nat holds
+A63:     for m be Element of NAT holds
            rseq.m= Partial_Sums
                  ((seq_id((vseq.m)-(vseq.n))) rto_power p).0;
            thus
@@ -1730,13 +1739,13 @@ A63:     for m be Nat holds
                   ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).0
            proof
             consider rseq0 be Real_Sequence such that
-A64:       ( for m be Nat holds rseq0.m=(seq_id(vseq.m)).0 ) &
+A64:       ( for m be Element of NAT holds rseq0.m=(seq_id(vseq.m)).0 ) &
             rseq0 is convergent &
             tseq.0=lim rseq0 by A43;
-A65:       for m being Nat holds rseq.m =
+A65:       for m being Element of NAT holds rseq.m =
             abs(rseq0.m -(seq_id(vseq.n)).0) to_power p
             proof
-               let m be Nat;
+               let m be Element of NAT;
               rseq.m =Partial_Sums
                  ((seq_id((vseq.m)-(vseq.n))) rto_power p).0 by A63
               .= ((seq_id((vseq.m)-(vseq.n))) rto_power p).0
@@ -1773,37 +1782,38 @@ lim rseq = abs(lim(rseq0) -(seq_id(vseq.n)).0) to_power p
          end;
          hence thesis;
         end;
-A67:  for i be Nat st P[i] holds P[i+1]
+A67:  for i be Element of NAT st P[i] holds P[i+1]
           proof
            now
-                let i be Nat such that
+                let i be Element of NAT such that
        A68:    for rseq be Real_Sequence st
-                 ( for m be Nat holds rseq.m= Partial_Sums
+                 ( for m be Element of NAT holds rseq.m= Partial_Sums
                  ((seq_id((vseq.m)-(vseq.n))) rto_power p).i ) holds
                  ( rseq is convergent & lim rseq =Partial_Sums
                   ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).i);
                 thus for rseq be Real_Sequence st
-                 ( for m be Nat holds rseq.m = Partial_Sums
+                 ( for m be Element of NAT holds rseq.m = Partial_Sums
                  ((seq_id((vseq.m)-(vseq.n))) rto_power p).(i+1) ) holds
                  ( rseq is convergent & lim rseq =Partial_Sums
                   ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).(i+1))
                 proof
                   let rseq be Real_Sequence such that
-       A69:     ( for m be Nat holds rseq.m = Partial_Sums
+       A69:     ( for m be Element of NAT holds rseq.m = Partial_Sums
                  ((seq_id((vseq.m)-(vseq.n))) rto_power p).(i+1) );
-                 deffunc F(Nat) = Partial_Sums
+                 deffunc F(Element of NAT) = Partial_Sums
                  ((seq_id((vseq.$1)-(vseq.n))) rto_power p).i;
                   consider rseqb be Real_Sequence such that
-       A70:       for m be Nat holds
+       A70:       for m be Element of NAT holds
                     rseqb.m = F(m) from SEQ_1:sch 1;
        A71:     rseqb is convergent &
                   lim rseqb = Partial_Sums
                   ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).i by A68,A70;
                   consider rseq0 be Real_Sequence such that
-       A72:       ( for m be Nat holds rseq0.m=(seq_id(vseq.m)).(i+1) ) &
+                  A72:       ( for m be Element of NAT holds
+                  rseq0.m=(seq_id(vseq.m)).(i+1) ) &
                   rseq0 is convergent & tseq.(i+1)=lim rseq0 by A43;
      A73:       now
-                    let m be Nat;
+                    let m be Element of NAT;
                     thus rseq.m = Partial_Sums
                    ((seq_id((vseq.m)-(vseq.n))) rto_power p).(i+1) by A69
                       .=((seq_id((vseq.m)-(vseq.n))) rto_power p).(i+1)
@@ -1855,34 +1865,34 @@ A67:  for i be Nat st P[i] holds P[i+1]
               end;
               hence thesis;
             end;
-      for i be Nat holds P[i] from NAT_1:sch 1(A62,A67);
+      for i be Element of NAT holds P[i] from NAT_1:sch 1(A62,A67);
        hence thesis;
      end;
-  for n be Nat st n >= k holds
+  for n be Element of NAT st n >= k holds
        ((seq_id(tseq)-seq_id(vseq.n)) rto_power p ) is summable &
         Sum ((seq_id(tseq)-seq_id(vseq.n)) rto_power p ) < e2
   proof
-    let n be Nat such that
+    let n be Element of NAT such that
 A74:     n >= k;
-A75:     for i be Nat st 0 <= i holds
+A75:     for i be Element of NAT st 0 <= i holds
            Partial_Sums ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).i <=e
           proof
-            let i be Nat such that 0 <=i;
-            deffunc F(Nat)=
+            let i be Element of NAT such that 0 <=i;
+            deffunc F(Element of NAT)=
                Partial_Sums ((seq_id((vseq.$1)-(vseq.n))) rto_power p).i;
                consider rseq be Real_Sequence such that
-A76:     for m be Nat holds rseq.m = F(m) from SEQ_1:sch 1;
+A76:     for m be Element of NAT holds rseq.m = F(m) from SEQ_1:sch 1;
 A77:     rseq is convergent by A60,A76;
 A78:     lim rseq =
                 Partial_Sums ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) .i
           by A60,A76;
-         for m be Nat st m >= k holds rseq.m <= e
+         for m be Element of NAT st m >= k holds rseq.m <= e
          proof
-            let m be Nat;
+            let m be Element of NAT;
             assume m >= k; then
 A79:      ((seq_id((vseq.m)-(vseq.n)) rto_power p) is summable &
             Sum( (seq_id((vseq.m)-(vseq.n)) rto_power p) ) < e &
-            for i be Nat holds
+            for i be Element of NAT holds
                0 <= ((seq_id((vseq.m)-(vseq.n))) rto_power p).i )
                 by A50,A74; then
 A80:        Partial_Sums ((seq_id((vseq.m)-(vseq.n))) rto_power p).i
@@ -1896,10 +1906,10 @@ A80:        Partial_Sums ((seq_id((vseq.m)-(vseq.n))) rto_power p).i
            hence Partial_Sums
            ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) .i <=e by A78;
           end;
-A81:   for i be Nat holds
+A81:   for i be Element of NAT holds
           0 <= ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) .i
        proof
-         let i be Nat;
+         let i be Element of NAT;
 A82:      ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) .i
          =(abs((seq_id(tseq)-seq_id(vseq.n)).i)) to_power p by Def1;
 A83:      abs((seq_id(tseq)-seq_id(vseq.n)).i) >=0 by COMPLEX1:132;
@@ -1912,7 +1922,7 @@ A84:   Partial_Sums
          now
           take e2=e+1;
 A85:       e2>e by XREAL_1:31;
-           let i be Nat;
+           let i be Element of NAT;
            0 <= i by NAT_1:18; then
            Partial_Sums
            ((seq_id(tseq)-seq_id(vseq.n)) rto_power p) .i <=e by A75;
@@ -1938,8 +1948,8 @@ A86:    Sum ((seq_id(tseq)-seq_id(vseq.n)) rto_power p)
   end;
 A87: (seq_id(tseq)) rto_power p is summable
    proof
-      consider m be Nat such that
-A88:  for n be Nat st n >= m holds
+      consider m be Element of NAT such that
+A88:  for n be Element of NAT st n >= m holds
          ((seq_id(tseq)-seq_id(vseq.n)) rto_power p ) is summable &
          Sum((seq_id(tseq)-seq_id(vseq.n)) rto_power p) < 1 by A44;
 A89: ((seq_id(tseq)-seq_id(vseq.m))
@@ -1957,23 +1967,24 @@ A91:  a +b =seq_id(tseq)+-seq_id(vseq.m)+seq_id(vseq.m) by SEQ_1:15
 end;
  reconsider tv=tseq as Point of lp by A1,A6,A87,Th10;
  for e be Real st
-     e > 0 ex m be Nat st for n be Nat st
+     e > 0 ex m be Element of NAT st for n be Element of NAT st
       n >= m holds ||.(vseq.n) - tv.|| < e
     proof
       let e be Real such that
 A92:  e > 0;
       set e1=e to_power p;
 A93: e1>0 by A92,POWER:39;
-      consider m be Nat such that
- A94: for n be Nat st n >= m holds ((seq_id(tseq)-seq_id(vseq.n))
+      consider m be Element of NAT such that
+ A94: for n be Element of NAT st n >= m holds ((seq_id(tseq)-seq_id(vseq.n))
        rto_power p ) is summable &
          Sum((seq_id(tseq)-seq_id(vseq.n)) rto_power p) < e1 by A44,A93;
      now
-     let n be Nat such that
+     let n be Element of NAT such that
 A95:  n >= m;
-A96: for i be Nat holds ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).i >= 0
+A96: for i be Element of NAT holds
+((seq_id(tseq)-seq_id(vseq.n)) rto_power p).i >= 0
     proof
-      let i be Nat;
+      let i be Element of NAT;
 A97:   ((seq_id(tseq)-seq_id(vseq.n)) rto_power p).i
        =abs((seq_id(tseq)-seq_id(vseq.n)).i) to_power p by Def1;
 A98:   abs((seq_id(tseq)-seq_id(vseq.n)).i) >=0 by COMPLEX1:132;

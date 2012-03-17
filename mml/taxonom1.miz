@@ -18,13 +18,14 @@ environ
  constructors SETFAM_1, XXREAL_0, NAT_1, FINSEQ_5, PRE_CIRC, REWRITE1,
       PRE_TOPC, TBSP_1, LANG1, PUA2MSS1, PARTIT1;
  registrations XREAL_0, EQREL_1, RELSET_1, ARYTM_3, STRUCT_0, SUBSET_1,
-      FINSET_1, TBSP_1, MEMBERED, PARTFUN1, XXREAL_0;
+      FINSET_1, TBSP_1, MEMBERED, PARTFUN1, XXREAL_0, NAT_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, SETFAM_1, BINOP_1, EQREL_1;
  theorems EQREL_1, T_1TOPSP, ZFMISC_1, PARTIT1, TARSKI, SETFAM_1, RELAT_2,
       METRIC_1, RELAT_1, REWRITE1, FINSEQ_1, LANG1, FINSEQ_5, RELSET_1, NAT_1,
       REAL_2, PRE_CIRC, FUNCT_1, FUNCT_2, FINSET_1, FINSEQ_3, TBSP_1, PRE_TOPC,
-      MSUALG_9, XBOOLE_0, XBOOLE_1, PARTFUN1, ORDERS_1, XREAL_1, XXREAL_0;
+      MSUALG_9, XBOOLE_0, XBOOLE_1, PARTFUN1, ORDERS_1, XREAL_1, XXREAL_0,
+      ORDINAL1;
  schemes RELSET_1, LMOD_7, NAT_1, XBOOLE_0;
 
 begin :: Preliminaries
@@ -52,7 +53,8 @@ A2: not k in dom p;
  assume k <> 0;
 then A3:k >= 1 by NAT_1:39;
 A4:k <= k+1 by NAT_1:37;
-      k+1 <= len p by A1,FINSEQ_3:27;
+  k+1 in NAT by ORDINAL1:def 13; then
+  k+1 <= len p by A1,FINSEQ_3:27;
  then k <= len p by A4,XXREAL_0:2;
  hence thesis by A2,A3,FINSEQ_3:27;
 end;
@@ -102,11 +104,11 @@ A13:       w+1 in dom p;
         hence p.(w+1) = p.1;
       end;
       end;
-           for k being Nat holds R[k] from NAT_1:sch 1(A10,A11);
+      for k being Nat holds R[k] from NAT_1:sch 2(A10,A11);
       hence p.(k+1) = p.j by A7,A9;
     end;
     end;
-    for k being Nat holds P[k] from NAT_1:sch 1(A3,A4);
+    for k being Nat holds P[k] from NAT_1:sch 2(A3,A4);
     hence p.i = p.j by A1;
 end;
 
@@ -186,16 +188,16 @@ A1:   R is_reflexive_in X & R is_symmetric_in X;
         assume A2: x in X & y in X & [x,y] in R[*];
 then A3:     x in field R & y in field R by FINSEQ_1:def 16;
         consider p being FinSequence such that
-A4:             len p >= 1 & p.1 = x & p.len p = y and
-A5:     for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R
-          by A2,FINSEQ_1:def 16;
+A4:     len p >= 1 & p.1 = x & p.len p = y and
+A5:     for i being Element of NAT st i >= 1 & i < len p holds
+          [p.i,p.(i+1)] in R by A2,FINSEQ_1:def 16;
         consider r being FinSequence such that A6: r = Rev p;
 A7:     len r >= 1 by A4,A6,FINSEQ_5:def 3;
 A8:     r.1 = y by A4,A6,FINSEQ_5:65;
 A9:     r.len r = r. len p by A6,FINSEQ_5:def 3
                .= x by A4,A6,FINSEQ_5:65;
-             now
-          let j be Nat such that A10: j >= 1 & j < len r;
+        now
+          let j be Element of NAT such that A10: j >= 1 & j < len r;
 A11:      j < len p by A6,A10,FINSEQ_5:def 3;
                j <= len p by A6,A10,FINSEQ_5:def 3;
           then j in Seg len p by A10,FINSEQ_1:3;
@@ -204,8 +206,10 @@ A13:      j + 1 >= 1 by NAT_1:29;
 A14:      len p >= j + 1 by A11,NAT_1:38;
           then j + 1 in Seg len p by A13,FINSEQ_1:3;
 then A15:      j + 1 in dom p by FINSEQ_1:def 3;
-               len p - j is Nat by A11,NAT_1:61;
-          then consider j1 being Nat such that A16: j1 = len p - j;
+               len p - j is Nat by A11,NAT_1:61; then
+               len p - j in NAT by ORDINAL1:def 13;
+          then consider j1 being Element of NAT such that
+          A16: j1 = len p - j;
 A17:      j1 >= 1 by A14,A16,XREAL_1:21;
                j > 0 by A10;
           then len p - 0 > len p - j by REAL_2:105;
@@ -245,7 +249,7 @@ for X being non empty set,
 holds R[*] is Equivalence_Relation of X
 proof
 let X be non empty set, R be Relation of X such that
-A1:               R is_reflexive_in X & R is_symmetric_in X;
+A1: R is_reflexive_in X & R is_symmetric_in X;
     R[*] is_reflexive_in X by A1,Th5;
    then A2:  dom(R[*]) = X & field(R[*]) = X by ORDERS_1:98;
 A3: R[*] is_symmetric_in X by A1,Th7;
@@ -266,13 +270,13 @@ A3:     p = [x,y] by A2,RELAT_1:def 1;
         consider r being FinSequence such that
 A4:     len r >= 1 and
 A5:     r.1 = x & r.(len r) = y and
-A6:     for i being Nat st i >= 1 & i < len r
+A6:     for i being Element of NAT st i >= 1 & i < len r
         holds [r.i, r.(i+1)] in R1 by A2,A3,FINSEQ_1:def 16;
 A7:     x in field R1 & y in field R1 by A2,A3,FINSEQ_1:def 16;
 A8:   field R1 c= field R2 by A1,RELAT_1:31;
-          now
-       let i be Nat such that A9: i >= 1 & i < len r;
-            [r.i, r.(i+1)] in R1 by A6,A9;
+      now
+       let i be Element of NAT such that A9: i >= 1 & i < len r;
+       [r.i, r.(i+1)] in R1 by A6,A9;
        hence [r.i, r.(i+1)] in R2 by A1;
      end;
      hence p in R2[*] by A3,A4,A5,A7,A8,FINSEQ_1:def 16;

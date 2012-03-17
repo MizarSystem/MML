@@ -10,19 +10,20 @@ environ
       BINOP_1, QC_LANG1, PRE_TOPC, ARYTM_3, MIDSP_2, VECTSP_1, GROUP_4,
       RLVECT_1, MIDSP_3, FUNCT_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, FUNCT_1, FUNCT_2, BINOP_1,
-      BINARITH, STRUCT_0, PRE_TOPC, FINSEQ_1, FINSEQ_2, NAT_1, FUNCT_7,
+      BINARITH, STRUCT_0, PRE_TOPC, FINSEQ_1, FINSEQ_2,
+      NUMBERS, NAT_1, FUNCT_7,
       RLVECT_1, MIDSP_1, MIDSP_2, XXREAL_0;
  constructors BINOP_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2, FUNCT_7, MIDSP_2;
  registrations FINSEQ_2, STRUCT_0, RELSET_1, NAT_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions MIDSP_1;
  theorems FINSEQ_1, FINSEQ_2, FUNCT_1, MIDSP_1, MIDSP_2, NAT_1, ZFMISC_1,
-      REAL_1, STRUCT_0, FINSEQ_3, XREAL_1, FUNCT_7, XBOOLE_0, TARSKI;
+      REAL_1, STRUCT_0, FINSEQ_3, XREAL_1, FUNCT_7, XBOOLE_0, TARSKI, ORDINAL1;
  schemes FINSEQ_2, FUNCT_2;
 
 begin
 
-reserve n,i,j,k,l for Nat;
+reserve n,i,j,k,l for Element of NAT;
 reserve D for non empty set;
 reserve c,d for Element of D;
 reserve p,q,q',r for FinSequence of D;
@@ -45,10 +46,12 @@ theorem
  proof
    assume i in Seg(n);
    then A1: 1<=i & i<=n by FINSEQ_1:3;
-   then consider j such that
+   then consider j being Nat such that
    A2: i = 1+j by NAT_1:28;
-   consider k such that
+   reconsider j as Element of NAT by ORDINAL1:def 13;
+   consider k being Nat such that
    A3: n = j+1+k by A1,A2,NAT_1:28;
+   reconsider k as Element of NAT by ORDINAL1:def 13;
    take j,k;
    thus thesis by A2,A3;
  end;
@@ -226,7 +229,7 @@ theorem
 
 definition let n;
  canceled;
- mode Nat of n -> Nat means
+ mode Nat of n -> Element of NAT means
  :Def4: 1<=it & it<=n+1;
  existence
   proof
@@ -405,7 +408,8 @@ Th16: (for m holds x.m = y.m) implies x = y
    hence thesis by FINSEQ_2:139;
  end;
 
-scheme SeqLambdaD'{n()->Nat,D()->non empty set,F(set)->Element of D()}:
+scheme SeqLambdaD'{n()->Element of NAT,D()->non empty set,
+               F(set)->Element of D()}:
   ex z being FinSequence of D() st len z = n()+1 &
    for j being Nat of n() holds z.j = F(j)
 proof

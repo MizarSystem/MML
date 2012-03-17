@@ -40,7 +40,6 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="REALSET2"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="SEQM_3"/>
@@ -124,7 +123,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="422">
+<Func kind="K" nr="414">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

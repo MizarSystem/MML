@@ -23,7 +23,7 @@ environ
       JORDAN1, PSCOMP_1, WEIERSTR, UNIFORM1, JGRAPH_6, TOPREALA;
  registrations STRUCT_0, RELSET_1, EUCLID, PRE_TOPC, BORSUK_1, XREAL_0,
       FINSEQ_1, MEMBERED, BORSUK_2, INT_1, RELAT_1, TOPALG_2, REAL_1, JORDAN5A,
-      XXREAL_0;
+      XXREAL_0, ORDINAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, JORDAN1, TOPALG_2, EUCLID, TOPREALA;
  theorems TARSKI, FUNCT_1, FINSEQ_1, NAT_1, REAL_1, REAL_2, SPPOL_1, FINSEQ_4,
@@ -38,7 +38,7 @@ environ
 begin
 
  reserve x, y for set;
- reserve i, j, n for Nat;
+ reserve i, j, n for Element of NAT;
  reserve p, p1, p2 for Point of TOP-REAL n;
  reserve a, b, c, d for real number;
 
@@ -54,19 +54,19 @@ A3:len f in dom f by A1,FINSEQ_3:27;
 end;
 
 Lm3:for f being FinSequence of REAL st
- (for k being Nat st 1<=k & k<len f holds f/.k<f/.(k+1)) holds
+ (for k being Element of NAT st 1<=k & k<len f holds f/.k<f/.(k+1)) holds
  f is increasing
 proof let f be FinSequence of REAL;
- assume A1:for k being Nat st 1<=k & k<len f holds f/.k<f/.(k+1);
+ assume A1:for k being Element of NAT st 1<=k & k<len f holds f/.k<f/.(k+1);
   now let i,j;
     now assume A2:i in dom f & j in dom f & i<j;
     then A3:1<=i & i<=len f by FINSEQ_3:27;
-    defpred P[Nat] means i+(1+$1)<=len f implies f/.i<f/.(i+(1+$1));
+    defpred P[Element of NAT] means i+(1+$1)<=len f implies f/.i<f/.(i+(1+$1));
     A4:1<=j & j<=len f by A2,FINSEQ_3:27;
     then i<len f by A2,XXREAL_0:2;
     then A5: P[0] by A1,A3;
-    A6:for k being Nat st P[k] holds P[(k+1)]
-    proof let k be Nat;assume
+    A6:for k being Element of NAT st P[k] holds P[(k+1)]
+    proof let k be Element of NAT;assume
 A7:  i+(1+k)<=len f implies f/.i<f/.(i+(1+k));
      now assume A8:i+(1+(k+1))<=len f;
        A9:1<=i+1 by NAT_1:29;   i+1<=i+1+k by NAT_1:29;
@@ -80,7 +80,7 @@ A7:  i+(1+k)<=len f implies f/.i<f/.(i+(1+k));
      end;
     hence i+(1+(k+1))<=len f implies f/.i<f/.(i+(1+(k+1)));
    end;
-  A13:for k being Nat holds P[k] from NAT_1:sch 1(A5,A6);
+  A13:for k being Element of NAT holds P[k] from NAT_1:sch 1(A5,A6);
   i+1<=j by A2,NAT_1:38;
   then j-'(i+1)=j-(i+1) by BINARITH:50;
   then i+(1+(j-'(i+1))) = j;
@@ -143,7 +143,7 @@ theorem Th1:
   ex h being FinSequence of REAL
    st h.1=0 & h.len h=1 & 5<=len h & rng h c= the carrier of I[01]
    & h is increasing
-   & (for i being Nat,Q being Subset of I[01],
+   & (for i being Element of NAT,Q being Subset of I[01],
     W being Subset of Euclid n
     st 1<=i & i<len h & Q=[.h/.i,h/.(i+1).] & W=g.:(Q) holds diameter(W)<e)
     proof
@@ -179,7 +179,7 @@ A7:  for u1,u2 being Element of
       then A13:2/s>=2/(1/2) by A8,A9,REAL_2:201;
       A14:s/2>0 by A8,A9,XREAL_1:217;
       2/s>0 by A8,A9,REAL_2:127;
-      then reconsider j= [/ (2/s) \] as Nat by INT_1:80;
+      then reconsider j= [/ (2/s) \] as Element of NAT by INT_1:80;
       A15: 2/s <= [/ (2/s) \] by INT_1:def 5;
       A16:2/s<=j by INT_1:def 5;
       0<j by A10,A15,REAL_2:127;
@@ -189,12 +189,12 @@ A7:  for u1,u2 being Element of
       2/s-j<=0 by A15,REAL_2:106;
       then 1+(2/s-j)<=1+0 by XREAL_1:8;
       then A20: s/2*(1+(2/s-j))<=s/2*1 by A14,XREAL_1:66;
-    defpred P[Nat,set] means $2=s/2*($1-1);
-    A21:for k being Nat,y1,y2 being set st
+    defpred P[Element of NAT,set] means $2=s/2*($1-1);
+    A21:for k being Element of NAT,y1,y2 being set st
     k in Seg j &  P[k,y1]& P[k,y2] holds y1=y2;
-    A22:for k being Nat st k in Seg j ex x st P[k,x];
+    A22:for k being Element of NAT st k in Seg j ex x st P[k,x];
     consider p being FinSequence such that
-     A23: dom p = Seg j & for k being Nat st k in Seg j holds
+     A23: dom p = Seg j & for k being Element of NAT st k in Seg j holds
      P[k,p.k] from FINSEQ_1:sch 1(A21,A22);
     A24:p.1=s/2*(1-1) by A18,A23 .=0;
     A25: Seg len p=Seg j by A23,FINSEQ_1:def 3;
@@ -206,9 +206,10 @@ A7:  for u1,u2 being Element of
     2*s<>0 by A9;
     then A29:(2*s)/(2*s)=1 by XCMPLX_1:60;
     then A30: 1-s/2*(j-1)=s/2*(1+(2/s- [/ (2/s) \])) by A28;
-A31: for i being Nat,r1,r2 being Real st 1<=i & i<len p & r1=p.i & r2=p.(i+1)
+A31: for i being Element of NAT,r1,r2 being Real
+ st 1<=i & i<len p & r1=p.i & r2=p.(i+1)
       holds r1<r2 & r2-r1=s/2
-    proof let i be Nat,r1,r2 be Real;assume
+    proof let i be Element of NAT,r1,r2 be Real;assume
       A32: 1<=i & i<len p & r1=p.i & r2=p.(i+1);
       then A33:i in Seg j by A25,FINSEQ_1:3;
       A34:i<i+1 by NAT_1:38;
@@ -221,9 +222,9 @@ A31: for i being Nat,r1,r2 being Real st 1<=i & i<len p & r1=p.i & r2=p.(i+1)
       r2-r1=s/2*(i)-s/2*(i-1) by A23,A32,A33,A37;
      hence thesis;
     end;
-A38:for i being Nat,r1 being Real st 1<=i & i<=len p & r1=p.i
+A38:for i being Element of NAT,r1 being Real st 1<=i & i<=len p & r1=p.i
       holds r1<1
-    proof let i be Nat,r1 be Real;assume
+    proof let i be Element of NAT,r1 be Real;assume
       A39: 1<=i & i<=len p & r1=p.i;
       then i in Seg j by A25,FINSEQ_1:3;
       then A40:r1=s/2*(i-1) by A23,A39;
@@ -242,7 +243,7 @@ A42:  r1=p.len p;
        then consider x such that
        A43: x in dom (p^<*1*>) & y=(p^<*1*>).x by FUNCT_1:def 5;
        A44:dom (p^<*1*>)=Seg len (p^<*1*>) by FINSEQ_1:def 3;
-       reconsider nx=x as Nat by A43;
+       reconsider nx=x as Element of NAT by A43;
        A45:1<=nx & nx<=len (p^<*1*>) by A43,A44,FINSEQ_1:3;
        A46: len (p^<*1*>)=len p+1 by FINSEQ_2:19;
        then A47:1<=nx & nx<=len p+1 by A43,A44,FINSEQ_1:3;
@@ -270,7 +271,7 @@ A42:  r1=p.len p;
        then consider x being set such that
        A55: x in dom p & y=p.x by FUNCT_1:def 5;
        A56:x in Seg len p by A55,FINSEQ_1:def 3;
-       reconsider nx=x as Nat by A55;
+       reconsider nx=x as Element of NAT by A55;
        A57:1<=nx & nx<=len p by A56,FINSEQ_1:3;
        A58:p.nx=s/2*(nx-1) by A23,A55;
        then reconsider ry=p.nx as Real;
@@ -296,8 +297,8 @@ A42:  r1=p.len p;
     then A65: the carrier of I[01] =the carrier of Closed-Interval-MSpace(0,1)
                       by TOPMETR:16,27
        .= [.0,1.] by TOPMETR:14;
-    A66:for i being Nat st 1<=i & i<len h1 holds h1/.i<h1/.(i+1)
-     proof let i be Nat;assume
+    A66:for i being Element of NAT st 1<=i & i<len h1 holds h1/.i<h1/.(i+1)
+     proof let i be Element of NAT;assume
        A67: 1<=i & i<len h1;
        then A68:i<=len p by A50,NAT_1:38;
        A69:i+1<=len h1 by A67,NAT_1:38;
@@ -320,8 +321,8 @@ A42:  r1=p.len p;
        end;
      end;
     then A78:h1 is increasing by Lm3;
-    A79:for i being Nat st 1<=i & i<len h1 holds h1/.(i+1)-h1/.i<=s/2
-     proof let i be Nat;assume
+A79:for i being Element of NAT st 1<=i & i<len h1 holds h1/.(i+1)-h1/.i<=s/2
+     proof let i be Element of NAT;assume
        A80: 1<=i & i<len h1;
        then A81:i<=len p by A50,NAT_1:38;
        A82:i+1<=len h1 by A80,NAT_1:38;
@@ -343,11 +344,11 @@ A42:  r1=p.len p;
         hence h1/.(i+1)-h1/.i<=s/2 by A41,A89,A90;
        end;
      end;
-     for i being Nat,Q being Subset of I[01],
+     for i being Element of NAT,Q being Subset of I[01],
       W being Subset of Euclid n
       st 1<=i & i<len h1 & Q=[.h1/.i,h1/.(i+1).] & W=g.:(Q) holds
       diameter(W)<e
-     proof let i be Nat,Q be Subset of I[01],
+     proof let i be Element of NAT,Q be Subset of I[01],
        W be Subset of Euclid n;
        assume A91:1<=i & i<len h1 & Q=[.h1/.i,h1/.(i+1).] & W=g.:(Q);
         then h1/.i<h1/.(i+1) by A66;
@@ -563,11 +564,11 @@ A19: e>0/5 by A18,REAL_1:73;
      then consider h being FinSequence of REAL such that
      A20: h.1=0 & h.len h=1 & 5<=len h & rng h c= the carrier of I[01]
      & h is increasing
-     &(for i being Nat,R being Subset of I[01],
+     &(for i being Element of NAT,R being Subset of I[01],
      W being Subset of Euclid 2
       st 1<=i & i<len h & R=[.h/.i,h/.(i+1).] & W=f.:(R) holds
      diameter(W)<e) by Th1;
-     deffunc F(Nat)=f.(h.$1);
+     deffunc F(Element of NAT)=f.(h.$1);
      ex h1' being FinSequence st len h1'=len h &
      for i st i in Seg len h holds h1'.i=F(i) from FINSEQ_1:sch 2;
      then consider h1' being FinSequence such that
@@ -578,7 +579,7 @@ A19: e>0/5 by A18,REAL_1:73;
         then consider x such that
         A22:x in dom h1' & y=h1'.x by FUNCT_1:def 5;
         A23:dom h1'=Seg len h1' by FINSEQ_1:def 3;
-        reconsider i=x as Nat by A22;
+        reconsider i=x as Element of NAT by A22;
         A24: h1'.i=f.(h.i) by A21,A22,A23;
         i in dom h by A21,A22,A23,FINSEQ_1:def 3;
         then A25:h.i in rng h by FUNCT_1:def 5;
@@ -681,14 +682,14 @@ A40:    f.(h.i) is Element of TOP-REAL 2 by A21,A32;
      A66:len h1>=1 by A20,A21,XXREAL_0:2;
      consider hb being FinSequence of REAL such that
      A67: hb.1=0 & hb.len hb=1 & 5<=len hb & rng hb c= the carrier of I[01]
-     & hb is increasing & (for i being Nat,R being Subset of I[01],
+     & hb is increasing & (for i being Element of NAT,R being Subset of I[01],
      W being Subset of Euclid 2
       st 1<=i & i<len hb & R=[.hb/.i,hb/.(i+1).] & W=g.:(R) holds
      diameter(W)<e) by A19,Th1;
      A68: 1<=len hb by A67,XXREAL_0:2;
      then A69:1 in dom hb by FINSEQ_3:27;
      A70:len hb in dom hb by A68,FINSEQ_3:27;
-     deffunc F(Nat)=g.(hb.$1);
+     deffunc F(Element of NAT)=g.(hb.$1);
      ex h2' being FinSequence st len h2'=len hb &
      for i st i in Seg len hb holds h2'.i=F(i) from FINSEQ_1:sch 2;
      then consider h2' being FinSequence such that
@@ -699,7 +700,7 @@ A40:    f.(h.i) is Element of TOP-REAL 2 by A21,A32;
         then consider x such that
         A72:x in dom h2' & y=h2'.x by FUNCT_1:def 5;
         A73:dom h2'=Seg len h2' by FINSEQ_1:def 3;
-        reconsider i=x as Nat by A72;
+        reconsider i=x as Element of NAT by A72;
         A74: h2'.i=g.(hb.i) by A71,A72,A73;
         i in dom hb by A71,A72,A73,FINSEQ_1:def 3;
         then A75:hb.i in rng hb by FUNCT_1:def 5;
@@ -924,7 +925,7 @@ A142:   W-bound Qa <= q1`1 & q1`1 <= E-bound Qa &
      X_axis(f2) lies_between (X_axis(h1)).1, (X_axis(h1)).(len h1) &
      Y_axis(f2) lies_between q1`2,q2`2 &
      (for j st j in dom f2 holds
-     ex k being Nat st k in dom h1 & |.(f2/.j - h1/.k).|<e)
+     ex k being Element of NAT st k in dom h1 & |.(f2/.j - h1/.k).|<e)
      &(for j st 1<=j & j+1<=len f2 holds |.f2/.j - f2/.(j+1).|<e)
                                   by A19,A27,A66,A100,JGRAPH_1:56;
      A156:len f2>=1 by A66,A155,XXREAL_0:2;
@@ -934,7 +935,7 @@ A142:   W-bound Qa <= q1`1 & q1`1 <= E-bound Qa &
      Y_axis(g2) lies_between (Y_axis(h2)).1, (Y_axis(h2)).(len h2) &
      X_axis(g2) lies_between p1`1,p2`1 &
      (for j st j in dom g2 holds
-     ex k being Nat st k in dom h2 & |.((g2/.j) - h2/.k).|<e)&
+     ex k being Element of NAT st k in dom h2 & |.((g2/.j) - h2/.k).|<e)&
      (for j st 1<=j & j+1<=len g2 holds |.(g2/.j) - g2/.(j+1).|<e)
                by A19,A80,A116,A117,JGRAPH_1:57;
      A158:len g2>=1 by A80,A157,XXREAL_0:2;
@@ -1244,7 +1245,7 @@ A253: f2/.1<>f2/.len f2 by A7,A217,A20,A21,A26,A155,A162,A164,A165
      A259:LSeg(f2,i)=LSeg(f2/.i,f2/.(i+1)) by A258,TOPREAL1:def 5;
      i<len f2 by A258,NAT_1:38;
      then i in dom f2 by A258,FINSEQ_3:27;
-     then consider k being Nat such that
+     then consider k being Element of NAT such that
      A260: k in dom h1 & |.f2/.i - h1/.k.|<e by A155;
      A261:|.ps-f2/.i.|<=|.f2/.i-f2/.(i+1).| by A257,A258,A259,JGRAPH_1:53;
      |.f2/.i-f2/.(i+1).|<e by A155,A258;
@@ -1276,7 +1277,7 @@ A253: f2/.1<>f2/.len f2 by A7,A217,A20,A21,A26,A155,A162,A164,A165
       ps in LSeg(g2,j) & y=LSeg(g2,j) & (1 <= j & j+1 <= len g2)
         by A271,A272,NAT_1:38,TOPREAL1:def 5;
      then j in dom g2 by FINSEQ_3:27;
-     then consider k' being Nat such that
+     then consider k' being Element of NAT such that
      A274: k' in dom h2 & |.((g2/.j) - h2/.k').|<e by A157;
      A275:|.ps-(g2/.j).|<=|.(g2/.j)-g2/.(j+1).| by A273,JGRAPH_1:53;
      |.(g2/.j)-g2/.(j+1).|<e by A157,A272;

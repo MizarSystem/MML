@@ -11,7 +11,8 @@ environ
       FILTER_2, WAYBEL_2, FUNCT_1, RELAT_1, FUNCT_4, YELLOW_1, PBOOLE,
       FUNCOP_1, CARD_3, RLVECT_2, PRE_TOPC, SETFAM_1, TARSKI, WELLORD2,
       SUBSET_1, TOPS_1, PCOMPS_1, WAYBEL_3, MONOID_0;
- notations TARSKI, XBOOLE_0, SUBSET_1, NAT_1, RELAT_1, FINSET_1, DOMAIN_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS,
+      XCMPLX_0, NAT_1, RELAT_1, FINSET_1, DOMAIN_1,
       ORDERS_1, STRUCT_0, REALSET2, FUNCT_1, FUNCT_4, PBOOLE, CARD_3, PRALG_1,
       FUNCT_7, MONOID_0, GROUP_1, ORDERS_2, PRE_TOPC, TOPS_1, TOPS_2, COMPTS_1,
       PCOMPS_1, LATTICE3, YELLOW_0, YELLOW_1, WAYBEL_0, YELLOW_4, WAYBEL_2,
@@ -21,7 +22,7 @@ environ
       YELLOW_1, YELLOW_4, WAYBEL_2;
  registrations SUBSET_1, STRUCT_0, FUNCT_1, FINSET_1, ORDERS_2, LATTICE3,
       PCOMPS_1, CANTOR_1, YELLOW_0, WAYBEL_0, YELLOW_1, ARYTM_3, TOPS_1,
-      MEMBERED, CARD_3, MONOID_0, COMPTS_1;
+      MEMBERED, CARD_3, MONOID_0, COMPTS_1, ORDINAL1, XXREAL_0, NAT_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, GROUP_1, REALSET2, ORDERS_2, LATTICE3, PRE_TOPC, TOPS_2,
       COMPTS_1, YELLOW_0, WAYBEL_0, WAYBEL_2, XBOOLE_0, SUBSET_1;
@@ -29,7 +30,7 @@ environ
       FUNCT_1, FINSET_1, FUNCT_4, FUNCOP_1, PBOOLE, CARD_3, PRALG_1, FUNCT_7,
       PRE_TOPC, TOPS_1, TOPS_2, COMPTS_1, PCOMPS_1, URYSOHN1, YELLOW_0,
       YELLOW_1, WAYBEL_0, YELLOW_2, WAYBEL_2, YELLOW_4, XBOOLE_0, XBOOLE_1,
-      MONOID_0;
+      MONOID_0, ORDINAL1;
  schemes NAT_1, FINSET_1, SUBSET_1, ZFREFLE1, PBOOLE, WELLORD2;
 
 begin :: 1. The "Way-Below" Relation
@@ -600,7 +601,7 @@ A5:    z in Y & y < z by A2,A4;
 A6:   dom f = Y & rng f c= Y &
      for x being set st x in Y holds P[x,f.x] from WELLORD2:sch 1(A3);
     consider x being Element of Y; set x1 = x;
-    set Z = {iter(f,n).x where n is Nat: not contradiction};
+    set Z = {iter(f,n).x where n is Element of NAT: not contradiction};
          f.x in rng f by A6,FUNCT_1:def 5;
      then f.x in Y by A6;
     then reconsider x, x' = f.x1 as Element of L;
@@ -609,7 +610,7 @@ A7:  [x,f.x] in the InternalRel of L & x <> f.x by A6;
 then A8:  x' in Z & x < x' by A7,ORDERS_2:def 10;
 A9:   Z c= Y
       proof let a be set; assume a in Z;
-       then consider n being Nat such that
+       then consider n being Element of NAT such that
 A10:     a = iter(f,n).x;
             dom iter(f,n) = Y by A6,FUNCT_7:76;
         then a in rng iter(f,n) & rng iter(f,n) c= Y by A6,A10,FUNCT_1:def 5
@@ -617,14 +618,15 @@ A10:     a = iter(f,n).x;
        hence a in Y;
       end;
     then reconsider Z as Subset of L by XBOOLE_1:1;
-A11:   now let i be Nat;
-        defpred P[Nat] means
+A11:   now let i be Element of NAT;
+        defpred P[Element of NAT] means
          ex z,y being Element of L st
           z = iter(f,i).x & y = iter(f,i+$1).x & z <= y;
            iter(f,i).x in Z;
        then A12:    P[0];
-A13:    for k being Nat st P[k] holds P[k+1]
-        proof let k be Nat; given z,y being Element of L such that
+A13:    for k being Element of NAT st P[k] holds P[k+1]
+        proof let k be Element of NAT;
+          given z,y being Element of L such that
 A14:      z = iter(f,i).x & y = iter(f,i+k).x & z <= y;
         take z;
 A15:      rng iter(f,i+k) c= Y & dom iter(f,i+k) = Y by A6,FUNCT_7:76;
@@ -640,22 +642,23 @@ A15:      rng iter(f,i+k) c= Y & dom iter(f,i+k) = Y by A6,FUNCT_7:76;
          then y <= yy by ORDERS_2:def 9;
         hence z <= yy by A14,ORDERS_2:26;
        end;
-A17:    for k being Nat holds P[k] from NAT_1:sch 1(A12,A13);
-      let k be Nat; assume i <= k;
+A17:    for k being Element of NAT holds P[k] from NAT_1:sch 1(A12,A13);
+        let k be Element of NAT; assume i <= k;
       then consider n being Nat such that
 A18:    k = i+n by NAT_1:28;
+        reconsider n as Element of NAT by ORDINAL1:def 13;
 A19:    ex z,y being Element of L st
         z = iter(f,i).x & y = iter(f,i+n).x & z <= y by A17;
       let z,y be Element of L; assume z = iter(f,i).x & y = iter(f,k).x;
       hence z <= y by A18,A19;
      end;
 A20:   now let z,y be Element of L; assume z in Z;
-      then consider k1 being Nat such that
+      then consider k1 being Element of NAT such that
 A21:    z = iter(f,k1).x;
       assume y in Z;
-      then consider k2 being Nat such that
+      then consider k2 being Element of NAT such that
 A22:    y = iter(f,k2).x;
-           k1 <= k2 or k2 <= k1;
+       k1 <= k2 or k2 <= k1;
       hence z <= y or z >= y by A11,A21,A22;
      end;
          sup Z is compact by A1;
@@ -701,7 +704,7 @@ then A30:    "\/"(B \/ {x}, L) = "\/"(B,L) "\/" "\/"({x},L) & sup {x'} = x
      end;
          P[A] from FINSET_1:sch 2(A25,A26,A27);
 then A31:  sup A in Z by A23,A24;
-    then consider n being Nat such that
+    then consider n being Element of NAT such that
 A32:   sup A = iter(f,n).x;
 A33:   [sup A, f.sup A] in the InternalRel of L & sup A <> f.sup A by A6,A9,A31
 ;

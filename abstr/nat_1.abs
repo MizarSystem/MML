@@ -19,12 +19,11 @@ environ
 begin
 
 definition
-  mode Nat is Element of NAT;
+  mode Nat is natural number;
 end;
 
  reserve x for Real,
-         p,q,k,l,m,n for Nat,
-         h,i,j,g for natural number,
+         p,q,k,l,m,n,s,h,i,j,g,k1,t,t1 for Nat,
          X for Subset of REAL;
 
 :: The results of axioms of natural numbers
@@ -40,11 +39,11 @@ theorem :: NAT_1:2                       :: axiom of induction
 :: The natural numbers are real numbers therefore some theorems of real
 :: numbers are translated for natural numbers.
 
-definition let n,k be Nat;
-  redefine func n + k -> Nat;
+definition let n,k be Element of NAT;
+  redefine func n + k -> Element of NAT;
  end;
 
-registration let n,k be natural number;
+registration let n,k be Nat;
   cluster n + k -> natural;
 end;
 
@@ -52,26 +51,26 @@ end;
 
 scheme :: NAT_1:sch 1
  Ind { P[Nat] } :
+ for k being Element of NAT holds P[k]
+   provided
+   P[0] and
+   for k being Element of NAT st P[k] holds P[k + 1];
+
+scheme :: NAT_1:sch 2
+ NatInd { P[Nat] } :
  for k being Nat holds P[k]
    provided
    P[0] and
-   for k being Nat st P[k] holds P[k + 1];
-
-scheme :: NAT_1:sch 2
- NatInd { P[natural number] } :
- for k being natural number holds P[k]
-   provided
-   P[0] and
-   for k be natural number st P[k] holds P[k + 1];
+   for k be Nat st P[k] holds P[k + 1];
 
 :: Like addition, the result of multiplication of two natural numbers is
 :: a natural number.
 
-definition let n,k be Nat;
-  redefine func n * k -> Nat;
+definition let n,k be Element of NAT;
+  redefine func n * k -> Element of NAT;
 end;
 
-registration let n,k be natural number;
+registration let n,k be Nat;
   cluster n * k -> natural;
 end;
 
@@ -103,58 +102,62 @@ theorem :: NAT_1:23
   i + j = 0 implies i = 0 & j = 0;
 
 registration
-  cluster non zero (natural number);
+  cluster non zero Nat;
 end;
 
-registration let m be natural number, n be non zero (natural number);
+registration let m be Nat, n be non zero Nat;
   cluster m + n -> non zero;
   cluster n + m -> non zero;
 end;
 
 scheme :: NAT_1:sch 3
  DefbyInd { N()->Nat, F(Nat,Nat)->Nat, P[Nat,Nat] } :
-  (for k ex n st P[k,n] ) &
-    for k,n,m st P[k,n] & P[k,m] holds n = m
+  (for k being Element of NAT ex n being Element of NAT st P[k,n]) &
+    for k,n,m being Element of NAT st P[k,n] & P[k,m] holds n = m
      provided
-    for k,n holds P[k,n] iff
-       k = 0 & n = N() or ex m,l st k = m + 1 & P[m,l] & n = F(k,l);
+    for k,n being Element of NAT holds P[k,n] iff
+       k = 0 & n = N() or
+       ex m,l being Element of NAT st k = m + 1 & P[m,l] & n = F(k,l);
 
 canceled 2;
 
 theorem :: NAT_1:26
-  for i,j st i <= j + 1 holds i <= j or i = j + 1;
+  i <= j + 1 implies i <= j or i = j + 1;
 
 theorem :: NAT_1:27
   i <= j & j <= i + 1 implies i = j or j = i + 1;
 
 theorem :: NAT_1:28
-  for i,j st i <= j ex k st j = i + k;
+  i <= j implies ex k st j = i + k;
 
 theorem :: NAT_1:29
   i <= i + j;
 
 scheme :: NAT_1:sch 4
  CompInd { P[Nat] } :
- for k holds P[k]
+  for k being Element of NAT holds P[k]
    provided
-   for k st for n st n < k holds P[n] holds P[k];
+   for k being Element of NAT st
+      for n being Element of NAT st n < k holds P[n] holds P[k];
 
 :: Principle of minimum
 
 scheme :: NAT_1:sch 5
  Min { P[Nat] } :
- ex k st P[k] & for n st P[n] holds k <= n
+ ex k being Element of NAT st P[k] &
+ for n being Element of NAT st P[n] holds k <= n
   provided
-  ex k st P[k];
+  ex k being Element of NAT st P[k];
 
 :: Principle of maximum
 
 scheme :: NAT_1:sch 6
- Max { P[Nat],N()->Nat } :
-  ex k st P[k] & for n st P[n] holds n <= k
+ Max { P[Nat], N()->Nat } :
+  ex k being Element of NAT st P[k] &
+  for n being Element of NAT st P[n] holds n <= k
    provided
-   for k st P[k] holds k <= N() and
-   ex k st P[k];
+   for k being Element of NAT st P[k] holds k <= N() and
+   ex k being Element of NAT st P[k];
 
 canceled 7;
 
@@ -165,41 +168,43 @@ theorem :: NAT_1:38
   i < j + 1 iff i <= j;
 
 theorem :: NAT_1:39
-  for j being natural number holds j < 1 implies j = 0;
+  j < 1 implies j = 0;
 
 theorem :: NAT_1:40
   i * j = 1 implies i = 1 & j = 1;
 
 theorem :: NAT_1:41
-  for k, n being natural number holds k <> 0 implies n < n + k;
+  k <> 0 implies n < n + k;
 
 scheme :: NAT_1:sch 7
  Regr { P[Nat] } :
- P[0]
+  P[0]
   provided
-  ex k st P[k] and
-  for k st k <> 0 & P[k] ex n st n < k & P[n];
+  ex k being Element of NAT st P[k] and
+  for k being Element of NAT st k <> 0 & P[k]
+     ex n being Element of NAT st n < k & P[n];
 
 :: Exact division and rest of division
 
- reserve k1,t,t1 for Nat;
-
 theorem :: NAT_1:42
-   for m st 0 < m for n ex k,t st n = (m*k)+t & t < m;
+  0 < m implies for n ex k,t st n = (m*k)+t & t < m;
 
 theorem :: NAT_1:43
- for n,m,k,k1,t,t1 being natural number
-     st n = m*k+t & t < m & n = m*k1+t1 & t1 < m holds
-      k = k1 & t = t1;
+  n = m*k+t & t < m & n = m*k1+t1 & t1 < m implies k = k1 & t = t1;
 
-definition let k,l be natural number;
+definition let k,l be Nat;
   func k div l -> Nat means
 :: NAT_1:def 1       :: the exact division
-  ( ex t st k = l * it + t & t < l ) or it = 0 & l = 0;
+  ( ex t being Nat st k = l * it + t & t < l ) or it = 0 & l = 0;
 
   func k mod l -> Nat means
 :: NAT_1:def 2         :: the rest of division
- ( ex t st k = l * t + it & it < l ) or it = 0 & l = 0;
+ ( ex t being Nat st k = l * t + it & it < l ) or it = 0 & l = 0;
+ end;
+
+definition let k,l be Nat;
+  redefine func k div l -> Element of NAT;
+  redefine func k mod l -> Element of NAT;
 end;
 
 canceled 2;
@@ -212,10 +217,10 @@ theorem :: NAT_1:47
 
 :: The divisibility relation
 
-definition let k,l be natural number;
+definition let k,l be Nat;
   pred k divides l means
 :: NAT_1:def 3
-  ex t st l = k * t;
+  ex t being Nat st l = k * t;
   reflexivity;
 end;
 
@@ -252,39 +257,39 @@ theorem :: NAT_1:58
 
 :: The least common multiple and the greatest common divisor
 
-definition let k,n be natural number;
-  func k lcm n -> natural number means
+definition let k,n be Nat;
+  func k lcm n -> Nat means
 :: NAT_1:def 4
   k divides it & n divides it &
-  for m st k divides m & n divides m holds it divides m;
+  for m being Nat st k divides m & n divides m holds it divides m;
     idempotence;
     commutativity;
 end;
 
-definition let k,n be natural number;
-  redefine func k lcm n -> Nat;
+definition let k,n be Nat;
+  redefine func k lcm n -> Element of NAT;
 end;
 
-definition let k,n be natural number;
-  func k hcf n -> natural number means
+definition let k,n be Nat;
+  func k hcf n -> Nat means
 :: NAT_1:def 5
   it divides k & it divides n &
-    for m st m divides k & m divides n holds m divides it;
+    for m being Nat st m divides k & m divides n holds m divides it;
     idempotence;
     commutativity;
 end;
 
-definition let k,n be natural number;
-  redefine func k hcf n -> Nat;
+definition let k,n be Nat;
+  redefine func k hcf n -> Element of NAT;
 end;
 
 scheme :: NAT_1:sch 8
  Euklides { Q(Nat)->Nat, a,b()->Nat } :
-  ex n st Q(n) = a() hcf b() & Q(n + 1) = 0
+  ex n being Element of NAT st Q(n) = a() hcf b() & Q(n + 1) = 0
    provided
    0 < b() & b() < a() and
    Q(0) = a() & Q(1) = b() and
-   for n holds Q(n + 2) = Q(n) mod Q(n + 1);
+   for n being Element of NAT holds Q(n + 2) = Q(n) mod Q(n + 1);
 
 registration
   cluster -> ordinal Nat;
@@ -295,57 +300,50 @@ registration
 end;
 
 theorem :: NAT_1:59
-  for k, n being natural number holds
-    k < k + n iff 1 <= n;
+  k < k + n iff 1 <= n;
 
 theorem :: NAT_1:60
-  for k, n being natural number st
-    k < n holds n - 1 is Nat;
+  k < n implies n - 1 is Element of NAT;
 
 theorem :: NAT_1:61
-  for k, n being natural number st
-    k <= n holds n - k is Nat;
+  k <= n implies n - k is Element of NAT;
 
 theorem :: NAT_1:62
-  for n being natural number holds n mod 2 = 0 or n mod 2 = 1;
+  n mod 2 = 0 or n mod 2 = 1;
 
 theorem :: NAT_1:63
-  for k, n being natural number holds (k * n) mod k = 0;
+  (k * n) mod k = 0;
 
 theorem :: NAT_1:64
-  for k, l being natural number st k > 1 holds 1 mod k = 1;
+  k > 1 implies 1 mod k = 1;
 
 theorem :: NAT_1:65
-  for k, l, n, m being natural number st
-    k mod n = 0 & l = k - m * n holds l mod n = 0;
+  k mod n = 0 & l = k - m * n implies l mod n = 0;
 
 theorem :: NAT_1:66
-  for k,l,n being natural number st n <> 0 & k mod n = 0 & l < n
-    holds k + l mod n = l;
+  n <> 0 & k mod n = 0 & l < n implies k + l mod n = l;
 
 theorem :: NAT_1:67
-  for k,l,n being natural number st k mod n = 0 holds
-    k + l mod n = l mod n;
+  k mod n = 0 implies k + l mod n = l mod n;
 
 theorem :: NAT_1:68
-  for k,n being natural number st k <> 0 holds (k * n) div k = n;
+  k <> 0 implies (k * n) div k = n;
 
 theorem :: NAT_1:69
-  for k,n,l being natural number st k mod n = 0 holds
-    (k + l) div n = (k div n) + (l div n);
+  k mod n = 0 implies (k + l) div n = (k div n) + (l div n);
 
 begin :: Addenda
 
 :: from ALGSEQ_1
 
 theorem :: NAT_1:70
-  m<n+1 implies m<n or m=n;
+  m < n+1 implies m < n or m = n;
 
 theorem :: NAT_1:71
-  k<2 implies k=0 or k=1;
+  k < 2 implies k = 0 or k = 1;
 
 registration
-  cluster non zero Nat;
+  cluster non zero Element of NAT;
 end;
 
 registration
@@ -353,63 +351,94 @@ registration
 end;
 
 registration
-  cluster -> non negative (natural number);
+  cluster -> non negative Nat;
 end;
 
 :: from AMI_5, 2005.11.16, A.T.
 
 theorem :: NAT_1:72
-   for m,k being Nat st k <> 0 holds m * k div k = m;
+  k <> 0 implies m * k div k = m;
 
 :: from GR_CY_1, 2005.11.16, A.T.
 
 theorem :: NAT_1:73
- for m,n,k being natural number holds m mod n = (n*k + m) mod n;
+  m mod n = (n*k + m) mod n;
 
 theorem :: NAT_1:74
- for p,s,n being natural number holds (p+s) mod n = ((p mod n)+s) mod n;
+  (p+s) mod n = ((p mod n)+s) mod n;
 
 theorem :: NAT_1:75
-   for p,s,n being natural number holds  (p+s) mod n = (p + ( s mod n)) mod n;
+  (p+s) mod n = (p + ( s mod n)) mod n;
 
 theorem :: NAT_1:76
- for n,k being natural number holds k < n implies k mod n = k;
+  k < n implies k mod n = k;
 
 theorem :: NAT_1:77
- for n being natural number holds n mod n = 0;
+  n mod n = 0;
 
 theorem :: NAT_1:78
- for n being natural number holds 0 = 0 mod n;
+  0 = 0 mod n;
 
 :: from JORDAN4
 
 theorem :: NAT_1:79
- i<>0 & h=j*i implies j<=h;
+ i <> 0 & h = j*i implies j <= h;
 
 theorem :: NAT_1:80
- i<j implies i div j=0;
+  i < j implies i div j=0;
 
 :: from SCMFSA_7, 2006.03.15, A.T.
 
 theorem :: NAT_1:81
- for k, n being Nat holds
-     k < n iff 1 <= k + 1 & k + 1 <= n;
+  k < n iff 1 <= k + 1 & k + 1 <= n;
 
 :: from BINOM, 2006.05.28, A.T.
 
 scheme :: NAT_1:sch 9
  Ind1{M() -> Nat, P[Nat]} :
-for i being Nat st M() <= i holds P[i]
+  for i being Element of NAT st M() <= i holds P[i]
 provided
   P[M()] and
-  for j being Nat st M() <= j holds P[j] implies P[j+1];
+  for j being Element of NAT st M() <= j holds P[j] implies P[j+1];
 
 :: from INT_2, 2006.05.30, AG
 
 scheme :: NAT_1:sch 10
- CompInd1 { a() -> Nat,P[Nat] } : for k being Nat st k>=a() holds
-P[k]
+ CompInd1 { a() -> Nat, P[Nat] } :
+  for k being Element of NAT st k>=a() holds P[k]
   provided
-   for k being Nat st k>=a() &
-  (for n being Nat st n>=a() & n<k holds P[n]) holds P[k];
+   for k being Element of NAT st k>=a() &
+  (for n being Element of NAT st n>=a() & n<k holds P[n]) holds P[k];
+
+:: Moved from CQC_THE1 on 07.07.2006 by AK
+
+theorem :: NAT_1:82
+  n <= 1 implies n = 0 or n = 1;
+
+theorem :: NAT_1:83
+  n <= 2 implies n = 0 or n = 1 or n = 2;
+
+theorem :: NAT_1:84
+  n <= 3 implies n = 0 or n = 1 or n = 2 or n = 3;
+
+theorem :: NAT_1:85
+  n <= 4 implies n = 0 or n = 1 or n = 2 or n = 3 or n = 4;
+
+theorem :: NAT_1:86
+  n <= 5 implies n = 0 or n = 1 or n = 2 or n = 3 or n = 4 or n = 5;
+
+theorem :: NAT_1:87
+  n <= 6 implies n = 0 or n = 1 or n = 2 or n = 3 or n = 4 or n = 5 or n = 6;
+
+theorem :: NAT_1:88
+  n <= 7 implies n = 0 or n = 1 or n = 2 or n = 3 or n = 4 or n = 5 or n = 6
+  or n = 7;
+
+theorem :: NAT_1:89
+  n <= 8 implies n = 0 or n = 1 or n = 2 or n = 3
+  or n = 4 or n = 5 or n = 6 or n = 7 or n = 8;
+
+theorem :: NAT_1:90
+  n <= 9 implies n = 0 or n = 1 or n = 2 or n = 3
+  or n = 4 or n = 5 or n = 6 or n = 7 or n = 8 or n = 9;
 

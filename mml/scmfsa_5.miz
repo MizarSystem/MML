@@ -9,14 +9,15 @@ environ
  vocabularies AMI_1, SCMFSA_2, RELOC, AMI_3, FUNCT_4, AMI_5, BOOLE, RELAT_1,
       FUNCT_1, CAT_1, AMI_2, ARYTM_1, NAT_1, ABSVALUE, FINSEQ_1, FINSEQ_2,
       CARD_3, FINSET_1, PARTFUN1, FINSEQ_4;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, XCMPLX_0, INT_2, NAT_1, INT_1,
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1,
+ NUMBERS,XCMPLX_0, INT_2, NAT_1, INT_1,
       CARD_3, PARTFUN1, CQC_LANG, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2,
       FINSEQ_4, FINSET_1, FUNCT_2, FUNCT_4, FUNCT_7, STRUCT_0, AMI_1, AMI_3,
       AMI_5, SCMFSA_2, SCMFSA_4, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, MEMBERED, FINSEQ_4, INT_2, FUNCT_7,
       AMI_5, RELOC, SCMFSA_4;
  registrations AMI_1, SCMFSA_2, RELSET_1, FUNCT_1, INT_1, SCMFSA_4, FRAENKEL,
-      AMI_5, MEMBERED, SETFAM_1, CARD_3;
+      AMI_5, MEMBERED, SETFAM_1, CARD_3, ORDINAL1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions AMI_1, TARSKI;
  theorems AMI_1, AMI_3, GRFUNC_1, NAT_1, CQC_LANG, TARSKI, FUNCT_4, FUNCT_1,
@@ -26,10 +27,10 @@ environ
 
 begin  :: Relocatability
 
-reserve j, k, m for Nat;
+reserve j, k, m for Element of NAT;
 
 definition
- let p be FinPartState of SCM+FSA, k be Nat;
+ let p be FinPartState of SCM+FSA, k be Element of NAT;
  func Relocated( p, k ) -> FinPartState of SCM+FSA equals
   Start-At ((IC p)+k)+* IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p;
  correctness;
@@ -41,10 +42,10 @@ Lm1:
   by SCMFSA_2:13,14,XBOOLE_1:70;
 
 theorem Th1:
- for p being FinPartState of SCM+FSA,k being Nat
+ for p being FinPartState of SCM+FSA,k being Element of NAT
   holds DataPart(Relocated(p,k)) = DataPart(p)
   proof
-   let p be FinPartState of SCM+FSA,k be Nat;
+   let p be FinPartState of SCM+FSA,k be Element of NAT;
      set X = (Start-At ((IC p)+k)) |(Int-Locations \/ FinSeq-Locations);
      consider x being Element of dom X;
      now assume dom X <> {};
@@ -94,10 +95,10 @@ A5: dom DataPart p c= Int-Locations \/ FinSeq-Locations by SCMFSA_3:8;
   end;
 
 theorem Th2:
- for p being FinPartState of SCM+FSA,k being Nat
+ for p being FinPartState of SCM+FSA,k being Element of NAT
   holds ProgramPart(Relocated(p,k)) = IncAddr(Shift(ProgramPart(p),k),k)
   proof
-   let p be FinPartState of SCM+FSA,k be Nat;
+   let p be FinPartState of SCM+FSA,k be Element of NAT;
      set X = (Start-At ((IC p)+k)) | the Instruction-Locations of SCM+FSA;
      consider x being Element of dom X;
         now assume dom X <> {};
@@ -147,11 +148,11 @@ theorem Th3:
   end;
 
 theorem Th4:
- for p being FinPartState of SCM+FSA, k being Nat,
+ for p being FinPartState of SCM+FSA, k being Element of NAT,
      l being Instruction-Location of SCM+FSA
   holds l in dom p iff l+k in dom Relocated(p,k)
    proof
-    let p be FinPartState of SCM+FSA,k be Nat,
+    let p be FinPartState of SCM+FSA,k be Element of NAT,
         l be Instruction-Location of SCM+FSA;
     consider m such that
 A1:      l = insloc m by SCMFSA_2:21;
@@ -180,10 +181,10 @@ then A7: dom ProgramPart p c= dom p by GRFUNC_1:8;
   end;
 
 theorem Th5:
- for p being FinPartState of SCM+FSA , k being Nat
+ for p being FinPartState of SCM+FSA , k being Element of NAT
   holds IC SCM+FSA in dom Relocated(p,k)
   proof
-   let p be FinPartState of SCM+FSA, k be Nat;
+   let p be FinPartState of SCM+FSA, k be Element of NAT;
 A1:Relocated(p,k)
     = Start-At ((IC p)+k) +* IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p
    .= Start-At ((IC p)+k) +* (IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p)
@@ -194,10 +195,10 @@ A1:Relocated(p,k)
   end;
 
 theorem Th6:
- for p being FinPartState of SCM+FSA, k being Nat
+ for p being FinPartState of SCM+FSA, k being Element of NAT
   holds IC Relocated(p,k) = (IC p) + k
    proof
-    let p be FinPartState of SCM+FSA, k be Nat;
+    let p be FinPartState of SCM+FSA, k be Element of NAT;
 A1:  Relocated(p,k) = Start-At ((IC p)+k)
       +* IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p
     .= Start-At ((IC p)+k)
@@ -218,19 +219,19 @@ then A3: not IC SCM+FSA in dom(IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p)
 
 theorem Th7:
  for p being FinPartState of SCM+FSA,
-     k being Nat,
+     k being Element of NAT,
      loc being Instruction-Location of SCM+FSA,
      I being Instruction of SCM+FSA
   st loc in dom ProgramPart p & I = p.loc
   holds IncAddr(I, k) = (Relocated(p, k)).(loc + k)
 proof
  let p be FinPartState of SCM+FSA,
-     k be Nat,
+     k be Element of NAT,
      loc be Instruction-Location of SCM+FSA,
      I be Instruction of SCM+FSA such that
 A1: loc in dom ProgramPart p & I = p.loc;
 A2: ProgramPart p c= p by AMI_5:63;
-   consider i being Nat such that
+   consider i being Element of NAT such that
 A3:  loc = insloc i by SCMFSA_2:21;
        insloc(i+k) in { insloc(j+k) : insloc j in dom ProgramPart(p) } by A1,A3
 ;
@@ -253,11 +254,11 @@ A6: I = (ProgramPart p).loc by A1,A2,GRFUNC_1:8;
 end;
 
 theorem Th8:
- for p being FinPartState of SCM+FSA,k being Nat
+ for p being FinPartState of SCM+FSA,k being Element of NAT
   holds Start-At (IC p + k) c= Relocated(p,k)
   proof
    let p be FinPartState of SCM+FSA,
-       k be Nat;
+       k be Element of NAT;
 A1:   Start-At (IC p + k) = {[IC SCM+FSA,IC p + k]} by AMI_5:35;
 A2:   IC SCM+FSA in dom (Relocated(p,k)) by Th5;
 A3:   IC Relocated(p,k) = IC p + k by Th6;
@@ -274,13 +275,13 @@ then A4:   [IC SCM+FSA,IC p + k] in Relocated(p,k) by A2,A3,FUNCT_1:def 4;
 theorem Th9:
  for s being data-only FinPartState of SCM+FSA,
      p being FinPartState of SCM+FSA,
-     k being Nat st IC SCM+FSA in dom p
+     k being Element of NAT st IC SCM+FSA in dom p
   holds
    Relocated((p +* s), k) = Relocated(p,k) +* s
    proof
      let s be data-only FinPartState of SCM+FSA,
          p be FinPartState of SCM+FSA,
-         k be Nat; assume
+         k be Element of NAT; assume
 A1: IC SCM+FSA in dom p;
 then A2: IC SCM+FSA in dom p \/ dom s by XBOOLE_0:def 2;
 A3: not IC SCM+FSA in Int-Locations \/ FinSeq-Locations
@@ -323,13 +324,13 @@ A10: DataPart (p +* s)
    end;
 
 theorem Th10:
- for k being Nat,
+ for k being Element of NAT,
      p being autonomic FinPartState of SCM+FSA ,
      s1, s2 being State of SCM+FSA
     st p c= s1 & Relocated(p,k) c= s2
   holds p c= s1 +* s2|(Int-Locations \/ FinSeq-Locations)
   proof
-   let k be Nat,
+   let k be Element of NAT,
        p be autonomic FinPartState of SCM+FSA ,
        s1, s2 be State of SCM+FSA such that
 A1:  p c= s1 & Relocated(p,k) c= s2;
@@ -400,16 +401,16 @@ end;
 begin :: Main theorems of relocatability
 
 theorem
-    for k being Nat
+    for k being Element of NAT
  for p being autonomic FinPartState of SCM+FSA st IC SCM+FSA in dom p
  for s being State of SCM+FSA st
      p c= s
- for i being Nat
+ for i being Element of NAT
   holds (Computation (s +* Relocated(p,k))).i
        = (Computation s).i +* Start-At (IC (Computation s ).i + k)
         +* ProgramPart (Relocated(p,k))
    proof
-    let k be Nat;
+    let k be Element of NAT;
     let p be autonomic FinPartState of SCM+FSA such that
         A1: IC SCM+FSA in dom p;
     let s be State of SCM+FSA such that
@@ -447,7 +448,7 @@ A7:    IC p = p.IC SCM+FSA by A1,AMI_3:def 16
           DataPart p c= p by AMI_5:62;
 then A8:    DataPart p c= s by A2,XBOOLE_1:1;
 A9:    (Computation s).0 = s by AMI_1:def 19;
-        defpred X[Nat] means
+        defpred X[Element of NAT] means
           (Computation (s +* Relocated(p,k))).$1
           = (Computation s).$1 +* Start-At (IC (Computation s).$1 + k)
                              +* ProgramPart (Relocated(p,k));
@@ -466,7 +467,7 @@ A9:    (Computation s).0 = s by AMI_1:def 19;
 FUNCT_4:79;
       then A10:   X[0];
 
-A11:     for i being Nat st X[i] holds X[i+1]
+A11:     for i being Element of NAT st X[i] holds X[i+1]
 :::       st (Computation (s +* Relocated(p,k))).i
 :::    = (Computation s).i +* Start-At (IC (Computation s).i + k)
 :::       +* ProgramPart (Relocated(p,k))
@@ -475,7 +476,7 @@ A11:     for i being Nat st X[i] holds X[i+1]
 :::       +* Start-At (IC (Computation s).(i+1) + k)
 :::       +* ProgramPart (Relocated(p,k))
   proof
-   let i be Nat
+   let i be Element of NAT
    such that
 A12: (Computation (s +* Relocated(p,k))).i
      = (Computation (s)).i +* Start-At (IC (Computation (s)).i + k)
@@ -543,7 +544,7 @@ A23:  Exec(IncAddr(CurInstr (Computation (s)).i,k),
           +* Start-At (IC (Computation (s)).(i+1) + k)
           +* ProgramPart (Relocated(p,k)) by A12,A13,A23,SCMFSA_3:10;
     end;
-    thus for i being Nat holds X[i] from NAT_1:sch 1 (A10,A11);
+    thus for i being Element of NAT holds X[i] from NAT_1:sch 1 (A10,A11);
 :::    holds (Computation (s +* Relocated(p,k))).i
 :::        = (Computation (s)).i
 :::         +* Start-At (IC (Computation (s)).i + k)
@@ -562,12 +563,12 @@ proof let s be State of SCM+FSA;
 end;
 
 theorem Th12:
- for k being Nat,
+ for k being Element of NAT,
      p being autonomic FinPartState of SCM+FSA ,
      s1, s2, s3 being State of SCM+FSA
     st IC SCM+FSA in dom p & p c= s1 & Relocated(p,k) c= s2 &
        s3 = s1 +* s2|(Int-Locations \/ FinSeq-Locations)
-    holds for i being Nat holds
+    holds for i being Element of NAT holds
      IC (Computation s1).i + k = IC (Computation s2).i &
      IncAddr(CurInstr((Computation s1).i), k) = CurInstr((Computation s2).i) &
      (Computation s1).i|dom (DataPart p)
@@ -575,7 +576,7 @@ theorem Th12:
      (Computation s3).i|(Int-Locations \/ FinSeq-Locations) =
      (Computation s2).i|(Int-Locations \/ FinSeq-Locations)
  proof
-  let k be Nat,
+  let k be Element of NAT,
       p be autonomic FinPartState of SCM+FSA,
       s1,s2,s3 be State of SCM+FSA such that
 A1:   IC SCM+FSA in dom p and
@@ -592,7 +593,7 @@ then A8:   DataPart (Relocated(p,k)) c= s2 by A3,XBOOLE_1:1;
 A9:   p is non programmed by A1,AMI_5:76;
 
 A10:   p c= s3 by A2,A3,A4,Th10;
-     defpred Y[Nat] means
+     defpred Y[Element of NAT] means
      IC (Computation s1).$1 + k = IC (Computation s2).$1 &
      IncAddr(CurInstr((Computation s1).$1), k)
         = CurInstr((Computation s2).$1) &
@@ -649,8 +650,8 @@ A18: dom (s2|(Int-Locations \/ FinSeq-Locations)) =
 AMI_1:def 19;
     end;
     then A19: Y[0];
-A20: for i being Nat st Y[i] holds Y[i+1]
-    proof let i be Nat such that
+A20: for i being Element of NAT st Y[i] holds Y[i+1]
+    proof let i be Element of NAT such that
 A21: IC (Computation s1).i + k = IC (Computation s2).i and
 A22:
     IncAddr(CurInstr((Computation s1).i), k) = CurInstr((Computation s2).i) and
@@ -800,7 +801,7 @@ A65: Cs2i1 = Following Cs2i by AMI_1:def 19
 A66: CurInstr Cs3i = CurInstr Cs1i by A2,A9,A10,SCMFSA_3:18;
 A67: Cs3i1 = Following Cs3i by AMI_1:def 19
             .= Exec (CurInstr Cs1i, Cs3i) by A66;
-  consider j being Nat such that
+  consider j being Element of NAT such that
 A68: IC Cs1i = insloc j by SCMFSA_2:21;
 A69: Next (IC Cs1i + k) = Next (insloc(j + k)) by A68,SCMFSA_4:def 1
                        .= insloc(j+k+1) by SCMFSA_2:32
@@ -1626,10 +1627,10 @@ A208:  dom DPp c= Int-Locations \/ FinSeq-Locations by SCMFSA_3:8;
    end;
    suppose
 A209: da = x;
-    then consider k1 being Nat such that
+    then consider k1 being Element of NAT such that
 A210:  k1 = abs(Cs1i.db) & Cs1i1.x = (Cs1i.f)/.k1
              by A64,A202,SCMFSA_2:98;
-    consider k2 being Nat such that
+    consider k2 being Element of NAT such that
 A211:  k2 = abs(Cs2i.db) & Cs2i1.x = (Cs2i.f)/.k2
              by A22,A65,A203,A209,SCMFSA_2:98;
         DPp c= p by AMI_5:62;
@@ -1664,10 +1665,10 @@ A214:  Cs3i1.f = Cs3i.f by A67,A202,SCMFSA_2:98;
    end;
    suppose
 A215:   da = x;
-    then consider k1 being Nat such that
+    then consider k1 being Element of NAT such that
 A216:  k1 = abs(Cs3i.db) & Cs3i1.x = (Cs3i.f)/.k1
              by A67,A202,SCMFSA_2:98;
-    consider k2 being Nat such that
+    consider k2 being Element of NAT such that
 A217:  k2 = abs(Cs2i.db) & Cs2i1.x = (Cs2i.f)/.k2
              by A22,A65,A203,A215,SCMFSA_2:98;
     thus (Cs3i1|(Int-Locations \/ FinSeq-Locations)).x =
@@ -1722,10 +1723,10 @@ A227:  dom DPp c= Int-Locations \/ FinSeq-Locations by SCMFSA_3:8;
    end;
    suppose
 A228: f = x;
-    then consider k1 being Nat such that
+    then consider k1 being Element of NAT such that
 A229:  k1 = abs(Cs1i.db) & Cs1i1.x = Cs1i.f +*(k1,Cs1i.da)
              by A64,A220,SCMFSA_2:99;
-    consider k2 being Nat such that
+    consider k2 being Element of NAT such that
 A230:  k2 = abs(Cs2i.db) & Cs2i1.x = Cs2i.f +*(k2,Cs2i.da)
              by A22,A65,A221,A228,SCMFSA_2:99;
         DPp c= p by AMI_5:62;
@@ -1760,10 +1761,10 @@ A233:  Cs3i1.f = Cs3i.f by A67,A220,SCMFSA_2:99;
    end;
    suppose
 A234:   f = x;
-    then consider k1 being Nat such that
+    then consider k1 being Element of NAT such that
 A235:  k1 = abs(Cs3i.db) & Cs3i1.x = Cs3i.f +*(k1,Cs3i.da)
              by A67,A220,SCMFSA_2:99;
-    consider k2 being Nat such that
+    consider k2 being Element of NAT such that
 A236:  k2 = abs(Cs2i.db) & Cs2i1.x = Cs2i.f +*(k2,Cs2i.da)
              by A22,A65,A221,A234,SCMFSA_2:99;
     thus (Cs3i1|(Int-Locations \/ FinSeq-Locations)).x =
@@ -1904,10 +1905,10 @@ SCMFSA_2:101
    end;
    suppose
 A261: f = x;
-    then consider k1 being Nat such that
+    then consider k1 being Element of NAT such that
 A262:  k1 = abs(Cs1i.da) & Cs1i1.x = k1 |-> 0
              by A64,A255,SCMFSA_2:101;
-    consider k2 being Nat such that
+    consider k2 being Element of NAT such that
 A263:  k2 = abs(Cs2i.da) & Cs2i1.x = k2 |-> 0
              by A22,A65,A256,A261,SCMFSA_2:101;
         DPp c= p by AMI_5:62;
@@ -1941,10 +1942,10 @@ A266:  Cs3i1.f = Cs3i.f by A67,A255,SCMFSA_2:101;
    end;
    suppose
 A267:   f = x;
-    then consider k1 being Nat such that
+    then consider k1 being Element of NAT such that
 A268:  k1 = abs(Cs3i.da) & Cs3i1.x = k1 |-> 0
              by A67,A255,SCMFSA_2:101;
-    consider k2 being Nat such that
+    consider k2 being Element of NAT such that
 A269:  k2 = abs(Cs2i.da) & Cs2i1.x = k2 |-> 0
              by A22,A65,A256,A267,SCMFSA_2:101;
     thus (Cs3i1|(Int-Locations \/ FinSeq-Locations)).x =
@@ -1970,18 +1971,18 @@ A271:  Cs3i1.d = Cs3i.d by A67,A255,A270,SCMFSA_2:101;
 
     end;
     end;
-   thus for i being Nat holds Y[i] from NAT_1:sch 1(A19,A20);
+   thus for i being Element of NAT holds Y[i] from NAT_1:sch 1(A19,A20);
 end;
 
 theorem Th13:
  for p being autonomic FinPartState of SCM+FSA ,
-     k being Nat
+     k being Element of NAT
   st IC SCM+FSA in dom p
   holds
   p is halting iff Relocated(p,k) is halting
   proof
    let p be autonomic FinPartState of SCM+FSA ,
-       k be Nat;
+       k be Element of NAT;
    assume
 A1: IC SCM+FSA in dom p;
 
@@ -1995,7 +1996,7 @@ A3:  Relocated(p,k) c= t;
      reconsider s = t +* p as State of SCM+FSA;
 A4: p c= t +* p by FUNCT_4:26;
      then s is halting by A2,AMI_1:def 26;
-     then consider u being Nat such that
+     then consider u being Element of NAT such that
 A5:  CurInstr((Computation s).u) = halt SCM+FSA by AMI_1:def 20;
       reconsider s3 = s +*
        t|(Int-Locations \/ FinSeq-Locations) as State of SCM+FSA by AMI_5:82;
@@ -2016,7 +2017,7 @@ A8: p c= t;
     reconsider s = t +* Relocated(p, k) as State of SCM+FSA;
 A9: Relocated(p,k) c= t +* Relocated(p,k) by FUNCT_4:26;
      then s is halting by A7,AMI_1:def 26;
-     then consider u being Nat such that
+     then consider u being Element of NAT such that
 A10:  CurInstr((Computation s).u) = halt SCM+FSA by AMI_1:def 20;
       reconsider s3 =
        t +* s|(Int-Locations \/ FinSeq-Locations) as State of SCM+FSA
@@ -2032,16 +2033,16 @@ A12:    not 0 in {6,7,8} by ENUMSET1:def 1;
   end;
 
 theorem Th14:
- for k being Nat
+ for k being Element of NAT
  for p being autonomic FinPartState of SCM+FSA st IC SCM+FSA in dom p
  for s being State of SCM+FSA st Relocated(p,k) c= s
   holds
-  for i being Nat holds
+  for i being Element of NAT holds
     (Computation s).i
      = (Computation(s +* p)).i +* Start-At (IC(Computation(s +* p)).i + k)
        +* s|dom ProgramPart p +* ProgramPart (Relocated(p,k))
  proof
-   let k be Nat;
+   let k be Element of NAT;
    let p be autonomic FinPartState of SCM+FSA such that
 A1:  IC SCM+FSA in dom p;
    let s be State of SCM+FSA such that
@@ -2074,7 +2075,7 @@ A12: dom DataPart p misses dom ProgramPart p by AMI_5:71;
  set PP = ProgramPart p;
  set DP = DataPart p;
  set PR = ProgramPart (Relocated(p,k));
- defpred X[Nat] means (Computation s).$1
+ defpred X[Element of NAT] means (Computation s).$1
     = (Computation(s +* p)).$1 +* Start-At (IC(Computation(s +* p)).$1 + k)
      +* s|dom ProgramPart p +* ProgramPart (Relocated(p,k));
 
@@ -2103,7 +2104,7 @@ A12: dom DataPart p misses dom ProgramPart p by AMI_5:71;
        +* s|dom ProgramPart p +* ProgramPart (Relocated(p,k)) by AMI_1:def 19;
   end;
   then A15: X[0];
-A16:     for i being Nat st X[i] holds X[i+1]
+A16:     for i being Element of NAT st X[i] holds X[i+1]
 :::       st (Computation s).i
 :::    = (Computation (s +* p)).i +* Start-At (IC (Computation(s +* p)).i + k)
 :::      +* s|dom ProgramPart p +* ProgramPart (Relocated(p,k))
@@ -2112,7 +2113,7 @@ A16:     for i being Nat st X[i] holds X[i+1]
 :::       +* Start-At (IC (Computation (s +* p)).(i+1) + k)
 :::       +* s|dom ProgramPart p +* ProgramPart (Relocated(p,k))
   proof
-   let i be Nat
+   let i be Element of NAT
    such that
 A17: (Computation s).i
     = (Computation (s +* p)).i +* Start-At (IC (Computation (s +* p)).i + k)
@@ -2222,7 +2223,7 @@ SCMFSA_4:30
 SCMFSA_4:28;
     end;
 
-    thus for i being Nat holds X[i] from NAT_1:sch 1 (A15,A16);
+    thus for i being Element of NAT holds X[i] from NAT_1:sch 1 (A15,A16);
 :::    holds
 :::    (Computation s).i
 :::    = (Computation(s +* p)).i +* Start-At (IC(Computation(s +* p)).i + k)
@@ -2230,17 +2231,17 @@ SCMFSA_4:28;
   end;
 
 theorem Th15:
-  for k being Nat
+  for k being Element of NAT
   for p being FinPartState of SCM+FSA st IC SCM+FSA in dom p
   for s being State of SCM+FSA st p c= s & Relocated(p,k) is autonomic
  holds
-  for i being Nat holds
+  for i being Element of NAT holds
    (Computation s).i
     = (Computation(s +* Relocated(p,k))).i
       +* Start-At (IC(Computation(s +* Relocated(p,k))).i -' k)
       +* s|dom ProgramPart Relocated(p,k) +* ProgramPart (p)
   proof
-   let k be Nat;
+   let k be Element of NAT;
    let p be FinPartState of SCM+FSA such that
 A1:IC SCM+FSA in dom p;
    let s be State of SCM+FSA such that
@@ -2287,7 +2288,7 @@ A17: dom ProgramPart Relocated(p,k) =
  set PP = ProgramPart p;
  set DP = DataPart p;
  set PR = ProgramPart Relocated(p,k);
-  defpred X[Nat] means (Computation s).$1
+  defpred X[Element of NAT] means (Computation s).$1
      = (Computation(s +* Relocated(p,k))).$1
      +* Start-At (IC(Computation(s +* Relocated(p,k))).$1 -' k)
      +* s|(dom ProgramPart Relocated(p,k)) +* ProgramPart p;
@@ -2323,7 +2324,7 @@ then (Computation s).0
      +* s|(dom ProgramPart Relocated(p,k))
      +* ProgramPart p by AMI_1:def 19;
      then A18:  X[0];
-A19:     for i being Nat st X[i] holds X[i+1]
+A19:     for i being Element of NAT st X[i] holds X[i+1]
 :::       st (Computation s).i
 :::    = (Computation (s +* Relocated(p,k))).i
 :::       +* Start-At (IC (Computation(s +* Relocated(p,k))).i -' k)
@@ -2333,7 +2334,7 @@ A19:     for i being Nat st X[i] holds X[i+1]
 :::       +* Start-At (IC (Computation (s +* Relocated(p,k))).(i+1) -' k)
 :::       +* s|(dom ProgramPart Relocated(p,k)) +* ProgramPart p
   proof
-   let i be Nat
+   let i be Element of NAT
    such that
 A20: (Computation s).i
     = (Computation (s +* Relocated(p,k))).i
@@ -2394,12 +2395,12 @@ then A29:  IC (Computation (s +* Relocated(p,k))).i
        in dom ProgramPart(Relocated(p,k)) by A3,A28,SCMFSA_3:17;
 A30:  ProgramPart(Relocated(p,k)) c= (Computation (s +* Relocated(p,k))).i
                                          by A28,AMI_5:64;
-   consider jk being Nat such that
+   consider jk being Element of NAT such that
 A31: IC (Computation (s +* Relocated(p,k))).i = insloc jk by SCMFSA_2:21;
 
        insloc jk in { insloc(j+k) : insloc j in dom ProgramPart(p) }
                    by A29,A31,Th3;
-   then consider j being Nat such that
+   then consider j being Element of NAT such that
 A32: insloc jk = insloc(j+k) & insloc j in dom ProgramPart(p);
 
 A33: insloc(j+k) -' k + k = insloc j + k -'k + k by SCMFSA_4:def 1
@@ -2473,7 +2474,7 @@ then A37:
      +* s|dom ProgramPart Relocated(p,k) +* ProgramPart p by A22;
     end;
 
-   thus for i being Nat holds X[i]
+   thus for i being Element of NAT holds X[i]
 :::    (Computation s).i
 :::     = (Computation(s +* Relocated(p,k))).i
 :::     +* Start-At (IC(Computation(s +* Relocated(p,k))).i -' k)
@@ -2483,20 +2484,20 @@ then A37:
 
 theorem Th16:
  for p being FinPartState of SCM+FSA st IC SCM+FSA in dom p
- for k being Nat
+ for k being Element of NAT
    holds
   p is autonomic iff Relocated(p,k) is autonomic
   proof
    let p be FinPartState of SCM+FSA such that
 A1:IC SCM+FSA in dom p;
-   let k be Nat;
+   let k be Element of NAT;
    hereby assume
 A2: p is autonomic;
    thus Relocated(p,k) is autonomic
    proof
     let s1,s2 be State of SCM+FSA such that
 A3:   Relocated(p,k) c= s1 & Relocated(p,k) c= s2;
-    let i be Nat;
+    let i be Element of NAT;
 A4:  (Computation s1).i
      = (Computation(s1 +* p)).i +* Start-At (IC(Computation(s1 +* p)).i + k)
         +* s1|dom ProgramPart p +* ProgramPart (Relocated(p,k))
@@ -2619,7 +2620,7 @@ A27: Relocated(p,k) is autonomic;
    proof
     let s1,s2 be State of SCM+FSA such that
 A28:   p c= s1 & p c= s2;
-    let i be Nat;
+    let i be Element of NAT;
 A29:  (Computation s1).i
      = (Computation(s1 +* Relocated(p,k))).i
      +* Start-At (IC(Computation(s1 +* Relocated(p,k))).i -' k)
@@ -2752,16 +2753,16 @@ A51:    (Computation s1).i|dom (Start-At (IC p) +* ProgramPart p)
 
 theorem Th17:
  for p being halting autonomic FinPartState of SCM+FSA st IC SCM+FSA in dom p
- for k being Nat holds
+ for k being Element of NAT holds
   DataPart(Result(p)) = DataPart(Result(Relocated(p,k)))
   proof
    let p be halting autonomic FinPartState of SCM+FSA such that
 A1: IC SCM+FSA in dom p;
-   let k be Nat;
+   let k be Element of NAT;
    consider s being State of SCM+FSA such that
 A2: p c= s by AMI_3:39;
        s is halting by A2,AMI_1:def 26;
-   then consider j1 being Nat such that
+   then consider j1 being Element of NAT such that
 A3: Result(s) = (Computation s).j1 and
 A4: CurInstr(Result(s)) = halt SCM+FSA by AMI_1:def 22;
    consider t being State of SCM+FSA such that
@@ -2805,7 +2806,7 @@ A9: Relocated(p,k) is halting & Relocated(p,k) is autonomic
 theorem
     for F being PartFunc of FinPartSt SCM+FSA, FinPartSt SCM+FSA,
      p being FinPartState of SCM+FSA st IC SCM+FSA in dom p & F is data-only
- for k being Nat
+ for k being Element of NAT
    holds
  p computes F iff Relocated( p,k) computes F
   proof
@@ -2813,7 +2814,7 @@ theorem
       p be FinPartState of SCM+FSA such that
 A1: IC SCM+FSA in dom p and
 A2: F is data-only;
-  let k be Nat;
+  let k be Element of NAT;
   hereby assume A3: p computes F;
    thus Relocated( p,k) computes F
     proof

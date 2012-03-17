@@ -22,12 +22,12 @@ environ
  theorems TARSKI, ZFMISC_1, FINSEQ_1, MCART_1, NAT_1, FUNCT_1, FUNCT_2,
       FUNCT_3, FUNCOP_1, MODAL_1, FUNCT_6, FINSEQ_2, FINSEQ_3, ENUMSET1,
       TREES_1, TREES_2, REAL_1, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1,
-      XXREAL_0;
+      XXREAL_0, ORDINAL1;
  schemes NAT_1, CARD_3, XBOOLE_0, FINSEQ_1;
 
 begin :: Finite sets
 
- reserve x,y,z for set, i,k,n for Nat, p,q,r,s for FinSequence,
+ reserve x,y,z for set, i,k,n for Element of NAT, p,q,r,s for FinSequence,
   w for FinSequence of NAT, X,Y for set, f for Function;
 
 Lm1: 1 <= n & n <= len p implies (p^q).n = p.n
@@ -995,7 +995,7 @@ registration let T be Tree;
   coherence by Lm2,Th33;
 end;
 
-registration let n be Nat, T be Tree;
+registration let n be Element of NAT, T be Tree;
  cluster n |-> T -> Tree-yielding;
   coherence
    proof 0 |-> T = {} & (n = 0 or n <> 0) by FINSEQ_2:72;
@@ -1011,7 +1011,7 @@ registration let T be finite Tree;
   coherence by Th34;
 end;
 
-registration let n be Nat, T be finite Tree;
+registration let n be Element of NAT, T be finite Tree;
  cluster n |-> T -> FinTree-yielding;
   coherence
    proof 0 |-> T = {} & (n = 0 or n <> 0) by FINSEQ_2:72;
@@ -1027,7 +1027,7 @@ registration let T be DecoratedTree;
   coherence by Lm2,Th35;
 end;
 
-registration let n be Nat, T be DecoratedTree;
+registration let n be Element of NAT, T be DecoratedTree;
  cluster n |-> T -> DTree-yielding;
   coherence
    proof 0 |-> T = {} & (n = 0 or n <> 0) by FINSEQ_2:72;
@@ -1456,7 +1456,7 @@ A12:      w^<*k*> in T & n <= k;
 A13:      now assume
 A14:       w = {};
           then <*k*> in T & <*k*> <> {} by A12,FINSEQ_1:47;
-         then consider m being Nat,q such that
+         then consider m being Element of NAT,q such that
 A15:       m < len p & q in p.(m+1) & <*k*> = <*m*>^q by A2;
              <*k*>.1 = k & (<*m*>^q).1 = m by FINSEQ_1:58,def 8;
 then A16:       n < len p by A12,A15,XXREAL_0:2;
@@ -1469,9 +1469,10 @@ NAT*
         end;
            now assume
        w <> {};
-         then consider q being FinSequence of NAT, m being Nat such that
+         then consider q being FinSequence of NAT, m being Element of NAT
+         such that
 A17:       w = <*m*>^q by MODAL_1:4;
-         consider m' being Nat,r such that
+         consider m' being Element of NAT,r such that
 A18:       m' < len p & r in p.(m'+1) & w^<*k*> = <*m'*>^r by A2,A12;
 A19:       w^<*k*> = <*m*>^(q^<*k*>) & w^<*n*> = <*m*>^(q^<*n*>)
            by A17,FINSEQ_1:45;
@@ -1580,7 +1581,7 @@ then A8: <*n*> in T by A1,A7,Def15;
       thus r in T|<*n*> implies r in S
         proof assume r in T|<*n*>;
 then A9:       {} <> <*n*> & <*n*>^r in T by A8,TREES_1:def 9;
-         consider m being Nat, q such that
+         consider m being Element of NAT, q such that
 A10:       m < len p & q in p.(m+1) & <*n*>^r = <*m*>^q by A1,A9,Def15;
              (<*n*>^r).1 = n & (<*m*>^q).1 = m by FINSEQ_1:58;
          hence thesis by A10,FINSEQ_1:46;
@@ -1600,7 +1601,7 @@ A2:  tree(p)-level 1 = {<*n*>: n < len p} &
     tree(q)-level 1 = {<*k*>: k < len q} &
     (for n st n < len p holds (tree(p))|<*n*> = p.(n+1)) &
      for n st n < len q holds (tree(q))|<*n*> = q.(n+1) by Th52;
-       now let n1,n2 be Nat; assume
+       now let n1,n2 be Element of NAT; assume
          {<*i*>: i < n1} = {<*k*>: k < n2} & n1 < n2;
       then <*n1*> in {<*i*>: i < n1};
      then consider i such that
@@ -1612,9 +1613,10 @@ A3:   <*n1*> = <*i*> & i < n1;
 then A4:  len p = len q by REAL_1:def 5;
        now let i; assume
 A5:    i >= 1 & i <= len p;
-     then consider k such that
+     then consider k be Nat such that
 A6:    i = 1+k by NAT_1:28;
-         k < len p by A5,A6,NAT_1:38;
+     reconsider k as Element of NAT by ORDINAL1:def 13;
+      k < len p by A5,A6,NAT_1:38;
       then p.i = (tree(p))|<*k*> & q.i = (tree(q))|<*k*> by A4,A6,Th52;
      hence p.i = q.i by A1;
     end;
@@ -1654,9 +1656,8 @@ then A1:     p = {} or ex n,q st n < len {} & q in {} .(n+1) & p = <*n*>^q
         by Def15,Th23;
       assume not thesis;
       then consider n,q such that
-A2:     n < len {} & q in {} .(n+1) & p = <*n*>^q by A1,TARSKI:def 1,TREES_1:56
-;
-          n < 0 by A2,FINSEQ_1:25;
+A2:   n < len {} & q in {} .(n+1) & p = <*n*>^q by A1,TARSKI:def 1,TREES_1:56;
+      n < 0 by A2,FINSEQ_1:25;
       hence contradiction;
      end;
    assume p in elementary_tree 0; then p = {} by TARSKI:def 1,TREES_1:56;
@@ -2288,10 +2289,11 @@ theorem Th81:
   proof let t be finite Tree; assume t in rng w;
    then consider x such that
 A1:  x in dom w & t = w.x by FUNCT_1:def 5;
-   reconsider x as Nat by A1;
+   reconsider x as Element of NAT by A1;
 A2:  1 <= x & len w >= x by A1,FINSEQ_3:27;
-   then consider n such that
+   then consider n be Nat such that
 A3:  x = 1+n by NAT_1:28;
+   reconsider n as Element of NAT by ORDINAL1:def 13;
      n < len w & {} in t & <*n*>^{} = <*n*>
      by A2,A3,FINSEQ_1:47,NAT_1:38,TREES_1:47;
     then t = (tree(w))|<*n*> & <*n*> in tree(w) & <*n*> <> {}
@@ -2351,17 +2353,18 @@ end;
 definition
  let p be FinSequence such that
 A1: p is DTree-yielding;
- defpred P[Nat, set] means
+ defpred P[Element of NAT, set] means
        ex T being DecoratedTree st T = p.$1 & $2 = T.{};
  func roots p -> FinSequence means
-   dom it = dom p & for i being Nat st i in dom p
+   dom it = dom p & for i being Element of NAT st i in dom p
    ex T being DecoratedTree st T = p.i & it.i = T.{};
   existence proof
 A2: Seg len p = dom p by FINSEQ_1:def 3;
-A3: for k being Nat, y1, y2 being set st k in Seg len p & P[k,y1] & P[k,y2]
+A3: for k being Element of NAT, y1, y2 being set
+ st k in Seg len p & P[k,y1] & P[k,y2]
           holds y1=y2;
-A4: for k being Nat st k in Seg len p ex x being set st P[k,x]
-  proof let k be Nat; assume k in Seg len p;
+A4: for k being Element of NAT st k in Seg len p ex x being set st P[k,x]
+  proof let k be Element of NAT; assume k in Seg len p;
      then p.k in rng p & rng p is constituted-DTrees
          by A1,A2,Def11,FUNCT_1:def 5;
      then reconsider T = p.k as DecoratedTree by Def5;
@@ -2369,7 +2372,8 @@ A4: for k being Nat st k in Seg len p ex x being set st P[k,x]
     thus thesis;
    end;
    consider q being FinSequence such that
-A5: dom q = Seg len p & for k being Nat st k in Seg len p holds P[k,q.k]
+A5: dom q = Seg len p & for k being Element of NAT st k in Seg len p
+ holds P[k,q.k]
                         from FINSEQ_1:sch 1(A3, A4);
    take q;
    thus dom q = dom p by A5,FINSEQ_1:def 3;
@@ -2377,9 +2381,11 @@ A5: dom q = Seg len p & for k being Nat st k in Seg len p holds P[k,q.k]
   end;
   uniqueness proof
    let x1, x2 be FinSequence such that
-A6:   (dom x1 = dom p & for i being Nat st i in dom p holds P[i,x1.i]) &
-     (dom x2 = dom p & for i being Nat st i in dom p holds P[i,x2.i]);
-      now let k be Nat; assume k in dom p;
+A6:   (dom x1 = dom p & for i being Element of NAT st i in dom p
+            holds P[i,x1.i]) &
+     (dom x2 = dom p & for i being Element of NAT st i in dom p
+      holds P[i,x2.i]);
+      now let k be Element of NAT; assume k in dom p;
     then P[k,x1.k] & P[k,x2.k] by A6;
     hence x1.k = x2.k;
    end;

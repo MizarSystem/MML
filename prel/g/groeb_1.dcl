@@ -44,7 +44,6 @@
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="REALSET2"/>
 <ArticleID name="SEQM_3"/>
@@ -64,10 +63,10 @@
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="10">
-<Func kind="K" nr="413">
+<Func kind="K" nr="405">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="433">
+<Func kind="K" nr="425">
 <LocusVar nr="1"/>
 </Func>
 </Func>

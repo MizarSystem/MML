@@ -35,10 +35,10 @@
 <ArticleID name="COMPLFLD"/>
 <ArticleID name="ALGSEQ_1"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="FINSEQ_4"/>
 <ArticleID name="MATRLIN"/>
 <ArticleID name="RELAT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="POLYNOM3"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="MEMBERED"/>
@@ -128,7 +128,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="482">
+<Func kind="K" nr="484">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -149,7 +149,7 @@
 <Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="483">
+<Func kind="K" nr="485">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -165,7 +165,7 @@
 <Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="483">
+<Func kind="K" nr="485">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -188,7 +188,7 @@
 <Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="485">
+<Func kind="K" nr="487">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>

@@ -11,7 +11,8 @@ environ
       FINSEQ_2, SGRAPH1, BINOP_1, SETWISEO, FINSOP_1, FINSUB_1, NAT_1, CARD_3,
       FINSET_1, JORDAN3, FUNCOP_1, CQC_LANG, FINSEQ_4, QC_LANG1, RFINSEQ,
       SQUARE_1, CARD_1, FINSEQ_5, REALSET1, ROUGHS_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, XXREAL_0, NAT_1, RELAT_1, FUNCT_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1,
+      XCMPLX_0,XXREAL_0, NAT_1, RELAT_1, FUNCT_1,
       BINOP_1, ZFMISC_1, RLVECT_1, NUMBERS, BINOP_2, VECTSP_1, FUNCT_2,
       SETWISEO, FINSEQ_4, PARTFUN1, GROUP_4, FINSUB_1, NEWTON, FINSOP_1,
       SETWOP_2, FINSEQ_1, STRUCT_0, MATRIX_2, MATRIX_3, FINSET_1, JORDAN3,
@@ -22,7 +23,7 @@ environ
       FINSEQ_5, ALGSTR_1, GROUP_4, MATRIX_3, JORDAN3;
  registrations STRUCT_0, INT_1, RELSET_1, VECTSP_1, XREAL_0, FUNCT_2, FINSEQ_1,
       GROUP_1, FINSET_1, FINSUB_1, PARTFUN1, MATRIX_2, ORDINAL1, FVSUM_1,
-      XXREAL_0;
+      XXREAL_0, NAT_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, XBOOLE_0, BINOP_1, RLVECT_1, FINSEQ_1, MATRIX_1, RVSUM_1,
       JORDAN3, FINSEQ_2, COMPLSP1;
@@ -31,7 +32,7 @@ environ
       FUNCT_2, XBOOLE_0, GROUP_4, ENUMSET1, ZFMISC_1, BINARITH, JORDAN3,
       REAL_1, XREAL_1, FINSEQ_5, INTEGRA2, FUNCOP_1, FINSUB_1, XBOOLE_1,
       CQC_LANG, RELAT_1, FINSEQ_4, SUBSET_1, RFINSEQ, FINSEQ_3, GROUP_7,
-      XXREAL_0;
+      XXREAL_0, ORDINAL1;
  schemes NAT_1, FUNCT_2, FINSEQ_1, FINSEQ_2;
 
 begin
@@ -244,9 +245,10 @@ proof let p be Permutation of Seg 2;
   now assume A2: p=<*1,2*>;
    set p0=<*1,2*>;
    A3: len p0=2 by FINSEQ_1:61;
-   consider i,j such that
+   consider i,j being Nat such that
     A4: i in dom p & j in dom p & i<>j & p.i=j & p.j=i &
-     for k st k <>i & k<>j & k in dom p holds p.k=k by A1,MATRIX_2:def 14;
+     for k being Nat st k <>i & k<>j & k in dom p holds p.k=k
+      by A1,MATRIX_2:def 14;
     A5: dom p = Seg len p0 by A2,FINSEQ_1:def 3 .={1,2} by A3,FINSEQ_1:4;then
     A6: i=1 or i=2 by A4,TARSKI:def 2;
     now per cases by A4,A6,A5,TARSKI:def 2;
@@ -264,10 +266,11 @@ proof let p be Permutation of Seg 2;
 end;
 
 theorem Th5:
-  for D being non empty set, f being FinSequence of D, k2 being Nat st
+  for D being non empty set, f being FinSequence of D, k2 being Element of NAT
+  st
     1<=k2 & k2< len f holds
      f = mid(f,1,k2)^mid(f,k2+1,len f)
-proof let D be non empty set, f be FinSequence of D, k2 be Nat;
+proof let D be non empty set, f be FinSequence of D, k2 be Element of NAT;
   assume A1: 1<=k2 & k2< len f;then
 A2: mid(f,1,len f) = mid(f,1,k2)^mid(f,k2+1,len f) by INTEGRA2:4;
   1< len f by A1,XXREAL_0:2;
@@ -339,18 +342,19 @@ proof let a be Element of Group_of_Perm 2;
   A1: q=a & q is_transposition;
   A2: the carrier of Group_of_Perm 2 = Permutations 2 by MATRIX_2:def 13;
   reconsider b=a as Permutation of Seg 2 by MATRIX_2:def 11,A2;
-  consider i,j such that
+  consider i,j being Nat such that
   A3: i in dom q & j in dom q & i<>j & q.i=j & q.j=i &
-   for k st k <>i & k<>j & k in dom q holds q.k=k by A1,MATRIX_2:def 14;
+   for k being Nat st k <>i & k<>j & k in dom q holds q.k=k
+    by A1,MATRIX_2:def 14;
   b is_transposition by MATRIX_2:def 14,A1,A3;
  hence a = <*2,1*> by Th4;
 end;
 
 theorem Th9:
-  for n being Nat,a,b being Element of Group_of_Perm n,
+  for n being Element of NAT,a,b being Element of Group_of_Perm n,
       pa,pb being Element of Permutations n st
         a=pa & b=pb holds a*b=pb*pa
- proof let n be Nat,a,b be Element of Group_of_Perm n,
+ proof let n be Element of NAT,a,b be Element of Group_of_Perm n,
   pa,pb be Element of Permutations n;
   assume A1: a=pa & b=pb;
   a*b=(the mult of Group_of_Perm n).(a,b) by GROUP_1:def 1
@@ -394,10 +398,12 @@ proof let l be FinSequence of Group_of_Perm 2;
      (ex q being Element of Permutations 2
               st l.i=q & q is_transposition));then
   ( ex t being Nat st len l = 2 * t + 0 & 0 < 2 ) or 0 = 0 & 2 = 0
-                               by NAT_1:def 2;then
-  consider t being Nat such that
-  A2: len l = 2 * t;
-  defpred P[Nat] means
+                               by NAT_1:def 2;
+  then consider t being Nat such that
+  A2a: len l = 2 * t;
+  reconsider t as Element of NAT by ORDINAL1:def 13;
+  A2: len l = 2 * t by A2a;
+  defpred P[Element of NAT] means
    for f being FinSequence of Group_of_Perm 2 st len f=2*$1 &
     (for i st i in dom f holds
      (ex q being Element of Permutations 2 st f.i=q & q is_transposition))
@@ -419,8 +425,8 @@ proof let l be FinSequence of Group_of_Perm 2;
     hence Product f = <*1,2*> by A4,GROUP_4:11;
    end;then
   A5: P[0];
-  A6: for s being Nat st P[s] holds P[s+1]
-   proof let s be Nat;
+  A6: for s being Element of NAT st P[s] holds P[s+1]
+   proof let s be Element of NAT;
     assume P[s];then
      A7: for f being FinSequence of Group_of_Perm 2 st
      len f=2*s & (for i st i in dom f holds
@@ -548,7 +554,7 @@ proof let l be FinSequence of Group_of_Perm 2;
      end;
     hence P[s+1];
    end;
-  for s being Nat holds P[s] from NAT_1:sch 1(A5,A6);
+  for s being Element of NAT holds P[s] from NAT_1:sch 1(A5,A6);
  hence Product l = <*1,2*> by A2,A1;
 end;
 
@@ -629,7 +635,7 @@ proof let K be Field, M be Matrix of 2,K;
      set dj=(the mult of K) $$ (Path_matrix(p2,M));
      consider f3 being Function of NAT,the carrier of K such that
      A31: f3.1 = (Path_matrix(p1,M)).1 &
-     (for n being Nat st 0 <> n & n < 2 holds
+     (for n being Element of NAT st 0 <> n & n < 2 holds
        f3.(n + 1) = (the mult of K).(f3.n,(Path_matrix(p1,M)).(n + 1)))
        & di = f3.2 by FINSOP_1:def 1,A4;
      f3.(1+1)=(the mult of K).(f3.1,(Path_matrix(p1,M)).(1+1)) by A31
@@ -637,7 +643,7 @@ proof let K be Field, M be Matrix of 2,K;
      A32: di=(M*(1,1))*(M*(2,2)) by A31;
      consider f4 being Function of NAT,the carrier of K such that
      A33: f4.1 = (Path_matrix(p2,M)).1 &
-     (for n being Nat st 0 <> n & n < 2 holds
+     (for n being Element of NAT st 0 <> n & n < 2 holds
        f4.(n + 1) = (the mult of K).(f4.n,(Path_matrix(p2,M)).(n + 1)))
        & dj = f4.2 by FINSOP_1:def 1,A5;
      f4.(1+1)=(the mult of K).(f4.1,(Path_matrix(p2,M)).(1+1)) by A33
@@ -653,14 +659,20 @@ proof let K be Field, M be Matrix of 2,K;
      A40: Product l0=Product <*> (the carrier of Group_of_Perm 2)
                    .= 1.(Group_of_Perm(2)) by GROUP_4:11
                    .= p1 by Lm2,MATRIX_2:28;
-     for i being Nat st i in dom l0
-               ex q being Element of Permutations 2
-              st l0.i=q & q is_transposition by A38,FINSEQ_1:4,def 3;then
-     A41: ex l be FinSequence of Group_of_Perm 2
-       st (len l)mod 2=0 & s1=Product l &
-       for i st i in dom l
-        ex q being Element of Permutations 2
-              st l.i=q & q is_transposition by A38,A39,A40;
+A41: ex l be FinSequence of Group_of_Perm 2
+     st (len l)mod 2=0 & s1=Product l &
+     for i st i in dom l
+     ex q being Element of Permutations 2
+     st l.i=q & q is_transposition
+     proof
+       take l0;
+       thus (len l0)mod 2=0 & s1=Product l0 by A38,A39,A40;
+       let i;
+       for i being Element of NAT st i in dom l0
+       ex q being Element of Permutations 2
+       st l0.i=q & q is_transposition by A38,FINSEQ_1:4,def 3;
+       hence thesis;
+     end;
 A42:  len Permutations 2 = 2 by MATRIX_2:20; then
      A43: p1 is even by MATRIX_2:def 15,A41;
      A44: f.p1 = -(di,p1) by A35 .=di by A43,MATRIX_2:def 16;
@@ -709,27 +721,27 @@ proof
 end;
 end;
 
-theorem Th13: for K being Field, n,m being Nat holds
+theorem Th13: for K being Field, n,m being Element of NAT holds
 len (0.(K,n,m))=n & dom (0.(K,n,m))=Seg n
-proof let K be Field, n,m be Nat;
+proof let K be Field, n,m be Element of NAT;
   len (n |-> (m |-> 0.K))=n by FINSEQ_2:69;
  hence len (0.(K,n,m)) =n by MATRIX_3:def 1;
  hence dom (0.(K,n,m))=Seg n by FINSEQ_1:def 3;
 end;
 
-theorem Th14: for K being Field, n being Nat,
-p being Element of Permutations n, i being Nat st i in Seg n holds
+theorem Th14: for K being Field, n being Element of NAT,
+p being Element of Permutations n, i being Element of NAT st i in Seg n holds
  p.i in Seg n
-proof let K be Field, n be Nat,
-  p be Element of Permutations(n),i be Nat;
+proof let K be Field, n be Element of NAT,
+  p be Element of Permutations(n),i be Element of NAT;
   assume A1: i in Seg n;
   p is Permutation of Seg n by MATRIX_2:def 11;
  hence p.i in Seg n by A1,FUNCT_2:7;
 end;
 
-theorem for K being Field, n being Nat st n>=1 holds
+theorem for K being Field, n being Element of NAT st n>=1 holds
     Det (0.(K,n,n)) = 0.K
-proof let K be Field, n be Nat;
+proof let K be Field, n be Element of NAT;
   assume A1: n>=1;then
   A2: n>0;
   set B=FinOmega Permutations n;
@@ -752,9 +764,9 @@ proof let K be Field, n be Nat;
         = -((the mult of K) $$ Path_matrix(p,(0.(K,n,n))),p)
     proof let p be Element of Permutations(n);
       A6: len (n |-> 0.K)=n by FINSEQ_2:69;
-      for i,j being Nat st i in dom (n |-> 0.K)
+      for i,j st i in dom (n |-> 0.K)
                    & j=p.i holds (n |-> 0.K).i=(0.(K,n,n))*(i,j)
-       proof let i,j be Nat;
+       proof let i,j;
          assume A7: i in dom (n |-> 0.K) & j=p.i;then
          A8: i in Seg n by FUNCOP_1:19;then
          A9: (n |-> 0.K).i=0.K by FUNCOP_1:13;
@@ -766,11 +778,11 @@ proof let K be Field, n be Nat;
         hence (n |-> 0.K).i=(0.(K,n,n))*(i,j) by A9,MATRIX_3:3;
        end;then
       A11: Path_matrix(p,(0.(K,n,n)))=(n |-> 0.K) by A6,MATRIX_3:def 7;
-      defpred P[Nat] means (the mult of K) $$ ( ($1+1) |-> 0.K)=0.K;
+      defpred P[Element of NAT] means (the mult of K) $$ ( ($1+1) |-> 0.K)=0.K;
       (1 |-> 0.K)= <* 0.K *> by FINSEQ_2:73;then
      A12: P[0] by FINSOP_1:12;
-     A13: for k being Nat st P[k] holds P[k+1]
-       proof let k be Nat;
+     A13: for k being Element of NAT st P[k] holds P[k+1]
+       proof let k be Element of NAT;
         assume A14: P[k];
          A15: (the mult of K) has_a_unity by FVSUM_1:11;
          (k+1+1) |-> 0.K = ((k+1) |-> 0.K) ^ <* 0.K *> by FINSEQ_2:74;then
@@ -781,7 +793,7 @@ proof let K be Field, n be Nat;
           .= 0.K by VECTSP_1:36;
         hence P[k+1];
        end;
-      A16: for k being Nat holds P[k] from NAT_1:sch 1(A12,A13);
+      A16: for k being Element of NAT holds P[k] from NAT_1:sch 1(A12,A13);
       n-'1=n-1 by A1,BINARITH:50;then
       n-'1+1=n;then
       A17: (the mult of K) $$ Path_matrix(p,(0.(K,n,n)))
@@ -848,10 +860,10 @@ definition let x,y,a,b be set;
 end;
 
 theorem
-  for K being Field, n being Nat st n>=1 holds
+  for K being Field, n being Element of NAT st n>=1 holds
     Det (1.(K,n)) = 1.K
 proof
-let K be Field, n be Nat;
+let K be Field, n be Element of NAT;
   assume A1: n>=1;then
   A2: n>0;
   set B=FinOmega(Permutations(n));
@@ -904,11 +916,11 @@ let K be Field, n be Nat;
     f2.p = -((the mult of K) $$ Path_matrix(p,(1.(K,n))),p)
     proof let p be Element of Permutations(n);
       A13: len (n |-> 1.K)=n by FINSEQ_2:69;
-      defpred P[Nat] means (the mult of K) $$ ( ($1+1) |-> 1.K)=1.K;
+      defpred P[Element of NAT] means (the mult of K) $$ ( ($1+1) |-> 1.K)=1.K;
       (1 |-> 1.K)= <* 1.K *> by FINSEQ_2:73;then
      A14: P[0] by FINSOP_1:12;
-     A15: for k being Nat st P[k] holds P[k+1]
-       proof let k be Nat;
+     A15: for k being Element of NAT st P[k] holds P[k+1]
+       proof let k be Element of NAT;
         assume A16: P[k];
          A17: (the mult of K) has_a_unity by FVSUM_1:11;
          (k+1+1) |-> 1.K = ((k+1) |-> 1.K) ^ <* 1.K *> by FINSEQ_2:74;then
@@ -919,7 +931,7 @@ let K be Field, n be Nat;
           .= 1.K by GROUP_1:def 5;
         hence P[k+1];
        end;
-      A18: for k being Nat holds P[k] from NAT_1:sch 1(A14,A15);
+      A18: for k being Element of NAT holds P[k] from NAT_1:sch 1(A14,A15);
       n-'1=n-1 by A1,BINARITH:50;then
       n-'1+1=n;then
       A19: (the mult of K) $$ (n |-> 1.K)=1.K by A18;
@@ -943,9 +955,9 @@ let K be Field, n be Nat;
          A23: -((the mult of K) $$ Path_matrix(p,(1.(K,n))),p)
            = (the mult of K) $$ Path_matrix(p,(1.(K,n)))
                     by A21,A6,MATRIX_2:def 16;
-               for i,j being Nat st i in dom (n |-> 1.K)
+               for i,j st i in dom (n |-> 1.K)
                    & j=p.i holds (n |-> 1.K).i=(1.(K,n))*(i,j)
-       proof let i,j be Nat;
+       proof let i,j;
          assume A24: i in dom (n |-> 1.K) & j=p.i;then
          A25: i in Seg n by FUNCOP_1:19;then
          A26: (n |-> 1.K).i=1.K by FUNCOP_1:13;
@@ -963,21 +975,19 @@ let K be Field, n be Nat;
        hence f2.p = -((the mult of K) $$ Path_matrix(p,(1.(K,n))),p)
                             by A23,A22,A19,A13,MATRIX_3:def 7;
       end;
-      case A29: p<>idseq n;
-        consider s being FinSequence such that
-        A30: s=p & len p=len s by MATRIX_2:def 12;
-        A31: not(len s=len idseq n &
-         for i st 1<=i & i<= len s holds s.i=(idseq n).i)
-                                      by A30,A29,FINSEQ_1:18;
-        A32: len p=n by MATRIX_2:22;then
-        consider i0 being Nat such that
-        A33:  1<=i0 & i0<=len p & p.i0<>(idseq n).i0
-                        by A31,A30,FINSEQ_2:55;
-        A34: i0 in Seg n by A33,A32;then
-        A35: p.i0<>i0 by A33,FUNCT_1:35;
+      case A29: p<>idseq n; then
+        p is Permutation of Seg len Permutations n by MATRIX_2:20; then
+        dom p = Seg len Permutations n by FUNCT_2:67; then
+AB:     dom p = Seg n by MATRIX_2:20; then
+AA:     dom p = dom idseq n by FINSEQ_2:54; then
+        consider i0 being set such that
+   A33: i0 in dom p & p.i0 <> (idseq n).i0 by A29,FUNCT_1:9;
+   A34: i0 in Seg n by A33,AA,AB;
+        reconsider i0 as Element of NAT by A34,ORDINAL1:def 13;
+   A35: p.i0<>i0 by A33,AA,AB,FINSEQ_2:56;
         p is Permutation of Seg n by MATRIX_2:def 11;then
         A36: p.i0 in Seg n by FUNCT_2:7,A34;then
-        reconsider j0=p.i0 as Nat;
+        reconsider j0=p.i0 as Element of NAT;
         A37: f2.p=F2(p) by A10
            .= 0.K by A29,CQC_LANG:def 1;
         A38: len (Path_matrix(p,(1.(K,n))))=n &
@@ -991,10 +1001,10 @@ let K be Field, n be Nat;
         [i0,j0] in Indices (1.(K,n)) by A34,A36,ZFMISC_1:def 2;then
         A40: (Path_matrix(p,(1.(K,n)))).i0=0.K
                               by A39,MATRIX_1:def 12,A35;
-          defpred P3[Nat] means $1 < n implies
+          defpred P3[Element of NAT] means $1 < n implies
           ex p3 being FinSequence of K st len p3=$1+1 &
             p3.1=(Path_matrix(p,(1.(K,n)))).1 &
-         (for n3 being Nat st 0 <> n3 & n3 < $1+1 & n3<n holds
+         (for n3 being Element of NAT st 0 <> n3 & n3 < $1+1 & n3<n holds
            p3.(n3 + 1) = (the mult of K).
                   (p3.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1)));
          1 in Seg len (Path_matrix(p,(1.(K,n)))) by A1,A38;then
@@ -1008,24 +1018,24 @@ let K be Field, n be Nat;
          reconsider q3=<* d *> as FinSequence of K;
          A42: len q3=1 by FINSEQ_1:56;
          A43: q3.1=(Path_matrix(p,(1.(K,n)))).1 by FINSEQ_1:57;
-         for n3 being Nat st 0 <> n3 & n3 < 0+1 & n3< n holds
+         for n3 being Element of NAT st 0 <> n3 & n3 < 0+1 & n3< n holds
            q3.(n3 + 1) = (the mult of K).
                   (q3.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1))
-          proof let n3 be Nat;
+          proof let n3 be Element of NAT;
             assume A44: 0 <> n3 & n3 < 0+1 & n3< n;then
             0<n3;
            hence thesis by A44,NAT_1:38;
           end;then
          A45: P3[0] by A42,A43;
-         A46: for k being Nat st P3[k] holds P3[k+1]
-          proof let k be Nat;
+         A46: for k being Element of NAT st P3[k] holds P3[k+1]
+          proof let k be Element of NAT;
             assume A47: P3[k];
             now per cases;
             case A48: k+1<n;then
             consider p3 being FinSequence of K such that
              A49: len p3=k+1 &
               p3.1=(Path_matrix(p,(1.(K,n)))).1 &
-             (for n3 being Nat st 0 <> n3 & n3 < k+1 & n3<n
+             (for n3 being Element of NAT st 0 <> n3 & n3 < k+1 & n3<n
               holds
                p3.(n3 + 1) = (the mult of K).
                   (p3.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1)))
@@ -1038,7 +1048,7 @@ let K be Field, n be Nat;
                 proof let x be set;assume x in NAT;
                  now per cases;
                  case A51: x in Seg (k+1);then
-                  reconsider nx=x as Nat;
+                  reconsider nx=x as Element of NAT;
                   nx in dom p3 by A51,A49,FINSEQ_1:def 3;then
                   A52: p3.nx in rng p3 by FUNCT_1:def 5;
                   rng p3 c= the carrier of K by FINSEQ_1:def 4;then
@@ -1084,11 +1094,11 @@ let K be Field, n be Nat;
             1 in dom p3 by FINSEQ_1:def 3;then
             A57: q3.1=p3.1 by FINSEQ_1:def 7
                    .=(Path_matrix(p,(1.(K,n)))).1 by A49;
-            for n3 being Nat st 0 <> n3 & n3 < k+1+1 & n3<n
+            for n3 being Element of NAT st 0 <> n3 & n3 < k+1+1 & n3<n
               holds
                q3.(n3 + 1) = (the mult of K).
                   (q3.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1))
-            proof let n3 be Nat;
+            proof let n3 be Element of NAT;
               assume A58: 0 <> n3 & n3 < k+1+1 & n3<n;
                 now per cases;
                 case A59: n3<k+1;then
@@ -1135,7 +1145,7 @@ let K be Field, n be Nat;
             end;
            hence P3[k+1];
           end;
-         for k being Nat holds P3[k] from NAT_1:sch 1(A45,A46);then
+         for k being Element of NAT holds P3[k] from NAT_1:sch 1(A45,A46);then
          A69: P3[n-'1];
          A70: n-1=n-'1 by A1,BINARITH:50;then
          A71: n-'1+1=n;
@@ -1144,7 +1154,7 @@ let K be Field, n be Nat;
          consider p3 being FinSequence of K such that
          A72: len p3=n-'1+1 &
             p3.1=(Path_matrix(p,(1.(K,n)))).1 &
-         (for n3 being Nat st 0 <> n3 & n3 < n-'1+1 & n3<n holds
+         (for n3 being Element of NAT st 0 <> n3 & n3 < n-'1+1 & n3<n holds
            p3.(n3 + 1) = (the mult of K).
                   (p3.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1))) by A69,A70;
           A73: len p3=n by A71,A72;
@@ -1157,7 +1167,7 @@ let K be Field, n be Nat;
          proof let x3 be Element of A;
            now per cases;
            case A75: x3 in Seg n;
-             reconsider m=x3 as Nat;
+             reconsider m=x3 as Element of NAT;
              A76: rng p3 c= the carrier of K by FINSEQ_1:def 4;
              x3 in dom p3 by FINSEQ_1:def 3,A75,A73;then
              p3.x3 in rng p3 by FUNCT_1:def 5;
@@ -1178,11 +1188,11 @@ let K be Field, n be Nat;
            (not x4 in Seg n implies f4.x4=0.K);
          1 in Seg n by A1;then
         A78: f4.1=p3.1 by A77 .=(Path_matrix(p,(1.(K,n)))).1 by A72;
-        A79: for n3 being Nat
+        A79: for n3 being Element of NAT
           st 0 <> n3 & n3 < len (Path_matrix(p,(1.(K,n)))) holds
            f4.(n3 + 1) = (the mult of K).
                   (f4.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1))
-         proof let n3 be Nat;
+         proof let n3 be Element of NAT;
            assume A80: 0 <> n3 & n3 < len (Path_matrix(p,(1.(K,n))));then
             n3>0;then
             A81: 0+1<=n3 by NAT_1:38;then
@@ -1197,20 +1207,22 @@ let K be Field, n be Nat;
           hence f4.(n3 + 1) = (the mult of K).
             (f4.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1)) by A83,A84,A77;
          end;
-         defpred P5[Nat] means f4.(i0+$1)=0.K;
-         A85: 0<i0 by A33;
+         defpred P5[Element of NAT] means f4.(i0+$1)=0.K;
+BB:      1 <= i0 by A34,FINSEQ_1:3; then
+         A85: 0<i0 by NAT_1:37;
          now per cases;
          case i0<=1;then
-          i0=1 by A33,XXREAL_0:1;
+          i0=1 by BB,XXREAL_0:1;
           hence P5[0] by A40,A78;
          end;
          case A86: i0>1;then
            i0-1> 1-1 by REAL_1:92;then
            A87: i0-1>0;
+CA:        i0 <= n by A34,FINSEQ_1:3;
            i0<i0+1 by NAT_1:38;then
            i0-1<i0+1-1 by REAL_1:92;then
            A88: i0-1<len (Path_matrix(p,(1.(K,n))))
-                          by A33,A32,A38,XXREAL_0:2;
+                          by CA,A38,XXREAL_0:2;
            reconsider a=f4.(i0-'1) as Element of K;
            i0-'1=i0-1 by BINARITH:50,A86;then
            i0-'1+1=i0;then
@@ -1223,8 +1235,8 @@ let K be Field, n be Nat;
           end;
           end;then
            A89: P5[0];
-           A90: for k being Nat st P5[k] holds P5[k+1]
-           proof let k be Nat;
+           A90: for k being Element of NAT st P5[k] holds P5[k+1]
+           proof let k be Element of NAT;
             assume P5[k];then
              A91: f4.(i0+k)=0.K;
              A92: 1<=1+(i0+k) by NAT_1:37;
@@ -1265,9 +1277,11 @@ let K be Field, n be Nat;
              end;
             hence P5[k+1];
            end;
-           for k being Nat holds P5[k] from NAT_1:sch 1(A89,A90);then
+           for k being Element of NAT holds P5[k] from NAT_1:sch 1(A89,A90);
+           then
            A100: P5[n-'i0];
-           n-'i0 =n-i0 by A33,A32,BINARITH:50;
+           i0 <= n by A34,FINSEQ_1:3; then
+           n-'i0 =n-i0 by BINARITH:50;
        hence f2.p = -((the mult of K) $$ Path_matrix(p,(1.(K,n))),p)
                   by A78,A79,A100,A37,A20,FINSOP_1:3,A38,A1;
       end;
@@ -1382,13 +1396,13 @@ end;
 
 definition let n be Nat, K be Field, M be Matrix of n,K;
   redefine attr M is diagonal means :Def2:
-    for i,j being Nat st i in Seg n & j in Seg n & i <> j holds
+    for i,j being Element of NAT st i in Seg n & j in Seg n & i <> j holds
       M*(i,j) = 0.K;
   compatibility
   proof
     hereby assume
 A1:   M is diagonal;
-      let i, j be Nat;
+      let i, j be Element of NAT;
       assume
 A2:   i in Seg n & j in Seg n & i <> j; then
       [i,j] in [:Seg n, Seg n:] by ZFMISC_1:def 2; then
@@ -1396,9 +1410,9 @@ A2:   i in Seg n & j in Seg n & i <> j; then
       hence M*(i,j) = 0.K by A1,A2,MATRIX_1:def 15;
     end;
     assume
-A3: for i,j being Nat st i in Seg n & j in Seg n & i <> j holds
+A3: for i,j being Element of NAT st i in Seg n & j in Seg n & i <> j holds
       M*(i,j) = 0.K;
-    let i,j;
+    let i,j be Nat;
     assume
 A4: [i,j] in Indices M & M*(i,j) <> 0.K; then
     [i,j] in [:Seg n, Seg n:] by MATRIX_1:25; then
@@ -1408,32 +1422,33 @@ A4: [i,j] in Indices M & M*(i,j) <> 0.K; then
 end;
 
 theorem
-  for K being Field, n being Nat, A being Matrix of n,K st
+  for K being Field, n being Element of NAT, A being Matrix of n,K st
     n>=1 & A is diagonal holds
       Det A = (the mult of K) $$ (diagonal_of_Matrix A)
-proof let K be Field, n be Nat,
+proof let K be Field, n be Element of NAT,
   A be Matrix of n,K;
   assume A1: n>=1 & A is diagonal;
 A2: len (diagonal_of_Matrix A)=n by MATRIX_3:def 10;
   set F4=diagonal_of_Matrix A;
   consider f4 being Function of NAT,the carrier of K such that
    A3:  f4.1 = F4.1 &
-     (for n4 being Nat st 0 <> n4 & n4 < len F4 holds
+     (for n4 being Element of NAT st 0 <> n4 & n4 < len F4 holds
        f4.(n4 + 1) = (the mult of K).(f4.n4,F4.(n4 + 1)))
        & (the mult of K)$$ (diagonal_of_Matrix A) = f4.(len F4)
                                by FINSOP_1:def 1,A1,A2;
-  deffunc F5(Nat) = f4.$1;
+  deffunc F5(Element of NAT) = f4.$1;
   ex z being FinSequence of K st len z = n &
-   for j st j in Seg n holds z.j = F5(j) from FINSEQ_2:sch 1;then
+  for j be Element of NAT st j in Seg n holds z.j = F5(j)
+  from FINSEQ_2:sch 1;then
   consider ps being FinSequence of K such that
   A4: len ps = n &
-   for j st j in Seg n holds ps.j = f4.j;
+  for j be Element of NAT st j in Seg n holds ps.j = f4.j;
    1 in Seg n by A1;then
    A5: ps.1=f4.1 by A4 .=F4.1 by A3;
-   A6: for i being Nat st 1<=i & i+1 in Seg n holds
+   A6: for i being Element of NAT st 1<=i & i+1 in Seg n holds
                ps.(i+1)=(the mult of K).((ps.i),
                  ((diagonal_of_Matrix A).(i+1)))
-    proof let i be Nat;
+    proof let i be Element of NAT;
       assume A7: 1<=i & i+1 in Seg n;then
       A8: 1<=i+1 & i+1<=n by FINSEQ_1:3;
       i<=i+1 by NAT_1:37;then
@@ -1448,7 +1463,7 @@ A2: len (diagonal_of_Matrix A)=n by MATRIX_3:def 10;
     end;
     n in Seg n by A1;then
    A10: ps.1=(diagonal_of_Matrix A).1 &
-   (for i being Nat st 1<=i & i+1 in Seg n holds
+   (for i being Element of NAT st 1<=i & i+1 in Seg n holds
                     ps.(i+1)=(the mult of K).((ps.i)
                          ,((diagonal_of_Matrix A).(i+1))))&
      ps.n=(the mult of K)$$ (diagonal_of_Matrix A)
@@ -1525,9 +1540,9 @@ A23: -(0.K,p)=0.K;
         A26: -((the mult of K) $$ Path_matrix(p,A),p)
            = (the mult of K) $$ Path_matrix(p,(A))
                     by A24,A15,MATRIX_2:def 16;
-       for i,j being Nat st i in dom ((diagonal_of_Matrix A))
+       for i,j st i in dom ((diagonal_of_Matrix A))
                    & j=p.i holds ((diagonal_of_Matrix A)).i=(A)*(i,j)
-       proof let i,j be Nat;
+       proof let i,j;
          assume A27: i in dom ((diagonal_of_Matrix A)) & j=p.i;then
          A28: i in Seg n by A2,FINSEQ_1:def 3;
          p.i=(id Seg n).i by A24 .=i by FUNCT_1:34,A28;
@@ -1535,24 +1550,23 @@ A23: -(0.K,p)=0.K;
                                      by MATRIX_3:def 10,A28,A27;
        end;
        hence f2.p
-        = -((the mult of K) $$ Path_matrix(p,(A)),p)
+        = -((the mult of K) $$ Path_matrix(p,A),p)
                                  by A26,A25,A22,MATRIX_3:def 7;
       end;
       case A29: p<>idseq n;
-        consider s being FinSequence such that
-        A30:  s=p & len p=len s by MATRIX_2:def 12;
-        A31: not(len s=len (idseq n) &
-         for i st 1<=i & i<= len s holds s.i=(idseq n).i)
-                                      by A30,A29,FINSEQ_1:18;
-        A32: len p=n by MATRIX_2:22;
-        consider i0 being Nat such that
-        A33:  1<=i0 & i0<=len p & p.i0<>(idseq n).i0
-                                      by A32,A31,A30,FINSEQ_2:55;
-        A34: i0 in Seg n by A33,A32;then
-        A35: p.i0<>i0 by A33,FUNCT_1:35;
+        p is Permutation of Seg len Permutations n by MATRIX_2:20; then
+        dom p = Seg len Permutations n by FUNCT_2:67; then
+AB:     dom p = Seg n by MATRIX_2:20; then
+AA:     dom p = dom idseq n by FINSEQ_2:54; then
+        consider i0 being set such that
+   A30: i0 in dom p & p.i0 <> (idseq n).i0 by A29,FUNCT_1:9;
+   A34: i0 in Seg n by A30,AA,AB; then
+        reconsider i0 as Element of NAT by A34,ORDINAL1:def 13;
+  A33:  1<=i0 & i0<=n by A34,FINSEQ_1:3;
+        A35: p.i0<>i0 by A33,A34,A30,FINSEQ_2:56;
         p is Permutation of Seg n by MATRIX_2:def 11;then
         A36: p.i0 in Seg n by FUNCT_2:7,A34;then
-         reconsider j0=p.i0 as Nat;
+         reconsider j0=p.i0 as Element of NAT;
         A37: f2.p=F2(p) by A19
            .= 0.K by A29,CQC_LANG:def 1;
         A38: len (Path_matrix(p,A))=n &
@@ -1563,10 +1577,10 @@ A23: -(0.K,p)=0.K;
         A40: (Path_matrix(p,A)).i0=(A)*(i0,j0) by A38;
         A41: (Path_matrix(p,A)).i0=0.K
                                  by A40,Def2,A35,A39,A38,A1,A36;
-        defpred P3[Nat] means $1 < n implies
+        defpred P3[Element of NAT] means $1 < n implies
           ex p3 being FinSequence of K st len p3=$1+1 &
             p3.1=(Path_matrix(p,A)).1 &
-         (for n3 being Nat st 0 <> n3 & n3 < $1+1 & n3<n holds
+         (for n3 being Element of NAT st 0 <> n3 & n3 < $1+1 & n3<n holds
            p3.(n3 + 1) = (the mult of K).
                   (p3.n3,(Path_matrix(p,A)).(n3 + 1)));
          1 in Seg len (Path_matrix(p,A)) by A1,A38;then
@@ -1579,24 +1593,24 @@ A23: -(0.K,p)=0.K;
          reconsider q3=<* d *> as FinSequence of K;
          A43: len q3=1 by FINSEQ_1:56;
          A44: q3.1=(Path_matrix(p,A)).1 by FINSEQ_1:57;
-         for n3 being Nat st 0 <> n3 & n3 < 0+1 & n3< n holds
+         for n3 being Element of NAT st 0 <> n3 & n3 < 0+1 & n3< n holds
            q3.(n3 + 1) = (the mult of K).
                   (q3.n3,(Path_matrix(p,A)).(n3 + 1))
-          proof let n3 be Nat;
+          proof let n3 be Element of NAT;
             assume A45: 0 <> n3 & n3 < 0+1 & n3< n;then
             0<n3;
            hence thesis by A45,NAT_1:38;
           end;then
          A46: P3[0] by A43,A44;
-         A47: for k being Nat st P3[k] holds P3[k+1]
-          proof let k be Nat;
+         A47: for k being Element of NAT st P3[k] holds P3[k+1]
+          proof let k be Element of NAT;
             assume A48: P3[k];
             now per cases;
             case A49: k+1<n;then
             consider p3 being FinSequence of K such that
              A50: len p3=k+1 &
               p3.1=(Path_matrix(p,A)).1 &
-             (for n3 being Nat st 0 <> n3 & n3 < k+1 & n3<n holds
+             (for n3 being Element of NAT st 0 <> n3 & n3 < k+1 & n3<n holds
                p3.(n3 + 1) = (the mult of K).
                   (p3.n3,(Path_matrix(p,A)).(n3 + 1))) by A48,NAT_1:37;
               defpred P6[set,set] means
@@ -1607,7 +1621,7 @@ A23: -(0.K,p)=0.K;
                 proof let x be set;assume x in NAT;
                  now per cases;
                  case A52: x in Seg (k+1);then
-                  reconsider nx=x as Nat;
+                  reconsider nx=x as Element of NAT;
                   nx in dom p3 by A52,A50,FINSEQ_1:def 3;then
                   A53: p3.nx in rng p3 by FUNCT_1:def 5;
                   rng p3 c= the carrier of K by FINSEQ_1:def 4;then
@@ -1650,11 +1664,11 @@ A23: -(0.K,p)=0.K;
             1 in dom p3 by FINSEQ_1:def 3;then
             A58: q3.1=p3.1 by FINSEQ_1:def 7
                    .=(Path_matrix(p,(A))).1 by A50;
-            for n3 being Nat st 0 <> n3 & n3 < k+1+1 & n3<n
+            for n3 being Element of NAT st 0 <> n3 & n3 < k+1+1 & n3<n
               holds
                q3.(n3 + 1) = (the mult of K).
                   (q3.n3,(Path_matrix(p,(A))).(n3 + 1))
-            proof let n3 be Nat;
+            proof let n3 be Element of NAT;
               assume A59: 0 <> n3 & n3 < k+1+1 & n3<n;
                 now per cases;
                 case A60: n3<k+1;then
@@ -1701,7 +1715,7 @@ A23: -(0.K,p)=0.K;
             end;
            hence P3[k+1];
           end;
-         for k being Nat holds P3[k] from NAT_1:sch 1(A46,A47);then
+         for k being Element of NAT holds P3[k] from NAT_1:sch 1(A46,A47);then
          A71: P3[n-'1];
          A72: n-1=n-'1 by A1,BINARITH:50;then
          A73: n-'1+1=n;
@@ -1710,7 +1724,7 @@ A23: -(0.K,p)=0.K;
          consider p3 being FinSequence of K such that
          A74: len p3=n-'1+1 &
             p3.1=(Path_matrix(p,A)).1 &
-         (for n3 being Nat st 0 <> n3 & n3 < n-'1+1 & n3<n holds
+         (for n3 being Element of NAT st 0 <> n3 & n3 < n-'1+1 & n3<n holds
            p3.(n3 + 1) = (the mult of K).
                   (p3.n3,(Path_matrix(p,(A))).(n3 + 1))) by A71,A72;
           A75: len p3=n by A73,A74;
@@ -1723,7 +1737,7 @@ A76:   for x3 being Element of Ab
          proof let x3 be Element of Ab;
            now per cases;
            case A77: x3 in Seg n;
-             reconsider m=x3 as Nat;
+             reconsider m=x3 as Element of NAT;
              A78: rng p3 c= the carrier of K by FINSEQ_1:def 4;
              x3 in dom p3 by FINSEQ_1:def 3,A75,A77;then
              p3.x3 in rng p3 by FUNCT_1:def 5;
@@ -1744,11 +1758,11 @@ A76:   for x3 being Element of Ab
            (not x4 in Seg n implies f4.x4=0.K);
          1 in Seg n by A1;then
         A80: f4.1=p3.1 by A79 .=(Path_matrix(p,A)).1 by A74;
-        A81: for n3 being Nat
+        A81: for n3 being Element of NAT
           st 0 <> n3 & n3 < len (Path_matrix(p,A)) holds
            f4.(n3 + 1) = (the mult of K).
                   (f4.n3,(Path_matrix(p,A)).(n3 + 1))
-         proof let n3 be Nat;
+         proof let n3 be Element of NAT;
            assume A82: 0 <> n3 & n3 < len (Path_matrix(p,A));then
             n3>0;then
             A83: 0+1<=n3 by NAT_1:38;
@@ -1762,7 +1776,7 @@ A76:   for x3 being Element of Ab
           hence f4.(n3 + 1) = (the mult of K).
                   (f4.n3,(Path_matrix(p,A)).(n3 + 1)) by A85,A86,A79;
          end;
-         defpred P5[Nat] means f4.(i0+$1)=0.K;
+         defpred P5[Element of NAT] means f4.(i0+$1)=0.K;
          A87: 0<i0 by A33;
          now per cases;
          case i0<=1;then
@@ -1774,7 +1788,7 @@ A76:   for x3 being Element of Ab
            A89: i0-1>0;
            i0<i0+1 by NAT_1:38;then
            i0-1<i0+1-1 by REAL_1:92;then
-           A90: i0-1<len (Path_matrix(p,A)) by A33,A32,A38,XXREAL_0:2;
+           A90: i0-1<len (Path_matrix(p,A)) by A33,A38,XXREAL_0:2;
           reconsider a=f4.(i0-'1) as Element of K;
           i0-'1=i0-1 by BINARITH:50,A88;then
           i0-'1+1=i0;then
@@ -1786,8 +1800,8 @@ A76:   for x3 being Element of Ab
           end;
           end;then
            A91: P5[0];
-           A92: for k being Nat st P5[k] holds P5[k+1]
-           proof let k be Nat;
+           A92: for k being Element of NAT st P5[k] holds P5[k+1]
+           proof let k be Element of NAT;
             assume P5[k];then
              A93: f4.(i0+k)=0.K;
              A94: 1<=1+(i0+k) by NAT_1:37;
@@ -1825,9 +1839,10 @@ A76:   for x3 being Element of Ab
              end;
             hence P5[k+1];
            end;
-           for k being Nat holds P5[k] from NAT_1:sch 1(A91,A92);then
+           for k being Element of NAT holds P5[k] from NAT_1:sch 1(A91,A92);
+           then
            A102: P5[n-'i0];
-           n-'i0 =n-i0 by A33,A32,BINARITH:50;
+           n-'i0 =n-i0 by A33,BINARITH:50;
        hence f2.p = -((the mult of K) $$ Path_matrix(p,A),p)
            by A37,A23,FINSOP_1:3,A38,A1,A80,A81,A102;
       end;
@@ -1940,9 +1955,9 @@ A76:   for x3 being Element of Ab
  hence thesis by MATRIX_3:def 9;
 end;
 
-theorem Th18: for n being Nat, p being Element of Permutations(n) holds
+theorem Th18: for p being Element of Permutations(n) holds
  p" is Element of Permutations(n)
-proof let n be Nat, p be Element of Permutations(n);
+proof let p be Element of Permutations(n);
   p" is Element of Group_of_Perm(n) by MATRIX_2:26;
  hence p" is Element of Permutations(n) by MATRIX_2:def 13;
 end;
@@ -1952,60 +1967,8 @@ definition let n;let p be Element of Permutations(n);
  coherence by Th18;
 end;
 
-theorem Th19: for n being Nat,K being Field,A being Matrix of n,K holds
- A@ is Matrix of n,K
-proof
- let n be Nat,K be Field,A be Matrix of n,K;
-  A1: len (A@)=width A by MATRIX_1:def 7;
-  A2: len A = n & for p being FinSequence of K
-   st p in rng A holds len p = n by MATRIX_1:def 3;
-  A3: now per cases;
-  case n>0;
-   hence len (A@)=n by A1,MATRIX_1:20,A2;
-  end;
-  case A4: n<=0;then
-   len (A@)=0 by A1,A2,MATRIX_1:def 4;
-   hence len (A@)=n by A4;
-  end;
-  end;
-  for p being FinSequence of K st p in rng (A@) holds len p = n
-  proof let p be FinSequence of K;
-   assume A5: p in rng (A@);
-    consider n2 being Nat such that
-    A6: for x being set st x in rng (A@)
-     ex s being FinSequence st s=x & len s = n2 by MATRIX_1:def 1;
-    A7: for p2 being FinSequence of K
-       st p2 in rng (A@) holds len p2 = n2
-    proof let p2 be FinSequence of K;
-     assume p2 in rng (A@);then
-      consider s being FinSequence such that
-      A8: s=p2 & len s = n2 by A6;
-     thus len p2 = n2 by A8;
-    end;
-    consider s being FinSequence such that
-    A9: s=p & len s = n2 by A5,A6;
-    A10: len p=n2 by A9;
-    now per cases;
-    case A11: n>0;then
-      A12: width A=n by MATRIX_1:20,A2;then
-      A13: len (A@)=width A & width (A@)=len A by A11,MATRIX_2:12;
-      A14: len (A@)=n & width (A@)=n by A2,A13,A12;then
-      A@ is Matrix of n,n2,K by A7,MATRIX_1:def 3;
-     hence len p = n by A10,A14,A11,MATRIX_1:20;
-   end;
-   case n<=0;then
-     A15: width A=0 by MATRIX_1:def 4,A2;
-     len (A@) = width A by MATRIX_1:def 7;then
-     A16: dom (A@)={} by A15,FINSEQ_1:4,def 3;
-      consider x0 being set such that
-     A17: x0 in dom (A@) & p=(A@).x0 by A5,FUNCT_1:def 5;
-    thus len p = n by A16,A17;
-    end;
-    end;
-   hence len p = n;
-  end;
-  hence A@ is Matrix of n,K by MATRIX_1:def 3,A3;
-end;
+theorem Th19: for K being Field,A being Matrix of n,K holds
+ A@ is Matrix of n,K;
 
 definition let n be Nat,K be Field;
   let A be Matrix of n,K;
@@ -2024,28 +1987,30 @@ end;
 
 definition let G be Group, f be FinSequence of G;
   func f" -> FinSequence of G means :Def4:
-    len it = len f & for i being Nat st i in dom f holds
+    len it = len f & for i being Element of NAT st i in dom f holds
       it/.i = (f/.i)";
 existence
 proof
-   deffunc F(Nat) = (f/.$1)";
+   deffunc F(Element of NAT) = (f/.$1)";
    ex p being FinSequence st len p = len f &
-    for k being Nat st k in Seg len f holds p.k=F(k) from FINSEQ_1:sch 2;then
+    for k being Element of NAT st k in Seg len f holds p.k=F(k)
+    from FINSEQ_1:sch 2;then
    consider p being FinSequence such that
-A1: len p = len f & for k being Nat st k in Seg len f holds p.k=F(k);
+A1: len p = len f & for k being Element of NAT st k in Seg len f
+holds p.k=F(k);
 A2: dom p = dom f by A1,FINSEQ_3:31;
     rng p c= the carrier of G
      proof let y be set;assume y in rng p;then
        consider x being set such that
        A3: x in dom p & y=p.x by FUNCT_1:def 5;
        A4: x in Seg len p by A3,FINSEQ_1:def 3;then
-       reconsider k=x as Nat;
+       reconsider k=x as Element of NAT;
        p.k=(f/.k)" by A1,A4;
       hence y in the carrier of G by A3;
      end;then
     reconsider q=p as FinSequence of G by FINSEQ_1:def 4;
-    for i being Nat st i in dom f holds q/.i=(f/.i)"
-    proof let i be Nat;
+    for i being Element of NAT st i in dom f holds q/.i=(f/.i)"
+    proof let i be Element of NAT;
       assume A5: i in dom f;then
 A6:   i in dom p by A2;
 A7:   i in Seg len f by A5,FINSEQ_1:def 3;
@@ -2056,19 +2021,20 @@ end;
 uniqueness
  proof
   thus for g1,g2 being FinSequence of G st
-(len g1=len f & for i being Nat st i in dom f holds
+(len g1=len f & for i being Element of NAT st i in dom f holds
   g1/.i=(f/.i)")&
-(len g2=len f & for j being Nat st j in dom f holds
+(len g2=len f & for j being Element of NAT st j in dom f holds
   g2/.j=(f/.j)")
    holds g1=g2
   proof let g1,g2 be FinSequence of G;
    assume A8: (len g1=len f &
-      for i being Nat st i in dom f holds g1/.i=(f/.i)")&
-     (len g2=len f & for j being Nat st j in dom f holds g2/.j=(f/.j)");
+      for i being Element of NAT st i in dom f holds g1/.i=(f/.i)")&
+     (len g2=len f & for j being Element of NAT st j in dom f
+     holds g2/.j=(f/.j)");
      A9: len g1=len g2 by A8;
 A10:  dom g1 = dom f by A8,FINSEQ_3:31;
-     for k being Nat st 1<= k & k<= len g1 holds g1.k=g2.k
-     proof let k be Nat;
+     for k being Element of NAT st 1<= k & k<= len g1 holds g1.k=g2.k
+     proof let k be Element of NAT;
        assume A11: 1<= k & k<= len g1;then
        k in Seg len g1;then
 A12:    k in dom g1 by FINSEQ_1:def 3;
@@ -2100,10 +2066,10 @@ proof let G be Group, f,g be FinSequence of G;
   A3: len f+len g=len (f") +len g by Def4
              .=len (f") + len (g") by Def4
              .= len ((f")^(g")) by FINSEQ_1:35;
-  for i being Nat st 1<=i & i<= len ((f^g)") holds
+  for i being Element of NAT st 1<=i & i<= len ((f^g)") holds
     ((f^g)").i=((f")^(g")).i
   proof
-   let i be Nat;
+   let i be Element of NAT;
     assume A4: 1<=i & i<= len ((f^g)");
      now per cases;
      case len f>0;
@@ -2167,9 +2133,9 @@ holds (<*a*>)" =<* a" *>
 proof let G be Group,a be Element of G;
   A1: len ((<*a*>)")=len (<* a *>) by Def4 .=1 by FINSEQ_1:56
                    .=len (<* a" *>) by FINSEQ_1:56;
-  for i being Nat st 1<=i & i<= len <*a" *> holds
+  for i being Element of NAT st 1<=i & i<= len <*a" *> holds
     ((<*a*>)").i=(<* a" *>).i
-   proof let i be Nat;
+   proof let i be Element of NAT;
     assume A2: 1<=i & i<= len <*a" *>;
      A3: len <*a" *>=1 by FINSEQ_1:56;then
      A4: i=1 by A2,XXREAL_0:1;then
@@ -2192,7 +2158,7 @@ theorem Th24: for G being Group,
 f being FinSequence of G
 holds Product (f^(Rev f)")=1.G
 proof let G be Group,f be FinSequence of G;
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
     for g being FinSequence of G st
     len g <=$1 holds Product (g^(Rev g)")=1.G;
   for g being FinSequence of G st
@@ -2207,8 +2173,8 @@ A2: g=<*>(the carrier of G) by FINSEQ_1:32;then
    hence Product (g^(Rev g)")=1.G by GROUP_4:11;
   end;then
   A4: P[0];
-  A5: for k being Nat st P[k] holds P[k+1]
-  proof let k be Nat;
+  A5: for k being Element of NAT st P[k] holds P[k+1]
+  proof let k be Element of NAT;
    assume A6: P[k];
     for g being FinSequence of G st
     len g <= k+1 holds Product (g^(Rev g)")=1.G
@@ -2253,7 +2219,7 @@ A2: g=<*>(the carrier of G) by FINSEQ_1:32;then
     end;
    hence P[k+1];
   end;
-  for j being Nat holds P[j] from NAT_1:sch 1(A4,A5);then
+  for j being Element of NAT holds P[j] from NAT_1:sch 1(A4,A5);then
   P[len f];
  hence Product (f^(Rev f)")=1.G;
 end;
@@ -2267,15 +2233,16 @@ A3: dom Rev f = dom ((Rev f)") by FINSEQ_3:31;
 A4: len ((Rev f)") = len Rev ((Rev f)") by FINSEQ_5:def 3;
 A5: len Rev ((Rev f)")=len ((Rev ((Rev f)"))") by Def4; then
 A6: dom Rev ((Rev f)")=dom ((Rev ((Rev f)"))") by FINSEQ_3:31;
-    for i being Nat st 1<= i & i <= len f holds f.i = ((Rev ((Rev f)") )").i
-    proof let i be Nat;
+    for i being Element of NAT st 1<= i & i <= len f
+    holds f.i = ((Rev ((Rev f)") )").i
+    proof let i be Element of NAT;
       assume A7: 1<= i & i <= len f;then
 A8:  i in Seg len f;then
 A9:   i in dom f by FINSEQ_1:def 3;
 A10:  i in dom ((Rev ((Rev f)"))") by FINSEQ_1:def 3,A8,A1,A2,A4,A5;
 A11:   len f-i=len f-'i by BINARITH:50,A7;then
       len f-i+1=len f-'i+1;then
-      reconsider j=len f-i+1 as Nat;
+      reconsider j=len f-i+1 as Element of NAT;
       len f-i+1>=0+1 by XREAL_1:8,A11;then
 A12:   j>=1;
       i-1>=0 by A7,XREAL_1:50;then
@@ -2335,10 +2302,10 @@ ITG be Element of Group_of_Perm(n);
  hence ITP"=ITG" by GROUP_1:def 6,A6,A9,A10,A7,A8;
 end;
 
-Lm4: for n being Nat,
+Lm4: for n being Element of NAT,
   IT being Element of Permutations(n) st
   IT is even & n>=1 holds IT" is even
-proof let n be Nat,
+proof let n be Element of NAT,
   IT be Element of Permutations(n);
  assume A1: IT is even & n>=1;
   A2: len Permutations n=n by MATRIX_2:20;
@@ -2367,7 +2334,8 @@ A3: (len l)mod 2=0 & IT=Product l &
      m+1-i<=m+i-i by XREAL_1:11;then
      A14: m-i+1<=m;
      m-i+1=m-'i+1 by A12,BINARITH:def 3;then
-     reconsider j=len l-i+1 as Nat;
+     reconsider j=len l-i+1 as Element of NAT;
+     reconsider ii=i as Element of NAT by ORDINAL1:def 13;
      A15: i+j=len l+1;
      j in Seg len l by A13,A14;then
      A16: j in dom l by FINSEQ_1:def 3;
@@ -2389,11 +2357,12 @@ A23:  l.j=l/.j by FINSEQ_4:def 4,A16;
 A24:  q=l/.j by A17,A23;
 A25:   i in dom Rev l by A9,A6,A4,FINSEQ_3:31;
 A26:  qq=(Rev l)"/.i by A9,FINSEQ_4:def 4
-                    .=((Rev l)/.i)" by Def4,A25
+                    .=((Rev l)/.ii)" by Def4,A25
                     .=(l/.j)" by FINSEQ_5:69,A15,A16
                     .=q" by A24,Th27,A1;
-      A27: for k being Nat st k <>j1 & k<>i1 & k in dom qq holds qq.k=k
-      proof let k be Nat;
+      A27: for k being Element of NAT st k <>j1 & k<>i1 & k in dom qq
+      holds qq.k=k
+      proof let k be Element of NAT;
         assume A28: k <>j1 & k<>i1 & k in dom qq;then
         q.k=k by A21,A20,A18;
        hence qq.k=k by A26,A28,A20,A21,FUNCT_1:54;
@@ -2401,25 +2370,35 @@ A26:  qq=(Rev l)"/.i by A9,FINSEQ_4:def 4
       A29: l.j=l/.j by FINSEQ_4:def 4,A16;
       A30: q=l/.j by A17,A29;
       A31: qq=(Rev l)"/.i by A9,FINSEQ_4:def 4
-            .=((Rev l)/.i)" by Def4,A25
+            .=((Rev l)/.ii)" by Def4,A25
             .=(l/.j)" by FINSEQ_5:69,A15,A16
             .=q" by A30,Th27,A1;
 A32: qq.j1=i1 by A18,FUNCT_1:54,A31;
-     qq.i1=j1 by A18,FUNCT_1:54,A31;then
-     qq is_transposition by MATRIX_2:def 14,A22,A18,A27,A32;
+     ex i,j st i in dom qq & j in dom qq & i<>j & qq.i=j & qq.j=i &
+     for k st k <>i & k<>j & k in dom qq holds qq.k=k
+     proof
+       take i=i1,j=j1;
+       qq.i1=j1 by A18,FUNCT_1:54,A31;
+       hence i in dom qq & j in dom qq & i<>j & qq.i=j & qq.j=i
+       by A22,A18,A32;
+       let k;
+       k in NAT by ORDINAL1:def 13;
+       hence thesis by A27;
+     end;
+     then qq is_transposition by MATRIX_2:def 14;
     hence ex q2 being Element of Permutations n
        st lv.i=q2 & q2 is_transposition;
   end;
  hence IT" is even by MATRIX_2:def 15,A2,A3,A5,A8;
 end;
 
-Lm5: for n being Nat, IT being Permutation of Seg n holds
+Lm5: for n being Element of NAT, IT being Permutation of Seg n holds
   (IT")"= IT by FUNCT_1:65;
 
-theorem Th28: for n being Nat,
+theorem Th28: for n being Element of NAT,
   IT being Element of Permutations(n) st n>=1 holds
   IT is even iff IT" is even
-proof let n be Nat,
+proof let n be Element of NAT,
   IT be Element of Permutations(n);
   assume A1: n>=1;
  hence IT is even implies IT" is even by Lm4;
@@ -2430,10 +2409,10 @@ proof let n be Nat,
  hence thesis;
 end;
 
-theorem Th29: for n being Nat,K being Field,
+theorem Th29: for n being Element of NAT,K being Field,
   p being Element of Permutations(n), x being Element of K
  st n>=1 holds -(x,p) = -(x,p")
-proof let n be Nat,K be Field,
+proof let n be Element of NAT,K be Field,
   p be Element of Permutations(n), x be Element of K;
   assume A1: n>=1;
   A2: len ((Permutations(n)))=n by MATRIX_2:20;
@@ -2492,12 +2471,12 @@ A3: P[n];
     rng f c= the carrier of K by FINSEQ_1:def 4;then
     reconsider a = f.(n+1) as Element of K by A7;
     a in rng g by A5,A6,FUNCT_1:def 5;
-    then consider m such that
+    then consider m be Element of NAT such that
     A8:m in dom g & g.m = a by FINSEQ_2:11;
     A9:g = (g|m)^(g/^m) by RFINSEQ:21;
     A10:1<=m & m<=len g by A8,FINSEQ_3:27;
     then max(0,m-1) = m-1 by FINSEQ_2:4;
-    then reconsider m1 = m-1 as Nat by FINSEQ_2:5;
+    then reconsider m1 = m-1 as Element of NAT by FINSEQ_2:5;
     set gg = g/^m, gm = g|m;
 A11:len gm = m by A10,FINSEQ_1:80;
 A12:m = m1+1;
@@ -2509,7 +2488,8 @@ A12:m = m1+1;
 A15:gm|m1 = g|((Seg m)/\(Seg m1)) by RELAT_1:100
              .= g|(Seg m1) by A14,XBOOLE_1:28
              .= g|m1;
-    set fn = f|n;
+    reconsider n1=n as Element of NAT by ORDINAL1:def 13;
+    set fn = f|n1;
     n<=n+1 by NAT_1:29;
     then A16:len fn = n by A4,FINSEQ_1:80;
 A17:f = fn ^ <*a*> by A4,RFINSEQ:20;
@@ -2534,18 +2514,18 @@ A17:f = fn ^ <*a*> by A4,RFINSEQ:20;
              .= (the mult of K)$$ gm*(the mult of K)$$ gg by A13,A15,Th30
              .= (the mult of K)$$ g by A9,Th30;
   end;
-  A18:for n holds P[n] from NAT_1:sch 1(A1,A2);
+  A18:for n holds P[n] from NAT_1:sch 2(A1,A2);
   let R1,R2 be FinSequence of K; assume
   A19:R1,R2 are_fiberwise_equipotent;
   len R1 = len R1;
   hence thesis by A18,A19;
 end;
 
-theorem Th32: for n being Nat, K being Field,
+theorem Th32: for n being Element of NAT, K being Field,
 p being Element of Permutations(n),
  f,g being FinSequence of K st n>=1 & len f=n & g=f*p holds
  f,g are_fiberwise_equipotent
-proof let n be Nat, K be Field,
+proof let n be Element of NAT, K be Field,
  p be Element of Permutations(n),
  f,g be FinSequence of K;
  assume A1: n>=1 & len f=n & g=f*p;then
@@ -2566,22 +2546,22 @@ proof let n be Nat, K be Field,
 end;
 
 theorem Th33:
-  for n being Nat, K being Field,
+  for n being Element of NAT, K being Field,
       p being Element of Permutations(n),
  f,g being FinSequence of K st n>=1 & len f=n & g=f*p holds
  (the mult of K) $$ f = (the mult of K) $$ g
-proof let n be Nat, K be Field,
+proof let n be Element of NAT, K be Field,
  p be Element of Permutations(n), f,g be FinSequence of K;
  assume n>=1 & len f=n & g=f*p;then
  f,g are_fiberwise_equipotent by Th32;
  hence (the mult of K) $$ f = (the mult of K) $$ g by Th31;
 end;
 
-theorem Th34: for n being Nat, K being Field,
+theorem Th34: for n being Element of NAT, K being Field,
 p being Element of Permutations(n),
  f being FinSequence of K st n>=1 & len f=n holds
  f*p is FinSequence of K
-proof let n be Nat, K be Field,
+proof let n be Element of NAT, K be Field,
 p be Element of Permutations(n), f be FinSequence of K;
  assume A1: n>=1 & len f=n;then
   f <> {} by FINSEQ_1:25;then
@@ -2599,11 +2579,11 @@ p be Element of Permutations(n), f be FinSequence of K;
  hence f*p is FinSequence of K by FINSEQ_1:def 4;
 end;
 
-theorem Th35: for n being Nat, K being Field,
+theorem Th35: for n being Element of NAT, K being Field,
 p being Element of Permutations(n),
  A being Matrix of n,K st n>=1 holds
  Path_matrix(p",A@) = (Path_matrix(p,A))*p"
-proof let n be Nat, K be Field,p be Element of Permutations(n),
+proof let n be Element of NAT, K be Field,p be Element of Permutations(n),
  A be Matrix of n,K;
  assume A1: n>=1;
   set f=(Path_matrix(p,A));
@@ -2628,16 +2608,17 @@ proof let n be Nat, K be Field,p be Element of Permutations(n),
     A12: i in Seg n by A9,FINSEQ_1:def 3;then
     A13: i in dom (p") by A8;then
     A14: ((Path_matrix(p,A))*p").i=(Path_matrix(p,A)).((p").i) by FUNCT_1:23;
-    A15: len f=n & for i2,j2 being Nat st i2 in dom f & j2=p.i2
+    A15: len f=n & for i2,j2 being Element of NAT st i2 in dom f & j2=p.i2
                     holds f.i2=A*(i2,j2) by MATRIX_3:def 7;
     A16: j in Seg n by A6,A11,A13,FUNCT_1:def 5;then
     A17: j in dom f by FINSEQ_1:def 3,A2;
     A18: dom (p") = rng p &
        for y,x being set holds y in rng p & x = (p").y
                        iff x in dom p & y = p.x by FUNCT_1:54,A11;
+X0: i in NAT & j in NAT by ORDINAL1:def 13;
     rng fp0 = Seg n by FUNCT_2:def 3,A5;then
     i=p.j by A11,A18,A12;then
-    A19: (Path_matrix(p,A)).j=A*(j,i) by A15,A17;
+    A19: (Path_matrix(p,A)).j=A*(j,i) by A15,A17,X0;
     dom A=Seg len A by FINSEQ_1:def 3 .= Seg n by MATRIX_1:def 3;then
     A20: j in dom A by A16;
     A21: n>0 by A1;
@@ -2649,11 +2630,11 @@ proof let n be Nat, K be Field,p be Element of Permutations(n),
  hence Path_matrix(p",A@) = (Path_matrix(p,A))*p" by MATRIX_3:def 7,A10;
 end;
 
-theorem Th36: for n being Nat, K being Field,
+theorem Th36: for n being Element of NAT, K being Field,
 p being Element of Permutations(n),
  A being Matrix of n,K st n>=1 holds
  (Path_product(A@)).(p") = (Path_product(A)).p
-proof let n be Nat, K be Field, p be Element of Permutations n,
+proof let n be Element of NAT, K be Field, p be Element of Permutations n,
  A be Matrix of n,K;
  assume A1: n>=1;
 A2: len (Path_matrix(p,A))=n by MATRIX_3:def 7;then
@@ -2669,9 +2650,10 @@ A2: len (Path_matrix(p,A))=n by MATRIX_3:def 7;then
  hence (Path_product(A@)).(p") = (Path_product(A)).p by A3;
 end;
 
-theorem for n being Nat, K being Field, A being Matrix of n,K st n>=1
+theorem for n being Element of NAT, K being Field, A being Matrix of n,K
+st n>=1
  holds Det (A) = Det (A@)
-proof let n be Nat, K be Field, A be Matrix of n,K;
+proof let n be Element of NAT, K be Field, A be Matrix of n,K;
  assume A1: n>=1;
   set f=Path_product(A);
   set f2=Path_product(A@);

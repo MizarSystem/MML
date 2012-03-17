@@ -9,17 +9,18 @@ environ
  vocabularies BHSP_1, PRE_TOPC, NORMSP_1, ORDINAL2, SEQM_3, SEQ_1, RLVECT_1,
       METRIC_1, FUNCT_1, ARYTM_1, ARYTM_3, ABSVALUE, RELAT_1, SEQ_2, LATTICES,
       BHSP_3, ARYTM, FUNCT_3, FRECHET2, BOOLE;
- notations TARSKI, XBOOLE_0, ORDINAL1, NUMBERS, XREAL_0, REAL_1, NAT_1,
+ notations TARSKI, XBOOLE_0, ORDINAL1, SUBSET_1,
+ NUMBERS, XCMPLX_0, XREAL_0, REAL_1, NAT_1,
       COMPLEX1, RELAT_1, FUNCT_1, FUNCT_3, SEQ_1, SEQM_3, STRUCT_0, PRE_TOPC,
       RLVECT_1, NORMSP_1, BHSP_1, BHSP_2, XXREAL_0;
  constructors PARTFUN1, FUNCT_3, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_1,
       SEQM_3, BHSP_2;
  registrations FUNCT_1, SEQM_3, STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, MEMBERED,
-      ORDINAL1, XXREAL_0;
+      ORDINAL1, XXREAL_0, NAT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems REAL_1, NAT_1, REAL_2, FUNCT_1, SEQ_2, SEQM_3, FUNCT_2, RLVECT_1,
       BHSP_1, BHSP_2, NORMSP_1, RELAT_1, RELSET_1, XREAL_0, XBOOLE_1, XCMPLX_0,
-      STRUCT_0, XREAL_1, COMPLEX1, XXREAL_0;
+      STRUCT_0, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1;
  schemes NAT_1, SEQ_1, FUNCT_2;
 
 begin
@@ -30,7 +31,7 @@ begin
          seq, seq1, seq2, seq3 for sequence of X,
          Nseq,Nseq1,Nseq2 for increasing Seq_of_Nat,
          Rseq for Real_Sequence,
-         k, l, l1, l2, l3, n, m, m1, m2 for Nat;
+         k, l, l1, l2, l3, n, m, m1, m2 for Element of NAT;
 
 deffunc 0'(RealUnitarySpace) = 0.$1;
 
@@ -642,7 +643,7 @@ end;
 theorem Th23:
   for m ex M st ( M > 0 & for n st n <= m holds ||.seq.n.|| < M )
 proof
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
    ex M st ( M > 0 & for n st n <= $1 holds ||.seq.n.|| < M );
 A1: P[0] proof take M = ||.(seq.0).|| + 1;
         ||.(seq.0).|| >= 0 by BHSP_1:34;
@@ -846,12 +847,12 @@ theorem Th26:
   for X being RealUnitarySpace,
       s being sequence of X,
       N being increasing Seq_of_Nat
-  for n being Nat holds (s * N).n=s.(N.n)
+  for n being Element of NAT holds (s * N).n=s.(N.n)
 proof
   let X be RealUnitarySpace,
       s be sequence of X,
       N be increasing Seq_of_Nat;
-  let n be Nat;
+  let n be Element of NAT;
      dom (s * N) = NAT by FUNCT_2:def 1;
   hence (s * N).n = s.(N.n) by FUNCT_1:22;
 end;
@@ -865,7 +866,7 @@ proof
        hence Rseq.n < Rseq.(n+1) by NAT_1:38;
      end;
 then A1:   Rseq is increasing by SEQM_3:def 11;
-        for n holds Rseq.n is Nat by FUNCT_1:35;
+        for n holds Rseq.n is Element of NAT by FUNCT_1:35;
      then reconsider Rseq as increasing Seq_of_Nat by A1,SEQM_3:29;
      take Nseq = Rseq;
         now let n;
@@ -1020,7 +1021,7 @@ definition
           let k;
           func seq ^\k -> sequence of X means
 :Def5:  for n holds it.n=seq.(n + k);
-existence proof deffunc F(Nat) = seq.($1 + k);
+existence proof deffunc F(Element of NAT) = seq.($1 + k);
   thus ex IT being sequence of X st for n holds IT.n=F(n)
   from FUNCT_2:sch 4;
 end;
@@ -1139,7 +1140,7 @@ end;
 
 theorem Th43:
   seq ^\k is subsequence of seq
-proof deffunc F(Nat) = $1 + k;
+proof deffunc F(Element of NAT) = $1 + k;
      consider Rseq such that
 A1:   for n holds Rseq.n = F(n) from SEQ_1:sch 1;
         now let n;
@@ -1149,8 +1150,8 @@ A2:   Rseq.n = n + k & Rseq.(n + 1) = n + 1 + k by A1;
      end;
 then A3:   Rseq is increasing by SEQM_3:def 11;
         now let n;
-        n + k is Nat;
-     hence Rseq.n is Nat by A1;
+        n + k is Element of NAT;
+     hence Rseq.n is Element of NAT by A1;
      end;
      then reconsider Rseq as increasing Seq_of_Nat by A3,SEQM_3:29;
      take Nseq=Rseq;
@@ -1194,8 +1195,9 @@ A5:   for n st n >= m1 holds ||.seq.n - g.|| < r by A4;
      take m = m1 + k;
      let n; assume
 A6:   n >= m;
-     then consider m2 such that
+     then consider m2 being Nat such that
 A7:   n = m1 + k + m2 by NAT_1:28;
+      reconsider m2 as Element of NAT by ORDINAL1:def 13;
         n - k = m1 + m2 by A7;
      then consider l such that
 A8:   l = n - k;
@@ -1226,11 +1228,13 @@ A4:   for n, m st ( n >= l1 & m >= l1 ) holds
      take l = l1 + k;
      let n, m; assume
 A5:   n >= l & m >= l;
-     then consider m1 such that
+     then consider m1 being Nat such that
 A6:   n = l1 + k + m1 by NAT_1:28;
+      reconsider m1 as Element of NAT by ORDINAL1:def 13;
 A7:   n - k = l1 + m1 by A6;
-     consider m2 such that
+     consider m2 being Nat such that
 A8:   m = l1 + k + m2 by A5,NAT_1:28;
+      reconsider m2 as Element of NAT by ORDINAL1:def 13;
 A9:   m - k = l1 + m2 by A8;
      consider l2 such that
 A10:   l2 = n - k by A7;

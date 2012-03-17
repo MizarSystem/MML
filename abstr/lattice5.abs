@@ -34,7 +34,7 @@ scheme :: LATTICE5:sch 1
    ex f being Function st dom f = NAT & f.0 = A() &
      for n being Element of NAT holds P[n,f.n,f.(n+1)]
  provided
-  for n being Nat for x being set ex y being set st P[n,x,y];
+  for n being Element of NAT for x being set ex y being set st P[n,x,y];
 
 theorem :: LATTICE5:1
 for f being Function, F being Function-yielding Function
@@ -137,7 +137,7 @@ definition let X; let f be non empty FinSequence of X; let x,y;
   pred x,y are_joint_by f,R1,R2 means
 :: LATTICE5:def 3
     f.1 = x & f.(len f) = y &
-    for i being Nat st 1 <= i & i < len f holds
+    for i being Element of NAT st 1 <= i & i < len f holds
       (i is odd implies [f.i,f.(i+1)] in R1) &
       (i is even implies [f.i,f.(i+1)] in R2);
 end;
@@ -145,7 +145,7 @@ end;
 canceled;
 
 theorem :: LATTICE5:12
-for x being set, o being Nat, R1,R2 being Relation,
+for x being set, o being Element of NAT, R1,R2 being Relation,
  f being non empty FinSequence of X st
   R1 is_reflexive_in X & R2 is_reflexive_in X & f = o |-> x
   holds x,x are_joint_by f,R1,R2;
@@ -153,7 +153,7 @@ for x being set, o being Nat, R1,R2 being Relation,
 canceled;
 
 theorem :: LATTICE5:14
-for x,y being set, R1,R2 being Relation, n,m being Nat st
+for x,y being set, R1,R2 being Relation, n,m being Element of NAT st
  (n <= m & R1 is_reflexive_in X & R2 is_reflexive_in X &
     ex f being non empty FinSequence of X st
       len f = n & x,y are_joint_by f,R1,R2)
@@ -165,12 +165,12 @@ definition
  given e such that
  e in the carrier of Y and
  e <> id X;
- given o being Nat such that
+ given o being Element of NAT such that
  for e1,e2,x,y st e1 in the carrier of Y & e2 in the carrier of Y &
                      [x,y] in e1 "\/" e2 holds
      ex F being non empty FinSequence of X st
       len F = o & x,y are_joint_by F,e1,e2;
- func type_of Y -> Nat means
+ func type_of Y -> Element of NAT means
 :: LATTICE5:def 4
  (for e1,e2,x,y st e1 in the carrier of Y & e2 in the carrier of Y &
                        [x,y] in e1 "\/" e2 holds
@@ -183,7 +183,7 @@ definition
 end;
 
 theorem :: LATTICE5:15
-for Y being Sublattice of EqRelLATT X, n being Nat st
+for Y being Sublattice of EqRelLATT X, n being Element of NAT st
  (ex e st e in the carrier of Y & e <> id X) &
  (for e1,e2,x,y st e1 in the carrier of Y & e2 in the carrier of Y &
     [x,y] in e1 "\/" e2 holds
@@ -196,21 +196,24 @@ begin :: A meet-representation of a lattice
 reserve A for non empty set,
         L for lower-bounded LATTICE;
 
-definition let A, L;
+definition let A be set, L be 1-sorted;
  mode BiFunction of A,L is Function of [:A,A:],the carrier of L;
 end;
 
-definition let A, L;
+definition let A be non empty set, L be 1-sorted;
  let f be BiFunction of A,L;let x,y be Element of A;
  redefine func f.(x,y) -> Element of L;
 end;
 
-definition let A, L; let f be BiFunction of A,L;
+definition let A; let L be 1-sorted; let f be BiFunction of A,L;
  canceled;
 
 attr f is symmetric means
 :: LATTICE5:def 6
  for x,y being Element of A holds f.(x,y) = f.(y,x);
+end;
+
+definition let A,L; let f be BiFunction of A,L;
 attr f is zeroed means
 :: LATTICE5:def 7
  for x being Element of A holds f.(x,x) = Bottom L;
@@ -473,7 +476,7 @@ definition let A,L; let d be distance_function of A,L;
 mode ExtensionSeq of A,d -> Function means
 :: LATTICE5:def 21
    dom it = NAT & it.0 = [A,d] &
-    for n being Nat holds
+    for n being Element of NAT holds
     ex A' being non empty set, d' being distance_function of A',L,
        Aq being non empty set, dq being distance_function of Aq,L st
      Aq, dq is_extension_of A',d' & it.n = [A',d'] & it.(n+1) = [Aq,dq];
@@ -481,11 +484,11 @@ end;
 
 theorem :: LATTICE5:41
  for d be distance_function of A,L for S being ExtensionSeq of A,d
- for k,l being Nat st k <= l holds (S.k)`1 c= (S.l)`1;
+ for k,l being Element of NAT st k <= l holds (S.k)`1 c= (S.l)`1;
 
 theorem :: LATTICE5:42
  for d be distance_function of A,L for S being ExtensionSeq of A,d
- for k,l being Nat st k <= l holds (S.k)`2 c= (S.l)`2;
+ for k,l being Element of NAT st k <= l holds (S.k)`2 c= (S.l)`2;
 
 definition let L;
 func BasicDF(L) -> distance_function of the carrier of L,L means
@@ -501,8 +504,8 @@ BasicDF(L) is onto;
 theorem :: LATTICE5:44
   for S being ExtensionSeq of the carrier of L, BasicDF(L)
   for FS being non empty set st
-    FS = union { (S.i)`1 where i is Nat: not contradiction} holds
-  union { (S.i)`2 where i is Nat: not contradiction}
+    FS = union { (S.i)`1 where i is Element of NAT: not contradiction} holds
+  union { (S.i)`2 where i is Element of NAT: not contradiction}
    is distance_function of FS,L;
 
 theorem :: LATTICE5:45
@@ -510,8 +513,8 @@ theorem :: LATTICE5:45
   for FS being non empty set,
       FD being distance_function of FS,L
  for x,y being Element of FS for a,b being Element of L st
- FS = union { (S.i)`1 where i is Nat: not contradiction} &
- FD = union { (S.i)`2 where i is Nat: not contradiction} &
+ FS = union { (S.i)`1 where i is Element of NAT: not contradiction} &
+ FD = union { (S.i)`2 where i is Element of NAT: not contradiction} &
  FD.(x,y) <= a"\/"b
   ex z1,z2,z3 being Element of FS st FD.(x,z1) = a & FD.(z2,z3) = a &
    FD.(z1,z2) = b & FD.(z3,y) = b;
@@ -523,8 +526,8 @@ theorem :: LATTICE5:46
   for f being Homomorphism of L,EqRelLATT FS
   for x, y being Element of FS
   for e1,e2 being Equivalence_Relation of FS,x,y st f = alpha FD &
-    FS = union { (S.i)`1 where i is Nat: not contradiction} &
-    FD = union { (S.i)`2 where i is Nat: not contradiction} &
+    FS = union { (S.i)`1 where i is Element of NAT: not contradiction} &
+    FD = union { (S.i)`2 where i is Element of NAT: not contradiction} &
        e1 in the carrier of Image f & e2 in the carrier of Image f &
        [x,y] in e1 "\/" e2
       ex F being non empty FinSequence of FS st

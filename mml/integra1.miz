@@ -28,14 +28,14 @@ environ
       PARTFUN2, JORDAN3, BINARITH, ZFMISC_1, COMPLSP1, FUNCT_3, FINSEQ_4,
       TREAL_1, GOBOARD2, RFINSEQ, JORDAN7, CARD_1, SEQ_1, RELAT_1, FUNCT_2,
       XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_0, FUNCOP_1, RELSET_1, XREAL_1,
-      XXREAL_0, FINSOP_1;
+      XXREAL_0, FINSOP_1, ORDINAL1;
  schemes FINSEQ_2, SEQ_1, BINARITH, XBOOLE_0;
 
 begin :: Definition of closed interval and its properties
 
 reserve a,a1,a2,b,b1,x,y,z for Real,
         F,G,H for FinSequence of REAL,
-        i,j,k,l,n,m for Nat,
+        i,j,k,l,n,m for Element of NAT,
         I for Subset of REAL,
         X for non empty set,
         x1,R,s for set;
@@ -340,7 +340,7 @@ A3:  dom p = Seg 1 by FUNCOP_1:19;
     rng p c= REAL by RELSET_1:12;
     then reconsider p as FinSequence of REAL by FINSEQ_1:def 4;
 A4: len p = 1 by A3,FINSEQ_1:def 3;
-A5: for j being Nat st j in Seg 1 holds p.j = a by FUNCOP_1:13;
+A5: for j being Element of NAT st j in Seg 1 holds p.j = a by FUNCOP_1:13;
       for n st n in Seg 1 holds p.n in A by A1,A2,A5;
    then p is FinSequence of A by A3,FINSEQ_2:14;
 then A6:rng p c= A by FINSEQ_1:def 4;
@@ -463,8 +463,9 @@ A4: 1<=i & i<=j by A1,A3,FINSEQ_1:3;
 then A5: i >= 2 by NAT_2:31;
     then A6: 1+1-1 <= i-1 by XREAL_1:11;
     A7: i-1<=j-0 by A4,REAL_1:92;
-    consider l such that
+    consider l being Nat such that
 A8:  i=2+l by A5,NAT_1:28;
+     reconsider l as Element of NAT by ORDINAL1:def 13;
 A9: l+1=i-(2-1) by A8;
     then i-1 in dom D by A3,A6,A7,FINSEQ_1:3;
 then A10:D.(i-1) in rng D by FUNCT_1:def 5;
@@ -476,7 +477,7 @@ definition
  let A be closed-interval Subset of REAL;
  let S be non empty Division of A;
  let D be Element of S;
- let i be Nat;
+ let i be Element of NAT;
  assume A1:i in dom D;
  func divset(D,i) -> closed-interval Subset of REAL means
  :Def5: inf it = inf A & sup it = D.i if i=1
@@ -512,7 +513,7 @@ A6:  i-1 in dom D & D.(i-1) in A by A1,A5,Th9;
        A7: i+-1< i+(1+-1) by XREAL_1:8;
      consider a1,b1 such that
 A8:  a1=D.(i-1) & b1=D.i;
-     reconsider j=i-1 as Nat by A1,A5,Th9;
+     reconsider j=i-1 as Element of NAT by A1,A5,Th9;
 A9:  D.j < D.i by A1,A6,A7,GOBOARD1:def 1;
      consider I such that
 A10:  I=[.a1,b1.];
@@ -615,7 +616,7 @@ definition let A be closed-interval Subset of REAL;
  it.i=(sup (rng (f|divset(D,i))))*vol(divset(D,i));
  existence
   proof
-    deffunc F(Nat)=(sup (rng (f|divset(D,$1))))*vol(divset(D,$1));
+    deffunc F(Element of NAT)=(sup (rng (f|divset(D,$1))))*vol(divset(D,$1));
     thus ex IT being FinSequence of REAL st
     len IT = len D & for i st i in Seg(len D) holds
     IT.i=F(i) from FINSEQ_2:sch 1;
@@ -642,7 +643,7 @@ A2:len s2 = len D & for i st i in Seg (len D) holds
  it.i=(inf (rng (f|divset(D,i))))*vol(divset(D,i));
  existence
   proof
-    deffunc F(Nat)=(inf (rng (f|divset(D,$1))))*vol(divset(D,$1));
+    deffunc F(Element of NAT)=(inf (rng (f|divset(D,$1))))*vol(divset(D,$1));
     thus ex z being FinSequence of REAL st len z = len D &
    for j st j in Seg len D holds z.j = F(j) from FINSEQ_2:sch 1;
   end;
@@ -1103,7 +1104,7 @@ theorem Th25:
    let A be closed-interval Subset of REAL;
    let S be non empty Division of A;
    let D be Element of S;
-   deffunc F(Nat)=vol(divset(D,$1));
+   deffunc F(Element of NAT)=vol(divset(D,$1));
    consider p being FinSequence of REAL such that
 A1:len p = len D &
    for i st i in Seg(len D) holds
@@ -1122,15 +1123,16 @@ A3:  i in Seg(len D);
      then len D >= 1 by NAT_1:39;
      then consider j being Nat such that
 A4:  len D = 1 + j by NAT_1:28;
-     thus thesis by A4;
+     j in NAT by ORDINAL1:def 13;
+     hence thesis by A4;
    end;
-   then reconsider k = len D - 1 as Nat;
-   deffunc F(Nat)=sup divset(D,$1);
+   then reconsider k = len D - 1 as Element of NAT;
+   deffunc F(Element of NAT)=sup divset(D,$1);
    consider s1 being FinSequence of REAL such that
 A5:len s1 = k &
    for i st i in Seg k holds
    s1.i = F(i) from FINSEQ_2:sch 1;
-   deffunc G(Nat)=inf divset(D,$1+1);
+   deffunc G(Element of NAT)=inf divset(D,$1+1);
    consider s2 being FinSequence of REAL such that
 A6:len s2 = k &
    for i st i in Seg k holds
@@ -1339,7 +1341,7 @@ A59:      (s1^<*sup A*>).i=D.i
 A60:      (<*inf A*>^s2).i = D.(i-1)
          proof
 A61:       i-len<*inf A*> in Seg(len s2) by A53,FINSEQ_1:def 3;
-              i-len<*inf A*> is Nat by A53;
+              i-len<*inf A*> is Element of NAT by A53;
            then 1 <= i-len<*inf A*> & i-len<*inf A*> <= len s2 by A61,
 FINSEQ_1:3;
            then len<*inf A*>+1 <= i & i <= len<*inf A*>+len s2 by XREAL_1:21,
@@ -1494,7 +1496,7 @@ A8:  for i st i in Seg(len D) holds
 A10: len p = len D &
      for i st i in Seg(len D) holds
      p.i=F(i) from FINSEQ_2:sch 1;
-     deffunc G(Nat)=(inf rng (f|divset(D,$1)))*vol(divset(D,$1));
+     deffunc G(Element of NAT)=(inf rng (f|divset(D,$1)))*vol(divset(D,$1));
      consider q being FinSequence of REAL such that
 A11: len q = len D &
      for i st i in Seg(len D) holds
@@ -1536,7 +1538,7 @@ theorem
  f being Function of A,REAL,
  S being non empty Division of A,
  D being Element of S,
- i being Nat
+ i being Element of NAT
  holds
  f is_bounded_above_on A & i in Seg(len D)implies
  (sup rng f)*vol(divset(D,i)) >= (sup rng (f|divset(D,i)))*vol(divset(D,i))
@@ -1545,7 +1547,7 @@ theorem
    let f be Function of A,REAL;
    let S be non empty Division of A;
    let D be Element of S;
-   let i be Nat;
+   let i be Element of NAT;
    assume A1:f is_bounded_above_on A;
    assume A2:i in Seg(len D);
 A3:rng(f|divset(D,i)) c= rng f by RELAT_1:99;
@@ -1614,7 +1616,7 @@ A8:  for i st i in Seg(len D) holds
 A10: len p = len D &
      for i st i in Seg(len D) holds
      p.i=F(i) from FINSEQ_2:sch 1;
-     deffunc G(Nat)=(sup rng (f|divset(D,$1)))*vol(divset(D,$1));
+     deffunc G(Element of NAT)=(sup rng (f|divset(D,$1)))*vol(divset(D,$1));
      consider q being FinSequence of REAL such that
 A11: len q = len D &
      for i st i in Seg(len D) holds
@@ -1667,13 +1669,13 @@ theorem Th30:
    assume f is_bounded_on A;
    then f is_bounded_below_on A & f is_bounded_above_on A by RFUNCT_1:def 11;
    then A1:rng f is bounded_below & rng f is bounded_above by Th13,Th15;
-   deffunc F(Nat)=(inf rng (f|divset(D,$1)))*vol(divset(D,$1));
+   deffunc F(Element of NAT)=(inf rng (f|divset(D,$1)))*vol(divset(D,$1));
    consider p being FinSequence of REAL such that
 A2:len p = len D &
    for i st i in Seg(len D) holds
    p.i=F(i) from FINSEQ_2:sch 1;
 A3:p=lower_volume(f,D) by A2,Def8;
-   deffunc G(Nat)=(sup rng (f|divset(D,$1)))*vol(divset(D,$1));
+   deffunc G(Element of NAT)=(sup rng (f|divset(D,$1)))*vol(divset(D,$1));
    consider q being FinSequence of REAL such that
 A4:len q = len D &
    for i st i in Seg(len D) holds
@@ -1857,7 +1859,7 @@ A3:D1.i in rng D1 by A1,FUNCT_1:def 5;
       rng D1 c= rng D2 by A2,Def20;
    then consider x1 such that
 A4:x1 in dom D2 & D1.i=D2.x1 by A3,FUNCT_1:def 5;
-   reconsider x1 as Nat by A4;
+   reconsider x1 as Element of NAT by A4;
    take x1;
    thus thesis by A4;
  end;
@@ -1865,14 +1867,14 @@ A4:x1 in dom D2 & D1.i=D2.x1 by A3,FUNCT_1:def 5;
 definition let A be closed-interval Subset of REAL;
  let S be non empty Division of A;
  let D1,D2 be Element of S;
- let i be Nat;
+ let i be Element of NAT;
  assume A1:D1 <= D2;
- func indx(D2,D1,i) -> Nat means
+ func indx(D2,D1,i) -> Element of NAT means
  :Def21: it in dom D2 & D1.i=D2.it if i in dom D1 otherwise it = 0;
  existence by A1,Th35;
  uniqueness
  proof
-   let m,n be Nat;
+   let m,n be Element of NAT;
    hereby assume that i in dom D1 and
 A2:  m in dom D2 & D1.i=D2.m and
 A3:  n in dom D2 & D1.i=D2.n;
@@ -1897,11 +1899,11 @@ end;
 
 theorem Th36:
  for p be increasing FinSequence of REAL,
-     n be Nat
+     n be Element of NAT
  holds n <= len p implies p/^n is increasing FinSequence of REAL
  proof
    let p be increasing FinSequence of REAL;
-   let n be Nat;
+   let n be Element of NAT;
    assume A1:n <= len p;
       for i,j st i in dom (p/^n) & j in
  dom (p/^n) & i< j holds (p/^n).i < (p/^n).j
@@ -1932,11 +1934,11 @@ then A10:  j+n in dom p by FINSEQ_1:def 3;
 
 theorem Th37:
  for p be increasing FinSequence of REAL,
- i,j be Nat holds j in dom p & i <= j implies
+ i,j be Element of NAT holds j in dom p & i <= j implies
  mid(p,i,j) is increasing FinSequence of REAL
  proof
    let p be increasing FinSequence of REAL;
-   let i,j be Nat;
+   let i,j be Element of NAT;
    assume that A1:j in dom p and A2:i <= j;
 A3:mid(p,i,j)=(p/^(i-'1))|(j-'i+1) by A2,JORDAN3:def 1;
       j in Seg(len p) by A1,FINSEQ_1:def 3;
@@ -1950,7 +1952,7 @@ then p/^(i-'1) is increasing FinSequence of REAL by Th36;
  end;
 
 theorem Th38: for A be closed-interval Subset of REAL,
- S be non empty Division of A, D be Element of S, i,j be Nat holds
+ S be non empty Division of A, D be Element of S, i,j be Element of NAT holds
  i in dom D & j in dom D & i<=j implies ex B be closed-interval Subset of REAL
  st inf B=mid(D,i,j).1 & sup B=mid(D,i,j).(len mid(D,i,j))
  & len mid(D,i,j)=j-i+1 & mid(D,i,j) is DivisionPoint of B
@@ -1958,7 +1960,7 @@ theorem Th38: for A be closed-interval Subset of REAL,
    let A be closed-interval Subset of REAL;
    let S be non empty Division of A;
    let D be Element of S;
-   let i,j be Nat;
+   let i,j be Element of NAT;
    assume that
  A1:i in dom D and
  A2:j in dom D and
@@ -1982,7 +1984,7 @@ then A6:  j-(i-'1) <= len D-(i-'1) by XREAL_1:11;
      then j-(i-'1)=j-i+1;
      hence thesis by A3,A4,A6,BINARITH:50;
    end;
-   reconsider k=j-'i+1 as Nat;
+   reconsider k=j-'i+1 as Element of NAT;
    reconsider D1=D/^(i-'1) as FinSequence of REAL;
    reconsider D2=D1|Seg k as FinSequence of REAL by FINSEQ_1:23;
 A7:mid(D,i,j) = D2
@@ -2036,7 +2038,7 @@ A16:M.(len M)=sup B by A14,Th6;
 theorem Th39: for A,B be closed-interval Subset of REAL,
  S be non empty Division of A, S1 be non empty Division of B,
  D be Element of S,
- i,j be Nat
+ i,j be Element of NAT
  holds i in dom D & j in dom D & i<=j & D.i>=inf B & D.j=sup B
  implies mid(D,i,j) is Element of S1
  proof
@@ -2044,7 +2046,7 @@ theorem Th39: for A,B be closed-interval Subset of REAL,
    let S be non empty Division of A;
    let S1 be non empty Division of B;
    let D be Element of S;
-   let i,j be Nat; assume that A1:i in dom D and A2:j in dom D and
+   let i,j be Element of NAT; assume that A1:i in dom D and A2:j in dom D and
    A3:i<=j and A4:D.i>=inf B and A5:D.j=sup B;
    consider A1 be closed-interval Subset of REAL such that
 A6:inf A1=mid(D,i,j).1 and A7:sup A1=mid(D,i,j).(len mid(D,i,j)) and
@@ -2086,7 +2088,7 @@ definition let p be FinSequence of REAL;
  :Def22: len it = len p & for i st i in Seg(len p) holds it.i=Sum(p|i);
  existence
   proof
-    deffunc F(Nat)=Sum(p|$1);
+    deffunc F(Element of NAT)=Sum(p|$1);
     thus ex IT being FinSequence of REAL st
     len IT = len p & for i st i in Seg(len p) holds
     IT.i=F(i) from FINSEQ_2:sch 1;
@@ -2111,7 +2113,7 @@ end;
 theorem Th40: for A be closed-interval Subset of REAL,
  f be Function of A,REAL, S be non empty Division of A,
  D1,D2 be Element of S st D1 <= D2 & f is_bounded_above_on A
- holds for i be non empty Nat holds (i in dom D1 implies
+ holds for i be non empty Element of NAT holds (i in dom D1 implies
  Sum(upper_volume(f,D1)|i) >= Sum(upper_volume(f,D2)|indx(D2,D1,i)))
  proof
    let A be closed-interval Subset of REAL;
@@ -2119,10 +2121,10 @@ theorem Th40: for A be closed-interval Subset of REAL,
    let S be non empty Division of A;
    let D1,D2 be Element of S;
    assume that A1:D1 <= D2 and A2:f is_bounded_above_on A;
-      for i be non empty Nat holds i in dom D1 implies
+      for i be non empty Element of NAT holds i in dom D1 implies
    Sum(upper_volume(f,D1)|i) >= Sum(upper_volume(f,D2)|indx(D2,D1,i))
    proof
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
     $1 in dom D1 implies
     Sum(upper_volume(f,D1)|$1) >= Sum(upper_volume(f,D2)|indx(D2,D1,$1));
 A3:  P[1]
@@ -2325,8 +2327,7 @@ A52:      1 <= i & i <= len DD2 & i in Seg(len DD2) & i in dom DD2
                    then i is non trivial by NAT_2:def 1;
                    then A62: i>=1+1&i-1<=indx(D2,D1,1)-0 by A16,A52,NAT_2:31
 ,REAL_1:92;
-                   then i-1 >= 1 & i-1 <= indx(D2,D1,1) by XREAL_1:21
-;
+                   then i-1 >= 1 & i-1 <= indx(D2,D1,1) by XREAL_1:21;
   then A63:           i-1 in Seg indx(D2,D1,1) by A61,FINSEQ_1:3;
                       1 <= i-1 & i-1 <= len D2 by A25,A62,XXREAL_0:2
 ,XREAL_1:21;
@@ -2489,10 +2490,10 @@ A93:         Seg indx(D2,D1,1) c= Seg(len D2) by A14,FINSEQ_1:7;
        end;
        hence thesis by A36,A37;
      end;
-A94:  for k being non empty Nat st
+A94:  for k being non empty Element of NAT st
      P[k] holds P[k+1]
      proof
-       let k be non empty Nat; assume A95:k in dom D1 implies
+       let k be non empty Element of NAT; assume A95:k in dom D1 implies
        Sum(upper_volume(f,D1)|k) >= Sum(upper_volume(f,D2)|indx(D2,D1,k));
        assume A96:k+1 in dom D1;
 then A97:   k+1 in Seg(len D1) by FINSEQ_1:def 3;
@@ -2540,6 +2541,8 @@ GOBOARD1:def 1;
          end;
          then consider ID being Nat such that
 A117:    indx(D2,D1,k+1) = indx(D2,D1,k) + ID by NAT_1:28;
+         reconsider ID as Element of NAT by ORDINAL1:def 13;
+aA117:    indx(D2,D1,k+1) = indx(D2,D1,k) + ID by A117;
 A118:    ID = indx(D2,D1,k+1) - indx(D2,D1,k) by A117;
 A119:     1 <= k & k <= len upper_volume(f,D1) by A102,Def7;
             indx(D2,D1,k) in dom D2 by A1,A104,Def21;
@@ -2558,7 +2561,7 @@ A121:     len K1D1=k+1 by A105,FINSEQ_1:80;
 A122:      len p1=k & len q1=1 & K1D1=p1^q1 by FINSEQ_2:26;
             len K1D2=IDK + (IDK1-IDK) by A111,FINSEQ_1:80;
          then consider p2,q2 being FinSequence of REAL such that
-A123:      len p2=IDK & len q2=IDK1-IDK & K1D2=p2^q2 by A117,FINSEQ_2:26;
+A123:      len p2=IDK & len q2=IDK1-IDK & K1D2=p2^q2 by aA117,FINSEQ_2:26;
 A124:      p1=KD1
          proof
 A125:       len p1 = len KD1 by A119,A122,FINSEQ_1:80;
@@ -2781,6 +2784,7 @@ A150,A196,Def5
             A202:   indx(D2,D1,k)+1 <= indx(D2,D1,k+1) by A112,NAT_1:38;
                    consider n1 being Nat such that
             A203:  n=1+n1 by A178,NAT_1:28;
+         reconsider n1 as Element of NAT by ORDINAL1:def 13;
             A204:   n1+(indx(D2,D1,k)+1)-'1=indx(D2,D1,k)+n-1
                      by A185,A203,BINARITH:50;
             A205:   1<=n-1 & n-1<=len MD2
@@ -2854,7 +2858,8 @@ p2 by A95,A103,A124,A134,XXREAL_0:2,FINSEQ_1:def 3;
        end;
        hence thesis;
      end;
-     thus for k being non empty Nat holds P[k] from BINARITH:sch 1(A3,A94);
+     thus for k being non empty Element of NAT holds P[k]
+     from BINARITH:sch 1(A3,A94);
    end;
    hence thesis;
  end;
@@ -2863,7 +2868,7 @@ theorem Th41:
  for A be closed-interval Subset of REAL,
  f be Function of A,REAL, S be non empty Division of A,
  D1,D2 be Element of S st D1 <= D2 & f is_bounded_below_on A
- holds for i be non empty Nat holds (i in dom D1 implies
+ holds for i be non empty Element of NAT holds (i in dom D1 implies
  Sum(lower_volume(f,D1)|i) <= Sum(lower_volume(f,D2)|indx(D2,D1,i)))
  proof
    let A be closed-interval Subset of REAL;
@@ -2871,10 +2876,10 @@ theorem Th41:
    let S be non empty Division of A;
    let D1,D2 be Element of S;
    assume that A1:D1 <= D2 and A2:f is_bounded_below_on A;
-      for i be non empty Nat holds i in dom D1 implies
+      for i be non empty Element of NAT holds i in dom D1 implies
    Sum(lower_volume(f,D1)|i) <= Sum(lower_volume(f,D2)|indx(D2,D1,i))
    proof
-defpred P[Nat] means $1 in dom D1 implies
+defpred P[Element of NAT] means $1 in dom D1 implies
      Sum(lower_volume(f,D1)|$1) <= Sum(lower_volume(f,D2)|indx(D2,D1,$1));
 A3:  P[1]
      proof
@@ -3238,9 +3243,9 @@ A94:         Seg indx(D2,D1,1) c= Seg(len D2) by A14,FINSEQ_1:7;
        end;
        hence thesis by A36,A37;
      end;
-A95:  for k being non empty Nat st P[k] holds P[k+1]
+A95:  for k being non empty Element of NAT st P[k] holds P[k+1]
      proof
-       let k be non empty Nat; assume A96:k in dom D1 implies
+       let k be non empty Element of NAT; assume A96:k in dom D1 implies
        Sum(lower_volume(f,D1)|k) <= Sum(lower_volume(f,D2)|indx(D2,D1,k));
        assume A97:k+1 in dom D1;
 then A98:   k+1 in Seg(len D1) by FINSEQ_1:def 3;
@@ -3288,6 +3293,8 @@ GOBOARD1:def 1;
          end;
          then consider ID being Nat such that
 A118:    indx(D2,D1,k+1) = indx(D2,D1,k) + ID by NAT_1:28;
+         reconsider ID as Element of NAT by ORDINAL1:def 13;
+aA118:    indx(D2,D1,k+1) = indx(D2,D1,k) + ID by A118;
 A119:     1 <= k & k <= len lower_volume(f,D1) by A103,Def8;
             indx(D2,D1,k) in dom D2 by A1,A105,Def21;
          then indx(D2,D1,k) in Seg(len D2) by FINSEQ_1:def 3;
@@ -3304,7 +3311,7 @@ A121:     len K1D1=k+1 by A106,FINSEQ_1:80;
 A122:      len p1=k & len q1=1 & K1D1=p1^q1 by FINSEQ_2:26;
             len K1D2=IDK + (IDK1-IDK) by A112,FINSEQ_1:80;
          then consider p2,q2 being FinSequence of REAL such that
-A123:      len p2=IDK & len q2=IDK1-IDK & K1D2=p2^q2 by A118,FINSEQ_2:26;
+A123:      len p2=IDK & len q2=IDK1-IDK & K1D2=p2^q2 by aA118,FINSEQ_2:26;
 A124:      p1=KD1
          proof
 A125:       len p1 = len KD1 by A119,A122,FINSEQ_1:80;
@@ -3534,6 +3541,7 @@ A150,A193,Def5
             A199:   indx(D2,D1,k)+1 <= indx(D2,D1,k+1) by A113,NAT_1:38;
                    consider n1 being Nat such that
             A200:  n=1+n1 by A176,NAT_1:28;
+            reconsider n1 as Element of NAT by ORDINAL1:def 13;
             A201:   n1+(indx(D2,D1,k)+1)-'1=indx(D2,D1,k)+n-1
                       by A183,A200,BINARITH:50;
             A202:   1<=n-1 & n-1<=len MD2
@@ -3612,14 +3620,15 @@ p2 by A96,A104,A124,A134,XXREAL_0:2,FINSEQ_1:def 3;
        end;
        hence thesis;
      end;
-     thus for n being non empty Nat holds P[n] from BINARITH:sch 1(A3,A95);
+     thus for n being non empty Element of NAT holds P[n]
+     from BINARITH:sch 1(A3,A95);
    end;
    hence thesis;
  end;
 
 theorem Th42: for A be closed-interval Subset of REAL,
  f be Function of A,REAL,
- S be non empty Division of A, D1,D2 be Element of S, i be Nat
+ S be non empty Division of A, D1,D2 be Element of S, i be Element of NAT
  holds D1 <= D2 & i in dom D1 & f is_bounded_above_on A
  implies
  (PartSums(upper_volume(f,D1))).i >=
@@ -3629,9 +3638,9 @@ theorem Th42: for A be closed-interval Subset of REAL,
    let f be Function of A,REAL;
    let S be non empty Division of A;
    let D1,D2 be Element of S;
-   let i be Nat; assume that A1:D1 <= D2 and A2:i in dom D1 and
+   let i be Element of NAT; assume that A1:D1 <= D2 and A2:i in dom D1 and
    A3:f is_bounded_above_on A;
-A4:i is non empty Nat
+A4:i is non empty Element of NAT
    proof
         i in Seg(len D1) by A2,FINSEQ_1:def 3;
      hence thesis by BINARITH:5;
@@ -3652,7 +3661,7 @@ A6: len upper_volume(f,D2)=len D2 by Def7;
 
 theorem Th43: for A be closed-interval Subset of REAL,
  f be Function of A,REAL,
- S be non empty Division of A, D1,D2 be Element of S, i be Nat
+ S be non empty Division of A, D1,D2 be Element of S, i be Element of NAT
  holds D1 <= D2 & i in dom D1 & f is_bounded_below_on A
  implies
  (PartSums(lower_volume(f,D1))).i <=
@@ -3662,9 +3671,9 @@ theorem Th43: for A be closed-interval Subset of REAL,
    let f be Function of A,REAL;
    let S be non empty Division of A;
    let D1,D2 be Element of S;
-   let i be Nat; assume that A1:D1 <= D2 and A2:i in dom D1 and
+   let i be Element of NAT; assume that A1:D1 <= D2 and A2:i in dom D1 and
    A3:f is_bounded_below_on A;
-A4:i is non empty Nat
+A4:i is non empty Element of NAT
    proof
         i in Seg(len D1) by A2,FINSEQ_1:def 3;
      hence thesis by BINARITH:5;

@@ -12,6 +12,7 @@ environ
       CONNSP_2, TOPS_1, TOPMETR, COMPLEX1, ABSVALUE, ORDINAL2, COMPTS_1,
       TARSKI, SETFAM_1, TOPREAL1, FINSEQ_4, ARYTM, JORDAN1A;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, ORDINAL2, NUMBERS,
+      XCMPLX_0,
       XREAL_0, COMPLEX1, REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, TOPS_1,
       TOPS_2, CONNSP_2, COMPTS_1, RCOMP_1, FINSEQ_1, FINSEQ_4, STRUCT_0,
       METRIC_1, TOPMETR, PCOMPS_1, EUCLID, PRE_TOPC, XXREAL_0;
@@ -20,7 +21,7 @@ environ
       ORDINAL2;
  registrations SUBSET_1, PRE_TOPC, RELSET_1, STRUCT_0, EUCLID, BORSUK_1,
       XREAL_0, METRIC_1, INT_1, TOPMETR, XBOOLE_0, NAT_1, MEMBERED, PCOMPS_1,
-      XXREAL_0;
+      XXREAL_0, ORDINAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, EUCLID;
  theorems BORSUK_1, COMPTS_1, CONNSP_2, ENUMSET1, EUCLID, FINSEQ_1, FUNCT_1,
@@ -32,7 +33,7 @@ environ
 
 begin
 
- reserve r,y1,y2,lambda for Real, i,j,n for Nat;
+ reserve r,y1,y2,lambda for Real, i,j,n for Element of NAT;
  reserve a,m for natural number;
 
 Lm1: the carrier of Euclid n = REAL n & the carrier of TOP-REAL n = REAL n
@@ -142,7 +143,7 @@ A6:  h is_homeomorphism & h.0 = f1.0 & h.1 = f2.1 by A3,A4,A5,TOPMETR2:6;
    thus thesis by A4,A5,A6;
  end;
 
-definition let n; let p1,p2 be Point of TOP-REAL n;
+definition let n be Element of NAT; let p1,p2 be Point of TOP-REAL n;
    func LSeg(p1,p2) -> Subset of TOP-REAL n equals
 :Def3: { (1-lambda)*p1 + lambda*p2 : 0 <= lambda & lambda <= 1 };
   coherence
@@ -207,8 +208,9 @@ theorem Th7:
  end;
 
 theorem Th8:
+  for n being Element of NAT
   for p1,p2 being Point of TOP-REAL n holds LSeg(p1,p2) = LSeg(p2,p1)
- proof let p1,p2 be Point of TOP-REAL n;
+ proof let n be Element of NAT;let p1,p2 be Point of TOP-REAL n;
        for a being set holds a in LSeg(p1,p2) iff a in LSeg(p2,p1)
     proof let a be set;
      thus a in LSeg(p1,p2) implies a in LSeg(p2,p1)
@@ -239,7 +241,7 @@ p2 &
    hence thesis by TARSKI:2;
  end;
 
-definition let n; let p1,p2 be Point of TOP-REAL n;
+definition let n be Element of NAT; let p1,p2 be Point of TOP-REAL n;
   redefine func LSeg(p1,p2);
   commutativity by Th8;
 end;
@@ -1487,8 +1489,8 @@ theorem Th31:
  set p1 = h/.1;
  A2: h is one-to-one by A1,Def10;
  A3: len h >= 1+1 by A1,Def10;
-  deffunc Q(Nat) = L~(h|($1+2));
-  defpred ARC[Nat] means
+  deffunc Q(Element of NAT) = L~(h|($1+2));
+  defpred ARC[Element of NAT] means
    1 <= $1 + 2 & $1 + 2 <= len h implies
    ex NE be non empty Subset of TOP-REAL 2 st NE = Q($1) &
     ex f being Function of I[01], (TOP-REAL 2)|NE st
@@ -1510,7 +1512,7 @@ then A8: 1 in Seg len (h|2) & 2 in Seg len (h|2) by FINSEQ_1:3;
       x = LSeg(h,1)
       proof
        assume x in {LSeg(h|2,i) : 1 <= i & i+1 <= len(h|2) };
-       then consider i being Nat such that
+       then consider i being Element of NAT such that
       A9: x = LSeg(h|2,i) and
       A10: 1 <= i & i+1 <= len(h|2);
        1 <= i & i+1 <= (1 + 1) by A6,A10,FINSEQ_1:def 3;
@@ -1572,7 +1574,7 @@ A23:    n + 1 +1 <> n + 2 + 1;
      A26: x in X and
      A27: X in {LSeg(h|(n+1+2),i) : 1 <= i & i+1 <= len(h|(n+1+2))}
       by TARSKI:def 4;
-      consider i being Nat such that
+      consider i being Element of NAT such that
      A28: X = LSeg(h|(n+1+2),i) and
      A29: 1 <= i & i+1 <= len(h|(n+1+2)) by A27;
           i + 1 - 1 = i;
@@ -1638,7 +1640,7 @@ FINSEQ_1:3;
        A50: x in X and
        A51: X in {LSeg(h|(n+2),i) : 1 <= i & i+1 <= len(h|(n+2))}
             by TARSKI:def 4;
-        consider i being Nat such that
+        consider i being Element of NAT such that
        A52: X = LSeg(h|(n+2),i) and
        A53: 1 <= i & i+1 <= len(h|(n+2)) by A51;
         A54: n + 1 + 2 <= len h & n + 2 <= len h by A18,XXREAL_0:2;
@@ -1790,7 +1792,7 @@ A106:     hh is_homeomorphism & hh.0 = f.0 & hh.1 = f1.1
        by A22,A24,A106;
    end;
 A107: for n holds ARC[n] from NAT_1:sch 1(A14,A15);
-  reconsider h1 = len h - 2 as Nat by A3,INT_1:18;
+  reconsider h1 = len h - 2 as Element of NAT by A3,INT_1:18;
  1 <= h1 + 2 by NAT_1:37;
    then consider NE being non empty Subset of TOP-REAL 2 such that
 A108:  NE = Q(h1) &
@@ -1869,7 +1871,7 @@ end;
 
 :: Moved from JORDAN1A, AK, 23.02.2006
 
-scheme TRSubsetEx { n() -> Nat, P[set] } :
+scheme TRSubsetEx { n() -> Element of NAT, P[set] } :
  ex A being Subset of TOP-REAL n() st
   for p being Point of TOP-REAL n() holds p in A iff P[p]
 proof
@@ -1887,7 +1889,7 @@ A1:  for x being set holds x in A iff x in the carrier of TOP-REAL n() & P[x]
     thus thesis by A1;
   end;
 
-scheme TRSubsetUniq { n() -> Nat, P[set] } :
+scheme TRSubsetUniq { n() -> Element of NAT, P[set] } :
  for A, B being Subset of TOP-REAL n() st
   (for p being Point of TOP-REAL n() holds p in A iff P[p]) &
   (for p being Point of TOP-REAL n() holds p in B iff P[p])

@@ -174,6 +174,9 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
+<Adjective nr="7"/>
+<Adjective nr="8"/>
+<Adjective nr="9"/>
 <Adjective nr="13"/>
 <Adjective nr="15"/>
 <Adjective nr="17" value="false"/>

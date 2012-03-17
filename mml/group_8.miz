@@ -11,7 +11,7 @@ environ
       FINSEQ_1, FUNCT_1, FILTER_0, GROUP_8, SETFAM_1, LATTICES, ARYTM,
       ORDINAL2;
  notations XBOOLE_0, CARD_1, TARSKI, ZFMISC_1, SUBSET_1,
-      ORDINAL1, XCMPLX_0, XXREAL_0,
+      ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
       RELAT_1, REALSET1, FUNCT_1, FUNCT_2, PBOOLE, BINOP_1, INT_1, NAT_1,
       RLVECT_1, FINSET_1, GROUP_2, GROUP_4, GROUP_6, GR_CY_1, FINSEQ_1,
       DOMAIN_1, STRUCT_0, GROUP_1, INT_2;
@@ -33,7 +33,7 @@ begin
          a,b,x,y,z for Element of G,
          H,K for strict Subgroup of G,
          h for Element of H,
-         p,n for Nat,
+         p,n for Element of NAT,
          A for Subset of G;
 
 theorem
@@ -67,27 +67,27 @@ end;
 theorem Th3:
 for a being Element of H
 for b being Element of G st a = b
-for n being Nat
+for n being Element of NAT
  holds a|^n = b|^n
 proof
  let a be Element of H;
 let b be Element of G such that A1: a = b;
-let n be Nat;
-defpred P[Nat] means a|^$1 = b|^$1;
+let n be Element of NAT;
+defpred P[Element of NAT] means a|^$1 = b|^$1;
 A2: P[0]
 proof
 A3: a |^ 0 = 1.H by GROUP_1:43;
   b |^ 0 = 1.G by GROUP_1:43;
   hence thesis by A3,GROUP_2:53;
 end;
-A4: for k being Nat st P[k] holds P[k + 1]
+A4: for k being Element of NAT st P[k] holds P[k + 1]
 proof
-let k be Nat such that A5: P[k];
+let k be Element of NAT such that A5: P[k];
 A6: a |^ (k +1) = (a|^ k) * a by GROUP_1:49;
    b |^ (k +1) = (b|^ k) * b by GROUP_1:49;
 hence thesis by A1,A5,A6,Th2;
 end;
-for k being Nat holds P[k] from NAT_1:sch 1(A2,A4);
+for k being Element of NAT holds P[k] from NAT_1:sch 1(A2,A4);
 hence thesis;
 end;
 
@@ -100,7 +100,7 @@ proof
 let a be Element of H;
 let b be Element of G such that A1: a = b;
 let i be Integer;
-consider k being Nat such that
+consider k being Element of NAT such that
 A2: i = k or i = - k by INT_1:8;
 per cases by A2;
    suppose i = k;
@@ -179,7 +179,7 @@ theorem Th8:
 for m being Integer holds (1.G) |^ m = 1.G
 proof
 let m be Integer;
-consider k being Nat such that A1: m = k or m = - k by INT_1:8;
+consider k being Element of NAT such that A1: m = k or m = - k by INT_1:8;
 per cases by A1;
    suppose m = k;
    hence thesis by GROUP_1:42;
@@ -230,9 +230,9 @@ proof
 assume A1: b is_not_of_order_0;
 ord b <> 0 by A1,GROUP_1:def 12; then
 A2: ord b > 0;
-deffunc B(Nat) = b |^ $1;
+deffunc B(Element of NAT) = b |^ $1;
 consider f being FinSequence such that
-A3: len f = ord b & for i being Nat st i in Seg ord b holds
+A3: len f = ord b & for i being Element of NAT st i in Seg ord b holds
 f.i = B(i) from FINSEQ_1:sch 2;
 A4: dom f = Seg ord b by A3,FINSEQ_1:def 3;
 the carrier of gr {b} c= rng f
@@ -246,7 +246,7 @@ A5: x in gr {b} by RLVECT_1:def 1; then
 A6: a = b|^m by A5,GR_CY_1:25;
    set k = m mod ord b;
    k >= 0 by NEWTON:78; then
-   reconsider k as Nat by INT_1:16;
+   reconsider k as Element of NAT by INT_1:16;
 A7: a = b|^k by A1,A6,Th10;
    per cases;
    suppose
@@ -273,11 +273,12 @@ theorem Th12:
 b is_of_order_0 implies b" is_of_order_0
 proof
   assume b is_of_order_0;
-  then A1: b |^n = 1.G implies n = 0 by GROUP_1:def 11;
+  then
+A1: for n being Nat st b |^n = 1.G holds n = 0 by GROUP_1:def 11;
   b" is_of_order_0
    proof
-     b" |^ n = 1.G implies n = 0
-     proof
+    for n being Nat st b" |^ n = 1.G holds n = 0
+     proof let n be Nat;
        assume b" |^ n = 1.G;
        then (b |^n)" = 1.G by GROUP_1:51;
        then (b |^n)" = (1.G)" by GROUP_1:16;
@@ -297,11 +298,11 @@ A1:  b is_of_order_0 implies for n being Integer holds
     b |^n = 1.G implies n = 0
           proof
             assume A2: b is_of_order_0;
-            then A3: for m being Nat holds b|^m = 1.G
+            then A3: for m being Element of NAT holds b|^m = 1.G
                     implies m = 0 by GROUP_1:def 11;
-            A4: for m being Nat holds b |^ - m = 1.G implies m = 0
+            A4: for m being Element of NAT holds b |^ - m = 1.G implies m = 0
                     proof
-                      let m be Nat;
+                      let m be Element of NAT;
                       assume A5: b |^ - m = 1.G;
                       A6: b |^ -m = (b |^ m)" by GROUP_1:71;
                       A7: b" |^ m = 1.G by A5,A6,GROUP_1:72;
@@ -312,7 +313,8 @@ A1:  b is_of_order_0 implies for n being Integer holds
             proof
               let n be Integer;
               assume A8: b |^ n = 1.G;
-              consider k being Nat such that A9: n = k or n = - k by INT_1:8;
+              consider k being Element of NAT such that
+              A9: n = k or n = - k by INT_1:8;
               per cases by A9;
               suppose n = k;
                 hence thesis by A3,A8;
@@ -336,12 +338,14 @@ end;
 theorem
 for G st ex a st a <> 1.G holds
 (for H holds H = G or H = (1).G) iff
-G is cyclic Group & G is finite & ex p being Nat st ord G = p & p is prime
+G is cyclic Group & G is finite & ex p being Element of NAT
+st ord G = p & p is prime
 proof
 let G such that A1: ex a st a <> 1.G;
 consider b such that A2: b <> 1.G by A1;
 A3: (for H holds H = G or H = (1).G) implies
-G is cyclic Group & G is finite & ex p being Nat st ord G = p & p is prime
+G is cyclic Group & G is finite &
+ex p being Element of NAT st ord G = p & p is prime
    proof
      assume A4: for H holds H = G or H = (1).G;
      A5: gr {b} is cyclic Group by GR_CY_2:10;
@@ -373,7 +377,8 @@ A13:           b = (b|^2)|^j1 by GR_CY_1:25;
             end;
           thus contradiction by A4,A10,A12;
           end;
-     then consider n being Nat such that A15: n = ord b & b is_not_of_order_0;
+     then consider n being Element of NAT such that
+     A15: n = ord b & b is_not_of_order_0;
      A16: G is finite by A6,A8,Th11;
      A17: ord G = ord gr{b} by A6;
      A18: ord b = ord gr{b} by A16,GR_CY_1:27;
@@ -381,7 +386,7 @@ A13:           b = (b|^2)|^j1 by GR_CY_1:25;
      n is prime
        proof
         assume A20: not n is prime;
-        ex u,v being Nat st u >1 & v > 1 & n = u * v
+        ex u,v being Element of NAT st u >1 & v > 1 & n = u * v
         proof
           not (n>1 & for m being natural number holds
               m divides n implies m = 1 or m = n)
@@ -397,9 +402,10 @@ A13:           b = (b|^2)|^j1 by GR_CY_1:25;
               end;
           then consider m being natural number such that
 A25:       m <> 1 & m <> n & m divides n by A21;
-reconsider m as Nat by ORDINAL1:def 13;
+reconsider m as Element of NAT by ORDINAL1:def 13;
           consider o being Nat such that
 A26:       n = m * o by A25,NAT_1:def 3;
+           reconsider o as Element of NAT by ORDINAL1:def 13;
           take u = m;
           take v = o;
           A27: u > 1
@@ -425,7 +431,8 @@ A26:       n = m * o by A25,NAT_1:def 3;
             end;
           hence thesis by A26,A27;
         end;
-        then consider u, v being Nat such that A29: u > 1 & v > 1 & n = u *v;
+        then consider u, v being Element of NAT such that
+        A29: u > 1 & v > 1 & n = u *v;
         ord (b |^v) = u by A6,A16,A19,A29,GR_CY_2:14;
         then A30: ord gr {b |^v } = u by A16,GR_CY_1:27;
         u <> n by A29,XCMPLX_1:7;
@@ -899,7 +906,7 @@ A10:(index B qua Integer) divides (index D qua Integer) by A9,INT_2:40;
 A11:(index B qua Integer) divides index D by A10;
 A12: index B divides index D
       proof
-        ex n being Nat st index D = (index B) * n
+        ex n being Element of NAT st index D = (index B) * n
            proof
              consider i being Integer such that
 A13:           index D = (index B qua Integer) * i by A11,INT_1:def 9;
@@ -912,7 +919,7 @@ A13:           index D = (index B qua Integer) * i by A11,INT_1:def 9;
                   index D > 0 by Th20;
                   hence contradiction by A13,A15,XREAL_1:133;
                   end;
-             then reconsider i as Nat by INT_1:16;
+             then reconsider i as Element of NAT by INT_1:16;
              take n = i;
              thus thesis by A13;
              end;
@@ -936,7 +943,7 @@ A19: (index A qua Integer) divides
 A20: (index A qua Integer) divides index E by A19,INT_2:40;
 A21:  index A divides index E
       proof
-        ex n being Nat st index E = (index A) * n
+        ex n being Element of NAT st index E = (index A) * n
            proof
              consider i being Integer such that
 A22:           index E = (index A qua Integer) * i by A20,INT_1:def 9;
@@ -949,7 +956,7 @@ A22:           index E = (index A qua Integer) * i by A20,INT_1:def 9;
                   index E > 0 by Th20;
                   hence contradiction by A22,A23,XREAL_1:133;
                   end;
-             then reconsider i as Nat by INT_1:16;
+             then reconsider i as Element of NAT by INT_1:16;
              take n = i;
              thus thesis by A22;
              end;
@@ -978,42 +985,42 @@ proof
 let a be Element of G;
 assume A1: a in H;
 let j be Integer;
-consider k being Nat such that
+consider k being Element of NAT such that
 A2:   j = k or j = - k by INT_1:8;
    per cases by A2;
    suppose A3: j =k;
-   defpred P[Nat] means a |^ $1 in H;
+   defpred P[Element of NAT] means a |^ $1 in H;
    A4: P[0]
       proof
         a |^0 = 1.G by GROUP_1:43;
         hence thesis by GROUP_2:55;
       end;
-   A5: for n being Nat st P[n] holds P[n + 1]
+   A5: for n being Element of NAT st P[n] holds P[n + 1]
              proof
-               let n be Nat such that A6: P[n];
+               let n be Element of NAT such that A6: P[n];
                (a |^ n) * a in H by A1,A6,GROUP_2:59;
                hence thesis by GROUP_1:49;
                end;
-   for n being Nat holds P[n] from NAT_1:sch 1(A4,A5);
+   for n being Element of NAT holds P[n] from NAT_1:sch 1(A4,A5);
    hence thesis by A3;
    end;
    suppose A7: j = - k;
-   defpred PP[Nat] means a |^ (- $1) in H;
+   defpred PP[Element of NAT] means a |^ (- $1) in H;
    A8: PP[0]
        proof
          a |^0 = 1.G by GROUP_1:43;
         hence thesis by GROUP_2:55;
          end;
-   A9: for n being Nat st PP[n] holds PP[n +1 ]
+   A9: for n being Element of NAT st PP[n] holds PP[n +1 ]
          proof
-           let n be Nat such that A10: PP[n];
+           let n be Element of NAT such that A10: PP[n];
            a" in H by A1,GROUP_2:60; then
            a |^(-n) * a" in H by A10,GROUP_2:59; then
            a |^(-n) * a |^ (-1) in H by GROUP_1:62; then
            a |^(- n + (- 1)) in H by GROUP_1:63;
          hence thesis;
        end;
-   for n being Nat holds PP[n] from NAT_1:sch 1(A8,A9);
+   for n being Element of NAT holds PP[n] from NAT_1:sch 1(A8,A9);
    hence thesis by A7;
    end;
   end;
@@ -1043,7 +1050,7 @@ theorem Th24:
 for G being strict Group
 for a being Element of G st G = gr{a} & G <> (1).G
 for H being strict Subgroup of G st H <> (1).G holds
-ex k being Nat st 0 < k & a |^k in H
+ex k being Element of NAT st 0 < k & a |^k in H
 proof
 let G be strict Group;
 let a be Element of G such that A1: G = gr{a} & G <> (1).G;
@@ -1069,7 +1076,7 @@ ex j being Integer st c = a |^j & j <>0
       hence contradiction by A9,GROUP_1:59;
     end; then consider j being Integer such that
 A10:  c = a |^ j & j <> 0;
-    consider n being Nat such that
+    consider n being Element of NAT such that
 A11:  j = n or j = -n by INT_1:8;
     per cases by A11;
       suppose A12: j = n;
@@ -1097,17 +1104,20 @@ proof
   consider b being Element of G such that
 A3:the HGrStr of G = gr{b} by GR_CY_1:def 9;
   consider i being Integer;
-  ex m being Nat st 0 < m & b |^m in H & for j being Nat st
+  ex m being Element of NAT
+   st 0 < m & b |^m in H & for j being Element of NAT st
     0 < j & b |^j in H holds m <= j
     proof
-      defpred P[Nat] means 0 < $1 & b |^$1 in H;
-  A4: ex k being Nat st P[k] by A1,A2,A3,Th24;
-      ex m being Nat st P[m] & for j being Nat st P[j] holds m <= j
+      defpred P[Element of NAT] means 0 < $1 & b |^$1 in H;
+  A4: ex k being Element of NAT st P[k] by A1,A2,A3,Th24;
+      ex m being Element of NAT st P[m] & for j being Element of NAT st P[j]
+      holds m <= j
         from NAT_1:sch 5(A4);
       hence thesis;
     end; then
-  consider m being Nat such that
-A5: 0 < m & b |^m in H & for j being Nat st 0 < j & b |^ j in H holds m <= j;
+  consider m being Element of NAT such that
+A5: 0 < m & b |^m in H & for j being Element of NAT st 0 < j & b |^ j in H
+holds m <= j;
 set c = b |^ m;
 reconsider c as Element of H by A5,RLVECT_1:def 1;
 A6: for a being Element of H holds
@@ -1137,7 +1147,7 @@ ex i being Integer st a = c |^ i
            hence thesis by A11,A12;
          end; then consider r,s being Integer such that A13:
          0 <= s & s < m & t = m * r + s;
-         reconsider s as Nat by A13,INT_1:16;
+         reconsider s as Element of NAT by A13,INT_1:16;
          A14: b |^ t = b |^ (m * r + s) by A13
       .= b |^(m *r) * (b |^s) by GROUP_1:63
       .= ((b |^m)|^ r) * (b |^ s) by GROUP_1:67;

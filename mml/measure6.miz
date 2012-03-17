@@ -18,7 +18,7 @@ environ
  definitions TARSKI, XBOOLE_0;
  theorems TARSKI, SUPINF_1, SUPINF_2, MEASURE1, FUNCT_1, MEASURE3, MEASURE4,
       MEASURE5, ZFMISC_1, FUNCT_2, NAT_1, CARD_4, WELLORD2, XREAL_0, REAL_2,
-      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0;
+      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes REAL_1, RECDEF_1, NAT_1, XBOOLE_0;
 
 begin
@@ -46,7 +46,7 @@ proof
    assume
 A1:F is nonnegative;
 A2:SUM(F) = sup(rng Ser(F)) by SUPINF_2:def 23;
-   consider n being Nat;
+   consider n being Element of NAT;
       Ser(F).n in rng Ser(F) & 0. <= Ser(F).n by A1,FUNCT_2:6,SUPINF_2:59;
    then consider y being R_eal such that
 A3:y in rng Ser(F) & 0. <= y;
@@ -57,14 +57,14 @@ end;
 theorem
       for F being Function of NAT,ExtREAL holds
    for x being R_eal holds
-   ((ex n being Nat st x <= F.n) &
+   ((ex n being Element of NAT st x <= F.n) &
    F is nonnegative) implies x <= SUM(F)
 proof
    let F be Function of NAT,ExtREAL;
    let x be R_eal;
    assume
-A1:(ex n being Nat st x <= F.n) & F is nonnegative;
-   then consider n being Nat such that
+A1:(ex n being Element of NAT st x <= F.n) & F is nonnegative;
+   then consider n being Element of NAT such that
 A2:x <= F.n;
       Ser(F).n in rng Ser(F) by FUNCT_2:6;
    then Ser(F).n <= sup(rng Ser(F)) by SUPINF_1:76;
@@ -76,7 +76,8 @@ then A3:Ser(F).n <= SUM(F) by SUPINF_2:def 23;
    end;
    suppose ex k being Nat st n = k + 1;
       then consider k being Nat such that
-   A4:n = k + 1;
+      A4:n = k + 1;
+      reconsider k as Element of NAT by ORDINAL1:def 13;
 A5:   Ser(F).n = Ser(F).k + F.(k + 1) by A4,SUPINF_2:63;
          0. <= Ser(F).k & x <= F.n & 0. <= F.n by A1,A2,SUPINF_2:58,59;
       then not ((0. = +infty & x = -infty) or (0. = -infty & x = +infty)) &
@@ -695,7 +696,7 @@ end;
 theorem
       for eps being R_eal st 0. < eps
    ex F being Function of NAT,ExtREAL st
-   (for n being Nat holds 0. < F.n) & SUM(F) < eps
+   (for n being Element of NAT holds 0. < F.n) & SUM(F) < eps
 proof
    let eps be R_eal;
    assume 0. < eps;
@@ -704,12 +705,13 @@ A1:0. < x0 & x0 < eps by Th23;
    consider x being R_eal such that
 A2:0. < x & x + x < x0 by A1,Th26;
    defpred P[set,set,set] means
-   for a,b being R_eal,s being Nat holds (s = $1 & a = $2 & b = $3 implies
+   for a,b being R_eal,s being Element of NAT holds (s = $1 & a = $2 & b = $3
+   implies
    b = len(a));
-A3:for n being Nat for x being Element of ExtREAL
+A3:for n being Element of NAT for x being Element of ExtREAL
    ex y being Element of ExtREAL st P[n,x,y]
    proof
-      let n be Nat;
+      let n be Element of NAT;
       let x be Element of ExtREAL;
       take len(x);
       thus thesis;
@@ -718,18 +720,18 @@ A3:for n being Nat for x being Element of ExtREAL
 A4:F.0 = x & for n being Element of NAT holds P[n,F.n,F.(n+1)]
    from RECDEF_1:sch 2(A3);
    take F;
-   defpred P[Nat] means 0. < F.$1;
+   defpred P[Element of NAT] means 0. < F.$1;
 A5: P[0] by A2,A4;
-A6:for k being Nat st P[k] holds P[k+1]
+A6:for k being Element of NAT st P[k] holds P[k+1]
    proof
-      let k be Nat;
+      let k be Element of NAT;
       assume
    A7:0. < F.k;
          F.(k+1) = len(F.k) by A4;
       hence thesis by A7,Th27;
    end;
-   thus A8: for n being Nat holds P[n] from NAT_1:sch 1(A5,A6);
-   then for n being Nat holds 0. <= F.n;
+   thus A8: for n being Element of NAT holds P[n] from NAT_1:sch 1(A5,A6);
+   then for n being Element of NAT holds 0. <= F.n;
    then A9:F is nonnegative by SUPINF_2:58;
       for s being R_eal holds s in rng Ser(F) implies s <= x0
    proof
@@ -737,12 +739,12 @@ A6:for k being Nat st P[k] holds P[k+1]
       assume s in rng Ser(F);
       then consider n being set such that
   A10:n in dom Ser(F) & s = Ser(F).n by FUNCT_1:def 5;
-      reconsider n as Nat by A10;
-      defpred P[Nat] means Ser(F).$1 + F.$1 < x0;
+      reconsider n as Element of NAT by A10;
+      defpred P[Element of NAT] means Ser(F).$1 + F.$1 < x0;
  A11: P[0] by A2,A4,SUPINF_2:63;
- A12: for l being Nat st P[l] holds P[l+1]
+ A12: for l being Element of NAT st P[l] holds P[l+1]
       proof
-         let l be Nat;
+         let l be Element of NAT;
          assume
      A13:Ser(F).l + F.l < x0;
      A14:Ser(F).(l+1) + F.(l+1) = (Ser(F).l + F.(l+1)) + F.(l+1)
@@ -762,7 +764,7 @@ A15:     F.(l+1) = len(F.l) by A4;
            by A18,A19,MEASURE4:1;
          hence thesis by A13,A14,SUPINF_1:29;
       end;
-         for k being Nat holds P[k] from NAT_1:sch 1(A11,A12);
+         for k being Element of NAT holds P[k] from NAT_1:sch 1(A11,A12);
   then A20:Ser(F).n + F.n < x0;
          0. <= Ser(F).n & 0. <= F.n by A8,A9,SUPINF_2:59;
       hence thesis by A10,A20,Th22;
@@ -845,31 +847,31 @@ end;
 theorem
       for F being Function of NAT,ExtREAL holds
    F is nonnegative & SUM(F) < +infty implies
-   for n being Nat holds F.n in REAL
+   for n being Element of NAT holds F.n in REAL
 proof
    let F be Function of NAT,ExtREAL;
    assume
 A1:F is nonnegative & SUM(F) < +infty;
-   defpred P[Nat] means F.$1 <= Ser(F).$1;
+   defpred P[Element of NAT] means F.$1 <= Ser(F).$1;
 A2:P[0] by SUPINF_2:63;
-A3:for k being Nat st P[k] holds P[k+1]
+A3:for k being Element of NAT st P[k] holds P[k+1]
    proof
-      let k be Nat;
+      let k be Element of NAT;
       assume F.k <= Ser(F).k;
       reconsider x = Ser(F).k, y = F.(k+1), z = Ser(F).(k+1) as R_eal;
    A4:x + F.(k+1) = Ser(F).(k+1) by SUPINF_2:63;
       0. <= x & 0. <= y & 0. <= z by A1,SUPINF_2:58,59;
       hence thesis by A4,SUPINF_2:20;
    end;
-A5:for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
-A6:for n being Nat holds Ser(F).n <= SUM(F)
+A5:for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
+A6:for n being Element of NAT holds Ser(F).n <= SUM(F)
    proof
-      let n be Nat;
+      let n be Element of NAT;
          Ser(F).n in rng Ser(F) by FUNCT_2:6;
       then Ser(F).n <= sup(rng Ser(F)) by SUPINF_1:76;
       hence thesis by SUPINF_2:def 23;
    end;
-   let n be Nat;
+   let n be Element of NAT;
       F.n <= Ser(F).n & Ser(F).n <= SUM(F) by A5,A6;
    then F.n <= SUM(F) by SUPINF_1:29;
    then 0. <= F.n & F.n < +infty by A1,SUPINF_1:29,SUPINF_2:58;

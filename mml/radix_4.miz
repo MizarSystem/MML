@@ -8,7 +8,8 @@ environ
 
  vocabularies INT_1, NAT_1, ARYTM_1, POWER, MIDSP_3, FINSEQ_1, FUNCT_1,
       RELAT_1, RLVECT_1, RADIX_1, FINSEQ_4, RADIX_3, RADIX_4, GROUP_1;
- notations TARSKI, SUBSET_1, XCMPLX_0, INT_1, NAT_1, FUNCT_1, POWER, XXREAL_0,
+ notations TARSKI, SUBSET_1,
+ NUMBERS,XCMPLX_0, INT_1, NAT_1, FUNCT_1, POWER, XXREAL_0,
       FINSEQ_1, FINSEQ_4, BINARITH, TREES_4, WSIERP_1, RADIX_1, RADIX_3;
  constructors XXREAL_0, MEMBERED, FINSEQ_4, POWER, BINARITH, RADIX_3;
  registrations INT_1, RELSET_1, MEMBERED, XREAL_0;
@@ -21,23 +22,23 @@ environ
 
 begin :: Some Useful Theorems
 
-reserve i,n,m,k,x,y for Nat,
+reserve i,n,m,k,x,y for Element of NAT,
         i1 for Integer;
 
 theorem Th1:
-  for k be Nat st 2 <= k holds 2 < Radix(k)
+  for k be Element of NAT st 2 <= k holds 2 < Radix(k)
 proof
-  defpred P[Nat] means 2 < Radix($1);
+  defpred P[Element of NAT] means 2 < Radix($1);
          Radix(2) = 2 to_power (1+1)
               .= 2 to_power 1 * 2 to_power 1 by POWER:32
               .= 2 * (2 to_power 1) by POWER:30
               .= 2 * 2 by POWER:30
               .= 4;
 then A1:     P[2];
-A2: for kk be Nat st
+A2: for kk be Element of NAT st
       kk >= 2 & P[kk] holds P[(kk + 1)]
       proof
-        let kk be Nat;
+        let kk be Element of NAT;
         assume
 A3:       2 <= kk & 2 < Radix(kk);
 A4:     Radix(kk + 1) = 2 to_power (kk + 1)
@@ -82,11 +83,11 @@ then A3:   i in Seg (n+1) by A2,FINSEQ_1:3;
 end;
 
 Lm3:
-  for k,x,n be Nat st
+  for k,x,n be Element of NAT st
     n >= 1 & x is_represented_by (n+1),k holds
       DigA(DecSD(x mod (Radix(k) |^ n),n,k),n) = DigA(DecSD(x,n,k),n)
 proof
-  let k,x,n be Nat;
+  let k,x,n be Element of NAT;
   assume n >= 1 & x is_represented_by (n+1),k;
       then n <> 0;
 then A1:   n in Seg n by FINSEQ_1:5;
@@ -104,10 +105,10 @@ end;
 begin :: Carry operation at n+1 digits Radix-2^k SD_Sub number
 
 theorem Th2:
-  for x,y be Integer, k be Nat st 3 <= k holds
+  for x,y be Integer, k be Element of NAT st 3 <= k holds
     SDSub_Add_Carry( SDSub_Add_Carry(x,k) + SDSub_Add_Carry(y,k), k ) = 0
 proof
-  let x,y be Integer, k be Nat;
+  let x,y be Integer, k be Element of NAT;
   assume
 A1:   k >= 3;
     then A2:   k - 1 >= 3 - 1 by REAL_1:92;
@@ -157,12 +158,12 @@ A1: 2 <= k & m is_represented_by 1,k;
 end;
 
 theorem Th5:
-  for k,x,n be Nat st
+  for k,x,n be Element of NAT st
     n >= 1 & k >= 3 & x is_represented_by (n+1),k holds
       DigA_SDSub(SD2SDSub(DecSD(x mod (Radix(k) |^ n),n,k)),n+1)
         = SDSub_Add_Carry(DigA(DecSD(x,n,k),n),k)
 proof
-  let k,x,n be Nat;
+  let k,x,n be Element of NAT;
   assume
 A1:   n >= 1 & k >= 3 & x is_represented_by (n+1),k;
 A2:   n+1 in Seg (n+1) by FINSEQ_1:5;
@@ -203,14 +204,14 @@ then A3:   DigA_SDSub(SD2SDSub(DecSD(m,1,k)),1)
 end;
 
 theorem Th7:
-  for k,x,n be Nat st
+  for k,x,n be Element of NAT st
     n >= 1 & k >= 2 & x is_represented_by (n+1),k holds
       (Radix(k) |^ n) * DigA_SDSub(SD2SDSub(DecSD(x,n+1,k)),n+1)
       = (Radix(k) |^ n) * DigA(DecSD(x,n+1,k),n+1)
         - (Radix(k) |^ (n+1)) * SDSub_Add_Carry(DigA(DecSD(x,n+1,k),n+1),k)
         + (Radix(k) |^ n) * SDSub_Add_Carry(DigA(DecSD(x,n+1,k),n),k)
 proof
-  let k,x,n be Nat;
+  let k,x,n be Element of NAT;
   assume
 A1:   n >= 1 & k >= 2 & x is_represented_by (n+1),k;
 A2:   n+1 in Seg (n+1) by FINSEQ_1:5;
@@ -246,7 +247,7 @@ end;
 begin :: Definition for adder operation on Radix-2^k SD-Sub number
 
 definition
-  let i,n,k be Nat,
+  let i,n,k be Element of NAT,
       x be Tuple of n,(k-SD_Sub), y be Tuple of n,(k-SD_Sub);
   assume A1:i in Seg n & k >= 2;
   func SDSubAddDigit(x,y,i,k) -> Element of k-SD_Sub equals
@@ -274,16 +275,16 @@ A8:   SDAD + SDAC is Element of INT by INT_1:def 2;
   end;
 end;
 
-definition let n,k be Nat,x,y be Tuple of n,(k-SD_Sub);
+definition let n,k be Element of NAT,x,y be Tuple of n,(k-SD_Sub);
   func x '+' y -> Tuple of n,(k-SD_Sub) means
     :Def2:
     for i st i in Seg n holds DigA_SDSub(it,i) = SDSubAddDigit(x,y,i,k);
 existence
   proof
-    deffunc F(Nat)=SDSubAddDigit(x,y,$1,k);
+    deffunc F(Element of NAT)=SDSubAddDigit(x,y,$1,k);
     consider z being FinSequence of (k-SD_Sub) such that
 A1:   len z = n and
-A2:   for j be Nat st j in Seg n holds
+A2:   for j be Element of NAT st j in Seg n holds
         z.j = F(j) from FINSEQ_2:sch 1;
     reconsider z as Tuple of n,(k-SD_Sub) by A1,FINSEQ_2:110;
     take z;
@@ -296,12 +297,12 @@ A3:   i in Seg n;
 uniqueness
   proof
     let k1,k2 be Tuple of n,(k-SD_Sub) such that
-A4: for i be Nat st i in Seg n holds
+A4: for i be Element of NAT st i in Seg n holds
            DigA_SDSub(k1,i) = SDSubAddDigit(x,y,i,k) and
-A5: for i be Nat st i in Seg n holds
+A5: for i be Element of NAT st i in Seg n holds
            DigA_SDSub(k2,i) = SDSubAddDigit(x,y,i,k);
     A6:len k1 = n & len k2 = n by FINSEQ_2:109;
-       now let j be Nat;
+       now let j be Element of NAT;
       assume
 A7:     j in Seg n;
       then k1.j = DigA_SDSub(k1,j) by RADIX_3:def 5
@@ -417,15 +418,15 @@ theorem
         x + y =
           SDSub2IntOut( SD2SDSub(DecSD(x,n,k)) '+' SD2SDSub(DecSD(y,n,k)) )
 proof
-  defpred P[Nat] means
-    for k,x,y be Nat st
+  defpred P[Element of NAT] means
+    for k,x,y be Element of NAT st
       k >= 3 & x is_represented_by $1,k & y is_represented_by $1,k holds
         x + y =
           SDSub2IntOut( SD2SDSub(DecSD(x,$1,k)) '+' SD2SDSub(DecSD(y,$1,k)) );
 
 A1: P[1]
   proof
-    let k,x,y be Nat;
+    let k,x,y be Element of NAT;
     assume
 A2:   k >= 3 & x is_represented_by 1,k & y is_represented_by 1,k;
 then A3: k >= 2 by XXREAL_0:2;
@@ -506,15 +507,15 @@ A11:  len (SDSub2INT(X '+' Y)) = 1 + 1 by FINSEQ_2:109;
       .= x + y + 0;
     hence thesis by A13,RADIX_3:def 12;
   end;
-A14:  for n be Nat st n >= 1 & P[n] holds P[n+1]
+A14:  for n be Element of NAT st n >= 1 & P[n] holds P[n+1]
 proof
-  let n be Nat;
+  let n be Element of NAT;
   assume
 A15:  n >= 1 & P[n];
       then n <> 0;
 then A16:  n in Seg n by FINSEQ_1:5;
 A17:  n+1 in Seg (n+1) by FINSEQ_1:5;
-  let k,x,y be Nat;
+  let k,x,y be Element of NAT;
   assume
 A18:  k >= 3 & x is_represented_by (n+1),k & y is_represented_by (n+1),k;
 then A19:  k >= 2 by XXREAL_0:2;
@@ -535,26 +536,29 @@ RADIX_1:def 12;
        .= Sum SDSub2INT(zn) by RADIX_3:def 12;
 A23:  (n+1) in Seg (n+1+1) by A17,FINSEQ_2:9;
 A24:  (n+1+1) in Seg (n+1+1) by FINSEQ_1:5;
-      deffunc G(Nat)=SDSub2INTDigit(z,$1,k);
+      deffunc G(Element of NAT)=SDSub2INTDigit(z,$1,k);
       consider zp being FinSequence of INT such that
 A25:  len zp = n+1 and
-A26:  for i be Nat st i in Seg (n+1) holds zp.i = G(i) from FINSEQ_2:sch 1;
+A26:  for i be Element of NAT st i in Seg (n+1) holds zp.i = G(i)
+ from FINSEQ_2:sch 1;
       consider zpp being FinSequence of INT such that
 A27:  len zpp = n and
-A28:  for i be Nat st i in Seg n holds zpp.i = G(i) from FINSEQ_2:sch 1;
-      deffunc GF(Nat)= SDSub2INTDigit(zn,$1,k);
+A28:  for i be Element of NAT st i in Seg n holds zpp.i = G(i)
+ from FINSEQ_2:sch 1;
+      deffunc GF(Element of NAT)= SDSub2INTDigit(zn,$1,k);
       consider znpp being FinSequence of INT such that
 A29:  len znpp = n and
-A30:  for i be Nat st i in Seg n holds znpp.i = GF(i) from FINSEQ_2:sch 1;
+A30:  for i be Element of NAT st i in Seg n holds znpp.i = GF(i)
+ from FINSEQ_2:sch 1;
 A31:  SDSub2INT(z) = zp^<* SDSub2INTDigit(z,(n+1)+1,k) *>
         proof
 A32:     len (zp^<*SDSub2INTDigit(z,n+1+1,k)*>)
             = n+1+1 by A25,FINSEQ_2:19;
 A33:     len SDSub2INT(z) = n+1+1 by FINSEQ_2:109;
-           for j be Nat st 1 <= j & j <= len SDSub2INT(z) holds
+           for j be Element of NAT st 1 <= j & j <= len SDSub2INT(z) holds
             SDSub2INT(z).j = (zp^<* SDSub2INTDigit(z,n+1+1,k) *>).j
             proof
-              let j be Nat;
+              let j be Element of NAT;
               assume 1 <= j & j <= len SDSub2INT(z);
 then A34:           j in Seg (n+1+1) by A33,FINSEQ_1:3;
 then A35:           j in dom SDSub2INT(z) by A33,FINSEQ_1:def 3;
@@ -586,10 +590,10 @@ A38:                j in dom SDSub2INT(z) by A33,A34,FINSEQ_1:def 3;
 A39:  zp = zpp^<* SDSub2INTDigit(z,(n+1),k) *>
         proof
 A40:     len (zpp^<*SDSub2INTDigit(z,n+1,k)*>) = n+1 by A27,FINSEQ_2:19;
-           for j be Nat st 1 <= j & j <= len zp holds
+           for j be Element of NAT st 1 <= j & j <= len zp holds
             zp.j = (zpp^<* SDSub2INTDigit(z,n+1,k) *>).j
             proof
-              let j be Nat;
+              let j be Element of NAT;
                 assume 1 <= j & j <= len zp;
 then A41:           j in Seg (n+1) by A25,FINSEQ_1:3;
                    now per cases by A41,FINSEQ_2:8;
@@ -619,10 +623,10 @@ A44:  SDSub2INT(zn) = znpp^<* SDSub2INTDigit(zn,n+1,k) *>
 A45:     len (znpp^<*SDSub2INTDigit(zn,n+1,k)*>)
             = n+1 by A29,FINSEQ_2:19;
 A46:     len SDSub2INT(zn) = n+1 by FINSEQ_2:109;
-           for j be Nat st 1 <= j & j <= len SDSub2INT(zn) holds
+           for j be Element of NAT st 1 <= j & j <= len SDSub2INT(zn) holds
             SDSub2INT(zn).j = (znpp^<* SDSub2INTDigit(zn,n+1,k) *>).j
             proof
-              let j be Nat;
+              let j be Element of NAT;
               assume 1 <= j & j <= len SDSub2INT(zn);
 then A47:           j in Seg (n+1) by A46,FINSEQ_1:3;
 then A48:           j in dom SDSub2INT(zn) by A46,FINSEQ_1:def 3;
@@ -653,9 +657,10 @@ A51:                j in dom SDSub2INT(zn) by A46,A47,FINSEQ_1:def 3;
         end;
 A52:  zpp = znpp
         proof
-           for j be Nat st 1 <= j & j <= len znpp holds znpp.j = zpp.j
+           for j be Element of NAT st 1 <= j & j <= len znpp
+            holds znpp.j = zpp.j
           proof
-            let j be Nat;
+            let j be Element of NAT;
             assume A53: 1 <= j & j <= len znpp;
 then A54:       j in Seg n by A29,FINSEQ_1:3;
 A55:       j <= n + 1 by A29,A53,NAT_1:37;
@@ -874,6 +879,6 @@ then A70: Sum SDSub2INT(z)
                           + (y mod (Radix(k) |^ n)) by A20,NAT_1:47;
      hence thesis by A70,RADIX_3:def 12;
   end;
-     for n be Nat st n >= 1 holds P[n] from NAT_1:sch 9(A1,A14);
+     for n be Element of NAT st n >= 1 holds P[n] from NAT_1:sch 9(A1,A14);
   hence thesis;
 end;

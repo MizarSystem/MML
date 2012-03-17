@@ -10,9 +10,9 @@ environ
       AMI_3, BOOLE, FUNCOP_1, SCMFSA6B, FUNCT_7, SF_MASTR, FINSEQ_1, INT_1,
       AMI_5, RELOC, SCM_1, CARD_1, SCMFSA6C, SCMFSA7B, SCMFSA_4, UNIALG_2,
       SCMFSA8B, ARYTM_1, SCMFSA8C, SCMFSA8A, SCM_HALT, CARD_3;
- notations TARSKI, XBOOLE_0, ENUMSET1, NUMBERS, XCMPLX_0, NAT_1, RELAT_1,
-      FINSEQ_1, FUNCT_1, FUNCT_4, FUNCT_7, STRUCT_0, AMI_1, AMI_3, AMI_5,
-      SCMFSA_2, CQC_LANG, CARD_1, SCM_1, SCMFSA_4, SCMFSA6B, SCMFSA_5,
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
+      RELAT_1, FINSEQ_1, FUNCT_1, FUNCT_4, FUNCT_7, STRUCT_0, AMI_1, AMI_3,
+      AMI_5, SCMFSA_2, CQC_LANG, CARD_1, SCM_1, SCMFSA_4, SCMFSA6B, SCMFSA_5,
       SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCMFSA7B, BINARITH,
       SCMFSA_3, SCMFSA6C, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, BINARITH, SCM_1, AMI_5, SCMFSA_3,
@@ -27,7 +27,7 @@ environ
 
 begin
 
-reserve m,n for Nat,
+ reserve m,n for Element of NAT,
          I for Macro-Instruction,
          s,s1,s2 for State of SCM+FSA,
          a for Int-Location,
@@ -37,7 +37,7 @@ definition let I be Macro-Instruction;
  attr I is InitClosed means
 :: SCM_HALT:def 1
 
- for s being State of SCM+FSA, n being Nat
+ for s being State of SCM+FSA, n being Element of NAT
     st Initialized I c= s
    holds IC (Computation s).n in dom I;
 
@@ -50,16 +50,16 @@ Initialized I is halting;
 :: SCM_HALT:def 3
   ::def5
  for s being State of SCM+FSA st Initialized I c= s
-  for k being Nat holds ((Computation s).k).intloc 0 = 1;
+  for k being Element of NAT holds ((Computation s).k).intloc 0 = 1;
 end;
 
 theorem :: SCM_HALT:1   ::TM001
-for x being set,i,m,n being Nat st
+for x being set,i,m,n being Element of NAT st
 x in dom (((intloc i) .--> m) +* Start-At insloc n) holds
   x=intloc i or x=IC SCM+FSA;
 
 theorem :: SCM_HALT:2   ::TM002
-for I being Macro-Instruction,i,m,n being Nat holds
+for I being Macro-Instruction,i,m,n being Element of NAT holds
    dom I misses dom (((intloc i) .--> m) +* Start-At insloc n);
 theorem :: SCM_HALT:3    ::I_iS
    Initialized I = I +* (((intloc 0) .--> 1) +* Start-At insloc 0);
@@ -123,11 +123,11 @@ theorem :: SCM_HALT:11   ::TM014=SCMFSA6B:26
 
 theorem :: SCM_HALT:12   ::TM016=SCMFSA6B:27 ::T0
  for J being InitHalting Macro-Instruction st Initialized J c= s1
- for n being Nat st ProgramPart Relocated(J,n) c= s2 &
+ for n being Element of NAT st ProgramPart Relocated(J,n) c= s2 &
      IC s2 = insloc n &
      s1 | (Int-Locations \/ FinSeq-Locations)
      = s2 | (Int-Locations \/ FinSeq-Locations)
- for i being Nat holds
+ for i being Element of NAT holds
      IC (Computation s1).i + n = IC (Computation s2).i &
      IncAddr(CurInstr ((Computation s1).i),n) = CurInstr ((Computation s2).i) &
      (Computation s1).i | (Int-Locations \/ FinSeq-Locations)
@@ -140,7 +140,7 @@ theorem :: SCM_HALT:14    :: TM020=SCMFSA6B:28 ::T13
  for I being InitHalting Macro-Instruction st
      Initialized I c= s1 & Initialized I c= s2 &
      s1,s2 equal_outside the Instruction-Locations of SCM+FSA holds
- for k being Nat holds
+ for k being Element of NAT holds
      (Computation s1).k, (Computation s2).k
          equal_outside the Instruction-Locations of SCM+FSA &
      CurInstr (Computation s1).k = CurInstr (Computation s2).k;
@@ -174,7 +174,7 @@ theorem :: SCM_HALT:18   ::TM028=MAI1:
     equal_outside the Instruction-Locations of SCM+FSA;
 
 theorem :: SCM_HALT:19   ::TM030=IScommute:
-for i,m,n being Nat holds
+for i,m,n being Element of NAT holds
  s+*I+*(((intloc i) .--> m) +* Start-At insloc n) =
  s+*(((intloc i) .--> m) +* Start-At insloc n)+* I;
 
@@ -204,12 +204,12 @@ theorem :: SCM_HALT:22  ::TM034=Lemma02
 theorem :: SCM_HALT:23  ::TM036=Lemma0
  for I being InitHalting Macro-Instruction
  st Initialized I c= s holds
-     for k being Nat st k <= LifeSpan s holds
+     for k being Element of NAT st k <= LifeSpan s holds
          CurInstr (Computation (s +* Directed I)).k <> halt SCM+FSA;
 
 theorem :: SCM_HALT:24
  for I being InitClosed Macro-Instruction st s +* Initialized I is halting
-   for J being Macro-Instruction, k being Nat
+   for J being Macro-Instruction, k being Element of NAT
     st k <= LifeSpan (s +* Initialized I ) holds
     (Computation (s +* Initialized I)).k,
     (Computation (s +* Initialized (I ';' J))).k
@@ -243,7 +243,7 @@ theorem :: SCM_HALT:26  ::TM042=Keep3
   st s +* I is halting
    for J being InitClosed Macro-Instruction
     st Initialized (I ';' J) c= s
-     for k being Nat holds
+     for k being Element of NAT holds
      (Computation (Result(s +*I) +* Initialized J )).k +* Start-At (IC
      (Computation (Result(s +*I) +* Initialized J )).k + card I),
      (Computation (s +* (I ';' J))).(LifeSpan (s +* I)+1+k)
@@ -252,7 +252,7 @@ theorem :: SCM_HALT:26  ::TM042=Keep3
 theorem :: SCM_HALT:27    ::Keep1
  for I being keepInt0_1 Macro-Instruction
   st not s +* Initialized I is halting
-   for J being Macro-Instruction, k being Nat
+   for J being Macro-Instruction, k being Element of NAT
     holds (Computation (s +* Initialized I)).k,
           (Computation (s +* Initialized (I ';' J))).k
            equal_outside the Instruction-Locations of SCM+FSA;
@@ -348,7 +348,7 @@ definition
  pred I is_closed_onInit s means
 :: SCM_HALT:def 4
  ::def3=D18
- for k being Nat holds
+ for k being Element of NAT holds
      IC (Computation (s +* Initialized I )).k in dom I;
  pred I is_halting_onInit s means
 :: SCM_HALT:def 5
@@ -367,7 +367,7 @@ I is InitHalting iff for s being State of SCM+FSA holds I is_halting_onInit s;
 theorem :: SCM_HALT:37   ::TM055=TQ9''(SCMFSA7B)
 for s being State of SCM+FSA, I being Macro-Instruction, a being Int-Location
  st I does_not_destroy a & I is_closed_onInit s & Initialized I c= s
-holds for k being Nat holds (Computation s).k.a = s.a;
+holds for k being Element of NAT holds (Computation s).k.a = s.a;
 
 registration
  cluster InitHalting good Macro-Instruction;
@@ -558,7 +558,7 @@ theorem :: SCM_HALT:61  ::TM206=T200724
 
 theorem :: SCM_HALT:62  ::TM208=TMP29
  for s being State of SCM+FSA, I being InitHalting Macro-Instruction,
-     a being Int-Location,k being Nat st I does_not_destroy a holds
+     a being Int-Location,k being Element of NAT st I does_not_destroy a holds
  IExec(I,s).a = (Computation (Initialize s +* (I +* Start-At insloc 0))).k.a;
 theorem :: SCM_HALT:63  ::TM209=TMP29''
  for s being State of SCM+FSA, I being InitHalting Macro-Instruction,
@@ -575,13 +575,14 @@ for s be State of SCM+FSA,I be keepInt0_1 InitHalting Macro-Instruction,
 theorem :: SCM_HALT:65  ::MAI1
  for s being State of SCM+FSA, I being InitClosed Macro-Instruction
      st Initialized I c= s & s is halting
- for m being Nat st m <= LifeSpan s
+ for m being Element of NAT st m <= LifeSpan s
      holds (Computation s).m,(Computation (s +* loop I)).m
          equal_outside the Instruction-Locations of SCM+FSA;
 
 theorem :: SCM_HALT:66
     for s being State of SCM+FSA, I being InitHalting Macro-Instruction
- st Initialized I c= s holds for k being Nat st k <= LifeSpan s holds
+ st Initialized I c= s holds for k being Element of NAT st k <= LifeSpan s
+ holds
          CurInstr (Computation (s +* loop I)).k <> halt SCM+FSA;
 
 theorem :: SCM_HALT:67   ::I_SI
@@ -590,7 +591,7 @@ theorem :: SCM_HALT:67   ::I_SI
 theorem :: SCM_HALT:68  ::TMP24
  for s being State of SCM+FSA, I being Macro-Instruction
      st I is_closed_onInit s & I is_halting_onInit s
- for m being Nat st m <= LifeSpan (s +* Initialized I)
+ for m being Element of NAT st m <= LifeSpan (s +* Initialized I)
      holds (Computation (s +* Initialized I)).m,
          (Computation(s +* Initialized (loop I))).m
          equal_outside the Instruction-Locations of SCM+FSA;
@@ -598,7 +599,7 @@ theorem :: SCM_HALT:68  ::TMP24
 theorem :: SCM_HALT:69  ::TMP25
  for s being State of SCM+FSA, I being Macro-Instruction
      st I is_closed_onInit s & I is_halting_onInit s
- for m being Nat st m < LifeSpan (s +* Initialized I) holds
+ for m being Element of NAT st m < LifeSpan (s +* Initialized I) holds
      CurInstr (Computation (s +* Initialized I)).m =
          CurInstr (Computation(s +* Initialized(loop I))).m;
 
@@ -611,7 +612,7 @@ theorem :: SCM_HALT:71   ::_TMP23
      st I is_closed_onInit s & I is_halting_onInit s holds
  (CurInstr (Computation (s +* Initialized (loop I))).
       LifeSpan (s +* Initialized I) = goto insloc 0 &
- for m being Nat st m <= LifeSpan (s +* Initialized I) holds
+ for m being Element of NAT st m <= LifeSpan (s +* Initialized I) holds
      CurInstr (Computation (s +* Initialized (loop I))).m <> halt SCM+FSA);
 
 theorem :: SCM_HALT:72  ::TMP26
@@ -652,7 +653,7 @@ theorem :: SCM_HALT:77  ::TMP22'
  for s being State of SCM+FSA, I being good InitHalting Macro-Instruction,
      a being read-write Int-Location st I does_not_destroy a &
      s.a > 0 holds
- ex s2 being State of SCM+FSA, k being Nat st
+ ex s2 being State of SCM+FSA, k being Element of NAT st
      s2 = s +* Initialized (loop if=0(a,Goto insloc 2,
      I ';' SubFrom(a,intloc 0))) &
      k = LifeSpan (s +* Initialized (if=0(a,Goto insloc 2,
@@ -663,7 +664,7 @@ theorem :: SCM_HALT:77  ::TMP22'
       (Computation s2).k.b = IExec(I,s).b) &
    (for f being FinSeq-Location holds (Computation s2).k.f = IExec(I,s).f) &
    IC (Computation s2).k = insloc 0 &
-   for n being Nat st n <= k holds
+   for n being Element of NAT st n <= k holds
        IC (Computation s2).n in
            dom loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0));
 
@@ -750,7 +751,7 @@ registration
 end;
 
 registration
- let n be Nat;
+ let n be Element of NAT;
  cluster intloc (n+1) -> read-write;
 end;
 

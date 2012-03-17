@@ -50,13 +50,13 @@ A1: 0 <= abs i by COMPLEX1:132;
 end;
 
 definition let i be Integer;
-  redefine func abs i -> Nat;
+  redefine func abs i -> Element of NAT;
   coherence by ORDINAL1:def 13;
 end;
 
  reserve x for set;
  reserve a, b, c for real number;
- reserve m, n, m1, m2 for Nat;
+ reserve m, n, m1, m2 for Element of NAT;
  reserve k, l, i for Integer;
  reserve p, q for Rational;
  reserve s1, s2 for Real_Sequence;
@@ -95,7 +95,7 @@ definition let a be real number;
   existence
   proof
    reconsider a as Real by XREAL_0:def 1;
-   deffunc F(Nat) = a|^$1;
+   deffunc F(Element of NAT) = a|^$1;
    ex f be Real_Sequence st for m holds f.m = F(m) from FUNCT_2:sch 4;
    hence thesis;
   end;
@@ -124,7 +124,7 @@ A1: s1 = a GeoSeq;
  assume that
 A2: s1.0 = 1 and
 A3: for m holds s1.(m+1) = s1.m * a;
-defpred P[Nat] means s1.$1 = a GeoSeq.$1;
+defpred P[Element of NAT] means s1.$1 = a GeoSeq.$1;
  s1.0 = a|^0 by A2,NEWTON:9 .= a GeoSeq.0 by Def1;
 then A4: P[0];
 A5: for m st P[m] holds P[m+1]
@@ -143,7 +143,7 @@ theorem
   for a st a <> 0 holds for m holds a GeoSeq.m <> 0
   proof let a such that
  A1: a <> 0;
- defpred P[Nat] means a GeoSeq.$1 <> 0;
+ defpred P[Element of NAT] means a GeoSeq.$1 <> 0;
  A2: P[0] by Th4;
  A3: for n holds P[n] implies P[n+1]
     proof let n such that
@@ -249,10 +249,12 @@ Lm3: for n being natural number holds
   0 < a & a < b & 1 <= n implies a |^ n < b |^ n
 proof let n be natural number;
   assume A1: 0 < a & a < b & 1 <= n;
- then A2: ex m st n = 1+m by NAT_1:28;
+ then consider m being Nat such that
+A2: n = 1+m by NAT_1:28;
+a1:  m in NAT by ORDINAL1:def 13;
  A3: a |^ (1+0) = a GeoSeq.(0+1) by Def1 .= a GeoSeq.0 * a by Th4
      .= 1*a by Th4 .= a;
- defpred P[Nat] means a |^ (1+$1) < b |^ (1+$1);
+ defpred P[Element of NAT] means a |^ (1+$1) < b |^ (1+$1);
   b |^ (1+0) = b GeoSeq.(0+1) by Def1 .= b GeoSeq.0 * b by Th4
  .= 1*b by Th4 .= b;
  then A4: P[0] by A1,A3;
@@ -264,7 +266,7 @@ proof let n be natural number;
   hence thesis by NEWTON:11;
  end;
   for m1 holds P[m1] from NAT_1:sch 1(A4,A5);
- hence thesis by A2;
+ hence thesis by a1,A2;
 end;
 
 theorem Th18:
@@ -278,7 +280,7 @@ proof
   end;
   suppose A2: a=0;
    reconsider k=n, k1=1 as Integer;
-   reconsider m=k-k1 as Nat by A1,INT_1:18;
+   reconsider m=k-k1 as Element of NAT by A1,INT_1:18;
       a |^ n = a |^ (m+1) .= a |^ m * a |^ 1 by NEWTON:13
   .= a |^ m * a GeoSeq.(0+1) by Def1 .= a |^ m * (a GeoSeq.0 * 0) by A2,Th4
   .= 0; hence a |^ n < b |^ n by A1,Th13;
@@ -299,8 +301,10 @@ proof
   let n be natural number;
  assume A1: 1 <= a & 1 <= n;
  then n<>0;
- then A2: ex m st n=m+1 by NAT_1:22;
- defpred P[Nat] means a <= a |^ ($1+1);
+ then consider m being Nat such that
+A2: n=m+1 by NAT_1:22;
+a1:  m in NAT by ORDINAL1:def 13;
+ defpred P[Element of NAT] means a <= a |^ ($1+1);
   a<=1*a;
  then a<=a GeoSeq.0 * a by Th4;
  then a<=a |^ 0 * a by Def1;
@@ -310,7 +314,7 @@ proof
   a*1 <= a |^ (m1+1) * a by A1,A5,XREAL_1:68; hence thesis by NEWTON:11;
  end;
   for m1 holds P[m1] from NAT_1:sch 1(A3,A4);
- hence thesis by A2;
+ hence thesis by A2,a1;
 end;
 
 theorem
@@ -319,11 +323,13 @@ theorem
 proof let n be natural number;
 assume A1: 1 < a & 2 <= n;
  then A2: a>0;
- A3: ex m st n = 2+m by A1,NAT_1:28;
+ then consider m being Nat such that
+A3: n = 2+m by A1,NAT_1:28;
+a1:  m in NAT by ORDINAL1:def 13;
  A4: a |^ (2+0) = a GeoSeq.(1+1) by Def1
  .= a GeoSeq.(0+1) * a by Th4 .= a GeoSeq.0 * a * a by Th4
  .= 1*a*a by Th4 .= a*a;
- defpred P[Nat] means a < a |^ (2+$1);
+ defpred P[Element of NAT] means a < a |^ (2+$1);
  A5: a*a > a*1 by A1,XREAL_1:70;
  then A6: P[0] by A4;
  A7: for m1 st P[m1] holds P[m1+1]
@@ -333,7 +339,7 @@ assume A1: 1 < a & 2 <= n;
   hence thesis by A5,XXREAL_0:2;
  end;
   for m1 holds P[m1] from NAT_1:sch 1(A6,A7);
- hence thesis by A3;
+ hence thesis by a1,A3;
 end;
 
 theorem
@@ -341,11 +347,13 @@ Th22:   for n being natural number st
   0 < a & a <= 1 & 1 <= n holds a |^ n <= a
 proof let n be natural number;
  assume A1: 0 < a & a <= 1 & 1 <= n;
- then A2: ex m st n = 1+m by NAT_1:28;
+ then consider m being Nat such that
+A2: n = 1+m by NAT_1:28;
+a1:  m in NAT by ORDINAL1:def 13;
  A3: a |^ (1+0) = a GeoSeq.(0+1) by Def1 .= a GeoSeq.0 * a by Th4
  .= 1*a by Th4 .= a;
  A4: a*a <= a*1 by A1,XREAL_1:66;
- defpred P[Nat] means a |^ (1+$1) <= a;
+ defpred P[Element of NAT] means a |^ (1+$1) <= a;
  A5: P[0] by A3;
  A6: for m1 st P[m1] holds P[m1+1]
  proof let m1; assume a |^ (1+m1) <= a;
@@ -354,7 +362,7 @@ proof let n be natural number;
   hence thesis by A4,XXREAL_0:2;
  end;
   for m1 holds P[m1] from NAT_1:sch 1(A5,A6);
- hence thesis by A2;
+ hence thesis by A2,a1;
 end;
 
 theorem
@@ -362,11 +370,13 @@ theorem
     0 < a & a < 1 & 2 <= n holds a |^ n < a
 proof let n be natural number;
  assume A1: 0 < a & a < 1 & 2 <= n;
- then A2: ex m st n = 2+m by NAT_1:28;
+ then consider m being Nat such that
+A2: n = 2+m by NAT_1:28;
+a1:  m in NAT by ORDINAL1:def 13;
  A3: a |^ (2+0) = a GeoSeq.(1+1) by Def1
  .= a GeoSeq.(0+1) * a by Th4 .= a GeoSeq.0 * a * a by Th4
  .= 1*a*a by Th4 .= a*a;
- defpred P[Nat] means a |^ (2+$1) < a;
+ defpred P[Element of NAT] means a |^ (2+$1) < a;
  A4: a*a < a*1 by A1,XREAL_1:70;
  then A5: P[0] by A3;
  A6: for m1 st P[m1] holds P[m1+1]
@@ -376,7 +386,7 @@ proof let n be natural number;
   hence thesis by A4,XXREAL_0:2;
  end;
   for m1 holds P[m1] from NAT_1:sch 1(A5,A6);
- hence thesis by A2;
+ hence thesis by A2,a1;
 end;
 
 theorem :: Bernoulli inequality
@@ -426,7 +436,7 @@ A4:  1 + 3 |^ 0 * a = 1 + 3 GeoSeq.0 * a by Def1
   then A7: 0 <= 1 + a;
   A8: 1 <= 3 |^ n
      proof per cases;
-     suppose A9: 0 = n;  n is Nat by ORDINAL1:def 13;
+     suppose A9: 0 = n;  n is Element of NAT by ORDINAL1:def 13;
       then 3 |^ n = 3 GeoSeq.n by Def1 .= 1 by A9,Th4;
       hence thesis;
      end;
@@ -460,7 +470,7 @@ theorem Th26:
     s2 is convergent & lim s2 = (lim s1) |^ m
 proof assume that A1: s1 is convergent and
                   A2: for n holds s2.n = (s1.n) |^ m;
- defpred P[Nat] means for s being Real_Sequence st
+ defpred P[Element of NAT] means for s being Real_Sequence st
   (for n holds s.n=(s1.n) |^ $1) holds s is convergent & lim s=(lim s1) |^ $1;
  A3: P[0]
  proof let s be Real_Sequence;
@@ -479,7 +489,7 @@ proof assume that A1: s1 is convergent and
             holds s is convergent & lim s = (lim s1) |^ m1;
   let s be Real_Sequence;
   assume A9: for n holds s.n = (s1.n) |^ (m1+1);
-  deffunc O(Nat) = (s1.$1) |^ m1;
+  deffunc O(Element of NAT) = (s1.$1) |^ m1;
   consider s3 being Real_Sequence such that A10:
   for n holds s3.n = O(n) from SEQ_1:sch 1;
   A11: s3 is convergent & lim s3 = (lim s1) |^ m1 by A8,A10;
@@ -720,7 +730,7 @@ proof assume A1: a>=0 & n>=1;
  end;
  suppose A2: a=0;
   reconsider k=n, k1=1 as Integer;
-  reconsider m=k-k1 as Nat by A1,INT_1:18;
+  reconsider m=k-k1 as Element of NAT by A1,INT_1:18;
   A3: 0 |^ n = 0 |^ (m+1) .= 0 |^ m * 0 |^ 1 by NEWTON:13
   .= 0 |^ m * 0 GeoSeq.(0+1) by Def1 .= 0 |^ m * (0 GeoSeq.0 * 0) by Th4
   .= 0; hence (n -Root a) |^ n = a by A1,A2,Def3; thus
@@ -872,7 +882,7 @@ proof assume that A1: a>=0 & n>=1 & m>=1 and
  end;
  suppose A11: a=0;
   reconsider k=n, k1=1 as Integer;
-  reconsider m1=k-k1 as Nat by A1,INT_1:18;
+  reconsider m1=k-k1 as Element of NAT by A1,INT_1:18;
   A12: a |^ (n+m) = a |^ (m1+m+1)
   .= a |^ (m1+m) * a by NEWTON:11 .= 0 by A11;
      n -Root a = 0 by A1,A11,Def3;
@@ -965,7 +975,7 @@ proof let s be Real_Sequence;
  let a such that A1: a>=1;
  assume A2: for n st n>=1 holds s.n = n -Root a;
  A3: a>0 by A1;
- deffunc O(Nat) = (a-1)/($1+1);
+ deffunc O(Element of NAT) = (a-1)/($1+1);
  consider s1 being Real_Sequence such that A4:
  for n holds s1.n = O(n) from SEQ_1:sch 1;
  A5: s1 is convergent & lim s1 = 0 by A4,SEQ_4:46;
@@ -1012,7 +1022,7 @@ proof let s be Real_Sequence;
  end;
  suppose A3: a<1; then a/a<1/a by A1,REAL_1:73;
   then A4: 1<=1/a by A1,XCMPLX_1:60;
-  deffunc O(Nat) = $1 -Root (1/a);
+  deffunc O(Element of NAT) = $1 -Root (1/a);
   consider s1 being Real_Sequence such that A5:
   for n holds s1.n = O(n) from SEQ_1:sch 1;
      for n holds n>=1 implies s1.n=n -Root (1/a) by A5;
@@ -1205,7 +1215,7 @@ proof
   assume A1: a<>0;
  per cases;
  suppose m-n>=0;
-  then reconsider m1 = m-n as Nat by INT_1:16;
+  then reconsider m1 = m-n as Element of NAT by INT_1:16;
   A2: a |^ n <> 0 by A1,Th12;
      a #Z (m-n) * a |^ n = a |^ m1 * a |^ n by Th46
   .= a |^ (m1+n) by NEWTON:13
@@ -1213,7 +1223,7 @@ proof
      a #Z (m-n) = a |^ m / a |^ n by A2,XCMPLX_1:90;
  end;
  suppose m-n<0; then -(m-n)>0 by XREAL_1:60;
-  then reconsider m1 = n-m as Nat by INT_1:16;
+  then reconsider m1 = n-m as Element of NAT by INT_1:16;
   A3: a |^ n <> 0 by A1,Th12;
   A4: a #Z (n-m) * a |^ m = a |^ m1 * a |^ m by Th46
       .= a |^ (m1+m) by NEWTON:13
@@ -1238,8 +1248,8 @@ proof assume A1: a<>0;
   .= a #Z k * a #Z l by A2,Def4;
  end;
  suppose A4: k>=0 & l<0; then -l>=0 by XREAL_1:60;
-  then reconsider n = -l as Nat by INT_1:16;
-  reconsider m = k as Nat by A4,INT_1:16;
+  then reconsider n = -l as Element of NAT by INT_1:16;
+  reconsider m = k as Element of NAT by A4,INT_1:16;
       k+l = m - n;
   hence a #Z (k+l) = a |^ m / a |^ n by A1,Th53
   .= a |^ m * (a |^ n)" by XCMPLX_0:def 9
@@ -1250,8 +1260,8 @@ proof assume A1: a<>0;
   .= a #Z k * a #Z l by A4,Def4;
  end;
  suppose A5: k<0 & l>=0; then -k>=0 by XREAL_1:60;
-  then reconsider n = -k as Nat by INT_1:16;
-  reconsider m = l as Nat by A5,INT_1:16;
+  then reconsider n = -k as Element of NAT by INT_1:16;
+  reconsider m = l as Element of NAT by A5,INT_1:16;
   k+l = m - n;
   hence a #Z (k+l) = a |^ m / a |^ n by A1,Th53
   .= a |^ m * (a |^ n)" by XCMPLX_0:def 9
@@ -1620,7 +1630,7 @@ theorem
 Th71: a>=1 & p >= 0 implies a #Q p >= 1
 proof assume A1: a>=1 & p>=0;
    then numerator(p)>=0 by RAT_1:76;
- then reconsider n = numerator(p) as Nat by INT_1:16;
+ then reconsider n = numerator(p) as Element of NAT by INT_1:16;
  A2: denominator(p) >= 1 by RAT_1:29;
  A3: a #Z numerator(p) = a |^ n by Th46;
     a |^ n >= 1 |^ n by A1,Th17;
@@ -1641,7 +1651,7 @@ theorem
 Th73: a>1 & p>0 implies a #Q p > 1
 proof assume A1: a>1 & p>0;
  then A2: numerator(p)>0 by RAT_1:77;
- then reconsider n = numerator(p) as Nat by INT_1:16;
+ then reconsider n = numerator(p) as Element of NAT by INT_1:16;
  A3: denominator(p) >= 1 by RAT_1:29;
  A4: a #Z numerator(p) = a |^ n by Th46;
      n>=0+1 by A2,NAT_1:38;
@@ -1735,7 +1745,7 @@ Th79: for a be real number
   ex s being Rational_Sequence st s is convergent & lim s = a
 & for n holds s.n<=a
 proof let a be real number;
- deffunc O(Nat) = [\($1+1)*a/]/($1+1);
+ deffunc O(Element of NAT) = [\($1+1)*a/]/($1+1);
  consider s being Real_Sequence such that A1:
  for n holds s.n = O(n) from SEQ_1:sch 1;
     now let n;
@@ -1747,7 +1757,7 @@ proof let a be real number;
  reconsider a1 = a as Real by XREAL_0:def 1;
  reconsider s1 = NAT --> a1 as Real_Sequence by FUNCOP_1:57;
  A2: for n holds s1.n = a1 by FUNCOP_1:13;
- deffunc O(Nat) = 1/($1+1);
+ deffunc O(Element of NAT) = 1/($1+1);
  consider s2 being Real_Sequence such that A3:
  for n holds s2.n = O(n) from SEQ_1:sch 1;
  A4: s2 is convergent & lim s2 = 0 by A3,SEQ_4:45;
@@ -1787,7 +1797,7 @@ theorem
 Th80: ex s being Rational_Sequence st s is convergent & lim s = a
 & for n holds s.n>=a
 proof
- deffunc O(Nat) = [/($1+1)*a\]/($1+1);
+ deffunc O(Element of NAT) = [/($1+1)*a\]/($1+1);
  consider s being Real_Sequence such that A1:
  for n holds s.n = O(n) from SEQ_1:sch 1;
     now let n;
@@ -1799,7 +1809,7 @@ proof
  a in REAL by XREAL_0:def 1;
  then reconsider s1 = NAT --> a as Real_Sequence by FUNCOP_1:57;
  A2: for n holds s1.n = a by FUNCOP_1:13;
- deffunc O(Nat) = 1/($1+1);
+ deffunc O(Element of NAT) = 1/($1+1);
  consider s2 being Real_Sequence such that A3:
  for n holds s2.n = O(n) from SEQ_1:sch 1;
  A4: s2 is convergent & lim s2 = 0 by A3,SEQ_4:45;
@@ -1839,7 +1849,7 @@ definition let a be real number; let s be Rational_Sequence;
  :Def7: for n holds it.n = a #Q (s.n);
   existence
   proof
-   deffunc O(Nat) = a #Q (s.$1);
+   deffunc O(Element of NAT) = a #Q (s.$1);
    consider s1 being Real_Sequence such that A1:
    for n holds s1.n = O(n) from SEQ_1:sch 1;
    take s1;
@@ -2604,12 +2614,12 @@ proof assume that A1: s1 is convergent & s2 is convergent and
  A11: s/"s1 is convergent by A1,A2,A5,A7,SEQ_2:37;
  A12: lim (s/"s1) = lim s/lim s1 by A1,A2,A5,A7,SEQ_2:38
       .= 1 by A2,A6,XCMPLX_1:60;
- consider m0 being Nat such that A13: p<m0 by SEQ_4:10;
+ consider m0 being Element of NAT such that A13: p<m0 by SEQ_4:10;
  reconsider q=m0 as Rational;
- deffunc O(Nat) = ((s/"s1).$1) |^ m0;
+ deffunc O(Element of NAT) = ((s/"s1).$1) |^ m0;
  consider s3 being Real_Sequence such that A14:
  for n holds s3.n = O(n) from SEQ_1:sch 1;
- deffunc O(Nat) = ((s1/"s).$1) |^ m0;
+ deffunc O(Element of NAT) = ((s1/"s).$1) |^ m0;
  consider s4 being Real_Sequence such that A15:
  for n holds s4.n = O(n) from SEQ_1:sch 1;
     s3 is convergent & lim s3 = 1 |^ m0 by A11,A12,A14,Th26;
@@ -2748,7 +2758,7 @@ proof assume that A1: s1 is convergent & s2 is convergent and
   suppose p>=0; hence lim s2 = (lim s1) #Q p by A1,A2,A3,Lm11;
   end;
   suppose A4: p<=0; then A5: -p>=-0 by XREAL_1:26;
-  deffunc O(Nat) = (s2.$1)";
+  deffunc O(Element of NAT) = (s2.$1)";
   consider s being Real_Sequence such that A6:
   for n holds s.n = O(n) from SEQ_1:sch 1;
      now let n;  s1.n>0 by A3;
@@ -2953,7 +2963,7 @@ A7:  now assume A8: lim s2 = 0;
    then consider n such that A9: for m st m>=n holds abs(s2.m-0)<a #R ((lim s1)
 +1)
    by A2,A8,SEQ_2:def 7;
-   consider n1 being Nat such that A10:
+   consider n1 being Element of NAT such that A10:
    for m st m>=n1 holds abs(s1.m-lim s1)<1 by A2,SEQ_2:def 7;
       now let m such that A11: m>=n+n1;
        n+n1>=n by NAT_1:37;
@@ -3015,7 +3025,7 @@ reserve r, u for real number,
         k for natural number;
 
 theorem
- r>0 & u > 0 implies ex k be Nat st u/(2 |^ k) <= r
+ r>0 & u > 0 implies ex k be Element of NAT st u/(2 |^ k) <= r
     proof
       assume that A1:r>0 and A2: u>0;
       consider t be real number such that
@@ -3028,11 +3038,11 @@ theorem
       consider n such that A6: (u * t) < n by SEQ_4:10;
       A7: 0 < u * t by A2,A4,REAL_2:122;
       then A8: u/(u * t) > u/n by A2,A6,REAL_2:200;
-      defpred P[Nat] means $1 <= 2 |^ $1;
+      defpred P[Element of NAT] means $1 <= 2 |^ $1;
       A9: P[0];
-      A10: for k be Nat st P[k] holds P[k + 1]
+      A10: for k be Element of NAT st P[k] holds P[k + 1]
         proof
-          let k be Nat;
+          let k be Element of NAT;
           assume A11: k <= 2 |^ k;
           A12: 2 |^ (k + 1) = (2 |^ k) * (2 |^ 1) by NEWTON:13
                           .= (2 |^ k) * 2 by NEWTON:10
@@ -3042,7 +3052,7 @@ theorem
               (2 |^ k) + 1 >= k + 1 by A11,XREAL_1:9;
           hence thesis by A12,A13,XXREAL_0:2;
         end;
-          for k be Nat holds P[k] from NAT_1:sch 1(A9,A10);
+          for k be Element of NAT holds P[k] from NAT_1:sch 1(A9,A10);
       then A14: n <= (2 |^ n);
           0 < n by A6,A7;
       then A15: u/n >= u/(2 |^ n) by A2,A14,REAL_2:201;
@@ -3065,8 +3075,8 @@ theorem
 :: from SCPINVAR, 2006.03.14, A.T.
 
 theorem Th108:
- for n,m,l be Nat st n divides m & n divides l holds n divides m-l
-proof let n,m,l be Nat;
+ for n,m,l be Element of NAT st n divides m & n divides l holds n divides m-l
+proof let n,m,l be Element of NAT;
     assume A1: n divides m & n divides l;
 then A2:  m = n * (m div n) by NAT_1:49;
 A3:  -l =-n*(l div n) by A1,NAT_1:49
@@ -3098,7 +3108,7 @@ then A3:    n > 0;
      consider t be Integer such that
 A4:   nn = m * t by A2,INT_1:def 9;
        0 < m & 0 < t or m < 0 & t < 0 by A3,A4,XREAL_1:136;
-      then reconsider k=t as Nat by INT_1:16;
+      then reconsider k=t as Element of NAT by INT_1:16;
            n = m * k by A4;
      hence m divides n by NAT_1:def 3;
     end;
@@ -3114,7 +3124,7 @@ A1:  x divides m & x divides n by NAT_1:def 5;
 A2:  y divides m by NAT_1:def 5;
     per cases;
     suppose n-m >= 0;
-      then reconsider nm=n-m as Nat by INT_1:16;
+      then reconsider nm=n-m as Element of NAT by INT_1:16;
 A3:   abs( n - m )=nm by ABSVALUE:def 1;
            x divides n-m by A1,Th108;
 then x divides abs( nm ) by A3,Th109;
@@ -3127,7 +3137,7 @@ then   y divides nm+m by A2,NAT_1:55;
     suppose n-m < 0;
 then A5:   abs( n - m )=-(n-m) by ABSVALUE:def 1
       .=m-n;
-      then reconsider mn=m-n as Nat;
+      then reconsider mn=m-n as Element of NAT;
            x divides m-n by A1,Th108;
 then x divides abs( n-m ) by A5,Th109;
 then A6:   x divides y by A1,NAT_1:def 5;

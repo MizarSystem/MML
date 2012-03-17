@@ -10,18 +10,19 @@ environ
       FINSEQ_1, ARYTM_1, SQUARE_1, RLVECT_1, PROB_1, ARYTM_3, VECTSP_1,
       RFINSEQ;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, RELSET_1,
-      PARTFUN1, FUNCT_2, FINSEQ_1, CARD_1, REAL_1, NAT_1, SQUARE_1, SEQ_1,
-      FINSEQ_4, FINSET_1, RVSUM_1, XXREAL_0;
+      PARTFUN1, FUNCT_2, FINSEQ_1, CARD_1, XCMPLX_0, NAT_1, REAL_1, SQUARE_1,
+      SEQ_1, FINSEQ_4, FINSET_1, RVSUM_1, XXREAL_0;
  constructors PARTFUN1, WELLORD2, REAL_1, SQUARE_1, NAT_1, BINOP_2, FINSEQOP,
-      SEQ_1, FINSEQ_4, RVSUM_1;
- registrations FINSET_1, FUNCT_1, RELSET_1, FINSEQ_1, FUNCT_2, NAT_1, MEMBERED;
+      SEQ_1, FINSEQ_4, RVSUM_1, ARYTM_3, INT_1;
+ registrations FINSET_1, FUNCT_1, RELSET_1, FINSEQ_1, FUNCT_2, NAT_1, MEMBERED,
+      ARYTM_3, XREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
 begin
 
 reserve x,y for set,
-        n,m for Nat,
+        n,m for Element of NAT,
         r,s for Real;
 
 definition let F,G be Relation;
@@ -111,24 +112,25 @@ theorem :: RFINSEQ:18
 
 definition let D be set,
                f be FinSequence of D,
-               n be Nat;
+               n be Element of NAT;
 func f /^ n -> FinSequence of D means
 :: RFINSEQ:def 2
- len it = len f - n & for m be Nat st
+ len it = len f - n & for m be Element of NAT st
  m in dom it holds it.m = f.(m+n) if n<=len f
  otherwise it = <*>D;
 end;
 
 theorem :: RFINSEQ:19
-for D be non empty set, f be FinSequence of D, n,m be Nat holds
+for D be non empty set, f be FinSequence of D, n,m be Element of NAT holds
    n in dom f & m in Seg n implies (f|n).m = f.m & m in dom f;
 
 theorem :: RFINSEQ:20
-for D be non empty set, f be FinSequence of D, n be Nat, x be set st
+for D be non empty set, f be FinSequence of D, n be Element of NAT, x be set st
    len f = n+1 & x = f.(n+1) holds f = (f|n) ^ <*x*>;
 
 theorem :: RFINSEQ:21
-for D be non empty set, f be FinSequence of D, n be Nat holds (f|n)^(f/^n) = f;
+for D be non empty set, f be FinSequence of D, n be Element of NAT
+ holds (f|n)^(f/^n) = f;
 
 theorem :: RFINSEQ:22
    for R1,R2 be FinSequence of REAL
@@ -138,15 +140,16 @@ definition let R be FinSequence of REAL;
 func MIM(R) -> FinSequence of REAL means
 :: RFINSEQ:def 3
  len it = len R & it.(len it) = R.(len R) &
- for n be Nat st 1 <= n & n <= len it - 1 holds it.n = (R.n) - (R.(n+1));
+ for n be Element of NAT st 1 <= n & n <= len it - 1
+  holds it.n = (R.n) - (R.(n+1));
 end;
 
 theorem :: RFINSEQ:23
-for R be FinSequence of REAL, r be Real, n be Nat
+for R be FinSequence of REAL, r be Real, n be Element of NAT
   st len R = n+2 & R.(n+1) = r holds MIM(R|(n+1)) = MIM(R)|n ^ <* r *>;
 
 theorem :: RFINSEQ:24
-for R be FinSequence of REAL, r,s be Real, n be Nat st
+for R be FinSequence of REAL, r,s be Real, n be Element of NAT st
 len R = n+2 & R.(n+1) = r & R.(n+2) = s holds MIM(R) = MIM(R)|n ^ <* r-s,s *>;
 
 theorem :: RFINSEQ:25
@@ -159,19 +162,20 @@ theorem :: RFINSEQ:27
    for r,s be Real holds MIM(<*r,s*>) = <*r-s,s*>;
 
 theorem :: RFINSEQ:28
-   for R be FinSequence of REAL, n be Nat holds MIM(R) /^ n = MIM(R/^n);
+   for R be FinSequence of REAL, n be Element of NAT
+    holds MIM(R) /^ n = MIM(R/^n);
 
 theorem :: RFINSEQ:29
 for R be FinSequence of REAL st len R <> 0 holds Sum MIM(R) = R.1;
 
 theorem :: RFINSEQ:30
-   for R be FinSequence of REAL, n be Nat
+   for R be FinSequence of REAL, n be Element of NAT
   st 1<=n & n<len R holds Sum MIM(R/^n) = R.(n+1);
 
 definition let IT be FinSequence of REAL;
 attr IT is non-increasing means
 :: RFINSEQ:def 4
- for n be Nat st n in dom IT & n+1 in dom IT holds IT.n >= IT.(n+1);
+ for n be Element of NAT st n in dom IT & n+1 in dom IT holds IT.n >= IT.(n+1);
 end;
 
 registration
@@ -186,14 +190,15 @@ theorem :: RFINSEQ:32
 for R be FinSequence of REAL holds
                       R is non-increasing
                               iff
-            for n,m be Nat st n in dom R & m in dom R & n<m holds R.n>=R.m;
+            for n,m be Element of NAT st n in dom R & m in dom R & n<m
+             holds R.n>=R.m;
 
 theorem :: RFINSEQ:33
-for R be non-increasing FinSequence of REAL, n be Nat holds
+for R be non-increasing FinSequence of REAL, n be Element of NAT holds
   R|n is non-increasing FinSequence of REAL;
 
 theorem :: RFINSEQ:34
-   for R be non-increasing FinSequence of REAL, n be Nat holds
+   for R be non-increasing FinSequence of REAL, n be Element of NAT holds
    R /^ n is non-increasing FinSequence of REAL;
 
 theorem :: RFINSEQ:35

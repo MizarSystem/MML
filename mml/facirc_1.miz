@@ -60,12 +60,13 @@ registration
 end;
 
 registration
- cluster -> non pair Nat;
+ cluster -> non pair Element of NAT;
   coherence
-   proof let n be Nat; given x,y being set such that
+   proof let n be Element of NAT; given x,y being set such that
 A1:   n = [x,y];
 A2:   n = {{x,y},{x}} & 0 = {} by A1;
-       n > 0 & n = {k where k is Nat: k < n} by A1,AXIOMS:30,NAT_1:18;
+       n > 0 & n = {k where k is Element of NAT: k < n}
+        by A1,AXIOMS:30,NAT_1:18;
      then 0 in n; hence contradiction by A2,TARSKI:def 2;
    end;
 end;
@@ -220,7 +221,7 @@ A2:  x in dom f & y = f.x by FUNCT_1:def 5;
    thus thesis by A1,A2;
   end;
 
-registration let n be Nat;
+registration let n be Element of NAT;
  cluster one-to-one nonpair-yielding FinSeqLen of n;
   existence
    proof reconsider p = id Seg n as FinSequence by FINSEQ_2:52;
@@ -229,7 +230,7 @@ registration let n be Nat;
     take p; thus p is one-to-one by FUNCT_1:52;
     let x be set; assume A1: x in dom p;
 then A2:   x in Seg n by RELAT_1:71;
-    reconsider i = x as Nat by A1;
+    reconsider i = x as Element of NAT by A1;
         p.x = i by A2,FUNCT_1:34;
     hence thesis;
    end;
@@ -239,7 +240,8 @@ registration
  cluster one-to-one nonpair-yielding FinSequence;
   existence
    proof
-    consider n being Nat, p being one-to-one nonpair-yielding FinSeqLen of n;
+    consider n being Element of NAT,
+    p being one-to-one nonpair-yielding FinSeqLen of n;
     take p; thus thesis;
    end;
 end;
@@ -590,7 +592,7 @@ definition
   coherence proof thus len <*x,y,z*> = 3 by FINSEQ_1:62; end;
 end;
 
-definition let n,m be Nat;
+definition let n,m be Element of NAT;
  let p be FinSeqLen of n;
  let q be FinSeqLen of m;
  redefine func p^q -> FinSeqLen of n+m;
@@ -635,26 +637,26 @@ definition
  let S be non void Circuit-like (non empty ManySortedSign);
  let A be non-empty Circuit of S;
  let s be State of A;
- let n be Nat;
+ let n be Element of NAT;
  func Following(s,n) -> State of A means
 :Def8:
   ex f being Function of NAT, product the Sorts of A st
    it = f.n & f.0 = s &
-   for n being Nat holds f.(n+1) = Following f.n;
+   for n being Element of NAT holds f.(n+1) = Following f.n;
  correctness
  proof
    set D = product the Sorts of A;
-   deffunc R(Nat,Element of D) = Following $2;
+   deffunc R(Element of NAT,Element of D) = Following $2;
     (ex y being Element of D st ex f being Function of NAT,D st
      y = f.n & f.0 = s &
-       for n being Nat holds f.(n+1) = R(n,f.n)) &
+       for n being Element of NAT holds f.(n+1) = R(n,f.n)) &
      for y1,y2 being Element of D st
      (ex f being Function of NAT,D st
      y1 = f.n & f.0 = s &
-       for n being Nat holds f.(n+1) = R(n,f.n)) &
+       for n being Element of NAT holds f.(n+1) = R(n,f.n)) &
      (ex f being Function of NAT,D st
      y2 = f.n & f.0 = s &
-     for n being Nat holds f.(n+1) = R(n,f.n)) holds y1 = y2
+     for n being Element of NAT holds f.(n+1) = R(n,f.n)) holds y1 = y2
          from RECDEF_1:sch 21;
     hence thesis;
  end;
@@ -668,20 +670,20 @@ theorem Th11:
    let A be non-empty Circuit of S, s be State of A;
        ex f being Function of NAT, product the Sorts of A st
      Following(s,0) = f.0 & f.0 = s &
-     for n being Nat holds f.(n+1) = Following f.n by Def8;
+     for n being Element of NAT holds f.(n+1) = Following f.n by Def8;
    hence thesis;
   end;
 
 theorem Th12:
  for S being Circuit-like non void (non empty ManySortedSign)
  for A being non-empty Circuit of S, s being State of A
- for n being Nat holds Following(s,n+1) = Following Following(s,n)
+ for n being Element of NAT holds Following(s,n+1) = Following Following(s,n)
   proof let S be Circuit-like non void (non empty ManySortedSign);
    let A be non-empty Circuit of S, s be State of A;
-   let n be Nat;
+   let n be Element of NAT;
    consider f being Function of NAT, product the Sorts of A such that
 A1:  Following(s,n) = f.n & f.0 = s &
-    for n being Nat holds f.(n+1) = Following f.n by Def8;
+    for n being Element of NAT holds f.(n+1) = Following f.n by Def8;
    thus Following(s,n+1) = f.(n+1) by A1,Def8
                         .= Following Following(s,n) by A1;
   end;
@@ -689,20 +691,22 @@ A1:  Following(s,n) = f.n & f.0 = s &
 theorem Th13:
  for S being Circuit-like non void (non empty ManySortedSign)
  for A being non-empty Circuit of S, s being State of A
- for n,m being Nat holds Following(s,n+m) = Following(Following(s,n),m)
+ for n,m being Element of NAT
+  holds Following(s,n+m) = Following(Following(s,n),m)
   proof let S be Circuit-like non void (non empty ManySortedSign);
    let A be non-empty Circuit of S, s be State of A;
-   let n be Nat;
-   defpred P[Nat] means Following(s,n+$1) = Following(Following(s,n),$1);
+   let n be Element of NAT;
+   defpred P[Element of NAT] means
+    Following(s,n+$1) = Following(Following(s,n),$1);
 A1:  P[0] by Th11;
-A2:  for m being Nat st P[m] holds P[m+1]
-     proof let m be Nat; assume
+A2:  for m being Element of NAT st P[m] holds P[m+1]
+     proof let m be Element of NAT; assume
 A3:    Following(s,n+m) = Following(Following(s,n),m);
      thus Following(s,n+(m+1)) = Following(s,n+m+1)
        .= Following Following(s,n+m) by Th12
        .= Following(Following(s,n),m+1) by A3,Th12;
     end;
-   thus for i being Nat holds P[i] from NAT_1:sch 1(A1,A2);
+   thus for i being Element of NAT holds P[i] from NAT_1:sch 1(A1,A2);
   end;
 
 theorem Th14:
@@ -728,10 +732,10 @@ theorem Th15:
 theorem Th16:
  for S being Circuit-like non void (non empty ManySortedSign)
  for A being non-empty Circuit of S, s being State of A
- for n being Nat holds Following(s,n+1) = Following(Following s, n)
+ for n being Element of NAT holds Following(s,n+1) = Following(Following s, n)
   proof let S be Circuit-like non void (non empty ManySortedSign);
    let A be non-empty Circuit of S, s be State of A;
-   let n be Nat;
+   let n be Element of NAT;
        Following(s,n+1) = Following(Following(s,1), n) by Th13;
    hence thesis by Th14;
   end;
@@ -743,20 +747,20 @@ definition
  let x be set;
  pred s is_stable_at x means:
 Def9:
-  for n being Nat holds (Following(s,n)).x = s.x;
+  for n being Element of NAT holds (Following(s,n)).x = s.x;
 end;
 
 theorem
     for S being non void Circuit-like (non empty ManySortedSign)
  for A being non-empty Circuit of S, s being State of A
  for x being set st s is_stable_at x
- for n being Nat holds Following(s,n) is_stable_at x
+ for n being Element of NAT holds Following(s,n) is_stable_at x
   proof let S be non void Circuit-like (non empty ManySortedSign);
    let A be non-empty Circuit of S;
    let s be State of A;
    let x be set such that
-A1:  for n being Nat holds (Following(s,n)).x = s.x;
-   let n, m be Nat;
+A1:  for n being Element of NAT holds (Following(s,n)).x = s.x;
+   let n, m be Element of NAT;
    thus (Following(Following(s,n),m)).x = (Following(s,n+m)).x by Th13
         .= s.x by A1
         .= (Following(s,n)).x by A1;
@@ -771,15 +775,15 @@ theorem
    let s be State of A;
    let x be set; assume
 A1:  x in InputVertices S;
-   defpred P[Nat] means (Following(s,$1)).x = s.x;
+   defpred P[Element of NAT] means (Following(s,$1)).x = s.x;
 A2:  P[0] by Th11;
-A3:  now let n be Nat; assume
+A3:  now let n be Element of NAT; assume
 A4:    P[n];
       (Following(s,n+1)).x = (Following Following(s,n)).x by Th12
           .= s.x by A1,A4,CIRCUIT2:def 5;
      hence P[n+1];
     end;
-   thus for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
+   thus for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
   end;
 
 theorem Th19:
@@ -794,7 +798,7 @@ theorem Th19:
    let g be Gate of S; set p = the_arity_of g;
    assume
 A1:  for x being set st x in rng p holds s is_stable_at x;
-   let n be Nat;
+   let n be Element of NAT;
        rng p c= the carrier of S & dom s = the carrier of S &
     dom Following(s, n) = the carrier of S by CIRCUIT1:4,FINSEQ_1:def 4;
 then A2:  dom ((Following(s, n))*p) = dom p & dom (s*p) = dom p by RELAT_1:46;
@@ -970,7 +974,8 @@ theorem Th30:
  for A2 being Boolean gate`2=den Circuit of S2
  for s being State of A1+*A2, s1 being State of A1
    st s1 = s|the carrier of S1
- for n being Nat holds Following(s,n)|the carrier of S1 = Following(s1,n)
+ for n being Element of NAT
+  holds Following(s,n)|the carrier of S1 = Following(s1,n)
   proof
    let S1,S2 be unsplit gate`1=arity gate`2isBoolean
                 non void non empty ManySortedSign such that
@@ -979,19 +984,19 @@ A1:  InnerVertices S2 misses InputVertices S1;
    let A2 be Boolean gate`2=den Circuit of S2;
    let s be State of A1+*A2, s1 be State of A1 such that
 A2:  s1 = s|the carrier of S1;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
       Following(s,$1)|the carrier of S1 = Following(s1,$1);
        Following(s,0) = s by Th11;
 then A3:  P[0] by A2,Th11;
-A4:  for n being Nat st P[n] holds P[n+1]
-     proof let n be Nat; assume
+A4:  for n being Element of NAT st P[n] holds P[n+1]
+     proof let n be Element of NAT; assume
 A5:     Following(s,n)|the carrier of S1 = Following(s1,n);
       thus Following(s,n+1)|the carrier of S1
          = (Following Following(s,n))|the carrier of S1 by Th12
         .= Following Following(s1,n) by A1,A5,Th28
         .= Following(s1,n+1) by Th12;
      end;
-   thus for n being Nat holds P[n] from NAT_1:sch 1(A3,A4);
+   thus for n being Element of NAT holds P[n] from NAT_1:sch 1(A3,A4);
   end;
 
 theorem Th31:
@@ -1002,7 +1007,8 @@ theorem Th31:
  for A2 being Boolean gate`2=den Circuit of S2
  for s being State of A1+*A2, s2 being State of A2
    st s2 = s|the carrier of S2
- for n being Nat holds Following(s,n)|the carrier of S2 = Following(s2,n)
+ for n being Element of NAT
+  holds Following(s,n)|the carrier of S2 = Following(s2,n)
   proof
    let S1,S2 be unsplit gate`1=arity gate`2isBoolean
                 non void non empty ManySortedSign such that
@@ -1011,19 +1017,19 @@ A1:  InnerVertices S1 misses InputVertices S2;
    let A2 be Boolean gate`2=den Circuit of S2;
    let s be State of A1+*A2, s2 be State of A2 such that
 A2:  s2 = s|the carrier of S2;
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
    Following(s,$1)|the carrier of S2 = Following(s2,$1);
        Following(s,0) = s by Th11;
 then A3:  P[0] by A2,Th11;
-A4:  for n being Nat st P[n] holds P[n+1]
-     proof let n be Nat; assume
+A4:  for n being Element of NAT st P[n] holds P[n+1]
+     proof let n be Element of NAT; assume
 A5:     Following(s,n)|the carrier of S2 = Following(s2,n);
       thus Following(s,n+1)|the carrier of S2
          = (Following Following(s,n))|the carrier of S2 by Th12
         .= Following Following(s2,n) by A1,A5,Th29
         .= Following(s2,n+1) by Th12;
      end;
-   thus for n being Nat holds P[n] from NAT_1:sch 1(A3,A4);
+   thus for n being Element of NAT holds P[n] from NAT_1:sch 1(A3,A4);
   end;
 
 theorem Th32:
@@ -1035,7 +1041,7 @@ theorem Th32:
  for s being State of A1+*A2, s1 being State of A1
    st s1 = s|the carrier of S1 holds
  for v being set st v in the carrier of S1
- for n being Nat holds (Following(s,n)).v = (Following(s1,n)).v
+ for n being Element of NAT holds (Following(s,n)).v = (Following(s1,n)).v
   proof
    let S1,S2 be unsplit gate`1=arity gate`2isBoolean
                 non void non empty ManySortedSign such that
@@ -1046,7 +1052,7 @@ A1:  InnerVertices S2 misses InputVertices S1;
 A2:  s1 = s|the carrier of S1;
    let v be set; assume
 A3:  v in the carrier of S1;
-   let n be Nat;
+   let n be Element of NAT;
 A4:  Following(s,n)|the carrier of S1 = Following(s1,n) by A1,A2,Th30;
        the carrier of S1 = dom Following(s1,n) by CIRCUIT1:4;
    hence thesis by A3,A4,FUNCT_1:70;
@@ -1061,7 +1067,7 @@ theorem Th33:
  for s being State of A1+*A2, s2 being State of A2
    st s2 = s|the carrier of S2 holds
  for v being set st v in the carrier of S2
- for n being Nat holds (Following(s,n)).v = (Following(s2,n)).v
+ for n being Element of NAT holds (Following(s,n)).v = (Following(s2,n)).v
   proof
    let S1,S2 be unsplit gate`1=arity gate`2isBoolean
                 non void non empty ManySortedSign such that
@@ -1072,7 +1078,7 @@ A1:  InnerVertices S1 misses InputVertices S2;
 A2:  s1 = s|the carrier of S2;
    let v be set; assume
 A3:  v in the carrier of S2;
-   let n be Nat;
+   let n be Element of NAT;
 A4:  Following(s,n)|the carrier of S2 = Following(s1,n) by A1,A2,Th31;
        the carrier of S2 = dom Following(s1,n) by CIRCUIT1:4;
    hence thesis by A3,A4,FUNCT_1:70;

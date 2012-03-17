@@ -64,4 +64,14 @@
 <Adjective nr="46"/>
 </Cluster>
 </FCluster>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="179"/>
+<Cluster>
+<Adjective nr="38" value="false"/>
+<Adjective nr="44"/>
+<Adjective nr="46"/>
+<Adjective nr="47"/>
+</Cluster>
+</FCluster>
 </Registrations>

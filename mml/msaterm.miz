@@ -10,7 +10,8 @@ environ
       TREES_3, MSAFREE, DTCONSTR, FREEALG, LANG1, TREES_4, BOOLE, TDGROUP,
       PROB_1, TREES_2, FINSET_1, MCART_1, QC_LANG1, FINSEQ_4, TREES_9, TREES_1,
       PRALG_1, ORDINAL1, FUNCT_6, CARD_3, MSATERM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, MCART_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0,
+      NAT_1, MCART_1,
       RELAT_1, STRUCT_0, FUNCT_1, FINSEQ_1, FUNCT_2, FINSET_1, TREES_1,
       TREES_2, CARD_3, FINSEQ_4, FUNCT_6, LANG1, TREES_3, TREES_4, TREES_9,
       PBOOLE, MSUALG_1, DTCONSTR, MSUALG_3, MSAFREE, XXREAL_0;
@@ -23,24 +24,25 @@ environ
  theorems TARSKI, NAT_1, ZFMISC_1, MCART_1, CARD_3, FUNCT_1, FINSEQ_1, FUNCT_2,
       FINSEQ_3, FINSEQ_4, CARD_5, FUNCT_6, TREES_1, TREES_2, MODAL_1, TREES_3,
       TREES_4, LANG1, DTCONSTR, TREES_9, PBOOLE, MSUALG_1, MSAFREE, DOMAIN_1,
-      RELAT_1, XBOOLE_0, FINSET_1, XREAL_1;
+      RELAT_1, XBOOLE_0, FINSET_1, XREAL_1, ORDINAL1;
  schemes TREES_2, ZFREFLE1, DTCONSTR, PBOOLE;
 
 begin
 
 Lm1: for n being set, p being FinSequence st n in dom p
-       ex k being Nat st n = k+1 & k < len p
+     ex k being Element of NAT st n = k+1 & k < len p
  proof let n be set, p be FinSequence; assume
 A1:  n in dom p;
-   then reconsider n as Nat;
+   then reconsider n as Element of NAT;
 A2:     n >= 1 & n <= len p by A1,FINSEQ_3:27;
       then consider k being Nat such that
-A3:     n = 1+k by NAT_1:28;
+      A3:     n = 1+k by NAT_1:28;
+      reconsider k as Element of NAT by ORDINAL1:def 13;
       take k; thus thesis by A2,A3,NAT_1:38;
  end;
 
 Lm2:
-  now let n be Nat, x be set; let p be FinSequence of x; assume
+  now let n be Element of NAT, x be set; let p be FinSequence of x; assume
 A1:    n < len p;
        n >= 0 by NAT_1:18;
     then n+1 >= 0+1 & n+1 <= len p by A1,NAT_1:38,XREAL_1:9;
@@ -771,8 +773,7 @@ theorem Th21:
  for o being OperSymbol of S, a being FinSequence of S-Terms V holds
   a is ArgumentSeq of Sym(o,V) iff Sym(o, V) ==> roots a
   proof let o be OperSymbol of S, a be FinSequence of S-Terms V;
-  a is SubtreeSeq of Sym(o, V) iff Sym(o, V) ==> roots a by DTCONSTR:def 9
-;
+  a is SubtreeSeq of Sym(o, V) iff Sym(o, V) ==> roots a by DTCONSTR:def 9;
     hence thesis by Def2;
   end;
 
@@ -798,7 +799,7 @@ A3:  i in dom a;
 then A4:   1 <= i & i <= len a by FINSEQ_3:27;
    reconsider t = (a qua FinSequence of S-Terms V qua non empty set)/.i
      as Term of S,V;
-   take t; thus t = a.i by A4,FINSEQ_4:24;
+     take t; i in NAT by ORDINAL1:def 13; hence t = a.i by A4,FINSEQ_4:24;
     then t in FreeSort(X, (the_arity_of o)/.i) by A1,A3,MSAFREE:9;
     then the_sort_of t = (the_arity_of o)/.i by Def5;
    hence thesis by A2,A3,FINSEQ_4:def 4;
@@ -854,7 +855,7 @@ A4:  S-Terms V = TS DTConMSA X;
      proof let x be set; assume x in rng a;
       then consider i being set such that
 A5:     i in dom a & x = a.i by FUNCT_1:def 5;
-      reconsider i as Nat by A5;
+      reconsider i as Nat by A5,ORDINAL1:def 13;
           (ex t being Term of S,V st
          t = a.i & the_sort_of t = (the_arity_of o).i) or
        ex t being Term of S,V st
@@ -1054,9 +1055,9 @@ A2:    t.{} = [x,s];
   end;
   end;
 
-Lm9: for n being Nat, p being FinSequence holds
+Lm9: for n being Element of NAT, p being FinSequence holds
   n < len p implies n+1 in dom p & p.(n+1) in rng p
- proof let n be Nat, p be FinSequence; assume
+ proof let n be Element of NAT, p be FinSequence; assume
 A1:    n < len p;  n >= 0 by NAT_1:18;
        then n+1 >= 0+1 & n+1 <= len p by A1,NAT_1:38,XREAL_1:9;
        then n+1 in dom p by FINSEQ_3:27;
@@ -1069,9 +1070,9 @@ theorem Th29:
     defpred P[set] means for q being Node of t st q = $1
         holds t|q is Term of S,V;
 A1:  P[{}] by TREES_9:1;
-A2: for p be Node of t,n be Nat st P[p] & p^<*n*> in dom t
+A2: for p be Node of t,n be Element of NAT st P[p] & p^<*n*> in dom t
         holds P[p^<*n*>]
-proof let p be Node of t, n be Nat; assume that
+proof let p be Node of t, n be Element of NAT; assume that
 A3:        for q being Node of t st q = p holds t|q is Term of S,V and
 A4:        p^<*n*> in dom t;
      reconsider u = t|p as Term of S,V by A3;
@@ -1088,14 +1089,15 @@ A8:      u.{} = [x,s];
         then <*n*> in {{}} by A6,TREES_1:56,TREES_4:3;
        hence contradiction by TARSKI:def 1;
       end;
-     then consider o being OperSymbol of S, x2 being Element of {the carrier of
-S}
+     then
+     consider o being OperSymbol of S, x2 being Element of {the carrier of S}
      such that
 A9:    u.{} = [o,x2] by A5,DOMAIN_1:9;
        x2 = the carrier of S by TARSKI:def 1;
      then consider a being ArgumentSeq of Sym(o,V) such that
 A10:    u = [o,the carrier of S]-tree a by A9,Th10;
-     consider i being Nat, T being DecoratedTree, r being Node of T such that
+     consider i being Element of NAT,
+     T being DecoratedTree, r being Node of T such that
 A11:    i < len a & T = a.(i+1) & <*n*> = <*i*>^r by A6,A10,TREES_4:11;
          n = <*n*>.1 by FINSEQ_1:57 .= i by A11,FINSEQ_1:58;
       then n+1 in dom a & u|<*n*> = a.(n+1) by A10,A11,Lm9,TREES_4:def 4;
@@ -1105,9 +1107,7 @@ A11:    i < len a & T = a.(i+1) & <*n*> = <*i*>^r by A6,A10,TREES_4:11;
        the_sort_of t = (the_arity_of o)/.(n+1) by Lm8;
      hence t|q is Term of S,V by A7,TREES_9:3;
     end;
-       for p being Node of t holds P[p] from TREES_2:sch 1(A1,A2);
-
-::      holds P[p] from TreeStruct_Ind(A1,A2);
+    for p being Node of t holds P[p] from TREES_2:sch 1(A1,A2);
    hence thesis;
   end;
 
@@ -1259,7 +1259,7 @@ then A6:   x in dom q by TREES_3:39;
       then p.x in rng p & rng p c= S-Terms ((the Sorts of A) \/ V)
        by A2,A4,FINSEQ_1:def 4,FUNCT_1:def 5;
      then reconsider t = p.x as c-Term of A,V;
-     reconsider i = x as Nat by A5;
+     reconsider i = x as Nat by A5,ORDINAL1:def 13;
      consider vt being finite DecoratedTree such that
 A7:   vt = q.i & vt is_an_evaluation_of t,f by A2,A3,A4,A6;
          (doms q).x = dom vt by A6,A7,FUNCT_6:31;
@@ -1273,7 +1273,7 @@ A8:  dom vt = tree r & tree doms p =
    take vt; thus vt = (Den(o,A).roots q)-tree q;
 A9:  dom doms p = dom p & len doms p = len p & dom doms q = dom q &
     len doms q = len q by TREES_3:39,40;
-       now let i be Nat; assume
+       now let i be Element of NAT; assume
 A10:   i in dom p;
       then p.i in rng p & rng p c= S-Terms ((the Sorts of A) \/ V)
        by FINSEQ_1:def 4,FUNCT_1:def 5;
@@ -1285,7 +1285,7 @@ A11:   vt = q.i & vt is_an_evaluation_of t,f by A3,A10;
              .= (doms p).i by A10,FUNCT_6:31;
     end;
    hence dom vt = dom(Sym(o,(the Sorts of A) \/ V)-tree p)
-                                          by A1,A2,A4,A8,A9,FINSEQ_1:17;
+   by A1,A2,A4,A8,A9,FINSEQ_1:17;
    let n be Node of vt;
 A12:  ([o,the carrier of S]-tree p).{} = [o,the carrier of S] by TREES_4:def 4;
    hereby let s be SortSymbol of S, v be Element of V.s;
@@ -1295,7 +1295,7 @@ A13:   (Sym(o,(the Sorts of A) \/ V)-tree p).n = [v,s];
       then s = the carrier of S by A1,A12,A13,ZFMISC_1:33;
       hence contradiction by Lm7;
      end;
-    then consider w being FinSequence of NAT, i being Nat such that
+    then consider w being FinSequence of NAT, i being Element of NAT such that
 A14:   n = <*i*>^w by MODAL_1:4;
 A15:   i < len p & w in (doms q).(i+1) by A2,A8,A9,A14,TREES_3:51;
     then reconsider t = p.(i+1) as c-Term of A,V by Lm2;
@@ -1315,7 +1315,7 @@ A20:   (Sym(o,(the Sorts of A) \/ V)-tree p).n = [x,s];
       then s = the carrier of S by A1,A12,A20,ZFMISC_1:33;
       hence contradiction by Lm7;
      end;
-    then consider w being FinSequence of NAT, i being Nat such that
+    then consider w being FinSequence of NAT, i being Element of NAT such that
 A21:   n = <*i*>^w by MODAL_1:4;
 A22:   i < len p & w in (doms q).(i+1) by A2,A8,A9,A21,TREES_3:51;
     then reconsider t = p.(i+1) as c-Term of A,V by Lm2;
@@ -1340,15 +1340,14 @@ A28:    n = {};
      hence vt.n = Den(o1, A).succ(vt,n) by A28,TREES_4:def 4;
     end;
     suppose n <> {};
-     then consider w being FinSequence of NAT, i being Nat such that
+     then consider w being FinSequence of NAT, i being Element of NAT such that
 A29:    n = <*i*>^w by MODAL_1:4;
 A30:    i < len p & w in (doms q).(i+1) by A2,A8,A9,A29,TREES_3:51;
      then reconsider t = p.(i+1) as c-Term of A,V by Lm2;
 A31:   i+1 in dom p by A30,Lm9;
      then consider e being finite DecoratedTree such that
-A32:    e = q.(i+1) & e is_an_evaluation_of t,f by A3;
-A33:    dom e = dom t & dom e = (doms q).(i+1) by A2,A4,A31,A32,Def9,FUNCT_6:31
-;
+A32: e = q.(i+1) & e is_an_evaluation_of t,f by A3;
+A33: dom e = dom t & dom e = (doms q).(i+1) by A2,A4,A31,A32,Def9,FUNCT_6:31;
      reconsider w as Node of e by A2,A4,A30,A31,A32,FUNCT_6:31;
      reconsider ii = <*i*> as Node of vt by A29,TREES_1:46;
 A34:    e = vt|ii by A2,A30,A32,TREES_4:def 4;
@@ -1429,7 +1428,7 @@ TREES_9:31;
    hence vt = (Den(o,A).roots q)-tree q by A4,TREES_4:def 4;
    let i be Nat, t be c-Term of A,V; assume
 A6:  i in dom p & t = p.i;
-   then consider k being Nat such that
+   then consider k being Element of NAT such that
 A7:  i = k+1 & k < len p by Lm1;
    reconsider u = {} as Node of t by TREES_1:47;
        <*k*>^u = <*k*> by FINSEQ_1:47;
@@ -1570,7 +1569,7 @@ A11:   len q2 = len p &
       for i being Nat, t being c-Term of A,V st i in dom p & t = p.i
        ex vt being finite DecoratedTree st
         vt = q2.i & vt is_an_evaluation_of t,f by A9,Th35;
-A12:    now let i be Nat; assume
+A12:    now let i be Element of NAT; assume
 A13:      i < len p;
        then reconsider t = p.(i+1) as c-Term of A,V by Lm2;
 A14:      i+1 in dom p by A13,Lm9;
@@ -1581,8 +1580,8 @@ A16:      vt2 = q2.(i+1) & vt2 is_an_evaluation_of t,f by A11,A14;
            t in rng p by A13,Lm9; hence q1.(i+1) = q2.(i+1) by A8,A15,A16;
       end;
 A17:   dom q1 = Seg len q1 & dom q2 = Seg len q2 by FINSEQ_1:def 3;
-         now let i be Nat; assume i in dom q1;
-        then ex k being Nat st i = k+1 & k < len q1 by Lm1;
+         now let i be Element of NAT; assume i in dom q1;
+           then ex k being Element of NAT st i = k+1 & k < len q1 by Lm1;
        hence q1.i = q2.i by A10,A12;
       end;
       then q1 = q2 by A10,A11,A17,FINSEQ_1:17;
@@ -1656,7 +1655,7 @@ A15:      dom roots q = Seg len q by FINSEQ_1:def 3
              .= dom ((the Sorts of A)*the_arity_of o) by A13,RELAT_1:46;
        let x be set; assume
 A16:      x in dom ((the Sorts of A)*the_arity_of o);
-       then consider i being Nat such that
+       then consider i being Element of NAT such that
 A17:      x = i+1 & i < len q by A14,A15,Lm1;
        consider T being DecoratedTree such that
 A18:      T = q.(i+1) & (roots q).(i+1) = T.{}
@@ -1778,7 +1777,7 @@ A3:  len r = len p &
        now
      thus
 A4:    dom p = dom p & dom q = dom p & dom r = dom p by A1,A3,FINSEQ_3:31;
-     let i be Nat; assume
+     let i be Element of NAT; assume
 A5:    i in dom r;
      then reconsider t = p.i as c-Term of A,V by A4,Th22;
      consider vt being finite DecoratedTree such that

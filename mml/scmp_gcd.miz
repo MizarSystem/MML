@@ -9,7 +9,8 @@ environ
  vocabularies AMI_3, SCMPDS_2, AMI_1, SCMPDS_4, ARYTM_3, NAT_1, INT_1, INT_2,
       ABSVALUE, SCMPDS_3, AMI_2, ARYTM_1, CARD_1, SCMFSA6A, SCMFSA_7, FUNCT_1,
       RELAT_1, SCMPDS_1, FUNCOP_1, FUNCT_4, BOOLE, SCMP_GCD;
- notations XBOOLE_0, ENUMSET1, XCMPLX_0, RELAT_1, FUNCT_1, INT_1, NAT_1,
+ notations XBOOLE_0, ENUMSET1, SUBSET_1,
+ NUMBERS,XCMPLX_0, RELAT_1, FUNCT_1, INT_1, NAT_1,
       DOMAIN_1, STRUCT_0, FUNCT_4, AMI_1, AMI_2, AMI_3, SCMPDS_1, SCMPDS_2,
       SCMPDS_3, CARD_1, SCMPDS_4, INT_2, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, SCMPDS_1, SCMPDS_4;
@@ -20,12 +21,12 @@ environ
  theorems AMI_1, AMI_3, NAT_1, TARSKI, FUNCT_4, INT_1, SCMPDS_2, SCMPDS_3,
       ABSVALUE, GRFUNC_1, SCMPDS_4, CQC_THE1, SCMPDS_5, SCMPDS_6, ENUMSET1,
       SCMPDS_1, INT_2, AMI_4, XBOOLE_0, XBOOLE_1, NEWTON, XREAL_1, RELAT_1,
-      XXREAL_0;
+      XXREAL_0, ORDINAL1;
  schemes NAT_1;
 
 begin :: Preliminaries
 
-reserve m,n for Nat,
+reserve m,n for Element of NAT,
         a,b for Int_position,
         i,j for Instruction of SCMPDS,
         s,s1,s2 for State of SCMPDS,
@@ -40,6 +41,7 @@ proof
    assume m>0;
    then consider t be Nat such that
 A1: n = m * t + r & r < m by NAT_1:def 2;
+    reconsider t as Element of NAT by ORDINAL1:def 13;
 A2: x divides n & x divides m by NAT_1:def 5;
     then x divides r by NAT_1:58;
 then A3: x divides y by A2,NAT_1:def 5;
@@ -66,10 +68,10 @@ A3: abs(i) mod abs(j) >= 0 by NAT_1:18;
 end;
 
 theorem Th3:
-  for m being Nat,j being Integer st inspos m=j holds
+  for m being Element of NAT,j being Integer st inspos m=j holds
      inspos(m+2) = 2*(abs(j) div 2)+4
 proof
-      let m be Nat,j be Integer;
+      let m be Element of NAT,j be Integer;
       assume inspos m=j;
 then A1:   j=il.m by SCMPDS_3:def 2
        .=2*m+2*1 by AMI_3:def 20
@@ -82,7 +84,7 @@ then j >= 0 by NAT_1:18;
     .= inspos(m+2) by SCMPDS_3:def 2;
 end;
 
-definition let k be Nat;
+definition let k be Element of NAT;
  func intpos k -> Int_position equals
   dl.k;
  coherence
@@ -93,11 +95,12 @@ definition let k be Nat;
 end;
 
 theorem Th4:
- for n1,n2 be Nat st n1 <> n2 holds intpos n1 <> intpos n2 by AMI_3:52;
+ for n1,n2 be Element of NAT st n1 <> n2 holds intpos n1 <> intpos n2
+ by AMI_3:52;
 
 theorem Th5:
- for n1,n2 be Nat holds DataLoc(n1,n2) = intpos(n1+n2)
-proof let n1,n2 be Nat;
+ for n1,n2 be Element of NAT holds DataLoc(n1,n2) = intpos(n1+n2)
+proof let n1,n2 be Element of NAT;
 A1:   n1+n2 >= 0 by NAT_1:18;
       thus DataLoc(n1,n2)=2*abs(n1+n2)+1 by SCMPDS_2:def 4
       .=2*(n1+n2)+1 by A1,ABSVALUE:def 1
@@ -106,16 +109,16 @@ A1:   n1+n2 >= 0 by NAT_1:18;
 end;
 
 theorem Th6:
- for s being State of SCMPDS,m1,m2 being Nat st IC s=inspos (m1+m2)
+ for s being State of SCMPDS,m1,m2 being Element of NAT st IC s=inspos (m1+m2)
  holds ICplusConst(s,-m2)=inspos m1
 proof
-    let s be State of SCMPDS,m1,m2 be Nat;
+    let s be State of SCMPDS,m1,m2 be Element of NAT;
     assume A1: IC s=inspos (m1+m2);
-     consider m such that
+     consider m being Element of NAT such that
 A2:  m = IC s & ICplusConst(s,-m2) = abs(m-2+2*(-m2))+2 by SCMPDS_2:def 20;
 A3:  m=il.(m1+m2) by A1,A2,SCMPDS_3:def 2
      .=2*(m1+m2) +2 by AMI_3:def 20;
-  2*m1 >= 0 by NAT_1:18;
+     2*m1 >= 0 by NAT_1:18;
      hence ICplusConst(s,-m2) =2*m1+2 by A2,A3,ABSVALUE:def 1
      .=il.m1 by AMI_3:def 20
      .=inspos m1 by SCMPDS_3:def 2;
@@ -798,11 +801,11 @@ theorem Th16:
   ex n st CurInstr (Computation s).n = return SBP &
    s.SBP=(Computation s).n.SBP & (Computation s).n.DataLoc(s.SBP,2)
    =s.DataLoc(s.SBP,2) gcd s.DataLoc(s.SBP,3) &
-   (for j be Nat st 1<j & j <= s.SBP+1 holds
+   (for j be Element of NAT st 1<j & j <= s.SBP+1 holds
        s.intpos j=(Computation s).n.intpos j)
 proof
    set GA=GCD-Algorithm;
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
       for s being State of SCMPDS st GA c= s
       & IC s = inspos 5 & s.SBP >0 & s.GBP=0 &
       s.DataLoc(s.SBP,3) <= $1 &
@@ -811,7 +814,7 @@ proof
       s.SBP=(Computation s).n.SBP &
       (Computation s).n.DataLoc(s.SBP,2)
       =s.DataLoc(s.SBP,2) gcd s.DataLoc(s.SBP,3) &
-      (for j be Nat st 1<j & j <= s.SBP+1 holds
+      (for j be Element of NAT st 1<j & j <= s.SBP+1 holds
          s.intpos j=(Computation s).n.intpos j);
 
       now
@@ -845,11 +848,11 @@ then A10:  abs(y)= 0 by ABSVALUE:def 1;
      .=abs(x) by A5,A9,ABSVALUE:def 1
      .=abs(x) hcf abs(y) by A10,NEWTON:65
      .=x gcd y by INT_2:def 3;
-     thus for j be Nat st 1<j & j <= s.SBP+1 holds
+     thus for j be Element of NAT st 1<j & j <= s.SBP+1 holds
         s.intpos j=(Computation s).n.intpos j by A7,SCMPDS_2:68;
    end;
 then A11: P[0];
-A12: now let k be Nat;
+A12: now let k be Element of NAT;
       assume A13:P[k];
          now let s be State of SCMPDS;
        set x=s.DataLoc(s.SBP,2),
@@ -864,20 +867,20 @@ A12: now let k be Nat;
         assume A19: y >= 0;
         assume A20: x >= y;
 then A21:     x >= 0 by A19,XXREAL_0:2;
-        reconsider y as Nat by A19,INT_1:16;
+        reconsider y as Element of NAT by A19,INT_1:16;
         per cases by A18,NAT_1:26;
         suppose y <= k;
           hence ex n st CurInstr Cs.n = return SBP &
            s.SBP=Cs.n.SBP &
            Cs.n.DataLoc(s.SBP,2)= x gcd yy &
-            (for j be Nat st 1<j & j <= s.SBP+1 holds
+            (for j be Element of NAT st 1<j & j <= s.SBP+1 holds
          s.intpos j=Cs.n.intpos j)
            by A13,A14,A15,A16,A17,A19,A20;
         end;
         suppose A22: y = k+1;
            then y<>0 by NAT_1:21;
 then A23:        y>0 by NAT_1:19;
-           reconsider pn=s.SBP as Nat by A16,INT_1:16;
+           reconsider pn=s.SBP as Element of NAT by A16,INT_1:16;
 A24:        pn=s.SBP;
 then A25:        IC Cs.7 = inspos (5+7) &
            Cs.8 = Exec(i12,Cs.7) & Cs.7.SBP=pn+4 &
@@ -907,7 +910,7 @@ then A35:       y1 <= k by A22,INT_1:20;
 A36:       CurInstr (Computation s8).m = return SBP &
           s8.SBP=(Computation s8).m.SBP &
           (Computation s8).m.DataLoc(s8.SBP,2)= x1 gcd y1 &
-         (for j be Nat st 1<j & j <= s8.SBP+1 holds
+         (for j be Element of NAT st 1<j & j <= s8.SBP+1 holds
           s8.intpos j=(Computation s8).m.intpos j)
             by A13,A26,A27,A30,A31,A32,A34,A35;
           set s9=Cs.(m+8);
@@ -962,7 +965,7 @@ A50:          DataLoc(Cs.(m+9).SBP,2)=intpos(pn+2) by A47,Th5;
 SCMPDS_2:59
              .=yy gcd (x mod yy) by A32,A33,A48,Th5
              .=x gcd yy by A21,A23,Th2;
-           hereby let j be Nat;
+           hereby let j be Element of NAT;
                assume A51: 1<j & j <= s.SBP+1;
                   s.SBP <= s8.SBP by A28,NAT_1:29;
                then s.SBP +1 <= s8.SBP+1 by XREAL_1:8;
@@ -987,7 +990,7 @@ A55: for n holds P[n] from NAT_1:sch 1(A11,A12);
     assume A56: GA c= s & IC s = inspos 5 &
     s.SBP >0 & s.GBP=0 & s.DataLoc(s.SBP,3) >= 0 &
     s.DataLoc(s.SBP,2) >= s.DataLoc(s.SBP,3);
-    then reconsider m=s.DataLoc(s.SBP,3) as Nat by INT_1:16;
+    then reconsider m=s.DataLoc(s.SBP,3) as Element of NAT by INT_1:16;
        P[m] by A55;
     hence thesis by A56;
 end;
@@ -1000,7 +1003,7 @@ theorem Th17:
   ex n st CurInstr (Computation s).n = return SBP &
    s.SBP=(Computation s).n.SBP & (Computation s).n.DataLoc(s.SBP,2)
    =s.DataLoc(s.SBP,2) gcd s.DataLoc(s.SBP,3) &
-    (for j be Nat st 1<j & j <= s.SBP+1 holds
+    (for j be Element of NAT st 1<j & j <= s.SBP+1 holds
         s.intpos j=(Computation s).n.intpos j)
 proof
     let s be State of SCMPDS;
@@ -1018,8 +1021,8 @@ A1:  GA c= s & IC s = inspos 5 &
      end;
      suppose x < y;
 then A2:    y>0 by A1,XXREAL_0:2;
-       reconsider y as Nat by A1,INT_1:16;
-       reconsider pn=s.SBP as Nat by A1,INT_1:16;
+       reconsider y as Element of NAT by A1,INT_1:16;
+       reconsider pn=s.SBP as Element of NAT by A1,INT_1:16;
 A3:    pn=s.SBP;
 then A4:    IC Cs.7 = inspos (5+7) &
        Cs.8 = Exec(i12,Cs.7) & Cs.7.SBP=pn+4 &
@@ -1048,7 +1051,7 @@ then A13:    y1<y by A2,NEWTON:79;
 A14:    CurInstr (Computation s8).m = return SBP &
        s8.SBP=(Computation s8).m.SBP &
        (Computation s8).m.DataLoc(s8.SBP,2)= x1 gcd y1 &
-       (for j be Nat st 1<j & j <= s8.SBP+1 holds
+       (for j be Element of NAT st 1<j & j <= s8.SBP+1 holds
         s8.intpos j=(Computation s8).m.intpos j)
             by A5,A6,A9,A10,A11,A13,Th16;
        set s9=Cs.(m+8);
@@ -1103,7 +1106,7 @@ SCMPDS_2:59
              .=yy gcd (x mod yy) by A11,A12,A26,Th5
              .=x gcd yy by A1,A2,Th2;
 
-           hereby let j be Nat;
+           hereby let j be Element of NAT;
                assume A29: 1<j & j <= s.SBP+1;
                   s.SBP <= s8.SBP by A7,NAT_1:29;
                then s.SBP +1 <= s8.SBP+1 by XREAL_1:8;
@@ -1150,7 +1153,8 @@ then A8:  s4.DataLoc(s4.SBP,2)=x by A1,A2,Th15;
 A9:  CurInstr Cs4.n = return SBP &
      s4.SBP=Cs4.n.SBP &
      Cs4.n.DataLoc(s4.SBP,2) =s4.DataLoc(s4.SBP,2) gcd s4.DataLoc(s4.SBP,3) &
-     (for j be Nat st 1<j & j <= s4.SBP+1 holds s4.intpos j=Cs4.n.intpos j)
+     (for j be Element of NAT st 1<j & j <= s4.SBP+1
+     holds s4.intpos j=Cs4.n.intpos j)
      by A2,A4,A5,A6,A7,Th17;
 A10:  Cs4.n.intpos 8=inspos 2 by A5,A9,SCMPDS_1:def 23;
   A11: DataLoc(Cs4.n.SBP,RetIC)=intpos(7+1) by A5,A9,Th5,SCMPDS_1:def 23;
@@ -1239,7 +1243,7 @@ Lm7:
    s2.DataLoc(s1.SBP,2) = s1.DataLoc(s1.SBP,2) &
    s2.DataLoc(s1.SBP,3) = s1.DataLoc(s1.SBP,3)
   implies
-    (for k be Nat,a be Int_position st k <= 7 & s1.a=s2.a holds
+    (for k be Element of NAT,a be Int_position st k <= 7 & s1.a=s2.a holds
       IC (Computation s1).k = IC (Computation s2).k &
       (Computation s1).k.a = (Computation s2).k.a)
 proof
@@ -1521,7 +1525,7 @@ then A105:        b<>DataLoc(Cs2.6.SBP,RetIC) by A6,A93;
            .=Cs2.7.b by A62,A105,SCMPDS_2:71;
        end;
        end;
-     hereby let k be Nat,a be Int_position;
+     hereby let k be Element of NAT,a be Int_position;
        assume A106:k <= 7 & s1.a=s2.a;
        per cases by A106,CQC_THE1:8;
        suppose A107:k=0;
@@ -1579,15 +1583,15 @@ Lm8:
    s1.SBP=(Computation s1).n.SBP &
    CurInstr (Computation s2).n = return SBP &
    s2.SBP=(Computation s2).n.SBP &
-   (for j be Nat st 1<j & j <= s1.SBP+1 holds
+   (for j be Element of NAT st 1<j & j <= s1.SBP+1 holds
       s1.intpos j=(Computation s1).n.intpos j &
       s2.intpos j=(Computation s2).n.intpos j ) &
-   (for k be Nat,a be Int_position st k <= n & s1.a=s2.a holds
+   (for k be Element of NAT,a be Int_position st k <= n & s1.a=s2.a holds
       IC (Computation s1).k = IC (Computation s2).k &
       (Computation s1).k.a =(Computation s2).k.a)
 proof
    set GA=GCD-Algorithm;
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
     for s1,s2 being State of SCMPDS st
     GA c= s1 & GA c= s2 & IC s1 = inspos 5 &
     s1.SBP >0 & s1.GBP=0 & s1.DataLoc(s1.SBP,3) <= $1 &
@@ -1601,10 +1605,10 @@ holds
    s1.SBP=(Computation s1).n.SBP &
    CurInstr (Computation s2).n = return SBP &
    s2.SBP=(Computation s2).n.SBP &
-   (for j be Nat st 1<j & j <= s1.SBP+1 holds
+   (for j be Element of NAT st 1<j & j <= s1.SBP+1 holds
       s1.intpos j=(Computation s1).n.intpos j &
       s2.intpos j=(Computation s2).n.intpos j) &
-   (for k be Nat,a be Int_position st k <= n & s1.a=s2.a holds
+   (for k be Element of NAT,a be Int_position st k <= n & s1.a=s2.a holds
       IC (Computation s1).k = IC (Computation s2).k &
       (Computation s1).k.a =(Computation s2).k.a);
 
@@ -1650,10 +1654,10 @@ A12:  IC Cs2.1=Cs2.1.IC SCMPDS
      .=s2.inspos 14 by AMI_1:54
      .=i14 by A2,Lm1;
      thus Cs2.n.SBP=s2.SBP by A10,SCMPDS_2:68;
-    thus for j be Nat st 1<j & j <= s1.SBP+1 holds
+    thus for j be Element of NAT st 1<j & j <= s1.SBP+1 holds
         s1.intpos j=Cs1.n.intpos j &
         s2.intpos j=Cs2.n.intpos j by A8,A10,SCMPDS_2:68;
-     hereby let k be Nat,a;
+     hereby let k be Element of NAT,a;
        assume A13: k <= n & s1.a=s2.a;
        per cases by A13,CQC_THE1:2;
        suppose A14:k=0;
@@ -1669,7 +1673,7 @@ A12:  IC Cs2.1=Cs2.1.IC SCMPDS
      end;
      end;
     end;
-A16: now let k be Nat;
+A16: now let k be Element of NAT;
       assume A17:P[k];
          now let s1,s2 be State of SCMPDS;
       set x =s1.DataLoc(s1.SBP,2),
@@ -1684,15 +1688,15 @@ A16: now let k be Nat;
         assume A23: x >= y;
         assume A24: IC s2 = IC s1 & s2.SBP = s1.SBP & s2.GBP=0;
         assume A25: s2.DataLoc(s1.SBP,2) = x & s2.DataLoc(s1.SBP,3) = y;
-        reconsider y as Nat by A22,INT_1:16;
+        reconsider y as Element of NAT by A22,INT_1:16;
         per cases by A21,NAT_1:26;
         suppose y <= k;
         hence ex n st CurInstr Cs1.n = return SBP & s1.SBP=Cs1.n.SBP &
           CurInstr Cs2.n = return SBP & s2.SBP=Cs2.n.SBP &
-          (for j be Nat st 1<j & j <= s1.SBP+1 holds
+          (for j be Element of NAT st 1<j & j <= s1.SBP+1 holds
             s1.intpos j=Cs1.n.intpos j &
             s2.intpos j=Cs2.n.intpos j) &
-          (for k be Nat,a st k <= n & s1.a=s2.a holds
+          (for k be Element of NAT,a st k <= n & s1.a=s2.a holds
            IC Cs1.k = IC Cs2.k & Cs1.k.a = Cs2.k.a)
            by A17,A18,A19,A20,A22,A23,A24,A25;
 
@@ -1700,7 +1704,7 @@ A16: now let k be Nat;
         suppose A26: y = k+1;
            then A27: y<>0 by NAT_1:21;
 then A28:        y>0 by NAT_1:19;
-           reconsider n=s1.SBP as Nat by A20,INT_1:16;
+           reconsider n=s1.SBP as Element of NAT by A20,INT_1:16;
 A29:        n=s1.SBP;
            set s8=Cs1.8,
                t8=Cs2.8;
@@ -1754,10 +1758,11 @@ A48:      CurInstr (Computation s8).m = return SBP &
          s8.SBP=(Computation s8).m.SBP &
          CurInstr (Computation t8).m = return SBP &
          t8.SBP=(Computation t8).m.SBP &
-        (for j be Nat st 1<j & j <= s8.SBP+1 holds
+        (for j be Element of NAT st 1<j & j <= s8.SBP+1 holds
           s8.intpos j=(Computation s8).m.intpos j &
           t8.intpos j=(Computation t8).m.intpos j) &
-          (for k be Nat,a be Int_position st k <= m & s8.a=t8.a holds
+          (for k be Element of NAT,a be Int_position st k <= m & s8.a=t8.a
+          holds
            IC (Computation s8).k = IC (Computation t8).k &
            (Computation s8).k.a =(Computation t8).k.a)
             by A17,A33,A34,A37,A38,A39,A41,A42,A43,A44,A45,A46,A47;
@@ -1841,7 +1846,7 @@ A74:          DataLoc(Cs2.(m+9).SBP,2)=intpos(n+2) by A70,Th5;
              then SBP <> DataLoc(Cs2.(m+9).SBP,2) by Lm3;
              hence Cs2.nn.SBP=s2.SBP by A24,A69,A70,SCMPDS_2:59;
 
-           hereby let j be Nat;
+           hereby let j be Element of NAT;
                assume
 A75:            1<j & j <= s1.SBP+1;
                   s1.SBP <= s8.SBP by A35,NAT_1:29;
@@ -1866,7 +1871,7 @@ A83:            s2.DataLoc(s2.SBP,3)>0 by A24,A25,A27,NAT_1:19;
                hence s2.intpos j=t8.intpos j by A30,SCMPDS_2:66
                    .=Cs2.nn.intpos j by A69,A81,A82,SCMPDS_2:59;
            end;
-           hereby let j be Nat,a;
+           hereby let j be Element of NAT,a;
              assume A84: j <= nn & s1.a=s2.a;
                 nn=m+9+1;
 then A85:          j <= m+9 or j=nn by A84,NAT_1:26;
@@ -1921,6 +1926,7 @@ A94:      now
            suppose A97: j>=8 & j <= m+8;
               then consider j1 be Nat such that
 A98:           j=8+j1 by NAT_1:28;
+              reconsider j1 as Element of NAT by ORDINAL1:def 13;
 A99:           j1 <= m by A97,A98,XREAL_1:8;
               thus IC Cs1.j = IC (Computation s8).j1 by A98,AMI_1:51
               .=IC (Computation t8).j1 by A48,A89,A99
@@ -1953,19 +1959,19 @@ A102: for n holds P[n] from NAT_1:sch 1(A1,A16);
      IC s2 = IC s1 & s2.SBP = s1.SBP & s2.GBP=0 &
      s2.DataLoc(s1.SBP,2) = s1.DataLoc(s1.SBP,2) &
      s2.DataLoc(s1.SBP,3) = s1.DataLoc(s1.SBP,3);
-     then reconsider m=s1.DataLoc(s1.SBP,3) as Nat by INT_1:16;
+     then reconsider m=s1.DataLoc(s1.SBP,3) as Element of NAT by INT_1:16;
         P[m] by A102;
      hence thesis by A103;
 end;
 
 Lm9:
-  for s1,s2 being State of SCMPDS,a be Int_position,k be Nat
+  for s1,s2 being State of SCMPDS,a be Int_position,k be Element of NAT
   st Initialized GCD-Algorithm c= s1 & Initialized GCD-Algorithm c= s2
   & s1.a=s2.a & k <= 4 holds
   IC (Computation s1).k = IC (Computation s2).k &
   (Computation s1).k.a = (Computation s2).k.a
 proof
-  let s1,s2 be State of SCMPDS,a be Int_position,k be Nat;
+  let s1,s2 be State of SCMPDS,a be Int_position,k be Element of NAT;
   set GA=GCD-Algorithm,
       Cs1=Computation s1,
       Cs2=Computation s2;
@@ -2186,10 +2192,10 @@ then A27:  t4.DataLoc(t4.SBP,2)=s4.DataLoc(s4.SBP,2) by A7,A12,A23,A25;
      consider n such that
 A28:  CurInstr Cs4.n = return SBP & s4.SBP=Cs4.n.SBP &
      CurInstr Ct4.n = return SBP & t4.SBP=Ct4.n.SBP &
-   (for j be Nat st 1<j & j <= s4.SBP+1 holds
+   (for j be Element of NAT st 1<j & j <= s4.SBP+1 holds
       s4.intpos j=Cs4.n.intpos j &
       t4.intpos j=Ct4.n.intpos j) &
-   (for k be Nat,c be Int_position st k <= n & s4.c = t4.c holds
+   (for k be Element of NAT,c be Int_position st k <= n & s4.c = t4.c holds
       IC (Computation s4).k = IC (Computation t4).k &
       (Computation s4).k.c =(Computation t4).k.c)
       by A1,A17,A19,A20,A21,A22,A24,A25,A26,A27,Lm8;
@@ -2231,7 +2237,7 @@ then A42:  Cs4.(n+1).b=Cs4.n.b by A31,SCMPDS_2:70
       .=Ct4.n.b by A28,A38
       .=Ct4.(n+1).b by A34,A41,SCMPDS_2:70;
 
-A43:  now let j be Nat;
+A43:  now let j be Element of NAT;
        A44: j<n+4+1 or j>=n+5;
        A45: now assume A46:j <= n+4;
           A47: j<3+1 or j>= 4;
@@ -2249,11 +2255,11 @@ A43:  now let j be Nat;
        hence IC Cs1.j=IC Cs2.j by A13,A15,A17,A18,Lm9;
        thus Cs1.j.a=Cs2.j.a by A13,A15,A17,A18,A48,Lm9;
        thus Cs1.j.b=Cs2.j.b by A13,A15,A17,A18,A48,Lm9;
-
       end;
       suppose A49: j>=4 & j<=n+4;
        then consider j1 be Nat such that
 A50:    j=4+j1 by NAT_1:28;
+       reconsider j1 as Element of NAT by ORDINAL1:def 13;
 A51:    j1 <= n by A49,A50,XREAL_1:8;
        thus IC Cs1.j = IC (Computation s4).j1 by A50,AMI_1:51
            .=IC (Computation t4).j1 by A28,A37,A51
@@ -2264,11 +2270,11 @@ A51:    j1 <= n by A49,A50,XREAL_1:8;
       thus Cs1.j.b = Cs4.j1.b by A50,AMI_1:51
            .=Ct4.j1.b by A28,A38,A51
            .=Cs2.j.b by A50,AMI_1:51;
-
       end;
       suppose j>=n+5;
        then consider j1 be Nat such that
 A52:    j=n+(1+4)+j1 by NAT_1:28;
+       reconsider j1 as Element of NAT by ORDINAL1:def 13;
 A53:    j=n+1+j1+4 by A52;
 A54:    n+1+j1 >= n+1 by NAT_1:29;
        thus IC Cs1.j=IC Cs4.(n+1+j1) by A53,AMI_1:51
@@ -2290,7 +2296,7 @@ A54:    n+1+j1 >= n+1 by NAT_1:29;
 A55:  dom(IA +* p) = { IC SCMPDS } \/ dom GA \/ { a, b } by A2,A3,FUNCT_4:def 1
       .= { IC SCMPDS } \/ { a,b } \/ dom GA by XBOOLE_1:4
       .= A \/ dom GA by ENUMSET1:42;
-    let k be Nat;
+    let k be Element of NAT;
 A56:  GA c= Cs2.k by A16,AMI_3:43;
         GA c= Cs1.k by A14,AMI_3:43;
 then A57:  Cs1.k | dom GA = GA by GRFUNC_1:64

@@ -24,15 +24,15 @@ environ
       FINSEQ_3, FINSEQ_4, FINSEQ_5, FINSEQ_6, FINSET_1, FUNCT_1, FUNCT_4,
       GLIB_000, GRAPH_2, GRAPH_5, INT_1, JORDAN12, MCART_1, NAT_1, NAT_2,
       PEPIN, REAL_1, RELAT_1, SPPOL_1, TARSKI, XBOOLE_0, XBOOLE_1, XREAL_1,
-      PRE_CIRC, XXREAL_0, HEYTING3;
+      PRE_CIRC, XXREAL_0, HEYTING3, ORDINAL1;
  schemes BINARITH, FINSEQ_1, FUNCT_1, NAT_1, RECDEF_1;
 
 begin :: Preliminaries
 
 theorem Th1: ::tODD01
-  for x,y being odd Nat holds
+  for x,y being odd Element of NAT holds
     x < y iff x + 2 <= y proof
-    let x,y be odd Nat;
+    let x,y be odd Element of NAT;
     hereby assume x < y; then
         x + 1 <= y by NAT_1:38; then
         x + 1 < y by REAL_1:def 5; then
@@ -52,40 +52,42 @@ Lm2:
   for F being finite Function holds card (dom F) = card F by PRE_CIRC:21;
 
 theorem Th2: ::tSGM01
-  for X being set, k being Nat st X c= Seg k holds
-    (for m,n being Nat st m in dom (Sgm X) & n = (Sgm X).m
+  for X being set, k being Element of NAT st X c= Seg k holds
+    (for m,n being Element of NAT st m in dom (Sgm X) & n = (Sgm X).m
        holds m <= n) proof
-    let X be set, k be Nat; assume
+    let X be set, k be Element of NAT; assume
 A1: X c= Seg k;
-    let m, n be Nat; assume
+    let m, n be Element of NAT; assume
 A2: m in dom (Sgm X) & n = (Sgm X).m;
-    defpred P[Nat] means ($1 in dom (Sgm X) & (ex n being Nat st n=(Sgm X).$1 &
+    defpred P[Element of NAT] means ($1 in dom (Sgm X) &
+    (ex n being Element of NAT st n=(Sgm X).$1 &
                           $1 <= n)) or (not $1 in dom (Sgm X));
     now 1 <= m & m <= len (Sgm X) by A2, FINSEQ_3:27; then
         1 <= len (Sgm X) by XXREAL_0:2;
         hence 1 in dom (Sgm X) by FINSEQ_3:27; then
     A3: (Sgm X).1 in rng (Sgm X) by FUNCT_1:12; set n = (Sgm X).1;
-        reconsider n as Nat by A3;
+        reconsider n as Element of NAT by A3;
         take n;
         thus n = (Sgm X).1;
         rng (Sgm X) = X by A1, FINSEQ_1:def 13;
         hence 1 <= n by A1,A3,FINSEQ_1:3;
     end; then
 A4: P[1];
-    now let x be non empty Nat; assume
+    now let x be non empty Element of NAT; assume
     A5: P[x];
         now per cases by A5;
         suppose
-        A6: x in dom (Sgm X) & ex n being Nat st n = (Sgm X).x & x <= n; then
+        A6: x in dom (Sgm X) & ex n being Element of NAT
+         st n = (Sgm X).x & x <= n; then
         A7: 1 <= x by FINSEQ_3:27;
         A8: x+0 < x+1 by XREAL_1:10;
-            consider n being Nat such that
+            consider n being Element of NAT such that
         A9: n = Sgm(X).x & x <= n by A6;
             now assume
             A10: x+1 in dom (Sgm X);
                 set n1 = (Sgm X).(x+1);
             A11: (Sgm X).(x+1) in rng (Sgm X) by A10, FUNCT_1:12;
-                reconsider n1 as Nat by A11;
+                reconsider n1 as Element of NAT by A11;
                 take n1;
                 thus n1 = (Sgm X).(x+1);
                 x+1 <= len Sgm X by A10, FINSEQ_3:27; then
@@ -102,11 +104,13 @@ A4: P[1];
         end;
         hence P[x+1];
     end; then
-A12: for x being non empty Nat st P[x] holds P[x+1];
-A13: for x being non empty Nat holds P[x] from BINARITH:sch 1(A4,A12);
-    m <> 0 by A2, FINSEQ_3:27; then reconsider m'=m as non empty Nat;
+A12: for x being non empty Element of NAT st P[x] holds P[x+1];
+A13: for x being non empty Element of NAT holds P[x]
+from BINARITH:sch 1(A4,A12);
+    m <> 0 by A2, FINSEQ_3:27;
+    then reconsider m'=m as non empty Element of NAT;
     P[m'] by A13; then
-    consider n' being Nat such that
+    consider n' being Element of NAT such that
 A14: n' = (Sgm X).m & m <= n' by A2;
     thus m <= n by A2, A14;
 end;
@@ -128,10 +132,11 @@ end;
 
 theorem Th4: ::tFINSUBSEQ02
   for X being set, fs being FinSequence of X, fss being FinSubsequence of fs,
-      m being Nat st m in dom Seq fss holds
-    ex n being Nat st n in dom fs & m <= n & (Seq fss).m = fs.n proof
+      m being Element of NAT st m in dom Seq fss holds
+    ex n being Element of NAT st n in dom fs & m <= n & (Seq fss).m = fs.n
+    proof
     let X be set, fs be FinSequence of X, fss be FinSubsequence of fs,
-        m be Nat;
+        m be Element of NAT;
 A1: fss c= fs by GRAPH_2:def 5; set f = Sgm(dom fss), n = f.m;
 A2: Seq fss = fss * f by FINSEQ_1:def 14; assume
 A3: m in dom Seq fss; then
@@ -140,9 +145,9 @@ A4: m in dom f & n in dom fss by FUNCT_1:21;
     (Seq fss).m = fss.n by A2,A3,FUNCT_1:22; then
     [n, Seq(fss).m] in fss by A4, FUNCT_1:def 4; then
 A5: n in dom fs & (Seq fss).m = fs.n by A1, FUNCT_1:8; then
-    reconsider n as Nat;
+    reconsider n as Element of NAT;
     set X = dom fss;
-    consider k being Nat such that
+    consider k being Element of NAT such that
 A6: dom fss c= Seg k by FINSEQ_1:def 12;
     m <= n by A4, A6, Th2;
     hence thesis by A5;
@@ -153,7 +158,7 @@ theorem Th5: ::tFINSUBSEQ03
     holds len Seq fss = card fss proof
     let X be set, fs be FinSequence of X, fss be FinSubsequence of fs;
 A1: Seq fss = fss * Sgm(dom fss) by FINSEQ_1:def 14;
-    consider k being Nat such that
+    consider k being Element of NAT such that
 A2: dom fss c= Seg k by FINSEQ_1:def 12;
     rng Sgm(dom fss) = dom fss by A2, FINSEQ_1:def 13; then
     dom (Seq fss) = dom (Sgm (dom fss)) by A1, RELAT_1:46; then
@@ -166,7 +171,7 @@ theorem Th6: ::tFINSUBSEQ04
   for X being set, fs being FinSequence of X, fss being FinSubsequence of fs
     holds dom Seq fss = dom Sgm (dom fss) proof
     let X be set, fs be FinSequence of X, fss be FinSubsequence of fs;
-    consider k being Nat such that
+    consider k being Element of NAT such that
 A1: dom fss c= Seg k by FINSEQ_1:def 12;
 A2: Seq fss = fss * Sgm (dom fss) by FINSEQ_1:def 14;
     rng Sgm(dom fss) c= dom fss by A1, FINSEQ_1:def 13;
@@ -177,13 +182,13 @@ begin :: Definitions
 
 definition let G be _Graph;
   mode VertexSeq of G -> FinSequence of the_Vertices_of G means :Def1: ::dVSEQ
-    for n being Nat st 1 <= n & n < len it holds
+    for n being Element of NAT st 1 <= n & n < len it holds
       ex e being set st e Joins it.n, it.(n+1), G;
   existence proof
     set v = choose the_Vertices_of G, IT = <*v*>;
     reconsider IT as FinSequence of the_Vertices_of G;
     take IT;
-    let n be Nat; assume 1 <= n & n < len IT;
+    let n be Element of NAT; assume 1 <= n & n < len IT;
     hence thesis by FINSEQ_1:57;
   end;
 end;
@@ -192,7 +197,7 @@ definition let G be _Graph;
   mode EdgeSeq of G -> FinSequence of the_Edges_of G means :Def2: ::dESEQ
     ex vs being FinSequence of the_Vertices_of G st
       len vs = len it + 1 &
-      for n being Nat st 1 <= n & n <= len it holds
+      for n being Element of NAT st 1 <= n & n <= len it holds
         it.n Joins vs.n,vs.(n+1),G;
   existence proof
     set IT = {}, vs = <*choose the_Vertices_of G*>;
@@ -201,7 +206,7 @@ definition let G be _Graph;
     take IT, vs;
     len vs = 0 + 1 by FINSEQ_1:57;
     hence len vs = len IT + 1 by FINSEQ_1:25;
-    let n be Nat; assume 1 <= n & n <= len IT;
+    let n be Element of NAT; assume 1 <= n & n <= len IT;
     hence thesis by FINSEQ_1:25;
   end;
 end;
@@ -210,7 +215,8 @@ definition let G be _Graph;
   mode Walk of G -> FinSequence of the_Vertices_of G \/ the_Edges_of G means
     :Def3: ::dWALK
     len it is odd & it.1 in the_Vertices_of G &
-    for n being odd Nat st n < len it holds it.(n+1) Joins it.n, it.(n+2), G;
+    for n being odd Element of NAT st n < len it
+    holds it.(n+1) Joins it.n, it.(n+2), G;
   existence proof
     set VE = (the_Vertices_of G) \/ (the_Edges_of G);
     consider v being set such that
@@ -219,7 +225,7 @@ A1: v in the_Vertices_of G by XBOOLE_0:def 1;
     take <*v*>;
     thus len <*v*> is odd by FINSEQ_1:57, JORDAN12:3;
     thus <*v*>.1 in the_Vertices_of G by A1, FINSEQ_1:57;
-    let n be odd Nat; assume n < len <*v*>; then
+    let n be odd Element of NAT; assume n < len <*v*>; then
     n < 1 by FINSEQ_1:57;
     hence thesis by HEYTING3:1;
 end;
@@ -244,7 +250,7 @@ definition let G be _Graph, v be Vertex of G;
     now thus len W is odd by FINSEQ_1:57, JORDAN12:3;
         W.1 = v by FINSEQ_1:57;
         hence W.1 in the_Vertices_of G;
-        let n be odd Nat; assume n < len <*v*>; then
+        let n be odd Element of NAT; assume n < len <*v*>; then
         1 <= n & n < 1 by FINSEQ_1:57, HEYTING3:1;
         hence W.(n+1) Joins W.n, W.(n+2), G;
     end;
@@ -266,11 +272,11 @@ definition let G be _Graph, x,y,e be set;
         set W = <*x,e,y*>;
         reconsider W as FinSequence of VE by A2, A3, FINSEQ_2:16;
     A4: len W = 3 & W.1 = x & W.2 = e & W.3 = y by FINSEQ_1:62;
-        now reconsider aa1=1 as odd Nat by JORDAN12:3;
+        now reconsider aa1=1 as odd Element of NAT by JORDAN12:3;
             aa1+2 is odd;
             hence len W is odd by FINSEQ_1:62;
             thus W.1 in the_Vertices_of G by A4, A1, GLIB_000:16;
-            let n be odd Nat; assume n < len W; then
+            let n be odd Element of NAT; assume n < len W; then
             n < 2 + 1 by FINSEQ_1:62; then
             n <= 2*1 by NAT_1:38; then
             n = 2*0 or n = 1 or n = 2*1 by CQC_THE1:3;
@@ -300,7 +306,7 @@ definition let G be _Graph, W be Walk of G;
         1 < len W by A1, REAL_1:def 5; then
         1+1 < len W + 1 by XREAL_1:10; then
         2 <= len W by NAT_1:38; then
-        reconsider n = len W - 2 * 1 as odd Nat by INT_1:18;
+        reconsider n = len W - 2 * 1 as odd Element of NAT by INT_1:18;
     A2: n + 2 = len W; then
         n < len W by NAT_1:41; then
         W.(n+1) Joins W.n, W.(len W), G by A2, Def3;
@@ -310,7 +316,7 @@ definition let G be _Graph, W be Walk of G;
   end;
 end;
 
-definition let G be _Graph, W be Walk of G, n be Nat;
+definition let G be _Graph, W be Walk of G, n be Element of NAT;
   func W.vertexAt(n) -> Vertex of G equals :Def8: ::dWVAT
     W.n if n is odd & n <= len W otherwise W.first();
   correctness proof
@@ -342,7 +348,7 @@ A1: len W' = len W by FINSEQ_5:def 3;
         W'.1 = W.(len W) by FINSEQ_5:65; then
         W'.1 = W.last();
         hence W'.1 in the_Vertices_of G;
-        let n be odd Nat; assume
+        let n be odd Element of NAT; assume
     A2: n < len W';
     A3: now 1 <= n & n <= len W by A2, FINSEQ_5:def 3, HEYTING3:1;
             hence n in dom W by FINSEQ_3:27;
@@ -355,8 +361,8 @@ A1: len W' = len W by FINSEQ_5:def 3;
         end; then
     A6: n <= len W & n+1 <= len W & n+2 <= len W by FINSEQ_3:27;
         set rn = len W-n+1, rnaa1 = len W-(n+1)+1, rn2 = len W-(n+2)+1;
-        reconsider rn, rn2 as odd Nat by A6, FINSEQ_5:1;
-        reconsider rnaa1 as even Nat by A6, FINSEQ_5:1;
+        reconsider rn, rn2 as odd Element of NAT by A6, FINSEQ_5:1;
+        reconsider rnaa1 as even Element of NAT by A6, FINSEQ_5:1;
         1+0 < n+2 by XREAL_1:10; then
         len W - (n+2) < len W - 1 by REAL_1:92; then
         len W - (n+2) + 1 < len W - 1 + 1 by XREAL_1:10; then
@@ -381,14 +387,14 @@ definition let G be _Graph, W1, W2 be Walk of G;
     A1: W1.last() = W2.first();
         len W2 <> 0; then
     A2: W2 <> {} by FINSEQ_1:25;
-    A3: now assume len W is even; then reconsider lenW as even Nat;
+    A3: now assume len W is even; then reconsider lenW as even Element of NAT;
             lenW + 1 = len W1 + len W2 by A2, GRAPH_2:13;
             hence contradiction;
         end;
         1 <= len W1 by HEYTING3:1; then
     A4: W.1 = W1.1 by GRAPH_2:14
            .= W1.first();
-        now let n be odd Nat such that
+        now let n be odd Element of NAT such that
         A5: n < len W; set v1 = W.n, v2 = W.(n+2), e = W.(n+1);
             now per cases;
             suppose
@@ -404,10 +410,12 @@ definition let G be _Graph, W1, W2 be Walk of G;
             suppose
             A10: len W1 < n+2; then consider k being Nat such that
             A11: n + 2 = len W1 + k by NAT_1:28;
-                now assume k is odd; then reconsider k as odd Nat;
+                now assume k is odd; then reconsider k as odd Element of NAT
+                  by ORDINAL1:def 13;
                     n+2 = len W1 + k by A11;
                     hence contradiction;
-                end; then reconsider k as even Nat;
+                end; then reconsider k as even Element of NAT
+                by ORDINAL1:def 13;
                 k <> 0 by A10, A11; then
                 0 < k; then
                 0 + 1 < k + 1 by XREAL_1:10; then
@@ -445,8 +453,9 @@ definition let G be _Graph, W1, W2 be Walk of G;
                     len W1 < n by A18, REAL_1:def 5; then
                 A24: 2+len W1-len W1<k+len W1-len W1
                       by A11,XREAL_1:10;
-                    reconsider two=2*1 as even Nat;
-                    reconsider k2 = k-two as even Nat by A24, INT_1:18;
+                    reconsider two=2*1 as even Element of NAT;
+                    reconsider k2 = k-two as even Element of NAT
+                    by A24, INT_1:18;
                     n + 2 = len W1 + k2 + 2 by A11; then
                 A25: n = len W1 + k2;
                     1+1-1 < k2 + 1 + 1 - 1 by A24, REAL_1:92; then
@@ -454,7 +463,7 @@ definition let G be _Graph, W1, W2 be Walk of G;
                     k2 < k2 + (1+1) by NAT_1:41; then
                     k2 < len W2 by A15, XXREAL_0:2; then
                 A27: W.n = W2.(k2+1) by A25, A26, GRAPH_2:15;
-                    set kaa1 = k2+1; reconsider kaa1 as odd Nat;
+                    set kaa1 = k2+1; reconsider kaa1 as odd Element of NAT;
                     kaa1+2 = k + 1; then
                 A28: W2.(kaa1+2) = W.(n+2) by A11, A12, A16, GRAPH_2:15;
                     kaa1 < kaa1 + 1 by NAT_1:59; then
@@ -475,27 +484,27 @@ definition let G be _Graph, W1, W2 be Walk of G;
   end;
 end;
 
-definition let G be _Graph, W be Walk of G, m, n being Nat;
+definition let G be _Graph, W be Walk of G, m, n being Element of NAT;
   func W.cut(m,n) -> Walk of G equals :Def11: ::dWCUT
      (m,n)-cut W if m is odd & n is odd & m <= n & n <= len W otherwise W;
   correctness proof
     hereby assume
     A1: m is odd & n is odd & m <= n & n <= len W;
-        reconsider m4 = m, n4 = n as odd Nat by A1;
+        reconsider m4 = m, n4 = n as odd Element of NAT by A1;
         set W2 = (m,n)-cut W, VG = the_Vertices_of G, EG = the_Edges_of G;
     A2: 1 <= m & m <= n & n <= len W by A1, HEYTING3:1; then
         len W2 + m4 - m4 = n4 + 1 - m4 by GRAPH_2:def 1; then
-        reconsider lenW2 = len W2 as odd Nat;
+        reconsider lenW2 = len W2 as odd Element of NAT;
         now lenW2 is odd;
             hence len W2 is odd;
             1 <= lenW2 by HEYTING3:1; then
-            reconsider lenW2aa1 = lenW2-1 as Nat by INT_1:18;
+            reconsider lenW2aa1 = lenW2-1 as Element of NAT by INT_1:18;
             0 < lenW2aa1 + 1; then
         A3: W2.(0+1) = W.(m+0) by A2, GRAPH_2:def 1;
             1 <= m & m <= len W by A1, XXREAL_0:2, HEYTING3:1; then
             W.m = W.vertexAt(m) by A1, Def8;
             hence W2.1 in VG by A3;
-            let i be odd Nat; assume
+            let i be odd Element of NAT; assume
         A4: i < len W2; then
             i + m < len W2 + m by XREAL_1:10; then
             i + m < n + 1 by A2, GRAPH_2:def 1; then
@@ -503,14 +512,14 @@ definition let G be _Graph, W be Walk of G, m, n being Nat;
             m4 + i < n4 by REAL_1:def 5; then
         A5: m + i < len W by A1, XXREAL_0:2;
             1 <= i by HEYTING3:1; then
-            reconsider iaa1 = i-1 as even Nat by INT_1:18;
+            reconsider iaa1 = i-1 as even Element of NAT by INT_1:18;
             iaa1 < len W2-0 by A4, REAL_1:92; then
         A6: W2.(iaa1+1) = W.(m+iaa1) by A2, GRAPH_2:def 1;
             i+1 <= lenW2 by A4, NAT_1:38; then
             i+1 < len W2 by REAL_1:def 5; then
         A7: W2.(i+1+1) = W.(m+(i+1)) by A2, GRAPH_2:def 1;
             1 <= m+i by A2, NAT_1:37; then
-            reconsider x=m4+i-1 as odd Nat by INT_1:18;
+            reconsider x=m4+i-1 as odd Element of NAT by INT_1:18;
             m + i - 1 < len W - 0 by A5, REAL_1:92; then
             W.(x+1) Joins W.x, W.(x+2), G by Def3;
             hence W2.(i+1) Joins W2.i, W2.(i+2), G
@@ -522,7 +531,7 @@ definition let G be _Graph, W be Walk of G, m, n being Nat;
   end;
 end;
 
-definition let G be _Graph, W be Walk of G, m, n be Nat;
+definition let G be _Graph, W be Walk of G, m, n be Element of NAT;
   func W.remove(m,n) -> Walk of G equals :Def12: ::dWREMOVE
      W.cut(1,m).append(W.cut(n,len W)) if m is odd & n is odd &
      m <= n & n <= len W & W.m = W.n otherwise W;
@@ -538,27 +547,29 @@ end;
 definition let G be _Graph, W be Walk of G;
   func W.vertexSeq() -> VertexSeq of G means :Def14: ::dWVSEQ
     len W + 1 = 2 * len it &
-    for n being Nat st 1 <= n & n <= len it holds it.n = W.(2*n - 1);
+    for n being Element of NAT st 1 <= n & n <= len it
+    holds it.n = W.(2*n - 1);
   existence proof
-    reconsider lenW1 = len W + 1 as even Nat;
+    reconsider lenW1 = len W + 1 as even Element of NAT;
     set lenIT = lenW1 div 2;
 A1: 2 divides lenW1 by PEPIN:22; then
 A2: 2*lenIT = lenW1 by NAT_1:49;
-    deffunc F(Nat) = W.(2*$1-1);
+    deffunc F(Element of NAT) = W.(2*$1-1);
     consider IT being FinSequence such that
 A3: len IT = lenIT &
-      for k being Nat st k in Seg lenIT holds IT.k = F(k)
+      for k being Element of NAT st k in Seg lenIT holds IT.k = F(k)
       from FINSEQ_1:sch 2;
     now let y be set; assume y in rng IT; then
         consider x being set such that
     A4: x in dom IT & y = IT.x by FUNCT_1:def 5;
     A5: x in Seg lenIT by A3, A4, FINSEQ_1:def 3;
-        reconsider x as Nat by A4;
-        set 2x = x*2; reconsider 2x as even Nat;
+        reconsider x as Element of NAT by A4;
+        set 2x = x*2; reconsider 2x as even Element of NAT;
         set 2xaa1 = 2x-1;
         1 <= x & x <= lenIT by A5, FINSEQ_1:3; then
     A6: 1*2 <= 2x & 2x <= lenIT * 2 by XREAL_1:66; then
-        1 <= 2x by XXREAL_0:2; then reconsider 2xaa1 as odd Nat by INT_1:18;
+        1 <= 2x by XXREAL_0:2;
+        then reconsider 2xaa1 as odd Element of NAT by INT_1:18;
         2 - 1 <= 2xaa1 & 2xaa1 <= lenW1-1 by A2, A6, XREAL_1:11; then
         W.2xaa1 = W.vertexAt(2xaa1) by Def8; then
         W.2xaa1 in the_Vertices_of G;
@@ -566,12 +577,13 @@ A3: len IT = lenIT &
     end; then
     rng IT c= the_Vertices_of G by TARSKI:def 3; then
     reconsider IT as FinSequence of the_Vertices_of G by FINSEQ_1:def 4;
-    now let n be Nat; set v1 = IT.n, v2 = IT.(n+1); assume
+    now let n be Element of NAT; set v1 = IT.n, v2 = IT.(n+1); assume
     A7: 1 <= n & n < len IT; then
     A8: n in Seg lenIT by A3, FINSEQ_1:3;
-        set 2n = 2*n; reconsider 2n as even Nat; set 2naa1 = 2n-1;
+        set 2n = 2*n; reconsider 2n as even Element of NAT; set 2naa1 = 2n-1;
         1 <= 2 & 1*2 <= n*2 by A7, XREAL_1:66; then
-        1 <= 2n by XXREAL_0:2; then reconsider 2naa1 as odd Nat by INT_1:18;
+        1 <= 2n by XXREAL_0:2;
+        then reconsider 2naa1 as odd Element of NAT by INT_1:18;
         1 <= n+1 & n+1 <= lenIT by A3, A7, NAT_1:38; then
         n+1 in Seg lenIT by FINSEQ_1:3; then
     A9: v2 = W.(2*(n+1)-1) by A3
@@ -586,7 +598,7 @@ A3: len IT = lenIT &
     end; then reconsider IT as VertexSeq of G by Def1;
     take IT;
     thus len W + 1 = 2 * len IT by A1, A3, NAT_1:49;
-    let n be Nat; assume
+    let n be Element of NAT; assume
     1 <= n & n <= len IT; then
     n in Seg len IT by FINSEQ_1:3;
     hence IT.n = W.(2*n-1) by A3;
@@ -594,13 +606,15 @@ end;
   uniqueness proof
     let IT1, IT2 be VertexSeq of G such that
 A12: len W + 1 = 2 * len IT1 &
-      for n being Nat st 1 <= n & n <= len IT1 holds IT1.n = W.(2*n - 1) and
+      for n being Element of NAT st 1 <= n & n <= len IT1
+      holds IT1.n = W.(2*n - 1) and
 A13: len W + 1 = 2 * len IT2 &
-      for n being Nat st 1 <= n & n <= len IT2 holds IT2.n = W.(2*n - 1);
+      for n being Element of NAT st 1 <= n & n <= len IT2
+      holds IT2.n = W.(2*n - 1);
 A14: len IT1 = len IT2 by A12, A13;
 A15: dom IT1 = Seg len IT2 by A14, FINSEQ_1:def 3
            .= dom IT2 by FINSEQ_1:def 3;
-    now let n be Nat such that
+    now let n be Element of NAT such that
     A16:  n in dom IT1;
     A17:  1 <= n & n <= len IT1 by A16, FINSEQ_3:27; then
          IT1.n = W.(2*n - 1) by A12;
@@ -613,22 +627,24 @@ end;
 definition let G be _Graph, W be Walk of G;
   func W.edgeSeq() -> EdgeSeq of G means :Def15: ::dWESEQ
     len W = 2*len it+1 &
-    for n being Nat st 1 <= n & n <= len it holds it.n = W.(2*n);
+    for n being Element of NAT st 1 <= n & n <= len it holds it.n = W.(2*n);
   existence proof
     1 <= len W by HEYTING3:1; then
-    reconsider lenWaa1 = len W-1 as even Nat by INT_1:18;
-    set lenIT = lenWaa1 div 2; reconsider lenIT as Nat;
+    reconsider lenWaa1 = len W-1 as even Element of NAT by INT_1:18;
+    set lenIT = lenWaa1 div 2; reconsider lenIT as Element of NAT;
     2 divides lenWaa1 by PEPIN:22; then
 A1: lenWaa1 = 2 * lenIT by NAT_1:49; then
 A2: len W = 2 * lenIT + 1;
-    deffunc F(Nat) = W.(2*$1);
+    deffunc F(Element of NAT) = W.(2*$1);
     consider IT being FinSequence such that
 A3: len IT = lenIT &
-    for n being Nat st n in Seg lenIT holds IT.n = F(n) from FINSEQ_1:sch 2;
+    for n being Element of NAT st n in Seg lenIT holds IT.n = F(n)
+    from FINSEQ_1:sch 2;
     now let y be set; assume y in rng IT; then consider x being set such that
     A4: x in dom IT & y = IT.x by FUNCT_1:def 5;
-    A5: x in Seg lenIT by A3, A4, FINSEQ_1:def 3; reconsider x as Nat by A4;
-    A6: y = W.(2*x) by A3, A4, A5; reconsider 2x = 2*x as even Nat;
+    A5: x in Seg lenIT by A3, A4, FINSEQ_1:def 3;
+    reconsider x as Element of NAT by A4;
+    A6: y = W.(2*x) by A3, A4, A5; reconsider 2x = 2*x as even Element of NAT;
         1 <= x & x <= lenIT by A5, FINSEQ_1:3; then
     A7: 1*2 <= 2*x & x*2 <= lenIT*2 by XREAL_1:66; then
     A8: 1 <= 2x by XXREAL_0:2;
@@ -637,7 +653,7 @@ A3: len IT = lenIT &
         2x + 1 <= lenWaa1 + 1 by XREAL_1:9; then
         2x <= 2x+1 & 2x+1 <= len W by NAT_1:29; then
     A9: 2x <= len W by XXREAL_0:2;
-        reconsider 2xaa1 = 2x-1 as odd Nat by A8, INT_1:18;
+        reconsider 2xaa1 = 2x-1 as odd Element of NAT by A8, INT_1:18;
         2xaa1 < len W by A9, SPPOL_1:5; then
         W.(2xaa1+1) Joins W.2xaa1, W.(2xaa1+2), G by Def3;
         hence y in the_Edges_of G by A6, GLIB_000:def 15;
@@ -652,14 +668,14 @@ A3: len IT = lenIT &
         2 * (len IT + 1) = 2 * len vs;
         hence
     A10: len vs = len IT + 1;
-        let n be Nat; set v1 = vs.n, v2 = vs.(n+1); assume
+        let n be Element of NAT; set v1 = vs.n, v2 = vs.(n+1); assume
     A11: 1 <= n & n <= len IT; then
     A12: 1 <= n & n <= len vs by A10, NAT_1:37;
     A13: 1 <= n+1 & n+1 <= len vs by A10, A11, NAT_1:37, XREAL_1:9;
-        set 2n = 2*n; reconsider 2n as even Nat;
+        set 2n = 2*n; reconsider 2n as even Element of NAT;
         set 2naa1 = 2n-1;
         1 <= n+n by A11, NAT_1:37; then
-        reconsider 2naa1 as odd Nat by INT_1:18;
+        reconsider 2naa1 as odd Element of NAT by INT_1:18;
     A14: v1 = W.(2*n-1) & v2 = W.(2*(n+1)-1) by A12, A13, Def14;
         n in Seg lenIT by A11, A3, FINSEQ_1:3; then
     A15: IT.n = W.(2naa1+1) by A3;
@@ -671,21 +687,23 @@ A3: len IT = lenIT &
     end; then reconsider IT as EdgeSeq of G by Def2;
     take IT;
     thus len W = 2*len IT+1 by A1, A3;
-    let n be Nat; assume 1 <= n & n <= len IT;  then
+    let n be Element of NAT; assume 1 <= n & n <= len IT;  then
     n in Seg lenIT by A3, FINSEQ_1:3;
     hence IT.n = W.(2*n) by A3;
 end;
   uniqueness proof
     let IT1, IT2 be EdgeSeq of G such that
 A17: len W = 2*len IT1 + 1 &
-    for n being Nat st 1 <= n & n <= len IT1 holds IT1.n = W.(2*n) and
+    for n being Element of NAT st 1 <= n & n <= len IT1 holds IT1.n = W.(2*n)
+     and
 A18: len W = 2*len IT2 + 1 &
-      for n being Nat st 1 <= n & n <= len IT2 holds IT2.n = W.(2*n);
+      for n being Element of NAT st 1 <= n & n <= len IT2
+      holds IT2.n = W.(2*n);
     2*len IT1 = 2*len IT2 by A17, A18; then
 A19: len IT1 = len IT2;
 A20: dom IT1 = Seg len IT2 by A19, FINSEQ_1:def 3
            .= dom IT2 by FINSEQ_1:def 3;
-    now let n be Nat; assume n in dom IT1; then
+    now let n be Element of NAT; assume n in dom IT1; then
     A21: 1 <= n & n <= len IT1 & n <= len IT2 by A19, FINSEQ_3:27;
         hence IT1.n = W.(2*n) by A17
                    .= IT2.n by A21, A18;
@@ -707,26 +725,27 @@ definition let G be _Graph, W be Walk of G;
 end;
 
 definition let G be _Graph, W be Walk of G;
-  func W.length() -> Nat equals  ::dWLENGTH
+  func W.length() -> Element of NAT equals  ::dWLENGTH
     len W.edgeSeq();
   coherence;
 end;
 
 definition let G be _Graph, W be Walk of G, v be set;
-  func W.find(v) -> odd Nat means :Def19: ::dWFINDV
+  func W.find(v) -> odd Element of NAT means :Def19: ::dWFINDV
     it <= len W & W.it = v &
-    for n being odd Nat st n <= len W & W.n = v holds it <= n if
+    for n being odd Element of NAT st n <= len W & W.n = v holds it <= n if
     v in W.vertices() otherwise it = len W;
   existence proof
     hereby assume
 A1: v in W.vertices();
   set vs = W.vertexSeq();
-    defpred P[Nat] means $1 is odd & $1 <= len W & W.$1 = v;
-    now v in rng vs by A1; then consider i being Nat such that
+    defpred P[Element of NAT] means $1 is odd & $1 <= len W & W.$1 = v;
+    now v in rng vs by A1; then consider i being Element of NAT such that
     A2: i in dom vs & vs.i = v by FINSEQ_2:11;
-        set n1 = 2*i; reconsider n1 as even Nat; set n = n1-1;
+        set n1 = 2*i; reconsider n1 as even Element of NAT; set n = n1-1;
     A3: 1 <= i & i <= len vs by A2, FINSEQ_3:27; then
-        1 <= i+i by NAT_1:37; then reconsider n as odd Nat by INT_1:18;
+        1 <= i+i by NAT_1:37; then reconsider n as odd Element of NAT
+         by INT_1:18;
         take n;
         i*2 <= len vs *2 by A3, XREAL_1:66; then
         i*2 <= len W + 1 by Def14; then
@@ -734,13 +753,14 @@ A1: v in W.vertices();
         hence n <= len W;
         thus W.n = v by A2, A3, Def14;
     end; then
-A4: ex k being Nat st P[k];
-    consider IT being Nat such that
-A5: P[IT] & for n being Nat st P[n] holds IT <= n from NAT_1:sch 5(A4);
-    reconsider IT as odd Nat by A5;
+A4: ex k being Element of NAT st P[k];
+    consider IT being Element of NAT such that
+A5: P[IT] & for n being Element of NAT st P[n] holds IT <= n
+ from NAT_1:sch 5(A4);
+    reconsider IT as odd Element of NAT by A5;
     take IT;
     thus IT <= len W & W.IT = v by A5;
-    let n be odd Nat; assume
+    let n be odd Element of NAT; assume
     n <= len W & W.n = v;
     hence IT <= n by A5;
     end;
@@ -750,14 +770,14 @@ A5: P[IT] & for n being Nat st P[n] holds IT <= n from NAT_1:sch 5(A4);
     thus thesis;
 end;
   uniqueness proof
-    let IT1, IT2 be odd Nat;
+    let IT1, IT2 be odd Element of NAT;
     hereby assume v in W.vertices();
         assume
     A6: IT1 <= len W & W.IT1 = v &
-        for n being odd Nat st n <= len W & W.n = v holds IT1 <= n;
+        for n being odd Element of NAT st n <= len W & W.n = v holds IT1 <= n;
         assume
     A7: IT2 <= len W & W.IT2 = v &
-        for n being odd Nat st n <= len W & W.n = v holds IT2 <= n;
+        for n being odd Element of NAT st n <= len W & W.n = v holds IT2 <= n;
     A8: IT1 <= IT2 by A6, A7;
         IT2 <= IT1 by A6, A7;
         hence IT1 = IT2 by A8, XXREAL_0:1;
@@ -768,31 +788,35 @@ end;
   consistency;
 end;
 
-definition let G be _Graph, W be Walk of G, n be Nat;
-  func W.find(n) -> odd Nat means :Def20: ::dWFINDN
+definition let G be _Graph, W be Walk of G, n be Element of NAT;
+  func W.find(n) -> odd Element of NAT means :Def20: ::dWFINDN
     it <= len W & W.it = W.n &
-      for k being odd Nat st k <= len W & W.k = W.n holds it <= k
+      for k being odd Element of NAT st k <= len W & W.k = W.n holds it <= k
     if (n is odd & n <= len W) otherwise it = len W;
   existence proof
-    defpred P[Nat] means $1 is odd & $1 <= len W & W.$1 = W.n;
+    defpred P[Element of NAT] means $1 is odd & $1 <= len W & W.$1 = W.n;
     hereby assume (n is odd & n <= len W); then
-    A1: ex n being Nat st P[n];
-        consider IT being Nat such that
-    A2: P[IT] & for k being Nat st P[k] holds IT <= k from NAT_1:sch 5(A1);
-        reconsider IT as odd Nat by A2;
+    A1: ex n being Element of NAT st P[n];
+        consider IT being Element of NAT such that
+    A2: P[IT] & for k being Element of NAT st P[k] holds IT <= k
+     from NAT_1:sch 5(A1);
+        reconsider IT as odd Element of NAT by A2;
         take IT;
         thus IT <= len W & W.IT = W.n by A2;
-        thus for k being odd Nat st k <= len W & W.k = W.n holds IT <= k by A2;
+        thus for k being odd Element of NAT st k <= len W & W.k = W.n
+        holds IT <= k by A2;
     end;
     thus thesis;
   end;
   uniqueness proof
-    let IT1, IT2 be odd Nat;
+    let IT1, IT2 be odd Element of NAT;
     hereby assume n is odd & n <= len W; assume
     A3: IT1 <= len W & W.IT1 = W.n &
-         for k being odd Nat st k <= len W & W.k = W.n holds IT1 <= k;
+         for k being odd Element of NAT st k <= len W & W.k = W.n
+         holds IT1 <= k;
         assume IT2 <= len W & W.IT2 = W.n &
-          for k being odd Nat st k <= len W & W.k = W.n holds IT2 <= k; then
+          for k being odd Element of NAT st k <= len W & W.k = W.n
+          holds IT2 <= k; then
         IT1 <= IT2 & IT2 <= IT1 by A3;
         hence IT1 = IT2 by XXREAL_0:1;
     end;
@@ -802,35 +826,38 @@ definition let G be _Graph, W be Walk of G, n be Nat;
 end;
 
 definition let G be _Graph, W be Walk of G, v be set;
-  func W.rfind(v) -> odd Nat means :Def21: ::dWRFINDV
+  func W.rfind(v) -> odd Element of NAT means :Def21: ::dWRFINDV
     it <= len W & W.it = v &
-    for n being odd Nat st n <= len W & W.n = v holds n <= it
+    for n being odd Element of NAT st n <= len W & W.n = v holds n <= it
     if v in W.vertices() otherwise it = len W;
   existence proof
     hereby assume
     A1: v in W.vertices();
-        defpred P[Nat] means $1 is odd & $1 <= len W & W.$1 = v;
-    A2: for k being Nat st P[k] holds k <= len W;
+        defpred P[Element of NAT] means $1 is odd & $1 <= len W & W.$1 = v;
+    A2: for k being Element of NAT st P[k] holds k <= len W;
         W.find(v) <= len W & W.(W.find(v)) = v by A1, Def19; then
-    A3: ex k being Nat st P[k];
-        consider IT being Nat such that
-    A4: P[IT] & for n being Nat st P[n] holds n <= IT from NAT_1:sch 6(A2,A3);
-        reconsider IT as odd Nat by A4;
+    A3: ex k being Element of NAT st P[k];
+        consider IT being Element of NAT such that
+    A4: P[IT] & for n being Element of NAT st P[n] holds n <= IT
+    from NAT_1:sch 6(A2,A3);
+        reconsider IT as odd Element of NAT by A4;
         take IT;
         thus IT <= len W & W.IT = v by A4;
-        let n be odd Nat; assume
+        let n be odd Element of NAT; assume
         n <= len W & W.n = v;
         hence n <= IT by A4;
     end;
     thus thesis;
   end;
   uniqueness proof
-    let IT1, IT2 be odd Nat;
+    let IT1, IT2 be odd Element of NAT;
     hereby assume v in W.vertices(); assume
     A5: IT1 <= len W & W.IT1 = v &
-          for n being odd Nat st n <= len W & W.n = v holds n <= IT1; assume
+          for n being odd Element of NAT st n <= len W & W.n = v
+          holds n <= IT1; assume
     A6: IT2 <= len W & W.IT2 = v &
-          for n being odd Nat st n <= len W & W.n = v holds n <= IT2;
+          for n being odd Element of NAT st n <= len W & W.n = v
+          holds n <= IT2;
     A7: IT2 <= IT1 by A5, A6;
           IT1 <= IT2 by A5, A6;
         hence IT1 = IT2 by A7, XXREAL_0:1;
@@ -840,33 +867,36 @@ definition let G be _Graph, W be Walk of G, v be set;
   consistency;
 end;
 
-definition let G be _Graph, W be Walk of G, n be Nat;
-  func W.rfind(n) -> odd Nat means :Def22: ::dWRFINDN
+definition let G be _Graph, W be Walk of G, n be Element of NAT;
+  func W.rfind(n) -> odd Element of NAT means :Def22: ::dWRFINDN
     it <= len W & W.it = W.n &
-    for k being odd Nat st k <= len W & W.k = W.n holds k <= it
+    for k being odd Element of NAT st k <= len W & W.k = W.n holds k <= it
     if (n is odd & n <= len W) otherwise it = len W;
   existence proof
-    defpred P[Nat] means $1 is odd & $1 <= len W & W.$1 = W.n;
+    defpred P[Element of NAT] means $1 is odd & $1 <= len W & W.$1 = W.n;
     hereby assume (n is odd & n <= len W); then
-    A1: ex k being Nat st P[k];
-    A2: for k being Nat st P[k] holds k <= len W;
-        consider IT being Nat such that
-    A3: P[IT] & for k being Nat st P[k] holds k <= IT from NAT_1:sch 6(A2,A1);
-        reconsider IT as odd Nat by A3;
+    A1: ex k being Element of NAT st P[k];
+    A2: for k being Element of NAT st P[k] holds k <= len W;
+        consider IT being Element of NAT such that
+    A3: P[IT] & for k being Element of NAT st P[k] holds k <= IT
+    from NAT_1:sch 6(A2,A1);
+        reconsider IT as odd Element of NAT by A3;
         take IT;
         thus IT <= len W & W.IT = W.n by A3;
-        thus for k being odd Nat st k <= len W & W.k = W.n
+        thus for k being odd Element of NAT st k <= len W & W.k = W.n
            holds k <= IT by A3;
     end;
     thus thesis;
   end;
   uniqueness proof
-    let IT1, IT2 be odd Nat;
+    let IT1, IT2 be odd Element of NAT;
     hereby assume n is odd & n <= len W; assume
     A4: IT1 <= len W & W.IT1 = W.n &
-         for k being odd Nat st k <= len W & W.k = W.n holds k <= IT1;
+         for k being odd Element of NAT st k <= len W & W.k = W.n
+         holds k <= IT1;
         assume IT2 <= len W & W.IT2 = W.n &
-          for k being odd Nat st k <= len W & W.k = W.n holds k <= IT2; then
+          for k being odd Element of NAT st k <= len W & W.k = W.n
+          holds k <= IT2; then
         IT1 <= IT2 & IT2 <= IT1 by A4;
         hence IT1 = IT2 by XXREAL_0:1;
     end;
@@ -884,7 +914,7 @@ definition let G be _Graph, W be Walk of G;
   attr W is closed means :Def24: ::dCLWALK
     W.first() = W.last();
   attr W is directed means :Def25: ::dDIWALK
-    for n being odd Nat st n < len W
+    for n being odd Element of NAT st n < len W
       holds (the_Source_of G).(W.(n+1)) = W.n;
   attr W is trivial means :Def26: ::dTVWALK
     W.length() = 0;
@@ -899,13 +929,13 @@ end;
 definition let G be _Graph, W be Walk of G;
   attr W is Path-like means :Def28: ::dPLWALK
     W is Trail-like &
-    for m, n being odd Nat st m < n & n <= len W holds
+    for m, n being odd Element of NAT st m < n & n <= len W holds
       W.m = W.n implies (m = 1 & n = len W);
 end;
 
 definition let G be _Graph, W be Walk of G;
   attr W is vertex-distinct means :Def29: ::dVDWALK
-    for m,n being odd Nat st m <= len W & n <= len W & W.m = W.n
+    for m,n being odd Element of NAT st m <= len W & n <= len W & W.m = W.n
       holds m = n;
 end;
 
@@ -918,21 +948,25 @@ definition let G be _Graph, W be Walk of G;
 end;
 
 Lm3:
-  for G be _Graph, W be Walk of G, n being odd Nat st n <= len W holds
+  for G be _Graph, W be Walk of G, n being odd Element of NAT st n <= len W
+  holds
     W.n in the_Vertices_of G proof
-    let G be _Graph, W be Walk of G, n be odd Nat; assume n <= len W; then
+    let G be _Graph, W be Walk of G, n be odd Element of NAT;
+    assume n <= len W; then
     W.n = W.vertexAt(n) by Def8;
     hence thesis;
 end;
 
 Lm4:
-  for G be _Graph, W be Walk of G, n being even Nat st n in dom W holds
-    ex naa1 being odd Nat st
+  for G be _Graph, W be Walk of G, n being even Element of NAT st n in dom W
+  holds
+    ex naa1 being odd Element of NAT st
       naa1 = n-1 & n-1 in dom W & n+1 in dom W &
       W.n Joins W.(naa1), W.(n+1),G proof
-    let G be _Graph, W be Walk of G, n be even Nat; assume n in dom W; then
+    let G be _Graph, W be Walk of G, n be even Element of NAT;
+    assume n in dom W; then
 A1: 1 <= n & n <= len W by FINSEQ_3:27; then
-    reconsider naa1 = n-1 as odd Nat by INT_1:18;
+    reconsider naa1 = n-1 as odd Element of NAT by INT_1:18;
     take naa1;
     thus naa1 = n-1;
     1 < n by A1,JORDAN12:3,REAL_1:def 5; then
@@ -951,9 +985,10 @@ A3: n+1 <= len W by NAT_1:38;
 end;
 
 Lm5:
-  for G be _Graph, W be Walk of G, n being odd Nat st n < len W holds
+  for G be _Graph, W be Walk of G, n being odd Element of NAT st n < len W
+  holds
      n in dom W & n+1 in dom W & n+2 in dom W proof
-    let G be _Graph, W be Walk of G, n be odd Nat; assume
+    let G be _Graph, W be Walk of G, n be odd Element of NAT; assume
 A1: n < len W;
 A2: 1 <= n by HEYTING3:1;
 A3: 1 <= n+1 & 1 <= n+2 by NAT_1:37;
@@ -970,7 +1005,7 @@ Lm6:
              .= W.(len W) by FINSEQ_1:57
              .= W.last();
     hence W is closed by Def24;
-    now let n be odd Nat; assume n < len W; then
+    now let n be odd Element of NAT; assume n < len W; then
         n < 1 by FINSEQ_1:56;
         hence W.n = (the_Source_of G).(W.(n+1)) by HEYTING3:1;
     end;
@@ -988,7 +1023,7 @@ Lm6:
     W.edgeSeq() is one-to-one by FINSEQ_1:25;
     hence
 A1: W is Trail-like by Def27;
-    now let n, m be odd Nat; assume n < m & m <= len W; then
+    now let n, m be odd Element of NAT; assume n < m & m <= len W; then
         n < m & m <= 1 by FINSEQ_1:57; then
         n < 1 by XXREAL_0:2;
         hence W.n = W.m implies (n = 1 & m = len W) by HEYTING3:1;
@@ -1037,10 +1072,10 @@ A1: len W = len W.reverse() by Lm9;
 end;
 
 Lm11:
-  for G being _Graph, W being Walk of G, n being Nat holds
+  for G being _Graph, W being Walk of G, n being Element of NAT holds
   n in dom W.reverse() implies W.reverse().n = W.(len W - n + 1) &
     (len W - n + 1) in dom W proof
-    let G be _Graph, W be Walk of G, n be Nat; assume
+    let G be _Graph, W be Walk of G, n be Element of NAT; assume
 A1: n in dom W.reverse();
     hence W.reverse().n = W.(len W - n + 1) by FINSEQ_5:def 3;
     n in Seg len W.reverse() by A1, FINSEQ_1:def 3; then
@@ -1115,10 +1150,10 @@ A3: W.first() = W1.first();
 end;
 
 Lm16:
-  for G be _Graph, W1,W2 be Walk of G, n being Nat holds
+  for G be _Graph, W1,W2 be Walk of G, n being Element of NAT holds
   n in dom W1 implies
     W1.append(W2).n = W1.n & n in dom W1.append(W2) proof
-    let G be _Graph, W1,W2 be Walk of G, n be Nat;
+    let G be _Graph, W1,W2 be Walk of G, n be Element of NAT;
     set W = W1.append(W2); assume
 A1: n in dom W1; then
 A2: 1 <= n & n <= len W1 by FINSEQ_3:27;
@@ -1128,7 +1163,7 @@ A2: 1 <= n & n <= len W1 by FINSEQ_3:27;
         W = W1 ^' W2 by Def10;
         hence W.n = W1.n by A2,GRAPH_2:14;
         1 <= len W2 by HEYTING3:1; then
-        reconsider lenW2aa1 = len W2 - 1 as Nat by INT_1:18;
+        reconsider lenW2aa1 = len W2 - 1 as Element of NAT by INT_1:18;
         n <= len W1 + lenW2aa1 by A2, NAT_1:37; then
         n <= len W1 + len W2 + -1; then
         n <= len W + 1 + -1 by A3, Lm13;
@@ -1141,14 +1176,14 @@ end;
 
 Lm17:
   for G be _Graph, W1,W2 be Walk of G holds W1.last() = W2.first() implies
-  for n being Nat st n < len W2 holds
+  for n being Element of NAT st n < len W2 holds
     W1.append(W2).(len W1 + n) = W2.(n+1) &
     (len W1 + n) in dom W1.append(W2) proof
     let G be _Graph, W1,W2 be Walk of G;
     set W = W1.append(W2); assume
 A1: W1.last() = W2.first(); then
 A2: W = W1 ^' W2 by Def10;
-    let n be Nat; assume
+    let n be Element of NAT; assume
 A3: n < len W2;
     now per cases;
     suppose
@@ -1175,10 +1210,11 @@ A5: 1 <= len W1 + n by NAT_1:37;
 end;
 
 Lm18:
-  for G be _Graph, W1,W2 be Walk of G, n be Nat holds
+  for G be _Graph, W1,W2 be Walk of G, n be Element of NAT holds
   n in dom W1.append(W2) implies
-     n in dom W1 or ex k being Nat st k < len W2 & n = len W1 + k proof
-    let G be _Graph, W1,W2 be Walk of G, n be Nat;
+     n in dom W1 or ex k being Element of NAT st k < len W2 & n = len W1 + k
+     proof
+    let G be _Graph, W1,W2 be Walk of G, n be Element of NAT;
     set W3 = W1.append(W2); assume
 A1: n in dom W3; then
 A2: 1 <= n & n <= len W3 by FINSEQ_3:27;
@@ -1187,7 +1223,7 @@ A2: 1 <= n & n <= len W3 by FINSEQ_3:27;
     A3: len W3 + 1 = len W1 + len W2 by Lm13;
         now assume not n in dom W1; then
             len W1 < n by A2, FINSEQ_3:27; then
-            reconsider k = n - len W1 as Nat by INT_1:18;
+            reconsider k = n - len W1 as Element of NAT by INT_1:18;
             take k;
             now assume len W2 <= k; then
                 len W1 + len W2 <= len W1 + k by XREAL_1:9;
@@ -1204,18 +1240,18 @@ A2: 1 <= n & n <= len W3 by FINSEQ_3:27;
 end;
 
 Lm19:
-  for G being _Graph, W being Walk of G, m,n being odd Nat
+  for G being _Graph, W being Walk of G, m,n being odd Element of NAT
    st m <= n & n <= len W holds len W.cut(m,n) + m = n+1 &
-    for i being Nat st i < len W.cut(m,n)
+    for i being Element of NAT st i < len W.cut(m,n)
         holds W.cut(m,n).(i+1) = W.(m+i) & m+i in dom W proof
-    let G be _Graph, W be Walk of G, m, n be odd Nat;
+    let G be _Graph, W be Walk of G, m, n be odd Element of NAT;
     set W2 = W.cut(m,n); assume
 A1: m <= n & n <= len W; then
 A2: W2 = (m,n)-cut W by Def11;
 A3: 1 <= m & m <= n & n <= len W by A1, HEYTING3:1;
     hence
 A4: len W.cut(m,n) + m = n + 1 by A2, GRAPH_2:def 1;
-    let i be Nat; assume
+    let i be Element of NAT; assume
 A5: i < len W.cut(m,n);
     hence W.cut(m,n).(i+1) = W.(m+i) by A2, A3,GRAPH_2:def 1;
     1 <= m by HEYTING3:1; then
@@ -1227,18 +1263,18 @@ A6: 1 <= m+i by NAT_1:37;
 end;
 
 Lm20:
-  for G being _Graph, W being Walk of G, m, n being odd Nat
+  for G being _Graph, W being Walk of G, m, n being odd Element of NAT
     st m <= n & n <= len W holds
     W.cut(m,n).first() = W.m & W.cut(m,n).last() = W.n &
     W.cut(m,n) is_Walk_from W.m, W.n proof
-    let G be _Graph, W be Walk of G, m, n be odd Nat;
+    let G be _Graph, W be Walk of G, m, n be odd Element of NAT;
     set W2 = W.cut(m,n); assume
 A1: m <= n & n <= len W;
     1-1 < len W2 - 0; then
     W2.(0+1) = W.(m+0) by A1, Lm19;
     hence
 A2: W2.first() = W.m;
-    reconsider nm4 = n-m as Nat by A1, INT_1:18;
+    reconsider nm4 = n-m as Element of NAT by A1, INT_1:18;
 A3: len W2 + m - m = n + 1 - m by A1, Lm19; then
     len W2 = n - m + 1; then
     n - m + 1 -1 < len W2 - 0 by REAL_1:92; then
@@ -1250,10 +1286,10 @@ A3: len W2 + m - m = n + 1 - m by A1, Lm19; then
 end;
 
 Lm21:
-  for G be _Graph, W be Walk of G, m,n,o being odd Nat
+  for G be _Graph, W be Walk of G, m,n,o being odd Element of NAT
     st m <= n & n <= o & o <= len W holds
     W.cut(m,n).append(W.cut(n,o)) = W.cut(m,o) proof
-    let G be _Graph, W be Walk of G, m,n,o be odd Nat; assume
+    let G be _Graph, W be Walk of G, m,n,o be odd Element of NAT; assume
 A1: m <= n & n <= o & o <= len W; then
 A2: m <= o & n <= len W by XXREAL_0:2;
     set W1 = W.cut(m,n), W2 = W.cut(n,o), W3 = W.cut(m,o), W4 = W1.append(W2);
@@ -1270,10 +1306,10 @@ A2: m <= o & n <= len W by XXREAL_0:2;
     A7: len W4 + 1 = len W3 + 1 by A3, Lm13; then
     A8: len W4 = len W3;
         thus len W4 = len W4 & len W3 = len W4 by A7;
-        let x be Nat; assume x in Seg len W4; then
+        let x be Element of NAT; assume x in Seg len W4; then
         x in dom W4 by FINSEQ_1:def 3; then
     A9: 1 <= x & x <= len W4 by FINSEQ_3:27; then
-        reconsider xaa1 = x-1 as Nat by INT_1:18;
+        reconsider xaa1 = x-1 as Element of NAT by INT_1:18;
         xaa1 < len W4 - 0 by A9, REAL_1:92; then
     A10: W3.(xaa1+1) = W.(m+xaa1) by A1, A2, A8, Lm19;
         now per cases;
@@ -1285,6 +1321,7 @@ A2: m <= o & n <= len W by XXREAL_0:2;
                      .= W3.x by A1,A2,A12,Lm19,A10; end;
         suppose x > len W1; then consider k being Nat such that
         A14: len W1 + k = x by NAT_1:28;
+        reconsider k as Element of NAT by ORDINAL1:def 13;
             len W1 + k + 1 <= len W3 + 1
               by A7,A9,A14,XREAL_1:9; then
             (k + 1)+len W1-len W1 <= len W2 +len W1-len W1
@@ -1311,9 +1348,10 @@ end;
 
 
 Lm23:
-  for G be _Graph, W be Walk of G, n being odd Nat st n <= len W holds
+  for G be _Graph, W be Walk of G, n being odd Element of NAT st n <= len W
+  holds
      W.cut(n,n) = <* W.vertexAt(n) *> proof
-    let G be _Graph, W be Walk of G, n be odd Nat; assume
+    let G be _Graph, W be Walk of G, n be odd Element of NAT; assume
 A1: n <= len W; then
 A2: W.cut(n,n) = (n,n)-cut W by Def11;
 A3: W.n = W.vertexAt(n) by A1, Def8;
@@ -1322,9 +1360,10 @@ A3: W.n = W.vertexAt(n) by A1, Def8;
 end;
 
 Lm24:
-  for G being _Graph, W being Walk of G, m,n being Nat holds
+  for G being _Graph, W being Walk of G, m,n being Element of NAT holds
     m is odd & m <= n implies W.cut(1,n).cut(1,m) = W.cut(1,m) proof
-    let G be _Graph, W be Walk of G, m,n be Nat; set W1 = W.cut(1,n); assume
+    let G be _Graph, W be Walk of G, m,n be Element of NAT;
+    set W1 = W.cut(1,n); assume
 A1: m is odd & m <= n;
     now per cases;
     suppose
@@ -1340,9 +1379,9 @@ A1: m is odd & m <= n;
     A8: W1 = (1,n)-cut W by A2,A3,JORDAN12:3,Def11;
     A9: W.cut(1,m) = (1,m)-cut W by A1, A3,JORDAN12:3, Def11;
     A10: len W.cut(1,m) + 1 = m + 1 by A1, A3,JORDAN12:3, Lm19;
-        now let x be Nat; assume x in Seg m; then
+        now let x be Element of NAT; assume x in Seg m; then
         A11: 1 <= x & x <= m by FINSEQ_1:3; then
-            reconsider xaa1 = x-1 as Nat by INT_1:18;
+            reconsider xaa1 = x-1 as Element of NAT by INT_1:18;
             x <= n by A1, A11, XXREAL_0:2; then
         A12: xaa1 < len W1 - 0 by A4, REAL_1:92;
         A13: xaa1 < len W1.cut(1,m) - 0 by A11, A6, REAL_1:92;
@@ -1361,10 +1400,10 @@ A1: m is odd & m <= n;
 end;
 
 Lm25:
-  for G be _Graph, W1,W2 be Walk of G, m,n being odd Nat
+  for G be _Graph, W1,W2 be Walk of G, m,n being odd Element of NAT
     st m <= n & n <= len W1 & W1.last() = W2.first()
     holds W1.append(W2).cut(m,n) = W1.cut(m,n) proof
-    let G be _Graph, W1,W2 be Walk of G, m,n be odd Nat; assume
+    let G be _Graph, W1,W2 be Walk of G, m,n be odd Element of NAT; assume
 A1: m <= n & n <= len W1 & W1.last() = W2.first();
     set W3 = W1.append(W2);
     len W1 <= len W3 by A1, Lm14;  then
@@ -1375,10 +1414,10 @@ A3: len W3.cut(m,n) = len W1.cut(m,n);
 A4: W3.cut(m,n) = (m,n)-cut W3 by A1, A2, Def11;
 A5: W1.cut(m,n) = (m,n)-cut W1 by A1, Def11;
 A6: 1 <= m & m <= n by HEYTING3:1, A1;
-    now let x be Nat; assume x in Seg len W1.cut(m,n); then
+    now let x be Element of NAT; assume x in Seg len W1.cut(m,n); then
         x in dom W1.cut(m,n) by FINSEQ_1:def 3; then
     A7: 1 <= x & x <= len W1.cut(m,n) by FINSEQ_3:27; then
-        reconsider xaa1 = x-1 as Nat by INT_1:18;
+        reconsider xaa1 = x-1 as Element of NAT by INT_1:18;
     A8: xaa1 + 1 = x;
     A9: xaa1 < len W3.cut(m,n) - 0 by A3,A7,REAL_1:92;
     A10: xaa1 < len W1.cut(m,n) - 0 by A7,REAL_1:92; then
@@ -1396,9 +1435,10 @@ A6: 1 <= m & m <= n by HEYTING3:1, A1;
 end;
 
 Lm26:
-  for G being _Graph, W being Walk of G, m being odd Nat st m <= len W holds
+  for G being _Graph, W being Walk of G, m being odd Element of NAT
+  st m <= len W holds
      len W.cut(1,m) = m proof
-    let G be _Graph, W be Walk of G, m be odd Nat; assume
+    let G be _Graph, W be Walk of G, m be odd Element of NAT; assume
 A1: m <= len W;
     1 is odd & 1 <= m by HEYTING3:1, JORDAN12:3; then
     len W.cut(1,m) + 1 = m + 1 by A1, Lm19;
@@ -1406,12 +1446,13 @@ A1: m <= len W;
 end;
 
 Lm27:
-  for G be _Graph, W be Walk of G, m be odd Nat, x be Nat
+  for G be _Graph, W be Walk of G, m be odd Element of NAT, x be Element of NAT
     st x in dom W.cut(1,m) & m <= len W holds W.cut(1,m).x = W.x proof
-    let G be _Graph, W be Walk of G, m be odd Nat, x be Nat; assume
+    let G be _Graph, W be Walk of G, m be odd Element of NAT,
+    x be Element of NAT; assume
 A1: x in dom W.cut(1,m) & m <= len W; then
 A2: 1 <= x & x <= len W.cut(1,m) by FINSEQ_3:27; then
-    reconsider xaa1 = x-1 as Nat by INT_1:18;
+    reconsider xaa1 = x-1 as Element of NAT by INT_1:18;
 A3: xaa1 + 1 = x;
 A4: 1 is odd & 1 <= m by HEYTING3:1, JORDAN12:3;
     x-1 < len W.cut(1,m) - 0 by A2, REAL_1:92;
@@ -1419,10 +1460,10 @@ A4: 1 is odd & 1 <= m by HEYTING3:1, JORDAN12:3;
 end;
 
 Lm28:
-  for G be _Graph, W be Walk of G, m,n be odd Nat
+  for G be _Graph, W be Walk of G, m,n be odd Element of NAT
     st m <= n & n <= len W & W.m = W.n holds
     len W.remove(m,n) + n = len W + m proof
-    let G be _Graph, W be Walk of G, m, n be odd Nat;
+    let G be _Graph, W be Walk of G, m, n be odd Element of NAT;
     set W1 = W.cut(1,m), W2 = W.cut(n,len W); assume
 A1: m <= n & n <= len W & W.m = W.n; then
 A2: 1 is odd & 1 <= m & m <= len W by HEYTING3:1, JORDAN12:3, XXREAL_0:2;
@@ -1439,9 +1480,9 @@ A5: len W1 = m;
 end;
 
 Lm29:
-  for G be _Graph, W be Walk of G, m,n be Nat, x,y be set holds
+  for G be _Graph, W be Walk of G, m,n be Element of NAT, x,y be set holds
     W is_Walk_from x,y implies W.remove(m,n) is_Walk_from x,y proof
-    let G be _Graph, W be Walk of G, m,n be Nat, x,y be set;
+    let G be _Graph, W be Walk of G, m,n be Element of NAT, x,y be set;
     set W2 = W.remove(m,n), WA = W.cut(1,m), WB = W.cut(n,len W); assume
 A1: W is_Walk_from x,y;
     now per cases;
@@ -1465,9 +1506,9 @@ A1: W is_Walk_from x,y;
 end;
 
 Lm30:
-  for G being _Graph, W being Walk of G, m,n be Nat holds
+  for G being _Graph, W being Walk of G, m,n be Element of NAT holds
     len W.remove(m,n) <= len W proof
-    let G be _Graph, W be Walk of G, m,n be Nat;
+    let G be _Graph, W be Walk of G, m,n be Element of NAT;
     set W2 = W.remove(m,n);
     now per cases;
     suppose
@@ -1482,8 +1523,9 @@ Lm30:
 end;
 
 Lm31:
-  for G be _Graph, W be Walk of G, m be Nat holds W.remove(m,m) = W proof
-    let G be _Graph, W be Walk of G, m be Nat;
+  for G be _Graph, W be Walk of G, m be Element of NAT
+  holds W.remove(m,m) = W proof
+    let G be _Graph, W be Walk of G, m be Element of NAT;
     now per cases;
     suppose
     A1: m is odd & m <= len W & W.m = W.m; then
@@ -1499,10 +1541,10 @@ Lm31:
 end;
 
 Lm32:
-  for G being _Graph, W being Walk of G, m,n be odd Nat
+  for G being _Graph, W being Walk of G, m,n be odd Element of NAT
    st m <= n & n <= len W & W.m = W.n holds
      W.cut(1,m).last() = W.cut(n,len W).first() proof
-    let G be _Graph, W be Walk of G, m,n be odd Nat; assume
+    let G be _Graph, W be Walk of G, m,n be odd Element of NAT; assume
 A1: m <= n & n <= len W & W.m = W.n; then
 A2: m <= len W by XXREAL_0:2;
     1 <= m & 1 is odd by HEYTING3:1, JORDAN12:3;
@@ -1511,15 +1553,16 @@ A2: m <= len W by XXREAL_0:2;
 end;
 
 Lm33:
-  for G be _Graph, W be Walk of G, x,y be set, m,n being odd Nat
+  for G be _Graph, W be Walk of G, x,y be set, m,n being odd Element of NAT
    st m <= n & n <= len W & W.m = W.n holds
-     (for x being Nat st x in Seg m holds W.remove(m,n).x = W.x) proof
-    let G be _Graph, W be Walk of G, x,y be set, m, n be odd Nat;
+     (for x being Element of NAT st x in Seg m holds W.remove(m,n).x = W.x)
+     proof
+    let G be _Graph, W be Walk of G, x,y be set, m, n be odd Element of NAT;
     set W2 = W.remove(m,n); assume
 A1: m <= n & n <= len W & W.m = W.n; then
 A2: W2 = W.cut(1,m).append(W.cut(n,len W)) by Def12;
 A3: m <= len W by A1, XXREAL_0:2;
-    let x be Nat; assume x in Seg m; then
+    let x be Element of NAT; assume x in Seg m; then
     1 <= x & x <= m by FINSEQ_1:3; then
     1 <= x & x <= len W.cut(1,m) by A3, Lm26; then
 A4: x in dom W.cut(1,m) by FINSEQ_3:27;
@@ -1528,12 +1571,12 @@ A4: x in dom W.cut(1,m) by FINSEQ_3:27;
 end;
 
 Lm34:
-  for G be _Graph, W be Walk of G, m,n being odd Nat
+  for G be _Graph, W be Walk of G, m,n being odd Element of NAT
     st m <= n & n <= len W & W.m = W.n holds
-     (for x being Nat st m <= x & x <= len W.remove(m,n) holds
+     (for x being Element of NAT st m <= x & x <= len W.remove(m,n) holds
         W.remove(m,n).x = W.(x - m + n) &
-        x - m + n is Nat & x - m + n <= len W) proof
-    let G be _Graph, W be Walk of G, m, n be odd Nat;
+        x - m + n is Element of NAT & x - m + n <= len W) proof
+    let G be _Graph, W be Walk of G, m, n be odd Element of NAT;
     set W2 = W.remove(m,n), WA = W.cut(1,m), WB = W.cut(n,len W); assume
 A1: m <= n & n <= len W & W.m = W.n; then
 A2: W2 = WA.append(WB) by Def12;
@@ -1542,9 +1585,10 @@ A3: WA.last() = WB.first() by A1, Lm32;
 A4: len WA = m by Lm26;
 A5: len WB + n = len W + 1 by A1, Lm19;
 A6: len W2 + n = len W + m by A1, Lm28;
-    let x be Nat; assume
+    let x be Element of NAT; assume
 A7: m <= x & x <= len W2; then consider a being Nat such that
 A8: len WA + a = x by A4, NAT_1:28;
+    reconsider a as Element of NAT by ORDINAL1:def 13;
     m + a + n <= m + len W by A4,A6,A7,A8,XREAL_1:9; then
 A9: a+n + m - m <= len W + m - m by REAL_1:92; then
     a + n + 1 <= len WB + n by A5, XREAL_1:9; then
@@ -1553,25 +1597,27 @@ A10: a + 1 - 1 < len WB + 1 - 1 by NAT_1:38; then
 A11: W2.x = WB.(a+1) by A2,A3,A8,Lm17
         .= W.(a + n) by A1, A10, Lm19;
     thus W2.x = W.(x - m + n) by A11, A4, A8;
-    a + n is Nat;
-    hence x-m+n is Nat by A4, A8;
+    a + n is Element of NAT by ORDINAL1:def 13;
+    hence x-m+n is Element of NAT by A4, A8;
     thus x-m+n <= len W by A4, A8, A9;
 end;
 
 Lm35:
-  for G be _Graph, W be Walk of G, m,n be odd Nat
+  for G be _Graph, W be Walk of G, m,n be odd Element of NAT
     st m <= n & n <= len W & W.m = W.n holds
     len W.remove(m,n) = len W + m - n proof
-   let G be _Graph, W be Walk of G, m,n be odd Nat; assume
+   let G be _Graph, W be Walk of G, m,n be odd Element of NAT; assume
    m <= n & n <= len W & W.m = W.n; then
    len W.remove(m,n) + n = len W + m by Lm28;
    hence thesis;
 end;
 
 Lm36:
-  for G be _Graph, W be Walk of G, m being Nat st W.first() = W.m holds
+  for G be _Graph, W be Walk of G, m being Element of NAT st W.first() = W.m
+  holds
     W.remove(1,m) = W.cut(m, len W) proof
-    let G be _Graph, W be Walk of G, m be Nat; assume W.first() = W.m; then
+    let G be _Graph, W be Walk of G, m be Element of NAT;
+    assume W.first() = W.m; then
 A1: W.1 = W.m;
     now per cases;
     suppose
@@ -1587,7 +1633,8 @@ A1: W.1 = W.m;
         len W.remove(1,m) + 1 = len W.cut(m, len W) + 1
           by JORDAN12:3,A4,Lm26; then
     A6: len W.remove(1,m) = len W.cut(m, len W);
-        now let n be Nat; assume 1 <= n & n <= len W.remove(1,m); then
+        now let n be Element of NAT; assume 1 <= n & n <= len W.remove(1,m);
+        then
         A7: n in dom W.remove(1,m) by FINSEQ_3:27;
             now per cases by A3, A7, Lm18;
               suppose
@@ -1604,8 +1651,9 @@ A1: W.1 = W.m;
                                .= W.cut(m, len W).1;
                 hence W.remove(1,m).n = W.cut(m, len W).n by A10,A9,XXREAL_0:1;
               end;
-              suppose ex k being Nat st k < len W.cut(m, len W) &
-                    n = len W.cut(1,1) + k; then consider k being Nat such that
+              suppose ex k being Element of NAT st k < len W.cut(m, len W) &
+                    n = len W.cut(1,1) + k;
+                    then consider k being Element of NAT such that
             A12: k < len W.cut(m, len W) & n = len W.cut(1,1) + k;
                 n = k + 1 by A12,JORDAN12:3,A4, Lm26;
                 hence W.remove(1,m).n = W.cut(m, len W).n
@@ -1624,20 +1672,22 @@ A1: W.1 = W.m;
 end;
 
 Lm37:
-  for G be _Graph, W be Walk of G, m,n be Nat holds
+  for G be _Graph, W be Walk of G, m,n be Element of NAT holds
   W.remove(m,n).first() = W.first() &
     W.remove(m,n).last() = W.last() proof
-    let G be _Graph, W be Walk of G, m,n be Nat;
+    let G be _Graph, W be Walk of G, m,n be Element of NAT;
     W is_Walk_from W.first(), W.last() by Def23; then
     W.remove(m,n) is_Walk_from W.first(), W.last() by Lm29;
     hence thesis by Def23;
 end;
 
 Lm38:
- for G be _Graph, W be Walk of G, m,n being odd Nat, x being Nat
+ for G be _Graph, W be Walk of G, m,n being odd Element of NAT,
+ x being Element of NAT
   st m <= n & n <= len W & W.m = W.n & x in dom W.remove(m,n) holds
      x in Seg m or (m <= x & x <= len W.remove(m,n)) proof
-   let G be _Graph, W be Walk of G, m,n be odd Nat, x be Nat; assume
+   let G be _Graph, W be Walk of G, m,n be odd Element of NAT,
+   x be Element of NAT; assume
     m <= n & n <= len W & W.m = W.n & x in dom W.remove(m,n); then
     1 <= x & x <= len W.remove(m,n) by FINSEQ_3:27;
     hence thesis by FINSEQ_1:3;
@@ -1702,7 +1752,7 @@ Lm42:
   for G be _Graph, W be Walk of G, e,x be set holds
   e Joins W.last(),x,G implies
   W.addEdge(e).(len W + 1) = e & W.addEdge(e).(len W + 2) = x &
-  for n being Nat st n in dom W holds W.addEdge(e).n = W.n proof
+  for n being Element of NAT st n in dom W holds W.addEdge(e).n = W.n proof
     let G be _Graph, W be Walk of G, e,x be set;
     set W2 = W.addEdge(e); assume
     e Joins W.last(), x, G; then
@@ -1713,7 +1763,7 @@ A3: dom <*e,x*> = Seg 2 by FINSEQ_3:29; then
     hence W2.(len W + 1) = e by A1, A2, FINSEQ_1:def 7;
     2 in dom <*e,x*> by A3, FINSEQ_1:3;
     hence W2.(len W + 2) = x by A1, A2, FINSEQ_1:def 7;
-    let n be Nat;
+    let n be Element of NAT;
     assume n in dom W;
     hence thesis by A1, FINSEQ_1:def 7;
 end;
@@ -1729,10 +1779,10 @@ A1: W is_Walk_from x,y & e Joins y,z,G; then
 end;
 
 Lm44:
-  for G being _Graph, W being Walk of G, n being even Nat
+  for G being _Graph, W being Walk of G, n being even Element of NAT
     st 1 <= n & n <= len W holds
     n div 2 in dom W.edgeSeq() & W.n = W.edgeSeq().(n div 2) proof
-    let G be _Graph, W be Walk of G, n be even Nat; assume
+    let G be _Graph, W be Walk of G, n be even Element of NAT; assume
 A1: 1 <= n & n <= len W;
 A2: 2 divides n by PEPIN:22; then
 A3: n = 2 * (n div 2) by NAT_1:49;
@@ -1759,9 +1809,9 @@ A4: now assume
 end;
 
 Lm45:
-  for G being _Graph, W being Walk of G, n being Nat holds
+  for G being _Graph, W being Walk of G, n being Element of NAT holds
     n in dom W.edgeSeq() iff 2*n in dom W proof
-    let G be _Graph, W be Walk of G, n be Nat;
+    let G be _Graph, W be Walk of G, n be Element of NAT;
     hereby assume n in dom W.edgeSeq(); then
     A1: 1 <= n & n <= len W.edgeSeq() by FINSEQ_3:27; then
     A2: 1 <= n + n by NAT_1:37;
@@ -1778,11 +1828,11 @@ end;
 
 Lm46:
   for G be _Graph, W be Walk of G holds
-  ex lenWaa1 being even Nat st lenWaa1 = len W - 1 &
+  ex lenWaa1 being even Element of NAT st lenWaa1 = len W - 1 &
   len W.edgeSeq() = lenWaa1 div 2 proof
     let G be _Graph, W be Walk of G; set lenWaa1 = len W - 1;
     1 <= len W by HEYTING3:1; then
-    reconsider lenWaa1 as even Nat by INT_1:18;
+    reconsider lenWaa1 as even Element of NAT by INT_1:18;
     take lenWaa1;
     thus lenWaa1 = len W - 1;
 A1: len W = 2*len W.edgeSeq()+1 by Def15;
@@ -1792,9 +1842,9 @@ A1: len W = 2*len W.edgeSeq()+1 by Def15;
 end;
 
 Lm47:
-  for G be _Graph, W be Walk of G, n be Nat holds
+  for G be _Graph, W be Walk of G, n be Element of NAT holds
    W.cut(1,n).edgeSeq() c= W.edgeSeq() proof
-    let G be _Graph, W be Walk of G, n be Nat;
+    let G be _Graph, W be Walk of G, n be Element of NAT;
     per cases;
     suppose
     A1: n is odd & 1 <= n & n <= len W;
@@ -1804,7 +1854,7 @@ Lm47:
             consider x,y being set such that
         A3: e = [x,y] by RELAT_1:def 1;
         A4: x in dom f & y = f.x by A2, A3, FUNCT_1:8; then
-            reconsider x as Nat;
+            reconsider x as Element of NAT;
             1 <= x & x <= len f by A4, FINSEQ_3:27; then
         A5: y = W.cut(1,n).(2*x) by A4, Def15;
         A6: 2*x in dom W.cut(1,n) by A4, Lm45; then
@@ -1839,7 +1889,7 @@ A2: 2*(len W.edgeSeq()+1) = 2*len W2.edgeSeq();
     len W3 = len W.edgeSeq() + len <*e*> by FINSEQ_1:35; then
     2*len W3 = 2*len W2.edgeSeq() by A2,FINSEQ_1:56; then
 A3: len W3 = len W2.edgeSeq();
-    now let k be Nat; assume
+    now let k be Element of NAT; assume
     A4: 1 <= k & k <= len W2.edgeSeq(); then
     A5: k in dom W3 by A3, FINSEQ_3:27;
     A6: W2.edgeSeq().k = W2.(2*k) by A4, Def15;
@@ -1851,8 +1901,9 @@ A3: len W3 = len W2.edgeSeq();
         A9: W3.k = W.(2*k) by A8, Def15;
             2*k in dom W by A7, Lm45;
             hence W2.edgeSeq().k = W3.k by A1,A6,A9,Lm42; end;
-        suppose ex n being Nat st n in dom <*e*> & k=len W.edgeSeq() + n;then
-            consider n being Nat such that
+        suppose ex n being Element of NAT
+        st n in dom <*e*> & k=len W.edgeSeq() + n;then
+            consider n being Element of NAT such that
         A10: n in dom <*e*> & k = len W.edgeSeq() + n;
             n in {1} by FINSEQ_1:4,A10,FINSEQ_1:55; then
         A11: n = 1 by TARSKI:def 1; then
@@ -1870,14 +1921,15 @@ end;
 Lm49:
   for G be _Graph, W be Walk of G, x be set holds
     x in W.vertices() iff
-     ex n being odd Nat st n <= len W & W.n = x proof
+     ex n being odd Element of NAT st n <= len W & W.n = x proof
     let G be _Graph, W be Walk of G, x be set; set vs = W.vertexSeq();
     hereby assume x in W.vertices(); then
-        x in rng vs; then consider i being Nat such that
+        x in rng vs; then consider i being Element of NAT such that
     A1: i in dom vs & vs.i = x by FINSEQ_2:11;
-        set n1 = 2*i; reconsider n1 as even Nat; set n = n1-1;
+        set n1 = 2*i; reconsider n1 as even Element of NAT; set n = n1-1;
     A2: 1 <= i & i <= len vs by A1, FINSEQ_3:27;
-        1 <= i+i by A2,NAT_1:37; then reconsider n as odd Nat by INT_1:18;
+        1 <= i+i by A2,NAT_1:37;
+        then reconsider n as odd Element of NAT by INT_1:18;
         take n;
         i*2 <= len vs *2 by A2, XREAL_1:66; then
         i*2 <= len W + 1 by Def14; then
@@ -1885,14 +1937,14 @@ Lm49:
         hence n <= len W;
         thus W.n = x by A1,A2,Def14;
     end;
-    assume ex n being odd Nat st n <= len W & W.n = x; then
-    consider n being odd Nat such that
+    assume ex n being odd Element of NAT st n <= len W & W.n = x; then
+    consider n being odd Element of NAT such that
 A3: n <= len W & W.n = x;
-    set n1 = n+1; reconsider n1 as even Nat;
+    set n1 = n+1; reconsider n1 as even Element of NAT;
     set i = n1 div 2;
 A4: 2 divides n1 by PEPIN:22; then
 A5: 2*i = n1 by NAT_1:49;
-    reconsider i as Nat;
+    reconsider i as Element of NAT;
     now 1 <= n by HEYTING3:1; then
         1+1 <= n1 by XREAL_1:9; then
         2*1 <= 2*i by A4,NAT_1:49; then
@@ -1911,12 +1963,12 @@ end;
 Lm50:
   for G be _Graph, W be Walk of G, e be set holds
     e in W.edges() iff
-     ex n being even Nat st 1 <= n & n <= len W & W.n = e proof
+     ex n being even Element of NAT st 1 <= n & n <= len W & W.n = e proof
     let G be _Graph, W be Walk of G, e be set; set es = W.edgeSeq();
     hereby assume e in W.edges(); then
-        e in rng es; then consider i being Nat such that
+        e in rng es; then consider i being Element of NAT such that
     A1: i in dom es & es.i = e by FINSEQ_2:11;
-        set n = 2*i; reconsider n as even Nat;
+        set n = 2*i; reconsider n as even Element of NAT;
     A2: 1 <= i & i <= len es by A1, FINSEQ_3:27;
         take n;
         1 <= i+i by A2, NAT_1:37;
@@ -1926,13 +1978,14 @@ Lm50:
         hence n <= len W by Def15;
         thus W.n = e by A1,A2,Def15;
     end;
-    assume ex n being even Nat st 1 <= n & n <= len W & W.n = e; then
-    consider n being even Nat such that
+    assume ex n being even Element of NAT
+    st 1 <= n & n <= len W & W.n = e; then
+    consider n being even Element of NAT such that
 A3: 1 <= n & n <= len W & W.n = e;
     set i = n div 2;
     2 divides n by PEPIN:22; then
 A4: 2*i = n by NAT_1:49;
-    reconsider i as Nat;
+    reconsider i as Element of NAT;
     now 1 < n by A3, JORDAN12:3,REAL_1:def 5; then
         1+1 < n+1 by XREAL_1:10; then
         2*1 <= 2*i by NAT_1:38,A4; then
@@ -1950,17 +2003,18 @@ end;
 
 Lm51:
   for G be _Graph, W be Walk of G, e be set holds
-  e in W.edges() implies ex v1, v2 being Vertex of G, n being odd Nat st
+  e in W.edges() implies
+  ex v1, v2 being Vertex of G, n being odd Element of NAT st
     n+2 <= len W & v1 = W.n & e = W.(n+1) & v2 = W.(n+2) &
     e Joins v1, v2,G proof
     let G be _Graph, W be Walk of G, e be set; assume
-    e in W.edges(); then consider n1 being even Nat such that
+    e in W.edges(); then consider n1 being even Element of NAT such that
 A1: 1 <= n1 & n1 <= len W & W.n1 = e by Lm50;
-    reconsider n = n1-1 as odd Nat by A1, INT_1:18;
+    reconsider n = n1-1 as odd Element of NAT by A1, INT_1:18;
     set v1 = W.n, v2 = W.(n+2);
     n1-1 <= len W - 0 by A1, REAL_1:92; then
     reconsider v1 as Vertex of G by Lm3;
-    reconsider lenW = len W as odd Nat;
+    reconsider lenW = len W as odd Element of NAT;
     n1 < lenW by A1, REAL_1:def 5; then
 A2: n+1+1 <= len W by NAT_1:38;
     reconsider v2 as Vertex of G by A2,Lm3;
@@ -1977,7 +2031,7 @@ Lm52:
     x in W.vertices() & y in W.vertices() proof
     let G be _Graph, W be Walk of G, e,x,y be set; assume
 A1: e in W.edges() & e Joins x,y,G; then
-    consider v1,v2 being Vertex of G, n being odd Nat such that
+    consider v1,v2 being Vertex of G, n being odd Element of NAT such that
 A2: n+2 <= len W & v1 = W.n & e = W.(n+1) & v2 = W.(n+2) &
       e Joins v1,v2,G by Lm51;
 A3: v2 in W.vertices() by A2, Lm49;
@@ -1992,35 +2046,37 @@ Lm53:
 
 Lm54:
 
-  for G be _Graph, W be Walk of G, n be odd Nat
+  for G be _Graph, W be Walk of G, n be odd Element of NAT
     st n <= len W holds W.find(n) <= n proof
-    let G be _Graph, W be Walk of G, n be odd Nat; assume
+    let G be _Graph, W be Walk of G, n be odd Element of NAT; assume
 A1: n <= len W; then
     W.find(n) <= len W & W.(W.find(n)) = W.n &
-    for k being odd Nat st k <= len W & W.k = W.n holds W.find(n) <= k
+    for k being odd Element of NAT st k <= len W & W.k = W.n
+    holds W.find(n) <= k
       by Def20;
     hence thesis by A1;
 end;
 
 Lm55:
-  for G be _Graph, W be Walk of G, n being odd Nat
+  for G be _Graph, W be Walk of G, n being odd Element of NAT
     st n <= len W holds W.rfind(n) >= n proof
-    let G be _Graph, W be Walk of G, n be odd Nat; assume
+    let G be _Graph, W be Walk of G, n be odd Element of NAT; assume
 A1: n <= len W; then
     W.rfind(n) <= len W & W.(W.rfind(n)) = W.n &
-    for k being odd Nat st k <= len W & W.k = W.n holds k <= W.rfind(n)
+    for k being odd Element of NAT st k <= len W & W.k = W.n
+    holds k <= W.rfind(n)
       by Def22;
     hence thesis by A1;
 end;
 
 Lm56:
   for G being _Graph, W being Walk of G holds W is directed iff
-    for n being odd Nat st n < len W
+    for n being odd Element of NAT st n < len W
       holds W.(n+1) DJoins W.n, W.(n+2), G proof
     let G be _Graph, W be Walk of G;
     hereby assume
     A1: W is directed;
-        let n be odd Nat; assume
+        let n be odd Element of NAT; assume
     A2: n < len W; then
     A3: W.(n+1) Joins W.n, W.(n+2), G by Def3;
     A4: W.n = (the_Source_of G).(W.(n+1)) by A1, A2, Def25;
@@ -2032,8 +2088,9 @@ Lm56:
         hence W.(n+1) DJoins W.n, W.(n+2), G by A3,GLIB_000:19;
     end;
     assume
-A6: for n being odd Nat st n < len W holds W.(n+1) DJoins W.n, W.(n+2), G;
-    now let n be odd Nat; assume
+A6: for n being odd Element of NAT st n < len W
+holds W.(n+1) DJoins W.n, W.(n+2), G;
+    now let n be odd Element of NAT; assume
         n < len W; then
         W.(n+1) DJoins W.n, W.(n+2), G by A6;
         hence (the_Source_of G).(W.(n+1)) = W.n by GLIB_000:def 16;
@@ -2056,7 +2113,7 @@ A4: len W2 = len W + 2 by Lm41;
 A5: W2.(len W) = W.(len W) by A3, Lm42
               .= y by A2;
 A6: W2.(len W + 1) = e by A3, Lm42;
-    now let n be odd Nat; assume n < len W2; then
+    now let n be odd Element of NAT; assume n < len W2; then
         n < len W + 1+1 by A4; then
         n <= len W + 1 by NAT_1:38; then
         n < len W + 1 by REAL_1:def 5; then
@@ -2086,19 +2143,20 @@ A6: W2.(len W + 1) = e by A3, Lm42;
 end;
 
 Lm58:
-  for G being _Graph, W being Walk of G, m,n being Nat holds
+  for G being _Graph, W being Walk of G, m,n being Element of NAT holds
     W is directed implies W.cut(m,n) is directed proof
-    let G be _Graph, W be Walk of G, m, n be Nat; set W2 = W.cut(m,n); assume
+    let G be _Graph, W be Walk of G, m, n be Element of NAT;
+    set W2 = W.cut(m,n); assume
 A1: W is directed;
     now per cases;
     suppose
     A2: m is odd & n is odd & m <= n & n <= len W; then
-        reconsider m' = m as odd Nat;
-        now let x be odd Nat; assume
+        reconsider m' = m as odd Element of NAT;
+        now let x be odd Element of NAT; assume
         A3: x < len W2; then
         A4: W2.(x+1) = W.(m+x) & m+x in dom W by A2, Lm19;
             1 <= x by HEYTING3:1; then
-            reconsider xaa1 = x - 1 as even Nat by INT_1:18;
+            reconsider xaa1 = x - 1 as even Element of NAT by INT_1:18;
             xaa1 < len W2 - 0 by A3, REAL_1:92; then
         A5: W2.(xaa1+1) = W.(m+xaa1) & m+xaa1 in dom W by A2, Lm19;
             x + 1 <= len W2 by A3,NAT_1:38; then
@@ -2173,12 +2231,12 @@ end;
 
 Lm62:
   for G being _Graph, W being Walk of G holds W is Trail-like iff
-  for m,n being even Nat st 1 <= m & m < n & n <= len W holds
+  for m,n being even Element of NAT st 1 <= m & m < n & n <= len W holds
     W.m <> W.n proof
     let G be _Graph, W be Walk of G;
     hereby assume W is Trail-like; then
     A1: W.edgeSeq() is one-to-one by Def27;
-        let m, n be even Nat; assume
+        let m, n be even Element of NAT; assume
     A2: 1 <= m & m < n & n <= len W; then
         m <= len W by XXREAL_0:2; then
     A3: m div 2 in dom W.edgeSeq() & W.m = W.edgeSeq().(m div 2)
@@ -2195,11 +2253,12 @@ Lm62:
         hence W.m <> W.n by A1, A3, A4, FUNCT_1:def 8;
     end;
     assume
-A6: for m,n being even Nat st 1 <= m & m < n & n <= len W holds W.m <> W.n;
+A6: for m,n being even Element of NAT st 1 <= m & m < n & n <= len W
+holds W.m <> W.n;
     now let x1, x2 be set; assume
     A7: x1 in dom W.edgeSeq() & x2 in dom W.edgeSeq() &
           W.edgeSeq().x1 = W.edgeSeq().x2; then
-        reconsider m = x1, n = x2 as Nat;
+        reconsider m = x1, n = x2 as Element of NAT;
         1 <= m & m <= len W.edgeSeq() by A7, FINSEQ_3:27; then
     A8: W.edgeSeq().x1 = W.(2*m) by Def15;
         1 <= n & n <= len W.edgeSeq() by A7, FINSEQ_3:27; then
@@ -2226,7 +2285,7 @@ Lm63:
     let G be _Graph, W be Walk of G;
 A1: now let W be Walk of G; assume
     A2: W is Trail-like;
-        now let m, n be even Nat; assume
+        now let m, n be even Element of NAT; assume
         A3: 1 <= m & m < n & n <= len W.reverse(); then
             m <= len W.reverse() by XXREAL_0:2; then
             m in dom W.reverse() by A3, FINSEQ_3:27; then
@@ -2236,9 +2295,9 @@ A1: now let W be Walk of G; assume
             n in dom W.reverse() by A3, FINSEQ_3:27; then
         A5: W.reverse().n = W.(len W - n + 1) &
               len W - n + 1 in dom W by Lm11;
-            reconsider lenW = len W as odd Nat;
-            reconsider rn = lenW-n+1 as even Nat by A5;
-            reconsider rm = lenW-m+1 as even Nat by A4;
+            reconsider lenW = len W as odd Element of NAT;
+            reconsider rn = lenW-n+1 as even Element of NAT by A5;
+            reconsider rm = lenW-m+1 as even Element of NAT by A4;
             len W - n < len W - m by A3, REAL_1:92; then
         A6: len W - n + 1 < len W - m + 1 by XREAL_1:10;
             1 <= rn & rm <= len W by A4, A5, FINSEQ_3:27;
@@ -2254,19 +2313,19 @@ A1: now let W be Walk of G; assume
 end;
 
 Lm64:
-  for G being _Graph, W being Walk of G, m,n being Nat holds
+  for G being _Graph, W being Walk of G, m,n being Element of NAT holds
     W is Trail-like implies W.cut(m,n) is Trail-like proof
-    let G be _Graph, W be Walk of G, m,n be Nat; assume
+    let G be _Graph, W be Walk of G, m,n be Element of NAT; assume
 A1: W is Trail-like;
     now per cases;
       suppose
     A2: m is odd & n is odd & m <= n & n <= len W;
-        now let x,y be even Nat; assume
+        now let x,y be even Element of NAT; assume
         A3: 1 <= x & x < y & y <= len W.cut(m,n);
-            reconsider xaa1 = x-1 as odd Nat by A3, INT_1:18;
+            reconsider xaa1 = x-1 as odd Element of NAT by A3, INT_1:18;
             1 <= y by A3, XXREAL_0:2; then
-            reconsider yaa1 = y-1 as odd Nat by INT_1:18;
-            reconsider m'=m, n'=n as odd Nat by A2;
+            reconsider yaa1 = y-1 as odd Element of NAT by INT_1:18;
+            reconsider m'=m, n'=n as odd Element of NAT by A2;
             x <= len W.cut(m,n) by A3, XXREAL_0:2; then
             x-1 < len W.cut(m,n)-0 by REAL_1:92; then
         A4: W.cut(m,n).(xaa1+1) = W.(m+xaa1) &
@@ -2300,8 +2359,8 @@ Lm65:
 A1: W is Trail-like & e in W.last().edgesInOut() & not e in W.edges(); then
 A2: e Joins W.last(), W.last().adj(e),G by GLIB_000:70;
     set W2 = W.addEdge(e);
-    reconsider lenW = len W, lenW2 = len W2 as odd Nat;
-    now let m,n be even Nat; assume
+    reconsider lenW = len W, lenW2 = len W2 as odd Element of NAT;
+    now let m,n be even Element of NAT; assume
     A3: 1 <= m & m < n & n <= len W2;
         now per cases;
         suppose
@@ -2347,7 +2406,7 @@ A1: len W <= 3;
         1 < len W by A3, REAL_1:def 5; then
         1+2 <= len W by JORDAN12:3, Th1; then
     A4: len W = 3 by A1, XXREAL_0:1;
-        now let m, n be even Nat such that
+        now let m, n be even Element of NAT such that
         A5: 1 <= m & m < n & n <= len W;
             2*0+1 < m by A5, REAL_1:def 5; then
         A6: 1+1 <= m by NAT_1:38;
@@ -2366,7 +2425,7 @@ Lm67:
     let G be _Graph, x,e,y be set; set W = G.walkOf(x,e,y); assume
 A1: e Joins x,y,G; then
 A2: len W = 3 by Lm7;
-   now let m,n be even Nat; assume
+   now let m,n be even Element of NAT; assume
     A3: 1 <= m & m < n & n <= len W; then
         1 < m by JORDAN12:3, REAL_1:def 5; then
         1+1 <= m by NAT_1:38; then
@@ -2376,7 +2435,7 @@ A2: len W = 3 by Lm7;
         hence W.m <> W.n by A4,NAT_1:38;
     end; then
 A5: W is Trail-like by Lm62;
-    now let m,n be odd Nat; assume
+    now let m,n be odd Element of NAT; assume
     A6: m < n & n <= len W;  assume W.m = W.n;
     A7: 1 <= m by HEYTING3:1; then
         1 < n by A6, XXREAL_0:2; then
@@ -2405,23 +2464,24 @@ Lm68:
     let G be _Graph, W be Walk of G;
 A1: now let W be Walk of G; assume
     A2: W is Path-like; then
-        W is Trail-like & for m, n being odd Nat st m < n & n <= len W
+        W is Trail-like & for m, n being odd Element of NAT
+        st m < n & n <= len W
           holds W.m = W.n implies (m = 1 & n = len W) by Def28; then
     A3: W.reverse() is Trail-like by Lm63;
-        reconsider lenW=len W as odd Nat;
-        now let m, n be odd Nat; assume
+        reconsider lenW=len W as odd Element of NAT;
+        now let m, n be odd Element of NAT; assume
         A4: m < n & n <= len W.reverse() & W.reverse().m = W.reverse().n; then
         A5: m <= len W.reverse() by XXREAL_0:2;
             1 <= m by HEYTING3:1; then
         A6: m in dom W.reverse() by A5, FINSEQ_3:27; then
         A7: W.reverse().m = W.(len W - m + 1) & len W - m + 1 in dom W
               by Lm11; then
-            reconsider rm = lenW-m+1 as odd Nat;
+            reconsider rm = lenW-m+1 as odd Element of NAT;
             1 <= n by HEYTING3:1; then
             n in dom W.reverse() by A4, FINSEQ_3:27; then
         A8: W.reverse().n = W.(len W - n + 1) & len W - n + 1 in dom W
               by Lm11; then
-            reconsider rn = lenW-n+1 as odd Nat;
+            reconsider rn = lenW-n+1 as odd Element of NAT;
             lenW - n < len W - m by A4, REAL_1:92; then
         A9: rn < rm by XREAL_1:10;
         A10: rm <= len W by A7, FINSEQ_3:27;
@@ -2444,22 +2504,23 @@ A1: now let W be Walk of G; assume
 end;
 
 Lm69:
-  for G being _Graph, W being Walk of G, m, n being Nat st W is Path-like
+  for G being _Graph, W being Walk of G, m, n being Element of NAT
+  st W is Path-like
      holds W.cut(m,n) is Path-like proof
-    let G be _Graph, W be Walk of G, m, n be Nat; assume
+    let G be _Graph, W be Walk of G, m, n be Element of NAT; assume
 A1: W is Path-like;
     now per cases;
     suppose
     A2: m is odd & n is odd & m <= n & n <= len W; then
-        reconsider m'=m, n'=n as odd Nat;
+        reconsider m'=m, n'=n as odd Element of NAT;
         now W is Trail-like by A1,Def28;
             hence W.cut(m,n) is Trail-like by Lm64;
-            let x,y be odd Nat; assume
+            let x,y be odd Element of NAT; assume
         A3: x < y & y <= len W.cut(m,n) & W.cut(m,n).x = W.cut(m,n).y;
             1 <= x by HEYTING3:1; then
-            reconsider xaa1 = x-1 as even Nat by INT_1:18;
+            reconsider xaa1 = x-1 as even Element of NAT by INT_1:18;
             1 <= y by HEYTING3:1; then
-            reconsider yaa1 = y-1 as even Nat by INT_1:18;
+            reconsider yaa1 = y-1 as even Element of NAT by INT_1:18;
             x <= len W.cut(m,n) by A3, XXREAL_0:2; then
             x-1 < len W.cut(m,n) - 0 by REAL_1:92; then
         A4: W.cut(m,n).(xaa1+1) = W.(m+xaa1) &
@@ -2496,17 +2557,18 @@ Lm70:
   for G being _Graph, W being Walk of G, e,v being set
    st W is Path-like & e Joins W.last(),v,G & not e in W.edges() &
       (W is trivial or W is open) &
-     for n being odd Nat st 1 < n & n <= len W holds W.n <> v holds
+     for n being odd Element of NAT st 1 < n & n <= len W holds W.n <> v holds
    W.addEdge(e) is Path-like proof
     let G be _Graph, W be Walk of G, e,v be set; assume
 A1: W is Path-like & e Joins W.last(), v,G & not e in W.edges() &
       (W is trivial or W is open) &
-      (for n being odd Nat st 1 < n & n <= len W holds W.n <> v); then
+      (for n being odd Element of NAT st 1 < n & n <= len W holds W.n <> v);
+      then
 A2: e in W.last().edgesInOut() by GLIB_000:65;
-    set W2 = W.addEdge(e); reconsider lenW = len W as odd Nat;
+    set W2 = W.addEdge(e); reconsider lenW = len W as odd Element of NAT;
     now W is Trail-like by A1, Def28;
         hence W2 is Trail-like by A1, A2, Lm65;
-        let m, n be odd Nat; assume
+        let m, n be odd Element of NAT; assume
     A3: m < n & n <= len W2 & W2.m = W2.n;
         now per cases by A1;
           suppose
@@ -2582,20 +2644,22 @@ end;
 
 Lm71:
   for G be _Graph, W be Walk of G holds
-  (for m,n being odd Nat st m <= len W & n <= len W & W.m = W.n holds m = n)
+  (for m,n being odd Element of NAT st m <= len W & n <= len W & W.m = W.n
+  holds m = n)
       implies W is Path-like proof
     let G be _Graph, W be Walk of G; assume
-A1: for m,n being odd Nat st m <= len W & n <= len W & W.m = W.n holds m = n;
-    now let m,n be even Nat; assume
+A1: for m,n being odd Element of NAT st m <= len W & n <= len W & W.m = W.n
+holds m = n;
+    now let m,n be even Element of NAT; assume
     A2: 1 <= m & m < n & n <= len W; then
         1 <= n & m <= len W by XXREAL_0:2; then
     A3: m in dom W & n in dom W by A2, FINSEQ_3:27;
         now assume
         A4: W.m = W.n;
-            consider maa1 being odd Nat such that
+            consider maa1 being odd Element of NAT such that
         A5: maa1 = m-1 & m-1 in dom W & m+1 in dom W &
             W.m Joins W.(maa1), W.(m+1), G by A3, Lm4;
-            consider naa1 being odd Nat such that
+            consider naa1 being odd Element of NAT such that
         A6: naa1 = n-1 & n-1 in dom W & n+1 in dom W &
             W.m Joins W.(naa1), W.(n+1), G by A4, A3, Lm4;
         A7: maa1 <= len W & m+1 <= len W by A5, FINSEQ_3:27;
@@ -2622,7 +2686,7 @@ A1: for m,n being odd Nat st m <= len W & n <= len W & W.m = W.n holds m = n;
         hence W.m <> W.n;
     end; then
 A10: W is Trail-like by Lm62;
-    now let m,n be odd Nat; assume
+    now let m,n be odd Element of NAT; assume
     A11: m < n & n <= len W; then
     A12: m <= len W by XXREAL_0:2;
         assume W.m = W.n;
@@ -2633,11 +2697,11 @@ end;
 
 Lm72:
   for G be _Graph, W be Walk of G holds
-    (for n being odd Nat st n <= len W holds W.rfind(n) = n)
+    (for n being odd Element of NAT st n <= len W holds W.rfind(n) = n)
     implies W is Path-like proof
     let G be _Graph, W be Walk of G; assume
-A1: for n being odd Nat st n <= len W holds W.rfind(n) = n;
-    now let m,n be odd Nat; assume
+A1: for n being odd Element of NAT st n <= len W holds W.rfind(n) = n;
+    now let m,n be odd Element of NAT; assume
     A2: m <= len W & n <= len W & W.m = W.n; then
     A3: W.rfind(m) = m & W.rfind(n) = n by A1;
     A4: n <= m by A2,A3,Def22;
@@ -2656,7 +2720,7 @@ Lm73:
 A1: e Joins W.last(),v,G & W is Path-like & not v in W.vertices() &
     (W is trivial or W is open);
 A2: not e in W.edges() by A1,Lm52;
-    for n being odd Nat st 1 < n & n <= len W holds v <> W.n
+    for n being odd Element of NAT st 1 < n & n <= len W holds v <> W.n
       by A1,Lm49;
     hence thesis by A1, A2, Lm70;
 end;
@@ -2678,7 +2742,7 @@ A1: len W <= 3;
         1+2 <= len W by JORDAN12:3, Th1; then
     A4: len W = 3 by A1, XXREAL_0:1;
     A5: W is Trail-like by A1, Lm66;
-        now let m, n be odd Nat; assume
+        now let m, n be odd Element of NAT; assume
         A6: m < n & n <= len W & W.m = W.n;
             m < 2*1+1 by A4, A6, XXREAL_0:2; then
             m+2 <= 3 by Th1; then
@@ -2707,7 +2771,7 @@ A1: W is trivial; then
     len W.edgeSeq() = 0; then
     W.edgeSeq() is one-to-one by FINSEQ_1:25; then
 A2: W is Trail-like by Def27;
-    now let m,n be odd Nat; assume
+    now let m,n be odd Element of NAT; assume
     A3: m < n & n <= len W & W.m = W.n; then
         1 <= m & 1 <= n & n <= 1 by A1,Lm60,HEYTING3:1;
         hence m = 1 & n = len W by A3,XXREAL_0:1;
@@ -2718,7 +2782,8 @@ A2: W is Trail-like by Def27;
   coherence proof
     let W be Walk of G; assume
 A4: W is trivial;
-    now let m,n be odd Nat; assume m <= len W & n <= len W & W.m = W.n; then
+    now let m,n be odd Element of NAT;
+    assume m <= len W & n <= len W & W.m = W.n; then
         m <= 1 & n <= 1 & 1 <= m & 1 <= n by A4,Lm60,HEYTING3:1; then
         m = 1 & n = 1 by XXREAL_0:1;
         hence m = n;
@@ -2728,7 +2793,7 @@ A4: W is trivial;
   cluster vertex-distinct -> Path-like Walk of G;
   coherence proof
     let W be Walk of G; assume W is vertex-distinct; then
-    for m,n being odd Nat st m <= len W & n <= len W & W.m = W.n
+    for m,n being odd Element of NAT st m <= len W & n <= len W & W.m = W.n
       holds m = n by Def29;
     hence W is Path-like by Lm71;
   end;
@@ -2858,7 +2923,7 @@ registration let G be _Graph, W1,W2 be DWalk of G;
     now per cases;
     suppose
     A1: W1.last() = W2.first();
-        now let n be odd Nat; assume
+        now let n be odd Element of NAT; assume
         A2: n < len W;
             1 <= n by HEYTING3:1; then
         A3: n in dom W by A2, FINSEQ_3:27;
@@ -2892,14 +2957,15 @@ registration let G be _Graph, W1,W2 be DWalk of G;
                   end;
                 end;
                 hence W.(n+1) DJoins W.n, W.(n+2), G; end;
-              suppose ex k being Nat st k < len W2 & n = len W1 + k; then
-                consider k being Nat such that
+              suppose ex k being Element of NAT st k < len W2 & n = len W1 + k;
+              then
+                consider k being Element of NAT such that
             A14: k < len W2 & n = len W1 + k;
                 now assume k is odd; then
-                    reconsider k' = k as odd Nat;
+                    reconsider k' = k as odd Element of NAT;
                     n = len W1 + k' by A14;
                     hence contradiction;
-                end; then reconsider k as even Nat;
+                end; then reconsider k as even Element of NAT;
             A15: W.n = W2.(k+1) by A1, A14, Lm17;
                 n + 1 < len W + 1 by A2, XREAL_1:10; then
                 1 + (k + len W1) < len W2 + len W1
@@ -2944,12 +3010,12 @@ registration let G be _Graph, W1,W2 be trivial Walk of G;
   end;
 end;
 
-registration let G be _Graph, W be DWalk of G, m,n be Nat;
+registration let G be _Graph, W be DWalk of G, m,n be Element of NAT;
   cluster W.cut(m,n) -> directed;
   coherence by Lm58;
 end;
 
-registration let G be _Graph, W be trivial Walk of G, m,n be Nat;
+registration let G be _Graph, W be trivial Walk of G, m,n be Element of NAT;
   cluster W.cut(m,n) -> trivial;
   coherence proof
     set W2 = W.cut(m,n);
@@ -2969,28 +3035,30 @@ registration let G be _Graph, W be trivial Walk of G, m,n be Nat;
   end;
 end;
 
-registration let G be _Graph, W be Trail of G, m,n be Nat;
+registration let G be _Graph, W be Trail of G, m,n be Element of NAT;
   cluster W.cut(m,n) -> Trail-like;
   coherence by Lm64;
 end;
 
-registration let G be _Graph, W be Path of G, m,n be Nat;
+registration let G be _Graph, W be Path of G, m,n be Element of NAT;
   cluster W.cut(m,n) -> Path-like;
   coherence by Lm69;
 end;
 
-registration let G be _Graph, W be vertex-distinct Walk of G, m,n be Nat;
+registration let G be _Graph, W be vertex-distinct Walk of G,
+m,n be Element of NAT;
   cluster W.cut(m,n) -> vertex-distinct;
   coherence proof
     set W2 = W.cut(m,n);
     now per cases;
       suppose
     A1: m is odd & n is odd & m <= n & n <= len W; then
-        reconsider m' = m as odd Nat;
-        now let a,b be odd Nat; assume
+        reconsider m' = m as odd Element of NAT;
+        now let a,b be odd Element of NAT; assume
         A2: a <= len W2 & b <= len W2 & W2.a = W2.b;
             1 <= a & 1 <= b by HEYTING3:1; then
-            reconsider aaa1 = a-1, baa1 = b-1 as even Nat by INT_1:18;
+            reconsider aaa1 = a-1, baa1 = b-1 as even Element of NAT
+            by INT_1:18;
             aaa1 < len W2 - 0 & baa1 < len W2 - 0 by A2,REAL_1:92; then
         A3: W2.(aaa1+1) = W.(m+aaa1) & m+aaa1 in dom W &
               W2.(baa1+1) = W.(m+baa1) & m+baa1 in dom W by A1,Lm19; then
@@ -3009,7 +3077,7 @@ registration let G be _Graph, W be vertex-distinct Walk of G, m,n be Nat;
   end;
 end;
 
-registration let G be _Graph, W be closed Walk of G, m,n be Nat;
+registration let G be _Graph, W be closed Walk of G, m,n be Element of NAT;
   cluster W.remove(m,n) -> closed;
   coherence proof
     thus W.remove(m,n).first() = W.first() by Lm37
@@ -3018,7 +3086,7 @@ registration let G be _Graph, W be closed Walk of G, m,n be Nat;
   end;
 end;
 
-registration let G be _Graph, W be DWalk of G, m,n be Nat;
+registration let G be _Graph, W be DWalk of G, m,n be Element of NAT;
   cluster W.remove(m,n) -> directed;
   coherence proof
     now per cases;
@@ -3034,7 +3102,7 @@ registration let G be _Graph, W be DWalk of G, m,n be Nat;
   end;
 end;
 
-registration let G be _Graph, W be trivial Walk of G, m,n be Nat;
+registration let G be _Graph, W be trivial Walk of G, m,n be Element of NAT;
   cluster W.remove(m,n) -> trivial;
   coherence proof
     now per cases;
@@ -3050,7 +3118,7 @@ registration let G be _Graph, W be trivial Walk of G, m,n be Nat;
   end;
 end;
 
-registration let G be _Graph, W be Trail of G, m,n be Nat;
+registration let G be _Graph, W be Trail of G, m,n be Element of NAT;
   cluster W.remove(m,n) -> Trail-like;
   coherence proof
     set W2 = W.remove(m,n);
@@ -3058,8 +3126,8 @@ A1: len W2 <= len W by Lm30;
     now per cases;
     suppose
     A2: m is odd & n is odd & m <= n & n <= len W & W.m = W.n; then
-        reconsider m'=m, n'=n as odd Nat;
-        now given a,b being even Nat such that
+        reconsider m'=m, n'=n as odd Element of NAT;
+        now given a,b being even Element of NAT such that
         A3: 1 <= a & a < b & b <= len W2 & W2.a = W2.b;
             1 <= b & a <= len W2 by A3,XXREAL_0:2; then
         A4: a in dom W2 & b in dom W2 by A3,FINSEQ_3:27;
@@ -3073,7 +3141,7 @@ A1: len W2 <= len W by Lm30;
                     hence contradiction by A3,A5,A6,Lm62; end;
                 suppose
                 A7: m <= b & b <= len W2; then
-                    reconsider b2 = b-m'+n' as even Nat by A2,Lm34;
+                    reconsider b2 = b-m'+n' as even Element of NAT by A2,Lm34;
                 A8: W2.b = W.b2 & b2 <= len W by A7,A2,Lm34;
                     now per cases;
                     suppose a < b2;
@@ -3090,8 +3158,8 @@ A1: len W2 <= len W by Lm30;
                 hence contradiction; end;
             suppose
             A11: m <= a & a <= len W2;
-                reconsider a2 = a-m'+n' as even Nat by A11,A2,Lm34;
-                reconsider nm4 = n'-m' as even Nat by A2, INT_1:18;
+                reconsider a2 = a-m'+n' as even Element of NAT by A11,A2,Lm34;
+                reconsider nm4 = n'-m' as even Element of NAT by A2, INT_1:18;
             A12: W2.a = W.a2 & a2 <= len W by A11,A2,Lm34;
                 now per cases by A2,A4,Lm38;
                   suppose b in Seg m; then
@@ -3100,7 +3168,8 @@ A1: len W2 <= len W by Lm30;
                   end;
                   suppose
                 A13: m <= b & b <= len W2;
-                    reconsider b2 = b-m'+n' as even Nat by A13,A2,Lm34;
+                    reconsider b2 = b-m'+n' as even Element of NAT
+                    by A13,A2,Lm34;
                 A14: W2.b = W.b2 & b2 <= len W by A13,A2,Lm34;
                     now per cases;
                       suppose
@@ -3129,7 +3198,7 @@ A1: len W2 <= len W by Lm30;
   end;
 end;
 
-registration let G be _Graph, W be Path of G, m,n be Nat;
+registration let G be _Graph, W be Path of G, m,n be Element of NAT;
   cluster W.remove(m,n) -> Path-like;
   coherence proof
     set W2 = W.remove(m,n);
@@ -3137,8 +3206,8 @@ A1: len W2 <= len W by Lm30;
     now per cases;
     suppose
     A2: m is odd & n is odd & m <= n & n <= len W & W.m = W.n;
-        reconsider m'=m, n'=n as odd Nat by A2;
-        now let x,y be odd Nat; assume
+        reconsider m'=m, n'=n as odd Element of NAT by A2;
+        now let x,y be odd Element of NAT; assume
         A3: x < y & y <= len W2 & W2.x = W2.y; then
         A4: 1 <= x & 1 <= y & x <= len W2 by HEYTING3:1, XXREAL_0:2; then
         A5: x in dom W2 & y in dom W2 by A3, FINSEQ_3:27;
@@ -3154,9 +3223,10 @@ A1: len W2 <= len W by Lm30;
                   end;
                   suppose
                 A8: m <= y & y <= len W2; then
-                A9: W2.y = W.(y-m+n) & y-m+n is Nat & y-m+n <= len W
+                A9: W2.y = W.(y-m+n) & y-m+n is Element of NAT & y-m+n <= len W
                       by A2,Lm34;
-                    reconsider y2 = y-m'+n' as odd Nat by A8,A2,Lm34;
+                    reconsider y2 = y-m'+n' as odd Element of NAT
+                    by A8,A2,Lm34;
                     y-m + n >= y-m+m by A2,XREAL_1:9; then
                 A10: x < y2 & y2 <= len W by A3,A8,A2,Lm34,XXREAL_0:2; then
                     x = 1 & y2 = len W by A3,A7,A9,Def28; then
@@ -3169,9 +3239,9 @@ A1: len W2 <= len W by Lm30;
                 hence x = 1 & y = len W2; end;
             suppose
             A11: m <= x & x <= len W2; then
-            A12: W2.x = W.(x-m+n) & x-m+n is Nat & x-m+n <= len W
+            A12: W2.x = W.(x-m+n) & x-m+n is Element of NAT & x-m+n <= len W
                   by A2,Lm34;
-                reconsider x2 = x-m'+n' as odd Nat by A11,A2,Lm34;
+                reconsider x2 = x-m'+n' as odd Element of NAT by A11,A2,Lm34;
                 now per cases by A2,A5,Lm38;
                   suppose y in Seg m; then
                     y <= m by FINSEQ_1:3;
@@ -3179,15 +3249,17 @@ A1: len W2 <= len W by Lm30;
                   end;
                   suppose
                 A13: m <= y & y <= len W2; then
-                A14: W2.y = W.(y-m+n) & y-m+n is Nat & y-m+n <= len W
+                A14: W2.y = W.(y-m+n) & y-m+n is Element of NAT &
+                y-m+n <= len W
                       by A2,Lm34;
-                    reconsider y2 = y-m'+n' as odd Nat by A13,A2,Lm34;
+                    reconsider y2 = y-m'+n' as odd Element of NAT
+                    by A13,A2,Lm34;
                     x + (n - m) < y + (n-m) by A3, XREAL_1:10; then
                 A15: x2 < y2; then
                 A16: x2 = 1 & y2 = len W by A3,A12,A14,Def28; then
                 A17: len W2 + n = y -m + n + m by A2,Lm28
                               .= y + n;
-                    reconsider xm4 = x-m as Nat by A11, INT_1:18;
+                    reconsider xm4 = x-m as Element of NAT by A11, INT_1:18;
                     1 <= n' by HEYTING3:1; then
                     x2 - n' <= 1-1 by A16,REAL_1:92; then
                 A18: xm4 = 0; then
@@ -3271,28 +3343,29 @@ A1: W1.edgeSeq() = Seq es by Def32;
     hence thesis by Def15;
 end;
 
-definition let G be _Graph, W be Walk of G, m,n being Nat;
+definition let G be _Graph, W be Walk of G, m,n being Element of NAT;
   redefine func W.remove(m,n) -> Subwalk of W;
   coherence proof
     set W2 = W.remove(m,n), es1 = W2.edgeSeq();
     now per cases;
     suppose
     A1: m is odd & n is odd & m <= n & n <= len W & W.m = W.n;  then
-        reconsider m'=m, n'=n as odd Nat;
+        reconsider m'=m, n'=n as odd Element of NAT;
         W is_Walk_from W.first(), W.last() by Def23; then
     A2: W2 is_Walk_from W.first(), W.last() by Lm29;
         1 <= m by A1, HEYTING3:1; then
-        reconsider maa1 = m'-1 as even Nat by INT_1:18;
-        reconsider lenWn4 = len W - n' as even Nat by A1, INT_1:18;
-        reconsider n1 = n'+1 as even Nat;
+        reconsider maa1 = m'-1 as even Element of NAT by INT_1:18;
+        reconsider lenWn4 = len W - n' as even Element of NAT by A1, INT_1:18;
+        reconsider n1 = n'+1 as even Element of NAT;
         1 <= len W by HEYTING3:1; then
-        reconsider lenWaa1 = len W - 1 as even Nat by INT_1:18;
+        reconsider lenWaa1 = len W - 1 as even Element of NAT by INT_1:18;
     A3: 2 divides maa1 & 2 divides lenWn4 & 2 divides lenWaa1 & 2 divides n1
           by PEPIN:22; then
     A4: maa1 = 2 * (maa1 div 2) & lenWn4 = 2 * (lenWn4 div 2) &
           lenWaa1 = 2 * (lenWaa1 div 2) & n1 = 2 * (n1 div 2) by NAT_1:49;
-        set X = {x where x is Nat : 1 <= x & x <= maa1 div 2};
-        set Y = {x where x is Nat : n1 div 2 <= x & x <= lenWaa1 div 2};
+        set X = {x where x is Element of NAT : 1 <= x & x <= maa1 div 2};
+        set Y = {x where x is Element of NAT :
+        n1 div 2 <= x & x <= lenWaa1 div 2};
         set Z = X \/ Y, es = W.edgeSeq() | Z;
         now let x be set; assume
         A5: x in Z;
@@ -3326,7 +3399,7 @@ definition let G be _Graph, W be Walk of G, m,n being Nat;
     A15: X c= Seg len W.edgeSeq() & Y c= Seg len W.edgeSeq() by XBOOLE_1:11;
         reconsider Z as finite set by A11, FINSET_1:13;
         reconsider X,Y as finite set by A15, FINSET_1:13;
-    A16: now let a,b be Nat; assume
+    A16: now let a,b be Element of NAT; assume
         A17: a in X & b in Y; then
             consider a' being Element of NAT such that
         A18: a'=a & 1 <= a' & a' <= maa1 div 2;
@@ -3367,8 +3440,10 @@ definition let G be _Graph, W be Walk of G, m,n being Nat;
             hence card X = maa1 div 2 by A28, CARD_2:19;
           end;
           suppose maa1 div 2 <> 0; then consider k being Nat such that
-        A31: maa1 div 2 = k + 1 by NAT_1:22;
-            thus card X = maa1 div 2 by A31,GRAPH_2:4;
+A31:      maa1 div 2 = k + 1 by NAT_1:22;
+            reconsider k as Element of NAT by ORDINAL1:def 13;
+            maa1 div 2 = k + 1 by A31;
+            hence card X = maa1 div 2 by GRAPH_2:4;
           end;
         end;
     A32: now per cases;
@@ -3376,7 +3451,7 @@ definition let G be _Graph, W be Walk of G, m,n being Nat;
         A33: n1 div 2 > lenWaa1 div 2;
         A34: now assume Y <> {}; then consider x being set such that
             A35: x in Y by XBOOLE_0:def 1;
-                consider x' being Nat such that
+                consider x' being Element of NAT such that
             A36: x' = x & n1 div 2 <= x' & x' <= lenWaa1 div 2 by A35;
                 thus contradiction by A33,A36,XXREAL_0:2;
             end;
@@ -3390,8 +3465,11 @@ definition let G be _Graph, W be Walk of G, m,n being Nat;
             hence card Y = lenWn4 div 2 by A34,CARD_2:19;
           end;
         suppose n1 div 2 <= lenWaa1 div 2; then
-            reconsider k = (lenWaa1 div 2) - (n1 div 2) as Nat by INT_1:18;
-            Y = {x where x is Nat: n1 div 2 <= x & x <= n1 div 2 + k}; then
+            reconsider k = (lenWaa1 div 2) - (n1 div 2) as Element of NAT
+            by INT_1:18;
+            Y = {x where x is Element of NAT:
+            n1 div 2 <= x & x <= n1 div 2 + k};
+            then
             card Y = k+1 by GRAPH_2:4; then
             2 * card Y = 2*(lenWaa1 div 2) - 2*(n1 div 2) + 2*1
                       .= lenWn4 by A4; then
@@ -3402,9 +3480,9 @@ definition let G be _Graph, W be Walk of G, m,n being Nat;
         now assume not X /\ Y = {}; then consider x being set such that
         A37: x in X /\ Y by XBOOLE_0:def 1;
         A38: x in X & x in Y by A37, XBOOLE_0:def 3; then
-            consider x' being Nat such that
+            consider x' being Element of NAT such that
         A39: x' = x & 1 <= x' & x' <= maa1 div 2;
-            consider y' being Nat such that
+            consider y' being Element of NAT such that
         A40: y' = x & n1 div 2 <= y' & y' <= lenWaa1 div 2 by A38;
             2*x' <= maa1 by A4,A39,XREAL_1:66; then
             2*y' < maa1+1 by A39,A40,NAT_1:38; then
@@ -3419,13 +3497,14 @@ definition let G be _Graph, W be Walk of G, m,n being Nat;
     A42: dom es1 = dom es2 by A23,A25;
     A43: dom Sgm X = Seg (maa1 div 2) by A15, A27, FINSEQ_3:45;
     A44: dom Sgm Y = Seg (lenWn4 div 2) by A15, A32, FINSEQ_3:45;
-    A45: X = {x where x is Nat : 0+1 <= x & x <= 0+(maa1 div 2)};
+    A45: X = {x where x is Element of NAT : 0+1 <= x & x <= 0+(maa1 div 2)};
         now assume n1 div 2 < 1; then
             2*(n1 div 2) < 2*1 by XREAL_1:70; then
             n + 1 - 1 < 2 - 1 by A4,REAL_1:92; then
             n' < 1;
             hence contradiction by HEYTING3:1;
-        end; then reconsider n1div2aa1 = (n1 div 2) - 1 as Nat by INT_1:18;
+        end; then reconsider n1div2aa1 = (n1 div 2) - 1 as Element of NAT
+        by INT_1:18;
         set lenY = lenWaa1 div 2 - n1div2aa1;
         now assume n1div2aa1 > lenWaa1 div 2; then
             2*n1div2aa1 > 2 * (lenWaa1 div 2) by XREAL_1:70; then
@@ -3433,15 +3512,16 @@ definition let G be _Graph, W be Walk of G, m,n being Nat;
         A46: n+1 - 1 - 1 > len W - 1; then
             n+1 - 1 >= len W by XREAL_1:11;
             hence contradiction by A1,A46,REAL_1:def 5;
-        end; then reconsider lenY as Nat by INT_1:18;
-    A47: Y = {x where x is Nat: n1div2aa1+1 <= x & x <= n1div2aa1+lenY};
+        end; then reconsider lenY as Element of NAT by INT_1:18;
+    A47: Y = {x where x is Element of NAT:
+    n1div2aa1+1 <= x & x <= n1div2aa1+lenY};
     A48: len (Sgm X) = maa1 div 2 by A43, FINSEQ_1:def 3;
         2*lenY =  2*(lenWaa1 div 2) - 2*(n1 div 2) + 2
               .= lenWn4 by A4; then
         lenWn4 = 2 * lenY + 0 & 0 < 2; then
     A49: lenY = lenWn4 div 2 by NAT_1:def 1;
         now let x' be set; assume
-        A50: x' in dom es1; then reconsider x = x' as Nat;
+        A50: x' in dom es1; then reconsider x = x' as Element of NAT;
         A51: 1 <= x & x <= len es1 by A50, FINSEQ_3:27; then
         A52: es1.x = W2.(2*x) by Def15;
             now per cases;
@@ -3470,7 +3550,8 @@ definition let G be _Graph, W be Walk of G, m,n being Nat;
                 2*x <= 2*len es1 by A51, XREAL_1:66; then
                 2*x <= 2*len es1 + 1 by NAT_1:37; then
             A63: 2*x <= len W2 by Def15; then
-            A64: es1.x' = W.(2*x-m+n) & 2*x-m+n is Nat & 2*x-m+n <= len W
+            A64: es1.x' = W.(2*x-m+n) & 2*x-m+n is Element of NAT &
+            2*x-m+n <= len W
                   by A1, A52, A62, Lm34;
             A65: Sgm(Z).x = (Sgm(X) ^ Sgm(Y)).x by A16,A15,FINSEQ_3:48;
             A66: now assume x <= maa1 div 2; then
@@ -3479,6 +3560,7 @@ definition let G be _Graph, W be Walk of G, m,n being Nat;
                     hence contradiction by A61;
                 end; then consider k being Nat such that
             A67: x = maa1 div 2 + k by NAT_1:28;
+            reconsider k as Element of NAT by ORDINAL1:def 13;
                 k <> 0 by A67,A66; then
                 0 < k; then
                 0+1 < k+1 by XREAL_1:10; then
@@ -3488,7 +3570,7 @@ definition let G be _Graph, W be Walk of G, m,n being Nat;
                     lenWn4 < 2*x - maa1 by A4; then
                 A70: lenWn4 + n < 2*x - m + 1 + n by XREAL_1:10;
                     set z = 2*x-m'+n';
-                    reconsider z as Nat by A1,A62,A63,Lm34;
+                    reconsider z as Element of NAT by A1,A62,A63,Lm34;
                     2*x-m'+n' < len W by A64, REAL_1:def 5; then
                     z+1 <= len W by NAT_1:38;
                     hence contradiction by A70;
@@ -3508,14 +3590,15 @@ then
                     then
                     lenWaa1 < 2*x - maa1 + (n1 - 2*1) by A4; then
                 A75: lenWaa1 + 1 < 2*x-m+n+1 by XREAL_1:10;
-                    reconsider z = 2*x-m'+n' as Nat by A63,A1,A62,Lm34;
+                    reconsider z = 2*x-m'+n' as Element of NAT
+                    by A63,A1,A62,Lm34;
                     len W <= z by A75, NAT_1:38;
                     hence contradiction by A64,REAL_1:def 5;
                 end; then
                 n1div2aa1 + k in Y by A73; then
                 n1div2aa1+k in dom es by A13,XBOOLE_0:def 2; then
             A76: es.(n1div2aa1+k) = W.edgeSeq().(n1div2aa1+k) by FUNCT_1:70;
-                consider lenWaa1' being even Nat such that
+                consider lenWaa1' being even Element of NAT such that
             A77: lenWaa1' = lenWaa1 & len W.edgeSeq() = lenWaa1' div 2
                   by Lm46;
             A78: es2.x = W.(2*(n1div2aa1+k)) by A71,A72,A74,A76,A77,Def15;
@@ -3539,11 +3622,11 @@ end;
 registration let G be _Graph, W be Walk of G;
   cluster Trail-like Path-like Subwalk of W;
   existence proof
-    defpred P1[Nat,set,set] means
+    defpred P1[Element of NAT,set,set] means
       ($2 is Walk of G & ex Wn being Walk of G st Wn = $2 &
       $3 = Wn.remove(Wn.find(2*$1+1),Wn.rfind(2*$1+1))) or
       (not $2 is Walk of G & $3 = $2);
-A1: now let n be Nat, x be set;
+A1: now let n be Element of NAT, x be set;
         now per cases;
         suppose x is Walk of G; then reconsider W = x as Walk of G;
             set y = W.remove(W.find(2*n+1),W.rfind(2*n+1));
@@ -3554,33 +3637,35 @@ A1: now let n be Nat, x be set;
         end;
         hence ex y being set st P1[n,x,y];
     end;
-A2: for n being Nat, x,y1,y2 being set st P1[n,x,y1] & P1[n,x,y2] holds y1=y2;
+A2: for n being Element of NAT, x,y1,y2 being set st P1[n,x,y1] & P1[n,x,y2]
+holds y1=y2;
     consider f being Function such that
 A3: dom f = NAT & f.0 = W &
     for n being Element of NAT holds P1[n,f.n,f.(n+1)]
       from RECDEF_1:sch 1(A1,A2);
-    defpred P2[Nat] means f.$1 is Subwalk of W;
+    defpred P2[Element of NAT] means f.$1 is Subwalk of W;
 A4: P2[0] by A3, Lm75;
-    now let n be Nat; assume
+    now let n be Element of NAT; assume
     A5: f.n is Subwalk of W; then consider Wn being Walk of G such that
     A6: Wn = f.n &
         f.(n+1) = Wn.remove(Wn.find(2*n+1),Wn.rfind(2*n+1)) by A3;
         thus f.(n+1) is Subwalk of W by A5, A6, Lm76;
     end; then
-A7: for n being Nat st P2[n] holds P2[n+1];
-    for n being Nat holds P2[n] from NAT_1:sch 1(A4,A7); then
+A7: for n being Element of NAT st P2[n] holds P2[n+1];
+    for n being Element of NAT holds P2[n] from NAT_1:sch 1(A4,A7); then
     reconsider W0 = f.0 as Subwalk of W;
-    defpred P3[Nat] means
+    defpred P3[Element of NAT] means
       ex Wn being Subwalk of W st Wn = f.$1 & len Wn <= len W &
-      for m being odd Nat st m < 2*$1+1 &  m <= len Wn
+      for m being odd Element of NAT st m < 2*$1+1 &  m <= len Wn
         holds Wn.rfind(m) = m;
-    for m being odd Nat st m < 2*0+1 & m <= len W0 holds W0.rfind(m) = m
+    for m being odd Element of NAT st m < 2*0+1 & m <= len W0
+    holds W0.rfind(m) = m
       by HEYTING3:1; then
 A8: P3[0] by A3;
-    now let n be Nat; assume P3[n]; then
+    now let n be Element of NAT; assume P3[n]; then
         consider Wn being Subwalk of W such that
     A9: Wn = f.n & len Wn <= len W &
-          for m being odd Nat st m < 2*n+1 & m <= len Wn
+          for m being odd Element of NAT st m < 2*n+1 & m <= len Wn
           holds Wn.rfind(m) = m;
         set a = Wn.find(2*n+1), b = Wn.rfind(2*n+1);
         set Wn1 = Wn.remove(a,b);
@@ -3590,7 +3675,7 @@ A8: P3[0] by A3;
         hence f.(n+1) = Wn1 by A9;
         len Wn1 <= len Wn by Lm30;
         hence len Wn1 <= len W by A9, XXREAL_0:2;
-        let m be odd Nat; set m' = Wn1.rfind(m); assume
+        let m be odd Element of NAT; set m' = Wn1.rfind(m); assume
     A10: m < 2*(n+1)+1 & m <= len Wn1; then
         m <= 2*(n+1) by NAT_1:38; then
         m < 2*n+1+1 by REAL_1:def 5; then
@@ -3601,9 +3686,11 @@ A8: P3[0] by A3;
         now per cases;
           suppose
         A14: 2*n+1 <= len Wn; then
-        A15: a <= len Wn & Wn.a = Wn.(2*n+1) & for k being odd Nat st
+        A15: a <= len Wn & Wn.a = Wn.(2*n+1) & for k being odd Element of NAT
+        st
               k <= len Wn & Wn.k = Wn.(2*n+1) holds a <= k by Def20;
-        A16: b <= len Wn & Wn.b = Wn.(2*n+1) & for k being odd Nat st
+        A16: b <= len Wn & Wn.b = Wn.(2*n+1) & for k being odd Element of NAT
+        st
               k <= len Wn & Wn.k = Wn.(2*n+1) holds k <= b by A14, Def22;
         A17: a <= 2*n+1 & 2*n+1 <= b by A14, Lm54, Lm55; then
         A18: a <= b by XXREAL_0:2; then
@@ -3620,7 +3707,7 @@ A8: P3[0] by A3;
                      .= W2.first() by A16, Lm20;
             set m' = Wn1.rfind(m);
         A25: m' >= m by A10, Lm55;
-        A26: m' <= len Wn1 & Wn1.m' = Wn1.m & for k being odd Nat st
+        A26: m' <= len Wn1 & Wn1.m' = Wn1.m & for k being odd Element of NAT st
               k <= len Wn1 & Wn1.k = Wn1.m holds k <= m' by A10, Def22; then
         A27: m' <= len Wn by A12, XXREAL_0:2;
             now per cases by A11, XXREAL_0:1;
@@ -3630,7 +3717,7 @@ A8: P3[0] by A3;
                 m < len Wn.cut(1,a) by A14, A22, A28, Lm26; then
             A30: Wn1.cut(1,m) = Wn.cut(1,a).cut(1,m) by A19, A23, A24, Lm25
                             .= Wn.cut(1,m) by A11, A22, Lm24;
-                reconsider maa1 = m - 1 as Nat by A23, INT_1:18;
+                reconsider maa1 = m - 1 as Element of NAT by A23, INT_1:18;
             A31: maa1 + 1 = m;
             A32: maa1 < m - 0 by REAL_1:92; then
                 maa1 < len Wn1.cut(1,m) by A10, Lm26; then
@@ -3645,7 +3732,8 @@ A8: P3[0] by A3;
                 A38: Wn1.cut(1,m') = Wn.cut(1,a).cut(1,m')
                                      by A19,JORDAN12:3,A24,A36,Lm25
                                  .= Wn.cut(1,m') by A35, Lm24;
-                    reconsider m'aa1 = m' - 1 as Nat by A37, INT_1:18;
+                    reconsider m'aa1 = m' - 1 as Element of NAT
+                    by A37, INT_1:18;
                 A39: m'aa1 < m' - 0 by REAL_1:92; then
                     m'aa1 < len Wn1.cut(1,m') by A26, Lm26; then
                 A40: Wn1.m' = Wn.cut(1,m').(m'aa1+1)
@@ -3658,9 +3746,9 @@ A8: P3[0] by A3;
                   end;
                   suppose
                 A41: a <= m'; set x = m' - a + b;
-                A42: Wn1.m' = Wn.x & x is Nat & x <= len Wn
+                A42: Wn1.m' = Wn.x & x is Element of NAT & x <= len Wn
                       by A18, A15, A16, A26, A41, Lm34;
-                    reconsider x as Nat by A18,A15,A16,A26,A41,Lm34;
+                    reconsider x as Element of NAT by A18,A15,A16,A26,A41,Lm34;
                 A43: x <= m by A29,A13,Def22,A42,A26,A34;
                     m' + a <= m' + b by A18, XREAL_1:9; then
                     m' + a - a <= m' + b - a by REAL_1:92; then
@@ -3675,7 +3763,7 @@ A8: P3[0] by A3;
                 m <= len Wn.cut(1,a) by A14,A22,Lm26; then
             A45: Wn1.cut(1,m) = Wn.cut(1,a).cut(1,m) by A19, A23, A24, Lm25
                             .= Wn.cut(1,m) by A11, A22, Lm24;
-                reconsider maa1 = m - 1 as Nat by A23, INT_1:18;
+                reconsider maa1 = m - 1 as Element of NAT by A23, INT_1:18;
             A46: maa1 + 1 = m;
             A47: maa1 < m - 0 by REAL_1:92; then
                 maa1 < len Wn1.cut(1,m) by A10, Lm26; then
@@ -3685,7 +3773,7 @@ A8: P3[0] by A3;
                 now assume
                 A50: m < m'; then
                 A51: a < m' by A20,A17,XXREAL_0:1,A44; set x = m' - a + b;
-                    Wn1.m' = Wn.x & x is Nat & x <= len Wn
+                    Wn1.m' = Wn.x & x is Element of NAT & x <= len Wn
                       by A18, A15, A16, A26, A51, Lm34; then
                     m' - a + b <= b by A44,A49,A14,Def22,A26; then
                     m' - a + b - b <= b - b by REAL_1:92; then
@@ -3704,15 +3792,15 @@ A8: P3[0] by A3;
         end;
         hence Wn1.rfind(m) = m;
     end; then
-A54: for n being Nat st P3[n] holds P3[n+1];
-A55: for n being Nat holds P3[n] from NAT_1:sch 1(A8,A54);
+A54: for n being Element of NAT st P3[n] holds P3[n+1];
+A55: for n being Element of NAT holds P3[n] from NAT_1:sch 1(A8,A54);
     set n = len W + 1;
     consider P being Subwalk of W such that
 A56: P = f.n & len P <= len W &
-    for m being odd Nat st m < 2*n+1 & m <= len P
+    for m being odd Element of NAT st m < 2*n+1 & m <= len P
       holds P.rfind(m) = m by A55;
     take P;
-    now let m be odd Nat; assume
+    now let m be odd Element of NAT; assume
     A57: m <= len P;
     A58: len P + 0 < n by A56, XREAL_1:10;
         len P + 0 < n+n by A58, XREAL_1:10; then
@@ -3733,7 +3821,7 @@ end;
 registration let G be _Graph, W be DWalk of G;
   cluster directed Path of W;
   existence proof
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
       for W1 being DWalk of G st W1.length() = $1 holds
        ex W2 being Path of W1 st W2 is directed;
     now let W1 be DWalk of G; assume W1.length() = 0; then
@@ -3749,7 +3837,7 @@ registration let G be _Graph, W be DWalk of G;
         thus W2 is directed by A3;
     end; then
 A4: P[0];
-    now let k be Nat; assume
+    now let k be Element of NAT; assume
     A5: P[k];
         let W1 be DWalk of G; assume
     A6: W1.length() = k + 1; then
@@ -3804,7 +3892,7 @@ A4: P[0];
 48;
             now per cases;
               suppose v in WB.vertices(); then
-                consider n being odd Nat such that
+                consider n being odd Element of NAT such that
             A26: n <= len WB & WB.n = v by Lm49;
                 reconsider WB' = WB as directed Path of G by A10;
                 set W2 = WB'.cut(1,n);
@@ -3814,7 +3902,7 @@ A4: P[0];
                 W2 is_Walk_from W1.1, W1.last() by A7; then
             A27: W2 is_Walk_from W1.first(), W1.last();
                 len W2 = n by A26, Lm26; then
-                consider naa1 being even Nat such that
+                consider naa1 being even Element of NAT such that
             A28: naa1 = n - 1 & len W2.edgeSeq() = naa1 div 2 by Lm46;
                 set es = esb | (rng (Sgm (dom esb) | Seg (naa1 div 2)));
                 reconsider es as FinSubsequence of WA.edgeSeq() by GRAPH_2:29;
@@ -3887,11 +3975,11 @@ A4: P[0];
                 for x,y1,y2 being set st [x,y1] in esb\es & [x,y2] in esb\es
                   holds y1 = y2 by FUNCT_1:def 1; then
                 reconsider esbes1 = esb \ es as Function by FUNCT_1:def 1;
-                now let a,b be Nat; assume
+                now let a,b be Element of NAT; assume
                 A45: a in dom es & b in dom (esbes1); then
                     consider xa being set such that
                 A46: xa in dom ses & ses.xa = a by A39, FUNCT_1:def 5;
-                    reconsider xa as Nat by A46;
+                    reconsider xa as Element of NAT by A46;
                 A47: a = Sgm(dom esb).xa by A46, FUNCT_1:70;
                 A48: xa in Seg(naa1 div 2) & xa in dom Sgm(dom esb)
                       by A46, RELAT_1:86;
@@ -3901,7 +3989,7 @@ A4: P[0];
                     consider xb being set such that
                 A50: xb in dom (Sgm (dom esb)) & Sgm(dom esb).xb = b
                       by FUNCT_1:def 5;
-                    reconsider xb as Nat by A50;
+                    reconsider xb as Element of NAT by A50;
                 A51: 1 <= xa & xa <= naa1 div 2 by A48, FINSEQ_1:3;
                 A52: 1 <= xb & xb <= len WB.edgeSeq() by A41,A50,FINSEQ_1:3;
 then
@@ -3923,7 +4011,7 @@ then
             A55: Sgm(dom esb) = Sgm(dom es) ^ Sgm(dom (esb \ es))
                   by A35, A36, A37, FINSEQ_3:48;
             A56: dom W2.edgeSeq() c= dom Seq esb by A19,A30,RELAT_1:25;
-                now let x be Nat; assume
+                now let x be Element of NAT; assume
                 A57: 1 <= x & x <= len W2.edgeSeq(); then
                 A58: x in dom W2.edgeSeq() by FINSEQ_3:27; then
                     [x,W2.edgeSeq().x] in W2.edgeSeq() by FUNCT_1:8; then
@@ -3967,7 +4055,7 @@ then
                     now per cases by A68, A69, XBOOLE_0:def 2;
                     suppose x in dom esb; then
                     A70: x in Seg k by A21; then
-                        reconsider x'=x as Nat;
+                        reconsider x'=x as Element of NAT;
                     A71: 1 <= x' & x' <= k by A70,FINSEQ_1:3; then
                         x' <= k+1 by NAT_1:37;
                         hence x in Seg (k+1) by A71, FINSEQ_1:3; end;
@@ -3990,7 +4078,7 @@ then
                     A78: y = ((k+1).-->e).x by A67,A68,A76,FUNCT_4:def 1;
                     A79: x = k+1 by A67, A77, TARSKI:def 1; then
                     A80: y = e by A78, CQC_LANG:6;
-                        reconsider x' = x as Nat by A67,A77;
+                        reconsider x' = x as Element of NAT by A67,A77;
                     A81: 1 <= x' & x' <= len W1.edgeSeq()
                           by A79, NAT_1:37,A6; then
                     A82: x in dom W1.edgeSeq() by FINSEQ_3:27;
@@ -4032,7 +4120,7 @@ then
                           .= card esb + card {[k+1,e]} by CQC_LANG:45
                           .= len W2.edgeSeq() by A89, CARD_1:79;
             A91: {k+1} c= Seg (k+1) by A68,A73,XBOOLE_1:11;
-                now let m, n be Nat; assume
+                now let m, n be Element of NAT; assume
                 A92: m in dom esb & n in {k+1}; then
                 A93: n = k+1 by TARSKI:def 1;
                     m <= k by FINSEQ_1:3,A22,A92;
@@ -4041,7 +4129,7 @@ then
             A94: Sgm(dom es)=Sgm(dom esb) ^ Sgm({k+1}) by A22,A68,A91,FINSEQ_3:
 48
                           .=Sgm(dom esb) ^ <* k+1 *> by FINSEQ_3:50;
-                now let n be Nat; assume
+                now let n be Element of NAT; assume
                 A95: 1 <= n & n <= len W2.edgeSeq(); then
                 A96: n in dom W2.edgeSeq() by FINSEQ_3:27;
                 A97: n in dom Seq es by A95, A90, FINSEQ_3:27;
@@ -4061,8 +4149,9 @@ then
                         hence W2.edgeSeq().n = (Seq es).n
                           by A101,A87,A98,A102,FUNCT_4:17;
                       end;
-                      suppose ex m being Nat st m in dom <*e*> &
-                      n = len Seq esb + m; then consider m being Nat such that
+                      suppose ex m being Element of NAT st m in dom <*e*> &
+                      n = len Seq esb + m; then consider m being Element of NAT
+                      such that
                     A103: m in dom <*e*> & n = len Seq esb + m;
                         m in {1} by A103,FINSEQ_1:4,FINSEQ_1:def 8; then
                     A104: m = 1 by TARSKI:def 1; then
@@ -4092,8 +4181,8 @@ def 1
         end;
         hence ex W2 being Path of W1 st W2 is directed;
     end; then
-A108: for k being Nat st P[k] holds P[k+1];
-A109: for k being Nat holds P[k] from NAT_1:sch 1(A4,A108);
+A108: for k being Element of NAT st P[k] holds P[k+1];
+A109: for k being Element of NAT holds P[k] from NAT_1:sch 1(A4,A108);
     W.length() = W.length();
     hence thesis by A109;
   end;
@@ -4335,35 +4424,35 @@ reserve G,G1,G2 for _Graph;
 reserve W,W1,W2 for Walk of G;
 reserve e,x,y,z for set;
 reserve v for Vertex of G;
-reserve n,m for Nat;
+reserve n,m for Element of NAT;
 
 canceled;
 
 theorem ::tWALK02
-  for n being odd Nat st n <= len W holds
+  for n being odd Element of NAT st n <= len W holds
     W.n in the_Vertices_of G by Lm3;
 
 theorem Th9: ::tWALK03
-  for n being even Nat st n in dom W holds
+  for n being even Element of NAT st n in dom W holds
     W.n in the_Edges_of G proof
-    let n be even Nat; assume n in dom W; then
+    let n be even Element of NAT; assume n in dom W; then
 A1: 1 <= n & n <= len W by FINSEQ_3:27; then
-    reconsider naa1 = n-1 as odd Nat by INT_1:18;
+    reconsider naa1 = n-1 as odd Element of NAT by INT_1:18;
     naa1 < len W - 0 by A1, REAL_1:92; then
     W.(naa1+1) Joins W.naa1, W.(naa1+2), G by Def3;
     hence thesis by GLIB_000:def 15;
 end;
 
 theorem ::tWALK04
-  for n being even Nat st n in dom W holds
-    ex naa1 being odd Nat st
+  for n being even Element of NAT st n in dom W holds
+    ex naa1 being odd Element of NAT st
       naa1 = n-1 & n-1 in dom W & n+1 in dom W &
       W.n Joins W.(naa1), W.(n+1),G by Lm4;
 
 theorem Th11: ::tWALK05
-  for n being odd Nat st n < len W holds
+  for n being odd Element of NAT st n < len W holds
     W.(n+1) in W.vertexAt(n).edgesInOut() proof
-    let n be odd Nat; assume
+    let n be odd Element of NAT; assume
 A1: n < len W; then
 A2: W.(n+1) Joins W.n, W.(n+2), G by Def3;
     W.vertexAt(n) = W.n by A1, Def8;
@@ -4371,16 +4460,16 @@ A2: W.(n+1) Joins W.n, W.(n+2), G by Def3;
 end;
 
 theorem Th12: ::tWALK06
-  for n being odd Nat st 1 < n & n <= len W holds
+  for n being odd Element of NAT st 1 < n & n <= len W holds
      W.(n-1) in W.vertexAt(n).edgesInOut() proof
-    let n be odd Nat; assume
+    let n be odd Element of NAT; assume
 A1: 1 < n & n <= len W;
-    reconsider naa1 = n-1 as even Nat by A1, INT_1:18;
+    reconsider naa1 = n-1 as even Element of NAT by A1, INT_1:18;
 A2: n - 1 <= len W - 0 by A1, REAL_1:92;
     1+1 <= n by A1, NAT_1:38; then
     1+1-1 <= n-1 by REAL_1:92; then
     naa1 in dom W by A2, FINSEQ_3:27; then
-    consider n5 being odd Nat such that
+    consider n5 being odd Element of NAT such that
 A3: n5 = naa1-1 & naa1-1 in dom W & naa1+1 in dom W &
       W.naa1 Joins W.(n5), W.(naa1+1),G by Lm4;
     n5 <= len W by A3, FINSEQ_3:27; then
@@ -4391,9 +4480,9 @@ A3: n5 = naa1-1 & naa1-1 in dom W & naa1+1 in dom W &
 end;
 
 theorem ::tWALK07
-  for n being odd Nat st n < len W holds
+  for n being odd Element of NAT st n < len W holds
      n in dom W & n+1 in dom W & n+2 in dom W proof
-    let n be odd Nat; assume
+    let n be odd Element of NAT; assume
 A1: n < len W;
 A2: 1 <= n by HEYTING3:1;
 A3: 1 <= n+1 & 1 <= n+2 by NAT_1:37;
@@ -4461,10 +4550,10 @@ end;
 
 theorem ::tWVAT01
   for W1 being Walk of G1, W2 being Walk of G2 st W1 = W2 holds
-    for n being Nat holds W1.vertexAt(n) = W2.vertexAt(n) proof
+    for n being Element of NAT holds W1.vertexAt(n) = W2.vertexAt(n) proof
     let W1 be Walk of G1, W2 be Walk of G2; assume
 A1: W1 = W2;
-    let n be Nat;
+    let n be Element of NAT;
     now per cases;
     suppose
     A2: n is odd & n <= len W1;
@@ -4514,7 +4603,7 @@ theorem Th25: ::tWREV04
     set rn = len W - n + 1; assume
 A1: n in dom W; then
     n <= len W by FINSEQ_3:27; then
-    reconsider rn as Nat by FINSEQ_5:1;
+    reconsider rn as Element of NAT by FINSEQ_5:1;
     n in Seg len W by A1, FINSEQ_1:def 3; then
     len W - n + 1 in Seg len W by FINSEQ_5:2; then
 A2: rn in Seg len W.reverse() by FINSEQ_5:def 3; then
@@ -4562,13 +4651,14 @@ theorem ::tWAPPND05
 
 theorem ::tWAPPND06
   W1.last() = W2.first() implies
-  for n being Nat st n < len W2 holds
+  for n being Element of NAT st n < len W2 holds
     W1.append(W2).(len W1 + n) = W2.(n+1) &
     (len W1 + n) in dom W1.append(W2) by Lm17;
 
 theorem ::tWAPPND07
   n in dom W1.append(W2) implies
-     n in dom W1 or ex k being Nat st k < len W2 & n = len W1 + k by Lm18;
+     n in dom W1 or ex k being Element of NAT st k < len W2 & n = len W1 + k
+     by Lm18;
 
 theorem Th36: ::tWAPPND08
   for W1A, W1B being Walk of G1, W2A,W2B being Walk of G2
@@ -4594,27 +4684,28 @@ A1: W1A = W2A & W1B = W2B;
 end;
 
 theorem ::tWCUT01
-  for m,n being odd Nat st m <= n & n <= len W holds
+  for m,n being odd Element of NAT st m <= n & n <= len W holds
     len W.cut(m,n) + m = n+1 &
-    for i being Nat st i < len W.cut(m,n)
+    for i being Element of NAT st i < len W.cut(m,n)
         holds W.cut(m,n).(i+1) = W.(m+i) & m+i in dom W by Lm19;
 
 theorem ::tWCUT02
-  for m, n being odd Nat st m <= n & n <= len W holds
+  for m, n being odd Element of NAT st m <= n & n <= len W holds
     W.cut(m,n).first() = W.m & W.cut(m,n).last() = W.n &
     W.cut(m,n) is_Walk_from W.m, W.n by Lm20;
 
 theorem ::tWCUT03
-  for m,n,o being odd Nat st m <= n & n <= o & o <= len W holds
+  for m,n,o being odd Element of NAT st m <= n & n <= o & o <= len W holds
     W.cut(m,n).append(W.cut(n,o)) = W.cut(m,o) by Lm21;
 
 theorem ::tWCUT04
   W.cut(1,len W) = W by Lm22;
 
 theorem Th41: ::tWCUT05
-  for n being odd Nat st n < len W holds
+  for n being odd Element of NAT st n < len W holds
   G.walkOf(W.n, W.(n+1), W.(n+2)) = W.cut(n,n+2) proof
-    let n be odd Nat; set v1 = W.n, e = W.(n+1), v2 = W.(n+2); assume
+    let n be odd Element of NAT; set v1 = W.n, e = W.(n+1), v2 = W.(n+2);
+    assume
 A1: n < len W; then
 A2: e Joins v1,v2,G by Def3; then
 A3: G.walkOf(v1,e,v2) = <*v1,e,v2*> by Def5;
@@ -4624,10 +4715,10 @@ A4: n <= n+2 & n+2 <= len W by A1, Th1; then
     len W.cut(n,n+2) + n = (1+2) + n; then
 A5: len W2 = 3;
 A6: len W1 = 3 by A2,Th15;
-    now let x be Nat; assume
+    now let x be Element of NAT; assume
     A7: x in Seg 3; then
     A8: 1 <= x & x <= 3 by FINSEQ_1:3; then
-        reconsider xaa1 = x-1 as Nat by INT_1:18;
+        reconsider xaa1 = x-1 as Element of NAT by INT_1:18;
     A9: xaa1+1 = x;
         xaa1 < 3-0 by A8, REAL_1:92; then
     A10: W2.x = W.(n+xaa1) by A4, A5, A9, Lm19;
@@ -4645,9 +4736,9 @@ A6: len W1 = 3 by A2,Th15;
 end;
 
 theorem Th42: ::tWCUT06
-  for m,n being odd Nat st m <= n & n < len W holds
+  for m,n being odd Element of NAT st m <= n & n < len W holds
     W.cut(m,n).addEdge(W.(n+1)) = W.cut(m,n+2) proof
-    let m,n be odd Nat; set W1 = W.cut(m,n); set e = W.(n+1); assume
+    let m,n be odd Element of NAT; set W1 = W.cut(m,n); set e = W.(n+1); assume
 A1: m <= n & n < len W; then
 A2: n <= n+2 & n+2 <= len W by Th1;
 A3: W1.last() = W.n by A1, Lm20; then
@@ -4662,7 +4753,7 @@ A3: W1.last() = W.n by A1, Lm20; then
 end;
 
 theorem ::tWCUT07
-  for n being odd Nat st n <= len W holds
+  for n being odd Element of NAT st n <= len W holds
      W.cut(n,n) = <* W.vertexAt(n) *> by Lm23;
 
 theorem ::tWCUT08
@@ -4670,25 +4761,27 @@ theorem ::tWCUT08
     W.cut(1,n).cut(1,m) = W.cut(1,m) by Lm24;
 
 theorem ::tWCUT09
-  for m,n being odd Nat st m <= n & n <= len W1 & W1.last() = W2.first()
+  for m,n being odd Element of NAT
+  st m <= n & n <= len W1 & W1.last() = W2.first()
     holds W1.append(W2).cut(m,n) = W1.cut(m,n) by Lm25;
 
 theorem ::tWCUT10
-  for m being odd Nat st m <= len W holds
+  for m being odd Element of NAT st m <= len W holds
      len W.cut(1,m) = m by Lm26;
 
 theorem ::tWCUT11
-  for m being odd Nat, x being Nat st x in dom W.cut(1,m) & m <= len W holds
+  for m being odd Element of NAT, x being Element of NAT
+  st x in dom W.cut(1,m) & m <= len W holds
      W.cut(1,m).x = W.x  by Lm27;
 
 theorem ::tWCUT12
-  for m,n being odd Nat, i being Nat
+  for m,n being odd Element of NAT, i being Element of NAT
     st m <= n & n <= len W & i in dom W.cut(m,n) holds
       W.cut(m,n).i = W.(m+i-1) & m+i-1 in dom W proof
-    let m,n be odd Nat, i be Nat; assume
+    let m,n be odd Element of NAT, i be Element of NAT; assume
 A1: m <= n & n <= len W & i in dom W.cut(m,n); then
 A2: 1 <= i & i <= len W.cut(m,n) by FINSEQ_3:27; then
-    reconsider iaa1 = i-1 as Nat by INT_1:18;
+    reconsider iaa1 = i-1 as Element of NAT by INT_1:18;
 A3: iaa1 < len W.cut(m,n) - 0 by A2, REAL_1:92;
     iaa1+1 = i; then
     W.cut(m,n).i = W.(m+iaa1) & m+iaa1 in dom W by A1,A3,Lm19;
@@ -4696,9 +4789,10 @@ A3: iaa1 < len W.cut(m,n) - 0 by A2, REAL_1:92;
 end;
 
 theorem Th49: ::tWCUT13
-  for W1 being Walk of G1, W2 being Walk of G2, m, n being Nat st W1 = W2 holds
+  for W1 being Walk of G1, W2 being Walk of G2, m, n being Element of NAT
+  st W1 = W2 holds
     W1.cut(m,n) = W2.cut(m,n) proof
-    let W1 be Walk of G1, W2 be Walk of G2, m, n be Nat; assume
+    let W1 be Walk of G1, W2 be Walk of G2, m, n be Element of NAT; assume
 A1: W1 = W2;
     now per cases;
     suppose
@@ -4714,7 +4808,7 @@ A1: W1 = W2;
 end;
 
 theorem ::tWREMOVE01
-  for m,n being odd Nat st m <= n & n <= len W & W.m = W.n holds
+  for m,n being odd Element of NAT st m <= n & n <= len W & W.m = W.n holds
      len W.remove(m,n) + n = len W + m  by Lm28;
 
 theorem ::tWREMOVE02
@@ -4727,27 +4821,28 @@ theorem ::tWREMOVE04
   W.remove(m,m) = W by Lm31;
 
 theorem ::tWREMOVE05
-  for m,n being odd Nat st m <= n & n <= len W & W.m = W.n holds
+  for m,n being odd Element of NAT st m <= n & n <= len W & W.m = W.n holds
      W.cut(1,m).last() = W.cut(n,len W).first() by Lm32;
 
 theorem ::tWREMOVE06
-  for m,n being odd Nat st m <= n & n <= len W & W.m = W.n holds
-     (for x being Nat st x in Seg m holds W.remove(m,n).x = W.x) by Lm33;
+  for m,n being odd Element of NAT st m <= n & n <= len W & W.m = W.n holds
+     (for x being Element of NAT st x in Seg m holds W.remove(m,n).x = W.x)
+     by Lm33;
 
 theorem ::tWREMOVE07
-  for m,n being odd Nat st m <= n & n <= len W & W.m = W.n holds
-     (for x being Nat st m <= x & x <= len W.remove(m,n) holds
+  for m,n being odd Element of NAT st m <= n & n <= len W & W.m = W.n holds
+     (for x being Element of NAT st m <= x & x <= len W.remove(m,n) holds
         W.remove(m,n).x = W.(x - m + n) &
-        x - m + n is Nat & x - m + n <= len W) by Lm34;
+        x - m + n is Element of NAT & x - m + n <= len W) by Lm34;
 
 theorem ::tWREMOVE08
-  for m,n being odd Nat st m <= n & n <= len W & W.m = W.n holds
+  for m,n being odd Element of NAT st m <= n & n <= len W & W.m = W.n holds
     len W.remove(m,n) = len W + m - n by Lm35;
 
 theorem Th58: ::tWREMOVE09
-   for m being Nat st W.m = W.last() holds
+   for m being Element of NAT st W.m = W.last() holds
      W.remove(m,len W) = W.cut(1,m) proof
-    let m be Nat; assume W.m = W.last(); then
+    let m be Element of NAT; assume W.m = W.last(); then
 A1: W.m = W.(len W);
     now per cases;
     suppose
@@ -4755,7 +4850,7 @@ A1: W.m = W.(len W);
         len W.remove(m,len W) + len W = len W + m by A1, Lm28; then
     A3: len W.remove(m,len W) = m; then
     A4: len W.remove(m,len W) = len W.cut(1,m) by A2, Lm26;
-        now let k be Nat; assume
+        now let k be Element of NAT; assume
         A5: 1 <= k & k <= len W.remove(m, len W); then
         A6: k in dom W.cut(1,m) by A4, FINSEQ_3:27;
             k in Seg m by A3, A5, FINSEQ_1:3;
@@ -4772,7 +4867,7 @@ A1: W.m = W.(len W);
 end;
 
 theorem ::tWREMOVE10
-  for m being Nat st W.first() = W.m holds
+  for m being Element of NAT st W.first() = W.m holds
     W.remove(1,m) = W.cut(m, len W) by Lm36;
 
 theorem ::tWREMOVE11
@@ -4780,14 +4875,15 @@ theorem ::tWREMOVE11
     W.remove(m,n).last() = W.last() by Lm37;
 
 theorem ::tWREMOVE12
- for m,n being odd Nat, x being Nat
+ for m,n being odd Element of NAT, x being Element of NAT
   st m <= n & n <= len W & W.m = W.n & x in dom W.remove(m,n) holds
      x in Seg m or (m <= x & x <= len W.remove(m,n)) by Lm38;
 
 theorem ::tWREMOVE13
-  for W1 being Walk of G1, W2 being Walk of G2, m, n being Nat st W1 = W2 holds
+  for W1 being Walk of G1, W2 being Walk of G2, m, n being Element of NAT
+  st W1 = W2 holds
     W1.remove(m,n) = W2.remove(m,n) proof
-    let W1 be Walk of G1, W2 be Walk of G2, m, n be Nat; assume
+    let W1 be Walk of G1, W2 be Walk of G2, m, n be Element of NAT; assume
 A1: W1 = W2;
     now per cases;
     suppose
@@ -4822,7 +4918,7 @@ theorem ::tWADDEDGE03
 theorem ::tWADDEDGE04
   e Joins W.last(),x,G implies
   W.addEdge(e).(len W + 1) = e & W.addEdge(e).(len W + 2) = x &
-  for n being Nat st n in dom W holds W.addEdge(e).n = W.n by Lm42;
+  for n being Element of NAT st n in dom W holds W.addEdge(e).n = W.n by Lm42;
 
 theorem ::tWADDEDGE05
   W is_Walk_from x,y & e Joins y,z,G implies
@@ -4841,10 +4937,10 @@ theorem Th68: ::tWVSEQ01
 end;
 
 theorem Th69: ::tWVSEQ02
-  for n being odd Nat st n <= len W holds
+  for n being odd Element of NAT st n <= len W holds
     2 * ((n+1) div 2) - 1 = n &
     1 <= (n+1) div 2 & (n+1) div 2 <= len W.vertexSeq() proof
-    let n be odd Nat; assume
+    let n be odd Element of NAT; assume
 A1: n <= len W; set m = (n+1) div 2;
     2 divides n+1 by PEPIN:22; then
 A2: 2 * m = n+1 by NAT_1:49;
@@ -4856,7 +4952,7 @@ A3: now assume m < 1; then
         hence contradiction by A2;
     end;
     hence 1 <= m;
-    reconsider maa1 = m-1 as Nat by A3, INT_1:18;
+    reconsider maa1 = m-1 as Element of NAT by A3, INT_1:18;
     now assume len W.vertexSeq() < m; then
         len W.vertexSeq() < maa1 + 1; then
         len W.vertexSeq() <= maa1 by NAT_1:38; then
@@ -4908,9 +5004,9 @@ A1: W.vertexSeq().1 = W.(2*1-1) &
 end;
 
 theorem ::tWVSEQ06
-  for n being odd Nat st n <= len W holds
+  for n being odd Element of NAT st n <= len W holds
     W.vertexAt(n) = W.vertexSeq().((n+1) div 2) proof
-    let n be odd Nat; assume
+    let n be odd Element of NAT; assume
 A1: n <= len W; then
 A2: W.vertexAt(n) = W.n by Def8; set m = (n+1) div 2;
     2 * m - 1 = n & 1 <= m & m <= len W.vertexSeq() by A1, Th69;
@@ -4927,12 +5023,12 @@ theorem Th74: ::tWVSEQ07
         2*1 <= 2*n by A1, XREAL_1:66; then
     A3: 2-1 <= 2*n-1 by REAL_1:92;
         1 <= n+n by A1, NAT_1:37; then
-        2*n-1 is Nat by INT_1:18;
+        2*n-1 is Element of NAT by INT_1:18;
         hence 2*n-1 in dom W by A2,A3,FINSEQ_3:27;
     end;
     assume
 A4: 2*n-1 in dom W; then
-    reconsider 2naa1=2*n-1 as Nat;
+    reconsider 2naa1=2*n-1 as Element of NAT;
     1 <= 2naa1 & 2naa1 <= len W by A4,FINSEQ_3:27; then
 A5: 1+1 <= 2*n-1+1 & 2*n-1+1 <= len W+1 by XREAL_1:9; then
 A6: 2*1 <= 2*n & 2*n <= len W + 1;
@@ -4951,12 +5047,12 @@ theorem ::tWVSEQ08
         A2: v in f; then consider x,y being set such that
         A3: v = [x,y] by RELAT_1:def 1;
         A4: x in dom f & y = f.x by A2, A3, FUNCT_1:8; then
-            reconsider x as Nat;
+            reconsider x as Element of NAT;
             1 <= x & x <= len f by A4,FINSEQ_3:27; then
         A5: y = W.cut(1,n).(2*x-1) by A4, Def14;
         A6: 2*x-1 in dom W.cut(1,n) by A4, Th74; then
         A7: y = W.(2*x-1) by A1, A5, Lm27;
-        A8: 2*x-1 is Nat by A6; then
+        A8: 2*x-1 is Element of NAT by A6; then
         A9: 1 <= 2*x-1 & 2*x-1 <= len W.cut(1,n) by A6, FINSEQ_3:27; then
             2*x-1 <= n by A1, Lm26; then
         A10: 2*x-1 <= len W by A1, XXREAL_0:2;
@@ -4986,7 +5082,7 @@ A2: len W + 2 + 1 = 2 * len W2.vertexSeq() by Def14;
     2*len W3 = len W + 1 + 2 by Def14
             .= 2* len W2.vertexSeq() by A2; then
 A3: len W3 = len W2.vertexSeq();
-    now let k be Nat; assume
+    now let k be Element of NAT; assume
     A4: 1 <= k & k <= len W2.vertexSeq(); then
     A5: k in dom W3 by A3, FINSEQ_3:27;
     A6: W2.vertexSeq().k = W2.(2*k-1) by A4, Def14;
@@ -4998,8 +5094,9 @@ A3: len W3 = len W2.vertexSeq();
         A9: W3.k = W.(2*k-1) by A8, Def14;
             2*k-1 in dom W by A7, Th74;
             hence W2.vertexSeq().k = W3.k by A1,A6,A9,Lm42; end;
-        suppose ex n being Nat st n in dom <*x*> & k=len W.vertexSeq()+n; then
-            consider n being Nat such that
+        suppose ex n being Element of NAT st n in dom <*x*> &
+        k=len W.vertexSeq()+n; then
+            consider n being Element of NAT such that
         A10: n in dom <*x*> & k  = len W.vertexSeq() + n;
             n in Seg 1 by A10, FINSEQ_1:55; then
         A11: n = 1 by FINSEQ_1:4,TARSKI:def 1; then
@@ -5026,7 +5123,7 @@ A1: W1 = W2;
                    .= 2 * len VS2 by Def14;
         hence
     A2: len VS2 = len VS1;
-        let x be Nat; assume x in Seg len VS1; then
+        let x be Element of NAT; assume x in Seg len VS1; then
         x in dom VS1 by FINSEQ_1:def 3; then
     A3: 1 <= x & x <= len VS1 & x <= len VS2 by A2, FINSEQ_3:27;
         hence VS1.x = W2.(2*x - 1) by A1, Def14
@@ -5036,22 +5133,22 @@ A1: W1 = W2;
 end;
 
 theorem ::tWESEQ01
-  for n being even Nat st 1 <= n & n <= len W holds
+  for n being even Element of NAT st 1 <= n & n <= len W holds
     n div 2 in dom W.edgeSeq() & W.n = W.edgeSeq().(n div 2) by Lm44;
 
 theorem ::tWESEQ02
     n in dom W.edgeSeq() iff 2*n in dom W by Lm45;
 
 theorem ::tWESEQ03
-  for n being Nat st n in dom W.edgeSeq()
+  for n being Element of NAT st n in dom W.edgeSeq()
     holds W.edgeSeq().n in the_Edges_of G proof
-    let n be Nat; assume n in dom W.edgeSeq(); then
+    let n be Element of NAT; assume n in dom W.edgeSeq(); then
     W.edgeSeq().n in rng W.edgeSeq() by FUNCT_1:def 5;
     hence W.edgeSeq().n in the_Edges_of G;
 end;
 
 theorem ::tWESEQ04
-  ex lenWaa1 being even Nat st lenWaa1 = len W - 1 &
+  ex lenWaa1 being even Element of NAT st lenWaa1 = len W - 1 &
   len W.edgeSeq() = lenWaa1 div 2 by Lm46;
 
 theorem ::tWESEQ05
@@ -5073,7 +5170,7 @@ theorem Th84: ::tWESEQ07
     A2: len W.edgeSeq() = 1; then
     A3: len W.edgeSeq() = len <*e*> by FINSEQ_1:56;
     A4: W = <*x,e,y*> by A1, Def5;
-        now let k be Nat; assume
+        now let k be Element of NAT; assume
         A5: 1 <= k & k <= len W.edgeSeq();
         A6: k = 1 by A5, A2, XXREAL_0:1; then
             W.edgeSeq().k = W.(2*1) by A5, Def15
@@ -5101,10 +5198,10 @@ A1: len W = len W.reverse() by Lm9;
     2 * len W.edgeSeq() = 2 * len W1; then
 A2: len W1 = len W.edgeSeq(); then
 A3: len W1 = len W2 by FINSEQ_5:def 3;
-    now let n be Nat; assume
+    now let n be Element of NAT; assume
     A4: 1 <= n & n <= len W1;
         set rn = len W.edgeSeq() - n + 1;
-        reconsider rn as Nat by A2,A4,FINSEQ_5:1;
+        reconsider rn as Element of NAT by A2,A4,FINSEQ_5:1;
     A5: n in Seg len W.edgeSeq() by A2, A4, FINSEQ_1:3; then
         rn in Seg len W.edgeSeq() by FINSEQ_5:2; then
     A6: 1 <= rn & rn <= len W.edgeSeq() by FINSEQ_1:3;
@@ -5138,7 +5235,7 @@ A2: len W4 = len W1.edgeSeq() + len W2.edgeSeq() by FINSEQ_1:35;
     2*len W3.edgeSeq() = 2*(len W1.edgeSeq() + len W2.edgeSeq()); then
 A3: len W3.edgeSeq() = len W4 by A2;
 A4: W3 = W1 ^' W2 by A1, Def10;
-    now let n be Nat; assume
+    now let n be Element of NAT; assume
     A5: 1 <= n & n <= len W3.edgeSeq(); then
     A6: n in dom W4 by A3, FINSEQ_3:27;
     A7: W3.edgeSeq().n = W3.(2*n) by A5, Def15;
@@ -5151,12 +5248,13 @@ A4: W3 = W1 ^' W2 by A1, Def10;
             2*n in dom W1 by A8, Lm45; then
             1 <= 2*n & 2*n <= len W1 by FINSEQ_3:27;
             hence W3.edgeSeq().n = W4.n by A4,A7,A10,GRAPH_2:14; end;
-        suppose ex k being Nat st k in dom W2.edgeSeq() &
-                n = len W1.edgeSeq() + k; then consider k being Nat such that
+        suppose ex k being Element of NAT st k in dom W2.edgeSeq() &
+                n = len W1.edgeSeq() + k;
+                then consider k being Element of NAT such that
         A11: k in dom W2.edgeSeq() & n = len W1.edgeSeq() + k;
         A12: 1 <= k & k <= len W2.edgeSeq() by A11, FINSEQ_3:27; then
             1 <= k+k by NAT_1:37; then
-            reconsider 2kaa1 = 2*k-1 as Nat by INT_1:18;
+            reconsider 2kaa1 = 2*k-1 as Element of NAT by INT_1:18;
         A13: W4.n = W2.edgeSeq().k by A11, FINSEQ_1:def 7
                 .= W2.(2*k) by A12, Def15;
             2*n+1 = 2*k + (2*len W1.edgeSeq()+1) by A11
@@ -5190,7 +5288,7 @@ A1: W1 = W2;
         2 * len ES1 = 2 * len ES2;
         hence
     A2: len ES2 = len ES1;
-        let x be Nat; assume x in Seg len ES1; then
+        let x be Element of NAT; assume x in Seg len ES1; then
         x in dom ES1 by FINSEQ_1:def 3; then
     A3: 1 <= x & x <= len ES1 & x <= len ES2 by A2, FINSEQ_3:27;
         hence ES1.x = W2.(2*x) by A1, Def15
@@ -5201,7 +5299,7 @@ end;
 
 theorem ::tWVERTICES01
   x in W.vertices() iff
-     ex n being odd Nat st n <= len W & W.n = x by Lm49;
+     ex n being odd Element of NAT st n <= len W & W.n = x by Lm49;
 
 theorem Th89: ::tWVERTICES02
     W.first() in W.vertices() & W.last() in W.vertices() proof
@@ -5211,9 +5309,9 @@ theorem Th89: ::tWVERTICES02
 end;
 
 theorem Th90: ::tWVERTICES03
-  for n being odd Nat st n <= len W holds
+  for n being odd Element of NAT st n <= len W holds
     W.vertexAt(n) in W.vertices() proof
-    let n be odd Nat; assume
+    let n be odd Element of NAT; assume
 A1: n <= len W;
     W.vertexAt(n) = W.n by A1, Def8;
     hence thesis by A1, Lm49;
@@ -5223,7 +5321,7 @@ theorem ::tWVERTICES04
   G.walkOf(v).vertices() = {v} proof
     now let x be set;
         hereby assume x in G.walkOf(v).vertices(); then
-            consider n being odd Nat such that
+            consider n being odd Element of NAT such that
         A1: n <= len G.walkOf(v) & G.walkOf(v).n = x by Lm49;
         A2: n <= 1 by A1, Th14;
             1 <= n by HEYTING3:1; then
@@ -5254,17 +5352,17 @@ theorem ::tWVERTICES06
     now let x be set;
         hereby assume
         A1: x in W.vertices(); then
-            consider n being odd Nat such that
+            consider n being odd Element of NAT such that
         A2: n <= len W & W.n = x by Lm49;
             1 <= n by HEYTING3:1; then
         A3: n in dom W by A2, FINSEQ_3:27; then
         A4: W.reverse().(len W - n + 1) = x by A2, Th25;
-            reconsider lenW = len W as odd Nat;
-        A5: lenW-n+1 is odd Nat by A2, FINSEQ_5:1;
+            reconsider lenW = len W as odd Element of NAT;
+        A5: lenW-n+1 is odd Element of NAT by A2, FINSEQ_5:1;
             n in Seg len W by A3, FINSEQ_1:def 3; then
             lenW-n+1 in Seg len W by FINSEQ_5:2; then
         A6: lenW-n+1 in dom W by FINSEQ_1:def 3; then
-            lenW-n+1 is Nat; then
+            lenW-n+1 is Element of NAT; then
             lenW-n+1 <= len W by A6,FINSEQ_3:27; then
         A7: lenW-n+1 <= len W.reverse() by Lm9;
             reconsider v=x as Vertex of G by A1;
@@ -5272,14 +5370,14 @@ theorem ::tWVERTICES06
         end;
         assume
     A8: x in W.reverse().vertices(); then
-        consider n being odd Nat such that
+        consider n being odd Element of NAT such that
     A9: n <= len W.reverse() & W.reverse().n = x by Lm49;
     A10: 1 <= n by HEYTING3:1; then
         n in dom W.reverse() by A9, FINSEQ_3:27; then
     A11: W.(len W - n + 1) = x by A9, FINSEQ_5:def 3;
-        reconsider lenW = len W as odd Nat;
+        reconsider lenW = len W as odd Element of NAT;
     A12: n <= len W by A9, Lm9; then
-    A13: lenW-n+1 is odd Nat by FINSEQ_5:1;
+    A13: lenW-n+1 is odd Element of NAT by FINSEQ_5:1;
         n in Seg len W by A10,A12, FINSEQ_1:3; then
         lenW-n+1 in Seg len W by FINSEQ_5:2; then
     A14: lenW-n+1 <= len W by A13, FINSEQ_1:3;
@@ -5298,7 +5396,7 @@ A2: W = W1 ^' W2 by Def10;
     now let x be set;
         hereby assume
         A3: x in W.vertices(); then reconsider v=x as Vertex of G;
-            consider n being odd Nat such that
+            consider n being odd Element of NAT such that
         A4: n <= len W & W.n = v by A3, Lm49;
         A5: 1 <= n by HEYTING3:1;
             now per cases;
@@ -5311,12 +5409,13 @@ A2: W = W1 ^' W2 by Def10;
             suppose
             A7: n > len W1; then consider k being Nat such that
             A8: len W1 + k = n by NAT_1:28;
-                reconsider lenW1 = len W1 as odd Nat;
+                reconsider lenW1 = len W1 as odd Element of NAT;
                 now assume k is odd; then
-                   reconsider k'=k as odd Nat;
+                   reconsider k'=k as odd Element of NAT by ORDINAL1:def 13;
                    lenW1 + k' = n by A8;
                    hence contradiction;
-                end; then reconsider k as even Nat;
+                end; then reconsider k as even Element of NAT
+                by ORDINAL1:def 13;
                 k <> 0 by A7, A8 ; then
                 0 < k; then
             A9: 0+1 <= k by NAT_1:38;
@@ -5336,7 +5435,7 @@ A2: W = W1 ^' W2 by Def10;
         assume
     A12: x in W1.vertices() \/ W2.vertices();
     A13: now assume x in W1.vertices(); then
-            consider n being odd Nat such that
+            consider n being odd Element of NAT such that
         A14: n <= len W1 & W1.n = x by Lm49;
             1 <= n by HEYTING3:1; then
             n in dom W1 by A14, FINSEQ_3:27; then
@@ -5347,7 +5446,8 @@ A2: W = W1 ^' W2 by Def10;
         now per cases by A12, XBOOLE_0:def 2;
         suppose x in W1.vertices();
             hence x in W.vertices() by A13; end;
-        suppose x in W2.vertices(); then consider n being odd Nat such that
+        suppose x in W2.vertices();
+        then consider n being odd Element of NAT such that
         A15: n <= len W2 & W2.n = x by Lm49;
             now per cases;
             suppose n = 1; then
@@ -5355,11 +5455,11 @@ A2: W = W1 ^' W2 by Def10;
                 hence x in W.vertices() by A13,Th89; end;
             suppose n <> 1;
                 1 <= n by HEYTING3:1; then
-                reconsider naa1 = n-1 as even Nat by INT_1:18;
+                reconsider naa1 = n-1 as even Element of NAT by INT_1:18;
                 naa1 < len W2 - 0 by A15, REAL_1:92; then
             A16: W.(len W1 + naa1) = W2.(naa1 + 1) & (len W1 + naa1) in dom W
                   by A1, Lm17;
-                reconsider lenW1 = len W1 as odd Nat;
+                reconsider lenW1 = len W1 as odd Element of NAT;
                 lenW1 + naa1 <= len W by A16, FINSEQ_3:27;
                 hence x in W.vertices() by A16,A15,Lm49; end;
             end;
@@ -5371,15 +5471,15 @@ A2: W = W1 ^' W2 by Def10;
 end;
 
 theorem ::tWVERTICES08
-  for m,n being odd Nat st m <= n & n <= len W holds
+  for m,n being odd Element of NAT st m <= n & n <= len W holds
     W.cut(m,n).vertices() c= W.vertices() proof
-    let m, n be odd Nat; set W2 = W.cut(m,n); assume
+    let m, n be odd Element of NAT; set W2 = W.cut(m,n); assume
 A1: m <= n & n <= len W;
     now let x be set; assume x in W2.vertices(); then
-    consider n being odd Nat such that
+    consider n being odd Element of NAT such that
 A2: n <= len W2 & W2.n = x by Lm49;
     1 <= n by HEYTING3:1; then
-    reconsider naa1 = n - 1 as even Nat by INT_1:18;
+    reconsider naa1 = n - 1 as even Element of NAT by INT_1:18;
     naa1 < len W2 - 0 by A2, REAL_1:92; then
 A3: W2.(naa1+1) = W.(m+naa1) & m+naa1 in dom W by A1, Lm19; then
     m+naa1 <= len W by FINSEQ_3:27;
@@ -5449,9 +5549,9 @@ theorem ::tWVERTICES11
      ex W' being Walk of G st W' is_Walk_from x,y proof
     assume
 A1: x in W.vertices() & y in W.vertices(); then
-    consider m being odd Nat such that
+    consider m being odd Element of NAT such that
 A2: m <= len W & W.m = x by Lm49;
-    consider n being odd Nat such that
+    consider n being odd Element of NAT such that
 A3: n <= len W & W.n = y by A1, Lm49;
     now per cases;
         suppose m <= n; then
@@ -5471,21 +5571,21 @@ theorem Th99: ::tWVERTICES12
 
 theorem ::tWEDGES01
    e in W.edges() iff
-     ex n being even Nat st 1 <= n & n <= len W & W.n = e by Lm50;
+     ex n being even Element of NAT st 1 <= n & n <= len W & W.n = e by Lm50;
 
 theorem Th101: ::tWEDGES02
   e in W.edges() iff
-    ex n being odd Nat st n < len W & W.(n+1) = e proof
+    ex n being odd Element of NAT st n < len W & W.(n+1) = e proof
     hereby assume e in W.edges(); then
-        consider n1 being even Nat such that
+        consider n1 being even Element of NAT such that
     A1: 1 <= n1 & n1 <= len W & W.n1 = e by Lm50;
-        reconsider n = n1-1 as odd Nat by A1, INT_1:18;
+        reconsider n = n1-1 as odd Element of NAT by A1, INT_1:18;
         take n;
         n1-1 < len W - 0 by A1, REAL_1:92;
         hence n < len W;
         thus W.(n+1) = e by A1;
     end;
-    given n being odd Nat such that
+    given n being odd Element of NAT such that
 A2: n < len W & W.(n+1) = e;
 A3: n+1 <= len W by A2,NAT_1:38;
     1 <= n+1 by NAT_1:37;
@@ -5495,7 +5595,7 @@ end;
 theorem Th102: ::tWEDGES03
   rng W = W.vertices() \/ W.edges() proof
     now let y be set; assume y in rng W; then
-        consider x being Nat such that
+        consider x being Element of NAT such that
     A1: x in dom W & W.x = y by FINSEQ_2:11;
     A2: 1 <= x & x <= len W by A1, FINSEQ_3:27;
         now per cases;
@@ -5513,13 +5613,13 @@ A3: rng W c= W.vertices() \/ W.edges() by TARSKI:def 3;
     A4: y in W.vertices() \/ W.edges();
         now per cases by A4, XBOOLE_0:def 2;
             suppose y in W.vertices(); then
-            consider x being odd Nat such that
+            consider x being odd Element of NAT such that
         A5: x <= len W & W.x = y by Lm49;
             1 <= x by HEYTING3:1; then
             x in dom W by A5, FINSEQ_3:27;
             hence y in rng W by A5, FUNCT_1:def 5; end;
             suppose y in W.edges(); then
-            consider x being even Nat such that
+            consider x being even Element of NAT such that
         A6: 1 <= x & x <= len W & W.x = y by Lm50;
             x in dom W by A6, FINSEQ_3:27;
             hence y in rng W by A6, FUNCT_1:def 5; end;
@@ -5539,9 +5639,10 @@ theorem Th103: ::tWEDGES04
 A1: W1.last() = W2.first(); then
 A2: W = W1 ^' W2 by Def10;
     set lenW1 = len W1, lenW2 = len W2;
-    reconsider lenW1, lenW2 as odd Nat;
+    reconsider lenW1, lenW2 as odd Element of NAT;
     now let x be set;
-        hereby assume x in WE; then consider n being even Nat such that
+        hereby assume x in WE;
+        then consider n being even Element of NAT such that
         A3: 1 <= n & n <= len W & W.n = x by Lm50;
             now per cases;
             suppose
@@ -5550,7 +5651,7 @@ A2: W = W1 ^' W2 by Def10;
                 x in W1E by A3, A4, Lm50;
                 hence x in W1E \/ W2E by XBOOLE_0:def 2; end;
             suppose len W1 < n; then
-                reconsider k = n-lenW1 as odd Nat by INT_1:18;
+                reconsider k = n-lenW1 as odd Element of NAT by INT_1:18;
             A5: 1 <= k by HEYTING3:1;
                 n - lenW1 + len W1 < len W + 1 by A3,NAT_1:38; then
                 n-lenW1 + lenW1 < lenW2 + len W1 by A1, Lm13; then
@@ -5567,16 +5668,18 @@ A2: W = W1 ^' W2 by Def10;
         assume
     A9: x in W1E \/ W2E;
         now per cases by A9, XBOOLE_0:def 2;
-            suppose x in W1E; then consider n being even Nat such that
+            suppose x in W1E;
+            then consider n being even Element of NAT such that
         A10: 1 <= n & n <= len W1 & W1.n = x by Lm50;
         A11: W.n = x by A2, A10, GRAPH_2:14;
             len W1 <= len W by A1, Lm14; then
             n <= len W by A10, XXREAL_0:2;
             hence x in WE by A10, A11, Lm50; end;
 
-            suppose x in W2E; then consider n being even Nat such that
+            suppose x in W2E;
+            then consider n being even Element of NAT such that
         A12: 1 <= n & n <= len W2 & W2.n = x by Lm50;
-            reconsider naa1 = n-1 as odd Nat by A12, INT_1:18;
+            reconsider naa1 = n-1 as odd Element of NAT by A12, INT_1:18;
         A13: 1 <= naa1 by HEYTING3:1;
              naa1 < len W2 by A12, SPPOL_1:5; then
         A14:  W.(lenW1 + naa1) = W2.(naa1+1) by A2, A13, GRAPH_2:15
@@ -5594,22 +5697,23 @@ A2: W = W1 ^' W2 by Def10;
 end;
 
 theorem ::tWEDGES05
-  e in W.edges() implies ex v1, v2 being Vertex of G, n being odd Nat st
+  e in W.edges() implies
+  ex v1, v2 being Vertex of G, n being odd Element of NAT st
     n+2 <= len W & v1 = W.n & e = W.(n+1) & v2 = W.(n+2) &
     e Joins v1, v2,G by Lm51;
 
 theorem Th105: ::tWEDGES06
   e in W.edges() iff
-    ex n being Nat st n in dom W.edgeSeq() & W.edgeSeq().n = e proof
+    ex n being Element of NAT st n in dom W.edgeSeq() & W.edgeSeq().n = e proof
     hereby assume e in W.edges(); then
         e in rng W.edgeSeq(); then
         consider n being set such that
     A1: n in dom W.edgeSeq() & W.edgeSeq().n = e by FUNCT_1:def 5;
-        reconsider n as Nat by A1;
+        reconsider n as Element of NAT by A1;
         take n;
         thus n in dom W.edgeSeq() & W.edgeSeq().n = e by A1;
     end;
-    given n being Nat such that
+    given n being Element of NAT such that
 A2: n in dom W.edgeSeq() & W.edgeSeq().n = e;
     e in rng W.edgeSeq() by A2, FUNCT_1:def 5;
     hence thesis;
@@ -5624,12 +5728,12 @@ theorem ::tWEDGES08
     now per cases;
     suppose
     A1: m is odd & n is odd & m <= n & n <= len W; then
-        reconsider m' = m as odd Nat;
+        reconsider m' = m as odd Element of NAT;
         now let e be set; assume e in W.cut(m,n).edges(); then
-            consider x being even Nat such that
+            consider x being even Element of NAT such that
         A2: 1 <= x & x <= len W.cut(m,n) & W.cut(m,n).x = e
               by Lm50;
-            reconsider xaa1 = x-1 as odd Nat by A2, INT_1:18;
+            reconsider xaa1 = x-1 as odd Element of NAT by A2, INT_1:18;
         A3: xaa1+1 = x;
             xaa1 < len W.cut(m,n) - 0 by A2, REAL_1:92; then
         A4: e = W.(m+xaa1) & m+xaa1 in dom W by A1, A2, A3, Lm19; then
@@ -5647,24 +5751,24 @@ theorem Th108: ::tWEDGES09
   W.edges() = W.reverse().edges() proof
     now let e be set;
         hereby assume e in W.edges(); then
-            consider n being even Nat such that
+            consider n being even Element of NAT such that
         A1: 1 <= n & n <= len W & W.n = e by Lm50;
             n in dom W by A1, FINSEQ_3:27; then
         A2: e = W.reverse().(len W - n + 1) &
               (len W - n + 1) in dom W.reverse() by A1, Th25; then
-            reconsider rn = len W - n + 1 as even Nat;
+            reconsider rn = len W - n + 1 as even Element of NAT;
             1 <= rn & rn <= len W.reverse() by A2, FINSEQ_3:27;
             hence e in W.reverse().edges() by A2, Lm50;
 
         end;
         assume e in W.reverse().edges(); then
-        consider n being even Nat such that
+        consider n being even Element of NAT such that
     A3: 1 <= n & n <= len W.reverse() & W.reverse().n = e by Lm50;
         n in dom W.reverse() by A3, FINSEQ_3:27; then
     A4: e = W.reverse().reverse().(len W.reverse() - n + 1) &
           (len W.reverse() - n + 1) in dom W.reverse().reverse()
           by A3, Th25; then
-        reconsider rn = len W.reverse() - n + 1 as even Nat;
+        reconsider rn = len W.reverse() - n + 1 as even Element of NAT;
     A5: e = W.rn & rn in dom W by A4, Lm12; then
         1 <= rn & rn <= len W by FINSEQ_3:27;
         hence e in W.edges() by A5, Lm50;
@@ -5682,7 +5786,7 @@ theorem Th109: ::tWEDGES10
     end;
     assume W.edges() = {e}; then
     e in W.edges() by TARSKI:def 1; then
-    consider n being even Nat such that
+    consider n being even Element of NAT such that
 A1: 1 <= n & n <= len W & W.n = e by Lm50;
 A2: 2*0+1 < n by A1, REAL_1:def 5;
     now assume not e Joins x,y,G; then
@@ -5695,7 +5799,7 @@ end;
 theorem ::tWEDGES11
   W.edges() c= G.edgesBetween(W.vertices()) proof
     now let e be set; assume e in W.edges(); then
-        consider v1,v2 being Vertex of G, n being odd Nat such that
+        consider v1,v2 being Vertex of G, n being odd Element of NAT such that
     A1: n+2 <= len W & v1 = W.n & e = W.(n+1) & v2 = W.(n+2) &
         e Joins v1,v2,G by Lm51;
         n < len W by A1, Th1; then
@@ -5743,9 +5847,9 @@ theorem ::tWLENGTH03
       W1.length() = W2.length() by Th87;
 
 theorem Th116: ::tWFINDV01
-  for n being odd Nat st n <= len W holds
+  for n being odd Element of NAT st n <= len W holds
     W.find(W.n) <= n & W.rfind(W.n) >= n proof
-    let n be odd Nat; assume
+    let n be odd Element of NAT; assume
 A1: n <= len W; then
 A2: W.n in W.vertices() by Lm49;
     hence W.find(W.n) <= n by A1,Def19;
@@ -5762,11 +5866,13 @@ A1: W1 = W2;
     A2: v in W1.vertices(); then
     A3: v in W2.vertices() by A1,Th99;
         W1.find(v) <= len W2 & W2.(W1.find(v)) = v &
-        for n being odd Nat st n <= len W2 & W2.n = v holds W1.find(v) <= n
+        for n being odd Element of NAT st n <= len W2 & W2.n = v
+        holds W1.find(v) <= n
           by A1, A2, Def19;
         hence W1.find(v) = W2.find(v) by A3,Def19;
         W1.rfind(v) <= len W2 & W2.(W1.rfind(v)) = v &
-          for n being odd Nat st n <= len W2 & W2.n = v holds n <= W1.rfind(v)
+          for n being odd Element of NAT st n <= len W2 & W2.n = v
+          holds n <= W1.rfind(v)
           by A1, A2, Def21;
         hence W1.rfind(v) = W2.rfind(v) by A3,Def21; end;
     suppose
@@ -5781,7 +5887,7 @@ A1: W1 = W2;
 end;
 
 theorem ::tWFINDN01
-  for n being odd Nat st n <= len W holds
+  for n being odd Element of NAT st n <= len W holds
     W.find(n) <= n & W.rfind(n) >= n by Lm54, Lm55;
 
 theorem Th119: ::tCLWALK01
@@ -5830,7 +5936,7 @@ end;
 
 theorem ::tDIWALK01
   W is directed iff
-  for n being odd Nat st n < len W
+  for n being odd Element of NAT st n < len W
     holds W.(n+1) DJoins W.n, W.(n+2), G by Lm56;
 
 theorem ::tDIWALK02
@@ -5839,7 +5945,7 @@ theorem ::tDIWALK02
     by Lm57;
 
 theorem ::tDIWALK03
-  for W being DWalk of G, m,n being Nat holds
+  for W being DWalk of G, m,n being Element of NAT holds
     W.cut(m,n) is directed;
 
 theorem ::tTVWALK01
@@ -5877,7 +5983,7 @@ A2: W2 <> {} by FINSEQ_1:25;
     A3: W1.append(W2) = W1 ^' W2 by Def10; then
         len W1.append(W2) + 1 = len W1 + 1 by A1, A2, GRAPH_2:13; then
     A4: len W1.append(W2) = len W1;
-        for k being Nat st 1 <= k & k <= len W1.append(W2)
+        for k being Element of NAT st 1 <= k & k <= len W1.append(W2)
           holds W1.append(W2).k = W1.k by A3,A4,GRAPH_2:14;
         hence thesis by A4, FINSEQ_1:18; end;
     suppose W1.last() <> W2.first();
@@ -5887,9 +5993,9 @@ A2: W2 <> {} by FINSEQ_1:25;
 end;
 
 theorem ::tTVWALK07
-  for m, n being odd Nat st m <= n & n <= len W holds
+  for m, n being odd Element of NAT st m <= n & n <= len W holds
     W.cut(m,n) is trivial iff m = n proof
-    let m, n be odd Nat; assume m <= n & n <= len W; then
+    let m, n be odd Element of NAT; assume m <= n & n <= len W; then
     len W.cut(m,n) + m = n + 1 by Lm19; then
 A1: len W.cut(m,n) = n + 1 - m
                   .= (n - m) + 1;
@@ -5911,12 +6017,14 @@ A1: 1 + 0 < len W + 2 by XREAL_1:10;
 end;
 
 theorem Th134: ::tTVWALK09
-  W is non trivial implies ex lenW2 being odd Nat st lenW2 = len W - 2 &
+  W is non trivial implies ex lenW2 being odd Element of NAT
+  st lenW2 = len W - 2 &
     W.cut(1,lenW2).addEdge(W.(lenW2+1)) = W proof
     assume W is non trivial; then
 A1: len W >= 3 by Lm59;
     set lenW2 = len W - 2*1;
-    2 <= len W by A1, XXREAL_0:2; then reconsider lenW2 as odd Nat by INT_1:18;
+    2 <= len W by A1, XXREAL_0:2; then reconsider lenW2 as odd Element of NAT
+    by INT_1:18;
     take lenW2;
     thus lenW2 = len W - 2;
     set W1 = W.cut(1,lenW2), e = W.(lenW2+1);
@@ -5932,21 +6040,21 @@ theorem Th135: ::tTVWALK10
 A1: W2 is non trivial & W2.edges() c= W1.edges(); then
 A2: 3 <= len W2 by Lm59;
     now let v be set; assume v in W2.vertices(); then
-        consider n being odd Nat such that
+        consider n being odd Element of NAT such that
     A3: n <= len W2 & W2.n = v by Lm49;
         now per cases;
         suppose n = len W2; then
             3-1 < n-0 by A2, REAL_1:92; then
-            reconsider n5 = n-2*1 as odd Nat by INT_1:18;
+            reconsider n5 = n-2*1 as odd Element of NAT by INT_1:18;
             n5 < n - 0 by REAL_1:92; then
         A4: n5 < len W2 by A3, XXREAL_0:2; then
         A5: W2.(n5+1) Joins W2.n5, W2.(n5+2), G by Def3;
             1 <= n5+1 & n5+1 <= len W2
               by A4,NAT_1:37,NAT_1:38; then
             W2.(n5+1) in W2.edges() by Lm50; then
-            consider m being even Nat such that
+            consider m being even Element of NAT such that
         A6: 1 <= m & m <= len W1 & W1.m = W2.(n5+1) by A1,Lm50;
-            reconsider maa1 = m - 1 as odd Nat by A6, INT_1:18;
+            reconsider maa1 = m - 1 as odd Element of NAT by A6, INT_1:18;
         A7: maa1 < len W1 - 0 by A6, REAL_1:92; then
         A8: W1.(maa1+1) Joins W1.maa1, W1.(maa1+2), G by Def3;
         A9: W1.maa1 = W1.vertexAt(maa1) by A7, Def8;
@@ -5958,10 +6066,10 @@ A2: 3 <= len W2 by Lm59;
         suppose n <> len W2; then
         A11: n < len W2 by A3, REAL_1:def 5; then
             W2.(n+1) in W2.edges() by Th101; then
-            consider m being even Nat such that
+            consider m being even Element of NAT such that
         A12: 1 <= m & m <= len W1 & W1.m = W2.(n+1) by A1,Lm50;
         A13: W1.m Joins v, W2.(n+2),G by A11,A3,A12,Def3;
-            reconsider maa1 = m - 1 as odd Nat by A12, INT_1:18;
+            reconsider maa1 = m - 1 as odd Element of NAT by A12, INT_1:18;
         A14: maa1 < len W1 - 0 by A12, REAL_1:92; then
         A15: W1.(maa1+1) Joins W1.maa1, W1.(maa1+2), G by Def3;
         A16: W1.maa1 = W1.vertexAt(maa1) by A14, Def8;
@@ -5982,7 +6090,7 @@ theorem ::tTVWALK11
     assume W is non trivial; then
 A1: len W <> 1 by Lm60;
     let v be Vertex of G; assume v in W.vertices(); then
-    consider n being odd Nat such that
+    consider n being odd Element of NAT such that
 A2: n <= len W & W.n = v by Lm49;
     now per cases;
     suppose
@@ -5990,7 +6098,7 @@ A2: n <= len W & W.n = v by Lm49;
         1 <= len W by HEYTING3:1; then
         1 < len W by A1, REAL_1:def 5; then
         1+1 <= len W by NAT_1:38; then
-        reconsider lenW2 = len W - 2*1 as odd Nat by INT_1:18;
+        reconsider lenW2 = len W - 2*1 as odd Element of NAT by INT_1:18;
         lenW2 < len W - 0 by REAL_1:92; then
         W.(lenW2+1) Joins W.lenW2,W.(lenW2+2),G by Def3; then
         W.(lenW2+1) Joins v,W.lenW2,G by A2,A3,GLIB_000:17; then
@@ -6030,7 +6138,7 @@ end;
 
 theorem ::tTLWALK01
   W is Trail-like iff
-  for m,n being even Nat st 1 <= m & m < n & n <= len W holds
+  for m,n being even Element of NAT st 1 <= m & m < n & n <= len W holds
     W.m <> W.n by Lm62;
 
 theorem ::tTLWALK02
@@ -6040,7 +6148,8 @@ theorem ::tTLWALK03
   W is Trail-like iff W.reverse() is Trail-like by Lm63;
 
 theorem ::tTLWALK04
-  for W being Trail of G, m,n being Nat holds W.cut(m,n) is Trail-like;
+  for W being Trail of G, m,n being Element of NAT
+  holds W.cut(m,n) is Trail-like;
 
 theorem ::tTLWALK05
   for W being Trail of G, e being set
@@ -6053,7 +6162,7 @@ theorem ::tTLWALK06
     holds v = W.first() or v = W.last() proof
     let W be Trail of G, v be Vertex of G; assume
 A1: v in W.vertices() & v is endvertex; then
-    consider n being odd Nat such that
+    consider n being odd Element of NAT such that
 A2: n <= len W & W.n = v by Lm49;
 A3: W.vertexAt(n) = v by A2, Def8;
     consider e being set such that
@@ -6063,7 +6172,7 @@ A4: v.edgesInOut() = {e} & not e Joins v,v,G by A1, GLIB_000:def 53;
     A6: n <> 1 & n <> len W by A2;
     A7: 1 <= n by HEYTING3:1; then
     A8: 1 < n by A6, REAL_1:def 5;
-        reconsider naa1 = n-1 as even Nat by A7,INT_1:18;
+        reconsider naa1 = n-1 as even Element of NAT by A7,INT_1:18;
         1+1 <= n by A8, NAT_1:38; then
     A9: 1+1-1 <= n-1 by REAL_1:92;
         n <> len W by A2, A5; then
@@ -6122,15 +6231,17 @@ theorem ::tPLWALK01
   len W <= 3 implies W is Path-like by Lm74;
 
 theorem ::tPLWALK02
-  (for m,n being odd Nat st m <= len W & n <= len W & W.m = W.n holds m = n)
+  (for m,n being odd Element of NAT st m <= len W & n <= len W & W.m = W.n
+  holds m = n)
       implies W is Path-like by Lm71;
 
 theorem ::tPLWALK03
   for W being Path of G st W is open holds
-    for m, n being odd Nat st m < n & n <= len W holds W.m <> W.n proof
+    for m, n being odd Element of NAT st m < n & n <= len W holds W.m <> W.n
+    proof
     let W be Path of G; assume
 A1: W is open;
-    let m, n be odd Nat; assume
+    let m, n be odd Element of NAT; assume
 A2: m < n & n <= len W;
     now assume
     A3: W.m = W.n; then
@@ -6144,21 +6255,21 @@ theorem ::tPLWALK04
    W is Path-like iff W.reverse() is Path-like by Lm68;
 
 theorem ::tPLWALK05
-   for W being Path of G, m, n being Nat
+   for W being Path of G, m, n being Element of NAT
      holds W.cut(m,n) is Path-like;
 
 theorem Th151: ::tPLWALK06
   for W being Path of G, e,v being set
    st e Joins W.last(),v,G & not e in W.edges() & (W is trivial or W is open) &
-     for n being odd Nat st 1 < n & n <= len W holds W.n <> v holds
+     for n being odd Element of NAT st 1 < n & n <= len W holds W.n <> v holds
    W.addEdge(e) is Path-like proof
     let W be Path of G, e,v be set; assume
 A1: e Joins W.last(), v,G & not e in W.edges() & (W is trivial or W is open) &
-    (for n being odd Nat st 1 < n & n <= len W holds W.n <> v); then
+    (for n being odd Element of NAT st 1 < n & n <= len W holds W.n <> v); then
 A2: e in W.last().edgesInOut() by GLIB_000:65;
-    set W2 = W.addEdge(e); reconsider lenW = len W as odd Nat;
+    set W2 = W.addEdge(e); reconsider lenW = len W as odd Element of NAT;
     now thus W2 is Trail-like by A1, A2, Lm65;
-        let m, n be odd Nat; assume
+        let m, n be odd Element of NAT; assume
     A3: m < n & n <= len W2 & W2.m = W2.n;
         now per cases by A1;
         suppose
@@ -6232,27 +6343,29 @@ theorem ::tPLWALK07
     holds W.addEdge(e) is Path-like by Lm73;
 
 theorem ::tPLWALK08
-  (for n being odd Nat st n <= len W holds W.find(W.n) = W.rfind(W.n))
+  (for n being odd Element of NAT st n <= len W
+  holds W.find(W.n) = W.rfind(W.n))
     implies W is Path-like proof
     assume
-A1: for n being odd Nat st n <= len W holds W.find(W.n) = W.rfind(W.n);
-A2: now let x be odd Nat; assume
+A1: for n being odd Element of NAT st n <= len W
+holds W.find(W.n) = W.rfind(W.n);
+A2: now let x be odd Element of NAT; assume
     A3: x <= len W;
     A4: W.find(W.x) <= x by A3, Th116;
     A5: W.rfind(W.x) >= x by A3, Th116;
         W.find(W.x) = W.rfind(W.x) by A3, A1;
         hence W.find(W.x) = x & W.rfind(W.x) = x by A4, A5, XXREAL_0:1;
     end;
-    now let m, n be even Nat; assume
+    now let m, n be even Element of NAT; assume
     A6: 1 <= m & m < n & n <= len W; then
         1 <= m & m <= len W by XXREAL_0:2; then
          m in dom W by FINSEQ_3:27; then
-        consider maa1 being odd Nat such that
+        consider maa1 being odd Element of NAT such that
     A7: maa1 = m-1 & m-1 in dom W & m+1 in dom W &
          W.m Joins W.(maa1), W.(m+1),G by Lm4;
          1 <= n & n <= len W by A6, XXREAL_0:2; then
         n in dom W by FINSEQ_3:27; then
-        consider naa1 being odd Nat such that
+        consider naa1 being odd Element of NAT such that
     A8: naa1 = n-1 & n-1 in dom W & n+1 in dom W &
           W.n Joins W.(naa1), W.(n+1),G by Lm4;
         now assume
@@ -6279,7 +6392,7 @@ A2: now let x be odd Nat; assume
         hence W.m <> W.n;
     end; then
 A12: W is Trail-like by Lm62;
-    now let m, n be odd Nat; assume
+    now let m, n be odd Element of NAT; assume
     A13: m < n & n <= len W & W.m = W.n; then
         m <= len W by XXREAL_0:2; then
         W.find(W.m) = m & W.find(W.m) = n by A2, A13;
@@ -6289,7 +6402,7 @@ A12: W is Trail-like by Lm62;
 end;
 
 theorem ::tPLWALK09
-  (for n being odd Nat st n <= len W holds W.rfind(n) = n)
+  (for n being odd Element of NAT st n <= len W holds W.rfind(n) = n)
     implies W is Path-like by Lm72;
 
 theorem ::tPLWALK10
@@ -6304,7 +6417,7 @@ theorem ::tPLWALK10
         hence thesis by NAT_1:37; end;
     suppose len W <> 1; then
         W is non trivial by Lm60; then
-        consider lenW2 being odd Nat such that
+        consider lenW2 being odd Element of NAT such that
     A1: lenW2 = len W - 2 & W.cut(1,lenW2).addEdge(W.(lenW2+1)) = W
           by Th134;
         set W2 = W.cut(1,lenW2), vs1 = W2.vertexSeq();
@@ -6337,11 +6450,11 @@ theorem ::tPLWALK10
                 .= b2 by A11, MCART_1:def 2;
         A14: a1 in dom vs1 & b1 = vs1.a1 & a2 in dom vs1 & b2 = vs1.a2
               by A9,A4,A10,A11,FUNCT_1:8;
-            reconsider a1,a2 as Nat by A14;
-        A15: now let n1,n2 be Nat; assume
+            reconsider a1,a2 as Element of NAT by A14;
+        A15: now let n1,n2 be Element of NAT; assume
             A16: n1<n2 & n1 in dom vs1 & n2 in dom vs1 & vs1.n1 = vs1.n2; then
             A17: 2*n1-1 in dom W2 & 2*n2-1 in dom W2 by Th74; then
-                reconsider a = 2*n1-1, b=2*n2-1 as odd Nat;
+                reconsider a = 2*n1-1, b=2*n2-1 as odd Element of NAT;
                 1 <= n1 & n1 <= len vs1 & 1 <= n2 & n2 <= len vs1
                   by A16, FINSEQ_3:27; then
             A18: vs1.n1 = W2.a & vs1.n2 = W2.b by Def14;
@@ -6389,7 +6502,7 @@ theorem ::tWVDISTINCT01
 A1: e Joins W.last(),v,G & not v in W.vertices();
     set W2 = W.addEdge(e);
 A2: len W2 = len W + 2 by A1,Lm41;
-A3: now let n be odd Nat; assume
+A3: now let n be odd Element of NAT; assume
     A4: n <= len W2 & n > len W; then
         len W + 1 <= n by NAT_1:38; then
         len W + 1 < n by REAL_1:def 5; then
@@ -6397,7 +6510,7 @@ A3: now let n be odd Nat; assume
         hence n = len W2 by A2,A4,XXREAL_0:1;
         hence W2.n = v by A1,A2,Lm42;
     end;
-    now let m,n be odd Nat; assume
+    now let m,n be odd Element of NAT; assume
     A5: m <= len W2 & n <= len W2 & W2.m = W2.n;
     A6: 1 <= m & 1 <= n by HEYTING3:1;
         now per cases;
@@ -6453,7 +6566,7 @@ theorem ::tCYWALK02
     ex W2 being Walk of G st W2 is_Walk_from x,y & not e in W2.edges() proof
     assume
 A1: e Joins x,y,G & e in W1.edges() & W1 is Cycle-like; then
-    consider v1,v2 being Vertex of G, n being odd Nat such that
+    consider v1,v2 being Vertex of G, n being odd Element of NAT such that
 A2: n+2 <= len W1 & v1 = W1.n & e = W1.(n+1) & v2 = W1.(n+2) &
       e Joins v1,v2,G by Lm51;
     set WA = W1.cut(n+2, len W1), WB = W1.cut(2*0+1,n);
@@ -6470,9 +6583,9 @@ A9: WA.last() = W1.last() & WB.first() = W1.last() by A3,A7,Def23;
     W1 is Path-like by A1, Def31; then
 A10: W1 is Trail-like by Def28;
 A11: now assume e in WA.edges(); then
-        consider m being even Nat such that
+        consider m being even Element of NAT such that
     A12: 1 <= m & m <= len WA & WA.m = e by Lm50;
-        reconsider maa1 = m-1 as odd Nat by A12, INT_1:18;
+        reconsider maa1 = m-1 as odd Element of NAT by A12, INT_1:18;
     A13: maa1+1 = m;
         maa1 < len WA - 0 by A12, REAL_1:92; then
     A14: e = W1.(n+2+maa1) & n+2+maa1 in dom W1 by A2, A12, A13, Lm19; then
@@ -6483,7 +6596,7 @@ A11: now assume e in WA.edges(); then
         hence contradiction by A2,A10,A14,A15,A17,Lm62;
     end;
 A18: now assume e in WB.edges(); then
-        consider m being even Nat such that
+        consider m being even Element of NAT such that
     A19: 1 <= m & m <= len WB & WB.m = e by Lm50;
         m in dom WB by A19, FINSEQ_3:27; then
     A20: W1.m = W1.(n+1) by A2, A5, A19, Lm27;
@@ -6548,11 +6661,11 @@ A1: W1 is Subwalk of W2; then
     consider es being FinSubsequence of W2.edgeSeq() such that
 A2: W1.edgeSeq() = Seq es by Def32;
     now let e be set; assume e in W1.edges(); then
-        consider n being even Nat such that
+        consider n being even Element of NAT such that
     A3: 1 <= n & n <= len W1 & W1.n = e by Lm50;
         n div 2 in dom Seq es & W1.n = (Seq es).(n div 2)
           by Lm44, A2, A3; then
-        consider m being Nat such that
+        consider m being Element of NAT such that
     A4: m in dom W2.edgeSeq() & n div 2 <= m & W1.n = W2.edgeSeq().m
           by Th4;
         thus e in W2.edges() by A3, A4, Th105;
@@ -6563,7 +6676,7 @@ A5: W1.edges() c= W2.edges() by TARSKI:def 3;
     suppose
     A6: W1 is trivial;
         now let v be set; assume v in W1.vertices(); then
-            consider n being odd Nat such that
+            consider n being odd Element of NAT such that
         A7: n <= len W1 & W1.n = v by Lm49;
             1 <= n & n <= 1 by A6,A7,Lm60,HEYTING3:1; then
             n = 1 by XXREAL_0:1; then
@@ -6580,23 +6693,24 @@ end;
 
 theorem Th165: ::tSUBWALK07
     W1 is Subwalk of W2 implies
-      for m being odd Nat st m <= len W1 holds
-       ex n being odd Nat st m <= n & n <= len W2 & W1.m = W2.n proof
+      for m being odd Element of NAT st m <= len W1 holds
+       ex n being odd Element of NAT st m <= n & n <= len W2 & W1.m = W2.n
+       proof
     assume
 A1: W1 is Subwalk of W2; then
     consider es being FinSubsequence of W2.edgeSeq() such that
 A2: W1.edgeSeq() = Seq es by Def32;
-    let m be odd Nat such that
+    let m be odd Element of NAT such that
 A3: m <= len W1;
     now per cases by A3, REAL_1:def 5;
     suppose
     A4: m < len W1; then
     A5: W1.(m+1) Joins W1.m, W1.(m+2), G by Def3;
-        reconsider m1= m+1 as even Nat;
+        reconsider m1= m+1 as even Element of NAT;
         1 <= m1 & m1 <= len W1 by A4,NAT_1:37, NAT_1:38; then
         m1 div 2 in dom W1.edgeSeq() & W1.m1 = W1.edgeSeq().(m1 div 2)
           by Lm44; then
-        consider x being Nat such that
+        consider x being Element of NAT such that
     A6: x in dom W2.edgeSeq() & m1 div 2 <= x & W1.m1 = W2.edgeSeq().x
           by A2, Th4; set n = 2*x;
     A7: 1 <= x & x <= len W2.edgeSeq() by A6, FINSEQ_3:27;
@@ -6604,7 +6718,7 @@ A3: m <= len W1;
     A8: 2 * (m1 div 2) = m1 by NAT_1:49;
         n in dom W2 by A6, Lm45; then
     A9: 1 <= n & n <= len W2 by FINSEQ_3:27; then
-        reconsider naa1 = n - 1 as odd Nat by INT_1:18;
+        reconsider naa1 = n - 1 as odd Element of NAT by INT_1:18;
     A10: naa1 < len W2 - 0 by A9, REAL_1:92; then
         W2.(naa1+1) Joins W2.naa1, W2.(naa1+2), G by Def3; then
     A11: W1.m1 Joins W2.naa1, W2.(naa1+2), G by A7,A6,Def15;
@@ -6632,16 +6746,17 @@ end;
 
 theorem ::tSUBWALK08
    W1 is Subwalk of W2 implies
-      for m being even Nat st 1 <= m & m <= len W1 holds
-       ex n being even Nat st m <= n & n <= len W2 & W1.m = W2.n proof
+      for m being even Element of NAT st 1 <= m & m <= len W1 holds
+       ex n being even Element of NAT st m <= n & n <= len W2 & W1.m = W2.n
+       proof
     assume W1 is Subwalk of W2; then
     consider es being FinSubsequence of W2.edgeSeq() such that
 A1: W1.edgeSeq() = Seq es by Def32;
-    let m be even Nat such that
+    let m be even Element of NAT such that
 A2: 1 <= m & m <= len W1;
     m div 2 in dom W1.edgeSeq() & W1.m = W1.edgeSeq().(m div 2)
       by A2, Lm44; then
-    consider ndiv2 being Nat such that
+    consider ndiv2 being Element of NAT such that
 A3: ndiv2 in dom W2.edgeSeq() & m div 2 <= ndiv2 & W1.m = W2.edgeSeq().ndiv2
       by A1, Th4;
     1 <= ndiv2 & ndiv2 <= len W2.edgeSeq() by A3, FINSEQ_3:27; then
@@ -6671,16 +6786,17 @@ A2: 1 < len W1 by A1, REAL_1:def 5;
         hence P is non trivial by A3,Th128; end;
     suppose W1 is closed; then
     A4: W1.1 = W1.(len W1) by Th119;
-        defpred P[Nat] means $1 is odd & 1 < $1 & $1 <= len W1 &
+        defpred P[Element of NAT] means $1 is odd & 1 < $1 & $1 <= len W1 &
           W1.($1) = W1.(len W1);
-    A5: ex k being Nat st P[k] by A2;
-        consider k being Nat such that
-    A6: P[k] & for m being Nat st P[m] holds k <= m from NAT_1:sch 5(A5);
-        reconsider k as odd Nat by A6;
+    A5: ex k being Element of NAT st P[k] by A2;
+        consider k being Element of NAT such that
+    A6: P[k] & for m being Element of NAT st P[m] holds k <= m
+    from NAT_1:sch 5(A5);
+        reconsider k as odd Element of NAT by A6;
         set W3 = W1.remove(k,len W1);
         1+1 < k+1 by A6, XREAL_1:10; then
         2 <= k by NAT_1:38; then
-        reconsider k2 = k - 2*1 as odd Nat by INT_1:18;
+        reconsider k2 = k - 2*1 as odd Element of NAT by INT_1:18;
         set W4 = W3.cut(2*0+1,k2);
         consider W5 being Path of W4;
         set e = W1.(k2+1), W2 = W5.addEdge(e);
@@ -6704,7 +6820,7 @@ A2: 1 < len W1 by A1, REAL_1:def 5;
     A18: now assume
         A19: e in W5.edges();
             W5.edges() c= W4.edges() by Th164; then
-            consider n being even Nat such that
+            consider n being even Element of NAT such that
         A20: 1 <= n & n <= len W4 & W4.n = e by A19,Lm50;
             n in dom W4 by A20, FINSEQ_3:27; then
         A21: e = W3.n by A9, A20, Lm27;
@@ -6731,8 +6847,9 @@ A2: 1 < len W1 by A1, REAL_1:def 5;
             k2 <= len W1 by A6, XXREAL_0:2;
             hence contradiction by A6,A26,A27,A28;
         end;
-        now let m be odd Nat; assume
-        A29: 1 < m & m <= len W5; then consider n being odd Nat such that
+        now let m be odd Element of NAT; assume
+        A29: 1 < m & m <= len W5;
+        then consider n being odd Element of NAT such that
         A30: m <= n & n <= len W4 & W5.m = W4.n by Th165;
         A31: 1 < n by A29, A30, XXREAL_0:2; then
             n in dom W4 by A30, FINSEQ_3:27; then
@@ -6797,7 +6914,7 @@ A2: 1 < len W1 by A1, REAL_1:def 5;
     A56: dom es5 c= dom W4.edgeSeq() by GRAPH_2:27;
         now thus dom es5 c= Seg len W1.edgeSeq() &
               dom g c= Seg len W1.edgeSeq() by A43,XBOOLE_1:11,A55;
-            let x,y be Nat such that
+            let x,y be Element of NAT such that
         A57: x in dom es5 & y in dom g;
         A58: y = (k2+1) div 2 by A44, A57, TARSKI:def 1;
             2 divides k2+1 by PEPIN:22; then
@@ -6842,7 +6959,7 @@ then
             2 * len Seq es = 2 * len W2.edgeSeq();
             hence
         A70: len W2.edgeSeq() = len Seq es;
-            let x be Nat; assume
+            let x be Element of NAT; assume
         A71: 1 <= x & x <= len W2.edgeSeq();
             set h = Sgm dom es;
         A72: Seq es = es * h by FINSEQ_1:def 14;
@@ -6850,9 +6967,9 @@ then
         A74: x in dom h & h.x in dom es by A72,FUNCT_1:21;
         A75: (Seq es).x = es.(h.x) by A72, A73, FUNCT_1:22;
         A76: dom h = Seg (len Sgm(dom es5) + len (Sgm dom g)) &
-              (for x being Nat st x in dom Sgm dom es5 holds
+              (for x being Element of NAT st x in dom Sgm dom es5 holds
                h.x = Sgm(dom es5).x) &
-              (for x being Nat st x in dom Sgm dom g holds
+              (for x being Element of NAT st x in dom Sgm dom g holds
                 h.(len Sgm(dom es5) + x) = (Sgm dom g).x)
                 by A61, FINSEQ_1:def 7;
         A77: Sgm dom g = Sgm {(k2+1) div 2} by CQC_LANG:5;
@@ -6922,7 +7039,7 @@ A2: W is FinSequence of VG1 \/ EG1 by FINSEQ_1:def 4;
     now thus len W is odd;
         W.1 in VG2 by Def3;
         hence W.1 in VG1;
-        let n be odd Nat; assume n < len W; then
+        let n be odd Element of NAT; assume n < len W; then
         W.(n+1) Joins W.n, W.(n+2), G2 by Def3;
         hence W.(n+1) Joins W.n, W.(n+2), G1 by GLIB_000:75;
     end;
@@ -6951,7 +7068,7 @@ theorem Th170: ::tSUBGRAPH_W03
 A1: W is non trivial & W.edges() c= the_Edges_of G2;
     set WV = W.vertices(), WE = W.edges();
     set VG2 = the_Vertices_of G2, EG2 = the_Edges_of G2;
-A2: now let n be odd Nat such that
+A2: now let n be odd Element of NAT such that
     A3: n <= len W;
         now per cases;
         suppose
@@ -6960,7 +7077,7 @@ A2: now let n be odd Nat such that
             1 <= n by HEYTING3:1; then
             1 < n by A5, REAL_1:def 5; then
             1+1 <= n by NAT_1:38; then
-            reconsider n5 = n-2*1 as odd Nat by INT_1:18;
+            reconsider n5 = n-2*1 as odd Element of NAT by INT_1:18;
             n5 < len W - 0 by A4, REAL_1:92; then
         A6: W.(n5+1) Joins W.n5, W.(n5+2), G1 by Def3;
         A7: 1 <= n5+1 by NAT_1:37;
@@ -6983,7 +7100,7 @@ A2: now let n be odd Nat such that
     now let y be set; assume y in rng W; then
     A11: y in WV \/ WE by Th102;
         now per cases by A11, XBOOLE_0:def 2;
-        suppose y in WV; then consider n being odd Nat such that
+        suppose y in WV; then consider n being odd Element of NAT such that
         A12: n <= len W & W.n = y by Lm49;
             y in VG2 by A2, A12;
             hence y in VG2 \/ EG2 by XBOOLE_0:def 2; end;
@@ -6995,10 +7112,10 @@ A2: now let n be odd Nat such that
     rng W c= VG2 \/ EG2 by TARSKI:def 3; then
 A13: W is FinSequence of VG2 \/ EG2 by FINSEQ_1:def 4;
     now thus len W is odd;
-        reconsider aa1 = 1 as odd Nat by JORDAN12:3;
+        reconsider aa1 = 1 as odd Element of NAT by JORDAN12:3;
         aa1 <= len W by HEYTING3:1;
         hence W.1 in VG2 by A2;
-        let n be odd Nat; set e = W.(n+1); assume
+        let n be odd Element of NAT; set e = W.(n+1); assume
     A14: n < len W; then
     A15: W.(n+1) Joins W.n, W.(n+2), G1 by Def3;
         1 <= n+1 & n+1 <= len W by A14,NAT_1:37,NAT_1:38; then
@@ -7038,7 +7155,7 @@ A1: not v in W.vertices();
 A2: EG2 = G1.edgesBetween( the_Vertices_of G1 \ {v}) by GLIB_000:38;
     now let y be set; assume y in rng W2; then consider x being set such that
     A3: x in dom W2 & y = W2.x by FUNCT_1:def 5;
-        reconsider x as Nat by A3;
+        reconsider x as Element of NAT by A3;
     A4: 1 <= x & x <= len W2 by A3, FINSEQ_3:27;
         now per cases;
         suppose
@@ -7050,8 +7167,8 @@ A2: EG2 = G1.edgesBetween( the_Vertices_of G1 \ {v}) by GLIB_000:38;
             end; then
             y in VG2 by A6, XBOOLE_0:def 4;
             hence y in VG2 \/ EG2 by XBOOLE_0:def 2; end;
-        suppose x is even; then reconsider x as even Nat;
-            consider xaa1 being odd Nat such that
+        suppose x is even; then reconsider x as even Element of NAT;
+            consider xaa1 being odd Element of NAT such that
         A7: xaa1 = x-1 & x-1 in dom W2 & x+1 in dom W2 &
               W2.x Joins W2.(xaa1), W2.(x+1),G1 by A3, Lm4;
         A8: y in the_Edges_of G1 by A3, A7, GLIB_000:def 15;
@@ -7089,11 +7206,11 @@ A2: EG2 = G1.edgesBetween( the_Vertices_of G1 \ {v}) by GLIB_000:38;
         not W2.1 in {v} by TARSKI:def 1; then
         W2.1 in VG2 by A11, XBOOLE_0:def 4;
         hence W2.1 in the_Vertices_of G2 by GLIB_000:50;
-        let n be odd Nat; assume
+        let n be odd Element of NAT; assume
     A12: n < len W2; then
     A13: W.(n+1) Joins W.n, W.(n+2), G1 by Def3;
     A14: W.n <> v by A1,A12,Lm49;
-        reconsider lenW2 = len W2 as odd Nat by Def3;
+        reconsider lenW2 = len W2 as odd Element of NAT by Def3;
         set e = W.(n+1);
         n+1 <= len W2 by A12, NAT_1:38; then
         n+1 < lenW2 by REAL_1:def 5; then
@@ -7177,7 +7294,7 @@ theorem Th176: ::tSUBGRAPH_WA01
     end;
     hereby assume
     A1: W is directed;
-        now let n be odd Nat; assume
+        now let n be odd Element of NAT; assume
         A2: n < len W'; then
         A3: (the_Source_of G2).(W'.(n+1)) = W'.n by A1, Def25;
         A4: 1 <= n+1 by NAT_1:37;
@@ -7193,19 +7310,21 @@ theorem Th176: ::tSUBGRAPH_WA01
         hence W is trivial Walk of G1 by Lm59;
     end;
 A5: now assume W is Trail-like; then
-        for m,n being even Nat st 1 <= m & m < n & n <= len W
+        for m,n being even Element of NAT st 1 <= m & m < n & n <= len W
           holds W'.m <> W'.n by Lm62;
         hence W is Trail-like Walk of G1 by Lm62;
     end;
     hence W is Trail-like implies W is Trail-like Walk of G1;
     now assume W is Path-like; then
-        W' is Trail-like & for m,n being odd Nat st m < n & n <= len W'
+        W' is Trail-like &
+         for m,n being odd Element of NAT st m < n & n <= len W'
           holds W'.m = W'.n implies (m=1 & n = len W') by A5,Def28;
         hence W is Path-like Walk of G1 by Def28;
     end;
     hence W is Path-like implies W is Path-like Walk of G1;
     hereby assume W is vertex-distinct; then
-        for m,n being odd Nat st m <= len W' & n <= len W' & W'.m = W'.n
+        for m,n being odd Element of NAT
+        st m <= len W' & n <= len W' & W'.m = W'.n
           holds m = n by Def29;
         hence W is vertex-distinct Walk of G1 by Def29;
     end;
@@ -7230,7 +7349,7 @@ A2: W1 is closed iff W1.first() = W1.last() by Def24;
     now
         hereby assume
         A3: W1 is directed;
-            now let n be odd Nat; assume
+            now let n be odd Element of NAT; assume
             A4: n < len W2; then
                 1 <= n+1 & n+1 <= len W2 by NAT_1:38, NAT_1:37; then
                 n+1 in dom W2 by FINSEQ_3:27; then
@@ -7247,16 +7366,18 @@ A2: W1 is closed iff W1.first() = W1.last() by Def24;
     hence W1 is directed iff W2 is directed;
     W1 is trivial iff len W2 = 1 by A1, Lm60;
     hence W1 is trivial iff W2 is trivial by Lm60;
-    W1 is Trail-like iff for m,n being even Nat st 1 <= m & m < n & n <= len W2
+    W1 is Trail-like iff for m,n being even Element of NAT
+    st 1 <= m & m < n & n <= len W2
       holds W2.m <> W2.n by A1, Lm62;
     hence
 A5: W1 is Trail-like iff W2 is Trail-like by Lm62;
-    W1 is Path-like iff (W1 is Trail-like & for m,n being odd Nat
+    W1 is Path-like iff (W1 is Trail-like & for m,n being odd Element of NAT
       st m < n & n <= len W2 holds W2.m = W2.n implies (m = 1 & n = len W2))
       by A1, Def28;
     hence W1 is Path-like iff W2 is Path-like by A5, Def28;
     W1 is vertex-distinct iff
-      (for m,n being odd Nat st m <= len W2 & n <= len W2 & W2.m = W2.n
+      (for m,n being odd Element of NAT
+      st m <= len W2 & n <= len W2 & W2.m = W2.n
         holds m = n) by A1,Def29;
     hence W1 is vertex-distinct iff W2 is vertex-distinct by Def29;
 end;
@@ -7267,7 +7388,7 @@ theorem ::tGPEQ_VSEQ01
 A1: G1 == G2 & x is VertexSeq of G1; then
     reconsider x2 = x as FinSequence of the_Vertices_of G2
       by GLIB_000:def 36;
-    now let n be Nat; assume
+    now let n be Element of NAT; assume
         1 <= n & n < len x2; then
         consider e being set such that
     A2: e Joins x2.n, x2.(n+1), G1 by A1,Def1;
@@ -7282,7 +7403,8 @@ theorem ::tGPEQ_ESEQ01
 A1: G1 == G2 & x is EdgeSeq of G1; then
     reconsider es = x as EdgeSeq of G1;
     consider vs being FinSequence of the_Vertices_of G1 such that
-A2: len vs = len es + 1 & for n being Nat st 1 <= n & n <= len es holds
+A2: len vs = len es + 1 & for n being Element of NAT st 1 <= n & n <= len es
+holds
       es.n Joins vs.n,vs.(n+1),G1 by Def2;
     reconsider es2 = es as FinSequence of the_Edges_of G2
       by A1,GLIB_000:def 36;
@@ -7290,7 +7412,7 @@ A2: len vs = len es + 1 & for n being Nat st 1 <= n & n <= len es holds
           by A1,GLIB_000:def 36;
         take vs;
         thus len vs = len es + 1 by A2;
-        let n be Nat; assume 1 <= n & n <= len es2; then
+        let n be Element of NAT; assume 1 <= n & n <= len es2; then
         es2.n Joins vs.n,vs.(n+1),G1 by A2;
         hence es2.n Joins vs.n,vs.(n+1),G2 by A1,GLIB_000:91;
     end;
@@ -7305,7 +7427,7 @@ A2: the_Vertices_of G1 = the_Vertices_of G2 &
     reconsider W = x as FinSequence of the_Vertices_of G2 \/ the_Edges_of G2
       by A1;
 A3: len W is odd & W.1 in the_Vertices_of G2 by A1,A2,Def3;
-    now let n be odd Nat; assume n < len W; then
+    now let n be odd Element of NAT; assume n < len W; then
         W.(n+1) Joins W.n, W.(n+2), G1 by A1, Def3;
         hence W.(n+1) Joins W.n, W.(n+2), G2 by A1,GLIB_000:91;
     end;

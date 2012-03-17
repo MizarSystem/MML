@@ -11,7 +11,8 @@ environ
       SEQ_2, FUNCT_1, JORDAN6, METRIC_1, PCOMPS_1, ABSVALUE, SQUARE_1, TOPMETR,
       BORSUK_1, RCOMP_1, ARYTM_3, GRAPH_1, TOPREAL4, FINSEQ_4, FINSEQ_1,
       TARSKI, SPPOL_2, BORSUK_6;
- notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, XXREAL_0,
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
+ XCMPLX_0,XXREAL_0,
       XREAL_0, REAL_1, PARTFUN1, COMPLEX1, SQUARE_1, SEQ_4, FINSEQ_1, FUNCT_2,
       DOMAIN_1, STRUCT_0, CONNSP_1, RCOMP_1, METRIC_1, PCOMPS_1, JORDAN5C,
       JORDAN6, EUCLID, TOPMETR, PRE_TOPC, TOPS_2, NUMBERS, ORDINAL1, PSCOMP_1,
@@ -21,7 +22,8 @@ environ
       RCOMP_2, CONNSP_1, TOPS_2, COMPTS_1, TOPREAL1, TOPREAL4, PSCOMP_1,
       BORSUK_2, JORDAN3, JORDAN5C, JORDAN6;
  registrations XREAL_0, EUCLID, STRUCT_0, RELSET_1, BORSUK_1, PRE_TOPC,
-      METRIC_1, TOPMETR, MEMBERED, SPPOL_2, NAT_1, XXREAL_0, FUNCT_2;
+      METRIC_1, TOPMETR, MEMBERED, SPPOL_2, NAT_1, XXREAL_0, FUNCT_2,
+      ORDINAL1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI;
  theorems TARSKI, TOPREAL1, XBOOLE_0, EUCLID, JORDAN6, STRUCT_0, TOPS_2,
@@ -143,7 +145,7 @@ end;
 
 reserve s,p,q for Point of TOP-REAL 2;
 reserve r for Real;
-reserve j for Nat;
+reserve j for Element of NAT;
 
 theorem Th6: for f being S-Sequence_in_R2, p,q being Point of TOP-REAL 2 st
    1 <=j & j < len f & p in LSeg(f,j) & q in LSeg(f,j) &
@@ -1068,7 +1070,7 @@ FUNCT_1:def 13;
   hence thesis;
 end;
 
-reserve n for Nat;
+reserve n for Element of NAT;
 
 theorem Th11:for P being Subset of I[01],s being Real st
  P=[.0,s.[ holds P is open
@@ -1569,11 +1571,11 @@ theorem Th20: for P being non empty Subset of TOP-REAL 2,
   Segment(P,p1,p2,p1,q1) is_an_arc_of p1,q1 by JORDAN16:39;
 
 theorem Th21:    :: Another version of TOPMETR3:18
-for n being Nat,p1,p2 being Point of TOP-REAL n,
+for n being Element of NAT,p1,p2 being Point of TOP-REAL n,
 P,P1 being non empty Subset of TOP-REAL n st
 P is_an_arc_of p1,p2 & P1 is_an_arc_of p1,p2 & P1 c= P
 holds P1=P
-proof let n be Nat,p1,p2 be Point of TOP-REAL n,
+proof let n be Element of NAT,p1,p2 be Point of TOP-REAL n,
 P,P1 be non empty Subset of TOP-REAL n;
  assume A1: P is_an_arc_of p1,p2 & P1 is_an_arc_of p1,p2 & P1 c= P;
   then P1 is_an_arc_of p2,p1 by JORDAN5B:14;
@@ -2670,32 +2672,34 @@ proof let P be non empty Subset of TOP-REAL 2,
       f is one-to-one & len f >= 2 & f is unfolded s.n.c. special
                     by A3,TOPREAL1:def 10;
    then A4: len f >1 by XXREAL_0:2;
-   A5: L~f = union { LSeg(f,i) where i is Nat : 1 <= i & i+1 <= len f }
+A5: L~f = union { LSeg(f,i) where i is Element of NAT :
+ 1 <= i & i+1 <= len f }
                           by TOPREAL1:def 6;
    then consider Y being set such that
    A6: p in Y & Y in
-      { LSeg(f,i) where i is Nat : 1 <= i & i+1 <= len f }
+      { LSeg(f,i) where i is Element of NAT : 1 <= i & i+1 <= len f }
             by A1,A3,TARSKI:def 4;
    A7: Y c= L~f
    proof let x be set;assume x in Y;
     hence x in L~f by A5,A6,TARSKI:def 4;
    end;
-   consider i being Nat such that
+   consider i being Element of NAT such that
    A8: Y=LSeg(f,i) & 1 <= i & i+1 <= len f by A6;
    A9: i<len f by A8,NAT_1:38;
    then A10: i in dom f by A8,FINSEQ_3:27;
    A11: 1<len f by A8,A9,XXREAL_0:2;
    A12: 1<i+1 by A8,NAT_1:38;
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
     for p being Point of TOP-REAL 2 st p=f.(i-'$1) holds p`1<>e;
       1 in dom f by A11,FINSEQ_3:27;
    then f/.1=f.1 by FINSEQ_4:def 4;
    then A13: P[i-'1] by A1,A3,A8,JCT_MISC:7;
-   then A14: ex k being Nat st P[k];
-      ex k being Nat st P[k] & for n being Nat st P[n] holds k <= n
+   then A14: ex k being Element of NAT st P[k];
+      ex k being Element of NAT st P[k] & for n being Element of NAT st P[n]
+       holds k <= n
                                   from NAT_1:sch 5(A14);
-   then consider k being Nat such that
-   A15: P[k] & for n being Nat st P[n] holds k <= n;
+   then consider k being Element of NAT such that
+   A15: P[k] & for n being Element of NAT st P[n] holds k <= n;
       i-'k <=i by BINARITH:52;
    then A16: i-'k <len f by A9,XXREAL_0:2;
    A17: i-1>=0 by A8,XREAL_1:50;
@@ -2710,7 +2714,7 @@ proof let P be non empty Subset of TOP-REAL 2,
    then reconsider pk=f.(i-'k) as Point of TOP-REAL 2;
    A23: i-'k=i-k by A19,BINARITH:def 3;
    A24: pk`1<> e by A15;
-   reconsider kn=k+1 as Nat;
+   reconsider kn=k+1 as Element of NAT;
       now per cases by A24,XXREAL_0:1;
    case A25: pk`1<e;
         now per cases;
@@ -2732,7 +2736,7 @@ proof let P be non empty Subset of TOP-REAL 2,
         then A35: g/.1=g.1 by FINSEQ_4:def 4
                 .=f.(1-1+i) by A34,JORDAN3:31
                 .=f/.i by A10,FINSEQ_4:def 4;
-        reconsider ia=i+1 as Nat;
+        reconsider ia=i+1 as Element of NAT;
            ia in Seg len f by A8,A12,FINSEQ_1:3;
         then A36: i+1 in dom f by FINSEQ_1:def 3;
            1+1 in Seg len g by A32,FINSEQ_1:3;
@@ -2743,9 +2747,11 @@ proof let P be non empty Subset of TOP-REAL 2,
            LSeg(f,i)=LSeg(f/.i,f/.(i+1)) by A8,TOPREAL1:def 5
                 .=LSeg(g,1) by A32,A35,A37,TOPREAL1:def 5;
         then p in Y &
-          Y in { LSeg(g,i2) where i2 is Nat : 1 <= i2 & i2+1 <= len g }
+          Y in { LSeg(g,i2) where i2 is Element of NAT :
+           1 <= i2 & i2+1 <= len g }
                            by A6,A8,A32;
-        then p in union{ LSeg(g,i2) where i2 is Nat : 1 <= i2 & i2+1 <=
+        then p in union{ LSeg(g,i2) where i2 is Element of NAT :
+         1 <= i2 & i2+1 <=
 len g
 }
             by TARSKI:def 4;
@@ -2802,7 +2808,7 @@ len g
         then A55: g/.1=g.1 by FINSEQ_4:def 4
                 .=f.(1-1+i) by A54,JORDAN3:31
                 .=f/.i by A10,FINSEQ_4:def 4;
-        reconsider ia=i+1 as Nat;
+        reconsider ia=i+1 as Element of NAT;
            ia in Seg len f by A8,A12,FINSEQ_1:3;
         then A56: i+1 in dom f by FINSEQ_1:def 3;
            1+1 in Seg len g by A52,FINSEQ_1:3;
@@ -2813,9 +2819,11 @@ len g
            LSeg(f,i)=LSeg(f/.i,f/.(i+1)) by A8,TOPREAL1:def 5
                 .=LSeg(g,1) by A52,A55,A57,TOPREAL1:def 5;
         then p in Y &
-          Y in { LSeg(g,i2) where i2 is Nat : 1 <= i2 & i2+1 <= len g }
+          Y in { LSeg(g,i2) where i2 is Element of NAT :
+           1 <= i2 & i2+1 <= len g }
                            by A6,A8,A52;
-        then p in union{ LSeg(g,i2) where i2 is Nat : 1 <= i2 & i2+1 <=
+        then p in union{ LSeg(g,i2) where i2 is Element of NAT
+         : 1 <= i2 & i2+1 <=
 len g}
             by TARSKI:def 4;
         then p in L~mid(f,i,len f) by TOPREAL1:def 6;
@@ -2854,7 +2862,7 @@ len g}
         A68: 1<=1 & 1<=i & i<=len f & 1<=i-'k &
          i-'k<=i+1-1 by A8,A20,A43,JORDAN3:14,NAT_1:38;
         A69: i-'k+1<=i by A44,NAT_1:38;
-        reconsider ia=i+1 as Nat;
+        reconsider ia=i+1 as Element of NAT;
            i-'k in Seg len g by A20,A63,A64,A65,FINSEQ_1:3;
         then i-'k in dom g by FINSEQ_1:def 3;
         then A70: g/.(i-'k)=g.(i-'k) by FINSEQ_4:def 4
@@ -2864,9 +2872,10 @@ len g}
              by A20,A66,TOPREAL1:def 5;
           then pk in LSeg(g,i-'k) &
           LSeg(g,i-'k) in
-          { LSeg(g,i2) where i2 is Nat : 1 <= i2 & i2+1 <= len g }
+          { LSeg(g,i2) where i2 is Element of NAT : 1 <= i2 & i2+1 <= len g }
                            by A22,A63,A64,A67,A69,A70,TOPREAL1:6;
-         then pk in union{ LSeg(g,i2) where i2 is Nat : 1 <= i2 & i2+1 <=
+         then pk in union{ LSeg(g,i2) where i2 is Element of NAT :
+          1 <= i2 & i2+1 <=
          len g } by TARSKI:def 4;
          then pk in L~mid(f,1,i) by TOPREAL1:def 6;
          then A71: LE pk,p44,P,p1,p2 by A3,A9,A45,SPRECT_3:33;
@@ -2880,9 +2889,9 @@ len g}
               p51 in P by A75,JORDAN5C:def 3;
            then consider Y3 being set such that
            A76: p51 in Y3 & Y3 in
-            { LSeg(f,i5) where i5 is Nat : 1 <= i5 & i5+1 <= len f }
+            { LSeg(f,i5) where i5 is Element of NAT : 1 <= i5 & i5+1 <= len f }
                      by A3,A5,TARSKI:def 4;
-           consider kk being Nat such that
+           consider kk being Element of NAT such that
            A77: Y3=LSeg(f,kk) &  (1 <= kk & kk+1 <= len f) by A76;
            A78: kk<len f by A77,NAT_1:38;
            then kk in Seg len f by A77,FINSEQ_1:3;
@@ -2935,7 +2944,8 @@ FINSEQ_4:def 4;
               proof let z be set;assume
                 A97: z in LSeg(f/.kk,f/.(kk+1));
                    LSeg(f/.kk,f/.(kk+1)) in
-                { LSeg(f,i7) where i7 is Nat : 1 <= i7 & i7+1 <= len f }
+                { LSeg(f,i7) where i7 is Element of NAT :
+                 1 <= i7 & i7+1 <= len f }
                                by A77,A81;
                hence z in L~f by A5,A97,TARSKI:def 4;
               end;
@@ -2964,7 +2974,8 @@ FINSEQ_4:def 4;
               proof let z be set;assume
                 A107: z in LSeg(f/.kk,f/.(kk+1));
                    LSeg(f/.kk,f/.(kk+1)) in
-                { LSeg(f,i7) where i7 is Nat : 1 <= i7 & i7+1 <= len f }
+                { LSeg(f,i7) where i7 is Element of NAT :
+                 1 <= i7 & i7+1 <= len f }
                                by A77,A81;
                hence z in L~f by A5,A107,TARSKI:def 4;
               end;
@@ -3062,7 +3073,7 @@ FINSEQ_4:def 4;
         then A136: g/.1=g.1 by FINSEQ_4:def 4
                 .=f.(1-1+i) by A135,JORDAN3:31
                 .=f/.i by A10,FINSEQ_4:def 4;
-        reconsider ia=i+1 as Nat;
+        reconsider ia=i+1 as Element of NAT;
            ia in Seg len f by A8,A12,FINSEQ_1:3;
         then A137: i+1 in dom f by FINSEQ_1:def 3;
            1+1 in Seg len g by A133,FINSEQ_1:3;
@@ -3073,9 +3084,11 @@ FINSEQ_4:def 4;
            LSeg(f,i)=LSeg(f/.i,f/.(i+1)) by A8,TOPREAL1:def 5
                 .=LSeg(g,1) by A133,A136,A138,TOPREAL1:def 5;
         then p in Y &
-          Y in { LSeg(g,i2) where i2 is Nat : 1 <= i2 & i2+1 <= len g }
+          Y in { LSeg(g,i2) where i2 is Element of NAT :
+           1 <= i2 & i2+1 <= len g }
                            by A6,A8,A133;
-        then p in union{ LSeg(g,i2) where i2 is Nat : 1 <= i2 & i2+1 <=
+        then p in union{ LSeg(g,i2) where i2 is Element of NAT :
+         1 <= i2 & i2+1 <=
         len g } by TARSKI:def 4;
         then p in L~mid(f,i,len f) by TOPREAL1:def 6;
         then A139: LE p44,p,P,p1,p2 by A3,A8,A9,SPRECT_4:4;
@@ -3132,7 +3145,7 @@ Def2;
         then A156: g/.1=g.1 by FINSEQ_4:def 4
                 .=f.(1-1+i) by A155,JORDAN3:31
                 .=f/.i by A10,FINSEQ_4:def 4;
-        reconsider ia=i+1 as Nat;
+        reconsider ia=i+1 as Element of NAT;
         ia in Seg len f by A8,A12,FINSEQ_1:3;
         then A157: i+1 in dom f by FINSEQ_1:def 3;
         1+1 in Seg len g by A153,FINSEQ_1:3;
@@ -3143,9 +3156,11 @@ Def2;
         LSeg(f,i)=LSeg(f/.i,f/.(i+1)) by A8,TOPREAL1:def 5
                 .=LSeg(g,1) by A153,A156,A158,TOPREAL1:def 5;
         then p in Y &
-          Y in { LSeg(g,i2) where i2 is Nat : 1 <= i2 & i2+1 <= len g }
+          Y in { LSeg(g,i2) where i2 is Element of NAT :
+           1 <= i2 & i2+1 <= len g }
                            by A6,A8,A153;
-        then p in union{ LSeg(g,i2) where i2 is Nat : 1 <= i2 & i2+1 <=
+        then p in union{ LSeg(g,i2) where i2 is Element of NAT :
+         1 <= i2 & i2+1 <=
         len g } by TARSKI:def 4;
         then p in L~mid(f,i,len f) by TOPREAL1:def 6;
         then A159: LE p44,p,P,p1,p2 by A3,A8,A9,SPRECT_4:4;
@@ -3183,7 +3198,7 @@ Def2;
         A169: 1<=1 & 1<=i & i<=len f & 1<=i-'k &
         i-'k<=i+1-1 by A8,A20,A144,JORDAN3:14,NAT_1:38;
         A170: i-'k+1<=i by A145,NAT_1:38;
-        reconsider ia=i+1 as Nat;
+        reconsider ia=i+1 as Element of NAT;
            i-'k in Seg len g by A20,A164,A165,A166,FINSEQ_1:3;
         then i-'k in dom g by FINSEQ_1:def 3;
         then A171: g/.(i-'k)=g.(i-'k) by FINSEQ_4:def 4
@@ -3193,9 +3208,10 @@ Def2;
              by A20,A167,TOPREAL1:def 5;
           then pk in LSeg(g,i-'k) &
           LSeg(g,i-'k) in
-          { LSeg(g,i2) where i2 is Nat : 1 <= i2 & i2+1 <= len g }
+          { LSeg(g,i2) where i2 is Element of NAT : 1 <= i2 & i2+1 <= len g }
                            by A22,A164,A165,A168,A170,A171,TOPREAL1:6;
-         then pk in union{ LSeg(g,i2) where i2 is Nat : 1 <= i2 & i2+1 <=
+         then pk in union{ LSeg(g,i2) where i2 is Element of NAT :
+          1 <= i2 & i2+1 <=
 len g } by TARSKI:def 4;
          then pk in L~mid(f,1,i) by TOPREAL1:def 6;
          then A172: LE pk,p44,P,p1,p2 by A3,A9,A146,SPRECT_3:33;
@@ -3209,9 +3225,9 @@ len g } by TARSKI:def 4;
               p51 in P by A176,JORDAN5C:def 3;
            then consider Y3 being set such that
            A177: p51 in Y3 & Y3 in
-            { LSeg(f,i5) where i5 is Nat : 1 <= i5 & i5+1 <= len f }
+            { LSeg(f,i5) where i5 is Element of NAT : 1 <= i5 & i5+1 <= len f }
                      by A3,A5,TARSKI:def 4;
-           consider kk being Nat such that
+           consider kk being Element of NAT such that
            A178: Y3=LSeg(f,kk) &  (1 <= kk & kk+1 <= len f) by A177;
            A179: kk<len f by A178,NAT_1:38;
            then kk in Seg len f by A178,FINSEQ_1:3;
@@ -3263,7 +3279,8 @@ FINSEQ_4:def 4;
               proof let z be set;assume
                 A197: z in LSeg(f/.kk,f/.(kk+1));
                    LSeg(f/.kk,f/.(kk+1)) in
-                { LSeg(f,i7) where i7 is Nat : 1 <= i7 & i7+1 <= len f }
+                { LSeg(f,i7) where i7 is Element of NAT :
+                 1 <= i7 & i7+1 <= len f }
                                by A178,A182;
                hence z in L~f by A5,A197,TARSKI:def 4;
               end;
@@ -3292,7 +3309,8 @@ FINSEQ_4:def 4;
               proof let z be set;assume
                 A207: z in LSeg(f/.kk,f/.(kk+1));
                    LSeg(f/.kk,f/.(kk+1)) in
-                { LSeg(f,i7) where i7 is Nat : 1 <= i7 & i7+1 <= len f }
+                { LSeg(f,i7) where i7 is Element of NAT :
+                 1 <= i7 & i7+1 <= len f }
                                by A178,A182;
                hence z in L~f by A5,A207,TARSKI:def 4;
               end;
@@ -3384,17 +3402,18 @@ proof let P be non empty Subset of TOP-REAL 2,
    then A2: P is_an_arc_of p1,p2 by TOPREAL4:3;
    consider f being FinSequence of (TOP-REAL 2) such that
    A3:  f is_S-Seq & P = L~f & p1=f/.1 & p2=f/.len f by A1,TOPREAL4:def 1;
-   A4: L~f = union { LSeg(f,i) where i is Nat : 1 <= i & i+1 <= len f }
+   A4: L~f = union { LSeg(f,i) where i is Element of NAT :
+    1 <= i & i+1 <= len f }
                           by TOPREAL1:def 6;
    then consider Y being set such that
    A5: p in Y & Y in
-      { LSeg(f,i) where i is Nat : 1 <= i & i+1 <= len f }
+      { LSeg(f,i) where i is Element of NAT : 1 <= i & i+1 <= len f }
             by A1,A3,TARSKI:def 4;
    A6: Y c= L~f
    proof let x be set;assume x in Y;
     hence x in L~f by A4,A5,TARSKI:def 4;
    end;
-   consider i being Nat such that
+   consider i being Element of NAT such that
    A7: Y=LSeg(f,i) &  (1 <= i & i+1 <= len f) by A5;
    A8: 1<i+1 by A7,NAT_1:38;
    A9: i<len f by A7,NAT_1:38;
@@ -3402,7 +3421,7 @@ proof let P be non empty Subset of TOP-REAL 2,
    then A10: i+1 in dom f by FINSEQ_1:def 3;
    A11: 1<len f by A7,A9,XXREAL_0:2;
    A12: 1<i+1 by A7,NAT_1:38;
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
     for p being Point of TOP-REAL 2 st p=f.(i+1+$1)
         holds p`1<>e;
    A13: len f - (i+1)>=0 by A7,XREAL_1:50;
@@ -3411,11 +3430,12 @@ proof let P be non empty Subset of TOP-REAL 2,
       i+1+((len f)-'(i+1))=i+1+(len f -(i+1)) by A13,BINARITH:def 3
                       .=len f;
    then A15: P[(len f)-'(i+1)] by A1,A3,A14,FINSEQ_4:def 4;
-   then A16: ex k being Nat st P[k];
-      ex k being Nat st P[k] & for n being Nat st P[n] holds k <= n
+   then A16: ex k being Element of NAT st P[k];
+      ex k being Element of NAT st P[k] & for n being Element of NAT st P[n]
+       holds k <= n
                                   from NAT_1:sch 5(A16);
-   then consider k being Nat such that
-   A17: P[k] & for n being Nat st P[n] holds k <= n;
+   then consider k being Element of NAT such that
+   A17: P[k] & for n being Element of NAT st P[n] holds k <= n;
    A18: k<=len f -'(i+1) by A15,A17;
       len f -'(i+1)=len f -(i+1) by A13,BINARITH:def 3;
    then A19: k+(i+1)<= len f -(i+1)+(i+1) by A18,XREAL_1:9;
@@ -3429,7 +3449,7 @@ proof let P be non empty Subset of TOP-REAL 2,
    then A24: f/.(i+1+k)=f.(i+1+k) by FINSEQ_4:def 4;
    then reconsider pk=f.(i+1+k) as Point of TOP-REAL 2;
    A25: pk`1<> e by A17;
-   reconsider kn=k+1 as Nat;
+   reconsider kn=k+1 as Element of NAT;
       now per cases by A25,XXREAL_0:1;
    case A26: pk`1<e;
         now per cases;
@@ -3513,9 +3533,9 @@ proof let P be non empty Subset of TOP-REAL 2,
               p51 in P by A46,JORDAN5C:def 3;
            then consider Y3 being set such that
            A47: p51 in Y3 & Y3 in
-            { LSeg(f,i5) where i5 is Nat : 1 <= i5 & i5+1 <= len f }
+            { LSeg(f,i5) where i5 is Element of NAT : 1 <= i5 & i5+1 <= len f }
                      by A3,A4,TARSKI:def 4;
-           consider kk being Nat such that
+           consider kk being Element of NAT such that
            A48: Y3=LSeg(f,kk) &  (1 <= kk & kk+1 <= len f) by A47;
            A49: kk-1>=0 by A48,XREAL_1:50;
            A50: kk<len f by A48,NAT_1:38;
@@ -3570,7 +3590,8 @@ FINSEQ_4:def 4;
               proof let z be set;assume
                 A71: z in LSeg(f/.kk,f/.(kk+1));
                    LSeg(f/.kk,f/.(kk+1)) in
-                { LSeg(f,i7) where i7 is Nat : 1 <= i7 & i7+1 <= len f }
+                { LSeg(f,i7) where i7 is Element of NAT :
+                 1 <= i7 & i7+1 <= len f }
                                by A48,A54;
                hence z in L~f by A4,A71,TARSKI:def 4;
               end;
@@ -3598,7 +3619,8 @@ FINSEQ_4:def 4;
               proof let z be set;assume
                 A80: z in LSeg(f/.kk,f/.(kk+1));
                    LSeg(f/.kk,f/.(kk+1)) in
-                { LSeg(f,i7) where i7 is Nat : 1 <= i7 & i7+1 <= len f }
+                { LSeg(f,i7) where i7 is Element of NAT :
+                 1 <= i7 & i7+1 <= len f }
                                by A48,A54;
                hence z in L~f by A4,A80,TARSKI:def 4;
               end;
@@ -3790,9 +3812,9 @@ JORDAN2C:2;
               p51 in P by A123,JORDAN5C:def 3;
            then consider Y3 being set such that
            A124: p51 in Y3 & Y3 in
-            { LSeg(f,i5) where i5 is Nat : 1 <= i5 & i5+1 <= len f }
+            { LSeg(f,i5) where i5 is Element of NAT : 1 <= i5 & i5+1 <= len f }
                      by A3,A4,TARSKI:def 4;
-           consider kk being Nat such that
+           consider kk being Element of NAT such that
            A125: Y3=LSeg(f,kk) &  (1 <= kk & kk+1 <= len f) by A124;
            A126: kk-1>=0 by A125,XREAL_1:50;
            A127: kk<len f by A125,NAT_1:38;
@@ -3847,7 +3869,8 @@ FINSEQ_4:def 4;
               proof let z be set;assume
                 A148: z in LSeg(f/.kk,f/.(kk+1));
                    LSeg(f/.kk,f/.(kk+1)) in
-                { LSeg(f,i7) where i7 is Nat : 1 <= i7 & i7+1 <= len f }
+                { LSeg(f,i7) where i7 is Element of NAT :
+                 1 <= i7 & i7+1 <= len f }
                                by A125,A131;
                hence z in L~f by A4,A148,TARSKI:def 4;
               end;
@@ -3875,7 +3898,8 @@ FINSEQ_4:def 4;
               proof let z be set;assume
                 A157: z in LSeg(f/.kk,f/.(kk+1));
                    LSeg(f/.kk,f/.(kk+1)) in
-                { LSeg(f,i7) where i7 is Nat : 1 <= i7 & i7+1 <= len f }
+                { LSeg(f,i7) where i7 is Element of NAT :
+                 1 <= i7 & i7+1 <= len f }
                                by A125,A131;
                hence z in L~f by A4,A157,TARSKI:def 4;
               end;

@@ -217,9 +217,8 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="89"/>
 <Func kind="K" nr="93"/>
 </Typ>
 </ArgTypes>

@@ -24,26 +24,27 @@ environ
 
 begin ::Some selected theorems on integers
 
-reserve i,j,k,n for Nat;
+reserve i,j,k,n for Element of NAT;
 reserve x,y,z for Tuple of n, BOOLEAN;
 
 theorem :: IDEA_1:1
   for i,j,k holds j is prime & i<j & k<j & i<>0 implies
-    ex a being Nat st (a*i) mod j = k & a < j;
+    ex a being Element of NAT st (a*i) mod j = k & a < j;
 
 theorem :: IDEA_1:2
-  for n,k1,k2 being Nat holds
+  for n,k1,k2 being Element of NAT holds
     n <> 0 & k1 mod n = k2 mod n & k1 <= k2 implies
-      ex t being Nat st k2 - k1 = n*t;
+      ex t being Element of NAT st k2 - k1 = n*t;
 
 theorem :: IDEA_1:3
-  for a, b being Nat holds a - b <= a;
+  for a, b being Element of NAT holds a - b <= a;
 
 theorem :: IDEA_1:4
-  for b1,b2,c being Nat holds b2 <= c implies b2 - b1 <= c;
+  for b1,b2,c being Element of NAT holds b2 <= c implies b2 - b1 <= c;
 
 theorem :: IDEA_1:5
-  for a,b,c being Nat holds 0<a & 0<b & a<c & b<c & c is prime implies
+  for a,b,c being Element of NAT holds 0<a & 0<b & a<c & b<c & c is prime
+  implies
     (a * b) mod c <> 0;
 
 begin :: Algebraic group on Fixed-length bit Integer
@@ -95,7 +96,7 @@ theorem :: IDEA_1:10
 
 definition
   let n;
-  let i be Nat;
+  let i be Element of NAT;
   pred i is_expressible_by n means
 :: IDEA_1:def 3
    i < 2 to_power(n);
@@ -106,8 +107,8 @@ theorem :: IDEA_1:11
 
 definition
   let n;
-  let i, j be Nat;
-  func ADD_MOD(i,j,n) -> Nat equals
+  let i, j be Element of NAT;
+  func ADD_MOD(i,j,n) -> Element of NAT equals
 :: IDEA_1:def 4
 
   (i + j) mod 2 to_power(n);
@@ -115,9 +116,9 @@ end;
 
 definition
   let n;
-  let i be Nat;
+  let i be Element of NAT;
   assume  i is_expressible_by n;
-  func NEG_N(i,n) -> Nat equals
+  func NEG_N(i,n) -> Element of NAT equals
 :: IDEA_1:def 5
 
      2 to_power(n) - i;
@@ -125,8 +126,8 @@ end;
 
 definition
   let n;
-  let i be Nat;
-  func NEG_MOD(i,n) -> Nat equals
+  let i be Element of NAT;
+  func NEG_MOD(i,n) -> Element of NAT equals
 :: IDEA_1:def 6
 
      NEG_N(i,n) mod 2 to_power(n);
@@ -151,8 +152,8 @@ theorem :: IDEA_1:17
      NEG_MOD(i,n) is_expressible_by n;
 
 definition
-  let n, i be Nat;
-  func ChangeVal_1(i,n) -> Nat equals
+  let n, i be Element of NAT;
+  func ChangeVal_1(i,n) -> Element of NAT equals
 :: IDEA_1:def 7
 
     2 to_power(n) if i = 0
@@ -164,13 +165,14 @@ theorem :: IDEA_1:18
       ChangeVal_1(i,n) <= 2 to_power(n) & ChangeVal_1(i,n) > 0;
 
 theorem :: IDEA_1:19
-  for n,a1,a2 be Nat holds a1 is_expressible_by n & a2 is_expressible_by n &
+  for n,a1,a2 be Element of NAT holds a1 is_expressible_by n &
+   a2 is_expressible_by n &
     ChangeVal_1(a1,n) = ChangeVal_1(a2,n) implies a1 = a2;
 
 definition
   let n;
-  let i be Nat;
-  func ChangeVal_2(i,n) -> Nat equals
+  let i be Element of NAT;
+  func ChangeVal_2(i,n) -> Element of NAT equals
 :: IDEA_1:def 8
 
     0 if i = 2 to_power(n)
@@ -182,23 +184,23 @@ theorem :: IDEA_1:20
     ChangeVal_2(i,n) is_expressible_by n;
 
 theorem :: IDEA_1:21
-  for n,a1,a2 be Nat holds a1 <> 0 & a2 <> 0 &
+  for n,a1,a2 be Element of NAT holds a1 <> 0 & a2 <> 0 &
     ChangeVal_2(a1,n) = ChangeVal_2(a2,n) implies a1 = a2;
 
 definition
   let n;
-  let i,j be Nat;
-  func MUL_MOD(i,j,n) -> Nat equals
+  let i,j be Element of NAT;
+  func MUL_MOD(i,j,n) -> Element of NAT equals
 :: IDEA_1:def 9
 
     ChangeVal_2((ChangeVal_1(i,n)*ChangeVal_1(j,n)) mod (2 to_power(n)+1),n);
 end;
 
 definition
-  let n be non empty Nat;
-  let i be Nat;
+  let n be non empty Element of NAT;
+  let i be Element of NAT;
   assume  i is_expressible_by n & (2 to_power(n) + 1) is prime;
-    func INV_MOD(i,n) -> Nat means
+    func INV_MOD(i,n) -> Element of NAT means
 :: IDEA_1:def 10
 
     MUL_MOD(i,it,n) = 1 & it is_expressible_by n;
@@ -238,7 +240,7 @@ definition
 :: IDEA_1:def 11
 
    len(it) = len(m) &
-   for i being Nat st i in dom m holds
+   for i being Element of NAT st i in dom m holds
      (i=1 implies it.i = MUL_MOD(m.1, k.1, n)) &
      (i=2 implies it.i = ADD_MOD(m.2, k.2, n)) &
      (i=3 implies it.i = ADD_MOD(m.3, k.3, n)) &
@@ -251,12 +253,12 @@ end;
 reserve m,k,k1,k2 for FinSequence of NAT;
 
 definition
-  let n be non empty Nat;
+  let n be non empty Element of NAT;
   let m,k be FinSequence of NAT;
   func IDEAoperationB(m, k, n) -> FinSequence of NAT means
 :: IDEA_1:def 12
 
-  len(it) = len(m) & for i being Nat st i in dom m holds
+  len(it) = len(m) & for i being Element of NAT st i in dom m holds
   (i=1 implies it.i =
     Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence
             MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
@@ -292,7 +294,7 @@ definition
 :: IDEA_1:def 13
 
    len(it) = len(m) &
-   for i being Nat st i in dom m holds
+   for i being Element of NAT st i in dom m holds
      it.i = IFEQ(i,2,m.3,IFEQ(i,3,m.2,m.i));
 end;
 
@@ -304,7 +306,7 @@ theorem :: IDEA_1:27
     IDEAoperationA(m,k,n).4 is_expressible_by n;
 
 theorem :: IDEA_1:28
-  for n being non empty Nat holds
+  for n being non empty Element of NAT holds
     len m >= 4 implies
     IDEAoperationB(m,k,n).1 is_expressible_by n &
     IDEAoperationB(m,k,n).2 is_expressible_by n &
@@ -321,7 +323,7 @@ theorem :: IDEA_1:29
     IDEAoperationC(m).4 is_expressible_by n;
 
 theorem :: IDEA_1:30
-  for n being non empty Nat,m,k1,k2 holds
+  for n being non empty Element of NAT,m,k1,k2 holds
     2 to_power(n)+1 is prime & len m >= 4 &
     m.1 is_expressible_by n & m.2 is_expressible_by n &
     m.3 is_expressible_by n & m.4 is_expressible_by n &
@@ -332,7 +334,7 @@ theorem :: IDEA_1:30
     IDEAoperationA( IDEAoperationA(m,k1,n), k2, n) = m;
 
 theorem :: IDEA_1:31
-  for n being non empty Nat,m,k1,k2 holds
+  for n being non empty Element of NAT,m,k1,k2 holds
     2 to_power(n)+1 is prime & len m >= 4 &
     m.1 is_expressible_by n & m.2 is_expressible_by n &
     m.3 is_expressible_by n & m.4 is_expressible_by n &
@@ -344,7 +346,7 @@ theorem :: IDEA_1:31
       = m;
 
 theorem :: IDEA_1:32
-  for n being non empty Nat,m,k1,k2 holds
+  for n being non empty Element of NAT,m,k1,k2 holds
     2 to_power(n)+1 is prime & len m >= 4 &
     m.1 is_expressible_by n & m.2 is_expressible_by n &
     m.3 is_expressible_by n & m.4 is_expressible_by n &
@@ -380,7 +382,7 @@ registration
 end;
 
 definition
-  let n be non empty Nat,k;
+  let n be non empty Element of NAT,k;
   func IDEA_P(k,n) -> Function of MESSAGES, MESSAGES means
 :: IDEA_1:def 15
 
@@ -388,7 +390,7 @@ definition
 end;
 
 definition
-  let n be non empty Nat,k;
+  let n be non empty Element of NAT,k;
   func IDEA_Q(k,n) -> Function of MESSAGES, MESSAGES means
 :: IDEA_1:def 16
 
@@ -396,7 +398,8 @@ definition
 end;
 
 definition
-  let r,lk be Nat,n be non empty Nat,Key be Matrix of lk,6,NAT;
+  let r,lk be Element of NAT,n be non empty Element of NAT,
+  Key be Matrix of lk,6,NAT;
   func IDEA_P_F(Key,n,r) -> FinSequence means
 :: IDEA_1:def 17
 
@@ -404,12 +407,14 @@ definition
 end;
 
 registration
-  let r,lk be Nat,n be non empty Nat,Key be Matrix of lk,6,NAT;
+  let r,lk be Element of NAT,n be non empty Element of NAT,
+  Key be Matrix of lk,6,NAT;
   cluster IDEA_P_F(Key,n,r) -> Function-yielding;
 end;
 
 definition
-  let r,lk be Nat,n be non empty Nat,Key be Matrix of lk,6,NAT;
+  let r,lk be Element of NAT,n be non empty Element of NAT,
+  Key be Matrix of lk,6,NAT;
   func IDEA_Q_F(Key,n,r) -> FinSequence means
 :: IDEA_1:def 18
 
@@ -417,7 +422,8 @@ definition
 end;
 
 registration
-  let r,lk be Nat,n be non empty Nat,Key be Matrix of lk,6,NAT;
+  let r,lk be Element of NAT,n be non empty Element of NAT,
+  Key be Matrix of lk,6,NAT;
   cluster IDEA_Q_F(Key,n,r) -> Function-yielding;
 end;
 
@@ -438,7 +444,7 @@ definition
 end;
 
 definition
-  let n be non empty Nat,k;
+  let n be non empty Element of NAT,k;
   func IDEA_PE(k,n) -> Function of MESSAGES, MESSAGES means
 :: IDEA_1:def 21
 
@@ -446,7 +452,7 @@ definition
 end;
 
 definition
-  let n be non empty Nat,k;
+  let n be non empty Element of NAT,k;
   func IDEA_QE(k,n) -> Function of MESSAGES, MESSAGES means
 :: IDEA_1:def 22
 
@@ -454,7 +460,7 @@ definition
 end;
 
 theorem :: IDEA_1:34
-  for n being non empty Nat,m,k1,k2
+  for n being non empty Element of NAT,m,k1,k2
      holds 2 to_power(n)+1 is prime & len m >= 4 &
       m.1 is_expressible_by n & m.2 is_expressible_by n &
       m.3 is_expressible_by n & m.4 is_expressible_by n &
@@ -467,7 +473,7 @@ theorem :: IDEA_1:34
         (IDEA_Q(k2,n)*IDEA_P(k1,n)).m = m;
 
 theorem :: IDEA_1:35
-  for n being non empty Nat,m,k1,k2 holds
+  for n being non empty Element of NAT,m,k1,k2 holds
        2 to_power(n)+1 is prime & len m >= 4 &
        m.1 is_expressible_by n & m.2 is_expressible_by n &
        m.3 is_expressible_by n & m.4 is_expressible_by n &
@@ -478,7 +484,7 @@ theorem :: IDEA_1:35
        (IDEA_QS(k2,n)*IDEA_PS(k1,n)).m = m;
 
 theorem :: IDEA_1:36
-  for n being non empty Nat,m,k1,k2 holds
+  for n being non empty Element of NAT,m,k1,k2 holds
     2 to_power(n)+1 is prime & len m >= 4 &
       m.1 is_expressible_by n & m.2 is_expressible_by n &
       m.3 is_expressible_by n & m.4 is_expressible_by n &
@@ -491,54 +497,65 @@ theorem :: IDEA_1:36
       (IDEA_QE(k2,n)*IDEA_PE(k1,n)).m = m;
 
 theorem :: IDEA_1:37
-  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
-    k being Nat holds IDEA_P_F(Key,n,(k+1)) =
+  for n being non empty Element of NAT,lk being Element of NAT,
+  Key being Matrix of lk,6,NAT,
+    k being Element of NAT holds IDEA_P_F(Key,n,(k+1)) =
       IDEA_P_F(Key,n,k)^<* IDEA_P(Line(Key,(k+1)),n) *>;
 
 theorem :: IDEA_1:38
-  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
-    k being Nat holds IDEA_Q_F(Key,n,(k+1)) =
+  for n being non empty Element of NAT,lk being Element of NAT,
+  Key being Matrix of lk,6,NAT,
+    k being Element of NAT holds IDEA_Q_F(Key,n,(k+1)) =
       <* IDEA_Q(Line(Key,k+1),n) *>^IDEA_Q_F(Key,n,k);
 
 theorem :: IDEA_1:39
-  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
-    k being Nat holds IDEA_P_F(Key,n,k) is FuncSeq-like FinSequence;
+  for n being non empty Element of NAT,lk being Element of NAT,
+  Key being Matrix of lk,6,NAT,
+    k being Element of NAT holds IDEA_P_F(Key,n,k) is FuncSeq-like FinSequence;
 
 theorem :: IDEA_1:40
-  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
-    k being Nat holds IDEA_Q_F(Key,n,k) is FuncSeq-like FinSequence;
+  for n being non empty Element of NAT,lk being Element of NAT,
+  Key being Matrix of lk,6,NAT,
+    k being Element of NAT holds IDEA_Q_F(Key,n,k) is FuncSeq-like FinSequence;
 
 theorem :: IDEA_1:41
-  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
-    k being Nat holds k <> 0 implies
+  for n being non empty Element of NAT,lk being Element of NAT,
+  Key being Matrix of lk,6,NAT,
+    k being Element of NAT holds k <> 0 implies
       IDEA_P_F(Key,n,k) is FuncSequence of MESSAGES,MESSAGES;
 
 theorem :: IDEA_1:42
-  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
-    k being Nat holds k <> 0 implies
+  for n being non empty Element of NAT,lk being Element of NAT,
+  Key being Matrix of lk,6,NAT,
+    k being Element of NAT holds k <> 0 implies
       IDEA_Q_F(Key,n,k) is FuncSequence of MESSAGES,MESSAGES;
 
 theorem :: IDEA_1:43
-  for n being non empty Nat,M being FinSequence of NAT,m,k st
+  for n being non empty Element of NAT,M being FinSequence of NAT,m,k st
     M = IDEA_P(k,n).m & len m >= 4 holds len M >= 4 &
      M.1 is_expressible_by n & M.2 is_expressible_by n &
      M.3 is_expressible_by n & M.4 is_expressible_by n;
 
 theorem :: IDEA_1:44
-  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
-    r being Nat holds rng compose(IDEA_P_F(Key,n,r),MESSAGES) c=MESSAGES &
+  for n being non empty Element of NAT,lk being Element of NAT,
+  Key being Matrix of lk,6,NAT,
+    r being Element of NAT
+     holds rng compose(IDEA_P_F(Key,n,r),MESSAGES) c=MESSAGES &
       dom compose(IDEA_P_F(Key,n,r),MESSAGES) =MESSAGES;
 
 theorem :: IDEA_1:45
-     for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
-    r being Nat holds rng compose(IDEA_Q_F(Key,n,r),MESSAGES) c=MESSAGES &
+     for n being non empty Element of NAT,lk being Element of NAT,
+     Key being Matrix of lk,6,NAT,
+    r being Element of NAT
+     holds rng compose(IDEA_Q_F(Key,n,r),MESSAGES) c=MESSAGES &
       dom compose(IDEA_Q_F(Key,n,r),MESSAGES) =MESSAGES;
 
 canceled;
 
 theorem :: IDEA_1:47
-  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
-    r being Nat,M being FinSequence of NAT,m st
+  for n being non empty Element of NAT,lk being Element of NAT,
+  Key being Matrix of lk,6,NAT,
+    r being Element of NAT,M being FinSequence of NAT,m st
       M = compose(IDEA_P_F(Key,n,r),MESSAGES).m & len m >= 4 &
        m.1 is_expressible_by n & m.2 is_expressible_by n &
        m.3 is_expressible_by n & m.4 is_expressible_by n
@@ -558,12 +575,13 @@ begin :: Modeling of IDEA Cryptogram
 :: encryption algorithm can be decrypted by IDEA decryption algorithm.
 
 theorem :: IDEA_1:48
-  for n being non empty Nat,lk being Nat,Key1,Key2 being Matrix of lk,6,NAT,
-    r being Nat,m st lk >= r &
+  for n being non empty Element of NAT,lk being Element of NAT,
+  Key1,Key2 being Matrix of lk,6,NAT,
+    r being Element of NAT,m st lk >= r &
       2 to_power(n)+1 is prime & len m >= 4 &
       m.1 is_expressible_by n & m.2 is_expressible_by n &
       m.3 is_expressible_by n & m.4 is_expressible_by n &
-      (for i being Nat holds i <= r implies
+      (for i being Element of NAT holds i <= r implies
         Key1*(i,1) is_expressible_by n & Key1*(i,2) is_expressible_by n &
         Key1*(i,3) is_expressible_by n & Key1*(i,4) is_expressible_by n &
         Key1*(i,5) is_expressible_by n & Key1*(i,6) is_expressible_by n &
@@ -578,12 +596,14 @@ theorem :: IDEA_1:48
      holds compose(IDEA_P_F(Key1,n,r)^IDEA_Q_F(Key2,n,r),MESSAGES).m = m;
 
 theorem :: IDEA_1:49
-     for n being non empty Nat,lk being Nat,Key1,Key2 being Matrix of lk,6,NAT,
-    r being Nat,ks1,ks2,ke1,ke2 being FinSequence of NAT,m st lk >= r &
+     for n being non empty Element of NAT,lk being Element of NAT,
+     Key1,Key2 being Matrix of lk,6,NAT,
+    r being Element of NAT,ks1,ks2,ke1,ke2 being FinSequence of NAT,m
+     st lk >= r &
         2 to_power(n)+1 is prime & len m >= 4 &
         m.1 is_expressible_by n & m.2 is_expressible_by n &
         m.3 is_expressible_by n & m.4 is_expressible_by n &
-        (for i being Nat holds i <= r implies
+        (for i being Element of NAT holds i <= r implies
          Key1*(i,1) is_expressible_by n & Key1*(i,2) is_expressible_by n &
          Key1*(i,3) is_expressible_by n & Key1*(i,4) is_expressible_by n &
          Key1*(i,5) is_expressible_by n & Key1*(i,6) is_expressible_by n &

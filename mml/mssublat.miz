@@ -26,7 +26,7 @@ environ
  theorems MSUALG_1, MSUALG_2, PBOOLE, TARSKI, UNIALG_1, UNIALG_2, FUNCT_1,
       RELAT_1, FUNCOP_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3,
       ZFMISC_1, REALSET2, CARD_3, ALG_1, LATTICES, CQC_LANG, MSUHOM_1,
-      RELSET_1, XBOOLE_0, XBOOLE_1;
+      RELSET_1, XBOOLE_0, XBOOLE_1, ORDINAL1;
  schemes FUNCT_2;
 
 begin
@@ -91,12 +91,12 @@ end;
 theorem Th6:
  for f be FinSequence st f = (*-->0).i holds len f = i
   proof
-     let p be FinSequence;
-     assume
-        p = (*-->0).i;
-  then p = i |-> 0 by PBOOLE:def 20;
-     hence thesis by FINSEQ_2:69;
-end;
+A1: i in NAT by ORDINAL1:def 13;
+    let p be FinSequence;
+    assume p = (*-->0).i;
+    then p = i |-> 0 by A1,PBOOLE:def 20;
+    hence thesis by FINSEQ_2:69;
+  end;
 
 begin
 
@@ -131,8 +131,9 @@ cluster the charact of U0 -> Function-yielding;
  coherence
   proof
    let x be set; assume
-    x in dom (the charact of U0);
-   hence (the charact of U0).x is Function by UNIALG_1:5;
+A1: x in dom (the charact of U0);
+    then x is Nat by ORDINAL1:def 13;
+   hence (the charact of U0).x is Function by A1,UNIALG_1:5;
   end;
 end;
 
@@ -224,20 +225,19 @@ then A16:      x in (len the_arity_of a)-tuples_on the carrier of U1
     reconsider ff1 as Function of dom signature(U1), {0}* by MSUALG_1:7;
 A17:     MSSign U1= ManySortedSign (#{0},dom signature(U1),ff1,ff2#)
                                        by MSUALG_1:16;
-          consider n being Nat such that
+          consider n being Element of NAT such that
 A18:     dom (signature (U2)) = Seg n by FINSEQ_1:def 2;
              a in Seg n by A14,A18;
-          then reconsider a as Nat;
+          then reconsider a as Element of NAT;
              U1,U2 are_similar by A1,UNIALG_2:16;
 then A19:    signature(U1)=signature(U2) by UNIALG_2:def 2;
 then A20:     (signature U1).a in rng (signature U1) by A14,FUNCT_1:def 5;
 A21:     rng (signature U1) c= NAT by FINSEQ_1:def 4;
              dom (*-->0) = NAT by FUNCT_2:def 1;
-          then a in dom ((*-->0)*(signature U1)) by A14,A19,A20,A21,FUNCT_1:21
-;
-          then A22:     (the Arity of MSSign U1).a = (*-->0).((signature U1).a)
+         then a in dom ((*-->0)*(signature U1)) by A14,A19,A20,A21,FUNCT_1:21;
+         then A22:     (the Arity of MSSign U1).a = (*-->0).((signature U1).a)
                                    by A17,FUNCT_1:22;
-          reconsider sig=(signature U1).a as Nat by A20,A21;
+          reconsider sig=(signature U1).a as Element of NAT by A20,A21;
 A23:     (the Arity of MSSign U1).a = sig |-> 0 by A22,PBOOLE:def 20;
 
              U1,U2 are_similar by A1,UNIALG_2:16;
@@ -469,7 +469,7 @@ A9:      dom the charact of U2 = Seg (len (the charact of U2)) &
           then A10:       n in dom signature U2 by A8,UNIALG_1:def 11;
 
           reconsider n as OperSymbol of MSSign U2 by A4,A8,A9,UNIALG_1:def 11;
-
+X0:       n is Nat by A8,ORDINAL1:def 13;
              C is_closed_on n by A6,MSUALG_2:def 7;
           then A11:      rng ((Den(n,MU2))|((C# * the Arity of MSSign U2).n))
 c=
@@ -496,7 +496,7 @@ FUNCT_1:23
                 .=(the Sorts of MU2)#.((*-->0).((signature U2).n))
                 by A10,FUNCT_1:23
                 .=(the Sorts of MU2)#.((*-->0).(arity(o)))
-                                                 by A8,A10,UNIALG_1:def 11
+                                                 by X0,A8,A10,UNIALG_1:def 11
                 .=(the Sorts of MU2)#.(arity(o) |-> 0) by PBOOLE:def 20;
 
 A15:            now
@@ -546,7 +546,7 @@ XBOOLE_1:1;
                   then s.x in the carrier of U2 by A23;
                   hence thesis by A21,A22,FUNCOP_1:13;
                  end;
-                then A24:             s in dom Den(n,MU2) by A16,A17,
+                 then A24:             s in dom Den(n,MU2) by A16,A17,
 CARD_3:def 5;
 
 A25:             s is Element of (len s)-tuples_on B &
@@ -555,7 +555,7 @@ A26:            n in dom signature U2 & (signature U2).n in dom (*-->0)
                  proof
                   thus n in dom signature U2 by A8,A9,UNIALG_1:def 11;
 A27:              dom *-->0 = NAT by FUNCT_2:def 1;
-                     (signature U2).n = arity o by A8,A10,UNIALG_1:def 11;
+                  (signature U2).n = arity o by X0,A8,A10,UNIALG_1:def 11;
                   hence thesis by A27;
                  end;
                 then A28:             n in dom ((*-->0)*(signature U2)) by
@@ -564,7 +564,7 @@ FUNCT_1:21;
 then A29:            (C# * the Arity of MSSign U2).n =
  C#.(((*-->0)*(signature U2)).n) by A4,FUNCT_1:23
                        .= C#.((*-->0).((signature U2).n)) by A28,FUNCT_1:22
-                       .= C#.((*-->0).(arity o)) by A8,A26,UNIALG_1:def 11
+                       .= C#.((*-->0).(arity o)) by X0,A8,A26,UNIALG_1:def 11
                        .= C#.((arity o) |-> 0) by PBOOLE:def 20;
                    0 in {0} by TARSKI:def 1;
                 then (arity o) |-> 0 is FinSequence of the carrier of MSSign
@@ -656,12 +656,13 @@ A10:      C is_closed_on N by A6,MSUALG_2:def 7;
 A11:       dom the charact of U2 = Seg (len (the charact of U2)) &
           dom signature U2 = Seg (len (signature U2)) by FINSEQ_1:def 3;
 
-A12:            N in dom signature U2 & (signature U2).N in dom (*-->0)
+X0:       N is Nat by A8,ORDINAL1:def 13;
+A12:      N in dom signature U2 & (signature U2).N in dom (*-->0)
                  proof
                   thus
 A13:               N in dom signature U2 by A7,A8,A11,UNIALG_1:def 11;
 A14:              dom *-->0 = NAT by FUNCT_2:def 1;
-                     (signature U2).N = arity o by A8,A13,UNIALG_1:def 11;
+                  (signature U2).N = arity o by X0,A8,A13,UNIALG_1:def 11;
                   hence thesis by A14;
                  end;
                 then A15:             N in dom ((*-->0)*(signature U2)) by
@@ -670,7 +671,7 @@ FUNCT_1:21;
 then A16:            (C# * the Arity of MSSign U2).N =
  C#.(((*-->0)*(signature U2)).N) by A4,FUNCT_1:23
                        .= C#.((*-->0).((signature U2).N)) by A15,FUNCT_1:22
-                       .= C#.((*-->0).(arity o)) by A8,A12,UNIALG_1:def 11
+                       .= C#.((*-->0).(arity o)) by X0,A8,A12,UNIALG_1:def 11
                        .= C#.((arity o) |-> 0) by PBOOLE:def 20;
                    0 in {0} by TARSKI:def 1;
                 then (arity o) |-> 0 is FinSequence of the carrier of MSSign
@@ -1156,14 +1157,15 @@ A3:     MSSign A = ManySortedSign
 A4:     MSSign B = ManySortedSign
          (#{0},dom signature(B),gg1,dom signature(B)-->0#)
            by MSUALG_1:16;
-       now let i; assume
+       now let i be Element of NAT; assume
 A5:      i in dom signature A;
 then A6:      i in dom ((*-->0)*(signature A)) by ALG_1:1;
 then A7:      (*-->0).((signature B).i)= ((*-->0)*(signature A)).i by A2,A3,A4,
 ALG_1:1
           .= (*-->0).((signature A).i) by A6,ALG_1:1;
-         reconsider m = (signature B).i as Nat by A2,A3,A4,A5,PARTFUN1:27;
-         reconsider k= (signature A).i as Nat by A5,PARTFUN1:27;
+         reconsider m = (signature B).i as Element of NAT
+         by A2,A3,A4,A5,PARTFUN1:27;
+         reconsider k= (signature A).i as Element of NAT by A5,PARTFUN1:27;
             (*-->0).m is Element of {0}*;
          then reconsider q = (*-->0).m as FinSequence;
             (*-->0).k is Element of {0}*;
@@ -1207,7 +1209,7 @@ A8:  (for x being set st x in the OperSymbols of MS holds
          x in the OperSymbols of MS;
         then reconsider x as OperSymbol of MS;
            x in Seg k by A4;
-        then reconsider n = x as Nat;
+        then reconsider n = x as Nat by ORDINAL1:def 13;
            n in dom(signature (1-Alg A)) by A6;
 then A9:     n in dom the charact of 1-Alg A by A5,FINSEQ_3:31;
         then reconsider h = (the charact of 1-Alg A).n
@@ -1582,7 +1584,7 @@ A1:   MSSign(A) = ManySortedSign
         consider OO being operation of A such that
 A2:      arity OO=0 by UNIALG_2:def 12;
         Seg len the charact of A = dom the charact of A by FINSEQ_1:def 3;
-        then consider i such that
+        then consider i being Element of NAT such that
 A3:     i in Seg len the charact of A & (the charact of A).i = OO
            by FINSEQ_2:11;
 A4:    len signature(A) = len the charact of A by UNIALG_1:def 11;

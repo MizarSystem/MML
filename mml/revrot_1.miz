@@ -11,7 +11,8 @@ environ
       MCART_1, PRE_TOPC, TOPREAL1, GOBOARD2, CARD_1, GOBOARD5, TARSKI,
       MATRIX_1, ABSVALUE, GOBOARD9, CONNSP_1, SUBSET_1, TOPS_1, PSCOMP_1,
       SPRECT_2, COMPTS_1, JORDAN5D, TREES_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, NAT_1, COMPLEX1, BINARITH,
+ notations TARSKI, XBOOLE_0, SUBSET_1,
+ NUMBERS,XCMPLX_0, NAT_1, COMPLEX1, BINARITH,
       CARD_1, FUNCT_1, FINSEQ_1, FINSEQ_2, MATRIX_1, FINSEQ_4, RFINSEQ,
       FINSEQ_5, FINSEQ_6, REALSET1, DOMAIN_1, STRUCT_0, REALSET2, PRE_TOPC,
       TOPS_1, CONNSP_1, COMPTS_1, EUCLID, TOPREAL1, GOBOARD1, GOBOARD2,
@@ -21,7 +22,7 @@ environ
       PSCOMP_1, GOBOARD9, SPRECT_2, JORDAN5D, JORDAN2C;
  registrations RELSET_1, SPRECT_1, SPRECT_2, EUCLID, FINSEQ_6, FINSEQ_5,
       GOBOARD9, GOBOARD2, PSCOMP_1, INT_1, FINSEQ_1, TEX_1, MEMBERED, REALSET1,
-      NAT_1;
+      NAT_1, ORDINAL1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TOPREAL1, GOBOARD5, SPRECT_2, TARSKI, FINSEQ_6, REALSET2,
       GOBOARD1, XBOOLE_0;
@@ -30,11 +31,11 @@ environ
       SPPOL_2, TARSKI, SPRECT_2, GOBOARD9, INT_1, SUBSET_1, JGRAPH_1, GOBOARD7,
       GOBOARD1, GOBOARD2, FUNCT_1, PARTFUN2, RELAT_1, FINSEQ_2, JORDAN5D,
       PSCOMP_1, REALSET2, JORDAN2C, EUCLID, YELLOW_8, TOPREAL3, XBOOLE_0,
-      XBOOLE_1, XREAL_1, XXREAL_0;
+      XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1;
 
-begin ::Preliminaries
+begin :: Preliminaries
 
-reserve i,j,k,m,n for Nat,
+reserve i,j,k,m,n for Element of NAT,
         D for non empty set,
         p for Element of D,
         f for FinSequence of D;
@@ -244,7 +245,7 @@ A1: 1 <= len (f:-p) by Th6;
  assume
 A2: p in rng f;
   then p..f <= len f by FINSEQ_4:31;
-  then reconsider x = len f - p..f as Nat by INT_1:18;
+  then reconsider x = len f - p..f as Element of NAT by INT_1:18;
       len (f:-p) -' 1 + p..f = x + 1 -' 1 + p..f by A2,FINSEQ_5:53
        .= len f - p..f + p..f by BINARITH:39
        .= len f;
@@ -384,10 +385,11 @@ A9: f:-p just_once_values f/.1
       let z be set;
       assume
 A10:      z in dom(f:-p);
-       then reconsider k = z as Nat;
+       then reconsider k = z as Element of NAT;
           k <> 0 by A10,FINSEQ_3:27;
-       then consider i such that
+       then consider i being Nat such that
 A11:     k = i+1 by NAT_1:22;
+         reconsider i as Element of NAT by ORDINAL1:def 13;
 A12:     (f:-p)/.(i+1) = f/.(i+p..f) by A2,A10,A11,FINSEQ_5:55;
 A13:     p..f <> 1 by A2,A3,FINSEQ_5:41;
           p..f >= 1 by A2,FINSEQ_4:31;
@@ -595,9 +597,9 @@ end;
 begin :: Finite sequences on the plane
 
 theorem Th19:
- for n being non empty Nat holds
+ for n being non empty Element of NAT holds
   0.REAL n <> 1.REAL n
-proof let n be non empty Nat;
+proof let n be non empty Element of NAT;
 A1:  0.REAL n = 0*n by EUCLID:def 9
         .= n |-> 0 by EUCLID:def 4;
 A2:  1.REAL n = 1*n by JORDAN2C:def 8
@@ -608,7 +610,7 @@ A2:  1.REAL n = 1*n by JORDAN2C:def 8
    hence 0.REAL n <> 1.REAL n by A1,A2;
 end;
 
-registration let n be non empty Nat;
+registration let n be non empty Element of NAT;
  cluster TOP-REAL n -> non trivial;
  coherence
   proof
@@ -630,13 +632,13 @@ A2: y in dom X_axis f and
 A3: (X_axis f).y = x by FUNCT_1:def 5;
 A4: dom X_axis f = dom f by SPRECT_2:19;
 A5: dom X_axis g = dom g by SPRECT_2:19;
-   reconsider y as Nat by A2;
+   reconsider y as Element of NAT by A2;
 A6: (X_axis f).y = (f/.y)`1 by A2,GOBOARD1:def 3;
       f/.y in rng f by A2,A4,PARTFUN2:4;
    then consider z being set such that
 A7: z in dom g and
 A8: g.z = f/.y by A1,FUNCT_1:def 5;
-   reconsider z as Nat by A7;
+   reconsider z as Element of NAT by A7;
       g/.z = f/.y by A7,A8,FINSEQ_4:def 4;
    then (X_axis g).z = (f/.y)`1 by A5,A7,GOBOARD1:def 3;
   hence x in rng X_axis g by A3,A5,A6,A7,FUNCT_1:def 5;
@@ -660,13 +662,13 @@ A2: y in dom Y_axis f and
 A3: (Y_axis f).y = x by FUNCT_1:def 5;
 A4: dom Y_axis f = dom f by SPRECT_2:20;
 A5: dom Y_axis g = dom g by SPRECT_2:20;
-   reconsider y as Nat by A2;
+   reconsider y as Element of NAT by A2;
 A6: (Y_axis f).y = (f/.y)`2 by A2,GOBOARD1:def 4;
       f/.y in rng f by A2,A4,PARTFUN2:4;
    then consider z being set such that
 A7: z in dom g and
 A8: g.z = f/.y by A1,FUNCT_1:def 5;
-   reconsider z as Nat by A7;
+   reconsider z as Element of NAT by A7;
       g/.z = f/.y by A7,A8,FINSEQ_4:def 4;
    then (Y_axis g).z = (f/.y)`2 by A5,A7,GOBOARD1:def 4;
   hence x in rng Y_axis g by A3,A5,A6,A7,FUNCT_1:def 5;
@@ -874,7 +876,7 @@ A8:   p = f.(p..f) by A5,FINSEQ_4:29 .= f/.(p..f) by A7,FINSEQ_4:def 4;
     let z be set such that
 A9:  z in dom f and
 A10:  z <> p..f;
-     reconsider k = z as Nat by A9;
+     reconsider k = z as Element of NAT by A9;
     per cases by A10,XXREAL_0:1;
     suppose
 A11:   k < p..f;
@@ -1599,7 +1601,7 @@ A8: k+1 <= len f by A5,NAT_1:38;
       k + 1 + len f <= len f + p..f by A7,XREAL_1:8;
    then n+1 <= len f by A9,SPRECT_3:6;
    then A12: n+1 <= len Rotate(f,p) by Th14;
-     for i1,j1,i2,j2 being Nat st
+     for i1,j1,i2,j2 being Element of NAT st
       [i1,j1] in Indices GoB Rotate(f,p) & [i2,j2] in Indices GoB Rotate(f,p) &
       (Rotate(f,p))/.n = (GoB Rotate(f,p))*(i1,j1) &
       (Rotate(f,p))/.(n+1) = (GoB Rotate(f,p))*(i2,j2) holds
@@ -1607,7 +1609,7 @@ A8: k+1 <= len f by A5,NAT_1:38;
     i1+1 = i2 & j1 = j2 & left_cell(f,k) = cell(GoB Rotate(f,p),i1,j1) or
     i1 = i2+1 & j1 = j2 & left_cell(f,k) = cell(GoB Rotate(f,p),i2,j2-'1) or
     i1 = i2 & j1 = j2+1 & left_cell(f,k) = cell(GoB Rotate(f,p),i1,j2)
-  proof let i1,j1,i2,j2 be Nat such that
+  proof let i1,j1,i2,j2 be Element of NAT such that
 A13: [i1,j1] in Indices GoB Rotate(f,p) and
 A14: [i2,j2] in Indices GoB Rotate(f,p) and
 A15: (Rotate(f,p))/.n = (GoB Rotate(f,p))*(i1,j1) and
@@ -1712,16 +1714,17 @@ then A8: len f -' 1 in dom f by A6,FINSEQ_3:27;
 A10: [i_w_n f, width GoB f] in Indices GoB f by JORDAN5D:def 7;
 A11: (GoB f)*(i_w_n f,width GoB f) = N-min L~f by JORDAN5D:def 7;
 A12: 1+1 in dom f by A4,FINSEQ_3:27;
-   then consider i1,j1 being Nat such that
+   then consider i1,j1 being Element of NAT such that
 A13:   [i1,j1] in Indices GoB f and
 A14:   f/.2 = (GoB f)*(i1,j1) by GOBOARD5:12;
-   consider i2,j2 being Nat such that
+   consider i2,j2 being Element of NAT such that
 A15:   [i2,j2] in Indices GoB f and
 A16:   f/.(len f -' 1) = (GoB f)*(i2,j2) by A8,GOBOARD5:12;
+AA:  width GoB f in NAT & i_w_n f in NAT by ORDINAL1:def 13; then
 A17: 1 <= width GoB f by A10,GOBOARD5:1;
 A18: 1 <= j1 & j1 <= width GoB f by A13,GOBOARD5:1;
 A19: 1 <= j2 & j2 <= width GoB f by A15,GOBOARD5:1;
-A20: 1 <= i_w_n f & i_w_n f <= len GoB f by A10,GOBOARD5:1;
+A20: 1 <= i_w_n f & i_w_n f <= len GoB f by AA,A10,GOBOARD5:1;
 A21: 1 <= i1 & i1 <= len GoB f by A13,GOBOARD5:1;
 A22: 1 <= i2 & i2 <= len GoB f by A15,GOBOARD5:1;
 A23: 1 in dom f by A5,FINSEQ_3:27;
@@ -1736,11 +1739,11 @@ A27:  width GoB f = j1;
     hence i_w_n f <= i1 by A11,A18,A20,A21,A27,GOBOARD5:4;
    end;
      abs(i_w_n f-i1)+abs(width GoB f-j1) = 1
-    by A1,A10,A11,A12,A13,A14,A23,GOBOARD5:13;
+    by A1,A10,A11,A12,A13,A14,A23,GOBOARD5:13,AA;
   then abs(i_w_n f-i1)=1 & width GoB f=j1 or abs(width GoB f-j1)=1 & i_w_n f=
-i1 by GOBOARD1:2;
+i1 by GOBOARD1:2,AA;
   then A28: i1 = i_w_n f+1 & width GoB f = j1 or
-     width GoB f = j1+1 & i_w_n f = i1 by A18,A26,GOBOARD1:1;
+     width GoB f = j1+1 & i_w_n f = i1 by A18,A26,GOBOARD1:1,AA;
 A29: len f in dom f by A5,FINSEQ_3:27;
 A30: (GoB f)*(i2,j2) in L~f by A4,A8,A16,GOBOARD1:16;
     A31: now assume
@@ -1754,11 +1757,11 @@ A32:  width GoB f = j2;
 A33: len f -' 1 + 1 = len f by A5,BINARITH:53;
   then f/.(len f -' 1 + 1) = f/.1 by FINSEQ_6:def 1;
   then abs(i2-i_w_n f)+abs(j2-width GoB f) = 1
-              by A1,A8,A10,A11,A15,A16,A29,A33,GOBOARD5:13;
+              by A1,A8,A10,A11,A15,A16,A29,A33,AA,GOBOARD5:13;
   then abs(i2-i_w_n f)=1 & j2=width GoB f or abs(j2-width GoB f)=1 & i2=i_w_n
-f by GOBOARD1:2;
+f by GOBOARD1:2,AA;
   then A34: i2 = i_w_n f+1 & j2 = width GoB f or
-     j2+1 = width GoB f & i2 = i_w_n f by A19,A31,GOBOARD1:1;
+     j2+1 = width GoB f & i2 = i_w_n f by A19,A31,AA,GOBOARD1:1;
 A35: A = L~f by SPPOL_2:22;
 A36: 1 <= i_w_n f +1 by NAT_1:29;
 A37: i_w_n f < i_e_n f by SPRECT_3:44;
@@ -1806,14 +1809,14 @@ A9:     N-min L~f = f.n_w_n f by JORDAN5D:def 15
             .= f/.n_w_n f by A8,FINSEQ_4:def 4;
       let z be set;
       assume
-A10:     z in dom f;
-       then reconsider k = z as Nat;
+A10:   z in dom f;
+       then reconsider k = z as Element of NAT;
       assume
-A11:    z <> n_w_n f;
+A11:  z <> n_w_n f;
       per cases by A11,XXREAL_0:1;
       suppose
-A12:     k < n_w_n f;
-          1 <= k by A10,FINSEQ_3:27;
+A12:  k < n_w_n f;
+      1 <= k by A10,FINSEQ_3:27;
       hence f/.z <> N-min L~f by A7,A9,A12,GOBOARD7:38;
       end;
       suppose
@@ -1872,7 +1875,7 @@ A10:   f/.1 = g.((f/.1)..g) by A7,FINSEQ_4:29
     let z be set such that
 A11:  z in dom g and
 A12:  z <> (f/.1)..g;
-     reconsider k = z as Nat by A11;
+     reconsider k = z as Element of NAT by A11;
     per cases by A12,XXREAL_0:1;
     suppose
 A13:   k < (f/.1)..g;

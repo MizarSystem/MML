@@ -9,18 +9,19 @@ environ
  vocabularies FINSEQ_2, BOOLE, UNIALG_1, FUNCT_2, PARTFUN1, RELAT_1, FINSEQ_1,
       FUNCOP_1, CQC_SIM1, FUNCT_1, FINSEQ_4, TARSKI, ZF_REFLE, SETFAM_1,
       SUBSET_1, LATTICES, BINOP_1, UNIALG_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, STRUCT_0, RELAT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1,
+      NUMBERS, NAT_1, STRUCT_0, RELAT_1,
       FUNCT_1, FINSEQ_1, SETFAM_1, FUNCOP_1, PARTFUN1, FINSEQ_2, LATTICES,
       BINOP_1, UNIALG_1;
  constructors SETFAM_1, DOMAIN_1, BINOP_1, FUNCOP_1, MEMBERED, FINSEQ_2,
       LATTICES, UNIALG_1;
  registrations SUBSET_1, LATTICES, UNIALG_1, RELSET_1, STRUCT_0, FINSEQ_2,
-      PARTFUN1, ARYTM_3, MEMBERED, XBOOLE_0;
+      PARTFUN1, ARYTM_3, MEMBERED, XBOOLE_0, ORDINAL1;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, UNIALG_1, XBOOLE_0;
  theorems TARSKI, FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_2, UNIALG_1, SUBSET_1,
       ZFMISC_1, SETFAM_1, FUNCOP_1, BINOP_1, LATTICES, FINSEQ_3, RELAT_1,
-      RELSET_1, XBOOLE_0, XBOOLE_1;
+      RELSET_1, XBOOLE_0, XBOOLE_1, ORDINAL1;
  schemes FINSEQ_1, BINOP_1, XBOOLE_0;
 
 begin
@@ -30,10 +31,11 @@ for n be Nat, D be non empty set, D1 be non empty Subset of D holds
   n-tuples_on D /\ n-tuples_on D1 = n-tuples_on D1
  proof
   let n be Nat,D be non empty set, D1 be non empty Subset of D;
+A1: n is Element of NAT by ORDINAL1:def 13;
       n-tuples_on D1 c= n-tuples_on D
    proof let z be set;
     assume z in n-tuples_on D1;
-    then z is Element of n-tuples_on D by FINSEQ_2:129;
+    then z is Element of n-tuples_on D by A1,FINSEQ_2:129;
     hence z in n-tuples_on D;
    end;
   hence thesis by XBOOLE_1:28;
@@ -137,7 +139,7 @@ func Operations(U0) -> PFuncsDomHQN of U0 equals
    reconsider A=rng the charact of(U0) as non empty set
      by FINSEQ_1:27;
         now let x be Element of A;
-     consider i such that
+     consider i being Element of NAT such that
 A1:   i in dom(the charact of(U0)) & (the charact of(U0)).i = x
                                                         by FINSEQ_2:11;
       reconsider p = (the charact of U0).i as PartFunc of U0
@@ -204,8 +206,10 @@ o};
    .=(arity o)-tuples_on A by A2,XBOOLE_1:28;
       o|((arity o)-tuples_on A) is PartFunc of A*,A
    proof
-        (arity o)-tuples_on A in {i-tuples_on A : not contradiction};
-    then (arity o)-tuples_on A c= union {i-tuples_on A : not contradiction}
+     (arity o)-tuples_on A in {i-tuples_on A where i is Element of NAT:
+     not contradiction};
+     then (arity o)-tuples_on A c= union {i-tuples_on A where
+     i is Element of NAT: not contradiction}
             by ZFMISC_1:92;
     then A5: dom ( o|((arity o)-tuples_on A)) c= A* by A4,FINSEQ_2:128;
         rng (o|((arity o)-tuples_on A)) c= A
@@ -260,9 +264,9 @@ for n being set,o st n in dom it & o =(the charact of(U0)).n holds it.n = o/.A;
   proof
    defpred P[Nat,set] means
    for o st o =(the charact of(U0)).$1 holds $2 = o/.A;
-   A1: for n st n in Seg len the charact of(U0)
+   A1: for n being Element of NAT st n in Seg len the charact of(U0)
       ex x being Element of PFuncs(A*,A) st P[n,x]
-    proof let n;
+    proof let n be Element of NAT;
      assume n in Seg len the charact of(U0);
      then n in dom the charact of(U0) by FINSEQ_1:def 3;
      then reconsider o1 =(the charact of(U0)).n as operation of U0 by Th6;
@@ -273,8 +277,8 @@ for n being set,o st n in dom it & o =(the charact of(U0)).n holds it.n = o/.A;
     end;
    consider p being FinSequence of PFuncs(A*,A) such that
    A2: dom p = Seg len the charact of(U0) and
-   A3: for n st n in Seg len the charact of(U0) holds P[n,p.n]
-          from FINSEQ_1:sch 5(A1);
+   A3: for n being Element of NAT st n in Seg len the charact of(U0) holds
+   P[n,p.n] from FINSEQ_1:sch 5(A1);
    reconsider p as PFuncFinSequence of A;
    take p;
    thus dom p =dom the charact of(U0) by A2,FINSEQ_1:def 3;
@@ -290,9 +294,9 @@ for n being set,o st n in dom it & o =(the charact of(U0)).n holds it.n = o/.A;
    p1.n = o/.A) & dom p2 = dom the charact of(U0) &
    for n being set,o st n in dom p2 & o = (the charact of(U0)).n holds
    p2.n = o/.A;
-       for n st n in dom the charact of(U0) holds p1.n = p2.n
-    proof
-     let n;assume A5: n in dom the charact of(U0);
+   for n be Element of NAT st n in dom the charact of(U0) holds p1.n = p2.n
+   proof
+     let n be Element of NAT;assume A5: n in dom the charact of(U0);
      then reconsider k =(the charact of(U0)).n as operation of U0 by Th6;
          p1.n =k/.A & p2.n =k/.A by A4,A5;
      hence thesis;
@@ -339,18 +343,17 @@ theorem
      then o/.A =o|((arity o)-tuples_on A) by Def6;
      then dom (o/.A) = dom o /\ ((arity o)-tuples_on A) by RELAT_1:90;
      then A1:dom (o/.A) =
-     ((arity o)-tuples_on the carrier of U1) /\ ((arity o)-tuples_on A)
-      by Th2
+     ((arity o)-tuples_on the carrier of U1) /\ ((arity o)-tuples_on A) by Th2
      .= (arity o)-tuples_on A by Th1;
-         dom (o/.A)=((arity (o/.A))-tuples_on A) by Th2;
-    hence thesis by A1,FINSEQ_2:130;
+     dom (o/.A)=(arity (o/.A))-tuples_on A by Th2;
+     hence thesis by A1,FINSEQ_2:130;
   end;
 
 definition let U0;
 mode SubAlgebra of U0 -> Universal_Algebra means :Def8:
 the carrier of it is Subset of U0 &
 for B be non empty Subset of U0 st B=the carrier of it holds
-the charact of(it) = Opers(U0,B) & B is opers_closed;
+the charact of it = Opers(U0,B) & B is opers_closed;
  existence
   proof
   A1: for B be non empty Subset of U0 st B=the carrier of U0
@@ -359,9 +362,9 @@ the charact of(it) = Opers(U0,B) & B is opers_closed;
     let B be non empty Subset of U0; assume
     A2: B =the carrier of U0;
     A3: dom the charact of(U0) = dom Opers(U0,B) by Def7;
-        for n st n in dom the charact of(U0) holds (the charact of(U0)).n =
-                                   (Opers(U0,B)).n
-     proof let n; assume
+    for n be Element of NAT st n in dom the charact of(U0)
+    holds (the charact of(U0)).n = (Opers(U0,B)).n
+     proof let n be Element of NAT; assume
       A4: n in dom the charact of(U0);
       then reconsider o =(the charact of(U0)).n as operation of U0 by Th6;
           (Opers(U0,B)).n = o/.B by A3,A4,Def7;
@@ -387,7 +390,7 @@ existence
    proof let B be non empty Subset of U0; assume
     A2: B=the carrier of S;
     A3: dom the charact of(U0)= dom Opers(U0,B) by Def7;
-         now let n; assume
+    now let n be Element of NAT; assume
       A4: n in dom the charact of (U0);
       then A5: n in dom Opers(U0,B) by Def7;
       reconsider o = (the charact of(U0)).n as operation of U0 by A4,Th6;
@@ -449,9 +452,9 @@ theorem
     let B be non empty Subset of U0; assume
     A2: B =the carrier of U0;
     A3: dom the charact of(U0) = dom Opers(U0,B) by Def7;
-        for n st n in dom the charact of(U0) holds (the charact of(U0)).n =
-    (Opers(U0,B)).n
-     proof let n; assume
+    for n be Element of NAT st n in dom the charact of(U0) holds
+    (the charact of(U0)).n = (Opers(U0,B)).n
+     proof let n be Element of NAT; assume
       A4: n in dom the charact of(U0);
       then reconsider o =(the charact of(U0)).n as operation of U0 by Th6;
           (Opers(U0,B)).n = o/.B by A3,A4,Def7;
@@ -463,8 +466,8 @@ theorem
  end;
 
 theorem
-    U0 is SubAlgebra of U1 & U1 is SubAlgebra of U2 implies U0 is SubAlgebra of
-U2
+  U0 is SubAlgebra of U1 & U1 is SubAlgebra of U2 implies
+  U0 is SubAlgebra of U2
  proof assume
   A1: U0 is SubAlgebra of U1 & U1 is SubAlgebra of U2;
   then A2: the carrier of U0 is Subset of U1 by Def8;
@@ -481,7 +484,7 @@ hence the carrier of U0 is Subset of U2 by A2,XBOOLE_1:1;
   A6: the charact of(U1) = Opers(U2,B2) & B2 is opers_closed by A1,Def8;
 A7:   now let o2 be operation of U2;
     A8: B2 is_closed_on o2 by A6,Def5;
-    consider n such that
+    consider n being Element of NAT such that
     A9: n in dom the charact of(U2) & (the charact of(U2)).n = o2
      by FINSEQ_2:11;
     A10: dom the charact of(U2) = dom Opers(U2,B2) by Def7;
@@ -540,7 +543,7 @@ o20
   A24: dom the charact of(U1)= dom Opers(U2,B2) by A1,Def8
     .= dom the charact of(U2) by Def7;
   A25: dom the charact of(U2)= dom Opers(U2,B) by Def7;
-       now let n; assume
+  now let n be Element of NAT; assume
     A26: n in dom Opers(U2,B);
     then reconsider o2 = (the charact of(U2)).n as operation of U2 by A25,Th6;
     reconsider o21 = (the charact of(U1)).n as operation of U1 by A24,A25,A26,
@@ -575,9 +578,9 @@ U2;
   A3: B1 = B by A2,XBOOLE_0:def 10;
   then A4: the charact of(U1) = Opers(U2,B1) & B1 is opers_closed by A1,Def8;
   A5: dom Opers(U2,B1) = dom the charact of (U2) by Def7;
-      for n st n in dom the charact of(U2) holds (the charact of(U2)).n =
-   (Opers(U2,B1)).n
-   proof let n; assume
+  for n being Element of NAT st n in dom the charact of(U2)
+  holds (the charact of(U2)).n = (Opers(U2,B1)).n
+   proof let n be Element of NAT; assume
     A6: n in dom the charact of(U2);
     then reconsider o =(the charact of(U2)).n as operation of U2 by Th6;
         (Opers(U2,B1)).n = o/.B1 by A5,A6,Def7
@@ -618,7 +621,7 @@ for U1,U2 be SubAlgebra of U0 st the carrier of U1 c= the carrier of U2
        then s is FinSequence of (the carrier of U0) by FINSEQ_1:def 4;
        then reconsider s0 = s as Element of (the carrier of U0)*
           by FINSEQ_1:def 11;
-       consider n such that
+       consider n being Element of NAT such that
        A8: n in dom the charact of(U2) & (the charact of(U2)).n = o2
        by FINSEQ_2:11;
        reconsider o0 = (the charact of(U0)).n as operation of U0 by A4,A8,Th6;
@@ -637,7 +640,7 @@ for U1,U2 be SubAlgebra of U0 st the carrier of U1 c= the carrier of U2
        then o2.s = o0.s1 by A12,FUNCT_1:72;
        hence thesis by A3,A6,A10,A11,Def4;
       end;
-         now let n; assume
+      now let n be Element of NAT; assume
       A13: n in dom the charact of(U0);
       then reconsider o0 = (the charact of(U0)).n as operation of U0 by Th6;
       reconsider o1 = (the charact of(U1)).n as operation of U1 by A4,A13,Th6;
@@ -686,8 +689,8 @@ A5:   dom the charact of (U1)= dom Opers(U2,A) by A1,Def8;
   A6: dom s1 c= dom s2 by A2,A3,A4,Def7;
    A7: dom s1 = dom s2 by A3,A4,A5,Def7;
    set X = dom s1;
-       for n st n in X holds s1.n = s2.n
-    proof let n; assume
+   for n being Element of NAT st n in X holds s1.n = s2.n
+    proof let n be Element of NAT; assume
      A8: n in X;
      then reconsider o1=(the charact of(U1)).n as operation of U1 by A3,Th6;
      A9: s1.n = arity(o1) by A8,UNIALG_1:def 11;
@@ -905,7 +908,7 @@ Constants(U0) is Subset of U1
     A1: a=x & ex o be operation of U0 st arity o=0 & a in rng o;
     consider o0 be operation of U0 such that
     A2: arity o0 = 0 & a in rng o0 by A1;
-    consider n such that
+    consider n being Element of NAT such that
     A3: n in dom (the charact of U0) & (the charact of U0).n=o0
     by FINSEQ_2:11;
     reconsider B =u1 as non empty Subset of U0 by Def8;
@@ -1017,7 +1020,7 @@ A7:A \/ Constants(U0) <> {} by A1,XBOOLE_1:15;
      A15:a=x & ex o be operation of U0 st arity o=0 & a in rng o;
      consider o0 be operation of U0 such that
      A16: arity o0 = 0 & a in rng o0 by A15;
-     consider n such that
+     consider n being Element of NAT such that
      A17:n in dom (the charact of(U0)) & (the charact of U0).n=o0
      by FINSEQ_2:11;
      reconsider B =u1 as non empty Subset of U0 by Def8;
@@ -1057,7 +1060,7 @@ A7:A \/ Constants(U0) <> {} by A1,XBOOLE_1:15;
    A30: dom the charact of(U0) = dom Opers(U0,P) &
        dom the charact of(U0) = dom Opers(U0,u11) by Def7;
 A31:    now let o1 be operation of U1;
-     consider n such that
+     consider n being Element of NAT such that
      A32: n in dom the charact of(U1) & o1 = (the charact of U1).n
      by FINSEQ_2:11;
      reconsider o0 = (the charact of U0).n as operation of U0 by A29,A30,A32,
@@ -1085,7 +1088,7 @@ Th6;
      hence B is_closed_on o1 by Def4;
     end;
    A39: dom Opers(U1,B) = dom the charact of(U1) by Def7;
-        now let n; assume A40: n in dom the charact of(U0);
+   now let n be Element of NAT; assume A40: n in dom the charact of(U0);
      then reconsider o0 = (the charact of U0).n as operation of U0 by Th6;
      reconsider o1 = (the charact of U1).n as operation of U1
      by A29,A30,A40,Th6;
@@ -1131,9 +1134,9 @@ theorem
   by Def8;
   A4:B is opers_closed & the charact of(W) = Opers(U0,B) by Def8;
   A5:dom the charact of(U0) = dom Opers(U0,B) by Def7;
-      for n st n in dom the charact of(U0) holds (the charact of(U0)).n =
-  (Opers(U0,B)).n
-   proof let n; assume
+  for n being Element of NAT st n in dom the charact of(U0)
+  holds (the charact of(U0)).n = (Opers(U0,B)).n
+   proof let n be Element of NAT; assume
     A6: n in dom the charact of(U0);
     then reconsider o =(the charact of(U0)).n as operation of U0 by Th6;
         (Opers(U0,B)).n = o/.B by A5,A6,Def7;
@@ -1289,9 +1292,9 @@ A5:  the carrier of (U1 /\(U1"\/"U2)) c= the carrier of U1 by A2,XBOOLE_1:17;
   A7:the charact of (U1)= Opers(U0,u1) & u1 is opers_closed by Def8;
   A8:dom Opers(U0,u112) = dom the charact of(U0) &
   dom Opers(U0,u1) = dom the charact of(U0) by Def7;
-      for n st n in dom the charact of (U0) holds
+  for n being Element of NAT st n in dom the charact of (U0) holds
   (the charact of U1/\(U1"\/"U2)).n= (the charact of U1).n
-   proof let n;
+   proof let n be Element of NAT;
     assume A9:n in dom the charact of (U0);
     then reconsider o0 = (the charact of U0).n as operation of U0 by Th6;
     thus (the charact of U1 /\ ( U1 "\/" U2)).n = Opers(U0,u112).n by A1,Def10

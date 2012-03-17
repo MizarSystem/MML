@@ -12,7 +12,8 @@ environ
       JORDAN3, RELAT_1, SPPOL_2, FUNCT_1, TARSKI, RFINSEQ, GROUP_2, SEQM_3,
       GOBOARD5, GOBOARD9, SUBSET_1, TOPREAL4, JORDAN5D, GOBOARD2, SPRECT_2,
       ABSVALUE, CARD_1, ORDINAL2, TOPS_1, JORDAN5C, FINSEQ_5, FINSEQ_4, ARYTM;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, ORDINAL1, XREAL_0,
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, ORDINAL1,
+ NUMBERS,XCMPLX_0,XREAL_0,
       COMPLEX1, REAL_1, NAT_1, BINARITH, CARD_1, RFINSEQ, FUNCT_1, FINSEQ_1,
       FINSEQ_4, FINSEQ_5, MATRIX_1, MATRIX_2, STRUCT_0, METRIC_1, PRE_TOPC,
       TOPS_1, COMPTS_1, CONNSP_1, PCOMPS_1, EUCLID, TOPREAL1, TOPREAL4,
@@ -23,7 +24,7 @@ environ
       TOPREAL2, TOPREAL4, GOBOARD2, SPPOL_1, JORDAN1, PSCOMP_1, GOBOARD9,
       JORDAN3, JORDAN5C, SPRECT_1, SPRECT_2, JORDAN5D;
  registrations STRUCT_0, RELSET_1, SPRECT_1, SPRECT_2, EUCLID, SPPOL_2,
-      GOBOARD2, XREAL_0, FINSEQ_5, ARYTM_3, MEMBERED, XXREAL_0;
+      GOBOARD2, XREAL_0, FINSEQ_5, ARYTM_3, MEMBERED, XXREAL_0, ORDINAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SPRECT_2, JORDAN1, TOPREAL4, GOBOARD1, XBOOLE_0, PSCOMP_1;
  theorems FINSEQ_4, TARSKI, FINSEQ_3, FINSEQ_1, SPRECT_2, GOBOARD7, PSCOMP_1,
@@ -33,12 +34,12 @@ environ
       CONNSP_1, SUBSET_1, GOBRD12, JORDAN5C, JORDAN6, CQC_THE1, MATRIX_2,
       GOBOARD1, ENUMSET1, CARD_2, GOBOARD2, BINARITH, NAT_2, ABSVALUE,
       GOBOARD8, PARTFUN2, FUNCT_1, XBOOLE_0, XBOOLE_1, XREAL_0, FINSEQ_2,
-      XREAL_1, XXREAL_0;
+      XREAL_1, XXREAL_0, NUMBERS;
  schemes DOMAIN_1;
 
 begin :: Preliminaries
 
- reserve i,j,k,n,m for Nat;
+ reserve i,j,k,n,m for Element of NAT;
 
 canceled;
 
@@ -709,11 +710,11 @@ A8: LSeg(f,j) c= L~f by TOPREAL3:26;
   end;
   suppose
 A9: q <> p;
-     for i, j being Nat st q in LSeg(f,i) & p in LSeg(f,j)
+     for i, j being Element of NAT st q in LSeg(f,i) & p in LSeg(f,j)
   & 1 <= i & i+1 <= len f
   & 1 <= j & j+1 <= len f holds
        i <= j & (i = j implies LE q,p,f/.i,f/.(i+1))
-  proof let i1, i2 be Nat such that
+  proof let i1, i2 be Element of NAT such that
 A10: q in LSeg(f,i1) and
 A11: p in LSeg(f,i2) and
 A12: 1 <= i1 & i1+1 <= len f and
@@ -888,7 +889,7 @@ A5: 1 <= width GoB f by GOBRD11:34;
 A6: 4 < len f by GOBOARD7:36;
    then A7:  1+1 <= len f by XXREAL_0:2;
    then A8:   1+1 in dom f by FINSEQ_3:27;
-   then consider i1,j1 being Nat such that
+   then consider i1,j1 being Element of NAT such that
 A9: [i1,j1] in Indices GoB f and
 A10: f/.2 = (GoB f)*(i1,j1) by GOBOARD2:25;
 A11: 1 <= len f by A6,XXREAL_0:2;
@@ -919,12 +920,12 @@ A22: f/.len f = f/.1 by FINSEQ_6:def 1;
 A23: len f -' 1 + 1 = len f by A11,BINARITH:53;
 A24:  1 <= len f -' 1 & len f -' 1 <= len f by A7,JORDAN3:7,12;
    then A25: len f -' 1 in dom f by FINSEQ_3:27;
-   then consider i2,j2 being Nat such that
+   then consider i2,j2 being Element of NAT such that
 A26: [i2,j2] in Indices GoB f and
 A27: f/.(len f -' 1) = (GoB f)*(i2,j2) by GOBOARD2:25;
 A28: 1 <= i2 & i2 <= len GoB f by A26,GOBOARD5:1;
 A29: 1 <= j2 & j2 <= width GoB f by A26,GOBOARD5:1;
-       len f in dom f by A11,FINSEQ_3:27;
+     len f in dom f by A11,FINSEQ_3:27;
    then A30:   abs(i2-i)+abs(j2-width GoB f) = 1
         by A2,A14,A22,A23,A25,A26,A27,GOBOARD5:13;
   per cases by A30,GOBOARD1:2;
@@ -954,7 +955,10 @@ then A34: f/.(len f -' 1) in N-most L~f by A33,SPRECT_2:14;
   suppose that
 A35: abs(j2-width GoB f)=1 and
 A36: i2=i;
-       j2 < width GoB f & width GoB f = j2+1 by A29,A35,GOBOARD1:1;
+X1:NAT c= REAL by NUMBERS:19;
+   width GoB f in NAT; then
+   width GoB f in REAL by X1; then
+   j2 < width GoB f & width GoB f = j2+1 by A29,A35,GOBOARD1:1;
   hence f/.(len f -' 1) = (GoB f)*(i,width GoB f -' 1) by A27,A36,BINARITH:39;
 end;
 end;

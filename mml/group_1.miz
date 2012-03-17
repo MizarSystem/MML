@@ -13,18 +13,19 @@ environ
       RELAT_1, FUNCT_1, REAL_1, FUNCT_2, BINOP_2, STRUCT_0, RLVECT_1, INT_1,
       NAT_1, FINSEQOP, SETWISEO, CARD_1, FINSET_1, BINOP_1, INT_2;
  constructors BINOP_1, SETWISEO, XXREAL_0, NAT_1, BINOP_2, MEMBERED, FINSEQOP,
-      INT_2, RLVECT_1;
+      INT_2, RLVECT_1, ARYTM_3;
  registrations FINSET_1, INT_1, STRUCT_0, RELSET_1, XREAL_0, MEMBERED, CARD_4,
-      ORDINAL2, XXREAL_0;
+      ORDINAL2, XXREAL_0, NAT_1, ARYTM_3;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions BINOP_1, FINSEQOP, STRUCT_0, RLVECT_1, SETWISEO;
  theorems ABSVALUE, BINOP_1, CARD_1, FINSEQOP, FUNCT_2, INT_1, NAT_1, REAL_1,
-      RLVECT_1, ZFMISC_1, STRUCT_0, BINOP_2, XREAL_1, COMPLEX1, XXREAL_0;
+      RLVECT_1, ZFMISC_1, STRUCT_0, BINOP_2, XREAL_1, COMPLEX1, XXREAL_0,
+      ORDINAL1;
  schemes FUNCT_1, FUNCT_2, INT_1, NAT_1, RECDEF_1, BINOP_1;
 
 begin
 
- reserve k,m,n for Nat;
+ reserve k,m,n for Element of NAT;
  reserve i,j for Integer;
 
 definition
@@ -548,7 +549,7 @@ definition let G be non empty HGrStr;
               f being Element of G such that
         A6: x = f and A7: g2 = y2 and A8: g2.0 = 1.G and
                              A9: for n holds g2.(n + 1) = (g2.n) * f;
-         defpred P[Nat] means g1.$1 = g2.$1;
+         defpred P[Element of NAT] means g1.$1 = g2.$1;
          A10: P[0] by A4,A8;
          A11: now let n;
            assume P[n];
@@ -564,7 +565,7 @@ definition let G be non empty HGrStr;
       proof let x be set;
         assume x in the carrier of G;
          then reconsider b = x as Element of G;
-         deffunc F(Nat,Element of G) = $2 * b;
+         deffunc F(Element of NAT,Element of G) = $2 * b;
          consider g0 being Function of NAT, the carrier of G such that
          A13: g0.0 = 1.G and
           A14: for n being Element of NAT holds g0.(n + 1) = F(n,g0.n)
@@ -580,7 +581,7 @@ definition let G be non empty HGrStr;
     consider f being Function such that dom f = the carrier of G and
      A15: for x be set st x in the carrier of G holds P[x,f.x]
           from FUNCT_1:sch 2(A1,A12);
-    defpred P[Element of G,Nat,set] means
+    defpred P[Element of G,Element of NAT,set] means
           ex g0 being Function of NAT, the carrier of G
             st g0 = f.$1 & $3 = g0.$2;
      A16: for a being Element of G, n being Element of NAT
@@ -630,7 +631,7 @@ definition let G be non empty HGrStr;
                     for n holds g.(h,n + 1) = (g.(h,n)) * h;
         now let h be Element of G,
              n be Element of NAT;
-        defpred P[Nat] means f.[h,$1] = g.[h,$1];
+        defpred P[Element of NAT] means f.[h,$1] = g.[h,$1];
          f.[h,0] = f.(h,0)
                    .= 1.G by A24
                    .= g.(h,0) by A25
@@ -669,7 +670,13 @@ definition let G,n,h;
   end;
 end;
 
-Lm2: h |^ (n + 1) = h |^ n * h by Def8;
+ reserve k,m,n for Nat;
+
+Lm2: h |^ (n + 1) = h |^ n * h
+ proof reconsider n as Element of NAT by ORDINAL1:def 13;
+   h |^ (n + 1) = h |^ n * h by Def8;
+  hence thesis;
+ end;
 
 Lm3: h |^ 0 = 1.G by Def8;
 
@@ -686,7 +693,7 @@ A2: now let n;
                    .= 1.G by Def5;
   hence P[n+1];
 end;
-  for n holds P[n] from NAT_1:sch 1(A1,A2);
+  for n holds P[n] from NAT_1:sch 2(A1,A2);
  hence thesis;
 end;
 
@@ -751,7 +758,7 @@ A2: for m st P[m] holds P[m+1]
                        .= h |^ n * (h |^ m * h) by Def4
                        .= h |^ n * (h |^ (m + 1)) by Lm2;
 end;
-   for m holds P[m] from NAT_1:sch 1(A1,A2);
+   for m holds P[m] from NAT_1:sch 2(A1,A2);
   hence thesis;
  end;
 
@@ -781,7 +788,7 @@ A2: for m st P[m] holds P[m+1]
                        .= h |^ n |^ m * (h |^ n |^ 1) by Th44
                        .= h |^ n |^ (m + 1) by Th48;
 end;
-    for m holds P[m] from NAT_1:sch 1(A1,A2);
+    for m holds P[m] from NAT_1:sch 2(A1,A2);
  hence thesis;
 end;
 
@@ -800,14 +807,15 @@ A2: now let n;
                   .= (h |^ (n + 1))" by Th49;
   hence P[n+1];
 end;
-  for n holds P[n] from NAT_1:sch 1(A1,A2);
+  for n holds P[n] from NAT_1:sch 2(A1,A2);
  hence thesis;
 end;
 
 theorem Th52:
  g * h = h * g implies g * (h |^ n) = h |^ n * g
 proof
-  defpred P[Nat] means g * h = h * g implies g * (h |^ $1) = h |^ $1 * g;
+  defpred P[Nat] means
+   g * h = h * g implies g * (h |^ $1) = h |^ $1 * g;
 A1: P[0] proof assume g * h = h * g;
  thus g * (h |^ 0) = g * 1.G by Lm3
                  .= g by Def5
@@ -824,7 +832,7 @@ A2: for n st P[n] holds P[n+1]
                        .= h * (h |^ n) * g by Def4
                        .= h |^ (n + 1) * g by Th49;
 end;
-   for n holds P[n] from NAT_1:sch 1(A1,A2);
+   for n holds P[n] from NAT_1:sch 2(A1,A2);
  hence thesis;
 end;
 
@@ -854,7 +862,7 @@ A3: for m st g * h = h * g holds g |^ n * (h |^ m) = h |^ m * (g |^ n);
                          .= h |^ m * (g * (g |^ n)) by Def4
                          .= h |^ m * (g |^ (n + 1)) by Th49;
 end;
-    for n holds P[n] from NAT_1:sch 1(A1,A2);
+    for n holds P[n] from NAT_1:sch 2(A1,A2);
  hence thesis;
 end;
 
@@ -883,7 +891,7 @@ A2: for n st P[n] holds P[n+1]
                          .= h |^ (n + 1) * (g |^ (n + 1)) by Th49
                          .= g |^ (n + 1) * (h |^ (n + 1)) by A4,Th53;
  end;
-  for n holds P[n] from NAT_1:sch 1(A1,A2);
+  for n holds P[n] from NAT_1:sch 2(A1,A2);
  hence thesis;
 end;
 
@@ -956,7 +964,7 @@ Lm4: h |^ (- i) = (h |^ i)"
 
 Lm5: j >= 1 or j = 0 or j < 0
  proof
-      j < 0 or (j is Nat & (j <> 0 or j = 0)) by INT_1:16;
+      j < 0 or (j is Element of NAT & (j <> 0 or j = 0)) by INT_1:16;
   hence thesis by NAT_1:39;
  end;
 
@@ -1023,7 +1031,7 @@ Lm7: j >= 0 or j = - 1 or j < - 1
     end;
     suppose A1: j < 0;
       then - j >= -0 by XREAL_1:26;
-     then reconsider n = - j as Nat by INT_1:16;
+     then reconsider n = - j as Element of NAT by INT_1:16;
          n <> -0 by A1;
       then n >= 1 by NAT_1:39;
       then n > 1 or n = 1 by REAL_1:def 5;
@@ -1036,7 +1044,7 @@ Lm8: h |^ (j + 1) = h |^ j * (h |^ 1)
  proof
 A1:   now per cases by Lm7;
     suppose A2: j >= 0;
-      then reconsider n = j as Nat by INT_1:16;
+      then reconsider n = j as Element of NAT by INT_1:16;
        A3: n + 1 >= 0;
        A4: n + 1 = abs( j + 1 ) by ABSVALUE:def 1;
      thus h |^ (j + 1) * ((h |^ (- 1)) * (h |^ (- j))) =
@@ -1133,7 +1141,7 @@ Lm9: h" |^ i = (h |^ i)"
  proof
    per cases;
     suppose i >= 0;
-      then reconsider n = i as Nat by INT_1:16;
+      then reconsider n = i as Element of NAT by INT_1:16;
      thus h" |^ i = (h |^ n)" by Th51
                 .= (h |^ i)";
     end;
@@ -1152,13 +1160,13 @@ theorem Th67:
   proof
    per cases;
      suppose i >= 0 & j >= 0;
-       then reconsider m = i, n = j as Nat by INT_1:16;
+       then reconsider m = i, n = j as Element of NAT by INT_1:16;
       thus h |^ (i * j) = h |^ m |^ n by Th50
                       .= h |^ i |^ j;
      end;
      suppose i >= 0 & j < 0;
         then i >= 0 & - j >= -0 by XREAL_1:26;
-       then reconsider m = i, n = - j as Nat by INT_1:16;
+       then reconsider m = i, n = - j as Element of NAT by INT_1:16;
             i * j = - (i * n);
       hence h |^ (i * j) = (h |^ (i * n))" by Lm4
                        .= h" |^ (i * n) by Lm9
@@ -1170,7 +1178,7 @@ theorem Th67:
      end;
      suppose i < 0 & j >= 0;
         then - i >= -0 & j >= 0 by XREAL_1:26;
-       then reconsider m = - i, n = j as Nat by INT_1:16;
+       then reconsider m = - i, n = j as Element of NAT by INT_1:16;
             i * j = - (m * j);
       hence h |^ (i * j) = (h |^ (m * j))" by Lm4
                        .= h" |^ (m * j) by Lm9
@@ -1181,7 +1189,7 @@ theorem Th67:
      end;
      suppose j < 0 & i < 0;
         then - j >= -0 & - i >= -0 by XREAL_1:26;
-       then reconsider m = - i, n = - j as Nat by INT_1:16;
+       then reconsider m = - i, n = - j as Element of NAT by INT_1:16;
            i * j * ((- 1) * (- 1)) = m * n;
       hence h |^ (i * j) = h |^ m |^ n by Th50
                       .= (h |^ (- i) |^ j)" by Lm4
@@ -1283,26 +1291,39 @@ theorem Th79:
   end;
 
 definition let G,h;
- func ord h -> Nat means
+ func ord h -> Element of NAT means
   :Def12: it = 0 if h is_of_order_0 otherwise
          h |^ it = 1.G & it <> 0 &
           for m st h |^ m = 1.G & m <> 0 holds it <= m;
  existence
   proof
-    defpred P[Nat] means h |^ $1 = 1.G & $1 <> 0;
-    per cases;
-     suppose h is_of_order_0;
-      hence thesis;
+    defpred P[Element of NAT] means h |^ $1 = 1.G & $1 <> 0;
+:::    per cases;
+     hereby assume h is_of_order_0;
+      take n = 0;
+      thus n = 0;
      end;
-     suppose not h is_of_order_0;
-        then A1: ex n st P[n] by Def11;
-       consider k such that A2: P[k] &
-        for n st P[n] holds k <= n from NAT_1:sch 5(A1);
-      thus thesis by A2;
+     hereby assume not h is_of_order_0;
+       then consider n such that
+X:      h |^ n = 1.G & n <> 0 by Def11;
+       n is Element of NAT by ORDINAL1:def 13;
+       then
+A1:    ex n being Element of NAT st P[n] by X;
+       consider k being Element of NAT such that
+A2:     P[k] and
+A3:     for n being Element of NAT st P[n] holds k <= n from NAT_1:sch 5(A1);
+      take k;
+      thus h |^ k = 1.G & k <> 0 by A2;
+      let m;
+       reconsider n = m as Element of NAT by ORDINAL1:def 13;
+      assume h |^ m = 1.G & m <> 0;
+       then h |^ n = 1.G & n <> 0;
+       then k <= n by A3;
+      hence k <= m;
   end;
   end;
  uniqueness
-  proof let n1,n2 be Nat;
+  proof let n1,n2 be Element of NAT;
    thus h is_of_order_0 & n1 = 0 & n2 = 0 implies n1 = n2;
     assume that not h is_of_order_0 and
                 A3: h |^ n1 = 1.G & n1 <> 0 &
@@ -1351,10 +1372,12 @@ theorem
 theorem
     h |^ n = 1.G implies ord h divides n
 proof
-  defpred P[Nat] means h |^ $1 = 1.G implies ord h divides $1;
-A1: for n st for k st k < n holds P[k] holds P[n]
-proof let n;
-  assume A2: for k st k < n holds h |^ k = 1.G implies ord h divides k;
+  defpred P[Element of NAT] means h |^ $1 = 1.G implies ord h divides $1;
+A1: for n being Element of NAT
+     st for k being Element of NAT st k < n holds P[k]
+  holds P[n]
+proof let n be Element of NAT;
+  assume A2: for k being Element of NAT st k < n holds P[k];
   assume A3: h |^ n = 1.G;
     per cases;
      suppose n = 0;
@@ -1369,13 +1392,16 @@ proof let n;
         suppose A5: ord h <> 0;
            then h is_not_of_order_0 by Def12;
            then ord h <= n by A3,A4,Def12;
-          then consider m such that A6: n = ord h + m by NAT_1:28;
+          then consider m being Nat such that
+          A6: n = ord h + m by NAT_1:28;
+a1:       m in NAT by ORDINAL1:def 13;
            A7: h |^ n = h |^ ord h * (h |^ m) by A6,Th48
                    .= 1.G * (h |^ m) by Th82
                    .= h |^ m by Def5;
               m < n by A5,A6,NAT_1:41;
-           then ord h divides m by A2,A3,A7;
-          then consider i being Nat such that A8: m = ord h * i by NAT_1:def 3;
+           then ord h divides m by a1,A2,A3,A7;
+          then consider i being Nat such that A8: m = ord h * i
+          by NAT_1:def 3;
               n = ord h * (1 + i) by A6,A8;
          hence thesis by NAT_1:def 3;
        end;
@@ -1383,7 +1409,9 @@ proof let n;
       hence thesis;
 end;
 end;
-     for n holds P[n] from NAT_1:sch 4(A1);
+X: for n being Element of NAT holds P[n] from NAT_1:sch 4(A1);
+   reconsider n as Element of NAT by ORDINAL1:def 13;
+   P[n] by X;
  hence thesis;
 end;
 
@@ -1420,7 +1448,7 @@ end;
 definition let G;
  assume
 A1:  G is finite;
- func ord G -> Nat means
+ func ord G -> Element of NAT means
   :Def15: ex B being finite set st B = the carrier of G & it = card B;
  existence
   proof

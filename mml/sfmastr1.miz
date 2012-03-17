@@ -28,7 +28,7 @@ environ
       FUNCT_7, LATTICE2, GRFUNC_1, CQC_THE1, SUBSET_1, FUNCT_4, CQC_SIM1,
       PRE_FF, PRE_CIRC, AMI_1, AMI_3, SCM_1, AMI_5, SCMFSA_2, SCMFSA_4,
       SCMFSA_5, SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A,
-      SCMFSA8B, SCMFSA8C, XBOOLE_0, XBOOLE_1, XREAL_1;
+      SCMFSA8B, SCMFSA8C, XBOOLE_0, XBOOLE_1, XREAL_1, ORDINAL1;
  schemes NAT_1, DOMAIN_1, FRAENKEL, RECDEF_1;
 
 begin :: Good instructions and good macro instructions
@@ -398,7 +398,7 @@ then A22: PPR c= I ';' J by FUNCT_4:26;
       then PPR c= s by A21,XBOOLE_1:1;
       then A23: PPR c= s4 by AMI_3:38; :: SCMFSA6B:27
 
- let k be Nat;
+ let k be Element of NAT;
  per cases by NAT_1:38;
  suppose k <= m1;
      then (Computation s1).k,
@@ -412,15 +412,16 @@ then A22: PPR c= I ';' J by FUNCT_4:26;
  suppose m1+1 <= k;
    then consider i being Nat such that
  A26: k = m1+1+i by NAT_1:28;
+   reconsider i as Element of NAT by ORDINAL1:def 13;
  A27: IC (Computation s3).i + card I =
  IC (Computation (Computation s).(m1+1)).i by A16,A17,A18,A20,A23,SCMFSA8C:42
     .= IC (Computation s).(m1+1+i) by AMI_1:51;
         s3 = s3+*JAt by A18,FUNCT_4:79;
  then A28: IC (Computation s3).i in dom J by A20,SCMFSA7B:def 7;
-     consider jloc being Nat such that
+     consider jloc being Element of NAT such that
  A29: IC (Computation s3).i = insloc jloc and
  A30: IC (Computation s3).i + card I = insloc(jloc+card I) by SCMFSA_4:def 1;
- A31: dom PPR = { insloc(j+card I) where j is Nat :
+ A31: dom PPR = { insloc(j+card I) where j is Element of NAT :
                    insloc j in dom ProgramPart(J) } by SCMFSA_5:3;
         dom ProgramPart(J) = dom J by AMI_5:72;
  then A32: insloc (jloc+card I) in dom PPR by A28,A29,A31;
@@ -476,7 +477,7 @@ then A16:  s = s +* (Directed I +* SAt) by FUNCT_4:79;
 then A17:   IC s4 = insloc card I by A9,A10,SCMFSA8A:36;
 A18:  s4 | D = s3 | D by A9,A10,A13,A16,SCMFSA8A:36;
 
-      reconsider m = m1 + 1 + m3 as Nat;
+      reconsider m = m1 + 1 + m3 as Element of NAT;
   A19: JAt c= s3 by FUNCT_4:26;
 
          Ins misses D by SCMFSA_2:13,14,XBOOLE_1:70;
@@ -513,21 +514,21 @@ end;
 
 theorem Th5:
  I is_closed_on s & I +* Start-At insloc 0 c= s & s is halting
- implies for m being Nat st m <= LifeSpan s
+ implies for m being Element of NAT st m <= LifeSpan s
           holds (Computation s).m, (Computation(s+*(I ';' J))).m
                   equal_outside the Instruction-Locations of SCM+FSA
 proof assume that
 A1: I is_closed_on s and
 A2: I +* Start-At insloc 0 c= s and
 A3: s is halting;
-   defpred X[Nat] means
+   defpred X[Element of NAT] means
     $1 <= LifeSpan s implies (Computation s).$1,(Computation(s+*(I ';' J))).$1
     equal_outside the Instruction-Locations of SCM+FSA;
       (Computation s).0 = s &
    (Computation(s+*(I ';' J))).0 = s+*(I ';' J) by AMI_1:def 19;
 then A4: X[0] by SCMFSA6A:27;
-A5: for m being Nat st X[m] holds X[m+1]
-   proof let m be Nat;
+A5: for m being Element of NAT st X[m] holds X[m+1]
+   proof let m be Element of NAT;
     assume
 A6:  m <= LifeSpan s
      implies (Computation s).m,(Computation(s+*(I ';' J))).m
@@ -564,7 +565,7 @@ A16:   CurInstr(Cs.m) = (Cs.m).IC(Cs.m)
      equal_outside the Instruction-Locations of SCM+FSA by A6,A7,A9,A10,
 NAT_1:38,SCMFSA6A:32;
    end;
- thus for n being Nat holds X[n] from NAT_1:sch 1(A4,A5);
+ thus for n being Element of NAT holds X[n] from NAT_1:sch 1(A4,A5);
 end;
 
 Lm1:
@@ -662,7 +663,7 @@ then A24:  s = s +* (Directed I +* SAt) by FUNCT_4:79;
 A25:    IC s4 = insloc card I by A2,A4,A9,SCMFSA8A:36;
   thus
 A26:  s4 | D = s3 | D by A2,A4,A9,A14,A24,SCMFSA8A:36;
-      reconsider m = m1 + 1 + m3 as Nat;
+      reconsider m = m1 + 1 + m3 as Element of NAT;
          InJ c= s3 by FUNCT_4:26;
   then A27: JAt c= s3 by SCMFSA6B:8;
          I ';' J c= Initialized (I ';' J) by SCMFSA6A:26;
@@ -676,13 +677,12 @@ A26:  s4 | D = s3 | D by A2,A4,A9,A14,A24,SCMFSA8A:36;
 A30:  intloc 0 in dom InJ by SCMFSA6A:45;
          intloc 0 in Int-Locations by SCMFSA_2:9;
 then A31: intloc 0 in D by XBOOLE_0:def 2;
-  hence
-         s4.intloc 0 = (s3 | D).intloc 0 by A26,FUNCT_1:72
+  hence s4.intloc 0 = (s3 | D).intloc 0 by A26,FUNCT_1:72
       .= s3.intloc 0 by A31,FUNCT_1:72
       .= (InJ).intloc 0 by A30,FUNCT_4:14
-      .= 1 by SCMFSA6A:46; :: SCMFSA6B:27
+      .= 1 by SCMFSA6A:46;
 
-A32: now let k be Nat;
+A32: now let k be Element of NAT;
       assume m1 + 1 + k < m;
    then A33: k < m3 by XREAL_1:8;
       assume A34: CurInstr (Computation s).(m1 + 1 + k) = halt SCM+FSA;
@@ -701,7 +701,7 @@ A32: now let k be Nat;
 then A35: CurInstr((Computation s).m)
        = IncAddr (halt SCM+FSA,card I) by A22,SCM_1:def 2
       .= halt SCM+FSA by SCMFSA_4:8;
-        now let k be Nat; assume A36: k < m;
+        now let k be Element of NAT; assume A36: k < m;
       per cases;
       suppose k <= m1;
        hence CurInstr (Computation s).k <> halt SCM+FSA
@@ -709,11 +709,15 @@ then A35: CurInstr((Computation s).m)
       end;
       suppose m1 < k;
        then m1 + 1 <= k by NAT_1:38;
-       then consider kk being Nat such that A37: m1 + 1 + kk = k by NAT_1:28;
-       thus CurInstr (Computation s).k <> halt SCM+FSA by A32,A36,A37;
+       then consider kk being Nat such that A37: m1 + 1 + kk = k
+       by NAT_1:28;
+       reconsider kk as Element of NAT by ORDINAL1:def 13;
+       m1 + 1 + kk = k by A37;
+       hence CurInstr (Computation s).k <> halt SCM+FSA by A32,A36,A37;
      end;
      end;
-then A38: for k being Nat st CurInstr (Computation s).k = halt SCM+FSA
+then A38:
+for k being Element of NAT st CurInstr (Computation s).k = halt SCM+FSA
      holds m <= k;
 
   thus
@@ -1245,7 +1249,7 @@ end;
 begin :: Memory allocation
 
  reserve L for finite Subset of Int-Locations,
-         m, n for Nat;
+         m, n for Element of NAT;
 
 definition
  let d be Int-Location;
@@ -1289,30 +1293,31 @@ definition
  let L be finite Subset of Int-Locations;
  func RWNotIn-seq L -> Function of NAT, bool NAT means
 :Def2:
- it.0 = {k where k is Nat : not intloc k in L & k <> 0} &
- (for i being Nat, sn being non empty Subset of NAT
+ it.0 = {k where k is Element of NAT : not intloc k in L & k <> 0} &
+ (for i being Element of NAT, sn being non empty Subset of NAT
   st it.i = sn holds it.(i+1) = sn \ {min sn}) &
- for i being Nat holds it.i is infinite;
+ for i being Element of NAT holds it.i is infinite;
  existence proof
-   defpred X[Nat] means not intloc $1 in L & $1 <> 0;
-  set sn = {k where k is Nat : X[k] };
+   defpred X[Element of NAT] means not intloc $1 in L & $1 <> 0;
+  set sn = {k where k is Element of NAT : X[k] };
  A1: sn is Subset of NAT from DOMAIN_1:sch 7;
     set M = L \/ {intloc 0};
        not Int-Locations c= M by SCMFSA_2:22,XBOOLE_0:def 10;
     then consider x being set such that
  A2: x in Int-Locations & not x in M by TARSKI:def 3;
     reconsider x as Int-Location by A2,SCMFSA_2:11;
-    consider k being Nat such that
+    consider k being Element of NAT such that
  A3: x = intloc k by SCMFSA_2:19;
+ AA: k in NAT by ORDINAL1:def 13;
  A4: not intloc k in L & not intloc k in {intloc 0} by A2,A3,XBOOLE_0:def 2;
-    then k <> 0 by TARSKI:def 1; then k in sn by A4;
+    then k <> 0 by TARSKI:def 1; then k in sn by AA,A4;
     then reconsider sn as non empty Subset of NAT by A1;
 
- defpred P[Nat, Subset of NAT, Subset of NAT] means
+ defpred P[Element of NAT, Subset of NAT, Subset of NAT] means
     for N being non empty Subset of NAT st N = $2
      holds $3 = $2 \ {min N};
 
-A5: now let n be Nat;
+A5: now let n be Element of NAT;
         let x be Subset of NAT;
      per cases;
      suppose x is empty; then P[n, x, {} NAT];
@@ -1338,16 +1343,16 @@ A7: for n being (Element of NAT) holds P[n, f.n, f.(n+1)]
       from RECDEF_1:sch 2(A5);
 
   take f;
-  thus f.0 = {v where v is Nat : not intloc v in L & v <> 0} by A6;
-  thus for i be Nat, sn be non empty Subset of NAT st
+  thus f.0 = {v where v is Element of NAT : not intloc v in L & v <> 0} by A6;
+  thus for i be Element of NAT, sn be non empty Subset of NAT st
    f.i = sn holds f.(i+1) = sn \ {min sn} by A7;
 
-   defpred X[Nat] means f.$1 is infinite;
+   defpred X[Element of NAT] means f.$1 is infinite;
 A8: X[0]
    proof assume f.0 is finite;
     then A9: sn is finite by A6;
-     deffunc U(Nat) = intloc $1;
-        set Isn = { U(v) where v is Nat : v in sn };
+     deffunc U(Element of NAT) = intloc $1;
+        set Isn = { U(v) where v is Element of NAT : v in sn };
            Isn is finite from FRAENKEL:sch 21(A9);
         then reconsider Isn as finite set;
            now let x be set;
@@ -1356,19 +1361,20 @@ A8: X[0]
           suppose x in M;
            hence x in Int-Locations;
           end;
-          suppose x in Isn; then consider k being Nat such that
+          suppose x in Isn; then consider k being Element of NAT such that
           A11: intloc k = x & k in sn;
            thus x in Int-Locations by A11,SCMFSA_2:9;
          end;
          end;
         assume x in Int-Locations;
           then reconsider x' = x as Int-Location by SCMFSA_2:11;
-          consider i being Nat such that
+          consider i being Element of NAT such that
         A12: x' = intloc i by SCMFSA_2:19;
+        AA: i in NAT by ORDINAL1:def 13;
             now assume not x in M;
              then not x' in L & not x' in {intloc 0} by XBOOLE_0:def 2;
              then not intloc i in L & i <> 0 by A12,TARSKI:def 1;
-             then i in sn;
+             then i in sn by AA;
           hence x in Isn by A12;
          end;
         hence x in M \/ Isn by XBOOLE_0:def 2;
@@ -1388,31 +1394,31 @@ A13:  for n st X[n] holds X[n+1]
       hence contradiction by A14,A15,A16,XBOOLE_1:45;
     end;
 
-  thus for n being Nat holds X[n] from NAT_1:sch 1(A8, A13);
+  thus for n being Element of NAT holds X[n] from NAT_1:sch 1(A8, A13);
  end;
  uniqueness proof let IT1, IT2 be Function of NAT, bool NAT such that
-A17: IT1.0 = {k where k is Nat : not intloc k in L & k <> 0} and
-A18: (for i being Nat, sn being non empty Subset of NAT
+A17: IT1.0 = {k where k is Element of NAT : not intloc k in L & k <> 0} and
+A18: (for i being Element of NAT, sn being non empty Subset of NAT
          st IT1.i = sn holds IT1.(i+1) = sn \ {min sn}) and
-    for i being Nat holds IT1.i is infinite and
-A19: IT2.0 = {k where k is Nat : not intloc k in L & k <> 0} and
-A20: (for i being Nat, sn being non empty Subset of NAT
+    for i being Element of NAT holds IT1.i is infinite and
+A19: IT2.0 = {k where k is Element of NAT : not intloc k in L & k <> 0} and
+A20: (for i being Element of NAT, sn being non empty Subset of NAT
          st IT2.i = sn holds IT2.(i+1) = sn \ {min sn}) and
-A21: for i being Nat holds IT2.i is infinite;
+A21: for i being Element of NAT holds IT2.i is infinite;
       now
     thus NAT = dom IT1 by FUNCT_2:def 1;
     thus NAT = dom IT2 by FUNCT_2:def 1;
-   defpred X[Nat] means IT1.$1 = IT2.$1;
+   defpred X[Element of NAT] means IT1.$1 = IT2.$1;
 A22: X[0] by A17,A19;
 A23:  for n st X[n] holds X[n+1]
-   proof let n be Nat; assume
+   proof let n be Element of NAT; assume
     A24: IT1.n = IT2.n;
        then IT1.n is infinite & IT2.n is infinite by A21;
        then reconsider IT1n = IT1.n as non empty Subset of NAT by Lm3;
      thus IT1.(n+1) = IT1n \ {min IT1n} by A18
                    .= IT2.(n+1) by A20,A24;
     end;
-       for n being Nat holds X[n] from NAT_1:sch 1(A22, A23);
+       for n being Element of NAT holds X[n] from NAT_1:sch 1(A22, A23);
     hence for x being set st x in NAT holds IT1.x = IT2.x;
    end;
   hence IT1 = IT2 by FUNCT_1:9;
@@ -1420,7 +1426,7 @@ A23:  for n st X[n] holds X[n+1]
 end;
 
 registration
- let L be finite Subset of Int-Locations, n be Nat;
+ let L be finite Subset of Int-Locations, n be Element of NAT;
  cluster (RWNotIn-seq L).n -> non empty;
  coherence by Def2;
 end;
@@ -1430,16 +1436,16 @@ theorem Th18:
  (for m st m in (RWNotIn-seq L).n holds not intloc m in L)
 proof
   set RL = RWNotIn-seq L;
-   defpred X[Nat] means not 0 in RL.$1 &
+   defpred X[Element of NAT] means not 0 in RL.$1 &
      for m st m in RL.$1 holds not intloc m in L;
 A1: X[0]
    proof
- A2: RL.0 = {k where k is Nat : not intloc k in L & k <> 0} by Def2;
-   hereby assume 0 in RL.0; then consider k being Nat such that
+ A2: RL.0 = {k where k is Element of NAT : not intloc k in L & k <> 0} by Def2;
+   hereby assume 0 in RL.0; then consider k being Element of NAT such that
     A3: k = 0 & not intloc k in L & k <> 0 by A2;
     thus contradiction by A3;
    end;
-   let m; assume m in RL.0; then consider k being Nat such that
+   let m; assume m in RL.0; then consider k being Element of NAT such that
     A4: k = m & not intloc k in L & k <> 0 by A2;
    thus not intloc m in L by A4;
     end;
@@ -1453,7 +1459,7 @@ A5:  for n st X[n] holds X[n+1]
      let m; assume m in RL.(n+1); then m in RL.n by A8,XBOOLE_0:def 4;
      hence not intloc m in L by A7;
     end;
-         for n being Nat holds X[n]  from NAT_1:sch 1(A1, A5);
+         for n being Element of NAT holds X[n]  from NAT_1:sch 1(A1, A5);
  hence thesis;
 end;
 
@@ -1479,7 +1485,7 @@ proof
  set RL = RWNotIn-seq L;
 
      now let n;
-     defpred X[Nat] means n < $1 implies min (RL.n) < min (RL.$1);
+     defpred X[Element of NAT] means n < $1 implies min (RL.n) < min (RL.$1);
 A1: X[0] by NAT_1:18;
 A2:  for m st X[m] holds X[m+1]
    proof let m such that
@@ -1495,13 +1501,13 @@ A2:  for m st X[m] holds X[m+1]
       hence min (RL.n) < min (RL.(m+1)) by XREAL_1:2;
     end;
     end;
-  thus for n being Nat holds X[n] from NAT_1:sch 1(A1, A2);
+  thus for n being Element of NAT holds X[n] from NAT_1:sch 1(A1, A2);
   end;
  hence thesis;
 end;
 
 definition
- let n be Nat, L be finite Subset of Int-Locations;
+ let n be Element of NAT, L be finite Subset of Int-Locations;
  func n-thRWNotIn L -> Int-Location equals
 
   intloc min ((RWNotIn-seq L).n);
@@ -1509,13 +1515,13 @@ definition
  end;
 
 notation
- let n be Nat, L be finite Subset of Int-Locations;
+ let n be Element of NAT, L be finite Subset of Int-Locations;
  synonym n-stRWNotIn L for n-thRWNotIn L; synonym n-ndRWNotIn L for
  n-thRWNotIn L; synonym n-rdRWNotIn L for n-thRWNotIn L;
 end;
 
 registration
- let n be Nat, L be finite Subset of Int-Locations;
+ let n be Element of NAT, L be finite Subset of Int-Locations;
  cluster n-thRWNotIn L -> read-write;
  coherence proof
   set FNI = n-thRWNotIn L;
@@ -1544,20 +1550,20 @@ proof
 end;
 
 definition
- let n be Nat, p be programmed FinPartState of SCM+FSA;
+ let n be Element of NAT, p be programmed FinPartState of SCM+FSA;
  func n-thNotUsed p -> Int-Location equals
              n-thRWNotIn UsedIntLoc p;
  correctness;
  end;
 
 notation
- let n be Nat, p be programmed FinPartState of SCM+FSA;
+ let n be Element of NAT, p be programmed FinPartState of SCM+FSA;
  synonym n-stNotUsed p for n-thNotUsed p; synonym n-ndNotUsed p for
  n-thNotUsed p; synonym n-rdNotUsed p for n-thNotUsed p;
 end;
 
 registration
- let n be Nat, p be programmed FinPartState of SCM+FSA;
+ let n be Element of NAT, p be programmed FinPartState of SCM+FSA;
  cluster n-thNotUsed p -> read-write;
  coherence;
 end;
@@ -1615,7 +1621,7 @@ end;
 theorem
    for N, result being read-write Int-Location
  st N <> result
-  for n being Nat st n = s.N
+  for n being Element of NAT st n = s.N
    holds IExec(Fib_macro(N, result), s).result = Fib n &
          IExec(Fib_macro(N, result), s).N = s.N
 proof let N, result be read-write Int-Location such that
@@ -1649,12 +1655,12 @@ A11: I31 does_not_destroy aux by A2,Th1;
       i30 does_not_destroy aux by A2,A3,SCMFSA7B:13;
    then Macro i30 does_not_destroy aux by SCMFSA8C:77;
 then A12: I301 does_not_destroy aux by A10,A11,SCMFSA8C:81;
- defpred P[Nat] means
+ defpred P[Element of NAT] means
    for s1 being State of SCM+FSA
     st $1 = s1.aux & s1.intloc 0 = 1
      holds
       IExec(I3, s1).Nsave = s1.Nsave &
-      for m being Nat st s1.result = Fib m & s1.next = Fib (m+1)
+      for m being Element of NAT st s1.result = Fib m & s1.next = Fib (m+1)
         holds IExec(I3, s1).result = Fib (m + $1) &
               IExec(I3, s1).next = Fib (m + 1 + $1);
  set D = Int-Locations \/ FinSeq-Locations;
@@ -1664,12 +1670,12 @@ A13: P[0]
       0 = s1.aux & s1.intloc 0 = 1;
  then A14:  IExec(I3, s1) | D = s1 | D by SCMFSA8C:123;
      hence IExec(I3, s1).Nsave = s1.Nsave by SCMFSA6A:38;
-     let m be Nat; assume
+     let m be Element of NAT; assume
  A15:  s1.result = Fib m & s1.next = Fib (m+1);
      hence IExec(I3, s1).result = Fib (m + 0) by A14,SCMFSA6A:38;
      thus IExec(I3, s1).next = Fib (m+1+0) by A14,A15,SCMFSA6A:38;
     end;
-A16: now let n be Nat such that
+A16: now let n be Element of NAT such that
  A17:  P[n];
      thus P[n+1]
      proof
@@ -1694,7 +1700,7 @@ A16: now let n be Nat such that
        .= Exec(i30, Initialize s1).Nsave by A7,SCMFSA6B:22
        .= (Initialize s1).Nsave by A8,SCMFSA_2:90
        .= s1.Nsave by SCMFSA6C:3;
-     let m be Nat; assume
+     let m be Element of NAT; assume
  A23:  s1.result = Fib m & s1.next = Fib (m+1);
  A24:  s2.result
     = Exec(SubFrom(aux, intloc 0), IExec(I301, s1)).result by SCMFSA6C:7
@@ -1723,7 +1729,7 @@ A16: now let n be Nat such that
        .= Fib (m+1+(n+1));
      end;
     end;
-A26: for n being Nat holds P[n] from NAT_1:sch 1(A13, A16);
+A26: for n being Element of NAT holds P[n] from NAT_1:sch 1(A13, A16);
 A27: s1.intloc 0
    = Exec(i2, IExec(i00 ';' i0 ';' i1, s)).intloc 0 by SCMFSA6C:7
   .= IExec(i00 ';' i0 ';' i1, s).intloc 0 by SCMFSA_2:89
@@ -1769,7 +1775,7 @@ A31: s1.aux
   .= Exec(i00, Initialize s).Nsave by A8,SCMFSA_2:91
   .= (Initialize s).N by SCMFSA_2:89
   .= s.N by SCMFSA6C:3;
- let n be Nat such that
+ let n be Element of NAT such that
 A32: n = s.N;
 A33: i02 is_halting_on Initialize s by SCMFSA7B:25;
 A34: I3 is_closed_on s1 & I3 is_halting_on s1 by A12,A27,SCMFSA8C:119;

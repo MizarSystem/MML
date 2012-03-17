@@ -16,25 +16,26 @@ environ
  constructors SETFAM_1, RELAT_2, WELLORD1, WELLORD2, XXREAL_0, REAL_1, NAT_1,
       MEMBERED, FINSEQ_4, PREPOWER, TOPS_2, COMPTS_1, PCOMPS_1;
  registrations SUBSET_1, PRE_TOPC, FINSET_1, RELSET_1, STRUCT_0, XREAL_0,
-      FINSEQ_1, METRIC_1, NEWTON, MEMBERED, ORDINAL1, XXREAL_0;
+      FINSEQ_1, METRIC_1, NEWTON, MEMBERED, ORDINAL1, XXREAL_0, NAT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, WELLORD1, RELAT_2, SETFAM_1, XBOOLE_0;
  theorems PCOMPS_1, COMPTS_1, SETFAM_1, TOPS_1, TOPS_2, PRE_TOPC, SUBSET_1,
       TARSKI, WELLORD2, ZFMISC_1, NAT_1, REAL_1, REAL_2, PREPOWER, WELLORD1,
       RELAT_1, RELAT_2, FUNCT_1, FINSET_1, METRIC_1, FINSEQ_1, CARD_1,
       FINSEQ_2, FINSEQ_4, TBSP_1, NEWTON, XBOOLE_0, XBOOLE_1, XCMPLX_1,
-      XREAL_1, XXREAL_0;
+      XREAL_1, XXREAL_0, ORDINAL1;
  schemes NAT_1, FUNCT_2, SUBSET_1, RECDEF_1, TREES_2, FRAENKEL, XBOOLE_0;
 
 begin :: 1. Selected properties of real numbers
 
   reserve r,u for real number;
-  reserve n,k,i for Nat;
+  reserve n,k,i for Element of NAT;
 
 canceled 2;
 
 theorem
-   r>0 & u > 0 implies ex k be Nat st u/(2 |^ k) <= r by PREPOWER:106;
+   r>0 & u > 0 implies ex k be Element of NAT st u/(2 |^ k) <= r
+    by PREPOWER:106;
 
 theorem
     k>=n & r >= 1 implies r |^ k >= r |^ n by PREPOWER:107;
@@ -187,7 +188,7 @@ definition let FX be set, R be Relation;
   end;
 end;
 
-definition let X be set, n be Nat, f be Function of NAT,bool X;
+definition let X be set, n be Element of NAT, f be Function of NAT,bool X;
   func PartUnionNat(n,f) equals
         union (f.:(Seg(n)\{n}));
   coherence;
@@ -356,7 +357,7 @@ theorem
         FX is Subset-Family of PM) by Th8;
 
   reserve Mn for Relation;
-  reserve n,k,l,q,p,q1 for Nat;
+  reserve n,k,l,q,p,q1 for Element of NAT;
 
 definition let PM be non empty set;
            let g be Function of NAT,(bool bool PM)*;
@@ -382,7 +383,7 @@ ex f being Function of NAT, bool bool PM() st
               }
       where V is Subset of PM() : P[V]}
 proof
-    defpred T[Nat,FinSequence of bool bool PM(),set] means
+    defpred T[Element of NAT,FinSequence of bool bool PM(),set] means
      $3 = $2^<*{union { F(c,$1) where c is Element of PM():
       for fq be Subset-Family of PM(),q st q <= $1 & fq = $2/.(q+1) holds
        Q[c,V,$1,fq] } where V is Subset of PM() : P[V]}*>;
@@ -437,13 +438,13 @@ proof
       A7: g.0=A and
       A8: for n be Element of NAT holds T[n,g.n,g.(n+1)] from RECDEF_1:sch 2
 (A1);
-      deffunc G(Nat) = (g.$1)/.len(g.$1);
+      deffunc G(Element of NAT) = (g.$1)/.len(g.$1);
       consider f be Function of NAT,bool bool PM() such that
        A9: for n holds f.n=G(n) from FUNCT_2:sch 4;
       take f;
           len <*UB()*> = 1 by FINSEQ_1:56;
       hence f.0 = <*UB()*>/.1 by A7,A9 .= UB() by FINSEQ_4:25;
-      defpred R[Nat] means len(g.$1) = $1 + 1;
+      defpred R[Element of NAT] means len(g.$1) = $1 + 1;
       A10: R[0] by A7,FINSEQ_1:56;
       A11: for k st R[k] holds R[k+1]
         proof
@@ -458,7 +459,8 @@ proof
           hence thesis by A12;
         end;
       A13: for n holds R[n] from NAT_1:sch 1(A10,A11);
-      defpred T[Nat] means for q st q <= $1 holds f.q = (g.$1)/.(q+1);
+      defpred T[Element of NAT] means
+       for q st q <= $1 holds f.q = (g.$1)/.(q+1);
       A14: T[0]
         proof
           let q;
@@ -615,7 +617,7 @@ proof
                     then consider C be set such that
                       A7: c in C and A8: C in {union(f.q): q <=
  n}by TARSKI:def 4;
-                    consider q be Nat such that
+                    consider q be Element of NAT such that
                       A9: C = union(f.q) and A10: q <= n by A8;
                     thus contradiction by A6,A7,A9,A10;
                   end;
@@ -703,9 +705,9 @@ theorem  :: Stone Theorem - general case
           hence thesis;
         end;
         then reconsider UB as Subset-Family of PM;
-        deffunc F1(Element of PM,Nat) = Ball($1,1/(2 |^($2+1)));
+        deffunc F1(Element of PM,Element of NAT) = Ball($1,1/(2 |^($2+1)));
         defpred Q1[Element of PM,
-                   Subset of PM,Nat] means
+                   Subset of PM,Element of NAT] means
          $1 in $2\PartUnion($2,Mn) & Ball($1,3/(2 |^ ($3+1))) c= $2;
         defpred P1[set] means $1 in FX;
         consider f being Function of NAT, bool bool the carrier of PM
@@ -767,7 +769,9 @@ theorem  :: Stone Theorem - general case
                     end;
                   end;
                   suppose n>0;
-                  then consider k such that A23: n = k + 1 by NAT_1:22;
+                  then consider k being Nat such that A23: n = k + 1
+                  by NAT_1:22;
+                  reconsider k as Element of NAT by ORDINAL1:def 13;
                   thus X in the topology of PT
                     proof
                           X in {union { Ball(c,1/(2 |^ (k+1)))
@@ -775,9 +779,8 @@ theorem  :: Stone Theorem - general case
                         c in V\PartUnion(V,Mn) &
                         Ball(c,3/(2 |^ (k+1))) c= V &
                         not c in union{union(f.q)
-                                      where q is Nat: q <= k } }
-                        where V is Subset of PM:
-                          V in FX} by A14,A18,A23;
+                                      where q is Element of NAT: q <= k } }
+                        where V is Subset of PM: V in FX} by A14,A18,A23;
                       then consider V be Subset of PM
                         such that
                         A24: X = union { Ball(c,1/(2 |^ (k+1)))
@@ -785,13 +788,13 @@ theorem  :: Stone Theorem - general case
                         c in V\PartUnion(V,Mn) &
                         Ball(c,3/(2 |^ (k+1))) c= V &
                         not c in union{union(f.q)
-                                      where q is Nat: q <= k } } and V in FX;
+                         where q is Element of NAT: q <= k } } and V in FX;
                         reconsider NF = { Ball(c,1/(2 |^ (k+1)))
                         where c is Element of PM:
                         c in V\PartUnion(V,Mn) &
                         Ball(c,3/(2 |^ (k+1))) c= V &
                         not c in union { union(f.q)
-                                       where q is Nat: q <= k } } as set;
+                             where q is Element of NAT: q <= k } } as set;
                           NF c= bool the carrier of PM
                         proof
                           let a be set;
@@ -847,8 +850,8 @@ theorem  :: Stone Theorem - general case
                          by A1,A3,A29,Th8;
                   consider r be Real such that
                    A35: r>0 and A36: Ball(x',r) c= X by A32,A34,PCOMPS_1:def 5;
-                  defpred P2[Nat] means 3/(2 |^ $1) <= r;
-                  A37: ex k be Nat st P2[k] by A35,PREPOWER:106;
+                  defpred P2[Element of NAT] means 3/(2 |^ $1) <= r;
+                  A37: ex k be Element of NAT st P2[k] by A35,PREPOWER:106;
                   consider k such that A38: P2[k] and
                      for l st P2[l] holds k <= l from NAT_1:sch 5(A37);
                   A39: 2 |^ k > 0 by PREPOWER:13;
@@ -879,7 +882,8 @@ theorem  :: Stone Theorem - general case
                         where y is Element of PM:
                         y in X\PartUnion(X,Mn) &
                         Ball(y,3/(2 |^ (k+1))) c= X &
-                        not y in union{ union(f.q) where q is Nat: q <= k} };
+                        not y in
+                        union{ union(f.q) where q is Element of NAT: q <= k} };
                   A45: x in W
                     proof
                       consider A be Subset of PM
@@ -908,15 +912,15 @@ theorem  :: Stone Theorem - general case
                       then A54: Ball(x',3/(2 |^ (k+1))) c= X
                       by A36,XBOOLE_1:1;
                           not x' in union { union(f.q)
-                                          where q is Nat: q <= k}
+                                          where q is Element of NAT: q <= k}
                        proof
                          assume x' in union { union(f.q)
-                                            where q is Nat: q <= k};
+                                            where q is Element of NAT: q <= k};
                          then consider D be set such that
                            A55: x' in D and
                            A56: D in { union(f.q)
-                     where q is Nat: q <= k} by TARSKI:def 4;
-                         consider q be Nat such that
+                     where q is Element of NAT: q <= k} by TARSKI:def 4;
+                         consider q be Element of NAT such that
                            A57: D = union (f.q) and q <= k by A56;
                          thus contradiction by A43,A55,A57;
                        end;
@@ -925,7 +929,7 @@ theorem  :: Stone Theorem - general case
                       y in X\PartUnion(X,Mn) &
                       Ball(y,3/(2 |^ (k+1))) c= X &
                               not y in union { union(f.q)
-                         where q is Nat: q <= k}} by A46,A53,A54;
+                         where q is Element of NAT: q <= k}} by A46,A53,A54;
                       hence thesis by A47,TARSKI:def 4;
                     end;
                   reconsider W as set;
@@ -933,11 +937,13 @@ theorem  :: Stone Theorem - general case
                     where y is Element of PM:
                     y in V\PartUnion(V,Mn) &
                     Ball(y,3/(2 |^ (k+1))) c= V &
-                      not y in union { union(f.q) where q is Nat: q <= k}}
+                      not y in union { union(f.q) where q is Element of NAT:
+                       q <= k}}
                     where V is Subset of PM: V in FX}
 by A31;
                   then W in f.(k+1) by A14;
-                  hence ex W be set,l be Nat st W in f.l & x in W by A45;
+                  hence ex W be set,l be Element of NAT
+                   st W in f.l & x in W by A45;
                   end;
                   hence contradiction by A42;
               end;
@@ -1004,15 +1010,16 @@ by A31;
                   end;
                 end;
                 suppose n>0;
-                then consider k such that A69: n = k + 1 by NAT_1:22;
+                then consider k being Nat such that A69: n = k + 1 by NAT_1:22;
+                reconsider k as Element of NAT by ORDINAL1:def 13;
                 thus ex Y be set st Y in FX & X c= Y
                   proof
                         X in {union { Ball(c,1/(2 |^ (k+1)))
                       where c is Element of PM:
                       c in V\PartUnion(V,Mn) &
                       Ball(c,3/(2 |^ (k+1))) c= V &
-                      not c in union { union(f.q) where q is Nat: q <= k}}
-                      where V is Subset of PM: V in FX}
+                      not c in union { union(f.q) where q is Element of NAT:
+                       q <= k}} where V is Subset of PM: V in FX}
                         by A14,A61,A69;
                     then consider V be Subset of PM
                       such that
@@ -1020,13 +1027,15 @@ by A31;
                       where c is Element of PM:
                       c in V\PartUnion(V,Mn) &
                       Ball(c,3/(2 |^ (k+1))) c= V &
-                      not c in union{union(f.q) where q is Nat: q <= k}} and
+                      not c in union{union(f.q) where q is Element of NAT:
+                       q <= k}} and
                       A71: V in FX;
                     reconsider NF = { Ball(c,1/(2 |^ (k+1)))
                       where c is Element of PM:
                       c in V\PartUnion(V,Mn) &
                       Ball(c,3/(2 |^ (k+1))) c= V &
-                      not c in union{union(f.q) where q is Nat: q <= k}}
+                      not c in union{union(f.q) where q is Element of NAT:
+                       q <= k}}
                       as set;
                         NF c= bool the carrier of PM
                       proof
@@ -1038,7 +1047,7 @@ by A31;
                             and c in V\PartUnion(V,Mn) &
                             Ball(c,3/(2 |^ (k+1))) c= V &
                             not c in union { union(f.q)
-                                           where q is Nat: q <= k};
+                                           where q is Element of NAT: q <= k};
                         thus a in bool the carrier of PM by A72;
                       end;
                       then reconsider NF as Subset-Family of PM;
@@ -1052,7 +1061,7 @@ by A31;
                             & c in V\PartUnion(V,Mn) and
                             A75: Ball(c,3/(2 |^ (k+1))) c= V &
                             not c in union { union(f.q)
-                                           where q is Nat: q <= k};
+                                           where q is Element of NAT: q <= k};
                              0 < 2 |^ (k+1) by PREPOWER:13;
                         then 1/(2 |^ (k+1)) <= 3/(2 |^ (k+1))
                         by REAL_1:73;
@@ -1091,7 +1100,7 @@ by A31;
                         by A1,A3,Th8;
                 consider r be Real such that
                A81: r>0 and A82: Ball(x',r) c= X by A76,A80,PCOMPS_1:def 5;
- consider m be Nat such that
+ consider m be Element of NAT such that
                 A83: 1/(2 |^ m) <= r by A81,PREPOWER:106;
                     2 |^ (m+1+k+1) > 0 by PREPOWER:13;
                 then A84: 1/(2 |^ (m+1+k+1)) > 0 by REAL_2:127;
@@ -1111,13 +1120,14 @@ by A31;
                        assume p in NZ;
                        then consider V be Subset of PT such that
                           A89: p = V and A90: V in GX and V meets W;
-                       consider k be Nat such that A91: V in f.k by A15,A90;
+                       consider k be Element of NAT such that A91: V in f.k
+                        by A15,A90;
                        thus thesis by A89,A91;
                       end;
                     consider g be Function such that
                       A92: dom g = NZ and
                       A93: for y be set st y in NZ ex n st g.y=n & P4[y,n] &
-                       for t be Nat st P4[y,t] holds n <=t
+                       for t be Element of NAT st P4[y,t] holds n <=t
                         from TREES_2:sch 4(A88);
                     A94: rng g c= {i: i < (m+1+k+1)}
                       proof
@@ -1125,13 +1135,14 @@ by A31;
                         assume t in rng g;
                         then consider a be set such that
                           A95: a in dom g and A96: t = g.a by FUNCT_1:def 5;
-                        consider n be Nat such that A97: g.a = n and
+                        consider n be Element of NAT such that A97: g.a = n and
                             A98:a in f.n and
-                          for p be Nat st a in f.p holds n <= p by A92,A93,A95;
+                          for p be Element of NAT st a in f.p holds n <= p
+                           by A92,A93,A95;
                         assume A99: not t in {i: i < (m+1+k+1)};
                         consider V such that A100:a=V and
                               V in GX and A101: V meets W by A92,A95;
-                        reconsider t as Nat by A96,A97;
+                        reconsider t as Element of NAT by A96,A97;
                         A102:t >= (m+1+k+1) by A99;
                         consider y being set such that
                         A103: y in V & y in W by A101,XBOOLE_0:3;
@@ -1141,13 +1152,14 @@ by A31;
                           end;
                           suppose t>0;
                           then consider l be Nat such that
-                              A104: t=l+1 by NAT_1:22;
+A104:                     t=l+1 by NAT_1:22;
+                          reconsider l as Element of NAT by ORDINAL1:def 13;
                               V in {union { Ball(c,1/(2 |^ (l+1)))
                           where c is Element of PM:
                           c in Y\PartUnion(Y,Mn) &
                           Ball(c,3/(2 |^ (l+1))) c= Y &
-                          not c in union{union(f.q) where q is Nat: q <= l}}
-                          where Y is Subset of PM:
+                          not c in union{union(f.q) where q is Element of NAT:
+                           q <= l}} where Y is Subset of PM:
                             Y in FX} by A14,A96,A97,A98,A100,A104;
                           then consider Y be Subset of PM
                           such that A105: V = union { Ball(c,1/(2 |^ (l+1)))
@@ -1155,12 +1167,13 @@ by A31;
                           c in Y\PartUnion(Y,Mn) &
                           Ball(c,3/(2 |^ (l+1))) c= Y &
                           not c in
- union{union(f.q) where q is Nat: q <= l}} and
+ union{union(f.q) where q is Element of NAT: q <= l}} and
                               Y in FX; reconsider NF = { Ball(c,1/(2 |^ (l+1)))
                           where c is Element of PM:
                           c in Y\PartUnion(Y,Mn) &
                           Ball(c,3/(2 |^ (l+1))) c= Y &
-                          not c in union{union(f.q) where q is Nat: q <= l}}
+                          not c in union{union(f.q) where q is Element of NAT:
+                           q <= l}}
                           as set;
                           consider T be set such that A106: y in T and
                           A107: T in NF by A103,A105,TARSKI:def 4;
@@ -1169,7 +1182,7 @@ by A31;
                           A109: c in Y\PartUnion(Y,Mn) &
                           Ball(c,3/(2 |^ (l+1))) c= Y &
                           not c in union{union (f.q)
-                            where q is Nat: q <= l} by A107;
+                            where q is Element of NAT: q <= l} by A107;
                           reconsider y as Element of PM
                               by A103;
  A110:2 |^ t >= 2 |^ (m+1+k+1) by A102,PREPOWER:107;
@@ -1187,12 +1200,13 @@ then A112: 1/(2 |^ (m+1+k+1)) >= 1/(2 |^ t) by A110,REAL_2:201;
   by REAL_2:146; then ((2 |^ (1+k))*2)-1>=2-1 by XREAL_1:11;
 then A114: 1/(2 |^ m) - 1/(2 |^ (m+1+k+1)) >= 1/(2 |^ (m+1+k+1)) by A111,A113,
 REAL_1:73;
-    A115: for t be Nat st t < l holds not c in union(f.t)
+    A115: for t be Element of NAT st t < l holds not c in union(f.t)
       proof
-        let t be Nat;
+        let t be Element of NAT;
         assume A116: t < l;
         assume A117: c in union(f.t);
-            union(f.t) in {union(f.q) where q is Nat: q <= l} by A116;
+            union(f.t) in {union(f.q) where q is Element of NAT: q <= l}
+             by A116;
         hence contradiction by A109,A117,TARSKI:def 4;
       end;
           dist(c,y) < 1/(2 |^ t) by A104,A106,A108,METRIC_1:12;
@@ -1208,7 +1222,7 @@ REAL_1:73;
           A121: k <> l
           proof
             assume k=l;
-            then union (f.k) in {union(f.q) where q is Nat: q <= l};
+            then union (f.k) in {union(f.q) where q is Element of NAT: q <= l};
             hence contradiction by A109,A120,TARSKI:def 4;
           end;A122:l >= k+(m+1) by A102,A104,XREAL_1:8;   k+(m+1)>=k
 by NAT_1:29;
@@ -1237,13 +1251,13 @@ by NAT_1:29;
       assume that A123: x1 in dom g and A124: x2 in dom g
           and A125: g.x1 = g.x2;
       assume A126: x1<>x2;
-      consider n1 be Nat such that A127: g.x1 = n1 and
+      consider n1 be Element of NAT such that A127: g.x1 = n1 and
         A128: x1 in f.n1 and
-            for t be Nat st x1 in f.t holds
+            for t be Element of NAT st x1 in f.t holds
           n1 <= t by A92,A93,A123;
-      consider n2 be Nat such that A129: g.x2 = n2 and
+      consider n2 be Element of NAT such that A129: g.x2 = n2 and
         A130: x2 in f.n2 and
-            for t be Nat st x2 in f.t holds
+            for t be Element of NAT st x2 in f.t holds
           n2 <= t by A92,A93,A124;
 
       consider V1 be Subset of PT such that
@@ -1383,13 +1397,14 @@ by NAT_1:29;
         end;
         suppose n1>0;
         then consider l be Nat such that
-            A171: n1 = l+1 by NAT_1:22;
+A171:   n1 = l+1 by NAT_1:22;
+        reconsider l as Element of NAT by ORDINAL1:def 13;
             x1 in {union {Ball(c,1/(2 |^ (l+1)))
           where c is Element of PM:
               c in M1\PartUnion(M1,Mn) &
               Ball(c,3/(2 |^ (l+1))) c= M1 &
                 not c in union { union(f.q)
-                where q is Nat: q <= l}}
+                where q is Element of NAT: q <= l}}
           where M1 is Subset of PM:
               M1 in FX} by A14,A128,A171;
         then consider
@@ -1399,13 +1414,13 @@ by NAT_1:29;
               c in M1\PartUnion(M1,Mn) &
               Ball(c,3/(2 |^ (l+1))) c= M1 &
                 not c in union { union(f.q)
-                where q is Nat: q <= l}} and A173: M1 in FX;
+                where q is Element of NAT: q <= l}} and A173: M1 in FX;
         reconsider NF = {Ball(c,1/(2 |^ (l+1)))
           where c is Element of PM:
           c in M1\PartUnion(M1,Mn) &
           Ball(c,3/(2 |^ (l+1))) c= M1 &
             not c in union { union(f.q)
-            where q is Nat: q <= l}} as set;
+            where q is Element of NAT: q <= l}} as set;
         consider k1 be set such that A174: w1 in k1 and
         A175: k1 in NF by A134,A172,TARSKI:def 4;
         consider c1 be Element of PM
@@ -1413,13 +1428,13 @@ by NAT_1:29;
         A177: c1 in M1\PartUnion(M1,Mn) and
         A178: Ball(c1,3/(2 |^ (l+1))) c= M1 and
               not c1 in union { union(f.q)
-            where q is Nat: q <= l} by A175;
+            where q is Element of NAT: q <= l} by A175;
             x2 in {union {Ball(c,1/(2 |^ (l+1)))
           where c is Element of PM:
               c in M2\PartUnion(M2,Mn) &
               Ball(c,3/(2 |^ (l+1))) c= M2 &
               not c in union { union(f.q)
-                where q is Nat: q <= l}}
+                where q is Element of NAT: q <= l}}
             where M2 is Subset of PM:
                   M2 in FX} by A14,A125,A127,A129,A130,A171;
         then consider M2 be Subset of PM such that
@@ -1428,13 +1443,13 @@ by NAT_1:29;
             c in M2\PartUnion(M2,Mn) &
             Ball(c,3/(2 |^ (l+1))) c= M2 &
             not c in union { union(f.q)
-             where q is Nat: q <= l}} and A180: M2 in FX;
+             where q is Element of NAT: q <= l}} and A180: M2 in FX;
         reconsider NF = {Ball(c,1/(2 |^ (l+1)))
           where c is Element of PM:
           c in M2\PartUnion(M2,Mn) &
           Ball(c,3/(2 |^ (l+1))) c= M2 &
             not c in union { union(f.q)
-            where q is Nat: q <= l}} as set;
+            where q is Element of NAT: q <= l}} as set;
         consider k2 be set such that A181: w2 in k2 and
         A182: k2 in NF by A138,A179,TARSKI:def 4;
         consider c2 be Element of PM
@@ -1442,7 +1457,7 @@ by NAT_1:29;
         A184: c2 in M2\PartUnion(M2,Mn) and
         A185: Ball(c2,3/(2 |^ (l+1))) c= M2 and
                not c2 in union { union(f.q)
-              where q is Nat: q <= l} by A182;
+              where q is Element of NAT: q <= l} by A182;
         A186: dist(x',c2) <= dist(x',w2) + dist(w2,c2) by METRIC_1:4;
             dist(c1,x') <= dist(c1,w1) + dist(w1,x')
           by METRIC_1:4;
@@ -1567,9 +1582,9 @@ then A206: NZ,rng g are_equipotent by A92,WELLORD2:def 4;
     proof
       let x be set;
       assume x in {i: i < m+1+k+1};
-      then consider i be Nat such that
+      then consider i be Element of NAT such that
         A207: x = i and A208: i < (m+1+k+1);
-      reconsider x1=x as Nat by A207;
+      reconsider x1=x as Element of NAT by A207;
           now per cases by NAT_1:19;
         suppose x1 = 0;
         hence x1 in {0} or x1 in Seg(m+1+k+1) by TARSKI:def 1;

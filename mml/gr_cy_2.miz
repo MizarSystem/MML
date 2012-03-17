@@ -10,17 +10,18 @@ environ
       ARYTM_1, ARYTM_3, GROUP_1, FINSET_1, GROUP_4, VECTSP_1, RELAT_1,
       FINSEQ_1, FUNCT_1, QC_LANG1, WELLORD1, FILTER_0, GROUP_5, GROUP_3;
  notations TARSKI, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1,
+ NUMBERS,
       INT_1, INT_2, NAT_1, RLVECT_1, GROUP_2, DOMAIN_1, STRUCT_0, GROUP_1,
       GROUP_3, GROUP_4, GROUP_5, GROUP_6, GR_CY_1, FINSEQ_1, XXREAL_0;
  constructors DOMAIN_1, BINOP_1, XXREAL_0, NAT_1, BINOP_2, INT_2, RLVECT_1,
       GROUP_4, GROUP_5, GROUP_6, GR_CY_1;
  registrations INT_1, GR_CY_1, STRUCT_0, XREAL_0, GROUP_2, FINSEQ_1, RELSET_1,
-      GROUP_1, ORDINAL2, XXREAL_0, ORDINAL1;
+      GROUP_1, ORDINAL2, XXREAL_0, ORDINAL1, ARYTM_3, NAT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions FUNCT_1;
  theorems FUNCT_2, GROUP_1, GROUP_2, GROUP_4, GROUP_5, FUNCT_1, GROUP_6,
       GR_CY_1, NAT_1, INT_1, INT_2, REAL_1, FINSEQ_1, TARSKI, RLVECT_1,
-      RELSET_1, XBOOLE_0, XCMPLX_1, NEWTON, XREAL_1;
+      RELSET_1, XBOOLE_0, XCMPLX_1, NEWTON, XREAL_1, ORDINAL1;
  schemes FUNCT_2, FINSEQ_1;
 
 begin
@@ -33,7 +34,7 @@ begin
  reserve a,b for Element of G;
  reserve g for Element of Gc;
  reserve a1 for Element of G1;
- reserve k,l,m,n,p,s,r for Nat;
+ reserve k,l,m,n,p,s,r for Element of NAT;
  reserve i0,i,i1,i2,i3,i4 for Integer;
  reserve j,j1 for Element of INT.Group;
  reserve x,y,t for set;
@@ -162,7 +163,7 @@ proof let a be Element of G;
 consider i such that A5: a= b|^i by A4,Th11;
 reconsider n1=ord G as Integer;
 A6:n1 > 0 by A1,GROUP_1:90; i mod n1 >= 0 by NEWTON:78;
- then reconsider p=i mod n1 as Nat by INT_1:16;
+ then reconsider p=i mod n1 as Element of NAT by INT_1:16;
 A7:a = b|^((i div n1) * n1 + (i mod n1)) by A5,A6,NEWTON:80
  .= b|^((i div n1)*n1) *(b|^(i mod n1)) by GROUP_1:63
  .= b|^(i div n1)|^ord G *(b|^(i mod n1)) by GROUP_1:67
@@ -208,9 +209,9 @@ thus a|^p|^s = a|^n by A4,GROUP_1:50 .=1.G by A1,A3,GR_CY_1:29;
  end;
 A7: s <> 0 by A1,A3,A4,GROUP_1:90;
  A8: p <> 0 by A1,A3,A4,GROUP_1:90;
-    for k st a|^p|^ k = 1.G & k <> 0 holds s <= k
+    for k being Nat st a|^p|^ k = 1.G & k <> 0 holds s <= k
 proof
-let k; assume that A9:a|^p|^k=1.G and A10: k <> 0 and A11: s > k;
+let k be Nat; assume that A9:a|^p|^k=1.G and A10: k <> 0 and A11: s > k;
 A12:p*s > p*k
 proof
 reconsider p1=p as Integer;
@@ -221,7 +222,8 @@ A13:ord a = n by A1,A2,A3,GR_CY_1:27;
 A14: p*k <> 0 by A8,A10,XCMPLX_1:6;
 A15: a is_not_of_order_0 by A1,GR_CY_1:26;
    a|^(p*k) = 1.G by A9,GROUP_1:50;
-hence contradiction by A4,A12,A13,A14,A15,GROUP_1:def 12;
+  then ord a <= p*k by A14,A15,GROUP_1:def 12;
+hence contradiction by A4,A12,A13;
 end;
 hence thesis by A5,A6,A7,GROUP_1:def 12;
 end;
@@ -230,7 +232,7 @@ theorem Th15:
  s divides k implies a|^k in gr {a|^s}
 proof
 assume s divides k;
-then consider p such that A1:k=s*p by NAT_1:def 3;
+then consider p be Nat such that A1:k=s*p by NAT_1:def 3;
    ex i st a|^k=a|^s|^i
 proof
 reconsider p'=p as Integer;
@@ -260,7 +262,7 @@ assume that A1:G is finite and A2: ord G = n and A3: G=gr {a} and A4: ord G1 =
 p
         and A5: G1= gr{a|^k};
  set z=k*p;  n>0 by A1,A2,GROUP_1:90;
- then consider m,l such that A6:z=(n*m)+l and A7:l < n by NAT_1:42;
+ then consider m,l being Nat such that A6:z=(n*m)+l and A7:l < n by NAT_1:42;
     l=0
   proof assume A8:l<>0;
    A9:G1 is finite by A1,GROUP_2:48;
@@ -292,8 +294,8 @@ A5:G=gr {a|^k} implies k hcf n = 1
    set d=k hcf n;
    A8: d divides k by NAT_1:def 5;
    A9: d divides n by NAT_1:def 5;
-   consider l such that A10:k=d*l by A8,NAT_1:def 3;
-   consider p such that A11:n=d*p by A9,NAT_1:def 3;
+   consider l be Nat such that A10:k=d*l by A8,NAT_1:def 3;
+   consider p be Nat such that A11:n=d*p by A9,NAT_1:def 3;
     A12: p divides n by A11,NAT_1:def 3;
    A13: (a|^k)|^p = a|^((l*d)*p) by A10,GROUP_1:50 .=a|^(n*l) by A11
  .=a|^n|^l by GROUP_1:50
@@ -392,14 +394,14 @@ A8: for i2 ex n st g|^i2=g|^n & n >= 0 & n < i1-i
       .=(1.Gc) *(g|^ (i2 mod r)) by GROUP_1:61
       .=g|^ (i2 mod r) by GROUP_1:def 5;
        i2 mod r >= 0 by A6,NEWTON:78;
-    then reconsider m=i2 mod r as Nat by INT_1:16;
+    then reconsider m=i2 mod r as Element of NAT by INT_1:16;
     take m;
     thus thesis by A6,A9,NEWTON:79;
       end;
-   reconsider m=r as Nat by A6,INT_1:16;
+   reconsider m=r as Element of NAT by A6,INT_1:16;
        ex F being FinSequence st rng F= the carrier of Gc
     proof
-    deffunc F(Nat) = g|^$1;
+    deffunc F(Element of NAT) = g|^$1;
     consider F being FinSequence such that A10:len F = m and
     A11:for p holds p in Seg m implies F.p = F(p) from FINSEQ_1:sch 2;
 A12: dom F = Seg m by A10,FINSEQ_1:def 3;
@@ -409,7 +411,7 @@ A13:  for y st y in rng F holds ex n st y=g|^n
       assume y in rng F;
       then consider x such that A14: x in dom F and
       A15: F.x=y by FUNCT_1:def 5;
-      reconsider n=x as Nat by A14;
+      reconsider n=x as Element of NAT by A14;
       take n;
       thus thesis by A11,A12,A14,A15;
     end;
@@ -486,14 +488,14 @@ A32: for i2 ex n st g|^i2=g|^n & n >= 0 & n < i-i1
     .=(1.Gc) *(g|^ (i2 mod r)) by GROUP_1:61
     .=g|^ (i2 mod r) by GROUP_1:def 5;
        i2 mod r >= 0 by A30,NEWTON:78;
-    then reconsider m=i2 mod r as Nat by INT_1:16;
+    then reconsider m=i2 mod r as Element of NAT by INT_1:16;
     take m;
     thus thesis by A30,A33,NEWTON:79;
       end;
-   reconsider m=r as Nat by A30,INT_1:16;
+   reconsider m=r as Element of NAT by A30,INT_1:16;
        ex F being FinSequence st rng F= the carrier of Gc
     proof
-    deffunc F(Nat) = g|^$1;
+    deffunc F(Element of NAT) = g|^$1;
     consider F being FinSequence such that A34:len F = m and
             A35:for p holds p in Seg m implies F.p=F(p) from FINSEQ_1:sch 2;
 A36: dom F = Seg m by A34,FINSEQ_1:def 3;
@@ -503,7 +505,7 @@ A37:  for y st y in rng F holds ex n st y=g|^n
       assume y in rng F;
       then consider x such that A38: x in dom F and A39: F.x=y by FUNCT_1:def 5
 ;
-      reconsider n=x as Nat by A38;
+      reconsider n=x as Element of NAT by A38;
       take n;
       thus thesis by A35,A36,A38,A39;
     end;
@@ -569,7 +571,7 @@ hence thesis by GROUP_1:def 14;
 definition
  let n such that A1:n>0;
  let h be Element of INT.Group(n);
- func @h -> Nat equals:
+ func @h -> Element of NAT equals:
  Def1: h;
  coherence
   proof
@@ -667,7 +669,7 @@ A29:    ex k st k<>0 & k < n & g|^k=1.Gc
          now per cases by REAL_1:def 5;
       case A30: p < m;
               reconsider m1=m ,p1=p as Integer;
-              reconsider r1 = (m1-p1) as Nat by A30,INT_1:18;
+              reconsider r1 = (m1-p1) as Element of NAT by A30,INT_1:18;
            now per cases;
           suppose A31: r1 >0;
                set zero=0;
@@ -698,7 +700,7 @@ A29:    ex k st k<>0 & k < n & g|^k=1.Gc
       end;
       case A34: m < p;
               reconsider m1=m,p1=p as Integer;
-              reconsider r1 = (p1-m1) as Nat by A34,INT_1:18;
+              reconsider r1 = (p1-m1) as Element of NAT by A34,INT_1:18;
            now per cases;
           suppose A35: r1 >0;
                set zero=0;
@@ -909,17 +911,19 @@ for G2 being strict Subgroup of G st ord G2=p holds G2=G1
 proof
 consider a being Element of G such that
 A5: G= gr {a} by A2,GR_CY_1:def 9;
-consider s such that A6: n=p*s by A4,NAT_1:def 3;
+consider s be Nat such that A6: n=p*s by A4,NAT_1:def 3;
+b1: s in NAT by ORDINAL1:def 13;
+then
 A7:ord (a|^s) = p by A1,A3,A5,A6,Th14;
 then A8:ord gr {a|^s} = p by A1,GR_CY_1:27;
 A9:for G2 being strict Subgroup of G st ord G2 = p holds G2=gr {a|^s}
 proof let G2 be strict Subgroup of G such that A10: ord G2 = p;
 consider k such that A11:G2 = gr {a|^k} by A1,A5,Th13;
    n divides k*p by A1,A3,A5,A10,A11,Th17;
-then consider m such that A12:k*p=n*m by NAT_1:def 3;
+then consider m be Nat such that A12:k*p=n*m by NAT_1:def 3;
    s divides k
 proof
-   ex l st k=s*l
+   ex l be Nat st k=s*l
 proof
 reconsider p1=p as Integer;
 A13:p<>0 by A1,A3,A6,GROUP_1:90;
@@ -931,8 +935,8 @@ thus thesis by A14;
 end;
 hence thesis by NAT_1:def 3;
 end;
-then a|^k in gr {a|^s} by Th15;
-hence thesis by A1,A8,A10,A11,Th16;
+then a|^k in gr {a|^s} by b1,Th15;
+hence thesis by A1,A8,A10,A11,b1,Th16;
 end;
 take gr {a|^s};
 thus thesis by A1,A7,A9,GR_CY_1:27;
@@ -970,23 +974,21 @@ theorem Th30:
   A7: ord g = n by A1,A2,A4,GR_CY_1:27;
       A8:k<>0 & 2<>0 by A1,A2,A3,GROUP_1:90;
        then A9:k>0;
-A10:    for p st g|^k|^ p = 1.Gc & p <> 0 holds 2 <= p
+A10:    for p being Nat st g|^k|^ p = 1.Gc & p <> 0 holds 2 <= p
       proof
-      let p; assume that A11:g|^k|^p=1.Gc and A12:p<>0 and A13:2>p;
+      let p be Nat; assume that A11:g|^k|^p=1.Gc and A12:p<>0 and A13:2>p;
       A14:n>k*p by A3,A9,A13,XREAL_1:70;
     A15:g is_not_of_order_0 by A1,GR_CY_1:26;
     A16:k*p<>0 by A8,A12,XCMPLX_1:6;
          1.Gc = g|^(k*p) by A11,GROUP_1:50;
       hence contradiction by A7,A14,A15,A16,GROUP_1:def 12;
       end;
-
-      for g2 being Element of Gc st ord g2=2 holds g|^k=g2
-   proof
+    hence ord(g|^k) = 2 by A5,A6,A8,GROUP_1:def 12;
     let g2 be Element of Gc;
     assume that A17:ord g2=2 and A18:g|^k<>g2;
-    consider k1 being Nat such that A19:g2=g|^k1 by A1,A4,Th12;
+    consider k1 being Element of NAT such that A19:g2=g|^k1 by A1,A4,Th12;
        now
-              consider t,t1 being Nat such that A20:k1=(k*t)+t1 and
+         consider t,t1 being Nat such that A20:k1=(k*t)+t1 and
                                                 A21:t1<k by A9,NAT_1:42;
             t1<>0
             proof
@@ -1027,8 +1029,6 @@ GROUP_1:50 .=g|^(n*t+t1*2) by A3
             hence contradiction by A7,A23,A24,A25,GROUP_1:def 12;
        end;
     hence thesis;
- end;
- hence thesis by A5,A6,A10,GROUP_1:def 12;
   end;
 
 registration let G;

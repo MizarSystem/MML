@@ -9,10 +9,10 @@ environ
  vocabularies FUNCT_1, RELAT_1, FUNCT_4, BOOLE, AMI_1, SCMFSA_2, SCMFSA6A,
       AMI_3, CAT_1, SCM_1, INT_1, FUNCOP_1, FUNCT_7, SF_MASTR, AMI_5, FINSEQ_1,
       RELOC, CARD_1, SCMFSA6B, CARD_3;
- notations TARSKI, XBOOLE_0, SETFAM_1, NUMBERS, XCMPLX_0, NAT_1, INT_1,
-      RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, CARD_1, CQC_LANG, FUNCT_4, STRUCT_0,
-      AMI_1, AMI_3, SCM_1, AMI_5, FUNCT_7, SCMFSA_2, SCMFSA_4, SCMFSA_5,
-      SCMFSA6A, SF_MASTR, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0, NAT_1,
+      INT_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, CARD_1, CQC_LANG, FUNCT_4,
+      STRUCT_0, AMI_1, AMI_3, SCM_1, AMI_5, FUNCT_7, SCMFSA_2, SCMFSA_4,
+      SCMFSA_5, SCMFSA6A, SF_MASTR, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, MEMBERED, FUNCT_7, SCM_1, AMI_5,
       SCMFSA_5, SCMFSA6A, SF_MASTR;
  registrations AMI_1, SCMFSA_2, FUNCT_1, SCMFSA_4, INT_1, SCMFSA6A, SF_MASTR,
@@ -31,7 +31,7 @@ theorem :: SCMFSA6B:3
 
 begin
 
- reserve m, n for Nat,
+ reserve m, n for Element of NAT,
          x for set,
          i for Instruction of SCM+FSA,
          I for Macro-Instruction,
@@ -114,7 +114,7 @@ end;
 definition let I be Macro-Instruction;
  attr I is paraclosed means
 :: SCMFSA6B:def 2
- for s being State of SCM+FSA, n being Nat
+ for s being State of SCM+FSA, n being Element of NAT
     st I +* Start-At insloc 0 c= s
    holds IC (Computation s).n in dom I;
 
@@ -125,7 +125,7 @@ definition let I be Macro-Instruction;
  attr I is keeping_0 means
 :: SCMFSA6B:def 4
  for s being State of SCM+FSA st I +* Start-At insloc 0 c= s
-  for k being Nat holds ((Computation s).k).intloc 0 = s.intloc 0;
+  for k being Element of NAT holds ((Computation s).k).intloc 0 = s.intloc 0;
 end;
 
 registration
@@ -186,11 +186,11 @@ theorem :: SCMFSA6B:26
 
 theorem :: SCMFSA6B:27
  for J being parahalting Macro-Instruction st J +* Start-At insloc 0 c= s1
- for n being Nat st ProgramPart Relocated(J,n) c= s2 &
+ for n being Element of NAT st ProgramPart Relocated(J,n) c= s2 &
      IC s2 = insloc n &
      s1 | (Int-Locations \/ FinSeq-Locations)
      = s2 | (Int-Locations \/ FinSeq-Locations)
- for i being Nat holds
+ for i being Element of NAT holds
      IC (Computation s1).i + n = IC (Computation s2).i &
      IncAddr(CurInstr ((Computation s1).i),n) = CurInstr ((Computation s2).i) &
      (Computation s1).i | (Int-Locations \/ FinSeq-Locations)
@@ -200,7 +200,7 @@ theorem :: SCMFSA6B:28
  for I being parahalting Macro-Instruction st
      I +* Start-At insloc 0 c= s1 & I +* Start-At insloc 0 c= s2 &
      s1,s2 equal_outside the Instruction-Locations of SCM+FSA holds
- for k being Nat holds
+ for k being Element of NAT holds
      (Computation s1).k, (Computation s2).k
          equal_outside the Instruction-Locations of SCM+FSA &
      CurInstr (Computation s1).k = CurInstr (Computation s2).k;
@@ -269,13 +269,13 @@ theorem :: SCMFSA6B:38
 theorem :: SCMFSA6B:39
  for I being parahalting Macro-Instruction
  st Initialized I c= s holds
-     for k being Nat st k <= LifeSpan s holds
+     for k being Element of NAT st k <= LifeSpan s holds
          CurInstr (Computation (s +* Directed I)).k <> halt SCM+FSA;
 
 theorem :: SCMFSA6B:40
  for I being paraclosed Macro-Instruction
   st s +* (I +* Start-At insloc 0) is halting
-   for J being Macro-Instruction, k being Nat
+   for J being Macro-Instruction, k being Element of NAT
     st k <= LifeSpan (s +* (I +* Start-At insloc 0))
      holds (Computation (s +* (I +* Start-At insloc 0))).k,
            (Computation (s +* ((I ';' J) +* Start-At insloc 0))).k
@@ -289,7 +289,7 @@ end;
 theorem :: SCMFSA6B:41
  for I being keeping_0 Macro-Instruction
   st not s +* (I +* Start-At insloc 0) is halting
-   for J being Macro-Instruction, k being Nat
+   for J being Macro-Instruction, k being Element of NAT
     holds (Computation (s +* (I +* Start-At insloc 0))).k,
           (Computation (s +* ((I ';' J) +* Start-At insloc 0))).k
            equal_outside the Instruction-Locations of SCM+FSA;
@@ -299,7 +299,7 @@ theorem :: SCMFSA6B:42
   st s +* I is halting
    for J being paraclosed Macro-Instruction
     st (I ';' J) +* Start-At insloc 0 c= s
-     for k being Nat
+     for k being Element of NAT
      holds (Computation (Result(s +*I)
                                +* (J +* Start-At insloc 0))).k
     +* Start-At (IC (Computation ((Result(s +*I))

@@ -9,12 +9,13 @@ environ
  vocabularies ARYTM, INT_1, RAT_1, ARYTM_1, PREPOWER, FUNCT_1, ARYTM_3, SEQ_1,
       SEQ_2, ORDINAL2, GROUP_1, RELAT_1, SQUARE_1, SEQ_4, ABSVALUE, PROB_1,
       POWER;
- notations SUBSET_1, NEWTON, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1,
-      NAT_1, SEQ_1, SEQ_2, SEQM_3, INT_1, SQUARE_1, SEQ_4, RAT_1, PREPOWER,
-      COMPLEX1, XXREAL_0;
+ notations SUBSET_1, NEWTON, ORDINAL1, XCMPLX_0, XREAL_0,
+      XXREAL_0, INT_1, RAT_1, REAL_1, NUMBERS,
+      NAT_1, SEQ_1, SEQ_2, SEQM_3, SQUARE_1, SEQ_4, PREPOWER,
+      COMPLEX1;
  constructors REAL_1, SQUARE_1, NAT_1, SEQ_2, SEQM_3, SEQ_4, PREPOWER;
  registrations INT_1, XREAL_0, NEWTON, SQUARE_1, PREPOWER, RAT_1, MEMBERED,
-      XXREAL_0;
+      XXREAL_0, NUMBERS, NAT_1, ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SQUARE_1;
  theorems REAL_1, ABSVALUE, NAT_1, SEQ_2, SEQM_3, INT_1, SQUARE_1, SEQ_4,
@@ -26,7 +27,7 @@ begin
 
 reserve x for set;
 reserve a, b, c, d, e for real number;
-reserve m, n, m1, m2 for Nat;
+reserve m, n, m1, m2 for Element of NAT;
 reserve k, l for Integer;
 reserve p for Rational;
 
@@ -71,12 +72,11 @@ proof assume A1: a>=0 or (ex m st n=2*m);
   suppose A4: a=0;
       now per cases by NAT_1:22;
    suppose A5: n=0;  a |^ n = a GeoSeq.n by PREPOWER:def 1 .= 1 by A5,
-PREPOWER:4
-;
+PREPOWER:4;
     hence a |^ n >= 0;
    end;
-   suppose ex m st n = m+1;
-    then consider m such that A6: n = m + 1;
+   suppose ex m being Nat st n = m+1;
+    then consider m being Nat such that A6: n = m + 1;
        a |^ n = a |^ m * a by A6,NEWTON:11 .= 0 by A4;
     hence a |^ n >= 0;
    end;
@@ -743,7 +743,7 @@ proof assume A1: n>=1; then A2: n>0;
   end;
   suppose A3: a=0;
   reconsider k = 1, l = n as Integer;
-  reconsider m = l-k as Nat by A1,INT_1:18;
+  reconsider m = l-k as Element of NAT by A1,INT_1:18;
      a |^ n = a |^ (m+1) .= a |^ m * 0 by A3,NEWTON:11
   .= 0;
   hence a to_power n = a |^ n by A2,A3,Def2;
@@ -1006,7 +1006,7 @@ reconsider a1=a, b1=b as Real by XREAL_0:def 1;
    A20: b<e & e<a to_power d by XREAL_1:7;
    reconsider e as Real by XREAL_0:def 1;
    consider n such that A21: n > (a1-1)/(e/b1-1) by SEQ_4:10;
-   reconsider m = max(1,n) as Nat by XXREAL_0:16;
+   reconsider m = max(1,n) as Element of NAT by XXREAL_0:16;
       n<=m by XXREAL_0:25;
    then A22: (a-1)/(e/b-1) < m by A21,XXREAL_0:2;
       e/b>1 by A2,A20,REAL_2:142;
@@ -1044,14 +1044,14 @@ A29:   ex g being Real st g=c & a to_power g <= b by A28;
    A32: a1 to_power d > 0 by A1,Th39; then e>0 by A31;
    then b/e>1 by A31,REAL_2:142;
    then A33: b/e-1>1-1 by XREAL_1:11;
-   deffunc F(Nat) = $1-root a;
+   deffunc F(Element of NAT) = $1-root a;
    consider s being Real_Sequence such that A34:
    for n holds s.n = F(n) from SEQ_1:sch 1;
     for n st n>=1 holds s.n = n-root a1 by A34;
    then s is convergent & lim s = 1 by A1,Th24;
    then consider n such that
    A35: for m st m>=n holds abs(s.m - 1)<b/e-1 by A33,SEQ_2:def 7;
-   reconsider m = max(1,n) as Nat by XXREAL_0:16;
+   reconsider m = max(1,n) as Element of NAT by XXREAL_0:16;
    A36: m>=n & m>=1 by XXREAL_0:25;
    then abs(s.m - 1)<b/e-1 by A35;
    then A37: abs(m-root a - 1)<b/e-1 by A34;
@@ -1065,7 +1065,7 @@ A29:   ex g being Real st g=c & a to_power g <= b by A28;
    then A38: a to_power (d + 1/m) < a to_power d / e * b by XCMPLX_1:75;
       a to_power d / e < 1 by A31,A32,REAL_2:142;
    then a to_power d / e * b < 1*b by A2,XREAL_1:70;
-   then a to_power (d + 1/m) < b by A38,XXREAL_0:2;
+   then a to_power (d + 1/m) <= b by A38,XXREAL_0:2;
    then d + 1/m in X;
    then d + 1/m <= d by A15,SEQ_4:def 4;
    then A39: 1/m <= 0 by REAL_2:174;
@@ -1101,7 +1101,7 @@ A29:   ex g being Real st g=c & a to_power g <= b by A28;
    A46: b<e & e<a to_power d by XREAL_1:7;
    reconsider e as Real by XREAL_0:def 1;
    consider n such that A47: n > (1/a1-1)/(e/b1-1) by SEQ_4:10;
-   reconsider m = max(1,n) as Nat by XXREAL_0:16;
+   reconsider m = max(1,n) as Element of NAT by XXREAL_0:16;
       n<=m by XXREAL_0:25;
    then A48: (1/a-1)/(e/b-1) < m by A47,XXREAL_0:2;
       e/b>1 by A2,A46,REAL_2:142;
@@ -1140,7 +1140,7 @@ A56:   ex g being Real st g=c & a to_power g <= b by A55;
    A59: a1 to_power d > 0 by A1,Th39; then e>0 by A58;
    then b/e>1 by A58,REAL_2:142;
    then A60: b/e-1>1-1 by XREAL_1:11;
-   deffunc F(Nat) = $1-root (1/a);
+   deffunc F(Element of NAT) = $1-root (1/a);
    consider s being Real_Sequence such that A61:
    for n holds s.n = F(n) from SEQ_1:sch 1;
    A62: 1/a>0 by A1,REAL_2:127;
@@ -1148,7 +1148,7 @@ A56:   ex g being Real st g=c & a to_power g <= b by A55;
    then s is convergent & lim s = 1 by A62,Th24;
    then consider n such that
    A63: for m st m>=n holds abs(s.m - 1)<b/e-1 by A60,SEQ_2:def 7;
-   reconsider m = max(1,n) as Nat by XXREAL_0:16;
+   reconsider m = max(1,n) as Element of NAT by XXREAL_0:16;
    A64: m>=n & m>=1 by XXREAL_0:25;
    then abs(s.m - 1)<b/e-1 by A63;
    then A65: abs(m-root (1/a) - 1)<b/e-1 by A61;
@@ -1381,7 +1381,7 @@ func number_e -> real number means
 holds it = lim s;
 existence
 proof
- deffunc F(Nat) = (1 + 1/($1+1)) to_power ($1+1);
+ deffunc F(Element of NAT) = (1 + 1/($1+1)) to_power ($1+1);
  consider s1 being Real_Sequence such that A1:
  for n holds s1.n = F(n) from SEQ_1:sch 1;
  take lim s1;
@@ -1398,7 +1398,7 @@ proof let a,b;
              A4: for s being Real_Sequence st
                  for n holds s.n = (1 + 1/(n+1)) to_power (n+1)
                  holds b = lim s;
- deffunc F(Nat) = (1 + 1/($1+1)) to_power ($1+1);
+ deffunc F(Element of NAT) = (1 + 1/($1+1)) to_power ($1+1);
  consider s1 being Real_Sequence such that A5:
  for n holds s1.n = F(n) from SEQ_1:sch 1;
   lim s1 = a by A3,A5;

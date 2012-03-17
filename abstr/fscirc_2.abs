@@ -10,14 +10,15 @@ environ
       FINSEQ_2, FUNCT_4, FUNCT_5, FUNCOP_1, PBOOLE, MARGREL1, BINARITH,
       CLASSES1, PARTFUN1, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, LATTICES,
       CIRCCOMB, FACIRC_1, ZF_REFLE, ZF_LANG, TWOSCOMP, FSCIRC_1, FSCIRC_2;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, NAT_1, MCART_1,
-      RELAT_1, CARD_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FUNCT_5,
-      PBOOLE, MARGREL1, BINARITH, CLASSES1, MSUALG_1, MSAFREE2, CIRCUIT1,
-      CIRCUIT2, CIRCCOMB, TWOSCOMP, FACIRC_1, FACIRC_2, FSCIRC_1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
+      MCART_1, RELAT_1, CARD_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2,
+      FUNCT_5, PBOOLE, MARGREL1, BINARITH, CLASSES1, MSUALG_1, MSAFREE2,
+      CIRCUIT1, CIRCUIT2, CIRCCOMB, TWOSCOMP, FACIRC_1, FACIRC_2, FSCIRC_1,
+      XXREAL_0;
  constructors ENUMSET1, XXREAL_0, FUNCT_5, CLASSES1, BINARITH, CIRCUIT1,
       CIRCUIT2, TWOSCOMP, FSCIRC_1, FACIRC_2;
  registrations RELSET_1, FINSEQ_2, MARGREL1, CIRCCOMB, FACIRC_1, STRUCT_0,
-      RELAT_1, CIRCCMB2, FACIRC_2, ORDINAL1, FRAENKEL, CARD_3;
+      RELAT_1, CIRCCMB2, FACIRC_2, ORDINAL1, FRAENKEL, CARD_3, NAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -37,14 +38,14 @@ definition
   ex f,g being ManySortedSet of NAT st
    it = f.n & f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
    g.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-   for n being Nat, S being non empty ManySortedSign, z be set
+   for n being Element of NAT, S being non empty ManySortedSign, z be set
     st S = f.n & z = g.n
     holds f.(n+1) = S +* BitSubtracterWithBorrowStr(x .(n+1), y.(n+1), z) &
           g.(n+1) = BorrowOutput(x .(n+1), y.(n+1), z);
 end;
 
 definition
- let n be Nat;
+ let n be Element of NAT;
  let x,y be FinSequence;
  func n-BitSubtracterCirc(x,y) ->
       Boolean gate`2=den strict Circuit of n-BitSubtracterStr(x,y)
@@ -55,7 +56,7 @@ definition
    f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
    g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
    h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-   for n being Nat, S being non empty ManySortedSign,
+   for n being Element of NAT, S being non empty ManySortedSign,
        A being non-empty MSAlgebra over S
    for z being set st S = f.n & A = g.n & z = h.n holds
      f.(n+1) = S +* BitSubtracterWithBorrowStr(x .(n+1), y.(n+1), z) &
@@ -64,14 +65,15 @@ definition
 end;
 
 definition
- let n be Nat;
+ let n be Element of NAT;
  let x,y be FinSequence;
  func n-BitBorrowOutput(x,y) ->
       Element of InnerVertices (n-BitSubtracterStr(x,y)) means
 :: FSCIRC_2:def 3
   ex h being ManySortedSet of NAT st
    it = h.n & h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-   for n being Nat holds h.(n+1) = BorrowOutput(x .(n+1), y.(n+1), h.n);
+   for n being Element of NAT holds h.(n+1)
+    = BorrowOutput(x .(n+1), y.(n+1), h.n);
 end;
 
 ::------------------------------------------------------------
@@ -83,13 +85,13 @@ theorem :: FSCIRC_2:1
    f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
    g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
    h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-   for n being Nat, S being non empty ManySortedSign,
+   for n being Element of NAT, S being non empty ManySortedSign,
        A being non-empty MSAlgebra over S
    for z being set st S = f.n & A = g.n & z = h.n holds
      f.(n+1) = S +* BitSubtracterWithBorrowStr(x .(n+1), y.(n+1), z) &
      g.(n+1) = A +* BitSubtracterWithBorrowCirc(x .(n+1), y.(n+1), z) &
      h.(n+1) = BorrowOutput(x .(n+1), y.(n+1), z)
- for n being Nat holds
+ for n being Element of NAT holds
    n-BitSubtracterStr(x,y) = f.n & n-BitSubtracterCirc(x,y) = g.n &
    n-BitBorrowOutput(x,y) = h.n;
 
@@ -123,7 +125,7 @@ theorem :: FSCIRC_2:4 ::Col002a:
     = BorrowOutput(a, b, c);
 
 theorem :: FSCIRC_2:5
- for n be Nat
+ for n be Element of NAT
  for p,q being FinSeqLen of n
  for p1,p2, q1,q2 being FinSequence holds
   n-BitSubtracterStr(p^p1, q^q1) = n-BitSubtracterStr(p^p2, q^q2) &
@@ -131,7 +133,8 @@ theorem :: FSCIRC_2:5
   n-BitBorrowOutput(p^p1, q^q1) = n-BitBorrowOutput(p^p2, q^q2);
 
 theorem :: FSCIRC_2:6 ::Col002b:
-    for n be Nat for x,y being FinSeqLen of n for a,b being set holds
+    for n be Element of NAT for x,y being FinSeqLen of n for a,b being set
+     holds
   (n+1)-BitSubtracterStr(x^<*a*>, y^<*b*>) = n-BitSubtracterStr(x, y) +*
       BitSubtracterWithBorrowStr(a, b, n-BitBorrowOutput(x, y)) &
   (n+1)-BitSubtracterCirc(x^<*a*>, y^<*b*>) = n-BitSubtracterCirc(x, y) +*
@@ -140,7 +143,7 @@ theorem :: FSCIRC_2:6 ::Col002b:
       BorrowOutput(a, b, n-BitBorrowOutput(x, y));
 
 theorem :: FSCIRC_2:7
- for n be Nat for x,y being FinSequence holds
+ for n be Element of NAT for x,y being FinSequence holds
   (n+1)-BitSubtracterStr(x, y) = n-BitSubtracterStr(x, y) +*
     BitSubtracterWithBorrowStr(x .(n+1), y.(n+1), n-BitBorrowOutput(x, y)) &
   (n+1)-BitSubtracterCirc(x, y) = n-BitSubtracterCirc(x, y) +*
@@ -153,13 +156,13 @@ theorem :: FSCIRC_2:7
 ::------------------------------------------------------------
 
 theorem :: FSCIRC_2:8
- for n,m be Nat st n <= m
+ for n,m be Element of NAT st n <= m
  for x,y being FinSequence holds
   InnerVertices (n-BitSubtracterStr(x,y)) c=
     InnerVertices (m-BitSubtracterStr(x,y));
 
 theorem :: FSCIRC_2:9
-    for n be Nat
+    for n be Element of NAT
  for x,y being FinSequence holds
   InnerVertices ((n+1)-BitSubtracterStr(x,y)) =
     InnerVertices (n-BitSubtracterStr(x,y)) \/
@@ -167,24 +170,24 @@ theorem :: FSCIRC_2:9
          n-BitBorrowOutput(x,y));
 
 definition
- let k,n be Nat such that
+ let k,n be Element of NAT such that
     k >= 1 & k <= n;
  let x,y be FinSequence;
  func (k,n)-BitSubtracterOutput(x,y) ->
       Element of InnerVertices (n-BitSubtracterStr(x,y)) means
 :: FSCIRC_2:def 4
-  ex i being Nat st k = i+1 &
+  ex i being Element of NAT st k = i+1 &
    it = BitSubtracterOutput(x .k, y.k, i-BitBorrowOutput(x,y));
 end;
 
 theorem :: FSCIRC_2:10
-    for n,k being Nat st k < n
+    for n,k being Element of NAT st k < n
  for x,y being FinSequence holds
   (k+1,n)-BitSubtracterOutput(x,y) =
      BitSubtracterOutput(x .(k+1), y.(k+1), k-BitBorrowOutput(x,y));
 
 theorem :: FSCIRC_2:11
-    for n being Nat
+    for n being Element of NAT
  for x,y being FinSequence holds
   InnerVertices (n-BitSubtracterStr(x,y)) is Relation;
 
@@ -223,13 +226,13 @@ theorem :: FSCIRC_2:17
      {[<*x,y*>,and2a],[<*y,c*>,and2],[<*x,c*>,and2a]} \/ {BorrowOutput(x,y,c)};
 
 registration
- let n be Nat;
+ let n be Element of NAT;
  let x,y be FinSequence;
  cluster n-BitBorrowOutput(x,y) -> pair;
 end;
 
 theorem :: FSCIRC_2:18
- for x,y being FinSequence, n being Nat
+ for x,y being FinSequence, n being Element of NAT
   holds
    (n-BitBorrowOutput(x,y))`1 = <*> &
    (n-BitBorrowOutput(x,y))`2 = (0-tuples_on BOOLEAN)-->TRUE &
@@ -240,7 +243,7 @@ theorem :: FSCIRC_2:18
    proj1 (n-BitBorrowOutput(x,y))`2 = 3-tuples_on BOOLEAN;
 
 theorem :: FSCIRC_2:19
- for n being Nat, x,y being FinSequence, p being set
+ for n being Element of NAT, x,y being FinSequence, p being set
   holds
    n-BitBorrowOutput(x,y) <> [p, and2] &
    n-BitBorrowOutput(x,y) <> [p, and2a] &
@@ -252,7 +255,7 @@ theorem :: FSCIRC_2:19
 
 theorem :: FSCIRC_2:20
  for f,g being nonpair-yielding FinSequence
- for n being Nat holds
+ for n being Element of NAT holds
   InputVertices ((n+1)-BitSubtracterStr(f,g)) =
     (InputVertices (n-BitSubtracterStr(f,g)))\/
      ((InputVertices BitSubtracterWithBorrowStr(f.(n+1),g.(n+1),
@@ -261,7 +264,7 @@ theorem :: FSCIRC_2:20
   InputVertices (n-BitSubtracterStr(f,g)) is without_pairs;
 
 theorem :: FSCIRC_2:21
-    for n being Nat
+    for n being Element of NAT
  for x,y being nonpair-yielding FinSeqLen of n holds
   InputVertices (n-BitSubtracterStr(x,y)) = rng x \/ rng y;
 
@@ -297,7 +300,7 @@ theorem :: FSCIRC_2:25
   holds Following(s,2) is stable;
 
 theorem :: FSCIRC_2:26
-    for n being Nat
+    for n being Element of NAT
  for x,y being nonpair-yielding FinSeqLen of n
  for s being State of n-BitSubtracterCirc(x,y)
   holds Following(s,1+2*n) is stable;

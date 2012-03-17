@@ -10,14 +10,15 @@ environ
       FINSEQ_2, FUNCT_4, FUNCT_5, FUNCOP_1, PBOOLE, MARGREL1, BINARITH,
       CLASSES1, PARTFUN1, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, LATTICES,
       CIRCCOMB, FACIRC_1, ZF_REFLE, ZF_LANG, TWOSCOMP, FSCIRC_1, FSCIRC_2;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, NAT_1, MCART_1,
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS,
+      XCMPLX_0, NAT_1, MCART_1,
       RELAT_1, CARD_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FUNCT_5,
       PBOOLE, MARGREL1, BINARITH, CLASSES1, MSUALG_1, MSAFREE2, CIRCUIT1,
       CIRCUIT2, CIRCCOMB, TWOSCOMP, FACIRC_1, FACIRC_2, FSCIRC_1, XXREAL_0;
  constructors ENUMSET1, XXREAL_0, FUNCT_5, CLASSES1, BINARITH, CIRCUIT1,
       CIRCUIT2, TWOSCOMP, FSCIRC_1, FACIRC_2;
  registrations RELSET_1, FINSEQ_2, MARGREL1, CIRCCOMB, FACIRC_1, STRUCT_0,
-      RELAT_1, CIRCCMB2, FACIRC_2, ORDINAL1, FRAENKEL, CARD_3;
+      RELAT_1, CIRCCMB2, FACIRC_2, ORDINAL1, FRAENKEL, CARD_3, NAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, CIRCUIT2, FACIRC_1, XBOOLE_0, MSAFREE2, FSCIRC_1;
  theorems TARSKI, ZFMISC_1, ENUMSET1, MCART_1, NAT_1, RELAT_1, ORDINAL1,
@@ -43,27 +44,28 @@ A1:  1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE)
   ex f,g being ManySortedSet of NAT st
    it = f.n & f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
    g.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-   for n being Nat, S being non empty ManySortedSign, z be set
+   for n being Element of NAT, S being non empty ManySortedSign, z be set
     st S = f.n & z = g.n
     holds f.(n+1) = S +* BitSubtracterWithBorrowStr(x .(n+1), y.(n+1), z) &
           g.(n+1) = BorrowOutput(x .(n+1), y.(n+1), z);
   uniqueness
   proof
-    deffunc o(set, Nat) = BorrowOutput(x .($2+1), y.($2+1), $1);
-    deffunc S(non empty ManySortedSign, set, Nat) =
+    reconsider n as Element of NAT by ORDINAL1:def 13;
+    deffunc o(set, Element of NAT) = BorrowOutput(x .($2+1), y.($2+1), $1);
+    deffunc S(non empty ManySortedSign, set, Element of NAT) =
       $1 +* BitSubtracterWithBorrowStr(x .($3+1), y.($3+1), $2);
      for S1,S2 being unsplit gate`1=arity gate`2isBoolean non void non empty
                  strict non empty ManySortedSign st
     (ex f,h being ManySortedSet of NAT st S1 = f.n &
     f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-    for n being Nat, S being non empty ManySortedSign, x being set
+    for n being Element of NAT, S being non empty ManySortedSign, x being set
      st S = f.n & x = h.n
      holds f.(n+1) = S(S,x,n) & h.(n+1) = o(x, n)) &
     (ex f,h being ManySortedSet of NAT st S2 = f.n &
     f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-    for n being Nat, S being non empty ManySortedSign, x being set
+    for n being Element of NAT, S being non empty ManySortedSign, x being set
      st S = f.n & x = h.n
      holds f.(n+1) = S(S,x,n) & h.(n+1) = o(x, n))
      holds S1 = S2 from CIRCCMB2:sch 9;
@@ -71,15 +73,16 @@ A1:  1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE)
  end;
   existence
   proof
-    deffunc o(set, Nat) = BorrowOutput(x .($2+1), y.($2+1), $1);
-    deffunc S(set, Nat) =
+    reconsider n as Element of NAT by ORDINAL1:def 13;
+    deffunc o(set, Element of NAT) = BorrowOutput(x .($2+1), y.($2+1), $1);
+    deffunc S(set, Element of NAT) =
       BitSubtracterWithBorrowStr(x .($2+1), y.($2+1), $1);
      ex S being unsplit gate`1=arity gate`2isBoolean
       non void non empty non empty strict ManySortedSign,
     f,h being ManySortedSet of NAT st
     S = f.n & f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-    for n being Nat, S being non empty ManySortedSign, x being set
+    for n being Element of NAT, S being non empty ManySortedSign, x being set
      st S = f.n & x = h.n
     holds f.(n+1) = S +* S(x,n) & h.(n+1) = o(x, n) from CIRCCMB2:sch 8(A1);
     hence thesis;
@@ -87,7 +90,7 @@ A1:  1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE)
 end;
 
 definition
- let n be Nat;
+ let n be Element of NAT;
  let x,y be FinSequence;
  func n-BitSubtracterCirc(x,y) ->
       Boolean gate`2=den strict Circuit of n-BitSubtracterStr(x,y)
@@ -97,7 +100,7 @@ definition
    f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
    g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
    h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-   for n being Nat, S being non empty ManySortedSign,
+   for n being Element of NAT, S being non empty ManySortedSign,
        A being non-empty MSAlgebra over S
    for z being set st S = f.n & A = g.n & z = h.n holds
      f.(n+1) = S +* BitSubtracterWithBorrowStr(x .(n+1), y.(n+1), z) &
@@ -109,25 +112,25 @@ definition
    set A0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE);
    set Sn = n-BitSubtracterStr(x,y);
    set o0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
-   deffunc o(set,Nat) = BorrowOutput(x .($2+1), y.($2+1), $1);
-   deffunc S(non empty ManySortedSign, set, Nat) =
+   deffunc o(set,Element of NAT) = BorrowOutput(x .($2+1), y.($2+1), $1);
+   deffunc S(non empty ManySortedSign, set, Element of NAT) =
      $1 +* BitSubtracterWithBorrowStr(x .($3+1), y.($3+1), $2);
    deffunc A(non empty ManySortedSign, non-empty MSAlgebra over $1,
-     set, Nat) =
+     set, Element of NAT) =
      $2 +* BitSubtracterWithBorrowCirc(x .($4+1), y.($4+1), $3);
 A1:  for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
-     for z being set, n being Nat holds
+     for z being set, n being Element of NAT holds
       A(S,A,z,n) is non-empty MSAlgebra over S(S,z,n);
    thus for A1,A2 being Boolean gate`2=den strict Circuit of Sn st
    (ex f,g,h being ManySortedSet of NAT st Sn = f.n & A1 = g.n &
     f.0 = S0 & g.0 = A0 & h.0 = o0 &
-    for n being Nat, S being non empty ManySortedSign,
+    for n being Element of NAT, S being non empty ManySortedSign,
         A being non-empty MSAlgebra over S
     for x being set st S = f.n & A = g.n & x = h.n
      holds f.(n+1) = S(S,x,n) & g.(n+1) = A(S,A,x,n) & h.(n+1) = o(x, n)) &
    (ex f,g,h being ManySortedSet of NAT st Sn = f.n & A2 = g.n &
     f.0 = S0 & g.0 = A0 & h.0 = o0 &
-    for n being Nat, S being non empty ManySortedSign,
+    for n being Element of NAT, S being non empty ManySortedSign,
         A being non-empty MSAlgebra over S
     for x being set st S = f.n & A = g.n & x = h.n
      holds f.(n+1) = S(S,x,n) & g.(n+1) = A(S,A,x,n) & h.(n+1) = o(x, n))
@@ -139,29 +142,29 @@ A1:  for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
    set A0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE);
    set Sn = n-BitSubtracterStr(x,y);
    set o0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
-   deffunc o(set,Nat) = BorrowOutput(x .($2+1), y.($2+1), $1);
-   deffunc S(non empty ManySortedSign, set, Nat) =
+   deffunc o(set,Element of NAT) = BorrowOutput(x .($2+1), y.($2+1), $1);
+   deffunc S(non empty ManySortedSign, set, Element of NAT) =
      $1 +* BitSubtracterWithBorrowStr(x .($3+1), y.($3+1), $2);
    deffunc A(non empty ManySortedSign, non-empty MSAlgebra over $1,
-     set, Nat) =
+     set, Element of NAT) =
      $2 +* BitSubtracterWithBorrowCirc(x .($4+1), y.($4+1), $3);
 A2:  for S being unsplit gate`1=arity gate`2isBoolean non void strict
                 non empty ManySortedSign,
-        z being set, n being Nat holds S(S,z,n)
+        z being set, n being Element of NAT holds S(S,z,n)
       is unsplit gate`1=arity gate`2isBoolean non void strict;
 A3:  for S,S1 being unsplit gate`1=arity gate`2isBoolean non void strict
                    non empty ManySortedSign,
          A being Boolean gate`2=den strict Circuit of S
-     for z being set, n being Nat st S1 = S(S,z,n) holds A(S,A,z,n)
+     for z being set, n being Element of NAT st S1 = S(S,z,n) holds A(S,A,z,n)
       is Boolean gate`2=den strict Circuit of S1;
 A4:  for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
-     for z being set, n being Nat holds
+     for z being set, n being Element of NAT holds
       A(S,A,z,n) is non-empty MSAlgebra over S(S,z,n);
 A5:  ex f,h being ManySortedSet of NAT st
       n-BitSubtracterStr(x,y) = f.n & f.0 =
       1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
       h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-     for n being Nat, S being non empty ManySortedSign, z being set
+     for n being Element of NAT, S being non empty ManySortedSign, z being set
       st S = f.n & z = h.n
       holds f.(n+1) = S(S,z,n) &
             h.(n+1) = o(z,n) by Def1;
@@ -169,7 +172,7 @@ A5:  ex f,h being ManySortedSet of NAT st
        f,g,h being ManySortedSet of NAT st
     Sn = f.n & A = g.n &
     f.0 = S0 & g.0 = A0 & h.0 = o0 &
-    for n being Nat, S being non empty ManySortedSign,
+    for n being Element of NAT, S being non empty ManySortedSign,
         A being non-empty MSAlgebra over S
     for x being set st S = f.n & A = g.n & x = h.n
      holds f.(n+1) = S(S,x,n) & g.(n+1) = A(S,A,x,n) & h.(n+1) = o(x, n)
@@ -178,47 +181,50 @@ A5:  ex f,h being ManySortedSet of NAT st
 end;
 
 definition
- let n be Nat;
+ let n be Element of NAT;
  let x,y be FinSequence;
  set c = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
  func n-BitBorrowOutput(x,y) ->
       Element of InnerVertices (n-BitSubtracterStr(x,y)) means:Def3:
   ex h being ManySortedSet of NAT st
    it = h.n & h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-   for n being Nat holds h.(n+1) = BorrowOutput(x .(n+1), y.(n+1), h.n);
+   for n being Element of NAT holds h.(n+1)
+    = BorrowOutput(x .(n+1), y.(n+1), h.n);
  uniqueness
  proof let o1, o2 be Element of InnerVertices (n-BitSubtracterStr(x,y));
    given h1 being ManySortedSet of NAT such that
 A1: o1 = h1.n & h1.0 = c &
-    for n being Nat holds h1.(n+1) = BorrowOutput(x .(n+1), y.(n+1), h1.n);
+    for n being Element of NAT holds h1.(n+1)
+     = BorrowOutput(x .(n+1), y.(n+1), h1.n);
    given h2 being ManySortedSet of NAT such that
 A2: o2 = h2.n & h2.0 = c &
-    for n being Nat holds h2.(n+1) = BorrowOutput(x .(n+1), y.(n+1), h2.n);
-    deffunc F(Nat,set) = BorrowOutput(x .($1+1), y.($1+1), $2);
+    for n being Element of NAT holds h2.(n+1)
+     = BorrowOutput(x .(n+1), y.(n+1), h2.n);
+    deffunc F(Element of NAT,set) = BorrowOutput(x .($1+1), y.($1+1), $2);
 A3: dom h1 = NAT & h1.0 = c &
-    for n being Nat holds h1.(n+1) = F(n,h1.n) by A1,PBOOLE:def 3;
+    for n being Element of NAT holds h1.(n+1) = F(n,h1.n) by A1,PBOOLE:def 3;
 A4: dom h2 = NAT & h2.0 = c &
-    for n being Nat holds h2.(n+1) = F(n,h2.n) by A2,PBOOLE:def 3;
+    for n being Element of NAT holds h2.(n+1) = F(n,h2.n) by A2,PBOOLE:def 3;
        h1 = h2 from RECDEF_1:sch 11(A3,A4);
    hence thesis by A1,A2;
   end;
  existence
   proof
   defpred P[set,set,set] means not contradiction;
-  deffunc S(non empty ManySortedSign,set,Nat) =
+  deffunc S(non empty ManySortedSign,set,Element of NAT) =
     $1 +* BitSubtracterWithBorrowStr(x .($3+1), y.($3+1), $2);
-  deffunc o(set,Nat) =
+  deffunc o(set,Element of NAT) =
     BorrowOutput(x .($2+1), y.($2+1), $1);
   consider f,g being ManySortedSet of NAT such that
 A5:  n-BitSubtracterStr(x,y) = f.n & f.0 =
     1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE)
       & g.0 = c and
-A6:  for n being Nat,
+A6:  for n being Element of NAT,
     S being non empty ManySortedSign,
     z be set st S = f.n & z = g.n
      holds f.(n+1) = S(S,z,n) &
            g.(n+1) = o(z,n) by Def1;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
       ex S being non empty ManySortedSign st S = f.$1 &
         g.$1 in InnerVertices S;
        InnerVertices 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) = {c}
@@ -226,8 +232,8 @@ A6:  for n being Nat,
     then c in InnerVertices 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE)
     by TARSKI:def 1;
 then A7:  P[0] by A5;
-A8: for i being Nat st P[i] holds P[i+1]
-    proof let i be Nat such that
+A8: for i being Element of NAT st P[i] holds P[i+1]
+    proof let i be Element of NAT such that
 A9:    ex S being non empty ManySortedSign st S = f.i & g.i in InnerVertices S
      and
 A10:    for S being non empty ManySortedSign st S = f.(i+1)
@@ -243,19 +249,20 @@ A11:    S = f.i & g.i in InnerVertices S by A9;
       g.(i+1) = BorrowOutput(x .(i+1), y.(i+1), g.i) by A6,A11,FACIRC_1:22;
      hence contradiction by A10;
     end;
-     for i being Nat holds P[i] from NAT_1:sch 1(A7,A8);
+     for i being Element of NAT holds P[i] from NAT_1:sch 1(A7,A8);
     then ex S being non empty ManySortedSign st S = f.n & g.n in InnerVertices
 S;
     then reconsider o = g.n as Element of InnerVertices (n-BitSubtracterStr(x,y
 ))
      by A5;
    take o, g; thus o = g.n & g.0 = c by A5;
-   let i be Nat;
+   let i be Element of NAT;
 A12: ex S being non empty ManySortedSign, x being set st
      S = f.0 & x = g.0 & P[S, x, 0] by A5;
-A13: for n being Nat, S being non empty ManySortedSign, x being set
+A13: for n being Element of NAT, S being non empty ManySortedSign, x being set
      st S = f.n & x = g.n & P[S, x, n] holds P[S(S,x,n), o(x, n), n+1];
-       for n being Nat ex S being non empty ManySortedSign st S = f.n
+       for n being Element of NAT
+        ex S being non empty ManySortedSign st S = f.n
       & P[S,g.n,n]
      from CIRCCMB2:sch 2(A12,A6,A13);
     then ex S being non empty ManySortedSign st S = f.i;
@@ -272,41 +279,41 @@ theorem Th1:
    f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
    g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
    h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-   for n being Nat, S being non empty ManySortedSign,
+   for n being Element of NAT, S being non empty ManySortedSign,
        A being non-empty MSAlgebra over S
    for z being set st S = f.n & A = g.n & z = h.n holds
      f.(n+1) = S +* BitSubtracterWithBorrowStr(x .(n+1), y.(n+1), z) &
      g.(n+1) = A +* BitSubtracterWithBorrowCirc(x .(n+1), y.(n+1), z) &
      h.(n+1) = BorrowOutput(x .(n+1), y.(n+1), z)
- for n being Nat holds
+ for n being Element of NAT holds
    n-BitSubtracterStr(x,y) = f.n & n-BitSubtracterCirc(x,y) = g.n &
    n-BitBorrowOutput(x,y) = h.n
   proof
   let x,y be FinSequence, f,g,h be ManySortedSet of NAT;
-   deffunc o(set,Nat) = BorrowOutput(x .($2+1), y.($2+1), $1);
-   deffunc F(Nat,set) = BorrowOutput(x .($1+1), y.($1+1), $2);
-   deffunc S(non empty ManySortedSign,set,Nat) =
+   deffunc o(set,Element of NAT) = BorrowOutput(x .($2+1), y.($2+1), $1);
+   deffunc F(Element of NAT,set) = BorrowOutput(x .($1+1), y.($1+1), $2);
+   deffunc S(non empty ManySortedSign,set,Element of NAT) =
      $1 +* BitSubtracterWithBorrowStr(x .($3+1), y.($3+1), $2);
    deffunc A(non empty ManySortedSign,non-empty MSAlgebra over $1,
-        set,Nat) =
+        set,Element of NAT) =
         $2 +* BitSubtracterWithBorrowCirc(x .($4+1), y.($4+1), $3);
    assume that
 A1:  f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) and
 A2:  h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] and
-A3:  for n being Nat, S being non empty ManySortedSign,
+A3:  for n being Element of NAT, S being non empty ManySortedSign,
         A being non-empty MSAlgebra over S
     for z being set st S = f.n & A = g.n & z = h.n holds
      f.(n+1) = S(S,z,n) &
      g.(n+1) = A(S,A,z,n) &
      h.(n+1) = o(z,n);
-   let n be Nat;
+   let n be Element of NAT;
     consider f1,g1,h1 being ManySortedSet of NAT such that
 A4:  n-BitSubtracterStr(x,y) = f1.n & n-BitSubtracterCirc(x,y) = g1.n and
 A5:  f1.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     g1.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     h1.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] and
-A6:  for n being Nat, S being non empty ManySortedSign,
+A6:  for n being Element of NAT, S being non empty ManySortedSign,
         A being non-empty MSAlgebra over S
     for z being set st S = f1.n & A = g1.n & z = h1.n holds
      f1.(n+1) = S(S,z,n) &
@@ -316,26 +323,28 @@ A7: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S st
      S = f.0 & A = g.0 by A1;
 A8: f.0 = f1.0 & g.0 = g1.0 & h.0 = h1.0 by A1,A2,A5;
 A9: for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
-     for z being set, n being Nat holds
+     for z being set, n being Element of NAT holds
       A(S,A,z,n) is non-empty MSAlgebra over S(S,z,n);
        f = f1 & g = g1 & h = h1 from CIRCCMB2:sch 14(A7,A8,A3,A6,A9);
    hence n-BitSubtracterStr(x,y) = f.n & n-BitSubtracterCirc(x,y) = g.n by A4;
-A10:  for n being Nat, S being non empty ManySortedSign, z being set st
+A10:  for n being Element of NAT, S being non empty ManySortedSign,
+z being set st
      S = f.n & z = h.n
      holds f.(n+1) = S(S,z,n) &
            h.(n+1) = o(z,n) from CIRCCMB2:sch 15(A1,A3,A9);
 A11:  f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) by A1;
-       for n being Nat, z being set st z = h.n holds
+       for n being Element of NAT, z being set st z = h.n holds
      h.(n+1) = o(z,n) from CIRCCMB2:sch 3(A11,A10);
 then A12:  dom h = NAT & h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-    for n being Nat holds h.(n+1) = F(n,h.n) by A2,PBOOLE:def 3;
+    for n being Element of NAT holds h.(n+1) = F(n,h.n) by A2,PBOOLE:def 3;
    consider h1 being ManySortedSet of NAT such that
 A13:  n-BitBorrowOutput(x,y) = h1.n and
 A14:  h1.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-    for n being Nat holds h1.(n+1) = BorrowOutput(x .(n+1), y.(n+1), h1.n)
+    for n being Element of NAT holds h1.(n+1)
+     = BorrowOutput(x .(n+1), y.(n+1), h1.n)
          by Def3;
 A15:  dom h1 = NAT & h1.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-    for n being Nat holds h1.(n+1) = F(n,h1.n) by A14,PBOOLE:def 3;
+    for n being Element of NAT holds h1.(n+1) = F(n,h1.n) by A14,PBOOLE:def 3;
        h = h1 from RECDEF_1:sch 11(A12,A15);
    hence thesis by A13;
   end;
@@ -352,7 +361,7 @@ A1:   0-BitSubtracterStr(a,b) = f.0 & 0-BitSubtracterCirc(a,b) = g.0 and
 A2:   f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) and
 A3:   g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) and
      h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] and
-     for n being Nat, S being non empty ManySortedSign,
+     for n being Element of NAT, S being non empty ManySortedSign,
           A being non-empty MSAlgebra over S
       for z being set st S = f.n & A = g.n & z = h.n holds
         f.(n+1) = S +* BitSubtracterWithBorrowStr(a .(n+1), b.(n+1), z) &
@@ -384,7 +393,7 @@ A3:  1-BitSubtracterCirc(a,b) = g.1 and
 A4:  f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     h.0 = c and
-A5:  for n being Nat, S being non empty ManySortedSign,
+A5:  for n being Element of NAT, S being non empty ManySortedSign,
         A being non-empty MSAlgebra over S
     for z be set st S = f.n & A = g.n & z = h.n
      holds f.(n+1) = S+*BitSubtracterWithBorrowStr(a.(n+1),b.(n+1), z) &
@@ -413,22 +422,24 @@ theorem ::Col002a:
   end;
 
 theorem Th5:
- for n be Nat
+ for n be Element of NAT
  for p,q being FinSeqLen of n
  for p1,p2, q1,q2 being FinSequence holds
   n-BitSubtracterStr(p^p1, q^q1) = n-BitSubtracterStr(p^p2, q^q2) &
   n-BitSubtracterCirc(p^p1, q^q1) = n-BitSubtracterCirc(p^p2, q^q2) &
   n-BitBorrowOutput(p^p1, q^q1) = n-BitBorrowOutput(p^p2, q^q2)
-  proof let n be Nat;
+  proof let n be Element of NAT;
    set c = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
    let p,q be FinSeqLen of n;
    let p1,p2, q1,q2 be FinSequence;
-   deffunc o(set,Nat) = BorrowOutput((p^p1) .($2+1), (q^q1).($2+1), $1);
-   deffunc F(Nat,set) = BorrowOutput((p^p1) .($1+1), (q^q1).($1+1), $2);
-   deffunc S(non empty ManySortedSign,set,Nat) =
+   deffunc o(set,Element of NAT)
+    = BorrowOutput((p^p1) .($2+1), (q^q1).($2+1), $1);
+   deffunc F(Element of NAT,set)
+    = BorrowOutput((p^p1) .($1+1), (q^q1).($1+1), $2);
+   deffunc S(non empty ManySortedSign,set,Element of NAT) =
      $1 +* BitSubtracterWithBorrowStr((p^p1) .($3+1), (q^q1).($3+1), $2);
    deffunc A(non empty ManySortedSign,non-empty MSAlgebra over $1,
-        set,Nat) =
+        set,Element of NAT) =
         $2 +* BitSubtracterWithBorrowCirc((p^p1) .($4+1), (q^q1).($4+1), $3);
    consider f1,g1,h1 being ManySortedSet of NAT such that
 A1: n-BitSubtracterStr(p^p1,q^q1) = f1.n &
@@ -436,7 +447,7 @@ A1: n-BitSubtracterStr(p^p1,q^q1) = f1.n &
 A2: f1.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     g1.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     h1.0 = c and
-A3: for n being Nat, S being non empty ManySortedSign,
+A3: for n being Element of NAT, S being non empty ManySortedSign,
         A being non-empty MSAlgebra over S
     for z be set st S = f1.n & A = g1.n & z = h1.n holds
      f1.(n+1) = S(S,z,n) &
@@ -448,7 +459,7 @@ A4: n-BitSubtracterStr(p^p2,q^q2) = f2.n &
 A5: f2.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     g2.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     h2.0 = c and
-A6: for n being Nat, S being non empty ManySortedSign,
+A6: for n being Element of NAT, S being non empty ManySortedSign,
         A being non-empty MSAlgebra over S
     for z be set st S = f2.n & A = g2.n & z = h2.n holds
      f2.(n+1) =
@@ -456,11 +467,11 @@ A6: for n being Nat, S being non empty ManySortedSign,
      g2.(n+1) =
        A +* BitSubtracterWithBorrowCirc((p^p2).(n+1), (q^q2).(n+1), z) &
      h2.(n+1) = BorrowOutput((p^p2).(n+1), (q^q2).(n+1), z) by Def2;
-    defpred L[Nat] means
+    defpred L[Element of NAT] means
       $1 <= n implies h1.$1 = h2.$1 & f1.$1 = f2.$1 & g1.$1 = g2.$1;
 A7:  L[0] by A2,A5;
-A8:  for i being Nat st L[i] holds L[i+1]
-     proof let i be Nat such that
+A8:  for i being Element of NAT st L[i] holds L[i+1]
+     proof let i be Element of NAT such that
 A9:   i <= n implies h1.i = h2.i & f1.i = f2.i & g1.i = g2.i and
 A10:   i+1 <= n;
          len p = n & len q = n by CIRCCOMB:def 12;
@@ -474,14 +485,14 @@ then A12:   (p^p1).(i+1) = p.(i+1) & (p^p2).(i+1) = p.(i+1) &
 A13:   ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S,
          x being set st
        S = f1.0 & A = g1.0 & x = h1.0 & P [S,A,x,0] by A2;
-A14:   for n being Nat, S being non empty ManySortedSign,
+A14:   for n being Element of NAT, S being non empty ManySortedSign,
           A being non-empty MSAlgebra over S
       for x being set st S = f1.n & A = g1.n & x = h1.n & P[S,A,x,n]
       holds P[S(S,x,n), A(S,A,x,n), o(x, n), n+1];
 A15:   for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
-      for z being set, n being Nat holds
+      for z being set, n being Element of NAT holds
         A(S,A,z,n) is non-empty MSAlgebra over S(S,z,n);
-         for n being Nat
+         for n being Element of NAT
       ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S
        st S = f1.n & A = g1.n & P[S,A,h1.n,n]
          from CIRCCMB2:sch 13(A13,A3,A14,A15);
@@ -501,7 +512,7 @@ A16:   S = f1.i & A = g1.i;
           by A3,A9,A10,A12,A16,NAT_1:38
        .= g2.(i+1) by A6,A9,A10,A16,NAT_1:38;
     end;
-A17:  for i being Nat holds L[i] from NAT_1:sch 1(A7,A8);
+A17:  for i being Element of NAT holds L[i] from NAT_1:sch 1(A7,A8);
    hence n-BitSubtracterStr(p^p1, q^q1) = n-BitSubtracterStr(p^p2, q^q2) &
      n-BitSubtracterCirc(p^p1, q^q1) = n-BitSubtracterCirc(p^p2, q^q2)
         by A1,A4;
@@ -511,14 +522,15 @@ A17:  for i being Nat holds L[i] from NAT_1:sch 1(A7,A8);
   end;
 
 theorem ::Col002b:
-    for n be Nat for x,y being FinSeqLen of n for a,b being set holds
+    for n be Element of NAT for x,y being FinSeqLen of n for a,b being set
+     holds
   (n+1)-BitSubtracterStr(x^<*a*>, y^<*b*>) = n-BitSubtracterStr(x, y) +*
       BitSubtracterWithBorrowStr(a, b, n-BitBorrowOutput(x, y)) &
   (n+1)-BitSubtracterCirc(x^<*a*>, y^<*b*>) = n-BitSubtracterCirc(x, y) +*
       BitSubtracterWithBorrowCirc(a, b, n-BitBorrowOutput(x, y)) &
   (n+1)-BitBorrowOutput(x^<*a*>, y^<*b*>) =
       BorrowOutput(a, b, n-BitBorrowOutput(x, y))
-  proof let n be Nat;
+  proof let n be Element of NAT;
    set c = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
    let x,y be FinSeqLen of n; let a,b be set;
    set p = x^<*a*>, q = y^<*b*>;
@@ -527,7 +539,7 @@ A1:  n-BitSubtracterStr(p,q) = f.n & n-BitSubtracterCirc(p,q) = g.n and
 A2:  f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     h.0 = c and
-A3:  for n being Nat, S being non empty ManySortedSign,
+A3:  for n being Element of NAT, S being non empty ManySortedSign,
         A being non-empty MSAlgebra over S
     for z be set st S = f.n & A = g.n & z = h.n holds
      f.(n+1) = S +* BitSubtracterWithBorrowStr(p.(n+1), q.(n+1), z) &
@@ -547,14 +559,14 @@ then A5:  p.(n+1) = a & q.(n+1) = b by FINSEQ_1:59;
   end;
 
 theorem Th7:
- for n be Nat for x,y being FinSequence holds
+ for n be Element of NAT for x,y being FinSequence holds
   (n+1)-BitSubtracterStr(x, y) = n-BitSubtracterStr(x, y) +*
     BitSubtracterWithBorrowStr(x .(n+1), y.(n+1), n-BitBorrowOutput(x, y)) &
   (n+1)-BitSubtracterCirc(x, y) = n-BitSubtracterCirc(x, y) +*
     BitSubtracterWithBorrowCirc(x .(n+1), y.(n+1), n-BitBorrowOutput(x, y)) &
   (n+1)-BitBorrowOutput(x, y) =
     BorrowOutput(x .(n+1), y.(n+1), n-BitBorrowOutput(x, y))
-  proof let n be Nat;
+  proof let n be Element of NAT;
    let x,y be FinSequence;
    set c = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
    consider f,g,h being ManySortedSet of NAT such that
@@ -562,7 +574,7 @@ A1:  n-BitSubtracterStr(x,y) = f.n & n-BitSubtracterCirc(x,y) = g.n and
 A2:  f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     h.0 = c and
-A3:  for n being Nat, S being non empty ManySortedSign,
+A3:  for n being Element of NAT, S being non empty ManySortedSign,
         A being non-empty MSAlgebra over S
     for z be set st S = f.n & A = g.n & z = h.n holds
      f.(n+1) = S +* BitSubtracterWithBorrowStr(x .(n+1), y.(n+1), z) &
@@ -580,21 +592,22 @@ A3:  for n being Nat, S being non empty ManySortedSign,
 ::------------------------------------------------------------
 
 theorem Th8:
- for n,m be Nat st n <= m
+ for n,m be Element of NAT st n <= m
  for x,y being FinSequence holds
   InnerVertices (n-BitSubtracterStr(x,y)) c=
     InnerVertices (m-BitSubtracterStr(x,y))
-  proof let n,m be Nat such that
+  proof let n,m be Element of NAT such that
 A1:  n <= m;
    let x,y be FinSequence;
    consider i being Nat such that
 A2:  m = n+i by A1,NAT_1:28;
-     defpred L[Nat] means
+   reconsider i as Element of NAT by ORDINAL1:def 13;
+     defpred L[Element of NAT] means
        InnerVertices (n-BitSubtracterStr(x,y)) c=
         InnerVertices ((n+$1)-BitSubtracterStr(x,y));
 A3: L[0];
-A4: for j being Nat st L[j] holds L[j+1]
-     proof let j be Nat;
+A4: for j being Element of NAT st L[j] holds L[j+1]
+     proof let j be Element of NAT;
       assume
 A5:      InnerVertices (n-BitSubtracterStr(x,y)) c=
           InnerVertices ((n+j)-BitSubtracterStr(x,y));
@@ -618,18 +631,19 @@ A6:      InnerVertices (n-BitSubtracterStr(x,y)) c=
             (n+j)-BitBorrowOutput(x, y)))) by FACIRC_1:27;
          hence thesis by Th7;
      end;
-    for j being Nat holds L[j] from NAT_1:sch 1(A3,A4);
-   hence thesis by A2;
+AA: for j being Element of NAT holds L[j] from NAT_1:sch 1(A3,A4);
+    m = n+i by A2;
+   hence thesis by A2,AA;
   end;
 
 theorem
-    for n be Nat
+    for n be Element of NAT
  for x,y being FinSequence holds
   InnerVertices ((n+1)-BitSubtracterStr(x,y)) =
     InnerVertices (n-BitSubtracterStr(x,y)) \/
      InnerVertices BitSubtracterWithBorrowStr(x .(n+1), y.(n+1),
          n-BitBorrowOutput(x,y))
-    proof let n be Nat;
+    proof let n be Element of NAT;
     let x,y be FinSequence;
         InnerVertices (n-BitSubtracterStr(x,y) +*
              BitSubtracterWithBorrowStr(x .(n+1), y.(n+1),
@@ -641,17 +655,18 @@ theorem
     end;
 
 definition
- let k,n be Nat such that
+ let k,n be Element of NAT such that
 A1:    k >= 1 & k <= n;
  let x,y be FinSequence;
  func (k,n)-BitSubtracterOutput(x,y) ->
       Element of InnerVertices (n-BitSubtracterStr(x,y)) means:Def4:
-  ex i being Nat st k = i+1 &
+  ex i being Element of NAT st k = i+1 &
    it = BitSubtracterOutput(x .k, y.k, i-BitBorrowOutput(x,y));
  uniqueness;
  existence
   proof consider i being Nat such that
 A2:  k = 1+i by A1,NAT_1:28;
+   reconsider i as Element of NAT by ORDINAL1:def 13;
    set o = BitSubtracterOutput(x .k, y.k, i-BitBorrowOutput(x,y));
 A3:  InnerVertices (k-BitSubtracterStr(x,y)) c=
       InnerVertices (n-BitSubtracterStr(x,y)) by A1,Th8;
@@ -675,34 +690,34 @@ A5:  k-BitSubtracterStr(x,y) = (i-BitSubtracterStr(x, y)) +*
 end;
 
 theorem
-    for n,k being Nat st k < n
+    for n,k being Element of NAT st k < n
  for x,y being FinSequence holds
   (k+1,n)-BitSubtracterOutput(x,y) =
      BitSubtracterOutput(x .(k+1), y.(k+1), k-BitBorrowOutput(x,y))
-  proof let n,k be Nat such that
+  proof let n,k be Element of NAT such that
 A1:  k < n;
    let x,y be FinSequence;
 A2:  k+1 >= 1 by NAT_1:29;
        k+1 <= n by A1,NAT_1:38;
-   then consider i being Nat such that
+   then consider i being Element of NAT such that
 A3:  k+1 = i+1 & (k+1,n)-BitSubtracterOutput(x,y) =
      BitSubtracterOutput(x .(k+1), y.(k+1), i-BitBorrowOutput(x,y)) by A2,Def4;
    thus thesis by A3;
   end;
 
 theorem
-    for n being Nat
+    for n being Element of NAT
  for x,y being FinSequence holds
   InnerVertices (n-BitSubtracterStr(x,y)) is Relation
-  proof let n be Nat;
+  proof let n be Element of NAT;
    let x,y be FinSequence;
-      defpred P[Nat] means
+      defpred P[Element of NAT] means
         InnerVertices ($1-BitSubtracterStr(x,y)) is Relation;
         0-BitSubtracterStr(x,y) = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE
 )
       by Th2;
 then A1:  P[0] by FACIRC_1:38;
-A2:  now let i be Nat; assume
+A2:  now let i be Element of NAT; assume
 A3:   P[i];
 A4:   (i+1)-BitSubtracterStr(x, y) = i-BitSubtracterStr(x, y) +*
          BitSubtracterWithBorrowStr(x .(i+1), y.(i+1),
@@ -711,7 +726,7 @@ A4:   (i+1)-BitSubtracterStr(x, y) = i-BitSubtracterStr(x, y) +*
               i-BitBorrowOutput(x, y)) is Relation by FSCIRC_1:22;
      hence P[i+1] by A3,A4,FACIRC_1:3;
     end;
-       for i being Nat holds P[i] from NAT_1:sch 1(A1,A2);
+       for i being Element of NAT holds P[i] from NAT_1:sch 1(A1,A2);
    hence thesis;
   end;
 
@@ -1086,7 +1101,7 @@ A1:   2GatesCircStr(x,y,c, 'xor') tolerates BorrowStr(x,y,c) by CIRCCOMB:55;
    end;
 
 registration
- let n be Nat;
+ let n be Element of NAT;
  let x,y be FinSequence;
  cluster n-BitBorrowOutput(x,y) -> pair;
  coherence
@@ -1094,12 +1109,13 @@ registration
    consider h being ManySortedSet of NAT such that
 A1: 0-BitBorrowOutput(x,y) = h.0 and
 A2: h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] and
-       for n being Nat holds h.(n+1) = BorrowOutput(x .(n+1), y.(n+1), h.n)
+       for n being Element of NAT holds h.(n+1)
+        = BorrowOutput(x .(n+1), y.(n+1), h.n)
            by Def3;
-     defpred P[Nat] means $1-BitBorrowOutput(x,y) is pair;
+     defpred P[Element of NAT] means $1-BitBorrowOutput(x,y) is pair;
 A3:  P[0] by A1,A2;
-A4:  for n being Nat st P[n] holds P[n+1]
-     proof let n be Nat;
+A4:  for n being Element of NAT st P[n] holds P[n+1]
+     proof let n be Element of NAT;
           (n+1)-BitBorrowOutput(x, y) =
           BorrowOutput(x .(n+1), y.(n+1), n-BitBorrowOutput(x, y)) by Th7
        .= [<*[<*x .(n+1),y.(n+1)*>, and2a],
@@ -1107,13 +1123,13 @@ A4:  for n being Nat st P[n] holds P[n+1]
           [<*x .(n+1),n-BitBorrowOutput(x, y)*>, and2a]*>, or3];
       hence thesis;
      end;
-       for n being Nat holds P[n] from NAT_1:sch 1(A3,A4);
+       for n being Element of NAT holds P[n] from NAT_1:sch 1(A3,A4);
    hence thesis;
   end;
 end;
 
 theorem Th18:
- for x,y being FinSequence, n being Nat
+ for x,y being FinSequence, n being Element of NAT
   holds
    (n-BitBorrowOutput(x,y))`1 = <*> &
    (n-BitBorrowOutput(x,y))`2 = (0-tuples_on BOOLEAN)-->TRUE &
@@ -1123,7 +1139,7 @@ theorem Th18:
    (n-BitBorrowOutput(x,y))`2 = or3 &
    proj1 (n-BitBorrowOutput(x,y))`2 = 3-tuples_on BOOLEAN
   proof let x,y be FinSequence;
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
     ($1-BitBorrowOutput(x,y))`1 = <*> &
     ($1-BitBorrowOutput(x,y))`2 = (0-tuples_on BOOLEAN)-->TRUE &
     proj1 ($1-BitBorrowOutput(x,y))`2 = 0-tuples_on BOOLEAN
@@ -1136,7 +1152,7 @@ theorem Th18:
     0-BitBorrowOutput(x,y) = [<*>, (0-tuples_on BOOLEAN)-->TRUE]
      by Th2,FUNCOP_1:19,MCART_1:7;
 then A1: P[0] by FUNCT_5:21,MCART_1:7;
-A2: now let n be Nat; assume P[n];
+A2: now let n be Element of NAT; assume P[n];
      set c = n-BitBorrowOutput(x, y);
          (n+1)-BitBorrowOutput(x, y) =
           BorrowOutput(x .(n+1), y.(n+1), c) by Th7
@@ -1148,16 +1164,16 @@ A2: now let n be Nat; assume P[n];
       ((n+1)-BitBorrowOutput(x, y))`2 = or3 by FUNCT_2:def 1,MCART_1:7;
       hence P[n+1] by FINSEQ_1:62,FUNCT_5:21;
     end;
-   thus for i being Nat holds P[i] from NAT_1:sch 1(A1,A2);
+   thus for i being Element of NAT holds P[i] from NAT_1:sch 1(A1,A2);
   end;
 
 theorem Th19:
- for n being Nat, x,y being FinSequence, p being set
+ for n being Element of NAT, x,y being FinSequence, p being set
   holds
    n-BitBorrowOutput(x,y) <> [p, and2] &
    n-BitBorrowOutput(x,y) <> [p, and2a] &
    n-BitBorrowOutput(x,y) <> [p, 'xor']
-  proof let n be Nat, x,y be FinSequence, p be set;
+  proof let n be Element of NAT, x,y be FinSequence, p be set;
       dom and2 = 2-tuples_on BOOLEAN &
    dom and2a = 2-tuples_on BOOLEAN & dom 'xor' = 2-tuples_on BOOLEAN &
     [p, and2]`2 = and2 & [p, and2a]`2 = and2a & [p, 'xor']`2 = 'xor'
@@ -1177,7 +1193,7 @@ then A1: proj1 [p, and2]`2 = 2-tuples_on BOOLEAN &
 
 theorem Th20:
  for f,g being nonpair-yielding FinSequence
- for n being Nat holds
+ for n being Element of NAT holds
   InputVertices ((n+1)-BitSubtracterStr(f,g)) =
     (InputVertices (n-BitSubtracterStr(f,g)))\/
      ((InputVertices BitSubtracterWithBorrowStr(f.(n+1),g.(n+1),
@@ -1185,31 +1201,33 @@ theorem Th20:
   InnerVertices (n-BitSubtracterStr(f,g)) is Relation &
   InputVertices (n-BitSubtracterStr(f,g)) is without_pairs
   proof let f,g be nonpair-yielding FinSequence;
-   deffunc Sn(Nat) = $1-BitSubtracterStr(f,g);
-   deffunc S(set, Nat) = BitSubtracterWithBorrowStr(f.($2+1),g.($2+1), $1);
-   deffunc F(Nat) = $1-BitBorrowOutput(f,g);
+   deffunc Sn(Element of NAT) = $1-BitSubtracterStr(f,g);
+   deffunc S(set, Element of NAT)
+    = BitSubtracterWithBorrowStr(f.($2+1),g.($2+1), $1);
+   deffunc F(Element of NAT) = $1-BitBorrowOutput(f,g);
    consider h being ManySortedSet of NAT such that
-A1:  for n being Nat holds h.n = F(n) from PBOOLE:sch 5;
-   deffunc h(Nat) = h.$1;
-   deffunc o(set, Nat) = BorrowOutput(f.($2+1),g.($2+1), $1);
+A1:  for n being Element of NAT holds h.n = F(n) from PBOOLE:sch 5;
+   deffunc h(Element of NAT) = h.$1;
+   deffunc o(set, Element of NAT) = BorrowOutput(f.($2+1),g.($2+1), $1);
    set k = (0-tuples_on BOOLEAN)-->TRUE;
 A2: 0-BitSubtracterStr(f,g) = 1GateCircStr(<*>, k) by Th2;
 then A3:  InnerVertices Sn(0) is Relation by FACIRC_1:38;
 A4:  InputVertices Sn(0) is without_pairs by A2,FACIRC_1:39;
        h(0) = 0-BitBorrowOutput(f,g) by A1;
 then A5:  h.0 in InnerVertices Sn(0);
-A6:  for n being Nat, x being set holds InnerVertices S(x,n) is Relation
+A6:  for n being Element of NAT, x being set
+ holds InnerVertices S(x,n) is Relation
      by FSCIRC_1:22;
-A7: now let n be Nat, x be set such that
+A7: now let n be Element of NAT, x be set such that
 A8:    x = h(n);
 A9:    h(n) = n-BitBorrowOutput(f,g) by A1;
           x <> [<*f.(n+1),g.(n+1)*>, and2a] & x <> [<*f.(n+1),g.(n+1)*>, 'xor']
         by A8,A9,Th19;
       hence InputVertices S(x, n) = {f.(n+1), g.(n+1), x} by Th16;
     end;
-A10:  for n being Nat, x being set st x = h.n holds
+A10:  for n being Element of NAT, x being set st x = h.n holds
        (InputVertices S(x, n)) \ {x} is without_pairs
-     proof let n be Nat, x be set such that
+     proof let n be Element of NAT, x be set such that
 A11:    x = h(n);
 A12:    InputVertices S(x, n) = {f.(n+1), g.(n+1), x} by A7,A11;
       thus (InputVertices S(x, n)) \ {x} is without_pairs
@@ -1220,7 +1238,8 @@ A12:    InputVertices S(x, n) = {f.(n+1), g.(n+1), x} by A7,A11;
         hence contradiction by TARSKI:def 1;
        end;
      end;
-A13:  now let n be Nat, S be non empty ManySortedSign, x be set; assume
+A13:  now let n be Element of NAT, S be non empty ManySortedSign, x be set;
+ assume
 A14:   S = Sn(n) & x = h.n;
 then A15:   x = n-BitBorrowOutput(f,g) & h(n+1) = (n+1)-BitBorrowOutput(f,g)
        by A1;
@@ -1236,21 +1255,21 @@ A16:   InnerVertices S(x, n) =
          o(x,n) in {o(x,n)} by TARSKI:def 1;
      hence o(x, n) in InnerVertices S(x, n) by A16,XBOOLE_0:def 2;
     end;
-A17:  for n being Nat holds
+A17:  for n being Element of NAT holds
      InputVertices Sn(n+1) =
       (InputVertices Sn(n))\/((InputVertices S(h.(n),n)) \ {h.(n)}) &
      InnerVertices Sn(n) is Relation &
      InputVertices Sn(n) is without_pairs from CIRCCMB2:sch 11(A3,A4,A5,A6,A10,
 A13);
-   let n be Nat;  h.n = n-BitBorrowOutput(f,g) by A1;
+   let n be Element of NAT;  h.n = n-BitBorrowOutput(f,g) by A1;
    hence thesis by A17;
   end;
 
 theorem
-    for n being Nat
+    for n being Element of NAT
  for x,y being nonpair-yielding FinSeqLen of n holds
   InputVertices (n-BitSubtracterStr(x,y)) = rng x \/ rng y
-  proof defpred P[Nat] means
+  proof defpred P[Element of NAT] means
     for x,y being nonpair-yielding FinSeqLen of $1 holds
      InputVertices ($1-BitSubtracterStr(x,y)) = rng x \/ rng y;
 A1:  P[0]
@@ -1263,8 +1282,8 @@ then A2:    rng x = {} & rng y = {} by FINSEQ_1:25,RELAT_1:60;
          = rng <*> by CIRCCOMB:49
         .= rng x \/ rng y by A2;
      end;
-A3:  for i being Nat st P[i] holds P[i+1]
-     proof let i be Nat such that
+A3:  for i being Element of NAT st P[i] holds P[i+1]
+     proof let i be Element of NAT such that
 A4:    P[i];
       let x,y be nonpair-yielding FinSeqLen of i+1;
       consider x' being nonpair-yielding FinSeqLen of i,
@@ -1312,7 +1331,7 @@ A15:    z1 <> [<*z2,i-BitBorrowOutput(x,y)*>, and2] &
        .= rng x' \/ {z1} \/ rng y' \/ {z2} by XBOOLE_1:4
        .= rng x \/ rng y by A13,A14,XBOOLE_1:4;
      end;
-   thus for i being Nat holds P[i] from NAT_1:sch 1(A1,A3);
+   thus for i being Element of NAT holds P[i] from NAT_1:sch 1(A1,A3);
   end;
 
 ::-----------------------------------------------------
@@ -1564,32 +1583,34 @@ XBOOLE_0:def 2;
   end;
 
 theorem
-    for n being Nat
+    for n being Element of NAT
  for x,y being nonpair-yielding FinSeqLen of n
  for s being State of n-BitSubtracterCirc(x,y)
   holds Following(s,1+2*n) is stable
-  proof let n be Nat, f,g be nonpair-yielding FinSeqLen of n;
-   deffunc S(set,Nat) = BitSubtracterWithBorrowStr(f.($2+1), g.($2+1), $1);
-   deffunc A(set,Nat) = BitSubtracterWithBorrowCirc(f.($2+1), g.($2+1), $1);
-   deffunc o(set,Nat) = BorrowOutput(f.($2+1), g.($2+1), $1);
+  proof let n be Element of NAT, f,g be nonpair-yielding FinSeqLen of n;
+   deffunc S(set,Element of NAT)
+    = BitSubtracterWithBorrowStr(f.($2+1), g.($2+1), $1);
+   deffunc A(set,Element of NAT)
+    = BitSubtracterWithBorrowCirc(f.($2+1), g.($2+1), $1);
+   deffunc o(set,Element of NAT) = BorrowOutput(f.($2+1), g.($2+1), $1);
    set S0 = 1GateCircStr(<*>, (0-tuples_on BOOLEAN)-->TRUE);
    set A0 = 1GateCircuit(<*>, (0-tuples_on BOOLEAN)-->TRUE);
    consider N being Function of NAT,NAT such that
 A1: N.0 = 1 & N.1 = 2 & N.2 = n by FACIRC_2:37;
-    deffunc n(Nat) = N.$1;
-A2: for x being set, n being Nat holds
+    deffunc n(Element of NAT) = N.$1;
+A2: for x being set, n being Element of NAT holds
       A(x,n) is Boolean gate`2=den strict Circuit of S(x,n);
 A3: now let s be State of A0;
          Following(s, 1) = Following s by FACIRC_1:14;
      hence Following(s, n(0)) is stable by A1,CIRCCMB2:2;
     end;
-   deffunc F(Nat) = $1-BitBorrowOutput(f,g);
+   deffunc F(Element of NAT) = $1-BitBorrowOutput(f,g);
    consider h being ManySortedSet of NAT such that
-A4:  for n being Nat holds h.n = F(n) from PBOOLE:sch 5;
-A5: for n being Nat, x being set
+A4:  for n being Element of NAT holds h.n = F(n) from PBOOLE:sch 5;
+A5: for n being Element of NAT, x being set
     for A being non-empty Circuit of S(x,n) st x = h.(n) & A = A(x,n)
     for s being State of A holds Following(s, n(1)) is stable
-     proof let n be Nat, x be set, A be non-empty Circuit of S(x,n);
+     proof let n be Element of NAT, x be set, A be non-empty Circuit of S(x,n);
       assume x = h.n;
        then x = n-BitBorrowOutput(f,g) by A4;
        then f.(n+1) <> [<*g.(n+1),x*>, and2] & g.(n+1) <> [<*f.(n+1),x*>,
@@ -1606,21 +1627,21 @@ A6: n-BitSubtracterStr(f,g) = f1.n & n-BitSubtracterCirc(f,g) = g1.n and
 A7: f1.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     g1.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
     h1.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-    for n being Nat, S being non empty ManySortedSign,
+    for n being Element of NAT, S being non empty ManySortedSign,
         A being non-empty MSAlgebra over S
     for z being set st S = f1.n & A = g1.n & z = h1.n holds
       f1.(n+1) = S +* BitSubtracterWithBorrowStr(f.(n+1), g.(n+1), z) &
       g1.(n+1) = A +* BitSubtracterWithBorrowCirc(f.(n+1), g.(n+1), z) &
       h1.(n+1) = BorrowOutput(f.(n+1), g.(n+1), z) by Def2;
        now let i be set; assume i in NAT;
-     then reconsider j = i as Nat;
+     then reconsider j = i as Element of NAT;
      thus h1.i = j-BitBorrowOutput(f,g) by A7,Th1 .= h.i by A4;
     end;
 then A8: h1 = h by PBOOLE:3;
 A9: ex u,v being ManySortedSet of NAT st
      Sn = u.(n(2)) & An = v.(n(2)) &
      u.0 = S0 & v.0 = A0 & h.0 = o0 &
-     for n being Nat, S being non empty ManySortedSign,
+     for n being Element of NAT, S being non empty ManySortedSign,
          A1 being non-empty MSAlgebra over S
      for x being set, A2 being non-empty MSAlgebra over S(x,n)
       st S = u.n & A1 = v.n & x = h.n & A2 = A(x,n)
@@ -1634,11 +1655,12 @@ A10: InnerVertices S0 is Relation & InputVertices S0 is without_pairs
     InnerVertices S0 = {[<*>, (0-tuples_on BOOLEAN)-->TRUE]}
      by Th2,CIRCCOMB:49;
 then A11: h.0 = o0 & o0 in InnerVertices S0 by A4,TARSKI:def 1;
-A12: for n being Nat, x being set holds InnerVertices S(x,n) is Relation
+A12: for n being Element of NAT, x being set
+ holds InnerVertices S(x,n) is Relation
      by FSCIRC_1:22;
-A13: for n being Nat, x being set st x = h.n holds
+A13: for n being Element of NAT, x being set st x = h.n holds
        (InputVertices S(x, n)) \ {x} is without_pairs
-     proof let n be Nat, x be set such that
+     proof let n be Element of NAT, x be set such that
 A14:    x = h.n;
           x = n-BitBorrowOutput(f,g) by A4,A14;
        then f.(n+1) <> [<*g.(n+1),x*>, and2] & g.(n+1) <> [<*f.(n+1),x*>,
@@ -1652,10 +1674,10 @@ then A15:    InputVertices S(x, n) = {f.(n+1),g.(n+1),x} by Th16;
         by ENUMSET1:def 1,TARSKI:def 1;
       hence thesis;
      end;
-A16: for n being Nat, x being set st x = h.n
+A16: for n being Element of NAT, x being set st x = h.n
      holds h.(n+1) = o(x, n) &
            x in InputVertices S(x,n) & o(x, n) in InnerVertices S(x, n)
-     proof let n be Nat, x be set such that
+     proof let n be Element of NAT, x be set such that
 A17:    x = h.n;
 A18:    x = n-BitBorrowOutput(f,g) &
        h.(n+1) = (n+1)-BitBorrowOutput(f,g) by A4,A17;

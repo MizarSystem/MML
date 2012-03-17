@@ -8,7 +8,8 @@ environ
 
  vocabularies ARYTM_1, NAT_1, INT_1, RADIX_1, FINSEQ_1, POWER, MIDSP_3,
       FINSEQ_4, GROUP_1, RELAT_1, RLVECT_1, FUNCT_1, RADIX_5;
- notations TARSKI, SUBSET_1, XCMPLX_0, XXREAL_0, NAT_1, BINARITH, RADIX_1,
+ notations TARSKI, SUBSET_1,
+ NUMBERS,XCMPLX_0, XXREAL_0, NAT_1, BINARITH, RADIX_1,
       POWER, FINSEQ_4, FINSEQ_1, FUNCT_1, WSIERP_1;
  constructors XXREAL_0, NAT_1, FINSEQ_4, POWER, BINARITH, RADIX_1;
  registrations REAL_1, NUMBERS, XREAL_0, INT_1, RELSET_1, XXREAL_0;
@@ -22,9 +23,9 @@ environ
 begin :: Some Useful Theorems
 
 theorem Th1:
-  for k be Nat st k >= 2 holds Radix(k) - 1 in k-SD
+  for k be Element of NAT st k >= 2 holds Radix(k) - 1 in k-SD
 proof
-  let k be Nat;
+  let k be Element of NAT;
   assume
 A1: k >= 2;
 A2: k-SD = {w where w is Element of INT:w <= Radix(k)-1 & w >= -Radix(k)+1}
@@ -38,10 +39,10 @@ A2: k-SD = {w where w is Element of INT:w <= Radix(k)-1 & w >= -Radix(k)+1}
 end;
 
 theorem Th2:
-  for i,n be Nat st i > 1 & i in Seg n holds
+  for i,n be Element of NAT st i > 1 & i in Seg n holds
     i -' 1 in Seg n
 proof
-    let i,n be Nat;
+    let i,n be Element of NAT;
     assume
 A1:   i > 1 & i in Seg n;
     then i - 1 > 1 - 1 by XREAL_1:11;
@@ -52,20 +53,20 @@ then A2: i -' 1 >= 0 + 1 by NAT_1:38;
     hence thesis by A2,FINSEQ_1:3;
 end;
 
-reserve k for Nat;
+reserve k for Element of NAT;
 
 theorem Th3:
-  for k be Nat st 2 <= k holds 4 <= Radix(k)
+  for k be Element of NAT st 2 <= k holds 4 <= Radix(k)
 proof
-  defpred P[Nat] means 4 <= Radix($1);
+  defpred P[Element of NAT] means 4 <= Radix($1);
         Radix(2) = 2 to_power (1+1)  by RADIX_1:def 1
               .= 2 to_power 1 * 2 to_power 1 by POWER:32
               .= 2 * (2 to_power 1) by POWER:30
               .= 2 * 2 by POWER:30;
       then A1:     P[2];
-A2:  for kk be Nat st kk >= 2 & P[kk] holds P[kk + 1]
+A2:  for kk be Element of NAT st kk >= 2 & P[kk] holds P[kk + 1]
       proof
-        let kk be Nat;
+        let kk be Element of NAT;
         assume
 A3:       2 <= kk & 4 <= Radix(kk);
 A4:     Radix(kk + 1) = 2 to_power (kk + 1) by RADIX_1:def 1
@@ -75,15 +76,16 @@ A4:     Radix(kk + 1) = 2 to_power (kk + 1) by RADIX_1:def 1
         Radix(kk + 1) >= Radix(kk) by A4,REAL_2:146;
         hence thesis by A3,XXREAL_0:2;
       end;
-        for i being Nat st 2 <= i holds P[i] from NAT_1:sch 9(A1,A2);
+        for i being Element of NAT st 2 <= i holds P[i]
+         from NAT_1:sch 9(A1,A2);
       hence thesis;
 end;
 
 theorem Th4:
-  for k be Nat, tx be Tuple of 1,k-SD holds
+  for k be Element of NAT, tx be Tuple of 1,k-SD holds
     SDDec(tx) = DigA(tx,1)
 proof
-  let k be Nat, tx be Tuple of 1,k-SD;
+  let k be Element of NAT, tx be Tuple of 1,k-SD;
 A1: 1 in Seg 1 by FINSEQ_1:3;
 then A2: (DigitSD(tx))/.1 = SubDigit(tx,1,k) by RADIX_1:def 6
       .= ( Radix(k) |^ (1-'1) )*DigB(tx,1) by RADIX_1:def 5
@@ -103,10 +105,10 @@ end;
 begin :: Properties of Primary Radix-$2^k$ SD Number
 
 theorem Th5:
-  for i,k,n be Nat st i in Seg n holds
+  for i,k,n be Element of NAT st i in Seg n holds
     DigA(DecSD(0,n,k),i) = 0
 proof
-  let i,k,n be Nat;
+  let i,k,n be Element of NAT;
   assume
 A1:   i in Seg n;
 A2: Radix(k) > 0 by RADIX_2:6;
@@ -120,10 +122,10 @@ A3: i >= 1 by A1,FINSEQ_1:3;
 end;
 
 theorem
-    for n,k be Nat st n >= 1 holds
+    for n,k be Element of NAT st n >= 1 holds
     SDDec(DecSD(0,n,k)) = 0
 proof
-  let n,k be Nat;
+  let n,k be Element of NAT;
   assume
 A1:   n >= 1;
       Radix(k) > 0 by RADIX_2:6;
@@ -135,10 +137,10 @@ A1:   n >= 1;
 end;
 
 theorem Th7:
-  for k,n be Nat st 1 in Seg n & k >= 2 holds
+  for k,n be Element of NAT st 1 in Seg n & k >= 2 holds
     DigA(DecSD(1,n,k),1) = 1
 proof
-  let k,n be Nat;
+  let k,n be Element of NAT;
   assume
 A1:   1 in Seg n & k >= 2;
     then A2: Radix(k) > 2 by RADIX_4:1;
@@ -155,10 +157,10 @@ A4: Radix(k) > 0 by A2;
 end;
 
 theorem Th8:
-  for i,k,n be Nat st i in Seg n & i > 1 & k >= 2 holds
+  for i,k,n be Element of NAT st i in Seg n & i > 1 & k >= 2 holds
     DigA(DecSD(1,n,k),i) = 0
 proof
-  let i,k,n be Nat;
+  let i,k,n be Element of NAT;
   assume
 A1:   i in Seg n & i > 1 & k >= 2;
     then A2: Radix(k) > 2 by RADIX_4:1;
@@ -176,10 +178,10 @@ A5: DigA(DecSD(1,n,k),i)
 end;
 
 theorem
-    for n,k be Nat st n >= 1 & k >= 2 holds
+    for n,k be Element of NAT st n >= 1 & k >= 2 holds
     SDDec(DecSD(1,n,k)) = 1
 proof
-  let n,k be Nat;
+  let n,k be Element of NAT;
   assume
 A1:   n >= 1 & k >= 2;
 then A2:   Radix(k) > 2 by RADIX_4:1;
@@ -193,18 +195,18 @@ then A2:   Radix(k) > 2 by RADIX_4:1;
 end;
 
 theorem Th10:
-  for k be Nat st k >= 2 holds SD_Add_Carry(Radix(k)) = 1
+  for k be Element of NAT st k >= 2 holds SD_Add_Carry(Radix(k)) = 1
 proof
-  let k be Nat;
+  let k be Element of NAT;
   assume k >= 2;
   then Radix(k) > 2 by RADIX_4:1;
   hence thesis by RADIX_1:def 10;
 end;
 
 theorem Th11:
-  for k be Nat st k >= 2 holds SD_Add_Data(Radix(k),k) = 0
+  for k be Element of NAT st k >= 2 holds SD_Add_Data(Radix(k),k) = 0
 proof
-  let k be Nat;
+  let k be Element of NAT;
   assume k >= 2;
 then A1: SD_Add_Carry(Radix(k)) = 1 by Th10;
       SD_Add_Data(Radix(k),k)
@@ -216,9 +218,9 @@ end;
 begin :: Primary Magnitude Relation of Radix-2^k SD Number
 
 Lm1:
-  for k be Nat st 2 <= k holds SD_Add_Carry(Radix(k) - 1) = 1
+  for k be Element of NAT st 2 <= k holds SD_Add_Carry(Radix(k) - 1) = 1
 proof
-    let k be Nat;
+    let k be Element of NAT;
     assume k >= 2;
       then Radix(k) >= 4 by Th3;
       then Radix(k) - 1 >= 4 - 1 by XREAL_1:11;
@@ -227,10 +229,10 @@ proof
 end;
 
 Lm2:
-  for n,k,i be Nat st k >= 2 & i in Seg n holds
+  for n,k,i be Element of NAT st k >= 2 & i in Seg n holds
     SD_Add_Carry(DigA(DecSD(1,n,k),i)) = 0
 proof
-  let n,k,i be Nat;
+  let n,k,i be Element of NAT;
   assume
 A1: k >= 2 & i in Seg n;
 then A2: i >= 1 by FINSEQ_1:3;
@@ -252,37 +254,40 @@ then A2: i >= 1 by FINSEQ_1:3;
 end;
 
 theorem Th12:
-  for n be Nat st n >= 1 holds
-    for k be Nat, tx,ty be Tuple of n,k-SD st
-      (for i be Nat st i in Seg n holds DigA(tx,i) = DigA(ty,i)) holds
+  for n be Element of NAT st n >= 1 holds
+    for k be Element of NAT, tx,ty be Tuple of n,k-SD st
+      (for i be Element of NAT st i in Seg n holds DigA(tx,i) = DigA(ty,i))
+       holds
         SDDec(tx) = SDDec(ty)
 proof
-  defpred P[Nat] means
-    for k be Nat, tx,ty be Tuple of $1,k-SD st
-      (for i be Nat st i in Seg $1 holds DigA(tx,i) = DigA(ty,i)) holds
+  defpred P[Element of NAT] means
+    for k be Element of NAT, tx,ty be Tuple of $1,k-SD st
+      (for i be Element of NAT st i in Seg $1 holds DigA(tx,i) = DigA(ty,i))
+       holds
         SDDec(tx) = SDDec(ty);
 A1: P[1]
     proof
-      let k be Nat, tx,ty be Tuple of 1,k-SD;
+      let k be Element of NAT, tx,ty be Tuple of 1,k-SD;
       assume
-A2:     for i be Nat st i in Seg 1 holds DigA(tx,i) = DigA(ty,i);
+A2:     for i be Element of NAT st i in Seg 1 holds DigA(tx,i) = DigA(ty,i);
 A3:   1 in Seg 1 by FINSEQ_1:3;
 A4:   SDDec(tx) = DigA(tx,1) by Th4;
         SDDec(ty) = DigA(ty,1) by Th4;
       hence thesis by A2,A3,A4;
   end;
-A5: for n be Nat st n >= 1 & P[n] holds P[n+1]
+A5: for n be Element of NAT st n >= 1 & P[n] holds P[n+1]
     proof
-      let n be Nat;
+      let n be Element of NAT;
       assume
 A6:    n >= 1 & P[n];
-      let k be Nat, tx,ty be Tuple of (n+1),k-SD;
+      let k be Element of NAT, tx,ty be Tuple of (n+1),k-SD;
       assume
-A7:    for i be Nat st i in Seg (n+1) holds DigA(tx,i) = DigA(ty,i);
-     deffunc F(Nat) = DigB(tx,$1);
+A7:    for i be Element of NAT st i in Seg (n+1) holds DigA(tx,i) = DigA(ty,i);
+     deffunc F(Element of NAT) = DigB(tx,$1);
       consider txn being FinSequence of INT such that
 A8:    len txn = n and
-A9:    for i be Nat st i in Seg n holds txn.i = F(i) from FINSEQ_2:sch 1;
+A9:    for i be Element of NAT st i in Seg n holds txn.i = F(i)
+ from FINSEQ_2:sch 1;
         rng txn c= k-SD
         proof
           let z be set;
@@ -290,7 +295,7 @@ A9:    for i be Nat st i in Seg n holds txn.i = F(i) from FINSEQ_2:sch 1;
           then consider xx be set such that
 A10:        xx in dom txn and
 A11:        z = txn.xx by FUNCT_1:def 5;
-          reconsider xx as Nat by A10;
+          reconsider xx as Element of NAT by A10;
 A12:      dom txn = Seg n by A8,FINSEQ_1:def 3;
 then A13:      z = DigB(tx,xx) by A9,A10,A11
            .= DigA(tx,xx) by RADIX_1:def 4;
@@ -299,9 +304,9 @@ then A13:      z = DigB(tx,xx) by A9,A10,A11
           hence thesis by A13;
         end;
       then reconsider txn as FinSequence of k-SD by FINSEQ_1:def 4;
-A14:  for i be Nat st i in Seg n holds txn.i = tx.i
+A14:  for i be Element of NAT st i in Seg n holds txn.i = tx.i
         proof
-          let i be Nat;
+          let i be Element of NAT;
           assume
 A15:        i in Seg n;
 then A16:        i in Seg (n+1) by FINSEQ_2:9;
@@ -309,10 +314,11 @@ then A16:        i in Seg (n+1) by FINSEQ_2:9;
                  .= DigA(tx,i) by RADIX_1:def 4;
           hence thesis by A16,RADIX_1:def 3;
         end;
-        deffunc F(Nat) = DigB(ty,$1);
+        deffunc F(Element of NAT) = DigB(ty,$1);
       consider tyn being FinSequence of INT such that
 A17:    len tyn = n and
-A18:    for i be Nat st i in Seg n holds tyn.i = F(i) from FINSEQ_2:sch 1;
+A18:    for i be Element of NAT st i in Seg n holds tyn.i = F(i)
+from FINSEQ_2:sch 1;
         rng tyn c= k-SD
         proof
           let z be set;
@@ -320,7 +326,7 @@ A18:    for i be Nat st i in Seg n holds tyn.i = F(i) from FINSEQ_2:sch 1;
           then consider yy be set such that
 A19:        yy in dom tyn and
 A20:        z = tyn.yy by FUNCT_1:def 5;
-          reconsider yy as Nat by A19;
+          reconsider yy as Element of NAT by A19;
 A21:      dom tyn = Seg n by A17,FINSEQ_1:def 3;
 then A22:      z = DigB(ty,yy) by A18,A19,A20
            .= DigA(ty,yy) by RADIX_1:def 4;
@@ -329,9 +335,9 @@ then A22:      z = DigB(ty,yy) by A18,A19,A20
           hence thesis by A22;
         end;
       then reconsider tyn as FinSequence of k-SD by FINSEQ_1:def 4;
-A23:  for i be Nat st i in Seg n holds tyn.i = ty.i
+A23:  for i be Element of NAT st i in Seg n holds tyn.i = ty.i
         proof
-          let i be Nat;
+          let i be Element of NAT;
           assume
 A24:        i in Seg n;
 then A25:        i in Seg (n+1) by FINSEQ_2:9;
@@ -343,9 +349,9 @@ then A25:        i in Seg (n+1) by FINSEQ_2:9;
       reconsider tyn as Tuple of n,k-SD by A17,FINSEQ_2:110;
 A26:  SDDec(txn) + (Radix(k) |^ n)*DigA(tx,n+1) = SDDec(tx) by A14,RADIX_2:10;
 A27:  SDDec(tyn) + (Radix(k) |^ n)*DigA(ty,n+1) = SDDec(ty) by A23,RADIX_2:10;
-        for i be Nat st i in Seg n holds DigA(txn,i) = DigA(tyn,i)
+        for i be Element of NAT st i in Seg n holds DigA(txn,i) = DigA(tyn,i)
         proof
-          let i be Nat;
+          let i be Element of NAT;
           assume
 A28:        i in Seg n;
 then A29:      DigA(txn,i) = txn.i by RADIX_1:def 3
@@ -361,42 +367,46 @@ A30:      DigA(tyn,i) = tyn.i by A28,RADIX_1:def 3
         (n+1) in Seg (n+1) by FINSEQ_1:6;
       hence thesis by A7,A26,A27,A31;
     end;
-    for n be Nat st n >= 1 holds P[n] from NAT_1:sch 9(A1,A5);
+    for n be Element of NAT st n >= 1 holds P[n] from NAT_1:sch 9(A1,A5);
   hence thesis;
 end;
 
 theorem
-    for n be Nat st n >= 1 holds
-    for k be Nat, tx,ty be Tuple of n,k-SD st
-      (for i be Nat st i in Seg n holds DigA(tx,i) >= DigA(ty,i)) holds
+    for n be Element of NAT st n >= 1 holds
+    for k be Element of NAT, tx,ty be Tuple of n,k-SD st
+      (for i be Element of NAT st i in Seg n holds DigA(tx,i) >= DigA(ty,i))
+      holds
         SDDec(tx) >= SDDec(ty)
 proof
-  defpred P[Nat] means
-    for k be Nat, tx,ty be Tuple of $1,k-SD st
-      (for i be Nat st i in Seg $1 holds DigA(tx,i) >= DigA(ty,i)) holds
+  defpred P[Element of NAT] means
+    for k be Element of NAT, tx,ty be Tuple of $1,k-SD st
+      (for i be Element of NAT st i in Seg $1 holds DigA(tx,i) >= DigA(ty,i))
+      holds
         SDDec(tx) >= SDDec(ty);
 A1: P[1]
     proof
-      let k be Nat, tx,ty be Tuple of 1,k-SD;
+      let k be Element of NAT, tx,ty be Tuple of 1,k-SD;
       assume
-A2:     for i be Nat st i in Seg 1 holds DigA(tx,i) >= DigA(ty,i);
+A2:     for i be Element of NAT st i in Seg 1 holds DigA(tx,i) >= DigA(ty,i);
 A3:     1 in Seg 1 by FINSEQ_1:3;
 A4:   SDDec(tx) = DigA(tx,1) by Th4;
         SDDec(ty) = DigA(ty,1) by Th4;
       hence thesis by A2,A3,A4;
   end;
-A5: for n be Nat st n >= 1 & P[n] holds P[n+1]
+A5: for n be Element of NAT st n >= 1 & P[n] holds P[n+1]
     proof
-      let n be Nat;
+      let n be Element of NAT;
       assume
 A6:    n >= 1 & P[n];
-      let k be Nat, tx,ty be Tuple of (n+1),k-SD;
+      let k be Element of NAT, tx,ty be Tuple of (n+1),k-SD;
       assume
-A7:    for i be Nat st i in Seg (n+1) holds DigA(tx,i) >= DigA(ty,i);
-      deffunc F(Nat) = DigB(tx,$1);
+A7:    for i be Element of NAT st i in Seg (n+1)
+holds DigA(tx,i) >= DigA(ty,i);
+      deffunc F(Element of NAT) = DigB(tx,$1);
       consider txn being FinSequence of INT such that
 A8:    len txn = n and
-A9:    for i be Nat st i in Seg n holds txn.i = F(i) from FINSEQ_2:sch 1;
+A9:    for i be Element of NAT st i in Seg n holds txn.i = F(i)
+from FINSEQ_2:sch 1;
         rng txn c= k-SD
         proof
           let z be set;
@@ -404,7 +414,7 @@ A9:    for i be Nat st i in Seg n holds txn.i = F(i) from FINSEQ_2:sch 1;
           then consider xx be set such that
 A10:        xx in dom txn and
 A11:        z = txn.xx by FUNCT_1:def 5;
-          reconsider xx as Nat by A10;
+          reconsider xx as Element of NAT by A10;
 A12:      dom txn = Seg n by A8,FINSEQ_1:def 3;
 then A13:      z = DigB(tx,xx) by A9,A10,A11
            .= DigA(tx,xx) by RADIX_1:def 4;
@@ -413,9 +423,9 @@ then A13:      z = DigB(tx,xx) by A9,A10,A11
           hence thesis by A13;
         end;
       then reconsider txn as FinSequence of k-SD by FINSEQ_1:def 4;
-A14:  for i be Nat st i in Seg n holds txn.i = tx.i
+A14:  for i be Element of NAT st i in Seg n holds txn.i = tx.i
         proof
-          let i be Nat;
+          let i be Element of NAT;
           assume
 A15:        i in Seg n;
 then A16:        i in Seg (n+1) by FINSEQ_2:9;
@@ -423,10 +433,11 @@ then A16:        i in Seg (n+1) by FINSEQ_2:9;
                  .= DigA(tx,i) by RADIX_1:def 4;
           hence thesis by A16,RADIX_1:def 3;
         end;
-      deffunc F(Nat) = DigB(ty,$1);
+      deffunc F(Element of NAT) = DigB(ty,$1);
       consider tyn being FinSequence of INT such that
 A17:    len tyn = n and
-A18:    for i be Nat st i in Seg n holds tyn.i = F(i) from FINSEQ_2:sch 1;
+A18:    for i be Element of NAT st i in Seg n holds tyn.i = F(i)
+from FINSEQ_2:sch 1;
         rng tyn c= k-SD
         proof
           let z be set;
@@ -434,7 +445,7 @@ A18:    for i be Nat st i in Seg n holds tyn.i = F(i) from FINSEQ_2:sch 1;
           then consider yy be set such that
 A19:        yy in dom tyn and
 A20:        z = tyn.yy by FUNCT_1:def 5;
-          reconsider yy as Nat by A19;
+          reconsider yy as Element of NAT by A19;
 A21:      dom tyn = Seg n by A17,FINSEQ_1:def 3;
 then A22:      z = DigB(ty,yy) by A18,A19,A20
            .= DigA(ty,yy) by RADIX_1:def 4;
@@ -443,9 +454,9 @@ then A22:      z = DigB(ty,yy) by A18,A19,A20
           hence thesis by A22;
         end;
       then reconsider tyn as FinSequence of k-SD by FINSEQ_1:def 4;
-A23:  for i be Nat st i in Seg n holds tyn.i = ty.i
+A23:  for i be Element of NAT st i in Seg n holds tyn.i = ty.i
         proof
-          let i be Nat;
+          let i be Element of NAT;
           assume
 A24:        i in Seg n;
 then A25:        i in Seg (n+1) by FINSEQ_2:9;
@@ -457,9 +468,9 @@ then A25:        i in Seg (n+1) by FINSEQ_2:9;
       reconsider tyn as Tuple of n,k-SD by A17,FINSEQ_2:110;
 A26:  SDDec(txn) + (Radix(k) |^ n)*DigA(tx,n+1) = SDDec(tx) by A14,RADIX_2:10;
 A27:  SDDec(tyn) + (Radix(k) |^ n)*DigA(ty,n+1) = SDDec(ty) by A23,RADIX_2:10;
-        for i be Nat st i in Seg n holds DigA(txn,i) >= DigA(tyn,i)
+        for i be Element of NAT st i in Seg n holds DigA(txn,i) >= DigA(tyn,i)
         proof
-          let i be Nat;
+          let i be Element of NAT;
           assume
 A28:        i in Seg n;
 then A29:      DigA(txn,i) = txn.i by RADIX_1:def 3
@@ -478,34 +489,34 @@ then A32:  DigA(tx,n+1) >= DigA(ty,n+1) by A7;
                                                      by A32,XREAL_1:66;
       hence thesis by A26,A27,A31,XREAL_1:9;
     end;
-    for n be Nat st n >= 1 holds P[n] from NAT_1:sch 9(A1,A5);
+    for n be Element of NAT st n >= 1 holds P[n] from NAT_1:sch 9(A1,A5);
   hence thesis;
 end;
 
 theorem Th14:
-  for n be Nat st n >= 1 holds
-    for k be Nat st k >= 2 holds
+  for n be Element of NAT st n >= 1 holds
+    for k be Element of NAT st k >= 2 holds
       for tx,ty,tz,tw be Tuple of n,k-SD st
-        (for i be Nat st i in Seg n holds
+        (for i be Element of NAT st i in Seg n holds
           (DigA(tx,i) = DigA(tz,i) & DigA(ty,i) = DigA(tw,i))
             or (DigA(ty,i) = DigA(tz,i) & DigA(tx,i) = DigA(tw,i))) holds
        SDDec(tz) + SDDec(tw) = SDDec(tx) + SDDec(ty)
 proof
-  defpred P[Nat] means
-    for k be Nat st k >= 2 holds
+  defpred P[Element of NAT] means
+    for k be Element of NAT st k >= 2 holds
       for tx,ty,tz,tw be Tuple of $1,k-SD st
-        (for i be Nat st i in Seg $1 holds
+        (for i be Element of NAT st i in Seg $1 holds
           (DigA(tx,i) = DigA(tz,i) & DigA(ty,i) = DigA(tw,i))
             or (DigA(ty,i) = DigA(tz,i) & DigA(tx,i) = DigA(tw,i))) holds
        SDDec(tz) + SDDec(tw) = SDDec(tx) + SDDec(ty);
 A1: P[1]
     proof
-      let k be Nat;
+      let k be Element of NAT;
       assume
 A2:     k >= 2;
       let tx,ty,tz,tw be Tuple of 1,k-SD;
       assume
-A3:     for j be Nat st j in Seg 1 holds
+A3:     for j be Element of NAT st j in Seg 1 holds
           (DigA(tx,j) = DigA(tz,j) & DigA(ty,j) = DigA(tw,j))
             or (DigA(ty,j) = DigA(tz,j) & DigA(tx,j) = DigA(tw,j));
 A4:   1 in Seg 1 by FINSEQ_1:3;
@@ -561,23 +572,24 @@ A8:   DigA(tx,1) = DigA(tz,1) & DigA(ty,1) = DigA(tw,1) implies
       end;
       hence thesis by A3,A4,A8;
   end;
-A9: for n be Nat st n >= 1 & P[n] holds P[n+1]
+A9: for n be Element of NAT st n >= 1 & P[n] holds P[n+1]
     proof
-      let n be Nat;
+      let n be Element of NAT;
       assume
 A10:    n >= 1 & P[n];
-      let k be Nat;
+      let k be Element of NAT;
       assume
 A11:    k >= 2;
       let tx,ty,tz,tw be Tuple of (n+1),k-SD;
       assume
-A12:   for i be Nat st i in Seg (n+1) holds
+A12:   for i be Element of NAT st i in Seg (n+1) holds
           (DigA(tx,i) = DigA(tz,i) & DigA(ty,i) = DigA(tw,i))
             or (DigA(ty,i) = DigA(tz,i) & DigA(tx,i) = DigA(tw,i));
-      deffunc F(Nat) = DigB(tx,$1);
+      deffunc F(Element of NAT) = DigB(tx,$1);
       consider txn being FinSequence of INT such that
 A13:   len txn = n and
-A14:   for i be Nat st i in Seg n holds txn.i = F(i) from FINSEQ_2:sch 1;
+A14:   for i be Element of NAT st i in Seg n holds txn.i = F(i)
+from FINSEQ_2:sch 1;
         rng txn c= k-SD
         proof
           let z be set;
@@ -585,7 +597,7 @@ A14:   for i be Nat st i in Seg n holds txn.i = F(i) from FINSEQ_2:sch 1;
           then consider xx be set such that
 A15:       xx in dom txn and
 A16:       z = txn.xx by FUNCT_1:def 5;
-          reconsider xx as Nat by A15;
+          reconsider xx as Element of NAT by A15;
 A17:     dom txn = Seg n by A13,FINSEQ_1:def 3;
 then A18:     z = DigB(tx,xx) by A14,A15,A16
            .= DigA(tx,xx) by RADIX_1:def 4;
@@ -594,9 +606,9 @@ then A18:     z = DigB(tx,xx) by A14,A15,A16
           hence thesis by A18;
         end;
       then reconsider txn as FinSequence of k-SD by FINSEQ_1:def 4;
-A19: for i be Nat st i in Seg n holds txn.i = tx.i
+A19: for i be Element of NAT st i in Seg n holds txn.i = tx.i
         proof
-          let i be Nat;
+          let i be Element of NAT;
           assume
 A20:       i in Seg n;
 then A21:       i in Seg (n+1) by FINSEQ_2:9;
@@ -604,10 +616,11 @@ then A21:       i in Seg (n+1) by FINSEQ_2:9;
                  .= DigA(tx,i) by RADIX_1:def 4;
           hence thesis by A21,RADIX_1:def 3;
         end;
-      deffunc F(Nat) = DigB(ty,$1);
+      deffunc F(Element of NAT) = DigB(ty,$1);
       consider tyn being FinSequence of INT such that
 A22:   len tyn = n and
-A23:   for i be Nat st i in Seg n holds tyn.i = F(i) from FINSEQ_2:sch 1;
+A23:   for i be Element of NAT st i in Seg n holds tyn.i = F(i)
+from FINSEQ_2:sch 1;
         rng tyn c= k-SD
         proof
           let z be set;
@@ -615,7 +628,7 @@ A23:   for i be Nat st i in Seg n holds tyn.i = F(i) from FINSEQ_2:sch 1;
           then consider yy be set such that
 A24:       yy in dom tyn and
 A25:       z = tyn.yy by FUNCT_1:def 5;
-          reconsider yy as Nat by A24;
+          reconsider yy as Element of NAT by A24;
 A26:     dom tyn = Seg n by A22,FINSEQ_1:def 3;
 then A27:     z = DigB(ty,yy) by A23,A24,A25
            .= DigA(ty,yy) by RADIX_1:def 4;
@@ -624,9 +637,9 @@ then A27:     z = DigB(ty,yy) by A23,A24,A25
           hence thesis by A27;
         end;
       then reconsider tyn as FinSequence of k-SD by FINSEQ_1:def 4;
-A28: for i be Nat st i in Seg n holds tyn.i = ty.i
+A28: for i be Element of NAT st i in Seg n holds tyn.i = ty.i
         proof
-          let i be Nat;
+          let i be Element of NAT;
           assume
 A29:       i in Seg n;
 then A30:       i in Seg (n+1) by FINSEQ_2:9;
@@ -634,10 +647,11 @@ then A30:       i in Seg (n+1) by FINSEQ_2:9;
                  .= DigA(ty,i) by RADIX_1:def 4;
           hence thesis by A30,RADIX_1:def 3;
         end;
-      deffunc F(Nat) = DigB(tz,$1);
+      deffunc F(Element of NAT) = DigB(tz,$1);
       consider tzn being FinSequence of INT such that
 A31:   len tzn = n and
-A32:   for i be Nat st i in Seg n holds tzn.i = F(i) from FINSEQ_2:sch 1;
+A32:   for i be Element of NAT st i in Seg n holds tzn.i = F(i)
+from FINSEQ_2:sch 1;
         rng tzn c= k-SD
         proof
           let z be set;
@@ -645,7 +659,7 @@ A32:   for i be Nat st i in Seg n holds tzn.i = F(i) from FINSEQ_2:sch 1;
           then consider zz be set such that
 A33:       zz in dom tzn and
 A34:       z = tzn.zz by FUNCT_1:def 5;
-          reconsider zz as Nat by A33;
+          reconsider zz as Element of NAT by A33;
 A35:     dom tzn = Seg n by A31,FINSEQ_1:def 3;
 then A36:     z = DigB(tz,zz) by A32,A33,A34
            .= DigA(tz,zz) by RADIX_1:def 4;
@@ -654,9 +668,9 @@ then A36:     z = DigB(tz,zz) by A32,A33,A34
           hence thesis by A36;
         end;
       then reconsider tzn as FinSequence of k-SD by FINSEQ_1:def 4;
-A37: for i be Nat st i in Seg n holds tzn.i = tz.i
+A37: for i be Element of NAT st i in Seg n holds tzn.i = tz.i
         proof
-          let i be Nat;
+          let i be Element of NAT;
           assume
 A38:       i in Seg n;
 then A39:       i in Seg (n+1) by FINSEQ_2:9;
@@ -664,10 +678,11 @@ then A39:       i in Seg (n+1) by FINSEQ_2:9;
                  .= DigA(tz,i) by RADIX_1:def 4;
           hence thesis by A39,RADIX_1:def 3;
         end;
-      deffunc F(Nat) = DigB(tw,$1);
+      deffunc F(Element of NAT) = DigB(tw,$1);
       consider twn being FinSequence of INT such that
 A40:   len twn = n and
-A41:   for i be Nat st i in Seg n holds twn.i = F(i) from FINSEQ_2:sch 1;
+A41:   for i be Element of NAT st i in Seg n holds twn.i = F(i)
+from FINSEQ_2:sch 1;
         rng twn c= k-SD
         proof
           let w be set;
@@ -675,7 +690,7 @@ A41:   for i be Nat st i in Seg n holds twn.i = F(i) from FINSEQ_2:sch 1;
           then consider ww be set such that
 A42:       ww in dom twn and
 A43:       w = twn.ww by FUNCT_1:def 5;
-          reconsider ww as Nat by A42;
+          reconsider ww as Element of NAT by A42;
 A44:     dom twn = Seg n by A40,FINSEQ_1:def 3;
 then A45:     w = DigB(tw,ww) by A41,A42,A43
            .= DigA(tw,ww) by RADIX_1:def 4;
@@ -684,9 +699,9 @@ then A45:     w = DigB(tw,ww) by A41,A42,A43
           hence thesis by A45;
         end;
       then reconsider twn as FinSequence of k-SD by FINSEQ_1:def 4;
-A46:  for i be Nat st i in Seg n holds twn.i = tw.i
+A46:  for i be Element of NAT st i in Seg n holds twn.i = tw.i
         proof
-          let i be Nat;
+          let i be Element of NAT;
           assume
 A47:       i in Seg n;
 then A48:       i in Seg (n+1) by FINSEQ_2:9;
@@ -702,11 +717,11 @@ A49:  SDDec(txn) + (Radix(k) |^ n)*DigA(tx,n+1) = SDDec(tx) by A19,RADIX_2:10;
 A50:  SDDec(tyn) + (Radix(k) |^ n)*DigA(ty,n+1) = SDDec(ty) by A28,RADIX_2:10;
 A51:  SDDec(tzn) + (Radix(k) |^ n)*DigA(tz,n+1) = SDDec(tz) by A37,RADIX_2:10;
 A52:  SDDec(twn) + (Radix(k) |^ n)*DigA(tw,n+1) = SDDec(tw) by A46,RADIX_2:10;
-       for i be Nat st i in Seg n holds
+       for i be Element of NAT st i in Seg n holds
         (DigA(txn,i) = DigA(tzn,i) & DigA(tyn,i) = DigA(twn,i))
           or (DigA(tyn,i) = DigA(tzn,i) & DigA(txn,i) = DigA(twn,i))
       proof
-        let i be Nat;
+        let i be Element of NAT;
         assume
 A53:      i in Seg n;
 then A54:    1 <= i & i <= n by FINSEQ_1:3;
@@ -742,31 +757,31 @@ then (DigA(tx,n+1) = DigA(tz,n+1) & DigA(ty,n+1) = DigA(tw,n+1))
         or (DigA(ty,n+1) = DigA(tz,n+1) & DigA(tx,n+1) = DigA(tw,n+1)) by A12;
       hence thesis by A60,A61;
     end;
-    for n be Nat st n >= 1 holds P[n] from NAT_1:sch 9(A1,A9);
+    for n be Element of NAT st n >= 1 holds P[n] from NAT_1:sch 9(A1,A9);
   hence thesis;
 end;
 
 theorem
-    for n,k be Nat st n >= 1 & k >= 2 holds
+    for n,k be Element of NAT st n >= 1 & k >= 2 holds
       for tx,ty,tz be Tuple of n,k-SD st
-        (for i be Nat st i in Seg n holds
+        (for i be Element of NAT st i in Seg n holds
           (DigA(tx,i) = DigA(tz,i) & DigA(ty,i) = 0)
             or (DigA(ty,i) = DigA(tz,i) & DigA(tx,i) = 0)) holds
        SDDec(tz) + SDDec(DecSD(0,n,k)) = SDDec(tx) + SDDec(ty)
 proof
-      let n,k be Nat;
+      let n,k be Element of NAT;
       assume
 A1:     n >= 1 & k >= 2;
       let tx,ty,tz be Tuple of n,k-SD;
       assume
-A2:     for i be Nat st i in Seg n holds
+A2:     for i be Element of NAT st i in Seg n holds
           (DigA(tx,i) = DigA(tz,i) & DigA(ty,i) = 0)
             or (DigA(ty,i) = DigA(tz,i) & DigA(tx,i) = 0);
-        for i be Nat st i in Seg n holds
+        for i be Element of NAT st i in Seg n holds
         (DigA(tx,i) = DigA(tz,i) & DigA(ty,i) = DigA(DecSD(0,n,k),i))
           or (DigA(ty,i) = DigA(tz,i) & DigA(tx,i) = DigA(DecSD(0,n,k),i))
       proof
-        let i be Nat;
+        let i be Element of NAT;
         assume
 A3:       i in Seg n;
         then DigA(DecSD(0,n,k),i) = 0 by Th5;
@@ -777,7 +792,7 @@ end;
 
 begin :: Definiton of Max/Min Radix-2^k SD Number in Some Digits
 
-definition let i,m,k be Nat;
+definition let i,m,k be Element of NAT;
   assume
 A1:  k >= 2;
   func SDMinDigit(m,k,i) -> Element of k-SD equals
@@ -799,20 +814,20 @@ A2: k-SD = {w where w is Element of INT:w <= Radix(k)-1 & w >= -Radix(k)+1}
 consistency;
 end;
 
-definition let n,m,k be Nat;
+definition let n,m,k be Element of NAT;
   func SDMin(n,m,k) -> Tuple of n,k-SD means
     :Def2:
-    for i be Nat st i in Seg n holds DigA(it,i) = SDMinDigit(m,k,i);
+    for i be Element of NAT st i in Seg n holds DigA(it,i) = SDMinDigit(m,k,i);
 existence
   proof
-    deffunc F(Nat) = SDMinDigit(m,k,$1);
+    deffunc F(Element of NAT) = SDMinDigit(m,k,$1);
     consider z being FinSequence of k-SD such that
 A1:   len z = n and
-A2:   for j be Nat st j in Seg n holds
+A2:   for j be Element of NAT st j in Seg n holds
         z.j = F(j) from FINSEQ_2:sch 1;
     reconsider z as Tuple of n,(k-SD) by A1,FINSEQ_2:110;
     take z;
-    let i be Nat;
+    let i be Element of NAT;
     assume
 A3:   i in Seg n;
     then DigA(z,i) = z.i by RADIX_1:def 3;
@@ -821,10 +836,12 @@ A3:   i in Seg n;
 uniqueness
   proof
       let k1,k2 be Tuple of n,k-SD such that
-A4:  for i be Nat st i in Seg n holds DigA(k1,i) = SDMinDigit(m,k,i) and
-A5:  for i be Nat st i in Seg n holds DigA(k2,i) = SDMinDigit(m,k,i);
+A4:  for i be Element of NAT st i in Seg n holds DigA(k1,i)
+ = SDMinDigit(m,k,i) and
+A5:  for i be Element of NAT st i in Seg n holds DigA(k2,i)
+ = SDMinDigit(m,k,i);
 A6:  len k1 = n & len k2 = n by FINSEQ_2:109;
-        now let j be Nat;
+        now let j be Element of NAT;
         assume
 A7:      j in Seg n;
         then k1.j = DigA(k1,j) by RADIX_1:def 3
@@ -837,7 +854,7 @@ A7:      j in Seg n;
   end;
 end;
 
-definition let i,m,k be Nat;
+definition let i,m,k be Element of NAT;
   assume
 A1:  k >= 2;
   func SDMaxDigit(m,k,i) -> Element of k-SD equals
@@ -848,20 +865,20 @@ coherence by A1,Th1,RADIX_1:16;
 consistency;
 end;
 
-definition let n,m,k be Nat;
+definition let n,m,k be Element of NAT;
   func SDMax(n,m,k) -> Tuple of n,k-SD means
     :Def4:
-    for i be Nat st i in Seg n holds DigA(it,i) = SDMaxDigit(m,k,i);
+    for i be Element of NAT st i in Seg n holds DigA(it,i) = SDMaxDigit(m,k,i);
 existence
   proof
-    deffunc F(Nat) = SDMaxDigit(m,k,$1);
+    deffunc F(Element of NAT) = SDMaxDigit(m,k,$1);
     consider z being FinSequence of k-SD such that
 A1:   len z = n and
-A2:   for j be Nat st j in Seg n holds
+A2:   for j be Element of NAT st j in Seg n holds
         z.j = F(j) from FINSEQ_2:sch 1;
     reconsider z as Tuple of n,(k-SD) by A1,FINSEQ_2:110;
     take z;
-    let i be Nat;
+    let i be Element of NAT;
     assume
 A3:   i in Seg n;
     then DigA(z,i) = z.i by RADIX_1:def 3;
@@ -870,10 +887,12 @@ A3:   i in Seg n;
 uniqueness
   proof
       let k1,k2 be Tuple of n,k-SD such that
-A4:  for i be Nat st i in Seg n holds DigA(k1,i) = SDMaxDigit(m,k,i) and
-A5:  for i be Nat st i in Seg n holds DigA(k2,i) = SDMaxDigit(m,k,i);
+A4:  for i be Element of NAT st i in Seg n holds DigA(k1,i)
+ = SDMaxDigit(m,k,i) and
+A5:  for i be Element of NAT st i in Seg n holds DigA(k2,i)
+ = SDMaxDigit(m,k,i);
 A6:  len k1 = n & len k2 = n by FINSEQ_2:109;
-        now let j be Nat;
+        now let j be Element of NAT;
         assume
 A7:      j in Seg n;
         then k1.j = DigA(k1,j) by RADIX_1:def 3
@@ -886,7 +905,7 @@ A7:      j in Seg n;
   end;
 end;
 
-definition let i,m,k be Nat;
+definition let i,m,k be Element of NAT;
   assume
 A1:  k >= 2;
   func FminDigit(m,k,i) -> Element of k-SD equals
@@ -912,20 +931,20 @@ then A5:   -Radix(k) + 1 <= 1 by XXREAL_0:2;
 consistency;
 end;
 
-definition let n,m,k be Nat;
+definition let n,m,k be Element of NAT;
   func Fmin(n,m,k) -> Tuple of n,k-SD means
     :Def6:
-    for i be Nat st i in Seg n holds DigA(it,i) = FminDigit(m,k,i);
+    for i be Element of NAT st i in Seg n holds DigA(it,i) = FminDigit(m,k,i);
 existence
   proof
-    deffunc F(Nat) = FminDigit(m,k,$1);
+    deffunc F(Element of NAT) = FminDigit(m,k,$1);
     consider z being FinSequence of k-SD such that
 A1:   len z = n and
-A2:   for j be Nat st j in Seg n holds
+A2:   for j be Element of NAT st j in Seg n holds
         z.j = F(j) from FINSEQ_2:sch 1;
     reconsider z as Tuple of n,(k-SD) by A1,FINSEQ_2:110;
     take z;
-    let i be Nat;
+    let i be Element of NAT;
     assume
 A3:   i in Seg n;
     hence DigA(z,i) = z.i by RADIX_1:def 3
@@ -934,10 +953,11 @@ A3:   i in Seg n;
 uniqueness
   proof
       let k1,k2 be Tuple of n,k-SD such that
-A4:  for i be Nat st i in Seg n holds DigA(k1,i) = FminDigit(m,k,i) and
-A5:  for i be Nat st i in Seg n holds DigA(k2,i) = FminDigit(m,k,i);
+A4:  for i be Element of NAT st i in Seg n holds DigA(k1,i)
+ = FminDigit(m,k,i) and
+A5:  for i be Element of NAT st i in Seg n holds DigA(k2,i) = FminDigit(m,k,i);
 A6:  len k1 = n & len k2 = n by FINSEQ_2:109;
-        now let j be Nat;
+        now let j be Element of NAT;
         assume
 A7:      j in Seg n;
         then k1.j = DigA(k1,j) by RADIX_1:def 3
@@ -950,7 +970,7 @@ A7:      j in Seg n;
   end;
 end;
 
-definition let i,m,k be Nat;
+definition let i,m,k be Element of NAT;
   assume
 A1:  k >= 2;
   func FmaxDigit(m,k,i) -> Element of k-SD equals
@@ -961,20 +981,20 @@ coherence by A1,Th1,RADIX_1:16;
 consistency;
 end;
 
-definition let n,m,k be Nat;
+definition let n,m,k be Element of NAT;
   func Fmax(n,m,k) -> Tuple of n,k-SD means
     :Def8:
-    for i be Nat st i in Seg n holds DigA(it,i) = FmaxDigit(m,k,i);
+    for i be Element of NAT st i in Seg n holds DigA(it,i) = FmaxDigit(m,k,i);
 existence
   proof
-    deffunc F(Nat) = FmaxDigit(m,k,$1);
+    deffunc F(Element of NAT) = FmaxDigit(m,k,$1);
     consider z being FinSequence of k-SD such that
 A1:   len z = n and
-A2:   for j be Nat st j in Seg n holds
+A2:   for j be Element of NAT st j in Seg n holds
         z.j = F(j) from FINSEQ_2:sch 1;
     reconsider z as Tuple of n,(k-SD) by A1,FINSEQ_2:110;
     take z;
-    let i be Nat;
+    let i be Element of NAT;
     assume
 A3:   i in Seg n;
     hence DigA(z,i) = z.i by RADIX_1:def 3
@@ -983,10 +1003,11 @@ A3:   i in Seg n;
 uniqueness
   proof
       let k1,k2 be Tuple of n,k-SD such that
-A4:  for i be Nat st i in Seg n holds DigA(k1,i) = FmaxDigit(m,k,i) and
-A5:  for i be Nat st i in Seg n holds DigA(k2,i) = FmaxDigit(m,k,i);
+A4:  for i be Element of NAT st i in Seg n holds DigA(k1,i)
+ = FmaxDigit(m,k,i) and
+A5:  for i be Element of NAT st i in Seg n holds DigA(k2,i) = FmaxDigit(m,k,i);
 A6:  len k1 = n & len k2 = n by FINSEQ_2:109;
-        now let j be Nat;
+        now let j be Element of NAT;
         assume
 A7:      j in Seg n;
         then k1.j = DigA(k1,j) by RADIX_1:def 3
@@ -1002,14 +1023,14 @@ end;
 begin :: Properties of Max/Min Radix-$2^k$ SD Numbers
 
 theorem Th16:
-  for n,m,k be Nat st n >= 1 & k >= 2 & m in Seg n holds
-    for i be Nat st i in Seg n holds
+  for n,m,k be Element of NAT st n >= 1 & k >= 2 & m in Seg n holds
+    for i be Element of NAT st i in Seg n holds
       DigA(SDMax(n,m,k),i)+DigA(SDMin(n,m,k),i) = 0
 proof
-      let n,m,k be Nat;
+      let n,m,k be Element of NAT;
       assume
 A1:     n >= 1 & k >= 2 & m in Seg n;
-      let i be Nat;
+      let i be Element of NAT;
       assume
 A2:     i in Seg n;
 then A3:   i >= 1 & i <= n by FINSEQ_1:3;
@@ -1037,21 +1058,21 @@ A6:    i >= m;
 end;
 
 theorem
-    for n be Nat st n >= 1 holds
-    for m,k be Nat st m in Seg n & k >= 2 holds
+    for n be Element of NAT st n >= 1 holds
+    for m,k be Element of NAT st m in Seg n & k >= 2 holds
       SDDec(SDMax(n,m,k)) + SDDec(SDMin(n,m,k)) = SDDec(DecSD(0,n,k))
 proof
-      let n be Nat;
+      let n be Element of NAT;
       assume
 A1:     n >= 1;
-      let m,k be Nat;
+      let m,k be Element of NAT;
       assume
 A2:     m in Seg n & k >= 2;
 A3:   n in Seg n by A1,FINSEQ_1:3;
-      A4: for i be Nat st i in Seg n holds
+      A4: for i be Element of NAT st i in Seg n holds
         DigA(DecSD(0,n,k),i) = DigA(SDMax(n,m,k) '+' SDMin(n,m,k),i)
       proof
-        let i be Nat;
+        let i be Element of NAT;
         assume
 A5:      i in Seg n;
 then A6:    i >= 1 & i <= n by FINSEQ_1:3;
@@ -1097,14 +1118,14 @@ then A9:      i -' 1 = 0 by NAT_2:10;
 end;
 
 theorem
-    for n be Nat st n >= 1 holds
-    for m,k be Nat st m in Seg n & k >= 2 holds
+    for n be Element of NAT st n >= 1 holds
+    for m,k be Element of NAT st m in Seg n & k >= 2 holds
       SDDec(Fmin(n,m,k)) = SDDec(SDMax(n,m,k)) + SDDec(DecSD(1,n,k))
 proof
-      let n be Nat;
+      let n be Element of NAT;
       assume
 A1:     n >= 1;
-      let m,k be Nat;
+      let m,k be Element of NAT;
       assume
 A2:     m in Seg n & k >= 2;
 then A3:   n >= m & m >= 1 by FINSEQ_1:3;
@@ -1162,10 +1183,10 @@ A15:    SDDec(SDMax(n,m,k)) + SDDec(DecSD(1,n,k))
                 * (Radix(k) |^ n) by A1,A2,RADIX_2:11
          .= SDDec(SDMax(n,m,k) '+' DecSD(1,n,k))
             + 0 * (Radix(k) |^ n) by A2,A12,A13,A14,Th8,RADIX_1:21;
-          for i be Nat st i in Seg n holds
+          for i be Element of NAT st i in Seg n holds
           DigA(Fmin(n,m,k),i) = DigA(SDMax(n,m,k) '+' DecSD(1,n,k),i)
         proof
-          let i be Nat;
+          let i be Element of NAT;
           assume
 A16:        i in Seg n;
 then A17:      DigA(SDMax(n,m,k) '+' DecSD(1,n,k),i)
@@ -1357,10 +1378,10 @@ then DigA(SDMax(n,m,k),i) = 0 by A2,A19,Def3;
 end;
 
 theorem
-      for n,m,k be Nat st m in Seg n & k >= 2 holds
+      for n,m,k be Element of NAT st m in Seg n & k >= 2 holds
       SDDec(Fmin(n+1,m+1,k)) = SDDec(Fmin(n+1,m,k)) + SDDec(Fmax(n+1,m,k))
 proof
-    let n,m,k be Nat;
+    let n,m,k be Element of NAT;
     assume
 A1:     m in Seg n & k >= 2;
 then A2:   n >= m & m >= 1 by FINSEQ_1:3;
@@ -1378,11 +1399,11 @@ A8:   SDDec(Fmin(n+1,m,k)) + SDDec(Fmax(n+1,m,k))
        .= SDDec(Fmin(n+1,m,k) '+' Fmax(n+1,m,k))
           + 0 * (Radix(k) |^ (n+1)) by A6,A7,RADIX_1:21;
 A9:  m in Seg (n+1) by A1,FINSEQ_2:9;
-        for i be Nat st i in Seg (n+1) holds
+        for i be Element of NAT st i in Seg (n+1) holds
         DigA(Fmin(n+1,m+1,k),i)
           = DigA(Fmin(n+1,m,k) '+' Fmax(n+1,m,k),i)
       proof
-        let i be Nat;
+        let i be Element of NAT;
         assume
 A10:      i in Seg (n+1);
 then A11:    DigA(Fmin(n+1,m,k) '+' Fmax(n+1,m,k),i)

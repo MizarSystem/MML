@@ -9,7 +9,8 @@ environ
  vocabularies CQC_LANG, MIDSP_3, MARGREL1, FINSEQ_1, FUNCT_1, RELAT_1, ZF_LANG,
       INT_1, BINARITH, ARYTM_1, POWER, MONOID_0, SETWISEO, FINSEQ_2, BINARI_2,
       FINSEQ_4;
- notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, NAT_1, FUNCT_1, INT_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0,
+    NUMBERS, NAT_1, FUNCT_1, INT_1,
       MARGREL1, BINOP_1, SETWOP_2, SERIES_1, CQC_LANG, FINSEQ_1, FINSEQ_2,
       FINSEQ_4, BINARITH, BINOP_2, XXREAL_0;
  constructors BINOP_1, SETWISEO, XXREAL_0, NAT_1, INT_1, CQC_LANG, FINSEQ_4,
@@ -33,8 +34,8 @@ definition let X be non empty set; let D be non empty Subset of X;
   end;
 end;
 
- reserve i,j,n for Nat;
- reserve m for non empty Nat;
+ reserve i,j,n for Element of NAT;
+ reserve m for non empty Element of NAT;
  reserve p,q for Tuple of n, BOOLEAN;
  reserve d,d1,d2 for Element of BOOLEAN;
 
@@ -56,7 +57,7 @@ proof
   hence thesis by A1,FINSEQ_2:10;
 end;
 
-definition let n be Nat;
+definition let n be Element of NAT;
   func Bin1 (n) -> Tuple of n, BOOLEAN means :Def1:
   for i st i in Seg n holds it/.i = IFEQ(i,1,TRUE,FALSE);
   existence
@@ -91,26 +92,26 @@ A2: for j st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
   end;
 end;
 
-definition let n be non empty Nat, x be Tuple of n, BOOLEAN;
+definition let n be non empty Element of NAT, x be Tuple of n, BOOLEAN;
   func Neg2 (x) -> Tuple of n,BOOLEAN equals
    'not' x + Bin1 (n);
   correctness;
 end;
 
-definition let n be Nat, x be Tuple of n, BOOLEAN;
+definition let n be Element of NAT, x be Tuple of n, BOOLEAN;
   func Intval (x) -> Integer equals :Def3:
    Absval (x) if x/.n = FALSE
     otherwise Absval (x) - 2 to_power n;
   correctness;
 end;
 
-definition let n be non empty Nat, z1,z2 be Tuple of n, BOOLEAN;
+definition let n be non empty Element of NAT, z1,z2 be Tuple of n, BOOLEAN;
   func Int_add_ovfl(z1,z2) -> Element of BOOLEAN equals
    'not' (z1/.n) '&' 'not' (z2/.n) '&' (carry(z1,z2)/.n);
   correctness;
 end;
 
-definition let n be non empty Nat, z1,z2 be Tuple of n, BOOLEAN;
+definition let n be non empty Element of NAT, z1,z2 be Tuple of n, BOOLEAN;
   func Int_add_udfl(z1,z2) -> Element of BOOLEAN equals
    (z1/.n) '&' (z2/.n) '&' 'not' (carry(z1,z2)/.n);
   correctness;
@@ -124,7 +125,7 @@ theorem
   proof
   let z1 be Tuple of 2,BOOLEAN;
   assume A1: z1 = <*FALSE*>^<*FALSE*>;
-            consider k1,k2 being Nat such that
+            consider k1,k2 being Element of NAT such that
          A2: Binary (z1) = <* k1,k2 *> by FINSEQ_2:120;
                z1 = <*FALSE,FALSE*> by A1,FINSEQ_1:def 9;
   then A3: z1/.1 = FALSE & z1/.2 = FALSE by FINSEQ_4:26;
@@ -156,7 +157,7 @@ theorem Th4:
   proof
   let z1 be Tuple of 2,BOOLEAN;
   assume A1: z1 = <*TRUE*>^<*FALSE*>;
-           consider k1,k2 being Nat such that
+           consider k1,k2 being Element of NAT such that
         A2: Binary (z1) = <* k1,k2 *> by FINSEQ_2:120;
               z1 = <*TRUE,FALSE*> by A1,FINSEQ_1:def 9;
   then A3: z1/.1 = TRUE & z1/.2 = FALSE by FINSEQ_4:26;
@@ -191,7 +192,7 @@ theorem
   proof
   let z1 be Tuple of 2,BOOLEAN;
   assume A1: z1 = <*FALSE*>^<*TRUE*>;
-           consider k1,k2 being Nat such that
+           consider k1,k2 being Element of NAT such that
         A2: Binary (z1) = <* k1,k2 *> by FINSEQ_2:120;
               z1 = <*FALSE,TRUE*> by A1,FINSEQ_1:def 9;
   then A3: z1/.1 = FALSE & z1/.2 = TRUE by FINSEQ_4:26;
@@ -232,7 +233,7 @@ theorem
   proof
   let z1 be Tuple of 2,BOOLEAN;
   assume A1: z1 = <*TRUE*>^<*TRUE*>;
-           consider k1,k2 being Nat such that
+           consider k1,k2 being Element of NAT such that
         A2: Binary (z1) = <* k1,k2 *> by FINSEQ_2:120;
               z1 = <*TRUE,TRUE*> by A1,FINSEQ_1:def 9;
   then A3: z1/.1 <> FALSE & z1/.2 <> FALSE by FINSEQ_4:26;
@@ -273,7 +274,7 @@ theorem
 theorem Th7:
   for i st i in Seg n & i = 1 holds (Bin1(n))/.i = TRUE
   proof
-  let i be Nat such that
+  let i be Element of NAT such that
         A1: i in Seg n
   and A2: i = 1;
   thus (Bin1(n))/.i = IFEQ(i,1,TRUE,FALSE) by A1,Def1
@@ -283,7 +284,7 @@ theorem Th7:
 theorem Th8:
   for i st i in Seg n & i <> 1 holds (Bin1(n))/.i = FALSE
   proof
-  let i be Nat such that
+  let i be Element of NAT such that
         A1: i in Seg n and
         A2: i <> 1;
   thus (Bin1(n))/.i = IFEQ(i,1,TRUE,FALSE) by A1,Def1
@@ -332,7 +333,7 @@ theorem Th9:
 theorem Th10:
   for m holds Intval (Bin1(m)^<*FALSE*>) = 1
   proof
-  defpred P[non empty Nat] means Intval (Bin1($1)^<*FALSE*>) = 1;
+  defpred P[non empty Element of NAT] means Intval (Bin1($1)^<*FALSE*>) = 1;
   A1: P[1] proof
            consider k being Element of BOOLEAN such that
        A2: Bin1(1) = <* k *> by FINSEQ_2:117;
@@ -341,7 +342,7 @@ theorem Th10:
   then Bin1(1) = <*TRUE*> by A2,A3,Th7;
   hence thesis by Th4;
     end;
-  A4: now let m be non empty Nat such that
+  A4: now let m be non empty Element of NAT such that
        A5: P[m];
               (Bin1(m)^<*FALSE*>)/.(m+1) = FALSE by BINARITH:3;
   then A6: Absval(Bin1(m)^<*FALSE*>) = 1 by A5,Def3;
@@ -392,7 +393,8 @@ theorem Th11:
 theorem Th12:
   for z being Tuple of m, BOOLEAN
   for d being Element of BOOLEAN holds
-   Intval(z^<*d*>) = Absval(z)-(IFEQ(d,FALSE,0,2 to_power(m)) qua Nat)
+   Intval(z^<*d*>) =
+    Absval(z)-(IFEQ(d,FALSE,0,2 to_power(m)) qua Element of NAT)
   proof
    let z be Tuple of m, BOOLEAN;
    let d;
@@ -404,7 +406,7 @@ theorem Th12:
  by BINARITH:46
                           .= Absval(z)+0 by A1,CQC_LANG:def 1
                           .= Absval(z);
-              Absval(z)-(IFEQ(d,FALSE,0,2 to_power(m)) qua Nat)
+              Absval(z)-(IFEQ(d,FALSE,0,2 to_power(m)) qua Element of NAT)
               = Absval(z) - 0 by A1,CQC_LANG:def 1
              .= Absval(z);
     hence thesis by A2;
@@ -685,7 +687,7 @@ theorem Th15:
   for m for x being Tuple of m, BOOLEAN holds
    Absval('not' x) = - Absval(x) + 2 to_power m - 1
   proof
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
   for x being Tuple of $1, BOOLEAN holds
    Absval('not' x) = - Absval(x) + 2 to_power $1 - 1;
   A1: P[1] proof let x be Tuple of 1, BOOLEAN;
@@ -869,7 +871,7 @@ theorem
         for d being Element of BOOLEAN holds
           Neg2(Neg2(z^<*d*>)) = z^<*d*>
   proof
-    defpred P[non empty Nat] means
+    defpred P[non empty Element of NAT] means
      for z being Tuple of $1, BOOLEAN
         for d being Element of BOOLEAN holds Neg2(Neg2(z^<*d*>)) = z^<*d*>;
 
@@ -1312,13 +1314,13 @@ z,Bin1(m+1))) 'xor' add_ovfl('not' Neg2(z),Bin1(m+1))*> by Th16
   thus for m holds P[m] from BINARITH:sch 1 (A1,A11);
   end;
 
-definition let n be non empty Nat, x, y be Tuple of n, BOOLEAN;
+definition let n be non empty Element of NAT, x, y be Tuple of n, BOOLEAN;
   func x - y -> Tuple of n, BOOLEAN means :Def6:
   for i st i in Seg n holds
     it/.i = (x/.i) 'xor' ((Neg2(y))/.i) 'xor' ((carry(x,Neg2(y)))/.i);
   existence
     proof
-   deffunc F(Nat) = (x/.$1) 'xor' ((Neg2(y))/.$1)
+   deffunc F(Element of NAT) = (x/.$1) 'xor' ((Neg2(y))/.$1)
                      'xor' ((carry(x,Neg2(y)))/.$1);
    consider z being FinSequence of BOOLEAN such that
 A1: len z = n and

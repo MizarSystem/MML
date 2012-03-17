@@ -11,7 +11,8 @@ environ
       COMPTS_1, TOPREAL1, SPPOL_1, FINSEQ_1, EUCLID, RELAT_1, MCART_1,
       MATRIX_1, PRE_TOPC, SEQM_3, FUNCT_1, ARYTM_1, FINSEQ_6, GOBOARD2,
       GRAPH_2, ARYTM_3, JORDAN18;
- notations TARSKI, XBOOLE_0, SUBSET_1, XXREAL_0, REAL_1, NAT_1, REALSET1,
+ notations TARSKI, XBOOLE_0, SUBSET_1,
+ NUMBERS,XCMPLX_0,XXREAL_0, REAL_1, NAT_1, REALSET1,
       FUNCT_1, FINSEQ_1, FINSEQ_4, FINSEQ_5, RFINSEQ, MATRIX_1, FINSEQ_6,
       GRAPH_2, STRUCT_0, PRE_TOPC, BINARITH, COMPTS_1, EUCLID, GOBOARD1,
       TOPREAL1, GOBOARD2, GOBOARD5, SPPOL_1, SPPOL_2, JORDAN3, JORDAN5C,
@@ -29,11 +30,11 @@ environ
       SPRECT_2, SPPOL_1, FUNCT_1, FINSEQ_2, JORDAN4, GOBOARD2, SPRECT_3,
       TOPREAL3, JORDAN8, PARTFUN2, SPRECT_1, XBOOLE_0, XBOOLE_1, ZFMISC_1,
       JORDAN1E, REVROT_1, JORDAN1B, JORDAN1J, GOBOARD3, TOPREAL8, GRAPH_2,
-      SPRECT_5, JORDAN18, JORDAN5C, MSUALG_8, XREAL_1, XXREAL_0;
+      SPRECT_5, JORDAN18, JORDAN5C, MSUALG_8, XREAL_1, XXREAL_0, ORDINAL1;
 
 begin
 
-  reserve n for Nat;
+  reserve n for Element of NAT;
 
   theorem Th1:
    for f be FinSequence of TOP-REAL 2
@@ -92,20 +93,22 @@ begin
   definition
    let f be FinSequence;
    attr f is almost-one-to-one means :Def1:
-    for i,j be Nat st i in dom f & j in dom f & (i <> 1 or j <> len f) &
+    for i,j be Element of NAT
+    st i in dom f & j in dom f & (i <> 1 or j <> len f) &
     (i <> len f or j <> 1) & f.i = f.j holds i = j;
   end;
 
   definition
    let f be FinSequence;
    attr f is weakly-one-to-one means :Def2:
-    for i be Nat st 1 <= i & i < len f holds f.i <> f.(i+1);
+    for i be Element of NAT st 1 <= i & i < len f holds f.i <> f.(i+1);
   end;
 
   definition
    let f be FinSequence;
    attr f is poorly-one-to-one means :Def3:
-    for i be Nat st 1 <= i & i < len f holds f.i <> f.(i+1) if len f <> 2
+    for i be Element of NAT
+    st 1 <= i & i < len f holds f.i <> f.(i+1) if len f <> 2
     otherwise not contradiction;
    consistency;
   end;
@@ -113,17 +116,19 @@ begin
   theorem
    for D be set
    for f be FinSequence of D holds f is almost-one-to-one iff
-    for i,j be Nat st i in dom f & j in dom f & (i <> 1 or j <> len f) &
+    for i,j be Element of NAT
+    st i in dom f & j in dom f & (i <> 1 or j <> len f) &
      (i <> len f or j <> 1) & f/.i = f/.j holds i = j
    proof
     let D be set;
     let f be FinSequence of D;
     thus f is almost-one-to-one implies
-     for i,j be Nat st i in dom f & j in dom f & (i <> 1 or j <> len f) &
+     for i,j be Element of NAT
+     st i in dom f & j in dom f & (i <> 1 or j <> len f) &
       (i <> len f or j <> 1) & f/.i = f/.j holds i = j
     proof
      assume A1: f is almost-one-to-one;
-     let i,j be Nat such that
+     let i,j be Element of NAT such that
       A2: i in dom f & j in dom f and
       A3: i <> 1 or j <> len f and
       A4: i <> len f or j <> 1 and
@@ -132,10 +137,10 @@ begin
         .= f.j by A2,FINSEQ_4:def 4;
      hence i = j by A1,A2,A3,A4,Def1;
     end;
-    assume A6: for i,j be Nat st i in dom f & j in dom f &
+    assume A6: for i,j be Element of NAT st i in dom f & j in dom f &
      (i <> 1 or j <> len f) & (i <> len f or j <> 1) & f/.i = f/.j
       holds i = j;
-    now let i,j be Nat such that
+    now let i,j be Element of NAT such that
       A7: i in dom f & j in dom f and
       A8: i <> 1 or j <> len f and
       A9: i <> len f or j <> 1 and
@@ -150,23 +155,24 @@ begin
   theorem Th5:
    for D be set
    for f be FinSequence of D holds f is weakly-one-to-one iff
-    for i be Nat st 1 <= i & i < len f holds f/.i <> f/.(i+1)
+    for i be Element of NAT st 1 <= i & i < len f holds f/.i <> f/.(i+1)
    proof
     let D be set;
     let f be FinSequence of D;
     thus f is weakly-one-to-one implies
-     for i be Nat st 1 <= i & i < len f holds f/.i <> f/.(i+1)
+     for i be Element of NAT st 1 <= i & i < len f holds f/.i <> f/.(i+1)
     proof
      assume A1: f is weakly-one-to-one;
-     let i be Nat such that
+     let i be Element of NAT such that
       A2: 1 <= i & i < len f;
      A3: f.i = f/.i by A2,FINSEQ_4:24;
      1 < i+1 & i+1 <= len f by A2,NAT_1:38;
      then f.(i+1) = f/.(i+1) by FINSEQ_4:24;
      hence f/.i <> f/.(i+1) by A1,A2,A3,Def2;
     end;
-    assume A4: for i be Nat st 1 <= i & i < len f holds f/.i <> f/.(i+1);
-    now let i be Nat such that
+    assume A4: for i be Element of NAT st 1 <= i & i < len f
+    holds f/.i <> f/.(i+1);
+    now let i be Element of NAT such that
       A5: 1 <= i & i < len f;
      A6: f.i = f/.i by A5,FINSEQ_4:24;
      1 < i+1 & i+1 <= len f by A5,NAT_1:38;
@@ -180,15 +186,15 @@ begin
    for D be set
    for f be FinSequence of D holds f is poorly-one-to-one iff
     (len f <> 2 implies
-     for i be Nat st 1 <= i & i < len f holds f/.i <> f/.(i+1))
+     for i be Element of NAT st 1 <= i & i < len f holds f/.i <> f/.(i+1))
    proof
     let D be set;
     let f be FinSequence of D;
     thus f is poorly-one-to-one & len f <> 2 implies
-     for i be Nat st 1 <= i & i < len f holds f/.i <> f/.(i+1)
+     for i be Element of NAT st 1 <= i & i < len f holds f/.i <> f/.(i+1)
     proof
      assume A1: f is poorly-one-to-one & len f <> 2;
-     let i be Nat such that
+     let i be Element of NAT such that
       A2: 1 <= i & i < len f;
      A3: f.i = f/.i by A2,FINSEQ_4:24;
      1 < i+1 & i+1 <= len f by A2,NAT_1:38;
@@ -196,10 +202,10 @@ begin
      hence f/.i <> f/.(i+1) by A1,A2,A3,Def3;
     end;
     assume A4: len f <> 2 implies
-     for i be Nat st 1 <= i & i < len f holds f/.i <> f/.(i+1);
+     for i be Element of NAT st 1 <= i & i < len f holds f/.i <> f/.(i+1);
     per cases;
      suppose A5: len f <> 2;
-      now let i be Nat such that
+      now let i be Element of NAT such that
         A6: 1 <= i & i < len f;
        A7: f.i = f/.i by A6,FINSEQ_4:24;
        1 < i+1 & i+1 <= len f by A6,NAT_1:38;
@@ -219,7 +225,7 @@ begin
    proof
     let f be FinSequence;
     assume A1: f is one-to-one;
-    let i,j be Nat;
+    let i,j be Element of NAT;
     assume that
      A2: i in dom f and
      A3: j in dom f and
@@ -240,7 +246,7 @@ begin
      case A2: len f <> 2;
       now per cases;
        suppose A3: len f <> 0;
-        let i be Nat;
+        let i be Element of NAT;
         assume A4: 1 <= i & i < len f;
         then A5: i in dom f by FINSEQ_3:27;
         A6: i+1 >= 1 by NAT_1:29;
@@ -252,7 +258,7 @@ begin
         hence f.i <> f.(i+1) by A1,A5,A7,A8,A9,Def1;
        end;
        suppose A10: len f = 0;
-        let i be Nat;
+        let i be Element of NAT;
         assume 1 <= i & i < len f;
         hence f.i <> f.(i+1) by A10;
        end;
@@ -274,11 +280,13 @@ begin
     thus f is weakly-one-to-one implies f is poorly-one-to-one
     proof
      assume f is weakly-one-to-one;
-     then for i be Nat st 1 <= i & i < len f holds f.i <> f.(i+1) by Def2;
+     then for i be Element of NAT st 1 <= i & i < len f
+     holds f.i <> f.(i+1) by Def2;
      hence f is poorly-one-to-one by A1,Def3;
     end;
     assume f is poorly-one-to-one;
-    then for i be Nat st 1 <= i & i < len f holds f.i <> f.(i+1) by A1,Def3;
+    then for i be Element of NAT st 1 <= i & i < len f
+    holds f.i <> f.(i+1) by A1,Def3;
     hence f is weakly-one-to-one by Def2;
    end;
 
@@ -286,7 +294,7 @@ begin
    cluster {} -> weakly-one-to-one;
    coherence
    proof
-    let i be Nat;
+    let i be Element of NAT;
     assume 1 <= i & i < len {};
     hence {}.i <> {}.(i+1) by FINSEQ_1:25;
    end;
@@ -297,7 +305,7 @@ begin
    cluster <*x*> -> weakly-one-to-one;
    coherence
    proof
-    let i be Nat;
+    let i be Element of NAT;
     assume 1 <= i & i < len <*x*>;
     hence <*x*>.i <> <*x*>.(i+1) by FINSEQ_1:56;
    end;
@@ -341,7 +349,7 @@ begin
    proof
     let f be FinSequence;
     assume A1: f is almost-one-to-one;
-    let i,j be Nat;
+    let i,j be Element of NAT;
     assume that
      A2: i in dom Rev f and
      A3: j in dom Rev f and
@@ -370,7 +378,7 @@ begin
    proof
     let f be FinSequence;
     assume A1: f is weakly-one-to-one;
-    let i be Nat;
+    let i be Element of NAT;
     assume that
      A2: 1 <= i and
      A3: i < len Rev f;
@@ -384,7 +392,7 @@ begin
     then A10: Rev f.i = f.(len f - i + 1) & Rev f.(i+1) = f.(len f - (i+1) + 1)
                                                         by A6,FINSEQ_5:def 3;
     len f - (i+1) + 1 = len f - i;
-    then reconsider j = len f - i as Nat by A4,A8,FINSEQ_5:1;
+    then reconsider j = len f - i as Element of NAT by A4,A8,FINSEQ_5:1;
     len f - (i+1) + 1 in Seg len f by A4,A9,FINSEQ_5:2;
     then A11: j >= 1 by FINSEQ_1:3;
     len f - i + 1 in Seg len f by A4,A5,FINSEQ_5:2;
@@ -453,7 +461,7 @@ begin
      suppose A2: p in rng f;
       A3: 0+1 <= p..f & p..f <= len f by A2,FINSEQ_4:31;
       A4: len (f:-p) = len f - p..f + 1 by A2,FINSEQ_5:53;
-      let i,j be Nat;
+      let i,j be Element of NAT;
       assume that
        A5: i in dom Rotate(f,p) and
        A6: j in dom Rotate(f,p) and
@@ -624,7 +632,7 @@ begin
     let p be Element of D;
     per cases;
      suppose A2: p in rng f;
-      let i be Nat;
+      let i be Element of NAT;
       A3: 1 <= p..f & p..f <= len f by A2,FINSEQ_4:31;
       A4: len (f:-p) = len f - p..f + 1 by A2,FINSEQ_5:53;
       A5: len Rotate(f,p) = len f by REVROT_1:14;
@@ -782,7 +790,7 @@ begin
        A3: x in dom (f/^1) and
        A4: y in dom (f/^1) and
        A5: (f/^1).x = (f/^1).y;
-      reconsider i=x, j=y as Nat by A3,A4;
+      reconsider i=x, j=y as Element of NAT by A3,A4;
       i in Seg len (f/^1) & j in Seg len (f/^1) by A3,A4,FINSEQ_1:def 3;
       then A6: 1 <= i & i <= len (f/^1) & 1 <= j & j <= len (f/^1)
                                                                 by FINSEQ_1:3;
@@ -804,7 +812,7 @@ begin
        A11: x in dom (f|(len f-'1)) and
        A12: y in dom (f|(len f-'1)) and
        A13: (f|(len f-'1)).x = (f|(len f-'1)).y;
-      reconsider i=x, j=y as Nat by A11,A12;
+      reconsider i=x, j=y as Element of NAT by A11,A12;
       i in Seg len (f|(len f-'1)) & j in Seg len (f|(len f-'1))
                                                      by A11,A12,FINSEQ_1:def 3;
       then A14: 1 <= i & i <= len (f|(len f-'1)) &
@@ -822,7 +830,7 @@ begin
     assume that
      A18: f/^1 is one-to-one and
      A19: f|(len f-'1) is one-to-one;
-    let i,j be Nat;
+    let i,j be Element of NAT;
     assume that
      A20: i in dom f and
      A21: j in dom f and
@@ -883,7 +891,7 @@ begin
 
   registration
    let C be compact non vertical non horizontal Subset of TOP-REAL 2;
-   let n be Nat;
+   let n be Element of NAT;
    cluster Cage(C,n) -> almost-one-to-one;
    coherence
    proof
@@ -901,7 +909,7 @@ begin
 
   registration
    let C be compact non vertical non horizontal Subset of TOP-REAL 2;
-   let n be Nat;
+   let n be Element of NAT;
    cluster Cage(C,n) -> weakly-one-to-one;
    coherence
    proof
@@ -942,9 +950,9 @@ theorem Th16:
     let f be FinSequence;
     assume
 A1: f is one-to-one;
-    for i be Nat st 1 <= i & i < len f holds f.i <> f.(i+1)
+    for i be Element of NAT st 1 <= i & i < len f holds f.i <> f.(i+1)
     proof
-      let i be Nat;
+      let i be Element of NAT;
       assume 1 <= i & i < len f; then
       i in dom f & i+1 in dom f & i <> i+1 by MSUALG_8:1;
       hence thesis by A1,FUNCT_1:def 8;
@@ -1017,17 +1025,18 @@ end;
   theorem Th18:
    for f be FinSequence of TOP-REAL 2
    for p be Point of TOP-REAL 2
-   for i1 be Nat st f is poorly-one-to-one unfolded s.n.c. &
+   for i1 be Element of NAT st f is poorly-one-to-one unfolded s.n.c. &
      1<i1 & i1<=len f & p=f.i1 holds
     Index(p,f) + 1 = i1
    proof
     let f be FinSequence of TOP-REAL 2;
-    let p be Point of TOP-REAL 2,i1 be Nat;
+    let p be Point of TOP-REAL 2,i1 be Element of NAT;
     assume A1: f is poorly-one-to-one unfolded s.n.c.;
     assume A2: 1<i1 & i1<=len f;
     then A3: i1 in dom f by FINSEQ_3:27;
     consider j being Nat such that
      A4: i1 = j+1 by A2,NAT_1:22;
+     reconsider j as Element of NAT by ORDINAL1:def 13;
     A5: 1 + 0 <= j by A2,A4,NAT_1:38;
     assume A6: p=f.i1;
     then p = f/.i1 by A3,FINSEQ_4:def 4;
@@ -1306,11 +1315,11 @@ end;
 
   theorem Th27:
    for f be special FinSequence of TOP-REAL 2
-   for i,j be Nat holds
+   for i,j be Element of NAT holds
     mid(f,i,j) is special
    proof
     let f be special FinSequence of TOP-REAL 2;
-    let i,j be Nat;
+    let i,j be Element of NAT;
     per cases;
      suppose A1: i <= j;
       mid(f,i,j) = (f/^(i-'1))|(j-'i+1) by A1,JORDAN3:def 1;
@@ -1326,11 +1335,11 @@ end;
 
   theorem Th28:
    for f be unfolded FinSequence of TOP-REAL 2
-   for i,j be Nat holds
+   for i,j be Element of NAT holds
     mid(f,i,j) is unfolded
    proof
     let f be unfolded FinSequence of TOP-REAL 2;
-    let i,j be Nat;
+    let i,j be Element of NAT;
     per cases;
      suppose A1: i <= j;
       mid(f,i,j) = (f/^(i-'1))|(j-'i+1) by A1,JORDAN3:def 1;
@@ -1769,7 +1778,8 @@ end;
      A2: p in L~f and
      A3: p<>f.1 and
      A4: g=mid(f,1,Index(p,f))^<*p*>;
-    consider i be Nat such that A5:1<=i & i+1<=len f & p in LSeg(f,i)
+    consider i be Element of NAT such that
+    A5:1<=i & i+1<=len f & p in LSeg(f,i)
      by A2,SPPOL_2:13;
     A6: 1<=Index(p,f) by A2,JORDAN3:41;
     A7: Index(p,f)<len f by A2,JORDAN3:41;
@@ -1792,7 +1802,7 @@ end;
     proof
      let x1,x2 be set;
      assume A18: x1 in dom g & x2 in dom g & g.x1=g.x2;
-     then reconsider n1=x1,n2=x2 as Nat;
+     then reconsider n1=x1,n2=x2 as Element of NAT;
      A19: 1<=n1 & n1<=len g & 1<=n2 & n2<=len g by A18,FINSEQ_3:27;
      now
       A20:g.len g = <*p*>.1 by A4,A11,A13,FINSEQ_1:def 7
@@ -1846,10 +1856,10 @@ end;
      end;
      hence x1=x2;
     end;
-    A39: for j be Nat st 1 <= j & j + 2 <= len g holds
+    A39: for j be Element of NAT st 1 <= j & j + 2 <= len g holds
      LSeg(g,j) /\ LSeg(g,j+1) = {g/.(j+1)}
     proof
-     let j be Nat;
+     let j be Element of NAT;
      assume A40: 1 <= j & j + 2 <= len g;
      then j+1<=len g by JORDAN3:10;
      then A41: LSeg(g,j) c= LSeg(f,j) by A2,A4,A40,JORDAN3:51;
@@ -1894,9 +1904,10 @@ end;
      end;
      hence LSeg(g,j) /\ LSeg(g,j+1) = {g/.(j+1)};
     end;
-    A57: for j1,j2 be Nat st j1+1 < j2 holds LSeg(g,j1) misses LSeg(g,j2)
+    A57: for j1,j2 be Element of NAT st j1+1 < j2
+    holds LSeg(g,j1) misses LSeg(g,j2)
     proof
-     let j1,j2 be Nat;
+     let j1,j2 be Element of NAT;
      assume A58:j1+1 < j2;
      j1>=0 by NAT_1:18;
      then A59: j1=0 or j1>=0+1 by NAT_1:38;
@@ -1931,10 +1942,10 @@ end;
      end;
      hence LSeg(g,j1) misses LSeg(g,j2);
     end;
-    for j be Nat st 1 <= j & j+1 <= len g holds
+    for j be Element of NAT st 1 <= j & j+1 <= len g holds
      (g/.j)`1 = (g/.(j+1))`1 or (g/.j)`2 = (g/.(j+1))`2
     proof
-     let j be Nat;
+     let j be Element of NAT;
      assume A64: 1 <= j & j+1 <= len g;
      A65: now
       j+1 <= Index(p,f)+1 by A4,A10,A64,FINSEQ_2:19;
@@ -2244,13 +2255,13 @@ end;
     now per cases by A3;
      case Index(p,f)<Index(q,f);
       then q in L~(L_Cut(f,p)) by A1,JORDAN3:64;
-      hence ex i1 being Nat st 1<=i1 & i1+1<=len L_Cut(f,p)
+      hence ex i1 being Element of NAT st 1<=i1 & i1+1<=len L_Cut(f,p)
         & q in LSeg(L_Cut(f,p),i1) by SPPOL_2:13;
      end;
      case Index(p,f)=Index(q,f)
          & LE p,q,f/.(Index(p,f)),f/.(Index(p,f)+1);
       then q in L~(L_Cut(f,p)) by A1,JORDAN3:66;
-      hence ex i1 being Nat st 1<=i1 & i1+1<=len L_Cut(f,p)
+      hence ex i1 being Element of NAT st 1<=i1 & i1+1<=len L_Cut(f,p)
         & q in LSeg(L_Cut(f,p),i1) by SPPOL_2:13;
      end;
     end;
@@ -2381,7 +2392,8 @@ end;
     A16: 1<=Index(b,f) & Index(b,f) < len f by A15,JORDAN3:41;
     then A17: Index(b,f) in dom f by FINSEQ_3:27;
     then A18: f/.Index(b,f) in rng f by PARTFUN2:4;
-    A19: for i be Nat st 1 <= i & i < Index(b,f) holds f/.i <> f/.Index(b,f)
+    A19: for i be Element of NAT st 1 <= i & i < Index(b,f)
+    holds f/.i <> f/.Index(b,f)
      by A16,GOBOARD7:38;
     A20: len(f:-(f/.Index(b,f)))=len f-(f/.Index(b,f))..f+1 by A18,FINSEQ_5:53;
     f/.Index(b,f)..f <= Index(b,f) by A17,FINSEQ_5:42;
@@ -2538,14 +2550,14 @@ end;
     then A64: (BCut^'pion)/.len BCut = BCut/.len BCut by GRAPH_2:61
        .= a by A58,Th20
        .= pion/.1 by FINSEQ_4:26;
-    A65: now let n be Nat;
+    A65: now let n be Element of NAT;
      assume n in dom pion;
      then A66: n in Seg 2 by FINSEQ_3:29;
      per cases by A66,TARSKI:def 2,FINSEQ_1:4;
       suppose A67: n = 1;
        len BCut in Seg len (BCut^'pion) by A63,A61,FINSEQ_1:3;
        then len BCut in dom (BCut^'pion) by FINSEQ_1:def 3;
-       then consider i,j be Nat such that
+       then consider i,j be Element of NAT such that
         A68: [i,j] in Indices Ga and
         A69: (BCut^'pion)/.len BCut = Ga*(i,j) by GOBOARD2:25;
        take i,j;
@@ -2554,7 +2566,7 @@ end;
       end;
       suppose A70: n = 1+1;
        len BCut + 1 in dom (BCut^'pion) by A60,A62,FINSEQ_3:27;
-       then consider i,j be Nat such that
+       then consider i,j be Element of NAT such that
         A71: [i,j] in Indices Ga and
         A72: (BCut^'pion)/.(len BCut + 1) = Ga*(i,j) by GOBOARD2:25;
        take i,j;
@@ -2571,10 +2583,10 @@ end;
      A77: pion/.len pion = pion1/.len pion1 and
      A78: len pion <= len pion1 by A65,GOBOARD3:2;
     reconsider pion1 as S-Sequence_in_R2 by A74;
-    A79: now let n be Nat;
+    A79: now let n be Element of NAT;
      assume A80: n in dom BCut;
      dom BCut c= dom (BCut^'pion) by Th23;
-     then consider i,j be Nat such that
+     then consider i,j be Element of NAT such that
       A81: [i,j] in Indices GoB(BCut^'pion) and
       A82: (BCut^'pion)/.n = GoB(BCut^'pion)*(i,j) by A80,GOBOARD2:25;
      take i,j;

@@ -163,6 +163,9 @@
 <Adjective nr="11"/>
 <Adjective nr="13" value="false"/>
 <Adjective nr="14"/>
+<Adjective nr="15"/>
+<Adjective nr="16"/>
+<Adjective nr="17"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
 </Cluster>

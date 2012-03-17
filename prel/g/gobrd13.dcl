@@ -32,7 +32,6 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="GOBOARD1"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="FINSEQ_4"/>
 <ArticleID name="MATRLIN"/>
@@ -52,7 +51,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="270">
+<Func kind="K" nr="262">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>

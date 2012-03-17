@@ -29,35 +29,35 @@ for s being State of SCM
      holds IC s = s.0 & CurInstr s = s.(s.0);
 
 theorem :: SCM_1:2
-for s being State of SCM, k being Nat
+for s being State of SCM, k being Element of NAT
      holds CurInstr (Computation s).k = s.(IC (Computation s).k) &
        CurInstr (Computation s).k = s.((Computation s).k.0);
 
 theorem :: SCM_1:3
 for s being State of SCM
- st ex k being Nat st s.(IC (Computation s).k) = halt SCM
+ st ex k being Element of NAT st s.(IC (Computation s).k) = halt SCM
   holds s is halting;
 
 theorem :: SCM_1:4
-for s being State of SCM, k being Nat
+for s being State of SCM, k being Element of NAT
   st s.(IC (Computation s).k) = halt SCM
    holds (Result s) = (Computation s).k;
 
 canceled 2;
 
 theorem :: SCM_1:7
-for n, m being Nat holds
+for n, m being Element of NAT holds
   IC SCM <> il.n & IC SCM <> dl.n & il.n <> dl.m;
 
 definition
  let I be FinSequence of the Instructions of SCM,
      D be FinSequence of INT,
-     il, ps, ds be Nat;
+     il, ps, ds be Element of NAT;
  mode State-consisting of il, ps, ds, I, D -> State of SCM means
 :: SCM_1:def 1
   IC it = il.il &
-  (for k being Nat st k < len I holds it.il.(ps+k) = I.(k+1)) &
-  (for k being Nat st k < len D holds it.dl.(ds+k) = D.(k+1));
+  (for k being Element of NAT st k < len I holds it.il.(ps+k) = I.(k+1)) &
+  (for k being Element of NAT st k < len D holds it.dl.(ds+k) = D.(k+1));
 end;
 
 theorem :: SCM_1:8
@@ -97,7 +97,7 @@ for x1,x2,x3,x4,x5,x6,x7, x8, x9 being set, p being FinSequence
 theorem :: SCM_1:14
     for I1, I2, I3, I4, I5, I6, I7, I8, I9 being Instruction of SCM,
     i1, i2, i3, i4 being Integer,
-    il being Nat,
+    il being Element of NAT,
     s being State-consisting of il, 0, 0,
              <*I1*>^<*I2*>^<*I3*>^<*I4*>^<*I5*>^<*I6*>^<*I7*>^<*I8*>^<*I9*>,
              <*i1*>^<*i2*>^<*i3*>^<*i4*>
@@ -109,7 +109,7 @@ theorem :: SCM_1:14
 theorem :: SCM_1:15
 for I1, I2 being Instruction of SCM,
     i1, i2 being Integer,
-    il being Nat,
+    il being Element of NAT,
     s being State-consisting of il, 0, 0, <*I1*>^<*I2*>, <*i1*>^<*i2*>
  holds IC s = il.il &
        s.il.0 = I1 & s.il.1 = I2 &
@@ -121,10 +121,11 @@ let N be with_non-empty_elements set;
     (non empty non void AMI-Struct over N);
  let s be State of S such that
  s is halting;
- func Complexity s -> Nat means
+ func Complexity s -> Element of NAT means
 :: SCM_1:def 2
   CurInstr((Computation s).it) = halt S &
-  for k being Nat st CurInstr((Computation s).k) = halt S holds it <= k;
+  for k being Element of NAT st CurInstr((Computation s).k) = halt S
+  holds it <= k;
  end;
 
 notation
@@ -136,19 +137,19 @@ let N be with_non-empty_elements set;
 end;
 
 theorem :: SCM_1:16
- for s being State of SCM, k being Nat
+ for s being State of SCM, k being Element of NAT
   holds s.(IC (Computation s).k) <> halt SCM &
      s.(IC (Computation s).(k+1)) = halt SCM
   iff Complexity s = k+1 & s is halting;
 
 theorem :: SCM_1:17
- for s being State of SCM, k being Nat
+ for s being State of SCM, k being Element of NAT
   st IC (Computation s).k <> IC (Computation s).(k+1) &
      s.(IC (Computation s).(k+1)) = halt SCM
   holds Complexity s = k+1;
 
 theorem :: SCM_1:18
-for k, n being Nat, s being State of SCM, a, b being Data-Location
+for k, n being Element of NAT, s being State of SCM, a, b being Data-Location
  st IC (Computation s).k = il.n & s.il.n = a := b
   holds IC (Computation s).(k+1) = il.(n+1) &
         (Computation s).(k+1).a = (Computation s).k.b &
@@ -156,7 +157,7 @@ for k, n being Nat, s being State of SCM, a, b being Data-Location
                               (Computation s).(k+1).d = (Computation s).k.d;
 
 theorem :: SCM_1:19
-for k, n being Nat, s being State of SCM, a, b being Data-Location
+for k, n being Element of NAT, s being State of SCM, a, b being Data-Location
  st IC (Computation s).k = il.n & s.il.n = AddTo(a,b)
   holds IC (Computation s).(k+1) = il.(n+1) &
         (Computation s).(k+1).a = (Computation s).k.a+(Computation s).k.b &
@@ -164,7 +165,7 @@ for k, n being Nat, s being State of SCM, a, b being Data-Location
                               (Computation s).(k+1).d = (Computation s).k.d;
 
 theorem :: SCM_1:20
-for k, n being Nat, s being State of SCM, a, b being Data-Location
+for k, n being Element of NAT, s being State of SCM, a, b being Data-Location
  st IC (Computation s).k = il.n & s.il.n = SubFrom(a,b)
   holds IC (Computation s).(k+1) = il.(n+1) &
         (Computation s).(k+1).a = (Computation s).k.a-(Computation s).k.b &
@@ -172,7 +173,7 @@ for k, n being Nat, s being State of SCM, a, b being Data-Location
                               (Computation s).(k+1).d = (Computation s).k.d;
 
 theorem :: SCM_1:21
-for k, n being Nat, s being State of SCM, a, b being Data-Location
+for k, n being Element of NAT, s being State of SCM, a, b being Data-Location
  st IC (Computation s).k = il.n & s.il.n = MultBy(a,b)
   holds IC (Computation s).(k+1) = il.(n+1) &
         (Computation s).(k+1).a = (Computation s).k.a*(Computation s).k.b &
@@ -180,7 +181,7 @@ for k, n being Nat, s being State of SCM, a, b being Data-Location
                               (Computation s).(k+1).d = (Computation s).k.d;
 
 theorem :: SCM_1:22
-for k, n being Nat, s being State of SCM, a, b being Data-Location
+for k, n being Element of NAT, s being State of SCM, a, b being Data-Location
  st IC (Computation s).k = il.n & s.il.n = Divide(a,b) & a<>b
   holds IC (Computation s).(k+1) = il.(n+1) &
     (Computation s).(k+1).a = (Computation s).k.a div (Computation s).k.b &
@@ -189,7 +190,7 @@ for k, n being Nat, s being State of SCM, a, b being Data-Location
                               (Computation s).(k+1).d = (Computation s).k.d;
 
 theorem :: SCM_1:23
-for k, n being Nat, s being State of SCM,
+for k, n being Element of NAT, s being State of SCM,
     il being Instruction-Location of SCM
  st IC (Computation s).k = il.n & s.il.n = goto il
  holds IC (Computation s).(k+1) = il &
@@ -197,7 +198,7 @@ for k, n being Nat, s being State of SCM,
                               (Computation s).(k+1).d = (Computation s).k.d;
 
 theorem :: SCM_1:24
-for k, n being Nat, s being State of SCM, a being Data-Location,
+for k, n being Element of NAT, s being State of SCM, a being Data-Location,
     il being Instruction-Location of SCM
  st IC (Computation s).k = il.n & s.il.n = a =0_goto il
  holds ((Computation s).k.a = 0 implies IC (Computation s).(k+1) = il) &
@@ -206,7 +207,7 @@ for k, n being Nat, s being State of SCM, a being Data-Location,
                               (Computation s).(k+1).d = (Computation s).k.d;
 
 theorem :: SCM_1:25
-for k, n being Nat, s being State of SCM, a being Data-Location,
+for k, n being Element of NAT, s being State of SCM, a being Data-Location,
     il being Instruction-Location of SCM
  st IC (Computation s).k = il.n & s.il.n = a >0_goto il
   holds ((Computation s).k.a > 0 implies IC (Computation s).(k+1) = il) &
@@ -231,23 +232,23 @@ theorem :: SCM_1:27
  for N being non empty with_non-empty_elements set,
      S be IC-Ins-separated definite halting
        (non empty non void AMI-Struct over N),
-     s being State of S, m being Nat
+     s being State of S, m being Element of NAT
  holds s is halting iff (Computation s).m is halting;
 
 theorem :: SCM_1:28
-     for s1, s2 being State of SCM, k, c being Nat
+     for s1, s2 being State of SCM, k, c being Element of NAT
   st s2 = (Computation s1).k & Complexity s2 = c & s2 is halting & 0 < c
    holds Complexity s1 = k+c;
 
 theorem :: SCM_1:29
-     for s1, s2 being State of SCM, k being Nat
+     for s1, s2 being State of SCM, k being Element of NAT
   st s2 = (Computation s1).k & s2 is halting
    holds Result s2 = Result s1;
 
 theorem :: SCM_1:30
     for I1, I2, I3, I4, I5, I6, I7, I8, I9 being Instruction of SCM,
     i1, i2, i3, i4 being Integer,
-    il being Nat,
+    il being Element of NAT,
     s being State of SCM
  st IC s = il.il &
     s.il.0 = I1 & s.il.1 = I2 & s.il.2 = I3 & s.il.3 = I4 &

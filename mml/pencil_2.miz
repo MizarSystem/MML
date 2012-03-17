@@ -10,13 +10,14 @@ environ
       FINSEQ_4, PRALG_1, PBOOLE, MSUALG_2, RLVECT_2, FUNCT_4, PENCIL_1, CARD_3,
       INTEGRA1, SUBSET_1, PRE_TOPC, REALSET1, CARD_1, SGRAPH1, CAT_1, AMI_1,
       RELAT_2, TARSKI, PENCIL_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, NAT_1, RELAT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1,
+ NUMBERS,XCMPLX_0, NAT_1, RELAT_1,
       BINARITH, REALSET1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, POLYNOM1,
       STRUCT_0, XXREAL_0, REALSET2, RFINSEQ, CARD_1, FINSEQ_1, CARD_3,
       PRE_TOPC, PBOOLE, PZFMISC1, TOPS_2, T_0TOPSP, GRCAT_1, PRALG_1, FINSEQ_4,
       PENCIL_1;
  constructors XXREAL_0, REAL_1, RFINSEQ, BINARITH, PZFMISC1, TOPS_2, GRCAT_1,
-      T_0TOPSP, POLYNOM1, PENCIL_1;
+      T_0TOPSP, POLYNOM1, PENCIL_1, NAT_1;
  registrations STRUCT_0, RELSET_1, SUBSET_1, FINSEQ_5, BORSUK_2, PENCIL_1,
       XREAL_0, TREES_9, FUNCT_2, PARTFUN1, XBOOLE_0, REALSET1, NAT_1, XXREAL_0;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
@@ -33,17 +34,17 @@ begin :: Preliminaries on finite sequences
 definition
  let D be set;
  let p be FinSequence of D;
- let i,j be Nat;
+ let i,j be Element of NAT;
 func Del(p,i,j) -> FinSequence of D equals
  (p|(i -' 1))^(p/^j);
 coherence;
 end;
 
 theorem Th1:
-for D being set,p being FinSequence of D,i,j being Nat
+for D being set,p being FinSequence of D,i,j being Element of NAT
 holds rng Del(p,i,j) c= rng p
  proof
-  let D be set,p be FinSequence of D,i,j be Nat;
+  let D be set,p be FinSequence of D,i,j be Element of NAT;
       rng (p|(i -' 1)) = rng (p|Seg(i -' 1)) by FINSEQ_1:def 15;
 then A1: rng (p|(i -' 1)) c= rng p by RELAT_1:99;
 A2: rng (p/^j) c= rng p
@@ -81,12 +82,12 @@ FINSEQ_1:44
  end;
 
 theorem Th2:
-for D being set,p being FinSequence of D,i,j being Nat st
+for D being set,p being FinSequence of D,i,j being Element of NAT st
 i in dom p & j in dom p holds len Del(p,i,j) = len p - j + i - 1
  proof
   let D be set;
   let p be FinSequence of D;
-  let i,j be Nat;
+  let i,j be Element of NAT;
   assume
 A1: i in dom p & j in dom p;
 then A2: 1 <= i & i <= len p by FINSEQ_3:27;
@@ -102,12 +103,12 @@ A5: j <= len p by A1,FINSEQ_3:27;
  end;
 
 theorem Th3:
-for D being set,p being FinSequence of D,i,j being Nat st
+for D being set,p being FinSequence of D,i,j being Element of NAT st
 i in dom p & j in dom p holds len Del(p,i,j) = 0 implies i=1 & j=len p
  proof
   let D be set;
   let p be FinSequence of D;
-  let i,j be Nat;
+  let i,j be Element of NAT;
   assume
 A1: i in dom p & j in dom p & len Del(p,i,j) = 0;
   then len p - j + i - 1 = 0 by Th2;
@@ -122,12 +123,12 @@ then A3: 1 >= i by A2,REAL_2:105;
  end;
 
 theorem Th4:
-for D being set,p being FinSequence of D,i,j,k being Nat st
+for D being set,p being FinSequence of D,i,j,k being Element of NAT st
 i in dom p & 1 <= k & k <= i-1 holds Del(p,i,j).k = p.k
  proof
   let D be set;
   let p be FinSequence of D;
-  let i,j,k be Nat;
+  let i,j,k be Element of NAT;
   assume
 A1: i in dom p & 1 <= k & k <= i-1;
 then A2: i <= len p by FINSEQ_3:27;
@@ -147,11 +148,11 @@ then A6: k in dom p by A1,FINSEQ_3:27;
  end;
 
 theorem Th5:
-for p,q being FinSequence, k being Nat holds
+for p,q being FinSequence, k being Element of NAT holds
 len p + 1 <= k implies (p^q).k=q.(k-len p)
  proof
   let p,q be FinSequence;
-  let k be Nat;
+  let k be Element of NAT;
   assume A1: len p + 1 <= k;
   per cases;
   suppose k <= len p + len q;
@@ -160,7 +161,8 @@ len p + 1 <= k implies (p^q).k=q.(k-len p)
   suppose A2: not k <= len p + len q;
   then not k <= len (p^q) by FINSEQ_1:35;
 then A3: not k in dom (p^q) by FINSEQ_3:27;
-A4: for n being Nat holds n in dom q iff 1<=n & n<=len q by FINSEQ_3:27;
+A4: for n being Element of NAT holds n in dom q iff 1<=n & n<=len q
+ by FINSEQ_3:27;
       k-len p > len q by A2,XREAL_1:22;
 then A5: not k-len p in dom q by A4;
   thus (p^q).k= {} by A3,FUNCT_1:def 4
@@ -169,13 +171,13 @@ then A5: not k-len p in dom q by A4;
  end;
 
 theorem Th6:
-for D being set,p being FinSequence of D,i,j,k being Nat st
+for D being set,p being FinSequence of D,i,j,k being Element of NAT st
 i in dom p & j in dom p & i <= j & i <= k & k <= len p - j + i - 1
 holds Del(p,i,j).k = p.(j -'i + k + 1)
  proof
   let D be set;
   let p be FinSequence of D;
-  let i,j,k be Nat;
+  let i,j,k be Element of NAT;
   assume
 A1: i in dom p & j in dom p & i <= j & i <= k & k <= len p - j + i - 1;
 then A2: 1 <=i & i <= len p by FINSEQ_3:27;
@@ -206,30 +208,33 @@ then A11: j -' i = j-i by BINARITH:def 3;
 scheme FinSeqOneToOne{X,Y,D()->set,f()-> FinSequence of D(),P[set,set]}:
  ex g being one-to-one FinSequence of D() st
  X() = g.1 & Y()=g.len g & rng g c= rng f() &
- for j being Nat st 1 <= j & j < len g holds P[g.j,g.(j+1)]
+ for j being Element of NAT st 1 <= j & j < len g holds P[g.j,g.(j+1)]
 provided
  A1: X() = f().1 & Y()=f().len f() and
- A2: for i being Nat, d1,d2 being set
+ A2: for i being Element of NAT, d1,d2 being set
  st 1 <= i & i < len f() & d1 =f().i & d2 = f().(i+1) holds P[d1,d2]
 proof
-    defpred Q[Nat] means
+    defpred Q[Element of NAT] means
     ex f being FinSequence of D() st
     len f = $1 &
     X() = f.1 & Y() = f.(len f) &
     rng f c= rng f() &
-    for i being Nat st 1 <= i & i < len f holds P[f.i,f.(i+1)];
-        for i being Nat st 1 <= i & i < len f() holds P[f().i,f().(i+1)] by A2;
-    then A3: ex k being Nat st Q[k] by A1;
-    consider k being Nat such that
-   A4: Q[k] & for n being Nat st Q[n] holds k <= n from NAT_1:sch 5(A3);
+    for i being Element of NAT st 1 <= i & i < len f holds P[f.i,f.(i+1)];
+        for i being Element of NAT st 1 <= i & i < len f()
+         holds P[f().i,f().(i+1)] by A2;
+    then A3: ex k being Element of NAT st Q[k] by A1;
+    consider k being Element of NAT such that
+   A4: Q[k] & for n being Element of NAT st Q[n] holds k <= n
+    from NAT_1:sch 5(A3);
     consider g being FinSequence of D() such that
    A5: len g = k &
     X() = g.1 & Y() = g.(len g) &
     rng g c= rng f() &
-    for i being Nat st 1 <= i & i < len g holds P[g.i,g.(i+1)] by A4;
+    for i being Element of NAT st 1 <= i & i < len g holds P[g.i,g.(i+1)]
+     by A4;
         now assume not g is one-to-one; then consider x,y being set such that
    A6: x in dom g & y in dom g & g.x = g.y & x <> y by FUNCT_1:def 8;
-    reconsider x,y as Nat by A6;
+    reconsider x,y as Element of NAT by A6;
     per cases by A6,XXREAL_0:1;
     suppose A7: x < y;
 then A8:  x+1 <= y by NAT_1:38;
@@ -276,11 +281,11 @@ BINARITH:50
     end;
     end;
     A22: rng d c= rng f() &
-    for i being Nat st 1 <= i & i < len d holds P[d.i,d.(i+1)]
+    for i being Element of NAT st 1 <= i & i < len d holds P[d.i,d.(i+1)]
      proof
           rng d c= rng g by Th1;
       hence rng d c= rng f() by A5,XBOOLE_1:1;
-      let i be Nat;
+      let i be Element of NAT;
       assume A23: 1 <= i & i < len d;
 A24:  1<=i+1 by NAT_1:29;
       per cases by REAL_1:def 5;
@@ -387,11 +392,11 @@ BINARITH:50
     end;
     end;
     A55: rng d c= rng f() &
-    for i being Nat st 1 <= i & i < len d holds P[d.i,d.(i+1)]
+    for i being Element of NAT st 1 <= i & i < len d holds P[d.i,d.(i+1)]
      proof
           rng d c= rng g by Th1;
       hence rng d c= rng f() by A5,XBOOLE_1:1;
-      let i be Nat;
+      let i be Element of NAT;
       assume A56: 1 <= i & i < len d;
 A57:  1<=i+1 by NAT_1:29;
       per cases by REAL_1:def 5;
@@ -457,7 +462,8 @@ A72:   1 <= x -'(y+1) + i + 1 by NAT_1:29;
     hence ex f being one-to-one FinSequence of D() st
     X() = f.1 & Y() = f.(len f) &
     rng f c= rng f() &
-    for i being Nat st 1 <= i & i < len f holds P[f.i,f.(i+1)] by A5;
+    for i being Element of NAT st 1 <= i & i < len f holds P[f.i,f.(i+1)]
+     by A5;
 end;
 
 begin :: Segre cosets
@@ -562,7 +568,7 @@ pred X,Y are_joinable means :Def3:
  X = f.1 & Y = f.(len f) &
  (for W being Subset of S st W in rng f holds
  W is closed_under_lines strong) &
- for i being Nat st 1 <= i & i < len f holds
+ for i being Element of NAT st 1 <= i & i < len f holds
  2 c= Card((f.i) /\ (f.(i+1)));
 end;
 
@@ -574,7 +580,8 @@ ex f being one-to-one FinSequence of bool the carrier of S st
 (X = f.1 & Y = f.(len f) &
 (for W being Subset of S st W in rng f holds
 W is closed_under_lines strong) &
-for i being Nat st 1 <= i & i < len f holds 2 c= Card((f.i) /\ (f.(i+1))))
+for i being Element of NAT st 1 <= i & i < len f
+ holds 2 c= Card((f.i) /\ (f.(i+1))))
 proof
  let S be TopStruct;
  let X,Y be Subset of S;
@@ -583,15 +590,15 @@ proof
 A1: X = f.1 & Y = f.(len f) and
 A2: (for W being Subset of S st W in rng f holds
  W is closed_under_lines strong) &
- for i being Nat st 1 <= i & i < len f holds
+ for i being Element of NAT st 1 <= i & i < len f holds
  2 c= Card((f.i) /\ (f.(i+1))) by Def3;
 defpred P[set,set] means 2 c= Card($1 /\ $2);
-A3: for i being Nat, d1,d2 being set st
+A3: for i being Element of NAT, d1,d2 being set st
  1 <= i & i < len f & d1 =f.i & d2 = f.(i+1) holds P[d1,d2] by A2;
 consider g being one-to-one FinSequence of bool the carrier of S such that
 A4: X = g.1 & Y = g.(len g) and
 A5: rng g c= rng f and
-A6: for i being Nat st 1 <= i & i < len g holds P[g.i,g.(i+1)]
+A6: for i being Element of NAT st 1 <= i & i < len g holds P[g.i,g.(i+1)]
  from FinSeqOneToOne(A1,A3);
 take g;
 thus thesis by A2,A4,A5,A6;
@@ -618,7 +625,7 @@ holds X,X are_joinable
     then W in {X} by FINSEQ_1:55;
     hence W is closed_under_lines strong by A1,TARSKI:def 1;
    end;
-  let i be Nat;
+  let i be Element of NAT;
   assume 1 <= i & i < len f;
   hence 2 c= Card((f.i) /\ (f.(i+1))) by FINSEQ_1:57;
 end;
@@ -654,18 +661,19 @@ A6: B0=X1 by A4,A5,PUA2MSS1:2;
 A7: X = f.1 & Y = f.(len f) &
   (for W being Subset of Segre_Product A st W in rng f holds
   W is closed_under_lines strong) &
-  for i being Nat st 1 <= i & i < len f holds
+  for i being Element of NAT st 1 <= i & i < len f holds
   2 c= Card((f.i) /\ (f.(i+1))) by A3,Def3;
 
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
   for H being Segre-like non trivial-yielding ManySortedSubset
   of Carrier A st f.$1 = product H holds
   indx(X1) = indx(H) & for i being set st i <> indx(X1) holds X1.i = H.i;
 
 A8: P[1] by A4,A7,PUA2MSS1:2;
-A9: for j being Nat st 1 <= j & j < len f holds P[j] implies P[j+1]
+A9: for j being Element of NAT st 1 <= j & j < len f
+ holds P[j] implies P[j+1]
      proof
-      let j be Nat; assume
+      let j be Element of NAT; assume
 A10:    1 <= j & j < len f;
 then A11:   j in dom f by FINSEQ_3:27;
 A12:   1 <= j+1 by NAT_1:29;
@@ -701,7 +709,8 @@ then A21:      i <> indx(B1) by A15,A16;
       end;
       hence P[j+1];
      end;
-A22: for i being Nat st 1 <= i & i <= len f holds P[i] from POLYNOM2:sch 4
+A22: for i being Element of NAT st 1 <= i & i <= len f holds P[i]
+ from POLYNOM2:sch 4
 (A8,A9);
       len f in dom f by A2,A7,FUNCT_1:def 4;
   then 1 <= len f by FINSEQ_3:27;
@@ -989,18 +998,18 @@ then A1: f is one-to-one by FUNCT_2:def 4;
 A3: X = g.1 & Y = g.(len g) &
   (for W being Subset of S st W in rng g holds
   W is closed_under_lines strong) &
-  for i being Nat st 1 <= i & i < len g holds
+  for i being Element of NAT st 1 <= i & i < len g holds
   2 c= Card((g.i) /\ (g.(i+1))) by Def3;
   deffunc F(set) = f.:(g.$1);
   consider p being FinSequence such that
-A4: len p = len g & for k being Nat st k in Seg len g holds p.k=F(k)
+A4: len p = len g & for k being Element of NAT st k in Seg len g holds p.k=F(k)
   from FINSEQ_1:sch 2;
 A5: dom p = Seg len p & dom g = Seg len g by FINSEQ_1:def 3;
       rng p c= bool the carrier of S
    proof
     let o be set; assume o in rng p; then consider i being set such that
 A6:  i in dom p & o=p.i by FUNCT_1:def 5;
-    reconsider i as Nat by A6;
+    reconsider i as Element of NAT by A6;
         g.i in rng g by A4,A5,A6,FUNCT_1:12;
     then reconsider gi = g.i as Subset of S;
         p.i = f.:(gi) by A4,A5,A6;
@@ -1018,7 +1027,7 @@ A6:  i in dom p & o=p.i by FUNCT_1:def 5;
     let W be Subset of S;
     assume W in rng p; then consider i being set such that
 A7:  i in dom p & W=p.i by FUNCT_1:def 5;
-    reconsider i as Nat by A7;
+    reconsider i as Element of NAT by A7;
         g.i in rng g by A4,A5,A7,FUNCT_1:12;
     then reconsider gi = g.i as Subset of S;
         gi in rng g by A4,A5,A7,FUNCT_1:12;
@@ -1026,10 +1035,10 @@ then A8: gi is strong closed_under_lines by A3;
         p.i = f.:(gi) by A4,A5,A7;
     hence W is closed_under_lines strong by A7,A8,Th16,Th18;
    end;
-  thus for i being Nat st 1 <= i & i < len p holds
+  thus for i being Element of NAT st 1 <= i & i < len p holds
   2 c= Card((p.i) /\ (p.(i+1)))
    proof
-    let i be Nat;
+    let i be Element of NAT;
     assume A9: 1 <= i & i < len p;
 then A10: 2 c= Card((g.i) /\ (g.(i+1))) by A3,A4;
         i in dom g by A4,A9,FINSEQ_3:27;
@@ -1181,14 +1190,15 @@ A22:    len f in dom f by A21,FUNCT_1:def 4;
 A23:    1 in dom f by FINSEQ_5:6;
        deffunc F(set) = product (L+*(indx(K),f.$1));
        consider g being FinSequence such that
-A24:     len g = len f & for k being Nat st k in Seg (len f) holds g.k = F(k)
+A24:     len g = len f & for k being Element of NAT st k in Seg (len f)
+ holds g.k = F(k)
           from FINSEQ_1:sch 2;
            rng g c= bool the carrier of Segre_Product A
         proof
          let a be set; assume a in rng g;
          then consider k being set such that
 A25:       k in dom g & a=g.k by FUNCT_1:def 5;
-         reconsider k as Nat by A25;
+         reconsider k as Element of NAT by A25;
 A26:      k in Seg (len f) by A24,A25,FINSEQ_1:def 3;
 A27:      dom (L+*(indx(K),f.k)) = I & dom Carrier A = I by PBOOLE:def 3;
              now let o be set;
@@ -1250,7 +1260,7 @@ then A44:    W = g.1 by A3,A24,A43;
 A45:    f.len f is non trivial
         proof
          A46: 1 <= len f by A22,FINSEQ_3:27;
-         reconsider l1 = (len f) - 1 as Nat by A22,FINSEQ_3:28;
+         reconsider l1 = (len f) - 1 as Element of NAT by A22,FINSEQ_3:28;
          per cases by A46,XXREAL_0:1; suppose len f = 1; hence thesis by A21,
 PENCIL_1:def 21;
          end;
@@ -1278,7 +1288,7 @@ holds
          let V be Subset of Segre_Product A;
          assume V in rng g; then consider n1 being set such that
 A51:       n1 in dom g & V=g.n1 by FUNCT_1:def 5;
-         reconsider n=n1 as Nat by A51;
+         reconsider n=n1 as Element of NAT by A51;
 A52:      n in Seg len f by A24,A51,FINSEQ_1:def 3;
 then A53:      g.n = product (L+*(indx(K),f.n)) by A24;
 A54:      n in dom f by A52,FINSEQ_1:def 3;
@@ -1329,10 +1339,10 @@ then A63:      indx(LI) = indx(K) by PENCIL_1:def 21;
          hence V is closed_under_lines strong by A51,A53,PENCIL_1:29;
         end;
 then A64:    Yb is non trivial strong closed_under_lines by A34,A49;
-           for i being Nat st 1 <= i & i < len g holds
+           for i being Element of NAT st 1 <= i & i < len g holds
        2 c= Card((g.i) /\ (g.(i+1)))
         proof
-         let i be Nat; assume A65: 1 <= i & i < len g;
+         let i be Element of NAT; assume A65: 1 <= i & i < len g;
          then i in Seg (len f) by A24,FINSEQ_1:3;
 then A66:      g.i = product (L+*(indx(K),f.i)) by A24;
              1 <= i+1 & i+1 <= len g by A65,NAT_1:38;

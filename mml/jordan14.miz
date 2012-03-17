@@ -11,7 +11,8 @@ environ
       GOBOARD5, TOPS_1, TREES_1, SPPOL_1, MCART_1, TARSKI, SUBSET_1, SEQM_3,
       GOBOARD9, COMPTS_1, JORDAN8, PSCOMP_1, GROUP_1, ARYTM_3, JORDAN11,
       JORDAN1H, JORDAN13, TOPREAL2, FINSEQ_4, JORDAN2C;
- notations TARSKI, XBOOLE_0, SUBSET_1, GOBOARD5, REAL_1, COMPLEX1, NAT_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, GOBOARD5,
+ NUMBERS,XCMPLX_0,REAL_1, COMPLEX1, NAT_1,
       BINARITH, CARD_4, FINSEQ_1, FINSEQ_4, STRUCT_0, MATRIX_1, PRE_TOPC,
       TOPREAL2, TOPS_1, COMPTS_1, CONNSP_1, EUCLID, TOPREAL1, GOBOARD1,
       SPPOL_1, PSCOMP_1, GOBOARD9, JORDAN2C, JORDAN8, GOBRD13, JORDAN1H,
@@ -21,7 +22,7 @@ environ
       GOBOARD9, JORDAN2C, JORDAN8, JORDAN1H, JORDAN11, JORDAN13;
  registrations RELSET_1, REVROT_1, SPRECT_2, JORDAN8, TOPREAL6, INT_1,
       SUBSET_1, PRE_TOPC, SPRECT_3, COMPTS_1, JORDAN1A, GOBRD14, TOPS_1,
-      TOPREAL5, MEMBERED, FINSEQ_1, TOPREAL1, JORDAN2C;
+      TOPREAL5, MEMBERED, FINSEQ_1, TOPREAL1, JORDAN2C, ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI;
  theorems NAT_1, FINSEQ_1, GOBOARD1, FINSEQ_4, EUCLID, FINSEQ_3, REAL_1,
@@ -59,17 +60,17 @@ begin
   theorem
       for G be Go-board
    for f be FinSequence of TOP-REAL 2
-   for k be Nat holds
+   for k be Element of NAT holds
     1 <= k & k+1 <= len f & f is_sequence_on G
      implies left_cell(f,k,G) is closed
    proof
     let G be Go-board;
     let f be FinSequence of TOP-REAL 2;
-    let k be Nat;
+    let k be Element of NAT;
     assume that
      A1: 1 <= k & k+1 <= len f and
      A2: f is_sequence_on G;
-    consider i1,j1,i2,j2 be Nat such that
+    consider i1,j1,i2,j2 be Element of NAT such that
      A3: [i1,j1] in Indices G & f/.k = G*(i1,j1) and
      A4: [i2,j2] in Indices G & f/.(k+1) = G*(i2,j2) and
      A5: i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
@@ -85,13 +86,14 @@ begin
   theorem Th4:
    for G be Go-board
    for p be Point of TOP-REAL 2
-   for i,j be Nat st 1 <= i & i+1 <= len G & 1 <= j & j+1 <= width G holds
+   for i,j be Element of NAT
+    st 1 <= i & i+1 <= len G & 1 <= j & j+1 <= width G holds
     p in Int cell(G,i,j) iff
     G*(i,j)`1 < p`1 & p`1 < G*(i+1,j)`1 & G*(i,j)`2 < p`2 & p`2 < G*(i,j+1)`2
    proof
     let G be Go-board;
     let p be Point of TOP-REAL 2;
-    let i,j be Nat;
+    let i,j be Element of NAT;
     assume that
      A1: 1 <= i & i+1 <= len G and
      A2: 1 <= j & j+1 <= width G;
@@ -140,7 +142,7 @@ begin
 
   definition
    let C be Simple_closed_curve;
-   let n be Nat;
+   let n be Element of NAT;
    func SpanStart(C,n) -> Point of TOP-REAL 2 equals
     Gauge(C,n)*(X-SpanStart(C,n),Y-SpanStart(C,n));
    coherence;
@@ -148,16 +150,16 @@ begin
 
   theorem Th6:
    for C be Simple_closed_curve
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     Span(C,n)/.1 = SpanStart(C,n) by JORDAN13:def 1;
 
   theorem Th7:
    for C be Simple_closed_curve
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     SpanStart(C,n) in BDD C
    proof
     let C be Simple_closed_curve;
-    let n be Nat;
+    let n be Element of NAT;
     assume A1: n is_sufficiently_large_for C;
     then A2: cell(Gauge(C,n),X-SpanStart(C,n)-'1,Y-SpanStart(C,n)) c= BDD C
                                                                by JORDAN11:6;
@@ -186,36 +188,36 @@ begin
 
   theorem Th8:
    for C be Simple_closed_curve
-   for n,k be Nat st n is_sufficiently_large_for C holds
+   for n,k be Element of NAT st n is_sufficiently_large_for C holds
     1 <= k & k+1 <= len Span(C,n) implies
      right_cell(Span(C,n),k,Gauge(C,n)) misses C &
      left_cell(Span(C,n),k,Gauge(C,n)) meets C
    proof
     let C be Simple_closed_curve;
-    let n,k be Nat;
+    let n,k be Element of NAT;
     set G = Gauge(C,n);
     set f = Span(C,n);
     assume A1: n is_sufficiently_large_for C;
     then A2: f is_sequence_on G &
      f/.1 = G*(X-SpanStart(C,n),Y-SpanStart(C,n)) &
      f/.2 = G*(X-SpanStart(C,n)-'1,Y-SpanStart(C,n)) by JORDAN13:def 1;
-     defpred P[Nat] means
-             for m be Nat st 1 <= m & m+1 <= len(f|$1) holds
+     defpred P[Element of NAT] means
+             for m be Element of NAT st 1 <= m & m+1 <= len(f|$1) holds
          right_cell(f|$1,m,G) misses C & left_cell(f|$1,m,G) meets C;
     A3: P[0]
-    proof let m be Nat;
+    proof let m be Element of NAT;
      assume A4: 1 <= m & m+1 <= len(f|0);
         1 <= m+1 by NAT_1:37;
      then 1 <= len(f|0) by A4,XXREAL_0:2;
      then 1 <= 0 by FINSEQ_1:25;
      hence right_cell(f|0,m,G) misses C & left_cell(f|0,m,G) meets C;
     end;
-    A5: for k be Nat st P[k] holds P[k+1]
+    A5: for k be Element of NAT st P[k] holds P[k+1]
     proof
-     let k be Nat;
+     let k be Element of NAT;
      A6: f|(k+1) is_sequence_on G by A2,GOBOARD1:38;
      A7: f|k is_sequence_on G by A2,GOBOARD1:38;
-     assume A8: for m be Nat st 1 <= m & m+1 <= len(f|k) holds
+     assume A8: for m be Element of NAT st 1 <= m & m+1 <= len(f|k) holds
       right_cell(f|k,m,G) misses C & left_cell(f|k,m,G) meets C;
      per cases;
       suppose A9: k >= len f;
@@ -227,7 +229,7 @@ begin
        then A11: k+1 <= len f by NAT_1:38;
        then A12: len(f|(k+1)) = k+1 by FINSEQ_1:80;
        A13: len(f|k) = k by A10,FINSEQ_1:80;
-       let m be Nat;
+       let m be Element of NAT;
        assume A14: 1 <= m & m+1 <= len(f|(k+1));
           now per cases by CQC_THE1:2;
         suppose A15: k = 0;
@@ -264,7 +266,7 @@ begin
             now per cases;
           suppose A26: m+1 = len(f|(k+1));
            then A27: m = len(f|k) by A12,A13;
-           consider i1,j1,i2,j2 be Nat such that
+           consider i1,j1,i2,j2 be Element of NAT such that
             A28: [i1,j1] in Indices G & f/.(len(f|k)-'1) = G*(i1,j1) and
             A29: [i2,j2] in Indices G & f/.(len(f|k)) = G*(i2,j2) and
                 i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
@@ -514,7 +516,7 @@ begin
           suppose m+1 <> len(f|(k+1));
            then m+1 < len(f|(k+1)) by A14,REAL_1:def 5;
            then A76: m+1 <= len(f|k) by A12,A13,NAT_1:38;
-           then consider i1,j1,i2,j2 be Nat such that
+           then consider i1,j1,i2,j2 be Element of NAT such that
             A77: [i1,j1] in Indices G & (f|k)/.m = G*(i1,j1) and
             A78: [i2,j2] in Indices G & (f|k)/.(m+1) = G*(i2,j2) and
             A79: i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
@@ -564,31 +566,32 @@ begin
        hence thesis;
     end;
     end;
-    A88: for k be Nat holds P[k] from NAT_1:sch 1(A3,A5);
+    A88: for k be Element of NAT holds P[k] from NAT_1:sch 1(A3,A5);
        f|len f = f by FINSEQ_1:79;
     hence thesis by A88;
    end;
 
   theorem Th9:
    for C be Simple_closed_curve
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     C misses L~Span(C,n)
    proof
     let C be Simple_closed_curve;
-    let n be Nat;
+    let n be Element of NAT;
     assume A1: n is_sufficiently_large_for C;
     set f = Span(C,n);
     set G = Gauge(C,n);
     assume not thesis;
     then consider c be set such that
      A2: c in C & c in L~f by XBOOLE_0:3;
-       L~f = union { LSeg(f,i) where i is Nat: 1 <= i & i+1 <= len f }
+       L~f =
+        union { LSeg(f,i) where i is Element of NAT: 1 <= i & i+1 <= len f }
                                                           by TOPREAL1:def 6;
     then consider Z be set such that
      A3: c in Z and
-     A4: Z in { LSeg(f,i) where i is Nat: 1 <= i & i+1 <= len f }
+     A4: Z in { LSeg(f,i) where i is Element of NAT: 1 <= i & i+1 <= len f }
                                                       by A2,TARSKI:def 4;
-    consider i be Nat such that
+    consider i be Element of NAT such that
      A5: Z = LSeg(f,i) and
      A6: 1 <= i & i+1 <= len f by A4;
        f is_sequence_on G by A1,JORDAN13:def 1;
@@ -600,18 +603,18 @@ begin
 
   registration
    let C be Simple_closed_curve;
-   let n be Nat;
+   let n be Element of NAT;
    cluster Cl RightComp Span(C,n) -> compact;
    coherence by GOBRD14:42;
   end;
 
   theorem Th10:
    for C be Simple_closed_curve
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     C meets LeftComp Span(C,n)
    proof
     let C be Simple_closed_curve;
-    let n be Nat;
+    let n be Element of NAT;
     assume A1: n is_sufficiently_large_for C;
     then A2: L~Span(C,n) misses C by Th9;
        len Span(C,n) > 4 by GOBOARD7:36;
@@ -627,11 +630,11 @@ begin
 
   theorem Th11:
    for C be Simple_closed_curve
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     C misses RightComp Span(C,n)
    proof
     let C be Simple_closed_curve;
-    let n be Nat;
+    let n be Element of NAT;
     assume A1: n is_sufficiently_large_for C;
     set f = Span(C,n);
 A2: C misses L~f by A1,Th9;
@@ -661,11 +664,11 @@ A2: C misses L~f by A1,Th9;
 
   theorem Th12:
    for C be Simple_closed_curve
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     C c= LeftComp Span(C,n)
    proof
     let C be Simple_closed_curve;
-    let n be Nat;
+    let n be Element of NAT;
     assume A1: n is_sufficiently_large_for C;
     set f = Span(C,n);
     let c be set;
@@ -678,11 +681,11 @@ A3: C misses L~f by A1,Th9;
 
   theorem Th13:
    for C be Simple_closed_curve
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     C c= UBD L~Span(C,n)
    proof
     let C be Simple_closed_curve;
-    let n be Nat;
+    let n be Element of NAT;
     assume n is_sufficiently_large_for C;
     then A1: C c= LeftComp Span(C,n) by Th12;
        LeftComp Span(C,n) is_outside_component_of L~Span(C,n) by GOBRD14:44;
@@ -692,11 +695,11 @@ A3: C misses L~f by A1,Th9;
 
   theorem Th14:
    for C be Simple_closed_curve
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     BDD L~Span(C,n) c= BDD C
    proof
     let C be Simple_closed_curve;
-    let n be Nat;
+    let n be Element of NAT;
     assume that
      A1: n is_sufficiently_large_for C and
      A2: not BDD L~Span(C,n) c= BDD C;
@@ -725,11 +728,11 @@ A3: C misses L~f by A1,Th9;
 
   theorem Th15:
    for C be Simple_closed_curve
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     UBD C c= UBD L~Span(C,n)
    proof
     let C be Simple_closed_curve;
-    let n be Nat;
+    let n be Element of NAT;
     assume n is_sufficiently_large_for C;
     then A1: BDD L~Span(C,n) c= BDD C by Th14;
     then A2: Cl BDD L~Span(C,n) c= Cl BDD C by PRE_TOPC:49;
@@ -751,11 +754,11 @@ A3: C misses L~f by A1,Th9;
 
   theorem
       for C be Simple_closed_curve
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     RightComp Span(C,n) c= BDD C
    proof
     let C be Simple_closed_curve;
-    let n be Nat;
+    let n be Element of NAT;
     assume n is_sufficiently_large_for C;
     then BDD L~Span(C,n) c= BDD C by Th14;
     hence RightComp Span(C,n) c= BDD C by GOBRD14:47;
@@ -763,11 +766,11 @@ A3: C misses L~f by A1,Th9;
 
   theorem Th17:
    for C be Simple_closed_curve
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     UBD C c= LeftComp Span(C,n)
    proof
     let C be Simple_closed_curve;
-    let n be Nat;
+    let n be Element of NAT;
     assume n is_sufficiently_large_for C;
     then UBD C c= UBD L~Span(C,n) by Th15;
     hence UBD C c= LeftComp Span(C,n) by GOBRD14:46;
@@ -775,11 +778,11 @@ A3: C misses L~f by A1,Th9;
 
   theorem Th18:
    for C be Simple_closed_curve
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     UBD C misses BDD L~Span(C,n)
    proof
     let C be Simple_closed_curve;
-    let n be Nat;
+    let n be Element of NAT;
     assume that
      A1: n is_sufficiently_large_for C and
      A2: UBD C meets BDD L~Span(C,n);
@@ -790,11 +793,11 @@ A3: C misses L~f by A1,Th9;
 
   theorem
       for C be Simple_closed_curve
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     UBD C misses RightComp Span(C,n)
    proof
     let C be Simple_closed_curve;
-    let n be Nat;
+    let n be Element of NAT;
     assume n is_sufficiently_large_for C;
     then UBD C misses BDD L~Span(C,n) by Th18;
     hence UBD C misses RightComp Span(C,n) by GOBRD14:47;
@@ -803,12 +806,12 @@ A3: C misses L~f by A1,Th9;
   theorem Th20:
    for C be Simple_closed_curve
    for P be Subset of TOP-REAL 2
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     P is_outside_component_of C implies P misses L~Span(C,n)
    proof
     let C be Simple_closed_curve;
     let P be Subset of TOP-REAL 2;
-    let n be Nat;
+    let n be Element of NAT;
     assume that
      A1: n is_sufficiently_large_for C and
      A2: P is_outside_component_of C and
@@ -823,11 +826,11 @@ A3: C misses L~f by A1,Th9;
 
   theorem Th21:
    for C be Simple_closed_curve
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     UBD C misses L~Span(C,n)
    proof
     let C be Simple_closed_curve;
-    let n be Nat;
+    let n be Element of NAT;
     assume A1: n is_sufficiently_large_for C;
     A2: UBD C = union {B where B is Subset of TOP-REAL 2:
      B is_outside_component_of C} by JORDAN2C:def 6;
@@ -845,11 +848,11 @@ A3: C misses L~f by A1,Th9;
 
   theorem Th22:
    for C be Simple_closed_curve
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     L~Span(C,n) c= BDD C
    proof
     let C be Simple_closed_curve;
-    let n be Nat;
+    let n be Element of NAT;
     assume A1: n is_sufficiently_large_for C;
     then A2: UBD C misses L~Span(C,n) by Th21;
        C misses L~Span(C,n) by A1,Th9;
@@ -860,13 +863,13 @@ A3: C misses L~f by A1,Th9;
 
   theorem Th23:
    for C be Simple_closed_curve
-   for i,j,k,n be Nat st
+   for i,j,k,n be Element of NAT st
     n is_sufficiently_large_for C & 1 <= k & k <= len Span(C,n) &
      [i,j] in Indices Gauge(C,n) & Span(C,n)/.k = Gauge(C,n)*(i,j) holds
       i > 1
    proof
     let C be Simple_closed_curve;
-    let i,j,k,n be Nat;
+    let i,j,k,n be Element of NAT;
     assume that
      A1: n is_sufficiently_large_for C and
      A2: 1 <= k & k <= len Span(C,n) and
@@ -902,13 +905,13 @@ A8: BDD C is Bounded by JORDAN2C:114;
 
   theorem Th24:
    for C be Simple_closed_curve
-   for i,j,k,n be Nat st
+   for i,j,k,n be Element of NAT st
     n is_sufficiently_large_for C & 1 <= k & k <= len Span(C,n) &
      [i,j] in Indices Gauge(C,n) & Span(C,n)/.k = Gauge(C,n)*(i,j) holds
       i < len Gauge(C,n)
    proof
     let C be Simple_closed_curve;
-    let i,j,k,n be Nat;
+    let i,j,k,n be Element of NAT;
     assume that
      A1: n is_sufficiently_large_for C and
      A2: 1 <= k & k <= len Span(C,n) and
@@ -950,13 +953,13 @@ A8: BDD C is Bounded by JORDAN2C:114;
 
   theorem Th25:
    for C be Simple_closed_curve
-   for i,j,k,n be Nat st
+   for i,j,k,n be Element of NAT st
     n is_sufficiently_large_for C & 1 <= k & k <= len Span(C,n) &
      [i,j] in Indices Gauge(C,n) & Span(C,n)/.k = Gauge(C,n)*(i,j) holds
       j > 1
    proof
     let C be Simple_closed_curve;
-    let i,j,k,n be Nat;
+    let i,j,k,n be Element of NAT;
     assume that
      A1: n is_sufficiently_large_for C and
      A2: 1 <= k & k <= len Span(C,n) and
@@ -992,13 +995,13 @@ A8: BDD C is Bounded by JORDAN2C:114;
 
   theorem Th26:
    for C be Simple_closed_curve
-   for i,j,k,n be Nat st
+   for i,j,k,n be Element of NAT st
     n is_sufficiently_large_for C & 1 <= k & k <= len Span(C,n) &
      [i,j] in Indices Gauge(C,n) & Span(C,n)/.k = Gauge(C,n)*(i,j) holds
       j < width Gauge(C,n)
    proof
     let C be Simple_closed_curve;
-    let i,j,k,n be Nat;
+    let i,j,k,n be Element of NAT;
     assume that
      A1: n is_sufficiently_large_for C and
      A2: 1 <= k & k <= len Span(C,n) and
@@ -1040,11 +1043,11 @@ A8: BDD C is Bounded by JORDAN2C:114;
 
   theorem
       for C be Simple_closed_curve
-   for n be Nat st n is_sufficiently_large_for C holds
+   for n be Element of NAT st n is_sufficiently_large_for C holds
     Y-SpanStart(C,n) < width Gauge(C,n)
    proof
     let C be Simple_closed_curve;
-    let n be Nat;
+    let n be Element of NAT;
     assume A1: n is_sufficiently_large_for C;
        len Span(C,n) > 4 by GOBOARD7:36;
     then A2: len Span(C,n) > 1 by XXREAL_0:2;
@@ -1057,11 +1060,11 @@ A8: BDD C is Bounded by JORDAN2C:114;
 
   theorem Th28:
    for C be compact non vertical non horizontal Subset of TOP-REAL 2
-   for n,m be Nat st m >= n & n >= 1 holds
+   for n,m be Element of NAT st m >= n & n >= 1 holds
     X-SpanStart(C,m) = 2|^(m-'n)*(X-SpanStart(C,n)-2)+2
    proof
     let C be compact non vertical non horizontal Subset of TOP-REAL 2;
-    let n,m be Nat;
+    let n,m be Element of NAT;
     A1: X-SpanStart(C,n) = 2|^(n-'1) + 2 by JORDAN1H:def 2;
     assume A2: m >=n;
     assume A3: n >= 1;
@@ -1077,15 +1080,15 @@ A8: BDD C is Bounded by JORDAN2C:114;
 
   theorem Th29:
    for C be compact non vertical non horizontal Subset of TOP-REAL 2
-   for n,m be Nat st n <= m & n is_sufficiently_large_for C holds
+   for n,m be Element of NAT st n <= m & n is_sufficiently_large_for C holds
     m is_sufficiently_large_for C
    proof
     let C be compact non vertical non horizontal Subset of TOP-REAL 2;
-    let n,m be Nat;
+    let n,m be Element of NAT;
     assume that
      A1: n <= m and
      A2: n is_sufficiently_large_for C;
-    consider j be Nat such that
+    consider j be Element of NAT such that
      A3: j < width Gauge(C,n) and
      A4: cell(Gauge(C,n),X-SpanStart(C,n)-'1,j) c= BDD C by A2,JORDAN1H:def 3;
     set iim = X-SpanStart(C,m);
@@ -1141,7 +1144,7 @@ C
     end;
     then 2|^(m-'n)*(j-2)+2 > 1 by A1,A3,JORDAN1A:53;
     then 2|^(m-'n)*(j-2)+2 > 0 by XXREAL_0:2;
-    then reconsider j1 = 2|^(m-'n)*(j-2)+2 as Nat by INT_1:16;
+    then reconsider j1 = 2|^(m-'n)*(j-2)+2 as Element of NAT by INT_1:16;
     A23: j1 < width Gauge(C,m) by A1,A3,A8,JORDAN1A:53;
        j+1 < width Gauge(C,n)
     proof
@@ -1149,9 +1152,9 @@ C
      assume j+1 >= width Gauge(C,n);
      then A25: j+1 > width Gauge(C,n) or j+1 = width Gauge(C,n) by XXREAL_0:1;
      per cases by A3,A25,NAT_1:38;
-      suppose A26: j = width Gauge(C,n);
-       A27: cell(Gauge(C,n),X-SpanStart(C,n)-'1,width Gauge(C,n)) is non empty
-                                                          by A24,JORDAN1A:45;
+     suppose A26: j = width Gauge(C,n); then
+       A27: cell(Gauge(C,n),X-SpanStart(C,n)-'1,j) is non empty
+                                                       by A24,JORDAN1A:45;
           cell(Gauge(C,n),X-SpanStart(C,n)-'1,width Gauge(C,n)) c= UBD C
                                                           by A24,JORDAN1A:71;
        then UBD C meets BDD C by A4,A26,A27,XBOOLE_1:68;
@@ -1206,13 +1209,13 @@ C
   theorem Th30:
    for G be Go-board
    for f be FinSequence of TOP-REAL 2
-   for i,j be Nat holds
+   for i,j be Element of NAT holds
     f is_sequence_on G & f is special & i <= len G & j <= width G implies
      cell(G,i,j)\L~f is connected
    proof
     let G be Go-board;
     let f be FinSequence of TOP-REAL 2;
-    let i,j be Nat;
+    let i,j be Element of NAT;
     assume that
      A1: f is_sequence_on G & f is special and
      A2: i<=len G & j<=width G;
@@ -1229,12 +1232,13 @@ C
 
   theorem Th31:
    for C be Simple_closed_curve
-   for n,k be Nat st n is_sufficiently_large_for C & Y-SpanStart(C,n) <= k &
+   for n,k be Element of NAT st n is_sufficiently_large_for C &
+    Y-SpanStart(C,n) <= k &
     k <= 2|^(n-'ApproxIndex C)*(Y-InitStart C-'2)+2 holds
      cell(Gauge(C,n),X-SpanStart(C,n)-'1,k)\L~Span(C,n) c= BDD L~Span(C,n)
    proof
     let C be Simple_closed_curve;
-    let n,k be Nat;
+    let n,k be Element of NAT;
     set G = Gauge(C,n);
     set f = Span(C,n);
     set AI = ApproxIndex C;
@@ -1247,13 +1251,13 @@ C
      A3: k <= 2|^(n-'AI)*(YI-'2)+2;
     A4: f is_sequence_on G by A1,JORDAN13:def 1;
     A5: 1 <= XS-'1 & XS-'1 < len G by JORDAN1H:59;
-    reconsider ro = k-YS as Nat by A2,INT_1:18;
+    reconsider ro = k-YS as Element of NAT by A2,INT_1:18;
     A6: k = YS+ro;
     A7: ro <= 2|^(n-'AI)*(YI-'2)+2-YS by A3,XREAL_1:11;
        XS > 2 by JORDAN1H:58;
     then XS > 1 by XXREAL_0:2;
     then A8: XS-'1+1 = XS by BINARITH:53;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
     $1 <= 2|^(n-'AI)*(YI-'2)+2-YS implies
      cell(G,XS-'1,YS+$1)\L~f c= BDD L~f;
     A9: P[0]
@@ -1270,9 +1274,9 @@ C
      hence cell(G,XS-'1,YS+0)\L~f c= BDD L~f by A11,GOBRD14:47;
     end;
     A14:
-    for t being Nat st P[t] holds P[t+1]
+    for t being Element of NAT st P[t] holds P[t+1]
     proof
-      let t be Nat;
+      let t be Element of NAT;
      assume A15: t <= 2|^(n-'AI)*(YI-'2)+2-YS implies
       cell(G,XS-'1,YS+t)\L~f c= BDD L~f;
      assume A16: t+1 <= 2|^(n-'AI)*(YI-'2)+2-YS;
@@ -1313,11 +1317,11 @@ C
      A32: YS+t < width G by A23,NAT_1:38;
      A33: 1 <= YS+(t+1) by A17,NAT_1:29;
      A34: now assume p in L~f;
-      then consider i be Nat such that
+      then consider i be Element of NAT such that
        A35: 1 <= i & i+1 <= len f and
        A36: p in LSeg(f,i) by SPPOL_2:13;
       A37: LSeg(f,i) = LSeg(f/.i,f/.(i+1)) by A35,TOPREAL1:def 5;
-      consider i1,j1,i2,j2 be Nat such that
+      consider i1,j1,i2,j2 be Element of NAT such that
        A38: [i1,j1] in Indices G & f/.i = G*(i1,j1) and
        A39: [i2,j2] in Indices G & f/.(i+1) = G*(i2,j2) and
        A40: (i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
@@ -1366,23 +1370,23 @@ C
      then BDD L~f meets UBD L~f by A15,A16,A24,A31,A53,XXREAL_0:2,XBOOLE_0:3;
      hence contradiction by JORDAN2C:28;
     end;
-       for t be Nat holds P[t] from NAT_1:sch 1(A9,A14);
+       for t be Element of NAT holds P[t] from NAT_1:sch 1(A9,A14);
     hence thesis by A6,A7;
    end;
 
   theorem Th32:
    for C be Subset of TOP-REAL 2
-   for n,m,i be Nat st m <= n & 1 < i & i+1 < len Gauge(C,m) holds
+   for n,m,i be Element of NAT st m <= n & 1 < i & i+1 < len Gauge(C,m) holds
     2|^(n-'m)*(i-2)+2+1 < len Gauge(C,n)
    proof
     let C be Subset of TOP-REAL 2;
-    let n,m,i be Nat;
+    let n,m,i be Element of NAT;
     assume that
      A1: m <= n and
      A2: 1 < i and
      A3: i+1 < len Gauge(C,m);
        1+1 <= i by A2,NAT_1:38;
-    then reconsider i2 = i-2 as Nat by INT_1:18;
+    then reconsider i2 = i-2 as Element of NAT by INT_1:18;
     A4: 2|^(n-'m) > 0 by NEWTON:102;
        len Gauge(C,m) = 2|^m + (2+1) by JORDAN8:def 1
        .= 2|^m + 2+1;
@@ -1399,11 +1403,11 @@ C
 
   theorem Th33:
    for C be Simple_closed_curve
-   for n,m be Nat st n is_sufficiently_large_for C & n <= m holds
+   for n,m be Element of NAT st n is_sufficiently_large_for C & n <= m holds
     RightComp Span(C,n) meets RightComp Span(C,m)
    proof
     let C be Simple_closed_curve;
-    let n,m be Nat;
+    let n,m be Element of NAT;
     assume that
      A1: n is_sufficiently_large_for C and
      A2: n <= m;
@@ -1477,14 +1481,15 @@ C
        j4 < len G by A23,JORDAN8:def 1;
     then j4+1 <= len G by NAT_1:38;
     then j4 <= len G - 1 by XREAL_1:21;
-    then consider c,d be Nat such that
+    then consider c,d be Element of NAT such that
         2 <= c & c <= len G1 - 1 and
         2 <= d & d <= len G1 - 1 and
      A39: [c,d] in Indices G1 and
      A40: G*(i-'1,j4) = G1*(c,d) and
         c = 2 + 2|^(m-'n)*(i-'1-'2) & d = 2 + 2|^(m-'n)*(j4-'2)
                                             by A2,A36,A37,A38,GOBRD14:18;
-       G*(i-'1,j4) in {G1*(ii,jj) where ii,jj is Nat: [ii,jj] in Indices G1}
+       G*(i-'1,j4) in
+        {G1*(ii,jj) where ii,jj is Element of NAT: [ii,jj] in Indices G1}
                                                                   by A39,A40;
     then G*(i-'1,j4) in Values G1 by GOBRD13:7;
     then G*(i-'1,j4)`1 <= G1*(i1-'1,j3)`1 by A18,A20,A22,A23,A25,A26,GOBRD13:15
@@ -1509,14 +1514,15 @@ C
     then 2|^(n-'AI)*(YI-'2)+2+1 < len G by A10,A15,A17,Th32;
     then 2|^(n-'AI)*(YI-'2)+2+1+1 <= len G by NAT_1:38;
     then j4+1 <= len G - 1 by XREAL_1:21;
-    then consider c, d be Nat such that
+    then consider c, d be Element of NAT such that
         2 <= c & c <= len G1 - 1 and
         2 <= d & d <= len G1 - 1 and
      A50: [c,d] in Indices G1 and
      A51: G*(i,j4+1) = G1*(c,d) and
         c = 2 + 2|^(m-'n)*(i-'2) & d = 2 + 2|^(m-'n)*(j4+1-'2)
                                             by A2,A21,A48,A49,GOBRD14:18;
-       G*(i,j4+1) in {G1*(ii,jj) where ii,jj is Nat: [ii,jj] in Indices G1}
+       G*(i,j4+1) in
+        {G1*(ii,jj) where ii,jj is Element of NAT: [ii,jj] in Indices G1}
                                                                   by A50,A51;
     then G*(i,j4+1) in Values G1 by GOBRD13:7;
     then G1*(i1,j3+1)`2 <= G*(i,j4+1)`2 by A18,A20,A22,A23,A25,A26,GOBRD13:16;
@@ -1536,13 +1542,13 @@ C
   theorem Th34:
    for G be Go-board
    for f be FinSequence of TOP-REAL 2 st f is_sequence_on G & f is special
-   for i,j be Nat st i <= len G & j <= width G holds
+   for i,j be Element of NAT st i <= len G & j <= width G holds
     Int cell(G,i,j) c= (L~f)`
    proof
     let G be Go-board;
     let f be FinSequence of TOP-REAL 2;
     assume A1: f is_sequence_on G & f is special;
-    let i,j be Nat;
+    let i,j be Element of NAT;
     assume i <= len G & j <= width G;
     then Int cell(G,i,j) misses (L~f) by A1,JORDAN9:16;
     hence thesis by SUBSET_1:43;
@@ -1550,11 +1556,11 @@ C
 
   theorem Th35:
    for C be Simple_closed_curve
-   for n,m be Nat st n is_sufficiently_large_for C & n <= m holds
+   for n,m be Element of NAT st n is_sufficiently_large_for C & n <= m holds
     L~Span(C,m) c= Cl LeftComp(Span(C,n))
    proof
     let C be Simple_closed_curve;
-    let i,j be Nat;
+    let i,j be Element of NAT;
     assume that
      A1: i is_sufficiently_large_for C and
      A2: i <= j and
@@ -1566,7 +1572,7 @@ C
      A7: p in L~Span(C,j) and
      A8: not p in Cl LeftComp(Span(C,i)) by A3,SUBSET_1:7;
     reconsider D = (L~Span(C,i))` as Subset of TOP-REAL 2;
-    consider i1 be Nat such that
+    consider i1 be Element of NAT such that
      A9: 1 <= i1 and
      A10: i1+1 <= len Span(C,j) and
      A11: p in LSeg(Span(C,j),i1) by A7,SPPOL_2:13;
@@ -1575,19 +1581,19 @@ C
     set G = Gauge(C,j);
     A13: now
      assume A14: not left_cell(Span(C,j),i1,G) c= Cl RightComp Span(C,i);
-        ex i2,j2 be Nat st
+        ex i2,j2 be Element of NAT st
       1 <= i2 & i2+1 <= len Gauge(C,i) & 1 <= j2 & j2+1 <= width Gauge(C,i) &
       left_cell(Span(C,j),i1,G) c= cell(Gauge(C,i),i2,j2)
      proof
       A15: i1 in dom f by A9,A12,FINSEQ_3:27;
-      then consider i4,j4 be Nat such that
+      then consider i4,j4 be Element of NAT such that
        A16: [i4,j4] in Indices Gauge(C,j) and
        A17: f/.i1 = (Gauge(C,j))*(i4,j4) by A5,GOBOARD1:def 11;
       A18: 1 <= i4 & i4 <= len Gauge(C,j) by A16,GOBOARD5:1;
       A19: 1 <= j4 & j4 <= width Gauge(C,j) by A16,GOBOARD5:1;
       A20: 1 <= i1+1 by NAT_1:29;
       then A21: i1+1 in dom f by A10,FINSEQ_3:27;
-      then consider i5,j5 be Nat such that
+      then consider i5,j5 be Element of NAT such that
        A22: [i5,j5] in Indices Gauge(C,j) and
        A23: f/.(i1+1) = (Gauge(C,j))*(i5,j5) by A5,GOBOARD1:def 11;
       A24: 1 <= i5 & i5 <= len Gauge(C,j) by A22,GOBOARD5:1;
@@ -1628,7 +1634,7 @@ GOBOARD1:def 11
         hence thesis by A2,A18,A19,A25,A26,A33,JORDAN1H:44;
      end;
      end;
-     then consider i2,j2 be Nat such that
+     then consider i2,j2 be Element of NAT such that
       A34: 1 <= i2 & i2+1 <= len Gauge(C,i) and
       A35: 1 <= j2 & j2+1 <= width Gauge(C,i) and
       A36: left_cell(Span(C,j),i1,G) c= cell(Gauge(C,i),i2,j2);
@@ -1688,11 +1694,11 @@ JORDAN1H:26
 
   theorem Th36:
    for C be Simple_closed_curve
-   for n,m be Nat st n is_sufficiently_large_for C & n <= m holds
+   for n,m be Element of NAT st n is_sufficiently_large_for C & n <= m holds
     RightComp(Span(C,n)) c= RightComp(Span(C,m))
    proof
     let C be Simple_closed_curve;
-    let n,m be Nat;
+    let n,m be Element of NAT;
     assume that
      A1: n is_sufficiently_large_for C and
      A2: n <= m;
@@ -1713,11 +1719,11 @@ JORDAN1H:26
 
   theorem
       for C be Simple_closed_curve
-   for n,m be Nat st n is_sufficiently_large_for C & n <= m holds
+   for n,m be Element of NAT st n is_sufficiently_large_for C & n <= m holds
     LeftComp(Span(C,m)) c= LeftComp(Span(C,n))
    proof
     let C be Simple_closed_curve;
-    let n,m be Nat;
+    let n,m be Element of NAT;
     assume that
      A1: n is_sufficiently_large_for C and
      A2: n <= m;

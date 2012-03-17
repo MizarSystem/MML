@@ -11,12 +11,12 @@ environ
       PRELAMB;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, REAL_1, CARD_1,
       BINOP_1, RELSET_1, STRUCT_0, FINSEQ_1, FINSEQ_2, FINSET_1, MCART_1,
-      RELAT_1, FUNCT_1, FUNCT_2, FUNCT_3, FUNCOP_1, MIDSP_1, RVSUM_1, NAT_1,
-      TREES_1, TREES_2, XXREAL_0;
+      RELAT_1, FUNCT_1, FUNCT_2, FUNCT_3, FUNCOP_1, MIDSP_1, RVSUM_1,
+      XCMPLX_0, NAT_1, TREES_1, TREES_2, XXREAL_0;
  constructors FUNCT_3, BINOP_1, XXREAL_0, REAL_1, NAT_1, RAT_1, BINOP_2,
       MEMBERED, RVSUM_1, TREES_2, MIDSP_1;
  registrations SUBSET_1, FINSEQ_1, RELSET_1, TREES_2, FINSET_1, STRUCT_0,
-      FUNCOP_1, MEMBERED, ORDINAL2, ORDINAL1;
+      FUNCOP_1, MEMBERED, ORDINAL2, ORDINAL1, NAT_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, STRUCT_0, XBOOLE_0;
  theorems FINSEQ_1, ZFMISC_1, TREES_2, RELSET_1, FUNCOP_1, FUNCT_2, TARSKI,
@@ -272,8 +272,10 @@ Th1: branchdeg v = 1 implies v^<*0*> in dom p
      then A1:    succ v <> {} by CARD_1:78,TREES_2:def 13;
      consider x being Element of succ v;
         x in succ v by A1;
-     then x in {v^<*n*>: v^<*n*> in dom p} by TREES_2:def 5;
-     then consider n such that A2: x = v^<*n*> & v^<*n*> in dom p;
+     then x in {v^<*n*> where n is Element of NAT: v^<*n*> in dom p}
+     by TREES_2:def 5;
+     then consider n being Element of NAT such that
+A2:  x = v^<*n*> & v^<*n*> in dom p;
         0 <= n by NAT_1:18;
      hence v^<*0*> in dom p by A2,TREES_1:def 5;
      end;
@@ -281,15 +283,18 @@ Th1: branchdeg v = 1 implies v^<*0*> in dom p
 theorem
 Th2: branchdeg v = 2 implies v^<*0*> in dom p & v^<*1*> in dom p
      proof
-     A1: succ v = {v^<*n*>: v^<*n*> in dom p} by TREES_2:def 5;
+     A1: succ v = {v^<*n*> where n is Element of NAT: v^<*n*> in dom p}
+     by TREES_2:def 5;
      assume branchdeg v = 2;
      then card succ v = 2 by TREES_2:def 13;
      then consider x,y being set such that A2: x <> y & succ v = {x,y} by
 CARD_2:79;
         x in succ v by A2,TARSKI:def 2;
-     then consider n such that A3: x = v^<*n*> & v^<*n*> in dom p by A1;
-        y in succ v by A2,TARSKI:def 2;
-     then consider k such that A4: y = v^<*k*> & v^<*k*> in dom p by A1;
+     then consider n being Element of NAT such that
+A3:  x = v^<*n*> & v^<*n*> in dom p by A1;
+     y in succ v by A2,TARSKI:def 2;
+     then consider k being Element of NAT such that
+A4:  y = v^<*k*> & v^<*k*> in dom p by A1;
         n <> 0 or k <> 0 by A2,A3,A4;
      then A5: n > 0 or k > 0 by NAT_1:19;
      hence v^<*0*> in dom p by A3,A4,TREES_1:def 5;
@@ -483,7 +488,8 @@ A2: for p be FinSequence of REAL, x be Real st P[p] holds P[p^<*x*>]
     then A5:rng p c= NAT by A4,XBOOLE_1:1;
        rng <*x*> c= rng (p^<*x*>) by FINSEQ_1:43;
     then rng <*x*> c= NAT & rng <*x*> = {x} by A4,FINSEQ_1:55,XBOOLE_1:1;
-    then reconsider s = Sum p, n=x as Nat by A3,A5,FINSEQ_1:def 4,ZFMISC_1:37;
+    then reconsider n=x as Element of NAT by ZFMISC_1:37;
+    reconsider s = Sum p as Nat by A3,A5,FINSEQ_1:def 4;
        Sum(p^<*x*>) = s + n by RVSUM_1:104;
    hence Sum(p^<*x*>) is Nat;
   end;

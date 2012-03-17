@@ -12,7 +12,8 @@ environ
       MCART_1, UNIALG_2, GROUP_6, MSUALG_3, MSAFREE, MSUALG_4, NATTRA_1,
       FINSEQ_4, OSALG_1, SEQM_3, YELLOW18, COH_SP, EQREL_1, RELAT_2, FUNCT_5,
       CARD_LAR, CARD_5, OSALG_2, OSALG_4, OSAFREE, PARTFUN1, FUNCT_7;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, RELAT_1, RELSET_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS,
+      XCMPLX_0, NAT_1, RELAT_1, RELSET_1,
       FUNCT_1, MCART_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2, PBOOLE, RELAT_2,
       TREES_2, CARD_3, EQREL_1, FINSEQ_4, STRUCT_0, LANG1, TREES_3, FUNCT_6,
       TREES_4, FUNCT_5, DTCONSTR, ORDERS_2, ORDERS_3, MSUALG_1, MSUALG_2,
@@ -22,7 +23,7 @@ environ
       ORDERS_3, OSALG_2, OSALG_3, OSALG_4;
  registrations SUBSET_1, PBOOLE, TREES_3, TREES_4, DTCONSTR, MSUALG_1,
       RELSET_1, STRUCT_0, XBOOLE_0, MSUALG_4, MSUALG_9, OSALG_1, OSALG_4,
-      MSAFREE, NAT_1, PARTFUN1, ORDINAL1, FUNCOP_1, RELAT_1;
+      MSAFREE, NAT_1, PARTFUN1, ORDINAL1, FUNCOP_1, RELAT_1, XCMPLX_0;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, XBOOLE_0, PBOOLE, MSUALG_3, OSALG_1, OSALG_3, OSALG_4;
  theorems TARSKI, FUNCT_1, FUNCT_2, MCART_1, ZFMISC_1, PBOOLE, CARD_3,
@@ -31,7 +32,7 @@ environ
       XBOOLE_1, OSALG_1, OSALG_2, OSALG_3, OSALG_4, MSAFREE, MSUALG_6,
       MSAFREE2, CARD_5, FINSEQ_2, FINSEQ_3, MSUALG_9, MSUALG_4, EQREL_1,
       FUNCT_5, ORDERS_2, RELAT_2, PARTFUN1, ORDERS_1, FUNCT_7, FUNCOP_1,
-      TREES_3;
+      TREES_3, ORDINAL1;
  schemes ZFREFLE1, FUNCT_1, RELSET_1, DTCONSTR, WELLORD2, XBOOLE_0, FUNCT_2,
       PBOOLE;
 
@@ -560,7 +561,7 @@ A4:   the carrier of S = x2 by TARSKI:def 1;
       let x;
       assume A22: x in dom b;
       then A23: f.x = root-tree (b.x) by A17;
-      reconsider i = x as Nat by A22;
+      reconsider i = x as Nat by A22,ORDINAL1:def 13;
       consider T be DecoratedTree such that
       A24: T = f.i & (roots f).i = T.{} by A17,A22,TREES_3:def 18;
       thus thesis by A23,A24,TREES_4:3;
@@ -820,7 +821,7 @@ for S be OrderSortedSign,
      then consider b be set such that
      A4: b in dom f & f.b = a by FUNCT_1:def 5;
      A5: a in ((ParsedTerms X) * ar).b by A2,A4;
-     reconsider b as Nat by A4;
+     reconsider b as Nat by A4,ORDINAL1:def 13;
          ((ParsedTerms X) * ar).b = (ParsedTerms X).(ar.b) by A2,A4,FUNCT_1:22
      .= (ParsedTerms X). (ar/.b) by A2,A3,A4,FINSEQ_4:def 4
      .= ParsedTerms(X,ar/.b) by Def8
@@ -888,7 +889,7 @@ MSAFREE:1;
     proof
      let x be set;
      assume A8: x in dom ((ParsedTerms X) * ar);
-     then reconsider n = x as Nat;
+     then reconsider n = x as Nat by ORDINAL1:def 13;
          ParsedTerms(X,ar/.n) = (ParsedTerms X). (ar/.n) by Def8
      .= (ParsedTerms X).(ar.n) by A5,A7,A8,FINSEQ_4:def 4
      .= ((ParsedTerms X) * ar).x by A8,FUNCT_1:22;
@@ -995,7 +996,7 @@ A13:      x2 = the carrier of S by TARSKI:def 1;
      proof
       let x be set;
       assume A22: x in dom r;
-      then reconsider n = x as Nat;
+      then reconsider n = x as Nat by ORDINAL1:def 13;
       set s = ar/.n,
           A = {a where a is Element of TS D:
               (ex s1 being Element of S, x be set st
@@ -1177,13 +1178,14 @@ for p be FinSequence of TS(DTConOSA(X)) st OSSym(o,X) ==> roots p holds
      then reconsider a = (OSSym(o,X))-tree p as Element of TS D by
 DTCONSTR:def 4;
          (ex q being DTree-yielding FinSequence st p = q & dom a = tree doms q)
-&
-      a.{} = OSSym(o,X) & for n be Nat st n < len p holds a|<*n*> = p.(n+1)
+         &
+      a.{} = OSSym(o,X) &
+      for n be Element of NAT st n < len p holds a|<*n*> = p.(n+1)
                                             by TREES_4:def 4;
      then consider q being DTree-yielding FinSequence such that
      A5: p = q & dom a = tree doms q &
      a.{} = OSSym(o,X) &
-     for n be Nat st n < len p holds a|<*n*> = p.(n+1);
+     for n be Element of NAT st n < len p holds a|<*n*> = p.(n+1);
      thus y in AX by A4,A5;
      thus P[x,y];
     end;
@@ -1804,8 +1806,8 @@ proof
        for y being Nat st y in dom x holds
        ex t being Element of TS DTConOSA(X) st t = x.y &
        f2.y = LeastSort t;
-      for k being Nat st k in dom f1 holds f1.k = f2.k
-  proof let k be Nat such that A10: k in dom f1;
+       for k being Element of NAT st k in dom f1 holds f1.k = f2.k
+  proof let k be Element of NAT such that A10: k in dom f1;
     consider t1 being Element of TS D such that
     A11: t1 = x.k & f1.k = LeastSort t1 by A8,A10;
     consider t2 being Element of TS D such that
@@ -1864,7 +1866,7 @@ proof
   hence len LSx = len w by A1,FINSEQ_3:31;
   let i be set such that A10: i in dom LSx;
   A11: i in dom w & i in dom x by A9,A10,Def14;
-  reconsider k = i as Nat by A10;
+  reconsider k = i as Nat by A10,ORDINAL1:def 13;
   let s1,s2 be Element of S such that
   A12: s1 = LSx.i & s2 = w.i;
   consider t2 being Element of TS D such that
@@ -2992,7 +2994,8 @@ proof
          by A13,A26,A27,A40,A41,A43,FUNCT_1:12;
          then reconsider t1 = ts1.y,t2 = x3.y,t3 = x5.y as Element of TS D
          by A12,A39;
-             [x5.y,w5/.y] in xy.y by A38,A40,A41,A43;
+X0:      y is Nat by A43,ORDINAL1:def 13;
+         then [x5.y,w5/.y] in xy.y by A38,A40,A41,A43;
          then A46: [t3,w5/.y] in F.(t2) by A26,A40,A41,A43,FUNCT_1:23;
          then A47: [t2,w5/.y] in F.(t2) &
                [t2,w5/.y] in F.t3 by Th20,Th21;
@@ -3000,7 +3003,7 @@ proof
          then A48: t2 in SPTA.(w5/.y) &
                t3 in SPTA.(w5/.y) by A47,Th20;
          then A49: LeastSort t2 <= w5/.y by Def12;
-         A50: [x2.y,w3/.y] in x.y by A25,A26,A27,A40,A41,A43;
+         A50: [x2.y,w3/.y] in x.y by X0,A25,A26,A27,A40,A41,A43;
          then A51: [x2.y,w3/.y] in F.(ts1.y) by A13,A26,A27,A40,A41,A43,
 FUNCT_1:23;
              [t2,w3/.y] in F.(t1) by A44,A50,FUNCT_1:23;
@@ -3023,7 +3026,7 @@ FUNCT_1:23;
        such that A57: for y being set st y in dom xz
        holds P[y,f.y] from FUNCT_2:sch 1(A42);
        A58: dom f = dom xz by FUNCT_2:def 1;
-       then ex n being Nat st dom f = Seg n by FINSEQ_1:def 2;
+       then ex n being Element of NAT st dom f = Seg n by FINSEQ_1:def 2;
        then reconsider f1 = f as FinSequence by FINSEQ_1:def 2;
            rng f c= the carrier of S by RELSET_1:12;
        then f1 is FinSequence of the carrier of S by FINSEQ_1:def 4;
@@ -4301,7 +4304,7 @@ A24:      x2 = the carrier of S by TARSKI:def 1;
         A46: dom (NH1#ts1) = dom ar by MSUALG_3:6;
             for x st x in dom (B * ar) holds (NH1#ts1).x in (B * ar).x
         proof let x such that A47: x in dom (B * ar);
-          reconsider x1 = x as Nat by A47;
+          reconsider x1 = x as Nat by A47,ORDINAL1:def 13;
           A48: rng ts c= TS D by FINSEQ_1:def 4;
           A49: ts.x1 in rng ts by A42,A43,A44,A45,A47,FUNCT_1:def 5;
           then reconsider t = ts.x as Element of TS(D) by A48;
@@ -4757,7 +4760,7 @@ proof
      proof
       let x;
       assume A31: x in dom (S1 * ar);
-      then reconsider n = x as Nat;
+      then reconsider n = x as Nat by ORDINAL1:def 13;
       A32: p.n = G.(ts.n) by A30,A31,ALG_1:1;
       A33: rng ts c= TS D by FINSEQ_1:def 4;
       A34: ts.n in rng ts by A22,A26,A28,A29,A31,FUNCT_1:def 5;
@@ -4896,7 +4899,7 @@ then A66: @(X,OSSym(o,X)) = o by ZFMISC_1:33;
     proof
      let a be set;
      assume A75: a in dom p;
-     then reconsider n = a as Nat;
+     then reconsider n = a as Nat by ORDINAL1:def 13;
      A76: (G*p).n = G.(x.n) by A73,A75;
      A77: (h#x).n = (h.(ar/.n)).(x.n) by A75,MSUALG_3:def 8;
      A78: h.(ar/.n) = G | (SA.(ar/.n)) by A3;
@@ -5437,7 +5440,7 @@ Th10;
     then A14: M.(nt-tree ts1) = pi(o,M*ts1) by A7,Def32;
     A15: nt = OSSym(o,X) by A9;
     A16: LeastSort t1 = so by A9,Th18;
-    consider l being Nat such that
+    consider l being Element of NAT such that
     A17: dom ts1 = Seg l by FINSEQ_1:def 2;
     A18: F.t1 = @(nt,F*ts1) by A7,Def22
     .= {[Den(o2,ParsedTermsOSA(X)).x2,s3] where
@@ -5464,7 +5467,7 @@ Th10;
       proof
         thus len LSMs = len w by A11,A12,FINSEQ_3:31;
         let i be set such that A24: i in dom LSMs;
-        reconsider k = i as Nat by A24;
+        reconsider k = i as Nat by A24,ORDINAL1:def 13;
         A25: ts1.k in rng ts1 by A12,A24,FUNCT_1:12;
         then reconsider tr = ts1.k as Element of TS D by A13;
         consider tr1 being Element of TS D such that
@@ -5708,9 +5711,9 @@ proof
        & dom (M*ts3) = dom ts3
        by A19,A20,ALG_1:1,FINSEQ_3:31,MSUALG_3:6;
      A25: rng ts3 c= TS D by FINSEQ_1:def 4;
-         for k being Nat st k in dom (M*ts3) holds (M*ts3).k = Ms.k
+     for k being Element of NAT st k in dom (M*ts3) holds (M*ts3).k = Ms.k
      proof
-       let k being Nat such that A26: k in dom (M*ts3);
+       let k being Element of NAT such that A26: k in dom (M*ts3);
        A27: ts1.k in rng ts1 & ts3.k in rng ts3 by A10,A24,A26,FUNCT_1:12;
        then reconsider tk1 = ts1.k, tk3 = ts3.k as Element of TS D
                   by A11,A25;

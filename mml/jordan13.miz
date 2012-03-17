@@ -12,7 +12,8 @@ environ
       RELAT_1, FUNCT_1, SUBSET_1, RELAT_2, RFINSEQ, GOBOARD9, TARSKI, TREES_1,
       CARD_1, JORDAN8, GOBRD13, FINSEQ_5, JORDAN2C, METRIC_1, PCOMPS_1,
       GROUP_1, ARYTM;
- notations TARSKI, GOBOARD5, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0,
+ notations TARSKI, GOBOARD5, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS,
+ XCMPLX_0,XXREAL_0,
       XREAL_0, REAL_1, NAT_1, BINARITH, RELAT_1, FUNCT_1, FUNCT_2, COMPLEX1,
       CARD_1, CARD_4, FINSEQ_1, FINSEQ_2, FINSEQ_4, STRUCT_0, RFINSEQ,
       MATRIX_1, METRIC_1, PRE_TOPC, TOPS_1, CONNSP_1, PCOMPS_1, EUCLID,
@@ -23,7 +24,7 @@ environ
       SPRECT_2, JORDAN2C, JORDAN8, JORDAN1H, JORDAN11;
  registrations RELSET_1, FINSEQ_1, SPPOL_2, REVROT_1, SPRECT_2, XREAL_0,
       GOBOARD9, JORDAN8, GOBRD13, SUBSET_1, TOPREAL6, SPRECT_3, INT_1, EUCLID,
-      JORDAN1A, MEMBERED, ORDINAL1, TOPREAL2, XXREAL_0;
+      JORDAN1A, MEMBERED, ORDINAL1, TOPREAL2, XXREAL_0, NAT_1;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
  definitions TARSKI, XBOOLE_0, GOBOARD1, GOBOARD5;
  theorems NAT_1, FINSEQ_1, GOBOARD1, FINSEQ_4, EUCLID, FINSEQ_3, REAL_1,
@@ -33,16 +34,16 @@ environ
       GOBOARD2, SPRECT_3, CARD_1, RFINSEQ, GOBOARD6, TOPREAL3, TOPMETR, TOPS_1,
       JORDAN8, GOBRD13, SPRECT_4, CONNSP_1, GOBRD14, JORDAN9, JORDAN5B,
       JORDAN2C, PARTFUN2, RELSET_1, TBSP_1, JORDAN1H, JORDAN11, XREAL_0,
-      ZFMISC_1, XREAL_1, XXREAL_0;
+      ZFMISC_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes NAT_1, LATTICE5;
 
 begin :: Spans
 
- reserve i, j, k, l, m, n, i1, i2, j1, j2 for Nat;
+ reserve i, j, k, l, m, n, i1, i2, j1, j2 for Element of NAT;
 
 definition let C be non vertical non horizontal non empty
                       being_simple_closed_curve Subset of TOP-REAL 2,
-               n be Nat;
+               n be Element of NAT;
   assume
 A1: n is_sufficiently_large_for C;
   func Span(C,n) -> clockwise_oriented
@@ -50,7 +51,7 @@ A1: n is_sufficiently_large_for C;
         it is_sequence_on Gauge(C,n) &
     it/.1 = Gauge(C,n)*(X-SpanStart(C,n),Y-SpanStart(C,n)) &
     it/.2 = Gauge(C,n)*(X-SpanStart(C,n)-'1,Y-SpanStart(C,n)) &
-    for k being Nat st 1 <= k & k+2 <= len it holds
+    for k being Element of NAT st 1 <= k & k+2 <= len it holds
       (front_right_cell(it,k,Gauge(C,n)) misses C &
         front_left_cell(it,k,Gauge(C,n)) misses C
           implies it turns_left k,Gauge(C,n)) &
@@ -63,7 +64,7 @@ existence
 proof
    set G = Gauge(C,n);
 A2:   len G = 2|^n+3 & len G = width G by JORDAN8:def 1;
-   defpred P[Nat,set,set] means
+   defpred P[Element of NAT,set,set] means
       ($1 = 0 implies $3 = <*G*(X-SpanStart(C,n),Y-SpanStart(C,n))*>) &
       ($1 = 1 implies $3 = <*G*(X-SpanStart(C,n),Y-SpanStart(C,n)),
                    G*(X-SpanStart(C,n)-'1,Y-SpanStart(C,n))*>) &
@@ -89,9 +90,9 @@ A2:   len G = 2|^n+3 & len G = width G by JORDAN8:def 1;
            implies $3 = f^<*G*(1,1)*>)) &
          (len f <> $1 implies $3 = {})) &
        ($1 > 1 & $2 is not FinSequence of TOP-REAL 2 implies $3 = {});
-A3:  for k being Nat, x being set ex y being set st P[k,x,y]
+A3:  for k being Element of NAT, x being set ex y being set st P[k,x,y]
    proof
-    let k be Nat, x be set;
+    let k be Element of NAT, x be set;
     per cases by CQC_THE1:2;
     suppose
 A4:    k=0;
@@ -118,7 +119,7 @@ A8:      len f = k;
 A9:         f is_sequence_on G & left_cell(f,len f-'1,G) meets C;
 A10:         1 <= (len f)-'1 by A6,A8,JORDAN3:12;
 A11:         (len f) -'1 +1 = len f by A6,A8,BINARITH:53;
-         then consider i1,j1,i2,j2 being Nat such that
+         then consider i1,j1,i2,j2 being Element of NAT such that
 A12:         [i1,j1] in Indices G & f/.((len f)-'1) = G*(i1,j1) and
 A13:         [i2,j2] in Indices G & f/.((len f) -'1+1) = G*(i2,j2) and
 A14:         i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
@@ -144,7 +145,7 @@ A23:              i1 = i2 & j1+1 = j2;
                take f1 = f^<*G*(i2-'1,j2)*>;
                    now
                 take i=i2-'1 ,j=j2;
-                     now let i1',j1',i2',j2' be Nat;
+                     now let i1',j1',i2',j2' be Element of NAT;
                   assume that
 A24:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
 A25:                 f1/.((len f)-'1) = G*(i1',j1') &
@@ -183,7 +184,7 @@ A27:             i1+1 = i2 & j1 = j2;
                take f1 = f^<*G*(i2,j2+1)*>;
                    now
                 take i=i2 ,j=j2+1;
-                     now let i1',j1',i2',j2' be Nat;
+                     now let i1',j1',i2',j2' be Element of NAT;
                   assume that
 A28:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
 A29:                 f1/.((len f)-'1) = G*(i1',j1') &
@@ -222,7 +223,7 @@ A31:             i1 = i2+1 & j1 = j2;
                take f1 = f^<*G*(i2,j2-'1)*>;
                    now
                 take i=i2 ,j=j2-'1;
-                     now let i1',j1',i2',j2' be Nat;
+                     now let i1',j1',i2',j2' be Element of NAT;
                   assume that
 A32:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
 A33:                 f1/.((len f)-'1) = G*(i1',j1') &
@@ -261,7 +262,7 @@ A35:             i1 = i2 & j1 = j2+1;
                take f1 = f^<*G*(i2+1,j2)*>;
                    now
                 take i=i2+1 ,j=j2;
-                     now let i1',j1',i2',j2' be Nat;
+                     now let i1',j1',i2',j2' be Element of NAT;
                   assume that
 A36:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
 A37:                 f1/.((len f)-'1) = G*(i1',j1') &
@@ -307,7 +308,7 @@ A40:              i1 = i2 & j1+1 = j2;
                take f1 = f^<*G*(i2,j2+1)*>;
                    now
                 take i=i2 ,j=j2+1;
-                     now let i1',j1',i2',j2' be Nat;
+                     now let i1',j1',i2',j2' be Element of NAT;
                   assume that
 A41:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
 A42:                 f1/.((len f)-'1) = G*(i1',j1') &
@@ -346,7 +347,7 @@ A44:             i1+1 = i2 & j1 = j2;
                take f1 = f^<*G*(i2+1,j2)*>;
                    now
                 take i=i2+1 ,j=j2;
-                     now let i1',j1',i2',j2' be Nat;
+                     now let i1',j1',i2',j2' be Element of NAT;
                   assume that
 A45:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
 A46:                 f1/.((len f)-'1) = G*(i1',j1') &
@@ -385,7 +386,7 @@ A48:             i1 = i2+1 & j1 = j2;
                take f1 = f^<*G*(i2-'1,j2)*>;
                    now
                 take i=i2-'1 ,j=j2;
-                     now let i1',j1',i2',j2' be Nat;
+                     now let i1',j1',i2',j2' be Element of NAT;
                   assume that
 A49:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
 A50:                 f1/.((len f)-'1) = G*(i1',j1') &
@@ -424,7 +425,7 @@ A52:             i1 = i2 & j1 = j2+1;
                take f1 = f^<*G*(i2,j2-'1)*>;
                    now
                 take i=i2 ,j=j2-'1;
-                     now let i1',j1',i2',j2' be Nat;
+                     now let i1',j1',i2',j2' be Element of NAT;
                   assume that
 A53:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
 A54:                 f1/.((len f)-'1) = G*(i1',j1') &
@@ -469,7 +470,7 @@ A57:              i1 = i2 & j1+1 = j2;
                take f1 = f^<*G*(i2+1,j2)*>;
                    now
                 take i=i2+1 ,j=j2;
-                     now let i1',j1',i2',j2' be Nat;
+                     now let i1',j1',i2',j2' be Element of NAT;
                   assume that
 A58:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
 A59:                 f1/.((len f)-'1) = G*(i1',j1') &
@@ -508,7 +509,7 @@ A61:             i1+1 = i2 & j1 = j2;
                take f1 = f^<*G*(i2,j2-'1)*>;
                    now
                 take i=i2 ,j=j2-'1;
-                     now let i1',j1',i2',j2' be Nat;
+                     now let i1',j1',i2',j2' be Element of NAT;
                   assume that
 A62:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
 A63:                 f1/.((len f)-'1) = G*(i1',j1') &
@@ -547,7 +548,7 @@ A65:             i1 = i2+1 & j1 = j2;
                take f1 = f^<*G*(i2,j2+1)*>;
                    now
                 take i=i2 ,j=j2+1;
-                     now let i1',j1',i2',j2' be Nat;
+                     now let i1',j1',i2',j2' be Element of NAT;
                   assume that
 A66:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
 A67:                 f1/.((len f)-'1) = G*(i1',j1') &
@@ -586,7 +587,7 @@ A69:             i1 = i2 & j1 = j2+1;
                take f1 = f^<*G*(i2-'1,j2)*>;
                    now
                 take i=i2-'1 ,j=j2;
-                     now let i1',j1',i2',j2' be Nat;
+                     now let i1',j1',i2',j2' be Element of NAT;
                   assume that
 A70:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
 A71:                 f1/.((len f)-'1) = G*(i1',j1') &
@@ -649,7 +650,7 @@ A76:   dom F = NAT and
 A77:   F.0 = {} and
 A78:   for k being Element of NAT holds P[k,F.k,F.(k+1)] from LATTICE5:sch 1
 (A3);
-defpred P[Nat] means F.$1 is FinSequence of TOP-REAL 2;
+defpred P[Element of NAT] means F.$1 is FinSequence of TOP-REAL 2;
 A79:   {} = <*>(the carrier of TOP-REAL 2);
 then A80:  P[0] by A77;
 A81:  for k st P[k] holds P[k+1]
@@ -713,7 +714,7 @@ A86:  for k holds P[k] from NAT_1:sch 1(A80,A81);
     end;
   then reconsider F as Function of NAT,(the carrier of TOP-REAL 2)*
    by A76,FUNCT_2:def 1,RELSET_1:11;
-   defpred P[Nat] means len(F.$1) = $1;
+   defpred P[Element of NAT] means len(F.$1) = $1;
 A87:  P[0] by A77,FINSEQ_1:25;
 A88:  for k st P[k] holds P[k+1]
     proof let k such that
@@ -761,7 +762,7 @@ A92:   for k holds P[k] from NAT_1:sch 1(A87,A88);
       set XS = X-SpanStart(C,n), YS = Y-SpanStart(C,n);
          2 < XS by JORDAN1H:58;
      then A93: 1 <= XS by XXREAL_0:2;
-     defpred Q[Nat] means
+     defpred Q[Element of NAT] means
      F.$1 is_sequence_on G &
       for m st 1 <= m & m+1 <= len(F.$1)
        holds right_cell(F.$1,m,G) misses C & left_cell(F.$1,m,G) meets C;
@@ -843,7 +844,7 @@ A111: l in dom(F.(k+1));
       assume A112: l in dom(F.(k+1)) & l+1 in dom(F.(k+1));
       then 1 <= l & l <= 2 & 1 <= l+1 & l+1 <= 2 by A102,A107,FINSEQ_3:27;
       then A113:    l = 0 or l = 1 or l = 2 by CQC_THE1:3;
-      let i1,j1,i2,j2 be Nat such that
+      let i1,j1,i2,j2 be Element of NAT such that
 A114:      [i1,j1] in Indices G & [i2,j2]in Indices G &
         (F.(k+1))/.l = G*(i1,j1) & (F.(k+1))/.(l+1) = G*(i2,j2);
 A115:     i1 = XS & j1 = YS & i2 = XS-'1 & j2 = YS
@@ -876,7 +877,7 @@ A123:   k > 1;
 then A124:   F.k is non empty by A101,FINSEQ_1:25;
 A125:   1 <= (len(F.k))-'1 by A101,A123,JORDAN3:12;
 A126:   (len(F.k)) -'1 +1 = len(F.k) by A101,A123,BINARITH:53;
-     then consider i1,j1,i2,j2 being Nat such that
+     then consider i1,j1,i2,j2 being Element of NAT such that
 A127:   [i1,j1] in Indices G & (F.k)/.(len(F.k)-'1) = G*(i1,j1) and
 A128:   [i2,j2] in Indices G & (F.k)/.len(F.k) = G*(i2,j2) and
           i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
@@ -939,7 +940,7 @@ A149:       f/.(len(F.k)+1) = G*(i,j) by FINSEQ_4:82;
           suppose that
 A150:         i1 = i2 & j1+1 = j2 and
 A151:         f/.(len(F.k)+1) = G*(i2-'1,j2);
-               now let i1',j1',i2',j2' be Nat;
+               now let i1',j1',i2',j2' be Element of NAT;
             assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
                 (F.k)/.len(F.k) = G*(i1',j1') & G*(i2-'1,j2) = G*(i2',j2');
              then A152:           i2 = i1' & j2 = j1' & i2-'1 = i2' & j2 = j2'
@@ -954,7 +955,7 @@ A151:         f/.(len(F.k)+1) = G*(i2-'1,j2);
           suppose that
 A153:          i1+1 = i2 & j1 = j2 and
 A154:          f/.(len(F.k)+1) = G*(i2,j2+1);
-               now let i1',j1',i2',j2' be Nat;
+               now let i1',j1',i2',j2' be Element of NAT;
             assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
               (F.k)/.len(F.k) = G*(i1',j1') & G*(i2,j2+1) = G*(i2',j2');
               then i2 = i1' & j2 = j1' & i2 = i2' & j2+1 = j2'
@@ -968,7 +969,7 @@ A154:          f/.(len(F.k)+1) = G*(i2,j2+1);
           suppose that
 A155:          i1 = i2+1 & j1 = j2 and
 A156:          f/.(len(F.k)+1) = G*(i2,j2-'1);
-               now let i1',j1',i2',j2' be Nat;
+               now let i1',j1',i2',j2' be Element of NAT;
             assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
                 (F.k)/.len(F.k) = G*(i1',j1') & G*(i2,j2-'1) = G*(i2',j2');
              then A157:           i2 = i1' & j2 = j1' & i2 = i2' & j2-'1 = j2'
@@ -983,7 +984,7 @@ A156:          f/.(len(F.k)+1) = G*(i2,j2-'1);
           suppose that
 A158:          i1 = i2 & j1 = j2+1 and
 A159:          f/.(len(F.k)+1) = G*(i2+1,j2);
-               now let i1',j1',i2',j2' be Nat;
+               now let i1',j1',i2',j2' be Element of NAT;
             assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
               (F.k)/.len(F.k) = G*(i1',j1') & G*(i2+1,j2) = G*(i2',j2');
               then i2 = i1' & j2 = j1' & i2+1 = i2' & j2 = j2'
@@ -1011,7 +1012,7 @@ A164:       f/.(len(F.k)+1) = G*(i,j) by FINSEQ_4:82;
           suppose that
 A165:         i1 = i2 & j1+1 = j2 and
 A166:         f/.(len(F.k)+1) = G*(i2,j2+1);
-               now let i1',j1',i2',j2' be Nat;
+               now let i1',j1',i2',j2' be Element of NAT;
             assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
                 (F.k)/.len(F.k) = G*(i1',j1') & G*(i2,j2+1) = G*(i2',j2');
              then i2 = i1' & j2 = j1' & i2 = i2' & j2+1 = j2'
@@ -1025,7 +1026,7 @@ A166:         f/.(len(F.k)+1) = G*(i2,j2+1);
           suppose that
 A167:          i1+1 = i2 & j1 = j2 and
 A168:          f/.(len(F.k)+1) = G*(i2+1,j2);
-               now let i1',j1',i2',j2' be Nat;
+               now let i1',j1',i2',j2' be Element of NAT;
             assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
               (F.k)/.len(F.k) = G*(i1',j1') & G*(i2+1,j2) = G*(i2',j2');
               then i2 = i1' & j2 = j1' & i2+1 = i2' & j2 = j2'
@@ -1039,7 +1040,7 @@ A168:          f/.(len(F.k)+1) = G*(i2+1,j2);
           suppose that
 A169:          i1 = i2+1 & j1 = j2 and
 A170:          f/.(len(F.k)+1) = G*(i2-'1,j2);
-               now let i1',j1',i2',j2' be Nat;
+               now let i1',j1',i2',j2' be Element of NAT;
             assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
                 (F.k)/.len(F.k) = G*(i1',j1') & G*(i2-'1,j2) = G*(i2',j2');
              then A171:           i2 = i1' & j2 = j1' & i2-'1 = i2' & j2 = j2'
@@ -1054,7 +1055,7 @@ A170:          f/.(len(F.k)+1) = G*(i2-'1,j2);
           suppose that
 A172:          i1 = i2 & j1 = j2+1 and
 A173:          f/.(len(F.k)+1) = G*(i2,j2-'1);
-               now let i1',j1',i2',j2' be Nat;
+               now let i1',j1',i2',j2' be Element of NAT;
             assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
               (F.k)/.len(F.k) = G*(i1',j1') & G*(i2,j2-'1) = G*(i2',j2');
 then A174:           i2 = i1' & j2 = j1' & i2 = i2' & j2-'1 = j2'
@@ -1082,7 +1083,7 @@ A179:       f/.(len(F.k)+1) = G*(i,j) by FINSEQ_4:82;
           suppose that
 A180:         i1 = i2 & j1+1 = j2 and
 A181:         f/.(len(F.k)+1) = G*(i2+1,j2);
-               now let i1',j1',i2',j2' be Nat;
+               now let i1',j1',i2',j2' be Element of NAT;
             assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
                 (F.k)/.len(F.k) = G*(i1',j1') & G*(i2+1,j2) = G*(i2',j2');
              then i2 = i1' & j2 = j1' & i2+1 = i2' & j2 = j2'
@@ -1096,7 +1097,7 @@ A181:         f/.(len(F.k)+1) = G*(i2+1,j2);
           suppose that
 A182:          i1+1 = i2 & j1 = j2 and
 A183:          f/.(len(F.k)+1) = G*(i2,j2-'1);
-               now let i1',j1',i2',j2' be Nat;
+               now let i1',j1',i2',j2' be Element of NAT;
             assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
               (F.k)/.len(F.k) = G*(i1',j1') & G*(i2,j2-'1) = G*(i2',j2');
 then A184:           i2 = i1' & j2 = j1' & i2 = i2' & j2-'1 = j2'
@@ -1111,7 +1112,7 @@ then A184:           i2 = i1' & j2 = j1' & i2 = i2' & j2-'1 = j2'
           suppose that
 A185:          i1 = i2+1 & j1 = j2 and
 A186:          f/.(len(F.k)+1) = G*(i2,j2+1);
-               now let i1',j1',i2',j2' be Nat;
+               now let i1',j1',i2',j2' be Element of NAT;
             assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
                 (F.k)/.len(F.k) = G*(i1',j1') & G*(i2,j2+1) = G*(i2',j2');
              then i2 = i1' & j2 = j1' & i2 = i2' & j2+1 = j2'
@@ -1125,7 +1126,7 @@ A186:          f/.(len(F.k)+1) = G*(i2,j2+1);
           suppose that
 A187:          i1 = i2 & j1 = j2+1 and
 A188:          f/.(len(F.k)+1) = G*(i2-'1,j2);
-               now let i1',j1',i2',j2' be Nat;
+               now let i1',j1',i2',j2' be Element of NAT;
             assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
               (F.k)/.len(F.k) = G*(i1',j1') & G*(i2-'1,j2) = G*(i2',j2');
 then A189:           i2 = i1' & j2 = j1' & i2-'1 = i2' & j2 = j2'
@@ -1342,7 +1343,7 @@ A229:           (F.(k+1))/.(len(F.k)+1) = G*(i2-'1,j2);
       suppose m+1 <> len(F.(k+1));
        then m+1 < len(F.(k+1)) by A190,REAL_1:def 5;
        then A230:     m+1 <= len(F.k)by A101,A102,NAT_1:38;
-       then consider i1,j1,i2,j2 being Nat such that
+       then consider i1,j1,i2,j2 being Element of NAT such that
 A231:     [i1,j1] in Indices G & (F.k)/.m = G*(i1,j1) and
 A232:     [i2,j2] in Indices G & (F.k)/.(m+1) = G*(i2,j2) and
 A233:      i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
@@ -1605,7 +1606,7 @@ A304:   k = 1;
 A305:   k > 1;
 then A306:   1 <= (len(F.k))-'1 by A302,JORDAN3:12;
           (len(F.k)) -'1 +1 = len(F.k) by A302,A305,BINARITH:53;
-     then consider i1,j1,i2,j2 being Nat such that
+     then consider i1,j1,i2,j2 being Element of NAT such that
 A307:   [i1,j1] in Indices G & (F.k)/.(len(F.k)-'1) = G*(i1,j1) and
 A308:   [i2,j2] in Indices G & (F.k)/.len(F.k) = G*(i2,j2) and
 A309:   i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
@@ -1695,7 +1696,7 @@ A312:       front_right_cell(F.k,(len(F.k))-'1,G) meets C;
      hence thesis;
    end;
    end;
-defpred P[Nat] means for m st m <= $1 holds (F.$1)|m = F.m;
+defpred P[Element of NAT] means for m st m <= $1 holds (F.$1)|m = F.m;
 A313: P[0]
    proof let m;
     assume
@@ -1744,14 +1745,14 @@ A325:  F.k is_sequence_on G by A246;
 A326:  len(F.k) = k by A92;
 then A327:  1 <= (len(F.k))-'1 by A324,JORDAN3:12;
         (len(F.k)) -'1 +1 = len(F.k) by A324,A326,BINARITH:53;
-    then ex i1,j1,i2,j2 being Nat st
+    then ex i1,j1,i2,j2 being Element of NAT st
          [i1,j1] in Indices G & (F.k)/.(len(F.k)-'1) = G*(i1,j1) &
          [i2,j2] in Indices G & (F.k)/.len(F.k) = G*(i2,j2) &
          (i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
       i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1) by A325,A327,JORDAN8:6;
     hence thesis by A249,A266,A283,A324,A326;
    end;
-   defpred P[Nat] means F.$1 is unfolded;
+   defpred P[Element of NAT] means F.$1 is unfolded;
        len(F.0) = 0 by A77,FINSEQ_1:25;
 then A328: P[0] by SPPOL_2:27;
 A329: for k st P[k] holds P[k+1]
@@ -1770,7 +1771,7 @@ A332:   k > 1;
 A333:   1 <= m by A332,JORDAN3:12;
 A334:   m+1 = k by A332,BINARITH:53;
 A335:   len(F.k) = k by A92;
-     then consider i1,j1,i2,j2 being Nat such that
+     then consider i1,j1,i2,j2 being Element of NAT such that
 A336:   [i1,j1] in Indices G & (F.k)/.m = G*(i1,j1) and
 A337:   [i2,j2] in Indices G & (F.k)/.len(F.k) = G*(i2,j2) and
 A338:   i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
@@ -1934,13 +1935,13 @@ then A370:       [i2-'1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2-'1,j2)*>
    end;
 
 A371: for k holds P[k] from NAT_1:sch 1(A328,A329);
-   defpred K[Nat] means $1 >= 1 &
+   defpred K[Element of NAT] means $1 >= 1 &
    ex m st m in dom(F.$1) & m <> len(F.$1) & (F.$1)/.m = (F.$1)/.len(F.$1);
   now assume
 A372:   for k st k >= 1 holds
         for m st m in dom(F.k) & m <> len(F.k)
          holds (F.k)/.m <> (F.k)/.len(F.k);
-         defpred P[Nat] means F.$1 is one-to-one;
+         defpred P[Element of NAT] means F.$1 is one-to-one;
 A373:    P[0] by A77;
 A374:    for k st P[k] holds P[k+1]
      proof let k; assume
@@ -1981,7 +1982,8 @@ A384:   for k holds card rng(F.k) = k
       hence card rng(F.k) = len(F.k) by FINSEQ_4:77
                          .= k by A92;
      end;
-    set k = (len G)*(width G)+1;
+     reconsider k = (len G)*(width G)+1 as Element of NAT
+     by ORDINAL1:def 13;
 A385:   k > (len G)*(width G) by NAT_1:38;
 A386:   card Values G <= (len G)*(width G) by GOBRD13:8;
         F.k is_sequence_on G by A246;
@@ -2175,7 +2177,7 @@ A475:    1 <= i1 & i1 <= len G & 1 <= j1 & j1 <= width G by A470,GOBOARD5:1;
 A476:    1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A472,GOBOARD5:1;
 A477:    j+1 <= len g by A465,NAT_1:38;
 then A478:    LSeg(g,j) = LSeg(g/.j,g/.(j+1)) by A463,TOPREAL1:def 5;
-     consider i1',j1',i2',j2' being Nat such that
+     consider i1',j1',i2',j2' being Element of NAT such that
 A479:    [i1',j1'] in Indices G and
 A480:    g/.j = G*(i1',j1') and
 A481:    [i2',j2'] in Indices G and
@@ -2521,7 +2523,7 @@ A521:    i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
 A522:    1 <= i1 & i1 <= len G & 1 <= j1 & j1 <= width G by A517,GOBOARD5:1;
 A523:    1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A519,GOBOARD5:1;
 A524:    LSeg(g,j) = LSeg(g/.j,g/.(j+1)) by A463,A511,TOPREAL1:def 5;
-     consider i1',j1',i2',j2' being Nat such that
+     consider i1',j1',i2',j2' being Element of NAT such that
 A525:    [i1',j1'] in Indices G and
 A526:    g/.j = G*(i1',j1') and
 A527:    [i2',j2'] in Indices G and
@@ -3149,7 +3151,7 @@ end;
     then m-'1 < l by NAT_1:38;
   then A662: m-'1 <> len(F.l) by A92;
 
-    consider p1,p2,q1,q2 being Nat such that
+    consider p1,p2,q1,q2 being Element of NAT such that
   A663: [p1,p2] in Indices G and
   A664: p = G*(p1,p2) and
   A665: [q1,q2] in Indices G and
@@ -3162,7 +3164,7 @@ end;
     per cases by A667;
     suppose ::A
     A669: p1 = q1 & p2+1 = q2;
-      consider a1,a2,p'1,p'2 being Nat such that
+      consider a1,a2,p'1,p'2 being Element of NAT such that
     A670: [a1,a2] in Indices G and
     A671: a = G*(a1,a2) and
     A672: [p'1,p'2] in Indices G and
@@ -3255,7 +3257,7 @@ GOBRD13:28;
     end;
     suppose ::B
     A695: p1+1 = q1 & p2 = q2;
-      consider a1,a2,p'1,p'2 being Nat such that
+      consider a1,a2,p'1,p'2 being Element of NAT such that
     A696: [a1,a2] in Indices G and
     A697: a = G*(a1,a2) and
     A698: [p'1,p'2] in Indices G and
@@ -3351,7 +3353,7 @@ GOBRD13:28;
     end;
     suppose ::C
     A724: p1 = q1+1 & p2 = q2;
-      consider a1,a2,p'1,p'2 being Nat such that
+      consider a1,a2,p'1,p'2 being Element of NAT such that
     A725: [a1,a2] in Indices G and
     A726: a = G*(a1,a2) and
     A727: [p'1,p'2] in Indices G and
@@ -3450,7 +3452,7 @@ GOBRD13:24;
     end;
     suppose ::D
     A753: p1 = q1 & p2 = q2+1;
-      consider a1,a2,p'1,p'2 being Nat such that
+      consider a1,a2,p'1,p'2 being Element of NAT such that
     A754: [a1,a2] in Indices G and
     A755: a = G*(a1,a2) and
     A756: [p'1,p'2] in Indices G and
@@ -3658,7 +3660,7 @@ A819: for k st 1 <= k & k+2 <= len f2 holds
        implies f2 goes_straight k,Gauge(C,n)) &
       (front_right_cell(f2,k,Gauge(C,n)) meets C
        implies f2 turns_right k,Gauge(C,n));
-       defpred P[Nat] means f1|$1 = f2|$1;
+       defpred P[Element of NAT] means f1|$1 = f2|$1;
 A820: P[0];
 A821: for k st P[k] holds P[k+1]
      proof let k such that

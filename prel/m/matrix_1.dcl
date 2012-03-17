@@ -83,9 +83,10 @@
 </RCluster>
 <RCluster>
 <ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="82"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="17"/>
+</Cluster>
 </Typ>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -119,9 +120,10 @@
 <Adjective nr="25" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="82"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="17"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="151">

@@ -9,24 +9,24 @@ environ
  vocabularies FINSEQ_1, ARYTM_1, INT_1, FUNCT_1, RELAT_1, SGRAPH1, EQREL_1,
       TARSKI, FINSET_1, BOOLE, CARD_1, BORSUK_1, SETFAM_1, AMI_1, MATRIX_2,
       MCART_1, RELAT_2, FUNCOP_1, FUNCT_4, FSM_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, NAT_1, INT_1,
-      SETFAM_1, STRUCT_0, FINSET_1, GROUP_1, MCART_1, DOMAIN_1, RELAT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
+      INT_1, SETFAM_1, STRUCT_0, FINSET_1, GROUP_1, MCART_1, DOMAIN_1, RELAT_1,
       FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, XXREAL_0, FUNCT_4, FINSEQ_1,
       FINSEQ_3, CARD_1, EQREL_1, BORSUK_1;
  constructors SETFAM_1, FUNCT_4, XXREAL_0, NAT_1, MEMBERED, FINSEQ_3, GROUP_1,
       BORSUK_1;
  registrations SUBSET_1, INT_1, FINSET_1, XBOOLE_0, RELSET_1, STRUCT_0,
-      BORSUK_1, XREAL_0, MEMBERED, FUNCT_2, PARTFUN1, EQREL_1, XXREAL_0;
+      BORSUK_1, XREAL_0, MEMBERED, FUNCT_2, PARTFUN1, EQREL_1, XXREAL_0, NAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
 begin :: Preliminaries
 
- reserve m, n, i, k for Nat;
+ reserve m, n, i, k for Element of NAT;
 
 theorem :: FSM_1:1
   for m, n being Nat holds
-   m < n implies ex p being Nat st n = m+p & 1 <= p;
+   m < n implies ex p being Element of NAT st n = m+p & 1 <= p;
 
 canceled 5;
 
@@ -315,7 +315,7 @@ end;
 canceled 2;
 
 theorem :: FSM_1:33
-      q1, q2-are_equivalent & q2, q3-are_equivalent implies q1, q3
+  q1, q2-are_equivalent & q2, q3-are_equivalent implies q1, q3
 -are_equivalent;
 
 theorem :: FSM_1:34
@@ -338,20 +338,21 @@ qa, qb-are_equivalent implies
                st qai = (qa, w)-admissible.i & qbi = ((qb, w)-admissible.i) &
                   qai, qbi-are_equivalent;
 
-definition let IAlph, OAlph,tfsm, qa, qb, k;
+definition let IAlph, OAlph,tfsm, qa, qb; let k be Nat;
  pred k-equivalent qa, qb means
 :: FSM_1:def 11
  for w st len w<=k holds (qa,w)-response = (qb,w)-response;
 end;
 
 theorem :: FSM_1:38
-k-equivalent qa, qa;
+for k be Nat holds k-equivalent qa, qa;
 
 theorem :: FSM_1:39
-k-equivalent qa, qb implies k-equivalent qb, qa;
+  for k be Nat st k-equivalent qa, qb holds k-equivalent qb, qa;
 
 theorem :: FSM_1:40
-  k-equivalent qa, qb & k-equivalent qb, qc implies k-equivalent qa, qc;
+  for k be Nat st k-equivalent qa, qb & k-equivalent qb, qc holds
+    k-equivalent qa, qc;
 
 theorem :: FSM_1:41
  qa,qb-are_equivalent implies k-equivalent qa,qb;
@@ -360,17 +361,17 @@ theorem :: FSM_1:42
 0-equivalent qa, qb;
 
 theorem :: FSM_1:43
- (k+m)-equivalent qa, qb implies k-equivalent qa, qb;
+ for k, m be Nat st (k+m)-equivalent qa, qb holds k-equivalent qa, qb;
 
 theorem :: FSM_1:44
- 1 <= k implies
+ for k be Nat st 1 <= k holds
  (k-equivalent qa, qb iff
   1-equivalent qa, qb &
-  for s being Element of IAlph, k1 being Nat st k1 = k - 1
+  for s being Element of IAlph, k1 being Element of NAT st k1 = k - 1
     holds k1-equivalent (the Tran of tfsm).[qa, s], (the Tran of tfsm).[qb, s])
 ;
 
-definition let IAlph, OAlph, tfsm, i;
+definition let IAlph, OAlph, tfsm; let i be Nat;
  func i-eq_states_EqR tfsm -> Equivalence_Relation of the carrier of tfsm
  means
 :: FSM_1:def 12
@@ -379,7 +380,7 @@ end;
 
 definition let IAlph, OAlph;
            let tfsm be non empty Mealy-FSM over IAlph, OAlph;
-           let i;
+           let i be Nat;
  func i-eq_states_partition tfsm ->
                   non empty a_partition of the carrier of tfsm equals
 :: FSM_1:def 13
@@ -390,8 +391,10 @@ theorem :: FSM_1:45
  (k+1)-eq_states_partition tfsm is_finer_than k-eq_states_partition tfsm;
 
 theorem :: FSM_1:46
+ for k be Nat holds
  Class (k-eq_states_EqR tfsm) = Class ((k+1)-eq_states_EqR tfsm)implies
-   for m holds Class ((k+m)-eq_states_EqR tfsm) = Class (k-eq_states_EqR tfsm);
+   for m be Nat holds
+   Class ((k+m)-eq_states_EqR tfsm) = Class (k-eq_states_EqR tfsm);
 
 theorem :: FSM_1:47
  k-eq_states_partition tfsm = (k+1)-eq_states_partition tfsm implies
@@ -400,7 +403,7 @@ theorem :: FSM_1:47
 theorem :: FSM_1:48
  (k+1)-eq_states_partition tfsm <> k-eq_states_partition tfsm implies
   for i st i <= k holds
-         (i+1)-eq_states_partition tfsm <> i-eq_states_partition tfsm;
+     (i+1)-eq_states_partition tfsm <> i-eq_states_partition tfsm;
 
 theorem :: FSM_1:49
 for tfsm being finite non empty Mealy-FSM over IAlph, OAlph holds
@@ -438,7 +441,7 @@ theorem :: FSM_1:54
 theorem :: FSM_1:55
     for tfsm being finite non empty Mealy-FSM over IAlph, OAlph st
 n+1 = card the carrier of tfsm holds
-     ex k being Nat st k <= n & k-eq_states_partition tfsm is final;
+     ex k being Element of NAT st k <= n & k-eq_states_partition tfsm is final;
 
 definition let IAlph, OAlph;
            let tfsm be finite non empty Mealy-FSM over IAlph, OAlph;
@@ -465,7 +468,7 @@ definition let IAlph, OAlph be non empty set;
  func (s,qf)-succ_class -> Element of final_states_partition tfsm means
 :: FSM_1:def 16
 
-  ex q being State of tfsm, n being Nat st
+  ex q being State of tfsm, n being Element of NAT st
    q in qf & (n+1) = card the carrier of tfsm &
              it = Class(n-eq_states_EqR tfsm, (the Tran of tfsm).[q,s]);
 end;
@@ -495,7 +498,7 @@ end;
 theorem :: FSM_1:57
 for qr being State of rtfsm st
  rtfsm = the_reduction_of tfsm & q in qr holds
-  for k being Nat st k in Seg (len w +1) holds
+  for k being Element of NAT st k in Seg (len w +1) holds
    (q,w)-admissible.k in (qr,w)-admissible.k;
 
 theorem :: FSM_1:58

@@ -9,7 +9,8 @@ environ
  vocabularies ORDERS_1, RELAT_2, REALSET1, CARD_4, FINSET_1, CAT_1, YELLOW_0,
       YELLOW_1, WELLORD2, WELLORD1, BOOLE, LATTICES, FUNCT_4, RELAT_1, FUNCT_1,
       ORDINAL1, CARD_1, FUNCOP_1, ARYTM_1, PBOOLE, ORDERS_4;
- notations TARSKI, XBOOLE_0, XCMPLX_0, FINSET_1, NAT_1, GROUP_1, PBOOLE,
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, FINSET_1, NAT_1,
+      GROUP_1, PBOOLE,
       CARD_1, CARD_4, REALSET2, RELAT_2, ORDERS_2, RELAT_1, FUNCT_1, FUNCT_2,
       DOMAIN_1, STRUCT_0, YELLOW_0, WAYBEL_0, YELLOW_1, WAYBEL_1, FUNCT_4,
       WELLORD1, ORDINAL1, XXREAL_0;
@@ -17,7 +18,7 @@ environ
       REALSET2, LATTICE3, ORDERS_3, WAYBEL_1, WAYBEL_2, WAYBEL_3, WAYBEL_8;
  registrations FINSET_1, WAYBEL_0, STRUCT_0, YELLOW_0, YELLOW_1, WAYBEL_2,
       XREAL_0, YELLOW13, RELSET_1, WAYBEL31, YELLOW14, YELLOW_2, NAT_1,
-      MEMBERED;
+      MEMBERED, ORDINAL1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, WAYBEL_1, WELLORD1;
  theorems GROUP_1, CARD_1, CARD_2, CARD_4, WAYBEL_0, WAYBEL_1, YELLOW_0,
@@ -154,6 +155,8 @@ for n,m be Nat holds
   let n,m be Nat;
    assume A1: n <= m;
 A2: the carrier of InclPoset(m)=m by YELLOW_1:1;
+    n in NAT & m in NAT by ORDINAL1:def 13;
+    then
 A3:  n c= m by A1,CARD_1:56;
 then A4: the carrier of InclPoset(n) c= the carrier of InclPoset(m)
       by A2,YELLOW_1:1;
@@ -712,12 +715,13 @@ A13:  card((the carrier of A) \ {b}) = (card the carrier of A) - card {b}
  of B,InclPoset(n) such that A14: f is isomorphic
       by WAYBEL_1:def 8;
 A15:  the carrier of B = (the carrier of A)\{b} by YELLOW_0:def 15;
+X0:   n in NAT & n+1 in NAT by ORDINAL1:def 13;
          n <= n+1 by NAT_1:29;
-    then n c= n+1 by CARD_1:56;
+    then n c= n+1 by CARD_1:56,X0;
     then A16: n c= the carrier of InclPoset(n+1) by YELLOW_1:1;
 A17: (the carrier of B) , { b } form_upper_lower_partition_of A by A15,Th3;
 A18:  the carrier of InclPoset(n) = n by YELLOW_1:1;
-A19:  n+1 = succ n by CARD_1:52 .= n \/ {n} by ORDINAL1:def 1;
+A19:  n+1 = succ n by X0,CARD_1:52 .= n \/ {n} by ORDINAL1:def 1;
 then A20:  (the carrier of InclPoset(n)) \/ {n} =
               the carrier of InclPoset(n+1) by A18,YELLOW_1:1;
          for a,b be Element of InclPoset(n+1) st
@@ -726,17 +730,17 @@ then A20:  (the carrier of InclPoset(n)) \/ {n} =
       let a,b be Element of InclPoset(n+1);
         assume a in the carrier of InclPoset(n) & b in {n};
 then A21:      a in n & b = n by TARSKI:def 1,YELLOW_1:1;
-        then a in { i where i is Nat: i < n } & b = n by AXIOMS:30;
-        then consider h be Nat such that A22: h = a & h < n;
+        then a in { i where i is Element of NAT: i < n } & b = n by AXIOMS:30;
+        then consider h be Element of NAT such that A22: h = a & h < n;
              a c= b
         proof
           assume not a c= b;
           then consider x be set such that A23: x in a & not x in b by
 TARSKI:def 3;
-               x in { w where w is Nat: w < h } by A22,A23,AXIOMS:30;
-          then consider w' be Nat such that A24: w' = x & w' < h;
+       x in { w where w is Element of NAT: w < h } by A22,A23,AXIOMS:30;
+          then consider w' be Element of NAT such that A24: w' = x & w' < h;
                w' < n by A22,A24,XXREAL_0:2;
-          then w' in { t where t is Nat: t < n};
+          then w' in { t where t is Element of NAT: t < n};
           hence contradiction by A21,A23,A24,AXIOMS:30;
         end;
 then A25:    a <= b by YELLOW_1:3;
@@ -815,6 +819,6 @@ A38: h = f +* g & h is isomorphic by A14,A17,A26,A34,Th5;
   end;
   end;
 
-       for n being Nat holds P[n] from NAT_1:sch 1(A1,A3);
+       for n being Nat holds P[n] from NAT_1:sch 2(A1,A3);
    hence thesis;
 end;

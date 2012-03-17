@@ -11,7 +11,8 @@ environ
       REWRITE1, MSUALG_4, CLOSURE2, PRALG_2, QC_LANG1, FUNCT_4, CANTOR_1,
       FINSET_1, MSUALG_6, MSUALG_7, MSUALG_8, CARD_3, FINSEQ_4;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, RELSET_1,
-      DOMAIN_1, STRUCT_0, NAT_1, BINOP_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1,
+      DOMAIN_1,
+      NUMBERS, STRUCT_0, NAT_1, BINOP_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1,
       FINSEQ_1, CARD_3, FINSEQ_4, REWRITE1, EQREL_1, LATTICES, LATTICE3,
       PBOOLE, MSSUBFAM, MSUALG_1, MSUALG_4, MSUALG_5, CLOSURE2, MSUALG_6,
       MSUALG_7, XXREAL_0;
@@ -37,17 +38,17 @@ begin
   reserve I for non empty set;
   reserve M for ManySortedSet of I;
   reserve Y,x,y,y1,z,i,j for set;
-  reserve k for Nat;
+  reserve k for Element of NAT;
   reserve p for FinSequence;
   reserve S for non void non empty ManySortedSign;
   reserve A for non-empty MSAlgebra over S;
 
   theorem Th1:
-   for n be Nat,
+   for n be (Element of NAT),
        p be FinSequence holds
     1 <= n & n < len p iff n in dom p & n+1 in dom p
    proof
-    let n be Nat;
+    let n be Element of NAT;
     let p be FinSequence;
     thus 1 <= n & n < len p implies n in dom p & n+1 in dom p
     proof
@@ -67,7 +68,7 @@ begin
     end;
    end;
 
-  scheme NonUniqSeqEx{A()->Nat,P[set,set]}:
+  scheme NonUniqSeqEx{A()->(Element of NAT),P[set,set]}:
     ex p st dom p = Seg A() & for k st k in Seg A() holds P[k,p.k]
    provided
     A1: for k st k in Seg A() ex x st P[k,x]
@@ -363,7 +364,8 @@ proof
    for X be Subset of EqRelLatt Y holds
     x in Y & y in Y implies ( [x,y] in "\/" X iff
      ex f being FinSequence st 1 <= len f & x = f.1 & y = f.(len f) &
-     for i be Nat st 1 <= i & i < len f holds [f.i,f.(i+1)] in union X )
+     for i be Element of NAT st 1 <= i & i < len f
+      holds [f.i,f.(i+1)] in union X )
    proof
     let Y be set;
     let X be Subset of EqRelLatt Y;
@@ -392,30 +394,33 @@ proof
     end;
     thus [x,y] in "\/" X implies
      ex f being FinSequence st 1 <= len f & x = f.1 & y = f.(len f) &
-      for i be Nat st 1 <= i & i < len f holds [f.i,f.(i+1)] in union X
+      for i be Element of NAT st 1 <= i & i < len f
+       holds [f.i,f.(i+1)] in union X
     proof
      assume [x,y] in "\/" X;
      then consider f be FinSequence such that A4: len f > 0 & x = f.1 &
-      y = f.(len f) & for i be Nat st i in dom f & i+1 in dom f holds
+      y = f.(len f) & for i be Element of NAT st i in dom f & i+1 in dom f
+       holds
        [f.i,f.(i+1)] in R by A3,REWRITE1:12;
      take f;
         0 + 1 <= len f by A4,NAT_1:38;
      hence 1 <= len f & x = f.1 & y = f.(len f) by A4;
-     let i be Nat;
+     let i be Element of NAT;
      assume 1 <= i & i < len f;
      then i in dom f & i+1 in dom f by Th1;
      hence [f.i,f.(i+1)] in union X by A4;
     end;
     thus ( ex f being FinSequence st 1 <= len f & x = f.1 & y = f.(len f) &
-     for i be Nat st 1 <= i & i < len f holds [f.i,f.(i+1)] in union X )
+     for i be Element of NAT st 1 <= i & i < len f
+      holds [f.i,f.(i+1)] in union X )
      implies [x,y] in "\/" X
     proof
      given f be FinSequence such that A5: 1 <= len f & x = f.1 &
-      y = f.(len f) & for i be Nat st 1 <= i & i < len f holds
+      y = f.(len f) & for i be Element of NAT st 1 <= i & i < len f holds
        [f.i,f.(i+1)] in union X;
         0 + 1 <= len f by A5;
      then A6: len f > 0 by NAT_1:38;
-        now let i be Nat;
+        now let i be Element of NAT;
       assume i in dom f & i+1 in dom f;
       then 1 <= i & i < len f by Th1;
       hence [f.i,f.(i+1)] in union X by A5;
@@ -987,18 +992,18 @@ definition
      A4: a in M.s1 & b in M.s1 by A2,ZFMISC_1:106;
      then consider f be FinSequence such that
       A5: 1 <= len f & a = f.1 & b = f.(len f) &
-       for i be Nat st 1 <= i & i < len f holds [f.i,f.(i+1)] in
+       for i be Element of NAT st 1 <= i & i < len f holds [f.i,f.(i+1)] in
         union EqRelSet (X,s1) by A3,Th10;
      reconsider t' = t as Function of M.s1,M.s2 by A1,MSUALG_6:11;
      A6: t'.a in M.s2 & t'.b in M.s2 by A4,FUNCT_2:7;
         ex g be FinSequence st
       1 <= len g & t.a = g.1 & t.b = g.(len g) &
-       for i be Nat st 1 <= i & i < len g holds [g.i,g.(i+1)] in
+       for i be Element of NAT st 1 <= i & i < len g holds [g.i,g.(i+1)] in
         union EqRelSet (X,s2)
      proof
       deffunc F(set)=t.(f.$1);
       consider g be FinSequence such that
-       A7: len g = len f & for k be Nat st k in Seg len f holds
+       A7: len g = len f & for k be Element of NAT st k in Seg len f holds
         g.k = F(k) from FINSEQ_1:sch 2;
       take g;
       thus 1 <= len g by A5,A7;
@@ -1006,7 +1011,7 @@ definition
       hence g.1 = t.a by A5,A7;
          len g in Seg len f by A5,A7,FINSEQ_1:3;
       hence g.(len g) = t.b by A5,A7;
-      let j be Nat;
+      let j be Element of NAT;
       assume A8: 1 <= j & j < len g;
       then [f.j,f.(j+1)] in union EqRelSet (X,s1) by A5,A7;
       then consider Z be set such that

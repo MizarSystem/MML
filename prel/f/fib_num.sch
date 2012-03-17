@@ -17,9 +17,8 @@
 <Scheme>
 <ArgTypes/>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="41"/>
 <Func kind="K" nr="45"/>
 </Typ>
 <Pred kind="P" nr="1">
@@ -33,9 +32,8 @@
 <Num nr="1"/>
 </Pred>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="41"/>
 <Func kind="K" nr="45"/>
 </Typ>
 <Not>
@@ -64,15 +62,13 @@
 <Scheme>
 <ArgTypes/>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="41"/>
 <Func kind="K" nr="45"/>
 </Typ>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="41"/>
 <Func kind="K" nr="45"/>
 </Typ>
 <Pred kind="P" nr="1">
@@ -82,15 +78,13 @@
 </For>
 </For>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="41"/>
 <Func kind="K" nr="45"/>
 </Typ>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="41"/>
 <Func kind="K" nr="45"/>
 </Typ>
 <Not>
@@ -110,23 +104,20 @@
 </For>
 </For>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="41"/>
 <Func kind="K" nr="45"/>
 </Typ>
 <Not>
 <And>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="41"/>
 <Func kind="K" nr="45"/>
 </Typ>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="41"/>
 <Func kind="K" nr="45"/>
 </Typ>
 <Not>
@@ -155,9 +146,8 @@
 </For>
 <Not>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="41"/>
 <Func kind="K" nr="45"/>
 </Typ>
 <Not>

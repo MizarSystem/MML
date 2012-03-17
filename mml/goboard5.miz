@@ -9,25 +9,26 @@ environ
  vocabularies PRE_TOPC, EUCLID, MATRIX_1, FINSEQ_1, TREES_1, RELAT_1, MCART_1,
       GOBOARD1, SEQM_3, FUNCT_1, INCSP_1, ORDINAL2, BOOLE, TOPREAL1, GOBOARD2,
       FINSEQ_6, CARD_1, MATRIX_2, ABSVALUE, ARYTM_1, GOBOARD5, FINSEQ_4;
- notations TARSKI, XBOOLE_0, SUBSET_1, ENUMSET1, ZFMISC_1, NUMBERS, REAL_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, ENUMSET1, ZFMISC_1, NUMBERS,
+      XCMPLX_0, REAL_1,
       NAT_1, BINARITH, CARD_1, FUNCT_1, FINSEQ_1, FINSEQ_4, MATRIX_1, MATRIX_2,
       STRUCT_0, PRE_TOPC, EUCLID, TOPREAL1, GOBOARD1, GOBOARD2, FINSEQ_6,
       COMPLEX1, XXREAL_0;
  constructors ENUMSET1, XXREAL_0, REAL_1, NAT_1, MEMBERED, COMPLEX1, FINSEQ_4,
       BINARITH, FINSEQ_6, MATRIX_2, TOPREAL1, GOBOARD2;
  registrations STRUCT_0, RELSET_1, GOBOARD1, GOBOARD2, MATRIX_1, EUCLID,
-      FINSEQ_1, NAT_1, MEMBERED;
+      FINSEQ_1, NAT_1, MEMBERED, ORDINAL1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, TOPREAL1, GOBOARD1, FINSEQ_6, XBOOLE_0;
  theorems GOBOARD1, FINSEQ_1, TOPREAL3, FINSEQ_4, FINSEQ_3, TOPREAL1, REAL_1,
       CQC_THE1, EUCLID, NAT_1, ENUMSET1, CARD_2, TARSKI, GOBOARD2, MATRIX_2,
       MCART_1, ZFMISC_1, ABSVALUE, MATRIX_1, BINARITH, SPPOL_2, FUNCT_1,
-      FINSEQ_2, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0;
+      FINSEQ_2, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1;
 
 begin
 
  reserve p,q for Point of TOP-REAL 2,
-         i,i1,i2,j,j1,j2,k for Nat,
+         i,i1,i2,j,j1,j2,k for Element of NAT,
          r,s for Real,
          G for Matrix of TOP-REAL 2;
 
@@ -41,7 +42,7 @@ proof let M be tabular FinSequence, i,j;
  hence 1 <= i & i <= len M & 1 <= j & j <= width M by FINSEQ_1:3,FINSEQ_3:27;
 end;
 
-definition let G be Matrix of TOP-REAL 2; let i;
+definition let G be Matrix of TOP-REAL 2; let i be Nat;
  func v_strip(G,i) -> Subset of TOP-REAL 2 equals
 :Def1:  { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 }
                     if 1 <= i & i < len G,
@@ -262,7 +263,7 @@ A1: G is non empty-yielding Y_equal-in-column and
 A2: 1 <= i & i <= len G;
       width G <> 0 by A1,GOBOARD1:def 5;
    then 1 <= width G by NAT_1:39;
-then G*(i,width G)`2 = G*(1,width G)`2 by A1,A2,Th2;
+  then G*(i,width G)`2 = G*(1,width G)`2 by A1,A2,Th2;
  hence h_strip(G,width G) = { |[r,s]| : G*(i,width G)`2 <= s } by Def2;
 end;
 
@@ -324,7 +325,7 @@ then G*(1,j)`1 = G*(1,1)`1 by A1,A2,Th3;
  hence v_strip(G,0) = { |[r,s]| : G*(1,j)`1 >= r } by A4,Def1;
 end;
 
-definition let G be Matrix of TOP-REAL 2; let i,j;
+definition let G be Matrix of TOP-REAL 2; let i,j be Nat;
  func cell(G,i,j) -> Subset of TOP-REAL 2 equals
    v_strip(G,i) /\ h_strip(G,j);
  correctness;
@@ -482,7 +483,7 @@ then A37: Xf.3 = Xf1.3 by FINSEQ_1:def 7 .= 1 by FINSEQ_1:62;
 then A38: Xf.(3+1) = Xf2.1 by A33,FINSEQ_1:def 7 .= 1 by FINSEQ_1:61;
        2 in dom Xf2 by A33,FINSEQ_3:27;
 then A39: Xf.(3+2) = Xf2.2 by A33,FINSEQ_1:def 7 .= 0 by FINSEQ_1:61;
-        now let n be Nat;
+        now let n be Element of NAT;
       assume n in dom Xf;
        then A40:    n <> 0 & n <= 5 by A34,FINSEQ_3:27;
       per cases by A40,CQC_THE1:6;
@@ -510,7 +511,7 @@ then A43:   rng Xf = { 0,1 } \/ { 0,1 } by A42,FINSEQ_1:44
       then A44:   rng <*0,1 qua Real*> = rng Xf by FINSEQ_2:147;
 A45:   len <*0,1 qua Real*> = 2 by FINSEQ_1:61 .= card rng Xf by A43,CARD_2:76;
         <*0,1 qua Real*> is increasing
-       proof let n,m be Nat;
+       proof let n,m be Element of NAT;
             len <*0,1 qua Real*> = 2 by FINSEQ_1:61;
 then A46:       dom <*0,1 qua Real*> = { 1,2 } by FINSEQ_1:4,def 3;
         assume n in dom <*0,1 qua Real*> & m in dom <*0,1 qua Real*>;
@@ -536,7 +537,7 @@ then A53: Yf.3 = Yf1.3 by FINSEQ_1:def 7 .= 1 by FINSEQ_1:62;
 then A54: Yf.(3+1) = Yf2.1 by A49,FINSEQ_1:def 7 .= 0 by FINSEQ_1:61;
        2 in dom Yf2 by A49,FINSEQ_3:27;
 then A55: Yf.(3+2) = Yf2.2 by A49,FINSEQ_1:def 7 .= 0 by FINSEQ_1:61;
-        now let n be Nat;
+        now let n be Element of NAT;
       assume n in dom Yf;
        then A56:    n <> 0 & n <= 5 by A50,FINSEQ_3:27;
       per cases by A56,CQC_THE1:6;
@@ -566,7 +567,7 @@ then A59:   rng Yf = { 0,1 } \/ { 0 } by A58,FINSEQ_1:44
       then A60:   rng <*0,1 qua Real*> = rng Yf by FINSEQ_2:147;
 A61:   len <*0,1 qua Real*> = 2 by FINSEQ_1:61 .= card rng Yf by A59,CARD_2:76;
         <*0,1 qua Real*> is increasing
-       proof let n,m be Nat;
+       proof let n,m be Element of NAT;
             len <*0,1 qua Real*> = 2 by FINSEQ_1:61;
 then A62:       dom <*0,1 qua Real*> = { 1,2 } by FINSEQ_1:4,def 3;
         assume n in dom <*0,1 qua Real*> & m in dom <*0,1 qua Real*>;
@@ -582,9 +583,9 @@ FINSEQ_1:61;
      set M = (|[0,0]|,|[0,1]|)][(|[1,0]|,|[1,1]|);
 A65:  len M = 2 by MATRIX_2:3 .= len Incr X_axis f by A48,FINSEQ_1:61;
 A66:  width M = 2 by MATRIX_2:3 .= len Incr Y_axis f by A64,FINSEQ_1:61;
-        for n,m being Nat st [n,m] in Indices M
+        for n,m being Element of NAT st [n,m] in Indices M
             holds M*(n,m) = |[(Incr X_axis f).n,(Incr Y_axis f).m]|
-      proof let n,m be Nat;
+      proof let n,m be Element of NAT;
        assume [n,m] in Indices M;
         then [n,m] in [:{ 1,2 },{ 1,2 }:] by FINSEQ_1:4,MATRIX_2:3;
         then A67:     [n,m] in {[1,1],[1,2],[2,1],[2,2]} by MCART_1:25;
@@ -656,10 +657,10 @@ A81:    k = 5;
      thus f/.k = (GoB f)*(1,1) by A10,A69,A81,MATRIX_2:6;
    end;
    end;
-   let n be Nat such that
+   let n be Element of NAT such that
 A82: n in dom f and
 A83: n+1 in dom f;
-   let m,k,i,j be Nat such that
+   let m,k,i,j be Element of NAT such that
 A84: [m,k] in Indices GoB f and
 A85: [i,j] in Indices GoB f and
 A86: f/.n = (GoB f)*(m,k) and
@@ -725,10 +726,10 @@ Lm2:
 
 theorem Th12:
  for f being non empty FinSequence of TOP-REAL 2
- for n being Nat st n in dom f
+ for n being Element of NAT st n in dom f
    ex i,j st [i,j] in Indices GoB f & f/.n = (GoB f)*(i,j)
 proof let f be non empty FinSequence of TOP-REAL 2;
- let n be Nat such that
+ let n be Element of NAT such that
 A1: n in dom f;
 A2: GoB f = GoB(Incr X_axis f,Incr Y_axis f) by GOBOARD2:def 3;
   set x = (f/.n)`1, y = (f/.n)`2;
@@ -761,13 +762,13 @@ end;
 
 theorem Th13:
 for f being standard (non empty FinSequence of TOP-REAL 2),
-    n being Nat st n in dom f & n+1 in dom f
-for m,k,i,j being Nat
+    n being Element of NAT st n in dom f & n+1 in dom f
+for m,k,i,j being Element of NAT
       st [m,k] in Indices GoB f & [i,j] in Indices GoB f &
          f/.n = (GoB f)*(m,k) & f/.(n+1) = (GoB f)*(i,j)
 holds abs(m-i)+abs(k-j) = 1
 proof let f be standard (non empty FinSequence of TOP-REAL 2),
-          n be Nat such that
+          n be Element of NAT such that
 A1: n in dom f & n+1 in dom f;
       f is_sequence_on GoB f by Def5;
  hence thesis by A1,GOBOARD1:def 11;
@@ -786,11 +787,11 @@ A1: 1 <= k & k+1 <= len f;
        k <= k+1 by NAT_1:29;
     then k <= len f by A1,XXREAL_0:2;
     then A2:  k in dom f by A1,FINSEQ_3:27;
-    then consider i1,j1 being Nat such that
+    then consider i1,j1 being Element of NAT such that
 A3:  [i1,j1] in Indices GoB f & f/.k = (GoB f)*(i1,j1) by Th12;
        k+1 >= 1 by NAT_1:29;
     then A4:  k+1 in dom f by A1,FINSEQ_3:27;
-    then consider i2,j2 being Nat such that
+    then consider i2,j2 being Element of NAT such that
 A5:  [i2,j2] in Indices GoB f & f/.(k+1) = (GoB f)*(i2,j2) by Th12;
 A6:  abs(i1-i2)+abs(j1-j2) = 1 by A2,A3,A4,A5,Th13;
 A7: now per cases by A6,GOBOARD1:2;
@@ -812,7 +813,7 @@ A11:  abs(j1-j2) = 1;
     end;
     end;
  func right_cell(f,k) -> Subset of TOP-REAL 2 means
-:Def6: for i1,j1,i2,j2 being Nat st
+:Def6: for i1,j1,i2,j2 being Element of NAT st
       [i1,j1] in Indices GoB f & [i2,j2] in Indices GoB f &
       f/.k = (GoB f)*(i1,j1) & f/.(k+1) = (GoB f)*(i2,j2) holds
     i1 = i2 & j1+1 = j2 & it = cell(GoB f,i1,j1) or
@@ -825,7 +826,7 @@ A11:  abs(j1-j2) = 1;
    suppose
 A12:  i1 = i2 & j1+1 = j2;
     take cell(GoB f,i1,j1);
-    let i1',j1',i2',j2' be Nat;
+    let i1',j1',i2',j2' be Element of NAT;
     assume [i1',j1'] in Indices GoB f & [i2',j2'] in Indices GoB f &
             f/.k = (GoB f)*(i1',j1') & f/.(k+1) = (GoB f)*(i2',j2');
      then i1 = i1' & i2 = i2' & j1 = j1' & j2 = j2' by A3,A5,GOBOARD1:21;
@@ -834,7 +835,7 @@ A12:  i1 = i2 & j1+1 = j2;
    suppose
 A13:  i1+1 = i2 & j1 = j2;
     take cell(GoB f,i1,j1-'1);
-    let i1',j1',i2',j2' be Nat;
+    let i1',j1',i2',j2' be Element of NAT;
     assume [i1',j1'] in Indices GoB f & [i2',j2'] in Indices GoB f &
             f/.k = (GoB f)*(i1',j1') & f/.(k+1) = (GoB f)*(i2',j2');
      then i1 = i1' & i2 = i2' & j1 = j1' & j2 = j2' by A3,A5,GOBOARD1:21;
@@ -843,7 +844,7 @@ A13:  i1+1 = i2 & j1 = j2;
    suppose
 A14:  i1 = i2+1 & j1 = j2;
     take cell(GoB f,i2,j2);
-    let i1',j1',i2',j2' be Nat;
+    let i1',j1',i2',j2' be Element of NAT;
     assume [i1',j1'] in Indices GoB f & [i2',j2'] in Indices GoB f &
             f/.k = (GoB f)*(i1',j1') & f/.(k+1) = (GoB f)*(i2',j2');
      then i1 = i1' & i2 = i2' & j1 = j1' & j2 = j2' by A3,A5,GOBOARD1:21;
@@ -852,7 +853,7 @@ A14:  i1 = i2+1 & j1 = j2;
    suppose
 A15:  i1 = i2 & j1 = j2+1;
     take cell(GoB f,i1-'1,j2);
-    let i1',j1',i2',j2' be Nat;
+    let i1',j1',i2',j2' be Element of NAT;
     assume [i1',j1'] in Indices GoB f & [i2',j2'] in Indices GoB f &
             f/.k = (GoB f)*(i1',j1') & f/.(k+1) = (GoB f)*(i2',j2');
      then i1 = i1' & i2 = i2' & j1 = j1' & j2 = j2' by A3,A5,GOBOARD1:21;
@@ -861,14 +862,14 @@ A15:  i1 = i2 & j1 = j2+1;
   end;
  uniqueness
   proof let P1,P2 be Subset of TOP-REAL 2 such that
-A16: for i1,j1,i2,j2 being Nat st
+A16: for i1,j1,i2,j2 being Element of NAT st
       [i1,j1] in Indices GoB f & [i2,j2] in Indices GoB f &
       f/.k = (GoB f)*(i1,j1) & f/.(k+1) = (GoB f)*(i2,j2) holds
     i1 = i2 & j1+1 = j2 & P1 = cell(GoB f,i1,j1) or
     i1+1 = i2 & j1 = j2 & P1 = cell(GoB f,i1,j1-'1) or
     i1 = i2+1 & j1 = j2 & P1 = cell(GoB f,i2,j2) or
     i1 = i2 & j1 = j2+1 & P1 = cell(GoB f,i1-'1,j2) and
-A17: for i1,j1,i2,j2 being Nat st
+A17: for i1,j1,i2,j2 being Element of NAT st
       [i1,j1] in Indices GoB f & [i2,j2] in Indices GoB f &
       f/.k = (GoB f)*(i1,j1) & f/.(k+1) = (GoB f)*(i2,j2) holds
     i1 = i2 & j1+1 = j2 & P2 = cell(GoB f,i1,j1) or
@@ -904,7 +905,7 @@ A17: for i1,j1,i2,j2 being Nat st
   end;
   end;
  func left_cell(f,k) -> Subset of TOP-REAL 2 means
-:Def7:  for i1,j1,i2,j2 being Nat st
+:Def7:  for i1,j1,i2,j2 being Element of NAT st
       [i1,j1] in Indices GoB f & [i2,j2] in Indices GoB f &
       f/.k = (GoB f)*(i1,j1) & f/.(k+1) = (GoB f)*(i2,j2) holds
     i1 = i2 & j1+1 = j2 & it = cell(GoB f,i1-'1,j1) or
@@ -917,7 +918,7 @@ A17: for i1,j1,i2,j2 being Nat st
    suppose
 A26:  i1 = i2 & j1+1 = j2;
     take cell(GoB f,i1-'1,j1);
-    let i1',j1',i2',j2' be Nat;
+    let i1',j1',i2',j2' be Element of NAT;
     assume [i1',j1'] in Indices GoB f & [i2',j2'] in Indices GoB f &
             f/.k = (GoB f)*(i1',j1') & f/.(k+1) = (GoB f)*(i2',j2');
      then i1 = i1' & i2 = i2' & j1 = j1' & j2 = j2' by A3,A5,GOBOARD1:21;
@@ -926,7 +927,7 @@ A26:  i1 = i2 & j1+1 = j2;
    suppose
 A27:  i1+1 = i2 & j1 = j2;
     take cell(GoB f,i1,j1);
-    let i1',j1',i2',j2' be Nat;
+    let i1',j1',i2',j2' be Element of NAT;
     assume [i1',j1'] in Indices GoB f & [i2',j2'] in Indices GoB f &
             f/.k = (GoB f)*(i1',j1') & f/.(k+1) = (GoB f)*(i2',j2');
      then i1 = i1' & i2 = i2' & j1 = j1' & j2 = j2' by A3,A5,GOBOARD1:21;
@@ -935,7 +936,7 @@ A27:  i1+1 = i2 & j1 = j2;
    suppose
 A28:  i1 = i2+1 & j1 = j2;
     take cell(GoB f,i2,j2-'1);
-    let i1',j1',i2',j2' be Nat;
+    let i1',j1',i2',j2' be Element of NAT;
     assume [i1',j1'] in Indices GoB f & [i2',j2'] in Indices GoB f &
             f/.k = (GoB f)*(i1',j1') & f/.(k+1) = (GoB f)*(i2',j2');
      then i1 = i1' & i2 = i2' & j1 = j1' & j2 = j2' by A3,A5,GOBOARD1:21;
@@ -944,7 +945,7 @@ A28:  i1 = i2+1 & j1 = j2;
    suppose
 A29:  i1 = i2 & j1 = j2+1;
     take cell(GoB f,i1,j2);
-    let i1',j1',i2',j2' be Nat;
+    let i1',j1',i2',j2' be Element of NAT;
     assume [i1',j1'] in Indices GoB f & [i2',j2'] in Indices GoB f &
             f/.k = (GoB f)*(i1',j1') & f/.(k+1) = (GoB f)*(i2',j2');
      then i1 = i1' & i2 = i2' & j1 = j1' & j2 = j2' by A3,A5,GOBOARD1:21;
@@ -953,14 +954,14 @@ A29:  i1 = i2 & j1 = j2+1;
   end;
  uniqueness
   proof let P1,P2 be Subset of TOP-REAL 2 such that
-A30: for i1,j1,i2,j2 being Nat st
+A30: for i1,j1,i2,j2 being Element of NAT st
       [i1,j1] in Indices GoB f & [i2,j2] in Indices GoB f &
       f/.k = (GoB f)*(i1,j1) & f/.(k+1) = (GoB f)*(i2,j2) holds
     i1 = i2 & j1+1 = j2 & P1 = cell(GoB f,i1-'1,j1) or
     i1+1 = i2 & j1 = j2 & P1 = cell(GoB f,i1,j1) or
     i1 = i2+1 & j1 = j2 & P1 = cell(GoB f,i2,j2-'1) or
     i1 = i2 & j1 = j2+1 & P1 = cell(GoB f,i1,j2) and
-A31: for i1,j1,i2,j2 being Nat st
+A31: for i1,j1,i2,j2 being Element of NAT st
       [i1,j1] in Indices GoB f & [i2,j2] in Indices GoB f &
       f/.k = (GoB f)*(i1,j1) & f/.(k+1) = (GoB f)*(i2,j2) holds
     i1 = i2 & j1+1 = j2 & P2 = cell(GoB f,i1-'1,j1) or
@@ -1717,11 +1718,11 @@ A1: 1 <= k & k+1 <= len f;
        k <= k+1 by NAT_1:29;
     then k <= len f by A1,XXREAL_0:2;
     then A2:  k in dom f by A1,FINSEQ_3:27;
-    then consider i1,j1 being Nat such that
+    then consider i1,j1 being Element of NAT such that
 A3:  [i1,j1] in Indices GoB f & f/.k = (GoB f)*(i1,j1) by Th12;
        k+1 >= 1 by NAT_1:29;
     then A4:  k+1 in dom f by A1,FINSEQ_3:27;
-    then consider i2,j2 being Nat such that
+    then consider i2,j2 being Element of NAT such that
 A5:  [i2,j2] in Indices GoB f & f/.(k+1) = (GoB f)*(i2,j2) by Th12;
 A6:  abs(i1-i2)+abs(j1-j2) = 1 by A2,A3,A4,A5,Th13;
 A7: now per cases by A6,GOBOARD1:2;
@@ -1747,12 +1748,16 @@ A13: 1 <= j2 & j2 <= width GoB f by A5,Th1;
 A14: 0+1 <= i1 & i1 <= len GoB f by A3,Th1;
 A15: 1 <= i2 & i2 <= len GoB f by A5,Th1;
       i1 > 0 by A14,NAT_1:38;
-   then consider i such that
-A16: i+1 = i1 by NAT_1:22;
+   then consider i being Nat such that
+aA16: i+1 = i1 by NAT_1:22;
+     reconsider i as Element of NAT by ORDINAL1:def 13;
+A16: i+1 = i1 by aA16;
 A17: i < len GoB f by A14,A16,NAT_1:38;
       j1 > 0 by A12,NAT_1:38;
-   then consider j such that
-A18: j+1 = j1 by NAT_1:22;
+   then consider j being Nat such that
+aA18: j+1 = j1 by NAT_1:22;
+     reconsider j as Element of NAT by ORDINAL1:def 13;
+A18: j+1 = j1 by aA18;
 A19: j < width GoB f by A12,A18,NAT_1:38;
    per cases by A7;
    suppose

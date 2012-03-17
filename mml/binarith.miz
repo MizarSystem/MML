@@ -20,7 +20,7 @@ environ
  definitions FINSEQ_1, TARSKI, MARGREL1;
  theorems NAT_1, INT_1, MARGREL1, FINSEQ_1, FINSEQ_2, FINSEQ_4, FUNCT_1,
       TARSKI, CQC_LANG, POWER, CARD_1, FINSOP_1, XBOOLE_0, BINOP_2, REAL_2,
-      XREAL_1, XXREAL_0;
+      XREAL_1, XXREAL_0, ORDINAL1;
  schemes FINSEQ_1, FINSEQ_2, RECDEF_1, NAT_1;
 
 begin
@@ -30,18 +30,18 @@ definition let i be Nat, D be non empty set;
 end;
 
  Lm1:
-    for i,j being Nat holds addnat.(i,j) = i + j by BINOP_2:def 23;
+    for i,j being Element of NAT holds addnat.(i,j) = i + j by BINOP_2:def 23;
 
 canceled;
 
   theorem Th2:
-    for i,n being Nat,
+    for i,n being Element of NAT,
         D being non empty set,
         d being Element of D,
         z being Tuple of n,D st i in Seg n holds
     (z^<*d*>)/.i=z/.i
     proof
-    let i,n be Nat,
+    let i,n be Element of NAT,
         D be non empty set,
         d be Element of D,
         z be Tuple of n,D such that A1: i in Seg n;
@@ -51,13 +51,13 @@ canceled;
     end;
 
   theorem Th3:
-    for n being Nat,
+    for n being Element of NAT,
         D being non empty set,
         d being Element of D,
         z being Tuple of n,D holds
     (z^<*d*>)/.(n+1)=d
     proof
-    let n be Nat,
+    let n be Element of NAT,
         D be non empty set,
         d be Element of D,
         z be Tuple of n,D;
@@ -72,7 +72,7 @@ canceled;
 canceled;
 
   theorem
-      for i,n being Nat holds
+      for i,n being Element of NAT holds
       i in Seg n implies i is non empty by CARD_1:51,FINSEQ_1:3;
 
   definition
@@ -514,7 +514,7 @@ z)) by MARGREL1:52
   end;
 
   definition let i,j be natural number;
-  func i -' j -> Nat equals
+  func i -' j -> Element of NAT equals
     :Def3:  i - j if i - j >= 0 otherwise 0;
   coherence by INT_1:16;
    correctness;
@@ -528,16 +528,16 @@ z)) by MARGREL1:52
     hence i + j -' j = i by Def3;
   end;
 
-  reserve i,j,k for Nat;
-  reserve n for non empty Nat;
+  reserve i,j,k for Element of NAT;
+  reserve n for non empty Element of NAT;
   reserve x,y,z1,z2 for Tuple of n, BOOLEAN;
 
-  definition let n be Nat, x be Tuple of n, BOOLEAN;
+  definition let n be Element of NAT, x be Tuple of n, BOOLEAN;
   func 'not' x -> Tuple of n, BOOLEAN means
        for i st i in Seg n holds it/.i = 'not' (x/.i);
     existence
      proof
-        deffunc F(Nat) = 'not' (x/.$1);
+        deffunc F(Element of NAT) = 'not' (x/.$1);
         consider z being FinSequence of BOOLEAN such that A1: len z = n and
         A2: for j st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
         reconsider z as Tuple of n, BOOLEAN by A1,FINSEQ_2:110;
@@ -564,7 +564,7 @@ then A8:          j in dom y & j in dom z by A6,FINSEQ_1:def 3;
       end;
  end;
 
-  definition let n be non empty Nat, x, y be Tuple of n, BOOLEAN;
+  definition let n be non empty Element of NAT, x, y be Tuple of n, BOOLEAN;
   func carry(x, y) -> Tuple of n, BOOLEAN means
 :Def5:
     it/.1 = FALSE &
@@ -572,12 +572,12 @@ then A8:          j in dom y & j in dom z by A6,FINSEQ_1:def 3;
         (x/.i) '&' (it/.i) 'or' (y/.i) '&' (it/.i);
     existence
       proof
-         deffunc G(Nat,Element of BOOLEAN) = (x/.($1+1)) '&'
+         deffunc G(Element of NAT,Element of BOOLEAN) = (x/.($1+1)) '&'
           (y/.($1+1)) 'or' (x/.($1+1)) '&' $2 'or' (y/.($1+1)) '&' $2;
       consider f being Function of NAT, BOOLEAN such that
         A1: f.0 = FALSE and A2: for i being Element of NAT
           holds f.(i+1) = G(i,f.i) from RECDEF_1:sch 4;
-        deffunc F(Nat) = f.($1-1);
+        deffunc F(Element of NAT) = f.($1-1);
         consider z being FinSequence such that A3: len z = n and
         A4: for j st j in Seg n holds z.j = F(j) from FINSEQ_1:sch 2;
            z is FinSequence of BOOLEAN
@@ -587,9 +587,9 @@ then A8:          j in dom y & j in dom z by A6,FINSEQ_1:def 3;
           then consider b be set such that
                         A5:b in dom z & a = z.b by FUNCT_1:def 5;
           A6: b in Seg n by A3,A5,FINSEQ_1:def 3;
-          reconsider b as Nat by A5;
+          reconsider b as Element of NAT by A5;
                 b>=1 by A6,FINSEQ_1:3;
-          then reconsider c = b-1 as Nat by INT_1:18;
+          then reconsider c = b-1 as Element of NAT by INT_1:18;
                 z.b = f.c by A4,A6;
           hence a in BOOLEAN by A5;
         end;
@@ -603,7 +603,8 @@ then A8:          j in dom y & j in dom z by A6,FINSEQ_1:def 3;
                 .= FALSE by A1;
         let i; assume A8: 1 <= i & i < n;
         then i <> 0;
-        then consider j such that A9: j+1 = i by NAT_1:22;
+        then consider j be Nat such that A9: j+1 = i by NAT_1:22;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
         A10: j+1 in Seg n by A8,A9;
         A11: i+1-1=i;
            j+1 in dom z by A3,A10,FINSEQ_1:def 3;
@@ -629,7 +630,7 @@ then A8:          j in dom y & j in dom z by A6,FINSEQ_1:def 3;
                 'or' (x/.i) '&' (z2/.i) 'or' (y/.i) '&' (z2/.i);
           A18: len z1 = n & len z2 = n by FINSEQ_2:109;
              now let j such that A19: j in Seg n;
-           defpred P[Nat] means $1 in Seg n implies z1/.$1 = z2/.$1;
+           defpred P[Element of NAT] means $1 in Seg n implies z1/.$1 = z2/.$1;
               A20: P[0] by FINSEQ_1:3;
               A21: now let k such that A22: P[k];
                 thus P[k+1]
@@ -662,13 +663,13 @@ A28:         dom z1 = Seg n & dom z2 = Seg n by A18,FINSEQ_1:def 3;
       end;
   end;
 
-  definition let n be Nat, x be Tuple of n, BOOLEAN;
+  definition let n be Element of NAT, x be Tuple of n, BOOLEAN;
   func Binary(x) -> Tuple of n, NAT means
   :Def6:  for i st i in Seg n holds
                   it/.i = IFEQ(x/.i,FALSE,0,2 to_power(i-'1));
   existence
   proof
-        deffunc F(Nat) = IFEQ( x/.$1,FALSE,0,2 to_power($1-'1));
+        deffunc F(Element of NAT) = IFEQ( x/.$1,FALSE,0,2 to_power($1-'1));
         consider z being FinSequence of NAT such that A1: len z = n and
         A2: for j st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
         reconsider z as Tuple of n, NAT by A1,FINSEQ_2:110;
@@ -697,8 +698,8 @@ A28:         dom z1 = Seg n & dom z2 = Seg n by A18,FINSEQ_1:def 3;
       end;
    end;
 
-  definition let n be Nat, x be Tuple of n, BOOLEAN;
-  func Absval (x) -> Nat equals
+  definition let n be Element of NAT, x be Tuple of n, BOOLEAN;
+  func Absval (x) -> Element of NAT equals
   addnat $$ Binary (x);
     correctness;
   end;
@@ -709,7 +710,8 @@ A28:         dom z1 = Seg n & dom z2 = Seg n by A18,FINSEQ_1:def 3;
                      (x/.i) 'xor' (y/.i) 'xor' (carry(x,y)/.i);
     existence
       proof
-        deffunc F(Nat) = (x/.$1) 'xor' (y/.$1) 'xor' (carry(x,y)/.$1);
+        deffunc F(Element of NAT)
+         = (x/.$1) 'xor' (y/.$1) 'xor' (carry(x,y)/.$1);
         consider z being FinSequence of BOOLEAN such that A1: len z = n and
         A2: for j st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
         reconsider z as Tuple of n, BOOLEAN by A1,FINSEQ_2:110;
@@ -745,16 +747,16 @@ A28:         dom z1 = Seg n & dom z2 = Seg n by A18,FINSEQ_1:def 3;
   correctness;
   end;
 
- scheme Indfrom1 { P[Nat] } :
- for k being non empty Nat holds P[k]
+ scheme Indfrom1 { P[Element of NAT] } :
+ for k being non empty Element of NAT holds P[k]
    provided
    A1: P[1] and
-   A2: for k being non empty Nat st P[k] holds P[k + 1]
+   A2: for k being non empty Element of NAT st P[k] holds P[k + 1]
 proof
-          defpred P[Nat] means $1 is non empty implies P[$1];
+          defpred P[Element of NAT] means $1 is non empty implies P[$1];
        A3: P[0];
        A4: now
-          let k be Nat;
+          let k be Element of NAT;
           assume A5: P[k];
            now
           assume k+1 is non empty;
@@ -767,7 +769,7 @@ proof
           end;
           end; hence P[k+1];
           end;
-          for k being Nat holds P[k] from NAT_1:sch 1(A3,A4);
+          for k being Element of NAT holds P[k] from NAT_1:sch 1(A3,A4);
        hence thesis;
      end;
 
@@ -798,7 +800,7 @@ end;
    proof
       let z1 be Tuple of 1,BOOLEAN;
       assume A1: z1=<*FALSE*>;
-        consider k being Nat such that
+        consider k being Element of NAT such that
           A2: Binary( z1 ) = <* k *> by FINSEQ_2:117;
           A3: z1/.1 = FALSE by A1,FINSEQ_4:25;
           1 in Seg 1;
@@ -815,7 +817,7 @@ end;
    proof
       let z1 be Tuple of 1,BOOLEAN;
       assume A1: z1=<*TRUE*>;
-        consider k being Nat such that
+        consider k being Element of NAT such that
           A2: Binary( z1 ) = <* k *> by FINSEQ_2:117;
        A3: z1/.1 <> FALSE by A1,FINSEQ_4:25;
           1 in Seg 1;
@@ -830,8 +832,8 @@ A5:                      1 - 1 = 0;
         end;
 
   definition
-    let n1 be non empty Nat;
-    let n2 be Nat;
+    let n1 be non empty Element of NAT;
+    let n2 be Element of NAT;
     let D  be non empty set;
     let z1 be Tuple of n1,D;
     let z2 be Tuple of n2,D;
@@ -849,21 +851,21 @@ A5:                      1 - 1 = 0;
   theorem Th43:
     for z1,z2 being Tuple of n,BOOLEAN holds
     for d1,d2 being Element of BOOLEAN holds
-    for i being Nat holds
+    for i being Element of NAT holds
     i in Seg n implies
      carry(z1^<*d1*>,z2^<*d2*>)/.i = carry(z1,z2)/.i
      proof
      let z1,z2 be Tuple of n,BOOLEAN;
      let d1,d2 be Element of BOOLEAN;
-     defpred P[Nat] means $1 in Seg n implies
+     defpred P[Element of NAT] means $1 in Seg n implies
           carry(z1^<*d1*>,z2^<*d2*>)/.$1 = carry(z1,z2)/.$1;
      A1: P[1] proof assume 1 in Seg n;
          thus
               carry(z1^<*d1*>,z2^<*d2*>)/.1 = FALSE by Def5
                .= carry(z1,z2)/.1 by Def5;
          end;
-     A2: for i being non empty Nat st P[i] holds P[i+1] proof
-         let i be non empty Nat;
+     A2: for i being non empty Element of NAT st P[i] holds P[i+1] proof
+         let i be non empty Element of NAT;
          assume
        A3: P[i];
        A4: i+1 > i by XREAL_1:31;
@@ -881,10 +883,11 @@ A5:                      1 - 1 = 0;
                       (z2/.i) '&' (carry(z1,z2)/.i) by A3,A5,A7,A8,Def5
                   .= carry(z1,z2)/.(i+1) by A5,Def5;
           end;
-        let i be Nat;
+        let i be Element of NAT;
         assume A9:i in Seg n;
         then A10: i is non empty by CARD_1:51,FINSEQ_1:3;
-           for i being non empty Nat holds P[i] from Indfrom1 (A1,A2);
+           for i being non empty Element of NAT holds P[i]
+           from Indfrom1 (A1,A2);
         hence thesis by A9,A10;
   end;
 
@@ -997,7 +1000,8 @@ A1:     for i st i in Seg (n+1) holds
    proof
      set f = FALSE,
          t = TRUE;
-    defpred P[ non empty Nat] means for z1,z2 being Tuple of $1, BOOLEAN holds
+    defpred P[ non empty Element of NAT] means
+     for z1,z2 being Tuple of $1, BOOLEAN holds
        Absval(z1+z2) + IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power ($1)) =
                    Absval(z1) + Absval(z2);
      A1: P[1]  proof
@@ -1119,7 +1123,8 @@ Def5;
 
         end;
         end;
-     A16: for n being non empty Nat st P[n] holds P[n+1] proof let n;
+     A16: for n being non empty Element of NAT st P[n] holds P[n+1]
+      proof let n;
          assume A17: P[n];
               let z1,z2 be Tuple of n+1,BOOLEAN;
               consider t1 being (Element of n-tuples_on BOOLEAN),
@@ -1128,11 +1133,12 @@ Def5;
               consider t2 being (Element of n-tuples_on BOOLEAN),
                  d2 being Element of BOOLEAN such that A19: z2 = t2^<*d2*>
  by FINSEQ_2:137;
-           IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (n+1)) is Nat &
-        IFEQ(d1 'xor' d2 'xor' add_ovfl(t1,t2),FALSE,0,2 to_power n) is Nat &
-        IFEQ(d1,FALSE,0,2 to_power n) is Nat &
-        IFEQ(d2,FALSE,0,2 to_power n) is Nat &
-        IFEQ(add_ovfl(t1,t2),FALSE,0,2 to_power(n)) is Nat;
+           IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (n+1)) is Element of NAT &
+        IFEQ(d1 'xor' d2 'xor' add_ovfl(t1,t2),FALSE,0,2 to_power n)
+         is Element of NAT &
+        IFEQ(d1,FALSE,0,2 to_power n) is Element of NAT &
+        IFEQ(d2,FALSE,0,2 to_power n) is Element of NAT &
+        IFEQ(add_ovfl(t1,t2),FALSE,0,2 to_power(n)) is Element of NAT;
         then reconsider
               C1= IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (n+1)),
               C2= IFEQ(d1 'xor' d2 'xor' add_ovfl(t1,t2),FALSE,0,2 to_power n),
@@ -1392,7 +1398,8 @@ A56:                   d1 '&' d2 'or' d1 '&' add_ovfl(t1,t2) 'or'
                          + Absval(t2^<*d2*>) by Th46
                   .= Absval(z1) + Absval(z2) by A18,A19,Th46;
        end;
-     thus for n being non empty Nat holds P[n] from Indfrom1 (A1,A16);
+     thus for n being non empty Element of NAT holds P[n]
+      from Indfrom1 (A1,A16);
    end;
 
   theorem
@@ -1469,7 +1476,7 @@ theorem
 
 :: from JORDAN4:1, AK, 21.06,2006
 
-reserve n,i,j,k for Nat;
+reserve n,i,j,k for Element of NAT;
 
 theorem
   n-'i=0 implies n<=i

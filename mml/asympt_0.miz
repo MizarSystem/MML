@@ -20,35 +20,38 @@ environ
  definitions TARSKI, FRAENKEL;
  theorems TARSKI, FUNCT_2, FRAENKEL, INT_1, NAT_1, PRE_CIRC, REAL_1, SEQ_1,
       SQUARE_1, SEQ_2, ABSVALUE, LIMFUNC1, POWER, PRE_FF, NEWTON, XREAL_0,
-      XBOOLE_0, XCMPLX_0, XCMPLX_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0;
+      XBOOLE_0, XCMPLX_0, XCMPLX_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0,
+      ORDINAL1;
  schemes FUNCT_2, FINSEQ_1, NAT_1;
 
 begin :: Preliminaries
 
 reserve c, c1, d for Real,
-        k, n, m, N, n1, N1, N2, N3, N4, N5, M for Nat,
+        k, n, m, N, n1, N1, N2, N3, N4, N5, M for Element of NAT,
         x for set;
 
-scheme FinSegRng1{m, n() -> Nat, X() -> non empty set,
+scheme FinSegRng1{m, n() -> Element of NAT, X() -> non empty set,
                   F(set) -> Element of X()} :
- {F(i) where i is Nat: m() <= i & i <= n()} is finite non empty Subset of X()
+ {F(i) where i is Element of NAT: m() <= i & i <= n()}
+  is finite non empty Subset of X()
 provided
 A1: m() <= n()
-proof defpred P[Nat] means not contradiction;
-   set S = {F(i) where i is Nat: m()<=i & i<=n() & P[i]};
-   set S1 = {F(i) where i is Nat: m()<=i & i<=n()};
+proof defpred P[Element of NAT] means not contradiction;
+   set S = {F(i) where i is Element of NAT: m()<=i & i<=n() & P[i]};
+   set S1 = {F(i) where i is Element of NAT: m()<=i & i<=n()};
     A2: now let x be set;
      hereby assume x in S;
-        then ex i being Nat st x = F(i) & m()<=i & i<=n() & P[i];
+        then ex i being Element of NAT st x = F(i) & m()<=i & i<=n() & P[i];
       hence x in S1;
      end;
      assume x in S1;
-        then ex i being Nat st x = F(i) & m()<=i & i<=n();
+        then ex i being Element of NAT st x = F(i) & m()<=i & i<=n();
      hence x in S;
     end;
 A3: F(m()) in S by A1;
 A4: S is finite from FINSEQ_1:sch 6;
-      S c= X() proof let x; assume x in S; then consider n1 being Nat such
+      S c= X() proof let x; assume x in S;
+       then consider n1 being Element of NAT such
 that
    A5: x = F(n1) and n1 >= m() & n1 <= n();
     thus x in X() by A5;
@@ -56,41 +59,44 @@ that
  hence thesis by A2,A3,A4,TARSKI:2;
 end;
 
-scheme FinImInit1{N() -> Nat, X() -> non empty set, F(set) -> Element of X()} :
- {F(n) where n is Nat: n <= N()} is finite non empty Subset of X()
+scheme FinImInit1{N() -> Element of NAT, X() -> non empty set,
+F(set) -> Element of X()} :
+ {F(n) where n is Element of NAT: n <= N()} is finite non empty Subset of X()
 proof
- set S = {F(n) where n is Nat: n <= N()};
- set T = {F(n) where n is Nat: 0<=n & n<=N()};
+ set S = {F(n) where n is Element of NAT: n <= N()};
+ set T = {F(n) where n is Element of NAT: 0<=n & n<=N()};
 A1: 0 <= N();
 A2: T is finite non empty Subset of X() from FinSegRng1(A1);
        now let x be set;
-    hereby assume x in S; then consider n being Nat such that
+    hereby assume x in S; then consider n being Element of NAT such that
 A3:   x = F(n) & n <= N();
      thus x in T by A3;
     end;
-    assume x in T; then consider n being Nat such that
+    assume x in T; then consider n being Element of NAT such that
     A4: x = F(n) & 0 <= n & n <= N();
     thus x in S by A4;
    end;
  hence thesis by A2,TARSKI:2;
 end;
 
-scheme FinImInit2{N() -> Nat, X() -> non empty set, F(set) -> Element of X()} :
- {F(n) where n is Nat: n < N()} is finite non empty Subset of X()
+scheme FinImInit2{N() -> Element of NAT, X() -> non empty set,
+F(set) -> Element of X()} :
+ {F(n) where n is Element of NAT: n < N()} is finite non empty Subset of X()
 provided
 A1: N() > 0
-proof set S = {F(n) where n is Nat: n < N()};
+proof set S = {F(n) where n is Element of NAT: n < N()};
    consider m being Nat such that
 A2: N() = m+1 by A1,NAT_1:22;
-    set T = {F(n) where n is Nat: n <= m};
+    reconsider m as Element of NAT by ORDINAL1:def 13;
+    set T = {F(n) where n is Element of NAT: n <= m};
 A3: T is finite non empty Subset of X() from FinImInit1;
        now let x be set;
-    hereby assume x in S; then consider n being Nat such that
+    hereby assume x in S; then consider n being Element of NAT such that
     A4: x = F(n) & n < N();
             n <= m by A2,A4,NAT_1:38;
      hence x in T by A4;
     end;
-    assume x in T; then consider n being Nat such that
+    assume x in T; then consider n being Element of NAT such that
     A5: x = F(n) & n <= m;
          n < m+1 by A5,NAT_1:38;
     hence x in S by A2,A5;
@@ -141,7 +147,7 @@ registration
          eventually-nondecreasing Real_Sequence;
   existence proof
    reconsider f = NAT --> 1 as Function of NAT, REAL by FUNCOP_1:57;
-  A1: for x being Nat holds f.x = 1 by FUNCOP_1:13;
+  A1: for x being Element of NAT holds f.x = 1 by FUNCOP_1:13;
    take f;
    thus f is eventually-nonnegative proof
     take 0; let n; assume n >= 0;   f.n = 1 by A1; hence f.n >= 0;
@@ -171,9 +177,9 @@ definition let c,d;
 end;
 
 definition let N,M;
- redefine func min(N,M) -> Nat;
+ redefine func min(N,M) -> Element of NAT;
   coherence by XXREAL_0:15;
-  func max(N,M) -> Nat;
+  func max(N,M) -> Element of NAT;
   coherence by XXREAL_0:16;
 end;
 
@@ -244,9 +250,9 @@ definition let f be Real_Sequence, c be real number;
   for n holds it.n = c + f.n;
  existence proof
     reconsider c as Real by XREAL_0:def 1;
-    deffunc F(Nat) = c+f.$1;
+    deffunc F(Element of NAT) = c+f.$1;
     consider h being Function of NAT, REAL such that
- A1: for n being Nat holds h.n = F(n) from FUNCT_2:sch 4;
+ A1: for n being Element of NAT holds h.n = F(n) from FUNCT_2:sch 4;
   take h; let n; thus thesis by A1;
  end;
  uniqueness proof let j,k be Real_Sequence such that
@@ -305,9 +311,9 @@ definition let f,g be Real_Sequence;
  func max(f, g) -> Real_Sequence means :Def10:
   for n holds it.n = max( f.n, g.n );
  existence proof
-    deffunc F(Nat) = max(f.$1, g.$1);
+    deffunc F(Element of NAT) = max(f.$1, g.$1);
     consider h being Function of NAT, REAL such that
- A1: for n being Nat holds h.n = F(n) from FUNCT_2:sch 4;
+ A1: for n being Element of NAT holds h.n = F(n) from FUNCT_2:sch 4;
    take h; let n; thus h.n = max(f.n, g.n) by A1;
  end;
  uniqueness proof let j, k be Real_Sequence such that
@@ -349,22 +355,23 @@ definition let f,g be Real_Sequence;
 end;
 
 Lm1:
- for f,g being Real_Sequence, n being Nat holds (f/"g).n = f.n/g.n
+ for f,g being Real_Sequence, n being Element of NAT holds (f/"g).n = f.n/g.n
 proof
- let f,g be Real_Sequence, n be Nat;
+ let f,g be Real_Sequence, n be Element of NAT;
   thus (f/"g).n = (f(#)(g")).n by SEQ_1:def 9 .= f.n*g".n by SEQ_1:12
               .= f.n*(g.n)" by SEQ_1:def 8 .= f.n/g.n by XCMPLX_0:def 9;
 end;
 
 theorem Th1: :: Problem 3.25
- for f being Real_Sequence, N being Nat st for n st n >= N holds f.n <= f.(n+1)
-  holds for n,m being Nat st N <= n & n <= m holds f.n <= f.m
+ for f being Real_Sequence, N being Element of NAT
+  st for n st n >= N holds f.n <= f.(n+1)
+  holds for n,m being Element of NAT st N <= n & n <= m holds f.n <= f.m
 proof
-  let f be Real_Sequence, N be Nat; assume
+  let f be Real_Sequence, N be Element of NAT; assume
 A1: for n st n >= N holds f.n <= f.(n+1);
    let n,m; assume
 A2:  n >= N;
-     defpred P[Nat] means f.n <= f.$1;
+     defpred P[Element of NAT] means f.n <= f.$1;
 A3: P[n];
 A4: for m st m >= n & P[m] holds P[m+1] proof
     let m; assume
@@ -401,7 +408,7 @@ A9: now
    let p be real number; assume
 A10: 0 < p;
    then 0*0<p*((als*als)/2) by A8,XREAL_1:98;
-   then consider n2 being Nat such that
+   then consider n2 being Element of NAT such that
 A11: for m st n2<=m holds
     abs(s.m-(ls))<p*((als*als)/2) by A1,SEQ_2:def 7;
    set N3=N1+N2;
@@ -647,7 +654,7 @@ proof
    end;
    suppose
    A6: N > 0;
-       deffunc F(Nat) = t.$1 / f.$1;
+       deffunc F(Element of NAT) = t.$1 / f.$1;
     reconsider B = { F(n) : n < N }
       as finite non empty Subset of REAL from FinImInit2(A6);
     set b = max B;
@@ -714,13 +721,13 @@ end;
 theorem :: Generalized Threshold Rule (page 81)
      for f being eventually-positive Real_Sequence,
      t being eventually-nonnegative Real_Sequence,
-     N being Nat
+     N being Element of NAT
   st t in Big_Oh(f) & for n st n >= N holds f.n > 0
    holds ex c st c > 0 & for n st n >= N holds t.n <= c*f.n
 proof
  let f be eventually-positive Real_Sequence,
      t be eventually-nonnegative Real_Sequence,
-     N be Nat; assume that
+     N be Element of NAT; assume that
 A1: t in Big_Oh(f) and
 A2: for n st n >= N holds f.n > 0;
     consider s being Element of Funcs(NAT, REAL) such that
@@ -729,9 +736,9 @@ A4: ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >= 0 by A1;
     consider c2 being Real, M such that
 A5:  c2 > 0 and
 A6:  for n st n >= M holds t.n <= c2*f.n & t.n >= 0 by A3,A4;
-     deffunc T(Nat) = t.$1;
+     deffunc T(Element of NAT) = t.$1;
  set tset = { T(n) : N <= n & n <= max(M,N) };
-     deffunc F(Nat) = f.$1;
+     deffunc F(Element of NAT) = f.$1;
  set fset = { F(n) : N <= n & n <= max(M,N) };
 A7: M <= max(M,N) by XXREAL_0:25;
 A8: N <= max(M,N) by XXREAL_0:25;
@@ -741,7 +748,8 @@ A8: N <= max(M,N) by XXREAL_0:25;
     then reconsider fset as finite non empty Subset of REAL;
  set T = max(tset);
  set F = min(fset);
-        F in fset by PRE_CIRC:def 4; then consider n1 being Nat such that
+        F in fset by PRE_CIRC:def 4;
+        then consider n1 being Element of NAT such that
 A9:  f.n1 = F & n1 >= N & n1 <= max(M,N);
 A10: F > 0 by A2,A9;
 A11:  F <> 0 by A2,A9;
@@ -833,9 +841,9 @@ proof
      consider c,N1 such that
   A13: c > 0 and
   A14: for n st n >= N1 holds t.n <= c*max(f,g).n & t.n >= 0 by A12;
-     consider M1 being Nat such that
+     consider M1 being Element of NAT such that
   A15: for n st n >= M1 holds f.n >= 0 by Def4;
-     consider M2 being Nat such that
+     consider M2 being Element of NAT such that
   A16: for n st n >= M2 holds g.n >= 0 by Def4;
    set N = max(N1, max(M1, M2));
          max(M1,M2) <= N & M1 <= max(M1,M2) & M2 <= max(M1,M2) by XXREAL_0:25;
@@ -882,13 +890,13 @@ A4: ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >= 0 by A2;
    consider t being Element of Funcs(NAT, REAL) such that
 A5: t = f and
 A6: ex c,N st c > 0 & for n st n >= N holds t.n <= c*g.n & t.n>=0 by A1;
-   consider cs being Real, Ns being Nat such that
+   consider cs being Real, Ns being Element of NAT such that
 A7: cs > 0 and
 A8: for n st n >= Ns holds s.n <= cs*f.n & s.n >= 0 by A4;
-   consider ct being Real, Nt being Nat such that
+   consider ct being Real, Nt being Element of NAT such that
        ct > 0 and
 A9: for n st n >= Nt holds t.n <= ct*g.n & t.n >= 0 by A6;
-   consider Ng being Nat such that
+   consider Ng being Element of NAT such that
 A10: for n st n >= Ng holds g.n >= 0 by Def4;
        now take c = max(cs*ct,max(cs,ct));
        A11: cs <= max(cs,ct) & ct <= max(cs,ct) & c >=
@@ -1375,7 +1383,7 @@ proof
    end;
    suppose
    A6: N > 0;
-       deffunc F(Nat) = t.$1 / f.$1;
+       deffunc F(Element of NAT) = t.$1 / f.$1;
        reconsider B = { F(n) : n < N }
          as finite non empty Subset of REAL from FinImInit2(A6);
     set b = min B;
@@ -1680,7 +1688,7 @@ A1: Big_Theta(f) = { s where s is Element of Funcs(NAT, REAL) :
    end;
    suppose
    A8: N > 0;
-      deffunc F(Nat) = t.$1 / f.$1;
+      deffunc F(Element of NAT) = t.$1 / f.$1;
       reconsider B = { F(n) : n < N }
         as finite non empty Subset of REAL from FinImInit2(A8);
     set b = max B;
@@ -1826,9 +1834,9 @@ XXREAL_0:2;
    A24: c > 0 and
    A25: d > 0 and
    A26: for n st n >= N holds d*max(f,g).n <= t.n & t.n <= c*max(f,g).n by A23;
-      consider N1 being Nat such that
+      consider N1 being Element of NAT such that
    A27: for n st n >= N1 holds f.n >= 0 by Def4;
-      consider N2 being Nat such that
+      consider N2 being Element of NAT such that
    A28: for n st n >= N2 holds g.n >= 0 by Def4;
    A29: d*2" > d*0 by A25,XREAL_1:70;
     set a = max(N, max(N1, N2));
@@ -2078,13 +2086,13 @@ proof
 end;
 
 definition :: Definition of f(bn) (page 89)
- let f be Real_Sequence, b be Nat;
+ let f be Real_Sequence, b be Element of NAT;
   func f taken_every b -> Real_Sequence means :Def18:
    for n holds it.n = f.(b*n);
  existence proof
-    deffunc F(Nat) = f.(b*$1);
+    deffunc F(Element of NAT) = f.(b*$1);
     consider h being Function of NAT, REAL such that
- A1: for n being Nat holds h.n = F(n) from FUNCT_2:sch 4;
+ A1: for n being Element of NAT holds h.n = F(n) from FUNCT_2:sch 4;
   take h; let n; thus h.n = f.(b*n) by A1;
  end;
  uniqueness proof let j,k be Real_Sequence such that
@@ -2096,7 +2104,7 @@ definition :: Definition of f(bn) (page 89)
 end;
 
 definition :: (page 89)
- let f be eventually-nonnegative Real_Sequence, b be Nat;
+ let f be eventually-nonnegative Real_Sequence, b be Element of NAT;
  pred f is_smooth_wrt b means :Def19:
   f is eventually-nondecreasing & f taken_every b in Big_Oh(f);
 end;
@@ -2104,15 +2112,15 @@ end;
 definition :: (page 89)
  let f be eventually-nonnegative Real_Sequence;
  attr f is smooth means :Def20:
-  for b being Nat st b >= 2 holds f is_smooth_wrt b;
+  for b being Element of NAT st b >= 2 holds f is_smooth_wrt b;
 end;
 
 theorem :: b-smooth implies smooth (page 90)
      for f being eventually-nonnegative Real_Sequence
-  st ex b being Nat st b >= 2 & f is_smooth_wrt b holds f is smooth
+  st ex b being Element of NAT st b >= 2 & f is_smooth_wrt b holds f is smooth
 proof
  let f be eventually-nonnegative Real_Sequence;
- given b being Nat such that
+ given b being Element of NAT such that
 A1: b >= 2 and
 A2: f is_smooth_wrt b;
 A3: f is eventually-nondecreasing & f taken_every b in Big_Oh(f) by A2,Def19;
@@ -2126,7 +2134,7 @@ A7: for n st n >= N2 holds t.n <= c*f.n & t.n >= 0 by A5;
 A8: for n st n >= N3 holds f.n <= f.(n+1) by A3,Def8;
  set N = max(N2, N3);
 A9: N >= N2 & N >= N3 by XXREAL_0:25;
-     now let a be Nat; assume
+     now let a be Element of NAT; assume
  A10: a >= 2;
  A11:  f taken_every a is Element of Funcs(NAT, REAL) by FUNCT_2:11;
   set i = [/log(b,a)\];
@@ -2139,10 +2147,10 @@ A9: N >= N2 & N >= N3 by XXREAL_0:25;
  then A16: log(b,a) > 0 by A13,A15,POWER:59;
  A17: [/log(b,a)\] >= log(b,a) by INT_1:def 5;
   then i >= 0 by A16;
-    then reconsider i as Nat by INT_1:16;
+    then reconsider i as Element of NAT by INT_1:16;
         c|^i = c to_power i by A6,POWER:48;
  then A18: c|^i > 0 by A6,POWER:39;
-  reconsider i1 = b|^i as Nat by NEWTON:99;
+  reconsider i1 = b|^i as Element of NAT by NEWTON:99;
       now let n; assume
   A19: n >= N;
   then A20: n >= N2 & n >= N3 by A9,XXREAL_0:2;
@@ -2159,7 +2167,7 @@ A9: N >= N2 & N >= N3 by XXREAL_0:25;
      then f.(a*n) <= f.(i1*n) by A8,A23,Th1;
      then (f taken_every a).n <= f.(i1*n) by Def18;
   then A25: (f taken_every a).n <= (f taken_every i1).n by Def18;
-      defpred P[Nat] means  f.(b|^$1*n) <= c|^$1*f.n;
+      defpred P[Element of NAT] means  f.(b|^$1*n) <= c|^$1*f.n;
  A26: P[0] proof
             f.(b|^0*n) = f.((b to_power 0)*n) by A14,POWER:48
                   .= f.(1*n) by POWER:29
@@ -2177,9 +2185,9 @@ A9: N >= N2 & N >= N3 by XXREAL_0:25;
                         .= f.(b*(b to_power k)*n) by POWER:30
                         .= f.(b*b|^k*n) by A14,POWER:48
                         .= f.(b*(b|^k*n));
-          reconsider n1 = b|^k as Nat by NEWTON:99;
+          reconsider n1 = b|^k as Element of NAT by NEWTON:99;
               m = n1*n;
-          then reconsider m as Nat;
+          then reconsider m as Element of NAT;
               m >= N2 proof
            per cases;
            suppose k = 0;
@@ -2226,18 +2234,18 @@ end;
 theorem Th38: :: First half of smoothness rule proof (page 90)
  for f being eventually-nonnegative Real_Sequence,
      t being eventually-nonnegative eventually-nondecreasing Real_Sequence,
-     b being Nat
+     b being Element of NAT
   st f is smooth & b >= 2 &
-     t in Big_Oh(f, { b|^n where n is Nat : not contradiction } )
+     t in Big_Oh(f, { b|^n where n is Element of NAT : not contradiction } )
    holds t in Big_Oh(f)
 proof
  let f be eventually-nonnegative Real_Sequence,
      t be eventually-nonnegative eventually-nondecreasing Real_Sequence,
-     b be Nat; assume that
+     b be Element of NAT; assume that
 A1: f is smooth and
 A2: b >= 2 and
-A3: t in Big_Oh(f, { b|^n where n is Nat : not contradiction } );
-   set X = { b|^n where n is Nat : not contradiction };
+A3: t in Big_Oh(f, { b|^n where n is Element of NAT : not contradiction } );
+   set X = { b|^n where n is Element of NAT : not contradiction };
        f is_smooth_wrt b by A1,A2,Def20;
 then A4: f is eventually-nondecreasing & f taken_every b in Big_Oh(f) by Def19;
    then consider N1 such that
@@ -2290,9 +2298,9 @@ hence contradiction by A25,A27,XREAL_1:8;
         end;
         hence thesis;
      end;
-     then reconsider i = [\log(b,n)/] as Nat by INT_1:16;
+     then reconsider i = [\log(b,n)/] as Element of NAT by INT_1:16;
          n1 = b|^i by A19,POWER:48;
-     then reconsider n1 as Nat by NEWTON:99;
+     then reconsider n1 as Element of NAT by NEWTON:99;
      set n2 = b*n1;
       n > 0 by A17,A23;
  then A28: n = b to_power log(b,n) by A19,POWER:def 3;
@@ -2307,7 +2315,7 @@ hence contradiction by A25,A27,XREAL_1:8;
      then n*b" <= 1*(b to_power [\log(b,n)/]) by A19,XCMPLX_0:def 7;
  then A32: n/b <= n1 by XCMPLX_0:def 9;
          [\log(b,n)/] + 1 >= 0+0 by A26,XREAL_1:9;
-     then reconsider n3 = [\log(b,n)/] + 1 as Nat by INT_1:16;
+     then reconsider n3 = [\log(b,n)/] + 1 as Element of NAT by INT_1:16;
          n2 = b|^n3 by A19,A30,POWER:48;
  then A33: n2 in X;
  A34: n2 >= N4 by A24,A31,XXREAL_0:2;
@@ -2340,18 +2348,18 @@ theorem Th39: :: Second half of smoothness rule proof (page 90),
                     :: also Problem 3.29
  for f being eventually-nonnegative Real_Sequence,
      t being eventually-nonnegative eventually-nondecreasing Real_Sequence,
-     b being Nat
+     b being Element of NAT
   st f is smooth & b >= 2 &
-     t in Big_Omega(f, { b|^n where n is Nat : not contradiction } )
+     t in Big_Omega(f, { b|^n where n is Element of NAT : not contradiction } )
    holds t in Big_Omega(f)
 proof
  let f be eventually-nonnegative Real_Sequence,
      t be eventually-nonnegative eventually-nondecreasing Real_Sequence,
-     b be Nat; assume that
+     b be Element of NAT; assume that
 A1: f is smooth and
 A2: b >= 2 and
-A3: t in Big_Omega(f, { b|^n where n is Nat : not contradiction } );
-   set X = { b|^n where n is Nat : not contradiction };
+A3: t in Big_Omega(f, { b|^n where n is Element of NAT : not contradiction } );
+   set X = { b|^n where n is Element of NAT : not contradiction };
        f is_smooth_wrt b by A1,A2,Def20;
 then A4: f is eventually-nondecreasing & (f taken_every b) in Big_Oh(f) by
 Def19;
@@ -2404,9 +2412,9 @@ A23: t is Element of Funcs(NAT, REAL) by FUNCT_2:11;
             then log(b,n) < 0 by A27,XREAL_1:8;
          hence contradiction by A19,A26,POWER:59;
      end;
-     then reconsider i = [\log(b,n)/] as Nat by INT_1:16;
+     then reconsider i = [\log(b,n)/] as Element of NAT by INT_1:16;
  A28: n1 = b|^i by A19,POWER:48;
-     then reconsider n1 as Nat by NEWTON:99;
+     then reconsider n1 as Element of NAT by NEWTON:99;
      set n2 = b*n1;
       n > 0 by A17,A24;
  then A29: n = b to_power log(b,n) by A19,POWER:def 3;
@@ -2454,18 +2462,18 @@ end;
 theorem :: Smoothness Rule (page 90)
      for f being eventually-nonnegative Real_Sequence,
      t being eventually-nonnegative eventually-nondecreasing Real_Sequence,
-     b being Nat
+     b being Element of NAT
   st f is smooth & b >= 2 &
-     t in Big_Theta(f, { b|^n where n is Nat : not contradiction } )
+     t in Big_Theta(f, { b|^n where n is Element of NAT : not contradiction } )
    holds t in Big_Theta(f)
 proof
  let f be eventually-nonnegative Real_Sequence,
      t be eventually-nonnegative eventually-nondecreasing Real_Sequence,
-     b be Nat; assume that
+     b be Element of NAT; assume that
 A1: f is smooth and
 A2: b >= 2 and
-A3: t in Big_Theta(f, { b|^n where n is Nat : not contradiction } );
-   set X = { b|^n where n is Nat : not contradiction };
+A3: t in Big_Theta(f, { b|^n where n is Element of NAT : not contradiction } );
+   set X = { b|^n where n is Element of NAT : not contradiction };
        t in Big_Oh(f,X) /\ Big_Omega(f,X) by A3,Th36;
 then A4: t in Big_Oh(f,X) & t in Big_Omega(f,X) by XBOOLE_0:def 3;
 then A5: t in Big_Oh(f) by A1,A2,Th38;
@@ -2642,7 +2650,7 @@ proof
         N >= N3 & N >= max(N1,N2) & max(N1,N2) >= N1 & max(N1,N2) >= N2
          by XXREAL_0:25;
  then A23: N >= N3 & N >= N1 & N >= N2 by XXREAL_0:2;
-    defpred P[Nat,Real] means
+    defpred P[Element of NAT,Real] means
      (t.$1 <= c*f.$1 implies $2 = t.$1) & (c*f.$1 < t.$1 implies $2 = c*f.$1);
  A24:for x being Element of NAT ex y being Element of REAL st P[x,y] proof
      let n; per cases;
@@ -2653,7 +2661,7 @@ proof
     end;
     consider f' being Function of NAT,REAL such that
  A25:for x being Element of NAT holds P[x,f'.x] from FUNCT_2:sch 3(A24);
-    defpred Q[Nat,Real] means
+    defpred Q[Element of NAT,Real] means
      (t.$1 <=
  c*f.$1 implies $2 = 0) & (c*f.$1 < t.$1 implies $2 = t.$1-c*f.$1);
  A26:for x being Element of NAT ex y being Element of REAL st Q[x,y] proof
@@ -2783,7 +2791,7 @@ XREAL_1:66
  A24:N >= N3 & N >= max(N1,N2) & max(N1,N2) >= N1 & max(N1,N2) >= N2
          by XXREAL_0:25;
  then A25: N >= N3 & N >= N1 & N >= N2 by XXREAL_0:2;
-    defpred P[Nat,Real] means
+    defpred P[Element of NAT,Real] means
       (f.$1 >= g.$1 or $1 < N implies $2 = t.$1) &
       (f.$1 < g.$1 & $1 >= N implies $2 = 0);
  A26:for x being Element of NAT ex y being Element of REAL st P[x,y] proof
@@ -2800,7 +2808,7 @@ XREAL_1:66
     end;
     consider f' being Function of NAT,REAL such that
  A28:for x being Element of NAT holds P[x,f'.x] from FUNCT_2:sch 3(A26);
-    defpred Q[Nat,Real] means
+    defpred Q[Element of NAT,Real] means
       (f.$1 >= g.$1 & $1 >= N implies $2 = 0) &
       (f.$1 < g.$1 or $1 < N implies $2 = t.$1);
  A29:for x being Element of NAT ex y being Element of REAL st Q[x,y] proof

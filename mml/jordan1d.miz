@@ -10,7 +10,8 @@ environ
       MATRIX_2, INT_1, GROUP_1, ARYTM_3, ARYTM_1, FINSEQ_1, JORDAN8, MCART_1,
       PSCOMP_1, TREES_1, MATRIX_1, GOBOARD5, SETFAM_1, JORDAN9, PRE_TOPC,
       JORDAN1A, TOPREAL1, GOBOARD1, FINSEQ_4, RELAT_1, FUNCT_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, SETFAM_1, ORDINAL1, XCMPLX_0, XXREAL_0,
+ notations TARSKI, XBOOLE_0, ENUMSET1, SETFAM_1, SUBSET_1, ORDINAL1,
+ NUMBERS,XCMPLX_0, XXREAL_0,
       XREAL_0, REAL_1, INT_1, NAT_1, FUNCT_1, STRUCT_0, FINSEQ_1, FINSEQ_4,
       BINARITH, NEWTON, PRE_TOPC, COMPTS_1, CONNSP_1, MATRIX_1, EUCLID,
       GOBOARD1, TOPREAL1, GOBOARD5, PSCOMP_1, SPPOL_1, ABIAN, GOBRD13, JORDAN8,
@@ -19,7 +20,8 @@ environ
       CARD_4, BINARITH, ABIAN, CONNSP_1, PSCOMP_1, JORDAN2C, JORDAN8, GOBRD13,
       JORDAN9, JORDAN1A;
  registrations XREAL_0, TOPREAL6, JORDAN8, INT_1, NEWTON, RELSET_1, EUCLID,
-      ABIAN, GRAPH_3, NAT_1, SPRECT_1, STRUCT_0, MEMBERED, JORDAN10, XXREAL_0;
+      ABIAN, GRAPH_3, NAT_1, SPRECT_1, STRUCT_0, MEMBERED, JORDAN10, XXREAL_0,
+      ORDINAL1;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
  definitions TARSKI, SETFAM_1, XBOOLE_0, PSCOMP_1;
  theorems BINARITH, EUCLID, GOBRD11, JORDAN8, PSCOMP_1, JORDAN1A, NAT_1,
@@ -33,7 +35,7 @@ environ
 begin  :: Preliminaries
 
 reserve
-   a, b, i, k, m, n for Nat,
+   a, b, i, k, m, n for Element of NAT,
    r, s for real number,
    D for non empty Subset of TOP-REAL 2,
    C for compact connected non vertical non horizontal Subset of TOP-REAL 2;
@@ -123,11 +125,11 @@ coherence
 end;
 
 registration
-  let m be non empty Nat;
+  let m be non empty Element of NAT;
  cluster 2|^m -> even;
 coherence
   proof
-    defpred P[Nat] means $1 is non empty implies 2|^$1 is even;
+    defpred P[Element of NAT] means $1 is non empty implies 2|^$1 is even;
 A1: P[0];
 A2: P[k] implies P[k+1]
     proof
@@ -141,11 +143,11 @@ A2: P[k] implies P[k+1]
 end;
 
 registration
-  let n be even Nat, m be non empty Nat;
+  let n be even Element of NAT, m be non empty Element of NAT;
  cluster n|^m -> even;
 coherence
   proof
-    defpred P[Nat] means $1 is non empty implies n|^$1 is even;
+    defpred P[Element of NAT] means $1 is non empty implies n|^$1 is even;
 A1: P[0];
 A2: P[k] implies P[k+1]
     proof
@@ -638,25 +640,25 @@ A82: I*(m,1)`1 <= r by A52,A54,A78,XXREAL_0:2;
 
 theorem
     for D being compact non vertical non horizontal Subset of TOP-REAL 2,
-     k being Nat holds
+     k being Element of NAT holds
  2 <= m & m+1 < len Gauge(D,i) & 2 <= n & n+1 < len Gauge(D,i) implies
  cell(Gauge(D,i),m,n) =
-  union { cell(Gauge(D,i+k),a,b) where a, b is Nat:
+  union { cell(Gauge(D,i+k),a,b) where a, b is Element of NAT:
    2|^k*m - 2|^(k+1) + 2 <= a & a <= 2|^k*m - 2|^k + 1 &
    2|^k*n - 2|^(k+1) + 2 <= b & b <= 2|^k*n - 2|^k + 1 }
   proof
     let D be compact non vertical non horizontal Subset of TOP-REAL 2;
-    let k be Nat;
+    let k be Element of NAT;
     assume that
 A1:   2 <= m and
 A2:   m+1 < len Gauge(D,i) and
 A3:   2 <= n and
 A4:   n+1 < len Gauge(D,i);
-    deffunc F(Nat) =
-     { cell(Gauge(D,i+$1),a,b) where a, b is Nat:
+    deffunc F(Element of NAT) =
+     { cell(Gauge(D,i+$1),a,b) where a, b is Element of NAT:
          2|^$1*m - 2|^($1+1) + 2 <= a & a <= 2|^$1*m - 2|^$1 + 1 &
          2|^$1*n - 2|^($1+1) + 2 <= b & b <= 2|^$1*n - 2|^$1 + 1 };
-    defpred P[Nat] means cell(Gauge(D,i),m,n) = union F($1);
+    defpred P[Element of NAT] means cell(Gauge(D,i),m,n) = union F($1);
 A5: P[0]
     proof
 A6:   now let m;
@@ -694,9 +696,9 @@ then A11:     x = cell(Gauge(D,i+0),m,n) by TARSKI:def 1;
       end;
       hence thesis by ZFMISC_1:31;
     end;
-A12:for w being Nat st P[w] holds P[w+1]
+A12:for w being Element of NAT st P[w] holds P[w+1]
     proof
-      let w be Nat such that
+      let w be Element of NAT such that
 A13:     P[w];
 A14:   i+w+1 = i+(w+1);
 A15:   len Gauge(D,i+w) = 2|^(i+w) + 3 by JORDAN8:def 1;
@@ -815,21 +817,21 @@ then A47:      2|^w*(m-1)+3 <= 2|^(w+i)+3 by XREAL_1:8;
       proof
         let X be set;
         assume X in F(w+1);
-        then consider a, b being Nat such that
+        then consider a, b being Element of NAT such that
 A48:      X = cell(Gauge(D,i+(w+1)),a,b) and
 A49:      2|^(w+1)*m - 2|^(w+1+1) + 2 <= a and
 A50:      a <= 2|^(w+1)*m - 2|^(w+1) + 1 and
 A51:      2|^(w+1)*n - 2|^(w+1+1) + 2 <= b and
 A52:      b <= 2|^(w+1)*n - 2|^(w+1) + 1;
 A53:     now
-          let a be even Nat;
-A54:       ex e being Nat st a = 2*e by ABIAN:def 2;
+          let a be even Element of NAT;
+A54:       ex e being Element of NAT st a = 2*e by ABIAN:def 2;
           thus 2*(a div 2 + 1) = 2*(a div 2) + 2*1
             .= a + 2 by A54,NAT_1:72;
         end;
 A55:     now
-          let a be odd Nat;
-          consider e being Nat such that
+          let a be odd Element of NAT;
+          consider e being Element of NAT such that
 A56:         a = 2*e+1 by ABIAN:9;
 A57:       2*e mod 2 = 0 by NAT_1:63;
           thus 2*(a div 2 + 1) = 2*(a div 2) + 2*1
@@ -837,7 +839,7 @@ A57:       2*e mod 2 = 0 by NAT_1:63;
             .= 2*(e + 0) + (1+1) by Lm1,NAT_1:72
             .= a + 1 by A56;
         end;
-        deffunc G(Nat,Nat)=
+        deffunc G(Element of NAT,Element of NAT)=
           cell(Gauge(D,i+w+1),2*(a div 2 + 1)-'$1,2*(b div 2 + 1)-'$2);
 A58:    now
           let a, m;
@@ -922,7 +924,7 @@ then A76:     1 + 1 <= b div 2 + 1 by Lm2,XREAL_1:8;
            b div 2 + 1+1 < len Gauge(D,i+w) by A4,A52,A65;
 then A77:     Y = G(2,2) \/ G(1,2) \/ G(2,1) \/ G(1,1) by A62,A75,A76,Th9;
 A78:    now
-          let m; let a be even Nat;
+          let m; let a be even Element of NAT;
           assume
 A79:        2|^(w+1)*m - 2|^(w+1+1) + 2 <= a;
 A80:      2 * (2|^w*m - 2|^(w+1) + 2) = 2|^(w+1)*m - 2|^(w+1+1) + 2+2 by A63;
@@ -931,7 +933,7 @@ A80:      2 * (2|^w*m - 2|^(w+1) + 2) = 2|^(w+1)*m - 2|^(w+1+1) + 2+2 by A63;
           hence 2|^w*m - 2|^(w+1) + 2 <= a div 2 + 1 by XREAL_1:70;
         end;
 A81:    now
-          let m; let a be even Nat;
+          let m; let a be even Element of NAT;
           assume a <= 2|^(w+1)*m - 2|^(w+1) + 1;
 then A82:      a < 2|^(w+1)*m - 2|^(w+1) + 1 by REAL_1:def 5;
 A83:      2 * (2|^w*m - 2|^w + 1) = 2|^(w+1)*m - 2|^(w+1) + 1+1 by A64;
@@ -942,7 +944,7 @@ A83:      2 * (2|^w*m - 2|^w + 1) = 2|^(w+1)*m - 2|^(w+1) + 1+1 by A64;
           hence a div 2 + 1 <= 2|^w*m - 2|^w + 1 by XREAL_1:70;
         end;
 A84:    now
-          let m; let a be odd Nat;
+          let m; let a be odd Element of NAT;
           assume 2|^(w+1)*m - 2|^(w+1+1) + 2 <= a;
 then A85:      2|^(w+1)*m - 2|^(w+1+1) + 2 < a by REAL_1:def 5;
 A86:      2 * (2|^w*m - 2|^(w+1) + 2) = 2|^(w+1)*m - 2|^(w+1+1) + 2+2 by A63;
@@ -952,7 +954,7 @@ A86:      2 * (2|^w*m - 2|^(w+1) + 2) = 2|^(w+1)*m - 2|^(w+1+1) + 2+2 by A63;
           hence 2|^w*m - 2|^(w+1) + 2 <= a div 2 + 1 by XREAL_1:70;
         end;
 A87:    now
-          let m; let a be odd Nat;
+          let m; let a be odd Element of NAT;
           assume
 A88:        a <= 2|^(w+1)*m - 2|^(w+1) + 1;
 A89:      2 * (2|^w*m - 2|^w + 1) = 2|^(w+1)*m - 2|^(w+1) + 1+1 by A64;
@@ -1028,12 +1030,12 @@ then A115:   union F(w+1) c= union F(w) by SETFAM_1:18;
       assume d in union F(w+1);
       hence thesis by A13,A115;
     end;
-       for w being Nat holds P[w] from NAT_1:sch 1(A5,A12);
+       for w being Element of NAT holds P[w] from NAT_1:sch 1(A5,A12);
     hence thesis;
   end;
 
   theorem Th11:
-   ex i being Nat st 1 <= i & i < len Cage(C,n) &
+   ex i being Element of NAT st 1 <= i & i < len Cage(C,n) &
     N-max C in right_cell(Cage(C,n),i,Gauge(C,n))
    proof
        N-max C in N-most C by PSCOMP_1:101;
@@ -1041,13 +1043,13 @@ then A115:   union F(w+1) c= union F(w) by SETFAM_1:18;
      A1: north_halfline N-max C /\ L~Cage(C,n) = {p} by JORDAN1A:107;
     A2: p in north_halfline N-max C /\ L~Cage(C,n) by A1,TARSKI:def 1;
     then A3: p in north_halfline N-max C & p in L~Cage(C,n) by XBOOLE_0:def 3;
-    then consider i be Nat such that
+    then consider i be Element of NAT such that
      A4: 1 <= i & i+1 <= len Cage(C,n) and
      A5: p in LSeg(Cage(C,n),i) by SPPOL_2:13;
     take i;
     thus A6: 1 <= i & i < len Cage(C,n) by A4,NAT_1:38;
     A7: Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
-    then consider i1,j1,i2,j2 be Nat such that
+    then consider i1,j1,i2,j2 be Element of NAT such that
      A8: [i1,j1] in Indices Gauge(C,n) and
      A9: Cage(C,n)/.i = Gauge(C,n)*(i1,j1) and
      A10: [i2,j2] in Indices Gauge(C,n) and
@@ -1113,10 +1115,10 @@ then A115:   union F(w+1) c= union F(w) by SETFAM_1:18;
    end;
 
   theorem
-      ex i being Nat st 1 <= i & i < len Cage(C,n) &
+      ex i being Element of NAT st 1 <= i & i < len Cage(C,n) &
     N-max C in right_cell(Cage(C,n),i)
    proof
-    consider i be Nat such that
+    consider i be Element of NAT such that
      A1: 1 <= i & i < len Cage(C,n) and
      A2: N-max C in right_cell(Cage(C,n),i,Gauge(C,n)) by Th11;
     take i;
@@ -1129,7 +1131,7 @@ then A115:   union F(w+1) c= union F(w) by SETFAM_1:18;
    end;
 
   theorem Th13:
-   ex i being Nat st 1 <= i & i < len Cage(C,n) &
+   ex i being Element of NAT st 1 <= i & i < len Cage(C,n) &
     E-min C in right_cell(Cage(C,n),i,Gauge(C,n))
    proof
        E-min C in E-most C by PSCOMP_1:111;
@@ -1137,13 +1139,13 @@ then A115:   union F(w+1) c= union F(w) by SETFAM_1:18;
      A1: east_halfline E-min C /\ L~Cage(C,n) = {p} by JORDAN1A:108;
     A2: p in east_halfline E-min C /\ L~Cage(C,n) by A1,TARSKI:def 1;
     then A3: p in east_halfline E-min C & p in L~Cage(C,n) by XBOOLE_0:def 3;
-    then consider i be Nat such that
+    then consider i be Element of NAT such that
      A4: 1 <= i & i+1 <= len Cage(C,n) and
      A5: p in LSeg(Cage(C,n),i) by SPPOL_2:13;
     take i;
     thus A6: 1 <= i & i < len Cage(C,n) by A4,NAT_1:38;
     A7: Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
-    then consider i1,j1,i2,j2 be Nat such that
+    then consider i1,j1,i2,j2 be Element of NAT such that
      A8: [i1,j1] in Indices Gauge(C,n) and
      A9: Cage(C,n)/.i = Gauge(C,n)*(i1,j1) and
      A10: [i2,j2] in Indices Gauge(C,n) and
@@ -1211,10 +1213,10 @@ JORDAN10:1,NAT_1:38;
    end;
 
   theorem
-      ex i being Nat st 1 <= i & i < len Cage(C,n) &
+      ex i being Element of NAT st 1 <= i & i < len Cage(C,n) &
     E-min C in right_cell(Cage(C,n),i)
    proof
-    consider i be Nat such that
+    consider i be Element of NAT such that
      A1: 1 <= i & i < len Cage(C,n) and
      A2: E-min C in right_cell(Cage(C,n),i,Gauge(C,n)) by Th13;
     take i;
@@ -1227,7 +1229,7 @@ JORDAN10:1,NAT_1:38;
    end;
 
   theorem Th15:
-   ex i being Nat st 1 <= i & i < len Cage(C,n) &
+   ex i being Element of NAT st 1 <= i & i < len Cage(C,n) &
     E-max C in right_cell(Cage(C,n),i,Gauge(C,n))
    proof
        E-max C in E-most C by PSCOMP_1:111;
@@ -1235,13 +1237,13 @@ JORDAN10:1,NAT_1:38;
      A1: east_halfline E-max C /\ L~Cage(C,n) = {p} by JORDAN1A:108;
     A2: p in east_halfline E-max C /\ L~Cage(C,n) by A1,TARSKI:def 1;
     then A3: p in east_halfline E-max C & p in L~Cage(C,n) by XBOOLE_0:def 3;
-    then consider i be Nat such that
+    then consider i be Element of NAT such that
      A4: 1 <= i & i+1 <= len Cage(C,n) and
      A5: p in LSeg(Cage(C,n),i) by SPPOL_2:13;
     take i;
     thus A6: 1 <= i & i < len Cage(C,n) by A4,NAT_1:38;
     A7: Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
-    then consider i1,j1,i2,j2 be Nat such that
+    then consider i1,j1,i2,j2 be Element of NAT such that
      A8: [i1,j1] in Indices Gauge(C,n) and
      A9: Cage(C,n)/.i = Gauge(C,n)*(i1,j1) and
      A10: [i2,j2] in Indices Gauge(C,n) and
@@ -1309,10 +1311,10 @@ JORDAN10:1,NAT_1:38;
    end;
 
   theorem
-      ex i being Nat st 1 <= i & i < len Cage(C,n) &
+      ex i being Element of NAT st 1 <= i & i < len Cage(C,n) &
     E-max C in right_cell(Cage(C,n),i)
    proof
-    consider i be Nat such that
+    consider i be Element of NAT such that
      A1: 1 <= i & i < len Cage(C,n) and
      A2: E-max C in right_cell(Cage(C,n),i,Gauge(C,n)) by Th15;
     take i;
@@ -1325,7 +1327,7 @@ JORDAN10:1,NAT_1:38;
    end;
 
   theorem Th17:
-   ex i being Nat st 1 <= i & i < len Cage(C,n) &
+   ex i being Element of NAT st 1 <= i & i < len Cage(C,n) &
     S-min C in right_cell(Cage(C,n),i,Gauge(C,n))
    proof
        S-min C in S-most C by PSCOMP_1:121;
@@ -1333,13 +1335,13 @@ JORDAN10:1,NAT_1:38;
      A1: south_halfline S-min C /\ L~Cage(C,n) = {p} by JORDAN1A:109;
     A2: p in south_halfline S-min C /\ L~Cage(C,n) by A1,TARSKI:def 1;
     then A3: p in south_halfline S-min C & p in L~Cage(C,n) by XBOOLE_0:def 3;
-    then consider i be Nat such that
+    then consider i be Element of NAT such that
      A4: 1 <= i & i+1 <= len Cage(C,n) and
      A5: p in LSeg(Cage(C,n),i) by SPPOL_2:13;
     take i;
     thus A6: 1 <= i & i < len Cage(C,n) by A4,NAT_1:38;
     A7: Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
-    then consider i1,j1,i2,j2 be Nat such that
+    then consider i1,j1,i2,j2 be Element of NAT such that
      A8: [i1,j1] in Indices Gauge(C,n) and
      A9: Cage(C,n)/.i = Gauge(C,n)*(i1,j1) and
      A10: [i2,j2] in Indices Gauge(C,n) and
@@ -1397,10 +1399,10 @@ JORDAN10:3,TOPREAL1:def 14;
    end;
 
   theorem
-      ex i being Nat st 1 <= i & i < len Cage(C,n) &
+      ex i being Element of NAT st 1 <= i & i < len Cage(C,n) &
     S-min C in right_cell(Cage(C,n),i)
    proof
-    consider i be Nat such that
+    consider i be Element of NAT such that
      A1: 1 <= i & i < len Cage(C,n) and
      A2: S-min C in right_cell(Cage(C,n),i,Gauge(C,n)) by Th17;
     take i;
@@ -1413,7 +1415,7 @@ JORDAN10:3,TOPREAL1:def 14;
    end;
 
   theorem Th19:
-   ex i being Nat st 1 <= i & i < len Cage(C,n) &
+   ex i being Element of NAT st 1 <= i & i < len Cage(C,n) &
     S-max C in right_cell(Cage(C,n),i,Gauge(C,n))
    proof
        S-max C in S-most C by PSCOMP_1:121;
@@ -1421,13 +1423,13 @@ JORDAN10:3,TOPREAL1:def 14;
      A1: south_halfline S-max C /\ L~Cage(C,n) = {p} by JORDAN1A:109;
     A2: p in south_halfline S-max C /\ L~Cage(C,n) by A1,TARSKI:def 1;
     then A3: p in south_halfline S-max C & p in L~Cage(C,n) by XBOOLE_0:def 3;
-    then consider i be Nat such that
+    then consider i be Element of NAT such that
      A4: 1 <= i & i+1 <= len Cage(C,n) and
      A5: p in LSeg(Cage(C,n),i) by SPPOL_2:13;
     take i;
     thus A6: 1 <= i & i < len Cage(C,n) by A4,NAT_1:38;
     A7: Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
-    then consider i1,j1,i2,j2 be Nat such that
+    then consider i1,j1,i2,j2 be Element of NAT such that
      A8: [i1,j1] in Indices Gauge(C,n) and
      A9: Cage(C,n)/.i = Gauge(C,n)*(i1,j1) and
      A10: [i2,j2] in Indices Gauge(C,n) and
@@ -1486,10 +1488,10 @@ GOBRD13:27,JORDAN10:3;
    end;
 
   theorem
-      ex i being Nat st 1 <= i & i < len Cage(C,n) &
+      ex i being Element of NAT st 1 <= i & i < len Cage(C,n) &
     S-max C in right_cell(Cage(C,n),i)
    proof
-    consider i be Nat such that
+    consider i be Element of NAT such that
      A1: 1 <= i & i < len Cage(C,n) and
      A2: S-max C in right_cell(Cage(C,n),i,Gauge(C,n)) by Th19;
     take i;
@@ -1502,7 +1504,7 @@ GOBRD13:27,JORDAN10:3;
    end;
 
   theorem Th21:
-   ex i being Nat st 1 <= i & i < len Cage(C,n) &
+   ex i being Element of NAT st 1 <= i & i < len Cage(C,n) &
     W-min C in right_cell(Cage(C,n),i,Gauge(C,n))
    proof
        W-min C in W-most C by PSCOMP_1:91;
@@ -1510,13 +1512,13 @@ GOBRD13:27,JORDAN10:3;
      A1: west_halfline W-min C /\ L~Cage(C,n) = {p} by JORDAN1A:110;
     A2: p in west_halfline W-min C /\ L~Cage(C,n) by A1,TARSKI:def 1;
     then A3: p in west_halfline W-min C & p in L~Cage(C,n) by XBOOLE_0:def 3;
-    then consider i be Nat such that
+    then consider i be Element of NAT such that
      A4: 1 <= i & i+1 <= len Cage(C,n) and
      A5: p in LSeg(Cage(C,n),i) by SPPOL_2:13;
     take i;
     thus A6: 1 <= i & i < len Cage(C,n) by A4,NAT_1:38;
     A7: Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
-    then consider i1,j1,i2,j2 be Nat such that
+    then consider i1,j1,i2,j2 be Element of NAT such that
      A8: [i1,j1] in Indices Gauge(C,n) and
      A9: Cage(C,n)/.i = Gauge(C,n)*(i1,j1) and
      A10: [i2,j2] in Indices Gauge(C,n) and
@@ -1575,10 +1577,10 @@ GOBRD13:23,JORDAN10:2;
    end;
 
   theorem
-      ex i being Nat st 1 <= i & i < len Cage(C,n) &
+      ex i being Element of NAT st 1 <= i & i < len Cage(C,n) &
     W-min C in right_cell(Cage(C,n),i)
    proof
-    consider i be Nat such that
+    consider i be Element of NAT such that
      A1: 1 <= i & i < len Cage(C,n) and
      A2: W-min C in right_cell(Cage(C,n),i,Gauge(C,n)) by Th21;
     take i;
@@ -1591,7 +1593,7 @@ GOBRD13:23,JORDAN10:2;
    end;
 
   theorem Th23:
-   ex i being Nat st 1 <= i & i < len Cage(C,n) &
+   ex i being Element of NAT st 1 <= i & i < len Cage(C,n) &
     W-max C in right_cell(Cage(C,n),i,Gauge(C,n))
    proof
        W-max C in W-most C by PSCOMP_1:91;
@@ -1599,13 +1601,13 @@ GOBRD13:23,JORDAN10:2;
      A1: west_halfline W-max C /\ L~Cage(C,n) = {p} by JORDAN1A:110;
     A2: p in west_halfline W-max C /\ L~Cage(C,n) by A1,TARSKI:def 1;
     then A3: p in west_halfline W-max C & p in L~Cage(C,n) by XBOOLE_0:def 3;
-    then consider i be Nat such that
+    then consider i be Element of NAT such that
      A4: 1 <= i & i+1 <= len Cage(C,n) and
      A5: p in LSeg(Cage(C,n),i) by SPPOL_2:13;
     take i;
     thus A6: 1 <= i & i < len Cage(C,n) by A4,NAT_1:38;
     A7: Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
-    then consider i1,j1,i2,j2 be Nat such that
+    then consider i1,j1,i2,j2 be Element of NAT such that
      A8: [i1,j1] in Indices Gauge(C,n) and
      A9: Cage(C,n)/.i = Gauge(C,n)*(i1,j1) and
      A10: [i2,j2] in Indices Gauge(C,n) and
@@ -1664,10 +1666,10 @@ GOBRD13:23,JORDAN10:2;
    end;
 
   theorem
-      ex i being Nat st 1 <= i & i < len Cage(C,n) &
+      ex i being Element of NAT st 1 <= i & i < len Cage(C,n) &
     W-max C in right_cell(Cage(C,n),i)
    proof
-    consider i be Nat such that
+    consider i be Element of NAT such that
      A1: 1 <= i & i < len Cage(C,n) and
      A2: W-max C in right_cell(Cage(C,n),i,Gauge(C,n)) by Th23;
     take i;
@@ -1680,16 +1682,16 @@ GOBRD13:23,JORDAN10:2;
    end;
 
   theorem Th25:
-   ex i being Nat st 1 <= i & i <= len Gauge(C,n) &
+   ex i being Element of NAT st 1 <= i & i <= len Gauge(C,n) &
     N-min L~Cage(C,n) = Gauge(C,n)*(i,width Gauge(C,n))
    proof
        N-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:43;
-    then consider m be Nat such that
+    then consider m be Element of NAT such that
      A1: m in dom Cage(C,n) and
      A2: Cage(C,n).m = N-min L~Cage(C,n) by FINSEQ_2:11;
     A3: Cage(C,n)/.m = N-min L~Cage(C,n) by A1,A2,FINSEQ_4:def 4;
        Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
-    then consider i,j be Nat such that
+    then consider i,j be Element of NAT such that
      A4: [i,j] in Indices Gauge(C,n) and
      A5: Cage(C,n)/.m = Gauge(C,n)*(i,j) by A1,GOBOARD1:def 11;
     take i;
@@ -1708,16 +1710,16 @@ GOBRD13:23,JORDAN10:2;
    end;
 
   theorem
-      ex i being Nat st 1 <= i & i <= len Gauge(C,n) &
+      ex i being Element of NAT st 1 <= i & i <= len Gauge(C,n) &
     N-max L~Cage(C,n) = Gauge(C,n)*(i,width Gauge(C,n))
    proof
        N-max L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:44;
-    then consider m be Nat such that
+    then consider m be Element of NAT such that
      A1: m in dom Cage(C,n) and
      A2: Cage(C,n).m = N-max L~Cage(C,n) by FINSEQ_2:11;
     A3: Cage(C,n)/.m = N-max L~Cage(C,n) by A1,A2,FINSEQ_4:def 4;
        Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
-    then consider i,j be Nat such that
+    then consider i,j be Element of NAT such that
      A4: [i,j] in Indices Gauge(C,n) and
      A5: Cage(C,n)/.m = Gauge(C,n)*(i,j) by A1,GOBOARD1:def 11;
     take i;
@@ -1736,26 +1738,26 @@ GOBRD13:23,JORDAN10:2;
    end;
 
   theorem
-      ex i being Nat st 1 <= i & i <= len Gauge(C,n) &
+      ex i being Element of NAT st 1 <= i & i <= len Gauge(C,n) &
     Gauge(C,n)*(i,width Gauge(C,n)) in rng Cage(C,n)
    proof
-    consider i be Nat such that A1: 1 <= i & i <= len Gauge(C,n) &
+    consider i be Element of NAT such that A1: 1 <= i & i <= len Gauge(C,n) &
      N-min L~Cage(C,n) = Gauge(C,n)*(i,width Gauge(C,n)) by Th25;
     take i;
     thus thesis by A1,SPRECT_2:43;
    end;
 
   theorem Th28:
-   ex j being Nat st 1 <= j & j <= width Gauge(C,n) &
+   ex j being Element of NAT st 1 <= j & j <= width Gauge(C,n) &
     E-min L~Cage(C,n) = Gauge(C,n)*(len Gauge(C,n),j)
    proof
        E-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:49;
-    then consider m be Nat such that
+    then consider m be Element of NAT such that
      A1: m in dom Cage(C,n) and
      A2: Cage(C,n).m = E-min L~Cage(C,n) by FINSEQ_2:11;
     A3: Cage(C,n)/.m = E-min L~Cage(C,n) by A1,A2,FINSEQ_4:def 4;
        Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
-    then consider i,j be Nat such that
+    then consider i,j be Element of NAT such that
      A4: [i,j] in Indices Gauge(C,n) and
      A5: Cage(C,n)/.m = Gauge(C,n)*(i,j) by A1,GOBOARD1:def 11;
     take j;
@@ -1774,16 +1776,16 @@ GOBRD13:23,JORDAN10:2;
    end;
 
   theorem
-      ex j being Nat st 1 <= j & j <= width Gauge(C,n) &
+      ex j being Element of NAT st 1 <= j & j <= width Gauge(C,n) &
     E-max L~Cage(C,n) = Gauge(C,n)*(len Gauge(C,n),j)
    proof
        E-max L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:50;
-    then consider m be Nat such that
+    then consider m be Element of NAT such that
      A1: m in dom Cage(C,n) and
      A2: Cage(C,n).m = E-max L~Cage(C,n) by FINSEQ_2:11;
     A3: Cage(C,n)/.m = E-max L~Cage(C,n) by A1,A2,FINSEQ_4:def 4;
        Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
-    then consider i,j be Nat such that
+    then consider i,j be Element of NAT such that
      A4: [i,j] in Indices Gauge(C,n) and
      A5: Cage(C,n)/.m = Gauge(C,n)*(i,j) by A1,GOBOARD1:def 11;
     take j;
@@ -1802,26 +1804,26 @@ GOBRD13:23,JORDAN10:2;
    end;
 
   theorem
-      ex j being Nat st 1 <= j & j <= width Gauge(C,n) &
+      ex j being Element of NAT st 1 <= j & j <= width Gauge(C,n) &
     Gauge(C,n)*(len Gauge(C,n),j) in rng Cage(C,n)
    proof
-    consider j be Nat such that A1: 1 <= j & j <= width Gauge(C,n) &
+    consider j be Element of NAT such that A1: 1 <= j & j <= width Gauge(C,n) &
      E-min L~Cage(C,n) = Gauge(C,n)*(len Gauge(C,n),j) by Th28;
     take j;
     thus thesis by A1,SPRECT_2:49;
    end;
 
   theorem Th31:
-   ex i being Nat st 1 <= i & i <= len Gauge(C,n) &
+   ex i being Element of NAT st 1 <= i & i <= len Gauge(C,n) &
     S-min L~Cage(C,n) = Gauge(C,n)*(i,1)
    proof
        S-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:45;
-    then consider m be Nat such that
+    then consider m be Element of NAT such that
      A1: m in dom Cage(C,n) and
      A2: Cage(C,n).m = S-min L~Cage(C,n) by FINSEQ_2:11;
     A3: Cage(C,n)/.m = S-min L~Cage(C,n) by A1,A2,FINSEQ_4:def 4;
        Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
-    then consider i,j be Nat such that
+    then consider i,j be Element of NAT such that
      A4: [i,j] in Indices Gauge(C,n) and
      A5: Cage(C,n)/.m = Gauge(C,n)*(i,j) by A1,GOBOARD1:def 11;
     take i;
@@ -1837,16 +1839,16 @@ GOBRD13:23,JORDAN10:2;
    end;
 
   theorem
-      ex i being Nat st 1 <= i & i <= len Gauge(C,n) &
+      ex i being Element of NAT st 1 <= i & i <= len Gauge(C,n) &
     S-max L~Cage(C,n) = Gauge(C,n)*(i,1)
    proof
        S-max L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:46;
-    then consider m be Nat such that
+    then consider m be Element of NAT such that
      A1: m in dom Cage(C,n) and
      A2: Cage(C,n).m = S-max L~Cage(C,n) by FINSEQ_2:11;
     A3: Cage(C,n)/.m = S-max L~Cage(C,n) by A1,A2,FINSEQ_4:def 4;
        Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
-    then consider i,j be Nat such that
+    then consider i,j be Element of NAT such that
      A4: [i,j] in Indices Gauge(C,n) and
      A5: Cage(C,n)/.m = Gauge(C,n)*(i,j) by A1,GOBOARD1:def 11;
     take i;
@@ -1862,26 +1864,26 @@ GOBRD13:23,JORDAN10:2;
    end;
 
   theorem
-      ex i being Nat st 1 <= i & i <= len Gauge(C,n) &
+      ex i being Element of NAT st 1 <= i & i <= len Gauge(C,n) &
     Gauge(C,n)*(i,1) in rng Cage(C,n)
    proof
-    consider i be Nat such that A1: 1 <= i & i <= len Gauge(C,n) &
+    consider i be Element of NAT such that A1: 1 <= i & i <= len Gauge(C,n) &
      S-min L~Cage(C,n) = Gauge(C,n)*(i,1) by Th31;
     take i;
     thus thesis by A1,SPRECT_2:45;
    end;
 
   theorem Th34:
-   ex j being Nat st 1 <= j & j <= width Gauge(C,n) &
+   ex j being Element of NAT st 1 <= j & j <= width Gauge(C,n) &
     W-min L~Cage(C,n) = Gauge(C,n)*(1,j)
    proof
        W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
-    then consider m be Nat such that
+    then consider m be Element of NAT such that
      A1: m in dom Cage(C,n) and
      A2: Cage(C,n).m = W-min L~Cage(C,n) by FINSEQ_2:11;
     A3: Cage(C,n)/.m = W-min L~Cage(C,n) by A1,A2,FINSEQ_4:def 4;
        Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
-    then consider i,j be Nat such that
+    then consider i,j be Element of NAT such that
      A4: [i,j] in Indices Gauge(C,n) and
      A5: Cage(C,n)/.m = Gauge(C,n)*(i,j) by A1,GOBOARD1:def 11;
     take j;
@@ -1898,16 +1900,16 @@ GOBRD13:23,JORDAN10:2;
    end;
 
   theorem
-      ex j being Nat st 1 <= j & j <= width Gauge(C,n) &
+      ex j being Element of NAT st 1 <= j & j <= width Gauge(C,n) &
     W-max L~Cage(C,n) = Gauge(C,n)*(1,j)
    proof
        W-max L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:48;
-    then consider m be Nat such that
+    then consider m be Element of NAT such that
      A1: m in dom Cage(C,n) and
      A2: Cage(C,n).m = W-max L~Cage(C,n) by FINSEQ_2:11;
     A3: Cage(C,n)/.m = W-max L~Cage(C,n) by A1,A2,FINSEQ_4:def 4;
        Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
-    then consider i,j be Nat such that
+    then consider i,j be Element of NAT such that
      A4: [i,j] in Indices Gauge(C,n) and
      A5: Cage(C,n)/.m = Gauge(C,n)*(i,j) by A1,GOBOARD1:def 11;
     take j;
@@ -1924,10 +1926,10 @@ GOBRD13:23,JORDAN10:2;
    end;
 
   theorem
-      ex j being Nat st 1 <= j & j <= width Gauge(C,n) &
+      ex j being Element of NAT st 1 <= j & j <= width Gauge(C,n) &
     Gauge(C,n)*(1,j) in rng Cage(C,n)
    proof
-    consider j be Nat such that A1: 1 <= j & j <= width Gauge(C,n) &
+    consider j be Element of NAT such that A1: 1 <= j & j <= width Gauge(C,n) &
      W-min L~Cage(C,n) = Gauge(C,n)*(1,j) by Th34;
     take j;
     thus thesis by A1,SPRECT_2:47;

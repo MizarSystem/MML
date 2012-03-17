@@ -10,17 +10,18 @@ environ
       RELAT_1, ARYTM_1, CONNSP_2, TOPS_1, SUBSET_1, SETFAM_1, TARSKI, COMPTS_1,
       URYSOHN1, PROB_1, LIMFUNC1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, DOMAIN_1, FUNCT_1,
-      FUNCT_2, REAL_1, FINSEQ_1, NAT_1, PROB_1, LIMFUNC1, COMPTS_1, STRUCT_0,
+      FUNCT_2,
+      XCMPLX_0, REAL_1, FINSEQ_1, NAT_1, PROB_1, LIMFUNC1, COMPTS_1, STRUCT_0,
       PRE_TOPC, CARD_4, TOPS_1, CONNSP_2, XXREAL_0;
  constructors SETFAM_1, DOMAIN_1, REAL_1, NAT_1, MEMBERED, PROB_1, LIMFUNC1,
       CARD_4, TOPS_1, COMPTS_1, CONNSP_2;
  registrations SUBSET_1, PRE_TOPC, RELSET_1, TOPS_1, ARYTM_3, XREAL_0,
-      MEMBERED, XXREAL_0, STRUCT_0;
+      MEMBERED, XXREAL_0, STRUCT_0, ORDINAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, CONNSP_2, XBOOLE_0, PROB_1, LIMFUNC1, SUBSET_1, PRE_TOPC;
  theorems TARSKI, SUBSET_1, FUNCT_1, NAT_1, FINSEQ_1, ZFMISC_1, PRE_TOPC,
       TOPS_1, ENUMSET1, REAL_1, SQUARE_1, COMPTS_1, NEWTON, REAL_2, CONNSP_2,
-      XBOOLE_0, XBOOLE_1, SCHEME1, XCMPLX_1, XREAL_1, XXREAL_0;
+      XBOOLE_0, XBOOLE_1, SCHEME1, XCMPLX_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes SUBSET_1, REAL_1, NAT_1, FINSEQ_1, FUNCT_2;
 
 begin
@@ -54,17 +55,15 @@ A1:   x = r & r > 1;
   end;
 
 definition
-  canceled 2;
-end;
-
-definition
-   let n be Nat;
+ canceled 2;
+   let n be Element of NAT;
    func dyadic(n) -> Subset of REAL means
 :Def3:for x being Real holds
-        x in it iff ex i being Nat st (0 <= i & i <= (2|^n) & x = i/(2|^n));
+        x in it iff
+         ex i being Element of NAT st (0 <= i & i <= (2|^n) & x = i/(2|^n));
 existence
  proof
-   defpred P[set] means ex i being Nat st
+   defpred P[set] means ex i being Element of NAT st
    (0 <= i & i <= (2|^n) & $1 = i/(2|^n));
     ex X being Subset of REAL st
      for x being Real holds x in X iff P[x] from REAL_1:sch 1;
@@ -74,9 +73,9 @@ uniqueness
 proof
    let A1,A2 be Subset of REAL;
    assume that
-A1:(for x being Real holds x in A1 iff ex i being Nat st
+A1:(for x being Real holds x in A1 iff ex i being Element of NAT st
    (0 <= i & i <= (2|^n) & x = i/(2|^n))) and
-A2:(for x being Real holds x in A2 iff ex i being Nat st
+A2:(for x being Real holds x in A2 iff ex i being Element of NAT st
    (0 <= i & i <= (2|^n) & x = i/(2|^n)));
       for a being set holds a in A1 iff a in A2
    proof
@@ -86,13 +85,15 @@ A2:(for x being Real holds x in A2 iff ex i being Nat st
          assume
       A3:a in A1;
          then reconsider a as Real;
-         ex i being Nat st (0 <= i & i <= (2|^n) & a = i/(2|^n)) by A1,A3;
+         ex i being Element of NAT st
+          0 <= i & i <= (2|^n) & a = i/(2|^n) by A1,A3;
          hence thesis by A2;
       end;
       assume
    A4:a in A2;
       then reconsider a as Real;
-      ex i being Nat st (0 <= i & i <= (2|^n) & a = i/(2|^n)) by A2,A4;
+      ex i being Element of NAT st
+        0 <= i & i <= (2|^n) & a = i/(2|^n) by A2,A4;
       hence thesis by A1;
    end;
    hence thesis by TARSKI:2;
@@ -102,10 +103,10 @@ end;
 definition
    func DYADIC -> Subset of REAL means
 :Def4:for a being Real holds a in it iff
-     ex n being Nat st a in dyadic(n);
+     ex n being Element of NAT st a in dyadic(n);
 existence
  proof
-   defpred P[set] means ex i being Nat st $1 in dyadic(i);
+   defpred P[set] means ex i being Element of NAT st $1 in dyadic(i);
     ex X being Subset of REAL st
      for x being Real holds x in X iff P[x] from REAL_1:sch 1;
    hence thesis;
@@ -115,9 +116,9 @@ proof
    let A1,A2 be Subset of REAL;
    assume that
 A1:(for x being Real holds x in A1 iff
-   ex n being Nat st x in dyadic(n)) and
+   ex n being Element of NAT st x in dyadic(n)) and
 A2:(for x being Real holds x in A2 iff
-   ex n being Nat st x in dyadic(n));
+   ex n being Element of NAT st x in dyadic(n));
       for a being set holds a in A1 iff a in A2
    proof
       let a be set;
@@ -127,7 +128,7 @@ A2:(for x being Real holds x in A2 iff
          assume
       A3:a in A1;
          then reconsider a as Real;
-            ex n being Nat st a in dyadic(n) by A1,A3;
+            ex n being Element of NAT st a in dyadic(n) by A1,A3;
          hence thesis by A2;
       end;
       thus
@@ -136,7 +137,7 @@ A2:(for x being Real holds x in A2 iff
          assume
       A4:a in A2;
          then reconsider a as Real;
-            ex n being Nat st a in dyadic(n) by A2,A4;
+            ex n being Element of NAT st a in dyadic(n) by A2,A4;
          hence thesis by A1;
       end;
    end;
@@ -166,15 +167,15 @@ end;
 canceled 2;
 
 theorem Th5:
-   for n being Nat holds
+   for n being Element of NAT holds
    for x being Real st x in dyadic(n) holds
    0 <= x & x <= 1
 proof
-   let n be Nat;
+   let n be Element of NAT;
    let x be Real;
    assume
    x in dyadic(n);
-   then consider i being Nat such that
+   then consider i being Element of NAT such that
 A1:0 <= i & i <= (2|^n) & x = i/(2|^n) by Def3;
       0 < (2|^n) by NEWTON:102;
 then A2:0/(2|^n) <= i/(2|^n) & i/(2|^n) <= (2|^n)/(2|^n) by A1,REAL_1:73;
@@ -186,20 +187,22 @@ theorem Th6:
 proof
 A1:  2|^0 = 1 by NEWTON:9;
 A2:for x being Real holds
-   x in dyadic(0) iff ex i being Nat st
+   x in dyadic(0) iff ex i being Element of NAT st
    (0 <= i & i <= 1 & x = i)
    proof
       let x be Real;
-   A3:x in dyadic(0) implies ex i being Nat st (0 <= i & i <= 1 & x = i)
+   A3:x in dyadic(0) implies ex i being Element of NAT st
+    0 <= i & i <= 1 & x = i
       proof
          assume x in dyadic(0);
-         then consider i being Nat such that
+         then consider i being Element of NAT such that
       A4:0 <= i & i <= 1 & x = i/1 by A1,Def3;
          thus thesis by A4;
       end;
-         (ex i being Nat st (0 <= i & i <= 1 & x = i)) implies x in dyadic(0)
+         (ex i being Element of NAT st (0 <= i & i <= 1 & x = i))
+          implies x in dyadic(0)
       proof
-         given i being Nat such that
+         given i being Element of NAT such that
       A5:0 <= i & i <= 1 & x = i;
             x = i/1 by A5;
          hence thesis by A1,A5,Def3;
@@ -216,7 +219,7 @@ A2:for x being Real holds
             assume
          A7:x in dyadic(0);
             then reconsider x as Real;
-            consider i being Nat such that
+            consider i being Element of NAT such that
          A8:0 <= i & i <= 1 & x = i by A2,A7;
                0 <= i & i <= 0+1 by A8;
             then x = 0 or x = 1 by A8,NAT_1:27;
@@ -247,7 +250,7 @@ A1: 2|^1 = 2 by NEWTON:10;
          assume
       A3:x in dyadic(1);
          then reconsider x as Real;
-         consider i being Nat such that
+         consider i being Element of NAT such that
       A4:0 <= i & i <= 2 & x = i/2 by A1,A3,Def3;
             0 <= i & (i <= 1 or i = 1+1) by A4,NAT_1:26;
 then i = 0 or i = 0+1 or i = 2 by NAT_1:27;
@@ -277,13 +280,13 @@ A5:          x in {0,1/2,1};
    hence thesis by TARSKI:2;
 end;
 
-registration let n be Nat;
+registration let n be Element of NAT;
    cluster dyadic(n) -> non empty;
 coherence
 proof
    consider x being Real such that
 A1:x = 0/(2|^n);
-     ex i being Nat st 0 <= i & i <= (2|^n) & x = i/(2|^n)
+     ex i being Element of NAT st 0 <= i & i <= (2|^n) & x = i/(2|^n)
    proof
      take 0;
      thus thesis by A1,NEWTON:102;
@@ -295,15 +298,15 @@ end;
 canceled;
 
 theorem Th9:
-   for n being Nat holds
+   for n being Element of NAT holds
    ex FS being FinSequence st (dom FS = Seg ((2|^n)+1) &
-   for i being Nat st i in dom FS holds FS.i = (i-1)/(2|^n))
+   for i being Element of NAT st i in dom FS holds FS.i = (i-1)/(2|^n))
 proof
-   let n be Nat;
-   deffunc F(Nat)=($1-1)/(2|^n);
+   let n be Element of NAT;
+   deffunc F(Element of NAT)=($1-1)/(2|^n);
    consider FS being FinSequence such that
 A1:len FS = (2|^n)+1 &
-   for i being Nat st i in Seg((2|^n)+1) holds FS.i = F(i)
+   for i being Element of NAT st i in Seg((2|^n)+1) holds FS.i = F(i)
    from FINSEQ_1:sch 2;
 A2:dom FS = Seg((2|^n)+1) by A1,FINSEQ_1:def 3;
    take FS;
@@ -311,24 +314,24 @@ A2:dom FS = Seg((2|^n)+1) by A1,FINSEQ_1:def 3;
 end;
 
 definition
-   let n be Nat;
+   let n be Element of NAT;
    func dyad(n) -> FinSequence means
 :Def6:dom it = Seg((2|^n)+1) &
-    for i being Nat st i in dom it holds it.i = (i-1)/(2|^n);
+    for i being Element of NAT st i in dom it holds it.i = (i-1)/(2|^n);
 existence by Th9;
 uniqueness
 proof
    let F1,F2 be FinSequence;
    assume that
 A1:dom F1 = Seg((2|^n)+1) &
-   for i being Nat st i in dom F1 holds F1.i = (i-1)/(2|^n) and
+   for i being Element of NAT st i in dom F1 holds F1.i = (i-1)/(2|^n) and
 A2:dom F2 = Seg((2|^n)+1) &
-   for i being Nat st i in dom F2 holds F2.i = (i-1)/(2|^n);
+   for i being Element of NAT st i in dom F2 holds F2.i = (i-1)/(2|^n);
    consider X being set such that
 A3:X = dom F1;
-      for k being Nat st k in X holds F1.k = F2.k
+      for k being Element of NAT st k in X holds F1.k = F2.k
    proof
-      let k be Nat;
+      let k be Element of NAT;
       assume
 A4:    k in X;
       hence F1.k = (k-1)/(2|^n) by A1,A3
@@ -339,12 +342,12 @@ end;
 end;
 
 theorem
-      for n being Nat holds
+      for n being Element of NAT holds
    dom dyad(n) = Seg((2|^n)+1) & rng dyad(n) = dyadic(n)
 proof
-   let n be Nat;
+   let n be Element of NAT;
 A1:dom (dyad(n)) = Seg((2|^n)+1) &
-   for i being Nat st i in dom (dyad(n)) holds
+   for i being Element of NAT st i in dom (dyad(n)) holds
    (dyad(n)).i = (i-1)/(2|^n) by Def6;
       for x being set holds x in rng (dyad(n)) iff x in dyadic(n)
    proof
@@ -355,23 +358,24 @@ A1:dom (dyad(n)) = Seg((2|^n)+1) &
          then consider y being set such that
       A3:y in dom (dyad(n)) & x = (dyad(n)).y by FUNCT_1:def 5;
       A4:y in Seg((2|^n)+1) by A3,Def6;
-         reconsider y as Nat by A3;
+         reconsider y as Element of NAT by A3;
       A5:1 <= y & y <= (2|^n) + 1 by A4,FINSEQ_1:3;
          then A6: 1 - 1 <= y - 1 & y - 1 <= (2|^n) + 1 - 1 by REAL_1:92;
          consider i being Nat such that
       A7:1 + i = y by A5,NAT_1:28;
-             x = (y-1)/(2|^n) by A3,Def6;
-         hence thesis by A6,A7,Def3;
+AA:      i in NAT by ORDINAL1:def 13;
+         x = (y-1)/(2|^n) by A3,Def6;
+         hence thesis by AA,A6,A7,Def3;
       end;
-         x in dyadic(n) implies x in rng (dyad(n))
+      x in dyadic(n) implies x in rng (dyad(n))
       proof
          assume
       A8:x in dyadic(n);
          then reconsider x as Real;
-         consider i being Nat such that
+         consider i being Element of NAT such that
       A9:0 <= i & i <= (2|^n) & x = i/(2|^n) by A8,Def3;
 A10:     0 + 1 <= i + 1 & i + 1 <= (2|^n) + 1 by A9,XREAL_1:8;
-         consider y being Nat such that
+         consider y being Element of NAT such that
       A11:y = i + 1;
       A12:y in Seg((2|^n)+1) by A10,A11,FINSEQ_1:3;
       then A13:y in dom (dyad(n)) by Def6;
@@ -406,16 +410,17 @@ end;
 end;
 
 theorem Th11:
-   for n being Nat holds dyadic(n) c= dyadic(n+1)
+   for n being Element of NAT holds dyadic(n) c= dyadic(n+1)
 proof
-   let n be Nat;
+   let n be Element of NAT;
    let x be set;
    assume
 A1:x in dyadic(n);
-      ex i being Nat st (0 <= i & i <= (2|^(n+1)) & x = i/(2|^(n+1)))
+      ex i being Element of NAT st (0 <= i & i <= (2|^(n+1))
+       & x = i/(2|^(n+1)))
    proof
       reconsider x as Real by A1;
-      consider i being Nat such that
+      consider i being Element of NAT such that
    A2:0 <= i & i <= (2|^n) & x = i/(2|^n) by A1,Def3;
 A3:      0*2 <= i*2 by A2,XREAL_1:66;
    A4:2|^(n+1) = (2|^n)*2 by NEWTON:11;
@@ -426,42 +431,43 @@ A3:      0*2 <= i*2 by A2,XREAL_1:66;
 end;
 
 theorem Th12:
-   for n being Nat holds
+   for n being Element of NAT holds
    0 in dyadic(n) & 1 in dyadic(n)
 proof
-  defpred P[Nat] means 0 in dyadic($1) & 1 in dyadic($1);
+  defpred P[Element of NAT] means 0 in dyadic($1) & 1 in dyadic($1);
 A1:P[0] by Th6,TARSKI:def 2;
-A2:for k being Nat st P[k] holds P[(k+1)]
+A2:for k being Element of NAT st P[k] holds P[(k+1)]
    proof
-      let k be Nat;
+      let k be Element of NAT;
       assume
    A3:0 in dyadic(k) & 1 in dyadic(k);
          dyadic(k) c= dyadic(k+1) by Th11;
       hence thesis by A3;
    end;
-    for k be Nat holds P[k] from NAT_1:sch 1(A1,A2);
+    for k be Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
    hence thesis;
 end;
 
 theorem Th13:
-   for n,i being Nat st 0 < i & i <= 2|^n holds
+   for n,i being Element of NAT st 0 < i & i <= 2|^n holds
    (i*2-1)/(2|^(n+1)) in dyadic(n+1) \ dyadic(n)
 proof
-   let n,i be Nat;
+   let n,i be Element of NAT;
    assume
 A1:0 < i & i <= 2|^n;
    then A2:    0*2 < i*2 by XREAL_1:70;
    then consider k being Nat such that
 A3:i*2 = k + 1 by NAT_1:22;
+AA:k in NAT by ORDINAL1:def 13;
       i*2 <= (2|^n)*2 by A1,XREAL_1:66;
 then i*2 <= 2|^(n+1) by NEWTON:11;
    then 0 <= k & k <= 2|^(n+1) by A2,A3,NAT_1:38;
-then A4:(i*2-1)/(2|^(n+1)) in dyadic(n+1) by A3,Def3;
+then A4:(i*2-1)/(2|^(n+1)) in dyadic(n+1) by AA,A3,Def3;
       not (i*2-1)/(2|^(n+1)) in dyadic(n)
    proof
       assume
       (i*2-1)/(2|^(n+1)) in dyadic(n);
-      then consider s being Nat such that
+      then consider s being Element of NAT such that
    A5:0 <= s & s <= 2|^n & (i*2-1)/(2|^(n+1)) = s/(2|^n) by Def3;
    A6:2|^n <> 0 & 2|^(n+1) <> 0 by NEWTON:102;
       then (i*2-1)*(2|^n) = s*(2|^(n+1)) by A5,XCMPLX_1:96;
@@ -477,13 +483,13 @@ then A4:(i*2-1)/(2|^(n+1)) in dyadic(n+1) by A3,Def3;
 end;
 
 theorem Th14:
-   for n,i being Nat st 0 <= i & i < 2|^n holds
+   for n,i being Element of NAT st 0 <= i & i < 2|^n holds
    (i*2+1)/(2|^(n+1)) in dyadic(n+1) \ dyadic(n)
 proof
-   let n,i be Nat;
+   let n,i be Element of NAT;
    assume
 A1:0 <= i & i < 2|^n;
-   consider s being Nat such that
+   consider s being Element of NAT such that
 A2:s = i + 1;
       0 + 1 <= i + 1 by A1,XREAL_1:8;
 then A3:0 < s by A2;
@@ -493,29 +499,29 @@ A4: s <= 2|^n by A1,A2,NAT_1:38;
 end;
 
 theorem Th15:
-   for n being Nat holds 1/(2|^(n+1)) in dyadic(n+1) \ dyadic(n)
+   for n being Element of NAT holds 1/(2|^(n+1)) in dyadic(n+1) \ dyadic(n)
 proof
-   let n be Nat;
+   let n be Element of NAT;
 A1: 2*0 + 1 = 1;
        0 < 2|^n by NEWTON:102;
    hence thesis by A1,Th14;
 end;
 
 definition
-   let n be Nat;
+   let n be Element of NAT;
    let x be Element of dyadic(n);
-   func axis(x,n) -> Nat means
+   func axis(x,n) -> Element of NAT means
 :Def7:x = it/(2|^n);
 existence
 proof
-   consider i being Nat such that
+   consider i being Element of NAT such that
 A1:0 <= i & i <= (2|^n) & x = i/(2|^n) by Def3;
    take i;
    thus thesis by A1;
 end;
 uniqueness
 proof
-   let i1,i2 be Nat;
+   let i1,i2 be Element of NAT;
    assume that
 A2:x = i1/(2|^n) and
 A3:x = i2/(2|^n);
@@ -527,22 +533,22 @@ end;
 end;
 
 theorem Th16:
-   for n being Nat holds
+   for n being Element of NAT holds
    for x being Element of dyadic(n) holds
    x = axis(x,n)/(2|^n) & axis(x,n) <= (2|^n)
 proof
-   let n be Nat;
+   let n be Element of NAT;
    let x be Element of dyadic(n);
-       ex i being Nat st 0 <= i & i <= 2|^n & x = i/(2|^n) by Def3;
+       ex i being Element of NAT st 0 <= i & i <= 2|^n & x = i/(2|^n) by Def3;
    hence thesis by Def7;
 end;
 
 theorem
-      for n being Nat holds
+      for n being Element of NAT holds
    for x being Element of dyadic(n) holds
    (axis(x,n)-1)/(2|^n) < x & x < (axis(x,n)+1)/(2|^n)
 proof
-   let n be Nat;
+   let n be Element of NAT;
    let x be Element of dyadic(n);
 A1:x = axis(x,n)/(2|^n) by Def7;
      A2: -1 + axis(x,n) < 0 + axis(x,n) &
@@ -552,11 +558,11 @@ A1:x = axis(x,n)/(2|^n) by Def7;
 end;
 
 theorem Th18:
-   for n being Nat holds
+   for n being Element of NAT holds
    for x being Element of dyadic(n) holds
    ((axis(x,n)-1)/(2|^n) < (axis(x,n)+1)/(2|^n))
 proof
-   let n be Nat;
+   let n be Element of NAT;
    let x be Element of dyadic(n);
      A1: -1 + axis(x,n) < 1 + axis(x,n) by XREAL_1:10;
       0 < 2|^n by NEWTON:102;
@@ -566,13 +572,13 @@ end;
 canceled;
 
 theorem Th20:
-   for n being Nat holds
+   for n being Element of NAT holds
    for x being Element of dyadic(n+1) holds
    (not x in dyadic(n) implies
    ((axis(x,n+1)-1)/(2|^(n+1)) in dyadic(n) &
    (axis(x,n+1)+1)/(2|^(n+1)) in dyadic(n)))
 proof
-   let n be Nat;
+   let n be Element of NAT;
    let x be Element of dyadic(n+1);
    assume
 A1:not x in dyadic(n);
@@ -581,11 +587,11 @@ A1:not x in dyadic(n);
    proof
       consider a being Real such that
    A2:a = (axis(x,n+1)-1)/(2|^(n+1));
-         ex i being Nat st (0 <= i & i <= (2|^n) & a = i/(2|^n))
+         ex i being Element of NAT st (0 <= i & i <= (2|^n) & a = i/(2|^n))
       proof
-         consider s being Nat such that
+         consider s being Element of NAT such that
       A3:0 <= s & s <= (2|^(n+1)) & x = s/(2|^(n+1)) by Def3;
-         consider k being Nat such that
+         consider k being Element of NAT such that
       A4:s = 2 * k or s = 2 * k + 1 by SCHEME1:1;
             now per cases by A4;
          case s = k * 2;
@@ -623,11 +629,11 @@ A1:not x in dyadic(n);
    proof
       consider a being Real such that
    A8:a = (axis(x,n+1)+1)/(2|^(n+1));
-         ex i being Nat st (0 <= i & i <= (2|^n) & a = i/(2|^n))
+         ex i being Element of NAT st (0 <= i & i <= (2|^n) & a = i/(2|^n))
       proof
-         consider s being Nat such that
+         consider s being Element of NAT such that
       A9:0 <= s & s <= (2|^(n+1)) & x = s/(2|^(n+1)) by Def3;
-         consider k being Nat such that
+         consider k being Element of NAT such that
       A10:s = 2 * k or s = 2 * k + 1 by SCHEME1:1;
             now per cases by A10;
          case s = k * 2;
@@ -639,7 +645,7 @@ A1:not x in dyadic(n);
          end;
          case
          A11:s = k * 2 + 1;
-            consider l being Nat such that
+            consider l being Element of NAT such that
          A12:l = k + 1;
 A13:        s <> (2|^(n+1))
             proof
@@ -672,11 +678,11 @@ A13:        s <> (2|^(n+1))
 end;
 
 theorem Th21:
-   for n being Nat holds
+   for n being Element of NAT holds
    for x1,x2 being Element of dyadic(n) st x1 < x2 holds
    axis(x1,n) < axis(x2,n)
 proof
-   let n be Nat;
+   let n be Element of NAT;
    let x1,x2 be Element of dyadic(n);
 A1: x1 = axis(x1,n)/(2|^n) & x2 = axis(x2,n)/(2|^n) by Th16;
       0 < (2|^n) by NEWTON:102;
@@ -684,11 +690,11 @@ A1: x1 = axis(x1,n)/(2|^n) & x2 = axis(x2,n)/(2|^n) by Th16;
 end;
 
 theorem Th22:
-   for n being Nat holds
+   for n being Element of NAT holds
    for x1,x2 being Element of dyadic(n) st x1 < x2 holds
    x1 <= (axis(x2,n)-1)/(2|^n) & (axis(x1,n)+1)/(2|^n) <= x2
 proof
-   let n be Nat;
+   let n be Element of NAT;
    let x1,x2 be Element of dyadic(n);
    assume
 A1:x1 < x2;
@@ -705,18 +711,18 @@ then A4:axis(x1,n) + 1 <= axis(x2,n) by NAT_1:38;
 end;
 
 theorem Th23:
-   for n being Nat holds
+   for n being Element of NAT holds
    for x1,x2 being Element of dyadic(n+1) st
    x1 < x2 & not x1 in dyadic(n) & not x2 in dyadic(n) holds
    (axis(x1,n+1)+1)/(2|^(n+1)) <= (axis(x2,n+1)-1)/(2|^(n+1))
 proof
-   let n be Nat;
+   let n be Element of NAT;
    let x1,x2 be Element of dyadic(n+1);
    assume
 A1:x1 < x2 & not x1 in dyadic(n) & not x2 in dyadic(n);
-   consider k1 being Nat such that
+   consider k1 being Element of NAT such that
 A2:axis(x1,n+1) = 2 * k1 or axis(x1,n+1) = 2 * k1 + 1 by SCHEME1:1;
-   consider k2 being Nat such that
+   consider k2 being Element of NAT such that
 A3:axis(x2,n+1) = 2 * k2 or axis(x2,n+1) = 2 * k2 + 1 by SCHEME1:1;
 A4:not axis(x1,n+1) = k1 * 2
    proof
@@ -1347,7 +1353,7 @@ end;
 theorem
     for T being non empty TopSpace st T is_T4
  for A,B being closed Subset of T st A <> {} & A misses B
- for n being Nat
+ for n being Element of NAT
  for G being Function of dyadic(n),bool the carrier of T st
    A c= G.0 & B = [#](T) \ G.1 &
    for r1,r2 being Element of dyadic(n) st r1 < r2 holds
@@ -1362,7 +1368,7 @@ theorem
 A1:T is_T4;
   let A,B be closed Subset of T such that
 A2: A <> {} & A /\ B = {};
-  let n be Nat;
+  let n be Element of NAT;
   let G be Function of dyadic(n),bool the carrier of T such that
 A3: A c= G.0 & B = [#](T) \ G.1 and
 A4: for r1,r2 being Element of dyadic(n) st r1 < r2 holds

@@ -10,7 +10,8 @@ environ
       TREES_1, FUNCT_1, RELAT_1, BOOLE, GROUP_1, BINOP_1, SETWISEO, MATRIX_2,
       FINSUB_1, FINSET_1, FUNCOP_1, MATRIX_3, MATRIX_9, FINSEQ_5, FUNCT_2,
       SGRAPH1, CARD_3, FINSEQ_4, NAT_1, CALCUL_2;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, ENUMSET1, FINSET_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1,
+      NUMBERS, XCMPLX_0, NAT_1, ENUMSET1, FINSET_1,
       RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2, BINOP_1,
       FINSOP_1, BINARITH, STRUCT_0, GROUP_1, VECTSP_1, RLVECT_1, SETWISEO,
       GROUP_4, SETWOP_2, FINSUB_1, MATRIX_1, FINSEQ_4, FINSEQ_5, MATRIX_2,
@@ -20,7 +21,7 @@ environ
       MATRIX_7;
  registrations FINSUB_1, FINSET_1, RELSET_1, STRUCT_0, FVSUM_1, MATRIX_2,
       FUNCT_2, PARTFUN1, XBOOLE_0, ORDINAL1, FINSEQ_5, FINSEQ_1, CHAIN_1,
-      INT_1, FINSEQ_6, VECTSP_1;
+      INT_1, FINSEQ_6, VECTSP_1, ARYTM_3, NAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions BINOP_1, RLVECT_1, FINSEQ_2, FINSEQ_1, RVSUM_1, SETWOP_2;
  theorems FINSEQ_1, FINSEQ_2, TARSKI, FUNCT_2, NAT_1, BINOP_1, FUNCT_1,
@@ -28,7 +29,7 @@ environ
       FUNCOP_1, FINSUB_1, FINSEQ_3, RLVECT_1, RELAT_1, FINSOP_1, RELSET_1,
       XBOOLE_0, XBOOLE_1, GROUP_1, MATRIX_3, FINSEQ_5, ENUMSET1, FINSEQ_6,
       GOBOARD7, FINSET_1, FINSEQ_4, GROUP_4, XREAL_1, GROUP_7, MATRIX_7,
-      BINARITH, XXREAL_0;
+      BINARITH, XXREAL_0, ORDINAL1;
  schemes FUNCT_2, FINSET_1, NAT_1;
 
 begin :: Preliminaries
@@ -63,7 +64,8 @@ registration let n be Nat;
 end;
 
 scheme NonEmptyFiniteX
-  { n() -> Nat, A() -> non empty Element of Fin Permutations n(), P[set] } :
+  { n() -> Element of NAT,
+  A() -> non empty Element of Fin Permutations n(), P[set] } :
     P[A()]
   provided
 A1: for x being Element of Permutations n() st x in A() holds P[{x}] and
@@ -113,7 +115,7 @@ Lm2:<*1,2*> <> <*2,1*> by GROUP_7:2;
 Lm3: <*2,1*> in Permutations 2 by TARSKI:def 2,MATRIX_7:3;
 
 Lm4:
-  for n being Nat,a,b being Element of
+  for n being Element of NAT,a,b being Element of
   the carrier of Group_of_Perm(n),
 pa,pb being Element of Permutations(n) st
 a=pa & b=pb holds a*b=pb*pa by MATRIX_7:9;
@@ -122,9 +124,10 @@ registration let n;
   cluster one-to-one FinSequence-like Function of Seg n, Seg n;
   existence
   proof
+X0: n in NAT by ORDINAL1:def 13;
     take f = id Seg n;
     dom f = Seg n by RELAT_1:71;
-    hence thesis by FINSEQ_1:def 2;
+    hence thesis by X0,FINSEQ_1:def 2;
   end;
 end;
 
@@ -144,8 +147,9 @@ registration let n;
   cluster id Seg n -> FinSequence-like;
   coherence
   proof
+X0: n in NAT by ORDINAL1:def 13;
     dom id Seg n = Seg n by RELAT_1:71;
-    hence thesis by FINSEQ_1:def 2;
+    hence thesis by X0,FINSEQ_1:def 2;
   end;
 end;
 
@@ -329,9 +333,9 @@ A7: FinOmega Permutations 1 = {idseq 1} by MATRIX_2:21,def 17;
   end;
 
 theorem
-  for K being Field, n being Nat st n >= 1 holds
+  for K being Field, n being Element of NAT st n >= 1 holds
     Per (0.(K,n,n)) = 0.K
-proof let K be Field, n be Nat;
+proof let K be Field, n be Element of NAT;
     assume A1: n>=1;then n >= 1+0; then
 A2: n > 0 by NAT_1:38;
     set B = FinOmega Permutations n;
@@ -353,9 +357,9 @@ A5:dom (PPath_product(0.(K,n,n))) = dom (Permutations(n) --> 0.K)
           (the mult of K) $$ Path_matrix(p,(0.(K,n,n)))
       proof let p be Element of Permutations(n);
 A6:     len (n |-> 0.K) = n by FINSEQ_2:69;
-        for i,j being Nat st i in dom (n |-> 0.K) & j=p.i holds
+        for i,j st i in dom (n |-> 0.K) & j=p.i holds
           (n |-> 0.K).i = (0.(K,n,n))*(i,j)
-        proof let i,j be Nat;
+        proof let i,j;
           assume A7: i in dom (n |-> 0.K) & j=p.i;then
 A8:       i in Seg n by FUNCOP_1:19;then
 A9:       (n |-> 0.K).i=0.K by FUNCOP_1:13;
@@ -368,11 +372,12 @@ A9:       (n |-> 0.K).i=0.K by FUNCOP_1:13;
           hence (n |-> 0.K).i=(0.(K,n,n))*(i,j) by A9,MATRIX_3:3;
         end;then
 A10:     Path_matrix(p,(0.(K,n,n))) = n |-> 0.K by A6,MATRIX_3:def 7;
-        defpred P[Nat] means (the mult of K) $$ (($1+1) |-> 0.K)=0.K;
+        defpred P[Element of NAT] means
+         (the mult of K) $$ (($1+1) |-> 0.K)=0.K;
         1 |-> 0.K = <* 0.K *> by FINSEQ_2:73;then
 A11:     P[0] by FINSOP_1:12;
-A12:     for k being Nat st P[k] holds P[k+1]
-        proof let k be Nat;
+A12:     for k being Element of NAT st P[k] holds P[k+1]
+        proof let k be Element of NAT;
           assume A13: P[k];
 A14:       (the mult of K) has_a_unity by FVSUM_1:11;
           (k+1+1) |-> 0.K = ((k+1) |-> 0.K) ^ <* 0.K *> by FINSEQ_2:74;then
@@ -384,7 +389,7 @@ A14:       (the mult of K) has_a_unity by FVSUM_1:11;
             .= 0.K by VECTSP_1:36;
           hence P[k+1];
         end;
-A15:     for k being Nat holds P[k] from NAT_1:sch 1(A11,A12);
+A15:     for k being Element of NAT holds P[k] from NAT_1:sch 1(A11,A12);
         n-'1+1=n by A1,BINARITH:53;then
         (the mult of K) $$ Path_matrix(p,(0.(K,n,n))) = 0.K by A10,A15;
         hence (Permutations(n) --> 0.K).p
@@ -1254,7 +1259,7 @@ A2: dom p = Seg 3 by FINSEQ_3:30 .= {1,2,3} by FINSEQ_3:1;
       given i,j such that
 A3:   i in dom p & j in dom p & i <> j & p.i = j & p.j = i &
       for k st k <> i & k <> j & k in dom p holds p.k = k;
-      ex k being Nat st k <> i & k <> j & k in dom p
+      ex k being Element of NAT st k <> i & k <> j & k in dom p
       proof
 A4:     (i = 1 or i = 2 or i = 3) & (j = 1 or j = 2 or j = 3)
           by A3,A2,ENUMSET1:def 1;
@@ -1321,7 +1326,7 @@ A2: dom p = Seg 3 by FINSEQ_3:30 .= {1,2,3} by FINSEQ_3:1;
       given i,j such that
 A3:   i in dom p & j in dom p & i <> j & p.i = j & p.j = i &
       for k st k <> i & k <> j & k in dom p holds p.k = k;
-      ex k being Nat st k <> i & k <> j & k in dom p
+      ex k being Element of NAT st k <> i & k <> j & k in dom p
       proof
 A4:     (i = 1 or i = 2 or i = 3) & (j = 1 or j = 2 or j = 3)
           by ENUMSET1:def 1,A3,A2;
@@ -1382,16 +1387,17 @@ theorem Th36:
   proof
     let f be Permutation of Seg n;
 A1: rng f c= Seg n by RELSET_1:12;
+X0: n in NAT by ORDINAL1:def 13;
     per cases;
     suppose n = 0; then
       dom f = Seg n by FUNCT_2:def 1,FINSEQ_1:4; then
-      f is FinSequence by FINSEQ_1:def 2;
+      f is FinSequence by X0,FINSEQ_1:def 2;
       hence thesis by A1,FINSEQ_1:def 4;
     end;
     suppose n <> 0; then
       Seg n <> {} by FINSEQ_1:5; then
       dom f = Seg n by FUNCT_2:def 1; then
-      f is FinSequence by FINSEQ_1:def 2;
+      f is FinSequence by X0,FINSEQ_1:def 2;
       hence thesis by A1,FINSEQ_1:def 4;
     end;
   end;
@@ -1732,7 +1738,7 @@ A6:       l.i = <*2,1,3*> by FINSEQ_1:61; then
 theorem
   for l being FinSequence of Group_of_Perm n st
     (len l) mod 2 = 0 &
-       (for i being Nat st i in dom l
+       (for i being Element of NAT st i in dom l
        ex q being Element of Permutations n st
        l.i = q & q is_transposition) holds
     Product l is even Permutation of Seg n
@@ -1740,7 +1746,7 @@ theorem
     let l be FinSequence of Group_of_Perm n;
     assume
 A1: (len l) mod 2 = 0 &
-       for i being Nat st i in dom l
+       for i being Element of NAT st i in dom l
        ex q being Element of Permutations n st
        l.i = q & q is_transposition;
     Product l in the carrier of Group_of_Perm n; then
@@ -1749,8 +1755,19 @@ A1: (len l) mod 2 = 0 &
     reconsider Pf = Product l as Permutation of Seg n;
     ex l be FinSequence of the carrier of Group_of_Perm n st
       (len l) mod 2 = 0 & Pf = Product l &
-    for i st i in dom l ex q being Element of Permutations n st
-    l.i=q & q is_transposition by A1; then
+    for i st i in dom l ex q being Element of Permutations n
+    st l.i=q & q is_transposition
+    proof
+      consider l be FinSequence of the carrier of Group_of_Perm n such that
+A3:   (len l) mod 2 = 0 & Pf = Product l and
+A2:   for i be Element of NAT st i in dom l
+      ex q being Element of Permutations n st l.i=q & q is_transposition by A1;
+      take l;
+      thus (len l) mod 2 = 0 & Pf = Product l by A3;
+      let i;
+      i in NAT by ORDINAL1:def 13;
+      hence thesis by A2;
+    end; then
     Pf is even by MATRIX_2:def 15;
     hence thesis;
   end;
@@ -1773,21 +1790,21 @@ A1:   p is Element of Permutations 3 by MATRIX_2:def 11;
 theorem Th41:
   for l being FinSequence of Group_of_Perm 3 st
     (len l) mod 2 = 0 &
-       (for i being Nat st i in dom l
+       (for i being Element of NAT st i in dom l
        ex q being Element of Permutations 3 st
        l.i = q & q is_transposition) holds
     Product l = <*1,2,3*> or Product l = <*2,3,1*> or Product l = <*3,1,2*>
   proof
     let l be FinSequence of Group_of_Perm 3;
     assume
-A1: (len l) mod 2 = 0 & (for i being Nat st i in dom l
+A1: (len l) mod 2 = 0 & (for i being Element of NAT st i in dom l
     ex q being Element of Permutations 3 st l.i = q & q is_transposition);
     then consider t being Nat such that
 A2: len l = 2 * t + 0 & 0 < 2 by NAT_1:def 2;
 A3: len l = 2 * t by A2;
     defpred P[Nat] means
     for f being FinSequence of Group_of_Perm 3 st
-    len f = 2 * $1 & (for i st i in dom f holds
+    len f = 2 * $1 & (for i be Element of NAT st i in dom f holds
      ex q being Element of Permutations 3 st f.i=q & q is_transposition)
      holds
     Product f = <*1,2,3*> or Product f = <*2,3,1*> or Product f = <*3,1,2*>;
@@ -1795,7 +1812,7 @@ A4: P[0]
     proof
       let f be FinSequence of Group_of_Perm 3;
       assume len f = 2*0 &
-      (for i st i in dom f holds
+      (for i be Element of NAT st i in dom f holds
       ex q being Element of Permutations 3 st
         f.i = q & q is_transposition); then
 A5:   len f = 0;
@@ -1810,14 +1827,15 @@ A7: for k being Nat st P[k] holds P[k+1]
       let k be Nat;
       assume P[k]; then
 A8:   for f being FinSequence of Group_of_Perm 3 st
-      len f = 2*k & (for i st i in dom f holds
+      len f = 2*k & (for i be Element of NAT st i in dom f holds
       (ex q being Element of Permutations 3 st f.i = q & q is_transposition))
       holds
       Product f = <*1,2,3*> or Product f = <*2,3,1*> or Product f = <*3,1,2*>;
       let f be FinSequence of Group_of_Perm 3;
       assume
-A9:   len f = 2 * (k+1) & (for i st i in dom f holds
+A9:   len f = 2 * (k+1) & (for i be Element of NAT st i in dom f holds
       ex q being Element of Permutations 3 st f.i = q & q is_transposition);
+      reconsider k as Element of NAT by ORDINAL1:def 13;
 A10:   rng f c= the carrier of Group_of_Perm 3 by RELSET_1:12;
       rng (f|Seg (2*k)) c= rng f by RELAT_1:99; then
       rng (f|Seg (2*k)) c= the carrier of Group_of_Perm 3
@@ -1832,10 +1850,10 @@ A12:   dom f = Seg (2*(k+1)) by A9,FINSEQ_1:def 3; then
       Seg len g = Seg (2*k) by FINSEQ_1:def 3; then
 A13:   len g = 2*k by FINSEQ_1:8;
 A14:   dom g c= dom f by RELAT_1:89;
-      for i st i in dom g holds
+      for i be Element of NAT st i in dom g holds
       ex q being Element of Permutations 3 st g.i = q & q is_transposition
       proof
-        let i; assume
+        let i be Element of NAT; assume
 A15:     i in dom g; then
         consider q being Element of Permutations 3 such that
 A16:     f.i = q & q is_transposition by A14,A9;
@@ -1926,20 +1944,37 @@ A44:   Product f = q12 * Pg by Lm4,A43;
       end;
       hence thesis;
     end;
-    for s being Nat holds P[s] from NAT_1:sch 1(A4,A7);
+    for s being Nat holds P[s] from NAT_1:sch 2(A4,A7);
     hence thesis by A1,A3;
   end;
+
+LmTh41:
+  for l being FinSequence of Group_of_Perm 3 st
+    (len l) mod 2 = 0 &
+       (for i being Nat st i in dom l
+       ex q being Element of Permutations 3 st
+       l.i = q & q is_transposition) holds
+    Product l = <*1,2,3*> or Product l = <*2,3,1*> or Product l = <*3,1,2*>
+proof
+  let l being FinSequence of Group_of_Perm 3 such that
+A1: (len l) mod 2 = 0 and
+A2: for i st i in dom l
+    ex q being Element of Permutations 3 st
+    l.i = q & q is_transposition;
+    for i be Element of NAT st i in dom l ex q being Element of Permutations 3
+    st l.i = q & q is_transposition by A2;
+    hence thesis by A1,Th41;
+end;
 
 registration
   cluster odd Permutation of Seg 3;
   existence
   proof
-    reconsider f = <*3,2,1*> as Permutation of Seg 3
-      by MATRIX_2:def 11,Th27;
+    reconsider f = <*3,2,1*> as Permutation of Seg 3 by MATRIX_2:def 11,Th27;
     not ex l be FinSequence of Group_of_Perm 3 st
     (len l) mod 2 = 0 & f = Product l &
     for i st i in dom l ex q being Element of Permutations 3 st
-    l.i = q & q is_transposition by Th41,Lm6; then
+    l.i = q & q is_transposition by LmTh41,Lm6; then
     f is odd by MATRIX_2:def 15;
     hence thesis;
   end;
@@ -1953,7 +1988,7 @@ theorem Th42:
     not ex l be FinSequence of Group_of_Perm 3 st
     (len l) mod 2 = 0 & f = Product l &
     for i st i in dom l ex q being Element of Permutations 3 st
-    l.i = q & q is_transposition by Th41,Lm6;
+    l.i = q & q is_transposition by LmTh41,Lm6;
     hence thesis by MATRIX_2:def 15;
   end;
 
@@ -1965,7 +2000,7 @@ theorem Th43:
     not ex l be FinSequence of Group_of_Perm 3 st
     (len l) mod 2 = 0 & f = Product l &
     for i st i in dom l ex q being Element of Permutations 3 st
-    l.i = q & q is_transposition by Th41,Lm6;
+    l.i = q & q is_transposition by LmTh41,Lm6;
     hence thesis by MATRIX_2:def 15;
   end;
 
@@ -1977,7 +2012,7 @@ theorem Th44:
     not ex l be FinSequence of Group_of_Perm 3 st
     (len l) mod 2 = 0 & f = Product l &
     for i st i in dom l ex q being Element of Permutations 3 st
-    l.i = q & q is_transposition by Th41,Lm6;
+    l.i = q & q is_transposition by LmTh41,Lm6;
     hence thesis by MATRIX_2:def 15;
   end;
 
@@ -2168,44 +2203,42 @@ A16: F $$(B2,r) = F.(F.(r.a4, r.a5),r.a6) by SETWOP_2:5,Lm6
   end;
 
 theorem Th48:
-  for i,n being Nat
+  for i,n being Element of NAT
   for p being Element of Permutations n st i in Seg n holds
-   ex k being Nat st k in Seg n & i = p.k
+   ex k being Element of NAT st k in Seg n & i = p.k
   proof
-    let i,n be Nat;
+    let i,n be Element of NAT;
     let p be Element of Permutations n;
     assume
 A1: i in Seg n;
-    consider s being FinSequence such that
-A2: s = p & len p = len s by MATRIX_2:def 12;
-A3: p is FinSequence by A2;
-    len p = n by MATRIX_2:22; then
-A4: dom s = Seg n by A2,FINSEQ_1:def 3;
-    p is Permutation of Seg n by MATRIX_2:def 11; then
-    i in rng p by A1,FUNCT_2:def 3; then
-    consider k being Nat such that
-A5: k in dom p & i = p.k by A3,FINSEQ_2:11;
-    thus thesis by A5,A4,A2;
+AA: p is Permutation of Seg n by MATRIX_2:def 11; then
+A4: dom p = Seg n by FUNCT_2:67; then
+    reconsider s = p as FinSequence by FINSEQ_1:def 2;
+    i in rng s by A1,FUNCT_2:def 3,AA; then
+    consider k being Element of NAT such that
+A5: k in dom s & i = s.k by FINSEQ_2:11;
+    thus thesis by A5,A4;
   end;
 
 theorem Th49:
   for M being Matrix of n, K st
-  (ex i being Nat st i in Seg n &
-   for k being Nat st k in Seg n holds Col(M,i).k = 0.K) holds
+  (ex i being Element of NAT st i in Seg n &
+   for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K) holds
    for p being Element of Permutations n holds
-  ex l being Nat st l in Seg n & Path_matrix (p,M).l = 0.K
+  ex l being Element of NAT st l in Seg n & Path_matrix (p,M).l = 0.K
   proof
     let M be Matrix of n, K;
     assume
-A1: ex i being Nat st i in Seg n &
-    for k being Nat st k in Seg n holds Col(M,i).k = 0.K;
-    consider i being Nat such that
+A1: ex i being Element of NAT st i in Seg n &
+    for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K;
+    consider i being Element of NAT such that
 A2: i in Seg n &
-    for k being Nat st k in Seg n holds Col(M,i).k = 0.K by A1;
+    for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K by A1;
     let p be Element of Permutations n;
     len Path_matrix (p, M) = n by MATRIX_3:def 7;then
 A3: dom Path_matrix (p, M) = Seg n by FINSEQ_1:def 3;
-    consider k being Nat such that
+    n in NAT by ORDINAL1:def 13;
+    then consider k being Element of NAT such that
 A4: k in Seg n and
 A5: i = p.k by Th48,A2;
 A6: len M = n by MATRIX_1:def 3;
@@ -2220,16 +2253,16 @@ A8: Path_matrix (p, M).k = Col(M,i).k by A7,MATRIX_1:def 9;
 theorem Th50:
   for p being Element of Permutations n
   for M being Matrix of n, K st
-    (ex i being Nat st i in Seg n &
-    for k being Nat st k in Seg n holds Col(M,i).k = 0.K)
+    (ex i being Element of NAT st i in Seg n &
+    for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K)
   holds (Path_product M).p = 0.K
   proof
     let p be Element of Permutations n;
     let M be Matrix of n, K;
     assume
-A1: ex i being Nat st i in Seg n &
-      for k being Nat st k in Seg n holds Col(M,i).k = 0.K;
-    consider l being Nat such that
+A1: ex i being Element of NAT st i in Seg n &
+      for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K;
+    consider l being Element of NAT such that
 A2: l in Seg n &
     Path_matrix (p,M).l = 0.K by A1,Th49;
     set k = l;
@@ -2255,37 +2288,39 @@ A5: (Path_product M).p = -((the mult of K) $$ Path_matrix(p,M),p)
 
 theorem Th51:
   for M being Matrix of n, K st
-    (ex i being Nat st i in Seg n &
-    for k being Nat st k in Seg n holds Col(M,i).k = 0.K) holds
+    (ex i being Element of NAT st i in Seg n &
+    for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K) holds
       (the add of K) $$ (FinOmega Permutations n, Path_product M) = 0.K
   proof
     let M be Matrix of n, K;
-    given i being Nat such that
+    reconsider n1=n as Element of NAT by ORDINAL1:def 13;
+    reconsider M1=M as Matrix of n1, K;
+    given i being Element of NAT such that
 A1: i in Seg n &
-    for k being Nat st k in Seg n holds Col(M,i).k = 0.K;
+    for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K;
     set F = the add of K;
-    set f = Path_product M;
+    set f = Path_product M1;
     set P1 = FinOmega Permutations n;
     consider c being Element of Permutations n;
     Permutations n is finite by MATRIX_2:30; then
-    reconsider P1 as non empty Element of Fin Permutations n
+    reconsider P1 as non empty Element of Fin Permutations n1
       by MATRIX_2:def 17;
-    defpred P[non empty Element of Fin Permutations n] means
+    defpred P[non empty Element of Fin Permutations n1] means
       F $$ ($1, f) = 0.K;
-A2: for x being Element of Permutations n st x in P1 holds P[{.x.}]
+A2: for x being Element of Permutations n1 st x in P1 holds P[{.x.}]
     proof
-      let x be Element of Permutations n;
+      let x be Element of Permutations n1;
       assume x in P1;
       F $$ ({.x.}, f) = f.x by SETWISEO:26
                    .= 0.K by Th50,A1;
       hence P[{.x.}];
     end;
-A3: for x being Element of Permutations n,
-        B being non empty Element of Fin Permutations n
+A3: for x being Element of Permutations n1,
+        B being non empty Element of Fin Permutations n1
       st x in P1 & B c= P1 & not x in B & P[B] holds P[B \/ {.x.}]
     proof
-      let x be Element of Permutations n,
-          B be non empty Element of Fin Permutations n;
+      let x be Element of Permutations n1,
+          B be non empty Element of Fin Permutations n1;
       assume
 A4:   x in P1 & B c= P1 & not x in B & P[B];
       F $$ (B \/ {.x.}, f) = F.(F $$(B,f), f.x) by A4,SETWOP_2:4
@@ -2300,15 +2335,15 @@ A4:   x in P1 & B c= P1 & not x in B & P[B];
 theorem Th52:
   for p being Element of Permutations n
   for M being Matrix of n, K st
-  (ex i being Nat st i in Seg n &
-  (for k being Nat st k in Seg n holds Col(M,i).k = 0.K)) holds
+  (ex i being Element of NAT st i in Seg n &
+  (for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K)) holds
     (PPath_product M).p = 0.K
    proof
      let p be Element of Permutations n;
      let M be Matrix of n, K;
-     assume ex i being Nat st i in Seg n &
-     (for k being Nat st k in Seg n holds Col(M,i).k = 0.K); then
-     consider l being Nat such that
+     assume ex i being Element of NAT st i in Seg n &
+     (for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K); then
+     consider l being Element of NAT such that
 A1:  l in Seg n & Path_matrix (p,M).l = 0.K by Th49;
      len Path_matrix (p, M) = n by MATRIX_3:def 7;then
      l in dom Path_matrix(p,M) by A1,FINSEQ_1:def 3; then
@@ -2320,37 +2355,39 @@ A2:  Product Path_matrix(p,M) = 0.K by A1,FVSUM_1:107;
 
 Lm12:
   for M being Matrix of n, K st
-    (ex i being Nat st i in Seg n &
-      for k being Nat st k in Seg n holds Col(M,i).k = 0.K) holds
+    (ex i being Element of NAT st i in Seg n &
+      for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K) holds
       (the add of K) $$ (FinOmega Permutations n, PPath_product M) = 0.K
   proof
     let M be Matrix of n, K;
+    reconsider n1=n as Element of NAT by ORDINAL1:def 13;
+    reconsider M1=M as Matrix of n1, K;
     assume
-A1: ex i being Nat st i in Seg n &
-    for k being Nat st k in Seg n holds Col(M,i).k = 0.K;
+A1: ex i being Element of NAT st i in Seg n &
+    for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K;
     set F = the add of K;
-    set f = PPath_product M;
-    set P1 = FinOmega Permutations n;
+    set f = PPath_product M1;
+    set P1 = FinOmega Permutations n1;
     consider c being Element of Permutations n;
     Permutations n is finite by MATRIX_2:30; then
-    reconsider P1 as non empty Element of Fin Permutations n
+    reconsider P1 as non empty Element of Fin Permutations n1
       by MATRIX_2:def 17;
-    defpred P[non empty Element of Fin Permutations n] means
+    defpred P[non empty Element of Fin Permutations n1] means
       F $$ ($1, f) = 0.K;
-A2: for x being Element of Permutations n st x in P1 holds P[{.x.}]
+A2: for x being Element of Permutations n1 st x in P1 holds P[{.x.}]
     proof
-      let x be Element of Permutations n;
+      let x be Element of Permutations n1;
       assume x in P1;
       F $$ ({.x.}, f) = f.x by SETWISEO:26
                    .= 0.K by Th52,A1;
       hence P[{.x.}];
     end;
-A3: for x being Element of Permutations n,
-        B being non empty Element of Fin Permutations n
+A3: for x being Element of Permutations n1,
+        B being non empty Element of Fin Permutations n1
       st x in P1 & B c= P1 & not x in B & P[B] holds P[B \/ {.x.}]
     proof
-      let x be Element of Permutations n,
-          B be non empty Element of Fin Permutations n;
+      let x be Element of Permutations n1,
+          B be non empty Element of Fin Permutations n1;
       assume
 A4:   x in P1 & B c= P1 & not x in B & P[B];
       F $$ (B \/ {.x.}, f) = F.(F $$(B,f), f.x) by A4,SETWOP_2:4
@@ -2364,14 +2401,14 @@ A4:   x in P1 & B c= P1 & not x in B & P[B];
 
 theorem
   for M being Matrix of n, K st
-  (ex i being Nat st i in Seg n &
-    for k being Nat st k in Seg n holds Col(M,i).k = 0.K) holds
+  (ex i being Element of NAT st i in Seg n &
+    for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K) holds
       Det M = 0.K
   proof
     let M be Matrix of n,K;
     assume
-A1: ex i being Nat st i in Seg n &
-    for k being Nat st k in Seg n holds Col(M,i).k = 0.K;
+A1: ex i being Element of NAT st i in Seg n &
+    for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K;
     set F = the add of K;
     set f = Path_product M;
     Permutations n is finite by MATRIX_2:30; then
@@ -2384,8 +2421,8 @@ A2: FinOmega Permutations n = Permutations n by MATRIX_2:def 17;
 
 theorem
   for M being Matrix of n, K st
-  (ex i being Nat st i in Seg n &
-    for k being Nat st k in Seg n holds Col(M,i).k = 0.K) holds
+  (ex i being Element of NAT st i in Seg n &
+    for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K) holds
       Per M = 0.K by Lm12;
 
 begin :: Auxiliary Lemmas for Further Work
@@ -2393,13 +2430,14 @@ begin :: Auxiliary Lemmas for Further Work
 theorem
   for M,N being Matrix of n, K st i in Seg n
   for p being Element of Permutations n holds
-  ex k being Nat st k in Seg n & i = p.k &
+  ex k being Element of NAT st k in Seg n & i = p.k &
     Col(N,i)/.k = Path_matrix (p, N)/.k
     proof
     let M,N be Matrix of n, K;
     assume A1: i in Seg n;
     let p be Element of Permutations n;
-    consider k being Nat such that
+    n in NAT by ORDINAL1:def 13;
+    then consider k being Element of NAT such that
 A2: k in Seg n and
 A3: i = p.k by Th48,A1;
     len N = n by MATRIX_1:def 3; then
@@ -2418,31 +2456,35 @@ A7: k in dom Col(N,i) by A4,FINSEQ_3:31;
 theorem
   for a being Element of K
   for M,N being Matrix of n, K st
-  (ex i being Nat st i in Seg n & (for k being Nat st
+  (ex i being Element of NAT st i in Seg n & (for k being Element of NAT st
     k in Seg n holds Col(M,i).k = a * Col(N,i)/.k) &
-  (for l being Nat st l <> i & l in Seg n holds Col(M,l) = Col(N,l)))
+  (for l being Element of NAT st l <> i & l in Seg n
+  holds Col(M,l) = Col(N,l)))
   for p being Element of Permutations n holds
-  ex l being Nat st l in Seg n &
+  ex l being Element of NAT st l in Seg n &
     Path_matrix (p,M)/.l = a * (Path_matrix (p,N)/.l)
   proof
     let a be Element of K;
     let M,N be Matrix of n, K;
     assume
-A1: (ex i being Nat st i in Seg n & (for k being Nat st
+A1: (ex i being Element of NAT st i in Seg n & (for k being Element of NAT st
     k in Seg n holds Col(M,i).k = a * Col(N,i)/.k) &
-      (for l being Nat st l <> i & l in Seg n holds Col(M,l) = Col(N,l)));
-    consider i being Nat such that
+      (for l being Element of NAT st l <> i & l in Seg n
+      holds Col(M,l) = Col(N,l)));
+    consider i being Element of NAT such that
 A2: i in Seg n and
-A3: (for k being Nat st
+A3: (for k being Element of NAT st
     k in Seg n holds Col(M,i).k = a * Col(N,i)/.k) &
-      (for l being Nat st l <> i & l in Seg n holds Col(M,l) = Col(N,l))
+      (for l being Element of NAT st l <> i & l in Seg n
+      holds Col(M,l) = Col(N,l))
         by A1;
     let p be Element of Permutations n;
     len Path_matrix (p, M) = n & len Path_matrix (p, N) = n
     by MATRIX_3:def 7;then
 A4: dom Path_matrix (p, M) = Seg n & dom Path_matrix (p, N) = Seg n
       by FINSEQ_1:def 3;
-    consider k being Nat such that
+    n in NAT by ORDINAL1:def 13;
+    then consider k being Element of NAT such that
 A5: k in Seg n and
 A6: i = p.k by Th48,A2;
 A7: len M = n & len N = n by MATRIX_1:def 3;

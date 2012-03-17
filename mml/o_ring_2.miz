@@ -7,44 +7,27 @@
 environ
 
  vocabularies VECTSP_1, FINSEQ_1, RELAT_1, FUNCT_1, O_RING_1, FINSEQ_4;
- notations NAT_1, FUNCT_1, FINSEQ_1, FINSEQ_4, STRUCT_0, RLVECT_1, GROUP_1,
-      VECTSP_1, O_RING_1, XXREAL_0;
+ notations SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, FUNCT_1, FINSEQ_1, FINSEQ_4,
+      STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1, O_RING_1, XXREAL_0;
  constructors XXREAL_0, NAT_1, FINSEQ_4, O_RING_1;
  registrations VECTSP_1, STRUCT_0, RELSET_1, NAT_1;
  requirements NUMERALS, REAL, SUBSET, ARITHM;
  definitions O_RING_1;
  theorems REAL_1, NAT_1, FINSEQ_1, O_RING_1, FINSEQ_3, XREAL_1, FINSEQ_4,
-      XXREAL_0;
+      XXREAL_0, CQC_THE1, ORDINAL1;
 
 begin
 
 reserve i,j,k,l,m,n for Nat;
 
 Lm1:
-  n<1 implies n=0
-    proof
-      assume n<1;
-      then n<0+1;
-      then 0<=n & n<=0 by NAT_1:18,38;
-      hence thesis by XXREAL_0:1;
-    end;
+  n<1 implies n=0 by CQC_THE1:2;
 
 Lm2:
-  n<>0 implies 1<=n
-    proof
-      assume n<>0;
-      then 0<n by NAT_1:19;
-      then 0+1<=n by NAT_1:38;
-      hence thesis;
-    end;
+  n<>0 implies 1<=n by CQC_THE1:2;
 
 Lm3:
-  n<=1 implies n=0 or n=1
-    proof
-      assume n<=1;
-      then n<1 or n=1 by REAL_1:def 5;
-      hence thesis by Lm1;
-    end;
+  n<=1 implies n=0 or n=1 by CQC_THE1:2;
 
 reserve R for non empty doubleLoopStr;
 reserve x,y for Scalar of R;
@@ -98,9 +81,9 @@ A1:     len f >= 0 by NAT_1:18;
             A8:for k st k in dom f holds h/.k=f/.k and
             A9:for k st k in dom g holds h/.(len f + k)=g/.k;
           A10:len h=len f+len g by A7,FINSEQ_1:def 3;
-          A11:for k st k in dom f holds h.k=f.k
+          A11:for k being Element of NAT st k in dom f holds h.k=f.k
             proof
-              let k such that A12:k in dom f;
+              let k be Element of NAT such that A12:k in dom f;
               A13:len f<=len f+len g by NAT_1:29;
               1<=k & k<=len f by A12,FINSEQ_3:27;
               then 1<=k & k<=len h by A10,A13,XXREAL_0:2;
@@ -110,9 +93,9 @@ A1:     len f >= 0 by NAT_1:18;
                      .=f.k by FINSEQ_4:def 4, A12;
               hence thesis;
             end;
-             for k st k in dom g holds h.(len f + k)=g.k
+             for k being Element of NAT st k in dom g holds h.(len f + k)=g.k
             proof
-              let k; assume A14:k in dom g;
+              let k be Element of NAT; assume A14:k in dom g;
               then 1<=k & k<=len g by FINSEQ_3:27;
               then 0+1<=len f+k & len f+k<=len f+len g by XREAL_1:9,A1;
               then len f + k in dom h by A10,FINSEQ_3:27;
@@ -188,10 +171,10 @@ Lm9:
       assume A1:x is_a_square;
       A2: len<*x*>=1 by Lm5;
       A3:<*x*>/.1 is_a_square by A1,Lm5;
-         for n st n<>0 & n<len <*x*>
+      for n being Element of NAT st n<>0 & n<len <*x*>
         ex y st y is_a_square & <*x*>/.(n+1)=<*x*>/.n+y
         proof
-          let n; assume n<>0 & n<len <*x*>;
+          let n be Element of NAT; assume n<>0 & n<len <*x*>;
           then n<>0 & n<1 by Lm5;
           hence thesis by Lm1;
         end;
@@ -221,9 +204,10 @@ Lm10:
       then 1<>0 & 1<len g by A3,NAT_1:38;
       then g/.1=f/.1 by A5;
       then A6:g/.1 is_a_square by A1,O_RING_1:def 4;
-         for n st n<>0 & n<len g ex y st y is_a_square & g/.(n+1)=g/.n+y
+      for n being Element of NAT st n<>0 & n<len g
+      ex y st y is_a_square & g/.(n+1)=g/.n+y
         proof
-          let n; assume A7:n<>0 & n<len g;
+          let n be Element of NAT; assume A7:n<>0 & n<len g;
           then A8:n<=len f by A3,NAT_1:38;
           A9:now assume A10:n<len f;
             A11:f/.n=g/.n by A5,A7;
@@ -264,10 +248,10 @@ Lm12:
       assume A1:x is_a_square;
       A2: len<*x*>=1 by Lm5;
       A3:<*x*>/.1 is_a_square by A1,Lm5;
-         for n st n<>0 & n<len <*x*>
+      for n being Element of NAT st n<>0 & n<len <*x*>
         ex y st y is_a_square & <*x*>/.(n+1)=<*x*>/.n*y
         proof
-          let n; assume n<>0 & n<len <*x*>;
+          let n be Element of NAT; assume n<>0 & n<len <*x*>;
           then n<>0 & n<1 by Lm5;
           hence thesis by Lm1;
         end;
@@ -306,10 +290,11 @@ Lm14:
       then 1<>0 & 1<len g by A3,NAT_1:38;
       then g/.1=f/.1 by A5;
       then A6:g/.1 is_a_product_of_squares by A1,O_RING_1:def 8;
-         for n st n<>0 & n<len g ex y st y is_a_product_of_squares &
+      for n be Element of NAT st n<>0 & n<len g
+      ex y st y is_a_product_of_squares &
         g/.(n+1)=g/.n+y
         proof
-          let n; assume A7:n<>0 & n<len g;
+          let n be Element of NAT; assume A7:n<>0 & n<len g;
           then A8:n<=len f by A3,NAT_1:38;
           A9:now assume A10:n<len f;
             A11:f/.n=g/.n by A5,A7;
@@ -351,10 +336,12 @@ Lm16:
       then A1:x is_a_product_of_squares by Lm13;
       A2: len<*x*>=1 by Lm5;
       A3:<*x*>/.1 is_a_product_of_squares by A1,Lm5;
-         for n st n<>0 & n<=len <*x*> holds <*x*>/.n is_a_product_of_squares or
-        ex i,j st <*x*>/.n=<*x*>/.i*<*x*>/.j & i<>0 & i<n & j<>0 & j<n
+      for n being Element of NAT st n<>0 & n<=len <*x*> holds
+      <*x*>/.n is_a_product_of_squares or
+        ex i,j being Element of NAT st <*x*>/.n=<*x*>/.i*<*x*>/.j &
+        i<>0 & i<n & j<>0 & j<n
         proof
-          let n; assume n<>0 & n<=len <*x*>;
+          let n be Element of NAT; assume n<>0 & n<=len <*x*>;
           then n<>0 & n<=1 by Lm5;
           hence thesis by A3,Lm3;
         end;
@@ -394,10 +381,10 @@ Lm18:
       then g/.1=f/.1 by A5;
       then A6:g/.1 is_an_amalgam_of_squares
         by A1,O_RING_1:def 12;
-         for n st n<>0 & n<len g ex y st y is_an_amalgam_of_squares &
-        g/.(n+1)=g/.n+y
+        for n being Element of NAT st n<>0 & n<len g
+        ex y st y is_an_amalgam_of_squares & g/.(n+1)=g/.n+y
         proof
-          let n; assume A7:n<>0 & n<len g;
+          let n be Element of NAT; assume A7:n<>0 & n<len g;
           then A8:n<=len f by A3,NAT_1:38;
           A9:now assume A10:n<len f;
             A11:f/.n=g/.n by A5,A7;
@@ -444,17 +431,17 @@ Lm20:
       set g=f^<*x*>;
       A3:len g=len f+len<*x*> by FINSEQ_1:35
             .=len f+1 by Lm5;
-         for n st n<>0 & n<=len g holds
+       for n being Element of NAT st n<>0 & n<=len g holds
         g/.n is_an_amalgam_of_squares or
-          ex i,j st (g/.n=g/.i*g/.j or g/.n=g/.i+g/.
+          ex i,j being Element of NAT st (g/.n=g/.i*g/.j or g/.n=g/.i+g/.
 j) & i<>0 & i<n & j<>0 & j<n
         proof
-          let n such that A4:n<>0 & n<=len g;
+          let n be Element of NAT such that A4:n<>0 & n<=len g;
           A5:now assume n<len g;
             then A6:n<=len f by A3,NAT_1:38;
             then A7:g/.n=f/.n by A4,Lm7;
             A8: f/.n is_an_amalgam_of_squares implies thesis by A4,A6,Lm7;
-               now given k,m such that
+               now given k,m being Element of NAT such that
                 A9:(f/.n=f/.k*f/.m or f/.n=f/.k+f/.m) & k<>0 & k<n & m<>0 &
                   m<n;
                  k<=len f by A6,A9,XXREAL_0:2;
@@ -481,19 +468,20 @@ Lm21:
       then len f+len<*f/.i+f/.j*><>0 by NAT_1:23;
       then A2:len (f^<*f/.i+f/.j*>)<>0 by FINSEQ_1:35;
       set g=f^<*f/.i+f/.j*>;
+      reconsider i,j as Element of NAT by ORDINAL1:def 13;
       A3:len g=len f+len<*f/.i+f/.j*> by FINSEQ_1:35
             .=len f+1 by Lm5;
-         for n st n<>0 & n<=len g holds
+         for n being Element of NAT st n<>0 & n<=len g holds
         g/.n is_an_amalgam_of_squares or
-          ex i,j st (g/.n=g/.i*g/.j or g/.n=g/.i+g/.
-j) & i<>0 & i<n & j<>0 & j<n
-        proof
-          let n such that A4:n<>0 & n<=len g;
+          ex i,j being Element of NAT st (g/.n=g/.i*g/.j or g/.n=g/.i+g/.j)
+          & i<>0 & i<n & j<>0 & j<n
+          proof
+          let n be Element of NAT such that A4:n<>0 & n<=len g;
           A5:now assume n<len g;
             then A6:n<=len f by A3,NAT_1:38;
             then A7:g/.n=f/.n by A4,Lm7;
             A8: f/.n is_an_amalgam_of_squares implies thesis by A4,A6,Lm7;
-               now given k,m such that
+               now given k,m being Element of NAT such that
                 A9:(f/.n=f/.k*f/.m or f/.n=f/.k+f/.m) & k<>0 & k<n & m<>0 &
                   m<n;
                  k<=len f by A6,A9,XXREAL_0:2;
@@ -527,17 +515,17 @@ Lm22:
       set g=f^<*x*>;
       A3:len g=len f+len<*x*> by FINSEQ_1:35
             .=len f+1 by Lm5;
-         for n st n<>0 & n<=len g holds
+         for n being Element of NAT st n<>0 & n<=len g holds
         g/.n is_an_amalgam_of_squares or
-          ex i,j st (g/.n=g/.i*g/.j or g/.n=g/.i+g/.
+          ex i,j being Element of NAT st (g/.n=g/.i*g/.j or g/.n=g/.i+g/.
 j) & i<>0 & i<n & j<>0 & j<n
         proof
-          let n such that A4:n<>0 & n<=len g;
+          let n be Element of NAT such that A4:n<>0 & n<=len g;
           A5:now assume n<len g;
             then A6:n<=len f by A3,NAT_1:38;
             then A7:g/.n=f/.n by A4,Lm7;
             A8: f/.n is_an_amalgam_of_squares implies thesis by A4,A6,Lm7;
-               now given k,m such that
+               now given k,m being Element of NAT such that
                 A9:(f/.n=f/.k*f/.m or f/.n=f/.k+f/.m) & k<>0 & k<n & m<>0 &
                   m<n;
                  k<=len f by A6,A9,XXREAL_0:2;
@@ -648,17 +636,18 @@ Lm28:
          len f<>0 by A1,O_RING_1:def 14;
       then len f+len g<>0 by NAT_1:23;
       then A3:len(f^g)<>0 by FINSEQ_1:35;
-         for n st n<>0 & n<=len (f^g) holds (f^g)/.n is_an_amalgam_of_squares
-or
-        ex i,j st ((f^g)/.n=(f^g)/.i*(f^g)/.j or (f^g)/.n=(f^g)/.i+(f^g)/.j) &
+      for n being Element of NAT st n<>0 & n<=len (f^g) holds
+      (f^g)/.n is_an_amalgam_of_squares or
+        ex i,j being Element of NAT
+        st ((f^g)/.n=(f^g)/.i*(f^g)/.j or (f^g)/.n=(f^g)/.i+(f^g)/.j) &
           i<>0 & i<n & j<>0 & j<n
           proof
-            let n; assume A4:n<>0 & n<=len (f^g);
+            let n be Element of NAT; assume A4:n<>0 & n<=len (f^g);
             then A5:n<=len f+len g by FINSEQ_1:35;
             A6:now assume A7:n<=len f;
               then A8:(f^g)/.n=f/.n by A4,Lm7;
               A9: f/.n is_an_amalgam_of_squares implies thesis by A4,A7,Lm7;
-                 now given k,l such that
+                 now given k,l being Element of NAT such that
                   A10:(f/.n=f/.k*f/.l or f/.n=f/.k+f/.l) &
                     k<>0 & k<n & l<>0 & l<n;
                    k<=len f by A7,A10,XXREAL_0:2;
@@ -670,13 +659,15 @@ or
               hence thesis by A1,A4,A7,A9,O_RING_1:def 14;
             end;
                now assume A12: len f<n;
-              then consider m such that A13:n=len f+m by NAT_1:28;
+              then consider m being Nat such that A13:n=len f+m
+              by NAT_1:28;
+              reconsider m as Element of NAT by ORDINAL1:def 13;
               A14:m<=len g by A5,A13,XREAL_1:8;
                  m<>0 & len f+m<=len f+len g by A4,A12,A13,FINSEQ_1:35;
               then A15:m<>0 & m<=len g by XREAL_1:8;
-              then A16: g/.m is_an_amalgam_of_squares implies thesis by A13,Lm8
-;
-                 now given k,l such that
+              then
+A16:          g/.m is_an_amalgam_of_squares implies thesis by A13,Lm8;
+                 now given k,l being Element of NAT such that
                   A17:(g/.m=g/.k*g/.l or g/.m=g/.k+g/.l) & k<>0 & k<m &
                     l<>0 & l<m;
                 A18:k<>0 & k<=len g by A14,A17,XXREAL_0:2;
@@ -704,8 +695,7 @@ or
                    len f+k<n & len f+l<n by A13,A17,XREAL_1:8;
                 hence thesis by A20,A22;
               end;
-              hence thesis
-                by A2,A15,A16,O_RING_1:def 14;
+              hence thesis by A2,A15,A16,O_RING_1:def 14;
             end;
             hence thesis by A6;
           end;

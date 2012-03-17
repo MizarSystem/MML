@@ -10,20 +10,21 @@ environ
       MSUALG_4, CARD_3, MSUALG_1, AMI_1, ZF_REFLE, FINSEQ_1, QC_LANG1, TDGROUP,
       RELAT_2, ARYTM_1, NAT_LAT, PRALG_2, MSUALG_5, FINSEQ_4, REALSET1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
-      REALSET1, STRUCT_0, PARTFUN1, FUNCT_2, RELSET_1, EQREL_1, BINOP_1,
+      REALSET1, NUMBERS, XCMPLX_0,
+      STRUCT_0, PARTFUN1, FUNCT_2, RELSET_1, EQREL_1, BINOP_1,
       PBOOLE, MSUALG_1, MSUALG_3, MSUALG_4, LATTICES, NAT_LAT, CARD_3,
       FINSEQ_1, FINSEQ_4, REAL_1, NAT_1, XXREAL_0;
  constructors BINOP_1, FRAENKEL, XXREAL_0, REAL_1, NAT_1, EQREL_1, FINSEQ_4,
       NAT_LAT, MSUALG_3, MSUALG_4;
  registrations SUBSET_1, STRUCT_0, MSUALG_1, LATTICES, NAT_LAT, RELSET_1,
       MSUALG_4, MSUALG_3, PRALG_1, PBOOLE, FINSEQ_1, NAT_1, EQREL_1, PARTFUN1,
-      FRAENKEL, RELAT_1;
+      FRAENKEL, RELAT_1, XREAL_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
  definitions PBOOLE, BINOP_1, REALSET1;
  theorems BINOP_1, PBOOLE, MSUALG_4, EQREL_1, TARSKI, NAT_LAT, LATTICES,
       RELAT_1, RELAT_2, RELSET_1, FUNCT_2, CARD_3, ZFMISC_1, MSUALG_1,
       FINSEQ_4, FUNCT_1, MSUALG_3, FINSEQ_1, NAT_1, MSAFREE2, XBOOLE_0,
-      XBOOLE_1, FINSEQ_3, XCMPLX_1, ORDERS_1, XREAL_1, XXREAL_0;
+      XBOOLE_1, FINSEQ_3, XCMPLX_1, ORDERS_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes PBOOLE, BINOP_1, NAT_1, FINSEQ_1, XBOOLE_0;
 
 begin
@@ -1017,11 +1018,15 @@ begin
     then A3: x = a1 ^ (<*x1*> ^ b1) & y = a1 ^ (<*y1*> ^ b1) by FINSEQ_1:45;
        now per cases by A1,XBOOLE_0:def 2;
      suppose A4: [x1,y1] in C1.((the_arity_of o)/.(len a1 + 1));
-         for n be Nat st n in dom x holds [x.n,y.n] in C1.((the_arity_of o)/.n)
+         for n be Nat st n in dom x
+          holds [x.n,y.n] in C1.((the_arity_of o)/.n)
       proof
        let n be Nat; assume A5: n in dom x;
-       then A6: n in dom (a1 ^ <*x1*>) or (ex k be Nat st k in dom b1 &
-        n = len (a1 ^ <*x1*>) + k) by A2,FINSEQ_1:38;
+       n in NAT by ORDINAL1:def 13;
+       then
+A6: n in dom (a1 ^ <*x1*>) or
+ (ex k be Element of NAT st k in dom b1 &
+ n = len (a1 ^ <*x1*>) + k) by A5,A2,FINSEQ_1:38;
        A7: the OperSymbols of S is non empty set by MSUALG_1:def 5;
        A8: n in dom (the_arity_of o) by A5,MSUALG_3:6;
        then A9: n in dom ((the Sorts of A) * (the_arity_of o))
@@ -1046,8 +1051,8 @@ begin
              y.n = a1.n by A3,A12,FINSEQ_1:def 7;
          hence [x.n,y.n] in C1.((the_arity_of o)/.n) by A11,A13,EQREL_1:11;
         end;
-        suppose ex m be Nat st m in dom <*x1*> & n = len a1 + m;
-         then consider m be Nat such that A14: m in
+        suppose ex m be Element of NAT st m in dom <*x1*> & n = len a1 + m;
+         then consider m be Element of NAT such that A14: m in
  dom <*x1*> & n = len a1 + m;
          A15: m in Seg 1 by A14,FINSEQ_1:55;
          then A16: m = 1 by FINSEQ_1:4,TARSKI:def 1;
@@ -1065,8 +1070,9 @@ begin
          hence [x.n,y.n] in C1.((the_arity_of o)/.n)
                                    by A4,A14,A15,A20,FINSEQ_1:4,TARSKI:def 1;
         end;
-        suppose ex k be Nat st k in dom b1 & n = len (a1 ^ <*x1*>) + k;
-         then consider k be Nat such that A21:
+        suppose
+         ex k be Element of NAT st k in dom b1 & n = len (a1 ^ <*x1*>) + k;
+         then consider k be Element of NAT such that A21:
           k in dom b1 & n = len (a1 ^ <*x1*>) + k;
          A22: x.n = b1.k by A2,A21,FINSEQ_1:def 7;
             n = len a1 + len <*x1*> + k by A21,FINSEQ_1:35;
@@ -1086,11 +1092,14 @@ begin
  C2.(the_result_sort_of o) by XBOOLE_0:def 2;
      end;
      suppose A23: [x1,y1] in C2.((the_arity_of o)/.(len a1 + 1));
-         for n be Nat st n in dom x holds [x.n,y.n] in C2.((the_arity_of o)/.n)
+         for n be Nat st n in dom x
+          holds [x.n,y.n] in C2.((the_arity_of o)/.n)
       proof
        let n be Nat; assume A24: n in dom x;
-       then A25: n in dom (a1 ^ <*x1*>) or (ex k be Nat st k in dom b1 &
-        n = len (a1 ^ <*x1*>) + k) by A2,FINSEQ_1:38;
+       n in NAT by ORDINAL1:def 13;
+       then
+A25: n in dom (a1 ^ <*x1*>) or (ex k be Element of NAT st k in dom b1 &
+        n = len (a1 ^ <*x1*>) + k) by A2,A24,FINSEQ_1:38;
        A26: the OperSymbols of S is non empty set by MSUALG_1:def 5;
        A27: n in dom (the_arity_of o) by A24,MSUALG_3:6;
        then A28: n in dom ((the Sorts of A) * (the_arity_of o))
@@ -1115,8 +1124,8 @@ begin
              y.n = a1.n by A3,A31,FINSEQ_1:def 7;
          hence [x.n,y.n] in C2.((the_arity_of o)/.n) by A30,A32,EQREL_1:11;
         end;
-        suppose ex m be Nat st m in dom <*x1*> & n = len a1 + m;
-         then consider m be Nat such that A33: m in
+        suppose ex m be Element of NAT st m in dom <*x1*> & n = len a1 + m;
+         then consider m be Element of NAT such that A33: m in
  dom <*x1*> & n = len a1 + m;
          A34: m in Seg 1 by A33,FINSEQ_1:55;
          then A35: m = 1 by FINSEQ_1:4,TARSKI:def 1;
@@ -1134,8 +1143,9 @@ begin
          hence [x.n,y.n] in C2.((the_arity_of o)/.n)
                                    by A23,A33,A34,A39,FINSEQ_1:4,TARSKI:def 1;
         end;
-        suppose ex k be Nat st k in dom b1 & n = len (a1 ^ <*x1*>) + k;
-         then consider k be Nat such that A40:
+        suppose
+         ex k be Element of NAT st k in dom b1 & n = len (a1 ^ <*x1*>) + k;
+         then consider k be Element of NAT such that A40:
           k in dom b1 & n = len (a1 ^ <*x1*>) + k;
          A41: x.n = b1.k by A2,A40,FINSEQ_1:def 7;
             n = len a1 + len <*x1*> + k by A40,FINSEQ_1:35;
@@ -1163,9 +1173,9 @@ begin
    for C1,C2 being MSCongruence of A
    for C being MSEquivalence-like ManySortedRelation of A st C = C1 "\/" C2
    for x1,y1 be set
-   for n be Nat
+   for n be Element of NAT
    for a1,a2,b1 being FinSequence st len a1 = n & len a1 = len a2 &
-    for k be Nat st k in dom a1 holds [a1.k,a2.k] in
+    for k be Element of NAT st k in dom a1 holds [a1.k,a2.k] in
  C.((the_arity_of o)/.k) holds
     ( [Den(o,A).(a1 ^ <*x1*> ^ b1),Den(o,A).(a2 ^ <*x1*> ^ b1)] in
     C.(the_result_sort_of o) & [x1,y1] in C.((the_arity_of o)/.(n+1)) implies
@@ -1177,10 +1187,11 @@ begin
    let C be MSEquivalence-like ManySortedRelation of A such that
     A1: C = C1 "\/" C2;
    let x1,y1 be set;
-   let n be Nat;
+   let n be Element of NAT;
    let a1,a2,b1 be FinSequence such that A2:
     len a1 = n & len a1 = len a2 &
-    for k be Nat st k in dom a1 holds [a1.k,a2.k] in C.((the_arity_of o)/.k);
+    for k be Element of NAT st k in dom a1
+     holds [a1.k,a2.k] in C.((the_arity_of o)/.k);
    assume that A3: [Den(o,A).(a1 ^ <*x1*> ^ b1),Den(o,A).(a2 ^ <*x1*> ^ b1)] in
                                                  C.(the_result_sort_of o) and
                A4: [x1,y1] in C.((the_arity_of o)/.(n+1));
@@ -1206,7 +1217,7 @@ begin
    then Den(o,A).x in (the Sorts of A).(the_result_sort_of o);
    then consider p be FinSequence such that A11: 1 <= len p &
    Den(o,A).(a1 ^ <*x1*> ^ b1) = p.1 & Den(o,A).(a2 ^ <*x1*> ^ b1) = p.(len p)
-    & for i be Nat st 1 <= i & i < len p holds
+    & for i be Element of NAT st 1 <= i & i < len p holds
        [p.i,p.(i+1)] in C1.(the_result_sort_of o) \/ C2.(the_result_sort_of o)
                                                    by A1,A3,A5,A9,EQREL_1:36;
    consider D' being ManySortedRelation of the Sorts of A such that A12:
@@ -1218,16 +1229,18 @@ begin
          .= (C1 "\/" C2).((the_arity_of o)/.(n+1)) by A12,Def3;
       x1 in (the Sorts of A).((the_arity_of o)/.(n+1)) by A4,ZFMISC_1:106;
    then consider f be FinSequence such that A14: 1 <= len f & x1 = f.1 &
-   y1 = f.(len f) & for i be Nat st 1 <= i & i < len f holds [f.i,f.(i+1)] in
+   y1 = f.(len f) &
+    for i be Element of NAT st 1 <= i & i < len f holds [f.i,f.(i+1)] in
    C1.((the_arity_of o)/.(n+1)) \/ C2.((the_arity_of o)/.(n+1))
                                                      by A1,A4,A13,EQREL_1:36;
-   deffunc G(Nat)=Den(o,A).(a2 ^ <*f.$1*> ^ b1);
+   deffunc G(Element of NAT)=Den(o,A).(a2 ^ <*f.$1*> ^ b1);
    consider g be FinSequence such that A15: len g = len f &
-    for i be Nat st i in Seg len f holds g.i = G(i)
+    for i be Element of NAT st i in Seg len f holds g.i = G(i)
                                                               from
 FINSEQ_1:sch 2;
       ex q being FinSequence st 1 <= len q & Den(o,A).x = q.1 &
-    Den(o,A).y = q.(len q) & for i be Nat st 1 <= i & i < len q holds
+    Den(o,A).y = q.(len q) & for i be Element of NAT st 1 <= i & i < len q
+    holds
      [q.i,q.(i+1)] in C1.(the_result_sort_of o) \/ C2.(the_result_sort_of o)
    proof
     take q = p ^ g;
@@ -1240,7 +1253,7 @@ FINSEQ_1:sch 2;
     hence q.(len q) = g.len g by A16,FINSEQ_1:def 7
                   .= Den(o,A).y by A14,A15,A17;
     A18: len p <> 0 by A11;
-    hereby let i be Nat such that A19: 1 <= i & i < len q;
+    hereby let i be Element of NAT such that A19: 1 <= i & i < len q;
      A20: (1 <= i & i < len p) or (len p + 1 <= i & i < len q) or i = len p
      proof
       assume that A21: not (1 <= i & i < len p) and
@@ -1248,7 +1261,8 @@ FINSEQ_1:sch 2;
          i <= len p by A19,A22,NAT_1:38;
       hence i = len p by A19,A21,XXREAL_0:1;
      end;
-     consider i1 be Nat such that A23: len p = i1 + 1 by A18,NAT_1:22;
+     consider i1 being Nat such that A23: len p = i1 + 1
+      by A18,NAT_1:22;
      A24: Seg len (a1 ^ <*x1*> ^ b1) = dom x by A5,FINSEQ_1:def 3
                  .= dom (the_arity_of o) by MSUALG_3:6
                  .= Seg len (the_arity_of o) by FINSEQ_1:def 3;
@@ -1257,7 +1271,7 @@ FINSEQ_1:sch 2;
                  .= len (a1 ^ (<*x1*> ^ b1)) by A2,FINSEQ_1:35
                  .= len (a1 ^ <*x1*> ^ b1) by FINSEQ_1:45
                  .= len the_arity_of o by A24,FINSEQ_1:8;
-     A26: now let k be Nat; assume k in dom x;
+     A26: now let k be Element of NAT; assume k in dom x;
       then A27: k in Seg len (the_arity_of o) by A7,A25,FINSEQ_1:def 3;
       then A28: k in dom (the_arity_of o) by FINSEQ_1:def 3;
       then A29: k in dom ((the Sorts of A) * (the_arity_of o))
@@ -1296,7 +1310,7 @@ FINSEQ_1:sch 2;
        then 1 in dom g by FINSEQ_1:def 3;
        then A36: q.(i+1) = g.1 by A33,FINSEQ_1:def 7
                         .= Den(o,A).(a2 ^ <*x1*> ^ b1) by A14,A15,A35;
-          for k be Nat st k in dom (a2 ^ <*x1*> ^ b1)
+       for k be Nat st k in dom (a2 ^ <*x1*> ^ b1)
         holds (a2 ^ <*x1*> ^ b1).k in (the Sorts of A).((the_arity_of o)/.k)
        proof
         let k be Nat; assume A37: k in dom (a2 ^ <*x1*> ^ b1);
@@ -1311,8 +1325,9 @@ FINSEQ_1:sch 2;
           hence (a2 ^ <*x1*> ^ b1).k in (the Sorts of A).((the_arity_of o)/.k)
                                                   by A40,ZFMISC_1:106;
          end;
-         suppose ex n1 be Nat st n1 in dom (<*x1*> ^ b1) & k = len a2 + n1;
-          then consider n1 be Nat such that
+         suppose
+          ex n1 be Element of NAT st n1 in dom (<*x1*> ^ b1) & k = len a2 + n1;
+          then consider n1 be Element of NAT such that
            A41: n1 in dom (<*x1*> ^ b1) & k = len a2 + n1;
              (a2 ^ <*x1*> ^ b1).k = (a2 ^ (<*x1*> ^ b1)).k by FINSEQ_1:45
                            .= (<*x1*> ^ b1).n1 by A41,FINSEQ_1:def 7
@@ -1349,7 +1364,7 @@ RELAT_1:33
        then A45: len p + 1 <= i+1 by NAT_1:37;
        A46: i+1 <= len q by A44,NAT_1:38;
           len p < i by A44,NAT_1:38;
-       then reconsider j = i - len p as Nat by NAT_1:61;
+       then reconsider j = i - len p as Element of NAT by NAT_1:61;
        A47: 1 <= j by A44,XREAL_1:21;
           len f = len q - len p by A15,A16,XCMPLX_1:26;
        then A48: j < len f by A44,XREAL_1:11;
@@ -1364,12 +1379,15 @@ RELAT_1:33
                                             by ZFMISC_1:106;
        A53: f.(i - len p + 1) in (the Sorts of A).((the_arity_of o)/.(n+1))
                                         by A51,ZFMISC_1:106;
-       A54: for k be Nat st k in dom (a2 ^ <*f.(i - len p)*> ^ b1) holds
+       A54: for k be Nat st k in dom (a2 ^ <*f.(i - len p)*> ^ b1)
+       holds
          (a2 ^ <*f.(i - len p)*> ^ b1).k in
                                        (the Sorts of A).((the_arity_of o)/.k)
        proof
-        let k be Nat; assume A55: k in dom (a2 ^ <*f.(i - len p)*> ^ b1);
-        then A56: k in dom (a2 ^ <*f.(i - len p)*>) or (ex n1 be Nat st n1 in
+        let k be Nat; assume
+A55: k in dom (a2 ^ <*f.(i - len p)*> ^ b1);
+        then
+A56: k in dom (a2 ^ <*f.(i - len p)*>) or (ex n1 be Element of NAT st n1 in
 dom b1 &
                     k = len (a2 ^ <*f.(i - len p)*>) + n1) by FINSEQ_1:38;
            now per cases by A56,FINSEQ_1:38;
@@ -1383,9 +1401,10 @@ dom b1 &
           hence (a2 ^ <*f.(i - len p)*> ^ b1).k in
              (the Sorts of A).((the_arity_of o)/.k) by A58,ZFMISC_1:106;
          end;
-         suppose ex n2 be Nat st n2 in dom <*f.(i - len p)*> & k = len a2 + n2
-;
-          then consider n2 be Nat such that
+         suppose
+          ex n2 be Element of NAT
+           st n2 in dom <*f.(i - len p)*> & k = len a2 + n2;
+          then consider n2 be Element of NAT such that
            A59: n2 in dom <*f.(i - len p)*> & k = len a2 + n2;
           A60: n2 in Seg 1 by A59,FINSEQ_1:55;
           then A61: k = len a1 + 1 by A2,A59,FINSEQ_1:4,TARSKI:def 1;
@@ -1400,9 +1419,9 @@ dom b1 &
                              (the Sorts of A).((the_arity_of o)/.k)
                                     by A2,A52,A59,A60,FINSEQ_1:4,TARSKI:def 1;
          end;
-         suppose ex n1 be Nat st n1 in dom b1 &
+         suppose ex n1 be Element of NAT st n1 in dom b1 &
                                        k = len (a2 ^ <*f.(i - len p)*>) + n1;
-          then consider n1 be Nat such that
+          then consider n1 be Element of NAT such that
            A62: n1 in dom b1 & k = len (a2 ^ <*f.(i - len p)*>) + n1;
           A63: len (a1 ^ <*x1*>) = len a1 + len <*x1*> by FINSEQ_1:35
                 .= len a2 + 1 by A2,FINSEQ_1:57
@@ -1425,12 +1444,15 @@ dom b1 &
         hence (a2 ^ <*f.(i - len p)*> ^ b1).k in
                                        (the Sorts of A).((the_arity_of o)/.k);
        end;
-       A65: for k be Nat st k in dom (a2 ^ <*f.(i + 1 - len p)*> ^ b1) holds
+A65: for k be Nat st k in dom (a2 ^ <*f.(i + 1 - len p)*> ^ b1)
+ holds
          (a2 ^ <*f.(i + 1 - len p)*> ^ b1).k in
                                        (the Sorts of A).((the_arity_of o)/.k)
        proof
-        let k be Nat; assume A66: k in dom (a2 ^ <*f.(i + 1 - len p)*> ^ b1);
-        then A67: k in dom (a2 ^ <*f.(i + 1 - len p)*>) or (ex n1 be Nat st
+        let k be Nat; assume
+A66: k in dom (a2 ^ <*f.(i + 1 - len p)*> ^ b1);
+        then
+A67: k in dom (a2 ^ <*f.(i + 1 - len p)*>) or (ex n1 be Element of NAT st
          n1 in dom b1 & k = len (a2 ^ <*f.(i + 1 - len p)*>) + n1)
                                                            by FINSEQ_1:38;
            now per cases by A67,FINSEQ_1:38;
@@ -1445,9 +1467,10 @@ dom b1 &
                       (the Sorts of A).
 ((the_arity_of o)/.k) by A69,ZFMISC_1:106;
          end;
-         suppose ex n2 be Nat st n2 in dom <*f.(i + 1 - len p)*> & k =
+         suppose
+          ex n2 be Element of NAT st n2 in dom <*f.(i + 1 - len p)*> & k =
                                                                  len a2 + n2;
-          then consider n2 be Nat such that
+          then consider n2 be Element of NAT such that
            A70: n2 in dom <*f.(i + 1 - len p)*> & k = len a2 + n2;
              n2 in Seg 1 by A70,FINSEQ_1:55;
           then A71: k = len a1 + 1 by A2,A70,FINSEQ_1:4,TARSKI:def 1;
@@ -1462,9 +1485,9 @@ dom b1 &
              (the Sorts of A).((the_arity_of o)/.k) by A2,A53,A71,XCMPLX_1:29
 ;
          end;
-         suppose ex n1 be Nat st n1 in dom b1 &
+         suppose ex n1 be Element of NAT st n1 in dom b1 &
                                    k = len (a2 ^ <*f.(i + 1 - len p)*>) + n1;
-          then consider n1 be Nat such that
+          then consider n1 be Element of NAT such that
            A72: n1 in dom b1 & k = len (a2 ^ <*f.(i + 1 - len p)*>) + n1;
           A73: len (a1 ^ <*x1*>) = len a1 + len <*x1*> by FINSEQ_1:35
                 .= len a2 + 1 by A2,FINSEQ_1:57
@@ -1540,7 +1563,8 @@ dom b1 &
    for C1,C2 being MSCongruence of A
    for C being MSEquivalence-like ManySortedRelation of A st C = C1 "\/" C2
    for x,y be Element of Args(o,A) holds
-    (( for n be Nat st n in dom x holds [x.n,y.n] in C.((the_arity_of o)/.n))
+    (( for n be Nat st n in dom x
+     holds [x.n,y.n] in C.((the_arity_of o)/.n))
      implies
     [Den(o,A).x,Den(o,A).y] in C.(the_result_sort_of o))
   proof
@@ -1551,7 +1575,7 @@ dom b1 &
    let x,y be Element of Args(o,A);
    assume A2: for n be Nat st n in dom x holds
                                   [x.n,y.n] in C.((the_arity_of o)/.n);
-   defpred P[Nat] means for a1,a2,b1 being FinSequence holds
+   defpred P[Element of NAT] means for a1,a2,b1 being FinSequence holds
     ((len a1 = $1 & len a1 = len a2 & x = a1 ^ b1 &
      for n be Nat st n in dom a1 holds [x.n,(a2 ^ b1).n]
        in C.((the_arity_of o)/.n)) implies
@@ -1579,9 +1603,9 @@ dom b1 &
     hence [Den(o,A).x,Den(o,A).(a2 ^ b1)] in C.(the_result_sort_of o)
                                                      by A6,A7,A9,RELAT_2:def 1;
    end;
-   A10: for l be Nat st P[l] holds P[l+1]
+   A10: for l be Element of NAT st P[l] holds P[l+1]
    proof
-    let l be Nat such that A11:
+    let l be Element of NAT such that A11:
      for a1,a2,b1 being FinSequence holds
       ((len a1 = l & len a1 = len a2 & x = a1 ^ b1 &
        for n be Nat st n in dom a1 holds
@@ -1609,10 +1633,10 @@ dom b1 &
     then A21: len q1 = len q2 by A18,XCMPLX_1:2;
     A22: dom q1 = Seg len q1 by FINSEQ_1:def 3
               .= dom q2 by A21,FINSEQ_1:def 3;
-    A23: for n be Nat st n in dom q1 holds [q1.n,q2.n] in
+    A23: for n be Element of NAT st n in dom q1 holds [q1.n,q2.n] in
       C.((the_arity_of o)/.n)
     proof
-     let n be Nat; assume A24: n in dom q1;
+     let n be Element of NAT; assume A24: n in dom q1;
      then A25: n in Seg len q1 by FINSEQ_1:def 3;
         len q1 <= len a1 by A12,A18,NAT_1:29;
      then Seg len q1 c= Seg len a1 by FINSEQ_1:7;
@@ -1653,7 +1677,7 @@ dom b1 &
     hence [Den(o,A).x,Den(o,A).(a2 ^ b1)] in C.(the_result_sort_of o)
                                  by A1,A14,A16,A17,A18,A21,A23,A28,Th15;
    end;
-   A37: for l be Nat holds P[l] from NAT_1:sch 1(A3,A10);
+   A37: for l be Element of NAT holds P[l] from NAT_1:sch 1(A3,A10);
    A38: dom x = dom (the_arity_of o) by MSUALG_3:6
             .= Seg len (the_arity_of o) by FINSEQ_1:def 3;
       dom y = dom (the_arity_of o) by MSUALG_3:6
@@ -1669,8 +1693,7 @@ dom b1 &
    then A40: len a1 = len a2 by A39,FINSEQ_1:8;
    A41: x = a1 ^ b1 by FINSEQ_1:47;
       y = a2 ^ b1 by FINSEQ_1:47;
-   hence [Den(o,A).x,Den(o,A).y] in C.(the_result_sort_of o) by A2,A37,A40,A41
-;
+   hence [Den(o,A).x,Den(o,A).y] in C.(the_result_sort_of o) by A2,A37,A40,A41;
   end;
 
   theorem Th17:
@@ -1683,7 +1706,8 @@ dom b1 &
    reconsider C as MSEquivalence-like ManySortedRelation of A
                                                           by MSUALG_4:def 5;
       for o be OperSymbol of S, x,y be Element of Args(o,A) st
-    (for n be Nat st n in dom x holds [x.n,y.n] in C.((the_arity_of o)/.n))
+    (for n be Nat st n in dom x
+     holds [x.n,y.n] in C.((the_arity_of o)/.n))
      holds [Den(o,A).x,Den(o,A).y] in C.(the_result_sort_of o) by Th16;
    hence C1 "\/" C2 is MSCongruence of A by MSUALG_4:def 6;
   end;
@@ -1705,8 +1729,10 @@ dom b1 &
    proof
     let o be OperSymbol of S;
     let x,y be Element of Args(o,A) such that A1:
-     for n be Nat st n in dom x holds [x.n,y.n] in C.((the_arity_of o)/.n);
-A2: for n be Nat st n in dom x holds [x.n,y.n] in C1.((the_arity_of o)/.n)
+     for n be Nat st n in dom x
+      holds [x.n,y.n] in C.((the_arity_of o)/.n);
+A2: for n be Nat st n in dom x
+ holds [x.n,y.n] in C1.((the_arity_of o)/.n)
     proof
      let n be Nat; assume n in dom x;
      then [x.n,y.n] in C.((the_arity_of o)/.n) by A1;
@@ -1714,7 +1740,8 @@ A2: for n be Nat st n in dom x holds [x.n,y.n] in C1.((the_arity_of o)/.n)
                                    C2.((the_arity_of o)/.n) by PBOOLE:def 8;
      hence thesis by XBOOLE_0:def 3;
     end;
-A3: for n be Nat st n in dom x holds [x.n,y.n] in C2.((the_arity_of o)/.n)
+A3: for n be Nat st n in dom x
+ holds [x.n,y.n] in C2.((the_arity_of o)/.n)
     proof
      let n be Nat; assume n in dom x;
      then [x.n,y.n] in C.((the_arity_of o)/.n) by A1;
@@ -2018,7 +2045,7 @@ S
      A4: dom y = dom (the_arity_of o) by MSUALG_3:6
               .= Seg len (the_arity_of o) by FINSEQ_1:def 3;
      then reconsider x' = x , y' = y as FinSequence by A3,FINSEQ_1:def 2;
-        now let n be Nat such that A5: n in dom x;
+        now let n be Element of NAT such that A5: n in dom x;
          J.((the_arity_of o)/.n) = id ((the Sorts of A).((the_arity_of o)/.n))
                                                           by MSUALG_3:def 1;
       then [x.n,y.n] in id ((the Sorts of A).((the_arity_of o)/.n)) by A2,A5;
@@ -2070,7 +2097,6 @@ S
     end;
     then reconsider J as MSEquivalence_Relation-like
                      ManySortedRelation of the Sorts of A by MSUALG_4:def 3;
-    reconsider J as ManySortedRelation of A;
     reconsider J as MSEquivalence-like ManySortedRelation of A
                                                           by MSUALG_4:def 5;
        for o be OperSymbol of S, x,y be Element of Args(o,A) st
@@ -2080,7 +2106,8 @@ S
     proof
      let o be OperSymbol of S;
      let x,y be Element of Args(o,A) such that
-         for n be Nat st n in dom x holds [x.n,y.n] in J.((the_arity_of o)/.n);
+         for n be Nat st n in dom x
+          holds [x.n,y.n] in J.((the_arity_of o)/.n);
         the OperSymbols of S <> {} by MSUALG_1:def 5;
      then o in the OperSymbols of S;
      then A2: o in dom (the ResultSort of S) by FUNCT_2:def 1;

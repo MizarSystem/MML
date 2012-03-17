@@ -11,14 +11,15 @@ environ
       GROUP_2, PRE_TOPC, PARTFUN1, SETWISEO, SETFAM_1, SUBSET_1, CQC_SIM1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, DOMAIN_1, MCART_1,
       SETFAM_1, RELAT_1, RELSET_1, FUNCT_1, FUNCT_2, BINOP_1, PARTFUN1,
-      XXREAL_0, FUNCOP_1, FINSEQ_1, FINSET_1, FINSUB_1, FRAENKEL, NAT_1,
+      XXREAL_0, FUNCOP_1, FINSEQ_1, FINSET_1, FINSUB_1, FRAENKEL,
+      XCMPLX_0, NAT_1,
       SETWISEO, QC_LANG1, QC_LANG2, QC_LANG3, CQC_LANG, FUNCT_4, RECDEF_1;
  constructors SETFAM_1, RELAT_2, PARTFUN1, DOMAIN_1, BINOP_1, FUNCOP_1,
       FUNCT_4, SETWISEO, FRAENKEL, XXREAL_0, NAT_1, MEMBERED, RECDEF_1,
       QC_LANG3, CQC_LANG;
  registrations SUBSET_1, RELSET_1, CQC_LANG, QC_LANG1, FINSUB_1, FUNCOP_1,
       FINSEQ_1, ARYTM_3, MEMBERED, FUNCT_2, PARTFUN1, ORDINAL2, XREAL_0,
-      XXREAL_0, ORDINAL1;
+      XXREAL_0, ORDINAL1, NAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
  definitions TARSKI, XBOOLE_0, BINOP_1, FUNCOP_1, QC_LANG3;
  theorems ZFMISC_1, DOMAIN_1, FINSEQ_1, CQC_LANG, QC_LANG1, PARTFUN1, QC_LANG3,
@@ -151,7 +152,7 @@ reserve p,q,r,s for Element of CQC-WFF,
 theorem Th5: p is atomic implies ex k,P,ll st p = P!ll
  proof
   assume p is atomic;
-  then consider k being Nat, P being (QC-pred_symbol of k),
+  then consider k being Element of NAT, P being (QC-pred_symbol of k),
     ll being QC-variable_list of k such that A1: p = P!ll by QC_LANG1:def 17;
      { ll.i : 1 <= i & i <= len ll & ll.i in free_QC-variables } = {} &
   { ll.m : 1 <= m & m <= len ll & ll.m in fixed_QC-variables } = {}
@@ -196,7 +197,7 @@ theorem Th9: for l being FinSequence holds
       let a; assume a in rng l;
       then consider x being set such that A1: x in dom l & a = l.x
        by FUNCT_1:def 5;
-      reconsider k = x as Nat by A1;
+      reconsider k = x as Element of NAT by A1;
          1 <= k & k <= len l by A1,FINSEQ_3:27;
       hence a in { l.i : 1 <= i & i <= len l } by A1;
      end;
@@ -204,7 +205,8 @@ theorem Th9: for l being FinSequence holds
      proof
       let a;
       assume a in { l.i : 1 <= i & i <= len l };
-      then consider k being Nat such that A2: a = l.k & 1 <= k & k <= len l;
+      then consider k being Element of NAT such that
+      A2: a = l.k & 1 <= k & k <= len l;
          k in dom l by A2,FINSEQ_3:27;
       hence a in rng l by A2,FUNCT_1:def 5;
      end;
@@ -244,7 +246,8 @@ defpred Pfn[Function of QC-WFF, D(), Nat] means
       (p is conjunctive implies
            $1.p = C($1.the_left_argument_of p, $1.the_right_argument_of p, p))
     & (p is universal implies $1.p = Q($1.the_scope_of p, p));
-defpred S[Nat] means ex F being Function of QC-WFF, D() st Pfn[F, $1];
+defpred S[Element of NAT] means
+ ex F being Function of QC-WFF, D() st Pfn[F, $1];
 A1: S[0]
     proof
      consider F being Function of QC-WFF, D();
@@ -254,8 +257,8 @@ A1: S[0]
            1 <= len @p by QC_LANG1:34;
         hence thesis by A2;
     end;
-A3: for n be Nat st S[n] holds S[n+1]
-   proof let n be Nat;
+A3: for n be Element of NAT st S[n] holds S[n+1]
+   proof let n be Element of NAT;
        given F being Function of QC-WFF, D() such that
   A4: Pfn[F, n];
      defpred P[Element of QC-WFF,Element of D()] means
@@ -378,7 +381,7 @@ A3: for n be Nat st S[n] holds S[n+1]
      end;
    end;
 
-A30: for n being Nat holds S[n] from NAT_1:sch 1 (A1, A3);
+A30: for n being Element of NAT holds S[n] from NAT_1:sch 1 (A1, A3);
 
 defpred Qfn[set, set] means
         ex p being Element of QC-WFF st p = $1 &
@@ -490,8 +493,8 @@ by A50;
 A60: Pfn[G, len @p1] by A30;
 A61: F.p = G.p by A58,A59,A60;
   hence p is atomic implies F.p = A(p) by A58,A60;
-  A62: for k being Nat st k < len @p holds Pfn[G, k]
-        proof let k be Nat; assume
+  A62: for k being Element of NAT st k < len @p holds Pfn[G, k]
+        proof let k be Element of NAT; assume
 A63:            k < len @p;
           let p' be Element of QC-WFF; assume
               len @p' <= k;
@@ -723,7 +726,8 @@ reserve f,h for Element of Funcs(bound_QC-variables,bound_QC-variables),
   K,L for Finite_Subset of bound_QC-variables;
 
 definition let f,g be Function of
- [:NAT,Funcs(bound_QC-variables,bound_QC-variables):], CQC-WFF, n be Nat;
+ [:NAT,Funcs(bound_QC-variables,bound_QC-variables):],
+   CQC-WFF, n be Element of NAT;
 func CON(f,g,n) -> Element of
  Funcs([:NAT,Funcs(bound_QC-variables,bound_QC-variables):], CQC-WFF) means
 :Def2: for k,h,p,q st p = f.(k,h) & q = g.(k+n,h) holds it.(k,h) = p '&' q;
@@ -767,7 +771,7 @@ A4: for k,h,p,q holds p = f.(k,h) & q = g.(k+n,h) implies G.(k,h) = p '&' q;
       proof
        let a be
         Element of [:NAT,Funcs(bound_QC-variables,bound_QC-variables):];
-       consider k being Nat,
+       consider k being Element of NAT,
         h being Element of Funcs(bound_QC-variables,bound_QC-variables)
          such that A5: a=[k,h] by DOMAIN_1:9;
        reconsider p=f.(k,h) as Element of CQC-WFF;
@@ -844,7 +848,7 @@ A4: for k,h,p st p = f.(k+1,h +* ({x} --> x.k)) holds G.(k,h) = All(x.k,p);
       proof
        let a be
         Element of [:NAT,Funcs(bound_QC-variables,bound_QC-variables):];
-       consider k being Nat,
+       consider k being Element of NAT,
         h being Element of Funcs(bound_QC-variables,bound_QC-variables)
          such that A5: a=[k,h] by DOMAIN_1:9;
        reconsider h2=h+*({x} --> x.k) as Function of
@@ -924,7 +928,7 @@ uniqueness
       proof
        let a be Element of
         [:NAT,Funcs(bound_QC-variables,bound_QC-variables):];
-       consider k being Nat,
+       consider k being Element of NAT,
         f being Element of Funcs(bound_QC-variables,bound_QC-variables)
          such that A4: a=[k,f] by DOMAIN_1:9;
         F.(k,f) = P!(f*l) by A2 .=G.(k,f) by A3;
@@ -1009,7 +1013,7 @@ definition
 existence
  proof
   set D = [:NAT,Funcs(bound_QC-variables,bound_QC-variables):];
-  deffunc A(Nat,
+  deffunc A(Element of NAT,
             QC-pred_symbol of $1,
             CQC-variable_list of $1) = ATOMIC($2,$3);
   deffunc N(Function of D, CQC-WFF,
@@ -1036,7 +1040,7 @@ A3: for r,s,x holds
 uniqueness
  proof
   set D = [:NAT,Funcs(bound_QC-variables,bound_QC-variables):];
-  deffunc A(Nat,
+  deffunc A(Element of NAT,
             QC-pred_symbol of $1,
             CQC-variable_list of $1) = ATOMIC($2,$3);
   deffunc N(Function of D, CQC-WFF,
@@ -1151,15 +1155,16 @@ A1: for p being Element of CQC-WFF, d being Element of NAT holds
  end;
 
 definition let A be non empty Subset of NAT;
- func min A -> Nat means  :Def8:
+ func min A -> Element of NAT means  :Def8:
    it in A & for k st k in A holds it <= k;
  existence
   proof
    consider x being Element of A;
-   defpred P[Nat] means $1 in A;
-    x is Nat;
-   then A1: ex x be Nat st P[x];
-   thus ex n be Nat st P[n] & for k st P[k] holds n <= k from NAT_1:sch 5(A1);
+   defpred P[Element of NAT] means $1 in A;
+    x is Element of NAT;
+   then A1: ex x be Element of NAT st P[x];
+   thus ex n be Element of NAT st P[n] & for k st P[k] holds n <= k
+    from NAT_1:sch 5(A1);
   end;
  uniqueness
   proof
@@ -1202,10 +1207,11 @@ theorem
          .= variables_in(the_arguments_of p,bound_QC-variables) by QC_LANG3:6
          .= { (the_arguments_of p).k : 1 <= k & k <= len the_arguments_of p &
               (the_arguments_of p).k in bound_QC-variables };
-         defpred A[Nat] means
+         defpred A[Element of NAT] means
           1 <= $1 & $1 <= len the_arguments_of p &
           (the_arguments_of p).$1 in bound_QC-variables;
-         defpred B[Nat] means 1 <= $1 & $1 <= len the_arguments_of p;
+         defpred B[Element of NAT] means
+          1 <= $1 & $1 <= len the_arguments_of p;
          deffunc F(set) = (the_arguments_of p).$1;
        A3: for k st A[k] holds B[k];
           { F(k) : A[k] } c= { F(n) : B[n]} from FRAENKEL:sch 1(A3);
@@ -1268,7 +1274,8 @@ definition let p;
    {k: for i st k<=i holds not x.i in still_not-bound_in p};
  coherence
   proof
-    defpred P[Nat] means for i st $1<=i holds not x.i in still_not-bound_in p;
+    defpred P[Element of NAT] means
+     for i st $1<=i holds not x.i in still_not-bound_in p;
      {k: P[k]} c= NAT from FRAENKEL:sch 10;
    hence thesis;
   end;
@@ -1308,7 +1315,7 @@ A1:     still_not-bound_in p <> {};
             take i;
             thus thesis by A6;
            end;
-       defpred P[Nat] means x.$1 in still_not-bound_in p;
+       defpred P[Element of NAT] means x.$1 in still_not-bound_in p;
       A7: {l: P[l]} c= NAT from FRAENKEL:sch 10;
       consider f being Function such that
        A8: dom f = still_not-bound_in p & rng f c= NAT and
@@ -1323,14 +1330,14 @@ A1:     still_not-bound_in p <> {};
          then consider x being set such that
           A10: x in dom f and
           A11: y = f.x by FUNCT_1:def 5;
-          reconsider n=f.x as Nat by A10,FUNCT_2:7;
+          reconsider n=f.x as Element of NAT by A10,FUNCT_2:7;
              x.n in still_not-bound_in p by A8,A9,A10;
          hence y in {k: x.k in still_not-bound_in p} by A11;
         end;
        assume y in {k: x.k in still_not-bound_in p};
         then consider k such that A12: y=k & x.k in still_not-bound_in p;
         reconsider a=x.k as Element of still_not-bound_in p by A12;
-        reconsider n=f.a as Nat;
+        reconsider n=f.a as Element of NAT;
         x.n = x.k by A9,A12;
         then n=k by ZFMISC_1:33;
        hence y in rng f by A8,A12,FUNCT_1:def 5;
@@ -1340,7 +1347,7 @@ A1:     still_not-bound_in p <> {};
       then A13: {k: x.k in still_not-bound_in p} is finite &
        {n: x.n in still_not-bound_in p} <> {} &
        {l: x.l in still_not-bound_in p} c= NAT by A3,A4,A7,FINSET_1:26;
-      defpred R[Nat,Nat] means $2 <= $1;
+      defpred R[Element of NAT,Element of NAT] means $2 <= $1;
       A14: for k,l holds R[k,l] or R[l,k];
       A15: for k,l,m st R[k,l] & R[l,m] holds R[k,m] by XXREAL_0:2;
       consider m such that
@@ -1364,7 +1371,7 @@ A1:     still_not-bound_in p <> {};
 end;
 
 definition let p;
- func index p -> Nat equals
+ func index p -> Element of NAT equals
     min (NBI p);
  coherence;
 end;
@@ -2046,7 +2053,8 @@ A6:  P[All(x,q),k,K,f];
 theorem Th40:
  [q,m,K,f] in SepQuadruples p & x.i in f.:K implies i < m
 proof
- defpred P[Element of CQC-WFF,Nat,Finite_Subset of bound_QC-variables,Function]
+ defpred P[Element of CQC-WFF,Element of NAT,
+           Finite_Subset of bound_QC-variables,Function]
   means for i holds x.i in $4.:$3 implies i < $2;
   A1: P[p, index p,{}.bound_QC-variables,id bound_QC-variables] by RELAT_1:149;
  A2: for q,k,K,f st ['not' q,k,K,f] in SepQuadruples p & P['not' q,k,K,f]
@@ -2094,7 +2102,9 @@ theorem
 theorem Th42:
  [q,m,K,f] in SepQuadruples p & x.i in f.:still_not-bound_in p implies i < m
 proof
- defpred P[Element of CQC-WFF,Nat,Finite_Subset of bound_QC-variables,Function]
+ defpred
+  P[Element of CQC-WFF,Element of NAT,
+    Finite_Subset of bound_QC-variables,Function]
   means for i holds x.i in $4.:still_not-bound_in p implies i < $2;
  A1: P[p,index p,{}.bound_QC-variables,id bound_QC-variables]
   proof let i;

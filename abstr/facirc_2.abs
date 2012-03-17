@@ -10,15 +10,15 @@ environ
       FINSEQ_2, FUNCT_4, FUNCT_5, FUNCOP_1, PBOOLE, MARGREL1, BINARITH,
       CLASSES1, PARTFUN1, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, LATTICES,
       CIRCCOMB, FACIRC_1, ZF_REFLE, ZF_LANG, FACIRC_2;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, NAT_1, MCART_1,
-      RELAT_1, CARD_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FUNCT_4,
-      FUNCT_5, PBOOLE, MARGREL1, BINARITH, CLASSES1, PARTFUN1, MSUALG_1,
-      MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
+      MCART_1, RELAT_1, CARD_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2,
+      FUNCT_4, FUNCT_5, PBOOLE, MARGREL1, BINARITH, CLASSES1, PARTFUN1,
+      MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1, XXREAL_0;
  constructors ENUMSET1, XXREAL_0, FUNCT_5, CLASSES1, BINARITH, CIRCUIT1,
       CIRCUIT2, FACIRC_1;
  registrations RELSET_1, FINSEQ_1, FINSEQ_2, MARGREL1, MSUALG_1, CIRCCOMB,
       FACIRC_1, SUBSET_1, STRUCT_0, RELAT_1, CIRCCMB2, ORDINAL1, FRAENKEL,
-      CARD_3;
+      CARD_3, NAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -42,8 +42,7 @@ registration
  cluster strict void ManySortedSign;
 end;
 
-definition
- let x be set;
+definition let x be set;
  func SingleMSS(x) -> strict void ManySortedSign means
 :: FACIRC_2:def 1
   the carrier of it = {x};
@@ -92,14 +91,14 @@ definition
   ex f,g being ManySortedSet of NAT st
    it = f.n & f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
    g.0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE] &
-   for n being Nat, S being non empty ManySortedSign, z be set
+   for n being Element of NAT, S being non empty ManySortedSign, z be set
     st S = f.n & z = g.n
     holds f.(n+1) = S +* BitAdderWithOverflowStr(x .(n+1), y.(n+1), z) &
           g.(n+1) = MajorityOutput(x .(n+1), y.(n+1), z);
 end;
 
 definition
- let n be Nat;
+ let n be Element of NAT;
  let x,y be FinSequence;
  func n-BitAdderCirc(x,y) ->
       Boolean gate`2=den strict Circuit of n-BitAdderStr(x,y) means
@@ -109,7 +108,7 @@ definition
    f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
    g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
    h.0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE] &
-   for n being Nat, S being non empty ManySortedSign,
+   for n being Element of NAT, S being non empty ManySortedSign,
        A being non-empty MSAlgebra over S
    for z being set st S = f.n & A = g.n & z = h.n holds
      f.(n+1) = S +* BitAdderWithOverflowStr(x .(n+1), y.(n+1), z) &
@@ -125,7 +124,7 @@ definition
 :: FACIRC_2:def 5
   ex h being ManySortedSet of NAT st
    it = h.n & h.0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE] &
-   for n being Nat, z be set st z = h.n holds
+   for n being Element of NAT, z be set st z = h.n holds
     h.(n+1) = MajorityOutput(x .(n+1), y.(n+1), z);
 end;
 
@@ -134,13 +133,13 @@ theorem :: FACIRC_2:7
    f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
    g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
    h.0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE] &
-   for n being Nat, S being non empty ManySortedSign,
+   for n being Element of NAT, S being non empty ManySortedSign,
        A being non-empty MSAlgebra over S
    for z being set st S = f.n & A = g.n & z = h.n holds
      f.(n+1) = S +* BitAdderWithOverflowStr(x .(n+1), y.(n+1), z) &
      g.(n+1) = A +* BitAdderWithOverflowCirc(x .(n+1), y.(n+1), z) &
      h.(n+1) = MajorityOutput(x .(n+1), y.(n+1), z)
- for n being Nat holds
+ for n being Element of NAT holds
    n-BitAdderStr(x,y) = f.n & n-BitAdderCirc(x,y) = g.n &
    n-BitMajorityOutput(x,y) = h.n;
 
@@ -173,7 +172,7 @@ theorem :: FACIRC_2:10
   1-BitMajorityOutput(<*a*>,<*b*>) = MajorityOutput(a, b, c);
 
 theorem :: FACIRC_2:11
- for n be Nat
+ for n be Element of NAT
  for p,q being FinSeqLen of n
  for p1,p2, q1,q2 being FinSequence holds
   n-BitAdderStr(p^p1, q^q1) = n-BitAdderStr(p^p2, q^q2) &
@@ -181,7 +180,8 @@ theorem :: FACIRC_2:11
   n-BitMajorityOutput(p^p1, q^q1) = n-BitMajorityOutput(p^p2, q^q2);
 
 theorem :: FACIRC_2:12
-    for n be Nat for x,y being FinSeqLen of n for a,b being set holds
+    for n be Element of NAT
+     for x,y being FinSeqLen of n for a,b being set holds
   (n+1)-BitAdderStr(x^<*a*>, y^<*b*>) = n-BitAdderStr(x, y) +*
       BitAdderWithOverflowStr(a, b, n-BitMajorityOutput(x, y)) &
   (n+1)-BitAdderCirc(x^<*a*>, y^<*b*>) = n-BitAdderCirc(x, y) +*
@@ -190,7 +190,7 @@ theorem :: FACIRC_2:12
     MajorityOutput(a, b, n-BitMajorityOutput(x, y));
 
 theorem :: FACIRC_2:13
- for n be Nat for x,y being FinSequence holds
+ for n be Element of NAT for x,y being FinSequence holds
   (n+1)-BitAdderStr(x, y) = n-BitAdderStr(x, y) +*
     BitAdderWithOverflowStr(x .(n+1), y.(n+1), n-BitMajorityOutput(x, y)) &
   (n+1)-BitAdderCirc(x, y) = n-BitAdderCirc(x, y) +*
@@ -199,12 +199,12 @@ theorem :: FACIRC_2:13
     MajorityOutput(x .(n+1), y.(n+1), n-BitMajorityOutput(x, y));
 
 theorem :: FACIRC_2:14
- for n,m be Nat st n <= m
+ for n,m be Element of NAT st n <= m
  for x,y being FinSequence holds
   InnerVertices (n-BitAdderStr(x,y)) c= InnerVertices (m-BitAdderStr(x,y));
 
 theorem :: FACIRC_2:15
-    for n be Nat
+    for n be Element of NAT
  for x,y being FinSequence holds
   InnerVertices ((n+1)-BitAdderStr(x,y)) =
     InnerVertices (n-BitAdderStr(x,y)) \/
@@ -218,18 +218,18 @@ definition
  func (k,n)-BitAdderOutput(x,y) ->
       Element of InnerVertices (n-BitAdderStr(x,y)) means
 :: FACIRC_2:def 6
-  ex i being Nat st k = i+1 &
+  ex i being Element of NAT st k = i+1 &
    it = BitAdderOutput(x .k, y.k, i-BitMajorityOutput(x,y));
 end;
 
 theorem :: FACIRC_2:16
-    for n,k being Nat st k < n
+    for n,k being Element of NAT st k < n
  for x,y being FinSequence holds
   (k+1,n)-BitAdderOutput(x,y) =
      BitAdderOutput(x .(k+1), y.(k+1), k-BitMajorityOutput(x,y));
 
 theorem :: FACIRC_2:17
-    for n being Nat
+    for n being Element of NAT
  for x,y being FinSequence holds
   InnerVertices (n-BitAdderStr(x,y)) is Relation;
 
@@ -282,13 +282,13 @@ registration
 end;
 
 registration
- let n be Nat;
+ let n be Element of NAT;
  let x,y be FinSequence;
  cluster n-BitMajorityOutput(x,y) -> pair;
 end;
 
 theorem :: FACIRC_2:25
- for x,y being FinSequence, n being Nat
+ for x,y being FinSequence, n being Element of NAT
   holds
    (n-BitMajorityOutput(x,y))`1 = <*> &
    (n-BitMajorityOutput(x,y))`2 = (0-tuples_on BOOLEAN)-->FALSE &
@@ -299,14 +299,14 @@ theorem :: FACIRC_2:25
    proj1 (n-BitMajorityOutput(x,y))`2 = 3-tuples_on BOOLEAN;
 
 theorem :: FACIRC_2:26
- for n being Nat, x,y being FinSequence, p being set
+ for n being Element of NAT, x,y being FinSequence, p being set
   holds
    n-BitMajorityOutput(x,y) <> [p, '&'] &
    n-BitMajorityOutput(x,y) <> [p, 'xor'];
 
 theorem :: FACIRC_2:27
  for f,g being nonpair-yielding FinSequence
- for n being Nat holds
+ for n being Element of NAT holds
   InputVertices ((n+1)-BitAdderStr(f,g)) =
     (InputVertices (n-BitAdderStr(f,g)))\/
      ((InputVertices BitAdderWithOverflowStr(f.(n+1),g.(n+1),
@@ -315,7 +315,7 @@ theorem :: FACIRC_2:27
   InputVertices (n-BitAdderStr(f,g)) is without_pairs;
 
 theorem :: FACIRC_2:28
-    for n being Nat
+    for n being Element of NAT
  for x,y being nonpair-yielding FinSeqLen of n holds
   InputVertices (n-BitAdderStr(x,y)) = rng x \/ rng y;
 
@@ -351,23 +351,23 @@ theorem :: FACIRC_2:32
   holds Following(s,2) is stable;
 
 theorem :: FACIRC_2:33
-    for n being Nat
+    for n being Element of NAT
  for x,y being nonpair-yielding FinSeqLen of n
  for s being State of n-BitAdderCirc(x,y)
   holds Following(s,1+2*n) is stable;
 
 theorem :: FACIRC_2:34
-    for i being Nat, x being FinSeqLen of i+1
+    for i being Element of NAT, x being FinSeqLen of i+1
   ex y being FinSeqLen of i, a being set st
    x = y^<*a*>;
 
 canceled;
 
 theorem :: FACIRC_2:36
-    for i being Nat, x being nonpair-yielding FinSeqLen of i+1
+    for i being Element of NAT, x being nonpair-yielding FinSeqLen of i+1
   ex y being nonpair-yielding FinSeqLen of i,
      a being non pair set st x = y^<*a*>;
 
 theorem :: FACIRC_2:37
-    for n being Nat
+    for n being Element of NAT
   ex N being Function of NAT,NAT st N.0 = 1 & N.1 = 2 & N.2 = n;

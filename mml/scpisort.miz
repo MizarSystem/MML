@@ -11,7 +11,8 @@ environ
       SCMPDS_5, SCMFSA6B, UNIALG_2, SCMFSA7B, SCMFSA_7, SCMPDS_7, ARYTM_1,
       RELOC, FUNCT_4, SCMPDS_3, FUNCT_7, SCM_1, BOOLE, AMI_5, SCMISORT,
       SCMFSA_9, SCMFSA8B, ABSVALUE, SCPISORT;
- notations XBOOLE_0, XCMPLX_0, RELAT_1, FUNCT_1, FUNCT_4, INT_1, NAT_1,
+ notations XBOOLE_0, SUBSET_1, NUMBERS,
+ XCMPLX_0, RELAT_1, FUNCT_1, FUNCT_4, INT_1, NAT_1,
       COMPLEX1, AMI_1, AMI_2, AMI_3, AMI_5, FUNCT_7, SCMPDS_2, SCMPDS_3,
       CARD_1, SCMPDS_4, SCM_1, SCMPDS_5, SCMPDS_6, SCMP_GCD, DOMAIN_1,
       FINSEQ_1, SCMPDS_7, SCMPDS_8, SFMASTR3, RFINSEQ, XXREAL_0;
@@ -25,26 +26,28 @@ environ
  theorems AMI_1, AMI_3, NAT_1, REAL_1, TARSKI, FUNCT_4, INT_1, SCMPDS_2,
       SCMPDS_3, GRFUNC_1, SCM_1, SCMFSA6B, SCMPDS_4, SCMPDS_5, SCMPDS_6,
       ENUMSET1, SCMP_GCD, SCMPDS_7, SCMPDS_8, ABSVALUE, FINSEQ_1, SFMASTR3,
-      FINSEQ_2, SCMBSORT, RFINSEQ, RELAT_1, XBOOLE_1, XCMPLX_1, XREAL_1;
+      FINSEQ_2, SCMBSORT, RFINSEQ, RELAT_1, XBOOLE_1, XCMPLX_1, XREAL_1,
+      ORDINAL1;
  schemes NAT_1, FINSEQ_1;
 
 begin :: Preliminaries
 
 reserve x for Int_position,
-        n,p0 for Nat;
+        n,p0 for Element of NAT;
 
 definition
- let f be FinSequence of INT,s be State of SCMPDS,m be Nat;
+ let f be FinSequence of INT,s be State of SCMPDS,m be Element of NAT;
  pred f is_FinSequence_on s,m means
-:Def1:  for i be Nat st 1 <= i & i <= len f holds f.i=s.intpos(m+i);
+:Def1:  for i be Element of NAT st 1 <= i & i <= len f holds f.i=s.intpos(m+i);
 end;
 
 Lm1:
- for f being FinSequence of INT,k be Nat holds f is_non_decreasing_on k,k
+ for f being FinSequence of INT,k be Element of NAT
+ holds f is_non_decreasing_on k,k
 proof
-   let f be FinSequence of INT,k be Nat;
+   let f be FinSequence of INT,k be Element of NAT;
         now
-      let i, j be Nat;
+      let i, j be Element of NAT;
       assume A1: k <= i & i <= j & j <= k;
        then k <= j by XREAL_1:2;
     then j=k by A1,XREAL_1:1;
@@ -54,10 +57,10 @@ proof
 end;
 
 theorem Th1:
- for f being FinSequence of INT,m,n be Nat st m >= n holds
+ for f being FinSequence of INT,m,n be Element of NAT st m >= n holds
  f is_non_decreasing_on m,n
 proof
-   let f be FinSequence of INT,m,n be Nat;
+   let f be FinSequence of INT,m,n be Element of NAT;
    assume A1: m>=n;
    per cases by A1,XREAL_1:1;
    suppose m=n;
@@ -65,7 +68,7 @@ proof
    end;
    suppose A2:m>n;
           now
-      let i, j be Nat;
+      let i, j be Element of NAT;
       assume A3: m <= i & i <= j & j <= n;
       assume f.i > f.j;
              m <= j by A3,XREAL_1:2;
@@ -76,16 +79,17 @@ end;
 end;
 
 theorem Th2:
-  for s being State of SCMPDS,n,m be Nat holds
+  for s being State of SCMPDS,n,m be Element of NAT holds
      ex f be FinSequence of INT st len f=n &
-     for i be Nat st 1<=i & i <= len f holds f.i=s.intpos(m+i)
+     for i be Element of NAT st 1<=i & i <= len f holds f.i=s.intpos(m+i)
 proof
-   let s be State of SCMPDS,n,m be Nat;
-   deffunc U(Nat) = s.intpos (m+$1);
+   let s be State of SCMPDS,n,m be Element of NAT;
+   deffunc U(Element of NAT) = s.intpos (m+$1);
    consider f being FinSequence such that
-A1:  len f = n & for i be Nat st i in Seg n holds f.i=U(i) from FINSEQ_1:sch 2;
+A1:  len f = n & for i be Element of NAT st i in Seg n holds f.i=U(i)
+from FINSEQ_1:sch 2;
          now
-       let i be Nat;
+       let i be Element of NAT;
        assume i in dom f;
        then i in Seg n by A1,FINSEQ_1:def 3;
        then f.i = s.intpos (m+i) by A1;
@@ -95,7 +99,7 @@ A1:  len f = n & for i be Nat st i in Seg n holds f.i=U(i) from FINSEQ_1:sch 2;
     take f;
     thus len f=n by A1;
     hereby
-       let i be Nat;
+       let i be Element of NAT;
        assume 1<=i & i <= len f;
        then i in Seg n by A1,FINSEQ_1:3;
        hence f.i = s.intpos (m+i) by A1;
@@ -103,12 +107,12 @@ A1:  len f = n & for i be Nat st i in Seg n holds f.i=U(i) from FINSEQ_1:sch 2;
 end;
 
 theorem
-      for s being State of SCMPDS,n,m be Nat holds
+      for s being State of SCMPDS,n,m be Element of NAT holds
     ex f be FinSequence of INT st len f=n & f is_FinSequence_on s,m
 proof
-     let s be State of SCMPDS,n,m be Nat;
+     let s be State of SCMPDS,n,m be Element of NAT;
      consider f be FinSequence of INT such that
-A1:  len f=n & for i be Nat st 1<=i & i <= len f holds
+A1:  len f=n & for i be Element of NAT st 1<=i & i <= len f holds
      f.i=s.intpos(m+i) by Th2;
      take f;
      thus len f=n by A1;
@@ -116,14 +120,14 @@ A1:  len f=n & for i be Nat st 1<=i & i <= len f holds
 end;
 
 theorem Th4:
- for f,g be FinSequence of INT,m,n be Nat st 1<=n & n <= len f &
+ for f,g be FinSequence of INT,m,n be Element of NAT st 1<=n & n <= len f &
  1<=m & m <= len f & len f=len g & f.m=g.n & f.n=g.m &
- (for k be Nat st k<>m & k<>n & 1<=k & k <= len f holds f.k=g.k)
+ (for k be Element of NAT st k<>m & k<>n & 1<=k & k <= len f holds f.k=g.k)
  holds f,g are_fiberwise_equipotent
 proof
-   let f,g be FinSequence of INT,m,n be Nat;
+   let f,g be FinSequence of INT,m,n be Element of NAT;
    assume A1: 1<=n & n <= len f & 1<=m & m <= len f & len f=len g
-   & f.m=g.n & f.n=g.m & for k be Nat st k<>m & k<>n & 1<=k &
+   & f.m=g.n & f.n=g.m & for k be Element of NAT st k<>m & k<>n & 1<=k &
    k <= len f holds f.k=g.k;
 A2: Seg (len f) = dom f by FINSEQ_1:def 3;
     A3: m in Seg (len f) by A1,FINSEQ_1:3;
@@ -132,7 +136,7 @@ A5: dom f=dom g by A1,A2,FINSEQ_1:def 3;
          now
         let k be set;
         assume A6: k<>m & k<>n & k in dom f;
-         then reconsider i=k as Nat;
+         then reconsider i=k as Element of NAT;
               1 <= i & i <= len f by A2,A6,FINSEQ_1:3;
         hence f.k=g.k by A1,A6;
    end;
@@ -241,22 +245,23 @@ proof
 end;
 
 Lm2:
- for a be Int_position,i be Integer,n be Nat,I be Program-block holds
+ for a be Int_position,i be Integer,n be Element of NAT,I be Program-block
+ holds
   card stop for-down(a,i,n,I)= card I+4
 proof
-   let a be Int_position,i be Integer,n be Nat,I be Program-block;
+   let a be Int_position,i be Integer,n be Element of NAT,I be Program-block;
    thus card stop for-down(a,i,n,I)= card for-down(a,i,n,I) +1 by SCMPDS_5:7
    .= card I +3+1 by SCMPDS_7:60
    .= card I + 4;
 end;
 
 Lm3:
- for a be Int_position,i be Integer,n be Nat,
+ for a be Int_position,i be Integer,n be Element of NAT,
  I be Program-block holds
    for-down(a,i,n,I)= ((a,i)<=0_goto (card I +3)) ';' (I ';'
    AddTo(a,i,-n) ';' goto -(card I+2))
 proof
-   let a be Int_position,i be Integer,n be Nat,I be Program-block;
+   let a be Int_position,i be Integer,n be Element of NAT,I be Program-block;
    set i1=(a,i)<=0_goto (card I +3),
        i2=AddTo(a,i,-n),
        i3=goto -(card I+2);
@@ -265,10 +270,11 @@ proof
 end;
 
 Lm4:
- for I being Program-block,a being Int_position,i being Integer,n be Nat
+ for I being Program-block,a being Int_position,i being Integer,
+ n be Element of NAT
  holds Shift(I ';' AddTo(a,i,-n),1) c= for-down(a,i,n,I)
 proof
-  let I be Program-block,a be Int_position,i be Integer,n be Nat;
+  let I be Program-block,a be Int_position,i be Integer,n be Element of NAT;
    set i1=(a,i)<=0_goto (card I+3),
        i2=AddTo(a,i,-n),
        i3=goto -(card I+2);
@@ -284,7 +290,7 @@ begin :: Computing the Execution Result of For-loop Program by Loop-Invariant
 
 scheme ForDownHalt { P[set],
  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
- a() -> Int_position,i() -> Integer,n() -> Nat}:
+ a() -> Int_position,i() -> Integer,n() -> Element of NAT}:
     (P[s()] or not P[s()]) &
      for-down(a(),i(),n(),I()) is_closed_on s() &
      for-down(a(),i(),n(),I()) is_halting_on s()
@@ -309,15 +315,15 @@ proof
        pJ=stop J ,
        IsJ= Initialized pJ;
 
-    defpred Q[Nat] means
+    defpred Q[Element of NAT] means
        for t be State of SCMPDS st t.b <= $1 &
        P[Dstate t] & t.a()=s().a()
       holds FOR is_closed_on t & FOR is_halting_on t;
 
 A4:  Q[0] by SCMPDS_7:63;
-A5:  for k be Nat st Q[k] holds Q[k + 1]
+A5:  for k be Element of NAT st Q[k] holds Q[k + 1]
      proof
-     let k be Nat;
+     let k be Element of NAT;
      assume A6: Q[k];
            now
         let t be State of SCMPDS;
@@ -434,7 +440,7 @@ A49:    t7.b=-n()+t.b by A41,A43,A45,SCMPDS_2:66;
 then A51:    FOR is_closed_on t7 & FOR is_halting_on t7 by A6,A47,A48,A49;
 A52:    t7 +* iFOR=t7 by A46,SCMPDS_7:37;
             now
-          let k be Nat;
+          let k be Element of NAT;
           per cases;
           suppose k < m4;
            then A53: k <= m3 by INT_1:20;
@@ -450,12 +456,13 @@ AMI_1:def 19;
                  suppose k<>0;
                   then consider kn be Nat such that
               A55: k=kn+1 by NAT_1:22;
+                  reconsider kn as Element of NAT by ORDINAL1:def 13;
                        kn < k by A55,XREAL_1:31;
                   then kn < m2 by A54,XREAL_1:2;
               then A56: IC (Computation t2).kn + 1 = IC (Computation t4).kn
                   by A12,A15,A17,A18,A26,A28,A36,SCMPDS_7:34;
               A57: IC (Computation t2).kn in dom pJ by A14,SCMPDS_6:def 2;
-                  consider lm be Nat such that
+                  consider lm be Element of NAT such that
               A58: IC (Computation t2).kn=inspos lm by SCMPDS_3:32;
                        lm < card pJ by A57,A58,SCMPDS_4:1;
                   then lm < card J+1 by SCMPDS_5:7;
@@ -480,7 +487,8 @@ AMI_1:51
           suppose k >= m4;
           then consider nn be Nat such that
          A62: k=m4+nn by NAT_1:28;
-                  C3.k=(Computation (t7 +* iFOR)).nn by A52,A62,AMI_1:51;
+           reconsider nn as Element of NAT by ORDINAL1:def 13;
+           C3.k=(Computation (t7 +* iFOR)).nn by A52,A62,AMI_1:51;
            hence IC (Computation t3).k in dom pFOR by A51,SCMPDS_6:def 2;
        end;
        end;
@@ -492,14 +500,14 @@ AMI_1:51
      end;
      hence Q[k+1];
      end;
-A63:  for k being Nat holds Q[k] from NAT_1:sch 1(A4,A5);
+A63:  for k being Element of NAT holds Q[k] from NAT_1:sch 1(A4,A5);
      thus P[s()] or not P[s()];
      per cases;
      suppose s().b <= 0;
        hence FOR is_closed_on s() & FOR is_halting_on s() by SCMPDS_7:63;
      end;
      suppose s().b > 0;
-     then reconsider m=s().b as Nat by INT_1:16;
+     then reconsider m=s().b as Element of NAT by INT_1:16;
           Q[m] by A63;
      hence FOR is_closed_on s() & FOR is_halting_on s() by A2;
 end;
@@ -507,7 +515,7 @@ end;
 
 scheme ForDownExec { P[set],
  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
- a() -> Int_position,i() -> Integer,n() -> Nat}:
+ a() -> Int_position,i() -> Integer,n() -> Element of NAT}:
     (P[s()] or not P[s()]) &
     IExec(for-down(a(),i(),n(),I()),s()) =
  IExec(for-down(a(),i(),n(),I()),IExec(I() ';' AddTo(a(),i(),-n()),s()))
@@ -662,6 +670,7 @@ then A48: CurInstr C1.m1 <> halt SCMPDS by SCMPDS_6:30;
          m0 > m1 by A7,A48,SCMPDS_6:2;
     then consider nn be Nat such that
 A49: m0=m1+nn by NAT_1:28;
+    reconsider nn as Element of NAT by ORDINAL1:def 13;
 A50: C1.m0 = C2.nn by A47,A49,AMI_1:51;
     then CurInstr C2.nn =halt SCMPDS by A7,SCM_1:def 2;
 then A51: nn >= m2 by A45,SCM_1:def 2;
@@ -682,7 +691,7 @@ end;
 
 scheme ForDownEnd { P[set],
  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
- a() -> Int_position,i() -> Integer,n() -> Nat}:
+ a() -> Int_position,i() -> Integer,n() -> Element of NAT}:
     (P[s()] or not P[s()]) &
     IExec(for-down(a(),i(),n(),I()),s()).DataLoc(s().a(),i()) <= 0 &
      P[Dstate IExec(for-down(a(),i(),n(),I()),s())]
@@ -700,7 +709,7 @@ proof
    set b=DataLoc(s().a(),i()),
        FR=for-down(a(),i(),n(),I());
 
-    defpred Q[Nat] means
+    defpred Q[Element of NAT] means
        for t be State of SCMPDS st t.b <= $1 & t.a()=s().a() & P[Dstate t]
       holds IExec(FR,t).b <= 0 & P[Dstate IExec(FR,t)];
 
@@ -713,7 +722,7 @@ then A6:   for x be Int_position holds IExec(FR,t).x = t.x by SCMPDS_7:66;
      thus P[Dstate IExec(FR,t)] by A5,A6,Th5;
    end;
 A7: now
-       let k be Nat;
+       let k be Element of NAT;
        assume A8:Q[k];
             now
          let u be State of SCMPDS;
@@ -748,11 +757,11 @@ A7: now
       end;
       hence Q[k+1];
    end;
-A18:  for k being Nat holds Q[k] from NAT_1:sch 1(A4,A7);
+A18:  for k being Element of NAT holds Q[k] from NAT_1:sch 1(A4,A7);
      thus (P[s()] or not P[s()]);
      per cases;
      suppose s().b > 0;
-       then reconsider m=s().b as Nat by INT_1:16;
+       then reconsider m=s().b as Element of NAT by INT_1:16;
             Q[m] by A18;
        hence thesis by A2;
      end;
@@ -763,7 +772,7 @@ end;
 
 theorem Th12:
  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
- a,x,y be Int_position, i,c be Integer,n be Nat st
+ a,x,y be Int_position, i,c be Integer,n be Element of NAT st
   n > 0 & s.x >= s.y +c &
  for t be State of SCMPDS st
    t.x >= t.y +c & t.a=s.a & t.DataLoc(s.a,i) > 0
@@ -775,7 +784,7 @@ holds
    for-down(a,i,n,I) is_closed_on s & for-down(a,i,n,I) is_halting_on s
 proof
   let s be State of SCMPDS,I be No-StopCode shiftable Program-block,
-  a,x,y be Int_position, i,c be Integer,n be Nat;
+  a,x,y be Int_position, i,c be Integer,n be Element of NAT;
    set b=DataLoc(s.a,i),
        J=I ';' AddTo(a,i,-n);
 
@@ -823,7 +832,7 @@ end;
 
 theorem Th13:
  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
- a,x,y be Int_position, i,c be Integer,n be Nat st
+ a,x,y be Int_position, i,c be Integer,n be Element of NAT st
   n > 0 & s.x >= s.y +c & s.DataLoc(s.a,i) > 0 &
  for t be State of SCMPDS st
    t.x >= t.y +c & t.a=s.a & t.DataLoc(s.a,i) > 0
@@ -836,7 +845,7 @@ holds
     IExec(for-down(a,i,n,I),IExec(I ';' AddTo(a,i,-n),s))
 proof
   let s be State of SCMPDS,I be No-StopCode shiftable Program-block,
-  a,x,y be Int_position, i,c be Integer,n be Nat;
+  a,x,y be Int_position, i,c be Integer,n be Element of NAT;
    set b=DataLoc(s.a,i),
        J=I ';' AddTo(a,i,-n);
 
@@ -885,7 +894,7 @@ end;
 
 theorem
       for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
- a be Int_position, i be Integer,n be Nat
+ a be Int_position, i be Integer,n be Element of NAT
  st s.DataLoc(s.a,i) > 0 & n > 0 & card I > 0 &
     a <> DataLoc(s.a,i) & (for t be State of SCMPDS st t.a=s.a
  holds IExec(I,t).a=t.a & IExec(I,t).DataLoc(s.a,i)=t.DataLoc(s.a,i) &
@@ -894,7 +903,7 @@ theorem
      for-down(a,i,n,I) is_closed_on s & for-down(a,i,n,I) is_halting_on s
 proof
  let s be State of SCMPDS,I be No-StopCode shiftable Program-block,
- a be Int_position, i be Integer,n be Nat;
+ a be Int_position, i be Integer,n be Element of NAT;
  assume A1: s.DataLoc(s.a,i) > 0 & n > 0 & card I > 0 &
       a <> DataLoc(s.a,i) & (for t be State of SCMPDS st t.a=s.a
     holds IExec(I,t).a=t.a & IExec(I,t).DataLoc(s.a,i)=t.DataLoc(s.a,i) &
@@ -911,7 +920,7 @@ begin :: A Program for Insert Sort
 :: n -> intpos 2,  x1 -> intpos 3
 
 definition
- let n,p0 be Nat;
+ let n,p0 be Element of NAT;
  func insert-sort(n,p0) -> Program-block equals
        ((GBP:=0) ';'
        ((GBP,1):=0) ';'
@@ -996,7 +1005,7 @@ Lm7:
   IExec(B1,s).a2=s.a2 & IExec(B1,s).a3=s.a3 &
   IExec(B1,s).a6 < s.a6 &
   IExec(B1,s).a4 >= 7+IExec(B1,s).a6 &
-  (for i be Nat st i>=7 & i<>s.a4-1 & i<>s.a4 holds
+  (for i be Element of NAT st i>=7 & i<>s.a4-1 & i<>s.a4 holds
     IExec(B1,s).intpos i=s.intpos i) &
   (s.DataLoc(s.a4,-1) > s.DataLoc(s.a4,0) implies
      IExec(B1,s).DataLoc(s.a4,-1)=s.DataLoc(s.a4,0) &
@@ -1082,7 +1091,7 @@ then A33: t1.a6=s.a6 by A23,SCMPDS_2:59;
 then A34: t1.x=s.x by A24,SCMPDS_2:59;
           y<>DataLoc(t0.a,5) by A8,A10,A16,A26;
 then A35: t1.y=s.y by A25,SCMPDS_2:59;
-A36: now let i be Nat;
+A36: now let i be Element of NAT;
         assume i>=7 & i<>s.a4-1 & i <> s.a4;
         then i>5 by XREAL_1:2;
         then intpos i <> DataLoc(t0.a,5) by A26,SCMP_GCD:4;
@@ -1119,7 +1128,7 @@ A53: t2.x=Exec(k2, t1).x by SCMPDS_5:47
 A54: y<>DataLoc(t1.a,5) by A8,A10,A16,A37;
 A55: t2.y=Exec(k2, t1).y by SCMPDS_5:47
      .=s.y by A35,A54,SCMPDS_2:62;
-A56: now let i be Nat;
+A56: now let i be Element of NAT;
         assume A57: i>=7 & i<>s.a4-1 & i <> s.a4;
         then i>5 by XREAL_1:2;
       then A58: intpos i <> DataLoc(t1.a,5) by A37,SCMP_GCD:4;
@@ -1160,7 +1169,7 @@ A73: t6.a5=s.x by A63,A65,A67,SCMPDS_2:59;
 then A74: t6.a6=s.a6 by A64,SCMPDS_2:59;
           y<>DataLoc(t02.a,5) by A8,A10,A16,A67;
 then A75: t6.y=s.y by A66,SCMPDS_2:59;
-A76: now let i be Nat;
+A76: now let i be Element of NAT;
         assume A77: i>=7 & i<>s.a4-1 & i <> s.a4;
         then i>5 by XREAL_1:2;
         then intpos i <> DataLoc(t02.a,5) by A67,SCMP_GCD:4;
@@ -1193,7 +1202,7 @@ A92: t5.a6 =Exec(k4, t6).a6 by SCMPDS_5:47
      .=s.a6 by A74,A91,SCMPDS_2:59;
 A93: t5.x =Exec(k4, t6).DataLoc(t6.a4,-1) by A72,SCMPDS_5:47
      .=s.y by A72,A75,SCMPDS_2:59;
-A94: now let i be Nat;
+A94: now let i be Element of NAT;
         assume A95: i>=7 & i<>s.a4-1 & i <> s.a4;
     A96: intpos i <> DataLoc(t6.a4,-1)
         proof
@@ -1235,7 +1244,7 @@ A113: t4.y =Exec(k5, t5).DataLoc(t5.a4,0) by A88,SCMPDS_5:46
      .=t5.DataLoc(t5.a,5) by SCMPDS_2:59
      .=t5.intpos(0+5) by A80,SCMP_GCD:5
      .=s.x by A90;
-A114: now let i be Nat;
+A114: now let i be Element of NAT;
         assume A115: i>=7 & i<>s.a4-1 & i <> s.a4;
     A116: intpos i <> DataLoc(t5.a4,0)
         proof
@@ -1275,7 +1284,7 @@ A131: t3.x=Exec(k6, t4).x by SCMPDS_5:46
 A132:  y<>DataLoc(t4.a,4) by A8,A10,A15,A118;
 A133: t3.y=Exec(k6, t4).y by SCMPDS_5:46
      .=s.x by A113,A132,SCMPDS_2:60;
-A134: now let i be Nat;
+A134: now let i be Element of NAT;
         assume A135: i>=7 & i<>s.a4-1 & i <> s.a4;
         then i>4 by XREAL_1:2;
       then A136: intpos i <> DataLoc(t4.a,4) by A118,SCMP_GCD:4;
@@ -1395,7 +1404,7 @@ A155:  now
         hence IExec(B1,s).a4 >= 7+IExec(B1,s).a6 by A155,A160;
       end;
       end;
-      hereby let i be Nat;
+      hereby let i be Element of NAT;
          set xi=intpos i;
          assume A161: i>=7 & i<>s.a4-1 & i <> s.a4;
      then A162: i>6 by XREAL_1:2;
@@ -1490,7 +1499,7 @@ proof
   set b=DataLoc(s.GBP,6),
       a=GBP;
   assume A1: s.a4 >= 7+s.b & s.a=0;
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
   for t be State of SCMPDS st t.a6 <= $1 & t.a4 >= 7+t.a6 & t.a=0 holds
     IExec(WH,t).a=0 & IExec(WH,t).a1=t.a1 &
     IExec(WH,t).a2=t.a2 & IExec(WH,t).a3=t.a3;
@@ -1503,9 +1512,9 @@ A2: P[0]
       thus IExec(WH,t).a1=t.a1 &
           IExec(WH,t).a2=t.a2 & IExec(WH,t).a3=t.a3 by A3,A4,SCMPDS_8:23;
     end;
-A5: for k be Nat st P[k] holds P[k+1]
+A5: for k be Element of NAT st P[k] holds P[k+1]
     proof
-       let k be Nat;
+       let k be Element of NAT;
        assume A6:P[k];
        thus P[k+1]
        proof
@@ -1557,8 +1566,8 @@ A19: b=intpos (0+6) by A1,SCMP_GCD:5;
       hence thesis by A1,A19,SCMPDS_8:23;
     end;
     suppose s.a6 > 0;
-      then reconsider m=s.a6 as Nat by INT_1:16;
-         for k be Nat holds P[k] from NAT_1:sch 1(A2,A5);
+      then reconsider m=s.a6 as Element of NAT by INT_1:16;
+         for k be Element of NAT holds P[k] from NAT_1:sch 1(A2,A5);
 then P[m];
     hence thesis by A1,A19;
 end;
@@ -1569,7 +1578,7 @@ Lm10:
      IExec(J4,s).GBP =0 & IExec(J4,s).a1 = s.a1+1 &
      IExec(J4,s).a2=s.a2 & IExec(J4,s).a3 =s.a3+1 &
      IExec(J4,s).a4 =s.a3+1 & IExec(J4,s).a6 =s.a1+1 &
-     for i be Nat st i >= 7 holds IExec(J4,s).intpos i=s.intpos i
+     for i be Element of NAT st i >= 7 holds IExec(J4,s).intpos i=s.intpos i
 proof
     let s be State of SCMPDS;
     set a=GBP;
@@ -1593,7 +1602,7 @@ then A7: t4.a1=s.a1 by A2,SCMPDS_2:60;
           a2<>DataLoc(t0.a,3) by A5,SCMP_GCD:4;
 then A8: t4.a2=s.a2 by A3,SCMPDS_2:60;
 A9: t4.a3=s.a3+1 by A4,A5,SCMPDS_2:60;
-A10: now let i be Nat;
+A10: now let i be Element of NAT;
           assume i >= 7;
           then i > 3 by XREAL_1:2;
           then intpos i<>DataLoc(t0.a,3) by A5,SCMP_GCD:4;
@@ -1617,7 +1626,7 @@ A20: t3.a3 =Exec(j2, t4).a3 by SCMPDS_5:47
      .=s.a3+1 by A9,A19,SCMPDS_2:59;
 A21: t3.a4 =Exec(j2,t4).a4 by SCMPDS_5:47
      .=s.a3+1 by A9,A11,A12,SCMPDS_2:59;
-A22: now let i be Nat;
+A22: now let i be Element of NAT;
           assume A23:i >= 7;
            then i > 4 by XREAL_1:2;
        then A24: intpos i<>DataLoc(t4.a,4) by A11,SCMP_GCD:4;
@@ -1641,7 +1650,7 @@ A32: t2.a3 =Exec(j3, t3).a3 by SCMPDS_5:46
 A33:  a4<>DataLoc(t3.a,1) by A25,SCMP_GCD:4;
 A34: t2.a4 =Exec(j3, t3).a4 by SCMPDS_5:46
      .=s.a3+1 by A21,A33,SCMPDS_2:60;
-A35: now let i be Nat;
+A35: now let i be Element of NAT;
           assume A36:i >= 7;
            then i > 1 by XREAL_1:2;
        then A37: intpos i<>DataLoc(t3.a,1) by A25,SCMP_GCD:4;
@@ -1669,7 +1678,7 @@ thus t1.a4 =Exec(j4, t2).a4 by SCMPDS_5:46
 A44:  DataLoc(t2.a,1)=intpos (0+1) by A27,SCMP_GCD:5;
 thus t1.a6 =Exec(j4, t2).a6 by SCMPDS_5:46
      .=s.a1+1 by A28,A38,A44,SCMPDS_2:59;
-     hereby let i be Nat;
+     hereby let i be Element of NAT;
           assume A45:i >= 7;
            then i > 6 by XREAL_1:2;
        then A46: intpos i<>DataLoc(t2.a,6) by A38,SCMP_GCD:4;
@@ -1686,7 +1695,7 @@ Lm11:
   holds
      IExec(B3,s).GBP=0 & IExec(B3,s).a2=s.a2-1 &
      IExec(B3,s).a3=s.a3+1 & IExec(B3,s).a1=s.a1+1 &
-     for i be Nat st i <> 2 holds
+     for i be Element of NAT st i <> 2 holds
         IExec(B3,s).intpos i=IExec(WH,IExec(J4,s)).intpos i
 proof
     let s be State of SCMPDS;
@@ -1728,7 +1737,7 @@ A12:   a1<>DataLoc(Bt.a,2) by A8,SCMP_GCD:4;
       .=IExec(WH,s1).a1 by A5,A6,SCMPDS_7:49
       .=s.a1+1 by A2,A3,A4,Lm9;
      hereby
-        let i be Nat;
+        let i be Element of NAT;
         assume i<> 2;
 then A13:     intpos i<>DataLoc(Bt.a,2) by A8,SCMP_GCD:4;
        thus IExec(B3,s).intpos i=Exec(jf, Bt).intpos i by A10,SCMPDS_7:50
@@ -1906,32 +1915,33 @@ end;
      set Insertthek1item=WH;
 
 theorem Th17:
- for s being State of SCMPDS,f,g be FinSequence of INT,k0,k being Nat
+ for s being State of SCMPDS,f,g be FinSequence of INT,
+ k0,k being Element of NAT
  st s.a4 >= 7+s.a6 & s.GBP=0 & k=s.a6 & k0=s.a4-s.a6-1 &
   f is_FinSequence_on s,k0 &
   g is_FinSequence_on IExec(Insertthek1item,s),k0 &
   len f=len g & len f > k & f is_non_decreasing_on 1,k
  holds
   f,g are_fiberwise_equipotent & g is_non_decreasing_on 1,k+1 &
-  (for i be Nat st i>k+1 & i <= len f holds f.i=g.i) &
-  (for i be Nat st 1 <= i & i <= k+1 holds
-    ex j be Nat st 1 <= j & j <= k+1 & g.i=f.j)
+  (for i be Element of NAT st i>k+1 & i <= len f holds f.i=g.i) &
+  (for i be Element of NAT st 1 <= i & i <= k+1 holds
+    ex j be Element of NAT st 1 <= j & j <= k+1 & g.i=f.j)
 proof
-  let s be State of SCMPDS,f,g be FinSequence of INT,m,n be Nat;
+  let s be State of SCMPDS,f,g be FinSequence of INT,m,n be Element of NAT;
   set a=GBP;
 
   assume A1: s.a4 >= 7+s.a6 & s.a=0 & n=s.a6 & m=s.a4-s.a6-1;
   assume A2: f is_FinSequence_on s,m & g is_FinSequence_on IExec(WH,s),m;
   assume A3: len f= len g & len f > n & f is_non_decreasing_on 1,n;
 
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
  for t be State of SCMPDS,f1,f2 be FinSequence of INT st
   t.a4 >= 7+t.a6 & t.a=0 & $1=t.a6 & m=t.a4-t.a6-1 &
   f1 is_FinSequence_on t,m & f2 is_FinSequence_on IExec(WH,t),m &
   len f1=len f2 & len f1 > $1 & f1 is_non_decreasing_on 1,$1 holds
   f1,f2 are_fiberwise_equipotent & f2 is_non_decreasing_on 1,$1+1 &
-  (for i be Nat st i>$1+1 & i <= len f1 holds f1.i=f2.i) &
-  (for i be Nat st 1 <= i & i <= $1+1 holds ex j be Nat st
+  (for i be Element of NAT st i>$1+1 & i <= len f1 holds f1.i=f2.i) &
+  (for i be Element of NAT st 1 <= i & i <= $1+1 ex j be Element of NAT st
    1 <= j & j <= $1+1 & f2.i=f1.j);
 A4: P[0]
     proof
@@ -1942,7 +1952,7 @@ A4: P[0]
    then A6:    t.DataLoc(t.a,6) =t.intpos(0+6) by SCMP_GCD:5
           .=0 by A5;
    A7:    now
-             let i be Nat;
+             let i be Element of NAT;
              assume A8: 1 <= i & i <= len f1;
              hence f1.i=t.intpos(m+i) by A5,Def1
               .=IExec(WH,t).intpos(m+i) by A6,SCMPDS_8:23
@@ -1951,11 +1961,12 @@ A4: P[0]
     then A9:  f1=f2 by A5,FINSEQ_1:18;
          thus f1,f2 are_fiberwise_equipotent by A5,A7,FINSEQ_1:18;
          thus f2 is_non_decreasing_on 1,0+1 by Th1;
-         thus for i be Nat st i>0+1 & i <= len f1 holds f1.i=f2.i by A7;
-         thus for i be Nat st 1 <= i & i <= 0+1
-          ex j be Nat st 1 <= j & j <= 0+1 & f2.i=f1.j by A9;
+         thus for i be Element of NAT st i>0+1 & i <= len f1 holds f1.i=f2.i
+         by A7;
+         thus for i be Element of NAT st 1 <= i & i <= 0+1
+          ex j be Element of NAT st 1 <= j & j <= 0+1 & f2.i=f1.j by A9;
     end;
-A10: now let k be Nat;
+A10: now let k be Element of NAT;
       assume A11:P[k];
            now
         let t be State of SCMPDS,f1,f2 be FinSequence of INT;
@@ -1978,7 +1989,7 @@ A10: now let k be Nat;
                m+1+(k+1) >= 7+t.a6 by A12;
       then A18: m+1 >= 7 by A12,XREAL_1:8;
       A19: Bt.a=0 & Bt.a1=t.a1 & Bt.a4 >= 7+Bt.a6 &
-          (for i be Nat st i>=7 & i<>t.a4-1 & i<>t.a4 holds
+          (for i be Element of NAT st i>=7 & i<>t.a4-1 & i<>t.a4 holds
             Bt.intpos i=t.intpos i) &
           (t.x > t.y implies Bt.x=t.y & Bt.y =t.x &
                 Bt.a6=t.a6-1 & Bt.a4=t.a4-1) &
@@ -1986,13 +1997,13 @@ A10: now let k be Nat;
           per cases;
           suppose A20: t.x > t.y;
            consider h be FinSequence of INT such that
-        A21: len h=len f1 & for i be Nat st 1<=i & i <= len h
+        A21: len h=len f1 & for i be Element of NAT st 1<=i & i <= len h
             holds h.i=Bt.intpos(m+i) by Th2;
         A22: Bt.a6=k by A12,A19,A20;
         A23: Bt.a4-Bt.a6-1=m by A12,A19,A20;
         A24: h is_FinSequence_on Bt,m by A21,Def1;
                  now
-               let i be Nat;
+               let i be Element of NAT;
                assume 1<=i & i <= len f2;
               hence f2.i=IExec(WH,t).intpos(m+i) by A12,Def1
                .=IExec(WH,Bt).intpos(m+i) by A12,Lm14;
@@ -2001,7 +2012,7 @@ A10: now let k be Nat;
                  k+1 > k by XREAL_1:31;
         then A26: len h > k by A12,A21,XREAL_1:2;
         A27: now
-               let i be Nat;
+               let i be Element of NAT;
                assume A28: i <> k+1 & i<>k+2 & 1 <= i & i <= len f1;
                 then m+i >= m+1 by XREAL_1:8;
             then A29: m+i >= 7 by A18,XREAL_1:2;
@@ -2013,7 +2024,7 @@ A10: now let k be Nat;
             end;
 
                  now
-                 let i,j be Nat;
+                 let i,j be Element of NAT;
                  assume A32: 1 <= i & i <= j & j <= k;
             A33:  k < k+1 by XREAL_1:31;
                       k+1 < k+1+1 by XREAL_1:31;
@@ -2029,8 +2040,9 @@ A10: now let k be Nat;
           end;
           then A39: h is_non_decreasing_on 1,k by SFMASTR3:def 4;
      then A40:  h,f2 are_fiberwise_equipotent & f2 is_non_decreasing_on 1,k+1 &
-          (for i be Nat st i>k+1 & i <= len h holds h.i=f2.i) &
-          (for i be Nat st 1 <= i & i <= k+1 holds ex j be Nat st
+          (for i be Element of NAT st i>k+1 & i <= len h holds h.i=f2.i) &
+          (for i be Element of NAT st 1 <= i & i <= k+1
+          ex j be Element of NAT st
           1 <= j & j <= k+1 & f2.i=h.j)
            by A11,A12,A19,A21,A22,A23,A24,A25,A26;
      A41:  1 <= k+1 by NAT_1:29;
@@ -2047,7 +2059,7 @@ Th4
 ;
            hence f1,f2 are_fiberwise_equipotent by A40,RFINSEQ:2;
                 now
-              let i,j be Nat;
+              let i,j be Element of NAT;
               assume A50: 1 <= i & i <= j & j <= (k+1)+1;
               per cases by A50,NAT_1:26;
               suppose j <= k+1;
@@ -2062,7 +2074,7 @@ Th4
                   suppose i<>j;
                     then i < j by A50,REAL_1:def 5;
                     then i <= k+1 by A51,NAT_1:38;
-                   then consider mm be Nat such that
+                   then consider mm be Element of NAT such that
                 A52: 1 <= mm & mm <= k+1 & f2.i=h.mm by A11,A12,A19,A21,A22,A23
 ,A24,A25,A26,A39,A50;
                 A53: f2.j=h.(k+2) by A11,A12,A19,A21,A22,A23,A24,A25,A26,A39
@@ -2086,7 +2098,7 @@ Th4
            end;
            hence f2 is_non_decreasing_on 1,(k+1)+1 by SFMASTR3:def 4;
            hereby
-              let i be Nat;
+              let i be Element of NAT;
               assume A56: i>(k+1)+1 & i <= len f1;
               A57: k+1 < k+1+1 by XREAL_1:31;
             then A58: i > k+1 by A56,XREAL_1:2;
@@ -2096,7 +2108,7 @@ Th4
                .=f1.i by A27,A56,A57,A59;
           end;
           hereby
-             let i be Nat;
+             let i be Element of NAT;
              assume A60: 1 <= i & i <= (k+1)+1;
              per cases;
             suppose A61: i=k+1+1;
@@ -2109,7 +2121,7 @@ Th4
            suppose i<>k+1+1;
                then i < k+1+1 by A60,REAL_1:def 5;
                then i <= k+1 by NAT_1:38;
-               then consider mm be Nat such that
+               then consider mm be Element of NAT such that
           A62: 1 <= mm & mm <= k+1 & f2.i=h.mm by A11,A12,A19,A21,A22,A23,A24
 ,A25,A26,A39,A60;
                hereby
@@ -2135,7 +2147,7 @@ Th4
 
           end;
           suppose A67: t.x <= t.y;
-            A68: now let i be Nat;
+            A68: now let i be Element of NAT;
                 assume A69: i>=1 & i <= len f1;
                      then m+i >= m+1 by XREAL_1:8;
              then A70: m+i >= 7 by A18,XREAL_1:2;
@@ -2163,7 +2175,7 @@ Th4
           then A75: f1=f2 by A12,FINSEQ_1:18;
           thus f1,f2 are_fiberwise_equipotent by A12,A68,FINSEQ_1:18;
                now
-               let i, j be Nat;
+               let i, j be Element of NAT;
                assume A76:  1 <= i & i <= j & j <= (k+1)+1;
               per cases by A76,NAT_1:26;
               suppose j <= k+1;
@@ -2190,26 +2202,28 @@ Th4
          end;
          end;
          hence f2 is_non_decreasing_on 1,(k+1)+1 by A75,SFMASTR3:def 4;
-         thus for i be Nat st i>(k+1)+1 & i <= len f1 holds f1.i=f2.i by A12
+         thus for i be Element of NAT st i>(k+1)+1 & i <= len f1
+         holds f1.i=f2.i by A12
 ,A68,FINSEQ_1:18;
-         thus for i be Nat st 1 <= i & i <= (k+1)+1
-           ex j be Nat st 1 <= j & j <= (k+1)+1 & f2.i=f1.j by A75;
+         thus for i be Element of NAT st 1 <= i & i <= (k+1)+1
+           ex j be Element of NAT st 1 <= j & j <= (k+1)+1 & f2.i=f1.j by A75;
       end;
       end;
       hence P[k+1];
     end;
-         for k be Nat holds P[k] from NAT_1:sch 1(A4,A10);
+         for k be Element of NAT holds P[k] from NAT_1:sch 1(A4,A10);
     hence thesis by A1,A2,A3;
 end;
 
 Lm15:
- for s being State of SCMPDS,f,g be FinSequence of INT,p0,n being Nat
+ for s being State of SCMPDS,f,g be FinSequence of INT,
+ p0,n being Element of NAT
  st s.GBP=0 & s.a2=n-1 & s.a3=p0+1 & s.a1=0 & p0 >= 6 &
   f is_FinSequence_on s,p0 & g is_FinSequence_on IExec(FR,s),p0 &
   len f=n & len g = n holds
   f,g are_fiberwise_equipotent & g is_non_decreasing_on 1,n
 proof
-    let s be State of SCMPDS,f,g be FinSequence of INT,p0,n be Nat;
+    let s be State of SCMPDS,f,g be FinSequence of INT,p0,n be Element of NAT;
     set a=GBP;
     assume A1:s.a=0 & s.a2=n-1 & s.a3=p0+1 & s.a1=0 & p0 >= 6 &
      f is_FinSequence_on s,p0 & g is_FinSequence_on IExec(FR,s),p0 &
@@ -2223,22 +2237,23 @@ proof
     end;
     suppose n<>0;
 then A3: n>0;
-    defpred P[Nat] means
-   for t be State of SCMPDS,f1,f2 be FinSequence of INT,m be Nat st
+    defpred P[Element of NAT] means
+   for t be State of SCMPDS,f1,f2 be FinSequence of INT,m be Element of NAT st
   t.a=0 & t.a2+t.a1=n-1 & t.a2=$1 & m=n-t.a2 & p0=t.a3-t.a1-1 &
   f1 is_FinSequence_on t,p0 & f2 is_FinSequence_on IExec(FR,t),p0 &
   f1 is_non_decreasing_on 1,m & len f1=n & len f2 = n holds
   f1,f2 are_fiberwise_equipotent & f2 is_non_decreasing_on 1,n;
 A4: P[0]
     proof
-        let t be State of SCMPDS,f1,f2 be FinSequence of INT,m be Nat;
+        let t be State of SCMPDS,f1,f2 be FinSequence of INT,
+        m be Element of NAT;
         assume A5: t.a=0 & t.a2+t.a1=n-1 & t.a2=0 & m=n-t.a2 &
            p0=t.a3-t.a1-1 & f1 is_FinSequence_on t,p0 &
            f2 is_FinSequence_on IExec(FR,t),p0 &
            f1 is_non_decreasing_on 1,m & len f1=n & len f2 = n;
        then A6: t.DataLoc(t.a,2)=t.intpos(0+2) by SCMP_GCD:5
            .=0 by A5;
-           A7: now let i be Nat;
+           A7: now let i be Element of NAT;
                assume A8: 1 <= i & i <= len f2;
                hence f2.i=IExec(FR,t).intpos(p0+i) by A5,Def1
                .=t.intpos(p0+i) by A6,SCMPDS_7:66
@@ -2248,10 +2263,11 @@ A4: P[0]
           thus f2 is_non_decreasing_on 1,n by A5,A7,FINSEQ_1:18;
     end;
 A9: now
-       let k be Nat;
+       let k be Element of NAT;
        assume A10:P[k];
             now
-           let t be State of SCMPDS,f1,f2 be FinSequence of INT,m be Nat;
+           let t be State of SCMPDS,f1,f2 be FinSequence of INT,
+           m be Element of NAT;
            assume A11: t.a=0 & t.a2+t.a1=n-1 & t.a2=k+1 & m=n-t.a2 &
              p0=t.a3-t.a1-1 & f1 is_FinSequence_on t,p0 &
              f2 is_FinSequence_on IExec(FR,t),p0 &
@@ -2261,16 +2277,17 @@ A9: now
          A12: t1.a =0 & t1.a1 = t.a1+1 &
              t1.a2=t.a2 & t1.a3 =t.a3+1 &
              t1.a4 =t.a3+1 & t1.a6 =t.a1+1 &
-             for i be Nat st i >= 7 holds t1.intpos i=t.intpos i by A11,Lm10;
+             for i be Element of NAT st i >= 7 holds t1.intpos i=t.intpos i
+             by A11,Lm10;
              consider h be FinSequence of INT such that
-         A13: len h=n & for i be Nat st 1<=i & i <= len h holds
+         A13: len h=n & for i be Element of NAT st 1<=i & i <= len h holds
              h.i=IExec(WH,t1).intpos(p0+i) by Th2;
          A14: p0=t1.a4-t1.a6-1 by A11,A12;
              then t1.a4=p0+(t1.a6+1);
              then t1.a4 >= 6+(t1.a6+1) by A1,XREAL_1:8;
              then A15: t1.a4 >= 6+1+t1.a6;
                   now
-                 let i be Nat;
+                 let i be Element of NAT;
                  assume A16: 1 <= i & i <= len f1;
                  then A17: p0+1 <= p0+i by XREAL_1:8;
                           p0+1 >= 6+1 by A1,XREAL_1:8;
@@ -2288,13 +2305,14 @@ A9: now
              then t.a3 >= 6+(t.a1+1) by A1,XREAL_1:8;
              then A23: t.a3 >= 6+1+t.a1;
         then A24:  Bt.a=0 & Bt.a2=t.a2-1 & Bt.a3=t.a3+1 & Bt.a1=t.a1+1 &
-             for i be Nat st i <> 2 holds Bt.intpos i=IExec(WH,t1).intpos i
+             for i be Element of NAT st i <> 2
+             holds Bt.intpos i=IExec(WH,t1).intpos i
              by A11,Lm11;
         then A25:  Bt.a2+Bt.a1=n-1 by A11;
         A26:  n-Bt.a2=m+1 by A11,A24;
         A27:  Bt.a3-Bt.a1-1=p0 by A11,A24;
                   now
-                 let i be Nat;
+                 let i be Element of NAT;
                  assume A28: 1 <= i & i <= len h;
                  then A29: p0+1 <= p0+i by XREAL_1:8;
                           p0+1 >= 6+1 by A1,XREAL_1:8;
@@ -2305,7 +2323,7 @@ A9: now
              end;
         then A31:  h is_FinSequence_on Bt,p0 by Def1;
                   now
-                 let i be Nat;
+                 let i be Element of NAT;
                  assume A32: 1 <= i & i <= len f2;
                  thus f2.i=IExec(FR,t).intpos(p0+i) by A11,A32,Def1
                       .= IExec(FR,Bt).intpos(p0+i) by A11,A23,Lm13;
@@ -2319,10 +2337,10 @@ A9: now
        end;
        hence P[k+1];
      end;
-A34:  for k being Nat holds P[k] from NAT_1:sch 1(A4,A9);
+A34:  for k being Element of NAT holds P[k] from NAT_1:sch 1(A4,A9);
           n >= 1+0 by A3,INT_1:20;
      then n-1 >= 0 by XREAL_1:21;
-     then reconsider n1=n-1 as Nat by INT_1:16;
+     then reconsider n1=n-1 as Element of NAT by INT_1:16;
 A35:  s.a2+s.a1=n-1+0 by A1;
 A36:  1=n-s.a2 by A1;
 A37:  p0=s.a3-s.a1-1 by A1;
@@ -2333,12 +2351,13 @@ end;
 end;
 
 theorem
-      for s being State of SCMPDS,f,g be FinSequence of INT,p0,n being Nat
+      for s being State of SCMPDS,f,g be FinSequence of INT,p0,
+      n being Element of NAT
  st p0 >= 6 & len f=n & len g = n & f is_FinSequence_on s,p0 &
     g is_FinSequence_on IExec(insert-sort(n,p0+1),s),p0 holds
     f,g are_fiberwise_equipotent & g is_non_decreasing_on 1,n
 proof
-     let s be State of SCMPDS,f,g be FinSequence of INT,p0,n be Nat;
+     let s be State of SCMPDS,f,g be FinSequence of INT,p0,n be Element of NAT;
      assume A1: p0 >= 6 & len f=n & len g = n & f is_FinSequence_on s,p0 &
          g is_FinSequence_on IExec(insert-sort(n,p0+1),s),p0;
 
@@ -2355,7 +2374,7 @@ proof
      t3=IExec(i1 ';' i2,s),
      t4=Exec(i1, t0);
 A2: t4.a=0 by SCMPDS_2:57;
-A3: now let i be Nat;
+A3: now let i be Element of NAT;
           assume i > 3;
           then i > 0;
           then intpos i<> a by SCMP_GCD:4,def 2;
@@ -2369,7 +2388,7 @@ A6: t3.a =Exec(i2, t4).a by SCMPDS_5:47
      .=0 by A2,A5,SCMPDS_2:58;
 A7: t3.a1 =Exec(i2, t4).a1 by SCMPDS_5:47
      .=0 by A4,SCMPDS_2:58;
-A8: now let i be Nat;
+A8: now let i be Element of NAT;
           assume A9:i > 3;
           then i > 1 by XREAL_1:2;
       then A10: intpos i<> DataLoc(t4.a,1) by A4,SCMP_GCD:4;
@@ -2387,7 +2406,7 @@ A15: t2.a1 =Exec(i3, t3).a1 by SCMPDS_5:46
      .=0 by A7,A14,SCMPDS_2:58;
 A16: t2.a2 =Exec(i3, t3).a2 by SCMPDS_5:46
      .=n-1 by A11,SCMPDS_2:58;
-A17: now let i be Nat;
+A17: now let i be Element of NAT;
           assume A18:i > 3;
           then i > 2 by XREAL_1:2;
       then A19: intpos i<> DataLoc(t3.a,2) by A11,SCMP_GCD:4;
@@ -2411,7 +2430,7 @@ A27: t1.a3 =Exec(i4, t2).a3 by SCMPDS_5:46
 
 A28:   p0+1 >= 6+1 by A1,XREAL_1:8;
            now
-         let i be Nat;
+         let i be Element of NAT;
          assume A29: 1 <= i & i <= len f;
           set pi=p0+i;
                pi >= p0+1 by A29,XREAL_1:8;
@@ -2428,7 +2447,7 @@ A33:  I4 is_closed_on s & I4 is_halting_on s by SCMPDS_6:34,35;
           t1.a3 >= t1.a1+7 by A24,A27,A28;
 then A34:  FR is_closed_on t1 & FR is_halting_on t1 by A22,Lm12;
           now
-         let i be Nat;
+         let i be Element of NAT;
        assume 1 <= i & i <= len g;
         hence g.i=IExec(insert-sort(n,p0+1),s).intpos(p0+i) by A1,Def1
         .=IExec(I4 ';' FR,s).intpos(p0+i)

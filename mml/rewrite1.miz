@@ -18,7 +18,7 @@ environ
  definitions TARSKI, RELAT_1, RELAT_2, WELLORD1;
  theorems TARSKI, ZFMISC_1, REAL_1, NAT_1, WELLORD1, RELAT_1, RELAT_2, FUNCT_1,
       FUNCOP_1, PBOOLE, FINSEQ_1, TREES_1, FINSEQ_5, EQREL_1, WELLORD2,
-      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0;
+      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes NAT_1, RELAT_1, EQREL_1, TREES_2;
 
 begin :: Forgetting concatenation and reduction sequence
@@ -28,7 +28,8 @@ definition
  func p$^q -> FinSequence means:
 Def1:
   it = p^q if p = {} or q = {} otherwise
-  ex i being Nat, r being FinSequence st len p = i+1 & r = p|Seg i & it = r^q;
+  ex i being Element of NAT, r being FinSequence st len p = i+1 & r = p|Seg i
+   & it = r^q;
   existence
    proof
     thus p = {} or q = {} implies ex r being FinSequence st r = p^q;
@@ -37,6 +38,7 @@ Def1:
      then len p >= 0+1 by NAT_1:38;
     then consider i being Nat such that
 A1:   len p = 1+i by NAT_1:28;
+    reconsider i as Element of NAT by ORDINAL1:def 13;
     reconsider r = p|Seg i as FinSequence by FINSEQ_1:19;
     take r^q, i, r;
     thus thesis by A1;
@@ -46,7 +48,7 @@ A1:   len p = 1+i by NAT_1:28;
 end;
 
 Lm1:
- now let p be FinSequence, x be Nat;
+ now let p be FinSequence, x be Element of NAT;
   assume x in dom p;
    then x in Seg len p by FINSEQ_1:def 3;
   hence x <= len p & x >= 0+1 by FINSEQ_1:3;
@@ -54,14 +56,14 @@ Lm1:
  end;
 
 Lm2:
- now let p be FinSequence, x be Nat;
+ now let p be FinSequence, x be Element of NAT;
   assume x+1 in dom p;
    then x+1 <= len p by Lm1;
   hence x < len p by NAT_1:38;
  end;
 
 Lm3:
- now let p be FinSequence, x be Nat;
+ now let p be FinSequence, x be Element of NAT;
   assume (x <= len p or x < len p) & (x >= 1 or x > 0);
    then x <= len p & x >= 0+1 by NAT_1:38;
    then x in Seg len p by FINSEQ_1:3;
@@ -69,7 +71,7 @@ Lm3:
  end;
 
 Lm4:
- now let p be FinSequence, x be Nat;
+ now let p be FinSequence, x be Element of NAT;
   assume x < len p;
    then x+1 <= len p & x+1 >= 1 by NAT_1:29,38;
   hence x+1 in dom p by Lm3;
@@ -87,7 +89,7 @@ theorem Th2:
  q <> {} implies (p^<*x*>)$^q = p^q
   proof assume
 A1:  q <> {};
-   consider i being Nat, r being FinSequence such that
+   consider i being Element of NAT, r being FinSequence such that
 A2:  len (p^<*x*>) = i+1 & r = (p^<*x*>)|Seg i & (p^<*x*>)$^q = r^q by A1,Def1;
    consider s being FinSequence such that
 A3:  p^<*x*> = r^s by A2,TREES_1:3;
@@ -120,12 +122,12 @@ theorem
     p <> {} implies ex x,q st p = <*x*>^q & len p = len q+1
   proof assume
 A1:  p <> {};
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
      for p st p <> {} & len p = $1 ex x,q st p = <*x*>^q & len p = len q+1;
 A2: P[0] by FINSEQ_1:25;
-A3: for i be Nat st P[i] holds P[i+1]
+A3: for i be Element of NAT st P[i] holds P[i+1]
  proof
-   now let i be Nat; assume
+   now let i be Element of NAT; assume
 A4:   for p st p <> {} & len p = i ex x,q st p = <*x*>^q & len p = len q+1;
      let p; assume
 A5:   p <> {} & len p = i+1;
@@ -147,20 +149,22 @@ A10:    q = <*x*>^r & len q = len r+1 by A4,A8;
     end;
    hence thesis;
   end;
-     for i being Nat holds P[i] from NAT_1:sch 1(A2,A3);
+     for i being Element of NAT holds P[i] from NAT_1:sch 1(A2,A3);
    hence thesis by A1;
   end;
 
 scheme PathCatenation {P[set,set], p,q() -> FinSequence}:
- for i being Nat st i in dom (p()$^q()) & i+1 in dom (p()$^q())
+ for i being Element of NAT st i in dom (p()$^q()) & i+1 in dom (p()$^q())
  for x,y being set st x = (p()$^q()).i & y = (p()$^q()).(i+1) holds P[x,y]
   provided
-A1:  for i being Nat st i in dom p() & i+1 in dom p() holds P[p().i, p().(i+1)]
+A1:  for i being Element of NAT st i in dom p() & i+1 in dom p()
+ holds P[p().i, p().(i+1)]
   and
-A2:  for i being Nat st i in dom q() & i+1 in dom q() holds P[q().i, q().(i+1)]
+A2:  for i being Element of NAT st i in dom q() & i+1 in dom q()
+ holds P[q().i, q().(i+1)]
   and
 A3:  len p() > 0 & len q() > 0 & p().len p() = q().1
-proof let i be Nat; assume
+proof let i be Element of NAT; assume
 A4:  i in dom (p()$^q()) & i+1 in dom (p()$^q());
 then A5: i >= 0+1 by Lm1;
 A6: i+1 >= 1 by NAT_1:29;
@@ -194,6 +198,7 @@ A17:   now assume i+1 <= len r;
     suppose i >= len p();
     then consider k being Nat such that
 A18:   i = len p()+k by NAT_1:28;
+       reconsider k as Element of NAT by ORDINAL1:def 13;
 A19:   len (p()$^q()) = len r + len q() & i = len r+(1+k) &
      i < len (p()$^q()) & len r+(1+k)+1 = len r+(k+1+1)
       by A4,A11,A12,A18,Lm2,FINSEQ_1:35;
@@ -210,13 +215,14 @@ definition
  mode RedSequence of R -> FinSequence means:
 Def2:
   len it > 0 &
-  for i being Nat st i in dom it & i+1 in dom it holds [it.i, it.(i+1)] in R;
+  for i being Element of NAT st i in dom it & i+1 in dom it
+   holds [it.i, it.(i+1)] in R;
   existence
    proof consider x being set;
     take p = <*x*>;
 A1:   dom p = {1} & len p = 1 by FINSEQ_1:4,55,57;
     hence len p > 0;
-    let i be Nat; assume i in dom p & i+1 in dom p;
+    let i be Element of NAT; assume i in dom p & i+1 in dom p;
      then i = 1 & i+1 = 1 by A1,TARSKI:def 1;
     hence thesis;
    end;
@@ -238,7 +244,7 @@ theorem Th7:
   proof let R be Relation, a be set; set p = <*a*>;
 A1:  dom p = {1} & len p = 1 by FINSEQ_1:4,55,57;
    hence len p > 0;
-   let i be Nat; assume i in dom p & i+1 in dom p;
+   let i be Element of NAT; assume i in dom p & i+1 in dom p;
     then i = 1 & i+1 = 1 by A1,TARSKI:def 1;
    hence thesis;
   end;
@@ -251,7 +257,7 @@ A1:  [a,b] in R; set p = <*a,b*>;
 A2:  len p = 1+1 & dom p = Seg len p by FINSEQ_1:61,def 3;
    hence len p > 0;
 A3:  p.1 = a & p.len p = b by A2,FINSEQ_1:61;
-   let i be Nat; assume i in dom p & i+1 in dom p;
+   let i be Element of NAT; assume i in dom p & i+1 in dom p;
     then i >= 1 & i+1 <= 1+1 by A2,Lm1;
     then i <= 1 & i >= 1 by XREAL_1:8;
     then i = 1 by XXREAL_0:1;
@@ -263,9 +269,11 @@ theorem Th9:
    p$^q is RedSequence of R
   proof let R be Relation, p,q be RedSequence of R;
     defpred P[set,set] means [$1,$2] in R;
-A1:  for i being Nat st i in dom p & i+1 in dom p holds P[p.i, p.(i+1)]
+A1:  for i being Element of NAT st i in dom p & i+1 in dom p
+ holds P[p.i, p.(i+1)]
      by Def2;
-A2:  for i being Nat st i in dom q & i+1 in dom q holds P[q.i, q.(i+1)]
+A2:  for i being Element of NAT st i in dom q & i+1 in dom q
+ holds P[q.i, q.(i+1)]
      by Def2;
    assume p.len p = q.1;
 then A3:  len p > 0 & len q > 0 & p.len p = q.1 by Def2;
@@ -276,7 +284,7 @@ A4:  p = p1^<*x*> by FINSEQ_1:63;
   then len r = len p1+len q by FINSEQ_1:35;
     then len r > len p1+0 & len p1+0 >= 0 by A3,NAT_1:18,XREAL_1:10;
    hence len r > 0;
-    for i being Nat st i in dom (p$^q) & i+1 in dom (p$^q)
+    for i being Element of NAT st i in dom (p$^q) & i+1 in dom (p$^q)
     for x,y being set st x = (p$^q).i & y = (p$^q).(i+1) holds P[x,y]
      from PathCatenation(A1,A2,A3);
    hence thesis;
@@ -287,17 +295,18 @@ theorem Th10:
    Rev p is RedSequence of R~
   proof let R be Relation, p be RedSequence of R;
 A1:  len p > 0 &
-    for i being Nat st i in dom p & i+1 in dom p holds [p.i, p.(i+1)] in R
+    for i being Element of NAT st i in dom p & i+1 in dom p
+     holds [p.i, p.(i+1)] in R
      by Def2;
 A2:  len Rev p = len p by FINSEQ_5:def 3;
    thus len Rev p > 0 by A1,FINSEQ_5:def 3;
 A3:  dom Rev p = Seg len p & dom p = Seg len p by A2,FINSEQ_1:def 3;
-   let i be Nat; assume
+   let i be Element of NAT; assume
 A4:  i in dom Rev p & i+1 in dom Rev p;
 then A5:  (Rev p).i = p.(len p-i+1) & (Rev p).(i+1) = p.(len p-(i+1)+1)
      by FINSEQ_5:def 3;
        i <= len p & i+1 <= len p by A2,A4,Lm1;
-   then reconsider k = len p-(i+1)+1 as Nat by FINSEQ_5:1;
+   then reconsider k = len p-(i+1)+1 as Element of NAT by FINSEQ_5:1;
   k = len p-i;
     then k+1 in dom p & k in dom p by A3,A4,FINSEQ_5:2;
     then [p.k, p.(k+1)] in R by Def2;
@@ -311,7 +320,7 @@ theorem Th11:
 A1:  R c= Q;
    let p be RedSequence of R;
    thus len p > 0 by Def2;
-   let i be Nat; assume i in dom p & i+1 in dom p;
+   let i be Element of NAT; assume i in dom p & i+1 in dom p;
     then [p.i, p.(i+1)] in R by Def2;
    hence [p.i, p.(i+1)] in Q by A1;
   end;
@@ -338,18 +347,21 @@ theorem Th12:
  for R being Relation, a,b being set holds
   R reduces a,b iff
   ex p being FinSequence st len p > 0 & p.1 = a & p.len p = b &
-   for i being Nat st i in dom p & i+1 in dom p holds [p.i, p.(i+1)] in R
+   for i being Element of NAT st i in dom p & i+1 in dom p
+    holds [p.i, p.(i+1)] in R
   proof let R be Relation, a,b be set;
    thus R reduces a,b implies
     ex p being FinSequence st len p > 0 & p.1 = a & p.len p = b &
-     for i being Nat st i in dom p & i+1 in dom p holds [p.i, p.(i+1)] in R
+     for i being Element of NAT st i in dom p & i+1 in dom p
+      holds [p.i, p.(i+1)] in R
     proof given p being RedSequence of R such that
 A1:    p.1 = a & p.len p = b;
      take p; thus thesis by A1,Def2;
     end;
    given p being FinSequence such that
 A2:  len p > 0 & p.1 = a & p.len p = b &
-    for i being Nat st i in dom p & i+1 in dom p holds [p.i, p.(i+1)] in R;
+    for i being Element of NAT st i in dom p & i+1 in dom p
+     holds [p.i, p.(i+1)] in R;
    reconsider p as RedSequence of R by A2,Def2;
    take p; thus thesis by A2;
   end;
@@ -368,7 +380,8 @@ theorem Th14:
   proof let a,b be set; given p being RedSequence of {} such that
 A1:  p.1 = a & p.len p = b;
 A2:  len p > 0 &
-    for i being Nat st i in dom p & i+1 in dom p holds [p.i, p.(i+1)] in {}
+    for i being Element of NAT st i in dom p & i+1 in dom p
+     holds [p.i, p.(i+1)] in {}
      by Def2;
        now assume len p > 1;
       then 1 in dom p & 1+1 in dom p by Lm3,Lm4;
@@ -385,7 +398,8 @@ theorem Th15:
    given p being RedSequence of R such that
 A1:  p.1 = a & p.len p = b;
 A2:  len p > 0 &
-    for i being Nat st i in dom p & i+1 in dom p holds [p.i, p.(i+1)] in R
+    for i being Element of NAT st i in dom p & i+1 in dom p
+     holds [p.i, p.(i+1)] in R
      by Def2;
    assume
 A3:  not a in field R;
@@ -436,16 +450,17 @@ then A6:  len r = len p1+len q by FINSEQ_1:35;
   end;
 
 theorem Th18:
- for R being Relation, p being RedSequence of R, i,j being Nat st
+ for R being Relation, p being RedSequence of R, i,j being Element of NAT st
   i in dom p & j in dom p & i <= j holds R reduces p.i,p.j
-  proof let R be Relation, p be RedSequence of R, i,j be Nat;
-    defpred Q[Nat] means i+$1 in dom p implies R reduces p.i,p.(i+$1);
+  proof let R be Relation, p be RedSequence of R, i,j be Element of NAT;
+    defpred Q[Element of NAT] means
+     i+$1 in dom p implies R reduces p.i,p.(i+$1);
     assume
 A1:  i in dom p & j in dom p & i <= j;
 A2: Q[0] by Th13;
-A3: for k being Nat st Q[k] holds Q[k+1]
+A3: for k being Element of NAT st Q[k] holds Q[k+1]
 proof
-  now let j be Nat such that
+  now let j be Element of NAT such that
 A4:   i+j in dom p implies R reduces p.i,p.(i+j) and
 A5:   i+(j+1) in dom p;
 A6:    i+(j+1) = i+j+1;
@@ -459,9 +474,11 @@ Th16;
     end;
    hence thesis;
   end;
-A8:  for j being Nat holds Q[j] from NAT_1:sch 1(A2,A3);
-       ex k being Nat st j = i+k by A1,NAT_1:28;
-   hence R reduces p.i,p.j by A1,A8;
+A8:  for j being Element of NAT holds Q[j] from NAT_1:sch 1(A2,A3);
+     consider k being Nat such that
+A9:  j = i+k by A1,NAT_1:28;
+     k in NAT by ORDINAL1:def 13;
+   hence R reduces p.i,p.j by A1,A8,A9;
   end;
 
 theorem Th19:
@@ -479,11 +496,11 @@ A2:  a <> b;
     then A3: [a,p.2] in R by A1,Def2;
    hence
     a in field R by RELAT_1:30;
-   defpred P[Nat] means $1 in dom p implies p.$1 in field R;
+   defpred P[Element of NAT] means $1 in dom p implies p.$1 in field R;
 A4: P[0]  by Lm1;
-A5: for k being Nat st P[k] holds P[k+1]
+A5: for k being Element of NAT st P[k] holds P[k+1]
 proof
-   now let i be Nat such that
+   now let i be Element of NAT such that
       i in dom p implies p.i in field R and
 A6:   i+1 in dom p;
 A7:   i < len p by A6,Lm2;
@@ -498,7 +515,7 @@ RELAT_1:30;
     end;
  hence thesis;
 end;
-A8:  for i being Nat holds P[i] from NAT_1:sch 1(A4,A5);
+A8:  for i being Element of NAT holds P[i] from NAT_1:sch 1(A4,A5);
        len p in dom p by FINSEQ_5:6;
    hence thesis by A1,A8;
   end;
@@ -519,7 +536,7 @@ A2:   a = p.1 & b = p.len p by Def3;
 then A3:   a in field R & b in field R by A1,Th19;
         len p > 0 by Def2;
 then A4:   len p >= 0+1 by NAT_1:38;
-        now let i be Nat; assume
+        now let i be Element of NAT; assume
           i >= 1 & i < len p;
        then i in dom p & i+1 in dom p by Lm3,Lm4;
       hence [p.i,p.(i+1)] in R by Def2;
@@ -530,11 +547,11 @@ then A4:   len p >= 0+1 by NAT_1:38;
 A5:  (a = b or [a,b] in R[*]) & not R reduces a,b;
    then consider p being FinSequence such that
 A6:  len p >= 1 & p.1 = a & p.(len p) = b and
-A7:  for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R
+A7:  for i being Element of NAT st i >= 1 & i < len p holds [p.i,p.(i+1)] in R
      by Th13,FINSEQ_1:def 16;
        p is RedSequence of R
      proof thus len p > 0 by A6;
-      let i be Nat; assume i in dom p & i+1 in dom p;
+      let i be Element of NAT; assume i in dom p & i+1 in dom p;
        then i >= 1 & i < len p by Lm1,Lm2;
       hence thesis by A7;
      end;
@@ -549,11 +566,11 @@ theorem Th22:
    hence R reduces a,b implies R[*] reduces a,b by Th13,Th16;
    given p being RedSequence of R[*] such that
 A1:  a = p.1 & b = p.len p;
-   defpred P[Nat] means $1 in dom p implies R reduces a,p.$1;
+   defpred P[Element of NAT] means $1 in dom p implies R reduces a,p.$1;
 A2:  P[0] by Lm1;
-A3: for k being Nat st P[k] holds P[k+1]
+A3: for k being Element of NAT st P[k] holds P[k+1]
 proof
-   now let i be Nat such that
+   now let i be Element of NAT such that
 A4:   i in dom p implies R reduces a,p.i and
 A5:   i+1 in dom p;
 A6:   i < len p by A5,Lm2;
@@ -569,7 +586,7 @@ then i in dom p by A6,Lm3;
     end;
   hence thesis;
 end;
-A8:  for i being Nat holds P[i] from NAT_1:sch 1(A2,A3);
+A8:  for i being Element of NAT holds P[i] from NAT_1:sch 1(A2,A3);
        len p in dom p by FINSEQ_5:6;
    hence thesis by A1,A8;
   end;
@@ -595,11 +612,11 @@ theorem
 A1:  p.1 = a & p.len p = b;
        len p > 0 by Def2;
 then A2: len p in dom p by Lm3;
-   defpred P[Nat] means $1 in dom p implies R reduces a,p.$1;
+   defpred P[Element of NAT] means $1 in dom p implies R reduces a,p.$1;
 A3:  P[0] by Lm1;
-A4: for k be Nat st P[k] holds P[k+1]
+A4: for k be Element of NAT st P[k] holds P[k+1]
 proof
-   now let i be Nat; assume
+   now let i be Element of NAT; assume
 A5:   i in dom p implies R reduces a,p.i; assume
 A6:   i+1 in dom p;
      per cases;
@@ -618,7 +635,7 @@ then [p.i, p.(i+1)] in R \/ id X & R reduces a,p.i by A5,A6,Def2;
     end;
   hence thesis;
 end;
-       for i being Nat holds P[i] from NAT_1:sch 1(A3,A4);
+       for i being Element of NAT holds P[i] from NAT_1:sch 1(A3,A4);
    hence R reduces a,b by A1,A2;
   end;
 
@@ -652,7 +669,7 @@ theorem Th26:
 A1:  p.1 = a & p.len p = b;
        p is RedSequence of R \/ R~
      proof thus len p > 0 by Def2;
-      let i be Nat; assume i in dom p & i+1 in dom p;
+      let i be Element of NAT; assume i in dom p & i+1 in dom p;
        then [p.i, p.(i+1)] in R by Def2;
       hence thesis by XBOOLE_0:def 2;
      end;
@@ -733,7 +750,8 @@ theorem Th34:
 A1:  not ex b being set st [a,b] in R; assume R reduces a,b;
    then consider p being FinSequence such that
 A2:  len p > 0 & p.1 = a & p.len p = b &
-    for i being Nat st i in dom p & i+1 in dom p holds [p.i, p.(i+1)] in
+    for i being Element of NAT st i in dom p & i+1 in dom p
+     holds [p.i, p.(i+1)] in
  R by Th12
 ;
        now assume len p > 1;
@@ -975,7 +993,8 @@ Def14:
   for a being set st a in field R holds a has_a_normal_form_wrt R;
 
  attr R is strongly-normalizing means :: terminating, Noetherian
-     for f being ManySortedSet of NAT ex i being Nat st not [f.i,f.(i+1)] in R;
+     for f being ManySortedSet of NAT ex i being Element of NAT
+      st not [f.i,f.(i+1)] in R;
 end;
 
 definition let R be Relation;
@@ -1058,13 +1077,14 @@ registration
  cluster strongly-normalizing -> irreflexive co-well_founded Relation;
  coherence
   proof let R be Relation such that
-A1:  for f being ManySortedSet of NAT ex i being Nat st not [f.i,f.(i+1)] in R;
+A1:  for f being ManySortedSet of NAT ex i being Element of NAT
+ st not [f.i,f.(i+1)] in R;
    thus R is irreflexive
      proof given x being set such that
 A2:    x in field R & [x,x] in R;
           dom (NAT --> x) = NAT by FUNCOP_1:19;
       then reconsider f = NAT --> x as ManySortedSet of NAT by PBOOLE:def 3;
-      consider i being Nat such that
+      consider i being Element of NAT such that
 A3:    not [f.i, f.(i+1)] in R by A1;
           f.i = x & f.(i+1) = x by FUNCOP_1:13;
       hence contradiction by A2,A3;
@@ -1085,7 +1105,8 @@ A6: y in Y & Q[y];
 then A7: for x be set st x in Y & Q[x] ex y be set st y in Y & P[x,y] & Q[y];
    consider f being Function such that
 A8:  dom f = NAT & rng f c= Y & f.0 = y and
-A9:  for k being Nat holds P[f.k,f.(k+1)] & Q[f.k] from TREES_2:sch 5(A6,A7);
+A9:  for k being Element of NAT holds P[f.k,f.(k+1)] & Q[f.k]
+ from TREES_2:sch 5(A6,A7);
        f is ManySortedSet of NAT by A8,PBOOLE:def 3;
    hence thesis by A1,A9;
   end;
@@ -1098,13 +1119,13 @@ A10:  for Y being set st Y c= field R & Y <> {}
    assume
 A11: for x being set st x in field R holds not [x,x] in R;
    let f be ManySortedSet of NAT; assume
-A12:  for i being Nat holds [f.i, f.(i+1)] in R;
+A12:  for i being Element of NAT holds [f.i, f.(i+1)] in R;
 A13:  dom f = NAT by PBOOLE:def 3;
 A14:  rng f c= field R
      proof let y be set; assume y in rng f;
       then consider x being set such that
 A15:     x in dom f & y = f.x by FUNCT_1:def 5;
-      reconsider x as Nat by A15,PBOOLE:def 3;
+      reconsider x as Element of NAT by A15,PBOOLE:def 3;
           [y, f.(x+1)] in R by A12,A15;
       hence thesis by RELAT_1:30;
      end;
@@ -1114,7 +1135,7 @@ A16:  a in rng f & for b being set st b in rng f & a <> b holds not [a,b] in R
      by A10,A14;
    consider x being set such that
 A17:  x in dom f & a = f.x by A16,FUNCT_1:def 5;
-   reconsider x as Nat by A17,PBOOLE:def 3;
+   reconsider x as Element of NAT by A17,PBOOLE:def 3;
 A18:  [a,f.(x+1)] in R & not [a,a] in R by A11,A12,A14,A16,A17;
     then a <> f.(x+1) & f.(x+1) in rng f by A13,FUNCT_1:def 5;
    hence contradiction by A16,A18;
@@ -1272,10 +1293,10 @@ A2:  p.1 = a & p.len p = b;
 A3: len p in dom p by FINSEQ_5:6;
    assume
 A4:  [a,c] in R;
-   defpred P[Nat] means $1 in dom p implies
+   defpred P[Element of NAT] means $1 in dom p implies
     ex d being set st ([p.$1,d] in R or p.$1 = d) & R reduces c,d;
 A5:  P[0] by Lm1;
-   now let i be Nat such that
+   now let i be Element of NAT such that
 A6:    i in dom p implies P[i] and
 A7:    i+1 in dom p;
      per cases by NAT_1:19; suppose i = 0;
@@ -1303,8 +1324,8 @@ A13:       ([p.(i+1),e] in R or p.(i+1) = e) & ([d,e] in R or d = e) by Def9;
       hence P[i+1] by A10,A12;
     end;
     end;
-then A14: for k be Nat st P[k] holds P[k+1];
-       for i being Nat holds P[i] from NAT_1:sch 1(A5,A14);
+then A14: for k be Element of NAT st P[k] holds P[k+1];
+       for i being Element of NAT holds P[i] from NAT_1:sch 1(A5,A14);
    then consider d being set such that
 A15: ([b,d] in R or b = d) & R reduces c,d by A2,A3;
    take d; thus thesis by A15,Th13,Th16;
@@ -1354,18 +1375,20 @@ A6: len p in dom p by FINSEQ_5:6;
    consider q being RedSequence of R such that
 A7:  q.1 = a & q.len q = c by A4,Def3;
 A8: len q in dom q & len q > 0 by Def2,FINSEQ_5:6;
-   defpred P[Nat,Nat] means p.$1, q.$2 are_convergent_wrt R;
-   defpred Q[Nat] means
-    $1 in dom p implies for j being Nat st j in dom q holds P[$1,j];
+   defpred P[Element of NAT,Element of NAT] means
+    p.$1, q.$2 are_convergent_wrt R;
+   defpred Q[Element of NAT] means
+    $1 in dom p implies for j being Element of NAT st j in dom q holds P[$1,j];
 A9:  Q[0] by Lm1;
-A10: for i being Nat st Q[i] holds Q[i+1]
-     proof let i be Nat such that
-       i in dom p implies for j being Nat st j in dom q holds P[i,j] and
+A10: for i being Element of NAT st Q[i] holds Q[i+1]
+     proof let i be Element of NAT such that
+       i in dom p implies
+        for j being Element of NAT st j in dom q holds P[i,j] and
 A11:    i+1 in dom p;
-      defpred R[Nat] means $1 in dom q implies P[i+1,$1];
+      defpred R[Element of NAT] means $1 in dom q implies P[i+1,$1];
 A12:    R[0] by Lm1;
-A13:    for j being Nat st R[j] holds R[j+1]
-        proof let j be Nat such that
+A13:    for j being Element of NAT st R[j] holds R[j+1]
+        proof let j be Element of NAT such that
 A14:     j in dom q implies P[i+1,j] and
 A15:     j+1 in dom q;
            1 in dom p & i+1 >= 1 by FINSEQ_5:6,NAT_1:29;
@@ -1383,9 +1406,9 @@ A19:     R reduces p.(i+1),d & R reduces q.j,d by A14,A17,Def7,Lm3;
        hence P[i+1,j+1] by A19,Th43;
       end;
       end;
-     thus for j being Nat holds R[j] from NAT_1:sch 1(A12,A13);
+     thus for j being Element of NAT holds R[j] from NAT_1:sch 1(A12,A13);
     end;
-     for i being Nat holds Q[i] from NAT_1:sch 1(A9,A10);
+     for i being Element of NAT holds Q[i] from NAT_1:sch 1(A9,A10);
    hence thesis by A5,A6,A7,A8;
   end;
 
@@ -1433,9 +1456,10 @@ A2:  for a,b being set st a,b are_divergent_wrt R
    let a,b be set; given p being RedSequence of R \/ R~ such that
 A3:  p.1 = a & p.len p = b;
 A4:  len p in dom p by FINSEQ_5:6;
-    defpred P[Nat] means $1 in dom p implies a,p.$1 are_convergent_wrt R;
+    defpred P[Element of NAT] means
+     $1 in dom p implies a,p.$1 are_convergent_wrt R;
 A5:  P[0] by Lm1;
-   now let i be Nat; assume that
+   now let i be Element of NAT; assume that
 A6:   i in dom p implies a,p.i are_convergent_wrt R and
 A7:   i+1 in dom p;
      per cases;
@@ -1460,8 +1484,8 @@ A10:   R reduces a,c & R reduces p.i,c by A6,A8,Def7;
      hence a, p.(i+1) are_convergent_wrt R by A3,Th39;
     end;
     end;
-then A11: for k being Nat st P[k] holds P[k+1];
-       for i being Nat holds P[i] from NAT_1:sch 1(A5,A11);
+then A11: for k being Element of NAT st P[k] holds P[k+1];
+       for i being Element of NAT holds P[i] from NAT_1:sch 1(A5,A11);
    hence thesis by A3,A4;
   end;
  cluster subcommutative -> confluent Relation;
@@ -1737,9 +1761,10 @@ A2:     R \/ Q reduces c,a & R \/ Q reduces c,b;
 A3:    R c= R \/ Q & Q c= R \/ Q by XBOOLE_1:7;
       consider p being RedSequence of R \/ Q such that
 A4:     c = p.1 & a = p.len p by A2,Def3;
-     defpred Z[Nat] means $1 in dom p implies p.$1,b are_convergent_wrt R \/ Q;
+     defpred Z[Element of NAT] means
+      $1 in dom p implies p.$1,b are_convergent_wrt R \/ Q;
 A5:     Z[0] by Lm1;
-      now let i be Nat such that
+      now let i be Element of NAT such that
 A6:      i in dom p implies p.i,b are_convergent_wrt R \/ Q and
 A7:      i+1 in dom p;
         per cases by NAT_1:19;
@@ -1753,11 +1778,11 @@ A10:      R \/ Q reduces p.i,d & R \/ Q reduces b,d by A6,A8,Def7,Lm3;
 A11:       p.i = q.1 & d = q.len q by A10,Def3;
          [p.i,p.(i+1)] in R \/ Q by A7,A9,Def2;
          then A12: [p.i,p.(i+1)] in R or [p.i,p.(i+1)] in Q by XBOOLE_0:def 2;
-       defpred P[Nat] means $1 in dom q implies
+       defpred P[Element of NAT] means $1 in dom q implies
           ex e being set st R \/ Q reduces p.(i+1),e &
            (R reduces q.$1,e or Q reduces q.$1,e);
 A13:    P[0] by Lm1;
-       now let j be Nat such that
+       now let j be Element of NAT such that
 A14:        j in dom q implies
             ex e being set st R \/ Q reduces p.(i+1),e &
              (R reduces q.j,e or Q reduces q.j,e) and
@@ -1816,8 +1841,8 @@ A26:          R reduces q.(j+1),x & Q reduces e,x by A1,Def18;
               by A18,A19,A20,A22,A24,Th16;
          end;
          end;
-then A27:  for k being Nat st P[k] holds P[k+1];
-A28:      for j being Nat holds P[j] from NAT_1:sch 1(A13,A27);
+then A27:  for k being Element of NAT st P[k] holds P[k+1];
+A28:      for j being Element of NAT holds P[j] from NAT_1:sch 1(A13,A27);
         thus p.(i+1),b are_convergent_wrt R \/ Q
          proof len q in dom q by FINSEQ_5:6;
           then consider e being set such that
@@ -1829,8 +1854,8 @@ A29:        R \/ Q reduces p.(i+1),e & (R reduces d,e or Q reduces d,e)
          end;
        end;
        end;
-then A30: for k being Nat st Z[k] holds Z[k+1];
-A31:     for i being Nat holds Z[i] from NAT_1:sch 1(A5,A30);
+then A30: for k being Element of NAT st Z[k] holds Z[k+1];
+A31:     for i being Element of NAT holds Z[i] from NAT_1:sch 1(A5,A30);
           len p in dom p by FINSEQ_5:6;
       hence a,b are_convergent_wrt R \/ Q by A4,A31;
      end;
@@ -1954,9 +1979,10 @@ then A3:  R \/ R~ c= (R \/ Q) \/ (R \/ Q)~ by A2,XBOOLE_1:13;
    end;
    given p being RedSequence of (R \/ Q) \/ (R \/ Q)~ such that
 A4:  a = p.1 & b = p.len p;
-   defpred Z[Nat] means  $1 in dom p implies a,p.$1 are_convertible_wrt R;
+   defpred Z[Element of NAT] means
+    $1 in dom p implies a,p.$1 are_convertible_wrt R;
 A5: Z[0] by Lm1;
-   now let i be Nat such that
+   now let i be Element of NAT such that
 A6:   i in dom p implies a,p.i are_convertible_wrt R and
 A7:   i+1 in dom p;
 A8:   i < len p by A7,Lm2;
@@ -1982,8 +2008,8 @@ are_convertible_wrt R
      hence a,p.(i+1) are_convertible_wrt R by Th31;
     end;
     end;
-then A10: for k being Nat st Z[k] holds Z[k+1];
-A11:  for i being Nat holds Z[i] from NAT_1:sch 1(A5,A10);
+then A10: for k being Element of NAT st Z[k] holds Z[k+1];
+A11:  for i being Element of NAT holds Z[i] from NAT_1:sch 1(A5,A10);
        len p in dom p by FINSEQ_5:6;
    hence a,b are_convertible_wrt R by A4,A11;
   end;
@@ -2029,9 +2055,10 @@ from RELAT_1:sch 1;
 A12:   for x,y st P reduces x,y holds x,y are_convertible_wrt R
       proof let x,y; given p being RedSequence of P such that
 A13:     x = p.1 & y = p.len p;
-      defpred Z[Nat] means $1 in dom p implies x,p.$1 are_convertible_wrt R;
+      defpred Z[Element of NAT] means
+       $1 in dom p implies x,p.$1 are_convertible_wrt R;
 A14:     Z[0] by Lm1;
-      now let i be Nat such that
+      now let i be Element of NAT such that
 A15:       i in dom p implies x,p.i are_convertible_wrt R and
 A16:       i+1 in dom p;
 A17:       i < len p by A16,Lm2;
@@ -2046,14 +2073,14 @@ then i in dom p by A17,Lm3;
          hence x,p.(i+1) are_convertible_wrt R by Th31;
         end;
         end;
-then A19: for k being Nat st Z[k] holds Z[k+1];
-A20:     for i being Nat holds Z[i] from NAT_1:sch 1(A14,A19);
+then A19: for k being Element of NAT st Z[k] holds Z[k+1];
+A20:     for i being Element of NAT holds Z[i] from NAT_1:sch 1(A14,A19);
            len p in dom p by FINSEQ_5:6;
        hence thesis by A13,A20;
       end;
 A21:  P is strongly-normalizing
       proof let f be ManySortedSet of NAT;
-       consider i being Nat;
+       consider i being Element of NAT;
        per cases; suppose not [f.i,f.(i+1)] in P; hence thesis;
        end;
        suppose

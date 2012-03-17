@@ -9,7 +9,8 @@ environ
  vocabularies RELAT_1, CQC_LANG, QC_LANG1, FINSEQ_1, ZF_LANG, ZF_MODEL, BOOLE,
       FUNCT_1, GOEDELCP, FINSET_1, VALUAT_1, MCART_1, QMAX_1, TARSKI, CQC_SIM1,
       ARYTM_1, CARD_4, SUBSTUT1, HENMODEL, CALCUL_1, SUBLEMMA, SUBSTUT2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XXREAL_0, REAL_1, NAT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0,
+      XXREAL_0, REAL_1, NAT_1,
       FINSEQ_1, FUNCT_1, QC_LANG1, QC_LANG2, QC_LANG3, NUMBERS, CQC_LANG,
       RELAT_1, FINSET_1, VALUAT_1, RELSET_1, FUNCT_2, CQC_SIM1, DOMAIN_1,
       MCART_1, CARD_4, SUBSTUT1, SUBLEMMA, SUBSTUT2, CALCUL_1, HENMODEL;
@@ -22,14 +23,14 @@ environ
  theorems TARSKI, FUNCT_1, MCART_1, XBOOLE_0, XBOOLE_1, CQC_LANG, QC_LANG1,
       ZFMISC_1, RELAT_1, QC_LANG3, QC_LANG2, HENMODEL, CALCUL_1, SUBLEMMA,
       NAT_1, FINSEQ_1, VALUAT_1, FUNCT_2, SUBSTUT2, FINSET_1, CQC_SIM1, CARD_4,
-      CALCUL_2, EULER_1, SUPINF_2, XREAL_1, XXREAL_0;
+      CALCUL_2, EULER_1, SUPINF_2, XREAL_1, XXREAL_0, ORDINAL1;
  schemes XBOOLE_0, NAT_1, FUNCT_1, SUBSTUT2, RECDEF_1;
 
 begin :: Henkin`s Theorem
 
  reserve b,b1,b2,c,d for set,
          X,Y for Subset of CQC-WFF,
-         i,j,k,m,n for Nat,
+         i,j,k,m,n for Element of NAT,
          p,p1,q,r,s,s1 for Element of CQC-WFF,
          x,x1,x2,y,y1 for bound_QC-variable,
          A for non empty set,
@@ -348,7 +349,7 @@ A7:  1 <= len L & L.1 = q & L.(len L) = p &
         for k st 1 <= k & k < len L
         ex G1,H1 being Element of QC-WFF st L.k = G1 & L.(k+1) = H1 &
         G1 is_immediate_constituent_of H1 by A2,SUBSTUT2:def 6;
-      defpred P[Nat] means 1 <= $1 & $1 <= len L implies
+      defpred P[Element of NAT] means 1 <= $1 & $1 <= len L implies
                           ex p1 st p1 = L.$1 & QuantNbr(q) <= QuantNbr(p1) &
                                                   (CX |- p1 iff JH,valH |= p1);
 A8:   P[0];
@@ -466,7 +467,7 @@ A6:   1 <= len L & L.1 = q & L.(len L) = p &
         for k st 1 <= k & k < len L
         ex G1,H1 being Element of QC-WFF st L.k = G1 & L.(k+1) = H1 &
         G1 is_immediate_constituent_of H1 by A5,SUBSTUT2:def 6;
-      defpred P[Nat] means 1 <= $1 & $1 <= len L implies
+      defpred P[Element of NAT] means 1 <= $1 & $1 <= len L implies
                           ex p1 st p1 = L.$1 & QuantNbr(q) <= QuantNbr(p1) &
                                               (CX |- p1 iff JH,valH |= p1);
 A7:   P[0];
@@ -662,7 +663,7 @@ A3:  'not' F1 is Element of CQC-WFF by CQC_LANG:23;
    uniqueness by QC_LANG2:19;
 end;
 
-definition let F be Function of NAT,CQC-WFF,a be Nat;
+definition let F be Function of NAT,CQC-WFF,a be Element of NAT;
   func bound_in(F,a) -> bound_QC-variable means
   :Def6: p = F.a implies it = Ex-bound_in p;
    existence
@@ -682,7 +683,7 @@ A2:    p = F.a implies x2 = Ex-bound_in p;
    end;
 end;
 
-definition let F be Function of NAT,CQC-WFF,a be Nat;
+definition let F be Function of NAT,CQC-WFF,a be Element of NAT;
   func the_scope_of(F,a) -> Element of CQC-WFF means
   :Def7: p = F.a implies it = Ex-the_scope_of p;
    existence
@@ -900,7 +901,7 @@ A1: now let a such that A2: a in still_not-bound_in rng f;
       consider b such that A3: a in b & b in A by TARSKI:def 4;
       consider p such that A4: b = still_not-bound_in p & p in rng f by A3;
       consider c such that A5: c in dom f & f.c = p by A4,FUNCT_1:def 5;
-      reconsider i = c as Nat by A5;
+      reconsider i = c as Element of NAT by A5;
       thus a in still_not-bound_in f by A3,A4,A5,CALCUL_1:def 5;
     end;
     now let a such that A6: a in still_not-bound_in f;
@@ -924,7 +925,7 @@ theorem
     consider f being Function such that
 A2: dom f = NAT & ExCl = rng f by Lm1,Th20;
     reconsider f as Function of NAT,CQC-WFF by A2,FUNCT_2:4;
-    defpred P[Nat,set,set] means
+    defpred P[Element of NAT,set,set] means
       ex K,L st K = $2`2 & L = K \/ still_not-bound_in {f.($1+1)} &
       $3 = [('not' (f.($1+1))) 'or'  (the_scope_of(f,($1+1)).(bound_in(f,$1+1),
                                                x.(min* {i : not x.i in L}))),
@@ -973,7 +974,7 @@ A8:     c in CQC-WFF & d in bool bound_QC-variables & h.n = [c,d]
       Ex(x,p) in ExCl by Def3; then
       consider a such that
 A9:      a in dom f & f.a = Ex(x,p) by A2,FUNCT_1:def 5;
-      reconsider a as Nat by A9;
+      reconsider a as Element of NAT by A9;
       reconsider r' = f.a as Element of CQC-WFF;
       Ex-bound_in r' = x & Ex-the_scope_of r' = p by A9,Th22; then
 A10:  bound_in(f,a) = x & the_scope_of(f,a) = p by Def6,Def7;
@@ -986,7 +987,8 @@ A13:  now assume A14: a = 0;
         hence CY |- 'not' Ex(x,p) 'or' (p.(x,y)) by A9,A10,A11,A12,Th21;
       end;
       now assume a <> 0; then
-        consider m such that A15: a = m+1 by NAT_1:22;
+        consider m being Nat such that A15: a = m+1 by NAT_1:22;
+        reconsider m as Element of NAT by ORDINAL1:def 13;
 A16:    ex K,L st K = (h.m)`2 & L = K \/ still_not-bound_in {r'} &
         h.a = [('not' r') 'or'  (the_scope_of(f,a).(bound_in(f,a),
                                                x.(min* {i : not x.i in L}))),
@@ -1041,7 +1043,7 @@ A29:        a in F.(n+1) by A28;
           let a; assume a in union rng F; then
           consider b such that A30: a in b & b in rng F by TARSKI:def 4;
           consider c such that A31: c in dom F & F.c = b by A30,FUNCT_1:def 5;
-          reconsider n = c as Nat by A18,A31;
+          reconsider n = c as Element of NAT by A18,A31;
 A32:      a in CX \/ {(h.m)`1 : m in n} by A18,A30,A31;
 A33:      now assume A34: a in CX;
             CX c= CY by XBOOLE_1:7;
@@ -1083,7 +1085,7 @@ A45:          a in {(h.j)`1 : j in m} by A44;
         proof
           let a such that A46: a in rng F;
           consider b such that A47: b in dom F & F.b = a by A46,FUNCT_1:def 5;
-          reconsider b as Nat by A18,A47;
+          reconsider b as Element of NAT by A18,A47;
 A48:      F.b = CX \/ {(h.i)`1 : i in b} by A18;
           now let c such that A49: c in {(h.i)`1 : i in b};
             consider i such that A50: (h.i)`1 = c & i in b by A49;
@@ -1146,7 +1148,7 @@ A61:          a = (h.n)`1 by TARSKI:def 1;
           F.(n+1) = CX \/ {(h.k)`1 : k in n} \/ {(h.n)`1} by XBOOLE_1:4;
           hence thesis by A18;
         end;
-        defpred P[Nat] means (h.$1)`2 is finite &
+        defpred P[Element of NAT] means (h.$1)`2 is finite &
                              (h.$1)`2 is Subset of bound_QC-variables;
 A62:    for k holds (h.k)`2 is finite &
                     (h.k)`2 is Subset of bound_QC-variables
@@ -1190,7 +1192,8 @@ A68:        (h.(k+1))`2 = K \/ still_not-bound_in
           for k holds P[k] from NAT_1:sch 1(A63,A65);
           hence thesis;
         end;
-        defpred P[Nat] means still_not-bound_in (F.($1+1)) c= (h.$1)`2 &
+        defpred P[Element of NAT] means
+         still_not-bound_in (F.($1+1)) c= (h.$1)`2 &
                 not x.(min* {i :
                    not x.i in still_not-bound_in {f.($1+1)} \/ (h.$1)`2})
                              in still_not-bound_in (F.($1+1) \/ {f.($1+1)});
@@ -1215,7 +1218,8 @@ A71:        (h.0)`2 = still_not-bound_in (CX \/ A1) by A5,MCART_1:7; then
             (h.0)`2 is finite by A62,Th26; then
             C is finite by FINSET_1:14; then
             consider x such that A72: not x in C by Th28;
-            consider l being Nat such that A73: x.l = x by QC_LANG3:36;
+            consider l being Element of NAT such that A73: x.l = x
+             by QC_LANG3:36;
             not x.l in C by A72,A73; then
             l in {i : not x.i in C}; then
             reconsider A  = {i : not x.i in C} as non empty set;
@@ -1271,7 +1275,8 @@ A87:       (h.(k+1))`1 = r &
             (h.(k+1))`2 is finite by A62,Th26; then
             C is finite by FINSET_1:14; then
             consider x such that A88: not x in C by Th28;
-            consider l being Nat such that A89: x.l = x by QC_LANG3:36;
+            consider l being Element of NAT such that A89: x.l = x
+             by QC_LANG3:36;
             l in {i : not x.i in still_not-bound_in {s} \/ B} by A88,A89; then
             reconsider A = {i : not x.i in still_not-bound_in {s} \/ B}
                                                               as non empty set;
@@ -1300,7 +1305,7 @@ A94:        still_not-bound_in (F.(k+1+1)) c= B by A51,A87; then
           for k holds P[k] from NAT_1:sch 1(A70,A84);
           hence thesis;
         end;
-        defpred P[Nat] means F.$1 is Consistent;
+        defpred P[Element of NAT] means F.$1 is Consistent;
 A95:    P[0]
         proof
           now let a such that A96: a in {(h.i)`1 : i in 0};
@@ -1360,7 +1365,8 @@ A109:         |- f1^<*s*>^<*'not' VERUM*> by A104,A105,A108,CALCUL_2:24;
                                                        by A1,FINSET_1:14; then
             C is finite by Th27; then
             consider x such that A110: not x in C by Th28;
-            consider l being Nat such that A111: x.l = x by QC_LANG3:36;
+            consider l being Element of NAT such that A111: x.l = x
+            by QC_LANG3:36;
             l in {i : not x.i in C} by A110,A111; then
             reconsider A  = {i : not x.i in C} as non empty set;
             now let a such that A112: a in A;
@@ -1412,7 +1418,9 @@ A125:        |- f1^<*r1*>^<*'not' VERUM*> by A120,A123,CALCUL_1:61;
             hence contradiction by A95,A104,Th24;
            end;
            now assume k <> 0; then
-             consider k1 being Nat such that A126: k = k1+1 by NAT_1:22;
+             consider k1 being Nat such that
+             A126: k = k1+1 by NAT_1:22;
+             reconsider k1 as Element of NAT by ORDINAL1:def 13;
 A127:         ex K,L st K = (h.k1)`2 & L = K \/ still_not-bound_in {f.(k1+1)} &
                   h.(k1+1) = [('not' (f.(k1+1))) 'or' (the_scope_of(f,(k1+1)).
                        (bound_in(f,k1+1),x.(min* {i : not x.i in L}))),
@@ -1557,7 +1565,7 @@ A9:    h.n c= X by XBOOLE_1:7;
 A10: for n,m st m in dom h & n in dom h & n < m holds h.n c= h.m
      proof
        let n,m such that A11: m in dom h & n in dom h & n < m;
-       defpred P[Nat] means n <= $1 implies h.n c= h.$1;
+       defpred P[Element of NAT] means n <= $1 implies h.n c= h.$1;
 A12:   P[0]
        proof
          assume n <= 0; then
@@ -1577,7 +1585,7 @@ A13:   for k st P[k] holds P[k+1]
        for k holds P[k] from NAT_1:sch 1(A12,A13);
        hence thesis by A11;
      end;
-     defpred P[Nat] means h.$1 is Consistent;
+     defpred P[Element of NAT] means h.$1 is Consistent;
 A17: P[0] by A4;
 A18: for k st P[k] holds P[k+1]
      proof
@@ -1598,7 +1606,7 @@ A20: CY is negation_faithful
      proof
        let p;
        consider a such that A21: a in dom f & f.a = p by A2,FUNCT_1:def 5;
-       reconsider n = a as Nat by A21;
+       reconsider n = a as Element of NAT by A21;
        set X =  h.n \/ {f.n};
        now assume not CY |- 'not' p; then
 A22:     not CY \/ {p} is Inconsistent by HENMODEL:10;

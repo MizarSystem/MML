@@ -165,7 +165,7 @@ proof
   let RS be Real_Sequence;
   assume
 A1:  RS=id NAT;
-  let n be Nat;
+  let n be Element of NAT;
   A2:  RS.n = n by A1,FUNCT_1:34;
        (id NAT).(n+1) = n+1 by FUNCT_1:34;
   hence RS.n<RS.(n+1) by A1,A2,NAT_1:38;
@@ -207,7 +207,7 @@ A1: x in dom S1 and
 A2: y = S1.x by FUNCT_1:def 5;
   consider NS being increasing Seq_of_Nat such that
 A3: S1=S*NS by BHSP_3:def 4;
-  reconsider x as Nat by A1;
+  reconsider x as Element of NAT by A1;
        NS.x in NAT;
   then A4:  NS.x in dom S by NORMSP_1:17;
        y = S.(NS.x) by A1,A2,A3,FUNCT_1:22;
@@ -249,17 +249,17 @@ end;
 
 scheme SubSeqChoice
   {T()->non empty 1-sorted,S()->sequence of T(),P[set]} :
-  ex S1 being subsequence of S() st for n being Nat holds P[S1.n]
+  ex S1 being subsequence of S() st for n being Element of NAT holds P[S1.n]
 provided A1:
-  for n being Nat ex m being Nat,x being Point of T() st
+  for n being Element of NAT ex m being Element of NAT,x being Point of T() st
     n <= m & x = S().m & P[x]
 proof
 A2:
-  for n being Nat ex m being Nat st
+  for n being Element of NAT ex m being Element of NAT st
     n <= m & P[S().m]
   proof
-    let n be Nat;
-    consider m being Nat such that
+    let n be Element of NAT;
+    consider m being Element of NAT such that
 A3:   ex x being Point of T() st n <= m & x = S().m & P[x] by A1;
     take m;
     consider x being Point of T() such that
@@ -267,30 +267,31 @@ A4:   n <= m & x = S().m & P[S().m] by A3;
     thus n <= m by A4;
     thus P[S().m] by A4;
   end;
-  then consider n0 being Nat such that
+  then consider n0 being Element of NAT such that
          0 <= n0 and
 A5: P[S().n0];
-  defpred R[Nat,set,set] means
+  defpred R[Element of NAT,set,set] means
     $3 in NAT &
-      (for m,k being Nat st m=$2 & k=$3 holds m<k & P[S().k]);
-A6: for n being Nat for x being set ex y being set st R[n,x,y]
+      (for m,k being Element of NAT st m=$2 & k=$3 holds m<k & P[S().k]);
+A6: for n being Element of NAT for x being set ex y being set st R[n,x,y]
   proof
-    let n be Nat, x be set;
+    let n be Element of NAT, x be set;
     per cases;
     suppose x in NAT;
-    then reconsider mx=x as Nat;
-    consider my being Nat such that
+    then reconsider mx=x as Element of NAT;
+    consider my being Element of NAT such that
 A7:    mx + 1 <= my & P[S().my] by A2;
     take my;
     thus my in NAT;
-    thus for m,k being Nat st m=x & k=my holds m<k & P[S().k] by A7,NAT_1:38;
+    thus for m,k being Element of NAT st m=x & k=my holds m<k & P[S().k]
+    by A7,NAT_1:38;
     end;
     suppose
 A8:    not x in NAT;
     set y=0;
     take 0;
     thus y in NAT;
-    let m,k be Nat;
+    let m,k be Element of NAT;
     assume m=x & k=y;
     hence m<k & P[S().k] by A8;
   end;
@@ -298,7 +299,7 @@ A8:    not x in NAT;
   consider g being Function such that
 A9: dom g = NAT and
 A10: g.0 = n0 and
-A11: for n being Nat holds R[n,g.n,g.(n+1)]
+A11: for n being Element of NAT holds R[n,g.n,g.(n+1)]
         from LATTICE5:sch 1(A6);
 A12:
   rng g c= NAT
@@ -308,24 +309,24 @@ A12:
     then consider x being set such that
 A13:   x in dom g and
 A14:   g.x = y by FUNCT_1:def 5;
-    reconsider n=x as Nat by A9,A13;
-    defpred P[Nat] means g.$1 in NAT;
+    reconsider n=x as Element of NAT by A9,A13;
+    defpred P[Element of NAT] means g.$1 in NAT;
 A15: P[0] by A10;
-A16: for k being Nat holds P[k] implies P[k+1] by A11;
-         for k being Nat holds P[k] from NAT_1:sch 1(A15,A16);
+A16: for k being Element of NAT holds P[k] implies P[k+1] by A11;
+         for k being Element of NAT holds P[k] from NAT_1:sch 1(A15,A16);
     then g.n in NAT;
     hence y in NAT by A14;
   end;
   then rng g c= REAL by XBOOLE_1:1;
   then reconsider g as Function of NAT,REAL by A9,FUNCT_2:4;
   reconsider g as Real_Sequence;
-       for n being Nat holds g.n<g.(n+1)
+       for n being Element of NAT holds g.n<g.(n+1)
   proof
-    let n be Nat;
+    let n be Element of NAT;
          g.(n+1) in rng g by A9,FUNCT_1:def 5;
-    then reconsider k=g.(n+1) as Nat by A12;
+    then reconsider k=g.(n+1) as Element of NAT by A12;
          g.n in rng g by A9,FUNCT_1:def 5;
-    then reconsider m=g.n as Nat by A12;
+    then reconsider m=g.n as Element of NAT by A12;
          m < k by A11;
     hence g.n<g.(n+1);
   end;
@@ -334,9 +335,9 @@ A16: for k being Nat holds P[k] implies P[k+1] by A11;
 A17: dom S1 = NAT by NORMSP_1:17;
   reconsider S1 as subsequence of S();
   take S1;
-  thus for n being Nat holds P[S1.n]
+  thus for n being Element of NAT holds P[S1.n]
   proof
-    let n be Nat;
+    let n be Element of NAT;
     per cases;
     suppose n = 0;
     hence P[S1.n] by A5,A10,A17,FUNCT_1:22;
@@ -344,9 +345,10 @@ A17: dom S1 = NAT by NORMSP_1:17;
     suppose n <> 0;
     then n > 0 by NAT_1:19;
     then n >= 0 + 1 by NAT_1:38;
-    then reconsider n'=n-1 as Nat by INT_1:18;
-A18:for m,k being Nat st m=g.(n') & k=g.((n')+1) holds P[S().k] by A11;
-    reconsider k=g.((n')+1) as Nat;
+    then reconsider n'=n-1 as Element of NAT by INT_1:18;
+A18:for m,k being Element of NAT st m=g.(n') & k=g.((n')+1) holds P[S().k]
+by A11;
+    reconsider k=g.((n')+1) as Element of NAT;
   P[S().k] by A18;
     hence P[S1.n] by A17,FUNCT_1:22;
   end;
@@ -356,40 +358,43 @@ end;
 scheme SubSeqChoice1
   {T()->non empty TopStruct,S()->sequence of T(),P[set]} :
   ex S1 being subsequence of S() st
-    for n being Nat holds P[S1.n]
+    for n being Element of NAT holds P[S1.n]
 provided
-A1: for n being Nat ex m being Nat,x being Point of T() st
+A1: for n being Element of NAT
+ex m being Element of NAT,x being Point of T() st
     n <= m & x = S().m & P[x]
 proof
   reconsider T'=T() as non empty 1-sorted;
   reconsider S'=S() as sequence of T';
-A2: for n being Nat ex m being Nat,x being Point of T' st
+A2: for n being Element of NAT ex m being Element of NAT,x being Point of T' st
     n <= m & x = S'.m & P[x] by A1;
   consider S1 being subsequence of S' such that
-A3: for n being Nat holds P[S1.n] from SubSeqChoice(A2);
+A3: for n being Element of NAT holds P[S1.n] from SubSeqChoice(A2);
   reconsider S1 as subsequence of S();
   take S1;
-  thus for n being Nat holds P[S1.n] by A3;
+  thus for n being Element of NAT holds P[S1.n] by A3;
 end;
 
 theorem Th6:
 for T being non empty 1-sorted, S being sequence of T,
 A being Subset of T holds
   (for S1 being subsequence of S holds not rng S1 c= A)
-    implies (ex n being Nat st for m being Nat st n <= m holds not S.m in A)
+    implies
+     (ex n being Element of NAT st for m being Element of NAT
+     st n <= m holds not S.m in A)
 proof
   let T be non empty 1-sorted, S be sequence of T,
   A be Subset of T;
   assume
 A1:  for S1 being subsequence of S holds not rng S1 c= A;
   assume
-A2: for n being Nat ex m being Nat st n <= m & S.m in A;
+A2: for n being Element of NAT ex m being Element of NAT st n <= m & S.m in A;
   defpred Q[set] means $1 in A;
-A3: for n being Nat ex m being Nat, x being Point of T
+A3: for n being Element of NAT ex m being Element of NAT, x being Point of T
     st n <= m & x = S.m & Q[x]
   proof
-    let n be Nat;
-    consider m being Nat such that
+    let n be Element of NAT;
+    consider m being Element of NAT such that
 A4:   n <= m & S.m in A by A2;
     take m;
     reconsider x=S.m as Point of T;
@@ -397,7 +402,7 @@ A4:   n <= m & S.m in A by A2;
     thus n <= m & x = S.m & x in A by A4;
   end;
   consider S1 being subsequence of S such that
-A5: for n being Nat holds Q[S1.n] from SubSeqChoice(A3);
+A5: for n being Element of NAT holds Q[S1.n] from SubSeqChoice(A3);
        rng S1 c= A
   proof
     let y be set;
@@ -405,7 +410,7 @@ A5: for n being Nat holds Q[S1.n] from SubSeqChoice(A3);
     then consider x1 being set such that
 A6:   x1 in dom S1 and
 A7:   S1.x1 = y by FUNCT_1:def 5;
-    reconsider n=x1 as Nat by A6;
+    reconsider n=x1 as Element of NAT by A6;
          S1.n in A by A5;
     hence y in A by A7;
   end;
@@ -423,11 +428,11 @@ proof
 A1:  rng S c= A \/ B;
   assume
 A2:  for S1 being subsequence of S holds not rng S1 c= A & not rng S1 c= B;
-  then consider n1 being Nat such that
-A3: for m being Nat st n1 <= m holds not S.m in A by Th6;
-  consider n2 being Nat such that
-A4: for m being Nat st n2 <= m holds not S.m in B by A2,Th6;
-  reconsider n=max(n1,n2) as Nat;
+  then consider n1 being Element of NAT such that
+A3: for m being Element of NAT st n1 <= m holds not S.m in A by Th6;
+  consider n2 being Element of NAT such that
+A4: for m being Element of NAT st n2 <= m holds not S.m in B by A2,Th6;
+  reconsider n=max(n1,n2) as Element of NAT;
        n1 <= n by XXREAL_0:25;
   then A5:  not S.n in A by A3;
        n2 <= n by XXREAL_0:25;
@@ -444,7 +449,7 @@ Lm11:for T being non empty TopSpace st T is first-countable holds
       ex S being Function st
         dom S = NAT &
         rng S = B &
-        for n,m being Nat st m >= n holds S.m c= S.n
+        for n,m being Element of NAT st m >= n holds S.m c= S.n
 proof
   let T be non empty TopSpace;
   assume
@@ -462,9 +467,9 @@ A5: dom S = NAT and
 A6: for n being set st n in NAT holds P[n,S.n]
       from ZFREFLE1:sch 1(A4);
 A7:
-  for n,m being Nat st m >= n holds S.m c= S.n
+  for n,m being Element of NAT st m >= n holds S.m c= S.n
   proof
-    let n,m be Nat;
+    let n,m be Element of NAT;
     assume
 A8:   m >= n;
          n in succ n & dom f = NAT by FUNCT_2:def 1,ORDINAL1:10;
@@ -505,7 +510,7 @@ A15:  A = S.n by FUNCT_1:def 5;
 A16:A = meet (f.:succ n) by A5,A6,A14,A15;
         f.:succ n c= bool the carrier of T by XBOOLE_1:1;
     then reconsider C=f.:succ n as Subset-Family of T;
-    reconsider n'=n as Nat by A5,A14;
+    reconsider n'=n as Element of NAT by A5,A14;
          n' + 1 is finite by CARD_1:69;
     then succ(n') is finite by CARD_1:52;
     then A17: f.:(succ n) is finite by FINSET_1:17;
@@ -630,12 +635,14 @@ A9: x2 in U2 and
 A10: U1 misses U2 by A1,A5,COMPTS_1:def 4;
 A11:U1 /\ U2 = {} by A10,XBOOLE_0:def 7;
        S is_convergent_to x1 by A3,FRECHET:def 4;
-  then consider n1 being Nat such that
-A12: for m being Nat st n1 <= m holds S.m in U1 by A6,A8,FRECHET:def 2;
+  then consider n1 being Element of NAT such that
+A12: for m being Element of NAT st n1 <= m holds S.m in U1
+by A6,A8,FRECHET:def 2;
        S is_convergent_to x2 by A4,FRECHET:def 4;
-  then consider n2 being Nat such that
-A13: for m being Nat st n2 <= m holds S.m in U2 by A7,A9,FRECHET:def 2;
-  reconsider n = max(n1,n2) as Nat;
+  then consider n2 being Element of NAT such that
+A13: for m being Element of NAT st n2 <= m holds S.m in U2
+by A7,A9,FRECHET:def 2;
+  reconsider n = max(n1,n2) as Element of NAT;
        n1 <= n by XXREAL_0:25;
   then A14:  S.n in U1 by A12;
        n2 <= n by XXREAL_0:25;
@@ -668,20 +675,20 @@ A4: for U1,U2 being Subset of T st
 A5: ex S being Function st
       dom S = NAT &
       rng S = B1 &
-      for n,m being Nat st m >= n holds S.m c= S.n by A1,Lm11;
+      for n,m being Element of NAT st m >= n holds S.m c= S.n by A1,Lm11;
   consider S1 being Function such that
 A6: dom S1 = NAT and
 A7: rng S1 = B1 and
-A8: for n,m being Nat st m >= n holds S1.m c= S1.n by A5;
+A8: for n,m being Element of NAT st m >= n holds S1.m c= S1.n by A5;
   consider B2 being Basis of x2 such that
 A9: ex S being Function st
       dom S = NAT &
       rng S = B2 &
-      for n,m being Nat st m >= n holds S.m c= S.n by A1,Lm11;
+      for n,m being Element of NAT st m >= n holds S.m c= S.n by A1,Lm11;
   consider S2 being Function such that
 A10:dom S2 = NAT and
 A11:rng S2 = B2 and
-A12:for n,m being Nat st m >= n holds S2.m c= S2.n by A9;
+A12:for n,m being Element of NAT st m >= n holds S2.m c= S2.n by A9;
   defpred P[set,set] means $2 in S1.$1 /\ S2.$1;
 A13:
   for n being set st n in NAT ex x being set st
@@ -723,9 +730,9 @@ A23:   V1 c= U1 by YELLOW_8:22;
     consider n being set such that
 A24:   n in dom S1 and
 A25:   V1 = S1.n by A7,A22,FUNCT_1:def 5;
-    reconsider n as Nat by A6,A24;
+    reconsider n as Element of NAT by A6,A24;
     take n;
-    let m be Nat;
+    let m be Element of NAT;
     assume n <= m;
     then A26:   S1.m c= S1.n by A8;
 A27:   S.m in S1.m /\ S2.m by A21;
@@ -745,9 +752,9 @@ A30:   V2 c= U2 by YELLOW_8:22;
     consider n being set such that
 A31:   n in dom S2 and
 A32:   V2 = S2.n by A11,A29,FUNCT_1:def 5;
-    reconsider n as Nat by A10,A31;
+    reconsider n as Element of NAT by A10,A31;
     take n;
-    let m be Nat;
+    let m be Element of NAT;
     assume n <= m;
     then A33:   S2.m c= S2.n by A12;
 A34:   S.m in S1.m /\ S2.m by A21;
@@ -809,14 +816,16 @@ proof
   then consider A being Subset of T such that
 A1: A is open and
 A2: x in A and
-A3: for n being Nat ex m being Nat st n <= m & not S.m in A by FRECHET:def 2;
+A3: for n being Element of NAT
+ ex m being Element of NAT st n <= m & not S.m in A by FRECHET:def 2;
   defpred P[set] means not $1 in A;
 A4:
-  for n being Nat ex m being Nat, x being Point of T st
+  for n being Element of NAT
+   ex m being Element of NAT, x being Point of T st
     n <= m & x = S.m & P[x]
   proof
-    let n be Nat;
-    consider m being Nat such that
+    let n be Element of NAT;
+    consider m being Element of NAT such that
 A5:   n <= m & not S.m in A by A3;
     take m;
     reconsider x=S.m as Point of T;
@@ -824,15 +833,16 @@ A5:   n <= m & not S.m in A by A3;
     thus n <= m & x = S.m & not x in A by A5;
   end;
   consider S1 being subsequence of S such that
-A6: for n being Nat holds P[S1.n] from SubSeqChoice1(A4);
+A6: for n being Element of NAT holds P[S1.n] from SubSeqChoice1(A4);
   take S1;
   let S2 be subsequence of S1;
        ex U1 being Subset of T st U1 is open & x in U1 &
-    for n being Nat ex m being Nat st n <= m & not S2.m in U1
+    for n being Element of NAT ex m being Element of NAT
+    st n <= m & not S2.m in U1
   proof
     take A;
     thus A is open & x in A by A1,A2;
-    let n be Nat;
+    let n be Element of NAT;
     take n;
     thus n <= n;
     consider NS being increasing Seq_of_Nat such that
@@ -878,10 +888,11 @@ A9: U1 is open by A1,A4,TOPS_2:55;
     A10:   x in f"U2 by A5,A6,A8,FUNCT_1:def 13;
     then reconsider x as Point of T1;
          S1 is_convergent_to x by A7,FRECHET:def 4;
-    then consider n being Nat such that
-A11:    for m being Nat st n <= m holds S1.m in f"U2 by A9,A10,FRECHET:def 2;
+    then consider n being Element of NAT such that
+A11:    for m being Element of NAT st n <= m holds S1.m in f"U2
+by A9,A10,FRECHET:def 2;
     take n;
-    let m be Nat;
+    let m be Element of NAT;
     assume n <= m;
     then S1.m in f"U2 by A11;
 then A12:    f.(S1.m) in U2 by FUNCT_1:def 13;
@@ -1011,8 +1022,9 @@ A3:    O is open;
     assume
 A4:    x in O;
          S is_convergent_to x by A2,FRECHET:def 4;
-    then consider n being Nat such that
-A5:  for m being Nat st n <= m holds S.m in O by A3,A4,FRECHET:def 2;
+    then consider n being Element of NAT such that
+A5:  for m being Element of NAT st n <= m holds S.m in O
+by A3,A4,FRECHET:def 2;
 A6:    S.n in O by A5;
          n in NAT;
     then n in dom S by NORMSP_1:17;
@@ -1048,10 +1060,10 @@ A1:  S is_convergent_to x;
   let U1 be Subset of T;
   assume
        U1 is open & x in U1;
-  then consider n being Nat such that
-A2:  for m being Nat st n <= m holds S.m in U1 by A1,FRECHET:def 2;
+  then consider n being Element of NAT such that
+A2:  for m being Element of NAT st n <= m holds S.m in U1 by A1,FRECHET:def 2;
   take n;
-  let m be Nat;
+  let m be Element of NAT;
   assume
 A3:  n <= m;
   consider NS being increasing Seq_of_Nat such that
@@ -1402,10 +1414,11 @@ A3:   r>0 and
 A4:   Ball(x,r) c= U1 by A1,TOPMETR:22;
     reconsider r as Real by XREAL_0:def 1;
          Ball(x,r) contains_almost_all_sequence S by A2,A3,METRIC_6:30;
-    then consider n being Nat such that
-A5:    for m being Nat st n <= m holds S.m in Ball(x,r) by METRIC_6:def 12;
+    then consider n being Element of NAT such that
+A5:    for m being Element of NAT st n <= m holds S.m in Ball(x,r)
+by METRIC_6:def 12;
     take n;
-    let m be Nat;
+    let m be Element of NAT;
     assume n <= m;
     then S.m in Ball(x,r) by A5;
     hence S'.m in U1 by A1,A4;
@@ -1424,10 +1437,11 @@ A8:   V in Family_open_set M;
     reconsider V' as Subset of TopSpaceMetr(M);
          V' in the topology of TopSpaceMetr(M) by A8,TOPMETR:16;
     then V' is open by PRE_TOPC:def 5;
-    then consider n being Nat such that
-A9:    for m being Nat st n <= m holds S'.m in V' by A1,A6,A7,FRECHET:def 2;
+    then consider n being Element of NAT such that
+A9:    for m being Element of NAT st n <= m holds S'.m in V'
+by A1,A6,A7,FRECHET:def 2;
     take n;
-    let m be Nat;
+    let m be Element of NAT;
     assume n <= m;
     hence S.m in V by A1,A9;
   end;
@@ -1483,8 +1497,8 @@ begin ::The Cluster Points
 definition
 let T be TopStruct, S be sequence of T, x be Point of T;
 pred x is_a_cluster_point_of S means :Def4:
-  for O being Subset of T, n being Nat st O is open & x in O
-    ex m being Nat st n <= m & S.m in O;
+  for O being Subset of T, n being Element of NAT st O is open & x in O
+    ex m being Element of NAT st n <= m & S.m in O;
 end;
 
 theorem Th34:
@@ -1495,12 +1509,13 @@ proof
   let T be non empty TopStruct, S be sequence of T, x be Point of T;
   given S1 being subsequence of S such that
 A1:  S1 is_convergent_to x;
-  let O be Subset of T, n be Nat;
+  let O be Subset of T, n be Element of NAT;
   assume that
 A2: O is open and
 A3: x in O;
-  consider n1 being Nat such that
-A4:  for m being Nat st n1 <= m holds S1.m in O by A1,A2,A3,FRECHET:def 2;
+  consider n1 being Element of NAT such that
+A4:  for m being Element of NAT st n1 <= m holds S1.m in O
+by A1,A2,A3,FRECHET:def 2;
   set n2=max(n1,n);
   consider NS being increasing Seq_of_Nat such that
 A5:  S1 = S * NS by BHSP_3:def 4;
@@ -1552,7 +1567,7 @@ A2: rng S c= Y;
 A3: U1 is open and
 A4: x in U1;
   take 0;
-  let m be Nat;
+  let m be Element of NAT;
   assume 0 <= m;
        m in NAT;
   then m in dom S by NORMSP_1:17;
@@ -1567,12 +1582,12 @@ end;
 
 theorem Th37:
 for T being non empty TopStruct, S being sequence of T, x,y being Point of T
-  st for n being Nat holds S.n = y & S is_convergent_to x holds
+  st for n being Element of NAT holds S.n = y & S is_convergent_to x holds
     x in Cl({y})
 proof
   let T be non empty TopStruct, S be sequence of T, x,y be Point of T;
   assume
-A1: for n being Nat holds S.n = y &
+A1: for n being Element of NAT holds S.n = y &
   S is_convergent_to x;
        for G being Subset of T st G is open holds
                         x in G implies {y} meets G
@@ -1581,8 +1596,9 @@ A1: for n being Nat holds S.n = y &
     assume
 A2:   G is open;
     assume x in G;
-    then consider n being Nat such that
-A3:    for m being Nat st n <= m holds S.m in G by A1,A2,FRECHET:def 2;
+    then consider n being Element of NAT such that
+A3:    for m being Element of NAT st n <= m holds S.m in G
+by A1,A2,FRECHET:def 2;
          S.n in G by A3;
 then A4:    y in G by A1;
          y in {y} by TARSKI:def 1;
@@ -1607,21 +1623,23 @@ A1: Y = { y where y is Point of T : x in Cl({y}) } and
 A2: rng S /\ Y = {} and
 A3: S is_convergent_to x;
 A4:
-  for z being set st z in rng S ex n0 being Nat st for m being Nat st n0 <= m
+  for z being set st z in rng S ex n0 being Element of NAT st
+  for m being Element of NAT st n0 <= m
     holds z <> S.m
   proof
     let z be set;
     assume
 A5:   z in rng S;
     assume
-A6:   for n0 being Nat ex m being Nat st n0 <= m & z = S.m;
+A6:   for n0 being Element of NAT
+ ex m being Element of NAT st n0 <= m & z = S.m;
     reconsider z'=z as Point of T by A5;
     defpred P[set] means $1 = z;
-A7: for n being Nat ex m being Nat,z' being Point of T st
+A7: for n being Element of NAT ex m being Element of NAT,z' being Point of T st
       n <= m & z' = S.m & P[z']
     proof
-      let n be Nat;
-      consider m being Nat such that
+      let n be Element of NAT;
+      consider m being Element of NAT such that
 A8:    n <= m and
 A9:    z = S.m by A6;
       take m;
@@ -1631,25 +1649,26 @@ A9:    z = S.m by A6;
       thus z'=z;
     end;
     consider S1 being subsequence of S such that
-A10:   for n being Nat holds P[S1.n] from SubSeqChoice1(A7);
+A10:   for n being Element of NAT holds P[S1.n] from SubSeqChoice1(A7);
          S1 is_convergent_to x by A3,Th18;
     then x in Cl({z'}) by A10,Th37;
     then z' in Y by A1;
     hence contradiction by A2,A5,XBOOLE_0:def 3;
   end;
-  defpred P[Nat,set,set] means
+  defpred P[Element of NAT,set,set] means
    $3 in NAT &
-    for n1,n2,m being Nat st n1=$2 & n2=$3 & n2 <= m holds S.m <> S.n1;
+    for n1,n2,m being Element of NAT
+     st n1=$2 & n2=$3 & n2 <= m holds S.m <> S.n1;
 A11:
-  for n being Nat for z1 being set ex z2 being set st P[n,z1,z2]
+  for n being Element of NAT for z1 being set ex z2 being set st P[n,z1,z2]
   proof
-    let n be Nat, z1 be set;
+    let n be Element of NAT, z1 be set;
     per cases;
     suppose
 A12:    not z1 in NAT;
     take 0;
     thus 0 in NAT;
-    let n1,n2,m be Nat;
+    let n1,n2,m be Element of NAT;
     assume that
 A13:    n1=z1 and
            n2=0 & n2 <= m;
@@ -1658,11 +1677,11 @@ A13:    n1=z1 and
     suppose z1 in NAT;
     then z1 in dom S by NORMSP_1:17;
     then S.z1 in rng S by FUNCT_1:def 5;
-    then consider n0 being Nat such that
-A14:    for m being Nat st n0 <= m holds S.z1 <> S.m by A4;
+    then consider n0 being Element of NAT such that
+A14:    for m being Element of NAT st n0 <= m holds S.z1 <> S.m by A4;
     take n0;
     thus n0 in NAT;
-    let n1,n2,m be Nat;
+    let n1,n2,m be Element of NAT;
     assume that
 A15:   n1=z1 and
 A16:   n2=n0 and
@@ -1676,31 +1695,31 @@ A19: f.0 = 0 and
 A20: for n being Element of NAT holds P[n,f.n,f.(n+1)]
         from LATTICE5:sch 1(A11);
 A21:
-  for n being Nat holds f.n is Nat
+  for n being Element of NAT holds f.n is Element of NAT
   proof
-    let n be Nat;
+    let n be Element of NAT;
     per cases;
     suppose n = 0;
-    hence f.n is Nat by A19;
+    hence f.n is Element of NAT by A19;
     end;
     suppose n <> 0;
     then 0 < n by NAT_1:19;
     then 0 + 1 < n + 1 by XREAL_1:8;
     then 1 <= n by NAT_1:38;
-    then reconsider n1=n-1 as Nat by INT_1:18;
+    then reconsider n1=n-1 as Element of NAT by INT_1:18;
          n1 + 1 = n;
-    hence f.n is Nat by A20;
+    hence f.n is Element of NAT by A20;
   end;
   end;
-  then for n be Nat holds f.n is real;
+  then for n be Element of NAT holds f.n is real;
   then reconsider f as Real_Sequence by A18,SEQ_1:4;
        f is increasing
   proof
-    let n be Nat;
+    let n be Element of NAT;
     assume
 A22:    f.n >= f.(n+1);
-    reconsider n1=f.n as Nat by A21;
-    reconsider n2=f.(n+1) as Nat by A21;
+    reconsider n1=f.n as Element of NAT by A21;
+    reconsider n2=f.(n+1) as Element of NAT by A21;
          n2 <= n1 by A22;
     then S.n1 <> S.n1 by A20;
     hence contradiction;
@@ -1715,13 +1734,13 @@ A25: S1.x1 = S1.x2;
   assume
 A26: x1 <> x2;
 A27:
-  for n1,n2 being Nat st n1 < n2 holds S1.n1 <> S1.n2
+  for n1,n2 being Element of NAT st n1 < n2 holds S1.n1 <> S1.n2
   proof
-    let n1,n2 be Nat;
+    let n1,n2 be Element of NAT;
     assume
 A28:   n1 < n2;
-    reconsider n1'=f.n1 as Nat;
-    reconsider n3'=f.(n1+1) as Nat;
+    reconsider n1'=f.n1 as Element of NAT;
+    reconsider n3'=f.(n1+1) as Element of NAT;
          n3' <= f.n2
     proof
       A29:     n1 + 1 <= n2 by A28,NAT_1:38;
@@ -1746,8 +1765,8 @@ A28:   n1 < n2;
     then n1 in dom S1 by NORMSP_1:17;
     hence S1.n1 <> S1.n2 by A30,A31,FUNCT_1:22;
   end;
-  reconsider n1=x1 as Nat by A23;
-  reconsider n2=x2 as Nat by A24;
+  reconsider n1=x1 as Element of NAT by A23;
+  reconsider n2=x2 as Element of NAT by A24;
   per cases by A26,REAL_1:def 5;
   suppose n1 < n2;
   hence contradiction by A25,A27;
@@ -1813,12 +1832,12 @@ A14: x1 in dom S2 by A6,A10,NORMSP_1:17;
     hence x1 = x2 by A2,A13,A14,FUNCT_1:def 8;
   end;
 A15:
-  for m being Nat holds
-    {k where k is Nat : k in rng f & k>m} <> {}
+  for m being Element of NAT holds
+    {k where k is Element of NAT : k in rng f & k>m} <> {}
   proof
-    let m be Nat;
+    let m be Element of NAT;
     assume
-A16:   {k where k is Nat : k in rng f & k>m} = {};
+A16:   {k where k is Element of NAT : k in rng f & k>m} = {};
 A17:
     m+1 is finite by CARD_1:69;
          rng f c= m + 1
@@ -1826,60 +1845,60 @@ A17:
       let x be set;
       assume
 A18:      x in rng f;
-      then reconsider x'=x as Nat by A7;
+      then reconsider x'=x as Element of NAT by A7;
            x' < m + 1
       proof
         assume x'>= m + 1;
         then x' > m by NAT_1:38;
-        then x' in {k where k is Nat : k in rng f & k>m} by A18;
+        then x' in {k where k is Element of NAT : k in rng f & k>m} by A18;
         hence contradiction by A16;
       end;
-      then x' in {x'' where x'' is Nat:x''< m+1};
+      then x' in {x'' where x'' is Element of NAT:x''< m+1};
       hence x in m+1 by AXIOMS:30;
     end;
     then rng f is finite by A17,FINSET_1:13;
     hence contradiction by A6,A9,Lm12;
   end;
 A19:
-  for m being Nat holds
-    {k where k is Nat : k in rng f & k>m} c= NAT
+  for m being Element of NAT holds
+    {k where k is Element of NAT : k in rng f & k>m} c= NAT
   proof
-    let m be Nat;
+    let m be Element of NAT;
     let z be set;
-    assume z in {k where k is Nat : k in rng f & k>m};
-    then consider k being Nat such that
+    assume z in {k where k is Element of NAT : k in rng f & k>m};
+    then consider k being Element of NAT such that
 A20:   k = z and
            k in rng f & k>m;
     thus z in NAT by A20;
   end;
-  defpred P[Nat,set,set] means
-   for B being non empty Subset of NAT, m being Nat st
-      m=$2 & B={k where k is Nat:k in rng f & k>m}
+  defpred P[Element of NAT,set,set] means
+   for B being non empty Subset of NAT, m being Element of NAT st
+      m=$2 & B={k where k is Element of NAT:k in rng f & k>m}
        holds $3=min B;
 A21:
-  for n being Nat for x being set ex y being set st P[n,x,y]
+  for n being Element of NAT for x being set ex y being set st P[n,x,y]
   proof
-    let n be Nat, x be set;
+    let n be Element of NAT, x be set;
     per cases;
     suppose x in NAT;
-    then reconsider x'=x as Nat;
-    set B={k where k is Nat:k in rng f & k>x'};
+    then reconsider x'=x as Element of NAT;
+    set B={k where k is Element of NAT:k in rng f & k>x'};
     reconsider B as Subset of NAT by A19;
     reconsider B as non empty Subset of NAT by A15;
     take min B;
-    let B' be non empty Subset of NAT, m be Nat;
+    let B' be non empty Subset of NAT, m be Element of NAT;
     assume that
 A22:  m=x and
-A23:  B'={k where k is Nat:k in rng f & k>m};
+A23:  B'={k where k is Element of NAT:k in rng f & k>m};
     thus min B=min B' by A22,A23;
     end;
     suppose
 A24:  not x in NAT;
     take 0;
-    let B be non empty Subset of NAT, m be Nat;
+    let B be non empty Subset of NAT, m be Element of NAT;
     assume that
 A25:  m=x and
-           B={k where k is Nat:k in rng f & k>m};
+           B={k where k is Element of NAT:k in rng f & k>m};
     thus 0=min B by A24,A25;
   end;
   end;
@@ -1888,20 +1907,20 @@ A26: dom g = NAT and
 A27: g.0 = min A and
 A28: for n being Element of NAT holds P[n,g.n,g.(n+1)]
      from LATTICE5:sch 1(A21);
-  defpred P[Nat] means g.$1 in NAT;
+  defpred P[Element of NAT] means g.$1 in NAT;
 A29: P[0] by A27;
-A30: for k being Nat st P[k] holds P[k+1]
+A30: for k being Element of NAT st P[k] holds P[k+1]
   proof
-    let k be Nat;
+    let k be Element of NAT;
     assume g.k in NAT;
-    then reconsider m=g.k as Nat;
-    set B={l where l is Nat:l in rng f & l>m};
+    then reconsider m=g.k as Element of NAT;
+    set B={l where l is Element of NAT:l in rng f & l>m};
     reconsider B as Subset of NAT by A19;
     reconsider B as non empty Subset of NAT by A15;
          g.(k+1)= min B by A28;
     hence g.(k+1) in NAT;
   end;
-A31:for k being Nat holds P[k] from NAT_1:sch 1(A29,A30);
+A31:for k being Element of NAT holds P[k] from NAT_1:sch 1(A29,A30);
 A32:rng g c= NAT
   proof
     let y be set;
@@ -1909,13 +1928,13 @@ A32:rng g c= NAT
     then consider x being set such that
 A33:  x in dom g and
 A34:  y = g.x by FUNCT_1:def 5;
-    reconsider x as Nat by A26,A33;
+    reconsider x as Element of NAT by A26,A33;
          g.x in NAT by A31;
     hence y in NAT by A34;
   end;
-       for n being Nat holds g.n is real
+       for n being Element of NAT holds g.n is real
   proof
-    let n be Nat;
+    let n be Element of NAT;
          g.n in NAT by A31;
     then reconsider w = g.n as Element of REAL;
          w is real;
@@ -1924,13 +1943,13 @@ A34:  y = g.x by FUNCT_1:def 5;
   then reconsider g1=g as Real_Sequence by A26,SEQ_1:4;
        g1 is increasing
   proof
-    let n be Nat;
-    reconsider m=g.n as Nat by A31;
-    reconsider B={k where k is Nat : k in rng f & k>m}
+    let n be Element of NAT;
+    reconsider m=g.n as Element of NAT by A31;
+    reconsider B={k where k is Element of NAT : k in rng f & k>m}
      as non empty Subset of NAT by A15,A19;
          g1.(n+1)=min B by A28;
     then g1.(n+1) in B by CQC_SIM1:def 8;
-    then consider k being Nat such that
+    then consider k being Element of NAT such that
 A35: k = g1.(n+1) and
            k in rng f and
 A36: k>m;
@@ -1945,8 +1964,8 @@ A37:
 A38:  x1 in dom g1 and
 A39:  x2 in dom g1 and
 A40:  g1.x1 = g1.x2;
-    reconsider n1=x1 as Nat by A38;
-    reconsider n2=x2 as Nat by A39;
+    reconsider n1=x1 as Element of NAT by A38;
+    reconsider n2=x2 as Element of NAT by A39;
     assume A41: x1 <> x2;
     per cases by A41,REAL_1:def 5;
     suppose n1 < n2;
@@ -1965,10 +1984,10 @@ A43:
       let y be set;
       assume
 A44:  y in rng f;
-      then reconsider y'=y as Nat by A7;
+      then reconsider y'=y as Element of NAT by A7;
       assume
 A45:  not y in rng g;
-      defpred P[Nat] means g1.$1 < y';
+      defpred P[Element of NAT] means g1.$1 < y';
 A46:  P[0]
       proof
         assume A47: not g1.0 < y';
@@ -1976,23 +1995,23 @@ A46:  P[0]
              g.0 in rng g by A26,FUNCT_1:def 5;
         hence contradiction by A27,A45,A47,A48,XXREAL_0:1;
       end;
-A49:  for n being Nat st P[n] holds P[n+1]
+A49:  for n being Element of NAT st P[n] holds P[n+1]
       proof
-        let n be Nat;
+        let n be Element of NAT;
         assume
 A50:     g1.n < y';
         assume A51: not g1.(n+1) < y';
-        reconsider m = g.n as Nat by A31;
-        reconsider B={k where k is Nat:k in rng f & k>m}
+        reconsider m = g.n as Element of NAT by A31;
+        reconsider B={k where k is Element of NAT:k in rng f & k>m}
           as non empty Subset of NAT by A15,A19;
 A52:    g.(n+1)=min B by A28;
-             y' in {k where k is Nat:k in rng f & k>m} by A44,A50;
+             y' in {k where k is Element of NAT:k in rng f & k>m} by A44,A50;
         then A53: min B <= y' by CQC_SIM1:def 8;
              g.(n+1) in rng g by A26,FUNCT_1:def 5;
         hence contradiction by A45,A51,A52,A53,XXREAL_0:1;
       end;
 A54:   y' is finite by CARD_1:69;
-A55:   for n being Nat holds P[n] from NAT_1:sch 1(A46,A49);
+A55:   for n being Element of NAT holds P[n] from NAT_1:sch 1(A46,A49);
            rng g c= y'
       proof
         let y be set;
@@ -2000,9 +2019,9 @@ A55:   for n being Nat holds P[n] from NAT_1:sch 1(A46,A49);
         then consider x being set such that
 A56:      x in dom g and
 A57:      y = g.x by FUNCT_1:def 5;
-        reconsider x as Nat by A26,A56;
+        reconsider x as Element of NAT by A26,A56;
              g1.x < y' by A55;
-        then g1.x in {i where i is Nat:i<y'};
+        then g1.x in {i where i is Element of NAT:i<y'};
         hence y in y' by A57,AXIOMS:30;
       end;
       then rng g is finite by A54,FINSET_1:13;
@@ -2013,7 +2032,7 @@ A57:      y = g.x by FUNCT_1:def 5;
     then consider x being set such that
 A58:   x in dom g and
 A59:   y = g.x by FUNCT_1:def 5;
-    reconsider n=x as Nat by A26,A58;
+    reconsider n=x as Element of NAT by A26,A58;
     per cases;
     suppose n=0;
     hence y in rng f by A27,A59,CQC_SIM1:def 8;
@@ -2022,14 +2041,14 @@ A59:   y = g.x by FUNCT_1:def 5;
     then n > 0 by NAT_1:19;
     then n + 1 > 0 + 1 by XREAL_1:8;
     then 1 <= n by NAT_1:38;
-    then reconsider m=n-1 as Nat by INT_1:18;
+    then reconsider m=n-1 as Element of NAT by INT_1:18;
 A60:m+1 = n;
-    reconsider l = g.m as Nat by A31;
-    reconsider B={k where k is Nat:k in rng f & k>l}
+    reconsider l = g.m as Element of NAT by A31;
+    reconsider B={k where k is Element of NAT:k in rng f & k>l}
       as non empty Subset of NAT by A15,A19;
          g.n = min B by A28,A60;
     then y in B by A59,CQC_SIM1:def 8;
-    then consider k being Nat such that
+    then consider k being Element of NAT such that
 A61:  k = y and
 A62:  k in rng f and
            k>l;
@@ -2076,13 +2095,15 @@ end;
 scheme PermSeq
   {T()->non empty 1-sorted,S()->sequence of T(),p()->Permutation of NAT,
    P[set]} :
-  ex n being Nat st for m being Nat st n<=m holds P[(S()*p()).m]
+  ex n being Element of NAT st for m being Element of NAT
+   st n<=m holds P[(S()*p()).m]
 provided A1:
-  ex n being Nat st for m being Nat, x being Point of T()
+  ex n being Element of NAT st for m being Element of NAT, x being Point of T()
     st n<=m & x=S().m holds P[x]
 proof
-  consider n being Nat such that
-A2:  for m being Nat, x being Point of T() st n<=m & x=S().m holds P[x] by A1;
+  consider n being Element of NAT such that
+A2:  for m being Element of NAT, x being Point of T() st n<=m & x=S().m
+ holds P[x] by A1;
        n + 1 is finite by CARD_1:69;
   then A3: succ n is finite by CARD_1:52;
      n in succ n & dom (p()") = NAT by FUNCT_2:def 1,ORDINAL1:10;
@@ -2092,9 +2113,9 @@ A2:  for m being Nat, x being Point of T() st n<=m & x=S().m holds P[x] by A1;
   A4: max X in X by PRE_CIRC:def 1;
   then reconsider mm = max X as natural number by ORDINAL1:def 13;
      mm + 1 is natural;
-  then reconsider mX = (max X) + 1 as Nat by ORDINAL1:def 13;
+  then reconsider mX = (max X) + 1 as Element of NAT by ORDINAL1:def 13;
   take mX;
-  let m be Nat;
+  let m be Element of NAT;
   assume
 A5: mX<=m;
        m in NAT;
@@ -2102,13 +2123,13 @@ then A6: m in dom p() by FUNCT_2:67;
        n<=p().m
   proof
     assume p().m<n;
-    then p().m in {p1 where p1 is Nat : p1 < n};
+    then p().m in {p1 where p1 is Element of NAT : p1 < n};
     then p().m in n by AXIOMS:30;
     then p().m in succ n by ORDINAL1:13;
     then m in p()"(succ n) by A6,FUNCT_1:def 13;
     then m in (p()").:(succ n) by FUNCT_1:155;
     then A7: m <=max X by PRE_CIRC:def 1;
-       max X is Nat by A4;
+       max X is Element of NAT by A4;
     hence contradiction by A5,A7,NAT_1:38;
   end;
   then A8:  P[S().(p().m)] by A2;
@@ -2120,19 +2141,22 @@ end;
 scheme PermSeq2
   {T()->non empty TopStruct,S()->sequence of T(),p()->Permutation of NAT,
    P[set]} :
-  ex n being Nat st for m being Nat st n<=m holds P[(S()*p()).m]
+  ex n being Element of NAT st for m being Element of NAT st n<=m
+   holds P[(S()*p()).m]
 provided A1:
-  ex n being Nat st for m being Nat, x being Point of T()
+  ex n being Element of NAT st for m being Element of NAT, x being Point of T()
     st n<=m & x=S().m holds P[x]
 proof
   reconsider T1=T() as non empty 1-sorted;
   reconsider S1=S() as sequence of T1;
 A2:
-  ex n being Nat st for m being Nat, x being Point of T1
+  ex n being Element of NAT st for m being Element of NAT, x being Point of T1
     st n<=m & x=S1.m holds P[x] by A1;
-       ex n being Nat st for m being Nat st n<=m holds P[(S1*p()).m]
+       ex n being Element of NAT st for m being Element of NAT st n<=m
+        holds P[(S1*p()).m]
       from PermSeq(A2);
-  hence ex n being Nat st for m being Nat st n<=m holds P[(S()*p()).m];
+  hence ex n being Element of NAT st for m being Element of NAT st n<=m
+   holds P[(S()*p()).m];
 end;
 
 theorem Th40:
@@ -2146,70 +2170,73 @@ proof
   assume
 A1:  S is_convergent_to x;
        for U1 being Subset of T st (U1 is open & x in U1)
-    ex n being Nat st for m being Nat st n <= m holds (S*P).m in U1
+    ex n being Element of NAT st for m being Element of NAT st n <= m
+     holds (S*P).m in U1
   proof
     let U1 be Subset of T;
     assume that
 A2:   U1 is open and
 A3:   x in U1;
     defpred P[set] means $1 in U1;
-A4: ex n being Nat st for m being Nat, x being Point of T
+A4: ex n being Element of NAT st for m being Element of NAT, x being Point of T
       st n<=m & x=S.m holds P[x]
     proof
-      consider n being Nat such that
-A5:      for m being Nat st n<=m holds S.m in U1 by A1,A2,A3,FRECHET:def 2;
+      consider n being Element of NAT such that
+A5:      for m being Element of NAT st n<=m holds S.m in U1
+by A1,A2,A3,FRECHET:def 2;
       take n;
-      let m be Nat, x be Point of T;
+      let m be Element of NAT, x be Point of T;
       assume that
 A6:     n<=m and
 A7:     x=S.m;
       thus x in U1 by A5,A6,A7;
     end;
-    thus ex n being Nat st for m being Nat st n <= m holds P[(S*P).m]
+    thus ex n being Element of NAT st for m being Element of NAT st n <= m
+    holds P[(S*P).m]
       from PermSeq2(A4);
   end;
   hence S*P is_convergent_to x by FRECHET:def 2;
 end;
 
 theorem Th41:
-for n0 being Nat ex NS being increasing Seq_of_Nat st
-  for n being Nat holds NS.n=n+n0
+for n0 being Element of NAT ex NS being increasing Seq_of_Nat st
+  for n being Element of NAT holds NS.n=n+n0
 proof
-  let n0 be Nat;
-  deffunc F(Nat) = $1 + n0;
+  let n0 be Element of NAT;
+  deffunc F(Element of NAT) = $1 + n0;
   consider NS being Real_Sequence such that
-A1: for n being Nat holds NS.n=F(n) from SEQ_1:sch 1;
+A1: for n being Element of NAT holds NS.n=F(n) from SEQ_1:sch 1;
 A2:
   NS is increasing
   proof
-    let n be Nat;
+    let n be Element of NAT;
          n < n + 1 by NAT_1:38;
     then n + n0 < (n+1) + n0 by XREAL_1:8;
     then NS.n < (n+1) + n0 by A1;
     hence NS.n < NS.(n+1) by A1;
   end;
-       for n being Nat holds NS.n is Nat
+       for n being Element of NAT holds NS.n is Element of NAT
   proof
-    let n be Nat;
+    let n be Element of NAT;
          n + n0 in NAT;
-    hence NS.n is Nat by A1;
+    hence NS.n is Element of NAT by A1;
   end;
   then reconsider NS as increasing Seq_of_Nat by A2,SEQM_3:29;
   take NS;
-  thus for n being Nat holds NS.n=n+n0 by A1;
+  thus for n being Element of NAT holds NS.n=n+n0 by A1;
 end;
 
 theorem Th42:
-for T being non empty 1-sorted, S being sequence of T, n0 being Nat
+for T being non empty 1-sorted, S being sequence of T, n0 being Element of NAT
 ex S1 being subsequence of S st
-  for n being Nat holds S1.n=S.(n+n0)
+  for n being Element of NAT holds S1.n=S.(n+n0)
 proof
-  let T be non empty 1-sorted, S be sequence of T, n0 be Nat;
+  let T be non empty 1-sorted, S be sequence of T, n0 be Element of NAT;
   consider NS being increasing Seq_of_Nat such that
-A1:  for n being Nat holds NS.n=n+n0 by Th41;
+A1:  for n being Element of NAT holds NS.n=n+n0 by Th41;
   reconsider S1 = S*NS as subsequence of S;
   take S1;
-  let n be Nat;
+  let n be Element of NAT;
        n in NAT;
   then n in dom S1 by NORMSP_1:17;
   hence S1.n = S.(NS.n) by FUNCT_1:22
@@ -2220,26 +2247,28 @@ theorem Th43:
 for T being non empty TopStruct, S being sequence of T, x being Point of T,
     S1 being subsequence of S st
       x is_a_cluster_point_of S &
-      ex n0 being Nat st for n being Nat holds S1.n=S.(n+n0)
+      ex n0 being Element of NAT st for n being Element of NAT
+      holds S1.n=S.(n+n0)
 holds x is_a_cluster_point_of S1
 proof
   let T be non empty TopStruct, S be sequence of T, x be Point of T,
       S1 be subsequence of S;
   assume that
 A1: x is_a_cluster_point_of S and
-A2: ex n0 being Nat st for n being Nat holds S1.n=S.(n+n0);
-  consider n0 being Nat such that
-A3:  for n being Nat holds S1.n=S.(n+n0) by A2;
-  let O be Subset of T, n be Nat;
+A2: ex n0 being Element of NAT st for n being Element of NAT
+holds S1.n=S.(n+n0);
+  consider n0 being Element of NAT such that
+A3:  for n being Element of NAT holds S1.n=S.(n+n0) by A2;
+  let O be Subset of T, n be Element of NAT;
   assume that
 A4: O is open and
 A5: x in O;
-  consider m0 being Nat such that
+  consider m0 being Element of NAT such that
 A6: n + n0 <= m0 and
 A7: S.m0 in O by A1,A4,A5,Def4;
        n0 <= n + n0 by NAT_1:29;
   then n0 <= m0 by A6,XXREAL_0:2;
-  then reconsider m=m0-n0 as Nat by INT_1:18;
+  then reconsider m=m0-n0 as Element of NAT by INT_1:18;
   take m;
   thus n <= m by A6,XREAL_1:21;
        S1.m = S.(m0-n0+n0) by A3
@@ -2263,7 +2292,7 @@ A1:  x is_a_cluster_point_of S;
 A2:    G is open;
     assume
          x in G;
-    then consider m being Nat such that
+    then consider m being Element of NAT such that
            0 <= m and
 A3:    S.m in G by A1,A2,Def4;
          m in NAT;
@@ -2292,14 +2321,14 @@ A2:  x is_a_cluster_point_of S;
    as Subset of T from DOMAIN_1:sch 7;
   per cases;
   suppose
-A3:  for n being Nat ex m being Nat st m >= n & S.m in Y;
+A3:  for n being Element of NAT ex m being Element of NAT st m >= n & S.m in Y;
   defpred P[set] means $1 in Y;
 A4:
-  for n being Nat ex m being Nat,y being Point of T st
+  for n being Element of NAT ex m being Element of NAT,y being Point of T st
     n <= m & y = S.m & P[y]
   proof
-    let n be Nat;
-    consider m being Nat such that
+    let n be Element of NAT;
+    consider m being Element of NAT such that
 A5:   m >= n and
 A6:   S.m in Y by A3;
     take m;
@@ -2308,7 +2337,7 @@ A6:   S.m in Y by A3;
     thus n <= m & y = S.m & y in Y by A5,A6;
   end;
   consider S1 being subsequence of S such that
-A7:  for n being Nat holds P[S1.n] from SubSeqChoice1(A4);
+A7:  for n being Element of NAT holds P[S1.n] from SubSeqChoice1(A4);
 A8:
   rng S1 c= Y
   proof
@@ -2317,22 +2346,23 @@ A8:
     then consider n being set such that
 A9:   n in dom S1 and
 A10:   y = S1.n by FUNCT_1:def 5;
-    reconsider n as Nat by A9;
+    reconsider n as Element of NAT by A9;
          S1.n in Y by A7;
     hence y in Y by A10;
   end;
   take S1;
   thus S1 is_convergent_to x by A8,Th36;
   end;
-  suppose ex n being Nat st for m being Nat st m >= n holds not S.m in Y;
-  then consider n0 being Nat such that
-A11:  for m being Nat st m >= n0 holds not S.m in Y;
+  suppose ex n being Element of NAT st for m being Element of NAT st m >= n
+  holds not S.m in Y;
+  then consider n0 being Element of NAT such that
+A11:  for m being Element of NAT st m >= n0 holds not S.m in Y;
   consider S' being subsequence of S such that
-A12:  for n being Nat holds S'.n=S.(n+n0) by Th42;
+A12:  for n being Element of NAT holds S'.n=S.(n+n0) by Th42;
 A13:
-  for n being Nat holds not S'.n in Y
+  for n being Element of NAT holds not S'.n in Y
   proof
-    let n be Nat;
+    let n be Element of NAT;
          n+n0 >= n0 by NAT_1:29;
     then not S.(n+n0) in Y by A11;
     hence not S'.n in Y by A12;
@@ -2346,7 +2376,7 @@ A14:   rng S' /\ Y <> {};
     then consider n being set such that
 A15:   n in dom S' and
 A16:   y = S'.n by FUNCT_1:def 5;
-    reconsider n as Nat by A15;
+    reconsider n as Element of NAT by A15;
          not S'.n in Y by A13;
     hence contradiction by A14,A16,XBOOLE_0:def 3;
   end;
@@ -2382,7 +2412,7 @@ theorem
       ex S being Function st
         dom S = NAT &
         rng S = B &
-        for n,m being Nat st m >= n holds S.m c= S.n by Lm11;
+        for n,m being Element of NAT st m >= n holds S.m c= S.n by Lm11;
 
 theorem
      for T being non empty TopSpace st

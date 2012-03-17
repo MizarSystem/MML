@@ -10,19 +10,21 @@ environ
       SCMFSA_7, SCMPDS_3, RELOC, CARD_1, SCMFSA6A, FUNCT_4, BOOLE, SCMFSA6B,
       FUNCT_7, SCM_1, AMI_2, AMI_5, SCMPDS_1, ABSVALUE, NAT_1, ARYTM_1,
       SCMPDS_5;
- notations TARSKI, XBOOLE_0, SETFAM_1, ENUMSET1, XCMPLX_0, RELAT_1, FUNCT_1,
-      FUNCT_4, INT_1, NAT_1, STRUCT_0, AMI_1, AMI_2, AMI_3, AMI_5, FUNCT_7,
-      SCMPDS_1, SCMPDS_2, INT_2, SCMPDS_3, CARD_1, SCMPDS_4, SCM_1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SETFAM_1, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0,
+      RELAT_1, FUNCT_1, FUNCT_4, INT_1, NAT_1, STRUCT_0, AMI_1, AMI_2, AMI_3,
+      AMI_5, FUNCT_7, SCMPDS_1, SCMPDS_2, INT_2, SCMPDS_3, CARD_1, SCMPDS_4,
+      SCM_1, XXREAL_0;
  constructors ENUMSET1, XXREAL_0, NAT_1, MEMBERED, INT_2, SCM_1, AMI_5,
       SCMFSA_4, SCMPDS_1, SCMPDS_4;
  registrations AMI_1, INT_1, FUNCT_1, SCMPDS_2, TREES_2, SCMFSA_4, SCMPDS_4,
-      FRAENKEL, MEMBERED, SETFAM_1, CARD_3;
+      FRAENKEL, MEMBERED, SETFAM_1, CARD_3, ORDINAL1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
 begin :: Preliminaries
+
 reserve x for set,
-        m,n for Nat,
+        m,n for Element of NAT,
         a,b,c for Int_position,
         i for Instruction of SCMPDS,
         s,s1,s2 for State of SCMPDS,
@@ -104,7 +106,7 @@ theorem :: SCMPDS_5:20  ::T13
  for I being parahalting Program-block st
      Initialized stop I c= s1 & Initialized stop I c= s2 &
      s1,s2 equal_outside the Instruction-Locations of SCMPDS holds
- for k being Nat holds
+ for k being Element of NAT holds
      (Computation s1).k, (Computation s2).k
          equal_outside the Instruction-Locations of SCMPDS &
      CurInstr (Computation s1).k = CurInstr (Computation s2).k;
@@ -279,12 +281,12 @@ theorem :: SCMPDS_5:27    ::Th37
      IC (Computation s).LifeSpan (s +* Initialized stop(I)) = inspos card I;
 
 theorem :: SCMPDS_5:28
- for I being parahalting Program-block,k be Nat
+ for I being parahalting Program-block,k be Element of NAT
  st k < LifeSpan (s +* Initialized stop(I))
  holds IC (Computation (s +* Initialized stop(I))).k in dom I;
 
 theorem :: SCMPDS_5:29
- for I being parahalting Program-block,k be Nat
+ for I being parahalting Program-block,k be Element of NAT
  st Initialized I c= s &
     k <= LifeSpan (s +* Initialized stop(I))
  holds
@@ -304,20 +306,20 @@ theorem :: SCMPDS_5:31     ::Th37 end
  or IC (Computation s).LifeSpan (s +* Initialized stop(I)) = inspos card I;
 
 theorem :: SCMPDS_5:32  :: Th39
- for I being parahalting No-StopCode Program-block,k being Nat
+ for I being parahalting No-StopCode Program-block,k being Element of NAT
  st Initialized I c= s & k < LifeSpan (s +* Initialized stop(I))
  holds CurInstr (Computation s).k <> halt SCMPDS;
 
 theorem :: SCMPDS_5:33  ::Th40
  for I being parahalting Program-block,J being Program-block,
-  k being Nat st k <= LifeSpan (s +* Initialized stop(I))
+  k being Element of NAT st k <= LifeSpan (s +* Initialized stop(I))
  holds (Computation (s +* Initialized stop I )).k,
        (Computation (s +* ((I ';' J) +* Start-At inspos 0))).k
         equal_outside the Instruction-Locations of SCMPDS;
 
 theorem :: SCMPDS_5:34     ::Th41B
  for I being parahalting Program-block,J being Program-block,
-  k being Nat st k <= LifeSpan (s +* Initialized stop(I))
+  k being Element of NAT st k <= LifeSpan (s +* Initialized stop(I))
  holds (Computation (s +* Initialized stop I )).k,
        (Computation (s +* Initialized stop (I ';' J))).k
         equal_outside the Instruction-Locations of SCMPDS;
@@ -356,7 +358,7 @@ begin :: Computation of two consecutive program blocks
 
 theorem :: SCMPDS_5:36    ::Th42
     for I being parahalting No-StopCode Program-block,J being parahalting
- shiftable Program-block,k being Nat
+ shiftable Program-block,k being Element of NAT
  st Initialized stop (I ';' J) c= s
  holds
  (Computation (Result(s +*Initialized stop I) +* Initialized stop J )).k

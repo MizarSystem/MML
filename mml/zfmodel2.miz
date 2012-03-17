@@ -8,7 +8,8 @@ environ
 
  vocabularies ZF_LANG, FUNCT_1, ZF_MODEL, ARYTM_3, BOOLE, QC_LANG3, FINSET_1,
       RELAT_1, ZFMODEL1;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NAT_1, RELAT_1, FUNCT_1,
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1,
+      NUMBERS, NAT_1, RELAT_1, FUNCT_1,
       FINSET_1, PARTFUN1, FUNCT_2, ZF_LANG, ZF_MODEL, ZFMODEL1, ZF_LANG1,
       XXREAL_0;
  constructors ENUMSET1, PARTFUN1, XXREAL_0, XREAL_0, NAT_1, ZF_MODEL, ZFMODEL1,
@@ -25,7 +26,7 @@ begin
 
  reserve x,y,z,x1,x2,x3,x4,y1,y2,s for Variable,
          M for non empty set,
-         a,b for set, i,j,k for Nat,
+         a,b for set, i,j,k for Element of NAT,
          m,m1,m2,m3,m4 for Element of M,
          H,H1,H2 for ZF-formula,
          v,v',v1,v2 for Function of VAR,M;
@@ -324,12 +325,13 @@ then A4:    i < i+j+1 & j < i+j+1 by NAT_1:38;
 A5:    variables_in (x '=' y) = {x,y} & variables_in (x 'in' y) = {x,y}
         by ZF_LANG1:151,152;
       thus P[x '=' y]
-        proof take i+j+1; let k be Nat; assume
+        proof take i+j+1; let k be Element of NAT; assume
              x.k in variables_in (x '=' y);
           then x.k = x.i or x.k = x.j by A2,A3,A5,TARSKI:def 2;
          hence thesis by A4,ZF_LANG1:86;
         end;
-      take i+j+1; let k be Nat; assume x.k in variables_in (x 'in' y);
+      take i+j+1; let k be Element of NAT;
+      assume x.k in variables_in (x 'in' y);
        then x.k = x.i or x.k = x.j by A2,A3,A5,TARSKI:def 2;
       hence thesis by A4,ZF_LANG1:86;
      end;
@@ -339,9 +341,9 @@ A6:  for H st P[H] holds P['not' H]
      end;
 A7:  for H1,H2 st P[H1] & P[H2] holds P[H1 '&' H2]
      proof let H1,H2;
-      given i1 being Nat such that
+      given i1 being Element of NAT such that
 A8:    for j st x.j in variables_in H1 holds j < i1;
-      given i2 being Nat such that
+      given i2 being Element of NAT such that
 A9:    for j st x.j in variables_in H2 holds j < i2;
           i1 <= i2 or i1 > i2;
       then consider i such that
@@ -355,9 +357,9 @@ A10:    i1 <= i2 & i = i2 or i1 > i2 & i = i1;
      end;
 A11:  for H,x st P[H] holds P[All(x,H)]
      proof let H,x;
-      given i1 being Nat such that
+      given i1 being Element of NAT such that
 A12:    for j st x.j in variables_in H holds j < i1;
-      consider i2 be Nat such that
+      consider i2 be Element of NAT such that
 A13:    x = x.i2 by ZF_LANG1:87;
           i1 <= i2+1 or i1 > i2+1;
       then consider i such that
@@ -796,14 +798,14 @@ theorem Th17:
     not x.0 in Free H2 & M,v2 |= All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0))) &
      def_func'(H1,v1) = def_func'(H2,v2)
   proof
-   defpred ZF[ZF-formula,Nat] means
+   defpred ZF[ZF-formula,Element of NAT] means
     for v1 st not x.0 in Free $1 &
      M,v1 |= All(x.3,Ex(x.0,All(x.4,$1 <=> x.4 '=' x.0)))
      ex H2,v2 st (for j st j < $2 & x.j in variables_in H2 holds
       j = 3 or j = 4) & not x.0 in Free H2 &
      M,v2 |= All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0))) &
       def_func'($1,v1) = def_func'(H2,v2);
-    defpred P[Nat] means for H holds ZF[H,$1];
+    defpred P[Element of NAT] means for H holds ZF[H,$1];
 A1:  P[0]
      proof let H;
       let v1 such that
@@ -824,7 +826,7 @@ A8:       for j st j < i & x.j in variables_in H1 holds j = 3 or j = 4 and
 A9:       not x.0 in Free H1 &
            M,v' |= All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0))) and
 A10:       def_func'(H,v1) = def_func'(H1,v') by A4,A5;
-         consider k being Nat such that
+         consider k being Element of NAT such that
 A11:       for j st x.j in variables_in All(x.4,x.i,H1) holds j < k by Th4;
              not x.k in variables_in All(x.4,x.i,H1) & x.i in {x.4,x.i} &
            x.4 in {x.4,x.i} &
@@ -972,7 +974,7 @@ A37:       i = 0;
          consider k such that
 A38:       for j st x.j in variables_in H holds j < k by Th4;
              k > 4 or not k > 4;
-         then consider k1 being Nat such that
+         then consider k1 being Element of NAT such that
 A39:       k > 4 & k1 = k or not k > 4 & k1 = 5;
          take F = H/(x.0,x.k1), v1/(x.k1,v1.(x.0));
              k1 <> 0 & k1 <> 3 & k1 <> 4 by A39;
@@ -1417,7 +1419,7 @@ A6: G = def_func'(H2,v2);
    consider i such that
 A7:  for j st x.j in variables_in H2 holds j < i by Th4;
        i > 4 or not i > 4;
-   then consider i3 being Nat such that
+   then consider i3 being Element of NAT such that
 A8: i > 4 & i3 = i or not i > 4 & i3 = 5;
 A9: i <= i3 by A8,XREAL_1:2;
        x.0 in {x.0,x.1,x.2} by ENUMSET1:def 1;
@@ -1438,10 +1440,10 @@ XBOOLE_0:3
         by A16,ENUMSET1:def 1,ZF_LANG1:164;
       hence contradiction by A11,A15,A16;
      end;
-   consider k1 being Nat such that
+   consider k1 being Element of NAT such that
 A17:  for j st x.j in variables_in H3 holds j < k1 by Th4;
        k1 > i3 or k1 <= i3;
-   then consider k being Nat such that
+   then consider k being Element of NAT such that
 A18: k1 > i3 & k = k1 or k1 <= i3 & k = i3+1;
 A19: not x.k in variables_in H2
      proof assume not thesis; then k < i by A7;

@@ -24,10 +24,10 @@ environ
 
 begin
 
-Lm1: for e being set, n being Nat st e in Seg n holds
-  ex i being Nat st e=i & 1<=i & i<=n
-proof let e be set, n be Nat; assume A1: e in Seg n;
-  then reconsider e as Nat;
+Lm1: for e being set, n being Element of NAT st e in Seg n holds
+  ex i being Element of NAT st e=i & 1<=i & i<=n
+proof let e be set, n be Element of NAT; assume A1: e in Seg n;
+  then reconsider e as Element of NAT;
   take e; thus thesis by A1,FINSEQ_1:3;
 end;
 
@@ -41,11 +41,11 @@ end;
 
 definition let m,n be natural number;
   func nat_interval(m,n) -> Subset of NAT equals
-    {i where i is Nat : m<=i & i<=n};
+    {i where i is Element of NAT : m<=i & i<=n};
   coherence proof
-    set IT = {i where i is Nat : m<=i & i<=n};
+    set IT = {i where i is Element of NAT : m<=i & i<=n};
        now let e be set; assume e in IT;
-      then consider i being Nat such that A1: i=e & m<=i & i<=n;
+      then consider i being Element of NAT such that A1: i=e & m<=i & i<=n;
            now per cases;
           suppose i=0; then i in {0} by TARSKI:def 1;
             hence e in ({0}\/(Seg n)) by A1,XBOOLE_0:def 2;
@@ -71,10 +71,10 @@ end;
 registration let m,n be natural number;
   cluster nat_interval(m,n) -> finite;
   coherence proof
-    reconsider n'=n as Nat by ORDINAL1:def 13;
-    set IT = {i where i is Nat : m<=i & i<=n};
+    reconsider n'=n as Element of NAT by ORDINAL1:def 13;
+    set IT = {i where i is Element of NAT : m<=i & i<=n};
        now let e be set; assume e in IT;
-      then consider i being Nat such that A1: i=e & m<=i & i<=n;
+      then consider i being Element of NAT such that A1: i=e & m<=i & i<=n;
            now per cases;
           suppose i=0; then i in {0} by TARSKI:def 1;
             hence e in ({0}\/(Seg n)) by A1,XBOOLE_0:def 2;
@@ -94,28 +94,29 @@ end;
 canceled;
 
 theorem
-  for m,n being Nat, e being set holds
-    (e in nat_interval(m,n) iff ex i being Nat st e=i & m<=i & i<=n);
+  for m,n being Element of NAT, e being set holds
+    e in nat_interval(m,n)
+     iff ex i being Element of NAT st e=i & m<=i & i<=n;
 
 theorem
-  for m,n,k being Nat holds k in nat_interval(m,n) iff m<=k & k<=n
-proof let m,n,k be Nat;
+  for m,n,k being Element of NAT holds k in nat_interval(m,n) iff m<=k & k<=n
+proof let m,n,k be Element of NAT;
   hereby assume k in nat_interval(m,n);
-    then consider i being Nat such that A1: k=i & m<=i & i<=n;
+    then consider i being Element of NAT such that A1: k=i & m<=i & i<=n;
     thus m<=k & k<=n by A1;
     end;
   assume m <= k & k <= n; hence thesis;
 end;
 
 theorem
-  for n being Nat holds nat_interval (1,n) = Seg n
-proof let n be Nat;
+  for n being Element of NAT holds nat_interval (1,n) = Seg n
+proof let n be Element of NAT;
   A1: now let e be set; assume e in nat_interval (1,n);
-    then consider i being Nat such that A2: (e=i & 1<=i & i<=n);
+    then consider i being Element of NAT such that A2: (e=i & 1<=i & i<=n);
     thus e in Seg n by A2,FINSEQ_1:3;
     end;
      now let e be set; assume A3: e in Seg n;
-    then reconsider i = e as Nat;  1 <= i & i <= n by A3,FINSEQ_1:3;
+    then reconsider i = e as Element of NAT;  1 <= i & i <= n by A3,FINSEQ_1:3;
     hence e in nat_interval(1,n);
     end;
   then nat_interval (1,n) c= Seg n & Seg n c= nat_interval (1,n)
@@ -124,22 +125,23 @@ proof let n be Nat;
 end;
 
 theorem Th5:
-  for m,n being Nat st 1 <= m holds nat_interval(m,n) c= Seg n
-proof let m,n be Nat; assume A1: 1<=m;
+  for m,n being Element of NAT st 1 <= m holds nat_interval(m,n) c= Seg n
+proof let m,n be Element of NAT; assume A1: 1<=m;
      now let e be set; assume e in nat_interval(m,n);
-    then consider i being Nat such that A2: (e=i & m<=i & i<=n);
+    then consider i being Element of NAT such that A2: (e=i & m<=i & i<=n);
        1<=i by A1,A2,XXREAL_0:2; hence e in Seg n by A2,FINSEQ_1:3;
   end;
   hence thesis by TARSKI:def 3;
 end;
 
-theorem Th6: for k,m,n being Nat st k<m holds
+theorem Th6: for k,m,n being Element of NAT st k<m holds
   Seg k misses nat_interval(m,n)
-proof let k,m,n be Nat; assume A1: k<m;
+proof let k,m,n be Element of NAT; assume A1: k<m;
      now let e be set; assume e in ((Seg k) /\ nat_interval(m,n));
     then A2: e in (Seg k) & e in nat_interval(m,n) by XBOOLE_0:def 3;
-    then consider i being Nat such that A3: (e=i & 1<=i & i<=k) by Lm1;
-    consider j being Nat such that A4: (e=j & m<=j & j<=n) by A2;
+    then consider i being Element of NAT such that
+    A3: (e=i & 1<=i & i<=k) by Lm1;
+    consider j being Element of NAT such that A4: (e=j & m<=j & j<=n) by A2;
     thus e in {} by A1,A3,A4,XXREAL_0:2;
   end;
   then ((Seg k) /\ nat_interval(m,n)) c= {} by TARSKI:def 3;
@@ -148,10 +150,10 @@ proof let k,m,n be Nat; assume A1: k<m;
 end;
 
 theorem
-  for m,n being Nat st n<m holds nat_interval(m,n)={}
-proof let m,n be Nat; assume A1: n<m;
+  for m,n being Element of NAT st n<m holds nat_interval(m,n)={}
+proof let m,n be Element of NAT; assume A1: n<m;
      now let e be set; assume e in nat_interval(m,n);
-      then consider i being Nat such that A2: e=i & m<=i & i<=n;
+      then consider i being Element of NAT such that A2: e=i & m<=i & i<=n;
       thus contradiction by A1,A2,XXREAL_0:2;
   end;
   hence thesis by XBOOLE_0:def 1;
@@ -768,7 +770,7 @@ begin :: SECTION 6: degree of vertices.
 
 definition let X be set, G be SimpleGraph of X;
   let v be set;
-  func degree (G,v) -> Nat means :Def11:
+  func degree (G,v) -> Element of NAT means :Def11:
     ex X being finite set st
       (for z being set holds (z in X iff z in (the SEdges of G) & v in z)) &
       it = card X;
@@ -784,7 +786,7 @@ definition let X be set, G be SimpleGraph of X;
     take card(X), X; thus thesis by A1;
     end;
   uniqueness proof
-    let IT1, IT2 be Nat; assume
+    let IT1, IT2 be Element of NAT; assume
          (ex X1 be finite set st
         (for z being set holds
             (z in X1 iff z in the SEdges of G & v in z)) & IT1 = card(X1)) &
@@ -1038,9 +1040,9 @@ definition let X be set, g be SimpleGraph of X,
                p be FinSequence of the carrier of g;
   pred p is_path_of v1,v2 means :Def12:
     (p.1)=v1 & (p.(len p))=v2 &
-    (for i being Nat st (1<=i & i<(len p)) holds
+    (for i being Element of NAT st (1<=i & i<(len p)) holds
        {p.i, p.(i+1)} in (the SEdges of g)) &
-    (for i,j being Nat st 1<=i & i<(len p) & i<j & j<(len p) holds
+    (for i,j being Element of NAT st 1<=i & i<(len p) & i<j & j<(len p) holds
            p.i <> p.j & {p.i,p.(i+1)}<>{p.j,p.(j+1)});
 end;
 
@@ -1103,7 +1105,7 @@ begin :: SECTION 8: some famous graphs.
 :: for  the proof of Kuratowski's theorem, we need only K_{3,3} and K_5.
 :: here we define complete (and complete bipartate) graphs in general.
 
-definition let n,m be Nat;
+definition let n,m be Element of NAT;
  canceled;
 
   func K_(m,n) -> SimpleGraph of NAT means
@@ -1143,7 +1145,7 @@ FINSET_1:13;
   uniqueness;
 end;
 
-definition let n be Nat;
+definition let n be Element of NAT;
   func K_(n) -> SimpleGraph of NAT means :Def17:
     ex ee being finite Subset of TWOELEMENTSETS(Seg n) st
       ee = {{i,j} where i,j is Element of NAT :
@@ -1195,11 +1197,12 @@ theorem Th46:  ex ee being Subset of TWOELEMENTSETS(Seg 3) st
     TriangleGraph = SimpleGraphStruct (#(Seg 3),ee#)
 proof
   consider ee being finite Subset of TWOELEMENTSETS(Seg 3) such that
-    A1: ee = {{i,j} where i,j is Nat : i in (Seg 3) & j in (Seg 3) & i<>j} &
+A1: ee = {{i,j} where i,j is Element of NAT :
+ i in (Seg 3) & j in (Seg 3) & i<>j} &
         TriangleGraph = SimpleGraphStruct (#(Seg 3),ee#) by Def17;
     take ee;
        now let a be set; assume a in ee;
-      then consider i,j being Nat such that A2:
+      then consider i,j being Element of NAT such that A2:
           a={i,j}& i in (Seg 3) & j in (Seg 3) & i<>j by A1; per cases by A2,
 ENUMSET1:def 1,FINSEQ_3:1;
       suppose A3: i=1;
@@ -1299,7 +1302,7 @@ def 1
     ONE^TWO^THREE is FinSequence of (the carrier of TriangleGraph);
   then reconsider pp=p as Element of (the carrier of TriangleGraph)* by
 FINSEQ_1:def 11;
-  A2: now let i be Nat; assume (1<=i & i<(len p));
+  A2: now let i be Element of NAT; assume (1<=i & i<(len p));
          then 1<=i &i<3+1 by FINSEQ_1:87; then 1<=i & i<=3 by NAT_1:38;
          then A3: i in Seg 3 by FINSEQ_1:3;
          per cases by A3,ENUMSET1:def 1,FINSEQ_3:1;
@@ -1316,7 +1319,7 @@ TriangleGraph)
               by A1,Th46,ENUMSET1:def 1;
          end;
          end;
-      now let i,j be Nat; assume 1<=i & i<len pp & i<j & j<len pp;
+      now let i,j be Element of NAT; assume 1<=i & i<len pp & i<j & j<len pp;
           then A4: 1<=i & i<(3+1) & i<j & j<(3+1) by FINSEQ_1:87;
           then A5: 1<=i & i<=3 & i<j & j<=3 by NAT_1:38;
           A6: 1<=(i+1) & (i+1)<=j & j<=3 by A4,NAT_1:38;

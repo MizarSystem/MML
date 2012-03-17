@@ -9,7 +9,8 @@ environ
  vocabularies FUNCT_1, BOOLE, RELAT_1, FINSET_1, ORDERS_1, FINSEQ_1, CARD_1,
       GRAPH_1, GRAPH_5, RLVECT_1, GRAPH_4, FINSEQ_4, FINSEQ_2, PROB_1, ARYTM_1,
       MSAFREE2;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XXREAL_0, RELAT_1, FUNCT_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS,
+ XCMPLX_0,XXREAL_0, RELAT_1, FUNCT_1,
       FINSEQ_1, FINSEQ_2, FINSEQ_4, CARD_1, FINSET_1, REAL_1, NAT_1, GRAPH_1,
       BINARITH, FUNCT_2, GRAPH_4, CARD_3, RVSUM_1, GOBOARD1, GRAPH_3;
  constructors XXREAL_0, REAL_1, NAT_1, CARD_3, SEQ_1, FINSEQ_4, FINSOP_1,
@@ -21,12 +22,12 @@ environ
  theorems FUNCT_2, XBOOLE_1, GRAPH_1, FINSEQ_1, GRAPH_4, FUNCT_1, FINSEQ_3,
       REAL_1, FINSEQ_4, NAT_1, CARD_1, TARSKI, YELLOW15, CARD_4, CARD_5,
       FINSEQ_2, FINSET_1, XBOOLE_0, CARD_2, RVSUM_1, SUBSET_1, ZFMISC_1,
-      XREAL_1, BINARITH, XXREAL_0, FINSOP_1, PRE_CIRC;
+      XREAL_1, BINARITH, XXREAL_0, FINSOP_1, PRE_CIRC, ORDINAL1;
  schemes FUNCT_1, NAT_1;
 
 begin :: Preliminaries
 
-reserve n,m,i,j,k for Nat,
+reserve n,m,i,j,k for Element of NAT,
         x,y,e,y1,y2,X,V,U for set,
         W,f,g for Function;
 
@@ -79,19 +80,19 @@ A4:  dom f = A() & for x st x in A() holds P[x,f.x];
 end;
 
 theorem Th3:
-  for D being finite set, n being Nat, X being set st
+  for D being finite set, n being Element of NAT, X being set st
   X = {x where x is Element of D* : 1 <= len x & len x <= n } holds
   X is finite
 proof
-     let D be finite set,n be Nat, X be set;
+     let D be finite set,n be Element of NAT, X be set;
      assume A1: X = {x where x is Element of D* : 1 <= len x & len x <= n };
-     deffunc F(Nat) = $1-tuples_on D;
+     deffunc F(Element of NAT) = $1-tuples_on D;
      consider f being Function such that
-A2:  dom f = Seg n & for x being Nat st x in Seg n
+A2:  dom f = Seg n & for x being Element of NAT st x in Seg n
      holds f.x = F(x) from LambdaAB;
         now let x;
          assume A3:x in dom f;
-         then reconsider z=x as Nat by A2;
+         then reconsider z=x as Element of NAT by A2;
             f.z = F(z) by A2,A3;
          hence f.x is finite by YELLOW15:2;
      end;
@@ -114,10 +115,10 @@ then A4:  Union f is finite by A2,CARD_4:63;
 end;
 
 theorem Th4:
-  for D being finite set, n being Nat, X being set
+  for D being finite set, n being Element of NAT, X being set
   st X = {x where x is Element of D* : len x <= n } holds X is finite
 proof
-     let D be finite set,n be Nat, X be set;
+     let D be finite set,n be Element of NAT, X be set;
      assume A1: X = {x where x is Element of D* : len x <= n };
      set B = {x where x is Element of D* : 1 <= len x & len x <= n };
 A2:  X c= { {} } \/ B
@@ -161,10 +162,10 @@ then A2: D=C \/ {x} by XBOOLE_1:45;
 end;
 
 theorem Th6:
-  for D being finite set, k being Nat st card D = k+1 holds
+  for D being finite set, k being Element of NAT st card D = k+1 holds
   ex x being Element of D,C being Subset of D st D = C \/ { x } & card C = k
 proof
-     let D be finite set,k be Nat;
+     let D be finite set,k be Element of NAT;
      assume A1: card D = k+1;
      then D <> {} by Th5;
      then consider x being set such that
@@ -196,7 +197,7 @@ end;
 scheme MinValue { D() -> non empty finite set, F(Element of D())-> Real}:
   ex x being Element of D() st for y being Element of D() holds F(x) <= F(y)
 proof
-    defpred P[Nat] means for A being Subset of D() st $1+1 = card A
+    defpred P[Element of NAT] means for A being Subset of D() st $1+1 = card A
     holds ex x being Element of D() st x in A &
     for y being Element of D() st y in A holds F(x) <= F(y);
 A1: P[0]
@@ -328,7 +329,7 @@ proof
         let x1,x2 be set;
         assume A2: x1 in dom p & x2 in dom p & p.x1 = p.x2;
         assume A3: x1 <> x2;
-        reconsider n=x1, m=x2 as Nat by A2;
+        reconsider n=x1, m=x2 as Element of NAT by A2;
     A4: 1 <= n & n <= len p by A2,FINSEQ_3:27;
     A5: 1 <= m & m <= len p by A2,FINSEQ_3:27;
        per cases;
@@ -383,16 +384,19 @@ A2:  len r =i by FINSEQ_2:19;
 then A3:  i in dom r by A2,FINSEQ_3:27;
      then consider y being set such that
 A4:  y in dom p & r.i = p.y by A1,Th2;
-     reconsider j=y as Nat by A4;
+     reconsider j=y as Element of NAT by A4;
         j <= len p by A4,FINSEQ_3:27;
      then consider k being Nat such that
 A5:  len p = j+k by NAT_1:28;
+     reconsider k as Element of NAT by ORDINAL1:def 13;
      consider s, p2 being FinSequence such that
 A6:  len s = j & len p2 = k & p = s^p2 by A5,FINSEQ_2:25;
 A7:  1 <= j by A4,FINSEQ_3:27;
-     then consider m such that
+     then consider m being Nat such that
 A8:  j = 1 + m by NAT_1:28;
-     consider p1 being FinSequence, d being set such that
+     reconsider m as Element of NAT by ORDINAL1:def 13;
+     j = 1 + m by A8;
+     then consider p1 being FinSequence, d being set such that
 A9:  s = p1^<*d*> by A6,A8,FINSEQ_2:21;
 A10:  j = len p1 +1 by A6,A9,FINSEQ_2:19;
 A11:  r.i=x by FINSEQ_1:59;
@@ -407,7 +411,7 @@ A14:  now let y be set;
           assume y = x;
           then consider z being set such that
      A16:  z in dom q & x = q.z by A15,FUNCT_1:def 5;
-          reconsider n=z as Nat by A16;
+          reconsider n=z as Element of NAT by A16;
              n <= len q by A16,FINSEQ_3:27;
      then A17:  n <> i by XREAL_1:31;
      A18:  n in dom r by A16,FINSEQ_2:18;
@@ -997,8 +1001,9 @@ then A47:  rv is_oriented_vertex_seq_of pq by A8,GRAPH_4:def 5;
        then A58:  v2 = rv.m by A7,FINSEQ_1:59;
        A59:  1 < n by A48,A49,A57,XXREAL_0:1;
                0 < n by A48;
-            then consider k such that
+            then consider k being Nat such that
        A60:  n=k+1 by NAT_1:22;
+       reconsider k as Element of NAT by ORDINAL1:def 13;
        A61:  1 <= k by A59,A60,NAT_1:38;
                k+1 < len r+1 by A7,A48,A60,XXREAL_0:2;
        then A62:  k+1 <= len r by NAT_1:38;
@@ -1215,21 +1220,23 @@ proof
 end;
 
 theorem Th23:
-  not vertices pe c= V implies ex i being Nat, q,r being FinSequence
+  not vertices pe c= V implies ex i being Element of NAT, q,r being FinSequence
   of the Edges of G st i+1 <= len pe & not vertices(pe/.(i+1)) c= V &
   len q=i & pe=q^r & vertices q c= V
 proof
-     defpred P[Nat] means $1 in dom pe & not vertices(pe/.$1) c= V;
+     defpred P[Element of NAT] means $1 in dom pe & not vertices(pe/.$1) c= V;
      assume not vertices pe c= V;
      then A1:   ex i st P[i] by Th22;
      consider k such that
 A2:  P[k] & for n st P[n] holds k <= n from NAT_1:sch 5(A1);
 A3:  1 <= k & k <= len pe by A2,FINSEQ_3:27;
-     then consider i such that
+     then consider i being Nat such that
 A4:  k=1+i by NAT_1:28;
-     consider j such that
+     reconsider i as Element of NAT by ORDINAL1:def 13;
+     consider j being Nat such that
 A5:  len pe=k+j by A3,NAT_1:28;
-        len pe=i+(1+j) by A4,A5;
+     reconsider j as Element of NAT by ORDINAL1:def 13;
+     len pe=i+(1+j) by A4,A5;
      then consider q,r being FinSequence such that
 A6:  len q = i & len r = 1+j & pe = q^r by FINSEQ_2:25;
      reconsider q,r as FinSequence of the Edges of G by A6,FINSEQ_1:50;
@@ -1266,7 +1273,7 @@ proof
            qe.i in rng qe by A3,FUNCT_1:def 5;
         then consider j being set such that
     A5: j in dom pe & qe.i = pe.j by A1,FUNCT_1:def 5;
-        reconsider j as Nat by A5;
+        reconsider j as Element of NAT by A5;
            pe/.j=qe/.i by A4,A5,FINSEQ_4:def 4;
         then x in {u where u is Vertex of G : ex k st k in dom pe &
         u in vertices(pe/.k)} by A2,A3,A5;
@@ -1458,9 +1465,10 @@ A5:  1<=i & i <= len p by A3,FINSEQ_3:27;
      end;
      suppose A7: v=FS.(p.i);
    then A8:  i > 1 by A1,A5,REAL_1:def 5;
-        consider j such that
+        consider j being Nat such that
    A9:  i=1+j by A5,NAT_1:28;
-   A10:  j >= 1 by A8,A9,NAT_1:38;
+   reconsider j as Element of NAT by ORDINAL1:def 13;
+A10: j >= 1 by A8,A9,NAT_1:38;
    A11:  j < len p by A5,A9,NAT_1:38;
         take j;
         thus thesis by A7,A9,A10,A11,GRAPH_1:def 12;
@@ -1807,7 +1815,7 @@ theorem Th47:
   AcyclicPaths(v1,v2) <> {}
 proof
     assume A1: p is_orientedpath_of v1,v2;
-    defpred P[Nat] means for p,v1,v2 st $1+1 = len p &
+    defpred P[Element of NAT] means for p,v1,v2 st $1+1 = len p &
     p is_orientedpath_of v1,v2 holds AcyclicPaths(p) <> {};
     set FS=the Source of G,
         FT=the Target of G;
@@ -1861,9 +1869,10 @@ A4: for k st P[k] holds P[k+1]
            suppose ex k st 1<=k & k <= len q & FT.(q.k)=FT.(p2.1);
               then consider k such that
          A19:  1<=k & k <= len q & FT.(q.k)=FT.(p2.1);
-              consider i such that
+              consider i being Nat such that
          A20:  len q = k + i by A19,NAT_1:28;
-              consider q1,q2 being FinSequence such that
+         i in NAT by ORDINAL1:def 13;
+then               consider q1,q2 being FinSequence such that
          A21:  len q1 = k & len q2 = i & q = q1^q2 by A20,FINSEQ_2:25;
               reconsider q1 as Simple (oriented Chain of G) by A21,Th17;
                  rng q1 c= rng q by A21,FINSEQ_1:42;
@@ -1931,7 +1940,7 @@ theorem Th48:
   AcyclicPaths(v1,v2,V) <> {}
 proof
     assume A1: p is_orientedpath_of v1,v2,V;
-    defpred P[Nat] means for p,v1,v2 st len p <= $1+1 &
+    defpred P[Element of NAT] means for p,v1,v2 st len p <= $1+1 &
     p is_orientedpath_of v1,v2,V holds AcyclicPaths(p) <> {};
     set FS=the Source of G,
         FT=the Target of G;
@@ -1984,15 +1993,17 @@ GRAPH_4:def 5;
                then consider n,m such that
            A16: 1<=n & n<m & m<=len vs & vs.n=vs.m & not (n=1 & m=len vs);
            A17: m >= 1 by A16,XXREAL_0:2;
-               then consider i such that
+               then consider i being Nat such that
            A18: m=1+i by NAT_1:28;
+           reconsider i as Element of NAT by ORDINAL1:def 13;
                hereby
                   per cases;
                   suppose A19:n=1;
                      then m < len vs by A16,REAL_1:def 5;
                  then A20: m <= len p by A9,NAT_1:38;
-                     then consider j such that
+                     then consider j being Nat such that
                  A21: len p=m+j by NAT_1:28;
+                 reconsider j as Element of NAT by ORDINAL1:def 13;
                  A22: len p=i+(1+j) by A18,A21;
                      then consider p1,p2 being FinSequence such that
                  A23: len p1 = i & len p2 = 1+j & p = p1^p2 by FINSEQ_2:25;
@@ -2000,8 +2011,7 @@ GRAPH_4:def 5;
                  A25: p.1 orientedly_joins vs/.1, vs/.(1+1) by A8,A12,
 GRAPH_4:def 5;
                         p.m orientedly_joins vs/.m, vs/.(m+1) by A8,A16,A19,A20
-,GRAPH_4:def 5
-;
+,GRAPH_4:def 5;
                  then A26: FS.(p.m) = vs/.m by GRAPH_4:def 1
                      .=vs.m by A16,A19,FINSEQ_4:24
                      .=vs/.n by A16,A24,FINSEQ_4:24
@@ -2044,12 +2054,15 @@ that
                  then A35:  n > 1 by A16,REAL_1:def 5;
                       consider n1 being Nat such that
                  A36:  n = 1+n1 by A16,NAT_1:28;
+                 reconsider n1 as Element of NAT by ORDINAL1:def 13;
                  A37:  n < len vs by A16,XXREAL_0:2;
                  then A38:  n1 < len p by A9,A36,XREAL_1:9;
-                      then consider j such that
+                      then consider j being Nat such that
                  A39: len p=n1+j by NAT_1:28;
-                     consider p1,p2 being FinSequence such that
-                 A40: len p1 = n1 & len p2 = j & p = p1^p2 by A39,FINSEQ_2:25;
+                 reconsider j as Element of NAT by ORDINAL1:def 13;
+                 len p=n1+j by A39;
+                 then consider p1,p2 being FinSequence such that
+                 A40: len p1 = n1 & len p2 = j & p = p1^p2 by FINSEQ_2:25;
                  A41: n1 >= 1 by A35,A36,NAT_1:38;
                  A42: rng p1 c= rng p by A40,FINSEQ_1:42;
                         p1.1=p.1 by A40,A41,Lm1;
@@ -2082,12 +2095,9 @@ that
                    A50:   r=q & q <> {} & FS.(q.1) = v1 & FT.(q.(len q))= v2
                           &rng q c= rng p1;
                    A51:    rng q c= rng p by A42,A50,XBOOLE_1:1;
-                            FS.(q.1) = FS.(p.1) & FT.(q.(len q)) = FT.(p.(len p
-)
-)
+                   FS.(q.1) = FS.(p.1) & FT.(q.(len q)) = FT.(p.(len p))
                          by A10,A50,Def3;
-                         then q in {w where w is Simple (oriented Chain of G)
-:
+                         then q in {w where w is Simple (oriented Chain of G):
                             w <> {} & FS.(w.1) = FS.(p.1) & FT.(w.(len w))=
                             FT.(p.(len p)) & rng w c= rng p} by A50,A51;
                          hence AcyclicPaths(p) <> {};
@@ -2097,14 +2107,14 @@ that
                      then A52:  m <= len p by A9,NAT_1:38;
                           then consider h being Nat such that
                      A53:  len p=m+h by NAT_1:28;
+                     reconsider h as Element of NAT by ORDINAL1:def 13;
                      A54:  len p=i+(1+h) by A18,A53;
                           then consider q1,q2 being FinSequence such that
                      A55:  len q1 = i & len q2 = 1+h & p = q1^q2
                           by FINSEQ_2:25;
                           reconsider q2 as oriented Chain of G by A55,Th14;
                              p.m orientedly_joins vs/.m,vs/.(m+1)by A8,A17,A52,
-GRAPH_4:def 5
-;
+GRAPH_4:def 5;
                      then A56:  FS.(p.m) = vs/.m by GRAPH_4:def 1
                            .=FT.(p1.len p1) by A16,A17,A44,A45,FINSEQ_4:24;
                      A57:   1 <= len q2 by A55,NAT_1:37;
@@ -2224,7 +2234,7 @@ definition
   let G be Graph, p be FinSequence of the Edges of G, W be Function;
   assume A1: W is_weight_of G;
   func RealSequence(p,W) -> FinSequence of REAL means :Def15:
-  dom p = dom it & for i be Nat st i in dom p holds it.i=W.(p.i);
+  dom p = dom it & for i be Element of NAT st i in dom p holds it.i=W.(p.i);
   existence
   proof
     deffunc F(set) = W.(p.$1);
@@ -2248,9 +2258,9 @@ then A3:   f is FinSequence by FINSEQ_1:def 2;
   proof
       let f1, f2 be FinSequence of REAL;
       assume A7: dom p = dom f1 &
-                 for i be Nat st i in dom p holds f1.i=W.(p.i);
+                 for i be Element of NAT st i in dom p holds f1.i=W.(p.i);
       assume A8: dom p = dom f2 &
-                 for i be Nat st i in dom p holds f2.i=W.(p.i);
+                 for i be Element of NAT st i in dom p holds f2.i=W.(p.i);
          now let i;
           assume A9: i in dom f1;
           hence f1.i=W.(p.i) by A7
@@ -2306,7 +2316,7 @@ proof
 A2: g.i=W.(qe.i) by A1,Def15;
     consider y being set such that
 A3: y in dom pe & qe.i = pe.y by A1,Th2;
-    reconsider j=y as Nat by A3;
+    reconsider j=y as Element of NAT by A3;
     take j;
     thus j in dom pe by A3;
     thus f.j=g.i by A1,A2,A3,Def15;
@@ -2364,15 +2374,16 @@ A4:  j in dom pe & f.j = g.1 by A1,A2,Th52;
 A5:  1 <= j & j <= len pe by A4,FINSEQ_3:27;
         dom pe = dom f by A3,Def15;
      then len pe = len f by FINSEQ_3:31;
-     then consider m such that
+     then consider m being Nat such that
 A6:  len f = j+m by A5,NAT_1:28;
+     reconsider m as Element of NAT by ORDINAL1:def 13;
      consider f1,f2 being FinSequence of REAL such that
 A7:  len f1 = j & len f2 = m & f = f1^f2 by A6,FINSEQ_2:26;
         for i st i in dom f holds f.i >= 0 by A1,Th51;
 then for y being Real st y in rng f holds y >= 0 by Lm3;
 then A8:  (for i st i in dom f1 holds f1.i >= 0) &
      (for i st i in dom f2 holds f2.i >= 0) by A7,Lm4;
-     consider n such that
+     consider n being Nat such that
 A9:  j=1+n by A5,NAT_1:28;
         dom g = dom qe by A3,Def15;
      then len g = len qe by FINSEQ_3:31;
@@ -2473,11 +2484,11 @@ proof
          f=RealSequence(pe^qe,W),
          g=RealSequence(pe,W),
          h=RealSequence(qe,W);
-A2:  dom r = dom f & for i be Nat st i in dom r holds f.i=W.(r.i)
+A2:  dom r = dom f & for i be Element of NAT st i in dom r holds f.i=W.(r.i)
      by A1,Def15;
-A3:  dom pe = dom g & for i be Nat st i in dom pe holds g.i=W.(pe.i)
+A3:  dom pe = dom g & for i be Element of NAT st i in dom pe holds g.i=W.(pe.i)
      by A1,Def15;
-A4:  dom qe = dom h & for i be Nat st i in dom qe holds h.i=W.(qe.i)
+A4:  dom qe = dom h & for i be Element of NAT st i in dom qe holds h.i=W.(qe.i)
      by A1,Def15;
 then A5:  len f = len r & len pe = len g & len qe = len h
        by A2,A3,FINSEQ_3:31;
@@ -2516,7 +2527,7 @@ theorem Th59:
 proof
     set D=the Edges of G;
     assume A1: qe is one-to-one & rng qe c= rng pe & W is_weight>=0of G;
-      defpred P[Nat] means
+      defpred P[Element of NAT] means
       for p, q being FinSequence of D st q is one-to-one &
       rng q c= rng p & len q = $1 holds cost(q,W) <= cost(p,W);
 A2:  W is_weight_of G by A1,Th50;
@@ -2528,9 +2539,9 @@ A3: P[0]
        then cost(q,W) = 0 by A2,Th55;
        hence cost(q,W) <= cost(p,W) by A1,Th54;
     end;
-A4: for k being Nat st P[k] holds P[k + 1]
+A4: for k being Element of NAT st P[k] holds P[k + 1]
     proof
-         let k be Nat;
+         let k be Element of NAT;
          assume A5: P[k];
             now
             let p, q be FinSequence of D;
@@ -2557,7 +2568,7 @@ A4: for k being Nat st P[k] holds P[k + 1]
          end;
          hence P[k+1];
     end;
-       for k being Nat holds P[k] from NAT_1:sch 1(A3,A4);
+       for k being Element of NAT holds P[k] from NAT_1:sch 1(A3,A4);
     then P[len qe];
     hence thesis by A1;
 end;
@@ -2798,14 +2809,15 @@ A5:  v1 in V by A1,A2,Th35;
           assume A6: r is_orientedpath_of v1,v2;
           per cases;
           suppose not vertices r c= V;
-             then consider i being Nat, s,t being FinSequence of the
+             then consider i being Element of NAT, s,t being FinSequence of the
              Edges of G such that
           A7:  i+1 <= len r & not vertices(r/.(i+1)) c= V & len s=i
               & r=s^t & vertices(s) c= V by Th23;
                  i+1 <= len s+len t by A7,FINSEQ_1:35;
           then A8: 1 <= len t by A7,XREAL_1:8;
-              then consider j such that
+              then consider j being Nat such that
           A9: len t = 1+j by NAT_1:28;
+          reconsider j as Element of NAT by ORDINAL1:def 13;
               reconsider s,t as oriented Chain of G by A7,Th14;
               consider t1,t2 being FinSequence such that
           A10: len t1 = 1 & len t2 = j & t = t1^t2 by A9,FINSEQ_2:25;
@@ -3007,9 +3019,10 @@ A15:  FS.e=v2 & FT.e=v3 by A1,GRAPH_4:def 1;
 A16:  W is_weight_of G by A1,Th50;
      per cases;
      suppose len s >= 2;
-       then consider k such that
+       then consider k being Nat such that
  A17:   len s = 1+1 + k by NAT_1:28;
- A18:   len s = 1 + (1+k) by A17;
+ reconsider k as Element of NAT by ORDINAL1:def 13;
+A18: len s = 1 + (1+k) by A17;
        then consider s1,s2 being FinSequence such that
  A19:   len s1 = 1+k & len s2 = 1 & s = s1^s2 by FINSEQ_2:25;
        reconsider s1,s2 as Simple (oriented Chain of G) by A19,Th17;
@@ -3114,8 +3127,9 @@ Th31
                  vertices(qx) \ {v3} c= V by A54,A56,XBOOLE_1:1;
                 then qx is_orientedpath_of v1,v3,V by A53,Def4;
              then A57: cost(Q,W) <= cost(qx,W) by A1,Def18;
-                 consider j such that
+                 consider j being Nat such that
              A58: len s1=i+j by A34,NAT_1:28;
+             reconsider j as Element of NAT by ORDINAL1:def 13;
                  consider t1,t2 being FinSequence such that
              A59: len t1 = i & len t2 = j & s1 = t1^t2 by A58,FINSEQ_2:25;
                  reconsider t1,t2 as Simple (oriented Chain of G) by A59,Th17;

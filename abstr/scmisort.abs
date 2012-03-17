@@ -61,7 +61,7 @@ theorem :: SCMISORT:4
 reserve s for State of SCM+FSA,
    I for Macro-Instruction,
    a for read-write Int-Location;
-reserve i,j,k,n for Nat;
+reserve i,j,k,n for Element of NAT;
 
 canceled;
 
@@ -79,7 +79,7 @@ theorem :: SCMISORT:8
   or n = 6 or n = 7 or n = 8 or n = 9 or n=10 or n=11;
 
 theorem :: SCMISORT:9
- for f,g be FinSequence of INT,m,n be Nat st 1<=n & n <= len f &
+ for f,g be FinSequence of INT,m,n be Element of NAT st 1<=n & n <= len f &
  1<=m & m <= len f & g=f+*(m,f/.n) +*(n,f/.m) holds
  f.m=g.n & f.n=g.m & (for k be set st k<>m & k<>n & k in dom f holds
  f.k=g.k) & f,g are_fiberwise_equipotent;
@@ -95,7 +95,7 @@ theorem :: SCMISORT:11   ::SCMFSA6B_28
  for s1,s2 be State of SCM+FSA,I be InitHalting Macro-Instruction st
      Initialized I c= s1 & Initialized I c= s2 &
  s1,s2 equal_outside the Instruction-Locations of SCM+FSA holds
- for k be Nat holds
+ for k be Element of NAT holds
      (Computation s1).k, (Computation s2).k
          equal_outside the Instruction-Locations of SCM+FSA &
      CurInstr (Computation s1).k = CurInstr (Computation s2).k;
@@ -132,7 +132,7 @@ theorem :: SCMISORT:16
 
 theorem :: SCMISORT:17
   for a being Int-Location, I being Macro-Instruction,
- s being State of SCM+FSA,k being Nat st
+ s being State of SCM+FSA,k being Element of NAT st
    I is_closed_onInit s & I is_halting_onInit s &
    k < LifeSpan (s +* Initialized I) &
    IC (Computation (s +* Initialized while>0(a,I))).(1 + k) =
@@ -165,7 +165,7 @@ theorem :: SCMISORT:19
  st I is_closed_onInit s & I is_halting_onInit s & s.a >0 holds
     IC (Computation (s +* Initialized while>0(a,I))).
     (LifeSpan (s +* Initialized I) + 3) = insloc 0 &
-    for k being Nat st k <= LifeSpan (s +* Initialized I) + 3
+    for k being Element of NAT st k <= LifeSpan (s +* Initialized I) + 3
     holds IC (Computation (s +* Initialized while>0(a,I))).k in
     dom while>0(a,I);
 
@@ -173,7 +173,7 @@ theorem :: SCMISORT:20     ::SCM_9_36
      for s being State of SCM+FSA, I being Macro-Instruction,a be read-write
  Int-Location st
     I is_closed_onInit s & I is_halting_onInit s & s.a >0 holds
-    for k being Nat st k <= LifeSpan (s +* Initialized I) + 3
+    for k being Element of NAT st k <= LifeSpan (s +* Initialized I) + 3
     holds IC (Computation (s +* Initialized while>0(a,I))).k
     in dom while>0(a,I);
 
@@ -191,7 +191,7 @@ theorem :: SCMISORT:21     ::SCM_9_37
 theorem :: SCMISORT:22
  for s be State of SCM+FSA, I be InitHalting Macro-Instruction,
      a be read-write Int-Location st s.a > 0 holds
- ex s2 be State of SCM+FSA, k be Nat st
+ ex s2 be State of SCM+FSA, k be Element of NAT st
    s2 = s +* Initialized (while>0(a,I)) &
    k =LifeSpan (s +* Initialized I) + 3 &
    IC (Computation s2).k = insloc 0 &
@@ -204,7 +204,7 @@ func StepWhile>0(a,s,I) -> Function of NAT,product the Object-Kind of SCM+FSA
   means
 :: SCMISORT:def 1
 
-   it.0 = s & for i being Nat
+   it.0 = s & for i being Element of NAT
   holds it.(i+1)=(Computation (it.i +* Initialized while>0(a,I))).
       (LifeSpan (it.i +* Initialized I) + 3);
 end;
@@ -222,7 +222,7 @@ theorem :: SCMISORT:26
 
 theorem :: SCMISORT:27
 for I be Macro-Instruction,a be read-write Int-Location,
-  s be State of SCM+FSA,k,n be Nat st
+  s be State of SCM+FSA,k,n be Element of NAT st
   IC StepWhile>0(a,s,I).k =insloc 0 & StepWhile>0(a,s,I).k=
   (Computation (s +* Initialized while>0(a,I))).n &
   StepWhile>0(a,s,I).k.intloc 0=1
@@ -235,7 +235,7 @@ theorem :: SCMISORT:28
   for I be Macro-Instruction,a be read-write Int-Location,
     s be State of SCM+FSA st
      ex f being Function of product the Object-Kind of SCM+FSA,NAT st
-      (for k being Nat holds ( f.(StepWhile>0(a,s,I).k) <> 0 implies
+      (for k being Element of NAT holds ( f.(StepWhile>0(a,s,I).k) <> 0 implies
       f.(StepWhile>0(a,s,I).(k+1)) < f.(StepWhile>0(a,s,I).k) &
       I is_closed_onInit StepWhile>0(a,s,I).k &
       I is_halting_onInit StepWhile>0(a,s,I).k) &
@@ -358,7 +358,7 @@ theorem :: SCMISORT:42
  for f being FinSeq-Location holds card (insert-sort f) = 82;
 
 theorem :: SCMISORT:43
- for f being FinSeq-Location, k being Nat st
+ for f being FinSeq-Location, k being Element of NAT st
    k < 82 holds insloc k in dom (insert-sort f);
 
 theorem :: SCMISORT:44
@@ -367,12 +367,13 @@ theorem :: SCMISORT:44
 theorem :: SCMISORT:45
 for s be State of SCM+FSA holds
     (s.f0, IExec(insert-sort f0,s).f0 are_fiberwise_equipotent) &
-    (for i,j be Nat st i>=1 & j<=len (s.f0) & i<j
+    (for i,j be Element of NAT st i>=1 & j<=len (s.f0) & i<j
      for x1,x2 be Integer st x1 =IExec(insert-sort f0,s).f0.i &
         x2=IExec(insert-sort f0,s).f0.j holds x1 >= x2);
 
 theorem :: SCMISORT:46
- for i being Nat, s being State of SCM+FSA,w being FinSequence of INT
+ for i being Element of NAT, s being State of SCM+FSA,
+ w being FinSequence of INT
   st Initialized Insert-Sort-Algorithm +* ((fsloc 0) .--> w) c= s
   holds IC (Computation s).i in dom Insert-Sort-Algorithm;
 

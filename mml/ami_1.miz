@@ -9,6 +9,7 @@ environ
  vocabularies BOOLE, FUNCT_2, FUNCT_1, RELAT_1, FUNCOP_1, CAT_1, FUNCT_4,
       CARD_3, TARSKI, FRAENKEL, PARTFUN1, FINSET_1, AMI_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, NUMBERS, CARD_3,
+   XCMPLX_0,
       RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FINSET_1, NAT_1, CQC_LANG,
       FRAENKEL, FUNCOP_1, FUNCT_4, FINSEQ_1, DOMAIN_1, STRUCT_0, XXREAL_0;
  constructors SETFAM_1, PARTFUN1, DOMAIN_1, FUNCOP_1, FUNCT_4, FRAENKEL,
@@ -20,7 +21,7 @@ environ
  definitions TARSKI, FRAENKEL, STRUCT_0, XBOOLE_0, CQC_LANG;
  theorems ZFMISC_1, FUNCT_2, TARSKI, NAT_1, CQC_LANG, CARD_3, CARD_5, FINSEQ_1,
       FUNCT_4, FUNCOP_1, FRAENKEL, FINSET_1, PARTFUN1, FUNCT_1, GRFUNC_1,
-      RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1;
+      RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, ORDINAL1;
  schemes NAT_1, RECDEF_1, FRAENKEL, XBOOLE_0;
 
 begin :: Preliminaries
@@ -30,10 +31,10 @@ begin :: Preliminaries
 canceled;
 
 theorem
- for a,b being set holds 1 <> [a,b] by ZFMISC_1:8, CARD_5:1;
+  for a,b being set holds 1 <> [a,b] by ZFMISC_1:8, CARD_5:1;
 
 theorem
-    for a,b being set holds 2 <> [a,b] by ZFMISC_1:10, CARD_5:1;
+  for a,b being set holds 2 <> [a,b] by ZFMISC_1:10, CARD_5:1;
 
 canceled;
 
@@ -414,7 +415,7 @@ begin :: Preliminaries
 
 reserve x,y,z,A,B for set,
         f,g,h for Function,
-        i,j,k for Nat;
+        i,j,k for Element of NAT;
 
 canceled 2;
 
@@ -1132,7 +1133,7 @@ theorem Th51:
  for k holds
  (Computation s).(i+k) = (Computation (Computation s).i).k
  proof
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
      (Computation s).(i+$1) = (Computation (Computation s).i).$1;
 A1: P[0] by Def19;
 A2: now let k; assume
@@ -1152,14 +1153,16 @@ theorem Th52:
   for s being State of S st CurInstr((Computation s).i) = halt S
    holds (Computation s).j = (Computation s).i
  proof assume i <= j;
-   then consider k such that
-A1:   j = i + k by NAT_1:28;
+   then consider k being Nat such that
+A1a:   j = i + k by NAT_1:28;
+      reconsider k as Element of NAT by ORDINAL1:def 13;
+A1:   j = i + k by A1a;
   let N;
   let S be halting IC-Ins-separated definite
       (non empty non void AMI-Struct over N);
   let s be State of S such that
 A2: CurInstr((Computation s).i) = halt S;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
      (Computation s).(i+$1) = (Computation s).i;
 A3: P[0];
 A4: now let k; assume
@@ -1183,9 +1186,9 @@ A1: s is halting;
 :Def22:  ex k st it = (Computation s).k & CurInstr(it) = halt S;
  uniqueness
   proof let s1,s2 be State of S;
-   given k1 being Nat such that
+   given k1 being Element of NAT such that
 A2: s1 = (Computation s).k1 & CurInstr(s1) = halt S;
-   given k2 being Nat such that
+   given k2 being Element of NAT such that
 A3: s2 = (Computation s).k2 & CurInstr(s2) = halt S;
        k1 <= k2 or k2 <= k1;
    hence s1 = s2 by A2,A3,Th52;
@@ -1226,7 +1229,7 @@ theorem Th54:
   let S be steady-programmed
     IC-Ins-separated definite (non empty non void AMI-Struct over N);
   let s be State of S, i be Instruction-Location of S;
-    defpred P[Nat] means s.i = (Computation s).$1.i;
+    defpred P[Element of NAT] means s.i = (Computation s).$1.i;
 A1: P[0] by Def19;
 A2: now let k;
     assume P[k];
@@ -1290,8 +1293,9 @@ A2: CurInstr s' = s'.IC s'
   let i;
       now per cases;
     suppose i <= k;
-      then consider j such that
+      then consider j being Nat such that
 A3:     k = i + j by NAT_1:28;
+      reconsider j as Element of NAT by ORDINAL1:def 13;
 A4:    (Computation s).k = (Computation (Computation s).i).j by A3,Th51;
       then A5:    (Computation s).i is halting by A2,Def20;
      thus Result s = s' by A1,Th56
@@ -1647,7 +1651,7 @@ A1: l = loc;
 A2: h = halt S;
    let s be State of S such that
 A3: (IC S,loc) --> (l, h) c= s;
-    defpred P[Nat] means (Computation s).$1 = s;
+    defpred P[Element of NAT] means (Computation s).$1 = s;
 A4: P[0] by Def19;
 A5: now let i;
     assume
@@ -1727,10 +1731,10 @@ A3:  s <= h by Th30;
    let s' be State of S such that
 A4:  s c= s';
        h is halting by A1,A3,Def26;
-    then consider k1 being Nat such that
+    then consider k1 being Element of NAT such that
 A5:  Result h = (Computation h).k1 & CurInstr(Result h) = halt S by Def22;
        s' is halting by A1,A4,Def26;
-    then consider k2 being Nat such that
+    then consider k2 being Element of NAT such that
 A6:  Result s' = (Computation s').k2 & CurInstr(Result s') = halt S by Def22;
        now per cases;
      suppose k1 <= k2;

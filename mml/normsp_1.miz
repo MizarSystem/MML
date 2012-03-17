@@ -9,19 +9,20 @@ environ
  vocabularies RLVECT_1, BINOP_1, FUNCT_1, PRE_TOPC, RLSUB_1, ABSVALUE, ARYTM_1,
       ARYTM_3, RELAT_1, SEQM_3, SEQ_2, SEQ_1, ORDINAL2, NORMSP_1, ARYTM,
       FUNCOP_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+   XREAL_0,
       REAL_1, NAT_1, FUNCT_1, FUNCOP_1, FUNCT_2, BINOP_1, RELAT_1, SEQ_1,
       SEQ_2, DOMAIN_1, STRUCT_0, PRE_TOPC, RLVECT_1, RLSUB_1, COMPLEX1,
       XXREAL_0;
  constructors DOMAIN_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2,
       RLSUB_1;
  registrations STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, ORDINAL1,
-      XXREAL_0;
+      XXREAL_0, NAT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions RLVECT_1, STRUCT_0, FUNCT_1;
  theorems TARSKI, REAL_1, NAT_1, FUNCT_1, SEQ_2, ABSVALUE, RLVECT_1, RLSUB_1,
       FUNCT_2, STRUCT_0, RELSET_1, XREAL_0, XBOOLE_0, XCMPLX_0, FUNCOP_1,
-      XREAL_1, COMPLEX1, XXREAL_0;
+      XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1;
  schemes FUNCT_2, SEQ_1, NAT_1;
 
 begin
@@ -303,7 +304,7 @@ definition let RNS be 1-sorted;
 end;
 
  reserve S, S1, S2 for sequence of RNS;
- reserve k, n, m, m1, m2 for Nat;
+ reserve k, n, m, m1, m2 for Element of NAT;
  reserve r for Real;
  reserve f for Function;
  reserve d, s, t for set;
@@ -431,7 +432,7 @@ proof
    assume
 A1:for n holds S.n = S.(n+1);
    let n;
-   defpred P[Nat] means S.n = S.(n+$1);
+   defpred P[Element of NAT] means S.n = S.(n+$1);
 A2:  P[0];
 A3:  now let k such that
 A4:  P[k];
@@ -452,11 +453,17 @@ proof
       A1:   for n, k holds S.n = S.(n+k);
            let n, m;
       A2:   now assume n <= m;
-           then ex k st m = n + k by NAT_1:28;
-           hence S.n = S.m by A1;
+      then consider k being Nat such that
+      k: m = n + k by NAT_1:28;
+      reconsider k as Element of NAT by ORDINAL1:def 13;
+      m=n+k by k;
+      hence S.n = S.m by A1;
         end;
         now assume m <= n;
-          then ex k st n = m + k by NAT_1:28;
+          then consider k being Nat such that
+          k: n = m + k by NAT_1:28;
+          reconsider k as Element of NAT by ORDINAL1:def 13;
+          n=m+k by k;
           hence S.n = S.m by A1;
         end;
      hence thesis by A2;
@@ -495,9 +502,9 @@ definition let RNS be non empty 1-sorted;
 A1:   dom S = NAT by FUNCT_2:def 1;
    hereby assume
 A2:   S is constant;
-    consider n0 being Nat;
+    consider n0 being Element of NAT;
     take r = S.n0;
-    let n be Nat;
+    let n be Element of NAT;
     thus S.n = r by A1,A2,FUNCT_1:def 16;
    end;
    given r being Element of RNS such that
@@ -548,7 +555,7 @@ definition let RNS be RealLinearSpace;
            func S1 + S2 -> sequence of RNS means :Def5:
   for n holds it.n = S1.n + S2.n;
   existence proof
-  deffunc F(Nat) = S1.$1 + S2.$1;
+  deffunc F(Element of NAT) = S1.$1 + S2.$1;
   thus ex S being sequence of RNS st for n holds S.n = F(n)
     from FUNCT_2:sch 4;
 end;
@@ -573,7 +580,7 @@ definition let RNS be RealLinearSpace;
            func S1 - S2 -> sequence of RNS means
 :Def6:    for n holds it.n = S1.n - S2.n;
 existence proof
-  deffunc F(Nat) = S1.$1 - S2.$1;
+  deffunc F(Element of NAT) = S1.$1 - S2.$1;
   thus ex S being sequence of RNS st for n holds S.n = F(n)
     from FUNCT_2:sch 4;
 end;
@@ -599,7 +606,7 @@ definition let RNS be RealLinearSpace;
            func S - x -> sequence of RNS means
 :Def7:     for n holds it.n = S.n - x;
 existence proof
-  deffunc F(Nat) = S.$1 - x;
+  deffunc F(Element of NAT) = S.$1 - x;
   thus ex S being sequence of RNS st for n holds S.n = F(n)
     from FUNCT_2:sch 4;
 end;
@@ -625,7 +632,7 @@ definition let RNS be RealLinearSpace;
   func a * S -> sequence of RNS means
 :Def8:     for n holds it.n = a * S.n;
 existence proof
-  deffunc F(Nat) = a * S.$1;
+  deffunc F(Element of NAT) = a * S.$1;
   thus ex S being sequence of RNS st for n holds S.n = F(n)
     from FUNCT_2:sch 4;
 end;
@@ -817,7 +824,7 @@ definition let RNS, S;
     for n holds it.n =||.(S.n).||;
   existence
   proof
-    deffunc F(Nat) = ||.(S.$1).||;
+    deffunc F(Element of NAT) = ||.(S.$1).||;
     consider s being Real_Sequence such that A1:
     for n holds s.n = F(n) from SEQ_1:sch 1;
     take s;

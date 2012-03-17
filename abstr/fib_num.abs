@@ -9,13 +9,13 @@ environ
  vocabularies ARYTM, ARYTM_1, ARYTM_3, SQUARE_1, FUNCT_1, PRE_FF, FILTER_0,
       FUNCT_3, RELAT_1, ORDINAL2, FIB_NUM, ABSVALUE, POWER, SEQ_1, SEQ_2,
       SEQM_3, LATTICES, GROUP_1;
- notations ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, SQUARE_1, SEQ_1, XXREAL_0,
-      NAT_1, INT_2, COMPLEX1, PRE_FF, SEQ_2, SEQM_3, LIMFUNC1, QUIN_1, NEWTON,
-      POWER;
+ notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, SQUARE_1, SEQ_1,
+      XXREAL_0, NAT_1, INT_2, COMPLEX1, PRE_FF, SEQ_2, SEQM_3, LIMFUNC1,
+      QUIN_1, NEWTON, POWER;
  constructors REAL_1, SQUARE_1, NAT_1, RAT_1, SEQ_2, SEQM_3, LIMFUNC1, QUIN_1,
       NEWTON, POWER, PRE_FF;
  registrations XREAL_0, SQUARE_1, QUIN_1, NEWTON, SEQ_1, RELSET_1, MEMBERED,
-      XXREAL_0;
+      XXREAL_0, NAT_1;
  requirements SUBSET, NUMERALS, REAL, ARITHM;
 
 
@@ -26,46 +26,47 @@ begin
 :: The proof we present is a slight adaptation of the one found in
 :: ``The Fibonacci Numbers'' by N. N. Vorobyov
 
-reserve a,k,m, n, p,r,s for Nat;
+reserve a,k,m, n, p,r,s for Element of NAT;
 
 :: Preliminary lemmas
 
 theorem :: FIB_NUM:1
-for m, n being Nat holds m hcf n = m hcf (n + m);
+for m, n being Element of NAT holds m hcf n = m hcf (n + m);
 
 theorem :: FIB_NUM:2
- for k, m, n being Nat st k hcf m = 1 holds k hcf m * n = k hcf n;
+ for k, m, n being Element of NAT
+ st k hcf m = 1 holds k hcf m * n = k hcf n;
 
 theorem :: FIB_NUM:3
  for s being real number st s > 0
-ex n being Nat st
+ex n being Element of NAT st
 (n > 0 & 0 < 1/n & 1/n <= s);
 
 scheme :: FIB_NUM:sch 1
- FibInd {P[Nat] } :
-for k being Nat holds P[k]
+ FibInd {P[Element of NAT] } :
+for k being Element of NAT holds P[k]
     provided
  P[0] and
  P[1] and
- for k being Nat st P[k] & P[k+1] holds P[k+2];
+ for k being Element of NAT st P[k] & P[k+1] holds P[k+2];
 
 scheme :: FIB_NUM:sch 2
- BinInd { P[Nat,Nat] } :
-for m, n  being Nat holds P[m, n]
+ BinInd { P[Element of NAT,Element of NAT] } :
+for m, n  being Element of NAT holds P[m, n]
     provided
-     for m, n being Nat st P[m,n] holds P[n,m] and
-     for k  being Nat st
-        (for m, n  being Nat st (m < k & n < k) holds P[m,n])
+     for m, n being Element of NAT st P[m,n] holds P[n,m] and
+     for k  being Element of NAT st
+        (for m, n  being Element of NAT st (m < k & n < k) holds P[m,n])
         holds
-        (for m  being Nat st m <= k holds P[k,m]);
+        (for m  being Element of NAT st m <= k holds P[k,m]);
 
 theorem :: FIB_NUM:4
- for m, n being Nat holds
+ for m, n being Element of NAT holds
 Fib(m + (n + 1)) = (Fib(n) * Fib (m)) +
                   (Fib(n + 1) * Fib (m + 1));
 
 theorem :: FIB_NUM:5
-   for m, n being Nat holds Fib(m) hcf Fib(n) = Fib(m hcf n);
+   for m, n being Element of NAT holds Fib(m) hcf Fib(n) = Fib(m hcf n);
 
 begin
 
@@ -104,11 +105,11 @@ definition
 end;
 
 theorem :: FIB_NUM:7
-   for n being Nat holds
+   for n being Element of NAT holds
   Fib(n) = ((tau to_power n) - (tau_bar to_power n))/(sqrt 5);
 
 theorem :: FIB_NUM:8
-    for n being Nat holds
+    for n being Element of NAT holds
      abs(Fib(n) - (tau to_power n)/(sqrt 5)) < 1;
 
 reserve F, G, f, g, h for Real_Sequence;
@@ -117,20 +118,20 @@ reserve F, G, f, g, h for Real_Sequence;
 
 theorem :: FIB_NUM:9
  for F, G being Real_Sequence st
-(for n being Nat holds F.n = G.n) holds F = G;
+(for n being Element of NAT holds F.n = G.n) holds F = G;
 
 theorem :: FIB_NUM:10
  for f, g, h being Real_Sequence st g is_not_0 holds
 (f /" g) (#) (g /" h) = (f /" h);
 
 theorem :: FIB_NUM:11
- for f, g being Real_Sequence for n being Nat holds
+ for f, g being Real_Sequence for n being Element of NAT holds
 (f /" g) . n = (f .n) / (g.n)
 &
 (f /" g) . n = (f.n) * (g.n)";
 
 theorem :: FIB_NUM:12
    for F being Real_Sequence st
-(for n being Nat holds F.n = Fib(n+1)/Fib(n))
+(for n being Element of NAT holds F.n = Fib(n+1)/Fib(n))
 holds
  F is convergent & lim F = tau;

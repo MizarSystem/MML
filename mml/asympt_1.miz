@@ -26,18 +26,18 @@ environ
       ABSVALUE, REAL_2, FUNCOP_1, POWER, NEWTON, EULER_2, SERIES_1, SEQM_3,
       FINSEQ_1, FINSEQ_3, FINSEQ_4, WSIERP_1, PRE_FF, RVSUM_1, FINSEQ_2,
       ASYMPT_0, FRAENKEL, RELSET_1, XREAL_0, XBOOLE_0, XCMPLX_0, XCMPLX_1,
-      XREAL_1, XXREAL_0;
+      XREAL_1, XXREAL_0, ORDINAL1;
  schemes FUNCT_2, SEQ_1, NAT_1, RECDEF_1;
 
 begin :: Examples from the text
 
 reserve c, c1, c2, d, d1, d2, e for Real,
-        i, k, n, m, N, n1, n2, N0, N1, N2, N3, M for Nat,
+        i, k, n, m, N, n1, n2, N0, N1, N2, N3, M for Element of NAT,
         x for set;
 
 Lm1:
  for n st n >= 2 holds 2 to_power n > n+1
-proof defpred P[Nat] means 2 to_power $1 > $1+1;
+proof defpred P[Element of NAT] means 2 to_power $1 > $1+1;
        2 to_power 2 = 2^2 by POWER:53
                 .= 4;
 then A1: P[2];
@@ -112,7 +112,7 @@ XREAL_1:10;
  (s.0 = 0 & (for n st n > 0 holds s.n = 12*(n to_power 3)*log(2,n) - 5*n^2
 ))
     proof
-      defpred P[Nat,Real] means
+      defpred P[Element of NAT,Real] means
         ($1 = 0 implies $2 = 0) &
          ($1 > 0 implies $2 = 12*($1 to_power 3)*log(2,$1) - 5*($1)^2);
     A10: for x being Element of NAT ex y being Element of REAL st P[x,y] proof
@@ -150,7 +150,7 @@ A12: p.0 = 0 &
     then reconsider p as eventually-positive Real_Sequence;
    ex s being Real_Sequence st
      s.0 = 0 & (for n st n > 0 holds s.n = (log(2,n))^2 + 36) proof
-      defpred P[Nat,Real] means
+      defpred P[Element of NAT,Real] means
        ($1 = 0 implies $2 = 0) & ($1 > 0 implies $2 = (log(2,$1))^2 + 36);
     A17: for x being Element of NAT ex y being Element of REAL st P[x,y] proof
        let n;
@@ -198,7 +198,7 @@ then A23: log(2,4) = 2*log(2,2) by POWER:63
            .= 2*1 by POWER:60
            .= 2;
 A24: for n st n >= 4 holds 7*n^2 > q.n proof
-     defpred P[Nat] means 7*$1^2 > q.$1;
+     defpred P[Element of NAT] means 7*$1^2 > q.$1;
    A25: P[4] proof
               q.4 = 2^2 + 36 by A19,A23
               .= 40;
@@ -305,7 +305,7 @@ A3: a > 0 & a <> 1 by ASYMPT_0:def 3;
  set N = [/a\];
 A4: [/a\] >= a by INT_1:def 5;
 A5: N > 0 by A3,INT_1:def 5;
-   then reconsider N as Nat by INT_1:16;
+   then reconsider N as Element of NAT by INT_1:16;
     now let n; assume
  A6: n >= N+1;
        N+1 > N+0 by XREAL_1:10;
@@ -389,9 +389,9 @@ definition let a,b,c be Real;
  func seq_a^(a,b,c) -> Real_Sequence means :Def1:
   it.n = a to_power (b*n+c);
  existence proof
-    deffunc F(Nat) = a to_power (b*$1+c);
+    deffunc F(Element of NAT) = a to_power (b*$1+c);
     consider h being Function of NAT, REAL such that
- A1: for n being Nat holds h.n = F(n) from FUNCT_2:sch 4;
+ A1: for n being Element of NAT holds h.n = F(n) from FUNCT_2:sch 4;
   take h; let n; thus h.n = a to_power (b*n+c) by A1;
  end;
  uniqueness proof let j,k be Real_Sequence such that
@@ -448,7 +448,7 @@ A1: a < b;
   set N1 = max( N, N0 );
  A7: N1 >= N & N1 >= N0 by XXREAL_0:25;
        N1 = N or N1 = N0 by XXREAL_0:16;
-    then reconsider N1 as Nat by A7,INT_1:16;
+    then reconsider N1 as Element of NAT by A7,INT_1:16;
   set n = N1 + 1;
   set e = (2 to_power (n*log(2,a)));
  A8: e > 0 by POWER:39;
@@ -477,7 +477,7 @@ definition
  func seq_logn -> Real_Sequence means :Def2:
   it.0 = 0 & (for n st n > 0 holds it.n = log(2,n));
  existence proof
-    defpred P[Nat,Real] means
+    defpred P[Element of NAT,Real] means
      ($1 = 0 implies $2 = 0) & ($1 > 0 implies $2 = log(2,$1));
  A1: for x being Element of NAT ex y being Element of REAL st P[x,y] proof
      let n;
@@ -515,7 +515,7 @@ definition let a be Real;
  func seq_n^(a) -> Real_Sequence means :Def3:
   it.0 = 0 & (for n st n > 0 holds it.n = n to_power a);
  existence proof
-    defpred P[Nat,Real] means
+    defpred P[Element of NAT,Real] means
       ($1 = 0 implies $2 = 0) & ($1 > 0 implies $2 = $1 to_power a);
  A1: for x being Element of NAT ex y being Element of REAL st P[x,y] proof
      let n;
@@ -574,9 +574,9 @@ registration let a be Real;
 end;
 
 Lm4:
- for f,g being Real_Sequence, n being Nat holds (f/"g).n = f.n/g.n
+ for f,g being Real_Sequence, n being Element of NAT holds (f/"g).n = f.n/g.n
 proof
- let f,g be Real_Sequence, n be Nat;
+ let f,g be Real_Sequence, n be Element of NAT;
   thus (f/"g).n = (f(#)g").n by SEQ_1:def 9 .= f.n*g".n by SEQ_1:12
               .= f.n*(g.n)" by SEQ_1:def 8 .= f.n/g.n by XCMPLX_0:def 9;
 end;
@@ -693,7 +693,7 @@ end;
 
 Lm12:
  for n st n >= 4 holds 2*n + 3 < 2 to_power n
-proof defpred P[Nat] means 2*$1 + 3 < 2 to_power $1;
+proof defpred P[Element of NAT] means 2*$1 + 3 < 2 to_power $1;
 A1: P[4] by Lm9;
 A2: for k st k >= 4 & P[k] holds P[k+1] proof
      let k such that
@@ -715,7 +715,7 @@ end;
 
 Lm13:
  for n st n >= 6 holds (n+1)^2 < 2 to_power n
-proof defpred P[Nat] means ($1+1)^2 < 2 to_power $1;
+proof defpred P[Element of NAT] means ($1+1)^2 < 2 to_power $1;
 A1: P[6] by Lm11;
 A2: for k st k >= 6 & P[k] holds P[k+1] proof
      let k such that
@@ -744,7 +744,7 @@ A2: 5 = 6-1;
   per cases;
   suppose i0 = i1;
      then c is Integer by INT_1:59;
-     then reconsider c as Nat by A1,INT_1:16;
+     then reconsider c as Element of NAT by A1,INT_1:16;
   A3: (c+1)^2 < 2 to_power c by A1,Lm13;
         c+0 < c+1 by XREAL_1:10;
      then c^2 < (c+1)^2 by SQUARE_1:78;
@@ -754,10 +754,10 @@ A2: 5 = 6-1;
   then A4: i0 + 1 = i1 by INT_1:66;
   then A5: i0 = i1 - 1;
   A6: i1 >= c by INT_1:def 5;
-     then reconsider i1 as Nat by A1,INT_1:16;
+     then reconsider i1 as Element of NAT by A1,INT_1:16;
         i1 > 6 by A1,A6,XXREAL_0:2;
   then A7: i0 > 5 by A2,A5,XREAL_1:11;
-     then reconsider i0 as Nat by INT_1:16;
+     then reconsider i0 as Element of NAT by INT_1:16;
         i0 >= 5 + 1 by A7,INT_1:20;
   then A8: i1^2 < 2 to_power i0 by A4,Lm13;
         i1 >= c by INT_1:def 5;
@@ -796,7 +796,7 @@ A2: now let p be real number; assume
      suppose N = 2; hence thesis;
     end;
     end;
-    then reconsider N as Nat by A4,INT_1:16;
+    then reconsider N as Element of NAT by A4,INT_1:16;
        p" > 0 by A3,XREAL_1:124;
     then 7*p" > 7*0 by XREAL_1:70;
  then A6: 7/p > 0 by XCMPLX_0:def 9;
@@ -875,7 +875,7 @@ A1: 1 = e/e by XCMPLX_1:60
  set h = f/"g;
    ex s being Real_Sequence st (s.0 = 0 &
      (for n st n > 0 holds s.n = log(2,n to_power e))) proof
-      defpred P[Nat,Real] means
+      defpred P[Element of NAT,Real] means
         ($1 = 0 implies $2 = 0) &
          ($1 > 0 implies $2 = log(2,$1 to_power e));
     A2: for x being Element of NAT ex y being Element of REAL st P[x,y] proof
@@ -954,7 +954,7 @@ Lm17:
  for f being Real_Sequence holds
   for N holds (for n st n <= N holds f.n >= 0) implies Sum(f,N) >= 0
 proof let f be Real_Sequence;
- defpred P[Nat] means
+ defpred P[Element of NAT] means
    (for n st n <= $1 holds f.n >= 0) implies Sum(f,$1) >= 0;
 A1: P[0] proof assume for n st n <= 0 holds f.n >= 0; then f.0 >= 0;
          then (Partial_Sums(f)).0 >= 0 by SERIES_1:def 1;
@@ -984,7 +984,7 @@ Lm18:
   holds for N holds (for n st n <= N holds f.n <= g.n) implies Sum(f,N) <= Sum
 (g,N)
 proof let f,g be Real_Sequence;
- defpred P[Nat] means
+ defpred P[Element of NAT] means
   (for n st n <= $1 holds f.n <= g.n) implies Sum(f,$1) <= Sum(g,$1);
 A1: P[0] proof
      assume (for n st n <= 0 holds f.n <= g.n);
@@ -1021,10 +1021,10 @@ end;
 Lm19:
  for f being Real_Sequence, b being Real st
   (f.0 = 0 & (for n st n > 0 holds f.n = b))
-   holds for N being Nat holds Sum(f,N) = b*N
+   holds for N being Element of NAT holds Sum(f,N) = b*N
 proof
  let f be Real_Sequence, b be Real;
-   defpred P[Nat] means Sum(f,$1) = b*$1;
+   defpred P[Element of NAT] means Sum(f,$1) = b*$1;
  assume
 A1: f.0 = 0 & (for n st n > 0 holds f.n = b);
    then (Partial_Sums(f)).0 = 0 by SERIES_1:def 1;
@@ -1044,9 +1044,9 @@ end;
 
 Lm20:
  for f being Real_Sequence,
-     N,M being Nat holds Sum(f,N,M) + f.(N+1) = Sum(f,N+1,M)
+     N,M being Element of NAT holds Sum(f,N,M) + f.(N+1) = Sum(f,N+1,M)
 proof
- let f be Real_Sequence, N,M be Nat;
+ let f be Real_Sequence, N,M be Element of NAT;
       Sum(f,N,M) + f.(N+1) = Sum(f,N) - Sum(f,M) + f.(N+1) by SERIES_1:def 7
                      .= Sum(f,N) + f.(N+1) + -Sum(f,M)
                      .= (Partial_Sums(f)).N + f.(N+1) + -Sum
@@ -1059,13 +1059,13 @@ proof
 end;
 
 Lm21:
- for f,g being Real_Sequence, M being Nat
+ for f,g being Real_Sequence, M being Element of NAT
   holds for N st N >= M+1 holds
     (for n st M+1 <= n & n <= N holds f.n <= g.n) implies Sum(f,N,M) <= Sum
 (g,N,M)
 proof
- let f,g be Real_Sequence, M be Nat;
- defpred P[Nat] means
+ let f,g be Real_Sequence, M be Element of NAT;
+ defpred P[Element of NAT] means
  (for n st M+1 <= n & n <= $1 holds f.n <= g.n)
    implies Sum(f,$1,M) <= Sum(g,$1,M);
 A1: P[M+1] proof assume
@@ -1141,13 +1141,13 @@ end;
 end;
 
 Lm23:
- for f being Real_Sequence, b being Real, N being Nat st
+ for f being Real_Sequence, b being Real, N being Element of NAT st
   (f.0 = 0 & (for n st n > 0 holds f.n = b))
-   holds for M being Nat holds Sum(f, N, M) = b*(N-M)
+   holds for M being Element of NAT holds Sum(f, N, M) = b*(N-M)
 proof
- let f be Real_Sequence, b be Real, N be Nat such that
+ let f be Real_Sequence, b be Real, N be Element of NAT such that
 A1: f.0 = 0 & (for n st n > 0 holds f.n = b);
- defpred P[Nat] means Sum(f, N, $1) = b*(N-$1);
+ defpred P[Element of NAT] means Sum(f, N, $1) = b*(N-$1);
 A2: P[0] proof
           Sum(f, 0) = (Partial_Sums(f)).0 by SERIES_1:def 6
                .= 0 by A1,SERIES_1:def 1;
@@ -1169,16 +1169,16 @@ A3: for M st P[M] holds P[M+1] proof let M; assume
                  .= b*(N-(M+1));
       hence thesis;
     end;
-     for M being Nat holds P[M] from NAT_1:sch 1(A2, A3);
+     for M being Element of NAT holds P[M] from NAT_1:sch 1(A2, A3);
   hence thesis;
 end;
 
 theorem
-    for f being Real_Sequence, k being Nat st
+    for f being Real_Sequence, k being Element of NAT st
   (for n holds f.n = Sum(seq_n^(k), n))
    holds f in Big_Theta(seq_n^(k+1))
 proof
- let f be Real_Sequence, k be Nat such that
+ let f be Real_Sequence, k be Element of NAT such that
 A1: for n holds f.n = Sum(seq_n^(k), n);
  set g = seq_n^(k+1);
 A2: f is Element of Funcs(NAT, REAL) by FUNCT_2:11;
@@ -1188,7 +1188,7 @@ then A3: (2 to_power (k+1))" > 0 by XREAL_1:124;
   set p = seq_n^(k);
    ex s being Real_Sequence st s.0 = 0 &
      (for m st m > 0 holds s.m = (n to_power k)) proof
-      defpred P[Nat,Real] means
+      defpred P[Element of NAT,Real] means
         ($1 = 0 implies $2 = 0) &
          ($1 > 0 implies $2 = (n to_power k));
     A5: for x being Element of NAT ex y being Element of REAL st P[x,y] proof
@@ -1246,7 +1246,7 @@ then A13: f in Big_Oh(g) by A2;
   set p = seq_n^(k);
    ex s being Real_Sequence st s.0 = 0 &
      (for m st m > 0 holds s.m = ((n/2) to_power k)) proof
-      defpred P[Nat,Real] means
+      defpred P[Element of NAT,Real] means
         ($1 = 0 implies $2 = 0) &
          ($1 > 0 implies $2 = ((n/2) to_power k));
     A15: for x being Element of NAT ex y being Element of REAL st P[x,y] proof
@@ -1271,14 +1271,14 @@ A17: q.0 = 0 & (for m st m > 0 holds q.m = (n/2) to_power k);
       A20: n*2" > 0*2" by A14,XREAL_1:70;
  then A21: n/2 > 0;
  A22: [/n/2\] >= n/2 by INT_1:def 5;
-     then reconsider n1 as Nat by INT_1:16;
+     then reconsider n1 as Element of NAT by INT_1:16;
   set n2 = n1-1;
     now assume n2 < 0;
         then n1-1 <= -1 by INT_1:21;
         then (n1-1)+1 <= -1+1 by XREAL_1:8;
       hence contradiction by A20,A22;
      end;
-     then reconsider n2 as Nat by INT_1:16;
+     then reconsider n2 as Element of NAT by INT_1:16;
  A23: now let m; assume m <= n;
    per cases;
    suppose m = 0;
@@ -1377,7 +1377,7 @@ A1: f.0 = 0 & (for n st n > 0 holds f.n = (n to_power log(2,n)));
        N2 >= N & N2 >= N0 by XXREAL_0:25;
  then A8: N1 >= N & N1 >= N0 by A7,XXREAL_0:2;
        N1 is Integer by XXREAL_0:16;
-    then reconsider N1 as Nat by A7,INT_1:16;
+    then reconsider N1 as Element of NAT by A7,INT_1:16;
   set n = N1 + 1;
        n > N1 + 0 by XREAL_1:10;
  then A9: n > N0 & n > N & n > 2 by A7,A8,XXREAL_0:2;
@@ -1492,8 +1492,8 @@ A2;
    set k = [/c\];
   A12: k >= c by INT_1:def 5;
        k > 0 by A9,INT_1:def 5;
-     then reconsider k as Nat by INT_1:16;
-     reconsider i = 1 as Nat;
+     then reconsider k as Element of NAT by INT_1:16;
+     reconsider i = 1 as Element of NAT;
    take N,i,k;
    thus i > 0;
     let n; assume A13: n >= N;
@@ -1525,7 +1525,7 @@ A2;
    set a = log(N,c1);
    set b = k+a;
    reconsider f = seq_n^(1) as Element of Funcs(NAT,REAL) by FUNCT_2:11;
-    defpred Q[Nat,Real] means
+    defpred Q[Element of NAT,Real] means
       ($1 < N implies $2 = 1) & ($1 >= N implies $2 = log($1,t.$1));
  A26:for x being Element of NAT ex y being Element of REAL st Q[x,y] proof
       let n; per cases;
@@ -1597,9 +1597,9 @@ proof
 A1: for n holds f.n = 3*(10 to_power 6) - 18*(10 to_power 3)*n + 27*n^2;
  set g = seq_n^(2);
 A2: f is Element of Funcs(NAT, REAL) by FUNCT_2:11;
-   consider t1 being Nat such that
+   consider t1 being Element of NAT such that
 A3: t1 = 10*10*10;
-   consider t2 being Nat such that
+   consider t2 being Element of NAT such that
 A4: t2 = t1*t1;
    t1 = 10*10^2 by A3;
    then t1 = 10*(10 to_power 2) by POWER:53;
@@ -1629,7 +1629,7 @@ A8: for n st n >= 400 holds f.n <= 27*n^2 proof
     hence thesis;
    end;
 A11: for n st n >= 400 holds 18*t1*n - 3*t2 < 27*n^2 proof
-    defpred P[Nat] means 18*t1*$1 - 3*t2 < 27*$1^2;
+    defpred P[Element of NAT] means 18*t1*$1 - 3*t2 < 27*$1^2;
 A12: P[400] by A4,A5,A7;
    A13: for k st k >= 400 & P[k] holds P[k+1] proof let k such that
        A14: k >= 400 and
@@ -1705,7 +1705,7 @@ proof
     A8: [/(N+2)/d\] >= (N+2)/d by INT_1:def 5;
     then A9:  n > 0 by A6,A7,XCMPLX_0:def 9;
            n is Integer by XXREAL_0:16;
-        then reconsider n as Nat by A6,INT_1:16;
+        then reconsider n as Element of NAT by A6,INT_1:16;
     A10:  (d*g.n)*(n to_power -2) = d*(n to_power 3)*(n to_power -2)
                                        by A9,Def3
                             .= d*((n to_power 3)*(n to_power -2))
@@ -1758,13 +1758,13 @@ A3: (2 to_power -1) > 0 by POWER:39;
  hence thesis by A1,A2,A3;
 end;
 
-definition let a be Nat;
+definition let a be Element of NAT;
  func seq_n!(a) -> Real_Sequence means :Def5:
   it.n = (n+a)!;
  existence proof
-   deffunc F(Nat) = ($1+a)!;
+   deffunc F(Element of NAT) = ($1+a)!;
     consider h being Function of NAT, REAL such that
- A1: for n being Nat holds h.n = F(n) from FUNCT_2:sch 4;
+ A1: for n being Element of NAT holds h.n = F(n) from FUNCT_2:sch 4;
   take h; let n; thus h.n = (n+a)! by A1;
  end;
  uniqueness proof let j,k be Real_Sequence such that
@@ -1775,7 +1775,7 @@ definition let a be Nat;
  end;
 end;
 
-registration let a be Nat;
+registration let a be Element of NAT;
  cluster seq_n!(a) -> eventually-positive;
   coherence proof
    set f = seq_n!(a);
@@ -1807,7 +1807,7 @@ A1: Big_Theta(g) = { s where s is Element of Funcs(NAT, REAL) :
      take n = max( N, [/(N+1)/d\] );
     A6:  n >= N & n >= [/(N+1)/d\] by XXREAL_0:25;
            n is Integer by XXREAL_0:16;
-        then reconsider n as Nat by A6,INT_1:16;
+        then reconsider n as Element of NAT by A6,INT_1:16;
     A7: n! <> 0 by NEWTON:23;
     A8:  (d*g.n)*(n!)" = (d*((n+1)!))*(n!)" by Def5
                      .= (d*((n+1)*(n!)))*(n!)" by NEWTON:21
@@ -1982,7 +1982,7 @@ A1: f is Element of Funcs(NAT, REAL) by FUNCT_2:11;
      take n = max( N, [/log(2,c)+1\] );
     A7:  n >= N & n >= [/log(2,c)+1\] by XXREAL_0:25;
            n is Integer by XXREAL_0:16;
-        then reconsider n as Nat by A7,INT_1:16;
+        then reconsider n as Element of NAT by A7,INT_1:16;
     A8: (c*q.n)*(2 to_power -n)
                   = (c*(2 to_power (1*n+0)))*(2 to_power -n) by Def1
                  .= c*((2 to_power n)*(2 to_power -n))
@@ -2038,7 +2038,7 @@ A5: now let p be real number such that
  A7: N1 >= [/((1/p) to_power (1/(c/2)))\] & N1 >= 2 by XXREAL_0:25;
  then A8: N1 > 1 by XXREAL_0:2;
         N1 is Integer by XXREAL_0:16;
-     then reconsider N1 as Nat by A7,INT_1:16;
+     then reconsider N1 as Element of NAT by A7,INT_1:16;
   take N1; let n; assume
   A9: n >= N1;
          p" > 0 by A6,XREAL_1:124;
@@ -2343,7 +2343,7 @@ begin :: Problem 3.21
 
 Lm27:
  for n holds (n^2 - n + 1) > 0
-proof defpred P[Nat] means ($1^2 - $1 + 1) > 0;
+proof defpred P[Element of NAT] means ($1^2 - $1 + 1) > 0;
 A1: P[0];
 A2: for k st P[k] holds P[k+1] proof let k such that
  A3: (k^2 - k + 1) > 0;
@@ -2355,11 +2355,11 @@ A2: for k st P[k] holds P[k+1] proof let k such that
 end;
 
 Lm28:
- for f,g being Real_Sequence, N being Nat, c being Real
+ for f,g being Real_Sequence, N being Element of NAT, c being Real
   st f is convergent & lim f = c & for n st n >= N holds f.n = g.n
    holds g is convergent & lim g = c
 proof
- let f,g be Real_Sequence, N be Nat, c be Real such that
+ let f,g be Real_Sequence, N be Element of NAT, c be Real such that
 A1: f is convergent and
 A2: lim f = c and
 A3: for n st n >= N holds f.n = g.n;
@@ -2395,7 +2395,7 @@ end;
 Lm30:
  for n st n >= 1 holds n^2 <= 2*(n^2 -n + 1)
 proof
-   defpred P[Nat] means $1^2 <= 2*($1^2 -$1 + 1);
+   defpred P[Element of NAT] means $1^2 <= 2*($1^2 -$1 + 1);
 A1: P[1];
 A2: for k st k>=1 & P[k] holds P[k+1] proof let k such that
     A3: k >= 1 and
@@ -2625,7 +2625,7 @@ A5: now let p be real number; assume
  set N = max(3,[/(p1 to_power -(1/6))\]);
  A7: N >= 3 & N >= [/(p to_power -(1/6))\] by XXREAL_0:25;
         N is Integer by XXREAL_0:16;
-     then reconsider N as Nat by A7,INT_1:16;
+     then reconsider N as Element of NAT by A7,INT_1:16;
   take N; let n; assume A8: n >= N;
   then A9: n >= 3 & n >= [/(p to_power -(1/6))\] by A7,XXREAL_0:2;
   then A10: log(2,n) >= log(2,3) by PRE_FF:12;
@@ -2755,7 +2755,7 @@ A5: now let p be real number such that
        hence thesis by XXREAL_0:16;
      end;
      end;
-     then reconsider N1 as Nat by A7,INT_1:16;
+     then reconsider N1 as Element of NAT by A7,INT_1:16;
   take N1; let n; assume
   A10: n >= N1;
          p" > 0 by A6,XREAL_1:124;
@@ -2814,7 +2814,7 @@ end;
 Lm33:
  for n st n >= 3 holds n^2 > 2*n + 1
 proof
- defpred P[Nat] means $1^2 > 2*$1 + 1;
+ defpred P[Element of NAT] means $1^2 > 2*$1 + 1;
 A1: P[3];
 A2: for n st n >= 3 & P[n] holds P[n+1] proof let n; assume that
      A3: n >= 3 and
@@ -2832,7 +2832,7 @@ end;
 Lm34:
  for n st n >= 10 holds 2 to_power (n-1) > (2*n)^2
 proof
-   defpred P[Nat] means 2 to_power ($1-1) > (2*$1)^2;
+   defpred P[Element of NAT] means 2 to_power ($1-1) > (2*$1)^2;
 A1: P[10] proof
      2 to_power (10-1) = 2 to_power (6+3)
                         .= 64*(2 to_power (2+1)) by Lm11,POWER:32
@@ -2871,7 +2871,7 @@ end;
 Lm35:
  for n st n >= 9 holds (n+1) to_power 6 < 2*(n to_power 6)
 proof
-   defpred P[Nat] means ($1+1) to_power 6 < 2*($1 to_power 6);
+   defpred P[Element of NAT] means ($1+1) to_power 6 < 2*($1 to_power 6);
 A1: P[9] proof
     A2:  9 to_power 2 = 9 to_power (1+1)
                     .= (9 to_power 1)*(9 to_power 1) by POWER:32
@@ -2881,12 +2881,12 @@ A1: P[9] proof
     A3:  2*(9 to_power 4) = 2*(9 to_power (2+2))
                         .= 2*(81*81) by A2,POWER:32
                         .= 13122;
-        consider t1 being Nat;
-        consider t2 being Nat;
-        consider t3 being Nat;
-        consider t4 being Nat;
-        consider t5 being Nat;
-        consider t6 being Nat such that
+        consider t1 being Element of NAT;
+        consider t2 being Element of NAT;
+        consider t3 being Element of NAT;
+        consider t4 being Element of NAT;
+        consider t5 being Element of NAT;
+        consider t6 being Element of NAT such that
     A4:  t6 = 10*10*10*10*10*10;
     A5: 10 to_power 3 = 10 to_power (2+1)
                      .= (10 to_power 2)*(10 to_power 1) by POWER:32
@@ -2942,7 +2942,7 @@ end;
 Lm36:
  for n st n >= 30 holds 2 to_power n > n to_power 6
 proof
-   defpred P[Nat] means 2 to_power $1 > $1 to_power 6;
+   defpred P[Element of NAT] means 2 to_power $1 > $1 to_power 6;
 A1: P[30] proof
           2 to_power 30 = 2 to_power (5*6)
                     .= 32 to_power 6 by Lm10,POWER:38;
@@ -2969,7 +2969,7 @@ proof
 A1: x > 9;
  set n = [/x\];
 A2: n >= x by INT_1:def 5;
-   then reconsider n as Nat by INT_1:16,A1;
+   then reconsider n as Element of NAT by INT_1:16,A1;
       x >= [\x/] by INT_1:def 4;
 then A3: 2 to_power x >= 2 to_power [\x/] by PRE_FF:10;
       [/x\] - [\x/] <= 1 proof
@@ -3028,7 +3028,7 @@ A1:  for n st n >= N1 holds n/6 > 1;
     then consider N2 such that
 A4:  for n st n >= N2 holds n/3 > 2*log(2,n);
        ex N st for n st n >= N holds n/2 > log(2,n)*log(2,n) proof
-     reconsider N = 2 to_power 10 as Nat;
+     reconsider N = 2 to_power 10 as Element of NAT;
         now take N; let n; assume
      A5: n >= N;
       set x = log(2,n);
@@ -3123,7 +3123,8 @@ end;
 Lm40:
  for n st n >= 10 holds 2 to_power (2*n) / (n!) < 1/(2 to_power (n-9))
 proof
-   defpred P[Nat] means 2 to_power (2*$1) / ($1!) < 1/(2 to_power ($1-9));
+   defpred P[Element of NAT] means
+    2 to_power (2*$1) / ($1!) < 1/(2 to_power ($1-9));
 A1: 7 = 8-1;
 A2: P[10] proof
     A3: 2 to_power (2*10) / (10!) = 2 to_power 20 / ((9+1)*(9!)) by NEWTON:21
@@ -3201,7 +3202,7 @@ end;
 Lm41:
  for n st n >= 3 holds 2*(n-2) >= n-1
 proof
-   defpred P[Nat] means 2*($1-2) >= $1-1;
+   defpred P[Element of NAT] means 2*($1-2) >= $1-1;
 A1: P[3];
 A2: for n st n >= 3 & P[n] holds P[n+1] proof let n; assume that n >= 3 and
 A3: 2*(n-2) >= n-1;
@@ -3365,13 +3366,13 @@ Lm48: :: (1 + 1/n)^n is non-decreasing
 proof
  let n; assume
 A1: n >= 1;
-    deffunc F(Nat) = (1 + 1/($1+1)) to_power ($1+1);
+    deffunc F(Element of NAT) = (1 + 1/($1+1)) to_power ($1+1);
     consider seq being Real_Sequence such that
 A2: for n holds seq.n =  F(n)from SEQ_1:sch 1;
 A3: seq is non-decreasing by A2,Lm47;
        n >= 0+1 by A1;
     then n-1 >= 0 by XREAL_1:21;
-    then reconsider m = n-1 as Nat by INT_1:16;
+    then reconsider m = n-1 as Element of NAT by INT_1:16;
        seq.m <= seq.(m+1) by A3,SEQM_3:def 13;
     then (1 + 1/(m+1)) to_power (m+1) <= seq.(m+1) by A2;
     then (1 + 1/n) to_power n <= (1 + 1/(n+1)) to_power (n+1) by A2;
@@ -3430,7 +3431,7 @@ A6: now let p be real number such that
        hence thesis by XXREAL_0:16;
      end;
      end;
-     then reconsider N1 as Nat by A8,INT_1:16;
+     then reconsider N1 as Element of NAT by A8,INT_1:16;
   take N1; let n; assume
   A12: n >= N1;
          p" > 0 by A7,XREAL_1:124;
@@ -3504,7 +3505,7 @@ A4: now let p be real number; assume
        hence thesis by XXREAL_0:16;
      end;
      end;
-     then reconsider N1 as Nat by A6,INT_1:16;
+     then reconsider N1 as Element of NAT by A6,INT_1:16;
   take N1; let n; assume
   A9: n >= N1;
   A10: h.n = f.n/g.n by Lm4;
@@ -3602,7 +3603,7 @@ A2: now let p be real number; assume
    set N = max(1,[/log(2,1/p)\] + 1);
   A5: N >= 1 & N >= ([/log(2,1/p)\] + 1) by XXREAL_0:25;
          N is Integer by XXREAL_0:16;
-     then reconsider N as Nat by A5,INT_1:16;
+     then reconsider N as Element of NAT by A5,INT_1:16;
    take N; let n; assume
    A6: n >= N;
    A7: abs(h.n-0) = abs((2 to_power -n)) by A1;
@@ -3653,7 +3654,7 @@ A1: now let p be real number; assume
  set N = max(10,[/9+log(2,1/p)\]);
  A3: N >= 10 & N >= [/9+log(2,1/p)\] by XXREAL_0:25;
         N is Integer by XXREAL_0:16;
-     then reconsider N as Nat by A3,INT_1:16;
+     then reconsider N as Element of NAT by A3,INT_1:16;
   take N; let n; assume n >= N;
   then A4: n >= 10 & n >= [/9+log(2,1/p)\] by A3,XXREAL_0:2;
   A5: h.n = f.n/g.n by Lm4
@@ -3703,7 +3704,7 @@ A3: now let p be real number; assume
    set N = max( 1, [/1/p\] );
  A6: N >= 1 & N >= ([/1/p\]) by XXREAL_0:25;
         N is Integer by XXREAL_0:16;
-     then reconsider N as Nat by A6,INT_1:16;
+     then reconsider N as Element of NAT by A6,INT_1:16;
    take N; let n; assume n >= N;
   then A7: n+1 > N by NAT_1:38;
   A8:-p < -0 by A4,XREAL_1:26;
@@ -3767,7 +3768,7 @@ A4:  for n st n >= 1 holds h.n > 0 proof
          then (n+1)!*(1/(n to_power n)) > (n+1)!*0 by A7,XREAL_1:70;
       hence thesis by A6,XCMPLX_1:100;
     end;
-    deffunc F(Nat) = h.$1 / h.($1+1);
+    deffunc F(Element of NAT) = h.$1 / h.($1+1);
     consider p being Real_Sequence such that
 A8:  for n holds p.n = F(n) from SEQ_1:sch 1;
 A9:  for n st n > 0 holds p.n = ((n+1)/(n+2)) * (((n+1)/n) to_power n) proof
@@ -3807,7 +3808,7 @@ XCMPLX_0:def 9
           .= ((n+1)/(n+2)) * (((n+1)/n) to_power n) by XCMPLX_1:100;
        hence p.n = ((n+1)/(n+2)) * (((n+1)/n) to_power n);
     end;
-    defpred P1[Nat] means p.$1 > 2;
+    defpred P1[Element of NAT] means p.$1 > 2;
 A12: P1[4] proof
        p.4 = ((4+1) / (4+2)) * (((4+1)/4) to_power 4) by A9
            .= (5 / 6) * ((5 to_power 4) / 256) by Lm43,POWER:36
@@ -3878,7 +3879,7 @@ A13: for k st k >= 4 & P1[k] holds P1[k+1] proof
       hence p.(k+1) > 2 by A15,XXREAL_0:2;
     end;
 A28:  for n st n >= 4 holds P1[n] from NAT_1:sch 9(A12, A13);
-     defpred P[Nat] means h.$1 < 1/($1-2);
+     defpred P[Element of NAT] means h.$1 < 1/($1-2);
 A29: P[4] proof
         h.4 = f.4/g.4 by Lm4 .= (4+1)!/g.4 by Def5 .= 120/256 by A1,Lm39,Lm43;
      hence thesis;
@@ -3912,7 +3913,7 @@ A39: now let p be real number; assume
  A41: [/1/p + 4\] >= 1/p + 4 by INT_1:def 5;
 A42:  4 + 1/p > 4 by A40,XREAL_1:31;
  then A43: N >= 4 by A41,XXREAL_0:2;
-     reconsider N as Nat by INT_1:16,A42,A41;
+     reconsider N as Element of NAT by INT_1:16,A42,A41;
   take N; let n; assume
   A44: n >= N;
   then A45: n >= 4 by A43,XXREAL_0:2;
@@ -3945,7 +3946,7 @@ A1: k <= n;
       n + 0 <= n + 1 by XREAL_1:8;
 then A2: k <= n+1 by A1,XXREAL_0:2;
  set n1 = n+1;
- reconsider l = n-k as Nat by A1,INT_1:18;
+ reconsider l = n-k as Element of NAT by A1,INT_1:18;
  set l1 = l+1;
       l1 = n1-k;
 then A3: (n1 choose k) / n1
@@ -3968,16 +3969,16 @@ end;
 
 theorem
     for n st n >= 1 holds
-  for f being Real_Sequence, k being Nat
+  for f being Real_Sequence, k being Element of NAT
    st (for n holds f.n = Sum(seq_n^(k), n))
     holds f.n >= (n to_power (k+1)) / (k+1)
 proof
-  defpred P[Nat] means
-  for f being Real_Sequence, k being Nat
+  defpred P[Element of NAT] means
+  for f being Real_Sequence, k being Element of NAT
    st (for n holds f.n = Sum(seq_n^(k), n))
     holds f.$1 >= ($1 to_power (k+1)) / (k+1);
 
-A1: P[1] proof let f be Real_Sequence, k be Nat such that
+A1: P[1] proof let f be Real_Sequence, k be Element of NAT such that
     A2: for n holds f.n = Sum(seq_n^(k), n);
       set g = seq_n^(k);
     A3: f.1 = Sum(g,1) by A2
@@ -3992,13 +3993,13 @@ A1: P[1] proof let f be Real_Sequence, k be Nat such that
           0+1 <= k+1 by XREAL_1:8;
      hence thesis by A3,A4,REAL_2:152;
     end;
-A5: for n being Nat st n >= 1 & P[n] holds P[n+1] proof
-     let n be Nat such that
+A5: for n being Element of NAT st n >= 1 & P[n] holds P[n+1] proof
+     let n be Element of NAT such that
     A6: n >= 1 and
-    A7: for f being Real_Sequence, k being Nat
+    A7: for f being Real_Sequence, k being Element of NAT
         st (for n holds f.n = Sum(seq_n^(k), n))
          holds f.n >= (n to_power (k+1)) / (k+1);
-     let f be Real_Sequence, k be Nat such that
+     let f be Real_Sequence, k be Element of NAT such that
     A8: for n holds f.n = Sum(seq_n^(k), n);
       set g = seq_n^(k);
     A9: f.(n+1) = Sum(g,n+1) by A8
@@ -4056,14 +4057,14 @@ A5: for n being Nat st n >= 1 & P[n] holds P[n+1] proof
            set m = i0-1;
            set l = k-m;
              A20: i-1 > 1-1 by A19,XREAL_1:11;
-             then reconsider i0 as Nat by INT_1:16;
+             then reconsider i0 as Element of NAT by INT_1:16;
          A21: i0 >= 0+1 by A20,INT_1:20;
          then m >= 0 by XREAL_1:21;
-             then reconsider m as Nat by INT_1:16;
+             then reconsider m as Element of NAT by INT_1:16;
              m = i-2;
          then A22: k >= m+0 by A17,XREAL_1:22;
          then l >= 0 by XREAL_1:21;
-             then reconsider l as Nat by INT_1:16;
+             then reconsider l as Element of NAT by INT_1:16;
                A23: i-1 <= (k+2)-1 by A17,XREAL_1:11;
                 len (((n,1) In_Power k)) = k+1 by NEWTON:def 4;
              then dom(((n,1) In_Power k)) = Seg(k+1) by FINSEQ_1:def 3;
@@ -4075,7 +4076,7 @@ A5: for n being Nat st n >= 1 & P[n] holds P[n+1] proof
                .= (k choose l)*(n to_power l) by A6,POWER:48;
           set i3 = (k+1)-i0;
          A26: i3 = l;
-             then reconsider i3 as Nat;
+             then reconsider i3 as Element of NAT;
          A27: i0 + 0 <= (k+1) by A26,XREAL_1:21;
                 len(((n,1) In_Power (k+1))) = (k+1)+1 by NEWTON:def 4;
              then dom(((n,1) In_Power (k+1))) = Seg(k+2) by FINSEQ_1:def 3;
@@ -4108,7 +4109,7 @@ proof
  let f be Real_Sequence such that
 A1: for n holds f.n = log(2,n!);
  set g = seq_logn;
- defpred P[Nat] means f.$1 = Sum(g, $1);
+ defpred P[Element of NAT] means f.$1 = Sum(g, $1);
 A2: P[0] proof
     A3: f.0 = log(2,1) by A1,NEWTON:18
           .= 0 by POWER:59;
@@ -4176,7 +4177,7 @@ A5: f is Element of Funcs(NAT, REAL) by FUNCT_2:11;
  A6: n >= 4;
    ex s being Real_Sequence st s.0 = 0 &
      (for m st m > 0 holds s.m = (log(2,n/2))) proof
-      defpred P[Nat,Real] means
+      defpred P[Element of NAT,Real] means
         ($1 = 0 implies $2 = 0) &
          ($1 > 0 implies $2 = log(2,n/2));
     A7: for x being Element of NAT ex y being Element of REAL st P[x,y] proof
@@ -4197,7 +4198,7 @@ A5: f is Element of Funcs(NAT, REAL) by FUNCT_2:11;
 A9: p.0 = 0 & (for m st m > 0 holds p.m = log(2,n/2));
    ex s being Real_Sequence st s.0 = 0 &
      (for m st m > 0 holds s.m = (log(2,n))) proof
-      defpred P[Nat,Real] means
+      defpred P[Element of NAT,Real] means
         ($1 = 0 implies $2 = 0) &
          ($1 > 0 implies $2 = log(2,n));
     A10: for x being Element of NAT ex y being Element of REAL st P[x,y] proof
@@ -4220,14 +4221,14 @@ A12: q.0 = 0 & (for m st m > 0 holds q.m = log(2,n));
      A13: n*2" > 0*2" by A6,XREAL_1:70;
  then A14: n/2 > 0;
  A15: [/n/2\] >= n/2 by INT_1:def 5;
-     then reconsider n1 as Nat by INT_1:16;
+     then reconsider n1 as Element of NAT by INT_1:16;
    set n2 = n1-1;
     now assume n2 < 0;
         then n1-1 <= -1 by INT_1:21;
         then (n1-1)+1 <= -1+1 by XREAL_1:8;
       hence contradiction by A13,A15;
      end;
-     then reconsider n2 as Nat by INT_1:16;
+     then reconsider n2 as Element of NAT by INT_1:16;
         for k st k <= n2 holds h.k >= 0 proof
       let k such that k <= n2;
        per cases;
@@ -4353,7 +4354,7 @@ A2: Big_Theta(f) = { s where s is Element of Funcs(NAT, REAL) :
         max(N, N0) >= N & max(N, N0) >= N0 by XXREAL_0:25;
  then A10: N1 >= N & N1 >= N0 by A9,XXREAL_0:2;
         N1 is Integer by XXREAL_0:16;
-     then reconsider N1 as Nat by A9,INT_1:16;
+     then reconsider N1 as Element of NAT by A9,INT_1:16;
   thus contradiction proof
    per cases by NAT_1:62;
    suppose
@@ -4428,7 +4429,7 @@ end;
 begin :: Problem 3.28
 
 definition
- let f be Function of NAT, REAL*, n be Nat;
+ let f be Function of NAT, REAL*, n be Element of NAT;
  redefine func f.n -> FinSequence of REAL;
  coherence proof
      f.n is Element of REAL*;
@@ -4440,13 +4441,13 @@ Lm52:
 now
  let a,b be positive Real;
 reconsider singlea = <*a*> as Element of REAL* by FINSEQ_1:def 11;
-defpred P[Nat,FinSequence of REAL,set] means
- ex n1 being Nat st n1 = [/(($1+1)+1)/2\] &
+defpred P[Element of NAT,FinSequence of REAL,set] means
+ ex n1 being Element of NAT st n1 = [/(($1+1)+1)/2\] &
    $3 = $2^<*4*$2/.n1 + b*(($1+1)+1)*>;
 
 A1:
-now let n be Nat, x be Element of REAL*;
-    reconsider n1 = [/((n+1)+1)/2\] as Nat by INT_1:80;
+now let n be Element of NAT, x be Element of REAL*;
+    reconsider n1 = [/((n+1)+1)/2\] as Element of NAT by INT_1:80;
     consider y being FinSequence of REAL such that
 A2: y = x^<*4*(x/.n1) + b*((n+1)+1)*>;
     reconsider y as Element of REAL* by FINSEQ_1:def 11;
@@ -4456,42 +4457,46 @@ end;
 
  consider prob28 being Function of NAT, REAL* such that
 A3: prob28.0 = singlea and
-A4: for n being Nat holds P[n,prob28.n,prob28.(n+1)]
+A4: for n being Element of NAT holds P[n,prob28.n,prob28.(n+1)]
         from RECDEF_1:sch 2(A1);
 
 take prob28;
 thus prob28.0 = <*a*> &
-     for n being Nat holds ex n1 being Nat st n1 = [/((n+1)+1)/2\] &
+     for n being Element of NAT
+      ex n1 being Element of NAT st n1 = [/((n+1)+1)/2\] &
       prob28.(n+1) = prob28.n^<*4*((prob28.n)/.n1) + b*((n+1)+1)*> by A3,A4;
 end;
 
-definition let n be Nat, a,b be positive Real;
-defpred P[Nat,FinSequence of REAL,set] means
- ex n1 being Nat st n1 = [/(($1+1)+1)/2\] &
+definition let n be Element of NAT, a,b be positive Real;
+defpred P[Element of NAT,FinSequence of REAL,set] means
+ ex n1 being Element of NAT st n1 = [/(($1+1)+1)/2\] &
    $3 = $2^<*4*($2/.n1) + b*(($1+1)+1)*>;
 
 A1:
-for n being Nat, x,y1,y2 being Element of REAL* st P[n,x,y1] & P[n,x,y2]
+for n being Element of NAT, x,y1,y2 being Element of REAL*
+ st P[n,x,y1] & P[n,x,y2]
  holds y1 = y2;
 
  func Prob28 (n,a,b) -> Real means :Def6:
   it = 0 if n = 0 otherwise
-   ex l being Nat, prob28 being Function of NAT, REAL* st
+   ex l being Element of NAT, prob28 being Function of NAT, REAL* st
     l+1 = n & it = (prob28.l)/.n &
      prob28.0 = <*a*> &
-     for n being Nat holds ex n1 being Nat st n1 = [/((n+1)+1)/2\] &
+     for n being Element of NAT holds ex n1 being Element of NAT
+      st n1 = [/((n+1)+1)/2\] &
        prob28.(n+1) = prob28.n^<*4*((prob28.n)/.n1) + b*((n+1)+1)*>;
  consistency;
  existence proof
 reconsider singlea = <*a*> as Element of REAL* by FINSEQ_1:def 11;
  consider prob28 being Function of NAT, REAL* such that
 A2: prob28.0 = singlea and
-A3: for n being Nat holds P[n,prob28.n,prob28.(n+1)] by Lm52;
+A3: for n being Element of NAT holds P[n,prob28.n,prob28.(n+1)] by Lm52;
 
   thus n = 0 implies ex c being Real st c = 0;
   assume n <> 0;
     then consider l being Nat such that
 A4: n = l+1 by NAT_1:22;
+    reconsider l as Element of NAT by ORDINAL1:def 13;
   take (prob28.l)/.n, l, prob28;
   thus thesis by A2,A3,A4;
  end;
@@ -4501,14 +4506,16 @@ reconsider singlea = <*a*> as Element of REAL* by FINSEQ_1:def 11;
   thus n = 0 & c1 = 0 & c2 = 0 implies c1 = c2;
   assume n <> 0; assume
 A5: not thesis;
-    then consider l1 being Nat, prob281 being Function of NAT, REAL* such that
+    then consider l1 being Element of NAT,
+    prob281 being Function of NAT, REAL* such that
 A6: l1+1 = n & c1 = (prob281.l1)/.n and
 A7: prob281.0 = singlea &
-    for n being Nat holds P[n,prob281.n,prob281.(n+1)];
-    consider l2 being Nat, prob282 being Function of NAT, REAL* such that
+    for n being Element of NAT holds P[n,prob281.n,prob281.(n+1)];
+    consider l2 being Element of NAT,
+    prob282 being Function of NAT, REAL* such that
 A8: l2+1 = n & c2 = (prob282.l2)/.n and
 A9: prob282.0 = singlea &
-    for n being Nat holds  P[n,prob282.n,prob282.(n+1)] by A5;
+    for n being Element of NAT holds  P[n,prob282.n,prob282.(n+1)] by A5;
     prob281 = prob282 from RECDEF_1:sch 10(A7,A9, A1);
   hence contradiction by A5,A6,A8;
  end;
@@ -4518,9 +4525,9 @@ definition let a,b be positive Real;
  func seq_prob28(a,b) -> Real_Sequence means :Def7:
   it.n = Prob28(n,a,b);
  existence proof
-    deffunc F(Nat) = Prob28($1,a,b);
+    deffunc F(Element of NAT) = Prob28($1,a,b);
     consider h being Function of NAT, REAL such that
- A1: for n being Nat holds h.n = F(n) from FUNCT_2:sch 4;
+ A1: for n being Element of NAT holds h.n = F(n) from FUNCT_2:sch 4;
   take h; let n; thus h.n = Prob28(n,a,b) by A1;
  end;
  uniqueness proof let j,k be Real_Sequence such that
@@ -4555,12 +4562,12 @@ Lm54:
     ex n1 st n1 = [/n/2\] & Prob28(n,a,b) = 4*Prob28(n1,a,b) + b*n
 proof
  let a,b be positive Real;
- defpred P[Nat,FinSequence of REAL,set] means
-  ex n1 being Nat st n1 = [/(($1+1)+1)/2\] &
+ defpred P[Element of NAT,FinSequence of REAL,set] means
+  ex n1 being Element of NAT st n1 = [/(($1+1)+1)/2\] &
     $3 = $2^<*4*($2/.n1) + b*(($1+1)+1)*>;
  consider prob28 being Function of NAT, REAL* such that
 A1: prob28.0 = <*a*> and
-A2: for n being Nat holds P[n,prob28.n,prob28.(n+1)] by Lm52;
+A2: for n being Element of NAT holds P[n,prob28.n,prob28.(n+1)] by Lm52;
  thus Prob28(0,a,b) = 0 by Def6;
    0 <> 1 & 0+1 = 1 & a = <*a*>/.1 by FINSEQ_4:25;
  hence
@@ -4569,28 +4576,30 @@ A2: for n being Nat holds P[n,prob28.n,prob28.(n+1)] by Lm52;
 A3: n >= 2;
  set m = n-2;
       n-2 >= 2-2 by A3,XREAL_1:11;
-   then reconsider m as Nat by INT_1:16;
+   then reconsider m as Element of NAT by INT_1:16;
    consider n1 such that
 A4: n1 = [/((m+1)+1)/2\] and
 A5: prob28.(m+1) = prob28.m^<*4*((prob28.m)/.n1) + b*((m+1)+1)*> by A2;
-   defpred P[Nat] means len(prob28.$1) = $1+1 &
-    for k being Nat st k <= $1 holds (prob28.$1)/.(k+1) = Prob28(k+1,a,b);
+   defpred P[Element of NAT] means len(prob28.$1) = $1+1 &
+    for k being Element of NAT st k <= $1
+     holds (prob28.$1)/.(k+1) = Prob28(k+1,a,b);
 A6: P[0] proof thus len(prob28.0) = 0+1 by A1,FINSEQ_1:57;
-    let k be Nat such that
+    let k be Element of NAT such that
    A7: k <= 0;
          k = 0 by A7;
     hence (prob28.0)/.(k+1) = Prob28(k+1,a,b) by A1,A2,Def6;
    end;
-A8:for n being Nat st P[n] holds P[n+1] proof
-    let n be Nat such that
+A8:for n being Element of NAT st P[n] holds P[n+1] proof
+    let n be Element of NAT such that
    A9: len(prob28.n) = n+1 and
-   A10: for k being Nat st k <= n holds (prob28.n)/.(k+1) = Prob28(k+1,a,b);
-       consider n1 being Nat such that
+   A10: for k being Element of NAT
+    st k <= n holds (prob28.n)/.(k+1) = Prob28(k+1,a,b);
+       consider n1 being Element of NAT such that
    A11: n1 = [/((n+1)+1)/2\] &
         prob28.(n+1) = prob28.n^<*4*((prob28.n)/.n1) + b*((n+1)+1)*> by A2;
           len <*4*((prob28.n)/.n1) + b*((n+1)+1)*> = 1 by FINSEQ_1:57;
     hence len(prob28.(n+1)) = (n+1)+1 by A9,A11,FINSEQ_1:35;
-    let k be Nat; assume
+    let k be Element of NAT; assume
        k <= n+1;
    then A12: k = n+1 or k <= n by NAT_1:26;
        now assume
@@ -4602,7 +4611,7 @@ A8:for n being Nat st P[n] holds P[n+1] proof
     end;
     hence (prob28.(n+1))/.(k+1) = Prob28(k+1,a,b) by A1,A2,A12,Def6;
    end;
-A14: for n being Nat holds P[n] from NAT_1:sch 1(A6, A8);
+A14: for n being Element of NAT holds P[n] from NAT_1:sch 1(A6, A8);
 then A15:(prob28.(m+1))/.((m+1)+1) = Prob28(n,a,b);
  set n2 = n1-1;
      n*2" > 0*2" by A3,XREAL_1:70;
@@ -4610,7 +4619,7 @@ then ((m+1)+1)/2 > 0;
    then n1 > 0 by A4,INT_1:def 5;
    then n1 >= 0 + 1 by INT_1:20;
    then n2 >= 0 by XREAL_1:21;
-   then reconsider n2 as Nat by INT_1:16;
+   then reconsider n2 as Element of NAT by INT_1:16;
 A16: len(prob28.m) = m+1 by A14;
       len(<*4*((prob28.m)/.n1) + b*((m+1)+1)*>) = 1 by FINSEQ_1:57;
 then A17: 1 in dom <*4*((prob28.m)/.n1) + b*((m+1)+1)*> by FINSEQ_3:27;
@@ -4665,8 +4674,9 @@ theorem
 proof
  let a,b be positive Real;
  set f = seq_prob28(a,b);
-   defpred R[Nat] means f.$1 <= f.($1+1);
-   defpred P[Nat] means (for n st n >= 1 & n < $1 holds R[n]) implies R[$1];
+   defpred R[Element of NAT] means f.$1 <= f.($1+1);
+   defpred P[Element of NAT] means (for n st n >= 1 & n < $1 holds R[n])
+    implies R[$1];
 A1: for k st k >= 1 & (for n st n >= 1 & n < k holds R[n]) holds R[k] proof
      for k st k >= 1 holds P[k] proof
     A2: P[1] proof
@@ -4695,9 +4705,9 @@ A1: for k st k >= 1 & (for n st n >= 1 & n < k holds R[n]) holds R[k] proof
         then A12: (m+1)/2 > 0;
         A13: [/(m+1)/2\] >= (m+1)/2 by INT_1:def 5;
         A14: t1 > 0 by A12,INT_1:def 5;
-            reconsider t1 as Nat by A13,INT_1:16;
+            reconsider t1 as Element of NAT by A13,INT_1:16;
                [/((m+1)+1)/2\] >= ((m+1)+1)/2 by INT_1:def 5;
-            then reconsider t2 as Nat by INT_1:16;
+            then reconsider t2 as Element of NAT by INT_1:16;
                f.t1 <= f.t2 proof
              per cases by NAT_1:62;
              suppose (m+1) mod 2 = 0;
@@ -4807,12 +4817,12 @@ begin :: Problem 3.30
 
 definition
  func POWEROF2SET -> non empty Subset of NAT equals
-  { 2 to_power n where n is Nat : not contradiction };
+  { 2 to_power n where n is Element of NAT : not contradiction };
  coherence proof
-  set IT = { 2 to_power n where n is Nat : not contradiction };
+  set IT = { 2 to_power n where n is Element of NAT : not contradiction };
  A1: 2 to_power 1 in IT;
        now let x; assume x in IT;
-     then consider n being Nat such that
+     then consider n being Element of NAT such that
     A2: 2 to_power n = x and not contradiction;
      thus x in NAT by A2;
     end;
@@ -4823,7 +4833,7 @@ end;
 Lm55:
  for n st n >= 2 holds n^2 > n+1
 proof
-  defpred P[Nat] means $1^2 > $1+1;
+  defpred P[Element of NAT] means $1^2 > $1+1;
 A1: P[2];
 A2: for k st k >= 2 & P[k] holds P[k+1] proof let k such that
     A3: k >= 2 and
@@ -4865,7 +4875,7 @@ A4: now assume m >= n;
     hence contradiction by A3,A5,XREAL_1:21;
    end;
 A6: n-1 >= 1 by A1,A2,XREAL_1:11;
-   then n-1 is Nat by INT_1:16;
+   then n-1 is Element of NAT by INT_1:16;
    then (2 to_power ((n+-1)+1)) - (2 to_power (n-1)) > 1 by A6,Lm56;
    then (2 to_power n) > 1 + (2 to_power (n-1)) by XREAL_1:22;
 then A7: (2 to_power n) - 1 > (2 to_power (n-1)) by XREAL_1:22;
@@ -4931,12 +4941,12 @@ A4: f is Element of Funcs(NAT, REAL) by FUNCT_2:11;
         hence thesis by XXREAL_0:16;
      end;
      end;
-     then reconsider N2 as Nat by A13,INT_1:16;
+     then reconsider N2 as Element of NAT by A13,INT_1:16;
    set N3 = (2 to_power N2) - 1;
     2 to_power N2 > 0 by POWER:39;
      then 2 to_power N2 >= 0 + 1 by NAT_1:38;
  then N3 >= 0 by XREAL_1:21;
-     then reconsider N3 as Nat by INT_1:16;
+     then reconsider N3 as Element of NAT by INT_1:16;
         2 to_power N2 > N2 + 1 by A15,Lm1;
  then A16: N3 > N2 by XREAL_1:22;
  then A17: N3 >= N by A14,XXREAL_0:2;
@@ -5010,7 +5020,7 @@ A27: h is Element of Funcs(NAT, REAL) by FUNCT_2:11;
        2 to_power 2 = 2^2 by POWER:53
                 .= 4;
     then N1 >= 3 by A2,A33,XREAL_1:11;
-    then reconsider N1 as Nat by INT_1:16;
+    then reconsider N1 as Element of NAT by INT_1:16;
        not N1 in POWEROF2SET by A32,Lm57;
  then A34: f.N1 = 2 to_power N1 by A1;
      N1+1 in POWEROF2SET;
@@ -5059,7 +5069,7 @@ A6: now let n such that
  A7: n >= 1 and
  A8: n in X;
  A9: f.n = n to_power (2 to_power [\log(2,n)/]) by A1,A7;
-     consider n1 being Nat such that
+     consider n1 being Element of NAT such that
  A10: n = 2 to_power n1 by A8;
     log(2,n) = n1*log(2,2) by A10,POWER:63
              .= n1*1 by POWER:60;
@@ -5082,8 +5092,8 @@ A6: now let n such that
         max(N, 2) >= N & max(N, 2) >= 2 by XXREAL_0:25;
  then A19: N1 >= N & N1 >= 2 by A18,XXREAL_0:2;
         N1 is Integer by XXREAL_0:16;
-     then reconsider N1 as Nat by A18,INT_1:16;
-     reconsider N2 = 2 to_power N1 as Nat;
+     then reconsider N1 as Element of NAT by A18,INT_1:16;
+     reconsider N2 = 2 to_power N1 as Element of NAT;
  A20: N2 > N1 + 1 by A19,Lm1;
         N1+1 > N1+0 by XREAL_1:10;
  then A21: N2 > N1 by A20,XXREAL_0:2;
@@ -5171,7 +5181,7 @@ A38: now let n; assume
  then A51: N0 > 0 & N0 > 1 by XXREAL_0:2;
  A52: 2*N0 > 1*N0 by A48,A49,XREAL_1:70;
         N0 is Integer by XXREAL_0:16;
-     then reconsider N0 as Nat by A48,INT_1:16;
+     then reconsider N0 as Element of NAT by A48,INT_1:16;
      h.N0 = g.(2*N0) by ASYMPT_0:def 18
          .= (2*N0) to_power (2*N0) by A2,A52;
  then A53: h.N0 > N0 to_power (2*N0) by A48,A49,A52,POWER:42;
@@ -5250,12 +5260,12 @@ A9: Big_Theta(g) = { t where t is Element of Funcs(NAT, REAL) :
         max(N,2) >= N & max(N,2) >= 2 by XXREAL_0:25;
  then A16: N0 >= N & N0 >= 2 by A15,XXREAL_0:2;
         N0 is Integer by XXREAL_0:16;
-     then reconsider N0 as Nat by A15,INT_1:16;
+     then reconsider N0 as Element of NAT by A15,INT_1:16;
   set N1 = (2 to_power N0) - 1;
     2 to_power N0 > 0 by POWER:39;
      then 2 to_power N0 >= 0 + 1 by NAT_1:38;
  then N1 >= 0 by XREAL_1:21;
-     then reconsider N1 as Nat by INT_1:16;
+     then reconsider N1 as Element of NAT by INT_1:16;
         2 to_power N0 > N0 + 1 by A16,Lm1;
  then A17: N1 > N0 by XREAL_1:22;
  then A18: N1 >= N by A16,XXREAL_0:2;
@@ -5301,7 +5311,7 @@ A23: now let n; assume
           then (n*2)*2" = 1*2" by A29,POWER:29;
           then A30: n*(2*2") = 1*2";
           now assume
-           1/2 is Nat;
+           1/2 is Element of NAT;
            then 0+1 <= 1/2 by NAT_1:38;
         hence contradiction;
        end;
@@ -5313,7 +5323,7 @@ A23: now let n; assume
 A32:        2*n = 2 to_power ((m+-1)+1) by A29
              .= (2 to_power (m-1))*(2 to_power 1) by POWER:32
              .= (2 to_power (m-1))*2 by POWER:30;
-             m-1 is Nat by A31,INT_1:16;
+             m-1 is Element of NAT by A31,INT_1:16;
        hence thesis by A28,A32;
      end;
      end;
@@ -5364,7 +5374,7 @@ A34: now let n; assume
     then A38: (2 to_power (2*N0)) - 1 >= 1 - 1 by XREAL_1:11;
  A39: N0 >= 1 by XXREAL_0:25;
  then A40: 2*N0 >= 2*1 by XREAL_1:66;
-    reconsider N1 as Nat by A38,INT_1:16;
+    reconsider N1 as Element of NAT by A38,INT_1:16;
        not N1 in POWEROF2SET by A40,Lm57;
  then A41: g.N1 = N1 to_power 2 by A1;
      N1+1 in POWEROF2SET;
@@ -5392,7 +5402,7 @@ begin :: Problem 3.31
 Lm58:
  for n st n >= 2 holds n! > 1
 proof
-   defpred P[Nat] means $1! > 1;
+   defpred P[Element of NAT] means $1! > 1;
 A1: P[2] by NEWTON:20;
 A2: for k st k >= 2 & P[k] holds P[k+1] proof
      let k such that
@@ -5410,7 +5420,7 @@ end;
 Lm59:
  for n1, n st n <= n1 holds n! <= n1!
 proof
-    defpred P[Nat] means for n st n <= $1 holds n! <= ($1)!;
+    defpred P[Element of NAT] means for n st n <= $1 holds n! <= ($1)!;
 A1: P[0] by XXREAL_0:1;
 A2: for k st P[k] holds P[k+1] proof let k such that
     A3: for n st n <= k holds n! <= k!;
@@ -5436,7 +5446,7 @@ Lm60:
  for k st k >= 1 holds
    ex n st (n! <= k & k < (n+1)! & for m st m! <= k & k < (m+1)! holds m = n)
 proof
-   defpred P[Nat] means ex n st
+   defpred P[Element of NAT] means ex n st
      (n! <= $1 & $1 < (n+1)! & for m st m! <= $1 & $1 < (m+1)! holds m = n);
 A1: P[1] proof
     take 1;
@@ -5527,8 +5537,8 @@ A4:for k st k >= 1 & P[k] holds P[k+1]  proof let k; assume that k >= 1 and
  hence thesis;
 end;
 
-definition let x be Nat;
- func Step1(x) -> Nat means :Def9:
+definition let x be Element of NAT;
+ func Step1(x) -> Element of NAT means :Def9:
   ex n st n! <= x & x < (n+1)! & it = n! if x <> 0
    otherwise it = 0;
  consistency;
@@ -5536,18 +5546,18 @@ definition let x be Nat;
   hereby assume x <> 0;
      then x > 0;
    then x >= 0+1 by NAT_1:38;
-     then consider k being Nat such that
+     then consider k being Element of NAT such that
   A1: k! <= x & x < (k+1)! and
         for m st m! <= x & x < (m+1)! holds m = k by Lm60;
      consider k1 being Real such that
   A2: k1 = k!;
-     reconsider k1 as Nat by A2;
+     reconsider k1 as Element of NAT by A2;
    take k1;
    thus ex m st m! <= x & x < (m+1)! & k1 = m! by A1,A2;
   end;
   thus thesis;
  end;
- uniqueness proof let n1, n2 be Nat;
+ uniqueness proof let n1, n2 be Element of NAT;
      now assume that
  A3: (ex n st n! <= x & x < (n+1)! & n1 = n!) and
  A4: (ex n st n! <= x & x < (n+1)! & n2 = n!);
@@ -5585,7 +5595,7 @@ A1: n >= 3;
 A2: 2 = 3-1;
  set n1 = n-1;
 A3: n1 >= 2 by A1,A2,XREAL_1:11;
-   then reconsider n1 as Nat by INT_1:16;
+   then reconsider n1 as Element of NAT by INT_1:16;
 A4: n1+1 = n;
       n1! >= 2 by A3,Lm59,NEWTON:20;
    then n1! > 1 by XXREAL_0:2;
@@ -5689,15 +5699,15 @@ A19: now let n;
      A30: max(N,3) >= N & max(N,3) >= 3 by XXREAL_0:25;
  then A31:n2 >= N & n2 >= 3 by A29,XXREAL_0:2;
        n2 is Integer by XXREAL_0:16;
-    then reconsider n2 as Nat by A29,INT_1:16;
+    then reconsider n2 as Element of NAT by A29,INT_1:16;
   set n1 = n2!-1;
  A32: n2 > 2 by A31,XXREAL_0:2;
  then A33:n2! >= 2 by Lm59,NEWTON:20;
  then A34: n1 >= 1 by A5,XREAL_1:11;
-    reconsider n1 as Nat by A34,INT_1:16;
+    reconsider n1 as Element of NAT by A34,INT_1:16;
   set n3 = n2-1;
  A35:n3 >= 1 by A5,A32,XREAL_1:11;
-    then reconsider n3 as Nat by INT_1:16;
+    then reconsider n3 as Element of NAT by INT_1:16;
        n2! > n2 by A31,Lm61;
     then n2! >= n2 + 1 by INT_1:20;
     then n1 >= n2 by XREAL_1:21;
@@ -5860,7 +5870,7 @@ A18:     c1 + c2 >= 0 + c2 by A12,XREAL_1:8;
      by FUNCT_2:11;
   set N0 = max(N, 2);
  A33:N0 >= N & N0 >= 2 by XXREAL_0:25;
-    reconsider N0 as Nat;
+    reconsider N0 as Element of NAT;
        now let n; assume A34: n >= N0;
     then A35:n >= N & n >= 2 by A33,XXREAL_0:2;
        then d*g.n <= t.n & t.n <= c*g.n by A30;
@@ -6148,14 +6158,15 @@ theorem
 theorem
   for f being Real_Sequence, b being Real st
   (f.0 = 0 & (for n st n > 0 holds f.n = b))
-   holds for N being Nat holds Sum(f,N) = b*N by Lm19;
+   holds for N being Element of NAT holds Sum(f,N) = b*N by Lm19;
 
 theorem
   for f being Real_Sequence,
-     N,M being Nat holds Sum(f,N,M) + f.(N+1) = Sum(f,N+1,M) by Lm20;
+     N,M being Element of NAT holds Sum(f,N,M) + f.(N+1) = Sum(f,N+1,M)
+      by Lm20;
 
 theorem
-  for f,g being Real_Sequence, M being Nat
+  for f,g being Real_Sequence, M being Element of NAT
   holds for N st N >= M+1 holds
     (for n st M+1 <= n & n <= N holds f.n <= g.n) implies Sum(f,N,M) <= Sum
 (g,N,M)
@@ -6165,12 +6176,12 @@ theorem
   for n holds [/n/2\] <= n by Lm22;
 
 theorem
-  for f being Real_Sequence, b being Real, N being Nat st
+  for f being Real_Sequence, b being Real, N being Element of NAT st
   (f.0 = 0 & (for n st n > 0 holds f.n = b))
-   holds for M being Nat holds Sum(f, N, M) = b*(N-M) by Lm23;
+   holds for M being Element of NAT holds Sum(f, N, M) = b*(N-M) by Lm23;
 
 theorem
-  for f,g being Real_Sequence, N being Nat, c being Real
+  for f,g being Real_Sequence, N being Element of NAT, c being Real
   st f is convergent & lim f = c & for n st n >= N holds f.n = g.n
    holds g is convergent & lim g = c by Lm28;
 

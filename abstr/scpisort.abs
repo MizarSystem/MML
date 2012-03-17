@@ -11,10 +11,10 @@ environ
       SCMPDS_5, SCMFSA6B, UNIALG_2, SCMFSA7B, SCMFSA_7, SCMPDS_7, ARYTM_1,
       RELOC, FUNCT_4, SCMPDS_3, FUNCT_7, SCM_1, BOOLE, AMI_5, SCMISORT,
       SCMFSA_9, SCMFSA8B, ABSVALUE, SCPISORT;
- notations XBOOLE_0, XCMPLX_0, RELAT_1, FUNCT_1, FUNCT_4, INT_1, NAT_1,
-      COMPLEX1, AMI_1, AMI_2, AMI_3, AMI_5, FUNCT_7, SCMPDS_2, SCMPDS_3,
-      CARD_1, SCMPDS_4, SCM_1, SCMPDS_5, SCMPDS_6, SCMP_GCD, DOMAIN_1,
-      FINSEQ_1, SCMPDS_7, SCMPDS_8, SFMASTR3, RFINSEQ, XXREAL_0;
+ notations XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1, FUNCT_1, FUNCT_4,
+      INT_1, NAT_1, COMPLEX1, AMI_1, AMI_2, AMI_3, AMI_5, FUNCT_7, SCMPDS_2,
+      SCMPDS_3, CARD_1, SCMPDS_4, SCM_1, SCMPDS_5, SCMPDS_6, SCMP_GCD,
+      DOMAIN_1, FINSEQ_1, SCMPDS_7, SCMPDS_8, SFMASTR3, RFINSEQ, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, RAT_1, MEMBERED, INT_2,
       RFINSEQ, SCM_1, AMI_5, SFMASTR3, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD,
       SCMPDS_7, SCMPDS_8;
@@ -27,32 +27,32 @@ environ
 begin :: Preliminaries
 
 reserve x for Int_position,
-        n,p0 for Nat;
+        n,p0 for Element of NAT;
 
 definition
- let f be FinSequence of INT,s be State of SCMPDS,m be Nat;
+ let f be FinSequence of INT,s be State of SCMPDS,m be Element of NAT;
  pred f is_FinSequence_on s,m means
 :: SCPISORT:def 1
-  for i be Nat st 1 <= i & i <= len f holds f.i=s.intpos(m+i);
+  for i be Element of NAT st 1 <= i & i <= len f holds f.i=s.intpos(m+i);
 end;
 
 theorem :: SCPISORT:1
- for f being FinSequence of INT,m,n be Nat st m >= n holds
+ for f being FinSequence of INT,m,n be Element of NAT st m >= n holds
  f is_non_decreasing_on m,n;
 
 theorem :: SCPISORT:2
-  for s being State of SCMPDS,n,m be Nat holds
+  for s being State of SCMPDS,n,m be Element of NAT holds
      ex f be FinSequence of INT st len f=n &
-     for i be Nat st 1<=i & i <= len f holds f.i=s.intpos(m+i);
+     for i be Element of NAT st 1<=i & i <= len f holds f.i=s.intpos(m+i);
 
 theorem :: SCPISORT:3
-      for s being State of SCMPDS,n,m be Nat holds
+      for s being State of SCMPDS,n,m be Element of NAT holds
     ex f be FinSequence of INT st len f=n & f is_FinSequence_on s,m;
 
 theorem :: SCPISORT:4
- for f,g be FinSequence of INT,m,n be Nat st 1<=n & n <= len f &
+ for f,g be FinSequence of INT,m,n be Element of NAT st 1<=n & n <= len f &
  1<=m & m <= len f & len f=len g & f.m=g.n & f.n=g.m &
- (for k be Nat st k<>m & k<>n & 1<=k & k <= len f holds f.k=g.k)
+ (for k be Element of NAT st k<>m & k<>n & 1<=k & k <= len f holds f.k=g.k)
  holds f,g are_fiberwise_equipotent;
 
 theorem :: SCPISORT:5   ::see SCMPDS_8:2
@@ -101,7 +101,7 @@ begin :: Computing the Execution Result of For-loop Program by Loop-Invariant
 scheme :: SCPISORT:sch 1
  ForDownHalt { P[set],
  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
- a() -> Int_position,i() -> Integer,n() -> Nat}:
+ a() -> Int_position,i() -> Integer,n() -> Element of NAT}:
     (P[s()] or not P[s()]) &
      for-down(a(),i(),n(),I()) is_closed_on s() &
      for-down(a(),i(),n(),I()) is_halting_on s()
@@ -119,7 +119,7 @@ provided
 scheme :: SCPISORT:sch 2
  ForDownExec { P[set],
  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
- a() -> Int_position,i() -> Integer,n() -> Nat}:
+ a() -> Int_position,i() -> Integer,n() -> Element of NAT}:
     (P[s()] or not P[s()]) &
     IExec(for-down(a(),i(),n(),I()),s()) =
  IExec(for-down(a(),i(),n(),I()),IExec(I() ';' AddTo(a(),i(),-n()),s()))
@@ -138,7 +138,7 @@ scheme :: SCPISORT:sch 2
 scheme :: SCPISORT:sch 3
  ForDownEnd { P[set],
  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
- a() -> Int_position,i() -> Integer,n() -> Nat}:
+ a() -> Int_position,i() -> Integer,n() -> Element of NAT}:
     (P[s()] or not P[s()]) &
     IExec(for-down(a(),i(),n(),I()),s()).DataLoc(s().a(),i()) <= 0 &
      P[Dstate IExec(for-down(a(),i(),n(),I()),s())]
@@ -155,7 +155,7 @@ provided
 
 theorem :: SCPISORT:12
  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
- a,x,y be Int_position, i,c be Integer,n be Nat st
+ a,x,y be Int_position, i,c be Integer,n be Element of NAT st
   n > 0 & s.x >= s.y +c &
  for t be State of SCMPDS st
    t.x >= t.y +c & t.a=s.a & t.DataLoc(s.a,i) > 0
@@ -168,7 +168,7 @@ holds
 
 theorem :: SCPISORT:13
  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
- a,x,y be Int_position, i,c be Integer,n be Nat st
+ a,x,y be Int_position, i,c be Integer,n be Element of NAT st
   n > 0 & s.x >= s.y +c & s.DataLoc(s.a,i) > 0 &
  for t be State of SCMPDS st
    t.x >= t.y +c & t.a=s.a & t.DataLoc(s.a,i) > 0
@@ -182,7 +182,7 @@ holds
 
 theorem :: SCPISORT:14
       for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
- a be Int_position, i be Integer,n be Nat
+ a be Int_position, i be Integer,n be Element of NAT
  st s.DataLoc(s.a,i) > 0 & n > 0 & card I > 0 &
     a <> DataLoc(s.a,i) & (for t be State of SCMPDS st t.a=s.a
  holds IExec(I,t).a=t.a & IExec(I,t).DataLoc(s.a,i)=t.DataLoc(s.a,i) &
@@ -194,7 +194,7 @@ begin :: A Program for Insert Sort
 :: n -> intpos 2,  x1 -> intpos 3
 
 definition
- let n,p0 be Nat;
+ let n,p0 be Element of NAT;
  func insert-sort(n,p0) -> Program-block equals
 :: SCPISORT:def 2
        ((GBP:=0) ';'
@@ -229,19 +229,21 @@ theorem :: SCPISORT:16
        p0 >= 7 implies insert-sort (n,p0) is parahalting;
 
 theorem :: SCPISORT:17
- for s being State of SCMPDS,f,g be FinSequence of INT,k0,k being Nat
+ for s being State of SCMPDS,f,g be FinSequence of INT,
+ k0,k being Element of NAT
  st s.a4 >= 7+s.a6 & s.GBP=0 & k=s.a6 & k0=s.a4-s.a6-1 &
   f is_FinSequence_on s,k0 &
   g is_FinSequence_on IExec(Insertthek1item,s),k0 &
   len f=len g & len f > k & f is_non_decreasing_on 1,k
  holds
   f,g are_fiberwise_equipotent & g is_non_decreasing_on 1,k+1 &
-  (for i be Nat st i>k+1 & i <= len f holds f.i=g.i) &
-  (for i be Nat st 1 <= i & i <= k+1 holds
-    ex j be Nat st 1 <= j & j <= k+1 & g.i=f.j);
+  (for i be Element of NAT st i>k+1 & i <= len f holds f.i=g.i) &
+  (for i be Element of NAT st 1 <= i & i <= k+1 holds
+    ex j be Element of NAT st 1 <= j & j <= k+1 & g.i=f.j);
 
 theorem :: SCPISORT:18
-      for s being State of SCMPDS,f,g be FinSequence of INT,p0,n being Nat
+      for s being State of SCMPDS,f,g be FinSequence of INT,p0,
+      n being Element of NAT
  st p0 >= 6 & len f=n & len g = n & f is_FinSequence_on s,p0 &
     g is_FinSequence_on IExec(insert-sort(n,p0+1),s),p0 holds
     f,g are_fiberwise_equipotent & g is_non_decreasing_on 1,n;

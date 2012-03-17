@@ -92,15 +92,15 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <And>
@@ -407,10 +407,10 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Not>
@@ -546,20 +546,20 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Not>
@@ -575,7 +575,7 @@
 <Func kind="F" nr="1">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="65">
+<Func kind="K" nr="67">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
 </Func>
@@ -634,7 +634,7 @@
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="61">
+<Func kind="K" nr="63">
 <Func kind="F" nr="1">
 <Var nr="1"/>
 </Func>
@@ -650,10 +650,10 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <For>
@@ -708,10 +708,10 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="41"/>
-<Func kind="K" nr="45"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <For>

@@ -77,9 +77,8 @@
 <Adjective nr="20"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="65"/>
 <Func kind="K" nr="69"/>
 </Typ>
 </ArgTypes>
@@ -300,9 +299,8 @@
 <Adjective nr="20"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="65"/>
 <Func kind="K" nr="69"/>
 </Typ>
 </ArgTypes>
@@ -552,9 +550,8 @@
 <Adjective nr="20"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="65"/>
 <Func kind="K" nr="69"/>
 </Typ>
 </ArgTypes>

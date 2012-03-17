@@ -30,6 +30,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="3" value="false"/>
+<Adjective nr="11"/>
+<Adjective nr="12"/>
+<Adjective nr="13"/>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
@@ -53,6 +56,9 @@
 <Adjective nr="2"/>
 <Adjective nr="3" value="false"/>
 <Adjective nr="10" value="false"/>
+<Adjective nr="11"/>
+<Adjective nr="12"/>
+<Adjective nr="13"/>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>

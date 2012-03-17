@@ -17,18 +17,19 @@ environ
  constructors PARTFUN1, DOMAIN_1, REAL_1, NAT_1, SEQM_3, SERIES_1, MEASURE3,
       MEASURE6, PARTFUN3, KURATO_2, RINFSUP1, PROB_3;
  registrations SUPINF_1, RELAT_1, SEQ_1, SUBSET_1, XREAL_0, RELSET_1, ARYTM_3,
-      PSCOMP_1, FUNCT_2, MEASURE3, MEASURE1, NUMBERS, XXREAL_0, ORDINAL1;
+      PSCOMP_1, FUNCT_2, MEASURE3, MEASURE1, NUMBERS, XXREAL_0, ORDINAL1,
+      NAT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, SERIES_1, SUBSET_1;
  theorems FUNCT_1, FUNCT_2, SEQ_1, SEQ_2, XREAL_1, SUPINF_1, NAT_1, TARSKI,
       XBOOLE_0, XBOOLE_1, PROB_2, RINFSUP1, SUPINF_2, SEQ_4, SEQM_3, CARD_3,
       SETLIM_1, PROB_1, SERIES_1, PROB_3, MEASURE1, MEASURE3, MEASURE6,
-      ZFMISC_1, XXREAL_0;
+      ZFMISC_1, XXREAL_0, ORDINAL1;
  schemes FUNCT_2, NAT_1, PARTFUN1, XBOOLE_0, KURATO_2;
 
 begin
 
- reserve n,m,k for Nat,
+ reserve n,m,k for Element of NAT,
          x,X for set,
          A1 for SetSequence of X,
          Si for SigmaField of X,
@@ -121,16 +122,17 @@ registration let X;
   existence
   proof
     reconsider Y = {} as Subset of X by XBOOLE_1:2;
-    deffunc F(Nat) = Y;
+    deffunc F(Element of NAT) = Y;
     ex f being SetSequence of X st
        for n holds f.n = F(n) from KURATO_2:sch 1; then
     consider A1 being SetSequence of X such that
 A1: for n holds A1.n = {};
     take A1;
-    for m,n st m <> n holds A1.m misses A1.n
+    for m,n being Nat st m <> n holds A1.m misses A1.n
     proof
-      let m,n;
-      A1.m = {} & A1.n = {} by A1;
+      let m,n be Nat;
+      m in NAT & n in NAT by ORDINAL1:def 13;
+      then A1.m = {} & A1.n = {} by A1;
       hence thesis by XBOOLE_1:65;
     end;
     hence thesis by PROB_3:def 4;
@@ -217,17 +219,18 @@ A1: A misses B and
 A2: A1.0 = A & A1.1 = B & for n st n > 1 holds A1.n = {};
     thus A1 is disjoint_valued
     proof
-      for m,n st m <> n holds A1.m misses A1.n
-      proof let m,n such that
+      for m,n being Nat st m <> n holds A1.m misses A1.n
+      proof let m,n be Nat such that
 A3:     m <> n;
+X0:     m in NAT & n in NAT by ORDINAL1:def 13;
         per cases;
         suppose
 A4:       m = 0;
           n >= 1 by A4,A3,NAT_1:39; then
 A5:      n + 1 > 1 by NAT_1:38;
-          per cases by A5,NAT_1:70;
+         per cases by A5,NAT_1:70,X0;
           suppose n > 1; then
-            A1.n = {} by A2;
+            A1.n = {} by A2,X0;
             hence thesis by XBOOLE_1:65;
           end;
           suppose n = 1;
@@ -238,10 +241,10 @@ A5:      n + 1 > 1 by NAT_1:38;
 A6:       m <> 0 & m = 1;
           n >= 1 or n <= 1; then
           n + 1 > 1 or n < 1 + 1 by NAT_1:38; then
-A7:      n > 1 or n < 1 by NAT_1:70,A6,A3;
+A7:      n > 1 or n < 1 by X0,NAT_1:70,A6,A3;
           per cases by A7, NAT_1:39;
           suppose n > 1; then
-            A1.n = {} by A2;
+            A1.n = {} by A2,X0;
             hence thesis by XBOOLE_1:65;
           end;
           suppose n = 0;
@@ -252,8 +255,8 @@ A7:      n > 1 or n < 1 by NAT_1:70,A6,A3;
 A8:       m <> 0 & m <> 1; then
           m >= 1 by NAT_1:39; then
           m +1 > 1 by NAT_1:38; then
-          m > 1 by A8,NAT_1:70; then
-          A1.m = {} by A2;
+          m > 1 by A8,NAT_1:70,X0; then
+          A1.m = {} by A2,X0;
           hence thesis by XBOOLE_1:65;
         end;
       end;
@@ -360,7 +363,7 @@ theorem Th8:
 A1:   for n holds P.(ASeq.n) = 0;
       for n holds Partial_Sums(P * ASeq).n = 0
       proof
-        defpred P[Nat] means Partial_Sums(P * ASeq).$1 = 0;
+        defpred P[Element of NAT] means Partial_Sums(P * ASeq).$1 = 0;
 A2:     P[0]
         proof
           thus Partial_Sums(P * ASeq).0 = (P * ASeq).0 by SERIES_1:def 1
@@ -433,7 +436,7 @@ A1:   for A being set st A in rng ASeq holds P.A = 0;
 A2: P.(Union ASeq) = 0 by CARD_3:def 4;
     hereby let A be set such that
 A3:   A in rng ASeq;
-      consider n1 being Nat such that
+      consider n1 being Element of NAT such that
 A4:   A = ASeq.n1 by A3,SETLIM_1:7;
       thus P.A = 0 by A2,A4,Th8;
     end;
@@ -448,7 +451,7 @@ theorem Th10:
 A1: seq = Eseq;
     reconsider Ps = Partial_Sums seq as Function of NAT, ExtREAL
       by FUNCT_2:9;
-    defpred P[Nat] means Ps.$1 = (Ser Eseq).$1;
+    defpred P[Element of NAT] means Ps.$1 = (Ser Eseq).$1;
 A2: P[0]
     proof
       thus Ps.0 = Eseq.0 by A1,SERIES_1:def 1 .= (Ser Eseq).0 by SUPINF_2:63;
@@ -480,7 +483,7 @@ A2: dom Eseq = NAT & dom seq = NAT by FUNCT_2:def 1;
     proof let x be R_eal;assume x in rng Eseq; then
       consider n1 being set such that
 A3:   n1 in NAT & Eseq.n1 = x by A2,FUNCT_1:def 5;
-      reconsider n1 as Nat by A3;
+      reconsider n1 as Element of NAT by A3;
       seq.n1 <= sup seq by A1,RINFSUP1:7;
       hence thesis by A1,A3;
     end; then
@@ -491,7 +494,7 @@ A6:rng Eseq <> {-infty}
       reconsider k1 = -infty as Element of rng Eseq by TARSKI:def 1;
       consider n1 being set such that
 A7:   n1 in NAT & Eseq.n1 = k1 by A2,FUNCT_1:def 5;
-      reconsider n1 as Nat by A7;
+      reconsider n1 as Element of NAT by A7;
       seq.n1 = k1 by A1,A7;
       hence contradiction;
     end; then
@@ -532,7 +535,7 @@ A2: dom Eseq = NAT & dom seq = NAT by FUNCT_2:def 1;
     proof let x be R_eal;assume x in rng Eseq; then
       consider n1 being set such that
 A3:   n1 in NAT & Eseq.n1 = x by A2,FUNCT_1:def 5;
-      reconsider n1 as Nat by A3;
+      reconsider n1 as Element of NAT by A3;
       inf seq <= seq.n1 by A1,RINFSUP1:8;
       hence thesis by A1,A3;
     end; then
@@ -543,7 +546,7 @@ A6:rng Eseq <> {+infty}
       reconsider k1 = +infty as Element of rng Eseq by TARSKI:def 1;
       consider n1 being set such that
 A7:   n1 in NAT & Eseq.n1 = k1 by A2,FUNCT_1:def 5;
-      reconsider n1 as Nat by A7;
+      reconsider n1 as Element of NAT by A7;
       seq.n1 = k1 by A1,A7;
       hence contradiction;
     end; then
@@ -741,7 +744,7 @@ Lm2:
   proof
     assume
 A1: A1 is non-decreasing;
-    defpred P[Nat] means (Partial_Union A1).$1 = A1.$1;
+    defpred P[Element of NAT] means (Partial_Union A1).$1 = A1.$1;
 A2: P[0] by PROB_3:def 2;
 A3: for k st P[k] holds P[k+1]
     proof let k such that
@@ -1805,7 +1808,7 @@ A61:    Partial_Sums(comP * BSeq).1
          .= comP.A + comP.B by A60,FUNCT_2:21,A56;
 A62:     for n holds Partial_Sums(comP * BSeq).(2+n) = comP.A + comP.B
         proof
-          defpred P[Nat] means Partial_Sums(comP * BSeq).(2+$1)
+          defpred P[Element of NAT] means Partial_Sums(comP * BSeq).(2+$1)
             = comP.A + comP.B;
 A63:      P[0]
           proof
@@ -1836,9 +1839,10 @@ A67:         2+k+1 >1
           thus for k holds P[k] from NAT_1:sch 1(A63,A65);
         end; let m such that
 A68:     2 <= m;
-        consider k such that
+        consider k being Nat such that
 A69:     m=2+k by A68,NAT_1:28;
-        thus thesis by A69,A62;
+         k in NAT by ORDINAL1:def 13;
+         hence thesis by A69,A62;
       end;
       Sum(comP * BSeq) = comP.A + comP.B by A59,PROB_1:3;
       hence thesis by A58,A15;
@@ -1920,7 +1924,8 @@ A85:  comP.Union BSeq = comP.Union CSeq by PROB_3:40
         .= lim Partial_Sums(comP * CSeq);
       for n holds Partial_Sums(comP * CSeq).n = (comP * BSeq).n
       proof
-        defpred P[Nat] means Partial_Sums(comP * CSeq).$1=(comP * BSeq).$1;
+        defpred P[Element of NAT] means
+         Partial_Sums(comP * CSeq).$1=(comP * BSeq).$1;
 A86:    P[0]
         proof
           thus Partial_Sums(comP * CSeq).0

@@ -32,14 +32,12 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="78"/>
 <Func kind="K" nr="82"/>
 </Typ>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="78"/>
 <Func kind="K" nr="82"/>
 </Typ>
 <Typ kind="M" nr="2">
@@ -57,16 +55,16 @@
 </Typ>
 <Not>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="78"/>
-<Func kind="K" nr="82"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="17"/>
+</Cluster>
 </Typ>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="78"/>
-<Func kind="K" nr="82"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="17"/>
+</Cluster>
 </Typ>
 <Not>
 <And>
@@ -108,14 +106,12 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="78"/>
 <Func kind="K" nr="82"/>
 </Typ>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="78"/>
 <Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
@@ -129,16 +125,16 @@
 </Typ>
 <Not>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="78"/>
-<Func kind="K" nr="82"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="17"/>
+</Cluster>
 </Typ>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="78"/>
-<Func kind="K" nr="82"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="17"/>
+</Cluster>
 </Typ>
 <Not>
 <And>
@@ -171,16 +167,16 @@
 </For>
 </Not>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="78"/>
-<Func kind="K" nr="82"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="17"/>
+</Cluster>
 </Typ>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="78"/>
-<Func kind="K" nr="82"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="17"/>
+</Cluster>
 </Typ>
 <Not>
 <And>
@@ -237,16 +233,16 @@
 </For>
 </For>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="78"/>
-<Func kind="K" nr="82"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="17"/>
+</Cluster>
 </Typ>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="78"/>
-<Func kind="K" nr="82"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="17"/>
+</Cluster>
 </Typ>
 <Not>
 <And>

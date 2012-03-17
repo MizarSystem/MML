@@ -28,7 +28,7 @@ definition
   mode Program-block is initial programmed FinPartState of SCMPDS;
 end;
 
-reserve l, m, n for Nat,
+reserve l, m, n for Element of NAT,
         i,j,k for Instruction of SCMPDS,
         I,J,K for Program-block;
 
@@ -113,10 +113,10 @@ theorem :: SCMPDS_4:16
     (Initialized I)|the Instruction-Locations of SCMPDS = I;
 
 theorem :: SCMPDS_4:17    :: SF2_16
- for k1,k2 be Nat st k1 <> k2 holds DataLoc(k1,0) <> DataLoc(k2,0);
+ for k1,k2 be Element of NAT st k1 <> k2 holds DataLoc(k1,0) <> DataLoc(k2,0);
 
 theorem :: SCMPDS_4:18   :: SF2_19:
- for dl being Int_position ex i being Nat
+ for dl being Int_position ex i being Element of NAT
   st dl = DataLoc(i,0);
 
 scheme :: SCMPDS_4:sch 1
@@ -124,7 +124,7 @@ scheme :: SCMPDS_4:sch 1
                  G(set) -> Integer,
                  I() -> Instruction-Location of SCMPDS }:
  ex S being State of SCMPDS st IC S = I() &
-  for i being Nat holds
+  for i being Element of NAT holds
     S.inspos i = F(i) & S.DataLoc(i,0) = G(i);
 
 theorem :: SCMPDS_4:19    :: Th34
@@ -346,7 +346,7 @@ end;
 definition let I be Program-block;
  attr I is paraclosed means
 :: SCMPDS_4:def 9
- for s being State of SCMPDS, n being Nat
+ for s being State of SCMPDS, n being Element of NAT
     st Initialized stop(I) c= s
    holds IC (Computation s).n in dom stop(I);
 
@@ -423,7 +423,7 @@ theorem :: SCMPDS_4:75  ::Th26 T9
  inspos 0 in dom stop (I);
 
 theorem :: SCMPDS_4:76
- for p being programmed FinPartState of SCMPDS,k being Nat,
+ for p being programmed FinPartState of SCMPDS,k being Element of NAT,
  il be Instruction-Location of SCMPDS st il in dom p holds
  il+k in dom Shift(p,k);
 
@@ -431,7 +431,7 @@ begin :: Shiftability of program blocks and instructions
 
 definition
  let i be Instruction of SCMPDS;
- let n be Nat;
+ let n be Element of NAT;
  pred i valid_at n means
 :: SCMPDS_4:def 11
   (InsCode i= 0 implies ex k1 st i = goto k1 & n+k1 >= 0) &
@@ -440,10 +440,10 @@ definition
    (InsCode i= 6 implies ex a,k1,k2 st i = (a,k1)>=0_goto k2 & n+k2 >= 0);
 end;
 
-reserve l for Nat;
+reserve l for Element of NAT;
 
 theorem :: SCMPDS_4:77
-  for i be Instruction of SCMPDS,m,n be Nat st i valid_at m & m <= n
+  for i be Instruction of SCMPDS,m,n be Element of NAT st i valid_at m & m <= n
  holds i valid_at n;
 
 definition let IT be FinPartState of SCMPDS;
@@ -537,7 +537,7 @@ theorem :: SCMPDS_4:78
   card I + k1 >= 0 holds I ';' goto k1 is shiftable;
 
 registration
- let n be Nat;
+ let n be Element of NAT;
  cluster Load goto n -> shiftable;
 end;
 
@@ -546,7 +546,7 @@ theorem :: SCMPDS_4:79
   card I + k2 >= 0 holds I ';' (a,k1)<>0_goto k2 is shiftable;
 
 registration
-  let k1 be Integer,a be Int_position,n be Nat;
+  let k1 be Integer,a be Int_position,n be Element of NAT;
   cluster Load (a,k1)<>0_goto n -> shiftable;
 end;
 
@@ -555,7 +555,7 @@ theorem :: SCMPDS_4:80
   card I + k2 >= 0 holds I ';' (a,k1)<=0_goto k2 is shiftable;
 
 registration
-  let k1 be Integer,a be Int_position,n be Nat;
+  let k1 be Integer,a be Int_position,n be Element of NAT;
   cluster Load (a,k1)<=0_goto n -> shiftable;
 end;
 
@@ -564,17 +564,17 @@ theorem :: SCMPDS_4:81
   card I + k2 >= 0 holds I ';' (a,k1)>=0_goto k2 is shiftable;
 
 registration
-  let k1 be Integer,a be Int_position,n be Nat;
+  let k1 be Integer,a be Int_position,n be Element of NAT;
   cluster Load (a,k1)>=0_goto n -> shiftable;
 end;
 
 theorem :: SCMPDS_4:82
- for s1,s2 being State of SCMPDS, n,m being Nat,k1 be Integer st
+ for s1,s2 being State of SCMPDS, n,m being Element of NAT,k1 be Integer st
      IC s1=inspos m & m+k1>=0 & IC s1 + n = IC s2
 holds ICplusConst(s1,k1) +n = ICplusConst(s2,k1);
 
 theorem :: SCMPDS_4:83   ::S6A_41
- for s1,s2 being State of SCMPDS, n,m being Nat,
+ for s1,s2 being State of SCMPDS, n,m being Element of NAT,
      i being Instruction of SCMPDS holds
      IC s1=inspos m & i valid_at m & InsCode i <> 1 & InsCode i <> 3 &
      IC s1 + n = IC s2 &
@@ -585,10 +585,10 @@ theorem :: SCMPDS_4:83   ::S6A_41
 
 theorem :: SCMPDS_4:84  ::Th27 T0
     for J being parahalting shiftable Program-block st Initialized stop J c= s1
- for n being Nat st Shift(stop J,n) c= s2 &
+ for n being Element of NAT st Shift(stop J,n) c= s2 &
    IC s2 = inspos n &
    s1 | SCM-Data-Loc = s2 | SCM-Data-Loc
-   for i being Nat holds
+   for i being Element of NAT holds
      IC (Computation s1).i + n = IC (Computation s2).i &
      CurInstr ((Computation s1).i) = CurInstr ((Computation s2).i) &
      (Computation s1).i | SCM-Data-Loc = (Computation s2).i | SCM-Data-Loc;

@@ -37,7 +37,6 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="ALGSEQ_1"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
@@ -112,7 +111,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="111">
-<Func kind="K" nr="402">
+<Func kind="K" nr="394">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="82"/>
 <Func kind="K" nr="129">
@@ -137,7 +136,7 @@
 <Pred kind="R" nr="2">
 <Var nr="3"/>
 <Func kind="K" nr="145">
-<Func kind="K" nr="402">
+<Func kind="K" nr="394">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="82"/>
 <Func kind="K" nr="129">
@@ -151,7 +150,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="34">
-<Func kind="K" nr="402">
+<Func kind="K" nr="394">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="82"/>
 <Func kind="K" nr="129">

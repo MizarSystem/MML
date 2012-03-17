@@ -10,7 +10,8 @@ environ
       ARYTM_1, ARYTM_3, GROUP_1, PARTFUN1, SEQFUNC, RELAT_1, PRALG_2, SUPINF_1,
       RCOMP_1, TOPMETR, ORDINAL2, RLVECT_1, TMAP_1, METRIC_1, PCOMPS_1,
       ABSVALUE, URYSOHN3, PROB_1, LIMFUNC1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0,
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0,
+      XCMPLX_0, XREAL_0,
       REAL_1, COMPLEX1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, NEWTON, TOPMETR,
       COMPTS_1, STRUCT_0, PRE_TOPC, TMAP_1, METRIC_1, PCOMPS_1, SEQFUNC,
       PARTFUN1, PROB_1, LIMFUNC1, SUPINF_1, SUPINF_2, MEASURE5, URYSOHN1;
@@ -25,7 +26,7 @@ environ
       REAL_2, TOPMETR, ABSVALUE, SEQFUNC, PARTFUN1, URYSOHN1, XREAL_0,
       RELSET_1, URYSOHN2, SUPINF_1, SUPINF_2, MEASURE5, MEASURE6, TMAP_1,
       METRIC_1, XBOOLE_0, XBOOLE_1, PREPOWER, XCMPLX_1, XREAL_1, PEPIN, NEWTON,
-      XXREAL_0, SUBSET_1;
+      XXREAL_0, SUBSET_1, ORDINAL1;
  schemes NAT_1, FUNCT_2, RECDEF_1, XBOOLE_0;
 
 begin
@@ -99,7 +100,7 @@ theorem Th1:
    for T being non empty being_T4 TopSpace,
        A,B being closed Subset of T st
    A <> {} & A misses B holds
-   for n being Nat holds
+   for n being Element of NAT holds
    ex G being Function of dyadic(n),bool the carrier of T st
    A c= G.0 & B = [#]T \ G.1 &
    (for r1,r2 being Element of dyadic(n) st r1 < r2 holds
@@ -109,15 +110,15 @@ proof
    let A,B be closed Subset of T;
    assume
 A1:A <> {} & A misses B;
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
    ex G being Function of dyadic($1),bool the carrier of T st
    A c= G.0 & B = [#]T \ G.1 &
    (for r1,r2 being Element of dyadic($1) st r1 < r2 holds
    (G.r1 is open & G.r2 is open & Cl(G.r1) c= G.r2));
 A2: P[0] by A1,Lm1;
-A3: for n being Nat st P[n] holds P[n+1]
+A3: for n being Element of NAT st P[n] holds P[n+1]
    proof
-      let n be Nat;
+      let n be Element of NAT;
       given G being Function of dyadic(n),bool the carrier of T such that
    A4:A c= G.0 & B = [#]T \ G.1 &
       (for r1,r2 being Element of dyadic(n) st r1 < r2 holds
@@ -130,13 +131,13 @@ A3: for n being Nat st P[n] holds P[n+1]
       take F;
       thus thesis by A5;
    end;
-   thus for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
+   thus for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
 end;
 
 definition
    let T be non empty TopSpace;
    let A,B be Subset of T;
-   let n be Nat;
+   let n be Element of NAT;
    assume A1:T is_T4 & A <> {} & A is closed & B is closed & A misses B;
    mode Drizzle of A,B,n -> Function of dyadic(n),bool the carrier of T means
 :Def1:    A c= it.0 & B = [#]T \ it.1 &
@@ -151,7 +152,7 @@ theorem Th3:
    for T being non empty being_T4 TopSpace,
        A,B being closed Subset of T st
    A <> {} & A misses B holds
-   for n being Nat,
+   for n being Element of NAT,
        G being Drizzle of A,B,n holds
    ex F being Drizzle of A,B,n+1 st
    for r being Element of dyadic(n+1) st
@@ -161,7 +162,7 @@ proof
    let A,B be closed Subset of T;
    assume
 A1:A <> {} & A misses B;
-   let n be Nat;
+   let n be Element of NAT;
    let G be Drizzle of A,B,n;
 A2: A c= G.0 & B = [#]T \ G.1 by A1,Def1;
    for r1,r2 being Element of dyadic(n) st r1 < r2 holds
@@ -188,13 +189,13 @@ end;
 theorem Th4:
   for T being non empty TopSpace,
       A,B being Subset of T,
-      n being Nat,
+      n being Element of NAT,
       S being Drizzle of A,B,n holds
    S is Element of PFuncs(DYADIC,bool the carrier of T)
 proof
   let T be non empty TopSpace;
   let A,B be Subset of T;
-  let n be Nat;
+  let n be Element of NAT;
   let S be Drizzle of A,B,n;
   dyadic(n) c= DYADIC by URYSOHN2:27;
   then S is PartFunc of DYADIC,bool the carrier of T by PARTFUN1:30;
@@ -204,7 +205,7 @@ end;
 definition
   let A,B be non empty set;
   let F be Function of NAT,PFuncs(A,B);
-  let n be Nat;
+  let n be Element of NAT;
   redefine func F.n -> Element of PFuncs(A,B);
   coherence by FUNCT_2:7;
 end;
@@ -214,7 +215,7 @@ theorem Th5:
       A,B being closed Subset of T st
    A <> {} & A misses B holds
    ex F being Functional_Sequence of DYADIC,bool the carrier of T st
-   for n being Nat holds
+   for n being Element of NAT holds
    F.n is Drizzle of A,B,n &
    for r being Element of dom (F.n) holds (F.n).r = (F.(n+1)).r
 proof
@@ -222,7 +223,7 @@ proof
    let A,B be closed Subset of T;
    assume
 A1:A <> {} & A misses B;
-   defpred P[set] means ex n being Nat st $1 is Drizzle of A,B,n;
+   defpred P[set] means ex n being Element of NAT st $1 is Drizzle of A,B,n;
    consider D being set such that
 A2:for x being set holds
    x in D iff x in PFuncs(DYADIC,bool the carrier of T) & P[x]
@@ -233,26 +234,27 @@ A3:S is Element of PFuncs(DYADIC,bool the carrier of T) by Th4;
    reconsider S as Element of D by A2,A3;
    defpred P1[Element of D,Element of D] means
      ex xx,yy being PartFunc of DYADIC,bool the carrier of T
-     st (xx=$1 & yy = $2 & (ex k being Nat st xx is Drizzle of A,B,k) &
-     (for k being Nat st xx is Drizzle of A,B,k holds
+     st (xx=$1 & yy = $2 &
+      (ex k being Element of NAT st xx is Drizzle of A,B,k) &
+     (for k being Element of NAT st xx is Drizzle of A,B,k holds
      yy is Drizzle of A,B,k+1) &
      (for r being Element of dom xx holds xx.r = yy.r));
-   defpred Q[Nat,Element of D,Element of D] means P1[$2,$3];
-A4:for n being Nat
+   defpred Q[Element of NAT,Element of D,Element of D] means P1[$2,$3];
+A4:for n being Element of NAT
    for x being Element of D ex y being Element of D st Q[n,x,y]
    proof
-      let n be Nat;
+      let n be Element of NAT;
       let x be Element of D;
-      consider s0 being Nat such that
+      consider s0 being Element of NAT such that
    A5:x is Drizzle of A,B,s0 by A2;
       reconsider xx = x as Drizzle of A,B,s0 by A5;
       consider yy being Drizzle of A,B,s0+1 such that
    A6:for r being Element of dyadic(s0+1) holds
       (r in dyadic(s0) implies yy.r = xx.r) by A1,Th3;
-   A7:for k being Nat st xx is Drizzle of A,B,k holds
+   A7:for k being Element of NAT st xx is Drizzle of A,B,k holds
       yy is Drizzle of A,B,k+1
       proof
-        let k be Nat;
+        let k be Element of NAT;
         assume xx is Drizzle of A,B,k;
         then A8:dom xx = dyadic(k) by FUNCT_2:def 1;
         k = s0
@@ -268,7 +270,7 @@ A4:for n being Nat
             not o in dyadic(k)
             proof
               assume o in dyadic(k);
-              then consider i being Nat such that
+              then consider i being Element of NAT such that
           A12:0 <= i & i <= (2|^k) & o = i/(2|^k) by URYSOHN1:def 3;
           A13:0 < 2|^s0 & 0 < 2|^k by NEWTON:102;
               then A14: 1*(2|^k) = i*(2|^s0) by A12,XCMPLX_1:96;
@@ -295,7 +297,7 @@ A4:for n being Nat
             not o in dyadic(s0)
             proof
               assume o in dyadic(s0);
-              then consider i being Nat such that
+              then consider i being Element of NAT such that
           A21:0 <= i & i <= (2|^s0) & o = i/(2|^s0) by URYSOHN1:def 3;
           A22:0 < 2|^s0 & 0 < 2|^k by NEWTON:102;
               then A23: 1*(2|^s0) = i*(2|^k) by A21,XCMPLX_1:96;
@@ -348,10 +350,11 @@ A4:for n being Nat
    for n being Element of NAT holds Q[n,F.n,F.(n+1)] from RECDEF_1:sch 2(A4);
    then consider F being Function of NAT,D such that
 A32:F.0 = S & for n being Element of NAT holds P1[F.n,F.(n+1)];
-   defpred R[Nat,PartFunc of DYADIC,bool the carrier of T,
+   defpred R[Element of NAT,PartFunc of DYADIC,bool the carrier of T,
              PartFunc of DYADIC,bool the carrier of T] means
-      ($2=F.$1 & $3 = F.($1+1) & (ex k being Nat st $2 is Drizzle of A,B,k) &
-          (for k being Nat st $2 is Drizzle of A,B,k holds
+      ($2=F.$1 & $3 = F.($1+1) &
+       (ex k being Element of NAT st $2 is Drizzle of A,B,k) &
+          (for k being Element of NAT st $2 is Drizzle of A,B,k holds
           $3 is Drizzle of A,B,k+1) &
           (for r being Element of dom $2 holds $2.r = $3.r));
 A33:F is Function & dom F = NAT &
@@ -363,15 +366,15 @@ A33:F is Function & dom F = NAT &
    rng F c= PFuncs(DYADIC,bool the carrier of T) by A33,XBOOLE_1:1;
    then reconsider F as Functional_Sequence of DYADIC,bool the carrier of T
    by SEQFUNC:def 1;
-   defpred P[Nat] means
+   defpred P[Element of NAT] means
       F.$1 is Drizzle of A,B,$1 &
       (for r being Element of dom (F.$1) holds (F.$1).r = (F.($1+1)).r);
           ex xx,yy being PartFunc of DYADIC,bool the carrier of T st
       R[0,xx,yy] by A32;
       then A34:  P[0] by A32;
-A35:for n being Nat st P[n] holds P[n+1]
+A35:for n being Element of NAT st P[n] holds P[n+1]
    proof
-      let n be Nat;
+      let n be Element of NAT;
       assume A36:P[n];
       consider xx,yy being PartFunc of DYADIC,bool the carrier of T
       such that
@@ -383,7 +386,7 @@ A35:for n being Nat st P[n] holds P[n+1]
   A38:R[n+1,xx1,yy1] by A32;
       thus thesis by A38;
    end;
-A39:for n being Nat holds P[n] from NAT_1:sch 1(A34,A35);
+A39:for n being Element of NAT holds P[n] from NAT_1:sch 1(A34,A35);
    take F;
    thus thesis by A39;
 end;
@@ -395,7 +398,7 @@ definition
 A1:T is_T4 & A <> {} & A is closed & B is closed & A misses B;
    mode Rain of A,B -> Functional_Sequence of DYADIC,bool the carrier of T
    means :Def2:
-     for n being Nat holds
+     for n being Element of NAT holds
        (it.n is Drizzle of A,B,n &
        (for r being Element of dom (it.n) holds (it.n).r = (it.(n+1)).r));
   existence by A1,Th5;
@@ -404,18 +407,19 @@ end;
 definition
    let x be Real;
    assume A1:x in DYADIC;
-   func inf_number_dyadic(x) -> Nat means :Def3:
+   func inf_number_dyadic(x) -> Element of NAT means :Def3:
      (x in dyadic(0) iff it = 0) &
-        for n being Nat st x in dyadic(n+1) & not x in dyadic(n)
+        for n being Element of NAT st x in dyadic(n+1) & not x in dyadic(n)
         holds it = n+1;
 existence
 proof
-  defpred P[Nat] means x in dyadic($1);
-A2:ex s being Nat st P[s] by A1,URYSOHN1:def 4;
-   ex q being Nat st P[q] &
-   (for i being Nat st P[i] holds q <= i) from NAT_1:sch 5(A2);
-   then consider q being Nat such that
-A3:x in dyadic(q) & (for i being Nat st x in dyadic(i) holds q <= i);
+  defpred P[Element of NAT] means x in dyadic($1);
+A2:ex s being Element of NAT st P[s] by A1,URYSOHN1:def 4;
+   ex q being Element of NAT st P[q] &
+   (for i being Element of NAT st P[i] holds q <= i) from NAT_1:sch 5(A2);
+   then consider q being Element of NAT such that
+A3:x in dyadic(q) &
+ (for i being Element of NAT st x in dyadic(i) holds q <= i);
    take q;
    A4: x in dyadic(0) implies q = 0
    proof
@@ -423,9 +427,10 @@ A3:x in dyadic(q) & (for i being Nat st x in dyadic(i) holds q <= i);
       then q <= 0 & 0 <= q by A3;
       hence thesis;
    end;
-   for n being Nat st x in dyadic(n+1) & not x in dyadic(n) holds q = n+1
+   for n being Element of NAT
+    st x in dyadic(n+1) & not x in dyadic(n) holds q = n+1
    proof
-      let n be Nat;
+      let n be Element of NAT;
       assume
    A5:x in dyadic(n+1) & not x in dyadic(n);
       then A6:q <= n + 1 by A3;
@@ -442,25 +447,27 @@ A3:x in dyadic(q) & (for i being Nat st x in dyadic(i) holds q <= i);
 end;
 uniqueness
 proof
-   let s1,s2 be Nat such that
+   let s1,s2 be Element of NAT such that
 A7:(x in dyadic(0) iff s1 = 0) &
-   (for n being Nat st x in dyadic(n+1) & not x in dyadic(n) holds s1 = n+1)
+   (for n being Element of NAT st x in dyadic(n+1) & not x in dyadic(n)
+    holds s1 = n+1)
    and
 A8:(x in dyadic(0) iff s2 = 0) &
-   (for n being Nat st x in dyadic(n+1) & not x in dyadic(n) holds s2 = n+1);
+   (for n being Element of NAT st x in dyadic(n+1) & not x in dyadic(n)
+    holds s2 = n+1);
    per cases;
    suppose s1 = 0;
      hence thesis by A7,A8;
    end;
    suppose
    A9:0 < s1;
-   defpred P[Nat] means x in dyadic($1);
-   A10:ex s being Nat st P[s] by A1,URYSOHN1:def 4;
-      ex q being Nat st P[q] &
-      (for i being Nat st P[i] holds q <= i) from NAT_1:sch 5(A10);
-      then consider q being Nat such that
+   defpred P[Element of NAT] means x in dyadic($1);
+   A10:ex s being Element of NAT st P[s] by A1,URYSOHN1:def 4;
+      ex q being Element of NAT st P[q] &
+      (for i being Element of NAT st P[i] holds q <= i) from NAT_1:sch 5(A10);
+      then consider q being Element of NAT such that
    A11:x in dyadic(q) &
-      (for i being Nat st x in dyadic(i) holds q <= i);
+      (for i being Element of NAT st x in dyadic(i) holds q <= i);
       now per cases;
       case q = 0;
         hence thesis by A7,A9,A11;
@@ -468,6 +475,7 @@ A8:(x in dyadic(0) iff s2 = 0) &
       case 0 < q;
         then consider m being Nat such that
     A12:q = m + 1 by NAT_1:22;
+        reconsider m as Element of NAT by ORDINAL1:def 13;
         not x in dyadic(m)
         proof
           assume x in dyadic(m);
@@ -492,7 +500,7 @@ A1:x in DYADIC;
    set s = inf_number_dyadic(x);
    assume
 A2:not x in dyadic(s);
-   consider k being Nat such that
+   consider k being Element of NAT such that
 A3:x in dyadic(k) by A1,URYSOHN1:def 4;
 A4:s < k
    proof
@@ -500,11 +508,11 @@ A4:s < k
      then dyadic(k) c= dyadic(s) by URYSOHN2:33;
      hence thesis by A2,A3;
    end;
-   defpred P[Nat] means not x in dyadic(s + 1 + $1);
+   defpred P[Element of NAT] means not x in dyadic(s + 1 + $1);
 A5:P[0] by A1,A2,Def3;
-A6:for i being Nat st P[i] holds P[(i+1)]
+A6:for i being Element of NAT st P[i] holds P[(i+1)]
    proof
-     let i be Nat;
+     let i be Element of NAT;
      assume
   A7:not x in dyadic(s + 1 + i);
      assume x in dyadic(s + 1 + (i + 1));
@@ -512,25 +520,26 @@ A6:for i being Nat st P[i] holds P[(i+1)]
      then s + 0 = s + (i + 2) by A1,A7,Def3;
      hence thesis;
    end;
-A8:for i being Nat holds P[i] from NAT_1:sch 1(A5,A6);
+A8:for i being Element of NAT holds P[i] from NAT_1:sch 1(A5,A6);
    consider i being Nat such that
 A9:k = i + 1 by A4,NAT_1:22;
    s <= i by A4,A9,NAT_1:38;
    then consider m being Nat such that
 A10:i = s + m by NAT_1:28;
+   reconsider m as Element of NAT by ORDINAL1:def 13;
    not x in dyadic(s + 1 + m) by A8;
    hence thesis by A3,A9,A10;
 end;
 
 theorem Th7:
   for x being Real st x in DYADIC holds
-  for n being Nat st inf_number_dyadic(x) <= n holds
+  for n being Element of NAT st inf_number_dyadic(x) <= n holds
    x in dyadic(n)
 proof
    let x be Real;
    assume
 A1:x in DYADIC;
-   let n be Nat;
+   let n be Element of NAT;
    assume
 A2:inf_number_dyadic(x) <= n;
 A3:x in dyadic(inf_number_dyadic(x)) by A1,Th6;
@@ -540,20 +549,21 @@ end;
 
 theorem Th8:
    for x being Real,
-       n being Nat st x in dyadic(n) holds
+       n being Element of NAT st x in dyadic(n) holds
    inf_number_dyadic(x) <= n
 proof
    let x be Real;
-   let n be Nat;
+   let n be Element of NAT;
    assume
 A1:x in dyadic(n);
 A2:dyadic n c= DYADIC by URYSOHN2:27;
-   defpred P[Nat] means x in dyadic($1);
-A3:ex s being Nat st P[s] by A1;
-   ex q being Nat st P[q] &
-      (for i being Nat st P[i] holds q <= i) from NAT_1:sch 5(A3);
-      then consider q being Nat such that
-   A4:x in dyadic(q) & (for i being Nat st x in dyadic(i) holds q <= i);
+   defpred P[Element of NAT] means x in dyadic($1);
+A3:ex s being Element of NAT st P[s] by A1;
+   ex q being Element of NAT st P[q] &
+      (for i being Element of NAT st P[i] holds q <= i) from NAT_1:sch 5(A3);
+      then consider q being Element of NAT such that
+   A4:x in dyadic(q) & (for i being Element of NAT st x in dyadic(i)
+    holds q <= i);
    A5:q <= n by A1,A4;
       now per cases;
       case q = 0;
@@ -563,6 +573,7 @@ A3:ex s being Nat st P[s] by A1;
       case 0 < q;
         then consider m being Nat such that
      A6:q = m + 1 by NAT_1:22;
+        reconsider m as Element of NAT by ORDINAL1:def 13;
         not x in dyadic(m)
         proof
           assume x in dyadic(m);
@@ -581,7 +592,7 @@ theorem Th9:
    (A <> {} & A misses B) holds
    for G being Rain of A,B,
        x being Real st x in DYADIC holds
-   for n being Nat holds
+   for n being Element of NAT holds
    (G.inf_number_dyadic(x)).x = (G.(inf_number_dyadic(x) + n)).x
 proof
    let T be non empty being_T4 TopSpace;
@@ -593,11 +604,11 @@ A1:A <> {} & A misses B;
    assume
 A2:x in DYADIC;
    set s = inf_number_dyadic(x);
-   defpred Q[Nat] means (G.s).x = (G.(s + $1)).x;
+   defpred Q[Element of NAT] means (G.s).x = (G.(s + $1)).x;
 A3: Q[0];
-A4:for n being Nat st Q[n] holds Q[(n+1)]
+A4:for n being Element of NAT st Q[n] holds Q[(n+1)]
    proof
-     let n be Nat;
+     let n be Element of NAT;
      assume
   A5:(G.s).x = (G.(s + n)).x;
      s <= s + n & s <= s + (n + 1) by NAT_1:29;
@@ -608,7 +619,7 @@ A4:for n being Nat st Q[n] holds Q[(n+1)]
      then dom(G.(s + n)) = dyadic(s + n) by FUNCT_2:def 1;
      hence thesis by A1,A5,A6,Def2;
    end;
-   for i be Nat holds Q[i] from NAT_1:sch 1(A3,A4);
+   for i be Element of NAT holds Q[i] from NAT_1:sch 1(A3,A4);
    hence thesis;
 end;
 
@@ -619,7 +630,7 @@ theorem Th10:
    for G being Rain of A,B,
        x being Real st x in DYADIC holds
    ex y being Subset of T st
-   (for n being Nat st x in dyadic(n) holds y = (G.n).x)
+   (for n being Element of NAT st x in dyadic(n) holds y = (G.n).x)
 proof
    let T be non empty being_T4 TopSpace;
    let A,B be closed Subset of T;
@@ -629,17 +640,18 @@ A1:A <> {} & A misses B;
    let x be Real;
    assume
 A2:x in DYADIC;
-   reconsider s = inf_number_dyadic(x) as Nat;
+   reconsider s = inf_number_dyadic(x) as Element of NAT;
 A3:x in dyadic(s) by A2,Th6;
    G.s is Drizzle of A,B,s by A1,Def2;
    then reconsider y = (G.s).x as Subset of T by A3,FUNCT_2:7;
    take y;
-   let n be Nat;
+   let n be Element of NAT;
    assume x in dyadic(n);
    then s <= n by Th8;
    then consider m being Nat such that
 A4:n = s + m by NAT_1:28;
-   thus thesis by A1,A2,A4,Th9;
+   m in NAT by ORDINAL1:def 13;
+   hence thesis by A1,A2,A4,Th9;
 end;
 
 theorem Th11:
@@ -652,7 +664,7 @@ theorem Th11:
    ((x in halfline 0 implies F.x = {}) &
    (x in right_open_halfline 1 implies F.x = the carrier of T) &
    (x in DYADIC implies
-   (for n being Nat st x in dyadic(n) holds F.x = (G.n).x)))
+   (for n being Element of NAT st x in dyadic(n) holds F.x = (G.n).x)))
 proof
    let T be non empty being_T4 TopSpace;
    let A,B be closed Subset of T;
@@ -663,7 +675,7 @@ A1:A <> {} & A misses B;
      (($1 in halfline 0 implies $2 = {}) &
      ($1 in right_open_halfline 1 implies $2 = the carrier of T) &
      ($1 in DYADIC implies
-     (for n being Nat st $1 in dyadic(n) holds $2 = (G.n).$1)));
+     (for n being Element of NAT st $1 in dyadic(n) holds $2 = (G.n).$1)));
 A2:for x being Element of DOM
    ex y being Subset of T st P[x,y]
    proof
@@ -702,7 +714,8 @@ A6:     s = s;
      suppose
    A10:x in DYADIC;
        then consider s being Subset of T such that
-   A11:for n being Nat st x in dyadic(n) holds s = (G.n).x by A1,Th10;
+   A11:for n being Element of NAT st x in dyadic(n) holds s = (G.n).x
+    by A1,Th10;
 A12:   not x in right_open_halfline 1
        proof
          assume
@@ -769,7 +782,7 @@ definition
        (x in halfline 0 implies it.x = {}) &
        (x in right_open_halfline 1 implies it.x = the carrier of T) &
        (x in DYADIC implies
-       (for n being Nat st x in dyadic(n) holds it.x = (R.n).x));
+       (for n being Element of NAT st x in dyadic(n) holds it.x = (R.n).x));
   existence by A1,Th11;
   uniqueness
   proof
@@ -778,12 +791,12 @@ A2:for x being Real st x in DOM holds
    ((x in halfline 0 implies G1.x = {}) &
    (x in right_open_halfline 1 implies G1.x = the carrier of T) &
    (x in DYADIC implies
-   (for n being Nat st x in dyadic(n) holds G1.x = (R.n).x))) and
+   (for n being Element of NAT st x in dyadic(n) holds G1.x = (R.n).x))) and
 A3:for x being Real st x in DOM holds
    ((x in halfline 0 implies G2.x = {}) &
    (x in right_open_halfline 1 implies G2.x = the carrier of T) &
    (x in DYADIC implies
-   (for n being Nat st x in dyadic(n) holds G2.x = (R.n).x)));
+   (for n being Element of NAT st x in dyadic(n) holds G2.x = (R.n).x)));
    for x being set st x in DOM holds G1.x = G2.x
    proof
       let x be set;
@@ -803,7 +816,7 @@ A3:for x being Real st x in DOM holds
       end;
       suppose
      A6:x in DYADIC;
-        then consider n being Nat such that
+        then consider n being Element of NAT such that
      A7:x in dyadic(n) by URYSOHN1:def 4;
         G1.x = (R.n).x & G2.x = (R.n).x by A2,A3,A4,A6,A7;
         hence thesis;
@@ -854,7 +867,7 @@ A2:C = (Tempest G).r and A3:r in DOM;
    end;
    suppose
   A5:r in DYADIC;
-     then consider n being Nat such that
+     then consider n being Element of NAT such that
   A6:r in dyadic(n) by URYSOHN1:def 4;
   A7:(Tempest G).r = (G.n).r by A1,A3,A5,A6,Def4;
      reconsider D = G.n as Drizzle of A,B,n by A1,Def2;
@@ -916,7 +929,7 @@ A2:r1 in DOM & r2 in DOM & r1 < r2;
    suppose
 A6:  r1 in DYADIC & r2 in halfline 0;
      then A7:r2 < 0 by URYSOHN1:1;
-     consider s being Nat such that
+     consider s being Element of NAT such that
   A8:r1 in dyadic(s) by A6,URYSOHN1:def 4;
      0 <= r1 by A8,URYSOHN1:5;
      hence thesis by A2,A7;
@@ -936,9 +949,9 @@ A6:  r1 in DYADIC & r2 in halfline 0;
    end;
    suppose
  A12:r1 in DYADIC & r2 in DYADIC;
-     then consider n1 being Nat such that
+     then consider n1 being Element of NAT such that
  A13:r1 in dyadic(n1) by URYSOHN1:def 4;
-     consider n2 being Nat such that
+     consider n2 being Element of NAT such that
  A14:r2 in dyadic(n2) by A12,URYSOHN1:def 4;
      set n = n1 + n2;
      n1 <= n & n2 <= n by NAT_1:29;
@@ -952,7 +965,7 @@ then A15:   dyadic(n1) c= dyadic(n) & dyadic(n2) c= dyadic(n) by URYSOHN2:33;
    suppose
    A17:r1 in right_open_halfline 1 & r2 in DYADIC;
    then A18:1 < r1 by URYSOHN1:2;
-     consider s being Nat such that
+     consider s being Element of NAT such that
  A19:r2 in dyadic(s) by A17,URYSOHN1:def 4;
      r2 <= 1 by A19,URYSOHN1:5;
      hence thesis by A2,A18,XXREAL_0:2;
@@ -1267,7 +1280,7 @@ A2:(Thunder G).p < r;
        assume x in S;
        then A11:x in DYADIC by Def5;
        then reconsider x as Real;
-       consider n being Nat such that
+       consider n being Element of NAT such that
    A12:x in dyadic(n) by A11,URYSOHN1:def 4;
        0 <= x & x <= 1 by A12,URYSOHN1:5;
        hence thesis by SUPINF_2:def 1;
@@ -1526,7 +1539,7 @@ A8:for x being Point of T holds
             then reconsider s as Real;
             s in halfline 0 \/ DYADIC by A23,XBOOLE_0:def 2;
             then A24: s in DOM by URYSOHN1:def 5,XBOOLE_0:def 2;
-            consider n being Nat such that
+            consider n being Element of NAT such that
         A25:s in dyadic(n) by A23,URYSOHN1:def 4;
         A26:(Tempest G).s = (G.n).s by A1,A23,A24,A25,Def4;
             reconsider D = G.n as Drizzle of A,B,n by A1,Def2;
@@ -1550,7 +1563,7 @@ A8:for x being Point of T holds
        A29:a in Rainbow(x,G) by A13,XBOOLE_0:def 1;
        A30:a in DYADIC by A29,Def5;
            then reconsider a as Real;
-           consider n being Nat such that
+           consider n being Element of NAT such that
        A31:a in dyadic(n) by A30,URYSOHN1:def 4;
            per cases by A31,URYSOHN1:5;
            suppose a = 0;
@@ -1633,7 +1646,7 @@ A8:for x being Point of T holds
              then (Thunder G).p <= r1 by A1,A46,Th19;
              hence thesis by A45,XXREAL_0:2;
            end;
-           consider n being Nat such that
+           consider n being Element of NAT such that
         A48:r1 in dyadic(n) by A44,URYSOHN1:def 4;
            r1 in halfline 0 \/ DYADIC by A44,XBOOLE_0:def 2;
         then A49:r1 in DOM by URYSOHN1:def 5,XBOOLE_0:def 2;

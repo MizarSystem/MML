@@ -24,7 +24,7 @@ environ
  theorems TARSKI, NAT_1, FUNCT_1, FUNCT_4, REAL_1, CQC_THE1, AMI_1, SCMFSA_2,
       SCMFSA_4, AMI_5, SCM_1, SCMFSA_5, SCMFSA6A, GRFUNC_1, SF_MASTR, SCMFSA6B,
       SCMFSA7B, SCMFSA8A, SCMFSA8B, ZFMISC_1, CQC_LANG, PRE_CIRC, RELAT_1,
-      XBOOLE_0, XBOOLE_1, XREAL_1;
+      XBOOLE_0, XBOOLE_1, XREAL_1, ORDINAL1;
  schemes NAT_1, RECDEF_1;
 
 begin
@@ -56,7 +56,7 @@ proof
 end;
 
 :: WHILE  Statement
- reserve m, n for Nat;
+ reserve m, n for Element of NAT;
 
 definition
  let a be Int-Location;
@@ -353,10 +353,10 @@ then A15:  insloc 0 in dom Macro i & insloc 1 in dom Macro i by TARSKI:def 2;
 end;
 
 theorem Th12:
- for a being Int-Location, I being Macro-Instruction,k being Nat st
+ for a being Int-Location, I being Macro-Instruction,k being Element of NAT st
    k < 6 holds insloc k in dom while=0(a,I)
 proof
-    let a be Int-Location, I be Macro-Instruction,k be Nat;
+    let a be Int-Location, I be Macro-Instruction,k be Element of NAT;
     assume A1: k < 6;
        6 <= card I + 6 by NAT_1:29;
 then A2:  k < card I + 6 by A1,XREAL_1:2;
@@ -365,10 +365,10 @@ then A2:  k < card I + 6 by A1,XREAL_1:2;
 end;
 
 theorem Th13:
- for a being Int-Location, I being Macro-Instruction,k being Nat st
+ for a being Int-Location, I being Macro-Instruction,k being Element of NAT st
    k < 6 holds insloc (card I +k) in dom while=0(a,I)
 proof
-    let a be Int-Location, I be Macro-Instruction,k be Nat;
+    let a be Int-Location, I be Macro-Instruction,k be Element of NAT;
     assume k < 6;
 then A1:  card I + k < card I + 6 by XREAL_1:8;
        card while=0(a,I) = card I + 6 by Th4;
@@ -576,10 +576,11 @@ FUNCT_4:def 1
 end;
 
 theorem
-    for a being Int-Location, I being Macro-Instruction,k being Nat st
+    for a being Int-Location, I being Macro-Instruction,k being Element of NAT
+    st
    k < card I +6 holds insloc k in dom while=0(a,I)
 proof
-    let a be Int-Location, I be Macro-Instruction,k be Nat;
+    let a be Int-Location, I be Macro-Instruction,k be Element of NAT;
     assume A1: k < card I +6;
        card while=0(a,I) = card I + 6 by Th4;
     hence thesis by A1,SCMFSA6A:15;
@@ -668,7 +669,7 @@ A22: IC s5 = s5.IC SCM+FSA by AMI_1:def 15
 then A23: CurInstr s5 = halt SCM+FSA by A22,AMI_1:def 17;
     then s1 is halting by AMI_1:def 20;
     hence while=0(a,I) is_halting_on s by SCMFSA7B:def 8;
-       now let k be Nat;
+       now let k be Element of NAT;
 A24:     k<=3 or k >= 3+1 by NAT_1:38;
        per cases by A24,CQC_THE1:4;
        suppose k = 0;
@@ -692,7 +693,7 @@ end;
 
 theorem Th19:
  for a being Int-Location, I being Macro-Instruction,
- s being State of SCM+FSA,k being Nat st
+ s being State of SCM+FSA,k being Element of NAT st
    I is_closed_on s & I is_halting_on s &
    k < LifeSpan (s +* (I +* Start-At insloc 0)) &
    IC (Computation (s +* (while=0(a,I) +* Start-At insloc 0))).(1 + k) =
@@ -712,7 +713,7 @@ proof
     let a be Int-Location;
     let I be Macro-Instruction;
     let s be State of SCM+FSA;
-    let k be Nat;
+    let k be Element of NAT;
     set s1 = s +* (while=0(a,I) +* Start-At insloc 0);
     set sI = s +* ( I +* Start-At insloc 0);
     set sK1=(Computation s1).(1 + k);
@@ -729,7 +730,7 @@ proof
     set i = a =0_goto insloc (card J + 3);
 
 A6:  dom f = {insloc (card I + 4)} by CQC_LANG:5;
-    consider n being Nat such that A7: l3 = insloc n by SCMFSA_2:21;
+    consider n being Element of NAT such that A7: l3 = insloc n by SCMFSA_2:21;
 A8: insloc n in dom I by A1,A7,SCMFSA7B:def 7;
     then A9: n < card I by SCMFSA6A:15;
  then n + 4 <> card I + 4;
@@ -839,7 +840,8 @@ proof
     set f = insloc (card I +4) .--> goto insloc 0;
     set i = a =0_goto insloc (card J + 3);
 A4:  dom f = {insloc (card I + 4)} by CQC_LANG:5;
-    consider n being Nat such that A5: IC sK2 = insloc n by SCMFSA_2:21;
+    consider n being Element of NAT such that A5: IC sK2 = insloc n
+    by SCMFSA_2:21;
 A6: insloc n in dom I by A1,A5,SCMFSA7B:def 7;
     then A7: n < card I by SCMFSA6A:15;
  then n + 4 <> card I + 4;
@@ -944,7 +946,8 @@ theorem Th22:
  st I is_closed_on s & I is_halting_on s & s.a =0 holds
     IC (Computation (s +* (while=0(a,I) +* Start-At insloc 0))).
     (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) = insloc 0 &
-    for k being Nat st k <= LifeSpan (s +* (I +* Start-At insloc 0)) + 3
+    for k being Element of NAT st k <=
+     LifeSpan (s +* (I +* Start-At insloc 0)) + 3
     holds IC (Computation (s +* (while=0(a,I) +* Start-At insloc 0))).k
     in dom while=0(a,I)
 proof
@@ -986,7 +989,7 @@ A11: IC s2 = s2.IC SCM+FSA by AMI_1:def 15
 then A12: s2 | D = s1 | D by SCMFSA6A:38
     .= s | D by SCMFSA8A:11
     .= sI | D by SCMFSA8A:11;
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
        $1 <= LifeSpan sI implies
        IC (Computation s1).(1 + $1) = IC (Computation sI).$1 + 4 &
        (Computation s1).(1 + $1) | D = (Computation sI).$1 | D;
@@ -1002,7 +1005,7 @@ A14:    IC SCM+FSA in dom (I +* Start-At insloc 0) by SF_MASTR:65;
        (Computation s1).(1 + 0) | D = (Computation sI).0 | D
         by A11,A12,AMI_1:def 19;
     end;
-A15: now let k be Nat;
+A15: now let k be Element of NAT;
        assume A16: P[k];
           now assume A17: k + 1 <= LifeSpan sI;
              k + 0 < k + 1 by XREAL_1:8;
@@ -1017,7 +1020,7 @@ then k < LifeSpan sI by A17,XREAL_1:2;
     set s2=(Computation s1).(1 + LifeSpan sI);
     set loc4=insloc (card I + 4);
     set s3=(Computation s1).(1+LifeSpan sI+1);
-A18: for k being Nat holds P[k] from NAT_1:sch 1(A13,A15);
+A18: for k being Element of NAT holds P[k] from NAT_1:sch 1(A13,A15);
     then P[LifeSpan sI];
 then A19: CurInstr s2 = goto loc4 by A1,A2,Th20;
 A20: s3 = Following s2 by AMI_1:def 19
@@ -1038,11 +1041,12 @@ A25: IC s4 = s4.IC SCM+FSA by AMI_1:def 15
 A26: LifeSpan sI+1+1+1 =LifeSpan sI+(2+1); thus
    IC (Computation s1).(LifeSpan sI+3) = insloc 0 by A25;
 
-A27: now let k be Nat;
+A27: now let k be Element of NAT;
        assume A28: k <= LifeSpan sI+3;
        assume k<>0;
        then consider n being Nat such that
 A29:    k = n+ 1 by NAT_1:22;
+       reconsider n as Element of NAT by ORDINAL1:def 13;
           k<=LifeSpan sI+1 or k >= LifeSpan sI+1+1 by NAT_1:38;
        then A30: k<=LifeSpan sI+1 or k = LifeSpan sI+1+1 or k > LifeSpan sI+1+1
           by REAL_1:def 5;
@@ -1050,7 +1054,8 @@ A29:    k = n+ 1 by NAT_1:22;
        suppose k<=LifeSpan sI+1;
 then n <= LifeSpan sI by A29,XREAL_1:8;
 then A31:       IC C1.(1 + n) = IC (Computation sI).n + 4 by A18;
-          consider m being Nat such that A32: IC (Computation sI).n = insloc m
+          consider m being Element of NAT such that
+          A32: IC (Computation sI).n = insloc m
             by SCMFSA_2:21;
              insloc m in dom I by A1,A32,SCMFSA7B:def 7;
        then m < card I by SCMFSA6A:15;
@@ -1067,7 +1072,7 @@ then insloc (m+4) in dom while=0(a,I) by A33,SCMFSA6A:15;
           hence IC C1.k in dom while=0(a,I) by A25,Th10;
     end;
     end;
-       now let k be Nat;
+       now let k be Element of NAT;
        assume A34: k <= LifeSpan sI+3;
        per cases;
        suppose k = 0;
@@ -1077,7 +1082,8 @@ then insloc (m+4) in dom while=0(a,I) by A33,SCMFSA6A:15;
           hence IC C1.k in dom while=0(a,I) by A27,A34;
     end;
     end;hence
-       for k being Nat st k <= LifeSpan sI + 3 holds IC C1.k in dom while=0(a,I
+       for k being Element of NAT st k <= LifeSpan sI + 3
+       holds IC C1.k in dom while=0(a,I
 );
 end;
 
@@ -1093,32 +1099,32 @@ definition
   means
 :Def4:
    it.0 = s &
-   for i being Nat
+   for i being Element of NAT
     holds it.(i+1)=(Computation (it.i +* (while=0(a,I) +* sl0))).
       (LifeSpan (it.i +* (I +* sl0)) + 3);
  existence
   proof
- deffunc U(Nat,Element of product the Object-Kind of SCM+FSA) =
+ deffunc U(Element of NAT,Element of product the Object-Kind of SCM+FSA) =
    (Computation ($2 +* (while=0(a,I) +* sl0))).
       (LifeSpan ($2 +* (I +* sl0)) + 3);
   thus ex f being Function of NAT,product the Object-Kind of SCM+FSA st
-   f.0 = s & for i being Nat holds f.(i+1)= U(i,f.i)
+   f.0 = s & for i being Element of NAT holds f.(i+1)= U(i,f.i)
   from RECDEF_1:sch 4;
   end;
  uniqueness
  proof
- deffunc U(Nat,Element of product the Object-Kind of SCM+FSA) =
+ deffunc U(Element of NAT,Element of product the Object-Kind of SCM+FSA) =
    (Computation ($2 +* (while=0(a,I) +* sl0))).
       (LifeSpan ($2 +* (I +* sl0)) + 3);
   let F1,F2 be Function of NAT,product the Object-Kind of SCM+FSA
       such that
-A1: F1.0 = s & for i being Nat holds F1.(i+1)= U(i,F1.i) and
-A2: F2.0 = s & for i being Nat holds F2.(i+1)= U(i,F2.i);
+A1: F1.0 = s & for i being Element of NAT holds F1.(i+1)= U(i,F1.i) and
+A2: F2.0 = s & for i being Element of NAT holds F2.(i+1)= U(i,F2.i);
     thus F1 = F2 from RECDEF_1:sch 12(A1,A2);
  end;
 end;
 
- reserve i,k,m,n for Nat;
+ reserve i,k,m,n for Element of NAT;
 
 canceled 2;
 
@@ -1135,13 +1141,13 @@ proof
     .=StepWhile=0(a,I,sk).1;
 end;
 
-scheme MinIndex { F(Nat)->Nat,j() -> Nat} :
+scheme MinIndex { F(Element of NAT)->Element of NAT,j() -> Element of NAT} :
   ex k st F(k)=0 & for n st F(n)=0 holds k <= n
    provided
 A1: F(0) = j() and
 A2: for k holds (F(k+1) < F(k) or F(k) = 0)
 proof
-    defpred P[Nat] means ex n st $1 = F(n);
+    defpred P[Element of NAT] means ex n st $1 = F(n);
 A3:  ex k st P[k] by A1;
 A4:  for k st k <> 0 & P[k] ex m st m < k & P[m]
     proof let k; assume
@@ -1151,7 +1157,7 @@ A6:    k = F(n);
        take F(n + 1);
        thus thesis by A2,A5,A6;
     end;
-    defpred X[Nat] means F($1)=0;
+    defpred X[Element of NAT] means F($1)=0;
        P[0] from NAT_1:sch 7(A3,A4);
 then A7:  ex k st X[k];
     thus ex k st X[k] & for n st X[n] holds k <= n from NAT_1:sch 5(A7);
@@ -1275,7 +1281,7 @@ end;
 
 theorem Th31:
   for I being Macro-Instruction,a being read-write Int-Location,
-   s being State of SCM+FSA,k,n being Nat st
+   s being State of SCM+FSA,k,n being Element of NAT st
 IC StepWhile=0(a,I,s).k =insloc 0 & StepWhile=0(a,I,s).k=
 (Computation (s +* (while=0(a,I) +* Start-At insloc 0))).n holds
 StepWhile=0(a,I,s).k = StepWhile=0(a,I,s).k +* (while=0(a,I)+*
@@ -1286,7 +1292,7 @@ Start-At insloc 0))).
 proof
     set IL = the Instruction-Locations of SCM+FSA;
     let I be Macro-Instruction,a be read-write Int-Location,
-    s be State of SCM+FSA,k,n be Nat;
+    s be State of SCM+FSA,k,n be Element of NAT;
     set D = Int-Locations \/ FinSeq-Locations;
     set s1 = s +* (while=0(a,I) +* Start-At insloc 0);
     set sk=StepWhile=0(a,I,s).k;
@@ -1309,11 +1315,11 @@ end;
 
 theorem Th32:
   for I being Macro-Instruction,a being read-write Int-Location,
-    s being State of SCM+FSA st (for k being Nat holds
+    s being State of SCM+FSA st (for k being Element of NAT holds
      I is_closed_on StepWhile=0(a,I,s).k &
      I is_halting_on StepWhile=0(a,I,s).k) &
     ex f being Function of product the Object-Kind of SCM+FSA,NAT st
-      (for k being Nat holds (f.(StepWhile=0(a,I,s).(k+1)) <
+      (for k being Element of NAT holds (f.(StepWhile=0(a,I,s).(k+1)) <
       f.(StepWhile=0(a,I,s).k)
       or f.(StepWhile=0(a,I,s).k) = 0) &
       ( f.(StepWhile=0(a,I,s).k)=0 iff (StepWhile=0(a,I,s).k).a <> 0 ) )
@@ -1323,21 +1329,22 @@ proof
     set IL = the Instruction-Locations of SCM+FSA;
     let I be Macro-Instruction,a be read-write Int-Location,
     s be State of SCM+FSA;
-    assume A1: for k being Nat holds I is_closed_on StepWhile=0(a,I,s).k &
+    assume A1: for k being Element of NAT
+    holds I is_closed_on StepWhile=0(a,I,s).k &
     I is_halting_on StepWhile=0(a,I,s).k;
     given f being Function of product the Object-Kind of SCM+FSA,NAT
-    such that A2:for k being Nat holds
+    such that A2:for k being Element of NAT holds
     (f.(StepWhile=0(a,I,s).(k+1)) < f.(StepWhile=0(a,I,s).k) or
     f.(StepWhile=0(a,I,s).k) = 0) &
     ( f.(StepWhile=0(a,I,s).k)=0 iff (StepWhile=0(a,I,s).k).a <> 0 );
-    deffunc F(Nat) = f.(StepWhile=0(a,I,s).$1);
+    deffunc F(Element of NAT) = f.(StepWhile=0(a,I,s).$1);
     set s1 = s +* (while=0(a,I) +* Start-At insloc 0);
 A3: F(0) =f.s by Def4;
 A4: for k holds ( F(k+1) < F(k) or F(k) = 0 ) by A2;
-    consider m being Nat such that
+    consider m being Element of NAT such that
 A5: F(m)=0 and
 A6: for n st F(n) =0 holds m <= n from MinIndex(A3,A4);
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
        $1+1 <= m implies
           ex k st StepWhile=0(a,I,s).($1+1)=(Computation s1).k;
 A7: P[0]
@@ -1346,7 +1353,7 @@ A7: P[0]
        thus StepWhile=0(a,I,s).(0+1)=(Computation s1).n by Th30;
     end;
 A8: IC SCM+FSA in dom (while=0(a,I) +* sl0 ) by SF_MASTR:65;
-A9: now let k be Nat;
+A9: now let k be Element of NAT;
        assume A10: P[k];
           now assume A11: (k+1)+ 1 <= m;
              k + 0 < k+ (1+ 1) by XREAL_1:8;
@@ -1354,7 +1361,7 @@ then A12:       k < m by A11,XREAL_1:2;
           A13: (k+1)+ 0 < (k+ 1)+ 1 by XREAL_1:8;
           set sk=StepWhile=0(a,I,s).k;
           set sk1=StepWhile=0(a,I,s).(k+1);
-          consider n being Nat such that
+          consider n being Element of NAT such that
 A14:       sk1 = (Computation s1).n by A10,A11,A13,XREAL_1:2;
 A15:       sk1= (Computation (sk +* (while=0(a,I)+* sl0))).
              (LifeSpan (sk +* (I +* sl0)) + 3) by Def4;
@@ -1368,7 +1375,7 @@ then A17:       IC sk1 =insloc 0 by A15,A16,Th22;
        end;
        hence P[k+1];
     end;
-A18: for k being Nat holds P[k] from NAT_1:sch 1(A7,A9);
+A18: for k being Element of NAT holds P[k] from NAT_1:sch 1(A7,A9);
        now per cases;
        suppose m=0;
           then (StepWhile=0(a,I,s).0).a <> 0 by A2,A5;
@@ -1379,11 +1386,14 @@ A18: for k being Nat holds P[k] from NAT_1:sch 1(A7,A9);
        suppose A19:m<>0;
           then consider i being Nat such that
 A20:       m=i+1 by NAT_1:22;
+          reconsider m,i as Element of NAT by ORDINAL1:def 13;
           set si=StepWhile=0(a,I,s).i;
           set sm=StepWhile=0(a,I,s).m;
           set sm1=sm +* (while=0(a,I)+* sl0);
-          consider n being Nat such that
+          m=i+1 by A20; then
+          consider n being Element of NAT such that
 A21:      sm = (Computation s1).n by A18,A20;
+          reconsider n as Element of NAT by ORDINAL1:def 13;
 A22:       sm.a <> 0 by A2,A5;
 A23:      sm= (Computation (si +* (while=0(a,I)+* sl0))).
             (LifeSpan (si +* (I +* sl0)) + 3) by A20,Def4;
@@ -1402,7 +1412,7 @@ A27:      sm1 | D = sm | D by SCMFSA8A:11;
 then A28:      sm1=sm by A26,A27,Th29;
              while=0(a,I) is_halting_on sm by A22,Th18;
           then sm1 is halting by SCMFSA7B:def 8;
-          then consider j being Nat such that
+          then consider j being Element of NAT such that
 A29:       CurInstr((Computation sm).j) = halt SCM+FSA by A28,AMI_1:def 20;
              CurInstr (Computation s1).(n+j) = halt SCM+FSA by A21,A29,AMI_1:51
 ;
@@ -1410,7 +1420,7 @@ A29:       CurInstr((Computation sm).j) = halt SCM+FSA by A28,AMI_1:def 20;
           hence while=0(a,I) is_halting_on s by SCMFSA7B:def 8;
 
           set p=(LifeSpan (s+* (I +* sl0)) + 3);
-             now let q be Nat;
+             now let q be Element of NAT;
 A30:           0<m by A19,NAT_1:19;
               per cases;
               suppose A31: q <= p;
@@ -1422,10 +1432,10 @@ then A33:              s.a = 0 by A2,A32;
 Th22;
               end;
               suppose A34: q > p;
-                 defpred P2[Nat] means
+                 defpred P2[Element of NAT] means
                  $1<=m & $1<>0 & (ex k st StepWhile=0(a,I,s).$1=
                  (Computation s1).k & k <= q);
-A35:              for i be Nat st P2[i] holds i <= m;
+A35:              for i be Element of NAT st P2[i] holds i <= m;
 A36:              now
                    take k=p;
                    thus StepWhile=0(a,I,s).1=(Computation s1).k &
@@ -1433,17 +1443,18 @@ A36:              now
                  end;
                     0+1 < m +1 by A30,XREAL_1:8;
 then 1 <= m by NAT_1:38;
-then A37:              ex t be Nat st P2[t] by A36;
+then A37:              ex t be Element of NAT st P2[t] by A36;
                     ex k st P2[k] & for i st P2[i] holds i <= k from NAT_1:sch
 6(A35,A37);
-                 then consider t being Nat such that
+                 then consider t being Element of NAT such that
 A38:              P2[t] & for i st P2[i] holds i <= t;
                     now per cases;
                     suppose t=m;
-                       then consider r being Nat such that
+                       then consider r being Element of NAT such that
 A39:                    sm=(Computation s1).r & r <= q by A38;
                        consider x being Nat such that
 A40:                    q = r+x by A39,NAT_1:28;
+                       reconsider x as Element of NAT by ORDINAL1:def 13;
 A41:                   (Computation s1).q = (Computation sm1).x by A28,A39,A40,
 AMI_1:51;
                          while=0(a,I) is_closed_on sm by A22,Th18;
@@ -1454,7 +1465,8 @@ SCMFSA7B:def 7;
 then A42:                   t < m by A38,REAL_1:def 5;
                       consider y being Nat such that
 A43:                   t=y+1 by A38,NAT_1:22;
-                      consider z being Nat such that
+                      reconsider y as Element of NAT by ORDINAL1:def 13;
+                      consider z being Element of NAT such that
 A44:                   StepWhile=0(a,I,s).t=(Computation s1).z & z <= q by A38;
                          y+ 0 < t by A43,XREAL_1:8;
 then A45:                   y < m by A38,XREAL_1:2;
@@ -1479,6 +1491,7 @@ q
                       end;
                       consider w being Nat such that
 A52:                   q = z+w by A44,NAT_1:28;
+                      reconsider w as Element of NAT by ORDINAL1:def 13;
 A53:                   w < LifeSpan (Dt +* (I +* sl0)) + 3 by A49,A52,XREAL_1:8
 ;
 A54:                   (Computation s1).q = (Computation Dt ).w by A44,A52,
@@ -1505,7 +1518,7 @@ theorem Th33:
   for I being parahalting Macro-Instruction, a being read-write
     Int-Location, s being State of SCM+FSA st
     ex f being Function of product the Object-Kind of SCM+FSA,NAT st
-      (for k being Nat holds (f.(StepWhile=0(a,I,s).(k+1)) <
+      (for k being Element of NAT holds (f.(StepWhile=0(a,I,s).(k+1)) <
       f.(StepWhile=0(a,I,s).k) or f.(StepWhile=0(a,I,s).k) = 0) &
       ( f.(StepWhile=0(a,I,s).k)=0 iff (StepWhile=0(a,I,s).k).a <> 0 ) )
      holds
@@ -1515,11 +1528,13 @@ proof
     Int-Location,s be State of SCM+FSA;
     assume A1:
     ex f being Function of product the Object-Kind of SCM+FSA,NAT st
-      (for k being Nat holds (f.(StepWhile=0(a,I,s).(k+1)) <
+      (for k being Element of NAT holds (f.(StepWhile=0(a,I,s).(k+1)) <
       f.(StepWhile=0(a,I,s).k) or f.(StepWhile=0(a,I,s).k) = 0) &
       ( f.(StepWhile=0(a,I,s).k)=0 iff (StepWhile=0(a,I,s).k).a <> 0 ) );
-A2:  for k being Nat holds I is_closed_on StepWhile=0(a,I,s).k by SCMFSA7B:24;
-        for k being Nat holds I is_halting_on StepWhile=0(a,I,s).k by
+A2:  for k being Element of NAT
+holds I is_closed_on StepWhile=0(a,I,s).k by SCMFSA7B:24;
+        for k being Element of NAT holds I is_halting_on StepWhile=0(a,I,s).k
+        by
 SCMFSA7B:25;
      hence thesis by A1,A2,Th32;
 end;
@@ -1538,7 +1553,7 @@ proof
     such that A1: for s being State of SCM+FSA holds
     (f.(StepWhile=0(a,I,s).1) < f.s or f.s = 0) & ( f.s =0 iff s.a <> 0 );
        now let t be State of SCM+FSA;
-          now let k be Nat;
+          now let k be Element of NAT;
              (f.(StepWhile=0(a,I,StepWhile=0(a,I,t).k).1) <
           f.(StepWhile=0(a,I,t).k) or f.(StepWhile=0(a,I,t).k) = 0) &
           ( f.(StepWhile=0(a,I,t).k)=0 iff (StepWhile=0(a,I,t).k).a <> 0 )
@@ -1625,10 +1640,10 @@ end;
 :: WHILE>0  Statement
 
 theorem Th37:
- for a being Int-Location, I being Macro-Instruction,k being Nat st
+ for a being Int-Location, I being Macro-Instruction,k being Element of NAT st
  k < 6 holds insloc k in dom while>0(a,I)
 proof
-    let a be Int-Location, I be Macro-Instruction,k be Nat;
+    let a be Int-Location, I be Macro-Instruction,k be Element of NAT;
     assume A1: k < 6;
        6 <= card I + 6 by NAT_1:29;
 then A2:  k < card I + 6 by A1,XREAL_1:2;
@@ -1637,10 +1652,10 @@ then A2:  k < card I + 6 by A1,XREAL_1:2;
 end;
 
 theorem Th38:
- for a being Int-Location, I being Macro-Instruction,k being Nat st
+ for a being Int-Location, I being Macro-Instruction,k being Element of NAT st
   k < 6 holds insloc (card I +k) in dom while>0(a,I)
 proof
-    let a be Int-Location, I be Macro-Instruction,k be Nat;
+    let a be Int-Location, I be Macro-Instruction,k be Element of NAT;
     assume k < 6;
 then A1:  card I + k < card I + 6 by XREAL_1:8;
        card while>0(a,I) = card I + 6 by Th5;
@@ -1843,10 +1858,11 @@ FUNCT_4:def 1
 end;
 
 theorem
-    for a being Int-Location, I being Macro-Instruction,k being Nat st
+    for a being Int-Location, I being Macro-Instruction,
+    k being Element of NAT st
  k < card I +6 holds insloc k in dom while>0(a,I)
 proof
-    let a be Int-Location, I be Macro-Instruction,k be Nat;
+    let a be Int-Location, I be Macro-Instruction,k be Element of NAT;
     assume A1: k < card I +6;
        card while>0(a,I) = card I + 6 by Th5;
     hence thesis by A1,SCMFSA6A:15;
@@ -1937,7 +1953,7 @@ A22:  IC s5 = s5.IC SCM+FSA by AMI_1:def 15
 then A23:  CurInstr s5 = halt SCM+FSA by A22,AMI_1:def 17;
      then s1 is halting by AMI_1:def 20;
      hence while>0(a,I) is_halting_on s by SCMFSA7B:def 8;
-        now let k be Nat;
+        now let k be Element of NAT;
 A24:      k<=3 or k >= 3+1 by NAT_1:38;
         per cases by A24,CQC_THE1:4;
         suppose k = 0;
@@ -1961,7 +1977,7 @@ end;
 
 theorem Th44:
  for a being Int-Location, I being Macro-Instruction,
- s being State of SCM+FSA,k being Nat st
+ s being State of SCM+FSA,k being Element of NAT st
    I is_closed_on s & I is_halting_on s &
    k < LifeSpan (s +* (I +* Start-At insloc 0)) &
    IC (Computation (s +* (while>0(a,I) +* Start-At insloc 0))).(1 + k) =
@@ -1982,7 +1998,7 @@ proof
     let a be Int-Location;
     let I be Macro-Instruction;
     let s be State of SCM+FSA;
-    let k be Nat;
+    let k be Element of NAT;
     set s1 = s +* (while>0(a,I) +* Start-At insloc 0);
     set sI = s +* ( I +* Start-At insloc 0);
     set sK1=(Computation s1).(1 + k);
@@ -1999,7 +2015,7 @@ proof
     set i = a >0_goto insloc (card J + 3);
 
 A6:  dom f = {insloc (card I + 4)} by CQC_LANG:5;
-    consider n being Nat such that A7: l3 = insloc n by SCMFSA_2:21;
+    consider n being Element of NAT such that A7: l3 = insloc n by SCMFSA_2:21;
 A8: insloc n in dom I by A1,A7,SCMFSA7B:def 7;
     then A9: n < card I by SCMFSA6A:15;
  then n + 4 <> card I + 4;
@@ -2108,7 +2124,8 @@ proof
     set f = insloc (card I +4) .--> goto insloc 0;
     set i = a >0_goto insloc (card J + 3);
 A4:  dom f = {insloc (card I + 4)} by CQC_LANG:5;
-    consider n being Nat such that A5: IC sK2 = insloc n by SCMFSA_2:21;
+    consider n being Element of NAT such that A5: IC sK2 = insloc n
+    by SCMFSA_2:21;
 A6: insloc n in dom I by A1,A5,SCMFSA7B:def 7;
     then A7: n < card I by SCMFSA6A:15;
  then n + 4 <> card I + 4;
@@ -2208,7 +2225,8 @@ theorem Th47:
  st I is_closed_on s & I is_halting_on s & s.a >0 holds
     IC (Computation (s +* (while>0(a,I) +* Start-At insloc 0))).
     (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) = insloc 0 &
-    for k being Nat st k <= LifeSpan (s +* (I +* Start-At insloc 0)) + 3
+    for k being Element of NAT
+     st k <= LifeSpan (s +* (I +* Start-At insloc 0)) + 3
     holds IC (Computation (s +* (while>0(a,I) +* Start-At insloc 0))).k
     in dom while>0(a,I)
 proof
@@ -2253,7 +2271,7 @@ then A12:  s2 | D = s1 | D by SCMFSA6A:38
      .= s | D by SCMFSA8A:11
      .= sI | D by SCMFSA8A:11;
 
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
        $1 <= LifeSpan sI implies
        IC (Computation s1).(1 + $1) = IC (Computation sI).$1 + 4 &
        (Computation s1).(1 + $1) | D = (Computation sI).$1 | D;
@@ -2269,7 +2287,7 @@ A14:    IC SCM+FSA in dom (I +* Start-At insloc 0) by SF_MASTR:65;
        (Computation s1).(1 + 0) | D = (Computation sI).0 | D by A11,A12,
 AMI_1:def 19;
     end;
-A15: now let k be Nat;
+A15: now let k be Element of NAT;
       assume A16: P[k];
          now assume A17: k + 1 <= LifeSpan sI;
             k + 0 < k + 1 by XREAL_1:8;
@@ -2284,7 +2302,7 @@ then k < LifeSpan sI by A17,XREAL_1:2;
     set s2=(Computation s1).(1 + LifeSpan sI);
     set loc4=insloc (card I + 4);
     set s3=(Computation s1).(1+LifeSpan sI+1);
-A18: for k being Nat holds P[k] from NAT_1:sch 1(A13,A15);
+A18: for k being Element of NAT holds P[k] from NAT_1:sch 1(A13,A15);
     then P[LifeSpan sI];
 then A19: CurInstr s2 = goto loc4 by A1,A2,Th45;
 A20: s3 = Following s2 by AMI_1:def 19
@@ -2305,11 +2323,12 @@ A25: IC s4 = s4.IC SCM+FSA by AMI_1:def 15
 A26: LifeSpan sI+1+1+1 =LifeSpan sI+(2+1); thus
    IC (Computation s1).(LifeSpan sI+3) = insloc 0 by A25;
 
-A27: now let k be Nat;
+A27: now let k be Element of NAT;
        assume A28: k <= LifeSpan sI+3;
        assume k<>0;
        then consider n being Nat such that
 A29:    k = n+ 1 by NAT_1:22;
+       reconsider n as Element of NAT by ORDINAL1:def 13;
           k<=LifeSpan sI+1 or k >= LifeSpan sI+1+1 by NAT_1:38;
        then A30: k<=LifeSpan sI+1 or k = LifeSpan sI+1+1 or k > LifeSpan sI+1+1
          by REAL_1:def 5;
@@ -2317,7 +2336,8 @@ A29:    k = n+ 1 by NAT_1:22;
        suppose k<=LifeSpan sI+1;
 then n <= LifeSpan sI by A29,XREAL_1:8;
 then A31:      IC C1.(1 + n) = IC (Computation sI).n + 4 by A18;
-         consider m being Nat such that A32: IC (Computation sI).n = insloc m
+         consider m being Element of NAT such that
+         A32: IC (Computation sI).n = insloc m
          by SCMFSA_2:21;
             insloc m in dom I by A1,A32,SCMFSA7B:def 7;
       then m < card I by SCMFSA6A:15;
@@ -2334,7 +2354,7 @@ then insloc (m+4) in dom while>0(a,I) by A33,SCMFSA6A:15;
          hence IC C1.k in dom while>0(a,I) by A25,Th10;
     end;
     end;
-       now let k be Nat;
+       now let k be Element of NAT;
        assume A34: k <= LifeSpan sI+3;
        per cases;
        suppose k = 0;
@@ -2344,7 +2364,8 @@ then insloc (m+4) in dom while>0(a,I) by A33,SCMFSA6A:15;
          hence IC C1.k in dom while>0(a,I) by A27,A34;
     end;
     end;hence
-    for k being Nat st k <= LifeSpan sI + 3 holds IC C1.k in dom while>0(a,I);
+    for k being Element of NAT st k <= LifeSpan sI + 3
+    holds IC C1.k in dom while>0(a,I);
 end;
 
 set sl0= Start-At insloc 0;
@@ -2357,25 +2378,26 @@ definition
  let s,I,a;
  func StepWhile>0(a,I,s) -> Function of NAT,product the Object-Kind of SCM+FSA
   means :Def5:
-   it.0 = s & for i being Nat holds
+   it.0 = s & for i being Element of NAT holds
     it.(i+1)=(Computation (it.i +* (while>0(a,I) +* sl0))).
       (LifeSpan (it.i +* (I +* sl0)) + 3);
  existence
   proof
-   deffunc U(Nat,Element of product the Object-Kind of SCM+FSA) =
+   deffunc U(Element of NAT,Element of product the Object-Kind of SCM+FSA) =
     (Computation ($2 +* (while>0(a,I) +* sl0))).
       (LifeSpan ($2 +* (I +* sl0)) + 3);
    thus ex f being Function of NAT,product the Object-Kind of SCM+FSA st
-   f.0 = s & for i being Nat holds f.(i+1)= U(i,f.i) from RECDEF_1:sch 4;
+   f.0 = s & for i being Element of NAT holds f.(i+1)= U(i,f.i)
+   from RECDEF_1:sch 4;
   end;
  uniqueness
  proof
-   deffunc U(Nat,Element of product the Object-Kind of SCM+FSA) =
+   deffunc U(Element of NAT,Element of product the Object-Kind of SCM+FSA) =
     (Computation ($2 +* (while>0(a,I) +* sl0))).
       (LifeSpan ($2 +* (I +* sl0)) + 3);
  let F1,F2 be Function of NAT,product the Object-Kind of SCM+FSA such that
-A1: F1.0 = s & for i being Nat holds F1.(i+1)= U(i,F1.i) and
-A2: F2.0 = s & for i being Nat holds F2.(i+1)= U(i,F2.i);
+A1: F1.0 = s & for i being Element of NAT holds F1.(i+1)= U(i,F1.i) and
+A2: F2.0 = s & for i being Element of NAT holds F2.(i+1)= U(i,F2.i);
     thus F1 = F2 from RECDEF_1:sch 12(A1,A2);
  end;
 end;
@@ -2414,7 +2436,7 @@ end;
 
 theorem Th52:
   for I being Macro-Instruction,a being read-write Int-Location,
-   s being State of SCM+FSA,k,n being Nat st
+   s being State of SCM+FSA,k,n being Element of NAT st
 IC StepWhile>0(a,I,s).k =insloc 0 & StepWhile>0(a,I,s).k=
 (Computation (s +* (while>0(a,I) +* Start-At insloc 0))).n holds
 StepWhile>0(a,I,s).k = StepWhile>0(a,I,s).k +* (while>0(a,I)+*
@@ -2426,7 +2448,7 @@ proof
     set D = Int-Locations \/ FinSeq-Locations;
     set IL = the Instruction-Locations of SCM+FSA;
     let I be Macro-Instruction,a be read-write Int-Location,
-    s be State of SCM+FSA,k,n be Nat;
+    s be State of SCM+FSA,k,n be Element of NAT;
     set s1 = s +* (while>0(a,I) +* Start-At insloc 0);
     set sk=StepWhile>0(a,I,s).k;
     set s2=sk +* (while>0(a,I)+* sl0);
@@ -2448,11 +2470,11 @@ end;
 
 theorem Th53:
   for I being Macro-Instruction,a being read-write Int-Location,
-    s being State of SCM+FSA st (for k being Nat holds
+    s being State of SCM+FSA st (for k being Element of NAT holds
      I is_closed_on StepWhile>0(a,I,s).k &
      I is_halting_on StepWhile>0(a,I,s).k) &
     ex f being Function of product the Object-Kind of SCM+FSA,NAT st
-      (for k being Nat holds (f.(StepWhile>0(a,I,s).(k+1)) <
+      (for k being Element of NAT holds (f.(StepWhile>0(a,I,s).(k+1)) <
       f.(StepWhile>0(a,I,s).k)
       or f.(StepWhile>0(a,I,s).k) = 0) &
       ( f.(StepWhile>0(a,I,s).k)=0 iff (StepWhile>0(a,I,s).k).a <= 0 ) )
@@ -2463,21 +2485,22 @@ proof
     set IL = the Instruction-Locations of SCM+FSA;
     let I be Macro-Instruction,a be read-write Int-Location,
     s be State of SCM+FSA;
-    assume A1: for k being Nat holds I is_closed_on StepWhile>0(a,I,s).k &
+    assume A1: for k being Element of NAT
+    holds I is_closed_on StepWhile>0(a,I,s).k &
     I is_halting_on StepWhile>0(a,I,s).k;
     given f being Function of product the Object-Kind of SCM+FSA,NAT
-    such that A2:for k being Nat holds
+    such that A2:for k being Element of NAT holds
     (f.(StepWhile>0(a,I,s).(k+1)) < f.(StepWhile>0(a,I,s).k) or
     f.(StepWhile>0(a,I,s).k) = 0) &
     ( f.(StepWhile>0(a,I,s).k)=0 iff (StepWhile>0(a,I,s).k).a <= 0 );
-    deffunc F(Nat) = f.(StepWhile>0(a,I,s).$1);
+    deffunc F(Element of NAT) = f.(StepWhile>0(a,I,s).$1);
     set s1 = s +* (while>0(a,I) +* Start-At insloc 0);
 A3: F(0) =f.s by Def5;
 A4: for k holds ( F(k+1) < F(k) or F(k) = 0 ) by A2;
-    consider m being Nat such that
+    consider m being Element of NAT such that
 A5: F(m)=0 and
 A6: for n st F(n) =0 holds m <= n from MinIndex(A3,A4);
-    defpred P[Nat] means
+    defpred P[Element of NAT] means
       $1+1 <= m implies
         ex k st StepWhile>0(a,I,s).($1+1)=(Computation s1).k;
 A7: P[0]
@@ -2486,7 +2509,7 @@ A7: P[0]
        thus StepWhile>0(a,I,s).(0+1)=(Computation s1).n by Th51;
     end;
 A8: IC SCM+FSA in dom (while>0(a,I) +* sl0 ) by SF_MASTR:65;
-A9: now let k be Nat;
+A9: now let k be Element of NAT;
        assume A10: P[k];
           now assume A11: (k+1)+ 1 <= m;
           k + 0 < k+ (1+ 1) by XREAL_1:8;
@@ -2494,7 +2517,7 @@ then A12:       k < m by A11,XREAL_1:2;
           A13: (k+1)+ 0 < (k+ 1)+ 1 by XREAL_1:8;
           set sk=StepWhile>0(a,I,s).k;
           set sk1=StepWhile>0(a,I,s).(k+1);
-          consider n being Nat such that
+          consider n being Element of NAT such that
 A14:       sk1 = (Computation s1).n by A10,A11,A13,XREAL_1:2;
 A15:       sk1= (Computation (sk +* (while>0(a,I)+* sl0))).
           (LifeSpan (sk +* (I +* sl0)) + 3) by Def5;
@@ -2508,7 +2531,7 @@ then A17:       IC sk1 =insloc 0 by A15,A16,Th47;
        end;
        hence P[k+1];
     end;
-A18: for k being Nat holds P[k] from NAT_1:sch 1(A7,A9);
+A18: for k being Element of NAT holds P[k] from NAT_1:sch 1(A7,A9);
        now per cases;
        suppose m=0;
          then (StepWhile>0(a,I,s).0).a <= 0 by A2,A5;
@@ -2519,10 +2542,12 @@ A18: for k being Nat holds P[k] from NAT_1:sch 1(A7,A9);
        suppose A19:m<>0;
          then consider i being Nat such that
 A20:      m=i+1 by NAT_1:22;
+         reconsider i as Element of NAT by ORDINAL1:def 13;
          set si=StepWhile>0(a,I,s).i;
          set sm=StepWhile>0(a,I,s).m;
          set sm1=sm +* (while>0(a,I)+* sl0);
-         consider n being Nat such that
+         m=i+1 by A20; then
+         consider n being Element of NAT such that
 A21:     sm = (Computation s1).n by A18,A20;
 A22:      sm.a <= 0 by A2,A5;
 A23:     sm= (Computation (si +* (while>0(a,I)+* sl0))).
@@ -2541,14 +2566,13 @@ A27:     sm1 | D = sm | D by SCMFSA8A:11;
 then A28:     sm1=sm by A26,A27,Th29;
             while>0(a,I) is_halting_on sm by A22,Th43;
          then sm1 is halting by SCMFSA7B:def 8;
-         then consider j being Nat such that
+         then consider j being Element of NAT such that
 A29:      CurInstr((Computation sm).j) = halt SCM+FSA by A28,AMI_1:def 20;
             CurInstr (Computation s1).(n+j) = halt SCM+FSA by A21,A29,AMI_1:51;
          then s1 is halting by AMI_1:def 20;
          hence while>0(a,I) is_halting_on s by SCMFSA7B:def 8;
-
          set p=(LifeSpan (s+* (I +* sl0)) + 3);
-            now let q be Nat;
+            now let q be Element of NAT;
 A30:         0<m by A19,NAT_1:19;
             per cases;
             suppose A31: q <= p;
@@ -2559,10 +2583,10 @@ then A33:           s.a > 0 by A2,A32;
               hence IC (Computation s1).q in dom while>0(a,I) by A31,A33,Th47;
             end;
             suppose A34: q > p;
-              defpred P2[Nat] means
+              defpred P2[Element of NAT] means
                 $1<=m & $1<>0 & (ex k st StepWhile>0(a,I,s).$1=
                 (Computation s1).k & k <= q);
-A35:           for i be Nat st P2[i] holds i <= m;
+A35:           for i be Element of NAT st P2[i] holds i <= m;
 A36:           now
                  take k=p;
                  thus StepWhile>0(a,I,s).1=(Computation s1).k & k <= q
@@ -2570,17 +2594,18 @@ A36:           now
               end;
                  0+1 < m +1 by A30,XREAL_1:8;
 then 1 <= m by NAT_1:38;
-then A37:           ex t be Nat st P2[t] by A36;
+then A37:           ex t be Element of NAT st P2[t] by A36;
                  ex k st P2[k] & for i st P2[i] holds i <= k from NAT_1:sch 6
 (A35,A37);
-              then consider t being Nat such that
+              then consider t being Element of NAT such that
 A38:           P2[t] & for i st P2[i] holds i <= t;
                  now per cases;
                  suppose t=m;
-                   then consider r being Nat such that
+                   then consider r being Element of NAT such that
 A39:                sm=(Computation s1).r & r <= q by A38;
                    consider x being Nat such that
 A40:                q = r+x by A39,NAT_1:28;
+                   reconsider x as Element of NAT by ORDINAL1:def 13;
 A41:                (Computation s1).q = (Computation sm1).x by A28,A39,A40,
 AMI_1:51;
                       while>0(a,I) is_closed_on sm by A22,Th43;
@@ -2591,7 +2616,8 @@ SCMFSA7B:def 7;
 then A42:                t < m by A38,REAL_1:def 5;
                    consider y being Nat such that
 A43:                t=y+1 by A38,NAT_1:22;
-                   consider z being Nat such that
+                   reconsider y as Element of NAT by ORDINAL1:def 13;
+                   consider z being Element of NAT such that
 A44:                StepWhile>0(a,I,s).t=(Computation s1).z & z <= q by A38;
                       y+ 0 < t by A43,XREAL_1:8;
 then A45:                y < m by A38,XREAL_1:2;
@@ -2616,6 +2642,7 @@ q
                    end;
                    consider w being Nat such that
 A52:                q = z+w by A44,NAT_1:28;
+                   reconsider w as Element of NAT by ORDINAL1:def 13;
 A53:                w < LifeSpan (Dt +* (I +* sl0)) + 3 by A49,A52,XREAL_1:8;
 A54:                (Computation s1).q = (Computation Dt ).w by A44,A52,
 AMI_1:51
@@ -2641,7 +2668,7 @@ theorem Th54:
   for I being parahalting Macro-Instruction, a being read-write
     Int-Location, s being State of SCM+FSA st
     ex f being Function of product the Object-Kind of SCM+FSA,NAT st
-      (for k being Nat holds (f.(StepWhile>0(a,I,s).(k+1)) <
+      (for k being Element of NAT holds (f.(StepWhile>0(a,I,s).(k+1)) <
       f.(StepWhile>0(a,I,s).k) or f.(StepWhile>0(a,I,s).k) = 0) &
       ( f.(StepWhile>0(a,I,s).k)=0 iff (StepWhile>0(a,I,s).k).a <= 0 ) )
      holds
@@ -2651,11 +2678,12 @@ proof
     Int-Location,s be State of SCM+FSA;
     assume A1:
     ex f being Function of product the Object-Kind of SCM+FSA,NAT st
-      (for k being Nat holds (f.(StepWhile>0(a,I,s).(k+1)) <
+      (for k being Element of NAT holds (f.(StepWhile>0(a,I,s).(k+1)) <
       f.(StepWhile>0(a,I,s).k) or f.(StepWhile>0(a,I,s).k) = 0) &
       ( f.(StepWhile>0(a,I,s).k)=0 iff (StepWhile>0(a,I,s).k).a <= 0 ) );
-A2:  for k being Nat holds I is_closed_on StepWhile>0(a,I,s).k by SCMFSA7B:24;
-       for k being Nat holds I is_halting_on StepWhile>0(a,I,s).k by
+A2:  for k being Element of NAT holds I is_closed_on StepWhile>0(a,I,s).k
+by SCMFSA7B:24;
+       for k being Element of NAT holds I is_halting_on StepWhile>0(a,I,s).k by
 SCMFSA7B:25;
     hence thesis by A1,A2,Th53;
 end;
@@ -2674,7 +2702,7 @@ proof
     such that A1: for s being State of SCM+FSA holds
     (f.(StepWhile>0(a,I,s).1) < f.s or f.s = 0) & ( f.s =0 iff s.a <= 0 );
        now let t be State of SCM+FSA;
-           now let k be Nat;
+           now let k be Element of NAT;
               (f.(StepWhile>0(a,I,StepWhile>0(a,I,t).k).1) <
            f.(StepWhile>0(a,I,t).k) or f.(StepWhile>0(a,I,t).k) = 0) &
            ( f.(StepWhile>0(a,I,t).k)=0 iff (StepWhile>0(a,I,t).k).a <= 0 )

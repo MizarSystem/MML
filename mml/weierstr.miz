@@ -11,19 +11,21 @@ environ
       COMPTS_1, EUCLID, LATTICES, PCOMPS_1, SEQ_2, SEQ_1, SEQ_4, WEIERSTR,
       ARYTM, FRECHET2;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
-      FUNCT_2, ORDINAL1, NUMBERS, XREAL_0, REAL_1, COMPLEX1, NAT_1, TOPMETR,
+      FUNCT_2, ORDINAL1, NUMBERS,
+      XCMPLX_0, XREAL_0, REAL_1, COMPLEX1, NAT_1, TOPMETR,
       METRIC_1, COMPTS_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, FINSEQ_1, FINSET_1,
       STRUCT_0, PRE_TOPC, TOPS_2, RCOMP_1, EUCLID, PCOMPS_1, XXREAL_0;
  constructors SETFAM_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2, SEQM_3,
       SEQ_4, RCOMP_1, TOPS_2, COMPTS_1, EUCLID, TOPMETR;
  registrations STRUCT_0, TOPMETR, PRE_TOPC, PCOMPS_1, EUCLID, XREAL_0,
-      METRIC_1, RELSET_1, ARYTM_3, FINSET_1, MEMBERED, ORDINAL1, SUBSET_1;
+      METRIC_1, RELSET_1, ARYTM_3, FINSET_1, MEMBERED, ORDINAL1, SUBSET_1,
+      NAT_1;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
  definitions STRUCT_0, TARSKI, SUBSET_1, PRE_TOPC;
  theorems TARSKI, FUNCT_1, FUNCT_2, NAT_1, FINSEQ_1, ZFMISC_1, REAL_1, SEQ_2,
       SEQ_4, ABSVALUE, COMPTS_1, RELAT_1, TOPS_2, RCOMP_1, TOPMETR, PCOMPS_1,
       METRIC_1, METRIC_6, XBOOLE_0, XBOOLE_1, XREAL_0, SUBSET_1, XREAL_1,
-      COMPLEX1, XXREAL_0;
+      COMPLEX1, XXREAL_0, ORDINAL1;
  schemes NAT_1, SUBSET_1, FUNCT_2;
 
 begin
@@ -111,7 +113,8 @@ proof
    assume
 A1:F is finite & F is_ball-family & rng p = F & dom p = Seg(n+1);
       reconsider q = p|(Seg(n)) as FinSequence by FINSEQ_1:19;
-         len p = n+1 by A1,FINSEQ_1:def 3;
+      n+1 is Element of NAT by ORDINAL1:def 13;
+      then len p = n+1 by A1,FINSEQ_1:def 3;
       then n <= len p by NAT_1:29;
    then A2:len q = n & dom q = Seg(n) by FINSEQ_1:21;
    then A3:dom q \/ {n+1} = dom p by A1,FINSEQ_1:11;
@@ -259,14 +262,13 @@ A1:F is finite & F is_ball-family;
                union F c= Ball(x1,r1) \/ Ball(x2,r2) by A12,A15,XBOOLE_1:1;
             hence thesis by A17,XBOOLE_1:1;
          end;
-            for n being Nat holds P[n] from NAT_1:sch 1(A3,A6);
+            for n being Nat holds P[n] from NAT_1:sch 2(A3,A6);
          hence thesis;
       end;
       consider p being FinSequence such that
    A18:rng p = F by A1,FINSEQ_1:73;
-      consider n being Nat such that
-   A19:dom p = Seg n by FINSEQ_1:def 2;
-      thus thesis by A1,A2,A18,A19;
+   ex n being Element of NAT st dom p = Seg n by FINSEQ_1:def 2;
+   hence thesis by A1,A2,A18;
 end;
 
 definition
@@ -275,7 +277,7 @@ definition
    let G be Subset-Family of S;
 func f"G -> Subset-Family of T means
 :Def1:for A being Subset of T holds
-     A in it iff ex B being Subset of S st (B in G & A = f"B);
+     A in it iff ex B being Subset of S st B in G & A = f"B;
 existence
 proof
   defpred P[Subset of T] means
@@ -1122,11 +1124,11 @@ A1:P is compact;
         A12:Ball(x,r) =
             {q where q is Element of RealSpace
             :dist(x,q)<r} by METRIC_1:18;
-               not ex n being Nat st
-            for m being Nat st n<=m holds abs(s1.m-(lim s1)) < r
+            not ex n being Element of NAT st
+            for m being Element of NAT st n<=m holds abs(s1.m-(lim s1)) < r
             proof
-               given n being Nat such that
-           A13:for m being Nat st n<=m holds abs(s1.m-(lim s1)) < r;
+               given n being Element of NAT such that
+           A13:for m being Element of NAT st n<=m holds abs(s1.m-(lim s1)) < r;
                set m = n + 1;
                   n <= m by NAT_1:29;
                then abs(s1.m-(lim s1)) < r by A13;

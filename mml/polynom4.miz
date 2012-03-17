@@ -11,7 +11,8 @@ environ
       ARYTM_3, ALGSEQ_1, POLYNOM1, FUNCOP_1, SQUARE_1, FINSEQ_4, FUNCT_4,
       GROUP_1, POLYNOM2, VECTSP_2, ENDALG, GRCAT_1, COHSP_1, QUOFIELD,
       POLYNOM4, ALGSTR_1;
- notations TARSKI, XBOOLE_0, NUMBERS, XCMPLX_0, NAT_1, SQUARE_1, RELAT_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1,
+  NUMBERS, XCMPLX_0, NAT_1, SQUARE_1, RELAT_1,
       FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1, POLYNOM1, STRUCT_0, FINSEQ_2,
       FINSEQ_4, FINSOP_1, RFINSEQ, BINARITH, NORMSP_1, RLVECT_1, GROUP_1,
       VECTSP_1, VECTSP_2, FVSUM_1, ALGSTR_1, GRCAT_1, ENDALG, QUOFIELD,
@@ -32,19 +33,19 @@ environ
 begin  :: Preliminaries
 
  Lm1:
-   for n be Nat holds 0-'n = 0 by NAT_2:10;
+   for n be Element of NAT holds 0-'n = 0 by NAT_2:10;
 
 canceled 2;
 
   theorem Th3:
    for D be non empty set
    for p be FinSequence of D
-   for n be Nat st 1 <= n & n <= len p holds
+   for n be Element of NAT st 1 <= n & n <= len p holds
     p = (p|(n-'1))^<*p.n*>^(p/^n)
    proof
     let D be non empty set;
     let p be FinSequence of D;
-    let n be Nat;
+    let n be Element of NAT;
     assume that
      A1: 1 <= n and
      A2: n <= len p;
@@ -121,13 +122,14 @@ canceled;
     let L be add-associative right_zeroed right_complementable
      left-distributive (non empty doubleLoopStr);
     let p be sequence of L;
-        now let i be Nat;
+        now let i be Element of NAT;
      consider r be FinSequence of the carrier of L such that
           len r = i+1 and
       A1: ((0_.(L))*'p).i = Sum r and
-      A2: for k be Nat st k in dom r holds r.k = (0_.(L)).(k-'1) * p.(i+1-'k)
+      A2: for k be Element of NAT st k in dom r
+       holds r.k = (0_.(L)).(k-'1) * p.(i+1-'k)
                                                          by POLYNOM3:def 11;
-         now let k be Nat;
+         now let k be Element of NAT;
       assume k in dom r;
       hence r.k = (0_.(L)).(k-'1) * p.(i+1-'k) by A2
          .= 0.L * p.(i+1-'k) by FUNCOP_1:13
@@ -144,9 +146,10 @@ canceled;
     len 0_.(L) = 0
    proof
     let L be non empty ZeroStr;
-        for i be Nat st i >= 0 holds (0_.(L)).i = 0.L by FUNCOP_1:13;
+        for i be Element of NAT st i >= 0 holds (0_.(L)).i = 0.L
+         by FUNCOP_1:13;
     then A1: 0 is_at_least_length_of 0_.(L) by ALGSEQ_1:def 3;
-        for i be Nat st i is_at_least_length_of 0_.(L) holds 0 <= i;
+        for i be Element of NAT st i is_at_least_length_of 0_.(L) holds 0 <= i;
     hence thesis by A1,ALGSEQ_1:def 4;
    end;
 
@@ -155,10 +158,10 @@ canceled;
     len 1_.(L) = 1
    proof
     let L be non degenerated (non empty multLoopStr_0);
-     for i be Nat st i >= 1 holds
+     for i be Element of NAT st i >= 1 holds
        (1_.(L)).i = 0.L by POLYNOM3:31;
     then A1: 1 is_at_least_length_of 1_.(L) by ALGSEQ_1:def 3;
-        now let i be Nat;
+        now let i be Element of NAT;
      assume that
       A2: i is_at_least_length_of 1_.(L) and
       A3: 0+1 > i;
@@ -182,7 +185,7 @@ canceled;
     A2: dom p = NAT by NORMSP_1:17;
         now let x be set;
      assume x in dom p;
-     then reconsider i=x as Nat by NORMSP_1:17;
+     then reconsider i=x as Element of NAT by NORMSP_1:17;
          i >= 0;
      hence p.x = 0.L by A1,ALGSEQ_1:def 3;
     end;
@@ -193,12 +196,12 @@ canceled;
   theorem Th9:
    for L be right_zeroed (non empty LoopStr)
    for p,q be Polynomial of L
-   for n be Nat st n >= len p & n >= len q holds
+   for n be Element of NAT st n >= len p & n >= len q holds
     n >= len (p+q)
    proof
     let L be right_zeroed (non empty LoopStr);
     let p,q be Polynomial of L;
-    let n be Nat;
+    let n be Element of NAT;
     assume that
      A1: n >= len p and
      A2: n >= len q;
@@ -276,17 +279,17 @@ canceled;
     let p be Polynomial of L;
     A1: len p is_at_least_length_of -p
     proof
-     let i be Nat;
+     let i be Element of NAT;
      assume A2: i >= len p;
      thus (-p).i = -(p.i) by POLYNOM3:def 7
         .= -0.L by A2,ALGSEQ_1:22
         .= 0.L by RLVECT_1:25;
     end;
-        now let n be Nat;
+        now let n be Element of NAT;
      assume A3: n is_at_least_length_of -p;
          n is_at_least_length_of p
      proof
-      let i be Nat;
+      let i be Element of NAT;
       assume i >= n;
       then (-p).i = 0.L by A3,ALGSEQ_1:def 3;
       then -p.i = 0.L by POLYNOM3:def 7;
@@ -301,13 +304,13 @@ canceled;
        for L be add-associative right_zeroed right_complementable
     (non empty LoopStr)
    for p,q be Polynomial of L
-   for n be Nat st n >= len p & n >= len q holds
+   for n be Element of NAT st n >= len p & n >= len q holds
     n >= len (p-q)
    proof
     let L be add-associative right_zeroed right_complementable
      (non empty LoopStr);
     let p,q be Polynomial of L;
-    let n be Nat;
+    let n be Element of NAT;
     assume that
      A1: n >= len p and
      A2: n >= len q;
@@ -341,18 +344,19 @@ A1: p.(len p -'1) * q.(len q -'1) <> 0.L;
     then A4: len p + len q - 1 >= 1-1 by XREAL_1:11;
     A5: len p + len q -' 1 is_at_least_length_of p*'q
     proof
-     let i be Nat;
+     let i be Element of NAT;
      consider r be FinSequence of the carrier of L such that
       A6: len r = i+1 and
       A7: (p*'q).i = Sum r and
-      A8: for k be Nat st k in dom r holds r.k = p.(k-'1) * q.(i+1-'k)
+      A8: for k be Element of NAT st k in dom r
+       holds r.k = p.(k-'1) * q.(i+1-'k)
                                                          by POLYNOM3:def 11;
      assume i >= len p + len q -' 1;
      then i >= len p + len q - 1 by BINARITH:def 3;
      then i+1 >= len p + len q by XREAL_1:22;
      then len p <= i+1 - len q by XREAL_1:21;
      then A9: -len p >= -(i+1 - len q) by XREAL_1:26;
-         now let k be Nat;
+         now let k be Element of NAT;
       assume A10: k in dom r;
       then A11: r.k = p.(k-'1) * q.(i+1-'k) by A8;
           k in Seg len r by A10,FINSEQ_1:def 3;
@@ -377,14 +381,14 @@ A1: p.(len p -'1) * q.(len q -'1) <> 0.L;
      end;
      hence (p*'q).i = 0.L by A7,POLYNOM3:1;
     end;
-        now let n be Nat;
+        now let n be Element of NAT;
      assume that
       A13: n is_at_least_length_of p*'q and
       A14: len p + len q -' 1 > n;
      consider r be FinSequence of the carrier of L such that
       A15: len r = len p + len q-'2+1 and
       A16: (p*'q).(len p + len q-'2) = Sum r and
-      A17: for k be Nat st k in dom r holds r.k =
+      A17: for k be Element of NAT st k in dom r holds r.k =
                     p.(k-'1) * q.(len p + len q-'2+1-'k) by POLYNOM3:def 11;
      A18: len p + len q -' 1 - 1 = len p + len q - 1 - 1 by A4,BINARITH:def 3;
      A19: len q >= 0+1 by A3,NAT_1:38;
@@ -407,7 +411,7 @@ A1: p.(len p -'1) * q.(len q -'1) <> 0.L;
            Sum((r|((len p)-'1))^<*r/.(len p)*>) + Sum (r/^len p) by RLVECT_1:58
         .= Sum(r|((len p)-'1)) + Sum<*r/.(len p)*> + Sum
  (r/^len p) by RLVECT_1:58;
-         now let i be Nat;
+         now let i be Element of NAT;
       assume A28: i in dom (r|((len p)-'1));
       A29: dom (r|((len p)-'1)) c= dom r by FINSEQ_5:20;
       A30: len p - 1 >= 1-1 by A26,XREAL_1:11;
@@ -436,7 +440,7 @@ A1: p.(len p -'1) * q.(len q -'1) <> 0.L;
                                                            by A15,A23,A24,
 BINARITH:def 3
         .= len q-'1 by A15,A23,A24,BINARITH:def 3;
-         now let i be Nat;
+         now let i be Element of NAT;
       assume A37: i in dom (r/^len p);
       then i in Seg len (r/^len p) by FINSEQ_1:def 3;
       then A38: 1 <= i & i <= len (r/^len p) by FINSEQ_1:3;
@@ -476,7 +480,7 @@ begin  :: Leading Monomials
    let p be Polynomial of L;
    func Leading-Monomial(p) -> sequence of L means :Def1:
     it.(len p-'1) = p.(len p-'1) &
-    for n be Nat st n <> len p-'1 holds it.n = 0.L;
+    for n be Element of NAT st n <> len p-'1 holds it.n = 0.L;
    existence
    proof
     reconsider P=0_.(L)+*(len p-'1,p.(len p-'1)) as sequence of L;
@@ -484,7 +488,7 @@ begin  :: Leading Monomials
         len p-'1 in NAT;
     then len p-'1 in dom 0_.(L) by NORMSP_1:17;
     hence P.(len p-'1) = p.(len p-'1) by FUNCT_7:33;
-    let n be Nat;
+    let n be Element of NAT;
     assume n <> len p-'1;
     hence P.n = (0_.(L)).n by FUNCT_7:34
        .= 0.L by FUNCOP_1:13;
@@ -493,10 +497,10 @@ begin  :: Leading Monomials
    proof
     let P1,P2 be sequence of L such that
      A1: P1.(len p-'1) = p.(len p-'1) and
-     A2: for n be Nat st n <> len p-'1 holds P1.n = 0.L and
+     A2: for n be Element of NAT st n <> len p-'1 holds P1.n = 0.L and
      A3: P2.(len p-'1) = p.(len p-'1) and
-     A4: for n be Nat st n <> len p-'1 holds P2.n = 0.L;
-        now let i be Nat;
+     A4: for n be Element of NAT st n <> len p-'1 holds P2.n = 0.L;
+        now let i be Element of NAT;
      per cases;
       suppose i = len p-'1;
        hence P1.i = P2.i by A1,A3;
@@ -521,7 +525,7 @@ begin  :: Leading Monomials
         len p-'1 in NAT;
     then len p-'1 in dom 0_.(L) by NORMSP_1:17;
     then A1: P.(len p-'1) = p.(len p-'1) by FUNCT_7:33;
-        now let n be Nat;
+        now let n be Element of NAT;
      assume n <> len p-'1;
      hence P.n = (0_.(L)).n by FUNCT_7:34
         .= 0.L by FUNCOP_1:13;
@@ -536,7 +540,7 @@ begin  :: Leading Monomials
    coherence
    proof
     take len p;
-    let i be Nat;
+    let i be Element of NAT;
     A1: Leading-Monomial(p) = 0_.(L)+*(len p-'1,p.(len p-'1)) by Th14;
     assume i >= len p;
     then i+1 > len p by NAT_1:38;
@@ -578,7 +582,8 @@ begin  :: Leading Monomials
     let p be Polynomial of L;
     assume len p = 0;
     then A1: (0_.(L)).(len p-'1) = p.(len p-'1) by Th8;
-        for n be Nat st n <> len p-'1 holds (0_.(L)).n = 0.L by FUNCOP_1:13;
+        for n be Element of NAT st n <> len p-'1 holds (0_.(L)).n = 0.L
+         by FUNCOP_1:13;
     hence thesis by A1,Def1;
    end;
 
@@ -597,7 +602,7 @@ begin  :: Leading Monomials
    proof
     let L be non degenerated (non empty multLoopStr_0);
     A1: (1_.(L)).(len (1_.(L))-'1) = (1_.(L)).(len (1_.(L))-'1);
-        now let n be Nat;
+        now let n be Element of NAT;
      assume n <> len (1_.(L))-'1;
      then n <> 1-'1 by Th7;
      then n <> 0 by BINARITH:51;
@@ -621,7 +626,7 @@ begin  :: Leading Monomials
       then A3: len p-1 >= 0 by XREAL_1:21;
       A4: len p is_at_least_length_of r
       proof
-       let i be Nat;
+       let i be Element of NAT;
        assume i >= len p;
        then i+1 > len p by NAT_1:38;
        then i+1-1 > len p-1 by XREAL_1:11;
@@ -631,7 +636,7 @@ begin  :: Leading Monomials
       end;
           len p-'1 in NAT;
       then A5: len p-'1 in dom 0_.(L) by NORMSP_1:17;
-          now let m be Nat;
+          now let m be Element of NAT;
        assume A6: m is_at_least_length_of r;
        A7: len p = len p-'1+1 by A2,BINARITH:53;
        assume len p > m;
@@ -656,16 +661,17 @@ begin  :: Leading Monomials
    for p be Polynomial of L st len p <> 0
    ex q be Polynomial of L st
     len q < len p & p = q+Leading-Monomial(p) &
-    for n be Nat st n < len p-1 holds q.n = p.n
+    for n be Element of NAT st n < len p-1 holds q.n = p.n
    proof
     let L be add-associative right_zeroed right_complementable
      (non empty LoopStr);
     let p be Polynomial of L;
     assume A1: len p <> 0;
-    deffunc F(Nat) = p.$1;
+    deffunc F(Element of NAT) = p.$1;
     consider q be Polynomial of L such that
      A2: len q <= len p-'1 and
-     A3: for n be Nat st n < len p-'1 holds q.n=F(n) from POLYNOM3:sch 2;
+     A3: for n be Element of NAT st n < len p-'1 holds q.n=F(n)
+      from POLYNOM3:sch 2;
     take q;
         len p > 0 by A1;
     then A4: len p >= 0+1 by NAT_1:38;
@@ -675,7 +681,7 @@ begin  :: Leading Monomials
     then A7: len (q+Leading-Monomial(p)) = max(len q,len Leading-Monomial(p))
                                                                    by A5,Th10
        .= len p by A5,A6,XXREAL_0:def 9;
-        now let k be Nat;
+        now let k be Element of NAT;
      assume k < len p;
      then k+1 <= len p by NAT_1:38;
      then A8: k+1-1 <= len p-1 by XREAL_1:11;
@@ -698,7 +704,7 @@ begin  :: Leading Monomials
     end;
     end;
     hence p = q+Leading-Monomial(p) by A7,ALGSEQ_1:28;
-    let n be Nat;
+    let n be Element of NAT;
     assume n < len p-1;
     then n < len p-'1 by BINARITH:def 3;
     hence q.n = p.n by A3;
@@ -714,17 +720,19 @@ begin  :: Evaluation of Polynomials
     ex F be FinSequence of the carrier of L st
      it = Sum F &
      len F = len p &
-     for n be Nat st n in dom F holds F.n = p.(n-'1) * (power L).(x,n-'1);
+     for n be Element of NAT st n in dom F
+      holds F.n = p.(n-'1) * (power L).(x,n-'1);
    existence
    proof
-    deffunc G(Nat) = p.($1-'1)*(power L).(x,$1-'1);
+    deffunc G(Element of NAT) = p.($1-'1)*(power L).(x,$1-'1);
     consider F be FinSequence of the carrier of L such that
      A1: len F = len p and
-     A2: for n be Nat st n in Seg len p holds F.n = G(n) from FINSEQ_2:sch 1;
+     A2: for n be Element of NAT st n in Seg len p holds F.n = G(n)
+      from FINSEQ_2:sch 1;
     take y = Sum F;
     take F;
     thus y = Sum F & len F = len p by A1;
-    let n be Nat;
+    let n be Element of NAT;
     assume n in dom F;
     then n in Seg len p by A1,FINSEQ_1:def 3;
     hence F.n = p.(n-'1) * (power L).(x,n-'1) by A2;
@@ -735,12 +743,14 @@ begin  :: Evaluation of Polynomials
     given F1 be FinSequence of the carrier of L such that
      A3: y1 = Sum F1 and
      A4: len F1 = len p and
-     A5: for n be Nat st n in dom F1 holds F1.n = p.(n-'1)*(power L).(x,n-'1);
+     A5: for n be Element of NAT st n in dom F1
+      holds F1.n = p.(n-'1)*(power L).(x,n-'1);
     given F2 be FinSequence of the carrier of L such that
      A6: y2 = Sum F2 and
      A7: len F2 = len p and
-     A8: for n be Nat st n in dom F2 holds F2.n = p.(n-'1)*(power L).(x,n-'1);
-        now let n be Nat;
+     A8: for n be Element of NAT st n in dom F2
+      holds F2.n = p.(n-'1)*(power L).(x,n-'1);
+        now let n be Element of NAT;
      assume n in Seg len p;
      then A9: n in dom F1 & n in dom F2 by A4,A7,FINSEQ_1:def 3;
      hence F1.n = p.(n-'1)*(power L).(x,n-'1) by A5
@@ -760,7 +770,7 @@ begin  :: Evaluation of Polynomials
     consider F be FinSequence of the carrier of L such that
      A1: eval(0_.(L),x) = Sum F and
      A2: len F = len 0_.(L) and
-         for n be Nat st n in dom F holds
+         for n be Element of NAT st n in dom F holds
                        F.n = (0_.(L)).(n-'1) * (power L).(x,n-'1) by Def2;
         len F = 0 by A2,Th6;
     then F = <*>the carrier of L by FINSEQ_1:32;
@@ -779,7 +789,7 @@ begin  :: Evaluation of Polynomials
     consider F be FinSequence of the carrier of L such that
      A1: eval(1_.(L),x) = Sum F and
      A2: len F = len 1_.(L) and
-     A3: for n be Nat st n in dom F holds
+     A3: for n be Element of NAT st n in dom F holds
                        F.n = (1_.(L)).(n-'1) * (power L).(x,n-'1) by Def2;
     A4: len F = 1 by A2,Th7;
     then 1 in Seg len F by FINSEQ_1:3;
@@ -822,19 +832,19 @@ begin  :: Evaluation of Polynomials
     consider F1 be FinSequence of the carrier of L such that
      A1: eval(p,x) = Sum F1 and
      A2: len F1 = len p and
-     A3: for n be Nat st n in dom F1 holds
+     A3: for n be Element of NAT st n in dom F1 holds
                              F1.n = p.(n-'1) * (power L).(x,n-'1) by Def2;
     consider F2 be FinSequence of the carrier of L such that
      A4: eval(q,x) = Sum F2 and
      A5: len F2 = len q and
-     A6: for n be Nat st n in dom F2 holds
+     A6: for n be Element of NAT st n in dom F2 holds
                              F2.n = q.(n-'1) * (power L).(x,n-'1) by Def2;
     consider F3 be FinSequence of the carrier of L such that
      A7: eval(p+q,x) = Sum F3 and
      A8: len F3 = len (p+q) and
-     A9: for n be Nat st n in dom F3 holds
+     A9: for n be Element of NAT st n in dom F3 holds
                          F3.n = (p+q).(n-'1) * (power L).(x,n-'1) by Def2;
-    reconsider k = max(len p,len q) as Nat by FINSEQ_2:1;
+    reconsider k = max(len p,len q) as Element of NAT by FINSEQ_2:1;
     A10: k >= len p & k >= len q by XXREAL_0:25;
     then k >= len (p+q) by Th9;
     then A11: k - len p >= 0 & k - len q >= 0 & k - len (p+q) >= 0
@@ -867,7 +877,7 @@ begin  :: Evaluation of Polynomials
     A16: Sum G3 = Sum F3 + Sum ((k-'(len F3)) |-> 0.L) by RLVECT_1:58
        .= Sum F3 + 0.L by MATRIX_3:13
        .= Sum F3 by RLVECT_1:def 7;
-        now let n be Nat;
+        now let n be Element of NAT;
      assume A17: n in Seg k;
      then A18: 0+1 <= n & n <= k by FINSEQ_1:3;
      per cases by REAL_1:def 5;
@@ -1056,16 +1066,18 @@ begin  :: Evaluation of Polynomials
     consider F1 be FinSequence of the carrier of L such that
      A1: eval(p,x) = Sum F1 and
      A2: len F1 = len p and
-     A3: for n be Nat st n in dom F1 holds F1.n = p.(n-'1) * (power L).(x,n-'1)
+     A3: for n be Element of NAT st n in dom F1
+      holds F1.n = p.(n-'1) * (power L).(x,n-'1)
                                                                   by Def2;
     consider F2 be FinSequence of the carrier of L such that
      A4: eval(-p,x) = Sum F2 and
      A5: len F2 = len (-p) and
-     A6: for n be Nat st n in dom F2 holds F2.n=(-p).(n-'1)*(power L).(x,n-'1)
+     A6: for n be Element of NAT st n in dom F2
+      holds F2.n=(-p).(n-'1)*(power L).(x,n-'1)
                                                                   by Def2;
     A7: len F2 = len F1 by A2,A5,Th11;
     then A8: dom F2 = dom F1 by FINSEQ_3:31;
-        now let n be Nat;
+        now let n be Element of NAT;
         let v be Element of L;
      assume that
       A9: n in dom F2 and
@@ -1111,7 +1123,8 @@ unital
     consider F be FinSequence of the carrier of L such that
      A1: eval(LMp,x) = Sum F and
      A2: len F = len LMp and
-     A3: for n be Nat st n in dom F holds F.n = LMp.(n-'1)*(power L).(x,n-'1)
+     A3: for n be Element of NAT st n in dom F
+      holds F.n = LMp.(n-'1)*(power L).(x,n-'1)
                                                                   by Def2;
     A4: len F = len p by A2,Th18;
     per cases;
@@ -1120,7 +1133,7 @@ unital
       then len p in Seg len F by A4,FINSEQ_1:3;
       then A6: len p in dom F by FINSEQ_1:def 3;
       A7: len p-1 >=0 by A5,XREAL_1:21;
-          now let i be Nat;
+          now let i be Element of NAT;
        assume that
         A8: i in dom F and
         A9: i <> len p;
@@ -1165,7 +1178,7 @@ unital
     consider F be FinSequence of the carrier of L such that
      A2: eval(LMp*'LMq,x) = Sum F and
      A3: len F = len (LMp*'LMq) and
-     A4: for n be Nat st n in dom F holds
+     A4: for n be Element of NAT st n in dom F holds
       F.n = (LMp*'LMq).(n-'1) * (power L).(x,n-'1) by Def2;
     A5: len p >= 0+1 & len q >= 0+1 by A1,NAT_1:38;
     then A6: len p-1 >= 0 & len q-1 >= 0 by XREAL_1:21;
@@ -1173,12 +1186,13 @@ unital
     A8: len p + len q >= 0+(1+1) by A5,XREAL_1:9;
     then A9: len p + len q - 1 >= 1 by XREAL_1:21;
     then len p + len q - 1 >= 0;
-    then reconsider i1=len p + len q - 1 as Nat by INT_1:16;
+    then reconsider i1=len p + len q - 1 as Element of NAT by INT_1:16;
     A10: i1-'1+1 = i1 by A9,BINARITH:53;
     consider r be FinSequence of the carrier of L such that
      A11: len r = i1-'1+1 and
      A12: (LMp*'LMq).(i1-'1) = Sum r and
-     A13: for k be Nat st k in dom r holds r.k = LMp.(k-'1)*LMq.(i1-'1+1-'k)
+     A13: for k be Element of NAT st k in dom r
+      holds r.k = LMp.(k-'1)*LMq.(i1-'1+1-'k)
                                                           by POLYNOM3:def 11;
         len p+(len q-1)-len p >= 0 by A5,XREAL_1:21;
     then A14: i1-'len p = len p+(len q-1)-len p by BINARITH:def 3
@@ -1191,7 +1205,7 @@ unital
     then len p in Seg len r by A5,A10,A11,FINSEQ_1:3;
     then A17: len p in dom r by FINSEQ_1:def 3;
     then A18: r.(len p) = LMp.(len p-'1) * LMq.(len q-'1) by A10,A13,A14;
-        now let i be Nat;
+        now let i be Element of NAT;
      assume that
       A19: i in dom r and
       A20: i <> len p;
@@ -1209,19 +1223,20 @@ unital
        .= LMp.(len p-'1) * LMq.(len q-'1) by A17,A18,FINSEQ_4:def 4
        .= p.(len p-'1) * LMq.(len q-'1) by Def1
        .= p.(len p-'1) * q.(len q-'1) by Def1;
-    A23: now let i be Nat;
+    A23: now let i be Element of NAT;
      assume that
       A24: i in dom F and
       A25: i <> i1;
      consider r1 be FinSequence of the carrier of L such that
       A26: len r1 = i-'1+1 and
       A27: (LMp*'LMq).(i-'1) = Sum r1 and
-      A28: for k be Nat st k in dom r1 holds r1.k=LMp.(k-'1)*LMq.(i-'1+1-'k)
+      A28: for k be Element of NAT st k in dom r1
+       holds r1.k=LMp.(k-'1)*LMq.(i-'1+1-'k)
                                                          by POLYNOM3:def 11;
          i in Seg len F by A24,FINSEQ_1:def 3;
      then i >= 1 by FINSEQ_1:3;
      then A29: i-'1+1 = i by BINARITH:53;
-     A30: now let j be Nat;
+     A30: now let j be Element of NAT;
       assume A31: j in dom r1;
       then j in Seg len r1 by FINSEQ_1:def 3;
       then j >= 0+1 by FINSEQ_1:3;
@@ -1263,19 +1278,20 @@ unital
                                                          by A4,A12,A16,A22,A37;
      end;
      suppose A38: (LMp*'LMq).(i1-'1) = 0.L;
-          now let j be Nat;
+          now let j be Element of NAT;
        assume j >= 0;
        consider r1 be FinSequence of the carrier of L such that
         A39: len r1 = j+1 and
         A40: (LMp*'LMq).j = Sum r1 and
-        A41: for k be Nat st k in dom r1 holds r1.k = LMp.(k-'1)*LMq.(j+1-'k)
+        A41: for k be Element of NAT st k in dom r1
+         holds r1.k = LMp.(k-'1)*LMq.(j+1-'k)
                                                          by POLYNOM3:def 11;
            now per cases;
         suppose j = i1-'1;
          hence (LMp*'LMq).j = 0.L by A38;
         end;
         suppose A42: j <> i1-'1;
-             now let k be Nat;
+             now let k be Element of NAT;
           assume A43: k in dom r1;
           per cases;
            suppose A44: k-'1 <> len p-'1;
@@ -1305,7 +1321,7 @@ unital
        hence (LMp*'LMq).j = 0.L;
       end;
       then A50: 0 is_at_least_length_of (LMp*'LMq) by ALGSEQ_1:def 3;
-          for m be Nat st m is_at_least_length_of (LMp*'
+          for m be Element of NAT st m is_at_least_length_of (LMp*'
 LMq) holds 0<=m;
       then len (LMp*'LMq) = 0 by A50,ALGSEQ_1:def 4;
       then LMp*'LMq = 0_.(L) by Th8;
@@ -1389,12 +1405,13 @@ VECTSP_1:39;
     let p1,q be Polynomial of L;
     let x be Element of L;
     set p=Leading-Monomial(p1);
-    defpred P[Nat] means for q be Polynomial of L holds
+    defpred P[Element of NAT] means for q be Polynomial of L holds
      len q = $1 implies eval(p*'q,x) = eval(p,x)*eval(q,x);
-    A1: for k be Nat st for n be Nat st n < k holds P[n] holds P[k]
+    A1: for k be Element of NAT st for n be Element of NAT st n < k
+     holds P[n] holds P[k]
     proof
-     let k be Nat;
-     assume A2: for n be Nat st n < k holds
+     let k be Element of NAT;
+     assume A2: for n be Element of NAT st n < k holds
       for q be Polynomial of L holds
        len q = n implies eval(p*'q,x) = eval(p,x) * eval(q,x);
      let q be Polynomial of L;
@@ -1404,7 +1421,7 @@ VECTSP_1:39;
        then consider r be Polynomial of L such that
         A4: len r < len q and
         A5: q = r+Leading-Monomial(q) and
-            for n be Nat st n < len q-1 holds r.n = q.n by Th19;
+            for n be Element of NAT st n < len q-1 holds r.n = q.n by Th19;
        set LMq = Leading-Monomial(q);
        thus eval(p*'q,x) = eval(p*'r+p*'LMq,x) by A5,POLYNOM3:32
           .= eval(p*'r,x) + eval(p*'LMq,x) by Th22
@@ -1422,7 +1439,7 @@ VECTSP_1:39;
     end;
     end;
     A7: len q = len q;
-      for n be Nat holds P[n] from NAT_1:sch 4(A1);
+      for n be Element of NAT holds P[n] from NAT_1:sch 4(A1);
     hence thesis by A7;
    end;
 
@@ -1439,12 +1456,13 @@ VECTSP_1:39;
      (non empty doubleLoopStr);
     let p,q be Polynomial of L;
     let x be Element of L;
-    defpred P[Nat] means for p be Polynomial of L holds
+    defpred P[Element of NAT] means for p be Polynomial of L holds
      len p = $1 implies eval(p*'q,x) = eval(p,x)*eval(q,x);
-    A1: for k be Nat st for n be Nat st n < k holds P[n] holds P[k]
+    A1: for k be Element of NAT st for n be Element of NAT st n < k holds P[n]
+     holds P[k]
     proof
-     let k be Nat;
-     assume A2: for n be Nat st n < k holds
+     let k be Element of NAT;
+     assume A2: for n be Element of NAT st n < k holds
       for p be Polynomial of L holds
        len p = n implies eval(p*'q,x) = eval(p,x) * eval(q,x);
      let p be Polynomial of L;
@@ -1454,7 +1472,7 @@ VECTSP_1:39;
        then consider r be Polynomial of L such that
         A4: len r < len p and
         A5: p = r+Leading-Monomial(p) and
-            for n be Nat st n < len p-1 holds r.n = p.n by Th19;
+            for n be Element of NAT st n < len p-1 holds r.n = p.n by Th19;
        set LMp = Leading-Monomial(p);
        thus eval(p*'q,x) = eval(r*'q+LMp*'q,x) by A5,POLYNOM3:33
           .= eval(r*'q,x) + eval(LMp*'q,x) by Th22
@@ -1472,7 +1490,7 @@ VECTSP_1:39;
     end;
     end;
     A7: len p = len p;
-      for n be Nat holds P[n] from NAT_1:sch 4(A1);
+      for n be Element of NAT holds P[n] from NAT_1:sch 4(A1);
     hence thesis by A7;
    end;
 

@@ -9,17 +9,17 @@ environ
  vocabularies ROUGHS_1, ARYTM_3, RCOMP_1, SQUARE_1, ARYTM_1, FUNCT_1, BOOLE,
       TARSKI, RELAT_1, RELAT_2, SUBSET_1, ORDERS_1, PARTFUN1, EQREL_1, CARD_1,
       FINSET_1, TOLER_1, NATTRA_1, REALSET1, FUNCT_3, PROB_2, FINSEQ_1, PROB_1,
-      RLVECT_1, FINSEQ_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, CARD_1, XXREAL_0,
-      REAL_1, NAT_1, SQUARE_1, FINSET_1, FUNCOP_1, RELAT_1, RELAT_2, FUNCT_1,
-      FINSEQ_1, RVSUM_1, FINSEQ_2, RELSET_1, PARTFUN1, CARD_3, PROB_2, FUNCT_2,
-      FUNCT_3, REALSET1, DOMAIN_1, STRUCT_0, REALSET2, PRE_TOPC, GROUP_1,
-      ORDERS_2, EQREL_1, RCOMP_1, TOLER_1, ORDERS_3;
+      RLVECT_1, FINSEQ_2, ARYTM;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, CARD_1,
+      XXREAL_0, XREAL_0, REAL_1, NAT_1, SQUARE_1, FINSET_1, FUNCOP_1, RELAT_1,
+      RELAT_2, FUNCT_1, FINSEQ_1, RVSUM_1, FINSEQ_2, RELSET_1, PARTFUN1,
+      CARD_3, PROB_2, FUNCT_2, FUNCT_3, REALSET1, DOMAIN_1, STRUCT_0, REALSET2,
+      PRE_TOPC, GROUP_1, ORDERS_2, EQREL_1, RCOMP_1, TOLER_1, ORDERS_3;
  constructors DOMAIN_1, REAL_1, SQUARE_1, NAT_1, BINOP_2, MEMBERED, EQREL_1,
       PROB_2, RCOMP_1, RVSUM_1, FUNCT_6, PRE_TOPC, REALSET2, ORDERS_3;
  registrations RELSET_1, STRUCT_0, SUBSET_1, MEMBERED, PARTFUN1, XREAL_0,
       FINSET_1, ARYTM_3, FSM_1, ORDERS_2, EQREL_1, FINSEQ_1, FUNCOP_1,
-      REALSET1, XXREAL_0;
+      REALSET1, XXREAL_0, NAT_1;
  requirements BOOLE, SUBSET, ARITHM, NUMERALS, REAL;
 
 
@@ -93,7 +93,7 @@ end;
 
 definition let A be set;
            let X be FinSequence of bool A;
-           let n be Nat;
+           let n be Element of NAT;
   redefine func X.n -> Subset of A;
 end;
 
@@ -148,7 +148,7 @@ registration let A be Approximation_Space;
   cluster the InternalRel of A -> transitive;
 end;
 
-definition let A be Tolerance_Space;
+definition let A be non empty RelStr;
            let X be Subset of A;
   func LAp X -> Subset of A equals
 :: ROUGHS_1:def 4
@@ -158,22 +158,22 @@ definition let A be Tolerance_Space;
     { x where x is Element of A : Class (the InternalRel of A, x) meets X };
 end;
 
-definition let A be Tolerance_Space;
+definition let A be non empty RelStr;
            let X be Subset of A;
   func BndAp X -> Subset of A equals
 :: ROUGHS_1:def 6
     UAp X \ LAp X;
 end;
 
-definition let A be Tolerance_Space;
+definition let A be non empty RelStr;
            let X be Subset of A;
   attr X is rough means
 :: ROUGHS_1:def 7
     BndAp X <> {};
   end;
 
-notation let A be Tolerance_Space;
-           let X be Subset of A;
+notation let A be non empty RelStr;
+         let X be Subset of A;
   antonym X is exact for X is rough;
 end;
 
@@ -296,7 +296,7 @@ end;
 definition let A be Approximation_Space; let X be Subset of A;
   mode RoughSet of X means
 :: ROUGHS_1:def 8
-     it = [LAp X, UAp X];
+    it = [LAp X, UAp X];
 end;
 
 begin :: Membership Function
@@ -387,7 +387,8 @@ definition let A be finite Tolerance_Space;
   func FinSeqM (x,X) -> FinSequence of REAL means
 :: ROUGHS_1:def 10
     dom it = dom X &
-     for n being Nat st n in dom X holds it.n = MemberFunc (X.n, A).x;
+     for n being Element of NAT st n in dom X
+      holds it.n = MemberFunc (X.n, A).x;
 end;
 
 theorem :: ROUGHS_1:53

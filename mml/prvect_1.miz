@@ -9,7 +9,8 @@ environ
  vocabularies RLVECT_1, VECTSP_1, BINOP_1, FUNCT_1, FINSEQOP, ARYTM_1,
       FINSEQ_2, RELAT_1, CARD_3, CAT_1, SETWISEO, FUNCOP_1, PARTFUN1, FINSEQ_1,
       BOOLE, ZF_REFLE, FRAENKEL, FUNCT_3, FUNCT_6, GROUP_2, PRVECT_1, GROUP_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, CARD_3, RELAT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, CARD_3,
+      RELAT_1,
       FUNCT_1, STRUCT_0, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1, FUNCOP_1,
       RLVECT_1, GROUP_1, VECTSP_1, FINSEQOP, FINSEQ_1, FRAENKEL, FUNCT_6,
       SETWISEO, FINSEQ_2;
@@ -22,7 +23,7 @@ environ
  theorems BINOP_1, FUNCT_1, FUNCT_2, FUNCT_3, FINSEQ_1, FINSEQ_2, FINSEQ_3,
       FINSEQOP, FUNCOP_1, VECTSP_1, ZFMISC_1, SETWISEO, TARSKI, CARD_3,
       FUNCT_6, RLVECT_1, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, FVSUM_1,
-      GROUP_1;
+      GROUP_1, ORDINAL1;
  schemes FUNCT_1, BINOP_1, FUNCT_2, FINSEQ_1;
 
 begin :: Abelian Groups and Fields
@@ -245,7 +246,11 @@ definition let D,n;
   let F be BinOp of D;
   let x,y be Element of n-tuples_on D;
   redefine func F.:(x,y) -> Element of n-tuples_on D;
-   coherence by FINSEQ_2:140;
+   coherence
+   proof
+     n in NAT by ORDINAL1:def 13;
+     hence thesis by FINSEQ_2:140;
+end;
  end;
 
 definition let D be non empty set;
@@ -307,7 +312,8 @@ A1:   for x being Element of (n-tuples_on D) qua non empty set
       proof
        let x be Element of (n-tuples_on D) qua non empty set;
        reconsider x'=x as Element of n-tuples_on D;
-       reconsider y=F*x' as Element of (n-tuples_on D) qua non empty set
+       n in NAT by ORDINAL1:def 13;
+       then reconsider y=F*x' as Element of (n-tuples_on D) qua non empty set
          by FINSEQ_2:133;
        take y, x'; thus thesis;
       end;
@@ -342,7 +348,11 @@ end;
 definition let D be non empty set;
  let n; let x be Element of D;
  redefine func n .--> x -> Element of n-tuples_on D;
-  correctness by FINSEQ_2:132;
+  correctness
+  proof
+    n in NAT by ORDINAL1:def 13;
+    hence thesis by FINSEQ_2:132;
+  end;
  end;
 
 canceled 2;
@@ -350,10 +360,11 @@ canceled 2;
 theorem Th14:
   B is commutative implies product(B,n) is commutative
   proof
+X0: n in NAT by ORDINAL1:def 13;
    assume A1: B is commutative;
       now let x,y be Element of n-tuples_on D;
     thus product(B,n).(x,y) = B.:(x,y) by Def1
-                           .= B.:(y,x) by A1,FINSEQOP:34
+                           .= B.:(y,x) by X0,A1,FINSEQOP:34
                            .= product(B,n).(y,x) by Def1;
    end;
    hence thesis by BINOP_1:def 2;
@@ -362,12 +373,13 @@ theorem Th14:
 theorem Th15:
   B is associative implies product(B,n) is associative
   proof
+X0: n in NAT by ORDINAL1:def 13;
    assume A1: B is associative;
       now let x,y,z be Element of n-tuples_on D;
     thus product(B,n).(product(B,n).(x,y),z) = product(B,n).(B.:(x,y),z)
                                                  by Def1
                      .= B.:(B.:(x,y),z) by Def1
-                     .= B.:(x,B.:(y,z)) by A1,FINSEQOP:29
+                     .= B.:(x,B.:(y,z)) by X0,A1,FINSEQOP:29
                      .= product(B,n).(x,B.:(y,z)) by Def1
                      .= product(B,n).(x,product(B,n).(y,z)) by Def1;
    end;
@@ -377,15 +389,16 @@ theorem Th15:
 theorem Th16:
   d is_a_unity_wrt B implies n .--> d is_a_unity_wrt product(B,n)
   proof
+X0: n in NAT by ORDINAL1:def 13;
    assume d is_a_unity_wrt B;
    then A1: B has_a_unity & d = the_unity_wrt B by BINOP_1:def 8,SETWISEO:def 2
 ;
       now let b be Element of (n-tuples_on D) qua non empty set;
     reconsider b' = b as Element of n-tuples_on D;
     thus product(B,n).(n .--> d,b) = B.:(n .--> d,b') by Def1
-                     .= b by A1,FINSEQOP:57;
+                     .= b by X0,A1,FINSEQOP:57;
     thus product(B,n).(b,n .--> d) = B.:(b',n .--> d) by Def1
-                     .= b by A1,FINSEQOP:57;
+                     .= b by A1,X0,FINSEQOP:57;
    end;
    hence thesis by BINOP_1:11;
   end;
@@ -393,7 +406,9 @@ theorem Th16:
 theorem Th17:
   B has_a_unity & B is associative & C is_an_inverseOp_wrt B implies
    product(C,n) is_an_inverseOp_wrt product(B,n)
-   proof assume
+   proof
+X0: n in NAT by ORDINAL1:def 13;
+     assume
    A1: B has_a_unity & B is associative & C is_an_inverseOp_wrt B;
    then A2: B has_an_inverseOp by FINSEQOP:def 2;
    then A3: C = the_inverseOp_wrt B by A1,FINSEQOP:def 3;
@@ -403,13 +418,13 @@ theorem Th17:
    then A4: n |->the_unity_wrt B = the_unity_wrt product(B,n) by BINOP_1:def 8;
        now let f be Element of (n-tuples_on D) qua non empty set;
     reconsider f' = f as Element of n-tuples_on D;
-    reconsider cf = C*f' as Element of n-tuples_on D by FINSEQ_2:133;
+    reconsider cf = C*f' as Element of n-tuples_on D by X0,FINSEQ_2:133;
     thus product(B,n).(f,product(C,n).f) = product(B,n).(f',C*f') by Def2
          .= B.:(f',cf) by Def1
-         .= n |->the_unity_wrt B by A1,A2,A3,FINSEQOP:77;
+         .= n |->the_unity_wrt B by X0,A1,A2,A3,FINSEQOP:77;
     thus product(B,n).(product(C,n).f,f) = product(B,n).(C*f',f') by Def2
          .= B.:(cf,f') by Def1
-         .= n |->the_unity_wrt B by A1,A2,A3,FINSEQOP:77;
+         .= n |->the_unity_wrt B by X0,A1,A2,A3,FINSEQOP:77;
     end;
     hence thesis by A4,FINSEQOP:def 1;
    end;
@@ -484,7 +499,8 @@ A2:      x1 in the carrier of F &
      reconsider x1 as Element of F by A2;
      reconsider v as Element of n-tuples_on the carrier of F by A2;
      take y = (the mult of F)[;](x1,v);
-        y is Element of n-tuples_on the carrier of F by FINSEQ_2:141;
+     n in NAT by ORDINAL1:def 13;
+     then y is Element of n-tuples_on the carrier of F by FINSEQ_2:141;
      hence y in n-tuples_on the carrier of F;
      take x1,v; thus thesis by A2;
      end;
@@ -769,7 +785,11 @@ definition let D be non empty set,
              x be Element of D,
              v be Element of n-tuples_on D;
   redefine func F[;](x,v) -> Element of n-tuples_on D;
-   coherence by FINSEQ_2:141;
+   coherence
+   proof
+     n in NAT by ORDINAL1:def 13;
+     hence thesis by FINSEQ_2:141;
+   end;
  end;
 
 registration let F,n;
@@ -814,13 +834,14 @@ A7:       n-Group_over F=LoopStr(# n-tuples_on the carrier of F,
                 (x,w))
           .= (the add of n-Group_over F).(x*v,x*w)
           .= x*v + x*w by A6,RLVECT_1:5;
+X0: n in NAT by ORDINAL1:def 13;
 thus (x+y)*v = (the lmult of n-VectSp_over F).(x+y,v)
           .= (n-Mult_over F).(x+y,v') by Def5
           .= (the mult of F)[;](x+y,v') by Def4
           .= (the mult of F)[;]((the add of F).(x,y),v') by RLVECT_1:5
           .= (the add of F).:
 ((the mult of F)[;](x,v'),(the mult of F)[;](y,v'))
-                by A5,FINSEQOP:47
+                by X0,A5,FINSEQOP:47
           .= product(the add of F,n).((the mult of F)[;](x,v'),
                 (the mult of F)[;](y,v')) by Def1
           .= product(the add of F,n).((n-Mult_over F).(x,v'),
@@ -839,7 +860,8 @@ thus (x+y)*v = (the lmult of n-VectSp_over F).(x+y,v)
           .= (n-Mult_over F).(x*y,v') by Def5
           .= (the mult of F)[;](x*y,v') by Def4
           .= (the mult of F)[;]((the mult of F).(x,y),v') by GROUP_1:def 1
-          .= (the mult of F)[;](x,(the mult of F)[;](y,v')) by A4,FINSEQOP:32
+          .= (the mult of F)[;](x,(the mult of F)[;](y,v'))
+          by X0,A4,FINSEQOP:32
           .= (n-Mult_over F).(x,(the mult of F)[;](y,v')) by Def4
           .= (n-Mult_over F).(x,(n-Mult_over F).(y,v')) by Def4
           .= (n-Mult_over F).(x,(the lmult of n-VectSp_over F).(y,v)) by Def5
@@ -850,7 +872,7 @@ thus (x+y)*v = (the lmult of n-VectSp_over F).(x+y,v)
   thus (1.F)*v = (the lmult of n-VectSp_over F).(1.F,v)
           .= (n-Mult_over F).(1.F,v') by Def5
           .= (the mult of F)[;](1.F,v') by Def4
-          .= v by A2,A3,FINSEQOP:58;
+          .= v by X0,A2,A3,FINSEQOP:58;
    thus thesis;
    end;
    hence thesis;
@@ -896,7 +918,8 @@ scheme NEFinSeqLambda {w()-> non empty FinSequence, F(set)->set}:
   for i being Element of dom w() holds p.i = F(i)
 proof
    consider p being FinSequence such that
-A1:    len p = len w() & for i st i in Seg len w() holds p.i = F(i)
+A1:    len p = len w() &
+       for i being Element of NAT st i in Seg len w() holds p.i = F(i)
                from FINSEQ_1:sch 2;
      consider x being Element of dom w();
          dom p = dom w() by A1,FINSEQ_3:31;
@@ -1307,15 +1330,17 @@ definition let g be Group-Sequence;
    proof
         defpred P[set,set] means ex j' being Element of dom g st j' = $1 &
          $2 = the carrier of g.j';
-A1:     for j be Nat,y1,y2 st j in Seg len g & P[j,y1] & P[j,y2] holds y1=y2;
-A2:     for j being Nat st j in Seg len g ex x st P[j,x]
-        proof let j be Nat;
+A1:     for j be Element of NAT,y1,y2 st j in Seg len g & P[j,y1] & P[j,y2]
+        holds y1=y2;
+A2:     for j being Element of NAT st j in Seg len g ex x st P[j,x]
+        proof let j be Element of NAT;
           assume j in Seg len g;
           then reconsider j' = j as Element of dom g by FINSEQ_1:def 3;
           take the carrier of g.j'; thus thesis;
         end;
      consider p being FinSequence such that
-A3:   dom p = Seg (len g) & for j being Nat st j in Seg len g holds P[j,p.j]
+A3:   dom p = Seg (len g) &
+      for j being Element of NAT st j in Seg len g holds P[j,p.j]
        from FINSEQ_1:sch 1(A1,A2);
 A4:   dom g = Seg len g by FINSEQ_1:def 3;
 A5:    p is non empty
@@ -1329,7 +1354,7 @@ A5:    p is non empty
        assume {} in rng p;
        then consider x such that
 A6:         x in dom p & {} = p.x by FUNCT_1:def 5;
-       reconsider x as Nat by A6;
+       reconsider x as Element of NAT by A6;
        consider x' being Element of dom g such that
 A7:       x' = x & p.x = the carrier of g.x' by A3,A6;
        thus contradiction by A6,A7;
@@ -1338,7 +1363,7 @@ A7:       x' = x & p.x = the carrier of g.x' by A3,A6;
    take p';
    thus len p' = len g by A3,FINSEQ_1:def 3;
    let j be Element of dom g;
-   reconsider k = j as Nat;
+   reconsider k = j as Element of NAT;
       ex j' being Element of dom g st j' = k & p'.k = the carrier of g.j'
                                                                by A3,A4;
    hence thesis;
@@ -1350,7 +1375,7 @@ A8:   len f = len g & for j be Element of dom g holds f.j = the carrier of g.j
 A9:   len h = len g & for j be Element of dom g holds h.j = the carrier of g.j;
     reconsider f' = f ,h' = h as FinSequence;
 A10:       dom f' = Seg len f' & dom h' = Seg len h' by FINSEQ_1:def 3;
-         now let j be Nat;
+         now let j be Element of NAT;
         assume j in dom f';
         then reconsider j' = j as Element of dom g by A8,FINSEQ_3:31;
              f'.j = the carrier of g.j' by A8;
@@ -1398,7 +1423,7 @@ A1:      len p = len carr g & for i holds p.i = F(i) from NEFinSeqLambda;
             and A3: (len h = len carr g & for i holds h.i = the add of g.i);
      reconsider f' = f,h' = h as FinSequence;
 A4:      dom f' = Seg len f' & dom h' = Seg len h' by FINSEQ_1:def 3;
-         now let i be Nat;
+         now let i be Element of NAT;
        assume i in dom f';
       then reconsider i' = i as Element of dom carr g by A2,FINSEQ_3:31;
            f'.i = the add of g.i' by A2;
@@ -1430,7 +1455,7 @@ A5:     len p = len carr g & for i holds p.i = F(i) from NEFinSeqLambda;
             and A7: len h = len carr g & for i holds h.i = comp g.i;
      reconsider f' = f,h' = h as FinSequence;
 A8:      dom f' = Seg len f' & dom h' = Seg len h' by FINSEQ_1:def 3;
-           now let i be Nat;
+           now let i be Element of NAT;
          assume i in dom f';
          then reconsider i' = i as Element of dom carr g by A6,FINSEQ_3:31;
               f.i = comp g.i' by A6;
@@ -1450,8 +1475,7 @@ A10:dom g = Seg len g & dom (carr g) = Seg len (carr g) & len g = len carr g &
         now let i be set; assume i in dom (carr g);
       then reconsider x = i as Element of dom carr g;
       reconsider x' = x as Element of dom g by A10;
-          p.x = the Zero of g.x & (carr g).x' = the carrier of g.x' by A9,Def12
-;
+      p.x = the Zero of g.x & (carr g).x' = the carrier of g.x' by A9,Def12;
       hence p.i in (carr g).i;
      end;
     then reconsider t = p as Element of product (carr g) by A9,A10,CARD_3:18;

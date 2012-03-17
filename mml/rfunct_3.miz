@@ -31,15 +31,15 @@ environ
 
 begin
 
-reserve n,m for Nat,
+reserve n,m for Element of NAT,
         r,s for Real,
         x,y for set;
 ::
 ::  Nonnegative and Nonpositive Part of a Real Number
 ::
 
-definition let n,m be Nat;
-redefine func min(n,m)->Nat;
+definition let n,m be Element of NAT;
+redefine func min(n,m)->Element of NAT;
  coherence by FINSEQ_2:1;
 end;
 
@@ -666,7 +666,7 @@ theorem
    for D be non empty set, f,g be FinSequence of PFuncs(D,REAL)
   st f,g are_fiberwise_equipotent holds Sum f = Sum g
  proof let D be non empty set;
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
    for f,g be FinSequence of PFuncs(D,REAL)
     st f,g are_fiberwise_equipotent & len f = $1 holds Sum f = Sum g;
   A1: P[0]
@@ -690,7 +690,7 @@ theorem
     A8: g = (g|m) ^ (g/^m) by RFINSEQ:21;
     A9: 1<=m & m<=len g by A7,FINSEQ_3:27;
     then max(0,m-1)=m-1 by FINSEQ_2:4;
-    then reconsider m1=m-1 as Nat by FINSEQ_2:5;
+    then reconsider m1=m-1 as Element of NAT by FINSEQ_2:5;
     set gg = g/^m,
         gm = g|m;
     A10: len gm = m by A9,FINSEQ_1:80;
@@ -740,7 +740,7 @@ func CHI(f,D) -> FinSequence of PFuncs(D,REAL) means :Def6:
 len it = len f & for n st n in dom it holds it.n = chi(f.n,D);
  existence
   proof
-  deffunc F(Nat)= chi(f.$1,D);
+  deffunc F(Element of NAT)= chi(f.$1,D);
    consider p be FinSequence such that
    A1: len p = len f and
    A2: for n st n in Seg len f holds p.n = F(n) from FINSEQ_1:sch 2;
@@ -783,7 +783,7 @@ for n st n in dom it
  existence
   proof
    set m = min(len R,len f);
-   defpred P[Nat,set] means
+   defpred P[Element of NAT,set] means
     for F be PartFunc of D,REAL, r st r=R.$1 & F = f.$1 holds $2 = r(#)F;
    A1: m<=len R & m<=len f by SQUARE_1:35;
    A2: for n st n in Seg m ex x being Element of PFuncs(D,REAL) st P[n,x]
@@ -833,11 +833,11 @@ definition let D be non empty set,
                f be FinSequence of PFuncs(D,REAL),
                d be Element of D;
 func f#d -> FinSequence of REAL means :Def8:
-len it = len f & for n be Nat, G be Element of PFuncs(D,REAL) st
+len it = len f & for n be Element of NAT, G be Element of PFuncs(D,REAL) st
                           n in dom it & f.n = G holds it.n = G.d;
  existence
   proof
-   defpred P[Nat,set] means
+   defpred P[Element of NAT,set] means
    for G be Element of PFuncs(D,REAL) st f.$1=G holds $2=G.d;
    A1: for n st n in Seg len f ex x being Element of REAL st P[n,x]
     proof let n; assume
@@ -852,15 +852,17 @@ len it = len f & for n be Nat, G be Element of PFuncs(D,REAL) st
    A3: for n st n in Seg len f holds P[n,p.n] from FINSEQ_1:sch 5(A1);
    take p;
    thus len p = len f by A2,FINSEQ_1:def 3;
-   let n be Nat, G be Element of PFuncs(D,REAL); assume
+   let n be Element of NAT, G be Element of PFuncs(D,REAL); assume
       n in dom p & f.n = G;
    hence thesis by A2,A3;
   end;
  uniqueness
   proof let p1,p2 be FinSequence of REAL; assume that
-   A4: len p1 = len f & for n be Nat, G be Element of PFuncs(D,REAL) st
+   A4: len p1 = len f &
+    for n be Element of NAT, G be Element of PFuncs(D,REAL) st
             n in dom p1 & f.n = G holds p1.n = G.d and
-   A5: len p2 = len f & for n be Nat, G be Element of PFuncs(D,REAL) st
+   A5: len p2 = len f & for n be Element of NAT,
+        G be Element of PFuncs(D,REAL) st
             n in dom p2 & f.n = G holds p2.n = G.d;
        now let n;
      A6: dom p1=Seg len p1 & dom p2=Seg len p2 by FINSEQ_1:def 3;
@@ -878,13 +880,14 @@ definition let D,C be non empty set,
                f be FinSequence of PFuncs(D,C),
                d be Element of D;
 pred d is_common_for_dom f means :Def9:
-for G be Element of PFuncs(D,C), n be Nat
+for G be Element of PFuncs(D,C), n be Element of NAT
   st n in dom f & f.n = G holds d in dom G;
 end;
 
 theorem Th29:
 for D,C be non empty set, f be FinSequence of PFuncs(D,C), d be Element of D,
- n be Nat st d is_common_for_dom f & n <> 0 holds d is_common_for_dom f|n
+ n be Element of NAT st d is_common_for_dom f &
+  n <> 0 holds d is_common_for_dom f|n
  proof let D1,D2 be non empty set, f be FinSequence of PFuncs(D1,D2),
            d1 be Element of D1, n; assume
   A1: d1 is_common_for_dom f & n<> 0;
@@ -911,7 +914,7 @@ A3: n<len f;
 theorem
    for D,C be non empty set, f be FinSequence of PFuncs(D,C), d be Element of D
 ,
-  n be Nat st d is_common_for_dom f holds d is_common_for_dom f /^ n
+  n be Element of NAT st d is_common_for_dom f holds d is_common_for_dom f /^ n
  proof let D1,D2 be non empty set, f be FinSequence of PFuncs(D1,D2),
            d1 be Element of D1, n; assume
   A1: d1 is_common_for_dom f;
@@ -938,7 +941,7 @@ theorem Th31:
 for D be non empty set, d be Element of D, f be FinSequence of PFuncs(D,REAL)
   st len f <> 0 holds d is_common_for_dom f iff d in dom Sum(f)
  proof let D be non empty set, d be Element of D;
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
   for f be FinSequence of PFuncs(D,REAL) st len f =$1 & len f <> 0 holds
      d is_common_for_dom f iff d in dom Sum(f);
   A1: P[0];
@@ -1015,9 +1018,9 @@ in dom F
 
 theorem Th32:
 for D be non empty set, f be FinSequence of PFuncs(D,REAL), d be Element of D,
-    n be Nat holds (f|n)#d = (f#d)|n
+    n be Element of NAT holds (f|n)#d = (f#d)|n
  proof let D1 be non empty set, f be FinSequence of PFuncs(D1,REAL),
-           d1 be Element of D1, n be Nat;
+           d1 be Element of D1, n be Element of NAT;
   A1: len(f#d1) = len f & len((f|n)#d1) = len(f|n) by Def8;
       now per cases;
    case A2: len f<=n;
@@ -1104,7 +1107,7 @@ theorem
 )
   st d is_common_for_dom f holds (Sum(f)).d = Sum (f#d)
  proof let D be non empty set, d be Element of D;
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
   for f be FinSequence of PFuncs(D,REAL) st len f = $1 & d is_common_for_dom f
     holds (Sum(f)).d = Sum(f#d);
   A1: P[0]
@@ -2433,7 +2436,7 @@ for D be non empty set, F be PartFunc of D,REAL, X be set, d be Element of D
   then len fx <> 0 & 0<=len fx by FINSEQ_1:25;
   then 0+1<=len fx by NAT_1:38;
   then max(0,len fx -1) = len fx - 1 by FINSEQ_2:4;
-  then reconsider n=len fx - 1 as Nat by FINSEQ_2:5;
+  then reconsider n=len fx - 1 as Element of NAT by FINSEQ_2:5;
      len fx = n+1;
   then A5: fx = fx|n ^ <*F.d*> by A1,RFINSEQ:20;
   then A6: fy, fx|n are_fiberwise_equipotent by A4,RFINSEQ:14;
@@ -2441,7 +2444,7 @@ for D be non empty set, F be PartFunc of D,REAL, X be set, d be Element of D
   hence thesis by A5,A6,RFINSEQ:36;
  end;
 
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
  for D be non empty set, F be PartFunc of D,REAL, X be set
    for Y be set, Z be finite set st Z = dom(F|Y) &
     dom(F|X) is finite & Y c= X & $1 = card Z &
@@ -2581,7 +2584,7 @@ RFINSEQ:2;
       A34: len <*F.d*> = 1 & <*F.d*>. 1 = F.d by FINSEQ_1:57;
       A35: 1<=n & n<=len xfy & 1<=n+1 & n+1<=len xfy by A33,FINSEQ_3:27;
       then max(0,n-1)=n-1 by FINSEQ_2:4;
-      then reconsider n1=n-1 as Nat by FINSEQ_2:5;
+      then reconsider n1=n-1 as Element of NAT by FINSEQ_2:5;
          len xfy = 1 + len fxy by A34,FINSEQ_1:35;
       then A36: len fxy = len xfy - 1;
       then A37: n1<=len fxy by A35,XREAL_1:11;
@@ -2718,7 +2721,7 @@ FinS(F-r,X).(len FinS(F-r,X)) = (F-r).d iff FinS(F,X).(len FinS(F,X)) = F.d
   A27: 1<=m & m<=len fx by A26,FINSEQ_3:27;
      ((F-r)|X).d in rng((F-r)|X) by A1,A2,FUNCT_1:def 5;
   then (F-r).d in rng((F-r)|X) by A1,A2,FUNCT_1:68;
-  then consider n1 be Nat such that
+  then consider n1 be Element of NAT such that
   A28: n1 in dom frx & frx.n1 = F.d -r by A5,A8,FINSEQ_2:11;
       1<=n1 & n1<=len frx by A28,FINSEQ_3:27;
   then n1<len frx by A8,A22,A28,REAL_1:def 5;
@@ -2745,7 +2748,7 @@ for D be non empty set, F be PartFunc of D,REAL, r be Real, X be set,
   let X be set;
   let G be finite set such that
 A1: G = dom(F|X);
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
   for X be set, G being finite set st G = dom(F|X) & $1= card(G) holds
    FinS(F-r, X) = FinS(F,X) - (card(G)|->r);
   A2: P[0]
@@ -2929,7 +2932,7 @@ A1: dom(F|(X \/ Y)) is finite;
     then F|Y c= F|(X \/ Y) by RELAT_1:104;
     then dom(F|Y) c= dom(F|(X \/ Y)) by RELAT_1:25;
   then reconsider dfy = dom(F|Y) as finite set by A1,FINSET_1:13;
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
   for Y be set, Z being finite set st Z = dom(F|Y) &
       dom(F|(X \/ Y)) is finite & X /\ Y = {} & $1 = card Z
      holds FinS(F,X \/ Y), FinS(F,X) ^ FinS(F,Y) are_fiberwise_equipotent;
@@ -3135,7 +3138,7 @@ for D be non empty set, F,G be PartFunc of D,REAL, X be set, Y being finite set
  proof let D be non empty set;
   let F,G be PartFunc of D,REAL, X be set, Y be finite set such that
 A1: Y = dom(F|X);
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
    for F,G be PartFunc of D,REAL, X be set, Y being finite set
     st card(Y) = $1 & Y = dom(F|X) & dom(F|X) = dom(G|X)
     holds Sum(F+G,X) = Sum(F,X) + Sum(G,X);

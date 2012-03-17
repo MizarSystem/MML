@@ -8,8 +8,9 @@ environ
 
  vocabularies FUNCT_1, BOOLE, RELAT_1, FINSET_1, TARSKI, CARD_1, ARYTM_1,
       FINSEQ_1, HALLMAR1, REALSET1, FUNCT_4, ZF_REFLE, NEWTON;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, XXREAL_0,
-      REAL_1, NAT_1, REALSET1, FINSET_1, CARD_1, FINSEQ_1, FUNCT_2, FUNCT_7;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, NUMBERS,
+      XCMPLX_0, XXREAL_0, REAL_1, NAT_1, REALSET1, FINSET_1, CARD_1, FINSEQ_1,
+      FUNCT_2, FUNCT_7;
  constructors XXREAL_0, XREAL_0, REAL_1, NAT_1, REALSET1, FUNCT_7;
  registrations FUNCT_1, RELAT_1, RELSET_1, SUBSET_1, NAT_1, XREAL_0, FINSET_1,
       CHAIN_1, FINSEQ_1, GOBOARD1, XXREAL_0;
@@ -23,18 +24,18 @@ theorem :: HALLMAR1:1
     card (X \/ Y) + card (X /\ Y) = card X + card Y;
 
 scheme :: HALLMAR1:sch 1
- Regr11 { n() -> Nat, P[set] }:
-  for k be Nat st 1 <= k & k <= n() holds P[k]
+ Regr11 { n() -> Element of NAT, P[set] }:
+  for k be Element of NAT st 1 <= k & k <= n() holds P[k]
   provided
   P[n()] & n() >= 2 and
-  for k be Nat st 1 <= k & k < n() & P[k+1] holds P[k];
+  for k be Element of NAT st 1 <= k & k < n() & P[k+1] holds P[k];
 
 scheme :: HALLMAR1:sch 2
- Regr2 { P[Nat] } :
+ Regr2 { P[Element of NAT] } :
   P[1]
   provided
-  ex n be Nat st n > 1 & P[n] and
-  for k be Nat st k >= 1 & P[k+1] holds P[k];
+  ex n be Element of NAT st n > 1 & P[n] and
+  for k be Element of NAT st k >= 1 & P[k+1] holds P[k];
 
 registration let F be non empty set;
   cluster non empty non-empty FinSequence of bool F;
@@ -43,12 +44,12 @@ end;
 theorem :: HALLMAR1:2
   for F being non empty set,
       f being non-empty FinSequence of bool F,
-      i being Nat st i in dom f holds
+      i being Element of NAT st i in dom f holds
     f.i <> {};
 
 registration let F be finite set,
                  A be FinSequence of bool F;
-             let i be Nat;
+             let i be Element of NAT;
   cluster A.i -> finite;
 end;
 
@@ -85,26 +86,26 @@ end;
 theorem :: HALLMAR1:5
   for F being finite set,
       A being FinSequence of bool F,
-      i being Nat st i in dom A holds
+      i being Element of NAT st i in dom A holds
     union (A, {i}) = A.i;
 
 theorem :: HALLMAR1:6
   for F being finite set,
       A being FinSequence of bool F,
-      i,j being Nat st i in dom A & j in dom A holds
+      i,j being Element of NAT st i in dom A & j in dom A holds
     union (A, {i,j}) = A.i \/ A.j;
 
 theorem :: HALLMAR1:7
   for J being set,
       F being finite set,
       A being FinSequence of bool F,
-      i being Nat st i in J & i in dom A holds
+      i being Element of NAT st i in J & i in dom A holds
     A.i c= union (A, J);
 
 theorem :: HALLMAR1:8
   for J being set,
       F being finite set,
-      i being Nat,
+      i being Element of NAT,
       A being FinSequence of bool F st
     i in J & i in dom A holds
       union (A, J) = union (A, J \ {i}) \/ A.i;
@@ -112,14 +113,14 @@ theorem :: HALLMAR1:8
 theorem :: HALLMAR1:9
   for J1, J2 being set,
       F being finite set,
-      i being Nat,
+      i being Element of NAT,
       A being FinSequence of bool F st i in dom A holds
     union (A,{i} \/ J1 \/ J2) = A.i \/ union (A,J1 \/ J2);
 
 theorem :: HALLMAR1:10
   for F being finite set,
       A being FinSequence of bool F
-  for i being Nat
+  for i being Element of NAT
   for x,y being set st x <> y & x in A.i & y in A.i holds
      (A.i \ {x}) \/ (A.i \ {y}) = A.i;
 
@@ -127,12 +128,12 @@ begin :: Cut Operation for Finite Sequences
 
 definition let F be finite set;
            let A be FinSequence of bool F;
-           let i be Nat;
+           let i be Element of NAT;
            let x be set;
   func Cut (A, i, x) -> FinSequence of bool F means
 :: HALLMAR1:def 2
     dom it = dom A &
-    for k being Nat st k in dom it holds
+    for k being Element of NAT st k in dom it holds
      (i = k implies it.k = A.k \ {x}) &
      (i <> k implies it.k = A.k);
 end;
@@ -140,28 +141,28 @@ end;
 theorem :: HALLMAR1:11
   for F being finite set,
       A being FinSequence of bool F,
-      i being Nat,
+      i being Element of NAT,
       x being set st i in dom A & x in A.i holds
     card (Cut (A,i,x).i) = card (A.i) - 1;
 
 theorem :: HALLMAR1:12
   for F being finite set,
       A being FinSequence of bool F,
-      i being Nat,
+      i being Element of NAT,
       x, J being set holds
    union (Cut (A, i, x), J \ {i}) = union (A, J \ {i});
 
 theorem :: HALLMAR1:13
   for F being finite set,
       A being FinSequence of bool F,
-      i being Nat,
+      i being Element of NAT,
       x, J being set st not i in J holds
     union (A, J) = union (Cut(A, i, x), J);
 
 theorem :: HALLMAR1:14
   for F being finite set,
       A being FinSequence of bool F,
-      i being Nat,
+      i being Element of NAT,
       x, J being set st
     i in dom Cut (A, i, x) & J c= dom Cut (A, i, x) & i in J holds
     union (Cut (A, i, x), J) = union (A, J \ {i}) \/ (A.i \ {x});
@@ -176,7 +177,7 @@ definition let F be finite set;
     ex f being FinSequence of F st
       f = A &
        dom X = dom f &
-        (for i being Nat st i in dom f holds f.i in X.i) &
+        (for i being Element of NAT st i in dom f holds f.i in X.i) &
           f is one-to-one;
 end;
 
@@ -196,13 +197,13 @@ theorem :: HALLMAR1:15
 theorem :: HALLMAR1:16
   for F being finite set,
       A being FinSequence of bool F,
-      i being Nat st i in dom A & A is Hall holds
+      i being Element of NAT st i in dom A & A is Hall holds
     card (A.i) >= 1;
 
 theorem :: HALLMAR1:17
   for F being non empty finite set,
       A being non empty FinSequence of bool F st
-    (for i being Nat st i in dom A holds card (A.i) = 1) &
+    (for i being Element of NAT st i in dom A holds card (A.i) = 1) &
    A is Hall holds
      (ex X being set st X is_a_system_of_different_representatives_of A);
 
@@ -216,11 +217,11 @@ begin :: Reductions and Singlifications of Finite Sequences
 
 definition let F be set,
                A be FinSequence of bool F,
-               i be Nat;
+               i be Element of NAT;
   mode Reduction of A, i -> FinSequence of bool F means
 :: HALLMAR1:def 5
     dom it = dom A &
-    (for j being Nat st j in dom A & j <> i holds A.j = it.j) &
+    (for j being Element of NAT st j in dom A & j <> i holds A.j = it.j) &
     it.i c= A.i;
 end;
 
@@ -229,12 +230,12 @@ definition let F be set,
   mode Reduction of A -> FinSequence of bool F means
 :: HALLMAR1:def 6
     dom it = dom A &
-    for i being Nat st i in dom A holds it.i c= A.i;
+    for i being Element of NAT st i in dom A holds it.i c= A.i;
 end;
 
 definition let F be set,
                A be FinSequence of bool F,
-               i be Nat;
+               i be Element of NAT;
   assume
   i in dom A & A.i <> {};
   mode Singlification of A, i -> Reduction of A means
@@ -245,21 +246,21 @@ end;
 theorem :: HALLMAR1:19
   for F being finite set,
       A being FinSequence of bool F,
-      i being Nat,
+      i being Element of NAT,
       C being Reduction of A, i holds
     C is Reduction of A;
 
 theorem :: HALLMAR1:20
   for F being finite set,
       A being FinSequence of bool F,
-      i being Nat,
+      i being Element of NAT,
       x being set st i in dom A & x in A.i holds
     Cut (A,i,x) is Reduction of A,i;
 
 theorem :: HALLMAR1:21
   for F being finite set,
       A being FinSequence of bool F,
-      i being Nat,
+      i being Element of NAT,
       x being set st i in dom A & x in A.i holds
     Cut (A,i,x) is Reduction of A;
 
@@ -273,14 +274,14 @@ theorem :: HALLMAR1:22
 theorem :: HALLMAR1:23
   for F being non empty finite set,
       A being non-empty FinSequence of bool F,
-      i being Nat,
+      i being Element of NAT,
       B being Singlification of A, i st i in dom A holds
     B.i <> {};
 
 theorem :: HALLMAR1:24
   for F being non empty finite set,
       A being non-empty FinSequence of bool F,
-      i, j being Nat,
+      i, j being Element of NAT,
       B being Singlification of A, i,
       C being Singlification of B, j st
     i in dom A & j in dom A & C.i <> {} & B.j <> {} holds
@@ -289,7 +290,7 @@ theorem :: HALLMAR1:24
 theorem :: HALLMAR1:25
   for F being set,
       A being FinSequence of bool F,
-      i being Nat holds
+      i being Element of NAT holds
     A is Reduction of A,i;
 
 theorem :: HALLMAR1:26
@@ -302,7 +303,7 @@ definition let F be non empty set,
   assume  A is non-empty;
   mode Singlification of A -> Reduction of A means
 :: HALLMAR1:def 8
-    for i being Nat st i in dom A holds Card (it.i) = 1;
+    for i being Element of NAT st i in dom A holds Card (it.i) = 1;
 end;
 
 theorem :: HALLMAR1:27
@@ -311,11 +312,12 @@ theorem :: HALLMAR1:27
       f being Function holds
     f is Singlification of A iff
     (dom f = dom A &
-    for i being Nat st i in dom A holds f is Singlification of A, i);
+    for i being Element of NAT st i in dom A holds f is Singlification of A, i)
+;
 
 registration let F be non empty finite set,
                  A be non empty FinSequence of bool F,
-                 k be Nat;
+                 k be Element of NAT;
   cluster -> non empty Singlification of A, k;
 end;
 
@@ -337,13 +339,13 @@ theorem :: HALLMAR1:28
 theorem :: HALLMAR1:29   :: Rado Lemma
   for F being finite set,
       A being FinSequence of bool F st A is Hall
-  for i being Nat st card (A.i) >= 2
+  for i being Element of NAT st card (A.i) >= 2
     ex x being set st x in A.i & Cut (A, i, x) is Hall;
 
 theorem :: HALLMAR1:30
   for F being finite set,
       A being FinSequence of bool F,
-      i being Nat st i in dom A & A is Hall holds
+      i being Element of NAT st i in dom A & A is Hall holds
     ex G being Singlification of A, i st G is Hall;
 
 theorem :: HALLMAR1:31

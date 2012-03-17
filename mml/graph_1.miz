@@ -9,7 +9,8 @@ environ
  vocabularies FUNCT_1, BOOLE, RELAT_1, PARTFUN1, RELAT_2, FINSET_1, ORDERS_1,
       FINSEQ_1, CARD_1, FUNCT_2, MCART_1, GRAPH_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      FINSEQ_1, FINSET_1, PARTFUN1, CARD_1, NAT_1, MCART_1, XXREAL_0;
+      FINSEQ_1, FINSET_1, PARTFUN1, CARD_1,
+      NUMBERS, NAT_1, MCART_1, XXREAL_0;
  constructors PARTFUN1, FUNCT_2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
  registrations SUBSET_1, FINSEQ_1, FINSET_1, PARTFUN1, RELSET_1, ARYTM_3,
       XREAL_0;
@@ -23,7 +24,7 @@ environ
 begin
 
 reserve x, y, z, v for set,
-        n, m, k for Nat;
+        n, m, k for Element of NAT;
 
 definition
   struct MultiGraphStruct (# Vertices, Edges -> set,
@@ -477,7 +478,7 @@ definition let G be Graph;
       rng c c= the Edges of G proof let y be set; assume y in rng c;
    then consider x being set such that
 A1: x in dom c & y=c.x by FUNCT_1:def 5;
-    reconsider x as Nat by A1;
+    reconsider x as Element of NAT by A1;
        1<=x & x<=len c by A1,FINSEQ_3:27;
     hence y in the Edges of G by A1,Def11;
    end;
@@ -537,7 +538,7 @@ definition let G be Graph;
     assume A3: for n, m st 1 <= n & n < m & m <= len IT holds IT.n <> IT.m;
     let x1,x2 be set;
     assume A4: x1 in dom IT & x2 in dom IT & IT.x1 = IT.x2;
-    then reconsider x' = x1, y' = x2 as Nat;
+    then reconsider x' = x1, y' = x2 as Element of NAT;
 A5:  1 <= x' & x' <= len IT & 1 <= y' & y' <= len IT by A4,FINSEQ_3:27;
     per cases;
     suppose A6: x' <> y';
@@ -734,7 +735,7 @@ existence
 end;
 
 definition let G be finite Graph;
-   func VerticesCount G -> Nat means
+   func VerticesCount G -> Element of NAT means
       ex B being finite set st B = the Vertices of G & it = card B;
 existence
  proof
@@ -744,7 +745,7 @@ existence
  end;
 uniqueness;
 
-   func EdgesCount G -> Nat means
+   func EdgesCount G -> Element of NAT means
       ex B being finite set st B = the Edges of G & it = card B;
 existence
  proof
@@ -756,7 +757,7 @@ uniqueness;
 end;
 
 definition let G be finite Graph; let x be Element of the Vertices of G;
-   func EdgesIn x -> Nat means
+   func EdgesIn x -> Element of NAT means
        ex X being finite set st
       (for z being set holds
           z in X iff z in the Edges of G & (the Target of G).z = x)
@@ -776,7 +777,7 @@ definition let G be finite Graph; let x be Element of the Vertices of G;
        thus thesis by A1;
      end;
   uniqueness
-     proof let n1, n2 be Nat such that
+     proof let n1, n2 be Element of NAT such that
        A2: ex X being finite set st
       (for z being set holds
           z in X iff z in the Edges of G & (the Target of G).z = x)
@@ -799,7 +800,7 @@ definition let G be finite Graph; let x be Element of the Vertices of G;
       hence n1 = n2 by A4,A5,TARSKI:2;
      end;
 
-  func EdgesOut x -> Nat means
+  func EdgesOut x -> Element of NAT means
        ex X being finite set st
       (for z being set holds
         z in X iff z in the Edges of G & (the Source of G).z = x)
@@ -819,7 +820,7 @@ definition let G be finite Graph; let x be Element of the Vertices of G;
        thus thesis by A6;
     end;
   uniqueness
-  proof let n1, n2 be Nat such that
+  proof let n1, n2 be Element of NAT such that
        A7: ex X being finite set st
       (for z being set holds
           z in X iff z in the Edges of G & (the Source of G).z = x)
@@ -844,7 +845,7 @@ definition let G be finite Graph; let x be Element of the Vertices of G;
 end;
 
 definition let G be finite Graph; let x be Element of the Vertices of G;
-  func Degree x -> Nat equals
+  func Degree x -> Element of NAT equals
         EdgesIn(x) + EdgesOut(x);
 correctness;
 end;
@@ -855,7 +856,7 @@ proof let p be Chain of G;
   reconsider q = p|Seg(n) as FinSequence by FINSEQ_1:19;
 
   A1: for n st 1 <= n & n <= len q holds q.n in the Edges of G
-    proof let k be Nat; assume 1 <= k & k <= len q;
+    proof let k be Element of NAT; assume 1 <= k & k <= len q;
      then A2: k in dom q by FINSEQ_3:27;
          dom q c= dom p by RELAT_1:89;
       then 1 <= k & k <= len p by A2,FINSEQ_3:27;
@@ -909,7 +910,7 @@ proof let p be Chain of G;
       end;
 
     thus for n st 1 <= n & n <= len q2 holds q2.n in the Vertices of G
-      proof let n be Nat; assume 1 <= n & n <= len q2;
+      proof let n be Element of NAT; assume 1 <= n & n <= len q2;
         then A12: n in dom q2 by FINSEQ_3:27;
              dom q2 c= dom q1 by RELAT_1:89;
         then 1 <= n & n <= len q1 by A12,FINSEQ_3:27;

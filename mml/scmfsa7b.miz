@@ -10,7 +10,8 @@ environ
       FUNCT_1, CAT_1, SCMFSA6A, CARD_1, FUNCT_4, INT_1, FINSEQ_2, AMI_2,
       SCMFSA6B, SF_MASTR, BOOLE, DTCONSTR, ABSVALUE, AMI_5, UNIALG_2, SCMFSA_4,
       FUNCOP_1, SCMFSA7B, FINSEQ_4;
- notations TARSKI, XBOOLE_0, ENUMSET1, XCMPLX_0, NAT_1, INT_1, RELAT_1,
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1,
+ NUMBERS,XCMPLX_0, NAT_1, INT_1, RELAT_1,
       FUNCT_1, FUNCT_4, FUNCT_7, FINSEQ_1, FINSEQ_2, FINSEQ_4, BINARITH,
       FINSOP_1, FUNCOP_1, DTCONSTR, CARD_1, CQC_LANG, AMI_1, AMI_3, AMI_5,
       SCMFSA_2, SCMFSA_4, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B, INT_2,
@@ -19,7 +20,7 @@ environ
       BINARITH, DTCONSTR, AMI_5, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B;
  registrations RELSET_1, FINSEQ_1, INT_1, FUNCT_1, AMI_1, SCMFSA_2, SCMFSA_4,
       SCMFSA_7, SF_MASTR, SCMFSA6B, FUNCOP_1, CQC_LANG, FRAENKEL, XREAL_0,
-      MEMBERED, SETFAM_1, XXREAL_0, CARD_3, FUNCT_7;
+      MEMBERED, SETFAM_1, XXREAL_0, CARD_3, FUNCT_7, ORDINAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  theorems SCMFSA_7, BINARITH, REAL_1, FINSEQ_1, FINSEQ_2, NAT_1, GRFUNC_1,
       FUNCT_1, FUNCT_4, FUNCT_7, FINSEQ_3, FINSEQ_4, AMI_1, ENUMSET1, SCMFSA_2,
@@ -30,7 +31,7 @@ environ
 
 begin
 
-reserve m for Nat;
+reserve m for Element of NAT;
 set A = the Instruction-Locations of SCM+FSA;
 
 theorem Th1: ::TG4
@@ -41,7 +42,7 @@ theorem Th1: ::TG4
 A1: dom Load p = {insloc (m -' 1): m in dom p} by SCMFSA_7:def 1;
       now let x be set;
       assume A2: x in dom Load p;
-      then consider k being Nat such that
+      then consider k being Element of NAT such that
   A3: x = insloc (k -' 1) and k in dom p by A1;
          k -' 1 < len p by A2,A3,SCMFSA_7:29;
       hence x in {insloc m: m < len p} by A3;
@@ -49,7 +50,7 @@ A1: dom Load p = {insloc (m -' 1): m in dom p} by SCMFSA_7:def 1;
 then A4: dom Load p c= {insloc m: m < len p} by TARSKI:def 3;
       now let x be set;
       assume x in {insloc m: m < len p};
-      then ex k being Nat st x = insloc k & k < len p;
+      then ex k being Element of NAT st x = insloc k & k < len p;
       hence x in dom Load p by SCMFSA_7:29;
      end;
    then {insloc m: m < len p} c= dom Load p by TARSKI:def 3;
@@ -66,7 +67,7 @@ A1: dom Load p = {insloc (m -' 1): m in dom p} by SCMFSA_7:def 1;
        assume y in rng Load p;
        then consider x being set such that
     A2: x in dom Load p & y = (Load p).x by FUNCT_1:def 5;
-       consider m being Nat such that
+       consider m being Element of NAT such that
    A3: x = insloc (m -' 1) & m in dom p by A1,A2;
     A4: m -' 1 + 1 in dom p by A2,A3,SCMFSA_7:26;
        then p.(m -' 1 + 1) = p/.(m -' 1 + 1) by FINSEQ_4:def 4
@@ -80,10 +81,11 @@ then A5: rng Load p c= rng p by FUNCT_1:19;
 FUNCT_1:def 5
 ;
    A7: dom p = Seg len p by FINSEQ_1:def 3;
-       reconsider x as Nat by A6,FINSEQ_3:25;
+       reconsider x as Element of NAT by A6,FINSEQ_3:25;
     A8: insloc (x -' 1) in dom Load p by A1,A6;
           dom p = {m : 1 <= m & m <= len p} by A7,FINSEQ_1:def 1;
-       then consider m being Nat such that A9: x = m & 1 <= m & m <= len p by
+       then consider m being Element of NAT such that
+       A9: x = m & 1 <= m & m <= len p by
 A6;
    A10: x -' 1 + 1 = x - 1 + 1 by A9,BINARITH:50
        .= x;
@@ -101,7 +103,7 @@ registration
  coherence
   proof
 A1: dom Load p = {insloc m: m < len p} by Th1;
-   A2: now let k,n be Nat; assume that
+   A2: now let k,n be Element of NAT; assume that
 A3:   insloc n in dom Load p and
 A4:   k < n;
          n < len p by A3,SCMFSA_7:29;
@@ -128,7 +130,7 @@ A2: len <* i *> = 1 by FINSEQ_1:56;
 A3: dom (insloc 0 .--> i) = {insloc 0} by CQC_LANG:5;
       now let x be set;
       assume x in dom Load <* i *>;
-      then consider m being Nat such that
+      then consider m being Element of NAT such that
   A4: x = insloc m and
   A5: m < 0 + len <* i *> by A1;
          m <= 0 by A2,A5,NAT_1:38;
@@ -179,7 +181,7 @@ then A3: 1 in dom <* i,halt SCM+FSA *> & 2 in
 A4: dom Macro i = {insloc 0,insloc 1} by Th4;
       now let x be set;
       assume x in dom Load <* i,halt SCM+FSA *>;
-      then consider m being Nat such that
+      then consider m being Element of NAT such that
   A5: x = insloc (m -' 1) and
   A6: m in dom <* i,halt SCM+FSA *> by A1;
          x = insloc (0 + 1 -' 1) or x = insloc (1 + 1 -' 1) by A2,A5,A6,
@@ -306,7 +308,7 @@ Lm1: ::SCMFSA_7'38
    assume A2: a := k c= s;
    per cases;
    suppose A3: k > 0;
-    then consider k1 being Nat such that
+    then consider k1 being Element of NAT such that
 A4: k1 + 1 = k &
         a := k = Load (<* a := intloc 0 *> ^ (k1 |-> AddTo(a,intloc 0)) ^
             <* halt SCM+FSA *>) by SCMFSA_7:def 2;
@@ -316,20 +318,20 @@ A5: len (<* a := intloc 0 *> ^ (k1 |-> AddTo(a,intloc 0)))
      = len <* a := intloc 0 *> + len (k1 |-> AddTo(a,intloc 0)) by FINSEQ_1:35
     .= 1 + len (k1 |-> AddTo(a,intloc 0)) by FINSEQ_1:56
     .= k by A4,FINSEQ_2:69;
-    reconsider k as Nat by A3,INT_1:16;
+    reconsider k as Element of NAT by A3,INT_1:16;
 A6: len f
      = len (<* a := intloc 0 *> ^ (k1 |-> AddTo(a,intloc 0))) +
         len <* halt SCM+FSA *> by FINSEQ_1:35
     .= k + 1 by A5,FINSEQ_1:56;
 then A7: dom f = Seg (k + 1) by FINSEQ_1:def 3;
-A8: now let i be Nat;
+A8: now let i be Element of NAT;
        assume A9: 0 <= i & i <= k;
        then 0 + 1 <= i + 1 & i + 1 <= k + 1 by XREAL_1:8;
        hence i + 1 in dom f by A7,FINSEQ_1:3;
           i < k + 1 & dom Load f = {insloc m: m < len f} by A9,Th1,NAT_1:38;
        hence insloc i in dom Load f by A6;
       end;
-A10: now let i be Nat;
+A10: now let i be Element of NAT;
        assume 0 <= i & i <= k;
 then A11:     i + 1 in dom f & insloc i in dom Load f by A8;
        hence s.insloc i = (Load f).insloc i by A2,A4,GRFUNC_1:8
@@ -341,11 +343,11 @@ A12: f.1 = (<* a := intloc 0 *> ^ ((k1 |-> AddTo(a,intloc 0)) ^
     .= a := intloc 0 by FINSEQ_1:58;
 A13: s.insloc 0 = f.(0 + 1) by A10
     .= a := intloc 0 by A12;
-A14: now let i be Nat;
+A14: now let i be Element of NAT;
        assume A15: 1 < i & i <= k;
 then A16:   1 <= i - 1 by INT_1:79;
        then 0 <= i - 1;
-       then reconsider i1 = i - 1 as Nat by INT_1:16;
+       then reconsider i1 = i - 1 as Element of NAT by INT_1:16;
           i - 1 <= k - 1 by A15,XREAL_1:11;
 then A17:   i1 in Seg k1 by A4,A16,FINSEQ_1:3;
 A18:   len <* a := intloc 0 *> = 1 by FINSEQ_1:56;
@@ -358,7 +360,7 @@ A18:   len <* a := intloc 0 *> = 1 by FINSEQ_1:56;
        .= (k1 |-> AddTo(a,intloc 0)).(i - 1) by A5,A15,A18,FINSEQ_1:37
        .= AddTo(a,intloc 0) by A17,FINSEQ_2:70;
       end;
-A19: now let i be Nat;
+A19: now let i be Element of NAT;
        assume A20: 0 < i & i < k;
 then A21:   0 + 1 < i + 1 by XREAL_1:8;
 A22:   i + 1 <= k by A20,NAT_1:38;
@@ -369,22 +371,23 @@ A22:   i + 1 <= k by A20,NAT_1:38;
 then f.(k + 1) = <* halt SCM+FSA *>.(k + 1 - k) by A5,A6,FINSEQ_1:37
     .= halt SCM+FSA by FINSEQ_1:def 8;
 then A23: s.insloc k = halt SCM+FSA by A10;
-A24: now let n be Nat;
+A24: now let n be Element of NAT;
        assume n = 0; hence
 A25:   (Computation s).n = s by AMI_1:def 19; hence
 A26:   CurInstr (Computation s).n = a:= intloc 0 by A1,A13,AMI_1:def 17;
        thus (Computation s).(n+1) = Following (Computation s).n by AMI_1:def 19
        .= Exec(a:= intloc 0,s) by A25,A26,AMI_1:def 18;
       end;
-A27: for i being Nat st i <= k holds IC (Computation s).i = insloc i
+A27: for i being Element of NAT st i <= k holds IC (Computation s).i = insloc i
       proof
-       let i be Nat;
+       let i be Element of NAT;
        assume A28: i <= k;
-       defpred P[Nat] means $1 <= k implies IC (Computation s).$1 = insloc $1;
+       defpred P[Element of NAT] means
+        $1 <= k implies IC (Computation s).$1 = insloc $1;
 A29:    P[0] by A1,AMI_1:def 19;
-A30:    for n being Nat st P[n] holds P[n + 1]
+A30:    for n being Element of NAT st P[n] holds P[n + 1]
          proof
-          let n be Nat;
+          let n be Element of NAT;
           assume A31: P[n];
           assume A32: n+1 <= k;
 then A33:      n < k by NAT_1:38;
@@ -409,7 +412,7 @@ A37:       (Computation s).(n+1) = Following (Computation s).n by AMI_1:def 19
            .= insloc (n+1) by A31,A32,NAT_1:38,SCMFSA_2:32;
          end;
          end;
-          for i being Nat holds P[i] from NAT_1:sch 1(A29,A30);
+          for i being Element of NAT holds P[i] from NAT_1:sch 1(A29,A30);
        hence IC (Computation s).i = insloc i by A28;
       end;
        CurInstr (Computation s).k
@@ -420,8 +423,8 @@ A37:       (Computation s).(n+1) = Following (Computation s).n by AMI_1:def 19
    end;
    suppose A38: k <= 0;
 then   -0 <= - k by XREAL_1:26;
-    then reconsider mk = - k as Nat by INT_1:16;
-    consider k1 being Nat such that
+    then reconsider mk = - k as Element of NAT by INT_1:16;
+    consider k1 being Element of NAT such that
 A39: k1 + k = 1 &
         a:=k = Load (<*a:=intloc 0*> ^ (k1 |-> SubFrom(a,intloc 0)) ^
             <*halt SCM+FSA*>) by A38,SCMFSA_7:def 2;
@@ -435,7 +438,7 @@ A41: len f = len(<*a:=intloc 0*>^(k1|->SubFrom(a,intloc 0)))+len<*halt SCM+FSA
         by FINSEQ_1:35
     .= mk+1+1 + 1 by A40,FINSEQ_1:56;
 then A42: dom f = Seg (mk+1+1 + 1) by FINSEQ_1:def 3;
-A43: now let i be Nat;
+A43: now let i be Element of NAT;
        assume A44: 0 <= i & i <= mk+1+1;
        then 0 + 1 <= i + 1 & i + 1 <= mk+1+1 + 1 by XREAL_1:8;
        hence i + 1 in dom f by A42,FINSEQ_1:3;
@@ -444,7 +447,7 @@ NAT_1:38
 ;
        hence insloc i in dom Load f by A41;
       end;
-A45: now let i be Nat;
+A45: now let i be Element of NAT;
        assume 0 <= i & i <= mk+1+1;
 then A46:     i + 1 in dom f & insloc i in dom Load f by A43;
        hence s.insloc i = (Load f).insloc i by A2,A39,GRFUNC_1:8
@@ -456,11 +459,11 @@ A47: f.1 = (<*a:=intloc 0*>^((k1|->SubFrom(a,intloc 0))^<*halt SCM+FSA*>)).1
     .= a := intloc 0 by FINSEQ_1:58;
 A48: s.insloc 0 = f.(0 + 1) by A45
     .= a := intloc 0 by A47;
-A49: now let i be Nat;
+A49: now let i be Element of NAT;
        assume A50: 1 < i & i <= mk+1+1;
        then A51: 1 - 1 < i - 1 by XREAL_1:11;
        then A52: 1 - 1 + 1 <= i - 1 by INT_1:20;
-       reconsider i1 = i - 1 as Nat by A51,INT_1:16;
+       reconsider i1 = i - 1 as Element of NAT by A51,INT_1:16;
           i - 1 <= mk+1+1 - 1 by A50,XREAL_1:11;
 then A53:   i1 in Seg k1 by A39,A52,FINSEQ_1:3;
 A54:   len <*a:= intloc 0*> = 1 by FINSEQ_1:56;
@@ -473,7 +476,7 @@ FINSEQ_1:3;
        .= (k1|->SubFrom(a,intloc 0)).(i - 1) by A40,A50,A54,FINSEQ_1:37
        .= SubFrom(a,intloc 0) by A53,FINSEQ_2:70;
       end;
-A55: now let i be Nat;
+A55: now let i be Element of NAT;
        assume A56: 0 < i & i < mk+1+1;
 then A57:   0 + 1 < i + 1 by XREAL_1:8;
 A58:   i + 1 <= mk+1+1 by A56,NAT_1:38;
@@ -485,22 +488,24 @@ then A59: f.(mk+1+1+1) = <*halt SCM+FSA*>.(mk+1+1+1-(mk+1+1)) by A40,A41,
 FINSEQ_1:37
     .= halt SCM+FSA by FINSEQ_1:def 8;
 A60: s.insloc (mk+1+1) = halt SCM+FSA by A45,A59;
-A61: now let n be Nat;
+A61: now let n be Element of NAT;
        assume n = 0; hence
 A62:   (Computation s).n = s by AMI_1:def 19; hence
 A63:   CurInstr (Computation s).n = a:= intloc 0 by A1,A48,AMI_1:def 17;
        thus (Computation s).(n+1) = Following (Computation s).n by AMI_1:def 19
        .= Exec(a:= intloc 0,s) by A62,A63,AMI_1:def 18;
       end;
-A64: for i being Nat st i <= mk+1+1 holds IC (Computation s).i = insloc i
+A64: for i being Element of NAT st i <= mk+1+1
+ holds IC (Computation s).i = insloc i
       proof
-       let i be Nat;
+       let i be Element of NAT;
        assume A65: i <= mk+1+1;
-       defpred P[Nat] means $1<=mk+1+1 implies IC (Computation s).$1=insloc $1;
+       defpred P[Element of NAT] means
+        $1<=mk+1+1 implies IC (Computation s).$1=insloc $1;
 A66:    P[0] by A1,AMI_1:def 19;
-A67:    for n being Nat st P[n] holds P[n + 1]
+A67:    for n being Element of NAT st P[n] holds P[n + 1]
          proof
-          let n be Nat;
+          let n be Element of NAT;
           assume A68: P[n];
           assume A69: n+1 <= mk+1+1;
 then A70:      n < mk+1+1 by NAT_1:38;
@@ -525,7 +530,7 @@ A74:       (Computation s).(n+1) = Following (Computation s).n by AMI_1:def 19
            .= insloc (n+1) by A68,A69,NAT_1:38,SCMFSA_2:32;
          end;
          end;
-          for i being Nat holds P[i] from NAT_1:sch 1(A66,A67);
+          for i being Element of NAT holds P[i] from NAT_1:sch 1(A66,A67);
        hence IC (Computation s).i = insloc i by A65;
       end;
        CurInstr (Computation s).(mk+1+1)
@@ -653,7 +658,7 @@ A3: a1 <> a2 by SCMFSA_2:16;
    set q0 = aSeq(a1,len p) ^ <* f :=<0,...,0> a1 *>;
 A5: (f := p) = Load q by SCMFSA_7:def 5;
 A6: dom Load q = {insloc (m -' 1): m in dom q} by SCMFSA_7:def 1;
-A7: now let k be Nat;
+A7: now let k be Element of NAT;
       assume A8: insloc k in dom Load q;
  then A9:   k + 1 in dom q by SCMFSA_7:26;
       thus (Load q).insloc k = q/.(k+1) by A8,SCMFSA_7:def 1
@@ -661,7 +666,7 @@ A7: now let k be Nat;
    end;
    consider pp being FinSequence of D* such that
 A10: len pp = len p and
-A11: for k being Nat st 1 <= k & k <= len p holds
+A11: for k being Element of NAT st 1 <= k & k <= len p holds
        ex i being Integer st
        i = p.k &
        pp.k = (aSeq(a1,k) ^ aSeq(a2,i) ^ <* (f,a1):= a2 *>) and
@@ -675,14 +680,14 @@ A15: now q = aSeq(a1,len p) ^ (<* f :=<0,...,0> a1 *> ^ (aSeq(f,p) ^
    then Load aSeq(a1,len p) c= (f := p) by A5,SCMFSA_7:31;
    hence Load aSeq(a1,len p) c= s by A4,XBOOLE_1:1;
    end;
-A16: now let i be Nat;
+A16: now let i be Element of NAT;
       assume A17: insloc i in dom Load q;
  then A18:   i + 1 in dom q by SCMFSA_7:26;
          s.insloc i = (Load q).insloc i by A4,A5,A17,GRFUNC_1:8;
       then s.insloc i = q/.(i + 1) by A17,SCMFSA_7:def 1;
       hence s.insloc i = q.(i + 1) by A18,FINSEQ_4:def 4;
      end;
-A19: now let i,k be Nat;
+A19: now let i,k be Element of NAT;
       assume i < len q;
  then A20:   insloc i in dom Load q by SCMFSA_7:29;
       thus ((Computation s).k).insloc i = s.insloc i by AMI_1:54
@@ -691,7 +696,7 @@ A19: now let i,k be Nat;
    defpred P[FinSequence] means $1 c= pp implies
        (ex pp0 being FinSequence of D* st
        (pp0 = $1 &
-       (for i being Nat st i <= len (q0 ^ FlattenSeq pp0) holds
+       (for i being Element of NAT st i <= len (q0 ^ FlattenSeq pp0) holds
            IC (Computation s).i = insloc i) &
        (((Computation s).(len (q0 ^ FlattenSeq pp0)).f) | Seg len pp0
            = p | Seg len pp0) &
@@ -707,7 +712,7 @@ A22:   q0 ^ FlattenSeq <*>(D*) = q0 ^ <*>D by SCMFSA_7:13
       assume {} c= pp;
       take <*>(D*);
       thus <*>(D*) = {};
-A23:   now let i be Nat such that A24: i < len q0;
+A23:   now let i be Element of NAT such that A24: i < len q0;
             i < len q0 implies i <= len aSeq(a1,len p) by A13,NAT_1:38;
          hence IC (Computation s).i = insloc i by A1,A2,A15,A24,SCMFSA_7:37;
         end;
@@ -730,18 +735,21 @@ A30:  IC (Computation s).len q0
        = (Computation s).len q0.IC SCM+FSA by AMI_1:def 15
       .= Next IC (Computation s).k by A29,SCMFSA_2:101
       .= insloc len q0 by A13,A25,SCMFSA_2:32;
-         now let i be Nat; assume i <= len q0;
+         now let i be Element of NAT; assume i <= len q0;
          then i < len q0 or i = len q0 by REAL_1:def 5;
          hence IC (Computation s).i = insloc i by A23,A30;
         end;
-      hence for i being Nat st i <= len (q0 ^ FlattenSeq <*>(D*)) holds
+      hence for i being Element of NAT st i <= len (q0 ^ FlattenSeq <*>(D*))
+      holds
           IC (Computation s).i = insloc i by A22;
          len <*>(D*) = 0 by FINSEQ_1:32;
       hence ((Computation s).(len (q0 ^ FlattenSeq <*>(D*))).f)|Seg len <*>(D
 *)
           = p | Seg len <*>(D*) by SCMFSA_7:21;
-      consider ki being Nat such that A31: ki = abs((Computation s).k.a1) &
+      consider ki being Element of NAT such that
+      A31: ki = abs((Computation s).k.a1) &
       Exec(f:=<0,...,0>a1, (Computation s).k).f = ki |-> 0 by SCMFSA_2:101;
+::>                                                         *4
      ki = abs( len p ) by A1,A2,A15,A31,SCMFSA_7:37
       .= len p by SCMFSA_7:1;
       hence len ((Computation s).(len (q0 ^ FlattenSeq <*>(D*))).f)
@@ -771,7 +779,7 @@ A36:  r ^ <* x *> c= pp;
       end;
       then consider pp0 being FinSequence of D* such that
 A37:  pp0 = r and
-A38:  for i being Nat st i <= len (q0 ^ FlattenSeq pp0) holds
+A38:  for i being Element of NAT st i <= len (q0 ^ FlattenSeq pp0) holds
           IC (Computation s).i = insloc i and
 A39:  ((Computation s).(len (q0 ^ FlattenSeq pp0)).f) | Seg len pp0
           = p | Seg len pp0 and
@@ -827,10 +835,10 @@ A57:  now let p be FinSequence; assume p c= x;
             q0 ^ FlattenSeq pp c= q by A12,FINSEQ_6:12;
          hence q0 ^ FlattenSeq pp0 ^ p c= q by A58,XBOOLE_1:1;
         end;
- A59: for c being Nat st c in dom aSeq(a1,r1) holds
+ A59: for c being Element of NAT st c in dom aSeq(a1,r1) holds
           aSeq(a1,r1).c = s1.insloc (c1 + c -' 1)
         proof
-         let c be Nat;
+         let c be Element of NAT;
          assume A60: c in dom aSeq(a1,r1);
      A61: now aSeq(a1,r1) c= x by A49,FINSEQ_6:12;
          hence q0 ^ FlattenSeq pp0 ^ aSeq(a1,r1) c= q by A57;
@@ -850,12 +858,12 @@ A57:  now let p be FinSequence; assume p c= x;
          .= s1.insloc (c1 + c -' 1) by AMI_1:54;
         end;
 A66: s1.O = 1 & IC s1 = insloc c1 by A2,A38,A41;
-A67: now let i be Nat;
+A67: now let i be Element of NAT;
          assume i <= len aSeq(a1,r1);
          hence insloc (c1 + i) = IC (Computation s1).i by A59,A66,SCMFSA_7:36
          .= IC (Computation s).(c1 + i) by AMI_1:51;
         end;
- A68: now let c be Nat;
+ A68: now let c be Element of NAT;
          assume A69: c in dom aSeq(a2,pr1);
  then A70:     c2 + c in dom (q0 ^ FlattenSeq pp0 ^ aSeq(a1,r1) ^ aSeq(a2,pr1))
              by FINSEQ_1:41;
@@ -881,7 +889,7 @@ A67: now let i be Nat;
          .= s2.insloc (c2 + c -' 1) by AMI_1:54;
         end;
 A74: s2.O = 1 & IC s2 = insloc c2 by A53,A54,A59,A66,SCMFSA_7:36;
-A75: now let i be Nat;
+A75: now let i be Element of NAT;
          assume i <= len aSeq(a2,pr1);
          hence insloc (c2 + i) = IC (Computation s2).i by A68,A74,SCMFSA_7:36
          .= IC (Computation s).(c2 + i) by AMI_1:51;
@@ -900,10 +908,10 @@ A75: now let i be Nat;
        = c2 + (len aSeq(a2,pr1) + 1) by A76,FINSEQ_1:56
       .= c2 + len aSeq(a2,pr1) + 1;
       end;
-A78:   for i being Nat st i < len (q0 ^ FlattenSeq pp1) holds
+A78:   for i being Element of NAT st i < len (q0 ^ FlattenSeq pp1) holds
          IC (Computation s).i = insloc i
         proof
-         let i be Nat;
+         let i be Element of NAT;
          assume A79: i < len (q0 ^ FlattenSeq pp1);
  A80:      now assume A81: not i <= c1;
             assume A82: not (c1 + 1 <= i & i <= c2);
@@ -919,7 +927,7 @@ NAT_1:38;
            then c1 + 1 - c1 <= i - c1 by XREAL_1:11;
  then A84:       0 <= i - c1;
              A85: i - c1 <= c2 - c1 by A83,XREAL_1:11;
-           reconsider ii = i - c1 as Nat by A84,INT_1:16;
+           reconsider ii = i - c1 as Element of NAT by A84,INT_1:16;
            thus insloc i = IC (Computation s).(c1 + ii) by A53,A67,A85
            .= IC (Computation s).i;
           end;
@@ -927,7 +935,7 @@ NAT_1:38;
            then c2 + 1 - c2 <= i - c2 by XREAL_1:11;
  then A87:       0 <= i - c2;
              A88: i - c2 <= c2 + len aSeq(a2,pr1) - c2 by A86,XREAL_1:11;
-           reconsider ii = i - c2 as Nat by A87,INT_1:16;
+           reconsider ii = i - c2 as Element of NAT by A87,INT_1:16;
            thus insloc i = IC (Computation s).(c2 + ii) by A75,A88
            .= IC (Computation s).i;
         end;
@@ -985,10 +993,10 @@ AMI_1:def 15
       .= Next insloc c3 by A56,A78,A90
       .= insloc len (q0 ^ FlattenSeq pp1) by A56,A89,SCMFSA_2:32;
       end;
-      thus for i being Nat st i <= len (q0 ^ FlattenSeq pp1) holds
+      thus for i being Element of NAT st i <= len (q0 ^ FlattenSeq pp1) holds
           IC (Computation s).i = insloc i
         proof
-         let i be Nat;
+         let i be Element of NAT;
          assume A101: i <= len (q0 ^ FlattenSeq pp1);
          per cases by A101,REAL_1:def 5;
          suppose i < len (q0 ^ FlattenSeq pp1);
@@ -998,9 +1006,11 @@ AMI_1:def 15
           hence IC (Computation s).i = insloc i by A100;
         end;
         end;
-      consider ki being Nat such that A102: ki = abs((Computation s).c3.a1) &
+      consider ki being Element of NAT such that
+      A102: ki = abs((Computation s).c3.a1) &
           Exec((f,a1):=a2, (Computation s).c3).f
           = (Computation s).c3.f +*(ki,(Computation s).c3.a2) by SCMFSA_2:99;
+::>                                                            *4
 A103:now thus ki = abs( (Computation s).(c2 + len aSeq(a2,pr1)).a1 ) by A102,
 FINSEQ_1:35
       .= abs( (Computation s2).(len aSeq(a2,pr1)).a1 ) by AMI_1:51
@@ -1032,11 +1042,11 @@ FINSEQ_1:35
   A110: now Seg len pp1 c= dom p by A108,FINSEQ_1:def 3;
       hence dom (p | Seg len pp1) = Seg len pp1 by RELAT_1:91;
       end;
-         for i being Nat st i in Seg len pp1 holds
+         for i being Element of NAT st i in Seg len pp1 holds
          (((Computation s).(len (q0 ^ FlattenSeq pp1)).f) | Seg len pp1).i
          = (p | Seg len pp1).i
         proof
-         let i be Nat;
+         let i be Element of NAT;
          assume A111: i in Seg len pp1;
  then A112:     1 <= i & i <= len pp1 by FINSEQ_1:3;
       A113: r1 in dom (s1.f) by A10,A40,A45,FINSEQ_1:def 3;
@@ -1099,7 +1109,7 @@ SCMFSA_2:99
       for r being FinSequence holds P[r] from FINSEQ_1:sch 3(A21,A34);
    then consider pp0 being FinSequence of D* such that
 A122: pp0 = pp and
-A123: for i being Nat st i <= len (q0 ^ FlattenSeq pp0) holds
+A123: for i being Element of NAT st i <= len (q0 ^ FlattenSeq pp0) holds
        IC (Computation s).i = insloc i and
 A124: ((Computation s).(len (q0 ^ FlattenSeq pp0)).f) | Seg len pp0
        = p | Seg len pp0 and
@@ -1129,26 +1139,26 @@ then A132: (Result s).f = p | Seg len pp0 by A122,A124,A131,RELAT_1:97;
  end;
 
 Lm5: ::SCMFSA_7'36
- for s being State of SCM+FSA, c0 being Nat st IC s = insloc c0
+ for s being State of SCM+FSA, c0 being Element of NAT st IC s = insloc c0
  for a being Int-Location, k being Integer st
-     (for c being Nat st c < len aSeq(a,k) holds
+     (for c being Element of NAT st c < len aSeq(a,k) holds
          aSeq(a,k).(c + 1) = s.insloc (c0 + c))
  holds
-     for i being Nat st i <= len aSeq(a,k) holds
+     for i being Element of NAT st i <= len aSeq(a,k) holds
          IC (Computation s).i = insloc (c0 + i)
  proof
    let s be State of SCM+FSA;
-   let c0 be Nat;
+   let c0 be Element of NAT;
    assume A1: IC s = insloc c0;
    let a be Int-Location;
    let k be Integer;
    assume
-A2: for c being Nat st c < len aSeq(a,k) holds
+A2: for c being Element of NAT st c < len aSeq(a,k) holds
        aSeq(a,k).(c + 1) = s.insloc (c0 + c);
    per cases;
    suppose A3: k > 0;
-    then reconsider k'= k as Nat by INT_1:16;
-    consider k1 being Nat such that
+    then reconsider k'= k as Element of NAT by INT_1:16;
+    consider k1 being Element of NAT such that
 A4: k1 + 1 = k' and
 A5: aSeq(a,k') = <*a:=intloc 0*> ^ (k1 |-> AddTo(a,intloc 0))
         by A3,SCMFSA_7:def 3;
@@ -1156,20 +1166,20 @@ A6: len aSeq(a,k') = len <*a:=intloc 0*> + len (k1|->AddTo(a,intloc 0)) by A5,
 FINSEQ_1:35
     .= 1 + len(k1|->AddTo(a,intloc 0)) by FINSEQ_1:56
     .= k' by A4,FINSEQ_2:69;
-    defpred Q[Nat] means $1 <= k' implies
+    defpred Q[Element of NAT] means $1 <= k' implies
         IC (Computation s).$1 = insloc (c0 + $1);
-       for i being Nat st i <= len aSeq(a,k') holds
+       for i being Element of NAT st i <= len aSeq(a,k') holds
        IC (Computation s).i = insloc (c0 + i)
       proof
-       let i be Nat;
+       let i be Element of NAT;
        assume A7: i <= len aSeq(a,k');
 A8: s.insloc (c0 + 0) = aSeq(a,k').(0 + 1) by A2,A3,A6
        .= a:= intloc 0 by A5,FINSEQ_1:58;
-A9: now let i be Nat;
+A9: now let i be Element of NAT;
           assume A10: 1 < i & i <= k';
    then A11:   1 <= i - 1 by INT_1:79;
           then 0 <= i - 1;
-          then reconsider i1 = i - 1 as Nat by INT_1:16;
+          then reconsider i1 = i - 1 as Element of NAT by INT_1:16;
              i - 1 <= k' - 1 by A10,XREAL_1:11;
    then A12:   i1 in Seg k1 by A4,A11,FINSEQ_1:3;
         len <* a:= intloc 0 *> = 1 by FINSEQ_1:56;
@@ -1177,14 +1187,14 @@ A9: now let i be Nat;
            = (k1 |-> AddTo(a,intloc 0)).(i - 1) by A5,A6,A10,FINSEQ_1:37
           .= AddTo(a,intloc 0) by A12,FINSEQ_2:70;
          end;
-A13: now let i be Nat;
+A13: now let i be Element of NAT;
           assume A14: 0 < i & i < k';
    then A15:   0 + 1 < i + 1 by XREAL_1:8;
    A16:   i + 1 <= k' by A14,NAT_1:38;
           thus s.insloc (c0 + i) = aSeq(a,k').(i+1) by A2,A6,A14
           .=AddTo(a,intloc 0) by A9,A15,A16;
          end;
- A17: now let n be Nat;
+ A17: now let n be Element of NAT;
           assume n = 0; hence
    A18:   (Computation s).n = s by AMI_1:def 19; hence
    A19:   CurInstr (Computation s).n = a:= intloc 0 by A1,A8,AMI_1:def 17;
@@ -1193,9 +1203,9 @@ AMI_1:def 19
           .= Exec(a:= intloc 0,s) by A18,A19,AMI_1:def 18;
          end;
    A20: Q[0] by A1,AMI_1:def 19;
-   A21: for n being Nat st Q[n] holds Q[n + 1]
+   A21: for n being Element of NAT st Q[n] holds Q[n + 1]
          proof
-          let n be Nat;
+          let n be Element of NAT;
           assume A22: Q[n];
           assume A23: n + 1 <= k';
           per cases;
@@ -1223,16 +1233,16 @@ AMI_1:def 19
            .= insloc (c0 + (n + 1));
          end;
          end;
-          for i being Nat holds Q[i] from NAT_1:sch 1(A20,A21);
+          for i being Element of NAT holds Q[i] from NAT_1:sch 1(A20,A21);
        hence thesis by A6,A7;
       end;
-    hence for i being Nat st i <= len aSeq(a,k) holds
+    hence for i being Element of NAT st i <= len aSeq(a,k) holds
         IC (Computation s).i = insloc (c0 + i);
    end;
    suppose A30: k <= 0;
 then   -0 <= - k by XREAL_1:26;
-    then reconsider mk = - k as Nat by INT_1:16;
-    consider k1 being Nat such that
+    then reconsider mk = - k as Element of NAT by INT_1:16;
+    consider k1 being Element of NAT such that
 A31: k1 + k = 1 and
 A32: aSeq(a,k) = <*a:=intloc 0*> ^ (k1 |-> SubFrom(a,intloc 0))
         by A30,SCMFSA_7:def 3;
@@ -1241,20 +1251,20 @@ A33: len aSeq(a,k)
 FINSEQ_1:35
     .= 1 + len (k1|->SubFrom(a,intloc 0)) by FINSEQ_1:56
     .= mk+1+1 by A31,FINSEQ_2:69;
-    defpred Q[Nat] means $1 <= mk+1+1 implies
+    defpred Q[Element of NAT] means $1 <= mk+1+1 implies
         IC (Computation s).$1 = insloc (c0 + $1);
-       for i being Nat st i <= len aSeq(a,k) holds
+       for i being Element of NAT st i <= len aSeq(a,k) holds
         IC (Computation s).i = insloc (c0 + i)
       proof
-       let i be Nat;
+       let i be Element of NAT;
        assume A34: i <= len aSeq(a,k);
 A35: s.insloc (c0 + 0) = aSeq(a,k).(0+1) by A2,A33
        .= a:= intloc 0 by A32,FINSEQ_1:58;
-A36: now let i be Nat;
+A36: now let i be Element of NAT;
           assume A37: 1 < i & i <= mk+1+1;
           then A38: 1 - 1 < i - 1 by XREAL_1:11;
           then A39: 1 - 1 + 1 <= i - 1 by INT_1:20;
-          reconsider i1 = i - 1 as Nat by A38,INT_1:16;
+          reconsider i1 = i - 1 as Element of NAT by A38,INT_1:16;
              i - 1 <= mk+1+1 - 1 by A37,XREAL_1:11;
    then A40:   i1 in Seg k1 by A31,A39,FINSEQ_1:3;
         len <* a:= intloc 0 *> = 1 by FINSEQ_1:56;
@@ -1262,19 +1272,19 @@ A36: now let i be Nat;
            = (k1|->SubFrom(a,intloc 0)).(i - 1) by A32,A33,A37,FINSEQ_1:37
           .= SubFrom(a,intloc 0) by A40,FINSEQ_2:70;
          end;
-A41: now let i be Nat;
+A41: now let i be Element of NAT;
           assume A42: 0 < i & i < mk+1+1;
    then A43:   0 + 1 < i + 1 by XREAL_1:8;
    A44:   i + 1 <= mk+1+1 by A42,NAT_1:38;
           thus s.insloc (c0 + i) = aSeq(a,k).(i+1) by A2,A33,A42
           .=SubFrom(a,intloc 0) by A36,A43,A44;
          end;
- A45: for n being Nat st n = 0 holds
+ A45: for n being Element of NAT st n = 0 holds
            ((Computation s).n = s &
            CurInstr (Computation s).n = a:= intloc 0 &
            (Computation s).(n+1) = Exec(a:= intloc 0,s))
          proof
-          let n be Nat;
+          let n be Element of NAT;
           assume n = 0; hence
    A46:   (Computation s).n = s by AMI_1:def 19; hence
    A47:   CurInstr (Computation s).n = a:= intloc 0 by A1,A35,AMI_1:def 17;
@@ -1283,9 +1293,9 @@ AMI_1:def 19
           .= Exec(a:= intloc 0,s) by A46,A47,AMI_1:def 18;
          end;
   A48:  Q[0] by A1,AMI_1:def 19;
-  A49:  for n being Nat st Q[n] holds Q[n + 1]
+  A49:  for n being Element of NAT st Q[n] holds Q[n + 1]
          proof
-          let n be Nat;
+          let n be Element of NAT;
           assume A50: Q[n];
           assume A51: n + 1 <= mk+1+1;
           per cases;
@@ -1313,10 +1323,10 @@ A57:       (Computation s).(n+1) = Following (Computation s).n by AMI_1:def 19
            .= insloc (c0 + (n + 1));
          end;
          end;
-          for i being Nat holds Q[i] from NAT_1:sch 1(A48,A49);
+          for i being Element of NAT holds Q[i] from NAT_1:sch 1(A48,A49);
        hence thesis by A33,A34;
      end;
-   hence for i being Nat st i <= len aSeq(a,k) holds
+   hence for i being Element of NAT st i <= len aSeq(a,k) holds
        IC (Computation s).i = insloc (c0 + i);
  end;
  end;
@@ -1325,7 +1335,7 @@ Lm6: ::SCMFSA_7'37
  for s being State of SCM+FSA st IC s = insloc 0
  for a being Int-Location, k being Integer st Load aSeq(a,k) c= s
  holds
-     for i being Nat st i <= len aSeq(a,k) holds
+     for i being Element of NAT st i <= len aSeq(a,k) holds
          IC (Computation s).i = insloc i
  proof
    let s be State of SCM+FSA;
@@ -1333,9 +1343,9 @@ Lm6: ::SCMFSA_7'37
    let a be Int-Location;
    let k be Integer;
    assume A2: Load aSeq(a,k) c= s;
-   let i be Nat;
+   let i be Element of NAT;
    assume A3: i <= len aSeq(a,k);
-      now let c be Nat;
+      now let c be Element of NAT;
       assume c < len aSeq(a,k);
    then A4: insloc c in dom Load aSeq(a,k) by SCMFSA_7:29;
    then A5: c + 1 in dom aSeq(a,k) by SCMFSA_7:26;
@@ -1364,7 +1374,7 @@ Lm7: ::SCMFSA_7'39
        <* halt SCM+FSA *>;
    set q0 = aSeq(a1,len p) ^ <* f :=<0,...,0> a1 *>;
 A3: (f := p) = Load q by SCMFSA_7:def 5;
-A4: now let k be Nat;
+A4: now let k be Element of NAT;
       assume A5: insloc k in dom Load q;
  then A6:   k + 1 in dom q by SCMFSA_7:26;
       thus (Load q).insloc k = q/.(k + 1) by A5,SCMFSA_7:def 1
@@ -1372,7 +1382,7 @@ A4: now let k be Nat;
    end;
    consider pp being FinSequence of D* such that
 A7: len pp = len p and
-A8: for k being Nat st 1 <= k & k <= len p holds
+A8: for k being Element of NAT st 1 <= k & k <= len p holds
        ex i being Integer st
        i = p.k &
        pp.k = (aSeq(a1,k) ^ aSeq(a2,i) ^ <* (f,a1):= a2 *>) and
@@ -1385,14 +1395,14 @@ A10: len q0 = k + 1 by FINSEQ_2:19;
        <* halt SCM+FSA *>)) by FINSEQ_1:45;
    then Load aSeq(a1,len p) c= (f := p) by A3,SCMFSA_7:31;
    then A11: Load aSeq(a1,len p) c= s by A2,XBOOLE_1:1;
-A12: now let i be Nat;
+A12: now let i be Element of NAT;
       assume A13: insloc i in dom Load q;
  then A14:   i + 1 in dom q by SCMFSA_7:26;
          s.insloc i = (Load q).insloc i by A2,A3,A13,GRFUNC_1:8;
       then s.insloc i = q/.(i + 1) by A13,SCMFSA_7:def 1;
       hence s.insloc i = q.(i + 1) by A14,FINSEQ_4:def 4;
      end;
-A15: now let i,k be Nat;
+A15: now let i,k be Element of NAT;
       assume i < len q;
  then A16:   insloc i in dom Load q by SCMFSA_7:29;
       thus ((Computation s).k).insloc i = s.insloc i by AMI_1:54
@@ -1401,14 +1411,14 @@ A15: now let i,k be Nat;
    defpred P[FinSequence] means $1 c= pp implies
        ex pp0 being FinSequence of D* st
        (pp0 = $1 &
-       for i being Nat st i <= len (q0 ^ FlattenSeq pp0) holds
+       for i being Element of NAT st i <= len (q0 ^ FlattenSeq pp0) holds
            IC (Computation s).i = insloc i);
 A17: P[{}]
      proof
   A18: q0 ^ FlattenSeq <*>(D*) = q0 ^ <*>D by SCMFSA_7:13
       .= q0 by FINSEQ_1:47;
       assume {} c= pp;
-A19:   now let i be Nat such that A20: i < len q0;
+A19:   now let i be Element of NAT such that A20: i < len q0;
             i < len q0 implies i <= len aSeq(a1,len p) by A10,NAT_1:38;
          hence IC (Computation s).i = insloc i by A1,A11,A20,Lm6;
         end;
@@ -1435,11 +1445,12 @@ A27:  IC (Computation s).len q0
       .= insloc len q0 by A10,A21,SCMFSA_2:32;
       take <*>(D*);
       thus <*>(D*) = {};
-         now let i be Nat; assume i <= len q0;
+         now let i be Element of NAT; assume i <= len q0;
          then i < len q0 or i = len q0 by REAL_1:def 5;
          hence IC (Computation s).i = insloc i by A19,A27;
         end;
-      hence for i being Nat st i <= len (q0 ^ FlattenSeq <*>(D*)) holds
+      hence for i being Element of NAT st i <= len (q0 ^ FlattenSeq <*>(D*))
+      holds
           IC (Computation s).i = insloc i by A18;
      end;
 A28: for r being FinSequence, x being set st P[r] holds P[r ^ <* x *>]
@@ -1451,7 +1462,7 @@ A28: for r being FinSequence, x being set st P[r] holds P[r ^ <* x *>]
          r c= r ^ <* x *> by FINSEQ_6:12;
       then consider pp0 being FinSequence of D* such that
 A31:  pp0 = r and
-A32:  for i being Nat st i <= len (q0 ^ FlattenSeq pp0) holds
+A32:  for i being Element of NAT st i <= len (q0 ^ FlattenSeq pp0) holds
           IC (Computation s).i = insloc i by A29,A30,XBOOLE_1:1;
       set r1 = len r + 1;
          len (r ^ <* x *>) = r1 by FINSEQ_2:19;
@@ -1497,11 +1508,11 @@ A45:  now let p be FinSequence; assume p c= x;
          hence q0 ^ FlattenSeq pp0 ^ p c= q by A46,XBOOLE_1:1;
         end;
       A47: IC s1 = insloc c1 &
-      for c being Nat st c < len aSeq(a1,r1) holds
+      for c being Element of NAT st c < len aSeq(a1,r1) holds
           aSeq(a1,r1).(c + 1) = s1.insloc (c1 + c)
         proof
          thus IC s1 = insloc c1 by A32;
-         let c be Nat;
+         let c be Element of NAT;
          assume A48: c < len aSeq(a1,r1);
             aSeq(a1,r1) c= x by A37,FINSEQ_6:12;
  then A49:     q0 ^ FlattenSeq pp0 ^ aSeq(a1,r1) c= q by A45;
@@ -1520,17 +1531,17 @@ A45:  now let p be FinSequence; assume p c= x;
          .= s.insloc (c1 + c) by A2,A3,A53,GRFUNC_1:8
          .= s1.insloc (c1 + c) by AMI_1:54;
         end;
-A54: now let i be Nat;
+A54: now let i be Element of NAT;
          assume i <= len aSeq(a1,r1);
          hence insloc (c1 + i) = IC (Computation s1).i by A47,Lm5
          .= IC (Computation s).(c1 + i) by AMI_1:51;
         end;
       A55: IC s2 = insloc c2 &
-          (for c being Nat st c < len aSeq(a2,pr1) holds
+          (for c being Element of NAT st c < len aSeq(a2,pr1) holds
               aSeq(a2,pr1).(c + 1) = s2.insloc (c2 + c))
         proof
          thus IC s2 = insloc c2 by A41,A42,A47,Lm5;
-         let c be Nat;
+         let c be Element of NAT;
          assume c < len aSeq(a2,pr1);
          then 1 <= c + 1 & c + 1 <= len aSeq(a2,pr1) by SCMFSA_7:28;
       then A56: c + 1 in dom aSeq(a2,pr1) by FINSEQ_3:27;
@@ -1553,7 +1564,7 @@ A54: now let i be Nat;
          .= s.insloc (c2 + c) by A2,A3,A59,GRFUNC_1:8
          .= s2.insloc (c2 + c) by AMI_1:54;
         end;
-A60: now let i be Nat;
+A60: now let i be Element of NAT;
          assume i <= len aSeq(a2,pr1);
          hence insloc (c2 + i) = IC (Computation s2).i by A55,Lm5
          .= IC (Computation s).(c2 + i) by AMI_1:51;
@@ -1570,10 +1581,10 @@ A60: now let i be Nat;
       .= c2 + (len aSeq(a2,pr1) + 1) by FINSEQ_1:56
       .= c2 + len aSeq(a2,pr1) + 1;
       end;
-A62:   for i being Nat st i < len (q0 ^ FlattenSeq pp1) holds
+A62:   for i being Element of NAT st i < len (q0 ^ FlattenSeq pp1) holds
           IC (Computation s).i = insloc i
         proof
-         let i be Nat;
+         let i be Element of NAT;
          assume A63: i < len (q0 ^ FlattenSeq pp1);
  A64:      now assume A65: not i <= c1;
             assume A66: not (c1 + 1 <= i & i <= c2);
@@ -1589,7 +1600,7 @@ NAT_1:38;
            then c1 + 1 - c1 <= i - c1 by XREAL_1:11;
  then A68:       0 <= i - c1;
              A69: i - c1 <= c2 - c1 by A67,XREAL_1:11;
-           reconsider ii = i - c1 as Nat by A68,INT_1:16;
+           reconsider ii = i - c1 as Element of NAT by A68,INT_1:16;
             insloc i = IC (Computation s).(c1 + ii) by A41,A54,A69;
            hence insloc i = IC (Computation s).i;
           end;
@@ -1597,7 +1608,7 @@ NAT_1:38;
            then c2 + 1 - c2 <= i - c2 by XREAL_1:11;
  then A71:       0 <= i - c2;
              A72: i - c2 <= c2 + len aSeq(a2,pr1) - c2 by A70,XREAL_1:11;
-           reconsider ii = i - c2 as Nat by A71,INT_1:16;
+           reconsider ii = i - c2 as Element of NAT by A71,INT_1:16;
            thus insloc i = IC (Computation s).(c2 + ii) by A60,A72
            .= IC (Computation s).i;
         end;
@@ -1647,10 +1658,10 @@ A75: q0 ^ FlattenSeq pp1 c= q by A40,A45;
 AMI_1:def 15
       .= Next IC (Computation s).c3 by SCMFSA_2:99
       .= Next insloc c3 by A44,A62,A74; end;
-      thus for i being Nat st i <= len (q0 ^ FlattenSeq pp1) holds
+      thus for i being Element of NAT st i <= len (q0 ^ FlattenSeq pp1) holds
           IC (Computation s).i = insloc i
         proof
-         let i be Nat;
+         let i be Element of NAT;
          assume A83: i <= len (q0 ^ FlattenSeq pp1);
          per cases by A83,REAL_1:def 5;
          suppose i < len (q0 ^ FlattenSeq pp1);
@@ -1664,7 +1675,7 @@ AMI_1:def 15
       for r being FinSequence holds P[r] from FINSEQ_1:sch 3(A17,A28);
    then consider pp0 being FinSequence of D* such that
 A84: pp0 = pp and
-A85: for i being Nat st i <= len (q0 ^ FlattenSeq pp0) holds
+A85: for i being Element of NAT st i <= len (q0 ^ FlattenSeq pp0) holds
        IC (Computation s).i = insloc i;
 A86: IC (Computation s).len (q0 ^ FlattenSeq pp) =
        insloc len (q0 ^ FlattenSeq pp) by A84,A85;
@@ -1839,7 +1850,9 @@ A1: card I = len <*>(the Instructions of SCM+FSA) by SCMFSA_7:25
       then consider x being set such that
   A2: x in dom I and I.x = halt SCM+FSA by FUNCT_1:def 5;
          dom I c= A by AMI_3:def 13;
-      then consider k being Nat such that A3: x = insloc k by A2,SCMFSA_2:21;
+      then consider k being Element of NAT such that A3: x = insloc k
+      by A2,SCMFSA_2:21;
+::>    *4
          k < 0 by A1,A2,A3,SCMFSA6A:15;
       hence contradiction;
      end;
@@ -1849,7 +1862,9 @@ then A4: I is halt-free by Def6;
       then consider x being set such that
   A5: x in dom I and I.x = i by FUNCT_1:def 5;
          dom I c= A by AMI_3:def 13;
-      then consider k being Nat such that A6: x = insloc k by A5,SCMFSA_2:21;
+      then consider k being Element of NAT such that A6: x = insloc k
+      by A5,SCMFSA_2:21;
+::>    *4
          k < 0 by A1,A5,A6,SCMFSA6A:15;
       hence contradiction;
      end;
@@ -2154,7 +2169,7 @@ definition
  let s be State of SCM+FSA;
  pred I is_closed_on s means
 :Def7: ::D18
- for k being Nat holds
+ for k being Element of NAT holds
      IC (Computation (s +* (I +* Start-At insloc 0))).k in dom I;
  pred I is_halting_on s means
 :Def8: ::D18'
@@ -2169,14 +2184,14 @@ theorem Th24: ::TQ6
    hereby assume A1: I is paraclosed;
       let s be State of SCM+FSA;
        I +* Start-At insloc 0 c= s +* (I +* Start-At insloc 0) by FUNCT_4:26;
-      then for k being Nat holds
+      then for k being Element of NAT holds
           IC (Computation (s +* (I +* Start-At insloc 0))).k in dom I
           by A1,SCMFSA6B:def 2;
       hence I is_closed_on s by Def7;
      end;
    assume A2: for s being State of SCM+FSA holds I is_closed_on s;
       now let s be State of SCM+FSA;
-      let k be Nat;
+      let k be Element of NAT;
       assume I +* Start-At insloc 0 c= s;
       then I is_closed_on s & s = s +* (I +* Start-At insloc 0)
         by A2,FUNCT_4:79;
@@ -2300,7 +2315,7 @@ A17:  i = g :=<0,...,0> da by SCMFSA_2:65;
 theorem Th27: ::TQ9''
  for s being State of SCM+FSA, I being Macro-Instruction, a being Int-Location
  st I does_not_destroy a & I is_closed_on s holds
-     for k being Nat holds
+     for k being Element of NAT holds
          (Computation (s +* (I +* Start-At insloc 0))).k.a = s.a
  proof
    let s be State of SCM+FSA;
@@ -2315,13 +2330,13 @@ A3: I +* Start-At insloc 0 c= s1 by FUNCT_4:26;
    then A4: I c= s1 by A3,XBOOLE_1:1;
 A5: a in dom s & not a in dom (I +* Start-At insloc 0)
        by SCMFSA6B:12,SCMFSA_2:66;
-   defpred P[Nat] means (Computation s1).$1.a = s.a;
+   defpred P[Element of NAT] means (Computation s1).$1.a = s.a;
 A6: P[0]
     proof
      thus (Computation s1).0.a = s1.a by AMI_1:def 19
           .= s.a by A5,FUNCT_4:12;
     end;
-A7: now let k be Nat;
+A7: now let k be Element of NAT;
       assume A8: P[k];
       set l = IC (Computation s1).k;
   A9: l in dom I by A2,Def7;
@@ -2339,7 +2354,7 @@ A7: now let k be Nat;
       .= s.a by A8,A10,Th26;
       end;
      end;
-   thus for k being Nat holds P[k] from NAT_1:sch 1(A6,A7);
+   thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A6,A7);
  end;
 
 theorem Th28: ::TQ7
@@ -2403,7 +2418,7 @@ registration
 then A2: I does_not_destroy intloc 0 by Def5;
       now let s be State of SCM+FSA;
       assume A3: I +* Start-At insloc 0 c= s;
-      let k be Nat;
+      let k be Element of NAT;
    A4: I is_closed_on s by A1,Th24;
          s +* (I +* Start-At insloc 0) = s by A3,FUNCT_4:79;
       hence (Computation s).k.intloc 0 = s.intloc 0 by A2,A4,Th27;
@@ -2423,7 +2438,7 @@ theorem Th29: ::TS3
       assume A1: x in rng aSeq(a,k);
       per cases;
       suppose A2: k > 0 & k = 0 + 1;
-       then consider k1 being Nat such that
+       then consider k1 being Element of NAT such that
    A3: k1 + 1 = k and
    A4: aSeq(a,k) = <* a := intloc 0 *> ^ (k1 |-> AddTo(a,intloc 0))
            by SCMFSA_7:def 3;
@@ -2436,7 +2451,7 @@ theorem Th29: ::TS3
            by ENUMSET1:def 1;
       end;
       suppose A5: k > 0 & k <> 1;
-       then consider k1 being Nat such that
+       then consider k1 being Element of NAT such that
    A6: k1 + 1 = k and
    A7: aSeq(a,k) = <* a := intloc 0 *> ^ (k1 |-> AddTo(a,intloc 0))
            by SCMFSA_7:def 3;
@@ -2457,7 +2472,7 @@ XBOOLE_0:def 2
            by ENUMSET1:def 1;
       end;
       suppose A9: not k > 0;
-       then consider k1 being Nat such that
+       then consider k1 being Element of NAT such that
    A10: k1 + k = 1 and
    A11: aSeq(a,k) = <* a := intloc 0 *> ^ (k1 |-> SubFrom(a,intloc 0))
            by SCMFSA_7:def 3;
@@ -2544,3 +2559,5 @@ registration
  correctness;
 end;
 
+::>
+::> 4: This inference is not accepted

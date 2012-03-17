@@ -22,12 +22,12 @@ environ
  theorems TARSKI, SUBSET_1, REAL_1, NAT_1, FUNCT_1, ABSVALUE, SEQ_1, SEQ_2,
       SEQM_3, SEQ_4, PARTFUN2, RFUNCT_1, RFUNCT_2, RCOMP_1, FCONT_1, RELAT_1,
       FUNCT_2, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, FUNCOP_1,
-      XREAL_1, COMPLEX1, XXREAL_0;
+      XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1;
  schemes NAT_1, SEQ_1, RCOMP_1;
 
 begin
 
- reserve n,m for Nat;
+ reserve n,m for Element of NAT;
  reserve x, X,X1,Z,Z1 for set;
  reserve s,g,r,t,p,x0,x1,x2 for Real;
  reserve s1,s2,q1 for Real_Sequence;
@@ -329,7 +329,7 @@ proof let f,Y such that A1: Y is compact and
  A5: for s st 0<s ex x1,x2 st x1 in Y & x2 in Y & abs(x1 - x2) < s &
      not abs(f.x1 - f.x2) < r by A3,Def1;
  A6: for n holds 0 < 1/(n+1) by XREAL_1:141;
- defpred P[Nat,real number] means
+ defpred P[Element of NAT,real number] means
  $2 in Y & ex x2 st x2 in Y & abs($2-x2)<1/($1+1) & not abs(f.($2)-f.x2) < r;
  A7: now let n;
      0 < 1/(n+1) by A6;
@@ -341,7 +341,7 @@ proof let f,Y such that A1: Y is compact and
   thus P[n,x1] by A8;
  end;
  consider s1 such that A9: for n holds P[n,s1.n] from RCOMP_1:sch 1(A7);
- defpred P[Nat,real number] means
+ defpred P[Element of NAT,real number] means
    $2 in Y & abs(s1.$1-$2) < 1/($1+1) & not abs(f.(s1.$1)-f.$2) < r;
  A10:now let n;
   consider x2 such that A11: x2 in Y & abs(s1.n-x2) < 1/(n+1) &
@@ -352,7 +352,7 @@ proof let f,Y such that A1: Y is compact and
  end;
  consider s2 such that A12: for n holds P[n,s2.n] from RCOMP_1:sch 1(A10);
   A13: now let p be real number such that A14: 0<p;
-   consider k be Nat such that A15: p" < k by SEQ_4:10;
+   consider k be Element of NAT such that A15: p" < k by SEQ_4:10;
    A16: 0 < p" by A14,XREAL_1:124;
    k < k+1 by NAT_1:38;
    then p" < k+1 by A15,XXREAL_0:2;
@@ -416,7 +416,7 @@ FCONT_1:def 1;
       by A37,A40,SEQ_2:26
      .= 0;
     now let n;
-  consider k be Nat such that
+  consider k be Element of NAT such that
 A43: for m st k<=m holds abs(((f|Y)*q1 - (f|Y)*q2).m-0)<r
   by A4,A41,A42,SEQ_2:def 7;
   A44: abs(((f|Y)*q1 - (f|Y)*q2).k - 0)<r by A43;
@@ -541,7 +541,7 @@ A21:  dom (abs(f1-f)^) = dom (abs(f1-f)) \ abs(f1-f)"{0} by RFUNCT_1:def 8
    end;
    suppose p<>g; then p < g by A1,REAL_1:def 5;
   then A31: 0 < g-p by XREAL_1:52;
-    consider k be Nat such that A32: (g-p)/s < k by SEQ_4:10;
+    consider k be Element of NAT such that A32: (g-p)/s < k by SEQ_4:10;
 A33:     0 < (g-p)/s by A30,A31,XREAL_1:141;
     then A34: 0 < k by A32;
        (g-p)/s *s < s*k by A30,A32,XREAL_1:70;
@@ -550,7 +550,7 @@ A33:     0 < (g-p)/s by A30,A31,XREAL_1:141;
     then (g-p)/k < s*(k*k"); then A35:
  (g-p)/k < s*1 by A32,A33,XCMPLX_0:def 7;
     A36: 0<(g-p)/k by A31,A34,XREAL_1:141;
-    deffunc F(Nat) = p + (g-p)/k*$1;
+    deffunc F(Element of NAT) = p + (g-p)/k*$1;
     consider s1 such that A37: for n holds s1.n = F(n) from SEQ_1:sch 1;
     A38: now let n; assume A39: n<k; then A40: n+1<=k by NAT_1:38;
      A41: abs(s1.(n+1) -s1.n) = abs(p + (g-p)/k*(n+1) - s1.n) by A37
@@ -579,16 +579,17 @@ g} by A44; hence s1.(n+1) in [.p,g.] by RCOMP_1:def 1;
     end;
     A45: s1.0 = p + (g-p)/k*0 by A37
     .= p;
-    defpred P[Nat] means r<=f.(s1.$1);
+    defpred P[Element of NAT] means r<=f.(s1.$1);
 A46:     s1.k = p + (g-p)/k*k by A37
     .= p + (g-p) by A32,A33,XCMPLX_1:88
     .= g;
     then A47: ex n st P[n] by A9;
-    consider l be Nat such that A48: P[l] &
+    consider l be Element of NAT such that A48: P[l] &
     for m st P[m] holds l<=m from NAT_1:sch 5(A47);
        l<>0 by A9,A10,A45,A48,REAL_1:def 5;
     then consider l1 be Nat such that A49: l=l1+1 by NAT_1:22;
-       f.(s1.l1) < r
+    reconsider l1 as Element of NAT by ORDINAL1:def 13;
+    f.(s1.l1) < r
     proof assume r <= f.(s1.l1); then l <= l1 by A48;
      then l+0 < l by A49,XREAL_1:10;
      hence contradiction;
@@ -605,8 +606,7 @@ A46:     s1.k = p + (g-p)/k*k by A37
     then s1.l1 in [.p,g.] & abs(f.(s1.(l1+1)) - f.(s1.l1)) < 1/(abs(M)+1)
       by A38;
     then s1.l1 in [.p,g.] & abs(r - f.(s1.l1)) <= 1/(abs(M)+1) by A52,
-XXREAL_0:2
-;
+XXREAL_0:2;
     hence contradiction by A23;
    end;
    end;
@@ -692,7 +692,7 @@ A68:  dom (abs(f1-f)^) = dom (abs(f1-f)) \ abs(f1-f)"{0} by RFUNCT_1:def 8
    end;
    suppose p<>g; then p < g by A1,REAL_1:def 5
 ; then A78: 0 < g-p by XREAL_1:52;
-    consider k be Nat such that A79: (g-p)/s < k by SEQ_4:10;
+    consider k be Element of NAT such that A79: (g-p)/s < k by SEQ_4:10;
 A80:     0 < (g-p)/s by A77,A78,XREAL_1:141;
     then A81: 0 < k by A79;
        (g-p)/s *s < s*k by A77,A79,XREAL_1:70;
@@ -702,7 +702,7 @@ A80:     0 < (g-p)/s by A77,A78,XREAL_1:141;
     then (g-p)/k < s*(k*k");
 then A82:    (g-p)/k < s*1 by A79,A80,XCMPLX_0:def 7;
     A83: 0<(g-p)/k by A78,A81,XREAL_1:141;
-    deffunc F(Nat) = g - (g-p)/k*$1;
+    deffunc F(Element of NAT) = g - (g-p)/k*$1;
     consider s1 such that A84: for n holds s1.n = F(n) from SEQ_1:sch 1;
     A85: now let n; assume A86: n<k; then A87: n+1<=k by NAT_1:38;
      A88: abs(s1.(n+1) -s1.n) = abs(g- (g-p)/k*(n+1) - s1.n) by A84
@@ -732,23 +732,23 @@ then A82:    (g-p)/k < s*1 by A79,A80,XCMPLX_0:def 7;
     end;
     A92: s1.0 = g- (g-p)/k*0 by A84
     .= g;
-    defpred P[Nat] means r<=f.(s1.$1);
+    defpred P[Element of NAT] means r<=f.(s1.$1);
 A93:     s1.k = g- (g-p)/k*k by A84
     .= g- (g-p) by A79,A80,XCMPLX_1:88
     .= p;
     then A94: ex n st P[n] by A56;
-    consider l be Nat such that A95: P[l] &
+    consider l be Element of NAT such that A95: P[l] &
     for m st P[m] holds l<=m from NAT_1:sch 5(A94);
-       l<>0 by A56,A57,A92,A95,REAL_1:def 5;
+    l<>0 by A56,A57,A92,A95,REAL_1:def 5;
     then consider l1 be Nat such that A96: l=l1+1 by NAT_1:22;
-       f.(s1.l1) < r
+    reconsider l1 as Element of NAT by ORDINAL1:def 13;
+    f.(s1.l1) < r
     proof assume r <= f.(s1.l1); then l <= l1 by A95;
      then l+0 < l by A96,XREAL_1:10;
      hence contradiction;
     end;
     then A97: 0<r-f.(s1.l1) by XREAL_1:52;
-    A98: r - f.(s1.l1) <= f.(s1.(l1+1)) - f.(s1.l1) by A95,A96,XREAL_1:11
-;
+    A98: r - f.(s1.l1) <= f.(s1.(l1+1)) - f.(s1.l1) by A95,A96,XREAL_1:11;
       0 < f.(s1.(l1+1)) - f.(s1.l1) by A95,A96,A97,XREAL_1:11;
     then abs(f.(s1.(l1+1)) - f.(s1.l1)) = f.(s1.(l1+1)) - f.(s1.l1)
       by ABSVALUE:def 1;
