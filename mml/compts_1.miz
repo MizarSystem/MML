@@ -18,7 +18,7 @@ environ
  definitions TARSKI, TOPS_2, XBOOLE_0;
  theorems TARSKI, FINSET_1, MCART_1, SETFAM_1, FUNCT_1, FUNCT_2, FUNCT_3,
       ZFMISC_1, ORDERS_1, PRE_TOPC, TOPS_1, TOPS_2, RELAT_1, STRUCT_0,
-      WELLORD2, XBOOLE_0, XBOOLE_1;
+      WELLORD2, XBOOLE_0, XBOOLE_1, SUBSET_1;
  schemes FUNCT_1, XBOOLE_0;
 
 begin
@@ -251,12 +251,12 @@ definition let T be TopStruct;
        st G c= F & G is_a_cover_of T & G is finite;
 
   attr T is being_T2 means :Def4:
-     for p, q being Point of T st not p = q
+     for p, q being Point of T st p <> q
       ex W, V being Subset of T st W is open & V is open &
        p in W & q in V & W misses V;
   attr T is being_T3 means
         for p being Point of T, P being Subset of T
-      st P <> {} & P is closed & not p in P
+      st P <> {} & P is closed & p in P`
       ex W, V being Subset of T st W is open & V is open &
        p in W & P c= V & W misses V;
   attr T is being_T4 means
@@ -588,13 +588,14 @@ reserve PS, QS for Subset of TS;
 theorem Th15:
  TS is_T2 implies
   for A being Subset of TS st A <> {} & A is compact
-   for p being Point of TS st not p in A
+   for p being Point of TS st p in A`
  ex PS,QS st PS is open & QS is open & p in PS & A c= QS & PS misses QS
  proof
   assume A1: TS is_T2;
   let F be Subset of TS such that A2: F <> {} and
    A3: F is compact;
-  let a be Point of TS such that A4: not a in F;
+  let a be Point of TS such that A4: a in F`;
+B4: not a in F by A4,SUBSET_1:54;
     defpred P[set,set,set] means
      ex PS,QS st $2=PS & $3=QS & PS is open & QS is open &
        a in PS & $1 in QS & PS /\ QS = {};
@@ -605,7 +606,7 @@ A5:  x in F implies
       then reconsider p=x as Point of TS;
       consider W,V being Subset of TS such that
       A7: W is open and A8: V is open
-      and A9: a in W and A10: p in V and A11: W misses V by A1,A4,A6,Def4;
+      and A9: a in W and A10: p in V and A11: W misses V by A1,A6,Def4,B4;
       reconsider PS=W, QS=V as set;
       take PS,QS;
      thus PS in the topology of TS & QS in the topology of TS
@@ -737,11 +738,9 @@ theorem Th16:
        proof
         assume A4: a in PS`;
         then reconsider p=a as Point of TS;
-           a in [#] TS \ PS by A4,PRE_TOPC:17;
-        then not p in PS by XBOOLE_0:def 4;
-        then consider W,V being Subset of TS such that
+        consider W,V being Subset of TS such that
          A5: W is open and V is open and A6: p in W and
-         A7: PS c= V and A8: W misses V by A1,A2,A3,Th15;
+         A7: PS c= V and A8: W misses V by A1,A2,A3,Th15,A4;
            W misses V`` by A8;
         then A9: W c= V` & V` c= PS` by A7,PRE_TOPC:19,TOPS_1:20;
        take Q = W;
@@ -879,7 +878,7 @@ theorem
    proof
     let p be Point of TS;
     let F be Subset of TS such that A3: F <> {} and
-     A4: F is closed and A5: not p in F;
+     A4: F is closed and A5: p in F`;
         F is compact by A2,A4,Th17;
     hence thesis by A1,A3,A5,Th15;
    end;
@@ -904,7 +903,8 @@ A10: x in A implies ex y,z st y in the topology of TS &
        proof
         assume A11: x in A;
          then reconsider p=x as Point of TS;
-            not p in B by A7,A11,XBOOLE_0:def 3;
+         not p in B by A7,A11,XBOOLE_0:def 3;
+         then p in B` by A11,SUBSET_1:50;
          then consider W,V being Subset of TS such that
          A12: W is open and
           A13: V is open and A14: p in W and

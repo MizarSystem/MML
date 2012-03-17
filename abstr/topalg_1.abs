@@ -1,0 +1,441 @@
+:: The Fundamental Group
+::  by Artur Korni{\l}owicz , Yasunari Shidama and Adam Grabowski
+:: 
+:: Received March 18, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, ORDINAL2, FUNCT_1, EUCLID, RELAT_1, ARYTM_1, BORSUK_2,
+      GRAPH_1, BORSUK_1, ALGSTR_1, WAYBEL20, PARTFUN1, RELAT_2, EQREL_1,
+      VECTSP_1, BINOP_1, GROUP_1, SEQM_3, FUNCT_2, BOOLE, REALSET1, TOPS_1,
+      ARYTM, RCOMP_1, ARYTM_3, METRIC_1, COMPLEX1, FINSEQ_2, ABSVALUE,
+      SUBSET_1, WELLORD1, GROUP_6, SGRAPH1, BORSUK_6, TOPALG_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELSET_1, EQREL_1,
+      ALG_1, FUNCT_1, PARTFUN1, FUNCT_2, RELAT_2, BINOP_1, SEQM_3, FUNCOP_1,
+      NUMBERS, ORDINAL1, ORDINAL2, XCMPLX_0, XREAL_0, REAL_1, ABSVALUE, NAT_1,
+      RCOMP_1, RCOMP_2, FINSEQ_1, RVSUM_1, FINSEQ_2, STRUCT_0, REALSET1,
+      GRCAT_1, METRIC_1, PRE_TOPC, YELLOW_2, TOPS_1, TOPS_2, VECTSP_1, GROUP_1,
+      BORSUK_1, TOPMETR, EUCLID, BORSUK_2, GROUP_6, BORSUK_6;
+ constructors TOPS_2, EUCLID, XCMPLX_0, NAT_1, BORSUK_2, VECTSP_1, FILTER_1,
+      GROUP_1, SEQM_3, REALSET1, COMPTS_1, TREAL_1, GRCAT_1, TOPS_1, YELLOW_2,
+      REAL_1, RCOMP_1, RCOMP_2, T_0TOPSP, GROUP_6, BORSUK_6;
+ clusters PRE_TOPC, RELSET_1, NAT_1, BORSUK_1, BORSUK_2, STRUCT_0, VECTSP_1,
+      EQREL_1, PARTFUN1, FILTER_1, XBOOLE_0, JORDAN5A, TEX_2, SEQM_3, BORSUK_4,
+      XCMPLX_0, XREAL_0, REAL_1, METRIC_1, EUCLID, TOPS_1, NUMBERS;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+
+
+begin :: Preliminaries
+
+reserve
+  p, q, x, y for real number,
+  n for Nat;
+
+theorem :: TOPALG_1:1
+  for G, H being Group, h being Homomorphism of G,H st
+  h * h" = id H & h" * h = id G holds h is_isomorphism;
+
+theorem :: TOPALG_1:2
+  for X being Subset of I[01], a being Point of I[01] st X = ]. a, 1 .] holds
+  X` = [. 0, a .];
+
+theorem :: TOPALG_1:3
+  for X being Subset of I[01], a being Point of I[01] st X = [. 0, a .[ holds
+  X` = [. a, 1 .];
+
+theorem :: TOPALG_1:4
+  for X being Subset of I[01], a being Point of I[01] st X = ]. a, 1 .] holds
+  X is open;
+
+theorem :: TOPALG_1:5
+  for X being Subset of I[01], a being Point of I[01] st X = [. 0, a .[ holds
+  X is open;
+
+theorem :: TOPALG_1:6
+  for f being Element of n-tuples_on REAL holds x * (-f) = - (x*f);
+
+theorem :: TOPALG_1:7
+  for f, g being Element of n-tuples_on REAL holds x * (f-g) = x*f - x*g;
+
+theorem :: TOPALG_1:8
+  for f being Element of n-tuples_on REAL holds (x-y) * f = x*f - y*f;
+
+theorem :: TOPALG_1:9
+  for f, g, h, k being Element of n-tuples_on REAL holds
+  (f+g)-(h+k) = (f-h)+(g-k);
+
+theorem :: TOPALG_1:10
+  for f being Element of REAL n st 0 <= x & x <= 1 holds |.x*f.| <= |.f.|;
+
+theorem :: TOPALG_1:11
+  for f being Element of REAL n, p being Point of I[01] holds |.p*f.| <= |.f.|;
+
+theorem :: TOPALG_1:12
+  for e1, e2, e3, e4, e5, e6 being Point of Euclid n,
+      p1, p2, p3, p4 being Point of TOP-REAL n st
+   e1 = p1 & e2 = p2 & e3 = p3 & e4 = p4 & e5 = p1+p3 & e6 = p2+p4 &
+   dist(e1,e2) < x & dist(e3,e4) < y
+   holds dist(e5,e6) < x+y;
+
+theorem :: TOPALG_1:13
+  for e1, e2, e5, e6 being Point of Euclid n,
+      p1, p2 being Point of TOP-REAL n st
+   e1 = p1 & e2 = p2 & e5 = y*p1 & e6 = y*p2 & dist(e1,e2) < x & y <> 0
+   holds dist(e5,e6) < abs(y)*x;
+
+theorem :: TOPALG_1:14
+  for e1, e2, e3, e4, e5, e6 being Point of Euclid n,
+      p1, p2, p3, p4 being Point of TOP-REAL n st
+   e1 = p1 & e2 = p2 & e3 = p3 & e4 = p4 & e5 = x*p1+y*p3 & e6 = x*p2+y*p4 &
+   dist(e1,e2) < p & dist(e3,e4) < q & x <> 0 & y <> 0
+   holds dist(e5,e6) < abs(x)*p + abs(y)*q;
+
+theorem :: TOPALG_1:15
+  for X being non empty TopSpace,
+      f1, f2, g being map of X,TOP-REAL n st
+    f1 is continuous & f2 is continuous &
+    for p being Point of X holds g.p = f1.p + f2.p
+  holds g is continuous;
+
+theorem :: TOPALG_1:16
+  for X being non empty TopSpace,
+      f, g being map of X,TOP-REAL n st
+    f is continuous & for p being Point of X holds g.p = y * f.p
+  holds g is continuous;
+
+theorem :: TOPALG_1:17
+  for X being non empty TopSpace,
+      f1, f2, g being map of X,TOP-REAL n st
+    f1 is continuous & f2 is continuous &
+    for p being Point of X holds g.p = x * f1.p + y * f2.p
+  holds g is continuous;
+
+theorem :: TOPALG_1:18
+  for F being map of [:TOP-REAL n,I[01]:], TOP-REAL n st
+   for x being Point of TOP-REAL n, i being Point of I[01] holds
+    F.(x,i) = (1-i) * x holds
+  F is continuous;
+
+theorem :: TOPALG_1:19
+  for F being map of [:TOP-REAL n,I[01]:], TOP-REAL n st
+   for x being Point of TOP-REAL n, i being Point of I[01] holds
+    F.(x,i) = i * x holds
+  F is continuous;
+
+begin :: Paths
+
+reserve
+  X for non empty TopSpace,
+  a, b, c, d, e, f for Point of X,
+  T for non empty arcwise_connected TopSpace,
+  a1, b1, c1, d1, e1, f1 for Point of T;
+
+theorem :: TOPALG_1:20
+  a,b are_connected & b,c are_connected implies
+  for A being Path of a,b, B being Path of b,c holds
+  A, A+B+-B are_homotopic;
+
+theorem :: TOPALG_1:21
+  for A being Path of a1,b1, B being Path of b1,c1 holds
+  A, A+B+-B are_homotopic;
+
+theorem :: TOPALG_1:22
+  a,b are_connected & c,b are_connected implies
+  for A being Path of a,b, B being Path of c,b holds
+  A, A+-B+B are_homotopic;
+
+theorem :: TOPALG_1:23
+  for A being Path of a1,b1, B being Path of c1,b1 holds
+  A, A+-B+B are_homotopic;
+
+theorem :: TOPALG_1:24
+  a,b are_connected & c,a are_connected implies
+  for A being Path of a,b, B being Path of c,a holds
+  A, -B+B+A are_homotopic;
+
+theorem :: TOPALG_1:25
+  for A being Path of a1,b1, B being Path of c1,a1 holds
+  A, -B+B+A are_homotopic;
+
+theorem :: TOPALG_1:26
+  a,b are_connected & a,c are_connected implies
+  for A being Path of a,b, B being Path of a,c holds
+  A, B+-B+A are_homotopic;
+
+theorem :: TOPALG_1:27
+  for A being Path of a1,b1, B being Path of a1,c1 holds
+  A, B+-B+A are_homotopic;
+
+theorem :: TOPALG_1:28
+  a,b are_connected & c,b are_connected implies
+  for A, B being Path of a,b, C being Path of b,c st
+  A+C, B+C are_homotopic holds A, B are_homotopic;
+
+theorem :: TOPALG_1:29
+  for A, B being Path of a1,b1, C being Path of b1,c1 st
+  A+C, B+C are_homotopic holds A, B are_homotopic;
+
+theorem :: TOPALG_1:30
+  a,b are_connected & a,c are_connected implies
+  for A, B being Path of a,b, C being Path of c,a st
+  C+A, C+B are_homotopic holds A, B are_homotopic;
+
+theorem :: TOPALG_1:31
+  for A, B being Path of a1,b1, C being Path of c1,a1 st
+  C+A, C+B are_homotopic holds A, B are_homotopic;
+
+theorem :: TOPALG_1:32
+  a,b are_connected & b,c are_connected & c,d are_connected &
+  d,e are_connected implies
+  for A being Path of a,b, B being Path of b,c, C being Path of c,d,
+      D being Path of d,e holds
+  A+B+C+D, A+(B+C)+D are_homotopic;
+
+theorem :: TOPALG_1:33
+  for A being Path of a1,b1, B being Path of b1,c1, C being Path of c1,d1,
+      D being Path of d1,e1 holds
+  A+B+C+D, A+(B+C)+D are_homotopic;
+
+theorem :: TOPALG_1:34
+  a,b are_connected & b,c are_connected & c,d are_connected &
+  d,e are_connected implies
+  for A being Path of a,b, B being Path of b,c, C being Path of c,d,
+      D being Path of d,e holds
+  A+B+C+D, A+(B+C+D) are_homotopic;
+
+theorem :: TOPALG_1:35
+  for A being Path of a1,b1, B being Path of b1,c1, C being Path of c1,d1,
+      D being Path of d1,e1 holds
+  A+B+C+D, A+(B+C+D) are_homotopic;
+
+theorem :: TOPALG_1:36
+  a,b are_connected & b,c are_connected & c,d are_connected &
+  d,e are_connected implies
+  for A being Path of a,b, B being Path of b,c, C being Path of c,d,
+      D being Path of d,e holds
+  A+(B+C)+D, A+B+(C+D) are_homotopic;
+
+theorem :: TOPALG_1:37
+  for A being Path of a1,b1, B being Path of b1,c1, C being Path of c1,d1,
+      D being Path of d1,e1 holds
+  A+(B+C)+D, A+B+(C+D) are_homotopic;
+
+theorem :: TOPALG_1:38
+  a,b are_connected & b,c are_connected & b,d are_connected implies
+  for A being Path of a,b, B being Path of d,b, C being Path of b,c holds
+  A+-B+B+C, A+C are_homotopic;
+
+theorem :: TOPALG_1:39
+  for A being Path of a1,b1, B being Path of d1,b1, C being Path of b1,c1 holds
+  A+-B+B+C, A+C are_homotopic;
+
+theorem :: TOPALG_1:40
+  a,b are_connected & a,c are_connected & c,d are_connected implies
+  for A being Path of a,b, B being Path of c,d, C being Path of a,c holds
+  A+-A+C+B+-B, C are_homotopic;
+
+theorem :: TOPALG_1:41
+  for A being Path of a1,b1, B being Path of c1,d1, C being Path of a1,c1 holds
+  A+-A+C+B+-B, C are_homotopic;
+
+theorem :: TOPALG_1:42
+  a,b are_connected & a,c are_connected & d,c are_connected implies
+  for A being Path of a,b, B being Path of c,d, C being Path of a,c holds
+  A+(-A+C+B)+-B, C are_homotopic;
+
+theorem :: TOPALG_1:43
+  for A being Path of a1,b1, B being Path of c1,d1, C being Path of a1,c1 holds
+  A+(-A+C+B)+-B, C are_homotopic;
+
+theorem :: TOPALG_1:44
+  a,b are_connected & b,c are_connected & c,d are_connected &
+  d,e are_connected & a,f are_connected implies
+  for A being Path of a,b, B being Path of b,c, C being Path of c,d,
+      D being Path of d,e, E being Path of f,c holds
+  A+(B+C)+D, A+B+-E+(E+C+D) are_homotopic;
+
+theorem :: TOPALG_1:45
+  for A being Path of a1,b1, B being Path of b1,c1, C being Path of c1,d1,
+      D being Path of d1,e1, E being Path of f1,c1 holds
+  A+(B+C)+D, A+B+-E+(E+C+D) are_homotopic;
+
+begin :: Fundamental group
+
+definition
+  let T be TopStruct, t be Point of T;
+  mode Loop of t is Path of t,t;
+end;
+
+definition
+  let T be non empty TopStruct, t be Point of T;
+  func Loops(t) means
+:: TOPALG_1:def 1
+  for x being set holds x in it iff x is Loop of t;
+end;
+
+registration
+  let T be non empty TopStruct, t be Point of T;
+  cluster Loops(t) -> non empty;
+end;
+
+definition
+  let X be non empty TopSpace, a be Point of X;
+  func EqRel(X,a) -> Relation of Loops(a) means
+:: TOPALG_1:def 2
+  for P, Q being Loop of a holds [P,Q] in it iff P,Q are_homotopic;
+end;
+
+registration
+  let X be non empty TopSpace, a be Point of X;
+  cluster EqRel(X,a) -> non empty total symmetric transitive;
+end;
+
+theorem :: TOPALG_1:46
+  for P, Q being Loop of a holds
+  Q in Class(EqRel(X,a),P) iff P,Q are_homotopic;
+
+theorem :: TOPALG_1:47
+  for P, Q being Loop of a holds
+  Class(EqRel(X,a),P) = Class(EqRel(X,a),Q) iff P,Q are_homotopic;
+
+definition
+  let X be non empty TopSpace, a be Point of X;
+  func FundamentalGroup(X,a) -> strict HGrStr means
+:: TOPALG_1:def 3
+  the carrier of it = Class EqRel (X,a) &
+  for x,y being Element of it
+   ex P,Q being Loop of a st x = Class(EqRel(X,a),P) & y = Class(EqRel(X,a),Q)
+    & (the mult of it).(x,y) = Class(EqRel(X,a),P+Q);
+end;
+
+notation
+  let X be non empty TopSpace, a be Point of X;
+  synonym pi_1(X,a) for FundamentalGroup(X,a);
+end;
+
+registration
+  let X be non empty TopSpace;
+  let a be Point of X;
+  cluster pi_1(X,a) -> non empty;
+end;
+
+theorem :: TOPALG_1:48
+  for x being set holds x in the carrier of pi_1(X,a) iff
+  ex P being Loop of a st x = Class(EqRel(X,a),P);
+
+registration
+  let X be non empty TopSpace;
+  let a be Point of X;
+  cluster pi_1(X,a) -> associative Group-like;
+end;
+
+definition
+  let T be non empty TopSpace,
+      x0, x1 be Point of T,
+      P being Path of x0,x1;
+  assume
+    x0,x1 are_connected;
+  func pi_1-iso(P) -> map of pi_1(T,x1), pi_1(T,x0) means
+:: TOPALG_1:def 4
+  for Q being Loop of x1 holds
+   it.Class(EqRel(T,x1),Q) = Class(EqRel(T,x0),P+Q+-P);
+end;
+
+reserve
+  x0, x1 for Point of X,
+  P, Q for Path of x0,x1,
+  y0, y1 for Point of T,
+  R, V for Path of y0,y1;
+
+theorem :: TOPALG_1:49
+  x0,x1 are_connected & P,Q are_homotopic implies pi_1-iso(P) = pi_1-iso(Q);
+
+theorem :: TOPALG_1:50
+  R,V are_homotopic implies pi_1-iso(R) = pi_1-iso(V);
+
+theorem :: TOPALG_1:51
+  x0,x1 are_connected implies
+  pi_1-iso(P) is Homomorphism of pi_1(X,x1), pi_1(X,x0);
+
+definition
+  let T be non empty arcwise_connected TopSpace,
+      x0, x1 be Point of T,
+      P be Path of x0,x1;
+  redefine func pi_1-iso(P) -> Homomorphism of pi_1(T,x1), pi_1(T,x0);
+end;
+
+theorem :: TOPALG_1:52
+  x0,x1 are_connected implies pi_1-iso(P) is one-to-one;
+
+theorem :: TOPALG_1:53
+  x0,x1 are_connected implies pi_1-iso(P) is onto;
+
+registration
+  let T be non empty arcwise_connected TopSpace,
+      x0, x1 be Point of T,
+      P be Path of x0,x1;
+  cluster pi_1-iso(P) -> one-to-one onto;
+end;
+
+theorem :: TOPALG_1:54
+  x0,x1 are_connected implies (pi_1-iso(P))" = pi_1-iso(-P);
+
+theorem :: TOPALG_1:55
+  (pi_1-iso(R))" = pi_1-iso(-R);
+
+theorem :: TOPALG_1:56
+  x0,x1 are_connected implies
+  for h being Homomorphism of pi_1(X,x1), pi_1(X,x0) st h = pi_1-iso(P) holds
+  h is_isomorphism;
+
+theorem :: TOPALG_1:57
+  pi_1-iso(R) is_isomorphism;
+
+theorem :: TOPALG_1:58
+  x0,x1 are_connected implies
+  pi_1(X,x0), pi_1(X,x1) are_isomorphic;
+
+theorem :: TOPALG_1:59
+  pi_1(T,y0), pi_1(T,y1) are_isomorphic;
+
+begin :: TOP-REAL n
+
+definition
+  let n be Nat,
+      a, b be Point of TOP-REAL n,
+      P, Q be Path of a,b;
+  func RealHomotopy(P,Q) -> map of [:I[01],I[01]:], TOP-REAL n means
+:: TOPALG_1:def 5
+  for s, t being Element of I[01] holds it.(s,t) = (1-t) * P.s + t * Q.s;
+end;
+
+theorem :: TOPALG_1:60
+  for a, b being Point of TOP-REAL n,
+      P, Q being Path of a,b holds
+  P, Q are_homotopic;
+
+definition
+  let n be Nat,
+      a, b be Point of TOP-REAL n,
+      P, Q be Path of a,b;
+  redefine func RealHomotopy(P,Q) -> Homotopy of P,Q;
+end;
+
+registration
+  let n be Nat,
+      a, b be Point of TOP-REAL n,
+      P, Q be Path of a,b;
+  cluster -> continuous Homotopy of P,Q;
+end;
+
+theorem :: TOPALG_1:61
+  for a being Point of TOP-REAL n,
+      C being Loop of a holds
+  the carrier of pi_1(TOP-REAL n,a) = { Class(EqRel(TOP-REAL n,a),C) };
+
+registration
+  let n be Nat;
+  let a be Point of TOP-REAL n;
+  cluster pi_1(TOP-REAL n,a) -> trivial;
+end;

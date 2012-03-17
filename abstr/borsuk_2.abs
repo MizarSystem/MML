@@ -10,17 +10,18 @@ environ
       ORDINAL2, FUNCT_4, FUNCOP_1, TOPS_2, BORSUK_1, GRAPH_1, RCOMP_1, RELAT_2,
       ARYTM_3, ARYTM_1, TREAL_1, SEQ_1, TOPMETR, SEQM_3, SETFAM_1, TARSKI,
       TSP_1, METRIC_1, URYSOHN1, PCOMPS_1, EUCLID, MCART_1, CONNSP_2, TOPS_1,
-      BORSUK_2;
- notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, REAL_1,
-      RELAT_1, SETFAM_1, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0, PRE_TOPC,
-      EUCLID, TOPS_2, MCART_1, RCOMP_1, PCOMPS_1, CARD_1, TOPS_1, COMPTS_1,
-      CONNSP_1, CONNSP_2, TREAL_1, FUNCT_4, SEQM_3, BORSUK_1, T_0TOPSP,
-      TOPMETR, BINOP_1, FUNCT_3, GRCAT_1, URYSOHN1, TSP_1, WEIERSTR;
+      BORSUK_2, ARYTM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, NAT_1, REAL_1, RELAT_1, SETFAM_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      STRUCT_0, PRE_TOPC, EUCLID, TOPS_2, MCART_1, RCOMP_1, PCOMPS_1, CARD_1,
+      TOPS_1, COMPTS_1, CONNSP_1, CONNSP_2, TREAL_1, FUNCT_4, SEQM_3, BORSUK_1,
+      T_0TOPSP, TOPMETR, BINOP_1, FUNCT_3, GRCAT_1, URYSOHN1, TSP_1, WEIERSTR;
  constructors EUCLID, TOPS_2, CONNSP_1, REAL_1, T_0TOPSP, TREAL_1, SEQM_3,
       TOPS_1, WEIERSTR, RCOMP_1, COMPTS_1, YELLOW_8, URYSOHN1, GRCAT_1,
       MEMBERED;
  clusters SUBSET_1, STRUCT_0, TOPMETR, FUNCT_1, PRE_TOPC, BORSUK_1, TSP_1,
-      YELLOW_6, YELLOW_8, WAYBEL10, METRIC_1, RELSET_1, MEMBERED, FUNCT_2;
+      YELLOW_6, YELLOW_8, WAYBEL10, METRIC_1, RELSET_1, MEMBERED, FUNCT_2,
+      XREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -64,6 +65,10 @@ theorem :: BORSUK_2:3
    f" is open;
 
 begin :: Paths and arcwise connected spaces
+
+registration
+  cluster -> real Element of I[01];
+end;
 
 definition let T be TopStruct; let a, b be Point of T;
  given f be map of I[01], T such that
@@ -126,9 +131,9 @@ definition let T be non empty TopSpace;
     g is continuous & g.0 = b & g.1 = c;
   func P + Q -> Path of a, c means
 :: BORSUK_2:def 4
-   for t being Point of I[01], t' being Real st t = t' holds
-    ( 0 <= t' & t' <= 1/2 implies it.t = P.(2*t') ) &
-    ( 1/2 <= t' & t' <= 1 implies it.t = Q.(2*t'-1) );
+   for t being Point of I[01] holds
+    ( t <= 1/2 implies it.t = P.(2*t) ) &
+    ( 1/2 <= t implies it.t = Q.(2*t-1) );
 end;
 
 registration let T be non empty TopSpace;
@@ -159,8 +164,7 @@ definition let T be non empty TopSpace;
 f is continuous & f.0 = a & f.1 = b;
   func - P -> Path of b, a means
 :: BORSUK_2:def 5
-   for t being Point of I[01], t' being Real st t = t' holds
-    it.t = P.(1-t');
+   for t being Point of I[01] holds it.t = P.(1-t);
 end;
 
 theorem :: BORSUK_2:8
@@ -237,16 +241,27 @@ registration let n be Nat;
  cluster TOP-REAL n -> being_T2;
 end;
 
-definition let T be non empty arcwise_connected TopSpace;
+definition let T be non empty TopStruct;
   let a, b be Point of T;
   let P, Q be Path of a, b;
- pred P, Q are_homotopic means
+  pred P, Q are_homotopic means
 :: BORSUK_2:def 6
-      ex f being map of [:I[01],I[01]:], T st
+   ex f being map of [:I[01],I[01]:], T st
     f is continuous &
     for s being Point of I[01] holds f.(s,0) = P.s & f.(s,1) = Q.s &
     for t being Point of I[01] holds f.(0,t) = a & f.(1,t) = b;
-  reflexivity;
   symmetry;
 end;
 
+theorem :: BORSUK_2:15
+  for T being non empty TopSpace, a, b being Point of T,
+      P being Path of a, b
+  st ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b
+  holds P, P are_homotopic;
+
+definition let T be non empty arcwise_connected TopSpace;
+  let a, b be Point of T;
+  let P, Q be Path of a, b;
+  redefine pred P, Q are_homotopic;
+  reflexivity;
+end;

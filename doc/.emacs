@@ -1,6 +1,7 @@
 ;;; example setting for Mizar mode
 
  (global-font-lock-mode t)
+ (setq require-final-newline t)
  (setq load-path (cons (substitute-in-file-name "$MIZFILES") load-path))
  (autoload 'mizar-mode "mizar" "Major mode for editing Mizar articles." t)
  (autoload 'mmlquery-decode "mizar")

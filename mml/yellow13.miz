@@ -33,7 +33,7 @@ environ
       YELLOW_2, YELLOW_3, YELLOW_8, WAYBEL_1, WAYBEL14, YELLOW_9, URYSOHN1,
       HEINE, GROUP_1, TSP_1, REALSET1, YELLOW_4, WAYBEL_0, RELAT_1, TDLAT_2,
       FUNCT_1, FUNCT_2, ORDERS_3, BORSUK_1, TEX_1, WAYBEL_2, YELLOW_6,
-      XBOOLE_0, XBOOLE_1;
+      XBOOLE_0, XBOOLE_1, SUBSET_1;
  schemes FINSET_1;
 
 begin  :: Preliminaries
@@ -219,7 +219,8 @@ theorem Th3:
     let T be discrete non empty TopSpace;
     let p be Point of T,
         P be Subset of T such that
-A1:   P <> {} & P is closed & not p in P;
+A1:   P <> {} & P is closed & p in P`;
+B1:  not p in P by A1,SUBSET_1:54;
     take W = {p}, V = P;
     thus W is open & V is open by TDLAT_3:17;
        W /\ V c= {}
@@ -228,7 +229,7 @@ A1:   P <> {} & P is closed & not p in P;
       assume a in W /\ V;
 then A2:   a in W & a in V by XBOOLE_0:def 3;
       assume not a in {};
-      thus contradiction by A1,A2,TARSKI:def 1;
+      thus contradiction by A1,A2,TARSKI:def 1,B1;
     end;
     hence p in W & P c= V & W /\ V = {} by TARSKI:def 1,XBOOLE_1:3;
   end;
@@ -274,7 +275,8 @@ coherence
 A1:   T is being_T4 being_T1;
     let p be Point of T,
         P be Subset of T such that
-A2:   P <> {} & P is closed & not p in P;
+A2:   P <> {} & P is closed & p in P`;
+B2:  not p in P by SUBSET_1:54,A2;
 A3: {p} is closed by A1,URYSOHN1:27;
        P /\ {p} c= {}
     proof
@@ -282,7 +284,7 @@ A3: {p} is closed by A1,URYSOHN1:27;
       assume a in P /\ {p};
 then A4:   a in P & a in {p} by XBOOLE_0:def 3;
       assume not a in {};
-      thus contradiction by A2,A4,TARSKI:def 1;
+      thus contradiction by B2,A4,TARSKI:def 1;
     end;
     then P /\ {p} = {} by XBOOLE_1:3;
     then P misses {p} by XBOOLE_0:def 7;
@@ -296,18 +298,28 @@ A5:   R is open & Q is open & {p} c= R & P c= Q & R misses Q
 end;
 
 registration
- cluster being_T3 being_T1 -> being_T2 (non empty TopSpace);
+ cluster being_T3 being_T1 -> being_T2 TopSpace;
 coherence
   proof
-    let T be non empty TopSpace such that
+    let T be TopSpace such that
 A1:   T is being_T3 being_T1;
     let p, q be Point of T;
-    assume p <> q;
+    assume
+Z:   p <> q;
 then A2: not p in {q} by TARSKI:def 1;
+     now assume the carrier of T = {};
+        then p = {} & q = {} by SUBSET_1:def 2;
+      hence contradiction by Z;
+     end;
+     then reconsider T' = T as non empty TopSpace by STRUCT_0:def 1;
+     reconsider p,q as Point of T';
+     the carrier of T' <> {};
+     then
+B2:   p in {q}` by SUBSET_1:50,A2;
        {q} is closed by A1,URYSOHN1:27;
     then consider W, V being Subset of T such that
 A3:   W is open & V is open & p in W & {q} c= V & W misses V
-       by A1,A2,COMPTS_1:def 5;
+       by A1,B2,COMPTS_1:def 5;
     take W, V;
        q in {q} by TARSKI:def 1;
     hence thesis by A3;

@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.76 $
+;; $Revision: 1.80 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -156,6 +156,10 @@ Valid values are 'gnuemacs,'Xemacs and 'winemacs.")
   "Speedbar support for the Mizar mode"
   :group 'mizar)
 
+(defgroup mizar-education nil
+  "Options for nonstandard Mizaring used when teaching Mizar"
+  :group 'mizar)
+
 (defcustom mizar-indent-width 2 
 "*Indentation width for Mizar articles."
 :type 'integer
@@ -193,6 +197,12 @@ Possible values are none, first, next, previous."
 	       (const :tag "first error in the article" "first")
 	       (const :tag "first error before point" "previous")
 	       (const :tag "no movement" "none"))
+:group 'mizar-running)
+
+(defcustom mizar-verifier "verifier"
+"*The default Mizar verifier used to check Mizar articles.
+This is used in the `mizar-it' function."
+:type 'string
 :group 'mizar-running)
 
 (defcustom mizfiles 
@@ -883,6 +893,29 @@ or lists containing parsed formulas, which are later handed over to
 	(mapconcat 'mizar-skelitem-string skel "\n")
 	"\nend;\n"))
 
+(defcustom mizar-skeleton-labels nil
+"*If set, skeleton steps produced by `mizar-insert-skeleton' are labeled."
+:type 'boolean
+:group 'mizar-skeletons)
+
+(defcustom mizar-default-label-name "Z"
+"*Default name of labels inserted when `mizar-skeleton-labels' is set.
+This is appended with a label number."
+:type 'string
+:group 'mizar-skeletons)
+
+(defvar mizar-next-sk-label 0
+"Global var used for numbering skeleton steps.")
+
+(defun mizar-next-sk-label ()
+"Returns next free label usable in proof skeletons."
+(let ((res ""))
+  (when mizar-skeleton-labels
+    (setq res (concat mizar-default-label-name 
+		      (int-to-string mizar-next-sk-label) ":"))
+    (incf mizar-next-sk-label))
+  res))
+    
 (defun mizar-default-assume-items (fla)
 "Create the default assumption skeleton for parsed formula FLA. 
 The skeleton is a list of of items, each item is a list of either strings 
@@ -913,9 +946,9 @@ or lists containing parsed formulas, which are later handed over to
      ((eq 'implies (car negfla))
       (mizar-default-assume-items 
        (list '& (second negfla) (list 'not (third negfla)))))
-     (t (list (list "assume" fla ";"))))))
+     (t (list (list "assume" (mizar-next-sk-label) fla ";"))))))
 
-   (t (list (list "assume" fla ";")))
+   (t (list (list "assume" (mizar-next-sk-label) fla ";")))
 )))
 
 (defcustom mizar-assume-items-func 'mizar-default-assume-items
@@ -1012,10 +1045,13 @@ This function is called in the interactive function
 :type 'function
 :group 'mizar-skeletons)
 
-(defun mizar-insert-skeleton (beg end)
+(defun mizar-insert-skeleton (beg end &optional labnr)
 "Insert a proof skeleton for formula starting at BEG after point END.
 For normal interactive usage, just select the region containing 
 the formula, and run this function. 
+If `mizar-skeleton-labels' is set, prompts additionaly for the
+first starting label number LABNR. The labels are then generated
+using the `mizar-default-label-name' string.
 The lisppars utility needs to be installed for this to work -
 it is distributed with Mizar since version 6.4, and the
 formula has to be accessible in the article to the Mizar parser -
@@ -1024,6 +1060,11 @@ Calls `mizar-parse-region-fla' to parse the formula, Then creates the
 skeleton using `mizar-skeleton-items-func', and pretty prints it using
 `mizar-skeleton-string'."
 (interactive "r")
+(or labnr (not mizar-skeleton-labels)
+    (setq labnr (string-to-number
+		 (read-string "First skeleton label: " 
+			      (int-to-string mizar-next-sk-label)))))
+(if labnr (setq mizar-next-sk-label labnr))
 (save-excursion
   (let ((skel
  	 (mizar-skeleton-string 
@@ -3940,6 +3981,7 @@ Show them in the buffer *Constructors List*."
 
 (defvar mizar-imenu-expr
 '(
+  ("Reservations" "[ \n\r]\\(reserve\\b.*\\)" 1)
   ("Structures" "[ \n\r]\\(struct\\b.*\\)" 1)
   ("Modes" "[ \n\r]\\(mode\\b.*\\)" 1)
   ("Attributes" "[ \n\r]\\(attr\\b.*\\)" 1)
@@ -4083,6 +4125,15 @@ If UTIL is given, call it instead of the Mizar verifier."
 
 (defvar makeenv "makeenv" "Program used for creating the article environment.")
 
+(defcustom mizar-forbid-accommodation nil
+"*The Mizar accomodator is not called under any circumstances.
+This is used for teaching purposes, when the article environment
+was produced by the teacher, and it is not desirable that the 
+students experimented with acommodating.
+Normal users should not change this option."
+:type 'boolean
+:group 'mizar-education)
+
 (defun mizar-call-util (program &optional buffer &rest args)
 "Wrapper around `call-process', handling mizar options.
 Currently only `mizar-allow-long-lines'."
@@ -4091,8 +4142,9 @@ Currently only `mizar-allow-long-lines'."
   (apply 'call-process program nil buffer nil args)))
 
 (defun mizar-accom (accomname force buffer article)
+(if mizar-forbid-accommodation 0
   (if force (mizar-call-util accomname buffer "-a" article)
-    (mizar-call-util accomname buffer article)))
+    (mizar-call-util accomname buffer article))))
 
 (defun mizar-noqr-sentinel (process signal)
   (if (memq (process-status process) '(exit signal))
@@ -4129,7 +4181,7 @@ If `mizar-use-momm', run tptpver instead.
 If FORCEACC, run makeenv with the -a option."
   (interactive)
   (let ((util (or util (if mizar-use-momm mizar-momm-verifier
-			 "verifier")))
+			 mizar-verifier)))
 	(makeenv makeenv))
     (if (eq mizar-emacs 'winemacs)
 	(progn
@@ -4137,7 +4189,8 @@ If FORCEACC, run makeenv with the -a option."
 		makeenv (concat mizfiles makeenv))))
     (cond ((not (string-match "miz$" (buffer-file-name)))
 	   (error "Not in .miz file!!"))
-	  ((not (executable-find makeenv))
+	  ((and (not mizar-forbid-accommodation)
+		(not (executable-find makeenv)))
 	   (error (concat makeenv " not found or not executable!!")))
 	  ((not (executable-find util))
 	   (error (concat util " not found or not executable!!")))
@@ -4179,7 +4232,7 @@ If FORCEACC, run makeenv with the -a option."
   (if (or noqr (not mizar-quick-run)) 
       (mizar-it-noqr util forceacc)
   (let ((util (or util (if mizar-use-momm mizar-momm-verifier
-			 "verifier")))
+			 mizar-verifier)))
 	(makeenv makeenv))
     (if (eq mizar-emacs 'winemacs)
 	(progn
@@ -4187,7 +4240,8 @@ If FORCEACC, run makeenv with the -a option."
 		makeenv (concat mizfiles makeenv))))
     (cond ((not (string-match "miz$" (buffer-file-name)))
 	   (error "Not in .miz file!!"))
-	  ((not (executable-find makeenv))
+	  ((and (not mizar-forbid-accommodation)
+		(not (executable-find makeenv)))
 	   (error (concat makeenv " not found or not executable!!")))
 	  ((not (executable-find util))
 	   (error (concat util " not found or not executable!!")))
@@ -4319,30 +4373,28 @@ If FORCEACC, run makeenv with the -a option."
 ; 	 (setq pos (match-beginning 0))
 ; 	 (re-search-forward (concat "[, \n]" var "[, \n]") " *\\([;]\\|by\\|proof\\)" (point-max) t))
 
-
 (defun make-reserve-summary ()
   "Make a summary of all type reservations before current point in the article.
-Display it in the buffer *Reservation-Summary* in other window.
+Display it in the `*Occur*' buffer, which uses the `occur-mode'.
 Previous contents of that buffer are killed first.
 Useful for finding out the exact meaning of variables used in
 some Mizar theorem or definition."
   (interactive)
-  (message "Making reservation summary...")
-  ;; This puts a description of bindings in a buffer called *Help*.
-  (setq result (make-reservations-string))
-  (with-output-to-temp-buffer "*Reservations-Summary*"
-    (save-excursion
-      (let ((cur-mode "mizar"))
-	(set-buffer standard-output)
-	(mizar-mode)
-	(erase-buffer)
-	(insert result))
-      (goto-char (point-min))))
-  (message "Making reservations summary...done"))
-
-
-
-			 
+  (let* ((old-face (if (boundp 'list-matching-lines-face)
+		       list-matching-lines-face)))
+    (if (get-buffer "*Occur*") (kill-buffer "*Occur*"))
+    (unwind-protect
+	(save-restriction
+	  (narrow-to-region (point-min) (point))
+	  ;; prevent occur from messing Mizar faces
+	  (if old-face
+	      (setq list-matching-lines-face nil))
+	  (occur "\\breserve\\b[^;]+;")
+	  (if (get-buffer "*Occur*")
+	      (message "Showing reservations before point")
+	    (message "No reservations before point")))
+      (if old-face
+	  (setq list-matching-lines-face old-face)))))
 
 (defun mizar-listvoc ()
   "List vocabulary."
@@ -4517,25 +4569,6 @@ This is a flamewar-resolving hack."
 	 (if  (string-match "\n$" result1)
 	     (setq result (concat result result1 "\n" ))
 	   (setq result (concat result result1 "\n\n" )))))
-    result))
-
-(defun make-reservations-string ()
-  "Make string of all reservations before point."
-  (interactive)
-  (save-excursion
-    (setq maxp (point))
-    (goto-char (point-min))
-    (setq result "")
-    (while
- 	(and
-	 (re-search-forward "^[ \t]*\\(reserve\\)" maxp t)
-	 (setq pos (match-beginning 1))
-	 (re-search-forward ";" maxp t))
-      (progn
-	(setq result1 (buffer-substring-no-properties pos (match-end 0)))
-	 (if  (string-match "\n$" result1)
-	     (setq result result1 )
-	   (setq result (concat result result1 "\n" )))))
     result))
 
 ;; Abbrevs

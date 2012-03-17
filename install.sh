@@ -1,6 +1,6 @@
 #!/bin/sh
 
-HEADER_STR="Installation of Mizar System Version 7.0.03 (Linux/FPC) (MML 4.03.825)"
+HEADER_STR="Installation of Mizar System Version 7.0.04 (Linux/FPC) (MML 4.04.834)"
 LDIR=`pwd`
 INSTALL_BIN='/usr/local/bin'
 INSTALL_DOC='/usr/local/doc/mizar'
@@ -18,11 +18,7 @@ exit_install()
 start_install()
  {
 
-   $DIALOG \
-   --title Info \
-   --textbox README 20 60
-   
-   $DIALOG \
+   dialog \
    --title Executables \
    --inputbox "Enter the path for installing Mizar executables"  10 60 $INSTALL_BIN 2> $INSTALL_TEMP
    if  [ ! -s $INSTALL_TEMP ]; then exit_install; fi
@@ -36,7 +32,7 @@ start_install()
    gzip -c -d $LDIR/mizbin.tar.gz | tar -xf - || exit_install "Error while unpacking to $INSTALL_BIN"
    cd $LDIR
 
-   $DIALOG \
+   dialog \
    --title "Shared files" \
    --inputbox "Enter the path for installing Mizar shared files"  10 60 $INSTALL_MIZ 2> $INSTALL_TEMP
    if  [ ! -s $INSTALL_TEMP ]; then exit_install; fi
@@ -55,7 +51,7 @@ start_install()
      rm -f $INSTALL_MIZ/mml.vct || exit_install "Unable to remove old share files"
    fi
    
-   $DIALOG \
+   dialog \
    --title "Shared files installation" \
    --infobox "It may take some time..."  3 60 
    
@@ -63,7 +59,7 @@ start_install()
    gzip -c -d $LDIR/mizshare.tar.gz | tar -xf - || exit_install "Error while unpacking to $INSTALL_MIZ"
    cd $LDIR
    
-   $DIALOG \
+   dialog \
    --title "Mizar documentation" \
    --inputbox "Enter the path for installing Mizar documentation"  10 60 $INSTALL_DOC 2> $INSTALL_TEMP
    if  [ ! -s $INSTALL_TEMP ]; then exit_install; fi
@@ -78,7 +74,7 @@ start_install()
    gzip -c -d $LDIR/mizdoc.tar.gz | tar -xf - || exit_install "Error while unpacking to $INSTALL_DOC"
    cd $LDIR
 
-   $DIALOG \
+   dialog \
    --title "Installation completed" \
    --clear \
    --msgbox \
@@ -105,6 +101,8 @@ start_old_install()
      read ANS
      if [ "$ANS" != "" ]; then INSTALL_BIN=$ANS; fi
    fi
+   echo "Unpacking to $INSTALL_BIN"
+   echo " "
 
    if [ ! -d $INSTALL_BIN ]; then
      mkdir -p $INSTALL_BIN || exit_install "Unable to create directory $INSTALL_BIN"
@@ -122,6 +120,8 @@ start_old_install()
      read ANS
      if [ "$ANS" != "" ]; then INSTALL_MIZ=$ANS; fi
    fi
+   echo "Unpacking to $INSTALL_MIZ"
+   echo " "
 
    if [ ! -d $INSTALL_MIZ ] 
     then
@@ -138,6 +138,7 @@ start_old_install()
    fi
 
    echo "It may take some time..."
+   echo " "
 
    cd $INSTALL_MIZ
    gzip -c -d $LDIR/mizshare.tar.gz | tar -xf - || exit_install "Error while unpacking to $INSTALL_MIZ"
@@ -150,6 +151,8 @@ start_old_install()
      read ANS
      if [ "$ANS" != "" ]; then INSTALL_DOC=$ANS; fi
    fi
+   echo "Unpacking to $INSTALL_DOC"
+   echo " "
 
    if [ ! -d $INSTALL_DOC ] 
     then
@@ -161,7 +164,6 @@ start_old_install()
    gzip -c -d $LDIR/mizdoc.tar.gz | tar -xf - || exit_install "Error while unpacking to $INSTALL_DOC"
    cd $LDIR
 
-   echo " "
    echo "The installation process of the Mizar system is completed."
    echo " "
    echo "Note:"
@@ -178,17 +180,21 @@ case $1 in
  '--default') DEFAULT="yes"; start_old_install; exit ;;
  '--nodialog') start_old_install; exit ;;
  *)
-  which dialog > /dev/null
-  if [ "$?" != 0 ]; then start_old_install; exit; fi
-  HEADER_STR=HEAD
-  dialog 2>&1 | grep backtitle > /dev/null
-  if [ "$?" = 0 ]; then DIALOG="`which dialog` --backtitle $HEADER_STR"; else DIALOG=`which dialog`;fi
-  $DIALOG \
+  dialog > /dev/null 2>&1
+  if [ "$?" != 0 -a ! -x /usr/bin/dialog ]; then start_old_install; else
+
+  dialog \
+  --title Info \
+  --textbox README 20 70   
+
+  dialog \
   --title Start \
-  --yesno "Do yo want to start Mizar installation ?" 6 40
+  --yesno "Start the installation ?"  6 30
+
   case $? in
    0) start_install ;;
    *) exit_install ;;
   esac;
+  fi
   ;;
 esac

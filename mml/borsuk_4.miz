@@ -19,10 +19,10 @@ environ
  constructors REALSET1, JORDAN2C, TOPS_2, TOPREAL2, TOPREAL1, CONNSP_1,
       RCOMP_2, PSCOMP_1, INTEGRA1, TMAP_1, BORSUK_3, COMPTS_1, YELLOW_8,
       PARTFUN1, LIMFUNC1, SPPOL_1, TOPGRP_1, TREAL_1, DOMAIN_1, XCMPLX_0,
-      MEMBERED, JORDAN1;
+      MEMBERED, JORDAN1, BORSUK_2, SEQM_3;
  clusters XREAL_0, RELSET_1, REVROT_1, TOPREAL6, STRUCT_0, PRE_TOPC, BORSUK_2,
       REALSET1, INTEGRA1, TEX_1, TEX_2, JORDAN1B, YELLOW13, EUCLID, MEMBERED,
-      ZFMISC_1;
+      ZFMISC_1, TOPS_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions XBOOLE_0, TARSKI, CONNSP_1, PARTFUN1, JORDAN1;
  theorems TOPS_2, T_0TOPSP, BORSUK_1, RCOMP_2, PRE_TOPC, COMPTS_1, TARSKI,
@@ -54,16 +54,6 @@ registration let T be non empty TopSpace;
     reconsider E = {t} as Subset of T;
     take E;
     thus thesis by CONNSP_1:29;
-  end;
-end;
-
-registration
-  cluster -> real Element of I[01];
-  coherence
-  proof
-    let a be Element of I[01];
-        a in [. 0, 1 .] by BORSUK_1:83;
-    hence thesis by XREAL_0:def 1;
   end;
 end;
 
@@ -287,12 +277,12 @@ A34:     rng g c= rng F by A14,XBOOLE_1:7;
 
 theorem Th7:
   for n being Nat,
-      A being non empty Subset of TOP-REAL n,
+      A being Subset of TOP-REAL n,
       p, q being Point of TOP-REAL n st
     A is_an_arc_of p, q holds A \ {p} is non empty
   proof
     let n be Nat,
-        A be non empty Subset of TOP-REAL n,
+        A be Subset of TOP-REAL n,
         p, q be Point of TOP-REAL n;
     assume A is_an_arc_of p, q;
 then A1: A \ { p, q } <> {} by JORDAN6:56;
@@ -331,9 +321,8 @@ then A3:   l>0 & l<1 by A1,REAL_1:def 5;
 A4:   l*s1<l*s4 by A1,A2,REAL_1:70;
           1-l>0 by A3,SQUARE_1:11;
 then A5:   (1-l)*s1<=(1-l)*s3 by A1,AXIOMS:25;
-          (1-l)*s1+l*s1=(1-l+l)*s1 by XCMPLX_1:8
-                  .=1 * s1 by XCMPLX_1:27
-                  .=s1;
+          (1-l)*s1+l*s1=(1-l+l)*s1
+                  .=1 * s1;
       hence thesis by A4,A5,REAL_1:67;
     end;
     end;
@@ -341,12 +330,14 @@ then A5:   (1-l)*s1<=(1-l)*s3 by A1,AXIOMS:25;
   end;
 
 theorem Th10:
-  for x being set, a, b being real number st a <= b &
+  for x being set, a, b being real number st
     x in [. a, b .] holds x in ]. a, b .[ or x = a or x = b
    proof
      let x be set, a,b be real number;
-     assume a <= b & x in [. a, b .];
-     then x in ]. a, b .[ \/ {a,b} by RCOMP_1:11;
+     assume
+A1:    x in [. a, b .];
+     then a <= b by RCOMP_1:13;
+     then x in ]. a, b .[ \/ {a,b} by A1,RCOMP_1:11;
      then x in ]. a, b .[ or x in {a,b} by XBOOLE_0:def 2;
      hence x in ]. a, b .[ or x = a or x = b by TARSKI:def 2;
    end;
@@ -406,14 +397,14 @@ A4: y' = x & c <= y' & y' <= d;
   end;
 
 theorem
-      for a, b, c, d being real number st a < b &
+  for a, b, c, d being real number st a <= b &
     [.a,b.] c= [.c,d.] holds c <= a & b <= d
   proof
     let a, b, c, d be real number;
-    assume A1: a < b;
+    assume A1: a <= b;
     assume A2: [.a,b.] c= [.c,d.];
 A3: a in [.a,b.] by A1,RCOMP_1:15;
-        b in [.a,b.] by A1,RCOMP_1:15;
+    b in [.a,b.] by A1,RCOMP_1:15;
     hence thesis by A2,A3,TOPREAL5:1;
   end;
 
@@ -449,7 +440,7 @@ then A8: d < ac by A6,AXIOMS:22;
   end;
 
 theorem
-      for a, b, c, d being real number st a < b &
+  for a, b, c, d being real number st a < b &
     ].a,b.[ c= [.c,d.] holds [.a,b.] c= [.c,d.]
   proof
     let a, b, c, d be real number;
@@ -461,7 +452,7 @@ then A4: ].a,b.[ meets [.c,d.] by A2,XBOOLE_1:69;
     proof
       let x be set;
       assume A5: x in [.a,b.];
-      per cases by A1,A5,Th10;
+      per cases by A5,Th10;
       suppose A6: x = a;
           now per cases;
         suppose A7: not a in [.c,d.];
@@ -523,8 +514,8 @@ theorem Th17:
         a, b be real number;
     assume A1: a < b;
     assume A2: A = ].a,b.[;
-then A3: 0 <= a by A1,Th15,BORSUK_1:83;
-        b <= 1 by A1,A2,Th15,BORSUK_1:83;
+    then A3: 0 <= a by A1,Th15,BORSUK_1:83;
+    b <= 1 by A1,A2,Th15,BORSUK_1:83;
     hence thesis by A3,BORSUK_1:83,TREAL_1:1;
   end;
 
@@ -589,7 +580,7 @@ then A3: Cl [.a,b.[ c= [.a,b.] by A2,PSCOMP_1:32;
   end;
 
 theorem
-      for A being Subset of I[01],
+  for A being Subset of I[01],
       a, b being real number st a < b & A = ].a,b.[ holds
     Cl A = [.a,b.]
   proof
@@ -643,12 +634,12 @@ then A3: [.a,b.] c= [#]I[01] by PRE_TOPC:12;
   end;
 
 theorem
-      for a,b being real number st a < b holds
+  for a,b being real number st a < b holds
    [.a,b.] <> ].a,b.]
   proof
     let a,b be real number;
     assume A1: a < b;
-        not a in ].a,b.] by RCOMP_2:4;
+    not a in ].a,b.] by RCOMP_2:4;
     hence thesis by A1,TOPREAL5:1;
   end;
 
@@ -964,7 +955,7 @@ A1: ]. a,b .[ c= [. a,b .] by RCOMP_1:15;
 begin :: Decompositions of Intervals
 
 theorem
-      for p being real number holds
+  for p being real number holds
    {p} is closed-interval Subset of REAL
   proof
     let p be real number;
@@ -1030,19 +1021,27 @@ A3: z = x & a <= z & z <= b;
 
 theorem Th48:
   for a, b being real number,
-      A being Subset of I[01] st a <= b & A = [.a,b.] holds
+      A being Subset of I[01] st A = [.a,b.] holds
     A is closed
   proof
     let a, b be real number,
         A be Subset of I[01];
-    assume A1: a <= b & A = [.a,b.];
-    then 0 <= a & b <= 1 by Th32;
+    assume A1: A = [.a,b.];
+    per cases;
+    suppose
+aa:      a <= b;
+    then 0 <= a & b <= 1 by A1,Th32;
 then A2: Closed-Interval-TSpace(a,b) is closed SubSpace of
-       Closed-Interval-TSpace(0,1) by A1,TREAL_1:6;
+       Closed-Interval-TSpace(0,1) by aa,TREAL_1:6;
     then reconsider BA = the carrier of Closed-Interval-TSpace(a,b) as
       Subset of Closed-Interval-TSpace(0,1) by BORSUK_1:35;
         BA is closed by A2,BORSUK_1:def 14;
-    hence thesis by A1,TOPMETR:25,27;
+    hence thesis by aa,A1,TOPMETR:25,27;
+    end;
+    suppose a > b;
+    then A = {}I[01] by A1,RCOMP_1:13;
+    hence thesis;
+    end;
   end;
 
 theorem Th49:
@@ -1054,7 +1053,7 @@ theorem Th49:
     A2: 0 <= p1 & p2 <= 1 by JORDAN5A:2;
     set S = [. p1, p2 .];
     reconsider S as Subset of I[01] by BORSUK_1:83,RCOMP_1:16;
-A3: S is closed by A1,Th48;
+A3: S is closed by Th48;
 A4: Closed-Interval-TSpace(p1,p2) is connected by A1,TREAL_1:23;
         I[01] | S = Closed-Interval-TSpace(p1,p2) by A1,A2,JGRAPH_5:7;
     hence thesis by A1,A3,A4,COMPTS_1:17,CONNSP_1:def 3,RCOMP_1:15;
@@ -1269,18 +1268,17 @@ A3:   x = r & a <= r & r < b;
   end;
 
 theorem
-      for D being Simple_closed_curve holds
+  for D being Simple_closed_curve holds
     (TOP-REAL 2) | R^2-unit_square, (TOP-REAL 2) | D are_homeomorphic
   proof
     let D be Simple_closed_curve;
-    consider f being map of (TOP-REAL 2)|R^2-unit_square, (TOP-REAL 2)|D
-      such that
-A1: f is_homeomorphism by TOPREAL2:def 1;
-    thus thesis by A1,T_0TOPSP:def 1;
+    ex f being map of (TOP-REAL 2)|R^2-unit_square, (TOP-REAL 2)|D st
+      f is_homeomorphism by TOPREAL2:def 1;
+    hence thesis by T_0TOPSP:def 1;
 end;
 
 theorem
-      for D being non empty Subset of TOP-REAL 2,
+  for D being non empty Subset of TOP-REAL 2,
       p1, p2 being Point of TOP-REAL 2 st D is_an_arc_of p1, p2 holds
     I(01), (TOP-REAL 2) | (D \ {p1,p2}) are_homeomorphic
   proof
@@ -1355,7 +1353,7 @@ theorem Th65:
   end;
 
 theorem
-      for p1, p2 being Point of TOP-REAL 2 st p1 <> p2 holds
+  for p1, p2 being Point of TOP-REAL 2 st p1 <> p2 holds
     I[01], (TOP-REAL 2) | LSeg (p1, p2) are_homeomorphic
   proof
     let p1, p2 be Point of TOP-REAL 2;
@@ -1385,22 +1383,23 @@ then A3: S = T by A2,TSEP_1:5;
   end;
 
 theorem Th68:
-  for A being non empty Subset of TOP-REAL 2,
+  for A being Subset of TOP-REAL 2,
       p, q being Point of TOP-REAL 2,
       a, b being Point of I[01] st A is_an_arc_of p, q & a < b
   ex E being non empty Subset of I[01],
      f being map of I[01]|E, (TOP-REAL 2)|A st
     E = [. a, b .] & f is_homeomorphism & f.a = p & f.b = q
   proof
-    let A be non empty Subset of TOP-REAL 2,
+    let A be Subset of TOP-REAL 2,
         p, q be Point of TOP-REAL 2,
         a, b be Point of I[01];
     assume that
 A1: A is_an_arc_of p, q and
 A2: a < b;
+    reconsider B = A as non empty Subset of TOP-REAL 2 by A1,TOPREAL1:4;
     reconsider E = [. a, b .] as non empty Subset of I[01] by A2,Th49;
     take E;
-    consider f being map of I[01], (TOP-REAL 2)|A such that
+    consider f being map of I[01], (TOP-REAL 2)|B such that
 A3: f is_homeomorphism & f.0 = p & f.1 = q by A1,TOPREAL1:def 2;
       0 <= a & b <= 1 by JORDAN5A:2;
 then A4: I[01]|E = Closed-Interval-TSpace(a,b) by A2,JGRAPH_5:7;
@@ -1450,30 +1449,30 @@ A3: h = f|X;
 theorem Th70:
   for X being Subset of I[01],
       a, b being Point of I[01] st
-   a <= b & X = ]. a, b .[ holds X is open
+   X = ]. a, b .[ holds X is open
   proof
     let X be Subset of I[01],
         a, b be Point of I[01];
-    assume
-A1: a <= b & X = ]. a, b .[;
+    assume that
+aa: X = ]. a, b .[;
     per cases;
-    suppose a <> b;
-then A2: a < b by A1,REAL_1:def 5;
+    suppose
+A1:   a < b;
 A3: 0 in the carrier of I[01] & 1 in the carrier of I[01] by JORDAN5A:2;
 A4: 0 <= a by JORDAN5A:2;
     reconsider A = [. 0, a .] as Subset of I[01] by A3,BORSUK_1:83,RCOMP_1:16;
 A5: b <= 1 by JORDAN5A:2;
     reconsider B = [. b, 1 .] as Subset of I[01] by A3,BORSUK_1:83,RCOMP_1:16;
-A6: A is closed by A4,Th48;
-        B is closed by A5,Th48;
+A6: A is closed by Th48;
+        B is closed by Th48;
 then A7: A \/ B is closed by A6,TOPS_1:36;
-A8: X = [. 0, 1 .] \ (A \/ B) by A1,A2,A4,A5,Th37;
+A8: X = [. 0, 1 .] \ (A \/ B) by aa,A1,A4,A5,Th37;
         [#] I[01] = [. 0, 1 .] by BORSUK_1:83,PRE_TOPC:12;
     then X = (A \/ B)` by A8,PRE_TOPC:17;
     hence thesis by A7,TOPS_1:29;
     end;
-    suppose a = b;
-    then X = {} by A1,RCOMP_1:12;
+    suppose a >= b;
+    then X = {} by aa,RCOMP_1:12;
     then X in the topology of I[01] by PRE_TOPC:5;
     hence thesis by PRE_TOPC:def 5;
   end;
@@ -1482,49 +1481,60 @@ A8: X = [. 0, 1 .] \ (A \/ B) by A1,A2,A4,A5,Th37;
 theorem Th71:
   for X being Subset of I(01),
       a, b being Point of I[01] st
-   a <= b & X = ]. a, b .[ holds X is open
+   X = ]. a, b .[ holds X is open
   proof
     let X be Subset of I(01),
         a, b be Point of I[01];
-    assume A1: a <= b & X = ]. a, b .[;
+    assume A1: X = ]. a, b .[;
     then reconsider X' = X as Subset of I[01] by Th44;
-        X' is open by A1,Th70;
+    X' is open by A1,Th70;
     hence thesis by Th59,TSEP_1:17;
   end;
 
 theorem Th72:
-  for X being non empty Subset of I(01),
+  for X being Subset of I(01),
       a being Point of I[01] st
-    0 < a & X = ]. 0, a .] holds X is closed
+    X = ]. 0, a .] holds X is closed
   proof
-    let X be non empty Subset of I(01),
+    let X be Subset of I(01),
         a be Point of I[01];
-    assume A1: 0 < a & X = ]. 0, a .];
+    assume A1: X = ]. 0, a .];
+    per cases;
+    suppose
+aa:   0 < a;      
 A2: 1 in the carrier of I[01] by JORDAN5A:2;
 A3: a <= 1 by JORDAN5A:2;
-        a <> 1
+    a <> 1
     proof
       assume
 A4:   a = 1;
-          a in X by A1,RCOMP_2:4;
+     a in X by aa,A1,RCOMP_2:4;
       hence contradiction by A4,Th60;
     end;
 then A5: a < 1 by A3,REAL_1:def 5;
     [#] I(01) = the carrier of I(01) by PRE_TOPC:12 .= ]. 0, 1 .[ by Def1;
-    then [#] I(01) \ X = ]. a, 1 .[ by A1,A5,Th41;
-    then [#] I(01) \ X is open by A2,A3,Th71;
+    then [#] I(01) \ X = ]. a, 1 .[ by aa,A1,A5,Th41;
+    then [#] I(01) \ X is open by A2,Th71;
     hence thesis by PRE_TOPC:def 6;
+    end;
+    suppose 0 >= a;
+    then X = {}I(01) by A1,RCOMP_2:10;
+    hence thesis;
+    end;
   end;
 
 theorem Th73:
-  for X being non empty Subset of I(01),
+  for X being Subset of I(01),
       a being Point of I[01] st
     X = [. a, 1 .[ holds X is closed
   proof
-    let X be non empty Subset of I(01),
+    let X be Subset of I(01),
         a be Point of I[01];
     assume A1: X = [. a, 1 .[;
 A2: 1 in the carrier of I[01] & 0 in the carrier of I[01] by JORDAN5A:2;
+    per cases;
+    suppose X is non empty;
+    then
 A3: a <> 1 by A1,RCOMP_2:7;
         a <= 1 by JORDAN5A:2;
 then A4: a < 1 by A3,REAL_1:def 5;
@@ -1538,28 +1548,34 @@ A6: a <> 0
       then 0 in ]. 0, 1 .[ by Def1;
       hence thesis by JORDAN6:45;
     end;
-A7: 0 <= a by JORDAN5A:2;
+    0 <= a by JORDAN5A:2;
     then [#] I(01) \ X = ]. 0, a .[ by A1,A4,A5,A6,Th42;
-    then [#] I(01) \ X is open by A2,A7,Th71;
+    then [#] I(01) \ X is open by A2,Th71;
     hence thesis by PRE_TOPC:def 6;
+    end;
+    suppose X is empty;
+    then X = {}I(01);
+    hence thesis;
+  end;
   end;
 
 theorem Th74:
-  for A being non empty Subset of TOP-REAL 2,
+  for A being Subset of TOP-REAL 2,
       p, q being Point of TOP-REAL 2,
       a, b being Point of I[01] st A is_an_arc_of p, q & a < b & b <> 1
   ex E being non empty Subset of I(01),
      f being map of I(01)|E, (TOP-REAL 2)|(A \ {p}) st
     E = ]. a, b .] & f is_homeomorphism & f.b = q
   proof
-    let A be non empty Subset of TOP-REAL 2,
+    let A be Subset of TOP-REAL 2,
         p, q be Point of TOP-REAL 2,
         a, b be Point of I[01];
     assume
 A1: A is_an_arc_of p, q & a < b & b <> 1;
-    then consider F being non empty Subset of I[01],
-             s being map of I[01]|F, (TOP-REAL 2)|A such that
-A2: F = [. a, b .] & s is_homeomorphism & s.a = p & s.b = q by Th68;
+    reconsider B = A as non empty Subset of TOP-REAL 2 by A1,TOPREAL1:4;
+    consider F being non empty Subset of I[01],
+             s being map of I[01]|F, (TOP-REAL 2)|B such that
+A2: F = [. a, b .] & s is_homeomorphism & s.a = p & s.b = q by A1,Th68;
     reconsider E = ]. a, b .] as non empty Subset of I(01) by A1,Th61;
 A3: the carrier of I(01)|E = E by JORDAN1:1;
     set X = E;
@@ -1616,21 +1632,22 @@ then A26: sX is_homeomorphism by A13,A15,A21,A22,TOPS_2:def 5;
   end;
 
 theorem Th75:
-  for A being non empty Subset of TOP-REAL 2,
+  for A being Subset of TOP-REAL 2,
       p, q being Point of TOP-REAL 2,
       a, b being Point of I[01] st A is_an_arc_of p, q & a < b & a <> 0
   ex E being non empty Subset of I(01),
      f being map of I(01)|E, (TOP-REAL 2)|(A \ {q}) st
     E = [. a, b .[ & f is_homeomorphism & f.a = p
   proof
-    let A be non empty Subset of TOP-REAL 2,
+    let A be Subset of TOP-REAL 2,
         p, q be Point of TOP-REAL 2,
         a, b be Point of I[01];
     assume
 A1: A is_an_arc_of p, q & a < b & a <> 0;
-    then consider F being non empty Subset of I[01],
-             s being map of I[01]|F, (TOP-REAL 2)|A such that
-A2: F = [. a, b .] & s is_homeomorphism & s.a = p & s.b = q by Th68;
+    then reconsider B = A as non empty Subset of TOP-REAL 2 by TOPREAL1:4;
+    consider F being non empty Subset of I[01],
+             s being map of I[01]|F, (TOP-REAL 2)|B such that
+A2: F = [. a, b .] & s is_homeomorphism & s.a = p & s.b = q by A1,Th68;
     reconsider E = [. a, b .[ as non empty Subset of I(01) by A1,Th62;
 A3: the carrier of I(01)|E = E by JORDAN1:1;
     set X = E;
@@ -1687,13 +1704,13 @@ then A26: sX is_homeomorphism by A13,A15,A21,A22,TOPS_2:def 5;
   end;
 
 theorem Th76:
-  for A, B being non empty Subset of TOP-REAL 2,
+  for A, B being Subset of TOP-REAL 2,
       p, q being Point of TOP-REAL 2 st
     A is_an_arc_of p, q & B is_an_arc_of q, p & A /\ B = { p, q } & p <> q
     holds
     I(01), (TOP-REAL 2) | ((A \ {p}) \/ (B \ {p})) are_homeomorphic
   proof
-    let A, B be non empty Subset of TOP-REAL 2,
+    let A, B be Subset of TOP-REAL 2,
         p, q be Point of TOP-REAL 2;
     assume that
 A1: A is_an_arc_of p, q and
@@ -1877,7 +1894,7 @@ A7: D \ {p} = (P1 \ {p}) \/ (P2 \ {p}) by A5,XBOOLE_1:42;
   end;
 
 theorem
-      for D being Simple_closed_curve,
+  for D being Simple_closed_curve,
       p, q being Point of TOP-REAL 2 st p in D & q in D holds
     (TOP-REAL 2) | (D \ {p}), (TOP-REAL 2) | (D \ {q}) are_homeomorphic
   proof
@@ -1996,7 +2013,7 @@ A13: g" = (g qua Function)" by A8,A10,TOPS_2:def 4
   end;
 
 theorem
-      for D being Simple_closed_curve,
+  for D being Simple_closed_curve,
       C being non empty compact connected Subset of TOP-REAL 2 st C c= D holds
     C = D or
     (ex p1, p2 being Point of TOP-REAL 2 st C is_an_arc_of p1,p2) or

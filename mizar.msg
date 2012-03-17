@@ -411,6 +411,8 @@ Paired functor brackets must be of the same kind
 Scheme reference is not allowed in a simple justification
 # 313
 "sch" expected
+# 314
+Incorrect beginning of a pattern
 # 320
 Selector or structure symbol expected
 # 321

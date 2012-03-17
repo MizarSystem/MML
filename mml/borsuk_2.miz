@@ -10,8 +10,9 @@ environ
       ORDINAL2, FUNCT_4, FUNCOP_1, TOPS_2, BORSUK_1, GRAPH_1, RCOMP_1, RELAT_2,
       ARYTM_3, ARYTM_1, TREAL_1, SEQ_1, TOPMETR, SEQM_3, SETFAM_1, TARSKI,
       TSP_1, METRIC_1, URYSOHN1, PCOMPS_1, EUCLID, MCART_1, CONNSP_2, TOPS_1,
-      BORSUK_2;
- notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, REAL_1,
+      BORSUK_2, ARYTM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, NAT_1, REAL_1,
       RELAT_1, SETFAM_1, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0, PRE_TOPC,
       EUCLID, TOPS_2, MCART_1, RCOMP_1, PCOMPS_1, CARD_1, TOPS_1, COMPTS_1,
       CONNSP_1, CONNSP_2,
@@ -21,7 +22,8 @@ environ
       TOPS_1, WEIERSTR, RCOMP_1, COMPTS_1, YELLOW_8, URYSOHN1, GRCAT_1,
       MEMBERED;
  clusters SUBSET_1, STRUCT_0, TOPMETR, FUNCT_1, PRE_TOPC, BORSUK_1, TSP_1,
-      YELLOW_6, YELLOW_8, WAYBEL10, METRIC_1, RELSET_1, MEMBERED, FUNCT_2;
+      YELLOW_6, YELLOW_8, WAYBEL10, METRIC_1, RELSET_1, MEMBERED, FUNCT_2,
+      XREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, PRE_TOPC, COMPTS_1, URYSOHN1, T_0TOPSP, XBOOLE_0;
  theorems BORSUK_1, FUNCOP_1, TOPS_2, TREAL_1, FUNCT_2, FUNCT_1, PRE_TOPC,
@@ -29,12 +31,26 @@ environ
       TOPMETR, FUNCT_4, TOPMETR2, HEINE, PCOMPS_1, SEQM_3, AXIOMS, MCART_1,
       ZFMISC_1, BINOP_1, CONNSP_2, FUNCT_3, COMPTS_1, T_0TOPSP, GRCAT_1,
       CARD_1, SPPOL_1, WEIERSTR, RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_0,
-      XCMPLX_1;
+      XCMPLX_1, XREAL_0;
  schemes FUNCT_2, FUNCT_1;
 
 begin :: Preliminaries
 
  reserve T,T1,T2,S for non empty TopSpace;
+
+Lm3:
+  for r being real number holds
+    0 <= r & r <= 1 iff r in the carrier of I[01]
+proof
+ let r be real number;
+A1: r is Real by XREAL_0:def 1;
+A2: [.0,1.] = { r1 where r1 is Real : 0 <= r1 & r1 <= 1 } by RCOMP_1:def 1;
+ hence 0 <= r & r <= 1 implies r in the carrier of I[01] by A1,BORSUK_1:83;
+ assume r in the carrier of I[01];
+ then consider r2 being Real such that A3: r2 = r & 0 <= r2 & r2 <= 1
+    by A2,BORSUK_1:83;
+ thus thesis by A3;
+end;
 
 scheme FrCard { A() -> non empty set, X() -> set,
        F(set) -> set, P[set] }:
@@ -218,6 +234,16 @@ end;
 
 begin :: Paths and arcwise connected spaces
 
+registration
+  cluster -> real Element of I[01];
+  coherence
+  proof
+    let a be Element of I[01];
+    a in [. 0, 1 .] by BORSUK_1:83;
+    hence thesis by XREAL_0:def 1;
+  end;
+end;
+
 definition let T be TopStruct; let a, b be Point of T;
  given f be map of I[01], T such that
 A1:  f is continuous & f.0 = a & f.1 = b;
@@ -353,9 +379,9 @@ definition let T be non empty TopSpace;
 A1:  f is continuous & f.0 = a & f.1 = b &
     g is continuous & g.0 = b & g.1 = c;
   func P + Q -> Path of a, c means :Def4:
-   for t being Point of I[01], t' being Real st t = t' holds
-    ( 0 <= t' & t' <= 1/2 implies it.t = P.(2*t') ) &
-    ( 1/2 <= t' & t' <= 1 implies it.t = Q.(2*t'-1) );
+   for t being Point of I[01] holds
+    ( t <= 1/2 implies it.t = P.(2*t) ) &
+    ( 1/2 <= t implies it.t = Q.(2*t-1) );
   existence
   proof
    set e1 = P[01](0, 1/2, (#)(0,1), (0,1)(#));
@@ -387,17 +413,15 @@ then A10:  t' in dom e1 by A9;
       by FUNCT_2:def 1;
     reconsider r1 = (#)(0,1), r2 = (0,1)(#) as Real
       by BORSUK_1:def 17,def 18,TREAL_1:8;
-       e1.s = ((r2 - r1)/(1/2 - 0))*t' + ((1/2)*r1 - 0 * r2)/(1/2) by TREAL_1:
-14
+    e1.s = ((r2 - r1)/(1/2 - 0))*t' + ((1/2)*r1 - 0 * r2)/(1/2) by TREAL_1:14
         .= 2*t' by BORSUK_1:def 17,def 18,TREAL_1:8;
     hence thesis by A10,FUNCT_1:23;
    end;
       not 0 in { r : 1/2 <= r & r <= 1 }
    proof
     assume 0 in { r : 1/2 <= r & r <= 1 };
-    then consider rr being Real such that
-A11:    rr = 0 & 1/2 <= rr & rr <= 1;
-    thus thesis by A11;
+    then ex rr being Real st rr = 0 & 1/2 <= rr & rr <= 1;
+    hence thesis;
    end;
    then not 0 in dom E2 by A3,A6,RCOMP_1:def 1;
 then A12:f.0 = E1.0 by FUNCT_4:12
@@ -424,8 +448,7 @@ A17:E2 is Function of the carrier of Closed-Interval-TSpace (1/2, 1),
       1/2 in { r : 0 <= r & r <= 1 };
    then reconsider pol = 1/2 as Point of I[01] by BORSUK_1:83,RCOMP_1:def 1;
     P is continuous & Q is continuous by A1,Def1;
-then A18:ff is continuous & gg is continuous by A15,A16,TOPMETR:27,TOPS_2:58
-;
+then A18:ff is continuous & gg is continuous by A15,A16,TOPMETR:27,TOPS_2:58;
 A19:[#] T1 = the carrier of T1 by PRE_TOPC:12
        .= [.0,1/2.] by TOPMETR:25;
 A20:[#] T2 = the carrier of T2 by PRE_TOPC:12
@@ -448,7 +471,7 @@ then A24:  t' in dom e2 by A23;
        e2.s = ((r2 - r1)/(1 - 1/2))*t' + (1*r1 - (1/2)*r2)/(1 - 1/2)
       by TREAL_1:14
         .= 2*t' + (- 1) by BORSUK_1:def 17,def 18,TREAL_1:8
-        .= 2*t' - 1 by XCMPLX_0:def 8;
+        .= 2*t' - 1;
     hence thesis by A24,FUNCT_1:23;
    end;
 A25:ff.(1/2) = P.(2*(1/2)) by A8
@@ -467,48 +490,49 @@ A27:   h = ff+*gg & h is continuous by A18,A21,A26,TOPMETR2:4;
       .= Q.(2*1-1) by A22
       .= c by A1,Def1;
    then reconsider f as Path of a, c by A12,A27,Def1;
-   for t being Point of I[01], t' being Real st t = t' holds
-     ( 0 <= t' & t' <= 1/2 implies f.t = P.(2*t') ) &
-     ( 1/2 <= t' & t' <= 1 implies f.t = Q.(2*t'-1) )
+   for t being Point of I[01] holds
+     ( t <= 1/2 implies f.t = P.(2*t) ) &
+     ( 1/2 <= t implies f.t = Q.(2*t-1) )
    proof
-    let t be Point of I[01], t' be Real;
-    assume A28: t = t';
-    thus 0 <= t' & t' <= 1/2 implies f.t = P.(2*t')
+    let t be Point of I[01];
+X1: 0 <= t & t <= 1 by Lm3;
+A0: t is Real by XREAL_0:def 1;
+    thus t <= 1/2 implies f.t = P.(2*t)
     proof
-     assume A29: 0 <= t' & t' <= 1/2;
-     then t' in { r : 0 <= r & r <= 1/2 };
-then A30:  t' in [.0,1/2.] by RCOMP_1:def 1;
+     assume A29: t <= 1/2;
+     then t in { r : 0 <= r & r <= 1/2 } by A0, X1;
+then A30:  t in [.0,1/2.] by RCOMP_1:def 1;
      per cases;
-     suppose A31: t' <> 1/2;
-        not t' in dom E2
+     suppose A31: t <> 1/2;
+        not t in dom E2
      proof
-      assume t' in dom E2;
-      then t' in [.0,1/2.] /\ [.1/2,1.] by A3,A6,A30,XBOOLE_0:def 3;
-      then t' in {1/2} by TOPMETR2:1;
+      assume t in dom E2;
+      then t in [.0,1/2.] /\ [.1/2,1.] by A3,A6,A30,XBOOLE_0:def 3;
+      then t in {1/2} by TOPMETR2:1;
       hence thesis by A31,TARSKI:def 1;
      end;
-     then f.t = E1.t by A28,FUNCT_4:12
-        .= P.(2*t') by A8,A28,A29;
+     then f.t = E1.t by FUNCT_4:12
+        .= P.(2*t) by A0,A8,A29,X1;
      hence thesis;
      end;
-     suppose A32: t' = 1/2;
+     suppose A32: t = 1/2;
         1/2 in { r : 1/2 <= r & r <= 1 };
      then 1/2 in [.1/2, 1.] by RCOMP_1:def 1;
      then 1/2 in the carrier of Closed-Interval-TSpace(1/2,1)
          by TOPMETR:25;
-     then t in dom E2 by A17,A28,A32,FUNCT_2:def 1;
-     then f.t = E1.t by A25,A28,A32,FUNCT_4:14
-        .= P.(2*t') by A8,A28,A29;
+     then t in dom E2 by A17,A32,FUNCT_2:def 1;
+     then f.t = E1.t by A25,A32,FUNCT_4:14
+        .= P.(2*t) by A0,A8,A29,X1;
      hence thesis;
     end;
     end;
-    thus 1/2 <= t' & t' <= 1 implies f.t = Q.(2*t'-1)
+    thus 1/2 <= t implies f.t = Q.(2*t-1)
     proof
-     assume A33: 1/2 <= t' & t' <= 1;
-     then t' in { r : 1/2 <= r & r <= 1 };
-then t' in [.1/2,1.] by RCOMP_1:def 1;
-     then f.t = E2.t by A3,A6,A28,FUNCT_4:14
-        .= Q.(2*t'-1) by A22,A28,A33;
+     assume A33: 1/2 <= t;
+     then t in { r : 1/2 <= r & r <= 1 } by A0,X1;
+then t in [.1/2,1.] by RCOMP_1:def 1;
+     then f.t = E2.t by A3,A6,FUNCT_4:14
+        .= Q.(2*t-1) by A0,A22,A33,X1;
      hence thesis;
     end;
    end;
@@ -517,13 +541,13 @@ then t' in [.1/2,1.] by RCOMP_1:def 1;
   uniqueness
   proof
    let A, B be Path of a, c such that
-A34:  for t being Point of I[01], t' being Real st t = t' holds
-   ( 0 <= t' & t' <= 1/2 implies A.t = P.(2*t') ) &
-   ( 1/2 <= t' & t' <= 1 implies A.t = Q.(2*t'-1) )
+A34:  for t being Point of I[01] holds
+   ( t <= 1/2 implies A.t = P.(2*t) ) &
+   ( 1/2 <= t implies A.t = Q.(2*t-1) )
    and
-A35:  for t being Point of I[01], t' being Real st t = t' holds
-   ( 0 <= t' & t' <= 1/2 implies B.t = P.(2*t') ) &
-   ( 1/2 <= t' & t' <= 1 implies B.t = Q.(2*t'-1) );
+A35:  for t being Point of I[01] holds
+   ( t <= 1/2 implies B.t = P.(2*t) ) &
+   ( 1/2 <= t implies B.t = Q.(2*t-1) );
 A36: dom B = the carrier of I[01] by FUNCT_2:def 1;
       A = B
    proof
@@ -661,8 +685,7 @@ definition let T be non empty TopSpace;
   given f be map of I[01], T such that
 A1:f is continuous & f.0 = a & f.1 = b;
   func - P -> Path of b, a means :Def5:
-   for t being Point of I[01], t' being Real st t = t' holds
-    it.t = P.(1-t');
+   for t being Point of I[01] holds it.t = P.(1-t);
   existence
   proof
    set e = L[01]((0,1)(#),(#)(0,1));
@@ -672,21 +695,17 @@ A2: e.0 = e.(#)(0,1) by TREAL_1:def 1
 A3: e.1 = e.(0,1)(#) by TREAL_1:def 2
       .= (#)(0,1) by TREAL_1:12
       .= 0 by TREAL_1:def 1;
-   set f = P * e;
-   reconsider f as map of I[01], T by FUNCT_2:19,TOPMETR:27;
-A4: for t being Point of I[01], t' being Real st t = t' holds
-    f.t = P.(1-t')
+   reconsider f = P * e as map of I[01], T by FUNCT_2:19,TOPMETR:27;
+A4: for t being Point of I[01] holds f.t = P.(1-t)
    proof
-    let t be Point of I[01], t' be Real; assume A5: t = t';
+    let t be Point of I[01];
     reconsider ee = t as Point of Closed-Interval-TSpace (0,1) by TOPMETR:27;
 A6:  (0,1)(#) = 1 & (#)(0,1) = 0 by TREAL_1:def 1,def 2;
        t in the carrier of Closed-Interval-TSpace (0,1) by TOPMETR:27;
     then t in dom e by FUNCT_2:def 1;
     then f.t = P.(e.ee) by FUNCT_1:23
-       .= P.((0-1)*t' + 1) by A5,A6,TREAL_1:10
-       .= P.((-1)*t' + 1)
-       .= P.(1 + -1*t') by XCMPLX_1:175
-       .= P.(1 - 1*t') by XCMPLX_0:def 8;
+       .= P.((0-1)*t + 1) by A6,TREAL_1:10
+       .= P.(1 - 1*t);
     hence thesis;
    end;
      0 in { r : 0 <= r & r <= 1 };
@@ -703,8 +722,7 @@ then A8: f.1 = P.0 by A3,FUNCT_1:23
       .= a by A1,Def1;
 A9: P is continuous by A1,Def1;
       e is continuous map of
-     Closed-Interval-TSpace(0,1),Closed-Interval-TSpace(0,1)
-       by TREAL_1:11;
+     Closed-Interval-TSpace(0,1),Closed-Interval-TSpace(0,1) by TREAL_1:11;
    then f is continuous by A9,TOPMETR:27,TOPS_2:58;
    then reconsider f as Path of b, a by A7,A8,Def1;
    take f;
@@ -713,18 +731,15 @@ A9: P is continuous by A1,Def1;
   uniqueness
   proof
    let R, Q be Path of b, a such that
-A10:  for t being Point of I[01], t' being Real st t = t' holds
-       R.t = P.(1-t') and
-A11:  for t being Point of I[01], t' being Real st t = t' holds
-       Q.t = P.(1-t');
+A10:  for t being Point of I[01] holds R.t = P.(1-t) and
+A11:  for t being Point of I[01] holds Q.t = P.(1-t);
 A12:  dom R = the carrier of I[01] by FUNCT_2:def 1;
 A13:  the carrier of I[01] = dom Q by FUNCT_2:def 1;
        for x be set st x in the carrier of I[01] holds R.x = Q.x
     proof
      let x be set; assume A14: x in the carrier of I[01];
      then reconsider x' = x as Point of I[01];
-     reconsider x2 = x as Real by A14,BORSUK_1:83;
-        R.x' = P.(1-x2) by A10
+        R.x' = P.(1-x') by A10
          .= Q.x' by A11;
      hence thesis;
     end;
@@ -738,19 +753,6 @@ proof
  let r be Real; assume 0 <= r & r <= 1;
  then 1-1 <= 1-r & 1-r <= 1-0 by REAL_1:92;
  hence thesis;
-end;
-
-Lm3:
- for r being Real holds
-  0 <= r & r <= 1 iff r in the carrier of I[01]
-proof
- let r be Real;
-A1: [.0,1.] = { r1 where r1 is Real : 0 <= r1 & r1 <= 1 } by RCOMP_1:def 1;
- hence 0 <= r & r <= 1 implies r in the carrier of I[01] by BORSUK_1:83;
- assume r in the carrier of I[01];
- then consider r2 being Real such that A2: r2 = r & 0 <= r2 & r2 <= 1
-    by A1,BORSUK_1:83;
- thus thesis by A2;
 end;
 
 Lm4:
@@ -1119,17 +1121,133 @@ registration let n be Nat;
  coherence by SPPOL_1:26;
 end;
 
-definition let T be non empty arcwise_connected TopSpace;
+definition let T be non empty TopStruct;
   let a, b be Point of T;
   let P, Q be Path of a, b;
- pred P, Q are_homotopic means
-      ex f being map of [:I[01],I[01]:], T st
+  pred P, Q are_homotopic means
+   ex f being map of [:I[01],I[01]:], T st
     f is continuous &
     for s being Point of I[01] holds f.(s,0) = P.s & f.(s,1) = Q.s &
     for t being Point of I[01] holds f.(0,t) = a & f.(1,t) = b;
-  reflexivity
+  symmetry
   proof
+  let P, Q be Path of a, b;
+  given f being map of [:I[01],I[01]:], T such that
+A17: f is continuous &
+    for s being Point of I[01] holds f.(s,0) = P.s & f.(s,1) = Q.s &
+    for t being Point of I[01] holds f.(0,t) = a & f.(1,t) = b;
+     id the carrier of I[01] = id I[01] by GRCAT_1:def 11;
+  then reconsider fA = id the carrier of I[01] as continuous map
+    of I[01], I[01];
+  reconsider fB = L[01]((0,1)(#),(#)(0,1)) as continuous map of I[01], I[01]
+      by TOPMETR:27,TREAL_1:11;
+  set F = [:fA, fB:];
+A18:  F is continuous by Th12;
+A19:dom L[01]((0,1)(#),(#)(0,1)) = the carrier of I[01] by FUNCT_2:def 1,
+TOPMETR:27;
+   set LL = L[01]((0,1)(#),(#)(0,1));
+  reconsider ff=f * F as map of [:I[01],I[01]:], T;
+A20: ff is continuous by A17,A18,TOPS_2:58;
+A21:  for s being Point of I[01] holds ff.(s,0) = Q.s & ff.(s,1) = P.s
+   proof
+    let s be Point of I[01];
+A22: for t being Point of I[01], t' being Real st t = t' holds
+    LL.t = 1-t'
+   proof
+    let t be Point of I[01], t' be Real; assume A23: t = t';
+    reconsider ee = t as Point of Closed-Interval-TSpace (0,1) by TOPMETR:27;
+A24:  (0,1)(#) = 1 & (#)(0,1) = 0 by TREAL_1:def 1,def 2;
+       LL.t = LL.ee
+       .= ((0-1)*t' + 1) by A23,A24,TREAL_1:10
+       .= (1 - 1*t');
+    hence thesis;
+   end;
+      dom id the carrier of I[01] = the carrier of I[01] by FUNCT_2:def 1;
+then A25: s in dom id the carrier of I[01] & 0 in dom LL &
+       1 in dom L[01]((0,1)(#),(#)(0,1)) by A19,Lm3;
+then A26: F.([s,0]) = [(id the carrier of I[01]).s,LL.0]
+                 by FUNCT_3:def 9
+             .= [s, LL.0[01]] by BORSUK_1:def 17,FUNCT_1:35
+             .= [s, 1 - 0] by A22,BORSUK_1:def 17
+             .= [s, 1];
+A27: F.([s,1]) = [(id the carrier of I[01]).s,(L[01]((0,1)(#),(#)(0,1))).1]
+                    by A25,FUNCT_3:def 9
+              .= [s,LL.1[01]] by BORSUK_1:def 18,FUNCT_1:35
+              .= [s,1 - 1] by A22,BORSUK_1:def 18
+              .= [s,0];
+A28:  dom F = [:dom id the carrier of I[01],
+              dom L[01]((0,1)(#),(#)(0,1)):] by FUNCT_3:def 9;
+then A29:  [s,1] in dom F by A25,ZFMISC_1:106;
+A30:  [s,0] in dom F by A25,A28,ZFMISC_1:106;
+A31:  ff.(s,0) = ff.([s,0]) by BINOP_1:def 1
+            .= f.(F.([s,0])) by A30,FUNCT_1:23
+            .= f.(s,1) by A26,BINOP_1:def 1
+            .= Q.s by A17;
+       ff.(s,1) = ff.([s,1]) by BINOP_1:def 1
+            .= f.(F.([s,1])) by A29,FUNCT_1:23
+            .= f.(s,0) by A27,BINOP_1:def 1
+            .= P.s by A17;
+    hence thesis by A31;
+   end;
+      for t being Point of I[01] holds ff.(0,t) = a & ff.(1,t) = b
+   proof
+    let t be Point of I[01];
+A32: t in the carrier of I[01];
+A33: dom L[01]((0,1)(#),(#)(0,1)) = the carrier of I[01] by FUNCT_2:def 1,
+TOPMETR:27;
+    reconsider tt = t as Real by A32,BORSUK_1:83;
+      for t being Point of I[01], t' being Real st t = t' holds
+    LL.t = 1-t'
+   proof
+    let t be Point of I[01], t' be Real; assume A34: t = t';
+    reconsider ee = t as Point of Closed-Interval-TSpace (0,1) by TOPMETR:27;
+A35:  (0,1)(#) = 1 & (#)(0,1) = 0 by TREAL_1:def 1,def 2;
+       LL.t = LL.ee
+       .= (0-1)*t' + 1 by A34,A35,TREAL_1:10
+       .= 1 - 1*t';
+    hence thesis;
+   end;
+then A36: (L[01]((0,1)(#),(#)(0,1))).t = 1 - tt;
+A37: dom id the carrier of I[01] = the carrier of I[01] by FUNCT_2:def 1;
+then A38: 0 in dom id the carrier of I[01] & 1 in dom id the carrier of I[01] &
+       t in dom L[01]((0,1)(#),(#)(0,1)) by A33,Lm3;
+then A39: F.([0,t]) = [(id the carrier of I[01]).0,(L[01]((0,1)(#),(#)(0,1))).t
+]
+      by FUNCT_3:def 9
+             .= [0,1 - tt] by A36,A37,A38,FUNCT_1:35;
+A40: F.([1,t]) = [(id the carrier of I[01]).1,(L[01]((0,1)(#),(#)(0,1))).t]
+                    by A38,FUNCT_3:def 9
+              .= [1,1 - tt] by A36,A37,A38,FUNCT_1:35;
+    reconsider t' = 1 - tt as Point of I[01] by Lm4;
+A41:  dom F = [:dom id the carrier of I[01],
+              dom L[01]((0,1)(#),(#)(0,1)):] by FUNCT_3:def 9;
+then A42:  [1,t] in dom F by A38,ZFMISC_1:106;
+A43:  [0,t] in dom F by A38,A41,ZFMISC_1:106;
+A44:  ff.(0,t) = ff.([0,t]) by BINOP_1:def 1
+            .= f.(F.([0,t])) by A43,FUNCT_1:23
+            .= f.(0,t') by A39,BINOP_1:def 1
+            .= a by A17;
+       ff.(1,t) = ff.([1,t]) by BINOP_1:def 1
+            .= f.(F.([1,t])) by A42,FUNCT_1:23
+            .= f.(1,t') by A40,BINOP_1:def 1
+            .= b by A17;
+    hence thesis by A44;
+   end;
+   hence thesis by A20,A21;
+  end;
+end;
+
+theorem Th15:
+  for T being non empty TopSpace, a, b being Point of T,
+      P being Path of a, b
+  st ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b
+  holds P, P are_homotopic
+proof
+  let T be non empty TopSpace;
+  let a, b be Point of T;
   let P be Path of a, b;
+  assume
+A0: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b;
   defpred Z[set, set] means $2 = P.($1`1);
 A1: for x be set st x in [:the carrier of I[01], the carrier of I[01]:]
        ex y be set st y in the carrier of T & Z[x,y]
@@ -1150,11 +1268,6 @@ A2:    for x being set st x in [:the carrier of I[01], the carrier of I[01]:]
    then reconsider f as Function of the carrier of [:I[01],I[01]:],
       the carrier of T;
    reconsider f as map of [:I[01],I[01]:], T;
-       ex f being map of [:I[01],I[01]:], T st
-    f is continuous &
-    for s being Point of I[01] holds f.(s,0) = P.s & f.(s,1) = P.s &
-    for t being Point of I[01] holds f.(0,t) = a & f.(1,t) = b
-   proof
    take f;
 A3: for W being Point of [:I[01], I[01]:],
         G being a_neighborhood of f.W
@@ -1163,16 +1276,15 @@ A3: for W being Point of [:I[01], I[01]:],
      let W be Point of [:I[01], I[01]:],
          G be a_neighborhood of f.W;
         W in the carrier of [:I[01], I[01]:];
-then A4:  W in [:the carrier of I[01], the carrier of I[01]:] by BORSUK_1:def 5
-;
+then A4: W in [:the carrier of I[01], the carrier of I[01]:] by BORSUK_1:def 5;
      then reconsider W1 = W`1 as Point of I[01] by MCART_1:10;
      reconsider G' = G as a_neighborhood of P.W1 by A2,A4;
-     consider H be a_neighborhood of W1 such that
+     P is continuous by A0,Def1;
+     then consider H be a_neighborhood of W1 such that
 A5:    P.:H c= G' by BORSUK_1:def 2;
 A6:  W1 in Int H by CONNSP_2:def 1;
      set HH = [:H, the carrier of I[01]:];
-        HH c= [:the carrier of I[01], the carrier of I[01]:] by ZFMISC_1:118
-;
+        HH c= [:the carrier of I[01], the carrier of I[01]:] by ZFMISC_1:118;
      then reconsider HH as Subset of [:I[01], I[01]:] by BORSUK_1:def 5;
         the carrier of I[01] c= the carrier of I[01];
      then reconsider AI = the carrier of I[01] as Subset of
@@ -1219,8 +1331,8 @@ A15:   f.(s,0) = f.s0 by BINOP_1:def 1
     for t being Point of I[01] holds f.(0,t) = a & f.(1,t) = b
    proof
     let t be Point of I[01];
-    reconsider t0 = [0,t], t1 = [1,t] as set;
-A16:  P.0 = a & P.1 = b by Def3;
+    set t0 = [0,t], t1 = [1,t];
+A16:  P.0 = a & P.1 = b by A0,Def1;
        t in the carrier of I[01] & 0 in the carrier of I[01] &
         1 in the carrier of I[01] by Lm3;
     then t0 in [:the carrier of I[01], the carrier of I[01]:] &
@@ -1231,118 +1343,15 @@ A16:  P.0 = a & P.1 = b by Def3;
     hence thesis by A16,MCART_1:7;
    end;
    hence thesis by A3,A13,BORSUK_1:def 2;
-  end;
-  hence thesis;
-  end;
-  symmetry
-  proof
-  let P, Q be Path of a, b;
-  given f being map of [:I[01],I[01]:], T such that
-A17: f is continuous &
-    for s being Point of I[01] holds f.(s,0) = P.s & f.(s,1) = Q.s &
-    for t being Point of I[01] holds f.(0,t) = a & f.(1,t) = b;
-     id the carrier of I[01] = id I[01] by GRCAT_1:def 11;
-  then reconsider fA = id the carrier of I[01] as continuous map
-    of I[01], I[01];
-  reconsider fB = L[01]((0,1)(#),(#)(0,1)) as continuous map of I[01], I[01]
-      by TOPMETR:27,TREAL_1:11;
-  set F = [:fA, fB:];
-A18:  F is continuous by Th12;
-A19:dom L[01]((0,1)(#),(#)(0,1)) = the carrier of I[01] by FUNCT_2:def 1,
-TOPMETR:27;
-   set LL = L[01]((0,1)(#),(#)(0,1));
-  reconsider ff=f * F as map of [:I[01],I[01]:], T;
-A20: ff is continuous by A17,A18,TOPS_2:58;
-A21:  for s being Point of I[01] holds ff.(s,0) = Q.s & ff.(s,1) = P.s
-   proof
-    let s be Point of I[01];
-A22: for t being Point of I[01], t' being Real st t = t' holds
-    LL.t = 1-t'
-   proof
-    let t be Point of I[01], t' be Real; assume A23: t = t';
-    reconsider ee = t as Point of Closed-Interval-TSpace (0,1) by TOPMETR:27;
-A24:  (0,1)(#) = 1 & (#)(0,1) = 0 by TREAL_1:def 1,def 2;
-       LL.t = LL.ee
-       .= ((0-1)*t' + 1) by A23,A24,TREAL_1:10
-       .= ((-1)*t' + 1)
-       .= (1 + -1*t') by XCMPLX_1:175
-       .= (1 - 1*t') by XCMPLX_0:def 8;
-    hence thesis;
-   end;
-      dom id the carrier of I[01] = the carrier of I[01] by FUNCT_2:def 1;
-then A25: s in dom id the carrier of I[01] & 0 in dom LL &
-       1 in dom L[01]((0,1)(#),(#)(0,1)) by A19,Lm3;
-then A26: F.([s,0]) = [(id the carrier of I[01]).s,LL.0]
-                 by FUNCT_3:def 9
-             .= [s, LL.0[01]] by BORSUK_1:def 17,FUNCT_1:35
-             .= [s, 1 - 0] by A22,BORSUK_1:def 17
-             .= [s, 1];
-A27: F.([s,1]) = [(id the carrier of I[01]).s,(L[01]((0,1)(#),(#)(0,1))).1]
-                    by A25,FUNCT_3:def 9
-              .= [s,LL.1[01]] by BORSUK_1:def 18,FUNCT_1:35
-              .= [s,1 - 1] by A22,BORSUK_1:def 18
-              .= [s,0];
-A28:  dom F = [:dom id the carrier of I[01],
-              dom L[01]((0,1)(#),(#)(0,1)):] by FUNCT_3:def 9;
-then A29:  [s,1] in dom F by A25,ZFMISC_1:106;
-A30:  [s,0] in dom F by A25,A28,ZFMISC_1:106;
-A31:  ff.(s,0) = ff.([s,0]) by BINOP_1:def 1
-            .= f.(F.([s,0])) by A30,FUNCT_1:23
-            .= f.(s,1) by A26,BINOP_1:def 1
-            .= Q.s by A17;
-       ff.(s,1) = ff.([s,1]) by BINOP_1:def 1
-            .= f.(F.([s,1])) by A29,FUNCT_1:23
-            .= f.(s,0) by A27,BINOP_1:def 1
-            .= P.s by A17;
-    hence thesis by A31;
-   end;
-      for t being Point of I[01] holds ff.(0,t) = a & ff.(1,t) = b
-   proof
-    let t be Point of I[01];
-A32: t in the carrier of I[01];
-A33: dom L[01]((0,1)(#),(#)(0,1)) = the carrier of I[01] by FUNCT_2:def 1,
-TOPMETR:27;
-    reconsider tt = t as Real by A32,BORSUK_1:83;
-      for t being Point of I[01], t' being Real st t = t' holds
-    LL.t = 1-t'
-   proof
-    let t be Point of I[01], t' be Real; assume A34: t = t';
-    reconsider ee = t as Point of Closed-Interval-TSpace (0,1) by TOPMETR:27;
-A35:  (0,1)(#) = 1 & (#)(0,1) = 0 by TREAL_1:def 1,def 2;
-       LL.t = LL.ee
-       .= ((0-1)*t' + 1) by A34,A35,TREAL_1:10
-       .= ((-1)*t' + 1)
-       .= (1 + -1*t') by XCMPLX_1:175
-       .= (1 - 1*t') by XCMPLX_0:def 8;
-    hence thesis;
-   end;
-then A36: (L[01]((0,1)(#),(#)(0,1))).t = 1 - tt;
-A37: dom id the carrier of I[01] = the carrier of I[01] by FUNCT_2:def 1;
-then A38: 0 in dom id the carrier of I[01] & 1 in dom id the carrier of I[01] &
-       t in dom L[01]((0,1)(#),(#)(0,1)) by A33,Lm3;
-then A39: F.([0,t]) = [(id the carrier of I[01]).0,(L[01]((0,1)(#),(#)(0,1))).t
-]
-      by FUNCT_3:def 9
-             .= [0,1 - tt] by A36,A37,A38,FUNCT_1:35;
-A40: F.([1,t]) = [(id the carrier of I[01]).1,(L[01]((0,1)(#),(#)(0,1))).t]
-                    by A38,FUNCT_3:def 9
-              .= [1,1 - tt] by A36,A37,A38,FUNCT_1:35;
-    reconsider t' = 1 - tt as Point of I[01] by Lm4;
-A41:  dom F = [:dom id the carrier of I[01],
-              dom L[01]((0,1)(#),(#)(0,1)):] by FUNCT_3:def 9;
-then A42:  [1,t] in dom F by A38,ZFMISC_1:106;
-A43:  [0,t] in dom F by A38,A41,ZFMISC_1:106;
-A44:  ff.(0,t) = ff.([0,t]) by BINOP_1:def 1
-            .= f.(F.([0,t])) by A43,FUNCT_1:23
-            .= f.(0,t') by A39,BINOP_1:def 1
-            .= a by A17;
-       ff.(1,t) = ff.([1,t]) by BINOP_1:def 1
-            .= f.(F.([1,t])) by A42,FUNCT_1:23
-            .= f.(1,t') by A40,BINOP_1:def 1
-            .= b by A17;
-    hence thesis by A44;
-   end;
-   hence thesis by A20,A21;
-  end;
 end;
 
+definition let T be non empty arcwise_connected TopSpace;
+  let a, b be Point of T;
+  let P, Q be Path of a, b;
+  redefine pred P, Q are_homotopic;
+  reflexivity
+  proof
+  ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b by Def2;
+  hence thesis by Th15;
+  end;
+end;

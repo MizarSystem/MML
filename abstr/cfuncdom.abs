@@ -1,0 +1,294 @@
+:: Complex Valued Function's Space
+::  by Noboru Endou
+:: 
+:: Received March 18, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary BINOP_1, FUNCT_2, FUNCT_1, QC_LANG1, RELAT_1, FUNCOP_1, VECTSP_1,
+      RLVECT_1, ARYTM_1, FUNCSDOM, CFUNCDOM, COMPLEX1, COMPLSP1, CFUNCT_1,
+      CLVECT_1, CLOPBAN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
+      FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, STRUCT_0, RLVECT_1, COMPLEX1,
+      CFUNCT_1, COMPLSP1, VECTSP_1, FRAENKEL, FUNCSDOM, CLVECT_1;
+ constructors DOMAIN_1, MEMBERED, FUNCSDOM, COMPLSP1, COMPLEX1, CLVECT_1;
+ clusters SUBSET_1, VECTSP_1, FUNCOP_1, RELSET_1, MEMBERED, COMPLEX1, CLVECT_1;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin  :: Operation of complex functions
+
+reserve x1,x2,z for set;
+reserve A,B for non empty set;
+reserve f,g,h for Element of Funcs(A,COMPLEX);
+
+definition let A;
+ func ComplexFuncAdd(A) -> BinOp of Funcs(A,COMPLEX) means
+:: CFUNCDOM:def 1
+ for f,g being Element of Funcs(A,COMPLEX) holds
+   it.(f,g) = addcomplex.:(f,g);
+end;
+
+definition let A;
+ func ComplexFuncMult(A) -> BinOp of Funcs(A,COMPLEX) means
+:: CFUNCDOM:def 2
+ for f,g being Element of Funcs(A,COMPLEX) holds
+   it.(f,g) = multcomplex.:(f,g);
+end;
+
+definition let A;
+ func ComplexFuncExtMult(A) ->
+        Function of [:COMPLEX,Funcs(A,COMPLEX):],Funcs(A,COMPLEX) means
+:: CFUNCDOM:def 3
+ for z being Complex,
+    f being (Element of Funcs(A,COMPLEX)), x being (Element of A) holds
+       (it.[z,f]).x = z*(f.x);
+end;
+
+definition let A;
+  func ComplexFuncZero(A) -> Element of Funcs(A,COMPLEX) equals
+:: CFUNCDOM:def 4
+  A --> 0c;
+end;
+
+definition let A;
+  func ComplexFuncUnit(A) -> Element of Funcs(A,COMPLEX) equals
+:: CFUNCDOM:def 5
+  A --> 1r;
+end;
+
+theorem :: CFUNCDOM:1
+h = (ComplexFuncAdd(A)).(f,g) iff
+  for x being Element of A holds h.x = f.x + g.x;
+
+theorem :: CFUNCDOM:2
+h = (ComplexFuncMult(A)).(f,g) iff
+  for x being Element of A holds h.x = f.x * g.x;
+
+theorem :: CFUNCDOM:3
+for x being Element of A holds (ComplexFuncUnit(A)).x = 1r;
+
+theorem :: CFUNCDOM:4
+for x being Element of A holds (ComplexFuncZero(A)).x = 0c;
+
+theorem :: CFUNCDOM:5
+ComplexFuncZero(A) <> ComplexFuncUnit(A);
+
+reserve a,b for Complex;
+
+theorem :: CFUNCDOM:6
+h = (ComplexFuncExtMult(A)).[a,f] iff
+ for x being Element of A holds h.x = a*(f.x);
+
+reserve u,v,w for VECTOR of CLSStruct(#Funcs(A,COMPLEX),
+            (ComplexFuncZero(A)),ComplexFuncAdd(A),ComplexFuncExtMult(A)#);
+
+theorem :: CFUNCDOM:7
+(ComplexFuncAdd(A)).(f,g) = (ComplexFuncAdd(A)).(g,f);
+
+theorem :: CFUNCDOM:8
+(ComplexFuncAdd(A)).(f,(ComplexFuncAdd(A)).(g,h)) =
+                    (ComplexFuncAdd(A)).((ComplexFuncAdd(A)).(f,g),h);
+
+theorem :: CFUNCDOM:9
+(ComplexFuncMult(A)).(f,g) = (ComplexFuncMult(A)).(g,f);
+
+theorem :: CFUNCDOM:10
+(ComplexFuncMult(A)).(f,(ComplexFuncMult(A)).(g,h)) =
+                    (ComplexFuncMult(A)).((ComplexFuncMult(A)).(f,g),h);
+
+theorem :: CFUNCDOM:11
+(ComplexFuncMult(A)).(ComplexFuncUnit(A),f) = f;
+
+theorem :: CFUNCDOM:12
+(ComplexFuncAdd(A)).(ComplexFuncZero(A),f) = f;
+
+theorem :: CFUNCDOM:13
+(ComplexFuncAdd(A)).(f,(ComplexFuncExtMult(A)).[-1r,f]) = ComplexFuncZero(A);
+
+theorem :: CFUNCDOM:14
+(ComplexFuncExtMult(A)).[1r,f] = f;
+
+theorem :: CFUNCDOM:15
+(ComplexFuncExtMult(A)).[a,(ComplexFuncExtMult(A)).[b,f]] =
+  (ComplexFuncExtMult(A)).[a*b,f];
+
+theorem :: CFUNCDOM:16
+(ComplexFuncAdd(A)).
+      ((ComplexFuncExtMult(A)).[a,f],(ComplexFuncExtMult(A)).[b,f])
+                                = (ComplexFuncExtMult(A)).[a+b,f];
+
+theorem :: CFUNCDOM:17
+(ComplexFuncMult(A)).(f,(ComplexFuncAdd(A)).(g,h)) =
+  (ComplexFuncAdd(A)).((ComplexFuncMult(A)).(f,g),(ComplexFuncMult(A)).(f,h));
+
+theorem :: CFUNCDOM:18
+(ComplexFuncMult(A)).((ComplexFuncExtMult(A)).[a,f],g) =
+   (ComplexFuncExtMult(A)).[a,(ComplexFuncMult(A)).(f,g)];
+
+begin  :: Complex linear space of complex valued functions
+
+theorem :: CFUNCDOM:19
+ex f,g st
+ (for z st z in A holds (z = x1 implies f.z = 1r) & (z<>x1 implies f.z = 0c)) &
+ (for z st z in A holds (z = x1 implies g.z = 0c) & (z<>x1 implies g.z = 1r));
+
+theorem :: CFUNCDOM:20
+(x1 in A & x2 in A & x1<>x2) &
+(for z st z in A holds (z=x1 implies f.z = 1r) & (z<>x1 implies f.z = 0c)) &
+(for z st z in A holds (z=x1 implies g.z = 0c) & (z<>x1 implies g.z = 1r))
+ implies
+  ( for a,b st (ComplexFuncAdd(A)).
+    ((ComplexFuncExtMult(A)).[a,f],(ComplexFuncExtMult(A)).[b,g])
+     = ComplexFuncZero(A) holds
+  a=0c & b=0c );
+
+theorem :: CFUNCDOM:21
+x1 in A & x2 in A & x1<>x2 implies
+ ( ex f,g st
+    for a,b st (ComplexFuncAdd(A)).
+      ((ComplexFuncExtMult(A)).[a,f],(ComplexFuncExtMult(A)).[b,g])
+      = ComplexFuncZero(A) holds
+   a=0c & b=0c );
+
+theorem :: CFUNCDOM:22
+A = {x1,x2} & x1<>x2 &
+( for z st z in A holds
+   (z=x1 implies f.z = 1r) & (z<>x1 implies f.z = 0c) ) &
+( for z st z in A holds
+   (z=x1 implies g.z = 0c) & (z<>x1 implies g.z = 1r) )
+ implies
+  for h holds (ex a,b st h = (ComplexFuncAdd(A)).
+      ((ComplexFuncExtMult(A)).[a,f],(ComplexFuncExtMult(A)).[b,g]));
+
+theorem :: CFUNCDOM:23
+A = {x1,x2} & x1<>x2 implies
+  ex f,g st
+   (for h holds
+     (ex a,b st h =
+     (ComplexFuncAdd(A)).
+      ((ComplexFuncExtMult(A)).[a,f],(ComplexFuncExtMult(A)).[b,g])));
+
+theorem :: CFUNCDOM:24
+(A = {x1,x2} & x1<>x2) implies
+  (ex f,g st
+   (for a,b st
+    (ComplexFuncAdd(A)).((ComplexFuncExtMult(A)).[a,f],
+         (ComplexFuncExtMult(A)).[b,g]) = ComplexFuncZero(A)
+                                        holds a=0c & b=0c) &
+    (for h holds
+     (ex a,b st h = (ComplexFuncAdd(A)).
+      ((ComplexFuncExtMult(A)).[a,f],(ComplexFuncExtMult(A)).[b,g]))));
+
+theorem :: CFUNCDOM:25
+CLSStruct(#Funcs(A,COMPLEX),
+     (ComplexFuncZero(A)),ComplexFuncAdd(A),ComplexFuncExtMult(A)#)
+       is ComplexLinearSpace;
+
+definition let A;
+  func ComplexVectSpace(A) -> strict ComplexLinearSpace equals
+:: CFUNCDOM:def 6
+   CLSStruct(#Funcs(A,COMPLEX),
+              (ComplexFuncZero(A)),ComplexFuncAdd(A),ComplexFuncExtMult(A)#);
+end;
+
+theorem :: CFUNCDOM:26
+ex V being strict ComplexLinearSpace st
+    (ex u,v being VECTOR of V st
+     (for a,b st a*u + b*v = 0.V holds a=0c & b=0c) &
+     (for w being VECTOR of V ex a,b st w = a*u + b*v));
+
+definition
+ let A;
+ func CRing(A) -> strict doubleLoopStr equals
+:: CFUNCDOM:def 7
+ doubleLoopStr(#Funcs(A,COMPLEX),ComplexFuncAdd(A),ComplexFuncMult(A),
+                    (ComplexFuncUnit(A)),(ComplexFuncZero(A))#);
+end;
+
+registration
+ let A;
+ cluster CRing A -> non empty;
+end;
+
+theorem :: CFUNCDOM:27
+for x,y,z being Element of CRing(A) holds
+  x+y = y+x &
+  (x+y)+z = x+(y+z) &
+  x+(0.CRing(A)) = x &
+  (ex t being Element of CRing(A) st x+t=(0.CRing(A))) &
+  x*y = y*x &
+  (x*y)*z = x*(y*z) &
+  x*(1_ CRing(A)) = x &
+  (1_ CRing(A))*x = x &
+  x*(y+z) = x*y + x*z &
+  (y+z)*x = y*x + z*x;
+
+theorem :: CFUNCDOM:28
+CRing(A) is commutative Ring;
+
+definition
+ struct(doubleLoopStr,CLSStruct) ComplexAlgebraStr (#
+           carrier -> set,
+           mult,add -> (BinOp of the carrier),
+           Mult -> (Function of [:COMPLEX,the carrier:],the carrier),
+           unity,Zero -> Element of the carrier #);
+end;
+
+registration
+ cluster non empty ComplexAlgebraStr;
+end;
+
+definition let A;
+ func CAlgebra(A) -> strict ComplexAlgebraStr equals
+:: CFUNCDOM:def 8
+   ComplexAlgebraStr(#Funcs(A,COMPLEX),ComplexFuncMult(A),ComplexFuncAdd(A),
+            ComplexFuncExtMult(A),(ComplexFuncUnit(A)),(ComplexFuncZero(A))#);
+end;
+
+registration let A;
+ cluster CAlgebra(A) -> non empty;
+end;
+
+theorem :: CFUNCDOM:29
+for x,y,z being Element of CAlgebra(A), a,b holds
+  x + y = y + x &
+  (x + y) + z = x + (y + z) &
+  x + (0.CAlgebra(A)) = x &
+  (ex t being Element of CAlgebra(A) st x + t=(0.CAlgebra(A))) &
+  x * y = y * x &
+  (x * y) * z = x * (y * z) &
+  x * (1_ CAlgebra(A)) = x &
+  x * (y + z) = x * y + x * z &
+  a * (x * y) = (a * x) * y &
+  a * (x + y) = a * x + a * y &
+  (a + b) * x = a * x + b * x &
+  (a * b) * x = a * (b * x);
+
+ definition let IT be non empty ComplexAlgebraStr;
+  attr IT is ComplexAlgebra-like means
+:: CFUNCDOM:def 9
+  for x,y,z being Element of IT
+    for a,b holds
+     x * (1_ IT) = x &
+     x * (y + z) = x * y + x * z &
+     a * (x * y) = (a * x) * y &
+     a * (x + y) = a * x + a * y &
+     (a + b) * x = a * x + b * x &
+     (a * b) * x = a * (b * x);
+end;
+
+registration
+ cluster strict Abelian add-associative right_zeroed right_complementable
+    commutative associative ComplexAlgebra-like (non empty ComplexAlgebraStr);
+end;
+
+definition
+  mode ComplexAlgebra is Abelian add-associative right_zeroed
+    right_complementable commutative associative ComplexAlgebra-like
+    (non empty ComplexAlgebraStr);
+end;
+
+theorem :: CFUNCDOM:30
+CAlgebra(A) is ComplexAlgebra;

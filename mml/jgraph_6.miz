@@ -23,7 +23,7 @@ environ
       TOPS_2, JORDAN17, TOPREAL1, PSCOMP_1, REAL_1, NAT_1;
  clusters STRUCT_0, RELSET_1, FUNCT_1, EUCLID, PRE_TOPC, TOPMETR, SQUARE_1,
       PSCOMP_1, BORSUK_1, TOPREAL2, BORSUK_2, TOPREAL1, JGRAPH_3, TOPS_1,
-      JGRAPH_2, TOPREAL6, XREAL_0, NAT_1, MEMBERED, XBOOLE_0;
+      JGRAPH_2, TOPREAL6, XREAL_0, NAT_1, MEMBERED, XBOOLE_0, SUBSET_1;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
  definitions TARSKI, XBOOLE_0, TOPREAL1;
  theorems TARSKI, XBOOLE_0, XBOOLE_1, AXIOMS, RELAT_1, FUNCT_1, FUNCT_2,
@@ -1387,7 +1387,7 @@ defpred P[Point of TOP-REAL 2] means |.$1.|=1;
  end;
 
  definition let a,b,r be real number;
-  assume A1: r>0;
+  assume A1: r>=0;
   func circle(a,b,r) -> compact non empty Subset of TOP-REAL 2 equals:Def6:
    {p where p is Point of TOP-REAL 2: |.p- |[a,b]| .|=r};
   coherence
@@ -1405,8 +1405,34 @@ defpred P[Point of TOP-REAL 2] means |.$1.|=1;
    .=|.|[r,0]|.| by EUCLID:31 .=sqrt(r^2+0^2) by A2,JGRAPH_3:10
    .=r by A1,SQUARE_1:60,89;
     then A3: |[r+a,b]| in Cb;
-        Cb is_simple_closed_curve by A1,Th32;
+    per cases by A1;
+    suppose r > 0;
+    then Cb is_simple_closed_curve by Th32;
     hence thesis by A3,Th31;
+    end;
+    suppose
+a5:   r = 0;
+a1:  Cb = {|[a,b]|}
+    proof
+      hereby
+        let x be set;
+        assume x in Cb;
+        then consider p being Point of TOP-REAL 2 such that
+a3:       x = p and
+a4:       |.p- |[a,b]| .| = r;
+        p = |[a,b]| by a5,a4,TOPRNS_1:29;
+        hence x in {|[a,b]|} by a3,TARSKI:def 1;
+      end;
+      let x be set;
+      assume x in {|[a,b]|};
+      then
+a6:   x = |[a,b]| by TARSKI:def 1;
+      |. |[a,b]| - |[a,b]| .| = 0 by TOPRNS_1:29;
+      hence x in Cb by a5,a6;
+    end;
+    Cb is compact by a1,BORSUK_1:41;
+    hence thesis by a1;
+    end;
    end;
  end;
 

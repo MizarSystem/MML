@@ -1,0 +1,4637 @@
+:: Algebraic Properties of Homotopies
+::  by Adam Grabowski and Artur Korni{\l}owicz
+:: 
+:: Received March 18, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, FUNCT_1, RELAT_1, SUBSET_1, BOOLE, COMPTS_1, ORDINAL2,
+      FUNCT_4, FUNCOP_1, TOPS_2, BORSUK_1, GRAPH_1, RCOMP_1, ARYTM_3, ARYTM_1,
+      TREAL_1, SEQ_1, TOPMETR, SEQM_3, EUCLID, MCART_1, BORSUK_2, BORSUK_6,
+      ARYTM, FUNCT_3, MEMBERED, FINSEQ_1, FINSEQ_2, JGRAPH_2, SGRAPH1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, NAT_1, REAL_1, MEMBERED, MCART_1, FINSEQ_1, FINSEQ_2, RELAT_1,
+      ALG_1, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0, PRE_TOPC, EUCLID, TOPS_2,
+      RCOMP_1, PCOMPS_1, COMPTS_1, METRIC_1, TOPRNS_1, JGRAPH_2, TREAL_1,
+      FUNCT_4, SEQM_3, BORSUK_1, T_0TOPSP, TOPMETR, BINOP_1, FUNCT_3, GRCAT_1,
+      URYSOHN1, WEIERSTR, BORSUK_2;
+ constructors EUCLID, TOPS_2, CONNSP_1, REAL_1, T_0TOPSP, TREAL_1, SEQM_3,
+      TOPS_1, WEIERSTR, RCOMP_1, COMPTS_1, YELLOW_8, URYSOHN1, GRCAT_1,
+      FINSEQ_1, FINSEQ_2, FINSEQ_4, SQUARE_1, XREAL_0, TOPRNS_1, JGRAPH_1,
+      ABSVALUE, JGRAPH_2, MEMBERED, BORSUK_2, DOMAIN_1, BORSUK_3, XCMPLX_0,
+      YELLOW_2;
+ clusters SUBSET_1, STRUCT_0, TOPMETR, FUNCT_1, PRE_TOPC, BORSUK_1, TSP_1,
+      YELLOW_6, YELLOW_8, WAYBEL10, METRIC_1, RELSET_1, MEMBERED, FUNCT_2,
+      BORSUK_2, RCOMP_1, BORSUK_3, BORSUK_4, XREAL_0, XCMPLX_0, ARYTM_3,
+      NUMBERS, BINARITH, BORSUK_5, TOPREAL1, EUCLID, SQUARE_1, JGRAPH_2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, PRE_TOPC, COMPTS_1, URYSOHN1, T_0TOPSP, XBOOLE_0,
+      BORSUK_2, MEMBERED;
+ theorems BORSUK_1, FUNCOP_1, TOPS_2, TREAL_1, FUNCT_2, FUNCT_1, PRE_TOPC,
+      RCOMP_1, TARSKI, RELAT_1, JORDAN1, REAL_1, TOPS_1, REAL_2, TOPMETR,
+      FUNCT_4, TOPMETR2, SEQM_3, AXIOMS, MCART_1, ZFMISC_1, BINOP_1, FUNCT_3,
+      COMPTS_1, RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, BORSUK_2, TMAP_1,
+      JORDAN5A, TOPREAL5, BORSUK_3, BORSUK_4, WAYBEL34, JGRAPH_5, XREAL_0,
+      SQUARE_1, YELLOW12, JORDAN6, JGRAPH_2, JGRAPH_3, JGRAPH_1, JGRAPH_6,
+      JORDAN5B, YELLOW_2, MEMBERED, SUBSET_1, STRUCT_0, JORDAN16, TOPREAL6,
+      EUCLID, FINSEQ_1, CATALG_1, JORDAN1K, MSAFREE3, JORDAN20;
+ schemes FUNCT_2, PARTFUN1, RECDEF_2, JGRAPH_2, DOMAIN_1, XBOOLE_0, JGRAPH_4;
+
+begin :: Preliminaries
+
+registration let n be Nat;
+  cluster -> Function-like Relation-like Element of TOP-REAL n;
+  coherence by EUCLID:26;
+end;
+
+registration let n be Nat;
+  cluster -> FinSequence-like Element of TOP-REAL n;
+  coherence by EUCLID:27;
+end;
+
+theorem Bzdet1:
+  the carrier of [:I[01],I[01]:] = [:[.0,1.], [.0,1.]:]
+    by BORSUK_1:83, def 5;
+
+theorem Miod1:
+  for x being real number st x <= 1/2 holds
+    2 * x - 1 <= 1 - 2 * x
+  proof
+    let x be real number;
+    assume x <= 1/2; then
+    4 * x <= 4 * (1/2) by AXIOMS:25; then
+    2 * x + 2 * x <= 1 + 1; then
+    2 * x + 2 * x - 1 <= 1 by REAL_1:86; then
+    2 * x - 1 + 2 * x <= 1;
+    hence thesis by REAL_1:84;
+  end;
+
+theorem Miod2:
+  for x being real number st x >= 1/2 holds
+    2 * x - 1 >= 1 - 2 * x
+  proof
+    let x be real number;
+    assume x >= 1/2; then
+    4 * x >= 4 * (1/2) by AXIOMS:25; then
+    2 * x + 2 * x >= 1 + 1; then
+    2 * x + 2 * x - 1 >= 1 by REAL_1:84; then
+    2 * x - 1 + 2 * x >= 1;
+    hence thesis by REAL_1:86;
+  end;
+
+theorem Hurra:
+  for x, a, b, c, d being real number st a <> b holds
+    ((d - c)/(b - a)) * (x - a) + c =
+      (1 - ((x - a)/(b - a)))*c + ((x - a)/(b - a)) * d
+  proof
+    let x, a, b, c, d be real number;
+    assume a <> b; then
+A1: b - a <> 0 by XCMPLX_1:15;
+    ((d - c)/(b - a)) * (x - a) + c =
+    ((d - c)/(b - a)) * (x - a) + c*1
+    .= ((d - c)/(b - a)) * (x - a) + c*((b - a)/(b - a)) by A1, XCMPLX_1:60
+    .= ((d - c)/(b - a)) * (x - a) + c*(b - a)/(b - a) by XCMPLX_1:75
+    .= (d - c) * (x - a) / (b - a) + c*(b - a)/(b - a) by XCMPLX_1:75
+    .= ((d-c)*(x-a) + c*(b - a))/ (b - a) by XCMPLX_1:63
+    .= ((b-x)*c + (x-a) * d) / (b - a) 
+    .= (b-x)*c/(b - a) + (x-a)*d/(b-a) by XCMPLX_1:63
+    .= (b-x)*c/(b - a) + ((x-a)/(b-a)) * d by XCMPLX_1:75
+    .= (((b-a) - (x-a))/(b-a))*c + ((x-a)/(b-a)) * d by XCMPLX_1:75
+    .= ((b-a)/(b-a) - (x-a)/(b-a))*c + ((x-a)/(b-a)) * d by XCMPLX_1:121
+    .= (1 - (x-a)/(b-a))*c + ((x-a)/(b-a)) * d by A1, XCMPLX_1:60;
+    hence thesis;  
+  end;
+
+theorem Hurra2:
+  for a, b, x being real number st a <= b & a <= x & x <= b holds
+    (x - a) / (b - a) in the carrier of Closed-Interval-TSpace (0,1)
+  proof
+    let a, b, x be real number;
+    assume
+A0: a <= b & a <= x & x <= b; then
+AA: x - a <= b - a by REAL_1:49;
+B1: b - a >= 0 by A0, SQUARE_1:12;
+A3: (x - a) / (b - a) <= 1
+     proof
+       per cases by A0, SQUARE_1:12;
+       suppose b - a = 0; then
+         (x - a) / (b - a) = 0 by XCMPLX_1:49;
+         hence thesis;
+       end;
+       suppose b - a > 0;
+         hence thesis by AA, REAL_2:117;
+       end;
+     end;
+A2: x - a >= 0 by A0, SQUARE_1:12;
+    (x - a) / (b - a) >= 0 by B1, A2, REAL_2:125; then
+    (x - a) / (b - a) in [.0,1.] by A3, TOPREAL5:1;
+    hence thesis by TOPMETR:25;
+  end;
+
+theorem Ble1:
+  for x being Point of I[01] st x <= 1/2 holds
+    2 * x is Point of I[01]
+  proof
+    let x be Point of I[01];
+    assume x <= 1/2; then
+A1: 2 * x <= 2 * (1/2) by AXIOMS:25;
+    0 <= x by JORDAN5A:2; then
+    2 * 0 <= 2 * x by AXIOMS:25;
+    hence thesis by A1, JORDAN5A:2;
+  end;
+
+theorem Ble2:
+  for x being Point of I[01] st x >= 1/2 holds
+    2 * x - 1 is Point of I[01]
+  proof
+    let x be Point of I[01];
+    assume x >= 1/2; then
+    2 * x >= 2 * (1/2) by AXIOMS:25; then
+A1: 2 * x - 1 >= 1 - 1 by REAL_1:49;
+    x <= 1 by JORDAN5A:2; then
+    2 * x <= 2 * 1 by AXIOMS:25; then
+    2 * x - 1 <= 2 - 1 by REAL_1:49;
+    hence thesis by A1, JORDAN5A:2;
+  end;
+
+theorem Dersu1:
+  for p, q being Point of I[01] holds
+    p * q is Point of I[01]
+  proof
+    let p, q be Point of I[01];
+A0: 0 <= p & p <= 1 & 0 <= q & q <= 1 by JORDAN5A:2; then
+A1: 0 <= p * q by REAL_2:121;
+    p * q <= 1 by A0, REAL_2:140;
+    hence thesis by A1, JORDAN5A:2;
+  end;
+
+theorem Utra1:
+  for x being Point of I[01] holds
+    1/2 * x is Point of I[01]
+  proof
+    let x be Point of I[01];
+    x >= 0 by JORDAN5A:2; then
+A1: 1/2 * x >= 1/2 * 0 by AXIOMS:25;
+    x <= 1 by JORDAN5A:2; then
+    1/2 * x <= 1/2 * 1 by AXIOMS:25; then
+    1/2 * x <= 1 by AXIOMS:22;
+    hence thesis by A1, JORDAN5A:2;
+  end;
+
+theorem Utra2:
+  for x being Point of I[01] st x >= 1/2 holds
+    x - 1/4 is Point of I[01]
+  proof
+    let x be Point of I[01];
+    assume x >= 1/2; then
+    x >= 1/4 + 0 by AXIOMS:22; then
+A1: x - 1/4 >= 0 by REAL_1:84; 
+    x <= 1 by JORDAN5A:2; then
+    x <= 1 + 1/4 by AXIOMS:22; then
+    x - 1/4 <= 1 by REAL_1:86;
+    hence thesis by A1, JORDAN5A:2;
+  end;
+
+theorem Ble4:
+  for x being Point of I[01] holds
+    1/2 * x is Point of I[01]
+  proof
+    let x be Point of I[01];
+    x <= 1 by JORDAN5A:2; then
+    x <= 2 by AXIOMS:22; then
+A1: 1/2 * x <= 1/2 * 2 by AXIOMS:25;
+    0 <= x by JORDAN5A:2; then
+    1/2 * 0 <= 1/2 * x by AXIOMS:25;
+    hence thesis by A1, JORDAN5A:2;
+  end;
+
+theorem Rosen:
+  id I[01] is Path of 0[01], 1[01]
+  proof
+    set f = id I[01];
+    f.0 = 0[01] & f.1 = 1[01] by BORSUK_1:def 17,def 18, TMAP_1:91;
+    hence thesis by BORSUK_2:def 3;
+  end;
+    
+theorem Wazne2:
+  for a, b, c, d being Point of I[01] st a <= b & c <= d holds
+    [:[.a,b.], [.c,d.]:] is compact non empty Subset of [:I[01], I[01]:]
+  proof
+    let a, b, c, d be Point of I[01];
+    assume that
+H1: a <= b and
+H2: c <= d;
+c1: [.a,b.] is Subset of I[01] by BORSUK_4:43;
+    [.c,d.] is Subset of I[01] by BORSUK_4:43; then
+CC: [:[.a,b.], [.c,d.]:] c=
+      [:the carrier of I[01], the carrier of I[01]:] by c1, ZFMISC_1:119;
+D1: a in [.a,b.] by H1, TOPREAL5:1;
+    c in [.c,d.] by H2, TOPREAL5:1; then
+    reconsider Ewa = [:[.a,b.], [.c,d.]:] as
+      non empty Subset of [:I[01], I[01]:]
+        by CC,BORSUK_1:def 5, D1, ZFMISC_1:106;
+    [.a,b.] is compact Subset of I[01] &
+      [.c,d.] is compact Subset of I[01] by H1, H2, BORSUK_4:49; then
+    Ewa is compact Subset of [:I[01], I[01]:] by BORSUK_3:27;
+    hence thesis;
+  end;
+
+begin :: Affine Maps
+
+theorem Josef:
+  for S, T being Subset of TOP-REAL 2 st
+    S = {p where p is Point of TOP-REAL 2 : p`2 <= 2 * p`1 - 1 } &
+    T = {p where p is Point of TOP-REAL 2 : p`2 <= p`1 } holds
+   AffineMap (1, 0, 1/2, 1/2) .: S = T
+  proof
+    let S, T be Subset of TOP-REAL 2;
+    assume
+Z1: S = {p where p is Point of TOP-REAL 2 : p`2 <= 2 * p`1 - 1 } &
+    T = {p where p is Point of TOP-REAL 2 : p`2 <= p`1 };
+    set A = 1, B = 0, C = 1/2, D = 1/2;
+    set f = AffineMap (1,0,1/2,1/2);
+    f .: S = T
+    proof
+      thus f .: S c= T
+      proof
+        let x be set;
+        assume x in f .: S; then
+        consider y being set such that
+A1:     y in dom f & y in S & x = f.y by FUNCT_1:def 12;
+        consider p being Point of TOP-REAL 2 such that
+A2:     y = p & p`2 <= 2 * p`1 - 1 by A1, Z1;
+        set b = f.p;
+A3:     f.p = |[A*(p`1)+B,C*(p`2)+D]| by JGRAPH_2:def 2; then
+A4:     b`1 = A * (p`1) + B by EUCLID:56;
+A5:     b`2 = C * (p`2) + D by A3, EUCLID:56;
+        C * p`2 <= C * (2 * p`1 - 1) by A2, AXIOMS:25; then
+        C * p`2 + D <= p`1 - C + D by AXIOMS:24;
+        hence thesis by A4, Z1, A1, A2, A5;
+      end;
+      let x be set;
+      assume x in T; then
+      consider p being Point of TOP-REAL 2 such that
+V1:   x = p & p`2 <= p`1 by Z1;
+      f is onto by JORDAN1K:36; then
+      rng f = the carrier of TOP-REAL 2 by FUNCT_2:def 3; then
+      consider y being set such that
+V2:   y in dom f & x = f.y by V1, FUNCT_1:def 5;
+      reconsider y as Point of TOP-REAL 2 by V2, FUNCT_2:def 1;
+      set b = f.y;
+A3:   f.y = |[A*(y`1)+B,C*(y`2)+D]| by JGRAPH_2:def 2; then
+AA:   b`1 = y`1 by EUCLID:56;
+HH:   b`2 = C * (y`2) + D by A3, EUCLID:56;
+      2 * b`2 <= 2 * y`1 by AA, V1, V2, AXIOMS:25; then
+      2 * b`2 - 1 <= 2 * y`1 - 1 by REAL_1:49; then
+      y in S by Z1, HH; 
+      hence thesis by V2, FUNCT_1:def 12;
+    end;
+    hence thesis;
+  end;
+
+theorem Josef2:
+  for S, T being Subset of TOP-REAL 2 st
+    S = {p where p is Point of TOP-REAL 2 : p`2 >= 2 * p`1 - 1 } &
+    T = {p where p is Point of TOP-REAL 2 : p`2 >= p`1 } holds
+   AffineMap (1, 0, 1/2, 1/2) .: S = T
+  proof
+    let S, T be Subset of TOP-REAL 2;
+    assume
+Z1:  S = {p where p is Point of TOP-REAL 2 : p`2 >= 2 * p`1 - 1 } &
+     T = {p where p is Point of TOP-REAL 2 : p`2 >= p`1 };
+     set A = 1, B = 0, C = 1/2, D = 1/2;
+     set f = AffineMap (1,0,1/2,1/2);
+     f .: S = T
+     proof
+       thus f .: S c= T
+       proof
+         let x be set;
+         assume x in f .: S; then
+         consider y being set such that
+A1:      y in dom f & y in S & x = f.y by FUNCT_1:def 12;
+         consider p being Point of TOP-REAL 2 such that
+A2:      y = p & p`2 >= 2 * p`1 - 1 by A1, Z1;
+         set b = f.p;
+A3:      f.p = |[A*(p`1)+B,C*(p`2)+D]| by JGRAPH_2:def 2; then
+A4:      b`1 = A * (p`1) + B by EUCLID:56;
+A5:      b`2 = C * (p`2) + D by A3, EUCLID:56;
+         C * p`2 >= C * (2 * p`1 - 1) by A2, AXIOMS:25; then
+         b`2 >= p`1 - C + D by A5, AXIOMS:24;
+         hence thesis by Z1, A1, A2, A4; 
+       end;
+       let x be set;
+       assume x in T; then
+       consider p being Point of TOP-REAL 2 such that
+V1:    x = p & p`2 >= p`1 by Z1;
+       f is onto by JORDAN1K:36; then
+       rng f = the carrier of TOP-REAL 2 by FUNCT_2:def 3; then
+       consider y being set such that
+V2:    y in dom f & x = f.y by V1, FUNCT_1:def 5;
+       reconsider y as Point of TOP-REAL 2 by V2, FUNCT_2:def 1;
+       set b = f.y;
+A3:    f.y = |[A*(y`1)+B,C*(y`2)+D]| by JGRAPH_2:def 2; then
+AA:    b`1 = y`1 by EUCLID:56;
+HH:    b`2 = C * (y`2) + D by A3, EUCLID:56;
+       2 * b`2 >= 2 * y`1 by AA, V1, V2, AXIOMS:25; then
+       2 * b`2 - 1 >= 2 * y`1 - 1 by REAL_1:49; then
+       y in S by Z1, HH;
+       hence thesis by V2, FUNCT_1:def 12;
+     end;
+     hence thesis;
+   end;
+
+theorem Josef3:
+  for S, T being Subset of TOP-REAL 2 st
+    S = {p where p is Point of TOP-REAL 2 : p`2 >= 1 - 2 * p`1 } &
+    T = {p where p is Point of TOP-REAL 2 : p`2 >= - p`1 } holds
+   AffineMap (1, 0, 1/2, -1/2) .: S = T
+  proof
+     let S, T be Subset of TOP-REAL 2;
+     assume
+Z1:  S = {p where p is Point of TOP-REAL 2 : p`2 >= 1 - 2 * p`1 } &
+     T = {p where p is Point of TOP-REAL 2 : p`2 >= - p`1 };
+     set A = 1, B = 0, C = 1/2, D = -1/2;
+     set f = AffineMap (1,0,1/2,-1/2);
+     f .: S = T
+     proof
+       thus f .: S c= T
+       proof
+         let x be set;
+         assume x in f .: S; then
+         consider y being set such that
+A1:      y in dom f & y in S & x = f.y by FUNCT_1:def 12;
+         consider p being Point of TOP-REAL 2 such that
+A2:      y = p & p`2 >= 1 - 2 * p`1 by A1, Z1;
+         set b = f.p;
+A3:      f.p = |[A*(p`1)+B,C*(p`2)+D]| by JGRAPH_2:def 2; then
+A4:      b`1 = A * (p`1) + B by EUCLID:56;
+         C * p`2 >= C * (1 - 2 * p`1) by A2, AXIOMS:25; then
+         C * p`2 + D >= C - p`1 + D by AXIOMS:24; then
+         b`2 >= - b`1 by A4, A3, EUCLID:56;
+         hence thesis by Z1, A1, A2;
+       end;
+       let x be set;
+       assume x in T; then
+       consider p being Point of TOP-REAL 2 such that
+V1:    x = p & p`2 >= - p`1 by Z1;
+       f is onto by JORDAN1K:36; then
+       rng f = the carrier of TOP-REAL 2 by FUNCT_2:def 3; then
+       consider y being set such that
+V2:    y in dom f & x = f.y by V1, FUNCT_1:def 5;
+       reconsider y as Point of TOP-REAL 2 by V2, FUNCT_2:def 1;
+       set b = f.y;
+A3:    f.y = |[A*(y`1)+B,C*(y`2)+D]| by JGRAPH_2:def 2; then
+AA:    b`1 = y`1 by EUCLID:56;
+HH:    b`2 = C * (y`2) + D by A3, EUCLID:56;
+       2 * b`2 >= 2 * (- y`1) by AA, V1, V2, AXIOMS:25; then
+       2 * b`2 + 1 >= 2 * (- y`1) + 1 by AXIOMS:24; then
+       y`2 >= 1 - 2 * y`1 by HH; then
+       y in S by Z1;
+       hence thesis by V2, FUNCT_1:def 12;
+     end;
+     hence thesis;
+   end;
+
+theorem Josef4:
+  for S, T being Subset of TOP-REAL 2 st
+    S = {p where p is Point of TOP-REAL 2 : p`2 <= 1 - 2 * p`1 } &
+    T = {p where p is Point of TOP-REAL 2 : p`2 <= - p`1 } holds
+   AffineMap (1, 0, 1/2, -1/2) .: S = T
+  proof
+     let S, T be Subset of TOP-REAL 2;
+     assume
+Z1:  S = {p where p is Point of TOP-REAL 2 : p`2 <= 1 - 2 * p`1 } &
+     T = {p where p is Point of TOP-REAL 2 : p`2 <= - p`1 };
+     set A = 1, B = 0, C = 1/2, D = -1/2;
+     set f = AffineMap (1,0,1/2,-1/2);
+     f .: S = T
+     proof
+       thus f .: S c= T
+       proof
+         let x be set;
+         assume x in f .: S; then
+         consider y being set such that
+A1:      y in dom f & y in S & x = f.y by FUNCT_1:def 12;
+         consider p being Point of TOP-REAL 2 such that
+A2:      y = p & p`2 <= 1 - 2 * p`1 by A1, Z1;
+         set b = f.p;
+A3:      f.p = |[A*(p`1)+B,C*(p`2)+D]| by JGRAPH_2:def 2; then
+A4:      b`1 = A * (p`1) + B by EUCLID:56;
+         C * p`2 <= C * (1 - 2 * p`1) by A2, AXIOMS:25; then
+         C * p`2 + D <= C - p`1 + D by AXIOMS:24; then
+         b`2 <= - b`1 by A4, A3, EUCLID:56;
+         hence thesis by Z1, A1, A2;
+       end;
+       let x be set;
+       assume x in T; then
+       consider p being Point of TOP-REAL 2 such that
+V1:    x = p & p`2 <= - p`1 by Z1;
+       f is onto by JORDAN1K:36; then
+       rng f = the carrier of TOP-REAL 2 by FUNCT_2:def 3; then
+       consider y being set such that
+V2:    y in dom f & x = f.y by V1, FUNCT_1:def 5;
+       reconsider y as Point of TOP-REAL 2 by V2, FUNCT_2:def 1;
+       set b = f.y;
+A3:    f.y = |[A*(y`1)+B,C*(y`2)+D]| by JGRAPH_2:def 2; then
+AA:    b`1 = y`1 by EUCLID:56;
+HH:    b`2 = C * (y`2) + D by A3, EUCLID:56;
+       2 * b`2 <= 2 * (- y`1) by AA, V1, V2, AXIOMS:25; then
+       2 * b`2 + 1 <= 2 * (- y`1) + 1 by AXIOMS:24; then
+       y`2 <= 1 - 2 * y`1 by HH; then
+       y in S by Z1; 
+       hence thesis by V2, FUNCT_1:def 12;
+     end;
+     hence thesis;
+   end;
+
+begin :: Real-membered Structures
+
+definition let T be 1-sorted;
+  attr T is real-membered means :RMS:
+    the carrier of T is real-membered;
+end;
+
+theorem RMS1:
+  for T being non empty 1-sorted holds
+    T is real-membered iff
+    for x being Element of T holds x is real
+  proof
+    let T be non empty 1-sorted;
+    hereby assume T is real-membered; then
+A1:   the carrier of T is real-membered by RMS;
+      let x be Element of T;
+      thus x is real by A1, MEMBERED:def 2;
+    end;
+    assume for x being Element of T holds x is real; then
+    for x being set st x in the carrier of T holds x is real; then
+    the carrier of T is real-membered by MEMBERED:def 2;
+    hence thesis by RMS;
+  end;
+
+registration 
+  cluster I[01] -> real-membered;
+  coherence
+  proof
+    for x being Element of I[01] holds x is real;
+    hence thesis by RMS1;
+  end;
+end;
+
+registration 
+  cluster non empty real-membered 1-sorted;
+  existence
+  proof
+    take I[01];
+    thus thesis;
+  end;
+  cluster non empty real-membered TopSpace;
+  existence
+  proof
+    take I[01];
+    thus thesis;
+  end;
+end;
+
+registration let T be real-membered 1-sorted;
+  cluster -> real Element of T;
+  coherence
+  proof
+    let x be Element of T;
+    per cases;
+    suppose T is non empty;
+      hence thesis by RMS1;
+    end;
+    suppose T is empty; then
+      the carrier of T is empty by STRUCT_0:def 1; then
+      x = 0 by SUBSET_1:def 2;
+      hence thesis;
+    end;  
+  end;
+end;
+
+registration let T be real-membered TopStruct;
+  cluster -> real-membered SubSpace of T;
+  coherence
+  proof
+    let R be SubSpace of T;
+    the carrier of R is real-membered
+    proof
+      let x be set;
+      assume
+A1:   x in the carrier of R;
+      the carrier of R c= the carrier of T by BORSUK_1:35; then
+      x is Element of T by A1; 
+      hence thesis;
+    end;
+    hence thesis by RMS;
+  end;
+end;  
+
+registration let S, T be real-membered non empty TopSpace,
+                 p be Element of [:S, T:];
+  cluster p`1 -> real;
+  coherence
+  proof
+    p in the carrier of [:S, T:]; then
+    p in [:the carrier of S, the carrier of T:] by BORSUK_1:def 5; then
+A1: p`1 in the carrier of S by MCART_1:10;
+    the carrier of S is real-membered by RMS;
+    hence thesis by A1, MEMBERED:def 2;
+  end;
+  cluster p`2 -> real;
+  coherence
+  proof
+    p in the carrier of [:S, T:]; then
+    p in [:the carrier of S, the carrier of T:] by BORSUK_1:def 5; then
+A1: p`2 in the carrier of T by MCART_1:10;
+    the carrier of T is real-membered by RMS;
+    hence thesis by A1, MEMBERED:def 2;
+  end;
+end;
+
+registration let T be non empty SubSpace of [:I[01], I[01]:],
+                 x be Point of T;
+  cluster x`1 -> real;
+  coherence
+  proof
+A1: the carrier of T c= the carrier of [:I[01], I[01]:] by BORSUK_1:35;
+    x in the carrier of T; then
+    reconsider x' = x as Point of [:I[01], I[01]:] by A1;
+    x'`1 is real;
+    hence thesis;
+  end;
+  cluster x`2 -> real;
+  coherence
+  proof
+A1: the carrier of T c= the carrier of [:I[01], I[01]:] by BORSUK_1:35;
+    x in the carrier of T; then
+    reconsider x' = x as Point of [:I[01], I[01]:] by A1;
+    x'`2 is real; 
+    hence thesis;
+  end;
+end;
+
+registration
+  cluster R^1 -> real-membered;
+  coherence
+  proof
+    for x being Element of R^1 holds x is real
+      by TOPMETR:24, XREAL_0:def 1;
+    hence thesis by RMS1;
+  end;
+end;
+
+begin :: Closed Subsets of TOP-REAL 2
+
+theorem KK23:
+  {p where p is Point of TOP-REAL 2 : p`2 <= 2 * p`1 - 1 }
+    is closed Subset of TOP-REAL 2
+proof
+  defpred P[Point of TOP-REAL 2] means $1`2 <= 2 * $1`1 - 1;
+  {p where p is Point of TOP-REAL 2 : P[p] }
+    is Subset of TOP-REAL 2 from JGRAPH_2:sch 1; then
+  reconsider K = {p where p is Point of TOP-REAL 2 : p`2 <= 2 * p`1 - 1 }
+    as Subset of TOP-REAL 2;
+  set A = 1, B = 0, C = 1/2, D = 1/2;
+  set f = AffineMap (1,0,1/2,1/2);
+  reconsider L = {p where p is Point of TOP-REAL 2 : p`2 <= p`1 }
+    as closed Subset of TOP-REAL 2 by JGRAPH_2:56;
+    K c= the carrier of TOP-REAL 2; then
+Y:  K c= dom f by FUNCT_2:def 1;
+V:  f is one-to-one by JGRAPH_2:54;
+Z:  f .: K = L by Josef;
+  K = f " (f .: K) by Y, V, MSAFREE3:1;
+  hence thesis by Z, PRE_TOPC:def 12;
+end;
+
+theorem BG23:
+  {p where p is Point of TOP-REAL 2 : p`2 >= 2 * p`1 - 1 }
+    is closed Subset of TOP-REAL 2
+proof
+  defpred P[Point of TOP-REAL 2] means $1`2 >= 2 * $1`1 - 1;
+  {p where p is Point of TOP-REAL 2 : P[p] }
+    is Subset of TOP-REAL 2 from JGRAPH_2:sch 1; then
+  reconsider K = {p where p is Point of TOP-REAL 2 : p`2 >= 2 * p`1 - 1 }
+    as Subset of TOP-REAL 2;
+  set A = 1, B = 0, C = 1/2, D = 1/2;
+  set f = AffineMap (1,0,1/2,1/2);
+  reconsider L = {p where p is Point of TOP-REAL 2 : p`2 >= p`1 }
+    as closed Subset of TOP-REAL 2 by JGRAPH_2:56;
+    K c= the carrier of TOP-REAL 2; then
+Y:  K c= dom f by FUNCT_2:def 1;
+V:  f is one-to-one by JGRAPH_2:54;
+Z:  f .: K = L by Josef2;
+  K = f " (f .: K) by Y, V, MSAFREE3:1;
+  hence thesis by Z, PRE_TOPC:def 12;
+end;
+
+theorem JG23:
+  {p where p is Point of TOP-REAL 2 : p`2 <= 1 - 2 * p`1 }
+    is closed Subset of TOP-REAL 2
+proof
+  defpred P[Point of TOP-REAL 2] means $1`2 <= 1 - 2 * $1`1;
+  {p where p is Point of TOP-REAL 2 : P[p] }
+    is Subset of TOP-REAL 2 from JGRAPH_2:sch 1; then
+  reconsider K = {p where p is Point of TOP-REAL 2 : p`2 <= 1 - 2 * p`1 }
+    as Subset of TOP-REAL 2;
+  set f = AffineMap (1,0,1/2,-1/2);
+  reconsider L = {p where p is Point of TOP-REAL 2 : p`2 <= - p`1 }
+    as closed Subset of TOP-REAL 2 by JGRAPH_2:57;
+    K c= the carrier of TOP-REAL 2; then
+Y:  K c= dom f by FUNCT_2:def 1;
+V:  f is one-to-one by JGRAPH_2:54;
+Z:  f .: K = L by Josef4;
+  K = f " (f .: K) by Y, V, MSAFREE3:1;
+  hence thesis by Z, PRE_TOPC:def 12;
+end;
+    
+theorem AG23:
+  {p where p is Point of TOP-REAL 2 : p`2 >= 1 - 2 * p`1 }
+    is closed Subset of TOP-REAL 2
+proof
+  defpred P[Point of TOP-REAL 2] means $1`2 >= 1 - 2 * $1`1;
+  {p where p is Point of TOP-REAL 2 : P[p] }
+    is Subset of TOP-REAL 2 from JGRAPH_2:sch 1; then
+  reconsider K = {p where p is Point of TOP-REAL 2 : p`2 >= 1 - 2 * p`1 }
+    as Subset of TOP-REAL 2;
+  set f = AffineMap (1,0,1/2,-1/2);
+  reconsider L = {p where p is Point of TOP-REAL 2 : p`2 >= - p`1 }
+    as closed Subset of TOP-REAL 2 by JGRAPH_2:57;
+    K c= the carrier of TOP-REAL 2; then
+Y:  K c= dom f by FUNCT_2:def 1;
+V:  f is one-to-one by JGRAPH_2:54;
+Z:  f .: K = L by Josef3;
+  K = f " (f .: K) by Y, V, MSAFREE3:1;
+  hence thesis by Z, PRE_TOPC:def 12;
+end;
+
+theorem KG23:
+  {p where p is Point of TOP-REAL 2 : p`2 >= 1 - 2 * p`1 &
+    p`2 >= 2 * p`1 - 1 } is closed Subset of TOP-REAL 2
+  proof
+    defpred P[Point of TOP-REAL 2] means $1`2 >= 1 - 2 * $1`1;
+    defpred R[Point of TOP-REAL 2] means $1`2 >= 2 * $1`1 - 1;
+    set T = {p where p is Point of TOP-REAL 2 : P[p] & R[p] };
+    reconsider K = { p where p is Point of TOP-REAL 2 : P[p] }
+      as closed Subset of TOP-REAL 2 by AG23;
+    reconsider L = { p where p is Point of TOP-REAL 2 : R[p] }
+      as closed Subset of TOP-REAL 2 by BG23;
+    {p where p is Point of TOP-REAL 2 : P[p] & R[p] } =
+    { p where p is Point of TOP-REAL 2 : P[p] } /\
+    { p where p is Point of TOP-REAL 2 : R[p] } from JGRAPH_4:sch 1; then
+    T = K /\ L; 
+    hence thesis by TOPS_1:35;
+  end;
+
+theorem Fuk:
+  ex f being map of [:R^1,R^1:], TOP-REAL 2 st
+    for x, y being Real holds f. [x,y] = <*x,y*>
+  proof
+    defpred P[Element of REAL,Element of REAL,set] means
+    ex c being Element of REAL 2 st c = $3 & $3 = <*$1,$2*>;
+A1: for x, y being Element of REAL
+     ex u being Element of REAL 2 st P[x,y,u]
+    proof
+      let x, y be Element of REAL;
+      take <*x,y*>;
+      <*x,y*> in 2-tuples_on REAL by CATALG_1:10;
+      then <*x,y*> is Element of REAL 2 by EUCLID:def 1;
+      hence thesis;
+    end;
+    consider f being Function of [:REAL,REAL:],REAL 2 such that
+A2: for x, y being Element of REAL holds P[x,y,f. [x,y]]
+      from FUNCT_2:sch 7(A1);
+    the carrier of [:R^1,R^1:] = [:the carrier of R^1,the carrier of R^1:] &
+     the carrier of R^1 = REAL &
+      the carrier of TOP-REAL 2 = REAL 2
+       by BORSUK_1:def 5,EUCLID:25,TOPMETR:24;
+    then reconsider f as map of [:R^1,R^1:], TOP-REAL 2;
+    take f;
+    for x, y being Real holds f. [x,y] = <*x,y*>
+    proof
+      let x, y be Real;
+      P[x,y,f. [x,y]] by A2;
+      hence thesis;
+    end;
+    hence thesis;
+ end;   
+  
+theorem Fuk2:
+  { p where p is Point of [:R^1,R^1:] : p`2 <= 1 - 2 * (p`1) }
+     is closed Subset of [:R^1,R^1:]
+  proof
+     set GG = [:R^1,R^1:], SS = TOP-REAL 2;
+     defpred P[Point of GG] means $1`2 <= 1 - 2 * ($1`1);
+     defpred R[Point of SS] means $1`2 <= 1 - 2 * ($1`1);
+     reconsider K = { p where p is Point of GG : P[p] } as Subset of GG
+       from DOMAIN_1:sch 7;
+     reconsider L = { p where p is Point of SS : R[p] } as Subset of SS
+       from DOMAIN_1:sch 7;
+     deffunc F(Element of GG) = <* $1`1 *>;  
+     consider f being map of GG, SS such that
+A1:  for x, y being Real holds f. [x,y] = <*x,y*> by Fuk;
+A2:  f is_homeomorphism by A1, TOPREAL6:85;
+     f .: K = L
+     proof
+       thus f .: K c= L
+       proof
+         let x be set;
+         assume x in f .: K; then
+         consider y being set such that
+B1:      y in dom f & y in K & x = f.y by FUNCT_1:def 12;
+         consider z being Point of GG such that
+B2:      z = y & P[z] by B1;
+         z in the carrier of GG; then
+         z in [:the carrier of R^1, the carrier of R^1:] by BORSUK_1:def 5;
+         then
+         consider x1, y1 being set such that
+B3:      x1 in the carrier of R^1 & y1 in the carrier of R^1 & z = [x1, y1]
+           by ZFMISC_1:def 2;
+         reconsider x1, y1 as Real by B3, TOPMETR:24;
+F1:      x = <*x1, y1*> by A1, B2, B3, B1; then
+         x = |[ x1, y1 ]| by EUCLID:def 16; then
+         reconsider x' = x as Point of SS;
+F2:      x'`1 = x'.1 by EUCLID:def 14
+             .= x1 by F1, FINSEQ_1:61;
+F3:      x'`2 = x'.2 by EUCLID:def 15
+             .= y1 by F1, FINSEQ_1:61;
+         z`1 = x1 & z`2 = y1 by B3, MCART_1:7;
+         hence thesis by B2, F2, F3;
+       end;
+       thus L c= f .: K
+       proof
+         let x be set;
+         assume x in L; then
+         consider z being Point of SS such that
+B2:      z = x & R[z];
+         consider x1, y1 being Real such that
+D1:      z = <*x1, y1*> by EUCLID:55;
+D2:      z = |[ x1, y1 ]| by D1, EUCLID:def 16; then
+         z`1 = x1 by EUCLID:56; then
+BE:      y1 <= 1 - 2 * x1 by B2, D2, EUCLID:56;
+         set Y = [x1, y1];
+bd:      Y in [:REAL, REAL:] by ZFMISC_1:106; then
+BD:      Y in the carrier of GG by BORSUK_1:def 5, TOPMETR:24;
+         reconsider Y as Point of GG by bd, BORSUK_1:def 5, TOPMETR:24;
+         Y`1 = x1 & Y`2 = y1 by MCART_1:7; then
+X3:      Y in K by BE;
+X1:      Y in dom f by BD, FUNCT_2:def 1;
+         x = f.Y by A1, D1, B2;
+         hence thesis by X3, X1, FUNCT_1:def 12;
+       end;
+     end;
+     hence thesis by TOPS_2:72, A2, JG23;
+  end;
+
+theorem Huk2:
+  { p where p is Point of [:R^1,R^1:] : p`2 <= 2 * (p`1) - 1 }
+     is closed Subset of [:R^1,R^1:]
+  proof
+     set GG = [:R^1,R^1:], SS = TOP-REAL 2;
+     defpred P[Point of GG] means $1`2 <= 2 * ($1`1) - 1;
+     defpred R[Point of SS] means $1`2 <= 2 * ($1`1) - 1;
+     reconsider K = { p where p is Point of GG : P[p] } as Subset of GG
+       from DOMAIN_1:sch 7;
+     reconsider L = { p where p is Point of SS : R[p] } as Subset of SS
+       from DOMAIN_1:sch 7;
+     deffunc F(Element of GG) = <* $1`1 *>;  
+     consider f being map of GG, SS such that
+A1:  for x, y being Real holds f. [x,y] = <*x,y*> by Fuk;
+A2:  f is_homeomorphism by A1, TOPREAL6:85;
+     f .: K = L
+     proof
+       thus f .: K c= L
+       proof
+         let x be set;
+         assume x in f .: K; then
+         consider y being set such that
+B1:      y in dom f & y in K & x = f.y by FUNCT_1:def 12;
+         consider z being Point of GG such that
+B2:      z = y & P[z] by B1;
+         z in the carrier of GG; then
+         z in [:the carrier of R^1, the carrier of R^1:] by BORSUK_1:def 5;
+         then
+         consider x1, y1 being set such that
+B3:      x1 in the carrier of R^1 & y1 in the carrier of R^1 & z = [x1, y1]
+           by ZFMISC_1:def 2;
+         reconsider x1, y1 as Real by B3, TOPMETR:24;
+F1:      x = <*x1, y1*> by A1, B2, B3, B1; then
+         x = |[ x1, y1 ]| by EUCLID:def 16; then
+         reconsider x' = x as Point of SS;
+F2:      x'`1 = x'.1 by EUCLID:def 14
+             .= x1 by F1, FINSEQ_1:61;
+F3:      x'`2 = x'.2 by EUCLID:def 15
+             .= y1 by F1, FINSEQ_1:61;
+         z`1 = x1 & z`2 = y1 by B3, MCART_1:7;
+         hence thesis by B2, F2, F3;
+       end;
+       thus L c= f .: K
+       proof
+         let x be set;
+         assume x in L; then
+         consider z being Point of SS such that
+B2:      z = x & R[z];
+         consider x1, y1 being Real such that
+D1:      z = <*x1, y1*> by EUCLID:55;
+D2:      z = |[ x1, y1 ]| by D1, EUCLID:def 16; then
+D3:      z`1 = x1 by EUCLID:56;
+BE:      y1 <= 2 * x1 - 1 by D3, B2, D2, EUCLID:56;
+         set Y = [x1, y1];
+bd:      Y in [:the carrier of R^1, the carrier of R^1:]
+           by TOPMETR:24, ZFMISC_1:106; then
+BD:      Y in the carrier of GG by BORSUK_1:def 5;
+         reconsider Y as Point of GG by bd, BORSUK_1:def 5;
+         Y`1 = x1 & Y`2 = y1 by MCART_1:7; then
+X3:      Y in K by BE;
+X1:      Y in dom f by BD, FUNCT_2:def 1;
+         x = f.Y by A1, D1, B2;
+         hence thesis by X3, X1, FUNCT_1:def 12;
+       end;
+     end;
+     hence thesis by TOPS_2:72, A2, KK23;
+  end;
+
+theorem Guk2:
+  { p where p is Point of [:R^1,R^1:] :
+    p`2 >= 1 - 2 * (p`1) & p`2 >= 2 * (p`1) - 1 }
+     is closed Subset of [:R^1,R^1:]
+  proof
+     set GG = [:R^1,R^1:], SS = TOP-REAL 2;
+     defpred P[Point of GG] means
+       $1`2 >= 1 - 2 * ($1`1) & $1`2 >= 2 * ($1`1) - 1;
+     defpred R[Point of SS] means 
+       $1`2 >= 1 - 2 * ($1`1) & $1`2 >= 2 * ($1`1) - 1;
+     reconsider K = { p where p is Point of GG : P[p] } as Subset of GG
+       from DOMAIN_1:sch 7;
+     reconsider L = { p where p is Point of SS : R[p] } as Subset of SS
+       from DOMAIN_1:sch 7;
+     deffunc F(Element of GG) = <* $1`1 *>;  
+     consider f being map of GG, SS such that
+A1:  for x, y being Real holds f. [x,y] = <*x,y*> by Fuk;
+A2:  f is_homeomorphism by A1, TOPREAL6:85;
+     f .: K = L
+     proof
+       thus f .: K c= L
+       proof
+         let x be set;
+         assume x in f .: K; then
+         consider y being set such that
+B1:      y in dom f & y in K & x = f.y by FUNCT_1:def 12;
+         consider z being Point of GG such that
+B2:      z = y & P[z] by B1;
+         z in the carrier of GG; then
+         z in [:the carrier of R^1, the carrier of R^1:] by BORSUK_1:def 5;
+         then
+         consider x1, y1 being set such that
+B3:      x1 in the carrier of R^1 & y1 in the carrier of R^1 & z = [x1, y1]
+           by ZFMISC_1:def 2;
+         reconsider x1, y1 as Real by B3, TOPMETR:24;
+F1:      x = <*x1, y1*> by A1, B1, B2, B3; then
+         x = |[ x1, y1 ]| by EUCLID:def 16; then
+         reconsider x' = x as Point of SS;
+F2:      x'`1 = x'.1 by EUCLID:def 14
+             .= x1 by F1, FINSEQ_1:61;
+F3:      x'`2 = x'.2 by EUCLID:def 15
+             .= y1 by F1, FINSEQ_1:61;
+         z`1 = x1 & z`2 = y1 by B3, MCART_1:7;
+         hence thesis by B2, F2, F3;
+       end;
+       thus L c= f .: K
+       proof
+         let x be set;
+         assume x in L; then
+         consider z being Point of SS such that
+B2:      z = x & R[z];
+         consider x1, y1 being Real such that
+D1:      z = <*x1, y1*> by EUCLID:55;
+D2:      z = |[ x1, y1 ]| by D1, EUCLID:def 16; then
+D3:      z`1 = x1 by EUCLID:56;
+BE:      y1 >= 1 - 2 * x1 & y1 >= 2 * x1 - 1 by D3, B2, D2, EUCLID:56;
+         set Y = [x1, y1];
+bd:      Y in [:the carrier of R^1, the carrier of R^1:]
+           by TOPMETR:24, ZFMISC_1:106; then
+BD:      Y in the carrier of GG by BORSUK_1:def 5;
+         reconsider Y as Point of GG by bd, BORSUK_1:def 5;
+         Y`1 = x1 & Y`2 = y1 by MCART_1:7; then
+X3:      Y in K by BE;
+X1:      Y in dom f by BD, FUNCT_2:def 1;
+         x = f.Y by A1, D1, B2;
+         hence thesis by X3, X1, FUNCT_1:def 12;
+       end;
+     end;
+     hence thesis by TOPS_2:72, A2, KG23;
+  end;
+
+theorem Fuk3:
+  { p where p is Point of [:I[01],I[01]:] : p`2 <= 1 - 2 * (p`1) }
+     is closed non empty Subset of [:I[01],I[01]:]
+  proof
+     set GG = [:I[01],I[01]:], SS = [:R^1,R^1:];
+     0 in the carrier of I[01] by JORDAN5A:2; then
+     [0,0] in [:the carrier of I[01], the carrier of I[01]:]
+       by ZFMISC_1:106; then
+     reconsider x = [0,0] as Point of GG by BORSUK_1:def 5;
+     x`1 = 0 & x`2 = 0 by MCART_1:7; then
+X1:  x`2 <= 1 - 2 * (x`1);
+     set P0 = { p where p is Point of GG : p`2 <= 1 - 2 * (p`1) };
+A0:  x in P0 by X1;
+     reconsider PA = { p where p is Point of SS : p`2 <= 1 - 2 * (p`1) }
+       as closed Subset of SS by Fuk2;
+A1:  GG is SubSpace of SS by BORSUK_3:25;
+A2:  P0 = PA /\ [#] GG
+     proof
+       thus P0 c= PA /\ [#] GG
+       proof
+         let x be set;
+         assume x in P0; then
+         consider p being Point of GG such that
+B1:      x = p & p`2 <= 1 - 2 * (p`1);
+B3:      x in the carrier of GG by B1;
+         the carrier of GG c= the carrier of SS by A1, BORSUK_1:35; then 
+         reconsider a = x as Point of SS by B3;
+         a`2 <= 1 - 2 * (a`1) by B1; then
+B2:      x in PA;
+         x in [#] GG by PRE_TOPC:def 3, B3;  
+         hence thesis by B2, XBOOLE_0:def 3;
+       end;
+       let x be set;
+       assume x in PA /\ [#] GG; then
+C2:    x in PA & x in [#] GG by XBOOLE_0:def 3; then
+       consider p being Point of SS such that
+C1:    x = p & p`2 <= 1 - 2 * (p`1);
+       thus thesis by C1, C2;
+     end; then
+     P0 c= [#] GG by XBOOLE_1:17; then
+     reconsider P0 as Subset of GG by PRE_TOPC:def 3;
+     P0 is closed by A1, A2, PRE_TOPC:43;
+     hence thesis by A0;
+  end;
+
+theorem Guk3:
+  { p where p is Point of [:I[01],I[01]:] :
+    p`2 >= 1 - 2 * (p`1) & p`2 >= 2 * (p`1) - 1 }
+     is closed non empty Subset of [:I[01],I[01]:]
+  proof
+     set GG = [:I[01],I[01]:], SS = [:R^1,R^1:];
+     1 in the carrier of I[01] by JORDAN5A:2; then
+     [1,1] in [:the carrier of I[01], the carrier of I[01]:]
+       by ZFMISC_1:106; then
+     reconsider x = [1,1] as Point of GG by BORSUK_1:def 5;
+     x`1 = 1 & x`2 = 1 by MCART_1:7; then
+X1:  x`2 >= 1 - 2 * (x`1) & x`2 >= 2 * (x`1) - 1;
+     set P0 = { p where p is Point of GG : p`2 >= 1 - 2 * (p`1) &
+       p`2 >= 2 * (p`1) - 1 };
+A0:  x in P0 by X1;
+     reconsider PA = { p where p is Point of SS :
+       p`2 >= 1 - 2 * (p`1) & p`2 >= 2 * (p`1) - 1 }
+         as closed Subset of SS by Guk2;
+A1:  GG is SubSpace of SS by BORSUK_3:25;
+A2:  P0 = PA /\ [#] GG
+     proof
+       thus P0 c= PA /\ [#] GG
+       proof
+         let x be set;
+         assume x in P0; then
+         consider p being Point of GG such that
+B1:      x = p & p`2 >= 1 - 2 * (p`1) & p`2 >= 2 * (p`1) - 1;
+B3:      x in the carrier of GG by B1;
+         the carrier of GG c= the carrier of SS by A1, BORSUK_1:35; then 
+         reconsider a = x as Point of SS by B3;
+         a`2 >= 1 - 2 * (a`1) & a`2 >= 2 * (a`1) - 1 by B1; then
+B2:      x in PA;
+         x in [#] GG by PRE_TOPC:def 3, B3;  
+         hence thesis by B2, XBOOLE_0:def 3;
+       end;
+       let x be set;
+       assume x in PA /\ [#] GG; then
+C2:    x in PA & x in [#] GG by XBOOLE_0:def 3; then
+       consider p being Point of SS such that
+C1:    x = p & p`2 >= 1 - 2 * (p`1) & p`2 >= 2 * (p`1) - 1;
+       thus thesis by C1, C2;
+     end; then
+     P0 c= [#] GG by XBOOLE_1:17; then
+     reconsider P0 as Subset of GG by PRE_TOPC:def 3;
+     P0 is closed by A1, A2, PRE_TOPC:43;
+     hence thesis by A0;
+  end;
+
+theorem Huk3:
+  { p where p is Point of [:I[01],I[01]:] : p`2 <= 2 * (p`1) - 1 }
+     is closed non empty Subset of [:I[01],I[01]:]
+  proof
+     set GG = [:I[01],I[01]:], SS = [:R^1,R^1:];
+     0 in the carrier of I[01] & 1 in the carrier of I[01] by JORDAN5A:2; then
+     [1,0] in [:the carrier of I[01], the carrier of I[01]:]
+       by ZFMISC_1:106; then
+     reconsider x = [1,0] as Point of GG by BORSUK_1:def 5;
+     x`1 = 1 & x`2 = 0 by MCART_1:7; then
+X1:  x`2 <= 2 * (x`1) - 1;
+     set P0 = { p where p is Point of GG : p`2 <= 2 * (p`1) - 1 };
+A0:  x in P0 by X1;
+     reconsider PA = { p where p is Point of SS : p`2 <= 2 * (p`1) - 1 }
+       as closed Subset of SS by Huk2;
+A1:  GG is SubSpace of SS by BORSUK_3:25;
+A2:  P0 = PA /\ [#] GG
+     proof
+       thus P0 c= PA /\ [#] GG
+       proof
+         let x be set;
+         assume x in P0; then
+         consider p being Point of GG such that
+B1:      x = p & p`2 <= 2 * (p`1) - 1;
+B3:      x in the carrier of GG by B1;
+         the carrier of GG c= the carrier of SS by A1, BORSUK_1:35; then 
+         reconsider a = x as Point of SS by B3;
+         a`2 <= 2 * (a`1) - 1 by B1; then
+B2:      x in PA;
+         x in [#] GG by PRE_TOPC:def 3, B3;  
+         hence thesis by B2, XBOOLE_0:def 3;
+       end;
+       let x be set;
+       assume x in PA /\ [#] GG; then
+C2:    x in PA & x in [#] GG by XBOOLE_0:def 3; then
+       consider p being Point of SS such that
+C1:    x = p & p`2 <= 2 * (p`1) - 1;
+       thus thesis by C1, C2;
+     end; then
+     P0 c= [#] GG by XBOOLE_1:17; then
+     reconsider P0 as Subset of GG by PRE_TOPC:def 3;
+     P0 is closed by A1, A2, PRE_TOPC:43;
+     hence thesis by A0;
+  end;
+  
+theorem Lynch:
+  for S, T being non empty TopSpace,
+      p being Point of [:S, T:] holds
+    p`1 is Point of S & p`2 is Point of T
+  proof
+    let S, T be non empty TopSpace,
+        p be Point of [:S, T:];
+    p in the carrier of [:S, T:]; then
+    p in [:the carrier of S, the carrier of T:] by BORSUK_1:def 5;
+    hence thesis by MCART_1:10;
+  end;
+
+theorem Kill2:
+  for A, B being Subset of [:I[01],I[01]:] st
+    A = [:[.0,1/2.], [.0,1.]:] & B = [:[.1/2,1.], [.0,1.]:] holds
+     [#] ([:I[01],I[01]:] | A) \/ [#] ([:I[01],I[01]:] | B)
+       = [#] [:I[01],I[01]:]
+  proof
+    let A, B be Subset of [:I[01],I[01]:];
+    assume that
+A1: A = [:[.0,1/2.], [.0,1.]:] and
+A2: B = [:[.1/2,1.], [.0,1.]:];
+    [#] ([:I[01],I[01]:] | A) \/ [#] ([:I[01],I[01]:] | B)
+                = A \/ [#] ([:I[01],I[01]:] | B) by PRE_TOPC:def 10
+               .= A \/ B by PRE_TOPC:def 10
+               .= [:[.0,1/2.] \/ [.1/2,1.], [.0,1.]:]
+                by A1, A2, ZFMISC_1:120
+               .= [:[.0,1.], [.0,1.]:] by TREAL_1:2
+      .= the carrier of [:I[01], I[01]:] by BORSUK_1:def 5, 83
+      .= [#] [:I[01],I[01]:] by PRE_TOPC:12;
+    hence thesis;
+  end;
+
+theorem Kill1:
+  for A, B being Subset of [:I[01],I[01]:] st
+    A = [:[.0,1/2.], [.0,1.]:] & B = [:[.1/2,1.], [.0,1.]:] holds
+     [#] ([:I[01],I[01]:] | A) /\ [#] ([:I[01],I[01]:] | B)
+       = [:{1/2}, [.0,1.] :]
+  proof
+    let A, B be Subset of [:I[01],I[01]:];
+    assume that
+A1: A = [:[.0,1/2.], [.0,1.]:] and
+A2: B = [:[.1/2,1.], [.0,1.]:];
+    [#] ([:I[01],I[01]:] | A) /\ [#] ([:I[01],I[01]:] | B) =
+                 A /\ [#] ([:I[01],I[01]:] | B) by PRE_TOPC:def 10
+              .= A /\ B by PRE_TOPC:def 10
+              .= [:[.0,1/2.] /\ [.1/2,1.], [.0,1.]:] by A1, A2, ZFMISC_1:122
+              .= [:{1/2}, [.0,1.]:] by TOPMETR2:1;
+    hence thesis;
+  end;
+
+begin :: Compact Spaces
+
+registration let T be TopStruct;
+  cluster {}T -> compact;
+  coherence by COMPTS_1:9;
+end;
+
+registration let T be TopStruct;
+  cluster empty compact Subset of T;
+  existence
+  proof
+    take {}T;
+    thus {}T is empty;
+    thus {}T is compact;
+    thus thesis;
+  end;
+end;
+
+theorem WazneX:
+  for T being TopStruct holds
+    {} is empty compact Subset of T
+  proof
+    let T be TopStruct;
+    {}T c= the carrier of T;
+    hence thesis;
+  end;
+
+theorem Wazne0:
+  for T being TopStruct,
+      a, b being real number st a > b holds
+   [.a,b.] is empty compact Subset of T
+  proof
+    let T be TopStruct,
+        a, b be real number;
+    assume a > b; then
+    [.a,b.] = {}T by RCOMP_1:13;
+    hence thesis;
+  end;
+
+theorem
+  for a, b, c, d being Point of I[01] holds
+    [:[.a,b.], [.c,d.]:] is compact Subset of [:I[01], I[01]:]
+  proof
+    let a, b, c, d be Point of I[01];
+    per cases;
+    suppose a <= b & c <= d;
+      hence thesis by Wazne2;
+    end;
+    suppose a > b & c <= d; then
+      reconsider A = [.a,b.] as empty Subset of I[01] by Wazne0;
+      [:A, [.c,d.]:] = {};
+      hence thesis by WazneX;
+    end;
+    suppose a > b & c > d; then
+      reconsider A = [.c,d.] as empty Subset of I[01] by Wazne0;
+      [:[.a,b.], A:] = {};
+      hence thesis by WazneX;
+    end;
+    suppose a <= b & c > d; then
+      reconsider A = [.c,d.] as empty Subset of I[01] by Wazne0;
+      [:[.a,b.], A:] = {};
+      hence thesis by WazneX;
+    end;
+  end;
+
+begin :: Continuous Maps
+
+definition let a, b, c, d be real number;
+  func L[01](a,b,c,d) -> map of
+    Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(c,d) equals :OJe:
+  L[01]((#)(c,d),(c,d)(#)) * P[01](a,b,(#)(0,1),(0,1)(#));
+  correctness;
+end;
+
+theorem Key1:
+  for a, b, c, d being real number st a < b & c < d holds
+    L[01](a,b,c,d).a = c & L[01](a,b,c,d).b = d
+  proof
+    let a, b, c, d be real number;
+    assume
+A1: a < b & c < d; then
+    a in [.a,b.] by TOPREAL5:1; then
+    a in the carrier of Closed-Interval-TSpace (a,b) by A1, TOPMETR:25; then
+A2: a in dom P[01](a,b,(#)(0,1),(0,1)(#)) by FUNCT_2:def 1;
+    thus L[01](a,b,c,d).a =
+       (L[01]((#)(c,d),(c,d)(#)) * P[01](a,b,(#)(0,1),(0,1)(#))).a by OJe
+       .= L[01]((#)(c,d),(c,d)(#)).(P[01](a,b,(#)(0,1),(0,1)(#)).a)
+          by A2, FUNCT_1:23
+       .= L[01]((#)(c,d),(c,d)(#)).(P[01](a,b,(#)(0,1),(0,1)(#)).(#)(a,b))
+          by A1, TREAL_1:def 1
+       .= L[01]((#)(c,d),(c,d)(#)).((#)(0,1)) by A1, TREAL_1:16
+       .= (#)(c,d) by A1, TREAL_1:12
+       .= c by A1, TREAL_1:def 1;
+    b in [.a,b.] by A1, TOPREAL5:1; then
+    b in the carrier of Closed-Interval-TSpace (a,b) by A1, TOPMETR:25; then
+A2: b in dom P[01](a,b,(#)(0,1),(0,1)(#)) by FUNCT_2:def 1;
+    thus L[01](a,b,c,d).b =
+       (L[01]((#)(c,d),(c,d)(#)) * P[01](a,b,(#)(0,1),(0,1)(#))).b by OJe
+       .= L[01]((#)(c,d),(c,d)(#)).(P[01](a,b,(#)(0,1),(0,1)(#)).b)
+          by A2, FUNCT_1:23
+       .= L[01]((#)(c,d),(c,d)(#)).(P[01](a,b,(#)(0,1),(0,1)(#)).(a,b)(#))
+          by A1, TREAL_1:def 2
+       .= L[01]((#)(c,d),(c,d)(#)).((0,1)(#)) by A1, TREAL_1:16
+       .= (c,d)(#) by A1, TREAL_1:12
+       .= d by A1, TREAL_1:def 2;
+  end;
+
+theorem Klucz:
+  for a, b, c, d being real number st
+  a < b & c <= d holds
+    L[01](a,b,c,d) is continuous map of
+      Closed-Interval-TSpace(a,b), Closed-Interval-TSpace(c,d)
+  proof
+    let a, b, c, d be real number;
+    assume
+A1: a < b & c <= d;
+A2: L[01]((#)(c,d),(c,d)(#)) is continuous map of
+      Closed-Interval-TSpace(0,1),Closed-Interval-TSpace(c,d)
+        by A1,TREAL_1:11;
+    P[01](a,b,(#)(0,1),(0,1)(#)) is continuous map of
+      Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(0,1)
+        by A1,TREAL_1:15; then
+A3: L[01]((#)(c,d),(c,d)(#)) * P[01](a,b,(#)(0,1),(0,1)(#)) is continuous
+      by A2, TOPS_2:58;
+    thus thesis by OJe, A3;
+  end;
+
+theorem Ksasia:
+  for a, b, c, d being real number st a < b & c <= d
+  for x being real number st a <= x & x <= b holds
+    L[01](a,b,c,d).x = ((d - c)/(b - a)) * (x - a) + c
+    proof
+      let a, b, c, d be real number;
+      assume A1: a < b;
+      assume A2: c <= d;
+      let x be real number;
+      assume Aa: a <= x;
+      assume Ab: x <= b;
+      set f = L[01](a,b,c,d);
+      set F = L[01]((#)(c,d),(c,d)(#));
+      set G = P[01](a,b,(#)(0,1),(0,1)(#));
+X1:   (#)(c,d) = c & (c,d)(#) = d by A2, TREAL_1:def 1, def 2;
+      x in [.a,b.] by Aa, Ab, TOPREAL5:1; then
+AA:   x in the carrier of Closed-Interval-TSpace (a,b) by A1, TOPMETR:25; then
+A3:   x in dom G by FUNCT_2:def 1;
+B2:   0 = (#)(0,1) & 1 = (0,1)(#) by TREAL_1:def 2, def 1;
+      set X = (x-a)/(b-a);
+C1:   X in the carrier of Closed-Interval-TSpace (0,1)
+        by Hurra2, A1,Aa, Ab; 
+      f = F * G by OJe; then
+      f.x = F.(G.x) by A3, FUNCT_1:23
+         .= F.(((b-x)*0 + (x-a)*1)/(b-a)) by A1, B2, AA, TREAL_1:def 4
+         .= (1 - X)*c + X * d by C1, A2, TREAL_1:def 3, X1
+         .= ((d - c)/(b - a)) * (x - a) + c by Hurra, A1;
+      hence L[01](a,b,c,d).x = ((d - c)/(b - a)) * (x - a) + c;
+    end;
+
+theorem Ble1':
+  for f1,f2 being map of [:I[01],I[01]:],I[01] st
+    f1 is continuous & f2 is continuous &
+   (for p being Point of [:I[01],I[01]:] holds
+       f1.p * f2.p is Point of I[01]) holds
+   ex g being map of [:I[01],I[01]:],I[01] st
+   (for p being Point of [:I[01],I[01]:],r1,r2 being real number st
+     f1.p=r1 & f2.p=r2 holds g.p=r1*r2) & g is continuous
+  proof
+    let f1,f2 be map of [:I[01],I[01]:],I[01];
+    assume
+A1: f1 is continuous & f2 is continuous &
+    (for p being Point of [:I[01],I[01]:] holds
+       f1.p * f2.p is Point of I[01]);
+    set X = [:I[01],I[01]:];
+    reconsider f1' = f1, f2' = f2 as map of X, R^1
+      by FUNCT_2:9, TOPMETR:24, BORSUK_1:83;
+    f1' is continuous & f2' is continuous by A1, TOPMETR:7; then 
+    consider g being map of X,R^1 such that
+B1: (for p being Point of X,r1,r2 being real number st
+    f1'.p=r1 & f2'.p=r2 holds g.p=r1*r2) & g is continuous by JGRAPH_2:35;
+    reconsider A = [.0,1.] as non empty Subset of R^1
+      by TOPMETR:24, TOPREAL5:1;
+Zx: [.0,1.] = the carrier of R^1|A by JORDAN1:1;
+Zy: rng g c= [.0,1.]
+    proof
+      let x be set;
+      assume x in rng g; then
+      consider y being set such that
+C1:   y in dom g & x = g.y by FUNCT_1:def 5;
+      reconsider y as Point of X by C1, FUNCT_2:def 1;
+      g.y = f1.y * f2.y by B1; then
+      g.y is Point of I[01] by A1;
+      hence thesis by C1, BORSUK_1:83;
+    end;
+    dom g = the carrier of X by FUNCT_2:def 1; then
+    reconsider g as map of X, R^1|A by Zx, Zy, FUNCT_2:4;
+    R^1 | A = I[01] by BORSUK_1:def 16, TOPMETR:def 7; then
+    reconsider g as continuous map of X, I[01] by B1, JGRAPH_1:63;
+    take g;
+    thus thesis by B1;
+  end;
+
+theorem Ble2':
+  for f1,f2 being map of [:I[01],I[01]:],I[01] st
+    f1 is continuous & f2 is continuous &
+  (for p being Point of [:I[01],I[01]:] holds f1.p + f2.p is Point of I[01])
+    holds ex g being map of [:I[01],I[01]:],I[01] st
+    (for p being Point of [:I[01],I[01]:],r1,r2 being real number st
+      f1.p=r1 & f2.p=r2 holds g.p=r1+r2) & g is continuous
+  proof
+    let f1,f2 be map of [:I[01],I[01]:],I[01];
+    assume
+A1: f1 is continuous & f2 is continuous &
+    (for p being Point of [:I[01],I[01]:] holds f1.p + f2.p is Point of I[01]);
+    set X = [:I[01],I[01]:];
+    reconsider f1' = f1, f2' = f2 as map of X, R^1
+      by FUNCT_2:9, TOPMETR:24, BORSUK_1:83;
+    f1' is continuous & f2' is continuous by A1, TOPMETR:7; then 
+    consider g being map of X,R^1 such that
+B1: (for p being Point of X,r1,r2 being real number st
+    f1'.p=r1 & f2'.p=r2 holds g.p=r1+r2) & g is continuous by JGRAPH_2:29;
+    reconsider A = [.0,1.] as non empty Subset of R^1
+      by TOPMETR:24, TOPREAL5:1;
+Zx: [.0,1.] = the carrier of R^1|A by JORDAN1:1;
+Zy: rng g c= [.0,1.]
+    proof
+      let x be set;
+      assume x in rng g; then
+      consider y being set such that
+C1:   y in dom g & x = g.y by FUNCT_1:def 5;
+      reconsider y as Point of X by C1, FUNCT_2:def 1;
+      g.y = f1.y + f2.y by B1; then
+      g.y is Point of I[01] by A1; 
+      hence thesis by C1, BORSUK_1:83;
+    end; 
+    dom g = the carrier of X by FUNCT_2:def 1; then
+    reconsider g as map of X, R^1|A by Zx, Zy, FUNCT_2:4;
+    R^1 | A = I[01] by BORSUK_1:def 16, TOPMETR:def 7; then
+    reconsider g as continuous map of X, I[01] by B1, JGRAPH_1:63;
+    take g;
+    thus thesis by B1;
+  end;
+
+theorem
+  for f1,f2 being map of [:I[01],I[01]:],I[01] st
+    f1 is continuous & f2 is continuous &
+     (for p being Point of [:I[01],I[01]:] holds f1.p - f2.p is Point of I[01])
+       holds ex g being map of [:I[01],I[01]:],I[01] st
+       (for p being Point of [:I[01],I[01]:],r1,r2 being real number st
+   f1.p=r1 & f2.p=r2 holds g.p=r1-r2) & g is continuous
+  proof
+    let f1,f2 be map of [:I[01],I[01]:],I[01];
+    assume
+A1: f1 is continuous & f2 is continuous &
+    (for p being Point of [:I[01],I[01]:] holds f1.p - f2.p is Point of I[01]);
+    set X = [:I[01],I[01]:];
+    reconsider f1' = f1, f2' = f2 as map of X, R^1
+      by FUNCT_2:9, TOPMETR:24, BORSUK_1:83;
+    f1' is continuous & f2' is continuous by A1, TOPMETR:7; then 
+    consider g being map of X,R^1 such that
+B1: (for p being Point of X,r1,r2 being real number st
+    f1'.p=r1 & f2'.p=r2 holds g.p=r1-r2) & g is continuous by JGRAPH_2:31;
+    reconsider A = [.0,1.] as non empty Subset of R^1
+      by TOPMETR:24, TOPREAL5:1;
+Zx: [.0,1.] = the carrier of R^1|A by JORDAN1:1;
+Zy: rng g c= [.0,1.]
+    proof
+      let x be set;
+      assume x in rng g; then
+      consider y being set such that
+C1:   y in dom g & x = g.y by FUNCT_1:def 5;
+      reconsider y as Point of X by C1, FUNCT_2:def 1;
+      g.y = f1.y - f2.y by B1; then
+      g.y is Point of I[01] by A1;
+      hence thesis by C1, BORSUK_1:83;
+    end;
+    dom g = the carrier of X by FUNCT_2:def 1; then
+    reconsider g as map of X, R^1|A by Zx, Zy, FUNCT_2:4;
+    R^1 | A = I[01] by BORSUK_1:def 16, TOPMETR:def 7; then
+    reconsider g as continuous map of X, I[01] by B1, JGRAPH_1:63;
+    take g;
+    thus thesis by B1;
+  end;
+
+begin :: Paths
+
+reserve
+  T for non empty TopSpace,
+  a, b, c, d for Point of T;
+
+theorem Te1:
+  for P being Path of a,b st P is continuous holds
+  P * L[01]((0,1)(#),(#)(0,1)) is continuous map of I[01], T
+proof
+  let P be Path of a,b such that
+a1: P is continuous;
+  L[01]((0,1)(#),(#)(0,1)) is continuous by TREAL_1:11;
+  hence P * L[01]((0,1)(#),(#)(0,1)) is continuous map of I[01], T
+   by a1,TOPMETR:27,TOPS_2:58;
+end;
+
+theorem Te2:
+  for X being non empty TopStruct,
+      a, b being Point of X,
+      P being Path of a,b st P.0 = a & P.1 = b holds
+  (P * L[01]((0,1)(#),(#)(0,1))).0 = b &
+  (P * L[01]((0,1)(#),(#)(0,1))).1 = a
+proof
+  let X be non empty TopStruct,
+      a, b be Point of X;
+  let P be Path of a,b such that
+a1: P.0 = a and
+a0: P.1 = b;
+  set e = L[01]((0,1)(#),(#)(0,1));
+A2: e.0 = e.(#)(0,1) by TREAL_1:def 1
+       .= (0,1)(#) by TREAL_1:12
+       .= 1 by TREAL_1:def 2;
+A3: e.1 = e.(0,1)(#) by TREAL_1:def 2
+       .= (#)(0,1) by TREAL_1:12
+       .= 0 by TREAL_1:def 1;
+a2:the carrier of Closed-Interval-TSpace(0,1) = [. 0,1 .] by TOPMETR:25;
+  0 in [. 0,1 .] by TOPREAL5:1;
+  hence (P * e).0 = b by a0,A2,a2,FUNCT_2:21;
+  1 in [. 0,1 .] by TOPREAL5:1;
+  hence (P * e).1 = a by a1,a2,A3,FUNCT_2:21;
+end;
+  
+theorem Te3:
+  for P being Path of a,b st P is continuous & P.0 = a & P.1 = b holds
+  -P is continuous & (-P).0 = b & (-P).1 = a
+proof
+  let P be Path of a,b such that
+a1: P is continuous and
+a2: P.0 = a and
+a3: P.1 = b;
+  P * L[01]((0,1)(#),(#)(0,1)) is continuous map of I[01], T &
+  (P * L[01]((0,1)(#),(#)(0,1))).0 = b &
+  (P * L[01]((0,1)(#),(#)(0,1))).1 = a by a1,a2,a3,Te1,Te2;
+  hence -P is continuous & (-P).0 = b & (-P).1 = a by BORSUK_2:def 1;
+end;
+
+definition
+  let T be TopStruct, a,b be Point of T;
+  pred a,b are_connected means :da:
+  ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b;
+end;
+
+definition
+  let T be non empty TopSpace, a,b be Point of T;
+  redefine pred a,b are_connected;
+reflexivity
+proof
+  let a be Point of T;
+  thus ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = a
+    by BORSUK_2:4;
+end;
+symmetry
+proof
+  let a,b be Point of T;
+  assume
+a1:  ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b;
+  consider P being Path of a,b;
+  take -P;
+  P is continuous & P.0 = a & P.1 = b by a1,BORSUK_2:def 1;
+  hence thesis by Te3;
+end;
+end;
+
+theorem Ttr:
+  a,b are_connected & b,c are_connected implies a,c are_connected
+proof
+  assume that
+a1: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b and
+a2: ex f being map of I[01], T st f is continuous & f.0 = b & f.1 = c;
+  consider P being Path of a,b, R being Path of b,c;
+  take P+R;
+  P is continuous & P.0 = a & P.1 = b &
+  R is continuous & R.0 = b & R.1 = c by a1,a2,BORSUK_2:def 1;
+  hence thesis by JORDAN20:27;
+end;
+  
+theorem Taa:
+  for T being arcwise_connected TopStruct,
+      a, b being Point of T holds a,b are_connected
+proof
+  let T be arcwise_connected TopStruct,
+      a, b be Point of T;
+  thus ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b
+    by BORSUK_2:def 2;
+end;
+
+theorem
+  for A being Path of a,a holds A,A are_homotopic
+proof
+  ex f be map of I[01], T st f is continuous & f.0 = a & f.1 = a by BORSUK_2:4;
+  hence thesis by BORSUK_2:15;
+end;
+
+theorem
+  a,b are_connected implies
+  for A being Path of a,b holds A,A are_homotopic
+proof
+  assume ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b;
+  hence thesis by BORSUK_2:15;
+end;
+
+theorem Tmm:
+  a,b are_connected implies for A being Path of a,b holds A = --A
+proof
+  assume
+a0: a,b are_connected;
+  then
+a1: ex f be map of I[01], T st f is continuous & f.0 = a & f.1 = b by da;
+   b,a are_connected by a0;
+   then
+a2: ex f be map of I[01], T st f is continuous & f.0 = b & f.1 = a by da;
+  let A be Path of a,b;
+  set I = the carrier of I[01];
+  for x being Element of I holds A.x = (--A).x
+  proof
+    let x be Element of I;
+    reconsider z = 1-x as Point of I[01] by JORDAN5B:4;
+    thus (--A).x = (-A).(1-x) by a2,BORSUK_2:def 5
+      .= A.(1-z) by a1,BORSUK_2:def 5
+      .= A.x;
+  end;
+  hence A = --A by FUNCT_2:113;
+end;
+  
+theorem
+  for T being non empty arcwise_connected TopSpace, a, b being Point of T
+  for A being Path of a,b holds A = --A
+proof
+  let T be non empty arcwise_connected TopSpace, a, b be Point of T;
+  a,b are_connected by Taa;
+  hence thesis by Tmm;
+end;
+
+theorem
+  a, b are_connected implies for A being Path of a, b holds
+    A is continuous
+  proof
+    assume a, b are_connected; then
+    ex g being map of I[01], T st g is continuous & g.0 = a & g.1 = b by da;
+   hence thesis by BORSUK_2:def 1;
+  end;
+
+begin :: Reexamination of a Path Concept
+
+definition let T be non empty arcwise_connected TopSpace;
+           let a, b, c be Point of T;
+           let P be Path of a, b,
+               Q be Path of b, c;
+  redefine func P + Q means
+   for t being Point of I[01] holds
+    ( t <= 1/2 implies it.t = P.(2*t) ) &
+    ( 1/2 <= t implies it.t = Q.(2*t-1) );
+  compatibility
+  proof
+    set PQ = P + Q;
+    consider f be map of I[01], T such that
+A1: f is continuous & f.0 = a & f.1 = b by BORSUK_2:def 2;
+    consider g be map of I[01], T such that
+A2: g is continuous & g.0 = b & g.1 = c by BORSUK_2:def 2;
+    let X be Path of a, c;
+    X = P + Q iff
+    for t being Point of I[01] holds
+    ( t <= 1/2 implies X.t = P.(2*t) ) &
+    ( 1/2 <= t implies X.t = Q.(2*t-1) )
+    proof
+      hereby assume
+X0:     X = P + Q;
+        let t be Point of I[01];
+        thus t <= 1/2 implies X.t = P.(2*t)
+          by A1, A2, X0, BORSUK_2:def 4;
+        assume 1/2 <= t;
+        hence X.t = Q.(2*t-1) by A1, A2, X0, BORSUK_2:def 4;
+      end;
+      assume for t being Point of I[01] holds
+        ( t <= 1/2 implies X.t = P.(2*t) ) &
+        ( 1/2 <= t implies X.t = Q.(2*t-1) );
+      hence thesis by BORSUK_2:def 4, A1, A2;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition let T be non empty arcwise_connected TopSpace;
+           let a, b be Point of T;
+           let P be Path of a, b;
+  redefine func - P means :DefMinus:
+   for t being Point of I[01] holds it.t = P.(1-t);
+  compatibility
+  proof
+A0: ex f being map of I[01], T st
+    f is continuous & f.0 = a & f.1 = b by BORSUK_2:def 2;
+    let X be Path of b, a;
+    thus thesis by A0, BORSUK_2:def 5;
+  end;
+end;
+
+begin :: Reparametrizations
+
+definition let T be non empty TopSpace,
+               a, b be Point of T;
+           let P be Path of a, b;
+           let f be continuous map of I[01], I[01];
+  assume T1:f.0 = 0 & f.1 = 1 & a, b are_connected;
+  func RePar (P, f) -> Path of a, b equals :RPDef:
+    P * f;
+  coherence
+  proof
+    set PF = P * f;
+    consider g being map of I[01], T such that
+A1: g is continuous & g.0 = a & g.1 = b by T1, da;
+    0 in the carrier of I[01] by JORDAN5A:2; then
+    0 in dom f by FUNCT_2:def 1; then
+A2: PF.0 = P.(f.0) by FUNCT_1:23 .= a by T1, A1, BORSUK_2:def 1;
+    1 in the carrier of I[01] by JORDAN5A:2; then
+    1 in dom f by FUNCT_2:def 1; then
+A3: PF.1 = P.(f.1) by FUNCT_1:23 .= b by T1, A1, BORSUK_2:def 1;
+    P is continuous by A1, BORSUK_2:def 1; then
+    PF is continuous by TOPS_2:58;
+    hence thesis by A3, A2, BORSUK_2:def 1;
+  end;
+end;
+
+theorem Bauhaus3:
+  for P being Path of a, b,
+      f being continuous map of I[01], I[01] st
+  f.0 = 0 & f.1 = 1 & a, b are_connected holds
+  RePar (P, f), P are_homotopic
+  proof
+    let P be Path of a, b,
+        f be continuous map of I[01], I[01];
+    assume
+S1: f.0 = 0 & f.1 = 1 & a,b are_connected; then
+RR: ex g being map of I[01], T st
+    g is continuous & g.0 = a & g.1 = b by da;
+    set Q = RePar (P,f);
+J0: 0 is Point of I[01] & 1 is Point of I[01] by JORDAN5A:2;
+    set X = [:I[01], I[01]:];
+    reconsider ID = id I[01] as Path of 0[01], 1[01] by Rosen;
+    set G1 = -ID;
+    reconsider G2 = pr2 (the carrier of I[01], the carrier of I[01])
+      as continuous map of X, I[01] by YELLOW12:40;
+    reconsider f1 = G1 * G2 as continuous map of X, I[01];
+a1: for s, t being Point of I[01] holds
+    f1. [s,t] = 1 - t
+    proof
+      let s, t be Point of I[01];
+HA:   1 - t in the carrier of I[01] by JORDAN5B:4;
+      [s,t] in [:the carrier of I[01],the carrier of I[01]:]
+        by ZFMISC_1:106; then
+      [s,t] in dom G2 by FUNCT_2:def 1; then
+      f1. [s,t] = G1. (G2. [s,t]) by FUNCT_1:23
+               .= G1. t by FUNCT_3:def 6 
+               .= ID.(1 - t) by DefMinus
+               .= 1 - t by HA, TMAP_1:91;
+      hence thesis;
+    end;
+    reconsider F2 = pr1 (the carrier of I[01], the carrier of I[01])
+      as continuous map of X, I[01] by YELLOW12:39;
+    reconsider f2 = f * F2 as continuous map of X, I[01];
+a2: for s, t being Point of I[01] holds
+    f2. [s,t] = f.s
+    proof
+      let s, t be Point of I[01];
+      [s,t] in [:the carrier of I[01],the carrier of I[01]:]
+        by ZFMISC_1:106; then
+      [s,t] in dom F2 by FUNCT_2:def 1; 
+      hence f2. [s,t] = f. (F2. [s,t]) by FUNCT_1:23
+                    .= f.s by FUNCT_3:def 5;
+    end;
+    reconsider f3 = pr1 (the carrier of I[01], the carrier of I[01]) as
+      continuous map of X, I[01] by YELLOW12:39;
+    reconsider f4 = pr2 (the carrier of I[01], the carrier of I[01]) as
+      continuous map of X, I[01] by YELLOW12:40;
+Hh: for p being Point of X holds f1.p * f2.p is Point of I[01]
+      by Dersu1;
+He: for p being Point of X holds f3.p * f4.p is Point of I[01]
+      by Dersu1; 
+    consider g1 being map of X,I[01] such that
+a5: (for p being Point of X,r1,r2 being real number st
+    f1.p=r1 & f2.p=r2 holds g1.p=r1*r2) & g1 is continuous by Hh, Ble1';
+G1: for t, s being Point of I[01] holds
+    g1. [s,t] = (1 - t) * f.s
+    proof
+      let t,s be Point of I[01];
+      f1. [s,t] = 1 - t & f2. [s,t] = f.s by a1, a2; 
+      hence thesis by a5;
+    end;
+    consider g2 being map of X,I[01] such that
+a3: (for p being Point of X,r1,r2 being real number st
+    f3.p=r1 & f4.p=r2 holds g2.p=r1*r2) & g2 is continuous by He, Ble1';
+G2: for t, s being Point of I[01] holds
+    g2. [s,t] = t * s
+    proof
+      let t, s being Point of I[01];
+      f3. [s,t] = s & f4. [s,t] = t by FUNCT_3:def 5, def 6;
+      hence thesis by a3;
+    end;
+    for p being Point of X holds g1.p + g2.p is Point of I[01]
+    proof
+      let p be Point of X;
+      p in the carrier of [:I[01],I[01]:]; then
+      p in [:the carrier of I[01], the carrier of I[01]:]
+         by BORSUK_1:def 5; then
+      consider s, t being set such that
+U1:   s in the carrier of I[01] & t in the carrier of I[01] & p = [s,t]
+        by ZFMISC_1:def 2;
+      reconsider s, t as Point of I[01] by U1;
+      set a = f.s;
+      per cases;
+      suppose
+UU:   f.s <= s;
+      0 <= t & t <= 1 by BORSUK_1:83, TOPREAL5:1; then
+U3:   a<=(1-t)*a+t*s & (1-t)*a+t*s<=s by UU, JGRAPH_6:2;
+U5:   g1.p + g2.p = (1 - t) * f.s + g2.p by G1, U1
+                 .= (1 - t) * f.s + t * s by G2, U1;
+u4:   0 <= a by TOPREAL5:1, BORSUK_1:83;
+      s <= 1 by BORSUK_1:83, TOPREAL5:1; then
+      (1-t)*a+t*s <= 1 by U3, AXIOMS:22; 
+      hence thesis by BORSUK_1:83, U5, u4, U3, TOPREAL5:1;
+      end;
+      suppose
+UU:     a > s; 
+        set j = 1 - t;
+        j in the carrier of I[01] by JORDAN5B:4; then
+        0 <= j & j <= 1 by JORDAN5A:2; then
+U3:     s <= (1 - j)*s + j * a & (1 - j)*s + j * a <= a by UU, JGRAPH_6:2;
+U5:     g1.p + g2.p = (1 - t) * f.s + g2.p by G1, U1
+                 .= (1 - t) * f.s + t * s by G2, U1;
+u4:     0 <= s by BORSUK_1:83, TOPREAL5:1;
+        a <= 1 by BORSUK_1:83, TOPREAL5:1; then
+        (1-t)*a+t*s <= 1 by U3, AXIOMS:22;
+        hence thesis by BORSUK_1:83, U5, U3, u4, TOPREAL5:1;
+      end;
+    end; then
+    consider h being map of X,I[01] such that
+a4: (for p being Point of X,r1,r2 being real number st
+    g1.p=r1 & g2.p=r2 holds h.p=r1+r2) & h is continuous by a3,a5,Ble2';
+J1: for t, s being Point of I[01] holds
+    h. [s,t] = (1 - t) * f.s + t * s
+    proof
+      let t, s being Point of I[01];
+      g1. [s,t] = (1 - t) * f.s & g2. [s,t] = t * s by G1, G2;
+      hence thesis by a4;
+    end;
+H1: for s being Point of I[01] holds h. [s,0] = f.s
+    proof
+      let s be Point of I[01];
+      thus h. [s,0] = (1 - 0) * f.s + 0 * s by J0, J1 .= f.s;
+    end;
+H3: for s being Point of I[01] holds h. [s,1] = s
+    proof
+      let s be Point of I[01];
+      thus h. [s,1] = (1 - 1) * f.s + 1 * s by J0, J1 .= s;
+    end;
+H2: for t being Point of I[01] holds h. [0,t] = 0
+    proof
+      let t be Point of I[01];
+      reconsider oo = 0 as Point of I[01] by JORDAN5A:2;
+      thus h. [0,t] = (1 - t) * f.oo + t * 0 by J1 .= 0 by S1;
+    end;
+H4: for t being Point of I[01] holds h. [1,t] = 1
+    proof
+      let t be Point of I[01];
+      reconsider oo = 1 as Point of I[01] by JORDAN5A:2;
+      thus h. [1,t] = (1 - t) * f.oo + t * 1 by J1
+           .= 1 - t + t by S1 .= 1;
+    end;
+JJ: dom h = the carrier of [:I[01],I[01]:] by FUNCT_2:def 1
+         .= [:the carrier of I[01],the carrier of I[01]:] by BORSUK_1:def 5;
+    set H = P * h;
+    P is continuous by RR, BORSUK_2:def 1; then
+T1: H is continuous by a4, TOPS_2:58;
+T2: for s being Point of I[01] holds H.(s,0) = Q.s & H.(s,1) = P.s
+    proof
+      let s be Point of I[01];
+      s in the carrier of I[01] & 0 in the carrier of I[01]
+        by JORDAN5A:2; then
+Z1:   [s,0] in dom h by JJ, ZFMISC_1:106;
+      1 in the carrier of I[01] by JORDAN5A:2; then
+Z2:   [s,1] in dom h by JJ, ZFMISC_1:106;
+      s in the carrier of I[01]; then
+Z3:   s in dom f by FUNCT_2:def 1;
+      thus H.(s,0) = H. [s,0] by BINOP_1:def 1
+                  .= P.(h. [s,0]) by Z1, FUNCT_1:23
+                  .= P.(f.s) by H1
+                  .= (P * f).s by Z3, FUNCT_1:23
+                  .= Q.s by RPDef, S1;
+      thus H.(s,1) = H. [s,1] by BINOP_1:def 1
+                  .= P. (h. [s,1]) by Z2, FUNCT_1:23
+                  .= P.s by H3;
+    end;
+    for t being Point of I[01] holds H.(0,t) = a & H.(1,t) = b
+    proof
+      let t be Point of I[01];
+      t in the carrier of I[01] & 0 in the carrier of I[01]
+        by JORDAN5A:2; then
+J1:   [0,t] in dom h by JJ, ZFMISC_1:106;
+      1 in the carrier of I[01] by JORDAN5A:2; then
+J2:   [1,t] in dom h by JJ, ZFMISC_1:106;
+      thus H.(0,t) = H. [0,t] by BINOP_1:def 1
+                  .= P. (h. [0,t]) by J1, FUNCT_1:23
+                  .= P. 0 by H2
+                  .= a by RR, BORSUK_2:def 1;
+      thus H.(1,t) = H. [1,t] by BINOP_1:def 1
+                  .= P. (h. [1,t]) by J2, FUNCT_1:23
+                  .= P. 1 by H4
+                  .= b by RR, BORSUK_2:def 1;
+    end;
+    hence thesis by T1, T2, BORSUK_2:def 6;
+  end;
+
+theorem
+  for T being non empty arcwise_connected TopSpace, a, b be Point of T,
+      P being Path of a, b,
+      f being continuous map of I[01], I[01] st
+  f.0 = 0 & f.1 = 1 holds
+  RePar (P, f), P are_homotopic
+  proof
+    let T be non empty arcwise_connected TopSpace, a, b be Point of T,
+        P be Path of a, b,
+        f be continuous map of I[01], I[01];
+    a, b are_connected by Taa;
+    hence thesis by Bauhaus3;
+  end;
+
+definition
+  func 1RP -> map of I[01], I[01] means :1RPDef:
+    for t being Point of I[01] holds
+      (t <= 1/2 implies it.t = 2 * t) &
+      (t > 1/2 implies it.t = 1);
+  existence
+  proof
+    defpred P[real number] means $1 <= 1/2;
+    deffunc F(real number) = 2 * $1;
+    deffunc G(set) = 1;
+    consider f being Function such that
+A1: dom f = the carrier of I[01] &
+    for x being set st x in the carrier of I[01] holds
+    (P[x] implies f.x = F(x)) &
+    (not P[x] implies f.x = G(x)) from PARTFUN1:sch 1;
+    for x being set st x in the carrier of I[01] holds
+      f.x in the carrier of I[01]
+    proof
+      let x be set;
+      assume x in the carrier of I[01]; then
+      reconsider x as Point of I[01];
+      per cases;
+      suppose
+A3:     P[x]; then
+        f.x = 2 * x by A1; then
+        f.x is Point of I[01] by A3, Ble1;
+        hence thesis;
+      end;
+      suppose not P[x]; then
+        f.x = G(x) by A1;
+        hence thesis by JORDAN5A:2;
+      end;  
+    end; then
+    reconsider f as map of I[01], I[01] by A1, FUNCT_2:5;
+    for t being Point of I[01] holds
+      (t <= 1/2 implies f.t = 2 * t) &
+      (t > 1/2 implies f.t = 1) by A1;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let f1, f2 be map of I[01], I[01];
+    assume that
+A1: for t being Point of I[01] holds
+      (t <= 1/2 implies f1.t = 2 * t) &
+      (t > 1/2 implies f1.t = 1) and
+A2: for t being Point of I[01] holds
+      (t <= 1/2 implies f2.t = 2 * t) &
+      (t > 1/2 implies f2.t = 1);
+    for t being Point of I[01] holds f1.t = f2.t
+    proof
+      let t be Point of I[01];
+      per cases;
+      suppose
+A3:     t <= 1/2; then
+        f1.t = 2 * t by A1 .= f2.t by A2, A3;
+        hence thesis;
+      end;
+      suppose
+A3:     t > 1/2; then
+        f1.t = 1 by A1 .= f2.t by A2, A3;
+        hence thesis;
+      end;
+    end; 
+    hence thesis by YELLOW_2:9;
+  end;
+end;
+
+registration
+  cluster 1RP -> continuous;
+  coherence
+  proof
+HH: 0 is Point of I[01] & 1/2 is Point of I[01] & 1 is Point of I[01]
+      by JORDAN5A:2; then
+    reconsider A = [.0,1/2.] as non empty compact Subset of I[01]
+      by BORSUK_4:49;
+    reconsider B = [.1/2,1.] as non empty compact Subset of I[01]
+      by HH, BORSUK_4:49;
+    set T1 = I[01]|A, T2 = I[01]|B, T = I[01];
+    T1 = Closed-Interval-TSpace (0,1/2) by JGRAPH_5:7; then
+    reconsider f = L[01](0,1/2,0,1) as continuous map of T1, I[01]
+      by Klucz, TOPMETR:27;
+    reconsider g = T2 --> 1[01] as continuous map of T2, I[01]
+      by BORSUK_1:36;
+XX: g = (the carrier of T2) --> 1 by BORSUK_1:def 3, def 18;
+B1: ([#] T1) \/ ([#] T2) = [.0,1/2.] \/ ([#] T2) by PRE_TOPC:def 10
+                        .= [.0,1/2.] \/ [.1/2,1.] by PRE_TOPC:def 10
+                        .= the carrier of I[01] by BORSUK_1:83, TREAL_1:2
+                        .= [#] T by PRE_TOPC:12;
+    for p be set st p in ([#] T1) /\ ([#] T2) holds f.p = g.p
+    proof
+      let p be set;
+      assume p in ([#] T1) /\ ([#] T2); then
+      p in [.0,1/2.] /\ ([#] T2) by PRE_TOPC:def 10; then
+      p in [.0,1/2.] /\ [.1/2,1.] by PRE_TOPC:def 10; then
+      p in {1/2} by TOPMETR2:1; then
+YY:   p = 1/2 by TARSKI:def 1; then
+      p in [.1/2,1.] by TOPREAL5:1; then
+YZ:   p in the carrier of T2 by JORDAN1:1;
+      f.p = ((1 - 0)/(1/2 - 0)) * (1/2 - 0) + 0 by YY, Ksasia
+         .= g.p by XX, YZ, FUNCOP_1:13;
+      hence thesis;
+    end; then
+    consider h being map of I[01], I[01] such that
+C1: h = f +* g & h is continuous by B1, BORSUK_2:1;
+    1RP = h
+    proof
+      for x being Element of I[01] holds 1RP.x = (f +* g).x
+      proof
+        let x be Element of I[01];
+D4:     dom g = the carrier of T2 by FUNCT_2:def 1
+             .= [.1/2,1.] by JORDAN1:1;
+        per cases by REAL_1:def 5;
+        suppose
+D0:       x < 1/2; then
+D1:       not x in dom g by D4, TOPREAL5:1;
+          0 <= x by JORDAN5A:2; then
+D3:       f.x = ((1 - 0)/(1/2 - 0)) * (x - 0) + 0 by D0, Ksasia
+             .= (1/(1/2)) * x;
+          thus 1RP.x = 2 * x by D0, 1RPDef
+                    .= (f +* g).x by D3, D1, FUNCT_4:12;
+        end;      
+        suppose
+D0:       x = 1/2; then
+DD:       x in dom g by D4, TOPREAL5:1; then
+DR:       x in the carrier of T2 by XX, FUNCOP_1:19;
+          thus 1RP.x = 2 * (1/2) by D0, 1RPDef
+                     .= g.x by DR, XX, FUNCOP_1:13
+                     .= (f +* g).x by DD, FUNCT_4:14;
+        end;
+        suppose
+Z0:       x > 1/2;
+          x <= 1 by JORDAN5A:2; then
+Z1:       x in dom g by D4, Z0, TOPREAL5:1; then
+Z2:       x in the carrier of T2 by FUNCT_2:def 1;
+          thus 1RP.x = 1 by 1RPDef, Z0
+                     .= g.x by Z2, FUNCOP_1:13, XX
+                     .= (f +* g).x by Z1, FUNCT_4:14;
+        end;      
+      end;
+      hence thesis by C1, YELLOW_2:9;
+    end; 
+    hence thesis by C1;
+  end;
+end;  
+
+theorem Bauhaus1:
+  1RP.0 = 0 & 1RP.1 = 1
+  proof
+    reconsider x = 0, y = 1 as Point of I[01] by JORDAN5A:2;
+    thus 1RP.0 = 2*x by 1RPDef
+              .= 0;
+    thus 1RP.1 = 1RP.y
+              .= 1 by 1RPDef;
+  end;
+
+definition
+  func 2RP -> map of I[01], I[01] means :2RPDef:
+    for t being Point of I[01] holds
+      (t <= 1/2 implies it.t = 0) &
+      (t > 1/2 implies it.t = 2 * t - 1);
+  existence
+  proof
+    defpred P[real number] means $1 <= 1/2;
+    deffunc G(real number) = 2 * $1 - 1;
+    deffunc F(set) = 0;
+    consider f being Function such that
+A1: dom f = the carrier of I[01] &
+    for x being set st x in the carrier of I[01] holds
+    (P[x] implies f.x = F(x)) &
+    (not P[x] implies f.x = G(x)) from PARTFUN1:sch 1;
+    for x being set st x in the carrier of I[01] holds
+      f.x in the carrier of I[01]
+    proof
+      let x be set;
+      assume x in the carrier of I[01]; then
+      reconsider x as Point of I[01];
+      per cases;
+      suppose P[x]; then
+        f.x = 0 by A1;
+        hence thesis by JORDAN5A:2;
+      end;
+      suppose
+A3:     not P[x]; then
+        f.x = G(x) by A1; then
+        f.x is Point of I[01] by A3, Ble2;
+        hence thesis;
+      end;  
+    end; then
+    reconsider f as map of I[01], I[01] by A1, FUNCT_2:5;
+    for t being Point of I[01] holds
+      (t <= 1/2 implies f.t = 0) &
+      (t > 1/2 implies f.t = 2 * t - 1) by A1;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let f1, f2 be map of I[01], I[01];
+    assume that
+A1: for t being Point of I[01] holds
+      (t <= 1/2 implies f1.t = 0) &
+      (t > 1/2 implies f1.t = 2 * t - 1) and
+A2: for t being Point of I[01] holds
+      (t <= 1/2 implies f2.t = 0) &
+      (t > 1/2 implies f2.t = 2 * t - 1);
+    for t being Point of I[01] holds f1.t = f2.t
+    proof
+      let t be Point of I[01];
+      per cases;
+      suppose
+A3:     t <= 1/2; then
+        f1.t = 0 by A1 .= f2.t by A2, A3;
+        hence thesis;
+      end;
+      suppose
+A3:     t > 1/2; then
+        f1.t = 2 * t - 1 by A1 .= f2.t by A2, A3;
+        hence thesis;
+      end;
+    end; 
+    hence thesis by YELLOW_2:9;
+  end;
+end;  
+
+registration
+  cluster 2RP -> continuous;
+  coherence
+  proof
+HH: 0 is Point of I[01] & 1/2 is Point of I[01] & 1 is Point of I[01]
+      by JORDAN5A:2; then
+    reconsider A = [.0,1/2.] as non empty compact Subset of I[01]
+      by BORSUK_4:49;
+    reconsider B = [.1/2,1.] as non empty compact Subset of I[01]
+      by HH, BORSUK_4:49;
+    set T1 = I[01]|A, T2 = I[01]|B, T = I[01];
+    T2 = Closed-Interval-TSpace (1/2,1) by JGRAPH_5:7; then
+    reconsider f = L[01](1/2,1,0,1) as continuous map of T2, I[01]
+      by Klucz, TOPMETR:27;
+    reconsider g = T1 --> 0[01] as continuous map of T1, I[01]
+      by BORSUK_1:36;
+XX: g = (the carrier of T1) --> 0 by BORSUK_1:def 3, def 17;  
+B1: ([#] T2) \/ ([#] T1) = [.0,1/2.] \/ ([#] T2) by PRE_TOPC:def 10
+                        .= [.0,1/2.] \/ [.1/2,1.] by PRE_TOPC:def 10
+                        .= the carrier of I[01] by BORSUK_1:83, TREAL_1:2
+                        .= [#] T by PRE_TOPC:12;
+    for p be set st p in ([#] T2) /\ ([#] T1) holds f.p = g.p
+    proof
+      let p be set;
+      assume p in ([#] T2) /\ ([#] T1); then
+      p in [.0,1/2.] /\ ([#] T2) by PRE_TOPC:def 10; then
+      p in [.0,1/2.] /\ [.1/2,1.] by PRE_TOPC:def 10; then
+      p in {1/2} by TOPMETR2:1; then
+YY:   p = 1/2 by TARSKI:def 1; then
+      p in [.0,1/2.] by TOPREAL5:1; then
+YZ:   p in the carrier of T1 by JORDAN1:1;
+      f.p = ((1 - 0)/(1 - 1/2)) * (1/2 - 1/2) + 0 by Ksasia, YY
+         .= g.p by XX, YZ, FUNCOP_1:13;
+      hence thesis;
+    end; then
+    consider h being map of I[01], I[01] such that
+C1: h = g +* f & h is continuous by B1, BORSUK_2:1;
+    2RP = h
+    proof
+      for x being Element of I[01] holds 2RP.x = (g +* f).x
+      proof
+        let x be Element of I[01];
+d4:     dom f = the carrier of T2 by FUNCT_2:def 1
+             .= [.1/2,1.] by JORDAN1:1;
+        per cases by REAL_1:def 5;
+        suppose
+D0:       x > 1/2;
+          x <= 1 by JORDAN5A:2; then
+D1:       x in dom f by D0, d4, TOPREAL5:1;
+          1 >= x by JORDAN5A:2; then
+D3:       f.x = ((1 - 0)/(1 - 1/2)) * (x - 1/2) + 0 by D0, Ksasia
+             .= 2 * (x - 1/2)
+             .= 2 * x - 1;
+          thus 2RP.x = 2 * x - 1 by D0, 2RPDef
+                    .= (g +* f).x by D3, D1, FUNCT_4:14;
+        end;      
+        suppose
+D0:       x = 1/2; then
+DD:       x in dom f by d4, TOPREAL5:1; 
+          thus 2RP.x = ((1 - 0)/(1 - 1/2)) * (1/2 - 1/2) + 0 by D0, 2RPDef
+                    .= f.x by Ksasia, D0
+                    .= (g +* f).x by DD, FUNCT_4:14;
+        end;
+        suppose
+Z0:       x < 1/2; then
+Z1:       not x in dom f by d4, TOPREAL5:1;
+          x >= 0 by JORDAN5A:2; then
+          x in [.0,1/2.] by Z0, TOPREAL5:1; then
+Z2:       x in the carrier of T1 by JORDAN1:1;
+          thus 2RP.x = 0 by 2RPDef, Z0
+                    .= g.x by Z2, FUNCOP_1:13, XX
+                    .= (g +* f).x by Z1, FUNCT_4:12;
+        end;      
+      end;
+      hence thesis by C1, YELLOW_2:9;
+    end; 
+    hence thesis by C1;
+  end;
+end;  
+
+theorem Bauhaus11:
+  2RP.0 = 0 & 2RP.1 = 1
+  proof
+    reconsider x = 0, y = 1 as Point of I[01] by JORDAN5A:2;
+    thus 2RP.0 = 2RP.x
+              .= 0 by 2RPDef;
+    thus 2RP.1 = 2 * y - 1 by 2RPDef
+              .= 1;
+  end;
+
+definition
+  func 3RP -> map of I[01], I[01] means :3RPDef:
+    for x being Point of I[01] holds
+    (x <= 1/2 implies it.x = 1/2 * x) &
+    (x > 1/2 & x <= 3/4 implies it.x = x - 1/4) &
+    (x > 3/4 implies it.x = 2 * x - 1);
+  existence 
+  proof
+    defpred P[real number] means $1 <= 1/2;
+    defpred Q[real number] means $1 > 1/2 & $1 <= 3/4;
+    defpred R[real number] means $1 > 3/4;
+    deffunc F(real number) = 1/2 * $1;
+    deffunc G(real number) = $1 - 1/4;
+    deffunc H(real number) = 2 * $1 - 1;
+B1: for c being set st c in the carrier of I[01] holds
+      (P[c] implies not Q[c]) &
+      (P[c] implies not R[c]) &
+      (Q[c] implies not R[c])
+    proof
+      let c be set;
+      assume c in the carrier of I[01]; then
+      reconsider c' = c as Point of I[01];
+      thus P[c] implies not Q[c];
+      hereby assume P[c]; then
+        c' <= 1/2;
+        hence not R[c] by AXIOMS:22;
+      end;  
+      assume Q[c];
+      hence thesis;
+    end;
+B2: for c being set st c in the carrier of I[01] holds
+      P[c] or Q[c] or R[c];
+    consider f being Function such that
+A1: dom f = the carrier of I[01] &
+    for c being set st c in the carrier of I[01] holds
+      (P[c] implies f.c = F(c)) &
+      (Q[c] implies f.c = G(c)) &
+      (R[c] implies f.c = H(c)) from RECDEF_2:sch 1 (B1,B2);
+    for x being set st x in the carrier of I[01] holds
+      f.x in the carrier of I[01]
+    proof
+      let x be set;
+      assume x in the carrier of I[01]; then
+      reconsider x as Point of I[01];
+      per cases;
+      suppose
+A3:     P[x]; then
+        f.x = 1/2 * x by A1; then
+        f.x is Point of I[01] by A3, Utra1;
+        hence thesis;
+      end;
+      suppose
+A3:     Q[x]; then
+        f.x = G(x) by A1; then
+        f.x is Point of I[01] by A3, Utra2;
+        hence thesis;
+      end;  
+      suppose
+A3:     R[x]; then
+AA:     x >= 1/2 by AXIOMS:22; 
+        f.x = 2 * x - 1 by A3, A1; then
+        f.x is Point of I[01] by Ble2, AA;
+        hence thesis;
+      end;  
+    end; then
+    reconsider f as map of I[01], I[01] by A1, FUNCT_2:5;
+    for x being Point of I[01] holds
+    (x <= 1/2 implies f.x = 1/2 * x) &
+    (x > 1/2 & x <= 3/4 implies f.x = x - 1/4) &
+    (x > 3/4 implies f.x = 2 * x - 1) by A1;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let f1, f2 be map of I[01], I[01];
+    assume that
+A1: for x being Point of I[01] holds
+      (x <= 1/2 implies f1.x = 1/2 * x) &
+      (x > 1/2 & x <= 3/4 implies f1.x = x - 1/4) &
+      (x > 3/4 implies f1.x = 2 * x - 1) and
+A2: for x being Point of I[01] holds
+      (x <= 1/2 implies f2.x = 1/2 * x) &
+      (x > 1/2 & x <= 3/4 implies f2.x = x - 1/4) &
+      (x > 3/4 implies f2.x = 2 * x - 1);
+    for x being Point of I[01] holds f1.x = f2.x
+    proof
+      let x be Point of I[01];
+      per cases;
+      suppose
+C1:     x <= 1/2; then
+        f1.x = 1/2 * x by A1 .= f2.x by A2, C1;
+        hence thesis;
+      end;  
+      suppose
+C1:     x > 1/2 & x <= 3/4; then
+        f1.x = x - 1/4 by A1 .= f2.x by A2, C1;
+        hence thesis;
+      end;  
+      suppose
+C1:     x > 3/4; then
+        f1.x = 2 * x - 1 by A1 .= f2.x by A2, C1;
+        hence thesis;
+      end;  
+    end;   
+    hence thesis by YELLOW_2:9;
+  end;
+end;
+
+registration
+  cluster 3RP -> continuous;
+  coherence
+  proof
+HH: 0 is Point of I[01] & 1/2 is Point of I[01] & 1/4 is Point of I[01] &
+      3/4 is Point of I[01] & 1 is Point of I[01] by JORDAN5A:2; then
+    reconsider A = [.0,1/2.] as non empty compact Subset of I[01]
+      by BORSUK_4:49;
+    reconsider B = [.1/2,3/4.] as non empty compact Subset of I[01]
+      by HH, BORSUK_4:49;
+    reconsider C = [.3/4,1.] as non empty compact Subset of I[01]
+      by HH, BORSUK_4:49;
+    reconsider D = [.1/2,1.] as non empty compact Subset of I[01]
+      by HH, BORSUK_4:49;
+    reconsider E = [.1/4,1/2.] as non empty compact Subset of I[01]
+      by HH, BORSUK_4:49;
+    reconsider F = [.0,1/4.] as non empty compact Subset of I[01]
+      by HH, BORSUK_4:49;
+    set T = I[01];
+    set T1 = T|A, T2 = T|B, T3 = T|C, T4 = T|D, T5 = T|E, T6 = T|F;
+Y1: Closed-Interval-TSpace (3/4,1) = T3 by JGRAPH_5:7;
+Y2: Closed-Interval-TSpace (1/2,1) = T4 by JGRAPH_5:7;
+Y3: Closed-Interval-TSpace (1/4,1/2) = T5 by JGRAPH_5:7;
+Y4: Closed-Interval-TSpace (1/2,3/4) = T2 by JGRAPH_5:7;
+Y5: Closed-Interval-TSpace (0,1/4) = T6 by JGRAPH_5:7;
+Y6: Closed-Interval-TSpace (0,1/2) = T1 by JGRAPH_5:7;
+    set f = L[01](0,1/2,0,1/4);
+    reconsider f as continuous map of T1, T6 by Y5, Y6, Klucz;
+    reconsider f as continuous map of T1, T by JORDAN6:4;
+PB: for x being Point of T1 holds f.x = 1/2 * x
+    proof
+      let x be Point of T1;
+      x in the carrier of T1; then
+      x in A by JORDAN1:1; then
+      0 <= x & x <= 1/2 by TOPREAL5:1; then
+      f.x = ((1/4 - 0)/(1/2 - 0)) * (x - 0) + 0 by Ksasia
+         .= 1/2 * x;
+      hence thesis;
+    end;
+    set g = L[01](1/2,3/4,1/4,1/2);
+    reconsider g as continuous map of T2, T5 by Y3, Y4, Klucz;
+    reconsider g as continuous map of T2, T by JORDAN6:4;
+PC: for x being Point of T2 holds g.x = x - 1/4
+    proof
+      let x be Point of T2;
+      x in the carrier of T2; then
+      x in B by JORDAN1:1; then
+      1/2 <= x & x <= 3/4 by TOPREAL5:1; then
+      g.x = ((1/2 - 1/4)/(3/4 - 1/2)) * (x - 1/2) + 1/4 by Ksasia
+         .= (x - 1/2) + 1/4 
+         .= x - 1/4;
+      hence thesis;
+    end;
+    set h = L[01](3/4,1,1/2,1);
+    reconsider h as continuous map of T3, T4 by Y1, Y2, Klucz;
+    reconsider h as continuous map of T3, T by JORDAN6:4;
+PA: for x being Point of T3 holds h.x = 2 * x - 1
+    proof
+      let x be Point of T3;
+      x in the carrier of T3; then
+      x in C by JORDAN1:1; then
+      3/4 <= x & x <= 1 by TOPREAL5:1; then
+      h.x = ((1 - 1/2)/(1 - 3/4)) * (x - 3/4) + 1/2 by Ksasia
+         .= 2 * (x - 3/4) + 1/2 
+         .= 2 * x - 1;
+      hence thesis;
+    end;
+    reconsider G = [.0,3/4.] as non empty compact Subset of I[01]
+      by HH, BORSUK_4:49;
+    set TT = T|G;
+J1: A c= G by TREAL_1:1;
+    B c= G by TREAL_1:1; then    
+    reconsider TT1 = T1, TT2 = T2 as SubSpace of T|G by J1, JORDAN16:6;
+    set f1 = f, g1 = g;
+X1: ([#] TT1) \/ ([#] TT2) = A \/ ([#] TT2) by PRE_TOPC:def 10
+                          .= A \/ B by PRE_TOPC:def 10
+                          .= [.0,3/4.] by TREAL_1:2
+                          .= [#] (T|G) by PRE_TOPC:def 10;
+X2: T|G is_T2 by TOPMETR:3;
+XX: ([#] TT1) /\ ([#] TT2) = A /\ ([#] TT2) by PRE_TOPC:def 10
+                          .= A /\ B by PRE_TOPC:def 10
+                          .= {1/2} by TOPMETR2:1;
+    for p be set st p in ([#] TT1) /\ ([#] TT2) holds f1.p = g1.p
+    proof
+      let p be set;
+      assume p in ([#] TT1) /\ ([#] TT2); then
+Z0:   p = 1/2 by XX, TARSKI:def 1; then
+      reconsider p as Point of I[01] by BORSUK_1:83, TOPREAL5:1;
+      f1.p = ((1/4 - 0)/(1/2 - 0)) * (p - 0) + 0 by Z0, Ksasia
+          .= ((1/2 - 1/4)/(3/4 - 1/2)) * (p - 1/2) + 1/4 by Z0
+          .= g1.p by Ksasia, Z0;
+      hence thesis;
+    end; then
+    consider FF being map of T|G, T such that
+D1: FF = f1 +* g1 & FF is continuous by X1, X2, BORSUK_2:1;
+X3: ([#] (T|G)) \/ ([#] T3) = G \/ ([#] T3) by PRE_TOPC:def 10
+                           .= G \/ C by PRE_TOPC:def 10
+                           .= the carrier of T by BORSUK_1:83, TREAL_1:2
+                           .= [#] T by PRE_TOPC:def 3;
+DD: ([#] (T|G)) /\ ([#] T3) = G /\ ([#] T3) by PRE_TOPC:def 10
+                           .= G /\ C by PRE_TOPC:def 10
+                           .= {3/4} by TOPMETR2:1;
+    for p be set st p in ([#] (T|G)) /\ ([#] T3) holds FF.p = h.p
+    proof
+      let p be set;
+      assume p in ([#] (T|G)) /\ ([#] T3); then
+EE:   p = 3/4 by DD, TARSKI:def 1; then
+      reconsider p as Point of T by JORDAN5A:2;
+      p in [.1/2,3/4.] by EE, TOPREAL5:1; then
+      p in the carrier of T2 by JORDAN1:1; then
+      p in dom g by FUNCT_2:def 1; then
+      FF.p = g.p by D1, FUNCT_4:14
+          .= 1/2 by Key1, EE
+          .= h.p by Key1, EE;
+      hence thesis;
+    end; then
+    consider HH being map of T, T such that
+G1: HH = FF +* h & HH is continuous by X3, D1, BORSUK_2:1;
+    for x being Element of T holds HH.x = 3RP.x
+    proof
+      let x be Element of T;
+KK:   0 <= x & x <= 1 by JORDAN5A:2;
+      per cases by REAL_1:def 5;
+      suppose
+K0:     x < 1/2; then
+        x in [.0,1/2.] by KK, TOPREAL5:1; then
+KA:     x is Point of T1 by JORDAN1:1;
+        not x in [.1/2,3/4.] by K0, TOPREAL5:1; then
+        not x in the carrier of T2 by JORDAN1:1; then
+KB:     not x in dom g by FUNCT_2:def 1;
+        x < 3/4 by K0, AXIOMS:22; then
+        not x in [.3/4,1.] by TOPREAL5:1; then
+        not x in the carrier of T3 by JORDAN1:1; then
+        not x in dom h by FUNCT_2:def 1; then
+        HH.x = FF.x by G1, FUNCT_4:12
+            .= f.x by KB, D1, FUNCT_4:12
+            .= 1/2 * x by PB, KA
+            .= 3RP.x by 3RPDef, K0;
+        hence thesis;
+      end;
+      suppose 
+K0:     x = 1/2;
+        x in [.1/2,3/4.] by K0, TOPREAL5:1; then
+        x in the carrier of T2 by JORDAN1:1; then
+KB:     x in dom g by FUNCT_2:def 1;
+        not x in [.3/4,1.] by K0, TOPREAL5:1; then
+        not x in the carrier of T3 by JORDAN1:1; then
+        not x in dom h by FUNCT_2:def 1; then
+        HH.x = FF.x by G1, FUNCT_4:12
+            .= g.x by KB, D1, FUNCT_4:14
+            .= 1/2 * x by K0, Key1
+            .= 3RP.x by 3RPDef, K0;
+        hence thesis;
+      end;  
+      suppose
+K0:     x > 1/2 & x < 3/4; then
+        x in [.1/2,3/4.] by TOPREAL5:1; then
+JA:     x in the carrier of T2 by JORDAN1:1; then
+KB:     x in dom g by FUNCT_2:def 1; 
+        not x in [.3/4,1.] by K0, TOPREAL5:1; then
+        not x in the carrier of T3 by JORDAN1:1; then
+        not x in dom h by FUNCT_2:def 1; then 
+        HH.x = FF.x by G1, FUNCT_4:12
+            .= g.x by D1, KB, FUNCT_4:14
+            .= x - 1/4 by PC, JA
+            .= 3RP.x by 3RPDef, K0;
+        hence thesis;
+      end;
+      suppose
+K0:     x = 3/4;
+        x in [.3/4,1.] by K0, TOPREAL5:1; then
+        x in the carrier of T3 by JORDAN1:1; then
+        x in dom h by FUNCT_2:def 1; then
+        HH.x = h.x by G1, FUNCT_4:14
+            .= x - 1/4 by K0, Key1
+            .= 3RP.x by 3RPDef, K0;
+        hence thesis;
+      end;  
+      suppose
+K0:     x > 3/4; then
+        x in [.3/4,1.] by KK, TOPREAL5:1; then
+K1:     x in the carrier of T3 by JORDAN1:1; then
+        x in dom h by FUNCT_2:def 1; then
+        HH.x = h.x by G1, FUNCT_4:14
+            .= 2 * x - 1 by PA, K1
+            .= 3RP.x by 3RPDef, K0;
+        hence thesis;
+      end;
+    end; 
+    hence thesis by G1, YELLOW_2:9;
+  end;
+end;
+
+theorem BauhausX:
+  3RP.0 = 0 & 3RP.1 = 1
+  proof
+A1: 0 is Point of I[01] & 1 is Point of I[01] by JORDAN5A:2;
+    thus 3RP.0 = 1/2 * 0 by A1, 3RPDef
+              .= 0;
+    thus 3RP.1 = 2 * 1 - 1 by A1, 3RPDef
+              .= 1;
+  end;
+
+theorem Bauhaus2:
+  for P being Path of a, b,
+      Q being constant Path of b, b st
+   a,b are_connected holds
+  RePar (P, 1RP) = P + Q
+  proof
+    let P be Path of a, b,
+        Q be constant Path of b, b;
+    set f = RePar (P, 1RP), g = P + Q;
+    assume
+RR: a, b are_connected; then
+    consider h being map of I[01], T such that
+Rr: h is continuous & h.0 = a & h.1 = b by da;
+    b, b are_connected; then
+R1: ex j being map of I[01], T st
+      j is continuous & j.0 = b & j.1 = b by da;
+    for p being Element of I[01] holds f.p = g.p
+    proof
+      let p be Element of I[01];
+      p in the carrier of I[01]; then
+A2:   p in dom 1RP by FUNCT_2:def 1;
+      0 in the carrier of I[01] by JORDAN5A:2; then
+A4:   0 in dom Q by FUNCT_2:def 1;
+A3:   f.p = (P * 1RP).p by Bauhaus1, RPDef, RR
+         .= P. (1RP.p) by A2, FUNCT_1:23;
+      per cases;
+      suppose
+S1:     p <= 1/2;
+        f.p = P.(2*p) by A3, S1, 1RPDef
+           .= g.p by S1, R1, BORSUK_2:def 4, Rr;
+        hence thesis;
+      end;
+      suppose
+S1:     p > 1/2; then
+        2*p - 1 is Point of I[01] by Ble2; then
+        2*p - 1 in the carrier of I[01]; then
+A5:     2*p - 1 in dom Q by FUNCT_2:def 1;
+        f.p = P.1 by S1, 1RPDef, A3
+           .= b by BORSUK_2:def 1, Rr
+           .= Q.0 by BORSUK_2:def 1, R1
+           .= Q.(2*p - 1) by A4, A5, SEQM_3:def 5
+           .= g.p by S1, BORSUK_2:def 4, R1, Rr;
+        hence thesis;
+      end;
+    end;
+    hence thesis by YELLOW_2:9;
+  end;
+
+theorem Bauhaus22:
+  for P being Path of a, b,
+      Q being constant Path of a, a st a,b are_connected holds
+  RePar (P, 2RP) = Q + P
+  proof
+    let P be Path of a, b,
+        Q be constant Path of a, a;
+    assume
+a1:   a,b are_connected; then
+a2: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b by da;
+    a,a are_connected; then
+a3: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = a by da;
+    set f = RePar (P, 2RP), g = Q + P;    
+    for p being Element of I[01] holds f.p = g.p
+    proof
+      let p be Element of I[01];
+      p in the carrier of I[01]; then
+A2:   p in dom 2RP by FUNCT_2:def 1;
+      0 in the carrier of I[01] by JORDAN5A:2; then
+A4:   0 in dom Q by FUNCT_2:def 1;
+A3:   f.p = (P * 2RP).p by a1, Bauhaus11, RPDef
+         .= P. (2RP.p) by A2, FUNCT_1:23;
+      per cases;
+      suppose
+S1:   p <= 1/2; then
+      2*p is Point of I[01] by Ble1; then
+      2*p in the carrier of I[01]; then
+AB:   2*p in dom Q by FUNCT_2:def 1;
+      f.p = P.0 by A3, S1, 2RPDef
+         .= a by a2, BORSUK_2:def 1
+         .= Q.0 by a3, BORSUK_2:def 1
+         .= Q.(2*p) by AB, A4, SEQM_3:def 5
+         .= g.p by a2, a3, S1, BORSUK_2:def 4;
+        hence thesis;
+      end;
+      suppose
+S1:     p > 1/2; 
+        f.p = P.(2*p - 1) by A3, 2RPDef, S1
+           .= g.p by a2, a3, S1, BORSUK_2:def 4;
+        hence thesis;
+      end;
+    end;
+    hence thesis by YELLOW_2:9;
+  end;
+
+theorem ToolY:
+  for P being Path of a, b,
+      Q being Path of b, c,
+      R being Path of c, d st
+  a,b are_connected & b,c are_connected & c,d are_connected holds
+  RePar (P + Q + R, 3RP) = P + (Q + R)
+  proof
+    let P be Path of a, b,
+        Q be Path of b, c,
+        R be Path of c, d;
+    assume that
+a1:   a,b are_connected and
+a2:   b,c are_connected and
+a3:   c,d are_connected;
+a4: a,c are_connected by a1,a2,Ttr; then
+ac: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = c by da;
+ab: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b by a1,da;
+bc: ex f being map of I[01], T st f is continuous & f.0 = b & f.1 = c by a2,da;
+    b,d are_connected by a2,a3,Ttr; then
+bd: ex f being map of I[01], T st f is continuous & f.0 = b & f.1 = d by da;
+cd: ex f being map of I[01], T st f is continuous & f.0 = c & f.1 = d by a3,da;
+    set F = P + Q + R;
+    set f = RePar (F, 3RP), g = P + (Q + R);
+    for x being Point of I[01] holds f.x = g.x
+    proof
+      let x be Point of I[01];
+      x in the carrier of I[01]; then
+A1:   x in dom 3RP by FUNCT_2:def 1;
+      a,d are_connected by a4,a3,Ttr; then
+XX:   f.x = (F*3RP).x by RPDef, BauhausX
+         .= F.(3RP.x) by FUNCT_1:23, A1;
+      per cases;
+      suppose
+B1:     x <= 1/2; then
+        x <= 2 by AXIOMS:22; then
+        reconsider y = 1/2 * x as Point of I[01] by Ble4;
+        1/2 * x <= (1/2) * (1/2) by B1, AXIOMS:25; then 
+B2:     y <= 1/2 by AXIOMS:22;
+        reconsider z = 2 * y as Point of I[01];
+        f.x = F.y by 3RPDef, XX, B1
+           .= (P + Q).z by ac, cd, B2, BORSUK_2:def 4
+           .= P.(2 * x) by ab, bc, B1, BORSUK_2:def 4
+           .= g.x by ab, bd, B1, BORSUK_2:def 4;
+        hence thesis;
+      end;  
+      suppose
+B1:     x > 1/2 & x <= 3/4; then
+B2:     x - 1/4 <= 3/4 - 1/4 by REAL_1:49; then
+BA:     x - 1/4 <= 1 by AXIOMS:22;
+BB:     1/2 - 1/4 <= x - 1/4 by B1, REAL_1:49; then
+        0 <= x - 1/4 by AXIOMS:22; then
+        reconsider y = x - 1/4 as Point of I[01] by BA, JORDAN5A:2;
+        reconsider z = 2 * y as Point of I[01] by B2, Ble1;
+B3:     2 * y >= 2 * (1/4) by BB, AXIOMS:25;
+        reconsider w = 2 * x - 1 as Point of I[01] by B1, Ble2;
+        2 * x <= 2 * (3/4) by B1, AXIOMS:25; then
+B5:     2 * x - 1 <= 3/2 - 1 by REAL_1:49;
+        f.x = F.y by 3RPDef, XX, B1
+           .= (P + Q).z by ac, cd, B2, BORSUK_2:def 4
+           .= Q.(2 * z - 1) by ab, bc, B3, BORSUK_2:def 4
+           .= Q.(2 * w) 
+           .= (Q + R).w by bc, cd, B5, BORSUK_2:def 4
+           .= g.x by ab, bd, B1, BORSUK_2:def 4;
+        hence thesis;
+      end;  
+      suppose
+B1:     x > 3/4; then
+BH:     x > 1/2 by AXIOMS:22; then
+        reconsider y = 2 * x - 1 as Point of I[01] by Ble2;
+        2 * x > 2 * (3/4) by B1, REAL_1:70; then
+B5:     2 * x - 1 > 2 * (3/4) - 1 by REAL_1:92;
+        reconsider w = 2 * x - 1 as Point of I[01] by BH, Ble2;
+        f.x = F.y by 3RPDef, XX, B1
+           .= R.(2 * y - 1) by ac, cd, B5, BORSUK_2:def 4
+           .= (Q + R).w by bc, cd, B5, BORSUK_2:def 4
+           .= g.x by ab, bd, BH, BORSUK_2:def 4;
+        hence thesis;
+      end;
+    end;
+    hence thesis by YELLOW_2:9;
+  end;
+
+begin :: Decomposition of the Unit Square
+
+definition
+  func LowerLeftUnitTriangle -> Subset of [:I[01], I[01]:] means :IADef:
+    for x being set holds x in it iff
+      ex a, b being Point of I[01] st x = [a,b] & b <= 1 - 2 * a;
+  existence
+  proof
+    defpred P[set] means 
+      ex a, b being Point of I[01] st $1 = [a,b] & b <= 1 - 2 * a;
+    consider X being set such that
+A1: for x being set holds x in X iff x in the carrier of [:I[01], I[01]:] &
+      P[x] from XBOOLE_0:sch 1;
+    X c= the carrier of [:I[01], I[01]:]
+    proof
+      let x be set;
+      assume x in X;
+      hence thesis by A1;
+    end; then
+    reconsider X as Subset of [:I[01], I[01]:];
+    take X;
+    thus thesis by A1;
+  end;
+  uniqueness
+  proof
+    let X1, X2 be Subset of [:I[01], I[01]:] such that
+A1: for x being set holds x in X1 iff
+      ex a, b being Point of I[01] st x = [a,b] & b <= 1 - 2 * a and
+A2: for x being set holds x in X2 iff
+      ex a, b being Point of I[01] st x = [a,b] & b <= 1 - 2 * a;
+    X1 = X2
+    proof
+      thus X1 c= X2
+      proof
+        let x be set;
+        assume x in X1; then
+        ex a, b being Point of I[01] st x = [a,b] & b <= 1 - 2 * a by A1;
+        hence thesis by A2;
+      end;
+      let x be set;
+      assume x in X2; then
+      ex a, b being Point of I[01] st x = [a,b] & b <= 1 - 2 * a by A2;
+      hence thesis by A1;
+    end;  
+    hence thesis;
+  end;
+end;
+
+notation
+  synonym IAA for LowerLeftUnitTriangle;
+end;
+
+definition
+  func UpperUnitTriangle -> Subset of [:I[01], I[01]:] means :IBDef:
+    for x being set holds x in it iff
+      ex a, b being Point of I[01] st x = [a,b] &
+        b >= 1 - 2 * a & b >= 2 * a - 1;
+  existence
+  proof
+    defpred P[set] means 
+      ex a, b being Point of I[01] st $1 = [a,b] &
+        b >= 1 - 2 * a & b >= 2 * a - 1;
+    consider X being set such that
+A1: for x being set holds x in X iff x in the carrier of [:I[01], I[01]:] &
+      P[x] from XBOOLE_0:sch 1;
+    X c= the carrier of [:I[01], I[01]:]
+    proof
+      let x be set;
+      assume x in X;
+      hence thesis by A1;
+    end; then
+    reconsider X as Subset of [:I[01], I[01]:];
+    take X;
+    thus thesis by A1;
+  end;
+  uniqueness
+  proof
+    let X1, X2 be Subset of [:I[01], I[01]:] such that
+A1: for x being set holds x in X1 iff
+      ex a, b being Point of I[01] st x = [a,b] &
+        b >= 1 - 2 * a & b >= 2 * a - 1 and
+A2: for x being set holds x in X2 iff
+      ex a, b being Point of I[01] st x = [a,b] &
+        b >= 1 - 2 * a & b >= 2 * a - 1;
+    X1 = X2
+    proof
+      thus X1 c= X2
+      proof
+        let x be set;
+        assume x in X1; then
+        ex a, b being Point of I[01] st x = [a,b] &
+          b >= 1 - 2 * a & b >= 2 * a - 1 by A1;
+        hence thesis by A2;
+      end;
+      let x be set;
+      assume x in X2; then
+      ex a, b being Point of I[01] st x = [a,b] &
+        b >= 1 - 2 * a & b >= 2 * a - 1 by A2;
+      hence thesis by A1;
+    end;  
+    hence thesis;
+  end;
+end;
+
+notation
+  synonym IBB for UpperUnitTriangle;
+end;
+
+definition
+  func LowerRightUnitTriangle -> Subset of [:I[01], I[01]:] means :ICDef:
+    for x being set holds x in it iff
+      ex a, b being Point of I[01] st x = [a,b] & b <= 2 * a - 1;
+  existence
+  proof
+    defpred P[set] means
+      ex a, b being Point of I[01] st $1 = [a,b] & b <= 2 * a - 1;
+    consider X being set such that
+A1: for x being set holds x in X iff x in the carrier of [:I[01], I[01]:] &
+      P[x] from XBOOLE_0:sch 1;
+    X c= the carrier of [:I[01], I[01]:]
+    proof
+      let x be set;
+      assume x in X;
+      hence thesis by A1;
+    end; then
+    reconsider X as Subset of [:I[01], I[01]:];
+    take X;
+    thus thesis by A1;
+  end;  
+  uniqueness
+  proof
+    let X1, X2 be Subset of [:I[01], I[01]:] such that
+A1: for x being set holds x in X1 iff
+      ex a, b being Point of I[01] st x = [a,b] & b <= 2 * a - 1 and
+A2: for x being set holds x in X2 iff
+      ex a, b being Point of I[01] st x = [a,b] & b <= 2 * a - 1;
+    X1 = X2
+    proof
+      thus X1 c= X2
+      proof
+        let x be set;
+        assume x in X1; then
+        ex a, b being Point of I[01] st x = [a,b] & b <= 2 * a - 1 by A1;
+        hence thesis by A2;
+      end;
+      let x be set;
+      assume x in X2; then
+      ex a, b being Point of I[01] st x = [a,b] & b <= 2 * a - 1 by A2;
+      hence thesis by A1;
+    end;  
+    hence thesis;
+  end;
+end;
+
+notation
+  synonym ICC for LowerRightUnitTriangle;
+end;
+
+theorem Fuk4:
+  IAA = { p where p is Point of [:I[01], I[01]:] : p`2 <= 1 - 2 * (p`1) }
+  proof
+    set P = { p where p is Point of [:I[01], I[01]:] :
+      p`2 <= 1 - 2 * (p`1) };
+    reconsider P' = P as non empty Subset of [:I[01], I[01]:] by Fuk3;
+    thus IAA c= P
+    proof
+      let x be set;
+      assume
+G0:   x in IAA; then
+      consider a, b being Point of I[01] such that
+G1:   x = [a,b] & b <= 1 - 2 * a by IADef;
+      reconsider x' = x as Point of [:I[01], I[01]:] by G0;
+      x'`1 = a & x'`2 = b by G1, MCART_1:7;
+      hence thesis by G1;
+    end;
+    let x be set;
+    assume x in P; then
+    consider p being Point of [:I[01], I[01]:] such that
+A0: p = x & p`2 <= 1 - 2 * (p`1);
+    x in the carrier of [:I[01], I[01]:] by A0; then
+    x in [:the carrier of I[01], the carrier of I[01]:] by BORSUK_1:def 5; then
+A1: x = [x`1, x`2] by MCART_1:23;
+A2: p`1 is Point of I[01] by Lynch;
+    p`2 is Point of I[01] by Lynch;
+    hence thesis by IADef, A1, A2, A0;
+  end;
+
+theorem Guk4:
+  IBB = { p where p is Point of [:I[01], I[01]:] :
+    p`2 >= 1 - 2 * (p`1) & p`2 >= 2 * (p`1) - 1 }
+  proof
+    set P = { p where p is Point of [:I[01], I[01]:] :
+      p`2 >= 1 - 2 * (p`1) & p`2 >= 2 * (p`1) - 1 };
+    reconsider P' = P as non empty Subset of [:I[01], I[01]:] by Guk3;
+    thus IBB c= P
+    proof
+      let x be set;
+      assume
+G0:   x in IBB; then
+      consider a, b being Point of I[01] such that
+G1:   x = [a,b] & b >= 1 - 2 * a & b >= 2 * a - 1 by IBDef;
+      reconsider x' = x as Point of [:I[01], I[01]:] by G0;
+      x'`1 = a & x'`2 = b by G1, MCART_1:7;
+      hence thesis by G1;
+    end;
+    let x be set;
+    assume x in P; then
+    consider p being Point of [:I[01], I[01]:] such that
+A0: p = x & p`2 >= 1 - 2 * (p`1) & p`2 >= 2 * (p`1) - 1;
+    x in the carrier of [:I[01], I[01]:] by A0; then
+    x in [:the carrier of I[01], the carrier of I[01]:] by BORSUK_1:def 5; then
+A1: x = [x`1, x`2] by MCART_1:23;
+A2: p`1 is Point of I[01] by Lynch;
+    p`2 is Point of I[01] by Lynch;
+    hence thesis by IBDef, A1, A2, A0;
+  end;
+
+theorem Huk4:
+  ICC = { p where p is Point of [:I[01], I[01]:] : p`2 <= 2 * (p`1) - 1 }
+  proof
+    set P = { p where p is Point of [:I[01], I[01]:] :
+      p`2 <= 2 * (p`1) - 1 };
+    reconsider P' = P as non empty Subset of [:I[01], I[01]:] by Huk3;
+    thus ICC c= P
+    proof
+      let x be set;
+      assume
+G0:   x in ICC; then
+      consider a, b being Point of I[01] such that
+G1:   x = [a,b] & b <= 2 * a - 1 by ICDef;
+      reconsider x' = x as Point of [:I[01], I[01]:] by G0;
+      x'`1 = a & x'`2 = b by G1, MCART_1:7;
+      hence thesis by G1;
+    end;
+    let x be set;
+    assume x in P; then
+    consider p being Point of [:I[01], I[01]:] such that
+A0: p = x & p`2 <= 2 * (p`1) - 1;
+    x in the carrier of [:I[01], I[01]:] by A0; then
+    x in [:the carrier of I[01], the carrier of I[01]:] by BORSUK_1:def 5; then
+A1: x = [x`1, x`2] by MCART_1:23;
+A2: p`1 is Point of I[01] by Lynch;
+    p`2 is Point of I[01] by Lynch;
+    hence thesis by ICDef, A1, A2, A0;
+  end;
+
+registration
+  cluster IAA -> closed non empty;
+  coherence by Fuk3, Fuk4;
+  cluster IBB -> closed non empty;
+  coherence by Guk3, Guk4;
+  cluster ICC -> closed non empty;
+  coherence by Huk3, Huk4;
+end;
+
+theorem JJJ:
+  IAA \/ IBB \/ ICC = [:[.0,1.], [.0,1.]:]
+  proof
+    thus IAA \/ IBB \/ ICC c= [:[.0,1.], [.0,1.]:] by Bzdet1;
+    let x be set;
+    assume
+A1: x in [:[.0,1.], [.0,1.]:]; then
+    reconsider q = x`1, p = x`2 as Point of I[01] by BORSUK_1:83, MCART_1:10;
+XX: x = [q,p] by A1, MCART_1:23;
+    x in IAA or x in IBB or x in ICC
+    proof
+      per cases;
+      suppose
+X1:     p >= 1 - 2 * q;
+        now per cases;
+          suppose p >= 2 * q - 1;
+            hence thesis by X1, XX, IBDef;
+          end;  
+          suppose p < 2 * q - 1;
+            hence thesis by XX, ICDef;
+          end;
+        end;  
+        hence thesis;
+      end;  
+      suppose p < 1 - 2 * q;
+        hence thesis by XX, IADef;
+      end;  
+    end; then
+    x in IAA \/ IBB or x in ICC by XBOOLE_0:def 2;
+    hence thesis by XBOOLE_0:def 2;
+  end;
+
+theorem Got1:
+  IAA /\ IBB = { p where p is Point of [:I[01], I[01]:] :
+    p`2 = 1 - 2 * (p`1) }
+  proof
+    set KK = { p where p is Point of [:I[01], I[01]:] :
+      p`2 = 1 - 2 * (p`1) };
+    thus IAA /\ IBB c= KK
+    proof
+      let x be set;
+      assume x in IAA /\ IBB; then
+A1:   x in IAA & x in IBB by XBOOLE_0:def 3; then
+      consider p being Point of [:I[01], I[01]:] such that
+A2:   x = p & p`2 <= 1 - 2 * (p`1) by Fuk4;
+      consider q being Point of [:I[01], I[01]:] such that
+A3:   x = q & q`2 >= 1 - 2 * (q`1) & q`2 >= 2 * (q`1) - 1 by A1, Guk4;
+      p`2 = 1 - 2 * (p`1) by AXIOMS:21, A2, A3;
+      hence thesis by A2;
+    end;
+    let x be set;
+    assume x in KK; then
+    consider p being Point of [:I[01], I[01]:] such that
+A1: p = x & p`2 = 1 - 2 * (p`1);
+    x in the carrier of [:I[01], I[01]:] by A1; then
+B1: x in [:the carrier of I[01], the carrier of I[01]:]
+      by BORSUK_1:def 5;
+A4: x = [p`1,p`2] by B1, A1, MCART_1:23;
+B2: p`1 in the carrier of I[01] & p`2 in the carrier of I[01]
+      by B1, A1, MCART_1:10;
+A2: x in IAA by A1, B2, A4, IADef;
+    1 - 2 * p`1 >= 0 by A1, B2, JORDAN5A:2; then
+    0 + 2 * p`1 <= 1 by REAL_1:84; then
+    (2 * p`1)/2 <= 1/2 by REAL_1:73; then
+    2 * p`1 - 1 <= 1 - 2 * (p`1) by Miod1; then
+    x in IBB by A1, B2, A4, IBDef;
+    hence thesis by A2, XBOOLE_0:def 3;
+  end;
+
+theorem Got11:
+  ICC /\ IBB = { p where p is Point of [:I[01], I[01]:] :
+    p`2 = 2 * (p`1) - 1 }
+  proof
+    set KK = { p where p is Point of [:I[01], I[01]:] :
+      p`2 = 2 * (p`1) - 1 };
+    thus ICC /\ IBB c= KK
+    proof
+      let x be set;
+      assume x in ICC /\ IBB; then
+A1:   x in ICC & x in IBB by XBOOLE_0:def 3; then
+      consider p being Point of [:I[01], I[01]:] such that
+A2:   x = p & p`2 <= 2 * (p`1) - 1 by Huk4;
+      consider q being Point of [:I[01], I[01]:] such that
+A3:   x = q & q`2 >= 1 - 2 * (q`1) & q`2 >= 2 * (q`1) - 1 by A1, Guk4;
+      p`2 = 2 * (p`1) - 1 by AXIOMS:21, A2, A3;
+      hence thesis by A2;
+    end;
+    let x be set;
+    assume x in KK; then
+    consider p being Point of [:I[01], I[01]:] such that
+A1: p = x & p`2 = 2 * (p`1) - 1;
+    x in the carrier of [:I[01], I[01]:] by A1; then
+B1: x in [:the carrier of I[01], the carrier of I[01]:]
+      by BORSUK_1:def 5;
+A4: x = [p`1,p`2] by B1, A1, MCART_1:23;
+B2: p`1 in the carrier of I[01] & p`2 in the carrier of I[01]
+      by B1, A1, MCART_1:10;
+A2: x in ICC by A1, B2, A4, ICDef;
+    2 * p`1 - 1 >= 0 by A1, B2, JORDAN5A:2; then
+    2 * p`1 >= 0 + 1 by REAL_1:84; then
+    (2 * p`1)/2 >= 1/2 by REAL_1:73; then
+    2 * p`1 - 1 >= 1 - 2 * (p`1) by Miod2; then
+    x in IBB by A1, B2, A4, IBDef;
+    hence thesis by A2, XBOOLE_0:def 3;
+  end;
+
+theorem Kasia:
+  for x being Point of [:I[01], I[01]:] st
+    x in IAA holds x`1 <= 1/2
+  proof
+    set GG = [:I[01], I[01]:];
+    let x be Point of GG;
+    assume x in IAA; then
+    consider a, b being Point of I[01] such that
+A1: x = [a,b] & b <= 1 - 2 * a by IADef;
+    b >= 0 by JORDAN5A:2; then
+    1 >= 0 + 2 * a by A1, REAL_1:84; then
+A2: 1/2 >= (2 * a)/2 by REAL_1:73;
+    x = [x`1, x`2] by A1, MCART_1:8;
+    hence thesis by A2, A1, ZFMISC_1:33;
+  end;
+
+theorem Kasia2:
+  for x being Point of [:I[01], I[01]:] st
+    x in ICC holds x`1 >= 1/2
+  proof
+    set GG = [:I[01], I[01]:];
+    let x be Point of GG;
+    assume x in ICC; then
+    consider a, b being Point of I[01] such that
+A1: x = [a,b] & b <= 2 * a - 1 by ICDef;
+    b >= 0 by JORDAN5A:2; then
+    0 + 1 <= 2 * a by A1, REAL_1:84; then
+A2: 1/2 <= (2 * a)/2 by REAL_1:73;
+    x = [x`1, x`2] by A1, MCART_1:8;
+    hence thesis by A2, A1, ZFMISC_1:33;
+  end;
+
+theorem Kasia4:
+  for x being Point of I[01] holds
+    [0,x] in IAA
+  proof
+    let x be Point of I[01];
+A1: 0 is Point of I[01] by JORDAN5A:2;
+    x <= 1 - 2 * 0 by JORDAN5A:2;
+    hence thesis by A1, IADef;
+  end;
+
+theorem Kasia6:
+  for s being set holds [0,s] in IBB implies s = 1
+  proof
+    let s be set;
+    assume [0,s] in IBB; then
+    consider a, b being Point of I[01] such that
+A1: [0,s] = [a,b] & b >= 1 - 2 * a & b >= 2 * a - 1 by IBDef;
+A2: b <= 1 by JORDAN5A:2; 
+    a = 0 & b = s by A1, ZFMISC_1:33;
+    hence thesis by A1, A2, AXIOMS:21;
+  end;
+
+theorem KasiaS:
+  for s being set holds [s,1] in ICC implies s = 1
+  proof
+    let s be set;
+    assume [s,1] in ICC; then
+    consider a, b being Point of I[01] such that
+A1: [s,1] = [a,b] & b <= 2 * a - 1 by ICDef;
+A2: a <= 1 by JORDAN5A:2; 
+A3: a = s & b = 1 by A1, ZFMISC_1:33; then
+    1 + 1 <= 2 * a by A1, REAL_1:84; then
+    2/2 <= (2 * a)/2 by REAL_1:73;
+    hence thesis by A3, A2, AXIOMS:21;
+  end;
+  
+theorem Kasia5:
+  [0,1] in IBB
+  proof
+A1: 0 is Point of I[01] & 1 is Point of I[01] by JORDAN5A:2;
+    1 >= 1 - 2 * 0 & 1 >= 2 * 0 - 1;
+    hence thesis by A1, IBDef;
+  end;
+
+theorem Kasia8:
+  for x being Point of I[01] holds
+    [x,1] in IBB
+  proof
+    let x be Point of I[01];
+A1: 0 is Point of I[01] & 1 is Point of I[01] by JORDAN5A:2;
+Z1: x <= 1 & x >= 0 by JORDAN5A:2; then
+    2 * x <= 2 * 1 by AXIOMS:25; then
+Z2: 2 * x - 1 <= 2 * 1 - 1 by REAL_1:92;
+    2 * x >= 2 * 0 by Z1, AXIOMS:25; then
+    1 - 2 * x <= 1 - 2 * 0 by REAL_1:92;
+    hence thesis by Z2, A1, IBDef;
+  end;
+  
+theorem Kasia5x:
+  [1/2,0] in ICC & [1,1] in ICC
+  proof
+A1: 1/2 is Point of I[01] & 0 is Point of I[01] & 1 is Point of I[01]
+      by JORDAN5A:2;
+    0 <= 2 * (1/2) - 1; 
+    hence [1/2,0] in ICC by A1, ICDef;
+    1 <= 2 * 1 - 1; 
+    hence thesis by A1, ICDef;
+  end;
+    
+theorem Kasiax:
+  [1/2,0] in IBB
+  proof
+A1: 1/2 is Point of I[01] & 0 is Point of I[01] & 1 is Point of I[01]
+      by JORDAN5A:2;
+    0 <= 1 - 2 * (1/2);
+    hence [1/2,0] in IBB by A1, IBDef;
+  end;
+
+theorem Kasia7:
+  for x being Point of I[01] holds
+    [1,x] in ICC
+  proof
+    let x be Point of I[01];
+A1: 1 is Point of I[01] by JORDAN5A:2;
+    x <= 2 * 1 - 1 by JORDAN5A:2;
+    hence thesis by A1, ICDef;
+  end;
+
+theorem Kasia6x:
+  for x being Point of I[01] st x >= 1/2 holds
+    [x,0] in ICC
+  proof
+    let x be Point of I[01];
+    assume x >= 1/2; then
+    2 * x >= 2 * (1/2) by AXIOMS:25; then
+A2: 2 * x - 1 >= 2 * (1/2) - 1 by REAL_1:92;
+    0 is Point of I[01] by JORDAN5A:2;
+    hence thesis by A2, ICDef;
+  end;
+
+theorem Kasia77:
+  for x being Point of I[01] st x <= 1/2 holds
+    [x,0] in IAA
+  proof
+    let x be Point of I[01];
+    assume x <= 1/2; then
+    2 * x <= 2 * (1/2) by AXIOMS:25; then
+A0: 1 - 2 * x >= 1 - 2 * (1/2) by REAL_1:92;
+    0 is Point of I[01] by JORDAN5A:2;
+    hence [x,0] in IAA by A0, IADef;
+  end;
+
+theorem Kasia7x:
+  for x being Point of I[01] st x < 1/2 holds
+    not [x,0] in IBB & not [x,0] in ICC
+  proof
+    let x be Point of I[01];
+    assume
+F1: x < 1/2;
+    thus not [x,0] in IBB
+    proof
+      assume [x,0] in IBB; then
+      consider a, b being Point of I[01] such that
+B1:   [x,0] = [a,b] & b >= 1 - 2 * a & b >= 2 * a - 1 by IBDef;
+      x = a & b = 0 by B1, ZFMISC_1:33; then
+      0 + 2 * x >= 1 by B1, REAL_1:86; then
+      (2 * x)/2 >= 1/2 by REAL_1:73;
+      hence thesis by F1;
+    end;  
+    not [x,0] in ICC
+    proof
+      assume [x,0] in ICC; then
+      consider a, b being Point of I[01] such that
+B1:   [x,0] = [a,b] & b <= 2 * a - 1 by ICDef;
+      x = a & b = 0 by B1, ZFMISC_1:33; then
+      0 + 1 <= 2 * x by B1, REAL_1:84; then
+      1/2 <= (2 * x)/2 by REAL_1:73;
+      hence thesis by F1;
+    end;  
+    hence thesis;
+  end;
+
+theorem Got22:
+  IAA /\ ICC = { [1/2,0] }
+  proof
+    thus IAA /\ ICC c= { [1/2,0] }
+    proof
+      let x be set;
+      assume
+A0:   x in IAA /\ ICC; then
+A1:   x in IAA & x in ICC by XBOOLE_0:def 3;
+      reconsider y = x as Point of [:I[01], I[01]:] by A0;
+      y in the carrier of [:I[01], I[01]:]; then
+ZV:   y in [:the carrier of I[01], the carrier of I[01]:] by BORSUK_1:def 5;
+A2:   y`1 >= 1/2 by A1, Kasia2;
+      y`1 <= 1/2 by A1, Kasia; then
+A4:   y`1 = 1/2 by A2, AXIOMS:21;
+      consider q being Point of [:I[01], I[01]:] such that
+A3:   q = y & q`2 <= 2 * (q`1) - 1 by Huk4, A1;
+      y`2 is Point of I[01] by Lynch; then
+      y`2 = 0 by A3, A4, JORDAN5A:2; then
+      y = [1/2,0] by A4, ZV, MCART_1:23; 
+      hence thesis by TARSKI:def 1;
+    end;
+XD: 1/2 is Point of I[01] by JORDAN5A:2; then
+XC: [1/2,0] in IAA by Kasia77; 
+    [1/2,0] in ICC by XD, Kasia6x; then
+    [1/2,0] in IAA /\ ICC by XC, XBOOLE_0:def 3; 
+    hence { [1/2,0] } c= IAA /\ ICC by ZFMISC_1:37;
+  end;
+  
+Kasia3:
+  for x, y being Point of I[01] holds
+    [x,y] in the carrier of [:I[01], I[01]:];
+
+begin :: Properties of a Homotopy
+
+reserve
+  X for non empty arcwise_connected TopSpace,
+  a1, b1, c1, d1 for Point of X;
+
+theorem Tx1:
+  for P be Path of a, b,
+      Q be Path of b, c,
+      R be Path of c, d st
+   a,b are_connected & b,c are_connected & c,d are_connected holds
+   (P + Q) + R, P + (Q + R) are_homotopic
+  proof
+    let P be Path of a, b,
+        Q be Path of b, c,
+        R be Path of c, d such that
+a1:  a,b are_connected and
+a2:  b,c are_connected and
+a3:  c,d are_connected;
+     a,c are_connected by a1,a2,Ttr; then
+a4:  a,d are_connected by a3,Ttr;
+     RePar (P + Q + R, 3RP) = P + (Q + R) by a1,a2,a3,ToolY;
+     hence thesis by a4, Bauhaus3, BauhausX;
+  end;
+
+theorem
+  for P be Path of a1, b1,
+      Q be Path of b1, c1,
+      R be Path of c1, d1 holds
+   (P + Q) + R, P + (Q + R) are_homotopic
+  proof
+    let P be Path of a1, b1,
+        Q be Path of b1, c1,
+        R be Path of c1, d1;
+   a1,b1 are_connected & b1,c1 are_connected & c1,d1 are_connected by Taa;
+   hence thesis by Tx1;
+end;
+
+theorem Tx2:
+  for P1, P2 being Path of a, b,
+      Q1, Q2 being Path of b, c st
+   a, b are_connected & b, c are_connected &
+   P1, P2 are_homotopic & Q1, Q2 are_homotopic holds
+      P1 + Q1, P2 + Q2 are_homotopic
+  proof
+    let P1, P2 be Path of a, b,
+        Q1, Q2 be Path of b, c;
+     assume that
+a1:   ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b and
+a2:   ex f being map of I[01], T st f is continuous & f.0 = b & f.1 = c and
+B1:  P1,P2 are_homotopic and
+B2:  Q1,Q2 are_homotopic;
+     consider f being map of [:I[01],I[01]:], T such that
+A1:  f is continuous &
+     for s being Point of I[01] holds f.(s,0) = P1.s & f.(s,1) = P2.s &
+     for t being Point of I[01] holds f.(0,t) = a    & f.(1,t) = b
+       by B1,BORSUK_2:def 6;
+     consider g being map of [:I[01],I[01]:], T such that
+A2:  g is continuous &
+     for s being Point of I[01] holds g.(s,0) = Q1.s & g.(s,1) = Q2.s &
+     for t being Point of I[01] holds g.(0,t) = b    & g.(1,t) = c
+       by B2,BORSUK_2:def 6;
+     reconsider R1 = L[01](0,1/2,0,1) as continuous map of
+       Closed-Interval-TSpace(0,1/2), I[01]
+         by Klucz, TOPMETR:27;
+     reconsider R2 = L[01](1/2,1,0,1) as continuous map of
+       Closed-Interval-TSpace(1/2,1), I[01]
+         by Klucz, TOPMETR:27;
+     set f1 = [:R1,id I[01]:], g1 = [:R2,id I[01]:];
+     set BB = [:I[01],I[01]:];
+KK:  0 is Point of I[01] & 1 is Point of I[01] & 1/2 is Point of I[01]
+       by JORDAN5A:2; then
+     reconsider N1 = [:[.0,1/2.], [.0,1.]:] as compact non empty Subset of BB
+       by Wazne2;
+     reconsider N2 = [:[.1/2,1.], [.0,1.]:] as compact non empty Subset of BB
+       by KK, Wazne2;
+     set T1 = BB | N1;
+     set T2 = BB | N2;
+     reconsider f1 as continuous map of
+       [:Closed-Interval-TSpace(0,1/2),I[01]:], [:I[01],I[01]:]
+         by BORSUK_2:12;
+     reconsider A01 = [.0,1.] as non empty Subset of I[01] by KK, BORSUK_4:49;
+     reconsider B01 = [.0,1/2.] as non empty Subset of I[01]
+       by KK, BORSUK_4:49;
+     reconsider B02 = [.1/2,1.] as non empty Subset of I[01]
+       by KK, BORSUK_4:49;
+     A01 = [#] I[01] by PRE_TOPC:def 3, BORSUK_1:83; then
+Qa:  I[01] = I[01] | A01 by WAYBEL34:31;
+     Closed-Interval-TSpace (0,1/2) = I[01] | B01 by JGRAPH_5:7; then
+     T1 = [:Closed-Interval-TSpace(0,1/2),I[01]:] by Qa,BORSUK_3:26; then
+     reconsider K1 = f * f1 as continuous map of T1, T by A1, TOPS_2:58;
+     reconsider g1 as continuous map of
+       [:Closed-Interval-TSpace(1/2,1),I[01]:], [:I[01],I[01]:]
+         by BORSUK_2:12;
+     Closed-Interval-TSpace (1/2,1) = I[01] | B02 by JGRAPH_5:7; then
+     T2 = [:Closed-Interval-TSpace(1/2,1),I[01]:] by Qa,BORSUK_3:26; then
+     reconsider K2 = g * g1 as continuous map of T2, T by A2, TOPS_2:58;
+I2:  ([#] T1) \/ ([#] T2) = [#] BB by Kill2;
+ZC:  dom K2 = the carrier of [:Closed-Interval-TSpace(1/2,1), I[01]:]
+         by FUNCT_2:def 1
+           .= [:the carrier of Closed-Interval-TSpace(1/2,1),
+             the carrier of I[01]:] by BORSUK_1:def 5;
+ZA:  dom f1 = the carrier of [:Closed-Interval-TSpace(0,1/2), I[01]:]
+        by FUNCT_2:def 1
+       .= [:the carrier of Closed-Interval-TSpace(0,1/2),
+       the carrier of I[01]:] by BORSUK_1:def 5;
+ZB:  dom g1 = the carrier of [:Closed-Interval-TSpace(1/2,1), I[01]:]
+        by FUNCT_2:def 1
+       .= [:the carrier of Closed-Interval-TSpace(1/2,1),
+       the carrier of I[01]:] by BORSUK_1:def 5;
+I1:  for p be set st p in ([#] T1) /\ ([#] T2) holds K1.p = K2.p
+     proof
+       let p be set;
+       assume p in ([#] T1) /\ ([#] T2); then
+       p in [:{1/2}, [.0,1.] :] by Kill1; then
+       consider x, y being set such that
+F1:    x in {1/2} & y in [.0,1.] & p = [x,y] by ZFMISC_1:def 2;
+fi:    y in the carrier of I[01] by F1, TOPMETR:25, 27;
+       reconsider y as Point of I[01] by F1, TOPMETR:25, 27;
+F2:    x = 1/2 by F1, TARSKI:def 1;
+       x in [.0,1/2.] by F2, TOPREAL5:1; then
+fb:    x in the carrier of Closed-Interval-TSpace(0,1/2)
+         by TOPMETR:25; then
+       p in [:the carrier of Closed-Interval-TSpace(0,1/2),
+         the carrier of I[01]:] by F1, fi, ZFMISC_1:106; then
+       p in the carrier of [:Closed-Interval-TSpace(0,1/2),I[01]:]
+         by BORSUK_1:def 5; then
+J2:    p in dom f1 by FUNCT_2:def 1;
+       x in [.1/2,1.] by F2, TOPREAL5:1; then
+fd:    x in the carrier of Closed-Interval-TSpace(1/2,1)
+         by TOPMETR:25; then
+       p in [:the carrier of Closed-Interval-TSpace(1/2,1),
+         the carrier of I[01]:] by F1, fi, ZFMISC_1:106; then
+       p in the carrier of [:Closed-Interval-TSpace(1/2,1),I[01]:]
+        by BORSUK_1:def 5; then
+j2:    p in dom g1 by FUNCT_2:def 1;
+a1:    x in dom R1 by fb, FUNCT_2:def 1;
+a2:    y in dom id I[01] by fi, FUNCT_2:def 1; then
+J3:    [x,y] in [:dom R1, dom id I[01]:] by a1, ZFMISC_1:106;
+       x in dom R2 by fd, FUNCT_2:def 1; then
+j3:    [x,y] in [:dom R2, dom id I[01]:] by a2, ZFMISC_1:106;
+S1:    R1. (1/2) = 1 by Key1;
+S2:    R2. (1/2) = 0 by Key1;
+       K1.p = f. (f1.p) by J2, FUNCT_1:23
+           .= f. [R1.x,(id I[01]).y] by F1, J3, FUNCT_3:86
+           .= f. [R1.x,y] by TMAP_1:91
+           .= f. (1,y) by S1, F2, BINOP_1:def 1
+           .= b by A1
+           .= g. (0,y) by A2
+           .= g. [0,y] by BINOP_1:def 1
+           .= g. [R2.x,(id I[01]).y] by S2, F2, TMAP_1:91
+           .= g. (g1. [x,y]) by j3, FUNCT_3:86
+           .= K2.p by j2, F1, FUNCT_1:23;
+       hence thesis;
+     end;
+     consider h being map of [:I[01],I[01]:], T such that
+T0:  h = K1 +* K2 & h is continuous by BORSUK_2:1, I1, I2;
+     take h;
+T1:  for s being Point of I[01] holds h.(s,0) = (P1+Q1).s &
+                                      h.(s,1) = (P2+Q2).s
+     proof
+       let s be Point of I[01];
+Y1:    h.(s,0) = (P1+Q1).s
+       proof
+         per cases;
+         suppose
+S1:      s < 1/2;
+S2:      s >= 0 by JORDAN5A:2;
+         not s in [.1/2,1.] by S1, TOPREAL5:1; then
+         not s in the carrier of Closed-Interval-TSpace(1/2,1)
+           by TOPMETR:25; then
+O1:      not [s,0] in dom K2 by ZC, ZFMISC_1:106;
+         s in [.0,1/2.] by S1, S2, TOPREAL5:1; then
+gf:      s in the carrier of Closed-Interval-TSpace(0,1/2) &
+           0 in the carrier of I[01] by JORDAN5A:2, TOPMETR:25; then
+J2:      [s,0] in dom f1 by ZA, ZFMISC_1:106;
+P1:      s in dom R1 by gf, FUNCT_2:def 1;
+         0 in dom id I[01] by gf, FUNCT_2:def 1; then
+J3:      [s,0] in [:dom R1, dom id I[01]:] by P1, ZFMISC_1:106;
+J4:      R1.s = ((1 - 0)/(1/2 - 0)) * (s - 0) + 0 by S1, S2, Ksasia
+             .= 2 * s;
+J5:      2 * s is Point of I[01] by S1, Ble1;
+         h.(s,0) = h. [s,0] by BINOP_1:def 1
+                .= K1. [s,0] by T0, FUNCT_4:12, O1
+                .= f .(f1. [s,0]) by J2, FUNCT_1:23
+                .= f. [R1.s,(id I[01]).0] by J3, FUNCT_3:86
+                .= f. [R1.s,0] by KK, TMAP_1:91
+                .= f. (2*s,0) by J4, BINOP_1:def 1
+                .= P1.(2 * s) by A1, J5;
+         hence thesis by a1, a2, S1, BORSUK_2:def 4;
+       end;
+       suppose
+S1:      s >= 1/2; 
+S2:      s <= 1 by JORDAN5A:2; then
+         s in [.1/2,1.] by S1, TOPREAL5:1; then
+gf:      s in the carrier of Closed-Interval-TSpace(1/2,1) &
+           0 in the carrier of I[01] by JORDAN5A:2, TOPMETR:25; then
+O1:      [s,0] in dom K2 by ZC, ZFMISC_1:106;
+J2:      [s,0] in dom g1 by gf, ZB, ZFMISC_1:106;
+P1:      s in dom R2 by gf, FUNCT_2:def 1;
+         0 in dom id I[01] by gf, FUNCT_2:def 1; then
+J3:      [s,0] in [:dom R2, dom id I[01]:] by P1, ZFMISC_1:106;
+J4:      R2.s = ((1 - 0)/(1 - 1/2)) * (s - 1/2) + 0 by S1, S2, Ksasia
+             .= 2 * (s - 1/2)
+             .= 2 * s - 1;
+J5:      2 * s - 1 is Point of I[01] by S1, Ble2;
+         h.(s,0) = h. [s,0] by BINOP_1:def 1
+                .= K2. [s,0] by T0, FUNCT_4:14, O1
+                .= g .(g1. [s,0]) by J2, FUNCT_1:23
+                .= g. [R2.s,(id I[01]).0] by J3, FUNCT_3:86
+                .= g. [R2.s,0] by KK, TMAP_1:91
+                .= g. (2*s-1,0) by J4, BINOP_1:def 1
+                .= Q1.(2 * s - 1) by A2, J5;
+         hence thesis by a1, a2, S1, BORSUK_2:def 4;
+       end;
+     end;
+       h.(s,1) = (P2+Q2).s
+       proof
+         per cases;
+         suppose
+S1:      s < 1/2;
+S2:      s >= 0 by JORDAN5A:2;
+         not s in [.1/2,1.] by S1, TOPREAL5:1; then
+         not s in the carrier of Closed-Interval-TSpace(1/2,1)
+           by TOPMETR:25; then
+O1:      not [s,1] in dom K2 by ZC, ZFMISC_1:106;
+         s in [.0,1/2.] by S1, S2, TOPREAL5:1; then
+gf:      s in the carrier of Closed-Interval-TSpace(0,1/2) &
+           1 in the carrier of I[01] by JORDAN5A:2, TOPMETR:25; then
+J2:      [s,1] in dom f1 by ZA, ZFMISC_1:106;
+P1:      s in dom R1 by gf, FUNCT_2:def 1;
+         1 in dom id I[01] by gf, FUNCT_2:def 1; then
+J3:      [s,1] in [:dom R1, dom id I[01]:] by P1, ZFMISC_1:106;
+J4:      R1.s = ((1 - 0)/(1/2 - 0)) * (s - 0) + 0 by S1, S2, Ksasia
+             .= 2 * s;
+J5:      2 * s is Point of I[01] by S1, Ble1;
+         h.(s,1) = h. [s,1] by BINOP_1:def 1
+                .= K1. [s,1] by T0, FUNCT_4:12, O1
+                .= f .(f1. [s,1]) by J2, FUNCT_1:23
+                .= f. [R1.s,(id I[01]).1] by J3, FUNCT_3:86
+                .= f. [R1.s,1] by KK, TMAP_1:91
+                .= f. (2*s,1) by J4, BINOP_1:def 1
+                .= P2.(2 * s) by A1, J5;
+         hence thesis by a1, a2, S1, BORSUK_2:def 4;
+       end;
+       suppose
+S1:      s >= 1/2; 
+S2:      s <= 1 by JORDAN5A:2; then
+         s in [.1/2,1.] by S1, TOPREAL5:1; then
+gf:      s in the carrier of Closed-Interval-TSpace(1/2,1) &
+           1 in the carrier of I[01] by JORDAN5A:2, TOPMETR:25; then
+O1:      [s,1] in dom K2 by ZC, ZFMISC_1:106;
+J2:      [s,1] in dom g1 by gf, ZB, ZFMISC_1:106;
+P1:      s in dom R2 by gf, FUNCT_2:def 1;
+         1 in dom id I[01] by gf, FUNCT_2:def 1; then
+J3:      [s,1] in [:dom R2, dom id I[01]:] by P1, ZFMISC_1:106;
+J4:      R2.s = ((1 - 0)/(1 - 1/2)) * (s - 1/2) + 0 by S1, S2, Ksasia
+             .= 2 * (s - 1/2)
+             .= 2 * s - 1;
+J5:      2 * s - 1 is Point of I[01] by S1, Ble2;
+         h.(s,1) = h. [s,1] by BINOP_1:def 1
+                .= K2. [s,1] by T0, FUNCT_4:14, O1
+                .= g .(g1. [s,1]) by J2, FUNCT_1:23
+                .= g. [R2.s,(id I[01]).1] by J3, FUNCT_3:86
+                .= g. [R2.s,1] by KK, TMAP_1:91
+                .= g. (2*s-1,1) by J4, BINOP_1:def 1
+                .= Q2.(2 * s - 1) by A2, J5;
+         hence thesis by a1, a2, S1, BORSUK_2:def 4;
+       end;
+     end;
+     hence thesis by Y1;
+   end;
+   for t being Point of I[01] holds h.(0,t) = a & h.(1,t) = c
+   proof
+     let t be Point of I[01];
+ZC:  dom K2 = the carrier of [:Closed-Interval-TSpace(1/2,1), I[01]:]
+         by FUNCT_2:def 1
+           .= [:the carrier of Closed-Interval-TSpace(1/2,1),
+             the carrier of I[01]:] by BORSUK_1:def 5;
+     not 0 in [.1/2,1.] by TOPREAL5:1; then
+     not 0 in the carrier of Closed-Interval-TSpace(1/2,1)
+       by TOPMETR:25; then
+J1:  not [0,t] in dom K2 by ZC, ZFMISC_1:106;
+     1 in [.1/2,1.] by TOPREAL5:1; then
+kj:  1 in the carrier of Closed-Interval-TSpace (1/2,1) by TOPMETR:25;
+j1:  [1,t] in dom K2 by ZC, kj, ZFMISC_1:106;
+     0 in [.0,1/2.] by TOPREAL5:1; then
+k0:  0 in the carrier of Closed-Interval-TSpace (0,1/2) by TOPMETR:25; then
+k1:  0 in dom R1 by FUNCT_2:def 1;
+sk:  t in the carrier of I[01]; 
+J2:  [0,t] in dom f1 by k0, ZA, ZFMISC_1:106;
+     1 in [.1/2,1.] by TOPREAL5:1; then
+     1 in the carrier of Closed-Interval-TSpace (1/2,1) by TOPMETR:25; then
+j2:  [1,t] in dom g1 by ZB, ZFMISC_1:106;
+     t in dom id I[01] by sk, FUNCT_2:def 1; then
+J3:  [0,t] in [:dom R1, dom id I[01]:] by k1, ZFMISC_1:106;
+k1:  1 in dom R2 by kj, FUNCT_2:def 1;
+     t in the carrier of I[01]; then
+     t in dom id I[01] by FUNCT_2:def 1; then
+j3:  [1,t] in [:dom R2, dom id I[01]:] by k1, ZFMISC_1:106;
+     thus h.(0,t) = h. [0,t] by BINOP_1:def 1
+                 .= K1. [0,t] by J1, FUNCT_4:12, T0
+                 .= f .(f1. [0,t]) by J2, FUNCT_1:23
+                 .= f. [R1.0,(id I[01]).t] by J3, FUNCT_3:86
+                 .= f. [R1.0,t] by TMAP_1:91
+                 .= f. [0,t] by Key1
+                 .= f.(0,t) by BINOP_1:def 1
+                 .= a by A1;
+      h.(1,t) = h. [1,t] by BINOP_1:def 1
+                 .= K2. [1,t] by j1, FUNCT_4:14, T0
+                 .= g .(g1. [1,t]) by j2, FUNCT_1:23
+                 .= g. [R2.1,(id I[01]).t] by j3, FUNCT_3:86
+                 .= g. [R2.1,t] by TMAP_1:91
+                 .= g. [1,t] by Key1
+                 .= g.(1,t) by BINOP_1:def 1
+                 .= c by A2;
+      hence thesis;
+    end;
+    hence thesis by T1, T0;
+  end;
+
+theorem
+  for P1, P2 being Path of a1, b1,
+      Q1, Q2 being Path of b1, c1 st
+   P1, P2 are_homotopic & Q1, Q2 are_homotopic holds
+      P1 + Q1, P2 + Q2 are_homotopic
+  proof
+    let P1, P2 be Path of a1, b1,
+        Q1, Q2 be Path of b1, c1;
+   a1, b1 are_connected & b1, c1 are_connected by Taa;
+   hence thesis by Tx2;
+end;
+
+theorem Tx3:
+  for P, Q being Path of a, b st a, b are_connected &
+      P, Q are_homotopic holds -P, -Q are_homotopic
+  proof
+    let P, Q be Path of a, b;
+    assume
+X1: ex f be map of I[01], T st f is continuous & f.0 = a & f.1 = b;
+    assume P, Q are_homotopic; then
+    consider f being map of [:I[01],I[01]:], T such that
+A17: f is continuous &
+    for s being Point of I[01] holds f.(s,0) = P.s & f.(s,1) = Q.s &
+    for t being Point of I[01] holds f.(0,t) = a   & f.(1,t) = b
+      by BORSUK_2:def 6;
+     reconsider fA = L[01]((0,1)(#),(#)(0,1)) as continuous map
+       of I[01], I[01] by TOPMETR:27,TREAL_1:11;
+  reconsider fB = L[01]((0,1)(#),(#)(0,1)) as continuous map of I[01], I[01]
+      by TOPMETR:27,TREAL_1:11;
+  reconsider fF = id I[01] as continuous map of I[01], I[01];
+  set F = [:fB, fF:];
+A18:  F is continuous by BORSUK_2:12;
+A19:dom fB = the carrier of I[01] & dom fF = the carrier of I[01]
+     by FUNCT_2:def 1;
+a2:  0 is Point of I[01] by JORDAN5A:2;
+   reconsider ff = f * F as map of [:I[01],I[01]:], T;
+   take ff;
+    thus ff is continuous by A17,A18,TOPS_2:58;
+A21:  for s being Point of I[01] holds ff.(s,0) = (-P).s & ff.(s,1) = (-Q).s
+   proof
+    let s be Point of I[01];
+A22: for t being Point of I[01], t' being Real st t = t' holds
+    fB.t = 1-t'
+   proof
+    let t be Point of I[01], t' be Real; assume A23: t = t';
+    reconsider ee = t as Point of Closed-Interval-TSpace (0,1) by TOPMETR:27;
+A24:  (0,1)(#) = 1 & (#)(0,1) = 0 by TREAL_1:def 1,def 2;
+    fB.t = fB.ee
+       .= ((0-1)*t' + 1) by A23,A24,TREAL_1:10
+       .= (1 - 1*t');
+    hence thesis;
+   end;
+A25: s in dom fB & 0 in dom fF & 1 in dom fF by A19,JORDAN5A:2;
+X2: s is Point of I[01] & s is Real by XREAL_0:def 1;
+X3: 1-s is Point of I[01] & 1-s is Real by XREAL_0:def 1, JORDAN5B:4;
+HH:  fB.s = 1 - s by A22, X2;
+A26: F.([s,0]) = [fB.s,fF.0] by FUNCT_3:def 9,A25
+             .= [1-s, 0] by HH,TMAP_1:91,a2;
+a2:  1 is Point of I[01] by JORDAN5A:2;
+A27: F.([s,1]) = [fB.s,fF.1] by A25,FUNCT_3:def 9
+              .= [1-s,1] by HH,TMAP_1:91,a2;
+A28:  dom F = [:dom fB, dom fF:] by FUNCT_3:def 9;
+then A29:  [s,1] in dom F by A25,ZFMISC_1:106;
+A30:  [s,0] in dom F by A25,A28,ZFMISC_1:106;
+A31:  ff.(s,0) = ff.([s,0]) by BINOP_1:def 1
+            .= f.(F.([s,0])) by A30,FUNCT_1:23
+            .= f.(1-s,0) by A26,BINOP_1:def 1
+            .= P.(1-s) by A17, X3
+            .= (-P).s by X1, BORSUK_2:def 5;
+      ff.(s,1) = ff.([s,1]) by BINOP_1:def 1
+            .= f.(F.([s,1])) by A29,FUNCT_1:23
+            .= f.(1-s,1) by A27,BINOP_1:def 1
+            .= Q.(1-s) by X3, A17
+            .= (-Q).s by X1, BORSUK_2:def 5;
+    hence thesis by A31;
+   end;
+   for t being Point of I[01] holds ff.(0,t) = b & ff.(1,t) = a
+   proof
+     let t be Point of I[01];
+A32: t in the carrier of I[01];
+     reconsider tt = t as Real by A32,BORSUK_1:83;
+HK:  for t being Point of I[01], t' being Real st t = t' holds
+       fB.t = 1-t'
+     proof
+       let t be Point of I[01], t' be Real; assume A34: t = t';
+    reconsider ee = t as Point of Closed-Interval-TSpace (0,1) by TOPMETR:27;
+A35:  (0,1)(#) = 1 & (#)(0,1) = 0 by TREAL_1:def 1,def 2;
+       fB.t = fB.ee
+       .= ((0-1)*t' + 1) by A34,A35,TREAL_1:10
+       .= (1 - 1*t');
+    hence thesis;
+   end;
+K1:  fB.0 = 1 - 0 by a2,HK .= 1;
+     1 is Point of I[01] by JORDAN5A:2; then
+K2:  fB.1 = 1 - 1 by HK .= 0;
+     dom fB = the carrier of I[01] &
+       dom fF = the carrier of I[01] by FUNCT_2:def 1;
+then A38: 0 in dom fB & 1 in dom fB & t in dom fF by JORDAN5A:2;
+then A39: F.([0,t]) = [fB.0,fF.t] by FUNCT_3:def 9
+             .= [1,tt] by K1,TMAP_1:91;
+A40: F.([1,t]) = [fB.1,fF.t] by A38,FUNCT_3:def 9
+              .= [0,tt] by K2,TMAP_1:91;
+    reconsider t' = 1 - tt as Point of I[01] by JORDAN5B:4;
+A41:  dom F = [:dom fB, dom fF:] by FUNCT_3:def 9;
+then A42:  [1,t] in dom F by A38,ZFMISC_1:106;
+A43:  [0,t] in dom F by A38,A41,ZFMISC_1:106;
+A44:  ff.(0,t) = ff.([0,t]) by BINOP_1:def 1
+            .= f.(F.([0,t])) by A43,FUNCT_1:23
+            .= f.(1,t) by A39,BINOP_1:def 1
+            .= b by A17;
+      ff.(1,t) = ff.([1,t]) by BINOP_1:def 1
+            .= f.(F.([1,t])) by A42,FUNCT_1:23
+            .= f.(0,t) by A40,BINOP_1:def 1
+            .= a by A17;
+    hence thesis by A44;
+   end;
+    hence thesis by A21;
+  end;
+
+theorem
+  for P, Q being Path of a1, b1 st 
+      P, Q are_homotopic holds -P, -Q are_homotopic
+  proof
+    let P, Q be Path of a1, b1;
+    a1, b1 are_connected by Taa;
+    hence thesis by Tx3;
+  end;
+
+theorem
+  for P, Q, R be Path of a, b holds
+    P, Q are_homotopic & Q, R are_homotopic implies P, R are_homotopic
+  proof
+    let P, Q, R be Path of a, b;
+    assume
+A:  P, Q are_homotopic & Q, R are_homotopic; then
+    consider f being map of [:I[01],I[01]:], T such that
+A1:   f is continuous &
+    for s being Point of I[01] holds f.(s,0) = P.s & f.(s,1) = Q.s &
+    for t being Point of I[01] holds f.(0,t) = a   & f.(1,t) = b
+      by BORSUK_2:def 6;
+    consider g being map of [:I[01],I[01]:], T such that
+A2:   g is continuous &
+    for s being Point of I[01] holds g.(s,0) = Q.s & g.(s,1) = R.s &
+    for t being Point of I[01] holds g.(0,t) = a   & g.(1,t) = b
+      by BORSUK_2:def 6, A;
+    reconsider P1 = P[01](0, 1/2, (#)(0,1), (0,1)(#)) as
+      continuous map of Closed-Interval-TSpace(0,1/2), I[01]
+        by TREAL_1:15, TOPMETR:27;
+    reconsider P2 = P[01](1/2, 1, (#)(0,1), (0,1)(#)) as
+      continuous map of Closed-Interval-TSpace(1/2,1), I[01]
+        by TREAL_1:15, TOPMETR:27;
+    set e1 = [:id I[01], P1:], e2 = [:id I[01], P2:];
+u1: dom id I[01] = the carrier of I[01] by FUNCT_2:def 1;
+u3: dom P[01](1/2, 1, (#)(0,1), (0,1)(#)) =
+      the carrier of Closed-Interval-TSpace(1/2, 1) by FUNCT_2:def 1;
+q1: e1 is continuous map of
+      [:I[01],Closed-Interval-TSpace(0,1/2):], [:I[01],I[01]:]
+        by BORSUK_2:12;
+q2: e2 is continuous map of
+      [:I[01],Closed-Interval-TSpace(1/2,1):], [:I[01],I[01]:]
+        by BORSUK_2:12;
+    set f1 = f * e1,
+        g1 = g * e2;
+z0: rng id I[01] c= the carrier of I[01] by RELSET_1:12;
+z2: rng P[01](1/2, 1, (#)(0,1), (0,1)(#)) c= the carrier of I[01]
+       by TOPMETR:27, RELSET_1:12;
+    rng e2 = [:rng id I[01], rng P[01](1/2, 1, (#)(0,1), (0,1)(#)):]
+      by FUNCT_3:88; then
+s1: rng e2 c= [:the carrier of I[01], the carrier of I[01]:]
+      by ZFMISC_1:119, z0, z2;
+    dom g = the carrier of [:I[01], I[01]:] by FUNCT_2:def 1
+          .= [:the carrier of I[01], the carrier of I[01]:]
+            by BORSUK_1:def 5; then
+a2: dom g1 = dom e2 by s1, RELAT_1:46
+         .= [:the carrier of I[01], the carrier of
+              Closed-Interval-TSpace(1/2,1):] by u1, u3, FUNCT_3:def 9;
+gg: the carrier of Closed-Interval-TSpace(0,1/2) = [.0,1/2.] &
+         the carrier of Closed-Interval-TSpace(1/2,1) = [.1/2,1.]
+           by TOPMETR:25;
+c1: [.0,1.] c= the carrier of I[01] by BORSUK_1:83;
+    [.0,1/2.] c= the carrier of I[01] by TREAL_1:1, BORSUK_1:83; then
+CC: [:[.0,1.], [.0,1/2.]:] c=
+      [:the carrier of I[01], the carrier of I[01]:]
+        by BORSUK_1:83, ZFMISC_1:119;
+D1: 1 in [.0,1.] by TOPREAL5:1;
+    0 in [.0,1/2.] by TOPREAL5:1; then
+    reconsider Ewa = [:[.0,1.], [.0,1/2.]:] as
+      non empty Subset of [:I[01], I[01]:]
+        by CC, BORSUK_1:def 5, D1, ZFMISC_1:106;
+    [.1/2,1.] c= the carrier of I[01] by TREAL_1:1, BORSUK_1:83; then
+CD: [:[.0,1.], [.1/2,1.]:] c=
+      [:the carrier of I[01], the carrier of I[01]:]
+        by BORSUK_1:83, ZFMISC_1:119;
+    1 in [.1/2,1.] by TOPREAL5:1; then
+    reconsider Ewa1 = [:[.0,1.], [.1/2,1.]:] as
+      non empty Subset of [:I[01], I[01]:]
+        by CD,BORSUK_1:def 5, D1,ZFMISC_1:106;
+    set T1 = [:I[01], I[01]:] | Ewa;
+    set T2 = [:I[01], I[01]:] | Ewa1;
+    reconsider A01 = [.0,1.] as non empty Subset of I[01] by c1, TOPREAL5:1;
+    reconsider B01 = [.0,1/2.] as non empty Subset of I[01]
+      by TREAL_1:1, BORSUK_1:83, TOPREAL5:1;
+    1/2 in [.0,1/2.] by TOPREAL5:1; then
+hh: 1/2 in the carrier of Closed-Interval-TSpace(0,1/2)
+      by TOPMETR:25;
+    reconsider B02 = [.1/2,1.] as non empty Subset of I[01]
+      by TREAL_1:1, BORSUK_1:83, TOPREAL5:1;
+    A01 = [#] I[01] by PRE_TOPC:def 3, BORSUK_1:83; then
+Qa: I[01] = I[01] | A01 by WAYBEL34:31;
+    Closed-Interval-TSpace (0,1/2) = I[01] | B01 by JGRAPH_5:7; then
+Q3: T1 = [:I[01],Closed-Interval-TSpace(0,1/2):] by Qa,BORSUK_3:26;
+    Closed-Interval-TSpace (1/2,1) = I[01] | B02 by JGRAPH_5:7; then
+Q4: T2 = [:I[01],Closed-Interval-TSpace(1/2,1):] by Qa,BORSUK_3:26;
+y0: [#] T1 = Ewa & [#] T2 = Ewa1 by PRE_TOPC:def 10; then
+y1: [#] T1 \/ [#] T2
+                = [:[.0,1.], [.0,1/2.] \/ [.1/2,1.]:] by ZFMISC_1:120
+      .= [:the carrier of I[01], the carrier of I[01]:]
+          by BORSUK_1:83, TREAL_1:2
+      .= the carrier of [:I[01], I[01]:] by BORSUK_1:def 5
+      .= [#] [:I[01],I[01]:] by PRE_TOPC:12;
+    reconsider f1 as continuous map of T1, T by q1, Q3, A1, TOPS_2:58;
+    reconsider g1 as continuous map of T2,T by Q4, q2, A2, TOPS_2:58;
+xy: 0 is Point of I[01] & 1 is Point of I[01] & 1/2 is Point of I[01]
+      by JORDAN5A:2; then
+xx: [.0,1.] is compact Subset of I[01] &
+      [.0,1/2.] is compact Subset of I[01] by BORSUK_4:49; then
+    Ewa is compact Subset of [:I[01], I[01]:] by BORSUK_3:27; then
+y2: T1 is compact by COMPTS_1:12;
+    [.1/2,1.] is compact Subset of I[01] by xy,BORSUK_4:49; then
+    Ewa1 is compact Subset of [:I[01], I[01]:] by xx,BORSUK_3:27; then
+y3: T2 is compact by COMPTS_1:12;
+Kot:[#] T1 /\ [#] T2
+               = [:[.0,1.], [.0,1/2.] /\ [.1/2,1.]:] by ZFMISC_1:122,y0
+              .= [:[.0,1.], {1/2} :] by TOPMETR2:1;
+w3: dom e1 = the carrier of [:I[01], Closed-Interval-TSpace(0,1/2):]
+      by FUNCT_2:def 1
+          .= [:the carrier of I[01],
+          the carrier of Closed-Interval-TSpace(0,1/2):] by BORSUK_1:def 5;
+w12:dom e2 = the carrier of [:I[01], Closed-Interval-TSpace(1/2,1):]
+      by FUNCT_2:def 1
+     .= [:the carrier of I[01],
+          the carrier of Closed-Interval-TSpace(1/2,1):] by BORSUK_1:def 5;
+w8: dom e1 = [:dom id I[01], dom P1:] by FUNCT_3:def 9;
+z8: dom e2 = [:dom id I[01], dom P2:] by FUNCT_3:def 9;
+K1: 1/2 in [.1/2,1.] by TOPREAL5:1; then
+hg: 1/2 in the carrier of Closed-Interval-TSpace(1/2,1) by TOPMETR:25;
+    for p be set st p in [#] T1 /\ [#] T2 holds f1.p = g1.p
+    proof
+      let p be set;
+      assume p in [#] T1 /\ [#] T2; then
+      consider x, y be set such that
+w1:   x in [.0,1.] & y in {1/2} & p = [x,y] by Kot, ZFMISC_1:def 2;
+w4:   y = 1/2 by w1, TARSKI:def 1;
+      x in { r where r is Real : 0 <= r & r <= 1 } by w1, RCOMP_1:def 1; then
+      consider r1 be Real such that
+w2:   r1 = x & 0 <= r1 & r1 <= 1;
+      reconsider x' = x as Point of I[01] by w2, JORDAN5A:2;
+      f1.p = g1.p
+      proof
+w6:     x in the carrier of I[01] by w2, JORDAN5A:2;
+        1/2 in [.0,1/2.] by TOPREAL5:1; then
+        reconsider y' = 1/2 as Point of Closed-Interval-TSpace(0,1/2)
+          by TOPMETR:25;
+      reconsider r1 = (#)(0,1), r2 = (0,1)(#) as Real
+        by TREAL_1:8, BORSUK_1:def 17, def 18;
+      set t' = 1/2;
+w9:   P1.y' = ((r2 - r1)/(1/2 - 0))*t' + ((1/2)*r1 - 0 *r2)/(1/2 - 0)
+        by TREAL_1:14
+        .= 1 by TREAL_1:8, BORSUK_1:def 17, def 18;
+      reconsider y' = 1/2 as Point of Closed-Interval-TSpace(1/2,1)
+        by K1, TOPMETR:25;
+w10:  P2.y' = ((r2 - r1)/(1 - 1/2))*t' + (1*r1 - (1/2)*r2)/(1 - 1/2)
+        by TREAL_1:14
+        .= 0 by TREAL_1:8, BORSUK_1:def 18, def 17;
+w7:   [x,y] in dom e1 by hh,w3, ZFMISC_1:106, w4, w6;
+w11:  [x,y] in dom e2 by w12, ZFMISC_1:106, w4, w6, hg;
+      f1.p = f.(e1. [x,y]) by FUNCT_1:23, w7, w1
+          .= f. [id I[01]. x, P1.y] by FUNCT_3:86, w7, w8
+          .= f. [x',1] by w4, w9, TMAP_1:91
+          .= f. (x',1) by BINOP_1:def 1
+          .= Q.x' by A1
+          .= g. (x',0) by A2
+          .= g. [x',0] by BINOP_1:def 1
+          .= g. [id I[01]. x', P2.y] by w10, TMAP_1:91, w4
+          .= g. (e2. [x, y]) by FUNCT_3:86, w11, z8
+          .= g1. p by w1, FUNCT_1:23, w11;
+     hence thesis;
+    end;
+    hence thesis;
+   end; then
+   consider h being map of [:I[01],I[01]:], T such that
+T1:  h = f1 +* g1 & h is continuous by BORSUK_2:1, y1, y2, y3;
+G2: the carrier of Closed-Interval-TSpace(1/2,1) = [. 1/2,1 .]
+      by TOPMETR:25;
+F2: the carrier of Closed-Interval-TSpace(0,1/2) = [. 0,1/2 .]
+      by TOPMETR:25;
+T: for s being Point of I[01] holds h.(s,0) = P.s & h.(s,1) = R.s
+   proof
+    let s be Point of I[01];
+G2: the carrier of Closed-Interval-TSpace(1/2,1) = [. 1/2,1 .]
+      by TOPMETR:25; then
+    not 0 in the carrier of Closed-Interval-TSpace(1/2,1)
+      by TOPREAL5:1; then
+W1: not [s,0] in dom g1 by a2,ZFMISC_1:106;
+FF: 0 in the carrier of Closed-Interval-TSpace(0,1/2)
+      by F2, TOPREAL5:1; then
+W2: [s,0] in dom e1 by w3,ZFMISC_1:106;
+    reconsider r1 = (#)(0,1), r2 = (0,1)(#) as Real
+      by TREAL_1:8, BORSUK_1:def 17, def 18;
+    set t' = 0;
+W4: P1.0 = ((r2 - r1)/(1/2 - 0))*t' + ((1/2)*r1 - 0 *r2)/(1/2 - 0)
+      by FF, TREAL_1:14
+        .= ((1/2)*0 - 0 *r2)/(1/2) by TREAL_1:def 1
+        .= 0;
+H1: h.(s,0) = h. [s,0] by BINOP_1:def 1
+           .= f1. [s,0] by T1,W1,FUNCT_4:12
+           .= f.(e1. [s,0]) by FUNCT_1:23,W2
+           .= f. [id I[01]. s, P1.0] by FUNCT_3:86, W2, w8
+           .= f. [s,P1.0] by TMAP_1:91
+           .= f. (s,0) by W4,BINOP_1:def 1
+           .= P.s by A1;
+ff: 1 in the carrier of Closed-Interval-TSpace(1/2,1)
+      by G2, TOPREAL5:1; then
+W1: [s,1] in dom g1 by a2,ZFMISC_1:106;
+W2: [s,1] in dom e2 by ff,w12,ZFMISC_1:106;
+    1/2 < 1 & 1 = (0,1)(#) & 1 = (1/2,1)(#) by TREAL_1:def 2; then
+W4: P2.1 = 1 by TREAL_1:16;
+    h.(s,1) = h. [s,1] by BINOP_1:def 1
+           .= g1. [s,1] by T1,W1,FUNCT_4:14
+           .= g.(e2. [s,1]) by FUNCT_1:23,W2
+           .= g. [id I[01]. s, P2.1] by FUNCT_3:86, W2, z8
+           .= g. [s,P2.1] by TMAP_1:91
+           .= g. (s,1) by W4,BINOP_1:def 1
+           .= R.s by A2;
+    hence thesis by H1;
+   end;
+fx:  1 in the carrier of I[01] by JORDAN5A:2;
+   for t being Point of I[01] holds h.(0,t) = a & h.(1,t) = b
+   proof
+     let t be Point of I[01];
+     per cases;
+     suppose
+S1:  t < 1/2;
+SS:  0 <= t by JORDAN5A:2;
+j1:  0 in the carrier of I[01] by JORDAN5A:2;
+     not t in the carrier of Closed-Interval-TSpace(1/2,1)
+       by S1,G2, TOPREAL5:1; then
+W1:  not [0,t] in dom g1 by a2,ZFMISC_1:106;
+zx:  t in the carrier of Closed-Interval-TSpace(0,1/2)
+       by SS,F2,S1,TOPREAL5:1; then
+W2:  [0,t] in dom e1 by w3,j1,ZFMISC_1:106;
+      reconsider r1 = (#)(0,1), r2 = (0,1)(#) as Real
+        by TREAL_1:8, BORSUK_1:def 17, def 18;
+E1:   t is Real by XREAL_0:def 1;
+      P1.t = ((r2 - r1)/(1/2 - 0))*t + ((1/2)*r1 - 0 *r2)/(1/2 - 0)
+        by TREAL_1:14,E1,zx
+        .= ((1 - r1)/(1/2))*t + ((1/2)*r1)/(1/2) by TREAL_1:def 2
+        .= ((1 - 0)/(1/2))*t + ((1/2)*r1)/(1/2) by TREAL_1:def 1
+        .= (1/(1/2))*t + ((1/2)*0)/(1/2) by TREAL_1:def 1
+        .= 2*t; then
+R1:  P1.t is Point of I[01] by Ble1, S1;
+     thus h.(0,t) = h. [0,t] by BINOP_1:def 1
+           .= f1. [0,t] by T1,W1,FUNCT_4:12
+           .= f.(e1. [0,t]) by FUNCT_1:23,W2
+           .= f. [id I[01]. 0, P1.t] by FUNCT_3:86, W2, w8
+           .= f. [0,P1.t] by xy,TMAP_1:91
+           .= f. (0,P1.t) by BINOP_1:def 1
+           .= a by A1, R1;
+     not t in the carrier of Closed-Interval-TSpace(1/2,1)
+       by gg, S1, TOPREAL5:1; then
+W1:  not [1,t] in dom g1 by a2,ZFMISC_1:106;
+     t in the carrier of Closed-Interval-TSpace(0,1/2)
+       by gg, S1, SS, TOPREAL5:1; then
+W2:  [1,t] in dom e1 by fx,w3,ZFMISC_1:106;
+     P1.t = ((r2 - r1)/(1/2 - 0))*t + ((1/2)*r1 - 0 *r2)/(1/2 - 0)
+        by TREAL_1:14,E1,zx
+        .= ((1 - r1)/(1/2))*t + ((1/2)*r1)/(1/2) by TREAL_1:def 2
+        .= ((1 - 0)/(1/2))*t + ((1/2)*r1)/(1/2) by TREAL_1:def 1
+        .= (1/(1/2))*t + ((1/2)*0)/(1/2) by TREAL_1:def 1
+        .= 2*t; then
+R1:  P1.t is Point of I[01] by Ble1, S1;
+     thus h.(1,t) = h. [1,t] by BINOP_1:def 1
+           .= f1. [1,t] by T1,W1,FUNCT_4:12
+           .= f.(e1. [1,t]) by FUNCT_1:23,W2
+           .= f. [id I[01]. 1, P1.t] by FUNCT_3:86, W2, w8
+           .= f. [1,P1.t] by xy,TMAP_1:91
+           .= f. (1,P1.t) by BINOP_1:def 1
+           .= b by A1, R1;
+     end;
+     suppose
+S1:  t >= 1/2;
+j1:  0 in the carrier of I[01] by JORDAN5A:2;
+     t <= 1 by JORDAN5A:2; then
+zx:  t in the carrier of Closed-Interval-TSpace(1/2,1)
+       by S1,G2, TOPREAL5:1; then
+W1:  [0,t] in dom g1 by a2,j1,ZFMISC_1:106;
+W2:  [0,t] in dom e2 by j1,w12,zx,ZFMISC_1:106;
+      reconsider r1 = (#)(0,1), r2 = (0,1)(#) as Real
+        by TREAL_1:8, BORSUK_1:def 17, def 18;
+E1:   t is Real by XREAL_0:def 1;
+      P2.t = ((r2 - r1)/(1 - 1/2))*t + (1*r1 - (1/2) *r2)/(1 - 1/2)
+        by TREAL_1:14,E1,zx
+        .= ((1 - r1)/(1/2))*t + (1*r1 - (1/2) *r2)/(1/2) by TREAL_1:def 2
+        .= ((1 - 0)/(1/2))*t + (1*r1 - (1/2) *r2)/(1/2) by TREAL_1:def 1
+        .= (1/(1/2))*t + (1*0 - (1/2) *r2)/(1/2) by TREAL_1:def 1
+        .= (1/(1/2))*t + (1*0 - (1/2) *1)/(1/2) by TREAL_1:def 2
+        .= 2*t + -1
+        .= 2*t - 1; then
+R1:  P2.t is Point of I[01] by Ble2, S1;
+       thus h.(0,t) = h. [0,t] by BINOP_1:def 1
+           .= g1. [0,t] by T1,W1,FUNCT_4:14
+           .= g.(e2. [0,t]) by FUNCT_1:23,W2
+           .= g. [id I[01]. 0, P2.t] by FUNCT_3:86, W2, z8
+           .= g. [0,P2.t] by xy,TMAP_1:91
+           .= g. (0,P2.t) by BINOP_1:def 1
+           .= a by A2, R1;
+W1:  [1,t] in dom g1 by a2,ZFMISC_1:106,fx,zx;
+W2:  [1,t] in dom e2 by zx,fx,w12,ZFMISC_1:106;
+     P2.t = ((r2 - r1)/(1 - 1/2))*t + (1*r1 - (1/2) *r2)/(1 - 1/2)
+        by TREAL_1:14,E1,zx
+        .= ((1 - r1)/(1/2))*t + (1*r1 - (1/2) *r2)/(1/2) by TREAL_1:def 2
+        .= ((1 - 0)/(1/2))*t + (1*r1 - (1/2) *r2)/(1/2) by TREAL_1:def 1
+        .= 2*t + (1*0 - (1/2) *r2)/(1/2) by TREAL_1:def 1
+        .= 2*t + (-(1/2) *r2)/(1/2)
+        .= 2*t + (-(1/2) *1)/(1/2) by TREAL_1:def 2
+        .= 2*t + -1
+        .= 2*t - 1; then
+R1:  P2.t is Point of I[01] by Ble2, S1;
+       thus h.(1,t) = h. [1,t] by BINOP_1:def 1
+           .= g1. [1,t] by T1,W1,FUNCT_4:14
+           .= g.(e2. [1,t]) by FUNCT_1:23,W2
+           .= g. [id I[01]. 1, P2.t] by FUNCT_3:86, W2, z8
+           .= g. [1,P2.t] by xy,TMAP_1:91
+           .= g. (1,P2.t) by BINOP_1:def 1
+           .= b by A2, R1;
+     end;
+   end;
+   hence thesis by T, T1, BORSUK_2:def 6;
+end;
+
+theorem Tx4:
+  for P be Path of a, b,
+      Q be constant Path of b, b st a, b are_connected holds
+    P + Q, P are_homotopic
+  proof
+    let P be Path of a, b,
+        Q be constant Path of b, b such that
+a1:  a,b are_connected;
+     RePar (P, 1RP) = P + Q by a1, Bauhaus2;
+     hence thesis by a1, Bauhaus3, Bauhaus1;
+  end;
+
+theorem
+  for P be Path of a1, b1,
+      Q be constant Path of b1, b1 holds
+    P + Q, P are_homotopic
+  proof
+    let P be Path of a1, b1,
+        Q be constant Path of b1, b1;
+    a1,b1 are_connected by Taa;
+    hence thesis by Tx4;
+  end;
+
+theorem Tx5:
+  for P be Path of a, b,
+      Q be constant Path of a, a st a, b are_connected holds
+   Q + P, P are_homotopic
+  proof
+    let P be Path of a, b,
+        Q be constant Path of a, a such that
+a1:  a,b are_connected;
+     RePar (P, 2RP) = Q + P by a1, Bauhaus22;
+     hence thesis by a1, Bauhaus3, Bauhaus11;
+  end;
+
+theorem
+  for P be Path of a1, b1,
+      Q be constant Path of a1, a1 holds
+   Q + P, P are_homotopic
+  proof
+    let P be Path of a1, b1,
+        Q be constant Path of a1, a1;
+     a1,b1 are_connected by Taa;
+     hence thesis by Tx5;
+  end;
+
+theorem Tx6:
+  for P being Path of a, b,
+      Q being constant Path of a, a st a, b are_connected holds
+   P + - P, Q are_homotopic
+  proof
+    let P be Path of a, b,
+        Q be constant Path of a, a such that
+a0: a, b are_connected;        
+a1: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b by a0,da;
+    b, a are_connected by a0; then
+a3: ex f being map of I[01], T st f is continuous & f.0 = b & f.1 = a by da;
+    then
+c1: -P is continuous by BORSUK_2:def 1;
+    set S = [:I[01],I[01]:];
+    set S1 = S|IAA;
+    set S2 = S|IBB;
+    set S3 = S|ICC;
+    reconsider e1 = pr1(the carrier of I[01], the carrier of I[01]) 
+      as continuous map of S, I[01] by YELLOW12:39;
+    reconsider e2 = pr2(the carrier of I[01], the carrier of I[01]) 
+      as continuous map of S, I[01] by YELLOW12:40;
+    a, a are_connected; then
+a2: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = a by da;
+    then
+    reconsider PP = P + -P as continuous Path of a,a by BORSUK_2:def 1;
+    set ff = PP * e1;
+    reconsider f = ff|IAA as map of S1, T by JGRAPH_3:12;
+    reconsider f as continuous map of S1, T by TOPMETR:10;
+GG: for x being Point of S1 holds f.x = P.(2 * x`1)
+    proof
+      let x be Point of S1;
+      x in the carrier of S1; then
+h1:   x in IAA by JORDAN1:1; then
+yy:   x in the carrier of S; then
+y2:   x in [:the carrier of I[01], the carrier of I[01]:] by BORSUK_1:def 5;
+      then
+Y3:   x = [x`1,x`2] by MCART_1:23; then
+y3:   x`1 in the carrier of I[01] & x`2 in the carrier of I[01]
+        by y2, ZFMISC_1:106; then
+Y2:   e1.x = x`1 by Y3, FUNCT_3:def 5;
+Y1:   x in dom e1 by yy, FUNCT_2:def 1;
+jj:   x`1 <= 1/2 by Kasia, h1;
+      f.x = ff.x by h1, FUNCT_1:72 .= (P + -P).(e1.x) by Y1, FUNCT_1:23
+         .= P.(2 * x`1) by y3, jj, a1, a3, BORSUK_2:def 4, Y2;
+      hence thesis;
+    end;
+    set gg = (-P) * e2;
+    reconsider gg as continuous map of S, T by c1,TOPS_2:58;
+    reconsider g = gg|IBB as map of S2, T by JGRAPH_3:12;
+    reconsider g as continuous map of S2, T by TOPMETR:10;
+GH: for x being Point of S2 holds g.x = P.(1 - x`2)
+    proof
+      let x be Point of S2;
+      x in the carrier of S2; then
+h1:   x in IBB by JORDAN1:1; then
+yy:   x in the carrier of S; then
+y2:   x in [:the carrier of I[01], the carrier of I[01]:] by BORSUK_1:def 5;
+      then
+Y3:   x = [x`1,x`2] by MCART_1:23; then
+y3:   x`1 in the carrier of I[01] & x`2 in the carrier of I[01]
+        by y2, ZFMISC_1:106; then
+Y2:   e2.x = x`2 by Y3, FUNCT_3:def 6;
+Y1:   x in dom e2 by yy, FUNCT_2:def 1;
+      g.x = gg.x by h1, FUNCT_1:72 .= (-P).(e2.x) by Y1, FUNCT_1:23
+         .= P.(1 - x`2) by y3, a1, BORSUK_2:def 5, Y2;
+      hence thesis;
+    end;
+    set hh = PP * e1;
+    reconsider h = hh|ICC as map of S3, T by JGRAPH_3:12;
+    reconsider h as continuous map of S3, T by TOPMETR:10;
+PK: for x being Point of S3 holds h.x = (-P).(2 * x`1 - 1)
+    proof
+      let x be Point of S3;
+      x in the carrier of S3; then
+h1:   x in ICC by JORDAN1:1; then
+yy:   x in the carrier of S; then
+y2:   x in [:the carrier of I[01], the carrier of I[01]:] by BORSUK_1:def 5;
+      then
+Y3:   x = [x`1,x`2] by MCART_1:23; then
+y3:   x`1 in the carrier of I[01] & x`2 in the carrier of I[01]
+        by y2, ZFMISC_1:106; then
+Y2:   e1.x = x`1 by Y3, FUNCT_3:def 5;
+Y1:   x in dom e1 by yy, FUNCT_2:def 1;
+mm:   x`1 >= 1/2 by Kasia2, h1; 
+      h.x = hh.x by h1, FUNCT_1:72 .= (P + - P).(e1.x) by Y1, FUNCT_1:23
+         .= (-P).(2 * x`1 - 1) by mm, y3, a1, a3, BORSUK_2:def 4, Y2;
+      hence thesis;
+    end;
+    set S12 = S | (IAA \/ IBB);
+    IAA \/ IBB <> {} by XBOOLE_1:15; then
+    the carrier of S12 <> {} by JORDAN1:1; then
+    reconsider S12 as non empty SubSpace of S by STRUCT_0:def 1;
+N0: the carrier of S12 = IAA \/ IBB by JORDAN1:1; then
+n0: [#]S12 = IAA \/ IBB by PRE_TOPC:def 3; 
+J1: [#]S1 = IAA by PRE_TOPC:def 10;
+J2: [#]S2 = IBB by PRE_TOPC:def 10; then
+    reconsider s1 = [#]S1, s2 = [#]S2 as Subset of S12 by J1, N0, XBOOLE_1:7;
+bC: ([#] S1) \/ ([#] S2) = [#] S12 by n0, PRE_TOPC:def 10, J2; 
+bD: for p be set st p in ([#] S1) /\ ([#] S2) holds f.p = g.p
+    proof
+      let p be set;
+      assume p in ([#] S1) /\ ([#] S2); then
+      p in ([#] S1) /\ IBB by PRE_TOPC:def 10; then
+F0:   p in IAA /\ IBB by PRE_TOPC:def 10; then
+      consider r being Point of S such that
+F1:   r = p & r`2 = 1 - 2 * (r`1) by Got1;
+F2:   p in IAA & p in IBB by F0, XBOOLE_0:def 3; then
+      reconsider pp = p as Point of S1 by JORDAN1:1;
+hg:   2 * r`1 = 1 - r`2 by F1;
+F3:   pp is Point of S2 by F2, JORDAN1:1;
+      f.p = P.(2 * pp`1) by GG
+         .= g.p by GH, F3, hg, F1;
+      hence thesis;
+    end; 
+    IAA c= IAA \/ IBB by XBOOLE_1:7; then    
+x1: S1 is SubSpace of S12 by JORDAN16:6;
+    IBB c= IAA \/ IBB by XBOOLE_1:7; then    
+x2: S2 is SubSpace of S12 by JORDAN16:6;
+x3: s1 is closed by J1, TOPS_2:34;
+    s2 is closed by J2, TOPS_2:34; then
+    consider fg being map of S12, T such that
+A2: fg = f +* g & fg is continuous by JGRAPH_2:9, bC, bD, x1, x2, x3;
+J3: [#]S3 = ICC by PRE_TOPC:def 10;
+    reconsider s12 = [#]S12, s3 = [#]S3 as Subset of S by PRE_TOPC:def 10;
+BC: ([#] S12) \/ ([#] S3) = (IAA \/ IBB) \/ ICC by n0, PRE_TOPC:def 10
+       .= the carrier of S by BORSUK_1:def 5, 83, JJJ
+       .= [#] S by PRE_TOPC:def 3; 
+BD: for p be set st p in ([#] S12) /\ ([#] S3) holds fg.p = h.p
+    proof
+      let p be set;
+      assume p in ([#] S12) /\ ([#] S3); then
+FG:   p in { [1/2,0] } \/ (IBB /\ ICC) by Got22, XBOOLE_1:23, J3, n0;
+      [1/2,0] in IBB /\ ICC by XBOOLE_0:def 3, Kasia5x, Kasiax; then
+      { [1/2,0] } c= IBB /\ ICC by ZFMISC_1:37; then
+F0:   p in IBB /\ ICC by FG, XBOOLE_1:12; then
+      consider q being Point of S such that
+F1:   q = p & q`2 = 2 * (q`1) - 1 by Got11;
+F2:   p in IBB & p in ICC by F0, XBOOLE_0:def 3; then
+      reconsider pp = p as Point of S3 by JORDAN1:1;
+F3:   pp is Point of S2 by F2, JORDAN1:1;
+RR:   2 * pp`1 - 1 is Point of I[01] by F1, Lynch;
+      p in the carrier of S2 by F2, JORDAN1:1; then
+      p in dom g by FUNCT_2:def 1; then
+      fg.p = g.p by A2, FUNCT_4:14
+          .= P.(1 - pp`2) by F3, GH
+          .= (-P).(2 * pp`1 - 1) by RR, a1, BORSUK_2:def 5, F1
+          .= h.p by PK;
+      hence thesis;
+    end; 
+V1: s12 is closed by TOPS_1:36, n0;
+    s3 = ICC by PRE_TOPC:def 10; then
+    consider H being map of S, T such that
+X1: H = fg +* h & H is continuous by A2, JGRAPH_2:9, V1, BC, BD;
+X2: for s being Point of I[01] holds H.(s,0) = (P+ -P).s &
+      H.(s,1) = Q.s
+    proof
+      let s be Point of I[01];
+      thus H.(s,0) = (P+ -P).s
+      proof
+O3:     [s,0]`1 = s by MCART_1:7;
+        per cases by REAL_1:def 5;
+        suppose
+O0:       s < 1/2; then
+V1:       [s,0] in IAA by Kasia77;
+          not [s,0] in ICC by O0, Kasia7x; then
+          not [s,0] in the carrier of S3 by JORDAN1:1; then
+O1:       not [s,0] in dom h by FUNCT_2:def 1;
+O6:       [s,0] in the carrier of S1 by V1, JORDAN1:1;
+          not [s,0] in IBB by O0, Kasia7x; then
+          not [s,0] in the carrier of S2 by JORDAN1:1; then
+O4:       not [s,0] in dom g by FUNCT_2:def 1;
+          H. [s,0] = fg. [s,0] by X1, O1, FUNCT_4:12
+                  .= f. [s,0] by A2, FUNCT_4:12, O4
+                  .= P.(2 * s) by O3, GG, O6
+                  .= (P+ -P).s by O0, a1, a3, BORSUK_2:def 4;
+          hence thesis by BINOP_1:def 1;
+        end;
+        suppose
+O0:       s = 1/2; then
+O2:       [s,0] in the carrier of S3 by Kasia5x, JORDAN1:1; then
+          [s,0] in dom h by FUNCT_2:def 1; then
+          H. [s,0] = h. [s,0] by X1, FUNCT_4:14
+                  .= (-P).(2 * s - 1) by O2, PK, O3
+                  .= b by a3, BORSUK_2:def 1, O0
+                  .= P.(2 * (1/2)) by a1, BORSUK_2:def 1
+                  .= (P+ -P).s by O0, a1, a3, BORSUK_2:def 4;
+          hence thesis by BINOP_1:def 1;
+        end;
+        suppose 
+O0:       s > 1/2; then
+          [s,0] in ICC by Kasia6x; then
+O2:       [s,0] in the carrier of S3 by JORDAN1:1; then
+          [s,0] in dom h by FUNCT_2:def 1; then
+          H. [s,0] = h. [s,0] by X1, FUNCT_4:14
+                  .= (-P).(2 * s - 1) by O2, PK, O3
+                  .= (P+ -P).s by O0, a1, a3, BORSUK_2:def 4;
+          hence thesis by BINOP_1:def 1;
+        end;
+      end;
+      thus H.(s,1) = Q.s
+      proof
+O3:     [s,1]`1 = s & [s,1]`2 = 1 by MCART_1:7;
+        dom Q = the carrier of I[01] by FUNCT_2:def 1; then
+FF:     0 in dom Q & s in dom Q by JORDAN5A:2;
+        per cases;
+        suppose s <> 1; then
+          not [s,1] in ICC by KasiaS; then
+          not [s,1] in the carrier of S3 by JORDAN1:1; then
+O1:       not [s,1] in dom h by FUNCT_2:def 1;
+          [s,1] in IBB by Kasia8; then
+YY:       [s,1] in the carrier of S2 by JORDAN1:1; then
+O4:       [s,1] in dom g by FUNCT_2:def 1;
+          H. [s,1] = fg. [s,1] by X1, O1, FUNCT_4:12
+                  .= g. [s,1] by A2, FUNCT_4:14, O4
+                  .= P.(1 - 1) by GH, YY, O3
+                  .= a by a1, BORSUK_2:def 1
+                  .= Q.0 by a2, BORSUK_2:def 1
+                  .= Q.s by FF, SEQM_3:def 5;
+          hence thesis by BINOP_1:def 1;
+        end;
+        suppose
+O0:       s = 1; then
+O2:       [s,1] in the carrier of S3 by Kasia5x, JORDAN1:1; then
+          [s,1] in dom h by FUNCT_2:def 1; then
+          H. [s,1] = h. [s,1] by X1, FUNCT_4:14
+                  .= (-P).(2 * s - 1) by O2, PK, O3
+                  .= a by a3, BORSUK_2:def 1, O0
+                  .= Q.0 by a2, BORSUK_2:def 1
+                  .= Q.s by SEQM_3:def 5, FF;
+          hence thesis by BINOP_1:def 1;
+        end;
+      end;
+    end;
+    for t being Point of I[01] holds H.(0,t) = a & H.(1,t) = a
+    proof
+      let t be Point of I[01];
+      thus H.(0,t) = a
+      proof
+        0 in the carrier of I[01] by JORDAN5A:2; then
+        reconsider x = [0,t] as Point of S by Kasia3;
+        x in IAA by Kasia4; then
+hk:     x is Point of S1 by JORDAN1:1;
+hl:     x`1 = 0 & x`2 = t by MCART_1:7; then
+        not x in ICC by Kasia2; then
+        not x in the carrier of S3 by JORDAN1:1; then
+hj:     not [0,t] in dom h by FUNCT_2:def 1;
+hh:     H.(0,t) = H. [0,t] by BINOP_1:def 1
+               .= fg. [0,t] by X1, FUNCT_4:12, hj;
+        per cases;
+        suppose t <> 1; then
+          not x in IBB by Kasia6; then
+          not x in the carrier of S2 by JORDAN1:1; then
+          not x in dom g by FUNCT_2:def 1; then
+          fg. [0,t] = f. [0,t] by A2, FUNCT_4:12
+                   .= P.(2 * x`1) by GG, hk
+                   .= a by hl, a1, BORSUK_2:def 1;
+          hence thesis by hh;
+        end;
+        suppose
+qu:       t = 1; then
+qi:       x in the carrier of S2 by JORDAN1:1, Kasia5; then
+          x in dom g by FUNCT_2:def 1; then
+          fg. [0,t] = g. [0,1] by qu, A2, FUNCT_4:14
+                   .= P.(1 - x`2) by GH, qi, qu
+                   .= a by a1, BORSUK_2:def 1, hl, qu;
+          hence thesis by hh;
+        end;       
+      end;
+      thus H.(1,t) = a
+      proof
+        1 in the carrier of I[01] by JORDAN5A:2; then        
+        reconsider x = [1,t] as Point of S by Kasia3;
+PL:     x in ICC by Kasia7; 
+hl:     x`1 = 1 & x`2 = t by MCART_1:7;
+PP:     x in the carrier of S3 by PL, JORDAN1:1; then
+hj:     [1,t] in dom h by FUNCT_2:def 1;
+hh:     H.(1,t) = H. [1,t] by BINOP_1:def 1
+               .= h. [1,t] by X1, FUNCT_4:14, hj;
+        h. [1,t] = (-P).(2 * x`1 - 1) by PK, PP
+                .= a by hl, a3, BORSUK_2:def 1;
+        hence thesis by hh;
+      end;
+    end; 
+    hence thesis by X1, X2, BORSUK_2:def 6;
+  end;
+
+theorem
+  for P being Path of a1, b1,
+      Q being constant Path of a1, a1 holds
+   P + - P, Q are_homotopic
+  proof
+    let P be Path of a1, b1,
+        Q be constant Path of a1, a1;
+    a1, b1 are_connected by Taa;
+    hence thesis by Tx6;
+  end;
+
+theorem Tx7:
+  for P being Path of b, a,
+      Q being constant Path of a, a st b, a are_connected holds
+   - P + P, Q are_homotopic
+  proof
+    let P be Path of b, a,
+        Q be constant Path of a, a such that
+a0: b, a are_connected;
+a1: ex f being map of I[01], T st f is continuous & f.0 = b & f.1 = a by a0,da;
+    then
+c0: P is continuous by BORSUK_2:def 1;
+    a, b are_connected by a0; then
+a3: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b by da;
+    set S = [:I[01],I[01]:];
+    set S1 = S|IAA;
+    set S2 = S|IBB;
+    set S3 = S|ICC;
+    reconsider e1 = pr1(the carrier of I[01], the carrier of I[01]) 
+      as continuous map of S, I[01] by YELLOW12:39;
+    reconsider e2 = pr2(the carrier of I[01], the carrier of I[01]) 
+      as continuous map of S, I[01] by YELLOW12:40;
+    a, a are_connected; then
+a2: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = a by da;
+    then
+    reconsider PP = -P + P as continuous Path of a,a by BORSUK_2:def 1;
+    set ff = PP * e1;
+    reconsider f = ff|IAA as map of S1, T by JGRAPH_3:12;
+    reconsider f as continuous map of S1, T by TOPMETR:10;
+GG: for x being Point of S1 holds f.x = (-P).(2 * x`1)
+    proof
+      let x be Point of S1;
+      x in the carrier of S1; then
+h1:   x in IAA by JORDAN1:1; then
+yy:   x in the carrier of S; then
+y2:   x in [:the carrier of I[01], the carrier of I[01]:] by BORSUK_1:def 5;
+      then
+Y3:   x = [x`1,x`2] by MCART_1:23; then
+y3:   x`1 in the carrier of I[01] & x`2 in the carrier of I[01]
+        by y2, ZFMISC_1:106; then
+Y2:   e1.x = x`1 by Y3, FUNCT_3:def 5;
+Y1:   x in dom e1 by yy, FUNCT_2:def 1;
+jj:   x`1 <= 1/2 by Kasia, h1;
+      f.x = ff.x by h1, FUNCT_1:72 .= (-P + P).(e1.x) by Y1, FUNCT_1:23
+         .= (-P).(2 * x`1) by y3, jj, a1, a3, BORSUK_2:def 4, Y2;
+      hence thesis;
+    end;
+    set gg = P * e2;
+    reconsider gg as continuous map of S, T by c0, TOPS_2:58;
+    reconsider g = gg|IBB as map of S2, T by JGRAPH_3:12;
+    reconsider g as continuous map of S2, T by TOPMETR:10;
+GH: for x being Point of S2 holds g.x = (-P).(1 - x`2)
+    proof
+      let x be Point of S2;
+      x in the carrier of S2; then
+h1:   x in IBB by JORDAN1:1; then
+yy:   x in the carrier of S; then
+y2:   x in [:the carrier of I[01], the carrier of I[01]:] by BORSUK_1:def 5;
+      then
+Y3:   x = [x`1,x`2] by MCART_1:23; then
+y3:   x`1 in the carrier of I[01] & x`2 in the carrier of I[01]
+        by y2, ZFMISC_1:106; then
+Y2:   e2.x = x`2 by Y3, FUNCT_3:def 6;
+hh:   1 - x`2 in the carrier of I[01] by JORDAN5B:4, y3;
+Y1:   x in dom e2 by yy, FUNCT_2:def 1;
+      g.x = gg.x by h1, FUNCT_1:72
+         .= P.(x`2) by Y2, Y1, FUNCT_1:23
+         .= P.(1 - (1 - x`2))
+         .= (-P).(1 - x`2) by hh, a1, BORSUK_2:def 5;
+      hence thesis;
+    end;
+    set hh = PP * e1;
+    reconsider h = hh|ICC as map of S3, T by JGRAPH_3:12;
+    reconsider h as continuous map of S3, T by TOPMETR:10;
+PK: for x being Point of S3 holds h.x = P.(2 * x`1 - 1)
+    proof
+      let x be Point of S3;
+      x in the carrier of S3; then
+h1:   x in ICC by JORDAN1:1; then
+yy:   x in the carrier of S; then
+y2:   x in [:the carrier of I[01], the carrier of I[01]:] by BORSUK_1:def 5;
+      then
+Y3:   x = [x`1,x`2] by MCART_1:23; then
+y3:   x`1 in the carrier of I[01] & x`2 in the carrier of I[01]
+        by y2, ZFMISC_1:106; then
+Y2:   e1.x = x`1 by Y3, FUNCT_3:def 5;
+Y1:   x in dom e1 by yy, FUNCT_2:def 1;
+mm:   x`1 >= 1/2 by Kasia2, h1; 
+      h.x = hh.x by h1, FUNCT_1:72 .= (-P + P).(e1.x) by Y1, FUNCT_1:23
+         .= P.(2 * x`1 - 1) by mm, y3, a1, a3, BORSUK_2:def 4, Y2;
+      hence thesis;
+    end;
+    set S12 = S | (IAA \/ IBB);
+    IAA \/ IBB <> {} by XBOOLE_1:15; then
+    the carrier of S12 <> {} by JORDAN1:1; then
+    reconsider S12 as non empty SubSpace of S by STRUCT_0:def 1;
+N0: the carrier of S12 = IAA \/ IBB by JORDAN1:1; then
+n0: [#]S12 = IAA \/ IBB by PRE_TOPC:def 3;
+J1: [#]S1 = IAA by PRE_TOPC:def 10;
+J2: [#]S2 = IBB by PRE_TOPC:def 10; then
+    reconsider s1 = [#]S1, s2 = [#]S2 as Subset of S12 by J1, N0, XBOOLE_1:7;
+bC: ([#] S1) \/ ([#] S2) = [#] S12 by n0, PRE_TOPC:def 10, J2; 
+bD: for p be set st p in ([#] S1) /\ ([#] S2) holds f.p = g.p
+    proof
+      let p be set;
+      assume p in ([#] S1) /\ ([#] S2); then
+      p in ([#] S1) /\ IBB by PRE_TOPC:def 10; then
+F0:   p in IAA /\ IBB by PRE_TOPC:def 10; then
+      consider r being Point of S such that
+F1:   r = p & r`2 = 1 - 2 * (r`1) by Got1;
+F2:   p in IAA & p in IBB by F0, XBOOLE_0:def 3; then
+      reconsider pp = p as Point of S1 by JORDAN1:1;
+hg:   2 * r`1 = 1 - r`2 by F1;
+F3:   pp is Point of S2 by F2, JORDAN1:1;
+      f.p = (-P).(2 * pp`1) by GG
+         .= g.p by GH, F3, hg, F1;
+      hence thesis;
+    end;
+    IAA c= IAA \/ IBB by XBOOLE_1:7; then    
+x1: S1 is SubSpace of S12 by JORDAN16:6;
+    IBB c= IAA \/ IBB by XBOOLE_1:7; then    
+x2: S2 is SubSpace of S12 by JORDAN16:6;
+x3: s1 is closed by J1, TOPS_2:34;
+    s2 is closed by J2, TOPS_2:34; then
+    consider fg being map of S12, T such that
+A2: fg = f +* g & fg is continuous by JGRAPH_2:9, bC, bD, x1, x2, x3;
+J3: [#]S3 = ICC by PRE_TOPC:def 10;
+    reconsider s12 = [#]S12, s3 = [#]S3 as Subset of S by PRE_TOPC:def 10;
+BC: ([#] S12) \/ ([#] S3)
+        = the carrier of S by BORSUK_1:def 5, 83, JJJ, n0, J3
+       .= [#] S by PRE_TOPC:def 3; 
+BD: for p be set st p in ([#] S12) /\ ([#] S3) holds fg.p = h.p
+    proof
+      let p be set;
+      assume p in ([#] S12) /\ ([#] S3); then
+FG:   p in { [1/2,0] } \/ (IBB /\ ICC) by Got22, XBOOLE_1:23, J3, n0;
+      [1/2,0] in IBB /\ ICC by XBOOLE_0:def 3, Kasia5x, Kasiax; then
+      { [1/2,0] } c= IBB /\ ICC by ZFMISC_1:37; then
+F0:   p in IBB /\ ICC by FG, XBOOLE_1:12; then
+      consider q being Point of S such that
+F1:   q = p & q`2 = 2 * (q`1) - 1 by Got11;
+F2:   p in IBB & p in ICC by F0, XBOOLE_0:def 3; then
+      reconsider pp = p as Point of S3 by JORDAN1:1;
+F3:   pp is Point of S2 by F2, JORDAN1:1;
+      pp`1 is Point of I[01] & pp`2 is Point of I[01] by F1, Lynch; then
+QQ:   1 - pp`2 in the carrier of I[01] by JORDAN5B:4;
+      p in the carrier of S2 by F2, JORDAN1:1; then
+      p in dom g by FUNCT_2:def 1; then
+      fg.p = g.p by A2, FUNCT_4:14
+          .= (-P).(1 - pp`2) by F3, GH
+          .= P.(1 - (1 - pp`2)) by a1, QQ, BORSUK_2:def 5
+          .= h.p by PK, F1;
+      hence thesis;
+    end; 
+V1: s12 is closed by TOPS_1:36, n0;
+    s3 = ICC by PRE_TOPC:def 10; then
+    consider H being map of S, T such that
+X1: H = fg +* h & H is continuous by A2, JGRAPH_2:9, V1, BC, BD;
+X2: for s being Point of I[01] holds H.(s,0) = (-P + P).s &
+      H.(s,1) = Q.s
+    proof
+      let s be Point of I[01];
+      thus H.(s,0) = (-P + P).s
+      proof
+O3:     [s,0]`1 = s by MCART_1:7;
+        per cases by REAL_1:def 5;
+        suppose
+O0:       s < 1/2; then
+V1:       [s,0] in IAA by Kasia77;
+          not [s,0] in ICC by O0, Kasia7x; then
+          not [s,0] in the carrier of S3 by JORDAN1:1; then
+O1:       not [s,0] in dom h by FUNCT_2:def 1;
+O6:       [s,0] in the carrier of S1 by V1, JORDAN1:1;
+          not [s,0] in IBB by O0, Kasia7x; then
+          not [s,0] in the carrier of S2 by JORDAN1:1; then
+O4:       not [s,0] in dom g by FUNCT_2:def 1;
+          H. [s,0] = fg. [s,0] by X1, O1, FUNCT_4:12
+                  .= f. [s,0] by A2, FUNCT_4:12, O4
+                  .= (-P).(2 * s) by O3, GG, O6
+                  .= (-P + P).s by O0, a1, a3, BORSUK_2:def 4;
+          hence thesis by BINOP_1:def 1;
+        end;
+        suppose
+O0:       s = 1/2; then
+O2:       [s,0] in the carrier of S3 by Kasia5x, JORDAN1:1; then
+          [s,0] in dom h by FUNCT_2:def 1; then
+          H. [s,0] = h. [s,0] by X1, FUNCT_4:14
+                  .= P.(2 * s - 1) by O2, PK, O3
+                  .= b by O0, a1, BORSUK_2:def 1
+                  .= (-P).(2 * (1/2)) by a3, BORSUK_2:def 1
+                  .= (-P + P).s by O0, a1, a3, BORSUK_2:def 4;
+          hence thesis by BINOP_1:def 1;
+        end;
+        suppose 
+O0:       s > 1/2; then
+          [s,0] in ICC by Kasia6x; then
+O2:       [s,0] in the carrier of S3 by JORDAN1:1; then
+          [s,0] in dom h by FUNCT_2:def 1; then
+          H. [s,0] = h. [s,0] by X1, FUNCT_4:14
+                  .= P.(2 * s - 1) by O2, PK, O3
+                  .= (-P + P).s by O0, a1, a3, BORSUK_2:def 4;
+          hence thesis by BINOP_1:def 1;
+        end;
+      end;
+      thus H.(s,1) = Q.s
+      proof
+O3:     [s,1]`1 = s & [s,1]`2 = 1 by MCART_1:7;
+        dom Q = the carrier of I[01] by FUNCT_2:def 1; then
+FF:     0 in dom Q & s in dom Q by JORDAN5A:2;
+        per cases;
+        suppose s <> 1; then
+          not [s,1] in ICC by KasiaS; then
+          not [s,1] in the carrier of S3 by JORDAN1:1; then
+O1:       not [s,1] in dom h by FUNCT_2:def 1;
+          [s,1] in IBB by Kasia8; then
+YY:       [s,1] in the carrier of S2 by JORDAN1:1; then
+O4:       [s,1] in dom g by FUNCT_2:def 1;
+          H. [s,1] = fg. [s,1] by X1, O1, FUNCT_4:12
+                  .= g. [s,1] by A2, FUNCT_4:14, O4
+                  .= (-P).(1 - 1) by GH, YY, O3
+                  .= a by a3, BORSUK_2:def 1
+                  .= Q.0 by a2, BORSUK_2:def 1
+                  .= Q.s by FF, SEQM_3:def 5;
+          hence thesis by BINOP_1:def 1;
+        end;
+        suppose
+O0:       s = 1; then
+O2:       [s,1] in the carrier of S3 by Kasia5x, JORDAN1:1; then
+          [s,1] in dom h by FUNCT_2:def 1; then
+          H. [s,1] = h. [s,1] by X1, FUNCT_4:14
+                  .= P.(2 * s - 1) by O2, PK, O3
+                  .= a by O0, a1, BORSUK_2:def 1
+                  .= Q.0 by a2, BORSUK_2:def 1
+                  .= Q.s by SEQM_3:def 5, FF;
+          hence thesis by BINOP_1:def 1;
+        end;
+      end;
+    end;
+    for t being Point of I[01] holds H.(0,t) = a & H.(1,t) = a
+    proof
+      let t be Point of I[01];
+      thus H.(0,t) = a
+      proof
+        0 in the carrier of I[01] by JORDAN5A:2; then        
+        reconsider x = [0,t] as Point of S by Kasia3;
+        x in IAA by Kasia4; then
+hk:     x is Point of S1 by JORDAN1:1;
+hl:     x`1 = 0 & x`2 = t by MCART_1:7; then
+        not x in ICC by Kasia2; then
+        not x in the carrier of S3 by JORDAN1:1; then
+hj:     not [0,t] in dom h by FUNCT_2:def 1; 
+hh:     H.(0,t) = H. [0,t] by BINOP_1:def 1
+               .= fg. [0,t] by X1, FUNCT_4:12, hj;
+        per cases;
+        suppose t <> 1; then
+          not x in IBB by Kasia6; then
+          not x in the carrier of S2 by JORDAN1:1; then
+          not x in dom g by FUNCT_2:def 1; then
+          fg. [0,t] = f. [0,t] by A2, FUNCT_4:12
+                   .= (-P).(2 * x`1) by GG, hk
+                   .= a by hl, a3, BORSUK_2:def 1;
+          hence thesis by hh;
+        end;
+        suppose
+qu:       t = 1; then
+qi:       x in the carrier of S2 by JORDAN1:1, Kasia5; then
+          x in dom g by FUNCT_2:def 1; then
+          fg. [0,t] = g. [0,1] by qu, A2, FUNCT_4:14
+                   .= (-P).(1 - x`2) by GH, qi, qu
+                   .= a by a3, BORSUK_2:def 1, hl, qu;
+          hence thesis by hh;
+        end;       
+      end;
+      thus H.(1,t) = a
+      proof
+        1 in the carrier of I[01] by JORDAN5A:2; then        
+        reconsider x = [1,t] as Point of S by Kasia3;
+PL:     x in ICC by Kasia7;
+hl:     x`1 = 1 & x`2 = t by MCART_1:7;
+PP:     x in the carrier of S3 by PL, JORDAN1:1; then
+hj:     [1,t] in dom h by FUNCT_2:def 1;
+hh:     H.(1,t) = H. [1,t] by BINOP_1:def 1
+               .= h. [1,t] by X1, FUNCT_4:14, hj;
+        h. [1,t] = P.(2 * x`1 - 1) by PK, PP
+                .= a by hl, a1, BORSUK_2:def 1;
+        hence thesis by hh;
+      end;
+    end; 
+    hence thesis by X1, X2, BORSUK_2:def 6;
+  end;
+  
+theorem
+  for P being Path of b1, a1,
+      Q being constant Path of a1, a1 holds
+   - P + P, Q are_homotopic
+  proof
+    let P be Path of b1, a1,
+        Q be constant Path of a1, a1;
+    b1, a1 are_connected by Taa;
+    hence thesis by Tx7;
+  end;
+  
+theorem
+ for P, Q be constant Path of a, a holds P, Q are_homotopic
+  proof
+    let P, Q be constant Path of a, a;
+    a, a are_connected; then
+a1: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = a by da;
+    P = I[01] --> a & Q = I[01] --> a by BORSUK_2:6;
+    hence thesis by a1, BORSUK_2:15;
+  end;
+
+definition let T be non empty TopSpace;
+           let a, b be Point of T;
+           let P, Q be Path of a, b;
+  assume A1:P, Q are_homotopic;
+  mode Homotopy of P, Q -> map of [:I[01],I[01]:], T means
+    it is continuous &
+    for s being Point of I[01] holds it.(s,0) = P.s &
+                                     it.(s,1) = Q.s &
+    for t being Point of I[01] holds it.(0,t) = a &
+                                     it.(1,t) = b;
+  existence by A1, BORSUK_2:def 6;
+end;
