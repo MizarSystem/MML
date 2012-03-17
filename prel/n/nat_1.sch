@@ -12,7 +12,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="NAT_1"/>
 </Signature>
 <Scheme>
@@ -43,7 +43,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="64">
+<Func kind="K" nr="67">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -81,7 +81,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="58">
+<Func kind="K" nr="59">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -214,7 +214,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="64">
+<Func kind="K" nr="67">
 <Var nr="3"/>
 <Num nr="1"/>
 </Func>
@@ -268,7 +268,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="64">
+<Func kind="K" nr="67">
 <Var nr="3"/>
 <Num nr="1"/>
 </Func>
@@ -576,14 +576,14 @@
 <Func kind="F" nr="1">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="69">
+<Func kind="K" nr="72">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
 </Func>
 </Pred>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="1">
-<Func kind="K" nr="64">
+<Func kind="K" nr="67">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -630,17 +630,17 @@
 </Typ>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="1">
-<Func kind="K" nr="64">
+<Func kind="K" nr="67">
 <Var nr="1"/>
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="67">
+<Func kind="K" nr="70">
 <Func kind="F" nr="1">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1">
-<Func kind="K" nr="64">
+<Func kind="K" nr="67">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

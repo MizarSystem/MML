@@ -20,12 +20,13 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="CONNSP_2"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="BORSUK_1"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <FCluster>
 <ArgTypes>
@@ -44,7 +45,7 @@
 <Adjective nr="5"/>
 <Adjective nr="18">
 <Func kind="U" nr="1">
-<Func kind="K" nr="142">
+<Func kind="K" nr="143">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -53,7 +54,7 @@
 </Adjective>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="142">
+<Func kind="K" nr="143">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -73,7 +74,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="85">
+<Func kind="K" nr="86">
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 <LocusVar nr="5"/>
@@ -81,6 +82,7 @@
 <Cluster>
 <Adjective nr="29"/>
 <Adjective nr="47"/>
+<Adjective nr="63"/>
 </Cluster>
 </FCluster>
 </Registrations>

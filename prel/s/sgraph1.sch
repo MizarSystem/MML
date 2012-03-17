@@ -33,7 +33,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="98">
+<Func kind="K" nr="99">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -49,7 +49,7 @@
 <Func kind="G" nr="3">
 <Func kind="K" nr="1"/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="97">
+<Func kind="K" nr="98">
 <Func kind="K" nr="1"/>
 </Func>
 </Func>
@@ -68,7 +68,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="98">
+<Func kind="K" nr="99">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -99,7 +99,7 @@
 </Func>
 </Func>
 <Func kind="K" nr="10">
-<Func kind="K" nr="97">
+<Func kind="K" nr="98">
 <Func kind="K" nr="2">
 <Func kind="U" nr="1">
 <Var nr="1"/>
@@ -133,7 +133,7 @@
 </Pred>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="97">
+<Func kind="K" nr="98">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -151,7 +151,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="6">
-<Func kind="K" nr="97">
+<Func kind="K" nr="98">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>

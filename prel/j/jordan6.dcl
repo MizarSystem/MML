@@ -27,6 +27,7 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <CCluster>
 <ArgTypes/>
@@ -34,12 +35,13 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="163"/>
+<Func kind="K" nr="164"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="44"/>
+<Adjective nr="65"/>
 </Cluster>
 </CCluster>
 </Registrations>

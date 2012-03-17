@@ -9,13 +9,13 @@ environ
  vocabularies TARSKI, BOOLE, SUPINF_1, RLVECT_1, ARYTM_3, ARYTM_1, SETFAM_1,
       PROB_1, SUBSET_1, FINSUB_1, FUNCT_1, SUPINF_2, RELAT_1, FUNCOP_1, CARD_4,
       PROB_2, MEASURE1;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0,
-      REAL_1, RELAT_1, FINSUB_1, FUNCT_1, FUNCT_2, NAT_1, SETFAM_1, FUNCOP_1,
-      PROB_1, PROB_2, CARD_4, SUPINF_1, SUPINF_2;
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0,
+      REAL_1, RELAT_1, FINSUB_1, FUNCT_1, RELSET_1, FUNCT_2, NAT_1, SETFAM_1,
+      FUNCOP_1, PROB_1, PROB_2, CARD_4, SUPINF_1, SUPINF_2;
  constructors ENUMSET1, NAT_1, REAL_1, SUPINF_2, FUNCOP_1, FINSUB_1, PROB_2,
-      MEMBERED, SETFAM_1;
+      MEMBERED, SETFAM_1, SUPINF_1, XXREAL_0;
  registrations SUBSET_1, SUPINF_1, RELSET_1, ARYTM_3, PROB_1, MEMBERED,
-      ORDINAL2;
+      ORDINAL2, NUMBERS, XREAL_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -30,12 +30,12 @@ canceled 2;
 
 theorem :: MEASURE1:4
    for x,y,s,t being R_eal holds
-   0.<=' x & 0.<=' s & x <=' y & s <=' t implies
-   x + s <=' y + t;
+   0.<= x & 0.<= s & x <= y & s <= t implies
+   x + s <= y + t;
 
 theorem :: MEASURE1:5
    for x,y,z being R_eal holds
-   0.<=' y & 0.<=' z & x = y + z & y <' +infty implies z = x - y;
+   0.<= y & 0.<= z & x = y + z & y < +infty implies z = x - y;
 
 canceled;
 
@@ -132,7 +132,7 @@ definition
    redefine attr F is nonnegative means
 :: MEASURE1:def 4
 for A being Element of X holds
-         0. <=' F.A;
+         0. <= F.A;
 end;
 
 canceled;
@@ -159,13 +159,13 @@ theorem :: MEASURE1:25
    for S being Field_Subset of X,
        M being Measure of S,
        A,B being Element of S holds
-   A c= B implies M.A <=' M.B;
+   A c= B implies M.A <= M.B;
 
 theorem :: MEASURE1:26
    for S being Field_Subset of X,
        M being Measure of S,
        A,B being Element of S holds
-   A c= B & M.A <' +infty implies M.(B \ A) = M.B - M.A;
+   A c= B & M.A < +infty implies M.(B \ A) = M.B - M.A;
 
 registration let X be set;
    cluster non empty compl-closed cap-closed Subset-Family of X;
@@ -190,7 +190,7 @@ theorem :: MEASURE1:27
    for S being Field_Subset of X,
        M being Measure of S,
        A,B being Element of S holds
-   M.(A \/ B) <=' M.A + M.B;
+   M.(A \/ B) <= M.A + M.B;
 
 definition
    let X be set,
@@ -294,61 +294,49 @@ definition
    let IT be Subset-Family of X;
  canceled;
 
-   attr IT is sigma_Field_Subset-like means
+   attr IT is sigma-additive means
 :: MEASURE1:def 9
-    for M being N_Sub_set_fam of X st M c= IT holds union M in IT;
+ for M being N_Sub_set_fam of X st M c= IT holds union M in IT;
 end;
 
 registration let X be set;
-   cluster non empty compl-closed sigma_Field_Subset-like Subset-Family of X;
+   cluster non empty compl-closed sigma-additive Subset-Family of X;
 end;
 
-definition let X be set;
-   mode sigma_Field_Subset of X is
-     compl-closed sigma_Field_Subset-like (non empty Subset-Family of X);
+registration let X;
+ cluster compl-closed sigma-multiplicative ->
+          sigma-additive Subset-Family of X;
+ cluster compl-closed sigma-additive ->
+          sigma-multiplicative Subset-Family of X;
 end;
-
-canceled 2;
-
-theorem :: MEASURE1:45
-   for S being sigma_Field_Subset of X holds {} in S & X in S;
 
 registration let X be set;
- cluster -> non empty sigma_Field_Subset of X;
+ cluster -> non empty SigmaField of X;
 end;
 
-theorem :: MEASURE1:46
-   for S being sigma_Field_Subset of X,
-       A,B being set st A in S & B in S holds A \/ B in S & A /\ B in S;
-
-theorem :: MEASURE1:47
-   for S being sigma_Field_Subset of X,
-       A,B being set st A in S & B in S holds A \ B in S;
-
-theorem :: MEASURE1:48
-      for S being sigma_Field_Subset of X holds S = X \ S;
+canceled 6;
 
 theorem :: MEASURE1:49
    for S being non empty Subset-Family of X holds
    ((for A being set holds A in S implies X\A in S) &
    (for M being N_Sub_set_fam of X st M c= S holds meet M in S)) iff
-   S is sigma_Field_Subset of X;
+   S is SigmaField of X;
 
 registration
    let X be set;
-   let S be sigma_Field_Subset of X;
+   let S be SigmaField of X;
    cluster disjoint_valued Function of NAT, S;
 end;
 
 definition
    let X be set;
-   let S be sigma_Field_Subset of X;
+   let S be SigmaField of X;
    mode Sep_Sequence of S is disjoint_valued Function of NAT, S;
 end;
 
 definition
    let X be set;
-   let S be sigma_Field_Subset of X;
+   let S be SigmaField of X;
    let F be Function of NAT,S;
    redefine func rng F -> non empty Subset-Family of X;
 end;
@@ -356,12 +344,12 @@ end;
 canceled 2;
 
 theorem :: MEASURE1:52
-   for S being sigma_Field_Subset of X,
+   for S being SigmaField of X,
        F being Function of NAT,S holds
    rng F is N_Sub_set_fam of X;
 
 theorem :: MEASURE1:53
-   for S being sigma_Field_Subset of X,
+   for S being SigmaField of X,
        F being Function of NAT,S holds
    union rng F is Element of S;
 
@@ -372,25 +360,25 @@ theorem :: MEASURE1:54
    M is nonnegative holds M*F is nonnegative;
 
 theorem :: MEASURE1:55
-   for S being sigma_Field_Subset of X,
+   for S being SigmaField of X,
        a,b being R_eal holds
    ex M being Function of S,ExtREAL st
    for A being Element of S holds
    (A = {} implies M.A = a) & (A <> {} implies M.A = b);
 
 theorem :: MEASURE1:56
-      for S being sigma_Field_Subset of X
+      for S being SigmaField of X
    ex M being Function of S,ExtREAL st
    for A being Element of S holds
    (A = {} implies M.A = 0.) & (A <> {} implies M.A = +infty);
 
 theorem :: MEASURE1:57
-   for S being sigma_Field_Subset of X
+   for S being SigmaField of X
    ex M being Function of S,ExtREAL st
    for A being Element of S holds M.A = 0.;
 
 theorem :: MEASURE1:58
-   for S being sigma_Field_Subset of X
+   for S being SigmaField of X
    ex M being Function of S,ExtREAL st
    M is nonnegative & M.{} = 0. &
    for F being Sep_Sequence of S holds
@@ -398,7 +386,7 @@ theorem :: MEASURE1:58
 
 definition
    let X be set;
-   let S be sigma_Field_Subset of X;
+   let S be SigmaField of X;
  canceled;
 
    mode sigma_Measure of S -> Function of S,ExtREAL means
@@ -410,42 +398,42 @@ it is nonnegative &
 end;
 
 registration let X be set;
-   cluster sigma_Field_Subset-like compl-closed -> cup-closed
+   cluster sigma-additive compl-closed -> cup-closed
      (non empty Subset-Family of X);
 end;
 
 canceled;
 
 theorem :: MEASURE1:60
-   for S being sigma_Field_Subset of X,
+   for S being SigmaField of X,
        M being sigma_Measure of S holds M is Measure of S;
 
 theorem :: MEASURE1:61
-      for S being sigma_Field_Subset of X,
+      for S being SigmaField of X,
        M being sigma_Measure of S,
        A,B being Element of S st
    A misses B holds M.(A \/ B) = M.A + M.B;
 
 theorem :: MEASURE1:62
-   for S being sigma_Field_Subset of X,
+   for S being SigmaField of X,
        M being sigma_Measure of S,
-       A,B being Element of S st A c= B holds M.A <=' M.B;
+       A,B being Element of S st A c= B holds M.A <= M.B;
 
 theorem :: MEASURE1:63
-      for S being sigma_Field_Subset of X,
+      for S being SigmaField of X,
        M being sigma_Measure of S,
        A,B being Element of S st
-   A c= B & M.A <' +infty holds M.(B \ A) = M.B - M.A;
+   A c= B & M.A < +infty holds M.(B \ A) = M.B - M.A;
 
 theorem :: MEASURE1:64
-   for S being sigma_Field_Subset of X,
+   for S being SigmaField of X,
        M being sigma_Measure of S,
        A,B being Element of S holds
-   M.(A \/ B) <=' M.A + M.B;
+   M.(A \/ B) <= M.A + M.B;
 
 definition
    let X be set,
-       S be sigma_Field_Subset of X,
+       S be SigmaField of X,
        M be sigma_Measure of S,
        A be set;
    pred A is_measurable M means
@@ -456,7 +444,7 @@ end;
 canceled;
 
 theorem :: MEASURE1:66
-      for S being sigma_Field_Subset of X,
+      for S being SigmaField of X,
        M being sigma_Measure of S holds
    {} is_measurable M & X is_measurable M &
    for A,B being set st A is_measurable M & B is_measurable M holds
@@ -464,7 +452,7 @@ theorem :: MEASURE1:66
    A /\ B is_measurable M;
 
 theorem :: MEASURE1:67
-      for S being sigma_Field_Subset of X,
+      for S being SigmaField of X,
        M being sigma_Measure of S,
        T being N_Sub_set_fam of X st
    (for A being set st A in T holds A is_measurable M) holds
@@ -472,7 +460,7 @@ theorem :: MEASURE1:67
 
 definition
    let X be set,
-       S be sigma_Field_Subset of X,
+       S be SigmaField of X,
        M be sigma_Measure of S;
    mode measure_zero of M -> Element of S means
 :: MEASURE1:def 13
@@ -482,21 +470,21 @@ end;
 canceled;
 
 theorem :: MEASURE1:69
-      for S being sigma_Field_Subset of X,
+      for S being SigmaField of X,
        M being sigma_Measure of S,
        A being Element of S,
        B being measure_zero of M st
    A c= B holds A is measure_zero of M;
 
 theorem :: MEASURE1:70
-      for S being sigma_Field_Subset of X,
+      for S being SigmaField of X,
        M being sigma_Measure of S,
        A,B being measure_zero of M holds
    A \/ B is measure_zero of M & A /\ B is measure_zero of M &
    A \ B is measure_zero of M;
 
 theorem :: MEASURE1:71
-      for S being sigma_Field_Subset of X,
+      for S being SigmaField of X,
        M being sigma_Measure of S,
        A being Element of S,
        B being measure_zero of M holds

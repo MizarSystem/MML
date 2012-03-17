@@ -40,6 +40,7 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="SCMRING1"/>
 <ArticleID name="SCMRING2"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <RCluster>
 <ArgTypes>
@@ -65,7 +66,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="336">
+<Func kind="K" nr="337">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -80,7 +81,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="336">
+<Func kind="K" nr="337">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -90,7 +91,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="336">
+<Func kind="K" nr="337">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -156,19 +157,19 @@
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="336">
+<Func kind="K" nr="337">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="274">
+<Func kind="K" nr="275">
 <Func kind="K" nr="13">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="336">
+<Func kind="K" nr="337">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>
@@ -178,6 +179,7 @@
 <Adjective nr="29"/>
 <Adjective nr="31" value="false"/>
 <Adjective nr="106"/>
+<Adjective nr="108"/>
 </Cluster>
 </FCluster>
 </Registrations>

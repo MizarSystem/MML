@@ -7,18 +7,66 @@
 environ
 
  vocabularies BOOLE, ARYTM, ARYTM_2, ARYTM_3, ORDINAL2, ARYTM_1, ORDINAL1,
-      COMPLEX1, RELAT_1, FUNCOP_1;
+      COMPLEX1, RELAT_1, FUNCOP_1, SUPINF_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ORDINAL2, FUNCT_4,
-      ARYTM_2, ARYTM_1, NUMBERS, ARYTM_0, XCMPLX_0, XREAL_0;
- constructors ARYTM_1, ARYTM_0, XREAL_0, XCMPLX_0, FUNCT_4, XBOOLE_0;
+      ARYTM_2, ARYTM_1, NUMBERS, ARYTM_0, XCMPLX_0, XREAL_0, XXREAL_0;
+ constructors ARYTM_1, ARYTM_0, XREAL_0, XCMPLX_0, FUNCT_4, XBOOLE_0,
+  XXREAL_0;
  registrations XREAL_0, ARYTM_2, ARYTM_3, ORDINAL2, NUMBERS, XCMPLX_0,
       ZFMISC_1, XBOOLE_0;
  requirements SUBSET, BOOLE, NUMERALS, ARITHM;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, XXREAL_0;
  theorems XBOOLE_0, ARYTM_0, ZFMISC_1, TARSKI, ARYTM_1, ARYTM_2, SUBSET_1,
-      ORDINAL2, ORDINAL1, XBOOLE_1, XREAL_0, XCMPLX_0, NUMBERS, XREAL_1;
+      ORDINAL2, ORDINAL1, XBOOLE_1, XREAL_0, XCMPLX_0, NUMBERS, XREAL_1,
+      XXREAL_0;
 
 begin
+
+reserve r,s for real number;
+
+Def2:
+ r <= s implies
+  (r in REAL+ & s in REAL+ implies
+   ex x',y' being Element of REAL+ st r = x' & s = y' & x' <=' y') &
+  (r in [:{0},REAL+:] & s in [:{0},REAL+:] implies
+  ex x',y' being Element of REAL+ st r = [0,x'] & s = [0,y'] & y' <=' x') &
+  (not(r in REAL+ & s in REAL+) & not (r in [:{0},REAL+:] & s in [:{0},REAL+:])
+    implies s in REAL+ & r in [:{0},REAL+:])
+proof
+  r in REAL & s in REAL by XREAL_0:def 1;
+  then r <> -infty & s <> +infty by XREAL_0:def 1;
+ hence thesis by XXREAL_0:def 5;
+end;
+
+Def2':
+  (r in REAL+ & s in REAL+ &
+   ex x',y' being Element of REAL+ st r = x' & s = y' & x' <=' y') or
+  (r in [:{0},REAL+:] & s in [:{0},REAL+:] &
+  ex x',y' being Element of REAL+ st r = [0,x'] & s = [0,y'] & y' <=' x') or
+   s in REAL+ & r in [:{0},REAL+:]
+  implies r <= s
+proof assume
+Z: (r in REAL+ & s in REAL+ &
+   ex x',y' being Element of REAL+ st r = x' & s = y' & x' <=' y') or
+  (r in [:{0},REAL+:] & s in [:{0},REAL+:] &
+  ex x',y' being Element of REAL+ st r = [0,x'] & s = [0,y'] & y' <=' x') or
+  ( s in REAL+ & r in [:{0},REAL+:]);
+ per cases;
+ case r in REAL+ & s in REAL+;
+   then not r in [:{0},REAL+:] & not s in [:{0},REAL+:]
+          by ARYTM_0:5,XBOOLE_0:3;
+  hence ex x',y' being Element of REAL+ st r = x' & s = y' & x' <=' y' by Z;
+ end;
+ case r in [:{0},REAL+:] & s in [:{0},REAL+:];
+   then not r in REAL+ & not s in REAL+ by ARYTM_0:5,XBOOLE_0:3;
+  hence ex x',y' being Element of REAL+ st r = [0,x'] & s = [0,y'] & y' <=' x'
+   by Z;
+ end;
+ case not(r in REAL+ & s in REAL+) &
+   not (r in [:{0},REAL+:] & s in [:{0},REAL+:]);
+  hence thesis by Z;
+ end;
+end;
 
 reserve x,y,z for real number,
         k for natural number,
@@ -116,10 +164,10 @@ A13: x in X and
 A14: y in Y;
       not z in [:{0},REAL+:] & not x in REAL+
      by A10,A13,ARYTM_0:5,ARYTM_2:21,XBOOLE_0:3;
-  hence x <= z by XREAL_0:def 2;
+  hence x <= z by Def2;
    reconsider y' = y as Element of REAL+ by A12,A14;
       o <=' y' by ARYTM_1:6;
-  hence z <= y by XREAL_0:def 2;
+  hence z <= y by Def2';
  end;
  suppose
        Y meets [:{0},REAL+:];
@@ -154,7 +202,7 @@ A26:     x in REAL+;
 A27:     x <= y0 by A1,A22,A25;
           not y0 in REAL+ & not x in
  [:{0},REAL+:] by A21,A26,ARYTM_0:5,XBOOLE_0:3;
-      hence contradiction by A27,XREAL_0:def 2;
+      hence contradiction by A27,Def2;
      end;
     hence u in [:{0},REAL+:] by A8,A25,XBOOLE_0:def 2;
    end;
@@ -189,7 +237,7 @@ A37: x in [:{0},REAL+:] & y in [:{0},REAL+:] by Lm4,ZFMISC_1:106;
     then consider x'',y'' being Element of REAL+ such that
 A38:  x = [0,x''] and
 A39:  y = [0,y''] and
-A40:  y'' <=' x'' by A37,XREAL_0:def 2;
+A40:  y'' <=' x'' by A37,Def2;
        x' = x'' & y' = y'' by A38,A39,ZFMISC_1:33;
    hence y' <=' x' by A40;
   end;
@@ -218,9 +266,9 @@ then A50: x' in X' by A44;
   suppose
 A51: y in REAL+;
      y1 <=' z' & z' <=' x' by A23,A41,A50;
- hence x <= z by A24,A43,A44,A49,XREAL_0:def 2;
+ hence x <= z by A24,A43,A44,A49,Def2';
      not z in REAL+ & not y in [:{0},REAL+:] by A43,A51,ARYTM_0:5,XBOOLE_0:3;
- hence z <= y by XREAL_0:def 2;
+ hence z <= y by Def2;
   end;
   suppose
 A52: y in [:{0},REAL+:];
@@ -232,7 +280,7 @@ A55: y = [e,y'] by ZFMISC_1:103;
 A56: y = [0,y'] by A53,A55,TARSKI:def 1;
    then y' in Y' by A45;
   then y' <=' z' & z' <=' x' by A41,A50;
- hence x <= z & z <= y by A24,A43,A44,A49,A52,A56,XREAL_0:def 2;
+ hence x <= z & z <= y by A24,A43,A44,A49,A52,A56,Def2';
  end;
  end;
  hence thesis;
@@ -256,7 +304,7 @@ A61:  u in Y;
 A62:     y in [:{0},REAL+:];
 A63:     x0 <= y by A1,A57,A61;
           not y in REAL+ & not x0 in [:{0},REAL+:] by A62,ARYTM_0:5,XBOOLE_0:3;
-      hence contradiction by A63,XREAL_0:def 2;
+      hence contradiction by A63,Def2;
      end;
     hence u in REAL+ by A9,A61,XBOOLE_0:def 2;
    end;
@@ -270,7 +318,7 @@ A64: x' in X' & y' in Y';
        X' c= X by XBOOLE_1:17;
     then x <= y by A1,A64;
     then ex x',y' being Element of REAL+ st x = x' & y = y' & x' <=' y'
-                                 by XREAL_0:def 2;
+                                 by Def2;
    hence x' <=' y';
   end;
  then consider z' being Element of REAL+ such that
@@ -290,14 +338,14 @@ A67: y in Y;
   then reconsider x' = x as Element of REAL+;
      x' in X' & y' in Y' by A66,A67,XBOOLE_0:def 3;
   then x' <=' z' & z' <=' y' by A65;
- hence x <= z & z <= y by XREAL_0:def 2;
+ hence x <= z & z <= y by Def2';
   end;
   suppose
     x in [:{0},REAL+:];
   then not x in REAL+ & not z in [:{0},REAL+:] by ARYTM_0:5,XBOOLE_0:3;
- hence x <= z by XREAL_0:def 2;
+ hence x <= z by Def2;
      x1 <=' z' & z' <=' y' by A59,A65,A67;
- hence z <= y by XREAL_0:def 2;
+ hence z <= y by Def2';
  end;
  end;
  hence thesis;
@@ -368,7 +416,7 @@ A2:   e in k;
     then reconsider y' = e as Element of REAL+ by ARYTM_2:2;
        y' in x' by A2;
 then A3:  y' in NAT & y' <> x' & y' <=' x' by ARYTM_2:19;
-    then j <= k by XREAL_0:def 2;
+    then j <= k by Def2';
     then j < k by A3,Lm1;
    hence e in { i: i < k };
   end;
@@ -379,6 +427,6 @@ A4: e = i and
 A5: not k <= i;
 A6: k in NAT & i in NAT by ORDINAL2:def 21;
   then reconsider x' = e, y' = k as Element of REAL+ by A4,ARYTM_2:2;
-   not y' <=' x' by A4,A5,XREAL_0:def 2;
+   not y' <=' x' by A4,A5,Def2';
  hence e in k by A4,A5,A6,ARYTM_2:19;
 end;

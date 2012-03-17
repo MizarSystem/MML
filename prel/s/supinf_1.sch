@@ -11,7 +11,6 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="SUPINF_1"/>
 </Signature>
 <Scheme>
 <ArgTypes/>
@@ -20,20 +19,14 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="6">
-<Func kind="K" nr="52"/>
-<Func kind="K" nr="2">
-<Func kind="K" nr="61"/>
-<Func kind="K" nr="60"/>
-</Func>
-</Func>
+<Func kind="K" nr="57"/>
 </Func>
 </Typ>
 <Not>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="59"/>
+<Func kind="K" nr="57"/>
 </Typ>
 <And>
 <Not>

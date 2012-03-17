@@ -1,0 +1,437 @@
+:: Introduction to Arithmetic of Extended Real Numbers
+::  by Library Committee
+::
+:: Received January 4, 2006
+:: Copyright (c) 2006 Association of Mizar Users
+
+environ
+
+ vocabularies SUPINF_1, ARYTM, BOOLE, ARYTM_2, ARYTM_3, ORDINAL1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ARYTM_2,
+  NUMBERS;
+ constructors NUMBERS, ARYTM_2, RELSET_1,FUNCT_2;
+ definitions TARSKI, NUMBERS;
+ registrations NUMBERS, XBOOLE_0;
+ theorems XBOOLE_0, TARSKI, ORDINAL1, NUMBERS, ARYTM_0,ZFMISC_1, ARYTM_1,
+  ENUMSET1;
+ requirements BOOLE,SUBSET,NUMERALS;
+
+begin
+
+reserve x for set;
+
+definition let x;
+ attr x is ext-real means
+:Def1: x in ExtREAL;
+end;
+
+registration
+ cluster ext-real number;
+  existence
+ proof
+   take 0;
+   thus 0 in ExtREAL by XBOOLE_0:def 2;
+ end;
+end;
+
+definition
+ func +infty equals REAL;
+  coherence;
+ func -infty equals [0,REAL];
+  coherence;
+end;
+
+definition
+ redefine func ExtREAL equals REAL \/ {+infty,-infty};
+ compatibility;
+end;
+
+registration
+ cluster +infty -> ext-real;
+ coherence
+  proof +infty in {REAL,[0,REAL]} by TARSKI:def 2;
+    then +infty in ExtREAL by XBOOLE_0:def 2;
+   hence thesis by Def1;
+  end;
+ cluster -infty -> ext-real;
+ coherence
+  proof -infty in {REAL,[0,REAL]} by TARSKI:def 2;
+    then -infty in ExtREAL by XBOOLE_0:def 2;
+   hence thesis by Def1;
+  end;
+end;
+
+definition let x,y be ext-real number;
+  pred x <= y means
+:Def5:  ex x',y' being Element of REAL+ st x = x' & y = y' & x' <=' y'
+              if x in REAL+ & y in REAL+,
+  ex x',y' being Element of REAL+ st x = [0,x'] & y = [0,y'] & y' <=' x'
+              if x in [:{0},REAL+:] & y in [:{0},REAL+:]
+  otherwise y in REAL+ & x in [:{0},REAL+:] or x = -infty or y = +infty;
+  consistency by ARYTM_0:5,XBOOLE_0:3;
+  reflexivity
+   proof let x be ext-real number such that
+A1:  not((x in REAL+ & x in REAL+ implies
+      ex x',y' being Element of REAL+ st x = x' & x = y' & x' <=' y') &
+    (x in [:{0},REAL+:] & x in [:{0},REAL+:] implies
+      ex x',y' being Element of REAL+
+       st x = [0,x'] & x = [0,y'] & y' <=' x') &
+         (not(x in REAL+ & x in REAL+) &
+         not(x in [:{0},REAL+:] & x in [:{0},REAL+:])
+     implies x in REAL+ & x in [:{0},REAL+:] or x = -infty or x = +infty));
+       x in ExtREAL by Def1;
+    then x in REAL+ \/ [:{0},REAL+:] \ {[0,0]} or x in {+infty,-infty}
+    by XBOOLE_0:def 2,NUMBERS:def 1;
+    then
+A2: x in REAL+ \/ [:{0},REAL+:] or x = +infty or x = -infty
+    by XBOOLE_0:def 4, TARSKI:def 2;
+    per cases by A1;
+    suppose that
+A3:   x in REAL+ and
+A4:   not ex x',y' being Element of REAL+ st x = x' & x = y' & x' <=' y';
+     reconsider x' = x as Element of REAL+ by A3;
+      not x' <=' x' by A4;
+    hence thesis;
+    end;
+    suppose that
+A5:   x in [:{0},REAL+:] and
+A6:   not ex x',y' being Element of REAL+
+              st x = [0,x'] & x = [0,y'] & y' <=' x';
+      consider z,x' being set such that
+A7:    z in {0} and
+A8:    x' in REAL+ and
+A9:    x = [z,x'] by A5,ZFMISC_1:103;
+      reconsider x' as Element of REAL+ by A8;
+         x = [0,x'] by A7,A9,TARSKI:def 1;
+    then not x' <=' x' by A6;
+     hence thesis;
+    end;
+    suppose not(not x in REAL+ & not x in [:{0},REAL+:]
+     implies x in REAL+ & x in [:{0},REAL+:] or x = -infty or x = +infty);
+    hence thesis by A2,XBOOLE_0:def 2;
+   end;
+   end;
+  connectedness
+   proof let x,y be ext-real number such that
+A10: not((x in REAL+ & y in REAL+ implies
+     ex x',y' being Element of REAL+ st x = x' & y = y' & x' <=' y') &
+      (x in [:{0},REAL+:] & y in [:{0},REAL+:] implies
+     ex x',y' being Element of REAL+ st x = [0,x'] & y = [0,y'] & y' <=' x')
+     & (not(x in REAL+ & y in REAL+)
+     & not(x in [:{0},REAL+:] & y in [:{0},REAL+:])
+     implies y in REAL+ & x in [:{0},REAL+:] or x = -infty or y = +infty));
+     x in ExtREAL & y in ExtREAL by Def1;
+     then (x in REAL+ \/ [:{0},REAL+:] \ {[0,0]} or x in {+infty,-infty}) &
+    (y in REAL+ \/ [:{0},REAL+:] \ {[0,0]} or y in {+infty,-infty})
+        by XBOOLE_0:def 2,NUMBERS:def 1;
+     then
+A11: (x in REAL+ \/ [:{0},REAL+:] or x = +infty or x = -infty) &
+    (y in REAL+ \/ [:{0},REAL+:] or y = +infty or y = -infty)
+        by XBOOLE_0:def 4, TARSKI:def 2;
+    per cases by A10;
+    suppose that
+A12:   x in REAL+ & y in REAL+ and
+A13:   not ex x',y' being Element of REAL+ st x = x' & y = y' & x' <=' y';
+    hereby assume y in REAL+ & x in REAL+;
+      then reconsider x' = x, y' = y as Element of REAL+;
+      take y',x';
+      thus y = y' & x = x';
+      thus y' <=' x' by A13;
+    end;
+    thus thesis by A12,ARYTM_0:5,XBOOLE_0:3;
+    end;
+    suppose that
+A14:   x in [:{0},REAL+:] & y in [:{0},REAL+:] and
+A15:   not ex x',y' being Element of REAL+
+              st x = [0,x'] & y = [0,y'] & y' <=' x';
+        now assume y in [:{0},REAL+:];
+       then consider z,y' being set such that
+A16:    z in {0} and
+A17:    y' in REAL+ and
+A18:    y = [z,y'] by ZFMISC_1:103;
+A19:     z = 0 by A16,TARSKI:def 1;
+      assume x in [:{0},REAL+:];
+       then consider z,x' being set such that
+A20:    z in {0} and
+A21:    x' in REAL+ and
+A22:    x = [z,x'] by ZFMISC_1:103;
+A23:     z = 0 by A20,TARSKI:def 1;
+       reconsider x',y' as Element of REAL+ by A17,A21;
+      take y',x';
+      thus y = [0,y'] & x = [0,x'] by A16,A18,A20,A22,TARSKI:def 1;
+      thus x' <=' y' by A15,A18,A19,A22,A23;
+     end;
+    hence thesis by A14,ARYTM_0:5,XBOOLE_0:3;
+    end;
+    suppose not(not(x in REAL+ & y in REAL+) &
+                not(x in [:{0},REAL+:] & y in [:{0},REAL+:])
+     implies y in REAL+ & x in [:{0},REAL+:] or x = -infty or y = +infty);
+    hence thesis by A11,XBOOLE_0:def 2;
+   end;
+   end;
+  end;
+
+notation let x,y be ext-real number;
+ synonym y >= x for x <= y;
+ antonym y < x for x <= y;
+ antonym x > y for x <= y;
+end;
+
+reserve a,b,c for ext-real number;
+
+Lm1: +infty <> [0,0]
+  proof assume +infty = [0,0];
+    then
+A:   +infty = {{0},{0}} by ENUMSET1:69
+            .= {{0}} by ENUMSET1:69;
+    2 = 0 \/ {0} by A,TARSKI:def 1
+       .= succ 0 by ORDINAL1:def 1
+       .= 1;
+   hence contradiction;
+  end;
+
+Lm4: not +infty in REAL+ by ARYTM_0:1,ORDINAL1:7;
+
+Lm5: not -infty in REAL+
+ proof assume
+A:  -infty in REAL+;
+B:  {0,REAL} in -infty by TARSKI:def 2;
+    REAL in {0,REAL} by TARSKI:def 2;
+  hence contradiction by A,B,ORDINAL1:3,ARYTM_0:1;
+ end;
+
+Lm6: not +infty in [:{0},REAL+:]
+ proof assume +infty in [:{0},REAL+:];
+   then +infty in REAL+ \/ [:{0},REAL+:] by XBOOLE_0:def 2;
+   then +infty in REAL by Lm1,ZFMISC_1:64, NUMBERS:def 1;
+  hence contradiction;
+ end;
+
+Lm7: not -infty in [:{0},REAL+:]
+ proof assume -infty in [:{0},REAL+:];
+   then REAL in REAL+ by ZFMISC_1:106;
+  hence contradiction by ORDINAL1:7,ARYTM_0:1;
+ end;
+
+theorem Tx1:
+ -infty < +infty
+proof
+  now assume -infty = +infty;
+    then {0,REAL} in REAL by TARSKI:def 2;
+   hence -infty <> +infty by TARSKI:def 2;
+  end;
+ hence thesis by Lm5,Lm7,Def5;
+end;
+
+canceled 3;
+
+theorem Anty:
+ a <= b & b <= a implies a = b
+proof assume that
+A1: a <= b and
+A2: b <= a;
+ per cases;
+ suppose that
+A4: a in REAL+ and
+A5: b in REAL+;
+  consider a',b' being Element of REAL+ such that
+A6: a = a' and
+A7: b = b' and
+A8: a' <=' b' by A1,A4,A5,Def5;
+  consider b'',a'' being Element of REAL+ such that
+A9: b = b'' and
+A10: a = a'' and
+A11: b'' <=' a'' by A2,A4,A5,Def5;
+ thus thesis by A6,A7,A8,A9,A10,A11,ARYTM_1:4;
+ end;
+ suppose
+A12:  a in REAL+ & b in [:{0},REAL+:];
+   then a <> -infty & b <> +infty by Lm5,Lm6;
+   not b in REAL+ & not a in [:{0},REAL+:] by ARYTM_0:5,XBOOLE_0:3,A12;
+ hence thesis by A1,Def5,A12,Lm5,Lm6;
+ end;
+ suppose
+A13:  b in REAL+ & a in [:{0},REAL+:];
+   then a <> +infty & b <> -infty by Lm5,Lm6;
+   not a in REAL+ & not b in [:{0},REAL+:] by ARYTM_0:5,XBOOLE_0:3,A13;
+ hence thesis by A2,Def5,A13,Lm5,Lm6;
+ end;
+ suppose that
+A14: a in [:{0},REAL+:] and
+A15: b in [:{0},REAL+:];
+  consider a',b' being Element of REAL+ such that
+A16: a = [0,a'] and
+A17: b = [0,b'] and
+A18: b' <=' a' by A1,A14,A15,Def5;
+  consider b'',a'' being Element of REAL+ such that
+A19: b = [0,b''] and
+A20: a = [0,a''] and
+A21: a'' <=' b'' by A2,A14,A15,Def5;
+     a' = a'' & b' = b'' by A16,A17,A19,A20,ZFMISC_1:33;
+ hence thesis by A18,A19,A20,A21,ARYTM_1:4;
+end;
+ suppose (a = -infty or a = +infty) & (b = -infty or b = +infty);
+  hence thesis by A1,A2,Tx1;
+ end;
+ suppose that
+S2: not(a in REAL+ & b in REAL+) and
+S3: not(a in [:{0},REAL+:] & b in [:{0},REAL+:]) and
+S4: not(b in REAL+ & a in [:{0},REAL+:]) and
+S5: not(a in REAL+ & b in [:{0},REAL+:]);
+   a = -infty or b = +infty by A1,S2,S3,S4,Def5;
+  hence thesis by A2,S2,S3,S5,Def5,Tx1;
+ end;
+end;
+
+theorem Tw3:
+ a <= +infty by Def5,Lm4,Lm6;
+
+theorem Tw4:
+ a >= -infty by Def5,Lm5,Lm7;
+
+theorem Tw1:
+ +infty <= a implies a = +infty
+proof a <= +infty by Def5,Lm4,Lm6;
+ hence thesis by Anty;
+end;
+
+theorem Tw2:
+ -infty >= a implies a = -infty
+proof a >= -infty by Def5,Lm5,Lm7;
+ hence thesis by Anty;
+end;
+
+theorem
+ a <= b & b <= c implies a <= c
+proof assume that
+A1: a <= b and
+A2: b <= c;
+ per cases;
+ suppose that
+A4: a in REAL+ and
+A5: b in REAL+ and
+A6: c in REAL+;
+  consider a',b' being Element of REAL+ such that
+A7: a = a' and
+A8: b = b' and
+A9: a' <=' b' by A1,A4,A5,Def5;
+  consider b'',c' being Element of REAL+ such that
+A10: b = b'' and
+A11: c = c' and
+A12: b'' <=' c' by A2,A5,A6,Def5;
+     a' <=' c' by A8,A9,A10,A12,ARYTM_1:3;
+ hence thesis by A6,A7,A11,Def5;
+ end;
+ suppose
+A13:  a in REAL+ & b in [:{0},REAL+:];
+  then not(a in REAL+ & b in REAL+) &
+       not(a in [:{0},REAL+:] & b in [:{0},REAL+:]) by ARYTM_0:5,XBOOLE_0:3;
+ hence thesis by A1,A13,Def5,Lm5,Lm6;
+ end;
+ suppose
+A14:  b in REAL+ & c in [:{0},REAL+:];
+  then not(c in REAL+ & b in REAL+) &
+       not(c in [:{0},REAL+:] & b in [:{0},REAL+:]) by ARYTM_0:5,XBOOLE_0:3;
+ hence thesis by A2,A14,Def5,Lm5,Lm6;
+ end;
+ suppose that
+A15: a in [:{0},REAL+:] and
+A16: c in REAL+;
+S2: c <> -infty & a <> +infty by A15,A16,Lm5,Lm6;
+     not(a in REAL+ & c in REAL+) &
+     not(a in [:{0},REAL+:] & c in [:{0},REAL+:])
+    by A15,A16,ARYTM_0:5,XBOOLE_0:3;
+ hence thesis by A16,Def5,S2;
+ end;
+ suppose that
+A17: a in [:{0},REAL+:] and
+A18: b in [:{0},REAL+:] and
+A19: c in [:{0},REAL+:];
+  consider a',b' being Element of REAL+ such that
+A20: a = [0,a'] and
+A21: b = [0,b'] and
+A22: b' <=' a' by A1,A17,A18,Def5;
+  consider b'',c' being Element of REAL+ such that
+A23: b = [0,b''] and
+A24: c = [0,c'] and
+A25: c' <=' b'' by A2,A18,A19,Def5;
+     b' = b'' by A21,A23,ZFMISC_1:33;
+  then c' <=' a' by A22,A25,ARYTM_1:3;
+ hence thesis by A17,A19,A20,A24,Def5;
+end;
+ suppose that
+S1: not(a in REAL+ & b in REAL+ & c in REAL+) and
+S2: not(a in REAL+ & b in [:{0},REAL+:]) and
+S3: not(b in REAL+ & c in [:{0},REAL+:]) and
+S4: not(a in [:{0},REAL+:] & c in REAL+) and
+S5: not(a in [:{0},REAL+:] & b in [:{0},REAL+:] & c in [:{0},REAL+:]);
+A:  b = +infty implies c = +infty by A2,Tw1;
+B:  b = -infty implies a = -infty by A1,Tw2;
+   a = -infty or b = +infty or b = -infty or c = +infty
+         by A1,A2,S1,S3,S4,S5,Def5;
+  hence thesis by A1,A2,S1,S2,S3,S5,Def5,A,B;
+ end;
+end;
+
+Lem:
+  not -infty in REAL
+  proof assume
+A:   -infty in REAL;
+B:  {0,REAL} in {{0,REAL},{0}} by TARSKI:def 2;
+    REAL in {0,REAL} by TARSKI:def 2;
+   hence contradiction by A,B,ORDINAL1:3;
+  end;
+
+theorem
+ a in REAL implies -infty < a
+proof
+A: -infty <= a by Tw4;
+ assume a in REAL;
+  then a <> -infty by Lem;
+ hence thesis by A,Anty;
+end;
+
+theorem
+ a in REAL implies +infty > a
+proof
+A: +infty >= a by Tw3;
+ assume a in REAL;
+  then a <> +infty;
+ hence thesis by A,Anty;
+end;
+
+Lm:
+ not a in REAL implies a = -infty or a = +infty
+proof assume
+Z: not a in REAL;
+  a in REAL \/ {-infty,+infty} by Def1;
+  then a in {-infty,+infty} by Z,XBOOLE_0:def 2;
+ hence thesis by TARSKI:def 2;
+end;
+
+theorem
+ a in REAL & b >= a implies b in REAL or b = +infty
+ proof assume that
+Z1: a in REAL and
+Z2: b >= a;
+  assume not b in REAL;
+   then
+A:  b = -infty or b = +infty by Lm;
+    b = -infty implies a = -infty by Z2,Tw2;
+  hence b = +infty by A,Z1,Lem;
+ end;
+
+theorem
+ a in REAL & b <= a implies b in REAL or b = -infty
+ proof assume that
+Z1: a in REAL and
+Z2: b <= a;
+  assume not b in REAL;
+   then
+A:  b = -infty or b = +infty by Lm;
+    b = +infty implies a = +infty by Z2,Tw1;
+  hence b = -infty by A,Z1;
+ end;
+
+
+

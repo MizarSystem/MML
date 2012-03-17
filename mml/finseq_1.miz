@@ -11,9 +11,9 @@ environ
       FUNCOP_1, FRAENKEL;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL2, XCMPLX_0, XREAL_0,
       RELAT_1, FUNCT_1, FRAENKEL, FUNCOP_1, WELLORD2, ORDINAL1, REAL_1, NAT_1,
-      NUMBERS, PARTFUN1, MCART_1, FINSET_1, CARD_1;
+      NUMBERS, PARTFUN1, MCART_1, FINSET_1, CARD_1, XXREAL_0;
  constructors NAT_1, RELSET_1, WELLORD2, CARD_1, XREAL_0, MEMBERED, XBOOLE_0,
-      DOMAIN_1, FUNCOP_1, FRAENKEL;
+      DOMAIN_1, FUNCOP_1, FRAENKEL, XXREAL_0;
  registrations FUNCT_1, RELAT_1, RELSET_1, CARD_1, SUBSET_1, NAT_1, XREAL_0,
       ORDINAL2, FINSET_1, FUNCOP_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -576,7 +576,7 @@ theorem Th23:
 proof
   let p be FinSequence of D;
 A1: p|(Seg a) is FinSequence by Th19;
-      rng(p|(Seg a)) c= rng p & rng p c= D by Def4,FUNCT_1:76;
+      rng(p|(Seg a)) c= rng p & rng p c= D by Def4,RELAT_1:89,99;
    then rng(p|(Seg a)) c= D by XBOOLE_1:1;
  hence thesis by A1,Def4;
 end;
@@ -1676,7 +1676,7 @@ A49:     rng p = rng(p ^ <* x *>) \ {x}
          thus rng p c= rng(p ^ <* x *>) \ {x}
           proof let z be set;
             assume A50: z in rng p;
-A51:             rng p c= rng(p ^ <* x *>) by A48,FUNCT_1:76;
+A51:             rng p c= rng(p ^ <* x *>) by A48,RELAT_1:89,99;
             consider y1 such that A52: y1 in dom p and A53: p.y1 = z
                                                    by A50,FUNCT_1:def 5;
              A54: y1 in Seg(len p) by A52,Def3;
@@ -1721,7 +1721,7 @@ A57:       q1 ^ q2 is one-to-one
                   (q1 ^ q2).m1 = q1.m1 & (q1 ^ q2).m2 = q2.j & q1.m1 = q.m1
                                     by A65,A66,A67,Def7,FUNCT_1:70;
                then A68: q.m1 = q.(y + j) by A17,A18,A60,A66;
-               A69: dom q1 c= dom q by FUNCT_1:76;
+               A69: dom q1 c= dom q by RELAT_1:89,99;
                   1 <= j by A17,A66,Th3;
                then A70: 1 <= y + j by NAT_1:37;
                   j <= n by A17,A66,Th3;
@@ -1739,7 +1739,7 @@ A57:       q1 ^ q2 is one-to-one
                   (q1 ^ q2).m2 = q1.m2 & (q1 ^ q2).m1 = q2.j & q1.m2 = q.m2
                                      by A73,A74,A75,Def7,FUNCT_1:70;
                then A76: q.m2 = q.(y + j) by A17,A18,A60,A74;
-               A77: dom q1 c= dom q by FUNCT_1:76;
+               A77: dom q1 c= dom q by RELAT_1:89,99;
                   1 <= j by A17,A74,Th3;
                then A78: 1 <= y + j by NAT_1:37;
                   j <= n by A17,A74,Th3;
@@ -1877,7 +1877,7 @@ theorem
   p|X is FinSubsequence & X|p is FinSubsequence
  proof
 A1: dom p = Seg len p by Def3;
-A2:   dom(p|X) c= dom p by FUNCT_1:76;
+A2:   dom(p|X) c= dom p by RELAT_1:89,99;
       dom(X|p) c= dom p by FUNCT_1:89;
   hence thesis by A1,A2,Def12;
  end;
@@ -2849,3 +2849,29 @@ theorem Th10:
    hence (p ^ q).(len p + i) = q.(len p + i - len p) by Th36
    .= q.i;
  end;
+
+:: from GRAPH_2, 2006.01.09, A.T.
+
+reserve i,j for Nat;
+
+scheme FinSegRng{m, n() -> Nat, F(set)->set, P[Nat]}:
+  {F(i): m()<=i & i<=n() & P[i]} is finite
+proof
+  set F = {F(i): m()<=i & i<=n() & P[i]};
+  deffunc G(Nat) = F($1-1);
+  consider f being FinSequence such that
+A1: len f = n()+1 and
+A2: for k st k in Seg (n()+1) holds f.k = G(k) from SeqLambda;
+     F c= rng f proof let x be set;assume x in F; then consider j such that
+A3: x=F(j) & m()<=j & j<=n() and P[j];
+      1<=j+1 & j+1<=n()+1 by A3,XREAL_1:8,NAT_1:29;
+then A4: j+1 in Seg (n()+1) by Th3;
+then A5: j+1 in dom f by A1,Def3;
+      f.(j+1) = F(j+1-1) by A2,A4 .= F(j);
+  hence x in rng f by A3,A5,FUNCT_1:def 5;
+  end;
+  hence thesis by FINSET_1:13;
+end;
+
+
+

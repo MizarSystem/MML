@@ -8,31 +8,34 @@ environ
 
  vocabularies SUPINF_1, MEASURE1, RLVECT_1, ARYTM_3, ARYTM_1, SETFAM_1,
       FUNCT_1, BOOLE, TARSKI, RELAT_1, SUPINF_2, PROB_1, MEASURE3, MEASURE4;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0,
-      RELAT_1, FUNCT_1, FUNCT_2, REAL_1, NAT_1, SETFAM_1, SUPINF_1, SUPINF_2,
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0,
+      RELAT_1, FUNCT_1, FUNCT_2, REAL_1, NAT_1, SETFAM_1,
+      PROB_1, SUPINF_1, SUPINF_2,
       MEASURE1, MEASURE3;
- constructors ENUMSET1, NAT_1, REAL_1, SUPINF_2, PROB_2, MEASURE3;
+ constructors ENUMSET1, NAT_1, REAL_1, SUPINF_2, PROB_2, MEASURE3, SUPINF_1,
+ XXREAL_0;
  registrations SUBSET_1, FUNCT_1, SUPINF_1, MEASURE1, RELSET_1, NAT_1,
-      XBOOLE_0, NUMBERS, ORDINAL2;
+      XBOOLE_0, NUMBERS, ORDINAL2, XREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, MEASURE3, XBOOLE_0;
  theorems TARSKI, ENUMSET1, FUNCT_1, FUNCT_2, ZFMISC_1, NAT_1, SUPINF_1,
-      SUPINF_2, MEASURE1, MEASURE2, MEASURE3, RELSET_1, XBOOLE_0, XBOOLE_1;
+      SUPINF_2, MEASURE1, MEASURE2, MEASURE3, RELSET_1, XBOOLE_0, XBOOLE_1,
+      XXREAL_0, PROB_1;
  schemes NAT_1, FUNCT_2, XBOOLE_0;
 
 begin :: Some theorems about R_eal numbers
 
  reserve x,y,z for R_eal,
          A,B,X for set,
-         S for sigma_Field_Subset of X;
+         S for SigmaField of X;
 
 theorem Th1:
-   0.<=' x & 0.<=' y & 0.<=' z implies (x + y) + z = x + (y + z)
+   0.<= x & 0.<= y & 0.<= z implies (x + y) + z = x + (y + z)
 proof
-   assume A1: 0.<=' x & 0.<=' y & 0.<=' z;
+   assume A1: 0.<= x & 0.<= y & 0.<= z;
 A2:(x in REAL or x in {-infty,+infty}) &
    (y in REAL or y in {-infty,+infty}) &
-   (z in REAL or z in {-infty,+infty}) by SUPINF_1:def 6,XBOOLE_0:def 2;
+   (z in REAL or z in {-infty,+infty}) by XXREAL_0:def 4,XBOOLE_0:def 2;
    per cases by A1,A2,SUPINF_2:19,TARSKI:def 2;
    suppose
 A3:x is Real & y is Real & z is Real;
@@ -80,14 +83,14 @@ end;
 end;
 
 theorem Th2:
-   (not x = -infty & not x = +infty) implies (y + x <=' z iff y <=' z - x)
+   (not x = -infty & not x = +infty) implies (y + x <= z iff y <= z - x)
 proof
    assume
 A1:not x = -infty & not x = +infty;
 A2:(x in REAL or x in {-infty,+infty}) & (y in REAL or y in {-infty,+infty}) &
-   (z in REAL or z in {-infty,+infty}) by SUPINF_1:def 6,XBOOLE_0:def 2;
+   (z in REAL or z in {-infty,+infty}) by XXREAL_0:def 4,XBOOLE_0:def 2;
    hereby assume
-A3:   y + x <=' z;
+A3:   y + x <= z;
          (y + x) - x = y
       proof
         per cases by A2,TARSKI:def 2;
@@ -117,10 +120,10 @@ A3:   y + x <=' z;
         hence thesis;
       end;
       end;
-      hence y <=' z - x by A1,A3,SUPINF_2:15;
+      hence y <= z - x by A1,A3,SUPINF_2:15;
    end;
    assume
-A9:y <=' z - x;
+A9:y <= z - x;
       (z - x) + x = z
    proof
       per cases by A2,TARSKI:def 2;
@@ -281,7 +284,7 @@ A18:        H.(l+1) = F.(l+1) \ G.l by A2;
 end;
 
 theorem Th6:
-   bool X is sigma_Field_Subset of X
+   bool X is SigmaField of X
 proof
 A1:for A being set holds A in bool X implies X\A in bool X
    proof
@@ -292,8 +295,12 @@ A1:for A being set holds A in bool X implies X\A in bool X
    end;
 A2:    for M being N_Sub_set_fam of X st M c= bool X holds union M in bool X;
     reconsider Y = bool X as Subset-Family of X by ZFMISC_1:def 1;
-    Y is sigma_Field_Subset-like by MEASURE1:def 9,A2;
-   hence thesis by A1,MEASURE1:def 3;
+    Y is sigma-additive by MEASURE1:def 9,A2;
+    then reconsider Y as
+     non empty compl-closed sigma-additive Subset-Family of X
+    by A1,MEASURE1:def 3;
+    Y is SigmaField of X;
+   hence thesis;
 end;
 
 definition let X be set;
@@ -357,16 +364,16 @@ canceled 2;
 theorem Th11:
    ex M being Function of bool X,ExtREAL st
    M is nonnegative & M.{} = 0. &
-   for A,B being Subset of X st A c= B holds M.A <=' M.B &
+   for A,B being Subset of X st A c= B holds M.A <= M.B &
    for F being Function of NAT,bool X holds
-   M.(union rng F) <=' SUM(M*F)
+   M.(union rng F) <= SUM(M*F)
 proof
    consider M being Function of bool X,ExtREAL such that
 A1:for A being Subset of X holds M.A = 0.by Th8;
-A2:for A being Subset of X holds 0.<=' M.A by A1;
+A2:for A being Subset of X holds 0.<= M.A by A1;
 then A3:M is nonnegative by MEASURE1:def 4;
 A4:{} c= X by XBOOLE_1:2;
-A5:for F being Function of NAT,bool X holds M.(union rng F) <=' SUM(M*F)
+A5:for F being Function of NAT,bool X holds M.(union rng F) <= SUM(M*F)
    proof
       let F be Function of NAT,bool X;
    A6:M.(union rng F) = 0.by A1;
@@ -383,7 +390,7 @@ A5:for F being Function of NAT,bool X holds M.(union rng F) <=' SUM(M*F)
       hence thesis by A6,A8,A9;
    end;
    take M;
-      for A,B being Subset of X holds M.A <=' M.B
+      for A,B being Subset of X holds M.A <= M.B
    proof
       let A,B be Subset of X;
          M.A = 0. & M.B = 0. by A1;
@@ -398,9 +405,9 @@ definition let X be set;
   mode C_Measure of X -> Function of bool X,ExtREAL means
 :Def2:it is nonnegative &
        it.{} = 0. &
-       for A,B being Subset of X st A c= B holds it.A <=' it.B &
+       for A,B being Subset of X st A c= B holds it.A <= it.B &
        for F being Function of NAT,bool X holds
-       it.(union rng F) <=' SUM(it*F);
+       it.(union rng F) <= SUM(it*F);
 existence by Th11;
 end;
 
@@ -411,22 +418,22 @@ definition let X be set;
   func sigma_Field(C) -> non empty Subset-Family of X means
 :Def3:for A being Subset of X holds
       (A in it iff for W,Z being Subset of X holds
-      (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z)));
+      (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z)));
 existence
 proof
    defpred P[set] means
    for A being set holds (A = $1 implies
    for W,Z being Subset of X holds
-   (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z)));
+   (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z)));
    consider D being set such that
 A1:for y being set holds (y in D iff (y in bool X & P[y])) from XBOOLE_0:sch 1;
 A2:for A being set holds (A in D iff A in bool X &
    for W,Z being Subset of X holds
-   (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z)))
+   (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z)))
    proof
       let A be set;
          P[A] iff for W,Z being Subset of X holds
-      (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z));
+      (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z));
       hence thesis by A1;
    end;
    reconsider A = {} as Subset of X by XBOOLE_1:2;
@@ -434,7 +441,7 @@ A3: now let W,Z be Subset of X;
       assume W c= A & Z c= X \ A;
    then A4:W = {} by XBOOLE_1:3;
       then C.W = 0. by Def2;
-      hence C.W + C.Z <=' C.(W \/ Z) by A4,SUPINF_2:18;
+      hence C.W + C.Z <= C.(W \/ Z) by A4,SUPINF_2:18;
    end;
    then D <> {} & for A being set holds A in D implies A in bool X by A2;
    then D c= bool X by TARSKI:def 3;
@@ -447,10 +454,10 @@ proof
    let D1,D2 be non empty Subset-Family of X such that
 A5:for A being Subset of X holds
    (A in D1 iff for W,Z being Subset of X holds
-   (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z))) and
+   (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z))) and
 A6:for A being Subset of X holds
    (A in D2 iff for W,Z being Subset of X holds
-   (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z)));
+   (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z)));
       for A being set holds A in D1 iff A in D2
    proof
       let A be set;
@@ -458,14 +465,14 @@ A6:for A being Subset of X holds
       A7:A in D1;
          then reconsider A' = A as Subset of X;
             for W,Z being Subset of X holds
-         (W c= A & Z c= X \ A' implies C.W + C.Z <=' C.(W \/ Z)) by A5,A7;
+         (W c= A & Z c= X \ A' implies C.W + C.Z <= C.(W \/ Z)) by A5,A7;
          hence A in D2 by A6;
       end;
       assume
    A8:A in D2;
       then reconsider A as Subset of X;
          for W,Z being Subset of X holds
-      (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z)) by A6,A8;
+      (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z)) by A6,A8;
       hence thesis by A5;
    end;
    hence thesis by TARSKI:2;
@@ -474,7 +481,7 @@ end;
 
 theorem Th12:
    for W,Z being Subset of X holds
-   C.(W \/ Z) <=' C.W + C.Z
+   C.(W \/ Z) <= C.W + C.Z
 proof
    let W,Z be Subset of X;
    reconsider P = {} as Subset of X by XBOOLE_1:2;
@@ -545,14 +552,14 @@ proof
 A1:   A in sigma_Field(C);
       let W,Z be Subset of X;
       assume W c= A & Z c= X \ A;
-      then C.(W \/ Z) <=' C.W + C.Z & C.W + C.Z <=' C.(W \/ Z) by A1,Def3,Th12
+      then C.(W \/ Z) <= C.W + C.Z & C.W + C.Z <= C.(W \/ Z) by A1,Def3,Th12
 ;
       hence C.W + C.Z = C.(W \/ Z) by SUPINF_1:22;
    end;
    assume for W,Z being Subset of X holds
    (W c= A & Z c= X \ A implies C.W + C.Z = C.(W \/ Z));
    then for W,Z being Subset of X holds
-   (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z));
+   (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z));
    hence thesis by Def3;
 end;
 
@@ -576,7 +583,7 @@ proof
 A1:A in sigma_Field(C);
 A2:X \ A c= X by XBOOLE_1:109;
       for W,Z being Subset of X holds
-   W c= X \ A & Z c= X \ (X \ A) implies C.W + C.Z <=' C.(W \/ Z)
+   W c= X \ A & Z c= X \ (X \ A) implies C.W + C.Z <= C.(W \/ Z)
    proof
       let W,Z be Subset of X;
       assume
@@ -620,21 +627,21 @@ A5:   W2 \/ Z c= X \ A \/ Z by A3,XBOOLE_1:9;
          Z c= (X \ A) /\ (X \ B) & (X \ A) /\ (X \ B) c= X \ B
       by A2,XBOOLE_1:17,53;
       then Z c= X \ B by XBOOLE_1:1;
-  then A10:C.W2 + C.Z <=' C.Z1 by A1,A9,Def3;
+  then A10:C.W2 + C.Z <= C.Z1 by A1,A9,Def3;
          C is nonnegative by Def2;
-  then A11:0.<=' C.W2 & 0.<=' C.Z by MEASURE1:def 4;
-      then 0. + 0. <=' C.W2 + C.Z by MEASURE1:4;
-  then A12:0. <=' C.W2 + C.Z by SUPINF_2:18;
+  then A11:0.<= C.W2 & 0.<= C.Z by MEASURE1:def 4;
+      then 0. + 0. <= C.W2 + C.Z by MEASURE1:4;
+  then A12:0. <= C.W2 + C.Z by SUPINF_2:18;
          C is nonnegative by Def2;
-  then A13:0. <=' C.W1 by MEASURE1:def 4;
-      then C.W1 + (C.W2 + C.Z) <=' C.(W \/ Z) by A8,A10,A12,MEASURE1:4;
-  then A14:(C.W1 + C.W2) + C.Z <=' C.(W \/ Z) by A11,A13,Th1;
+  then A13:0. <= C.W1 by MEASURE1:def 4;
+      then C.W1 + (C.W2 + C.Z) <= C.(W \/ Z) by A8,A10,A12,MEASURE1:4;
+  then A14:(C.W1 + C.W2) + C.Z <= C.(W \/ Z) by A11,A13,Th1;
          C is nonnegative by Def2;
-  then A15:0.<=' C.W & 0.<=' C.Z & C.Z <=' C.Z by MEASURE1:def 4;
-         C.W <=' C.W1 + C.W2 by A7,Th12;
-      then C.W + C.Z <=' (C.W1 + C.W2) + C.Z by A15,MEASURE1:4;
-  then A16:C.W + C.Z <=' C.(W \/ Z) by A14,SUPINF_1:29;
-         C.(W \/ Z) <=' C.W + C.Z by Th12;
+  then A15:0.<= C.W & 0.<= C.Z & C.Z <= C.Z by MEASURE1:def 4;
+         C.W <= C.W1 + C.W2 by A7,Th12;
+      then C.W + C.Z <= (C.W1 + C.W2) + C.Z by A15,MEASURE1:4;
+  then A16:C.W + C.Z <= C.(W \/ Z) by A14,SUPINF_1:29;
+         C.(W \/ Z) <= C.W + C.Z by Th12;
       hence thesis by A16,SUPINF_1:22;
    end;
    hence thesis by Th14;
@@ -705,7 +712,7 @@ A3:for x being set st x in NAT holds P[x,F.x];
 end;
 
 theorem Th21:
-   sigma_Field(C) is sigma_Field_Subset of X
+   sigma_Field(C) is SigmaField of X
 proof
 A1:for A being set holds A in sigma_Field(C) implies X\A in sigma_Field(C)
    by Th16;
@@ -717,12 +724,12 @@ A2:C is nonnegative by Def2;
       assume
    A3:M c= sigma_Field(C);
          for W,Z being Subset of X holds
-      (W c= union M & Z c= X \ union M implies C.W + C.Z <=' C.(W \/ Z))
+      (W c= union M & Z c= X \ union M implies C.W + C.Z <= C.(W \/ Z))
       proof
          let W,Z be Subset of X;
          assume
       A4:W c= union M & Z c= X \ union M;
-         reconsider S = bool X as sigma_Field_Subset of X by Th6;
+         reconsider S = bool X as SigmaField of X by Th6;
          consider F being Function of NAT,bool X such that
       A5:rng F = M by SUPINF_2:def 14;
       A6:for n being Element of NAT holds F.n in sigma_Field(C)
@@ -824,7 +831,7 @@ A26:        QQ.(k+1) = QQ.k \/ Q.(k+1) by A17;
                hence thesis by A38,XBOOLE_0:def 4;
             end;
 then A39:        Z \/ QQ.k c= X \ (F.(k+1) \ G.k) by A30,XBOOLE_1:8;
-        A40:0. <=' C.Z & 0. <=' Ser(C*Q).k & 0. <=' (C*Q).(k+1)
+        A40:0. <= C.Z & 0. <= Ser(C*Q).k & 0. <= (C*Q).(k+1)
             by A2,A18,SUPINF_2:58,59;
                C.(Q.(k+1)) + C.(Z \/ QQ.k) = C.((Z \/ QQ.k) \/ Q.(k+1)) by A27
 ,A28,A39,Th14
@@ -852,7 +859,7 @@ FUNCT_2:21
          end;
 A46:     for n being Nat holds Q[n] from NAT_1:sch 1(A42,A43);
      A47:union rng Q = W by A4,A5,A14,A16,XBOOLE_1:28;
-     A48:for n being Element of NAT holds Ser(C*Q).n + C.Z <=' C.(Z \/ W)
+     A48:for n being Element of NAT holds Ser(C*Q).n + C.Z <= C.(Z \/ W)
          proof
             let n be Element of NAT;
         A49:Ser(C*Q).n + C.Z = C.(Z \/ QQ.n) by A41;
@@ -860,25 +867,25 @@ A46:     for n being Nat holds Q[n] from NAT_1:sch 1(A42,A43);
             then Z \/ QQ.n c= Z \/ W by XBOOLE_1:9;
             hence thesis by A49,Def2;
          end;
-     A50:C.Z = +infty implies C.W + C.Z <=' C.(W \/ Z)
+     A50:C.Z = +infty implies C.W + C.Z <= C.(W \/ Z)
          proof
             assume
         A51:C.Z = +infty;
-               0. <=' C.W by A2,MEASURE1:def 4;
+               0. <= C.W by A2,MEASURE1:def 4;
         then A52:C.W + C.Z = +infty by A51,SUPINF_2:19,def 2;
                Z c= W \/ Z by XBOOLE_1:7;
             hence thesis by A51,A52,Def2;
          end;
-            (not C.Z = -infty & not C.Z = +infty) implies C.W + C.Z <=' C.(W \/
+            (not C.Z = -infty & not C.Z = +infty) implies C.W + C.Z <= C.(W \/
 Z
 )
          proof
             assume
         A53:not C.Z = -infty & not C.Z = +infty;
-        A54:for n being Element of NAT holds Ser(C*Q).n <=' C.(Z \/ W) - C.Z
+        A54:for n being Element of NAT holds Ser(C*Q).n <= C.(Z \/ W) - C.Z
             proof
                let n be Element of NAT;
-                  Ser(C*Q).n + C.Z <=' C.(Z \/ W) by A48;
+                  Ser(C*Q).n + C.Z <= C.(Z \/ W) by A48;
                hence thesis by A53,Th2;
             end;
             defpred P[set,set] means ($1 = 0 implies
@@ -896,17 +903,17 @@ Z
             P[x,R.x] from FUNCT_2:sch 1(A55);
             then consider R being Function of NAT,ExtREAL such that
         A56:for x being set st x in NAT holds P[x,R.x];
-               for n being Nat holds 0. <=' R.n
+               for n being Nat holds 0. <= R.n
             proof
                let n be Nat;
                per cases;
                suppose
            A57:n = 0;
                   Z c= Z \/ W by XBOOLE_1:7;
-               then C.Z <=' C.(Z \/ W) by Def2;
-      then A58:C.Z - C.Z <=' C.(Z \/ W) - C.Z by A53,SUPINF_2:15;
+               then C.Z <= C.(Z \/ W) by Def2;
+      then A58:C.Z - C.Z <= C.(Z \/ W) - C.Z by A53,SUPINF_2:15;
                   C.Z in REAL or C.Z in {-infty,+infty}
-               by SUPINF_1:def 6,XBOOLE_0:def 2;
+               by XXREAL_0:def 4,XBOOLE_0:def 2;
                then consider y being Real such that
            A59:y = C.Z by A53,TARSKI:def 2;
            A60:C.Z - C.Z = y - y by A59,SUPINF_2:5;
@@ -917,7 +924,7 @@ Z
             end;
             end;
         then A61:R is nonnegative by SUPINF_2:58;
-A62:        for n being Nat holds Ser(C*Q).n <=' Ser(R).n
+A62:        for n being Nat holds Ser(C*Q).n <= Ser(R).n
             proof
               defpred P[Nat] means Ser(R).$1 = C.(Z \/ W) - C.Z;
                let n be Nat;
@@ -949,26 +956,30 @@ A64:      for k being Nat st P[k] holds P[k+1]
                Ser(R).1 = y + R.(0+1) by SUPINF_2:63
                     .= y + 0. by A56
                     .= C.(Z \/ W) - C.Z by A67,SUPINF_2:18;
-        then A68:SUM(C*Q) <=' C.(Z \/ W) - C.Z by A62,A66,MEASURE3:3;
-               C.W <=' SUM(C*Q) by A47,Def2;
-            then C.W <=' C.(Z \/ W) - C.Z by A68,SUPINF_1:29;
+        then A68:SUM(C*Q) <= C.(Z \/ W) - C.Z by A62,A66,MEASURE3:3;
+               C.W <= SUM(C*Q) by A47,Def2;
+            then C.W <= C.(Z \/ W) - C.Z by A68,SUPINF_1:29;
             hence thesis by A53,Th2;
          end;
          hence thesis by A2,A50,MEASURE1:def 4,SUPINF_2:19;
       end;
       hence thesis by Def3;
    end;
-   hence thesis by A1,MEASURE1:def 3,def 9;
+    then reconsider Y = sigma_Field C as
+     non empty compl-closed sigma-additive Subset-Family of X
+    by A1,MEASURE1:def 3,def 9;
+    Y is SigmaField of X;
+   hence thesis;
 end;
 
 registration let X be set;
    let C be C_Measure of X;
-   cluster sigma_Field(C) -> sigma_Field_Subset-like compl-closed non empty;
+   cluster sigma_Field(C) -> sigma-additive compl-closed non empty;
   coherence by Th21;
 end;
 
 definition let X be set;
-   let S be sigma_Field_Subset of X;
+   let S be SigmaField of X;
    let A be N_Sub_fam of S;
    redefine func union A -> Element of S;
 coherence
@@ -1031,9 +1042,9 @@ A1:now let A be Element of sigma_Field(C);
       reconsider A' = A as Subset of X;
 A2:   (sigma_Meas(C)).A' = C.A' by Def4;
          C is nonnegative by Def2;
-      hence 0.<=' (sigma_Meas(C)).A by A2,MEASURE1:def 4;
+      hence 0.<= (sigma_Meas(C)).A by A2,MEASURE1:def 4;
    end;
-  {} in sigma_Field(C) by MEASURE1:45;
+  {} in sigma_Field(C) by PROB_1:10;
    then (sigma_Meas(C)).{} = C.{} by Def4;
 then A3:sigma_Meas(C) is nonnegative & (sigma_Meas(C)).{} = 0.
    by A1,Def2,MEASURE1:def 4;
@@ -1061,7 +1072,7 @@ theorem Th23:
 proof
    reconsider M = sigma_Meas(C) as Measure of sigma_Field(C) by Th22;
       for F being Sep_Sequence of sigma_Field(C) holds
-   M.(union rng F) <=' SUM(M*F)
+   M.(union rng F) <= SUM(M*F)
    proof
       let F be Sep_Sequence of sigma_Field(C);
       consider A being Subset of X such that
@@ -1084,7 +1095,7 @@ A3:   C*F' is Function of NAT,ExtREAL;
       end;
 then A7:   M*F = C*F by A3,FUNCT_2:18;
       reconsider F as Function of NAT,bool X by FUNCT_2:9;
-         b <=' SUM(C*F) by A1,A2,Def2;
+         b <= SUM(C*F) by A1,A2,Def2;
       hence thesis by A1,A2,A7,Def4;
    end;
    hence thesis by MEASURE3:17;
@@ -1107,11 +1118,11 @@ A1:C.A = 0.;
       assume
    A2:W c= A & Z c= X \ A;
          C is nonnegative by Def2;
-      then 0.<=' C.W & C.W <=' 0. by A1,A2,Def2,MEASURE1:def 4;
+      then 0.<= C.W & C.W <= 0. by A1,A2,Def2,MEASURE1:def 4;
    then A3:C.W = 0. by SUPINF_1:22;
          Z c= W \/ Z by XBOOLE_1:7;
-      then C.Z <=' C.(W \/ Z) by Def2;
-      hence C.W + C.Z <=' C.(W \/ Z) by A3,SUPINF_2:18;
+      then C.Z <= C.(W \/ Z) by Def2;
+      hence C.W + C.Z <= C.(W \/ Z) by A3,SUPINF_2:18;
    end;
    hence thesis by Def3;
 end;
@@ -1127,7 +1138,7 @@ A2:A c= B & (sigma_Meas(C)).B = 0.;
    reconsider B as Subset of X by A1;
 A3:C.B = 0. by A1,A2,Def4;
       C is nonnegative by Def2;
-   then 0.<=' C.A & C.A <=' 0. by A2,A3,Def2,MEASURE1:def 4;
+   then 0.<= C.A & C.A <= 0. by A2,A3,Def2,MEASURE1:def 4;
    then C.A = 0. by SUPINF_1:22;
    hence thesis by Th24;
 end;

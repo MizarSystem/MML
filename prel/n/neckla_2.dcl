@@ -25,6 +25,7 @@
 <ArticleID name="CLASSES1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="NECKLA_2"/>
 </Signature>
 <RCluster>
@@ -36,19 +37,19 @@
 <Adjective nr="10" value="false"/>
 <Adjective nr="17"/>
 <Adjective nr="50"/>
-<Adjective nr="52"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="143"/>
+<Func kind="K" nr="146"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="144"/>
+<Func kind="K" nr="147"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
@@ -64,7 +65,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="122">
+<Func kind="K" nr="123">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -77,7 +78,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="111"/>
+<Func kind="K" nr="112"/>
 </Typ>
 <Cluster>
 <Adjective nr="36"/>
@@ -101,6 +102,7 @@
 <Adjective nr="37"/>
 <Adjective nr="39"/>
 <Adjective nr="41" value="false"/>
+<Adjective nr="52"/>
 </Cluster>
 </CCluster>
 </Registrations>

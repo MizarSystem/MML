@@ -18,6 +18,7 @@
 <ArticleID name="LATTICES"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="NAT_LAT"/>
 </Signature>
 <RCluster>
@@ -47,7 +48,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="98"/>
+<Func kind="K" nr="101"/>
 <Cluster>
 <Adjective nr="21" value="false"/>
 <Adjective nr="27"/>
@@ -62,7 +63,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="99"/>
+<Func kind="K" nr="102"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="45"/>
@@ -74,7 +75,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="105"/>
+<Func kind="K" nr="108"/>
 <Cluster>
 <Adjective nr="21" value="false"/>
 <Adjective nr="27"/>
@@ -104,6 +105,7 @@
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="42"/>
+<Adjective nr="50"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -123,6 +125,7 @@
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="42"/>
+<Adjective nr="50"/>
 </Cluster>
 </CCluster>
 </Registrations>

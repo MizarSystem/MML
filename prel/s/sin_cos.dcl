@@ -27,6 +27,7 @@
 <ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="SIN_COS"/>
 </Signature>
 <FCluster>
@@ -40,13 +41,14 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="171">
+<Func kind="K" nr="174">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="27"/>
 <Adjective nr="30"/>
+<Adjective nr="43"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -56,7 +58,7 @@
 <Func kind="K" nr="53"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="176">
+<Func kind="K" nr="179">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -85,28 +87,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="189">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="27"/>
-<Adjective nr="30"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="30"/>
-</Cluster>
-</Typ>
-</ArgTypes>
 <Func kind="K" nr="192">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="27"/>
 <Adjective nr="30"/>
+<Adjective nr="43"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -117,12 +104,30 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="197">
+<Func kind="K" nr="195">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="27"/>
 <Adjective nr="30"/>
+<Adjective nr="43"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="30"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="200">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="27"/>
+<Adjective nr="30"/>
+<Adjective nr="43"/>
 </Cluster>
 </FCluster>
 </Registrations>

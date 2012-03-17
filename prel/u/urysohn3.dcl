@@ -12,8 +12,9 @@
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="SUPINF_1"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
+<ArticleID name="SUPINF_1"/>
 </Signature>
 <CCluster>
 <ArgTypes>
@@ -33,7 +34,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="18"/>
-<Adjective nr="25"/>
+<Adjective nr="19"/>
+<Adjective nr="22"/>
 </Cluster>
 </CCluster>
 </Registrations>

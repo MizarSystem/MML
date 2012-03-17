@@ -30,6 +30,7 @@
 <ArticleID name="VECTSP_4"/>
 <ArticleID name="VECTSP_5"/>
 <ArticleID name="VECTSP_7"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="SUPINF_1"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="COMPLFLD"/>

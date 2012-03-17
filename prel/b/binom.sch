@@ -14,9 +14,9 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -34,7 +34,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="19">
+<Pred kind="R" nr="20">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Pred>
@@ -57,7 +57,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="19">
+<Pred kind="R" nr="20">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Pred>
@@ -66,7 +66,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="87">
+<Func kind="K" nr="88">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -159,7 +159,7 @@
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
-<Func kind="K" nr="87">
+<Func kind="K" nr="88">
 <Var nr="3"/>
 <Num nr="1"/>
 </Func>
@@ -272,7 +272,7 @@
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="2"/>
-<Func kind="K" nr="87">
+<Func kind="K" nr="88">
 <Var nr="3"/>
 <Num nr="1"/>
 </Func>

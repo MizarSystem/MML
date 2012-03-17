@@ -14,6 +14,7 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="CATALAN1"/>
 </Signature>
 <FCluster>
@@ -24,7 +25,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="70">
+<Func kind="K" nr="73">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -33,6 +34,7 @@
 <Adjective nr="19"/>
 <Adjective nr="21" value="false"/>
 <Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -44,7 +46,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="70">
+<Func kind="K" nr="73">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -55,6 +57,7 @@
 <Adjective nr="20"/>
 <Adjective nr="21" value="false"/>
 <Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 </Registrations>

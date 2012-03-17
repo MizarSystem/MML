@@ -98,7 +98,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="221">
+<Func kind="K" nr="222">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

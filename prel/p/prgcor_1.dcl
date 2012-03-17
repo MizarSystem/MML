@@ -15,6 +15,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <FCluster>
 <ArgTypes>
@@ -40,6 +41,7 @@
 <Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 </Registrations>

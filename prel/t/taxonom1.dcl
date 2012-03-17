@@ -19,6 +19,7 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="TBSP_1"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
@@ -29,6 +30,7 @@
 <Adjective nr="24"/>
 <Adjective nr="26" value="false"/>
 <Adjective nr="27"/>
+<Adjective nr="46"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -55,7 +57,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="101">
+<Func kind="K" nr="102">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -63,6 +65,7 @@
 <Adjective nr="24"/>
 <Adjective nr="26" value="false"/>
 <Adjective nr="27"/>
+<Adjective nr="46"/>
 </Cluster>
 </FCluster>
 </Registrations>

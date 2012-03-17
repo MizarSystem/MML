@@ -17,6 +17,7 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="REALSET1"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
@@ -36,6 +37,7 @@
 <Adjective nr="24"/>
 <Adjective nr="25"/>
 <Adjective nr="26" value="false"/>
+<Adjective nr="27"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -52,6 +54,7 @@
 <Adjective nr="24"/>
 <Adjective nr="25"/>
 <Adjective nr="26" value="false"/>
+<Adjective nr="27"/>
 </Cluster>
 </RCluster>
 </Registrations>

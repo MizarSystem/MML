@@ -13,17 +13,9 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="SUPINF_1"/>
 </Signature>
-<RCluster>
-<ArgTypes/>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="22"/>
-</Cluster>
-</RCluster>
 <RCluster>
 <ArgTypes/>
 <Typ kind="M" nr="1">
@@ -43,18 +35,11 @@
 </Cluster>
 </RCluster>
 <FCluster>
-<ArgTypes/>
-<Func kind="K" nr="66"/>
-<Cluster>
-<Adjective nr="1" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="66"/>
+<Func kind="K" nr="57"/>
 </Func>
 </Typ>
 </ArgTypes>
@@ -70,7 +55,7 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="66"/>
+<Func kind="K" nr="57"/>
 </Func>
 </Typ>
 </ArgTypes>
@@ -85,7 +70,7 @@
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="66"/>
+<Func kind="K" nr="57"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="76">
@@ -99,7 +84,7 @@
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="66"/>
+<Func kind="K" nr="57"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="77">
@@ -114,10 +99,10 @@
 <Cluster/>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="66"/>
+<Func kind="K" nr="57"/>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="22"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -130,7 +115,7 @@
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="24"/>
+<Adjective nr="22"/>
 </Cluster>
 </CCluster>
 </Registrations>

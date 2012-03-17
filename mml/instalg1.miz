@@ -17,7 +17,7 @@ environ
       DTCONSTR, REWRITE1, FUNCT_7, PBOOLE, PZFMISC1, MSUALG_1, PARTFUN1,
       FUNCT_2, PRALG_2, MSUALG_3, PUA2MSS1, MSAFREE, MSATERM, MSUALG_6;
  constructors NAT_1, REWRITE1, MSATERM, PUA2MSS1, FUNCT_7, MSUALG_6, FINSEQ_4,
-      MSUALG_3, PZFMISC1, PRALG_2;
+      MSUALG_3, PZFMISC1, PRALG_2, XXREAL_0;
  registrations STRUCT_0, RELSET_1, FUNCT_1, TREES_3, PBOOLE, MSUALG_1, MSAFREE,
       PRE_CIRC, MSUALG_9, MSATERM, FUNCT_2, XBOOLE_0, FUNCOP_1;
  requirements SUBSET, BOOLE;
@@ -25,7 +25,7 @@ environ
       PBOOLE, PZFMISC1;
  theorems ZFMISC_1, RELAT_1, FUNCT_1, GRFUNC_1, FUNCT_2, FINSEQ_1, FINSEQ_4,
       TARSKI, TREES_4, PBOOLE, MSUALG_1, MSUALG_3, REWRITE1, PRALG_2, PUA2MSS1,
-      MSAFREE, MSATERM, EXTENS_1, MSUALG_6, RELSET_1, XBOOLE_0;
+      MSAFREE, MSATERM, EXTENS_1, MSUALG_6, RELSET_1, XBOOLE_0, MSALIMIT;
  schemes ZFREFLE1, MSATERM, MSUALG_6, WELLORD2;
 
 begin :: Preliminaries
@@ -250,24 +250,17 @@ theorem Th9:
  for S being feasible ManySortedSign holds
    id the carrier of S, id the OperSymbols of S form_morphism_between S,S
   proof let S be feasible ManySortedSign;
-A1:  the carrier of S = {} implies the OperSymbols of S = {} by Def1;
-   set f = id the carrier of S, g = id the OperSymbols of S;
-A2:  dom the ResultSort of S = the OperSymbols of S &
-    rng the ResultSort of S c= the carrier of S &
-    dom the Arity of S = the OperSymbols of S by A1,FUNCT_2:def 1,RELSET_1:12;
-    then f*the ResultSort of S = the ResultSort of S by RELAT_1:79;
-   hence dom f = the carrier of S & dom g = the OperSymbols of S &
-    rng f c= the carrier of S & rng g c= the OperSymbols of S &
-    f*the ResultSort of S = (the ResultSort of S)*g by A2,FUNCT_1:42,RELAT_1:71
-;
-   let o be set, p be Function;
-   assume
-A3:  o in the OperSymbols of S & p = (the Arity of S).o;
-then A4:  g.o = o & p in (the carrier of S)* by FUNCT_1:34,FUNCT_2:7;
-    then p is FinSequence of the carrier of S by FINSEQ_1:def 11;
-    then rng p c= the carrier of S by FINSEQ_1:def 4;
-   hence f*p = (the Arity of S).(g.o) by A3,A4,RELAT_1:79;
-  end;
+   per cases;
+   suppose S is void;
+    hence thesis by MSALIMIT:6;
+   end;
+   suppose
+S:   S is non void;
+     then reconsider S as non void feasible ManySortedSign;
+     S is non empty;
+    hence thesis by PUA2MSS1:29,S;
+   end;
+ end;
 
 theorem Th10:
  for S1,S2 being ManySortedSign
@@ -719,7 +712,7 @@ A1:  f,g form_morphism_between S,S by Th9;
        dom the Charact of A = the OperSymbols of S &
     dom the Sorts of A = the carrier of S by PBOOLE:def 3;
     then the Sorts of the MSAlgebra of A = (the Sorts of A)*f &
-    the Charact of the MSAlgebra of A = (the Charact of A)*g by FUNCT_1:42;
+    the Charact of the MSAlgebra of A = (the Charact of A)*g by RELAT_1:78,80;
    hence thesis by A1,Def3;
   end;
 
@@ -1521,7 +1514,7 @@ A1:  f, g form_morphism_between S,S by PUA2MSS1:29;
 then A2:  I is_homomorphism FreeMSA X, FreeMSA X &
     h is_homomorphism FreeMSA (X*f), (FreeMSA X)|(S,f,g) by Def5,MSUALG_3:9;
        dom X = the carrier of S by PBOOLE:def 3;
-then A3:  X*f = X & (FreeMSA X)|(S,f,g) = FreeMSA X by Th26,FUNCT_1:42;
+then A3:  X*f = X & (FreeMSA X)|(S,f,g) = FreeMSA X by Th26,RELAT_1:78,80;
        now let i be set; assume i in the carrier of S;
      then reconsider s = i as SortSymbol of S;
 A4:    (I||FreeGen X).s = (I.s)|((FreeGen X).s) &

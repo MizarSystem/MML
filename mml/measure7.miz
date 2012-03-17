@@ -10,14 +10,15 @@ environ
 
  vocabularies FUNCT_1, SUPINF_1, RLVECT_1, SUPINF_2, ORDINAL2, RELAT_1,
       ARYTM_3, TARSKI, MEASURE5, FUNCT_2, BOOLE, COMPLEX1, FUNCT_3, MCART_1,
-      MEASURE4, MEASURE1, MEASURE3, MEASURE7, FUNCOP_1;
+      MEASURE4, MEASURE1, MEASURE3, MEASURE7, FUNCOP_1, PROB_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MCART_1, NUMBERS,
-      XREAL_0, REAL_1, RELAT_1, FUNCT_1, FUNCOP_1, NAT_1, SUPINF_1, SUPINF_2,
+      XXREAL_0, REAL_1, RELAT_1, FUNCT_1, FUNCOP_1, NAT_1,
+      PROB_1, SUPINF_1, SUPINF_2,
       MEASURE1, MEASURE3, MEASURE4, MEASURE5, FUNCT_2;
  constructors NAT_1, SUPINF_2, MEASURE3, MEASURE4, MEASURE6, MCART_1, FRAENKEL,
-      MEMBERED, FUNCOP_1;
+      MEMBERED, FUNCOP_1, PROB_1, MEASURE1, PROB_2, XXREAL_0;
  registrations SUBSET_1, SUPINF_1, MEASURE4, RELSET_1, ARYTM_3, FRAENKEL,
-      FUNCT_2, MEMBERED, ORDINAL2;
+      FUNCT_2, MEMBERED, ORDINAL2, NUMBERS, XREAL_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SUPINF_1, MEASURE4, XBOOLE_0;
  theorems TARSKI, SUPINF_1, SUPINF_2, MEASURE1, FUNCT_1, MEASURE4, MEASURE5,
@@ -72,7 +73,7 @@ end;
 
 theorem Th2:
    for F being Function of NAT,ExtREAL st F is nonnegative holds
-   for n being Nat holds F.n <=' Ser(F).n
+   for n being Nat holds F.n <= Ser(F).n
 proof
    let F be Function of NAT,ExtREAL;
    assume
@@ -86,13 +87,13 @@ A1:F is nonnegative;
     then consider k being Nat such that
       A2:n = k + 1 by NAT_1:22;
          A3:Ser(F).n = Ser(F).k + F.n by A2,SUPINF_2:63;
-            0. <=' Ser(F).k & F.n <=' F.n & 0. <=' F.n by A1,SUPINF_2:58,59;
+            0. <= Ser(F).k & F.n <= F.n & 0. <= F.n by A1,SUPINF_2:58,59;
          then not ((0. = +infty & F.n = -infty) or (0. = -infty & F.n = +infty
 )) &
          not ((Ser(F).k = +infty & F.n = -infty) or (Ser(F).k = -infty & F.n =
 +infty)) &
-         0. <=' Ser(F).k & F.n <=' F.n by SUPINF_1:17,SUPINF_2:def 1;
-   then 0. + F.n <=' Ser(F).n by A3,SUPINF_2:14;
+         0. <= Ser(F).k & F.n <= F.n by SUPINF_1:17,SUPINF_2:def 1;
+   then 0. + F.n <= Ser(F).n by A3,SUPINF_2:14;
   hence thesis by SUPINF_2:18;
 end;
 end;
@@ -120,13 +121,13 @@ A2:for n being Nat holds F.n = G.n + H.n;
             A7: Ser(G).(k + 1) = Ser(G).k + G.(k + 1) &
             Ser(H).(k + 1) = Ser(H).k + H.(k + 1) by SUPINF_2:63;
       set n = k+1;
-         0. <=' G.n & 0. <=' H.n by A1,SUPINF_2:58;
-      then 0. + 0. <=' G.n + H.n by MEASURE1:4;
-      then 0. <=' G.n + H.n by SUPINF_2:18;
-    then A8: 0. <=' F.(k+1) by A2;
-         A9:0. <=' (Ser G).k & 0. <=' (Ser H).k & 0. <=' (Ser G).(k+1)
+         0. <= G.n & 0. <= H.n by A1,SUPINF_2:58;
+      then 0. + 0. <= G.n + H.n by MEASURE1:4;
+      then 0. <= G.n + H.n by SUPINF_2:18;
+    then A8: 0. <= F.(k+1) by A2;
+         A9:0. <= (Ser G).k & 0. <= (Ser H).k & 0. <= (Ser G).(k+1)
                  by A1,SUPINF_2:59;
-         A10:0. <=' H.(k+1) & 0. <=' G.(k+1) by A1,SUPINF_2:58;
+         A10:0. <= H.(k+1) & 0. <= G.(k+1) by A1,SUPINF_2:58;
                (Ser G).k + (Ser H).k + F.(k + 1)
                  = ((Ser G).k + F.(k+1)) + (Ser H).k by A8,A9,MEASURE4:1
                 .= (((Ser G).k + G.(k+1)) + H.(k+1)) + (Ser H).k
@@ -141,7 +142,7 @@ theorem Th4:
    for F,G,H being Function of NAT,ExtREAL st
    for n being Nat holds F.n = G.n + H.n holds
    G is nonnegative & H is nonnegative implies
-   SUM(F) <=' SUM(G) + SUM(H)
+   SUM(F) <= SUM(G) + SUM(H)
 proof
    let F,G,H be Function of NAT,ExtREAL;
    assume
@@ -163,12 +164,12 @@ A1:for n being Nat holds F.n = G.n + H.n;
             A6:Ser(F).(k+1) = Ser(F).k + F.(k+1) &
             Ser(G).(k+1) = Ser(G).k + G.(k+1) &
             Ser(H).(k+1) = Ser(H).k + H.(k+1) by SUPINF_2:63;
-            0. <=' G.(k+1) & 0. <=' H.(k+1) by A2,SUPINF_2:58;
-         then 0. + 0. <=' G.(k+1) + H.(k+1) by MEASURE1:4;
-         then 0. <=' G.(k+1) + H.(k+1) by SUPINF_2:18;
-         then A7: 0. <=' F.(k+1) by A1;
-        A8:0. <=' Ser(G).k & 0. <=' G.(k+1) &
-            0. <=' Ser(H).k & 0. <=' H.(k+1) & 0. <=' Ser(H).(k+1)
+            0. <= G.(k+1) & 0. <= H.(k+1) by A2,SUPINF_2:58;
+         then 0. + 0. <= G.(k+1) + H.(k+1) by MEASURE1:4;
+         then 0. <= G.(k+1) + H.(k+1) by SUPINF_2:18;
+         then A7: 0. <= F.(k+1) by A1;
+        A8:0. <= Ser(G).k & 0. <= G.(k+1) &
+            0. <= Ser(H).k & 0. <= H.(k+1) & 0. <= Ser(H).(k+1)
             by A2,SUPINF_2:58,59;
         hence Ser(F).(k+1) = Ser(G).k + (Ser(H).k + F.(k+1))
                      by A5,A6,A7,MEASURE4:1
@@ -189,15 +190,15 @@ A1:for n being Nat holds F.n = G.n + H.n;
          reconsider n as Nat by A11;
                Ser(G).n in rng Ser(G) & Ser(H).n in rng Ser(H)
             by FUNCT_2:6;
-            then Ser(G).n <=' sup(rng Ser(G)) & Ser(H).n <=' sup(rng Ser(H))
+            then Ser(G).n <= sup(rng Ser(G)) & Ser(H).n <= sup(rng Ser(H))
             by SUPINF_1:76;
-          then A12:Ser(G).n <=' SUM(G) & Ser(H).n <=' SUM(H) by SUPINF_2:def 23
+          then A12:Ser(G).n <= SUM(G) & Ser(H).n <= SUM(H) by SUPINF_2:def 23
 ;
-            0. <=' Ser(G).n & 0. <=' Ser(H).n by A2,SUPINF_2:59;
-         then Ser(G).n + Ser(H).n <=' SUM(G) + SUM(H) by A12,MEASURE1:4;
+            0. <= Ser(G).n & 0. <= Ser(H).n by A2,SUPINF_2:59;
+         then Ser(G).n + Ser(H).n <= SUM(G) + SUM(H) by A12,MEASURE1:4;
        hence thesis by A9,A11;
       end;
-       then sup(rng Ser(F)) <=' SUM(G) + SUM(H) by SUPINF_1:def 16;
+       then sup(rng Ser(F)) <= SUM(G) + SUM(H) by SUPINF_1:def 16;
       hence thesis by SUPINF_2:def 23;
 end;
 
@@ -205,28 +206,28 @@ canceled;
 
 theorem Th6:
    for F,G being Function of NAT,ExtREAL holds
-   (F is nonnegative & for n being Nat holds F.n <=' G.n) implies
-   for n being Nat holds (Ser(F)).n <=' SUM(G)
+   (F is nonnegative & for n being Nat holds F.n <= G.n) implies
+   for n being Nat holds (Ser(F)).n <= SUM(G)
 proof
    let F,G be Function of NAT,ExtREAL;
    assume that
 A1:F is nonnegative and
-A2: for n being Nat holds F.n <=' G.n;
+A2: for n being Nat holds F.n <= G.n;
       let n be Nat;
    A3:SUM(G) = sup(rng Ser(G)) by SUPINF_2:def 23;
    set y = Ser(G).n;
       dom Ser(G) = NAT & rng Ser(G) c= ExtREAL by FUNCT_2:def 1;
-   then y in rng Ser(G) & Ser(F).n <=' y by A1,A2,FUNCT_1:def 5,SUPINF_2:61;
+   then y in rng Ser(G) & Ser(F).n <= y by A1,A2,FUNCT_1:def 5,SUPINF_2:61;
   hence thesis by A3,SUPINF_1:97;
 end;
 
 theorem Th7:
    for F being Function of NAT,ExtREAL holds
    F is nonnegative implies
-   for n being Nat holds (Ser(F)).n <=' SUM(F)
+   for n being Nat holds (Ser(F)).n <= SUM(F)
 proof
   let F be Function of NAT,ExtREAL;
-      for n being Nat holds F.n <=' F.n;
+      for n being Nat holds F.n <= F.n;
   hence thesis by Th6;
 end;
 
@@ -313,7 +314,7 @@ proof let X be non empty set;
    let G be Function of X,ExtREAL;
    assume
 A1:G is nonnegative;
-      for n being Nat holds 0. <=' (On G).n
+      for n being Nat holds 0. <= (On G).n
    proof
       let n be Nat;
       per cases;
@@ -331,7 +332,7 @@ end;
 
 theorem Th9:
    for F being Function of NAT,ExtREAL st F is nonnegative holds
-   for n,k being Nat st n <= k holds Ser(F).n <=' Ser(F).k
+   for n,k being Nat st n <= k holds Ser(F).n <= Ser(F).k
 proof
    let F be Function of NAT,ExtREAL;
    assume
@@ -340,14 +341,14 @@ A1:F is nonnegative;
       assume n <= k;
       then consider s being Nat such that
    A2:k = n + s by NAT_1:28;
-   defpred P[Nat] means Ser(F).n <=' Ser(F).(n+$1);
+   defpred P[Nat] means Ser(F).n <= Ser(F).(n+$1);
    A3: P[0];
    A4: for k being Nat st P[k] holds P[k+1]
       proof
          let k be Nat;
          assume
-      A5:Ser(F).n <=' Ser(F).(n+k);
-            Ser(F).(n+k) <=' Ser(F).((n+k)+1) by A1,SUPINF_2:59;
+      A5:Ser(F).n <= Ser(F).(n+k);
+            Ser(F).(n+k) <= Ser(F).((n+k)+1) by A1,SUPINF_2:59;
        hence thesis by A5,SUPINF_1:29;
       end;
         for s being Nat holds P[s] from NAT_1:sch 1(A3,A4);
@@ -426,7 +427,7 @@ theorem Th11:
    for G being Function of NAT,ExtREAL st G is nonnegative holds
    for S being non empty Subset of NAT holds
    for H being Function of S,NAT st H is one-to-one holds
-   SUM(On(G*H)) <=' SUM(G)
+   SUM(On(G*H)) <= SUM(G)
 proof
    let G be Function of NAT,ExtREAL;
    assume
@@ -436,7 +437,7 @@ A1:G is nonnegative;
    assume A2: H is one-to-one;
       defpred P[Nat] means ex m being Nat st
         for F being Function of NAT,ExtREAL st F is nonnegative holds
-          Ser(On(F*H)).$1 <=' Ser(F).m;
+          Ser(On(F*H)).$1 <= Ser(F).m;
       A3: P[0]
          proof
             per cases;
@@ -460,8 +461,8 @@ A1:G is nonnegative;
                A7:F is nonnegative;
                   Ser(On(F*H)).0 = (On(F*H)).0 by SUPINF_2:63;
                   then A8:Ser(On(F*H)).0 = 0. by A6,Def1;
-              A9:0. <=' F.0 by A7,SUPINF_2:58;
-                     F.0 <=' Ser(F).m by A7,Th2;
+              A9:0. <= F.0 by A7,SUPINF_2:58;
+                     F.0 <= Ser(F).m by A7,Th2;
                   hence thesis by A8,A9,SUPINF_1:29;
          end;
          end;
@@ -470,7 +471,7 @@ A1:G is nonnegative;
             let k be Nat;
             given m0 being Nat such that
          A11:for F being Function of NAT,ExtREAL st F is nonnegative holds
-            Ser(On(F*H)).k <=' Ser(F).m0;
+            Ser(On(F*H)).k <= Ser(F).m0;
             per cases;
             suppose
             A12:k+1 in S;
@@ -504,7 +505,7 @@ A1:G is nonnegative;
                   consider G0 being Function of NAT,ExtREAL such that
                A19:for n being Element of NAT holds
                   QQ0[n,G0.n] from FUNCT_2:sch 3(A16);
-                     for n being Nat holds 0. <=' G0.n
+                     for n being Nat holds 0. <= G0.n
                   proof
                      let n be Nat;
                      per cases;
@@ -538,7 +539,7 @@ A1:G is nonnegative;
                   consider G1 being Function of NAT,ExtREAL such that
                A24:for n being Element of NAT holds
                   QQ1[n,G1.n] from FUNCT_2:sch 3(A21);
-                     for n being Nat holds 0. <=' G1.n
+                     for n being Nat holds 0. <= G1.n
                   proof
                      let n be Nat;
                      per cases;
@@ -636,12 +637,12 @@ A27:                GG0.n = (G0*H).n by Def1
 A48:             G0.v = F.v by A19;
 A49:                 (Ser GG1).(k+1) = (Ser GG1).k + GG1.(k+1) by SUPINF_2:63
                                  .= (Ser On(G1*H)).k by A33,SUPINF_2:18;
-                 A50:(Ser On(G1*H)).k <=' Ser(G1).m0 by A11,A25;
-                        Ser(G1).m0 <=' Ser(G1).m by A13,A25,Th9;
-                 then A51:(Ser GG1).(k+1) <=' (Ser G1).m by A49,A50,SUPINF_1:29
+                 A50:(Ser On(G1*H)).k <= Ser(G1).m0 by A11,A25;
+                        Ser(G1).m0 <= Ser(G1).m by A13,A25,Th9;
+                 then A51:(Ser GG1).(k+1) <= (Ser G1).m by A49,A50,SUPINF_1:29
 ;
-A52:                  0. <=' (Ser GG0).(k+1) &
-                    0. <=' (Ser GG1).(k+1) by A26,A32,SUPINF_2:59;
+A52:                  0. <= (Ser GG0).(k+1) &
+                    0. <= (Ser GG1).(k+1) by A26,A32,SUPINF_2:59;
                   for m being Nat holds
                F.m = G0.m + G1.m
                   proof
@@ -680,26 +681,26 @@ SUPINF_2:63
          end;
    A60:for k being Nat holds P[k] from NAT_1:sch 1(A3,A10);
          for x being R_eal st x in rng Ser(On(G*H)) holds
-      (ex y being R_eal st y in rng Ser(G) & x <=' y)
+      (ex y being R_eal st y in rng Ser(G) & x <= y)
       proof
          let x be R_eal;
          assume
       A61:x in rng Ser(On(G*H));
-            ex y being R_eal st y in rng Ser(G) & x <=' y
+            ex y being R_eal st y in rng Ser(G) & x <= y
          proof
             consider n being set such that
          A62:n in dom Ser(On(G*H)) & x = Ser(On(G*H)).n by A61,FUNCT_1:def 5;
             reconsider n as Nat by A62,FUNCT_2:def 1;
             consider m being Nat such that
          A63:for F being Function of NAT,ExtREAL st F is nonnegative holds
-            Ser(On(F*H)).n <=' Ser(F).m by A60;
+            Ser(On(F*H)).n <= Ser(F).m by A60;
             take Ser(G).m;
                dom Ser(G) = NAT & m in NAT by FUNCT_2:def 1;
           hence thesis by A1,A62,A63,FUNCT_1:def 5;
          end;
          hence thesis;
       end;
-   then A64:sup(rng Ser(On(G*H))) <=' sup(rng Ser(G)) by SUPINF_1:99;
+   then A64:sup(rng Ser(On(G*H))) <= sup(rng Ser(G)) by SUPINF_1:99;
       SUM(G) = sup(rng Ser(G)) by SUPINF_2:def 23;
       hence thesis by A64,SUPINF_2:def 23;
 end;
@@ -710,7 +711,7 @@ theorem Th12:
    for S being non empty Subset of NAT holds
    for H being Function of S,NAT st H is one-to-one holds
    (for k being Nat holds ((k in S implies F.k = (G*H).k) &
-   ((not k in S) implies F.k = 0.))) implies SUM(F) <=' SUM(G)
+   ((not k in S) implies F.k = 0.))) implies SUM(F) <= SUM(G)
 proof
    let F,G be Function of NAT,ExtREAL;
    assume
@@ -816,7 +817,7 @@ proof
    let F be Interval_Covering of A;
       (F vol) is nonnegative
    proof
-     for n being Nat holds 0. <=' (F vol).n
+     for n being Nat holds 0. <= (F vol).n
       proof
          let n be Nat;
          (F vol).n = vol(F.n) by Def4;
@@ -903,16 +904,16 @@ end;
 theorem Th14:
    for F being Function of NAT,(bool REAL) holds
    for G being Interval_Covering of F holds
-   for n being Nat holds 0. <=' (vol(G)).n
+   for n being Nat holds 0. <= (vol(G)).n
 proof
    let F be Function of NAT, bool REAL;
    let G be Interval_Covering of F;
    let n be Nat;
 A1:(vol(G)).n = vol(G.n) by Def7;
-       for k being Nat holds 0. <=' ((G.n) vol).k
+       for k being Nat holds 0. <= ((G.n) vol).k
     proof
        let k be Nat;
-       0. <=' vol((G.n).k) by MEASURE5:63;
+       0. <= vol((G.n).k) by MEASURE5:63;
        hence thesis by Def4;
     end;
   then ((G.n) vol) is nonnegative by SUPINF_2:58;
@@ -1175,7 +1176,7 @@ theorem Th15:
    ex m being Nat st
    for F being Function of NAT,bool REAL holds
    for G being Interval_Covering of F holds
-   Ser((On(G,H)) vol).k <=' Ser(vol(G)).m
+   Ser((On(G,H)) vol).k <= Ser(vol(G)).m
 proof
    let H be Function of NAT,[:NAT,NAT:];
    assume that
@@ -1186,7 +1187,7 @@ A2: rng H = [:NAT,NAT:];
       ex m being Nat st
        for F being Function of NAT,bool REAL holds
         for G being Interval_Covering of F holds
-         Ser((On(G,H)) vol).($1) <=' Ser(vol(G)).m;
+         Ser((On(G,H)) vol).($1) <= Ser(vol(G)).m;
    A3:  P[0]
       proof
        take m = pr1(H).0;
@@ -1197,15 +1198,15 @@ A2: rng H = [:NAT,NAT:];
                (GG vol).0 = vol(GG.0) &
             ((G.(pr1(H).0)) vol).(pr2(H).0) = vol((G.(pr1(H).0)).(pr2(H).0))
             by Def4;
-        then A5:(GG vol).0 <=' ((G.(pr1(H).0)) vol).(pr2(H).0) by A2,Def13;
+        then A5:(GG vol).0 <= ((G.(pr1(H).0)) vol).(pr2(H).0) by A2,Def13;
           ((G.(pr1(H).0))) vol is nonnegative by Th13;
-            then (GG vol).0 <=' SUM((G.(pr1(H).0)) vol)
+            then (GG vol).0 <= SUM((G.(pr1(H).0)) vol)
             by A5,MEASURE6:3;
-            then (GG vol).0 <=' vol(G.(pr1(H).0));
-        then A6:(GG vol).0 <=' (vol(G)).(pr1(H).0) by Def7;
-               for n being Nat holds 0. <=' (vol(G)).n by Th14;
+            then (GG vol).0 <= vol(G.(pr1(H).0));
+        then A6:(GG vol).0 <= (vol(G)).(pr1(H).0) by Def7;
+               for n being Nat holds 0. <= (vol(G)).n by Th14;
             then vol(G) is nonnegative by SUPINF_2:58;
-            then (vol(G)).m <=' Ser(vol(G)).m by Th2;
+            then (vol(G)).m <= Ser(vol(G)).m by Th2;
            hence thesis by A4,A6,SUPINF_1:29;
       end;
    A7: for k being Nat st P[k] holds P[k+1]
@@ -1214,7 +1215,7 @@ A2: rng H = [:NAT,NAT:];
          given m0 being Nat such that
       A8: for F being Function of NAT,bool REAL holds
          for G being Interval_Covering of F holds
-         Ser((On(G,H)) vol).k <=' Ser(vol(G)).m0;
+         Ser((On(G,H)) vol).k <= Ser(vol(G)).m0;
          take m = m0 + pr1(H).(k+1);
             let F be Function of NAT,bool REAL;
             let G be Interval_Covering of F;
@@ -1348,7 +1349,7 @@ A2: rng H = [:NAT,NAT:];
                         end;
                      then A26:SUM((G1.n) vol) = 0. by Th1;
                               for s being Nat holds
-                           ((G0.n) vol).s <=' ((G.n) vol).s
+                           ((G0.n) vol).s <= ((G.n) vol).s
                            proof
                               let s be Nat;
                                  ((G0.n) vol).s = vol((G0.n).s) by Def4
@@ -1356,10 +1357,10 @@ A2: rng H = [:NAT,NAT:];
                                         .= ((G.n) vol).s by Def4;
                               hence thesis;
                            end;
-                       then A27:SUM((G0.n) vol) <=' SUM((G.n) vol)
+                       then A27:SUM((G0.n) vol) <= SUM((G.n) vol)
                            by A23,SUPINF_2:62;
                               for s being Nat holds
-                           ((G.n) vol).s <=' ((G0.n) vol).s
+                           ((G.n) vol).s <= ((G0.n) vol).s
                            proof
                               let s be Nat;
                                  ((G0.n) vol).s = vol((G0.n).s) by Def4
@@ -1367,7 +1368,7 @@ A2: rng H = [:NAT,NAT:];
                                         .= ((G.n) vol).s by Def4;
                               hence thesis;
                            end;
-                           then SUM((G.n) vol) <=' SUM((G0.n) vol)
+                           then SUM((G.n) vol) <= SUM((G0.n) vol)
                            by A23,SUPINF_2:62;
                        then SUM((G.n) vol) = SUM((G0.n) vol)
                                             by A27,SUPINF_1:22;
@@ -1397,12 +1398,12 @@ A2: rng H = [:NAT,NAT:];
                            (G1.n) vol is nonnegative by Th13;
                        A33:SUM((G0.n) vol) = 0. by A30,Th1;
                               for s being Nat holds
-                           ((G1.n) vol).s <=' ((G.n) vol).s by A29;
-                       then A34:SUM((G1.n) vol) <=' SUM((G.n) vol)
+                           ((G1.n) vol).s <= ((G.n) vol).s by A29;
+                       then A34:SUM((G1.n) vol) <= SUM((G.n) vol)
                            by A32,SUPINF_2:62;
                               for s being Nat holds
-                           ((G.n) vol).s <=' ((G1.n) vol).s by A29;
-                           then SUM((G.n) vol) <=' SUM((G1.n) vol)
+                           ((G.n) vol).s <= ((G1.n) vol).s by A29;
+                           then SUM((G.n) vol) <= SUM((G1.n) vol)
                            by A23,SUPINF_2:62;
                            then SUM((G.n) vol) = SUM((G1.n) vol)
                            by A34,SUPINF_1:22;
@@ -1415,7 +1416,7 @@ A2: rng H = [:NAT,NAT:];
             end;
 A35:          GG0 vol is nonnegative by Th13;
 A36:       GG1 vol is nonnegative by Th13;
-           A37:(Ser(GG0 vol)).(k+1) <=' SUM(GG0 vol) by A35,Th7;
+           A37:(Ser(GG0 vol)).(k+1) <= SUM(GG0 vol) by A35,Th7;
 A38:   G0.(pr1(H).(k+1)) vol is nonnegative by Th13;
                   set N0 = {s where s is Nat : pr1(H).(k+1) = pr1(H).s};
 A39:                N0 c= NAT
@@ -1480,24 +1481,24 @@ A45:                    SOS.s1 = pr2(H).s1 & SOS.s2 = pr2(H).s2 by A41,A42;
                                .= 0. by A12,A50,MEASURE5:60;
                    hence thesis;
                   end;
-                then A51:SUM(GG0 vol) <=' SUM(G0.(pr1(H).(k+1)) vol)
+                then A51:SUM(GG0 vol) <= SUM(G0.(pr1(H).(k+1)) vol)
                    by A35,A38,A46,Th12;
               A52:SUM(G0.(pr1(H).(k+1)) vol) = vol(G0.(pr1(H).(k+1)))
                                    .= (vol(G0)).(pr1(H).(k+1)) by Def7;
-                     for s being Nat holds 0. <=' (vol(G0)).s by Th14;
+                     for s being Nat holds 0. <= (vol(G0)).s by Th14;
               then A53:vol(G0) is nonnegative by SUPINF_2:58;
-              then A54:(vol(G0)).(pr1(H).(k+1)) <=' (Ser(vol(G0))).(pr1(H).(k+1
+              then A54:(vol(G0)).(pr1(H).(k+1)) <= (Ser(vol(G0))).(pr1(H).(k+1
 ))
                   by Th2;
-                 (Ser vol(G0)).(pr1(H).(k+1)) <=' (Ser vol(G0)).m
+                 (Ser vol(G0)).(pr1(H).(k+1)) <= (Ser vol(G0)).m
                   by A53,SUPINF_2:60;
-                then A55:SUM(G0.(pr1(H).(k+1)) vol) <=' (Ser vol(G0)).m
+                then A55:SUM(G0.(pr1(H).(k+1)) vol) <= (Ser vol(G0)).m
                            by A52,A54,SUPINF_1:29;
-                  (Ser(GG0 vol)).(k+1) <=' SUM(G0.(pr1(H).(k+1)) vol)
+                  (Ser(GG0 vol)).(k+1) <= SUM(G0.(pr1(H).(k+1)) vol)
                by A37,A51,SUPINF_1:29;
-              then A56:(Ser (GG0 vol)).(k+1) <=' (Ser vol(G0)).m by A55,
+              then A56:(Ser (GG0 vol)).(k+1) <= (Ser vol(G0)).m by A55,
 SUPINF_1:29;
-           A57:(Ser(GG1 vol)).k <=' (Ser vol(G1)).m0 by A8;
+           A57:(Ser(GG1 vol)).k <= (Ser vol(G1)).m0 by A8;
                    GG1.(k+1) = (G1.(pr1(H).(k+1))).(pr2(H).(k+1)) by A2,Def13
                           .= {} by A16;
                 then A58: (GG1 vol).(k+1) = 0. by Def4,MEASURE5:60;
@@ -1505,18 +1506,18 @@ SUPINF_1:29;
                   by SUPINF_2:63;
                then A59:             (Ser (GG1 vol)).(k+1) = (Ser (GG1 vol)).k
                  by A58,SUPINF_2:18;
-                  for s being Nat holds 0. <=' (vol(G1)).s by Th14;
+                  for s being Nat holds 0. <= (vol(G1)).s by Th14;
                then vol(G1) is nonnegative by SUPINF_2:58;
-               then (Ser vol(G1)).m0 <=' (Ser vol(G1)).m by SUPINF_2:60;
-              then A60:(Ser (GG1 vol)).(k+1) <=' (Ser vol(G1)).m by A57,A59,
+               then (Ser vol(G1)).m0 <= (Ser vol(G1)).m by SUPINF_2:60;
+              then A60:(Ser (GG1 vol)).(k+1) <= (Ser vol(G1)).m by A57,A59,
 SUPINF_1:29;
                   GG0 vol is nonnegative &
                GG1 vol is nonnegative by Th13;
-then A61:          0. <=' (Ser (GG0 vol)).(k+1) &
-               0. <=' (Ser (GG1 vol)).(k+1) by SUPINF_2:59;
-                  for s being Nat holds 0. <=' (vol(G0)).s by Th14;
+then A61:          0. <= (Ser (GG0 vol)).(k+1) &
+               0. <= (Ser (GG1 vol)).(k+1) by SUPINF_2:59;
+                  for s being Nat holds 0. <= (vol(G0)).s by Th14;
             then A62:vol(G0) is nonnegative by SUPINF_2:58;
-                  for s being Nat holds 0. <=' (vol(G1)).s by Th14;
+                  for s being Nat holds 0. <= (vol(G1)).s by Th14;
                then vol(G1) is nonnegative by SUPINF_2:58;
             then A63: (Ser vol(G)).m = (Ser vol(G0)).m + (Ser vol(G1)).m
              by A21,A62,Th3;
@@ -1558,7 +1559,7 @@ end;
 theorem Th16:
    for F being Function of NAT,bool REAL holds
    for G being Interval_Covering of F holds
-   inf Svc(union rng F) <=' SUM(vol(G))
+   inf Svc(union rng F) <= SUM(vol(G))
 proof
    let F be Function of NAT,bool REAL;
    let G be Interval_Covering of F;
@@ -1570,7 +1571,7 @@ proof
       then A2:vol(GG) = sup(rng Ser(GG vol));
       A3:SUM(vol(G)) = sup(rng Ser(vol(G))) by SUPINF_2:def 23;
             for x being R_eal st x in rng Ser(GG vol)
-          ex y being R_eal st y in rng Ser(vol(G)) & x <=' y
+          ex y being R_eal st y in rng Ser(vol(G)) & x <= y
          proof
             let x be R_eal;
             assume x in rng Ser(GG vol);
@@ -1580,14 +1581,14 @@ proof
                consider m being Nat such that
            A5:for F being Function of NAT,bool REAL holds
                for G be Interval_Covering of F holds
-               Ser((On(G,H)) vol).n <=' Ser(vol(G)).m by A1,Th15;
+               Ser((On(G,H)) vol).n <= Ser(vol(G)).m by A1,Th15;
                take Ser(vol(G)).m;
                   dom Ser(vol(G)) = NAT & m in NAT by FUNCT_2:def 1;
              hence thesis by A4,A5,FUNCT_1:def 5;
          end;
-     then A6:   vol(GG) <=' SUM(vol(G)) by A2,A3,SUPINF_1:99;
+     then A6:   vol(GG) <= SUM(vol(G)) by A2,A3,SUPINF_1:99;
        Q in Svc(union rng F) by Def8;
-    then inf Svc(union rng F) <=' Q by SUPINF_1:79;
+    then inf Svc(union rng F) <= Q by SUPINF_1:79;
    hence thesis by A6,SUPINF_1:29;
 end;
 
@@ -1600,7 +1601,7 @@ A1:for A being Subset of REAL holds
    proof
       let A be Subset of REAL;
       let F be Interval_Covering of A;
-         for n being Nat holds 0. <=' (F vol).n
+         for n being Nat holds 0. <= (F vol).n
       proof
          let n be Nat;
          (F vol).n = vol(F.n) by Def4;
@@ -1608,7 +1609,7 @@ A1:for A being Subset of REAL holds
       end; hence thesis by SUPINF_2:58;
    end;
          A2: for A being Subset of REAL holds
-         0.<=' OS_Meas.A
+         0.<= OS_Meas.A
          proof
             let A be Subset of REAL;
          A3:OS_Meas.A = inf(Svc(A)) by Def10;
@@ -1621,9 +1622,9 @@ A1:for A being Subset of REAL holds
                A5:F vol is nonnegative by A1;
                A6:SUM(F vol) = sup(rng Ser(F vol)) by SUPINF_2:def 23;
                   set y = Ser(F vol).0;
-                 y in rng Ser(F vol) & 0. <=' y by A5,FUNCT_2:6,SUPINF_2:59;
-                  then 0. <=' y & y <=' sup(rng Ser(F vol)) by SUPINF_1:76;
-               then 0. <=' SUM(F vol) by A6,SUPINF_1:29;
+                 y in rng Ser(F vol) & 0. <= y by A5,FUNCT_2:6,SUPINF_2:59;
+                  then 0. <= y & y <= sup(rng Ser(F vol)) by SUPINF_1:76;
+               then 0. <= SUM(F vol) by A6,SUPINF_1:29;
                hence thesis by A4;
             end;
            hence thesis by A3,SUPINF_1:def 17;
@@ -1650,8 +1651,8 @@ A9:   for r being Nat holds 0 <= r implies (G vol).r = 0.
             let x be R_eal;
             assume
          A11:x in Svc({});
-               0. <=' OS_Meas.{} by A2;
-            then 0. <=' inf Svc({}) & inf Svc({}) <=' x by A11,Def10,
+               0. <= OS_Meas.{} by A2;
+            then 0. <= inf Svc({}) & inf Svc({}) <= x by A11,Def10,
 SUPINF_1:79;
             hence thesis by SUPINF_1:29;
          end;
@@ -1674,7 +1675,7 @@ A16:           B c= union(rng F) &
             then reconsider G = F as Interval_Covering of A by A16,Def2;
                x = vol(G)
             proof
-A17:             for n being Nat holds (G vol).n <=' (F vol).n
+A17:             for n being Nat holds (G vol).n <= (F vol).n
                proof
                   let n be Nat;
                      (G vol).n = vol(G.n) by Def4
@@ -1682,8 +1683,8 @@ A17:             for n being Nat holds (G vol).n <=' (F vol).n
                   hence thesis;
                end;
                   G vol is nonnegative by A1;
-           then A18:SUM(G vol) <=' SUM(F vol) by A17,SUPINF_2:62;
-A19:             for n being Nat holds (F vol).n <=' (G vol).n
+           then A18:SUM(G vol) <= SUM(F vol) by A17,SUPINF_2:62;
+A19:             for n being Nat holds (F vol).n <= (G vol).n
                proof
                   let n be Nat;
                      (G vol).n = vol(G.n) by Def4
@@ -1691,49 +1692,49 @@ A19:             for n being Nat holds (F vol).n <=' (G vol).n
                   hence thesis;
                end;
              F vol is nonnegative by A1;
-          then A20:      SUM(F vol) <=' SUM(G vol) by A19,SUPINF_2:62;
+          then A20:      SUM(F vol) <= SUM(G vol) by A19,SUPINF_2:62;
              thus thesis by A15,A18,A20,SUPINF_1:22;
             end;
           hence thesis by Def8;
          end;
             OS_Meas.A = inf Svc(A) & OS_Meas.B = inf Svc(B) by Def10;
-         hence OS_Meas.A <=' OS_Meas.B by A13,SUPINF_1:94;
+         hence OS_Meas.A <= OS_Meas.B by A13,SUPINF_1:94;
          let F be Function of NAT,bool REAL;
          per cases;
          suppose
         A21:for n being Nat holds Svc(F.n) <> {+infty};
          A22:SUM(OS_Meas*F) = sup(rng Ser(OS_Meas*F)) by SUPINF_2:def 23;
-           A23:for n being Nat holds 0. <=' (OS_Meas*F).n
+           A23:for n being Nat holds 0. <= (OS_Meas*F).n
                proof
                   let n be Nat;
                  (OS_Meas*F).n = OS_Meas.(F.n) by FUNCT_2:21;
                   hence thesis by A2;
                end;
            then A24:OS_Meas*F is nonnegative by SUPINF_2:58;
-               inf Svc(union rng F) <=' sup(rng Ser(OS_Meas*F))
+               inf Svc(union rng F) <= sup(rng Ser(OS_Meas*F))
             proof
                assume
-            A25:not inf Svc(union rng F) <=' sup(rng Ser(OS_Meas*F));
+            A25:not inf Svc(union rng F) <= sup(rng Ser(OS_Meas*F));
                set y = inf Svc(union rng F), x = sup(rng Ser(OS_Meas*F));
-              0. <=' (OS_Meas*F).0 by A23;
-               then A26:0. <=' Ser(OS_Meas*F).0 by SUPINF_2:63;
+              0. <= (OS_Meas*F).0 by A23;
+               then A26:0. <= Ser(OS_Meas*F).0 by SUPINF_2:63;
                   Ser(OS_Meas*F).0 in rng Ser(OS_Meas*F) by FUNCT_2:6;
-               then Ser(OS_Meas*F).0 <=' x by SUPINF_1:76;
-           then 0. <=' x by A26,SUPINF_1:29;
+               then Ser(OS_Meas*F).0 <= x by SUPINF_1:76;
+           then 0. <= x by A26,SUPINF_1:29;
                then consider eps being R_eal such that
-           A27:0. <' eps & x + eps <' y & eps in REAL by A25,MEASURE6:25;
+           A27:0. < eps & x + eps < y & eps in REAL by A25,MEASURE6:25;
                consider E being Function of NAT,ExtREAL such that
-           A28:(for n being Nat holds 0. <' E.n) & SUM(E) <' eps
+           A28:(for n being Nat holds 0. < E.n) & SUM(E) < eps
                by A27,MEASURE6:31;
                defpred P[Element of NAT,Element of Funcs(NAT,bool REAL)]
                means
                  ex F0 being Interval_Covering of F.$1 st
-                 ($2 = F0 & (vol(F0) <' inf Svc(F.$1) + E.$1));
+                 ($2 = F0 & (vol(F0) < inf Svc(F.$1) + E.$1));
              A29:for n being Element of NAT holds
                ex F0 being Element of Funcs(NAT,bool REAL) st P[n,F0]
                proof
                   let n be Element of NAT;
-A30:        OS_Meas.(F.n) = inf Svc(F.n) & 0. <=' OS_Meas.(F.n)
+A30:        OS_Meas.(F.n) = inf Svc(F.n) & 0. <= OS_Meas.(F.n)
                by A2,Def10;
                Svc(F.n) <> {+infty} by A21;
             then not Svc(F.n) c= {+infty} by ZFMISC_1:39;
@@ -1743,15 +1744,15 @@ A30:        OS_Meas.(F.n) = inf Svc(F.n) & 0. <=' OS_Meas.(F.n)
                reconsider x as R_eal by A31;
                A32: x in Svc(F.n) & not x in {+infty} by A31,XBOOLE_0:def 4;
             then A33:x in Svc(F.n) & x <> +infty by TARSKI:def 1;
-            A34:inf Svc(F.n) <=' x by A32,SUPINF_1:79;
-                  x <=' +infty by SUPINF_1:20;
-               then x <' +infty by A33,SUPINF_1:22;
-                 then 0. is Real & 0. <=' inf Svc(F.n) & inf Svc(F.n) <'
+            A34:inf Svc(F.n) <= x by A32,SUPINF_1:79;
+                  x <= +infty by SUPINF_1:20;
+               then x < +infty by A33,SUPINF_1:22;
+                 then 0. is Real & 0. <= inf Svc(F.n) & inf Svc(F.n) <
 +infty
                   by A30,A34,SUPINF_1:29,SUPINF_2:def 1;
-                  then 0. <' E.n & inf Svc(F.n) is Real by A28,MEASURE6:17;
+                  then 0. < E.n & inf Svc(F.n) is Real by A28,MEASURE6:17;
                  then consider S being R_eal such that
-              A35: S in Svc(F.n) & S <' inf Svc(F.n) + E.n by MEASURE6:32;
+              A35: S in Svc(F.n) & S < inf Svc(F.n) + E.n by MEASURE6:32;
                   consider FS being Interval_Covering of F.n such that
               A36:S = vol(FS) by A35,Def8;
                   reconsider FS as Element of Funcs(NAT,bool REAL)
@@ -1767,11 +1768,11 @@ A30:        OS_Meas.(F.n) = inf Svc(F.n) & 0. <=' OS_Meas.(F.n)
                proof
                   let n be Nat;
                   consider F0 being Interval_Covering of F.n such that
-               A38:F0 = FF.n & vol(F0) <' inf Svc(F.n) + E.n by A37;
+               A38:F0 = FF.n & vol(F0) < inf Svc(F.n) + E.n by A37;
                   thus thesis by A38;
                end;
                then reconsider FF as Interval_Covering of F by Def3;
-                     for n being Nat holds 0. <=' E.n by A28;
+                     for n being Nat holds 0. <= E.n by A28;
               then A39:E is nonnegative by SUPINF_2:58;
                   defpred P1[Element of NAT,Element of ExtREAL] means
                        $2 = (OS_Meas*F).$1 + E.$1;
@@ -1780,28 +1781,28 @@ A30:        OS_Meas.(F.n) = inf Svc(F.n) & 0. <=' OS_Meas.(F.n)
                   consider G0 being Function of NAT,ExtREAL such that
               A41:for n being Element of NAT holds P1[n,G0.n]
                   from FUNCT_2:sch 3(A40);
-              A42:SUM(G0) <=' SUM(OS_Meas*F) + SUM(E) by A24,A39,A41,Th4;
+              A42:SUM(G0) <= SUM(OS_Meas*F) + SUM(E) by A24,A39,A41,Th4;
               A43:for n being Nat holds
-                  (vol(FF)).n <=' G0.n
+                  (vol(FF)).n <= G0.n
                   proof
                      let n be Nat;
                   consider F0 being Interval_Covering of F.n such that
-               A44:F0 = FF.n & vol(F0) <' inf Svc(F.n) + E.n by A37;
+               A44:F0 = FF.n & vol(F0) < inf Svc(F.n) + E.n by A37;
                   (OS_Meas*F).n = OS_Meas.(F.n) by FUNCT_2:21;
-               then vol(FF.n) <' (OS_Meas*F).n + E.n by A44,Def10;
-                   then (vol(FF)).n <' (OS_Meas*F).n + E.n by Def7;
+               then vol(FF.n) < (OS_Meas*F).n + E.n by A44,Def10;
+                   then (vol(FF)).n < (OS_Meas*F).n + E.n by Def7;
                      hence thesis by A41;
                   end;
-                     for n being Nat holds 0. <=' (vol(FF)).n by Th14;
+                     for n being Nat holds 0. <= (vol(FF)).n by Th14;
                   then vol(FF) is nonnegative by SUPINF_2:58;
-              then A45:SUM(vol(FF)) <=' SUM(G0) by A43,SUPINF_2:62;
-                0. <=' SUM(OS_Meas*F) & 0. <=' SUM(E) by A24,A39,MEASURE6:2;
-                  then SUM(OS_Meas*F) + SUM(E) <=' SUM(OS_Meas*F) + eps
+              then A45:SUM(vol(FF)) <= SUM(G0) by A43,SUPINF_2:62;
+                0. <= SUM(OS_Meas*F) & 0. <= SUM(E) by A24,A39,MEASURE6:2;
+                  then SUM(OS_Meas*F) + SUM(E) <= SUM(OS_Meas*F) + eps
                   by A28,MEASURE1:4;
-                  then SUM(G0) <=' SUM(OS_Meas*F) + eps by A42,SUPINF_1:29;
-               then A46:SUM (vol(FF)) <=' SUM (OS_Meas*F) + eps by A45,
+                  then SUM(G0) <= SUM(OS_Meas*F) + eps by A42,SUPINF_1:29;
+               then A46:SUM (vol(FF)) <= SUM (OS_Meas*F) + eps by A45,
 SUPINF_1:29;
-                  y <=' SUM vol(FF) by Th16;
+                  y <= SUM vol(FF) by Th16;
               hence thesis by A22,A27,A46,SUPINF_1:29;
             end;
             hence thesis by A22,Def10;
@@ -1812,7 +1813,7 @@ SUPINF_1:29;
                inf {+infty} = +infty by SUPINF_1:86; then
                OS_Meas.(F.n) = +infty by A47,Def10;
             then A48: (OS_Meas*F).n = +infty by FUNCT_2:21;
-               for n being Nat holds 0. <=' (OS_Meas*F).n
+               for n being Nat holds 0. <= (OS_Meas*F).n
             proof
                let n be Nat;
                (OS_Meas*F).n = OS_Meas.(F.n) by FUNCT_2:21;
@@ -1830,7 +1831,7 @@ correctness by Th17;
 end;
 
 definition
-  func Lmi_sigmaFIELD -> sigma_Field_Subset of REAL equals
+  func Lmi_sigmaFIELD -> SigmaField of REAL equals
   sigma_Field(OS_Meas);
 correctness;
 end;

@@ -8,11 +8,12 @@ environ
 
  vocabularies FUNCT_1, BOOLE, RELAT_1, PARTFUN1, RELAT_2, FINSET_1, ORDERS_1,
       FINSEQ_1, CARD_1, FUNCT_2, MCART_1, GRAPH_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, RELAT_1, FUNCT_1,
-      FUNCT_2, FINSEQ_1, FINSET_1, PARTFUN1, CARD_1, NAT_1, MCART_1;
- constructors FUNCT_2, FINSEQ_1, PARTFUN1, NAT_1, MCART_1, XREAL_0, MEMBERED;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
+      FUNCT_2, FINSEQ_1, FINSET_1, PARTFUN1, CARD_1, NAT_1, MCART_1, XXREAL_0;
+ constructors FUNCT_2, FINSEQ_1, PARTFUN1, NAT_1, MCART_1, XREAL_0, MEMBERED,
+ XXREAL_0;
  registrations SUBSET_1, FINSEQ_1, FINSET_1, PARTFUN1, RELSET_1, ARYTM_3,
-      MEMBERED;
+      MEMBERED, XREAL_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions REAL_1, FUNCT_1, TARSKI;
  theorems FUNCT_2, FUNCT_1, PARTFUN1, FINSEQ_1, NAT_1, FINSET_1, ZFMISC_1,
@@ -56,12 +57,10 @@ reserve G, G1, G2, G3 for Graph;
 
 Lm1: for G being Graph holds
    dom(the Source of G) = the Edges of G &
-   dom(the Target of G) = the Edges of G &
-   rng(the Source of G) c= the Vertices of G &
-   rng(the Target of G) c= the Vertices of G
+   dom(the Target of G) = the Edges of G
 proof let G be Graph;
      the Vertices of G <> {} by Def1;
-  hence thesis by FUNCT_2:def 1,RELSET_1:12;
+  hence thesis by FUNCT_2:def 1;
 end;
 
 Lm2: for G being Graph,
@@ -859,7 +858,7 @@ proof let p be Chain of G;
   A1: for n st 1 <= n & n <= len q holds q.n in the Edges of G
     proof let k be Nat; assume 1 <= k & k <= len q;
      then A2: k in dom q by FINSEQ_3:27;
-         dom q c= dom p by FUNCT_1:76;
+         dom q c= dom p by RELAT_1:89;
       then 1 <= k & k <= len p by A2,FINSEQ_3:27;
       then p.k in the Edges of G by Def11;
      hence q.k in the Edges of G by A2,FUNCT_1:70;
@@ -913,14 +912,14 @@ proof let p be Chain of G;
     thus for n st 1 <= n & n <= len q2 holds q2.n in the Vertices of G
       proof let n be Nat; assume 1 <= n & n <= len q2;
         then A12: n in dom q2 by FINSEQ_3:27;
-             dom q2 c= dom q1 by FUNCT_1:76;
+             dom q2 c= dom q1 by RELAT_1:89;
         then 1 <= n & n <= len q1 by A12,FINSEQ_3:27;
         then q1.n in the Vertices of G by A3;
        hence q2.n in the Vertices of G by A12,FUNCT_1:70;
       end;
     let k; assume A13: 1 <= k & k <= len q;
      then A14: k in dom q by FINSEQ_3:27;
-        dom q c= dom p by FUNCT_1:76;
+        dom q c= dom p by RELAT_1:89;
       then 1 <= k & k <= len p by A14,FINSEQ_3:27;
      then consider x', y' being Element of the Vertices of G such that A15:
        x' = q1.k & y' = q1.(k+1) & p.k joins x' ,y' by A3;
@@ -1119,9 +1118,8 @@ end;
 theorem
       for G being Graph holds
      dom(the Source of G) = the Edges of G &
-     dom(the Target of G) = the Edges of G &
-     rng(the Source of G) c= the Vertices of G &
-     rng(the Target of G) c= the Vertices of G by Lm1;
+     dom(the Target of G) = the Edges of G
+      by Lm1;
 
 theorem
       for x being Element of the Vertices of G holds
@@ -1808,12 +1806,12 @@ proof assume G1 c= G2 & G2 c= G3;
    thus A7: (the Target of G1).v = (the Target of G2).v by A1,A5,Def17
        .= (the Target of G3).v by A1,A3,A5,Def17;
 
-     A8: rng (the Source of G1) c= the Vertices of G1 by Lm1;
+     A8: rng (the Source of G1) c= the Vertices of G1 by RELSET_1:12;
          v in dom (the Source of G1) by A5,Lm1;
       then (the Source of G1).v in rng(the Source of G1) by FUNCT_1:def 5;
     hence (the Source of G3).v in the Vertices of G1 by A6,A8;
 
-     A9: rng (the Target of G1) c= the Vertices of G1 by Lm1;
+     A9: rng (the Target of G1) c= the Vertices of G1 by RELSET_1:12;
         v in dom(the Target of G1) by A5,Lm1;
      then (the Target of G1).v in rng(the Target of G1) by FUNCT_1:def 5;
     hence thesis by A7,A9;

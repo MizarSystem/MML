@@ -22,6 +22,7 @@
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="KURATO_2"/>
 </Signature>
 <Scheme>
@@ -61,7 +62,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="116">
+<Func kind="K" nr="117">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -105,7 +106,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="12">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -118,7 +119,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="136">
+<Func kind="K" nr="139">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -150,7 +151,7 @@
 <Var nr="2"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="136">
+<Func kind="K" nr="139">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>

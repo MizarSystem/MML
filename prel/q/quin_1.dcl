@@ -13,6 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="QUIN_1"/>
 </Signature>
 <FCluster>
@@ -33,7 +34,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="64">
+<Func kind="K" nr="67">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -60,7 +61,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="64">
+<Func kind="K" nr="67">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -68,6 +69,7 @@
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 </Registrations>

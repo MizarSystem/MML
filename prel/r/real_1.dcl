@@ -13,6 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <CCluster>
 <ArgTypes/>
@@ -24,6 +25,7 @@
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </CCluster>
 </Registrations>

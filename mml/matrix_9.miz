@@ -1,0 +1,2483 @@
+:: On the Permanent of a Matrix
+::  by Ewa Romanowicz and Adam Grabowski
+:: 
+:: Received January 4, 2006
+:: Copyright (c) 2006 Association of Mizar Users
+
+environ
+
+ vocabularies VECTSP_1, RLVECT_1, MATRIX_1, FINSEQ_2, ARYTM_1, FINSEQ_1,
+      TREES_1, FUNCT_1, RELAT_1, BOOLE, GROUP_1, BINOP_1, SETWISEO, MATRIX_2,
+      FINSUB_1, FINSET_1, FUNCOP_1, MATRIX_3, MATRIX_9, FINSEQ_5, FUNCT_2,
+      SGRAPH1, CARD_3, FINSEQ_4, NAT_1, CALCUL_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, ENUMSET1,
+      FINSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2,
+      BINOP_1, FUNCOP_1, FINSOP_1, BINARITH, STRUCT_0, GROUP_1, VECTSP_1,
+      RLVECT_1, SETWISEO, GROUP_4, SETWOP_2, FINSUB_1, MATRIX_1, FINSEQ_4,
+      FINSEQ_5, MATRIX_2, MATRIX_3, XXREAL_0;
+ constructors SETWISEO, SETWOP_2, NAT_1, FINSOP_1, PARTFUN1, RELAT_2, MATRIX_3,
+      JORDAN3, FINSEQ_5, DOMAIN_1, FINSEQ_4, GROUP_4, FUNCOP_1, MATRIX_7,
+      BINARITH, ALGSTR_1, XXREAL_0;
+ registrations FINSUB_1, FINSET_1, RELSET_1, STRUCT_0, FVSUM_1, MATRIX_2,
+      FUNCT_2, PARTFUN1, XBOOLE_0, ORDINAL2, FINSEQ_5, FINSEQ_1, CHAIN_1,
+      INT_1, FINSEQ_6, FUNCOP_1, FINSEQ_2, VECTSP_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions BINOP_1, RLVECT_1, FINSEQ_2, FINSEQ_1;
+ theorems FINSEQ_1, FINSEQ_2, TARSKI, FUNCT_2, NAT_1, BINOP_1, FUNCT_1,
+      SETWISEO, VECTSP_1, ZFMISC_1, FVSUM_1, SETWOP_2, MATRIX_1, MATRIX_2,
+      FUNCOP_1, FINSUB_1, FINSEQ_3, RLVECT_1, RELAT_1, FINSOP_1, RELSET_1,
+      XBOOLE_0, XBOOLE_1, GROUP_1, MATRIX_3, FINSEQ_5, ENUMSET1, FINSEQ_6,
+      GOBOARD7, FINSET_1, FINSEQ_4, GROUP_4, XREAL_1, GROUP_7, MATRIX_7,
+      BINARITH;
+ schemes FUNCT_2, FINSET_1, NAT_1;
+
+begin :: Preliminaries
+
+ reserve x,y,z,x1,x2,y1,y2,z1,z2 for set,
+         i,j,k,l,n,m for Nat,
+         D for non empty set,
+         K for Field;
+
+IdPer:
+  idseq n in Permutations n by MATRIX_2:def 11;
+
+theorem Lemacik:
+  for a, A being set st a in A holds
+    {a} in Fin A
+  proof
+    let a, A be set;
+    assume
+A2: a in A;
+    {a} c= A by A2,ZFMISC_1:37;
+    hence thesis by FINSUB_1:def 5;
+  end;
+
+registration let n be Nat;
+  cluster non empty Element of Fin Permutations n;
+  existence
+  proof
+    idseq n in Permutations n by IdPer; then
+    {idseq n} in Fin Permutations n by Lemacik;
+    hence thesis;
+  end;
+end;
+
+scheme NonEmptyFiniteX
+  { n() -> Nat, A() -> non empty Element of Fin Permutations n(), P[set] } :
+    P[A()]
+  provided
+A1: for x being Element of Permutations n() st x in A() holds P[{x}] and
+A2: for x being Element of Permutations n(),
+        B being non empty Element of Fin Permutations n() st
+    x in A() & B c= A() & not x in B & P[B] holds P[B \/ {x}]
+  proof
+    defpred Q[set] means $1 is empty or P[$1];
+A3: A() is finite;
+A4: Q[{}];
+A5: for x,B being set st x in A() & B c= A() & Q[B] holds Q[B \/ {x}]
+    proof
+      let x,B be set;
+      assume
+A6:   x in A() & B c= A() & Q[B];
+H1:   A() c= Permutations n() by FINSUB_1:def 5; then
+      reconsider x as Element of Permutations n() by A6;
+H2:   B c= Permutations n() by H1,A6,XBOOLE_1:1;
+      Permutations n() is finite by MATRIX_2:30; then
+H5:   B is finite by H2,FINSET_1:13;
+      per cases;
+      suppose
+G1:     x in B;
+        then reconsider B as non empty Element of Fin Permutations n()
+          by H2,H5,FINSUB_1:def 5;
+        {x} c= B by G1,ZFMISC_1:37;
+        hence thesis by A6,XBOOLE_1:12;
+      end;
+      suppose
+A7:     B is non empty & not x in B;
+        then reconsider B as non empty Element of Fin Permutations n()
+          by H2,H5,FINSUB_1:def 5;
+        P[B \/ {x}] by A2,A6,A7;
+        hence thesis;
+      end;
+      suppose B is empty; then
+        P[B \/ {x}] by A1,A6;
+        hence thesis;
+      end;
+    end;
+    Q[A()] from FINSET_1:sch 2(A3,A4,A5);
+    hence thesis;
+  end;
+
+b1:<*1,2*> <> <*2,1*> by GROUP_7:2;
+
+AA844:
+  for l being FinSequence of Group_of_Perm 2
+ st (len l) mod 2=0 &
+(for i st i in dom l holds (ex q being Element of Permutations 2
+ st l.i=q & q is_transposition)) holds Product l = <*1,2*>
+   by MATRIX_7:11;
+
+Ble1: <*2,1*> in Permutations 2 by TARSKI:def 2,MATRIX_7:3;
+
+AA844c:
+  for n being Nat,a,b being Element of
+  the carrier of Group_of_Perm(n),
+pa,pb being Element of Permutations(n) st
+a=pa & b=pb holds a*b=pb*pa by MATRIX_7:9;
+
+registration let n;
+  cluster one-to-one FinSequence-like Function of Seg n, Seg n;
+  existence
+  proof
+    take f = id Seg n;
+    dom f = Seg n by RELAT_1:71;
+    hence thesis by FINSEQ_1:def 2;
+  end;
+end;
+
+Lemma1:
+  for f being FinSequence-like Function st
+    f is one-to-one holds
+      Rev f is one-to-one
+  proof
+    let f be FinSequence-like Function;
+    assume f is one-to-one; then
+    reconsider g = f as one-to-one FinSequence-like Function;
+    Rev g is one-to-one;
+    hence thesis;
+  end;
+
+registration let n;
+  cluster id Seg n -> FinSequence-like;
+  coherence
+  proof
+    dom id Seg n = Seg n by RELAT_1:71;
+    hence thesis by FINSEQ_1:def 2;
+  end;
+end;
+
+theorem Th2:
+  (Rev idseq 2).1 = 2 & (Rev idseq 2).2 = 1
+  proof
+    reconsider f = idseq 2 as one-to-one FinSequence-like Function
+      of Seg 2, Seg 2;
+    f.1 = (Rev f).len f & f.(len f) = (Rev f).1 by FINSEQ_5:65;then
+C0: (idseq 2).1 = (Rev idseq 2).2 & f.2 = (Rev f).1 by FINSEQ_2:55;
+B1: dom Rev f = dom f & rng Rev f = rng f by FINSEQ_5:60; then
+A3: dom Rev f = Seg 2 by FINSEQ_2:54; then
+    1 in dom f by B1; then
+A4: (idseq 2).1 = 1 by A3,B1,FINSEQ_2:56;
+    2 in dom f by B1,A3;
+    hence thesis by C0,A4,A3,B1,FINSEQ_2:56;
+  end;     
+      
+theorem LemmaX1:
+  for f being one-to-one Function st
+    dom f = Seg 2 & rng f = Seg 2 holds
+      f = id Seg 2 or f = Rev id Seg 2
+  proof
+    let f be one-to-one Function;
+G2: dom idseq 2 = Seg 2 by FINSEQ_2:54;
+    assume
+A1: dom f = Seg 2 & rng f = Seg 2;
+B1: 1 in dom f by A1; then
+    f.1 in rng f by FUNCT_1:12; then
+A2: f.1 = 1 or f.1 = 2 by TARSKI:def 2,FINSEQ_1:4, A1;
+B2: 2 in dom f by A1;then
+    f.2 in rng f by FUNCT_1:12; then
+    f.2 = 2 or f.2 = 1 by A1,TARSKI:def 2, FINSEQ_1:4; then
+B3: f.1 = 1 & f.2 = 2 or f.1 = 2 & f.2 = 1 by A2,FUNCT_1:def 8,B1,B2;
+    per cases by B3;
+    suppose R3: f.1 = 1 & f.2 = 2;
+    for x being set st x in Seg 2 holds f.x = x
+    proof
+      let x be set;
+      assume x in Seg 2; then
+      x = 1 or x = 2 by TARSKI:def 2,FINSEQ_1:4;
+      hence thesis by R3;
+    end;
+    hence thesis by FUNCT_1:34,A1;
+  end;
+  suppose U1: f.1 = 2 & f.2 = 1;
+U2: dom f = dom Rev id Seg 2 by A1,G2,FINSEQ_5:60;
+    for x st x in Seg 2 holds f.x = (Rev id Seg 2).x
+    proof
+      let x be set;
+      assume x in Seg 2;then
+      x = 1 or x = 2 by TARSKI:def 2,FINSEQ_1:4;
+      hence thesis by U1,Th2;
+    end;
+    hence thesis by U2,FUNCT_1:9, A1;
+  end;
+  end;
+
+begin :: Permutations
+
+theorem RevIdPer:
+  Rev idseq n in Permutations n
+  proof
+    reconsider f = idseq n as one-to-one FinSequence-like Function
+      of Seg n, Seg n;
+D2: rng idseq n = Seg n by FUNCT_2:def 3;
+A3: dom f = dom Rev f & rng f = rng Rev f by FINSEQ_5:60;
+C1: dom Rev f = Seg n by FINSEQ_2:54, A3;
+    rng Rev f c= Seg n by FINSEQ_5:60,D2; then
+    reconsider g = Rev f as FinSequence-like Function of Seg n, Seg n
+      by C1,FUNCT_2:4;
+B2: g is onto by FUNCT_2:def 3,A3,D2;
+    g is bijective by B2,FUNCT_2:def 4;
+    hence thesis by MATRIX_2:def 11;
+  end;
+
+theorem Th1:
+  for f being FinSequence st
+    n <> 0 & f in Permutations n holds
+    Rev f in Permutations n
+    proof
+      let f be FinSequence;
+      assume A0: n <> 0 & f in Permutations n;then
+B0:   f is Permutation of Seg n by MATRIX_2:def 11;
+KK:   Seg n <> {} by A0,FINSEQ_1:5;
+D1:   Rev f is one-to-one by Lemma1,B0;
+T1:   rng f = Seg n by FUNCT_2:def 3,B0;
+A3:   dom f = dom Rev f & rng f = rng Rev f by FINSEQ_5:60;
+      dom Rev f = Seg n & rng Rev f = Seg n by B0,FUNCT_2:def 1,KK,A3,T1; then
+      reconsider g = Rev f as FinSequence-like Function of Seg n,Seg n
+        by FUNCT_2:4;
+      g is onto by FUNCT_2:def 3,T1,A3; then
+      g is bijective by D1,FUNCT_2:def 4;
+      hence thesis by MATRIX_2:def 11;
+    end;    
+      
+theorem Cosik0:
+  Permutations 2 = { idseq 2, Rev idseq 2 }
+  proof
+     now let p be set;
+     assume p in Permutations 2; then
+     reconsider q = p as Permutation of Seg 2 by MATRIX_2:def 11;
+A1:  q is Function of Seg 2, Seg 2 & rng q = Seg 2 by FUNCT_2:def 3;
+A2:  dom q = Seg 2 by FUNCT_2:67;
+     reconsider q as FinSequence by A2,FINSEQ_1:def 2;
+     q = idseq 2 or q = Rev idseq 2 by LemmaX1,A1,A2;
+     hence p in {idseq 2, Rev idseq 2} by TARSKI:def 2;
+   end;then
+A4: Permutations 2 c= {idseq 2, Rev idseq 2 } by TARSKI:def 3;
+    now let x;
+     assume x in {idseq 2, Rev idseq 2 }; then
+     x = idseq 2 or x = Rev idseq 2 by TARSKI:def 2;
+     hence x in Permutations 2 by RevIdPer,IdPer;
+    end;
+    then {idseq 2, Rev idseq 2 } c= Permutations 2 by TARSKI:def 3;
+    hence thesis by A4,XBOOLE_0:def 10;
+   end; 
+    
+begin :: The Permanent of a Matrix
+
+definition let n,K;let M be Matrix of n,K;
+  func PPath_product M -> Function of Permutations n, the carrier of K means
+:Def8: for p being Element of Permutations(n) holds
+    it.p = (the mult of K) $$ Path_matrix(p,M);
+existence
+proof
+   deffunc V(Element of Permutations n) =
+        (the mult of K) $$ Path_matrix($1,M);
+   consider f being Function of Permutations(n),the carrier of K such that
+A1: for p being Element of Permutations(n) holds
+      f.p = V(p) from FUNCT_2:sch 4;
+   take f;
+   thus thesis by A1;
+ end;
+uniqueness
+proof
+   let f1,f2 be Function of Permutations(n), the carrier of K;
+   assume that
+A2: for p being Element of Permutations(n) holds
+     f1.p = (the mult of K) $$ Path_matrix(p,M) and
+A3: for p being Element of Permutations(n) holds
+     f2.p = (the mult of K) $$ Path_matrix(p,M);
+   now let p be Element of Permutations(n);
+     f1.p = (the mult of K) $$ Path_matrix(p,M) by A2;
+     hence f1.p=f2.p by A3;
+   end;
+   hence thesis by FUNCT_2:113;
+ end;
+end;
+
+definition let n, K; let M be Matrix of n,K;
+  func Per M -> Element of K equals
+    (the add of K) $$ (FinOmega Permutations n, PPath_product M);
+  coherence;
+end;
+
+ reserve a,b,c,d for Element of K;
+
+theorem
+  Per <*<*a*>*> = a
+  proof
+   set M = <*<*a*>*>;
+A2:(PPath_product M).(idseq 1)=a
+   proof
+     reconsider p = idseq 1 as Element of Permutations 1
+       by MATRIX_2:def 11;
+A3:  len Path_matrix(p,M) = 1 by MATRIX_3:def 7; then
+A4:  dom Path_matrix(p,M) = Seg 1 by FINSEQ_1:def 3; then
+A5:  1 in dom Path_matrix(p,M); then
+     1 = p.1 by A4,FINSEQ_2:56; then
+     Path_matrix(p,M).1 = M*(1,1) by A5,MATRIX_3:def 7; then
+     Path_matrix(p,M).1 = a by MATRIX_2:5; then
+A6:  Path_matrix(p,M) = <*a*> by A3,FINSEQ_1:57;
+A7:  (PPath_product M).p = (the mult of K) $$ Path_matrix(p,M) by Def8;
+     <*a*> = 1|->a by FINSEQ_2:73;
+     hence thesis by A6,A7,FINSOP_1:17;
+   end;
+A9: FinOmega Permutations 1 = {idseq 1} by MATRIX_2:21,def 17;
+    idseq 1 in Permutations 1 by MATRIX_2:21,TARSKI:def 1;
+    hence thesis by A2,A9,SETWISEO:26;
+  end;
+
+theorem
+  for K being Field, n being Nat st n >= 1 holds
+    Per (0.(K,n,n)) = 0.K
+proof let K be Field, n be Nat;
+    assume A0: n>=1;then n >= 1+0; then
+A1: n > 0 by NAT_1:38;
+    set B = FinOmega Permutations n;
+    set f = PPath_product(0.(K,n,n));
+    set F = the add of K;
+    set Y = the carrier of K;
+    set X = Permutations n;
+A5: Permutations(n) is finite by MATRIX_2:30;
+A3: FinOmega Permutations n <> {} by A5,MATRIX_2:def 17;
+    dom (Permutations(n) --> 0.K) = Permutations(n) by FUNCOP_1:19;then
+A32:dom (PPath_product(0.(K,n,n))) = dom (Permutations(n) --> 0.K)
+      by FUNCT_2:def 1;
+    for x being set st x in dom PPath_product(0.(K,n,n)) holds
+      (PPath_product(0.(K,n,n))).x = (Permutations(n) --> 0.K).x
+    proof let x be set;
+      assume x in dom PPath_product(0.(K,n,n));
+      for p being Element of Permutations n holds
+        (Permutations(n) --> 0.K).p =
+          (the mult of K) $$ Path_matrix(p,(0.(K,n,n)))
+      proof let p be Element of Permutations(n);
+C9:     len (n |-> 0.K) = n by FINSEQ_2:69;
+        for i,j being Nat st i in dom (n |-> 0.K) & j=p.i holds
+          (n |-> 0.K).i = (0.(K,n,n))*(i,j)
+        proof let i,j be Nat;
+          assume D0: i in dom (n |-> 0.K) & j=p.i;then
+D5:       i in Seg n by FINSEQ_2:68;then
+D2:       (n |-> 0.K).i=0.K by FINSEQ_2:70;
+D7:       i in dom (0.(K,n,n)) by D5,MATRIX_7:13;
+          j in Seg n by D0,D5,MATRIX_7:14;then
+          i in dom (0.(K,n,n)) & j in Seg width (0.(K,n,n))
+            by D5,MATRIX_7:13,A1,MATRIX_1:24;then
+          [i,j] in [:dom (0.(K,n,n)),Seg width (0.(K,n,n)):]
+            by ZFMISC_1:def 2;then
+          [i,j] in Indices (0.(K,n,n)) by MATRIX_1:def 5;
+          hence (n |-> 0.K).i=(0.(K,n,n))*(i,j) by D2,MATRIX_3:3;
+        end;then
+C7:     Path_matrix(p,(0.(K,n,n))) = n |-> 0.K by C9,MATRIX_3:def 7;
+        defpred P[Nat] means (the mult of K) $$ (($1+1) |-> 0.K)=0.K;
+        1 |-> 0.K = <* 0.K *> by FINSEQ_2:73;then
+C5:     P[0] by FINSOP_1:12;
+C6:     for k being Nat st P[k] holds P[k+1]
+        proof let k be Nat;
+          assume C1: P[k];
+C2:       (the mult of K) has_a_unity by FVSUM_1:11;
+          (k+1+1) |-> 0.K = ((k+1) |-> 0.K) ^ <* 0.K *> by FINSEQ_2:74;then
+          (the mult of K) $$ ( (k+1+1) |-> 0.K)
+             = (the mult of K).((the mult of K) $$ (((k+1) |-> 0.K)),0.K)
+               by FINSOP_1:5,C2
+            .= (the mult of K).(0.K,0.K) by C1
+            .= (0.K)*(0.K) by GROUP_1:def 1
+            .= 0.K by VECTSP_1:36;
+          hence P[k+1];
+        end;
+C9:     for k being Nat holds P[k] from NAT_1:sch 1(C5,C6);
+        n-'1+1=n by A0,BINARITH:53;then
+        (the mult of K) $$ Path_matrix(p,(0.(K,n,n))) = 0.K by C7,C9;
+        hence (Permutations(n) --> 0.K).p
+          = (the mult of K) $$ Path_matrix(p,(0.(K,n,n)))
+            by FUNCOP_1:13;
+      end;
+      hence (PPath_product(0.(K,n,n))).x = (Permutations(n) --> 0.K).x
+        by Def8;
+    end;then
+B30:PPath_product(0.(K,n,n)) = Permutations(n) --> 0.K by A32,FUNCT_1:9;
+    reconsider G0= Fin X --> 0.K as Function of Fin X, Y;
+B11:G0.B=0.K by FUNCOP_1:13;
+B12:for e being Element of Y st e is_a_unity_wrt F holds G0.({}) = e
+    proof let e be Element of Y;
+      assume e is_a_unity_wrt F;then
+C3:   F.(0.K,e) = 0.K by BINOP_1:11;
+      0.K is_a_unity_wrt F by FVSUM_1:8;then
+C4:   F.(0.K,e) = e by BINOP_1:11;
+      {} in Fin X by FINSUB_1:18;
+      hence G0.({}) = e by C3,C4,FUNCOP_1:13;
+    end;
+B13:for x being Element of X holds G0.({x}) = f.x
+    proof let x be Element of X;
+C4:   G0.({x}) = 0.K by FUNCOP_1:13;
+      f.x=(Permutations(n) --> 0.K).x by B30 .= 0.K by FUNCOP_1:13;
+      hence G0.({x}) = f.x by C4;
+    end;
+    for B' being Element of Fin X st B' c= B & B' <> {}
+      for x being Element of X st x in B\B' holds G0.(B' \/ {x})
+                    = F.(G0.B',f.x)
+    proof let B' be Element of Fin X;
+      assume B' c= B & B' <> {};
+      thus for x being Element of X st x in B\B' holds G0.(B' \/ {x})
+                    = F.(G0.B',f.x)
+      proof let x be Element of X;
+        assume x in B \ B';
+E3:     G0.(B' \/ {x})=0.K by FUNCOP_1:13;
+E6:     G0.B' = 0.K by FUNCOP_1:13;
+E5:     f.x = (PPath_product(0.(K,n,n))).x
+         .=(Permutations(n) --> 0.K).x by B30 .= 0.K by FUNCOP_1:13;
+        0.K is_a_unity_wrt F by FVSUM_1:8;
+        hence G0.(B' \/ {x}) = F.(G0.B',f.x) by E3,E5,E6,BINOP_1:11;
+      end;
+    end;
+    hence thesis by SETWISEO:def 3,A3,B11,B12,B13;
+end;
+
+theorem Cosik1:
+  for p being Element of Permutations 2 st p = idseq 2 holds
+    Path_matrix (p, (a,b)][(c,d)) = <* a,d *>
+  proof
+    let p be Element of Permutations 2 such that A0: p = idseq 2;
+A1:  len Path_matrix (p, (a,b)][(c,d)) = 2 by MATRIX_3:def 7;then
+A2:  dom Path_matrix (p, (a,b)][(c,d)) = Seg 2 by FINSEQ_1:def 3; then
+B1:  1 in dom Path_matrix (p, (a,b)][(c,d));then
+A3:  1 = p.1 by A2,FINSEQ_2:56, A0;
+B2:  2 in dom Path_matrix (p, (a,b)][(c,d)) by A2;then
+A4:  2 = p.2 by A2,FINSEQ_2:56, A0;
+C1:  Path_matrix (p, (a,b)][(c,d)).1=(a,b)][(c,d)*(1,1)
+       by B1, MATRIX_3:def 7, A3
+     .= a by MATRIX_2:6;
+     Path_matrix (p, (a,b)][(c,d)).2=(a,b)][(c,d)*(2,2)
+       by B2, MATRIX_3:def 7, A4
+     .= d by MATRIX_2:6;
+    hence thesis by C1, A1, FINSEQ_1:61;
+  end;
+
+theorem Cosik2:
+  for p being Element of Permutations 2 st p = Rev idseq 2 holds
+    Path_matrix (p, (a,b)][(c,d)) = <* b,c *>
+   proof
+     let p be Element of Permutations 2 such that A0: p = Rev idseq 2;
+A1:  len Path_matrix (p, (a,b)][(c,d)) = 2 by MATRIX_3:def 7;then
+A2:  dom Path_matrix (p, (a,b)][(c,d)) = Seg 2 by FINSEQ_1:def 3; then
+B1:  2 in dom Path_matrix (p, (a,b)][(c,d));
+B2:  1 in dom Path_matrix (p, (a,b)][(c,d)) by A2;
+C1:  Path_matrix (p, (a,b)][(c,d)).2=(a,b)][(c,d)*(2,1)
+       by B1, MATRIX_3:def 7, A0,Th2
+     .=c by MATRIX_2:6;
+     Path_matrix (p, (a,b)][(c,d)).1=(a,b)][(c,d)*(1,2)
+       by B2, MATRIX_3:def 7, A0,Th2
+     .= b by MATRIX_2:6;
+     hence thesis by C1, A1, FINSEQ_1:61;
+   end;
+   
+theorem ThMult:
+  (the mult of K) $$ <* a,b *> = a * b
+  proof
+    (the mult of K) $$ <* a,b *> = Product <*a,b*> by GROUP_4:def 3
+                                .= a * b by FVSUM_1:103;
+    hence thesis;
+  end;
+
+begin
+
+registration
+  cluster odd Permutation of Seg 2;
+  existence
+  proof
+    rng idseq 2 c= Seg 2 by RELSET_1:12; then
+    reconsider f = idseq 2 as FinSequence of Seg 2 by FINSEQ_1:def 4;
+    reconsider g = <*2,1*> as Permutation of Seg 2 by Ble1,MATRIX_2:def 11;
+    not ex l be FinSequence of Group_of_Perm 2 st
+     (len l) mod 2 = 0 & g = Product l &
+       for i st i in dom l
+         ex q being Element of Permutations 2 st
+           l.i = q & q is_transposition by MATRIX_7:11,b1; then
+    g is odd by MATRIX_2:def 15;
+    hence thesis;
+  end;
+end;
+
+registration let n be Nat;
+  cluster even Permutation of Seg n;
+  existence
+  proof
+    reconsider f = id Seg n as Permutation of Seg n;
+    f is even by MATRIX_2:29;
+    hence thesis;
+  end;
+end;
+
+theorem Ko1:
+  <*2,1*> is odd Permutation of Seg 2
+  proof
+    rng idseq 2 c= Seg 2 by RELSET_1:12; then
+    reconsider f = idseq 2 as FinSequence of Seg 2 by FINSEQ_1:def 4;
+    reconsider g = <*2,1*> as Permutation of Seg 2 by Ble1,MATRIX_2:def 11;
+    not ex l be FinSequence of Group_of_Perm 2 st
+     (len l) mod 2 = 0 & g = Product l &
+       for i st i in dom l
+         ex q being Element of Permutations 2 st
+           l.i = q & q is_transposition by b1,MATRIX_7:11;
+    hence thesis by MATRIX_2:def 15;
+  end;
+
+theorem
+  Det (a,b)][(c,d) = a * d - b * c
+  proof
+    set M = (a,b)][(c,d);
+    reconsider id2 = idseq 2 as Permutation of Seg 2;
+    reconsider Id2 = idseq 2 as Element of Permutations 2 by IdPer;
+    reconsider rid2 = Rev idseq 2 as Element of Permutations 2 by RevIdPer;
+    set F = the add of K;
+    set f = Path_product M;
+    len Permutations 2 = 2 by MATRIX_2:20; then
+J1: Id2 is even by MATRIX_2:29;
+Z1: f.id2 = -((the mult of K) $$ Path_matrix (Id2,M),Id2)
+           by MATRIX_3:def 8
+         .= (the mult of K) $$ Path_matrix (Id2,M)
+           by MATRIX_2:def 16,J1
+         .= (the mult of K) $$ <*a,d*> by Cosik1
+         .= a*d by ThMult;
+    reconsider f1 = f.Id2, f2 = f.rid2 as Element of K;
+    1 in Seg 2; then
+H2: id2.1 = 1 by FINSEQ_2:56;
+X1: rid2 = <*2,1*> by FINSEQ_5:64,FINSEQ_2:61;
+D1: id2 <> rid2 by H2,Th2;
+    len Permutations 2 = 2 by MATRIX_2:20; then
+G1: rid2 is odd by X1,Ko1;
+Z2: f.rid2 = -((the mult of K) $$ Path_matrix (rid2,M),rid2)
+       by MATRIX_3:def 8
+       .= -(the mult of K) $$ Path_matrix (rid2,M) by G1,MATRIX_2:def 16
+       .= -(the mult of K) $$ <*b,c*> by Cosik2     
+       .= -b*c by ThMult;
+    Permutations 2 is finite by MATRIX_2:30; then
+C4: FinOmega Permutations 2 = Permutations 2 by MATRIX_2:def 17;
+    Det M = F $$ ({Id2,rid2},f) by C4,Cosik0,MATRIX_3:def 9
+      .= F.(f.id2, f.rid2) by D1,SETWOP_2:3
+      .= a*d - b*c by Z1,Z2;
+    hence thesis;
+  end;
+  
+theorem
+  Per (a,b)][(c,d) = a * d + b * c
+  proof
+    set M = (a,b)][(c,d);
+    reconsider Id2 = idseq 2 as Element of Permutations 2 by IdPer;
+    reconsider id2 = Id2 as Permutation of Seg 2;
+    reconsider rid2 = Rev idseq 2 as Element of Permutations 2 by RevIdPer;
+    set F = the add of K;
+    set f = PPath_product M;
+Z1: f.id2 = (the mult of K) $$ Path_matrix (Id2,M) by Def8
+         .= (the mult of K) $$ <*a,d*> by Cosik1
+         .= a*d by ThMult;
+Z2: f.rid2 = (the mult of K) $$ Path_matrix (rid2,M) by Def8
+       .= (the mult of K) $$ <*b,c*> by Cosik2
+       .= b*c by ThMult;
+    Permutations 2 is finite by MATRIX_2:30; then
+C4: FinOmega Permutations 2 = Permutations 2 by MATRIX_2:def 17;
+    reconsider f1 = f.Id2, f2 = f.rid2 as Element of K;
+    1 in Seg 2; then
+D1: id2 <> rid2 by FINSEQ_2:56,Th2;
+    Per M = F.(f.id2, f.rid2) by D1,SETWOP_2:3,C4,Cosik0
+      .= a*d + b*c by Z1,Z2;
+    hence thesis;
+  end;
+  
+theorem ThRevId3:
+  Rev idseq 3 = <*3,2,1*>
+  proof
+    reconsider h = <*2,3*> as FinSequence of NAT;
+    set g = Rev h;
+T2: <*1*>^h = <*1,2,3*> by FINSEQ_1:60;
+    Rev h = <*3,2*> by FINSEQ_5:64;
+    hence thesis by T2,FINSEQ_2:62,FINSEQ_6:28;
+  end;
+  
+ reserve D for non empty set;
+  
+theorem
+  for x,y,z being Element of D
+  for f being FinSequence of D st f = <*x,y,z*> holds
+  Rev f = <*z,y,x*>
+  proof
+    let x,y,z be Element of D;
+    let f be FinSequence of D;
+    reconsider h = <*y,z*> as FinSequence of D;
+    set g = Rev h;
+    assume f = <*x,y,z*>; then
+A2: f = <*x*>^h by FINSEQ_1:60;
+    Rev h = <*z,y*> by FINSEQ_5:64;
+    hence thesis by A2,FINSEQ_6:28;
+  end;
+
+theorem Th4:
+  for f, g being FinSequence st f ^ g in Permutations n holds
+    f ^ Rev g in Permutations n
+  proof
+    let f, g be FinSequence;
+    assume A1: f ^ g in Permutations n;
+R3: f ^ g is Permutation of Seg n by MATRIX_2:def 11,A1;
+KK: rng (f^g) = Seg n by R3,FUNCT_2:def 3;
+    dom (f ^ g) = Seg n by FUNCT_2:67,R3; then
+R1: Seg n = Seg (len f + len g) by FINSEQ_1:def 7;
+B4: len g = len Rev g by FINSEQ_5:def 3;
+A9: dom g = dom Rev g & rng g = rng Rev g by FINSEQ_5:60;
+R2: rng (f^g) = rng f \/ rng g by FINSEQ_1:44
+    .= rng (f^Rev g) by A9,FINSEQ_1:44;
+A8: rng f misses rng g & f is one-to-one & g is one-to-one
+      by FINSEQ_3:98,R3;then
+B3: Rev g is one-to-one by Lemma1;
+    set h = f ^ Rev g;
+I1: dom h = Seg n by R1,B4,FINSEQ_1:def 7;
+    rng h = Seg n by R2,KK; then
+    reconsider h as FinSequence-like Function of
+      Seg n, Seg n by I1,FUNCT_2:4;
+B1: h is onto by FUNCT_2:def 3,R2,KK;
+    h is one-to-one by B3,A8,A9,FINSEQ_3:98;then
+    h is bijective by FUNCT_2:def 4,B1;
+    hence thesis by MATRIX_2:def 11;
+  end;  
+
+theorem Th5:
+  for f, g being FinSequence st f ^ g in Permutations n holds
+    g ^ f in Permutations n
+  proof
+    let f, g be FinSequence;
+    assume A1: f ^ g in Permutations n;
+R3: f ^ g is Permutation of Seg n by MATRIX_2:def 11,A1;
+A5: f ^ g is Function of Seg n,Seg n & rng (f ^ g) = Seg n
+      by FUNCT_2:def 3,R3;then
+A4: dom (f ^ g) = Seg n by FUNCT_2:67;
+C1: len(f^g) = len f + len g by FINSEQ_1:35
+            .= len (g^f) by FINSEQ_1:35;
+    Seg len(f^g) = dom (f^g) by FINSEQ_1:def 3; then
+C4: dom (f^g) = dom (g^f) by C1,FINSEQ_1:def 3;
+R2: rng (f^g) = rng f \/ rng g by FINSEQ_1:44
+    .= rng (g^f) by FINSEQ_1:44;
+A8: rng f misses rng g & f is one-to-one & g is one-to-one
+      by FINSEQ_3:98,R3;
+    reconsider h = g ^ f as FinSequence-like Function of Seg n, Seg n
+      by FUNCT_2:4,R2,A5,C4,A4;
+B1: h is onto by FUNCT_2:def 3,A5,R2;
+    h is one-to-one by A8,FINSEQ_3:98;then
+    h is bijective by FUNCT_2:def 4,B1;
+    hence thesis by MATRIX_2:def 11;
+  end;
+
+theorem ThPermut3:
+  Permutations 3 =
+    {<*1,2,3*>,<*3,2,1*>,<*1,3,2*>,<*2,3,1*>,<*2,1,3*>,<*3,1,2*>}
+    proof
+     now let p be set;
+     assume p in Permutations 3; then
+     reconsider q=p as Permutation of Seg 3 by MATRIX_2:def 11;
+A1:  q is Function of Seg 3,Seg 3 & rng q = Seg 3 by FUNCT_2:def 3;
+A2:  dom q = Seg 3 by FUNCT_2:67;
+ZZ:  1 in Seg 3 & 2 in Seg 3 & 3 in Seg 3;
+     q.1 in Seg 3 by A1,FUNCT_2:6,ZZ;then
+Q1:  q.1 = 1 or q.1 = 2 or q.1 = 3 by ENUMSET1:def 1,FINSEQ_3:1;
+     q.2 in Seg 3 by A1,FUNCT_2:6,ZZ;then
+Q2:  q.2 = 1 or q.2 = 2 or q.2 = 3 by ENUMSET1:def 1,FINSEQ_3:1;
+     q.3 in Seg 3 by A1,FUNCT_2:6,ZZ;then
+qq:  q.3 = 1 or q.3 = 2 or q.3 = 3 by ENUMSET1:def 1,FINSEQ_3:1;
+     q.1=1 & q.2=2 & q.3=3 or
+     q.1=3 & q.2=2 & q.3=1 or
+     q.1=1 & q.2=3 & q.3=2 or
+     q.1=2 & q.2=3 & q.3=1 or
+     q.1=2 & q.2=1 & q.3=3 or
+     q.1=3 & q.2=1 & q.3=2 implies q=<*1,2,3*> or q=<*3,2,1*> or q=<*1,3,2*> or
+     q=<*2,3,1*> or q=<*2,1,3*> or q=<*3,1,2*>
+     proof
+       reconsider q as FinSequence by A2,FINSEQ_1:def 2;
+       len q = 3 by A2,FINSEQ_1:def 3;
+       hence thesis by FINSEQ_1:62;
+     end; then
+     p in {<*1,2,3*>,<*3,2,1*>} or q in {<*1,3,2*>,<*2,3,1*>} or
+       q in {<*2,1,3*>,<*3,1,2*>}
+         by qq,TARSKI:def 2,Q1,Q2,FUNCT_1:def 8,A2,ZZ;then
+     p in {<*1,2,3*>,<*3,2,1*>} or q in {<*1,3,2*>,<*2,3,1*>}\/
+       {<*2,1,3*>,<*3,1,2*>} by XBOOLE_0:def 2;then
+     p in {<*1,2,3*>,<*3,2,1*>} or
+       q in {<*1,3,2*>,<*2,3,1*>,<*2,1,3*>,<*3,1,2*>} by ENUMSET1:45;then
+     p in {<*1,2,3*>,<*3,2,1*>} \/ {<*1,3,2*>,<*2,3,1*>,<*2,1,3*>,<*3,1,2*>}
+       by XBOOLE_0:def 2;
+     hence p in {<*1,2,3*>,<*3,2,1*>,<*1,3,2*>,<*2,3,1*>,<*2,1,3*>,<*3,1,2*>}
+       by ENUMSET1:52;
+    end;then
+A4: Permutations 3 c=
+      {<*1,2,3*>,<*3,2,1*>,<*1,3,2*>,<*2,3,1*>,<*2,1,3*>,<*3,1,2*>}
+        by TARSKI:def 3;
+     now let x;
+       assume x in {<*1,2,3*>,<*3,2,1*>,<*1,3,2*>,<*2,3,1*>,
+         <*2,1,3*>,<*3,1,2*>};then
+       x in {<*1,2,3*>,<*3,2,1*>}\/{<*1,3,2*>,<*2,3,1*>,<*2,1,3*>,<*3,1,2*>}
+         by ENUMSET1:52; then
+       x in {<*1,2,3*>,<*3,2,1*>} or
+         x in {<*1,3,2*>,<*2,3,1*>,<*2,1,3*>,<*3,1,2*>}
+           by XBOOLE_0:def 2;then
+       x in {<*1,2,3*>,<*3,2,1*>} or
+         x in {<*1,3,2*>,<*2,3,1*>} \/ {<*2,1,3*>,<*3,1,2*>}
+           by ENUMSET1:45;then
+       x in {<*1,2,3*>,<*3,2,1*>} or x in {<*1,3,2*>,<*2,3,1*>} or
+         x in {<*2,1,3*>,<*3,1,2*>} by XBOOLE_0:def 2;then
+B1:    x=<*1,2,3*> or x=<*3,2,1*> or x=<*1,3,2*> or x=<*2,3,1*> or
+         x=<*2,1,3*> or x=<*3,1,2*> by TARSKI:def 2;
+K0:    idseq 3 in Permutations 3 by IdPer;
+K2:    Rev idseq 3 in Permutations 3 by RevIdPer;
+K3:   <*1,3,2*> in Permutations 3
+      proof
+        reconsider f = <*1,2,3*> as one-to-one FinSequence-like Function
+          of Seg 3,Seg 3 by FINSEQ_2:62;
+        reconsider h = <*2,3*> as FinSequence of NAT;
+K3:     f = <*1*> ^ h by FINSEQ_1:60;
+        Rev h = <*3,2*> by FINSEQ_5:64;then
+        <*1*>^Rev h = <*1,3,2*> by FINSEQ_1:60;
+        hence thesis by K3,K0,FINSEQ_2:62,Th4;
+       end;
+K4:    <*2,3,1*> in Permutations 3
+       proof
+        reconsider f = <*1,2,3*> as one-to-one FinSequence-like Function
+          of Seg 3,Seg 3 by FINSEQ_2:62;
+        reconsider h = <*2,3*> as FinSequence of NAT;
+        f = <*1*> ^ h by FINSEQ_1:60;
+        hence thesis by Th5,K0,FINSEQ_2:62;
+       end;
+K5:    <*2,1,3*> in Permutations 3
+       proof
+        reconsider f = <*1,2,3*> as one-to-one FinSequence-like Function
+          of Seg 3,Seg 3 by FINSEQ_2:62;
+        reconsider h = <*1,2*> as FinSequence of NAT;
+K4:     <*3*> ^ h in Permutations 3 by Th5,K0,FINSEQ_2:62;
+K5:     Rev h = <*2,1*> by FINSEQ_5:64;
+        <*3*> ^ Rev h in Permutations 3 by Th4,K4;
+        hence thesis by Th5,K5;
+       end;
+      <*3,1,2*> in Permutations 3
+      proof
+        reconsider f = <*1,2,3*> as one-to-one FinSequence-like Function
+          of Seg 3,Seg 3 by FINSEQ_2:62;
+        reconsider h = <*1,2*> as FinSequence of NAT;
+        <*3*> ^ h = <*3,1,2*> by FINSEQ_1:60;
+        hence thesis by Th5,K0,FINSEQ_2:62;
+       end;
+       hence x in Permutations 3 by B1,K0,K2,K3,K4,K5,ThRevId3,FINSEQ_2:62;
+     end; then
+     {<*1,2,3*>,<*3,2,1*>,<*1,3,2*>,<*2,3,1*>,<*2,1,3*>,<*3,1,2*>}
+     c= Permutations 3 by TARSKI:def 3;       
+    hence thesis by XBOOLE_0:def 10, A4;
+  end;
+
+theorem Lem1:
+  for a,b,c,d,e,f,g,h,i being Element of K
+  for M being Matrix of 3,K st M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>
+  for p being Element of Permutations 3 st p = <*1,2,3*> holds
+  Path_matrix (p,M) = <* a,e,i *>
+  proof
+    let a,b,c,d,e,f,g,h,i be Element of K;
+    let M be Matrix of 3, K;
+    assume A0: M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>;
+    let p be Element of Permutations 3;
+    assume A1: p = <*1,2,3*>;
+L1: len M = 3 by MATRIX_1:def 3;then
+L2: width M = 3 by MATRIX_1:20;
+A3: len Path_matrix (p,M) = 3 by MATRIX_3:def 7;then
+A2: dom Path_matrix (p,M) = Seg 3 by FINSEQ_1:def 3;
+Q1: 1 in dom Path_matrix (p,M) by A2;
+R1: 1 = p.1 by FINSEQ_1:62,A1;
+Q2: 2 in dom Path_matrix (p,M) by A2;
+R2: 2 = p.2 by FINSEQ_1:62,A1;
+Q3: 3 in dom Path_matrix (p,M) by A2;
+R3: 3 = p.3 by FINSEQ_1:62,A1;
+X1: M.1 = <*a,b,c*> by A0,FINSEQ_1:62;
+    [1,1] in Indices M by GOBOARD7:10,L1,L2; then
+    consider r being FinSequence of the carrier of K such that
+Y1: r = M.1 & M*(1,1) = r.1 by MATRIX_1:def 6;
+X3: r.1 = a by FINSEQ_1:62,Y1,X1;
+P1: Path_matrix (p,M).1 = M*(1,1) by MATRIX_3:def 7,Q1,R1
+                       .= a by X3,Y1;
+Y1: M.2 = <*d,e,f*> by A0,FINSEQ_1:62;
+    [2,2] in Indices M by GOBOARD7:10,L1,L2; then
+    consider y being FinSequence of the carrier of K such that
+K1: y = M.2 & M*(2,2) = y.2 by MATRIX_1:def 6;
+Y3: y.2 = e by FINSEQ_1:62,K1,Y1;
+P2: Path_matrix (p,M).2 = M*(2,2) by MATRIX_3:def 7,Q2,R2
+                       .= e by Y3,K1;
+Z1: M.3 = <*g,h,i*> by A0,FINSEQ_1:62;
+    [3,3] in Indices M by GOBOARD7:10,L1,L2; then
+    consider z being FinSequence of the carrier of K such that
+K2: z = M.3 & M*(3,3) = z.3 by MATRIX_1:def 6;
+Z3: z.3 = i by FINSEQ_1:62,Z1,K2;
+    Path_matrix (p,M).3 = M*(3,3) by MATRIX_3:def 7,Q3,R3
+                       .= i by Z3,K2;
+    hence thesis by P1,P2,FINSEQ_1:62,A3;
+  end;  
+  
+theorem Lem2:
+  for a,b,c,d,e,f,g,h,i being Element of K
+  for M being Matrix of 3,K st M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>
+  for p being Element of Permutations 3 st p = <*3,2,1*> holds
+  Path_matrix (p,M) = <* c,e,g *>
+  proof
+    let a,b,c,d,e,f,g,h,i be Element of K;
+    let M be Matrix of 3, K;
+    assume A0: M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>;
+    let p be Element of Permutations 3;
+    assume
+L0: p = <*3,2,1*>;
+L1: len M = 3 by MATRIX_1:def 3;then
+L2: width M = 3 by MATRIX_1:20;
+A3: len Path_matrix (p,M) = 3 by MATRIX_3:def 7;then
+A2: dom Path_matrix (p,M)= Seg 3 by FINSEQ_1:def 3;
+Q1: 1 in dom Path_matrix (p,M) by A2;
+R1: 3 = p.1 by FINSEQ_1:62,L0;
+Q2: 2 in dom Path_matrix (p,M) by A2;
+R2: 2 = p.2 by FINSEQ_1:62,L0;
+Q3: 3 in dom Path_matrix (p,M) by A2;
+R3: 1 = p.3 by FINSEQ_1:62,L0;
+X1: M.1 = <*a,b,c*> by A0,FINSEQ_1:62;
+    [1,3] in Indices M by GOBOARD7:10,L1,L2; then
+    consider r being FinSequence of the carrier of K such that
+K1: r = M.1 & M*(1,3) = r.3 by MATRIX_1:def 6;
+X3: r.3 = c by FINSEQ_1:62,X1,K1;
+P1: Path_matrix (p,M).1 = M*(1,3) by MATRIX_3:def 7,Q1,R1
+                       .= c by X3,K1;
+Y1: M.2 = <*d,e,f*> by A0,FINSEQ_1:62;
+    [2,2] in Indices M by GOBOARD7:10,L1,L2; then
+    consider y being FinSequence of the carrier of K such that
+K2: y = M.2 & M*(2,2) = y.2 by MATRIX_1:def 6;
+Y3: y.2 = e by FINSEQ_1:62,Y1,K2;
+P2: Path_matrix (p,M).2 = M*(2,2) by MATRIX_3:def 7,Q2,R2
+                       .= e by Y3,K2;
+Z1: M.3 = <*g,h,i*> by A0,FINSEQ_1:62;
+    [3,1] in Indices M by GOBOARD7:10,L1,L2; then
+    consider z being FinSequence of the carrier of K such that
+K3: z = M.3 & M*(3,1) = z.1 by MATRIX_1:def 6;
+Z3: z.1 = g by FINSEQ_1:62,Z1,K3;
+    Path_matrix (p,M).3 = M*(3,1) by MATRIX_3:def 7,Q3,R3
+                       .= g by Z3,K3;
+    hence thesis by P1,P2,FINSEQ_1:62,A3;
+  end;
+
+theorem Lem3:
+  for a,b,c,d,e,f,g,h,i being Element of K
+  for M being Matrix of 3,K st M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>
+  for p being Element of Permutations 3 st p = <*1,3,2*> holds
+  Path_matrix (p,M) = <* a,f,h *>
+  proof
+    let a,b,c,d,e,f,g,h,i be Element of K;
+    let M be Matrix of 3, K;
+    assume A0: M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>;
+    let p be Element of Permutations 3;
+    assume A1: p = <*1,3,2*>;
+L1: len M = 3 by MATRIX_1:def 3;then
+L2: width M = 3 by MATRIX_1:20;
+A3: len Path_matrix (p,M) = 3 by MATRIX_3:def 7;then
+A2: dom Path_matrix (p,M)= Seg 3 by FINSEQ_1:def 3;
+Q1: 1 in dom Path_matrix (p,M) by A2;
+R1: 1 = p.1 by FINSEQ_1:62,A1;
+Q2: 2 in dom Path_matrix (p,M) by A2;
+R2: 3 = p.2 by FINSEQ_1:62,A1;
+Q3: 3 in dom Path_matrix (p,M) by A2;
+R3: 2 = p.3 by FINSEQ_1:62,A1;
+X1: M.1 = <*a,b,c*> by A0,FINSEQ_1:62;
+    [1,1] in Indices M by L1,L2,GOBOARD7:10; then
+    consider r being FinSequence of the carrier of K such that
+K1: r = M.1 & M*(1,1) = r.1 by MATRIX_1:def 6;
+X3: r.1 = a by FINSEQ_1:62,X1,K1;
+P1: Path_matrix (p,M).1 = M*(1,1) by MATRIX_3:def 7,Q1,R1
+                       .= a by X3,K1;
+Y1: M.2 = <*d,e,f*> by A0,FINSEQ_1:62;
+    [2,3] in Indices M by GOBOARD7:10,L1,L2; then
+    consider y being FinSequence of the carrier of K such that
+K2: y = M.2 & M*(2,3) = y.3 by MATRIX_1:def 6;
+Y3: y.3 = f by FINSEQ_1:62,Y1,K2;
+P2: Path_matrix (p,M).2 = M*(2,3) by MATRIX_3:def 7,Q2,R2
+                       .= f by Y3,K2;
+Z1: M.3 = <*g,h,i*> by A0,FINSEQ_1:62;
+    [3,2] in Indices M by GOBOARD7:10,L1,L2; then
+    consider z being FinSequence of the carrier of K such that
+K3: z = M.3 & M*(3,2) = z.2 by MATRIX_1:def 6;
+Z3: z.2 = h by FINSEQ_1:62,Z1,K3;
+    Path_matrix (p,M).3 = M*(3,2) by MATRIX_3:def 7,Q3,R3
+                       .= h by Z3,K3;
+    hence thesis by P1,P2,FINSEQ_1:62,A3;
+  end;
+  
+theorem Lem4:
+  for a,b,c,d,e,f,g,h,i being Element of K
+  for M being Matrix of 3,K st M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>
+  for p being Element of Permutations 3 st p = <*2,3,1*> holds
+  Path_matrix (p,M) = <* b,f,g *>
+    proof
+    let a,b,c,d,e,f,g,h,i be Element of K;
+    let M be Matrix of 3, K;
+    assume A0: M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>;
+    let p be Element of Permutations 3;
+    assume A1: p = <*2,3,1*>;
+L1: len M = 3 by MATRIX_1:def 3;then
+L2: width M = 3 by MATRIX_1:20;
+A3: len Path_matrix (p,M) = 3 by MATRIX_3:def 7;then
+A2: dom Path_matrix (p,M)= Seg 3 by FINSEQ_1:def 3;
+Q1: 1 in dom Path_matrix (p,M) by A2;
+R1: 2 = p.1 by FINSEQ_1:62,A1;
+Q2: 2 in dom Path_matrix (p,M) by A2;
+R2: 3 = p.2 by FINSEQ_1:62,A1;
+Q3: 3 in dom Path_matrix (p,M) by A2;
+R3: 1 = p.3 by FINSEQ_1:62,A1;
+X1: M.1 = <*a,b,c*> by A0,FINSEQ_1:62;
+    [1,2] in Indices M by L1,L2,GOBOARD7:10; then
+    consider r being FinSequence of the carrier of K such that
+K1: r = M.1 & M*(1,2) = r.2 by MATRIX_1:def 6;
+X3: r.2 = b by FINSEQ_1:62,X1,K1;
+P1: Path_matrix (p,M).1 = M*(1,2) by MATRIX_3:def 7,Q1,R1
+                       .= b by X3,K1;
+Y1: M.2 = <*d,e,f*> by A0,FINSEQ_1:62;
+    [2,3] in Indices M by GOBOARD7:10,L1,L2; then
+    consider y being FinSequence of the carrier of K such that
+K2: y = M.2 & M*(2,3) = y.3 by MATRIX_1:def 6;
+Y3: y.3 = f by FINSEQ_1:62,Y1,K2;
+P2: Path_matrix (p,M).2 = M*(2,3) by MATRIX_3:def 7,Q2,R2
+                       .= f by Y3,K2;
+Z1: M.3 = <*g,h,i*> by A0,FINSEQ_1:62;
+    [3,1] in Indices M by GOBOARD7:10,L1,L2; then
+    consider z being FinSequence of the carrier of K such that
+K3: z = M.3 & M*(3,1) = z.1 by MATRIX_1:def 6;
+Z3: z.1 = g by FINSEQ_1:62,Z1,K3;
+    Path_matrix (p,M).3 = M*(3,1) by MATRIX_3:def 7,Q3,R3
+                       .= g by Z3,K3;
+    hence thesis by P1,P2,FINSEQ_1:62,A3;
+  end;
+  
+theorem Lem5:
+  for a,b,c,d,e,f,g,h,i being Element of K
+  for M being Matrix of 3,K st M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>
+  for p being Element of Permutations 3 st p = <*2,1,3*> holds
+  Path_matrix (p,M) = <* b,d,i *>
+    proof
+    let a,b,c,d,e,f,g,h,i be Element of K;
+    let M be Matrix of 3, K;
+    assume A0: M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>;
+    let p be Element of Permutations 3;
+    assume A1: p = <*2,1,3*>;
+L1: len M = 3 by MATRIX_1:def 3;then
+L2: width M = 3 by MATRIX_1:20;
+A3: len Path_matrix (p,M) = 3 by MATRIX_3:def 7;then
+A2: dom Path_matrix (p,M)= Seg 3 by FINSEQ_1:def 3;
+Q1: 1 in dom Path_matrix (p,M) by A2;
+R1: 2 = p.1 by FINSEQ_1:62,A1;
+Q2: 2 in dom Path_matrix (p,M) by A2;
+R2: 1 = p.2 by FINSEQ_1:62,A1;
+Q3: 3 in dom Path_matrix (p,M) by A2;
+R3: 3 = p.3 by FINSEQ_1:62,A1;
+X1: M.1 = <*a,b,c*> by A0,FINSEQ_1:62;
+    [1,2] in Indices M by GOBOARD7:10,L1,L2; then
+    consider r being FinSequence of the carrier of K such that
+K1: r = M.1 & M*(1,2) = r.2 by MATRIX_1:def 6;
+X3: r.2 = b by FINSEQ_1:62,X1,K1;
+P1: Path_matrix (p,M).1 = M*(1,2) by MATRIX_3:def 7,Q1,R1
+                       .= b by X3,K1;
+Y1: M.2 = <*d,e,f*> by A0,FINSEQ_1:62;
+    [2,1] in Indices M by GOBOARD7:10,L1,L2; then
+    consider y being FinSequence of the carrier of K such that
+K2: y = M.2 & M*(2,1) = y.1 by MATRIX_1:def 6;
+Y3: y.1 = d by FINSEQ_1:62,Y1,K2;
+P2: Path_matrix (p,M).2 = M*(2,1) by MATRIX_3:def 7,Q2,R2
+                       .= d by Y3,K2;
+Z1: M.3 = <*g,h,i*> by A0,FINSEQ_1:62;
+    [3,3] in Indices M by GOBOARD7:10,L1,L2; then
+    consider z being FinSequence of the carrier of K such that
+K3: z = M.3 & M*(3,3) = z.3 by MATRIX_1:def 6;
+Z3: z.3 = i by FINSEQ_1:62,Z1,K3;
+    Path_matrix (p,M).3 = M*(3,3) by MATRIX_3:def 7,Q3,R3
+                       .= i by Z3,K3;
+    hence thesis by P1,P2,FINSEQ_1:62,A3;
+  end;
+  
+theorem Lem6:
+  for a,b,c,d,e,f,g,h,i being Element of K
+  for M being Matrix of 3,K st M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>
+  for p being Element of Permutations 3 st p = <*3,1,2*> holds
+  Path_matrix (p,M) = <* c,d,h *>
+    proof
+    let a,b,c,d,e,f,g,h,i be Element of K;
+    let M be Matrix of 3, K;
+    assume A0: M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>;
+    let p be Element of Permutations 3;
+    assume A1: p = <*3,1,2*>;
+L1: len M = 3 by MATRIX_1:def 3;then
+L2: width M = 3 by MATRIX_1:20;
+A3: len Path_matrix (p,M) = 3 by MATRIX_3:def 7;then
+A2: dom Path_matrix (p,M) = Seg 3 by FINSEQ_1:def 3;
+Q1: 1 in dom Path_matrix (p,M) by A2;
+R1: 3 = p.1 by FINSEQ_1:62,A1;
+Q2: 2 in dom Path_matrix (p,M) by A2;
+R2: 1 = p.2 by FINSEQ_1:62,A1;
+Q3: 3 in dom Path_matrix (p,M) by A2;
+R3: 2 = p.3 by FINSEQ_1:62,A1;
+X1: M.1 = <*a,b,c*> by A0,FINSEQ_1:62;
+    [1,3] in Indices M by GOBOARD7:10,L1,L2; then
+    consider r being FinSequence of the carrier of K such that
+K1: r = M.1 & M*(1,3) = r.3 by MATRIX_1:def 6;
+X3: r.3 = c by FINSEQ_1:62,X1,K1;
+P1: Path_matrix (p,M).1 = M*(1,3) by MATRIX_3:def 7,Q1,R1
+                       .= c by X3,K1;
+Y1: M.2 = <*d,e,f*> by A0,FINSEQ_1:62;
+    [2,1] in Indices M by GOBOARD7:10,L1,L2; then
+    consider y being FinSequence of the carrier of K such that
+K2: y = M.2 & M*(2,1) = y.1 by MATRIX_1:def 6;
+Y3: y.1 = d by FINSEQ_1:62,Y1,K2;
+P2: Path_matrix (p,M).2 = M*(2,1) by MATRIX_3:def 7,Q2,R2
+                       .= d by Y3,K2;
+Z1: M.3 = <*g,h,i*> by A0,FINSEQ_1:62;
+    [3,2] in Indices M by GOBOARD7:10,L1,L2; then
+    consider z being FinSequence of the carrier of K such that
+K3: z = M.3 & M*(3,2) = z.2 by MATRIX_1:def 6;
+Z3: z.2 = h by FINSEQ_1:62,Z1,K3;
+    Path_matrix (p,M).3 = M*(3,2) by MATRIX_3:def 7,Q3,R3
+      .= h by Z3,K3;
+    hence thesis by P1,P2,FINSEQ_1:62,A3;
+  end;
+
+theorem ThMult3:
+  (the mult of K) $$ <* a,b,c *> = a * b * c
+  proof
+    (the mult of K) $$ <* a,b,c *>
+       = Product <* a,b,c *> by GROUP_4:def 3
+      .= a * b * c by FVSUM_1:104;
+    hence thesis;
+  end;
+  
+theorem CosTakiego:
+  <*1,3,2*> in Permutations 3 & <*2,3,1*> in Permutations 3 &
+  <*2,1,3*> in Permutations 3 & <*3,1,2*> in Permutations 3 &
+  <*1,2,3*> in Permutations 3 & <*3,2,1*> in Permutations 3
+  proof
+K0:  idseq 3 in Permutations 3 by IdPer;
+     reconsider f = <*1,2,3*> as one-to-one FinSequence-like Function
+       of Seg 3,Seg 3 by FINSEQ_2:62;
+K3:  <*1,3,2*> in Permutations 3
+     proof
+        set h = <*2,3*>;
+K3:     f = <*1*> ^ h by FINSEQ_1:60;
+K2:     f in Permutations 3 by IdPer,FINSEQ_2:62;
+        Rev h = <*3,2*> by FINSEQ_5:64;then
+        <*1*>^Rev h = <*1,3,2*> by FINSEQ_1:60;
+        hence thesis by K3,K2,Th4;
+       end;
+K4:    <*2,3,1*> in Permutations 3
+       proof
+        f = <*1*> ^ <*2,3*> by FINSEQ_1:60;
+        hence thesis by Th5,K0,FINSEQ_2:62;
+       end;
+       set h = <*1,2*>;
+K5:    <*2,1,3*> in Permutations 3
+       proof
+K4:     <*3*> ^ h in Permutations 3 by K0,Th5,FINSEQ_2:62;
+K5:     Rev h = <*2,1*> by FINSEQ_5:64;
+        <*3*> ^ Rev h in Permutations 3 by Th4,K4;
+        hence thesis by Th5,K5;
+       end;
+K6:  <*3,1,2*> in Permutations 3
+     proof
+       <*3*> ^ h = <*3,1,2*> by FINSEQ_1:60;
+       hence thesis by Th5,K0,FINSEQ_2:62;
+     end;
+     <*3,2,1*> in Permutations 3 by ThRevId3,Th1,K0;
+     hence thesis by K3,K4,K5,K6,FINSEQ_2:62,IdPer;
+   end;
+
+ThRozne:
+  <*1,2,3*> <> <*3,2,1*> & <*1,2,3*> <> <*1,3,2*> & <*1,2,3*> <> <*2,3,1*> &
+  <*1,2,3*> <> <*2,1,3*> & <*1,2,3*> <> <*3,1,2*> &
+  <*3,2,1*> <> <*1,3,2*> & <*3,2,1*> <> <*2,3,1*> & <*3,2,1*> <> <*2,1,3*> &
+  <*3,2,1*> <> <*3,1,2*> &
+  <*1,3,2*> <> <*2,3,1*> & <*1,3,2*> <> <*2,1,3*> & <*1,3,2*> <> <*3,1,2*> &
+  <*2,3,1*> <> <*2,1,3*> & <*2,3,1*> <> <*3,1,2*> & <*2,1,3*> <> <*3,1,2*>
+    by GROUP_7:3;
+
+theorem LmFin:
+  <*2,3,1*>" = <*3,1,2*>
+proof
+    set f = <*2,3,1*>, g = <*3,1,2*>;
+A1: dom f = {1,2,3} by FINSEQ_3:1,FINSEQ_3:30;
+A2: f is one-to-one by FINSEQ_3:104;
+    rng f = {2,3,1} by FINSEQ_2:148 .= {1,2,3} by ENUMSET1:100; then
+A3: rng f = dom g by FINSEQ_3:1,FINSEQ_3:30; then
+B1: dom (g * f) = {1,2,3} by A1,RELAT_1:46; then
+T1: dom (g * f) = dom id {1,2,3} by RELAT_1:71;
+    for x being set st x in dom (g * f) holds
+      (g * f).x = (id {1,2,3}).x
+    proof
+      let x be set;
+      assume
+Z1:   x in dom (g * f); then
+Z3:   (g * f).x = g.(f.x) by FUNCT_1:22;
+Z2:   x in {1,2,3} by Z1,B1;
+      per cases by Z2,ENUMSET1:def 1;
+      suppose
+Y1:     x = 1; then
+        g.(f.x) = g.2 by FINSEQ_1:62
+               .= 1 by FINSEQ_1:62
+               .= (id {1,2,3}).x by Y1,Z2,FUNCT_1:35;
+        hence thesis by Z3;
+      end;
+      suppose
+Y1:     x = 2; then
+        g.(f.x) = g.3 by FINSEQ_1:62
+               .= 2 by FINSEQ_1:62
+               .= (id {1,2,3}).x by Y1,Z2,FUNCT_1:35;
+        hence thesis by Z3;
+      end;
+      suppose
+Y1:     x = 3; then
+        g.(f.x) = g.1 by FINSEQ_1:62
+               .= 3 by FINSEQ_1:62
+               .= (id {1,2,3}).x by Y1,Z2,FUNCT_1:35;
+        hence thesis by Z3;
+      end;
+    end; then
+    g * f = id {1,2,3} by T1,FUNCT_1:9;
+    hence thesis by A1,A2,A3,FUNCT_1:63;
+end;
+
+theorem
+  for a being Element of Group_of_Perm 3 st
+    a = <*2,3,1*> holds a" = <*3,1,2*>
+  proof
+    let a be Element of Group_of_Perm 3;
+    assume
+A1: a = <*2,3,1*>;
+    reconsider a1 = a as Element of Permutations 3 by MATRIX_2:def 13;
+    a1" = <*3,1,2*> by A1,LmFin;
+    hence thesis by MATRIX_7:27;
+  end;
+
+begin :: Transpositions
+
+theorem Th1T:
+  for p being Permutation of Seg 3 st p = <* 1,3,2 *> holds
+    p is_transposition
+  proof
+    let p be Permutation of Seg 3;
+    assume
+A0: p = <*1,3,2*>; then
+A2: dom p = Seg 3 by FINSEQ_3:30 .= {1,2,3} by FINSEQ_3:1;
+    ex i,j st i in dom p & j in dom p & i <> j & p.i = j & p.j = i &
+      for k st k <> i & k <> j & k in dom p holds p.k = k
+    proof
+      take i = 2, j = 3;
+      thus i in dom p & j in dom p by A2,ENUMSET1:def 1;
+      for k st k <> i & k <> j & k in dom p holds p.k = k
+      proof
+        let k; assume k <> i & k <> j & k in dom p; then
+        k = 1 by A2,ENUMSET1:def 1;
+        hence thesis by A0,FINSEQ_1:62;
+      end;
+      hence thesis by A0,FINSEQ_1:62;
+    end;
+    hence thesis by MATRIX_2:def 14;
+  end;
+
+theorem Th2T:
+  for p being Permutation of Seg 3 st p = <* 2,1,3 *> holds
+    p is_transposition
+  proof
+    let p be Permutation of Seg 3;
+    assume
+A0: p = <*2,1,3*>; then
+A2: dom p = Seg 3 by FINSEQ_3:30 .= {1,2,3} by FINSEQ_3:1;
+    ex i,j st i in dom p & j in dom p & i <> j & p.i = j & p.j = i &
+      for k st k <> i & k <> j & k in dom p holds p.k = k
+    proof
+      take i = 1, j = 2;
+      thus i in dom p & j in dom p by A2,ENUMSET1:def 1;
+      for k st k <> i & k <> j & k in dom p holds p.k = k
+      proof
+        let k; assume k <> i & k <> j & k in dom p; then
+        k = 3 by A2,ENUMSET1:def 1;
+        hence thesis by A0,FINSEQ_1:62;
+      end;
+      hence thesis by A0,FINSEQ_1:62;
+    end;
+    hence thesis by MATRIX_2:def 14;
+  end;
+
+theorem
+  for p being Permutation of Seg 3 st p = <* 3,2,1 *> holds
+    p is_transposition
+  proof
+    let p be Permutation of Seg 3;
+    assume
+A0: p = <*3,2,1*>; then
+A2: dom p = Seg 3 by FINSEQ_3:30 .= {1,2,3} by FINSEQ_3:1;
+    ex i,j st i in dom p & j in dom p & i <> j & p.i = j & p.j = i &
+      for k st k <> i & k <> j & k in dom p holds p.k = k
+    proof
+      take i = 1, j = 3;
+      thus i in dom p & j in dom p by A2,ENUMSET1:def 1;
+      for k st k <> i & k <> j & k in dom p holds p.k = k
+      proof
+        let k; assume k <> i & k <> j & k in dom p; then
+        k = 2 by A2,ENUMSET1:def 1;
+        hence thesis by A0,FINSEQ_1:62;
+      end;
+      hence thesis by A0,FINSEQ_1:62;
+    end;
+    hence thesis by MATRIX_2:def 14;
+  end;
+
+theorem Th4T:
+  for p being Permutation of Seg n st p = id Seg n holds
+    not p is_transposition
+  proof
+    let p be Permutation of Seg n;
+    assume
+A0: p = id Seg n; then
+A2: dom p = Seg n by FUNCT_1:34;
+    not ex i,j st i in dom p & j in dom p & i <> j & p.i = j & p.j = i &
+      for k st k <> i & k <> j & k in dom p holds p.k = k
+        by A2,A0,FUNCT_1:34;
+    hence thesis by MATRIX_2:def 14;
+  end;
+
+theorem Th5T:
+  for p being Permutation of Seg 3 st p = <* 3,1,2 *> holds
+    not p is_transposition
+  proof
+    let p be Permutation of Seg 3;
+    assume
+A0: p = <*3,1,2*>; then
+A2: dom p = Seg 3 by FINSEQ_3:30 .= {1,2,3} by FINSEQ_3:1;
+    not ex i,j st i in dom p & j in dom p & i <> j & p.i = j & p.j = i &
+      for k st k <> i & k <> j & k in dom p holds p.k = k
+    proof
+      given i,j such that
+X1:   i in dom p & j in dom p & i <> j & p.i = j & p.j = i &
+      for k st k <> i & k <> j & k in dom p holds p.k = k;
+      ex k being Nat st k <> i & k <> j & k in dom p
+      proof
+XX:     (i = 1 or i = 2 or i = 3) & (j = 1 or j = 2 or j = 3)
+          by X1,A2,ENUMSET1:def 1;
+        per cases by XX,X1;
+        suppose
+A1:       i = 1 & j = 2;
+          take 3;
+          thus thesis by A1,A2,ENUMSET1:def 1;
+        end;
+        suppose
+A1:       i = 2 & j = 3;
+          take 1;
+          thus thesis by A1,A2,ENUMSET1:def 1;
+        end;
+        suppose
+A1:       i = 1 & j = 3;
+          take 2;
+          thus thesis by A1,A2,ENUMSET1:def 1;
+        end;
+        suppose
+A1:       i = 2 & j = 1;
+          take 3;
+          thus thesis by A1,A2,ENUMSET1:def 1;
+        end;
+        suppose
+A1:       i = 3 & j = 1;
+          take 2;
+          thus thesis by A1,A2,ENUMSET1:def 1;
+        end;
+        suppose
+A1:       i = 3 & j = 2;
+          take 1;
+          thus thesis by A1,A2,ENUMSET1:def 1;
+        end;
+      end; then
+      consider k such that
+X2:   k <> i & k <> j & k in dom p;
+C2:   p.k = k by X1,X2;
+      per cases by A2,X2,ENUMSET1:def 1;
+      suppose k = 1;
+        hence thesis by C2,A0,FINSEQ_1:62;
+      end;
+      suppose k = 2;
+        hence thesis by C2,A0,FINSEQ_1:62;
+      end;
+      suppose k = 3;
+        hence thesis by C2,A0,FINSEQ_1:62;
+      end;
+    end;
+    hence thesis by MATRIX_2:def 14;
+  end;
+
+theorem Th6T:
+  for p being Permutation of Seg 3 st p = <* 2,3,1 *> holds
+    not p is_transposition
+  proof
+    let p be Permutation of Seg 3;
+    assume
+A0: p = <*2,3,1*>; then
+A2: dom p = Seg 3 by FINSEQ_3:30 .= {1,2,3} by FINSEQ_3:1;
+    not ex i,j st i in dom p & j in dom p & i <> j & p.i = j & p.j = i &
+      for k st k <> i & k <> j & k in dom p holds p.k = k
+    proof
+      given i,j such that
+X1:   i in dom p & j in dom p & i <> j & p.i = j & p.j = i &
+      for k st k <> i & k <> j & k in dom p holds p.k = k;
+      ex k being Nat st k <> i & k <> j & k in dom p
+      proof
+XX:     (i = 1 or i = 2 or i = 3) & (j = 1 or j = 2 or j = 3)
+          by ENUMSET1:def 1,X1,A2;
+        per cases by XX,X1;
+        suppose
+A1:       i = 1 & j = 2;
+          take 3;
+          thus thesis by A1,A2,ENUMSET1:def 1;
+        end;
+        suppose
+A1:       i = 2 & j = 3;
+          take 1;
+          thus thesis by A1,A2,ENUMSET1:def 1;
+        end;
+        suppose
+A1:       i = 1 & j = 3;
+          take 2;
+          thus thesis by A1,A2,ENUMSET1:def 1;
+        end;
+        suppose
+A1:       i = 2 & j = 1;
+          take 3;
+          thus thesis by A1,A2,ENUMSET1:def 1;
+        end;
+        suppose
+A1:       i = 3 & j = 1;
+          take 2;
+          thus thesis by A1,A2,ENUMSET1:def 1;
+        end;
+        suppose
+A1:       i = 3 & j = 2;
+          take 1;
+          thus thesis by A1,A2,ENUMSET1:def 1;
+        end;
+      end; then
+      consider k such that
+X2:   k <> i & k <> j & k in dom p;
+C2:   p.k = k by X1,X2;
+      per cases by A2,X2,ENUMSET1:def 1;
+      suppose k = 1;
+        hence thesis by C2,A0,FINSEQ_1:62;
+      end;
+      suppose k = 2;
+        hence thesis by C2,A0,FINSEQ_1:62;
+      end;
+      suppose k = 3;
+        hence thesis by C2,A0,FINSEQ_1:62;
+      end;
+    end;
+    hence thesis by MATRIX_2:def 14;
+  end;
+
+begin :: Corrollaries
+
+theorem Kasia:
+  for f being Permutation of Seg n holds
+    f is FinSequence of Seg n
+  proof
+    let f be Permutation of Seg n;
+A1: rng f c= Seg n by RELSET_1:12;
+    per cases;
+    suppose n = 0; then
+      dom f = Seg n by FUNCT_2:def 1,FINSEQ_1:4; then
+      f is FinSequence by FINSEQ_1:def 2;
+      hence thesis by A1,FINSEQ_1:def 4;
+    end;
+    suppose n <> 0; then
+      Seg n <> {} by FINSEQ_1:5; then
+      dom f = Seg n by FUNCT_2:def 1; then
+      f is FinSequence by FINSEQ_1:def 2;
+      hence thesis by A1,FINSEQ_1:def 4;
+    end;
+  end;
+
+theorem ArgenPom:
+  <*2,1,3*> * <*1,3,2*> = <*2,3,1*> & <*1,3,2*> * <*2,1,3*> = <*3,1,2*> &
+  <*2,1,3*> * <*3,2,1*> = <*3,1,2*> & <*3,2,1*> * <*2,1,3*> = <*2,3,1*> &
+  <*3,2,1*> * <*3,2,1*> = <*1,2,3*> & <*2,1,3*> * <*2,1,3*> = <*1,2,3*> &
+  <*1,3,2*> * <*1,3,2*> = <*1,2,3*> & <*1,3,2*> * <*2,3,1*> = <*3,2,1*> &
+  <*2,3,1*> * <*2,3,1*> = <*3,1,2*> & <*2,3,1*> * <*3,1,2*> = <*1,2,3*> &
+  <*3,1,2*> * <*2,3,1*> = <*1,2,3*> & <*3,1,2*> * <*3,1,2*> = <*2,3,1*> &
+  <*1,3,2*> * <*3,2,1*> = <*2,3,1*> & <*3,2,1*> * <*1,3,2*> = <*3,1,2*>
+  proof
+    set f = <*1,3,2*>, g = <*2,1,3*>, h = <*3,2,1*>;
+    set F = <*2,3,1*>, G = <*3,1,2*>, H = <*1,2,3*>;
+    dom f = Seg 3 by FINSEQ_3:30 .= {1,2,3} by FINSEQ_3:1; then
+A1: 1 in dom f & 2 in dom f & 3 in dom f by ENUMSET1:def 1;
+    dom F = Seg 3 by FINSEQ_3:30 .= {1,2,3} by FINSEQ_3:1; then
+aa: 1 in dom F & 2 in dom F & 3 in dom F by ENUMSET1:def 1;
+    dom g = Seg 3 by FINSEQ_3:30 .= {1,2,3} by FINSEQ_3:1; then
+a1: 1 in dom g & 2 in dom g & 3 in dom g by ENUMSET1:def 1;
+    dom G = Seg 3 by FINSEQ_3:30 .= {1,2,3} by FINSEQ_3:1; then
+c1: 1 in dom G & 2 in dom G & 3 in dom G by ENUMSET1:def 1;
+    dom h = Seg 3 by FINSEQ_3:30 .= {1,2,3} by FINSEQ_3:1; then
+c2: 1 in dom h & 2 in dom h & 3 in dom h by ENUMSET1:def 1;
+Y1: g in Permutations 3 & f in Permutations 3 & h in Permutations 3 &
+      G in Permutations 3 & F in Permutations 3 by CosTakiego;
+Y5: g is Permutation of Seg 3 & h is Permutation of Seg 3 &
+      F is Permutation of Seg 3 & G is Permutation of Seg 3 &
+        f is Permutation of Seg 3 by MATRIX_2:def 11,CosTakiego;
+N1: f is Permutation of Seg 3 by Y1,MATRIX_2:def 11;
+    reconsider f,g,h,F,G as FinSequence of Seg 3 by Y5,Kasia;
+Y3: 3 = len h & 3 = len g & 3 = len f & 3 = len F & 3 = len G
+      by FINSEQ_1:62; then
+    reconsider gf = g * f as FinSequence of Seg 3 by N1,FINSEQ_2:50;
+Y2: f is Permutation of Seg 3 & g is Permutation of Seg 3 &
+      h is Permutation of Seg 3 & G is Permutation of Seg 3
+        & F is Permutation of Seg 3
+        by Y1,MATRIX_2:def 11;
+A2: len gf = 3 by Y2,Y3,FINSEQ_2:47;
+    reconsider fg = f * g as FinSequence of Seg 3 by Y5,Y3,FINSEQ_2:50;
+a2: len fg = 3 by Y2,Y3,FINSEQ_2:47;
+    reconsider fF = f * F as FinSequence of Seg 3 by Y5,Y3,FINSEQ_2:50;
+a3: len fF = 3 by Y2,Y3,FINSEQ_2:47;
+    reconsider fh = f * h as FinSequence of Seg 3 by Y5,Y3,FINSEQ_2:50;
+a8: len fh = 3 by Y2,Y3,FINSEQ_2:47;
+    reconsider hf = h * f as FinSequence of Seg 3 by Y5,Y3,FINSEQ_2:50;
+a9: len hf = 3 by Y2,Y3,FINSEQ_2:47;
+    reconsider FF = F * F as FinSequence of Seg 3 by Y5,Y3,FINSEQ_2:50;
+BB: len FF = 3 by Y2,Y3,FINSEQ_2:47;
+    reconsider FG = F * G as FinSequence of Seg 3 by Y5,Y3,FINSEQ_2:50;
+FG: len FG = 3 by Y2,Y3,FINSEQ_2:47;
+    reconsider GF = G * F as FinSequence of Seg 3 by Y5,Y3,FINSEQ_2:50;
+GF: len GF = 3 by Y2,Y3,FINSEQ_2:47;
+    reconsider GG = G * G as FinSequence of Seg 3 by Y5,Y3,FINSEQ_2:50;
+GG: len GG = 3 by Y2,Y3,FINSEQ_2:47;
+    reconsider gG = g * G as FinSequence of Seg 3 by Y2,Y3,FINSEQ_2:50;
+    reconsider gh = g * h as FinSequence of Seg 3 by Y2,Y3,FINSEQ_2:50;
+gh: len gh = 3 by Y2,Y3,FINSEQ_2:47;
+    reconsider hg = h * g as FinSequence of Seg 3 by Y2,Y3,FINSEQ_2:50;
+hg: len hg = 3 by Y2,Y3,FINSEQ_2:47;
+    reconsider hh = h * h as FinSequence of Seg 3 by Y2,Y3,FINSEQ_2:50;
+hh: len hh = 3 by Y2,Y3,FINSEQ_2:47;
+    reconsider gg = g * g as FinSequence of Seg 3 by Y2,Y3,FINSEQ_2:50;
+gg: len gg = 3 by Y2,Y3,FINSEQ_2:47;
+    reconsider ff = f * f as FinSequence of Seg 3 by Y2,Y3,FINSEQ_2:50;
+ff: len ff = 3 by Y2,Y3,FINSEQ_2:47;
+    thus <*2,1,3*> * <*1,3,2*> = <*2,3,1*>
+    proof
+B1:   gf.1 = g.(f.1) by A1,FUNCT_1:23
+          .= g.1 by FINSEQ_1:62 .= 2 by FINSEQ_1:62;
+B2:   gf.2 = g.(f.2) by A1,FUNCT_1:23
+          .= g.3 by FINSEQ_1:62 .= 3 by FINSEQ_1:62;
+      gf.3 = g.(f.3) by A1,FUNCT_1:23
+          .= g.2 by FINSEQ_1:62 .= 1 by FINSEQ_1:62;
+      hence thesis by A2,B1,B2,FINSEQ_1:62;
+    end;
+    thus <*1,3,2*> * <*2,1,3*> = <*3,1,2*>
+    proof
+B1:   fg.1 = f.(g.1) by a1,FUNCT_1:23
+          .= f.2 by FINSEQ_1:62 .= 3 by FINSEQ_1:62;
+B2:   fg.2 = f.(g.2) by a1,FUNCT_1:23
+          .= f.1 by FINSEQ_1:62 .= 1 by FINSEQ_1:62;
+      fg.3 = f.(g.3) by a1,FUNCT_1:23
+          .= f.3 by FINSEQ_1:62 .= 2 by FINSEQ_1:62;
+      hence thesis by a2,B1,B2,FINSEQ_1:62;
+    end;
+    thus <*2,1,3*> * <*3,2,1*> = <*3,1,2*>
+    proof
+B1:   gh.1 = g.(h.1) by c2,FUNCT_1:23
+          .= g.3 by FINSEQ_1:62 .= 3 by FINSEQ_1:62;
+B2:   gh.2 = g.(h.2) by c2,FUNCT_1:23
+          .= g.2 by FINSEQ_1:62 .= 1 by FINSEQ_1:62;
+      gh.3 = g.(h.3) by c2,FUNCT_1:23
+          .= g.1 by FINSEQ_1:62 .= 2 by FINSEQ_1:62;
+      hence thesis by gh,B1,B2,FINSEQ_1:62;
+    end;
+    thus <*3,2,1*> * <*2,1,3*> = <*2,3,1*>
+    proof
+B1:   hg.1 = h.(g.1) by a1,FUNCT_1:23
+          .= h.2 by FINSEQ_1:62 .= 2 by FINSEQ_1:62;
+B2:   hg.2 = h.(g.2) by a1,FUNCT_1:23
+          .= h.1 by FINSEQ_1:62 .= 3 by FINSEQ_1:62;
+      hg.3 = h.(g.3) by a1,FUNCT_1:23
+          .= h.3 by FINSEQ_1:62 .= 1 by FINSEQ_1:62;
+      hence thesis by hg,B1,B2,FINSEQ_1:62;
+    end;
+    thus <*3,2,1*> * <*3,2,1*> = <*1,2,3*>
+    proof
+B1:   hh.1 = h.(h.1) by c2,FUNCT_1:23
+          .= h.3 by FINSEQ_1:62 .= 1 by FINSEQ_1:62;
+B2:   hh.2 = h.(h.2) by c2,FUNCT_1:23
+          .= h.2 by FINSEQ_1:62 .= 2 by FINSEQ_1:62;
+      hh.3 = h.(h.3) by c2,FUNCT_1:23
+          .= h.1 by FINSEQ_1:62 .= 3 by FINSEQ_1:62;
+      hence thesis by hh,B1,B2,FINSEQ_1:62;
+    end;
+    thus <*2,1,3*> * <*2,1,3*> = <*1,2,3*>
+    proof
+B1:   gg.1 = g.(g.1) by a1,FUNCT_1:23
+          .= g.2 by FINSEQ_1:62 .= 1 by FINSEQ_1:62;
+B2:   gg.2 = g.(g.2) by a1,FUNCT_1:23
+          .= g.1 by FINSEQ_1:62 .= 2 by FINSEQ_1:62;
+      gg.3 = g.(g.3) by a1,FUNCT_1:23
+          .= g.3 by FINSEQ_1:62 .= 3 by FINSEQ_1:62;
+      hence thesis by gg,B1,B2,FINSEQ_1:62;
+    end;
+    thus <*1,3,2*> * <*1,3,2*> = <*1,2,3*>
+    proof
+B1:   ff.1 = f.(f.1) by A1,FUNCT_1:23
+          .= f.1 by FINSEQ_1:62 .= 1 by FINSEQ_1:62;
+B2:   ff.2 = f.(f.2) by A1,FUNCT_1:23
+          .= f.3 by FINSEQ_1:62 .= 2 by FINSEQ_1:62;
+      ff.3 = f.(f.3) by A1,FUNCT_1:23
+          .= f.2 by FINSEQ_1:62 .= 3 by FINSEQ_1:62;
+      hence thesis by ff,B1,B2,FINSEQ_1:62;
+    end;
+    thus <*1,3,2*> * <*2,3,1*> = <*3,2,1*>
+    proof
+B1:   fF.1 = f.(F.1) by aa,FUNCT_1:23
+          .= f.2 by FINSEQ_1:62 .= 3 by FINSEQ_1:62;
+B2:   fF.2 = f.(F.2) by aa,FUNCT_1:23
+          .= f.3 by FINSEQ_1:62 .= 2 by FINSEQ_1:62;
+      fF.3 = f.(F.3) by aa,FUNCT_1:23
+          .= f.1 by FINSEQ_1:62 .= 1 by FINSEQ_1:62;
+      hence thesis by a3,B1,B2,FINSEQ_1:62;
+    end;
+    thus <*2,3,1*> * <*2,3,1*> = <*3,1,2*>
+    proof
+B1:   FF.1 = F.(F.1) by aa,FUNCT_1:23
+          .= F.2 by FINSEQ_1:62 .= 3 by FINSEQ_1:62;
+B2:   FF.2 = F.(F.2) by aa,FUNCT_1:23
+          .= F.3 by FINSEQ_1:62 .= 1 by FINSEQ_1:62;
+      FF.3 = F.(F.3) by aa,FUNCT_1:23
+          .= F.1 by FINSEQ_1:62 .= 2 by FINSEQ_1:62;
+      hence thesis by BB,B1,B2,FINSEQ_1:62;
+    end;
+    thus <*2,3,1*> * <*3,1,2*> = <*1,2,3*>
+    proof
+B1:   FG.1 = F.(G.1) by c1,FUNCT_1:23
+          .= F.3 by FINSEQ_1:62 .= 1 by FINSEQ_1:62;
+B2:   FG.2 = F.(G.2) by c1,FUNCT_1:23
+          .= F.1 by FINSEQ_1:62 .= 2 by FINSEQ_1:62;
+      FG.3 = F.(G.3) by c1,FUNCT_1:23
+          .= F.2 by FINSEQ_1:62 .= 3 by FINSEQ_1:62;
+      hence thesis by FG,B1,B2,FINSEQ_1:62;
+    end;
+    thus <*3,1,2*> * <*2,3,1*> = <*1,2,3*>
+    proof
+B1:   GF.1 = G.(F.1) by aa,FUNCT_1:23
+          .= G.2 by FINSEQ_1:62 .= 1 by FINSEQ_1:62;
+B2:   GF.2 = G.(F.2) by aa,FUNCT_1:23
+          .= G.3 by FINSEQ_1:62 .= 2 by FINSEQ_1:62;
+      GF.3 = G.(F.3) by aa,FUNCT_1:23
+          .= G.1 by FINSEQ_1:62 .= 3 by FINSEQ_1:62;
+      hence thesis by GF,B1,B2,FINSEQ_1:62;
+    end;
+    thus <*3,1,2*> * <*3,1,2*> = <*2,3,1*>
+    proof
+B1:   GG.1 = G.(G.1) by c1,FUNCT_1:23
+          .= G.3 by FINSEQ_1:62 .= 2 by FINSEQ_1:62;
+B2:   GG.2 = G.(G.2) by c1,FUNCT_1:23
+          .= G.1 by FINSEQ_1:62 .= 3 by FINSEQ_1:62;
+      GG.3 = G.(G.3) by c1,FUNCT_1:23
+          .= G.2 by FINSEQ_1:62 .= 1 by FINSEQ_1:62;
+      hence thesis by GG,B1,B2,FINSEQ_1:62;
+    end;
+    thus <*1,3,2*> * <*3,2,1*> = <*2,3,1*>
+    proof
+B1:   fh.1 = f.(h.1) by c2,FUNCT_1:23
+          .= f.3 by FINSEQ_1:62 .= 2 by FINSEQ_1:62;
+B2:   fh.2 = f.(h.2) by c2,FUNCT_1:23
+          .= f.2 by FINSEQ_1:62 .= 3 by FINSEQ_1:62;
+      fh.3 = f.(h.3) by c2,FUNCT_1:23
+          .= f.1 by FINSEQ_1:62 .= 1 by FINSEQ_1:62;
+      hence thesis by a8,B1,B2,FINSEQ_1:62;
+    end;
+    thus <*3,2,1*> * <*1,3,2*> = <*3,1,2*>
+    proof
+B1:   hf.1 = h.(f.1) by A1,FUNCT_1:23
+          .= h.1 by FINSEQ_1:62 .= 3 by FINSEQ_1:62;
+B2:   hf.2 = h.(f.2) by A1,FUNCT_1:23
+          .= h.3 by FINSEQ_1:62 .= 1 by FINSEQ_1:62;
+      hf.3 = h.(f.3) by A1,FUNCT_1:23
+          .= h.2 by FINSEQ_1:62 .= 2 by FINSEQ_1:62;
+      hence thesis by a9,B1,B2,FINSEQ_1:62;
+    end;
+  end;
+
+theorem AA842:
+  for p being Permutation of Seg 3 st p is_transposition holds
+    p = <*2,1,3*> or p = <*1,3,2*> or p = <*3,2,1*>
+proof let p be Permutation of Seg 3;
+    assume A1: p is_transposition;
+A3: id Seg 3 = <*1,2,3*> by FINSEQ_2:62;
+A4: p in Permutations 3 by MATRIX_2:def 11;
+    p=<*1,2,3*> or p=<*2,1,3*> or p=<*2,3,1*>
+      or p=<*3,1,2*> or p=<*3,2,1*> or p=<*1,3,2*>
+        by A4,ENUMSET1:def 4,ThPermut3;
+    hence thesis by A1,A3,Th4T,Th5T,Th6T;
+end;
+
+theorem NFZ:
+  for f, g being Element of Permutations n holds
+    f * g in Permutations n
+  proof
+    let f, g be Element of Permutations n;
+    reconsider F = f, G = g as Permutation of Seg n by MATRIX_2:def 11;
+    F * G is Permutation of Seg n;
+    hence thesis by MATRIX_2:def 11;
+  end;
+
+LemAA: <*1,2,3*> is even Permutation of Seg 3
+  by MATRIX_2:29,FINSEQ_2:62;
+
+LemA4: <*2,3,1*> is even Permutation of Seg 3
+  proof
+    reconsider f = <*2,3,1*> as Permutation of Seg 3
+      by MATRIX_2:def 11,CosTakiego;
+    ex l be FinSequence of Group_of_Perm 3 st
+    (len l) mod 2 = 0 & f = Product l &
+    for i st i in dom l ex q being Element of Permutations 3 st
+    l.i = q & q is_transposition
+    proof
+Z1:   <*2,1,3*> in Permutations 3 & <*1,3,2*> in Permutations 3
+        by CosTakiego; then
+      reconsider l1 = <*2,1,3*>, l2 = <*1,3,2*>
+        as Element of Group_of_Perm 3 by MATRIX_2:def 13;
+      reconsider l = <* l2, l1 *> as FinSequence of Group_of_Perm 3;
+      take l;
+D1:   len l = 2 * 1 by FINSEQ_1:61;
+      hence (len l) mod 2 = 0 by NAT_1:63;
+      reconsider L2 = l2, L1 = l1 as Element of Permutations 3 by Z1;
+      Product l = l2 * l1 by GROUP_4:13
+               .= (the mult of Group_of_Perm 3).(l2,l1) by GROUP_1:def 1
+               .= L1 * L2 by MATRIX_2:def 13
+               .= <*2,3,1*> by ArgenPom;
+      hence f = Product l;
+D2:   dom l = Seg 2 by D1,FINSEQ_1:def 3 .= {1,2} by FINSEQ_1:4;
+      for i st i in dom l ex q being Element of Permutations 3 st
+      l.i = q & q is_transposition
+      proof
+        let i; assume i in dom l; then
+K1:     i in {1,2} by D2;
+        per cases by K1,TARSKI:def 2;
+        suppose i = 2; then
+KK:       l.i = <*2,1,3*> by FINSEQ_1:61; then
+          reconsider q = l.i as Element of Permutations 3 by CosTakiego;
+          len Permutations 3 = 3 by MATRIX_2:20; then
+          q is_transposition by KK,Th2T;
+          hence thesis;
+        end;
+        suppose i = 1; then
+KK:       l.i = <*1,3,2*> by FINSEQ_1:61; then
+          reconsider q = l.i as Element of Permutations 3 by CosTakiego;
+          len Permutations 3 = 3 by MATRIX_2:20; then
+          q is_transposition by KK,Th1T;
+          hence thesis;
+        end;
+      end;
+      hence thesis;
+    end;
+    hence thesis by MATRIX_2:def 15;
+  end;
+
+LemA5: <*3,1,2*> is even Permutation of Seg 3
+  proof
+    reconsider f = <*3,1,2*> as Permutation of Seg 3
+      by MATRIX_2:def 11,CosTakiego;
+    ex l be FinSequence of Group_of_Perm 3 st
+    (len l) mod 2 = 0 & f = Product l &
+    for i st i in dom l ex q being Element of Permutations 3 st
+    l.i = q & q is_transposition
+    proof
+Z1:   <*2,1,3*> in Permutations 3 & <*1,3,2*> in Permutations 3
+        by CosTakiego; then
+      <*2,1,3*> in the carrier of Group_of_Perm 3 &
+        <*1,3,2*> in the carrier of Group_of_Perm 3 by MATRIX_2:def 13; then
+      reconsider l1 = <*2,1,3*>, l2 = <*1,3,2*>
+        as Element of Group_of_Perm 3;
+      reconsider l = <* l1, l2 *> as FinSequence of Group_of_Perm 3;
+      take l;
+D1:   len l = 2 * 1 by FINSEQ_1:61;
+      hence (len l) mod 2 = 0 by NAT_1:63;
+      reconsider L2 = l2, L1 = l1 as Element of Permutations 3 by Z1;
+      Product l = l1 * l2 by GROUP_4:13
+               .= (the mult of Group_of_Perm 3).(l1,l2) by GROUP_1:def 1
+               .= L2 * L1 by MATRIX_2:def 13
+               .= <*3,1,2*> by ArgenPom;
+      hence f = Product l;
+D2:   dom l = Seg 2 by D1,FINSEQ_1:def 3 .= {1,2} by FINSEQ_1:4;
+      for i st i in dom l ex q being Element of Permutations 3 st
+      l.i = q & q is_transposition
+      proof
+        let i; assume i in dom l; then
+K1:     i in {1,2} by D2;
+        per cases by K1,TARSKI:def 2;
+        suppose i = 2; then
+KK:       l.i = <*1,3,2*> by FINSEQ_1:61; then
+          reconsider q = l.i as Element of Permutations 3 by CosTakiego;
+          len Permutations 3 = 3 by MATRIX_2:20; then
+          q is_transposition by KK,Th1T;
+          hence thesis;
+        end;
+        suppose i = 1; then
+KK:       l.i = <*2,1,3*> by FINSEQ_1:61; then
+          reconsider q = l.i as Element of Permutations 3 by CosTakiego;
+          len Permutations 3 = 3 by MATRIX_2:20; then
+          q is_transposition by KK,Th2T;
+          hence thesis;
+        end;
+      end;
+      hence thesis;
+    end;
+    hence thesis by MATRIX_2:def 15;
+  end;
+
+theorem
+  for l being FinSequence of Group_of_Perm n st
+    (len l) mod 2 = 0 &
+       (for i being Nat st i in dom l
+       ex q being Element of Permutations n st
+       l.i = q & q is_transposition) holds
+    Product l is even Permutation of Seg n
+  proof
+    let l be FinSequence of Group_of_Perm n;
+    assume
+A1: (len l) mod 2 = 0 &
+       for i being Nat st i in dom l
+       ex q being Element of Permutations n st
+       l.i = q & q is_transposition;
+    Product l in the carrier of Group_of_Perm n; then
+    Product l in Permutations n by MATRIX_2:def 13; then
+    Product l is Permutation of Seg n by MATRIX_2:def 11; then
+    reconsider Pf = Product l as Permutation of Seg n;
+    ex l be FinSequence of the carrier of Group_of_Perm n st
+      (len l) mod 2 = 0 & Pf = Product l &
+    for i st i in dom l ex q being Element of Permutations n st
+    l.i=q & q is_transposition by A1; then
+    Pf is even by MATRIX_2:def 15;
+    hence thesis;
+  end;
+
+V3: for p being Permutation of Seg 3 holds p * <*1,2,3*> = p
+    proof
+      let p be Permutation of Seg 3;
+A1:   p is Element of Permutations 3 by MATRIX_2:def 11;
+      idseq 3 = <*1,2,3*> by FINSEQ_2:62;
+      hence thesis by A1,MATRIX_2:24;
+    end;
+V4: for p being Permutation of Seg 3 holds <*1,2,3*> * p = p
+    proof
+      let p be Permutation of Seg 3;
+A1:   p is Element of Permutations 3 by MATRIX_2:def 11;
+      idseq 3 = <*1,2,3*> by FINSEQ_2:62;
+      hence thesis by A1,MATRIX_2:24;
+    end;
+
+theorem Argen:
+  for l being FinSequence of Group_of_Perm 3 st
+    (len l) mod 2 = 0 &
+       (for i being Nat st i in dom l
+       ex q being Element of Permutations 3 st
+       l.i = q & q is_transposition) holds
+    Product l = <*1,2,3*> or Product l = <*2,3,1*> or Product l = <*3,1,2*>
+  proof
+    let l be FinSequence of Group_of_Perm 3;
+    assume
+A1: (len l) mod 2 = 0 & (for i being Nat st i in dom l
+    ex q being Element of Permutations 3 st l.i = q & q is_transposition);
+    then consider t being Nat such that
+a2: len l = 2 * t + 0 & 0 < 2 by NAT_1:def 2;
+A2: len l = 2 * t by a2;
+    defpred P[Nat] means
+    for f being FinSequence of Group_of_Perm 3 st
+    len f = 2 * $1 & (for i st i in dom f holds
+     ex q being Element of Permutations 3 st f.i=q & q is_transposition)
+     holds
+    Product f = <*1,2,3*> or Product f = <*2,3,1*> or Product f = <*3,1,2*>;
+A3: P[0]
+    proof
+      let f be FinSequence of Group_of_Perm 3;
+      assume len f = 2*0 &
+      (for i st i in dom f holds
+      ex q being Element of Permutations 3 st
+        f.i = q & q is_transposition); then
+B4:   len f = 0;
+      set G = Group_of_Perm 3;
+B3:   f = <*>the carrier of G by B4,FINSEQ_1:32;
+      1.G = idseq 3 by MATRIX_2:28
+         .= <*1,2,3*> by FINSEQ_2:62;
+      hence thesis by B3,GROUP_4:11;
+    end;
+A4: for k being Nat st P[k] holds P[k+1]
+    proof
+      let k be Nat;
+      assume P[k]; then
+C2:   for f being FinSequence of Group_of_Perm 3 st
+      len f = 2*k & (for i st i in dom f holds
+      (ex q being Element of Permutations 3 st f.i = q & q is_transposition))
+      holds
+      Product f = <*1,2,3*> or Product f = <*2,3,1*> or Product f = <*3,1,2*>;
+      let f be FinSequence of Group_of_Perm 3;
+      assume
+H0:   len f = 2 * (k+1) & (for i st i in dom f holds
+      ex q being Element of Permutations 3 st f.i = q & q is_transposition);
+H1:   rng f c= the carrier of Group_of_Perm 3 by RELSET_1:12;
+      rng (f|Seg (2*k)) c= rng f by RELAT_1:99; then
+      rng (f|Seg (2*k)) c= the carrier of Group_of_Perm 3
+        by H1,XBOOLE_1:1; then
+      reconsider g = f|Seg (2*k) as FinSequence of Group_of_Perm 3
+        by FINSEQ_1:def 4;
+      2*k <= 2*k + 2 by NAT_1:29; then
+H2:   Seg (2*k) c= Seg (2*(k+1)) by FINSEQ_1:7;
+      set l = 2*k;
+HH:   dom f = Seg (2*(k+1)) by H0,FINSEQ_1:def 3; then
+      dom g = Seg (2*k) by H2,RELAT_1:91; then
+      Seg len g = Seg (2*k) by FINSEQ_1:def 3; then
+h1:   len g = 2*k by FINSEQ_1:8;
+h3:   dom g c= dom f by RELAT_1:89;
+      for i st i in dom g holds
+      ex q being Element of Permutations 3 st g.i = q & q is_transposition
+      proof
+        let i; assume
+hh:     i in dom g; then
+        consider q being Element of Permutations 3 such that
+h4:     f.i = q & q is_transposition by h3,H0;
+        take q;
+        g.i = q by h4,hh,FUNCT_1:70;
+        hence thesis by h4;
+      end; then
+H2:   Product g = <*1,2,3*> or Product g = <*2,3,1*> or
+        Product g = <*3,1,2*> by C2,h1;
+j1:   len f = l + 1 + 1 by H0; then
+U1:   f = f | Seg (l+1) ^ <*f.(l+1+1)*> by FINSEQ_3:61;
+      set h = f | Seg (l+1);
+      len h = l + 1 by j1,FINSEQ_3:59; then
+U3:   h = h | Seg l ^ <*h.(l+1)*> by FINSEQ_3:61;
+j1:   1 <= l+1 by NAT_1:29;
+      l+1 <= l+2 by XREAL_1:8; then
+J2:   l+1 in dom f by HH,j1;
+j2:   l+1 <= l+2 by XREAL_1:8;
+      1 <= l+2 & l+2 <= 2*(k+1) by j1,j2,XREAL_1:2; then
+J6:   l+2 in dom f by HH;
+JT:   l <= l+1 by NAT_1:29;
+      l+1 in Seg (l+1) by FINSEQ_1:6; then
+JO:   h.(l+1) = f.(l+1) by FUNCT_1:72;
+U2:   (f | Seg (l+1)) | Seg l = (f | (l+1)) | l
+         .= f | l by JT,FINSEQ_5:80
+         .= f | Seg l;
+u2:   h.(l+1) = f/.(l+1) by JO,J2,FINSEQ_4:def 4;
+      f.(l+1+1) = f/.(l+2) by J6,FINSEQ_4:def 4; then
+      f = f | Seg (2*k+1) ^ <*f/.(l+2)*> by U1
+       .= g ^ <*h.(2*k+1)*> ^ <*f/.(l+2)*> by U2,U3
+       .= g ^ <*f/.(l+1)*> ^ <*f/.(l+2)*> by u2
+       .= g ^ (<*f/.(l+1)*> ^ <*f/.(l+2)*>) by FINSEQ_1:45; then
+H3:   Product f = Product g * Product (<*f/.(l+1)*> ^ <*f/.(l+2)*>)
+        by GROUP_4:8
+        .= Product g * (Product(<*f/.(l+1)*>) * f/.(l+2)) by GROUP_4:9
+        .= Product g * (f/.(l+1) * f/.(l+2)) by GROUP_4:12;
+      consider q2 being Element of Permutations 3 such that
+J1:   f.(l+1) = q2 & q2 is_transposition by H0,J2;
+JL:   q2 = f/.(l+1) by J2,J1,FINSEQ_4:def 4;
+JA:   len Permutations 3 = 3 by MATRIX_2:20;
+      consider q1 being Element of Permutations 3 such that
+J7:   f.(l+2) = q1 & q1 is_transposition by J6,H0;
+JK:   q1 = f/.(l+2) by J6,J7,FINSEQ_4:def 4;
+JJ:   q1 = <*2,1,3*> or q1 = <*1,3,2*> or q1 = <*3,2,1*> by JA,J7,AA842;
+Jj:   q2 = <*2,1,3*> or q2 = <*1,3,2*> or q2 = <*3,2,1*> by J1,JA,AA842;
+PO:   q1 * q2 in Permutations 3 by NFZ; then
+V5:   q1 * q2 is Permutation of Seg 3 by MATRIX_2:def 11;
+      Product g in the carrier of Group_of_Perm 3; then
+      Product g in Permutations 3 by MATRIX_2:def 13; then
+V6:   Product g is Permutation of Seg 3 by MATRIX_2:def 11; then
+      reconsider Pg = Product g as Element of Permutations 3
+        by MATRIX_2:def 11;
+V1:   Pg = <*1,2,3*> or Pg = <*2,3,1*> or Pg = <*3,1,2*> by H2;
+X1:   q1 = <*2,1,3*> or q1 = <*1,3,2*> or q1 = <*3,2,1*> by JJ;
+      q2 = <*2,1,3*> or q2 = <*1,3,2*> or q2 = <*3,2,1*> by Jj; then
+V2:   q1 * q2 = <*2,3,1*> or q1 * q2 = <*1,2,3*> or q1 * q2 = <*3,1,2*>
+        by X1,ArgenPom;
+ZE:   f/.(l+1) * f/.(l+2) = q1 * q2 by JK,JL,AA844c;
+      reconsider q12 = q1 * q2 as Element of Permutations 3 by PO;
+      reconsider f12 = f/.(l+1) * f/.(l+2) as Element of Group_of_Perm 3;
+      Product f = Product g * f12 by H3; then
+V0:   Product f = q12 * Pg by AA844c,ZE;
+      Product f = <*1,2,3*> or Product f = <*2,3,1*> or
+        Product f = <*3,1,2*>
+      proof
+        per cases by V1,V2;
+        suppose Pg = <*1,2,3*> & q1 * q2 = <*2,3,1*>;
+          hence thesis by V0,V3,V5;
+        end;
+        suppose Pg = <*2,3,1*> & q1 * q2 = <*2,3,1*>;
+          hence thesis by ArgenPom,V0;
+        end;
+        suppose Pg = <*2,3,1*> & q1 * q2 = <*3,1,2*>;
+          hence thesis by ArgenPom,V0;
+        end;
+        suppose q1 * q2 = <*1,2,3*>;
+          hence thesis by V1,V0,V6,V4;
+        end;
+        suppose Pg = <*1,2,3*> & q1 * q2 = <*3,1,2*>;
+          hence thesis by V0,V3,V5;
+        end;
+        suppose Pg = <*3,1,2*> & q1 * q2 = <*2,3,1*>;
+          hence thesis by ArgenPom,V0;
+        end;
+        suppose Pg = <*3,1,2*> & q1 * q2 = <*3,1,2*>;
+          hence thesis by ArgenPom,V0;
+        end;
+      end;
+      hence thesis;
+    end;
+    for s being Nat holds P[s] from NAT_1:sch 1(A3,A4);
+    hence thesis by A1,A2;
+  end;
+
+registration
+  cluster odd Permutation of Seg 3;
+  existence
+  proof
+    reconsider f = <*3,2,1*> as Permutation of Seg 3
+      by MATRIX_2:def 11,CosTakiego;
+    not ex l be FinSequence of Group_of_Perm 3 st
+    (len l) mod 2 = 0 & f = Product l &
+    for i st i in dom l ex q being Element of Permutations 3 st
+    l.i = q & q is_transposition by Argen,ThRozne; then
+    f is odd by MATRIX_2:def 15;
+    hence thesis;
+  end;
+end;
+
+theorem LemA1:
+  <*3,2,1*> is odd Permutation of Seg 3
+  proof
+    <*3,2,1*> in Permutations 3 by CosTakiego; then
+    reconsider f = <*3,2,1*> as Permutation of Seg 3 by MATRIX_2:def 11;
+    not ex l be FinSequence of Group_of_Perm 3 st
+    (len l) mod 2 = 0 & f = Product l &
+    for i st i in dom l ex q being Element of Permutations 3 st
+    l.i = q & q is_transposition by Argen,ThRozne;
+    hence thesis by MATRIX_2:def 15;
+  end;
+
+theorem LemA2:
+  <*2,1,3*> is odd Permutation of Seg 3
+  proof
+    <*2,1,3*> in Permutations 3 by CosTakiego; then
+    reconsider f = <*2,1,3*> as Permutation of Seg 3 by MATRIX_2:def 11;
+    not ex l be FinSequence of Group_of_Perm 3 st
+    (len l) mod 2 = 0 & f = Product l &
+    for i st i in dom l ex q being Element of Permutations 3 st
+    l.i = q & q is_transposition by Argen,ThRozne;
+    hence thesis by MATRIX_2:def 15;
+  end;
+
+theorem LemA3:
+  <*1,3,2*> is odd Permutation of Seg 3
+  proof
+    reconsider f = <*1,3,2*> as Permutation of Seg 3
+      by MATRIX_2:def 11,CosTakiego;
+    not ex l be FinSequence of Group_of_Perm 3 st
+    (len l) mod 2 = 0 & f = Product l &
+    for i st i in dom l ex q being Element of Permutations 3 st
+    l.i = q & q is_transposition by Argen,ThRozne;
+    hence thesis by MATRIX_2:def 15;
+  end;
+
+theorem
+  for p being odd Permutation of Seg 3 holds
+    p = <*3,2,1*> or p = <*1,3,2*> or p = <*2,1,3*>
+  proof
+    let p be odd Permutation of Seg 3;
+A1: Permutations 3 =
+      {<*1,2,3*>,<*3,2,1*>,<*1,3,2*>,<*2,3,1*>,<*2,1,3*>,<*3,1,2*>}
+        by ThPermut3;
+    p in Permutations 3 by MATRIX_2:def 11;
+    hence thesis by LemAA,LemA4,LemA5,A1,ENUMSET1:def 4;
+  end;
+
+begin :: Determinant and Permanent
+
+theorem
+  for a,b,c,d,e,f,g,h,i being Element of K
+  for M being Matrix of 3,K st M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*> holds
+  Det M = a*e*i - c*e*g - a*f*h + b*f*g - b*d*i + c*d*h
+  proof
+    let a,b,c,d,e,f,g,h,i be Element of K;
+    let M be Matrix of 3,K;
+    assume A0: M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>;
+    reconsider id3 = idseq 3 as Permutation of Seg 3;
+    reconsider Id3 = idseq 3 as Element of Permutations 3 by IdPer;
+    reconsider rid3 = Rev idseq 3 as Element of Permutations 3 by RevIdPer;
+KK: id3 = <*1,2,3*> & rid3 = <*3,2,1*> by FINSEQ_2:62,ThRevId3;
+    reconsider a3 = <*1,3,2*>, a4 = <*2,3,1*>, a5 = <*2,1,3*>,
+               a6 = <*3,1,2*> as Element of Permutations 3 by CosTakiego;
+    set F = the add of K;
+    set r = Path_product M;
+A3: id Seg 3 is even by MATRIX_2:29;
+A4: id3 is even by A3;
+FF: 3 = len Permutations 3 by MATRIX_2:20; then
+J1: Id3 is even by A4;
+G1: r.id3 = -((the mult of K) $$ Path_matrix (Id3,M),Id3)
+            by MATRIX_3:def 8
+         .= (the mult of K) $$ Path_matrix (Id3,M) by MATRIX_2:def 16,J1
+         .= (the mult of K) $$ <* a,e,i *> by Lem1,A0,KK
+         .= a*e*i by ThMult3;
+J2: rid3 is odd by LemA1,FF,KK;
+G2: r.rid3 = -((the mult of K) $$ Path_matrix (rid3,M),rid3)
+          by MATRIX_3:def 8
+       .= -(the mult of K) $$ Path_matrix (rid3,M) by J2,MATRIX_2:def 16
+       .= -(the mult of K) $$ <* c,e,g *> by Lem2,A0,KK
+       .= -c*e*g by ThMult3;
+J3: a3 is odd by LemA3,FF;
+G3: r.a3 = -((the mult of K) $$ Path_matrix (a3,M),a3) by MATRIX_3:def 8
+       .= -(the mult of K) $$ Path_matrix (a3,M) by J3,MATRIX_2:def 16
+       .= -(the mult of K) $$ <* a,f,h *> by Lem3,A0     
+       .= -a*f*h by ThMult3;
+J4: a4 is even by LemA4,FF;
+G4: r.a4 = -((the mult of K) $$ Path_matrix (a4,M),a4) by MATRIX_3:def 8
+       .= (the mult of K) $$ Path_matrix (a4,M) by J4,MATRIX_2:def 16
+       .= (the mult of K) $$ <* b,f,g *> by Lem4,A0     
+       .= b*f*g by ThMult3;
+J5: a5 is odd by LemA2,FF;
+G5: r.a5 = -((the mult of K) $$ Path_matrix (a5,M),a5) by MATRIX_3:def 8
+       .= -(the mult of K) $$ Path_matrix (a5,M) by J5,MATRIX_2:def 16
+       .= -(the mult of K) $$ <* b,d,i *> by Lem5,A0
+       .= -b*d*i by ThMult3;
+J6: a6 is even by LemA5,FF;
+G6: r.a6 = -((the mult of K) $$ Path_matrix (a6,M),a6) by MATRIX_3:def 8
+       .= (the mult of K) $$ Path_matrix (a6,M) by J6,MATRIX_2:def 16
+       .= (the mult of K) $$ <* c,d,h *> by Lem6,A0
+       .= c*d*h by ThMult3;
+    Permutations 3 is finite by MATRIX_2:30;then
+C4: FinOmega Permutations 3 = Permutations 3 by MATRIX_2:def 17;
+    reconsider r1 = r.id3, r2 = r.rid3, r3 = r.a3, r4 = r.a4, r5 = r.a5,
+      r6 = r.a6 as Element of K by J1,FUNCT_2:7;
+Z0: {Id3,rid3,a3,a4,a5,a6} = Permutations 3 by KK,ThPermut3;
+    reconsider X = {Id3,rid3,a3,a4,a5,a6}
+      as Element of Fin Permutations 3 by C4,Z0;
+BZ: FinOmega Permutations 3 = X by Z0,MATRIX_2:def 17;
+L1: X = {Id3,rid3,a3} \/ {a4,a5,a6} by ENUMSET1:53;
+    reconsider B1 = {Id3,rid3,a3}, B2 = {a4,a5,a6}
+      as Element of Fin Permutations 3;
+L2: B1 <> {} & B2 <> {} & B1 misses B2
+    proof
+C1:   B1 <> {} by ENUMSET1:def 1;
+C2:   B2 <> {} by ENUMSET1:def 1;
+      B1 \ B2 = B1
+      proof
+        for x be set st x in B1 \ B2 holds
+          x in B1 by XBOOLE_0:def 4; then
+B1:     B1 \ B2 c= B1 by TARSKI:def 3;
+        now
+          let x;
+          assume A0: x in B1;
+          x=Id3 or x=rid3 or x=a3 by ENUMSET1:def 1,A0;then
+          x in B1 & not x in B2 by ENUMSET1:def 1,ThRozne,KK;
+          hence x in B1 \ B2 by XBOOLE_0:def 4;
+        end;then
+        B1 c= B1 \ B2 by TARSKI:def 3;
+        hence thesis by B1,XBOOLE_0:def 10;
+      end;
+      hence thesis by XBOOLE_1:83,C1,C2;
+    end;
+Z1: F $$(B1,r) = F.(F.(r.Id3, r.rid3),r.a3) by SETWOP_2:5,ThRozne,KK
+              .= r1 + r2 + r3;
+Z2: F $$(B2,r) = F.(F.(r.a4, r.a5),r.a6) by SETWOP_2:5,ThRozne
+              .= r4 + r5 + r6;
+    Det M = F $$ (FinOmega Permutations 3, r) by MATRIX_3:def 9
+      .= F.(F $$ (B1,r),F $$ (B2,r)) by SETWOP_2:6,L1,L2,BZ
+      .= r1 + r2 + r3 + (r4 + r5 + r6) by Z1,Z2
+      .= r1 + r2 + r3 + (r4 + (r5 + r6)) by RLVECT_1:def 6
+      .= r1 + r2 + r3 + r4 + (r5 + r6) by RLVECT_1:def 6
+      .= a*e*i - c*e*g - a*f*h + b*f*g - b*d*i + c*d*h
+        by G1,G2,G3,G4,G5,G6,RLVECT_1:def 6;
+    hence thesis;
+  end;
+
+theorem
+  for a,b,c,d,e,f,g,h,i being Element of K
+  for M being Matrix of 3,K st M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*> holds
+    Per M = a*e*i + c*e*g + a*f*h + b*f*g + b*d*i + c*d*h
+  proof
+    let a,b,c,d,e,f,g,h,i be Element of K;
+    let M be Matrix of 3,K;
+    assume A0: M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>;
+    reconsider id3 = idseq 3 as Permutation of Seg 3;
+    reconsider Id3 = idseq 3 as Element of Permutations 3 by IdPer;
+    reconsider rid3 = Rev idseq 3 as Element of Permutations 3 by RevIdPer;
+KK: id3 = <*1,2,3*> & rid3 = <*3,2,1*> by FINSEQ_2:62,ThRevId3;
+    reconsider a3 = <*1,3,2*>, a4 = <*2,3,1*>, a5 = <*2,1,3*>,
+               a6 = <*3,1,2*> as Element of Permutations 3 by CosTakiego;
+    set F = the add of K;
+    set r = PPath_product M;
+G1: r.id3 = (the mult of K) $$ Path_matrix (Id3,M) by Def8
+         .= (the mult of K) $$ <* a,e,i *> by Lem1,A0,KK
+         .= a*e*i by ThMult3;
+G2: r.rid3 = (the mult of K) $$ Path_matrix (rid3,M) by Def8
+       .= (the mult of K) $$ <* c,e,g *> by Lem2,A0,KK
+       .= c*e*g by ThMult3;
+G3: r.a3 = (the mult of K) $$ Path_matrix (a3,M) by Def8
+       .= (the mult of K) $$ <* a,f,h *> by Lem3,A0
+       .= a*f*h by ThMult3;
+G4: r.a4 = (the mult of K) $$ Path_matrix (a4,M) by Def8
+       .= (the mult of K) $$ <* b,f,g *> by Lem4,A0
+       .= b*f*g by ThMult3;
+G5: r.a5 = (the mult of K) $$ Path_matrix (a5,M) by Def8
+       .= (the mult of K) $$ <* b,d,i *> by Lem5,A0     
+       .= b*d*i by ThMult3;
+G6: r.a6 = (the mult of K) $$ Path_matrix (a6,M) by Def8
+       .= (the mult of K) $$ <* c,d,h *> by Lem6,A0     
+       .= c*d*h by ThMult3;
+    Permutations 3 is finite by MATRIX_2:30;then
+C4: FinOmega Permutations 3 = Permutations 3 by MATRIX_2:def 17;
+    id3 in Permutations 3 by IdPer;then
+    reconsider r1 = r.id3, r2 = r.rid3, r3 = r.a3, r4 = r.a4, r5 = r.a5,
+      r6 = r.a6 as Element of K by FUNCT_2:7;
+    reconsider X = {Id3,rid3,a3,a4,a5,a6} as Element of Fin Permutations 3
+      by C4,KK,ThPermut3;
+BZ: FinOmega Permutations 3 = X by KK,ThPermut3,MATRIX_2:def 17;
+L1: X = {Id3,rid3,a3} \/ {a4,a5,a6} by ENUMSET1:53;
+    reconsider B1 = {Id3,rid3,a3}, B2 = {a4,a5,a6}
+      as Element of Fin Permutations 3;
+L2: B1 <> {} & B2 <> {} & B1 misses B2
+    proof
+C1:   B1 <> {} by ENUMSET1:def 1;
+C2:   B2 <> {} by ENUMSET1:def 1;
+      B1 \ B2 = B1
+      proof
+        for x be set st x in B1 \ B2 holds
+          x in B1 by XBOOLE_0:def 4; then
+B1:     B1 \ B2 c= B1 by TARSKI:def 3;
+        now
+          let x;
+          assume A0: x in B1;
+          x=Id3 or x=rid3 or x=a3 by ENUMSET1:def 1,A0;then          
+          x in B1 & not x in B2 by ENUMSET1:def 1,ThRozne,KK;
+          hence x in B1 \ B2 by XBOOLE_0:def 4;
+        end;then
+        B1 c= B1 \ B2 by TARSKI:def 3;
+        hence thesis by B1,XBOOLE_0:def 10;
+      end;
+      hence thesis by XBOOLE_1:83,C1,C2;
+    end;
+Z1: F $$(B1,r) = F.(F.(r.Id3, r.rid3),r.a3) by SETWOP_2:5,ThRozne,KK
+              .= r1 + r2 + r3;
+Z2: F $$(B2,r) = F.(F.(r.a4, r.a5),r.a6) by SETWOP_2:5,ThRozne
+              .= r4 + r5 + r6;
+    Per M = F.(F $$ (B1,r),F $$ (B2,r)) by SETWOP_2:6,L1,L2,BZ
+      .= r1 + r2 + r3 + (r4 + r5 + r6) by Z1,Z2
+      .= r1 + r2 + r3 + (r4 + (r5 + r6)) by RLVECT_1:def 6
+      .= r1 + r2 + r3 + r4 + (r5 + r6) by RLVECT_1:def 6
+      .= a*e*i + c*e*g + a*f*h + b*f*g + b*d*i + c*d*h
+        by G1,G2,G3,G4,G5,G6,RLVECT_1:def 6;
+    hence thesis;
+  end;    
+  
+theorem CosikX:
+  for i,n being Nat
+  for p being Element of Permutations n st i in Seg n holds
+   ex k being Nat st k in Seg n & i = p.k
+  proof
+    let i,n be Nat;
+    let p be Element of Permutations n;
+    assume
+AA: i in Seg n;
+    consider s being FinSequence such that
+A2: s = p & len p = len s by MATRIX_2:def 12;
+KF: p is FinSequence by A2;
+    len p = n by MATRIX_2:22; then
+SS: dom s = Seg n by A2,FINSEQ_1:def 3;
+    p is Permutation of Seg n by MATRIX_2:def 11; then
+    i in rng p by AA,FUNCT_2:def 3; then
+    consider k being Nat such that
+KK: k in dom p & i = p.k by KF,FINSEQ_2:11;
+    thus thesis by KK,SS,A2;
+  end;
+
+theorem Cosik3:
+  for M being Matrix of n, K st
+  (ex i being Nat st i in Seg n &
+   for k being Nat st k in Seg n holds Col(M,i).k = 0.K) holds
+   for p being Element of Permutations n holds
+  ex l being Nat st l in Seg n & Path_matrix (p,M).l = 0.K
+  proof
+    let M be Matrix of n, K;
+    assume
+a0: ex i being Nat st i in Seg n &
+    for k being Nat st k in Seg n holds Col(M,i).k = 0.K;
+    consider i being Nat such that
+A0: i in Seg n &
+    for k being Nat st k in Seg n holds Col(M,i).k = 0.K by a0;
+    let p be Element of Permutations n;
+    len Path_matrix (p, M) = n by MATRIX_3:def 7;then
+A2: dom Path_matrix (p, M) = Seg n by FINSEQ_1:def 3;
+    consider k being Nat such that
+LL: k in Seg n and
+L4: i = p.k by CosikX,A0;
+X2: len M = n by MATRIX_1:def 3;
+    1 <= k & k <= len M by LL,FINSEQ_1:3,X2; then
+L5: k in dom M by FINSEQ_3:27;
+    Path_matrix (p, M).k = M*(k,i) by L4,MATRIX_3:def 7,LL,A2; then
+R2: Path_matrix (p, M).k = Col(M,i).k by L5,MATRIX_1:def 9;
+    take k;
+    thus thesis by R2,A0,LL;
+  end;
+  
+theorem Th3:
+  for p being Element of Permutations n
+  for M being Matrix of n, K st
+    (ex i being Nat st i in Seg n &
+    for k being Nat st k in Seg n holds Col(M,i).k = 0.K)
+  holds (Path_product M).p = 0.K
+  proof
+    let p be Element of Permutations n;
+    let M be Matrix of n, K;
+    assume
+A0: ex i being Nat st i in Seg n &
+      for k being Nat st k in Seg n holds Col(M,i).k = 0.K;
+    consider l being Nat such that
+XX: l in Seg n &
+    Path_matrix (p,M).l = 0.K by A0,Cosik3;
+    set k = l;
+P1: Path_matrix(p,M).k = 0.K by XX;
+    len Path_matrix (p, M) = n by MATRIX_3:def 7;then
+    k in dom (Path_matrix(p,M)) by XX,FINSEQ_1:def 3; then
+YY: Product Path_matrix(p,M) = 0.K by P1,FVSUM_1:107;
+Y1: (Path_product M).p = -((the mult of K) $$ Path_matrix(p,M),p)
+      by MATRIX_3:def 8
+                      .= - (Product (Path_matrix(p,M)),p) by GROUP_4:def 3;
+    per cases;
+    suppose p is even; then
+      -(Product (Path_matrix(p,M)),p) = Product (Path_matrix(p,M))
+        by MATRIX_2:def 16 .= 0.K by YY;
+      hence thesis by Y1;
+    end;
+    suppose p is odd;
+      then -(Product (Path_matrix(p,M)),p) = -Product (Path_matrix(p,M))
+        by MATRIX_2:def 16 .= 0.K by YY,RLVECT_1:25;
+      hence thesis by Y1;
+    end;
+  end;
+
+theorem Th7:
+  for M being Matrix of n, K st
+    (ex i being Nat st i in Seg n &
+    for k being Nat st k in Seg n holds Col(M,i).k = 0.K) holds
+      (the add of K) $$ (FinOmega Permutations n, Path_product M) = 0.K
+  proof
+    let M be Matrix of n, K;
+    given i being Nat such that
+A1: i in Seg n &
+    for k being Nat st k in Seg n holds Col(M,i).k = 0.K;
+    set F = the add of K;
+    set f = Path_product M;
+    set P1 = FinOmega Permutations n;
+    consider c being Element of Permutations n;
+    Permutations n is finite by MATRIX_2:30; then
+    reconsider P1 as non empty Element of Fin Permutations n
+      by MATRIX_2:def 17;
+    defpred P[non empty Element of Fin Permutations n] means
+      F $$ ($1, f) = 0.K;
+C1: for x being Element of Permutations n st x in P1 holds P[{x}]
+    proof
+      let x be Element of Permutations n;
+      assume x in P1;
+      F $$ ({x}, f) = f.x by SETWISEO:26
+                   .= 0.K by Th3,A1;
+      hence P[{x}];
+    end;
+C2: for x being Element of Permutations n,
+        B being non empty Element of Fin Permutations n
+      st x in P1 & B c= P1 & not x in B & P[B] holds P[B \/ {x}]
+    proof
+      let x be Element of Permutations n,
+          B be non empty Element of Fin Permutations n;
+      assume
+F1:   x in P1 & B c= P1 & not x in B & P[B];
+      F $$ (B \/ {x}, f) = F.(F $$(B,f), f.x) by F1,SETWOP_2:4
+                       .= F $$(B,f) + 0.K by Th3,A1
+                       .= 0.K by F1,RLVECT_1:10;
+      hence P[B \/ {x}];
+    end;
+    P[P1] from NonEmptyFiniteX(C1,C2);
+    hence thesis;
+  end;
+
+theorem Th6:
+  for p being Element of Permutations n
+  for M being Matrix of n, K st
+  (ex i being Nat st i in Seg n &
+  (for k being Nat st k in Seg n holds Col(M,i).k = 0.K)) holds
+    (PPath_product M).p = 0.K
+   proof
+     let p be Element of Permutations n;
+     let M be Matrix of n, K;
+     assume
+A0:  ex i being Nat st i in Seg n &
+     (for k being Nat st k in Seg n holds Col(M,i).k = 0.K); then
+     consider l being Nat such that
+XX:  l in Seg n & Path_matrix (p,M).l = 0.K by Cosik3;
+     len Path_matrix (p, M) = n by MATRIX_3:def 7;then
+     l in dom Path_matrix(p,M) by XX,FINSEQ_1:def 3; then
+YY:  Product Path_matrix(p,M) = 0.K by XX,FVSUM_1:107;
+     (PPath_product M).p = (the mult of K) $$ Path_matrix(p,M) by Def8
+      .= 0.K by YY,GROUP_4:def 3;
+     hence thesis;
+   end;    
+   
+Th7b:
+  for M being Matrix of n, K st
+    (ex i being Nat st i in Seg n &
+      for k being Nat st k in Seg n holds Col(M,i).k = 0.K) holds
+      (the add of K) $$ (FinOmega Permutations n, PPath_product M) = 0.K
+  proof
+    let M be Matrix of n, K;
+    assume
+A1: ex i being Nat st i in Seg n &
+    for k being Nat st k in Seg n holds Col(M,i).k = 0.K;
+    set F = the add of K;
+    set f = PPath_product M;
+    set P1 = FinOmega Permutations n;
+    consider c being Element of Permutations n;
+    Permutations n is finite by MATRIX_2:30; then
+    reconsider P1 as non empty Element of Fin Permutations n
+      by MATRIX_2:def 17;
+    defpred P[non empty Element of Fin Permutations n] means
+      F $$ ($1, f) = 0.K;
+C1: for x being Element of Permutations n st x in P1 holds P[{x}]
+    proof
+      let x be Element of Permutations n;
+      assume x in P1;
+      F $$ ({x}, f) = f.x by SETWISEO:26
+                   .= 0.K by Th6,A1;
+      hence P[{x}];
+    end;
+C2: for x being Element of Permutations n,
+        B being non empty Element of Fin Permutations n
+      st x in P1 & B c= P1 & not x in B & P[B] holds P[B \/ {x}]
+    proof
+      let x be Element of Permutations n,
+          B be non empty Element of Fin Permutations n;
+      assume
+F1:   x in P1 & B c= P1 & not x in B & P[B];
+      F $$ (B \/ {x}, f) = F.(F $$(B,f), f.x) by F1,SETWOP_2:4
+                       .= F $$(B,f) + 0.K by Th6,A1
+                       .= 0.K by F1,RLVECT_1:10;
+      hence P[B \/ {x}];
+    end;
+    P[P1] from NonEmptyFiniteX(C1,C2);
+    hence thesis;
+  end;
+
+theorem
+  for M being Matrix of n, K st
+  (ex i being Nat st i in Seg n &
+    for k being Nat st k in Seg n holds Col(M,i).k = 0.K) holds
+      Det M = 0.K
+  proof
+    let M be Matrix of n,K;
+    assume
+A1: ex i being Nat st i in Seg n &
+    for k being Nat st k in Seg n holds Col(M,i).k = 0.K;
+    set F = the add of K;
+    set f = Path_product M;
+    Permutations n is finite by MATRIX_2:30; then
+C4: FinOmega Permutations n = Permutations n by MATRIX_2:def 17;
+    reconsider P1 = Permutations n as Element of Fin Permutations n by C4;
+    Det M = F $$ (FinOmega Permutations n,f) by MATRIX_3:def 9
+         .= 0.K by A1,Th7;
+    hence thesis;
+  end;
+
+theorem
+  for M being Matrix of n, K st
+  (ex i being Nat st i in Seg n &
+    for k being Nat st k in Seg n holds Col(M,i).k = 0.K) holds
+      Per M = 0.K by Th7b;
+
+begin :: Auxiliary Lemmas for Further Work
+
+theorem
+  for M,N being Matrix of n, K st i in Seg n
+  for p being Element of Permutations n holds
+  ex k being Nat st k in Seg n & i = p.k &
+    Col(N,i)/.k = Path_matrix (p, N)/.k
+    proof
+    let M,N be Matrix of n, K;
+    assume L2: i in Seg n;
+    let p be Element of Permutations n;
+    consider k being Nat such that
+LL: k in Seg n and
+L4: i = p.k by CosikX,L2;
+    len N = n by MATRIX_1:def 3; then
+m1: k in dom N by LL,FINSEQ_1:def 3;
+    take k;
+    len Path_matrix (p, N) = n by MATRIX_3:def 7; then
+H0: k in dom Path_matrix (p, N) by LL,FINSEQ_1:def 3; then
+    Path_matrix (p, N).k = N*(k,i) by L4,MATRIX_3:def 7; then
+H1: Path_matrix (p, N)/.k = N*(k,i) by H0,FINSEQ_4:def 4;
+    len Col(N,i) = len N by MATRIX_1:def 9; then
+ll: k in dom Col(N,i) by m1,FINSEQ_3:31;
+    Col(N,i).k = N*(k,i) by m1,MATRIX_1:def 9;
+    hence thesis by LL,L4,H1,ll,FINSEQ_4:def 4;
+  end;
+
+theorem
+  for a being Element of K
+  for M,N being Matrix of n, K st
+  (ex i being Nat st i in Seg n & (for k being Nat st
+    k in Seg n holds Col(M,i).k = a * Col(N,i)/.k) &
+  (for l being Nat st l <> i & l in Seg n holds Col(M,l) = Col(N,l)))
+  for p being Element of Permutations n holds
+  ex l being Nat st l in Seg n &
+    Path_matrix (p,M)/.l = a * (Path_matrix (p,N)/.l)
+  proof
+    let a be Element of K;
+    let M,N be Matrix of n, K;
+    assume
+A0: (ex i being Nat st i in Seg n & (for k being Nat st
+    k in Seg n holds Col(M,i).k = a * Col(N,i)/.k) &
+      (for l being Nat st l <> i & l in Seg n holds Col(M,l) = Col(N,l)));
+    consider i being Nat such that
+a1: i in Seg n and
+a0: (for k being Nat st
+    k in Seg n holds Col(M,i).k = a * Col(N,i)/.k) &
+      (for l being Nat st l <> i & l in Seg n holds Col(M,l) = Col(N,l))
+        by A0;
+    let p be Element of Permutations n;
+    len Path_matrix (p, M) = n & len Path_matrix (p, N) = n
+    by MATRIX_3:def 7;then
+A2: dom Path_matrix (p, M) = Seg n & dom Path_matrix (p, N) = Seg n
+      by FINSEQ_1:def 3;
+    consider k being Nat such that
+LL: k in Seg n and
+L4: i = p.k by CosikX,a1;
+X2: len M = n & len N = n by MATRIX_1:def 3;
+    1 <= k & k <= len M & 1 <= k & k <= len N by LL,FINSEQ_1:3,X2; then
+L5: k in dom M & k in dom N by FINSEQ_3:27; then
+L2: Col(M,i).k = M*(k,i) & Col(N,i).k = N*(k,i) by MATRIX_1:def 9;
+XX: Col(N,i)/.k = Path_matrix (p, N)/.k
+    proof
+      len Path_matrix (p, N) = n by MATRIX_3:def 7; then
+H0:   k in dom Path_matrix (p, N) by LL,FINSEQ_1:def 3; then
+      Path_matrix (p, N).k = N*(k,i) by L4,MATRIX_3:def 7; then
+H1:   Path_matrix (p, N)/.k = N*(k,i) by H0,FINSEQ_4:def 4;
+      len Col(N,i) = len N by MATRIX_1:def 9; then
+      dom Col(N,i) = dom N by FINSEQ_3:31; then
+      N*(k,i) = Col(N,i)/.k by L5,L2,FINSEQ_4:def 4;
+      hence thesis by H1;
+    end;
+    k in dom Path_matrix (p, M) & k in dom Path_matrix (p, N) by LL,A2; then
+    Path_matrix (p, M).k = M*(k,i) & Path_matrix (p, N).k = N*(k,i)
+      by L4,MATRIX_3:def 7; then
+R2: Path_matrix (p, M).k = Col(M,i).k by L5,MATRIX_1:def 9
+      .= a * (Path_matrix (p, N)/.k) by XX,LL,a0;
+    take k;
+    thus thesis by LL,A2,FINSEQ_4:def 4,R2;
+  end;

@@ -114,7 +114,7 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="269"/>
+<Func kind="K" nr="270"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
@@ -131,7 +131,7 @@
 <Cluster/>
 <Func kind="K" nr="22">
 <Func kind="U" nr="1">
-<Func kind="K" nr="200">
+<Func kind="K" nr="201">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -142,12 +142,12 @@
 <Adjective nr="11" value="false"/>
 <Adjective nr="83"/>
 <Adjective nr="85">
-<Func kind="K" nr="200">
+<Func kind="K" nr="201">
 <Num nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="108">
-<Func kind="K" nr="200">
+<Func kind="K" nr="201">
 <Num nr="2"/>
 </Func>
 </Adjective>

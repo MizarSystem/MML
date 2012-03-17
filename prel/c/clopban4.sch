@@ -30,6 +30,7 @@
 <ArticleID name="CLOPBAN1"/>
 <ArticleID name="CFUNCDOM"/>
 <ArticleID name="CLOPBAN2"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -87,13 +88,13 @@
 <And>
 <Not>
 <And>
-<Pred kind="R" nr="12">
+<Pred kind="R" nr="15">
 <Var nr="3"/>
 <Var nr="1"/>
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="135">
+<Func kind="K" nr="136">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -109,19 +110,19 @@
 <Not>
 <And>
 <Not>
-<Pred kind="R" nr="12">
+<Pred kind="R" nr="15">
 <Var nr="3"/>
 <Var nr="1"/>
 </Pred>
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="135">
+<Func kind="K" nr="136">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="125">
+<Func kind="K" nr="126">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

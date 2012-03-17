@@ -9,30 +9,21 @@ environ
  vocabularies BOOLE, ARYTM_3, SEQ_2, ARYTM, LATTICES, ORDINAL2, TARSKI,
       SUPINF_1, SETFAM_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, ORDINAL1, NUMBERS,
-      XREAL_0, REAL_1;
- constructors REAL_1, XREAL_0, MEMBERED;
- registrations XREAL_0, SUBSET_1, XBOOLE_0, MEMBERED;
+      XXREAL_0, XREAL_0, REAL_1;
+ constructors REAL_1, XREAL_0, MEMBERED, XXREAL_0, ARYTM_2;
+ registrations XREAL_0, SUBSET_1, XBOOLE_0, MEMBERED, XXREAL_0, NUMBERS;
  requirements SUBSET, BOOLE;
 
 
 begin
 
-::
-:: -infty , +infty and ExtREAL enlarged set of real numbers
-::
-
-definition
-  func +infty equals
-:: SUPINF_1:def 1
-    REAL;
-end;
+theorem :: SUPINF_1:1
+  not +infty in REAL;
 
 canceled;
 
-theorem :: SUPINF_1:2
-  not +infty in REAL;
-
 definition let IT be set;
+ canceled;
   attr IT is +Inf-like means
 :: SUPINF_1:def 2
     IT = +infty;
@@ -51,18 +42,13 @@ canceled;
 theorem :: SUPINF_1:4
   +infty is +Inf;
 
-definition
-  func -infty equals
-:: SUPINF_1:def 3
-    {REAL};
-end;
-
 canceled;
 
 theorem :: SUPINF_1:6
   not -infty in REAL;
 
 definition let IT be set;
+  canceled;
   attr IT is -Inf-like means
 :: SUPINF_1:def 4
     IT = -infty;
@@ -80,22 +66,6 @@ canceled;
 
 theorem :: SUPINF_1:8
   -infty is -Inf;
-
-definition let IT be set;
-  attr IT is ext-real means
-:: SUPINF_1:def 5
-    IT in REAL \/ {-infty,+infty};
-end;
-
-registration
-  cluster ext-real set;
-end;
-
-definition
-  func ExtREAL equals
-:: SUPINF_1:def 6
-    REAL \/ {-infty,+infty};
-end;
 
 registration
   cluster -> ext-real Element of ExtREAL;
@@ -122,60 +92,52 @@ definition
   redefine func -infty -> R_eal;
 end;
 
-canceled 2;
-
-theorem :: SUPINF_1:14
-  -infty <> +infty;
+canceled 3;
 
 definition let x,y be R_eal;
-  pred x <=' y means
+ canceled 2;
+ redefine
+  pred x <= y means
 :: SUPINF_1:def 7
     ex p,q being Real st p = x & q = y & p <= q if x in REAL & y in REAL
     otherwise x = -infty or y = +infty;
-  reflexivity;
-  connectedness;
   end;
-
-notation let x,y be R_eal;
-  antonym y <' x for x <=' y;
-end;
 
 canceled;
 
 theorem :: SUPINF_1:16
   for x,y being R_eal st
     x is Real & y is Real holds
-   (x <=' y iff ex p,q being Real st (p = x & q = y & p <= q));
+   (x <= y iff ex p,q being Real st (p = x & q = y & p <= q));
 
 theorem :: SUPINF_1:17
-  for x being R_eal st x in REAL holds -infty <' x;
+  for x being R_eal st x in REAL holds -infty < x;
 
 theorem :: SUPINF_1:18
-  for x being R_eal st x in REAL holds x <' +infty;
+  for x being R_eal st x in REAL holds x < +infty;
 
-theorem :: SUPINF_1:19
-  -infty <' +infty;
+canceled;
 
 theorem :: SUPINF_1:20
-  for x being R_eal holds x <=' +infty;
+  for x being R_eal holds x <= +infty;
 
 theorem :: SUPINF_1:21
-  for x being R_eal holds -infty <=' x;
+  for x being R_eal holds -infty <= x;
 
 theorem :: SUPINF_1:22
-  for x,y being R_eal holds x <=' y & y <=' x implies x = y;
+  for x,y being R_eal holds x <= y & y <= x implies x = y;
 
 theorem :: SUPINF_1:23
   for x being R_eal st
-    x <=' -infty holds x = -infty;
+    x <= -infty holds x = -infty;
 
 theorem :: SUPINF_1:24
   for x being R_eal st
-    +infty <=' x holds x = +infty;
+    +infty <= x holds x = +infty;
 
 scheme :: SUPINF_1:sch 1
  SepReal {P[R_eal]}:
-   ex X being Subset of REAL \/ {-infty,+infty} st
+   ex X being Subset of ExtREAL st
    for x being R_eal holds x in X iff P[x];
 
 canceled 2;
@@ -187,17 +149,13 @@ theorem :: SUPINF_1:27
 canceled;
 
 theorem :: SUPINF_1:29
-  for x,y,z being R_eal holds x <=' y & y <=' z implies x <=' z;
-
-registration
-  cluster ExtREAL -> non empty;
-end;
+  for x,y,z being R_eal holds x <= y & y <= z implies x <= z;
 
 canceled;
 
 theorem :: SUPINF_1:31
   for x being R_eal st
-    x in REAL holds -infty <' x & x <' +infty;
+    x in REAL holds -infty < x & x < +infty;
 
 ::
 ::       Majorant and minorant element of X being subset of ExtREAL
@@ -208,7 +166,7 @@ definition let X be Subset of ExtREAL;
 
   mode majorant of X -> R_eal means
 :: SUPINF_1:def 9
-    for x be R_eal holds x in X implies x <=' it;
+    for x be R_eal holds x in X implies x <= it;
 end;
 
 canceled;
@@ -224,7 +182,7 @@ theorem :: SUPINF_1:34
 definition let X be Subset of ExtREAL;
   mode minorant of X -> R_eal means
 :: SUPINF_1:def 10
-    for x be R_eal holds x in X implies it <=' x;
+    for x be R_eal holds x in X implies it <= x;
 end;
 
 canceled;
@@ -359,13 +317,13 @@ theorem :: SUPINF_1:62
    for X being non empty Subset of ExtREAL st
    X is bounded_above & X <> {-infty} holds
    ex UB being R_eal st UB is majorant of X &
-   for y being R_eal st y is majorant of X holds UB <=' y;
+   for y being R_eal st y is majorant of X holds UB <= y;
 
 theorem :: SUPINF_1:63
    for X being non empty Subset of ExtREAL st
    X is bounded_below & X <> {+infty} holds
    ex LB being R_eal st LB is minorant of X &
-   (for y being R_eal st y is minorant of X holds y <=' LB);
+   (for y being R_eal st y is minorant of X holds y <= LB);
 
 theorem :: SUPINF_1:64
   for X being Subset of ExtREAL st
@@ -378,26 +336,26 @@ theorem :: SUPINF_1:65
 theorem :: SUPINF_1:66
    for X being Subset of ExtREAL st X = {-infty} holds
    ex UB being R_eal st UB is majorant of X &
-   for y being R_eal st y is majorant of X holds UB <=' y;
+   for y being R_eal st y is majorant of X holds UB <= y;
 
 theorem :: SUPINF_1:67
    for X being Subset of ExtREAL st
    X = {+infty} holds
    ex LB being R_eal st LB is minorant of X &
-   for y being R_eal st y is minorant of X holds y <=' LB;
+   for y being R_eal st y is minorant of X holds y <= LB;
 
 theorem :: SUPINF_1:68
    for X being non empty Subset of ExtREAL st
    X is bounded_above holds
    ex UB being R_eal st UB is majorant of X &
-   for y being R_eal st y is majorant of X holds UB <=' y;
+   for y being R_eal st y is majorant of X holds UB <= y;
 
 theorem :: SUPINF_1:69
    for X being non empty Subset of ExtREAL st
    X is bounded_below holds
    ex LB being R_eal st LB is minorant of X &
    for y being R_eal st
-   y is minorant of X holds y <=' LB;
+   y is minorant of X holds y <= LB;
 
 theorem :: SUPINF_1:70
    for X being non empty Subset of ExtREAL st
@@ -413,12 +371,12 @@ theorem :: SUPINF_1:71
 theorem :: SUPINF_1:72
    for X being non empty Subset of ExtREAL holds
    ex UB being R_eal st UB is majorant of X &
-   for y being R_eal st y is majorant of X holds UB <=' y;
+   for y being R_eal st y is majorant of X holds UB <= y;
 
 theorem :: SUPINF_1:73
    for X being non empty Subset of ExtREAL holds
    ex LB being R_eal st LB is minorant of X &
-   for y being R_eal st y is minorant of X holds y <=' LB;
+   for y being R_eal st y is minorant of X holds y <= LB;
 
 ::
 ::       sup X, inf X least upper bound and greatest lower bound of set X
@@ -428,27 +386,27 @@ definition let X be non empty Subset of ExtREAL;
   func sup X -> R_eal means
 :: SUPINF_1:def 16
     it is majorant of X &
-    for y being R_eal st y is majorant of X holds it <=' y;
+    for y being R_eal st y is majorant of X holds it <= y;
 end;
 
 canceled 2;
 
 theorem :: SUPINF_1:76
    for X being non empty Subset of ExtREAL,
-       x being R_eal st x in X holds x <=' sup X;
+       x being R_eal st x in X holds x <= sup X;
 
 definition let X be non empty Subset of ExtREAL;
    func inf X -> R_eal means
 :: SUPINF_1:def 17
      it is minorant of X &
-     for y being R_eal st y is minorant of X holds y <=' it;
+     for y being R_eal st y is minorant of X holds y <= it;
 end;
 
 canceled 2;
 
 theorem :: SUPINF_1:79
    for X being non empty Subset of ExtREAL,
-       x being R_eal st x in X holds inf X <=' x;
+       x being R_eal st x in X holds inf X <= x;
 
 theorem :: SUPINF_1:80
   for X being non empty Subset of ExtREAL,
@@ -490,51 +448,51 @@ canceled 4;
 
 theorem :: SUPINF_1:91
   for X,Y being non empty Subset of ExtREAL st
-    X c= Y holds sup X <=' sup Y;
+    X c= Y holds sup X <= sup Y;
 
 theorem :: SUPINF_1:92
   for x,y being R_eal,
       a being R_eal st
-   x <=' a & y <=' a holds sup{x,y} <=' a;
+   x <= a & y <= a holds sup{x,y} <= a;
 
 theorem :: SUPINF_1:93
   for x,y being R_eal holds
-   (x <=' y implies sup{x,y} = y) & (y <=' x implies sup{x,y} = x);
+   (x <= y implies sup{x,y} = y) & (y <= x implies sup{x,y} = x);
 
 theorem :: SUPINF_1:94
   for X,Y being non empty Subset of ExtREAL st
-    X c= Y holds inf Y <=' inf X;
+    X c= Y holds inf Y <= inf X;
 
 theorem :: SUPINF_1:95
   for x,y being R_eal,
       a being R_eal st
-    a <=' x & a <=' y holds a <=' inf{x,y};
+    a <= x & a <= y holds a <= inf{x,y};
 
 theorem :: SUPINF_1:96
   for x,y being R_eal holds
-    (x <=' y implies inf{x,y} = x) & (y <=' x implies inf{x,y} = y);
+    (x <= y implies inf{x,y} = x) & (y <= x implies inf{x,y} = y);
 
 theorem :: SUPINF_1:97
   for X being non empty Subset of ExtREAL,
       x being R_eal st
-   (ex y being R_eal st y in X & x <=' y) holds x <=' sup X;
+   (ex y being R_eal st y in X & x <= y) holds x <= sup X;
 
 theorem :: SUPINF_1:98
   for X being non empty Subset of ExtREAL,
       x being R_eal st
-   (ex y being R_eal st y in X & y <=' x) holds inf X <=' x;
+   (ex y being R_eal st y in X & y <= x) holds inf X <= x;
 
 theorem :: SUPINF_1:99
   for X,Y being non empty Subset of ExtREAL st
    (for x being R_eal st x in X holds
-   (ex y being R_eal st y in Y & x <=' y)) holds
-   sup X <=' sup Y;
+   (ex y being R_eal st y in Y & x <= y)) holds
+   sup X <= sup Y;
 
 theorem :: SUPINF_1:100
   for X,Y being non empty Subset of ExtREAL st
    (for y being R_eal st y in Y holds
-   (ex x being R_eal st x in X & x <=' y)) holds
-   inf X <=' inf Y;
+   (ex x being R_eal st x in X & x <= y)) holds
+   inf X <= inf Y;
 
 theorem :: SUPINF_1:101
    for X,Y being Subset of ExtREAL,
@@ -570,11 +528,11 @@ theorem :: SUPINF_1:106
 
 theorem :: SUPINF_1:107
   for X,Y,S being non empty Subset of ExtREAL st
-    S = X /\ Y holds sup(S) <=' inf{sup X,sup Y};
+    S = X /\ Y holds sup(S) <= inf{sup X,sup Y};
 
 theorem :: SUPINF_1:108
   for X,Y,S being non empty Subset of ExtREAL st
-    S = X /\ Y holds sup{inf X,inf Y} <=' inf(S);
+    S = X /\ Y holds sup{inf X,inf Y} <= inf(S);
 
 definition let X be non empty set;
    mode bool_DOMAIN of X -> set means
@@ -613,7 +571,7 @@ theorem :: SUPINF_1:114
    S = union F holds sup S = sup SUP(F);
 
 definition let F be bool_DOMAIN of ExtREAL;
-   func INF(F) -> Subset of ExtREAL means
+   func INF F -> Subset of ExtREAL means
 :: SUPINF_1:def 20
      for a being R_eal holds
         a in it iff ex A being non empty Subset of ExtREAL st
@@ -647,4 +605,4 @@ begin :: Addenda
 
 theorem :: SUPINF_1:120
    for x,y being R_eal, p,q being real number st
-   x = p & y = q holds p <= q iff x <=' y;
+   x = p & y = q holds p <= q iff x <= y;

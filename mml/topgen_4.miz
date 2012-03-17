@@ -15,10 +15,10 @@ environ
       NUMBERS, CARD_4, MCART_1, FUNCT_2, NAT_1, FINSET_1, SETFAM_1, STRUCT_0,
       GROUP_1, CONNSP_2, REALSET1, OPENLATT, MEASURE1, PRE_TOPC, TOPS_1,
       TOPS_2, CONNSP_1, TDLAT_3, WAYBEL23, PROB_1, URYSOHN1, TOPMETR, CANTOR_1,
-      ORDERS_4, TSP_1, TOPGEN_1, TOPGEN_3, PCOMPS_1;
+      ORDERS_4, TSP_1, TOPGEN_1, TOPGEN_3, PCOMPS_1, XXREAL_0;
  constructors MEMBERED, TOPS_1, TOPS_2, CONNSP_1, TDLAT_3, WAYBEL23, URYSOHN1,
       COMPTS_1, TSP_1, CARD_4, ORDERS_4, SETFAM_1, KURATO_2, MCART_1, TOPGEN_1,
-      TOPGEN_2, TOPGEN_3, MEASURE1, OPENLATT;
+      TOPGEN_2, TOPGEN_3, MEASURE1, OPENLATT, XXREAL_0, TOPMETR;
  registrations STRUCT_0, RELSET_1, TOPS_1, YELLOW13, CARD_1, ORDINAL1,
       TOPREAL6, TOPGEN_1, FINSET_1, WAYBEL12, SUBSET_1, BORSUK_3, TOPGEN_2,
       TOPGEN_3, MEASURE1, ORDINAL2, PROB_1;
@@ -28,7 +28,7 @@ environ
       XBOOLE_1, SUBSET_1, YELLOW_8, WAYBEL23, TOPMETR, NUMBERS, CONNSP_1,
       CONNSP_2, CARD_4, CARD_1, KURATO_2, PCOMPS_1, XBOOLE_0, TOPGEN_1, TOPS_2,
       MEASURE1, WAYBEL12, MCART_1, REALSET1, BORSUK_4, TSP_1, TOPGEN_2,
-      TOPGEN_3, PROB_1, SUPINF_2, SETLIM_1, CARD_3, CARD_2, OPENLATT;
+      TOPGEN_3, PROB_1, CARD_2, OPENLATT;
  schemes FUNCT_1, TREES_2, BORSUK_2, SUBSET_1, XBOOLE_0;
 
 begin :: Preliminaries
@@ -400,19 +400,19 @@ end;
 
 Lm2:
   for T being set, F being Subset-Family of T st
-    F is sigma_Field_Subset of T holds
+    F is SigmaField of T holds
       F is closed_for_countable_unions
   proof
     let T be set,
         F be Subset-Family of T;
     assume
-A1: F is sigma_Field_Subset of T;
+A1: F is SigmaField of T;
     let G be countable Subset-Family of T;
     assume
 A2: G c= F;
     per cases;
     suppose G is empty;
-      hence thesis by A1,MEASURE1:45,ZFMISC_1:2;
+      hence thesis by A1,PROB_1:10,ZFMISC_1:2;
     end;
     suppose G is non empty;
       hence thesis by A1,A2,MEASURE1:def 9;
@@ -420,7 +420,7 @@ A2: G c= F;
   end;
 
 registration let T be set;
-  cluster -> closed_for_countable_unions sigma_Field_Subset of T;
+  cluster -> closed_for_countable_unions SigmaField of T;
   coherence by Lm2;
 end;
 
@@ -444,21 +444,24 @@ end;
 
 theorem Th13:
   for T being set, F being Subset-Family of T holds
-    F is sigma_Field_Subset of T iff
+    F is SigmaField of T iff
       F is compl-closed closed_for_countable_unions
   proof
     let T be set, F be Subset-Family of T;
-    thus F is sigma_Field_Subset of T implies
+    thus F is SigmaField of T implies
       F is compl-closed closed_for_countable_unions;
     assume
 A1: F is compl-closed closed_for_countable_unions;
-    F is sigma_Field_Subset-like
+    F is sigma-additive
     proof
       let M be N_Sub_set_fam of T;
       assume M c= F;
       hence thesis by A1,Def4;
     end;
-    hence thesis by A1,Th12;
+     then reconsider F as
+      non empty compl-closed sigma-additive Subset-Family of T by A1,Th12;
+     F is SigmaField of T;
+    hence thesis;
   end;
 
 definition let T be set, F be Subset-Family of T;
@@ -1800,69 +1803,7 @@ A2: dom A is countable by CARD_4:44,FUNCT_2:def 1;
     hence thesis;
   end;
 
-theorem Th62:
-  for T, F being set holds
-    F is SigmaField of T iff
-      F is sigma_Field_Subset of T
-  proof
-    let T, F be set;
-    hereby assume
-A1:   F is SigmaField of T; then
-      reconsider F' = F as non empty compl-closed Subset-Family of T;
-      for M being N_Sub_set_fam of T st M c= F' holds union M in F'
-      proof
-        let M be N_Sub_set_fam of T;
-        assume
-A2:     M c= F';
-        consider f being Function of NAT, bool T such that
-A3:     rng f = M by SUPINF_2:def 14;
-        Union f = (Intersection Complement f)` by SETLIM_1:35; then
-A4:     union rng f = (Intersection Complement f)` by CARD_3:def 4;
-        for n being Nat holds (Complement f).n in F'
-        proof
-          let n be Nat;
-          set B = (Complement f).n;
-A5:       f.n in rng f by FUNCT_2:6;
-          B = (f.n)` by PROB_1:def 4;
-          hence thesis by A5,A2,A3,PROB_1:def 1;
-        end; then
-        Intersection Complement f in F' by A1,PROB_1:def 8;
-        hence thesis by A3,A4,PROB_1:def 1;
-      end;
-      hence F is sigma_Field_Subset of T by MEASURE1:def 9;
-    end;
-    assume
-A6: F is sigma_Field_Subset of T;
-A7: for A1 being SetSequence of T st
-      (for n being Nat holds A1.n in F) holds Intersection A1 in F
-    proof
-      let A1 be SetSequence of T;
-      assume
-A8:   for n being Nat holds A1.n in F;
-      reconsider M = rng Complement A1 as N_Sub_set_fam of T by Th61;
-      set B = Complement A1;
-A9:   Complement B = A1;
-      M c= F
-      proof
-        let x be set;
-        assume x in M; then
-        consider a being set such that
-A10:     a in dom B & x = B.a by FUNCT_1:def 5;
-        reconsider a as Nat by A10,FUNCT_2:def 1;
-A11:     A1.a in F by A8;
-        x = (A1.a)` by A10,PROB_1:def 4;
-        hence thesis by A11,A6,PROB_1:def 1;
-      end; then
-      union rng Complement A1 in F by A6,MEASURE1:def 9; then
-      Union Complement A1 in F by CARD_3:def 4; then
-A12:   (Union Complement A1)` in F by A6,PROB_1:def 1;
-      Union Complement A1 = (Intersection A1)` by A9,SETLIM_1:35;
-      hence thesis by A12;
-    end;
-    for A being Subset of T st A in F holds A` in F
-      by A6,PROB_1:def 1;
-    hence thesis by A6,A7,PROB_1:def 8;
-  end;
+canceled;
 
 theorem Th63:
   for F, G being Subset-Family of T st F is all-open-containing & F c= G
@@ -1902,7 +1843,7 @@ A2:  F c= G;
 
 definition let T be 1-sorted;
   mode SigmaField of T is SigmaField of the carrier of T;
-  mode sigma_Field_Subset of T is sigma_Field_Subset of the carrier of T;
+  mode SigmaField of T is SigmaField of the carrier of T;
 end;
 
 registration let T be non empty TopSpace;
@@ -1923,7 +1864,7 @@ theorem Th65:
     TotFam T c= sigma TotFam T by PROB_1:def 14;
     hence E is all-open-containing by Th63;
     thus E is compl-closed;
-    thus E is closed_for_countable_unions by Th62;
+    thus E is closed_for_countable_unions;
   end;
 
 registration let T;
@@ -1933,32 +1874,25 @@ registration let T;
 end;
 
 registration let T be non empty 1-sorted;
-  cluster sigma_Field_Subset-like compl-closed closed_for_countable_unions
+  cluster sigma-additive compl-closed closed_for_countable_unions
     non empty Subset-Family of T;
   existence
   proof
     take E = sigma TotFam T;
-    thus thesis by Th62;
+    thus thesis;
   end;
 end;
 
 registration let T be non empty TopSpace;
   cluster -> closed_for_countable_unions SigmaField of T;
-  coherence by Th62;
+  coherence;
 end;
 
 theorem Th66:
   for T being non empty TopSpace,
       F being Subset-Family of T st
     F is compl-closed closed_for_countable_unions holds
-      F is SigmaField of T
-  proof
-    let T being non empty TopSpace,
-        F be Subset-Family of T;
-    assume F is compl-closed closed_for_countable_unions; then
-    F is sigma_Field_Subset of T by Th13;
-    hence thesis by Th62;
-  end;
+      F is SigmaField of T by Th13;
 
 registration let T be non empty TopSpace;
   cluster all-open-containing SigmaField of T;
@@ -2043,7 +1977,7 @@ A9:     Z = S & X c= S & S is SigmaField of T by A8,Th66;
 A13:     Z = S & X c= S & S is all-open-containing compl-closed
           closed_for_countable_unions Subset-Family of T by A11;
         Z = S & X c= S & S is SigmaField of T by A13,Th66;
-        hence E` in Z by A12,PROB_1:def 8;
+        hence E` in Z by A12,PROB_1:def 1;
       end;
       hence thesis by A1,SETFAM_1:def 1;
     end;
@@ -2166,7 +2100,7 @@ A1: X c= BT by Th69;
       let Z be set;
       assume
 A2:   X c= Z & Z is SigmaField of T; then
-      reconsider Z' = Z as sigma_Field_Subset of T by Th62;
+      reconsider Z' = Z as SigmaField of T;
       Z' is all-open-containing by A2,Th63;
       hence thesis by Def11;
     end;

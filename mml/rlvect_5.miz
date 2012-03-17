@@ -9,19 +9,19 @@ environ
  vocabularies RLVECT_1, RLSUB_1, RLVECT_2, RLVECT_3, BOOLE, ARYTM_1, FUNCT_1,
       FINSET_1, CARD_1, FINSEQ_1, RELAT_1, FUNCT_2, SEQ_1, FINSEQ_4, SUBSET_1,
       RFINSEQ, RLSUB_2, MATRLIN, TARSKI, VECTSP_9;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XREAL_0, REAL_1,
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, REAL_1,
       NAT_1, RELAT_1, FUNCT_1, FUNCT_2, CARD_1, FINSET_1, FINSEQ_1, FINSEQ_3,
       FINSEQ_4, STRUCT_0, RFINSEQ, RLVECT_1, RLVECT_2, RLSUB_1, RLSUB_2,
-      RLVECT_3;
+      RLVECT_3, XXREAL_0;
  constructors REAL_1, NAT_1, FINSEQ_3, RFINSEQ, RLVECT_3, RLSUB_2, RLVECT_2,
-      FINSEQ_4, PARTFUN1, XREAL_0, MEMBERED, REALSET1;
+      FINSEQ_4, PARTFUN1, XREAL_0, MEMBERED, REALSET1, XXREAL_0;
  registrations SUBSET_1, STRUCT_0, RELSET_1, FINSEQ_1, FINSET_1, FUNCT_2,
-      NAT_1, MEMBERED, ORDINAL2, RLVECT_3;
+      NAT_1, MEMBERED, ORDINAL2, RLVECT_3, XREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI;
  theorems TARSKI, ENUMSET1, SUBSET_1, REAL_1, NAT_1, CARD_1, CARD_2, FUNCT_1,
       FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSET_1, RFINSEQ,
-      RLVECT_1, RLVECT_2, MATRLIN, RLVECT_3, RLSUB_1, RLSUB_2, VECTSP_9,
+      RLVECT_1, RLVECT_2, RLVECT_3, RLSUB_1, RLSUB_2,
       RELSET_1, XBOOLE_0, XBOOLE_1, ZFMISC_1, XCMPLX_0, XCMPLX_1, XREAL_1;
  schemes NAT_1, FINSEQ_1, FUNCT_2;
 
@@ -239,7 +239,7 @@ A5: Sum(L) = Sum(L (#) G) by RLVECT_2:def 10;
 
   reconsider A = rng G as Subset of rng F by A2,A4;
   consider P being Permutation of dom F such that
-A6: (F - A`) ^ (F - A) = F*P by A1,MATRLIN:8;
+A6: (F - A`) ^ (F - A) = F*P by A1,FINSEQ_3:124;
 
   set F1 = F - A`;
 
@@ -248,7 +248,7 @@ A6: (F - A`) ^ (F - A) = F*P by A1,MATRLIN:8;
       X \ A` = X /\ A`` by SUBSET_1:32
         .= A by XBOOLE_1:28;
   then rng F1 = rng G & F1 is one-to-one by A1,FINSEQ_3:72,94;
-  then F1, G are_fiberwise_equipotent by A3,VECTSP_9:4;
+  then F1, G are_fiberwise_equipotent by A3,RFINSEQ:39;
   then consider Q being Permutation of dom G such that
 A7: F1 = G*Q by RFINSEQ:17;
 
@@ -515,7 +515,7 @@ A16: G is one-to-one and
 A17: rng G = Carrier(K) and
 A18: Sum(K) = Sum(K (#) G) by RLVECT_2:def 10;
 
-      F, G are_fiberwise_equipotent by A12,A13,A14,A16,A17,VECTSP_9:4;
+      F, G are_fiberwise_equipotent by A12,A13,A14,A16,A17,RFINSEQ:39;
   then consider P being Permutation of dom G such that
 A19: F = G*P by RFINSEQ:17;
 
@@ -1196,20 +1196,12 @@ registration
     end;
 end;
 
-definition
-  let V be RealLinearSpace;
-  redefine attr V is finite-dimensional means
-:Def2:
-  ex I being finite Subset of V st I is Basis of V;
-  compatibility by Def1;
-end;
-
 theorem Th24:
   V is finite-dimensional implies for I being Basis of V holds I is finite
 proof
   assume V is finite-dimensional;
   then consider A being finite Subset of V such that
-A1: A is Basis of V by Def2;
+A1: A is Basis of V by Def1;
   let B be Basis of V;
   consider p being FinSequence such that
 A2: rng p = A by FINSEQ_1:73;
@@ -1427,7 +1419,7 @@ then A1: V' = (0).V' by RLSUB_1:40;
 A2: I is linearly-independent by RLVECT_3:8;
       Lin(I) = (0).V' by RLVECT_3:19;
   then I is Basis of V' by A1,A2,RLVECT_3:def 3;
-  hence thesis by Def2;
+  hence thesis by Def1;
 end;
 
 theorem Th28:
@@ -1472,6 +1464,7 @@ end;
 begin  :: Dimension of a Vector Space
 
 definition
+ canceled;
   let V be RealLinearSpace;
   assume A1: V is finite-dimensional;
   func dim V -> Nat means
@@ -1480,7 +1473,7 @@ definition
   existence
   proof
     consider A being finite Subset of V such that
-  A2: A is Basis of V by A1,Def2;
+  A2: A is Basis of V by A1,Def1;
     consider n being Nat such that
   A3: n = card A;
         for I being Basis of V holds Card I = n by A1,A2,A3,Th26;
@@ -1494,7 +1487,7 @@ definition
   A5: for I being Basis of V holds Card I = m;
 
     consider A being finite Subset of V such that
-  A6: A is Basis of V by A1,Def2;
+  A6: A is Basis of V by A1,Def1;
         Card A = n & Card A = m by A4,A5,A6;
     hence n = m;
   end;
@@ -1549,7 +1542,7 @@ theorem Th31:
   dim V = dim (Omega).V
 proof
   consider I being finite Subset of V such that
-A1: I is Basis of V by Def2;
+A1: I is Basis of V by Def1;
 A2: Card I = dim V by A1,Def3;
 A3: I is linearly-independent by A1,RLVECT_3:def 3;
     (Omega).V = the RLSStruct of V by RLSUB_1:def 4
@@ -1594,9 +1587,9 @@ proof
 then A5: the RLSStruct of V = (Omega).W by RLSUB_1:def 4
                      .= the RLSStruct of W by RLSUB_1:def 4;
   consider A being finite Subset of V such that
-A6: A is Basis of V by Def2;
+A6: A is Basis of V by Def1;
   consider B being finite Subset of W such that
-A7: B is Basis of W by Def2;
+A7: B is Basis of W by Def1;
 
 A8: A is linearly-independent by A6,RLVECT_3:def 3;
 A9: B is linearly-independent by A7,RLVECT_3:def 3;
@@ -1619,7 +1612,7 @@ proof
   hereby assume
   A1: dim V = 0;
     consider I being finite Subset of V such that
-  A2: I is Basis of V by Def2;
+  A2: I is Basis of V by Def1;
         Card I = 0 by A1,A2,Def3;
   then A3: I = {}(the carrier of V) by CARD_2:59;
         (Omega).V = the RLSStruct of V by RLSUB_1:def 4
@@ -1630,7 +1623,7 @@ proof
   assume (Omega).V = (0).V;
 then A4: the RLSStruct of V = (0).V by RLSUB_1:def 4;
   consider I being finite Subset of V such that
-A5: I is Basis of V by Def2;
+A5: I is Basis of V by Def1;
       Lin(I) = (0).V by A4,A5,RLVECT_3:def 3;
 then A6: I = {} or I = {0.V} by RLVECT_3:20;
       now
@@ -1646,7 +1639,7 @@ theorem
 proof
   hereby
     consider I being finite Subset of V such that
-  A1: I is Basis of V by Def2;
+  A1: I is Basis of V by Def1;
     assume dim V = 1;
     then Card I = 1 by A1,Def3;
     then consider v being set such that
@@ -1673,7 +1666,7 @@ theorem
 proof
   hereby
     consider I being finite Subset of V such that
-  A1: I is Basis of V by Def2;
+  A1: I is Basis of V by Def1;
     assume dim V = 2;
   then A2: Card I = 2 by A1,Def3;
     then consider u being set such that
@@ -1729,7 +1722,7 @@ proof
 
 A1: W1 /\ W2 is finite-dimensional by Th28;
   then consider I being finite Subset of W1 /\ W2 such that
-A2: I is Basis of W1 /\ W2 by Def2;
+A2: I is Basis of W1 /\ W2 by Def1;
 A3: Card I = dim(W1 /\ W2) by A1,A2,Def3;
 
       W1 /\ W2 is Subspace of W1 by RLSUB_2:20;
@@ -1887,7 +1880,7 @@ then A29: Lin(A) = W1 + W2 by A21,RLSUB_1:34;
     reconsider B as Subset of rng F by A34,XBOOLE_1:17;
 
     consider P being Permutation of dom F such that
-  A36: (F - B`) ^ (F - B) = F*P by A33,MATRLIN:8;
+  A36: (F - B`) ^ (F - B) = F*P by A33,FINSEQ_3:124;
 
     reconsider F1 = F - B`, F2 = F - B
     as FinSequence of the carrier of W1 + W2 by FINSEQ_3:93;
@@ -2046,10 +2039,10 @@ proof
   assume
 A1: n <= dim V;
   consider I being finite Subset of V such that
-A2: I is Basis of V by Def2;
+A2: I is Basis of V by Def1;
       n <= card I by A1,A2,Def3;
   then consider A being finite Subset of I such that
-A3: Card A = n by VECTSP_9:1;
+A3: Card A = n by FINSEQ_4:87;
   reconsider A as Subset of V by XBOOLE_1:1;
   reconsider W = Lin(A) as strict finite-dimensional Subspace of V;
       I is linearly-independent by A2,RLVECT_3:def 3;
@@ -2087,7 +2080,7 @@ definition
     A5: W = x and
     A6: dim W = n;
       consider A being finite Subset of W such that
-    A7: A is Basis of W by Def2;
+    A7: A is Basis of W by Def1;
       reconsider A as Subset of W;
           A is linearly-independent by A7,RLVECT_3:def 3;
       then reconsider B = A as linearly-independent Subset of V by Th15;

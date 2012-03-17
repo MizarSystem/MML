@@ -28,6 +28,7 @@
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="ABIAN"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <FCluster>
 <ArgTypes>
@@ -38,7 +39,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="111">
 <LocusVar nr="1"/>
 <Num nr="2"/>
 </Func>
@@ -47,6 +48,7 @@
 <Adjective nr="26"/>
 <Adjective nr="30"/>
 <Adjective nr="43"/>
+<Adjective nr="45"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -58,7 +60,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="111">
 <LocusVar nr="1"/>
 <Num nr="2"/>
 </Func>
@@ -67,6 +69,7 @@
 <Adjective nr="26"/>
 <Adjective nr="30"/>
 <Adjective nr="43" value="false"/>
+<Adjective nr="45"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -78,7 +81,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="138">
+<Func kind="K" nr="139">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -89,6 +92,7 @@
 <Adjective nr="26"/>
 <Adjective nr="30"/>
 <Adjective nr="43"/>
+<Adjective nr="45"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -106,7 +110,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="138">
+<Func kind="K" nr="139">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -117,6 +121,7 @@
 <Adjective nr="26"/>
 <Adjective nr="30"/>
 <Adjective nr="43"/>
+<Adjective nr="45"/>
 </Cluster>
 </FCluster>
 </Registrations>

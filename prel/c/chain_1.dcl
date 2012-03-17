@@ -22,6 +22,7 @@
 <ArticleID name="REALSET1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="RAT_1"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
@@ -38,9 +39,11 @@
 <Adjective nr="18"/>
 <Adjective nr="22"/>
 <Adjective nr="27"/>
+<Adjective nr="28"/>
 <Adjective nr="29" value="false"/>
 <Adjective nr="30"/>
 <Adjective nr="37"/>
+<Adjective nr="38"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -83,7 +86,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="88">
+<Func kind="K" nr="89">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

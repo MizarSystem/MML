@@ -14,9 +14,9 @@ environ
       FUNCT_2, ZFMISC_1, NAT_1, PARTFUN1, BINOP_1, FUNCOP_1, FINSEQ_1,
       FINSEQOP, COMPLSP1, COMPLEX1, RVSUM_1, FINSEQ_2, BINOP_2, EUCLID_2,
       ORDINAL1, MATRIX_5, MATRIX_1, MATRIX_3, MATRIX_4, RLVECT_1, COMPLSP2,
-      SETWOP_2, COMPLFLD, BINARITH, FINSEQ_4, STRUCT_0, GROUP_1;
+      SETWOP_2, COMPLFLD, BINARITH, FINSEQ_4, STRUCT_0, GROUP_1, XXREAL_0;
  constructors NAT_1, SETWISEO, MEMBERED, PARTFUN1, FINSOP_1, EUCLID_2,
-      MATRIX_5, MATRIX_4, MATRIX_3, COMPLSP2, BINARITH, FINSEQ_4;
+      MATRIX_5, MATRIX_4, MATRIX_3, COMPLSP2, BINARITH, FINSEQ_4, XXREAL_0;
  registrations RELSET_1, FINSEQ_2, NAT_1, FUNCT_1, FUNCT_2, BINOP_2, COMPLEX1,
       XREAL_0, XCMPLX_0, NUMBERS, RELAT_1, ORDINAL2, COMPLFLD;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
@@ -992,29 +992,6 @@ proof let F1,F2 be FinSequence of COMPLEX;
   hence thesis;
  end;
 
-theorem Th33:
-  for F1,F2 being FinSequence of COMPLEX,i being Nat holds
-    i in dom (F1+F2) implies (F1+F2).i = F1.i + F2.i
- proof let F1,F2 be FinSequence of COMPLEX,i be Nat;
-  assume
-  A1: i in dom (F1+F2);
-  set r1 = F1.i, r2 = F2.i;
-  F1 + F2 = addcomplex.:(F1,F2) & i in dom(F1+F2) by A1,COMPLSP1:def 7;
-  then (F1 + F2).i = addcomplex.(r1,r2) by FUNCOP_1:28;
-  hence thesis by BINOP_2:def 3;
- end;
-
-theorem Th34:
-  for F1,F2 being FinSequence of COMPLEX,i being Nat holds
-    i in dom (F1-F2) implies (F1-F2).i = F1.i - F2.i
-proof let F1,F2 be FinSequence of COMPLEX,i be Nat;
-  assume A1: i in dom (F1-F2);
-  set r1 = F1.i, r2 = F2.i;
-  F1 - F2 = diffcomplex.:(F1,F2) & i in dom(F1-F2) by A1,COMPLSP1:def 8;
-  then (F1 - F2).i = diffcomplex.(r1,r2) by FUNCOP_1:28;
-  hence thesis by BINOP_2:def 4;
-end;
-
 theorem
   for x,y,z being FinSequence of COMPLEX st len x=len y & len y=len z holds
     mlt((x-y),z) = mlt(x,z)-mlt(y,z)
@@ -1043,12 +1020,12 @@ proof let x,y,z be FinSequence of COMPLEX;
      .=Seg len(mlt(x2,z2)) by FINSEQ_2:109
      .=dom (mlt(x,z)) by FINSEQ_1:def 3;
      set a=x.i, b=y.i, d=(x-y).i, e=z.i;
-     A6: d=a-b by A1,A2,A4,A5,Th34;
+     A6: d=a-b by A1,A2,A4,A5,COMPLSP2:2;
     thus mlt(x-y,z).i=d*e by A4,Th19
      .=a*e-b*e by A6
      .=mlt(x,z).i -b*e by A1,A2,A4,Th19
      .=mlt(x,z).i -mlt(y,z).i by A1,A3,A4,Th19
-     .=(mlt(x,z)-mlt(y,z)).i by A1,A4,Th34;
+     .=(mlt(x,z)-mlt(y,z)).i by A1,A4,COMPLSP2:2;
    end;
  hence thesis by A1,FINSEQ_1:17;
 end;
@@ -1081,12 +1058,12 @@ proof let x,y,z be FinSequence of COMPLEX;
      .=Seg len mlt(x2,y2) by FINSEQ_2:109
      .=dom mlt(x,y) by FINSEQ_1:def 3;
      set a=y.i, b=z.i, d=(y-z).i, e=x.i;
-     A6: d=a-b by A1,A2,A4,A5,Th34;
+     A6: d=a-b by A1,A2,A4,A5,COMPLSP2:2;
     thus mlt(x,y-z).i=e*d by A4,Th19
      .=e*a-e*b by A6
      .=mlt(x,y).i -e*b by A1,A2,A4,Th19
      .=mlt(x,y).i -mlt(x,z).i by A1,A3,A4,Th19
-     .=(mlt(x,y)-mlt(x,z)).i by A1,A4,Th34;
+     .=(mlt(x,y)-mlt(x,z)).i by A1,A4,COMPLSP2:2;
   end;
  hence thesis by A1,FINSEQ_1:17;
 end;
@@ -1119,12 +1096,12 @@ proof let x,y,z be FinSequence of COMPLEX;
      .=Seg len mlt(x2,y2) by FINSEQ_2:109
      .=dom mlt(x,y) by FINSEQ_1:def 3;
      set a=y.i, b=z.i, d=(y+z).i, e=x.i;
-     A6: d=a+b by A1,A2,A4,A5,Th33;
+     A6: d=a+b by A1,A2,A4,A5,COMPLSP2:1;
     thus mlt(x,y+z).i=e*d by A4,Th19
      .=e*a+e*b by A6
      .=mlt(x,y).i +e*b by A1,A2,A4,Th19
      .=mlt(x,y).i +mlt(x,z).i by A1,A3,A4,Th19
-     .=(mlt(x,y)+mlt(x,z)).i by A1,A4,Th33;
+     .=(mlt(x,y)+mlt(x,z)).i by A1,A4,COMPLSP2:1;
   end;
  hence thesis by A1,FINSEQ_1:17;
 end;
@@ -1157,12 +1134,12 @@ proof let x,y,z be FinSequence of COMPLEX;
      .=Seg len mlt(x2,z2) by FINSEQ_2:109
      .=dom mlt(x,z) by FINSEQ_1:def 3;
      set a=x.i, b=y.i, d=(x+y).i, e=z.i;
-     A6: d=a+b by A1,A2,A4,A5,Th33;
+     A6: d=a+b by A1,A2,A4,A5,COMPLSP2:1;
     thus mlt(x+y,z).i=d*e by A4,Th19
      .=a*e+b*e by A6
      .=mlt(x,z).i +b*e by A1,A2,A4,Th19
      .=mlt(x,z).i +mlt(y,z).i by A1,A3,A4,Th19
-     .=(mlt(x,z)+mlt(y,z)).i by A1,A4,Th33;
+     .=(mlt(x,z)+mlt(y,z)).i by A1,A4,COMPLSP2:1;
   end;
  hence thesis by A1,FINSEQ_1:17;
 end;
@@ -1441,7 +1418,7 @@ proof let i,j be Nat,M1,M2 be Matrix of COMPLEX;
    .= M1*(j,i)+M2*(j,i) by A14,Th7,A1
    .= M1*(j,i)+(Line(M2,j)).i by A8,MATRIX_1:def 8
    .= (Line(M1,j)).i+(Line(M2,j)).i by A7,MATRIX_1:def 8
-   .= (Line(M1,j)+Line(M2,j)).i by A10,Th33;
+   .= (Line(M1,j)+Line(M2,j)).i by A10,COMPLSP2:1;
   end;
   hence thesis by FINSEQ_1:18,A4,A5;
 end;
@@ -1829,7 +1806,7 @@ proof let M be Matrix of COMPLEX;
           A74: j in Seg width N2 by A33,Def11,A71;
           A75: 1<=j & j<=width N by FINSEQ_1:3,A74,A33;
           (ColSum(N2)+Line(N,(k+1+1))).j
-           = (ColSum N2).j+(Line(N,k+1+1)).j by A73,Th33
+           = (ColSum N2).j+(Line(N,k+1+1)).j by A73,COMPLSP2:1
           .= (ColSum N2).j+N*(k+1+1,j) by MATRIX_1:def 8,A74,A33
           .= (ColSum N).j by A34,A75;
           hence thesis;

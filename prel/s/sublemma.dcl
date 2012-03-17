@@ -33,8 +33,8 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="23">
-<Func kind="K" nr="191"/>
-<Func kind="K" nr="111"/>
+<Func kind="K" nr="192"/>
+<Func kind="K" nr="112"/>
 </Func>
 </Typ>
 <Cluster>

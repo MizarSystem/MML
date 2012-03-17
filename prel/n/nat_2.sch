@@ -16,11 +16,11 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="FINSEQ_4"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -48,7 +48,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="83">
+<Func kind="K" nr="84">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="3"/>
@@ -57,7 +57,7 @@
 <And>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="109">
+<Func kind="K" nr="110">
 <Func kind="K" nr="76"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
@@ -82,12 +82,12 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="12">
+<Pred kind="R" nr="17">
 <Num nr="1"/>
 <Var nr="2"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="12">
+<Pred kind="R" nr="17">
 <Func kind="F" nr="3"/>
 <Var nr="2"/>
 </Pred>
@@ -95,17 +95,17 @@
 <Not>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="109">
+<Func kind="K" nr="110">
 <Func kind="K" nr="76"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="109">
+<Func kind="K" nr="110">
 <Func kind="K" nr="76"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
-<Func kind="K" nr="118">
+<Func kind="K" nr="119">
 <Var nr="2"/>
 <Num nr="1"/>
 </Func>
@@ -127,12 +127,12 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="12">
+<Pred kind="R" nr="17">
 <Num nr="1"/>
 <Var nr="1"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="12">
+<Pred kind="R" nr="17">
 <Func kind="F" nr="3"/>
 <Var nr="1"/>
 </Pred>
@@ -169,7 +169,7 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="27" value="false"/>
 </Cluster>
 <Func kind="K" nr="72"/>
 <Func kind="K" nr="76"/>
@@ -184,7 +184,7 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="27" value="false"/>
 </Cluster>
 <Func kind="K" nr="72"/>
 <Func kind="K" nr="76"/>
@@ -196,7 +196,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="118">
+<Func kind="K" nr="119">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

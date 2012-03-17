@@ -8,11 +8,12 @@ environ
 
  vocabularies MEASURE1, FUNCT_1, SUPINF_2, BOOLE, SETFAM_1, TARSKI, RELAT_1,
       ARYTM_3, RLVECT_1, PROB_1, ORDINAL2, MEASURE2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, RELAT_1,
-      FUNCT_1, FUNCT_2, NAT_1, SETFAM_1, SUPINF_1, SUPINF_2, MEASURE1;
- constructors NAT_1, SUPINF_2, MEASURE1, PROB_2, MEMBERED, SETFAM_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0, RELAT_1,
+      FUNCT_1, FUNCT_2, NAT_1, SETFAM_1, PROB_1, SUPINF_1, SUPINF_2, MEASURE1;
+ constructors NAT_1, SUPINF_2, MEASURE1, PROB_2, MEMBERED, SETFAM_1, SUPINF_1,
+      XXREAL_0;
  registrations SUBSET_1, SUPINF_1, MEASURE1, RELSET_1, ARYTM_3, MEMBERED,
-      ORDINAL2;
+      ORDINAL2, NUMBERS, XREAL_0;
  requirements NUMERALS, SUBSET, BOOLE;
 
 
@@ -24,14 +25,14 @@ begin
  reserve X for set;
 
 theorem :: MEASURE2:1
-   for S being sigma_Field_Subset of X,
+   for S being SigmaField of X,
        M being sigma_Measure of S,
        F being Function of NAT,S holds
    M*F is nonnegative;
 
 definition
    let X be set;
-   let S be sigma_Field_Subset of X;
+   let S be SigmaField of X;
    mode N_Measure_fam of S -> N_Sub_set_fam of X means
 :: MEASURE2:def 1
  it c= S;
@@ -40,26 +41,26 @@ end;
 canceled;
 
 theorem :: MEASURE2:3
-   for S being sigma_Field_Subset of X,
+   for S being SigmaField of X,
        T being N_Measure_fam of S holds
    meet T in S & union T in S;
 
 definition
    let X be set,
-       S be sigma_Field_Subset of X,
+       S be SigmaField of X,
        T be N_Measure_fam of S;
    redefine func meet T -> Element of S;
    redefine func union T -> Element of S;
 end;
 
 theorem :: MEASURE2:4
-   for S being sigma_Field_Subset of X,
+   for S being SigmaField of X,
        N being Function of NAT,S holds
    ex F being Function of NAT,S st
    F.0 = N.0 & for n being Element of NAT holds F.(n+1) = N.(n+1) \ N.n;
 
 theorem :: MEASURE2:5
-   for S being sigma_Field_Subset of X,
+   for S being SigmaField of X,
        N being Function of NAT,S holds
    ex F being Function of NAT,S st
    F.0 = N.0 & for n being Element of NAT holds F.(n+1) = N.(n+1) \/ F.n;
@@ -85,19 +86,19 @@ theorem :: MEASURE2:8
    implies (for n,m being Nat st n <= m holds F.n c= G.m);
 
 theorem :: MEASURE2:9
-   for S being sigma_Field_Subset of X holds
+   for S being SigmaField of X holds
    for N, G being Function of NAT,S holds
    ex F being Function of NAT,S st
    F.0 = N.0 & for n being Element of NAT holds F.(n+1) = N.(n+1) \ G.n;
 
 theorem :: MEASURE2:10
-  for S being sigma_Field_Subset of X holds
+  for S being SigmaField of X holds
    for N being Function of NAT,S holds
    ex F being Function of NAT,S st
    F.0 = {} & for n being Element of NAT holds F.(n+1) = N.0 \ N.n;
 
 theorem :: MEASURE2:11
-   for S being sigma_Field_Subset of X holds
+   for S being SigmaField of X holds
    for N, G, F being Function of NAT,S holds
    (G.0 = N.0 & (for n being Element of NAT holds G.(n+1) = N.(n+1) \/ G.n) &
    F.0 = N.0 & (for n being Element of NAT holds F.(n+1) = N.(n+1) \ G.n))
@@ -106,14 +107,14 @@ theorem :: MEASURE2:11
 canceled;
 
 theorem :: MEASURE2:13
-   for S being sigma_Field_Subset of X,
+   for S being SigmaField of X,
        M being sigma_Measure of S,
        T being N_Measure_fam of S,
        F being Function of NAT,S st
-   T = rng F holds M.(union T) <=' SUM(M*F);
+   T = rng F holds M.(union T) <= SUM(M*F);
 
 theorem :: MEASURE2:14
-   for S being sigma_Field_Subset of X,
+   for S being SigmaField of X,
        T being N_Measure_fam of S holds
    ex F being Function of NAT,S st T = rng F;
 
@@ -125,21 +126,21 @@ theorem :: MEASURE2:15
    for n being Element of NAT holds F.n c= F.(n+1);
 
 theorem :: MEASURE2:16
-  for S being sigma_Field_Subset of X,
+  for S being SigmaField of X,
       M being sigma_Measure of S,
       T being N_Measure_fam of S st
    (for A being set st A in T holds A is measure_zero of M) holds
    union T is measure_zero of M;
 
 theorem :: MEASURE2:17
-   for S being sigma_Field_Subset of X,
+   for S being SigmaField of X,
        M being sigma_Measure of S,
        T being N_Measure_fam of S st
    (ex A being set st A in T & A is measure_zero of M) holds
    meet T is measure_zero of M;
 
 theorem :: MEASURE2:18
-  for S being sigma_Field_Subset of X,
+  for S being SigmaField of X,
       M being sigma_Measure of S,
       T being N_Measure_fam of S st
    (for A being set st A in T holds A is measure_zero of M) holds
@@ -147,7 +148,7 @@ theorem :: MEASURE2:18
 
 definition
    let X be set;
-   let S be sigma_Field_Subset of X;
+   let S be SigmaField of X;
    let IT be N_Measure_fam of S;
    attr IT is non-decreasing means
 :: MEASURE2:def 2
@@ -157,13 +158,13 @@ end;
 
 registration
    let X be set;
-   let S be sigma_Field_Subset of X;
+   let S be SigmaField of X;
   cluster non-decreasing N_Measure_fam of S;
 end;
 
 definition
    let X be set;
-   let S be sigma_Field_Subset of X;
+   let S be SigmaField of X;
    let IT be N_Measure_fam of S;
    attr IT is non-increasing means
 :: MEASURE2:def 3
@@ -173,14 +174,14 @@ end;
 
 registration
    let X be set;
-   let S be sigma_Field_Subset of X;
+   let S be SigmaField of X;
    cluster non-increasing N_Measure_fam of S;
 end;
 
 canceled 2;
 
 theorem :: MEASURE2:21
-  for S being sigma_Field_Subset of X,
+  for S being SigmaField of X,
       N,F being Function of NAT,S holds
    (F.0 = {} & for n being Element of NAT holds
    (F.(n+1) = N.0 \ N.n & N.(n+1) c= N.n)) implies
@@ -198,21 +199,21 @@ theorem :: MEASURE2:23
    (for n,m being Nat st n < m holds F.n misses F.m);
 
 theorem :: MEASURE2:24
-   for S being sigma_Field_Subset of X,
+   for S being SigmaField of X,
        N,F being Function of NAT,S holds
    (F.0 = N.0 & for n being Element of NAT holds
    (F.(n+1) = N.(n+1) \ N.n & N.n c= N.(n+1)))
    implies union rng F = union rng N;
 
 theorem :: MEASURE2:25
-   for S being sigma_Field_Subset of X,
+   for S being SigmaField of X,
        N,F being Function of NAT,S holds
    (F.0 = N.0 & for n being Element of NAT holds
    (F.(n+1) = N.(n+1) \ N.n & N.n c= N.(n+1)))
    implies F is Sep_Sequence of S;
 
 theorem :: MEASURE2:26
-      for S being sigma_Field_Subset of X,
+      for S being SigmaField of X,
        N,F being Function of NAT,S holds
    (F.0 = N.0 & for n being Element of NAT holds
    (F.(n+1) = N.(n+1) \ N.n & N.n c= N.(n+1)))
@@ -220,7 +221,7 @@ theorem :: MEASURE2:26
    N.(n+1) = F.(n+1) \/ N.n);
 
 theorem :: MEASURE2:27
-      for S being sigma_Field_Subset of X,
+      for S being SigmaField of X,
        M being sigma_Measure of S,
        F being Function of NAT,S st
    (for n being Element of NAT holds F.n c= F.(n+1)) holds

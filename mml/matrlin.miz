@@ -11,13 +11,13 @@ environ
       SUBSET_1, FUNCOP_1, MEASURE6, VECTSP_1, RLVECT_2, RLVECT_3, RLVECT_1,
       FINSET_1, RLSUB_1, BINOP_1, LATTICES, QC_LANG1, SEQ_1,
       SQUARE_1, RVSUM_1, RLSUB_2, CAT_3, MATRLIN;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, NAT_1,
       MOD_2, FINSEQ_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, STRUCT_0,
       MATRIX_1, MATRIX_2, MATRIX_3, FVSUM_1, RLVECT_1, GROUP_1, VECTSP_1,
       VECTSP_4, VECTSP_6, VECTSP_7, FINSET_1, FINSEQ_4, FUNCOP_1, FINSEQ_3,
-      CARD_1, FINSEQ_2, FINSEQOP, BINOP_1, SQUARE_1;
+      CARD_1, FINSEQ_2, FINSEQOP, BINOP_1, SQUARE_1, XXREAL_0;
  constructors REAL_1, NAT_1, MOD_2, FUNCT_3, MATRIX_3, FVSUM_1, VECTSP_6,
-      VECTSP_7, FINSEQ_3, BINOP_1, SQUARE_1, FINSEQ_4, PARTFUN1;
+      VECTSP_7, FINSEQ_3, BINOP_1, SQUARE_1, FINSEQ_4, PARTFUN1, XXREAL_0;
  registrations FINSET_1, MATRIX_1, FUNCT_1, VECTSP_1, RELSET_1, STRUCT_0,
       FINSEQ_1, FUNCOP_1, XREAL_0, FUNCT_2, NAT_1, ORDINAL2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -216,117 +216,7 @@ A13:  F"A \/ F"(rng F \ A) c= dom F by A2,A4,XBOOLE_1:8;
       hence thesis by A11,A12,FUNCT_2:3,83;
     end;
 
-  theorem Th8:
-    for F being FinSequence, A be Subset of rng F st F is one-to-one
-     ex p being Permutation of dom F st
-      (F-A`)^(F-A) = F*p
-    proof
-      let F be FinSequence;
-      let A be Subset of rng F such that A1: F is one-to-one;
-      set F1 = F-A`, F2 = F-A;
-      (rng F) \ (rng F1) = (rng F) \ (rng F \ A`) by FINSEQ_3:72
-                            .= rng F \ (rng F \ (rng F \ A)) by SUBSET_1:def 5
-                            .= rng F \ (rng F /\ A) by XBOOLE_1:48
-                            .= rng F \ A by XBOOLE_1:47
-                            .= rng F2 by FINSEQ_3:72;
-      then reconsider p = Sgm(F"(rng F1))^Sgm(F"(rng F2))
-        as Permutation of dom F by Th7;
-      take p;
-A2:   F1 is one-to-one & F2 is one-to-one by A1,FINSEQ_3:94;
-A3:   A misses (rng F \ A) by XBOOLE_1:79;
-A4:   rng(F-A`) = rng F \ A` by FINSEQ_3:72;
-      then rng F1 /\ rng F2 = (rng F \ A`) /\ (rng F \ A) by FINSEQ_3:72
-                     .= (rng F \ (rng F \ A)) /\ (rng F \ A) by SUBSET_1:def 5
-                     .= (rng F /\ A) /\ (rng F \ A) by XBOOLE_1:48
-                     .= A /\ (rng F \ A) by XBOOLE_1:28
-                     .= {} by A3,XBOOLE_0:def 7;
-      then A5: rng F1 misses rng F2 by XBOOLE_0:def 7;
-A6:   rng (F1^F2) = rng F1 \/ rng F2 by FINSEQ_1:44
-                     .= (rng F \ A`) \/ (rng F \ A) by A4,FINSEQ_3:72
-                     .= (rng F \ (rng F \ A)) \/ (rng F \ A) by SUBSET_1:def 5
-                     .= (rng F /\ A) \/ (rng F \ A) by XBOOLE_1:48
-                     .= A \/ (rng F \ A) by XBOOLE_1:28
-                     .= A \/ rng F by XBOOLE_1:39
-                     .= rng F by XBOOLE_1:12;
-A7:   F1^F2 is one-to-one by A2,A5,FINSEQ_3:98;
-      reconsider F3 = F * p as FinSequence by FINSEQ_2:44;
-A8:   len F3 = len F by FINSEQ_2:48
-              .= len (F1^F2) by A1,A6,A7,FINSEQ_1:65
-              .= len F1 + len F2 by FINSEQ_1:35;
-A9:   now let k such that A10: k in dom F1;
-A11:   F"A` = F"(rng F \ A) by SUBSET_1:def 5
-               .= F"(rng F) \ F"A by FUNCT_1:138
-               .= dom F \ F"A by RELAT_1:169;
-A12:   F"(rng F) = dom F by RELAT_1:169;
-       then F"A` c= F"(rng F) by A11,XBOOLE_1:36;
-       then A13: card(F"(rng F) \ F"A`) = card (F"(rng F)) - card (F"A`)
-                                                              by CARD_2:63
-                                  .= card Seg len F - card (F"A`)
-                                                       by A12,FINSEQ_1:def 3
-                                  .= len F - card (F"A`) by FINSEQ_1:78
-                                  .= len (F - A`) by FINSEQ_3:66;
-       F"(rng F1) c= dom F by RELAT_1:167;
-       then A14: F"(rng F1) c= Seg len F by FINSEQ_1:def 3;
-A15:   dom Sgm(F"(rng F1)) = Seg len Sgm(F"(rng F1)) by FINSEQ_1:def 3
-                          .= Seg card(F"(rng F1)) by A14,FINSEQ_3:44
-                          .= Seg card(F"(rng F \ A`)) by FINSEQ_3:72
-                          .= Seg len (F - A`) by A13,FUNCT_1:138
-                          .= dom F1 by FINSEQ_1:def 3;
-       dom Sgm(F"(rng F1)) c= dom p by FINSEQ_1:39;
-       hence (F*p).k = F.(p.k) by A10,A15,FUNCT_1:23
-                   .= F.(Sgm(F"(rng F1)).k) by A10,A15,FINSEQ_1:def 7
-                   .= (F*Sgm(F"(rng F1))).k by A10,A15,FUNCT_1:23
-                   .= (F*Sgm(F"(rng F \ A`))).k by FINSEQ_3:72
-                   .= (F*Sgm(F"(rng F \ (rng F \ A)))).k by SUBSET_1:def 5
-                   .= (F*Sgm(F"(rng F /\ A))).k by XBOOLE_1:48
-                   .= (F*Sgm(F"(rng F) /\ F"A)).k by FUNCT_1:137
-                   .= (F*Sgm(dom F /\ F"A)).k by RELAT_1:169
-                   .= (F*Sgm((dom F) \ (F"A`))).k by A11,XBOOLE_1:48
-                   .= F1.k by FINSEQ_3:def 1;
-      end;
-      now let k such that A16: k in dom F2;
-A17:   F"(rng F) = dom F by RELAT_1:169;
-       F"A c= dom F by RELAT_1:167;
-       then F"A c= F"(rng F) by RELAT_1:169;
-       then A18: card(F"(rng F) \ F"A) = card (F"(rng F)) - card (F"A)
-                                                             by CARD_2:63
-                                  .= card Seg len F - card (F"A)
-                                                       by A17,FINSEQ_1:def 3
-                                  .= len F - card (F"A) by FINSEQ_1:78
-                                  .= len (F - A) by FINSEQ_3:66;
-A19:   F"(rng F2) c= dom F by RELAT_1:167;
-A20:   dom F = Seg len F by FINSEQ_1:def 3;
-       len Sgm(F"(rng F2)) = card(F"(rng F2)) by A19,A20,FINSEQ_3:44
-                          .= card(F"(rng F \ A)) by FINSEQ_3:72
-                          .= len (F - A) by A18,FUNCT_1:138; then
-A21:   dom Sgm(F"(rng F2)) = dom F2 by FINSEQ_3:31;
-A22:   F"A` = F"(rng F \ A) by SUBSET_1:def 5
-           .= F"(rng F) \ F"A by FUNCT_1:138
-           .= dom F \ F"A by RELAT_1:169;
-A23:   F"(rng F) = dom F by RELAT_1:169;
-       then F"A` c= F"(rng F) by A22,XBOOLE_1:36;
-       then A24: card(F"(rng F) \ F"A`) = card (F"(rng F)) - card (F"A`)
-                                                              by CARD_2:63
-                                  .= card Seg len F - card (F"A`)
-                                                        by A23,FINSEQ_1:def 3
-                                  .= len F - card (F"A`) by FINSEQ_1:78
-                                  .= len (F - A`) by FINSEQ_3:66;
-       F"(rng F1) c= dom F by RELAT_1:167;
-       then F"(rng F1) c= Seg len F by FINSEQ_1:def 3;
-       then A25: len Sgm(F"(rng F1)) = card(F"(rng F1)) by FINSEQ_3:44
-                             .= card(F"(rng F \ A`)) by FINSEQ_3:72
-                             .= len (F - A`) by A24,FUNCT_1:138;
-       then len F1 + k in dom p by A16,A21,FINSEQ_1:41;
-       hence (F*p).(len F1 + k) = F.(p.(len F1 + k)) by FUNCT_1:23
-                         .= F.(Sgm(F"(rng F2)).k) by A16,A21,A25,FINSEQ_1:def 7
-                         .= (F*Sgm(F"(rng F2))).k by A16,A21,FUNCT_1:23
-                         .= (F*Sgm(F"(rng F \ A))).k by FINSEQ_3:72
-                         .= (F*Sgm(F"(rng F) \ F"A)).k by FUNCT_1:138
-                         .= (F*Sgm((dom F) \ F"A)).k by RELAT_1:169
-                         .= F2.k by FINSEQ_3:def 1;
-      end;
-      hence thesis by A8,A9,FINSEQ_3:43;
-    end;
+canceled;
 
   definition let IT be Function;
     attr IT is FinSequence-yielding means
@@ -1008,7 +898,7 @@ A6:     dom (KL (#) G2) = dom G2 by FINSEQ_3:31;
       end;
       then A8: Sum(KL (#) G2) = 0.V1 by Th15;
       consider p1 being Permutation of dom F such that
-A9:   (F-A`)^(F-A) = F * p1 by A1,Th8;
+A9:   (F-A`)^(F-A) = F * p1 by A1,FINSEQ_3:124;
       len (KL (#) F) = len F by VECTSP_6:def 8; then
       dom (KL (#) F) = dom F by FINSEQ_3:31;
       then reconsider p1 as Permutation of dom (KL (#) F);

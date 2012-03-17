@@ -8,38 +8,41 @@ environ
 
  vocabularies PARTFUN1, SUPINF_1, MEASURE1, RELAT_1, FUNCT_1, COMPLEX1, BOOLE,
       ARYTM_1, TARSKI, ARYTM_3, NAT_1, RLVECT_1, GROUP_1, FINSEQ_1, INTEGRA1,
-      MESFUNC2, MESFUNC3, ARYTM, ORDINAL2;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      MESFUNC2, MESFUNC3, ARYTM, ORDINAL2, PROB_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
+      XREAL_0,
       REAL_1, BINARITH, ORDINAL2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      FINSEQ_1, NAT_1, RAT_1, SUPINF_1, SUPINF_2, MEASURE1, EXTREAL1, MESFUNC1,
+      FINSEQ_1, NAT_1, RAT_1,
+      PROB_1, SUPINF_1, SUPINF_2, MEASURE1, EXTREAL1, MESFUNC1,
       MESFUNC2, MESFUNC3, CONVFUN1;
  constructors REAL_1, NAT_1, BINARITH, FINSEQOP, FINSOP_1, EXTREAL1, SUPINF_2,
       PARTFUN1, RAT_1, MESFUNC1, MESFUNC3, MEASURE6, MESFUNC2, CONVFUN1,
-      MEASURE3;
+      MEASURE3, XXREAL_0;
  registrations SUPINF_1, XREAL_0, RELSET_1, NAT_1, FINSEQ_1, ORDINAL2,
-      MEASURE1;
+      MEASURE1, NUMBERS;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions MESFUNC3, TARSKI, XBOOLE_0;
  theorems MEASURE1, TARSKI, SUPINF_1, FUNCT_1, NAT_1, REAL_1, SUPINF_2,
       RELSET_1, EXTREAL1, EXTREAL2, MESFUNC1, ZFMISC_1, FINSEQ_1, FINSEQ_2,
-      FINSEQ_5, PROB_2, XBOOLE_0, XBOOLE_1, XCMPLX_1, RELAT_1, MESFUNC2,
-      CONVFUN1, MESFUNC3, BINARITH, XREAL_1, NAT_2, JORDAN3, FINSEQ_3;
+      FINSEQ_5, PROB_2, XBOOLE_0, XBOOLE_1, RELAT_1, MESFUNC2,
+      CONVFUN1, MESFUNC3, BINARITH, XREAL_1, NAT_2, JORDAN3, FINSEQ_3,
+      XXREAL_0, PROB_1, FINSUB_1;
  schemes FINSEQ_1, FINSEQ_2, NAT_1;
 
 begin  :: Linearity of Lebesgue Integral of Simple Valued Function
 
 theorem Th1:
 for F,G,H be FinSequence of ExtREAL
- st (for i be Nat st i in dom F holds 0. <=' F.i)
-  & (for i be Nat st i in dom G holds 0. <=' G.i)
+ st (for i be Nat st i in dom F holds 0. <= F.i)
+  & (for i be Nat st i in dom G holds 0. <= G.i)
    & dom F = dom G & H = F + G
  holds
   Sum(H)=Sum(F)+Sum(G)
 proof
    let F,G,H be FinSequence of ExtREAL;
    assume that
-A1:for i be Nat st i in dom F holds 0. <=' F.i and
-A2:for i be Nat st i in dom G holds 0. <=' G.i and
+A1:for i be Nat st i in dom F holds 0. <= F.i and
+A2:for i be Nat st i in dom G holds 0. <= G.i and
 A3:dom F = dom G and
 A4:H = F + G;
    consider f be Function of NAT,ExtREAL such that
@@ -58,7 +61,7 @@ A7: Sum(H) = h.(len H) & h.0 = 0. &
     consider x be set such that
 A8:  x in dom F & y = F.x by FUNCT_1:def 5;
     reconsider x as Nat by A8;
-    0. <=' F.x by A1,A8;
+    0. <= F.x by A1,A8;
     hence thesis by A8,TARSKI:def 1,SUPINF_2:19;
    end; then
    rng F misses {-infty} by XBOOLE_0:3; then
@@ -70,7 +73,7 @@ A9:F"{-infty} = {} by RELAT_1:173;
     consider x be set such that
 A10: x in dom G & y = G.x by FUNCT_1:def 5;
     reconsider x as Nat by A10;
-    0. <=' G.x by A2,A10;
+    0. <= G.x by A2,A10;
     hence thesis by A10,TARSKI:def 1,SUPINF_2:19;
    end; then
    rng G misses {-infty} by XBOOLE_0:3; then
@@ -110,7 +113,7 @@ A25:  for m be Nat st Pf[m] holds Pf[m+1]
 A28:    f.(m+1) = f.m + F.(m+1) by A5,A13;
        1 <= m+1 by NAT_1:29; then
        m+1 in dom H by A27,FINSEQ_3:27; then
-       -infty <' 0. & 0. <=' F.(m+1) by A1,A12,SUPINF_2:19;
+       -infty < 0. & 0. <= F.(m+1) by A1,A12,SUPINF_2:19;
        hence thesis by A26,A27,A28,NAT_1:38,SUPINF_2:9;
      end;
      for i be Nat holds Pf[i] from NAT_1:sch 1(A24,A25);
@@ -127,7 +130,7 @@ A30:  for m be Nat st Pg[m] holds Pg[m+1]
 A33:    g.(m+1) = g.m + G.(m+1) by A6,A14;
        1 <= m+1 by NAT_1:29; then
        m+1 in dom H by A32,FINSEQ_3:27; then
-       -infty <' 0. & 0. <=' G.(m+1) by A2,A3,A12,SUPINF_2:19;
+       -infty < 0. & 0. <= G.(m+1) by A2,A3,A12,SUPINF_2:19;
        hence thesis by A31,A32,A33,NAT_1:38,SUPINF_2:9;
      end;
      for i be Nat holds Pg[i] from NAT_1:sch 1(A29,A30);
@@ -153,7 +156,7 @@ end;
 
 theorem Th2:
 for X be non empty set,
-    S be sigma_Field_Subset of X,
+    S be SigmaField of X,
     M be sigma_Measure of S
  holds
    for n be Nat,
@@ -162,7 +165,7 @@ for X be non empty set,
        a,x be FinSequence of ExtREAL
     st f is_simple_func_in S
      & dom f <> {}
-     & (for x be set st x in dom f holds 0. <=' f.x)
+     & (for x be set st x in dom f holds 0. <= f.x)
      & F,a are_Re-presentation_of f
      & dom x = dom F
      & (for i be Nat st i in dom x holds x.i=a.i*(M*F).i)
@@ -171,14 +174,14 @@ for X be non empty set,
     integral(X,S,M,f)=Sum(x)
 proof
    let X be non empty set;
-   let S be sigma_Field_Subset of X;
+   let S be SigmaField of X;
    let M be sigma_Measure of S;
    defpred P[Nat] means
    for f be PartFunc of X,ExtREAL, F be Finite_Sep_Sequence of S,
        a,x be FinSequence of ExtREAL st
         f is_simple_func_in S
       & dom f <> {}
-      & (for x be set st x in dom f holds 0. <=' f.x)
+      & (for x be set st x in dom f holds 0. <= f.x)
       & F,a are_Re-presentation_of f
       & dom x = dom F
       & (for i be Nat st i in dom x holds x.i=a.i*(M*F).i)
@@ -192,7 +195,7 @@ A1:P[0]
     assume that
      f is_simple_func_in S and
 A2:  dom f <> {} and
-     (for x be set st x in dom f holds 0. <=' f.x) and
+     (for x be set st x in dom f holds 0. <= f.x) and
 A3:  F,a are_Re-presentation_of f and
      dom x = dom F and
      (for i be Nat st i in dom x holds x.i = a.i*(M*F).i) and
@@ -211,7 +214,7 @@ A6:  P[n];
         a,x be FinSequence of ExtREAL such that
 A7:   f is_simple_func_in S and
 A8:   dom f <> {} and
-A9:   (for x be set st x in dom f holds 0. <=' f.x) and
+A9:   (for x be set st x in dom f holds 0. <= f.x) and
 A10:   F,a are_Re-presentation_of f and
 A11:   dom x = dom F and
 A12:   (for i be Nat st i in dom x holds x.i=a.i*(M*F).i) and
@@ -224,7 +227,7 @@ A13:   len F = n+1;
      reconsider a1 as FinSequence of ExtREAL by FINSEQ_1:23;
      reconsider x1 as FinSequence of ExtREAL by FINSEQ_1:23;
 A14:  f is_finite by A7,MESFUNC2:def 5;
-     for x be Element of X st x in dom f1 holds |. f1.x .| <' +infty
+     for x be Element of X st x in dom f1 holds |. f1.x .| < +infty
      proof
       let x be Element of X;
       assume A15:x in dom f1; then
@@ -238,7 +241,7 @@ A18: dom f1 = union rng F1
      proof
 A19:   dom f1 = (dom f) /\ (union rng F1) by FUNCT_1:68
             .= (union rng F) /\ (union rng F1) by A10,MESFUNC3:def 1;
-      rng F1 c= rng F by FUNCT_1:76; then
+      rng F1 c= rng F by RELAT_1:89,99; then
       union rng F1 c= union rng F by ZFMISC_1:95;
       hence thesis by A19,XBOOLE_1:28;
      end;
@@ -261,7 +264,7 @@ A21:     n in dom F1 & x in F1.n & y in F1.n; then
         F1.n c= dom f1 by A18,ZFMISC_1:92; then
 A22:     f1.x = f.x & f1.y = f.y by A21,FUNCT_1:70;
 A23:     F1.n = F.n by A21,FUNCT_1:70;
-        dom F1 c= dom F by FUNCT_1:76; then
+        dom F1 c= dom F by RELAT_1:89,99; then
         f.x = a.n & f.y = a.n by A21,A23,A10,MESFUNC3:def 1;
         hence thesis by A22;
        end;
@@ -269,12 +272,12 @@ A23:     F1.n = F.n by A21,FUNCT_1:70;
       end;
       hence thesis by A17,MESFUNC2:def 5;
      end;
-A24:  for x be set st x in dom f1 holds 0. <=' f1.x
+A24:  for x be set st x in dom f1 holds 0. <= f1.x
      proof
       let x be set;
       assume
 A25:  x in dom f1;
-      dom f1 c= dom f by FUNCT_1:76; then
+      dom f1 c= dom f by RELAT_1:89,99; then
       x in dom f & f1.x = f.x by A25,FUNCT_1:70;
       hence thesis by A9;
      end;
@@ -286,7 +289,7 @@ A26: dom F1 = dom F /\ Seg n by FUNCT_1:68
      proof
       let n be Nat;
       assume A27:n in dom F1;
-      dom F1 c= dom F & dom a1 c= dom a by FUNCT_1:76; then
+      dom F1 c= dom F & dom a1 c= dom a by RELAT_1:89,99; then
 A28:  n in dom F & F1.n = F.n & n in dom a & a1.n = a.n by A27,A26,FUNCT_1:70;
       let x be set;
       assume A29:x in F1.n;
@@ -319,7 +322,7 @@ A35:    m in dom F1;
 A36:    m in dom x by A11,XBOOLE_0:def 3;
         F1.m = {} by A33,A35; then
 A37:    F.m = {} by A35,FUNCT_1:70;
-        reconsider EMPTY = {} as Element of S by MEASURE1:45;
+        reconsider EMPTY = {} as Element of S by PROB_1:10;
         M.EMPTY = 0. by MEASURE1:def 11; then
 A38:    (M*F).m = 0. by A37,A36,A11,FUNCT_1:23;
         x.m = a.m*(M*F).m by A36,A12;
@@ -586,7 +589,7 @@ A104:      dom G = Seg len G by FINSEQ_1:def 3
          G,b are_Re-presentation_of f &
          b.1 = 0. &
          (for m be Nat st 2 <= m & m in dom b holds
-         0. <' b.m & b.m <' +infty) & dom y = dom G &
+         0. < b.m & b.m < +infty) & dom y = dom G &
          (for m be Nat st m in dom y holds y.m = b.m*(M*G).m)
          proof
 A105:       for k be Nat st k in dom G
@@ -609,7 +612,7 @@ A107:        v in G.k;
           hence G,b are_Re-presentation_of f by A103,A104,MESFUNC3:def 1;
           thus b.1 = 0. by A81;
           thus for k be Nat st 2 <= k & k in dom b holds
-            0. <' b.k & b.k <' +infty
+            0. < b.k & b.k < +infty
           proof
            let k be Nat;
            assume
@@ -622,12 +625,12 @@ A110:       union rng F = {} \/ F.(n+1) by A32,A18,A55
 A111:       v in G.k by XBOOLE_0:def 1;
 A112:       f.v = b.k by A105,A111,A108,A69,A79;
 A113:       v in dom f by A111,A109,A108,A73,A110,A10,MESFUNC3:def 1; then
-           0. <=' b.k & b.k <> 0. by A9,A112,A109,A108,A82,A64;
-           hence 0. <' b.k by SUPINF_1:22;
+           0. <= b.k & b.k <> 0. by A9,A112,A109,A108,A82,A64;
+           hence 0. < b.k by SUPINF_1:22;
            dom f c= X by RELSET_1:12; then
            reconsider v as Element of X by A113;
-           |. f.v .| <' +infty by A14,A113,MESFUNC2:def 1;
-           hence b.k <' +infty by A112,EXTREAL2:58;
+           |. f.v .| < +infty by A14,A113,MESFUNC2:def 1;
+           hence b.k < +infty by A112,EXTREAL2:58;
           end;
           thus dom y = Seg len y by FINSEQ_1:def 3 .= Seg 2 by A83
                     .= Seg len G by A70 .= dom G by FINSEQ_1:def 3;
@@ -668,7 +671,7 @@ A118:        k = 1;
            end;
            suppose
 A119:        k = 2;
-            reconsider v = {} as Element of S by MEASURE1:45;
+            reconsider v = {} as Element of S by PROB_1:10;
             take v;
             thus (k = 1 implies v = union rng F) &
              (k = 2 implies v = {}) by A119;
@@ -681,7 +684,7 @@ A121:     1 in Seg 2 & 2 in dom G & 2 in Seg 2
            by A120,FINSEQ_1:4,TARSKI:def 2; then
 A122:      G.1 = union rng F & G.2 = {} & M.(G.2) = (M*G).2
            by A120,FUNCT_1:23; then
-         reconsider EMPTY = G.2 as Element of S by MEASURE1:45;
+         reconsider EMPTY = G.2 as Element of S by PROB_1:10;
 A123:      (M*G).2 = 0. by A122,MEASURE1:def 11;
          defpred Pb[Nat,set] means
          ($1 = 1 implies $2 = 0.) &
@@ -765,7 +768,7 @@ A138:        (u = 1 or u = 2) & (v = 1 or v = 2) by A120,FINSEQ_1:4,TARSKI:def
          reconsider G as Finite_Sep_Sequence of S by PROB_2:def 3;
          G,b are_Re-presentation_of f & b.1 = 0. &
          (for m be Nat st 2 <= m & m in dom b holds
-           0. <' b.m & b.m <' +infty) & dom y = dom G &
+           0. < b.m & b.m < +infty) & dom y = dom G &
          (for m be Nat st m in dom y holds y.m = b.m*(M*G).m)
          proof
           Seg len G = dom G by FINSEQ_1:def 3 .= Seg 2 by A120; then
@@ -798,7 +801,7 @@ A142:          k = 1; then
           hence G,b are_Re-presentation_of f by A139,A120,A128,MESFUNC3:def 1;
           thus b.1 = 0. by A129,A128;
           thus for k be Nat st 2 <= k & k in dom b holds
-            0. <' b.k & b.k <' +infty
+            0. < b.k & b.k < +infty
           proof
            let k be Nat;
            assume 2 <= k & k in dom b; then
@@ -830,7 +833,7 @@ A144:    for i be Nat st i in dom x1 holds x1.i=a1.i*(M*F1).i
         let i be Nat;
         assume
 A145:    i in dom x1;
-A146:    dom x1 c= dom x & dom a1 c= dom a by FUNCT_1:76; then
+A146:    dom x1 c= dom x & dom a1 c= dom a by RELAT_1:89,99; then
         x.i = a.i * (M*F).i by A12,A145; then
 A147:    x1.i = a.i * (M*F).i by A145,FUNCT_1:68
             .= a1.i * (M*F).i by A26,A31,A145,FUNCT_1:68;
@@ -850,7 +853,7 @@ A151:    len F1 = n by FINSEQ_1:def 3;
 A152:    G,b are_Re-presentation_of f1 and
 A153:    b.1 =0. and
 A154:    for n be Nat st 2 <= n & n in dom b holds
-        0. <' b.n & b.n <' +infty and
+        0. < b.n & b.n < +infty and
 A155:    dom y = dom G and
 A156:    for n be Nat st n in dom y holds y.n=b.n*(M*G).n and
 A157:    integral(X,S,M,f1)=Sum(y) by MESFUNC3:def 2,A20,A143,A24;
@@ -875,8 +878,8 @@ A162:         k = 1;
 A163:         F.(n+1) in rng F by FUNCT_1:12;
 A164:         rng F c= S by FINSEQ_1:def 4;
             set x = G.1 \/ F.(n+1);
-            reconsider x as Element of S by A160,A162,A161,A163,A164,MEASURE1:
-46;
+            reconsider x as Element of S
+             by A160,A162,A161,A163,A164,FINSUB_1:def 1;
             PH[k,x] by A162;
             hence thesis;
            end;
@@ -1211,7 +1214,7 @@ A245:      x.(n+1) = 0.
            suppose
 A246:         F.(n+1) = {};
 A247:        (M*F).(n+1) = M.(F.(n+1)) by A244,FUNCT_1:23;
-            reconsider EMPTY = {} as Element of S by MEASURE1:45;
+            reconsider EMPTY = {} as Element of S by PROB_1:10;
 A248:        (M*F).(n+1) = 0. by A247,A246,MEASURE1:def 11;
             x.(n+1) = a.(n+1)*(M*F).(n+1) by A12,A244,A11;
             hence thesis by A248,EXTREAL1:22;
@@ -1240,15 +1243,15 @@ A256:         a.l = f.v by A255,A253,A11,A10,MESFUNC3:def 1;
 A257:         F.l in rng F by A253,A11,FUNCT_1:12; then
              v in union rng F by A255,TARSKI:def 4; then
              v in dom f by A10,MESFUNC3:def 1; then
-A258:         0. <=' a.l by A256,A9;
+A258:         0. <= a.l by A256,A9;
              rng F c= S by FINSEQ_1:def 4; then
              reconsider Fl = F.l as Element of S by A257;
              reconsider EMPTY = {} as Element of S by MEASURE1:21;
              EMPTY c= F.l by XBOOLE_1:2; then
-             M.{} <=' M.(Fl) by MEASURE1:62; then
-             0. <=' M.(Fl) by MEASURE1:def 11; then
-             0. <=' (M*F).l by A253,A11,FUNCT_1:23; then
-             0. * (M*F).l <=' a.l*(M*F).l by A258,EXTREAL1:42;
+             M.{} <= M.(Fl) by MEASURE1:62; then
+             0. <= M.(Fl) by MEASURE1:def 11; then
+             0. <= (M*F).l by A253,A11,FUNCT_1:23; then
+             0. * (M*F).l <= a.l*(M*F).l by A258,EXTREAL1:42;
              hence contradiction by A254,SUPINF_2:19,EXTREAL1:22;
             end;
             suppose
@@ -1290,11 +1293,11 @@ A264:     v in F.(n+1) by A261,XBOOLE_0:def 1;
          v in union rng F by A264,TARSKI:def 4; then
 A265:     v in dom f & dom f c= X by A10,MESFUNC3:def 1,RELSET_1:12; then
          reconsider v as Element of X;
-A266:     0. <=' f.v by A265,A9;
+A266:     0. <= f.v by A265,A9;
          f.v = a.(n+1) by A264,A263,A10,MESFUNC3:def 1; then
-A267:     |. a.(n+1) .| <' +infty by A262,A265,MESFUNC2:def 1;
-A268:    0. <=' a.(n+1) by A266,A264,A263,A10,MESFUNC3:def 1; then
-A269:     0. <' a.(n+1) & a.(n+1) <' +infty
+A267:     |. a.(n+1) .| < +infty by A262,A265,MESFUNC2:def 1;
+A268:    0. <= a.(n+1) by A266,A264,A263,A10,MESFUNC3:def 1; then
+A269:     0. < a.(n+1) & a.(n+1) < +infty
            by A261,A267,EXTREAL2:58,SUPINF_1:22;
          defpred PH[Nat,set] means
           ($1 <= len G implies $2 = G.$1) &
@@ -1380,7 +1383,7 @@ A287:    Seg len G = dom G by FINSEQ_1:def 3
 A288:     len G = len b by FINSEQ_1:8;
 A289:     len G = len y by A155,FINSEQ_3:31;
 A290:      for m be Nat st 2 <= m & m in dom c holds
-          0. <' c.m & c.m <' +infty
+          0. < c.m & c.m < +infty
          proof
           let m be Nat;
           assume
@@ -1388,7 +1391,7 @@ A291:      2 <= m & m in dom c; then
 A292:      m <= len c by FINSEQ_3:27;
           per cases;
            suppose m = len c;
-            hence 0. <' c.m & c.m <' +infty by A281,A282,A291,A269;
+            hence 0. < c.m & c.m < +infty by A281,A282,A291,A269;
            end;
            suppose m <> len c; then
             m < len b + 1 by A292,A282,REAL_1:def 5; then
@@ -1396,7 +1399,7 @@ A293:        m <= len b by NAT_1:38; then
 A294:        c.m = b.m by A291,A281;
             1 <= m by A291,XREAL_1:2; then
             m in dom b by A293,FINSEQ_3:27;
-            hence 0. <' c.m & c.m <' +infty by A154,A291,A294;
+            hence 0. < c.m & c.m < +infty by A154,A291,A294;
            end;
          end;
          defpred Pz[Nat,set] means
@@ -1637,14 +1640,14 @@ A352:         1 <= k by FINSEQ_1:3;
                1 < k by A352,REAL_1:def 5; then
                1+1 <= k & k in dom b by NAT_1:38,A155,A350,A152,MESFUNC3:def 1;
 then
-A353:           0. <' b.k & b.k <' +infty by A154;
+A353:           0. < b.k & b.k < +infty by A154;
                G.k in rng G & rng G c= S
                  by A155,A350,FUNCT_1:12,FINSEQ_1:def 4; then
                reconsider Gk = G.k as Element of S;
-               reconsider EMPTY = {} as Element of S by MEASURE1:45;
+               reconsider EMPTY = {} as Element of S by PROB_1:10;
                EMPTY c= Gk by XBOOLE_1:2; then
-               M.EMPTY <=' M.(Gk) by MEASURE1:62; then
-A354:           0. <=' M.(Gk) by MEASURE1:def 11;
+               M.EMPTY <= M.(Gk) by MEASURE1:62; then
+A354:           0. <= M.(Gk) by MEASURE1:def 11;
                (M*G).k = M.(G.k) by A155,A350,FUNCT_1:23;
                hence contradiction by A350,A354,A351,A353,EXTREAL2:44,SUPINF_2:
 19;
@@ -1657,10 +1660,10 @@ A355:         a.(n+1)*(M*F).(n+1) = -infty by TARSKI:def 1;
 A356:         n+1 in dom F by A13,FINSEQ_3:27; then
              F.(n+1) in rng F & rng F c= S by FUNCT_1:12,FINSEQ_1:def 4; then
              reconsider Fn1 = F.(n+1) as Element of S;
-             reconsider EMPTY = {} as Element of S by MEASURE1:45;
+             reconsider EMPTY = {} as Element of S by PROB_1:10;
              EMPTY c= Fn1 by XBOOLE_1:2; then
-             M.EMPTY <=' M.(Fn1) by MEASURE1:62; then
-A357:         0. <=' M.(Fn1) by MEASURE1:def 11;
+             M.EMPTY <= M.(Fn1) by MEASURE1:62; then
+A357:         0. <= M.(Fn1) by MEASURE1:def 11;
              (M*F).(n+1) = M.(Fn1) by A356,FUNCT_1:23;
              hence contradiction by A355,A357,EXTREAL2:44,SUPINF_2:19,A268;
             end;
@@ -1705,7 +1708,7 @@ A368:       x.k = -infty by A367,FUNCT_1:70;
            k in (dom x)/\(Seg n) by A367,FUNCT_1:68; then
 A369:       k in dom x by XBOOLE_0:def 3; then
 A370:       x.k = a.k*(M*F).k by A12;
-           reconsider EMPTY = {} as Element of S by MEASURE1:45;
+           reconsider EMPTY = {} as Element of S by PROB_1:10;
 A371:       F.k in rng F by A11,A369,FUNCT_1:12;
            rng F c= S by FINSEQ_1:def 4; then
            reconsider Fk = F.k as Element of S by A371;
@@ -1716,10 +1719,10 @@ A372:         v in F.k by XBOOLE_0:def 1;
 A373:         a.k = f.v by A372,A11,A369,A10,MESFUNC3:def 1;
              v in union rng F by A371,A372,TARSKI:def 4; then
              v in dom f by A10,MESFUNC3:def 1; then
-A374:         0. <=' a.k by A9,A373;
+A374:         0. <= a.k by A9,A373;
              EMPTY c= Fk by XBOOLE_1:2; then
-             M.EMPTY <=' M.Fk by MEASURE1:62; then
-A375:         0. <=' M.Fk by MEASURE1:def 11;
+             M.EMPTY <= M.Fk by MEASURE1:62; then
+A375:         0. <= M.Fk by MEASURE1:def 11;
              M.Fk = (M*F).k by A11,A369,FUNCT_1:23;
              hence contradiction by A368,A375,A370,A374,EXTREAL2:45,SUPINF_2:19
 ;
@@ -1759,14 +1762,14 @@ end;
 
 theorem Th3:
 for X be non empty set,
-    S be sigma_Field_Subset of X,
+    S be SigmaField of X,
     f be PartFunc of X,ExtREAL,
     M be sigma_Measure of S,
     F be Finite_Sep_Sequence of S,
     a,x be FinSequence of ExtREAL
  st f is_simple_func_in S
   & dom f <> {}
-  & (for x be set st x in dom f holds 0. <=' f.x)
+  & (for x be set st x in dom f holds 0. <= f.x)
   & F,a are_Re-presentation_of f
   & dom x = dom F
   & (for n be Nat st n in dom x holds x.n=a.n*(M*F).n)
@@ -1774,7 +1777,7 @@ for X be non empty set,
     integral(X,S,M,f)=Sum(x)
 proof
    let X be non empty set;
-   let S be sigma_Field_Subset of X;
+   let S be SigmaField of X;
    let f be PartFunc of X,ExtREAL;
    let M be sigma_Measure of S;
    let F be Finite_Sep_Sequence of S;
@@ -1782,7 +1785,7 @@ proof
    assume that
 A1: f is_simple_func_in S and
 A2: dom f <> {} and
-A3: for x be set st x in dom f holds 0. <=' f.x and
+A3: for x be set st x in dom f holds 0. <= f.x and
 A4: F,a are_Re-presentation_of f and
 A5: dom x = dom F and
 A6: for n be Nat st n in dom x holds x.n=a.n*(M*F).n;
@@ -1792,12 +1795,12 @@ end;
 
 theorem Th4:
 for X be non empty set,
-    S be sigma_Field_Subset of X,
+    S be SigmaField of X,
     f be PartFunc of X,ExtREAL,
     M be sigma_Measure of S
  st f is_simple_func_in S
   & dom f <> {}
-  & (for x be set st x in dom f holds 0. <=' f.x)
+  & (for x be set st x in dom f holds 0. <= f.x)
  holds
     ex F be Finite_Sep_Sequence of S, a,x be FinSequence of ExtREAL
      st F,a are_Re-presentation_of f
@@ -1806,13 +1809,13 @@ for X be non empty set,
       & integral(X,S,M,f)=Sum(x)
 proof
    let X be non empty set,
-       S be sigma_Field_Subset of X,
+       S be SigmaField of X,
        f be PartFunc of X,ExtREAL,
        M be sigma_Measure of S;
    assume that
 A1: f is_simple_func_in S and
 A2: dom f <> {} and
-A3: for x be set st x in dom f holds 0. <=' f.x;
+A3: for x be set st x in dom f holds 0. <= f.x;
    consider F be Finite_Sep_Sequence of S,
     a be FinSequence of ExtREAL such that
 A4: F,a are_Re-presentation_of f by A1,MESFUNC3:12;
@@ -1846,28 +1849,28 @@ end;
 
 theorem
 for X be non empty set,
-    S be sigma_Field_Subset of X,
+    S be SigmaField of X,
     M be sigma_Measure of S,
     f,g be PartFunc of X,ExtREAL
   st f is_simple_func_in S & dom f <> {}
-   & (for x be set st x in dom f holds 0. <=' f.x)
+   & (for x be set st x in dom f holds 0. <= f.x)
    & g is_simple_func_in S & dom g = dom f
-   & (for x be set st x in dom g holds 0. <=' g.x)
+   & (for x be set st x in dom g holds 0. <= g.x)
  holds
     f+g is_simple_func_in S & dom (f+g) <> {}
-  & (for x be set st x in dom (f+g) holds 0. <=' (f+g).x)
+  & (for x be set st x in dom (f+g) holds 0. <= (f+g).x)
   & integral(X,S,M,f+g)=integral(X,S,M,f)+integral(X,S,M,g)
 proof
    let X be non empty set,
-       S be sigma_Field_Subset of X,
+       S be SigmaField of X,
        M be sigma_Measure of S,
        f,g be PartFunc of X,ExtREAL such that
 A1:f is_simple_func_in S and
 A2:dom f <> {} and
-A3:for x be set st x in dom f holds 0. <=' f.x and
+A3:for x be set st x in dom f holds 0. <= f.x and
 A4:g is_simple_func_in S and
 A5:dom g = dom f and
-A6:for x be set st x in dom g holds 0. <=' g.x;
+A6:for x be set st x in dom g holds 0. <= g.x;
    consider F be Finite_Sep_Sequence of S,
    a,x be FinSequence of ExtREAL such that
 A7: F,a are_Re-presentation_of f and
@@ -2188,16 +2191,16 @@ A108: f+g is_finite
       now let x be Element of X;
         assume A109: x in dom (f+g);
         f is_finite by A1,MESFUNC2:def 5; then
-        A110: |. f.x .| <' +infty by A109,A106,MESFUNC2:def 1;
+        A110: |. f.x .| < +infty by A109,A106,MESFUNC2:def 1;
         g is_finite by A4,MESFUNC2:def 5; then
-        A111: |. g.x .| <' +infty by A107,A109,MESFUNC2:def 1;
+        A111: |. g.x .| < +infty by A107,A109,MESFUNC2:def 1;
         A112: |. (f+g).x .| = |. f.x + g.x .| by A109,MESFUNC1:def 3;
         not (f.x = +infty or f.x = -infty) &
         not (g.x = +infty or g.x = -infty) by A110,A111,EXTREAL2:67; then
-        A113: |. (f+g).x .| <=' |. f.x .| + |. g.x .| by A112,EXTREAL2:61;
+        A113: |. (f+g).x .| <= |. f.x .| + |. g.x .| by A112,EXTREAL2:61;
         |. f.x .| + |. g.x .| <> +infty by A110,A111,SUPINF_2:8; then
-        |. f.x .| + |. g.x .| <' +infty by SUPINF_1:24;
-        hence |. (f+g).x .| <' +infty by A113,SUPINF_1:29;
+        |. f.x .| + |. g.x .| < +infty by SUPINF_1:24;
+        hence |. (f+g).x .| < +infty by A113,SUPINF_1:29;
       end;
       hence thesis by MESFUNC2:def 1;
     end;
@@ -2252,15 +2255,15 @@ A135: y in dom (f+g) by A114,A116,A133,TARSKI:def 4;
    A136: f+g is_simple_func_in S by A108,A114,A115,MESFUNC2:def 5;
   thus dom (f+g) <> {} by A106,A2;
   thus
-A137: for x be set st x in dom (f+g) holds 0. <=' (f+g).x
+A137: for x be set st x in dom (f+g) holds 0. <= (f+g).x
    proof
    let x be set;
    assume A138: x in dom (f+g); then
-A139:  0. <=' f.x by A3,A106;
-     0. <=' g.x by A6,A107,A138; then
-A140:  0. <=' f.x + g.x by A139,EXTREAL2:7;
+A139:  0. <= f.x by A3,A106;
+     0. <= g.x by A6,A107,A138; then
+A140:  0. <= f.x + g.x by A139,EXTREAL2:7;
      dom f c= X by RELSET_1:12;
-     hence 0. <=' (f + g).x by A138,A106,A140,MESFUNC1:def 3;
+     hence 0. <= (f + g).x by A138,A106,A140,MESFUNC1:def 3;
    end;
 A141:
     for k be Nat st k in dom FG
@@ -2370,7 +2373,7 @@ A175: integral(X,S,M,f+g)=Sum z1
               by A136,A106,A2,A137,A172,A75,A76,Th3;
 A176: dom x1=dom FG by A63
          .=dom y1 by A70;
-A177: for i be Nat st i in dom x1 holds 0. <=' x1.i
+A177: for i be Nat st i in dom x1 holds 0. <= x1.i
   proof
    let i be Nat;
    assume
@@ -2400,26 +2403,26 @@ A187:   x' in F.i' by XBOOLE_0:def 1;
 A188:  f.x' = a.i' by A186,A187,A7,MESFUNC3:def 1 .= a1.i by A180,A61;
       F.i' in rng F by A186,FUNCT_1:12; then
       F.i' c= dom f by A9,ZFMISC_1:92; then
-A189:  0. <=' a1.i by A187,A3,A188;
+A189:  0. <= a1.i by A187,A3,A188;
 A190:  FG.i in rng FG by A178,A63,FUNCT_1:12;
       rng FG c= S by FINSEQ_1:def 4; then
       reconsider FGi = FG.i as Element of S by A190;
       reconsider EMPTY = {} as Element of S by MEASURE1:21;
       EMPTY c= FGi by XBOOLE_1:2; then
-A191:  M.({}) <=' M.FGi by MEASURE1:62;
+A191:  M.({}) <= M.FGi by MEASURE1:62;
       M.{} = 0. by MEASURE1:def 11; then
-      0. <=' (M*FG).i by A191,A178,A63,FUNCT_1:23;
-      hence 0. <=' x1.i by A179,A189,EXTREAL2:45;
+      0. <= (M*FG).i by A191,A178,A63,FUNCT_1:23;
+      hence 0. <= x1.i by A179,A189,EXTREAL2:45;
      end;
      suppose
 A192:   F.i' = {};
       FG.i = F.i' /\ G.((i-'1) mod lb + 1) by A180,A13,A14; then
       M.(FG.i) = 0. by A192,MEASURE1:def 11; then
       (M*FG).i = 0. by A178,A63,FUNCT_1:23;
-      hence 0. <=' x1.i by A179,EXTREAL1:22;
+      hence 0. <= x1.i by A179,EXTREAL1:22;
      end;
    end;
-A193:for i be Nat st i in dom y1 holds 0. <=' y1.i
+A193:for i be Nat st i in dom y1 holds 0. <= y1.i
    proof
     let i be Nat;
     assume A194: i in dom y1;
@@ -2442,23 +2445,23 @@ A201:   x' in G.i' by XBOOLE_0:def 1;
 A202:  g.x' = b.i' by A200,A201,A8,MESFUNC3:def 1 .= b1.i by A196,A66;
       G.i' in rng G by A200,FUNCT_1:12; then
       G.i' c= dom g by A11,ZFMISC_1:92; then
-A203:  0. <=' b1.i by A201,A6,A202;
+A203:  0. <= b1.i by A201,A6,A202;
 A204:  FG.i in rng FG by A194,A70,FUNCT_1:12;
       rng FG c= S by FINSEQ_1:def 4; then
       reconsider FGi = FG.i as Element of S by A204;
       reconsider EMPTY = {} as Element of S by MEASURE1:21;
       EMPTY c= FGi by XBOOLE_1:2; then
-A205:  M.({}) <=' M.FGi by MEASURE1:62;
+A205:  M.({}) <= M.FGi by MEASURE1:62;
       M.{} = 0. by MEASURE1:def 11; then
-      0. <=' (M*FG).i by A205,A194,A70,FUNCT_1:23;
-      hence 0. <=' y1.i by A195,A203,EXTREAL2:45;
+      0. <= (M*FG).i by A205,A194,A70,FUNCT_1:23;
+      hence 0. <= y1.i by A195,A203,EXTREAL2:45;
      end;
      suppose
 A206:   G.i' = {};
       FG.i = F.((i-'1) div lb + 1) /\ G.i' by A196,A13,A14; then
       M.(FG.i) = 0. by A206,MEASURE1:def 11; then
       (M*FG).i = 0. by A194,A70,FUNCT_1:23;
-      hence 0. <=' y1.i by A195,EXTREAL1:22;
+      hence 0. <= y1.i by A195,EXTREAL1:22;
      end;
    end;
    z1=x1+y1
@@ -2517,12 +2520,12 @@ A221: p in Seg la by A216,FINSEQ_1:3;
 A222: q in Seg lb by A216,FINSEQ_1:3;
 A223:  p in dom F by A10,FINSEQ_1:def 3,A221;
 A224:  q in dom G by A12,FINSEQ_1:def 3,A222;
-A225:  for x be Element of ExtREAL st 0. <=' x holds
-      0. = x or 0. <' x
+A225:  for x be Element of ExtREAL st 0. <= x holds
+      0. = x or 0. < x
      proof
       let x be Element of ExtREAL;
       assume
-A226:   0. <=' x;
+A226:   0. <= x;
       per cases;
        suppose x in REAL; then
         reconsider a = x as Real;
@@ -2530,7 +2533,7 @@ A226:   0. <=' x;
         hence thesis by EXTREAL1:18,SUPINF_2:def 1;
        end;
        suppose not x in REAL; then
-        x in {-infty,+infty} by XBOOLE_0:def 2,SUPINF_1:def 6;
+        x in {-infty,+infty} by XBOOLE_0:def 2,XXREAL_0:def 4;
        hence thesis by A226,SUPINF_2:19,TARSKI:def 2;
        end;
      end;
@@ -2545,15 +2548,15 @@ A229:     v in F.p & v in G.q by A228,XBOOLE_0:def 3; then
 A230:     a.p = f.v by A7,A223,MESFUNC3:def 1;
         F.p in rng F by A223,FUNCT_1:12; then
         v in dom f by A9,A229,TARSKI:def 4; then
-        0. <=' a.p by A230,A3; then
-        0. <=' a1.k by A61,A214; then
-A231:     0. = a1.k or 0. <' a1.k by A225;
+        0. <= a.p by A230,A3; then
+        0. <= a1.k by A61,A214; then
+A231:     0. = a1.k or 0. < a1.k by A225;
 A232:     b.q = g.v by A8,A224,A229,MESFUNC3:def 1;
         G.q in rng G by A224,FUNCT_1:12; then
         v in dom g by A11,A229,TARSKI:def 4; then
-        0. <=' b.q by A232,A6; then
-        0. <=' b1.k by A66,A214; then
-        0. = b1.k or 0. <' b1.k by A225;
+        0. <= b.q by A232,A6; then
+        0. <= b1.k by A66,A214; then
+        0. = b1.k or 0. < b1.k by A225;
         hence thesis by A231,EXTREAL1:29;
        end;
        suppose FG.k = {}; then
@@ -2578,27 +2581,27 @@ end;
 
 theorem
 for X be non empty set,
-    S be sigma_Field_Subset of X,
+    S be SigmaField of X,
     M be sigma_Measure of S,
     f,g be PartFunc of X,ExtREAL, c be R_eal
   st f is_simple_func_in S
    & dom f <> {}
-   & (for x be set st x in dom f holds 0. <=' f.x)
-   & 0. <=' c & c <' +infty
+   & (for x be set st x in dom f holds 0. <= f.x)
+   & 0. <= c & c < +infty
    & dom g = dom f
    & (for x be set st x in dom g holds g.x=c*f.x)
  holds
     integral(X,S,M,g)=c*integral(X,S,M,f)
 proof
    let X be non empty set,
-       S be sigma_Field_Subset of X,
+       S be SigmaField of X,
        M be sigma_Measure of S,
        f,g be PartFunc of X,ExtREAL,
        c be R_eal such that
 A1:f is_simple_func_in S and
 A2:dom f <> {} and
-A3:for x be set st x in dom f holds 0. <=' f.x and
-A4:0. <=' c & c <' +infty and
+A3:for x be set st x in dom f holds 0. <= f.x and
+A4:0. <= c & c < +infty and
 A5:dom g = dom f and
 A6:for x be set st x in dom g holds g.x=c*f.x;
    consider F be Finite_Sep_Sequence of S,
@@ -2609,17 +2612,17 @@ A8: dom x = dom F and
 A9: for n be Nat st n in dom x holds x.n=a.n*(M*F).n and
 A10: integral(X,S,M,f)=Sum(x) by A1,A2,A3,Th4;
 A11:f is_finite by A1,MESFUNC2:def 5;
-   for x be Element of X st x in dom g holds |. g.x .| <' +infty
+   for x be Element of X st x in dom g holds |. g.x .| < +infty
    proof
     let x be Element of X;
     assume
 A12:  x in dom g; then
-    |. f.x .| <' +infty by A5,A11,MESFUNC2:def 1; then
+    |. f.x .| < +infty by A5,A11,MESFUNC2:def 1; then
     f.x <> -infty & f.x <> +infty by EXTREAL2:67; then
     c*f.x <> +infty & c*f.x <> -infty by A4,SUPINF_2:19,EXTREAL1:27,28; then
     g.x <> +infty & g.x <> -infty by A12,A6; then
-    -infty <' g.x & g.x <' +infty by SUPINF_1:23,24; then
-    -(+infty) <' g.x & g.x <' +infty by SUPINF_2:def 3;
+    -infty < g.x & g.x < +infty by SUPINF_1:23,24; then
+    -(+infty) < g.x & g.x < +infty by SUPINF_2:def 3;
     hence thesis by EXTREAL2:59;
    end; then
 A13:g is_finite by MESFUNC2:def 1;
@@ -2648,13 +2651,13 @@ A18: n in dom G & x in G.n & y in G.n; then
     thus thesis by A5,A15,A17;
    end;
 A19:g is_simple_func_in S by A13,A14,MESFUNC2:def 5;
-A20:for x be set st x in dom g holds 0. <=' g.x
+A20:for x be set st x in dom g holds 0. <= g.x
    proof
     let x be set;
     assume
 A21:  x in dom g; then
-    0. <=' f.x by A5,A3; then
-    0. <=' c*f.x by A4,EXTREAL2:45;
+    0. <= f.x by A5,A3; then
+    0. <= c*f.x by A4,EXTREAL2:45;
     hence thesis by A21,A6;
    end;
    consider G be Finite_Sep_Sequence of S,

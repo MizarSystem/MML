@@ -17,6 +17,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <FCluster>
 <ArgTypes>
@@ -55,6 +56,7 @@
 <Adjective nr="23"/>
 <Adjective nr="25" value="false"/>
 <Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -76,6 +78,7 @@
 <Adjective nr="23"/>
 <Adjective nr="25" value="false"/>
 <Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -18,6 +18,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="SUPINF_1"/>
 <ArticleID name="HAHNBAN"/>
 </Signature>

@@ -257,7 +257,7 @@ A7:   A is connected by A4,A5,A6,Th5;
   hence thesis by A1;
 end;
 
-theorem
+theorem Th9:
       for V being Subset of GX st V is connected & V<>{}
    holds skl V is_a_component_of GX by Th8;
 
@@ -283,11 +283,10 @@ end;
 theorem
   Th11: for V being Subset of GX st V is connected & V<>{} holds
     skl (skl V)=skl V
-proof let V be Subset of GX;assume A1:V is connected & V<>{};
- then A2:skl V is_a_component_of GX by Th8;
- then skl V <> {}(GX) by CONNSP_1:34;
- then skl V is connected & skl V <> {} by A1,Th5;
-hence thesis by A2,Th10;
+proof let V be Subset of GX;
+ assume V is connected & V<>{};
+   then skl V is_a_component_of GX by Th9;
+ hence thesis by Th7;
 end;
 
 theorem
@@ -394,9 +393,9 @@ theorem
 proof let A,B be Subset of GX;assume
  A1: A is_a_component_of GX & B is connected & B<>{} &
   A /\ B ={};
-     now assume A /\ skl B <>{};
-  then consider x being Point of GX such that A2:x in A /\ skl B by SUBSET_1:10
-;
+  assume A /\ skl B <>{};
+  then consider x being Point of GX such that
+A2:x in A /\ skl B by SUBSET_1:10;
   A3: x in A & x in skl B by A2,XBOOLE_0:def 3;
   A4:skl A=A by A1,Th7;
       A is connected by A1,CONNSP_1:def 5;
@@ -406,9 +405,6 @@ proof let A,B be Subset of GX;assume
   then A7:(skl B) /\ B={} by A1,A3,A4,A5,A6,Th15;
       B c= skl B by A1,Th1;
  hence contradiction by A1,A7,XBOOLE_1:28;
- end;
-:: then A /\ skl B ={};
-hence thesis by XBOOLE_0:def 7;
 end;
 
 begin :: On unions of components
@@ -863,7 +859,7 @@ theorem
    by XBOOLE_1:28;
 
 theorem
- Th29: for GX being TopSpace
+ for GX being TopSpace
  for V,B being Subset of GX st V is open holds
   Down(V,B) is open
 proof let GX be TopSpace;
@@ -913,99 +909,10 @@ theorem
  V c= B holds Down(Up(V),B)=V by Th28;
 
 theorem
- Th34: for GX being TopSpace
+ for GX being TopSpace
  for V,B being Subset of GX,
    W being Subset of GX|B st V=W & W is connected holds V is connected
-proof let GX be TopSpace;
- let V,B be Subset of GX, W be Subset of GX|B;
- assume A1:V=W & W is connected;
-    then (GX|B)|W is connected by CONNSP_1:def 3;
-   then A2:for A2,B2 being Subset of (GX|B)|W
-    st [#]((GX|B)|W) = A2 \/ B2 & A2 <> {}((GX|B)|W)
-    & B2 <> {}((GX|B)|W) & A2 is open &
-    B2 is open holds A2 meets B2 by CONNSP_1:12;
-       for A3,B3 being Subset of GX|V
-    st [#](GX|V) = A3 \/ B3 & A3 <> {}(GX|V)
-    & B3 <> {}(GX|V) & A3 is open & B3 is open holds A3 meets B3
-      proof let A3,B3 be Subset of GX|V;assume
-        A3:[#](GX|V) = A3 \/ B3 & A3 <> {}(GX|V)
-        & B3 <> {}(GX|V) & A3 is open &
-        B3 is open;
-        then A4: A3 in the topology of GX|V &
-        B3 in the topology of GX|V by PRE_TOPC:def 5;
-         then consider Qa being Subset of GX such that
-        A5:  Qa in the topology of GX &
-         A3 = Qa /\ [#](GX|V) by PRE_TOPC:def 9;
-         reconsider Qa as Subset of GX;
-        A6: Qa is open by A5,PRE_TOPC:def 5;
-         consider Qb being Subset of GX such that
-        A7:  Qb in the topology of GX &
-         B3 = Qb /\ [#](GX|V) by A4,PRE_TOPC:def 9;
-         reconsider Qb as Subset of GX;
-       [#](GX|V) c= (Qa \/ Qb)/\ [#](GX|V) by A3,A5,A7,XBOOLE_1:23;
-        then for x st x in [#](GX|V) holds x in (Qa \/ Qb) by XBOOLE_0:def 3
-;
-        then A8:[#](GX|V) c= Qa \/ Qb by TARSKI:def 3;
-        A9:V=[#](GX|V) by PRE_TOPC:def 10;
-        A10: Qb is open by A7,PRE_TOPC:def 5;
-         reconsider A4=Down(Qa,B), B4=Down(Qb,B) as Subset of (GX|B);
-         reconsider A6=Down(A4,W), B6=Down(B4,W) as Subset of (GX|B)|W;
-        A11: A4 is open by A6,Th29;
-        A12: B4 is open by A10,Th29;
-        A13: A4 \/ B4 =(Qa \/ Qb)/\ B by XBOOLE_1:23;
-        A14: A6 is open by A11,Th29;
-        A15: B6 is open by A12,Th29;
-             W c= the carrier of GX|B;
-        then A16: W c= B by JORDAN1:1;
-             A3 c= the carrier of GX|V;
-        then A17: A3 c= V by JORDAN1:1;
-        then A18: A3 c=B by A1,A16,XBOOLE_1:1;
-             ex x being Point of GX|V st x in A3 by A3,SUBSET_1:10;
-         then consider x0 being set such that
-        A19: x0 in A3;
-        A20: x0 in Qa by A5,A19,XBOOLE_0:def 3;
-        A21: x0 in A4 by A18,A19,A20,XBOOLE_0:def 3;
-        A22: W c= A4 \/ B4 by A1,A8,A9,A13,A16,XBOOLE_1:19; A23: x0 in A6 by A1
-,A17,A19,A21,
-XBOOLE_0:def 3;
-             B3 c= the carrier of GX|V;
-        then A24: B3 c= V by JORDAN1:1;
-        then A25: B3 c=B by A1,A16,XBOOLE_1:1;
-             ex x being Point of GX|V st x in B3 by A3,SUBSET_1:10;
-         then consider y0 being set such that
-        A26: y0 in B3;
-        A27: y0 in Qb by A7,A26,XBOOLE_0:def 3;
-        A28: y0 in B4 by A25,A26,A27,XBOOLE_0:def 3;
-        A29: B6<>{} by A1,A24,A26,A28,XBOOLE_0:def 3;
-            A6 \/ B6=(A4 \/ B4)/\ W by XBOOLE_1:23;
-        then A30:W c= A6 \/ B6 by A22,XBOOLE_1:19;
-            A6 \/ B6 c= the carrier of (GX|B)|W;
-        then A6 \/ B6 c= W by JORDAN1:1;
-        then A6 \/ B6=W by A30,XBOOLE_0:def 10
-               .= [#]((GX|B)|W) by PRE_TOPC:def 10;
-         then A6 meets B6 by A2,A14,A15,A23,A29;
-         then A6 /\ B6 <> {} by XBOOLE_0:def 7;
-         then consider x1 being set such that A31: x1 in A6 /\ B6 by
-XBOOLE_0:def 1
-;
-             x1 in A6 & x1 in B6 by A31,XBOOLE_0:def 3;
-         then x1 in A4 & x1 in W & x1 in B4 by XBOOLE_0:def 3;
-         then x1 in Qa & x1 in B & x1 in W & x1 in Qb & x1 in B
-         by XBOOLE_0:def 3;
-         then x1 in Qa /\ Qb & x1 in W by XBOOLE_0:def 3;
-         then A32:Qa /\ Qb /\ [#](GX|V)<>{} by A1,A9,XBOOLE_0:def 3;
-             Qa /\ Qb /\ [#](GX|V) c=(Qa /\ [#](GX|V))/\(Qb /\ [#](GX|V))
-         proof let x;assume x in Qa /\ Qb /\ [#](GX|V);
-          then x in Qa /\ Qb & x in [#](GX|V) by XBOOLE_0:def 3;
-          then x in Qa & x in Qb & x in [#](GX|V) by XBOOLE_0:def 3;
-          then x in Qa /\ [#](GX|V) & x in Qb /\ [#](GX|V) by XBOOLE_0:def 3;
-          hence x in (Qa /\ [#](GX|V))/\(Qb /\ [#](GX|V)) by XBOOLE_0:def 3;
-         end;
-        hence A3 /\ B3 <> {} by A5,A7,A32,XBOOLE_1:3;
-      end;
-    then GX|V is connected by CONNSP_1:12;
- hence thesis by CONNSP_1:def 3;
-end;
+    by CONNSP_1:24;
 
 theorem
      for B being Subset of GX, p be Point of GX st p in B
@@ -1015,5 +922,5 @@ proof let B be Subset of GX, p be Point of GX;
  then reconsider B' = B as non empty Subset of GX;
   A2:skl Down(p,B') is connected by CONNSP_1:41;
       skl(p,B)=skl Down(p,B) by A1,Th27;
- hence thesis by A2,Th34;
+ hence thesis by A2,CONNSP_1:24;
 end;

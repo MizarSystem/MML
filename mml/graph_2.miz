@@ -8,20 +8,21 @@ environ
 
  vocabularies FINSEQ_1, FINSET_1, FUNCT_1, ARYTM_1, RELAT_1, INT_1, CARD_1,
       BOOLE, FINSEQ_2, TARSKI, GRAPH_1, ORDERS_1, GRAPH_2, FINSEQ_4, ORDINAL2,
-      ARYTM;
+      ARYTM, REALSET1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0,
-      XREAL_0, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_4, CARD_1,
-      FINSET_1, NAT_1, INT_1, RECDEF_1, GRAPH_1, BINARITH;
+      XREAL_0, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, REALSET1,
+      FINSEQ_2, FINSEQ_4, CARD_1,
+      FINSET_1, NAT_1, INT_1, RECDEF_1, GRAPH_1, BINARITH, XXREAL_0;
  constructors WELLORD2, INT_1, GRAPH_1, BINARITH, FINSEQ_4, PARTFUN1, RECDEF_1,
-      NAT_1;
+      NAT_1, XXREAL_0, REALSET1, FINSEQ_6;
  registrations INT_1, FUNCT_1, FINSEQ_1, FINSET_1, CARD_1, GRAPH_1, RELSET_1,
-      NAT_1, XREAL_0, ORDINAL2;
+      NAT_1, XREAL_0, ORDINAL2, GOBOARD1, FINSEQ_6, REALSET1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, REAL_1, GRAPH_1, XBOOLE_0;
  theorems TARSKI, ENUMSET1, NAT_1, REAL_1, FINSEQ_1, FINSEQ_2, GRAPH_1,
       RELAT_1, FUNCT_1, GRFUNC_1, FUNCT_2, BINARITH, REAL_2, INT_1, FINSET_1,
       CARD_1, CARD_2, CARD_4, FINSEQ_3, FINSEQ_4, CQC_THE1, ZFMISC_1, RELSET_1,
-      XBOOLE_0, XBOOLE_1, XCMPLX_1, ORDINAL2, XREAL_1;
+      XBOOLE_0, XBOOLE_1, XCMPLX_1, ORDINAL2, XREAL_1, FINSEQ_5, REALSET1;
  schemes NAT_1, RECDEF_1, FINSEQ_1, FUNCT_1;
 
 begin :: Preliminaries
@@ -30,25 +31,6 @@ reserve p, q for FinSequence,
         X, Y, x, y for set,
         D for non empty set,
         i, j, k, l, m, k1, k2, n, r for Nat;
-
-scheme FinSegRng{m, n() -> Nat, F(set)->set, P[Nat]}:
-  {F(i): m()<=i & i<=n() & P[i]} is finite
-proof
-  set F = {F(i): m()<=i & i<=n() & P[i]};
-  deffunc G(Nat) = F($1-1);
-  consider f being FinSequence such that
-A1: len f = n()+1 and
-A2: for k st k in Seg (n()+1) holds f.k = G(k) from FINSEQ_1:sch 2;
-     F c= rng f proof let x be set;assume x in F; then consider j such that
-A3: x=F(j) & m()<=j & j<=n() and P[j];
-      1<=j+1 & j+1<=n()+1 by A3,XREAL_1:8,NAT_1:29;
-then A4: j+1 in Seg (n()+1) by FINSEQ_1:3;
-then A5: j+1 in dom f by A1,FINSEQ_1:def 3;
-      f.(j+1) = F(j+1-1) by A2,A4 .= F(j);
-  hence x in rng f by A3,A5,FUNCT_1:def 5;
-  end;
-  hence thesis by FINSET_1:13;
-end;
 
 theorem Th1: m+1<=k & k<=n iff ex i being Nat st m<=i & i<n & k=i+1 proof
  hereby assume that
@@ -219,7 +201,7 @@ theorem Th4: for m, n being Nat holds Card {k: m<=k & k<=m+n} = n+1 proof
  defpred P[Nat] means not contradiction;
  deffunc F(Nat) = $1;
  set F = {F(k): m<=k & k<=m+n & P[k]};
-  F is finite from FinSegRng;
+  F is finite from FINSEQ_1:sch 6;
  then reconsider F as finite set;
   F = {F(k): m<=k & k<=m+n}
  proof
@@ -3113,7 +3095,8 @@ A4: m1<=len q;  1<m1 by A2,A3,XREAL_1:2;
 then A5: q.m1=p.m1 by FUNCT_1:68;  n1 < len q by A3,A4,XREAL_1:2;
     then n1 in dom q by A2,FINSEQ_3:27;
 then A6: q.n1=p.n1 by FUNCT_1:68;
-       dom q c= dom p by FUNCT_1:76; then dom q c= Seg len p by FINSEQ_1:def 3
+       dom q c= dom p by RELAT_1:89,99;
+       then dom q c= Seg len p by FINSEQ_1:def 3
 ;
     then Seg len q c= Seg len p by FINSEQ_1:def 3;
     then len q<=len p by FINSEQ_1:7;
@@ -3323,5 +3306,118 @@ then A24:   n+1 in dom oc by A18,FINSEQ_3:27;
   hence vs.1 = SG.(oc.1) by A5,FINSEQ_1:def 7;
  end;
  uniqueness by A1,Th37;
+end;
+
+begin :: Addenda
+
+:: from AMISTD_1, 2006.01.12, A.T.
+
+theorem Th5:
+ for f1 being non empty FinSequence of D, f2 being FinSequence of D
+  holds (f1^'f2)/.1 = f1/.1
+proof
+  let f1 be non empty FinSequence of D,
+      f2 be FinSequence of D;
+A1:1 in dom f1 by FINSEQ_5:6;
+A2:1 in dom (f1^(2, len f2)-cut f2) by FINSEQ_5:6;
+  thus (f1^'f2)/.1 = (f1^(2, len f2)-cut f2)/.1
+    .= (f1^(2, len f2)-cut f2).1 by A2,FINSEQ_4:def 4
+    .= f1.1 by A1,FINSEQ_1:def 7
+    .= f1/.1 by A1,FINSEQ_4:def 4;
+end;
+
+theorem Th6:
+ for f1 being FinSequence of D, f2 being non trivial FinSequence of D
+  holds (f1^'f2)/.len(f1^'f2) = f2/.len f2
+proof
+  let f1 be FinSequence of D,
+      f2 be non trivial FinSequence of D;
+        2 <= len f2 by REALSET1:13;
+then A1: 1 < len f2 by XREAL_1:2;
+        0 <= len f1 by NAT_1:18;
+then A2: 1+0 < len f1 + len f2 by A1,XREAL_1:10;
+      len (f1^'f2) + 1 = len f1 + len f2 by Th13;
+  then 1 <= len(f1^'f2) by A2,NAT_1:38;
+  hence (f1^'f2)/.len(f1^'f2)
+    = (f1^'f2).len(f1^'f2) by FINSEQ_4:24
+   .= f2.len f2 by A1,Th16
+   .= f2/.len f2 by A1,FINSEQ_4:24;
+end;
+
+theorem Th7:
+ for f being FinSequence holds f^'{} = f
+ proof
+  let f be FinSequence;
+      len {} = 0 by FINSEQ_1:25;
+then A1: 2 > len{};
+  thus f^'{} = f^(2, len {})-cut {}
+        .= f^{} by A1,Def1
+        .= f by FINSEQ_1:47;
+ end;
+
+theorem Th8:
+ for f being FinSequence holds f^'<*x*> = f
+ proof
+   let f be FinSequence;
+       len <*x*> = 1 by FINSEQ_1:56;
+   then (2, len <*x*>)-cut <*x*> = {} by Def1;
+  hence f^'<*x*> = f^{}
+        .= f by FINSEQ_1:47;
+ end;
+
+theorem Th9: :: GRAPH_2:14
+ for f1, f2 being FinSequence of D holds
+  1<=n & n<=len f1 implies (f1^'f2)/.n = f1/.n
+proof
+  let f1, f2 be FinSequence of D;
+  assume that
+A1:  1<=n and
+A2:  n<=len f1;
+  per cases;
+  suppose f2 = {};
+  hence (f1^'f2)/.n = f1/.n by Th7;
+  end;
+  suppose
+A3: f2 <> {};
+then A4:len (f1^'f2) + 1 = len f1 + len f2 by Th13;
+      len f2 <> 0 by A3,FINSEQ_1:25;
+  then 0 < len f2 by NAT_1:19;
+  then len f1 + 0 < len f1 + len f2 by XREAL_1:8;
+  then n < len (f1^'f2) + 1 by A2,A4,XREAL_1:2;
+  then n <= len (f1^'f2) by NAT_1:38;
+  hence (f1^'f2)/.n = (f1^'f2).n by A1,FINSEQ_4:24
+     .= f1.n by A1,A2,Th14
+     .= f1/.n by A1,A2,FINSEQ_4:24;
+end;
+end;
+
+theorem Th10: :: GRAPH_2:15
+ for f1, f2 being FinSequence of D holds
+  1<=n & n<len f2 implies (f1^'f2)/.(len f1 + n) = f2/.(n+1)
+proof
+  let f1, f2 be FinSequence of D;
+  assume that
+A1:  1<=n and
+A2:  n<len f2;
+        0 <= len f1 by NAT_1:18;
+then A3: 0+1 <= len f1 + n by A1,XREAL_1:9;
+A4: now per cases;
+      suppose f2 <> {};
+then A5:   len (f1^'f2) + 1 = len f1 + len f2 by Th13;
+          len f1 + n < len f1 + len f2 by A2,XREAL_1:8;
+      hence len f1+n <= len (f1^'f2) by A5,NAT_1:38;
+      end;
+      suppose f2 = {};
+      then len f2 = 0 by FINSEQ_1:25;
+      hence len f1+n <= len (f1^'f2) by A2,NAT_1:18;
+    end;
+    end;
+        0 <= n by NAT_1:18;
+then A6: 0+1 <= n+1 by XREAL_1:8;
+A7: n+1 <= len f2 by A2,NAT_1:38;
+  thus (f1^'f2)/.(len f1 + n)
+     = (f1^'f2).(len f1 + n) by A3,A4,FINSEQ_4:24
+    .= f2.(n+1) by A1,A2,Th15
+    .= f2/.(n+1) by A6,A7,FINSEQ_4:24;
 end;
 

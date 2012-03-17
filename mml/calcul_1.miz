@@ -13,8 +13,9 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1, FUNCT_1, QC_LANG1,
       NUMBERS, ORDINAL2, FINSEQ_2, CARD_1, XREAL_0, NAT_1, CQC_LANG, RELAT_1,
       FINSET_1, VALUAT_1, CQC_THE1, RELSET_1, FUNCT_2, FRAENKEL, MARGREL1,
-      DOMAIN_1, MCART_1, SUBSTUT1, SUBSTUT2, SUBLEMMA;
- constructors DOMAIN_1, CQC_THE1, NAT_1, SUBSTUT2, FINSEQ_2, XREAL_0, WELLORD2;
+      DOMAIN_1, MCART_1, SUBSTUT1, SUBSTUT2, SUBLEMMA, XXREAL_0;
+ constructors DOMAIN_1, CQC_THE1, NAT_1, SUBSTUT2, FINSEQ_2, XREAL_0, WELLORD2,
+ XXREAL_0;
  registrations NAT_1, FINSEQ_1, RELSET_1, CQC_LANG, XREAL_0, SUBSET_1,
       QC_LANG1, FUNCT_1, FINSET_1, ORDINAL2, CARD_5;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -749,36 +750,19 @@ A4:   v.(x|a).b = v.b by SUBLEMMA:49;
 
 theorem Th27:
   for v,w holds v|still_not-bound_in f = w|still_not-bound_in f
-                                           implies (J,v |= f iff J,w |= f)
+                                           implies (J,v |= f implies J,w |= f)
   proof
     let v,w such that A1: v|still_not-bound_in f = w|still_not-bound_in f;
-A2: for i,p st i in dom f & p = f.i holds J,v |= p iff J,w |= p
-    proof
-      let i,p such that A3: i in dom f & p = f.i;
-      for b st b in still_not-bound_in p holds b in still_not-bound_in f
-                                                               by A3,Def5; then
-      still_not-bound_in p c= still_not-bound_in f by TARSKI:def 3; then
-      v|still_not-bound_in p = w|still_not-bound_in p by A1,RELAT_1:188;
-      hence thesis by SUBLEMMA:70;
-    end;
-    thus J,v |= f implies J,w |= f
-    proof
       assume J,v |= f; then
 A4:   J,v |= rng(f) by Def14;
       let p such that A5: p in rng(f);
       consider i such that A6: i in dom f & p = f.i by A5,FINSEQ_2:11;
-      J,v |= p by A4,A5,Def11;
-      hence thesis by A2,A6;
-    end;
-    thus J,w |= f implies J,v |= f
-    proof
-      assume J,w |= f; then
-A7:   J,w |= rng(f) by Def14;
-      let p such that A8: p in rng(f);
-      consider i such that A9: i in dom f & p = f.i by A8,FINSEQ_2:11;
-      J,w |= p by A7,A8,Def11;
-      hence thesis by A2,A9;
-    end;
+X:    J,v |= p by A4,A5,Def11;
+      for b st b in still_not-bound_in p holds b in still_not-bound_in f
+                                                               by A6,Def5; then
+      still_not-bound_in p c= still_not-bound_in f by TARSKI:def 3; then
+      v|still_not-bound_in p = w|still_not-bound_in p by A1,RELAT_1:188;
+      hence thesis by X,SUBLEMMA:70;
   end;
 
 theorem Th28:

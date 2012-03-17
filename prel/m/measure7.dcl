@@ -12,7 +12,6 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="SUPINF_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="RELSET_1"/>
@@ -25,13 +24,15 @@
 <ArticleID name="NEWTON"/>
 <ArticleID name="CARD_4"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FINSUB_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
-<ArticleID name="MEASURE1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="MEASURE2"/>
+<ArticleID name="FINSUB_1"/>
+<ArticleID name="MEASURE1"/>
 <ArticleID name="MEASURE4"/>
+<ArticleID name="XXREAL_0"/>
+<ArticleID name="SUPINF_1"/>
 <ArticleID name="MEASURE5"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="MEASURE7"/>
@@ -41,7 +42,7 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="69"/>
+<Func kind="K" nr="205"/>
 </Func>
 </Typ>
 </ArgTypes>

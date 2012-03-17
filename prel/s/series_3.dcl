@@ -14,6 +14,7 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="COMPLEX1"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <FCluster>
 <ArgTypes>
@@ -23,13 +24,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="79">
+<Func kind="K" nr="80">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="21" value="false"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 </Registrations>

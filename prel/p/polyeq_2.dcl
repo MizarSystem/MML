@@ -4,6 +4,7 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="POLYEQ_2"/>
 </Signature>
 <FCluster>
@@ -39,7 +40,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="8">
+<Func kind="K" nr="10">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -50,6 +51,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="2"/>
+<Adjective nr="5"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -85,7 +87,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="9">
+<Func kind="K" nr="11">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -96,6 +98,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="2"/>
+<Adjective nr="5"/>
 </Cluster>
 </FCluster>
 </Registrations>

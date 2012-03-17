@@ -7,9 +7,10 @@
 environ
 
  vocabularies SUPINF_1, MEASURE6, ARYTM_3, ARYTM_1, RLVECT_1, ARYTM, COMPLEX1;
- notations ORDINAL1, XCMPLX_0, XREAL_0, REAL_1, SUPINF_1, SUPINF_2, MEASURE6;
- constructors REAL_1, SUPINF_2, MEASURE6, MEMBERED;
- registrations XREAL_0, MEMBERED, XBOOLE_0;
+ notations ORDINAL1, XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, SUPINF_1, SUPINF_2,
+      MEASURE6;
+ constructors REAL_1, SUPINF_2, MEASURE6, MEMBERED, XXREAL_0;
+ registrations XREAL_0, MEMBERED, XBOOLE_0, SUPINF_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -21,11 +22,7 @@ begin
 theorem :: EXTREAL1:1
   x <> +infty & x <> -infty implies x is Real;
 
-theorem :: EXTREAL1:2
-  -infty <' +infty;
-
-theorem :: EXTREAL1:3
-  x <' y implies x <> +infty & y <> -infty;
+canceled 2;
 
 theorem :: EXTREAL1:4
   (x = +infty iff -x = -infty) & (x = -infty iff -x = +infty);
@@ -36,7 +33,7 @@ theorem :: EXTREAL1:5
 canceled;
 
 theorem :: EXTREAL1:7
-  x <> -infty & y <> +infty & x <=' y implies x <> +infty & y <> -infty;
+  x <> -infty & y <> +infty & x <= y implies x <> +infty & y <> -infty;
 
 theorem :: EXTREAL1:8
   not (x = +infty & y = -infty) & not (x = -infty & y = +infty) &
@@ -62,10 +59,10 @@ definition
 func x * y -> R_eal means
 :: EXTREAL1:def 1
  (ex a,b being Real st (x = a & y = b & it = a * b)) or
- (((0. <' x & y=+infty) or (0. <' y & x=+infty) or (x <' 0. & y=-infty) or
- (y <' 0. & x = -infty)) & it = +infty) or
- (((x <' 0. & y=+infty) or (y <' 0. & x=+infty) or (0. <' x & y=-infty) or
- (0. <' y & x = -infty)) & it = -infty) or
+ (((0. < x & y=+infty) or (0. < y & x=+infty) or (x < 0. & y=-infty) or
+ (y < 0. & x = -infty)) & it = +infty) or
+ (((x < 0. & y=+infty) or (y < 0. & x=+infty) or (0. < x & y=-infty) or
+ (0. < y & x = -infty)) & it = -infty) or
  ((x = 0. or y = 0.) & it = 0.);
 end;
 
@@ -77,14 +74,14 @@ for x,y being R_eal holds
  (x = a & y = b) implies x * y = a * b;
 
 theorem :: EXTREAL1:14
-  (0. <=' x & 0. <' y) or (0. <' x & 0. <=' y) implies 0. <' x + y;
+  (0. <= x & 0. < y) or (0. < x & 0. <= y) implies 0. < x + y;
 
 theorem :: EXTREAL1:15
-  (x <=' 0. & y <' 0.) or (x <' 0. & y <=' 0.) implies x + y <' 0.;
+  (x <= 0. & y < 0.) or (x < 0. & y <= 0.) implies x + y < 0.;
 
 theorem :: EXTREAL1:16
   for x be R_eal st x in REAL holds
-    (-infty <' x & x <' 0.) or x = 0. or (0. <' x & x <' +infty);
+    (-infty < x & x < 0.) or x = 0. or (0. < x & x < +infty);
 
 theorem :: EXTREAL1:17
   for x,y being R_eal holds x * y = y * x;
@@ -95,16 +92,16 @@ definition let x,y be R_eal;
 end;
 
 theorem :: EXTREAL1:18
-  x = a implies (0 < a iff 0. <' x);
+  x = a implies (0 < a iff 0. < x);
 
 theorem :: EXTREAL1:19
-  x = a implies (a < 0 iff x <' 0.);
+  x = a implies (a < 0 iff x < 0.);
 
 theorem :: EXTREAL1:20
-  (0. <' x & 0. <' y) or (x <' 0. & y <' 0.) implies 0. <' x * y;
+  (0. < x & 0. < y) or (x < 0. & y < 0.) implies 0. < x * y;
 
 theorem :: EXTREAL1:21
-  (0. <' x & y <' 0.) or (x <' 0. & 0. <' y) implies x * y <' 0.;
+  (0. < x & y < 0.) or (x < 0. & 0. < y) implies x * y < 0.;
 
 theorem :: EXTREAL1:22
   x * y = 0. iff (x = 0. or y = 0.);
@@ -116,7 +113,7 @@ theorem :: EXTREAL1:24
 -0. = 0.;
 
 theorem :: EXTREAL1:25
-   (0. <' x iff -x <' 0.) & (x <' 0. iff 0. <' -x);
+   (0. < x iff -x < 0.) & (x < 0. iff 0. < -x);
 
 theorem :: EXTREAL1:26
   -(x * y) = x * (-y) & -(x * y) = (-x) * y;
@@ -133,9 +130,9 @@ theorem :: EXTREAL1:29
 for x,y,z be R_eal st
   (x <> +infty & x <> -infty) or
   (y = -infty & z = +infty) or
-  (y <' 0. & z <' 0.) or
+  (y < 0. & z < 0.) or
   (y = 0. or z = 0.) or
-  (0. <' y & 0. <' z) or
+  (0. < y & 0. < z) or
   (y = +infty & z = -infty) holds
     x * (y + z) = x * y + x * z;
 
@@ -149,8 +146,8 @@ assume not((x=-infty or x=+infty) & (y=-infty or y=+infty)) & y <> 0.;
 func x / y -> R_eal means
 :: EXTREAL1:def 2
 (ex a,b being Real st (x = a & y = b & it = a / b)) or
-(((x=+infty & 0. <' y) or (x=-infty & y <' 0.)) & it = +infty) or
-(((x=-infty & 0. <' y) or (x=+infty & y <' 0.)) & it = -infty) or
+(((x=+infty & 0. < y) or (x=-infty & y < 0.)) & it = +infty) or
+(((x=-infty & 0. < y) or (x=+infty & y < 0.)) & it = -infty) or
 ((y = -infty or y = +infty) & it = 0.);
 end;
 
@@ -171,16 +168,16 @@ x / x = 1;
 definition let x be R_eal;
   func |. x .| -> R_eal equals
 :: EXTREAL1:def 3
-  x if 0. <=' x otherwise -x;
+  x if 0. <= x otherwise -x;
 end;
 
 canceled;
 
 theorem :: EXTREAL1:36
-     for x being R_eal st 0. <' x holds |.x.| = x;
+     for x being R_eal st 0. < x holds |.x.| = x;
 
 theorem :: EXTREAL1:37
-     for x being R_eal st x <' 0. holds |.x.| = -x;
+     for x being R_eal st x < 0. holds |.x.| = -x;
 
 theorem :: EXTREAL1:38
      for a,b being Real holds R_EAL(a*b) = R_EAL a * R_EAL b;
@@ -189,44 +186,44 @@ theorem :: EXTREAL1:39
      for a,b being Real st b <> 0 holds R_EAL(a/b) = R_EAL a / R_EAL b;
 
 theorem :: EXTREAL1:40
-   for x,y being R_eal st x <=' y & (x <' +infty & -infty <' y) holds 0. <=' y-
+   for x,y being R_eal st x <= y & (x < +infty & -infty < y) holds 0. <= y-
 x;
 
 theorem :: EXTREAL1:41
-     for x,y being R_eal st x <' y & (x <' +infty & -infty <' y) holds 0. <' y-
+     for x,y being R_eal st x < y & (x < +infty & -infty < y) holds 0. < y-
 x;
 
 theorem :: EXTREAL1:42
-     x <=' y & 0. <=' z implies x*z <=' y*z;
+     x <= y & 0. <= z implies x*z <= y*z;
 
 theorem :: EXTREAL1:43
-     x <=' y & z <=' 0. implies y*z <=' x*z;
+     x <= y & z <= 0. implies y*z <= x*z;
 
 theorem :: EXTREAL1:44
-     x <' y & 0. <' z & z <> +infty implies x*z <' y*z;
+     x < y & 0. < z & z <> +infty implies x*z < y*z;
 
 theorem :: EXTREAL1:45
-     x <' y & z <' 0. & z <> -infty implies y*z <' x*z;
+     x < y & z < 0. & z <> -infty implies y*z < x*z;
 
 theorem :: EXTREAL1:46
    (x is Real & y is Real) implies
-  (x <' y iff ex p,q being Real st (p = x & q = y & p < q));
+  (x < y iff ex p,q being Real st (p = x & q = y & p < q));
 
 theorem :: EXTREAL1:47
-     x <> -infty & y <> +infty & x <=' y & 0. <' z implies x/z <=' y/z;
+     x <> -infty & y <> +infty & x <= y & 0. < z implies x/z <= y/z;
 
 theorem :: EXTREAL1:48
-     x <=' y & 0. <' z & z <> +infty implies x/z <=' y/z;
+     x <= y & 0. < z & z <> +infty implies x/z <= y/z;
 
 theorem :: EXTREAL1:49
-     x <> -infty & y <> +infty & x <=' y & z <' 0. implies y/z <=' x/z;
+     x <> -infty & y <> +infty & x <= y & z < 0. implies y/z <= x/z;
 
 theorem :: EXTREAL1:50
-     x <=' y & z <' 0. & z <> -infty implies y/z <=' x/z;
+     x <= y & z < 0. & z <> -infty implies y/z <= x/z;
 
 theorem :: EXTREAL1:51
-     x <' y & 0. <' z & z <> +infty implies x/z <' y/z;
+     x < y & 0. < z & z <> +infty implies x/z < y/z;
 
 theorem :: EXTREAL1:52
-     x <' y & z <' 0. & z <> -infty implies y/z <' x/z;
+     x < y & z < 0. & z <> -infty implies y/z < x/z;
 

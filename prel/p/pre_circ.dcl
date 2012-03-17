@@ -29,6 +29,7 @@
 <ArticleID name="TREES_4"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="PRE_CIRC"/>
 </Signature>
 <RCluster>
@@ -60,7 +61,7 @@
 <Adjective nr="1"/>
 <Adjective nr="2"/>
 <Adjective nr="4"/>
-<Adjective nr="52">
+<Adjective nr="53">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -75,13 +76,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="107">
+<Func kind="K" nr="108">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="27"/>
+<Adjective nr="52"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -150,7 +152,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="158">
+<Func kind="K" nr="159">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -186,7 +188,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="161">
+<Func kind="K" nr="162">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -204,7 +206,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="180">
+<Func kind="K" nr="181">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -225,7 +227,7 @@
 <Cluster/>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="168">
+<Func kind="K" nr="169">
 <LocusVar nr="1"/>
 </Func>
 </Typ>

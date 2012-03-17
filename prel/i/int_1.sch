@@ -13,6 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="INT_1"/>
 </Signature>
 <Scheme>
@@ -29,7 +30,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <And>
@@ -69,14 +70,14 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
@@ -99,7 +100,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
@@ -113,7 +114,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="58">
+<Func kind="K" nr="59">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -127,14 +128,14 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
@@ -157,7 +158,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
@@ -171,7 +172,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="62">
+<Func kind="K" nr="63">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -185,14 +186,14 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -205,7 +206,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
@@ -216,13 +217,13 @@
 <Not>
 <And>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="62">
+<Func kind="K" nr="63">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="58">
+<Func kind="K" nr="59">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -237,7 +238,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -245,7 +246,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
@@ -256,7 +257,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
@@ -280,7 +281,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
@@ -301,7 +302,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
@@ -316,7 +317,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -324,7 +325,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
@@ -335,7 +336,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
@@ -359,7 +360,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
@@ -380,7 +381,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>

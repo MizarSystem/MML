@@ -27,7 +27,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="AMI_1"/>
-<ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -69,7 +69,7 @@
 <Not>
 <And>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="85">
+<Func kind="K" nr="86">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -86,8 +86,8 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="84">
 <Func kind="K" nr="85">
+<Func kind="K" nr="86">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -116,11 +116,11 @@
 <Cluster>
 <Adjective nr="5"/>
 </Cluster>
-<Func kind="K" nr="223">
+<Func kind="K" nr="224">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="223">
+<Func kind="K" nr="224">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -129,11 +129,11 @@
 <Cluster>
 <Adjective nr="5"/>
 </Cluster>
-<Func kind="K" nr="223">
+<Func kind="K" nr="224">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="223">
+<Func kind="K" nr="224">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>

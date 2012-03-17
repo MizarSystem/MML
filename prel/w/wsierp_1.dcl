@@ -23,6 +23,7 @@
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <FCluster>
 <ArgTypes>
@@ -36,7 +37,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="131">
+<Func kind="K" nr="132">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -45,6 +46,7 @@
 <Adjective nr="19"/>
 <Adjective nr="22"/>
 <Adjective nr="23"/>
+<Adjective nr="30"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -66,6 +68,7 @@
 <Adjective nr="19"/>
 <Adjective nr="22"/>
 <Adjective nr="23"/>
+<Adjective nr="30"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -10,9 +10,9 @@ environ
       SETFAM_1, SUBSET_1, FINSUB_1, BOOLE, RELAT_1, FUNCOP_1, TARSKI, PROB_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSUB_1, RELAT_1, FUNCT_1,
       REAL_1, FUNCT_2, FUNCOP_1, ORDINAL1, CARD_3, NUMBERS, XCMPLX_0, XREAL_0,
-      NAT_1, COMPLEX1, SEQ_1, SEQ_2, SETFAM_1;
+      NAT_1, COMPLEX1, SEQ_1, SEQ_2, SETFAM_1, XXREAL_0;
  constructors ABSVALUE, SEQ_2, SETFAM_1, FINSUB_1, FUNCOP_1, XCMPLX_0,
-      MEMBERED, XBOOLE_0, COMPLEX1, CARD_3;
+      MEMBERED, XBOOLE_0, COMPLEX1, CARD_3, XXREAL_0;
  registrations FUNCT_1, XREAL_0, RELSET_1, SUBSET_1, FUNCOP_1, MEMBERED,
       ORDINAL2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -84,7 +84,6 @@ theorem :: PROB_1:12
 
 theorem :: PROB_1:13
      for A, B being set holds
-   (A \ B) misses B &
    (A in F & B in F implies (A \ B) \/ B in F);
 
 theorem :: PROB_1:14
@@ -168,18 +167,26 @@ theorem :: PROB_1:30
 definition let X,A1;
   attr A1 is non-increasing means
 :: PROB_1:def 6
-    for n,m st n <= m holds A1.m c= A1.n;
+ for n,m st n <= m holds A1.m c= A1.n;
   attr A1 is non-decreasing means
 :: PROB_1:def 7
        for n,m st n <= m holds A1.n c= A1.m;
 end;
 
-definition let X be set;
-  mode SigmaField of X -> non empty Subset-Family of X means
+definition let X be set, F be Subset-Family of X;
+ attr F is sigma-multiplicative means
 :: PROB_1:def 8
-  (for A1 being SetSequence of X st
-    (for n holds A1.n in it) holds Intersection A1 in it) &
-  (for A being Subset of X st A in it holds A` in it);
+ for A1 being SetSequence of X st for n holds A1.n in F
+       holds Intersection A1 in F;
+end;
+
+registration let X be set;
+ cluster compl-closed sigma-multiplicative non empty Subset-Family of X;
+end;
+
+definition let X be set;
+ mode SigmaField of X
+  is compl-closed sigma-multiplicative non empty Subset-Family of X;
 end;
 
 canceled;

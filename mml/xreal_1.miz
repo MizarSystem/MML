@@ -7,132 +7,73 @@
 environ
 
  vocabularies ARYTM_1, ARYTM, ARYTM_3, RELAT_1, ARYTM_2, BOOLE, COMPLEX1,
-      ORDINAL2, FUNCOP_1, OPPCAT_1, ZF_LANG, ASYMPT_0, XCMPLX_0;
+      ORDINAL2, FUNCOP_1, OPPCAT_1, ZF_LANG, ASYMPT_0, XCMPLX_0, SUPINF_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ORDINAL2, FUNCT_4,
-      ARYTM_2, ARYTM_1, ARYTM_0, XCMPLX_0, XREAL_0, NUMBERS;
+      ARYTM_2, ARYTM_1, ARYTM_0, XCMPLX_0, XREAL_0, NUMBERS, XXREAL_0;
  constructors XCMPLX_0, XREAL_0, SUBSET_1, NUMBERS, ARYTM_3, ARYTM_0, ORDINAL3,
-      MCART_1, ENUMSET1, DOMAIN_1, ARYTM_2, FUNCT_4, ARYTM_1;
+      MCART_1, ENUMSET1, DOMAIN_1, ARYTM_2, FUNCT_4, ARYTM_1, XXREAL_0;
  registrations XREAL_0, ARYTM_2, ARYTM_3, ORDINAL2, NUMBERS, XCMPLX_0,
       ZFMISC_1, XBOOLE_0;
+ definitions XXREAL_0;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
  theorems TARSKI, ARYTM_2, ARYTM_1, ARYTM_0, XBOOLE_0, XCMPLX_0, XCMPLX_1,
-      XREAL_0, NUMBERS, ZFMISC_1;
+      XREAL_0, NUMBERS, ZFMISC_1, XXREAL_0;
 
 begin
 
  reserve a,b,c,d for real number;
 
-theorem Th1: :: AXIOMS:21
- a <= b & b <= a implies a = b
-proof assume that
-A1: a <= b and
-A2: b <= a;
-    a in REAL & b in REAL by XREAL_0:def 1;
-then A3: a in REAL+ \/ [:{0},REAL+:] & b in REAL+ \/ [:{0},REAL+:]
-      by NUMBERS:def 1,XBOOLE_0:def 4;
- per cases by A3,XBOOLE_0:def 2;
- suppose that
-A4: a in REAL+ and
-A5: b in REAL+;
-  consider a',b' being Element of REAL+ such that
-A6: a = a' and
-A7: b = b' and
-A8: a' <=' b' by A1,A4,A5,XREAL_0:def 2;
-  consider b'',a'' being Element of REAL+ such that
-A9: b = b'' and
-A10: a = a'' and
-A11: b'' <=' a'' by A2,A4,A5,XREAL_0:def 2;
- thus thesis by A6,A7,A8,A9,A10,A11,ARYTM_1:4;
- end;
- suppose
-A12:  a in REAL+ & b in [:{0},REAL+:];
-  then not(a in REAL+ & b in REAL+) &
-       not(a in [:{0},REAL+:] & b in [:{0},REAL+:]) by ARYTM_0:5,XBOOLE_0:3;
- hence thesis by A1,A12,XREAL_0:def 2;
- end;
- suppose
-A13:  b in REAL+ & a in [:{0},REAL+:];
-  then not(a in REAL+ & b in REAL+) &
-       not(a in [:{0},REAL+:] & b in [:{0},REAL+:]) by ARYTM_0:5,XBOOLE_0:3;
- hence thesis by A2,A13,XREAL_0:def 2;
- end;
- suppose that
-A14: a in [:{0},REAL+:] and
-A15: b in [:{0},REAL+:];
-  consider a',b' being Element of REAL+ such that
-A16: a = [0,a'] and
-A17: b = [0,b'] and
-A18: b' <=' a' by A1,A14,A15,XREAL_0:def 2;
-  consider b'',a'' being Element of REAL+ such that
-A19: b = [0,b''] and
-A20: a = [0,a''] and
-A21: a'' <=' b'' by A2,A14,A15,XREAL_0:def 2;
-     a' = a'' & b' = b'' by A16,A17,A19,A20,ZFMISC_1:33;
- hence thesis by A18,A19,A20,A21,ARYTM_1:4;
-end;
+reserve r,s for real number;
+
+Def2:
+ r <= s implies
+  (r in REAL+ & s in REAL+ implies
+   ex x',y' being Element of REAL+ st r = x' & s = y' & x' <=' y') &
+  (r in [:{0},REAL+:] & s in [:{0},REAL+:] implies
+  ex x',y' being Element of REAL+ st r = [0,x'] & s = [0,y'] & y' <=' x') &
+  (not(r in REAL+ & s in REAL+) & not (r in [:{0},REAL+:] & s in [:{0},REAL+:])
+    implies s in REAL+ & r in [:{0},REAL+:])
+proof
+  r in REAL & s in REAL by XREAL_0:def 1;
+  then r <> -infty & s <> +infty by XREAL_0:def 1;
+ hence thesis by XXREAL_0:def 5;
 end;
 
+Def2':
+  (r in REAL+ & s in REAL+ &
+   ex x',y' being Element of REAL+ st r = x' & s = y' & x' <=' y') or
+  (r in [:{0},REAL+:] & s in [:{0},REAL+:] &
+  ex x',y' being Element of REAL+ st r = [0,x'] & s = [0,y'] & y' <=' x') or
+   s in REAL+ & r in [:{0},REAL+:]
+  implies r <= s
+proof assume
+Z: (r in REAL+ & s in REAL+ &
+   ex x',y' being Element of REAL+ st r = x' & s = y' & x' <=' y') or
+  (r in [:{0},REAL+:] & s in [:{0},REAL+:] &
+  ex x',y' being Element of REAL+ st r = [0,x'] & s = [0,y'] & y' <=' x') or
+  ( s in REAL+ & r in [:{0},REAL+:]);
+ per cases;
+ case r in REAL+ & s in REAL+;
+   then not r in [:{0},REAL+:] & not s in [:{0},REAL+:]
+          by ARYTM_0:5,XBOOLE_0:3;
+  hence ex x',y' being Element of REAL+ st r = x' & s = y' & x' <=' y' by Z;
+ end;
+ case r in [:{0},REAL+:] & s in [:{0},REAL+:];
+   then not r in REAL+ & not s in REAL+ by ARYTM_0:5,XBOOLE_0:3;
+  hence ex x',y' being Element of REAL+ st r = [0,x'] & s = [0,y'] & y' <=' x'
+   by Z;
+ end;
+ case not(r in REAL+ & s in REAL+) &
+   not (r in [:{0},REAL+:] & s in [:{0},REAL+:]);
+  hence thesis by Z;
+ end;
+end;
+
+theorem Th1: :: AXIOMS:21
+ a <= b & b <= a implies a = b by XXREAL_0:5;
+
 theorem Th2: :: AXIOMS:22
- a <= b & b <= c implies a <= c
-proof assume that
-A1: a <= b and
-A2: b <= c;
-       a in REAL & b in REAL & c in REAL by XREAL_0:def 1;
-then A3: a in REAL+ \/ [:{0},REAL+:] & b in REAL+ \/ [:{0},REAL+:]
-       & c in REAL+ \/ [:{0},REAL+:] by NUMBERS:def 1,XBOOLE_0:def 4;
- per cases by A3,XBOOLE_0:def 2;
- suppose that
-A4: a in REAL+ and
-A5: b in REAL+ and
-A6: c in REAL+;
-  consider a',b' being Element of REAL+ such that
-A7: a = a' and
-A8: b = b' and
-A9: a' <=' b' by A1,A4,A5,XREAL_0:def 2;
-  consider b'',c' being Element of REAL+ such that
-A10: b = b'' and
-A11: c = c' and
-A12: b'' <=' c' by A2,A5,A6,XREAL_0:def 2;
-     a' <=' c' by A8,A9,A10,A12,ARYTM_1:3;
- hence thesis by A7,A11,XREAL_0:def 2;
- end;
- suppose
-A13:  a in REAL+ & b in [:{0},REAL+:];
-  then not(a in REAL+ & b in REAL+) &
-       not(a in [:{0},REAL+:] & b in [:{0},REAL+:]) by ARYTM_0:5,XBOOLE_0:3;
- hence thesis by A1,A13,XREAL_0:def 2;
- end;
- suppose
-A14:  b in REAL+ & c in [:{0},REAL+:];
-  then not(c in REAL+ & b in REAL+) &
-       not(c in [:{0},REAL+:] & b in [:{0},REAL+:]) by ARYTM_0:5,XBOOLE_0:3;
- hence thesis by A2,A14,XREAL_0:def 2;
- end;
- suppose that
-A15: a in [:{0},REAL+:] and
-A16: c in REAL+;
-     not(a in REAL+ & c in REAL+) &
-  not(a in [:{0},REAL+:] & c in
- [:{0},REAL+:]) by A15,A16,ARYTM_0:5,XBOOLE_0:3;
- hence thesis by A16,XREAL_0:def 2;
- end;
- suppose that
-A17: a in [:{0},REAL+:] and
-A18: b in [:{0},REAL+:] and
-A19: c in [:{0},REAL+:];
-  consider a',b' being Element of REAL+ such that
-A20: a = [0,a'] and
-A21: b = [0,b'] and
-A22: b' <=' a' by A1,A17,A18,XREAL_0:def 2;
-  consider b'',c' being Element of REAL+ such that
-A23: b = [0,b''] and
-A24: c = [0,c'] and
-A25: c' <=' b'' by A2,A18,A19,XREAL_0:def 2;
-     b' = b'' by A21,A23,ZFMISC_1:33;
-  then c' <=' a' by A22,A25,ARYTM_1:3;
- hence thesis by A17,A19,A20,A24,XREAL_0:def 2;
-end;
-end;
+ a <= b & b <= c implies a <= c by XXREAL_0:10;
 
 Lm1: for x1,x2 being Element of REAL st a = [*x1,x2*]
        holds x2 = 0 & a = x1
@@ -171,7 +112,7 @@ proof
 A1: a <= b;
   reconsider x1=a, y1=b, z1=c as Element of REAL by XREAL_0:def 1;
 A2: +(y1,z1) = b + c & +(x1,z1) = a + c by Lm2;
- per cases by A1,XREAL_0:def 2;
+ per cases by A1,Def2;
  suppose that
 A3: a in REAL+ and
 A4: b in REAL+ and
@@ -179,7 +120,7 @@ A5: c in REAL+;
   consider a'',b'' being Element of REAL+ such that
 A6: a = a'' and
 A7: b = b'' and
-A8: a'' <=' b'' by A1,A3,A4,XREAL_0:def 2;
+A8: a'' <=' b'' by A1,A3,A4,Def2;
   consider a',c' being Element of REAL+ such that
 A9: a = a' and
 A10: c = c' and
@@ -189,7 +130,7 @@ A12: b = b' and
 A13: c = c'' and
 A14: +(y1,z1) = b' + c'' by A4,A5,ARYTM_0:def 2;
       a' + c' <=' b' + c'' by A6,A7,A8,A9,A10,A12,A13,ARYTM_1:7;
- hence a + c <= b + c by A2,A11,A14,XREAL_0:def 2;
+ hence a + c <= b + c by A2,A11,A14,Def2';
  end;
  suppose that
 A15: a in [:{0},REAL+:] and
@@ -209,14 +150,14 @@ A21: +(y1,z1) = b' + c'' by A16,A17,ARYTM_0:def 2;
 A23:  c' -' a' <=' c' by ARYTM_1:11;
        c' <=' b' + c'' by A18,A20,ARYTM_2:20;
     then c' -' a' <=' b' + c'' by A23,ARYTM_1:3;
-   hence a + c <= b + c by A2,A19,A21,A22,XREAL_0:def 2;
+   hence a + c <= b + c by A2,A19,A21,A22,Def2';
    end;
    suppose not a' <=' c';
     then c' - a' = [0,a' -' c'] by ARYTM_1:def 2;
     then c' - a' in [:{0},REAL+:] by Lm3,ZFMISC_1:106;
     then not a + c in REAL+ & not b + c in [:{0},REAL+:]
                  by A2,A19,A21,ARYTM_0:5,XBOOLE_0:3;
-   hence a + c <= b + c by XREAL_0:def 2;
+   hence a + c <= b + c by Def2;
   end;
   end;
  hence thesis;
@@ -228,7 +169,7 @@ A26: c in REAL+;
   consider a'',b'' being Element of REAL+ such that
 A27: a = [0,a''] and
 A28: b = [0,b''] and
-A29: b'' <=' a'' by A1,A24,A25,XREAL_0:def 2;
+A29: b'' <=' a'' by A1,A24,A25,Def2;
   consider a',c' being Element of REAL+ such that
 A30: a = [0,a'] and
 A31: c = c' and
@@ -246,7 +187,7 @@ then A39:   c' - a' = c' -' a' by ARYTM_1:def 2;
        b' <=' c' by A29,A36,A37,A38,ARYTM_1:3;
 then A40:   c' - b' = c' -' b' by ARYTM_1:def 2;
        c' -' a' <=' c'' -' b' by A29,A31,A34,A36,A37,ARYTM_1:16;
-   hence a + c <= b + c by A2,A31,A32,A34,A35,A39,A40,XREAL_0:def 2;
+   hence a + c <= b + c by A2,A31,A32,A34,A35,A39,A40,Def2';
    end;
    suppose not a' <=' c';
     then A41:  +(x1,z1) = [0,a' -' c'] by A32,ARYTM_1:def 2;
@@ -256,13 +197,13 @@ then A40:   c' - b' = c' -' b' by ARYTM_1:def 2;
      then c' - b' = c' -' b' by ARYTM_1:def 2;
      then not +(x1,z1) in REAL+ & not +(y1,z1) in [:{0},REAL+:]
                  by A31,A34,A35,A42,ARYTM_0:5,XBOOLE_0:3;
-    hence a + c <= b + c by A2,XREAL_0:def 2;
+    hence a + c <= b + c by A2,Def2;
     end;
     suppose not b' <=' c';
      then A43:  +(y1,z1) = [0,b' -' c'] by A31,A34,A35,ARYTM_1:def 2;
     then A44:   +(y1,z1) in [:{0},REAL+:] by Lm3,ZFMISC_1:106;
         b' -' c' <=' a' -' c' by A29,A36,A37,ARYTM_1:17;
-    hence a + c <= b + c by A2,A41,A42,A43,A44,XREAL_0:def 2;
+    hence a + c <= b + c by A2,A41,A42,A43,A44,Def2';
    end;
    end;
    hence thesis;
@@ -277,7 +218,7 @@ A47: c in [:{0},REAL+:];
   consider a'',b'' being Element of REAL+ such that
 A48: a = a'' and
 A49: b = b'' and
-A50: a'' <=' b'' by A1,A45,A46,XREAL_0:def 2;
+A50: a'' <=' b'' by A1,A45,A46,Def2;
   consider a',c' being Element of REAL+ such that
 A51: a = a' and
 A52: c = [0,c'] and
@@ -294,7 +235,7 @@ then A59:   a' - c' = a' -' c' by ARYTM_1:def 2;
        c' <=' b' by A48,A49,A50,A51,A54,A58,ARYTM_1:3;
 then A60:   b' - c' = b' -' c' by ARYTM_1:def 2;
        a' -' c' <=' b' -' c'' by A48,A49,A50,A51,A54,A57,ARYTM_1:17;
-   hence a + c <= b + c by A2,A53,A56,A57,A59,A60,XREAL_0:def 2;
+   hence a + c <= b + c by A2,A53,A56,A57,A59,A60,Def2';
    end;
    suppose not c' <=' a';
     then A61:  +(x1,z1) = [0,c' -' a'] by A53,ARYTM_1:def 2;
@@ -304,13 +245,13 @@ then A60:   b' - c' = b' -' c' by ARYTM_1:def 2;
      then b' - c' = b' -' c' by ARYTM_1:def 2;
      then not +(x1,z1) in REAL+ & not +(y1,z1) in [:{0},REAL+:]
                  by A56,A57,A62,ARYTM_0:5,XBOOLE_0:3;
-    hence a + c <= b + c by A2,XREAL_0:def 2;
+    hence a + c <= b + c by A2,Def2;
     end;
     suppose not c' <=' b';
      then A63:  +(y1,z1) = [0,c' -' b'] by A56,A57,ARYTM_1:def 2;
     then A64:   +(y1,z1) in [:{0},REAL+:] by Lm3,ZFMISC_1:106;
     c' -' b' <=' c' -' a' by A48,A49,A50,A51,A54,ARYTM_1:16;
-    hence a + c <= b + c by A2,A61,A62,A63,A64,XREAL_0:def 2;
+    hence a + c <= b + c by A2,A61,A62,A63,A64,Def2';
    end;
    end;
    hence thesis;
@@ -338,7 +279,7 @@ A73:  +(x1,z1) in [:{0},REAL+:] by A69,Lm3,ZFMISC_1:106;
     then b' - c'' = b' -' c'' by A72,ARYTM_1:def 2;
     then not +(x1,z1) in REAL+ & not +(y1,z1) in [:{0},REAL+:]
                  by A71,A73,ARYTM_0:5,XBOOLE_0:3;
-   hence a + c <= b + c by A2,XREAL_0:def 2;
+   hence a + c <= b + c by A2,Def2;
    end;
    suppose
        not c' <=' b';
@@ -347,7 +288,7 @@ then A75:  +(y1,z1) in [:{0},REAL+:] by Lm3,ZFMISC_1:106;
 A76:  c' -' b' <=' c' by ARYTM_1:11;
        c' <=' c' + a' by ARYTM_2:20;
     then c' -' b' <=' c' + a' by A76,ARYTM_1:3;
-   hence a + c <= b + c by A2,A69,A73,A74,A75,XREAL_0:def 2;
+   hence a + c <= b + c by A2,A69,A73,A74,A75,Def2';
   end;
   end;
  hence thesis;
@@ -359,7 +300,7 @@ A79: c in [:{0},REAL+:];
   consider a'',b'' being Element of REAL+ such that
 A80: a = [0,a''] and
 A81: b = [0,b''] and
-A82: b'' <=' a'' by A1,A77,A78,XREAL_0:def 2;
+A82: b'' <=' a'' by A1,A77,A78,Def2;
      not a in REAL+ & not c in REAL+ by A77,A79,ARYTM_0:5,XBOOLE_0:3;
   then consider a',c' being Element of REAL+ such that
 A83: a = [0,a'] and
@@ -376,7 +317,7 @@ A91: c' = c'' by A84,A87,ZFMISC_1:33;
 then A92: b' + c' <=' a' + c'' by A82,A89,A90,ARYTM_1:7;
 A93: +(x1,z1) in [:{0},REAL+:] by A85,Lm3,ZFMISC_1:106;
       +(y1,z1) in [:{0},REAL+:] by A88,Lm3,ZFMISC_1:106;
- hence a + c <= b + c by A2,A85,A88,A91,A92,A93,XREAL_0:def 2;
+ hence a + c <= b + c by A2,A85,A88,A91,A92,A93,Def2';
 end;
 end;
 
@@ -516,18 +457,18 @@ A2: 0 <= c;
   reconsider x1=a, y1=b, z1=c as Element of REAL by XREAL_0:def 1;
 A3: *(y1,z1) = b * c & *(x1,z1) = a * c by Lm10;
    not o in [:{0},REAL+:] by ARYTM_0:5,XBOOLE_0:3;
-then A4: c in REAL+ by A2,XREAL_0:def 2;
+then A4: c in REAL+ by A2,Def2;
 assume
 A5: not thesis;
  then A6: c <> 0;
- per cases by A1,XREAL_0:def 2;
+ per cases by A1,Def2;
  suppose that
 A7: a in REAL+ and
 A8: b in REAL+;
   consider a'',b'' being Element of REAL+ such that
 A9: a = a'' and
 A10: b = b'' and
-A11: a'' <=' b'' by A1,A7,A8,XREAL_0:def 2;
+A11: a'' <=' b'' by A1,A7,A8,Def2;
   consider a',c' being Element of REAL+ such that
 A12: a = a' and
 A13: c = c' and
@@ -537,7 +478,7 @@ A15: b = b' and
 A16: c = c'' and
 A17: *(y1,z1) = b' *' c'' by A4,A8,ARYTM_0:def 3;
       a' *' c' <=' b' *' c' by A9,A10,A11,A12,A15,ARYTM_1:8;
- hence contradiction by A3,A5,A13,A14,A16,A17,XREAL_0:def 2;
+ hence contradiction by A3,A5,A13,A14,A16,A17,Def2';
  end;
  suppose that
 A18: a in [:{0},REAL+:] and
@@ -553,7 +494,7 @@ A21: *(y1,z1) = b' *' c'' by A4,A19,ARYTM_0:def 3;
       *(x1,z1) in [:{0},REAL+:] by A20,Lm3,ZFMISC_1:106;
   then not *(x1,z1) in REAL+ & not *(y1,z1) in [:{0},REAL+:]
      by A21,ARYTM_0:5,XBOOLE_0:3;
- hence contradiction by A3,A5,XREAL_0:def 2;
+ hence contradiction by A3,A5,Def2;
  end;
  suppose that
 A22: a in [:{0},REAL+:] and
@@ -561,7 +502,7 @@ A23: b in [:{0},REAL+:];
   consider a'',b'' being Element of REAL+ such that
 A24: a = [0,a''] and
 A25: b = [0,b''] and
-A26: b'' <=' a'' by A1,A22,A23,XREAL_0:def 2;
+A26: b'' <=' a'' by A1,A22,A23,Def2;
   consider a',c' being Element of REAL+ such that
 A27: a = [0,a'] and
 A28: c = c' and
@@ -575,7 +516,7 @@ A34: b' = b'' by A25,A30,ZFMISC_1:33;
 A35: *(x1,z1) in [:{0},REAL+:] & *(y1,z1) in [:{0},REAL+:]
   by A29,A32,Lm3,ZFMISC_1:106;
       b' *' c' <=' a' *' c' by A26,A33,A34,ARYTM_1:8;
- hence contradiction by A3,A5,A28,A29,A31,A32,A35,XREAL_0:def 2;
+ hence contradiction by A3,A5,A28,A29,A31,A32,A35,Def2';
 end;
 end;
 

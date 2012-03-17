@@ -13,6 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
@@ -24,6 +25,7 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -53,31 +55,9 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="17"/>
-</Cluster>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="17"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="58">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="17"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
-</Cluster>
-</FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
@@ -99,6 +79,31 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
+<Adjective nr="22"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="17"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="17"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="60">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="17"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -115,7 +120,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="58">
+<Func kind="K" nr="59">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -124,6 +129,7 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -140,7 +146,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="58">
+<Func kind="K" nr="59">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -149,6 +155,7 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -165,6 +172,7 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
+<Adjective nr="22"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -182,6 +190,7 @@
 <Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="21" value="false"/>
+<Adjective nr="22"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -197,6 +206,7 @@
 <Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="21" value="false"/>
+<Adjective nr="22"/>
 </Cluster>
 </CCluster>
 </Registrations>

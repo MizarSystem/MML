@@ -18,20 +18,20 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="BINOP_1"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="ALGSTR_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="BINOP_1"/>
 </Signature>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="37"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -54,12 +54,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="32">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Adjective>
-<Adjective nr="75">
+<Adjective nr="72">
 <Func kind="K" nr="11">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -68,6 +63,11 @@
 <LocusVar nr="1"/>
 </Func>
 </Func>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="73">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -79,7 +79,7 @@
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="38"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -102,12 +102,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="33">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Adjective>
-<Adjective nr="75">
+<Adjective nr="72">
 <Func kind="K" nr="11">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -116,6 +111,11 @@
 <LocusVar nr="1"/>
 </Func>
 </Func>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="74">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -127,7 +127,7 @@
 <Typ kind="G" nr="5">
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="50"/>
+<Adjective nr="47"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -150,12 +150,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="32">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Adjective>
-<Adjective nr="75">
+<Adjective nr="72">
 <Func kind="K" nr="11">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -168,21 +163,26 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
+<Adjective nr="73">
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="37"/>
-<Adjective nr="39"/>
+<Adjective nr="34"/>
+<Adjective nr="36"/>
 </Cluster>
 <Typ kind="G" nr="3">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="64"/>
+<Adjective nr="61"/>
 </Cluster>
 </CCluster>
 </Registrations>

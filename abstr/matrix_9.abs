@@ -1,0 +1,362 @@
+:: On the Permanent of a Matrix
+::  by Ewa Romanowicz and Adam Grabowski
+:: 
+:: Received January 4, 2006
+:: Copyright (c) 2006 Association of Mizar Users
+
+environ
+
+ vocabularies VECTSP_1, RLVECT_1, MATRIX_1, FINSEQ_2, ARYTM_1, FINSEQ_1,
+      TREES_1, FUNCT_1, RELAT_1, BOOLE, GROUP_1, BINOP_1, SETWISEO, MATRIX_2,
+      FINSUB_1, FINSET_1, FUNCOP_1, MATRIX_3, MATRIX_9, FINSEQ_5, FUNCT_2,
+      SGRAPH1, CARD_3, FINSEQ_4, NAT_1, CALCUL_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, ENUMSET1, FINSET_1,
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2, BINOP_1,
+      FUNCOP_1, FINSOP_1, BINARITH, STRUCT_0, GROUP_1, VECTSP_1, RLVECT_1,
+      SETWISEO, GROUP_4, SETWOP_2, FINSUB_1, MATRIX_1, FINSEQ_4, FINSEQ_5,
+      MATRIX_2, MATRIX_3, XXREAL_0;
+ constructors SETWISEO, SETWOP_2, NAT_1, FINSOP_1, PARTFUN1, RELAT_2, MATRIX_3,
+      JORDAN3, FINSEQ_5, DOMAIN_1, FINSEQ_4, GROUP_4, FUNCOP_1, MATRIX_7,
+      BINARITH, ALGSTR_1, XXREAL_0;
+ registrations FINSUB_1, FINSET_1, RELSET_1, STRUCT_0, FVSUM_1, MATRIX_2,
+      FUNCT_2, PARTFUN1, XBOOLE_0, ORDINAL2, FINSEQ_5, FINSEQ_1, CHAIN_1,
+      INT_1, FINSEQ_6, FUNCOP_1, FINSEQ_2, VECTSP_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+ reserve x,y,z,x1,x2,y1,y2,z1,z2 for set,
+         i,j,k,l,n,m for Nat,
+         D for non empty set,
+         K for Field;
+
+theorem :: MATRIX_9:1
+  for a, A being set st a in A holds
+    {a} in Fin A;
+
+registration let n be Nat;
+  cluster non empty Element of Fin Permutations n;
+end;
+
+scheme :: MATRIX_9:sch 1
+ NonEmptyFiniteX
+  { n() -> Nat, A() -> non empty Element of Fin Permutations n(), P[set] } :
+    P[A()]
+  provided
+ for x being Element of Permutations n() st x in A() holds P[{x}] and
+ for x being Element of Permutations n(),
+        B being non empty Element of Fin Permutations n() st
+    x in A() & B c= A() & not x in B & P[B] holds P[B \/ {x}];
+
+registration let n;
+  cluster one-to-one FinSequence-like Function of Seg n, Seg n;
+end;
+
+registration let n;
+  cluster id Seg n -> FinSequence-like;
+end;
+
+theorem :: MATRIX_9:2
+  (Rev idseq 2).1 = 2 & (Rev idseq 2).2 = 1;
+
+theorem :: MATRIX_9:3
+  for f being one-to-one Function st
+    dom f = Seg 2 & rng f = Seg 2 holds
+      f = id Seg 2 or f = Rev id Seg 2;
+
+begin :: Permutations
+
+theorem :: MATRIX_9:4
+  Rev idseq n in Permutations n;
+
+theorem :: MATRIX_9:5
+  for f being FinSequence st
+    n <> 0 & f in Permutations n holds
+    Rev f in Permutations n;
+
+theorem :: MATRIX_9:6
+  Permutations 2 = { idseq 2, Rev idseq 2 };
+
+begin :: The Permanent of a Matrix
+
+definition let n,K;let M be Matrix of n,K;
+  func PPath_product M -> Function of Permutations n, the carrier of K means
+:: MATRIX_9:def 1
+ for p being Element of Permutations(n) holds
+    it.p = (the mult of K) $$ Path_matrix(p,M);
+end;
+
+definition let n, K; let M be Matrix of n,K;
+  func Per M -> Element of K equals
+:: MATRIX_9:def 2
+    (the add of K) $$ (FinOmega Permutations n, PPath_product M);
+end;
+
+ reserve a,b,c,d for Element of K;
+
+theorem :: MATRIX_9:7
+  Per <*<*a*>*> = a;
+
+theorem :: MATRIX_9:8
+  for K being Field, n being Nat st n >= 1 holds
+    Per (0.(K,n,n)) = 0.K;
+
+theorem :: MATRIX_9:9
+  for p being Element of Permutations 2 st p = idseq 2 holds
+    Path_matrix (p, (a,b)][(c,d)) = <* a,d *>;
+
+theorem :: MATRIX_9:10
+  for p being Element of Permutations 2 st p = Rev idseq 2 holds
+    Path_matrix (p, (a,b)][(c,d)) = <* b,c *>;
+
+theorem :: MATRIX_9:11
+  (the mult of K) $$ <* a,b *> = a * b;
+
+begin
+
+registration
+  cluster odd Permutation of Seg 2;
+end;
+
+registration let n be Nat;
+  cluster even Permutation of Seg n;
+end;
+
+theorem :: MATRIX_9:12
+  <*2,1*> is odd Permutation of Seg 2;
+
+theorem :: MATRIX_9:13
+  Det (a,b)][(c,d) = a * d - b * c;
+
+theorem :: MATRIX_9:14
+  Per (a,b)][(c,d) = a * d + b * c;
+
+theorem :: MATRIX_9:15
+  Rev idseq 3 = <*3,2,1*>;
+
+ reserve D for non empty set;
+
+theorem :: MATRIX_9:16
+  for x,y,z being Element of D
+  for f being FinSequence of D st f = <*x,y,z*> holds
+  Rev f = <*z,y,x*>;
+
+theorem :: MATRIX_9:17
+  for f, g being FinSequence st f ^ g in Permutations n holds
+    f ^ Rev g in Permutations n;
+
+theorem :: MATRIX_9:18
+  for f, g being FinSequence st f ^ g in Permutations n holds
+    g ^ f in Permutations n;
+
+theorem :: MATRIX_9:19
+  Permutations 3 =
+    {<*1,2,3*>,<*3,2,1*>,<*1,3,2*>,<*2,3,1*>,<*2,1,3*>,<*3,1,2*>};
+
+theorem :: MATRIX_9:20
+  for a,b,c,d,e,f,g,h,i being Element of K
+  for M being Matrix of 3,K st M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>
+  for p being Element of Permutations 3 st p = <*1,2,3*> holds
+  Path_matrix (p,M) = <* a,e,i *>;
+
+theorem :: MATRIX_9:21
+  for a,b,c,d,e,f,g,h,i being Element of K
+  for M being Matrix of 3,K st M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>
+  for p being Element of Permutations 3 st p = <*3,2,1*> holds
+  Path_matrix (p,M) = <* c,e,g *>;
+
+theorem :: MATRIX_9:22
+  for a,b,c,d,e,f,g,h,i being Element of K
+  for M being Matrix of 3,K st M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>
+  for p being Element of Permutations 3 st p = <*1,3,2*> holds
+  Path_matrix (p,M) = <* a,f,h *>;
+
+theorem :: MATRIX_9:23
+  for a,b,c,d,e,f,g,h,i being Element of K
+  for M being Matrix of 3,K st M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>
+  for p being Element of Permutations 3 st p = <*2,3,1*> holds
+  Path_matrix (p,M) = <* b,f,g *>;
+
+theorem :: MATRIX_9:24
+  for a,b,c,d,e,f,g,h,i being Element of K
+  for M being Matrix of 3,K st M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>
+  for p being Element of Permutations 3 st p = <*2,1,3*> holds
+  Path_matrix (p,M) = <* b,d,i *>;
+
+theorem :: MATRIX_9:25
+  for a,b,c,d,e,f,g,h,i being Element of K
+  for M being Matrix of 3,K st M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*>
+  for p being Element of Permutations 3 st p = <*3,1,2*> holds
+  Path_matrix (p,M) = <* c,d,h *>;
+
+theorem :: MATRIX_9:26
+  (the mult of K) $$ <* a,b,c *> = a * b * c;
+
+theorem :: MATRIX_9:27
+  <*1,3,2*> in Permutations 3 & <*2,3,1*> in Permutations 3 &
+  <*2,1,3*> in Permutations 3 & <*3,1,2*> in Permutations 3 &
+  <*1,2,3*> in Permutations 3 & <*3,2,1*> in Permutations 3;
+
+theorem :: MATRIX_9:28
+  <*2,3,1*>" = <*3,1,2*>;
+
+theorem :: MATRIX_9:29
+  for a being Element of Group_of_Perm 3 st
+    a = <*2,3,1*> holds a" = <*3,1,2*>;
+
+begin :: Transpositions
+
+theorem :: MATRIX_9:30
+  for p being Permutation of Seg 3 st p = <* 1,3,2 *> holds
+    p is_transposition;
+
+theorem :: MATRIX_9:31
+  for p being Permutation of Seg 3 st p = <* 2,1,3 *> holds
+    p is_transposition;
+
+theorem :: MATRIX_9:32
+  for p being Permutation of Seg 3 st p = <* 3,2,1 *> holds
+    p is_transposition;
+
+theorem :: MATRIX_9:33
+  for p being Permutation of Seg n st p = id Seg n holds
+    not p is_transposition;
+
+theorem :: MATRIX_9:34
+  for p being Permutation of Seg 3 st p = <* 3,1,2 *> holds
+    not p is_transposition;
+
+theorem :: MATRIX_9:35
+  for p being Permutation of Seg 3 st p = <* 2,3,1 *> holds
+    not p is_transposition;
+
+begin :: Corrollaries
+
+theorem :: MATRIX_9:36
+  for f being Permutation of Seg n holds
+    f is FinSequence of Seg n;
+
+theorem :: MATRIX_9:37
+  <*2,1,3*> * <*1,3,2*> = <*2,3,1*> & <*1,3,2*> * <*2,1,3*> = <*3,1,2*> &
+  <*2,1,3*> * <*3,2,1*> = <*3,1,2*> & <*3,2,1*> * <*2,1,3*> = <*2,3,1*> &
+  <*3,2,1*> * <*3,2,1*> = <*1,2,3*> & <*2,1,3*> * <*2,1,3*> = <*1,2,3*> &
+  <*1,3,2*> * <*1,3,2*> = <*1,2,3*> & <*1,3,2*> * <*2,3,1*> = <*3,2,1*> &
+  <*2,3,1*> * <*2,3,1*> = <*3,1,2*> & <*2,3,1*> * <*3,1,2*> = <*1,2,3*> &
+  <*3,1,2*> * <*2,3,1*> = <*1,2,3*> & <*3,1,2*> * <*3,1,2*> = <*2,3,1*> &
+  <*1,3,2*> * <*3,2,1*> = <*2,3,1*> & <*3,2,1*> * <*1,3,2*> = <*3,1,2*>;
+
+theorem :: MATRIX_9:38
+  for p being Permutation of Seg 3 st p is_transposition holds
+    p = <*2,1,3*> or p = <*1,3,2*> or p = <*3,2,1*>;
+
+theorem :: MATRIX_9:39
+  for f, g being Element of Permutations n holds
+    f * g in Permutations n;
+
+theorem :: MATRIX_9:40
+  for l being FinSequence of Group_of_Perm n st
+    (len l) mod 2 = 0 &
+       (for i being Nat st i in dom l
+       ex q being Element of Permutations n st
+       l.i = q & q is_transposition) holds
+    Product l is even Permutation of Seg n;
+
+theorem :: MATRIX_9:41
+  for l being FinSequence of Group_of_Perm 3 st
+    (len l) mod 2 = 0 &
+       (for i being Nat st i in dom l
+       ex q being Element of Permutations 3 st
+       l.i = q & q is_transposition) holds
+    Product l = <*1,2,3*> or Product l = <*2,3,1*> or Product l = <*3,1,2*>;
+
+registration
+  cluster odd Permutation of Seg 3;
+end;
+
+theorem :: MATRIX_9:42
+  <*3,2,1*> is odd Permutation of Seg 3;
+
+theorem :: MATRIX_9:43
+  <*2,1,3*> is odd Permutation of Seg 3;
+
+theorem :: MATRIX_9:44
+  <*1,3,2*> is odd Permutation of Seg 3;
+
+theorem :: MATRIX_9:45
+  for p being odd Permutation of Seg 3 holds
+    p = <*3,2,1*> or p = <*1,3,2*> or p = <*2,1,3*>;
+
+begin :: Determinant and Permanent
+
+theorem :: MATRIX_9:46
+  for a,b,c,d,e,f,g,h,i being Element of K
+  for M being Matrix of 3,K st M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*> holds
+  Det M = a*e*i - c*e*g - a*f*h + b*f*g - b*d*i + c*d*h;
+
+theorem :: MATRIX_9:47
+  for a,b,c,d,e,f,g,h,i being Element of K
+  for M being Matrix of 3,K st M = <*<*a,b,c*>,<*d,e,f*>,<*g,h,i*>*> holds
+    Per M = a*e*i + c*e*g + a*f*h + b*f*g + b*d*i + c*d*h;
+
+theorem :: MATRIX_9:48
+  for i,n being Nat
+  for p being Element of Permutations n st i in Seg n holds
+   ex k being Nat st k in Seg n & i = p.k;
+
+theorem :: MATRIX_9:49
+  for M being Matrix of n, K st
+  (ex i being Nat st i in Seg n &
+   for k being Nat st k in Seg n holds Col(M,i).k = 0.K) holds
+   for p being Element of Permutations n holds
+  ex l being Nat st l in Seg n & Path_matrix (p,M).l = 0.K;
+
+theorem :: MATRIX_9:50
+  for p being Element of Permutations n
+  for M being Matrix of n, K st
+    (ex i being Nat st i in Seg n &
+    for k being Nat st k in Seg n holds Col(M,i).k = 0.K)
+  holds (Path_product M).p = 0.K;
+
+theorem :: MATRIX_9:51
+  for M being Matrix of n, K st
+    (ex i being Nat st i in Seg n &
+    for k being Nat st k in Seg n holds Col(M,i).k = 0.K) holds
+      (the add of K) $$ (FinOmega Permutations n, Path_product M) = 0.K;
+
+theorem :: MATRIX_9:52
+  for p being Element of Permutations n
+  for M being Matrix of n, K st
+  (ex i being Nat st i in Seg n &
+  (for k being Nat st k in Seg n holds Col(M,i).k = 0.K)) holds
+    (PPath_product M).p = 0.K;
+
+theorem :: MATRIX_9:53
+  for M being Matrix of n, K st
+  (ex i being Nat st i in Seg n &
+    for k being Nat st k in Seg n holds Col(M,i).k = 0.K) holds
+      Det M = 0.K;
+
+theorem :: MATRIX_9:54
+  for M being Matrix of n, K st
+  (ex i being Nat st i in Seg n &
+    for k being Nat st k in Seg n holds Col(M,i).k = 0.K) holds
+      Per M = 0.K;
+
+begin :: Auxiliary Lemmas for Further Work
+
+theorem :: MATRIX_9:55
+  for M,N being Matrix of n, K st i in Seg n
+  for p being Element of Permutations n holds
+  ex k being Nat st k in Seg n & i = p.k &
+    Col(N,i)/.k = Path_matrix (p, N)/.k;
+
+theorem :: MATRIX_9:56
+  for a being Element of K
+  for M,N being Matrix of n, K st
+  (ex i being Nat st i in Seg n & (for k being Nat st
+    k in Seg n holds Col(M,i).k = a * Col(N,i)/.k) &
+  (for l being Nat st l <> i & l in Seg n holds Col(M,l) = Col(N,l)))
+  for p being Element of Permutations n holds
+  ex l being Nat st l in Seg n &
+    Path_matrix (p,M)/.l = a * (Path_matrix (p,N)/.l);

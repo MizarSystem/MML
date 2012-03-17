@@ -10,9 +10,9 @@ environ
       SETFAM_1, SUBSET_1, FINSUB_1, BOOLE, RELAT_1, FUNCOP_1, TARSKI, PROB_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSUB_1, RELAT_1, FUNCT_1,
       REAL_1, FUNCT_2, FUNCOP_1, ORDINAL1, CARD_3, NUMBERS, XCMPLX_0, XREAL_0,
-      NAT_1, COMPLEX1, SEQ_1, SEQ_2, SETFAM_1;
+      NAT_1, COMPLEX1, SEQ_1, SEQ_2, SETFAM_1, XXREAL_0;
  constructors ABSVALUE, SEQ_2, SETFAM_1, FINSUB_1, FUNCOP_1, XCMPLX_0,
-      MEMBERED, XBOOLE_0, COMPLEX1, CARD_3;
+      MEMBERED, XBOOLE_0, COMPLEX1, CARD_3, XXREAL_0;
  registrations FUNCT_1, XREAL_0, RELSET_1, SUBSET_1, FUNCOP_1, MEMBERED,
       ORDINAL2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -31,12 +31,6 @@ reserve f for Function;
 reserve m,n for Nat;
 reserve r,r1,r2 for real number;
 reserve seq for Real_Sequence;
-
-:::::::::::::::::::::::::::::::::::::::
-::  corrolaries from other articles  ::
-:::::::::::::::::::::::::::::::::::::::
-
-Lm1: for r,r2 st 0 <= r holds r2 - r <= r2 by XREAL_1:45;
 
 canceled 2;
 
@@ -179,15 +173,9 @@ end;
 
 theorem
      for A, B being set holds
-   (A \ B) misses B &
    (A in F & B in F implies (A \ B) \/ B in F)
   proof
    let A, B be set;
-   thus A \ B misses B
-      proof
-            x in A \ B implies not x in B by XBOOLE_0:def 4;
-         hence thesis by XBOOLE_0:3;
-      end;
      assume
   A1: A in F & B in F;
         A \/ B = (A \ B) \/ B by XBOOLE_1:39;
@@ -493,33 +481,44 @@ theorem Th30:
 
 definition let X,A1;
   attr A1 is non-increasing means
-   :Def6: for n,m st n <= m holds A1.m c= A1.n;
+:Def6: for n,m st n <= m holds A1.m c= A1.n;
   attr A1 is non-decreasing means
        for n,m st n <= m holds A1.n c= A1.m;
 end;
 
-definition let X be set;
-  mode SigmaField of X -> non empty Subset-Family of X means :Def8:
-  (for A1 being SetSequence of X st
-    (for n holds A1.n in it) holds Intersection A1 in it) &
-  (for A being Subset of X st A in it holds A` in it);
+definition let X be set, F be Subset-Family of X;
+ attr F is sigma-multiplicative means
+:Def8: for A1 being SetSequence of X st for n holds A1.n in F
+       holds Intersection A1 in F;
+end;
+
+registration let X be set;
+ cluster compl-closed sigma-multiplicative non empty Subset-Family of X;
   existence
   proof
-    reconsider IT = bool X as non empty Subset-Family of X by ZFMISC_1:def 1;
-    take IT;
-    thus thesis;
+    reconsider F = bool X as non empty Subset-Family of X by ZFMISC_1:def 1;
+    take F;
+    thus (for A being Subset of X st A in F holds A` in F) &
+     for A1 being SetSequence of X st for n holds A1.n in F
+       holds Intersection A1 in F;
+    thus F is non empty;
   end;
+end;
+
+definition let X be set;
+ mode SigmaField of X
+  is compl-closed sigma-multiplicative non empty Subset-Family of X;
 end;
 
 canceled;
 
-theorem Th32:
+theorem
   for S being non empty set holds
    S is SigmaField of X iff
     (S c= bool X) &
     (for A1 being SetSequence of X st
       (for n holds A1.n in S) holds Intersection A1 in S) &
-    (for A being Subset of X st A in S holds A` in S) by Def8;
+    (for A being Subset of X st A in S holds A` in S) by Def8,Def1;
 
 canceled 2;
 
@@ -527,21 +526,7 @@ theorem Th35:
   Y is SigmaField of X implies Y is Field_Subset of X
 proof assume
    A1: Y is SigmaField of X;
-    for A,B being Subset of X st A in Y & B in Y holds A /\ B in Y
-        proof let A,B be Subset of X such that
-       A2: A in Y & B in Y;
-        consider A1 such that
-       A3: (A1.0 = A & for n st n <> 0 holds A1.n = B) by Th22;
-       A4: Intersection A1 = A /\ B by A3,Th30;
-           for n holds A1.n in Y by A2,A3;
-          hence thesis by A1,A4,Def8;
-        end;
-   then A5: (for A,B being Subset of X holds
-    (Y c= bool X &
-    ((A in Y & B in Y) implies A /\ B in Y) &
-    (A in Y implies A` in Y))) by A1,Def8;
     reconsider Y' = Y as non empty Subset-Family of X by A1;
-A6: Y' is compl-closed by A5,Def1;
        Y is cap-closed
     proof let A,B be set; assume
     A7: A in Y & B in Y;
@@ -552,7 +537,7 @@ A6: Y' is compl-closed by A5,Def1;
            for n holds A1.n in Y by A7,A8;
         hence thesis by A1,A9,Def8;
     end;
-    hence thesis by A6;
+    hence thesis by A1;
 end;
 
 registration let X be set;
@@ -615,8 +600,8 @@ A1: (for n holds A1.n in Si) implies
    proof
     assume for n holds A1.n in Si;
     then Intersection A1 in Si by Def8;
-    then (Union Complement A1)` in Si;
-    then (Union Complement A1)`` in Si by Def8;
+:::    then (Union Complement A1)` in Si;
+    then (Union Complement A1)`` in Si by Def1;
     hence thesis;
    end;
 A2: (for n holds A1.n in Si) implies
@@ -626,7 +611,7 @@ A2: (for n holds A1.n in Si) implies
        for n holds (Complement A1).n in Si
     proof let n;
          A1.n in Si by A3;
-      then (A1.n)` in Si by Def8;
+      then (A1.n)` in Si by Def1;
       hence thesis by Def4;
     end; hence thesis;
    end;
@@ -680,7 +665,7 @@ theorem
     for A being Event of Si holds A` is Event of Si
   proof let A be Event of Si;
      A in Si by Def10;
-  then A` in Si by Def8;
+  then A` in Si by Def1;
   hence thesis by Def10;
   end;
 
@@ -1076,7 +1061,7 @@ theorem
   proof
  A1: 0 <= P.(A /\ B) by Def13;
       P.(A \/ B) = P.A + P.B - P.(A /\ B) by Th74;
-   hence thesis by A1,Lm1;
+   hence thesis by A1,XREAL_1:45;
   end;
 
 ::  definition of sigma-field generated by families
@@ -1091,7 +1076,7 @@ Th76: bool Omega is SigmaField of Omega
         (Y c= bool Omega) &
      (for BSeq st (for n holds BSeq.n in Y) holds Intersection BSeq in Y) &
      (for E st E in Y holds E` in Y);
-   hence thesis by Th32;
+   hence thesis by Def8,Def1;
   end;
 
 Lm3: for X being Subset-Family of Omega ex Y being SigmaField of Omega
@@ -1106,12 +1091,10 @@ Lm3: for X being Subset-Family of Omega ex Y being SigmaField of Omega
            X1 is SigmaField of Omega by Th76;
         hence thesis;
        end;
-  then A2: Y c= bool Omega by SETFAM_1:4;
-         now let Z; assume Z in V;
+A3:   now let Z; assume Z in V;
        then ex S st Z = S & X c= S & S is SigmaField of Omega;
        hence {} in Z by Th10;
       end;
-      then A3: {} in Y by A1,SETFAM_1:def 1;
   A4: for BSeq st (for n holds BSeq.n in Y) holds Intersection BSeq in Y
       proof let BSeq such that A5: for n holds BSeq.n in Y;
           now let Z; assume A6: Z in V;
@@ -1128,11 +1111,12 @@ Lm3: for X being Subset-Family of Omega ex Y being SigmaField of Omega
           now let Z; assume A9: Z in V;
        then A10: E in Z by A8,SETFAM_1:def 1;
           ex S st Z = S & X c= S & S is SigmaField of Omega by A9;
-       hence E` in Z by A10,Def8;
+       hence E` in Z by A10,Def1;
        end;
        hence thesis by A1,SETFAM_1:def 1;
       end;
-    then reconsider Y as SigmaField of Omega by A2,A3,A4,Th32;
+    then reconsider Y as SigmaField of Omega
+                      by A1,SETFAM_1:4,def 1,A3,A4,Def8,Def1;
     take Y;
 A11:       now let Z; assume Z in V;
        then ex S st Z = S & X c= S & S is SigmaField of Omega;

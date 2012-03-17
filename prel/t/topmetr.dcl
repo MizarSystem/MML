@@ -26,6 +26,7 @@
 <ArticleID name="CONNSP_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="BORSUK_1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="TOPMETR"/>
 </Signature>
 <RCluster>
@@ -98,7 +99,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="161">
+<Func kind="K" nr="164">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -113,7 +114,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="163"/>
+<Func kind="K" nr="166"/>
 <Cluster>
 <Adjective nr="21" value="false"/>
 <Adjective nr="25"/>
@@ -131,7 +132,7 @@
 </Cluster>
 <LocusVar nr="1"/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="163"/>
+<Func kind="K" nr="166"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="1">
@@ -145,6 +146,7 @@
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="30"/>
+<Adjective nr="63"/>
 </Cluster>
 </FCluster>
 </Registrations>

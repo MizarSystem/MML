@@ -17,8 +17,8 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="BINOP_2"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -44,7 +44,7 @@
 </Pred>
 <Pred kind="R" nr="12">
 <Var nr="1"/>
-<Func kind="K" nr="90">
+<Func kind="K" nr="91">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -81,7 +81,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="12">
-<Func kind="K" nr="90">
+<Func kind="K" nr="91">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
@@ -96,13 +96,13 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="128">
+<Func kind="K" nr="129">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="20">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="128">
+<Func kind="K" nr="129">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

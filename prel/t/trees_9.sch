@@ -13,7 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -42,7 +42,7 @@
 <Func kind="F" nr="2"/>
 </Pred>
 <Pred kind="R" nr="12">
-<Func kind="K" nr="60">
+<Func kind="K" nr="61">
 <Func kind="F" nr="2"/>
 </Func>
 <Var nr="1"/>
@@ -53,7 +53,7 @@
 <And>
 <Not>
 <Pred kind="R" nr="12">
-<Func kind="K" nr="60">
+<Func kind="K" nr="61">
 <Func kind="F" nr="2"/>
 </Func>
 <Var nr="1"/>

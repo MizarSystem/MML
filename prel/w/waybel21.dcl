@@ -42,13 +42,13 @@
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="EQREL_1"/>
 <ArticleID name="YELLOW_3"/>
 <ArticleID name="WAYBEL_2"/>
 <ArticleID name="COMPTS_1"/>
 <ArticleID name="YELLOW_6"/>
 <ArticleID name="WAYBEL_9"/>
 <ArticleID name="YELLOW_9"/>
+<ArticleID name="EQREL_1"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
@@ -152,7 +152,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="396">
+<Func kind="K" nr="389">
 <LocusVar nr="1"/>
 <Func kind="K" nr="51">
 <LocusVar nr="1"/>
@@ -199,7 +199,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="396">
+<Func kind="K" nr="389">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -260,7 +260,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="393">
+<Func kind="K" nr="386">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

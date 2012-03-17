@@ -11,17 +11,14 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="SUPINF_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FINSUB_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
-<ArticleID name="MEASURE1"/>
 <ArticleID name="PROB_2"/>
 </Signature>
 <RCluster>
@@ -32,10 +29,10 @@
 <Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="40">
+<Adjective nr="30">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="43">
+<Adjective nr="33">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -46,16 +43,16 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="10">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="24"/>
-<Adjective nr="27"/>
-<Adjective nr="44"/>
+<Adjective nr="18"/>
+<Adjective nr="21"/>
+<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 </Registrations>

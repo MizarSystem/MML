@@ -58,17 +58,6 @@
 </Cluster>
 </RCluster>
 <RCluster>
-<ArgTypes/>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="19"/>
-<Adjective nr="29"/>
-</Cluster>
-</RCluster>
-<RCluster>
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -280,7 +269,7 @@
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="299">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -306,7 +295,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="184">
+<Func kind="K" nr="185">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

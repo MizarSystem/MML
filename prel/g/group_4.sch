@@ -47,7 +47,7 @@
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="133">
+<Func kind="K" nr="134">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -122,7 +122,7 @@
 <And>
 <Pred kind="R" nr="3">
 <Var nr="1"/>
-<Func kind="K" nr="122">
+<Func kind="K" nr="123">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

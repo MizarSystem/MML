@@ -52,7 +52,7 @@
 <Func kind="K" nr="30">
 <Func kind="K" nr="1"/>
 </Func>
-<Func kind="K" nr="84"/>
+<Func kind="K" nr="85"/>
 </Func>
 <Cluster>
 <Adjective nr="29" value="false"/>
@@ -65,7 +65,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="94"/>
+<Func kind="K" nr="95"/>
 <Cluster>
 <Adjective nr="29" value="false"/>
 <Adjective nr="30"/>
@@ -73,7 +73,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="94"/>
+<Func kind="K" nr="95"/>
 <Cluster>
 <Adjective nr="29" value="false"/>
 <Adjective nr="30"/>

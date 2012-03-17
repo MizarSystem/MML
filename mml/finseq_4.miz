@@ -10,8 +10,9 @@ environ
       ARYTM_1, INT_1, RLSUB_2, TARSKI, FINSEQ_4, ORDINAL2, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, ORDINAL2, RELAT_1,
       NUMBERS, XCMPLX_0, XREAL_0, FINSEQ_1, FUNCT_1, PARTFUN1, CARD_1, FUNCT_2,
-      FINSET_1, INT_1, NAT_1, FINSEQ_3;
- constructors DOMAIN_1, WELLORD2, FUNCT_2, INT_1, NAT_1, FINSEQ_3, MEMBERED;
+      FINSET_1, INT_1, NAT_1, FINSEQ_3, XXREAL_0;
+ constructors DOMAIN_1, WELLORD2, FUNCT_2, INT_1, NAT_1, FINSEQ_3, MEMBERED,
+ XXREAL_0;
  registrations FINSEQ_1, FUNCT_1, INT_1, FINSET_1, RELSET_1, MEMBERED, ARYTM_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions FUNCT_1, TARSKI, XBOOLE_0;
@@ -712,7 +713,7 @@ theorem Th49:
 FUNCT_1:def 5;
      A6: dom r = Seg n by A1,A3,Th47;
     then reconsider y as Nat by A4;
-A7:  dom r c= dom p by FUNCT_1:76;
+A7:  dom r c= dom p by RELAT_1:89,99;
         y <= n by A4,A6,FINSEQ_1:3;
      then y + 1 <= x..p & y < y + 1 by XREAL_1:31,XREAL_1:21;
      then y < x..p by XREAL_1:2;
@@ -732,7 +733,7 @@ theorem
     x in rng p implies rng(p -| x) c= rng p
   proof assume x in rng p;
     then ex n st n = x..p - 1 & p | Seg n = p -| x by Def6;
-   hence thesis by FUNCT_1:76;
+   hence thesis by RELAT_1:89,99;
   end;
 
 theorem
@@ -1340,7 +1341,7 @@ then A2: P[0];
                reconsider r = q | Seg k as FinSequence by FINSEQ_1:19;
                 A17: len r = k by A4,FINSEQ_3:59;
                 then A18: dom r = Seg k & rng r c= rng q
-                                                by FINSEQ_1:def 3,FUNCT_1:76;
+                                     by FINSEQ_1:def 3,RELAT_1:89,99;
                 A19: rng q c= Seg k
                  proof let x;
                    assume x in rng q;
@@ -1357,7 +1358,7 @@ then A2: P[0];
                 then consider x such that A23: x in dom r and
                 A24: r.x = q.(k + 1) by A18,A19,A21,FUNCT_1:def 5;
                reconsider n = x as Nat by A23;
-A25:           dom r c= dom q by FUNCT_1:76;
+A25:           dom r c= dom q by RELAT_1:89,99;
                 A26: r.x = q.x by A18,A23,FUNCT_1:72;
                    n <= k & k < k + 1 by A18,A23,FINSEQ_1:3,XREAL_1:31;
              hence thesis by A6,A7,A22,A23,A24,A25,A26,FUNCT_1:def 8;
@@ -1496,11 +1497,11 @@ then A7:     dom p,dom q are_equipotent &
                    .= q * q" * (f * p) by RELAT_1:55
                    .= id(rng q) * (f * p) by A6,FUNCT_1:61
                    .= id(rng q) * f * p by RELAT_1:55
-                   .= f * p by A2,A5,FUNCT_1:42;
+                   .= f * p by A2,A5,RELAT_1:78,80;
            then A13: q * g * p" = f * (p * p") by RELAT_1:55
                         .= f * id(rng p) by A4,FUNCT_1:61
                         .= f * id(dom f) by A3,A9,FUNCT_2:def 1
-                        .= f by FUNCT_1:42;
+                        .= f by RELAT_1:78,80;
               p" is one-to-one & q * g is one-to-one
            by A4,A6,A12,FUNCT_1:46,62;
         hence thesis by A13,FUNCT_1:46;
@@ -1509,7 +1510,7 @@ then A7:     dom p,dom q are_equipotent &
      hence thesis;
     end;
 
-theorem
+theorem Th77:
     p is one-to-one iff card(rng p) = len p
   proof
    thus p is one-to-one implies card(rng p) = len p
@@ -1568,7 +1569,7 @@ is finite
             then 1 <= 0 by A1,A9,CARD_1:78,79;
           hence contradiction;
          end;
-        hence thesis by A9,PARTFUN1:10,57;
+        hence thesis by A9,RELAT_1:60,PARTFUN1:57;
        end;
        suppose A11: B <> {};
             dom(q") = rng q by A6,FUNCT_1:55;
@@ -1714,4 +1715,36 @@ A4: Seg n = dom f /\ Seg n by A3,XBOOLE_1:28
       .= f.m by A1,A2,A4,FUNCT_1:68
       .= f/.m by A1,A3,Def4;
  end;
+
+:: from VECTSP_9, 2006.01.06, A.T.
+
+theorem
+  for X being finite set st n <= card X
+    holds
+   ex A being finite Subset of X st Card A = n
+proof
+  let X be finite set such that
+A1: n <= card X;
+  consider p being FinSequence such that
+A2: rng p = X and
+A3: p is one-to-one by Th73;
+A4: n <= len p by A1,A2,A3,Th77;
+  reconsider q = p|Seg n as FinSequence by FINSEQ_1:19;
+A5: len q = n by A4,FINSEQ_1:21;
+A6: q is one-to-one by A3,FUNCT_1:84;
+  reconsider A = rng q as Subset of X by A2,RELAT_1:89,99;
+      Card A = n & A is finite by A5,A6,Th77;
+  hence thesis;
+end;
+
+reserve f for Function;
+
+theorem
+  f is one-to-one & x in rng f implies Card(f"{x}) = 1
+proof
+ assume f is one-to-one & x in rng f;
+  then f just_once_values x by Th10;
+  then ex B being finite set st B = f"{x} & card B = 1 by Def2;
+ hence Card(f"{x}) = 1;
+end;
 

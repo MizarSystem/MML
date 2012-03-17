@@ -49,6 +49,7 @@
 <ArticleID name="CIRCCOMB"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="FACIRC_1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="FACIRC_2"/>
 </Signature>
 <RCluster>
@@ -70,7 +71,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="429">
+<Func kind="K" nr="432">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -107,6 +108,7 @@
 <Adjective nr="120" value="false"/>
 <Adjective nr="121" value="false"/>
 <Adjective nr="122"/>
+<Adjective nr="123"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -151,7 +153,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="434">
+<Func kind="K" nr="437">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

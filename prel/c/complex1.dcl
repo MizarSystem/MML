@@ -14,6 +14,7 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="COMPLEX1"/>
 </Signature>
 <FCluster>
@@ -24,12 +25,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="64">
+<Func kind="K" nr="67">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -40,17 +42,18 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="65">
+<Func kind="K" nr="68">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="68"/>
+<Func kind="K" nr="71"/>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="18"/>
@@ -69,12 +72,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="79">
+<Func kind="K" nr="82">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <CCluster>

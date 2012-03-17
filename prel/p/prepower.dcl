@@ -26,6 +26,7 @@
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="PREPOWER"/>
 </Signature>
 <RCluster>
@@ -43,7 +44,7 @@
 <Func kind="K" nr="52"/>
 </Adjective>
 <Adjective nr="30"/>
-<Adjective nr="39"/>
+<Adjective nr="40"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -54,7 +55,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="155">
+<Func kind="K" nr="156">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -64,6 +65,7 @@
 <Adjective nr="21" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="32"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -79,13 +81,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="180">
+<Func kind="K" nr="183">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -101,13 +104,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="182">
+<Func kind="K" nr="185">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -8,18 +8,19 @@ environ
 
  vocabularies RELAT_1, CARD_1, FUNCT_1, BOOLE, TARSKI, FUNCT_2, FINSET_1,
       FINSEQ_1, ARYTM_1, SQUARE_1, RLVECT_1, PROB_1, ARYTM_3, VECTSP_1,
-      RFINSEQ;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, RELAT_1, FUNCT_1,
+      RFINSEQ, FINSEQ_4;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
       FUNCT_2, FINSEQ_1, CARD_1, REAL_1, NAT_1, SQUARE_1, SEQ_1, FINSEQ_4,
-      FINSET_1, RVSUM_1;
+      FINSET_1, RVSUM_1, XXREAL_0;
  constructors WELLORD2, FINSEQOP, REAL_1, NAT_1, SQUARE_1, FINSEQ_4, SEQ_1,
-      PARTFUN1, BINOP_2, RVSUM_1;
- registrations FINSET_1, FUNCT_1, RELSET_1, FINSEQ_1, FUNCT_2, NAT_1, MEMBERED;
+      PARTFUN1, BINOP_2, RVSUM_1, XXREAL_0;
+ registrations FINSET_1, FUNCT_1, RELSET_1, FINSEQ_1, FUNCT_2, NAT_1, MEMBERED,
+ XREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems TARSKI, FINSEQ_1, FINSEQ_2, FINSEQ_3, REAL_1, NAT_1, FUNCT_1,
       FUNCT_2, FINSET_1, CARD_1, CARD_2, RVSUM_1, WELLORD2, ZFMISC_1, RELAT_1,
-      RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1;
+      RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, FINSEQ_4;
  schemes NAT_1, FINSEQ_1, ZFREFLE1, WELLORD2;
 
 begin
@@ -1366,7 +1367,7 @@ Lm7: for n st P[n] holds P[n+1]
   A4: fn = R|n by FINSEQ_1:def 15;
   A5: dom fn = dom R /\ Seg n by FUNCT_1:68;
   reconsider fn as FinSequence by FINSEQ_1:19;
-     rng fn c= rng R & rng R c= REAL by FINSEQ_1:def 4,FUNCT_1:76;
+     rng fn c= rng R & rng R c= REAL by FINSEQ_1:def 4,RELAT_1:89,99;
   then rng fn c= REAL by XBOOLE_1:1;
   then reconsider fn as FinSequence of REAL by FINSEQ_1:def 4;
      n<=n+1 by NAT_1:29;
@@ -1649,3 +1650,33 @@ theorem
   then (0*R).i in {0} by TARSKI:def 1;
   hence thesis by A1,A2,A3,FUNCT_1:def 13;
  end;
+
+begin :: Addenda
+
+:: from VECTSP_9, 2006.01.06, A.T.
+
+reserve f, g for Function;
+
+theorem
+  for f, g st rng f = rng g & f is one-to-one & g is one-to-one
+    holds
+   f, g are_fiberwise_equipotent
+proof
+  let f, g be Function such that
+A1: rng f = rng g and
+A2: f is one-to-one and
+A3: g is one-to-one;
+    let x;
+    per cases;
+
+    suppose x in rng f;
+    then Card(f"{x}) = 1 & Card(g"{x}) = 1 by A1,A2,A3,FINSEQ_4:88;
+    hence thesis;
+
+    end;
+    suppose not x in rng f;
+    then Card(f"{x}) = 0 & Card(g"{x}) = 0 by A1,CARD_1:78,FUNCT_1:142;
+    hence thesis;
+  end;
+end;
+

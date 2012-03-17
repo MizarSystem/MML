@@ -88,7 +88,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="173">
+<Func kind="K" nr="174">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>

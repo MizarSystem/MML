@@ -13,7 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
-<ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -89,7 +89,7 @@
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1">
-<Func kind="K" nr="64">
+<Func kind="K" nr="65">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

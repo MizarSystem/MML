@@ -12,7 +12,6 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="SUPINF_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="RELSET_1"/>
@@ -25,12 +24,12 @@
 <ArticleID name="NEWTON"/>
 <ArticleID name="CARD_4"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FINSUB_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
-<ArticleID name="MEASURE1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="MEASURE2"/>
+<ArticleID name="FINSUB_1"/>
+<ArticleID name="MEASURE1"/>
 <ArticleID name="MEASURE3"/>
 </Signature>
 <FCluster>
@@ -41,10 +40,10 @@
 <Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="44">
+<Adjective nr="34">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="47">
+<Adjective nr="37">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -54,25 +53,28 @@
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="20">
+<Typ kind="M" nr="17">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="208">
+<Func kind="K" nr="195">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="44">
+<Adjective nr="34">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="47">
+<Adjective nr="37">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="42"/>
+<Adjective nr="43"/>
+<Adjective nr="46">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

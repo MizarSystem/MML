@@ -7,8 +7,8 @@
 environ
 
  vocabularies BOOLE, TARSKI, ZFMISC_1;
- notations TARSKI, XBOOLE_0;
- constructors TARSKI, XBOOLE_0;
+ notations TARSKI, XBOOLE_0, ENUMSET1;
+ constructors TARSKI, XBOOLE_0, ENUMSET1;
  registrations XBOOLE_0;
  definitions TARSKI, XBOOLE_0;
  theorems TARSKI, XBOOLE_0, ENUMSET1, XBOOLE_1;
@@ -1881,3 +1881,84 @@ proof
   then (X \/ {x}) \ {x} = X \ {x} & X \ {x} = X by XBOOLE_1:40,Th65;
   hence thesis;
 end;
+
+:: from WAYBEL18, 2006.01.06, A.T.
+
+theorem
+ for x,y,z,Z being set holds
+  Z c= {x,y,z} iff Z = {} or Z = {x} or Z = {y} or Z = {z} or Z = {x,y} or
+                   Z = {y,z} or Z = {x,z} or Z = {x,y,z}
+ proof
+  let x,y,z,Z be set; hereby assume that
+ A1: Z c= {x,y,z} and A2: Z <> {} and A3: Z <> {x} and A4: Z <> {y} and
+ A5: Z <> {z} and A6: Z <> {x,y} and A7: Z <> {y,z} and A8: Z <> {x,z};
+         {x,y,z} c= Z
+     proof
+      let a be set; assume
+   A9: a in {x,y,z};
+   A10:  now assume not x in Z;
+     then A11:  Z c= {x,y,z} \ {x} by A1,Lm3;
+               {x,y,z} \ {x} = ({x} \/ {y,z}) \ {x} by ENUMSET1:42
+           .= {y,z} \ {x} by XBOOLE_1:40;
+          then {x,y,z} \ {x} c= {y,z} by XBOOLE_1:36;
+          then Z c= {y,z} by A11,XBOOLE_1:1;
+         hence contradiction by A2,A4,A5,A7,Lm15;
+        end;
+   A12:  now assume not y in Z;
+     then A13:  Z c= {x,y,z} \ {y} by A1,Lm3;
+               {x,y,z} \ {y} = ({x,y} \/ {z}) \ {y} by ENUMSET1:43
+           .= ({x} \/ {y} \/ {z}) \ {y} by ENUMSET1:41
+           .= ({x} \/ {z} \/ {y}) \ {y} by XBOOLE_1:4
+           .= ({x,z} \/ {y}) \ {y} by ENUMSET1:41
+           .= {x,z} \ {y} by XBOOLE_1:40;
+          then {x,y,z} \ {y} c= {x,z} by XBOOLE_1:36;
+          then Z c= {x,z} by A13,XBOOLE_1:1;
+         hence contradiction by A2,A3,A5,A8,Lm15;
+        end;
+             now assume not z in Z;
+     then A14:  Z c= {x,y,z} \ {z} by A1,Lm3;
+               {x,y,z} \ {z} = ({x,y} \/ {z}) \ {z} by ENUMSET1:43
+           .= {x,y} \ {z} by XBOOLE_1:40;
+          then {x,y,z} \ {z} c= {x,y} by XBOOLE_1:36;
+          then Z c= {x,y} by A14,XBOOLE_1:1;
+         hence contradiction by A2,A3,A4,A6,Lm15;
+        end;
+       hence thesis by A9,A10,A12,ENUMSET1:def 1;
+     end;
+    hence Z = {x,y,z} by A1,XBOOLE_0:def 10;
+   end;
+   assume A15: Z = {} or Z = {x} or Z = {y} or Z = {z} or Z = {x,y} or
+             Z = {y,z} or Z = {x,z} or Z = {x,y,z};
+   per cases by A15;
+    suppose Z = {}; hence Z c= {x,y,z} by XBOOLE_1:2;
+    end;
+    suppose Z = {x}; then Z c= {x} \/ {y,z} by XBOOLE_1:7;
+     hence Z c= {x,y,z} by ENUMSET1:42;
+    end;
+    suppose Z = {y}; then A16: Z c= {x,y} by Th12;
+          {x,y} c= {x,y} \/ {z} by XBOOLE_1:7; then {x,y} c= {x,y,z} by
+ENUMSET1:43
+;
+     hence Z c= {x,y,z} by A16,XBOOLE_1:1;
+    end;
+    suppose Z = {z}; then Z c= {x,y} \/ {z} by XBOOLE_1:7;
+     hence Z c= {x,y,z} by ENUMSET1:43;
+    end;
+    suppose Z = {x,y}; then Z c= {x,y} \/ {z} by XBOOLE_1:7;
+     hence Z c= {x,y,z} by ENUMSET1:43;
+    end;
+    suppose Z = {y,z}; then Z c= {x} \/ {y,z} by XBOOLE_1:7;
+     hence Z c= {x,y,z} by ENUMSET1:42;
+    end;
+    suppose Z = {x,z}; then A17: Z c= {x,z} \/ {y} by XBOOLE_1:7
+;    {x,z} \/ {y} =
+     {x} \/ {z} \/ {y} by ENUMSET1:41 .=
+     {x} \/ ({y} \/ {z}) by XBOOLE_1:4 .= {x} \/ {y,z} by ENUMSET1:41;
+     hence Z c= {x,y,z} by A17,ENUMSET1:42;
+    end;
+    suppose Z = {x,y,z}; hence Z c= {x,y,z};
+ end;
+ end;
+
+
+

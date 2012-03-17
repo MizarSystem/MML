@@ -8,9 +8,9 @@ environ
 
  vocabularies RLVECT_1, ARYTM_1, RELAT_1, ANALOAF, DIRAF, SYMSP_1, REALSET1,
       INCSP_1, AFF_1, ANALMETR;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, DOMAIN_1, REAL_1,
-      STRUCT_0, DIRAF, RELSET_1, RLVECT_1, AFF_1, ANALOAF, REALSET2;
- constructors DOMAIN_1, REAL_1, AFF_1, MEMBERED;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, REAL_1,
+      STRUCT_0, DIRAF, RELSET_1, RLVECT_1, AFF_1, ANALOAF, REALSET2, XXREAL_0;
+ constructors DOMAIN_1, REAL_1, AFF_1, MEMBERED, XXREAL_0;
  registrations DIRAF, ANALOAF, RELSET_1, STRUCT_0, SUBSET_1, XREAL_0, MEMBERED;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions STRUCT_0, RLVECT_1;
@@ -433,7 +433,7 @@ end;
 reserve POS for non empty ParOrtStr;
 
 definition let POS; let a,b,c,d be Element of POS;
- pred a,b // c,d means :Def5: [[a,b],[c,d]] in the CONGR of POS;
+ canceled;
  pred a,b _|_ c,d means :Def6: [[a,b],[c,d]] in the orthogonality of POS;
 end;
 
@@ -503,13 +503,13 @@ theorem Th32: p=u & q=v & p1=u1 & q1=v1 implies
     (p,q // p1,q1 iff (ex a,b st a*(v-u) = b*(v1-u1) & (a<>0 or b<>0)))
  proof assume that A1: p=u & q=v & p1=u1 & q1=v1;
  hereby assume p,q // p1,q1;
- then [[p,q],[p1,q1]] in the CONGR of AMSpace(V,w,y) by Def5;
+ then [[p,q],[p1,q1]] in the CONGR of AMSpace(V,w,y) by ANALOAF:def 2;
  then [[u,v],[u1,v1]] in lambda(DirPar(V)) by A1;
  hence ex a,b st a*(v-u) = b*(v1-u1) & (a<>0 or b<>0) by Th19; end;
  given a,b such that A2: a*(v-u) = b*(v1-u1) & (a<>0 or b<>0);
     [[u,v],[u1,v1]] in lambda(DirPar(V)) by A2,Th19;
  then [[p,q],[p1,q1]] in the CONGR of AMSpace(V,w,y) by A1;
- hence p,q // p1,q1 by Def5;
+ hence p,q // p1,q1 by ANALOAF:def 2;
 end;
 
 theorem Th33: p,q _|_ p1,q1 implies p1,q1 _|_ p,q
@@ -779,11 +779,11 @@ proof let a,b,c,d be Element of POS, a',b',c',d' be Element
  of the carrier of Af(POS) such that
  A1: a=a' & b=b' & c = c' & d=d'; set AF = Af(POS);
  hereby assume a,b // c,d; then [[a',b'],[c',d']] in the CONGR of AF by A1,
-Def5;
+ANALOAF:def 2;
  hence a',b' // c',d' by ANALOAF:def 2; end;
  assume a',b' // c',d';
 then [[a,b],[c,d]] in the CONGR of POS by A1,ANALOAF:def 2;
- hence a,b // c,d by Def5; end;
+ hence a,b // c,d by ANALOAF:def 2; end;
 
 Lm12: for POS being OrtAfSp holds Af(POS) is AffinSpace by Def9;
 
@@ -1278,18 +1278,26 @@ that
 ; then p,q _|_ b,a by Def9; then b,a _|_ p,q by Def9; hence thesis
  by A1,Def14; end;
 
-theorem Th68:
-K // M implies M // K proof assume K // M; then consider a,b,c,d such that
+definition let POS; let K,M be Subset of POS;
+ redefine pred K // M;
+ symmetry
+ proof let K,M be Subset of POS;
+  assume K // M; then consider a,b,c,d such that
 A1: a<>b & c <>d & K = Line(a,b) & M = Line(c,d) and A2: a,b // c,d by Def16;
 reconsider a'=a,b'=b,c'=c,d'=d as Element of Af(POS);
-   a',b' // c',d' by A2,Th48; then c',d' // a',b' by AFF_1:13; then c,d // a,
-b
-by Th48; hence thesis by A1,Def16; end;
+   a',b' // c',d' by A2,Th48; then c',d' // a',b' by AFF_1:13;
+   then c,d // a,b by Th48;
+  hence thesis by A1,Def16;
+end;
+end;
+
+canceled;
 
 theorem Th69:
-r,s _|_ K & (K // M or M // K) implies r,s _|_ M proof assume that A1: r,s _|_
- K and
- A2: K // M or M // K; A3: K // M by A2,Th68; consider p,q such that
+r,s _|_ K & K // M implies r,s _|_ M
+proof assume that A1: r,s _|_ K and
+A2: K // M;
+ A3: K // M by A2; consider p,q such that
  A4: p<>q & K = Line(p,q) & r,s _|_ p,q by A1,Def14; consider a,b,c,d such
  that A5: a<>b & c <>d and A6: K = Line(a,b) and A7: M = Line(c,d) & a,b // c,d
  by A3,Def16; reconsider p'=p,q'=q,a'=a,b'=b,c'=c,d'=d as Element of the
@@ -1300,19 +1308,10 @@ r,s _|_ K & (K // M or M // K) implies r,s _|_ M proof assume that A1: r,s _|_
  by A7,Th48; then p',q' // c',d' by A5,A9,AFF_1:14;
  then A10: p,q // c,d by Th48;
     p,q _|_ r,s by A4,Def9; then r,s _|_ c,d by A4,A10,Def9;
- hence thesis by A5,A7,Def14; end;
-
-theorem Th70:
-K _|_ M implies M _|_ K proof assume K _|_ M; then consider a,b,c,d such that
- A1: a<>b & c <>d & K = Line(a,b) & M = Line(c,d) and A2: a,b _|_ c,d by Th63;
-    c,d _|_ a,b by A2,Def9; hence thesis by A1,Th63; end;
-
-definition let POS be OrtAfSp; let K,M be Subset of POS;
- redefine pred K // M;
- symmetry by Th68;
- redefine pred K _|_ M;
- symmetry by Th70;
+ hence thesis by A5,A7,Def14;
 end;
+
+canceled;
 
 theorem Th71:
 a in K & b in K & a,b _|_ K implies a=b proof assume that A1: a in K & b in
@@ -1325,25 +1324,34 @@ a in K & b in K & a,b _|_ K implies a=b proof assume that A1: a in K & b in
  then p',q' // a',b' by AFF_1:19; then A4: p,q // a,b by Th48;  p,q _|_ a,b
  by A3,Def9; then a,b _|_ a,b by A3,A4,Def9; hence thesis by Def9; end;
 
-theorem Th72:
-not K _|_ K proof
+definition let POS; let K,M be Subset of POS;
+ redefine pred K _|_ M;
+ irreflexivity
+ proof let K be Subset of POS;
  assume not thesis;
- then consider a,b such that A1: a<>b & K = Line(a,b) & a,b _|_ K
- by Def15; reconsider a'=a,b'=b as Element of Af(POS);  K = Line(a',b') by A1,
+ then consider a,b such that A1: a<>b & K = Line(a,b) & a,b _|_ K by Def15;
+  reconsider a'=a,b'=b as Element of Af(POS);  K = Line(a',b') by A1,
 Th56; then a in K & b in K by AFF_1:26;
  hence contradiction by A1,Th71; end;
+ symmetry
+ proof let K,M be Subset of POS;
+  assume K _|_ M; then consider a,b,c,d such that
+ A1: a<>b & c <>d & K = Line(a,b) & M = Line(c,d) and A2: a,b _|_ c,d by Th63;
+    c,d _|_ a,b by A2,Def9; hence thesis by A1,Th63;
+ end;
+end;
+
+canceled;
 
 theorem Th73:
-(K _|_ M or M _|_ K) & (K // N or N // K) implies (M _|_ N & N _|_ M)
-proof assume that A1: K _|_ M or M _|_ K and A2: K // N or N // K;
+ K _|_ M  & K // N  implies N _|_ M
+proof assume that A1: K _|_ M and A2: K // N;
     M _|_ K by A1; then consider r,s such that
 A3: r<>s & M = Line(r,s) & r,s _|_ K by Def15;  r,s _|_ N by A2,A3,Th69;
-hence M _|_ N by A3,Def15; hence N _|_ M; end;
+hence N _|_ M by A3,Def15;
+end;
 
-theorem Th74:
-K // N implies not K _|_ N proof assume A1: K // N; assume not thesis;
- then K _|_ K by A1,Th73;
- hence contradiction by Th72; end;
+canceled;
 
 theorem
    a in K & b in K & c,d _|_ K implies (c,d _|_ a,b & a,b _|_ c,d)
@@ -1476,9 +1484,9 @@ a,b // c,d implies M // N
     M = Line(a,b) & N = Line(c,d) by A1,A2,Th76;
  hence thesis by A1,A2,A3,Def16; end;
 
-theorem  (K _|_ M or M _|_ K) & (K _|_ N or N _|_ K) implies (M // N & N // M
-)
-proof assume that A1: K _|_ M or M _|_ K and A2: K _|_ N or N _|_ K; A3: K _|_
+theorem
+ M _|_ K & N _|_ K implies M // N
+proof assume that A1: M _|_ K and A2: N _|_ K; A3: K _|_
  M & K _|_ N
  by A1,A2; then consider p1,q1,a,b being Element of POS such
  that A4: p1<>q1 & a<>b & K = Line(p1,q1) & M = Line(a,b) and A5: p1,q1 _|_ a,b
@@ -1491,11 +1499,12 @@ proof assume that A1: K _|_ M or M _|_ K and A2: K _|_ N or N _|_ K; A3: K _|_
  q2' in Line(p1',q1') by AFF_1:26; then LIN p1',q1',p2' & LIN p1',q1',q2'
  by AFF_1:def 2; then p1',q1' // p2',q2' by AFF_1:19; then p1,q1 // p2,q2
  by Th48; then a,b _|_ p2,q2 by A4,A5,Th84; then a,b // c,d by A6,A7,Th85;
- hence M // N by A4,A6,Def16; hence N // M; end;
+ hence M // N by A4,A6,Def16;
+ end;
 
 theorem Th88: M _|_ N implies ex p st p in M & p in N
  proof assume A1: M _|_ N;
-then A2: not M // N by Th74;
+then A2: not M // N by Th73;
  reconsider M'=M,N'=N as Subset of Af(POS);
     M is_line & N is_line by A1,Th62; then A3: M' is_line & N' is_line by Th58;
     not M' // N' by A2,Th64; then consider p' being Element of

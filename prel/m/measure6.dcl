@@ -11,8 +11,9 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="SUPINF_1"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
+<ArticleID name="SUPINF_1"/>
 <ArticleID name="MEASURE5"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="MEASURE6"/>
@@ -29,11 +30,11 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="18"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="84">
+<Func kind="K" nr="82">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

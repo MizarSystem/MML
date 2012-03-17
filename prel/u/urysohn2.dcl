@@ -11,7 +11,6 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="SUPINF_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="RELSET_1"/>
@@ -20,12 +19,14 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="XXREAL_0"/>
+<ArticleID name="SUPINF_1"/>
 <ArticleID name="MEASURE5"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="RCOMP_1"/>
 <ArticleID name="GROUP_1"/>
@@ -44,7 +45,7 @@
 <Adjective nr="40"/>
 </Cluster>
 <Func kind="K" nr="40">
-<Func kind="K" nr="62"/>
+<Func kind="K" nr="114"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="3">

@@ -43,7 +43,7 @@
 <Adjective nr="80"/>
 <Adjective nr="84">
 <Func kind="U" nr="1">
-<Func kind="K" nr="155">
+<Func kind="K" nr="156">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -52,7 +52,7 @@
 <Adjective nr="86"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="155">
+<Func kind="K" nr="156">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -60,11 +60,11 @@
 </ArgTypes>
 <Func kind="K" nr="46">
 <Func kind="U" nr="1">
-<Func kind="K" nr="155">
+<Func kind="K" nr="156">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="214">
+<Func kind="K" nr="215">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>

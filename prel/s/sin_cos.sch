@@ -18,6 +18,7 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="COMSEQ_1"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -61,7 +62,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="106">
+<Func kind="K" nr="107">
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
@@ -83,7 +84,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="106">
+<Func kind="K" nr="107">
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
@@ -142,7 +143,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="85">
+<Func kind="K" nr="86">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 <Var nr="2"/>
@@ -166,7 +167,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="85">
+<Func kind="K" nr="86">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 <Var nr="2"/>

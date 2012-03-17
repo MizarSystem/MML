@@ -28,6 +28,7 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="ABIAN"/>
 <ArticleID name="SETFAM_1"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
@@ -54,7 +55,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="60">
+<Func kind="K" nr="61">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -62,6 +63,7 @@
 <Adjective nr="19"/>
 <Adjective nr="25"/>
 <Adjective nr="50" value="false"/>
+<Adjective nr="54"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -73,7 +75,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="60">
+<Func kind="K" nr="61">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -81,6 +83,7 @@
 <Adjective nr="19"/>
 <Adjective nr="25"/>
 <Adjective nr="50"/>
+<Adjective nr="54"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -133,7 +136,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="127">
+<Func kind="K" nr="128">
 <Num nr="1"/>
 <Num nr="2"/>
 <Num nr="3"/>
@@ -150,7 +153,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="128">
+<Func kind="K" nr="129">
 <Num nr="1"/>
 <Num nr="2"/>
 <Num nr="3"/>
@@ -173,7 +176,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="94">
+<Func kind="K" nr="95">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

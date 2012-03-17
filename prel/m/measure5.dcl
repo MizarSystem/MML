@@ -11,8 +11,9 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="SUPINF_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="XXREAL_0"/>
+<ArticleID name="SUPINF_1"/>
 <ArticleID name="MEASURE5"/>
 </Signature>
 <RCluster>
@@ -24,8 +25,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
 <Adjective nr="29"/>
 </Cluster>
 </RCluster>
@@ -38,8 +39,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
 <Adjective nr="30"/>
 </Cluster>
 </RCluster>
@@ -52,8 +53,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
 <Adjective nr="31"/>
 </Cluster>
 </RCluster>
@@ -66,8 +67,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
 <Adjective nr="32"/>
 </Cluster>
 </RCluster>
@@ -80,8 +81,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
 <Adjective nr="33"/>
 </Cluster>
 </RCluster>
@@ -95,11 +96,11 @@
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
-<Adjective nr="28"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
 <Adjective nr="33"/>
 </Cluster>
 </RCluster>
@@ -115,8 +116,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
 <Adjective nr="33"/>
 </Cluster>
 </CCluster>
@@ -132,8 +133,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
 <Adjective nr="33"/>
 </Cluster>
 </CCluster>
@@ -149,8 +150,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
 <Adjective nr="33"/>
 </Cluster>
 </CCluster>
@@ -166,8 +167,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
 <Adjective nr="33"/>
 </Cluster>
 </CCluster>

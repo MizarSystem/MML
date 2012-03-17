@@ -9,12 +9,12 @@ environ
  vocabularies VECTSP_1, RLSUB_1, FINSET_1, CARD_1, FINSEQ_1, RELAT_1, FUNCT_1,
       FINSEQ_4, RFINSEQ, BOOLE, RLVECT_2, FUNCT_2, RLVECT_1, SEQ_1, ARYTM_1,
       SUBSET_1, RLVECT_3, RLSUB_2, MATRLIN, TARSKI, VECTSP_9;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0,
       NAT_1, RELAT_1, STRUCT_0, FUNCT_1, FUNCT_2, CARD_1, FINSET_1, FINSEQ_1,
       FINSEQ_3, FINSEQ_4, RFINSEQ, RLVECT_1, VECTSP_1, VECTSP_4, VECTSP_6,
-      VECTSP_5, VECTSP_7, MATRLIN;
+      VECTSP_5, VECTSP_7, MATRLIN, XXREAL_0;
  constructors REAL_1, FINSEQ_3, RFINSEQ, VECTSP_6, VECTSP_5, VECTSP_7, MATRLIN,
-      DOMAIN_1, RLVECT_2, PARTFUN1, REALSET1;
+      DOMAIN_1, RLVECT_2, PARTFUN1, REALSET1, XXREAL_0;
  registrations SUBSET_1, STRUCT_0, RELSET_1, FINSEQ_1, FINSET_1, MATRLIN,
       XREAL_0, FUNCT_2, VECTSP_1, NAT_1, ORDINAL2, VECTSP_7;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -49,73 +49,7 @@ registration
   end;
 end;
 
-theorem Th1:
-  for X being finite set st n <= card X
-    holds
-   ex A being finite Subset of X st Card A = n
-proof
-  let X be finite set such that
-A1: n <= card X;
-  consider p being FinSequence such that
-A2: rng p = X and
-A3: p is one-to-one by FINSEQ_4:73;
-A4: n <= len p by A1,A2,A3,FINSEQ_4:77;
-  reconsider q = p|Seg n as FinSequence by FINSEQ_1:19;
-A5: len q = n by A4,FINSEQ_1:21;
-A6: q is one-to-one by A3,FUNCT_1:84;
-  reconsider A = rng q as Subset of X by A2,FUNCT_1:76;
-      Card(A) = n & A is finite by A5,A6,FINSEQ_4:77;
-  hence thesis;
-end;
-
-:: More On Functions
-
-reserve f, g for Function;
-
-theorem Th2:
-  for f st f is one-to-one holds x in rng f implies Card(f"{x}) = 1
-proof
-  let f be Function;
-  assume A1: f is one-to-one;
-  assume x in rng f;
-  then f just_once_values x by A1,FINSEQ_4:10;
-  then consider B being finite set such that
-A2: B = f"{x} & card B = 1 by FINSEQ_4:def 2;
-  thus Card(f"{x}) = 1 by A2;
-end;
-
-theorem
-     for f holds not x in rng f implies Card(f"{x}) = 0 by CARD_1:78
-,FUNCT_1:142
-;
-
-theorem Th4:
-  for f, g st rng f = rng g & f is one-to-one & g is one-to-one
-    holds
-   f, g are_fiberwise_equipotent
-proof
-  let f, g be Function such that
-A1: rng f = rng g and
-A2: f is one-to-one and
-A3: g is one-to-one;
-
-      for x be set holds Card(f"{x}) = Card(g"{x})
-  proof
-    let x;
-    per cases;
-
-    suppose x in rng f;
-    then Card(f"{x}) = 1 & Card(g"{x}) = 1 by A1,A2,A3,Th2;
-    hence thesis;
-
-    end;
-    suppose not x in rng f;
-    then Card(f"{x}) = 0 & Card(g"{x}) = 0 by A1,CARD_1:78,FUNCT_1:142;
-    hence thesis;
-  end;
-  end;
-  hence f, g are_fiberwise_equipotent by RFINSEQ:def 1;
-end;
+canceled 4;
 
 Lm1:
   for X, x being set st x in X holds X \ {x} \/ {x} = X
@@ -263,14 +197,14 @@ A5: Sum(L) = Sum(L (#) G) by VECTSP_6:def 9;
 
   reconsider A = rng G as Subset of rng F by A2,A4;
   consider P being Permutation of dom F such that
-A6: (F - A`) ^ (F - A) = F*P by A1,MATRLIN:8;
+A6: (F - A`) ^ (F - A) = F*P by A1,FINSEQ_3:124;
   set F1 = F - A`;
       rng F c= rng F;
   then reconsider X = rng F as Subset of rng F;
       X \ A` = X /\ A`` by SUBSET_1:32
         .= A by XBOOLE_1:28;
   then rng F1 = rng G & F1 is one-to-one by A1,FINSEQ_3:72,94;
-  then F1, G are_fiberwise_equipotent by A3,Th4;
+  then F1, G are_fiberwise_equipotent by A3,RFINSEQ:39;
   then consider Q being Permutation of dom G such that
 A7: F1 = G*Q by RFINSEQ:17;
 
@@ -535,7 +469,7 @@ A15: Sum(L) = Sum(L (#) F) by VECTSP_6:def 9;
 A16: G is one-to-one and
 A17: rng G = Carrier(K) and
 A18: Sum(K) = Sum(K (#) G) by VECTSP_6:def 9;
-      F, G are_fiberwise_equipotent by A12,A13,A14,A16,A17,Th4;
+      F, G are_fiberwise_equipotent by A12,A13,A14,A16,A17,RFINSEQ:39;
   then consider P being Permutation of dom G such that
 A19: F = G*P by RFINSEQ:17;
   set p = L (#) F;
@@ -1908,7 +1842,7 @@ then A29: Lin(A) = W1 + W2 by A21,VECTSP_4:33;
     reconsider B as Subset of rng F by A34,XBOOLE_1:17;
 
     consider P being Permutation of dom F such that
-  A36: (F - B`) ^ (F - B) = F*P by A33,MATRLIN:8;
+  A36: (F - B`) ^ (F - B) = F*P by A33,FINSEQ_3:124;
     reconsider F1 = F - B`, F2 = F - B
       as FinSequence of the carrier of W1 + W2 by FINSEQ_3:93;
   A37: F1 is one-to-one & F2 is one-to-one by A33,FINSEQ_3:94;
@@ -2069,7 +2003,7 @@ A1: n <= dim V;
 A2: I is Basis of V by Def1;
       n <= card I by A1,A2,Def2;
   then consider A being finite Subset of I such that
-A3: Card A = n by Th1;
+A3: Card A = n by FINSEQ_4:87;
   reconsider A as Subset of V by XBOOLE_1:1;
   reconsider W = Lin(A) as strict finite-dimensional Subspace of V;
       I is linearly-independent by A2,VECTSP_7:def 3;

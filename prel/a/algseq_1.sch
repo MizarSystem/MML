@@ -19,7 +19,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
-<ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="ALGSEQ_1"/>
 </Signature>
 <Scheme>
@@ -52,7 +52,7 @@
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="44">
+<Adjective nr="42">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -64,7 +64,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="13">
-<Func kind="K" nr="120">
+<Func kind="K" nr="123">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -86,7 +86,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="111">
+<Func kind="K" nr="112">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>

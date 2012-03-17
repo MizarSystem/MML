@@ -16,8 +16,8 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -56,7 +56,7 @@
 <Func kind="F" nr="2"/>
 <Func kind="K" nr="20">
 <Var nr="1"/>
-<Func kind="K" nr="81">
+<Func kind="K" nr="82">
 <Var nr="1"/>
 </Func>
 </Func>
@@ -77,13 +77,13 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="12">
+<Pred kind="R" nr="13">
 <Num nr="1"/>
 <Var nr="2"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="12">
-<Func kind="K" nr="81">
+<Pred kind="R" nr="13">
+<Func kind="K" nr="82">
 <Var nr="1"/>
 </Func>
 <Var nr="2"/>
@@ -97,7 +97,7 @@
 </Func>
 <Func kind="K" nr="20">
 <Var nr="1"/>
-<Func kind="K" nr="97">
+<Func kind="K" nr="98">
 <Var nr="2"/>
 <Num nr="1"/>
 </Func>
@@ -123,7 +123,7 @@
 <Func kind="F" nr="2"/>
 <Func kind="K" nr="20">
 <Func kind="F" nr="4"/>
-<Func kind="K" nr="81">
+<Func kind="K" nr="82">
 <Func kind="F" nr="4"/>
 </Func>
 </Func>
@@ -145,13 +145,13 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="12">
+<Pred kind="R" nr="13">
 <Num nr="1"/>
 <Var nr="1"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="12">
-<Func kind="K" nr="81">
+<Pred kind="R" nr="13">
+<Func kind="K" nr="82">
 <Func kind="F" nr="4"/>
 </Func>
 <Var nr="1"/>
@@ -168,7 +168,7 @@
 <Var nr="3"/>
 <Func kind="K" nr="20">
 <Func kind="F" nr="4"/>
-<Func kind="K" nr="97">
+<Func kind="K" nr="98">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

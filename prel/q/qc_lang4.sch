@@ -23,7 +23,7 @@
 <ArticleID name="TREES_3"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="TREES_9"/>
-<ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -76,7 +76,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Var nr="3"/>
-<Func kind="K" nr="134">
+<Func kind="K" nr="135">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -84,7 +84,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="163">
+<Func kind="K" nr="164">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -149,7 +149,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="132">
+<Func kind="K" nr="133">
 <Func kind="K" nr="10">
 <Func kind="F" nr="2"/>
 </Func>
@@ -158,7 +158,7 @@
 </Pred>
 <Pred kind="R" nr="1">
 <Var nr="3"/>
-<Func kind="K" nr="134">
+<Func kind="K" nr="135">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
@@ -166,7 +166,7 @@
 </Pred>
 <Pred kind="R" nr="12">
 <Func kind="F" nr="3">
-<Func kind="K" nr="134">
+<Func kind="K" nr="135">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

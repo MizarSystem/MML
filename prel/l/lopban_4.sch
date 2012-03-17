@@ -29,6 +29,7 @@
 <ArticleID name="FUNCSDOM"/>
 <ArticleID name="LOPBAN_1"/>
 <ArticleID name="LOPBAN_2"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -86,13 +87,13 @@
 <And>
 <Not>
 <And>
-<Pred kind="R" nr="12">
+<Pred kind="R" nr="22">
 <Var nr="3"/>
 <Var nr="1"/>
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="128">
+<Func kind="K" nr="129">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -108,19 +109,19 @@
 <Not>
 <And>
 <Not>
-<Pred kind="R" nr="12">
+<Pred kind="R" nr="22">
 <Var nr="3"/>
 <Var nr="1"/>
 </Pred>
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="128">
+<Func kind="K" nr="129">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="118">
+<Func kind="K" nr="119">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

@@ -11,7 +11,7 @@ environ
  constructors PRE_TOPC, MEMBERED, SETFAM_1;
  registrations PRE_TOPC, STRUCT_0, MEMBERED;
  requirements BOOLE, SUBSET;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, PRE_TOPC;
  theorems PRE_TOPC, TARSKI, SUBSET_1, STRUCT_0, XBOOLE_0, XBOOLE_1;
 
 begin
@@ -22,12 +22,7 @@ begin
 canceled;
 
 theorem
-     K \/ [#] TS = [#] TS
-  proof
-      K \/ [#] TS = K \/ (the carrier of TS) by PRE_TOPC:def 3;
-  then K \/ [#] TS = the carrier of TS by XBOOLE_1:12;
-  hence thesis by PRE_TOPC:def 3;
-  end;
+     K \/ [#] TS = [#] TS by XBOOLE_1:12;
 
 canceled 5;
 
@@ -39,21 +34,7 @@ theorem Th8:
   hence thesis;
   end;
 
-canceled 11;
-
-theorem Th20:
- K c= Q iff K misses Q`
- proof
- hereby assume K c= Q;
-   then K \ Q = {} by XBOOLE_1:37;
-   then K /\ Q` = {} by SUBSET_1:32;
-   hence K misses Q` by XBOOLE_0:def 7;
- end;
- assume K misses Q`;
- then K /\ Q` = {} by XBOOLE_0:def 7;
- then K \ Q = {} by SUBSET_1:32;
- hence thesis by XBOOLE_1:37;
- end;
+canceled 12;
 
 theorem Th21:
  K` = Q` implies K = Q
@@ -77,11 +58,9 @@ theorem Th21:
 theorem Th22:
  {} TS is closed
  proof
-  A1: [#] TS = the carrier of TS by PRE_TOPC:def 3;
-      the carrier of TS in the topology of TS by PRE_TOPC:def 1;
-  then A2: [#] TS is open by A1,PRE_TOPC:def 5;
-      [#] TS = [#] TS \ {} TS;
-  hence thesis by A2,PRE_TOPC:def 6;
+   the carrier of TS in the topology of TS by PRE_TOPC:def 1;
+   then [#] TS is open by PRE_TOPC:def 5;
+  hence [#] TS \ {} TS is open;
  end;
 
 registration let T be TopSpace;
@@ -115,7 +94,7 @@ theorem Th26:
 theorem Th27:
  Cl([#] GX) = [#] GX
 proof
- thus Cl([#] GX) c= [#] GX by PRE_TOPC:14;
+ thus Cl([#] GX) c= [#] GX;
  thus ([#] GX) c= Cl([#] GX) by PRE_TOPC:48;
  end;
 
@@ -255,7 +234,7 @@ proof
 A5: (R`) \/ T` = (R /\ T)` by SUBSET_1:30;
       R /\ T = {} GX by A4,XBOOLE_0:def 7;
   then (R /\ T)` = [#] GX by PRE_TOPC:27;
-  then A6: R c= R` \/ T` by A5,PRE_TOPC:14;
+  then A6: R c= R` \/ T` by A5;
   A7: R c= T`
   proof let x;
   assume A8: x in R;
@@ -736,8 +715,7 @@ theorem
  assume R is closed;
   then A1: Cl R = R by PRE_TOPC:52;
   let x;
-   assume A2: x in Fr R;
-   thus x in R by A1,A2,XBOOLE_0:def 3;
+  thus thesis by A1,XBOOLE_0:def 3;
  end;
 
 Lm3: Fr K c= Fr(K \/ L) \/ Fr(K /\ L) \/ (Fr K /\ Fr L)
@@ -774,7 +752,7 @@ then A16:     (K`) /\ Q2 <> {} by XBOOLE_0:def 7;
     A19: L misses Q3 or (L`) misses Q3 by A2,Th61;
    A20: now assume  L /\ Q3 = {};
       then Q3 misses L`` by XBOOLE_0:def 7;
-     then A21:Q3 c= L` by Th20;
+     then A21:Q3 c= L` by SUBSET_1:44;
          ((K`) /\ Q1) /\ ((L`) /\ Q3) = {} /\ Q3 by A9,A10,XBOOLE_1:15,16;
      then ((K`) /\ Q1) /\ Q3 = {} by A21,XBOOLE_1:28;
     hence (K`) /\ (Q1 /\ Q3) = {} by XBOOLE_1:16;
@@ -782,7 +760,7 @@ then A16:     (K`) /\ Q2 <> {} by XBOOLE_0:def 7;
     A22: Q1 /\ Q3 is open by A5,A17,Th38;
     x'' in Q1 /\ Q3 by A6,A18,XBOOLE_0:def 3;
     then (K`) meets (Q1 /\ Q3) by A1,A2,A22,Th61;
-    then A23:Q3 c= L by A19,A20,Th20,XBOOLE_0:def 7;
+    then A23:Q3 c= L by A19,A20,SUBSET_1:44,XBOOLE_0:def 7;
         (K /\ (Q2 /\ L)) /\ Q3 = {} /\ Q3 by A15,A16,XBOOLE_1:15,16;
     then K /\ ((Q2 /\ L) /\ Q3) = {} by XBOOLE_1:16;
     then K /\ (Q2 /\ (L /\ Q3)) = {} by XBOOLE_1:16;
@@ -875,7 +853,7 @@ A1:  (Cl T`)` \/ (Cl T)` = (Cl T /\ Cl T`)` by SUBSET_1:30;
           Int T c= T by Th44;
    then A3: Int T = T /\ Int T by XBOOLE_1:28;
        T c= Cl T by PRE_TOPC:48;
-   then T misses (Cl T)` by Th20;
+   then T misses (Cl T)` by SUBSET_1:44;
    then T \ Fr T = {} \/ Int T by A2,A3,XBOOLE_0:def 7;
   hence thesis;
  end;
@@ -1003,9 +981,8 @@ theorem
   proof
    assume that A1: R is dense and A2:R c= S;
     A3: Cl R = [#] GX by A1,Def3;
-    A4: Cl S c= [#] GX by PRE_TOPC:14;
          [#] GX c= Cl S by A2,A3,PRE_TOPC:49;
-    then [#] GX = Cl S by A4,XBOOLE_0:def 10;
+    then [#] GX = Cl S by XBOOLE_0:def 10;
    hence thesis by Def3;
   end;
 
@@ -1024,7 +1001,6 @@ then A5: TS is non empty by STRUCT_0:def 1;
    hence P meets Q by A2,A3,A5,Th39;
  end;
   assume A6: for Q st Q <> {} & Q is open holds P meets Q;
-   A7: Cl P c= [#] TS by PRE_TOPC:14;
        [#] TS c= Cl P
    proof
     let x be set; assume
@@ -1033,11 +1009,11 @@ then A9:   TS is non empty by STRUCT_0:def 1;
         for C be Subset of TS st C is open & x in C holds P meets C by A6;
     hence x in Cl P by A8,A9,Th39;
    end;
-  then Cl P = [#] TS by A7,XBOOLE_0:def 10;
+  then Cl P = [#] TS by XBOOLE_0:def 10;
   hence thesis by Def3;
  end;
 
-theorem
+theorem Th81:
   P is dense implies for Q holds Q is open implies Cl Q = Cl(Q /\ P)
  proof
   assume A1: P is dense;
@@ -1066,30 +1042,9 @@ A8: P /\ (Q /\ Q1) = (Q /\ P) /\ Q1 by XBOOLE_1:16;
 theorem
   P is dense & Q is dense & Q is open implies P /\ Q is dense
  proof
-  assume that A1:P is dense and A2:Q is dense and A3:Q is open;
-       Cl P = [#] TS by A1,Def3;
-    then Cl P /\ Cl Q = ([#] TS) /\ ([#] TS) by A2,Def3
-            .= [#] TS;
-    then A4: Cl(P /\ Q) c= [#] TS by PRE_TOPC:51;
-         [#] TS c= Cl(P /\ Q)
-     proof
-     let x be set; assume
-A5:     x in [#] TS;
-then A6: TS is non empty by STRUCT_0:def 1;
-          now let C be Subset of TS; assume A7: C is open;
-       assume x in C;
-       then Q meets C by A2,A7,Th80;
-       then A8:Q /\ C <> {} by XBOOLE_0:def 7;
-           Q /\ C is open by A3,A7,Th38;
-       then P meets (Q /\ C) by A1,A8,Th80;
-       then P /\ (Q /\ C) <> {} by XBOOLE_0:def 7;
-       then (P /\ Q) /\ C <> {} by XBOOLE_1:16;
-       hence (P /\ Q) meets C by XBOOLE_0:def 7;
-      end;
-    hence thesis by A5,A6,Th39;
-    end;
-    then Cl(P /\ Q) = [#] TS by A4,XBOOLE_0:def 10;
-   hence thesis by Def3;
+  assume that A1:P is dense and A2:Cl Q = [#]TS and A3:Q is open;
+  thus Cl(P /\ Q) = Cl Q by A1,A3,Th81
+      .= [#]TS by A2;
   end;
 
  definition let GX be TopStruct, R be Subset of GX;
@@ -1156,8 +1111,7 @@ A4:  P` is dense by A1,Def4;
       then Q` c= Cl((P \/ Q)`) by PRE_TOPC:17;
      then Cl(Q`) c= Cl(Cl((P \/ Q)`)) by PRE_TOPC:49;
     then A9: [#] TS c= Cl((P \/ Q)`) by A5,Th26;
-        Cl((P \/ Q)`) c= [#] TS by PRE_TOPC:14;
-   then [#] TS = Cl((P \/ Q)`) by A9,XBOOLE_0:def 10;
+   [#] TS = Cl((P \/ Q)`) by A9,XBOOLE_0:def 10;
    then (P \/ Q)` is dense by Def3;
   hence thesis by Def4;
  end;
@@ -1170,14 +1124,14 @@ theorem
    let Q;
    assume that A2: Q c= P and A3:Q is open and A4: Q <> {};
        Q meets P` by A1,A3,A4,Th80;
-   hence contradiction by A2,Th20;
+   hence contradiction by A2,SUBSET_1:44;
   end;
   assume A5: for Q st Q c= P & Q is open holds Q={};
   assume not P is boundary;
   then not P` is dense by Def4;
   then consider C being Subset of TS such that A6: C <> {} and
        A7: C is open and A8: (P`) misses C by Th80;
-      C c= P by A8,Th20;
+      C c= P by A8,SUBSET_1:44;
   hence contradiction by A5,A6,A7;
  end;
 
@@ -1210,7 +1164,7 @@ then A8: (P`) /\ Q is open by A4,Th38;
     A12: G c= Q and A13: G <> {} and G is open and A14: P misses G
  by A9,A10,A11;
        G misses (P``) by A14;
-     then G c= P` by Th20;
+     then G c= P` by SUBSET_1:44;
      hence (P`) meets Q by A12,A13,XBOOLE_1:67;
     end;
     then P` is dense by Th80;
@@ -1230,11 +1184,10 @@ theorem
  assume R c= Fr R;
   then R c= Cl R /\ Cl(R`) & Cl R /\ Cl(R`) c= Cl(R`) by XBOOLE_1:17;
   then A1: R c= Cl(R`) by XBOOLE_1:1;
-   A2: Cl(R`) c= [#] GX by PRE_TOPC:14;
         R` c= Cl(R`) by PRE_TOPC:48;
     then R \/ (R`) c= Cl(R`) by A1,XBOOLE_1:8;
    then [#] GX c= Cl(R`) by PRE_TOPC:18;
-   then [#] GX = Cl(R`) by A2,XBOOLE_0:def 10;
+   then [#] GX = Cl(R`) by XBOOLE_0:def 10;
   then R` is dense by Def3;
   hence thesis by Def4;
  end;
@@ -1288,11 +1241,10 @@ theorem Th91:
   then Cl R is boundary by Def5;
    then (Cl R)` is dense by Def4;
    then A1: Cl((Cl R)`) = [#] GX by Def3;
-     A2: Cl(R`) c= [#] GX by PRE_TOPC:14;
        R c= Cl R by PRE_TOPC:48;
     then (Cl R)` c= R` by SUBSET_1:31;
    then [#] GX c= Cl(R`) by A1,PRE_TOPC:49;
-  then [#] GX= Cl(R`) by A2,XBOOLE_0:def 10;
+  then [#] GX= Cl(R`) by XBOOLE_0:def 10;
   hence thesis by Def3;
  end;
 

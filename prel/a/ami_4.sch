@@ -13,7 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
-<ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -51,7 +51,7 @@
 <Func kind="F" nr="1">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="69">
+<Func kind="K" nr="70">
 <Func kind="F" nr="3"/>
 <Func kind="F" nr="4"/>
 </Func>
@@ -110,7 +110,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="1">
-<Func kind="K" nr="64">
+<Func kind="K" nr="65">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -121,12 +121,12 @@
 </Pred>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="2">
-<Func kind="K" nr="64">
+<Func kind="K" nr="65">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="67">
+<Func kind="K" nr="68">
 <Func kind="F" nr="1">
 <Var nr="1"/>
 </Func>

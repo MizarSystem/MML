@@ -15,13 +15,13 @@ environ
       NUMBERS, XCMPLX_0, XREAL_0, NAT_1, MEMBERED, REALSET1, FUNCT_1, PARTFUN1,
       FUNCT_2, DOMAIN_1, CARD_1, CARD_3, FINSEQ_1, FINSEQ_4, CQC_LANG, GRAPH_2,
       FINSET_1, FUNCT_4, STRUCT_0, AMI_1, AMI_3, AMI_5, ORDINAL1, BINARITH,
-      PRE_CIRC;
+      PRE_CIRC, XXREAL_0;
  constructors FINSEQ_4, GRAPH_2, REALSET1, DOMAIN_1, FINSEQ_6, AMI_5, BINARITH,
-      PRE_CIRC, WELLORD2, PARTFUN1, RELAT_2, NAT_1;
+      PRE_CIRC, WELLORD2, PARTFUN1, RELAT_2, NAT_1, XXREAL_0;
  registrations AMI_1, RELSET_1, INT_1, FINSEQ_5, FUNCT_7, SUBSET_1, RELAT_1,
       FINSEQ_6, FINSEQ_1, NAT_1, SCMFSA_4, FINSET_1, FUNCT_1, SCMRING1,
       REALSET1, XBOOLE_0, FUNCT_2, FRAENKEL, MEMBERED, PRE_CIRC, ZFMISC_1,
-      PARTFUN1, ORDINAL2, SETFAM_1;
+      PARTFUN1, ORDINAL2, SETFAM_1, XREAL_0;
  requirements NUMERALS, BOOLE, REAL, SUBSET, ARITHM;
  definitions TARSKI, STRUCT_0, AMI_1, SETFAM_1, AMI_3, YELLOW_8, XBOOLE_0,
  CQC_LANG;
@@ -122,116 +122,7 @@ registration let f1 be non empty FinSequence, f2 be FinSequence;
   end;
 end;
 
-canceled;
-
-theorem Th5:
- for f1 being non empty FinSequence of D, f2 being FinSequence of D
-  holds (f1^'f2)/.1 = f1/.1
-proof
-  let f1 be non empty FinSequence of D,
-      f2 be FinSequence of D;
-A1:1 in dom f1 by FINSEQ_5:6;
-A2:1 in dom (f1^(2, len f2)-cut f2) by FINSEQ_5:6;
-  thus (f1^'f2)/.1 = (f1^(2, len f2)-cut f2)/.1 by GRAPH_2:def 2
-    .= (f1^(2, len f2)-cut f2).1 by A2,FINSEQ_4:def 4
-    .= f1.1 by A1,FINSEQ_1:def 7
-    .= f1/.1 by A1,FINSEQ_4:def 4;
-end;
-
-theorem Th6:
- for f1 being FinSequence of D, f2 being non trivial FinSequence of D
-  holds (f1^'f2)/.len(f1^'f2) = f2/.len f2
-proof
-  let f1 be FinSequence of D,
-      f2 be non trivial FinSequence of D;
-        2 <= len f2 by REALSET1:13;
-then A1: 1 < len f2 by XREAL_1:2;
-        0 <= len f1 by NAT_1:18;
-then A2: 1+0 < len f1 + len f2 by A1,XREAL_1:10;
-      len (f1^'f2) + 1 = len f1 + len f2 by GRAPH_2:13;
-  then 1 <= len(f1^'f2) by A2,NAT_1:38;
-  hence (f1^'f2)/.len(f1^'f2)
-    = (f1^'f2).len(f1^'f2) by FINSEQ_4:24
-   .= f2.len f2 by A1,GRAPH_2:16
-   .= f2/.len f2 by A1,FINSEQ_4:24;
-end;
-
-theorem Th7:
- for f being FinSequence holds f^'{} = f
- proof
-  let f be FinSequence;
-      len {} = 0 by FINSEQ_1:25;
-then A1: 2 > len{};
-  thus f^'{} = f^(2, len {})-cut {} by GRAPH_2:def 2
-        .= f^{} by A1,GRAPH_2:def 1
-        .= f by FINSEQ_1:47;
- end;
-
-theorem Th8:
- for f being FinSequence holds f^'<*x*> = f
- proof
-   let f be FinSequence;
-       len <*x*> = 1 by FINSEQ_1:56;
-   then (2, len <*x*>)-cut <*x*> = {} by GRAPH_2:def 1;
-  hence f^'<*x*> = f^{} by GRAPH_2:def 2
-        .= f by FINSEQ_1:47;
- end;
-
-theorem Th9: :: GRAPH_2:14
- for f1, f2 being FinSequence of D holds
-  1<=n & n<=len f1 implies (f1^'f2)/.n = f1/.n
-proof
-  let f1, f2 be FinSequence of D;
-  assume that
-A1:  1<=n and
-A2:  n<=len f1;
-  per cases;
-  suppose f2 = {};
-  hence (f1^'f2)/.n = f1/.n by Th7;
-  end;
-  suppose
-A3: f2 <> {};
-then A4:len (f1^'f2) + 1 = len f1 + len f2 by GRAPH_2:13;
-      len f2 <> 0 by A3,FINSEQ_1:25;
-  then 0 < len f2 by NAT_1:19;
-  then len f1 + 0 < len f1 + len f2 by XREAL_1:8;
-  then n < len (f1^'f2) + 1 by A2,A4,XREAL_1:2;
-  then n <= len (f1^'f2) by NAT_1:38;
-  hence (f1^'f2)/.n = (f1^'f2).n by A1,FINSEQ_4:24
-     .= f1.n by A1,A2,GRAPH_2:14
-     .= f1/.n by A1,A2,FINSEQ_4:24;
-end;
-end;
-
-theorem Th10: :: GRAPH_2:15
- for f1, f2 being FinSequence of D holds
-  1<=n & n<len f2 implies (f1^'f2)/.(len f1 + n) = f2/.(n+1)
-proof
-  let f1, f2 be FinSequence of D;
-  assume that
-A1:  1<=n and
-A2:  n<len f2;
-        0 <= len f1 by NAT_1:18;
-then A3: 0+1 <= len f1 + n by A1,XREAL_1:9;
-A4: now per cases;
-      suppose f2 <> {};
-then A5:   len (f1^'f2) + 1 = len f1 + len f2 by GRAPH_2:13;
-          len f1 + n < len f1 + len f2 by A2,XREAL_1:8;
-      hence len f1+n <= len (f1^'f2) by A5,NAT_1:38;
-      end;
-      suppose f2 = {};
-      then len f2 = 0 by FINSEQ_1:25;
-      hence len f1+n <= len (f1^'f2) by A2,NAT_1:18;
-    end;
-    end;
-        0 <= n by NAT_1:18;
-then A6: 0+1 <= n+1 by XREAL_1:8;
-A7: n+1 <= len f2 by A2,NAT_1:38;
-  thus (f1^'f2)/.(len f1 + n)
-     = (f1^'f2).(len f1 + n) by A3,A4,FINSEQ_4:24
-    .= f2.(n+1) by A1,A2,GRAPH_2:15
-    .= f2/.(n+1) by A6,A7,FINSEQ_4:24;
-end;
+canceled 7;
 
 begin :: Ami-Struct
 
@@ -625,16 +516,16 @@ A4: f2/.1 = l2 and
 A5: f2/.len f2 = l3 and
 A6: for n st 1 <= n & n < len f2 holds f2/.(n+1) in SUCC f2/.n;
   take f1^'f2;
-  thus (f1^'f2)/.1 = l1 by A1,Th5;
+  thus (f1^'f2)/.1 = l1 by A1,GRAPH_2:57;
        now per cases;
     suppose f2 is trivial;
      then consider x being Instruction-Location of S such that
 A7:     f2 = <*x*> by Th3;
-         f1^'f2 = f1 by A7,Th8;
+         f1^'f2 = f1 by A7,GRAPH_2:60;
     hence (f1^'f2)/.len(f1^'f2) = l3 by A2,A4,A5,A7,FINSEQ_1:56;
     end;
     suppose f2 is not trivial;
-    hence (f1^'f2)/.len(f1^'f2) = l3 by A5,Th6;
+    hence (f1^'f2)/.len(f1^'f2) = l3 by A5,GRAPH_2:58;
    end;
    end;
   hence (f1^'f2)/.len(f1^'f2) = l3;
@@ -647,16 +538,16 @@ A11: len (f1^'f2) +1 = len f1 + len f2 by GRAPH_2:13;
   suppose
 A12:  n < len f1;
     then n+1 <= len f1 by NAT_1:38;
-then A13:  (f1^'f2)/.(n+1) = f1/.(n+1) by A10,Th9;
-       (f1^'f2)/.n = f1/.n by A8,A12,Th9;
+then A13:  (f1^'f2)/.(n+1) = f1/.(n+1) by A10,GRAPH_2:61;
+       (f1^'f2)/.n = f1/.n by A8,A12,GRAPH_2:61;
   hence (f1^'f2)/.(n+1) in SUCC (f1^'f2)/.n by A3,A8,A12,A13;
   end;
   suppose
 A14:  n = len f1;
-then A15:  (f1^'f2)/.n = f2/.1 by A2,A4,A8,Th9;
+then A15:  (f1^'f2)/.n = f2/.1 by A2,A4,A8,GRAPH_2:61;
        n+1 < len (f1^'f2) +1 by A9,XREAL_1:8;
 then A16:  1 < len f2 by A11,A14,XREAL_1:8;
-   then (f1^'f2)/.(n+1) = f2/.(1+1) by A14,Th10;
+   then (f1^'f2)/.(n+1) = f2/.(1+1) by A14,GRAPH_2:62;
   hence (f1^'f2)/.(n+1) in SUCC (f1^'f2)/.n by A6,A15,A16;
   end;
   suppose
@@ -671,9 +562,9 @@ A20:  1 <= m+1 by NAT_1:29;
 then A21:  m+1 < len f2 by XREAL_1:8;
         m <= m+1 by NAT_1:29;
     then m < len f2 by A21,XREAL_1:2;
-then A22:  (f1^'f2)/.n = f2/.(m+1) by A18,A19,Th10;
+then A22:  (f1^'f2)/.n = f2/.(m+1) by A18,A19,GRAPH_2:62;
        (f1^'f2)/.(n+1) = (f1^'f2)/.(len f1 + (m+1)) by A18
-          .= f2/.(m+1+1) by A20,A21,Th10;
+          .= f2/.(m+1+1) by A20,A21,GRAPH_2:62;
   hence (f1^'f2)/.(n+1) in SUCC (f1^'f2)/.n by A6,A20,A21,A22;
  end;
  end;

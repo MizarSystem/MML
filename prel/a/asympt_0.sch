@@ -11,8 +11,8 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
+<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -60,7 +60,7 @@
 <Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="18"/>
 </Cluster>
 <Func kind="K" nr="40">
 <Func kind="F" nr="3"/>
@@ -107,7 +107,7 @@
 <Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="18"/>
 </Cluster>
 <Func kind="K" nr="40">
 <Func kind="F" nr="2"/>
@@ -152,7 +152,7 @@
 <Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="18"/>
 </Cluster>
 <Func kind="K" nr="40">
 <Func kind="F" nr="2"/>

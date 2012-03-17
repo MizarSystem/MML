@@ -52,10 +52,10 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="83">
+<Func kind="K" nr="84">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="110">
+<Func kind="K" nr="111">
 <Func kind="F" nr="1"/>
 <Num nr="1"/>
 </Func>

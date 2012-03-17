@@ -26,14 +26,14 @@
 <ArticleID name="EUCLID"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="PCOMPS_1"/>
+<ArticleID name="URYSOHN1"/>
+<ArticleID name="COMPTS_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="CONNSP_2"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
-<ArticleID name="URYSOHN1"/>
-<ArticleID name="COMPTS_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="SEQ_4"/>
@@ -80,19 +80,19 @@
 <Func kind="K" nr="260"/>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="223"/>
+<Func kind="K" nr="230"/>
 </Func>
 </Adjective>
 <Adjective nr="18">
 <Func kind="K" nr="260"/>
-<Func kind="K" nr="223"/>
+<Func kind="K" nr="230"/>
 </Adjective>
-<Adjective nr="61">
+<Adjective nr="68">
 <Func kind="U" nr="1">
 <Func kind="K" nr="260"/>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="223"/>
+<Func kind="K" nr="230"/>
 </Func>
 </Adjective>
 <Adjective nr="81"/>
@@ -132,19 +132,19 @@
 <Func kind="K" nr="260"/>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="223"/>
+<Func kind="K" nr="230"/>
 </Func>
 </Adjective>
 <Adjective nr="18">
 <Func kind="K" nr="260"/>
-<Func kind="K" nr="223"/>
+<Func kind="K" nr="230"/>
 </Adjective>
-<Adjective nr="61">
+<Adjective nr="68">
 <Func kind="U" nr="1">
 <Func kind="K" nr="260"/>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="223"/>
+<Func kind="K" nr="230"/>
 </Func>
 </Adjective>
 <Adjective nr="81"/>
@@ -202,8 +202,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="15"/>
-<Adjective nr="69"/>
-<Adjective nr="73"/>
+<Adjective nr="53"/>
+<Adjective nr="57"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -211,8 +211,8 @@
 <Cluster>
 <Adjective nr="4" value="false"/>
 <Adjective nr="15"/>
-<Adjective nr="69"/>
-<Adjective nr="74"/>
+<Adjective nr="53"/>
+<Adjective nr="58"/>
 </Cluster>
 <Typ kind="G" nr="3">
 <Cluster/>

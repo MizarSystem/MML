@@ -25,11 +25,12 @@
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="AMI_2"/>
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="140"/>
+<Func kind="K" nr="143"/>
 <Cluster>
 <Adjective nr="13" value="false"/>
 <Adjective nr="44"/>
@@ -41,7 +42,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="141"/>
+<Func kind="K" nr="144"/>
 <Cluster>
 <Adjective nr="13" value="false"/>
 <Adjective nr="44"/>
@@ -53,7 +54,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="142"/>
+<Func kind="K" nr="145"/>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="13" value="false"/>
@@ -63,13 +64,13 @@
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="135">
-<Func kind="K" nr="143"/>
+<Func kind="K" nr="136">
+<Func kind="K" nr="146"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="140"/>
+<Func kind="K" nr="143"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="11">
@@ -80,6 +81,7 @@
 <Adjective nr="29"/>
 <Adjective nr="32"/>
 <Adjective nr="41"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 </Registrations>

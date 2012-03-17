@@ -11,12 +11,12 @@ environ
       POWER, GRCAT_1, FINSEQ_2, BINARITH, FINSEQ_1, FUNCT_1, RELAT_1, BINARI_3,
       CQC_LANG, MATRIX_1, INCSP_1, PRALG_1, FUNCT_7, FUNCT_2, FUNCT_5, BOOLE,
       TREES_1, IDEA_1, FINSEQ_4, FUNCOP_1, FRAENKEL;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, INT_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, INT_1,
       INT_2, NAT_1, MARGREL1, RELAT_1, FUNCT_1, FRAENKEL, FUNCOP_1, MATRIX_1,
       PARTFUN1, FUNCT_2, FUNCT_5, FUNCT_7, SERIES_1, CQC_LANG, FINSEQ_1,
-      FINSEQ_2, FINSEQ_4, BINARITH, BINARI_3, WSIERP_1;
+      FINSEQ_2, FINSEQ_4, BINARITH, BINARI_3, WSIERP_1, XXREAL_0;
  constructors FUNCT_7, BINARI_2, SERIES_1, BINARITH, BINARI_3, FINSEQ_4,
-      WSIERP_1, FUNCT_5, PARTFUN1, NAT_1, MATRIX_1;
+      WSIERP_1, FUNCT_5, PARTFUN1, NAT_1, MATRIX_1, XXREAL_0;
  registrations INT_1, FUNCT_1, RELSET_1, MARGREL1, FUNCT_7, NAT_1, XREAL_0,
       FUNCT_2, ORDINAL2, FUNCOP_1, FRAENKEL, FINSEQ_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -64,8 +64,7 @@ proof
     A2: i<j and
     A3: k<j and
     A4: i<>0;
-     j>1 by A1,INT_2:def 5;
-  then A5:j>0;
+  A5:j>0 by A1,INT_2:def 5;
      i,j are_relative_prime by A1,A2,A4,Lm1;
   then consider a,b being Integer such that
        A6:a*i + b*j = k by EULER_1:11;
@@ -144,7 +143,6 @@ theorem Th1:
   proof
     let i,j,k be Nat;
     assume A1: j is prime & i<j & k<j & i<>0;
-    then j>1 by INT_2:def 5;
     then A2:j>0;
     consider a being Nat such that
       A3: (a*i) mod j = k by A1,Lm2;
@@ -198,8 +196,7 @@ theorem Th5:
     let a,b,c be Nat;
     assume A1: 0<a & 0<b & a<c & b<c & c is prime;
     assume A2: (a * b) mod c = 0;
-         0 < c by A1;
-      then (a * b) = c * ((a * b) div c) + 0 by A2,NAT_1:47;
+      then (a * b) = c * ((a * b) div c) + 0 by NAT_1:47,A1;
       then c divides (a * b) by NAT_1:def 3;
       then c divides a or c divides b by A1,NEWTON:98;
       hence contradiction by A1,NAT_1:54;
@@ -272,7 +269,6 @@ proof
      now let j;
   assume A2:j in Seg n;
     then A3:j in dom (x 'xor' x) & j in dom (ZERO(n)) by A1,FINSEQ_1:def 3;
-    then j in dom (x 'xor' x) & j in dom (n |-> FALSE);
     then A4:j in dom (x 'xor' x) & j in Seg n by FINSEQ_2:68;
     A5:ZERO(n).j = (n |-> FALSE).j
                 .= FALSE by A4,FINSEQ_2:70;
@@ -677,8 +673,7 @@ definition
           consider b being Integer such that A34: b = b2 - b1;
              b1 - b1 <= b2 - b1 by A32,XREAL_1:11;
           then reconsider b as Nat by A34,INT_1:16;
-             k*b = (2 to_power(n)+1)*t by A33,A34;
-          then (2 to_power(n)+1) divides k*b by NAT_1:def 3;
+          (2 to_power(n)+1) divides k*b by NAT_1:def 3,A33,A34;
           then A35: (2 to_power(n)+1) divides k or (2 to_power(n)+1)
  divides b
                                                      by A1,NEWTON:98;
@@ -688,7 +683,6 @@ definition
           then not ((2 to_power(n)+1) <= b) by NAT_1:38;
           then A37:not(0 < b) by A21,A35,A36,NAT_1:54;
           b2 - b1 + b1 = 0 + b1 by A34,A37,XREAL_1:1;
-          then b2 - (b1 - b1) = b1;
           hence b1 = b2;
         end;
         suppose A38:b2 <= b1;
@@ -698,8 +692,7 @@ definition
           consider b being Integer such that A40: b = b1 - b2;
              b2 - b2 <= b1 - b2 by A38,XREAL_1:11;
           then reconsider b as Nat by A40,INT_1:16;
-             k*b = (2 to_power(n)+1)*t by A39,A40;
-          then (2 to_power(n)+1) divides k*b by NAT_1:def 3;
+          (2 to_power(n)+1) divides k*b by NAT_1:def 3,A39,A40;
           then A41: (2 to_power(n)+1) divides k or (2 to_power(n)+1)
  divides b
                                                      by A1,NEWTON:98;
@@ -708,7 +701,6 @@ definition
           then not ((2 to_power(n)+1) <= b) by NAT_1:38;
           then not(0 < b) by A21,A41,A42,NAT_1:54;
           then b1 - b2 + b2 = 0 + b2 by A40,XREAL_1:1;
-          then b1 - (b2 - b2) = b2;
           hence b2 = b1;
       end;
       end;
@@ -729,19 +721,17 @@ proof
     suppose A3:i = 0;
       then A4:ChangeVal_1(i,n) = 2 to_power(n) by Def7;
          2 to_power n < (2 to_power n)+1 by XREAL_1:31;
-      then A5:(ChangeVal_1(i,n)) mod ((2 to_power n)+1) = 2 to_power(n)
+      then (ChangeVal_1(i,n)) mod ((2 to_power n)+1) = 2 to_power(n)
                                                     by A4,NAT_1:76;
-         ChangeVal_2(2 to_power(n),n) = 0 by Def8;
-    hence thesis by A2,A3,A5;
+    hence thesis by A2,A3,Def8;
     end;
     suppose i <> 0;
       then A6:(ChangeVal_1(i,n)) mod ((2 to_power n)+1)
                        = i mod ((2 to_power n)+1) by Def7;
          2 to_power n < (2 to_power n)+1 by XREAL_1:31;
       then i < (2 to_power n)+1 by A1,XREAL_1:2;
-      then A7:(ChangeVal_1(i,n)) mod ((2 to_power n)+1) = i by A6,NAT_1:76;
-         ChangeVal_2(i,n) = i by A1,Def8;
-    hence thesis by A2,A7;
+      then (ChangeVal_1(i,n)) mod ((2 to_power n)+1) = i by A6,NAT_1:76;
+    hence thesis by A2,A1,Def8;
 end;
 end;
 
@@ -770,10 +760,9 @@ proof
       A6:CV <> 0 by A1,A2,A3,Th5;
          now per cases by A5,XREAL_1:1;
         suppose A7:CV = 2 to_power(n);
-          then MUL_MOD(i,j,n) = 0 by Def8;
           then A8:MUL_MOD(MUL_MOD(i,j,n),k,n)
                  = ChangeVal_2((ChangeVal_1(0,n)*K)
-                     mod (2 to_power(n)+1),n)
+                     mod (2 to_power(n)+1),n) by Def8
                 .= ChangeVal_2((CV*K) mod (2 to_power(n)+1),n) by A7,Def7
                 .= ChangeVal_2(((I*J)*K) mod (2 to_power(n)+1),n)
                                                     by EULER_2:10;
@@ -810,10 +799,9 @@ proof
         hence thesis;
         end;
         suppose CV < 2 to_power(n);
-          then MUL_MOD(i,j,n) = CV by Def8;
           then A13:MUL_MOD(MUL_MOD(i,j,n),k,n)
                  = ChangeVal_2((ChangeVal_1(CV,n)*K)
-                     mod (2 to_power(n)+1),n)
+                     mod (2 to_power(n)+1),n) by Def8
                 .= ChangeVal_2((CV*K) mod (2 to_power(n)+1),n) by A6,Def7
                 .= ChangeVal_2(((I*J)*K) mod (2 to_power(n)+1),n)
                                                     by EULER_2:10;
@@ -823,10 +811,9 @@ proof
           A15:CV2 <> 0 by A1,A3,A4,Th5;
              now per cases by A14,XREAL_1:1;
             suppose A16:CV2 = 2 to_power(n);
-              then MUL_MOD(j,k,n) = 0 by Def8;
               then MUL_MOD(i,MUL_MOD(j,k,n),n)
                      = ChangeVal_2((I*ChangeVal_1(0,n))
-                             mod (2 to_power(n)+1),n)
+                             mod (2 to_power(n)+1),n) by Def8
                     .= ChangeVal_2((I*CV2) mod (2 to_power(n)+1),n) by A16,Def7
                     .= ChangeVal_2((I*(J*K)) mod (2 to_power(n)+1),n)
                                                        by EULER_2:10
@@ -867,12 +854,10 @@ proof
      now per cases by A2,XREAL_1:1;
     suppose CV = 2 to_power(n);
       then ChangeVal_2(CV,n) = 0 by Def8;
-      then MUL_MOD(i,j,n) < 2 to_power(n) by A1;
-    hence thesis by Def3;
+    hence thesis by A1,Def3;
     end;
     suppose A3:CV < 2 to_power(n);
       then ChangeVal_2(CV,n) = CV by Def8;
-      then MUL_MOD(i,j,n) = CV;
     hence thesis by A3,Def3;
   end;
   end;
@@ -3018,7 +3003,7 @@ theorem Th44:
             then IDEA_P_F(Key,n,r) = {} by FINSEQ_1:25;
             then compose(IDEA_P_F(Key,n,r),MESSAGES) = id MESSAGES
                                               by FUNCT_7:41;
-            hence thesis by FUNCT_2:67;
+            hence thesis by RELSET_1:12;
         end;
         end;
          dom compose(IDEA_P_F(Key,n,r),MESSAGES) = MESSAGES
@@ -3094,7 +3079,7 @@ theorem
             then IDEA_Q_F(Key,n,r) = {} by FINSEQ_1:25;
             then compose(IDEA_Q_F(Key,n,r),MESSAGES) = id MESSAGES
                                               by FUNCT_7:41;
-            hence thesis by FUNCT_2:67;
+            hence thesis by RELSET_1:12;
         end;
         end;
          dom compose(IDEA_Q_F(Key,n,r),MESSAGES) = MESSAGES
@@ -3130,73 +3115,7 @@ theorem
       hence thesis by A2;
   end;
 
-theorem Th46:
-  for n being non empty Nat,m being FinSequence of NAT, lk being Nat,
-      Key being Matrix of lk,6,NAT, r being Nat,
-      M being FinSequence of NAT st
-      M = compose(IDEA_P_F(Key,n,r),MESSAGES).m & len m >= 4
-      holds len M >= 4
-  proof
-    let n be non empty Nat,
-        m be FinSequence of NAT, lk be Nat,
-        Key be Matrix of lk,6,NAT;
-
-    A1: m in MESSAGES by FINSEQ_1:def 11;
-       for r being Nat,M being FinSequence of NAT st
-         M = compose(IDEA_P_F(Key,n,r),MESSAGES).m & len m >= 4 holds
-       len M >= 4
-    proof
-      defpred P[Nat] means
-        for M being FinSequence of NAT st
-          M = compose(IDEA_P_F(Key,n,$1),MESSAGES).m & len m >= 4 holds
-          len M >= 4;
-
-      A2: P[0]
-        proof
-          let M be FinSequence of NAT;
-          assume that A3: M = compose(IDEA_P_F(Key,n,0),MESSAGES).m and
-                      A4: len m >= 4;
-             len IDEA_P_F(Key,n,0) = 0 by Def17;
-          then IDEA_P_F(Key,n,0) = {} by FINSEQ_1:25;
-          then M = (id MESSAGES).m by A3,FUNCT_7:41
-                .= m by A1,FUNCT_1:35;
-          hence thesis by A4;
-        end;
-      A5: for k being Nat st P[k] holds P[k + 1]
-        proof
-          let k be Nat;
-          assume A6: P[k];
-          let M be FinSequence of NAT;
-          assume that A7: M = compose(IDEA_P_F(Key,n,k+1),MESSAGES).m and
-                      A8: len m >= 4;
-             M = compose(IDEA_P_F(Key,n,k)^<* IDEA_P(Line(Key,(k+1)),n) *>,
-                          MESSAGES).m by A7,Th37;
-          then A9: M = (IDEA_P(Line(Key,(k+1)),n)*
-                      compose(IDEA_P_F(Key,n,k),MESSAGES)).m by FUNCT_7:43;
-          A10: dom compose(IDEA_P_F(Key,n,k),MESSAGES) = MESSAGES &
-               rng compose(IDEA_P_F(Key,n,k),MESSAGES) c= MESSAGES by Th44;
-          then compose(IDEA_P_F(Key,n,k),MESSAGES).m
-                in rng(compose(IDEA_P_F(Key,n,k),MESSAGES)) by A1,FUNCT_1:def 5
-;
-          then reconsider M1 = compose(IDEA_P_F(Key,n,k),MESSAGES).m
-                      as FinSequence of NAT by A10,FINSEQ_1:def 11;
-          A11:len M1 >= 4 by A6,A8;
-
-             dom (IDEA_P(Line(Key,(k+1)),n)*
-                      compose(IDEA_P_F(Key,n,k),MESSAGES))=MESSAGES
-            proof
-                 rng compose(IDEA_P_F(Key,n,k),MESSAGES)
-                  c= dom IDEA_P(Line(Key,(k+1)),n) by A10,FUNCT_2:def 1;
-              hence thesis by A10,RELAT_1:46;
-            end;
-          then M = IDEA_P(Line(Key,(k+1)),n).
-                  (compose(IDEA_P_F(Key,n,k),MESSAGES).m) by A1,A9,FUNCT_1:22;
-          hence thesis by A11,Th43;
-        end;
-      thus for k being Nat holds P[k] from NAT_1:sch 1(A2,A5);
-    end;
-    hence thesis;
-   end;
+canceled;
 
 theorem Th47:
   for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
@@ -3251,7 +3170,53 @@ theorem Th47:
             in rng(compose(IDEA_P_F(Key,n,r1),MESSAGES)) by A3,FUNCT_1:def 5;
       then reconsider M1 = compose(IDEA_P_F(Key,n,r1),MESSAGES).m
                       as FinSequence of NAT by A8,FINSEQ_1:def 11;
-         len M1 >= 4 by A2,Th46;
+    A1: m in MESSAGES by FINSEQ_1:def 11;
+      defpred P[Nat] means
+        for M being FinSequence of NAT st
+          M = compose(IDEA_P_F(Key,n,$1),MESSAGES).m holds len M >= 4;
+
+      B2: P[0]
+        proof
+          let M be FinSequence of NAT;
+          assume A3: M = compose(IDEA_P_F(Key,n,0),MESSAGES).m;
+             len IDEA_P_F(Key,n,0) = 0 by Def17;
+          then IDEA_P_F(Key,n,0) = {} by FINSEQ_1:25;
+          then M = (id MESSAGES).m by A3,FUNCT_7:41
+                .= m by A1,FUNCT_1:35;
+          hence thesis by A2;
+        end;
+      A5: for k being Nat st P[k] holds P[k + 1]
+        proof
+          let k be Nat;
+          assume A6: P[k];
+          let M be FinSequence of NAT;
+          assume M = compose(IDEA_P_F(Key,n,k+1),MESSAGES).m;
+          then M = compose(IDEA_P_F(Key,n,k)^<* IDEA_P(Line(Key,(k+1)),n) *>,
+                          MESSAGES).m by Th37;
+          then A9: M = (IDEA_P(Line(Key,(k+1)),n)*
+                      compose(IDEA_P_F(Key,n,k),MESSAGES)).m by FUNCT_7:43;
+          A10: dom compose(IDEA_P_F(Key,n,k),MESSAGES) = MESSAGES &
+               rng compose(IDEA_P_F(Key,n,k),MESSAGES) c= MESSAGES by Th44;
+          then compose(IDEA_P_F(Key,n,k),MESSAGES).m
+                in rng(compose(IDEA_P_F(Key,n,k),MESSAGES)) by A1,FUNCT_1:def 5
+;
+          then reconsider M1 = compose(IDEA_P_F(Key,n,k),MESSAGES).m
+                      as FinSequence of NAT by A10,FINSEQ_1:def 11;
+          A11:len M1 >= 4 by A6;
+
+             dom (IDEA_P(Line(Key,(k+1)),n)*
+                      compose(IDEA_P_F(Key,n,k),MESSAGES))=MESSAGES
+            proof
+                 rng compose(IDEA_P_F(Key,n,k),MESSAGES)
+                  c= dom IDEA_P(Line(Key,(k+1)),n) by A10,FUNCT_2:def 1;
+              hence thesis by A10,RELAT_1:46;
+            end;
+          then M = IDEA_P(Line(Key,(k+1)),n).
+                  (compose(IDEA_P_F(Key,n,k),MESSAGES).m) by A1,A9,FUNCT_1:22;
+          hence thesis by A11,Th43;
+        end;
+       for k being Nat holds P[k] from NAT_1:sch 1(B2,A5);
+       then len M1 >= 4;
       hence thesis by A7,Th43;
   end;
   end;
@@ -3453,8 +3418,7 @@ theorem Th48:
                     M.2 is_expressible_by n &
                     M.3 is_expressible_by n &
                     M.4 is_expressible_by n by A8,A9,Th47;
-               lk > 0 by A6;
-             then width Key1 = 6 & width Key2 = 6 by MATRIX_1:24;
+             width Key1 = 6 & width Key2 = 6 by MATRIX_1:24,A6;
              then A21: 1 in Seg(width Key1) & 2 in Seg(width Key1) &
                           3 in Seg(width Key1) & 4 in Seg(width Key1) &
                           5 in Seg(width Key1) & 6 in Seg(width Key1) &
@@ -3520,7 +3484,7 @@ theorem Th48:
                  compose(IDEA_P_F(Key1,n,k),MESSAGES))).m by FUNCT_7:53
              .=(compose(IDEA_Q_F(Key2,n,k),MESSAGES) *
                 ((IDEA_Q(Line(Key2,(k+1)),n) * IDEA_P(Line(Key1,(k+1)),n))*
-                 compose(IDEA_P_F(Key1,n,k),MESSAGES))).m by FUNCT_2:74
+                 compose(IDEA_P_F(Key1,n,k),MESSAGES))).m by FUNCT_2:23
              .= compose(IDEA_Q_F(Key2,n,k),MESSAGES).
                 (((IDEA_Q(Line(Key2,(k+1)),n) * IDEA_P(Line(Key1,(k+1)),n))*
                 compose(IDEA_P_F(Key1,n,k),MESSAGES)).m)
@@ -3646,9 +3610,9 @@ theorem
         (IDEA_QE(ke2,n)*(IDEA_PE(ke1,n)*((id MESSAGES)*
          IDEA_PS(ks1,n)))))).m by FUNCT_7:41
      .=(IDEA_QS(ks2,n)*((IDEA_QE(ke2,n)*(IDEA_PE(ke1,n)*((id MESSAGES)*
-         IDEA_PS(ks1,n)))))).m by FUNCT_2:74
+         IDEA_PS(ks1,n)))))).m by FUNCT_2:23
      .=(IDEA_QS(ks2,n)*(IDEA_QE(ke2,n)*
-        (IDEA_PE(ke1,n)*IDEA_PS(ks1,n)))).m by FUNCT_2:74
+        (IDEA_PE(ke1,n)*IDEA_PS(ks1,n)))).m by FUNCT_2:23
      .=IDEA_QS(ks2,n).((IDEA_QE(ke2,n)*(IDEA_PE(ke1,n)*
              IDEA_PS(ks1,n))).m) by A7,FUNCT_2:70
      .=IDEA_QS(ks2,n).(IDEA_QE(ke2,n).((IDEA_PE(ke1,n)*

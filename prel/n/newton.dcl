@@ -22,6 +22,7 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="NEWTON"/>
 </Signature>
 <RCluster>
@@ -40,6 +41,7 @@
 <Adjective nr="26" value="false"/>
 <Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -55,13 +57,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="129">
+<Func kind="K" nr="132">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -77,7 +80,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="129">
+<Func kind="K" nr="132">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -87,6 +90,7 @@
 <Adjective nr="24"/>
 <Adjective nr="26" value="false"/>
 <Adjective nr="32"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -97,12 +101,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="132">
+<Func kind="K" nr="135">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -118,18 +123,19 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="134">
+<Func kind="K" nr="137">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="139"/>
+<Func kind="K" nr="142"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="18" value="false"/>
