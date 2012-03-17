@@ -86,7 +86,7 @@
 </Pred>
 </For>
 <Not>
-<Pred kind="R" nr="16">
+<Pred kind="R" nr="18">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="116"/>
 <Var nr="1"/>

@@ -373,10 +373,9 @@ A2:   the carrier of (X|Z) = Z by PRE_TOPC:29;
 begin :: On the product of compact spaces
 
 theorem
-      for X being non empty TopSpace, Y being compact non empty TopSpace,
+  for X being non empty TopSpace, Y being compact non empty TopSpace,
       G being open Subset of [:X, Y:],
-      x being set st
-   x in { x' where x' is Point of X : [:{x'}, the carrier of Y:] c= G }
+      x being set st [:{x}, the carrier of Y:] c= G
    ex f being ManySortedSet of the carrier of Y st
    for i being set st i in the carrier of Y
     ex G1 being Subset of X, H1 being Subset of Y st f.i = [G1,H1] &
@@ -386,13 +385,18 @@ proof
      G be open Subset of [:X, Y:],
      x be set;
  assume
-     x in { x' where x' is Point of X : [:{x'}, the carrier of Y:] c= G };
-  then consider x' be Point of X such that
-A1:  x = x' & [:{x'}, the carrier of Y:] c= G;
+A1: [:{x}, the carrier of Y:] c= G;
+    then
+A0:  [:{x}, the carrier of Y:] c= the carrier of [:X,Y:] by XBOOLE_1:1;
+B1:  the carrier of [:X,Y:] = [: the carrier of X, the carrier of Y:]
+    by BORSUK_1:def 5;
+    consider y being Point of Y;
+    [x,y] in [:{x},the carrier of Y:] by ZFMISC_1:128;
+    then reconsider x' = x as Point of X by A0,B1,ZFMISC_1:106;
 A2: [:{x'}, the carrier of Y:] c= union Base-Appr G by A1,BORSUK_1:54;
 A3:now let y be set;
    assume A4: y in the carrier of Y;
-       x in {x'} by A1,TARSKI:def 1;
+       x in {x'} by TARSKI:def 1;
    then [x,y] in [:{x'}, the carrier of Y:] by A4,ZFMISC_1:106;
    then consider Z be set such that
 A5:   [x, y] in Z & Z in Base-Appr G by A2,TARSKI:def 4;
@@ -430,7 +434,7 @@ end;
 theorem Th13:
   for X being non empty TopSpace, Y being compact non empty TopSpace,
       G being open Subset of [:Y, X:] holds
- for x being set st x in { y where y is Point of X : [:[#]Y, {y}:] c= G }
+ for x being set st [:[#]Y, {x}:] c= G
    holds
     ex R be open Subset of X st x in R &
       R c= { y where y is Point of X : [:[#]Y, {y}:] c= G }
@@ -438,9 +442,15 @@ proof
   let X be non empty TopSpace, Y be compact non empty TopSpace,
       G be open Subset of [:Y, X:];
   let x be set;
-  assume x in { y where y is Point of X : [:[#]Y, {y}:] c= G };
-  then consider x' being Point of X such that
-A1: x' = x & [:[#]Y, {x'}:] c= G;
+  assume
+A1: [:[#]Y, {x}:] c= G;
+    then
+A0:  [:[#]Y,{x}:] c= the carrier of [:Y,X:] by XBOOLE_1:1;
+B1:  the carrier of [:Y,X:] = [: the carrier of Y, the carrier of X:]
+    by BORSUK_1:def 5;
+    consider y being Point of Y;
+    [y,x] in [:the carrier of Y,{x}:] by ZFMISC_1:129;
+    then reconsider x' = x as Point of X by A0,B1,ZFMISC_1:106;
 A2: [#]Y is compact by COMPTS_1:10;
       Int G = G by TOPS_1:55;
   then G is a_neighborhood of [:[#]Y, {x'}:] by A1,CONNSP_2:def 2;
@@ -460,7 +470,7 @@ then A5:[#]Y c= W by A4,XBOOLE_1:1;
     then [:[#]Y, {r'}:] c= G by A3,XBOOLE_1:1;
     hence thesis;
   end;
- hence thesis by A1,CONNSP_2:def 1;
+ hence thesis by CONNSP_2:def 1;
 end;
 
 theorem Th14:
@@ -497,8 +507,10 @@ A3: union RR = Q
   thus Q c= union RR
   proof
    let a be set; assume a in Q;
-   then consider R be open Subset of X such that
-A4:  a in R & R c= Q by Th13;
+   then consider x' being Point of X such that
+A1: a = x' & [:[#]Y, {x'}:] c= G;
+   consider R be open Subset of X such that
+A4:  a in R & R c= Q by A1,Th13;
        R in RR by A2,A4;
    hence thesis by A4,TARSKI:def 4;
   end;

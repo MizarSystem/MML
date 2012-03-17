@@ -4,10 +4,10 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
@@ -59,7 +59,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -75,7 +75,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -93,7 +93,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -113,7 +113,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -134,7 +134,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -419,7 +419,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <LocusVar nr="1"/>
 </Func>
 </Typ>

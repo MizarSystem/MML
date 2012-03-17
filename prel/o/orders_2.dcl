@@ -5,12 +5,12 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDERS_1"/>
@@ -48,7 +48,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

@@ -13,9 +13,10 @@ environ
       FUNCT_1, FUNCT_2, BINOP_1, PARTFUN1, FUNCT_4, FUNCT_5, FRAENKEL,
       CLASSES2, FUNCOP_1, CAT_1, CAT_2, OPPCAT_1;
  constructors PARTFUN1, DOMAIN_1, CLASSES2, CAT_2, OPPCAT_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
+      RELSET_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, FUNCT_1, CAT_1, CAT_2, BINOP_1;
+ definitions TARSKI, FUNCT_1, CAT_1, CAT_2, BINOP_1, RELAT_1;
  theorems TARSKI, ENUMSET1, ZFMISC_1, MCART_1, DOMAIN_1, FUNCT_1, FUNCT_2,
       PARTFUN1, FUNCOP_1, FUNCT_4, FRAENKEL, CLASSES2, CAT_1, CAT_2, OPPCAT_1,
       GRFUNC_1, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, BINOP_1;
@@ -543,26 +544,25 @@ A10:  for m2,m1 holds [m2,m1] in dom h1 iff dom m2 = cod m1 and
 A11:  for m2,m1 st dom m2 = cod m1 holds h1.[m2,m1] = m2*m1 and
 A12:  for m2,m1 holds [m2,m1] in dom h2 iff dom m2 = cod m1 and
 A13:  for m2,m1 st dom m2 = cod m1 holds h2.[m2,m1] = m2*m1;
-       now
-     thus
 A14:     dom h1 c= [:Maps V,Maps V:] by RELSET_1:12;
-     thus
 A15:     dom h2 c= [:Maps V,Maps V:] by RELSET_1:12;
-     let x,y be set;
-     thus [x,y] in dom h1 implies [x,y] in dom h2
-      proof assume
-A16:      [x,y] in dom h1;
-       then reconsider m2 = x, m1 = y as Element of Maps V by A14,ZFMISC_1:106;
-          dom m2 = cod m1 by A10,A16;
-       hence thesis by A12;
+A18: dom h1 = dom h2
+      proof let x,y be set;
+       thus [x,y] in dom h1 implies [x,y] in dom h2
+        proof assume
+  A16:      [x,y] in dom h1;
+         then reconsider m2 = x, m1 = y as Element of Maps V
+                                by A14,ZFMISC_1:106;
+            dom m2 = cod m1 by A10,A16;
+         hence thesis by A12;
+        end;
+       assume
+  A17:    [x,y] in dom h2;
+       then reconsider m2 = x, m1 = y as Element of Maps V
+                                by A15,ZFMISC_1:106;
+          dom m2 = cod m1 by A12,A17;
+       hence [x,y] in dom h1 by A10;
       end;
-     assume
-A17:    [x,y] in dom h2;
-     then reconsider m2 = x, m1 = y as Element of Maps V by A15,ZFMISC_1:106;
-        dom m2 = cod m1 by A12,A17;
-     hence [x,y] in dom h1 by A10;
-    end;
-then A18:   dom h1 = dom h2 by ZFMISC_1:110;
        now let m be Element of [:Maps V,Maps V:];
      assume
 A19:    m in dom h1;
@@ -1076,14 +1076,14 @@ A2:   dom w c= [:Maps W,Maps W:] & dom v c= [:Maps V,Maps V:]
 A3:    Maps W c= Maps V by Th7;
     thus
 A4:   dom w c= dom v
-     proof let x be set; assume
-A5:    x in dom w;
+     proof let x,y be set; assume
+A5:    [x,y] in dom w;
       then consider m2,m1 being Element of Maps W such that
-A6:    x = [m2,m1] by A2,DOMAIN_1:9;
+A6:    [x,y] = [m2,m1] by A2,DOMAIN_1:9;
       reconsider m1' = m1, m2' = m2 as Element of Maps V by A3,TARSKI:def 3;
       dom m2' = dom m2 & cod m1' = cod m1 & dom m2 = cod m1
        by A5,A6,Def12;
-      hence x in dom v by A6,Def12;
+      hence [x,y] in dom v by A6,Def12;
      end;
     let x be set; assume
 A7:   x in dom w;

@@ -3119,7 +3119,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Pred kind="R" nr="75">
+<Pred kind="R" nr="77">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Pred>
@@ -3580,7 +3580,7 @@
 </Func>
 </Pred>
 <Not>
-<Pred kind="R" nr="18">
+<Pred kind="R" nr="20">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -3770,7 +3770,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Pred kind="R" nr="76">
+<Pred kind="R" nr="78">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Pred>
@@ -4221,7 +4221,7 @@
 </Func>
 </Pred>
 <Not>
-<Pred kind="R" nr="18">
+<Pred kind="R" nr="20">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -4438,7 +4438,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Pred kind="R" nr="77">
+<Pred kind="R" nr="79">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Pred>

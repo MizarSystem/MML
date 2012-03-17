@@ -23,6 +23,7 @@
 <ArticleID name="SEQFUNC"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SUPINF_1"/>
 <ArticleID name="CARD_4"/>
@@ -46,7 +47,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="55"/>
+<Adjective nr="57"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
@@ -55,7 +56,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="69"/>
+<Adjective nr="71"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -68,7 +69,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="68"/>
+<Adjective nr="70"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
@@ -77,7 +78,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="70"/>
+<Adjective nr="72"/>
 </Cluster>
 </CCluster>
 </Registrations>

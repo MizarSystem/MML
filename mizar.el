@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.137 $
+;; $Revision: 1.139 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -894,9 +894,9 @@ See `mizar-insert-skeleton' for more."
 (interactive "r")
 (save-excursion
   (goto-char beg)
-  (let ((fla (bline (current-line)) (bcol (+ 1 (current-column)))
+  (let (fla (bline (current-line)) (bcol (+ 1 (current-column)))
 	(lspname (concat (file-name-sans-extension (buffer-file-name))
-			 ".lsp" ))))
+			 ".lsp" )))
     (mizar-it "lisppars" nil nil t)
     (or (file-readable-p lspname)
 	(error "The lisppars utility failed, unknown error!"))
@@ -1203,7 +1203,7 @@ then, for pretty printing, by using `mizar-skeleton-string'."
 	      (string-to-number
 	       (read-string "First skeleton label: " 
 			    (int-to-string mizar-next-sk-label))))))
-  (if label-number (setq mizar-next-sk-label labnr))
+  (if label-number (setq mizar-next-sk-label label-number))
   (save-excursion
     (let ((skel
 	   (mizar-skeleton-string 
@@ -5767,9 +5767,10 @@ move backward across N balanced expressions."
 	  (goto-char (match-end 0)))
 	  ))))
 
-(defun mizar-hs-adjust-block-beginning ()
+(defun mizar-hs-adjust-block-beginning (pos)
   "Adjust the block that we are looking at."
   (save-excursion
+    (goto-char pos)
     (forward-word -1)
     (point)))
 

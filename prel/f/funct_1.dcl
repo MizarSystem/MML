@@ -79,6 +79,25 @@
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="1">
+<Func kind="K" nr="4">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+</Func>
+<Cluster>
+<Adjective nr="7"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="7"/>

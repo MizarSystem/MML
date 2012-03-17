@@ -175,7 +175,9 @@ theorem Th9:
       now let x be set;
       hereby assume A1: x in dom P;
          dom P c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
-      then consider n being Element of NAT such that A2: x = insloc n
+      then reconsider l = x as Instruction-Location of SCM+FSA
+          by A1,AMI_1:def 4;
+      consider n being Element of NAT such that A2: l = insloc n
       by A1,SCMFSA_2:21;
       thus x in {insloc m:insloc m in dom P} by A1,A2;
       end;
@@ -412,7 +414,13 @@ theorem Th17:
 then A1: A c= dom s by XBOOLE_1:7;
       dom Initialize s = D \/ {IC SCM+FSA} \/ A by SCMFSA6A:34;
 then A2: A c= dom Initialize s by XBOOLE_1:7;
-      for x be set st x in A holds s.x = (Initialize s).x by SCMFSA6C:3;
+   for x be set st x in A holds s.x = (Initialize s).x
+    proof let x be set;
+     assume x in A;
+      then reconsider x as Instruction-Location of SCM+FSA by AMI_1:def 4;
+      s.x = (Initialize s).x by SCMFSA6C:3;
+     hence thesis;
+    end;
    then A3: s | A = (Initialize s) | A by A1,A2,SCMFSA6A:9;
    thus IExec(I,s) = Result (s +* Initialized I) +* s | A by SCMFSA6B:def 1
    .= Result (Initialize s +* Initialized I) +* s | A by SCMFSA8A:8
@@ -573,7 +581,7 @@ theorem Th26:
    let x be set;
    assume A1: x in dom I;
       dom I c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
-   then reconsider y = x as Instruction-Location of SCM+FSA by A1;
+   then reconsider y = x as Instruction-Location of SCM+FSA by A1,AMI_1:def 4;
 A2: not y in dom Start-At l by SCMFSA6B:11;
     x in dom (I +* Start-At l) by A1,FUNCT_4:13;
    hence (s +* (I +* Start-At l)).x = (I +* Start-At l).x by FUNCT_4:14
@@ -786,8 +794,9 @@ A1: Initialize s
    .= s +* ((intloc 0 .--> 1) +* Start-At insloc 0) by FUNCT_4:15;
       now let x be set;
       assume A2: x in A;
-   then A3: not x in dom Start-At insloc 0 by SCMFSA6B:11;
-         x <> intloc 0 & dom (intloc 0 .--> 1) = {intloc 0}
+       then reconsider l = x as Instruction-Location of SCM+FSA by AMI_1:def 4;
+   A3: not l in dom Start-At insloc 0 by A2,SCMFSA6B:11;
+         l <> intloc 0 & dom (intloc 0 .--> 1) = {intloc 0}
           by A2,FUNCOP_1:19,SCMFSA_2:84;
       then not x in dom (intloc 0 .--> 1) by TARSKI:def 1;
       hence not x in dom (intloc 0 .--> 1) \/ dom Start-At insloc 0
@@ -859,7 +868,12 @@ then A6: IExec(SCM+FSA-Stop,s) | D = s1 | D by Th37
       suppose A14: x = IC SCM+FSA;
        then x in {IC SCM+FSA} by TARSKI:def 1;
     then A15: x in dom Start-At insloc 0 by FUNCOP_1:19;
-          not x in A by A14,AMI_1:48;
+       now assume
+Z:        x in A;
+         then reconsider x as Instruction-Location of SCM+FSA by AMI_1:def 4;
+         x in A by Z;
+        hence contradiction by A14,AMI_1:48;
+       end;
        then not x in dom s /\ A by XBOOLE_0:def 3;
        then x in dom s1 & not x in dom (s | A) by A14,RELAT_1:90,SCMFSA8B:1;
        hence IExec(SCM+FSA-Stop,s).x
@@ -4332,7 +4346,12 @@ theorem Th87:
    assume I is_halting_on s0;
 then A1: s1 is halting by SCMFSA7B:def 8;
    hereby let a be read-write Int-Location;
-         not a in A by SCMFSA_2:84;
+       now assume
+Z:        a in A;
+         then reconsider a as Instruction-Location of SCM+FSA by AMI_1:def 4;
+         a in A by Z;
+        hence contradiction by SCMFSA_2:84;
+       end;
       then not a in dom s /\ A by XBOOLE_0:def 3;
   then A2: a in dom Result s1 & not a in dom (s | A) by RELAT_1:90,SCMFSA_2:66;
          s +* Initialized I = s1 by SCMFSA8A:13;
@@ -4341,7 +4360,12 @@ then A1: s1 is halting by SCMFSA7B:def 8;
       .= (Computation s1).(LifeSpan s1).a by A1,SCMFSA6B:16;
      end;
    let f be FinSeq-Location;
-      not f in A by SCMFSA_2:85;
+       now assume
+Z:        f in A;
+         then reconsider f as Instruction-Location of SCM+FSA by AMI_1:def 4;
+         f in A by Z;
+        hence contradiction by SCMFSA_2:85;
+       end;
    then not f in dom s /\ A by XBOOLE_0:def 3;
 then A3: f in dom Result s1 & not f in dom (s | A) by RELAT_1:90,SCMFSA_2:67;
       s +* Initialized I = s1 by SCMFSA8A:13;
@@ -4381,7 +4405,12 @@ theorem Th89:
    set s0 = Initialize s;
    set s1 = s0 +* (I +* Start-At insloc 0);
 A4: s1 is halting by A2,SCMFSA7B:def 8;
-      not a in A by SCMFSA_2:84;
+       now assume
+Z:        a in A;
+         then reconsider a as Instruction-Location of SCM+FSA by AMI_1:def 4;
+         a in A by Z;
+        hence contradiction by SCMFSA_2:84;
+       end;
    then not a in dom s /\ A by XBOOLE_0:def 3;
 then A5: a in dom Result s1 & not a in dom (s | A) by RELAT_1:90,SCMFSA_2:66;
       s +* Initialized I = s0 +* (I +* Start-At insloc 0) by SCMFSA8A:13;
@@ -4445,7 +4474,12 @@ theorem Th92:
    set a = intloc 0;
    assume I is_halting_on s0;
 then A1: s1 is halting by SCMFSA7B:def 8;
-      not a in A by SCMFSA_2:84;
+       now assume
+Z:        a in A;
+         then reconsider a as Instruction-Location of SCM+FSA by AMI_1:def 4;
+         a in A by Z;
+        hence contradiction by SCMFSA_2:84;
+       end;
    then not a in dom s /\ A by XBOOLE_0:def 3;
 then A2: a in dom Result s1 & not a in dom (s | A) by RELAT_1:90,SCMFSA_2:66;
 A3: s0 | D = s1 | D by SCMFSA8A:11;
@@ -4594,7 +4628,12 @@ A8: now let k be Element of NAT;
       thus (Computation s1).k.intloc 0 = s0.intloc 0 by A7
       .= 1 by SCMFSA6C:3;
      end;
-      not a in A by SCMFSA_2:84;
+       now assume
+Z:        a in A;
+         then reconsider a as Instruction-Location of SCM+FSA by AMI_1:def 4;
+         a in A by Z;
+        hence contradiction by SCMFSA_2:84;
+       end;
    then not a in dom s /\ A by XBOOLE_0:def 3;
 then A9: a in dom Result s1 & not a in dom (s | A) by RELAT_1:90,SCMFSA_2:66;
       s +* Initialized I = s1 by SCMFSA8A:13;

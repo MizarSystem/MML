@@ -2,12 +2,12 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
@@ -70,7 +70,7 @@
 <Func kind="K" nr="210"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
+<Func kind="K" nr="16">
 <Var nr="1"/>
 <Func kind="K" nr="142">
 <Var nr="2"/>
@@ -147,7 +147,7 @@
 <Func kind="K" nr="210"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
+<Func kind="K" nr="16">
 <Var nr="1"/>
 <Func kind="K" nr="142">
 <Var nr="3"/>
@@ -174,7 +174,7 @@
 <Func kind="K" nr="210"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
+<Func kind="K" nr="16">
 <Var nr="2"/>
 <Func kind="K" nr="142">
 <Var nr="3"/>
@@ -189,7 +189,7 @@
 </For>
 </For>
 <Not>
-<Pred kind="R" nr="17">
+<Pred kind="R" nr="19">
 <Func kind="K" nr="154">
 <Num nr="2"/>
 <Func kind="K" nr="210"/>
@@ -246,7 +246,7 @@
 <Func kind="K" nr="210"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
+<Func kind="K" nr="16">
 <Var nr="1"/>
 <Func kind="K" nr="142">
 <Var nr="2"/>
@@ -314,7 +314,7 @@
 <Func kind="K" nr="210"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
+<Func kind="K" nr="16">
 <Var nr="1"/>
 <Func kind="K" nr="142">
 <Var nr="3"/>
@@ -341,7 +341,7 @@
 <Func kind="K" nr="210"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
+<Func kind="K" nr="16">
 <Var nr="2"/>
 <Func kind="K" nr="142">
 <Var nr="3"/>
@@ -356,7 +356,7 @@
 </For>
 </For>
 <Not>
-<Pred kind="R" nr="17">
+<Pred kind="R" nr="19">
 <Func kind="K" nr="154">
 <Num nr="2"/>
 <Func kind="K" nr="210"/>
@@ -419,7 +419,7 @@
 <Func kind="K" nr="210"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
+<Func kind="K" nr="16">
 <Var nr="1"/>
 <Func kind="K" nr="143">
 <Var nr="2"/>
@@ -505,7 +505,7 @@
 <Func kind="K" nr="210"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
+<Func kind="K" nr="16">
 <Var nr="1"/>
 <Func kind="K" nr="143">
 <Var nr="3"/>
@@ -541,7 +541,7 @@
 <Func kind="K" nr="210"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
+<Func kind="K" nr="16">
 <Var nr="2"/>
 <Func kind="K" nr="143">
 <Var nr="3"/>
@@ -559,7 +559,7 @@
 </For>
 </For>
 <Not>
-<Pred kind="R" nr="17">
+<Pred kind="R" nr="19">
 <Func kind="K" nr="154">
 <Num nr="3"/>
 <Func kind="K" nr="210"/>
@@ -622,7 +622,7 @@
 <Func kind="K" nr="210"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
+<Func kind="K" nr="16">
 <Var nr="1"/>
 <Func kind="K" nr="143">
 <Var nr="2"/>
@@ -699,7 +699,7 @@
 <Func kind="K" nr="210"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
+<Func kind="K" nr="16">
 <Var nr="1"/>
 <Func kind="K" nr="143">
 <Var nr="3"/>
@@ -735,7 +735,7 @@
 <Func kind="K" nr="210"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
+<Func kind="K" nr="16">
 <Var nr="2"/>
 <Func kind="K" nr="143">
 <Var nr="3"/>
@@ -753,7 +753,7 @@
 </For>
 </For>
 <Not>
-<Pred kind="R" nr="17">
+<Pred kind="R" nr="19">
 <Func kind="K" nr="154">
 <Num nr="3"/>
 <Func kind="K" nr="210"/>

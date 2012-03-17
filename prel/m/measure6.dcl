@@ -13,6 +13,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="SUPINF_1"/>
 <ArticleID name="XXREAL_1"/>
 <ArticleID name="MEASURE5"/>
@@ -22,10 +23,10 @@
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="34"/>
+<Adjective nr="36"/>
 </Cluster>
 <Func kind="K" nr="28">
-<Func kind="K" nr="54"/>
+<Func kind="K" nr="62"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="1">
@@ -34,12 +35,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="76">
+<Func kind="K" nr="84">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="34"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 </Registrations>

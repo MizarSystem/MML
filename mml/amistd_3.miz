@@ -16,7 +16,8 @@ environ
       FINSEQ_1, FINSEQ_2, TREES_1, TREES_2, STRUCT_0, AMI_1, AMI_3, AMI_5,
       AMISTD_1, AMISTD_2;
  constructors WELLORD1, PARTFUN1, WELLORD2, BINOP_1, ORDINAL2, XXREAL_0, NAT_1,
-      ORDERS_1, FINSEQ_2, SEQ_4, REALSET1, TREES_2, AMI_5, AMISTD_2;
+      ORDERS_1, FINSEQ_2, SEQ_4, REALSET1, TREES_2, AMI_5, AMISTD_2,
+      ARYTM_3;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FUNCOP_1, ARYTM_3, FINSET_1,
       FRAENKEL, XXREAL_0, NAT_1, CARD_1, MEMBERED, FINSEQ_1, CARD_3, SEQ_4,
       REALSET1, CARD_4, TREES_2, CARD_5, FINSEQ_6, HEYTING2, NECKLACE, AMI_1,
@@ -29,14 +30,14 @@ environ
       RELAT_1, FINSEQ_3, FINSEQ_5, TARSKI, QC_LANG4, CARD_5, FINSEQ_2,
       XBOOLE_0, AMI_5, AMISTD_2, CQC_LANG, CARD_2, WELLORD2, ENUMSET1,
       WELLORD1, ZFMISC_1, CARD_4, FINSET_1, FUNCOP_1, RELSET_1, MEMBERED,
-      ORDERS_1, XXREAL_0;
- schemes FRAENKEL, TREES_2, FUNCT_2, NAT_1, HILBERT2, ORDINAL2, BINOP_1;
+      ORDERS_1, XXREAL_0,AMI_1;
+ schemes AMI_1, TREES_2, FUNCT_2, NAT_1, HILBERT2, ORDINAL2, BINOP_1;
 
 begin
 
 :: Preliminaries
 
-reserve x, y, X for set,
+reserve x, y, z, X for set,
         m, n for natural number,
         O for Ordinal,
         R, S for Relation;
@@ -313,6 +314,9 @@ A1: X c= O;
   then A2: card X = Card order_type_of RelIncl X by CARD_5:16;
    order_type_of RelIncl X is finite by A1,Lm2;
   then order_type_of RelIncl X in omega by CARD_4:7;
+  then reconsider o = order_type_of RelIncl X as natural number
+                         by ORDINAL1:def 13;
+   o = card X by A2,CARD_1:66;
   hence thesis by A2,CARD_1:66;
 end;
 
@@ -641,26 +645,26 @@ A1:   F is non empty and
 A2:   F is programmed;
   func FirstLoc F -> Instruction-Location of S means :Def2:
   ex M being non empty Subset of NAT st
-     M = { locnum l where l is Element of the Instruction-Locations of S
+     M = { locnum l where l is Instruction-Location of S
                         : l in dom F } &
      it = il.(S, min M);
 existence
 proof
-  deffunc G(Element of the Instruction-Locations of S) = locnum $1;
+  deffunc G(Instruction-Location of S) = locnum $1;
   reconsider F as non empty programmed FinPartState of S by A1,A2;
-  set M = { G(l) where l is Element of the Instruction-Locations of S
+  set M = { G(l) where l is Instruction-Location of S
           : l in dom F };
 A3: dom F is finite;
-A4: M is finite from FRAENKEL:sch 21(A3);
+A4: M is finite from AMI_1:sch 1(A3);
     consider l being Element of dom F;
      l in dom F & dom F c= the Instruction-Locations of S by AMI_3:def 13;
-    then reconsider l as Element of the Instruction-Locations of S;
+    then reconsider l as Instruction-Location of S by AMI_1:def 4;
 A5: locnum l in M;
      M c= NAT
     proof
       let k be set;
       assume k in M;
-      then ex l being Element of the Instruction-Locations of S st
+      then ex l being Instruction-Location of S st
         k = locnum l & l in dom F;
       hence k in NAT;
     end;
@@ -677,11 +681,11 @@ theorem Th21:
 proof
     let F be non empty programmed FinPartState of S;
     consider M being non empty Subset of NAT such that
-A1:    M = { locnum l where l is Element of the Instruction-Locations of S
+A1:    M = { locnum l where l is Instruction-Location of S
                           : l in dom F } and
 A2:    FirstLoc F = il.(S,min M) by Def2;
      min M in M by SEQ_4:def 6;
-    then ex l being Element of the Instruction-Locations of S st
+    then ex l being Instruction-Location of S st
       min M = locnum l & l in dom F by A1;
     hence FirstLoc F in dom F by A2,AMISTD_1:def 13;
   end;
@@ -693,18 +697,18 @@ proof
     let F, G be non empty programmed FinPartState of S such that
 A1:   F c= G;
     consider M being non empty Subset of NAT such that
-A2:    M = { locnum l where l is Element of the Instruction-Locations of S
+A2:    M = { locnum l where l is Instruction-Location of S
                           : l in dom F } and
 A3:    FirstLoc F = il.(S,min M) by Def2;
     consider N being non empty Subset of NAT such that
-A4:    N = { locnum l where l is Element of the Instruction-Locations of S
+A4:    N = { locnum l where l is Instruction-Location of S
                           : l in dom G } and
 A5:    FirstLoc G = il.(S,min N) by Def2;
      M c= N
     proof
       let a be set;
       assume a in M;
-      then A6:   ex l being Element of the Instruction-Locations of S st
+      then A6:   ex l being Instruction-Location of S st
        a = locnum l & l in dom F by A2;
        dom F c= dom G by A1,GRFUNC_1:8;
       hence a in N by A4,A6;
@@ -720,7 +724,7 @@ proof
     let F be non empty programmed FinPartState of S such that
 A1:   l1 in dom F;
     consider M being non empty Subset of NAT such that
-A2:    M = { locnum w where w is Element of the Instruction-Locations of S
+A2:    M = { locnum w where w is Instruction-Location of S
                           : w in dom F } and
 A3:    FirstLoc F = il.(S,min M) by Def2;
 A4: locnum FirstLoc F = min M by A3,AMISTD_1:def 13;
@@ -735,7 +739,7 @@ theorem
 proof
     let F be lower non empty programmed FinPartState of S;
     consider M being non empty Subset of NAT such that
-       M = { locnum l where l is Element of the Instruction-Locations of S
+       M = { locnum l where l is Instruction-Location of S
                           : l in dom F } and
 A1:    FirstLoc F = il.(S,min M) by Def2;
 A2: FirstLoc F in dom F by Th21;
@@ -804,7 +808,10 @@ registration
  cluster LocNums F -> non empty;
 coherence
 proof
-   ex l being Instruction-Location of S st l in F by SUBSET_1:10;
+   consider l being Element of the Instruction-Locations of S such that
+W:  l in F by SUBSET_1:10;
+   reconsider l as Instruction-Location of S by AMI_1:def 4;
+   l in F by W;
   hence thesis by Th25;
 end;
 end;
@@ -878,7 +885,7 @@ A9: dom f = LocNums F by A1,FUNCT_2:def 1;
   let a be set;
   assume
 A10: a in F;
-  then reconsider l = a as Instruction-Location of S;
+  then reconsider l = a as Instruction-Location of S by AMI_1:def 4;
 A11:locnum l in dom f by A9,A10;
   then P[locnum l,f.locnum l] by A4,A9;
   then f.locnum l = a by AMISTD_1:def 13;
@@ -1047,7 +1054,7 @@ definition
       S be standard (IC-Ins-separated definite
            (non empty non void AMI-Struct over N)),
       M be FinPartState of S;
-  func ExecTree(M) -> DecoratedTree of the Instruction-Locations of S means
+  func ExecTree(M) -> IL-DecoratedTree of S means
 :Def5:
   it.{} = FirstLoc(M) &
   for t being Element of dom it holds
@@ -1057,15 +1064,18 @@ definition
       it.(t^<*m*>) = (LocSeq NIC(pi(M,it.t),it.t)).m;
 existence
 proof
-set D = the Instruction-Locations of S;
-  defpred P[Element of D,Element of NAT,set] means
-  ($2 in dom LocSeq NIC(pi(M,$1),$1) implies
-   $3 = (LocSeq NIC(pi(M,$1),$1)).$2) &
-  (not $2 in dom LocSeq NIC(pi(M,$1),$1) implies $3 = il.(S,0));
-A1: for x being Element of D, y being Element of NAT
-      ex z being Element of D st P[x,y,z]
+  set D = the Instruction-Locations of S;
+  defpred P[set,Element of NAT,set] means
+   ex l being Instruction-Location of S st l = $1 &
+  ($2 in dom LocSeq NIC(pi(M,l),l) implies
+   $3 = (LocSeq NIC(pi(M,l),l)).$2) &
+  (not $2 in dom LocSeq NIC(pi(M,l),l) implies $3 = il.(S,0));
+A1: for x being Element of the Instruction-Locations of S,
+        y being Element of NAT
+      ex z being Element of the Instruction-Locations of S st P[x,y,z]
     proof
-      let x be Element of D, y be Element of NAT;
+      let x be Element of the Instruction-Locations of S, y be Element of NAT;
+       reconsider x as Instruction-Location of S by AMI_1:def 4;
       set z = (LocSeq NIC(pi(M,x),x)).y;
       per cases;
       suppose
@@ -1083,42 +1093,69 @@ A4:     not y in dom LocSeq NIC(pi(M,x),x);
     end;
     end;
   consider f be Function of [:D,NAT:],D such that
-A5: for l being Instruction-Location of S, n being Element of NAT holds
+A5: for l being Element of the Instruction-Locations of S,
+        n being Element of NAT holds
      P[l,n,f.(l,n)] from BINOP_1:sch 3(A1);
-  deffunc F(Element of D) = Card NIC(pi(M,$1),$1);
-A6: for d being Element of D,
-        k1, k2 being Element of NAT st k1 <= k2 & k2 in F(d) holds k1 in F(d)
+  defpred F[set,set] means
+    ex l being Instruction-Location of S st l = $2 &
+                  $1 in Card NIC(pi(M,l),l);
+A6: for d being Element of the Instruction-Locations of S,
+        k1, k2 being Element of NAT st k1 <= k2 & F[k2,d] holds F[k1,d]
    proof
-     let d be Element of D,
+     let d be Element of the Instruction-Locations of S,
          k1, k2 be Element of NAT such that
 A7:    k1 <= k2 and
-A8:    k2 in F(d);
+A8:    F[k2,d];
+      reconsider d as Instruction-Location of S by AMI_1:def 4;
+     take d;
       k1 c= k2 by A7,CARD_1:56;
      hence thesis by A8,ORDINAL1:22;
    end;
-  consider T being DecoratedTree of D such that
+  consider T being DecoratedTree of the Instruction-Locations of S such that
 A9:T.{} = FirstLoc(M) and
 A10:for t being Element of dom T holds
-    succ t = { t^<*k*> where k is Element of NAT:
-    k in F(T.t qua Instruction-Location of S)} &
-     for n being Element of NAT st n in F(T.t qua Instruction-Location of S)
-     holds
-      T.(t^<*n*>) = f.(T.t,n) from TREES_2:sch 8(A6);
+    succ t = { t^<*k*> where k is Element of NAT: F[k,T.t]} &
+     for n being Element of NAT st F[n,T.t]
+      holds T.(t^<*n*>) = f.(T.t,n) from TREES_2:sch 10(A6);
+   reconsider T as IL-DecoratedTree of S by AMI_1:def 37;
   take T;
-  thus T.{} = FirstLoc(M) by A9;
+   {} in dom T by TREES_1:47;
+  hence T.{} = FirstLoc(M) by A9,AMI_1:def 38;
   let t be Element of dom T;
-  thus succ t = { t^<*k*> where k is Element of NAT:
-  k in F(T.t qua Instruction-Location of S)} by A10;
+   t in dom T;
+   then
+X:  (T qua DecoratedTree of the Instruction-Locations of S).t = T.t
+        by AMI_1:def 38;
+   deffunc G(Element of NAT) = t^<*$1*>;
+   defpred S[Element of NAT,Instruction-Location of S] means
+               $1 in Card NIC(pi(M,$2),$2);
+   set X = {G(k) where k is Element of NAT:
+              ex l being Instruction-Location of S st l = T.t & S[k,l] },
+       Y = {G(k) where k is Element of NAT: S[k,T.t]};
+Y: succ t = X by X,A10;
+   X = Y from AMI_1:sch 2;
+  hence
+U: succ t = Y by Y;
   let m be Element of NAT;
   assume
 A11: m in Card NIC(pi(M,T.t),T.t);
 A12: dom LocSeq NIC(pi(M,T.t),T.t) = Card NIC(pi(M,T.t),T.t) by Def4;
-  thus T.(t^<*m*>) = f.(T.t,m) by A10,A11
-    .= (LocSeq NIC(pi(M,T.t),T.t)).m by A5,A11,A12;
+   consider l being Instruction-Location of S such that
+W1:  l = T.t and
+W2: (m in dom LocSeq NIC(pi(M,l),l) implies
+               f.(T.t,m)= (LocSeq NIC(pi(M,l),l)).m) and
+W3: not m in dom LocSeq NIC(pi(M,l),l) implies f.(T.t,m) = il.(S,0) by A5;
+   S[m,T.t] by A11;
+   then t^<*m*> in {G(k) where k is Element of NAT: S[k,T.t]};
+   then t^<*m*> in dom T by U,TREES_2:14;
+   then (T qua DecoratedTree of the Instruction-Locations of S).(t^<*m*>)
+                 = T.(t^<*m*>) by AMI_1:def 38;
+  hence T.(t^<*m*>) = f.(T.t,m) by A10,A11,AMI_1:def 38,X
+    .= (LocSeq NIC(pi(M,T.t),T.t)).m by A5,A11,A12,W1,W2;
 end;
 uniqueness
 proof
-  let T1,T2 be DecoratedTree of the Instruction-Locations of S such that
+  let T1,T2 be IL-DecoratedTree of S such that
 A13: T1.{} = FirstLoc(M) and
 A14: for t being Element of dom T1 holds
      succ t = { t^<*k*> where k is Element of NAT:
@@ -1307,7 +1344,8 @@ A81:      for n being Element of NAT holds R[n] from NAT_1:sch 1(A61,A62);
    end;
 A83: for n being Element of NAT holds P[n] from NAT_1:sch 1(A17,A18);
    then A84:dom T1 = dom T2 by Th18;
-   for p being FinSequence of NAT st p in dom T1 holds T1.p = T2.p
+   for p being FinSequence of NAT st p in dom T1
+    holds (T1 qua Function).p = (T2 qua Function).p
   proof
     let p be FinSequence of NAT;
     assume
@@ -1359,8 +1397,10 @@ A102: (p|Seg(n+1)).len (p|Seg(n+1)) in Card NIC(pi(M,T2.t2),T2.t2)
        .= T2.(p|Seg (n+1)) by A16,A88,A89,A91,A93,A97,A102,XXREAL_0:2;
   end;
 A103:  for n being Element of NAT holds P[n] from NAT_1:sch 1(A86,A87);
-   p|Seg len p = p by FINSEQ_3:55;
-  hence thesis by A85,A103;
+X: p|Seg len p = p by FINSEQ_3:55;
+   (T1 qua Function).p = T1.p & (T2 qua Function).p = T2.p
+               by A84,A85,AMI_1:def 38;
+  hence thesis by A85,A103,X;
   end;
   hence T1 = T2 by A84,TREES_2:33;
 end;
@@ -1552,14 +1592,16 @@ A51:     E.t in dom M by A21;
   end;
    for x being Element of NAT holds X[x] from NAT_1:sch 1(A22,A23);
   then A53: dom E = D by Th18;
-   for x being set st x in dom E holds E.x = il.(S,0)
+   for x being set st x in dom E holds (E qua Function).x = il.(S,0)
   proof
     let x be set;
-    assume x in dom E;
+    assume
+Z:   x in dom E;
     then reconsider x as Element of dom E;
      E.x in dom M by A21;
     then E.x in {il.(S,0)} by A1,CQC_LANG:5;
-    hence thesis by TARSKI:def 1;
+    then E.x = il.(S,0) by TARSKI:def 1;
+    hence thesis by Z,AMI_1:def 38;
   end;
   hence thesis by A53,FUNCOP_1:17;
 end;

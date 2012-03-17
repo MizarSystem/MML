@@ -12,6 +12,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="SUPINF_1"/>
 </Signature>
 <Scheme>
@@ -20,14 +21,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="54"/>
+<Func kind="K" nr="62"/>
 </Func>
 </Typ>
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="54"/>
+<Func kind="K" nr="62"/>
 </Func>
 </Typ>
 <Not>

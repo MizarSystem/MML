@@ -80,8 +80,9 @@ A1: now let x be set;
     assume
 A2:   x in dom P;
         dom P c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
-     then consider n such that
-A3:    x = inspos n by A2,SCMPDS_3:32;
+     then reconsider l=x as Instruction-Location of SCMPDS by A2,AMI_1:def 4;
+     consider n such that
+A3:    l = inspos n by A2,SCMPDS_3:32;
     take n;
     thus x = U(n) by A3;
    end;
@@ -152,6 +153,8 @@ A1: for x being set st x in dom I ex d being Element of NAT st x = U(d)
      proof let x be set;
 A2:     dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
       assume x in dom I;
+      then reconsider l=x as Instruction-Location of SCMPDS by A2,AMI_1:def 4;
+       l=x;
       hence thesis by A2,SCMPDS_3:32;
      end;
 A3: for d1,d2 being Element of NAT st U(d1) = U(d2) holds d1=d2;
@@ -307,8 +310,13 @@ end;
 theorem Th9:   :: Th26
  I c= Initialized I
 proof set A = the Instruction-Locations of SCMPDS;
-   dom I c= A by AMI_3:def 13;
-then A1: not IC SCMPDS in dom I by AMI_1:48;
+X:  dom I c= A by AMI_3:def 13;
+A1:   now assume IC SCMPDS in dom I;
+        then reconsider l=IC SCMPDS as Instruction-Location of SCMPDS
+                    by X,AMI_1:def 4;
+        l=IC SCMPDS;
+       hence contradiction by AMI_1:48;
+      end;
        dom Start-At(inspos 0) = { IC SCMPDS } by FUNCOP_1:19;
     then dom I misses dom (Start-At (inspos 0)) by A1,ZFMISC_1:56;
  hence thesis by FUNCT_4:33;
@@ -324,7 +332,12 @@ proof set A = the Instruction-Locations of SCMPDS;
  let s1,s2 be State of SCMPDS such that
 A1: IC s1 = IC s2 and
 A2: for a being Int_position holds s1.a = s2.a;
-      not IC SCMPDS in A by AMI_1:48;
+      now assume IC SCMPDS in A;
+        then reconsider l=IC SCMPDS as Instruction-Location of SCMPDS
+                      by AMI_1:def 4;
+        l=IC SCMPDS;
+       hence contradiction by AMI_1:48;
+      end;
    then {IC SCMPDS} misses A by ZFMISC_1:56;
 then A3: {IC SCMPDS } \/ SCM-Data-Loc misses A by AMI_5:33,XBOOLE_1:70;
 A4: (the carrier of SCMPDS) \ A
@@ -737,7 +750,12 @@ theorem
     (Initialized I)|the Instruction-Locations of SCMPDS = I
 proof
 A1: dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
-A2: not IC SCMPDS in the Instruction-Locations of SCMPDS by AMI_1:48;
+A2: now assume IC SCMPDS in the Instruction-Locations of SCMPDS;
+      then reconsider l=IC SCMPDS as Instruction-Location of SCMPDS
+             by AMI_1:def 4;
+      l=IC SCMPDS;
+     hence contradiction by AMI_1:48;
+    end;
       dom Start-At(inspos 0) = { IC SCMPDS } by FUNCOP_1:19;
  then dom Start-At(inspos 0) misses the Instruction-Locations of SCMPDS
        by A2,ZFMISC_1:56;
@@ -795,7 +813,10 @@ A1: for e being set st e in the carrier of SCMPDS
         then e is Int_position by SCMPDS_2:9;
         hence ex m st e = DataLoc(m,0) by Th18;
       end;
-      case e in S3;
+      case
+C:     e in S3;
+        then reconsider l=e as Instruction-Location of SCMPDS by AMI_1:def 4;
+        l=l;
        hence ex m st e = inspos m by SCMPDS_3:32;
      end;
      end;
@@ -844,8 +865,9 @@ then A14:    x = IC SCMPDS by TARSKI:def 1;
    hence f.x in (the Object-Kind of SCMPDS).x by A12,A14;
     end;
     suppose A15: x in the Instruction-Locations of SCMPDS;
-    then (the Object-Kind of SCMPDS).x = ObjectKind inspos m by A12,AMI_1:48
-,SCMPDS_2:53
+     then reconsider l=x as Instruction-Location of SCMPDS by AMI_1:def 4;
+    (the Object-Kind of SCMPDS).l = ObjectKind inspos m by A12,AMI_1:48
+,SCMPDS_2:53,A15
         .= the Instructions of SCMPDS by AMI_1:def 14;
    hence f.x in (the Object-Kind of SCMPDS).x by A12,A15,AMI_1:48,SCMPDS_2:53;
   end;
@@ -889,6 +911,8 @@ A1:dom s = S1 \/ S2 \/ S3 by AMI_3:36,SCMPDS_3:5;
    assume x in dom s;
    then x in S1 \/ S2 or x in S3 by A1,XBOOLE_0:def 2;
    then x in S1 or x in S2 or x in S3 by XBOOLE_0:def 2;
+   then x in S1 or x in S2 or
+      x is Instruction-Location of SCMPDS by AMI_1:def 4;
    hence thesis by SCMPDS_2:9,TARSKI:def 1;
 end;
 
@@ -901,16 +925,31 @@ theorem     :: T29
    let s1,s2 be State of SCMPDS;
 A1: the Instruction-Locations of SCMPDS c= dom s1 by SCMFSA_2:3;
 A2: the Instruction-Locations of SCMPDS c= dom s2 by SCMFSA_2:3;
-      (for l being Instruction-Location of SCMPDS holds s1.l = s2.l) iff
+X:      (for l being Instruction-Location of SCMPDS holds s1.l = s2.l) implies
+ (for l being set st l in the Instruction-Locations of SCMPDS
+       holds s1.l = s2.l)
+    proof assume
+Z:    for l being Instruction-Location of SCMPDS holds s1.l = s2.l;
+     let x be set;
+     assume x in the Instruction-Locations of SCMPDS;
+      then reconsider l=x as Instruction-Location of SCMPDS by AMI_1:def 4;
+      s1.l = s2.l by Z;
+     hence thesis;
+    end;
    (for l being set st l in the Instruction-Locations of SCMPDS
-       holds s1.l = s2.l);
-   hence thesis by A1,A2,SCMFSA6A:9;
+       holds s1.l = s2.l) implies
+      (for l being Instruction-Location of SCMPDS holds s1.l = s2.l);
+   hence thesis by A1,A2,SCMFSA6A:9,X;
 end;
 
 theorem  :: T32
     for i being Instruction-Location of SCMPDS holds
      not i in SCM-Data-Loc
-by AMI_5:33,XBOOLE_0:3;
+proof let i be Instruction-Location of SCMPDS;
+ i in the Instruction-Locations of SCMPDS;
+ then i in SCM-Instr-Loc;
+ hence thesis by AMI_5:33,XBOOLE_0:3,AMI_1:def 4;
+end;
 
 theorem Th23:    :: Th38
  for s1,s2 being State of SCMPDS holds
@@ -1039,8 +1078,12 @@ theorem Th30:  :: Th47
   for I being Program-block holds not IC SCMPDS in dom I
 proof
    let I be Program-block;
-    dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
-   hence not IC SCMPDS in dom I by AMI_1:48;
+X:  dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
+   assume IC SCMPDS in dom I;
+    then reconsider l=IC SCMPDS as Instruction-Location of SCMPDS
+        by AMI_1:def 4,X;
+    l = IC SCMPDS;
+  hence contradiction by AMI_1:48;
 end;
 
 theorem Th31:  :: Th48
@@ -1054,6 +1097,8 @@ proof
    per cases by A1,XBOOLE_0:def 2;
    suppose A2: a in dom I;
        dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
+     then reconsider l=a as Instruction-Location of SCMPDS by A2,AMI_1:def 4;
+     l=a;
     hence contradiction by A2,SCMPDS_2:53;
    end;
    suppose a in {IC SCMPDS};
@@ -1069,8 +1114,9 @@ theorem Th32:   ::TN32
 proof assume
 A1: x in dom I;
    A2: dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
+    then reconsider l=x as Instruction-Location of SCMPDS by A1,AMI_1:def 4;
 A3: dom Start-At inspos n = {IC SCMPDS} by FUNCOP_1:19;
-      x <> IC SCMPDS by A1,A2,AMI_1:48;
+      l <> IC SCMPDS by A1,A2,AMI_1:48;
    then not x in dom Start-At inspos n by A3,TARSKI:def 1;
  hence thesis by FUNCT_4:12;
 end;
@@ -1414,8 +1460,11 @@ A2: dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
   assume dom I /\ dom (Start-At inspos n) <> {};
        then consider x being set such that
    A3: x in dom I /\ dom (Start-At inspos n) by XBOOLE_0:def 1;
-          x in dom I & x in dom (Start-At inspos n) by A3,XBOOLE_0:def 3;
+X:        x in dom I & x in dom (Start-At inspos n) by A3,XBOOLE_0:def 3;
        then IC SCMPDS in dom I by A1,TARSKI:def 1;
+     then reconsider l=IC SCMPDS as Instruction-Location of SCMPDS
+       by AMI_1:def 4,A2;
+     l=IC SCMPDS;
     hence contradiction by A2,AMI_1:48;
 end;
 
@@ -1442,9 +1491,10 @@ A1: dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
   assume not thesis; then consider x being set such that
 A2:  x in the Instruction-Locations of SCMPDS & x in dom Start-At inspos n
        by XBOOLE_0:3;
+B2: x is Instruction-Location of SCMPDS by A2,AMI_1:def 4;
       dom Start-At inspos n = {IC SCMPDS} by FUNCOP_1:19;
    then x = IC SCMPDS by A2,TARSKI:def 1;
-  hence contradiction by A2,AMI_1:48;
+  hence contradiction by A2,AMI_1:48,B2;
  end;
  then (I +* Start-At inspos n)|the Instruction-Locations of SCMPDS
   = I | the Instruction-Locations of SCMPDS by FUNCT_4:76;

@@ -6,8 +6,9 @@
 
 environ
 
- vocabularies ARYTM_1, ARYTM_3, NAT_1, INT_1;
- notations SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, INT_1;
+ vocabularies ARYTM_1, ARYTM_3, NAT_1, INT_1, ORDINAL2, ARYTM;
+ notations SUBSET_1, ORDINAL1,
+    NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, INT_1;
  constructors XXREAL_0, NAT_1, INT_1;
  registrations ARYTM_3, XXREAL_0, XREAL_0, NAT_1, INT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -759,3 +760,38 @@ then y divides m*t by Th9;
     then y divides x by A4,Def5;
    hence thesis by A3,Th5;
 end;
+
+:: from AMI_3, 2007.06.14, A.T.
+
+reserve i,j for Element of NAT;
+
+scheme INDI{ k,n() -> Element of NAT, P[set] }:
+     P[n()]
+provided
+ A1: P[0] and
+ A2: k() > 0 and
+ A3: for i,j st P[k()*i] & j <> 0 & j <= k() holds
+     P[k()*i+j]
+proof
+   defpred R[Element of NAT] means P[k()*$1];
+A4: R[0] by A1;
+A5: now let i; assume
+A6:  R[i];
+        k()*(i+1) = k()*i + k();
+    hence R[i+1] by A2,A3,A6;
+   end;
+  A7: for i holds R[i] from NAT_1:sch 1(A4,A5);
+then A8: P[k()*(n() div k())];
+  per cases;
+  suppose n() mod k() = 0;
+   then n() = k() * (n() div k()) + 0 by A2,Th2;
+   hence thesis by A7;
+  end;
+  suppose
+A9: n() mod k() <> 0;
+A10: n() = k() * (n() div k()) + (n() mod k()) by A2,Th2;
+      n() mod k() <= k() by A2,Th1;
+  hence thesis by A3,A8,A9,A10;
+ end;
+ end;
+

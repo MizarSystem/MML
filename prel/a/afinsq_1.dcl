@@ -334,6 +334,23 @@
 <Adjective nr="24"/>
 </Cluster>
 </FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="15">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="13" value="false"/>
+</Cluster>
+</FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>

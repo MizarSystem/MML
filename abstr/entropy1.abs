@@ -1,0 +1,472 @@
+:: Definition and Some Properties of Information Entropy
+::  by Bo Zhang and Yatsuka Nakamura
+:: 
+:: Received July 9, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM, FINSEQ_1, BOOLE, ARYTM_1, FUNCT_1, NAT_1, MATRIXC1,
+      MATRPROB, RELAT_1, RVSUM_1, ARYTM_3, FINSEQ_2, INCSP_1, MATRIXR1, RAT_1,
+      FCONT_1, RLVECT_1, MATRIX_1, TREES_1, PARTFUN1, CAT_3, POWER, TAYLOR_1,
+      LIMFUNC1, FDIFF_1, RCOMP_1, SEQ_1, SUPINF_2, PARTFUN3, ROUGHS_1,
+      FINSEQ_4, ENTROPY1, FUNCOP_1;
+ notations TARSKI, SUBSET_1, XBOOLE_0, XCMPLX_0, XXREAL_0, XXREAL_1, XREAL_0,
+      REAL_1, NAT_1, NAT_D, ORDINAL1, NUMBERS, PARTFUN1, RELAT_1, FUNCT_1,
+      SEQ_1, ZFMISC_1, FUNCOP_1, BINOP_1, RLVECT_1, BINOP_2, FINSOP_1, FUNCT_2,
+      RVSUM_1, FVSUM_1, FINSEQ_1, FINSEQ_2, FINSEQOP, NEWTON, MATRIXR1,
+      MATRIX_1, EUCLID, PARTFUN3, RFUNCT_2, POWER, LIMFUNC1, RCOMP_1, FCONT_1,
+      MATRPROB, FDIFF_1, TAYLOR_1, FINSEQ_4;
+ constructors FVSUM_1, SETWOP_2, NUMBERS, REAL_1, XREAL_0, XCMPLX_0, XBOOLE_0,
+      NAT_D, FINSEQ_4, BINOP_2, MATRIX_1, SEQ_1, MATRIX_4, MATRIX_3, FINSOP_1,
+      VECTSP_1, MATRIXR1, MEMBERED, BINOP_1, XXREAL_0, FINSEQ_3, PARTFUN1,
+      FUNCOP_1, FINSEQ_2, RVSUM_1, NEWTON, SQUARE_1, MATRLIN, EUCLID_2, NAT_1,
+      MATRPROB, PARTFUN3, PARTFUN2, FDIFF_1, RFUNCT_2, RCOMP_1, FCONT_1, POWER,
+      LIMFUNC1, SIN_COS, TAYLOR_1, INTEGRA1, RCOMP_2, XXREAL_1;
+ registrations MATRPROB, RELSET_1, NAT_1, RAT_1, FINSEQ_2, MEMBERED, FUNCT_1,
+      FUNCT_2, BINOP_2, ORDINAL1, SEQ_1, XREAL_0, FCONT_3, RCOMP_1, XXREAL_0,
+      NUMBERS, ARYTM_3, XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+ reserve D for non empty set,
+         i,j,k,l for Element of NAT,
+         n,m for Nat,
+         x,y for set,
+         a,b,c,b1,r,r1,r2 for Real,
+         p,q for FinSequence of REAL,
+         MR,MR1 for Matrix of REAL;
+
+theorem :: ENTROPY1:1
+  k <> 0 & i < l & l <= j & k divides l implies
+    i div k < j div k;
+
+theorem :: ENTROPY1:2
+  r > 0 implies ((log_ number_e).r <= r - 1) &
+    (r = 1 iff (log_ number_e).r = r - 1) &
+    (r <> 1 iff (log_ number_e).r < r - 1);
+
+theorem :: ENTROPY1:3
+  r > 0 implies (log(number_e,r) <= r - 1) &
+    (r = 1 iff log(number_e,r) = r - 1) &
+    (r <> 1 iff log(number_e,r) < r - 1);
+
+theorem :: ENTROPY1:4
+  a>1 & b>1 implies log(a,b) > 0;
+
+theorem :: ENTROPY1:5
+  a>0 & a<>1 & b>0 implies -log(a,b) = log(a,1/b);
+
+theorem :: ENTROPY1:6
+  a>0 & a<>1 & b>=0 & c>=0 implies b*c*log(a,b*c) = b*c*log(a,b)+b*c*log(a,c);
+
+theorem :: ENTROPY1:7
+  for q,q1,q2 being FinSequence of REAL st len q1 = len q & len q1 = len q2 &
+    (for k st k in dom q1 holds q.k = q1.k + q2.k) holds
+      Sum q = Sum q1 + Sum q2;
+
+theorem :: ENTROPY1:8
+  for q,q1,q2 being FinSequence of REAL st len q1 = len q & len q1 = len q2 &
+    (for k st k in dom q1 holds q.k = q1.k - q2.k) holds
+      Sum q = Sum q1 - Sum q2;
+
+theorem :: ENTROPY1:9
+  len p >= 1 implies ex q st len q = len p & q.1 = p.1 &
+    (for k st 0 <> k & k < len p holds q.(k+1) = q.k + p.(k+1)) &
+    Sum p = q.(len p);
+
+notation let p;
+  synonym p is nonnegative for p is nonnegative-yielding;
+end;
+
+definition let p;
+  redefine attr p is nonnegative means
+:: ENTROPY1:def 1
+    for i st i in dom p holds p.i >= 0;
+end;
+
+registration
+  cluster nonnegative FinSequence of REAL;
+end;
+
+theorem :: ENTROPY1:10
+  p is nonnegative & r>=0 implies r*p is nonnegative;
+
+definition let p,k;
+  pred p has_onlyone_value_in k means
+:: ENTROPY1:def 2
+    k in dom p & for i st i in dom p & i<>k holds p.i=0;
+end;
+
+theorem :: ENTROPY1:11
+  p has_onlyone_value_in k & i<>k implies p.i=0;
+
+theorem :: ENTROPY1:12
+  len p = len q & p has_onlyone_value_in k implies
+    mlt(p,q) has_onlyone_value_in k & mlt(p,q).k = p.k * q.k;
+
+theorem :: ENTROPY1:13
+  p has_onlyone_value_in k implies Sum p = p.k;
+
+theorem :: ENTROPY1:14
+  p is nonnegative implies
+    for k st k in dom p & p.k = Sum p holds p has_onlyone_value_in k;
+
+registration
+  cluster ProbFinS -> non empty nonnegative FinSequence of REAL;
+end;
+
+theorem :: ENTROPY1:15
+  for p being ProbFinS FinSequence of REAL
+   for k st k in dom p & p.k = 1 holds p has_onlyone_value_in k;
+
+theorem :: ENTROPY1:16
+  for i being non empty Nat holds
+    (i |-> (1/i)) is ProbFinS FinSequence of REAL;
+
+registration
+  cluster with_sum=1 -> non empty-yielding Matrix of REAL;
+  cluster Joint_Probability -> non empty-yielding Matrix of REAL;
+end;
+
+theorem :: ENTROPY1:17
+  for M being Matrix of REAL st M = {} holds SumAll M = 0;
+
+theorem :: ENTROPY1:18
+  for M being Matrix of D holds
+    for i st i in dom M holds dom(M.i) = Seg width M;
+
+theorem :: ENTROPY1:19
+   MR is m-nonnegative iff
+    (for i st i in dom MR holds Line(MR,i) is nonnegative);
+
+begin :: Properties on Transformations between Vector and Matrix
+
+theorem :: ENTROPY1:20
+  for j st j in dom p holds Col(LineVec2Mx p,j) = <*p.j*>;
+
+theorem :: ENTROPY1:21
+  for p being non empty FinSequence of REAL for q being FinSequence of REAL
+    for M being Matrix of REAL holds
+    M = (ColVec2Mx p) * (LineVec2Mx q) iff
+      (len M = len p & width M = len q &
+      for i,j st [i,j] in Indices M holds M*(i,j) = p.i * q.j);
+
+theorem :: ENTROPY1:22
+  for p being non empty FinSequence of REAL for q being FinSequence of REAL
+    for M being Matrix of REAL holds
+    M = (ColVec2Mx p) * (LineVec2Mx q) iff
+      (len M = len p & width M = len q &
+      for i st i in dom M holds Line(M,i) = p.i * q);
+
+theorem :: ENTROPY1:23
+  for p,q being ProbFinS FinSequence of REAL holds
+    (ColVec2Mx p) * (LineVec2Mx q) is Joint_Probability;
+
+definition let n;
+           let MR be Matrix of n,REAL;
+  attr MR is diagonal means
+:: ENTROPY1:def 3
+    for i,j st [i,j] in Indices MR & MR*(i,j) <> 0 holds i=j;
+end;
+
+registration let n;
+  cluster diagonal Matrix of n,REAL;
+end;
+
+theorem :: ENTROPY1:24
+  for MR being Matrix of n,REAL holds
+    MR is diagonal iff
+      for i st i in dom MR holds Line(MR,i) has_onlyone_value_in i;
+
+definition let p;
+  func Vec2DiagMx p -> diagonal Matrix of len p,REAL means
+:: ENTROPY1:def 4
+    for j st j in dom p holds it*(j,j) = p.j;
+end;
+
+theorem :: ENTROPY1:25
+  MR=Vec2DiagMx p iff
+    len MR = len p & width MR = len p & for i st i in dom MR holds
+      Line(MR,i) has_onlyone_value_in i & Line(MR,i).i=p.i;
+
+theorem :: ENTROPY1:26
+  len p = len MR implies
+    (MR1 = (Vec2DiagMx p) * MR iff
+      len MR1 = len p & width MR1 = width MR &
+      for i,j st [i,j] in Indices MR1 holds MR1*(i,j) = p.i * (MR*(i,j)));
+
+theorem :: ENTROPY1:27
+  len p = len MR implies
+    (MR1 = (Vec2DiagMx p) * MR iff
+      len MR1 = len p & width MR1 = width MR &
+      for i st i in dom MR1 holds Line(MR1,i) = p.i * Line(MR,i));
+
+theorem :: ENTROPY1:28
+  for p being ProbFinS FinSequence of REAL
+  for M being non empty-yielding Conditional_Probability Matrix of REAL
+    st len p = len M holds (Vec2DiagMx p) * M is Joint_Probability;
+
+theorem :: ENTROPY1:29
+  for M being Matrix of D for p being FinSequence of D* st
+    len p = len M & p.1 = M.1 &
+    (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
+      for k st k in dom p holds len (p.k) = k * width M;
+
+theorem :: ENTROPY1:30
+  for M being Matrix of D for p being FinSequence of D* st
+    len p = len M & p.1 = M.1 &
+    (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
+      for i,j st i in dom p & j in dom p & i <= j holds dom (p.i) c= dom (p.j);
+
+theorem :: ENTROPY1:31
+  for M being Matrix of D for p being FinSequence of D* st
+    len p = len M & p.1 = M.1 &
+    (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
+      len (p.1) = width M & (for j st [1,j] in Indices M holds
+      j in dom (p.1) & (p.1).j = M*(1,j));
+
+theorem :: ENTROPY1:32
+  for M being Matrix of D for p being FinSequence of D* st
+     len p = len M & p.1 = M.1 &
+     (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
+       for j st j >= 1 & j < len p holds
+       (for l st l in dom(p.j) holds (p.j).l = (p.(j+1)).l);
+
+theorem :: ENTROPY1:33
+  for M being Matrix of D for p being FinSequence of D* st
+     len p = len M & p.1 = M.1 &
+     (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
+       for i,j st i in dom p & j in dom p & i <= j holds
+       (for l st l in dom(p.i) holds (p.i).l = (p.j).l);
+
+theorem :: ENTROPY1:34
+  for M being Matrix of D for p being FinSequence of D* st
+     len p = len M & p.1 = M.1 &
+     (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
+       for j st j >= 1 & j < len p holds
+       (for l st l in Seg width M holds (j*width M+l) in dom (p.(j+1)) &
+       (p.(j+1)).(j*width M+l)=(M.(j+1)).l);
+
+theorem :: ENTROPY1:35
+  for M being Matrix of D for p being FinSequence of D* st
+    len p = len M & p.1 = M.1 &
+    (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
+      for i,j st [i,j] in Indices M holds (i-1)*(width M)+j in dom(p.i) &
+        M*(i,j) = (p.i).((i-1)*(width M)+j);
+
+theorem :: ENTROPY1:36
+  for M being Matrix of D for p being FinSequence of D* st
+    len p = len M & p.1 = M.1 &
+    (for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1)) holds
+      for i,j st [i,j] in Indices M holds (i-1)*(width M)+j in dom(p.(len M))
+      & M*(i,j) = (p.(len M)).((i-1)*(width M)+j);
+
+theorem :: ENTROPY1:37
+  for M being Matrix of REAL for p being FinSequence of REAL* st
+    len p = len M & p.1 = M.1 &
+    (for k st k >= 1 & k < len M holds p.(k+1)=(p.k) ^ M.(k+1)) holds
+      for k st k >= 1 & k < len M holds Sum(p.(k+1))=Sum(p.k)+Sum(M.(k+1));
+
+theorem :: ENTROPY1:38
+  for M being Matrix of REAL for p being FinSequence of REAL* st
+    len p = len M & p.1 = M.1 &
+    (for k st k >= 1 & k < len M holds p.(k+1)=(p.k) ^ M.(k+1)) holds
+      SumAll M = Sum(p.(len M));
+
+definition let D be non empty set;
+           let M be Matrix of D;
+  func Mx2FinS(M) -> FinSequence of D means
+:: ENTROPY1:def 5
+  it = {} if len M = 0 otherwise
+  ex p being FinSequence of D* st it = p.(len M) &
+    len p = len M & p.1 = M.1 &
+    for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
+end;
+
+theorem :: ENTROPY1:39
+  for M being Matrix of D holds
+    len Mx2FinS(M) = len M * width M;
+
+theorem :: ENTROPY1:40
+  for M being Matrix of D for i,j st [i,j] in Indices M holds
+    (i-1) * (width M) + j in dom Mx2FinS M &
+    M*(i,j) = (Mx2FinS(M)).((i-1) * (width M) + j);
+
+theorem :: ENTROPY1:41
+  for M being Matrix of D for k,l st
+    k in dom(Mx2FinS(M)) & l = k - 1 holds
+    [((l div width M)+1),((l mod width M)+1)] in Indices M &
+    (Mx2FinS(M)).k = M*(((l div width M)+1),((l mod width M)+1));
+
+theorem :: ENTROPY1:42
+  SumAll MR = Sum Mx2FinS MR;
+
+theorem :: ENTROPY1:43
+  MR is m-nonnegative iff Mx2FinS(MR) is nonnegative;
+
+theorem :: ENTROPY1:44
+  MR is Joint_Probability iff Mx2FinS(MR) is ProbFinS;
+
+theorem :: ENTROPY1:45
+  for p,q being ProbFinS FinSequence of REAL holds
+    Mx2FinS((ColVec2Mx p) * (LineVec2Mx q)) is ProbFinS;
+
+theorem :: ENTROPY1:46
+  for p being ProbFinS FinSequence of REAL
+  for M being non empty-yielding Conditional_Probability Matrix of REAL st
+  len p = len M holds
+    Mx2FinS((Vec2DiagMx p) * M) is ProbFinS;
+
+begin :: Information Entropy
+
+definition let a,p;
+  assume  a > 0 & a <> 1 & p is nonnegative;
+  func FinSeq_log(a,p) -> FinSequence of REAL means
+:: ENTROPY1:def 6
+    len it = len p & for k st k in dom it holds
+      (p.k > 0 implies it.k = log(a,p.k))  &
+      (p.k = 0 implies it.k = 0);
+end;
+
+definition let p;
+  func Infor_FinSeq_of p -> FinSequence of REAL equals
+:: ENTROPY1:def 7
+    mlt(p,FinSeq_log(2,p));
+end;
+
+theorem :: ENTROPY1:47
+  for p being nonnegative FinSequence of REAL
+  for q holds
+    q = Infor_FinSeq_of p iff
+    len q = len p & for k st k in dom q holds q.k = p.k * log(2,p.k);
+
+theorem :: ENTROPY1:48
+  for p being nonnegative FinSequence of REAL for k st k in dom p holds
+    (p.k = 0 implies (Infor_FinSeq_of p).k = 0) &
+    (p.k > 0 implies (Infor_FinSeq_of p).k = p.k * log(2,p.k));
+
+theorem :: ENTROPY1:49
+  for p being nonnegative FinSequence of REAL
+  for q holds q = - Infor_FinSeq_of p iff
+    (len q = len p & for k st k in dom q holds q.k = p.k * log(2,1/(p.k)));
+
+theorem :: ENTROPY1:50
+  for p being nonnegative FinSequence of REAL st r1>=0 & r2>=0 holds
+    for i st i in dom p & p.i = r1*r2 holds
+      (Infor_FinSeq_of p).i = r1*r2*log(2,r1) + r1*r2*log(2,r2);
+
+theorem :: ENTROPY1:51
+  for p being nonnegative FinSequence of REAL st r>=0 holds
+    Infor_FinSeq_of (r*p) = (r*log(2,r)*p) + (r*mlt(p,FinSeq_log(2,p)));
+
+theorem :: ENTROPY1:52
+  for p being non empty ProbFinS FinSequence of REAL
+    for k st k in dom p holds (Infor_FinSeq_of p).k <= 0;
+
+definition let MR;
+  assume  MR is m-nonnegative;
+  func Infor_FinSeq_of MR -> Matrix of REAL means
+:: ENTROPY1:def 8
+    len it = len MR & width it = width MR &
+    for k st k in dom it holds it.k=mlt(Line(MR,k),FinSeq_log(2,Line(MR,k)));
+end;
+
+theorem :: ENTROPY1:53
+  for M being m-nonnegative Matrix of REAL
+    for k st k in dom M holds
+      Line(Infor_FinSeq_of M,k) = Infor_FinSeq_of Line(M,k);
+
+theorem :: ENTROPY1:54
+  for M being m-nonnegative Matrix of REAL
+  for M1 being Matrix of REAL holds
+    M1 = Infor_FinSeq_of M iff
+      len M1 = len M & width M1 = width M &
+      for i,j st [i,j] in Indices M1 holds M1*(i,j)=M*(i,j)*log(2,M*(i,j));
+
+definition let p being FinSequence of REAL;
+  func Entropy p -> Real equals
+:: ENTROPY1:def 9
+    -Sum Infor_FinSeq_of p;
+end;
+
+theorem :: ENTROPY1:55
+  for p being non empty ProbFinS FinSequence of REAL
+    holds Entropy p >= 0;
+
+theorem :: ENTROPY1:56
+  for p being non empty ProbFinS FinSequence of REAL
+   st ex k st k in dom p & p.k = 1 holds
+     Entropy p = 0;
+
+theorem :: ENTROPY1:57
+  for p,q being non empty ProbFinS FinSequence of REAL,
+    pp,qq being FinSequence of REAL st len p = len q &
+    len pp = len p & len qq = len q &
+    (for k st k in dom p holds p.k > 0 & q.k > 0 &
+      pp.k=-p.k*log(2,p.k) & qq.k = -p.k*log(2,q.k)) holds
+        Sum pp <= Sum qq &
+        ((for k st k in dom p holds p.k=q.k) iff Sum pp = Sum qq) &
+        ((ex k st k in dom p & p.k<>q.k) iff Sum pp < Sum qq);
+
+theorem :: ENTROPY1:58
+  for p being non empty ProbFinS FinSequence of REAL st
+    (for k st k in dom p holds p.k>0) holds
+      (Entropy p <= log(2,len p)) &
+      ((for k st k in dom p holds p.k=1/(len p)) iff Entropy p=log(2,len p)) &
+      ((ex k st k in dom p & p.k<>1/(len p)) iff Entropy p<log(2,len p));
+
+theorem :: ENTROPY1:59
+  for M being m-nonnegative Matrix of REAL holds
+    Mx2FinS(Infor_FinSeq_of M) = Infor_FinSeq_of Mx2FinS(M);
+
+theorem :: ENTROPY1:60
+  for p,q being ProbFinS FinSequence of REAL
+    for M being Matrix of REAL st M=(ColVec2Mx p)*(LineVec2Mx q) holds
+      SumAll Infor_FinSeq_of M = Sum Infor_FinSeq_of p+Sum Infor_FinSeq_of q;
+
+definition let MR;
+  func Entropy_of_Joint_Prob MR -> Real equals
+:: ENTROPY1:def 10
+    Entropy Mx2FinS MR;
+end;
+
+theorem :: ENTROPY1:61
+  for p,q being ProbFinS FinSequence of REAL holds
+    Entropy_of_Joint_Prob ((ColVec2Mx p) * (LineVec2Mx q)) =
+      Entropy p + Entropy q;
+
+definition let MR;
+  func Entropy_of_Cond_Prob MR -> FinSequence of REAL means
+:: ENTROPY1:def 11
+    len it = len MR &
+    for k st k in dom it holds it.k = Entropy Line(MR,k);
+end;
+
+theorem :: ENTROPY1:62
+  for M being non empty-yielding Conditional_Probability Matrix of REAL
+  for p being FinSequence of REAL holds
+    p = Entropy_of_Cond_Prob M iff
+      len p = len M &
+      for k st k in dom p holds p.k = -Sum ((Infor_FinSeq_of M).k);
+
+theorem :: ENTROPY1:63
+  for M being non empty-yielding Conditional_Probability Matrix of REAL holds
+    Entropy_of_Cond_Prob M = -LineSum Infor_FinSeq_of M;
+
+theorem :: ENTROPY1:64
+  for p being ProbFinS FinSequence of REAL
+  for M being non empty-yielding Conditional_Probability Matrix of REAL st
+  len p = len M holds
+    for M1 being Matrix of REAL st M1=(Vec2DiagMx p) * M holds
+    SumAll Infor_FinSeq_of M1 =
+      Sum Infor_FinSeq_of p + Sum mlt(p,LineSum(Infor_FinSeq_of M));
+
+theorem :: ENTROPY1:65
+  for p being ProbFinS FinSequence of REAL
+  for M being non empty-yielding Conditional_Probability Matrix of REAL st
+  len p = len M holds
+    Entropy_of_Joint_Prob ((Vec2DiagMx p) * M) =
+      Entropy p + Sum mlt(p,Entropy_of_Cond_Prob M);

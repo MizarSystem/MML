@@ -104,7 +104,12 @@ A13: InsCode l <= 9+1 implies InsCode l <= 8+1 or InsCode l = 10 by NAT_1:8;
        as State of SCM by SCMFSA_2:73;
 A14:  dom((the Instruction-Locations of SCM) --> I)
         = SCM-Instr-Loc by FUNCOP_1:19;
-       not IC SCM in SCM-Instr-Loc by AMI_1:48;
+    now assume IC SCM in the Instruction-Locations of SCM;
+      then reconsider l = IC SCM as Instruction-Location of SCM by AMI_1:def 4;
+      l = IC SCM;
+     hence contradiction by AMI_1:48;
+    end;
+    then not IC SCM in SCM-Instr-Loc by AMI_1:48;
     then SCM-Instr-Loc misses {IC SCM} by ZFMISC_1:56;
     then SCM-Instr-Loc misses SCM-Data-Loc \/ {IC SCM} by AMI_5:33,XBOOLE_1:70
 ;
@@ -129,7 +134,13 @@ A18:  S1 | (SCM-Data-Loc \/ {IC SCM})
        (the carrier of SCM) misses FinSeq-Locations by SCMFSA_1:def 2,XBOOLE_1:
 79;
 then A19:  (the carrier of SCM) /\ FinSeq-Locations = {} by XBOOLE_0:def 7;
-      not IC SCM+FSA in the Instruction-Locations of SCM+FSA by AMI_1:48;
+      now assume IC SCM+FSA in the Instruction-Locations of SCM+FSA;
+        then reconsider l = IC SCM+FSA as Instruction-Location of SCM+FSA
+                             by AMI_1:def 4;
+         l = IC SCM+FSA;
+       hence contradiction by AMI_1:48;
+      end;
+
 then A20: the Instruction-Locations of SCM+FSA misses {IC SCM+FSA} by
 ZFMISC_1:56;
       (the Instruction-Locations of SCM+FSA)
@@ -276,7 +287,8 @@ XBOOLE_0:def 2;
     then s1.fa = (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).fa
                  by FUNCT_1:72
        .= s2.fa by A1,A45,FUNCT_1:72;
-then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A9,A40,A41,A42,A43,A44,AMI_3:24
+then Exec (l,s1) | {db} = Exec(l,s2) | {db}
+ by A9,A40,A41,A42,A43,A44,GRFUNC_1:90
 ;
 then A46:       Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
           = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A29,A38,
@@ -285,7 +297,7 @@ RELAT_1:185;
        Exec (l,s1).IC SCM+FSA = Next IC s1 by A28,SCMFSA_2:98
                       .= Exec (l,s2).IC SCM+FSA by A6,A28,SCMFSA_2:98;
     then Exec (l,s1) | {IC SCM+FSA} = Exec (l,s2) | {IC SCM+FSA} by A7,A8,
-AMI_3:24;
+GRFUNC_1:90;
    hence Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
       = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
                 by A46,RELAT_1:185;
@@ -371,7 +383,7 @@ XBOOLE_0:def 2;
                  by FUNCT_1:72
        .= s2.fa by A1,A66,FUNCT_1:72;
 then Exec (l,s1) | {fa} = Exec(l,s2) | {fa} by A9,A59,A60,A61,A62,A63,A65,
-AMI_3:24;
+GRFUNC_1:90;
 then A67:       Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
           = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A48,A57,
 RELAT_1:185;
@@ -379,7 +391,7 @@ RELAT_1:185;
        Exec (l,s1).IC SCM+FSA = Next IC s1 by A47,SCMFSA_2:99
                       .= Exec (l,s2).IC SCM+FSA by A6,A47,SCMFSA_2:99;
     then Exec (l,s1) | {IC SCM+FSA} = Exec (l,s2) | {IC SCM+FSA} by A7,A8,
-AMI_3:24;
+GRFUNC_1:90;
    hence Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
       = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
                 by A67,RELAT_1:185;
@@ -450,7 +462,7 @@ XBOOLE_0:def 2;
        .= s2.fa by A1,A79,FUNCT_1:72;
     then Exec (l,s1).da = len(s2.fa) by A68,SCMFSA_2:100
          .= Exec (l,s2).da by A68,SCMFSA_2:100;
-then Exec (l,s1) | {da} = Exec(l,s2) | {da} by A7,A8,AMI_3:24;
+then Exec (l,s1) | {da} = Exec(l,s2) | {da} by A7,A8,GRFUNC_1:90;
 then A80:       Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
           = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A69,A78,
 RELAT_1:185;
@@ -458,7 +470,7 @@ RELAT_1:185;
        Exec (l,s1).IC SCM+FSA = Next IC s1 by A68,SCMFSA_2:100
                       .= Exec (l,s2).IC SCM+FSA by A6,A68,SCMFSA_2:100;
     then Exec (l,s1) | {IC SCM+FSA} = Exec (l,s2) | {IC SCM+FSA} by A7,A8,
-AMI_3:24;
+GRFUNC_1:90;
    hence Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
       = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
                 by A80,RELAT_1:185;
@@ -531,7 +543,7 @@ A96: Exec(l, s2).fa = k2 |->0 by A81,SCMFSA_2:101;
     s1.da = (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).da
                  by A10,A92,FUNCT_1:72
        .= s2.da by A1,A10,A92,FUNCT_1:72;
-then Exec (l,s1) | {fa} = Exec(l,s2) | {fa} by A9,A93,A94,A95,A96,AMI_3:24;
+then Exec (l,s1) | {fa} = Exec(l,s2) | {fa} by A9,A93,A94,A95,A96,GRFUNC_1:90;
 then A97:       Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
           = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A82,A91,
 RELAT_1:185;
@@ -539,7 +551,7 @@ RELAT_1:185;
        Exec (l,s1).IC SCM+FSA = Next IC s1 by A81,SCMFSA_2:101
                       .= Exec (l,s2).IC SCM+FSA by A6,A81,SCMFSA_2:101;
     then Exec (l,s1) | {IC SCM+FSA} = Exec (l,s2) | {IC SCM+FSA} by A7,A8,
-AMI_3:24;
+GRFUNC_1:90;
    hence Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
       = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
                 by A97,RELAT_1:185;
@@ -570,7 +582,7 @@ then A2: dom (s | the Instruction-Locations of S)
       proof
        let x be set;
        assume x in the Instruction-Locations of S;
-       then reconsider l = x as Instruction-Location of S;
+       then reconsider l = x as Instruction-Location of S by AMI_1:def 4;
        thus (Exec (i, s) | the Instruction-Locations of S).x
               = (Exec (i, s)).l by FUNCT_1:72
              .= s.l by AMI_1:def 13
@@ -671,7 +683,8 @@ A2:  Int-Locations \/ FinSeq-Locations misses
       then consider x being set such that
 A3:    x in {IC SCM+FSA} and
 A4:    x in the Instruction-Locations of SCM+FSA by XBOOLE_0:3;
-          x = IC SCM+FSA by A3,TARSKI:def 1;
+       reconsider l = x as Instruction-Location of SCM+FSA by AMI_1:def 4,A4;
+          l = IC SCM+FSA by A3,TARSKI:def 1;
        hence contradiction by A4,AMI_1:48;
       end;
       then Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} misses
@@ -803,9 +816,10 @@ A3:  d1 in dom DataPart p by A1;
          Element of (the Instruction-Locations of SCM+FSA) \ dom p;
      not the Instruction-Locations of SCM+FSA c= dom p
                                 by FINSET_1:13,SCMFSA_2:24;
-     then A6: (the Instruction-Locations of SCM+FSA) \ dom p <> {} by
-XBOOLE_1:37;
-     then reconsider il as Instruction-Location of SCM+FSA by XBOOLE_0:def 4;
+     then
+A6: (the Instruction-Locations of SCM+FSA) \ dom p <> {} by XBOOLE_1:37;
+     then il in the Instruction-Locations of SCM+FSA by XBOOLE_0:def 4;
+     then reconsider il as Instruction-Location of SCM+FSA by AMI_1:def 4;
      per cases by A3,A4,XBOOLE_0:def 2;
      suppose d1 in Int-Locations;
      then reconsider d1 as Int-Location by SCMFSA_2:11;
@@ -1175,7 +1189,11 @@ registration
        now
         dom P = { IC SCM+FSA, insloc 0 } by FUNCT_4:65;
 then A2:  IC SCM+FSA in dom P by TARSKI:def 2;
-     assume dom P c= the Instruction-Locations of SCM+FSA;
+     assume
+Z:    dom P c= the Instruction-Locations of SCM+FSA;
+      then reconsider l = IC SCM+FSA as Instruction-Location of SCM+FSA
+                          by A2,AMI_1:def 4;
+      l in dom P by A2;
      hence contradiction by A2,AMI_1:48;
     end;
    hence P is non programmed by AMI_3:def 13;

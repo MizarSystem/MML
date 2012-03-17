@@ -454,11 +454,11 @@
 <Var nr="1"/>
 </Func>
 <And>
-<Pred kind="R" nr="16">
+<Pred kind="R" nr="18">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Pred>
-<Pred kind="R" nr="16">
+<Pred kind="R" nr="18">
 <Var nr="1"/>
 <Func kind="F" nr="2"/>
 </Pred>

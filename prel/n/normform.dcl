@@ -2,13 +2,13 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
@@ -29,8 +29,8 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="8">
-<Func kind="K" nr="20">
-<Func kind="K" nr="20">
+<Func kind="K" nr="24">
+<Func kind="K" nr="24">
 <Func kind="K" nr="81">
 <LocusVar nr="1"/>
 </Func>
@@ -38,7 +38,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="20">
+<Func kind="K" nr="24">
 <Func kind="K" nr="81">
 <LocusVar nr="1"/>
 </Func>
@@ -47,7 +47,7 @@
 </Func>
 </Func>
 </Func>
-<Func kind="K" nr="20">
+<Func kind="K" nr="24">
 <Func kind="K" nr="81">
 <LocusVar nr="1"/>
 </Func>
@@ -57,7 +57,7 @@
 </Func>
 </Adjective>
 <Adjective nr="11">
-<Func kind="K" nr="20">
+<Func kind="K" nr="24">
 <Func kind="K" nr="81">
 <LocusVar nr="1"/>
 </Func>
@@ -67,7 +67,7 @@
 </Func>
 </Adjective>
 <Adjective nr="12">
-<Func kind="K" nr="20">
+<Func kind="K" nr="24">
 <Func kind="K" nr="81">
 <LocusVar nr="1"/>
 </Func>
@@ -77,7 +77,7 @@
 </Func>
 </Adjective>
 <Adjective nr="13">
-<Func kind="K" nr="20">
+<Func kind="K" nr="24">
 <Func kind="K" nr="81">
 <LocusVar nr="1"/>
 </Func>

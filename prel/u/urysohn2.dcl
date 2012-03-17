@@ -22,6 +22,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="SUPINF_1"/>
 <ArticleID name="XXREAL_1"/>
 <ArticleID name="MEASURE5"/>
@@ -45,10 +46,10 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="45"/>
+<Adjective nr="47"/>
 </Cluster>
 <Func kind="K" nr="10">
-<Func kind="K" nr="132"/>
+<Func kind="K" nr="140"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">
@@ -56,12 +57,12 @@
 <Func kind="K" nr="62"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="300">
+<Func kind="K" nr="308">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="45"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -155,11 +155,16 @@ A1: dom s = Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
        the Instruction-Locations of SCM+FSA by SCMFSA6A:34;
 A2: IExec(I,s) = Result (s +* Initialized I)
        +* s | the Instruction-Locations of SCM+FSA by SCMFSA6B:def 1;
-      dom (s | the Instruction-Locations of SCM+FSA)
+X:    dom (s | the Instruction-Locations of SCM+FSA)
     = dom s /\ the Instruction-Locations of SCM+FSA by RELAT_1:90
    .= the Instruction-Locations of SCM+FSA by A1,XBOOLE_1:21;
-then A3: not IC SCM+FSA in dom (s | the Instruction-Locations of SCM+FSA)
-       by AMI_1:48;
+A3:
+   now assume IC SCM+FSA in dom (s | the Instruction-Locations of SCM+FSA);
+     then reconsider l = IC SCM+FSA as Instruction-Location of SCM+FSA
+      by X,AMI_1:def 4;
+     l = IC SCM+FSA;
+    hence contradiction   by AMI_1:48;
+   end;
    thus IC IExec(I,s) = IExec(I,s).IC SCM+FSA by AMI_1:def 15
    .= (Result (s +* Initialized I)).IC SCM+FSA by A2,A3,FUNCT_4:12
    .= IC Result (s +* Initialized I) by AMI_1:def 15;
@@ -275,7 +280,8 @@ theorem Th12: ::T53(@BBB8)
    let l be Instruction-Location of SCM+FSA;
       now let x be set;
       assume x in dom (s | A);
-      then x is Instruction-Location of SCM+FSA by Th3;
+      then x in the Instruction-Locations of SCM+FSA by Th3;
+      then x is Instruction-Location of SCM+FSA by AMI_1:def 4;
       then x <> IC SCM+FSA by AMI_1:48;
       then not x in {IC SCM+FSA} by TARSKI:def 1;
       hence not x in dom Start-At l by FUNCOP_1:19;
@@ -424,7 +430,8 @@ then A4: dom PP c= dom the Object-Kind of SCM+FSA by AMI_1:25;
       now let x be set;
       assume A5: x in dom PP;
          dom P c= A by AMI_3:def 13;
-      then reconsider ll = x as Instruction-Location of SCM+FSA by A3,A5;
+      then reconsider ll = x as Instruction-Location of SCM+FSA
+      by A3,A5,AMI_1:def 4;
  A6:  (the Object-Kind of SCM+FSA).ll = ObjectKind ll by AMI_1:def 6
       .= X by AMI_1:def 14;
  A7:  PP.x in rng PP by A5,FUNCT_1:def 5;
@@ -440,7 +447,7 @@ then A4: dom PP c= dom the Object-Kind of SCM+FSA by AMI_1:25;
       hence PP.x in (the Object-Kind of SCM+FSA).x by A6,A7;
      end;
    then PP in sproduct the Object-Kind of SCM+FSA by A4,CARD_3:def 9;
-   then reconsider PP as FinPartState of SCM+FSA;
+   then reconsider PP as FinPartState of SCM+FSA by AMI_1:77;
       dom P c= A by AMI_3:def 13;
    then PP is programmed FinPartState of SCM+FSA by A3,AMI_3:def 13;
    hence thesis;
@@ -1267,7 +1274,8 @@ then A2: X c= dom g by XBOOLE_1:7;
   A4: y = f.x by FUNCT_1:def 5;
       consider s being State of SCM+FSA;
          dom f c= A by AMI_3:def 13;
-      then reconsider l = x as Instruction-Location of SCM+FSA by A3;
+      then reconsider l = x as Instruction-Location of SCM+FSA
+      by A3,AMI_1:def 4;
          (s +* f).l = f.l by A3,FUNCT_4:14;
       hence y in X by A4;
      end;
@@ -1754,7 +1762,7 @@ theorem Th48: ::T70
    let x be set;
    assume A1: x in dom I;
       dom I c= the Instruction-Locations of S by AMI_3:def 13;
-   then reconsider ll = x as Instruction-Location of S by A1;
+   then reconsider ll = x as Instruction-Location of S by A1,AMI_1:def 4;
    consider s being State of S;
       (s +* I).ll = I.x by A1,FUNCT_4:14;
    hence I.x is Instruction of S;

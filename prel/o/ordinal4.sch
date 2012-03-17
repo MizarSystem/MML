@@ -145,7 +145,7 @@
 </Not>
 </For>
 <Not>
-<Pred kind="R" nr="18">
+<Pred kind="R" nr="20">
 <Func kind="F" nr="1">
 <Var nr="2"/>
 </Func>

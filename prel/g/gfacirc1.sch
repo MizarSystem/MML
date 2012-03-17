@@ -171,7 +171,7 @@
 </Pred>
 </For>
 <Not>
-<Pred kind="R" nr="17">
+<Pred kind="R" nr="19">
 <Func kind="K" nr="161">
 <Num nr="1"/>
 <Func kind="K" nr="367"/>
@@ -307,7 +307,7 @@
 </Pred>
 </For>
 <Not>
-<Pred kind="R" nr="17">
+<Pred kind="R" nr="19">
 <Func kind="K" nr="161">
 <Num nr="1"/>
 <Func kind="K" nr="367"/>

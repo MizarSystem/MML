@@ -471,10 +471,13 @@ then A9:   a + b - 3 is Element of NAT by INT_1:18;
 
 begin  :: Properties of AMI-Struct
 
-theorem
- for N be set,
-     S being AMI-Struct over N,
-     F being FinPartState of S holds F \ X is FinPartState of S by AMI_1:40;
+theorem Th11:
+ for N being set, S being AMI-Struct over N,
+     F being FinPartState of S holds F \ X is FinPartState of S
+ proof let N be set, S be AMI-Struct over N, F be FinPartState of S;
+   F \ X is Element of sproduct the Object-Kind of S by AMI_1:40;
+  hence thesis by AMI_1:77;
+ end;
 
 theorem Th12:
  for S being IC-Ins-separated definite (non empty non void AMI-Struct over N),
@@ -483,7 +486,7 @@ theorem Th12:
   proof
     let S be IC-Ins-separated definite (non empty non void AMI-Struct over N),
         F be programmed FinPartState of S;
-    reconsider G = F \ X as FinPartState of S by AMI_1:40;
+    reconsider G = F \ X as FinPartState of S by Th11;
     per cases;
     suppose G is empty;
     then reconsider H = G as empty FinPartState of S;
@@ -574,7 +577,7 @@ A1: dom F c= the Instruction-Locations of S by AMI_3:def 13;
       let x be set;
       assume
 A2:     x in dom F;
-      then reconsider f = x as Instruction-Location of S by A1;
+      then reconsider f = x as Instruction-Location of S by A1,AMI_1:def 4;
 A3:   locnum f < card F by A2,Th14;
         reconsider i = locnum f as Element of NAT;
           f = il.(S,i) by AMISTD_1:def 13;
@@ -710,7 +713,7 @@ registration
 coherence
   proof
     let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
-    given f being Function of NAT, the Instruction-Locations of S such that
+    given f being IL-Function of NAT, S such that
 A1:   f is bijective and
           for m, n being Element of NAT holds m <= n iff f.m <= f.n;
 A2: NAT,the Instruction-Locations of S are_equipotent by A1,KNASTER:13;
@@ -756,6 +759,7 @@ theorem Th18:
 A1:   for f being Instruction-Location of S holds NIC(I,f)={NextLoc f};
     consider p, q being Element of the Instruction-Locations of S such that
 A2:   p <> q by YELLOW_8:def 1;
+    reconsider p,q as Instruction-Location of S by AMI_1:def 4;
     set X = { NIC(I,f) where f is Instruction-Location of S:
         not contradiction };
     assume not thesis;
@@ -943,8 +947,9 @@ InsCode J;
     then x in dom PA AddressParts InsCode I by A2,Def1;
     then (PA AddressParts InsCode I).x = pi(AddressParts InsCode I,x)
       by A2,Def1;
-    hence (AddressPart I).x is Instruction-Location of S by A2,A3,CARD_3:def 6
-;
+    then (AddressPart I).x is
+     Element of the Instruction-Locations of S by A2,A3,CARD_3:def 6;
+    hence (AddressPart I).x is Instruction-Location of S by AMI_1:def 4;
   end;
 
 registration
@@ -999,6 +1004,7 @@ existence
   proof
     consider l1, l2 being Element of the Instruction-Locations of S such that
 A1:   l1 <> l2 by YELLOW_8:def 1;
+    reconsider l1,l2 as Instruction-Location of S by AMI_1:def 4;
     consider I being Instruction of S;
     take f = (l1,l2) --> (I,I);
     thus f is non trivial
@@ -1716,8 +1722,9 @@ A2: for e being set st e in dom p ex u being set st P[e,u]
     proof
       let e be set;
       assume e in dom p;
-      then consider m being natural number such that
-A3:     e = il.(S,m) by A1,AMISTD_1:26;
+      then reconsider l=e as Instruction-Location of S by A1,AMI_1:def 4;
+      consider m being natural number such that
+A3:     l = il.(S,m) by A1,AMISTD_1:26;
       take IncAddr(pi(p,il.(S,m)),k);
         reconsider m  as Element of NAT by ORDINAL1:def 13;
          e = il.(S,m) by A3;
@@ -1735,14 +1742,14 @@ then A6: dom f c= dom the Object-Kind of S by A4,FUNCT_2:def 1;
 A7:     x in dom f;
 then A8:   ex m being Element of NAT st x = il.(S,m) & f.x = IncAddr(pi
 (p,il.(S,m)),k) by A4,A5;
-      reconsider y = x as Instruction-Location of S by A1,A4,A7;
+      reconsider y = x as Instruction-Location of S by A1,A4,A7,AMI_1:def 4;
           (the Object-Kind of S).y = ObjectKind y
                               .= the Instructions of S by AMI_1:def 14;
       hence f.x in (the Object-Kind of S).x by A8;
     end;
-    then reconsider f as Element of sproduct the Object-Kind of S by A6,
-CARD_3:def 9;
-    reconsider f as FinPartState of S by A4,FINSET_1:29;
+    then reconsider f as finite Element of sproduct the Object-Kind of S
+                               by A6,CARD_3:def 9,A4,FINSET_1:29;
+    reconsider f as FinPartState of S by AMI_1:77;
     take f;
     thus dom f = dom p by A4;
     let m be natural number;
@@ -1766,8 +1773,9 @@ A12:  for m being natural number st il.(S,m) in dom p holds
       let x be set;
       assume
 A13:    x in dom p;
-      then consider m being natural number such that
-A14:    x = il.(S,m) by A1,AMISTD_1:26;
+      then reconsider l=x as Instruction-Location of S by A1,AMI_1:def 4;
+      consider m being natural number such that
+A14:    l = il.(S,m) by A1,AMISTD_1:26;
        reconsider m as Element of NAT by ORDINAL1:def 13;
       thus IT1.x = IncAddr(pi(p,il.(S,m)),k) by A10,A13,A14
                 .= IT2.x by A12,A13,A14;
@@ -1873,7 +1881,7 @@ A2: dom IncAddr(F,k+m) = dom F by Def15;
       let x be set such that
 A3:     x in dom F;
       dom F c= the Instruction-Locations of S by AMI_3:def 13;
-      then reconsider x as Instruction-Location of S by A3;
+      then reconsider x as Instruction-Location of S by A3,AMI_1:def 4;
 A4:   x = il.(S,locnum x) by AMISTD_1:def 13;
 then A5:   il.(S,locnum x) in dom IncAddr(F,k) by A3,Def15;
 A6:   IncAddr(pi(F,il.(S,locnum x)),k) = IncAddr(F,k).il.(S,locnum x)
@@ -1934,7 +1942,7 @@ A7:     x in dom f;
       then consider m being Element of NAT such that
 A8:      x = il.(S,m+k) and
 A9:      f.x = p.il.(S,m) by A3,A4;
-      reconsider y = x as Instruction-Location of S by A3,A5,A7;
+      reconsider y = x as Instruction-Location of S by A3,A5,A7,AMI_1:def 4;
 A10:  (the Object-Kind of S).x = ObjectKind y
                               .= the Instructions of S by AMI_1:def 14;
       consider s being State of S such that
@@ -1952,8 +1960,9 @@ A14:      j+k = m+k by A12,AMISTD_1:25;
 A15:dom p is finite;
 A16:for m1, m2 being Element of NAT st G(m1) = G(m2)
 holds m1 = m2 by AMISTD_1:25;
-        A is finite from FUNCT_7:sch 2(A15,A16);
-    then reconsider f as FinPartState of S by A3,FINSET_1:29;
+    A is finite from FUNCT_7:sch 2(A15,A16);
+    then f is finite by A3,FINSET_1:29;
+    then reconsider f as FinPartState of S by A3,AMI_1:77;
     take f;
     thus dom f = { il.(S,m+k) where m is Element of NAT: il.(S,m) in dom p }
     by A3;
@@ -2050,7 +2059,7 @@ A1: dom Shift(F,k) =
     consider a being set such that
 A2:   a in dom F by XBOOLE_0:def 1;
         dom F c= the Instruction-Locations of S by AMI_3:def 13;
-    then reconsider a as Instruction-Location of S by A2;
+    then reconsider a as Instruction-Location of S by A2,AMI_1:def 4;
     consider m being natural number such that
 A3:   a = il.(S,m) by AMISTD_1:26;
     reconsider m as Element of NAT by ORDINAL1:def 13;
@@ -2075,8 +2084,9 @@ A2: dom F = { il.(S,m+0) where m is Element of NAT: il.(S,m) in dom F }
         let a be set;
         assume
 A3:       a in dom F;
-        then consider k being natural number such that
-A4:       a = il.(S,k) by A1,AMISTD_1:26;
+        then reconsider l=a as Instruction-Location of S by A1,AMI_1:def 4;
+        consider k being natural number such that
+A4:       l = il.(S,k) by A1,AMISTD_1:26;
         reconsider k as Element of NAT by ORDINAL1:def 13;
             a = il.(S,k+0) by A4;
         hence a in
@@ -2188,7 +2198,7 @@ A2: for e being set st e in dom F ex u being set st P[e,u]
     proof
       let e be set;
       assume e in dom F;
-      then reconsider e as Instruction-Location of S by A1;
+      then reconsider e as Instruction-Location of S by A1,AMI_1:def 4;
       take il.(S,k+locnum e), e;
       thus thesis;
     end;
@@ -2500,7 +2510,11 @@ definition
    let F be non empty programmed FinPartState of S;
  func CutLastLoc F -> FinPartState of S equals
   F \ ( LastLoc F .--> F.LastLoc F );
-coherence by AMI_1:40;
+coherence
+ proof F \ ( LastLoc F .--> F.LastLoc F ) in sproduct the Object-Kind of S
+                  by AMI_1:40;
+  hence thesis by AMI_1:77;
+ end;
 end;
 
 theorem Th47:
@@ -2610,7 +2624,7 @@ A1:     l in dom G;
       let m be Instruction-Location of S such that
 A2:     m <= l;
       consider M being finite non empty natural-membered set such that
-A3:     M = { locnum w where w is Element of the Instruction-Locations of S
+A3:     M = { locnum w where w is Instruction-Location of S
                            : w in dom F } and
 A4:     LastLoc F = il.(S, max M) by AMISTD_1:def 21;
       reconsider R = {[LastLoc F, F.LastLoc F]} as Relation by RELAT_1:4;
@@ -2861,7 +2875,7 @@ A3:   x in dom F;
     end;
     suppose
 A4:   x in {LastLoc F};
-    then reconsider f = x as Instruction-Location of S;
+    then reconsider f = x as Instruction-Location of S by AMI_1:def 4;
         x = LastLoc F by A4,TARSKI:def 1;
 then A5: locnum f = locnum il.(S,card F -' 1) by AMISTD_1:55
       .= card F -' 1 by AMISTD_1:def 13
@@ -3203,7 +3217,12 @@ then A30: s2 = s1 +* (IC S .--> (IC s1 + k)) by A24,A25,FUNCT_1:9;
     set s3 = s1 +* (il.(S,m) .--> pi(G,il.(S,m)));
 A31: dom (il.(S,m) .--> pi(G,il.(S,m))) = {il.(S,m)} by FUNCOP_1:19;
 then A32: il.(S,m) in dom (il.(S,m) .--> pi(G,il.(S,m))) by TARSKI:def 1;
-A33: not IC S in dom (il.(S,m) .--> pi(G,il.(S,m))) by A31,AMI_1:48;
+A33: now assume IC S in dom (il.(S,m) .--> pi(G,il.(S,m)));
+       then reconsider l=IC S as Instruction-Location of S
+             by A31,AMI_1:def 4;
+       l=IC S;
+      hence contradiction by A31,AMI_1:48;
+     end;
 A34: IC s3 = s1.IC S by A33,FUNCT_4:12
          .= il.(S,m) by A20,A21,A22,FUNCT_4:14;
 A35: s3.il.(S,m) = (il.(S,m) .--> pi(G,il.(S,m))).il.(S,m) by A32,FUNCT_4:14

@@ -17,11 +17,16 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="GRAPH_1"/>
+<ArticleID name="GRAPH_2"/>
+<ArticleID name="TREES_1"/>
+<ArticleID name="TREES_2"/>
 <ArticleID name="AMI_1"/>
 <ArticleID name="AMI_3"/>
 <ArticleID name="SCMPDS_2"/>
@@ -31,11 +36,11 @@
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="U" nr="6">
+<Func kind="U" nr="10">
 <Func kind="K" nr="12">
 <Func kind="K" nr="45"/>
 </Func>
-<Func kind="K" nr="174"/>
+<Func kind="K" nr="229"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="1">
@@ -43,40 +48,35 @@
 <Adjective nr="16"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="19">
 <Cluster/>
-<Func kind="U" nr="1">
-<Func kind="K" nr="174"/>
-</Func>
-<Func kind="U" nr="5">
 <Func kind="K" nr="12">
 <Func kind="K" nr="45"/>
 </Func>
-<Func kind="K" nr="174"/>
-</Func>
+<Func kind="K" nr="229"/>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="114">
-<Func kind="U" nr="7">
+<Func kind="K" nr="132">
+<Func kind="U" nr="11">
 <Func kind="K" nr="12">
 <Func kind="K" nr="45"/>
 </Func>
-<Func kind="K" nr="174"/>
+<Func kind="K" nr="229"/>
 </Func>
 </Func>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="142">
+<Func kind="K" nr="191">
 <Func kind="K" nr="12">
 <Func kind="K" nr="45"/>
 </Func>
-<Func kind="K" nr="174"/>
+<Func kind="K" nr="229"/>
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="3"/>
@@ -89,13 +89,13 @@
 </Typ>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="148">
+<Func kind="K" nr="197">
 <Func kind="K" nr="12">
 <Func kind="K" nr="45"/>
 </Func>
-<Func kind="K" nr="174"/>
+<Func kind="K" nr="229"/>
 <Var nr="1"/>
-<Func kind="K" nr="194">
+<Func kind="K" nr="249">
 <Var nr="2"/>
 </Func>
 </Func>
@@ -104,9 +104,9 @@
 </Func>
 </Pred>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="175">
+<Func kind="K" nr="230">
 <Var nr="1"/>
-<Func kind="K" nr="176">
+<Func kind="K" nr="231">
 <Var nr="2"/>
 <Num nr="0"/>
 </Func>

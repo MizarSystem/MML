@@ -14,8 +14,8 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, RELAT_1, SETFAM_1,
       ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, NAT_1, MEMBERED, REALSET1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, DOMAIN_1, CARD_1, CARD_3, FINSEQ_1,
-      FINSEQ_4, FUNCOP_1, GRAPH_2, FINSET_1, FUNCT_4, STRUCT_0, AMI_1, AMI_3,
-      AMI_5, BINARITH, PRE_CIRC, XXREAL_0;
+      FINSEQ_4, FUNCOP_1, GRAPH_2, FINSET_1, FUNCT_4, STRUCT_0,
+      BINARITH, PRE_CIRC, XXREAL_0, AMI_1, AMI_3, AMI_5;
  constructors RELAT_2, PARTFUN1, WELLORD2, XXREAL_0, NAT_1, FINSEQ_4, REALSET1,
       BINARITH, PRE_CIRC, GRAPH_2, AMI_5;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
@@ -31,7 +31,7 @@ environ
       BINARITH, INT_1, SETFAM_1, REVROT_1, REALSET1, FINSEQ_5, PRE_CIRC,
       INTEGRA2, CARD_4, FUNCT_7, RELSET_1, XBOOLE_0, XBOOLE_1, MEMBERED,
       FINSET_1, XREAL_1, XXREAL_0;
- schemes NAT_1, FUNCT_7, FINSEQ_2, FRAENKEL, DOMAIN_1, FUNCT_2;
+ schemes NAT_1, FUNCT_7, FINSEQ_2, AMI_1, DOMAIN_1, FUNCT_2, FUNCT_1;
 
 begin :: Preliminaries
 
@@ -130,7 +130,7 @@ then A3: dom Ok = dom s by FUNCT_2:def 1;
       assume
 A4:     x in dom f;
 then A5:   f.x = I by A1,FUNCOP_1:13;
-      reconsider x as Instruction-Location of S by A4,FUNCOP_1:19;
+      reconsider x as Instruction-Location of S by A4,A1,AMI_1:def 4;
           Ok.x = ObjectKind x
           .= the Instructions of S by AMI_1:def 14;
       hence thesis by A5;
@@ -157,10 +157,10 @@ registration
  cluster empty FinPartState of S;
 existence
   proof
-    reconsider a = {} as
-     finite  Element of sproduct the Object-Kind of S by AMI_1:26;
-    take a;
-    thus a is empty;
+    {} is Element of sproduct the Object-Kind of S  by CARD_3:68;
+    then reconsider a = {} as FinPartState of S by AMI_1:77;
+   take a;
+   thus a is empty;
   end;
 end;
 
@@ -402,6 +402,7 @@ proof
  let i be Element of the Instructions of S;
   given p, q being Element of the Instruction-Locations of S such that
 A1:  p <> q;
+   reconsider p,q as Instruction-Location of S by AMI_1:def 4;
   assume
 A2: for l being Instruction-Location of S holds NIC(i,l)={l};
  set X = { NIC(i, l) where l is Instruction-Location of S: not contradiction };
@@ -462,10 +463,11 @@ begin :: Ordering of Instruction Locations
 definition let N,S,l1,l2;
  pred l1 <= l2 means
 :Def8:
-  ex f being non empty FinSequence of the Instruction-Locations of S st
+  ex f being non empty IL-FinSequence of S st
    f/.1 = l1 & f/.len f = l2 &
    for n st 1 <= n & n < len f holds f/.(n+1) in SUCC f/.n;
- reflexivity proof
+ reflexivity
+  proof
    let l;
    take <*l*>;
    thus <*l*>/.1 = l by FINSEQ_4:25;
@@ -476,12 +478,12 @@ end;
 theorem
      l1 <= l2 & l2 <= l3 implies l1 <= l3
  proof
-  given f1 being non empty FinSequence of the Instruction-Locations of S
+  given f1 being non empty IL-FinSequence of S
   such that
 A1: f1/.1 = l1 and
 A2: f1/.len f1 = l2 and
 A3: for n st 1 <= n & n < len f1 holds f1/.(n+1) in SUCC f1/.n;
-  given f2 being non empty FinSequence of the Instruction-Locations of S
+  given f2 being non empty IL-FinSequence of S
   such that
 A4: f2/.1 = l2 and
 A5: f2/.len f2 = l3 and
@@ -490,8 +492,9 @@ A6: for n st 1 <= n & n < len f2 holds f2/.(n+1) in SUCC f2/.n;
   thus (f1^'f2)/.1 = l1 by A1,GRAPH_2:57;
        now per cases;
     suppose f2 is trivial;
-     then consider x being Instruction-Location of S such that
+     then consider x being Element of the Instruction-Locations of S such that
 A7:     f2 = <*x*> by Th3;
+     reconsider x as Instruction-Location of S by AMI_1:def 4;
          f1^'f2 = f1 by A7,GRAPH_2:60;
     hence (f1^'f2)/.len(f1^'f2) = l3 by A2,A4,A5,A7,FINSEQ_1:56;
     end;
@@ -551,19 +554,19 @@ definition
  let N, S;
  attr S is standard means
 :Def10:
- ex f being Function of NAT, the Instruction-Locations of S st
+ ex f being IL-Function of NAT, S st
   f is bijective & for m, n being Element of NAT holds m <= n iff f.m <= f.n;
 end;
 
 theorem Th17:
- for f1, f2 being Function of NAT, the Instruction-Locations of S
+ for f1, f2 being IL-Function of NAT, S
   st f1 is bijective & (for m, n being Element of NAT holds m <= n
   iff f1.m <= f1.n) &
      f2 is bijective & (for m, n being Element of NAT holds m <= n
      iff f2.m <= f2.n)
    holds f1 = f2
 proof
- let f1, f2 be Function of NAT, the Instruction-Locations of S such that
+ let f1, f2 be IL-Function of NAT, S such that
 A1: f1 is bijective and
 A2: for m, n being Element of NAT holds m <= n iff f1.m <= f1.n and
 A3: f2 is bijective and
@@ -611,20 +614,20 @@ end;
 end;
 
 theorem Th18:
- for f being Function of NAT, the Instruction-Locations of S
+ for f being IL-Function of NAT, S
   st f is bijective holds
      (for m, n being Element of NAT holds m <= n iff f.m <= f.n) iff
      (for k being Element of NAT holds f.(k+1) in SUCC (f.k) &
            for j being Element of NAT st f.j in SUCC (f.k) holds k <= j)
 proof
-  let f be Function of NAT, the Instruction-Locations of S; assume
+  let f be IL-Function of NAT, S; assume
 A1: f is bijective;
    hereby assume
    A2: for m, n being Element of NAT holds m <= n iff f.m <= f.n;
     let k be Element of NAT;
         k <= k+1 by NAT_1:11;
-    then f.k <= f.(k+1) by A2; then consider F being non empty FinSequence
-                            of the Instruction-Locations of S such that
+    then f.k <= f.(k+1) by A2;
+    then consider F being non empty IL-FinSequence of S such that
   A3: F/.1 = f.k & F/.len F = f.(k+1) and
   A4: for n st 1 <= n & n < len F holds F/.(n+1) in SUCC F/.n by Def8;
           len F <> 0 by FINSEQ_1:25;
@@ -650,8 +653,9 @@ A1: f is bijective;
   A18: F/.(len F1+1) = F.x by A11,A15,FINSEQ_4:def 4
                    .= f.(k+1) by A9,FINSEQ_4:29;
           len F1 <> 0 by A3,A8,A10,A13,A16,FINSEQ_4:def 4;
-      then reconsider F1 as non empty FinSequence
-        of the Instruction-Locations of S by A9,FINSEQ_1:25,FINSEQ_4:53;
+      then F1 is non empty FinSequence of the Instruction-Locations of S
+                   by A9,FINSEQ_1:25,FINSEQ_4:53;
+      then reconsider F1 as non empty IL-FinSequence of S by AMI_1:def 34;
           rng f = the Instruction-Locations of S by A6,FUNCT_2:def 3;
       then consider m being set such that
   A19: m in dom f & f.m = F/.len F1 by FUNCT_1:def 5;
@@ -684,8 +688,7 @@ A1: f is bijective;
        hence F1/.(n+1) in SUCC F1/.n by A4,A25,A31,A32;
       end;
   then A33: f.k <= f.m by A19,A21,A24,Def8;
-      reconsider F2 = <*F/.len F1, F/.x*>
-        as non empty FinSequence of the Instruction-Locations of S;
+      reconsider F2 = <*F/.len F1, F/.x*> as non empty IL-FinSequence of S;
   A34: len F2 = 2 by FINSEQ_1:61;
   then A35: 1 in dom F2 & 2 in dom F2 by FINSEQ_3:27;
   then A36: F2/.1 = F2.1 by FINSEQ_4:def 4
@@ -718,8 +721,7 @@ XBOOLE_0:def 3;
     hence f.(k+1) in SUCC (f.k) by A4,A17,A18,A19,A40;
    let j be Element of NAT; assume
   A44: f.j in SUCC (f.k);
-   reconsider F = <*f.k, f.j*>
-     as non empty FinSequence of the Instruction-Locations of S;
+   reconsider F = <*f.k, f.j*> as non empty IL-FinSequence of S;
   A45: len F = 2 by FINSEQ_1:61;
   then A46: 1 in dom F & 2 in dom F by FINSEQ_3:27;
   then A47: F/.1 = F.1 by FINSEQ_4:def 4
@@ -757,8 +759,9 @@ A51:  for k being Element of NAT holds f.(k+1) in SUCC (f.k) &
     A54: len F = mn+1 and
     A55: for j being Element of NAT st j in Seg (mn+1) holds F.j = F(j) from
 FINSEQ_2:sch 1;
-     reconsider F as non empty FinSequence of the Instruction-Locations of S
-           by A54,FINSEQ_1:25;
+     F is non empty FinSequence of the Instruction-Locations of S
+                   by A54,FINSEQ_1:25,FINSEQ_4:53;
+     then reconsider F as non empty IL-FinSequence of S by AMI_1:def 34;
      take F;
             m+1 <= n by A53,INT_1:20;
     then 1 <= n-m by XREAL_1:21;
@@ -794,8 +797,7 @@ FINSEQ_2:sch 1;
 A64: f.m <= f.n;
 A65: f is one-to-one onto by A1,FUNCT_2:def 4;
 A66: dom f = NAT by FUNCT_2:def 1;
-   consider F being non empty FinSequence
-                           of the Instruction-Locations of S such that
+   consider F being non empty IL-FinSequence of S such that
    A67: F/.1 = f.m & F/.len F = f.n and
    A68: for n being Element of NAT
    st 1 <= n & n < len F holds F/.(n+1) in SUCC F/.n
@@ -838,17 +840,17 @@ end;
 
 theorem Th19:
  S is standard iff
-     ex f being Function of NAT, the Instruction-Locations of S
+     ex f being IL-Function of NAT, S
       st f is bijective &
          for k being Element of NAT holds f.(k+1) in SUCC (f.k) &
            for j being Element of NAT st f.j in SUCC (f.k) holds k <= j
 proof
  hereby assume S is standard;
-   then consider f being Function of NAT, the Instruction-Locations of S such
+   then consider f being IL-Function of NAT, S such
 that
 A1: f is bijective and
 A2: for m, n being Element of NAT holds m <= n iff f.m <= f.n by Def10;
-  thus ex f being Function of NAT, the Instruction-Locations of S st
+  thus ex f being IL-Function of NAT, S st
          f is bijective &
          for k being Element of NAT holds f.(k+1) in SUCC (f.k) &
            for j being Element of NAT st f.j in SUCC (f.k) holds k <= j
@@ -858,7 +860,7 @@ A2: for m, n being Element of NAT holds m <= n iff f.m <= f.n by Def10;
    thus thesis by A1,A2,Th18;
   end;
  end;
-   given f be Function of NAT, the Instruction-Locations of S such that
+   given f be IL-Function of NAT, S such that
 A3: f is bijective and
 A4: for k being Element of NAT holds f.(k+1) in SUCC (f.k) &
     for j being Element of NAT st f.j in SUCC (f.k) holds k <= j;
@@ -1255,7 +1257,9 @@ A1:
           InsCode I = InsCode i and
 A2:   o <> IC M;
        o in NAT or o in {NAT} by A1,XBOOLE_0:def 2;
-   then o in NAT or o = NAT by TARSKI:def 1;
+    then o in NAT by TARSKI:def 1,A2,A1;
+    then reconsider l = o as Instruction-Location of STC N by A1,AMI_1:def 4;
+    Exec(i,s).l = s.l by AMI_1:def 13;
    hence Exec(I, s).o = s.o by A1,A2,AMI_1:def 13;
   end;
 
@@ -1317,7 +1321,11 @@ A1: InsCode i = 1;
              : not contradiction };
    assume not thesis; then consider x being set such that
 A2: x in meet X by XBOOLE_0:def 1;
-   reconsider l1 = 0, l2 = 1 as Instruction-Location of STC N by Def11;
+   0 in NAT & 1 in NAT;
+   then 0 in the Instruction-Locations of STC N &
+   1 in the Instruction-Locations of STC N by Def11;
+   then reconsider l1 = 0, l2 = 1 as Instruction-Location of STC N
+              by AMI_1:def 4;
        NIC(i, l1) in X & NIC(i, l2) in X;
    then {0+1} in X & {1+1} in X by A1,Lm5;
    then x in {1} & x in {2} by A2,SETFAM_1:def 1;
@@ -1399,8 +1407,10 @@ registration
  proof
    set M = STC N;
 A1: the Instruction-Locations of M = NAT by Def11;
-   then reconsider f = id NAT as Function of NAT, the Instruction-Locations of
-M;
+   then id NAT is Function of NAT, the Instruction-Locations of STC N
+                        by Def11;
+   then reconsider f = id NAT as IL-Function of NAT, STC N
+              by AMI_1:def 36;
        now let k be Element of NAT;
           f.k = k by FUNCT_1:35;
    then A2: f.(k+1) = k+1 & SUCC (f.k) = {k,k+1} by Th24,FUNCT_1:35;
@@ -1450,12 +1460,12 @@ definition
        (non empty non void AMI-Struct over N)),
      k be natural number;
  func il.(S,k) -> Instruction-Location of S means :Def12:
- ex f being Function of NAT, the Instruction-Locations of S st
+ ex f being IL-Function of NAT, S st
    f is bijective &
    (for m, n being Element of NAT holds m <= n iff f.m <= f.n) &
    it = f.k;
  existence proof
- consider f being Function of NAT, the Instruction-Locations of S such that
+ consider f being IL-Function of NAT, S such that
 A1: f is bijective &
    for m, n being Element of NAT holds m <= n iff f.m <= f.n by Def10;
   reconsider k as Element of NAT by ORDINAL1:def 13;
@@ -1471,11 +1481,11 @@ proof
  let k1, k2 be natural number; assume
 A1: il.(T,k1) = il.(T,k2);
 A2: k1 is Element of NAT & k2 is Element of NAT by ORDINAL1:def 13;
- consider f1 being Function of NAT, the Instruction-Locations of T such that
+ consider f1 being IL-Function of NAT, T such that
 A3: f1 is bijective & (for m, n being Element of NAT holds m <= n
 iff f1.m <= f1.n) &
     il.(T,k1) = f1.k1 by Def12;
- consider f2 being Function of NAT, the Instruction-Locations of T such that
+ consider f2 being IL-Function of NAT, T such that
 A4: f2 is bijective & (for m, n being Element of NAT holds m <= n
 iff f2.m <= f2.n) &
     il.(T,k2) = f2.k2 by Def12;
@@ -1490,7 +1500,7 @@ theorem Th26:
 proof
  let l be Instruction-Location of T;
  consider k1 being Element of NAT;
- consider f1 being Function of NAT, the Instruction-Locations of T such that
+ consider f1 being IL-Function of NAT, T such that
 A1: f1 is bijective & (for m, n being Element of NAT holds m <= n
 iff f1.m <= f1.n) &
     il.(T,k1) = f1.k1 by Def12;
@@ -1539,11 +1549,11 @@ theorem Th28:
 proof
  let k1, k2 be natural number;
 A1: k1 is Element of NAT & k2 is Element of NAT by ORDINAL1:def 13;
- consider f1 being Function of NAT, the Instruction-Locations of T such that
+ consider f1 being IL-Function of NAT, T such that
 A2: f1 is bijective & (for m, n being Element of NAT holds m <= n
 iff f1.m <= f1.n) &
     il.(T,k1) = f1.k1 by Def12;
- consider f2 being Function of NAT, the Instruction-Locations of T such that
+ consider f2 being IL-Function of NAT, T such that
 A3: f2 is bijective & (for m, n being Element of NAT holds m <= n
 iff f2.m <= f2.n) &
     il.(T,k2) = f2.k2 by Def12;
@@ -1653,13 +1663,14 @@ theorem Th37:
 proof
   set M = STC N;
 A1: z is Element of NAT by ORDINAL1:def 13;
-  consider f being Function of NAT, the Instruction-Locations of M such that
+  consider f being IL-Function of NAT, M such that
 A2: f is bijective & (for m, n being Element of NAT holds m <= n
 iff f.m <= f.n) &
    il.(M,z) = f.z by Def12;
 A3: the Instruction-Locations of M = NAT by Def11;
-   then reconsider f2 = id NAT
-     as Function of NAT, the Instruction-Locations of M;
+   then id NAT is Function of NAT, the Instruction-Locations of STC N;
+   then reconsider f2 = id NAT as IL-Function of NAT, STC N
+              by AMI_1:def 36;
        now let k be Element of NAT;
    A4: f2.(k+1) = k+1 & f2.k = k by FUNCT_1:35;
    then A5: SUCC f2.k = {k,k+1} by Th24;
@@ -1670,7 +1681,8 @@ A3: the Instruction-Locations of M = NAT by Def11;
      then j = k or j = k+1 by A5,A6,TARSKI:def 2;
     hence k <= j by NAT_1:11;
    end;
-   then for m, n being Element of NAT holds m <= n iff f2.m <= f2.n by A3,Th18;
+   then for m, n being Element of NAT holds m <= n iff f2.m <= f2.n
+                   by A3,Th18;
    then f = f2 by A2,A3,Th17;
  hence il.(STC N, z) = z by A1,A2,FUNCT_1:35;
 end;
@@ -1816,7 +1828,7 @@ sequential
     assume JUMP i is non empty;
     then consider l being set such that
 A1:   l in JUMP i by XBOOLE_0:def 1;
-    reconsider l as Instruction-Location of T by A1;
+    reconsider l as Instruction-Location of T by A1,AMI_1:def 4;
     set X = { NIC(i,l1) where
         l1 is Instruction-Location of T: not contradiction };
         NIC(i,l) in X;
@@ -1989,8 +2001,8 @@ theorem Th49:
     consider l being set such that
 A1:   l in dom F by XBOOLE_0:def 1;
         dom F c= the Instruction-Locations of T by AMI_3:def 13;
-    then reconsider l as Instruction-Location of T by A1;
-    consider f being Function of NAT, the Instruction-Locations of T such that
+    then reconsider l as Instruction-Location of T by A1,AMI_1:def 4;
+    consider f being IL-Function of NAT, T such that
 A2:   f is bijective and
 A3:   for m, n being Element of NAT holds m <= n iff f.m <= f.n and
 A4:   il.(T,0) = f.0 by Def12;
@@ -2019,8 +2031,9 @@ A1: now
       assume
 A2:     x in dom P;
           dom P c= the Instruction-Locations of T by AMI_3:def 13;
-      then consider n being natural number such that
-A3:     x = il.(T,n) by A2,Th26;
+      then reconsider l=x as Instruction-Location of T by A2,AMI_1:def 4;
+      consider n being natural number such that
+A3:     l = il.(T,n) by A2,Th26;
        reconsider n as Element of NAT by ORDINAL1:def 13;
       take n;
       thus x = F(n) by A3;
@@ -2063,21 +2076,22 @@ definition
  let F be non empty programmed FinPartState of S;
  func LastLoc F -> Instruction-Location of S means :Def21:
   ex M being finite non empty natural-membered set st
-     M = { locnum l where l is Element of the Instruction-Locations of S
+     M = { locnum l where l is Instruction-Location of S
                         : l in dom F } &
      it = il.(S, max M);
- existence proof
-    deffunc F(Element of the Instruction-Locations of S) = locnum $1;
-    set M = { F(l) where l is Element of the Instruction-Locations of S
+ existence
+  proof
+    deffunc F(Instruction-Location of S) = locnum $1;
+    set M = { F(l) where l is Instruction-Location of S
                            : l in dom F };
  A1: dom F is finite;
- A2: M is finite from FRAENKEL:sch 21(A1);
+ A2: M is finite from AMI_1:sch 1(A1);
     consider l being Element of dom F;
         l in dom F & dom F c= the Instruction-Locations of S by AMI_3:def 13;
-    then reconsider l as Element of the Instruction-Locations of S;
+    then reconsider l as Instruction-Location of S by AMI_1:def 4;
 A3:  locnum l in M;
         M c= NAT proof let k be set; assume k in M;
-      then ex l being Element of the Instruction-Locations of S st
+      then ex l being Instruction-Location of S st
        k = locnum l & l in dom F;
      hence k in NAT;
     end;
@@ -2094,11 +2108,10 @@ theorem Th51:
   proof
     let F be non empty programmed FinPartState of T;
     consider M being finite non empty natural-membered set such that
-A1:    M = { locnum l where l is Element of the Instruction-Locations of T
-                          : l in dom F } and
+A1:    M = { locnum l where l is Instruction-Location of T : l in dom F } and
 A2:    LastLoc F = il.(T, max M) by Def21;
       max M in M by PRE_CIRC:def 1;
-    then ex l being Element of the Instruction-Locations of T st
+    then ex l being Instruction-Location of T st
       max M = locnum l & l in dom F by A1;
     hence LastLoc F in dom F by A2,Def13;
   end;
@@ -2110,11 +2123,11 @@ theorem
     let F, G be non empty programmed FinPartState of T such that
 A1:   F c= G;
     consider M being finite non empty natural-membered set such that
-A2:    M = { locnum l where l is Element of the Instruction-Locations of T
+A2:    M = { locnum l where l is Instruction-Location of T
                           : l in dom F } and
 A3:    LastLoc F = il.(T, max M) by Def21;
     consider N being finite non empty natural-membered set such that
-A4:    N = { locnum l where l is Element of the Instruction-Locations of T
+A4:    N = { locnum l where l is Instruction-Location of T
                           : l in dom G } and
 A5:    LastLoc G = il.(T, max N) by Def21;
     reconsider MM = M, NN = N as non empty finite Subset of REAL by MEMBERED:3;
@@ -2122,7 +2135,7 @@ A5:    LastLoc G = il.(T, max N) by Def21;
     proof
       let a be set;
       assume a in M;
-      then consider l being Element of the Instruction-Locations of T such that
+      then consider l being Instruction-Location of T such that
 A6:     a = locnum l & l in dom F by A2;
           dom F c= dom G by A1,GRFUNC_1:8;
       hence a in N by A4,A6;
@@ -2140,7 +2153,7 @@ theorem Th53:
         l be Instruction-Location of T such that
 A1:   l in dom F;
     consider M being finite non empty natural-membered set such that
-A2:    M = { locnum w where w is Element of the Instruction-Locations of T
+A2:    M = { locnum w where w is Instruction-Location of T
                           : w in dom F } and
 A3:    LastLoc F = il.(T, max M) by Def21;
 A4: locnum LastLoc F = max M by A3,Def13;
@@ -2165,7 +2178,7 @@ A2:   LastLoc F = LastLoc G;
       assume
 A3:     x in dom G;
           dom G c= the Instruction-Locations of T by AMI_3:def 13;
-      then reconsider x as Instruction-Location of T by A3;
+      then reconsider x as Instruction-Location of T by A3,AMI_1:def 4;
 A4:   x <= LastLoc F by A2,A3,Th53;
           LastLoc F in dom F by Th51;
       hence thesis by A4,Def20;

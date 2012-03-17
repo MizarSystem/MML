@@ -18,7 +18,7 @@ environ
       FUNCT_7, CAT_2, AMI_2, AMI_3;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
       FUNCOP_1, ARYTM_3, FRAENKEL, NUMBERS, XREAL_0, INT_1, FINSEQ_1, CARD_3,
-      PBOOLE, GR_CY_1, AMI_2, AMI_3;
+      PBOOLE, GR_CY_1, AMI_2, AMI_3, AFINSQ_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, FUNCOP_1, CARD_1;
  theorems ZFMISC_1, FUNCT_2, TARSKI, CAT_2, FUNCOP_1, GR_CY_1, INT_1, CARD_3,
@@ -432,8 +432,16 @@ end;
 theorem Th9:
  SCM+FSA-OK.0 = SCM+FSA-Instr-Loc
  proof
-A1: not 0 in dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
-     by Lm1,AMI_1:48,AMI_3:4,def 1;
+   now assume
+Z:   IC SCM in SCM-Instr-Loc;
+     then reconsider l = IC SCM as Instruction-Location of SCM
+                    by AMI_1:def 4,AMI_3:def 1;
+     l in SCM-Instr-Loc by Z;
+    hence contradiction by AMI_1:48;
+   end;
+   then not 0 in SCM-Instr-Loc by AMI_3:4;
+   then
+A1: not 0 in dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)) by Lm1;
       0 in NAT;
 then A2:  0 in dom SCM-OK by FUNCT_2:def 1;
    thus SCM+FSA-OK.0 = ((INT --> INT*) +* SCM-OK).0 by A1,FUNCT_4:12
@@ -447,8 +455,10 @@ proof
 A1: b in SCM-Data-Loc;
 then A2: b in NAT;
    b is Data-Location by A1,AMI_3:def 1,def 2;
+   then b is not Instruction-Location of SCM by AMI_5:22;
+   then not b in SCM-Instr-Loc by AMI_3:def 1, AMI_1:def 4;
 then A3: not b in dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
-      by Lm1,AMI_3:def 1,AMI_5:22;
+      by Lm1;
 A4:  b in dom SCM-OK by A2,FUNCT_2:def 1;
    thus SCM+FSA-OK.b = ((INT --> INT*) +* SCM-OK).b by A3,FUNCT_4:12
         .= SCM-OK.b by A4,FUNCT_4:14
@@ -496,17 +506,19 @@ theorem Th13:
    SCM+FSA-Instr-Loc <> INT* & SCM+FSA-Instr <> INT*
  proof
   thus SCM+FSA-Instr-Loc <> INT by AMI_2:6;
-A1: not 2 in SCM+FSA-Instr by AMI_1:3,ZFMISC_1:102;
+X: not ex x,y st 2 = [x,y];
+   then
+A1: not 2 in SCM+FSA-Instr by RELAT_1:def 1;
       2 in NAT;
   hence SCM+FSA-Instr <> INT by A1,NUMBERS:17;
    A2: 2*1 in { 2*k : k > 0 };
   hence
-   SCM+FSA-Instr-Loc <> SCM+FSA-Instr by AMI_1:3,AMI_2:def 3,ZFMISC_1:102;
+   SCM+FSA-Instr-Loc <> SCM+FSA-Instr by AMI_2:def 3,RELAT_1:def 1,X;
    {} in INT* by FINSEQ_1:66;
   hence SCM+FSA-Instr-Loc <> INT* by A1,A2,Th9,Th11,AMI_2:def 3;
       now assume {} in SCM+FSA-Instr;
      then consider x,y such that
-A3:    {} = [x,y] by ZFMISC_1:102;
+A3:    {} = [x,y] by RELAT_1:def 1;
     thus contradiction by A3;
    end;
   hence SCM+FSA-Instr <> INT* by FINSEQ_1:66;

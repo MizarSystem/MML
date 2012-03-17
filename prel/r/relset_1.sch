@@ -241,4 +241,126 @@
 </Not>
 </For>
 </Scheme>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="5">
+<Cluster/>
+<Func kind="F" nr="1"/>
+<Func kind="F" nr="2"/>
+</Typ>
+<Typ kind="M" nr="5">
+<Cluster/>
+<Func kind="F" nr="1"/>
+<Func kind="F" nr="2"/>
+</Typ>
+</ArgTypes>
+<Pred kind="R" nr="16">
+<Func kind="F" nr="1"/>
+<Func kind="F" nr="2"/>
+<Func kind="F" nr="3"/>
+<Func kind="F" nr="4"/>
+</Pred>
+<For>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<For>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="2"/>
+</Typ>
+<And>
+<Not>
+<And>
+<Pred kind="R" nr="2">
+<Func kind="K" nr="4">
+<Var nr="1"/>
+<Var nr="2"/>
+</Func>
+<Func kind="F" nr="3"/>
+</Pred>
+<Not>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Var nr="2"/>
+</Pred>
+</Not>
+</And>
+</Not>
+<Not>
+<And>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Var nr="2"/>
+</Pred>
+<Not>
+<Pred kind="R" nr="2">
+<Func kind="K" nr="4">
+<Var nr="1"/>
+<Var nr="2"/>
+</Func>
+<Func kind="F" nr="3"/>
+</Pred>
+</Not>
+</And>
+</Not>
+</And>
+</For>
+</For>
+<For>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<For>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="2"/>
+</Typ>
+<And>
+<Not>
+<And>
+<Pred kind="R" nr="2">
+<Func kind="K" nr="4">
+<Var nr="1"/>
+<Var nr="2"/>
+</Func>
+<Func kind="F" nr="4"/>
+</Pred>
+<Not>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Var nr="2"/>
+</Pred>
+</Not>
+</And>
+</Not>
+<Not>
+<And>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Var nr="2"/>
+</Pred>
+<Not>
+<Pred kind="R" nr="2">
+<Func kind="K" nr="4">
+<Var nr="1"/>
+<Var nr="2"/>
+</Func>
+<Func kind="F" nr="4"/>
+</Pred>
+</Not>
+</And>
+</Not>
+</And>
+</For>
+</For>
+</Scheme>
 </Schemes>

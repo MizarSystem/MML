@@ -2,8 +2,8 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="RELAT_1"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="RELAT_1"/>
 <ArticleID name="FINSET_1"/>
 </Signature>
 <Scheme>

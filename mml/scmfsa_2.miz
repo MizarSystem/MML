@@ -184,7 +184,7 @@ definition let k be natural number;
   end;
  func insloc k -> Instruction-Location of SCM+FSA equals
   il.k;
- coherence;
+ coherence by AMI_1:def 4;
  func fsloc k -> FinSeq-Location equals
    -(k+1);
   coherence
@@ -243,7 +243,7 @@ theorem
   st il = insloc i
  proof
   let il be Instruction-Location of SCM+FSA;
-   reconsider D = il as Instruction-Location of SCM;
+   reconsider D = il as Instruction-Location of SCM by AMI_1:def 4;
    consider i being Element of NAT such that
 A1:  D = il.i by AMI_5:19;
   take i;
@@ -333,14 +333,14 @@ theorem
 
 theorem
   for x being set st x in SCM+FSA-Instr-Loc
-  holds x is Instruction-Location of SCM+FSA;
+  holds x is Instruction-Location of SCM+FSA by AMI_1:def 4;
 
 definition let loc be Instruction-Location of SCM+FSA;
  func Next loc -> Instruction-Location of SCM+FSA means
 :Def9: ex mj being Element of SCM+FSA-Instr-Loc st mj = loc & it = Next mj;
  existence
   proof reconsider loc as Element of SCM+FSA-Instr-Loc;
-   Next loc is Instruction-Location of SCM+FSA;
+   Next loc is Instruction-Location of SCM+FSA by AMI_1:def 4;
    hence thesis;
   end;
  correctness;
@@ -349,7 +349,14 @@ end;
 theorem
  for loc being Instruction-Location of SCM+FSA,
  mj being Element of SCM+FSA-Instr-Loc st mj = loc
- holds Next mj = Next loc by Def9;
+ holds Next mj = Next loc
+  proof let loc be Instruction-Location of SCM+FSA,
+     mj being Element of SCM+FSA-Instr-Loc such that
+Z:  mj = loc;
+    ex m being Element of SCM+FSA-Instr-Loc st m = loc & Next loc = Next m
+           by Def9;
+   hence thesis by AMI_1:def 4,Z;
+  end;
 
 theorem
   for k being natural number holds Next insloc k = insloc(k+1)
@@ -376,8 +383,12 @@ reserve la,lb for Instruction-Location of SCM+FSA,
 theorem Th33:
  la = La implies Next la = Next La
 proof
-  ex mj being Element of SCM+FSA-Instr-Loc st
+X: ex mj being Element of SCM+FSA-Instr-Loc st
    mj = la & Next la = Next mj by Def9;
+  reconsider La as Instruction-Location of SCM by AMI_1:def 4;
+   ex mj being Element of SCM-Instr-Loc st
+   mj = La & Next La = Next mj by AMI_3:def 11;
+  then la = La implies Next la = Next La by AMI_3:def 11,X,AMI_1:def 4;
  hence thesis by AMI_3:def 11;
 end;
 
@@ -532,7 +543,7 @@ definition let la;
 :Def16: ex La st la = La & it = goto La;
  existence
   proof
- reconsider L=la as Instruction-Location of SCM;
+ reconsider L=la as Instruction-Location of SCM by AMI_1:def 4;
     reconsider i = goto L as Instruction of SCM+FSA by Th38;
    take i,L;
    thus thesis;
@@ -543,7 +554,7 @@ definition let la;
 :Def17: ex A,La st a = A & la = La & it = A=0_goto La;
  existence
   proof
- reconsider L=la as Instruction-Location of SCM;
+ reconsider L=la as Instruction-Location of SCM by AMI_1:def 4;
  reconsider A = a as Data-Location by Th25;
     reconsider i = A=0_goto L as Instruction of SCM+FSA by Th38;
    take i,A,L;
@@ -554,7 +565,7 @@ definition let la;
 :Def18: ex A,La st a = A & la = La & it = A>0_goto La;
  existence
   proof
- reconsider L=la as Instruction-Location of SCM;
+ reconsider L=la as Instruction-Location of SCM by AMI_1:def 4;
  reconsider A = a as Data-Location by Th25;
     reconsider i = A>0_goto L as Instruction of SCM+FSA by Th38;
    take i,A,L;
@@ -783,7 +794,7 @@ A1: InsCode ins = 6;
     then reconsider I = ins as Instruction of SCM by Th34;
     consider La such that
 A2:    I = goto La by AMI_5:52,A1;
-     reconsider loc = La as Instruction-Location of SCM+FSA;
+     reconsider loc = La as Instruction-Location of SCM+FSA by AMI_1:def 4;
     take loc;
     thus thesis by A2,Def16;
    end;
@@ -797,7 +808,7 @@ A1: InsCode ins = 7;
     then reconsider I = ins as Instruction of SCM by Th34;
     consider La,A such that
 A2:    I = A=0_goto La by AMI_5:53,A1;
-     reconsider loc = La as Instruction-Location of SCM+FSA;
+     reconsider loc = La as Instruction-Location of SCM+FSA by AMI_1:def 4;
          A in SCM-Data-Loc by AMI_3:def 2;
      then reconsider da = A as Int-Location by Def4;
     take loc,da;
@@ -813,7 +824,7 @@ A1: InsCode ins = 8;
     then reconsider I = ins as Instruction of SCM by Th34;
     consider La,A such that
 A2:    I = A>0_goto La by AMI_5:54,A1;
-     reconsider loc = La as Instruction-Location of SCM+FSA;
+     reconsider loc = La as Instruction-Location of SCM+FSA by AMI_1:def 4;
          A in SCM-Data-Loc by AMI_3:def 2;
      then reconsider da = A as Int-Location by Def4;
     take loc,da;
@@ -1333,8 +1344,10 @@ then        x = IC SCM+FSA by TARSKI:def 1;
      hence g1.x = g2.x by A3,A5,A6;
      end;
      suppose
-                 x in SCM+FSA-Instr-Loc;
-     hence g1.x = g2.x by A4,A5,A6;
+S:    x in SCM+FSA-Instr-Loc;
+      then reconsider l = x as Instruction-Location of SCM+FSA by AMI_1:def 4;
+      g1.l = g2.l by A4,A5,A6,AMI_1:def 4,S;
+     hence g1.x = g2.x by A4,A5,A6,AMI_1:def 4,S;
     end;
     end;
     hence s1 = s2 by A5,A6,A7,FUNCT_1:9;
@@ -1760,8 +1773,10 @@ A6: SCM+FSA-Exec-Res(I,S) =
 A7: Exec(c:=(g,a), s) = (SCM+FSA-Chg(S1, Next IC S)) by A6,SCMFSA_1:def 18;
 A8: I int_addr1 = ml & I int_addr2 = mk by A1,A3,SCMFSA_1:def 10,
 def 11;
+X: ex mj being Element of SCM+FSA-Instr-Loc
+            st mj = IC s & Next IC s = Next mj by Def9;
   thus Exec(c:=(g,a), s).IC SCM+FSA = Next IC S by A7,Th7,SCMFSA_1:20
-    .= Next IC s by Th7,Def9;
+    .= Next IC s by Th7,AMI_1:def 4,X;
 A9:  I coll_addr1 = p by A1,A3,SCMFSA_1:def 12;
   hereby take k;
    thus k = abs(s.a) by A1,A3,A4,SCMFSA_1:def 11;
@@ -1804,8 +1819,10 @@ A6: SCM+FSA-Exec-Res(I,S)=SCM+FSA-Chg(SCM+FSA-Chg(S,I coll_addr1,F),Next IC S)
 A7: Exec((g,a):=c, s) = (SCM+FSA-Chg(S1, Next IC S)) by A6,SCMFSA_1:def 18;
 A8: I int_addr1 = ml & I int_addr2 = mk by A1,A3,SCMFSA_1:def 10,
 def 11;
+X: ex mj being Element of SCM+FSA-Instr-Loc
+            st mj = IC s & Next IC s = Next mj by Def9;
   thus Exec((g,a):=c, s).IC SCM+FSA = Next IC S by A7,Th7,SCMFSA_1:20
-    .= Next IC s by Th7,Def9;
+    .= Next IC s by Th7,X,AMI_1:def 4;
 A9:  I coll_addr1 = p by A1,A3,SCMFSA_1:def 12;
   hereby take k;
    thus k = abs(s.a) by A1,A3,A4,SCMFSA_1:def 11;
@@ -1842,8 +1859,10 @@ A3: I`2 = <*ml,p*> by MCART_1:7;
 A4: Exec(c:=len g, s) = SCM+FSA-Exec-Res(I,S) by SCMFSA_1:def 18
                     .= (SCM+FSA-Chg(S1, Next IC S)) by A2,SCMFSA_1:def 17;
 A5: I int_addr3 = ml by A1,A3,SCMFSA_1:def 13;
+X: ex mj being Element of SCM+FSA-Instr-Loc
+            st mj = IC s & Next IC s = Next mj by Def9;
   thus Exec(c:=len g, s).IC SCM+FSA = Next IC S by A4,Th7,SCMFSA_1:20
-    .= Next IC s by Th7,Def9;
+    .= Next IC s by Th7,X,AMI_1:def 4;
 A6:  I coll_addr2 = p by A1,A3,SCMFSA_1:def 14;
   thus Exec(c:=len g, s).c = S1.ml by A4,SCMFSA_1:21
     .= len(s.g) by A5,A6,SCMFSA_1:25;
@@ -1881,9 +1900,11 @@ A6: SCM+FSA-Exec-Res(I,S)
       = SCM+FSA-Chg(SCM+FSA-Chg(S,I coll_addr2,F),Next IC S)
        by A2,SCMFSA_1:def 17;
   set S1 = SCM+FSA-Chg(S,I coll_addr2,F);
+X: ex mj being Element of SCM+FSA-Instr-Loc
+            st mj = IC s & Next IC s = Next mj by Def9;
 A7: Exec(g:=<0,...,0>c, s) = SCM+FSA-Chg(S1, Next IC S) by A6,SCMFSA_1:def 18;
   hence Exec(g:=<0,...,0>c, s).IC SCM+FSA = Next IC S by Th7,SCMFSA_1:20
-    .= Next IC s by Th7,Def9;
+    .= Next IC s by Th7,X,AMI_1:def 4;
 A8:  I coll_addr2 = p by A1,A3,SCMFSA_1:def 14;
   hereby take k;
    thus k = abs(s.c) by A1,A3,A4,SCMFSA_1:def 13;
@@ -1936,7 +1957,7 @@ A2:   I is halting;
     reconsider T = s as SCM+FSA-State;
 A3: IC T = T.0;
 A4: Exec(I,s).IC SCM+FSA = T.0 by  A2,AMI_1:def 8,Th7;
-    reconsider w = T.0 as Instruction-Location of SCM+FSA by A3;
+    reconsider w = T.0 as Instruction-Location of SCM+FSA by A3,AMI_1:def 4;
     consider mj being Element of SCM+FSA-Instr-Loc such that
 A5:   mj = w & Next w = Next mj by Def9;
     Exec(I,s).IC SCM+FSA = Next w by A1,Th7;
@@ -2085,7 +2106,7 @@ A10:   t.a <> 0;
 A11: IC t = IC w by Th7;
 A12: IC w = w.0;
 A13: Exec(a=0_goto la,t).IC SCM+FSA = w.0 by  A9,AMI_1:def 8,Th7;
-    reconsider e = w.0 as Instruction-Location of SCM+FSA by A12;
+    reconsider e = w.0 as Instruction-Location of SCM+FSA by A12,AMI_1:def 4;
 A14: Exec(a=0_goto la,t).IC SCM+FSA = Next e by A10,A11,Th96;
       ex mi being Element of SCM+FSA-Instr-Loc
         st mi = e & Next e = Next mi by Def9;
@@ -2152,7 +2173,7 @@ A10:   t.a <= 0;
 A11: IC t = IC w by Th7;
 A12: IC w = w.0;
 A13: Exec(a>0_goto la,t).IC SCM+FSA = w.0 by  A9,AMI_1:def 8,Th7;
-    reconsider e = w.0 as Instruction-Location of SCM+FSA by A12;
+    reconsider e = w.0 as Instruction-Location of SCM+FSA by A12,AMI_1:def 4;
 A14: Exec(a>0_goto la,t).IC SCM+FSA = Next e by A10,A11,Th97;
       ex mi being Element of SCM+FSA-Instr-Loc
         st mi = e & Next e = Next mi by Def9;

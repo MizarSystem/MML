@@ -2,13 +2,13 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
@@ -67,7 +67,7 @@
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="U" nr="1">
 <Func kind="K" nr="282">
 <Num nr="2"/>
@@ -90,7 +90,7 @@
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="K" nr="79"/>
 </Func>
 </Typ>
@@ -131,7 +131,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="2">
+<Func kind="K" nr="6">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -207,7 +207,7 @@
 </Adjective>
 <Adjective nr="105" value="false"/>
 </Cluster>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="U" nr="1">
 <Func kind="K" nr="282">
 <Num nr="2"/>
@@ -235,7 +235,7 @@
 </Adjective>
 <Adjective nr="104" value="false"/>
 </Cluster>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="U" nr="1">
 <Func kind="K" nr="282">
 <Num nr="2"/>
@@ -264,7 +264,7 @@
 <Adjective nr="104" value="false"/>
 <Adjective nr="105" value="false"/>
 </Cluster>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="U" nr="1">
 <Func kind="K" nr="282">
 <Num nr="2"/>
@@ -292,7 +292,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="23">
+<Func kind="K" nr="27">
 <Func kind="K" nr="79"/>
 </Func>
 <Cluster>
@@ -321,7 +321,7 @@
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="K" nr="79"/>
 </Func>
 </Typ>
@@ -339,7 +339,7 @@
 <Adjective nr="104" value="false"/>
 <Adjective nr="105" value="false"/>
 </Cluster>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="U" nr="1">
 <Func kind="K" nr="282">
 <Num nr="2"/>
@@ -479,7 +479,7 @@
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="K" nr="79"/>
 </Func>
 </Typ>
@@ -496,7 +496,7 @@
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="K" nr="79"/>
 </Func>
 </Typ>

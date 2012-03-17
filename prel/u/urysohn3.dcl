@@ -6,6 +6,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
@@ -22,7 +23,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 <Func kind="K" nr="10">
-<Func kind="K" nr="54"/>
+<Func kind="K" nr="62"/>
 </Func>
 </Typ>
 </ArgTypes>
@@ -32,7 +33,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="17"/>
 </Cluster>
 </CCluster>
 </Registrations>

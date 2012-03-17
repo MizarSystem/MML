@@ -1,0 +1,1338 @@
+:: Mizar Analysis of Algorithms: Preliminaries
+::  by Grzegorz Bancerek
+:: 
+:: Received July 9, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies AOFA_000, UNIALG_1, FUNCT_1, BINOP_1, GROUP_1, FINSEQ_1, RELAT_1,
+      BINTREE1, FUNCT_2, PARTFUN1, COMPUT_1, BOOLE, MSUALG_1, FUNCT_7,
+      ZF_REFLE, SUPINF_1, RLVECT_1, FUNCOP_1, FUNCT_4, ARYTM, PROB_1, TARSKI,
+      TREES_4, FINSEQ_2, ARYTM_1, FINSET_1, CQC_LANG, SUBSET_1, FUNCT_3,
+      VECTSP_1, SETFAM_1, FREEALG, FINSEQ_4, DTCONSTR, CARD_1, TREES_2, LANG1,
+      TDGROUP, TREES_3, RAT_1, TREES_1, MEMBERED, SQUARE_1, WELLORD1, INCPROJ,
+      FACIRC_1, UNIALG_2, PRELAMB, FUNCT_5, CQC_SIM1, ALG_1, ORDINAL2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, PRE_TOPC, ENUMSET1, SETFAM_1,
+      ORDINAL1, MEMBERED, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
+      FUNCT_3, FINSET_1, CQC_LANG, LANG1, MSAFREE1, FINSEQ_1, SEQ_1, SEQM_3,
+      BINOP_1, CARD_1, CARD_3, FRAENKEL, PROB_2, FINSEQ_2, FINSEQOP, PBOOLE,
+      PZFMISC1, PRE_FF, PRE_CIRC, FACIRC_1, NUMBERS, XCMPLX_0, XXREAL_0,
+      XREAL_0, TREES_1, TREES_2, TREES_3, NAT_1, BINARITH, WSIERP_1, SUPINF_1,
+      MESFUNC1, FUNCOP_1, FUNCT_4, FUNCT_5, FUNCT_7, ABIAN, CAT_2, BORSUK_1,
+      MARGREL1, STRUCT_0, UNIALG_1, UNIALG_2, ALG_1, FREEALG, PUA2MSS1,
+      COMPUT_1, SUPINF_2, TREES_4, DTCONSTR, MSUALG_1, MSAFREE, MSATERM,
+      MSUALG_3, FINSEQ_4;
+ constructors ORDINAL2, FINSEQ_1, UNIALG_1, PUA2MSS1, COMPUT_1, FUNCT_7,
+      BINOP_1, BINARITH, REAL_1, BORSUK_1, SUPINF_1, SUPINF_2, POLYNOM1,
+      CATALG_1, MSATERM, MSAFREE3, PROB_2, MSAFREE1, MSUALG_3, CQC_LANG,
+      FACIRC_1, CARD_4, AMI_2, FUNCT_3, ALG_1, FREEALG, FINSEQ_4, FINSOP_1,
+      ORDERS_1, PZFMISC1, PRE_FF, INT_2, ABSVALUE, FUNCT_5, FINSEQOP, WSIERP_1,
+      ENUMSET1, PRE_CIRC, WELLORD2, UNIALG_2, CAT_2, ABIAN, SETFAM_1, EXTREAL1,
+      MARGREL1, MESFUNC1;
+ registrations ZFMISC_1, RELSET_1, FUNCT_1, FUNCOP_1, FINSEQ_2, FRAENKEL,
+      FUNCT_2, FINSEQ_1, UNIALG_1, COMPUT_1, NUMBERS, NAT_1, ORDINAL2,
+      STRUCT_0, PUA2MSS1, SUPINF_1, PBOOLE, MSUALG_1, INSTALG1, MSATERM,
+      MSAFREE1, MSAFREE3, MSUALG_2, PRALG_1, DTCONSTR, FREEALG, FUNCT_7, INT_1,
+      CARD_4, WAYBEL12, CARD_5, SUBSET_1, ORDERS_1, CARD_3, SEQ_1, XXREAL_0,
+      XREAL_0, TOPGEN_4, TREES_2, TREES_3, TREES_4, MEMBERED, XBOOLE_0,
+      FINSET_1, TREES_1, PRE_CIRC, FACIRC_1, RELAT_1, PRE_TOPC;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+
+
+begin :: Binary operations, orbits, and iterations
+
+notation
+  let x,y be set;
+  antonym x nin y for x in y;
+end;
+
+theorem :: AOFA_000:1
+  for f,g,h being Function
+  for A being set st A c= dom f & A c= dom g & rng h c= A &
+    for x being set st x in A holds f.x = g.x
+  holds f*h = g*h;
+
+registration
+  let x,y be non empty set;
+  cluster <*x,y*> -> non-empty;
+end;
+
+registration
+  let p,q be non-empty FinSequence;
+  cluster p^q -> non-empty;
+end;
+
+definition
+  let f be homogeneous Function;
+  let x be set;
+  pred x is_a_unity_wrt f means
+:: AOFA_000:def 1
+
+  for y,z being set st <*y,z*> in dom f or <*z,y*> in dom f
+  holds <*x,y*> in dom f & f.<*x,y*> = y &
+        <*y,x*> in dom f & f.<*y,x*> = y;
+end;
+
+definition
+  let f be homogeneous Function;
+  attr f is associative means
+:: AOFA_000:def 2
+
+  for x,y,z being set st <*x,y*> in dom f & <*y,z*> in dom f &
+  <*f.<*x,y*>,z*> in dom f & <*x,f.<*y,z*>*> in dom f
+  holds f.<*f.<*x,y*>,z*> = f.<*x,f.<*y,z*>*>;
+  attr f is unital means
+:: AOFA_000:def 3
+
+  ex x being set st x is_a_unity_wrt f;
+end;
+
+definition
+  let X be set;
+  let Y be non empty set;
+  let Z be FinSequenceSet of X;
+  let y be Element of Y;
+  redefine func Z --> y -> PartFunc of X*,Y;
+end;
+
+registration
+  let X be non empty set;
+  let x be Element of X;
+  let n be Nat;
+  cluster (n-tuples_on X) --> x ->
+  non empty quasi_total homogeneous PartFunc of X*, X;
+end;
+
+theorem :: AOFA_000:2
+  for X being non empty set, x being Element of X
+  for n being Nat holds arity ((n-tuples_on X) --> x) = n;
+
+registration
+  let X be non empty set;
+  let x be Element of X;
+  cluster (0-tuples_on X) --> x -> nullary (homogeneous PartFunc of X*, X);
+  cluster (1-tuples_on X) --> x -> unary (homogeneous PartFunc of X*, X);
+  cluster (2-tuples_on X) --> x -> binary (homogeneous PartFunc of X*, X);
+  cluster (3-tuples_on X) --> x -> ternary (homogeneous PartFunc of X*, X);
+end;
+
+registration
+  let X be non empty set;
+  cluster binary associative unital
+  (non empty quasi_total homogeneous PartFunc of X*, X);
+  cluster nullary (non empty quasi_total homogeneous PartFunc of X*, X);
+  cluster ternary (non empty quasi_total homogeneous PartFunc of X*, X);
+end;
+
+theorem :: AOFA_000:3
+  for X being non empty set
+  for p being FinSequence of FinTrees X
+  for x,t being set st t in rng p
+  holds t <> x-tree p;
+
+definition
+  let f,g be Function;
+  let X be set;
+  func (f,X)+*g -> Function equals
+:: AOFA_000:def 4
+g+*(f|X);
+end;
+
+theorem :: AOFA_000:4
+  for f,g being Function, x,X being set holds
+  x in X & X c= dom f implies ((f,X)+*g).x = f.x;
+
+theorem :: AOFA_000:5
+  for f,g being Function, x,X being set holds
+  x nin X & x in dom g implies ((f,X)+*g).x = g.x;
+
+definition
+  let X,Y be non empty set;
+  let f,g be Element of Funcs(X,Y);
+  let A be set;
+  redefine func (f,A)+*g -> Element of Funcs(X,Y);
+end;
+
+definition
+  let X,Y,Z be non empty set;
+  let f be Element of Funcs(X,Y);
+  let g be Element of Funcs(Y,Z);
+  redefine func g*f -> Element of Funcs(X,Z);
+end;
+
+definition
+  let f be Function;
+  let x be set;
+  func f orbit x equals
+:: AOFA_000:def 5
+  {iter(f,n).x where n is Element of NAT: x in dom iter(f,n)};
+end;
+
+theorem :: AOFA_000:6
+  for f being Function, x being set st x in dom f
+  holds x in f orbit x;
+
+theorem :: AOFA_000:7
+  for f being Function, x,y being set
+  st rng f c= dom f & y in f orbit x holds f.y in f orbit x;
+
+theorem :: AOFA_000:8
+  for f being Function, x being set st x in dom f holds f.x in f orbit x;
+
+theorem :: AOFA_000:9
+  for f being Function, x being set st x in dom f & f.x in dom f
+  holds f orbit (f.x) c= f orbit x;
+
+definition
+  let f be Function such that
+ rng f c= dom f;
+  let A be set;
+  let x be set;
+  func (A,x) iter f -> Function means
+:: AOFA_000:def 6
+  dom it = dom f &
+  for a being set st a in dom f holds
+    (f orbit a c= A implies it.a = x) &
+    for n being Nat st iter(f,n).a nin A &
+       for i being Nat st i < n holds iter(f,i).a in A
+    holds it.a = iter(f,n).a;
+end;
+
+definition
+  let f be Function such that
+ rng f c= dom f;
+  let A be set;
+  let g be Function;
+  func (A,g) iter f -> Function means
+:: AOFA_000:def 7
+
+  dom it = dom f &
+  for a being set st a in dom f holds
+    (f orbit a c= A implies it.a = g.a) &
+    for n being Nat st iter(f,n).a nin A &
+       for i being Nat st i < n holds iter(f,i).a in A
+    holds it.a = iter(f,n).a;
+end;
+
+theorem :: AOFA_000:10
+  for f,g being Function, a,A being set
+  st rng f c= dom f & a in dom f holds
+  not f orbit a c= A implies
+  ex n being Nat st ((A,g) iter f).a = iter(f,n).a & iter(f,n).a nin A &
+  for i being Nat st i < n holds iter(f,i).a in A;
+
+theorem :: AOFA_000:11
+  for f,g being Function, a,A being set
+  st rng f c= dom f & a in dom f & g*f = g holds
+  a in A implies ((A,g) iter f).a = ((A,g) iter f).(f.a);
+
+theorem :: AOFA_000:12
+  for f,g being Function, a,A being set
+  st rng f c= dom f & a in dom f holds
+  a nin A implies ((A,g) iter f).a = a;
+
+definition
+  let X be non empty set;
+  let f be Element of Funcs(X,X);
+  let A be set;
+  let g be Element of Funcs(X,X);
+  redefine func (A,g) iter f -> Element of Funcs(X,X);
+end;
+
+begin :: Free universal algebras
+
+theorem :: AOFA_000:13
+  for X being non empty set, S being non empty FinSequence of NAT
+  ex A being Universal_Algebra st the carrier of A = X & signature A = S;
+
+theorem :: AOFA_000:14
+  for S being non empty FinSequence of NAT
+  ex A being Universal_Algebra st the carrier of A = NAT & signature A = S &
+  for i,j being Nat st i in dom S & j = S.i
+  holds (the charact of A).i = (j-tuples_on NAT) --> i;
+
+theorem :: AOFA_000:15
+  for S being non empty FinSequence of NAT
+  for i,j being Nat st i in dom S & j = S.i
+  for X being non empty set, f being Function of j-tuples_on X, X
+  ex A being Universal_Algebra st the carrier of A = X & signature A = S &
+  (the charact of A).i = f;
+
+registration
+  let f be non empty FinSequence of NAT;
+  let D be non empty disjoint_with_NAT set;
+  cluster -> Relation-like Function-like Element of FreeUnivAlgNSG(f,D);
+end;
+
+registration
+  let f be non empty FinSequence of NAT;
+  let D be non empty disjoint_with_NAT set;
+  cluster -> DecoratedTree-like Element of FreeUnivAlgNSG(f,D);
+  cluster -> DTree-yielding FinSequence of FreeUnivAlgNSG(f,D);
+end;
+
+theorem :: AOFA_000:16
+  for G being non empty DTConstrStr
+  for t being set st t in TS G
+  holds
+   (ex d being Symbol of G st d in Terminals G & t = root-tree d) or
+   (ex o being Symbol of G, p being FinSequence of TS G
+    st o ==> roots p & t = o-tree p);
+
+theorem :: AOFA_000:17
+  for X being disjoint_with_NAT non empty set
+  for S being non empty FinSequence of NAT
+  for i being Nat st i in dom S
+  for p being FinSequence of FreeUnivAlgNSG(S,X) st len p = S.i holds
+  Den(In(i, dom the charact of FreeUnivAlgNSG(S,X)),FreeUnivAlgNSG(S,X)).p
+  = i-tree p;
+
+definition
+  let A be non-empty UAStr;
+  let B be Subset of A;
+  let n be Nat;
+  func B|^n -> Subset of A means
+:: AOFA_000:def 8
+
+  ex F being Function of NAT, bool the carrier of A st it = F.n & F.0 = B &
+  for n being Nat holds F.(n+1) = F.n \/
+  {Den(o,A).p where o is (Element of dom the charact of A),
+  p is Element of (the carrier of A)*: p in dom Den(o,A) & rng p c= F.n};
+end;
+
+theorem :: AOFA_000:18
+  for A being Universal_Algebra, B being Subset of A
+  holds B|^0 = B;
+
+theorem :: AOFA_000:19
+  for A being Universal_Algebra, B being Subset of A
+  for n being Nat
+  holds B|^(n+1) = (B|^n) \/ {Den(o,A).p
+  where o is (Element of dom the charact of A),
+  p is Element of (the carrier of A)*: p in dom Den(o,A) & rng p c= B|^n};
+
+theorem :: AOFA_000:20
+  for A being Universal_Algebra, B being Subset of A
+  for n being Nat
+  for x being set
+  holds x in B|^(n+1) iff x in B|^n or
+  ex o being Element of dom the charact of A st
+  ex p being Element of (the carrier of A)*
+  st x = Den(o,A).p & p in dom Den(o,A) & rng p c= B|^n;
+
+theorem :: AOFA_000:21
+  for A being Universal_Algebra, B being Subset of A
+  for n,m being Nat st n <= m
+  holds B|^n c= B|^m;
+
+theorem :: AOFA_000:22
+  for A being Universal_Algebra
+  for B1,B2 being Subset of A st B1 c= B2
+  for n being Nat holds B1|^n c= B2|^n;
+
+theorem :: AOFA_000:23
+  for A being Universal_Algebra, B being Subset of A
+  for n being Nat
+  for x being set
+  holds x in B|^(n+1) iff x in B or
+  ex o being Element of dom the charact of A st
+  ex p being Element of (the carrier of A)*
+  st x = Den(o,A).p & p in dom Den(o,A) & rng p c= B|^n;
+
+scheme :: AOFA_000:sch 1
+ MaxVal{A() -> non empty set, B() -> set, P[set,set]}:
+  ex n being Nat st
+  for x being Element of A() st x in B() holds P[x,n]
+  provided
+ B() is finite
+  and
+ for x being Element of A() st x in B() ex n being Nat st P[x,n]
+  and
+ for x being Element of A()
+  for n,m being Nat st P[x,n] & n <= m holds P[x,m];
+
+theorem :: AOFA_000:24
+  for A being Universal_Algebra, B being Subset of A
+  ex C being Subset of A
+  st C = union {B|^n where n is Element of NAT: not contradiction} &
+  C is opers_closed;
+
+theorem :: AOFA_000:25
+  for A being Universal_Algebra, B,C being Subset of A
+  st C is opers_closed & B c= C
+  holds union {B|^n where n is Element of NAT: not contradiction} c= C;
+
+definition
+  let A be Universal_Algebra;
+  func Generators A -> Subset of A equals
+:: AOFA_000:def 9
+(the carrier of A) \
+  union {rng o where o is Element of Operations A: not contradiction};
+end;
+
+theorem :: AOFA_000:26
+  for A being Universal_Algebra, a being Element of A holds
+  a in Generators A iff not ex o being Element of Operations A st a in rng o;
+
+theorem :: AOFA_000:27
+  for A being Universal_Algebra
+  for B being Subset of A st B is opers_closed
+  holds Constants A c= B;
+
+theorem :: AOFA_000:28
+  for A being Universal_Algebra st Constants A = {}
+  holds {} A is opers_closed;
+
+theorem :: AOFA_000:29
+  for A being Universal_Algebra st Constants A = {}
+  for G being GeneratorSet of A
+  holds G <> {};
+
+theorem :: AOFA_000:30
+  for A being Universal_Algebra
+  for G being Subset of A
+  holds G is GeneratorSet of A iff
+  for I being Element of A ex n being Nat st I in G|^n;
+
+theorem :: AOFA_000:31
+  for A being Universal_Algebra
+  for B being Subset of A
+  for G being GeneratorSet of A st G c= B
+  holds B is GeneratorSet of A;
+
+theorem :: AOFA_000:32
+  for A being Universal_Algebra
+  for G being GeneratorSet of A
+  for a being Element of A
+  st not ex o being Element of Operations A st a in rng o
+  holds a in G;
+
+theorem :: AOFA_000:33
+  for A being Universal_Algebra, G being GeneratorSet of A
+  holds Generators A c= G;
+
+theorem :: AOFA_000:34
+  for A being free Universal_Algebra
+  for G being free GeneratorSet of A
+  holds G = Generators A;
+
+registration
+  let A be free Universal_Algebra;
+  cluster Generators A -> free GeneratorSet of A;
+end;
+
+definition
+  let A be free Universal_Algebra;
+  redefine func Generators A -> GeneratorSet of A;
+end;
+
+registration
+  let A,B be set;
+  cluster [:A,B:] -> disjoint_with_NAT;
+end;
+
+theorem :: AOFA_000:35
+  for A being free Universal_Algebra
+  for G being GeneratorSet of A
+  for B being Universal_Algebra
+  for h1,h2 being Function of A,B
+  st h1 is_homomorphism A,B & h2 is_homomorphism A,B & h1|G = h2|G
+  holds h1 = h2;
+
+theorem :: AOFA_000:36
+  for A being free Universal_Algebra
+  for o1,o2 being OperSymbol of A
+  for p1,p2 being FinSequence st p1 in dom Den(o1,A) & p2 in dom Den(o2,A)
+  holds Den(o1,A).p1 = Den(o2,A).p2 implies o1 = o2 & p1 = p2;
+
+theorem :: AOFA_000:37
+  for A being free Universal_Algebra
+  for o1,o2 being Element of Operations A
+  for p1,p2 being FinSequence st p1 in dom o1 & p2 in dom o2
+  holds o1.p1 = o2.p2 implies o1 = o2 & p1 = p2;
+
+theorem :: AOFA_000:38
+  for A being free Universal_Algebra
+  for o being OperSymbol of A
+  for p being FinSequence st p in dom Den(o,A)
+  for a being set st a in rng p
+  holds a <> Den(o,A).p;
+
+theorem :: AOFA_000:39
+  for A being free Universal_Algebra
+  for G being GeneratorSet of A
+  for o being OperSymbol of A
+  st for o' being OperSymbol of A, p being FinSequence
+     st p in dom Den(o',A) & Den(o',A).p in G holds o' <> o
+  for p being FinSequence st p in dom Den(o,A)
+  for n being Nat st Den(o,A).p in G|^(n+1)
+  holds rng p c= G|^n;
+
+theorem :: AOFA_000:40
+  for A being free Universal_Algebra
+  for o being OperSymbol of A
+  for p being FinSequence st p in dom Den(o,A)
+  for n being Nat st Den(o,A).p in (Generators A)|^(n+1)
+  holds rng p c= (Generators A)|^n;
+
+begin :: If-while Algebra
+
+definition
+  let S be non empty UAStr;
+  attr S is with_empty-instruction means
+:: AOFA_000:def 10
+
+  1 in dom the charact of S &
+  (the charact of S).1 is nullary (non empty homogeneous
+  quasi_total PartFunc of (the carrier of S)*, the carrier of S);
+  attr S is with_catenation means
+:: AOFA_000:def 11
+
+  2 in dom the charact of S &
+  (the charact of S).2 is binary (non empty homogeneous
+    quasi_total PartFunc of (the carrier of S)*, the carrier of S);
+  attr S is with_if-instruction means
+:: AOFA_000:def 12
+
+  3 in dom the charact of S &
+  (the charact of S).3 is ternary (non empty homogeneous
+    quasi_total PartFunc of (the carrier of S)*, the carrier of S);
+  attr S is with_while-instruction means
+:: AOFA_000:def 13
+
+  4 in dom the charact of S &
+  (the charact of S).4 is binary (non empty homogeneous
+    quasi_total PartFunc of (the carrier of S)*, the carrier of S);
+  attr S is associative means
+:: AOFA_000:def 14
+
+  (the charact of S).2 is binary associative (non empty homogeneous
+    quasi_total PartFunc of (the carrier of S)*, the carrier of S);
+end;
+
+definition
+  let S be non-empty UAStr;
+  attr S is unital means
+:: AOFA_000:def 15
+
+  ex f being binary (non empty homogeneous
+   quasi_total PartFunc of (the carrier of S)*, the carrier of S)
+  st f = (the charact of S).2 &
+     Den(In(1, dom the charact of S), S).({}) is_a_unity_wrt f;
+end;
+
+theorem :: AOFA_000:41
+  for X being non empty set, x being Element of X
+  for c being binary associative unital
+    (non empty quasi_total homogeneous PartFunc of X*, X)
+  st x is_a_unity_wrt c
+  for i being ternary
+    (non empty quasi_total homogeneous PartFunc of X*, X)
+  for w being binary
+    (non empty quasi_total homogeneous PartFunc of X*, X)
+  ex S being non-empty strict UAStr st
+  the carrier of S = X &
+  the charact of S = <*(0-tuples_on X)-->x,c*>^<*i,w*> &
+  S is with_empty-instruction with_catenation unital associative
+       with_if-instruction with_while-instruction
+       quasi_total partial;
+
+registration
+  cluster with_empty-instruction with_catenation with_if-instruction
+  with_while-instruction unital associative
+  (quasi_total partial non-empty strict UAStr);
+end;
+
+definition
+  mode preIfWhileAlgebra is with_empty-instruction
+  with_catenation with_if-instruction with_while-instruction
+  Universal_Algebra;
+end;
+
+reserve A for preIfWhileAlgebra,
+  C,I,J for Element of A;
+reserve S for non empty set, T for Subset of S,
+  s for Element of S;
+
+definition
+  let A be non empty UAStr;
+  mode Algorithm of A is Element of A;
+end;
+
+theorem :: AOFA_000:42
+  for A being with_empty-instruction (non-empty UAStr)
+  holds dom Den(In(1, dom the charact of A), A) = {{}};
+
+definition
+  let A be with_empty-instruction (non-empty UAStr);
+  func EmptyIns A -> Algorithm of A equals
+:: AOFA_000:def 16
+  Den(In(1, dom the charact of A), A).{};
+end;
+
+theorem :: AOFA_000:43
+  for A being with_empty-instruction Universal_Algebra
+  for o being Element of Operations A
+  st o = Den(In(1, dom the charact of A), A)
+  holds arity o = 0 & EmptyIns A in rng o;
+
+theorem :: AOFA_000:44
+  for A being with_catenation (non-empty UAStr)
+  holds dom Den(In(2, dom the charact of A), A) = 2-tuples_on the carrier of A;
+
+definition
+  let A be with_catenation (non-empty UAStr);
+  let I1,I2 be Algorithm of A;
+  func I1 \; I2 -> Algorithm of A equals
+:: AOFA_000:def 17
+  Den(In(2, dom the charact of A), A).<*I1,I2*>;
+end;
+
+theorem :: AOFA_000:45
+  for A being with_empty-instruction with_catenation unital (non-empty UAStr)
+  for I being Element of A holds
+  EmptyIns A\;I = I & I\;EmptyIns A = I;
+
+theorem :: AOFA_000:46
+  for A being associative with_catenation (non-empty UAStr)
+  for I1,I2,I3 being Element of A holds
+  (I1\;I2)\;I3 = I1\;(I2\;I3);
+
+theorem :: AOFA_000:47
+  for A being with_if-instruction (non-empty UAStr)
+  holds dom Den(In(3, dom the charact of A), A) = 3-tuples_on the carrier of A;
+
+definition
+  let A be with_if-instruction (non-empty UAStr);
+  let C,I1,I2 be Algorithm of A;
+  func if-then-else(C,I1,I2) -> Algorithm of A equals
+:: AOFA_000:def 18
+  Den(In(3, dom the charact of A), A).<*C,I1,I2*>;
+end;
+
+definition
+  let A be with_empty-instruction with_if-instruction (non-empty UAStr);
+  let C,I be Algorithm of A;
+  func if-then(C,I) -> Algorithm of A equals
+:: AOFA_000:def 19
+  if-then-else(C,I,EmptyIns A);
+end;
+
+theorem :: AOFA_000:48
+  for A being with_while-instruction (non-empty UAStr)
+  holds dom Den(In(4, dom the charact of A), A) = 2-tuples_on the carrier of A;
+
+definition
+  let A be with_while-instruction (non-empty UAStr);
+  let C,I be Algorithm of A;
+  func while(C,I) -> Algorithm of A equals
+:: AOFA_000:def 20
+  Den(In(4, dom the charact of A), A).<*C,I*>;
+end;
+
+definition
+  let A be preIfWhileAlgebra;
+  let I0,C,I,J be Element of A;
+  func for-do(I0,C,J,I) -> Element of A equals
+:: AOFA_000:def 21
+  I0\;while(C,I\;J);
+end;
+
+definition
+  let A be preIfWhileAlgebra;
+  func ElementaryInstructions A -> Subset of A equals
+:: AOFA_000:def 22
+  (the carrier of A)
+  \ {EmptyIns A}
+  \ rng Den(In(3, dom the charact of A), A)
+  \ rng Den(In(4, dom the charact of A), A)
+  \ {I1 \; I2 where I1,I2 is Algorithm of A: I1 <> I1\;I2 & I2 <> I1\;I2};
+end;
+
+theorem :: AOFA_000:49
+  for A being preIfWhileAlgebra holds EmptyIns A nin ElementaryInstructions A;
+
+theorem :: AOFA_000:50
+  for A being preIfWhileAlgebra
+  for I1,I2 being Element of A st I1 <> I1\;I2 & I2 <> I1\;I2
+   holds I1\;I2 nin ElementaryInstructions A;
+
+theorem :: AOFA_000:51
+  for A being preIfWhileAlgebra
+  for C,I1,I2 being Element of A
+  holds if-then-else(C,I1,I2) nin ElementaryInstructions A;
+
+theorem :: AOFA_000:52
+  for A being preIfWhileAlgebra
+  for C,I being Element of A
+  holds while(C,I) nin ElementaryInstructions A;
+
+theorem :: AOFA_000:53
+  for A being preIfWhileAlgebra
+  for I being Element of A
+  st I nin ElementaryInstructions A
+  holds I = EmptyIns A or
+  (ex I1,I2 being Element of A st I = I1\;I2 & I1 <> I1\;I2 & I2 <> I1\;I2) or
+  (ex C,I1,I2 being Element of A st I = if-then-else(C,I1,I2)) or
+  (ex C,J being Element of A st I = while(C,J));
+
+definition
+  let A be preIfWhileAlgebra;
+  attr A is infinite means
+:: AOFA_000:def 23
+
+  ElementaryInstructions A is infinite;
+  attr A is degenerated means
+:: AOFA_000:def 24
+
+  (ex I1,I2 being Element of A st
+  I1 <> EmptyIns A & I1\;I2 = I2 or I2 <> EmptyIns A & I1\;I2 = I1 or
+  (I1 <> EmptyIns A or I2 <> EmptyIns A) & I1\;I2 = EmptyIns A) or
+  (ex C,I1,I2 being Element of A st if-then-else(C,I1,I2) = EmptyIns A) or
+  (ex C,I being Element of A st while(C,I) = EmptyIns A) or
+  (ex I1,I2,C,J1,J2 being Element of A st I1 <> EmptyIns A & I2 <> EmptyIns A &
+  I1\;I2 = if-then-else(C,J1,J2)) or
+  (ex I1,I2,C,J being Element of A st I1 <> EmptyIns A & I2 <> EmptyIns A &
+  I1\;I2 = while(C,J)) or
+  (ex C1,I1,I2,C2,J being Element of A st
+  if-then-else(C1,I1,I2) = while(C2,J));
+  attr A is well_founded means
+:: AOFA_000:def 25
+
+  ElementaryInstructions A is GeneratorSet of A;
+end;
+
+definition
+  func ECIW-signature -> non empty FinSequence of NAT equals
+:: AOFA_000:def 26
+  <*0, 2*>^<*3, 2*>;
+end;
+
+theorem :: AOFA_000:54
+  len ECIW-signature = 4 & dom ECIW-signature = Seg 4 &
+  ECIW-signature.1 = 0 & ECIW-signature.2 = 2 &
+  ECIW-signature.3 = 3 & ECIW-signature.4 = 2;
+
+definition
+  let A be partial non-empty non empty UAStr;
+  attr A is ECIW-strict means
+:: AOFA_000:def 27
+
+   signature A = ECIW-signature;
+end;
+
+theorem :: AOFA_000:55
+  for A being partial non-empty non empty UAStr st A is ECIW-strict
+  for o being OperSymbol of A
+  holds o = 1 or o = 2 or o = 3 or o = 4;
+
+registration
+  let X be disjoint_with_NAT non empty set;
+  cluster FreeUnivAlgNSG(ECIW-signature,X) -> with_empty-instruction
+  with_catenation with_if-instruction with_while-instruction;
+end;
+
+theorem :: AOFA_000:56
+  for X being disjoint_with_NAT non empty set
+  for I being Element of FreeUnivAlgNSG(ECIW-signature,X)
+  holds
+    (ex x being Element of X st I = root-tree x) or
+    (ex n being Nat, p being FinSequence of FreeUnivAlgNSG(ECIW-signature,X)
+     st n in Seg 4 & I = n-tree p & len p = ECIW-signature.n);
+
+theorem :: AOFA_000:57
+  for X being disjoint_with_NAT non empty set
+  holds EmptyIns FreeUnivAlgNSG(ECIW-signature,X) = 1-tree {};
+
+theorem :: AOFA_000:58
+  for X being disjoint_with_NAT non empty set
+  for p being FinSequence of FreeUnivAlgNSG(ECIW-signature,X)
+  st 1-tree p is Element of FreeUnivAlgNSG(ECIW-signature,X)
+  holds p = {};
+
+theorem :: AOFA_000:59
+  for X being disjoint_with_NAT non empty set
+  for I1,I2 being Element of FreeUnivAlgNSG(ECIW-signature,X)
+  holds I1\;I2 = 2-tree(I1,I2);
+
+theorem :: AOFA_000:60
+  for X being disjoint_with_NAT non empty set
+  for p being FinSequence of FreeUnivAlgNSG(ECIW-signature,X)
+  st 2-tree p is Element of FreeUnivAlgNSG(ECIW-signature,X)
+  ex I1,I2 being Element of FreeUnivAlgNSG(ECIW-signature,X)
+  st p = <*I1,I2*>;
+
+theorem :: AOFA_000:61
+  for X being disjoint_with_NAT non empty set
+  for I1,I2 being Element of FreeUnivAlgNSG(ECIW-signature,X)
+  holds I1\;I2 <> I1 & I1\;I2 <> I2;
+
+theorem :: AOFA_000:62
+  for X being disjoint_with_NAT non empty set
+  for I1,I2,J1,J2 being Element of FreeUnivAlgNSG(ECIW-signature,X)
+  holds I1\;I2 = J1\;J2 implies I1 = J1 & I2 = J2;
+
+theorem :: AOFA_000:63
+  for X being disjoint_with_NAT non empty set
+  for C,I1,I2 being Element of FreeUnivAlgNSG(ECIW-signature,X)
+  holds if-then-else(C,I1,I2) = 3-tree<*C,I1,I2*>;
+
+theorem :: AOFA_000:64
+  for X being disjoint_with_NAT non empty set
+  for p being FinSequence of FreeUnivAlgNSG(ECIW-signature,X)
+  st 3-tree p is Element of FreeUnivAlgNSG(ECIW-signature,X)
+  ex C,I1,I2 being Element of FreeUnivAlgNSG(ECIW-signature,X)
+  st p = <*C,I1,I2*>;
+
+theorem :: AOFA_000:65
+  for X being disjoint_with_NAT non empty set
+  for C1,C2,I1,I2,J1,J2 being Element of FreeUnivAlgNSG(ECIW-signature,X)
+  st if-then-else(C1,I1,I2) = if-then-else(C2,J1,J2)
+  holds C1 = C2 & I1 = J1 & I2 = J2;
+
+theorem :: AOFA_000:66
+  for X being disjoint_with_NAT non empty set
+  for C,I being Element of FreeUnivAlgNSG(ECIW-signature,X)
+  holds while(C,I) = 4-tree(C,I);
+
+theorem :: AOFA_000:67
+  for X being disjoint_with_NAT non empty set
+  for p being FinSequence of FreeUnivAlgNSG(ECIW-signature,X)
+  st 4-tree p is Element of FreeUnivAlgNSG(ECIW-signature,X)
+  ex C,I being Element of FreeUnivAlgNSG(ECIW-signature,X)
+  st p = <*C,I*>;
+
+theorem :: AOFA_000:68
+  for X being disjoint_with_NAT non empty set
+  for I being Element of FreeUnivAlgNSG(ECIW-signature,X)
+  st I in ElementaryInstructions FreeUnivAlgNSG(ECIW-signature,X)
+  ex x being Element of X st I = x-tree {};
+
+theorem :: AOFA_000:69
+  for X being disjoint_with_NAT non empty set
+  for p being FinSequence of FreeUnivAlgNSG(ECIW-signature,X)
+  for x being Element of X
+  st x-tree p is Element of FreeUnivAlgNSG(ECIW-signature,X)
+  holds p = {};
+
+theorem :: AOFA_000:70
+  for X being disjoint_with_NAT non empty set
+  holds ElementaryInstructions FreeUnivAlgNSG(ECIW-signature,X) =
+  FreeGenSetNSG(ECIW-signature,X) &
+  Card X = Card FreeGenSetNSG(ECIW-signature,X);
+
+registration
+  cluster infinite disjoint_with_NAT set;
+end;
+
+registration
+  let X be infinite disjoint_with_NAT set;
+  cluster FreeUnivAlgNSG(ECIW-signature,X) -> infinite;
+end;
+
+registration
+  let X be disjoint_with_NAT non empty set;
+  cluster FreeUnivAlgNSG(ECIW-signature,X) -> ECIW-strict;
+end;
+
+theorem :: AOFA_000:71
+  for A being preIfWhileAlgebra
+  holds Generators A c= ElementaryInstructions A;
+
+theorem :: AOFA_000:72
+  for A being preIfWhileAlgebra st A is free
+  for C,I1,I2 being Element of A
+  holds EmptyIns A <> I1\;I2 & EmptyIns A <> if-then-else(C,I1,I2) &
+  EmptyIns A <> while(C,I1);
+
+theorem :: AOFA_000:73
+  for A being preIfWhileAlgebra st A is free
+  for I1,I2,C,J1,J2 being Element of A
+  holds I1\;I2 <> I1 & I1\;I2 <> I2 &
+  (I1\;I2 = J1\;J2 implies I1 = J1 & I2 = J2) &
+  I1\;I2 <> if-then-else(C,J1,J2) & I1\;I2 <> while(C,J1);
+
+theorem :: AOFA_000:74
+  for A being preIfWhileAlgebra st A is free
+  for C,I1,I2,D,J1,J2 being Element of A
+  holds if-then-else(C,I1,I2) <> C & if-then-else(C,I1,I2) <> I1 &
+  if-then-else(C,I1,I2) <> I2 & if-then-else(C,I1,I2) <> while(D,J1) &
+  (if-then-else(C,I1,I2) = if-then-else(D,J1,J2) implies C=D & I1=J1 & I2=J2);
+
+theorem :: AOFA_000:75
+  for A being preIfWhileAlgebra st A is  free
+  for C,I,D,J being Element of A
+  holds while(C,I) <> C & while(C,I) <> I &
+  (while(C,I) = while(D,J) implies C = D & I = J);
+
+registration
+  cluster free -> well_founded non degenerated preIfWhileAlgebra;
+end;
+
+registration
+  cluster infinite non degenerated well_founded ECIW-strict free
+  strict preIfWhileAlgebra;
+end;
+
+definition
+  mode IfWhileAlgebra is
+  non degenerated well_founded ECIW-strict preIfWhileAlgebra;
+end;
+
+registration
+  let A be infinite preIfWhileAlgebra;
+  cluster ElementaryInstructions A -> infinite;
+end;
+
+theorem :: AOFA_000:76
+  for A being preIfWhileAlgebra
+  for B being Subset of A
+  for n being Nat holds
+  EmptyIns A in B|^(n+1) &
+  for C,I1,I2 being Element of A
+  st C in B|^n & I1 in B|^n & I2 in B|^n
+  holds I1\;I2 in B|^(n+1) & if-then-else(C,I1,I2) in B|^(n+1) &
+  while(C,I1) in B|^(n+1);
+
+theorem :: AOFA_000:77
+  for A being ECIW-strict preIfWhileAlgebra
+  for x being set, n being Nat st x in (ElementaryInstructions A)|^(n+1)
+  holds x in (ElementaryInstructions A)|^n or x = EmptyIns A or
+  (ex I1,I2 being Element of A st x = I1\;I2 &
+  I1 in (ElementaryInstructions A)|^n & I2 in (ElementaryInstructions A)|^n) or
+  (ex C,I1,I2 being Element of A st x = if-then-else(C,I1,I2) &
+  C in (ElementaryInstructions A)|^n &
+  I1 in (ElementaryInstructions A)|^n & I2 in (ElementaryInstructions A)|^n) or
+  (ex C,I being Element of A st x = while(C,I) &
+  C in (ElementaryInstructions A)|^n & I in (ElementaryInstructions A)|^n);
+
+theorem :: AOFA_000:78
+  for A being Universal_Algebra
+  for B being Subset of A
+  holds Constants A c= B|^1;
+
+theorem :: AOFA_000:79
+  for A being preIfWhileAlgebra
+  holds A is well_founded iff
+  for I being Element of A ex n being Nat st I in (ElementaryInstructions A)|^n
+;
+
+scheme :: AOFA_000:sch 2
+ StructInd{
+    A() -> well_founded ECIW-strict preIfWhileAlgebra,
+    I() -> (Element of A()),
+    P[set]
+  }:
+  P[I()]
+  provided
+ for I being Element of A() st I in ElementaryInstructions A()
+    holds P[I] and
+ P[EmptyIns A()] and
+ for I1,I2 being Element of A() st P[I1] & P[I2] holds P[I1\;I2] and
+ for C,I1,I2 being Element of A() st P[C] & P[I1] & P[I2]
+    holds P[if-then-else(C,I1,I2)] and
+ for C,I being Element of A() st P[C] & P[I] holds P[while(C,I)];
+
+begin :: Execution function
+
+definition
+  let A be preIfWhileAlgebra;
+  let S be non empty set; :: states
+  let f be Function of [:S, the carrier of A:], S;
+  attr f is satisfying_empty-instruction means
+:: AOFA_000:def 28
+
+  for s being Element of S holds f.(s, EmptyIns A) = s;
+
+  attr f is satisfying_catenation means
+:: AOFA_000:def 29
+
+  for s being Element of S
+  for I1,I2 being Element of A holds
+  f.(s,I1 \; I2) = f.(f.(s,I1),I2);
+end;
+
+definition
+  let A be preIfWhileAlgebra;
+  let S be non empty set; :: states
+  let T be Subset of S;   :: true states
+  let f be Function of [:S, the carrier of A:], S;
+  pred f satisfies_if_wrt T means
+:: AOFA_000:def 30
+
+  for s being Element of S for C, I1,I2 being Element of A holds
+  (f.(s,C) in T implies f.(s,if-then-else(C,I1,I2)) = f.(f.(s,C),I1)) &
+  (f.(s,C) nin T implies f.(s,if-then-else(C,I1,I2)) = f.(f.(s,C),I2));
+
+  pred f satisfies_while_wrt T means
+:: AOFA_000:def 31
+
+  for s being Element of S for C, I being Element of A holds
+  (f.(s,C) in T implies f.(s,while(C,I)) = f.(f.(f.(s,C),I),while(C,I))) &
+  (f.(s,C) nin T implies f.(s,while(C,I)) = f.(s,C));
+end;
+
+theorem :: AOFA_000:80
+  for f being Function of [:S, the carrier of A:], S
+  st f is satisfying_empty-instruction & f satisfies_if_wrt T
+  for s being Element of S holds
+  f.(s,C) nin T implies f.(s,if-then(C,I)) = f.(s,C);
+
+theorem :: AOFA_000:81
+  pr1(S, the carrier of A) is satisfying_empty-instruction &
+  pr1(S, the carrier of A) is satisfying_catenation &
+  pr1(S, the carrier of A) satisfies_if_wrt T &
+  pr1(S, the carrier of A) satisfies_while_wrt T;
+
+definition
+  let A be preIfWhileAlgebra;
+  let S be non empty set; :: states
+  let T be Subset of S;   :: true states
+  mode ExecutionFunction of A,S,T -> Function of [:S, the carrier of A:], S
+  means
+:: AOFA_000:def 32
+
+  it is satisfying_empty-instruction &
+  it is satisfying_catenation &
+  it satisfies_if_wrt T &
+  it satisfies_while_wrt T;
+end;
+
+registration
+  let A be preIfWhileAlgebra;
+  let S be non empty set; :: states
+  let T be Subset of S;   :: true states
+  cluster -> satisfying_empty-instruction satisfying_catenation
+  ExecutionFunction of A,S,T;
+end;
+
+definition
+  let A be preIfWhileAlgebra;
+  let I be Element of A;
+  let S be non empty set; :: states
+  let s be Element of S;
+  let T be Subset of S;   :: true states
+  let f be ExecutionFunction of A, S, T;
+:: iteration of I started in s terminates wrt f
+  pred f iteration_terminates_for I,s means
+:: AOFA_000:def 33
+
+  ex r being non empty FinSequence of S st r.1 = s & r.len r nin T &
+  for i being Nat st 1 <= i & i < len r
+  holds r.i in T & r.(i+1) = f.(r.i, I);
+end;
+
+definition
+  let A be preIfWhileAlgebra;
+  let I be Element of A;
+  let S be non empty set; :: states
+  let s be Element of S;
+  let T be Subset of S;   :: true states
+  let f be ExecutionFunction of A, S, T;
+  func iteration-degree(I,s,f) -> R_eal means
+:: AOFA_000:def 34
+
+  ex r being non empty FinSequence of S st
+  it = (len r)-1 & r.1 = s & r.len r nin T &
+  for i being Nat st 1 <= i & i < len r holds r.i in T & r.(i+1) = f.(r.i, I)
+  if f iteration_terminates_for I,s
+  otherwise it = +infty;
+end;
+
+reserve f for ExecutionFunction of A,S,T;
+
+theorem :: AOFA_000:82
+  f iteration_terminates_for I,s iff iteration-degree(I,s,f) < +infty;
+
+theorem :: AOFA_000:83
+  s nin T implies f iteration_terminates_for I,s & iteration-degree(I,s,f) = 0;
+
+theorem :: AOFA_000:84
+  s in T implies
+  (f iteration_terminates_for I,s iff f iteration_terminates_for I, f.(s,I)) &
+  iteration-degree(I,s,f) = 1.+iteration-degree(I,f.(s,I),f);
+
+theorem :: AOFA_000:85
+  iteration-degree(I,s,f) >= 0;
+
+scheme :: AOFA_000:sch 3
+ Termination
+  {A() -> preIfWhileAlgebra,
+   I() -> (Element of A()),
+   S() -> non empty set,
+   s() -> (Element of S()),
+   T() -> Subset of S(),
+   f() -> ExecutionFunction of A(),S(),T(),
+   F(set) -> Nat, P[set]
+  }:
+  f() iteration_terminates_for I(),s()
+  provided
+ s() in T() iff P[s()] and
+ for s being Element of S() st P[s]
+   holds (P[f().(s,I())] iff f().(s,I()) in T()) & F(f().(s,I())) < F(s);
+
+scheme :: AOFA_000:sch 4
+ Termination2
+  {A() -> preIfWhileAlgebra,
+   I() -> (Element of A()),
+   S() -> non empty set,
+   s() -> (Element of S()),
+   T() -> Subset of S(),
+   f() -> ExecutionFunction of A(),S(),T(),
+   F(set) -> Nat, P,R[set]
+  }:
+  f() iteration_terminates_for I(),s()
+  provided
+ P[s()] and
+ s() in T() iff R[s()] and
+ for s being Element of S() st P[s] & s in T() & R[s]
+   holds P[f().(s, I())] & (R[f().(s,I())] iff f().(s,I()) in T()) &
+   F(f().(s,I())) < F(s);
+
+theorem :: AOFA_000:86
+  for r being non empty FinSequence of S st r.1 = f.(s,C) & r.len r nin T &
+    for i being Nat st 1 <= i & i < len r
+    holds r.i in T & r.(i+1) = f.(r.i, I \; C)
+  holds f.(s, while(C,I)) = r.len r;
+
+theorem :: AOFA_000:87
+  for I being Element of A
+  for s being Element of S holds
+  not f iteration_terminates_for I,s iff (curry' f).I orbit s c= T;
+
+scheme :: AOFA_000:sch 5
+ InvariantSch
+  {A() -> preIfWhileAlgebra,
+   C,I() -> (Element of A()),
+   S() -> non empty set,
+   s() -> (Element of S()),
+   T() -> Subset of S(),
+   f() -> ExecutionFunction of A(),S(),T(),
+   P,R[set]
+  }:
+  P[f().(s(),while(C(),I()))] & not R[f().(s(),while(C(),I()))]
+provided
+ P[s()] and
+ f() iteration_terminates_for I()\;C(), f().(s(),C()) and
+ for s being Element of S() st P[s] & s in T() & R[s]
+   holds P[f().(s,I())] and
+ for s being Element of S() st P[s] holds
+   P[f().(s,C())] & (f().(s,C()) in T() iff R[f().(s,C())]);
+
+scheme :: AOFA_000:sch 6
+ coInvariantSch
+  {A() -> preIfWhileAlgebra,
+   C,I() -> (Element of A()),
+   S() -> non empty set,
+   s() -> (Element of S()),
+   T() -> Subset of S(),
+   f() -> ExecutionFunction of A(),S(),T(),
+   P[set]
+  }:
+  P[s()]
+provided
+ P[f().(s(),while(C(),I()))] and
+ f() iteration_terminates_for I()\;C(), f().(s(),C()) and
+ for s being Element of S() st P[f().(f().(s,C()),I())] & f().(s,C()) in T()
+   holds P[f().(s,C())] and
+ for s being Element of S() st P[f().(s,C())] holds P[s];
+
+theorem :: AOFA_000:88
+  for A being free preIfWhileAlgebra
+  for I1,I2 being Element of A
+  for n being Nat st I1\;I2 in (ElementaryInstructions A)|^n
+  ex i being Nat st n = i+1 &
+  I1 in (ElementaryInstructions A)|^i & I2 in (ElementaryInstructions A)|^i;
+
+theorem :: AOFA_000:89
+  for A being free preIfWhileAlgebra
+  for C,I1,I2 being Element of A
+  for n being Nat st if-then-else(C,I1,I2) in (ElementaryInstructions A)|^n
+  ex i being Nat st n = i+1 & C in (ElementaryInstructions A)|^i &
+  I1 in (ElementaryInstructions A)|^i & I2 in (ElementaryInstructions A)|^i;
+
+theorem :: AOFA_000:90
+  for A being free preIfWhileAlgebra
+  for C,I being Element of A
+  for n being Nat st while(C,I) in (ElementaryInstructions A)|^n
+  ex i being Nat st n = i+1 &
+  C in (ElementaryInstructions A)|^i & I in (ElementaryInstructions A)|^i;
+
+begin :: Existence and uniqueness of execution function and termination
+
+scheme :: AOFA_000:sch 7
+ IndDef {A() -> free ECIW-strict preIfWhileAlgebra,
+  S() -> non empty set,
+  Emp() -> (Element of S()),
+  ElemF(set) -> set,
+  ConF, WhiF(set,set) -> (Element of S()),
+  IfF(set,set,set) -> Element of S()}:
+  ex f being Function of the carrier of A(), S() st
+   (for I being Element of A() st I in ElementaryInstructions A()
+     holds f.I = ElemF(I)) &
+   f.EmptyIns A() = Emp() &
+   (for I1,I2 being Element of A() holds f.(I1\;I2) = ConF(f.I1,f.I2)) &
+   (for C,I1,I2 being Element of A()
+     holds f.if-then-else(C,I1,I2) = IfF(f.C,f.I1,f.I2)) &
+   (for C,I being Element of A() holds f.while(C,I) = WhiF(f.C,f.I))
+  provided
+ for I being Element of A() st I in ElementaryInstructions A()
+     holds ElemF(I) in S();
+
+theorem :: AOFA_000:91
+  for A being free ECIW-strict preIfWhileAlgebra
+  for g being Function of [:S, ElementaryInstructions A:], S
+  for s0 being Element of S
+  ex f being ExecutionFunction of A, S, T
+  st f|[:S, ElementaryInstructions A:] = g &
+    for s being Element of S
+    for C,I being Element of A st not f iteration_terminates_for I\;C, f.(s,C)
+    holds f.(s, while(C,I)) = s0;
+
+theorem :: AOFA_000:92
+  for A being free ECIW-strict preIfWhileAlgebra
+  for g being Function of [:S, ElementaryInstructions A:], S
+  for F being Function of Funcs(S,S), Funcs(S,S)
+  st for h being Element of Funcs(S,S) holds (F.h)*h = F.h
+  ex f being ExecutionFunction of A, S, T
+  st f|[:S, ElementaryInstructions A:] = g &
+  for C,I being Element of A
+  for s being Element of S st not f iteration_terminates_for I\;C, f.(s, C)
+  holds f.(s, while(C, I)) = F.((curry' f).(I\;C)).(f.(s,C));
+
+theorem :: AOFA_000:93
+  for A being free ECIW-strict preIfWhileAlgebra
+  for f1,f2 being ExecutionFunction of A, S, T
+  st f1|[:S, ElementaryInstructions A:] = f2|[:S, ElementaryInstructions A:] &
+     for s being Element of S
+     for C,I being Element of A
+     st not f1 iteration_terminates_for I\;C, f1.(s,C)
+     holds f1.(s, while(C,I)) = f2.(s, while(C,I))
+  holds f1 = f2;
+
+definition
+  let A be preIfWhileAlgebra;
+  let S be non empty set;
+  let T be Subset of S;
+  let f be ExecutionFunction of A, S, T;
+
+  func TerminatingPrograms(A,S,T,f) -> Subset of [:S, the carrier of A:] means
+:: AOFA_000:def 35
+
+  ([:S, ElementaryInstructions A:] c= it & [:S, {EmptyIns A}:] c= it &
+   for s being Element of S
+   for C,I,J being Element of A holds
+   ([s,I] in it & [f.(s,I), J] in it implies [s, I\;J] in it) &
+   ([s,C] in it & [f.(s,C), I] in it & f.(s, C) in T
+   implies [s, if-then-else(C,I,J)] in it) &
+   ([s,C] in it & [f.(s,C), J] in it & f.(s, C) nin T
+   implies [s, if-then-else(C,I,J)] in it) &
+   ([s,C] in it &
+    (ex r being non empty FinSequence of S st r.1 = f.(s,C) & r.len r nin T &
+    for i being Nat st 1 <= i & i < len r
+    holds r.i in T & [r.i, I\;C] in it & r.(i+1) = f.(r.i, I\;C))
+    implies [s, while(C,I)] in it)
+  ) &
+  for P being Subset of [:S, the carrier of A:] st
+    [:S, ElementaryInstructions A:] c= P & [:S, {EmptyIns A}:] c= P &
+    for s being Element of S
+    for C,I,J being Element of A holds
+    ([s,I] in P & [f.(s,I), J] in P implies [s, I\;J] in P) &
+    ([s,C] in P & [f.(s,C), I] in P & f.(s, C) in T
+    implies [s, if-then-else(C,I,J)] in P) &
+    ([s,C] in P & [f.(s,C), J] in P & f.(s, C) nin T
+    implies [s, if-then-else(C,I,J)] in P) &
+    ([s,C] in P &
+     (ex r being non empty FinSequence of S st r.1 = f.(s,C) & r.len r nin T &
+     for i being Nat st 1 <= i & i < len r
+     holds r.i in T & [r.i, I\;C] in P & r.(i+1) = f.(r.i, I\;C))
+     implies [s, while(C,I)] in P)
+  holds it c= P;
+end;
+
+definition
+  let A be preIfWhileAlgebra;
+  let I be Element of A;
+  attr I is absolutely-terminating means
+:: AOFA_000:def 36
+
+  for S being non empty set, s being Element of S
+  for T being Subset of S
+  for f being ExecutionFunction of A, S, T
+  holds [s,I] in TerminatingPrograms(A,S,T,f);
+end;
+
+theorem :: AOFA_000:94
+  I in ElementaryInstructions A implies [s, I] in TerminatingPrograms(A,S,T,f);
+
+theorem :: AOFA_000:95
+  I in ElementaryInstructions A implies I is absolutely-terminating;
+
+theorem :: AOFA_000:96
+  [s, EmptyIns A] in TerminatingPrograms(A,S,T,f);
+
+registration
+  let A;
+  cluster EmptyIns A -> absolutely-terminating;
+end;
+
+registration
+  let A;
+  cluster absolutely-terminating Element of A;
+end;
+
+theorem :: AOFA_000:97
+  A is free & [s, I\;J] in TerminatingPrograms(A,S,T,f) implies
+  [s,I] in TerminatingPrograms(A,S,T,f) &
+  [f.(s,I), J] in TerminatingPrograms(A,S,T,f);
+
+registration
+  let A;
+  let I,J be absolutely-terminating Element of A;
+  cluster I\;J -> absolutely-terminating;
+end;
+
+theorem :: AOFA_000:98
+  A is free & [s, if-then-else(C,I,J)] in TerminatingPrograms(A,S,T,f)
+  implies [s,C] in TerminatingPrograms(A,S,T,f) &
+  (f.(s,C) in T implies [f.(s,C), I] in TerminatingPrograms(A,S,T,f)) &
+  (f.(s,C) nin T implies [f.(s,C), J] in TerminatingPrograms(A,S,T,f));
+
+registration
+  let A;
+  let C,I,J be absolutely-terminating Element of A;
+  cluster if-then-else(C,I,J) -> absolutely-terminating;
+end;
+
+theorem :: AOFA_000:99
+  A is free & [s, while(C,I)] in TerminatingPrograms(A,S,T,f)
+  implies [s,C] in TerminatingPrograms(A,S,T,f) &
+  ex r being non empty FinSequence of S st
+     r.1 = f.(s,C) & r.len r nin T &
+     for i being Nat st 1 <= i & i < len r
+     holds r.i in T & [r.i, I\;C] in TerminatingPrograms(A,S,T,f) &
+      r.(i+1) = f.(r.i, I\;C);
+
+theorem :: AOFA_000:100
+  A is free & [s, while(C,I)] in TerminatingPrograms(A,S,T,f) & f.(s,C) in T
+  implies [f.(s,C), I] in TerminatingPrograms(A,S,T,f);
+
+theorem :: AOFA_000:101
+  for C,I being absolutely-terminating Element of A
+  st f iteration_terminates_for I\;C, f.(s,C)
+  holds [s, while(C,I)] in TerminatingPrograms(A,S,T,f);
+
+theorem :: AOFA_000:102
+  for A being free ECIW-strict preIfWhileAlgebra
+  for f1,f2 being ExecutionFunction of A, S, T
+  st f1|[:S, ElementaryInstructions A:] = f2|[:S, ElementaryInstructions A:]
+  holds TerminatingPrograms(A,S,T,f1) = TerminatingPrograms(A,S,T,f2);
+
+theorem :: AOFA_000:103
+  for A being free ECIW-strict preIfWhileAlgebra
+  for f1,f2 being ExecutionFunction of A, S, T
+  st f1|[:S, ElementaryInstructions A:] = f2|[:S, ElementaryInstructions A:]
+  for s being Element of S
+  for I being Element of A st [s,I] in TerminatingPrograms(A,S,T,f1)
+  holds f1.(s, I) = f2.(s, I);

@@ -2,12 +2,12 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
@@ -109,7 +109,7 @@
 </Pred>
 </Fraenkel>
 </Pred>
-<Pred kind="R" nr="37">
+<Pred kind="R" nr="39">
 <Func kind="K" nr="278">
 <Func kind="K" nr="131">
 <Var nr="4"/>
@@ -343,7 +343,7 @@
 <Var nr="2"/>
 </Func>
 <And>
-<Pred kind="R" nr="37">
+<Pred kind="R" nr="39">
 <Var nr="5"/>
 <Var nr="3"/>
 </Pred>
@@ -354,12 +354,12 @@
 </And>
 </Fraenkel>
 </Pred>
-<Pred kind="R" nr="37">
+<Pred kind="R" nr="39">
 <Num nr="0"/>
 <Var nr="3"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="37">
+<Pred kind="R" nr="39">
 <Func kind="K" nr="115">
 <Var nr="4"/>
 </Func>

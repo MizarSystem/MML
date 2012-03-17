@@ -2,12 +2,12 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
@@ -24,6 +24,10 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="GRAPH_1"/>
+<ArticleID name="GRAPH_2"/>
+<ArticleID name="TREES_1"/>
+<ArticleID name="TREES_2"/>
 <ArticleID name="AMI_1"/>
 <ArticleID name="AMI_3"/>
 <ArticleID name="SCMFSA_2"/>
@@ -37,52 +41,48 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="20"/>
-<Adjective nr="52">
-<Func kind="K" nr="34">
+<Adjective nr="70">
+<Func kind="K" nr="2">
 <Func kind="K" nr="45"/>
 <Func kind="K" nr="117">
 <Func kind="K" nr="45"/>
 </Func>
 </Func>
-<Func kind="K" nr="196"/>
+<Func kind="K" nr="233"/>
 </Adjective>
-<Adjective nr="53"/>
-<Adjective nr="54"/>
+<Adjective nr="71"/>
+<Adjective nr="72"/>
 </Cluster>
-<Func kind="K" nr="126">
-<Func kind="U" nr="7">
-<Func kind="K" nr="34">
+<Func kind="K" nr="202">
+<Func kind="K" nr="2">
 <Func kind="K" nr="45"/>
 <Func kind="K" nr="117">
 <Func kind="K" nr="45"/>
 </Func>
 </Func>
-<Func kind="K" nr="196"/>
-</Func>
+<Func kind="K" nr="233"/>
 </Func>
 </Typ>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="27">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="238">
+<Func kind="K" nr="275">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="20"/>
-<Adjective nr="52">
-<Func kind="K" nr="34">
+<Adjective nr="70">
+<Func kind="K" nr="2">
 <Func kind="K" nr="45"/>
 <Func kind="K" nr="117">
 <Func kind="K" nr="45"/>
 </Func>
 </Func>
-<Func kind="K" nr="196"/>
+<Func kind="K" nr="233"/>
 </Adjective>
-<Adjective nr="53"/>
-<Adjective nr="54"/>
+<Adjective nr="71"/>
+<Adjective nr="72"/>
 </Cluster>
 </FCluster>
 </Registrations>

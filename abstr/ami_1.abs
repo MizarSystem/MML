@@ -8,29 +8,20 @@ environ
 
  vocabularies BOOLE, FUNCT_2, FUNCT_1, RELAT_1, FUNCOP_1, CAT_1, FUNCT_4,
       CARD_3, TARSKI, FRAENKEL, PARTFUN1, FINSET_1, AMI_1, NAT_1, NEWTON,
-      AMI_5, MCART_1, AMISTD_2, FUNCT_3;
- notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, SETFAM_1, NUMBERS,
-      CARD_3, XCMPLX_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, NAT_1,
-      FUNCOP_1, FUNCT_4, FINSEQ_1, DOMAIN_1, STRUCT_0, XXREAL_0;
- constructors SETFAM_1, PARTFUN1, DOMAIN_1, FUNCT_4, FRAENKEL, XXREAL_0, NAT_1,
-      INT_1, CARD_3, CQC_LANG, STRUCT_0;
+      AMI_5, MCART_1, AMISTD_2, FUNCT_3, FINSEQ_1, FINSEQ_4, GRAPH_2, TREES_2,
+      ORDINAL1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, SETFAM_1, ORDINAL1,
+      NUMBERS, CARD_3, XCMPLX_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1,
+      FINSET_1, NAT_1, FRAENKEL, FUNCOP_1, FUNCT_4, FINSEQ_1, FINSEQ_4,
+      GRAPH_2, DOMAIN_1, TREES_1, TREES_2, STRUCT_0, XXREAL_0;
+ constructors BINOP_1, SETFAM_1, PARTFUN1, DOMAIN_1, FUNCT_4, FRAENKEL,
+      XXREAL_0, NAT_1, INT_1, CARD_3, CQC_LANG, STRUCT_0, FINSEQ_4, GRAPH_2,
+      TREES_2;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
       FUNCT_2, FUNCOP_1, FUNCT_4, ARYTM_3, FINSET_1, FRAENKEL, XREAL_0,
-      FINSEQ_1, CARD_3, STRUCT_0;
+      FINSEQ_1, CARD_3, STRUCT_0, ALTCAT_1, AFINSQ_1, TREES_2, TREES_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
 
-
-begin :: Preliminaries
-
-
-
-canceled;
-
-theorem :: AMI_1:2
-  for a,b being set holds 1 <> [a,b];
-
-theorem :: AMI_1:3
-  for a,b being set holds 2 <> [a,b];
 
 begin :: General concepts
 
@@ -40,8 +31,6 @@ definition let N be set;
     Instruction-Counter -> Element of the carrier,
     Instruction-Locations -> Subset of the carrier,
     Instructions -> non empty set,
-:::     Subset of
-:::     [: NAT, ((union N) \/ the carrier)* :],
     Object-Kind ->
      Function of the carrier,
                  N \/ { the Instructions, the Instruction-Locations },
@@ -88,7 +77,10 @@ definition let N be set; let S be non empty AMI-Struct over N;
 end;
 
 definition let N be set; let S be non empty non void AMI-Struct over N;
- mode Instruction-Location of S is Element of the Instruction-Locations of S;
+ mode Instruction-Location of S -> Element of the Instruction-Locations of S
+      means
+:: AMI_1:def 4
+  not contradiction;
 end;
 
 definition let N be set; let S be AMI-Struct over N;
@@ -96,8 +88,6 @@ definition let N be set; let S be AMI-Struct over N;
 end;
 
 definition let N be set; let S be non empty AMI-Struct over N;
- canceled;
-
  func IC S -> Object of S equals
 :: AMI_1:def 5
   the Instruction-Counter of S;
@@ -141,7 +131,7 @@ end;
 
 reserve E for set;
 
-canceled 2;
+canceled 5;
 
 theorem :: AMI_1:6
  Trivial-AMI N is halting;
@@ -478,8 +468,16 @@ registration let N be set; let S be AMI-Struct over N;
  cluster finite Element of sproduct the Object-Kind of S;
 end;
 
+registration let N be set; let S be AMI-Struct over N;
+ cluster FinPartSt S -> non empty functional;
+end;
+
 definition let N be set; let S be AMI-Struct over N;
- mode FinPartState of S is finite Element of sproduct the Object-Kind of S;
+ mode FinPartState of S is Element of FinPartSt S;
+end;
+
+registration let N be set; let S be AMI-Struct over N;
+ cluster -> finite FinPartState of S;
 end;
 
 definition let N;
@@ -783,3 +781,86 @@ definition
  let I be Element of the Instructions of S;
  redefine func InsCode I -> InsType of S;
 end;
+
+theorem :: AMI_1:77
+ for N being set, S being AMI-Struct over N
+ for x being finite Element of sproduct the Object-Kind of S
+         holds x in FinPartSt S;
+
+begin :: On the instruction locations
+
+definition let N be set, S be AMI-Struct over N;
+ mode IL-FinSequence of S -> FinSequence of the Instruction-Locations of S
+  means
+:: AMI_1:def 34
+ not contradiction;
+end;
+
+reserve N for set, S for non empty non void AMI-Struct over N;
+
+definition let N,S;
+ let f be IL-FinSequence of S; let x be set;
+ func f/.x -> Instruction-Location of S equals
+:: AMI_1:def 35
+   f/.x;
+end;
+
+definition let N,S; let l1 be Instruction-Location of S;
+ redefine func <*l1*> -> IL-FinSequence of S;
+ let l2 be Instruction-Location of S;
+ redefine func <*l1,l2*> -> IL-FinSequence of S;
+end;
+
+registration let N,S;
+ cluster non empty IL-FinSequence of S;
+end;
+
+definition let N,S;
+ let f1,f2 be IL-FinSequence of S;
+ redefine func f1^'f2 -> IL-FinSequence of S;
+end;
+
+definition let D be set;
+ let N, S;
+ mode IL-Function of D,S -> Function of D, the Instruction-Locations of S means
+:: AMI_1:def 36
+  not contradiction;
+end;
+
+definition let D be non empty set;
+ let N,S;
+ let f be IL-Function of D,S, d be Element of D;
+ redefine func f.d -> Instruction-Location of S;
+end;
+
+definition let N,S;
+ mode IL-DecoratedTree of S -> DecoratedTree of the Instruction-Locations of S
+      means
+:: AMI_1:def 37
+  not contradiction;
+end;
+
+definition let N,S; let T be IL-DecoratedTree of S;
+ let x be set such that
+ x in dom T;
+ func T.x -> Instruction-Location of S equals
+:: AMI_1:def 38
+  T.x;
+end;
+
+scheme :: AMI_1:sch 1
+ ILFraenkelFin {N() -> set,
+      S() -> non empty non void AMI-Struct over N(),
+      X() -> set, F(set) -> set }:
+ { F(w) where w is Instruction-Location of S(): w in X() } is finite
+provided
+  X() is finite;
+
+scheme :: AMI_1:sch 2
+ {N,D()-> set, S()-> non empty non void AMI-Struct over N(),
+        F(set) -> set,
+        T() -> Instruction-Location of S(),
+        P[set,set]}:
+  { F(i) where i is Element of D():
+    ex l being Instruction-Location of S() st l = T() & P[i,l] }
+    = { F(j) where j is Element of D(): P[j,T()] };

@@ -2,6 +2,7 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
@@ -31,7 +32,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="14"/>
+<Func kind="K" nr="18"/>
 <Cluster>
 <Adjective nr="5"/>
 </Cluster>

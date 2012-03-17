@@ -6,9 +6,9 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="FINSUB_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
@@ -240,7 +240,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="38">
+<Func kind="K" nr="25">
 <Func kind="K" nr="1"/>
 </Func>
 <Cluster>
@@ -319,7 +319,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="25">
+<Func kind="K" nr="29">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -336,7 +336,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="25">
+<Func kind="K" nr="29">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

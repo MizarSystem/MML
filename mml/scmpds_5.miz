@@ -134,15 +134,16 @@ A1: inspos 0 in dom II by Th5;
 end;
 
 theorem Th11:   ::SCMFSA6B_32
-  x in dom (stop Load i) iff x=inspos 0 or x=inspos 1
+  x in dom stop Load i iff x=inspos 0 or x=inspos 1
 proof
      set pi=stop Load i,
          A = the Instruction-Locations of SCMPDS;
 A1:  card pi = 2 by Th8;
      hereby assume A2:x in dom pi;
           dom pi c= A by AMI_3:def 13;
-       then consider n such that
-A3:    x=inspos n by A2,SCMPDS_3:32;
+       then reconsider l=x as Instruction-Location of SCMPDS by A2,AMI_1:def 4;
+       consider n such that
+A3:    l=inspos n by A2,SCMPDS_3:32;
           n < 1+1 by A1,A2,A3,SCMPDS_4:1;
        then n <= 1 by NAT_1:13;
        hence x=inspos 0 or x=inspos 1 by A3,NAT_1:26;
@@ -224,8 +225,9 @@ then A2: card sI <= card sIJ by A1,NAT_1:11;
        assume
     A3: x in dom sI;
           dom sI c= A by AMI_3:def 13;
-       then consider n such that
-    A4: inspos n= x by A3,SCMPDS_3:32;
+       then reconsider l=x as Instruction-Location of SCMPDS by A3,AMI_1:def 4;
+       consider n such that
+    A4: inspos n= l by A3,SCMPDS_3:32;
            n < card sI by A3,A4,SCMPDS_4:1;
         then n < card sIJ by A2,XXREAL_0:2;
         hence x in dom sIJ by A4,SCMPDS_4:1;
@@ -340,11 +342,15 @@ proof
    set SI=stop I,
        IL=the Instruction-Locations of SCMPDS;
 A1: dom s = {IC SCMPDS} \/ SCM-Data-Loc \/ IL by SCMPDS_4:19;
-      dom (s | IL)
+X:  dom (s | IL)
     = dom s /\ IL by RELAT_1:90
    .= IL by A1,XBOOLE_1:21;
-then A2: not IC SCMPDS in dom (s | IL)
-       by AMI_1:48;
+A2: now assume IC SCMPDS in dom (s | IL);
+      then reconsider l=IC SCMPDS as Instruction-Location of SCMPDS
+             by AMI_1:def 4,X;
+      l=IC SCMPDS;
+     hence contradiction by AMI_1:48;
+    end;
    thus IC IExec(I,s) = IC Result (s +* Initialized SI) by A2,FUNCT_4:12;
 end;
 
@@ -1181,8 +1187,10 @@ A5:  now let x be set;
          per cases by A7,SCMPDS_4:28;
          suppose A8: x in dom spJ;
                dom spJ c= A by AMI_3:def 13;
-          hence (IsJ | D).x = ((Computation s1).m1 | D).x by A7,A8,SCMPDS_4:22
-;
+          then reconsider l=x as Instruction-Location of SCMPDS
+                       by A8,AMI_1:def 4;
+          (IsJ | D).l = ((Computation s1).m1 | D).l by A7,A8,SCMPDS_4:22;
+          hence (IsJ | D).x = ((Computation s1).m1 | D).x by A7,A8,SCMPDS_4:22;
          end;
          suppose x = IC SCMPDS;
           hence (IsJ | D).x = ((Computation s1).m1 | D).x by A6,SCMPDS_3:6
@@ -1821,8 +1829,10 @@ A5:  now let x be set;
          per cases by A7,SCMPDS_4:28;
          suppose A8: x in dom spJ;
                dom spJ c= A by AMI_3:def 13;
-          hence (IsJ | D).x = ((Computation s1).m1 | D).x by A7,A8,SCMPDS_4:22
-;
+          then reconsider l=x as Instruction-Location of SCMPDS
+                    by A8,AMI_1:def 4;
+          (IsJ | D).l = ((Computation s1).m1 | D).l by A7,A8,SCMPDS_4:22;
+          hence (IsJ | D).x = ((Computation s1).m1 | D).x by A7,A8,SCMPDS_4:22;
          end;
          suppose x = IC SCMPDS;
           hence (IsJ | D).x = ((Computation s1).m1 | D).x by A6,SCMPDS_3:6
@@ -2153,6 +2163,9 @@ A6:   x in X & x in Y by XBOOLE_0:3;
         hence contradiction by A6,AMI_5:33,XBOOLE_0:3;
       end;
       suppose x = IC SCMPDS;
+      then reconsider l=IC SCMPDS as Instruction-Location of SCMPDS
+             by AMI_1:def 4,A6;
+         l=IC SCMPDS;
         hence contradiction by A6,AMI_1:48;
      end;
      end;
@@ -2471,6 +2484,9 @@ A12:    x in X & x in Y by XBOOLE_0:3;
         hence contradiction by A12,AMI_5:33,XBOOLE_0:3;
        end;
        suppose x = IC SCMPDS;
+      then reconsider l=IC SCMPDS as Instruction-Location of SCMPDS
+             by AMI_1:def 4,A12;
+         l=IC SCMPDS;
         hence contradiction by A12,AMI_1:48;
      end;
      end;
@@ -2488,7 +2504,9 @@ A19: IExec(Li, s) | Y = s | Y by A6,A15,A16,A17,SCMFSA6B:3,SCMPDS_3:5;
            x in dom (Exec(i, Is) | Y);
         then A20: x in Y /\ (X \/ Y) by A7,RELAT_1:90,SCMPDS_3:5;
 then A21:    x in Y by XBOOLE_1:21;
-        reconsider x' = x as Instruction-Location of SCMPDS by A20,XBOOLE_1:21;
+        x is Element of the Instruction-Locations of SCMPDS by A20,XBOOLE_1:21;
+        then reconsider x' = x as Instruction-Location of SCMPDS
+                          by AMI_1:def 4;
       thus (Exec(i, Is)|Y).x = (Exec(i, Is)).x by A21,FUNCT_1:72
             .= Is.x' by AMI_1:def 13
             .= s.x by Th40;

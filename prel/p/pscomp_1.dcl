@@ -191,7 +191,7 @@
 <Adjective nr="67"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="15">
+<Typ kind="M" nr="14">
 <Cluster>
 <Adjective nr="59" value="false"/>
 </Cluster>

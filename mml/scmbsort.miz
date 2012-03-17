@@ -32,7 +32,7 @@ environ
       SCMFSA_2, SCMFSA6B, SCMFSA7B, SCMFSA8B, SCMFSA8A, SCMFSA8C, SCMFSA_4,
       SCMFSA6C, SCM_HALT, ABSVALUE, FINSEQ_4, FINSEQ_2, XBOOLE_0, XBOOLE_1,
       SCMFSA9A, XREAL_1, ORDINAL1, SCMFSA_1, XXREAL_0;
- schemes AMI_3, FUNCT_1, NAT_1;
+ schemes RELSET_1, FUNCT_1, NAT_1;
 
 begin :: Preliminaries
 
@@ -391,8 +391,9 @@ A1: p c= s1 & p c= s2;
     A2: now let x be set;
       assume A3:x in dom p;
       A4: dom p c= the Instruction-Locations of S by AMI_3:def 13;
-then A5:   s1.x = Cs1.x by A3,AMI_1:54;
-A6:   s2.x = Cs2.x by A3,A4,AMI_1:54;
+      then reconsider l=x as Instruction-Location of S by A3,AMI_1:def 4;
+A5:   s1.l = Cs1.l by A3,A4,AMI_1:54;
+A6:   s2.l = Cs2.l by A3,A4,AMI_1:54;
      p.x=s1.x by A1,A3,GRFUNC_1:8;
       hence Cs1.x = Cs2.x by A1,A3,A5,A6,GRFUNC_1:8;
     end;
@@ -1318,8 +1319,12 @@ A2: DI=DB \/ { intloc 0,IC SCM+FSA } by Th41;
 A3: y in DI /\ dom x by XBOOLE_0:def 1;
 A4: y in DI & y in dom x by A3,XBOOLE_0:def 3;
 then A5: y=f by A1,TARSKI:def 1;
-   DB c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
-   then not y in DB by A5,SCMFSA_2:85;
+X: DB c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+   now assume y in DB;
+     then reconsider y as Instruction-Location of SCM+FSA by X,AMI_1:def 4;
+     y=y;
+    hence contradiction by A5,SCMFSA_2:85;
+   end;
    then y in {intloc 0,IC SCM+FSA } by A2,A4,XBOOLE_0:def 2;
 then y=intloc 0 or y=IC SCM+FSA by TARSKI:def 2;
     hence contradiction by A5,SCMFSA_2:82,83;
@@ -1926,7 +1931,7 @@ A11:  for p,q being FinPartState of SCM+FSA holds [p,q] in IT1 iff X[p,q] by A9
 ;
 A12:  for p,q being FinPartState of SCM+FSA holds [p,q] in IT2 iff X[p,q] by
 A10;
-    thus IT1 = IT2 from AMI_3:sch 2(A11,A12);
+    thus IT1 = IT2 from RELSET_1:sch 4(A11,A12);
   end;
 end;
 
@@ -1942,9 +1947,9 @@ proof
        assume A1:p in dom f;
        then A2: [p,f.p] in f by FUNCT_1:8;
           dom f c=FinPartSt SCM+FSA by RELSET_1:12;
-       then A3: p is FinPartState of SCM+FSA by A1,AMI_3:32;
+       then A3: p is FinPartState of SCM+FSA by A1;
           q in FinPartSt SCM+FSA by A1,PARTFUN1:27;
-        then q is FinPartState of SCM+FSA by AMI_3:32;
+        then q is FinPartState of SCM+FSA;
     then consider t be FinSequence of INT,u being FinSequence of REAL such that
     A4: t,u are_fiberwise_equipotent & u is FinSequence of INT &
        u is non-increasing & p = fsloc 0 .--> t & q = fsloc 0 .--> u
@@ -3588,7 +3593,7 @@ A11:  w,u are_fiberwise_equipotent & u is non-increasing &
 then A12:  u=z by A9,A11,RFINSEQ:36;
         fsloc 0 in the carrier of SCM+FSA;
 then fsloc 0 in dom Result t by AMI_3:36;
-then A13:  Sorting-Function.s c= Result t by A9,A11,A12,AMI_3:27;
+then A13:  Sorting-Function.s c= Result t by A9,A11,A12,FUNCT_4:90;
         s c= p +* s by FUNCT_4:26;
 then A14:  dom s c= dom(p +* s) by RELAT_1:25;
      A15: dom(fsloc 0 .--> z) = { fsloc 0 } by FUNCOP_1:19;

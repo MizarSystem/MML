@@ -23,6 +23,10 @@
 <ArticleID name="CARD_3"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="GRAPH_1"/>
+<ArticleID name="GRAPH_2"/>
+<ArticleID name="TREES_1"/>
+<ArticleID name="TREES_2"/>
 <ArticleID name="AMI_1"/>
 <ArticleID name="AMI_3"/>
 <ArticleID name="FINSEQ_2"/>
@@ -32,39 +36,37 @@
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="141">
-<Func kind="U" nr="7">
+<Func kind="K" nr="198">
 <Func kind="K" nr="2">
 <Func kind="K" nr="65"/>
-<Func kind="K" nr="194">
+<Func kind="K" nr="231">
 <Func kind="K" nr="65"/>
 </Func>
 </Func>
-<Func kind="K" nr="196"/>
-</Func>
+<Func kind="K" nr="233"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="17"/>
-<Adjective nr="47">
+<Adjective nr="65">
 <Func kind="K" nr="2">
 <Func kind="K" nr="65"/>
-<Func kind="K" nr="194">
+<Func kind="K" nr="231">
 <Func kind="K" nr="65"/>
 </Func>
 </Func>
-<Func kind="K" nr="196"/>
+<Func kind="K" nr="233"/>
 </Adjective>
-<Adjective nr="52" value="false">
+<Adjective nr="70" value="false">
 <Func kind="K" nr="2">
 <Func kind="K" nr="65"/>
-<Func kind="K" nr="194">
+<Func kind="K" nr="231">
 <Func kind="K" nr="65"/>
 </Func>
 </Func>
-<Func kind="K" nr="196"/>
+<Func kind="K" nr="233"/>
 </Adjective>
 </Cluster>
 </RCluster>

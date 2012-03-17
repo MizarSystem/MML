@@ -3,12 +3,12 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="ENUMSET1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
@@ -115,7 +115,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="44">
+<Func kind="K" nr="12">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -131,7 +131,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="41">
+<Func kind="K" nr="9">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -151,7 +151,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="42">
+<Func kind="K" nr="10">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -199,7 +199,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="23">
+<Func kind="K" nr="27">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -218,7 +218,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="25">
+<Func kind="K" nr="29">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -237,7 +237,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="24">
+<Func kind="K" nr="28">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -256,7 +256,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="24">
+<Func kind="K" nr="28">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -272,7 +272,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="41">
+<Func kind="K" nr="9">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -292,7 +292,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="42">
+<Func kind="K" nr="10">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -400,7 +400,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="10">
+<Func kind="K" nr="14">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

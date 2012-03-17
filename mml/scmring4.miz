@@ -64,7 +64,7 @@ Lm2:
 theorem Th1:
   NAT,the Instruction-Locations of S are_equipotent
   proof
-    consider f being Function of NAT, the Instruction-Locations of S such that
+    consider f being IL-Function of NAT, S such that
 A1:   f is bijective and for m, n being Element of NAT holds m <= n
 iff f.m <= f.n
       by AMISTD_1:def 10;
@@ -175,6 +175,7 @@ Lm5:
     let i be set;
     assume
 A1:   i in the Instruction-Locations of S;
+    then i is Instruction-Location of S by AMI_1:def 4;
     then i <> IC S by AMI_1:48;
     then not i in {IC S} by TARSKI:def 1;
     hence thesis by A1,XBOOLE_0:def 4;
@@ -199,6 +200,7 @@ A1: B misses I by Lm3;
       let i be set;
       assume
 A2:     i in I;
+      then i is Instruction-Location of S by AMI_1:def 4;
       then i <> IC S by AMI_1:48;
       then not i in {IC S} by TARSKI:def 1;
       hence thesis by A2,XBOOLE_0:def 4;
@@ -319,8 +321,14 @@ A5: dom Exec(i,s+*p) = C by AMI_3:36;
       let x be set;
       assume
 A7:     x in {IC S};
-      then x = IC S by TARSKI:def 1;
-      then not x in I by AMI_1:48;
+      then
+X:     x = IC S by TARSKI:def 1;
+:::      then not x in I by AMI_1:48;
+    now assume x in I;
+      then reconsider l=x as Instruction-Location of S by AMI_1:def 4;
+      l=x;
+     hence contradiction by X,AMI_1:48;
+    end;
       hence thesis by A7,XBOOLE_0:def 4;
     end;
     then A8: C \ I = D \/ {IC S} by A6,XBOOLE_1:12;
@@ -332,6 +340,7 @@ A7:     x in {IC S};
       then consider o being set such that
 A10:     o in D \/ {IC S} and
 A11:     o in I by XBOOLE_0:3;
+      reconsider l = o as Instruction-Location of S by A11,AMI_1:def 4;
 A12:   o in D or o in {IC S} by A10,XBOOLE_0:def 2;
       per cases by A12,TARSKI:def 1;
       suppose o in D;
@@ -339,6 +348,7 @@ A12:   o in D or o in {IC S} by A10,XBOOLE_0:def 2;
       hence contradiction by A11,XBOOLE_0:def 2;
       end;
       suppose o = IC S;
+       then l = IC S;
       hence contradiction by A11,AMI_1:48;
       end;
     end;
@@ -639,6 +649,9 @@ then A9:   x = IC SCM R by TARSKI:def 1;
       suppose
 A10:     x in SCM-Instr-Loc;
         the Instruction-Locations of SCM R = SCM-Instr-Loc by SCMRING2:def 1;
+       then reconsider l = x as Instruction-Location of SCM R
+       by A10,AMI_1:def 4;
+       l = x;
       hence g1.x = g2.x by A3,A4,A5,A10;
       end;
     end;
@@ -1229,6 +1242,9 @@ A1: ObjectKind il.(SCM R,0) = the Instructions of SCM R by AMI_1:def 14;
         dom P = { IC SCM R, il.(SCM R,0) } by FUNCT_4:65;
 then A2:   IC SCM R in dom P by TARSKI:def 2;
       assume dom P c= the Instruction-Locations of SCM R;
+       then reconsider l = IC SCM R as Instruction-Location of SCM R
+                         by A2,AMI_1:def 4;
+       l = IC SCM R;
       hence contradiction by A2,AMI_1:48;
     end;
     hence P is non programmed by AMI_3:def 13;
@@ -1258,8 +1274,8 @@ then A5:   k.x = r by FUNCOP_1:87;
          .= the carrier of R by SCMRING3:1;
       hence k.x in f.x by A5;
     end;
-    then A6:k in sproduct the Object-Kind of SCM R by A1,A2,A3,CARD_3:def 9;
-    thus thesis by A6;
+    then k in sproduct the Object-Kind of SCM R by A1,A2,A3,CARD_3:def 9;
+    hence thesis by AMI_1:77;
   end;
 end;
 
@@ -1292,7 +1308,9 @@ then A5:   SCM-Data-Loc \ dom p <> {} by XBOOLE_1:37;
         not the Instruction-Locations of SCM R c= dom p
         by FINSET_1:13;
 then A6:   (the Instruction-Locations of SCM R) \ dom p <> {} by XBOOLE_1:37;
-      then reconsider il as Instruction-Location of SCM R by XBOOLE_0:def 4;
+      then il is Element of the Instruction-Locations of SCM R
+              by XBOOLE_0:def 4;
+      then reconsider il as Instruction-Location of SCM R by AMI_1:def 4;
       consider e being Element of R such that
 A7:     e <> 0.R by A1,ANPROJ_1:def 8;
       set p1 = p +* ((il .--> (d1:=d2)) +* (d2.--> 0.R) +* Start-At il);
@@ -1921,6 +1939,7 @@ A1:   S is realistic;
       then x in dom X;
       then A2:   x in dom (Start-At ((IC g)+k)) /\ I by FUNCT_1:68;
       then A3:   x in I by XBOOLE_0:def 3;
+      then reconsider x as Instruction-Location of S by AMI_1:def 4;
        x in dom (Start-At ((IC g)+k)) by A2,XBOOLE_0:def 3;
       then x in {IC S} by FUNCOP_1:19;
       then x = IC S by TARSKI:def 1;
@@ -2048,7 +2067,7 @@ theorem Th54:
 A2:   dom f c= the Instruction-Locations of S by AMI_3:def 13;
       assume
 A3:     x in dom f;
-      then reconsider x'=x as Instruction-Location of S by A2;
+      then reconsider x'=x as Instruction-Location of S by A2,AMI_1:def 4;
         x in { il.(S,m+i) where m is Element of NAT:
         il.(S,m) in dom IncAddr(p,i) }
        by A3,AMISTD_2:def 16;
@@ -3075,7 +3094,7 @@ A19: (Computation s).i
 then A20: dom ProgramPart p = dom (s|dom ProgramPart p) by RELAT_1:91;
     then dom sdom is finite;
     then sdom is finite by FINSET_1:29;
-    then reconsider sdom as FinPartState of SCM R;
+    then reconsider sdom as FinPartState of SCM R by AMI_1:77;
       dom (s|dom ProgramPart p) c= SCM-Instr-Loc by A20,Th29;
     then dom (s|dom ProgramPart p) c= the Instruction-Locations of SCM R
  by SCMRING2:def 1;
@@ -3247,7 +3266,7 @@ then A22: dom ProgramPart Relocated(p,k) =
        dom (s|(dom ProgramPart Relocated(p,k))) by RELAT_1:91;
     then dom sdom is finite;
     then sdom is finite by FINSET_1:29;
-    then reconsider sdom as FinPartState of SCM R;
+    then reconsider sdom as FinPartState of SCM R by AMI_1:77;
       dom (s|(dom ProgramPart Relocated(p,k))) c= SCM-Instr-Loc by A22,Th29;
     then dom (s|(dom ProgramPart Relocated(p,k)))
        c= the Instruction-Locations of SCM R by SCMRING2:def 1;
@@ -3641,7 +3660,7 @@ A4:  p computes F;
 A5: x in dom F;
       dom F c= FinPartSt SCM R by RELSET_1:12;
     then reconsider s = x as data-only FinPartState of SCM R
-      by A3,A5,AMI_3:32,AMI_5:def 9;
+      by A3,A5,AMI_5:def 9;
     take s;
     thus x=s;
     consider s1 being FinPartState of SCM R such that
@@ -3668,7 +3687,7 @@ A11:  Relocated (p,k) computes F;
 A12: x in dom F;
       dom F c= FinPartSt SCM R by RELSET_1:12;
     then reconsider s = x as data-only FinPartState of SCM R
-      by A3,A12,AMI_3:32,AMI_5:def 9;
+      by A3,A12,AMI_5:def 9;
     take s;
     thus x=s;
     consider s1 being FinPartState of SCM R such that

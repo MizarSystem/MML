@@ -1183,7 +1183,7 @@ theorem Th70:
    thus {x} --> y = {[x,y]} by ZFMISC_1:35;
   end;
 
-theorem
+theorem Th71:
     for a,b,c,d being set st a <> c
   holds (a,c) --> (b,d) = { [a,b], [c,d] }
  proof let a,b,c,d be set such that
@@ -1449,7 +1449,7 @@ theorem
 
 :: from AMI_1, 2006.03.14, A.T.
 
-theorem
+theorem Th86:
  for a,b,c being set holds (a,a) --> (b,c) = a .--> c
  proof let a,b,c be set;
 A1: dom(a .-->c) = {a} by FUNCOP_1:19
@@ -1457,7 +1457,7 @@ A1: dom(a .-->c) = {a} by FUNCOP_1:19
   thus (a,a) --> (b,c) = a .--> c by A1,Th20;
  end;
 
-theorem
+theorem Th87:
  for x,y holds x .--> y = {[x,y]}
   proof let x,y;
    thus x .--> y = {[x,y]} by ZFMISC_1:35;
@@ -1495,4 +1495,36 @@ A2: dom g = {a,b} by Th65;
     hence (f +* g).b = g.b by Th14
      .= d by A1,Th66;
   end;
+
+:: from AMI_3, 2007.06.14, A.T.
+
+theorem Th27:
+ for a,b being set, f being Function st a in dom f & f.a = b
+  holds a .--> b c= f
+ proof let a,b be set, f be Function;
+  assume a in dom f & f.a = b;
+   then [a,b] in f by FUNCT_1:8;
+   then {[a,b]} c= f by ZFMISC_1:37;
+  hence a .--> b c= f by Th87;
+ end;
+
+theorem
+    for a,b,c,d being set, f being Function st
+     a in dom f & c in dom f & f.a = b & f.c = d
+  holds (a,c) --> (b,d) c= f
+ proof let a,b,c,d be set, f be Function;
+  assume
+A1: a in dom f & c in dom f & f.a = b & f.c = d;
+  per cases;
+  suppose
+A2:  a <> c;
+      [a,b] in f & [c,d] in f by A1,FUNCT_1:8;
+   then { [a,b], [c,d]} c= f by ZFMISC_1:38;
+  hence (a,c) --> (b,d) c= f by A2,Th71;
+  end;
+  suppose a = c;
+   then (a,c) --> (b,d) = c .--> d by Th86;
+  hence (a,c) --> (b,d) c= f by A1,Th27;
+ end;
+ end;
 

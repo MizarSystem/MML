@@ -15,6 +15,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="SUPINF_1"/>
 <ArticleID name="CARD_4"/>
 <ArticleID name="SUPINF_2"/>
@@ -30,7 +31,7 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="22"/>
-<Adjective nr="32"/>
+<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -44,8 +45,8 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="22"/>
-<Adjective nr="32"/>
-<Adjective nr="37"/>
+<Adjective nr="34"/>
+<Adjective nr="39"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -67,7 +68,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="102">
+<Func kind="K" nr="110">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -86,7 +87,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="103">
+<Func kind="K" nr="111">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -115,7 +116,7 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="35">
+<Adjective nr="37">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -131,11 +132,11 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="33">
+<Adjective nr="35">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="36">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -163,11 +164,11 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="33">
+<Adjective nr="35">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="34">
+<Adjective nr="36">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -183,7 +184,7 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="35">
+<Adjective nr="37">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>

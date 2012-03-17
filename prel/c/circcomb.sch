@@ -126,7 +126,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="26">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>

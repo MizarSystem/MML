@@ -26,16 +26,19 @@ definition let X be set;
 end;
 
 registration
- cluster Relation-like Function-like set;
+ cluster Function-like Relation;
  existence
-  proof take {};
-   thus (for p st p in {} ex x,y st [x,y] = p) &
-   (for x,y1,y2 st [x,y1] in {} & [x,y2] in {} holds y1 = y2);
+  proof 
+   reconsider E={} as Relation;
+   take E;
+   (for p st p in E ex x,y st [x,y] = p) &
+   (for x,y1,y2 st [x,y1] in E & [x,y2] in E holds y1 = y2);
+   hence thesis by Def1;
   end;
 end;
 
 definition
-  mode Function is Function-like Relation-like set;
+  mode Function is Function-like Relation;
 end;
 
 registration
@@ -44,6 +47,24 @@ registration
   proof let f be set;
    assume f is empty;
    hence for x,y1,y2 st [x,y1] in f & [x,y2] in f holds y1 = y2;
+  end;
+end;
+
+registration let a, b be set;
+  cluster {[a,b]} -> Function-like;
+  coherence
+  proof
+    set X = {[a, b]};
+A1: [:{a},{b}:] = X by ZFMISC_1:35;
+    for x,y1,y2 be set st [x,y1] in X & [x,y2] in X holds y1 = y2
+    proof
+      let x,y1,y2 be set such that
+A2:   [x,y1] in X and
+A3:   [x,y2] in X;
+      y1 = b & y2 = b by A1,A2,A3,ZFMISC_1:34;
+      hence thesis;
+    end;
+    hence thesis by Def1;
   end;
 end;
 
@@ -83,20 +104,20 @@ A6:  P[x1,z1] by A4;
     then consider x2,z2 such that
 A7:  [x2,z2] = [x,y2] and
 A8:  P[x2,z2] by A4;
-        x = x1 & z1 = y1 & x = x2 & z2 = y2 by A5,A7,ZFMISC_1:33;
+     x = x1 & z1 = y1 & x = x2 & z2 = y2 by A5,A7,ZFMISC_1:33;
      hence y1 = y2 by A1,A6,A8;
     end;
    then reconsider f = F as Function by Def1,RELAT_1:def 1;
    take f; let x,y;
    thus [x,y] in f implies x in A() & P[x,y]
      proof assume
-A9:     [x,y] in f;
+A9:   [x,y] in f;
       then [x,y] in [:A(),Y:] by A4;
       hence x in A() by ZFMISC_1:106;
       consider x1,y1 such that
-A10:     [x1,y1] = [x,y] and
-A11:     P[x1,y1] by A4,A9;
-          x1 = x & y1 = y by A10,ZFMISC_1:33;
+A10:  [x1,y1] = [x,y] and
+A11:  P[x1,y1] by A4,A9;
+      x1 = x & y1 = y by A10,ZFMISC_1:33;
       hence thesis by A11;
      end;
    assume that
@@ -109,7 +130,6 @@ A13:  P[x,y];
 
 definition let f,x;
  canceled 2;
-
   func f.x -> set means
 :Def4: [x,it] in f if x in dom f otherwise it = {};
   existence by RELAT_1:def 4;
@@ -136,26 +156,21 @@ theorem Th9:
  proof assume that
 A1:  dom f = dom g and
 A2:  for x st x in dom f holds f.x = g.x;
-A3:   (for p st p in f ex x,y st [x,y] = p) &
-      (for p st p in g ex x,y st [x,y] = p) by RELAT_1:def 1;
-      [x,y] in f iff [x,y] in g
-    proof
+  let x,y;
      thus [x,y] in f implies [x,y] in g
       proof assume
-A4:       [x,y] in f;
-then A5:       x in dom f by RELAT_1:def 4;
+A4:     [x,y] in f;then
+A5:     x in dom f by RELAT_1:def 4;
         then f.x = y by A4,Def4;
         then g.x = y by A2,A5;
         hence thesis by A1,A5,Def4;
       end;
      assume
-A6:     [x,y] in g;
-then A7:     x in dom g by RELAT_1:def 4;
+A6:   [x,y] in g;then
+A7:   x in dom g by RELAT_1:def 4;
       then g.x = y by A6,Def4;
       then f.x = y by A1,A2,A7;
       hence thesis by A1,A7,Def4;
-    end;
-   hence thesis by A3,ZFMISC_1:112;
  end;
 
 definition let f;
@@ -173,9 +188,9 @@ A2:   [x,y] in f by A1,RELAT_1:def 5;
     thus x in dom f & y = f.x by A2,Th8;
    end;
    given x such that
-A3:   x in dom f and
-A4:   y = f.x;
-      [x,y] in f by A3,A4,Def4;
+A3: x in dom f and
+A4: y = f.x;
+    [x,y] in f by A3,A4,Def4;
    hence y in Y by A1,RELAT_1:def 5;
   end;
   assume
@@ -216,7 +231,7 @@ theorem Th14:
       then consider z such that
 A2:    z in dom f and
 A3:    y = f.z by Def5;
-         z = x by A1,A2,TARSKI:def 1;
+       z = x by A1,A2,TARSKI:def 1;
       hence thesis by A3,TARSKI:def 1;
      end;
     assume y in {f.x};
@@ -238,7 +253,7 @@ A3: for x,y1,y2 st R[x,y1] & R[x,y2] holds y1 = y2 by A1;
 A4:  for x,y holds [x,y] in f iff x in A() & R[x,y]
     from GraphFunc(A3);
    take f;
-      x in dom f iff x in A()
+    x in dom f iff x in A()
     proof
      thus x in dom f implies x in A()
       proof assume x in dom f;
@@ -253,17 +268,17 @@ A6:     P[x,y] by A2;
      hence x in dom f by RELAT_1:def 4;
     end;
    hence
-A7:  dom f = A() by TARSKI:2;
+A7: dom f = A() by TARSKI:2;
    let x;
    assume
-A8:   x in A();
+A8: x in A();
    then consider y such that
-A9:   P[x,y] by A2;
-      [x,y] in f by A4,A8,A9;
+A9: P[x,y] by A2;
+    [x,y] in f by A4,A8,A9;
    hence thesis by A7,A8,A9,Def4;
  end;
 
-scheme Lambda{A()->set,F(set)->set}:
+scheme Lambda{A() -> set,F(set) -> set}:
  ex f being Function st dom f = A() & for x st x in A() holds f.x = F(x)
 proof
    defpred P[set,set] means $2 = F($1);
@@ -293,7 +308,7 @@ A4: now assume y1 in rng f;
     now assume
 A5:    y1 = y;
      consider x being Element of X;
-        f.x = y by A1,A3;
+     f.x = y by A1,A3;
      hence y1 in rng f by A1,A2,A5,Def5;
     end;
     hence thesis by A4;
@@ -316,7 +331,7 @@ A4:    for x st x in X holds f.x = F(x) from Lambda;
      consider g being Function such that
 A5:    dom g = X and
 A6:    for x st x in X holds g.x = F(x) from Lambda;
-        f.x = 0 & g.x = 1 by A2,A4,A6;
+       f.x = 0 & g.x = 1 by A2,A4,A6;
      hence contradiction by A1,A3,A5;
  end;
 
@@ -354,9 +369,9 @@ A6:      dom f = X and
 A7:      for x st x in X holds f.x = F(x) from Lambda;
       take f;
       thus dom f = X by A6;
-         z in rng f implies z in Y
+      z in rng f implies z in Y
       proof assume z in rng f;
-        then ex x st x in dom f & z = f.x by Def5;
+       then ex x st x in dom f & z = f.x by Def5;
        hence z in Y by A5,A6,A7;
       end;
       hence rng f c= Y by TARSKI:def 3;
@@ -607,9 +622,9 @@ canceled;
 theorem Th37:
   dom(f*(id X)) = dom f /\ X
  proof
-      x in dom(f*(id X)) iff x in dom f /\ X
+    x in dom(f*(id X)) iff x in dom f /\ X
     proof
-        x in dom(f*(id X)) iff x in dom f & x in X
+      x in dom(f*(id X)) iff x in dom f & x in X
       proof
        thus x in dom(f*(id X)) implies x in dom f & x in X
         proof assume x in dom(f*(id X));
@@ -870,7 +885,7 @@ registration
   cluster empty Function;
  existence
   proof
-       {} is Function;
+    {} is Function;
     hence thesis;
   end;
 end;
@@ -1214,7 +1229,7 @@ registration let f,X;
 end;
 
 theorem Th68:
-   g = f|X iff dom g = dom f /\ X & for x st x in dom g holds g.x = f.x
+  g = f|X iff dom g = dom f /\ X & for x st x in dom g holds g.x = f.x
  proof
   hereby assume
 A1: g = f|X;
@@ -1312,7 +1327,7 @@ A2:  x1 in dom(f|X) & x2 in dom(f|X);
 end;
 
 registration let Y,f;
- cluster Y|f -> Function-like;
+  cluster Y|f -> Function-like;
   coherence
  proof
   let x,y1,y2;
@@ -2124,15 +2139,14 @@ A1:     dom id X = X by Th34;
     thus e in A implies ex u st u in dom id X & u in A & e = (id X).u
      proof
       assume
-A2:     e in A;
+A2:   e in A;
       take e;
-      thus
-        e in dom id X by A1,A2;
+      thus e in dom id X by A1,A2;
       thus e in A by A2;
       thus e = (id X).e by A2,Th34;
      end;
     given u such that
-A3:   u in dom id X & u in A & e = (id X).u;
+A3: u in dom id X & u in A & e = (id X).u;
     thus e in A by A3,Th34;
    end;
   hence thesis by Def12;
@@ -2153,7 +2167,7 @@ A1:  f is empty-yielding;
     hence f.x is empty by A1,RELAT_1:184;
    end;
    assume
-A2:   for x st x in dom f holds f.x is empty;
+A2:for x st x in dom f holds f.x is empty;
    let s be set;
    assume s in rng f;
     then ex e being set st e in dom f & s = f.e by Def5;
@@ -2296,12 +2310,11 @@ end;
 :: missing, 2007.04.13, A.T.
 
 registration let f be Function;
- cluster -> Function-like Subset of f;
+  cluster -> Function-like Subset of f;
  coherence
   proof let g be Subset of f;
    let x,y1,y2;
    assume [x,y1] in g & [x,y2] in g;
-    then [x,y1] in f & [x,y2] in f;
    hence y1 = y2 by Def1;
   end;
 end;

@@ -25,6 +25,10 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="GRAPH_1"/>
+<ArticleID name="GRAPH_2"/>
+<ArticleID name="TREES_1"/>
+<ArticleID name="TREES_2"/>
 <ArticleID name="AMI_1"/>
 <ArticleID name="AMI_3"/>
 <ArticleID name="AMI_5"/>
@@ -34,7 +38,7 @@
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="32" value="false"/>
 </Cluster>
@@ -43,18 +47,16 @@
 </ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="123">
-<Func kind="U" nr="7">
+<Func kind="K" nr="218">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
-</Func>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="17"/>
-<Adjective nr="54">
+<Adjective nr="72">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -64,30 +66,28 @@
 <ArgTypes/>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="123">
-<Func kind="U" nr="7">
+<Func kind="K" nr="218">
 <Func kind="K" nr="12">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="194"/>
-</Func>
+<Func kind="K" nr="231"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="17"/>
-<Adjective nr="48">
+<Adjective nr="66">
 <Func kind="K" nr="12">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="194"/>
+<Func kind="K" nr="231"/>
 </Adjective>
-<Adjective nr="53" value="false">
+<Adjective nr="71" value="false">
 <Func kind="K" nr="12">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="194"/>
+<Func kind="K" nr="231"/>
 </Adjective>
 </Cluster>
 </RCluster>
@@ -100,11 +100,11 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="U" nr="5">
+<Func kind="U" nr="9">
 <Func kind="K" nr="12">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="194"/>
+<Func kind="K" nr="231"/>
 </Func>
 <Cluster>
 <Adjective nr="17" value="false"/>
@@ -114,11 +114,11 @@
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="U" nr="6">
+<Func kind="U" nr="10">
 <Func kind="K" nr="12">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="194"/>
+<Func kind="K" nr="231"/>
 </Func>
 </Typ>
 </ArgTypes>

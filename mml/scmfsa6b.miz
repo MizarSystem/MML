@@ -69,6 +69,13 @@ A1: I +* Start-At insloc n c= s;
  hence thesis by A1,XBOOLE_1:11;
 end;
 
+Lx2:  now assume IC SCM+FSA in the Instruction-Locations of SCM+FSA;
+       then reconsider l = IC SCM+FSA as Instruction-Location of SCM+FSA
+                      by AMI_1:def 4;
+        l = IC SCM+FSA;
+      hence contradiction by AMI_1:48;
+     end;
+
 theorem Th6:
   (I +* Start-At insloc n)|the Instruction-Locations of SCM+FSA = I
 proof
@@ -79,7 +86,7 @@ A2:  x in the Instruction-Locations of SCM+FSA & x in dom Start-At insloc n
        by XBOOLE_0:3;
        dom Start-At insloc n = {IC SCM+FSA} by FUNCOP_1:19;
    then x = IC SCM+FSA by A2,TARSKI:def 1;
-  hence contradiction by A2,AMI_1:48;
+  hence contradiction by A2,Lx2;
  end;
  then (I +* Start-At insloc n)|the Instruction-Locations of SCM+FSA
   = I | the Instruction-Locations of SCM+FSA by FUNCT_4:76;
@@ -92,7 +99,7 @@ proof assume
 A1: x in dom I;
    A2: dom I c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
 A3: dom Start-At insloc n = {IC SCM+FSA} by FUNCOP_1:19;
-       x <> IC SCM+FSA by A1,A2,AMI_1:48;
+       x <> IC SCM+FSA by A1,A2,Lx2;
    then not x in dom Start-At insloc n by A3,TARSKI:def 1;
  hence thesis by FUNCT_4:12;
 end;
@@ -528,7 +535,12 @@ A23: dom IS = dom I \/ dom Start-At insloc 0 by FUNCT_4:def 1
    then not IC s2 in {IC SCM+FSA} by TARSKI:def 1;
    then not IC s2 in dom IS by A21,A23,XBOOLE_0:def 2;
 then A24: IS c= s00 by A18,FUNCT_7:91;
-A25:  not FI in dom I by A19,SCMFSA_2:84;
+A25:  now assume
+Z:      FI in dom I;
+     then reconsider FI as Instruction-Location of SCM+FSA by A19,AMI_1:def 4;
+     FI in dom I by Z;
+    hence contradiction by A19,SCMFSA_2:84;
+   end;
        FI <> IC SCM+FSA by SCMFSA_2:81;
    then not FI in {IC SCM+FSA} by TARSKI:def 1;
    then not FI in dom IS by A23,A25,XBOOLE_0:def 2;
@@ -585,7 +597,8 @@ theorem
 proof let I be parahalting Macro-Instruction,
           a be read-write Int-Location; assume
 A1: not a in UsedIntLoc I;
-        not a in the Instruction-Locations of SCM+FSA by SCMFSA_2:84;
+        not a is Instruction-Location of SCM+FSA by SCMFSA_2:84;
+    then not a in the Instruction-Locations of SCM+FSA by AMI_1:def 4;
     then not a in dom (s|the Instruction-Locations of SCM+FSA) by RELAT_1:86;
 then A2: (IExec(I, s)).a = (Result(s+*Initialized I)).a by FUNCT_4:12;
 A3: Initialized I c= s+*Initialized I by FUNCT_4:26;
@@ -606,7 +619,8 @@ theorem
   holds not f in UsedInt*Loc I implies (IExec(I, s)).f = s.f
 proof let I be parahalting Macro-Instruction; assume
 A1: not f in UsedInt*Loc I;
-        not f in the Instruction-Locations of SCM+FSA by SCMFSA_2:85;
+    not f is Instruction-Location of SCM+FSA by SCMFSA_2:85;
+    then not f in the Instruction-Locations of SCM+FSA by AMI_1:def 4;
     then not f in dom (s|the Instruction-Locations of SCM+FSA) by RELAT_1:86;
 then A2: (IExec(I, s)).f = (Result(s+*Initialized I)).f by FUNCT_4:12;
 A3: Initialized I c= s+*Initialized I by FUNCT_4:26;
@@ -741,9 +755,10 @@ theorem Th26:
  proof
    let I be parahalting Macro-Instruction;
    consider x being set such that A1: x in dom I by XBOOLE_0:def 1;
-   dom I c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
-   then consider n being Element of NAT such that A2: insloc n = x
-   by A1,SCMFSA_2:21;
+X: dom I c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+   then reconsider x as Instruction-Location of SCM+FSA by A1,AMI_1:def 4;
+   consider n being Element of NAT such that A2: insloc n = x
+   by A1,SCMFSA_2:21,X;
    per cases;
    suppose n = 0;
     hence insloc 0 in dom I by A1,A2;
@@ -930,7 +945,7 @@ A1: dom s = Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
     = dom s /\ the Instruction-Locations of SCM+FSA by RELAT_1:90
    .= the Instruction-Locations of SCM+FSA by A1,XBOOLE_1:21;
 then A2: not IC SCM+FSA in dom (s | the Instruction-Locations of SCM+FSA)
-       by AMI_1:48;
+       by AMI_1:48,Lx2;
    thus IC IExec(I,s) = IC Result (s +* Initialized I) by A2,FUNCT_4:12;
  end;
 
@@ -941,9 +956,11 @@ theorem Th31:
 proof
  let I be non empty Macro-Instruction; consider iloc being set such that
 A1: iloc in dom I by XBOOLE_0:def 1;
-       dom I c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
-   then consider i being Element of NAT such that
-A2: iloc = insloc i by A1,SCMFSA_2:21;   0 < i or 0 = i;
+X:     dom I c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+   then reconsider iloc as Instruction-Location of SCM+FSA by A1,AMI_1:def 4;
+   consider i being Element of NAT such that
+A2: iloc = insloc i by A1,SCMFSA_2:21,X;
+       0 < i or 0 = i;
  hence
 A3: insloc 0 in dom I by A1,A2,SCMFSA_4:def 4;
       I c= Initialized I by SCMFSA6A:26;
@@ -1537,7 +1554,11 @@ A10:  intloc 0 in dom Initialized I by SCMFSA6A:45;
       then A13: x in dom Initialized J & x in D by XBOOLE_0:def 3;
          per cases by A13,SCMFSA6A:44;
          suppose A14: x in dom J;
-              dom J c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+X:         dom J c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+           then reconsider l=x as Instruction-Location of SCM+FSA
+                     by A14,AMI_1:def 4;
+           ((Initialized J) | D).l = ((Computation s1).m1 | D).l
+                      by A13,X,A14,SCMFSA6A:37;
           hence ((Initialized J) | D).x = ((Computation s1).m1 | D).x by A13
 ,A14,SCMFSA6A:37;
          end;
@@ -1707,7 +1728,10 @@ A8:  s3 | D = ((Computation s1).m1 | D) +* kk by FUNCT_4:75;
          then A12: x in dom J or x in {IC SCM+FSA} by XBOOLE_0:def 2;
          per cases by A12,TARSKI:def 1;
          suppose A13: x in dom J;
-              dom J c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+X:            dom J c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+           then reconsider l=x as Instruction-Location of SCM+FSA
+                     by A13,AMI_1:def 4;
+           kk.l = ((Computation s1).m1 | D).l by A11,A13,SCMFSA6A:37;
           hence kk.x = ((Computation s1).m1 | D).x by A11,A13,SCMFSA6A:37;
          end;
          suppose x = IC SCM+FSA;

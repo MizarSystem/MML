@@ -687,7 +687,7 @@
 <Func kind="F" nr="2"/>
 </Typ>
 </ArgTypes>
-<Pred kind="R" nr="39">
+<Pred kind="R" nr="41">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -989,7 +989,7 @@
 <Func kind="F" nr="2"/>
 </Typ>
 </ArgTypes>
-<Pred kind="R" nr="40">
+<Pred kind="R" nr="42">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>

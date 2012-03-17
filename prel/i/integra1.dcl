@@ -2,13 +2,13 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
@@ -43,7 +43,7 @@
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="K" nr="53"/>
 </Func>
 </Typ>
@@ -58,7 +58,7 @@
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="K" nr="53"/>
 </Func>
 </Typ>
@@ -76,7 +76,7 @@
 <Adjective nr="7" value="false"/>
 <Adjective nr="20"/>
 </Cluster>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="K" nr="53"/>
 </Func>
 </Typ>
@@ -96,7 +96,7 @@
 <Adjective nr="7" value="false"/>
 <Adjective nr="20"/>
 </Cluster>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="K" nr="53"/>
 </Func>
 </Typ>
@@ -115,7 +115,7 @@
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="K" nr="53"/>
 </Func>
 </Typ>
@@ -131,7 +131,7 @@
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <Func kind="K" nr="53"/>
 </Func>
 </Typ>

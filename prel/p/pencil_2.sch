@@ -3,12 +3,12 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
@@ -46,21 +46,21 @@
 <And>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="16">
+<Func kind="K" nr="20">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
 </Pred>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="2"/>
-<Func kind="K" nr="16">
+<Func kind="K" nr="20">
 <Var nr="1"/>
 <Func kind="K" nr="81">
 <Var nr="1"/>
 </Func>
 </Func>
 </Pred>
-<Pred kind="R" nr="14">
+<Pred kind="R" nr="4">
 <Func kind="K" nr="66">
 <Func kind="K" nr="50"/>
 <Func kind="F" nr="3"/>
@@ -93,11 +93,11 @@
 </Not>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="16">
+<Func kind="K" nr="20">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="16">
+<Func kind="K" nr="20">
 <Var nr="1"/>
 <Func kind="K" nr="59">
 <Var nr="2"/>
@@ -116,14 +116,14 @@
 <And>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="16">
+<Func kind="K" nr="20">
 <Func kind="F" nr="4"/>
 <Num nr="1"/>
 </Func>
 </Pred>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="2"/>
-<Func kind="K" nr="16">
+<Func kind="K" nr="20">
 <Func kind="F" nr="4"/>
 <Func kind="K" nr="81">
 <Func kind="F" nr="4"/>
@@ -160,14 +160,14 @@
 </Not>
 <Pred kind="R" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="16">
+<Func kind="K" nr="20">
 <Func kind="F" nr="4"/>
 <Var nr="1"/>
 </Func>
 </Pred>
 <Pred kind="R" nr="1">
 <Var nr="3"/>
-<Func kind="K" nr="16">
+<Func kind="K" nr="20">
 <Func kind="F" nr="4"/>
 <Func kind="K" nr="59">
 <Var nr="1"/>

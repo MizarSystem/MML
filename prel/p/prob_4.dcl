@@ -2,6 +2,7 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
@@ -9,7 +10,6 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
@@ -30,7 +30,7 @@
 <Typ kind="M" nr="4">
 <Cluster/>
 <Func kind="K" nr="83"/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -40,13 +40,13 @@
 <Adjective nr="7" value="false"/>
 <Adjective nr="8">
 <Func kind="K" nr="83"/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="16">
 <Func kind="K" nr="83"/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -68,8 +68,8 @@
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="19">
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
+<Func kind="K" nr="23">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -86,13 +86,13 @@
 <Adjective nr="7" value="false"/>
 <Adjective nr="8">
 <Func kind="K" nr="83"/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="16">
 <Func kind="K" nr="83"/>
-<Func kind="K" nr="19">
+<Func kind="K" nr="23">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>

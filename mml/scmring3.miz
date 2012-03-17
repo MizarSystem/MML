@@ -21,7 +21,7 @@ environ
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
       FUNCOP_1, ARYTM_3, FRAENKEL, XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3,
       CARD_4, STRUCT_0, VECTSP_1, TEX_2, INT_3, AMI_1, AMI_2, AMI_3, SCMRING1,
-      SCMRING2, AMISTD_2;
+      SCMRING2, AMISTD_2, AFINSQ_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, FUNCT_2, FUNCT_7, SCMRING1, SCMRING2, AMISTD_1,
       AMISTD_2, XBOOLE_0, FUNCOP_1, STRUCT_0, AMI_1;
@@ -54,7 +54,7 @@ coherence
     then ex a, b being set st a in NAT &
      b in (union {the carrier of INT.Ring} \/ NAT)* & 1 = [a,b]
       by ZFMISC_1:def 2;
-    hence thesis by AMI_1:2;
+    hence thesis;
   end;
 end;
 
@@ -1151,7 +1151,7 @@ A7:     I = goto i2 by A2,A6,Th22;
     end;
     let x be set;
     assume x in the Instruction-Locations of SCM R;
-    then reconsider x as Instruction-Location of SCM R;
+    then reconsider x as Instruction-Location of SCM R by AMI_1:def 4;
 A8: AddressPart goto x = <*x*> by MCART_1:def 2;
        InsCode goto i1 = InsCode goto x by A2,Th14;
 then A9: <*x*> in AddressParts InsCode goto i1 by A8;
@@ -1186,7 +1186,7 @@ A7:     I = b =0_goto i2 by A2,A6,Th23;
     end;
     let x be set;
     assume x in the Instruction-Locations of SCM R;
-    then reconsider x as Instruction-Location of SCM R;
+    then reconsider x as Instruction-Location of SCM R by AMI_1:def 4;
 A8: AddressPart (a =0_goto x) = <*x,a*> by MCART_1:def 2;
        InsCode (a =0_goto i1) = InsCode (a =0_goto x) by A2,Th15;
 then A9: <*x,a*> in AddressParts InsCode (a =0_goto i1) by A8;
@@ -1318,6 +1318,7 @@ A1:   for l being Instruction-Location of SCM R holds NIC(i,l)={Next l};
     then consider p, q being Element of the Instruction-Locations of SCM R
      such that
 A2:   p <> q by YELLOW_8:def 1;
+    reconsider p, q as Instruction-Location of SCM R by AMI_1:def 4;
     set X = { NIC(i,f) where f is Instruction-Location of SCM R:
         not contradiction };
     assume not thesis;
@@ -1376,8 +1377,11 @@ proof
    then meet X is non empty;
    then consider x being set such that
 A1:   x in meet X by XBOOLE_0:def 1;
-   reconsider i1 = il.1, i2 = il.2 as Instruction-Location of SCM R
+   il.1 is Element of the Instruction-Locations of SCM R &
+   il.2 is Element of the Instruction-Locations of SCM R
     by AMI_3:def 1,SCMRING2:def 1;
+   then reconsider i1 = il.1, i2 = il.2 as Instruction-Location of SCM R
+    by AMI_1:def 4;
       NIC(halt SCM R, i1) in X & NIC(halt SCM R, i2) in X;
    then {i1} in X & {i2} in X by Th53;
    then x in {i1} & x in {i2} by A1,SETFAM_1:def 1;
@@ -1523,8 +1527,9 @@ set X = { NIC(goto i1, il) : not contradiction };
   let x be set;
   hereby assume
   A1: x in meet X;
-      reconsider il1 = il.1 as Instruction-Location of SCM R
+    il.1 is Element of the Instruction-Locations of SCM R
        by AMI_3:def 1,SCMRING2:def 1;
+    then reconsider il1 = il.1 as Instruction-Location of SCM R by AMI_1:def 4;
          NIC(goto i1, il1) in X;
      then x in NIC(goto i1, il1) by A1,SETFAM_1:def 1;
      hence x in {i1} by Th59;
@@ -1575,7 +1580,8 @@ proof
            .= ((IC SCM R, il)-->(il1, I)).IC SCM R by A3,FUNCT_4:14
            .= il by A4,FUNCT_4:66;
    A7: il in dom ((IC SCM R, il)-->(il1, I)) by A1,TARSKI:def 2;
-          a <> il by Th2;
+   il in the Instruction-Locations of SCM R;
+       then a <> il by Th2;
        then not il in dom (a .--> 0R) by A2,TARSKI:def 1;
    then A8: v.il = u.il by FUNCT_4:12
            .= ((IC SCM R, il)-->(il1, I)).il by A7,FUNCT_4:14
@@ -1624,6 +1630,8 @@ A1:  x in {i1, Next il};
 A2:ObjectKind a = (SCM-OK R).a' by SCMRING2:def 1
       .= the carrier of R by SCMRING1:5;
    A3: IC SCM R <> il by AMI_1:48;
+   il in the Instruction-Locations of SCM R;
+   then
 A4:   a <> il by Th2;
 A5:   IC SCM R <> a by Th3;
    set F = {IC Following s where s is State of SCM R:
@@ -1687,8 +1695,11 @@ set X = { NIC(a=0_goto i1, il) : not contradiction };
   let x be set;
   hereby assume
   A1: x in meet X;
-      reconsider il1 = il.1, il2 = il.2 as Instruction-Location of SCM R
+    il.1 is Element of the Instruction-Locations of SCM R &
+    il.2 is Element of the Instruction-Locations of SCM R
        by AMI_3:def 1,SCMRING2:def 1;
+    then reconsider il1 = il.1, il2 = il.2 as Instruction-Location of SCM R
+                             by AMI_1:def 4;
          NIC(a=0_goto i1, il1) in X & NIC(a=0_goto i1, il2) in X;
   then A2: x in NIC(a=0_goto i1, il1) & x in NIC(a=0_goto i1, il2)
        by A1,SETFAM_1:def 1;
@@ -1804,13 +1815,13 @@ proof
 end;
 
 theorem Th65:
- for f being Function of NAT, the Instruction-Locations of SCM R
+ for f being IL-Function of NAT, SCM R
    st for k being Element of NAT holds f.k = il.k holds
   f is bijective &
   for k being Element of NAT holds f.(k+1) in SUCC (f.k) &
    for j being Element of NAT st f.j in SUCC (f.k) holds k <= j
   proof
-    let f be Function of NAT, the Instruction-Locations of SCM R such that
+    let f be IL-Function of NAT, SCM R such that
 A1:   for k being Element of NAT holds f.k = il.k;
 A2: the Instruction-Locations of SCM
     = the Instruction-Locations of SCM R by AMI_3:def 1,SCMRING2:def 1;
@@ -1830,8 +1841,12 @@ A3:   f is bijective
      thus rng f c= the Instruction-Locations of SCM R by RELSET_1:12;
      thus the Instruction-Locations of SCM R c= rng f proof
      let x be set; assume x in the Instruction-Locations of SCM R;
-      then consider i being Element of NAT such that
-    A6: x = il.i by A2,AMI_5:19;
+      then x in SCM-Instr-Loc by SCMRING2:def 1;
+      then x in the Instruction-Locations of SCM by AMI_3:def 1;
+      then reconsider l=x as Instruction-Location of SCM by AMI_1:def 4;
+      consider i being Element of NAT such that
+
+    A6: l = il.i by AMI_5:19;
            dom f = NAT by FUNCT_2:def 1;
         then il.i = f.i & i in dom f by A1;
     hence x in rng f by A6,FUNCT_1:def 5;
@@ -1872,7 +1887,7 @@ coherence
 A1:   for k being Element of NAT holds f.k = U(k) from FUNCT_2:sch 4;
        the Instruction-Locations of SCM
      = the Instruction-Locations of SCM R by AMI_3:def 1,SCMRING2:def 1;
-    then reconsider f as Function of NAT, the Instruction-Locations of SCM R;
+    then reconsider f as IL-Function of NAT, SCM R by AMI_1:def 36;
        for k being Element of NAT holds f.k = il.k by A1;
     then f is bijective &
      for k being Element of NAT holds f.(k+1) in SUCC (f.k) &
@@ -1889,13 +1904,13 @@ theorem Th66:
 A1:   for k being Element of NAT holds f.k = U(k) from FUNCT_2:sch 4;
        the Instruction-Locations of SCM
      = the Instruction-Locations of SCM R by AMI_3:def 1,SCMRING2:def 1;
-    then reconsider f as Function of NAT, the Instruction-Locations of SCM R;
+    then reconsider f as IL-Function of NAT, SCM R by AMI_1:def 36;
 A2:  for k being Element of NAT holds f.k = il.k by A1;
 then A3:  f is bijective by Th65;
 A4:  for k being Element of NAT holds f.(k+1) in SUCC (f.k) &
       for j being Element of NAT st f.j in SUCC (f.k) holds k <= j by A2,Th65;
     reconsider k as Element of NAT by ORDINAL1:def 13;
-       ex f being Function of NAT, the Instruction-Locations of SCM R st
+       ex f being IL-Function of NAT, SCM R st
      f is bijective &
      (for m, n being Element of NAT holds m <= n iff f.m <= f.n) &
      il.k = f.k
@@ -1983,6 +1998,8 @@ A2:    o <> IC S;
 A3:    I = goto i2 by A1,Th22;
     per cases by A2,Th5;
     suppose o in the Instruction-Locations of S;
+     then reconsider l=o as Instruction-Location of S by AMI_1:def 4;
+     l=o;
     hence Exec(I, s).o = s.o by AMI_1:def 13;
     end;
     suppose o is Data-Location of R;
@@ -2015,6 +2032,8 @@ A2:    o <> IC S;
 A3:    I = (b =0_goto i2) by A1,Th23;
     per cases by A2,Th5;
     suppose o in the Instruction-Locations of S;
+     then reconsider l=o as Instruction-Location of S by AMI_1:def 4;
+     l = o;
     hence Exec(I, s).o = s.o by AMI_1:def 13;
     end;
     suppose o is Data-Location of R;

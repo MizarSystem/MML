@@ -39,6 +39,20 @@ reserve P,R for Relation of X,Y;
 
 canceled 3;
 
+definition let X,Y,R,Z;
+ redefine pred R c= Z means
+:: RELSET_1:def 2
+ for x being Element of X, y being Element of Y
+   holds [x,y] in R implies [x,y] in Z;
+end;
+
+definition let X,Y,P,R;
+ redefine pred P = R means
+:: RELSET_1:def 3
+ for x being Element of X, y being Element of Y
+   holds [x,y] in P iff [x,y] in R;
+end;
+
 theorem :: RELSET_1:4
   A c= R implies A is Relation of X,Y;
 
@@ -178,7 +192,7 @@ scheme :: RELSET_1:sch 1
  ex R being Relation of A(),B() st
    for x,y holds [x,y] in R iff x in A() & y in B() & P[x,y];
 
-:: Relation on the set
+:: Relation on a set
 
 definition let X;
   mode Relation of X is Relation of X,X;
@@ -244,4 +258,25 @@ theorem :: RELSET_1:54
  for N being set, R,S being Relation of N
   st for i being set st i in N holds Im(R,i) = Im(S,i)
  holds R = S;
+
+:: from AMI_3, 2007.06.13, A.T. (generalized)
+
+scheme :: RELSET_1:sch 4
+ {A,B() -> set, P[set,set], P,R()->Relation of A(), B()}:
+ P() = R()
+ provided
+ for p being Element of A(), q being Element of B()
+      holds [p,q] in P() iff P[p,q] and
+ for p being Element of A(), q being Element of B()
+      holds [p,q] in R() iff P[p,q];
+
+:: missing, 2007.06.14, A.T.
+
+registration let X,Y,Z; let f be Relation of [:X,Y:], Z;
+ cluster dom f -> Relation-like;
+end;
+
+registration let X,Y,Z; let f be Relation of X, [:Y, Z:];
+ cluster rng f -> Relation-like;
+end;
 

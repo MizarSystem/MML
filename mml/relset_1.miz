@@ -47,6 +47,50 @@ reserve P,R for Relation of X,Y;
 
 canceled 3;
 
+definition let X,Y,R,Z;
+ redefine pred R c= Z means
+:Def2: for x being Element of X, y being Element of Y
+   holds [x,y] in R implies [x,y] in Z;
+ compatibility
+  proof
+   thus R c= Z implies for x being Element of X, y being Element of Y
+      holds [x,y] in R implies [x,y] in Z;
+   assume A1: for x being Element of X, y being Element of Y holds
+     [x,y] in R implies [x,y] in Z;
+   let a,b be set;
+   assume A2: [a,b] in R;
+    then reconsider a'=a as Element of X by ZFMISC_1:106;
+    reconsider b'=b as Element of Y by A2,ZFMISC_1:106;
+    [a',b'] in Z by A1,A2;
+   hence [a,b] in Z;
+  end;
+end;
+
+definition let X,Y,P,R;
+ redefine pred P = R means
+:Def3: for x being Element of X, y being Element of Y
+   holds [x,y] in P iff [x,y] in R;
+ compatibility
+  proof
+   thus P = R implies for x being Element of X, y being Element of Y
+      holds [x,y] in P iff [x,y] in R;
+   assume A1: for x being Element of X, y being Element of Y holds
+     [x,y] in P iff [x,y] in R;
+    let a,b be set;
+    hereby assume A2: [a,b] in P;
+      then reconsider a'=a as Element of X by ZFMISC_1:106;
+      reconsider b'=b as Element of Y by A2,ZFMISC_1:106;
+          [a',b'] in R by A1,A2;
+      hence [a,b] in R;
+    end;
+    assume A3: [a,b] in R;
+    then reconsider a'=a as Element of X by ZFMISC_1:106;
+    reconsider b'=b as Element of Y by A3,ZFMISC_1:106;
+        [a',b'] in P by A1,A3;
+    hence [a,b] in P;
+  end;
+end;
+
 theorem
   A c= R implies A is Relation of X,Y
  proof assume A c= R; then A c= [:X,Y:] by XBOOLE_1:1;
@@ -542,19 +586,17 @@ proof
 A1: for x,y holds [x,y] in R iff x in A() & y in B() & P[x,y]
                                            from RELAT_1:sch 1;
      R c= [:A(),B():]
-     proof let x; assume
-  A2:   x in R;
-       then consider x1,x2 being set such that
-  A3:  x = [x1,x2] by RELAT_1:def 1;
-       x1 in A() & x2 in B() by A1,A2,A3;
-       hence x in [:A(),B():] by A3,ZFMISC_1:106;
+     proof let x1,x2 be set; assume
+  A2:   [x1,x2] in R;
+       x1 in A() & x2 in B() by A1,A2;
+       hence [x1,x2] in [:A(),B():] by ZFMISC_1:106;
      end;
     then reconsider R as Relation of A(),B() by Def1;
     take R;
     thus for x,y holds [x,y] in R iff x in A() & y in B() & P[x,y] by A1;
   end;
 
-:: Relation on the set
+:: Relation on a set
 
 definition let X;
   mode Relation of X is Relation of X,X;
@@ -744,7 +786,7 @@ theorem
  holds R = S
 proof let N be set, R,S be Relation of N such that
 A1: for i being set st i in N holds Im(R,i) = Im(S,i);
- let a,b be set;
+ let a,b be Element of N;
  thus [a,b] in R implies [a,b] in S
   proof assume
 A2:  [a,b] in R;
@@ -769,5 +811,31 @@ A7:  [e,b] in R and
 A8:  e in {a} by RELAT_1:def 13;
     e = a by A8,TARSKI:def 1;
    hence [a,b] in R by A7;
+end;
+
+:: from AMI_3, 2007.06.13, A.T. (generalized)
+
+scheme {A,B() -> set, P[set,set], P,R()->Relation of A(), B()}:
+ P() = R()
+ provided
+A1: for p being Element of A(), q being Element of B()
+      holds [p,q] in P() iff P[p,q] and
+A2: for p being Element of A(), q being Element of B()
+      holds [p,q] in R() iff P[p,q]
+proof let y be Element of A(), z be Element of B();
+  [y,z] in P() iff P[y,z] by A1;
+ hence thesis by A2;
+end;
+
+:: missing, 2007.06.14, A.T.
+
+registration let X,Y,Z; let f be Relation of [:X,Y:], Z;
+ cluster dom f -> Relation-like;
+ coherence;
+end;
+
+registration let X,Y,Z; let f be Relation of X, [:Y, Z:];
+ cluster rng f -> Relation-like;
+ coherence;
 end;
 

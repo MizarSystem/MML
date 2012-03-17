@@ -45,10 +45,10 @@ theorem Th3:
   A c= R implies A is Relation-like
  proof assume A1: x in A implies x in R;
    thus x in A implies ex y,z st x = [y,z]
-     proof assume x in A;
-       then x in R by A1;
-       hence thesis by Def1;
-     end;
+   proof assume x in A;
+     then x in R by A1;
+     hence thesis by Def1;
+   end;
  end;
 
 theorem Th4:
@@ -61,7 +61,7 @@ theorem Th4:
     end;
  end;
 
-theorem
+theorem Th5:
   {[a,b],[c,d]} is Relation-like
  proof
    thus x in {[a,b],[c,d]} implies ex y,z st x = [y,z]
@@ -73,9 +73,23 @@ theorem
 
 theorem Th6:
   [:X,Y:] is Relation-like
- proof
-  thus a in [:X,Y:] implies ex x,y st a = [x,y] by ZFMISC_1:102;
+ proof let z;
+  assume z in [:X,Y:];
+   then ex x,y st x in X & y in Y & [x,y]=z by ZFMISC_1:def 2;
+  hence thesis;
  end;
+
+registration let a, b be set;
+  cluster {[a,b]} -> Relation-like;
+  coherence by Th4;
+  cluster [:a,b:] -> Relation-like;
+  coherence by Th6;
+end;
+
+registration let a, b, c, d be set;
+  cluster {[a,b],[c,d]} -> Relation-like;
+  coherence by Th5;
+end;
 
 scheme RelExistence{A,B() -> set, P[set,set]}:
   ex R being Relation st
@@ -188,28 +202,26 @@ registration let P,R;
  end;
 end;
 
-definition let P,R;
- redefine pred P c= R means
-:Def3: for a,b holds [a,b] in P implies [a,b] in R;
+definition let P,A;
+ redefine pred P c= A means
+:Def3: for a,b holds [a,b] in P implies [a,b] in A;
  compatibility
  proof
-  thus P c= R implies (for a,b holds [a,b] in P implies [a,b] in R);
-  thus (for a,b holds [a,b] in P implies [a,b] in R) implies P c= R
+  thus P c= A implies (for a,b holds [a,b] in P implies [a,b] in A);
+  thus (for a,b holds [a,b] in P implies [a,b] in A) implies P c= A
   proof
-  assume A1: for a,b holds [a,b] in P implies [a,b] in R;
-  now let x;
+  assume A1: for a,b holds [a,b] in P implies [a,b] in A;
+  let x;
    assume A2: x in P;
    then ex y,z st x = [y,z] by Def1;
-   hence x in R by A1,A2;
-  end;
-  hence thesis by TARSKI:def 3;
+   hence x in A by A1,A2;
   end;
   end;
 end;
 
 canceled 2;
 
-theorem Th9:
+theorem
   X /\ R is Relation
  proof X /\ R c= R by XBOOLE_1:17;
    hence thesis by Th3;
@@ -314,7 +326,7 @@ definition let R;
 A1:  for y holds y in Y iff y in union(union R) & Q[y] from XBOOLE_0:sch 1;
     take Y;
     let y;
-       (ex x st [x,y] in R) implies y in union(union R) by Lm1;
+    (ex x st [x,y] in R) implies y in union union R by Lm1;
     hence thesis by A1;
   end;
  uniqueness
@@ -334,7 +346,7 @@ end;
 canceled 2;
 
 theorem
-     x in dom R implies ex y st y in rng R
+  x in dom R implies ex y st y in rng R
  proof assume x in dom R;
    then consider y such that
 A1: [x,y] in R by Def4;
@@ -357,12 +369,10 @@ theorem
 theorem Th21:
   R c= [:dom R, rng R:]
  proof
-   let x;
-     assume A1: x in R;
-     then consider y,z such that
- A2: x = [y,z] by Def1;
-     y in dom R & z in rng R by A1,A2,Def4,Def5;
-     hence x in [:dom R, rng R:] by A2,ZFMISC_1:106;
+   let y,z;
+     assume A1: [y,z] in R;
+     y in dom R & z in rng R by A1,Def4,Def5;
+     hence [y,z] in [:dom R, rng R:] by ZFMISC_1:106;
  end;
 
 theorem
@@ -528,7 +538,7 @@ theorem
 definition let R;
   func field R -> set equals
   dom R \/ rng R;
-  correctness;
+  coherence;
 end;
 
 canceled;
@@ -538,29 +548,24 @@ theorem
  proof
    assume A1: [a,b] in R;
    then a in dom R by Def4;
-   then a in dom R \/ rng R by XBOOLE_0:def 2;
-   hence a in field R;
+   hence a in field R by XBOOLE_0:def 2;
    b in rng R by A1,Def5;
-   then b in dom R \/ rng R by XBOOLE_0:def 2;
-   hence b in field R;
+   hence b in field R by XBOOLE_0:def 2;
  end;
 
 theorem
   P c= R implies field P c= field R
- proof assume P c= R;
+  proof assume P c= R;
     then dom P c= dom R & rng P c= rng R by Th25;
-    then dom P \/ rng P c= dom R \/ rng R by XBOOLE_1:13;
-    then field P c= dom R \/ rng R;
-    hence thesis;
- end;
+    hence thesis by XBOOLE_1:13;
+  end;
 
 theorem
-  R = {[x,y]} implies field R = {x,y}
- proof assume R = {[x,y]};
-    then A1: dom R = {x} & rng R = {y} by Th23;
-    {x} \/ {y} = {x,y} by ENUMSET1:41;
-    hence thesis by A1;
- end;
+  field {[x,y]} = {x,y}
+  proof set R = {[x,y]};
+    dom R = {x} & rng R = {y} by Th23;
+    hence thesis by ENUMSET1:41;
+  end;
 
 theorem
   field(P \/ R) = field P \/ field R
@@ -575,7 +580,6 @@ theorem
 theorem
   field(P /\ R) c= field P /\ field R
  proof let x; assume x in field(P /\ R);
-   then x in dom(P /\ R) \/ rng(P /\ R);
    then A1: x in dom(P /\ R) or x in rng(P /\ R) by XBOOLE_0:def 2;
 A2:   dom(P /\ R) c= dom P /\ dom R by Th14;
 A3:   rng(P /\ R) c= rng P /\ rng R by Th27;
@@ -584,8 +588,7 @@ A3:   rng(P /\ R) c= rng P /\ rng R by Th27;
           by XBOOLE_0:def 3;
     then x in dom P /\ dom R or x in rng P /\ rng R implies
        x in dom P \/ rng P & x in dom R \/ rng R by XBOOLE_0:def 2;
-    then x in field P & x in field R by A1,A2,A3;
-    hence x in field P /\ field R by XBOOLE_0:def 3;
+    hence x in field P /\ field R by XBOOLE_0:def 3,A1,A2,A3;
  end;
 
 ::                  CONVERSE RELATION
@@ -628,30 +631,30 @@ theorem Th37:
     assume u in rng R;
      then consider x such that
 A1:    [x,u] in R by Def5;
-        [u,x] in R~ by A1,Def7;
+    [u,x] in R~ by A1,Def7;
     hence u in dom(R~) by Def4;
    end;
   thus dom(R~) c= rng R
    proof let u be set;
     assume u in dom(R~);
-     then consider x such that
-A2:    [u,x] in R~ by Def4;
-        [x,u] in R by A2,Def7;
+    then consider x such that
+A2: [u,x] in R~ by Def4;
+    [x,u] in R by A2,Def7;
     hence u in rng R by Def5;
    end;
   thus dom R c= rng(R~)
    proof let u be set;
     assume u in dom R;
      then consider x such that
-A3:    [u,x] in R by Def4;
-        [x,u] in R~ by A3,Def7;
+A3:  [u,x] in R by Def4;
+     [x,u] in R~ by A3,Def7;
     hence u in rng(R~) by Def5;
    end;
   let u be set;
   assume u in rng(R~);
    then consider x such that
-A4:  [x,u] in R~ by Def5;
-      [u,x] in R by A4,Def7;
+A4:[x,u] in R~ by Def5;
+   [u,x] in R by A4,Def7;
   hence u in dom R by Def4;
  end;
 
@@ -705,7 +708,7 @@ theorem
 ::               ________________________
 
 definition let P,R;
-   func P*R -> Relation means
+  func P*R -> Relation means
 :Def8: [x,y] in it iff ex z st [x,z] in P & [z,y] in R;
  existence
   proof
@@ -724,9 +727,9 @@ A2: [x,z] in P & [z,y] in R;
  uniqueness
   proof let P1,P2;
    assume that A3: [x,y] in P1 iff ex z st [x,z] in P & [z,y] in R and
-               A4: [x,y] in P2 iff ex z st [x,z] in P & [z,y] in R;
-      now let x,y;
-        [x,y] in P1 iff ex z st [x,z] in P & [z,y] in R by A3;
+   A4: [x,y] in P2 iff ex z st [x,z] in P & [z,y] in R;
+   now let x,y;
+    [x,y] in P1 iff ex z st [x,z] in P & [z,y] in R by A3;
     hence [x,y] in P1 iff [x,y] in P2 by A4;
    end;
   hence P1=P2 by Def2;
@@ -739,10 +742,10 @@ theorem Th44:
   dom(P*R) c= dom P
  proof
    let x;
-     assume x in dom(P*R);
-     then consider y such that A1: [x,y] in P*R by Def4;
-     ex z st [x,z] in P & [z,y] in R by A1,Def8;
-     hence x in dom P by Def4;
+   assume x in dom(P*R);
+   then consider y such that A1: [x,y] in P*R by Def4;
+   ex z st [x,z] in P & [z,y] in R by A1,Def8;
+   hence x in dom P by Def4;
  end;
 
 theorem Th45:
@@ -774,13 +777,13 @@ theorem
  proof assume
    A1: for y st y in dom P holds y in rng R;
    thus rng(R*P) c= rng P by Th45;
-     let z; assume z in rng P;
-       then consider y such that A2: [y,z] in P by Def5;
-       y in dom P by A2,Def4;
-       then y in rng R by A1;
-       then consider x such that A3: [x,y] in R by Def5;
-       [x,z] in R*P by A2,A3,Def8;
-       hence z in rng(R*P) by Def5;
+   let z; assume z in rng P;
+   then consider y such that A2: [y,z] in P by Def5;
+   y in dom P by A2,Def4;
+   then y in rng R by A1;
+   then consider x such that A3: [x,y] in R by Def5;
+   [x,z] in R*P by A2,A3,Def8;
+   hence z in rng(R*P) by Def5;
  end;
 
 theorem Th48:
@@ -835,9 +838,9 @@ A1: now assume [x,y] in P*(R \/ Q);
           [z,y] in R \/ Q by A5,XBOOLE_0:def 2;
           hence [x,y] in P*(R \/ Q) by A5,Def8;
         end;
-           now assume [x,y] in P*Q;
+        now assume [x,y] in P*Q;
           then consider z such that A6: [x,z] in P & [z,y] in Q by Def8;
-             [z,y] in R \/ Q by A6,XBOOLE_0:def 2;
+          [z,y] in R \/ Q by A6,XBOOLE_0:def 2;
           hence [x,y] in P*(R \/ Q) by A6,Def8;
         end;
       hence [x,y] in P*(R \/ Q) by A3,A4,XBOOLE_0:def 2;
@@ -853,7 +856,7 @@ theorem
      now let x,y;
     now assume [x,y] in P*(R /\ Q);
       then consider z such that A1: [x,z] in P & [z,y] in R /\ Q by Def8;
-         [z,y] in R & [z,y] in Q by A1,XBOOLE_0:def 3;
+      [z,y] in R & [z,y] in Q by A1,XBOOLE_0:def 3;
       then [x,y] in P*R & [x,y] in P*Q by A1,Def8;
       hence [x,y] in (P*R) /\ (P*Q) by XBOOLE_0:def 3;
     end;
@@ -908,10 +911,10 @@ theorem Th55:
       now let a,b;
   A1: now assume [a,b] in (P*R)*Q;
         then consider y such that
-            A2: [a,y] in P*R & [y,b] in Q by Def8;
-            consider x such that
-            A3: [a,x] in P & [x,y] in R by A2,Def8;
-               [x,b] in R*Q by A2,A3,Def8;
+        A2: [a,y] in P*R & [y,b] in Q by Def8;
+        consider x such that
+        A3: [a,x] in P & [x,y] in R by A2,Def8;
+        [x,b] in R*Q by A2,A3,Def8;
         hence [a,b] in P*(R*Q) by A3,Def8;
       end;
          now assume [a,b] in P*(R*Q);
@@ -940,15 +943,15 @@ registration
 end;
 
 registration
- cluster {} -> Relation-like;
-coherence;
+  cluster {} -> Relation-like;
+  coherence;
 end;
 
 registration
   cluster non empty Relation;
   existence
   proof
-    reconsider X = {[0,0]} as Relation by Th4;
+    reconsider X = {[0,0]} as Relation;
      X is non empty;
     hence thesis;
   end;
@@ -1001,7 +1004,7 @@ theorem Th60:
    end;
    thus rng {} = {}
    proof
-        now let y be set;
+     now let y be set;
        now assume y in rng({});
          then ex x st [x,y] in {} by Def5;
          hence contradiction;
@@ -1065,7 +1068,7 @@ theorem
 theorem Th66:
   {}~ = {}
  proof
-     for x,y st [x,y] in {}~ holds contradiction by Def7;
+  for x,y st [x,y] in {}~ holds contradiction by Def7;
   hence thesis by Th56;
  end;
 
@@ -1107,9 +1110,8 @@ registration let R be Relation, S be non-empty Relation;
  cluster R*S -> non-empty;
  coherence
   proof
-A1: rng(R*S) c= rng S by Th45;
-    not {} in rng S by Def9;
-   hence not {} in rng(R*S) by A1;
+   rng(R*S) c= rng S by Th45;
+   hence not {} in rng(R*S) by Def9;
   end;
 end;
 
@@ -1117,7 +1119,7 @@ end;
 ::             _________________
 
 definition let X;
-   func id X -> Relation means
+  func id X -> Relation means
 :Def10: [x,y] in it iff x in X & x = y;
   existence
   proof
@@ -1132,8 +1134,8 @@ A1: for x,y holds [x,y] in R iff x in X & y in X & Z[x,y] from RelExistence;
   proof let P1,P2;
    assume that A2: [x,y] in P1 iff x in X & x=y and
                A3: [x,y] in P2 iff x in X & x=y;
-       now let x,y;
-               [x,y] in P1 iff x in X & x=y by A2;
+    now let x,y;
+     [x,y] in P1 iff x in X & x=y by A2;
      hence [x,y] in P1 iff [x,y] in P2 by A3;
     end;
    hence P1=P2 by Def2;
@@ -1152,7 +1154,7 @@ theorem Th71:
          then ex y st [x,y] in id X by Def4;
          hence x in X by Def10;
        end;
-          now assume x in X;
+       now assume x in X;
          then [x,x] in id X by Def10;
          hence x in dom(id X) by Def4;
        end;
@@ -1165,13 +1167,13 @@ theorem Th71:
      x in rng id X iff x in X
      proof
        thus x in rng id X implies x in X
-         proof assume x in rng id X;
-           then consider y such that
-     A2:   [y,x] in id X by Def5;
-              x=y by A2,Def10;
-           hence thesis by A2,Def10;
-         end;
-          [x,x] in id X iff x in X by Def10;
+       proof assume x in rng id X;
+         then consider y such that
+   A2:   [y,x] in id X by Def5;
+         x=y by A2,Def10;
+         hence thesis by A2,Def10;
+       end;
+       [x,x] in id X iff x in X by Def10;
        hence thesis by Def5;
     end;
     hence rng id X = X by TARSKI:2;
@@ -1184,17 +1186,15 @@ theorem
    [x,y] in (id X)~ iff [x,y] in id X
    proof
     thus [x,y] in (id X)~ implies [x,y] in id X
-     proof assume A1: [x,y] in (id X)~;
+     proof assume [x,y] in (id X)~;
        then [y,x] in id X by Def7;
-       then x = y by Def10;
-       hence thesis by A1,Def7;
+       hence thesis by Def10;
      end;
    thus [x,y] in id X implies [x,y] in (id X)~
-     proof assume A2: [x,y] in id X;
-
-       then x = y by Def10;
-       hence thesis by A2,Def7;
-     end;
+   proof assume A2: [x,y] in id X;
+     then x = y by Def10;
+     hence thesis by A2,Def7;
+   end;
   end;
   hence thesis by Def2;
  end;
@@ -1230,10 +1230,10 @@ theorem Th75:
     proof assume [x,y] in R*id Y;
        then consider z such that
     A1: [x,z] in R & [z,y] in id Y by Def8;
-           z = y & z in Y by A1,Def10;
+       z = y & z in Y by A1,Def10;
        hence thesis by A1;
     end;
-      y in Y implies [y,y] in id Y by Def10;
+    y in Y implies [y,y] in id Y by Def10;
    hence thesis by Def8;
  end;
 
@@ -1341,14 +1341,14 @@ theorem Th86:
    thus x in dom(R|X) implies x in X & x in dom R
     proof assume x in dom(R|X);
      then consider y such that A1: [x,y] in R|X by Def4;
-        [x,y] in R & x in X by A1,Def11;
+     [x,y] in R & x in X by A1,Def11;
      hence thesis by Def4;
     end;
    assume
 A2:    x in X;
    assume x in dom R;
    then consider y such that A3: [x,y] in R by Def4;
-      [x,y] in R|X by A2,A3,Def11;
+   [x,y] in R|X by A2,A3,Def11;
    hence thesis by Def4;
  end;
 
@@ -1435,7 +1435,7 @@ A1:   R|X = {};
 theorem Th96:
   R|X = R /\ [:X,rng R:]
  proof
-   reconsider P=R /\ [:X,rng R:] as Relation by Th9;
+   reconsider P=R /\ [:X,rng R:] as Relation;
       [x,y] in R|X iff [x,y] in P
     proof
      thus [x,y] in R|X implies [x,y] in P
@@ -1587,14 +1587,13 @@ A1: now
      then x in X \ Y & [x,y] in R by Def11;
      then A2: x in X & not x in Y & [x,y] in R by XBOOLE_0:def 4;
      then A3: [x,y] in R|X by Def11;
-             not [x,y] in R|Y by A2,Def11;
+     not [x,y] in R|Y by A2,Def11;
      hence [x,y] in R|X \ R|Y by A3,XBOOLE_0:def 4;
     end;
-       now
-     assume [x,y] in R|X \ R|Y;
+    now assume [x,y] in R|X \ R|Y;
      then A4: [x,y] in R|X & not [x,y] in R|Y by XBOOLE_0:def 4;
      then A5: x in X & [x,y] in R by Def11;
-             not x in Y or not [x,y] in R by A4,Def11;
+    not x in Y or not [x,y] in R by A4,Def11;
     then x in X \ Y & [x,y] in R by A5,XBOOLE_0:def 4;
     hence [x,y] in R|(X \ Y) by Def11;
    end;
@@ -1606,7 +1605,7 @@ A1: now
 theorem Th110:
   R|{} = {}
  proof
-     not [x,y] in R|{} by Def11;
+  not [x,y] in R|{} by Def11;
   hence thesis by Th56;
  end;
 
@@ -1625,13 +1624,13 @@ A1:  now
        assume [x,y] in (P*R)|X;
        then A2: x in X & [x,y] in P*R by Def11;
        then consider a such that A3: [x,a] in P & [a,y] in R by Def8;
-             [x,a] in P|X by A2,A3,Def11;
+       [x,a] in P|X by A2,A3,Def11;
        hence [x,y] in (P|X)*R by A3,Def8;
      end;
-        now
+     now
        assume [x,y] in (P|X)*R;
        then consider a such that A4: [x,a] in P|X & [a,y] in R by Def8;
-          A5: x in X & [x,a] in P by A4,Def11;
+       A5: x in X & [x,a] in P by A4,Def11;
        then [x,y] in P*R by A4,Def8;
        hence [x,y] in (P*R)|X by A5,Def11;
     end;
@@ -1659,7 +1658,7 @@ A1: for x,y holds [x,y] in P iff x in dom R & y in rng R &
    assume that A2: [x,y] in P1 iff y in Y & [x,y] in R and
                A3: [x,y] in P2 iff y in Y & [x,y] in R;
        now let x,y;
-               [x,y] in P1 iff y in Y & [x,y] in R by A2;
+       [x,y] in P1 iff y in Y & [x,y] in R by A2;
      hence [x,y] in P1 iff [x,y] in P2 by A3;
     end;
    hence P1 = P2 by Def2;
@@ -1744,7 +1743,7 @@ theorem
 theorem Th124:
   Y|R = R /\ [:dom R,Y:]
  proof
-   reconsider P = R /\ [:dom R,Y:] as Relation by Th9;
+   reconsider P = R /\ [:dom R,Y:] as Relation;
       [x,y] in Y|R iff [x,y] in P
     proof
      thus [x,y] in Y|R implies [x,y] in P
@@ -1808,7 +1807,7 @@ theorem Th131:
 A1:  X c= Y;
       [x,y] in X|R implies [x,y] in Y|R
     proof
-         ([x,y] in X|R iff [x,y] in R & y in X) &
+      ([x,y] in X|R iff [x,y] in R & y in X) &
       ([x,y] in Y|R iff [x,y] in R & y in Y) by Def12;
       hence thesis by A1;
     end;
@@ -1947,7 +1946,7 @@ A1:  for y holds y in Y iff
     thus y in Y implies ex x st [x,y] in R & x in X by A1;
     given x such that
 A2:  [x,y] in R & x in X;
-        y in rng R by A2,Def5;
+    y in rng R by A2,Def5;
     hence y in Y by A1,A2;
    end;
 
@@ -2003,10 +2002,10 @@ A2:       [x,y] in R & x in X by Th143;
        end;
       assume y in R.:(dom R /\ X);
       then consider x such that
-          x in dom R and
-A3:       [x,y] in R & x in dom R /\ X by Th143;
-          x in X by A3,XBOOLE_0:def 3;
-       hence thesis by A3,Def13;
+      x in dom R and
+A3:   [x,y] in R & x in dom R /\ X by Th143;
+      x in X by A3,XBOOLE_0:def 3;
+      hence thesis by A3,Def13;
     end;
    hence thesis by TARSKI:2;
  end;
@@ -2020,7 +2019,7 @@ theorem Th146:
      assume y in rng R;
      then consider x such that
 A2:  [x,y] in R by Def5;
-        x in dom R by A2,Def4;
+     x in dom R by A2,Def4;
      hence thesis by A2,Def13;
    end;
    hence thesis by A1,XBOOLE_0:def 10;
@@ -2057,8 +2056,8 @@ theorem
    consider y being Element of R.:{};
    assume
 A1: not thesis;
-        y in R.:{} iff ex x st [x,y] in R & x in {} by Def13;
-      hence thesis by A1;
+    y in R.:{} iff ex x st [x,y] in R & x in {} by Def13;
+    hence thesis by A1;
  end;
 
 theorem
@@ -2115,15 +2114,14 @@ theorem
         hence y in R.:X \/ R.:Y by XBOOLE_0:def 2;
       end;
          now assume A3: y in R.:X \/ R.:Y;
-
   A4:  now assume y in R.:X;
           then consider x such that A5: [x,y] in R & x in X by Def13;
-                x in X \/ Y & [x,y] in R by A5,XBOOLE_0:def 2;
+          x in X \/ Y & [x,y] in R by A5,XBOOLE_0:def 2;
           hence y in R.:(X \/ Y) by Def13;
         end;
-           now assume y in R.:Y;
+        now assume y in R.:Y;
           then consider x such that A6: [x,y] in R & x in Y by Def13;
-                x in X \/ Y & [x,y] in R by A6,XBOOLE_0:def 2;
+          x in X \/ Y & [x,y] in R by A6,XBOOLE_0:def 2;
           hence y in R.:(X \/ Y) by Def13;
         end;
         hence y in R.:(X \/ Y) by A3,A4,XBOOLE_0:def 2;
@@ -2139,7 +2137,7 @@ theorem
    let y;
      assume y in R.:(X /\ Y);
      then consider x such that A1: [x,y] in R & x in X /\ Y by Def13;
-           x in X & x in Y & [x,y] in R by A1,XBOOLE_0:def 3;
+     x in X & x in Y & [x,y] in R by A1,XBOOLE_0:def 3;
      then y in R.:X & y in R.:Y by Def13;
      hence y in R.:X /\ R.:Y by XBOOLE_0:def 3;
  end;
@@ -2148,11 +2146,11 @@ theorem
   R.:X \ R.:Y c= R.:(X \ Y)
  proof
    let y; assume y in R.:X \ R.:Y;
-     then A1: y in R.:X & not y in R.:Y by XBOOLE_0:def 4;
-     then consider x such that A2: [x,y] in R & x in X by Def13;
-     not x in Y or not [x,y] in R by A1,Def13;
-     then x in X \ Y & [x,y] in R by A2,XBOOLE_0:def 4;
-     hence y in R.:(X \ Y) by Def13;
+   then A1: y in R.:X & not y in R.:Y by XBOOLE_0:def 4;
+   then consider x such that A2: [x,y] in R & x in X by Def13;
+   not x in Y or not [x,y] in R by A1,Def13;
+   then x in X \ Y & [x,y] in R by A2,XBOOLE_0:def 4;
+   hence y in R.:(X \ Y) by Def13;
  end;
 
 theorem Th156:
@@ -2187,7 +2185,7 @@ theorem
 theorem
   (P*R).:X=R.:(P.:X)
  proof
-      y in (P*R).:X iff y in R.:(P.:X)
+    y in (P*R).:X iff y in R.:(P.:X)
     proof
       thus y in (P*R).:X implies y in R.:(P.:X)
         proof assume y in (P*R).:X;
@@ -2206,7 +2204,7 @@ A5:   x in P.:X by Def13;
      consider z such that
 A6:   [z,x] in P and
 A7:   z in X by A5,Def13;
-        [z,y] in P*R by A4,A6,Def8;
+     [z,y] in P*R by A4,A6,Def8;
      hence thesis by A7,Def13;
     end;
    hence thesis by TARSKI:2;
@@ -2223,7 +2221,7 @@ theorem
 A1:       [x,z] in P*R by Def5;
           consider y such that
 A2:       [x,y] in P & [y,z] in R by A1,Def8;
-             y in rng P by A2,Def5;
+          y in rng P by A2,Def5;
          hence z in R.:(rng P) by A2,Def13;
        end;
       assume z in R.:(rng P);
@@ -2298,8 +2296,8 @@ A2:  [x,y] in R & y in Y;
   proof let X1,X2;
    assume that A3: x in X1 iff ex y st [x,y] in R & y in Y and
                A4: x in X2 iff ex y st [x,y] in R & y in Y;
-      now let x;
-        x in X1 iff ex y st [x,y] in R & y in Y by A3;
+   now let x;
+    x in X1 iff ex y st [x,y] in R & y in Y by A3;
     hence x in X1 iff x in X2 by A4;
    end;
   hence X1=X2 by TARSKI:2;
@@ -2362,7 +2360,7 @@ theorem Th169:
      assume x in dom R;
      then consider y such that
 A1:  [x,y] in R by Def4;
-        y in rng R by A1,Def5;
+     y in rng R by A1,Def5;
      hence thesis by A1,Def14;
  end;
 
@@ -2374,19 +2372,19 @@ theorem
   R"{} = {}
  proof
    consider x being Element of R"{};
-  assume
-A1: not thesis;
-        x in R"{} iff ex y st [x,y] in R & y in {} by Def14;
-      hence thesis by A1;
+   assume
+A1:not thesis;
+   x in R"{} iff ex y st [x,y] in R & y in {} by Def14;
+   hence thesis by A1;
  end;
 
 theorem
   {}"Y = {}
  proof
    consider x being Element of {}"Y;
-  assume not thesis;
-    then ex y st [x,y] in {} & y in Y by Def14;
-    hence contradiction;
+   assume not thesis;
+   then ex y st [x,y] in {} & y in Y by Def14;
+   hence contradiction;
  end;
 
 theorem
@@ -2430,13 +2428,13 @@ theorem
        then x in R"X or x in R"Y by Def14;
        hence x in R"X \/ R"Y by XBOOLE_0:def 2;
       end;
-         now assume A3: x in R"X \/ R"Y;
+      now assume A3: x in R"X \/ R"Y;
   A4: now assume x in R"X;
         then consider y such that A5: [x,y] in R & y in X by Def14;
             y in X \/ Y & [x,y] in R by A5,XBOOLE_0:def 2;
         hence x in R"(X \/ Y) by Def14;
        end;
-          now assume x in R"Y;
+       now assume x in R"Y;
         then consider y such that A6: [x,y] in R & y in Y by Def14;
         y in X \/ Y & [x,y] in R by A6,XBOOLE_0:def 2;
         hence x in R"(X \/ Y) by Def14;
@@ -2693,13 +2691,20 @@ registration let R be Relation;
  coherence by Th3;
 end;
 
-:: from SYSREL, 2007.04.13, A.T.
+:: from YELLOW_3, 2007.06.13, A.T.
 
-registration let X,Y;
- cluster [:X,Y:] -> Relation-like;
- correctness by Th6;
+scheme ExtensionalityR { A, B() -> Relation,
+                         P[set,set] }:
+ A() = B()
+provided
+A1: for a, b being set holds [a,b] in A() iff P[a,b] and
+A2: for a, b being set holds [a,b] in B() iff P[a,b]
+proof let y,z be set;
+ hereby assume [y,z] in A();
+   then P[y,z] by A1;
+  hence [y,z] in B() by A2;
+ end;
+ assume [y,z] in B();
+  then P[y,z] by A2;
+ hence [y,z] in A() by A1;
 end;
-
-:: missing, 2007.04.13, A.T.
-
-

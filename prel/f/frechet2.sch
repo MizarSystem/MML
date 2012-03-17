@@ -99,7 +99,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="18">
+<Pred kind="R" nr="20">
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>
@@ -197,7 +197,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="18">
+<Pred kind="R" nr="20">
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>
@@ -276,7 +276,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="18">
+<Pred kind="R" nr="20">
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>
@@ -325,7 +325,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="18">
+<Pred kind="R" nr="20">
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>
@@ -407,7 +407,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="18">
+<Pred kind="R" nr="20">
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>
@@ -456,7 +456,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="18">
+<Pred kind="R" nr="20">
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>

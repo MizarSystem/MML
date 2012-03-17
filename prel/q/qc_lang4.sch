@@ -163,7 +163,7 @@
 <Var nr="2"/>
 </Func>
 </Pred>
-<Pred kind="R" nr="17">
+<Pred kind="R" nr="19">
 <Func kind="F" nr="3">
 <Func kind="K" nr="152">
 <Func kind="F" nr="1"/>

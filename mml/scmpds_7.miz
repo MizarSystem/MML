@@ -156,7 +156,7 @@ then A2: s1.IC SCMPDS=IC s2 by AMI_1:def 15
     .=s2.IC SCMPDS by AMI_1:def 15;
 A3: dom s1 ={IC SCMPDS} \/ D \/ A by SCMPDS_4:19;
 A4: dom s2 ={IC SCMPDS} \/ D \/ A by SCMPDS_4:19;
-    then s1|{IC SCMPDS} = s2|{IC SCMPDS} by A2,A3,AMI_3:24;
+    then s1|{IC SCMPDS} = s2|{IC SCMPDS} by A2,A3,GRFUNC_1:90;
     then s1|({IC SCMPDS} \/ D) = s2| ({IC SCMPDS} \/ D) by A1,RELAT_1:185;
     then s1|({IC SCMPDS} \/ D \/ A) = s2| ({IC SCMPDS} \/ D \/
  A) by A1,RELAT_1:185;
@@ -181,7 +181,8 @@ theorem  :: S8C_Th26
 proof
    assume A1: x in dom I;
       dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
-   then reconsider y = x as Instruction-Location of SCMPDS by A1;
+   then x is Element of the Instruction-Locations of SCMPDS by A1;
+   then reconsider y = x as Instruction-Location of SCMPDS by AMI_1:def 4;
 A2: not y in dom Start-At l by SCMPDS_4:60;
       x in dom (I +* Start-At l) by A1,FUNCT_4:13;
    hence (s +* (I +* Start-At l)).x = (I +* Start-At l).x by FUNCT_4:14
@@ -646,8 +647,13 @@ proof
    set s1 = s +* Initialized stop I;
    assume I is_halting_on s;
 then A1: s1 is halting by SCMPDS_6:def 3;
-       dom (s | A)=A by SCMPDS_6:1;
-then A2: not a in dom (s | A) by SCMPDS_2:53;
+X:     dom (s | A)=A by SCMPDS_6:1;
+A2: now assume a in dom (s | A);
+      then reconsider l=a as Instruction-Location of SCMPDS
+             by X,AMI_1:def 4;
+      l=a;
+     hence contradiction by X,SCMPDS_2:53;
+    end;
     thus IExec(I,s).a = (Result s1).a by A2,FUNCT_4:12
       .= (Computation s1).(LifeSpan s1).a by A1,SCMFSA6B:16;
 end;
@@ -1161,6 +1167,9 @@ A6:  now let x be set;
          per cases by A8,SCMPDS_4:28;
          suppose A9: x in dom spJ;
                dom spJ c= A by AMI_3:def 13;
+          then reconsider l=x as Instruction-Location of SCMPDS
+                by A9,AMI_1:def 4;
+           l=x;
           hence (IsJ | D).x = ((Computation s1).m1 | D).x by A8,A9,SCMPDS_4:22
 ;
          end;
@@ -1340,6 +1349,9 @@ A6:  now let x be set;
          per cases by A8,SCMPDS_4:28;
          suppose A9: x in dom spJ;
                dom spJ c= A by AMI_3:def 13;
+          then reconsider l=x as Instruction-Location of SCMPDS
+                by A9,AMI_1:def 4;
+           l=x;
           hence (IsJ | D).x = ((Computation s1).m1 | D).x by A8,A9,SCMPDS_4:22
 ;
          end;
@@ -1810,7 +1822,12 @@ A17:    dom SAl = {IC SCMPDS} by FUNCOP_1:19;
 A18:    x is Int_position;
         then x <> IC SCMPDS by SCMPDS_2:52;
 then A19:    not x in dom SAl by A17,TARSKI:def 1;
-       not x in dom (s | A) by A7,A18,SCMPDS_2:53;
+    now assume x in dom (s | A);
+      then reconsider l=x as Instruction-Location of SCMPDS
+             by A7,AMI_1:def 4;
+      l=x;
+     hence contradiction by A7,A18,SCMPDS_2:53;
+    end;
       hence
            IExec(FOR,s).x = s4.x by A14,FUNCT_4:12
        .= s3.x by A4,A18,SCMPDS_2:69
@@ -1819,8 +1836,14 @@ then A19:    not x in dom SAl by A17,TARSKI:def 1;
       end;
       suppose
 A20:    x = IC SCMPDS;
+   now assume x in dom (s | A);
+      then reconsider l=x as Instruction-Location of SCMPDS
+             by A7,AMI_1:def 4;
+      l=x;
+     hence contradiction by A7,AMI_1:48,AMI_5:25,A20;
+    end;
         then x in dom Result s3 & not x in dom (s | A) by A7,AMI_1:48,AMI_5:25
-;
+,A20;
       hence
             IExec(FOR,s).x = s4.x by A14,FUNCT_4:12
        .= inspos(card I + 3) by A11,A20,AMI_1:def 15
@@ -1976,8 +1999,18 @@ then A30:    t2 | D = t4 | D by SCMPDS_4:23;
             t5=(Computation t4).m2,
             l1=inspos (card I + 1);
 A31:     dom (t | A) = A by SCMPDS_6:1;
-then A32:     not a in dom (t | A) by SCMPDS_2:53;
-A33:     not b in dom (t | A) by A31,SCMPDS_2:53;
+A32: now assume a in dom (t | A);
+      then reconsider l=a as Instruction-Location of SCMPDS
+             by A31,AMI_1:def 4;
+      l=a;
+     hence contradiction by A31,SCMPDS_2:53;
+    end;
+A33: now assume b in dom (t | A);
+      then reconsider l=b as Instruction-Location of SCMPDS
+             by A31,AMI_1:def 4;
+      l=b;
+     hence contradiction by A31,SCMPDS_2:53;
+    end;
            card I + 1 < card I + 3 by XREAL_1:8;
 then A34:     l1 in dom FOR by Th52;
 A35:     FOR c= iFOR by SCMPDS_6:17;
@@ -2032,7 +2065,12 @@ A51:    t8.a=s.a by A46,A49,SCMPDS_2:66;
 A52:   now
          let x be Int_position;
          assume A53:x in X;
-       A54:  not x in dom (t | A) by A31,SCMPDS_2:53;
+A54: now assume x in dom (t | A);
+      then reconsider l=x as Instruction-Location of SCMPDS
+             by A31,A53,AMI_1:def 4;
+      l=x;
+     hence contradiction by A11,A31,SCMPDS_2:53;
+    end;
            t5.x=(Computation t2).m2.x by A38,SCMPDS_4:23
             .=(Result t2).x by A18,SCMFSA6B:16
             .=IExec(I,t).x by A54,FUNCT_4:12
@@ -2239,8 +2277,18 @@ then A31:    sI | D = s4 | D by SCMPDS_4:23;
             s5=(Computation s4).mI,
             l1=inspos (card I + 1);
 A32:     dom (s | A) = A by SCMPDS_6:1;
-then A33:     not a in dom (s | A) by SCMPDS_2:53;
-A34:     not b in dom (s | A) by A32,SCMPDS_2:53;
+A33: now assume a in dom (s | A);
+      then reconsider l=a as Instruction-Location of SCMPDS
+             by A32,AMI_1:def 4;
+      l=a;
+     hence contradiction by A11,A32,SCMPDS_2:53;
+    end;
+A34: now assume b in dom (s | A);
+      then reconsider l=b as Instruction-Location of SCMPDS
+             by A32,AMI_1:def 4;
+      l=b;
+     hence contradiction by A11,A32,SCMPDS_2:53;
+    end;
            card I + 1 < card I + 3 by XREAL_1:8;
 then A35:    l1 in dom FOR by Th52;
 A36:    FOR c= iFOR by SCMPDS_6:17;
@@ -2303,7 +2351,12 @@ then A55:    s2.x=IExec(J,s).x by FUNCT_4:12;
         hence s8.x=s2.x by A51,A53,A54,FUNCT_4:12;
        end;
        suppose A56: x<>b;
-       A57:  not x in dom (s | A) by A32,SCMPDS_2:53;
+A57: now assume x in dom (s | A);
+      then reconsider l=x as Instruction-Location of SCMPDS
+             by A32,AMI_1:def 4;
+      l=x;
+     hence contradiction by A11,A32,SCMPDS_2:53;
+    end;
        A58:  s5.x=(Computation sI).mI.x by A39,SCMPDS_4:23
             .=(Result sI).x by A19,SCMFSA6B:16
             .=IExec(I,s).x by A57,FUNCT_4:12;
@@ -2591,7 +2644,12 @@ A17:    dom SAl = {IC SCMPDS} by FUNCOP_1:19;
 A18:    x is Int_position;
         then x <> IC SCMPDS by SCMPDS_2:52;
 then A19:    not x in dom SAl by A17,TARSKI:def 1;
-       not x in dom (s | A) by A7,A18,SCMPDS_2:53;
+    now assume x in dom (s | A);
+      then reconsider l=x as Instruction-Location of SCMPDS
+             by A7,AMI_1:def 4;
+      l=x;
+     hence contradiction by A7,A18,SCMPDS_2:53;
+    end;
       hence
            IExec(FOR,s).x = s4.x by A14,FUNCT_4:12
        .= s3.x by A4,A18,SCMPDS_2:68
@@ -2600,8 +2658,14 @@ then A19:    not x in dom SAl by A17,TARSKI:def 1;
       end;
       suppose
 A20:    x = IC SCMPDS;
+     now assume x in dom (s | A);
+      then reconsider l=x as Instruction-Location of SCMPDS
+             by A7,AMI_1:def 4;
+      l=x;
+     hence contradiction by A7,AMI_1:48,AMI_5:25,A20;
+    end;
         then x in dom Result s3 & not x in dom (s | A) by A7,AMI_1:48,AMI_5:25
-;
+,A20;
       hence
             IExec(FOR,s).x = s4.x by A14,FUNCT_4:12
        .= inspos(card I + 3) by A11,A20,AMI_1:def 15
@@ -2750,8 +2814,18 @@ then A28:    t2 | D = t4 | D by SCMPDS_4:23;
             t5=(Computation t4).m2,
             l1=inspos (card I + 1);
 A29:     dom (t | A) = A by SCMPDS_6:1;
-then A30:     not a in dom (t | A) by SCMPDS_2:53;
-A31:     not b in dom (t | A) by A29,SCMPDS_2:53;
+A30: now assume a in dom (t | A);
+      then reconsider l=a as Instruction-Location of SCMPDS
+             by A29,AMI_1:def 4;
+      l=a;
+     hence contradiction by A29,SCMPDS_2:53;
+    end;
+A31: now assume b in dom (t | A);
+      then reconsider l=b as Instruction-Location of SCMPDS
+             by A29,AMI_1:def 4;
+      l=b;
+     hence contradiction by A29,SCMPDS_2:53;
+    end;
            card I + 1 < card I + 3 by XREAL_1:8;
 then A32:     l1 in dom FOR by Th61;
 A33:     FOR c= iFOR by SCMPDS_6:17;
@@ -2806,7 +2880,12 @@ A49:    t8.a=s.a by A44,A47,SCMPDS_2:66;
 A50:   now
          let x be Int_position;
          assume A51:x in X;
-       A52:  not x in dom (t | A) by A29,SCMPDS_2:53;
+A52: now assume x in dom (t | A);
+      then reconsider l=x as Instruction-Location of SCMPDS
+             by A29,AMI_1:def 4;
+      l=x;
+     hence contradiction by A11,A29,SCMPDS_2:53;
+    end;
            t5.x=(Computation t2).m2.x by A36,SCMPDS_4:23
             .=(Result t2).x by A16,SCMFSA6B:16
             .=IExec(I,t).x by A52,FUNCT_4:12
@@ -3011,8 +3090,18 @@ then A31:    sI | D = s4 | D by SCMPDS_4:23;
             s5=(Computation s4).mI,
             l1=inspos (card I + 1);
 A32:     dom (s | A) = A by SCMPDS_6:1;
-then A33:     not a in dom (s | A) by SCMPDS_2:53;
-A34:     not b in dom (s | A) by A32,SCMPDS_2:53;
+A33: now assume a in dom (s | A);
+      then reconsider l=a as Instruction-Location of SCMPDS
+             by A32,AMI_1:def 4;
+      l=a;
+     hence contradiction by A11,A32,SCMPDS_2:53;
+    end;
+A34: now assume b in dom (s | A);
+      then reconsider l=b as Instruction-Location of SCMPDS
+             by A32,AMI_1:def 4;
+      l=b;
+     hence contradiction by A11,A32,SCMPDS_2:53;
+    end;
            card I + 1 < card I + 3 by XREAL_1:8;
 then A35:    l1 in dom FOR by Th61;
 A36:    FOR c= iFOR by SCMPDS_6:17;
@@ -3075,7 +3164,12 @@ then A55:    s2.x=IExec(J,s).x by FUNCT_4:12;
         hence s8.x=s2.x by A51,A53,A54,FUNCT_4:12;
        end;
        suppose A56: x<>b;
-       A57:  not x in dom (s | A) by A32,SCMPDS_2:53;
+A57: now assume x in dom (s | A);
+      then reconsider l=x as Instruction-Location of SCMPDS
+             by A32,AMI_1:def 4;
+      l=x;
+     hence contradiction by A11,A32,SCMPDS_2:53;
+    end;
        A58:  s5.x=(Computation sI).mI.x by A39,SCMPDS_4:23
             .=(Result sI).x by A19,SCMFSA6B:16
             .=IExec(I,s).x by A57,FUNCT_4:12;

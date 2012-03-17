@@ -213,7 +213,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="18">
+<Pred kind="R" nr="20">
 <Func kind="K" nr="183">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
@@ -229,7 +229,7 @@
 <Not>
 <And>
 <Not>
-<Pred kind="R" nr="18">
+<Pred kind="R" nr="20">
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
 </Pred>

@@ -173,7 +173,7 @@ end;
 
 theorem
   for x being set st x in SCM-Instr-Loc
-  holds x is Instruction-Location of SCMPDS;
+  holds x is Instruction-Location of SCMPDS by AMI_1:def 4;
 
 begin :: The Instruction Structure
 
@@ -1051,7 +1051,11 @@ then A9:   x = IC SCMPDS by TARSKI:def 1;
         then x is Int_position by Def2;
         hence g1.x = g2.x by A2,A4,A5;
      end;
-     suppose x in SCM-Instr-Loc; hence g1.x = g2.x by A3,A4,A5;
+     suppose
+S:     x in SCM-Instr-Loc;
+       then reconsider l = x as Instruction-Location of SCMPDS by AMI_1:def 4;
+       g1.l = g2.l by A3,A4,A5;
+      hence g1.x = g2.x by A3,A4,A5;
     end;
     end;
     hence s1 = s2 by A4,A5,A6,FUNCT_1:9;
@@ -1062,7 +1066,7 @@ definition let loc be Instruction-Location of SCMPDS;
 :Def19: ex mj being Element of SCM-Instr-Loc st mj = loc & it = Next mj;
  existence
   proof reconsider loc as Element of SCM-Instr-Loc;
-        Next loc is Instruction-Location of SCMPDS;
+        Next loc is Instruction-Location of SCMPDS by AMI_1:def 4;
    hence thesis;
   end;
  correctness;
@@ -1071,7 +1075,14 @@ end;
 theorem Th55:
  for loc being Instruction-Location of SCMPDS,
      mj being Element of SCM-Instr-Loc st mj = loc
- holds Next mj = Next loc by Def19;
+ holds Next mj = Next loc
+  proof let loc be Instruction-Location of SCMPDS,
+     mj being Element of SCM-Instr-Loc such that
+Z:  mj = loc;
+    ex m being Element of SCM-Instr-Loc st m = loc & Next loc = Next m
+           by Def19;
+   hence thesis by AMI_1:def 4,Z;
+  end;
 
  Lm9:
 for i being Element of SCMPDS-Instr st i = I
@@ -1372,7 +1383,11 @@ then A3: abs(n-2+2*c)+2 =abs(2*(j+c))+2
     .=2*(abs((j+c))+1);
    reconsider m=abs((j+c))+1 as Nat;
        m > 0 by NAT_1:3;
-   then 2*m in SCM-Instr-Loc; hence thesis by A3;
+   then 2*m in SCM-Instr-Loc;
+   then 2*m in the Instruction-Locations of SCMPDS;
+   then reconsider l = 2*m as Instruction-Location of SCMPDS by AMI_1:def 4;
+  take l;
+  thus thesis by A3,AMI_1:def 4;
   end;
  correctness;
 end;
@@ -1756,7 +1771,7 @@ A2:   I is halting;
     reconsider t = s as SCMPDS-State;
 A3: IC t = t.0;
 A4: Exec(I,s).IC SCMPDS = t.0 by A2,AMI_1:def 8;
-    reconsider w = t.0 as Instruction-Location of SCMPDS by A3;
+    reconsider w = t.0 as Instruction-Location of SCMPDS by A3,AMI_1:def 4;
     consider mj being Element of SCM-Instr-Loc such that
 A5:   mj = w & Next w = Next mj by Def19;
    thus contradiction by A1,A4,A5;
@@ -1833,7 +1848,8 @@ proof
    set n=abs(k1);
    n+1>0 by NAT_1:3;
    then 2*(n+1) in SCM-Instr-Loc;
-   then reconsider loc=2*(n+1) as Instruction-Location of SCMPDS;
+   then reconsider loc=2*(n+1) as Instruction-Location of SCMPDS
+             by AMI_1:def 4;
    consider s be State of SCMPDS such that
 A2: s.0=loc & for d being Int_position holds s.d = 0 by Th74;
 A3: loc=IC s by A2;
@@ -1886,7 +1902,7 @@ theorem Th89:
  return a is non halting
 proof
    2*1 in SCM-Instr-Loc;
-   then reconsider loc=2 as Instruction-Location of SCMPDS;
+   then reconsider loc=2 as Instruction-Location of SCMPDS by AMI_1:def 4;
    consider s be State of SCMPDS such that
 A1: s.0=loc & for d being Int_position holds s.d = 0 by Th74;
     consider mj being Element of SCM-Instr-Loc such that

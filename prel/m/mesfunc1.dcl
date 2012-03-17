@@ -20,6 +20,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SUPINF_1"/>
@@ -27,7 +28,7 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="136"/>
+<Func kind="K" nr="144"/>
 <Cluster>
 <Adjective nr="14" value="false"/>
 </Cluster>
@@ -39,7 +40,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="138">
+<Func kind="K" nr="146">
 <Func kind="K" nr="55">
 <LocusVar nr="1"/>
 <Num nr="1"/>

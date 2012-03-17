@@ -7,15 +7,16 @@
 environ
 
  vocabularies BOOLE, SEQ_2, ARYTM, LATTICES, ORDINAL2, TARSKI, SUPINF_1,
-      SETFAM_1, NAT_1, MEMBERED;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, ORDINAL1, NUMBERS,
+      SETFAM_1, NAT_1, MEMBERED, AMI_1, SUBSET_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1,
+      DOMAIN_1, ORDINAL1, NUMBERS,
       MEMBERED, XXREAL_0, XREAL_0, REAL_1;
- constructors NUMBERS, XXREAL_0, XREAL_0, MEMBERED;
+ constructors NUMBERS, XXREAL_0, XREAL_0, MEMBERED, SETFAM_1, DOMAIN_1;
  registrations XBOOLE_0, SUBSET_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED;
  requirements SUBSET, BOOLE;
- definitions TARSKI, XXREAL_0, MEMBERED;
+ definitions TARSKI, XXREAL_0, MEMBERED, SUBSET_1, SETFAM_1;
  theorems AXIOMS, TARSKI, ZFMISC_1, XREAL_0, XBOOLE_0, XBOOLE_1, XREAL_1,
-      XXREAL_0, MEMBERED;
+      XXREAL_0, MEMBERED, SETFAM_1;
  schemes XBOOLE_0, MEMBERED;
 
 begin
@@ -1632,27 +1633,25 @@ A1:S = X /\ Y;
    hence thesis;
 end;
 
-definition let X be non empty set;
-   mode bool_DOMAIN of X -> set means :Def18:
-     it is non empty Subset-Family of X &
-     for A being set st A in it holds A is non empty;
-existence
-proof
-   set F = {X};
-A1: for x being set holds x in F implies x in bool X
-   proof
-     let x be set;
-     assume
-  A2:x in F;
-     X in bool X by ZFMISC_1:def 1;
-     hence thesis by A2,TARSKI:def 1;
-   end;
-   take F;
-   thus thesis by A1,TARSKI:def 1,def 3;
+registration let X be non empty set;
+ cluster non empty with_non-empty_elements Subset-Family of X;
+ existence
+  proof
+   take {[#]X};
+   thus {[#]X} is non empty;
+   assume {} in {[#]X};
+    then {} = [#]X by TARSKI:def 1;
+   hence contradiction;
+  end;
 end;
+
+definition let X be non empty set;
+   mode bool_DOMAIN of X is non empty with_non-empty_elements
+           Subset-Family of X;
 end;
 
 definition let F be bool_DOMAIN of ExtREAL;
+ canceled;
   func SUP(F) -> ext-real-membered set means :Def19:
     for a being ext-real number holds
       a in it iff ex A being non empty ext-real-membered set st
@@ -1694,9 +1693,9 @@ registration let F be bool_DOMAIN of ExtREAL;
    coherence
    proof
 A1:F is non empty Subset-Family of ExtREAL &
-   for A being set st A in F holds A is non empty by Def18;
+   for A being set st A in F holds A is non empty by SETFAM_1:def 9;
    consider A being Element of F;
-   F <> {} by Def18;
+   F <> {};
    then A in F;
    then A is Subset of ExtREAL by A1;
    then reconsider A as non empty ext-real-membered set by A1;
@@ -1747,7 +1746,7 @@ A1:S = union F;
      assume x in S;
      then consider Z being set such that
   A2:x in Z & Z in F by A1,TARSKI:def 4;
-     F is non empty Subset-Family of ExtREAL by Def18;
+     F is non empty Subset-Family of ExtREAL;
      then Z is Subset of ExtREAL by A2;
      then reconsider Z as non empty ext-real-membered set by A2;
      consider a being set such that
@@ -1787,7 +1786,7 @@ existence
 proof defpred P[ext-real number] means
    ex A being non empty ext-real-membered set st A in F & $1 = inf A;
 A1:F is non empty Subset-Family of ExtREAL &
-   for A being set holds A in F implies A is non empty set by Def18;
+   for A being set holds A in F implies A is non empty set by SETFAM_1:def 9;
    consider A being Element of F;
    A is Subset of ExtREAL by A1,TARSKI:def 3;
    then reconsider A as non empty ext-real-membered set by A1;
@@ -1832,9 +1831,9 @@ registration let F be bool_DOMAIN of ExtREAL;
 coherence
 proof
 A1:F is non empty Subset-Family of ExtREAL &
-   for A being set holds A in F implies A is non empty set by Def18;
+   for A being set holds A in F implies A is non empty set by SETFAM_1:def 9;
    consider A being Element of F;
-   F <> {} by Def18;
+   F <> {};
    then A in F;
    then A is Subset of ExtREAL by A1;
    then reconsider A as non empty ext-real-membered set by A1;
@@ -1885,7 +1884,7 @@ A1:S = union F;
      assume x in S;
      then consider Z being set such that
   A2:x in Z & Z in F by A1,TARSKI:def 4;
-A3:   F is non empty Subset-Family of ExtREAL by Def18;
+A3:   F is non empty Subset-Family of ExtREAL;
      Z is Subset of ExtREAL by A2,A3;
      then reconsider Z as non empty ext-real-membered set by A2;
      consider a being set such that

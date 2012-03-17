@@ -308,7 +308,7 @@ A7:          x in dom f;
        then consider m such that
 A8:       x = il.(m+k) and
 A9:       f.x = p.il.m by A3,A4;
-       reconsider y = x as Instruction-Location of SCM by A3,A5,A7;
+       reconsider y = x as Instruction-Location of SCM by A3,A5,A7,AMI_1:def 4;
 A10:   (the Object-Kind of SCM).y = ObjectKind y
                                  .= the Instructions of SCM by AMI_1:def 14;
        consider s being State of SCM such that
@@ -387,7 +387,7 @@ A30:   x = F(m2) & il.m2 in dom p;
       hence thesis by A30;
     end;
     then f is finite by A3,A27,FINSET_1:29;
-    then reconsider f as FinPartState of SCM;
+    then reconsider f as FinPartState of SCM by AMI_1:77;
         f is programmed
      proof
       let x be set;
@@ -498,8 +498,9 @@ definition
      let e be set;
      assume
 A2:         e in dom p;
-         dom p c= the Instruction-Locations of SCM by AMI_3:def 13;
-     then consider m such that A3:e = il.m by A2,AMI_5:19;
+X:       dom p c= the Instruction-Locations of SCM by AMI_3:def 13;
+     then reconsider e as Instruction-Location of SCM by AMI_1:def 4,A2;
+     consider m such that A3:e = il.m by A2,AMI_5:19,X;
      take IncAddr(pi(p,il.m),k);
      thus thesis by A3;
     end;
@@ -516,7 +517,7 @@ then A7:  dom f c= dom the Object-Kind of SCM by A4,FUNCT_2:def 1;
 A8:         x in dom f;
        then consider m such that x = il.m and
 A9:       f.x = IncAddr(pi(p,il.m),k) by A4,A5;
-       reconsider y = x as Instruction-Location of SCM by A4,A6,A8;
+       reconsider y = x as Instruction-Location of SCM by A4,A6,A8,AMI_1:def 4;
            (the Object-Kind of SCM).y = ObjectKind y
                                  .= the Instructions of SCM by AMI_1:def 14;
        hence f.x in (the Object-Kind of SCM).x by A9;
@@ -525,7 +526,7 @@ A9:       f.x = IncAddr(pi(p,il.m),k) by A4,A5;
                        by A7,CARD_3:def 9;
     dom f is finite by A4,FINSET_1:29;
     then f is finite by FINSET_1:29;
-    then reconsider f as FinPartState of SCM;
+    then reconsider f as FinPartState of SCM by AMI_1:77;
         f is programmed
      proof
       let x be set;
@@ -555,8 +556,10 @@ A15:  for m st il.m in dom p holds IT2.il.m = IncAddr(pi(p,il.m) ,k);
        proof
         let x be set;
         assume A16: x in dom p;
-            dom p c= the Instruction-Locations of SCM by AMI_3:def 13;
-        then consider m such that A17:x = il.m by A16,AMI_5:19;
+X:      dom p c= the Instruction-Locations of SCM by AMI_3:def 13;
+        then reconsider l = x as Instruction-Location of SCM
+               by AMI_1:def 4,A16;
+        consider m such that A17:l = il.m by A16,AMI_5:19,X;
         thus IT1.x = IncAddr(pi(p,il.m),k) by A13,A16,A17
                    .= IT2.x by A15,A16,A17;
        end;
@@ -595,7 +598,7 @@ A3:  dom (Shift(IncAddr(p,i),i)) c= the Instruction-Locations of SCM
                                             by AMI_3:def 13;
      assume
 A4:   x in dom (Shift(IncAddr(p,i),i));
-     then reconsider x'=x as Instruction-Location of SCM by A3;
+     then reconsider x'=x as Instruction-Location of SCM by A3, AMI_1:def 4;
          x in { il.(m+i) where m is Element of NAT:il.m in dom IncAddr(p,i) }
                                             by A4,Def4;
      then consider m being Element of NAT such that
@@ -632,12 +635,17 @@ theorem Th20:
   proof
    let p be FinPartState of SCM,
        x be set;
-   assume x in dom IncAddr(Shift(ProgramPart(p),k),k);
-   then x in dom (Shift(ProgramPart(p),k)) by Def5;
+   assume
+Z:   x in dom IncAddr(Shift(ProgramPart(p),k),k);
+   dom IncAddr(Shift(ProgramPart(p),k),k) c= the Instruction-Locations of SCM
+          by AMI_3:def 13;
+   then reconsider l = x as Instruction-Location of SCM by AMI_1:def 4,Z;
+   x in dom (Shift(ProgramPart(p),k)) by Def5,Z;
    then x in { il.(m+k):il.m in dom ProgramPart(p) } by Def4;
-   then consider m such that A1: x = il.(m+k) and
+   then consider m such that A1: l = il.(m+k) and
                                  il.m in dom ProgramPart(p);
-  thus x in SCM-Instr-Loc by A1;
+   l in the Instruction-Locations of SCM by A1;
+  hence x in SCM-Instr-Loc by A1;
  end;
 
 theorem Th21:
@@ -688,6 +696,7 @@ theorem Th22:
 then A1:   x in dom (Start-At ((IC p)+k)) /\ the Instruction-Locations of SCM
                                                 by RELAT_1:90;
 then A2:   x in the Instruction-Locations of SCM by XBOOLE_0:def 3;
+      then reconsider x as Instruction-Location of SCM by AMI_1:def 4;
           x in dom (Start-At ((IC p)+k)) by A1,XBOOLE_0:def 3;
       then x in {IC SCM} by FUNCOP_1:19;
       then x = IC SCM by TARSKI:def 1;
@@ -2894,7 +2903,7 @@ A17: (Computation s).i
 then A18: dom ProgramPart p = dom (s|dom ProgramPart p) by RELAT_1:91;
     dom sdom is finite by A18,FINSET_1:29;
     then sdom is finite by FINSET_1:29;
-    then reconsider sdom as FinPartState of SCM;
+    then reconsider sdom as FinPartState of SCM by AMI_1:77;
         dom (s|dom ProgramPart p) c= SCM-Instr-Loc by A18,RELAT_1:87;
     then reconsider sdom as programmed FinPartState of SCM by AMI_3:def 13;
 A19: (Computation (s +* p)).(i+1) = Following((Computation (s +* p)).i)
@@ -3072,7 +3081,7 @@ then A21: dom ProgramPart Relocated(p,k) =
        dom (s|(dom ProgramPart Relocated(p,k))) by RELAT_1:91;
     dom sdom is finite by A21,FINSET_1:29;
     then sdom is finite by FINSET_1:29;
-    then reconsider sdom as FinPartState of SCM;
+    then reconsider sdom as FinPartState of SCM by AMI_1:77;
         dom (s|(dom ProgramPart Relocated(p,k))) c= SCM-Instr-Loc by A21,
 RELAT_1:87
 ;
@@ -3492,7 +3501,7 @@ A2: F is data-only;
     assume
 A4: x in dom F;
         dom F c= FinPartSt SCM by RELSET_1:12;
-    then reconsider s = x as data-only FinPartState of SCM by A2,A4,AMI_3:32
+    then reconsider s = x as data-only FinPartState of SCM by A2,A4
 ,AMI_5:def 9;
     take s;
     thus x=s;
@@ -3520,7 +3529,7 @@ then A9: IC SCM in dom(p +* s) by A1,XBOOLE_0:def 2;
     assume
 A11: x in dom F;
         dom F c= FinPartSt SCM by RELSET_1:12;
-    then reconsider s = x as data-only FinPartState of SCM by A2,A11,AMI_3:32
+    then reconsider s = x as data-only FinPartState of SCM by A2,A11
 ,AMI_5:def 9;
     take s;
     thus x=s;
