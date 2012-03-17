@@ -6,12 +6,12 @@
 
 environ
 
- vocabularies SETFAM_1, FUNCT_1, FINSEQ_1, PBOOLE, SUBSET_1, BOOLE, NORMSP_1,
-      PARTFUN1;
+ vocabularies SETFAM_1, FUNCT_1, FINSEQ_1, PBOOLE, SUBSET_1, BOOLE, NAT_1,
+      RLVECT_1, GROUP_1, VECTSP_1, NORMSP_1, PARTFUN1, REALSET1, STRUCT_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, RELSET_1, PARTFUN1,
-      FUNCT_2, NUMBERS, FINSEQ_1, PBOOLE;
- constructors PBOOLE, NAT_D, PARTFUN1;
- registrations SUBSET_1, XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2;
+      FUNCT_2, NUMBERS, FINSEQ_1, REALSET1, PBOOLE;
+ constructors PBOOLE, NAT_D, PARTFUN1, REALSET1, CQC_LANG;
+ registrations SUBSET_1, XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2, REALSET1;
  requirements BOOLE, SUBSET;
 
 
@@ -19,11 +19,6 @@ begin
 
 definition
   struct 1-sorted(# carrier -> set #);
-end;
-
-definition
-  struct (1-sorted) ZeroStr(# carrier -> set,
-                             Zero -> Element of the carrier #);
 end;
 
 definition let S be 1-sorted;
@@ -38,10 +33,6 @@ end;
 
 registration
  cluster non empty 1-sorted;
-end;
-
-registration
- cluster non empty ZeroStr;
 end;
 
 registration let S be non empty 1-sorted;
@@ -128,3 +119,82 @@ end;
 definition let S,T be 1-sorted;
   mode PartFunc of S,T is PartFunc of the carrier of S,the carrier of T;
 end;
+
+::Moved from RLVECT_1, 2007.02.19, A.T.
+
+definition let S be 1-sorted; let x be set;
+ pred x in S means
+:: STRUCT_0:def 5
+x in the carrier of S;
+end;
+
+:: Pointed structures
+
+definition
+  struct (1-sorted) ZeroStr(# carrier -> set,
+                             ZeroF -> Element of the carrier #);
+end;
+
+registration
+ cluster non empty ZeroStr;
+end;
+
+definition
+  struct (1-sorted) OneStr(# carrier -> set,
+                             OneF -> Element of the carrier #);
+end;
+
+definition
+  struct (ZeroStr,OneStr) ZeroOneStr(# carrier -> set,
+                             ZeroF -> Element of the carrier,
+                             OneF -> Element of the carrier #);
+end;
+
+definition let S be ZeroStr;
+ func 0.S -> Element of S equals
+:: STRUCT_0:def 6
+   the ZeroF of S;
+end;
+
+definition let S be OneStr;
+ func 1.S -> Element of S equals
+:: STRUCT_0:def 7
+   the OneF of S;
+end;
+
+definition let S be ZeroOneStr;
+ attr S is degenerated means
+:: STRUCT_0:def 8
+  0.S = 1.S;
+end;
+
+definition let IT be 1-sorted;
+  attr IT is trivial means
+:: STRUCT_0:def 9
+ the carrier of IT is trivial;
+end;
+
+definition
+ let S be 1-sorted;
+ redefine attr S is trivial means
+:: STRUCT_0:def 10
+ for x,y being Element of S holds x = y;
+end;
+
+registration
+ cluster non degenerated -> non trivial ZeroOneStr;
+end;
+
+registration let A be non empty set;
+ cluster 1-sorted(#A#) -> non empty;
+end;
+
+registration
+ cluster trivial strict non empty 1-sorted;
+ cluster non trivial strict non empty 1-sorted;
+end;
+
+registration let S be non trivial 1-sorted;
+ cluster the carrier of S -> non trivial;
+end;
+

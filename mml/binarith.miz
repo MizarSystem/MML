@@ -8,20 +8,22 @@ environ
 
  vocabularies MONOID_0, FUNCT_1, RELAT_1, MIDSP_3, FINSEQ_1, MARGREL1, ZF_LANG,
       ORDINAL2, ARYTM_1, CQC_LANG, POWER, SETWISEO, BOOLE, FINSEQ_2, BINARITH,
-      FINSEQ_4, ARYTM, NAT_1;
+      FINSEQ_4, ARYTM, NAT_1, RFINSEQ;
  notations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, REAL_1, NAT_1,
-      NAT_D, XBOOLEAN, MARGREL1, FUNCT_1, FUNCT_2, BINOP_1, BINOP_2, SETWISEO,
-      SETWOP_2, SERIES_1, CQC_LANG, FINSEQ_1, FINSEQ_2, FINSEQ_4, XXREAL_0;
+      NAT_D, XBOOLEAN, MARGREL1,
+      RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, BINOP_2, SETWISEO, FUNCOP_1,
+      SETWOP_2, SERIES_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
+      RFINSEQ, XXREAL_0;
  constructors BINOP_1, SETWISEO, XXREAL_0, NAT_1, INT_1, BINOP_2, MEMBERED,
-      CQC_LANG, MARGREL1, FINSEQ_4, FINSOP_1, SERIES_1, ORDINAL2, COMPLEX1,
-      NAT_D;
+      MARGREL1, FINSEQ_4, FINSOP_1, SERIES_1, ORDINAL2, COMPLEX1,
+      NAT_D, RFINSEQ;
  registrations INT_1, RELSET_1, MARGREL1, NAT_1, MEMBERED, ORDINAL2, FINSEQ_2,
-      BINOP_2, XXREAL_0, ORDINAL1, XBOOLEAN;
+      BINOP_2, XXREAL_0, ORDINAL1, XBOOLEAN, FUNCT_1, FINSEQ_1, SUBSET_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FINSEQ_1, TARSKI, XBOOLEAN;
  theorems NAT_1, INT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, FUNCT_1, TARSKI,
-      CQC_LANG, POWER, FINSOP_1, XBOOLE_0, BINOP_2, REAL_2, XREAL_1, XXREAL_0,
-      ORDINAL1, XBOOLEAN;
+      POWER, FINSOP_1, XBOOLE_0, BINOP_2, REAL_2, XREAL_1, XXREAL_0,
+      ORDINAL1, XBOOLEAN, RFINSEQ, FINSEQ_3;
  schemes FINSEQ_1, FINSEQ_2, RECDEF_1, NAT_1;
 
 begin
@@ -38,7 +40,7 @@ canceled;
         d being Element of D,
         z being Tuple of n,D st i in Seg n holds
     (z^<*d*>)/.i=z/.i
-    proof
+    @proof
     let i,n be Element of NAT,
         D be non empty set,
         d be Element of D,
@@ -54,7 +56,7 @@ canceled;
         d being Element of D,
         z being Tuple of n,D holds
     (z^<*d*>)/.(n+1)=d
-    proof
+    @proof
     let n be Element of NAT,
         D be non empty set,
         d be Element of D,
@@ -77,12 +79,12 @@ canceled;
     let x, y be Element of BOOLEAN;
     redefine func x 'or' y -> Element of BOOLEAN;
     correctness
-     proof x 'or' y = FALSE or x 'or' y = TRUE by XBOOLEAN:def 3;
+     @proof x 'or' y = FALSE or x 'or' y = TRUE by XBOOLEAN:def 3;
       hence thesis;
      end;
     func x 'xor' y -> Element of BOOLEAN;
     correctness
-     proof x 'xor' y = FALSE or x 'xor' y = TRUE by XBOOLEAN:def 3;
+     @proof x 'xor' y = FALSE or x 'xor' y = TRUE by XBOOLEAN:def 3;
       hence thesis;
      end;
   end;
@@ -147,7 +149,7 @@ canceled 5;
 
   theorem Th39:
   for i,j being natural number holds i + j -' j = i
-  proof
+  @proof
      let i, j be natural number;
      i + j - j >= 0;
     hence i + j -' j = i by Def3;
@@ -161,7 +163,7 @@ canceled 5;
   func 'not' x -> Tuple of n, BOOLEAN means
        for i st i in Seg n holds it/.i = 'not' (x/.i);
     existence
-     proof
+     @proof
         deffunc F(Element of NAT) = 'not' (x/.$1);
         consider z being FinSequence of BOOLEAN such that A1: len z = n and
         A2: for j st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
@@ -173,7 +175,7 @@ canceled 5;
                     .= 'not' (x/.i) by A2,A3;
       end;
     uniqueness
-      proof
+      @proof
         let y, z be Tuple of n, BOOLEAN such that
           A4: for i st i in Seg n holds y/.i = 'not' (x/.i) and
           A5: for i st i in Seg n holds z/.i = 'not' (x/.i);
@@ -196,7 +198,7 @@ then A8:          j in dom y & j in dom z by A6,FINSEQ_1:def 3;
       for i st 1 <= i & i < n holds it/.(i+1) = (x/.i) '&' (y/.i) 'or'
         (x/.i) '&' (it/.i) 'or' (y/.i) '&' (it/.i);
     existence
-      proof
+      @proof
          deffunc G(Element of NAT,Element of BOOLEAN) = (x/.($1+1)) '&'
           (y/.($1+1)) 'or' (x/.($1+1)) '&' $2 'or' (y/.($1+1)) '&' $2;
       consider f being Function of NAT, BOOLEAN such that
@@ -206,7 +208,7 @@ then A8:          j in dom y & j in dom z by A6,FINSEQ_1:def 3;
         consider z being FinSequence such that A3: len z = n and
         A4: for j st j in Seg n holds z.j = F(j) from FINSEQ_1:sch 2;
            z is FinSequence of BOOLEAN
-        proof
+        @proof
           let a be set;
           assume a in rng z;
           then consider b be set such that
@@ -244,7 +246,7 @@ then A8:          j in dom y & j in dom z by A6,FINSEQ_1:def 3;
                        (y/.i) '&' (z/.i) by A2,A9,A12;
     end;
     uniqueness
-      proof
+      @proof
         let z1, z2 be Tuple of n, BOOLEAN such that
           A14: z1/.1 = FALSE and
           A15: for i st 1 <= i & i < n holds z1/.(i+1) = (x/.i) '&' (y/.i)
@@ -258,7 +260,7 @@ then A8:          j in dom y & j in dom z by A6,FINSEQ_1:def 3;
               A20: P[0] by FINSEQ_1:3;
               A21: now let k such that A22: P[k];
                 thus P[k+1]
-                proof
+                @proof
                  assume A23: k+1 in Seg n;
                  per cases;
                    suppose k = 0;
@@ -292,7 +294,7 @@ A28:         dom z1 = Seg n & dom z2 = Seg n by A18,FINSEQ_1:def 3;
   :Def6:  for i st i in Seg n holds
                   it/.i = IFEQ(x/.i,FALSE,0,2 to_power(i-'1));
   existence
-  proof
+  @proof
         deffunc F(Element of NAT) = IFEQ( x/.$1,FALSE,0,2 to_power($1-'1));
         consider z being FinSequence of NAT such that A1: len z = n and
         A2: for j st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
@@ -304,7 +306,7 @@ A28:         dom z1 = Seg n & dom z2 = Seg n by A18,FINSEQ_1:def 3;
                     .= IFEQ(x/.j,FALSE,0,2 to_power(j-'1)) by A2,A3;
   end;
     uniqueness
-      proof
+      @proof
         let z1, z2 be Tuple of n, NAT such that
          A4: for i st i in Seg n holds z1/.i =
               IFEQ(x/.i,FALSE,0,2 to_power(i-'1)) and
@@ -333,7 +335,7 @@ A28:         dom z1 = Seg n & dom z2 = Seg n by A18,FINSEQ_1:def 3;
   :Def8:  for i st i in Seg n holds it/.i =
                      (x/.i) 'xor' (y/.i) 'xor' (carry(x,y)/.i);
     existence
-      proof
+      @proof
         deffunc F(Element of NAT)
          = (x/.$1) 'xor' (y/.$1) 'xor' (carry(x,y)/.$1);
         consider z being FinSequence of BOOLEAN such that A1: len z = n and
@@ -346,7 +348,7 @@ A28:         dom z1 = Seg n & dom z2 = Seg n by A18,FINSEQ_1:def 3;
                    .= (x/.i) 'xor' (y/.i) 'xor' (carry(x,y)/.i) by A2,A3;
      end;
     uniqueness
-      proof
+      @proof
         let z1, z2 such that
          A4: for i st i in Seg n holds z1/.i =
                   (x/.i) 'xor' (y/.i) 'xor' (carry(x,y)/.i) and
@@ -376,7 +378,7 @@ A28:         dom z1 = Seg n & dom z2 = Seg n by A18,FINSEQ_1:def 3;
    provided
    A1: P[1] and
    A2: for k being non empty Element of NAT st P[k] holds P[k + 1]
-proof
+@proof
           defpred P[Element of NAT] means $1 is non empty implies P[$1];
        A3: P[0];
        A4: now
@@ -405,7 +407,7 @@ end;
   theorem Th40:
    for z1 being Tuple of 1,BOOLEAN holds
      z1= <*FALSE*> or z1=<*TRUE*>
-   proof
+   @proof
      let z1 be Tuple of 1,BOOLEAN;
      consider B being Element of BOOLEAN such that
       A1: z1=<*B*> by FINSEQ_2:117;
@@ -421,7 +423,7 @@ end;
   theorem Th41:
    for z1 being Tuple of 1,BOOLEAN holds
    z1=<*FALSE*> implies Absval(z1) = 0
-   proof
+   @proof
       let z1 be Tuple of 1,BOOLEAN;
       assume A1: z1=<*FALSE*>;
         consider k being Element of NAT such that
@@ -437,7 +439,7 @@ end;
   theorem Th42:
    for z1 being Tuple of 1,BOOLEAN holds
    z1=<*TRUE*> implies Absval(z1)=1
-   proof
+   @proof
       let z1 be Tuple of 1,BOOLEAN;
       assume A1: z1=<*TRUE*>;
         consider k being Element of NAT such that
@@ -476,17 +478,17 @@ A5:                      1 - 1 = 0;
     for i being Element of NAT holds
     i in Seg n implies
      carry(z1^<*d1*>,z2^<*d2*>)/.i = carry(z1,z2)/.i
-     proof
+     @proof
      let z1,z2 be Tuple of n,BOOLEAN;
      let d1,d2 be Element of BOOLEAN;
      defpred P[Element of NAT] means $1 in Seg n implies
           carry(z1^<*d1*>,z2^<*d2*>)/.$1 = carry(z1,z2)/.$1;
-     A1: P[1] proof assume 1 in Seg n;
+     A1: P[1] @proof assume 1 in Seg n;
          thus
               carry(z1^<*d1*>,z2^<*d2*>)/.1 = FALSE by Def5
                .= carry(z1,z2)/.1 by Def5;
          end;
-     A2: for i being non empty Element of NAT st P[i] holds P[i+1] proof
+     A2: for i being non empty Element of NAT st P[i] holds P[i+1] @proof
          let i be non empty Element of NAT;
          assume
        A3: P[i];
@@ -517,7 +519,7 @@ A5:                      1 - 1 = 0;
     for z1,z2 being Tuple of n,BOOLEAN,
               d1,d2 being Element of BOOLEAN holds
     add_ovfl(z1,z2) = carry(z1^<*d1*>,z2^<*d2*>)/.(n+1)
-    proof
+    @proof
     let z1,z2 be Tuple of n,BOOLEAN,
                d1,d2 be Element of BOOLEAN;
          A1: n in Seg n by FINSEQ_1:5;
@@ -533,14 +535,14 @@ A5:                      1 - 1 = 0;
    for z1,z2 being Tuple of n,BOOLEAN,
              d1,d2 being Element of BOOLEAN holds
      z1^<*d1*> + z2^<*d2*> = (z1+z2)^<*d1 'xor' d2 'xor' add_ovfl(z1,z2)*>
-   proof
+   @proof
      let z1,z2 be Tuple of n,BOOLEAN,
          d1,d2 be Element of BOOLEAN;
         for i st i in Seg (n+1) holds
         ((z1+z2)^<*d1 'xor' d2 'xor' add_ovfl(z1,z2)*>)/.i =
            ((z1^<*d1*>)/.i) 'xor' ((z2^<*d2*>)/.i) 'xor'
                (carry(z1^<*d1*>,z2^<*d2*>)/.i)
-     proof
+     @proof
      let i such that A1:i in Seg (n+1);
      A2:Seg (n+1) = Seg (n) \/ {. n+1 .} by FINSEQ_1:11;
      per cases by A1,A2,XBOOLE_0:def 2;
@@ -576,13 +578,13 @@ A5:                      1 - 1 = 0;
     for z being Tuple of n,BOOLEAN,
               d being Element of BOOLEAN holds
     Absval(z^<*d*>) = Absval(z)+IFEQ(d,FALSE,0,2 to_power n)
-    proof
+    @proof
       let z be Tuple of n,BOOLEAN,
           d be Element of BOOLEAN;
 A1:     for i st i in Seg (n+1) holds
       ((Binary(z)^<*IFEQ(d,FALSE,0,2 to_power(n))*>)/.i)
               = IFEQ((z^<*d*>)/.i,FALSE,0,2 to_power(i-'1))
-      proof
+      @proof
      let i such that A2:i in Seg (n+1);
      A3:Seg (n+1) = Seg (n) \/ {. n+1 .} by FINSEQ_1:11;
      per cases by A2,A3,XBOOLE_0:def 2;
@@ -613,14 +615,14 @@ A1:     for i st i in Seg (n+1) holds
    for n for z1,z2 being Tuple of n,BOOLEAN holds
    Absval(z1+z2) + IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (n)) =
                    Absval(z1) + Absval(z2)
-   proof
+   @proof
      set f = FALSE,
          t = TRUE;
     defpred P[ non empty Element of NAT] means
      for z1,z2 being Tuple of $1, BOOLEAN holds
        Absval(z1+z2) + IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power ($1)) =
                    Absval(z1) + Absval(z2);
-     A1: P[1]  proof
+     A1: P[1]  @proof
          let z1,z2 be Tuple of 1, BOOLEAN;
             carry(z1,z2)/.1 = f by Def5;
         then A2: add_ovfl(z1,z2)
@@ -630,7 +632,7 @@ A3:        Absval(T)=1 & Absval(F)=0 by Th41,Th42;
            per cases by Th40;
             suppose A4:z1=<*f*> & z2=<*f*>;
               A5: IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (1)) = 0
-                proof
+                @proof
                  add_ovfl(z1,z2) = f by FINSEQ_4:25,A2,A4;
                   hence IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (1))
                        = 0 by CQC_LANG:def 1;
@@ -651,7 +653,7 @@ Def5;
             end;
             suppose A7:z1=<*t*> & z2=<*f*>;
               A8: IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (1)) = 0
-                proof
+                @proof
                       add_ovfl(z1,z2) = t '&' (<*f*>/.1) by A2,A7,FINSEQ_4:25
                        .= f by FINSEQ_4:25;
                   hence IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (1))
@@ -671,7 +673,7 @@ A7
             end;
             suppose A10:z1=<*f*> & z2=<*t*>;
               A11: IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (1)) = 0
-                proof
+                @proof
                       add_ovfl(z1,z2) = f '&' (<*t*>/.1) by A2,A10,FINSEQ_4:25
                        .= f;
                   hence IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (1))
@@ -693,7 +695,7 @@ A7
             end;
             suppose A13:z1=<*t*> & z2=<*t*>;
               A14: IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power 1) = 2
-                proof
+                @proof
                       add_ovfl(z1,z2) = t by FINSEQ_4:25,A2,A13;
                   hence IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (1))
                        = 2 to_power 1 by CQC_LANG:def 1
@@ -716,7 +718,7 @@ A7
         end;
         end;
      A16: for n being non empty Element of NAT st P[n] holds P[n+1]
-      proof let n;
+      @proof let n;
          assume A17: P[n];
               let z1,z2 be Tuple of n+1,BOOLEAN;
               consider t1 being (Element of n-tuples_on BOOLEAN),
@@ -757,7 +759,7 @@ A7
           .= d1 '&' d2 'or' d1 '&' add_ovfl(t1,t2) 'or' d2 '&' add_ovfl(t1,t2)
  by Th44;
       A21: C2 + C1 = C5 + C3 + C4
-          proof
+          @proof
              now per cases;
           suppose A22: d1=f;
           then A23:C3=0 by CQC_LANG:def 1;
@@ -933,7 +935,7 @@ A56:                   d1 '&' d2 'or' d1 '&' add_ovfl(t1,t2) 'or'
        for z1,z2 being Tuple of n,BOOLEAN holds
     z1,z2 are_summable implies
     Absval(z1+z2) = Absval(z1) + Absval(z2)
-    proof
+    @proof
       let z1,z2 be Tuple of n,BOOLEAN;
       assume z1,z2 are_summable;
       then add_ovfl(z1,z2) = FALSE by Def10;
@@ -951,7 +953,7 @@ reserve a,b,c for natural number;
 
 theorem
   c <= a & c <= b & a -' c = b -' c implies a = b
- proof
+ @proof
     assume A1: a >= c & b >= c & a -' c = b -' c;
     then a - c >= 0 by XREAL_1:50;
     then
@@ -963,7 +965,7 @@ A2: a -' c = a - c by Def3;
 
 theorem Th50:
    b <= a implies a -' b = a - b
- proof
+ @proof
     assume a >= b;
     then a - b >= 0 by XREAL_1:50;
     hence thesis by Def3;
@@ -973,11 +975,11 @@ theorem Th50:
 
 theorem Th51:
  a -' a = 0
-  proof a-a = 0; hence thesis by Def3; end;
+  @proof a-a = 0; hence thesis by Def3; end;
 
 theorem Th52:
  a -' b <= a
-  proof per cases;
+  @proof per cases;
    suppose
 A1: a-b >= 0;
     a-b <= a-0 by REAL_2:106;
@@ -992,7 +994,7 @@ A1: a-b >= 0;
 
 theorem Th53:
    for i,j being natural number st i >= j holds i -' j + j = i
-  proof
+  @proof
    let i,j be natural number;
    assume i >= j;
    then ex m being Nat st i = j + m by NAT_1:10;
@@ -1006,7 +1008,7 @@ reserve n,i,j,k for Nat;
 
 theorem Th54:
   n-'i=0 implies n<=i
-proof
+@proof
   assume A1:n-'i=0;
   assume i<n; then i+1<=n by NAT_1:13; then i+1-i<=n-i by XREAL_1:11;
   hence contradiction by A1,Def3;
@@ -1014,13 +1016,13 @@ end;
 
 theorem
   i<=j implies j+k-'i=j+k-i
-proof assume i<=j; then i<=j+k by NAT_1:12;
+@proof assume i<=j; then i<=j+k by NAT_1:12;
  hence thesis by Th50;
 end;
 
 theorem
   i<=j implies j+k-'i=j-'i+k
-proof assume A1:i<=j; then i<=j+k by NAT_1:12;
+@proof assume A1:i<=j; then i<=j+k by NAT_1:12;
  hence j+k-'i=j+k-i by Th50 .=j-i+k
     .=j-'i+k by A1,Th50;
 end;
@@ -1031,7 +1033,7 @@ reserve i,j,k,i1,i2,n for natural number;
 
 theorem Th57:
  i-'i1>=1 or i-i1>=1 implies i-'i1=i-i1
-proof
+@proof
  assume A1: i-'i1>=1 or i-i1>=1;
  per cases by A1;
  suppose A2:i-'i1>=1;
@@ -1044,13 +1046,13 @@ end;
 end;
 
 theorem n-'0=n
-proof
+@proof
   n-'0=n-0 by Def3 .=n;
  hence thesis;
 end;
 
 theorem i1<=i2 implies n-'i2<=n-'i1
-proof assume A1:i1<=i2;
+@proof assume A1:i1<=i2;
  per cases;
  suppose A2:i2<=n; then i1<=n by A1,XXREAL_0:2;
     then A3:n-'i1=n-i1 by Th50;
@@ -1064,7 +1066,7 @@ end;
 
 theorem Th60:
   i1<=i2 implies i1-'n<=i2-'n
-proof assume A1:i1<=i2;
+@proof assume A1:i1<=i2;
  per cases;
  suppose i1-n>=0; then A2:i1-'n=i1-n by Def3;
      i1-n<=i2-n by A1,XREAL_1:11;
@@ -1076,13 +1078,13 @@ end;
 end;
 
 theorem Th61:i-'i1>=1 or i-i1>=1 implies i-'i1+i1=i
-proof assume i-'i1>=1 or i-i1>=1;
+@proof assume i-'i1>=1 or i-i1>=1;
  then i-'i1+i1=i-i1+i1 by Th57 .=i;
  hence thesis;
 end;
 
 theorem i1<=i2 implies i1-'1<=i2
-proof assume A1:i1<=i2;
+@proof assume A1:i1<=i2;
  per cases;
  suppose i1-1>=0; then i1-'1=i1-1 by Def3;
   then i1-'1<=i1-1+1 by NAT_1:12;
@@ -1094,7 +1096,7 @@ end;
 end;
 
 theorem Th63:i-'2=i-'1-'1
-proof
+@proof
  per cases;
  suppose A1:i>=2;
       1<=i by A1,XXREAL_0:2;
@@ -1126,7 +1128,7 @@ end;
 
 theorem Th64:
  i1+1<=i2 implies i1-'1<i2 & i1-'2<i2 & i1<=i2
-proof assume
+@proof assume
 A1: i1+1<=i2;
 then A2: i1<i2 by NAT_1:13;
      i1-'1<=i1 by Th52;
@@ -1141,7 +1143,7 @@ theorem i1+2<=i2 or i1+1+1<=i2
         implies i1+1<i2 & i1+1-'1<i2 & i1+1-'2<i2 & i1+1<=i2 &
                 i1-'1+1<i2 & i1-'1+1-'1<i2 &
                i1<i2 & i1-'1<i2 & i1-'2<i2 & i1<=i2
-proof assume i1+2<=i2 or i1+1+1<=i2;
+@proof assume i1+2<=i2 or i1+1+1<=i2;
   then i1+1+1<=i2;
 hence A1:i1+1<i2 & i1+1-'1<i2 & i1+1-'2<i2 & i1+1<=i2 by Th64,NAT_1:13;
         i1-'1<=i1 by Th52; then i1-'1+1<=i1+1 by XREAL_1:8;
@@ -1153,7 +1155,7 @@ end;
 
 theorem i1<=i2 or i1<=i2-'1
      implies i1<i2+1 & i1<=i2+1 & i1<i2+1+1 & i1<=i2+1+1 & i1<i2+2 & i1<=i2+2
-proof assume A1:i1<=i2 or i1<=i2-'1;
+@proof assume A1:i1<=i2 or i1<=i2-'1;
   A2:now assume i1<=i2;
    then A3:i1<i2+1 by NAT_1:13;
        i2+1+1=i2+(1+1);
@@ -1169,7 +1171,7 @@ proof assume A1:i1<=i2 or i1<=i2-'1;
 end;
 
 theorem i1<i2 or i1+1<=i2 implies i1<=i2-'1
-proof assume A1:i1<i2 or i1+1<=i2;
+@proof assume A1:i1<i2 or i1+1<=i2;
  per cases by A1;
  suppose A2:i1<i2; then i1+1<=i2 by NAT_1:13; then A3: i1+1-1<=i2-1 by
 XREAL_1:11; 0+1<=i2 by A2,NAT_1:13;
@@ -1182,14 +1184,14 @@ end;
 end;
 
 theorem i>=i1 implies i>=i1-'i2
-proof assume A1:i>=i1;
+@proof assume A1:i>=i1;
       i1>=i1-'i2 by Th52;
   hence thesis by A1,XXREAL_0:2;
 end;
 
 theorem
       1<=i & 1<=i1-'i implies i1-'i<i1
-proof assume A1:1<=i & 1<=i1-'i;
+@proof assume A1:1<=i & 1<=i1-'i;
  then A2:i1-i=(i1-'i)+i-i by Th61 .=i1-'i;
   i1-(i1-'i) = i by A2;
  hence thesis by A1,REAL_2:106;
@@ -1199,7 +1201,7 @@ end;
 
 theorem Th70:  :: SPRECT_3:5
  i-'k <= j implies i <= j + k
-proof assume
+@proof assume
 A1: i-'k <= j;
  per cases;
  suppose
@@ -1216,14 +1218,14 @@ end;
 
 theorem   :: SPRECT_3:6
  i <= j + k implies i-'k <= j
-proof assume i <= j + k;
+@proof assume i <= j + k;
   then i -' k <= j + k -' k by Th60;
  hence i-'k <= j by Th39;
 end;
 
 theorem    :: SPRECT_3:7
  i <= j -' k & k <= j implies i + k <= j
-proof assume that
+@proof assume that
 A1: i <= j -' k and
 A2: j >= k;
       i + k <= j -' k + k by A1,XREAL_1:8;
@@ -1232,7 +1234,7 @@ end;
 
 theorem  :: SPRECT_3:8
      j + k <= i implies k <= i -' j
-proof assume
+@proof assume
 A1: j + k <= i;
  per cases by A1,XXREAL_0:1;
  suppose j + k = i;
@@ -1245,7 +1247,7 @@ end;
 
 theorem   :: SPRECT_3:9
   k <= i & i < j implies i -' k < j -' k
-proof assume that
+@proof assume that
 A1: k <= i and
 A2: i < j;
 A3: k <= j by A1,A2,XXREAL_0:2;
@@ -1256,7 +1258,7 @@ end;
 
 theorem   :: SPRECT_3:10
   i < j & k < j implies i -' k < j -' k
-proof assume that
+@proof assume that
 A1: i < j and
 A2: k < j;
  per cases;
@@ -1272,3 +1274,23 @@ then A3: i -' k = i - k by Th50;
  hence thesis by A4;
 end;
 end;
+
+:: from JORDAN3, 2007.03.09, A.T
+
+reserve D for non empty set;
+
+theorem
+ for f being FinSequence of D,k being Nat holds
+       len (f/^k)=len f-'k
+proof let f be FinSequence of D,k be Nat;
+ per cases;
+ suppose A1:k<=len f; then len f-'k=len f-k by Th50;
+  hence len (f/^k)=len f-'k by A1,RFINSEQ:def 2;
+ end;
+ suppose A2:k>len f; then (f/^k)=<*>D by RFINSEQ:def 2;
+   then A3:len (f/^k)=0 by FINSEQ_1:32;
+       len f-k<0 by A2,REAL_2:105;
+  hence len (f/^k)=len f-'k by A3,Def3;
+end;
+end;
+

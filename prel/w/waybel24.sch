@@ -13,10 +13,10 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
@@ -42,14 +42,14 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="4">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="27" value="false"/>
+<Adjective nr="26" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="4">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="27" value="false"/>
+<Adjective nr="26" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -112,13 +112,13 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="4">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="49"/>
-<Adjective nr="50"/>
-<Adjective nr="51"/>
-<Adjective nr="106"/>
-<Adjective nr="107"/>
+<Adjective nr="53"/>
+<Adjective nr="54"/>
+<Adjective nr="55"/>
+<Adjective nr="110"/>
+<Adjective nr="111"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -192,9 +192,9 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="9">
+<Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="27" value="false"/>
+<Adjective nr="26" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -262,9 +262,9 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="4">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="27" value="false"/>
+<Adjective nr="26" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -332,14 +332,14 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="9">
+<Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="27" value="false"/>
+<Adjective nr="26" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="9">
+<Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="27" value="false"/>
+<Adjective nr="26" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

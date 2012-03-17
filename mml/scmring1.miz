@@ -9,20 +9,20 @@ environ
  vocabularies GR_CY_1, AMI_2, FINSET_1, REALSET1, RLVECT_1, VECTSP_1, ORDINAL2,
       FINSEQ_1, AMI_1, AMI_3, TARSKI, BOOLE, SCMFSA7B, BINOP_1, FUNCSDOM,
       NAT_1, FUNCT_1, CARD_3, RELAT_1, FUNCT_4, CAT_1, MCART_1, ARYTM_1,
-      CQC_LANG, FUNCT_2, FUNCT_5, SCMRING1, FINSEQ_4, GROUP_1;
+      CQC_LANG, FUNCT_2, FUNCT_5, SCMRING1, FINSEQ_4, GROUP_1, VECTSP_2;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, FINSET_1, RELAT_1,
-      XCMPLX_0, FUNCT_1, FUNCT_2, BINOP_1, GR_CY_1, REALSET1, STRUCT_0,
+      XCMPLX_0, FUNCT_1, FUNCT_2, BINOP_1, CARD_1, REALSET1, STRUCT_0,
       GROUP_1, RLVECT_1, VECTSP_1, REALSET2, FUNCSDOM, ORDINAL1, MCART_1,
-      NUMBERS, CARD_3, NAT_1, NAT_D, FINSEQ_1, FRAENKEL, FINSEQ_4, CQC_LANG,
+      NUMBERS, CARD_3, NAT_1, NAT_D, FINSEQ_1, FRAENKEL, FINSEQ_4, FUNCOP_1,
       FUNCT_4, CAT_2, AMI_1, AMI_2, AMI_3, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, MEMBERED, FINSEQ_4, REALSET2, CAT_2,
       AMI_2, AMI_3, NAT_D;
- registrations AMI_1, AMI_2, CQC_LANG, STRUCT_0, TOPGRP_1, VECTSP_1, RELSET_1,
+ registrations AMI_1, AMI_2, FUNCOP_1, STRUCT_0, TOPGRP_1, VECTSP_1, RELSET_1,
       AMI_5, YELLOW13, GCD_1, FINSEQ_5, XBOOLE_0, NAT_1, FRAENKEL, ORDINAL1,
-      REALSET1, SETFAM_1, CARD_3;
+      REALSET1, SETFAM_1, CARD_3, GR_CY_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, FINSEQ_1, RLVECT_1, VECTSP_1;
- theorems AMI_1, AMI_2, CAT_2, CARD_3, CQC_LANG, ENUMSET1, FINSEQ_1, FINSEQ_3,
+ definitions TARSKI, FINSEQ_1, RLVECT_1, VECTSP_1, FUNCOP_1;
+ theorems AMI_1, AMI_2, CAT_2, CARD_3, FUNCOP_1, ENUMSET1, FINSEQ_1, FINSEQ_3,
       FINSEQ_4, FUNCT_1, FUNCT_2, FUNCT_4, GR_CY_1, AMI_3, MCART_1, NAT_1,
       ORDINAL1, REALSET2, SCHEME1, STRUCT_0, TARSKI, YELLOW_8, ZFMISC_1,
       XBOOLE_0, XBOOLE_1, NAT_D;
@@ -62,20 +62,20 @@ A1: S is trivial;
        (for u, v, w being Element of S holds
             u + v + w = u + (v + w)) &
        for v being Element of S holds v + 0.S = v
-         by REALSET2:def 7;
+         by STRUCT_0:def 10;
   let v be Element of S;
   take v;
-  thus v + v = 0.S by A1,REALSET2:def 7;
+  thus v + v = 0.S by A1,STRUCT_0:def 10;
  end;
- cluster trivial -> right_unital right-distributive (non empty doubleLoopStr);
+ cluster trivial -> well-unital right-distributive (non empty doubleLoopStr);
 coherence
  proof
   let S be non empty doubleLoopStr such that
 A2: S is trivial;
   thus for x be Element of S holds
-    x*(1_S) = x by A2,REALSET2:def 7;
+    x*(1.S) = x & (1.S)*x = x by A2,STRUCT_0:def 10;
   let x, y, z be Element of S;
-  thus x*(y+z) = x*y + x*z by A2,REALSET2:def 7;
+  thus x*(y+z) = x*y + x*z by A2,STRUCT_0:def 10;
  end;
 end;
 
@@ -279,7 +279,7 @@ existence
   consider a being BinOp of {0};
   reconsider z = 0 as Element of {0} by TARSKI:def 1;
   take doubleLoopStr(#{0},a,a,z,z#);
-  thus thesis by REALSET2:def 5,STRUCT_0:def 1;
+  thus thesis by STRUCT_0:def 9,STRUCT_0:def 1;
  end;
 end;
 
@@ -596,7 +596,7 @@ coherence
 A1:  dom(SCM-OK R) = NAT by FUNCT_2:def 1;
   then dom s = NAT by CARD_3:18;
 then A2:  dom(s +* (0 .--> u)) = NAT \/ dom(0 .--> u) by FUNCT_4:def 1
-      .= NAT \/ {0} by CQC_LANG:5
+      .= NAT \/ {0} by FUNCOP_1:14,19
       .= dom(SCM-OK R) by A1,ZFMISC_1:46;
         now let x be set;
      assume
@@ -604,16 +604,16 @@ A3:    x in dom(SCM-OK R);
          now per cases;
       suppose
 A4:     x = 0;
-            {0} = dom(0 .--> u) by CQC_LANG:5;
+            {0} = dom(0 .--> u) by FUNCOP_1:14,19;
         then 0 in dom(0 .--> u) by TARSKI:def 1;
        then (s +* (0 .--> u)).0 = (0 .--> u).0 by FUNCT_4:14
-          .= u by CQC_LANG:6;
+          .= u by FUNCOP_1:87;
         then (s +* (0 .--> u)).0 in SCM-Instr-Loc;
        hence (s +* (0 .--> u)).x in (SCM-OK R).x by A4,Th2;
       end;
       suppose
 A5:     x <> 0;
-            {0} = dom(0 .--> u) by CQC_LANG:5;
+            {0} = dom(0 .--> u) by FUNCOP_1:14,19;
         then not x in dom(0 .--> u) by A5,TARSKI:def 1;
         then (s +* (0 .--> u)).x = s.x by FUNCT_4:12;
        hence (s +* (0 .--> u)).x in (SCM-OK R).x by A3,CARD_3:18;
@@ -630,10 +630,10 @@ theorem
   holds SCM-Chg(s,u).0 = u
  proof
    let s be SCM-State of G, u be Element of SCM-Instr-Loc;
-      {0} = dom(0 .--> u) by CQC_LANG:5;
+      {0} = dom(0 .--> u) by FUNCOP_1:14,19;
 then A1: 0 in dom(0 .--> u) by TARSKI:def 1;
   thus SCM-Chg(s,u).0 = (0 .--> u).0 by A1,FUNCT_4:14
-    .= u by CQC_LANG:6;
+    .= u by FUNCOP_1:87;
  end;
 
 theorem
@@ -647,7 +647,7 @@ theorem
 A1:  (SCM-OK G).0 = SCM-Instr-Loc & (SCM-OK G).mk = the carrier of G
      by Th2,Th5;
 A2: the carrier of G <> SCM-Instr-Loc by Def2;
-      {0} = dom(0 .--> u) by CQC_LANG:5;
+      {0} = dom(0 .--> u) by FUNCOP_1:14,19;
 then A3: not mk in dom(0 .--> u) by A1,A2,TARSKI:def 1;
   thus SCM-Chg(s,u).mk = s.mk by A3,FUNCT_4:12;
 end;
@@ -661,7 +661,7 @@ theorem
        u, v be Element of SCM-Instr-Loc;
 A1:  (SCM-OK G).0 = SCM-Instr-Loc & (SCM-OK G).v = SCM-Instr G by Th2,Th6;
 A2: SCM-Instr-Loc <> SCM-Instr G by Th1;
-      {0} = dom(0 .--> u) by CQC_LANG:5;
+      {0} = dom(0 .--> u) by FUNCOP_1:14,19;
 then A3:  not v in dom(0 .--> u) by A1,A2,TARSKI:def 1;
   thus SCM-Chg(s,u).v = s.v by A3,FUNCT_4:12;
 end;
@@ -677,7 +677,7 @@ coherence
 A1: dom(SCM-OK R) = NAT by FUNCT_2:def 1;
  then dom s = NAT by CARD_3:18;
 then A2: dom(s +* (t .--> u)) = NAT \/ dom(t .--> u) by FUNCT_4:def 1
-      .= NAT \/ {t} by CQC_LANG:5
+      .= NAT \/ {t} by FUNCOP_1:14,19
       .= dom(SCM-OK R) by A1,ZFMISC_1:46;
         now let x be set;
      assume
@@ -685,16 +685,16 @@ A3:    x in dom(SCM-OK R);
          now per cases;
       suppose
 A4:     x = t;
-            {t} = dom(t .--> u) by CQC_LANG:5;
+            {t} = dom(t .--> u) by FUNCOP_1:14,19;
         then t in dom(t .--> u) by TARSKI:def 1;
        then (s +* (t .--> u)).t = (t .--> u).t by FUNCT_4:14
-          .= u by CQC_LANG:6;
+          .= u by FUNCOP_1:87;
        then (s +* (t .--> u)).t in the carrier of R;
        hence (s +* (t .--> u)).x in (SCM-OK R).x by A4,Th5;
       end;
       suppose
 A5:     x <> t;
-           {t} = dom(t .--> u) by CQC_LANG:5;
+           {t} = dom(t .--> u) by FUNCOP_1:14,19;
        then not x in dom(t .--> u) by A5,TARSKI:def 1;
         then (s +* (t .--> u)).x = s.x by FUNCT_4:12;
        hence (s +* (t .--> u)).x in (SCM-OK R).x by A3,CARD_3:18;
@@ -716,7 +716,7 @@ theorem
 A1:  (SCM-OK G).0 = SCM-Instr-Loc & (SCM-OK G).t = the carrier of G
     by Th2,Th5;
 A2: SCM-Instr-Loc <> the carrier of G by Def2;
-      {t} = dom(t .--> u) by CQC_LANG:5;
+      {t} = dom(t .--> u) by FUNCOP_1:14,19;
 then A3:  not 0 in dom(t .--> u) by A1,A2,TARSKI:def 1;
  thus SCM-Chg(s,t,u).0 = s.0 by A3,FUNCT_4:12;
 end;
@@ -728,10 +728,10 @@ theorem
  proof
  let s be SCM-State of G, t be Element of SCM-Data-Loc,
      u be Element of G;
-     {t} = dom(t .--> u) by CQC_LANG:5;
+     {t} = dom(t .--> u) by FUNCOP_1:14,19;
 then A1: t in dom(t .--> u) by TARSKI:def 1;
  thus SCM-Chg(s,t,u).t = (t .--> u).t by A1,FUNCT_4:14
-   .= u by CQC_LANG:6;
+   .= u by FUNCOP_1:87;
 end;
 
 theorem
@@ -744,7 +744,7 @@ theorem
       u be Element of G,
      mk be Element of SCM-Data-Loc such that
 A1:   mk <> t;
-      {t} = dom(t .--> u) by CQC_LANG:5;
+      {t} = dom(t .--> u) by FUNCOP_1:14,19;
 then A2: not mk in dom(t .--> u) by A1,TARSKI:def 1;
  thus SCM-Chg(s,t,u).mk = s.mk by A2,FUNCT_4:12;
 end;
@@ -761,7 +761,7 @@ theorem
 A1: (SCM-OK G).v = SCM-Instr G & (SCM-OK G).t = the carrier of G
      by Th5,Th6;
 A2: SCM-Instr G <> the carrier of G by Def2;
-      {t} = dom(t .--> u) by CQC_LANG:5;
+      {t} = dom(t .--> u) by FUNCOP_1:14,19;
 then A3:  not v in dom(t .--> u) by A1,A2,TARSKI:def 1;
  thus SCM-Chg(s,t,u).v = s.v by A3,FUNCT_4:12;
 end;

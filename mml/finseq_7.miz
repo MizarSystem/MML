@@ -8,16 +8,18 @@ environ
 
  vocabularies FINSEQ_1, ARYTM_1, RELAT_1, FUNCT_1, RFINSEQ, FINSEQ_4, FUNCT_4,
       BOOLE, FINSEQ_7, NAT_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, NAT_D,
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1,
+      NUMBERS, XCMPLX_0, NAT_1, NAT_D,
       BINARITH, FUNCT_1, FINSEQ_1, FINSEQ_4, RFINSEQ, FUNCT_7, XXREAL_0;
- constructors FUNCT_4, XXREAL_0, NAT_1, INT_1, CQC_LANG, FINSEQ_4, REALSET1,
+ constructors FUNCT_4, XXREAL_0, NAT_1, INT_1, FINSEQ_4, REALSET1,
       RFINSEQ, BINARITH, FUNCT_7, NAT_D;
- registrations FINSEQ_1, FINSEQ_5, RELSET_1, INT_1, XXREAL_0, NAT_1;
+ registrations FINSEQ_1, FINSEQ_5, RELSET_1, INT_1, XXREAL_0, NAT_1, FUNCT_7;
+ definitions FINSEQ_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  theorems TARSKI, NAT_1, BINARITH, FINSEQ_1, FINSEQ_3, FINSEQ_4, FINSEQ_5,
-      FINSEQ_6, RFINSEQ, JORDAN3, JORDAN8, INT_1, GENEALG1, POLYNOM4, POLYNOM1,
-      REVROT_1, FUNCT_7, JORDAN2B, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0,
-      ORDINAL1;
+      FINSEQ_6, RFINSEQ, INT_1, GENEALG1, FUNCT_7, XBOOLE_0, XBOOLE_1,
+      XREAL_1, XXREAL_0,
+      ORDINAL1, NAT_2;
 
 begin :: Some Basic Theorems
 
@@ -26,7 +28,7 @@ reserve D for non empty set,
   p, p1, p2, p3, q for Element of D,
   i, j, k, l, n for Nat;
 
-theorem Th1:
+theorem
   1 <= i & j <= len f & i < j implies
     f = (f|(i-'1))^<*f.i*>^((f/^i)|(j-'i-'1))^<*f.j*>^(f/^j)
 proof
@@ -34,28 +36,27 @@ proof
     A1:1 <= i and
     A2:j <= len f and
     A3:i < j;
-     i -'i < j -'i by A3,BINARITH:75;
-  then A4:0 < j -'i;
-  reconsider i,j as Element of NAT by ORDINAL1:def 13;
   set I = j-'i-'1;
-  A5:j -'i >= 1 by A4,NAT_1:14;
+  i -'i < j -'i by A3,BINARITH:75;
+  then j -'i >= 1 by NAT_1:14;
   then A6:I + 1 = j -'i by BINARITH:53;
      j -'i <= len f -'i by A2,BINARITH:60;
-  then A7:I+1 <= len (f/^i) by A6,JORDAN3:19;
+  then A7:I+1 <= len (f/^i) by A6,BINARITH:76;
   A8:i <= len f by A2,A3,XXREAL_0:2;
      1 <= j by A1,A3,XXREAL_0:2;
   then A9:j in dom f by A2,FINSEQ_3:27;
+  reconsider i,j as Element of NAT by ORDINAL1:def 13;
   A10:(I+1)+i = j by A3,A6,BINARITH:53;
-     1 <= I+1 by A5,BINARITH:53;
+     1 <= I+1 by NAT_1:14;
   then I+1 in dom (f/^i) by A7,FINSEQ_3:27;
   then A11:(f/^i)/.(I+1) = f/.j by A10,FINSEQ_5:30;
   A12:i < len (f|j) by A2,A3,FINSEQ_1:80;
   A13:f/^i = ((f|j)^(f/^j))/^i by RFINSEQ:21
            .= ((f|j)/^i)^(f/^j) by A12,GENEALG1:1
-           .= ((f/^i)|(I+1))^(f/^j) by A6,JORDAN3:21
-           .= ((f/^i)|I)^<*(f/^i)/.(I+1)*>^(f/^j) by A7,JORDAN8:2
+           .= ((f/^i)|(I+1))^(f/^j) by A6,FINSEQ_5:83
+           .= ((f/^i)|I)^<*(f/^i)/.(I+1)*>^(f/^j) by A7,FINSEQ_5:85
            .= ((f/^i)|I)^<*f.j*>^(f/^j) by A9,A11,FINSEQ_4:def 4;
-     f = (f|(i-'1))^<*f.i*>^(f/^i) by A1,A8,POLYNOM4:3
+     f = (f|(i-'1))^<*f.i*>^(f/^i) by A1,A8,FINSEQ_5:87
         .= (f|(i-'1))^<*f.i*>^(((f/^i)|I)^(<*f.j*>^(f/^j))) by A13,FINSEQ_1:45
         .= (f|(i-'1))^<*f.i*>^((f/^i)|I)^(<*f.j*>^(f/^j)) by FINSEQ_1:45
         .= (f|(i-'1))^<*f.i*>^((f/^i)|I)^<*f.j*>^(f/^j) by FINSEQ_1:45;
@@ -106,8 +107,8 @@ end;
 Lm1:
   j -'i -'1 = j -'1 -'i
 proof
-     j -'i -'1 = j -'(i+1) by POLYNOM1:3;
-  hence thesis by POLYNOM1:3;
+     j -'i -'1 = j -'(i+1) by NAT_2:32;
+  hence thesis by NAT_2:32;
 end;
 
 begin :: Definition of Replace Function and its properties
@@ -134,7 +135,7 @@ A1: 1 <= i & i <= len f implies f +* (i, p) = (f|(i-'1))^<*p*>^(f/^i)
     proof
       assume 1 <= i & i <= len f;
       then i in dom f by FINSEQ_3:27;
-      hence thesis by JORDAN2B:13;
+      hence thesis by FUNCT_7:100;
     end;
        not (1 <= i & i <= len f) implies f +* (i, p) = f
     proof
@@ -176,7 +177,7 @@ proof
   set F = <*f.i*>;
   per cases;
     suppose not i in Seg (len f);
-      then not (1 <= i & i <= len f) by FINSEQ_1:3;
+      then not (1 <= i & i <= len f);
       then rng Replace(f,i,p) = rng f by Def1;
       hence thesis by A1,FINSEQ_1:42;
     end;
@@ -190,7 +191,7 @@ proof
        .= rng P \/ rng (Q^<*p*>) by FINSEQ_1:44
        .= rng (P^(Q^<*p*>)) by FINSEQ_1:44;
         rng f \/ {p}
-        = rng ((P^F^Q)^<*p*>) by A1,A2,POLYNOM4:3
+        = rng ((P^F^Q)^<*p*>) by A1,A2,FINSEQ_5:87
        .= rng (P^F^Q) \/ rng <*p*> by FINSEQ_1:44
        .= rng (P^(F^Q)) \/ rng <*p*> by FINSEQ_1:45
        .= rng P \/ rng (F^Q) \/ rng <*p*> by FINSEQ_1:44
@@ -307,7 +308,7 @@ proof
    .= (F|(i-'1))^<*p*>^((P^Q)/^i) by A2,Def1
    .= (F|(i-'1))^<*p*>^((P/^i)^Q) by A1,A5,GENEALG1:1
    .= (F|(i-'1))^<*p*>^(((fp/^i)^fj)^Q) by A6,GENEALG1:1
-   .= (F|(i-'1))^<*p*>^((((f/^i)|((j-'1)-'i))^fj)^Q) by JORDAN3:21
+   .= (F|(i-'1))^<*p*>^((((f/^i)|((j-'1)-'i))^fj)^Q) by FINSEQ_5:83
    .= (F|(i-'1))^<*p*>^(((f/^i)|((j-'1)-'i))^fj)^Q by FINSEQ_1:45
    .= (F|(i-'1))^<*p*>^((f/^i)|((j-'1)-'i))^fj^Q by FINSEQ_1:45
    .= ((P^Q)|(i-'1))^<*p*>^(f/^i)|((j-'1)-'i)^fj^Q by A2,Def1
@@ -346,7 +347,7 @@ proof
                 .= (f|0)^<*q*>^(f/^1) by BINARITH:51
                 .= {}^<*q*>^<*p2*> by A3,FINSEQ_1:61
                 .= <*q*>^<*p2*> by FINSEQ_1:47;
-  hence thesis by FINSEQ_1:def 9;
+  hence thesis;
 end;
 
 theorem Th16:
@@ -360,12 +361,12 @@ proof
           .= 1 by BINARITH:39;
      Replace(f,2,q) = (f|(2-'1))^<*q*>^(f/^2) by A2,Def1
                 .= (f|1)^<*q*>^(f/^len f) by A4,FINSEQ_1:61
-                .= (f|1)^<*q*>^{} by REVROT_1:2
+                .= (f|1)^<*q*>^{} by RFINSEQ:40
                 .= <*f/.1*>^<*q*>^{} by FINSEQ_5:23
                 .= <*f/.1*>^<*q*> by FINSEQ_1:47
                 .= <*f.1*>^<*q*> by A3,FINSEQ_4:def 4
                 .= <*p1*>^<*q*> by FINSEQ_1:61;
-  hence thesis by FINSEQ_1:def 9;
+  hence thesis;
 end;
 
 theorem Th17:
@@ -377,9 +378,8 @@ proof
                 .= (f|0)^<*q*>^(f/^1) by BINARITH:51
                 .= <*q*>^(f/^1) by FINSEQ_1:47
                 .= <*q*>^<*p2,p3*> by FINSEQ_6:51
-                .= <*q*>^(<*p2*>^<*p3*>) by FINSEQ_1:def 9
                 .= <*q*>^<*p2*>^<*p3*> by FINSEQ_1:45;
-  hence thesis by FINSEQ_1:def 10;
+  hence thesis;
 end;
 
 theorem Th18:
@@ -387,21 +387,20 @@ theorem Th18:
 proof
   set f = <*p1,p2,p3*>;
   A1:len f = 3 by FINSEQ_1:62;
-     1 <= 3 & 3 <= len f by FINSEQ_1:62;
-  then A2:3 in dom f by FINSEQ_3:27;
+  then
+  A2:3 in dom f by FINSEQ_3:27;
   A3:1 in dom f by A1,FINSEQ_3:27;
   A4:2 -'1 = 1 + 1 -'1
           .= 1 by BINARITH:39;
   A5:len f = 2 + 1 by FINSEQ_1:62;
-  A6:f is non empty by A1,FINSEQ_1:25;
      Replace(f,2,q) = (f|(2-'1))^<*q*>^(f/^2) by A1,Def1
                 .= (f|1)^<*q*>^<*f/.3*> by A4,A5,FINSEQ_5:33
                 .= (f|1)^<*q*>^<*f.3*> by A2,FINSEQ_4:def 4
                 .= (f|1)^<*q*>^<*p3*> by FINSEQ_1:62
-                .= <*f/.1*>^<*q*>^<*p3*> by A6,FINSEQ_5:23
+                .= <*f/.1*>^<*q*>^<*p3*> by FINSEQ_5:23
                 .= <*f.1*>^<*q*>^<*p3*> by A3,FINSEQ_4:def 4
                 .= <*p1*>^<*q*>^<*p3*> by FINSEQ_1:62;
-  hence thesis by FINSEQ_1:def 10;
+  hence thesis;
 end;
 
 theorem Th19:
@@ -416,45 +415,65 @@ proof
           .= 2 by BINARITH:39;
      Replace(f,3,q) = (f|(3-'1))^<*q*>^(f/^3) by A2,Def1
                 .= (f|2)^<*q*>^(f/^len f) by A5,FINSEQ_1:62
-                .= (f|2)^<*q*>^{} by REVROT_1:2
+                .= (f|2)^<*q*>^{} by RFINSEQ:40
                 .= (f|2)^<*q*> by FINSEQ_1:47
-                .= <*f/.1,f/.2*>^<*q*> by A1,JORDAN8:1
-                .= (<*f/.1*>^<*f/.2*>)^<*q*> by FINSEQ_1:def 9
+                .= <*f/.1,f/.2*>^<*q*> by A1,FINSEQ_5:84
                 .= <*f.1*>^<*f/.2*>^<*q*> by A3,FINSEQ_4:def 4
                 .= <*f.1*>^<*f.2*>^<*q*> by A4,FINSEQ_4:def 4
                 .= <*p1*>^<*f.2*>^<*q*> by FINSEQ_1:62
                 .= <*p1*>^<*p2*>^<*q*> by FINSEQ_1:62;
-  hence thesis by FINSEQ_1:def 10;
+  hence thesis;
 end;
 
 begin :: Definition of Swap Function and its properties
+
+registration
+  let f be FinSequence;
+  let i, j be Nat;
+  cluster Swap(f, i, j) -> FinSequence-like;
+  correctness
+   proof dom Swap(f, i, j) = dom f by FUNCT_7:101;
+    hence ex n being Element of NAT st dom Swap(f, i, j) = Seg n
+       by FINSEQ_1:def 2;
+   end;
+end;
 
 definition
   let D be non empty set;
   let f be FinSequence of D;
   let i, j be Nat;
-  func Swap(f, i, j) -> FinSequence of D equals :Def2:
+  redefine func Swap(f, i, j) -> FinSequence of D equals :Def2:
       Replace(Replace(f, i, f/.j), j, f/.i)
         if 1 <= i & i <= len f & 1 <= j & j <= len f
       otherwise f;
+  coherence
+   proof
+     rng Swap(f,i,j) = rng f by FUNCT_7:105;
+    hence rng Swap(f, i, j) c= D by FINSEQ_1:def 4;
+   end;
+  compatibility
+   proof let IT be FinSequence of D;
+    thus 1 <= i & i <= len f & 1 <= j & j <= len f implies
+     (IT = Swap(f, i, j) iff IT = Replace(Replace(f, i, f/.j), j, f/.i))
+    proof assume 1 <= i & i <= len f & 1 <= j & j <= len f;
+      then
+Z:     i in dom f & j in dom f by FINSEQ_3:27;
+      then f/.i = f.i & f/.j = f.j by FINSEQ_4:def 4;
+     hence thesis by Z,FUNCT_7:def 12;
+    end;
+    assume not(1 <= i & i <= len f & 1 <= j & j <= len f);
+     then not(i in dom f & j in dom f) by FINSEQ_3:27;
+    hence IT = Swap(f, i, j) iff IT =f by FUNCT_7:def 12;
+   end;
   correctness;
 end;
 
 theorem Th20:
   len Swap(f, i, j) = len f
 proof
-    per cases;
-      suppose 1 <= i & i <= len f & 1 <= j & j <= len f;
-        then Swap(f, i, j)
-          = Replace(Replace(f, i, f/.j), j, f/.i) by Def2;
-        then len Swap(f, i, j)
-           = len Replace(f, i, f/.j) by Th7;
-      hence thesis by Th7;
-      end;
-      suppose not (1 <= i & i <= len f & 1 <= j & j <= len f);
-     hence thesis by Def2;
-  end;
-  end;
+  dom Swap(f, i, j) = dom f by FUNCT_7:101;
+ hence thesis by FINSEQ_3:31;
+end;
 
 Lm3:
   1 <= i & i <= len f & 1 <= j & j <= len f
@@ -632,188 +651,7 @@ end;
 end;
 
 theorem
-     rng Swap(f,i,j) = rng f
-proof
-  per cases;
-  suppose A1: 1 <= i & i <= len f & 1 <= j & j <= len f;
-    then A2:i in dom f by FINSEQ_3:27;
-    A3:j in dom f by A1,FINSEQ_3:27;
-       now per cases by XXREAL_0:1;
-    suppose A4:j < i;
-      set F = Replace(f,i,f/.j);
-      A5:j <= len F by A1,Th7;
-      set fp = f|(i-'1);
-      set fj = <*f/.j*>;
-      set P = fp^fj;
-      set Q = f/^i;
-         i -'1 <= i by BINARITH:52;
-      then A6:i -'1 <= len f by A1,XXREAL_0:2;
-      A7: len P = len fp + len fj by FINSEQ_1:35
-                .= len fp + 1 by FINSEQ_1:56
-                .= i -'1 + 1 by A6,FINSEQ_1:80
-                .= i by A1,BINARITH:53;
-         1 + j <= i by A4,INT_1:20;
-      then j <= i -' 1 by BINARITH:73;
-      then A8:j <= len fp by A6,FINSEQ_1:80;
-      A9:j-'1 <= len P by A4,A7,BINARITH:62;
-      A10:j -'1 < i -'1 by A1,A4,BINARITH:74;
-      then A11:j-'1 <= len fp by A6,FINSEQ_1:80;
-         rng Swap(f,i,j) = rng Replace(F,j,f/.i) by A1,Def2
-       .= rng ((F|(j-'1))^<*f/.i*>^(F/^j)) by A1,A5,Def1
-       .= rng ((F|(j-'1))^<*f.i*>^(F/^j)) by A2,FINSEQ_4:def 4
-       .= rng ((F|(j-'1))^<*f.i*>^((P^Q)/^j)) by A1,Def1
-       .= rng ((F|(j-'1))^<*f.i*>^((P/^j)^Q)) by A4,A7,GENEALG1:1
-       .= rng ((F|(j-'1))^<*f.i*>^(((fp/^j)^fj)^Q)) by A8,GENEALG1:1
-       .= rng ((F|(j-'1))^<*f.i*>^((((f/^j)|((i-'1)-'j))^fj)^Q)) by JORDAN3:21
-       .= rng ((F|(j-'1))^<*f.i*>^(((f/^j)|((i-'1)-'j))^fj)^Q) by FINSEQ_1:45
-       .= rng ((F|(j-'1))^<*f.i*>^((f/^j)|((i-'1)-'j))^fj^Q) by FINSEQ_1:45
-       .= rng (((P^Q)|(j-'1))^<*f.i*>^(f/^j)|((i-'1)-'j)^fj^Q) by A1,Def1
-       .= rng ((P|(j-'1))^<*f.i*>^(f/^j)|((i-'1)-'j)^fj^Q) by A9,FINSEQ_5:25
-       .= rng ((fp|(j-'1))^<*f.i*>^(f/^j)|((i-'1)-'j)^fj^Q) by A11,FINSEQ_5:25
-       .= rng ((f|(j-'1))^<*f.i*>^(f/^j)|((i-'1)-'j)^fj^Q) by A10,FINSEQ_5:80
-       .= rng ((f|(j-'1))^<*f.i*>^(f/^j)|((i-'1)-'j)^<*f.j*>^Q)
-                                                        by A3,FINSEQ_4:def 4
-       .= rng ((f|(j-'1))^<*f.i*>^(f/^j)|(i-'j-'1)^<*f.j*>^Q) by Lm1
-       .= rng (((f|(j-'1))^<*f.i*>^(f/^j)|(i-'j-'1))^(<*f.j*>^Q))
-                                                        by FINSEQ_1:45
-       .= rng ((f|(j-'1))^<*f.i*>^(f/^j)|(i-'j-'1)) \/ rng (<*f.j*>^Q)
-                                                        by FINSEQ_1:44
-       .= rng (((f|(j-'1)))^(<*f.i*>^(f/^j)|(i-'j-'1))) \/ rng (<*f.j*>^Q)
-                                                        by FINSEQ_1:45
-       .= rng (f|(j-'1)) \/ rng (<*f.i*>^(f/^j)|(i-'j-'1)) \/ rng (<*f.j*>^Q)
-                                                        by FINSEQ_1:44
-       .= rng (f|(j-'1)) \/ (rng <*f.i*> \/ rng ((f/^j)|(i-'j-'1)))
-                                      \/ rng (<*f.j*>^Q) by FINSEQ_1:44
-       .= rng (f|(j-'1)) \/ (rng <*f.i*> \/ rng ((f/^j)|(i-'j-'1)))
-                                 \/ (rng <*f.j*> \/ rng Q) by FINSEQ_1:44
-       .= rng (f|(j-'1)) \/ rng ((f/^j)|(i-'j-'1)) \/ rng <*f.i*>
-                                 \/ (rng <*f.j*> \/ rng Q) by XBOOLE_1:4
-       .= rng (f|(j-'1)) \/ rng ((f/^j)|(i-'j-'1)) \/ rng <*f.i*>
-                                 \/ rng <*f.j*> \/ rng Q by XBOOLE_1:4
-       .= rng (f|(j-'1)) \/ rng ((f/^j)|(i-'j-'1)) \/ rng <*f.j*>
-                                 \/ rng <*f.i*> \/ rng Q by XBOOLE_1:4
-       .= rng (f|(j-'1)) \/ (rng ((f/^j)|(i-'j-'1)) \/ rng <*f.j*>)
-                                 \/ rng <*f.i*> \/ rng Q by XBOOLE_1:4
-       .= rng (f|(j-'1)) \/ rng (<*f.j*>^((f/^j)|(i-'j-'1)))
-                                 \/ rng <*f.i*> \/ rng Q by FINSEQ_1:44
-       .= rng (f|(j-'1)) \/ rng (<*f.j*>^((f/^j)|(i-'j-'1)))
-                                 \/ (rng <*f.i*> \/ rng Q) by XBOOLE_1:4
-       .= rng (f|(j-'1)) \/ rng (<*f.j*>^((f/^j)|(i-'j-'1)))
-                                 \/ rng (<*f.i*>^Q) by FINSEQ_1:44
-       .= rng (f|(j-'1)) \/ (rng (<*f.j*>^((f/^j)|(i-'j-'1)))
-                                 \/ rng (<*f.i*>^Q)) by XBOOLE_1:4
-       .= rng (f|(j-'1)) \/ rng ((<*f.j*>^((f/^j)|(i-'j-'1)))^(<*f.i*>^Q))
-                                                    by FINSEQ_1:44
-       .= rng ((f|(j-'1))^((<*f.j*>^((f/^j)|(i-'j-'1)))^(<*f.i*>^Q)))
-                                                    by FINSEQ_1:44
-       .= rng ((f|(j-'1))^(<*f.j*>^(((f/^j)|(i-'j-'1))^(<*f.i*>^Q))))
-                                                    by FINSEQ_1:45
-       .= rng ((f|(j-'1))^(<*f.j*>^(((f/^j)|(i-'j-'1))^<*f.i*>^Q)))
-                                                    by FINSEQ_1:45
-       .= rng ((f|(j-'1))^<*f.j*>^(((f/^j)|(i-'j-'1))^<*f.i*>^Q))
-                                                    by FINSEQ_1:45
-       .= rng ((f|(j-'1))^<*f.j*>^((f/^j)|(i-'j-'1)^(<*f.i*>^Q)))
-                                                    by FINSEQ_1:45
-       .= rng ((f|(j-'1))^<*f.j*>^(f/^j)|(i-'j-'1)^(<*f.i*>^Q))
-                                                    by FINSEQ_1:45
-       .= rng ((f|(j-'1))^<*f.j*>^(f/^j)|(i-'j-'1)^<*f.i*>^Q)
-                                                    by FINSEQ_1:45
-       .= rng f by A1,A4,Th1;
-      hence thesis;
-    end;
-    suppose A12:i < j;
-      set F = Replace(f,j,f/.i);
-      A13:i <= len F by A1,Th7;
-      set fp = f|(j-'1);
-      set fj = <*f/.i*>;
-      set P = fp^fj;
-      set Q = f/^j;
-         j -'1 <= j by BINARITH:52;
-      then A14:j -'1 <= len f by A1,XXREAL_0:2;
-      A15: len P = len fp + len fj by FINSEQ_1:35
-                .= len fp + 1 by FINSEQ_1:56
-                .= j -'1 + 1 by A14,FINSEQ_1:80
-                .= j by A1,BINARITH:53;
-         1 + i <= j by A12,INT_1:20;
-      then i <= j -' 1 by BINARITH:73;
-      then A16:i <= len fp by A14,FINSEQ_1:80;
-      A17:i-'1 <= len P by A12,A15,BINARITH:62;
-      A18:i -'1 < j -'1 by A1,A12,BINARITH:74;
-      then A19:i-'1 <= len fp by A14,FINSEQ_1:80;
-         rng Swap(f,i,j)
-        = rng Swap(f,j,i) by Th23
-       .= rng Replace(F,i,f/.j) by A1,Def2
-       .= rng ((F|(i-'1))^<*f/.j*>^(F/^i)) by A1,A13,Def1
-       .= rng ((F|(i-'1))^<*f.j*>^(F/^i)) by A3,FINSEQ_4:def 4
-       .= rng ((F|(i-'1))^<*f.j*>^((P^Q)/^i)) by A1,Def1
-       .= rng ((F|(i-'1))^<*f.j*>^((P/^i)^Q)) by A12,A15,GENEALG1:1
-       .= rng ((F|(i-'1))^<*f.j*>^(((fp/^i)^fj)^Q)) by A16,GENEALG1:1
-       .= rng ((F|(i-'1))^<*f.j*>^((((f/^i)|((j-'1)-'i))^fj)^Q)) by JORDAN3:21
-       .= rng ((F|(i-'1))^<*f.j*>^(((f/^i)|((j-'1)-'i))^fj)^Q) by FINSEQ_1:45
-       .= rng ((F|(i-'1))^<*f.j*>^((f/^i)|((j-'1)-'i))^fj^Q) by FINSEQ_1:45
-       .= rng (((P^Q)|(i-'1))^<*f.j*>^(f/^i)|((j-'1)-'i)^fj^Q) by A1,Def1
-       .= rng ((P|(i-'1))^<*f.j*>^(f/^i)|((j-'1)-'i)^fj^Q) by A17,FINSEQ_5:25
-       .= rng ((fp|(i-'1))^<*f.j*>^(f/^i)|((j-'1)-'i)^fj^Q) by A19,FINSEQ_5:25
-       .= rng ((f|(i-'1))^<*f.j*>^(f/^i)|((j-'1)-'i)^fj^Q) by A18,FINSEQ_5:80
-       .= rng ((f|(i-'1))^<*f.j*>^(f/^i)|((j-'1)-'i)^<*f.i*>^Q)
-                                                        by A2,FINSEQ_4:def 4
-       .= rng ((f|(i-'1))^<*f.j*>^(f/^i)|(j-'i-'1)^<*f.i*>^Q) by Lm1
-       .= rng (((f|(i-'1))^<*f.j*>^(f/^i)|(j-'i-'1))^(<*f.i*>^Q))
-                                                        by FINSEQ_1:45
-       .= rng ((f|(i-'1))^<*f.j*>^(f/^i)|(j-'i-'1)) \/ rng (<*f.i*>^Q)
-                                                        by FINSEQ_1:44
-       .= rng (((f|(i-'1)))^(<*f.j*>^(f/^i)|(j-'i-'1))) \/ rng (<*f.i*>^Q)
-                                                        by FINSEQ_1:45
-       .= rng (f|(i-'1)) \/ rng (<*f.j*>^(f/^i)|(j-'i-'1)) \/ rng (<*f.i*>^Q)
-                                                        by FINSEQ_1:44
-       .= rng (f|(i-'1)) \/ (rng <*f.j*> \/ rng ((f/^i)|(j-'i-'1)))
-                                      \/ rng (<*f.i*>^Q) by FINSEQ_1:44
-       .= rng (f|(i-'1)) \/ (rng <*f.j*> \/ rng ((f/^i)|(j-'i-'1)))
-                                 \/ (rng <*f.i*> \/ rng Q) by FINSEQ_1:44
-       .= rng (f|(i-'1)) \/ rng ((f/^i)|(j-'i-'1)) \/ rng <*f.j*>
-                                 \/ (rng <*f.i*> \/ rng Q) by XBOOLE_1:4
-       .= rng (f|(i-'1)) \/ rng ((f/^i)|(j-'i-'1)) \/ rng <*f.j*>
-                                 \/ rng <*f.i*> \/ rng Q by XBOOLE_1:4
-       .= rng (f|(i-'1)) \/ rng ((f/^i)|(j-'i-'1)) \/ rng <*f.i*>
-                                 \/ rng <*f.j*> \/ rng Q by XBOOLE_1:4
-       .= rng (f|(i-'1)) \/ (rng ((f/^i)|(j-'i-'1)) \/ rng <*f.i*>)
-                                 \/ rng <*f.j*> \/ rng Q by XBOOLE_1:4
-       .= rng (f|(i-'1)) \/ rng (<*f.i*>^((f/^i)|(j-'i-'1)))
-                                 \/ rng <*f.j*> \/ rng Q by FINSEQ_1:44
-       .= rng (f|(i-'1)) \/ rng (<*f.i*>^((f/^i)|(j-'i-'1)))
-                                 \/ (rng <*f.j*> \/ rng Q) by XBOOLE_1:4
-       .= rng (f|(i-'1)) \/ rng (<*f.i*>^((f/^i)|(j-'i-'1)))
-                                 \/ rng (<*f.j*>^Q) by FINSEQ_1:44
-       .= rng (f|(i-'1)) \/ (rng (<*f.i*>^((f/^i)|(j-'i-'1)))
-                                 \/ rng (<*f.j*>^Q)) by XBOOLE_1:4
-       .= rng (f|(i-'1)) \/ rng ((<*f.i*>^((f/^i)|(j-'i-'1)))^(<*f.j*>^Q))
-                                                    by FINSEQ_1:44
-       .= rng ((f|(i-'1))^((<*f.i*>^((f/^i)|(j-'i-'1)))^(<*f.j*>^Q)))
-                                                    by FINSEQ_1:44
-       .= rng ((f|(i-'1))^(<*f.i*>^(((f/^i)|(j-'i-'1))^(<*f.j*>^Q))))
-                                                    by FINSEQ_1:45
-       .= rng ((f|(i-'1))^(<*f.i*>^(((f/^i)|(j-'i-'1))^<*f.j*>^Q)))
-                                                    by FINSEQ_1:45
-       .= rng ((f|(i-'1))^<*f.i*>^(((f/^i)|(j-'i-'1))^<*f.j*>^Q))
-                                                    by FINSEQ_1:45
-       .= rng ((f|(i-'1))^<*f.i*>^((f/^i)|(j-'i-'1)^(<*f.j*>^Q)))
-                                                    by FINSEQ_1:45
-       .= rng ((f|(i-'1))^<*f.i*>^(f/^i)|(j-'i-'1)^(<*f.j*>^Q)) by FINSEQ_1:45
-       .= rng ((f|(i-'1))^<*f.i*>^(f/^i)|(j-'i-'1)^<*f.j*>^Q) by FINSEQ_1:45
-       .= rng f by A1,A12,Th1;
-
-      hence thesis;
-    end;
-    suppose i = j;
-      hence thesis by Th21;
-    end;
-    end;
-    hence thesis;
-  end;
-  suppose not (1 <= i & i <= len f & 1 <= j & j <= len f);
-    hence thesis by Def2;
-end;
-end;
+  rng Swap(f,i,j) = rng f by FUNCT_7:105;
 
 theorem
      Swap(<*p1, p2*>, 1, 2) = <*p2, p1*>
@@ -912,7 +750,7 @@ proof
     = (f|(i-'1))^<*f/.len f*>^(f/^i)|(len f-'i-'1)^<*f/.i*>^(f/^len f)
                                                                by Th29
    .= (f|(i-'1))^<*f/.len f*>^(f/^i)|(len f-'i-'1)^<*f/.i*>^{}
-                                                               by REVROT_1:2;
+                                                               by RFINSEQ:40;
   hence thesis by FINSEQ_1:47;
 end;
 
@@ -1015,16 +853,16 @@ proof
                .= (G1^(H1^(f/^j)))|(i-'1) by FINSEQ_1:45
                .= G1|(i-'1) by A12,FINSEQ_5:25
                .= f|(i-'1) by A11,FINSEQ_5:80;
-      A15:(F1/^i)|(j-'i-'1) = (F1/^i)|(j-'(i+1)) by POLYNOM1:3
-                       .= (F1/^i)|(j-'1-'i) by POLYNOM1:3
-                       .= (F1|(j-'1))/^i by JORDAN3:21
+      A15:(F1/^i)|(j-'i-'1) = (F1/^i)|(j-'(i+1)) by NAT_2:32
+                       .= (F1/^i)|(j-'1-'i) by NAT_2:32
+                       .= (F1|(j-'1))/^i by FINSEQ_5:83
                        .= ((G1^H1^(f/^j))|(j-'1))/^i by A1,Def1
                        .= ((G1^(H1^(f/^j)))|(j-'1))/^i by FINSEQ_1:45
                        .= ((G1^(H1^(f/^j)))|len G1)/^i by A9,FINSEQ_1:80
                        .= G1/^i by FINSEQ_5:26
-                       .= (f/^i)|((j-'1)-'i) by JORDAN3:21
-                       .= (f/^i)|(j-'(1+i)) by POLYNOM1:3
-                       .= (f/^i)|(j-'i-'1) by POLYNOM1:3;
+                       .= (f/^i)|((j-'1)-'i) by FINSEQ_5:83
+                       .= (f/^i)|(j-'(1+i)) by NAT_2:32
+                       .= (f/^i)|(j-'i-'1) by NAT_2:32;
       A16:1 <= i & i <= len F1 & 1 <= j & j <= len F1 by A1,Th7;
       then A17:i in dom F1 by FINSEQ_3:27;
       A18:j in dom F1 by A16,FINSEQ_3:27;
@@ -1046,9 +884,8 @@ proof
         A22:i = j + k by NAT_1:10;
       reconsider i,j,k as Element of NAT by ORDINAL1:def 13;
         A23: i - j > j - j by A21,XREAL_1:11;
-      then A24:i - j > 0;
       A25:k = i -'j by A22,A23,BINARITH:def 3;
-      i-'j <> 0 by A24,BINARITH:def 3;
+      i-'j <> 0 by A23,BINARITH:def 3;
       then A26:i -'j >= 1 by NAT_1:14;
       A27:k >= 1 by A22,A23,NAT_1:14;
       set F = Swap(f,j,i);
@@ -1072,9 +909,9 @@ proof
          i -'1 <= i by BINARITH:52;
       then i -'1 <= len f by A1,XXREAL_0:2;
       then i -'1-'j <= len f -'j by BINARITH:60;
-      then i -'1-'j <= len (f/^j) by JORDAN3:19;
-      then i -'(1+j) <= len (f/^j) by POLYNOM1:3;
-      then A31:i-'j-'1 <= len (f/^j) by POLYNOM1:3;
+      then i -'1-'j <= len (f/^j) by BINARITH:76;
+      then i -'(1+j) <= len (f/^j) by NAT_2:32;
+      then A31:i-'j-'1 <= len (f/^j) by NAT_2:32;
       A32:len (V^W) = len V + len W by FINSEQ_1:35
                .= len V + 1 by FINSEQ_1:56
                .= i-'j-'1 + 1 by A31,FINSEQ_1:80
@@ -1119,9 +956,9 @@ proof
                   .= (G1^(H1^(f/^j)))|len G1 by A39,FINSEQ_1:80
                   .= G1 by FINSEQ_5:26;
       A45:(F1/^j)|(i-'j-'1)
-        = (F1/^j)|(i-'(j+1)) by POLYNOM1:3
-       .= (F1/^j)|(i-'1-'j) by POLYNOM1:3
-       .= (F1|(i-'1))/^j by JORDAN3:21
+        = (F1/^j)|(i-'(j+1)) by NAT_2:32
+       .= (F1/^j)|(i-'1-'j) by NAT_2:32
+       .= (F1|(i-'1))/^j by FINSEQ_5:83
        .= (((G1^H1)^(f/^j))|(j+(k-'1)))/^j by A1,A22,A43,Def1
        .= ((G1^H1)^((f/^j)|(k-'1)))/^len (G1^H1) by A40,GENEALG1:2
        .= (f/^j)|(i-'j-'1) by A25,FINSEQ_5:40;

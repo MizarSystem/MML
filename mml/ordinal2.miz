@@ -7,13 +7,13 @@
 environ
 
  vocabularies ORDINAL1, FUNCT_1, BOOLE, SETFAM_1, TARSKI, RELAT_1, ORDINAL2,
-      FUNCOP_1;
+      FUNCOP_1, ZFREFLE1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
       SETFAM_1, FUNCOP_1;
  constructors SETFAM_1, ORDINAL1, FUNCOP_1;
  registrations FUNCT_1, SUBSET_1, ORDINAL1, ZFMISC_1, XBOOLE_0, FUNCOP_1;
  requirements SUBSET, BOOLE, NUMERALS;
- definitions TARSKI, XBOOLE_0, ORDINAL1;
+ definitions ORDINAL1, TARSKI, XBOOLE_0;
  theorems TARSKI, XBOOLE_0, ORDINAL1, SETFAM_1, ZFMISC_1, FUNCT_1, RELAT_1,
       XBOOLE_1, FUNCOP_1;
  schemes XBOOLE_0, FUNCT_1, ORDINAL1;
@@ -2109,3 +2109,52 @@ A1:  rng(X --> o) c= {o} by FUNCOP_1:19;
    hence thesis by Def8;
   end;
 end;
+
+:: from ZFREFLE1, 2007.03.14, A.T.
+
+ definition let A,B be Ordinal;
+  pred A is_cofinal_with B means  ex xi being Ordinal-Sequence st
+        dom xi = B & rng xi c= A & xi is increasing & A = sup xi;
+   reflexivity
+    proof let A;
+A1:    dom id A = A & rng id A = A by RELAT_1:71;
+     then reconsider xi = id A as T-Sequence by ORDINAL1:def 7;
+     reconsider xi as Ordinal-Sequence by A1,Def8;
+     take xi; thus dom xi = A & rng xi c= A by RELAT_1:71;
+     thus xi is increasing
+       proof let B,C; assume
+A2:       B in C & C in dom xi;
+         then B in dom xi & xi.C = C by A1,FUNCT_1:35,ORDINAL1:19;
+        hence xi.B in xi.C by A1,A2,FUNCT_1:35;
+       end;
+     thus A = sup xi by A1,Th26;
+    end;
+ end;
+
+reserve e,u for set;
+
+theorem
+ Th19: e in rng psi implies e is Ordinal
+  proof assume e in rng psi;
+   then consider u such that
+A1:  u in dom psi & e = psi.u by FUNCT_1:def 5;
+       u is Ordinal by A1,ORDINAL1:23;
+   hence thesis by A1,Th34;
+  end;
+
+theorem
+ Th20: rng psi c= sup psi
+  proof let e; assume
+A1:  e in rng psi;
+    then e is Ordinal & sup psi = sup rng psi by Th19;
+   hence thesis by A1,Th27;
+  end;
+
+theorem
+    A is_cofinal_with {} implies A = {}
+  proof given psi such that
+A1:  dom psi = {} & rng psi c= A & psi is increasing & A = sup psi;
+   thus A = sup {} by  A1,RELAT_1:65
+         .= {} by Th26;
+  end;
+

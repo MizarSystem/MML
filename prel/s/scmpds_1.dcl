@@ -10,8 +10,6 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XCMPLX_0"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -22,18 +20,12 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="STRUCT_0"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="GROUP_1"/>
-<ArticleID name="SEQ_1"/>
-<ArticleID name="RVSUM_1"/>
-<ArticleID name="GR_CY_1"/>
 <ArticleID name="AMI_2"/>
 <ArticleID name="SCMPDS_1"/>
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="214"/>
+<Func kind="K" nr="142"/>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="7" value="false"/>
@@ -44,31 +36,31 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="30">
-<Func kind="K" nr="214"/>
-<Func kind="K" nr="120">
-<Func kind="K" nr="124">
-<Func kind="K" nr="215"/>
+<Adjective nr="23">
+<Func kind="K" nr="142"/>
+<Func kind="K" nr="115">
+<Func kind="K" nr="119">
+<Func kind="K" nr="143"/>
 </Func>
-<Func kind="K" nr="124">
-<Func kind="K" nr="215"/>
+<Func kind="K" nr="119">
+<Func kind="K" nr="143"/>
 </Func>
 </Func>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="214"/>
-<Func kind="K" nr="120">
-<Func kind="K" nr="124">
-<Func kind="K" nr="215"/>
+<Func kind="K" nr="142"/>
+<Func kind="K" nr="115">
+<Func kind="K" nr="119">
+<Func kind="K" nr="143"/>
 </Func>
-<Func kind="K" nr="124">
-<Func kind="K" nr="215"/>
+<Func kind="K" nr="119">
+<Func kind="K" nr="143"/>
 </Func>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="214"/>
+<Func kind="K" nr="142"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="12">

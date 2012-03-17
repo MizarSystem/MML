@@ -243,9 +243,7 @@ A1:    for h being Element of IT holds
 A2:  x is_a_unity_wrt the mult of IT;
    take x;
    let h be Element of IT;
-       for a holds (the mult of IT).(x,h) = h &
-                (the mult of IT).(h,x) = h by A2,BINOP_1:11;
-   hence h * x = h & x * h = h;
+   thus h * x = h & x * h = h by A2,BINOP_1:11;
   end;
 end;
 
@@ -696,22 +694,22 @@ A1:     IT is well-unital;
      thus 1.IT is_a_left_unity_wrt the mult of IT
       proof let a be Element of IT;
        thus (the mult of IT).(1.IT,a)
-                  = (1.IT)*a by VECTSP_1:def 9
-                 .= a by A1,VECTSP_2:def 2;
+                  = (1.IT)*a
+                 .= a by A1,VECTSP_1:def 16;
       end;
      let a be Element of IT;
      thus (the mult of IT).(a,1.IT)
-                  = a*(1.IT) by VECTSP_1:def 9
-                 .= a by A1,VECTSP_2:def 2;
+                  = a*(1.IT)
+                 .= a by A1,VECTSP_1:def 16;
     end;
    assume
 A2:  1.IT is_a_unity_wrt the mult of IT;
    let x be Element of IT;
 A3:  1.IT is_a_right_unity_wrt the mult of IT by A2,BINOP_1:def 7;
-   thus x*(1.IT) = (the mult of IT).(x,1.IT) by VECTSP_1:def 9
+   thus x*(1.IT) = (the mult of IT).(x,1.IT)
            .= x by A3,BINOP_1:def 6;
 A4:  1.IT is_a_left_unity_wrt the mult of IT by A2,BINOP_1:def 7;
-   thus (1.IT)*x = (the mult of IT).(1.IT,x) by VECTSP_1:def 9
+   thus (1.IT)*x = (the mult of IT).(1.IT,x)
            .= x by A4,BINOP_1:def 5;
   end;
 end;
@@ -732,17 +730,6 @@ A2:  for a being Element of M holds un(M)*a = a & a*un(M) = a;
     end;
    hence thesis by A1,BINOP_1:11;
   end;
-
-Lm6: for M being non empty multLoopStr st M is well-unital holds M is unital
-  proof let M be non empty multLoopStr;
-   assume un(M) is_a_unity_wrt the mult of M;
-   hence op(M) has_a_unity by SETWISEO:def 2;
-  end;
-
-registration
- cluster well-unital -> unital (non empty multLoopStr);
-  coherence by Lm6;
-end;
 
 theorem Th19:
  for M being non empty multLoopStr st M is well-unital holds
@@ -768,12 +755,11 @@ registration
     take G = multLoopStr(#{p},o,e#);
     reconsider e as Element of G;
     reconsider o as BinOp of G;
-X:  un(G) = e;
         now let b be Element of G;
           o.(e,b) = p & o.(b,e) = p & b = p by TARSKI:def 1;
       hence o.(e,b) = b & o.(b,e) = b;
      end;
-    hence un(G) is_a_unity_wrt op(G) by BINOP_1:11,X;
+    hence un(G) is_a_unity_wrt op(G) by BINOP_1:11;
     hence op(G) is commutative & op(G) is associative & op(G) is cancelable &
       op(G) is idempotent & op(G) is invertible uniquely-decomposable &
       ex e being Element of G st e is_a_unity_wrt op(G) by Th3;
@@ -1016,7 +1002,7 @@ X:      op(the multLoopStr of N) <= op(G) by Def24;
      then for M being multLoopStr st G = M
       holds un(the multLoopStr of N) = un(M) by Def24;
      then the multLoopStr of N is MonoidalSubStr of G by Def24,X;
-    hence thesis by X;
+    hence thesis;
    end;
 end;
 
@@ -1471,8 +1457,8 @@ A4:     y in dom (op||D()) &
        by A2,A4,RELAT_1:91;
       reconsider y1 = y`1, y2 = y`2 as Element of D();
           y = [y1,y2] by MCART_1:23;
-       then op.(y1,y2) = x by A4,FUNCT_1:70;
-       then x = y1*y2;
+:::       then op.(y1,y2) = x by A4,FUNCT_1:70;
+       then x = y1*y2 by A4,FUNCT_1:70;
       hence thesis by A1;
      end;
    then reconsider f = op||D() as BinOp of D() by A3,FUNCT_2:def 1
@@ -1575,12 +1561,6 @@ definition
    end;
 end;
 
- Lm7:
- the carrier of <REAL,+> = REAL &
- the mult of <REAL,+> = addreal &
- for a,b being Element of <REAL,+>, x,y being Real st
-   a = x & b = y holds a*b = x+y by BINOP_2:def 9;
-
 canceled;
 
 theorem
@@ -1598,7 +1578,7 @@ theorem Th43:
    then reconsider a' = a, b' = b as Element of <REAL,+>
     by TARSKI:def 3;
        a*b = a'*b' by Th27;
-   hence thesis by Lm7;
+   hence thesis by BINOP_2:def 9;
   end;
 
 theorem Th44:
@@ -1609,14 +1589,13 @@ theorem Th44:
 A1:  for b being Element of N holds a*b = b & b*a = b by Th6;
        carr(N) c= REAL by Th25;
    then reconsider x = a as Real by TARSKI:def 3;
-       x+0 = a*a by A1 .= x+x by Th43;
-then A2:  a = 0;
+B2:    x+0 = a*a by A1 .= x+x by Th43;
        now let b be Element of N;
          a*b = op(N).(a,b) & b*a = op(N).(b,a);
      hence op(N).(a,b) = b & op(N).(b,a) = b by A1;
     end;
     then a is_a_unity_wrt op(N) by BINOP_1:11;
-   hence thesis by A2,BINOP_1:def 8;
+   hence thesis by B2,BINOP_1:def 8;
   end;
 
 registration let G be unital (non empty HGrStr);
@@ -1643,7 +1622,7 @@ then A2:   dom (addreal||INT) = [:INT,INT:] by RELAT_1:91;
 A3:    x in [:INT,INT:];
 then A4:    x`1 in INT & x`2 in INT & x = [x`1,x`2] by MCART_1:10,23;
       reconsider i1 = x`1, i2 = x`2 as Element of INT by A3,MCART_1:10;
-      thus addint.x = addint.(i1,i2) by A4
+      thus addint.x = addint.(i1,i2) by A3,MCART_1:23
                    .= addreal.(i1,i2) by GR_CY_1:def 2
                    .= (addreal||INT).x by  A4,A2,A3,FUNCT_1:70;
      end;
@@ -1811,12 +1790,6 @@ definition
    end;
 end;
 
- Lm8:
- the carrier of <REAL,*> = REAL &
- the mult of <REAL,*> = multreal &
- for a,b being Element of <REAL,*>, x,y being Real st
-   a = x & b = y holds a*b = x*y by BINOP_2:def 11;
-
 canceled;
 
 theorem
@@ -1834,7 +1807,7 @@ theorem Th58:
    then reconsider a' = a, b' = b as Element of <REAL,*>
     by TARSKI:def 3;
        a*b = a'*b' by Th27;
-   hence thesis by Lm8;
+   hence thesis by BINOP_2:def 11;
   end;
 
 canceled;
@@ -1997,24 +1970,23 @@ A1:   for a,b being Element of D* holds
        hence thesis;
       end;
     then reconsider G as constituted-FinSeqs strict (non empty HGrStr);
-A2: for p,q be Element of G holds p [*] q = p^q by A1;
      G is unital associative cancelable uniquely-decomposable
       proof set N = G, f = op(N);
         <*>D = {};
        then reconsider a = {} as Element of N by FINSEQ_1:def 11;
 A3:      now let b be Element of N;
-         thus a[*]b = a^b by A2 .= b by FINSEQ_1:47;
-         thus b[*]a = b^a by A2 .= b by FINSEQ_1:47;
+         thus a[*]b = a^b by A1 .= b by FINSEQ_1:47;
+         thus b[*]a = b^a by A1 .= b by FINSEQ_1:47;
         end;
        hence N is unital by Th6;
        now let a,b,c be Element of N;
          reconsider p = a[*]b, q = b[*]c as Element of N;
-         thus a*b*c = p^c by A2 .= a^b^c by A2 .= a^(b^c) by FINSEQ_1:45
-                   .= a^q by A2 .= a*(b*c) by A2;
+         thus a*b*c = p^c by A1 .= a^b^c by A1 .= a^(b^c) by FINSEQ_1:45
+                   .= a^q by A1 .= a*(b*c) by A1;
         end;
        hence N is associative by Lm2;
            now let a,b,c be Element of N;
-             a*b = a^b & a*c = a^c & b*a = b^a & c*a = c^a by A2;
+             a*b = a^b & a*c = a^c & b*a = b^a & c*a = c^a by A1;
          hence a*b = a*c or b*a = c*a implies b = c by FINSEQ_1:46;
         end;
        hence N is cancelable by Th15;
@@ -2025,16 +1997,15 @@ A3:      now let b be Element of N;
          hence f.(a,b) = b & f.(b,a) = b by A3;
         end;
 then A4:        a is_a_unity_wrt op(N) by BINOP_1:11;
-then A5:      the_unity_wrt op(N) = a by BINOP_1:def 8;
        let a',b be Element of N;
         assume f.(a',b) = the_unity_wrt op(N);
-        then {} = a'[*]b by A5 .= a'^b by A2;
+        then {} = a'[*]b by A4,BINOP_1:def 8 .= a'^b by A1;
         then a = a' & a = b by FINSEQ_1:48;
        hence thesis by A4,BINOP_1:def 8;
       end;
     then reconsider G as unital associative cancelable uniquely-decomposable
                     constituted-FinSeqs strict (non empty HGrStr);
-    take G; thus thesis by A2;
+    take G; thus thesis by A1;
    end;
   uniqueness
    proof let G1,G2 be unital associative cancelable uniquely-decomposable
@@ -2070,7 +2041,7 @@ definition let D;
    end;
 end;
 
-theorem Th68:
+theorem
  D*+^ = HGrStr(#D*, D-concatenation#) by Def34;
 
 theorem Th69:
@@ -2161,7 +2132,7 @@ then A5:   x`1 in A* & x`2 in A* by MCART_1:10;
 theorem
     D-concatenation has_a_unity & the_unity_wrt (D-concatenation) = {} &
  D-concatenation is associative
-  proof HGrStr(#D*,D-concatenation#) = D*+^ by Th68;
+  proof HGrStr(#D*,D-concatenation#) = D*+^ by Def34;
    hence thesis by Def10,Def12,Th69;
   end;
 

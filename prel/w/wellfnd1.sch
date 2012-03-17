@@ -17,11 +17,11 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="FUNCT_3"/>
@@ -47,7 +47,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="203">
+<Func kind="K" nr="208">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -97,9 +97,9 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="3">
+<Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="45" value="false"/>
+<Adjective nr="44" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -151,7 +151,7 @@
 <Var nr="2"/>
 <Var nr="1"/>
 </Func>
-<Func kind="U" nr="3">
+<Func kind="U" nr="4">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -165,15 +165,15 @@
 <Pred kind="P" nr="1">
 <Func kind="F" nr="2"/>
 </Pred>
-<Pred kind="V" nr="54">
+<Pred kind="V" nr="58">
 <Func kind="F" nr="1"/>
 </Pred>
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="3">
+<Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="45" value="false"/>
+<Adjective nr="44" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -223,7 +223,7 @@
 <Var nr="2"/>
 <Var nr="1"/>
 </Func>
-<Func kind="U" nr="3">
+<Func kind="U" nr="4">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -243,7 +243,7 @@
 </And>
 </Not>
 </For>
-<Pred kind="V" nr="54">
+<Pred kind="V" nr="58">
 <Func kind="F" nr="1"/>
 </Pred>
 </Scheme>

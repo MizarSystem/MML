@@ -18,42 +18,42 @@
 </Signature>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="3">
+<Typ kind="G" nr="5">
 <Cluster/>
 </Typ>
-<Typ kind="G" nr="3">
+<Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="16" value="false"/>
+<Adjective nr="15" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="82">
+<Func kind="K" nr="84">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="16" value="false"/>
-<Adjective nr="17"/>
+<Adjective nr="15" value="false"/>
+<Adjective nr="21"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="3">
+<Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="16" value="false"/>
+<Adjective nr="15" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="3">
+<Typ kind="G" nr="5">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="82">
+<Func kind="K" nr="84">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="16" value="false"/>
-<Adjective nr="17"/>
+<Adjective nr="15" value="false"/>
+<Adjective nr="21"/>
 </Cluster>
 </FCluster>
 </Registrations>

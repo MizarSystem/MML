@@ -18,7 +18,7 @@ environ
  registrations ORDINAL1, ZF_LANG, ORDINAL2, CLASSES2, ZF_LANG1, RELSET_1,
       CARD_1, FUNCT_2, PARTFUN1, SUBSET_1;
  requirements NUMERALS, BOOLE, SUBSET;
- definitions TARSKI, ORDINAL2, ZF_MODEL, ZF_REFLE, XBOOLE_0, BINOP_1;
+ definitions TARSKI, ORDINAL2, ZF_MODEL, ORDINAL1, XBOOLE_0, BINOP_1;
  theorems TARSKI, NAT_1, ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_5, ORDINAL1,
       ORDINAL2, ORDINAL3, ORDINAL4, CARD_1, CARD_2, CLASSES1, CLASSES2,
       ZF_LANG, CARD_3, ZF_MODEL, ZFMODEL1, ZF_LANG1, ZF_REFLE, RELAT_1,
@@ -293,53 +293,6 @@ A1:  M1 is_a_model_of_ZF & M1 <==> M2;
    hence thesis by Th5;
   end;
 
-scheme NonUniqFuncEx { X() -> set, P[set,set] }:
- ex f being Function st dom f = X() & for e st e in X() holds P[e,f.e]
-  provided
-A1: for e st e in X() ex u st P[e,u]
-proof
-A2: now assume X() = {};
-then A3:    for e st e in X() ex u st u in {} & P[e,u];
-         ex f being Function st dom f = X() & rng f c= {} &
-       for e st e in X() holds P[e,f.e] from WELLORD2:sch 1(A3);
-     hence thesis;
-    end;
-       now assume X() <> {};
-     then reconsider D = X() as non empty set;
-     defpred Q[set,Ordinal] means ex u st u in Rank $2 & P[$1,u];
-A4:    for e being Element of D ex A st Q[e,A]
-       proof let e be Element of D;
-        consider u such that
-A5:       P[e,u] by A1;
-            u c= Rank the_rank_of u by CLASSES1:def 8;
-         then u in Rank succ the_rank_of u by CLASSES1:36;
-        hence thesis by A5;
-       end;
-     consider F be Function such that
-A6:    dom F = D & for d being Element of D ex A st A = F.d & Q[d,A] &
-        for B st Q[d,B] holds A c= B from ZF_REFLE:sch 1(A4);
-A7:    for e st e in X() ex u st u in Rank sup rng F & P[e,u]
-       proof let e; assume
-A8:       e in X();
-        then consider A such that
-A9:       A = F.e & (ex u st u in Rank A & P[e,u]) &
-          for B st ex u st u in Rank B & P[e,u] holds A c= B by A6;
-        consider u such that
-A10:       u in Rank A & P[e,u] by A9;
-        take u;
-            A in rng F by A6,A8,A9,FUNCT_1:def 5;
-         then A in sup rng F by ORDINAL2:27;
-         then A c= sup rng F by ORDINAL1:def 2;
-         then Rank A c= Rank sup rng F by CLASSES1:43;
-        hence thesis by A10;
-       end;
-         ex f being Function st dom f = X() & rng f c= Rank sup rng F &
-       for e st e in X() holds P[e, f.e] from WELLORD2:sch 1(A7);
-     hence thesis;
-    end;
-   hence thesis by A2;
-  end;
-
 canceled;
 
 theorem
@@ -437,7 +390,7 @@ A18:       u in dom (L|a) & e = (L|a).u by FUNCT_1:def 5;
       then consider u such that
 A19:    u in dom L & e = L.u by FUNCT_1:def 5;
       reconsider u as Ordinal of W by A2,A19,ZF_REFLE:8;
-         P[a] from ZF_REFLE:sch 5(A7,A8,A12); then L.u in On W;
+         P[a] from ZF_REFLE:sch 4(A7,A8,A12); then L.u in On W;
       hence thesis by A19;
      end;
    then reconsider phi = L as Ordinal-Sequence of W by A2,ORDINAL4:def 3;
@@ -474,7 +427,7 @@ A28:       a in b;  b in On W & a in On W by ZF_REFLE:8;
            by ORDINAL2:27;
          hence phi.a in phi.b;
         end;
-          for b holds Q[b] from ZF_REFLE:sch 5(A22,A23,A26);
+          for b holds Q[b] from ZF_REFLE:sch 4(A22,A23,A26);
        then phi.a in phi.b by A21;
       hence thesis;
      end;
@@ -549,82 +502,19 @@ then A6:  sup (C+^xi) = C+^sup xi & lim xi = A' & xi is increasing
    hence thesis by A3,A4,A5,A6,ORDINAL4:8;
   end;
 
- definition let A,B be Ordinal;
-  pred A is_cofinal_with B means  ex xi being Ordinal-Sequence st
-        dom xi = B & rng xi c= A & xi is increasing & A = sup xi;
-   reflexivity
-    proof let A;
-A1:    dom id A = A & rng id A = A by RELAT_1:71;
-     then reconsider xi = id A as T-Sequence by ORDINAL1:def 7;
-     reconsider xi as Ordinal-Sequence by A1,ORDINAL2:def 8;
-     take xi; thus dom xi = A & rng xi c= A by RELAT_1:71;
-     thus xi is increasing
-       proof let B,C; assume
-A2:       B in C & C in dom xi;
-         then B in dom xi & xi.C = C by A1,FUNCT_1:35,ORDINAL1:19;
-        hence xi.B in xi.C by A1,A2,FUNCT_1:35;
-       end;
-     thus A = sup xi by A1,ORDINAL2:26;
-    end;
- end;
-
  reserve psi for Ordinal-Sequence;
 
 canceled;
 
 theorem
- Th19: e in rng psi implies e is Ordinal
-  proof assume e in rng psi;
-   then consider u such that
-A1:  u in dom psi & e = psi.u by FUNCT_1:def 5;
-       u is Ordinal by A1,ORDINAL1:23;
-   hence thesis by A1,ORDINAL2:34;
-  end;
+ Th19: e in rng psi implies e is Ordinal by ORDINAL2:66;
 
 theorem
- Th20: rng psi c= sup psi
-  proof let e; assume
-A1:  e in rng psi;
-    then e is Ordinal & sup psi = sup rng psi by Th19;
-   hence thesis by A1,ORDINAL2:27;
-  end;
+ Th20: rng psi c= sup psi by ORDINAL2:67;
 
 theorem
     A is_cofinal_with B & B is_cofinal_with C implies A is_cofinal_with C
-  proof given xi1 being Ordinal-Sequence such that
-A1: dom xi1 = B & rng xi1 c= A & xi1 is increasing & A = sup xi1;
-   given xi2 being Ordinal-Sequence such that
-A2: dom xi2 = C & rng xi2 c= B & xi2 is increasing & B = sup xi2;
-   consider xi being Ordinal-Sequence such that
-A3:  xi = xi1*xi2 & xi is increasing by A1,A2,ORDINAL4:13;
-   take xi;
-   thus
-A4:  dom xi = C by A1,A2,A3,RELAT_1:46;
-       rng xi c= rng xi1 by A3,RELAT_1:45;
-   hence
-     rng xi c= A & xi is increasing by A1,A3,XBOOLE_1:1;
-then A5:  sup xi = sup rng xi & sup xi1 = sup rng xi1 & sup xi2 = sup rng xi2 &
-     sup rng xi c= sup A & sup A = A by ORDINAL2:26,30;
-   thus A c= sup xi
-     proof let a be Ordinal; assume a in A;
-      then consider b being Ordinal such that
-A6:    b in rng xi1 & a c= b by A1,ORDINAL2:29;
-      consider e such that
-A7:    e in B & b = xi1.e by A1,A6,FUNCT_1:def 5;
-      reconsider e as Ordinal by A7,ORDINAL1:23;
-      consider c being Ordinal such that
-A8:    c in rng xi2 & e c= c by A2,A7,ORDINAL2:29;
-      consider u such that
-A9:    u in C & c = xi2.u by A2,A8,FUNCT_1:def 5;
-      reconsider u as Ordinal by A9,ORDINAL1:23;
-          xi1.e c= xi1.c & xi1.c = xi.u & xi.u in rng xi & xi.u is Ordinal
-         by A1,A2,A3,A4,A8,A9,FUNCT_1:22,def 5,ORDINAL4:9;
-       then xi.u in sup xi & xi.u is Ordinal & a c= xi.u
-        by A6,A7,ORDINAL2:27,XBOOLE_1:1;
-      hence thesis by ORDINAL1:22;
-     end;
-   thus thesis by A5;
-  end;
+     by ORDINAL4:39;
 
 theorem
  Th22: A is_cofinal_with B implies B c= A
@@ -655,29 +545,7 @@ A1:  dom psi <> {} & dom psi is_limit_ordinal & psi is increasing &
   end;
 
 theorem
-    succ A is_cofinal_with 1
-  proof deffunc F(set) = A;
-    consider psi such that
-A1:  dom psi = 1 & for B st B in 1 holds psi.B = F(B) from ORDINAL2:sch 3;
-   take psi; thus dom psi = 1 by A1;
-   thus rng psi c= succ A
-     proof let e; assume e in rng psi;
-      then consider u such that
-A2:     u in 1 & e = psi.u by A1,FUNCT_1:def 5;
-      reconsider u as Ordinal by A2,ORDINAL1:23;
-          psi.u = A by A1,A2;
-      hence thesis by A2,ORDINAL1:10;
-     end;
-   thus psi is increasing
-     proof let B,C; assume
-        B in C & C in dom psi;
-      hence thesis by A1,ORDINAL3:17;
-     end;
-       dom psi = {{}} & {} in 1 by A1,ORDINAL1:10,ORDINAL3:18,Lm3;
-    then rng psi = {psi.{}} & psi.{} = A & sup psi = sup rng psi
-     by A1,FUNCT_1:14;
-   hence thesis by ORDINAL2:31;
-  end;
+    succ A is_cofinal_with 1 by ORDINAL3:86;
 
 theorem
     A is_cofinal_with succ B implies ex C st A = succ C
@@ -704,41 +572,10 @@ A6:     e in succ B & b = psi.e by A1,A5,FUNCT_1:def 5;
 
 theorem
     A is_cofinal_with B implies (A is_limit_ordinal iff B is_limit_ordinal)
-  proof given psi such that
-A1:  dom psi = B & rng psi c= A & psi is increasing & A = sup psi;
-   thus A is_limit_ordinal implies B is_limit_ordinal
-     proof assume
-A2:     A is_limit_ordinal;
-          now let C; assume
-A3:       C in B;
-         then A4: psi.C in rng psi by A1,FUNCT_1:def 5;
-        reconsider c = psi.C as Ordinal;
-            succ c in
- A & A = sup rng psi by A1,A2,A4,ORDINAL1:41;
-        then consider b being Ordinal such that
-A5:       b in rng psi & succ c c= b by ORDINAL2:29;
-        consider e such that
-A6:       e in B & b = psi.e by A1,A5,FUNCT_1:def 5;
-        reconsider e as Ordinal by A6,ORDINAL1:23;
-            c in succ c by ORDINAL1:10;
-         then not b c= c by A5,ORDINAL1:7;
-         then not e c= C by A1,A3,A6,ORDINAL4:9;
-         then C in e by ORDINAL1:26;
-         then succ C c= e by ORDINAL1:33;
-        hence succ C in B by A6,ORDINAL1:22;
-       end;
-      hence thesis by ORDINAL1:41;
-     end;
-   thus thesis by A1,ORDINAL4:16;
-  end;
+                by ORDINAL4:40;
 
 theorem
-    A is_cofinal_with {} implies A = {}
-  proof given psi such that
-A1:  dom psi = {} & rng psi c= A & psi is increasing & A = sup psi;
-   thus A = sup {} by  A1,RELAT_1:65
-         .= {} by ORDINAL2:26;
-  end;
+    A is_cofinal_with {} implies A = {} by ORDINAL2:68;
 
 theorem
     not On W is_cofinal_with a
@@ -791,7 +628,7 @@ A1: omega in W & phi is increasing & phi is continuous;
 A2: nu.0-element_of W = b and
 A3: for a holds nu.succ a = C(a,nu.a) and
     for a st a <> 0-element_of W & a is_limit_ordinal holds nu.a = D(a,nu|a)
-        from ZF_REFLE:sch 4;
+        from ZF_REFLE:sch 3;
    set xi = nu|omega; set a = sup xi;
 A4:  omega in On W & dom nu = On W by A1,ORDINAL1:def 10,ORDINAL4:def 3;
 then A5:    omega c= dom nu by ORDINAL1:def 2;
@@ -1022,7 +859,7 @@ a) &
        then A in xi.succ e & xi.succ e in phi.a by A25,ORDINAL1:22;
       hence A in phi.a by ORDINAL1:19;
      end;
-       for a holds P[a] from ZF_REFLE:sch 5(A15,A16,A17);
+       for a holds P[a] from ZF_REFLE:sch 4(A15,A16,A17);
     then a c= xi.a & xi.a c= a by A11,A13,A14,ORDINAL4:10;
     then xi.a = a by XBOOLE_0:def 10;
    hence L.a,va |= H iff M,M!va |= H by A11,A13;
@@ -1097,8 +934,8 @@ A12:   e in On W & {} = L.e by A2,FUNCT_1:def 5;
        by A2,A8,ZF_REFLE:8;
      hence contradiction by A12,Th34;
     end;
-   then reconsider L as DOMAIN-Sequence of W by A2,RELAT_1:def 9,ZF_REFLE:def 5
-;
+   then reconsider L as DOMAIN-Sequence of W
+     by A2,RELAT_1:def 9,ZF_REFLE:def 5;
 A13:  for a,b st a in b holds L.a c= L.b
      proof let a,b; assume A14: a in b;
 then A15:    Rank a in Rank b & b <> {} & succ a c= b

@@ -7,12 +7,13 @@
 environ
 
  vocabularies FUNCOP_1, FUNCT_2, RELAT_1, FINSEQ_1, BOOLE, QC_LANG1, ZF_LANG,
-      MARGREL1, NAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FINSEQ_1, RELAT_1,
-      FUNCOP_1, FRAENKEL, XBOOLEAN;
+      MARGREL1, NAT_1, FUNCT_1, VALUAT_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, FINSEQ_1,
+      RELAT_1, FUNCOP_1, FRAENKEL, XBOOLEAN;
  constructors FUNCOP_1, FRAENKEL, FINSEQ_1, XBOOLEAN, XCMPLX_0, XXREAL_0,
       NAT_D;
- registrations RELSET_1, FUNCOP_1, SUBSET_1, XBOOLE_0, XBOOLEAN;
+ registrations RELSET_1, FUNCOP_1, SUBSET_1, XBOOLE_0, XBOOLEAN, FUNCT_1,
+      RELAT_1;
  requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
 
 
@@ -274,3 +275,54 @@ end;
 theorem :: MARGREL1:53
      (not FALSE in X iff ALL(X) = TRUE) &
       (FALSE in X iff ALL(X) = FALSE);
+
+begin :: Addenda
+
+:: from VALUAT_1, 2007.03.15, A.T.
+
+definition let f be Function;
+ attr f is boolean-valued means
+:: MARGREL1:def 17
+ rng f c= BOOLEAN;
+end;
+
+registration
+ cluster boolean-valued Function;
+end;
+
+registration let f be boolean-valued Function, x be set;
+ cluster f.x -> boolean;
+end;
+
+definition
+ let p be boolean-valued Function;
+  func 'not' p -> boolean-valued Function means
+:: MARGREL1:def 18
+ dom it = dom p &
+   for x being set st x in dom p holds it.x = 'not'(p.x);
+  involutiveness;
+ let q be boolean-valued Function;
+  func p '&' q -> boolean-valued Function means
+:: MARGREL1:def 19
+ dom it = dom p /\ dom q &
+  for x being set st x in dom it holds it.x = (p.x) '&' (q.x);
+ commutativity;
+ idempotence;
+end;
+
+registration let A be set;
+ cluster -> boolean-valued Element of Funcs(A,BOOLEAN);
+end;
+
+definition let A be non empty set;
+ redefine
+ let p be Element of Funcs(A,BOOLEAN);
+  func 'not' p -> Element of Funcs(A,BOOLEAN) means
+:: MARGREL1:def 20
+ for x being Element of A holds it.x = 'not'(p.x);
+ let q be Element of Funcs(A,BOOLEAN);
+  func p '&' q -> Element of Funcs(A,BOOLEAN) means
+:: MARGREL1:def 21
+ for x being Element of A holds it.x = (p.x) '&' (q.x);
+end;
+

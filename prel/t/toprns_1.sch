@@ -40,7 +40,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="212">
+<Func kind="K" nr="215">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -54,7 +54,7 @@
 <Adjective nr="16">
 <Func kind="K" nr="46"/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="212">
+<Func kind="K" nr="215">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -62,7 +62,7 @@
 </Cluster>
 <Func kind="K" nr="46"/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="212">
+<Func kind="K" nr="215">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -75,8 +75,8 @@
 <Func kind="K" nr="46"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="149">
-<Func kind="K" nr="212">
+<Func kind="K" nr="152">
+<Func kind="K" nr="215">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>

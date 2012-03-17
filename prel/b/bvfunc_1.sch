@@ -10,9 +10,9 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="XBOOLEAN"/>
@@ -33,20 +33,20 @@
 <Typ kind="M" nr="8">
 <Cluster/>
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="113"/>
-<Func kind="K" nr="96">
+<Func kind="K" nr="116"/>
+<Func kind="K" nr="99">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="113"/>
+<Func kind="K" nr="116"/>
 </Func>
 </Typ>
 <For>
 <Typ kind="M" nr="8">
 <Cluster/>
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="113"/>
-<Func kind="K" nr="96">
+<Func kind="K" nr="116"/>
+<Func kind="K" nr="99">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="113"/>
+<Func kind="K" nr="116"/>
 </Func>
 </Typ>
 <Not>
@@ -57,9 +57,9 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="81">
+<Func kind="K" nr="70">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="113"/>
+<Func kind="K" nr="116"/>
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>
@@ -74,9 +74,9 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="81">
+<Func kind="K" nr="70">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="113"/>
+<Func kind="K" nr="116"/>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
@@ -86,9 +86,9 @@
 </Pred>
 </For>
 <Not>
-<Pred kind="R" nr="17">
+<Pred kind="R" nr="16">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="113"/>
+<Func kind="K" nr="116"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>

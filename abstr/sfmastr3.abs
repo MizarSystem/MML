@@ -243,11 +243,13 @@ definition
  func for-up(a, b, c, I) -> Macro-Instruction equals
 :: SFMASTR3:def 8
 
-    aux := c ';'
-    SubFrom(aux, b) ';'
-    AddTo(aux, intloc 0) ';'
+    (1-stRWNotIn ({a, b, c} \/ UsedIntLoc I)) := c ';'
+    SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), b) ';'
+    AddTo(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), intloc 0) ';'
     (a := b) ';'
-    while>0( aux, I ';' AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0) );
+    while>0( 1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), I ';'
+       AddTo(a, intloc 0) ';'
+       SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), intloc 0) );
 end;
 
 theorem :: SFMASTR3:28
@@ -292,10 +294,13 @@ definition
 :: SFMASTR3:def 9
 
   minpos := start ';'
-  for-up ( cv, start, finish,
-           aux1 := (f, cv) ';'
-           (aux2 := (f, minpos)) ';'
-           if>0(aux2, aux1, Macro (minpos := cv), SCM+FSA-Stop)
+  for-up ( 3-rdRWNotIn {start, finish, minpos}, start, finish,
+           (1-stRWNotIn {start, finish, minpos}) :=
+                             (f, 3-rdRWNotIn {start, finish, minpos}) ';'
+           ((2-ndRWNotIn {start, finish, minpos}) := (f, minpos)) ';'
+           if>0((2-ndRWNotIn {start, finish, minpos}),
+             (1-stRWNotIn {start, finish, minpos}), Macro (minpos :=
+             (3-rdRWNotIn {start, finish, minpos})), SCM+FSA-Stop)
          );
 end;
 
@@ -337,7 +342,9 @@ definition
  func swap(f, a, b) -> Macro-Instruction equals
 :: SFMASTR3:def 10
 
-  aux1 := (f,a) ';' (aux2 := (f,b)) ';' ((f,a) := aux2) ';' ((f,b) := aux1);
+  1-stRWNotIn {a, b} := (f,a) ';'
+    (2-ndRWNotIn {a, b} := (f,b)) ';' ((f,a) := (2-ndRWNotIn {a, b})) ';'
+      ((f,b) := (1-stRWNotIn {a, b}));
 end;
 
 registration
@@ -374,10 +381,16 @@ definition
 
  func Selection-sort f -> Macro-Instruction equals
 :: SFMASTR3:def 11
-  (1-stNotUsed swap(f, cv, minpos)) :=len f ';'
-  for-up ( cv, intloc 0, (1-stNotUsed swap(f, cv, minpos)),
-           FinSeqMin(f, cv, (1-stNotUsed swap(f, cv, minpos)), minpos) ';'
-           swap(f, cv, minpos)
+  (1-stNotUsed swap(f, 1-stRWNotIn {} Int-Locations,
+               2-ndRWNotIn {} Int-Locations)) :=len f ';'
+  for-up ( 1-stRWNotIn {} Int-Locations, intloc 0,
+    (1-stNotUsed swap(f, 1-stRWNotIn {} Int-Locations,
+                         2-ndRWNotIn {} Int-Locations)),
+           FinSeqMin(f, 1-stRWNotIn {} Int-Locations,
+             (1-stNotUsed swap(f, 1-stRWNotIn {} Int-Locations,
+               2-ndRWNotIn {} Int-Locations)),
+               2-ndRWNotIn {} Int-Locations) ';'
+           swap(f, 1-stRWNotIn {} Int-Locations, 2-ndRWNotIn {} Int-Locations)
          );
 end;
 

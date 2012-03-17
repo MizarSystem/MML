@@ -41,23 +41,23 @@
 <Adjective nr="17"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="44"/>
-<Adjective nr="47"/>
-<Adjective nr="55"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="58" value="false"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="34" value="false"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
+<Adjective nr="41"/>
+<Adjective nr="50"/>
+<Adjective nr="53"/>
+<Adjective nr="61"/>
+<Adjective nr="62"/>
+<Adjective nr="64"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="183">
+<Func kind="K" nr="188">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -65,16 +65,16 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="22"/>
-<Adjective nr="64"/>
-<Adjective nr="70">
+<Adjective nr="70"/>
+<Adjective nr="76">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="73">
+<Adjective nr="79">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="75">
+<Adjective nr="81">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -87,23 +87,23 @@
 <Adjective nr="17"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="44"/>
-<Adjective nr="47"/>
-<Adjective nr="55"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="58" value="false"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="34" value="false"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
+<Adjective nr="41"/>
+<Adjective nr="50"/>
+<Adjective nr="53"/>
+<Adjective nr="61"/>
+<Adjective nr="62"/>
+<Adjective nr="64"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="182">
+<Func kind="K" nr="187">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -111,12 +111,12 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="22"/>
-<Adjective nr="64"/>
-<Adjective nr="73">
+<Adjective nr="70"/>
+<Adjective nr="79">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="74">
+<Adjective nr="80">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>

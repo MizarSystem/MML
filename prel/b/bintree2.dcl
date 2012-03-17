@@ -40,11 +40,11 @@
 </Typ>
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="28"/>
-<Adjective nr="30"/>
-<Adjective nr="40"/>
-<Adjective nr="50"/>
-<Adjective nr="53"/>
+<Adjective nr="29"/>
+<Adjective nr="31"/>
+<Adjective nr="41"/>
+<Adjective nr="55"/>
+<Adjective nr="58"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -52,8 +52,8 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="28"/>
-<Adjective nr="50"/>
+<Adjective nr="29"/>
+<Adjective nr="55"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -63,7 +63,7 @@
 <Func kind="K" nr="66"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="256">
+<Func kind="K" nr="267">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -72,7 +72,7 @@
 <Adjective nr="4"/>
 <Adjective nr="5"/>
 <Adjective nr="15">
-<Func kind="K" nr="170">
+<Func kind="K" nr="179">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -85,8 +85,8 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="28"/>
-<Adjective nr="50"/>
+<Adjective nr="29"/>
+<Adjective nr="55"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -94,7 +94,7 @@
 <Func kind="K" nr="66"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="170">
+<Func kind="K" nr="179">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -107,8 +107,8 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="28"/>
-<Adjective nr="53"/>
+<Adjective nr="29"/>
+<Adjective nr="58"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -118,7 +118,7 @@
 <Func kind="K" nr="66"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="257">
+<Func kind="K" nr="268">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -134,18 +134,18 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="28"/>
-<Adjective nr="53"/>
+<Adjective nr="29"/>
+<Adjective nr="58"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="28"/>
-<Adjective nr="30"/>
-<Adjective nr="40"/>
-<Adjective nr="50"/>
+<Adjective nr="29"/>
+<Adjective nr="31"/>
+<Adjective nr="41"/>
+<Adjective nr="55"/>
 </Cluster>
 </CCluster>
 </Registrations>

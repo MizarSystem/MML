@@ -22,6 +22,8 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
+<ArticleID name="ENUMSET1"/>
+<ArticleID name="DOMAIN_1"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
@@ -37,7 +39,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="201">
+<Func kind="K" nr="229">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -45,12 +47,12 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="45">
-<Func kind="K" nr="201">
+<Adjective nr="49">
+<Func kind="K" nr="229">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="61"/>
+<Adjective nr="65"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -59,7 +61,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="201">
+<Func kind="K" nr="229">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -67,52 +69,52 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="45">
-<Func kind="K" nr="201">
+<Adjective nr="49">
+<Func kind="K" nr="229">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="62"/>
+<Adjective nr="66"/>
 </Cluster>
 </RCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="46" value="false"/>
-<Adjective nr="61"/>
+<Adjective nr="50" value="false"/>
+<Adjective nr="65"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="201">
+<Func kind="K" nr="229">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="62" value="false"/>
+<Adjective nr="66" value="false"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="46" value="false"/>
-<Adjective nr="62"/>
+<Adjective nr="50" value="false"/>
+<Adjective nr="66"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="201">
+<Func kind="K" nr="229">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="61" value="false"/>
+<Adjective nr="65" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

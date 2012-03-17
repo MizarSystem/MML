@@ -20,7 +20,7 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="3">
+<Typ kind="G" nr="5">
 <Cluster/>
 </Typ>
 </ArgTypes>
@@ -56,7 +56,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="98">
+<Func kind="K" nr="100">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="28">
 <Func kind="U" nr="1">
@@ -75,7 +75,7 @@
 </Func>
 </Func>
 </Typ>
-<Func kind="K" nr="98">
+<Func kind="K" nr="100">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -92,7 +92,7 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="3">
+<Typ kind="G" nr="5">
 <Cluster/>
 </Typ>
 </ArgTypes>
@@ -128,7 +128,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="97">
+<Func kind="K" nr="99">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="28">
 <Func kind="U" nr="1">
@@ -147,7 +147,7 @@
 </Func>
 </Func>
 </Typ>
-<Func kind="K" nr="97">
+<Func kind="K" nr="99">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 </Func>

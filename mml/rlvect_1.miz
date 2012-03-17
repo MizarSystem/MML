@@ -7,7 +7,7 @@
 environ
 
  vocabularies BINOP_1, FUNCT_1, ARYTM_1, RELAT_1, FINSEQ_1, BOOLE, RLVECT_1,
-      ANPROJ_1, ORDINAL2, ARYTM, FUNCOP_1, NAT_1, COMPLEX1;
+      ANPROJ_1, ORDINAL2, ARYTM, FUNCOP_1, NAT_1, COMPLEX1, REALSET1, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XXREAL_0, DOMAIN_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FUNCOP_1, REAL_1,
       FINSEQ_1, NAT_1, NAT_D, STRUCT_0;
@@ -26,12 +26,12 @@ begin
 definition
  struct (ZeroStr) LoopStr (# carrier -> set,
                     add -> BinOp of the carrier,
-                    Zero -> Element of the carrier #);
+                    ZeroF -> Element of the carrier #);
 end;
 
 definition
  struct (LoopStr) RLSStruct (# carrier -> set,
-              Zero -> Element of the carrier,
+              ZeroF -> Element of the carrier,
               add -> BinOp of the carrier,
               Mult -> Function of [:REAL, the carrier:], the carrier
             #);
@@ -55,28 +55,17 @@ definition let V be RLSStruct;
   mode VECTOR of V is Element of V;
 end;
 
-definition let V be 1-sorted; let x;
- pred x in V means
-  :Def1: x in the carrier of V;
-end;
-
 canceled 2;
 
 theorem
     for V being non empty 1-sorted, v being Element of V
-  holds v in V by Def1;
+  holds v in V by STRUCT_0:def 5;
 
 ::
 ::   Definitons of functions on the Elements of the carrier of
 ::   Real Linear Space structure, i.e. zero element, addition of two
 ::   elements, and multiplication of the element by a real number.
 ::
-
- definition let V be ZeroStr;
-  func 0.V -> Element of V equals
-    the Zero of V;
-  coherence;
- end;
 
 reserve v for VECTOR of V;
 reserve a,b for Real;
@@ -95,6 +84,7 @@ registration
 end;
 
  definition let V be non empty LoopStr, v,w be Element of V;
+ canceled 2;
   func v + w -> Element of V equals
     (the add of V).(v,w);
   coherence;
@@ -1960,3 +1950,61 @@ definition
   attr a is non-zero means
       a <> 0.R;
 end;
+
+begin :: Addenda
+
+:: from REALSET2, 2007.02.24, A.T
+
+definition
+  let L be non empty LoopStr;
+  attr L is zeroed means
+:Def1: for a being Element of L holds a+0.L = a & 0.L+a = a;
+  attr L is complementable means
+:Def2: for a being Element of L
+        ex b being Element of L st a+b = 0.L & b+a = 0.L;
+end;
+
+registration
+ cluster zeroed -> right_zeroed (non empty LoopStr);
+ coherence
+  proof let L be non empty LoopStr;
+   assume L is zeroed;
+   hence for v being Element of L holds v + 0.L = v by Def1;
+  end;
+ cluster complementable -> right_complementable (non empty LoopStr);
+ coherence
+  proof let L be non empty LoopStr;
+   assume
+Z:   L is complementable;
+   let v be Element of L;
+    ex w being Element of L st v+w = 0.L & w+v = 0.L by Z,Def2;
+   hence thesis;
+  end;
+end;
+
+registration
+ cluster Abelian right_zeroed -> zeroed (non empty LoopStr);
+ coherence
+  proof let L be non empty LoopStr;
+   assume
+Z:   L is Abelian right_zeroed;
+   let a be Element of L;
+   thus a+0.L = a by Z,Def7;
+   hence 0.L+a = a by Z,Def5;
+
+  end;
+ cluster Abelian right_complementable -> complementable (non empty LoopStr);
+ coherence
+  proof let L be non empty LoopStr;
+   assume
+Z:   L is Abelian right_complementable;
+   let a be Element of L;
+    consider w being Element of L such that
+W:   a+w = 0.L by Z,Def8;
+   take w;
+   thus thesis by W,Z,Def5;
+  end;
+end;
+
+
+

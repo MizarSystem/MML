@@ -10,7 +10,8 @@ environ
       FINSEQ_2, MATRLIN, MEASURE6, SQUARE_1, ORDERS_2, RELAT_2, ORDERS_1,
       FINSET_1, TRIANG_1, ARYTM_1, CARD_1, VECTSP_1, NORMSP_1, FUNCT_2,
       POLYNOM1, ALGSEQ_1, FUNCOP_1, FUNCT_4, ARYTM_3, LATTICES, ALGSTR_2,
-      GROUP_1, BINOP_1, DTCONSTR, RFINSEQ, POLYNOM3, FINSEQ_4, NAT_1;
+      GROUP_1, BINOP_1, DTCONSTR, RFINSEQ, POLYNOM3, FINSEQ_4, NAT_1,
+      VECTSP_2, GR_CY_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, ORDERS_1,
       STRUCT_0, NAT_1, NAT_D, RELAT_1, RELAT_2, RELSET_1, CARD_1, FINSET_1,
       FUNCT_1, PARTFUN1, FUNCT_2, TRIANG_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
@@ -19,20 +20,20 @@ environ
       VECTSP_1, NORMSP_1, POLYNOM1, ALGSEQ_1, XXREAL_0, BHSP_1;
  constructors DOMAIN_1, BINOP_1, SQUARE_1, FINSEQOP, FINSOP_1, SETWOP_2,
       RFINSEQ, BINARITH, FINSEQ_5, WSIERP_1, NORMSP_1, ALGSEQ_1, DTCONSTR,
-      TRIANG_1, POLYNOM1, NAT_1, NAT_D, BHSP_1;
+      TRIANG_1, POLYNOM1, NAT_1, NAT_D, BHSP_1, REALSET1;
  registrations XREAL_0, SUBSET_1, FINSEQ_1, STRUCT_0, RELSET_1, VECTSP_1,
       FINSEQ_2, FINSEQ_5, INT_1, FINSET_1, POLYNOM1, GOBRD13, FUNCT_2,
       MEMBERED, ORDINAL1, NAT_1, XXREAL_0, SEQ_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, XBOOLE_0, RELAT_1, RELAT_2, MATRLIN, RLVECT_1, GROUP_1,
-      VECTSP_1, ALGSEQ_1, BINOP_1, RVSUM_1, FINSEQ_2, FUNCT_2;
+      VECTSP_1, ALGSEQ_1, BINOP_1, RVSUM_1, FINSEQ_2, FUNCT_2, STRUCT_0;
  theorems AXIOMS, TARSKI, ENUMSET1, RELSET_1, REAL_1, REAL_2, INT_1, NAT_1,
       CARD_1, FINSET_1, RLVECT_1, VECTSP_1, BINARITH, ALGSEQ_1, RELAT_2,
       ORDERS_1, FUNCT_1, FUNCT_2, FUNCT_7, FUNCOP_1, FINSEQ_1, FINSEQ_2,
       FINSEQ_3, FINSEQ_4, FINSEQ_5, RFINSEQ, BINOP_1, CARD_3, TRIANG_1,
       GROUP_7, RVSUM_1, FVSUM_1, MATRLIN, YELLOW15, POLYNOM1, JORDAN8, RELAT_1,
       XBOOLE_0, RLVECT_2, XCMPLX_1, PARTFUN1, GROUP_1, XREAL_1, XXREAL_0,
-      ORDINAL1, BHSP_1, NORMSP_1;
+      ORDINAL1, BHSP_1, NORMSP_1, VECTSP_2;
  schemes FUNCT_2, FINSEQ_1, FINSEQ_2, NAT_1, POLYNOM2, RELSET_1, SUBSET_1,
       BINARITH, BINOP_1;
 
@@ -1297,18 +1298,7 @@ A7:  dom t1 = Seg len t1 by FINSEQ_1:def 3;
    for D being set,
        p be FinSequence of D
    for i be Element of NAT st i < len p holds
-    p|(i+1) = p|i ^ <*p.(i+1)*>
-   proof
-    let D be set,
-        p be FinSequence of D;
-    let i be Element of NAT;
-    assume i < len p;
-then A1: i+1 <= len p by NAT_1:13;
-then A2: p|(i+1) = p|i ^ <*p/.(i+1)*> by JORDAN8:2;
-        1 <= i+1 by NAT_1:11;
-    then i+1 in dom p by A1,FINSEQ_3:27;
-    hence thesis by A2,FINSEQ_4:def 4;
-   end;
+    p|(i+1) = p|i ^ <*p.(i+1)*> by FINSEQ_5:86;
 
   theorem Th20:
    for p be FinSequence of REAL
@@ -1526,7 +1516,7 @@ proof
     let x be set;
     assume A1: x in support (p+q);
     then reconsider x1 = x as Element of NAT;
-        x1 in PSeg len (p+q) by A1;
+        x1 in Segm len (p+q) by A1;
     then A2: x1 < len (p+q) by ALGSEQ_1:10;
         x1 < len p or x1 < len q
     proof
@@ -1537,7 +1527,7 @@ proof
      then x1 is_at_least_length_of p+q by Th24;
      hence contradiction by A2,Th23;
     end;
-    then x in PSeg len p or x in PSeg len q;
+    then x in Segm len p or x in Segm len q by CARD_1:98;
     then x in support p or x in support q;
     hence thesis by XBOOLE_0:def 2;
    end;
@@ -1689,7 +1679,7 @@ canceled;
   definition
    let L be non empty multLoopStr_0;
    func 1_.(L) -> sequence of L equals
-    0_.(L)+*(0,1_L);
+    0_.(L)+*(0,1.L);
    coherence;
   end;
 
@@ -1709,13 +1699,13 @@ canceled;
 
   theorem Th31:
    for L be non empty multLoopStr_0 holds
-    (1_.(L)).0 = 1_L &
+    (1_.(L)).0 = 1.L &
     for n be Element of NAT st n <> 0 holds (1_.(L)).n = 0.L
    proof
     let L be non empty multLoopStr_0;
         the carrier of L is non empty & 0 in NAT;
     then A1: 0 in dom 0_.(L) by FUNCT_2:def 1;
-    thus (1_.(L)).0 = 1_L by A1,FUNCT_7:33;
+    thus (1_.(L)).0 = 1.L by A1,FUNCT_7:33;
     let n be Element of NAT;
     assume A2: n <> 0;
     thus (1_.(L)).n = (0_.(L)).n by A2,FUNCT_7:34
@@ -2569,12 +2559,12 @@ A2: for k be Element of NAT st k in dom r
    end;
 
   theorem Th36:
-   for L be add-associative right_zeroed right_unital right_complementable
+   for L be add-associative right_zeroed well-unital right_complementable
     right-distributive (non empty doubleLoopStr)
    for p be sequence of L holds
     p*'1_.(L) = p
    proof
-    let L be add-associative right_zeroed right_unital right_complementable
+    let L be add-associative right_zeroed well-unital right_complementable
      right-distributive (non empty doubleLoopStr);
     let p be sequence of L;
         now let i be Element of NAT;
@@ -2611,7 +2601,8 @@ A2: for k be Element of NAT st k in dom r
         .= p.(i+1-'1) * (1_.(L)).(i+1-'(i+1)) by A3,A4
         .= p.i * (1_.(L)).(i+1-'(i+1)) by BINARITH:39
         .= p.i * (1_.(L)).0 by BINARITH:51
-        .= (p.i) * 1_L by Th31
+        .= (p.i) * 1.L by Th31
+        .= (p.i) * 1_L by VECTSP_2:85
         .= p.i by VECTSP_1:def 13;
      hence (p*'1_.(L)).i = p.i by A2,A5,A11,RLVECT_1:10;
     end;
@@ -2852,7 +2843,7 @@ A18:  ex p1,q1 be Polynomial of L st p1 = x & q1 = y & Mu.(x,y) = p1*'q1 by A9;
   end;
 
 Lm2: now
- let L be add-associative right_zeroed right_complementable right_unital
+ let L be add-associative right_zeroed right_complementable well-unital
      Abelian commutative distributive (non empty doubleLoopStr);
    set Pm = Polynom-Ring L;
  let x, e be Element of Pm;
@@ -2868,12 +2859,11 @@ A2:  1.Pm = 1_.L by Def12;
 end;
 
   registration
-   let L be add-associative right_zeroed right_complementable right_unital
+   let L be add-associative right_zeroed right_complementable well-unital
             Abelian commutative distributive (non empty doubleLoopStr);
-   cluster Polynom-Ring L -> unital;
+   cluster Polynom-Ring L -> well-unital;
    coherence
-   proof
-    take 1.Polynom-Ring L;
+   proof let x be Element of Polynom-Ring L;
     thus thesis by Lm2;
    end;
   end;
@@ -2900,11 +2890,11 @@ end;
   end;
 
 theorem
- for L being add-associative right_zeroed right_complementable right_unital
+ for L being add-associative right_zeroed right_complementable well-unital
             Abelian commutative distributive (non empty doubleLoopStr) holds
   1_Polynom-Ring L = 1_.L
 proof
- let L be add-associative right_zeroed right_complementable right_unital
+ let L be add-associative right_zeroed right_complementable well-unital
             Abelian commutative distributive (non empty doubleLoopStr);
   set Pm = Polynom-Ring L;
 A1: 1.Pm = 1_.L by Def12;

@@ -9,10 +9,10 @@ environ
  vocabularies FUNCT_1, RELAT_1, BOOLE, BINOP_1, FUNCT_3, QC_LANG1, REALSET1,
       REALSET2, FINSET_1, CARD_1, CAT_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      BINOP_1, CQC_LANG, FUNCT_3, FINSET_1, CARD_1, XXREAL_0;
- constructors FUNCT_3, XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED, CQC_LANG,
-      BINOP_1, NAT_D;
- registrations FUNCT_1, RELSET_1, MEMBERED, FINSET_1, NAT_1;
+      BINOP_1, DOMAIN_1, FUNCOP_1, FUNCT_3, FINSET_1, CARD_1, XXREAL_0;
+ constructors FUNCT_3, XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED, FUNCOP_1,
+      BINOP_1, NAT_D, DOMAIN_1, CARD_1;
+ registrations FUNCT_1, RELSET_1, MEMBERED, FINSET_1, NAT_1, SUBSET_1;
  requirements SUBSET, BOOLE, NUMERALS, REAL;
 
 
@@ -153,11 +153,7 @@ definition
     F||A;
 end;
 
-theorem :: REALSET1:10
-    for A being set holds
-    for x being Element of A holds
-    ex F being BinOp of A st
-    for y being set holds y in [:A\{x},A\{x}:] implies F.y in A\{x};
+canceled;
 
 definition
     let A be set;
@@ -182,11 +178,14 @@ func F!(A,x) -> BinOp of A\{x} equals
     F||(A\{x});
 end;
 
+registration
+   let F be non empty set;
+ cluster trivial non empty Subset of F;
+end;
+
 definition
-   let F be non trivial set;
-   mode OnePoint of F -> set means
-:: REALSET1:def 10
-ex x being Element of F st it = {x};
+   let F be non empty set;
+   mode OnePoint of F is trivial non empty Subset of F;
 end;
 
 theorem :: REALSET1:12
@@ -198,17 +197,6 @@ registration
    let F be non trivial set;
    let A be OnePoint of F;
    cluster F\A -> non empty;
-end;
-
-registration
-   let F be non trivial set;
- cluster non empty OnePoint of F;
-end;
-
-definition
-   let F be non trivial set;
-   let x be Element of F;
-   redefine func {x} -> OnePoint of F;
 end;
 
 begin :: Addenda
@@ -226,6 +214,10 @@ theorem :: REALSET1:15
   for D being set, A being Subset of D
    holds A is non trivial iff
     ex d1,d2 being Element of D st d1 in A & d2 in A & d1 <> d2;
+
+theorem :: REALSET1:16
+ for F being non trivial set, A being OnePoint of F
+  ex x being Element of F st A = {x};
 
 begin :: Addenda
 

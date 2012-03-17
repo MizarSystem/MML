@@ -11,7 +11,7 @@ environ
       TREES_1, POWER, INT_1, BINTREE2, MCART_1, EUCLID, FINSEQ_2, MIDSP_3,
       MARGREL1, ZF_LANG, NAT_1, MATRIX_2, RELAT_2, PRE_TOPC, FUNCT_2, SUBSET_1,
       BINOP_1, UNIALG_1, COMPLEX1, VECTSP_1, GROUP_1, GROUP_2, VECTMETR,
-      FINSEQ_4, PARTFUN1;
+      FINSEQ_4, PARTFUN1, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, MCART_1, XCMPLX_0,
       COMPLEX1, REAL_1, RELAT_2, NAT_1, NAT_D, INT_1, POWER, ABIAN, SERIES_1,
       RELAT_1, RELSET_1, MARGREL1, BINOP_1, DOMAIN_1, FUNCT_1, PARTFUN1,
@@ -545,14 +545,14 @@ FINSEQ_4:24
            FinSeqLevel(l+1,dD).j = FSLlprim^<*(j+1) mod 2*> by A124,BINTREE2:24
 ;
        then A140: FSLl = FSLlprim & d = (j+1) mod 2 by A132,FINSEQ_2:20;
-       then x1 = (D.(FinSeqLevel(l,dD).j1))`1 &
+       then
+B141:   x1 = (D.(FinSeqLevel(l,dD).j1))`1 &
         y1 = (D.(FinSeqLevel(l,dD).j1))`2 by A135,MCART_1:7;
-       then A141: dist(x1,y1) = dist(x,y) / 2 to_power l by A123,A128;
            now per cases by A140,NAT_D:12;
         suppose d = 0;
          then DF1 = x1 & DF2 = b by A131,A132,A136,ZFMISC_1:33;
          then 2 * dist(DF1,DF2) = (dist(x,y) / 2 to_power l) / 2 * 2
-                                                   by A138,A141;
+                                                   by A138,B141,A123,A128;
          hence dist(DF1,DF2) = dist(x,y) / ((2 to_power l) * 2) by XCMPLX_1:79
            .= dist(x,y) / ((2 to_power l) * (2 to_power 1)) by POWER:30
            .= dist(x,y) / (2 to_power (l+1)) by POWER:32;
@@ -560,7 +560,7 @@ FINSEQ_4:24
         suppose d = 1;
          then DF1 = b & DF2 = y1 by A131,A132,A137,ZFMISC_1:33;
          then 2 * dist(DF1,DF2) = (dist(x,y) / 2 to_power l) / 2 * 2
-                                                   by A139,A141;
+                                                   by A139,B141,A123,A128;
          hence dist(DF1,DF2) = dist(x,y) / ((2 to_power l) * 2) by XCMPLX_1:79
            .= dist(x,y) / ((2 to_power l) * (2 to_power 1)) by POWER:30
            .= dist(x,y) / (2 to_power (l+1)) by POWER:32;
@@ -904,7 +904,7 @@ begin  :: Real Linear-Metric Spaces
 definition
   struct(RLSStruct,MetrStruct) RLSMetrStruct (# carrier -> set,
           distance -> Function of [:the carrier,the carrier:],REAL,
-          Zero -> Element of the carrier,
+          ZeroF -> Element of the carrier,
           add -> BinOp of the carrier,
           Mult -> Function of [:REAL, the carrier:],the carrier #);
 end;
@@ -1021,9 +1021,8 @@ end;
      let x be VECTOR of W;
      set c = a + b;
      reconsider X = x as Element of ZS;
-     A10: c * x = M(c,X) by A3;
-         a * x + b * x = A(M(a,X),M(b,X)) by A2;
-     hence thesis by A10;
+      c * x = M(c,X) by A3;
+     hence thesis by A2;
     end;
     A11: for a,b be Element of REAL
          for x be VECTOR of W holds (a * b) * x = a * (b * x)
@@ -1032,9 +1031,8 @@ end;
      let x be VECTOR of W;
      set c = a * b;
      reconsider X = x as Element of ZS;
-     A12: c * x = M(c,X) by A3;
-         a * (b * x) = M(a,M(b,X)) by A3;
-     hence thesis by A12;
+      c * x = M(c,X) by A3;
+     hence thesis by A3;
     end;
     A13: for x be VECTOR of W holds 1 * x = x
     proof
@@ -1130,13 +1128,11 @@ end;
              right_complementable triangle (non empty RLSMetrStruct);
     let v,w be Element of V;
     Norm (v + w) <= dist(0.V,v) + dist(v,v + w) by METRIC_1:4;
-    then Norm (v + w) <= Norm v + dist(v,v + w);
     then Norm (v + w) <= Norm v + dist(v + -v,v + w + -v) by Def6;
     then Norm (v + w) <= Norm v + dist(0.V,v + w + -v) by RLVECT_1:16;
     then Norm (v + w) <= Norm v + dist(0.V,w + ((-v) + v)) by RLVECT_1:def 6;
     then Norm (v + w) <= Norm v + dist(0.V,w + (0.V)) by RLVECT_1:16;
-    then Norm (v + w) <= Norm v + dist(0.V,w) by RLVECT_1:10;
-    hence Norm (v + w) <= Norm v + Norm w;
+    hence Norm (v + w) <= Norm v + Norm w by RLVECT_1:10;
    end;
 
   theorem
@@ -1165,15 +1161,11 @@ end;
    proof
      deffunc F(Element of REAL n, Element of REAL n) = $1+$2;
     consider f be BinOp of REAL n such that
-     A1: for x,y be Element of REAL n holds f.(x,y) = F(x,y) from BINOP_1:sch 4
-;
+A1: for x,y be Element of REAL n holds f.(x,y) = F(x,y) from BINOP_1:sch 4;
      deffunc G(Element of REAL, Element of REAL n) = $1*$2;
     consider g be Function of [:REAL, REAL n:],REAL n such that
      A2: for r be Element of REAL,
              x be Element of REAL n holds g.(r,x) = G(r,x) from BINOP_1:sch 4;
-    A3: for r be Element of REAL,
-            x be Element of REAL n holds
-        g.(r,x) = r * x by A2;
     set RLSMS = RLSMetrStruct (# REAL n, Pitag_dist n, 0*n, f, g #);
     A4: now let v,w be Element of RLSMS;
      reconsider v1 = v, w1 = w as Element of REAL n;
@@ -1300,7 +1292,7 @@ def 8,def 9;
     reconsider RLSMS as strict RealLinearMetrSpace by A9,A12,A16,Def5,Def6,
 METRIC_1:1,2,3,4;
     take RLSMS;
-    thus thesis by A1,A3;
+    thus thesis by A1,A2;
    end;
    uniqueness
    proof
@@ -1619,7 +1611,7 @@ begin  :: Groups of Isometric Functions
      then reconsider x1 = x as Element of RLMSpace n;
          1_IsomGroup n = id (RLMSpace n) by Th10;
      then id(RLMSpace n) in G by GROUP_2:55;
-     then A1: id(RLMSpace n) in the carrier of G by RLVECT_1:def 1;
+     then A1: id(RLMSpace n) in the carrier of G by STRUCT_0:def 5;
          id(RLMSpace n).x1 = x1 by FUNCT_1:35;
      hence [x,x] in S by A1,Def10;
     end;
@@ -1684,9 +1676,9 @@ begin  :: Groups of Isometric Functions
      reconsider g3 = g2 as Element of IsomGroup n by A23,TARSKI:def 3;
      A27: g3*f3 = (the mult of IsomGroup n).(g,f) by GROUP_1:def 1
         .= g*f by A24,A26,Def9;
-       f2 in G & g2 in G by RLVECT_1:def 1;
+       f2 in G & g2 in G by STRUCT_0:def 5;
      then g3*f3 in G by GROUP_2:59;
-     then A28: g*f in the carrier of G by A27,RLVECT_1:def 1;
+     then A28: g*f in the carrier of G by A27,STRUCT_0:def 5;
          x1 in the carrier of RLMSpace n;
      then x1 in dom f by A25,FUNCT_2:def 1;
      then (g*f).x1 = z1 by A20,A22,FUNCT_1:23;

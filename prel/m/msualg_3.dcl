@@ -23,13 +23,6 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="LATTICES"/>
-<ArticleID name="REALSET1"/>
-<ArticleID name="RLVECT_1"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
-<ArticleID name="REALSET2"/>
 <ArticleID name="MSUALG_1"/>
 <ArticleID name="MSUALG_2"/>
 <ArticleID name="FRAENKEL"/>
@@ -49,20 +42,20 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="24"/>
-<Adjective nr="102"/>
+<Adjective nr="70"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="93" value="false"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="61" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="16">
+<Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="96">
+<Adjective nr="64">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -70,19 +63,19 @@
 </Typ>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="U" nr="11">
+<Func kind="U" nr="7">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="204">
+<Func kind="K" nr="164">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="101"/>
+<Adjective nr="69"/>
 </Cluster>
 </FCluster>
 </Registrations>

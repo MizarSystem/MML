@@ -7,7 +7,7 @@
 environ
 
  vocabularies ORDINAL1, RELAT_1, FUNCT_1, BOOLE, WELLORD1, TARSKI, WELLORD2,
-      ORDINAL2, FINSET_1, CARD_1, FUNCOP_1, NAT_1, COMPLEX1;
+      ORDINAL2, FINSET_1, CARD_1, FUNCOP_1, NAT_1, COMPLEX1, GR_CY_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
       NAT_D, RELAT_1, ENUMSET1, FUNCT_1, FUNCOP_1, WELLORD1, ORDINAL1,
       ORDINAL2, WELLORD2, FINSET_1, XXREAL_0;
@@ -19,7 +19,7 @@ environ
  definitions TARSKI, FUNCT_1, FINSET_1, WELLORD2, XBOOLE_0, RELAT_1;
  theorems TARSKI, FUNCT_1, ZFMISC_1, ORDINAL1, ORDINAL2, WELLORD1, WELLORD2,
       NAT_1, AXIOMS, REAL_1, RELAT_1, FINSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1,
-      XREAL_1, ENUMSET1;
+      XREAL_1, ENUMSET1, XXREAL_0;
  schemes ORDINAL1, ORDINAL2, FUNCT_1, NAT_1, FINSET_1, XBOOLE_0;
 
 begin
@@ -720,11 +720,11 @@ A3:  dom f = X & for y st y in X holds f.y = x by FUNCOP_1:13,19;
        then a = y & b = y by A2,A3,TARSKI:def 1;
       hence thesis;
      end;
-   thus dom f = X by A3;
+   thus dom f = X by FUNCOP_1:19;
    thus rng f c= { x } by FUNCOP_1:19;
    let a; assume a in { x };
 then A4:  a = x & y in { y } by TARSKI:def 1;
-    then f.y = x by A2,A3;
+    then f.y = x by A2,FUNCOP_1:13;
    hence a in rng f by A2,A3,A4,FUNCT_1:def 5;
   end;
 
@@ -747,13 +747,8 @@ A1:  1 = {} \/ { {} } by ORDINAL1:def 1
      proof
       take IT = 1; thus 1 = IT;
       let A; assume A,IT are_equipotent;
-      then consider y such that
-A2:     A = { y } by A1,Th48;
-A3:     y in A by A2,TARSKI:def 1;
-      then reconsider y as Ordinal by ORDINAL1:23;
-          y c= A by A3,ORDINAL1:def 2;
-     then y = {} or y = A by A2,ZFMISC_1:39;
-      hence IT c= A by A1,A2,A3;
+      then ex y st A = { y } by A1,Th48;
+      hence IT c= A by ZFMISC_1:39,A1;
      end;
    then reconsider M = 1 as Cardinal;
        { x },M are_equipotent by A1,Th48;
@@ -938,8 +933,9 @@ A7:     now assume a = y; then not y in
        end;
       hence thesis by A7;
      end;
-   let z; assume z in X \ { y };
-then A8:  z in X & not z in { y } by XBOOLE_0:def 4;
+   let z; assume
+Z:  z in X \ { y };
+    then z in X & not z in { y } by XBOOLE_0:def 4;
 then A9:  z <> y by TARSKI:def 1;
 A10:  now assume
 A11:   z = x;
@@ -951,7 +947,7 @@ then A12:   y in dom f by A1,A4,XBOOLE_0:def 4;
     end;
        now assume z <> x;
       then not z in { x } by TARSKI:def 1;
-then A13:   z in X \ { x } by A8,XBOOLE_0:def 4;
+then A13:   z in X \ { x } by Z,XBOOLE_0:def 4;
       then z = f.z by A4,A9;
      hence z in rng f by A4,A13,FUNCT_1:def 5;
     end;
@@ -1041,7 +1037,7 @@ registration cluster -> cardinal Element of NAT;
 end;
 
 theorem
- Th66: for n being Element of NAT holds n = Card n by Def5;
+ for n being Element of NAT holds n = Card n by Def5;
 
 canceled;
 
@@ -1065,7 +1061,7 @@ theorem
          rng id n = n & dom id n = n by RELAT_1:71;
      hence thesis by FINSET_1:def 1;
     end;
-   hence thesis by Th66;
+   hence thesis by Def5;
   end;
 
 canceled;
@@ -1074,7 +1070,7 @@ theorem
  Th71: Card n = Card m implies n = m
   proof assume
 A1:  Card n = Card m;
-       Card n = n & Card m = m by Th66;
+       Card n = n & Card m = m by Def5;
    hence thesis by A1;
   end;
 
@@ -1083,7 +1079,7 @@ theorem
   proof
        (Card n <=` Card m iff Card n c= Card m) &
      Card n = n & Card m = m &
-      ( n c= m iff n <= m) by Th56,Th66;
+      ( n c= m iff n <= m) by Th56,Def5;
    hence thesis;
   end;
 
@@ -1151,7 +1147,7 @@ then A1:  Card Card n <` Card(n+1) by Th73;
        for M st Card Card n <` M holds Card(n+1) <=` M
      proof let M such that
 A2:     Card Card n in M;
-        Card n = n & M = M by Th66;
+        Card n = n & M = M by Def5;
        then succ n c= M & (n+1) = succ n &
         Card(n+1) = (n+1) by A2,Def5,Th52,ORDINAL1:33;
       hence Card(n+1) c= M;
@@ -1171,7 +1167,7 @@ func card X -> Element of NAT means
   coherence
    proof consider n such that
 A1:   X,n are_equipotent by Th74;
-        n = Card n by Th66 .= Card X by A1,Th21;
+        n = Card n by Def5 .= Card X by A1,Th21;
     hence thesis;
    end;
   compatibility by Def5;
@@ -1316,7 +1312,7 @@ A3:  succ N in omega & N is natural by ORDINAL1:41,def 13,Lm3;
    consider n such that
 A4:   N = n by A2;
    nextcard Card n = Card(n+1) & Card n = n & Card(n+1) = (n+1) &
-   (n+1) = succ n & N = N by Th52,Th66,Th76;
+   (n+1) = succ n & N = N by Th52,Def5,Th76;
    hence contradiction by A1,A3,A4,Lm2,Th83;
   end;
 
@@ -1439,4 +1435,116 @@ proof
 A1:  dom f is infinite & f is one-to-one;
   then dom f,rng f are_equipotent by WELLORD2:def 4;
   hence rng f is infinite by A1,Th68;
+end;
+
+:: from ALGSEQ_1, 2007.03.18, A.T.
+
+reserve k,n,m for natural number;
+
+definition let n;
+  func Segm n -> set equals
+   n;
+  coherence;
+end;
+
+reserve l for Element of NAT;
+
+definition let n;
+  redefine func Segm n -> Subset of NAT;
+  coherence
+  proof
+    set X = Segm n;
+    X c= NAT
+    proof let x; assume x in X;
+      then x in { l : l < n } by AXIOMS:30;
+      then ex l st x = l & l < n;
+      hence x in NAT;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem Th10:
+  k in Segm n iff k < n
+  proof
+   hereby assume k in Segm n;
+     then k in { l : l < n } by AXIOMS:30;
+     then ex l st k = l & l < n;
+    hence k < n;
+   end;
+   assume
+Z:  k < n;
+    reconsider k as Element of NAT by ORDINAL1:def 13;
+    k in { l : l < n } by Z;
+   hence thesis by AXIOMS:30;
+  end;
+
+theorem
+ Th12: n in Segm(n+1)
+  proof
+    reconsider n as Element of NAT by ORDINAL1:def 13;
+    n<n+1 by XREAL_1:31;
+    then n in {l:l<n+1};
+    hence thesis by AXIOMS:30;
+  end;
+
+theorem
+ Th13: n <= m iff Segm n c= Segm m
+  proof
+   thus n <= m implies Segm n c= Segm m
+     proof assume
+A1:  n <= m;
+     let x; assume
+A2:  x in Segm n;
+     then reconsider k = x as Element of NAT;
+     k < n by A2,Th10;
+     then k < m by A1,XXREAL_0:2;
+     then x in { l : l < m };
+     hence x in Segm m by AXIOMS:30;
+   end;
+   now assume
+Z:  not n <= m;
+    reconsider m as Element of NAT by ORDINAL1:def 13;
+     m in { l : l < n } by Z;
+     then m in Segm n by AXIOMS:30;
+     hence thesis by Th10;
+    end;
+   hence thesis;
+  end;
+
+theorem Th15:
+  k <= n implies Segm k = Segm k /\ Segm n
+proof
+   assume k <= n;
+    then Segm k c= Segm n by Th13;
+   hence thesis by XBOOLE_1:28;
+end;
+
+theorem
+  Segm n \/ { n } = Segm (n+1)
+proof
+  thus Segm n \/ { n } c= Segm (n+1)
+  proof
+    n+0<=n+1 by XREAL_1:9;
+then A1:     Segm n c= Segm(n+1) by Th13;
+       let x;
+       assume x in Segm n \/ { n };
+       then x in Segm n or x in { n } by XBOOLE_0:def 2;
+       then x in Segm (n+1) or x = n by A1,TARSKI:def 1;
+       hence thesis by Th12;
+    end;
+    let x;
+    assume A2:x in Segm (n+1);
+    then reconsider x as Element of NAT;
+pc: x<n+1 by A2,Th10;
+    per cases by pc,NAT_1:22;
+    suppose x < n;
+    then x in { l : l < n };
+    then x in Segm n by AXIOMS:30;
+    hence thesis by XBOOLE_0:def 2;
+    end;
+    suppose x = n;
+     then x in {n} by TARSKI:def 1;
+     hence thesis by XBOOLE_0:def 2;
+    end;
 end;

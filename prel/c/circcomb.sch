@@ -27,12 +27,6 @@
 <ArticleID name="SEQ_4"/>
 <ArticleID name="PRE_CIRC"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="REALSET1"/>
-<ArticleID name="RLVECT_1"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
-<ArticleID name="REALSET2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="MSUALG_1"/>
@@ -111,7 +105,7 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="11">
+<Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="43" value="false"/>
 </Cluster>
@@ -122,9 +116,9 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="91">
+<Adjective nr="61">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -136,15 +130,15 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="U" nr="12">
+<Func kind="U" nr="8">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="165">
+<Func kind="K" nr="175">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="113"/>
+<Func kind="K" nr="116"/>
 </Func>
 </Pred>
 <For>
@@ -157,7 +151,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="144">
+<Func kind="K" nr="153">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -167,14 +161,14 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="U" nr="9">
+<Func kind="U" nr="5">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
 <Pred kind="R" nr="1">
 <Var nr="3"/>
 <Func kind="K" nr="35">
-<Func kind="U" nr="10">
+<Func kind="U" nr="6">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="2"/>
@@ -183,7 +177,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="35">
-<Func kind="U" nr="13">
+<Func kind="U" nr="9">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -213,7 +207,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="144">
+<Func kind="K" nr="153">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -223,14 +217,14 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="U" nr="9">
+<Func kind="U" nr="5">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
 <Pred kind="R" nr="1">
 <Var nr="2"/>
 <Func kind="K" nr="35">
-<Func kind="U" nr="10">
+<Func kind="U" nr="6">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
@@ -246,22 +240,22 @@
 <Cluster>
 <Adjective nr="5"/>
 <Adjective nr="15">
-<Func kind="K" nr="145">
-<Func kind="K" nr="126">
+<Func kind="K" nr="154">
+<Func kind="K" nr="135">
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="113"/>
+<Func kind="K" nr="116"/>
 </Func>
-<Func kind="K" nr="113"/>
+<Func kind="K" nr="116"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="145">
-<Func kind="K" nr="126">
+<Func kind="K" nr="154">
+<Func kind="K" nr="135">
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="113"/>
+<Func kind="K" nr="116"/>
 </Func>
-<Func kind="K" nr="113"/>
+<Func kind="K" nr="116"/>
 </Typ>
 </Is>
 </Not>

@@ -9,17 +9,19 @@ environ
  vocabularies RELAT_1, CQC_THE1, CQC_LANG, QC_LANG1, FINSEQ_1, ZF_LANG,
       ZF_MODEL, BOOLE, FUNCT_1, FUNCT_4, CALCUL_1, FINSET_1, VALUAT_1, CAT_1,
       MCART_1, QMAX_1, ORDINAL2, FINSEQ_2, CARD_1, TARSKI, SUBSTUT1, SUBLEMMA,
-      NAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1, FUNCT_1, QC_LANG1,
+      NAT_1, FUNCOP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1,
+      RELAT_1, FUNCT_1, QC_LANG1,
       NUMBERS, ORDINAL1, FINSEQ_2, CARD_1, XCMPLX_0, XXREAL_0, NAT_1, NAT_D,
-      CQC_LANG, RELAT_1, FINSET_1, VALUAT_1, CQC_THE1, RELSET_1, FUNCT_2,
+      FUNCOP_1, CQC_LANG, FINSET_1, VALUAT_1, CQC_THE1,
+      RELSET_1, PARTFUN1, FUNCT_2,
       FRAENKEL, DOMAIN_1, MCART_1, SUBSTUT1, SUBSTUT2, SUBLEMMA;
  constructors WELLORD2, DOMAIN_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2, CQC_THE1,
       SUBSTUT2, PARTFUN1, NAT_D;
  registrations NAT_1, FINSEQ_1, RELSET_1, CQC_LANG, XREAL_0, SUBSET_1,
-      QC_LANG1, FUNCT_1, FINSET_1, ORDINAL1, CARD_5, XXREAL_0;
+      QC_LANG1, FUNCT_1, FINSET_1, ORDINAL1, CARD_5, XXREAL_0, FUNCOP_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0, CQC_LANG, FINSEQ_2;
+ definitions TARSKI, XBOOLE_0, CQC_LANG, FINSEQ_2, FUNCOP_1;
  theorems TARSKI, FUNCT_1, MCART_1, XBOOLE_0, XBOOLE_1, QC_LANG1, ZFMISC_1,
       RELAT_1, QC_LANG3, QC_LANG2, SUBSTUT1, FUNCT_4, SUBLEMMA, NAT_1,
       FINSEQ_1, FINSEQ_3, VALUAT_1, FINSEQ_2, SUBSTUT2, FUNCOP_1, CQC_THE1,
@@ -131,7 +133,7 @@ A5:   dom f c= dom Seq (g|N) by A1,RELAT_1:25;
       [n,f.n] in f by A4,FUNCT_1:8; then
       (Seq (g|N)).n = a by A1,A4,FUNCT_1:8; then
 A6:   a in rng (Seq (g|N)) by A4,A5,FUNCT_1:12;
-      rng (Seq (g|N)) = rng (Sgm (dom (g|N)) * (g|N)) by FINSEQ_1:def 14; then
+      rng (Seq (g|N)) = rng ((g|N) * Sgm (dom (g|N))) by FINSEQ_1:def 14; then
       rng (Seq (g|N)) c= rng (g|N) by RELAT_1:45;
       hence a in rng (g|N) by A6;
     end; then
@@ -371,7 +373,7 @@ A20:  now assume A21: i in Seg n; then
         Sgm (dom f2).i = (idseq n).i by A19,FINSEQ_1:def 7; then
 A22:    Sgm (dom f2).i = i by A21,FUNCT_1:35;
 A23:    i in dom Sgm (dom f2) by A3,A4,A13,FUNCT_1:8;
-        Seq f2 = Sgm (dom f2) * f2 by FINSEQ_1:def 14; then
+        Seq f2 = f2 * Sgm (dom f2) by FINSEQ_1:def 14; then
 A24:    Seq f2.i = f2.i by A22,A23,FUNCT_1:23;
 A25:    f1 = Ant(f)^(g^<*Suc(f)*>) & Seg n c= N by FINSEQ_1:45,XBOOLE_1:7;
 A26:     Seg len Ant f = dom Ant f by FINSEQ_1:def 3;
@@ -388,7 +390,7 @@ A31:    f.i = Suc(f) by A1,Def2;
         len idseq n = n by FINSEQ_2:55; then
 A32:    Sgm (dom f2).i = n+(m+1) by A19,A30,FINSEQ_1:59;
 A33:    i in dom Sgm (dom f2) by A3,A4,A13,FUNCT_1:8;
-        Seq f2 = Sgm (dom f2) * f2 by FINSEQ_1:def 14; then
+        Seq f2 = f2 * Sgm (dom f2) by FINSEQ_1:def 14; then
 A34:    Seq f2.i = f2.(n+(m+1)) by A32,A33,FUNCT_1:23;
 A35:    n+(m+1) in {n+(m+1)} by TARSKI:def 1;
         {n+(m+1)} c= N by XBOOLE_1:7; then
@@ -400,7 +402,7 @@ A37:    len (Ant(f)^g) = n + m by FINSEQ_1:35;
         hence Seq f2.i = f.i by A31,FINSEQ_1:57;
       end;
       rng Sgm (dom (f1|N)) = dom (f1|N) by FINSEQ_1:71; then
-      dom f = dom (Sgm (dom (f1|N)) * (f1|N)) by A13,RELAT_1:46; then
+      dom f = dom ((f1|N) * Sgm (dom (f1|N))) by A13,RELAT_1:46; then
       dom f = dom Seq f2 by FINSEQ_1:def 14;
       hence b in Seq f2 by A4,A5,A12,A13,A20,A29,FINSEQ_2:8,FUNCT_1:8;
     end;
@@ -703,14 +705,17 @@ A1: J,v |= CQC_Sub([p,Sbst(x,y)]) iff
              J,v.Val_S(v,[p,Sbst(x,y)]) |= [p,Sbst(x,y)] by SUBLEMMA:93;
 A2: J,v.Val_S(v,[p,Sbst(x,y)]) |= [p,Sbst(x,y)] iff
              J,v.Val_S(v,[p,Sbst(x,y)]) |= p by Th23;
-    Val_S(v,[p,Sbst(x,y)]) = (@[p,Sbst(x,y)]`2)*v by SUBLEMMA:def 2; then
-A3: Val_S(v,[p,Sbst(x,y)]) = @Sbst(x,y)*v by MCART_1:7;
-    @Sbst(x,y) = Sbst(x,y) by SUBSTUT1:def 2; then
-    Val_S(v,[p,Sbst(x,y)]) = x .--> y*v by A3,SUBSTUT2:def 1; then
-A4: Val_S(v,[p,Sbst(x,y)]) = (x .--> y)*v;
+    Val_S(v,[p,Sbst(x,y)]) = v*(@[p,Sbst(x,y)]`2) by SUBLEMMA:def 2; then
+A3: Val_S(v,[p,Sbst(x,y)]) = v*@Sbst(x,y) by MCART_1:7;
+    @Sbst(x,y) = Sbst(x,y) by SUBSTUT1:def 2;
+    then Val_S(v,[p,Sbst(x,y)]) = v*(x .--> y) by A3,SUBSTUT2:def 1;
+    then
+A4: Val_S(v,[p,Sbst(x,y)]) = v*({x} --> y);
     y in bound_QC-variables; then
-    y in dom v by SUBLEMMA:59; then
-A5: Val_S(v,[p,Sbst(x,y)]) = x .--> v.y by A4,FUNCOP_1:23;
+    y in dom v by SUBLEMMA:59;
+    then Val_S(v,[p,Sbst(x,y)]) = {x} --> v.y by A4,FUNCOP_1:23;
+    then
+A5: Val_S(v,[p,Sbst(x,y)]) = x .--> v.y;
     set a = v.y;
     Val_S(v,[p,Sbst(x,y)]) = x .--> a by A5; then
     Val_S(v,[p,Sbst(x,y)]) = (x|a) by SUBLEMMA:def 9;
@@ -2497,7 +2502,7 @@ A2: for a being set st a in dom f ex b st P[a,b]
     consider n such that A5: dom f = Seg n by FINSEQ_1:def 2;
     consider F1 being Function such that
 A6:             rng F1 = Seg n & dom F1 in omega by FINSET_1:def 1;
-    set F = F1*F2;
+    set F = F2*F1;
 A7: dom F in omega by A4,A5,A6,RELAT_1:46;
     set X = {still_not-bound_in p : ex i st i in dom f & p = f.i};
 A8: now let b such that A9: b in rng F;

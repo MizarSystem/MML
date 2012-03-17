@@ -8,10 +8,10 @@ environ
 
  vocabularies VECTSP_1, RLVECT_1, LATTICES, ARYTM_1, FUNCSDOM, BINOP_1,
       RELAT_1, ARYTM_3, FUNCT_1, BOOLE, MIDSP_1, FUNCT_3, VECTSP_2, GROUP_1,
-      NAT_1;
+      NAT_1, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_2, BINOP_1, STRUCT_0,
       RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM, MIDSP_1, FUNCT_3;
- constructors FUNCT_3, BINOP_1, VECTSP_1, MIDSP_1, NAT_D;
+ constructors FUNCT_3, BINOP_1, VECTSP_1, MIDSP_1, NAT_D, XCMPLX_0;
  registrations VECTSP_1, STRUCT_0, RELSET_1, SUBSET_1, XBOOLE_0, GROUP_1;
  requirements SUBSET, BOOLE;
 
@@ -21,15 +21,6 @@ begin :: 1_ RING
  reserve FS for non empty doubleLoopStr;
  reserve F for Field;
 
-definition
-  let IT be non empty multLoopStr;
- canceled;
-
- attr IT is well-unital means
-:: VECTSP_2:def 2
-  for x being Element of IT holds x * 1.IT = x & 1.IT * x = x;
-end;
-
 registration
  cluster well-unital -> unital (non empty multLoopStr);
 end;
@@ -38,17 +29,6 @@ registration
  cluster strict Abelian add-associative right_zeroed right_complementable
     unital distributive (non empty doubleLoopStr);
 end;
-
-theorem :: VECTSP_2:1
-    (for x,y,z being Scalar of FS holds
-               x+y = y+x &
-               (x+y)+z = x+(y+z) &
-               x+(0.FS) = x &
-               x+(-x) = 0.FS &
-               x*(1_FS) = x & (1_FS)*x = x &
-               (x*y)*z = x*(y*z) &
-               x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x)
-    iff FS is Ring;
 
 :: 3. RING
 
@@ -71,7 +51,7 @@ registration
 end;
 
 definition let IT be non empty multLoopStr_0;
- canceled 2;
+ canceled 4;
 
  attr IT is domRing-like means
 :: VECTSP_2:def 5
@@ -87,7 +67,7 @@ definition
  mode domRing is domRing-like non degenerated comRing;
 end;
 
-canceled 11;
+canceled 12;
 
 theorem :: VECTSP_2:13
   F is domRing;
@@ -106,13 +86,7 @@ end;
 
  reserve R for Ring;
 
-canceled 2;
-
-theorem :: VECTSP_2:16
-    (for x being Scalar of R holds
-      (x <> 0.R implies ex y be Scalar of R
-      st x*y = 1_R) & 0.R <> 1_R)
-      implies R is Skew-Field;
+canceled 3;
 
 :: 10. AXIOMS OF SKEW-FIELD
 
@@ -157,12 +131,12 @@ theorem :: VECTSP_2:39
  for F being add-associative right_zeroed right_complementable
      distributive non degenerated (non empty doubleLoopStr)
  for x, y being Element of F holds
-   x*y = 1_F implies x<>0.F & y<>0.F;
+   x*y = 1.F implies x<>0.F & y<>0.F;
 
 theorem :: VECTSP_2:40
  for SF being non degenerated Field-like associative
     Abelian add-associative right_zeroed right_complementable
-        left_unital right_unital distributive (non empty doubleLoopStr),
+        well-unital distributive (non empty doubleLoopStr),
      x being Element of SF holds
   x<>0.SF implies ex y being Element of SF st y*x = 1_SF;
 
@@ -172,13 +146,13 @@ theorem :: VECTSP_2:41
 theorem :: VECTSP_2:42
  for SF being non degenerated Field-like associative
     Abelian add-associative right_zeroed right_complementable
-        unital distributive (non empty doubleLoopStr),
+        well-unital distributive (non empty doubleLoopStr),
      x,y,z being Element of SF holds
         x * y = x * z & x<>0.SF implies y = z;
 
 definition let SF be non degenerated Field-like associative
     Abelian add-associative right_zeroed right_complementable
-        unital distributive (non empty doubleLoopStr),
+        well-unital distributive (non empty doubleLoopStr),
                x be Element of SF;
   assume  x<>0.SF;
  canceled;
@@ -245,7 +219,7 @@ theorem :: VECTSP_2:57
 definition let FS be 1-sorted;
  struct(LoopStr) RightModStr over FS (# carrier -> set,
       add -> BinOp of the carrier,
-      Zero -> Element of the carrier,
+      ZeroF -> Element of the carrier,
       rmult -> Function of [: the carrier, the carrier of FS:], the carrier #);
 end;
 
@@ -268,7 +242,7 @@ definition let FS1,FS2 be 1-sorted;
  struct (VectSpStr over FS1, RightModStr over FS2) BiModStr over FS1,FS2
    (# carrier -> set,
     add -> BinOp of the carrier,
-    Zero -> Element of the carrier,
+    ZeroF -> Element of the carrier,
     lmult -> Function of [:the carrier of FS1, the carrier:], the carrier,
     rmult -> Function of [:the carrier, the carrier of FS2:], the carrier #);
 end;

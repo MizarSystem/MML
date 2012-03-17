@@ -8,16 +8,16 @@
 environ
 
  vocabularies BOOLE, NORMSP_1, FUNCT_1, RLVECT_1, RELAT_1, FINSEQ_1, ALGSEQ_1,
-      FUNCOP_1, NAT_1;
+      FUNCOP_1, NAT_1, GR_CY_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, NAT_D, RELAT_1, FUNCT_1,
-      FUNCOP_1, RLVECT_1, STRUCT_0, FUNCT_2, XXREAL_0;
+      CARD_1, FUNCOP_1, RLVECT_1, STRUCT_0, FUNCT_2, XXREAL_0;
  constructors FUNCOP_1, XXREAL_0, XREAL_0, NAT_1, RLVECT_1, NAT_D;
  registrations STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, XBOOLE_0, NUMBERS,
       ORDINAL1, FUNCOP_1, XXREAL_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, CARD_1;
  theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, REAL_1, NAT_1, XBOOLE_0,
-      XBOOLE_1, FUNCOP_1, XREAL_1, XXREAL_0;
+      XBOOLE_1, FUNCOP_1, XREAL_1, XXREAL_0, CARD_1;
  schemes FUNCT_2, NAT_1;
 
 begin
@@ -25,159 +25,36 @@ begin
  reserve i,k,l,m,n for Element of NAT,
          x for set;
 
-definition let n;
-  func PSeg n -> set equals
- { k : k < n };
-  coherence;
-end;
-
-definition let n;
-  redefine func PSeg n -> Subset of NAT;
-  coherence
-  proof
-    set X = PSeg n;
-    X c= NAT
-    proof let x; assume x in X;
-      then x in { k : k < n };
-      then (ex k st x = k & k < n) & ex x st x in NAT;
-      hence x in NAT;
-    end;
-    hence thesis;
-  end;
-end;
-
-Lm1: x in PSeg n implies x is Element of NAT;
+Lm1: x in Segm n implies x is Element of NAT;
 
 canceled 9;
 
 theorem Th10:
-  k in PSeg n iff k < n
-  proof
-    k in { m : m < n } iff ex m st k = m & m < n;
-    hence thesis;
-  end;
+  k in Segm n iff k < n by CARD_1:98;
 
 theorem
- Th11: PSeg 0 = {} & PSeg 1 = { 0 } & PSeg 2 = { 0,1 }
-  proof
-   hereby assume
-A1:   PSeg 0 <> {};
-     consider x being Element of PSeg 0;
-     reconsider x as Element of NAT by A1,Lm1;
-     x < 0 by A1,Th10;
-     hence contradiction by NAT_1:2;
-   end;
-   now let x;
-     thus x in PSeg 1 implies x in { 0 }
-       proof assume
-A2:     x in PSeg 1;
-        consider k such that
-A3:     x = k & k < 1 by A2;
-        k < 0 + 1 by A3;
-        then k <= 0 by NAT_1:13;
-        then k = 0 by NAT_1:2;
-        hence thesis by A3,TARSKI:def 1;
-       end;
-     assume x in { 0 };
-then A4:    x = 0 by TARSKI:def 1;
-     thus x in PSeg 1 by A4;
-    end;
-   hence PSeg 1 = { 0 } by TARSKI:2;
-   now let x;
-     thus x in PSeg 2 implies x in { 0,1 }
-       proof assume
-A5:      x in PSeg 2;
-         consider k such that
-A6:      x = k & k < 2 by A5;
-         k = 0 or k = 1 by A6,NAT_1:23;
-         hence x in { 0,1 } by A6,TARSKI:def 2;
-       end;
-     assume x in { 0,1 };
-    then x = 0 or x = 1 by TARSKI:def 2;
-      then x in { m : m < 2 };
-     hence x in PSeg 2;
-    end;
-   hence PSeg 2 = { 0,1 } by TARSKI:2;
-  end;
+ Th11: Segm 0 = {} & Segm 1 = { 0 } & Segm 2 = { 0,1 }
+                 by CARD_1:87,88;
 
 theorem
- Th12: n in PSeg(n+1)
-  proof
-    n<n+1 by XREAL_1:31;
-    then n in {k:k<n+1};
-    hence thesis;
-  end;
+ Th12: n in Segm(n+1) by CARD_1:99;
 
 theorem
- Th13: n <= m iff PSeg n c= PSeg m
-  proof
-   thus n <= m implies PSeg n c= PSeg m
-     proof assume
-A1:  n <= m;
-     let x; assume
-A2:  x in PSeg n;
-     then reconsider k = x as Element of NAT;
-     k < n by A2,Th10;
-     then k < m by A1,XXREAL_0:2;
-     then x in { l : l < m };
-     hence x in PSeg m;
-   end;
-   now assume not n <= m;
-     then m in PSeg n;
-     hence thesis by Th10;
-   end;
-   hence thesis;
-  end;
+ Th13: n <= m iff Segm n c= Segm m by CARD_1:100;
 
 theorem
- Th14: PSeg n = PSeg m implies n = m
-  proof assume PSeg n = PSeg m;
-    then n <= m & m <= n by Th13;
-    hence n = m by XXREAL_0:1;
-  end;
+ Th14: Segm n = Segm m implies n = m;
 
 theorem Th15:
   k <= n implies
-    PSeg k = PSeg k /\ PSeg n & PSeg k = PSeg n /\ PSeg k
-proof
-   assume k <= n;
-   then PSeg k c= PSeg n by Th13;
-   hence thesis by XBOOLE_1:28;
-end;
+    Segm k = Segm k /\ Segm n & Segm k = Segm n /\ Segm k by CARD_1:101;
 
 theorem
-  (PSeg k = PSeg k /\ PSeg n or PSeg k = PSeg n /\ PSeg k)
-    implies k <= n
-proof
-  now assume A1: PSeg k = PSeg k /\ PSeg n;
-    assume not k <= n;
-    then PSeg n = PSeg k by A1,Th15;
-    hence k <= n by Th14;
-  end;
-  hence thesis;
-end;
+  (Segm k = Segm k /\ Segm n or Segm k = Segm n /\ Segm k)
+    implies k <= n by CARD_1:101;
 
 theorem
-  PSeg n \/ { n } = PSeg (n+1)
-proof
-  thus PSeg n \/ { n } c= PSeg (n+1)
-  proof
-    n+0<=n+1 by XREAL_1:9;
-then A1:     PSeg n c= PSeg(n+1) by Th13;
-       let x;
-       assume x in PSeg n \/ { n };
-       then x in PSeg n or x in { n } by XBOOLE_0:def 2;
-       then x in PSeg (n+1) or x = n by A1,TARSKI:def 1;
-       hence thesis by Th12;
-    end;
-    let x;
-    assume A2:x in PSeg (n+1);
-    then reconsider x as Element of NAT;
-    x<n+1 by A2,Th10;
-    then x<n or x=n by NAT_1:22;
-    then x in PSeg n or x in {n} by TARSKI:def 1;
-    hence thesis by XBOOLE_0:def 2;
-end;
+  Segm n \/ { n } = Segm (n+1) by CARD_1:102;
 
 ::
 ::    Algebraic Sequences
@@ -186,6 +63,7 @@ end;
 reserve R for non empty ZeroStr;
 
 definition let R;
+ canceled;
   let F be sequence of R;
   attr F is finite-Support means :Def2:
     ex n st for i st i >= n holds F.i = 0.R;
@@ -303,14 +181,14 @@ theorem Th25:
 
 definition let R,p;
   func support p -> Subset of NAT equals
-   PSeg len p;
+   Segm len p;
   coherence;
 end;
 
 canceled;
 
 theorem
-  k = len p iff PSeg k = support p by Th14;
+  k = len p iff Segm k = support p;
 
  scheme AlgSeqLambdaF{R()->non empty ZeroStr,A()->Element of NAT,
                       F(Element of NAT)->Element of R()}:
@@ -460,13 +338,7 @@ theorem Th31:
     end;
 
 theorem
-  p=<%0.R%> iff support p = {}
-proof
-  thus p=<%0.R%> implies support p = {} by Lm5,Th11;
-  assume A1: support p = {};
-   len p = 0 by A1,Th11,Th14;
-   hence p=<%0.R%> by Th31;
-end;
+  p=<%0.R%> iff support p = {} by Th31;
 
 theorem Th33:
   <%0.R%>.i=0.R

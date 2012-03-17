@@ -8,10 +8,10 @@ environ
 
  vocabularies VECTSP_1, RLVECT_1, LATTICES, ARYTM_1, FUNCSDOM, BINOP_1,
       RELAT_1, ARYTM_3, FUNCT_1, BOOLE, MIDSP_1, FUNCT_3, VECTSP_2, GROUP_1,
-      NAT_1;
+      NAT_1, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_2, BINOP_1, STRUCT_0,
       RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM, MIDSP_1, FUNCT_3;
- constructors FUNCT_3, BINOP_1, VECTSP_1, MIDSP_1, NAT_D;
+ constructors FUNCT_3, BINOP_1, VECTSP_1, MIDSP_1, NAT_D, XCMPLX_0;
  registrations VECTSP_1, STRUCT_0, RELSET_1, SUBSET_1, XBOOLE_0, GROUP_1;
  requirements SUBSET, BOOLE;
  definitions VECTSP_1, RLVECT_1, STRUCT_0, GROUP_1;
@@ -22,14 +22,6 @@ begin :: 1_ RING
  reserve FS for non empty doubleLoopStr;
  reserve F for Field;
 
-definition
-  let IT be non empty multLoopStr;
- canceled;
-
- attr IT is well-unital means
- :Def2: for x being Element of IT holds x * 1.IT = x & 1.IT * x = x;
-end;
-
 Lm1:
 for L being non empty multLoopStr st L is well-unital
   holds L is unital
@@ -37,7 +29,7 @@ proof
   let L being non empty multLoopStr such that
 A1: L is well-unital;
   take 1.L;
-  thus for h being Element of L holds h * 1.L = h & 1.L * h = h by A1,Def2;
+  thus thesis by A1,VECTSP_1:def 16;
 end;
 
 registration
@@ -51,7 +43,8 @@ for L being non empty multLoopStr st L is well-unital holds 1.(L) = 1_L
    assume
 A1: L is well-unital;
    then
-A2: for h being Element of L holds h * 1.(L) = h & 1.(L) * h = h by Def2;
+A2: for h being Element of L holds h * 1.(L) = h & 1.(L) * h = h
+          by VECTSP_1:def 16;
    L is unital by A1,Lm1;
    hence 1.(L) = 1_L by A2,GROUP_1:def 5;
  end;
@@ -66,51 +59,6 @@ registration
     hence thesis;
    end;
 end;
-
-theorem
-    (for x,y,z being Scalar of FS holds
-               x+y = y+x &
-               (x+y)+z = x+(y+z) &
-               x+(0.FS) = x &
-               x+(-x) = 0.FS &
-               x*(1_FS) = x & (1_FS)*x = x &
-               (x*y)*z = x*(y*z) &
-               x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x)
-    iff FS is Ring
- proof
-  thus (for x,y,z being Scalar of FS holds
-               x+y = y+x &
-               (x+y)+z = x+(y+z) &
-               x+(0.FS) = x &
-               x+(-x) = 0.FS &
-               x*(1_FS) = x & (1_FS)*x = x &
-               (x*y)*z = x*(y*z) &
-               x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x)
-    implies FS is Ring
-    proof
- assume A1: for x,y,z being Scalar of FS holds
-               x+y = y+x &
-               (x+y)+z = x+(y+z) &
-               x+(0.FS) = x &
-               x+(-x) = 0.FS &
-               x*(1_FS) = x & (1_FS)*x = x &
-               (x*y)*z = x*(y*z) &
-               x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x;
-         FS is right_complementable
-      proof
-        let v be Element of FS;
-        take -v;
-        thus v + -v = 0.FS by A1;
-      end;
-  hence thesis by A1,GROUP_1:def 4,RLVECT_1:def 5,def 6,def 7,VECTSP_1:def 13
-,def 18,def 19;
- end;
- assume
-A2: FS is Ring;
- let x,y,z be Scalar of FS;
- thus thesis by A2,GROUP_1:def 4,RLVECT_1:def 5,def 6,def 7,def 10
-,VECTSP_1:def 13,def 18,def 19;
- end;
 
 :: 3. RING
 
@@ -154,7 +102,7 @@ registration
 end;
 
 definition let IT be non empty multLoopStr_0;
- canceled 2;
+ canceled 4;
 
  attr IT is domRing-like means :Def5:
    for x,y being Element of IT holds x*y = 0.IT
@@ -177,7 +125,7 @@ definition
  mode domRing is domRing-like non degenerated comRing;
 end;
 
-canceled 11;
+canceled 12;
 
 theorem
   F is domRing
@@ -213,13 +161,7 @@ end;
 
  reserve R for Ring;
 
-canceled 2;
-
-theorem
-    (for x being Scalar of R holds
-      (x <> 0.R implies ex y be Scalar of R
-      st x*y = 1_R) & 0.R <> 1_R)
-      implies R is Skew-Field by VECTSP_1:def 20,def 21;
+canceled 3;
 
 :: 10. AXIOMS OF SKEW-FIELD
 
@@ -320,45 +262,45 @@ theorem Th39:
  for F being add-associative right_zeroed right_complementable
      distributive non degenerated (non empty doubleLoopStr)
  for x, y being Element of F holds
-   x*y = 1_F implies x<>0.F & y<>0.F
+   x*y = 1.F implies x<>0.F & y<>0.F
 proof
 let F be add-associative right_zeroed right_complementable
      distributive non degenerated (non empty doubleLoopStr),
   x, y be Element of F;
-    now A1: x = 0.F implies x*y <> 1_F
+A1: x = 0.F implies x*y <> 1.F
   proof
     assume x = 0.F;
     then x*y = 0.F by VECTSP_1:39;
-    hence thesis by VECTSP_1:def 21;
+    hence thesis by STRUCT_0:def 8;
   end;
-     y = 0.F implies x*y <> 1_F
+     y = 0.F implies x*y <> 1.F
    proof
     assume y = 0.F;
     then x*y = 0.F by VECTSP_1:36;
-    hence thesis by VECTSP_1:def 21;
+    hence thesis by STRUCT_0:def 8;
    end;
   hence thesis by A1;
- end;
- hence thesis;
 end;
 
 theorem Th40:
  for SF being non degenerated Field-like associative
     Abelian add-associative right_zeroed right_complementable
-        left_unital right_unital distributive (non empty doubleLoopStr),
+        well-unital distributive (non empty doubleLoopStr),
      x being Element of SF holds
   x<>0.SF implies ex y being Element of SF st y*x = 1_SF
  proof
   let SF be non degenerated Field-like associative
     Abelian add-associative right_zeroed right_complementable
-        left_unital right_unital distributive (non empty doubleLoopStr),
+        well-unital right_unital distributive (non empty doubleLoopStr),
      x be Element of SF;
+X: 1_SF = 1.SF by VECTSP_1:96;
   assume x<>0.SF;
   then consider y be Element of SF
-  such that A1: x*y = 1_SF by VECTSP_1:def 20;
-     y<>0.SF by A1,Th39;
+  such that A1: x*y = 1_SF by VECTSP_1:def 20,X;
+     1_SF = 1.SF by Lm2;
+     then y<>0.SF by A1,Th39;
   then consider z be Element of SF
-  such that A2: y*z = 1_SF by VECTSP_1:def 20;
+  such that A2: y*z = 1_SF by VECTSP_1:def 20,X;
 A3:  z = (x*y)*z by A1,VECTSP_1:def 19
 .= x*1_SF by A2,GROUP_1:def 4 .= x by VECTSP_1:def 13;
   take y;
@@ -368,8 +310,9 @@ A3:  z = (x*y)*z by A1,VECTSP_1:def 19
 theorem
 Th41: x*y = 1_SF implies y*x = 1_SF
  proof
+A: 1_SF =1.SF by Lm2;
   assume A1: x*y = 1_SF;
-  then x<>0.SF by Th39;
+  then x<>0.SF by Th39,A;
   then consider z such that A2: z*x = 1_SF by Th40;
      y = (z*x)*y by A2,VECTSP_1:def 19
      .= z*1_SF by A1,GROUP_1:def 4 .= z by VECTSP_1:def 13;
@@ -379,17 +322,18 @@ Th41: x*y = 1_SF implies y*x = 1_SF
 theorem Th42:
  for SF being non degenerated Field-like associative
     Abelian add-associative right_zeroed right_complementable
-        unital distributive (non empty doubleLoopStr),
+        well-unital distributive (non empty doubleLoopStr),
      x,y,z being Element of SF holds
         x * y = x * z & x<>0.SF implies y = z
  proof
   let SF be non degenerated Field-like associative
     Abelian add-associative right_zeroed right_complementable
-        unital distributive (non empty doubleLoopStr),
+        well-unital distributive (non empty doubleLoopStr),
      x,y,z be Element of SF;
   assume that A1: x * y = x * z and A2: x<>0.SF;
+A: 1_SF =1.SF by Lm2;
   consider u being Element of SF such that
-  A3: u * x = 1_SF by A2,Th40;
+  A3: u * x = 1_SF by A2,Th40,A;
      y = (u*x)*y by A3,VECTSP_1:def 19 .= u*(x*z) by A1,GROUP_1:def 4
   .= 1_SF*z by A3,GROUP_1:def 4 .= z by VECTSP_1:def 19;
   hence thesis;
@@ -397,14 +341,15 @@ theorem Th42:
 
 definition let SF be non degenerated Field-like associative
     Abelian add-associative right_zeroed right_complementable
-        unital distributive (non empty doubleLoopStr),
+        well-unital distributive (non empty doubleLoopStr),
                x be Element of SF;
   assume A1: x<>0.SF;
  canceled;
+X: 1_SF = 1.SF by VECTSP_1:96;
 
   func x" -> Scalar of SF
     means :Def7:  x * it = 1_SF;
-  existence by A1,VECTSP_1:def 20;
+  existence by A1,VECTSP_1:def 20,X;
   uniqueness by A1,Th42;
 end;
 
@@ -427,17 +372,18 @@ canceled;
 theorem
 Th45: x*y = 1_SF implies x = y" & y = x"
  proof
+A: 1_SF =1.SF by Lm2;
      now A1: x*y = 1_SF implies x = y"
    proof
     assume A2: x*y = 1_SF;
-    then A3: y<>0.SF by Th39;
+    then A3: y<>0.SF by Th39,A;
        y*x = 1_SF by A2,Th41;
     hence thesis by A3,Def7;
    end;
      x*y = 1_SF implies y = x"
    proof
     assume A4: x*y = 1_SF;
-    then x<>0.SF by Th39;
+    then x<>0.SF by Th39,A;
     hence thesis by A4,Def7;
    end;
    hence thesis by A1;
@@ -602,7 +548,7 @@ end;
 definition let FS be 1-sorted;
  struct(LoopStr) RightModStr over FS (# carrier -> set,
       add -> BinOp of the carrier,
-      Zero -> Element of the carrier,
+      ZeroF -> Element of the carrier,
       rmult -> Function of [: the carrier, the carrier of FS:], the carrier #);
 end;
 
@@ -635,7 +581,7 @@ definition let FS1,FS2 be 1-sorted;
  struct (VectSpStr over FS1, RightModStr over FS2) BiModStr over FS1,FS2
    (# carrier -> set,
     add -> BinOp of the carrier,
-    Zero -> Element of the carrier,
+    ZeroF -> Element of the carrier,
     lmult -> Function of [:the carrier of FS1, the carrier:], the carrier,
     rmult -> Function of [:the carrier, the carrier of FS2:], the carrier #);
 end;
@@ -696,7 +642,7 @@ A1:  x' + b = 0.R by RLVECT_1:def 8;
     take b';
     thus x + b' = 0.IT by  A1;
    end;
-   hence thesis by VECTSP_1:7;
+   hence thesis by RLVECT_1:def 5,def 6,def 7,def 8;
   end;
  end;
 

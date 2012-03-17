@@ -23,7 +23,7 @@ environ
       SCMPDS_5, SCMPDS_6, SCMPDS_7, SCMPDS_8, WSIERP_1, FRAENKEL, XREAL_0,
       MEMBERED, SETFAM_1, STRUCT_0, XXREAL_0, CARD_3, NAT_1, SEQ_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions CQC_LANG, SCMPDS_2, SCMP_GCD;
+ definitions FUNCOP_1, SCMPDS_2, SCMP_GCD;
  theorems AMI_1, AMI_3, NAT_1, REAL_1, TARSKI, FUNCT_4, INT_1, SCMPDS_2,
       SCMPDS_3, GRFUNC_1, SCM_1, SCMFSA6B, SCMPDS_4, SCMPDS_5, SCMPDS_6,
       ENUMSET1, SCMP_GCD, SCMPDS_7, SCMPDS_8, ABSVALUE, FINSEQ_1, SFMASTR3,
@@ -68,11 +68,11 @@ proof
      hence thesis by Lm1;
    end;
    suppose A2:m>n;
-          now
+   now
       let i, j be Element of NAT;
       assume A3: m <= i & i <= j & j <= n;
       assume f.i > f.j;
-             m <= j by A3,XXREAL_0:2;
+       m <= j by A3,XXREAL_0:2;
        hence contradiction by A2,A3,XXREAL_0:2;
      end;
      hence thesis by SFMASTR3:def 4;
@@ -959,9 +959,11 @@ end;
       k6= AddTo(GBP,4,-1),
       k7= AddTo(GBP,6,-1),
       FA= Load ((GBP,6):=0),
-      TR=k3 ';' k4 ';' k5 ';' k6 ';' k7,
+      TR= ((GBP,5):=(intpos 4,-1)) ';' ((intpos 4,-1):=(intpos 4,0)) ';'
+          ((intpos 4,0 ):=(GBP,5)) ';' (AddTo(GBP,4,-1)) ';' (AddTo(GBP,6,-1)),
       IF= if>0(GBP,5, TR,FA),
-      B1= k1 ';' k2 ';' IF,
+      B1= ((GBP,5):=(intpos 4,-1)) ';' (SubFrom(GBP,5,intpos 4,0)) ';'
+          (if>0(GBP,5, TR,FA)),
       WH= while>0(GBP,6,B1),
       J4= j1 ';' j2 ';' j3 ';' j4,
       B2= J4 ';' WH,
@@ -1805,7 +1807,7 @@ end;
 begin :: The Property of Insert Sort and Its Correctness
 
 theorem
-        card insert-sort (n,p0) = 23
+  card insert-sort (n,p0) = 23
 proof
    set i1= GBP:=0,
        i2= (GBP,1):=0,
@@ -1905,9 +1907,14 @@ end;
 theorem Th17:
  for s being State of SCMPDS,f,g be FinSequence of INT,
  k0,k being Element of NAT
- st s.a4 >= 7+s.a6 & s.GBP=0 & k=s.a6 & k0=s.a4-s.a6-1 &
+ st s.(intpos 4) >= 7+s.(intpos 6) & s.GBP=0 & k=s.(intpos 6) &
+   k0=s.(intpos 4)-s.(intpos 6)-1 &
   f is_FinSequence_on s,k0 &
-  g is_FinSequence_on IExec(Insertthek1item,s),k0 &
+  g is_FinSequence_on IExec(while>0(GBP,6,((GBP,5):=(intpos 4,-1)) ';'
+    (SubFrom(GBP,5,intpos 4,0)) ';' (if>0(GBP,5,
+      ((GBP,5):=(intpos 4,-1)) ';' ((intpos 4,-1):=(intpos 4,0)) ';'
+          ((intpos 4,0 ):=(GBP,5)) ';' (AddTo(GBP,4,-1)) ';'
+          (AddTo(GBP,6,-1)),Load ((GBP,6):=0)))),s),k0 &
   len f=len g & len f > k & f is_non_decreasing_on 1,k
  holds
   f,g are_fiberwise_equipotent & g is_non_decreasing_on 1,k+1 &

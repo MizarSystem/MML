@@ -17,10 +17,10 @@
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="CLASSES2"/>
 <ArticleID name="ORDINAL4"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="AFINSQ_1"/>
 </Signature>
@@ -38,13 +38,13 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="11"/>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="172">
+<Func kind="K" nr="178">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -157,13 +157,13 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="11"/>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="171">
+<Func kind="K" nr="177">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -206,7 +206,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="11"/>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -222,7 +222,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="11"/>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </Typ>
 <For>
@@ -238,7 +238,7 @@
 <Pred kind="P" nr="1">
 <Func kind="K" nr="121">
 <Var nr="1"/>
-<Func kind="K" nr="176">
+<Func kind="K" nr="182">
 <Var nr="2"/>
 </Func>
 </Func>
@@ -280,14 +280,14 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="11"/>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="2">
 <Var nr="3"/>
-<Func kind="K" nr="180">
+<Func kind="K" nr="186">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -312,14 +312,14 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="11"/>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="2">
 <Var nr="3"/>
-<Func kind="K" nr="180">
+<Func kind="K" nr="186">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

@@ -7,14 +7,15 @@
 environ
 
  vocabularies ORDINAL2, ORDINAL1, BOOLE, TARSKI, SETFAM_1, FUNCT_1, RELAT_1,
-      ORDINAL3;
+      ORDINAL3, ZFREFLE1;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, SETFAM_1,
       ORDINAL2;
  constructors SETFAM_1, ORDINAL2;
  registrations ORDINAL1, ZFMISC_1, XBOOLE_0, ORDINAL2;
  requirements SUBSET, BOOLE, NUMERALS;
- definitions TARSKI, XBOOLE_0;
- theorems TARSKI, XBOOLE_0, FUNCT_1, ORDINAL1, SETFAM_1, ORDINAL2, XBOOLE_1;
+ definitions TARSKI, XBOOLE_0, ORDINAL2;
+ theorems TARSKI, XBOOLE_0, FUNCT_1, ORDINAL1, SETFAM_1, ORDINAL2, XBOOLE_1,
+  ZFMISC_1;
  schemes ORDINAL1, ORDINAL2, XBOOLE_0;
 
 begin
@@ -54,7 +55,7 @@ theorem
    hence thesis by ORDINAL1:35;
   end;
 
-theorem
+theorem Th7:
     union On X is Ordinal
   proof
        x in On X implies x is Ordinal by ORDINAL1:def 10;
@@ -147,7 +148,7 @@ theorem
    hence A c= {} & {} c= A by ORDINAL1:34,XBOOLE_1:2,Lm1;
   end;
 
-theorem
+theorem Th18:
     1 = {{}}
   proof
        now let x;
@@ -1350,3 +1351,52 @@ theorem
    hence A div^ 1 = A by Def7;
    hence A mod^ 1 = A-^A by ORDINAL2:56 .= {} by Th67;
   end;
+
+begin :: Addenda
+
+:: from ZF_REFLE, 2007.03.13, A.T.
+
+theorem
+  sup X c= succ union On X
+  proof reconsider A = union On X as Ordinal by Th7;
+     On X c= succ A
+     proof let x; assume
+A1:   x in On X;
+      then reconsider a = x as Ordinal by ORDINAL1:def 10;
+      a c= A by A1,ZFMISC_1:92;
+      hence x in succ A by ORDINAL1:34;
+     end;
+   hence thesis by ORDINAL2:def 7;
+  end;
+
+:: from ZFREFLE1, 2007.03.14, A.T.
+
+reserve e,u for set;
+
+theorem
+    succ A is_cofinal_with 1
+  proof deffunc F(set) = A;
+    consider psi such that
+A1:  dom psi = 1 & for B st B in 1 holds psi.B = F(B) from ORDINAL2:sch 3;
+   take psi; thus dom psi = 1 by A1;
+   thus rng psi c= succ A
+     proof let e; assume e in rng psi;
+      then consider u such that
+A2:     u in 1 & e = psi.u by A1,FUNCT_1:def 5;
+      reconsider u as Ordinal by A2,ORDINAL1:23;
+          psi.u = A by A1,A2;
+      hence thesis by A2,ORDINAL1:10;
+     end;
+   thus psi is increasing
+     proof let B,C; assume
+        B in C & C in dom psi;
+      hence thesis by A1,Th17;
+     end;
+       dom psi = {{}} & {} in 1 by A1,ORDINAL1:10,Th18,Lm1;
+    then rng psi = {psi.{}} & psi.{} = A & sup psi = sup rng psi
+     by A1,FUNCT_1:14;
+   hence thesis by ORDINAL2:31;
+  end;
+
+
+

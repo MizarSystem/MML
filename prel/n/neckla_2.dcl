@@ -30,26 +30,26 @@
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="G" nr="4">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="39"/>
-<Adjective nr="47"/>
-<Adjective nr="52"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="43"/>
+<Adjective nr="51"/>
+<Adjective nr="56"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="156"/>
+<Func kind="K" nr="160"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="157"/>
+<Func kind="K" nr="161"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
@@ -65,7 +65,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="146">
+<Func kind="K" nr="150">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -78,7 +78,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="120"/>
+<Func kind="K" nr="122"/>
 </Typ>
 <Cluster>
 <Adjective nr="20"/>

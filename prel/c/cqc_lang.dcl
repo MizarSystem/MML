@@ -10,6 +10,8 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
@@ -23,7 +25,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="77"/>
+<Func kind="K" nr="97"/>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="9">
@@ -33,33 +35,15 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="19"/>
-<Adjective nr="31">
+<Adjective nr="23"/>
+<Adjective nr="35">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 </RCluster>
 <FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="141">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-</Cluster>
-</FCluster>
-<FCluster>
 <ArgTypes/>
-<Func kind="K" nr="145"/>
+<Func kind="K" nr="164"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>

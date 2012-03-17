@@ -13,59 +13,53 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="REALSET1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
-<ArticleID name="REALSET2"/>
 <ArticleID name="ANALOAF"/>
 <ArticleID name="DIRAF"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="G" nr="10">
+<Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="61" value="false"/>
-<Adjective nr="63"/>
-<Adjective nr="66"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="41"/>
+<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes/>
-<Typ kind="G" nr="10">
+<Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="61" value="false"/>
-<Adjective nr="63"/>
-<Adjective nr="66"/>
-<Adjective nr="67"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="41"/>
+<Adjective nr="44"/>
+<Adjective nr="45"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="10">
+<Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="27" value="false"/>
+<Adjective nr="25" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="160">
+<Func kind="K" nr="125">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="63"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="41"/>
 </Cluster>
 </FCluster>
 </Registrations>

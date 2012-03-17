@@ -13,41 +13,34 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="STRUCT_0"/>
-<ArticleID name="GROUP_1"/>
-<ArticleID name="SEQ_1"/>
-<ArticleID name="RVSUM_1"/>
-<ArticleID name="GR_CY_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="AMI_2"/>
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="200"/>
+<Func kind="K" nr="135"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="201"/>
+<Func kind="K" nr="136"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="204"/>
+<Func kind="K" nr="139"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
@@ -57,13 +50,13 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="195">
-<Func kind="K" nr="205"/>
+<Func kind="K" nr="130">
+<Func kind="K" nr="140"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="202"/>
+<Func kind="K" nr="137"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="35">
@@ -73,8 +66,8 @@
 <Cluster>
 <Adjective nr="8"/>
 <Adjective nr="18"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
+<Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </FCluster>
 </Registrations>

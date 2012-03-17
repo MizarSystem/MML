@@ -12,7 +12,7 @@ environ
       SCMFSA6C, SCMFSA6B, SCM_1, SCM_HALT, FUNCT_7, UNIALG_2, CARD_3, AMI_2,
       SCMFSA8C, ARYTM_1, ABSVALUE, SCMBSORT, FINSEQ_4, SCMISORT, NAT_1;
  notations TARSKI, XBOOLE_0, SETFAM_1, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0,
-      NAT_1, NAT_D, CQC_LANG, RELAT_1, FUNCT_1, SEQ_1, FUNCT_2, FUNCT_4,
+      NAT_1, NAT_D, FUNCOP_1, RELAT_1, FUNCT_1, SEQ_1, FUNCT_2, FUNCT_4,
       FUNCT_7, CARD_1, FINSEQ_1, CARD_3, STRUCT_0, AMI_1, AMI_3, SCM_1, AMI_5,
       SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C,
       SCMFSA7B, SCMFSA8A, SCMFSA_9, SCMFSA8B, INT_1, FINSEQ_4, SCMBSORT,
@@ -22,11 +22,11 @@ environ
       SCMFSA8B, SCMFSA8C, SCMFSA_9, SFMASTR1, SCM_HALT, SCMBSORT, SEQM_3,
       NAT_D;
  registrations RELSET_1, FUNCT_1, AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR,
-      SCMFSA6C, SCMFSA8A, FINSUB_1, SCM_HALT, SCMFSA_9, INT_1, CQC_LANG,
+      SCMFSA6C, SCMFSA8A, FINSUB_1, SCM_HALT, SCMFSA_9, INT_1, FUNCOP_1,
       FRAENKEL, XREAL_0, MEMBERED, SETFAM_1, STRUCT_0, XXREAL_0, CARD_3;
  requirements BOOLE, REAL, NUMERALS, SUBSET, ARITHM;
- definitions AMI_1, SCMFSA_2;
- theorems SF_MASTR, FUNCT_1, FUNCT_7, CQC_LANG, RELAT_1, AMI_1, FUNCT_2,
+ definitions AMI_1, SCMFSA_2, FUNCOP_1;
+ theorems SF_MASTR, FUNCT_1, FUNCT_7, FUNCOP_1, RELAT_1, AMI_1, FUNCT_2,
       SCMFSA6A, FUNCT_4, AMI_5, FINSEQ_3, ENUMSET1, AMI_3, REAL_1, NAT_1,
       TARSKI, INT_1, GRFUNC_1, RFINSEQ, SCMFSA_2, SCMFSA6B, SCMFSA7B, SCMFSA8B,
       SCMFSA8A, SCMFSA8C, SCMFSA_4, SCMFSA6C, SCM_HALT, ABSVALUE, FINSEQ_4,
@@ -108,7 +108,7 @@ then A5: UIL=UIL2 by FUNCT_2:113;
    per cases;
    suppose x<>l;
       then not x in {l} by TARSKI:def 1;
-   then not x in dom (l.-->ic) by CQC_LANG:5;
+   then not x in dom (l.-->ic) by FUNCOP_1:19;
    then p.x=pl.x by FUNCT_4:12;
       hence f.x = UIL.plx by A9,FUNCT_1:22
           .= g.x by A6,A8,A9,FUNCT_1:23;
@@ -226,7 +226,7 @@ then A5: UIL=UIL2 by FUNCT_2:113;
    per cases;
    suppose x<>l;
       then not x in {l} by TARSKI:def 1;
-   then not x in dom (l.-->ic) by CQC_LANG:5;
+   then not x in dom (l.-->ic) by FUNCOP_1:19;
    then p.x=pl.x by FUNCT_4:12;
       hence f.x = UIL.plx by A9,FUNCT_1:22
           .= g.x by A6,A8,A9,FUNCT_1:23;
@@ -1639,31 +1639,36 @@ set a4 = intloc 4;
 set a5 = intloc 5;
 set a6 = intloc 6;
 set initializeWorkMem =
-   (a2:= intloc 0) ';'
-   (a3:= intloc 0) ';'
-   (a4:= intloc 0) ';'
-   (a5:= intloc 0) ';'
-   (a6:= intloc 0);
+   ((intloc 2):= intloc 0) ';'
+   ((intloc 3):= intloc 0) ';'
+   ((intloc 4):= intloc 0) ';'
+   ((intloc 5):= intloc 0) ';'
+   ((intloc 6):= intloc 0);
 
 definition
  let f be FinSeq-Location;
  func insert-sort f -> Macro-Instruction equals
-   initializeWorkMem ';'
-       (a1:=len f) ';'
-       SubFrom(a1,a0) ';'
-       Times(a1,
-          ((a2:=len f) ';' SubFrom(a2,a1) ';' (a3 := a2) ';'
-          AddTo(a3,a0) ';' (a6:=(f,a3)) ';' SubFrom(a4,a4)) ';'
-          while>0(a2, (a5:=(f,a2)) ';' SubFrom(a5,a6) ';'
-               if>0(a5,Macro SubFrom(a2,a2),
-                    AddTo(a4,a0) ';' SubFrom(a2,a0))
+   (((intloc 2):= intloc 0) ';' ((intloc 3):= intloc 0) ';'
+   ((intloc 4):= intloc 0) ';' ((intloc 5):= intloc 0) ';'
+   ((intloc 6):= intloc 0)) ';'
+       ((intloc 1):=len f) ';'
+       SubFrom(intloc 1,intloc 0) ';'
+       Times(intloc 1,
+          (((intloc 2):=len f) ';' SubFrom(intloc 2,intloc 1) ';'
+          ((intloc 3) := intloc 2) ';'
+          AddTo(intloc 3,intloc 0) ';' ((intloc 6):=(f,intloc 3)) ';'
+          SubFrom(intloc 4,intloc 4)) ';'
+          while>0(intloc 2, ((intloc 5):=(f,intloc 2)) ';'
+               SubFrom(intloc 5,intloc 6) ';'
+               if>0(intloc 5,Macro SubFrom(intloc 2,intloc 2),
+                    AddTo(intloc 4,intloc 0) ';' SubFrom(intloc 2,intloc 0))
           ) ';'
-          Times(a4,
-               (a2:=a3) ';'
-               SubFrom(a3,a0) ';'
-               (a5:=(f,a2)) ';'
-               (a6:=(f,a3)) ';'
-               ((f,a2):=a6) ';'((f,a3):=a5)
+          Times(intloc 4,
+               ((intloc 2):=intloc 3) ';'
+               SubFrom(intloc 3,intloc 0) ';'
+               ((intloc 5):=(f,intloc 2)) ';'
+               ((intloc 6):=(f,intloc 3)) ';'
+               ((f,intloc 2):=intloc 6) ';'((f,intloc 3):=intloc 5)
           )
        );
   coherence;
@@ -1677,7 +1682,8 @@ end;
 
 theorem Th38:
   for f being FinSeq-Location holds
-    UsedIntLoc (insert-sort f) = {a0,a1,a2,a3,a4,a5,a6}
+    UsedIntLoc (insert-sort f) =
+      {intloc 0,intloc 1,intloc 2,intloc 3,intloc 4,intloc 5,intloc 6}
 proof
   let f be FinSeq-Location;
   set i1= a2:=a3,
@@ -3606,10 +3612,11 @@ end;
 
 theorem Th45:
 for s be State of SCM+FSA holds
-    (s.f0, IExec(insert-sort f0,s).f0 are_fiberwise_equipotent) &
-    (for i,j be Element of NAT st i>=1 & j<=len (s.f0) & i<j
-     for x1,x2 be Integer st x1 =IExec(insert-sort f0,s).f0.i &
-        x2=IExec(insert-sort f0,s).f0.j holds x1 >= x2)
+    (s.(fsloc 0), IExec(insert-sort (fsloc 0),s).(fsloc 0)
+      are_fiberwise_equipotent) &
+    (for i,j be Element of NAT st i>=1 & j<=len (s.(fsloc 0)) & i<j
+     for x1,x2 be Integer st x1 =IExec(insert-sort (fsloc 0),s).(fsloc 0).i &
+        x2=IExec(insert-sort (fsloc 0),s).(fsloc 0).j holds x1 >= x2)
 proof let s be State of SCM+FSA;
       set WJ=w2 ';' w3 ';' w4 ';' w5 ';' w6 ';' j1 ';' j2,
       s0=Initialize s,
@@ -3678,12 +3685,12 @@ proof
       x=fsloc 0 .--> t,
       z=IExec(insert-sort f0,s).f0;
   assume A1: p+*x c= s;
-        dom x = { f0} by CQC_LANG:5;
+        dom x = { f0} by FUNCOP_1:19;
 then A2: f0 in dom x by TARSKI:def 1;
  then f0 in dom (p+*x) by FUNCT_4:13;
 then A3: s.f0=(p+*x).f0 by A1,GRFUNC_1:8
     .=x.f0 by A2,FUNCT_4:14
-    .=t by CQC_LANG:6;
+    .=t by FUNCOP_1:87;
 A4: (s.f0, z are_fiberwise_equipotent) &
     (for i,j be Element of NAT st i>=1 & j<=len (s.f0) & i<j
      for x1,x2 be Integer st x1 =z.i & x2=z.j holds x1 >= x2) by Th45;
@@ -3972,7 +3979,7 @@ proof let x be set;
 A1:  x = fsloc 0 .--> w by SCMBSORT:60;
      reconsider s = x as FinPartState of SCM+FSA by A1;
    set p = Initialized Insert-Sort-Algorithm;
-A2:  dom s = { fsloc 0 } by A1,CQC_LANG:5;
+A2:  dom s = { fsloc 0 } by A1,FUNCOP_1:19;
      take s;
 thus x = s;
 A3:  p +* s is autonomic by A1,Th48;
@@ -4005,7 +4012,7 @@ then fsloc 0 in dom Result t by AMI_3:36;
 then A13:  Sorting-Function.s c= Result t by A9,A11,A12,AMI_3:27;
          s c= p +* s by FUNCT_4:26;
 then A14:  dom s c= dom(p +* s) by RELAT_1:25;
-     A15: dom(fsloc 0 .--> z) = { fsloc 0 } by CQC_LANG:5;
+     A15: dom(fsloc 0 .--> z) = { fsloc 0 } by FUNCOP_1:19;
          Result(p +* s) = (Result t)|dom(p +* s) by A3,A8,A10,AMI_1:def 28;
  hence Sorting-Function.s c= Result(p +* s) by A2,A9,A13,A14,A15,RELAT_1:186;
 end;

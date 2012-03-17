@@ -51,7 +51,7 @@
 <Adjective nr="22"/>
 <Adjective nr="26"/>
 <Adjective nr="35"/>
-<Adjective nr="99"/>
+<Adjective nr="105"/>
 </Cluster>
 </RCluster>
 </Registrations>

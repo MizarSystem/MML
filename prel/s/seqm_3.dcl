@@ -23,15 +23,15 @@
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="94"/>
-<Func kind="K" nr="90"/>
+<Func kind="K" nr="97"/>
+<Func kind="K" nr="93"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="8">
-<Func kind="K" nr="94"/>
-<Func kind="K" nr="90"/>
+<Func kind="K" nr="97"/>
+<Func kind="K" nr="93"/>
 </Adjective>
 <Adjective nr="26"/>
 <Adjective nr="27"/>
@@ -45,21 +45,21 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="8">
-<Func kind="K" nr="94"/>
-<Func kind="K" nr="90"/>
+<Func kind="K" nr="97"/>
+<Func kind="K" nr="93"/>
 </Adjective>
 <Adjective nr="27"/>
 <Adjective nr="32"/>
 </Cluster>
-<Func kind="K" nr="94"/>
-<Func kind="K" nr="90"/>
+<Func kind="K" nr="97"/>
+<Func kind="K" nr="93"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="94"/>
+<Func kind="K" nr="97"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="118">
+<Func kind="K" nr="121">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -67,8 +67,8 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="8">
-<Func kind="K" nr="94"/>
-<Func kind="K" nr="90"/>
+<Func kind="K" nr="97"/>
+<Func kind="K" nr="93"/>
 </Adjective>
 <Adjective nr="26"/>
 <Adjective nr="27"/>
@@ -103,8 +103,8 @@
 </Cluster>
 <Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="94"/>
-<Func kind="K" nr="90"/>
+<Func kind="K" nr="97"/>
+<Func kind="K" nr="93"/>
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
@@ -120,8 +120,8 @@
 </Cluster>
 <Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="94"/>
-<Func kind="K" nr="90"/>
+<Func kind="K" nr="97"/>
+<Func kind="K" nr="93"/>
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
@@ -137,8 +137,8 @@
 </Cluster>
 <Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="94"/>
-<Func kind="K" nr="90"/>
+<Func kind="K" nr="97"/>
+<Func kind="K" nr="93"/>
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
@@ -156,8 +156,8 @@
 </Cluster>
 <Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="94"/>
-<Func kind="K" nr="90"/>
+<Func kind="K" nr="97"/>
+<Func kind="K" nr="93"/>
 </Typ>
 <Cluster>
 <Adjective nr="4"/>

@@ -18,7 +18,8 @@ environ
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FINSEQ_1;
  theorems TARSKI, ZFMISC_1, ENUMSET1, REAL_1, NAT_1, FUNCT_1, FUNCT_2, FUNCT_3,
-      FINSEQ_1, FUNCOP_1, TREES_1, RELAT_1, RELSET_1, XBOOLE_1, XREAL_1,
+      FINSEQ_1, FUNCOP_1, ::TREES_1,
+      RELAT_1, RELSET_1, XBOOLE_1, XREAL_1,
       GRFUNC_1, XXREAL_0, ORDINAL1;
  schemes FINSEQ_1, NAT_1;
 
@@ -262,7 +263,7 @@ theorem Th25:
 A1:  len r = i+j;
   reconsider p = r|(Seg i) as FinSequence by FINSEQ_1:19;
   consider q being FinSequence such that
-A2:  r = p^q by TREES_1:3;
+A2:  r = p^q by FINSEQ_1:101;
   take p,q;
        i <= len r by A1,NAT_1:11;
   hence len p = i by FINSEQ_1:21;
@@ -1755,5 +1756,37 @@ A5: dom p2 = Seg i by A3,FINSEQ_1:def 3;
       .= p2.j by A2,A5,A6,GRFUNC_1:8;
      end;
    hence p1 = p2 by A3,Th10;
+ end;
+
+:: from MODAL_1, 2007.03.14, A.T.
+
+reserve m,n for Element of NAT,
+        s,w for FinSequence of NAT;
+
+theorem Th4:
+for s st s <> {} ex w,n st s = <*n*>^w
+ proof
+ defpred P[FinSequence of NAT] means $1 <> {} implies ex w,n
+        st $1 = <*n*>^w;
+ A1: P[<*> NAT];
+ A2: for s,m st P[s] holds P[s^<*m*>]
+  proof let s,m such that
+   A3: s <> {} implies ex w,n st s = <*n*>^w; assume s^<*m*> <> {};
+     per cases;
+     suppose A4: s = {};
+      reconsider w = <*> NAT as FinSequence of NAT;
+      take w, n = m;
+      thus s^<*m*> = <*m*> by A4,FINSEQ_1:47
+        .= <*n*>^w by FINSEQ_1:47;
+     end;
+     suppose s <> {};
+      then consider w,n such that
+      A5: s = <*n*>^w by A3;
+      take w1 = w^<*m*>,n;
+      thus s^<*m*> =<*n*>^w1 by A5,FINSEQ_1:45;
+  end;
+  end;
+  for p being FinSequence of NAT holds P[p] from IndSeqD(A1,A2);
+ hence thesis;
  end;
 

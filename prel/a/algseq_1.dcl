@@ -20,7 +20,7 @@
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>
-<Adjective nr="20" value="false"/>
+<Adjective nr="19" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -40,7 +40,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="21">
+<Adjective nr="25">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

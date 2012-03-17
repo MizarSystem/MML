@@ -7,7 +7,8 @@
 environ
 
  vocabularies RLVECT_1, BINOP_1, ARYTM_1, FUNCT_1, LATTICES, RELAT_1, ARYTM_3,
-      VECTSP_1, ALGSTR_2, REALSET1, GROUP_1, ARYTM, NAT_1;
+      VECTSP_1, ALGSTR_2, REALSET1, GROUP_1, ARYTM, NAT_1, MOD_1, VECTSP_2,
+      STRUCT_0;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, FUNCT_2, BINOP_1,
       ORDINAL1, XCMPLX_0, XXREAL_0, XREAL_0, BINARITH, BINOP_2, STRUCT_0,
       RLVECT_1, GROUP_1;
@@ -69,45 +70,33 @@ registration
 end;
 
 definition
- mode AbGroup is add-associative right_zeroed right_complementable
-   Abelian (non empty LoopStr);
+  mode AddGroup is add-associative right_zeroed right_complementable
+                        (non empty LoopStr);
 end;
 
-theorem :: VECTSP_1:7
-(for x,y,z being Element of GS holds
-             x+y = y+x &
-             (x+y)+z = x+(y+z) &
-             x+(0.GS) = x &
-             ex x' being Element of GS st x+x' = 0.GS)
-     iff GS is AbGroup;
+definition
+ mode AbGroup is Abelian AddGroup;
+end;
 
 ::
 ::                         4. FIELD STRUCTURE
 ::
 
 definition
- struct(HGrStr) multLoopStr (# carrier -> set,
+ struct(HGrStr,OneStr) multLoopStr (# carrier -> set,
                         mult -> BinOp of the carrier,
-                        unity -> Element of the carrier #);
+                        OneF -> Element of the carrier #);
 end;
 
 registration
  cluster non empty strict multLoopStr;
 end;
 
-definition let FS be multLoopStr;
- canceled 2;
-
- func 1.FS -> Element of FS equals
-:: VECTSP_1:def 9
-   the unity of FS;
-end;
-
 definition
- struct(multLoopStr,ZeroStr) multLoopStr_0 (# carrier -> set,
+ struct(multLoopStr,ZeroOneStr) multLoopStr_0 (# carrier -> set,
                         mult -> BinOp of the carrier,
-                        unity -> Element of the carrier,
-                        Zero -> Element of the carrier #);
+                        OneF -> Element of the carrier,
+                        ZeroF -> Element of the carrier #);
 end;
 
 registration
@@ -117,7 +106,7 @@ end;
 definition
  struct(LoopStr,multLoopStr_0) doubleLoopStr (# carrier -> set,
                          add, mult -> BinOp of the carrier,
-                         unity, Zero -> Element of the carrier #);
+                         OneF, ZeroF -> Element of the carrier #);
 end;
 
 registration
@@ -125,7 +114,7 @@ registration
 end;
 
 definition let IT be non empty doubleLoopStr;
- canceled;
+ canceled 4;
 
  attr IT is right-distributive means
 :: VECTSP_1:def 11
@@ -165,8 +154,23 @@ registration let a,b be Element of F_Real, x,y be real number;
  identify a*b with x*y when a = x, b = y;
 end;
 
+definition
+  let IT be non empty multLoopStr;
+ attr IT is well-unital means
+:: VECTSP_1:def 16
+  for x being Element of IT holds x * 1.IT = x & 1.IT * x = x;
+end;
+
+registration
+ cluster F_Real -> well-unital;
+end;
+
+registration
+ cluster well-unital (non empty multLoopStr_0);
+end;
+
 definition let IT be non empty doubleLoopStr;
- canceled 2;
+ canceled;
 
  attr IT is distributive means
 :: VECTSP_1:def 18
@@ -181,16 +185,21 @@ definition let IT be non empty multLoopStr;
 end;
 
 definition let IT be non empty multLoopStr_0;
- attr IT is Field-like means
+ attr IT is almost_left_invertible means
 :: VECTSP_1:def 20
   for x being Element of IT st x <> 0.IT
-     ex y be Element of IT st x*y = 1_IT;
+     ex y be Element of IT st x*y = 1.IT;
 end;
 
-definition let IT be non empty multLoopStr_0;
- attr IT is degenerated means
+notation let IT be non empty multLoopStr_0;
+ synonym IT is Field-like for IT is almost_left_invertible;
+end;
+
+definition
+ let IT be well-unital (non empty multLoopStr_0);
+ redefine attr IT is degenerated means
 :: VECTSP_1:def 21
-   0.IT = 1_IT;
+  0.IT = 1_IT;
 end;
 
 registration
@@ -199,7 +208,8 @@ end;
 
 registration
  cluster F_Real -> add-associative right_zeroed right_complementable Abelian
-   commutative associative left_unital right_unital distributive Field-like
+   commutative associative left_unital right_unital distributive
+   almost_left_invertible
    non degenerated;
 end;
 
@@ -229,17 +239,18 @@ end;
 
 registration
  cluster add-associative right_zeroed right_complementable Abelian
-   commutative associative left_unital right_unital distributive Field-like
-   non degenerated strict (non empty doubleLoopStr);
+   commutative associative left_unital right_unital distributive
+   almost_left_invertible
+   non degenerated well-unital strict (non empty doubleLoopStr);
 end;
 
 definition
  mode Field is add-associative right_zeroed right_complementable
-    Abelian commutative associative left_unital distributive
-      Field-like non degenerated (non empty doubleLoopStr);
+    Abelian commutative associative well-unital distributive
+      almost_left_invertible non degenerated (non empty doubleLoopStr);
 end;
 
-canceled 12;
+canceled 13;
 
 theorem :: VECTSP_1:20
   1_F_Real = 1;
@@ -253,16 +264,16 @@ theorem :: VECTSP_1:21
   x*y = y*x &
   (x*y)*z = x*(y*z) &
   (1_F_Real)*x = x &
-  (x <> 0.F_Real implies ex y be Element of F_Real st x*y = 1_F_Real) &
+  (x <> 0.F_Real implies ex y be Element of F_Real st x*y = 1.F_Real) &
   x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x;
 
 theorem :: VECTSP_1:22
   for FS being non empty doubleLoopStr holds
   (for x,y,z being Element of FS holds
       (x <> 0.FS implies ex y be Element of FS
-      st x*y = 1_FS)
+      st x*y = 1.FS)
        & x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x ) iff
-      FS is distributive Field-like (non empty doubleLoopStr);
+      FS is distributive almost_left_invertible (non empty doubleLoopStr);
 
 ::
 ::                        6. AXIOMS OF FIELD
@@ -270,23 +281,27 @@ theorem :: VECTSP_1:22
 
 canceled 10;
 
+registration
+ cluster well-unital -> unital (non empty multLoopStr);
+end;
+
 theorem :: VECTSP_1:33
- for F being associative commutative left_unital distributive
-         Field-like (non empty doubleLoopStr),
+ for F being associative commutative well-unital distributive
+         almost_left_invertible (non empty doubleLoopStr),
      x,y,z being Element of F
   holds (x <> 0.F & x*y = x*z) implies y = z;
 
-definition let F be associative commutative left_unital distributive
-    Field-like (non empty doubleLoopStr),
+definition let F be associative commutative well-unital distributive
+    almost_left_invertible (non empty doubleLoopStr),
    x be Element of F;
  assume  x <> 0.F;
  func x" -> Element of F means
 :: VECTSP_1:def 22
-   x*it = 1_F;
+   x*it = 1.F;
 end;
 
-definition let F be associative commutative left_unital distributive
-    Field-like (non empty doubleLoopStr),
+definition let F be associative commutative well-unital distributive
+    almost_left_invertible (non empty doubleLoopStr),
    x,y be Element of F;
  func x/y ->Element of F equals
 :: VECTSP_1:def 23
@@ -335,7 +350,7 @@ theorem :: VECTSP_1:43
 
 theorem :: VECTSP_1:44
  for F being add-associative right_zeroed right_complementable
-             associative commutative left_unital Field-like
+             associative commutative well-unital almost_left_invertible
              distributive (non empty doubleLoopStr),
      x,y being Element of F holds
  x*y=0.F iff x=0.F or y=0.F;
@@ -353,7 +368,7 @@ definition let F be 1-sorted;
  struct(LoopStr) VectSpStr over F (#
                    carrier -> set,
                     add -> BinOp of the carrier,
-                    Zero -> Element of the carrier,
+                    ZeroF -> Element of the carrier,
                    lmult -> Function of [:the carrier of F,the carrier:],
                                       the carrier #);
 end;
@@ -406,13 +421,13 @@ definition let F be non empty doubleLoopStr;
 end;
 
 registration let F be add-associative right_zeroed right_complementable Abelian
-   associative left_unital distributive (non empty doubleLoopStr);
+   associative well-unital distributive (non empty doubleLoopStr);
  cluster VectSp-like add-associative right_zeroed right_complementable Abelian
    strict (non empty VectSpStr over F);
 end;
 
 definition let F be add-associative right_zeroed right_complementable Abelian
-   associative left_unital distributive (non empty doubleLoopStr);
+   associative well-unital distributive (non empty doubleLoopStr);
  mode VectSp of F is VectSp-like
   add-associative right_zeroed right_complementable Abelian
    (non empty VectSpStr over F);
@@ -428,7 +443,7 @@ canceled 13;
 
 theorem :: VECTSP_1:59
  for F being add-associative right_zeroed right_complementable
-    Abelian associative left_unital distributive (non empty doubleLoopStr),
+    Abelian associative well-unital distributive (non empty doubleLoopStr),
      x being Element of F
  for V being add-associative right_zeroed
              right_complementable VectSp-like (non empty VectSpStr over F),
@@ -474,7 +489,7 @@ theorem :: VECTSP_1:67
 
 theorem :: VECTSP_1:68
  for F be add-associative right_zeroed right_complementable Abelian
-          associative left_unital distributive (non empty doubleLoopStr),
+          associative well-unital distributive (non empty doubleLoopStr),
      V be VectSp-like add-associative right_zeroed right_complementable
         (non empty VectSpStr over F),
      x being Element of F,
@@ -487,7 +502,7 @@ end;
 
 theorem :: VECTSP_1:69
  for F be add-associative right_zeroed right_complementable Abelian
-         associative left_unital right_unital distributive
+         associative well-unital right_unital distributive
          (non empty doubleLoopStr),
      V be VectSp-like add-associative right_zeroed right_complementable
         (non empty VectSpStr over F),
@@ -497,7 +512,7 @@ theorem :: VECTSP_1:69
 
 theorem :: VECTSP_1:70
     for F be add-associative right_zeroed right_complementable Abelian
-         associative left_unital right_unital distributive
+         associative well-unital right_unital distributive
          (non empty doubleLoopStr),
      V be VectSp-like add-associative right_zeroed right_complementable
         (non empty VectSpStr over F),
@@ -507,10 +522,14 @@ theorem :: VECTSP_1:70
 
 canceled 2;
 
+registration
+ cluster well-unital -> unital (non empty multLoopStr);
+end;
+
 theorem :: VECTSP_1:73
     for F being add-associative right_zeroed right_complementable
-             commutative associative left_unital non degenerated
-             Field-like distributive (non empty doubleLoopStr),
+             commutative associative well-unital non degenerated
+             almost_left_invertible distributive (non empty doubleLoopStr),
      x being Element of F holds
  x <> 0.F implies (x")" = x;
 
@@ -539,7 +558,7 @@ registration
 end;
 
 definition let F be add-associative right_zeroed right_complementable
-             commutative associative left_unital Field-like
+             commutative associative well-unital almost_left_invertible
              non degenerated distributive (non empty doubleLoopStr);
  redefine attr F is Fanoian means
 :: VECTSP_1:def 29
@@ -616,3 +635,15 @@ theorem :: VECTSP_1:95
   for n be Element of NAT st n > 0 holds
     (power L).(0.L,n) = 0.L;
 
+:: 2007.02.14, A.T.
+
+registration
+ cluster well-unital (non empty multLoopStr);
+end;
+
+registration let S be well-unital (non empty multLoopStr);
+ identify 1_S with 1.S;
+end;
+
+theorem :: VECTSP_1:96
+for L being non empty multLoopStr st L is well-unital holds 1.L = 1_L;

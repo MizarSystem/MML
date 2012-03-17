@@ -39,9 +39,9 @@
 </Signature>
 <RCluster>
 <ArgTypes>
-<Typ kind="G" nr="3">
+<Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="29" value="false"/>
+<Adjective nr="28" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -66,7 +66,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="43">
+<Adjective nr="47">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -74,7 +74,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="96">
+<Adjective nr="100">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>

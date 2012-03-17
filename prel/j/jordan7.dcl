@@ -37,7 +37,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="86"/>
+<Adjective nr="92"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>

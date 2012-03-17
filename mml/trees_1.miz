@@ -8,15 +8,18 @@ environ
 
  vocabularies FUNCT_1, FINSEQ_1, RELAT_1, BOOLE, ARYTM_1, FINSET_1, CARD_1,
       ZFMISC_1, TARSKI, ORDINAL2, TREES_1, NAT_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, NAT_1, NAT_D, NUMBERS,
+ notations TARSKI, XBOOLE_0, ENUMSET1,
+      SUBSET_1, XCMPLX_0, NAT_1, NAT_D, NUMBERS,
       ORDINAL1, RELAT_1, FUNCT_1, FINSEQ_1, FINSET_1, CARD_1, XXREAL_0;
- constructors WELLORD2, XXREAL_0, XREAL_0, REAL_1, NAT_1, FINSEQ_1, NAT_D;
+ constructors WELLORD2, XXREAL_0, XREAL_0, REAL_1, NAT_1, FINSEQ_1, NAT_D,
+      ENUMSET1;
  registrations RELSET_1, FINSEQ_1, FINSET_1, NAT_1, XREAL_0, XBOOLE_0,
       ORDINAL2, XXREAL_0, ORDINAL1, SUBSET_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, REAL_1, FINSET_1, FUNCT_1, WELLORD2, XBOOLE_0;
  theorems TARSKI, REAL_1, NAT_1, FINSEQ_1, FINSET_1, FUNCT_1, CARD_1, RELAT_1,
-      GRFUNC_1, CARD_2, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1;
+      GRFUNC_1, CARD_2, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1,
+      ENUMSET1, FINSEQ_2;
  schemes NAT_1, FUNCT_1, FINSEQ_1, XBOOLE_0;
 
 begin
@@ -43,51 +46,11 @@ theorem
 
 theorem
  Th2: for p,q being FinSequence st q = p|Seg n holds len q <= len p
-  proof let p,q be FinSequence; assume
-       q = p|Seg n;
-    then dom q = dom p /\ Seg n & Seg len q = dom q & Seg len p = dom p
-     by FINSEQ_1:def 3,RELAT_1:90;
-    then Seg len q c= Seg len p by XBOOLE_1:17;
-   hence thesis by FINSEQ_1:7;
-  end;
+               by FINSEQ_1:100;
 
 theorem
  Th3: for p,r being FinSequence st r = p|Seg n
-      ex q being FinSequence st p = r^q
-  proof let p,r be FinSequence; assume
-A1:  r = p|Seg n;
-    then len r <= len p by Th2;
-   then consider m be Nat such that
-A2:  len p = len r + m by NAT_1:10;
-   reconsider m as Element of NAT by ORDINAL1:def 13;
-   deffunc U(Element of NAT) = p.(len r + $1);
-   consider q being FinSequence such that
-A3:  len q = m & for k st k in Seg m holds q.k = U(k) from FINSEQ_1:sch 2;
-   take q;
-A4:  len p = len(r^q) by A2,A3,FINSEQ_1:35;
-       now let k such that
-A5:    1 <= k & k <= len p;
-A6:    now assume k <= len r;
-        then k in
- Seg len r & dom r = Seg len r by A5,FINSEQ_1:3,def 3;
-        then (r^q).k = r.k & r.k = p.k by A1,FINSEQ_1:def 7,FUNCT_1:70;
-       hence p.k = (r^q).k;
-      end;
-         now assume A7:not k <= len r;
-        then consider j being Nat such that
-A8:      k = len r + j by NAT_1:10;
-           k-len r = j by A8;
-then A9:      (r^q).k = q.j by A4,A5,A7,FINSEQ_1:37;
-           j <> 0 by A7,A8;
-        then 0 < j & k <= len r + len q by A2,A3,A5;
-        then 0+1 <= j & j <= len q by A8,NAT_1:13,XREAL_1:8;
-        then j in Seg m by A3,FINSEQ_1:3;
-       hence p.k = (r^q).k by A3,A8,A9;
-      end;
-     hence p.k = (r^q).k by A6;
-    end;
-   hence thesis by A4,FINSEQ_1:18;
-  end;
+      ex q being FinSequence st p = r^q by FINSEQ_1:101;
 
 theorem
   {} <> <*x*>;
@@ -182,7 +145,7 @@ A2:  q = p^r by Th8;
    hence thesis by A2,FINSEQ_1:47;
   end;
 
-theorem
+theorem Th16:
      <*x*> is_a_prefix_of <*y*> iff x = y
   proof
    thus <*x*> is_a_prefix_of <*y*> implies x = y
@@ -257,7 +220,7 @@ A2:  card p = card q;
 
 canceled 5;
 
-theorem
+theorem Th30:
      p1^<*x*> is_a_prefix_of p2 implies p1 is_a_proper_prefix_of p2
   proof assume
      p1^<*x*> is_a_prefix_of p2;
@@ -873,7 +836,7 @@ then A1:   p in { {} } or p in { <*k*> : k < n } by XBOOLE_0:def 2;
 
 definition let T;
  func Leaves T -> Subset of T means
-     p in it iff p in T & not ex q st q in T & p is_a_proper_prefix_of q;
+:Def8: p in it iff p in T & not ex q st q in T & p is_a_proper_prefix_of q;
   existence
    proof
     defpred X[set] means
@@ -1972,4 +1935,154 @@ A4:    height fT = n;
 A5:  X[n] from NAT_1:sch 4(A2);
    let fT;  height fT = height fT;
    hence thesis by A5;
+  end;
+
+begin :: Addenda
+
+:: from MODAL_1, 2007.03.14, A.T.
+
+reserve s,t for FinSequence;
+
+theorem Th12:
+w^t is_a_proper_prefix_of w^s implies t is_a_proper_prefix_of s
+ proof assume A1: w^t is_a_proper_prefix_of w^s;
+   then w^t is_a_prefix_of w^s & w^t <> w^s by XBOOLE_0:def 8;
+  then consider a be FinSequence such that
+  A2: w^s = w^t^a by Th8;
+     w^t^a = w^(t^a) by FINSEQ_1:45;
+   then s= t^a by A2,FINSEQ_1:46;
+   then t is_a_prefix_of s by Th8;
+  hence thesis by A1,XBOOLE_0:def 8;
+ end;
+
+theorem Th6:
+n <> m implies not <*n*> is_a_prefix_of <*m*>^s
+ proof assume A1: n <> m;
+  assume <*n*> is_a_prefix_of <*m*>^s;
+ then A2:  ex a be FinSequence st <*m*>^s = <*n*>^a by Th8;
+     m = (<*m*>^s).1 by FINSEQ_1:58
+   .= n by A2,FINSEQ_1:58;
+  hence contradiction by A1;
+ end;
+
+theorem Th9:
+elementary_tree 1 = {{},<*0*>}
+ proof
+  A1: elementary_tree 1 = { <*n*> : n < 1 } \/ {{}};
+     now let x;
+  thus x in {{},<*0*>} implies x in { <*n*> : n < 1 } or x in {{}}
+    proof
+     assume x in {{},<*0*>}; then x = {} or x = <*0*> by TARSKI:def 2;
+     hence thesis by TARSKI:def 1;
+    end;
+   assume A2: x in { <*n*> : n < 1 } or x in {{}};
+       now per cases by A2;
+     suppose x in { <*n*> : n < 1 }; then consider n such that
+      A3: x = <*n*> & n < 1;
+         n = 0 by A3,NAT_1:26;
+      hence x in {{},<*0*>} by A3,TARSKI:def 2;
+     end;
+     suppose x in {{}}; then x = {} by TARSKI:def 1;
+      hence x in {{},<*0*>} by TARSKI:def 2;
+     end;
+     end;
+    hence x in {{},<*0*>};
+   end;
+  hence thesis by A1,XBOOLE_0:def 2;
+ end;
+
+theorem Th7:
+not <*n*> is_a_proper_prefix_of <*m*>
+ proof
+  assume not thesis;
+  then <*n*> is_a_prefix_of <*m*> & <*n*> <> <*m*> by XBOOLE_0:def 8;
+  hence contradiction by Th16;
+ end;
+
+theorem Th10:
+elementary_tree 2 = {{},<*0*>,<*1*>}
+  proof
+  A1: elementary_tree 2 = { <*n*> : n < 2 } \/ {{}};
+     now let x;
+  thus x in {{},<*0*>,<*1*>} implies x in { <*n*> : n < 2 } or x in {{}}
+    proof
+     assume x in {{},<*0*>,<*1*>}; then x = {} or x = <*0*> or x = <*1*>
+                                                        by ENUMSET1:def 1;
+     hence thesis by TARSKI:def 1;
+    end;
+  assume A2: x in { <*n*> : n < 2 } or x in {{}};
+      now per cases by A2;
+    suppose x in { <*n*> : n < 2 };
+     then consider n such that A3: x = <*n*> & n < 2;
+        n = 0 or n = 1 by A3,NAT_1:27;
+     hence x in {{},<*0*>,<*1*>} by A3,ENUMSET1:def 1;
+    end;
+    suppose x in {{}}; then x = {} by TARSKI:def 1;
+     hence x in {{},<*0*>,<*1*>} by ENUMSET1:def 1;
+   end;
+   end;
+  hence x in {{},<*0*>,<*1*>};
+  end;
+  hence thesis by A1,XBOOLE_0:def 2;
+ end;
+
+:: from BINTREE1
+
+theorem
+ for T being Tree, t being Element of T holds
+  t in Leaves T iff not t^<*0*> in T
+proof
+ let T be Tree, t be Element of T;
+ hereby assume
+A1:   t in Leaves T;
+      t is_a_proper_prefix_of t^<*0*> by Th30;
+  hence not t^<*0*> in T by A1,Def8;
+ end;
+   assume
+A2:  not t^<*0*> in T & not t in Leaves T;
+   then consider q being FinSequence of NAT such that
+A3:  q in T & t is_a_proper_prefix_of q by Def8;
+       t is_a_prefix_of q by A3,XBOOLE_0:def 8;
+   then consider r being FinSequence such that
+A4:  q = t^r by Th8;
+   reconsider r as FinSequence of NAT by A4,FINSEQ_1:50;
+       len q = len t+len r by A4,FINSEQ_1:35; then len r <> 0 by A3,Th24
+;
+    then r <> {} by FINSEQ_1:25;
+   then consider p being FinSequence of NAT, x being Element of NAT such that
+A5:  r = <*x*>^p by FINSEQ_2:150;
+       q = t^<*x*>^p by A4,A5,FINSEQ_1:45;
+    then t^<*x*> in T & 0 <= x by A3,NAT_1:2,Th46;
+   hence contradiction by A2,Def5;
+end;
+
+theorem
+ for T being Tree, t being Element of T holds
+  t in Leaves T iff not ex n being Element of NAT st t^<*n*> in T
+  proof let T be Tree, t be Element of T;
+   hereby assume A1: t in Leaves T;
+    given n being Element of NAT such that
+A2:   t^<*n*> in T;
+        not t is_a_proper_prefix_of t^<*n*> & t is_a_prefix_of t^<*n*>
+      by A1,A2,Th8,Def8;
+     then t = t^<*n*> & t = t^{} by FINSEQ_1:47,XBOOLE_0:def 8;
+     then {} = <*n*> by FINSEQ_1:46;
+    hence contradiction;
+   end;
+   assume
+A3:  not (ex n being Element of NAT st t^<*n*> in T) & not t in Leaves T;
+   then consider q being FinSequence of NAT such that
+A4:  q in T & t is_a_proper_prefix_of q by Def8;
+       t is_a_prefix_of q by A4,XBOOLE_0:def 8;
+   then consider r being FinSequence such that
+A5:  q = t^r by Th8;
+   reconsider r as FinSequence of NAT by A5,FINSEQ_1:50;
+       len q = len t+len r by A5,FINSEQ_1:35; then len r <> 0 by A4,Th24
+;
+    then r <> {} by FINSEQ_1:25;
+   then consider p being FinSequence of NAT, x being Element of NAT such that
+A6:  r = <*x*>^p by FINSEQ_2:150;
+       q = t^<*x*>^p by A5,A6,FINSEQ_1:45;
+    then t^<*x*> in T by A4,Th46;
+   hence contradiction by A3;
   end;

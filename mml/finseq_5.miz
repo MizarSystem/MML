@@ -9,16 +9,19 @@ environ
  vocabularies ARYTM_1, FINSEQ_1, FUNCT_1, RELAT_1, FINSEQ_4, REALSET1, RFINSEQ,
       BOOLE, RLSUB_2, FINSEQ_5, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, NUMBERS, NAT_1, NAT_D,
-      RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_4, REALSET1, RFINSEQ, XXREAL_0;
+      RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_4, REALSET1, RFINSEQ,
+      BINARITH, XXREAL_0;
  constructors XXREAL_0, REAL_1, NAT_1, INT_1, FINSEQ_4, REALSET1, RFINSEQ,
-      NAT_D;
+      BINARITH, NAT_D;
  registrations FUNCT_1, FINSEQ_1, RELSET_1, INT_1, ORDINAL1, XREAL_0, ARYTM_3,
       NAT_1;
+ registrations MARGREL1, MEMBERED, ORDINAL2, FINSEQ_2,
+      BINOP_2, XXREAL_0, XBOOLEAN, SUBSET_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, XBOOLE_0, FINSEQ_1;
  theorems TARSKI, ZFMISC_1, REAL_1, NAT_1, PARTFUN2, FUNCT_1, FINSEQ_1,
       FINSEQ_2, FINSEQ_3, FINSEQ_4, RFINSEQ, REALSET1, RELAT_1, INT_1,
-      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0;
+      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, BINARITH, ORDINAL1;
  schemes FINSEQ_1;
 
 begin
@@ -296,7 +299,7 @@ A1: i in dom f;
 
 canceled;
 
-theorem
+theorem Th18:
   for f being FinSequence holds
     len(f|i) <= len f
  proof let f be FinSequence;
@@ -1413,7 +1416,7 @@ proof len (<*>D)=0 by FINSEQ_1:32;
 end;
 
 theorem
-  Rev (<*>D)=<*>D;
+  Rev <*>D = <*>D;
 
 :: from AMISTD_1, 2006.03,15, A.T.
 
@@ -1425,4 +1428,152 @@ registration
    thus thesis;
   end;
 end;
+
+:: from JORDAN3, 2007.03.09, A.T
+
+theorem
+ for f being FinSequence of D,l1,l2 being Nat holds
+         (f/^l1)|(l2-'l1)=(f|l2)/^l1
+proof let f be FinSequence of D,l1,l2 be Nat;
+ per cases;
+ suppose A2:l1<=l2;
+  per cases;
+  suppose A3:l2<=len f;
+    then A4:l1<=len f by A2,XXREAL_0:2;
+    then A5:len (f/^l1)=len f-l1 by RFINSEQ:def 2;
+    A6:l1<=len (f|l2) by A2,A3,FINSEQ_1:80;
+        l2-l1<=len f-l1 by A3,XREAL_1:11;
+    then A7:l2-'l1<=len (f/^l1) by A2,A5,BINARITH:50;
+    then A8:len ((f/^l1)|(l2-'l1)) = l2-'l1 by FINSEQ_1:80;
+    A9:len ((f|l2)/^l1)=len (f|l2)-l1 by A6,RFINSEQ:def 2
+                  .=l2-l1 by A3,FINSEQ_1:80
+                  .=l2-'l1 by A2,BINARITH:50;
+    for k being Element of NAT st 1<=k & k<=len ((f|l2)/^l1) holds
+    ((f/^l1)|(l2-'l1)).k=((f|l2)/^l1).k
+    proof let k be Element of NAT such that
+A10: 1<=k and
+A11: k<=len ((f|l2)/^l1);
+     A12:k<=len (f/^l1) by A7,A9,A11,XXREAL_0:2;
+     A13:k in Seg (l2-'l1) by A9,A10,A11;
+     A14:k in dom (f/^l1) by A10,A12,FINSEQ_3:27;
+         k<=l2-l1 by A2,A9,A11,BINARITH:50; then
+A15: k+l1<=l2-l1+l1 by XREAL_1:8;
+     A16:k in dom ((f|l2)/^l1) by A10,A11,FINSEQ_3:27;
+     ((f/^l1)|(l2-'l1)).k =(f/^l1).k by A13,FUNCT_1:72
+     .=f.(k+l1) by A4,A14,RFINSEQ:def 2
+     .=(f|l2).(k+l1) by A15,FINSEQ_3:121
+     .=((f|l2)/^l1).k by A6,A16,RFINSEQ:def 2;
+     hence ((f/^l1)|(l2-'l1)).k=((f|l2)/^l1).k;
+    end;
+   hence (f/^l1)|(l2-'l1)=(f|l2)/^l1 by A8,A9,FINSEQ_1:18;
+  end;
+  suppose A17:l2>len f;
+    then A18:f|l2=f by FINSEQ_1:79;
+        len (f/^l1)=len f-'l1 by BINARITH:76;
+    then len (f/^l1)<=l2-'l1 by A17,BINARITH:60;
+   hence (f/^l1)|(l2-'l1)=(f|l2)/^l1 by A18,FINSEQ_1:79;
+  end;
+ end;
+ suppose A19:l1>l2;
+   then l1-l1>l2-l1 by XREAL_1:11;
+   then l2-'l1=0 by BINARITH:def 3;
+   then dom ((f/^l1)|(l2-'l1)) =dom (f/^l1) /\ {} NAT
+           by FUNCT_1:68,FINSEQ_1:4
+   .={} NAT;
+   then A20:(f/^l1)|(l2-'l1)=<*>(D) by FINSEQ_1:26;
+   reconsider l1'=l1,l2'=l2 as Element of NAT by ORDINAL1:def 13;
+   per cases;
+   suppose l1<=len f; then l2<len f by A19,XXREAL_0:2;
+    then l1'>len (f|l2') by A19,FINSEQ_1:80;
+    hence (f/^l1)|(l2-'l1)=(f|l2)/^l1 by A20,Th35;
+   end;
+   suppose A21:l1>len f;
+     len (f|l2')<=len f by Th18;
+    then l1'>len (f|l2') by A21,XXREAL_0:2;
+    hence (f/^l1)|(l2-'l1)=(f|l2)/^l1 by A20,Th35;
+   end;
+ end;
+end;
+
+:: from JORDAN8, 2007.03.18, A.T.
+
+reserve D for set, f for FinSequence of D;
+
+theorem
+     len f >= 2 implies f|2 = <*f/.1,f/.2*>
+proof assume
+A1: len f >= 2;
+then A2: len(f|2) = 2 by FINSEQ_1:80;
+  set d1 = f/.1, d2 = f/.2;
+      now
+A3:  rng f c= D by FINSEQ_1:def 4;
+    assume D is empty;
+     then rng f = {} by A3,XBOOLE_1:3;
+     then f = {} by RELAT_1:64;
+     then len f = 0 by FINSEQ_1:25;
+    hence contradiction by A1;
+   end;
+   then reconsider D as non empty set;
+   reconsider f as FinSequence of D;
+      1 in dom(f|2) by A2,FINSEQ_3:27;
+then A4:  d1 = (f|2)/.1 by FINSEQ_4:85
+       .= (f|2).1 by A2,FINSEQ_4:24;
+      2 in dom(f|2) by A2,FINSEQ_3:27;
+   then d2 = (f|2)/.2 by FINSEQ_4:85
+          .= (f|2).2 by A2,FINSEQ_4:24;
+  hence thesis by A2,A4,FINSEQ_1:61;
+end;
+
+theorem Th85:
+     k+1 <= len f implies f|(k+1) = f|k^<*f/.(k+1)*>
+proof assume
+A1:  k+1 <= len f;
+    1 <= k+1 by NAT_1:12;
+then A2: k+1 in dom f by A1,FINSEQ_3:27;
+    f|k = f|Seg k by FINSEQ_1:def 15;
+ then f|Seg(k+1) = (f|k)^<*f.(k+1)*> by A2,Th11;
+ hence f|(k+1) = (f|k)^<*f.(k+1)*> by FINSEQ_1:def 15
+              .= (f|k)^<*f/.(k+1)*> by A2,FINSEQ_4:def 4;
+end;
+
+:: from JORDAN3, 2007.03.18, A.T.
+
+theorem Th86:
+   for D being set,
+       p be FinSequence of D
+   for i be Element of NAT st i < len p holds
+    p|(i+1) = p|i ^ <*p.(i+1)*>
+   proof
+    let D be set,
+        p be FinSequence of D;
+    let i be Element of NAT;
+    assume i < len p;
+then A1: i+1 <= len p by NAT_1:13;
+then A2: p|(i+1) = p|i ^ <*p/.(i+1)*> by Th85;
+        1 <= i+1 by NAT_1:11;
+    then i+1 in dom p by A1,FINSEQ_3:27;
+    hence thesis by A2,FINSEQ_4:def 4;
+   end;
+
+:: from POLYNOM4, 2007.03.18, A.T.
+
+  theorem
+   for D be non empty set
+   for p be FinSequence of D
+   for n be Element of NAT st 1 <= n & n <= len p holds
+    p = (p|(n-'1))^<*p.n*>^(p/^n)
+   proof
+    let D be non empty set;
+    let p be FinSequence of D;
+    let n be Element of NAT;
+    assume that
+     A1: 1 <= n and
+     A2: n <= len p;
+        len p >= n-'1+1 by A1,A2,BINARITH:53;
+    then A3: len p > n-'1 by NAT_1:13;
+        p|n = p|(n-'1+1) by A1,BINARITH:53
+       .= p|(n-'1)^<*p.(n-'1+1)*> by A3,Th86
+       .= p|(n-'1)^<*p.n*> by A1,BINARITH:53;
+    hence p = (p|(n-'1))^<*p.n*>^(p/^n) by RFINSEQ:21;
+   end;
 

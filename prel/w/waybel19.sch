@@ -44,14 +44,14 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="9">
+<Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="17"/>
-<Adjective nr="49"/>
-<Adjective nr="50"/>
-<Adjective nr="51"/>
-<Adjective nr="73"/>
-<Adjective nr="74"/>
+<Adjective nr="21"/>
+<Adjective nr="53"/>
+<Adjective nr="54"/>
+<Adjective nr="55"/>
+<Adjective nr="77"/>
+<Adjective nr="78"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -66,7 +66,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="V" nr="18">
+<Pred kind="V" nr="22">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Pred>

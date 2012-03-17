@@ -12,7 +12,7 @@ environ
       TRIANG_1, MATRLIN, MEASURE6, SQUARE_1, CARD_3, REALSET1, GROUP_1,
       ALGSTR_1, LATTICES, DTCONSTR, MSUALG_3, SEQM_3, ALGSEQ_1, ORDINAL1,
       ARYTM_3, FUNCT_2, FRAENKEL, FINSUB_1, SETWISEO, TARSKI, RFINSEQ,
-      POLYNOM1, FVSUM_1, FINSEQ_4, SEQ_1, NAT_1;
+      POLYNOM1, FVSUM_1, FINSEQ_4, SEQ_1, NAT_1, VECTSP_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, ORDERS_1, RELAT_1,
       XCMPLX_0, RELSET_1, RELAT_2, FUNCT_1, FINSET_1, FINSUB_1, SETWISEO,
       ORDINAL1, PBOOLE, PARTFUN1, FUNCT_2, BINOP_2, FINSEQ_1, STRUCT_0,
@@ -31,7 +31,7 @@ environ
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, RLVECT_1, FUNCT_1, VECTSP_1, MATRLIN, CARD_3,
       RELAT_2, PBOOLE, RELSET_1, WELLORD2, FRAENKEL, RELAT_1, SEQM_3, GROUP_1,
-      ANPROJ_1, SEQ_1, BINOP_1, FINSEQ_2;
+      SEQ_1, BINOP_1, FINSEQ_2, STRUCT_0, ANPROJ_1;
  theorems FUNCT_1, FINSET_1, FINSEQ_3, FINSEQ_4, ZFMISC_1, FINSEQ_1, FUNCT_2,
       RLVECT_1, VECTSP_1, FUNCOP_1, STRUCT_0, TARSKI, FUNCT_7, BINOP_1,
       RELAT_1, MATRLIN, FINSEQ_2, CARD_3, RFINSEQ, DTCONSTR, GROUP_7, CQC_LANG,
@@ -73,28 +73,7 @@ A7: dom (dom f --> x) = dom f by FUNCOP_1:19;
 end;
 
 theorem Th3:
- for a, b, c being Nat holds a-'b-'c = a-'(b+c)
-proof let a, b, c be Nat;
- per cases;
- suppose A1: a <= b;
- then A2: a <= b+c by NAT_1:12;
-  thus a-'b-'c = 0-'c by A1,NAT_2:10 .= 0 by NAT_2:10
-     .= a-'(b+c) by A2,NAT_2:10;
- end;
- suppose A3: b <= a & a-b <= c;
- then A4: a <= b+c by XREAL_1:22;
-      a-'b = a-b by A3,BINARITH:50;
-  hence a-'b-'c = 0 by A3,NAT_2:10
-    .= a-'(b+c) by A4,NAT_2:10;
- end;
- suppose A5: b <= a & c <= a-b;
- then A6: c+b <= a by XREAL_1:21;
-      a-'b = a-b by A5,BINARITH:50;
-  hence a-'b-'c = a-b-c by A5,BINARITH:50
-    .= a-(b+c)
-    .= a-'(b+c) by A6,BINARITH:50;
-end;
-end;
+ for a, b, c being Nat holds a-'b-'c = a-'(b+c) by NAT_2:32;
 
 theorem Th4:
  for X being set, R being Relation st field R c= X holds R is Relation of X
@@ -814,7 +793,7 @@ registration
  cluster non degenerated -> non trivial (non empty multLoopStr_0);
  coherence
   proof let K be non empty multLoopStr_0;
-   assume 0.K <> 1_K;
+   assume 0.K <> 1.K;
    hence thesis by ANPROJ_1:def 8;
   end;
 end;
@@ -830,7 +809,7 @@ end;
 registration
  cluster strict Abelian add-associative right_zeroed right_complementable
          associative commutative distributive Field-like
-         unital non trivial (non empty doubleLoopStr);
+         well-unital non trivial (non empty doubleLoopStr);
  existence proof take F_Real; thus thesis; end;
 end;
 
@@ -4758,12 +4737,11 @@ registration
      L be right_zeroed Abelian add-associative right_complementable
           unital distributive associative
           non trivial (non empty doubleLoopStr);
- cluster Polynom-Ring (n, L) -> unital right-distributive;
+ cluster Polynom-Ring (n, L) -> well-unital right-distributive;
  coherence
   proof set Pm = Polynom-Ring (n, L);
-   thus Pm is unital
-   proof
-    take e = 1.Pm;
+   thus Pm is well-unital
+   proof let x be Element of Pm;
     thus thesis by Lm6;
    end;
   let x, y, z be Element of Pm;

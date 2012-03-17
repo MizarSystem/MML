@@ -24,25 +24,25 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="42"/>
+<Adjective nr="43"/>
 <Adjective nr="44"/>
+<Adjective nr="46"/>
+<Adjective nr="47"/>
+<Adjective nr="50"/>
 </Cluster>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="42"/>
 <Adjective nr="43"/>
+<Adjective nr="44"/>
+<Adjective nr="46"/>
+<Adjective nr="47"/>
+<Adjective nr="49"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -12,7 +12,7 @@ environ
       SCMFSA6C, SCMFSA6B, SCM_1, SCM_HALT, FUNCT_7, UNIALG_2, CARD_3, AMI_2,
       SCMFSA8C, ARYTM_1, ABSVALUE, SCMBSORT, FINSEQ_4, SCMISORT, NAT_1;
  notations TARSKI, XBOOLE_0, SETFAM_1, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0,
-      NAT_1, NAT_D, CQC_LANG, RELAT_1, FUNCT_1, SEQ_1, FUNCT_2, FUNCT_4,
+      NAT_1, NAT_D, FUNCOP_1, RELAT_1, FUNCT_1, SEQ_1, FUNCT_2, FUNCT_4,
       FUNCT_7, CARD_1, FINSEQ_1, CARD_3, STRUCT_0, AMI_1, AMI_3, SCM_1, AMI_5,
       SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C,
       SCMFSA7B, SCMFSA8A, SCMFSA_9, SCMFSA8B, INT_1, FINSEQ_4, SCMBSORT,
@@ -22,7 +22,7 @@ environ
       SCMFSA8B, SCMFSA8C, SCMFSA_9, SFMASTR1, SCM_HALT, SCMBSORT, SEQM_3,
       NAT_D;
  registrations RELSET_1, FUNCT_1, AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR,
-      SCMFSA6C, SCMFSA8A, FINSUB_1, SCM_HALT, SCMFSA_9, INT_1, CQC_LANG,
+      SCMFSA6C, SCMFSA8A, FINSUB_1, SCM_HALT, SCMFSA_9, INT_1, FUNCOP_1,
       FRAENKEL, XREAL_0, MEMBERED, SETFAM_1, STRUCT_0, XXREAL_0, CARD_3;
  requirements BOOLE, REAL, NUMERALS, SUBSET, ARITHM;
 
@@ -313,22 +313,27 @@ definition
  let f be FinSeq-Location;
  func insert-sort f -> Macro-Instruction equals
 :: SCMISORT:def 2
-   initializeWorkMem ';'
-       (a1:=len f) ';'
-       SubFrom(a1,a0) ';'
-       Times(a1,
-          ((a2:=len f) ';' SubFrom(a2,a1) ';' (a3 := a2) ';'
-          AddTo(a3,a0) ';' (a6:=(f,a3)) ';' SubFrom(a4,a4)) ';'
-          while>0(a2, (a5:=(f,a2)) ';' SubFrom(a5,a6) ';'
-               if>0(a5,Macro SubFrom(a2,a2),
-                    AddTo(a4,a0) ';' SubFrom(a2,a0))
+   (((intloc 2):= intloc 0) ';' ((intloc 3):= intloc 0) ';'
+   ((intloc 4):= intloc 0) ';' ((intloc 5):= intloc 0) ';'
+   ((intloc 6):= intloc 0)) ';'
+       ((intloc 1):=len f) ';'
+       SubFrom(intloc 1,intloc 0) ';'
+       Times(intloc 1,
+          (((intloc 2):=len f) ';' SubFrom(intloc 2,intloc 1) ';'
+          ((intloc 3) := intloc 2) ';'
+          AddTo(intloc 3,intloc 0) ';' ((intloc 6):=(f,intloc 3)) ';'
+          SubFrom(intloc 4,intloc 4)) ';'
+          while>0(intloc 2, ((intloc 5):=(f,intloc 2)) ';'
+               SubFrom(intloc 5,intloc 6) ';'
+               if>0(intloc 5,Macro SubFrom(intloc 2,intloc 2),
+                    AddTo(intloc 4,intloc 0) ';' SubFrom(intloc 2,intloc 0))
           ) ';'
-          Times(a4,
-               (a2:=a3) ';'
-               SubFrom(a3,a0) ';'
-               (a5:=(f,a2)) ';'
-               (a6:=(f,a3)) ';'
-               ((f,a2):=a6) ';'((f,a3):=a5)
+          Times(intloc 4,
+               ((intloc 2):=intloc 3) ';'
+               SubFrom(intloc 3,intloc 0) ';'
+               ((intloc 5):=(f,intloc 2)) ';'
+               ((intloc 6):=(f,intloc 3)) ';'
+               ((f,intloc 2):=intloc 6) ';'((f,intloc 3):=intloc 5)
           )
        );
 end;
@@ -341,7 +346,8 @@ end;
 
 theorem :: SCMISORT:38
   for f being FinSeq-Location holds
-    UsedIntLoc (insert-sort f) = {a0,a1,a2,a3,a4,a5,a6};
+    UsedIntLoc (insert-sort f) =
+      {intloc 0,intloc 1,intloc 2,intloc 3,intloc 4,intloc 5,intloc 6};
 
 theorem :: SCMISORT:39     ::IS004
   for f being FinSeq-Location holds
@@ -367,10 +373,11 @@ theorem :: SCMISORT:44
 
 theorem :: SCMISORT:45
 for s be State of SCM+FSA holds
-    (s.f0, IExec(insert-sort f0,s).f0 are_fiberwise_equipotent) &
-    (for i,j be Element of NAT st i>=1 & j<=len (s.f0) & i<j
-     for x1,x2 be Integer st x1 =IExec(insert-sort f0,s).f0.i &
-        x2=IExec(insert-sort f0,s).f0.j holds x1 >= x2);
+    (s.(fsloc 0), IExec(insert-sort (fsloc 0),s).(fsloc 0)
+      are_fiberwise_equipotent) &
+    (for i,j be Element of NAT st i>=1 & j<=len (s.(fsloc 0)) & i<j
+     for x1,x2 be Integer st x1 =IExec(insert-sort (fsloc 0),s).(fsloc 0).i &
+        x2=IExec(insert-sort (fsloc 0),s).(fsloc 0).j holds x1 >= x2);
 
 theorem :: SCMISORT:46
  for i being Element of NAT, s being State of SCM+FSA,

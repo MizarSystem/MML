@@ -6,24 +6,20 @@
 
 environ
 
- vocabularies SETFAM_1, FUNCT_1, FINSEQ_1, PBOOLE, SUBSET_1, BOOLE, NORMSP_1,
-      PARTFUN1;
+ vocabularies SETFAM_1, FUNCT_1, FINSEQ_1, PBOOLE, SUBSET_1, BOOLE, NAT_1,
+      RLVECT_1, GROUP_1, VECTSP_1, NORMSP_1, PARTFUN1, REALSET1, STRUCT_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, RELSET_1, PARTFUN1,
-      FUNCT_2, NUMBERS, FINSEQ_1, PBOOLE;
- constructors PBOOLE, NAT_D, PARTFUN1;
- registrations SUBSET_1, XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2;
+      FUNCT_2, NUMBERS, FINSEQ_1, REALSET1, PBOOLE;
+ constructors PBOOLE, NAT_D, PARTFUN1, REALSET1, CQC_LANG;
+ registrations SUBSET_1, XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2, REALSET1;
  requirements BOOLE, SUBSET;
- definitions SUBSET_1;
+ definitions SUBSET_1, TARSKI, XBOOLE_0, REALSET1;
+ theorems TARSKI,REALSET1,XBOOLE_0, SUBSET_1, CARD_1;
 
 begin
 
 definition
   struct 1-sorted(# carrier -> set #);
-end;
-
-definition
-  struct (1-sorted) ZeroStr(# carrier -> set,
-                             Zero -> Element of the carrier #);
 end;
 
 definition let S be 1-sorted;
@@ -45,15 +41,6 @@ registration
   proof consider A being non empty set;
    take 1-sorted(#A#);
    thus the carrier of 1-sorted(#A#) is non empty;
-  end;
-end;
-
-registration
- cluster non empty ZeroStr;
- existence
-  proof consider A being non empty set, a being Element of A;
-   take ZeroStr(#A,a#);
-   thus the carrier of ZeroStr(#A,a#) is non empty;
   end;
 end;
 
@@ -156,3 +143,159 @@ end;
 definition let S,T be 1-sorted;
   mode PartFunc of S,T is PartFunc of the carrier of S,the carrier of T;
 end;
+
+::Moved from RLVECT_1, 2007.02.19, A.T.
+
+definition let S be 1-sorted; let x be set;
+ pred x in S means x in the carrier of S;
+end;
+
+:: Pointed structures
+
+definition
+  struct (1-sorted) ZeroStr(# carrier -> set,
+                             ZeroF -> Element of the carrier #);
+end;
+
+registration
+ cluster non empty ZeroStr;
+ existence
+  proof consider A being non empty set, a being Element of A;
+   take ZeroStr(#A,a#);
+   thus the carrier of ZeroStr(#A,a#) is non empty;
+  end;
+end;
+
+definition
+  struct (1-sorted) OneStr(# carrier -> set,
+                             OneF -> Element of the carrier #);
+end;
+
+definition
+  struct (ZeroStr,OneStr) ZeroOneStr(# carrier -> set,
+                             ZeroF -> Element of the carrier,
+                             OneF -> Element of the carrier #);
+end;
+
+definition let S be ZeroStr;
+ func 0.S -> Element of S equals
+   the ZeroF of S;
+ coherence;
+end;
+
+definition let S be OneStr;
+ func 1.S -> Element of S equals
+   the OneF of S;
+ coherence;
+end;
+
+definition let S be ZeroOneStr;
+ attr S is degenerated means
+:Def8:  0.S = 1.S;
+end;
+
+definition let IT be 1-sorted;
+  attr IT is trivial means
+:Def9: the carrier of IT is trivial;
+end;
+
+definition
+ let S be 1-sorted;
+ redefine attr S is trivial means
+:Def10: for x,y being Element of S holds x = y;
+ compatibility
+ proof set I = the carrier of S;
+  per cases;
+  suppose
+A1:I is non empty;
+  thus S is trivial implies
+    for x,y being Element of I holds x = y
+  proof
+   assume
+A2:   I is trivial;
+    consider a being set such that
+A3:   I = {a} by A1,A2,REALSET1:def 4;
+    let x, y be Element of I;
+    thus x = a by A3,TARSKI:def 1
+          .= y by A3,TARSKI:def 1;
+  end;
+  assume
+A4: for x,y being Element of I holds x = y;
+  consider a being set such that
+A5:  a in I by A1,XBOOLE_0:def 1;
+   I = {a}
+    proof
+      hereby
+       let i be set;
+       assume i in I;
+       then a = i by A4,A5;
+       hence i in {a} by TARSKI:def 1;
+      end;
+      let i be set;
+      assume i in {a};
+      hence i in I by A5,TARSKI:def 1;
+    end;
+   hence I is empty or ex x being set st I = {x};
+  end;
+  suppose
+A6:I is empty;
+A7: I is trivial implies S is trivial by Def9;
+    for x,y being Element of I holds x = y
+   proof
+    let x, y be Element of I;
+    thus x = {} by A6,SUBSET_1:def 2
+          .= y by A6,SUBSET_1:def 2;
+   end;
+  hence thesis by A6,A7,REALSET1:def 4;
+ end;
+ end;
+end;
+
+registration
+ cluster non degenerated -> non trivial ZeroOneStr;
+ coherence
+  proof let L be ZeroOneStr;
+   assume
+Z:  L is non degenerated;
+   assume L is trivial;
+    then 0.L = 1.L by Def10;
+   hence contradiction by Z,Def8;
+
+  end;
+end;
+
+registration let A be non empty set;
+ cluster 1-sorted(#A#) -> non empty;
+ coherence by Def1;
+end;
+
+registration
+ cluster trivial strict non empty 1-sorted;
+ existence
+  proof
+   take Y = 1-sorted (#1#);
+   thus Y is trivial
+    proof the carrier of Y = 1;
+     hence thesis by Def9, CARD_1:87;
+    end;
+   thus thesis;
+  end;
+ cluster non trivial strict non empty 1-sorted;
+ existence
+  proof
+   take Y = 1-sorted (#2#);
+   thus Y is non trivial
+    proof
+      reconsider x=0, y=1 as Element of Y by TARSKI:def 2, CARD_1:88;
+     take x,y;
+     thus thesis;
+    end;
+   thus thesis;
+  end;
+end;
+
+registration let S be non trivial 1-sorted;
+ cluster the carrier of S -> non trivial;
+ coherence by Def9;
+end;
+

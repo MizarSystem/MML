@@ -12,15 +12,12 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="QC_LANG1"/>
-<ArticleID name="QC_LANG2"/>
-<ArticleID name="CQC_LANG"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="ORDERS_1"/>
@@ -29,42 +26,42 @@
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="G" nr="4">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="51"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="43"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes/>
-<Typ kind="G" nr="4">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="45"/>
-<Adjective nr="51"/>
-<Adjective nr="52"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="37"/>
+<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="189"/>
+<Func kind="K" nr="134"/>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="51"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="43"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="189"/>
+<Func kind="K" nr="134"/>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="45"/>
-<Adjective nr="51"/>
-<Adjective nr="52"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="37"/>
+<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 </Registrations>

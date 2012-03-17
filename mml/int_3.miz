@@ -8,22 +8,28 @@ environ
 
  vocabularies BINOP_1, INT_1, FUNCT_1, VECTSP_1, RELAT_1, ARYTM_1, GR_CY_1,
       FUNCT_7, RLVECT_1, VECTSP_2, LATTICES, ABSVALUE, EUCLID, NAT_1, FUNCSDOM,
-      GCD_1, ARYTM_3, INT_2, MCART_1, ORDINAL2, NAT_LAT, INT_3, ARYTM, GROUP_1;
+      GCD_1, ARYTM_3, INT_2, MCART_1, ORDINAL2, NAT_LAT, INT_3, ARYTM, GROUP_1,
+      XREAL_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       COMPLEX1, RLVECT_1,
-      MCART_1, RELAT_1, FUNCT_1, BINOP_2, STRUCT_0, FUNCT_2, GCD_1, GROUP_1,
-      VECTSP_1, VECTSP_2, FUNCSDOM, BINOP_1, EUCLID, GR_CY_1, INT_1, FUNCT_7,
+      MCART_1, RELAT_1, FUNCT_1, BINOP_2,
+      STRUCT_0, FUNCT_2, GCD_1, GROUP_1, CARD_1,
+      VECTSP_1, VECTSP_2, FUNCSDOM, BINOP_1, EUCLID, GR_CY_1,
+      INT_1, FUNCT_7,
       NEWTON, INT_2, NAT_1, NAT_D, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, BINOP_2, SEQ_1, INT_2,
-      FUNCT_7, EUCLID, GR_CY_1, GCD_1, NAT_D, COMPLEX1;
+      FUNCT_7, EUCLID, GR_CY_1, GCD_1, NAT_D, COMPLEX1, ARYTM_3, ORDINAL3,
+      NEWTON;
  registrations STRUCT_0, FUNCT_1, XREAL_0, INT_1, RELSET_1, GCD_1, SEQ_1,
-      MEMBERED, ORDINAL1, NAT_1, VECTSP_1, XXREAL_0;
+      MEMBERED, ORDINAL1, NAT_1, VECTSP_1, XXREAL_0, GR_CY_1, NEWTON,
+      ARYTM_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions RLVECT_1, STRUCT_0, GROUP_1, VECTSP_1, VECTSP_2, BINOP_1;
  theorems TARSKI, BINOP_1, FUNCT_1, FUNCT_2, VECTSP_1, INT_1, RELAT_1, GCD_1,
       RLVECT_1, REAL_1, EUCLID, ABSVALUE, GR_CY_1, FUNCT_7, NAT_1, MCART_1,
       INT_2, RELSET_1, XREAL_0, ORDINAL1, XCMPLX_0, XCMPLX_1, NUMBERS, BINOP_2,
-      GROUP_1, XREAL_1, COMPLEX1, XXREAL_0, NAT_D;
+      GROUP_1, XREAL_1, COMPLEX1, XXREAL_0, NAT_D, STRUCT_0, VECTSP_2,
+      CARD_1, NEWTON;
  schemes NAT_1, BINOP_1, LMOD_7, BINOP_2;
 
 begin
@@ -144,13 +150,16 @@ Lm20: 0 in INT by INT_1:def 2;
 
 Lm2:0 = 0.M by Lm20,FUNCT_7:def 1;
 
+Lm20': 1 in INT by INT_1:def 2;
+
+Lm2':1 = 1.M by Lm20',FUNCT_7:def 1;
+
 registration
- cluster INT.Ring -> unital;
+ cluster INT.Ring -> well-unital;
 coherence
-proof
-  reconsider e = 1 as Element of M by INT_1:def 1;
-  take e;
-  thus thesis;
+proof let x be Element of INT.Ring;
+  1.M = 1 by Lm2';
+  hence thesis;
 end;
 end;
 
@@ -740,14 +749,14 @@ coherence
   end;
 end;
 
-Lm12:for F being commutative associative left_unital Field-like right_zeroed
+Lm12:for F being commutative associative well-unital Field-like right_zeroed
   (non empty doubleLoopStr)
   for f being Function of the carrier of F,NAT holds
     (for a,b being Element of F st b <> 0.F holds
     (ex q,r being Element of F st
      (a = q * b + r & (r = 0.F or f.r < f.b))))
   proof
-  let F be commutative associative left_unital Field-like right_zeroed
+  let F be commutative associative well-unital Field-like right_zeroed
      (non empty doubleLoopStr);
   let f be Function of the carrier of F,NAT;
      now let a,b be Element of F;
@@ -756,10 +765,10 @@ Lm12:for F being commutative associative left_unital Field-like right_zeroed
         (a = q * b + r & (r = 0.F or f.r < f.b)))
       proof
       consider x being Element of F such that
-      A2: b * x = 1_F by A1,VECTSP_1:def 20;
+      A2: b * x = 1.F by A1,VECTSP_1:def 20;
            (a * x) * b + 0.F
-         = a * 1_F + 0.F by A2,GROUP_1:def 4
-        .= a + 0.F by VECTSP_1:def 19
+         = a * 1.F + 0.F by A2,GROUP_1:def 4
+        .= a + 0.F by VECTSP_1:def 16
         .= a by RLVECT_1:def 7;
       hence thesis;
       end;
@@ -831,14 +840,14 @@ proof
                st z = s * x + t * y};
      A4: x in M & y in M
          proof
-         A5:   1_E * x + 0.E * y
-             = 1_E * x + 0.E by VECTSP_1:39
-            .= 1_E * x by RLVECT_1:def 7
-            .= x by VECTSP_1:def 19;
-               0.E * x + 1_E * y
-             = 0.E + 1_E * y by VECTSP_1:39
-            .= 1_E * y by RLVECT_1:10
-            .= y by VECTSP_1:def 19;
+         A5:   1.E * x + 0.E * y
+             = 1.E * x + 0.E by VECTSP_1:39
+            .= 1.E * x by RLVECT_1:def 7
+            .= x by VECTSP_1:def 16;
+               0.E * x + 1.E * y
+             = 0.E + 1.E * y by VECTSP_1:39
+            .= 1.E * y by RLVECT_1:10
+            .= y by VECTSP_1:def 16;
          hence thesis by A5;
          end;
      defpred P[Element of NAT] means
@@ -993,7 +1002,7 @@ end;
 registration
 cluster Euclidian -> gcd-like (domRing-like non degenerated
     Abelian add-associative right_zeroed right_complementable
-    associative commutative right_unital right-distributive
+    associative commutative well-unital right-distributive
      (non empty doubleLoopStr));
 coherence by Th4;
 end;
@@ -1042,10 +1051,10 @@ end;
 end;
 
 theorem
-Th5:for F being commutative associative left_unital Field-like right_zeroed
+Th5:for F being commutative associative well-unital Field-like right_zeroed
   (non empty doubleLoopStr) holds F is Euclidian
 proof
-let F be commutative associative left_unital Field-like right_zeroed
+let F be commutative associative well-unital Field-like right_zeroed
   (non empty doubleLoopStr);
 consider f being Function of the carrier of F,NAT;
     (for a,b being Element of F st b <> 0.F holds
@@ -1055,18 +1064,18 @@ hence thesis by Def9;
 end;
 
 registration
-cluster commutative associative left_unital Field-like right_zeroed Field-like
+cluster commutative associative well-unital Field-like right_zeroed Field-like
   -> Euclidian (non empty doubleLoopStr);
 coherence by Th5;
 end;
 
 theorem
-   for F being commutative associative left_unital Field-like right_zeroed
+   for F being commutative associative well-unital Field-like right_zeroed
   (non empty doubleLoopStr)
 for f being Function of the carrier of F,NAT holds
 f is DegreeFunction of F
 proof
-let F be commutative associative left_unital Field-like right_zeroed
+let F be commutative associative well-unital Field-like right_zeroed
   (non empty doubleLoopStr);
 let f be Function of the carrier of F,NAT;
    (for a,b being Element of F st b <> 0.F holds
@@ -1529,29 +1538,33 @@ func multint(n) -> BinOp of Segm(n) means :Def11:
  it.(k,l) = (k * l) mod n;
 existence
  proof
+    reconsider n as non zero natural number by A1;
    defpred P[Element of Segm(n),Element of Segm(n),set]
    means $3 = ($1 * $2) mod n;
   A2: for k,l being Element of Segm(n) ex c being Element of Segm(n)
       st P[k,l,c]
       proof
       let k,l be Element of Segm(n);
-      reconsider k' = k,l' = l as Element of NAT;
+      reconsider k' = k,l' = l as Element of NAT by ORDINAL1:def 13;
       ((k'*l') mod n) < n by A1,NAT_D:1;
       then reconsider c = (k'*l') mod n as Element of Segm(n) by GR_CY_1:10;
       take c;
       thus thesis;
       end;
-  thus ex c being BinOp of Segm(n) st
- for k,l being Element of Segm(n) holds P[k,l,c.(k,l)]
- from BINOP_1:sch 3(A2);
+    ex c being BinOp of Segm(n) st
+     for k,l being Element of Segm(n) holds P[k,l,c.(k,l)]
+          from BINOP_1:sch 3(A2);
+   hence thesis;
   end;
 uniqueness
  proof
+    reconsider n as non zero natural number by A1;
    deffunc O(Element of Segm(n),Element of Segm(n))=($1 * $2) mod n;
-   thus for o1,o2 being BinOp of Segm(n) st
+   for o1,o2 being BinOp of Segm(n) st
     (for a,b being Element of Segm(n) holds o1.(a,b) = O(a,b)) &
     (for a,b being Element of Segm(n) holds o2.(a,b) = O(a,b))
-  holds o1 = o2 from BINOP_2:sch 2;
+     holds o1 = o2 from BINOP_2:sch 2;
+  hence thesis;
  end;
 end;
 
@@ -1562,6 +1575,7 @@ func compint(n) -> UnOp of Segm(n) means :Def12:
  it.k = (n - k) mod n;
 existence
  proof
+    reconsider n as non zero natural number by A1;
  set f = {[k,(n-k) mod n] where k is Element of NAT : k < n };
  A2: f is Relation-like
     proof
@@ -1653,11 +1667,13 @@ existence
  end;
 uniqueness
  proof
+    reconsider n as non zero natural number by A1;
    deffunc F(Element of Segm(n))=(n - $1) mod n;
-  thus for f1,f2 being UnOp of Segm(n) st
+  for f1,f2 being UnOp of Segm(n) st
      (for a being Element of Segm(n) holds f1.a = F(a))
    & (for a being Element of Segm(n) holds f2.a = F(a))
-  holds f1 = f2 from LMOD_7:sch 2;
+    holds f1 = f2 from LMOD_7:sch 2;
+  hence thesis;
  end;
 end;
 
@@ -1670,6 +1686,7 @@ proof
 let n be natural number;
 assume A1: n > 0;
 let a,b be Element of Segm(n);
+ reconsider n as non zero natural number by A1;
 consider c being Element of NAT such that A2: c = (a + b) mod n;
 consider t being Nat such that
 A3: (a + b = n * t + c & c < n) or c = 0 & n = 0 by A2,NAT_D:def 2;
@@ -1730,7 +1747,8 @@ A9: (addint(n)).(a,b) = (a + b) - n implies a + b >= n
             then A18: n * t >= n * 2 by XREAL_1:66;
             A19: n * t + c >= n * t by NAT_1:11;
                a is natural & b is natural by ORDINAL1:def 13;
-            then a < n & b < n by A1,GR_CY_1:10;
+            a in Segm n & b in Segm n;
+            then a < n & b < n by A1,CARD_1:98;
             then a + b < n * 1 + n * 1 by XREAL_1:10;
             hence thesis by A3,A18,A19,XXREAL_0:2;
             end;
@@ -1773,7 +1791,7 @@ proof
 let n be natural number;
 assume A1: n > 0;
 let a,b be Element of Segm(n);
-reconsider a, b as Element of NAT;
+reconsider a, b as Element of NAT by ORDINAL1:def 13;
 let k be natural number;
 A2: now assume (multint(n)).(a,b) = a * b - k * n;
    then A3: (a * b) mod n = a * b - k * n by A1,Def11;
@@ -1853,8 +1871,11 @@ proof
 let n be natural number;
 assume A1: n > 0;
 let a be Element of Segm(n);
-reconsider a as Element of NAT;
-A2: a < n by A1,GR_CY_1:10;
+ reconsider n as non zero natural number by A1;
+reconsider a as Element of NAT by ORDINAL1:def 13;
+X: a in Segm n;
+ then
+A2: a < n by A1,CARD_1:98;
 then a - a < n - a by XREAL_1:11;
 then reconsider b = n - a as Element of NAT by INT_1:16;
 consider c being Element of NAT such that A3: c = b mod n;
@@ -1933,7 +1954,7 @@ A15: (compint(n)).(a) = 0 implies a = 0
          end;
     then a' = 0 by A16,A20;
     then (n - a) + a = a;
-    hence thesis by A1,GR_CY_1:10;
+    hence thesis by A1,CARD_1:98,X;
     end;
 A24: (compint(n)).(a) = n - a implies a <> 0
     proof
@@ -1973,7 +1994,7 @@ func INT.Ring(n) -> doubleLoopStr equals
 coherence;
 end;
 
-registration let n be natural number;
+registration let n be non zero natural number;
  cluster INT.Ring(n) -> strict non empty;
 coherence
   proof
@@ -1989,7 +2010,7 @@ proof
 set n = 1,
     R = INT.Ring n;
 A1: for x being Element of R st x <> 0.R
-    ex y be Element of R st x*y = 1_R
+    ex y be Element of R st x*y = 1.R
     proof
     let x be Element of R;
     assume x <> 0.R;
@@ -1997,7 +2018,7 @@ A1: for x being Element of R st x <> 0.R
     then x <> 0 by FUNCT_7:def 1;
     hence thesis by GR_CY_1:13,TARSKI:def 1;
     end;
-A2: 0.R = 0 by GR_CY_1:13,TARSKI:def 1 .= 1_R by GR_CY_1:13,TARSKI:def 1;
+A2: 0.R = 0 by GR_CY_1:13,TARSKI:def 1 .= 1.R by GR_CY_1:13,TARSKI:def 1;
 A3: for a,b being Element of R holds a + b = b + a
     proof
     let a,b be Element of R;
@@ -2039,12 +2060,12 @@ A8: for a being Element of R holds
 ,TARSKI:def 1;
     end;
 A9: for a being Element of R holds
-    1_R * a = a & a * 1_R = a
+    1.R * a = a & a * 1.R = a
     proof
     let a be Element of R;
-    A10: 1_R * a = 0 by GR_CY_1:13,TARSKI:def 1 .= a by GR_CY_1:13
+    A10: 1.R * a = 0 by GR_CY_1:13,TARSKI:def 1 .= a by GR_CY_1:13
 ,TARSKI:def 1;
-       a * 1_R = 0 by GR_CY_1:13,TARSKI:def 1 .= a by GR_CY_1:13
+       a * 1.R = 0 by GR_CY_1:13,TARSKI:def 1 .= a by GR_CY_1:13
 ,TARSKI:def 1;
     hence thesis by A10;
     end;
@@ -2068,16 +2089,17 @@ A13: R is right_complementable
        take -v;
        thus v + -v = 0.R by A8;
      end;
-     R is left_unital
+     R is well-unital
      proof
       let x be Element of R;
-      thus (1_R)*x = x by A9;
+      thus x*(1.R) = x by A9;
+      thus (1.R)*x = x by A9;
      end;
 hence thesis by A1,A2,A3,A4,A5,A6,A7,A9,A11,A12,A13,GROUP_1:def 4,
 def 16
-,def 2,RLVECT_1:def 5,def 6,def 7,VECTSP_1:def 18,
+,def 2,RLVECT_1:def 5,def 6,def 7,VECTSP_1:def 18,def 16,
 def 20,def 21,
-def 13;
+def 13, STRUCT_0:def 8;
 end;
 
 registration
@@ -2091,27 +2113,26 @@ now
   assume
 A1:  n > 0;
   assume a in Segm n;
-  then a < n by A1,GR_CY_1:10;
+  then a < n by A1,CARD_1:98;
 then A2: n-a is Element of NAT by INT_1:18;
   assume a > 0;
   then n-a < n-0 by REAL_1:92;
-  hence n-a in Segm n by A2,GR_CY_1:10;
+  hence n-a in Segm n by A2,CARD_1:98;
 end;
 
 Lm16:
-for n being natural number st 0 < n
+for n being non zero natural number
 for e, h being Element of INT.Ring(n) st e = 1 holds
 h*e=h & e*h=h
 proof
-  let n be natural number;
-  assume
+  let n be non zero natural number;
 A1: 0 < n;
   set M = INT.Ring(n);
   let e, h be Element of M such that
 A2: e = 1;
   reconsider a=h, b=e as Element of Segm(n);
-  reconsider a1 = a as Element of NAT;
-A3: a1 < n by A1,GR_CY_1:10;
+  reconsider a1 = a as Element of NAT by ORDINAL1:def 13;
+A3: a1 < n by A1,CARD_1:98;
   thus h*e = (a * 1) mod n by A2,A1,Def11
   .= h by A3,NAT_D:24;
   thus e*h = (a * 1) mod n by A2,A1,Def11
@@ -2119,46 +2140,45 @@ A3: a1 < n by A1,GR_CY_1:10;
 end;
 
 Lm17: now
-  let n be natural number;
+  let n be non zero natural number;
   assume
 A1: 1 < n;
-  thus INT.Ring(n) is unital
+  thus INT.Ring n is unital
   proof
-    set M = INT.Ring(n);
-    reconsider e = 1 as Element of M by A1,GR_CY_1:10;
+    set M = INT.Ring n;
+    reconsider e = 1 as Element of M by A1,CARD_1:98;
     take e;
     thus thesis by A1,Lm16;
   end;
 end;
 
 Lm18:
-for n being natural number st 1 < n holds 1_INT.Ring(n) = 1
+for n being natural number st 1 < n holds 1.INT.Ring(n) = 1
 proof
   let n be natural number;
   set M = INT.Ring(n);
-  assume
-A1: 1 < n;
-  then
-A2: M is unital by Lm17;
-  reconsider e = 1 as Element of M by A1,GR_CY_1:10;
-  for x being Element of M holds x*e=x & e*x=x by A1,Lm16;
-  hence thesis by A2,GROUP_1:def 5;
+  assume 1 < n;
+   then
+X:  1 in Segm n by CARD_1:98;
+  thus 1.INT.Ring(n) = In(1, Segm n)
+      .= 1 by FUNCT_7:def 1,X;
 end;
 
 theorem Th21:
 for n being natural number st n > 1 holds
  INT.Ring(n) is non degenerated &
- INT.Ring(n) is unital distributive commutative Ring
+ INT.Ring(n) is well-unital distributive commutative Ring
  proof
  let n be natural number;
  assume A1: n > 1;
  then 1 < n + 1 by NAT_1:13;
  then A2: 1 - 1 < (n + 1) - 1 by XREAL_1:11;
+ reconsider n as non zero natural number by A1;
  A3: n <> 0 by A1;
  set F = INT.Ring(n);
- A4: 0 in Segm(n) by A2,GR_CY_1:10;
+ A4: 0 in Segm(n) by A2,CARD_1:98;
  A5: 0.F = 0 by A4,FUNCT_7:def 1;
- A6: 1_F = 1 by A1,Lm18;
+ A6: 1.F = 1 by A1,Lm18;
  A7: for a,b being Element of F holds a + b = b + a
      proof
      let a,b be Element of F;
@@ -2196,11 +2216,11 @@ for n being natural number st n > 1 holds
      reconsider bb = b' as Element of NAT; reconsider bb as Integer;
      reconsider cc = c' as Element of NAT; reconsider cc as Integer;
      A13: aa >= 0 & aa < n & bb >= 0 & bb < n & cc >= 0 & cc < n
- by A2,GR_CY_1:10;
+ by A2,CARD_1:98;
         (aa + bb) mod n >= 0 & (aa + bb) mod n < n by A2,Th9;
-     then A15: (a' + b') mod n is Element of Segm(n) by GR_CY_1:10;
+     then A15: (a' + b') mod n is Element of Segm(n) by CARD_1:98;
         (bb + cc) mod n >= 0 & (bb + cc) mod n < n by A2,Th9;
-     then A17: (b' + c') mod n is Element of Segm(n) by GR_CY_1:10;
+     then A17: (b' + c') mod n is Element of Segm(n) by CARD_1:98;
      A18: (a + b) + c
          = (addint(n)).((a' + b') mod n, c') by A2,GR_CY_1:def 5
         .= (((a' + b') mod n) + c') mod n by A2,A15,GR_CY_1:def 5;
@@ -2224,11 +2244,11 @@ for n being natural number st n > 1 holds
      reconsider bb = b' as Element of NAT; reconsider bb as Integer;
      reconsider cc = c' as Element of NAT; reconsider cc as Integer;
      A21: aa >= 0 & aa < n & bb >= 0 & bb < n & cc >= 0 & cc < n
- by A2,GR_CY_1:10;
+ by A2,CARD_1:98;
         (aa * bb) mod n >= 0 & (aa * bb) mod n < n by A2,Th9;
-     then A23: (a' * b') mod n is Element of Segm(n) by GR_CY_1:10;
+     then A23: (a' * b') mod n is Element of Segm(n) by CARD_1:98;
         (bb * cc) mod n >= 0 & (bb * cc) mod n < n by A2,Th9;
-     then A25: (b' * c') mod n is Element of Segm(n) by GR_CY_1:10;
+     then A25: (b' * c') mod n is Element of Segm(n) by CARD_1:98;
      A26: (a * b) * c
          = (multint(n)).((a' * b') mod n, c') by A2,Def11
         .= (((a' * b') mod n) * c') mod n by A2,A23,Def11;
@@ -2248,17 +2268,17 @@ for n being natural number st n > 1 holds
      let a be Element of F;
      A29: a + 0.F = (addint(n)).(a,0) by A5;
      reconsider a' = a as Element of Segm(n);
-     A30: 0 is Element of Segm(n) by A2,GR_CY_1:10;
-        a' + 0 < n by A2,GR_CY_1:10;
+     A30: 0 is Element of Segm(n) by A2,CARD_1:98;
+        a' + 0 < n by A2,CARD_1:98;
      hence thesis by A29,A30,Th17;
      end;
  A31: for a being Element of F holds
-     1_F * a = a & a * 1_F = a
+     1.F * a = a & a * 1.F = a
      proof
      let a be Element of F;
      reconsider a' = a as Element of Segm(n);
-     A32: (0 * n <= 1 * a' & 1 * a' < (0 + 1) * n) by A2,GR_CY_1:10;
-     A33: 1 is Element of Segm(n) by A1,GR_CY_1:10;
+     A32: (0 * n <= 1 * a' & 1 * a' < (0 + 1) * n) by A2,CARD_1:98;
+     A33: 1 is Element of Segm(n) by A1,CARD_1:98;
      then A34: (multint(n)).(1,a) = a' - 0 * n by A32,Th18
                                  .= a';
         (multint(n)).(a,1) = a' - 0 * n by A32,A33,Th18
@@ -2274,13 +2294,13 @@ for n being natural number st n > 1 holds
      reconsider bb = b' as Element of NAT; reconsider bb as Integer;
      reconsider cc = c' as Element of NAT; reconsider cc as Integer;
      A36: aa >= 0 & aa < n & bb >= 0 & bb < n & cc >= 0 & cc < n
- by A2,GR_CY_1:10;
+ by A2,CARD_1:98;
         (bb + cc) mod n >= 0 & (bb + cc) mod n < n by A2,Th9;
-     then A38: (b' + c') mod n is Element of Segm(n) by GR_CY_1:10;
+     then A38: (b' + c') mod n is Element of Segm(n) by CARD_1:98;
         (bb * aa) mod n >= 0 & (bb * aa) mod n < n by A2,Th9;
-     then A40: (b' * a') mod n is Element of Segm(n) by GR_CY_1:10;
+     then A40: (b' * a') mod n is Element of Segm(n) by CARD_1:98;
         (cc * aa) mod n >= 0 & (cc * aa) mod n < n by A2,Th9;
-     then A42: (c' * a') mod n is Element of Segm(n) by GR_CY_1:10;
+     then A42: (c' * a') mod n is Element of Segm(n) by CARD_1:98;
      A43: (b + c) * a
          = (multint(n)).((b' + c') mod n, a') by A2,GR_CY_1:def 5
         .= (((b' + c') mod n) * a') mod n by A2,A38,Def11;
@@ -2325,20 +2345,16 @@ for n being natural number st n > 1 holds
           .= 0.F by A5,NAT_D:25;
       end;
       end;
- A48: F is right_unital
+      F is well-unital
       proof
        let x be Element of F;
-       thus x*(1_F) = x by A31;
+       thus x*(1.F) = x by A31;
+       thus (1.F)*x = x by A31;
       end;
-      F is left_unital
-      proof
-       let x be Element of F;
-       thus (1_F)*x = x by A31;
-      end;
- then reconsider F as commutative Ring by A7,A10,A12,A20,A28,A35,A45,A46,A48,
+ then reconsider F as commutative Ring by A7,A10,A12,A20,A28,A35,A45,A46,
 GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,
 def 7,VECTSP_1:def 18;
-    F is non degenerated by A5,A6,VECTSP_1:def 21;
+    F is non degenerated by A5,A6,STRUCT_0:def 8;
  hence thesis;
 end;
 
@@ -2352,22 +2368,23 @@ end;
 theorem
 Th22:for p being natural number st p > 1 holds
  INT.Ring(p) is add-associative right_zeroed right_complementable
-    Abelian commutative associative left_unital distributive
+    Abelian commutative associative well-unital distributive
       Field-like non degenerated (non empty doubleLoopStr)
   iff p is Prime
 proof
 let p be natural number; assume A1: p > 1;
 then p > 1 + 0;
 then A2: p >= 0 & p <> 0 & p > 0;
+ reconsider p as non zero natural number by A1;
 reconsider P = INT.Ring(p) as Ring by A1,Th21;
-    reconsider p as Element of NAT by ORDINAL1:def 13;
+    reconsider p as non zero Element of NAT by ORDINAL1:def 13;
 A3: now assume A4: p is Prime;
       for a being Element of P st a <> 0.P
-   ex b be Element of P st a * b = 1_P
+   ex b be Element of P st a * b = 1.P
     proof
     let a be Element of P; assume A5: a <> 0.P;
     reconsider a' = a as Element of Segm(p);
-    reconsider a' as Element of NAT;
+    reconsider a' as Element of NAT by ORDINAL1:def 13;
     A6: abs(a') = a & abs(p) = p by ABSVALUE:def 1;
        1 * a' = a' & 1 * p = p;
     then A7: 1 divides a' & 1 divides p by NAT_D:def 3;
@@ -2392,7 +2409,7 @@ A3: now assume A4: p is Prime;
         end;
         hence thesis;
         end;
-      then m <> p by A2,GR_CY_1:10;
+      then m <> p by A2,CARD_1:98;
       hence thesis by A4,A8,INT_2:def 5;
       end;
     then a' hcf p = 1 by A7,NAT_D:def 5;
@@ -2401,7 +2418,7 @@ A3: now assume A4: p is Prime;
     A13: 1 = s * a' + t * p by Th16;
     A14: s mod p >= 0 & s mod p < p by A2,Th9;
     then s mod p is Element of NAT by INT_1:16;
-    then reconsider b' = s mod p as Element of Segm(p) by A14,GR_CY_1:10;
+    then reconsider b' = s mod p as Element of Segm(p) by A14,CARD_1:98;
     reconsider b = b' as Element of P;
     reconsider b2 = b' as Integer; reconsider a2 = a' as Integer;
     reconsider e = 1 as Integer;
@@ -2411,17 +2428,17 @@ A3: now assume A4: p is Prime;
          .= (a2 * s) mod p by Th15
          .= e mod p by A13,Th8
          .= e by A1,Th10
-         .= 1_P by A1,Lm18;
+         .= 1.P by A1,Lm18;
     hence thesis;
     end;
    hence INT.Ring(p) is add-associative right_zeroed right_complementable
-    Abelian commutative associative left_unital distributive
+    Abelian commutative associative well-unital distributive
       Field-like non degenerated (non empty doubleLoopStr) by A1,Th21,
 VECTSP_1:def 20;
    end;
    now assume A15: INT.Ring(p) is add-associative right_zeroed
 right_complementable
-    Abelian commutative associative left_unital distributive
+    Abelian commutative associative well-unital distributive
       Field-like non degenerated (non empty doubleLoopStr);
       for n being natural number holds n divides p implies n = 1 or n = p
      proof
@@ -2473,9 +2490,9 @@ right_complementable
        end;
        case n <> p;
          then n < p by A21,REAL_1:def 5;
-         then reconsider n2 = n as Element of Segm(p) by GR_CY_1:10;
+         then reconsider n2 = n as Element of Segm(p) by CARD_1:98;
          reconsider n' = n2 as Element of INT.Ring(p);
-         reconsider k2 = k as Element of Segm(p) by A25,GR_CY_1:10;
+         reconsider k2 = k as Element of Segm(p) by A25,CARD_1:98;
          reconsider k' = k2 as Element of INT.Ring(p);
             n <> 0 & k <> 0 by A1,A16;
          then A26: n <> 0.(INT.Ring(p)) & k <> 0.(INT.Ring(p)) by A2,Lm19;
@@ -2496,9 +2513,19 @@ hence thesis by A3;
 end;
 
 registration
+ cluster -> non zero Prime;
+ coherence
+  proof let k be Prime;
+   assume k is zero;
+    then k in SetPrimenumber 2 by NEWTON:def 7;
+   hence contradiction;
+  end;
+end;
+
+registration
 let p be Prime;
  cluster INT.Ring(p) -> add-associative right_zeroed right_complementable
-   Abelian commutative associative left_unital distributive Field-like
+   Abelian commutative associative well-unital distributive Field-like
     non degenerated;
 coherence
  proof
@@ -2507,8 +2534,8 @@ coherence
 end;
 
 theorem
-  1_INT.Ring = 1 by Lm5;
+  1.INT.Ring = 1 by Lm5, VECTSP_2:85;
 
 theorem
-  for n being natural number st 1 < n holds 1_INT.Ring(n) = 1 by Lm18;
+  for n being natural number st 1 < n holds 1.INT.Ring(n) = 1 by Lm18;
 

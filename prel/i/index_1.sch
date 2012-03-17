@@ -15,14 +15,11 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="FUNCT_4"/>
-<ArticleID name="QC_LANG1"/>
-<ArticleID name="QC_LANG2"/>
-<ArticleID name="CQC_LANG"/>
 <ArticleID name="CAT_1"/>
 <ArticleID name="OPPCAT_1"/>
 <ArticleID name="FUNCT_3"/>
@@ -42,13 +39,13 @@
 </Typ>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="56"/>
+<Adjective nr="45"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="56"/>
+<Adjective nr="45"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -58,7 +55,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="26">
+<Typ kind="M" nr="25">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -92,14 +89,14 @@
 <Func kind="F" nr="4">
 <Var nr="1"/>
 </Func>
-<Typ kind="M" nr="17">
+<Typ kind="M" nr="16">
 <Cluster/>
-<Func kind="K" nr="292">
+<Func kind="K" nr="242">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="292">
+<Func kind="K" nr="242">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 <Var nr="1"/>

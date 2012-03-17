@@ -26,7 +26,7 @@ environ
  theorems REAL_1, NAT_1, FUNCT_2, FUNCT_7, FUNCOP_1, FINSEQ_1, FINSEQ_2,
       FINSEQ_3, FINSEQ_4, FINSEQ_5, RFINSEQ, BINARITH, RLVECT_1, VECTSP_1,
       VECTSP_2, FVSUM_1, NORMSP_1, ALGSEQ_1, GROUP_1, POLYNOM2, POLYNOM3,
-      INT_1, NAT_2, MATRIX_3, ALGSTR_1, XREAL_1, XXREAL_0, BHSP_1;
+      INT_1, NAT_2, MATRIX_3, ALGSTR_1, XREAL_1, XXREAL_0, BHSP_1, STRUCT_0;
  schemes NAT_1, FINSEQ_2, POLYNOM3, FUNCT_2;
 
 begin  :: Preliminaries
@@ -40,21 +40,7 @@ canceled 2;
    for D be non empty set
    for p be FinSequence of D
    for n be Element of NAT st 1 <= n & n <= len p holds
-    p = (p|(n-'1))^<*p.n*>^(p/^n)
-   proof
-    let D be non empty set;
-    let p be FinSequence of D;
-    let n be Element of NAT;
-    assume that
-     A1: 1 <= n and
-     A2: n <= len p;
-        len p >= n-'1+1 by A1,A2,BINARITH:53;
-    then A3: len p > n-'1 by NAT_1:13;
-        p|n = p|(n-'1+1) by A1,BINARITH:53
-       .= p|(n-'1)^<*p.(n-'1+1)*> by A3,POLYNOM3:19
-       .= p|(n-'1)^<*p.n*> by A1,BINARITH:53;
-    hence p = (p|(n-'1))^<*p.n*>^(p/^n) by RFINSEQ:21;
-   end;
+    p = (p|(n-'1))^<*p.n*>^(p/^n) by FINSEQ_5:87;
 
 Lm2:
 for R being left_zeroed add-right-cancelable
@@ -74,10 +60,10 @@ end;
 registration
 cluster Field-like -> domRing-like
            (left_zeroed add-right-cancelable right-distributive
-            left_unital commutative associative (non empty doubleLoopStr));
+            well-unital commutative associative (non empty doubleLoopStr));
 coherence
  proof
- let L be left_zeroed add-right-cancelable right-distributive left_unital
+ let L be left_zeroed add-right-cancelable right-distributive well-unital
           commutative associative (non empty doubleLoopStr);
  assume A1: L is Field-like;
      now let x,y be Element of L;
@@ -86,8 +72,9 @@ coherence
      proof
      assume x <> 0.L;
      then consider z being Element of L such that
-     A3: x * z = 1_L by A1,VECTSP_1:def 20;
-         z * 0.L = 1_L * y by A2,A3,GROUP_1:def 4
+     A3: x * z = 1.L by A1,VECTSP_1:def 20;
+         x * z = 1_L by A3,VECTSP_2:85;
+         then z * 0.L = 1_L * y by A2,A3,GROUP_1:def 4
             .= y by VECTSP_1:def 19;
      hence y = 0.L by Lm2;
      end;
@@ -164,7 +151,7 @@ canceled;
      assume that
       A2: i is_at_least_length_of 1_.(L) and
       A3: 0+1 > i;
-     A4: 1_L <> 0.L by VECTSP_1:def 21;
+     A4: 1.L <> 0.L by STRUCT_0:def 8;
          0 >= i by A3,NAT_1:13;
      then (1_.(L)).0 = 0.L by A2,ALGSEQ_1:def 3;
      hence contradiction by A4,POLYNOM3:31;
@@ -777,12 +764,12 @@ begin  :: Evaluation of Polynomials
    end;
 
   theorem Th21:
-   for L be unital add-associative right_zeroed right_complementable
+   for L be well-unital add-associative right_zeroed right_complementable
     associative non degenerated (non empty doubleLoopStr)
    for x be Element of L holds
     eval(1_.(L),x) = 1_L
    proof
-    let L be unital add-associative right_zeroed right_complementable
+    let L be well-unital add-associative right_zeroed right_complementable
      associative non degenerated (non empty doubleLoopStr);
     let x be Element of L;
     consider F be FinSequence of the carrier of L such that
@@ -795,7 +782,8 @@ begin  :: Evaluation of Polynomials
     then 1 in dom F by FINSEQ_1:def 3;
     then F.1 = (1_.(L)).(1-'1) * (power L).(x,1-'1) by A3
        .= (1_.(L)).(0) * (power L).(x,1-'1) by BINARITH:51
-       .= 1_L * (power L).(x,1-'1) by POLYNOM3:31
+       .= 1.L * (power L).(x,1-'1) by POLYNOM3:31
+       .= 1_L * (power L).(x,1-'1) by VECTSP_2:85
        .= (power L).(x,1-'1) by VECTSP_1:def 19
        .= (power L).(x,0) by BINARITH:51
        .= 1_L by GROUP_1:def 8;
@@ -1542,7 +1530,7 @@ begin  :: Evaluation Homomorphism
 
   registration
    let L be add-associative right_zeroed right_complementable distributive
-    associative unital non degenerated commutative Abelian
+    associative well-unital non degenerated commutative Abelian
     (non empty doubleLoopStr);
    let x be Element of L;
    cluster Polynom-Evaluation(L,x) -> unity-preserving;
@@ -1594,7 +1582,7 @@ begin  :: Evaluation Homomorphism
 
   registration
    let L be add-associative right_zeroed right_complementable Abelian
-    left_unital distributive commutative associative non degenerated
+    well-unital distributive commutative associative non degenerated
     (non empty doubleLoopStr);
    let x be Element of L;
    cluster Polynom-Evaluation(L,x) -> RingHomomorphism;

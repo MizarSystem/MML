@@ -7,7 +7,8 @@
 environ
 
  vocabularies BINOP_1, FUNCT_2, FUNCT_1, QC_LANG1, RELAT_1, FUNCOP_1, VECTSP_1,
-      RLVECT_1, ARYTM_1, LATTICES, FUNCSDOM, GROUP_1, NAT_1;
+      RLVECT_1, ARYTM_1, LATTICES, FUNCSDOM, GROUP_1, NAT_1, VECTSP_2,
+      STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
       FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, BINOP_2, STRUCT_0, RLVECT_1,
       REAL_1, GROUP_1, VECTSP_1, FRAENKEL;
@@ -15,7 +16,7 @@ environ
       VECTSP_1, NAT_D;
  registrations SUBSET_1, RLVECT_1, VECTSP_1, RELSET_1, MEMBERED;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions RLVECT_1, STRUCT_0, GROUP_1, BINOP_1;
+ definitions RLVECT_1, STRUCT_0, GROUP_1, BINOP_1,VECTSP_1;
  theorems FUNCT_2, BINOP_1, FUNCOP_1, RLVECT_1, VECTSP_1, TARSKI, BINOP_2,
       GROUP_1;
  schemes BINOP_1, FUNCT_2;
@@ -604,14 +605,8 @@ Th34: RLSStruct(#Funcs(A,REAL),
         IT is Abelian add-associative right_zeroed right_complementable
        RealLinearSpace-like
  proof
-  thus u+v = v+u proof
-   reconsider v' = v, u' = u as Element of Funcs(A,REAL);
-   thus u+v = v+u by Th16; end;
-  thus (u+v)+w = u+(v+w) proof
-    reconsider v'=v, u'=u, w'=w as Element of Funcs(A,REAL);
-    thus
-        (u+v)+w = u+(v+w) by Th17; end;
-
+  thus u+v = v+u by Th16;
+  thus (u+v)+w = u+(v+w) by Th17;
   thus u+0.IT = u proof
     reconsider u'=u as Element of Funcs(A,REAL);
    thus u+0.IT = (RealFuncAdd(A)).(RealFuncZero(A),u') by Th16
@@ -628,22 +623,8 @@ Th34: RLSStruct(#Funcs(A,REAL),
     thus u+w = 0.IT by Th22;
    end;
 
-  thus a*(u+v) = a*u + a *v
-   proof
-    reconsider v' = v, u' = u as Element of Funcs(A,REAL);
-    reconsider w = (RealFuncExtMult(A)).[a,u'],w' = (RealFuncExtMult(A)).[a,v']
- as VECTOR of IT;
-    thus a*(u+v) = (a*u) + (a*v) by Lm4;
-   end;
-
-  thus (a+b)*v = a*v + b*v
-   proof
-    reconsider v' = v as Element of Funcs(A,REAL);
-    reconsider w = (RealFuncExtMult(A)).[a,v'],w' = (RealFuncExtMult(A)).[b,v']
- as VECTOR of IT;
-    thus (a+b)*v = (a*v) + (b*v) by Th25;
-   end;
-
+  thus a*(u+v) = a*u + a *v by Lm4;
+  thus (a+b)*v = a*v + b*v by Th25;
   thus (a*b)*v = a*(b*v) by Th24;
   thus 1*v = v by Th23;
       end;
@@ -682,15 +663,7 @@ canceled 2;
       ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]))) by A1,Th33;
     reconsider u=f, v=g as VECTOR of V;
     take u,v;
-    thus for a,b st a*u + b*v = 0.V holds a=0 & b=0
-     proof let r,s be Real such that A3: r*u + s*v=0.V;
-
-        reconsider u' = r*u,v' = s*v as Element of Funcs(A,REAL);
-           0.V = (RealFuncAdd(A)).((RealFuncExtMult(A)).[r,f],
-               (RealFuncExtMult(A)).[s,g]) by A3;
-         then (RealFuncAdd(A)).((RealFuncExtMult(A)).[r,f],
-            (RealFuncExtMult(A)).[s,g]) = RealFuncZero(A);
-        hence r=0 & s=0 by A2; end;
+    thus for a,b st a*u + b*v = 0.V holds a=0 & b=0 by A2;
       thus for w being VECTOR of V ex a,b st w = a*u + b*v
         proof let w be VECTOR of V;
          reconsider h=w as Element of Funcs(A,REAL);
@@ -706,8 +679,8 @@ definition
  canceled 4;
 
  func RRing(A) -> strict doubleLoopStr equals
-    doubleLoopStr(#Funcs(A,REAL),RealFuncAdd(A),RealFuncMult(A),
-                    (RealFuncUnit(A)),(RealFuncZero(A))#);
+    doubleLoopStr(#Funcs(A,REAL),RealFuncAdd A,RealFuncMult A,
+                    RealFuncUnit A,RealFuncZero A#);
    correctness;
 end;
 
@@ -744,7 +717,7 @@ end;
 
 canceled 3;
 
-theorem Th41:
+theorem
   1_RRing(A) = RealFuncUnit(A)
 proof
   set FR = RRing(A);
@@ -762,8 +735,8 @@ theorem Th42:
                                             x+t=(0.RRing(A))) &
          x*y = y*x &
          (x*y)*z = x*(y*z) &
-         x*(1_RRing(A)) = x &
-         (1_RRing(A))*x = x &
+         x*(1.RRing(A)) = x &
+         (1.RRing(A))*x = x &
          x*(y+z) = x*y + x*z &
          (y+z)*x = y*x + z*x
  proof let x,y,z be Element of RRing(A);
@@ -785,10 +758,10 @@ A1: for x,y be Element of RRing(A)
    end;
   thus x*y = y*x by A1;
   thus (x*y)*z = x*(y*z) by Th19;
-  thus x*(1_RRing(A)) = (RealFuncMult(A)).(f,RealFuncUnit(A)) by Th41
+  thus x*(1.RRing(A)) = (RealFuncMult(A)).(f,RealFuncUnit(A))
                      .= (RealFuncMult(A)).(RealFuncUnit(A),f) by Th18
                      .= x by Th20;
-  hence (1_RRing(A))*x = x by A1;
+  hence (1.RRing(A))*x = x by A1;
   thus x*(y+z) = x*y + x*z by Th26;
   hence (y+z)*x = x*y + x*z by A1
               .= y*x + x*z by A1
@@ -809,7 +782,7 @@ registration
            x+t=(0.RRing(A))) &
          x*y = y*x &
          (x*y)*z = x*(y*z) &
-         x*(1_RRing(A)) = x &
+         x*(1.RRing(A)) = x &
          x*(y+z) = x*y + x*z by Th42;
       then RRing(A) is
          Abelian add-associative right_zeroed right_complementable
@@ -822,33 +795,35 @@ end;
 
 definition
   mode Ring is Abelian add-associative right_zeroed right_complementable
-    associative left_unital right_unital
-    distributive (non empty doubleLoopStr);
+    associative well-unital distributive (non empty doubleLoopStr);
 end;
 
 theorem  RRing(A) is commutative Ring
  proof
-      for x,y,z being Element of RRing(A) holds
-         x+y = y+x &
-         (x+y)+z = x+(y+z) &
-         x+(0.RRing(A)) = x &
-         (ex t being Element of RRing(A) st
-                                            x+t=(0.RRing(A))) &
-         x*y = y*x &
-         (x*y)*z = x*(y*z) &
-         x*(1_RRing(A)) = x &
-         (1_RRing(A))*x = x &
-         x*(y+z) = x*y + x*z &
-         (y+z)*x = y*x + z*x by Th42;
-   hence thesis by GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7,def 8
-,VECTSP_1:def 18;
+X1:  RRing A is commutative
+   proof let x be Element of RRing A; thus thesis by Th42; end;
+X2:  RRing A is Abelian
+   proof let x be Element of RRing A; thus thesis by Th42; end;
+X3:  RRing A is add-associative
+   proof let x be Element of RRing A; thus thesis by Th42; end;
+X4:  RRing A is right_zeroed
+   proof let x be Element of RRing A; thus thesis by Th42; end;
+X5: RRing A is right_complementable
+   proof let x be Element of RRing A; thus thesis by Th42; end;
+X6: RRing A is associative
+   proof let x be Element of RRing A; thus thesis by Th42; end;
+X7: RRing A is well-unital
+   proof let x be Element of RRing A; thus thesis by Th42; end;
+     RRing A is distributive
+   proof let x be Element of RRing A; thus thesis by Th42; end;
+  hence thesis by X1,X2,X3,X4,X5,X6,X7;
   end;
 
 definition
   struct(doubleLoopStr,RLSStruct) AlgebraStr (# carrier -> set,
                  mult,add -> (BinOp of the carrier),
                  Mult -> (Function of [:REAL,the carrier:],the carrier),
-                 unity,Zero -> Element of the carrier #);
+                 OneF,ZeroF -> Element of the carrier #);
 end;
 
 registration

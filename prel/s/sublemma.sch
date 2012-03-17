@@ -18,9 +18,9 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="QC_LANG1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
@@ -33,8 +33,8 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="229"/>
-<Func kind="K" nr="251"/>
+<Func kind="K" nr="231"/>
+<Func kind="K" nr="253"/>
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="1"/>
@@ -43,25 +43,25 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="229"/>
-<Func kind="K" nr="251"/>
+<Func kind="K" nr="231"/>
+<Func kind="K" nr="253"/>
 </Typ>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="229"/>
-<Func kind="K" nr="251"/>
+<Func kind="K" nr="231"/>
+<Func kind="K" nr="253"/>
 </Typ>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="112"/>
-<Func kind="K" nr="113"/>
+<Func kind="K" nr="114"/>
+<Func kind="K" nr="115"/>
 </Typ>
 <For>
 <Typ kind="M" nr="16">
 <Cluster/>
-<Func kind="K" nr="260">
+<Func kind="K" nr="262">
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>
@@ -75,7 +75,7 @@
 <For>
 <Typ kind="M" nr="9">
 <Cluster>
-<Adjective nr="34">
+<Adjective nr="35">
 <Var nr="5"/>
 </Adjective>
 </Cluster>
@@ -84,19 +84,19 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="116"/>
-<Func kind="K" nr="118">
+<Func kind="K" nr="118"/>
+<Func kind="K" nr="120">
 <Var nr="5"/>
 </Func>
 </Typ>
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="214"/>
+<Func kind="K" nr="216"/>
 </Typ>
 <And>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="256">
+<Func kind="K" nr="258">
 <Var nr="5"/>
 <Var nr="7"/>
 <Var nr="6"/>
@@ -122,7 +122,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="258">
+<Func kind="K" nr="260">
 <Var nr="1"/>
 </Func>
 </Pred>
@@ -132,10 +132,10 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="232">
+<Func kind="K" nr="234">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="232">
+<Func kind="K" nr="234">
 <Var nr="2"/>
 </Func>
 </Pred>
@@ -147,7 +147,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="259">
+<Func kind="K" nr="261">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -158,7 +158,7 @@
 <Not>
 <And>
 <Pred kind="V" nr="42">
-<Func kind="K" nr="260">
+<Func kind="K" nr="262">
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>
@@ -168,8 +168,8 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
+<Func kind="K" nr="264">
 <Func kind="K" nr="262">
-<Func kind="K" nr="260">
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>

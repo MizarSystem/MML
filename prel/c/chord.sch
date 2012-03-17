@@ -13,10 +13,10 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="GLIB_000"/>
@@ -56,7 +56,7 @@
 <Not>
 <Pred kind="R" nr="32">
 <Var nr="1"/>
-<Func kind="K" nr="150">
+<Func kind="K" nr="155">
 <Var nr="2"/>
 </Func>
 </Pred>
@@ -80,7 +80,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="150">
+<Func kind="K" nr="155">
 <Var nr="2"/>
 </Func>
 <Var nr="1"/>

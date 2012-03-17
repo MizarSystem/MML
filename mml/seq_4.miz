@@ -1526,3 +1526,85 @@ registration
   end;
 end;
 
+:: from CQC_SIM1, 2007.03.15, A.T.
+
+notation let A be non empty natural-membered set;
+  synonym min A for lower_bound A;
+end;
+
+Lm11:
+for A being non empty natural-membered set, k be natural number st k in A &
+ for n being Element of NAT st n in A holds k <= n
+ holds k = min A
+proof
+  let A be non empty natural-membered set, k be natural number such that
+A2: k in A and
+A3: for n being Element of NAT st n in A holds k <= n;
+  defpred P[Element of NAT] means $1 in A;
+  consider a being Element of A;
+A4: now
+      let r be real number;
+      assume
+B1:   r in A;
+      then r is natural by MEMBERED:def 6;
+      then r in NAT by ORDINAL1:def 13;
+      hence k <= r by A3,B1;
+    end;
+    now
+      let t be real number;
+      assume for s being real number st s in A holds t <= s;
+      then
+B2:   t <= min A by Th60;
+      min A <= k by A2,Def5;
+      hence t <= k by B2,XXREAL_0:2;
+    end;
+    then k = min A by A4,Th61;
+    hence thesis;
+end;
+
+Lm10:
+for A being non empty natural-membered set holds min A in A
+proof
+  let A be non empty natural-membered set;
+  defpred P[Element of NAT] means $1 in A;
+  consider a being Element of A;
+  a in A;
+  then a is natural by MEMBERED:def 6;
+  then a in NAT by ORDINAL1:def 13;
+  then
+A1: ex k being Element of NAT st P[k];
+    consider k being Element of NAT such that
+A2: P[k] and
+A3: for n being Element of NAT st P[n] holds k <= n from NAT_1:sch 5(A1);
+    k = min A by A2,A3,Lm11;
+    hence thesis by A2;
+end;
+
+definition
+  let A be non empty natural-membered set;
+  redefine func min A -> Element of NAT means :Def8:
+  it in A & for k being natural number st k in A holds it <= k;
+  coherence
+  proof
+    min A in A by Lm10;
+    then min A is natural by MEMBERED:def 6;
+    hence thesis by ORDINAL1:def 13;
+  end;
+  compatibility
+  proof
+    let m be Element of NAT;
+    hereby
+      assume
+A1:   m = min A;
+      hence m in A by Lm10;
+      thus for k being natural number holds
+      k in A implies m <= k by A1,Def5;
+    end;
+    assume
+A2: m in A;
+    assume for k being natural number st k in A holds m <= k;
+    then for k being Element of NAT st k in A holds m <= k;
+    hence thesis by A2,Lm11;
+  end;
+end;
+

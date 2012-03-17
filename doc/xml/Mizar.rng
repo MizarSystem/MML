@@ -72,9 +72,28 @@ aid optionally specifies its article's name in uppercase.   </a:documentation>
       </zeroOrMore>
     </element>
   </define>
+  <define name="IdentifyRegistrations">
+    <a:documentation>Identifications, either imported from other articles ( after accommodation)
+- the signature is implicit in that case, or exported from the current 
+article - then the signature has to be specified.
+aid optionally specifies its article's name in uppercase.   </a:documentation>
+    <element name="IdentifyRegistrations">
+      <optional>
+        <attribute name="aid">
+          <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <ref name="Signature"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="IdentifyWithExp"/>
+      </zeroOrMore>
+    </element>
+  </define>
   <define name="Definientia">
     <a:documentation>Definientia, either imported from other articles ( after accommodation)
-- the signature is implicit in that case, or exported from the current 
+- the signature is implicit in that case, or exported from the current
 article - then the signature has to be specified.
 aid optionally specifies article's name in uppercase.</a:documentation>
     <element name="Definientia">
@@ -95,7 +114,7 @@ aid optionally specifies article's name in uppercase.</a:documentation>
     <a:documentation>Theorems, either imported from other articles ( after accommodation)
 - the signature is implicit in that case, or exported from the current
 article - then the signature has to be specified.
-They can be either ordinary or definitional.   
+They can be either ordinary or definitional.
 The article number and order in article can be given,
 otherwise it belongs to the current article and order is implicit.
 Optional aid attribute specifies article name.
@@ -238,98 +257,6 @@ This implementation might change in some time.</a:documentation>
       </zeroOrMore>
     </element>
   </define>
-  <define name="DefMeaning">
-    <a:documentation>DefMeaning consists of the formulas and terms defining a constructor.
-It can be either defined by _equals_ (terms) or
-by _means_ (formulas). It may contain several
-partial (case) definitions - first in them comes the
-definition (term or formula) valid in that case and second comes
-the case formula. The final term or formula specifies the default
-case, it is mandatory if no partial definitions are given.
-If no default is given, the disjunction of all case formulas must 
-be true (this have to be proved using the _consistency_ condition).</a:documentation>
-    <element name="DefMeaning">
-      <attribute name="kind">
-        <choice>
-          <value>e</value>
-          <value>m</value>
-        </choice>
-      </attribute>
-      <zeroOrMore>
-        <element name="PartialDef">
-          <choice>
-            <ref name="Formula"/>
-            <ref name="Term"/>
-          </choice>
-          <ref name="Formula"/>
-        </element>
-      </zeroOrMore>
-      <optional>
-        <choice>
-          <ref name="Formula"/>
-          <ref name="Term"/>
-        </choice>
-      </optional>
-    </element>
-  </define>
-  <define name="Definiens">
-    <a:documentation>Definiens of a constructor. This overlaps a bit with Constructor.
-defnr is the number of the corresponding definitional theorem.   
-First come the argument types and possibly also the result type.
-The optional formula is conjunction of all assumptions if any given.
-If this is a redefinition, essentials are indeces of arguments
-corresponding to the arguments of original, otherwise it is just
-identity. This could be now encode with just one number like the
-superfluous does for Constructor.
-Optionally the article id (aid) and order in article (nr)
-can be given.   
-relnr optionally gives its serial number
-in environment for a particular article (it is not in prels).      </a:documentation>
-    <element name="Definiens">
-      <attribute name="constrkind">
-        <choice>
-          <value>M</value>
-          <value>L</value>
-          <value>V</value>
-          <value>R</value>
-          <value>K</value>
-          <value>U</value>
-          <value>G</value>
-        </choice>
-      </attribute>
-      <attribute name="constrnr">
-        <data type="integer"/>
-      </attribute>
-      <attribute name="defnr">
-        <data type="integer"/>
-      </attribute>
-      <attribute name="aid">
-        <data type="string"/>
-      </attribute>
-      <optional>
-        <attribute name="nr">
-          <data type="integer"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="relnr">
-          <data type="integer"/>
-        </attribute>
-      </optional>
-      <zeroOrMore>
-        <ref name="Typ"/>
-      </zeroOrMore>
-      <element name="Essentials">
-        <zeroOrMore>
-          <ref name="Int"/>
-        </zeroOrMore>
-      </element>
-      <optional>
-        <ref name="Formula"/>
-      </optional>
-      <ref name="DefMeaning"/>
-    </element>
-  </define>
   <define name="Requirement">
     <a:documentation>Requirement is a constructor specially treated by the system.
 We give its internal number and optionally its name and
@@ -431,7 +358,9 @@ replaced by more correct "L" in Mizar gradually.
 First goes the LowerCluster, than UpperCluster
 Optionally the article id (aid) and order in article (absnr)
 can be given. If available, presentational info
-(number of the Pattern) is given in pid.</a:documentation>
+(number of the Pattern) is given in pid, and   
+presentational info about variable introduced (e.g. in Fraenkel)
+may be given in vid.</a:documentation>
     <element name="Typ">
       <attribute name="kind">
         <choice>
@@ -459,6 +388,11 @@ can be given. If available, presentational info
           <data type="integer"/>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="vid">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <zeroOrMore>
         <ref name="Cluster"/>
       </zeroOrMore>
@@ -476,10 +410,17 @@ can be given. If available, presentational info
   </define>
   <define name="For">
     <a:documentation>Universally quantified formula
-If available, presentational info is given in pid.   </a:documentation>
+If available, presentational info is given in pid.   
+If available, numbere of the variable identifier is
+given in vid.      </a:documentation>
     <element name="For">
       <optional>
         <attribute name="pid">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="vid">
           <data type="integer"/>
         </attribute>
       </optional>
@@ -618,11 +559,17 @@ Their types are given elsewhere in data using them - see e.g. Constructor</a:doc
     </element>
   </define>
   <define name="Const">
-    <a:documentation>Normal local constant introduced e.g. by Let or Consider</a:documentation>
+    <a:documentation>Normal local constant introduced e.g. by Let or Consider
+presentational info may be given in vid.</a:documentation>
     <element name="Const">
       <attribute name="nr">
         <data type="integer"/>
       </attribute>
+      <optional>
+        <attribute name="vid">
+          <data type="integer"/>
+        </attribute>
+      </optional>
     </element>
   </define>
   <define name="InfConst">
@@ -690,7 +637,9 @@ The first (mandatory) term is the expansion, arguments follow.</a:documentation>
   </define>
   <define name="Fraenkel">
     <a:documentation>Fraenkel term is defined by the types of its lambda arguments,
-its lambda term and the separating formula.</a:documentation>
+its lambda term and the separating formula.
+Each type may optionally have presentational info about
+the variable (vid) inside.</a:documentation>
     <element name="Fraenkel">
       <zeroOrMore>
         <ref name="Typ"/>
@@ -746,11 +695,16 @@ but they are probably no longer used on this level.</a:documentation>
     </attribute>
   </define>
   <define name="Proposition">
-    <a:documentation>Proposition is a sentence with position and possible label</a:documentation>
+    <a:documentation>Proposition is a sentence with position and possible label (and its identifier).</a:documentation>
     <element name="Proposition">
       <ref name="Position"/>
       <optional>
         <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="vid">
           <data type="integer"/>
         </attribute>
       </optional>
@@ -848,9 +802,96 @@ can be given.   </a:documentation>
       </choice>
     </element>
   </define>
+  <define name="Identify">
+    <a:documentation>Identification (unoriented, this is not used currently, see identifyWithExp instead).
+This says that two terms with the two constructors at the top
+are equal when the pairs of their arguments specified in EqArgs
+are equal.
+Optionally the article id (aid) and order in article (nr)
+can be given.</a:documentation>
+    <element name="Identify">
+      <optional>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+        <attribute name="aid">
+          <data type="string"/>
+        </attribute>
+      </optional>
+      <choice>
+        <ref name="ErrorIdentify"/>
+        <group>
+          <ref name="ConstrDef"/>
+          <ref name="ConstrDef"/>
+          <element name="EqArgs">
+            <zeroOrMore>
+              <ref name="Pair"/>
+            </zeroOrMore>
+          </element>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="ErrorIdentify">
+    <a:documentation>This encodes error during identification processing</a:documentation>
+    <element name="ErrorIdentify">
+      <empty/>
+    </element>
+  </define>
+  <define name="IdentifyWithExp">
+    <a:documentation>Identification (oriented, currently used version).
+This says to identify anything matching the first term 
+or formula pattern (with ConstrKind and ConstrNr as the top 
+constructor) with the second pattern (instantiated by the matching).
+The type requirements for the matching (i.e. the loci) are given first.
+Note that this works only one way, if you want it also the other way, the
+symmetrical variant has to be explicitly stated as another identification.
+Optionally the article id (aid) and order in article (nr)
+can be given.</a:documentation>
+    <element name="IdentifyWithExp">
+      <optional>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+        <attribute name="aid">
+          <data type="string"/>
+        </attribute>
+      </optional>
+      <choice>
+        <ref name="ErrorIdentify"/>
+        <group>
+          <attribute name="constrkind">
+            <choice>
+              <value>K</value>
+              <value>U</value>
+              <value>G</value>
+              <value>V</value>
+              <value>R</value>
+            </choice>
+          </attribute>
+          <attribute name="constrnr">
+            <data type="integer"/>
+          </attribute>
+          <zeroOrMore>
+            <ref name="Typ"/>
+          </zeroOrMore>
+          <choice>
+            <group>
+              <ref name="Term"/>
+              <ref name="Term"/>
+            </group>
+            <group>
+              <ref name="Formula"/>
+              <ref name="Formula"/>
+            </group>
+          </choice>
+        </group>
+      </choice>
+    </element>
+  </define>
   <define name="Scheme">
     <a:documentation>Schemes keep types of their second-order variables.
-First comes the scheme thesis, then the premises.   
+First comes the scheme thesis, then the premises.
 The article number and order in article can be given,
 otherwise it belongs to the current article and order is implicit.
 Optional aid attribute specifies article name.</a:documentation>
@@ -1237,16 +1278,144 @@ original pattern to which the current is defined as synonym/antonym.</a:document
       </optional>
     </element>
   </define>
+  <define name="ConstrDef">
+    <a:documentation>ConstrDef holds a term together with types of its variables and 
+the top-level functor. Used now mainly for identify.</a:documentation>
+    <element name="ConstrDef">
+      <attribute name="constrkind">
+        <choice>
+          <value>K</value>
+          <value>U</value>
+          <value>G</value>
+        </choice>
+      </attribute>
+      <attribute name="constrnr">
+        <data type="integer"/>
+      </attribute>
+      <zeroOrMore>
+        <ref name="Typ"/>
+      </zeroOrMore>
+      <optional>
+        <ref name="Term"/>
+      </optional>
+    </element>
+  </define>
+  <define name="DefMeaning">
+    <a:documentation>DefMeaning consists of the formulas and terms defining a constructor.
+It can be either defined by _equals_ (terms) or
+by _means_ (formulas). It may contain several
+partial (case) definitions - first in them comes the
+definition (term or formula) valid in that case and second comes
+the case formula. The final term or formula specifies the default
+case, it is mandatory if no partial definitions are given.
+If no default is given, the disjunction of all case formulas must
+be true (this have to be proved using the _consistency_ condition).</a:documentation>
+    <element name="DefMeaning">
+      <attribute name="kind">
+        <choice>
+          <value>e</value>
+          <value>m</value>
+        </choice>
+      </attribute>
+      <zeroOrMore>
+        <element name="PartialDef">
+          <choice>
+            <ref name="Formula"/>
+            <ref name="Term"/>
+          </choice>
+          <ref name="Formula"/>
+        </element>
+      </zeroOrMore>
+      <optional>
+        <choice>
+          <ref name="Formula"/>
+          <ref name="Term"/>
+        </choice>
+      </optional>
+    </element>
+  </define>
+  <define name="Definiens">
+    <a:documentation>Definiens of a constructor. This overlaps a bit with Constructor.
+defnr is the number of the corresponding definitional theorem, and
+vid optionally its label's identifier.   
+First come the argument types and possibly also the result type.
+The optional formula is conjunction of all assumptions if any given.
+If this is a redefinition, essentials are indeces of arguments
+corresponding to the arguments of original, otherwise it is just
+identity. This could be now encode with just one number like the
+superfluous does for Constructor.
+Optionally the article id (aid) and order in article (nr)
+can be given.
+relnr optionally gives its serial number
+in environment for a particular article (it is not in prels).
+vid gives a number of the label identifier if present.   </a:documentation>
+    <element name="Definiens">
+      <attribute name="constrkind">
+        <choice>
+          <value>M</value>
+          <value>L</value>
+          <value>V</value>
+          <value>R</value>
+          <value>K</value>
+          <value>U</value>
+          <value>G</value>
+        </choice>
+      </attribute>
+      <attribute name="constrnr">
+        <data type="integer"/>
+      </attribute>
+      <attribute name="defnr">
+        <data type="integer"/>
+      </attribute>
+      <optional>
+        <attribute name="vid">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <attribute name="aid">
+        <data type="string"/>
+      </attribute>
+      <optional>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="relnr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <zeroOrMore>
+        <ref name="Typ"/>
+      </zeroOrMore>
+      <element name="Essentials">
+        <zeroOrMore>
+          <ref name="Int"/>
+        </zeroOrMore>
+      </element>
+      <optional>
+        <ref name="Formula"/>
+      </optional>
+      <ref name="DefMeaning"/>
+    </element>
+  </define>
   <define name="Ref">
     <a:documentation>Reference can be either private (coming from the current article)
-- their number is the position at the stack of accessible 
+- their number is the position at the stack of accessible
 references (so it is not unique), or library - these additionally
 contain their kind (theorem or definition) and article nr.
-The position in the inference is kept for error messaging.</a:documentation>
+The position in the inference is kept for error messaging.
+For a private inference, the vid attribute optionally tells
+its identifier's number.</a:documentation>
     <element name="Ref">
       <attribute name="nr">
         <data type="integer"/>
       </attribute>
+      <optional>
+        <attribute name="vid">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <optional>
         <attribute name="articlenr">
           <data type="integer"/>
@@ -1358,11 +1527,19 @@ directive - this should be changed to a user option eventually.   </a:documentat
   </define>
   <define name="Article">
     <a:documentation>The complete article after analyzer.
-aid specifies its name in uppercase.</a:documentation>
+aid specifies its name in uppercase, and mizfiles
+optionally gives a location of the local MIZFILES directory used
+during processing the article (needed to know for browsing of
+locally installed html in MIZFILES/html).</a:documentation>
     <element name="Article">
       <attribute name="aid">
         <data type="string"/>
       </attribute>
+      <optional>
+        <attribute name="mizfiles">
+          <data type="string"/>
+        </attribute>
+      </optional>
       <zeroOrMore>
         <choice>
           <ref name="DefinitionBlock"/>
@@ -1392,7 +1569,9 @@ together with their counts.</a:documentation>
     <a:documentation>Introduction of local constants, the numbering is automatic,
 so only types are needed.
 For easier presentation, nr optionally contains the number   
-of the first local constant created here.</a:documentation>
+of the first local constant created here.
+Each type may optionally have presentational info about
+the variable (vid) inside.   </a:documentation>
     <element name="Let">
       <optional>
         <attribute name="nr">
@@ -1417,7 +1596,9 @@ of the first local constant created here.</a:documentation>
 assumption starts with existential quantifier. In that case,
 the existential variables are introduced as local constants.
 For easier presentation, nr optionally contains the number   
-of the first local constant created here.   </a:documentation>
+of the first local constant created here.   
+Each type may optionally have presentational info about
+the variable (vid) inside.   </a:documentation>
     <element name="Given">
       <optional>
         <attribute name="nr">
@@ -1440,10 +1621,12 @@ just changes the thesis.</a:documentation>
     </element>
   </define>
   <define name="TakeAsVar">
-    <a:documentation>Take with equality. This introduces a new local constant, 
+    <a:documentation>Take with equality. This introduces a new local constant,
 whose type is given here.
 For easier presentation, nr optionally contains the number   
-of the first local constant created here.      </a:documentation>
+of the first local constant created here.      
+The type may optionally have presentational info about
+the variable (vid) inside.   </a:documentation>
     <element name="TakeAsVar">
       <optional>
         <attribute name="nr">
@@ -1466,7 +1649,9 @@ _thus_ or _hereby_ (which starts diffuse conclusion).</a:documentation>
 and its justification, then the new local constants
 and zero or more propositions about them.
 For easier presentation, nr optionally contains the number   
-of the first local constant created here.      </a:documentation>
+of the first local constant created here.      
+Each type may optionally have presentational info about
+the variable (vid) inside.   </a:documentation>
     <element name="Consider">
       <optional>
         <attribute name="nr">
@@ -1484,20 +1669,22 @@ of the first local constant created here.      </a:documentation>
     </element>
   </define>
   <define name="Reconsider">
-    <a:documentation>First comes the target type, then the reconsidered terms.
-For all these terms a new local variable with the target type 
+    <a:documentation>First comes the series of target types and reconsidered terms.
+For all these terms a new local variable with its target type
 is created, and its equality to the corresponding term is remembered.
 Finally the proposition about the typing is given and justified.
-For easier presentation, nr optionally contains the number   
-of the first local constant created here.   </a:documentation>
+For easier presentation, nr optionally contains the number
+of the first local constant created here.   
+Each type may optionally have presentational info about
+the variable (vid) inside.   </a:documentation>
     <element name="Reconsider">
       <optional>
         <attribute name="nr">
           <data type="integer"/>
         </attribute>
       </optional>
-      <ref name="Typ"/>
       <oneOrMore>
+        <ref name="Typ"/>
         <ref name="Term"/>
       </oneOrMore>
       <ref name="Proposition"/>
@@ -1510,7 +1697,9 @@ is given. This local constant is now always expanded to its
 definition, and should not directly appear in any expression,
 but it is now needed for some implementation reasons.
 For easier presentation, nr optionally contains the number   
-of the first local constant created here.      </a:documentation>
+of the first local constant created here.      
+The type may optionally have presentational info about
+the variable (vid) inside.   </a:documentation>
     <element name="Set">
       <optional>
         <attribute name="nr">
@@ -1525,10 +1714,15 @@ of the first local constant created here.      </a:documentation>
     <a:documentation>Private functor. First come the types of arguments, then
 its definition and the result type.
 For easier presentation, nr optionally contains number   
-of the private functor created here.     </a:documentation>
+of the private functor created here, and its identifier's number (vid).</a:documentation>
     <element name="DefFunc">
       <optional>
         <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="vid">
           <data type="integer"/>
         </attribute>
       </optional>
@@ -1541,10 +1735,15 @@ of the private functor created here.     </a:documentation>
     <a:documentation>Private predicate. First come the types of arguments, then
 its definition.
 For easier presentation, nr optionally contains number   
-of the private predicate created here.        </a:documentation>
+of the private predicate created here, and its identifier's number (vid).</a:documentation>
     <element name="DefPred">
       <optional>
         <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="vid">
           <data type="integer"/>
         </attribute>
       </optional>
@@ -1686,7 +1885,7 @@ for diffuse reasoning in the end.</a:documentation>
     </element>
   </define>
   <define name="SkeletonItem">
-    <a:documentation>Skeleton items change the current thesis, for Proof the
+    <a:documentation>Skeleton items change the InFile.Current thesis, for Proof the
 changed Thesis together with used expansions is printed
 explicitely after them.   
 PerCasesReasoning is not included here.</a:documentation>
@@ -1718,10 +1917,16 @@ finished by optional per cases reasoning.</a:documentation>
   </define>
   <define name="Proof">
     <a:documentation>Direct proof of some proposition (which is the proof's thesis).
-Label (nr) of proof (if any) is label of its thesis.</a:documentation>
+Label (nr) of proof (if any) is label of its thesis, vid is then
+the identifier nr of this label.</a:documentation>
     <element name="Proof">
       <optional>
         <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="vid">
           <data type="integer"/>
         </attribute>
       </optional>
@@ -1732,10 +1937,16 @@ Label (nr) of proof (if any) is label of its thesis.</a:documentation>
   </define>
   <define name="Now">
     <a:documentation>Diffuse statement - its thesis is reconstructed in the end.
-Label (nr) of diffuse statement (if any) is label of its thesis.</a:documentation>
+Label (nr) and its identifier (vid) of diffuse statement
+(if any) is label of its thesis.</a:documentation>
     <element name="Now">
       <optional>
         <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="vid">
           <data type="integer"/>
         </attribute>
       </optional>
@@ -1753,10 +1964,16 @@ Label (nr) of diffuse statement (if any) is label of its thesis.</a:documentatio
     </choice>
   </define>
   <define name="IterEquality">
-    <a:documentation>Iterative equality. The ptional number is label.</a:documentation>
+    <a:documentation>Iterative equality. The optional numbers (nr) is serial label
+numbering, and original label identifier (vid).</a:documentation>
     <element name="IterEquality">
       <optional>
         <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="vid">
           <data type="integer"/>
         </attribute>
       </optional>
@@ -1789,7 +2006,9 @@ Label (nr) of diffuse statement (if any) is label of its thesis.</a:documentatio
     </choice>
   </define>
   <define name="Reservation">
-    <a:documentation>Reservation of a new variable for a type.</a:documentation>
+    <a:documentation>Reservation of a new variable for a type.
+The type may optionally have presentational info about
+the variable (vid) inside.   </a:documentation>
     <element name="Reservation">
       <ref name="Typ"/>
     </element>
@@ -1933,32 +2152,49 @@ of canceled items as an attribute.</a:documentation>
     </element>
   </define>
   <define name="SchemeFuncDecl">
-    <a:documentation>Declaration of a scheme functor.</a:documentation>
+    <a:documentation>Declaration of a scheme functor, possibly with its identifier number.</a:documentation>
     <element name="SchemeFuncDecl">
       <attribute name="nr">
         <data type="integer"/>
       </attribute>
+      <optional>
+        <attribute name="vid">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <ref name="ArgTypes"/>
       <ref name="Typ"/>
     </element>
   </define>
   <define name="SchemePredDecl">
-    <a:documentation>Declaration of a scheme predicate.</a:documentation>
+    <a:documentation>Declaration of a scheme predicate, possibly with its identifier number.</a:documentation>
     <element name="SchemePredDecl">
       <attribute name="nr">
         <data type="integer"/>
       </attribute>
+      <optional>
+        <attribute name="vid">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <ref name="ArgTypes"/>
     </element>
   </define>
   <define name="SchemeBlock">
     <a:documentation>Scheme blocks are used for declaring the types of second-order
 variables appearing in a scheme, and for its justification.
-This could be a bit unified with Scheme later.</a:documentation>
+This could be a bit unified with Scheme later.
+schemenr is its serial nr in the article, while vid is
+its identifier number.   </a:documentation>
     <element name="SchemeBlock">
       <attribute name="schemenr">
         <data type="integer"/>
       </attribute>
+      <optional>
+        <attribute name="vid">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <ref name="Position"/>
       <zeroOrMore>
         <choice>
@@ -1986,7 +2222,9 @@ the structure mode, the strict attribute and zero or more selectors,
 and create existential registration for the strict attribute.
 If any definientia and definitional theorems are created,
 they follow immediately after the enclosing definitional block
-(this might be changed in the future).      </a:documentation>
+(this might be changed in the future).      
+Number, position, and identifier number of the definiens 
+(vid) can be optionally given.</a:documentation>
     <element name="Definition">
       <attribute name="kind">
         <choice>
@@ -2012,6 +2250,11 @@ they follow immediately after the enclosing definitional block
           <data type="integer"/>
         </attribute>
         <ref name="Position"/>
+      </optional>
+      <optional>
+        <attribute name="vid">
+          <data type="integer"/>
+        </attribute>
       </optional>
       <choice>
         <group>
@@ -2088,6 +2331,19 @@ could be made more specific for each.</a:documentation>
       </optional>
     </element>
   </define>
+  <define name="IdentifyRegistration">
+    <a:documentation>One justified identification registration. The correctness conditions
+could be made more specific.</a:documentation>
+    <element name="IdentifyRegistration">
+      <ref name="IdentifyWithExp"/>
+      <zeroOrMore>
+        <ref name="CorrectnessCondition"/>
+      </zeroOrMore>
+      <optional>
+        <ref name="Correctness"/>
+      </optional>
+    </element>
+  </define>
   <define name="RegistrationBlock">
     <a:documentation>Block of cluster registrations.
 </a:documentation>
@@ -2098,6 +2354,7 @@ could be made more specific for each.</a:documentation>
           <ref name="Let"/>
           <ref name="AuxiliaryItem"/>
           <ref name="Registration"/>
+          <ref name="IdentifyRegistration"/>
           <ref name="Canceled"/>
         </choice>
       </oneOrMore>

@@ -7,7 +7,8 @@
 environ
 
  vocabularies ORDINAL2, ORDINAL1, FUNCT_1, TARSKI, RELAT_1, BOOLE, FINSEQ_1,
-      ORDINAL3, CLASSES2, CLASSES1, CARD_1, ORDINAL4, FUNCOP_1, NAT_1;
+      ORDINAL3, CLASSES2, CLASSES1, CARD_1, ORDINAL4, FUNCOP_1, NAT_1,
+      ZFREFLE1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCOP_1,
       ORDINAL1, ORDINAL2, ORDINAL3, CARD_1, CLASSES1, CLASSES2;
  constructors WELLORD2, FUNCOP_1, ORDINAL3, CARD_1, CLASSES1, CLASSES2, NAT_D;
@@ -610,7 +611,7 @@ A2:  rng f2 c= A by ORDINAL2:def 8;
    hence thesis by ORDINAL2:def 8;
   end;
 
-theorem
+theorem Th13:
     f1 is increasing & f2 is increasing implies
    ex phi st phi = f1*f2 & phi is increasing
   proof assume
@@ -1875,3 +1876,79 @@ then A44:    L.succ z = phi.C & L.succ z in rng L & B = phi.y
     then not S in phi.S by A38,ORDINAL1:7;
    hence contradiction by A18;
   end;
+
+begin :: Addenda
+
+:: from ZFREFLE1, 2007.03.14, A.T.
+
+reserve e,u for set;
+
+theorem
+    A is_cofinal_with B & B is_cofinal_with C implies A is_cofinal_with C
+  proof given xi1 being Ordinal-Sequence such that
+A1: dom xi1 = B & rng xi1 c= A & xi1 is increasing & A = sup xi1;
+   given xi2 being Ordinal-Sequence such that
+A2: dom xi2 = C & rng xi2 c= B & xi2 is increasing & B = sup xi2;
+   consider xi being Ordinal-Sequence such that
+A3:  xi = xi1*xi2 & xi is increasing by A1,A2,Th13;
+   take xi;
+   thus
+A4:  dom xi = C by A1,A2,A3,RELAT_1:46;
+       rng xi c= rng xi1 by A3,RELAT_1:45;
+   hence
+     rng xi c= A & xi is increasing by A1,A3,XBOOLE_1:1;
+then A5:  sup xi = sup rng xi & sup xi1 = sup rng xi1 & sup xi2 = sup rng xi2 &
+     sup rng xi c= sup A & sup A = A by ORDINAL2:26,30;
+   thus A c= sup xi
+     proof let a be set;
+      assume
+Z:     a in A;
+       then reconsider a as Ordinal by ORDINAL1:23;
+      consider b being Ordinal such that
+A6:    b in rng xi1 & a c= b by A1,ORDINAL2:29,Z;
+      consider e such that
+A7:    e in B & b = xi1.e by A1,A6,FUNCT_1:def 5;
+      reconsider e as Ordinal by A7,ORDINAL1:23;
+      consider c being Ordinal such that
+A8:    c in rng xi2 & e c= c by A2,A7,ORDINAL2:29;
+      consider u such that
+A9:    u in C & c = xi2.u by A2,A8,FUNCT_1:def 5;
+      reconsider u as Ordinal by A9,ORDINAL1:23;
+          xi1.e c= xi1.c & xi1.c = xi.u & xi.u in rng xi & xi.u is Ordinal
+         by A1,A2,A3,A4,A8,A9,FUNCT_1:22,def 5,Th9;
+       then xi.u in sup xi & xi.u is Ordinal & a c= xi.u
+        by A6,A7,ORDINAL2:27,XBOOLE_1:1;
+      hence thesis by ORDINAL1:22;
+     end;
+   thus thesis by A5;
+  end;
+
+theorem
+    A is_cofinal_with B implies (A is_limit_ordinal iff B is_limit_ordinal)
+  proof given psi such that
+A1:  dom psi = B & rng psi c= A & psi is increasing & A = sup psi;
+   thus A is_limit_ordinal implies B is_limit_ordinal
+     proof assume
+A2:     A is_limit_ordinal;
+          now let C; assume
+A3:       C in B;
+         then A4: psi.C in rng psi by A1,FUNCT_1:def 5;
+        reconsider c = psi.C as Ordinal;
+        succ c in A & A = sup rng psi by A1,A2,A4,ORDINAL1:41;
+        then consider b being Ordinal such that
+A5:       b in rng psi & succ c c= b by ORDINAL2:29;
+        consider e such that
+A6:       e in B & b = psi.e by A1,A5,FUNCT_1:def 5;
+        reconsider e as Ordinal by A6,ORDINAL1:23;
+            c in succ c by ORDINAL1:10;
+         then not b c= c by A5,ORDINAL1:7;
+         then not e c= C by A1,A3,A6,Th9;
+         then C in e by ORDINAL1:26;
+         then succ C c= e by ORDINAL1:33;
+        hence succ C in B by A6,ORDINAL1:22;
+       end;
+      hence thesis by ORDINAL1:41;
+     end;
+   thus thesis by A1,Th16;
+  end;
+

@@ -18,51 +18,49 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_4"/>
-<ArticleID name="QC_LANG1"/>
-<ArticleID name="QC_LANG2"/>
-<ArticleID name="CQC_LANG"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="AMI_1"/>
 <ArticleID name="AMI_3"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="SCMFSA_2"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="9">
 <Cluster/>
 <Func kind="K" nr="2">
 <Func kind="K" nr="65"/>
-<Func kind="K" nr="175">
+<Func kind="K" nr="192">
 <Func kind="K" nr="65"/>
 </Func>
 </Func>
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="194"/>
 </Typ>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="15"/>
-<Adjective nr="53">
+<Adjective nr="47">
 <Func kind="K" nr="2">
 <Func kind="K" nr="65"/>
-<Func kind="K" nr="175">
+<Func kind="K" nr="192">
 <Func kind="K" nr="65"/>
 </Func>
 </Func>
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="194"/>
 </Adjective>
-<Adjective nr="57" value="false">
+<Adjective nr="51" value="false">
 <Func kind="K" nr="2">
 <Func kind="K" nr="65"/>
-<Func kind="K" nr="175">
+<Func kind="K" nr="192">
 <Func kind="K" nr="65"/>
 </Func>
 </Func>
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="194"/>
 </Adjective>
 </Cluster>
 </RCluster>

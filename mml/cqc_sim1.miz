@@ -13,11 +13,12 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, DOMAIN_1,
       MCART_1, SETFAM_1, RELAT_1, RELSET_1, FUNCT_1, FUNCT_2, BINOP_1,
       PARTFUN1, XREAL_0, XXREAL_0, FUNCOP_1, FINSEQ_1, FINSET_1, FINSUB_1,
-      FRAENKEL, NAT_1, NAT_D, MEMBERED, SEQ_4, SETWISEO, QC_LANG1, QC_LANG2,
-      QC_LANG3, CQC_LANG, FUNCT_4, RECDEF_1;
+      FRAENKEL, NAT_1, NAT_D, MEMBERED, SETWISEO, QC_LANG1, QC_LANG2,
+      QC_LANG3, CQC_LANG, FUNCT_4, RECDEF_1, SEQ_4;
  constructors SETFAM_1, RELAT_2, PARTFUN1, DOMAIN_1, BINOP_1, FUNCOP_1,
       FUNCT_4, SETWISEO, FRAENKEL, XXREAL_0, NAT_1, MEMBERED, RECDEF_1,
-      QC_LANG3, CQC_LANG, NAT_D, SEQ_4;
+      QC_LANG3, CQC_LANG, NAT_D, SEQ_4, ARYTM_3, ORDINAL3, RAT_1, SEQM_3,
+      SEQ_2, REAL_1,COMPLEX1;
  registrations SUBSET_1, RELSET_1, CQC_LANG, QC_LANG1, FINSUB_1, FUNCOP_1,
       FINSEQ_1, ARYTM_3, MEMBERED, FUNCT_2, PARTFUN1, ORDINAL2, XREAL_0,
       XXREAL_0, ORDINAL1, NAT_1, FRAENKEL, SEQ_4;
@@ -27,7 +28,7 @@ environ
       MCART_1, FUNCT_1, FUNCT_2, NAT_1, TARSKI, FUNCOP_1, FUNCT_4, FINSEQ_2,
       FINSET_1, SETFAM_1, QC_LANG2, RELAT_1, RELSET_1, FINSEQ_3, XBOOLE_0,
       XBOOLE_1, XXREAL_0, SEQ_4, MEMBERED, ORDINAL1;
- schemes CQC_LANG, FUNCT_2, ZFREFLE1, NAT_1, FRAENKEL, CARD_3, QC_LANG1,
+ schemes CQC_LANG, FUNCT_2, CLASSES1, NAT_1, FRAENKEL, CARD_3, QC_LANG1,
       WELLORD2, BINOP_1;
 
 begin
@@ -128,7 +129,6 @@ A by RELAT_1:156;
  let u be set;
  assume
 A5: u in (g +* ({x} --> y)).:A \ {y};
-  then u in (g +* ({x} --> y)).:A;
   then consider z being set such that
 A6: z in dom(g +* ({x} --> y)) & z in A & u = (g +* ({x} --> y)).z
     by FUNCT_1:def 12;
@@ -254,10 +254,7 @@ A1: S[0]
     proof
      consider F being Function of QC-WFF, D();
      take F;
-     let p be Element of QC-WFF such that
-    A2: len @p <= 0;
-           1 <= len @p by QC_LANG1:34;
-        hence thesis by A2;
+     thus thesis by QC_LANG1:34;
     end;
 A3: for n be Element of NAT st S[n] holds S[n+1]
    proof let n be Element of NAT;
@@ -455,7 +452,7 @@ A45:          len @the_left_argument_of p < len @p by A41,QC_LANG1:46;
  consider F being Function such that
 A49: dom F = QC-WFF and
 A50: for x being set st x in
- QC-WFF holds Qfn[x, F.x] from ZFREFLE1:sch 1 (A31);
+ QC-WFF holds Qfn[x, F.x] from CLASSES1:sch 1 (A31);
    F is Function of QC-WFF, D()
  proof
      rng F c= D()
@@ -1156,89 +1153,7 @@ A1: for p being Element of CQC-WFF, d being Element of NAT holds
   thus F(All(x,p)) = Q(x,F(p)) from CQC_LANG:sch 9(A1);
  end;
 
-notation let A be non empty natural-membered set;
-  synonym min A for lower_bound A;
-end;
-
-Lm11:
-for A being non empty natural-membered set, k be natural number st k in A &
- for n being Element of NAT st n in A holds k <= n
- holds k = min A
-proof
-  let A be non empty natural-membered set, k be natural number such that
-A2: k in A and
-A3: for n being Element of NAT st n in A holds k <= n;
-  defpred P[Element of NAT] means $1 in A;
-  consider a being Element of A;
-A4: now
-      let r be real number;
-      assume
-B1:   r in A;
-      then r is natural by MEMBERED:def 6;
-      then r in NAT by ORDINAL1:def 13;
-      hence k <= r by A3,B1;
-    end;
-    now
-      let t be real number;
-      assume for s being real number st s in A holds t <= s;
-      then
-B2:   t <= min A by SEQ_4:60;
-      min A <= k by A2,SEQ_4:def 5;
-      hence t <= k by B2,XXREAL_0:2;
-    end;
-    then k = min A by A4,SEQ_4:61;
-    hence thesis;
-end;
-
-Lm10:
-for A being non empty natural-membered set holds min A in A
-proof
-  let A be non empty natural-membered set;
-  defpred P[Element of NAT] means $1 in A;
-  consider a being Element of A;
-  a in A;
-  then a is natural by MEMBERED:def 6;
-  then a in NAT by ORDINAL1:def 13;
-  then
-A1: ex k being Element of NAT st P[k];
-    consider k being Element of NAT such that
-A2: P[k] and
-A3: for n being Element of NAT st P[n] holds k <= n from NAT_1:sch 5(A1);
-    k = min A by A2,A3,Lm11;
-    hence thesis by A2;
-end;
-
-definition
-  let A be non empty natural-membered set;
-  redefine func min A -> Element of NAT means :Def8:
-  it in A & for k being natural number st k in A holds it <= k;
-  coherence
-  proof
-    min A in A by Lm10;
-    then min A is natural by MEMBERED:def 6;
-    hence thesis by ORDINAL1:def 13;
-  end;
-  compatibility
-  proof
-    let m be Element of NAT;
-    hereby
-      assume
-A1:   m = min A;
-      hence m in A by Lm10;
-      thus for k being natural number holds
-      k in A implies m <= k by A1,SEQ_4:def 5;
-    end;
-    assume
-A2: m in A;
-    assume for k being natural number st k in A holds m <= k;
-    then for k being Element of NAT st k in A holds m <= k;
-    hence thesis by A2,Lm11;
-  end;
-end;
-
-theorem Th19:
- for A,B being non empty natural-membered set st A c= B
- holds min B <= min A by SEQ_4:64;
+canceled;
 
 theorem
  Th20: for p being Element of QC-WFF holds still_not-bound_in p is finite
@@ -1326,6 +1241,7 @@ proof
 end;
 
 definition let p;
+ canceled;
  func NBI p -> Subset of NAT equals
    {k: for i st k<=i holds not x.i in still_not-bound_in p};
  coherence
@@ -1428,7 +1344,7 @@ end;
 
 definition let p;
  func index p -> Element of NAT equals
-    min (NBI p);
+    min NBI p;
  coherence;
 end;
 
@@ -1437,26 +1353,21 @@ theorem Th21: index p = 0 iff p is closed
   thus index p = 0 implies p is closed
    proof
     assume index p = 0;
-    then min NBI p = 0;
-    then 0 in NBI p by Def8;
-    then 0 in {k: for i st k<=i holds not x.i in still_not-bound_in p};
+    then 0 in NBI p by SEQ_4:def 6;
     then A1: ex k st k=0 & for i st k<=i holds not x.i in still_not-bound_in p;
        now assume
 A2:  still_not-bound_in p <> {};
      consider a being Element of still_not-bound_in p;
      reconsider a as bound_QC-variable by A2,TARSKI:def 3;
-     consider i such that A3: x.i = a by QC_LANG3:36;
-        i>=0 by NAT_1:2;
-     hence contradiction by A1,A2,A3;
+     ex i st x.i = a by QC_LANG3:36;
+     hence contradiction by A1,A2;
     end;
     hence thesis by QC_LANG1:def 30;
    end;
   assume p is closed;
    then 0<=i implies not x.i in still_not-bound_in p by QC_LANG1:def 30;
-   then 0 in {k: for i st k<=i holds not x.i in still_not-bound_in p};
    then 0 in NBI p;
-   then min NBI p <= 0 by Def8;
-   then min NBI p = 0 by NAT_1:3;
+   then min NBI p <= 0 by SEQ_4:def 6;
   hence index p = 0;
  end;
 
@@ -1466,7 +1377,7 @@ theorem Th22:
 A1: x.i in still_not-bound_in p;
       now assume
 A2:  min (NBI p) <= i;
-        min NBI p in NBI p by Def8;
+        min NBI p in NBI p by SEQ_4:def 6;
      then ex k st k = min NBI p &
       for i st k<=i holds not x.i in still_not-bound_in p;
     hence contradiction by A1,A2;
@@ -1479,7 +1390,6 @@ theorem Th23: index VERUM = 0 by Th21,QC_LANG3:24;
 theorem Th24: index ('not' p) = index p
  proof
       still_not-bound_in p = still_not-bound_in 'not' p by QC_LANG3:11;
-  then NBI 'not' p = NBI p;
   hence index 'not' p = index p;
  end;
 
@@ -1515,9 +1425,7 @@ A5:     k = e & for i st k<=i holds not x.i in
       end;
      hence e in NBI q by A5;
     end;
-   then A7:  min NBI p <= min NBI(p '&' q) & min NBI q <= min NBI(p '&' q) by
-A2,Th19;
-  thus thesis by A7;
+  hence thesis by A2,SEQ_4:64;
  end;
 
 definition let X be set;
@@ -2381,7 +2289,6 @@ end;
 theorem  index p = index(SepVar p)
  proof
       still_not-bound_in p = still_not-bound_in (SepVar p) by Th45;
-   then NBI p = NBI (SepVar p);
   hence index p = index(SepVar p);
  end;
 

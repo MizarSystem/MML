@@ -15,16 +15,17 @@ environ
       GROUP_2, UPROOTS, XCMPLX_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, REALSET1, NUMBERS, ARYTM_0, XCMPLX_0,
       XREAL_0, ZFMISC_1, COMPLEX1, REAL_1, SQUARE_1, INT_1, INT_2, NAT_1,
-      NAT_D, PREPOWER, POWER, RLVECT_1, VECTSP_1, VECTSP_2, BINOP_1,
+      NAT_D, PREPOWER, POWER, RLVECT_1, VECTSP_2, BINOP_1,
       RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, RAT_1, FINSEQ_2, FINSEQ_4, FINSOP_1,
-      DOMAIN_1, STRUCT_0, GROUP_4, NORMSP_1, BINARITH, RVSUM_1, ALGSEQ_1,
+      DOMAIN_1, STRUCT_0, VECTSP_1,
+      GROUP_4, NORMSP_1, BINARITH, RVSUM_1, ALGSEQ_1,
       COMPLFLD, HAHNBAN1, POLYNOM3, POLYNOM4, POLYNOM5, COMPTRIG, CARD_1,
       GROUP_2, SIN_COS, NEWTON, FINSET_1, GROUP_1, MOD_2, GRAPH_2, ORDINAL1,
       BINOP_2, POLYNOM1, FVSUM_1, UPROOTS, XXREAL_0;
  constructors WELLORD2, DOMAIN_1, BINOP_1, ARYTM_0, REAL_1, SQUARE_1, FINSEQOP,
       FINSOP_1, SETWOP_2, RVSUM_1, PREPOWER, POWER, BINARITH, SIN_COS,
       RLVECT_2, ALGSTR_1, GROUP_4, NORMSP_1, MOD_2, MATRIX_2, HAHNBAN1,
-      GRAPH_2, COMPTRIG, POLYNOM4, POLYNOM5, UPROOTS, NAT_D;
+      GRAPH_2, COMPTRIG, POLYNOM4, POLYNOM5, UPROOTS, NAT_D, REALSET1;
  registrations XREAL_0, STRUCT_0, RELSET_1, SEQ_1, GROUP_1, FINSEQ_2, COMPLFLD,
       POLYNOM1, POLYNOM3, NAT_1, INT_1, COMPLEX1, POLYNOM5, FINSEQ_1, FINSET_1,
       CARD_1, FSM_1, MEMBERED, ORDINAL2, ARYTM_3, ORDINAL1, WSIERP_1, RFINSEQ,
@@ -189,6 +190,8 @@ A13:    Product f = Product f1 * c by A11,GROUP_4:9;
   hence |. Product f .| = Product g by A1,A2;
 end;
 
+Lx: 1_F_Complex = 1.F_Complex by VECTSP_1:96;
+
 theorem Th4:
 for s being non empty finite Subset of F_Complex,
     x being Element of F_Complex,
@@ -234,7 +237,7 @@ FINSEQ_4:def 4;
    end;
 A14: len f = len r by A1,A7,FINSEQ_1:def 3;
 then A15: eval(poly_with_roots((s,1)-bag),x) = Product(f)
-      by A1,A9,UPROOTS:69;
+      by A1,A9,UPROOTS:69,Lx;
        for i being Element of NAT st i in dom f holds |. f/.i .| = r.i proof
     let i be Element of NAT; assume
    A16: i in dom f;
@@ -1551,10 +1554,11 @@ n be non empty Element of NAT;
 end;
 
 theorem Th44:
-for L being non degenerated left_unital (non empty doubleLoopStr),
+for L being non degenerated well-unital (non empty doubleLoopStr),
     n being non empty Element of NAT
  holds len unital_poly(L,n) = n+1
-proof let L be non degenerated left_unital (non empty doubleLoopStr);
+proof let L be non degenerated well-unital (non empty doubleLoopStr);
+X: 1.L = 1_L by VECTSP_1:96;
     let n be non empty Element of NAT;
         for i being Element of NAT st i >= n+1 holds unital_poly(L,n).i=0.L
     proof let i be Element of NAT such that A1: i >= n+1;
@@ -1572,7 +1576,7 @@ then A3: n+1 is_at_least_length_of unital_poly(L,n) by ALGSEQ_1:def 3;
         then m <= n by NAT_1:13;
              then unital_poly(L,n).(n) = 0.L &
             unital_poly(L,n).(n) = 1_L by A4,Th42,ALGSEQ_1:def 3;
-          hence contradiction by VECTSP_1:def 21;
+          hence contradiction by VECTSP_1:def 21,Lx,X;
         end;
       hence thesis;
     end;
@@ -1580,7 +1584,7 @@ then A3: n+1 is_at_least_length_of unital_poly(L,n) by ALGSEQ_1:def 3;
 end;
 
 registration
-  let L be non degenerated left_unital (non empty doubleLoopStr),
+  let L be non degenerated well-unital (non empty doubleLoopStr),
       n be non empty Element of NAT;
  cluster unital_poly(L,n) -> non-zero;
  correctness proof
@@ -1859,7 +1863,7 @@ proof let n be non empty Element of NAT;  set p = unital_poly(F_Complex, n);
     len p = n+1 by Th44;
 then p.(len p-'1) = p.n by BINARITH:39 .= 1_F_Complex by Th42;
   hence unital_poly(F_Complex, n)
-   = poly_with_roots BRoots unital_poly(F_Complex, n) by UPROOTS:67
+   = poly_with_roots BRoots unital_poly(F_Complex, n) by UPROOTS:67,Lx
   .= poly_with_roots((n-roots_of_1, 1)-bag) by Th49;
 end;
 
@@ -2078,7 +2082,7 @@ that
              hence x in sB by A38,A39;
             end; then A41: sB = sb by TARSKI:2;
                f.(i+1) = <%1_F_Complex%> by A2,A26,A34
-                  .= poly_with_roots(eb) by UPROOTS:62;
+                  .= poly_with_roots(eb) by UPROOTS:62,Lx;
          hence F.(i+1) = (poly_with_roots b)*' poly_with_roots(eb) by A6,A25
 ,A32,A33
            .= poly_with_roots (b+eb) by UPROOTS:66
@@ -2266,7 +2270,7 @@ XXREAL_0:1;
    reconsider p1 = <%1_F_Complex %> as Element of cPRFC by POLYNOM3:def 12;
 A27: Product(h) = Product(fm) * p1 by GROUP_4:9
              .= Pfm *' <%1_F_Complex %> by POLYNOM3:def 12
-             .= Product(fm) by UPROOTS:34;
+             .= Product(fm) by UPROOTS:34,Lx;
    reconsider cpn = cyclotomic_poly n as Element of cPRFC by POLYNOM3:def 12;
        Product(f) = Product(fm) * cpn by A21,GROUP_4:9;
   hence unital_poly(F_Complex,n) = (cyclotomic_poly n)*'p
@@ -2753,7 +2757,7 @@ that
         then A20: (t,1)-bag = EmptyBag the carrier of F_Complex by UPROOTS:11;
              F.1 = Product <*fd1*> by A7,A10,A12 .= fd1 by FINSOP_1:12
            .= <%1_F_Complex%> by A3,A11,A13;
-     hence thesis by A20,UPROOTS:62;
+     hence thesis by A20,UPROOTS:62,Lx;
     end;
 A21: for i being Element of NAT st 1 <= i & i < len f
 holds R[i] implies R[i+1]
@@ -2814,7 +2818,7 @@ n
              hence x in sB by A42,A43;
             end;
                 f.(i+1) = <%1_F_Complex%> by A3,A27,A37;
-            then F.(i+1) = (poly_with_roots b) by A29,A32,A36,UPROOTS:34
+            then F.(i+1) = (poly_with_roots b) by A29,A32,A36,UPROOTS:34,Lx
                    .= poly_with_roots(B) by A38,TARSKI:2;
             hence thesis;
         end;

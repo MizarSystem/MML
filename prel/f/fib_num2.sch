@@ -6,9 +6,11 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="ENUMSET1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
+<ArticleID name="DOMAIN_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
@@ -24,8 +26,8 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
-<Func kind="K" nr="79"/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="104"/>
+<Func kind="K" nr="108"/>
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="1"/>
@@ -42,8 +44,8 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
-<Func kind="K" nr="79"/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="104"/>
+<Func kind="K" nr="108"/>
 </Typ>
 <Not>
 <And>
@@ -51,14 +53,14 @@
 <Var nr="1"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="119">
+<Func kind="K" nr="143">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="119">
+<Func kind="K" nr="143">
 <Var nr="1"/>
 <Num nr="2"/>
 </Func>
@@ -75,8 +77,8 @@
 <Cluster>
 <Adjective nr="19" value="false"/>
 </Cluster>
-<Func kind="K" nr="79"/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="104"/>
+<Func kind="K" nr="108"/>
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="1"/>
@@ -93,8 +95,8 @@
 <Cluster>
 <Adjective nr="19" value="false"/>
 </Cluster>
-<Func kind="K" nr="79"/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="104"/>
+<Func kind="K" nr="108"/>
 </Typ>
 <Not>
 <And>
@@ -102,14 +104,14 @@
 <Var nr="1"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="119">
+<Func kind="K" nr="143">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="119">
+<Func kind="K" nr="143">
 <Var nr="1"/>
 <Num nr="2"/>
 </Func>

@@ -13,11 +13,11 @@ environ
       AMI_2, SCMFSA6C, SFMASTR1, PRE_FF, ABSVALUE, SCMFSA9A;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, NUMBERS, XCMPLX_0,
       FINSUB_1, FUNCOP_1, CARD_1, CARD_3, INT_1, NAT_1, NAT_D, ABIAN, RELAT_1,
-      FUNCT_1, FUNCT_2, FUNCT_4, CQC_SIM1, PRE_FF, STRUCT_0, AMI_1, AMI_3,
+      FUNCT_1, FUNCT_2, FUNCT_4, SEQ_4, PRE_FF, STRUCT_0, AMI_1, AMI_3,
       SCM_1, AMI_5, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SCMFSA6B, SF_MASTR,
       SCMFSA6C, SCMFSA_7, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
       INT_2, XXREAL_0;
- constructors XXREAL_0, NAT_1, MEMBERED, INT_2, CQC_SIM1, PRE_FF, ABIAN, SCM_1,
+ constructors XXREAL_0, NAT_1, MEMBERED, INT_2, SEQ_4, PRE_FF, ABIAN, SCM_1,
       AMI_5, SCMFSA_5, SCMFSA_7, SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA8A,
       SCMFSA8B, SCMFSA_9, SFMASTR1, NAT_D;
  registrations XREAL_0, FINSET_1, FUNCT_1, INT_1, ABIAN, FINSUB_1, AMI_1,
@@ -25,9 +25,9 @@ environ
       SCMFSA8B, SCMFSA_9, SFMASTR1, FUNCOP_1, RELSET_1, NAT_1, FRAENKEL,
       MEMBERED, ORDINAL1, SETFAM_1, XXREAL_0, CARD_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions CQC_LANG;
+ definitions FUNCOP_1;
  theorems TARSKI, ZFMISC_1, REAL_1, ABSVALUE, NAT_1, INT_1, NAT_2, FUNCT_1,
-      FUNCT_2, CQC_LANG, GRFUNC_1, FUNCOP_1, FUNCT_4, CQC_SIM1, PRE_FF, ABIAN,
+      FUNCT_2, CQC_LANG, GRFUNC_1, FUNCOP_1, FUNCT_4, SEQ_4, PRE_FF, ABIAN,
       FSM_1, AMI_1, SCM_1, AMI_5, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A,
       SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA8C,
       SCMFSA_9, SFMASTR1, RELSET_1, RELAT_1, XBOOLE_0, XBOOLE_1, NEWTON,
@@ -51,14 +51,14 @@ proof
          f.0 in rng f by FUNCT_2:6;
       then reconsider rf = rng f as non empty Subset of NAT by RELSET_1:12;
       set m = min rf;
-         m in rf by CQC_SIM1:def 8;
+         m in rf by SEQ_4:def 6;
       then consider x being set such that
     A4: x in dom f & m = f.x by FUNCT_1:def 5;
       reconsider x as Element of NAT by A4,FUNCT_2:def 1;
          f.x = F(x) & f.(x+1) = F(x+1) by A3;
       then A5: f.(x+1) < f.x or P[x] by A1;
          f.(x+1) in rf by FUNCT_2:6;
-     hence contradiction by A2,A4,A5,CQC_SIM1:def 8;
+     hence contradiction by A2,A4,A5,SEQ_4:def 6;
     end;
 then A6:  ex k st P[k];
     thus ex k st P[k] & for n st P[n] holds k <= n from NAT_1:sch 5(A6);
@@ -157,7 +157,6 @@ end;
  reserve s, s1, s2 for State of SCM+FSA,
          a for read-write Int-Location,
          b for Int-Location,
-
          I, J for Macro-Instruction,
          Ig for good Macro-Instruction,
          i, j, k, m, n for Element of NAT;
@@ -691,9 +690,10 @@ A1: WithVariantWhile=0 a, I, s;
 end;
 
 theorem Th22: :: based on SCMFSA_9:10
- while=0(a, I) +* SAt c= s & s.a <> 0
+ while=0(a, I) +* (Start-At insloc 0) c= s & s.a <> 0
   implies LifeSpan s = 4 & for k being Element of NAT
-  holds (Computation s).k | D = s | D
+  holds (Computation s).k | (Int-Locations \/ FinSeq-Locations) =
+    s | (Int-Locations \/ FinSeq-Locations)
 proof assume that
 A1: while=0(a, I) +* SAt c= s and
 A2: s.a <> 0;
@@ -840,9 +840,11 @@ theorem Th23: :: based on SCMFSA_9:22
  I is_closed_on s & I is_halting_on s & s.a = 0
   implies
    (Computation (s +* (while=0(a,I) +* Start-At insloc 0))).
-    (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) | D
+    (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) |
+      (Int-Locations \/ FinSeq-Locations)
  = (Computation (s +* (I +* Start-At insloc 0))).
-    (LifeSpan (s +* (I +* Start-At insloc 0))) | D
+    (LifeSpan (s +* (I +* Start-At insloc 0))) |
+     (Int-Locations \/ FinSeq-Locations)
 proof assume that
 A1: I is_closed_on s and
 A2: I is_halting_on s and
@@ -943,7 +945,8 @@ end;
 
 theorem Th24: :: Step_eq0_0:
   (StepWhile=0(a, I, s).k).a <> 0
-   implies StepWhile=0(a, I, s).(k+1) | D = StepWhile=0(a, I, s).k | D
+   implies StepWhile=0(a, I, s).(k+1) | (Int-Locations \/ FinSeq-Locations) =
+     StepWhile=0(a, I, s).k | (Int-Locations \/ FinSeq-Locations)
 proof assume
 A1: (StepWhile=0(a, I, s).k).a <> 0;
   set SW = StepWhile=0(a, I, s);
@@ -963,8 +966,8 @@ theorem Th25: :: Step_eq0_1:
   or I is parahalting) &
  (StepWhile=0(a, I, s).k).a = 0 &
  (StepWhile=0(a, I, s).k).intloc 0 = 1
-   implies StepWhile=0(a, I, s).(k+1) | D
-         = IExec(I, StepWhile=0(a, I, s).k) | D
+   implies StepWhile=0(a, I, s).(k+1) | (Int-Locations \/ FinSeq-Locations)
+    = IExec(I, StepWhile=0(a, I, s).k) | (Int-Locations \/ FinSeq-Locations)
 proof assume that
 A1:    I is_halting_on Initialize StepWhile=0(a, I, s).k &
       I is_closed_on Initialize StepWhile=0(a, I, s).k
@@ -1060,8 +1063,11 @@ thus for k being Element of NAT holds X[k] from NAT_1:sch 1(A3,A4);
 end;
 
 theorem  :: eSW12:
-    ProperBodyWhile=0 a, I, s1 & s1 | D = s2 | D implies
-   for k holds StepWhile=0(a, I, s1).k | D = StepWhile=0(a, I, s2).k | D
+    ProperBodyWhile=0 a, I, s1 &
+      s1 | (Int-Locations \/ FinSeq-Locations) =
+      s2 | (Int-Locations \/ FinSeq-Locations) implies
+   for k holds StepWhile=0(a, I, s1).k | (Int-Locations \/ FinSeq-Locations) =
+     StepWhile=0(a, I, s2).k | (Int-Locations \/ FinSeq-Locations)
 proof assume that
 A1: ProperBodyWhile=0 a, I, s1 and
 A2: s1 | D = s2 | D;
@@ -1121,9 +1127,10 @@ A2: WithVariantWhile=0 a, I, s;
    (StepWhile=0(a, I, s).k).a <> 0 &
    (for i being Element of NAT st (StepWhile=0(a, I, s).i).a <> 0
    holds k <= i) &
-   (Computation (s +* (while=0(a, I) +* SAt))).
-                         (LifeSpan (s +* (while=0(a, I) +* SAt))) | D
-     = StepWhile=0(a, I, s).k | D;
+   (Computation (s +* (while=0(a, I) +* (Start-At insloc 0)))).
+      (LifeSpan (s +* (while=0(a, I) +* (Start-At insloc 0)))) |
+        (Int-Locations \/ FinSeq-Locations)
+     = StepWhile=0(a, I, s).k | (Int-Locations \/ FinSeq-Locations);
  existence proof
 
   set SW = StepWhile=0(a, I, s);
@@ -1247,7 +1254,9 @@ holds k2 <= i) and
 end;
 
 theorem  :: IE_while_ne0:
-    s.intloc 0 = 1 & s.a <> 0 implies IExec(while=0(a, I), s) | D = s | D
+  s.intloc 0 = 1 & s.a <> 0 implies
+    IExec(while=0(a, I), s) | (Int-Locations \/ FinSeq-Locations) =
+      s | (Int-Locations \/ FinSeq-Locations)
 proof assume that
 A1: s.intloc 0 = 1 and
 A2: s.a <> 0;
@@ -1280,8 +1289,9 @@ end;
 theorem  :: IE_while_eq0:
     (ProperBodyWhile=0 a, I, Initialize s or I is parahalting) &
   WithVariantWhile=0 a, I, Initialize s
-   implies IExec(while=0(a, I), s) | D
-       = StepWhile=0(a, I, Initialize s).ExitsAtWhile=0(a, I, Initialize s) | D
+   implies IExec(while=0(a, I), s) | (Int-Locations \/ FinSeq-Locations)
+       = StepWhile=0(a, I, Initialize s).ExitsAtWhile=0(a, I, Initialize s) |
+         (Int-Locations \/ FinSeq-Locations)
 proof assume that
 A1: ProperBodyWhile=0 a, I, Initialize s or I is parahalting and
 A2: WithVariantWhile=0 a, I, Initialize s;
@@ -1761,9 +1771,10 @@ A1: WithVariantWhile>0 a, I, s;
 end;
 
 theorem Th35: :: based on SCMFSA_9:32
- while>0(a, I) +* SAt c= s & s.a <= 0
+ while>0(a, I) +* (Start-At insloc 0) c= s & s.a <= 0
   implies LifeSpan s = 4 & for k being Element of NAT
-  holds (Computation s).k | D = s | D
+  holds (Computation s).k | (Int-Locations \/ FinSeq-Locations) =
+    s | (Int-Locations \/ FinSeq-Locations)
 proof assume that
 A1: while>0(a, I) +* SAt c= s and
 A2: s.a <= 0;
@@ -1911,9 +1922,11 @@ theorem Th36: :: based on SCMFSA_9:36
  I is_closed_on s & I is_halting_on s & s.a > 0
   implies
    (Computation (s +* (while>0(a,I) +* Start-At insloc 0))).
-    (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) | D
+    (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) |
+      (Int-Locations \/ FinSeq-Locations)
  = (Computation (s +* (I +* Start-At insloc 0))).
-    (LifeSpan (s +* (I +* Start-At insloc 0))) | D
+    (LifeSpan (s +* (I +* Start-At insloc 0))) |
+      (Int-Locations \/ FinSeq-Locations)
 proof assume that
 A1: I is_closed_on s and
 A2: I is_halting_on s and
@@ -2014,7 +2027,8 @@ end;
 
 theorem Th37: :: Step_gt0_0:
   (StepWhile>0(a, I, s).k).a <= 0
-   implies StepWhile>0(a, I, s).(k+1) | D = StepWhile>0(a, I, s).k | D
+   implies StepWhile>0(a, I, s).(k+1) | (Int-Locations \/ FinSeq-Locations) =
+     StepWhile>0(a, I, s).k | (Int-Locations \/ FinSeq-Locations)
 proof assume
 A1: (StepWhile>0(a, I, s).k).a <= 0;
   set SW = StepWhile>0(a, I, s);
@@ -2034,8 +2048,9 @@ theorem Th38: :: Step_gt0_1:
   or I is parahalting) &
  (StepWhile>0(a, I, s).k).a > 0 &
  (StepWhile>0(a, I, s).k).intloc 0 = 1
-   implies StepWhile>0(a, I, s).(k+1) | D
-         = IExec(I, StepWhile>0(a, I, s).k) | D
+   implies StepWhile>0(a, I, s).(k+1) | (Int-Locations \/ FinSeq-Locations)
+         = IExec(I, StepWhile>0(a, I, s).k) |
+           (Int-Locations \/ FinSeq-Locations)
 proof assume that
 A1:    I is_halting_on Initialize StepWhile>0(a, I, s).k &
       I is_closed_on Initialize StepWhile>0(a, I, s).k
@@ -2129,8 +2144,11 @@ thus for k being Element of NAT holds X[k] from NAT_1:sch 1(A3,A4);
 end;
 
 theorem Th40: :: SW12:
- ProperBodyWhile>0 a, I, s1 & s1 | D = s2 | D implies
-   for k holds StepWhile>0(a, I, s1).k | D = StepWhile>0(a, I, s2).k | D
+ ProperBodyWhile>0 a, I, s1 &
+   s1 | (Int-Locations \/ FinSeq-Locations) =
+     s2 | (Int-Locations \/ FinSeq-Locations) implies
+   for k holds StepWhile>0(a, I, s1).k | (Int-Locations \/ FinSeq-Locations) =
+     StepWhile>0(a, I, s2).k | (Int-Locations \/ FinSeq-Locations)
 proof assume that
 A1: ProperBodyWhile>0 a, I, s1 and
 A2: s1 | D = s2 | D;
@@ -2184,16 +2202,16 @@ definition
  assume that
 A1: ProperBodyWhile>0 a, I, s or I is parahalting and
 A2: WithVariantWhile>0 a, I, s;
- func ExitsAtWhile>0(a, I, s) -> Element of NAT means
-:Def6:
+ func ExitsAtWhile>0(a, I, s) -> Element of NAT means :Def6:
   ex k being Element of NAT st
    it = k &
    (StepWhile>0(a, I, s).k).a <= 0 &
    (for i being Element of NAT st (StepWhile>0(a, I, s).i).a <= 0
    holds k <= i) &
-   (Computation (s +* (while>0(a, I) +* SAt))).
-                         (LifeSpan (s +* (while>0(a, I) +* SAt))) | D
-     = StepWhile>0(a, I, s).k | D;
+   (Computation (s +* (while>0(a, I) +* (Start-At insloc 0)))).
+                (LifeSpan (s +* (while>0(a, I) +* (Start-At insloc 0)))) |
+                (Int-Locations \/ FinSeq-Locations)
+     = StepWhile>0(a, I, s).k | (Int-Locations \/ FinSeq-Locations);
  existence proof
 
   set SW = StepWhile>0(a, I, s);
@@ -2314,7 +2332,9 @@ holds k2 <= i) and
 end;
 
 theorem  :: IE_while_le0:
-    s.intloc 0 = 1 & s.a <= 0 implies IExec(while>0(a, I), s) | D = s | D
+  s.intloc 0 = 1 & s.a <= 0 implies
+    IExec(while>0(a, I), s) | (Int-Locations \/ FinSeq-Locations) =
+      s | (Int-Locations \/ FinSeq-Locations)
 proof assume that
 A1: s.intloc 0 = 1 and
 A2: s.a <= 0;
@@ -2347,10 +2367,10 @@ end;
 theorem Th42: :: IE_while_gt0:
  (ProperBodyWhile>0 a, I, Initialize s or I is parahalting) &
   WithVariantWhile>0 a, I, Initialize s
-   implies IExec(while>0(a, I), s) | D
-       = StepWhile>0(a, I, Initialize s).ExitsAtWhile>0(a, I, Initialize s) | D
+   implies IExec(while>0(a, I), s) | (Int-Locations \/ FinSeq-Locations)
+       = StepWhile>0(a, I, Initialize s).ExitsAtWhile>0(a, I, Initialize s) |
+         (Int-Locations \/ FinSeq-Locations)
 proof
-
  assume that
 A1: ProperBodyWhile>0 a, I, Initialize s or I is parahalting and
 A2: WithVariantWhile>0 a, I, Initialize s;
@@ -2387,7 +2407,8 @@ end;
 theorem Th43:
  StepWhile>0(a, I, s).k.a <= 0 implies
   for n being Element of NAT st k <= n
-   holds StepWhile>0(a, I, s).n | D = StepWhile>0(a, I, s).k | D
+   holds StepWhile>0(a, I, s).n | (Int-Locations \/ FinSeq-Locations) =
+     StepWhile>0(a, I, s).k | (Int-Locations \/ FinSeq-Locations)
 proof assume
 A1: StepWhile>0(a, I, s).k.a <= 0;
   set SW = StepWhile>0(a, I, s);
@@ -2412,7 +2433,8 @@ A3: now let n be Element of NAT such that
 end;
 
 theorem
-    s1 | D = s2 | D & ProperBodyWhile>0 a, I, s1
+  s1 | (Int-Locations \/ FinSeq-Locations) =
+    s2 | (Int-Locations \/ FinSeq-Locations) & ProperBodyWhile>0 a, I, s1
   implies ProperBodyWhile>0 a, I, s2
 proof assume that
 A1: s1 | D = s2 | D and
@@ -2446,7 +2468,8 @@ theorem Th45:
   for i, j st i <> j & i <= ExitsAtWhile>0(a, Ig, s) &
                        j <= ExitsAtWhile>0(a, Ig, s)
      holds StepWhile>0(a, Ig, s).i <> StepWhile>0(a, Ig, s).j &
-           StepWhile>0(a, Ig, s).i | D <> StepWhile>0(a, Ig, s).j | D
+           StepWhile>0(a, Ig, s).i | (Int-Locations \/ FinSeq-Locations) <>
+             StepWhile>0(a, Ig, s).j | (Int-Locations \/ FinSeq-Locations)
 proof set I = Ig; assume that
 A1: s.intloc 0 = 1 and
 A2: ProperBodyWhile>0 a, I, s and
@@ -2463,7 +2486,6 @@ A6: for i being Element of NAT st SW.i.a <= 0 holds K <= i and
   such that
 A7: for k being Element of NAT holds f.(SW.(k+1)) < f.(SW.k) or SW.k.a <= 0
      by A3,Def5;
-
 A8: for i, j being Element of NAT st i < j & i <= K & j <= K holds SW.i <> SW.j
    proof let i, j be Element of NAT; assume
  A9: i < j & i <= K & j <= K;
@@ -2563,7 +2585,8 @@ end;
 definition
  let f be Function of product the Object-Kind of SCM+FSA, NAT;
  attr f is on_data_only means
-:Def7: for s1, s2 st s1 | D = s2 | D holds f.s1 = f.s2;
+:Def7: for s1, s2 st s1 | (Int-Locations \/ FinSeq-Locations) =
+  s2 | (Int-Locations \/ FinSeq-Locations) holds f.s1 = f.s2;
 end;
 
 theorem Th46:
@@ -2635,7 +2658,8 @@ end;
 end;
 
 theorem
-    s1.intloc 0 = 1 & s1 | D = s2 | D &
+  s1.intloc 0 = 1 & s1 | (Int-Locations \/ FinSeq-Locations) =
+    s2 | (Int-Locations \/ FinSeq-Locations) &
  ProperBodyWhile>0 a, Ig, s1 & WithVariantWhile>0 a, Ig, s1
   implies WithVariantWhile>0 a, Ig, s2
 proof set I = Ig; assume that
@@ -2665,11 +2689,6 @@ begin :: fusc using while>0, bottom-up
 
 definition
  let N, result be Int-Location;
-
-   set next = 1-stRWNotIn {N, result};
-   set aux = 2-ndRWNotIn {N, result};
-   set rem2 = 3-rdRWNotIn {N, result};
-
     :: set next = 1-stRWNotIn {N, result};
     :: set aux  = 2-ndRWNotIn {N, result};
     :: set rem2 = 3-rdRWNotIn {N, result};
@@ -2679,14 +2698,14 @@ definition
  func Fusc_macro ( N, result ) -> Macro-Instruction equals
 
    SubFrom(result, result) ';'
-   (next := intloc 0) ';'
-   (aux := N) ';'
-   while>0 ( aux,
-             rem2 := 2 ';'
-             Divide(aux, rem2) ';'
-             if=0 ( rem2,
-                    Macro AddTo(next, result),
-                    Macro AddTo(result, next)
+   ((1-stRWNotIn {N, result}) := intloc 0) ';'
+   ((2-ndRWNotIn {N, result}) := N) ';'
+   while>0 ( 2-ndRWNotIn {N, result},
+             (3-rdRWNotIn {N, result}) := 2 ';'
+             Divide(2-ndRWNotIn {N, result}, 3-rdRWNotIn {N, result}) ';'
+             if=0 ( 3-rdRWNotIn {N, result},
+                    Macro AddTo(1-stRWNotIn {N, result}, result),
+                    Macro AddTo(result, 1-stRWNotIn {N, result})
                   )
            );
  correctness;

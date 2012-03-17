@@ -10,7 +10,7 @@ environ
       LATTICES, RELAT_1, NORMSP_1, ARYTM_3, POLYNOM3, ARYTM_1, GROUP_1,
       ALGSTR_1, ALGSTR_2, FINSEQ_1, RFINSEQ, MATRIX_2, FINSEQ_4, BOOLE,
       UNIALG_2, RLSUB_1, SETFAM_1, POLYNOM1, ALGSEQ_1, POLYALG1, REALSET1,
-      NAT_1;
+      NAT_1, VECTSP_2, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0,
       REALSET1, STRUCT_0, NAT_1, NAT_D, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1,
       FINSEQ_4, FINSOP_1, RFINSEQ, BINOP_1, BINARITH, GROUP_1, RLVECT_1,
@@ -19,12 +19,13 @@ environ
       VECTSP_4, XXREAL_0;
  constructors SETFAM_1, DOMAIN_1, BINOP_1, XXREAL_0, REAL_1, FINSOP_1, RFINSEQ,
       BINARITH, ALGSTR_1, VECTSP_4, NORMSP_1, POLYNOM1, POLYNOM3, POLYNOM5,
-      NAT_D, BHSP_1;
+      NAT_D, BHSP_1, REALSET1;
  registrations SUBSET_1, FUNCT_1, STRUCT_0, RELSET_1, VECTSP_1, ALGSTR_2,
       FINSEQ_5, ARYTM_3, BINOM, POLYNOM3, POLYNOM5, MEMBERED, REALSET1,
       XXREAL_0, NAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, RLVECT_1, GROUP_1, VECTSP_1, VECTSP_4, BINOP_1, REALSET1;
+ definitions TARSKI, RLVECT_1, GROUP_1, VECTSP_1, VECTSP_4, BINOP_1, REALSET1,
+      STRUCT_0;
  theorems TARSKI, NAT_1, RLVECT_1, VECTSP_1, BINARITH, FUNCT_1, FUNCT_2,
       FUNCOP_1, FINSEQ_1, FINSEQ_3, FINSEQ_4, FINSEQ_5, RFINSEQ, BINOP_1,
       POLYNOM1, POLYNOM3, STRUCT_0, ZFMISC_1, POLYNOM5, BINOM, RELAT_1,
@@ -38,7 +39,7 @@ definition let F be 1-sorted;
  struct ( doubleLoopStr,VectSpStr over F ) AlgebraStr over F (#
          carrier -> set,
          add, mult -> BinOp of the carrier,
-         Zero, unity -> Element of the carrier,
+         ZeroF, OneF -> Element of the carrier,
          lmult -> Function of [:the carrier of F,the carrier:],
                                       the carrier #);
 end;
@@ -469,14 +470,15 @@ A6:    1 in dom f & 1<=k & k<=i by A4,A5,FINSEQ_5:6;
     end;
 
   theorem Th5:
-   for L be add-associative right_zeroed left_unital right_complementable
+   for L be add-associative right_zeroed well-unital right_complementable
     left-distributive (non empty doubleLoopStr)
    for p be sequence of L holds
    (1_.(L))*'p = p
    proof
-    let L be add-associative right_zeroed left_unital right_complementable
+    let L be add-associative right_zeroed well-unital right_complementable
      left-distributive (non empty doubleLoopStr);
     let p be sequence of L;
+X: 1.L = 1_L by VECTSP_1:96;
         now let i be Element of NAT;
      consider r be FinSequence of the carrier of L such that
       A1: len r = i+1 and
@@ -509,7 +511,7 @@ A6:    1 in dom f & 1<=k & k<=i by A4,A5,FINSEQ_5:6;
         .= (1_.(L)).(1-'1)*p.(i+1-'1) by A3,A5
         .= (1_.(L)).(1-'1)*p.i by BINARITH:39
         .= (1_.(L)).(0)*p.i by BINARITH:51
-        .= 1_(L)*p.i by POLYNOM3:31
+        .= 1_(L)*p.i by POLYNOM3:31,X
         .= p.i by VECTSP_1:def 19;
      hence ((1_.(L))*'p).i = p.i by A2,A6,A12,RLVECT_1:10;
     end;
@@ -518,21 +520,22 @@ A6:    1 in dom f & 1<=k & k<=i by A4,A5,FINSEQ_5:6;
 
 Lm1: now
    let L be add-associative right_zeroed right_complementable
-         distributive unital (non empty doubleLoopStr);
+         distributive well-unital (non empty doubleLoopStr);
+X: 1.L = 1_L by VECTSP_1:96;
    set F = Formal-Series L;
    let x, e be Element of F;
    assume
 A1: e = 1_.L;
    reconsider a=x, b=e as sequence of L by Def2;
    thus x * e = a*'b by Def2
-   .= x by A1,POLYNOM3:36;
+   .= x by A1,POLYNOM3:36,X;
    thus e * x = b*'a by Def2
-   .= x by A1,Th5;
+   .= x by A1,Th5,X;
 end;
 
 registration
   let L be right_zeroed add-associative right_complementable
-    distributive unital (non empty doubleLoopStr);
+    distributive well-unital (non empty doubleLoopStr);
   cluster Formal-Series L -> unital;
   coherence
   proof
@@ -543,7 +546,7 @@ registration
 end;
 
 Lm2: now
-   let L be add-associative right_zeroed right_complementable unital
+   let L be add-associative right_zeroed right_complementable well-unital
          distributive (non empty doubleLoopStr);
    set F = Formal-Series L;
    reconsider e = 1_.L as Element of F by Def2;
@@ -641,10 +644,10 @@ theorem Th8:
     end;
 
 theorem Th9:
-   for L be associative left_unital (non empty doubleLoopStr)
+   for L be associative well-unital (non empty doubleLoopStr)
    for p being sequence of L holds 1_L*p = p
     proof
-     let L be associative left_unital (non empty doubleLoopStr);
+     let L be associative well-unital (non empty doubleLoopStr);
      let p be sequence of L;
      for i being Element of NAT holds ((1_L)*p).i = p.i
       proof
@@ -657,7 +660,7 @@ theorem Th9:
 
 registration
    let L be Abelian add-associative associative right_zeroed
-   right_complementable left_unital distributive (non empty doubleLoopStr);
+   right_complementable well-unital distributive (non empty doubleLoopStr);
    cluster Formal-Series L -> VectSp-like;
    coherence
    proof
@@ -1497,7 +1500,7 @@ A7: 0.Polynom-Algebra L = 0.(Polynom-Algebra L)
 end;
 
 theorem
-  for L being add-associative right_zeroed right_complementable unital
+  for L being add-associative right_zeroed right_complementable well-unital
          distributive (non empty doubleLoopStr) holds
    1_Formal-Series L = 1_.L by Lm2;
 

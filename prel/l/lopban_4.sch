@@ -33,18 +33,18 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="12">
+<Typ kind="G" nr="14">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="39"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="40"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
 <Adjective nr="43"/>
-<Adjective nr="52"/>
-<Adjective nr="71"/>
-<Adjective nr="80"/>
+<Adjective nr="44"/>
+<Adjective nr="49"/>
+<Adjective nr="58"/>
+<Adjective nr="77"/>
+<Adjective nr="86"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -93,7 +93,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="142">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -116,12 +116,12 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="142">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="132">
+<Func kind="K" nr="137">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

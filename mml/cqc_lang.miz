@@ -16,7 +16,7 @@ environ
  registrations SUBSET_1, RELSET_1, QC_LANG1, FUNCOP_1, ARYTM_3, MEMBERED,
       FUNCT_4, NAT_1, ORDINAL1;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions TARSKI, BINOP_1;
+ definitions TARSKI, BINOP_1, FUNCOP_1;
  theorems TARSKI, ENUMSET1, ZFMISC_1, FUNCT_1, FUNCT_2, FINSEQ_1, PARTFUN1,
       FUNCOP_1, QC_LANG1, QC_LANG2, QC_LANG3, FINSEQ_2, RELSET_1, FINSEQ_3,
       XBOOLE_1, FUNCT_4;
@@ -26,31 +26,6 @@ begin
 
  reserve i,j,k for Element of NAT;
 
-definition let x,y,a,b be set;
- func IFEQ(x,y,a,b) -> set equals
-:Def1: a if x = y otherwise b;
-  correctness;
-end;
-
-definition let D be non empty set; let x,y be set, a,b be Element of D;
- redefine func IFEQ(x,y,a,b) -> Element of D;
- coherence
-  proof x = y or x <> y;
-   hence thesis by Def1;
-  end;
-end;
-
-definition let x,y be set;
- func x .--> y -> set equals
-  {x} --> y;
-  coherence;
-end;
-
-registration let x,y be set;
- cluster x .--> y -> Function-like Relation-like;
- coherence;
-end;
-
 canceled 4;
 
 theorem Th5:
@@ -58,11 +33,7 @@ theorem Th5:
      by FUNCOP_1:14,19;
 
 theorem Th6:
-   for x,y be set holds (x .--> y).x = y
- proof let x,y be set;
-     x .--> y = {x} --> y & x in {x} by TARSKI:def 1;
-  hence thesis by FUNCOP_1:13;
- end;
+   for x,y be set holds (x .--> y).x = y by FUNCOP_1:87;
 
  reserve x,y for bound_QC-variable;
  reserve a for free_QC-variable;
@@ -109,6 +80,7 @@ A2:  x2 in NAT & x = [x1,x2] by QC_LANG1:def 1,ZFMISC_1:def 2;
  reserve f for Substitution;
 
 definition let l,f;
+ canceled 2;
   func Subst(l,f) -> FinSequence of QC-variables means
 :Def3: len it = len l &
  for k st 1 <= k & k <= len l holds
@@ -1218,7 +1190,7 @@ theorem Th35:
  proof assume p is universal;
   then (p.x) = IFEQ(bound_in p,x,p,All(bound_in p,(the_scope_of p).x)) by Lm3
 ;
-  hence thesis by Def1;
+  hence thesis by FUNCOP_1:def 8;
  end;
 
 theorem Th36:
@@ -1227,7 +1199,7 @@ theorem Th36:
  proof assume p is universal;
   then (p.x) = IFEQ(bound_in p,x,p,All(bound_in p,(the_scope_of p).x)) by Lm3
 ;
-  hence thesis by Def1;
+  hence thesis by FUNCOP_1:def 8;
  end;
 
 theorem Th37:
@@ -1369,70 +1341,26 @@ begin :: Addenda
  reserve x,y,i,j,k for set;
 
 theorem Th42:
- (i,j):->k = [i,j].-->k
- proof
-A1: {[i,j]} = [:{i},{j}:] by ZFMISC_1:35;
-       dom([i,j].-->k) = {[i,j]} & rng([i,j].-->k) = {k} by Th5;
-  then [i,j].-->k is Function of [:{i},{j}:],{k} by A1,FUNCT_2:def 1
-,RELSET_1:11;
-  hence thesis by FUNCT_2:def 5;
- end;
+ (i,j):->k = [i,j].-->k by FUNCT_4:84;
 
 theorem
- ((i,j):->k).(i,j) = k
- proof
-  thus ((i,j):->k).(i,j) = ([i,j].-->k).[i,j] by Th42
-         .= k by Th6;
- end;
+ ((i,j):->k).(i,j) = k by FUNCT_4:85;
 
 :: from AMI_1, 2006.03.14, A.T.
 
 theorem
- for a,b,c being set holds (a,a) --> (b,c) = a .--> c
- proof let a,b,c be set;
-A1: dom(a .-->c) = {a} by FUNCOP_1:19
-        .= dom({a} -->b) by FUNCOP_1:19;
-  thus (a,a) --> (b,c) = (a .--> b) +* (a .-->c) by FUNCT_4:def 4
-     .= a .--> c by A1,FUNCT_4:20;
- end;
+ for a,b,c being set holds (a,a) --> (b,c) = a .--> c by FUNCT_4:86;
 
 theorem
- for x,y holds x .--> y = {[x,y]}
-  proof let x,y;
-   thus x .--> y = [:{x},{y}:] by FUNCOP_1:def 2
-     .= {[x,y]} by ZFMISC_1:35;
-  end;
+ for x,y holds x .--> y = {[x,y]} by FUNCT_4:87;
 
 :: from SCMPDS_9, 2006.03.26, A.T.
 
 theorem
   for f being Function, a,b,c being set st a <> c holds
-    (f +* (a .-->b)).c = f.c
-  proof
-    let f be Function,
-        a,b,c be set such that
-A1: a <> c;
-    set g = a .-->b;
-    dom g = {a} by Th5;
-    then not c in dom g by A1,TARSKI:def 1;
-    hence (f +* g).c = f.c by FUNCT_4:12;
-  end;
+    (f +* (a .-->b)).c = f.c by FUNCT_4:88;
 
 theorem
   for f being Function, a,b,c,d being set st a <> b holds
    (f +* ((a,b)-->(c,d))) .a = c &
-   (f +* ((a,b)-->(c,d))) .b = d
-  proof
-    let f be Function,
-        a,b,c,d be set such that
-A1:   a <> b;
-    set g = (a,b)-->(c,d);
-A2: dom g = {a,b} by FUNCT_4:65;
-    then a in dom g by TARSKI:def 2;
-    hence (f +* g).a = g.a by FUNCT_4:14
-     .= c by A1,FUNCT_4:66;
-     b in dom g by A2,TARSKI:def 2;
-    hence (f +* g).b = g.b by FUNCT_4:14
-     .= d by A1,FUNCT_4:66;
-  end;
-
+   (f +* ((a,b)-->(c,d))) .b = d by FUNCT_4:89;

@@ -12,20 +12,21 @@ environ
       SCMFSA_1, SQUARE_1, PRE_FF, ARYTM_1, SFMASTR1, NAT_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0,
       FINSET_1, CARD_1, NAT_1, NAT_D, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4,
-      FUNCT_7, CQC_SIM1, PRE_FF, STRUCT_0, AMI_1, AMI_3, SCM_1, AMI_5,
+      FUNCT_7, PRE_FF, STRUCT_0, AMI_1, AMI_3, SCM_1, AMI_5,
       SCMFSA_1, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SCMFSA6B, SF_MASTR,
-      SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA8C, XXREAL_0;
- constructors DOMAIN_1, SETWISEO, XXREAL_0, NAT_1, MEMBERED, CQC_SIM1, PRE_FF,
+      SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA8C, XXREAL_0, SEQ_4;
+ constructors DOMAIN_1, SETWISEO, XXREAL_0, NAT_1, MEMBERED, SEQ_4, PRE_FF,
       SCM_1, AMI_5, SCMFSA_1, SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C,
       SCMFSA8A, SCMFSA8B, SCMFSA8C, NAT_D;
  registrations SUBSET_1, INT_1, FINSET_1, FUNCT_1, AMI_1, SCMFSA_2, SCMFSA_4,
       SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8C, CARD_3,
       RELSET_1, FRAENKEL, MEMBERED, ORDINAL1, SETFAM_1, XREAL_0, XXREAL_0,
-      SCMFSA_9, AMI_5;
+      SCMFSA_9, AMI_5, ARYTM_3, SEQ_4;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions CQC_LANG, AMI_1, AMI_2, AMI_3, SCMFSA_1, SCMFSA_2, SCMFSA7B;
+ definitions AMI_1, AMI_2, AMI_3, SCMFSA_1, SCMFSA_2, SCMFSA7B,
+  FUNCOP_1;
  theorems TARSKI, ZFMISC_1, ENUMSET1, REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2,
-      FUNCT_7, LATTICE2, GRFUNC_1, SUBSET_1, FUNCT_4, CQC_SIM1, PRE_FF,
+      FUNCT_7, LATTICE2, GRFUNC_1, SUBSET_1, FUNCT_4, SEQ_4, PRE_FF,
       PRE_CIRC, AMI_1, AMI_3, SCM_1, AMI_5, SCMFSA_2, SCMFSA_4, SCMFSA_5,
       SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B,
       SCMFSA8C, XBOOLE_0, XBOOLE_1, XREAL_1, ORDINAL1, FUNCOP_1, CQC_LANG,
@@ -36,8 +37,7 @@ begin :: Good instructions and good macro instructions
 
 definition
  let i be Instruction of SCM+FSA;
- attr i is good means
-:Def1:
+ attr i is good means :Def1:
  Macro i is good;
 end;
 
@@ -60,7 +60,7 @@ registration
  end;
  cluster MultBy(a, b) -> good;
  coherence proof
-       MultBy(a, b) does_not_destroy intloc 0 by SCMFSA7B:15;
+  MultBy(a, b) does_not_destroy intloc 0 by SCMFSA7B:15;
   hence Macro MultBy(a, b) is good by SCMFSA8C:99;
  end;
 end;
@@ -78,7 +78,7 @@ registration
  let a, b be read-write Int-Location;
  cluster Divide(a, b) -> good;
  coherence proof
-      Divide(a, b) does_not_destroy intloc 0 by SCMFSA7B:16;
+  Divide(a, b) does_not_destroy intloc 0 by SCMFSA7B:16;
   hence Macro Divide(a, b) is good by SCMFSA8C:99;
  end;
 end;
@@ -87,7 +87,7 @@ registration
  let l be Instruction-Location of SCM+FSA;
  cluster goto l -> good;
  coherence proof
-      goto l does_not_destroy intloc 0 by SCMFSA7B:17;
+  goto l does_not_destroy intloc 0 by SCMFSA7B:17;
   hence Macro goto l is good by SCMFSA8C:99;
  end;
 end;
@@ -305,7 +305,7 @@ begin :: Composition of non parahalting macro instructions
       ::           Initialized I is halting
 
 theorem Th2:
- (I +* Start-At insloc 0) | D = {}
+ (I +* Start-At insloc 0) | (Int-Locations \/ FinSeq-Locations) = {}
 proof
   set SAt = Start-At insloc 0;
    set IAt = I +* SAt;
@@ -1074,11 +1074,12 @@ then A6: IExec(I ';' J,s) =
 end;
 
 theorem
-    (Ig is parahalting or
+ (Ig is parahalting or
               Ig is_halting_on Initialize s & Ig is_closed_on Initialize s) &
  (J is parahalting or
               J is_halting_on IExec(Ig, s) & J is_closed_on IExec(Ig, s))
-  implies IExec(Ig ';' J, s) | D = IExec(J, IExec(Ig, s)) | D
+  implies IExec(Ig ';' J, s) | (Int-Locations \/ FinSeq-Locations) =
+    IExec(J, IExec(Ig, s)) | (Int-Locations \/ FinSeq-Locations)
 proof set I = Ig; assume
 A1: (I is parahalting or
               I is_halting_on Initialize s & I is_closed_on Initialize s) &
@@ -1092,7 +1093,8 @@ end;
 theorem Th11:
     Ig is parahalting
  or Ig is_closed_on Initialize s & Ig is_halting_on Initialize s
- implies (Initialize IExec(Ig, s)) | D = IExec(Ig, s) | D
+ implies (Initialize IExec(Ig, s)) | (Int-Locations \/ FinSeq-Locations) =
+   IExec(Ig, s) | (Int-Locations \/ FinSeq-Locations)
 proof set I = Ig; assume that
 A1: I is parahalting or
            I is_closed_on Initialize s & I is_halting_on Initialize s;
@@ -1139,7 +1141,7 @@ end;
 
 theorem Th12:
  Ig is parahalting or
-          Ig is_halting_on Initialize s & Ig is_closed_on Initialize s
+       Ig is_halting_on Initialize s & Ig is_closed_on Initialize s
   implies IExec(Ig ';' j, s).a = Exec(j, IExec(Ig, s)).a
 proof set I = Ig; assume that
 A1: I is parahalting or
@@ -1180,7 +1182,8 @@ end;
 theorem
     Ig is parahalting or
     Ig is_halting_on Initialize s & Ig is_closed_on Initialize s
-  implies IExec(Ig ';' j, s) | D = Exec(j, IExec(Ig, s)) | D
+  implies IExec(Ig ';' j, s) | (Int-Locations \/ FinSeq-Locations) =
+    Exec(j, IExec(Ig, s)) | (Int-Locations \/ FinSeq-Locations)
 proof set I = Ig; assume
 A1: I is parahalting or
           I is_halting_on Initialize s & I is_closed_on Initialize s;
@@ -1231,7 +1234,8 @@ theorem
     J is parahalting or
        J is_halting_on Exec(i, Initialize s) &
        J is_closed_on Exec(i, Initialize s)
-  implies IExec(i ';' J, s) | D = IExec(J, Exec(i, Initialize s)) | D
+  implies IExec(i ';' J, s) | (Int-Locations \/ FinSeq-Locations) =
+    IExec(J, Exec(i, Initialize s)) | (Int-Locations \/ FinSeq-Locations)
 proof assume
 A1: J is parahalting or
           J is_halting_on Exec(i, Initialize s) &
@@ -1382,7 +1386,7 @@ A13:  for n st X[n] holds X[n+1]
   A14: f.n is infinite;
     then reconsider sn = f.n as non empty Subset of NAT by Lm3;
   A15: f.(n+1) = sn \ {min sn} by A7;
-        min sn in sn by CQC_SIM1:def 8;
+        min sn in sn by SEQ_4:def 6;
      then A16: {min sn} c= sn by ZFMISC_1:37;
     assume f.(n+1) is finite;
        then reconsider sn1 = f.(n+1) as finite set;
@@ -1466,9 +1470,9 @@ proof
   set sn = RL.n;
   set sn1 = RL.(n+1);
 A1: sn1 = sn \ {min sn} by Def2;
-A2: min sn in sn & min sn1 in sn1 by CQC_SIM1:def 8;
+A2: min sn in sn & min sn1 in sn1 by SEQ_4:def 6;
       sn1 c= sn by A1,XBOOLE_1:36;
-then A3: min sn <= min sn1 by CQC_SIM1:19;
+then A3: min sn <= min sn1 by SEQ_4:64;
  assume min ((RWNotIn-seq L).n) >= min ((RWNotIn-seq L).(n+1));
    then min sn = min sn1 by A3,XXREAL_0:1;
    then min sn1 in {min sn} by TARSKI:def 1;
@@ -1522,7 +1526,7 @@ registration
  coherence proof
   set FNI = n-thRWNotIn L;
   set sn = (RWNotIn-seq L).n;
-      min sn in sn by CQC_SIM1:def 8;
+      min sn in sn by SEQ_4:def 6;
    then min sn <> 0 by Th18;
    then FNI <> intloc 0;
   hence thesis by SF_MASTR:def 5;
@@ -1533,7 +1537,7 @@ theorem Th21:
  not n-thRWNotIn L in L
 proof
   set FNI = n-thRWNotIn L; set sn = (RWNotIn-seq L).n;
-      min sn in sn by CQC_SIM1:def 8;
+      min sn in sn by SEQ_4:def 6;
  hence not FNI in L by Th18;
 end;
 
@@ -1589,9 +1593,6 @@ end;
 definition
  let N, result be Int-Location;
 
-  set next = 1-stRWNotIn {N, result};
-  set aux = 1-stRWNotIn UsedIntLoc swap(result, next);
-  set Nsave = 2-ndRWNotIn UsedIntLoc swap(result, next);
       ::  set next = 1-stRWNotIn {N, result};
       ::      local variable
       ::  set aux  = 1-stRWNotIn UsedIntLoc swap(result, next);
@@ -1605,12 +1606,15 @@ definition
 
  func Fib_macro (N, result) -> Macro-Instruction equals
 
-   Nsave := N ';'
+   2-ndRWNotIn UsedIntLoc swap(result, 1-stRWNotIn {N, result}) := N ';'
    (SubFrom(result, result)) ';'
-   (next := intloc 0) ';'
-   (aux := Nsave) ';'
-   Times( aux, AddTo(result, next) ';' swap(result, next) ) ';'
-   (N := Nsave);
+   (1-stRWNotIn {N, result} := intloc 0) ';'
+   ((1-stRWNotIn UsedIntLoc swap(result, 1-stRWNotIn {N, result})) :=
+       (2-ndRWNotIn UsedIntLoc swap(result, 1-stRWNotIn {N, result}))) ';'
+   Times( 1-stRWNotIn UsedIntLoc swap(result, 1-stRWNotIn {N, result}),
+     AddTo(result, 1-stRWNotIn {N, result}) ';'
+   swap(result, 1-stRWNotIn {N, result}) ) ';'
+   (N := (2-ndRWNotIn UsedIntLoc swap(result, 1-stRWNotIn {N, result})));
  correctness;
 end;
 

@@ -10,7 +10,7 @@ environ
       FUNCT_1, VECTSP_1, QC_LANG1, SETWISEO, RLVECT_1, FINSEQ_2, GROUP_1,
       GROUP_4, RELAT_1, ARYTM_1, FINSET_1, CARD_1, GROUP_2, TARSKI, ARYTM_3,
       FILTER_0, RLSUB_1, GRAPH_1, GR_CY_1, CARD_3, COMPLEX1, COMPLSP1,
-      SUBSET_1, BOOLE;
+      SUBSET_1, BOOLE, XREAL_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       RELAT_1, FUNCT_1, REAL_1, SEQ_1, FUNCT_2, CARD_1, FINSET_1, BINOP_1,
       DOMAIN_1, XREAL_0, INT_1, FINSEQ_1, FINSUB_1, FINSOP_1, SETWISEO,
@@ -24,12 +24,12 @@ environ
       ORDINAL1, RVSUM_1, SETWISEO;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions GROUP_1, FUNCT_1, TARSKI, BINOP_1, REALSET1, FINSOP_1, FINSEQ_2,
-      FINSEQ_1, RVSUM_1, FVSUM_1, GROUP_4, SETWOP_2;
+      FINSEQ_1, RVSUM_1, FVSUM_1, GROUP_4, SETWOP_2, CARD_1;
  theorems BINOP_1, INT_1, INT_2, NAT_1, REAL_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
       ZFMISC_1, FUNCT_2, FUNCOP_1, GROUP_1, GROUP_2, GROUP_4, TARSKI, FUNCT_1,
       CARD_1, WELLORD2, RLVECT_1, FINSOP_1, RELSET_1, XBOOLE_0, XBOOLE_1,
       RELAT_1, BINOP_2, NUMBERS, SETWISEO, XREAL_1, XXREAL_0, ORDINAL1,
-      RVSUM_1, SETWOP_2, FINSEQ_3, NAT_D;
+      RVSUM_1, SETWOP_2, FINSEQ_3, NAT_D, STRUCT_0, AXIOMS, ALGSEQ_1, SUBSET_1;
  schemes BINOP_1, NAT_1, FINSEQ_1, FINSEQ_2;
 
 begin
@@ -43,27 +43,14 @@ begin
  reserve F for FinSequence of the carrier of G;
  reserve I for FinSequence of INT;
 
-definition let n be natural number such that A1:n > 0;
- func Segm (n) -> non empty Subset of NAT equals
-:Def1:  {p: p<n};
-coherence
-proof
- set X={p:p<n};
-     0 in X by A1;
- then reconsider X as non empty set;
-     X c= NAT
+registration let n be non zero natural number;
+ cluster Segm n -> non empty;
+ coherence
   proof
-       for x holds x in X implies x in NAT
-    proof
-     let x be set;
-     assume x in X;
-     then ex p being Element of NAT st p=x & p<n;
-     hence thesis;
-    end;
-   hence thesis by TARSKI:def 3;
- end;
- hence thesis;
- end;
+    0 < n;
+    then 0 in Segm n by CARD_1:98;
+   hence thesis;
+  end;
 end;
 
 Lm1:
@@ -73,13 +60,7 @@ canceled 9;
 
 theorem Th10:
   for n,s being natural number st n > 0 holds s in Segm (n) iff s < n
- proof
-  let n,s be natural number;
-  assume A1: n>0;
-A2: s is Element of NAT by ORDINAL1:def 13;
-      s in { p : p<n } iff ex p st s=p & p<n;
-  hence thesis by A1,A2,Def1;
- end;
+                 by CARD_1:98;
 
 canceled;
 
@@ -92,7 +73,7 @@ theorem Th13:
       now let x;
   thus x in Segm(1) implies x in { 0 }
     proof assume A1:x in Segm(1);
-         Segm(1) = { p : p < 1 } by Def1;
+         Segm(1) = { p : p < 1 } by AXIOMS:30;
      then consider p such that
      A2:x = p & (p < 1) by A1;
          p < 0 + 1 by A2;
@@ -112,6 +93,7 @@ end;
        :::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 definition
+ canceled;
   redefine func addint means
   for i1,i2 being Element of INT holds
   it.(i1,i2) = addreal.(i1,i2);
@@ -476,7 +458,7 @@ A15: rng F c= the carrier of gr {a}
        assume y in rng F;
        then consider n such that A16:y= a|^n by A12;
            y in gr {a} by A16,Th25;
-       hence thesis by RLVECT_1:def 1;
+       hence thesis by STRUCT_0:def 5;
       end;
      hence thesis by TARSKI:def 3;
    end;
@@ -817,7 +799,7 @@ theorem Th31:
           a = 1_G by A2;
       then a in {1_G} by TARSKI:def 1;
       then a in the carrier of (1).G by GROUP_2:def 7;
-      hence thesis by RLVECT_1:def 1;
+      hence thesis by STRUCT_0:def 5;
      end;
    then G = (1).G by GROUP_2:71;
    hence contradiction by A1,GROUP_2:81;
@@ -887,19 +869,39 @@ registration let a,b be Element of INT.Group;
   end;
 end;
 
+registration let n be natural number;
+ cluster -> natural Element of Segm n;
+ coherence
+  proof per cases;
+   suppose n = 0;
+     then Segm n = {} by ALGSEQ_1:11;
+    hence thesis by SUBSET_1:def 2;
+   end;
+   suppose
+S:  n > 0;
+    let x be Element of Segm n;
+     reconsider n as non zero natural number by S;
+      x in Segm n;
+      then x in NAT;
+    hence thesis by ORDINAL1:def 13;
+   end;
+  end;
+end;
+
 definition let n be natural number such that A1:n > 0;
  func addint(n) -> BinOp of Segm(n) means
  :Def5: for k,l being Element of Segm(n) holds
   it.(k,l) = (k+l) mod n;
  existence
   proof
+   reconsider n as non zero natural number by A1;
     defpred P[Element of Segm n,Element of Segm n,set] means
       $3 = ($1+$2) mod n;
     A2: for k,l being Element of Segm(n) ex c being Element of Segm(n) st
       P[k,l,c]
        proof
        let k,l be Element of Segm(n);
-       reconsider k'=k,l'=l as Element of NAT;
+       reconsider k'=k,l'=l as Element of NAT by ORDINAL1:def 13;
             ((k'+l') mod n) < n by A1,NAT_D:1;
         then reconsider c = (k'+l') mod n as Element of Segm(n) by Th10;
        take c;
@@ -927,11 +929,11 @@ definition let n be natural number such that A1:n > 0;
 end;
 
 theorem Th34:
-  for n being natural number st n > 0 holds
+  for n being non zero natural number holds
   HGrStr(#Segm(n),addint(n)#) is associative Group-like
   proof
-   let n be natural number;
-   assume A1:n>0;
+   let n be non zero natural number;
+A1: n>0;
    set G = HGrStr (# Segm(n), addint(n) #);
    A2: for h,g be Element of G, A,B be Element of Segm(n)
    st h = A & g = B
@@ -1010,7 +1012,11 @@ thus g * h = e
 definition let n be natural number such that A1: n > 0;
  func INT.Group(n) -> strict Group equals
 :Def6: HGrStr(#Segm(n),addint(n)#);
-coherence by A1,Th34;
+coherence
+ proof reconsider n as non zero natural number by A1;
+   HGrStr(#Segm n, addint n#) is associative Group-like by Th34;
+  hence thesis;
+ end;
 end;
 
 theorem Th35:
@@ -1045,7 +1051,7 @@ theorem Th36:
    proof
     let h be Element of INT.Group(n);
     reconsider A = h as Element of Segm(n) by A2;
-    reconsider A as Element of NAT;
+    reconsider A as Element of NAT by ORDINAL1:def 13;
     A4:A < n by A1,Th10;
     A5: h * e = (A + 0) mod n by A3
              .= h by A4,NAT_D:24;
@@ -1133,9 +1139,9 @@ INT.Group is Subgroup of G1
         let x;
         assume that A3: x in the carrier of (Omega).INT.Group and
         A4: not x in the carrier of G1;
-            x in (Omega).INT.Group by A3,RLVECT_1:def 1;
+            x in (Omega).INT.Group by A3,STRUCT_0:def 5;
         then x in INT.Group by GROUP_2:def 8;
-        then x in INT by RLVECT_1:def 1;
+        then x in INT by STRUCT_0:def 5;
         then reconsider x'=x as Integer by INT_1:def 2;
             h in {h} by TARSKI:def 1;
         then reconsider h''=h as Element of G1 by A2;
@@ -1212,7 +1218,7 @@ theorem Th41:
           for b being Element of G ex j1 st b=a|^j1
        proof
         let b be Element of G;
-            b in gr {a} by A1,RLVECT_1:def 1;
+            b in gr {a} by A1,STRUCT_0:def 5;
         hence thesis by Th25;
        end;
      hence thesis;

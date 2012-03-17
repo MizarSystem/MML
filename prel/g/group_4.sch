@@ -25,11 +25,11 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="3">
+<Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="31"/>
-<Adjective nr="32"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -37,7 +37,7 @@
 <For>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="33"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -61,7 +61,7 @@
 <For>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="33"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -90,7 +90,7 @@
 <For>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="33"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -104,11 +104,11 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="3">
+<Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="31"/>
-<Adjective nr="32"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -121,14 +121,14 @@
 <And>
 <Pred kind="R" nr="3">
 <Var nr="1"/>
-<Func kind="K" nr="133">
+<Func kind="K" nr="137">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
 <For>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="33"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>

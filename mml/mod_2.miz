@@ -18,10 +18,10 @@ environ
  registrations VECTSP_1, STRUCT_0, RELSET_1, SUBSET_1, ALGSTR_1, XBOOLE_0,
       FUNCT_2;
  requirements SUBSET, BOOLE, NUMERALS;
- definitions RLVECT_1, STRUCT_0, GROUP_1, GRCAT_1;
+ definitions RLVECT_1, STRUCT_0, GROUP_1, GRCAT_1, VECTSP_1;
  theorems BINOP_1, CARD_2, CLASSES2, ENUMSET1, GRCAT_1, FUNCT_2, ORDINAL1,
       VECTSP_1, RLVECT_1, TARSKI, RELAT_1, ALGSTR_1, GROUP_1, FUNCOP_1,
-      FUNCT_1;
+      FUNCT_1, STRUCT_0, VECTSP_2;
  schemes FUNCT_2, BINOP_1;
 
 begin
@@ -42,13 +42,9 @@ Lm2: VectSpStr (#{{}},op2,op0,pr2(the carrier of R,{{}})#)
  proof
    set G = VectSpStr (#{{}},op2,op0,pr2(the carrier of R,{{}})#);
    set a = 0.L_Trivial;
-     A1: now let a,b be Element of G;
-      let x,y be Element of L_Trivial;
-       assume A2: x = a & b = y;
-      thus a + b = x + y by A2,ALGSTR_1:def 4;
-     end;
-A3: 0.G = 0.L_Trivial by Lm1,ALGSTR_1:def 4
-;
+     A1: for a,b being Element of G
+      for x,y being Element of L_Trivial st x = a & b = y
+      holds a + b = x + y by ALGSTR_1:def 4;
 A4:  G is Abelian add-associative right_zeroed right_complementable
       proof
        thus G is Abelian
@@ -56,20 +52,19 @@ A4:  G is Abelian add-associative right_zeroed right_complementable
         reconsider x = a, y = b as Element of L_Trivial
  by ALGSTR_1:def 4;
          thus a + b = y + x by A1
-                   .= b + a by A1;
+                   .= b + a by ALGSTR_1:def 4;
         end;
        hereby let a,b,c be Element of G;
         reconsider x = a, y = b, z = c as
           Element of L_Trivial by ALGSTR_1:def 4;
-        A5: a + b = x + y & b + c = y + z by A1;
-       hence a + b + c = x + y + z by A1
+       thus a + b + c = x + y + z by ALGSTR_1:def 4
                      .= x + (y + z) by RLVECT_1:def 6
-                     .= a + (b + c) by A1,A5;
+                     .= a + (b + c) by ALGSTR_1:def 4;
        end;
        hereby let a be Element of G;
         reconsider x = a as Element of L_Trivial
  by ALGSTR_1:def 4;
-       thus a + 0.G = x + 0.L_Trivial by A1,A3
+       thus a + 0.G = x + 0.L_Trivial by ALGSTR_1:def 4,Lm1
                     .= a by RLVECT_1:10;
        end;
        let a be Element of G;
@@ -79,17 +74,18 @@ A4:  G is Abelian add-associative right_zeroed right_complementable
 A6:     x + b = 0.L_Trivial by RLVECT_1:def 8;
        reconsider b' = b as Element of G by ALGSTR_1:def 4;
        take b';
-       thus a + b' = 0.G by A1,A3,A6;
+       thus a + b' = 0.G by ALGSTR_1:def 4,Lm1,A6;
       end;
+X: 1_R = 1.R by VECTSP_2:85;
       now
      let x,y be Scalar of R, v,w be Vector of G;
         x*(v+w) = a & x*v+x*w = a &
      (x+y)*v = a & x*v+y*v = a &
      (x*y)*v = a & x*(y*v) = a &
-     (1_R)*v = a & v = a by ALGSTR_1:def 4,GRCAT_1:8;
+     (1.R)*v = a & v = a by ALGSTR_1:def 4,GRCAT_1:8;
      hence x*(v+w) = x*v+x*w & (x+y)*v = x*v+y*v
-           & (x*y)*v = x*(y*v) & (1_R)*v = v;end;
-  hence thesis by A4,VECTSP_1:def 26;
+           & (x*y)*v = x*(y*v) & (1.R)*v = v;end;
+  hence thesis by A4,VECTSP_1:def 26,X;
 end;
 
 definition let R;
@@ -496,8 +492,8 @@ proof
   A1: G = LModMorphismStr(#G2,G3,g#) & F = LModMorphismStr(#G1,G2,f#);
      dom(G) = G2 by Def11
         .= cod(F) by Def11;
-  then G*F = LModMorphismStr(#G1,G3,g*f#) by A1,Def13;
-  hence thesis;
+:::  then G*F = LModMorphismStr(#G1,G3,g*f#) by A1,Def13;
+  hence thesis by A1,Def13;
 end;
 
  theorem
@@ -783,45 +779,22 @@ A1: e = 1;
 end;
 
 registration
-  cluster Z3 -> unital;
+  cluster Z3 -> well-unital;
 coherence
-proof
-  reconsider e = 1 as Element of Z3;
-  take e;
+proof let x be Element of Z3;
   thus thesis by Lm6;
 end;
-end;
-
-Lm7:
-1_Z3 = 1
-proof
-  reconsider e = 1 as Element of Z3;
-  for h being Element of Z3 holds h * e = h & e * h = h by Lm6;
-  hence thesis by GROUP_1:def 5;
 end;
 
 canceled;
 
 theorem
 Th32: 0.Z3 = 0
-  & 1_Z3 = 1
+  & 1.Z3 = 1
   & 0.Z3 is Element of {0,1,2}
-  & 1_Z3 is Element of {0,1,2}
+  & 1.Z3 is Element of {0,1,2}
   & the add of Z3 = add3
-  & the mult of Z3 = mult3
- by Lm7;
-
-Lm8:
-  for x,y being Scalar of Z3, X,Y being Element of {0,1,2}
-     st X=x & Y=y holds
-        x+y = X+Y
-      & x*y = X*Y
- proof
-   let x,y be Scalar of Z3, X,Y be Element of {0,1,2}; assume
-   A1: X=x & Y=y;
-   hence x+y = X+Y by Def18;
-   thus x*y = X*Y by  A1,Def19;
- end;
+  & the mult of Z3 = mult3;
 
 Lm9: for x,y,z being Scalar of Z3, X,Y,Z being Element of {0,1,2}
      st X=x & Y=y & Z=z holds
@@ -832,8 +805,8 @@ Lm9: for x,y,z being Scalar of Z3, X,Y,Z being Element of {0,1,2}
  proof
    let x,y,z be Scalar of Z3, X,Y,Z be Element of {0,1,2}; assume
    A1: X=x & Y=y & Z=z;
-   then x+y = X+Y & y+z = Y+Z & x*y = X*Y & y*z = Y*Z by Lm8;
-   hence thesis by A1,Lm8;
+   then x+y = X+Y & y+z = Y+Z & x*y = X*Y & y*z = Y*Z by Def18,Def19;
+   hence thesis by A1,Def18,Def19;
  end;
 
 Lm10: for x,y,z,a being Element of {0,1,2} st a = 0 holds
@@ -924,7 +897,7 @@ registration
     proof
       let x be Element of Z3;
       reconsider X=x,a=0 as Element of {0,1,2} by Def23;
-      thus x+0.Z3 = X+a by Lm8
+      thus x+0.Z3 = X+a by Def18
         .= x by Lm10;
     end;
     let x be Element of Z3;
@@ -938,17 +911,17 @@ A1:  y' = -x' by Def20;
       per cases by ENUMSET1:def 1;
       suppose A2:x = 0;
 then A3:    y' = 0 by A1,Def15;
-      thus x+y = x'+y' by Lm8
+      thus x+y = x'+y' by Def18
               .= 0.Z3 by A2,A3,Def16;
       end;
       suppose A4:x = 1;
 then A5:    y' = 2 by A1,Def15;
-      thus x+y = x'+y' by Lm8
+      thus x+y = x'+y' by Def18
               .= 0.Z3 by A4,A5,Def16;
       end;
       suppose A6:x = 2;
 then A7:    y' = 1 by A1,Def15;
-      thus x+y = x'+y' by Lm8
+      thus x+y = x'+y' by Def18
               .= 0.Z3 by A6,A7,Def16;
     end;
     end;
@@ -1160,9 +1133,9 @@ Th36: for F being non empty doubleLoopStr st for x,y,z being Scalar of F holds
             x+(-x) = (0.F) &
             x*y = y*x &
             (x*y)*z = x*(y*z) &
-            1_F*x = x &
-            (x<>(0.F) implies ex y be Scalar of F st x*y = 1_F) &
-            0.F <> 1_F &
+            1.F*x = x & x*(1.F) = x &
+            (x<>(0.F) implies ex y be Scalar of F st x*y = 1.F) &
+            0.F <> 1.F &
             x*(y+z) = x*y+x*z holds F is Field
  proof
    let F be non empty doubleLoopStr such that
@@ -1170,46 +1143,59 @@ Th36: for F being non empty doubleLoopStr st for x,y,z being Scalar of F holds
             x+y = y+x & (x+y)+z = x+(y+z) &
             x+(0.F) = x & x+(-x) = (0.F) &
             x*y = y*x & (x*y)*z = x*(y*z) &
-            (1_F)*x = x &
-            (x<>(0.F) implies ex y be Scalar of F st x*y = 1_F) &
-            0.F <> 1_F & x*(y+z) = x*y+x*z;
+            (1.F)*x = x & x*(1.F) = x &
+            (x<>(0.F) implies ex y be Scalar of F st x*y = 1.F) &
+            0.F <> 1.F & x*(y+z) = x*y+x*z;
 A2:now
      let x,y,z be Scalar of F;
      thus x+y = y+x & (x+y)+z = x+(y+z) &
             x+(0.F) = x & x+(-x) = (0.F) &
             x*y = y*x & (x*y)*z = x*(y*z) &
-            (1_F)*x = x &
-            (x<>(0.F) implies ex y be Scalar of F st x*y = 1_F) &
-            0.F <> 1_F & x*(y+z) = x*y+x*z by A1;
+            (1.F)*x = x & x*(1.F) = x &
+            (x<>(0.F) implies ex y be Scalar of F st x*y = 1.F) &
+            0.F <> 1.F & x*(y+z) = x*y+x*z by A1;
      thus (y+z)*x = x*(y+z) by A1
                  .= x*y + x*z by A1
                  .= y*x + x*z by A1
                  .= y*x + z*x by A1;
      end;
-        F is right_complementable
+X:     F is well-unital
+         by A2,GROUP_1:def 4,def 16,RLVECT_1:def 5,
+def 6,def 7
+,VECTSP_1:def 18,def 19,def 20,def 21,def 16, STRUCT_0:def 8;
+Z:  F is right_complementable
      proof
        let v be Element of F;
        take -v;
        thus v + -v = 0.F by A2;
      end;
-   hence F is Field by A2,GROUP_1:def 4,def 16,RLVECT_1:def 5,
+    F is Field-like
+         by A2,GROUP_1:def 4,def 16,RLVECT_1:def 5,
 def 6,def 7
-,VECTSP_1:def 18,def 19,def 20,def 21;
+,VECTSP_1:def 18,def 19,def 20,def 21,def 16, STRUCT_0:def 8,X,Z;
+   hence F is add-associative right_zeroed right_complementable
+    Abelian commutative associative well-unital distributive
+      Field-like non degenerated (non empty doubleLoopStr)
+         by A2,GROUP_1:def 4,def 16,RLVECT_1:def 5,
+def 6,def 7
+,VECTSP_1:def 18,def 19,def 20,def 21,def 16, STRUCT_0:def 8,X,Z;
+
  end;
 
 theorem
 Th37: Z3 is Fanoian Field
  proof
    set F = Z3;
-   reconsider a = 0.F, b = 1_F as Element of {0,1,2};
+X: 1_F = 1.F by VECTSP_2:85;
+   reconsider a = 0.F, b = 1.F as Element of {0,1,2};
       now
      let x,y,z be Scalar of Z3;
      thus x+y = y+x & (x+y)+z = x+(y+z) &
             x+(0.Z3) = x & x+(-x) = (0.Z3) &
             x*y = y*x & (x*y)*z = x*(y*z) &
-            (1_Z3)*x = x &
-            (x<>0.Z3 implies ex y be Scalar of Z3 st x*y = 1_Z3) &
-            0.Z3 <> 1_Z3 & x*(y+z) = x*y+x*z
+            (1.Z3)*x = x & x*(1.Z3) = x &
+            (x<>0.Z3 implies ex y be Scalar of Z3 st x*y = 1.Z3) &
+            0.Z3 <> 1.Z3 & x*(y+z) = x*y+x*z
        proof
          reconsider X=x, Y=y, Z=z as Element of {0,1,2};
          thus x+y = X+Y by Th33
@@ -1229,32 +1215,35 @@ Th37: Z3 is Fanoian Field
          thus (x*y)*z = (X*Y)*Z by Th34
                      .= X*(Y*Z) by Th35
                      .= x*(y*z) by Th34;
-         thus (1_Z3)*x = b*X by Th33
-                      .= x by Th32,Th35;
-         thus x <> 0.Z3 implies ex y being Scalar of Z3 st x*y = 1_Z3
+         thus (1.Z3)*x = b*X by Th33
+                      .= x by Th35;
+         thus x*(1.Z3) = X*b by Th33
+                      .= b*X by Th35
+                      .= x by Th35;
+         thus x <> 0.Z3 implies ex y being Scalar of Z3 st x*y = 1.Z3
           proof
             assume x <> 0.Z3;
             then consider Y being Element of {0,1,2} such that
-            A1: X*Y = b by Th32,Th35;
+            A1: X*Y = b by Th35;
             reconsider y=Y as Scalar of Z3;
             take y;
             thus thesis by A1,Th33;
           end;
-         thus 0.Z3 <> 1_Z3 by Th32;
+         thus 0.Z3 <> 1.Z3;
          A2: y+z = Y+Z & x*y = X*Y & x*z = X*Z by Th33;
          hence x*(y+z) = X*(Y+Z) by Th33
                      .= X*Y + X*Z by Th35
                      .= x*y+x*z by A2,Th33;
        end;end;
    then reconsider F as Field by Th36;
-      1_F + 1_F = b + b by Def18
-            .= 2 by Def16,Th32;
-   hence thesis by Th32,VECTSP_1:def 29;
+      1.F + 1.F = b + b by Def18
+            .= 2 by Def16;
+   hence thesis by Th32,VECTSP_1:def 29,X;
  end;
 
 registration
  cluster Z3 -> Fanoian add-associative right_zeroed right_complementable
-    Abelian commutative associative left_unital distributive Field-like;
+    Abelian commutative associative well-unital distributive Field-like;
  coherence by Th37;
 end;
 

@@ -28,7 +28,7 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="198"/>
+<Func kind="K" nr="200"/>
 <Cluster>
 <Adjective nr="18"/>
 <Adjective nr="19"/>

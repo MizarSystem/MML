@@ -52,45 +52,45 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="90">
+<Adjective nr="96">
 <Func kind="U" nr="1">
-<Func kind="K" nr="228">
+<Func kind="K" nr="230">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="91"/>
-<Adjective nr="92"/>
-<Adjective nr="96"/>
 <Adjective nr="97"/>
+<Adjective nr="98"/>
+<Adjective nr="102"/>
+<Adjective nr="103"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="228">
+<Func kind="K" nr="230">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="275">
+<Func kind="K" nr="277">
 <Num nr="2"/>
-<Func kind="K" nr="262">
+<Func kind="K" nr="264">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="39">
-<Func kind="K" nr="228">
-<Num nr="2"/>
-</Func>
-</Adjective>
 <Adjective nr="43">
-<Func kind="K" nr="228">
+<Func kind="K" nr="230">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="87">
-<Func kind="K" nr="228">
+<Adjective nr="47">
+<Func kind="K" nr="230">
+<Num nr="2"/>
+</Func>
+</Adjective>
+<Adjective nr="93">
+<Func kind="K" nr="230">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -100,11 +100,11 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="108"/>
+<Adjective nr="114"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="228">
+<Func kind="K" nr="230">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -115,28 +115,28 @@
 <Func kind="K" nr="66"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="166">
-<Func kind="K" nr="228">
+<Func kind="K" nr="170">
+<Func kind="K" nr="230">
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="274">
-<Func kind="K" nr="282">
+<Func kind="K" nr="276">
+<Func kind="K" nr="284">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="40">
-<Func kind="K" nr="228">
+<Adjective nr="44">
+<Func kind="K" nr="230">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="98">
+<Adjective nr="104">
 <Num nr="2"/>
 </Adjective>
-<Adjective nr="104">
-<Func kind="K" nr="228">
+<Adjective nr="110">
+<Func kind="K" nr="230">
 <Num nr="2"/>
 </Func>
 </Adjective>

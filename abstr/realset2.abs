@@ -7,78 +7,33 @@
 environ
 
  vocabularies BOOLE, REALSET1, FUNCT_1, RELAT_1, BINOP_1, RLVECT_1, QC_LANG1,
-      VECTSP_1, REALSET2, NAT_1, FUNCOP_1, FUNCT_4, CAT_1, FUNCT_7, GROUP_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      REALSET1, FUNCOP_1, FUNCT_2, BINOP_1, FUNCT_4, FUNCT_7, STRUCT_0,
-      RLVECT_1, GROUP_1, VECTSP_1;
+      VECTSP_1, REALSET2, NAT_1, FUNCOP_1, FUNCT_4, CAT_1, FUNCT_7, GROUP_1,
+      LATTICES, ORDINAL2, XREAL_0, ARYTM_1, ALGSTR_2, MOD_1, VECTSP_2,
+      STRUCT_0;
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1,
+      FUNCT_1, REALSET1, FUNCOP_1, FUNCT_2, BINOP_1, FUNCT_4, FUNCT_7,
+      ORDINAL1, XCMPLX_0, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1;
  constructors ENUMSET1, BINOP_1, REALSET1, VECTSP_1, NAT_D, FUNCOP_1, FUNCT_4,
-      FUNCT_7;
+      FUNCT_7, ORDINAL1, XXREAL_0, XCMPLX_0, VECTSP_2, DOMAIN_1, PARTFUN1,
+      FUNCT_3;
  registrations REALSET1, RELSET_1, SUBSET_1, XBOOLE_0, RLVECT_1, GROUP_1,
-      VECTSP_1, STRUCT_0, FUNCOP_1;
- requirements SUBSET, BOOLE;
+      VECTSP_1, STRUCT_0, FUNCOP_1, ARYTM_3, XCMPLX_0;
+ requirements SUBSET, BOOLE, NUMERALS;
 
 
 begin
 
-reserve x,y for set;
-
 definition
-  let IT be LoopStr;
-  attr IT is zeroed means
-:: REALSET2:def 1
-                 for a being Element of IT holds
-                      (the add of IT).(a,0.IT) = a &
-                      (the add of IT).(0.IT,a) = a;
-  attr IT is complementable means
-:: REALSET2:def 2
-                 for a being Element of IT
-                  ex b being Element of IT st
-                      (the add of IT).(a,b) = 0.IT &
-                      (the add of IT).(b,a) = 0.IT;
-end;
-
-registration
- cluster strict Abelian add-associative zeroed
-                        complementable (non empty LoopStr);
-end;
-
-definition
-   mode AbGroup is Abelian add-associative zeroed complementable
-    (non empty LoopStr);
-end;
-
-definition
-  canceled 2;
-  let IT be 1-sorted;
-  attr IT is trivial means
-:: REALSET2:def 5
-   the carrier of IT is trivial;
-end;
-
-registration
- cluster trivial 1-sorted;
-end;
-
-registration
- cluster non trivial strict doubleLoopStr;
-end;
-
-definition
- canceled;
- let IT be 1-sorted;
- redefine attr IT is trivial means
-:: REALSET2:def 7
-     for x,y being Element of IT holds x = y;
-end;
-
-definition
+  canceled 7;
  func add_2 -> BinOp of 2 equals
 :: REALSET2:def 8
-  (0,0) .--> 0 +* (0,1) .--> 1 +* (1,0) .--> 1 +* (1,1) .--> 0;
+  ((0,0) .--> 0) +* ((0,1).-->1) +* ((1,0).-->1) +* ((1,1).-->0);
  func mult_2 -> BinOp of 2 equals
 :: REALSET2:def 9
-  (0,0) .--> 0 +* (0,1) .--> 0 +* (1,0) .--> 0 +* (1,1) .--> 1;
+  ((0,0).-->0) +* ((0,1).-->0) +* ((1,0).-->0) +* ((1,1).-->1);
 end;
+
+reserve x,y for set;
 
 definition
  func dL-Z_2 -> doubleLoopStr equals
@@ -87,26 +42,39 @@ definition
 end;
 
 registration
- cluster dL-Z_2 -> strict non empty;
+ cluster dL-Z_2 -> strict non empty non degenerated;
+end;
+
+registration
+ cluster dL-Z_2 -> add-associative distributive;
+end;
+
+registration
+ cluster add-associative
+  (non trivial non empty strict doubleLoopStr);
+end;
+
+registration
+ cluster -> natural Element of dL-Z_2;
+end;
+
+registration
+ cluster zero Element of dL-Z_2;
+ cluster non zero Element of dL-Z_2;
 end;
 
 definition
-  let IT be non empty doubleLoopStr;
-  attr IT is Field-like means
+  let L be non trivial doubleLoopStr;
+  attr L is Field-like means
 :: REALSET2:def 11
- the LoopStr of IT is AbGroup &
- ::IT is not degenerated &
-   ex A being non trivial set,
-            od being BinOp of A, nd being Element of A,
-            om being DnT of nd,A, nm being Element of A\{nd} st
-           (IT = doubleLoopStr(#A,od,om,nm,nd#) &
+
+   ex om being DnT of 0.L,the carrier of L st
+     om = the mult of L &
            (for B being non empty set, P being BinOp of B,
                 e being Element of B holds
-           B = A\{nd} & e = nm & P = om!(A,nd) implies
-           LoopStr(#B,P,e#) is AbGroup)) &
-           for x,y,z being Element of A holds
-            om.(x,od.(y,z)) = od.(om.(x,y),om.(x,z)) &
-            om.(od.(x,y),z) = od.(om.(x,z),om.(y,z));
+           B = (the carrier of L)\{0.L} & e = 1.L &
+           P = om!(the carrier of L,0.L)
+           implies LoopStr(#B,P,e#) is AbGroup);
 end;
 
 registration
@@ -119,215 +87,205 @@ registration
 end;
 
 registration
- cluster strict Field-like (non empty doubleLoopStr);
+ cluster non trivial -> non empty doubleLoopStr;
+end;
+
+registration
+ cluster strict Field-like Abelian distributive add-associative
+   right_zeroed right_complementable (non degenerated doubleLoopStr);
+end;
+
+registration
+ cluster add-associative right_zeroed right_complementable
+    Abelian commutative associative well-unital distributive
+      almost_left_invertible
+    -> Field-like (non degenerated doubleLoopStr);
 end;
 
 definition
-  mode Field is Field-like (non empty doubleLoopStr);
-end;
-
-definition
-   let F be Field;
-   func suppf(F) -> non trivial set equals
-:: REALSET2:def 12
-    the carrier of F;
-end;
-
-definition
-   let F be Field;
-   func odf(F) -> BinOp of suppf F means
-:: REALSET2:def 13
- ex nd being Element of suppf(F),
-              om being DnT of nd, suppf(F),
-              nm being Element of suppf(F)\{nd} st
-           F = doubleLoopStr(#suppf F,it,om,nm,nd#);
-end;
-
-definition
-   let F be Field;
-   func ndf(F) -> Element of suppf(F) means
-:: REALSET2:def 14
-    ex om being DnT of it,suppf(F),
-             nm being Element of suppf(F)\{it} st
-           F = doubleLoopStr(#suppf F,odf F,om,nm,it#);
-end;
-
-definition
-   let F be Field;
-   func omf(F) -> DnT of ndf(F),suppf(F) means
+   let F be Field-like Abelian distributive add-associative
+        right_zeroed right_complementable (non degenerated doubleLoopStr);
+canceled 3;
+   func omf(F) -> DnT of 0.F,the carrier of F equals
 :: REALSET2:def 15
-   ex nm being Element of suppf(F)\{ndf(F)} st
-           F = doubleLoopStr(#suppf F,odf F,it,nm,ndf F#);
+    the mult of F;
 end;
 
 definition
-   let F be Field;
-   func nmf(F) -> Element of suppf(F)\{ndf(F)} means
+   let F be Field-like Abelian distributive add-associative
+        right_zeroed right_complementable (non degenerated doubleLoopStr);
+   func nmf(F) -> Element of (the carrier of F)\{0.F} equals
 :: REALSET2:def 16
-       F = doubleLoopStr(#suppf F,odf F,omf F,it,ndf F#);
+     1.F;
 end;
 
 theorem :: REALSET2:1
-   for F being Field holds LoopStr(#suppf(F),odf(F),ndf(F)#) is AbGroup;
+  for F being Field holds the LoopStr of F is AbGroup;
 
 theorem :: REALSET2:2
-   for F being Field, B being non empty set,
+   for F being Field-like Abelian distributive add-associative
+        right_zeroed right_complementable (non degenerated doubleLoopStr),
+       B being non empty set,
        P being BinOp of B, e being Element of B st
-   B = suppf(F)\{ndf(F)} & e = nmf(F) & P = omf(F)!(suppf(F),ndf(F)) holds
+   B = (the carrier of F)\{0.F} & e = nmf(F) &
+   P = omf(F)!(the carrier of F,0.F) holds
     LoopStr(#B,P,e#) is AbGroup;
 
 theorem :: REALSET2:3
-   for F being Field, x,y,z being Element of suppf(F) holds
-    omf(F).(x,odf(F).(y,z)) = odf(F).(omf(F).(x,y),omf(F).(x,z)) &
-    omf(F).(odf(F).(x,y),z) = odf(F).(omf(F).(x,z),omf(F).(y,z));
+ for F being Field, x,y,z being Element of F holds
+    x*(y+z) = (x*y)+(x*z) &
+    (x+y)*z = x*z+y*z;
 
 theorem :: REALSET2:4
    for F being Field,
-       a,b,c being Element of suppf(F) holds
-   odf(F).(odf(F).(a,b),c) = odf(F).(a,odf(F).(b,c));
+       a,b,c being Element of (the carrier of F)holds
+   (a+b)+c = a+(b+c);
 
 theorem :: REALSET2:5
    for F being Field,
-       a,b being Element of suppf(F) holds
-   odf(F).(a,b) = odf(F).(b,a);
+       a,b being Element of (the carrier of F)holds
+   a+b = b+a;
 
 theorem :: REALSET2:6
-   for F being Field,
-       a being Element of suppf(F) holds
-   odf(F).(a,ndf(F)) = a & odf(F).(ndf(F),a) = a;
+   for F being Field, a being Element of F holds
+   a+0.F = a & 0.F+a = a;
 
 theorem :: REALSET2:7
-   for F being Field,
-       a being Element of suppf(F) ex b being Element of suppf(F) st
-   odf(F).(a,b) = ndf(F) & odf(F).(b,a) = ndf(F);
+   for F being Field, a being Element of F ex b being Element of F st
+    a+b = 0.F & b+a = 0.F;
 
 theorem :: REALSET2:8
-   for F being Field,
-       a,b,c being Element of suppf(F)\{ndf(F)} holds
-   omf(F).(omf(F).(a,b),c) = omf(F).(a,omf(F).(b,c));
+   for F being Field-like Abelian distributive add-associative
+        right_zeroed right_complementable (non degenerated doubleLoopStr),
+       a,b,c being Element of (the carrier of F)\{0.F} holds
+   (a*b)*c = a*(b*c);
 
 theorem :: REALSET2:9
-   for F being Field,
-       a,b being Element of suppf(F)\{ndf(F)} holds
-   omf(F).(a,b) = omf(F).(b,a);
+   for F being Field-like Abelian distributive add-associative
+        right_zeroed right_complementable (non degenerated doubleLoopStr),
+       a,b being Element of (the carrier of F)\{0.F} holds
+   a*b = b*a;
 
 theorem :: REALSET2:10
-   for F being Field,
-       a being Element of suppf(F)\{ndf(F)} holds
-   omf(F).(a,nmf(F)) = a & omf(F).(nmf(F),a) = a;
+   for F being Field-like Abelian distributive add-associative
+        right_zeroed right_complementable (non degenerated doubleLoopStr),
+       a being Element of (the carrier of F)\{0.F} holds
+   a*1.F = a & 1.F*a = a;
 
 theorem :: REALSET2:11
-   for F being Field,
-       a being Element of suppf(F)\{ndf(F)}
-   ex b being Element of suppf(F)\{ndf(F)} st
-   omf(F).(a,b) = nmf(F) & omf(F).(b,a) = nmf(F);
+   for F being Field-like Abelian distributive add-associative
+        right_zeroed right_complementable (non degenerated doubleLoopStr),
+       a being Element of (the carrier of F)\{0.F}
+   ex b being Element of (the carrier of F)\{0.F} st
+   a*b = 1.F & b*a = 1.F;
 
 definition
    let F be Field;
-   func compf(F) -> Function of suppf(F),suppf(F) means
+   func compf F -> UnOp of the carrier of F means
 :: REALSET2:def 17
- for x being Element of suppf(F) holds odf(F).(x,it.x) = ndf(F);
+ for x being Element of F holds it.x = -x;
 end;
 
 theorem :: REALSET2:12
-   for F being Field,
-       x,y being Element of suppf(F) holds
-   odf(F).(x,y) = ndf(F) implies y = compf(F).x;
+   for F being Field, x,y being Element of F holds
+   x+y = 0.F implies y = (compf F).x;
 
 theorem :: REALSET2:13
-   for F being Field,
-       x being Element of suppf(F) holds
+   for F being Field, x being Element of F holds
    x = compf(F).(compf(F).x);
 
 theorem :: REALSET2:14
     for F being Field,
-        a,b being Element of suppf(F) holds
-    (odf(F).(a,b) is Element of suppf(F) &
-    omf(F).(a,b) is Element of suppf(F) &
-    compf(F).a is Element of suppf(F));
+        a,b being Element of (the carrier of F)holds
+    (the add of F).(a,b) is Element of (the carrier of F)&
+    omf(F).(a,b) is Element of (the carrier of F)&
+    compf(F).a is Element of the carrier of F;
 
 theorem :: REALSET2:15
-   for F being Field,
-       a,b,c being Element of suppf(F) holds
-   omf(F).(a,odf(F).(b,compf(F).c)) =
-   odf(F).(omf(F).(a,b),compf(F).(omf(F).(a,c)));
+   for F being Field, a,b,c being Element of F holds
+   a*(b-c) = a*b-a*c;
 
 theorem :: REALSET2:16
-   for F being Field,
-       a,b,c being Element of suppf(F) holds
-   omf(F).(odf(F).(a,compf(F).b),c) =
-   odf(F).(omf(F).(a,c),compf(F).(omf(F).(b,c)));
+   for F being Field, a,b,c being Element of F holds
+   (a-b)*c = a*c-b*c;
 
 theorem :: REALSET2:17
-   for F being Field,
-       a being Element of suppf(F) holds omf(F).(a,ndf(F)) = ndf(F);
+   for F being Field, a being Element of F holds a*0.F = 0.F;
 
 theorem :: REALSET2:18
-   for F being Field,
-       a being Element of suppf(F) holds omf(F).(ndf(F),a) = ndf(F);
+   for F being Field, a being Element of F holds 0.F*a = 0.F;
 
 theorem :: REALSET2:19
-  for F being Field,
-       a,b being Element of suppf(F) holds
-   compf(F).(omf(F).(a,b)) = omf(F).(a,compf(F).b);
+  for F being Field, a,b being Element of F holds
+   -(a*b) = a*-b;
 
 theorem :: REALSET2:20
-   for F being Field holds omf(F).(nmf(F),ndf(F)) = ndf(F);
+   for F being Field holds 1.F*0.F = 0.F;
 
 theorem :: REALSET2:21
-   for F being Field holds omf(F).(ndf(F),nmf(F)) = ndf(F);
+   for F being Field holds 0.F*1.F = 0.F;
 
 theorem :: REALSET2:22
   for F being Field,
-       a,b being Element of suppf(F) holds
-   omf(F).(a,b) is Element of suppf(F);
+       a,b being Element of (the carrier of F)holds
+   omf(F).(a,b) is Element of the carrier of F;
 
 theorem :: REALSET2:23
-   for F being Field,
-       a,b,c being Element of suppf(F) holds
-   omf(F).(omf(F).(a,b),c) = omf(F).(a,omf(F).(b,c));
+   for F being Field-like Abelian distributive add-associative
+        right_zeroed right_complementable (non degenerated doubleLoopStr),
+      a,b,c being Element of F holds
+   (a*b)*c = a*(b*c);
 
 theorem :: REALSET2:24
-  for F being Field,
-       a,b being Element of suppf(F) holds
-   omf(F).(a,b) = omf(F).(b,a);
+  for F being Field-like Abelian distributive add-associative
+        right_zeroed right_complementable (non degenerated doubleLoopStr),
+      a,b being Element of F holds
+   a*b = b*a;
 
 theorem :: REALSET2:25
-   for F being Field,
-       a being Element of suppf(F) holds
-   omf(F).(a,nmf(F)) = a & omf(F).(nmf(F),a) = a;
+   for F being Field-like Abelian distributive add-associative
+        right_zeroed right_complementable (non degenerated doubleLoopStr),
+       a being Element of F holds
+   a*1.F = a & 1.F*a = a;
 
 definition
   let F be Field;
-  func revf(F) -> Function of suppf(F)\{ndf(F)},suppf(F)\{ndf(F)} means
+  func revf(F) -> UnOp of (the carrier of F)\{0.F} means
 :: REALSET2:def 18
- for x being Element of suppf(F)\{ndf(F)} holds
+ for x being Element of (the carrier of F)\{0.F} holds
         omf(F).(x,it.x) = nmf(F);
 end;
 
 theorem :: REALSET2:26
   for F being Field,
-      x,y being Element of suppf(F)\{ndf(F)} holds
-      omf(F).(x,y) = nmf(F) implies y = revf(F).x;
+      x,y being Element of (the carrier of F)\{0.F} holds
+      x*y = 1.F implies y = revf(F).x;
 
 theorem :: REALSET2:27
   for F being Field,
-      x being Element of suppf(F)\{ndf(F)} holds
+      x being Element of (the carrier of F)\{0.F} holds
       x =revf(F).(revf(F).x);
 
 theorem :: REALSET2:28
   for F being Field,
-      a,b being Element of suppf(F)\{ndf(F)} holds
-   omf(F).(a,b) is Element of suppf(F)\{ndf(F)} &
-   revf(F).a is Element of suppf(F)\{ndf(F)};
+      a,b being Element of (the carrier of F)\{0.F} holds
+   omf(F).(a,b) is Element of (the carrier of F)\{0.F} &
+   revf(F).a is Element of (the carrier of F)\{0.F};
 
 theorem :: REALSET2:29
-  for F being Field,
-      a,b,c being Element of suppf(F) holds
-   odf(F).(a,b) = odf(F).(a,c) implies b = c;
+  for F being Field, a,b,c being Element of F holds
+   a+b = a+c implies b = c;
 
 theorem :: REALSET2:30
   for F being Field,
-      a being Element of suppf(F)\{ndf(F)},
-      b,c being Element of suppf(F) holds
-   omf(F).(a,b) = omf(F).(a,c) implies b = c;
+      a being Element of (the carrier of F)\{0.F},
+      b,c being Element of (the carrier of F)holds
+   a*b = a*c implies b = c;
+
+registration
+ cluster Field-like Abelian distributive add-associative
+    right_zeroed right_complementable
+  -> commutative associative well-unital
+      almost_left_invertible (non degenerated doubleLoopStr);
+end;
+

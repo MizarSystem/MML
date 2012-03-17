@@ -17,8 +17,8 @@
 <ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="GLIB_000"/>
@@ -46,7 +46,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="159">
+<Func kind="K" nr="165">
 <Var nr="1"/>
 </Func>
 <Num nr="1"/>
@@ -78,7 +78,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="159">
+<Func kind="K" nr="165">
 <Var nr="2"/>
 </Func>
 <Var nr="1"/>
@@ -102,7 +102,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="159">
+<Func kind="K" nr="165">
 <Var nr="2"/>
 </Func>
 <Func kind="K" nr="92">
@@ -146,7 +146,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="161">
+<Func kind="K" nr="167">
 <Var nr="1"/>
 </Func>
 <Num nr="0"/>
@@ -176,7 +176,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="161">
+<Func kind="K" nr="167">
 <Var nr="2"/>
 </Func>
 <Var nr="1"/>
@@ -200,7 +200,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="161">
+<Func kind="K" nr="167">
 <Var nr="2"/>
 </Func>
 <Func kind="K" nr="92">

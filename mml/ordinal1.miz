@@ -372,11 +372,28 @@ A7:   b in X;
   end;
 
 definition let A,B;
- redefine pred A c= B;
+ redefine pred A c= B means
+  for C st C in A holds C in B;
+   compatibility
+    proof
+     thus A c= B implies for C st C in A holds C in B;
+     assume
+A1:    for C st C in A holds C in B;
+     let x; assume
+A2:    x in A;
+     then reconsider C = x as Ordinal by Th23;
+         C in B by A1,A2;
+     hence thesis;
+    end;
   connectedness
   proof let A,B;
-        A in B or A = B or B in A by Th24;
-   hence thesis by Def2;
+   given C such that
+G1: C in A and
+G2: not C in B;
+   let D;
+    A in B or A = B or B in A by Th24;
+    then B c= A by G1,G2,Def2,Th19;
+   hence thesis;
   end;
 end;
 
@@ -747,8 +764,6 @@ A6:  not A c= C;
 ::
 
  definition let A be set;
- canceled;
-
   attr A is being_limit_ordinal means
 :Def6:  A = union A;
   end;
@@ -1387,4 +1402,41 @@ registration
    hence thesis;
   end;
 end;
+
+:: from ZF_REFLE, 2007,03.13, A.T.
+
+scheme ALFA { D() -> non empty set, P[set,set] }:
+ ex F st dom F = D() &
+  for d being Element of D() ex A st A = F.d & P[d,A] &
+   for B st P[d,B] holds A c= B
+  provided
+A1: for d being Element of D() ex A st P[d,A]
+proof
+   defpred Q[set,set] means
+    ex A st A = $2 & P[$1,A] & for B st P[$1,B] holds A c= B;
+A2:  for x,y,z st x in D() & Q[x,y] & Q[x,z] holds y = z
+     proof let x,y,z such that x in D();
+      given A1 being Ordinal such that
+A3:    A1 = y & P[x,A1] & for B st P[x,B] holds A1 c= B;
+      given A2 being Ordinal such that
+A4:    A2 = z & P[x,A2] & for B st P[x,B] holds A2 c= B;
+          A1 c= A2 & A2 c= A1 by A3,A4;
+      hence thesis by A3,A4,XBOOLE_0:def 10;
+     end;
+A5:  for x st x in D() ex y st Q[x,y]
+     proof let x; assume x in D();
+       then reconsider d = x as Element of D();
+       defpred Q[Ordinal] means P[d,$1];
+A6:    ex A st Q[A] by A1;
+      consider A such that
+A7:    Q[A] & for B st Q[B] holds A c= B from OrdinalMin(A6);
+      reconsider y = A as set;
+      take y,A; thus thesis by A7;
+     end;
+   consider F such that
+A8:  dom F = D() & for x st x in D() holds Q[x,F.x] from FUNCT_1:sch 2(A2,A5);
+   take F; thus dom F = D() by A8;
+   let d be Element of D();
+   thus Q[d,F.d] by A8;
+  end;
 

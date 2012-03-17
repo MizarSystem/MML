@@ -14,7 +14,7 @@ environ
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, ORDINAL1, NUMBERS,
       XCMPLX_0, NAT_1, NAT_D, INT_1, RELAT_1, FINSEQ_1, FUNCT_1, COMPLEX1,
       FUNCT_2, FUNCT_4, FINSEQ_2, SEQ_1, FINSEQ_4, FUNCT_7, STRUCT_0, AMI_1,
-      AMI_3, AMI_5, SCMFSA_2, CQC_LANG, CARD_1, SCMFSA_4, FINSUB_1, CARD_3,
+      AMI_3, AMI_5, SCMFSA_2, FUNCOP_1, CARD_1, SCMFSA_4, FINSUB_1, CARD_3,
       PARTFUN1, SCMFSA6B, SCMFSA6C, SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B,
       SCMFSA8C, RFINSEQ, SCMFSA7B, BINARITH, SCM_HALT, XXREAL_0;
  constructors PARTFUN1, SETWISEO, XXREAL_0, NAT_1, SEQ_1, FINSEQ_4, INT_2,
@@ -22,8 +22,8 @@ environ
       SCMFSA8A, SCMFSA8B, SCMFSA8C, SCM_HALT, SCMFSA_1, RVSUM_1, SEQM_3, NAT_D;
  registrations RELSET_1, FUNCT_1, AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR,
       SCMFSA6C, SCMFSA8A, FINSUB_1, SCMFSA8B, RFINSEQ, SCM_HALT, SCMFSA_9,
-      INT_1, CQC_LANG, NAT_1, FRAENKEL, XREAL_0, MEMBERED, SETFAM_1, STRUCT_0,
-      XXREAL_0, CARD_3;
+      INT_1, FUNCOP_1, NAT_1, FRAENKEL, XREAL_0, MEMBERED, SETFAM_1, STRUCT_0,
+      XXREAL_0, CARD_3, SUBSET_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -309,34 +309,40 @@ theorem :: SCMBSORT:57
 
 definition
  let f be FinSeq-Location;
- func bubble-sort f -> Macro-Instruction means
+ func bubble-sort f -> Macro-Instruction equals
 :: SCMBSORT:def 1
-   it= initializeWorkMem ';'
-       (a1:=len f) ';'
-       Times(a1,
-          a2 := a1 ';'
-          SubFrom(a2,a0) ';'
-          (a3:=len f) ';'
-          Times(a2,
-                  a4:=a3 ';'
-                  SubFrom(a3,a0) ';'
-                  (a5:=(f,a3)) ';'
-                  (a6:=(f,a4)) ';' SubFrom(a6,a5) ';'
-                  if>0(a6,(a6:=(f,a4)) ';'
-                     ((f,a3):=a6) ';'((f,a4):=a5),SCM+FSA-Stop)
+   ( ((intloc 2):= (intloc 0)) ';' ((intloc 3):= (intloc 0)) ';'
+                   ((intloc 4):= (intloc 0)) ';'
+                   ((intloc 5):= (intloc 0)) ';'
+                   ((intloc 6):= (intloc 0)) ) ';'
+       ((intloc 1):=len f) ';'
+       Times((intloc 1),
+          (intloc 2) := (intloc 1) ';'
+          SubFrom(intloc 2,intloc 0) ';'
+          ((intloc 3):=len f) ';'
+          Times(intloc 2,
+                  (intloc 4):=(intloc 3) ';'
+                  SubFrom(intloc 3,intloc 0) ';'
+                  ((intloc 5):=(f,intloc 3)) ';'
+                  ((intloc 6):=(f,(intloc 4))) ';'
+                  SubFrom(intloc 6,intloc 5) ';'
+                  if>0(intloc 6,((intloc 6):=(f,intloc 4)) ';'
+                     ((f,intloc 3):=(intloc 6)) ';'
+                     ((f,intloc 4):=(intloc 5)),SCM+FSA-Stop)
           )
        );
 end;
 
 definition
- func Bubble-Sort-Algorithm -> Macro-Instruction means
+  func Bubble-Sort-Algorithm -> Macro-Instruction equals
 :: SCMBSORT:def 2
-  it = bubble-sort fsloc 0;
+    bubble-sort fsloc 0;
 end;
 
 theorem :: SCMBSORT:58
  for f being FinSeq-Location holds
-  UsedIntLoc (bubble-sort f) = {a0,a1,a2,a3,a4,a5,a6};
+  UsedIntLoc (bubble-sort f) = {intloc 0,intloc 1,intloc 2,intloc 3, intloc 4,
+  intloc 5,intloc 6};
 
 theorem :: SCMBSORT:59
  for f being FinSeq-Location holds
@@ -377,10 +383,11 @@ theorem :: SCMBSORT:64
 
 theorem :: SCMBSORT:65
 for s be State of SCM+FSA holds
-    (s.f0, IExec(bubble-sort f0,s).f0 are_fiberwise_equipotent) &
-    (for i,j be Element of NAT st i>=1 & j<=len (s.f0) & i<j
-     for x1,x2 be Integer st x1 =IExec(bubble-sort f0,s).f0.i &
-        x2=IExec(bubble-sort f0,s).f0.j holds x1 >= x2);
+    (s.(fsloc 0), IExec(bubble-sort (fsloc 0),s).(fsloc 0)
+      are_fiberwise_equipotent) &
+    (for i,j be Element of NAT st i>=1 & j<=len (s.(fsloc 0)) & i<j
+     for x1,x2 be Integer st x1 =IExec(bubble-sort (fsloc 0),s).(fsloc 0).i &
+        x2=IExec(bubble-sort (fsloc 0),s).(fsloc 0).j holds x1 >= x2);
 
 theorem :: SCMBSORT:66
  for i being Element of NAT, s being State of SCM+FSA,

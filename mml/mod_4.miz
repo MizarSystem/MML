@@ -10,7 +10,7 @@ environ
       FUNCSDOM, VECTSP_2, LATTICES, BINOP_1, INCSP_1, MOD_1, ORDINAL4, GROUP_6,
       MOD_4, GROUP_1, NAT_1, GRCAT_1, ENDALG, COHSP_1;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, DOMAIN_1,
-      STRUCT_0, MOD_1, BINOP_1, RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM,
+      STRUCT_0, BINOP_1, RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM,
       VECTSP_2, GRCAT_1, FUNCT_4, GROUP_6, RINGCAT1;
  constructors PARTFUN1, DOMAIN_1, FUNCOP_1, VECTSP_2, GRCAT_1, RINGCAT1, NAT_D,
       GROUP_6;
@@ -47,7 +47,7 @@ begin :: Pierscienie przeciwne
 reserve K for non empty doubleLoopStr;
 
 definition let K;
- func opp(K) -> strict doubleLoopStr equals
+ func opp K -> strict doubleLoopStr equals
    doubleLoopStr (# the carrier of K,
                                the add of K,
                                ~(the mult of K),
@@ -68,40 +68,31 @@ Lm1: for K being non empty doubleLoopStr
 for x,y being Scalar of K, a,b being Scalar of opp(K)
        st x = a & y = b holds x+y = a+b & x*y = b*a by Th1;
 
-Lm2: for K being unital (non empty doubleLoopStr)
- for h, e being Element of opp(K) st e = 1_K holds
+Lm2: for K being well-unital (non empty doubleLoopStr)
+ for h, e being Element of opp K st e = 1.K holds
 h * e = h & e * h = h
 proof
-  let K be unital (non empty doubleLoopStr);
-  let h, e be Element of opp(K);
+  let K be well-unital (non empty doubleLoopStr);
+  let h, e be Element of opp K;
   assume
-A1: e = 1_K;
+A1: e = 1.K;
   reconsider a = h, b = e as Element of K;
   thus h * e = b * a by Lm1
-  .= h by A1,GROUP_1:def 5;
+  .= h by A1,VECTSP_1:def 16;
   thus e * h = a * b by Lm1
-  .= h by A1,GROUP_1:def 5;
+  .= h by A1,VECTSP_1:def 16;
 end;
 
 registration
-  let K be unital (non empty doubleLoopStr);
-  cluster opp(K) -> unital;
+  let K be well-unital (non empty doubleLoopStr);
+  cluster opp(K) -> well-unital;
 coherence
-proof
- reconsider e = 1_K as Element of opp(K);
- take e;
+proof let x be Element of opp K;
  thus thesis by Lm2;
 end;
 end;
 
-Lm3: for K being unital (non empty doubleLoopStr) holds 1_K = 1_opp(K)
-proof
-  let K be unital (non empty doubleLoopStr);
- set G = opp(K);
- reconsider e = 1_K as Element of G;
- for h being Element of G holds h * e = h & e * h = h by Lm2;
- hence 1_K = 1_opp(K) by GROUP_1:def 5;
-end;
+Lm3: for K being well-unital (non empty doubleLoopStr) holds 1.K = 1.opp K;
 
 Lm4: now
 let K be add-associative right_zeroed right_complementable
@@ -159,6 +150,11 @@ proof
  hence -x = -a by RLVECT_1:19;
 end;
 
+Lm5':
+for K being non empty doubleLoopStr
+for x,y being Scalar of K, a,b being Scalar of opp(K)
+       st x = a & y = b holds x+y = a+b & x*y = b*a by Th1;
+
 theorem
 the LoopStr of opp(K) = the LoopStr of K &
 (K is add-associative right_zeroed right_complementable implies
@@ -188,8 +184,7 @@ end;
 Lm6: opp(opp(K)) = the doubleLoopStr of K by FUNCT_4:54;
 
 Lm7:
-for K being add-associative right_zeroed
-                 right_complementable (non empty doubleLoopStr)
+for K being non empty doubleLoopStr
 for x,y,z,u being Scalar of K, a,b,c,d being Scalar of opp(K)
        st x = a & y = b & z = c & u = d holds
          (x+y)+z = (a+b)+c & x+(y+z) = a+(b+c)
@@ -197,22 +192,21 @@ for x,y,z,u being Scalar of K, a,b,c,d being Scalar of opp(K)
        & x*(y+z) = (b+c)*a & (y+z)*x = a*(b+c)
        & x*y+z*u = b*a+d*c
 proof
-let K be add-associative right_zeroed right_complementable
-  (non empty doubleLoopStr);
+let K be non empty doubleLoopStr;
  let x,y,z,u be Scalar of K, a,b,c,d be Scalar of opp(K); assume
  A1: x = a & y = b & z = c & u = d;
    then x+y = a+b & y+z = b+c
  & x*y = b*a & y*z = c*b
  & x*z = c*a & y*x = a*b
- & z*u = d*c by Lm5;
- hence thesis by A1,Lm5;
+ & z*u = d*c by Lm5';
+ hence thesis by A1,Lm5';
 end;
 
 canceled;
 
 theorem
    (for K being unital (non empty doubleLoopStr) holds
-    1_K = 1_opp(K)) &
+    1.K = 1.opp(K)) &
    for K being add-associative right_zeroed
       right_complementable (non empty doubleLoopStr) holds
   0.K = 0.opp(K)
@@ -226,54 +220,83 @@ theorem
         & x*(y+z) = (b+c)*a & (y+z)*x = a*(b+c)
         & x*y+z*u = b*a+d*c by Lm5,Lm7,Lm3;
 
-theorem
-Th5: for K being Ring holds opp(K) is strict Ring
-  proof
-   let K be Ring;
-   set L = opp(K);
-      for x,y,z being Scalar of L holds
-      x+y = y+x
-    & (x+y)+z = x+(y+z)
-    & x+(0.L) = x
-    & x+(-x) = (0.L)
-    & x*(1_L) = x & (1_L)*x = x
-    & (x*y)*z = x*(y*z)
-    & x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x
-    proof
-     let x,y,z be Scalar of L;
-     reconsider a = x, b = y, c = z as Scalar of K;
-     A1: a+b = b+a
-      & (a+b)+c = a+(b+c)
-      & a+(0.K) = a
-      & a+(-a) = (0.K)
-      & a*(1_K) = a & (1_K)*a = a
-      & a*(b+c) = a*b+a*c & (b+c)*a = b*a+c*a by VECTSP_2:1;
-     A2: x+y = a+b & y+x = b+a & y+z = b+c
-      & 0.K = 0.L
-      & -x = -a
-      & 1_K = 1_L
-      & x*y = b*a
-      & x*z = c*a & y*x = a*b & z*x = a*c by Lm5,Lm3;
-     hence x+y = y+x;
-     thus (x+y)+z = (a+b)+c
-                 .= a+(b+c) by VECTSP_2:1
-                 .= x+(y+z);
-     thus x+(0.L) = x by A1;
-     thus x+(-x) = (0.L) by A1,A2;
-     thus x*(1_L) = x by A1,A2,Lm5;
-     thus (1_L)*x = x by A1,A2,Lm5;
-     thus (x*y)*z = c*(b*a) by Lm7
-                 .= c*b*a by VECTSP_2:1
-                 .= x*(y*z) by Lm7;
+registration let K be Abelian (non empty doubleLoopStr);
+ cluster opp K -> Abelian;
+ coherence
+  proof let x,y be Element of opp K;
+    reconsider a=x, b=y as Element of K;
+   thus x+y = a+b .= b+a
+        .= y+x;
+  end;
+end;
+
+registration let K be add-associative (non empty doubleLoopStr);
+ cluster opp K -> add-associative;
+ coherence
+  proof let x,y,z be Element of opp K;
+    reconsider a = x, b = y, c = z as Element of K;
+   thus (x+y)+z = (a+b)+c
+               .= a+(b+c) by RLVECT_1:def 6
+               .= x+(y+z);
+  end;
+end;
+
+registration let K be right_zeroed (non empty doubleLoopStr);
+ cluster opp K -> right_zeroed;
+ coherence
+  proof let x be Element of opp K;
+    reconsider a = x as Element of K;
+   thus x+0.opp K = a+0.K
+               .= a by RLVECT_1:def 7
+               .= x;
+  end;
+end;
+
+registration let K be right_complementable (non empty doubleLoopStr);
+ cluster opp K -> right_complementable;
+ coherence
+  proof let x be Element of opp K;
+    reconsider a = x as Element of K;
+    consider b being Element of K such that
+W:   a + b = 0.K by RLVECT_1:def 8;
+    reconsider y = b as Element of opp K;
+   take y;
+   thus x+y = a+b by Lm5 .= 0.K by W .= 0.opp K;
+  end;
+end;
+
+registration let K be associative (non empty doubleLoopStr);
+ cluster opp K -> associative;
+ coherence
+  proof let x,y,z be Element of opp K;
+    reconsider a = x, b = y, c = z as Element of K;
+   thus (x*y)*z = c*(b*a) by Lm7
+               .= c*b*a by GROUP_1:def 4
+               .= x*(y*z) by Lm7;
+  end;
+end;
+
+registration let K be well-unital (non empty doubleLoopStr);
+ cluster opp K -> well-unital;
+ coherence by Lm5',Lm3;
+end;
+
+registration let K be distributive (non empty doubleLoopStr);
+ cluster opp K -> distributive;
+ coherence
+  proof let x,y,z be Element of opp K;
+    reconsider a = x, b = y, c = z as Element of K;
      thus x*(y+z) = (b+c)*a by Lm7
-                 .= b*a+c*a by VECTSP_2:1
+                 .= b*a+c*a by VECTSP_1:def 18
                  .= x*y+x*z by Lm7;
      thus (y+z)*x = a*(b+c) by Lm7
-                 .= a*b+a*c by VECTSP_2:1
+                 .= a*b+a*c by VECTSP_1:def 18
                  .= y*x+z*x by Lm7;
-    end;
-    hence thesis by VECTSP_2:1;
   end;
+end;
+
+theorem
+Th5: for K being Ring holds opp(K) is strict Ring;
 
 registration let K be Ring;
  cluster opp(K) -> Abelian add-associative right_zeroed right_complementable
@@ -282,19 +305,7 @@ registration let K be Ring;
 end;
 
 theorem
-Th6: for K being Ring holds opp(K) is Ring
-  proof
-   let K be Ring;
-      for x,y,z being Scalar of opp(K) holds x*(y*z) = (x*y)*z
-    proof
-     let x,y,z be Scalar of opp(K);
-     reconsider a = x,b = y,c = z as Scalar of K;
-     A1: (c*b)*a = c*(b*a) by GROUP_1:def 4;
-        (c*b)*a = x*(y*z) by Lm7;
-     hence thesis by A1,Lm7;
-    end;
-    hence thesis by GROUP_1:def 4;
-  end;
+Th6: for K being Ring holds opp(K) is Ring;
 
 registration let K be Ring;
  cluster opp(K) -> associative;
@@ -305,12 +316,15 @@ theorem
 Th7: for K being Skew-Field holds opp(K) is Skew-Field
   proof
    let K be Skew-Field;
+X: 1_opp K = 1.opp K by VECTSP_1:96;
    set L = opp(K);
       for x being Scalar of L holds
     (x <> 0.L implies ex y be Scalar of L st x*y = 1_L)
     & 0.L <> 1_L
     proof
      let x be Scalar of L;
+X:   1_K = 1.K & 1_L = 1.L by VECTSP_2:85;
+     then
      A1: 1_K = 1_L & 0.K = 0.L by Lm3;
          x <> 0.L implies ex y be Scalar of L st x*y = 1_L
       proof
@@ -318,14 +332,14 @@ Th7: for K being Skew-Field holds opp(K) is Skew-Field
        A2: x <> 0.L;
        reconsider a = x as Scalar of K;
        consider b being Scalar of K such that
-       A3: b*a = 1_K by A1,A2,VECTSP_2:40;
+       A3: b*a = 1_K by A2,VECTSP_2:40;
        reconsider y = b as Scalar of opp(K);
        take y;
        thus thesis by A3,A1,Lm5;
       end;
      hence thesis by A1,VECTSP_1:def 21;
     end;
-   hence thesis by VECTSP_1:def 20,def 21;
+   hence thesis by VECTSP_1:def 20,def 21,X;
   end;
 
 registration let K be Skew-Field;
@@ -580,7 +594,7 @@ A1: L=opp(K) & W=opp(V) & x=y & v=w;
       opp(o) = the rmult of opp(V) by Th10;
   hence w*y = (opp(o)).(w,y) by A1,VECTSP_2:def 15
            .= o.(x,v) by A1,Th16
-           .= x*v by VECTSP_1:def 24;
+           .= x*v;
 end;
 
 theorem
@@ -627,7 +641,7 @@ A1: K=opp(L) & V=opp(W) & x=y & v=w;
 A2: opp(o) = the lmult of opp(W) by Th13;
   thus w*y = o.(w,y) by VECTSP_2:def 15
            .= (opp(o)).(x,v) by A1,Th20
-           .= x*v by A1,A2,VECTSP_1:def 24;
+           .= x*v by A1,A2;
 end;
 
 theorem
@@ -719,6 +733,8 @@ A6:      x + b = 0.V by RLVECT_1:def 8;
      reconsider a=x,b=y as Scalar of K;
      reconsider p=v,q=w as Vector of V by Th9;
 A7:   v+w=p+q by Th18;
+     1_K = 1.K & 1_R = 1.R by VECTSP_2:85;
+      then
 A8:   y*x=a*b & 1_R=1_K & x+y=a+b by Lm5,Lm3;
 A9:   b*p=v*y & a*p=v*x & b*p=v*y & a*q=w*x by Th17;
     thus (v+w)*x = a*(p+q) by A7,Th17
@@ -785,6 +801,8 @@ A6:      x + b = 0.W by RLVECT_1:def 8;
      reconsider a=x,b=y as Scalar of K;
      reconsider p=v,q=w as Vector of W by Th12;
 A7:   v+w=p+q by Th22;
+     1_K = 1.K & 1_R = 1.R by VECTSP_2:85;
+      then
 A8:   x*y=b*a & 1_R=1_K & x+y=a+b by Lm5,Lm3;
 A9:   p*b=y*v & p*a=x*v & p*b=y*v & q*a=x*w by Th21;
     thus x*(v+w) = (p+q)*a by A7,Th21
@@ -1153,7 +1171,7 @@ theorem
 reserve K for add-associative right_zeroed right_complementable
   (non empty doubleLoopStr);
 reserve L for add-associative right_zeroed right_complementable
-  unital (non empty doubleLoopStr);
+  well-unital (non empty doubleLoopStr);
 reserve J for Function of K,L;
 
 theorem Th35:
@@ -1176,7 +1194,9 @@ A0: J is additive multiplicative unity-preserving by RINGCAT1:def 2;
                   .= J'.y*J'.x by Lm5;
     end;
     J'.(1_K) = 1_L by A0,GROUP_1:def 17
-                  .= 1_L' by Lm3;
+         .= 1.L by VECTSP_2:85
+         .= 1.L' by Lm3
+         .= 1_L' by VECTSP_2:85;
    then J' is additive antimultiplicative unity-preserving
    by A3,A4,GRCAT_1:def 13,GROUP_1:def 17,Def6a;
    hence J' is antilinear by Def6;
@@ -1198,7 +1218,9 @@ A0: J' is additive antimultiplicative unity-preserving by Def6;
                   .= J.x*J.y by Lm5;
     end;
     J.(1_K) = 1_L' by A0,GROUP_1:def 17
-    .= 1_L by Lm3;
+    .= 1.L' by VECTSP_2:85
+    .= 1.L by Lm3
+    .= 1_L by VECTSP_2:85;
     then J is additive multiplicative unity-preserving
     by A6,A7,GROUP_1:def 17,GROUP_6:def 7,GRCAT_1:def 13;
    hence J is linear by RINGCAT1:def 2;
@@ -1229,7 +1251,9 @@ A0:J is additive antimultiplicative unity-preserving
                   .= J'.x*J'.y by Lm5;
     end;
     thus J'.(1_K) = 1_L by A0,GROUP_1:def 17
-                  .= 1_L' by Lm3;
+                  .= 1.L by VECTSP_2:85
+                  .= 1.L' by Lm3
+                  .= 1_L' by VECTSP_2:85;
   end;
   end;
   assume
@@ -1245,7 +1269,9 @@ A0:J is additive antimultiplicative unity-preserving
                   .= J.y*J.x by Lm5;
     end;
     thus J.(1_K) = 1_L' by A5,GROUP_1:def 17
-                  .= 1_L by Lm3;
+                .= 1.L' by VECTSP_2:85
+                  .= 1.L by Lm3
+                  .= 1_L by VECTSP_2:85;
  end;
 
 theorem
@@ -1306,7 +1332,7 @@ Th42: J is antiisomorphism iff opp(J) is isomorphism
  end;
 
 reserve K for add-associative right_zeroed right_complementable
-  unital (non empty doubleLoopStr);
+  well-unital (non empty doubleLoopStr);
 reserve J for Function of K,K;
 
 theorem
@@ -1505,7 +1531,7 @@ Lm24: for x,y being Vector of V holds
     proof
       let x,y be Vector of V;
          f.(x+y) = 0.W & f.x = 0.W & f.y = 0.W by FUNCOP_1:13;
-      hence f.(x+y) = f.x+f.y by VECTSP_1:7;
+      hence f.(x+y) = f.x+f.y by RLVECT_1:def 7;
     end;
  end;
 

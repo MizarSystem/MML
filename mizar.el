@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.125 $
+;; $Revision: 1.127 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -193,9 +193,9 @@ Speedbar can be (de)activated later by running the command `speedbar'."
 
 (defcustom mizar-show-output 4
 "*Determines the size of the output window after processing.
-Possible values: none, 4, 10, all."
-:type '(choice (const :tag "no output" none)
-	       (const :tag "all output" all)
+Possible values: \"none\", 4, 10, \"all\"."
+:type '(choice (const :tag "no output" "none")
+	       (const :tag "all output" "all")
 	       (const :tag "4 lines" 4)
 	       (const :tag "10 lines" 10))
 :group 'mizar-running)
@@ -2302,7 +2302,7 @@ Used to keep tables up-to-date.")
 	  (let* ((decl (with-temp-buffer
 			 (insert-file-contents sglname)
 			 (split-string (buffer-string) "[\n]")))
-		 (count (string-to-int (car decl)))
+		 (count (string-to-number (car decl)))
 		 (result (cdr decl))
 		 (tail (nthcdr count decl))
 		 (nums (cdr tail))
@@ -2478,7 +2478,7 @@ The clusters inside FRM must already be expanded here."
 		    (setq nr1 (concat nr1 (char-to-string n1))
 			  cur1 (+ cur1 1))
 		  (setq cont nil)))
-	      (setq tok (idxrepr idx (string-to-int nr1))
+	      (setq tok (idxrepr idx (string-to-number nr1))
 		    cur cur1)
 	      (setq res
 		    (if cstronly (nconc res (list tok))
@@ -2507,8 +2507,8 @@ The clusters inside FRM must already be expanded here."
 	  (let ((line (match-string 1))
 		(col (match-string 2))
 		(frm (match-string 0)))
-	    (setq res (cons (list (string-to-int line)
-				  (string-to-int col) frm) res)))))
+	    (setq res (cons (list (string-to-number line)
+				  (string-to-number col) frm) res)))))
       (nreverse res))))
 
 ;; kill after debugging, old pre-xml version
@@ -2527,8 +2527,8 @@ The clusters inside FRM must already be expanded here."
 	  (let ((line (match-string 2))
 		(col (match-string 3))
 		(frm (match-string 1)))
-	    (setq res (cons (list (string-to-int line)
-				  (string-to-int col) frm) res)))))
+	    (setq res (cons (list (string-to-number line)
+				  (string-to-number col) frm) res)))))
       (nreverse res))))
       
 
@@ -2771,7 +2771,6 @@ or *mmlquery* if `mizar-expl-kind' is 'mmlquery.
 The variable `mizar-do-expl' should be non-nil."
   (interactive)
   (let ((pos (or pos (point))))
-    (interactive)
     (save-excursion
     (let ((frm (get-text-property pos 'expl)))
       (if frm
@@ -3969,7 +3968,7 @@ Return list of them."
 			  ", 0, 0, " linestr ", " colstr ", .*"))
        res b e)
   (or (file-readable-p problems)
-      (error "File %s not readable, run tptpver first!"))
+      (error "File %s not readable, run tptpver first!" problems))
   (with-temp-buffer
     (insert-file-contents problems)
     (goto-char (point-min))
@@ -4076,14 +4075,14 @@ If RAW is non-nil, process filter FILTER is used if given, otherwise none."
 (sit-for 1)
 (let* ((tt (cond
 	    ((cdr typetables)     ; have to create tmp
-	     (let ((t (make-temp-name
+	     (let ((temp (make-temp-name
 		       (concat default-directory "tmptt")))
 		 (t1 typetables))
-	       (with-temp-file t
+	       (with-temp-file temp
 		 (while t1
-		   (insert-file-contents (car t))
+		   (insert-file-contents (car temp))
 		  (setq t1 (cdr t1))))
-	       t))
+	       temp))
 	    (typetables (car typetables))
 	    (t nil)))
        (args tlist) compr (i 0))
@@ -4251,7 +4250,7 @@ then the MoMM db."
 	    (if (and mizar-momm-compressed
 		     (equal (file-name-extension f) "gz"))
 		(let ((excode (call-process "gzip" f t nil "-dc"))
-		   (if (or (stringpp excode) (/= 0 excode))
+		   (if (or (stringp excode) (/= 0 excode))
 		       (error "Error in decompressing %s" f))))
 	      (insert-file-contents f))
 	    (process-send-string mommpr (buffer-string))
@@ -4261,7 +4260,7 @@ then the MoMM db."
 	    (if (and mizar-momm-compressed
 		     (equal (file-name-extension f1) "gz"))
 		(let ((excode (call-process "gzip" f1 t nil "-dc"))
-		   (if (or (stringpp excode) (/= 0 excode))
+		   (if (or (stringp excode) (/= 0 excode))
 		       (error "Error in decompressing %s" f1))))
 	      (insert-file-contents f1))
 	    (process-send-string mommpr (buffer-string))

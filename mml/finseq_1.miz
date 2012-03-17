@@ -8,7 +8,7 @@ environ
 
  vocabularies ORDINAL2, ARYTM, FUNCT_1, BOOLE, RELAT_1, FINSET_1, TARSKI,
       ORDINAL1, CARD_1, PARTFUN1, ARYTM_1, FINSEQ_1, MCART_1, MONOID_0,
-      FUNCOP_1, FRAENKEL, FUNCT_4, NAT_1;
+      FUNCOP_1, FRAENKEL, FUNCT_4, NAT_1, ZF_REFLE;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1,
       FRAENKEL, FUNCOP_1, WELLORD2, ORDINAL1, REAL_1, NAT_1, NAT_D, NUMBERS,
       PARTFUN1, FUNCT_4, MCART_1, FINSET_1, CARD_1, XXREAL_0;
@@ -483,8 +483,8 @@ proof
   hence thesis by A1,FUNCT_1:9;
 end;
 
-theorem
-  ( (len p = len q) & for k st 1 <=k & k <= len p holds p.k=q.k )
+theorem Th18:
+  (len p = len q & for k st 1 <=k & k <= len p holds p.k=q.k )
       implies p=q
 proof
    assume
@@ -849,7 +849,7 @@ A3: len p+(1+m) = k by A2;
    hence thesis by A3,Def7;
 end;
 
-theorem
+theorem Th37:
   for k being natural number st
     len p < k & k <= len(p^q) holds (p^q).k = q.(k - len p)
 proof
@@ -3120,5 +3120,67 @@ A1:   <*a,b,c*> = <*d,e,f*>;
           .= e by A1,Th62;
     thus c = <*a,b,c*>.3 by Th62
           .= f by A1,Th62;
+  end;
+
+:: from PRVECT_1, 2007.03.09, A.T
+
+registration
+  cluster non empty non-empty FinSequence;
+   existence
+    proof consider a being non empty set;
+     take <*a*>;
+     thus <*a*> is non empty;
+     assume {} in rng <*a*>;
+     then {} in {a} by Th55;
+     hence contradiction by TARSKI:def 1;
+    end;
+ end;
+
+theorem
+ Th2: for p,q being FinSequence st q = p|Seg n holds len q <= len p
+  proof let p,q be FinSequence; assume
+       q = p|Seg n;
+    then dom q = dom p /\ Seg n & Seg len q = dom q & Seg len p = dom p
+     by Def3,RELAT_1:90;
+    then Seg len q c= Seg len p by XBOOLE_1:17;
+   hence thesis by Th7;
+  end;
+
+theorem
+  for p,r being FinSequence st r = p|Seg n
+      ex q being FinSequence st p = r^q
+  proof let p,r be FinSequence; assume
+A1:  r = p|Seg n;
+    then len r <= len p by Th2;
+   then consider m be Nat such that
+A2:  len p = len r + m by NAT_1:10;
+   reconsider m as Element of NAT by ORDINAL1:def 13;
+   deffunc U(Element of NAT) = p.(len r + $1);
+   consider q being FinSequence such that
+A3:  len q = m & for k st k in Seg m holds q.k = U(k) from SeqLambda;
+   take q;
+A4:  len p = len(r^q) by A2,A3,Th35;
+       now let k such that
+A5:    1 <= k & k <= len p;
+A6:    now assume k <= len r;
+        then k in
+ Seg len r & dom r = Seg len r by A5,Th3,Def3;
+        then (r^q).k = r.k & r.k = p.k by A1,Def7,FUNCT_1:70;
+       hence p.k = (r^q).k;
+      end;
+         now assume A7:not k <= len r;
+        then consider j being Nat such that
+A8:      k = len r + j by NAT_1:10;
+           k-len r = j by A8;
+then A9:      (r^q).k = q.j by A4,A5,A7,Th37;
+           j <> 0 by A7,A8;
+        then 0 < j & k <= len r + len q by A2,A3,A5;
+        then 0+1 <= j & j <= len q by A8,NAT_1:13,XREAL_1:8;
+        then j in Seg m by A3,Th3;
+       hence p.k = (r^q).k by A3,A8,A9;
+      end;
+     hence p.k = (r^q).k by A6;
+    end;
+   hence thesis by A4,Th18;
   end;
 

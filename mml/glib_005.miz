@@ -14,16 +14,16 @@ environ
  notations TARSKI, XBOOLE_0, NUMBERS, SUBSET_1, XCMPLX_0, XXREAL_0, XREAL_0,
       DOMAIN_1, REAL_1, RELAT_1, PARTFUN1, FUNCT_1, FINSEQ_1, SEQ_1, CARD_1,
       PBOOLE, FUNCT_2, GRAPH_5, ORDINAL1, POLYNOM1, UPROOTS, RELSET_1,
-      FINSET_1, NAT_1, NAT_D, CQC_LANG, FUNCT_4, PRE_CIRC, SEQM_3, GLIB_000,
+      FINSET_1, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, PRE_CIRC, SEQM_3, GLIB_000,
       GLIB_001, ABIAN, GLIB_002, GLIB_003, GLIB_004;
- constructors DOMAIN_1, FUNCT_4, XXREAL_0, REAL_1, BINOP_2, CQC_LANG, PRE_CIRC,
+ constructors DOMAIN_1, FUNCT_4, XXREAL_0, REAL_1, BINOP_2, FUNCOP_1, PRE_CIRC,
       GRAPH_5, UPROOTS, GLIB_002, GLIB_003, GLIB_004, NAT_D;
  registrations RELSET_1, FINSET_1, XREAL_0, INT_1, ABIAN, FINSEQ_1, NAT_1,
-      FUNCOP_1, CQC_LANG, MEMBERED, ORDINAL1, POLYNOM1, BAGORDER, RFINSEQ,
+      FUNCOP_1, MEMBERED, ORDINAL1, POLYNOM1, BAGORDER, RFINSEQ,
       GLIB_000, GLIB_001, GLIB_002, GLIB_003, XXREAL_0, GLIB_004;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
- definitions GLIB_000, GLIB_003;
- theorems CARD_1, CARD_2, CQC_LANG, FINSEQ_1, FINSEQ_2, FINSEQ_3, FUNCOP_1,
+ definitions GLIB_000, GLIB_003, FUNCOP_1;
+ theorems CARD_1, CARD_2, FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
       FUNCT_1, FUNCT_2, FUNCT_4, GLIB_000, GLIB_001, GLIB_003, GLIB_004,
       GRAPH_5, HEYTING3, INT_1, NAT_1, PBOOLE, PEPIN, POLYNOM1, REAL_1,
       RELAT_1, SEQ_1, SEQM_3, TARSKI, UPROOTS, XBOOLE_0, XBOOLE_1, XREAL_0,
@@ -35,7 +35,7 @@ begin ::Preliminary theorems
 registration let x be set, y be real number;
   cluster x.-->y -> real-yielding;
   coherence proof
-A1: rng (x.-->y) = {y} by CQC_LANG:5;
+A1: rng (x.-->y) = {y} by FUNCOP_1:14,19;
     y in REAL by XREAL_0:def 1; then
     rng (x.-->y) c= REAL by A1,ZFMISC_1:37;
     hence thesis by SEQ_1:def 1;
@@ -512,14 +512,15 @@ A4: for e being set holds e in IT2 iff
 end;
 
 definition let G be real-weighted real-elabeled WEVGraph;
-  set e = choose AP:NextBestEdges(G);
-  func AP:Step(G) -> real-weighted real-elabeled WEVGraph equals :Def14
-: ::dAPSTEP
+  func AP:Step(G) -> real-weighted real-elabeled WEVGraph equals :Def14:
      G if AP:NextBestEdges(G) = {},
-     G.labelVertex((the_Source_of G).e, e) if
+     G.labelVertex((the_Source_of G).(choose AP:NextBestEdges(G)),
+       choose AP:NextBestEdges(G)) if
           AP:NextBestEdges(G) <> {} &
-          not (the_Source_of G).e in G.labeledV() otherwise
-     G.labelVertex((the_Target_of G).e, e);
+          not (the_Source_of G).(choose AP:NextBestEdges(G)) in G.labeledV()
+            otherwise
+     G.labelVertex((the_Target_of G).(choose AP:NextBestEdges(G)),
+       choose AP:NextBestEdges(G));
   coherence;
   consistency;
 end;
@@ -689,7 +690,7 @@ A1: G0 = G.set(VLabelSelector, source .--> 1) by Def15;
     thus the_Weight_of G = the_Weight_of G0 by A1,GLIB_000:12;
     thus the_ELabel_of G = the_ELabel_of G0 by A1,GLIB_000:12;
 A2: the_VLabel_of G0 = source .--> 1 by A1,GLIB_000:11;
-    dom (source.-->1) = {source} by CQC_LANG:5;
+    dom (source.-->1) = {source} by FUNCOP_1:14,19;
     hence G0.labeledV() = {source} by A2;
 end;
 
@@ -4012,12 +4013,12 @@ then
                 set XOUT= (EL1|v'.edgesOut())+* (e2.-->(EL1.e2 + T));
             A53: e1 in v'.edgesIn() & e2 in v'.edgesOut()
                   by A52,GLIB_000:60,62;
-            A54: dom (e1.-->(EL1.e1+T)) = {e1} by CQC_LANG:5; then
+            A54: dom (e1.-->(EL1.e1+T)) = {e1} by FUNCOP_1:14,19; then
             A55: dom XIN = dom (EL1|v'.edgesIn()) \/ {e1} by FUNCT_4:def 1
                        .= v'.edgesIn() \/ {e1} by PBOOLE:def 3
                        .= v'.edgesIn() by A53,ZFMISC_1:46; then
                 reconsider XIN as Rbag of v'.edgesIn() by PBOOLE:def 3;
-            A56: dom (e2.-->(EL1.e2+T)) = {e2} by CQC_LANG:5; then
+            A56: dom (e2.-->(EL1.e2+T)) = {e2} by FUNCOP_1:14,19; then
             A57: dom XOUT = dom (EL1|v'.edgesOut())\/{e2} by FUNCT_4:def 1
                         .= v'.edgesOut() \/ {e2} by PBOOLE:def 3
                         .= v'.edgesOut() by A53,ZFMISC_1:46; then
@@ -4031,7 +4032,7 @@ then
                     A61: e = e1; then
                         e in dom (e1.-->(EL1.e1+T)) by A54,TARSKI:def 1;
                         hence XIN.e = (e1.-->(EL1.e1+T)).e1 by A61,FUNCT_4:14
-                                   .= EL1.e1 + T by CQC_LANG:6
+                                   .= EL1.e1 + T by FUNCOP_1:87
                                    .= EL2.e by A3,A29,A32,A52,A61,Def20;
                       end;
                       suppose
@@ -4103,7 +4104,7 @@ then
                     A75: e = e2; then
                         e in dom (e2.-->(EL1.e2+T)) by A56,TARSKI:def 1;
                         hence XOUT.e = (e2.-->(EL1.e2+T)).e2 by A75,FUNCT_4:14
-                                    .= EL1.e2 + T by CQC_LANG:6
+                                    .= EL1.e2 + T by FUNCOP_1:87
                                     .= EL2.e by A3,A24,A26,A52,A75,Def20;
                       end;
                       suppose
@@ -4184,17 +4185,17 @@ then
                 set XIN2 = XIN1 +* (e2.-->(EL1.e2-T));
             A86: dom XIN1 = dom (EL1|v'.edgesIn()) \/ dom (e1.-->(EL1.e1+T))
                              by FUNCT_4:def 1
-                        .= dom (EL1|v'.edgesIn()) \/ {e1} by CQC_LANG:5
+                        .= dom (EL1|v'.edgesIn()) \/ {e1} by FUNCOP_1:14,19
                         .= v'.edgesIn() \/ {e1} by PBOOLE:def 3
                         .= v'.edgesIn() by A85,ZFMISC_1:46; then
                 reconsider XIN1 as Rbag of v'.edgesIn() by PBOOLE:def 3;
             A87: dom XIN2 = dom XIN1 \/ dom (e2.-->(EL1.e2-T)) by FUNCT_4:def 1
-                        .= v'.edgesIn() \/ {e2} by A86,CQC_LANG:5
+                        .= v'.edgesIn() \/ {e2} by A86,FUNCOP_1:14,19
                         .= v'.edgesIn() by A85,ZFMISC_1:46; then
                 reconsider XIN2 as Rbag of v'.edgesIn() by PBOOLE:def 3;
             A88: dom (EL2|v.edgesIn()) = v.edgesIn() by PBOOLE:def 3;
             A89: dom (e1.-->(EL1.e1+T)) = {e1} & dom (e2.-->(EL1.e2-T)) = {e2}
-                  by CQC_LANG:5;
+                  by FUNCOP_1:14,19;
             A90: now let e be set; assume
                 A91: e in dom (EL2|v.edgesIn()); then
                 A92: e in v.edgesIn() by PBOOLE:def 3;
@@ -4207,7 +4208,7 @@ then
 then
                         XIN2.e = XIN1.e by FUNCT_4:12
                               .= (e1.-->(EL1.e1+T)).e by A95,FUNCT_4:14
-                              .= EL2.e by A84,A94,CQC_LANG:6;
+                              .= EL2.e by A84,A94,FUNCOP_1:87;
                         hence (EL2|v.edgesIn()).e = XIN2.e by FUNCT_1:72,A91,
 A88;
                       end;
@@ -4215,7 +4216,7 @@ A88;
                     A96: e = e2; then
                         e in dom (e2.-->(EL1.e2-T)) by A89,TARSKI:def 1; then
                         XIN2.e = (e2.-->(EL1.e2-T)).e2 by A96,FUNCT_4:14
-                              .= EL2.e by A84,A96,CQC_LANG:6;
+                              .= EL2.e by A84,A96,FUNCOP_1:87;
                         hence (EL2|v.edgesIn()).e = XIN2.e by FUNCT_1:72,A91,
 A88;
                       end;
@@ -4275,18 +4276,18 @@ then
                 set XOUT2 = XOUT1 +* (e2.-->(EL1.e2+T));
             A111: dom XOUT1 = dom (EL1|v'.edgesOut()) \/ dom (e1.-->(EL1.e1-T))
                               by FUNCT_4:def 1
-                         .= dom (EL1|v'.edgesOut()) \/ {e1} by CQC_LANG:5
+                         .= dom (EL1|v'.edgesOut()) \/ {e1} by FUNCOP_1:14,19
                          .= v'.edgesOut() \/ {e1} by PBOOLE:def 3
                          .= v'.edgesOut() by A110,ZFMISC_1:46; then
                 reconsider XOUT1 as Rbag of v'.edgesOut() by PBOOLE:def 3;
             A112: dom XOUT2 = dom XOUT1\/dom (e2.-->(EL1.e2+T)) by FUNCT_4:def
 1
-                         .= v'.edgesOut() \/ {e2} by A111,CQC_LANG:5
+                         .= v'.edgesOut() \/ {e2} by A111,FUNCOP_1:14,19
                          .= v'.edgesOut() by A110,ZFMISC_1:46; then
                 reconsider XOUT2 as Rbag of v'.edgesOut() by PBOOLE:def 3;
             A113: dom (EL2|v.edgesOut()) = v.edgesOut() by PBOOLE:def 3;
             A114: dom (e1.-->(EL1.e1-T)) = {e1} & dom (e2.-->(EL1.e2+T)) = {e2}
-                  by CQC_LANG:5;
+                  by FUNCOP_1:14,19;
             A115: now let e be set; assume
                 A116: e in dom (EL2|v.edgesOut()); then
                 A117: e in v.edgesOut() by PBOOLE:def 3;
@@ -4299,7 +4300,7 @@ then
 then
                         XOUT2.e = XOUT1.e by FUNCT_4:12
                                .= (e1.-->(EL1.e1-T)).e by A120,FUNCT_4:14
-                               .= EL2.e by A109,A119,CQC_LANG:6;
+                               .= EL2.e by A109,A119,FUNCOP_1:87;
                         hence (EL2|v.edgesOut()).e=XOUT2.e by FUNCT_1:72,A116,
 A113;
                       end;
@@ -4307,7 +4308,7 @@ A113;
                     A121: e = e2; then
                         e in dom (e2.-->(EL1.e2+T)) by A114,TARSKI:def 1; then
                         XOUT2.e = (e2.-->(EL1.e2+T)).e by FUNCT_4:14
-                               .= EL2.e by A109,A121,CQC_LANG:6;
+                               .= EL2.e by A109,A121,FUNCOP_1:87;
                         hence (EL2|v.edgesOut()).e=XOUT2.e by FUNCT_1:72,A116,
 A113;
                       end;
@@ -4367,7 +4368,7 @@ then
                 set XIN = (EL1|v'.edgesIn())+*(e2.-->(EL1.e2-T));
                 set XOUT= (EL1|v'.edgesOut())+*(e1.-->(EL1.e1-T));
             A136: dom (e1.-->(EL1.e1-T)) = {e1} &
-                dom (e2.-->(EL1.e2-T)) = {e2} by CQC_LANG:5; then
+                dom (e2.-->(EL1.e2-T)) = {e2} by FUNCOP_1:14,19; then
             A137: dom XIN = dom (EL1|v'.edgesIn()) \/ {e2} by FUNCT_4:def 1
                        .= v'.edgesIn() \/ {e2} by PBOOLE:def 3
                        .= v'.edgesIn() by A135,ZFMISC_1:46; then
@@ -4387,7 +4388,7 @@ then
                     A142: e = e2; then
                         e in dom (e2.-->(EL1.e2-T)) by A136,TARSKI:def 1;
                         hence XIN.e = (e2.-->(EL1.e2-T)).e2 by A142,FUNCT_4:14
-                                   .= EL2.e by A134,A142,CQC_LANG:6;
+                                   .= EL2.e by A134,A142,FUNCOP_1:87;
                       end;
                       suppose
                     A143: e <> e2; then
@@ -4417,7 +4418,7 @@ then
                     A148: e = e1; then
                         e in dom (e1.-->(EL1.e1-T)) by A136,TARSKI:def 1;
                         hence XOUT.e = (e1.-->(EL1.e1-T)).e1 by A148,FUNCT_4:14
-                                    .= EL2.e by A134,A148,CQC_LANG:6;
+                                    .= EL2.e by A134,A148,FUNCOP_1:87;
                       end;
                       suppose
                     A149: e <> e1; then
@@ -4534,7 +4535,7 @@ A8: P.(len P) = sink by A1,GLIB_001:18;
     A11: e1 in G.edgesInto({sink}) by A6,GLIB_000:def 28;
         set EI2 = EI1+*(e1.-->(EI1.e1 + T));
     A12: dom EI2 = dom EI1 \/ dom (e1.-->(EI1.e1 + T)) by FUNCT_4:def 1
-               .= dom EI1 \/ {e1} by CQC_LANG:5
+               .= dom EI1 \/ {e1} by FUNCOP_1:14,19
                .= G.edgesInto({sink}) \/ {e1} by PBOOLE:def 3
                .= G.edgesInto({sink}) by A11,ZFMISC_1:46; then
         reconsider EI2 as Rbag of G.edgesInto({sink}) by PBOOLE:def 3;
@@ -4551,9 +4552,9 @@ A8: P.(len P) = sink by A1,GLIB_001:18;
               suppose
             A18: e = e1; then
                 e in {e1} by TARSKI:def 1; then
-                e in dom (e1.-->(EI1.e1+T)) by CQC_LANG:5; then
+                e in dom (e1.-->(EI1.e1+T)) by FUNCOP_1:14,19; then
                 EI2.e = (e1.-->(EI1.e1+T)).e1 by A18,FUNCT_4:14
-                     .= EI1.e1 + T by CQC_LANG:6
+                     .= EI1.e1 + T by FUNCOP_1:87
                      .= EL2.e1 by A15,A10,A7,A18,FUNCT_1:72;
                 hence (EL2|G2.edgesInto({sink})).e = EI2.e
                   by A14,A13,FUNCT_1:72,A18;
@@ -4561,7 +4562,7 @@ A8: P.(len P) = sink by A1,GLIB_001:18;
               suppose
             A19: e <> e1; then
                 not e in {e1} by TARSKI:def 1; then
-                not e in dom (e1.-->(EI1.e1+T)) by CQC_LANG:5; then
+                not e in dom (e1.-->(EI1.e1+T)) by FUNCOP_1:14,19; then
             A20: EI2.e = EI1.e by FUNCT_4:12
                      .= EL1.e by A15,A7,FUNCT_1:72;
                 now assume e in P.edges(); then
@@ -4656,7 +4657,7 @@ A8: P.(len P) = sink by A1,GLIB_001:18;
     A38: e1 in G.edgesOutOf({sink}) by A6,GLIB_000:def 29;
         set EO2 = EO1+*(e1.-->(EO1.e1-T));
     A39: dom EO2 = dom EO1 \/ dom (e1.-->(EO1.e1 - T)) by FUNCT_4:def 1
-               .= dom EO1 \/ {e1} by CQC_LANG:5
+               .= dom EO1 \/ {e1} by FUNCOP_1:14,19
                .= G.edgesOutOf({sink}) \/ {e1} by PBOOLE:def 3
                .= G.edgesOutOf({sink}) by A38,ZFMISC_1:46; then
         reconsider EO2 as Rbag of G.edgesOutOf({sink}) by PBOOLE:def 3;
@@ -4672,9 +4673,9 @@ A8: P.(len P) = sink by A1,GLIB_001:18;
               suppose
             A45: e = e1; then
                 e in {e1} by TARSKI:def 1; then
-                e in dom (e1.-->(EO1.e1-T)) by CQC_LANG:5; then
+                e in dom (e1.-->(EO1.e1-T)) by FUNCOP_1:14,19; then
                 EO2.e = (e1.-->(EO1.e1-T)).e1 by A45,FUNCT_4:14
-                     .= EO1.e1 - T by CQC_LANG:6
+                     .= EO1.e1 - T by FUNCOP_1:87
                      .= EL2.e by A36,A7,A42,A45,FUNCT_1:72;
                 hence (EL2|G2.edgesOutOf({sink})).e = EO2.e
                   by A41,A40,FUNCT_1:72;
@@ -4682,7 +4683,7 @@ A8: P.(len P) = sink by A1,GLIB_001:18;
               suppose
             A46: e <> e1; then
                 not e in {e1} by TARSKI:def 1; then
-                not e in dom (e1.-->(EO1.e1-T)) by CQC_LANG:5; then
+                not e in dom (e1.-->(EO1.e1-T)) by FUNCOP_1:14,19; then
             A47: EO2.e = EO1.e by FUNCT_4:12
                      .= EL1.e by A7,A42,FUNCT_1:72;
                 now assume e in P.edges(); then

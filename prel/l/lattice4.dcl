@@ -18,10 +18,10 @@
 </Signature>
 <RCluster>
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="27"/>
+<Adjective nr="16" value="false"/>
+<Adjective nr="31"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -35,11 +35,11 @@
 </RCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="27"/>
-<Adjective nr="34"/>
+<Adjective nr="16" value="false"/>
+<Adjective nr="31"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -53,7 +53,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="92">
+<Func kind="K" nr="94">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

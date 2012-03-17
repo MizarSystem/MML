@@ -22,7 +22,7 @@ Too many equalities in an inference
 # 16
 Collection overflow
 # 20
-The structure of sentences disagrees the scheme
+The structure of the sentences disagrees with the scheme
 # 21
 Invalid instantiation of a scheme functor
 # 22
@@ -365,6 +365,12 @@ Unexpected "end"
 ";" missing
 # 219
 Unexpected "proof"
+# 220
+Local predicates are not allowed in library items 
+# 221
+Local functors are not allowed in library items
+# 222
+Local constants are not allowed in library items  
 # 228
 Unexpected "reconsider"
 # 229

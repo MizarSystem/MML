@@ -9,24 +9,25 @@ environ
  vocabularies FUNCT_1, RELAT_1, BOOLE, CAT_1, FUNCOP_1, FINSET_1, PBOOLE,
       CAT_4, FUNCT_4, INT_1, FINSEQ_1, CARD_1, SETFAM_1, SUBSET_1, PRALG_1,
       ZF_REFLE, FINSEQ_2, MCART_1, TARSKI, FINSEQ_4, REWRITE1, FUNCT_5,
-      FUNCT_2, FUNCT_7, PARTFUN1, NAT_1;
+      FUNCT_2, FUNCT_7, PARTFUN1, NAT_1, ARYTM_1, RFINSEQ, FINSEQ_7;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
       NAT_1, NAT_D, SETFAM_1, PBOOLE, DOMAIN_1, CARD_1, RELAT_1, FUNCT_1,
-      RELSET_1, BINOP_1, FINSEQ_1, FINSET_1, CQC_LANG, PARTFUN1, FUNCOP_1,
-      FUNCT_2, FINSEQ_2, FUNCT_4, FUNCT_5, FINSEQ_4, REWRITE1;
+      RELSET_1, BINOP_1, FINSET_1, PARTFUN1, FUNCOP_1,
+      FUNCT_2, FINSEQ_1, FINSEQ_2, FUNCT_4, FUNCT_5, FINSEQ_4,
+      RFINSEQ, BINARITH, REWRITE1;
  constructors SETFAM_1, PARTFUN1, WELLORD2, DOMAIN_1, BINOP_1, FUNCT_4,
-      XXREAL_0, NAT_1, INT_1, FUNCT_5, CQC_LANG, PBOOLE, FINSEQ_4, REWRITE1,
-      NAT_D;
+      XXREAL_0, NAT_1, INT_1, FUNCT_5, PBOOLE, FINSEQ_4, REWRITE1,
+      RFINSEQ, BINARITH, NAT_D;
  registrations NUMBERS, SUBSET_1, RELAT_1, FUNCT_1, FINSEQ_1, RELSET_1, CARD_1,
-      FUNCOP_1, FUNCT_4, CQC_LANG, PARTFUN1, INT_1, ORDINAL1, XREAL_0, NAT_1;
+      FUNCOP_1, FUNCT_4, PARTFUN1, INT_1, ORDINAL1, XREAL_0, NAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, FUNCT_1, XBOOLE_0, FUNCOP_1, BINOP_1, CQC_LANG, FINSEQ_2;
+ definitions TARSKI, FUNCT_1, XBOOLE_0, FUNCOP_1, BINOP_1, FINSEQ_2;
  theorems FINSEQ_1, RELAT_1, CARD_5, TARSKI, AXIOMS, ZFMISC_1, INT_1, FUNCT_1,
-      FINSEQ_2, FUNCT_4, SUBSET_1, FINSET_1, CQC_LANG, CARD_1, NAT_1, FUNCT_2,
+      FINSEQ_2, FUNCT_4, SUBSET_1, FINSET_1, CARD_1, NAT_1, FUNCT_2,
       FUNCOP_1, PBOOLE, SETFAM_1, MCART_1, FINSEQ_3, REAL_1, ENUMSET1,
       REWRITE1, TREES_1, FUNCT_5, FINSEQ_4, RELSET_1, XBOOLE_0, XBOOLE_1,
-      PARTFUN1, GRFUNC_1, XREAL_1, XXREAL_0, ORDINAL1;
- schemes NAT_1, DOMAIN_1, ZFREFLE1, FRAENKEL, FINSEQ_1, RECDEF_1, FUNCT_2;
+      PARTFUN1, GRFUNC_1, XREAL_1, XXREAL_0, ORDINAL1, BINARITH, RFINSEQ;
+ schemes NAT_1, DOMAIN_1, CLASSES1, FRAENKEL, FINSEQ_1, RECDEF_1, FUNCT_2;
 
 begin :: Preliminaries
 
@@ -144,7 +145,7 @@ proof let I,J be set, M be ManySortedSet of [:I,J:];
  let i,j be set;
  assume i in I & j in J;
 then A1: [i,j] in [:I,J:] by ZFMISC_1:106;
- thus (i,j):-> (M.(i,j)) = [i,j].--> (M.[i,j]) by CQC_LANG:42
+ thus (i,j):-> (M.(i,j)) = [i,j].--> (M.[i,j]) by FUNCT_4:84
        .= M|{[i,j]} by A1,Th7
        .= M|[:{i},{j}:] by ZFMISC_1:35;
 end;
@@ -877,7 +878,7 @@ A1: i in dom f;
 then A2:  {i} c= dom f by ZFMISC_1:37;
    thus dom(f+*(i,x)) = dom(f+*(i.-->x)) by A1,Def3
       .= dom f \/ dom(i.-->x) by FUNCT_4:def 1
-      .= dom f \/ {i} by CQC_LANG:5
+      .= dom f \/ {i} by FUNCOP_1:14,19
       .= dom f by A2,XBOOLE_1:12;
   end;
   suppose not i in dom f;
@@ -889,12 +890,12 @@ theorem Th33:
  for f be Function, d,i be set st i in dom f holds (f+*(i,d)).i = d
 proof
  let f be Function, d,i be set;
-       dom(i.-->d) = {i} by CQC_LANG:5;
+       dom(i.-->d) = {i} by FUNCOP_1:14,19;
 then A1: i in dom(i.-->d) by TARSKI:def 1;
  assume i in dom f;
  hence (f+*(i,d)).i = (f+*(i.-->d)).i by Def3
      .= (i.-->d).i by A1,FUNCT_4:14
-     .= d by CQC_LANG:6;
+     .= d by FUNCOP_1:87;
 end;
 
 theorem Th34:
@@ -903,7 +904,7 @@ theorem Th34:
 proof
  let f be Function, d,i,j be set such that
 A1: i <> j;
-       dom(i.-->d) = {i} by CQC_LANG:5;
+       dom(i.-->d) = {i} by FUNCOP_1:14,19;
 then A2: not j in dom(i.-->d) by A1,TARSKI:def 1;
  per cases;
  suppose i in dom f;
@@ -924,7 +925,7 @@ A1: i <> j;
   suppose that
 A2: i in dom f and
 A3: j in dom f;
-        dom(i.-->d) = {i} & dom(j.-->e) = {j} by CQC_LANG:5;
+        dom(i.-->d) = {i} & dom(j.-->e) = {j} by FUNCOP_1:14,19;
 then A4: dom(i.-->d) misses dom(j.-->e) by A1,ZFMISC_1:17;
 A5: i in dom(f+*(j,e)) by A2,Th32;
         j in dom(f+*(i,d)) by A3,Th32;
@@ -965,7 +966,7 @@ theorem
       for f be Function, d,e,i be set
   holds f+*(i,d)+*(i,e) = f+*(i,e)
  proof let f be Function, d,e,i be set;
-A1: dom(i.-->d) = {i} by CQC_LANG:5 .= dom(i.-->e) by CQC_LANG:5;
+A1: dom(i.-->d) = {i} by FUNCOP_1:14,19 .= dom(i.-->e) by FUNCOP_1:14,19;
   per cases;
   suppose
 A2: i in dom f;
@@ -1013,7 +1014,7 @@ definition
 A1:   i in dom f;
     then f+*(i,d) = f+*(i.-->d) by Def3;
     then A2:   rng(f+*(i,d)) c= rng f \/ rng(i.-->d) by FUNCT_4:18;
-A3:   rng f \/ rng(i.-->d) = rng f \/ {d} by CQC_LANG:5;
+A3:   rng f \/ rng(i.-->d) = rng f \/ {d} by FUNCOP_1:14,19;
           f.i in rng f by A1,FUNCT_1:def 5;
      then {d} c= D by ZFMISC_1:37;
      then rng f \/ {d} c= D by XBOOLE_1:8;
@@ -2044,7 +2045,7 @@ A3:    x in Seg n; then reconsider i = x as Element of NAT;
      end;
    consider f being Function such that
 A4:  dom f = Seg n and
-A5:  for x being set st x in Seg n holds P[x,f.x] from ZFREFLE1:sch 1(A2);
+A5:  for x being set st x in Seg n holds P[x,f.x] from CLASSES1:sch 1(A2);
    reconsider f as FinSequence by A4,FINSEQ_1:def 2;
    take f;
    thus len f+1 = len q by A1,A4,FINSEQ_1:def 3;
@@ -2534,7 +2535,7 @@ theorem
 then A1: f+*(a,b) = f+*(a.-->b) by Def3;
   assume a in A;
    then {a} c= A by ZFMISC_1:37;
-   then dom(a.-->b) c= A by CQC_LANG:5;
+   then dom(a.-->b) c= A by FUNCOP_1:14,19;
   hence f,f+*(a,b) equal_outside A by A1,Th31;
   end;
   suppose not a in dom f;
@@ -2552,7 +2553,7 @@ proof let f be Function, a,b,A be set;
 A1:  a in dom f;
  assume not a in A;
   then {a} misses A by ZFMISC_1:56;
-  then A2: dom (a.-->b) misses A by CQC_LANG:5;
+  then A2: dom (a.-->b) misses A by FUNCOP_1:14,19;
  thus (f+*(a,b))|A = (f +* (a.-->b))|A by A1,Def3
     .= f|A by A2,FUNCT_4:76;
  end;
@@ -2607,10 +2608,10 @@ theorem Th96:
   proof
     let f be Function,
         a, b be set;
-        dom (a .--> b) = {a} by CQC_LANG:5;
+        dom (a .--> b) = {a} by FUNCOP_1:14,19;
     then a in dom (a .--> b) by TARSKI:def 1;
     hence (f +* (a .--> b)).a = (a .--> b).a by FUNCT_4:14
-      .= b by CQC_LANG:6;
+      .= b by FUNCOP_1:87;
   end;
 
 :: from SCMFSA6A, 2006.03.14, A.T.
@@ -2624,7 +2625,7 @@ A1: dom <*a*> = {1} by FINSEQ_1:4,def 8;
 then A2: <*a*> +* (1,b) = <*a*> +* (1 .--> b) by Def3;
 then A3: dom (<*a*> +* (1,b))
        = dom <*a*> \/ dom (1 .--> b) by FUNCT_4:def 1
-      .= {1} \/ {1} by A1,CQC_LANG:5
+      .= {1} \/ {1} by A1,FUNCOP_1:14,19
       .= {1};
 A4: dom <*b*> = {1} by FINSEQ_1:4,def 8;
        for x being set st x in {1} holds (<*a*> +* (1,b)).x = <*b*>.x
@@ -2650,4 +2651,248 @@ theorem
    hence f +* (x .--> f.x) = f +*(x,f.x) by Def3
    .= f by Th37;
  end;
+
+:: from JORDAN2B, 2007.03.18, A.T.
+
+reserve i for Nat;
+reserve j for Element of NAT;
+
+theorem Th12:
+ for w being FinSequence,r being set,i
+     holds len (w+*(i,r))=len w
+proof let w be FinSequence,r be set,i;
+      dom ( w+*(i,r))=dom w by Th32;
+   then Seg len ( w+*(i,r))=dom w by FINSEQ_1:def 3 .=Seg len w by
+FINSEQ_1:def 3;
+  hence thesis by FINSEQ_1:8;
+end;
+
+theorem
+ for D being non empty set,
+     w being FinSequence of D,
+     r being Element of D
+  st i in dom w holds w+*(i,r)=(w|(i-'1))^<*r*>^(w/^i)
+proof
+ let D be non empty set,
+     w be FinSequence of D,
+     r be Element of D;
+  assume A1: i in dom w;
+    then A2: 1<=i & i<=len w by FINSEQ_3:27;
+    then A3:i-'1<=len w by BINARITH:62;
+    A4:len(w+*(i,r))=i-1+1+(len w -i) by Th12;
+    A5:len ((w|(i-'1))^<*r*>^(w/^i))
+    =len ((w|(i-'1))^<*r*>)+len(w/^i) by FINSEQ_1:35
+    .=len (w|(i-'1))+len<*r*>+len(w/^i) by FINSEQ_1:35
+    .=len (w|(i-'1))+1+len(w/^i) by FINSEQ_1:56
+    .=(i-'1)+1+len(w/^i) by A3,FINSEQ_1:80
+    .=(i-'1)+1+(len w-i) by A2,RFINSEQ:def 2
+    .=(i-1)+1+(len w-i) by A2,BINARITH:50;
+       for j st 1<=j & j<=len (w+*(i,r)) holds
+    (w+*(i,r)).j=((w|(i-'1))^<*r*>^(w/^i)).j
+    proof let j;assume
+      A6: 1<=j & j<=len (w+*(i,r));
+      A7:len (w+*(i,r))=len (w) by Th12;
+       A8:len ((w|(i-'1))^<*r*>)
+       =len (w|(i-'1))+len<*r*> by FINSEQ_1:35
+      .=len (w|(i-'1))+1 by FINSEQ_1:56
+      .=(i-'1)+1 by A3,FINSEQ_1:80
+      .=(i-1)+1 by A2,BINARITH:50
+      .=i;
+      A9:len (w|(i-'1))
+       =(i-'1) by A3,FINSEQ_1:80
+       .=(i-1) by A2,BINARITH:50;
+         now per cases by REAL_1:def 5;
+      case A10:i<j;
+        A11:j<=len ((w|(i-'1))^<*r*>^(w/^i)) by A5,A6,Th12;
+         A12:i<=len w by A1,FINSEQ_3:27;
+            i+1<=j by A10,NAT_1:13;
+         then A13: i+1-i<=j-i by XREAL_1:11;
+         A14:len (w/^i)=len w -'i by BINARITH:76 .=len w -i by A12,BINARITH:50;
+            j-i<=len w-i by A6,A7,XREAL_1:11;
+         then 1<=j-'i & j-'i<=len (w/^i) by A13,A14,BINARITH:57;
+         then A15:j-'i in dom (w/^i) by FINSEQ_3:27;
+           ((w|(i-'1))^<*r*>^(w/^i)).j
+        =(w/^i).(j-len ((w|(i-'1))^<*r*>)) by A8,A10,A11,FINSEQ_1:37
+        .=(w/^i).(j-'i) by A8,A10,BINARITH:50
+        .=w.(j-'i+i) by A12,A15,RFINSEQ:def 2 .=w.j by A10,BINARITH:53;
+       hence (w+*(i,r)).j=((w|(i-'1))^<*r*>^(w/^i)).j by A10,Th34;
+      end;
+      case A16:j=i;
+        A17:i=len (w|(i-'1))+1 by A9;
+           ((w|(i-'1))^<*r*>^(w/^i)).j
+         =((w|(i-'1))^<*r*>).i by A6,A8,A16,FINSEQ_1:85
+        .=r by A17,FINSEQ_1:59;
+       hence (w+*(i,r)).j=((w|(i-'1))^<*r*>^(w/^i)).j by A1,A16,Th33;
+      end;
+      case A18:j<i;
+        then j+1<=i by NAT_1:13;
+        then A19: j+1-1<=i-1 by XREAL_1:11;
+        then A20:j<=i-'1 by A2,BINARITH:50;
+           ((w|(i-'1))^<*r*>^(w/^i)).j
+        =((w|(i-'1))^<*r*>).j by A6,A8,A18,FINSEQ_1:85
+        .=(w|(i-'1)).j by A6,A9,A19,FINSEQ_1:85
+        .= w.j by A20,FINSEQ_3:121;
+       hence (w+*(i,r)).j=((w|(i-'1))^<*r*>^(w/^i)).j by A18,Th34;
+      end;
+      end;
+     hence (w+*(i,r)).j=((w|(i-'1))^<*r*>^(w/^i)).j;
+    end;
+  hence thesis by A4,A5,FINSEQ_1:18;
+end;
+
+:: comp. FINSEQ_7, 2007.03.18, A.T.
+
+reserve F for Function, e,x,y,z for set;
+
+definition
+  let F; let x,y;
+  func Swap(F,x,y) equals :Defx:
+    F+*(x,F.y)+*(y,F.x) if x in dom F & y in dom F
+      otherwise F;
+  correctness;
+end;
+
+registration
+  let F; let x,y;
+  cluster Swap(F,x,y) -> Relation-like Function-like;
+  coherence
+   proof per cases;
+    suppose x in dom F & y in dom F;
+      then Swap(F,x,y) =  F+*(x,F.y)+*(y,F.x) by Defx;
+     hence thesis;
+    end;
+    suppose not(x in dom F & y in dom F);
+     hence thesis by Defx;
+    end;
+   end;
+end;
+
+theorem Thx0:
+ dom Swap(F,x,y) = dom F
+  proof per cases;
+   suppose that
+S1: x in dom F and
+S2: y in dom F;
+    thus dom Swap(F,x,y) = dom(F+*(x,F.y)+*(y,F.x)) by S1,S2,Defx
+       .= dom(F+*(x,F.y)) by Th32
+       .= dom F by Th32;
+   end;
+    suppose not(x in dom F & y in dom F);
+     hence thesis by Defx;
+    end;
+  end;
+
+theorem Thx1:
+ rng(F+*(x,y)) c= rng F \/ {y}
+ proof
+X: rng(x.-->y) = {y} by FUNCOP_1:14,19;
+  per cases;
+  suppose x in dom F;
+    then F+*(x,y) = F+*(x.-->y) by Def3;
+   hence rng(F+*(x,y)) c= rng F \/ {y} by X,FUNCT_4:18;
+  end;
+  suppose not x in dom F;
+    then F+*(x,y) = F by Def3;
+   hence thesis by XBOOLE_1:7;
+  end;
+ end;
+
+theorem Thx2:
+ rng F c= rng(F+*(x,y)) \/ {F.x}
+ proof
+  per cases;
+  suppose x in dom F;
+   let z;
+   assume z in rng F;
+    then consider e such that
+W1:  e in dom F and
+W2:  z = F.e by FUNCT_1:def 5;
+X:  dom F = dom(F+*(x,y)) by Th32;
+   per cases;
+   suppose e = x;
+    then z in {F.x} by W2,TARSKI:def 1;
+   hence z in rng(F+*(x,y)) \/ {F.x} by XBOOLE_0:def 2;
+   end;
+   suppose e <> x;
+    then (F+*(x,y)).e = F.e by Th34;
+    then z in rng(F+*(x,y)) by W1,W2,FUNCT_1:12,X;
+   hence z in rng(F+*(x,y)) \/ {F.x} by XBOOLE_0:def 2;
+   end;
+  end;
+  suppose not x in dom F;
+    then F+*(x,y) = F by Def3;
+   hence thesis by XBOOLE_1:7;
+  end;
+ end;
+
+theorem Thx3:
+ x in dom F implies y in rng(F+*(x,y))
+ proof assume
+Z:  x in dom F;
+   then
+A:  x in dom (F+*(x,y)) by Th32;
+   (F+*(x,y)).x = y by Z,Th33;
+  hence thesis by FUNCT_1:12,A;
+ end;
+
+theorem Thx4:
+ rng Swap(F,x,y) = rng F
+  proof per cases;
+   suppose that
+S1: x in dom F and
+S2: y in dom F;
+A:  Swap(F,x,y) = F+*(x,F.y)+*(y,F.x) by S1,S2,Defx;
+    F.x in rng F by S1,FUNCT_1:12;
+    then
+Dx: F.x in rng F \/ {F.y} by XBOOLE_0:def 2;
+Dy: F.y in rng F by S2,FUNCT_1:12;
+D:  rng F \/ {F.y} \/ {F.x} = rng F \/ {F.y} by Dx,ZFMISC_1:46
+          .= rng F by Dy,ZFMISC_1:46;
+C:  rng Swap(F,x,y) c= rng(F+*(x,F.y)) \/ {F.x} by A,Thx1;
+    rng(F+*(x,F.y)) c= rng F \/ {F.y} by Thx1;
+    then rng(F+*(x,F.y)) \/ {F.x} c= rng F by D,XBOOLE_1:9;
+    then
+B:  rng Swap(F,x,y) c= rng F by C,XBOOLE_1:1;
+E2: y in dom(F+*(x,F.y)) by S2,Th32;
+    then
+     F.x in rng Swap(F,x,y) by Thx3,A;
+    then
+Dx: F.x in rng Swap(F,x,y) \/ {F.y} by XBOOLE_0:def 2;
+Dy: F.y in rng Swap(F,x,y)
+     proof per cases;
+      suppose F.x = F.y;
+       hence thesis by E2,Thx3,A;
+      end;
+      suppose
+S:     F.x <> F.y;
+B:      dom Swap(F,x,y) = dom F by Thx0;
+        Swap(F,x,y).x = F+*(x,F.y).x by A,S,Th34
+                .= F.y by S1,Th33;
+       hence thesis by S1,FUNCT_1:12,B;
+      end;
+     end;
+Y:  (F+*(x,F.y)).y = F.y
+     proof per cases;
+      suppose x <> y;
+        hence (F+*(x,F.y)).y = F.y by Th34;
+      end;
+      suppose x = y;
+       hence (F+*(x,F.y)).y = F.y by S1,Th33;
+      end;
+     end;
+D:  rng Swap(F,x,y) \/ {F.y} \/ {F.x}
+           = rng Swap(F,x,y) \/ {F.y} by Dx,ZFMISC_1:46
+          .= rng Swap(F,x,y) by Dy,ZFMISC_1:46;
+E:  rng F c= rng(F+*(x,F.y)) \/ {F.x} by Thx2;
+    rng(F+*(x,F.y)) c= rng Swap(F,x,y) \/ {F.y} by A,Thx2,Y;
+    then rng(F+*(x,F.y)) \/ {F.x} c= rng Swap(F,x,y) by D,XBOOLE_1:9;
+    then rng F c= rng Swap(F,x,y) by E,XBOOLE_1:1;
+    hence thesis by B,XBOOLE_0:def 10;
+   end;
+    suppose not(x in dom F & y in dom F);
+     hence thesis by Defx;
+    end;
+  end;
+
+
 

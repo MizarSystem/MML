@@ -273,7 +273,7 @@ A2:  for x st x in A() ex y st P[x,y];
      for x st x in A() holds P[x,f.x] from FuncEx(A1,A2);
   end;
 
-theorem
+theorem Th15:
   X <> {} implies for y ex f st dom f = X & rng f = {y}
  proof assume
 A1:  X <> {};
@@ -1561,12 +1561,12 @@ theorem
       f.:(X1 \ X2) c= f.:X1 \ f.:X2
      proof let y;
       assume y in f.:(X1\X2);
-      then consider x such that
+       then consider x such that
 A3:     x in dom f and
 A4:     x in X1\X2 and
 A5:     y = f.x by Def12;
-A6:     x in X1 & not x in X2 by A4,XBOOLE_0:def 4;
-then A7:     y in f.:X1 by A3,A5,Def12;
+A6:     not x in X2 by A4,XBOOLE_0:def 4;
+A7:     y in f.:X1 by A3,A5,Def12,A4;
          now assume y in f.:X2;
         then ex z st z in dom f & z in X2 & y = f.z by Def12;
         hence contradiction by A1,A3,A5,A6,Def8;
@@ -2263,3 +2263,33 @@ definition let f,g;
   dom f = dom g & for x st x in dom f holds f.x = g.x;
   compatibility by Th9;
 end;
+
+:: missing, 2007.03.09, A.T.
+
+registration
+ cluster non-empty non empty Function;
+  existence
+   proof consider X being non empty set;
+     consider f such that
+W1:   dom f = X and
+W2:   rng f = {X} by Th15;
+    take f;
+     not {} in rng f by W2,TARSKI:def 1;
+    hence f is non-empty by RELAT_1:def 9;
+    thus f is non empty by W1,RELAT_1:60;
+   end;
+end;
+
+:: from PRVECT_1, 2007.03.09, A.T.
+
+registration
+  let a be non-empty non empty Function;
+  let i be Element of dom a;
+  cluster a.i -> non empty;
+   coherence
+    proof
+      a.i in rng a by Def5;
+     hence thesis by RELAT_1:def 9;
+    end;
+end;
+

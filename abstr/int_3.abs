@@ -8,15 +8,17 @@ environ
 
  vocabularies BINOP_1, INT_1, FUNCT_1, VECTSP_1, RELAT_1, ARYTM_1, GR_CY_1,
       FUNCT_7, RLVECT_1, VECTSP_2, LATTICES, ABSVALUE, EUCLID, NAT_1, FUNCSDOM,
-      GCD_1, ARYTM_3, INT_2, MCART_1, ORDINAL2, NAT_LAT, INT_3, ARYTM, GROUP_1;
+      GCD_1, ARYTM_3, INT_2, MCART_1, ORDINAL2, NAT_LAT, INT_3, ARYTM, GROUP_1,
+      XREAL_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, COMPLEX1,
       RLVECT_1, MCART_1, RELAT_1, FUNCT_1, BINOP_2, STRUCT_0, FUNCT_2, GCD_1,
-      GROUP_1, VECTSP_1, VECTSP_2, FUNCSDOM, BINOP_1, EUCLID, GR_CY_1, INT_1,
-      FUNCT_7, NEWTON, INT_2, NAT_1, NAT_D, XXREAL_0;
+      GROUP_1, CARD_1, VECTSP_1, VECTSP_2, FUNCSDOM, BINOP_1, EUCLID, GR_CY_1,
+      INT_1, FUNCT_7, NEWTON, INT_2, NAT_1, NAT_D, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, BINOP_2, SEQ_1, INT_2,
-      FUNCT_7, EUCLID, GR_CY_1, GCD_1, NAT_D, COMPLEX1;
+      FUNCT_7, EUCLID, GR_CY_1, GCD_1, NAT_D, COMPLEX1, ARYTM_3, ORDINAL3,
+      NEWTON;
  registrations STRUCT_0, FUNCT_1, XREAL_0, INT_1, RELSET_1, GCD_1, SEQ_1,
-      MEMBERED, ORDINAL1, NAT_1, VECTSP_1, XXREAL_0;
+      MEMBERED, ORDINAL1, NAT_1, VECTSP_1, XXREAL_0, GR_CY_1, NEWTON, ARYTM_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -54,7 +56,7 @@ registration let a,b be Element of INT.Ring, c,d be Integer;
 end;
 
 registration
- cluster INT.Ring -> unital;
+ cluster INT.Ring -> well-unital;
 end;
 
 registration
@@ -165,7 +167,7 @@ for E being EuclidianRing holds E is gcdDomain;
 registration
 cluster Euclidian -> gcd-like (domRing-like non degenerated
     Abelian add-associative right_zeroed right_complementable
-    associative commutative right_unital right-distributive
+    associative commutative well-unital right-distributive
      (non empty doubleLoopStr));
 end;
 
@@ -174,16 +176,16 @@ redefine func absint -> DegreeFunction of INT.Ring;
 end;
 
 theorem :: INT_3:5
-for F being commutative associative left_unital Field-like right_zeroed
+for F being commutative associative well-unital Field-like right_zeroed
   (non empty doubleLoopStr) holds F is Euclidian;
 
 registration
-cluster commutative associative left_unital Field-like right_zeroed Field-like
+cluster commutative associative well-unital Field-like right_zeroed Field-like
   -> Euclidian (non empty doubleLoopStr);
 end;
 
 theorem :: INT_3:6
-   for F being commutative associative left_unital Field-like right_zeroed
+   for F being commutative associative well-unital Field-like right_zeroed
   (non empty doubleLoopStr)
 for f being Function of the carrier of F,NAT holds
 f is DegreeFunction of F;
@@ -279,7 +281,7 @@ func INT.Ring(n) -> doubleLoopStr equals
  doubleLoopStr(#Segm(n),addint(n),multint(n),In (1,Segm(n)),In (0,Segm(n))#);
 end;
 
-registration let n be natural number;
+registration let n be non zero natural number;
  cluster INT.Ring(n) -> strict non empty;
 end;
 
@@ -294,25 +296,29 @@ end;
 theorem :: INT_3:21
 for n being natural number st n > 1 holds
  INT.Ring(n) is non degenerated &
- INT.Ring(n) is unital distributive commutative Ring;
+ INT.Ring(n) is well-unital distributive commutative Ring;
 
 theorem :: INT_3:22
 for p being natural number st p > 1 holds
  INT.Ring(p) is add-associative right_zeroed right_complementable
-    Abelian commutative associative left_unital distributive
+    Abelian commutative associative well-unital distributive
       Field-like non degenerated (non empty doubleLoopStr)
   iff p is Prime;
 
 registration
+ cluster -> non zero Prime;
+end;
+
+registration
 let p be Prime;
  cluster INT.Ring(p) -> add-associative right_zeroed right_complementable
-   Abelian commutative associative left_unital distributive Field-like
+   Abelian commutative associative well-unital distributive Field-like
     non degenerated;
 end;
 
 theorem :: INT_3:23
-  1_INT.Ring = 1;
+  1.INT.Ring = 1;
 
 theorem :: INT_3:24
-  for n being natural number st 1 < n holds 1_INT.Ring(n) = 1;
+  for n being natural number st 1 < n holds 1.INT.Ring(n) = 1;
 

@@ -31,11 +31,22 @@ Registrations =
    ( RCluster | CCluster | FCluster )*
    }
 
-## Definientia, either imported from other articles ( after accommodation)
+## Identifications, either imported from other articles ( after accommodation)
 ## - the signature is implicit in that case, or exported from the current 
 ## article - then the signature has to be specified.
+## aid optionally specifies its article's name in uppercase.   
+IdentifyRegistrations = 
+ element IdentifyRegistrations {
+   attribute aid { xsd:string }?,
+   Signature?,
+   IdentifyWithExp*
+   }
+
+## Definientia, either imported from other articles ( after accommodation)
+## - the signature is implicit in that case, or exported from the current
+## article - then the signature has to be specified.
 ## aid optionally specifies article's name in uppercase.
-Definientia = 
+Definientia =
  element Definientia {
    attribute aid { xsd:string }?,
    Signature?, Definiens* }
@@ -43,7 +54,7 @@ Definientia =
 ## Theorems, either imported from other articles ( after accommodation)
 ## - the signature is implicit in that case, or exported from the current
 ## article - then the signature has to be specified.
-## They can be either ordinary or definitional.   
+## They can be either ordinary or definitional.
 ## The article number and order in article can be given,
 ## otherwise it belongs to the current article and order is implicit.
 ## Optional aid attribute specifies article name.
@@ -101,52 +112,10 @@ Formats =
    }*
  }
 
-## DefMeaning consists of the formulas and terms defining a constructor.
-## It can be either defined by _equals_ (terms) or
-## by _means_ (formulas). It may contain several
-## partial (case) definitions - first in them comes the
-## definition (term or formula) valid in that case and second comes
-## the case formula. The final term or formula specifies the default
-## case, it is mandatory if no partial definitions are given.
-## If no default is given, the disjunction of all case formulas must 
-## be true (this have to be proved using the _consistency_ condition).
-DefMeaning =   
- element DefMeaning {
-   attribute kind { 'e' | 'm' },
-   element PartialDef { ( Formula | Term ), Formula }*,
-   (Formula | Term)?
- }
-
-## Definiens of a constructor. This overlaps a bit with Constructor.
-## defnr is the number of the corresponding definitional theorem.   
-## First come the argument types and possibly also the result type.
-## The optional formula is conjunction of all assumptions if any given.
-## If this is a redefinition, essentials are indeces of arguments
-## corresponding to the arguments of original, otherwise it is just
-## identity. This could be now encode with just one number like the
-## superfluous does for Constructor.
-## Optionally the article id (aid) and order in article (nr)
-## can be given.   
-## relnr optionally gives its serial number
-## in environment for a particular article (it is not in prels).      
-Definiens =
- element Definiens {
-   attribute constrkind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' },
-   attribute constrnr { xsd:integer},
-   attribute defnr { xsd:integer},
-   attribute aid { xsd:string },
-   attribute nr { xsd:integer }?,
-   attribute relnr { xsd:integer }?,
-   Typ*,
-   element Essentials { Int*},
-   Formula?,
-   DefMeaning
-  }
-
 ## Requirement is a constructor specially treated by the system.
 ## We give its internal number and optionally its name and
 ## the article id (aid) and order in article (absnr).
-Requirement =   
+Requirement =
  element Requirement {
    attribute constrkind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' },
    attribute constrnr { xsd:integer },
@@ -193,7 +162,9 @@ Cluster =
 ## First goes the LowerCluster, than UpperCluster
 ## Optionally the article id (aid) and order in article (absnr)
 ## can be given. If available, presentational info
-## (number of the Pattern) is given in pid.
+## (number of the Pattern) is given in pid, and   
+## presentational info about variable introduced (e.g. in Fraenkel)
+## may be given in vid.
 Typ =
  element Typ {
    attribute kind { "M" | "G" | "L" | "errortyp" },
@@ -201,6 +172,7 @@ Typ =
    ( attribute absnr { xsd:integer },
      attribute aid { xsd:string } )?,
    attribute pid { xsd:integer }?,
+   attribute vid { xsd:integer }?,
    Cluster*,
    Term*
  }
@@ -213,9 +185,12 @@ Is =
 
 ## Universally quantified formula
 ## If available, presentational info is given in pid.   
+## If available, numbere of the variable identifier is
+## given in vid.      
 For =
  element For {
    attribute pid { xsd:integer }?,
+   attribute vid { xsd:integer }?,
    Typ, Formula
  }
 
@@ -288,8 +263,12 @@ LambdaVar =
  element LambdaVar { attribute nr { xsd:integer } }
    
 ## Normal local constant introduced e.g. by Let or Consider
+## presentational info may be given in vid.
 Const =
- element Const { attribute nr { xsd:integer } }
+   element Const {
+      attribute nr { xsd:integer },
+      attribute vid { xsd:integer }?
+   }
    
 ## Inference constant - used for internal term sharing
 InfConst =
@@ -323,6 +302,8 @@ PrivFunc =
 
 ## Fraenkel term is defined by the types of its lambda arguments,
 ## its lambda term and the separating formula.
+## Each type may optionally have presentational info about
+## the variable (vid) inside.
 Fraenkel =
  element Fraenkel {
    Typ*, Term, Formula
@@ -354,11 +335,12 @@ Position =
    attribute line { xsd:integer},
    attribute col { xsd:integer}
 
-## Proposition is a sentence with position and possible label
+## Proposition is a sentence with position and possible label (and its identifier).
 Proposition =
  element Proposition {
    Position,
    attribute nr { xsd:integer}?,
+   attribute vid { xsd:integer}?,
    Formula
  }
 
@@ -404,12 +386,52 @@ FCluster =
    ( ErrorCluster | (ArgTypes, Term, Cluster, Typ?) )
    }
 
+## Identification (unoriented, this is not used currently, see identifyWithExp instead).
+## This says that two terms with the two constructors at the top
+## are equal when the pairs of their arguments specified in EqArgs
+## are equal.
+## Optionally the article id (aid) and order in article (nr)
+## can be given.
+Identify =
+ element Identify {
+   ( attribute nr { xsd:integer },
+     attribute aid { xsd:string } )?,
+   ( ErrorIdentify
+     | ( ConstrDef, ConstrDef, element EqArgs { Pair* }))
+   }
+
+## This encodes error during identification processing
+ErrorIdentify =
+ element ErrorIdentify { empty }
+
+## Identification (oriented, currently used version).
+## This says to identify anything matching the first term 
+## or formula pattern (with ConstrKind and ConstrNr as the top 
+## constructor) with the second pattern (instantiated by the matching).
+## The type requirements for the matching (i.e. the loci) are given first.
+## Note that this works only one way, if you want it also the other way, the
+## symmetrical variant has to be explicitly stated as another identification.
+## Optionally the article id (aid) and order in article (nr)
+## can be given.
+IdentifyWithExp =
+ element IdentifyWithExp {
+   ( attribute nr { xsd:integer },
+     attribute aid { xsd:string } )?,
+   ( ErrorIdentify
+     | ( attribute constrkind { 'K' | 'U' | 'G' | 'V' | 'R'},
+         attribute constrnr { xsd:integer},
+         Typ*, 
+         ( (Term, Term) | (Formula, Formula) )
+       )
+   )
+ }
+
 ## Schemes keep types of their second-order variables.
-## First comes the scheme thesis, then the premises.   
+## First comes the scheme thesis, then the premises.
 ## The article number and order in article can be given,
 ## otherwise it belongs to the current article and order is implicit.
 ## Optional aid attribute specifies article name.
-Scheme =   
+Scheme =
  element Scheme {
    ( attribute articlenr { xsd:integer },
      attribute nr { xsd:integer } )?,
@@ -573,31 +595,88 @@ Pattern =
    element Expansion { Typ }?
  }
 
+## ConstrDef holds a term together with types of its variables and 
+## the top-level functor. Used now mainly for identify.
+ConstrDef =
+ element ConstrDef {
+   attribute constrkind { 'K' | 'U' | 'G' },
+   attribute constrnr { xsd:integer},
+   Typ*, Term?
+ }
+
+## DefMeaning consists of the formulas and terms defining a constructor.
+## It can be either defined by _equals_ (terms) or
+## by _means_ (formulas). It may contain several
+## partial (case) definitions - first in them comes the
+## definition (term or formula) valid in that case and second comes
+## the case formula. The final term or formula specifies the default
+## case, it is mandatory if no partial definitions are given.
+## If no default is given, the disjunction of all case formulas must
+## be true (this have to be proved using the _consistency_ condition).
+DefMeaning =
+ element DefMeaning {
+   attribute kind { 'e' | 'm' },
+   element PartialDef { ( Formula | Term ), Formula }*,
+   (Formula | Term)?
+ }
+
+## Definiens of a constructor. This overlaps a bit with Constructor.
+## defnr is the number of the corresponding definitional theorem, and
+## vid optionally its label's identifier.   
+## First come the argument types and possibly also the result type.
+## The optional formula is conjunction of all assumptions if any given.
+## If this is a redefinition, essentials are indeces of arguments
+## corresponding to the arguments of original, otherwise it is just
+## identity. This could be now encode with just one number like the
+## superfluous does for Constructor.
+## Optionally the article id (aid) and order in article (nr)
+## can be given.
+## relnr optionally gives its serial number
+## in environment for a particular article (it is not in prels).
+## vid gives a number of the label identifier if present.   
+Definiens =
+ element Definiens {
+   attribute constrkind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' },
+   attribute constrnr { xsd:integer},
+   attribute defnr { xsd:integer},
+   attribute vid { xsd:integer}?,
+   attribute aid { xsd:string },
+   attribute nr { xsd:integer }?,
+   attribute relnr { xsd:integer }?,
+   Typ*,
+   element Essentials { Int*},
+   Formula?,
+   DefMeaning
+  }
+
 ## Reference can be either private (coming from the current article)
-## - their number is the position at the stack of accessible 
+## - their number is the position at the stack of accessible
 ## references (so it is not unique), or library - these additionally
 ## contain their kind (theorem or definition) and article nr.
 ## The position in the inference is kept for error messaging.
+## For a private inference, the vid attribute optionally tells
+## its identifier's number.
 Ref =
  element Ref {
    attribute nr { xsd:integer },
+   attribute vid { xsd:integer }?,
    ( attribute articlenr { xsd:integer},
      attribute kind { 'T' | 'D' } )?,
    Position
  }
-   
+
 Inference = ( By | From | element ErrorInf { empty } )
-   
+
 ## By encodes one simple justification.
-By = 
+By =
  element By {
    Position,
    attribute linked { xsd:boolean}?,
    Ref*
  }
-   
+
 ## From encodes one scheme justification, it cannot be linked.
-From = 
+From =
  element From {
    Position,
    attribute articlenr { xsd:integer},
@@ -640,10 +719,14 @@ FromExplanations =
    }
 
 ## The complete article after analyzer.
-## aid specifies its name in uppercase.
+## aid specifies its name in uppercase, and mizfiles
+## optionally gives a location of the local MIZFILES directory used
+## during processing the article (needed to know for browsing of
+## locally installed html in MIZFILES/html).
 Article = 
  element Article {
    attribute aid { xsd:string },
+   attribute mizfiles { xsd:string }?,
    ( DefinitionBlock | RegistrationBlock |
      NotationBlock | Reservation | SchemeBlock |
      JustifiedTheorem | DefTheorem | Definiens |
@@ -659,6 +742,8 @@ ThesisExpansions =
 ## so only types are needed.
 ## For easier presentation, nr optionally contains the number   
 ## of the first local constant created here.
+## Each type may optionally have presentational info about
+## the variable (vid) inside.   
 Let = 
  element Let {
    attribute nr { xsd:integer }?,   
@@ -673,6 +758,8 @@ Assume =
 ## the existential variables are introduced as local constants.
 ## For easier presentation, nr optionally contains the number   
 ## of the first local constant created here.   
+## Each type may optionally have presentational info about
+## the variable (vid) inside.   
 Given = 
  element Given {
    attribute nr { xsd:integer }?,
@@ -683,10 +770,12 @@ Given =
 Take = 
  element Take { Term }
 
-## Take with equality. This introduces a new local constant, 
+## Take with equality. This introduces a new local constant,
 ## whose type is given here.
 ## For easier presentation, nr optionally contains the number   
 ## of the first local constant created here.      
+## The type may optionally have presentational info about
+## the variable (vid) inside.   
 TakeAsVar = 
  element TakeAsVar {
    attribute nr { xsd:integer }?,
@@ -702,6 +791,8 @@ Conclusion =
 ## and zero or more propositions about them.
 ## For easier presentation, nr optionally contains the number   
 ## of the first local constant created here.      
+## Each type may optionally have presentational info about
+## the variable (vid) inside.   
 Consider =
  element Consider { 
    attribute nr { xsd:integer }?,
@@ -709,16 +800,18 @@ Consider =
    Typ+, Proposition*
  }
 
-## First comes the target type, then the reconsidered terms.
-## For all these terms a new local variable with the target type 
+## First comes the series of target types and reconsidered terms.
+## For all these terms a new local variable with its target type
 ## is created, and its equality to the corresponding term is remembered.
 ## Finally the proposition about the typing is given and justified.
-## For easier presentation, nr optionally contains the number   
+## For easier presentation, nr optionally contains the number
 ## of the first local constant created here.   
+## Each type may optionally have presentational info about
+## the variable (vid) inside.   
 Reconsider =
  element Reconsider { 
    attribute nr { xsd:integer }?,
-   Typ, Term+,
+   (Typ, Term)+,
    Proposition, Justification
  }
 
@@ -728,6 +821,8 @@ Reconsider =
 ## but it is now needed for some implementation reasons.
 ## For easier presentation, nr optionally contains the number   
 ## of the first local constant created here.      
+## The type may optionally have presentational info about
+## the variable (vid) inside.   
 Set =
  element Set { 
    attribute nr { xsd:integer }?,
@@ -737,20 +832,22 @@ Set =
 ## Private functor. First come the types of arguments, then
 ## its definition and the result type.
 ## For easier presentation, nr optionally contains number   
-## of the private functor created here.     
+## of the private functor created here, and its identifier's number (vid).
 DefFunc =
- element DefFunc { 
+ element DefFunc {
    attribute nr { xsd:integer }?,
+   attribute vid { xsd:integer }?,
    ArgTypes, Term, Typ
  }
 
 ## Private predicate. First come the types of arguments, then
 ## its definition.
 ## For easier presentation, nr optionally contains number   
-## of the private predicate created here.        
+## of the private predicate created here, and its identifier's number (vid).
 DefPred =
  element DefPred { 
    attribute nr { xsd:integer }?,
+   attribute vid { xsd:integer }?,
    ArgTypes, Formula
  }
 
@@ -826,7 +923,7 @@ PerCasesReasoning =
         PerCases, EndPosition, BlockThesis ) )
  }
 
-## Skeleton items change the current thesis, for Proof the
+## Skeleton items change the InFile.Current thesis, for Proof the
 ## changed Thesis together with used expansions is printed
 ## explicitely after them.   
 ## PerCasesReasoning is not included here.
@@ -841,19 +938,23 @@ Reasoning =
      PerCasesReasoning?, EndPosition )
 
 ## Direct proof of some proposition (which is the proof's thesis).
-## Label (nr) of proof (if any) is label of its thesis.
+## Label (nr) of proof (if any) is label of its thesis, vid is then
+## the identifier nr of this label.
 Proof = 
  element Proof {
    attribute nr { xsd:integer }?,
+   attribute vid { xsd:integer }?,
    Position,
    BlockThesis, Reasoning 
  }
 
 ## Diffuse statement - its thesis is reconstructed in the end.
-## Label (nr) of diffuse statement (if any) is label of its thesis.
+## Label (nr) and its identifier (vid) of diffuse statement
+## (if any) is label of its thesis.
 Now = 
  element Now {
    attribute nr { xsd:integer }?,
+   attribute vid { xsd:integer }?,
    Position,
    Reasoning, BlockThesis 
  }
@@ -861,10 +962,12 @@ Now =
 ## Direct justification.   
 Justification = ( Inference | Proof | SkippedProof )
 
-## Iterative equality. The ptional number is label.
+## Iterative equality. The optional numbers (nr) is serial label
+## numbering, and original label identifier (vid).
 IterEquality =
  element IterEquality {
    attribute nr { xsd:integer }?,
+   attribute vid { xsd:integer }?,
    Position,
    Term, IterStep+
  }
@@ -878,6 +981,8 @@ AuxiliaryItem =
      Set | Reconsider | DefFunc | DefPred )
 
 ## Reservation of a new variable for a type.
+## The type may optionally have presentational info about
+## the variable (vid) inside.   
 Reservation = 
  element Reservation { Typ }
 
@@ -899,7 +1004,7 @@ DefTheorem =
 
 ## A property of a constructor, the proposition expreesing it,
 ## and its justification.
-JustifiedProperty = 
+JustifiedProperty =
  element JustifiedProperty {
    Property, Proposition, Justification
  }
@@ -914,7 +1019,7 @@ CorrectnessCondition =
    
 UnknownCorrCond = 
  element UnknownCorrCond { Formula | ( Proposition, Justification ) }
-Coherence = 
+Coherence =
  element Coherence { Formula | ( Proposition, Justification ) }
 Compatibility = 
  element Compatibility { Formula | ( Proposition, Justification ) }
@@ -940,26 +1045,31 @@ Correctness =
 Canceled = 
  element Canceled { empty }
 
-## Declaration of a scheme functor.
+## Declaration of a scheme functor, possibly with its identifier number.
 SchemeFuncDecl =   
  element SchemeFuncDecl {
    attribute nr { xsd:integer},
+   attribute vid { xsd:integer}?,
    ArgTypes, Typ
  }
    
-## Declaration of a scheme predicate.
+## Declaration of a scheme predicate, possibly with its identifier number.
 SchemePredDecl =   
  element SchemePredDecl {
    attribute nr { xsd:integer},
+   attribute vid { xsd:integer}?,
    ArgTypes
  }
 
 ## Scheme blocks are used for declaring the types of second-order
 ## variables appearing in a scheme, and for its justification.
 ## This could be a bit unified with Scheme later.
+## schemenr is its serial nr in the article, while vid is
+## its identifier number.   
 SchemeBlock =   
  element SchemeBlock {
    attribute schemenr { xsd:integer },
+   attribute vid { xsd:integer }?,
    Position,
    ( SchemeFuncDecl | SchemePredDecl )*,
    element SchemePremises { Proposition* },
@@ -977,12 +1087,15 @@ SchemeBlock =
 ## If any definientia and definitional theorems are created,
 ## they follow immediately after the enclosing definitional block
 ## (this might be changed in the future).      
+## Number, position, and identifier number of the definiens 
+## (vid) can be optionally given.
 Definition = 
  element Definition {
    attribute kind { 'M' | 'V' | 'R' | 'K' | 'G' },
    attribute redefinition { xsd:boolean }?,
    attribute expandable { xsd:boolean }?,
    ( attribute nr { xsd:integer }, Position )?,
+   attribute vid { xsd:integer }?,
    ( ( CorrectnessCondition*, Correctness?,
        JustifiedProperty*, Constructor?, Pattern? )
    | ( Constructor, Constructor, Constructor+,
@@ -1010,12 +1123,19 @@ Registration =
    CorrectnessCondition*, Correctness?
  }
 
+## One justified identification registration. The correctness conditions
+## could be made more specific.
+IdentifyRegistration = 
+ element IdentifyRegistration {
+   IdentifyWithExp, CorrectnessCondition*, Correctness?
+ }
+
 ## Block of cluster registrations.
 ## 
 RegistrationBlock = 
  element RegistrationBlock {
    Position,
-   ( Let | AuxiliaryItem | Registration | Canceled )+,
+   ( Let | AuxiliaryItem | Registration | IdentifyRegistration | Canceled )+,
    EndPosition
  }
 

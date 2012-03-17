@@ -15,6 +15,8 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="ENUMSET1"/>
+<ArticleID name="DOMAIN_1"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -42,7 +44,7 @@
 <Cluster/>
 <Func kind="K" nr="19">
 <Func kind="U" nr="1">
-<Func kind="K" nr="206">
+<Func kind="K" nr="234">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -67,12 +69,12 @@
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="41">
+<Adjective nr="45">
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="54"/>
-<Adjective nr="56"/>
+<Adjective nr="58"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -88,7 +90,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="215">
+<Func kind="K" nr="243">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -100,12 +102,12 @@
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="41">
+<Adjective nr="45">
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="54"/>
-<Adjective nr="56"/>
+<Adjective nr="58"/>
+<Adjective nr="60"/>
 </Cluster>
 </FCluster>
 </Registrations>

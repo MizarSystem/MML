@@ -201,20 +201,16 @@ begin :: Another times macro instruction
 
 definition
  let a be Int-Location, I be Macro-Instruction;
-
-   set aux = 1-stRWNotIn ({a} \/ UsedIntLoc I);
-   :: set aux = 1-stRWNotIn ({a} U UsedIntLoc I);
-
  func times(a, I) -> Macro-Instruction equals
-
-     aux := a ';' while>0 ( aux, I ';' SubFrom(aux, intloc 0) );
+     (1-stRWNotIn ({a} \/ UsedIntLoc I)) := a ';'
+     while>0 ( 1-stRWNotIn ({a} \/ UsedIntLoc I), I ';'
+     SubFrom(1-stRWNotIn ({a} \/ UsedIntLoc I), intloc 0) );
  correctness;
- end;
+end;
 
 notation
- let a be Int-Location, I be Macro-Instruction;
-
-   synonym a times I for times(a, I);
+  let a be Int-Location, I be Macro-Instruction;
+  synonym a times I for times(a, I);
 end;
 
 theorem Th8: :: timesUsed:
@@ -267,12 +263,11 @@ end;
 
 definition
  let s be State of SCM+FSA, I be Macro-Instruction, a be Int-Location;
-   set aux = 1-stRWNotIn ({a} \/ UsedIntLoc I);
-   :: set aux = 1-stRWNotIn ({a} U UsedIntLoc I);
  func StepTimes(a, I, s) -> Function of NAT, product the Object-Kind of SCM+FSA
       equals
-
-  StepWhile>0(aux, I ';' SubFrom(aux, intloc 0), Exec(aux := a, Initialize s));
+  StepWhile>0(1-stRWNotIn ({a} \/ UsedIntLoc I), I ';'
+  SubFrom(1-stRWNotIn ({a} \/ UsedIntLoc I), intloc 0),
+  Exec(1-stRWNotIn ({a} \/ UsedIntLoc I) := a, Initialize s));
  correctness;
 end;
 
@@ -689,7 +684,8 @@ end;
 theorem Th23: :: IE_times1:
  s.a = k & (ProperTimesBody a, J, s or J is parahalting) &
  (s.intloc 0 = 1 or a is read-write)
-  implies IExec(times(a, J), s) | D = StepTimes(a, J, s).k | D
+  implies IExec(times(a, J), s) | (Int-Locations \/ FinSeq-Locations) =
+    StepTimes(a, J, s).k | (Int-Locations \/ FinSeq-Locations)
 proof set I = J; assume
 A1: s.a = k; assume
       ProperTimesBody a, I, s or I is parahalting;
@@ -707,8 +703,7 @@ A4: 0 <= s.a by A1;
    set ISW = StepWhile>0(au, ISu, Is1);
 A5: ST = SW;
 
-        s1.intloc 0 = (Initialize s).intloc 0 by SCMFSA_2:89 .= 1 by SCMFSA6C:3
-;
+   s1.intloc 0 = (Initialize s).intloc 0 by SCMFSA_2:89 .= 1 by SCMFSA6C:3;
      then A6: Is1 | D = s1 | D by SCMFSA8C:27;
 
 A7: ProperBodyWhile>0 au, ISu, s1 proof
@@ -1083,23 +1078,24 @@ begin :: A macro for the Fibonacci sequence
 
 definition
  let N, result be Int-Location;
-   set next = 1-stRWNotIn {N, result};
-   set Nsave = 1-stNotUsed times(N, AddTo(result, next)';'swap(result, next));
 :: set next = 1-stRWNotIn {N, result};
 ::      local variable
-:: set N_save = 1-stNotUsed times(N, AddTo(result, next)';'swap(result, next));
+:: set Nsave = 1-stNotUsed times(N, AddTo(result, next)';'swap(result, next));
 ::      for saving and restoring N
 
       :: - requires: N <> result
       :: - does not change N
 
  func Fib-macro (N, result) -> Macro-Instruction equals
-
-   Nsave := N ';'
+   (1-stNotUsed times(N, AddTo(result, (1-stRWNotIn {N, result}))';'
+     swap(result, 1-stRWNotIn {N, result}))) := N ';'
    (SubFrom(result, result)) ';'
-   (next := intloc 0) ';'
-   times( N, AddTo(result, next) ';' swap(result, next) ) ';'
-   (N := Nsave);
+   ((1-stRWNotIn {N, result}) := intloc 0) ';'
+   times(N, AddTo(result, (1-stRWNotIn {N, result})) ';'
+   swap(result, (1-stRWNotIn {N, result})) ) ';'
+   (N := (1-stNotUsed times(N, AddTo(result, 1-stRWNotIn {N, result})';'
+   swap(result, 1-stRWNotIn {N, result}))));
+
  correctness;
 end;
 

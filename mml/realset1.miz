@@ -9,14 +9,14 @@ environ
  vocabularies FUNCT_1, RELAT_1, BOOLE, BINOP_1, FUNCT_3, QC_LANG1, REALSET1,
       REALSET2, FINSET_1, CARD_1, CAT_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      BINOP_1, CQC_LANG, FUNCT_3, FINSET_1, CARD_1, XXREAL_0;
- constructors FUNCT_3, XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED, CQC_LANG,
-      BINOP_1, NAT_D;
- registrations FUNCT_1, RELSET_1, MEMBERED, FINSET_1, NAT_1;
+      BINOP_1, DOMAIN_1, FUNCOP_1, FUNCT_3, FINSET_1, CARD_1, XXREAL_0;
+ constructors FUNCT_3, XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED, FUNCOP_1,
+      BINOP_1, NAT_D, DOMAIN_1, CARD_1;
+ registrations FUNCT_1, RELSET_1, MEMBERED, FINSET_1, NAT_1, SUBSET_1;
  requirements SUBSET, BOOLE, NUMERALS, REAL;
  definitions BINOP_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, FUNCT_3, ZFMISC_1, RELSET_1, XBOOLE_0,
-      XBOOLE_1, RELAT_1, CARD_2, NAT_1, CARD_1, CQC_LANG;
+      XBOOLE_1, RELAT_1, CARD_2, NAT_1, CARD_1, FUNCOP_1, FUNCT_4;
 
 begin
 
@@ -288,19 +288,14 @@ definition
 coherence by Th9;
 end;
 
-theorem Th10:
-    for A being set holds
-    for x being Element of A holds
-    ex F being BinOp of A st
-    for y being set holds y in [:A\{x},A\{x}:] implies F.y in A\{x}
-    by Th8;
+canceled;
 
 definition
     let A be set;
     let x be Element of A;
     mode DnT of x,A -> BinOp of A means
 :Def8: for y being set holds y in [:A\{x},A\{x}:] implies it.y in A\{x};
-existence by Th10;
+existence by Th8;
 end;
 
 theorem Th11:
@@ -337,10 +332,9 @@ func F!(A,x) -> BinOp of A\{x} equals
 coherence by Th11;
 end;
 
-definition
-   let F be non trivial set;
-   mode OnePoint of F -> set means
-:Def10:ex x being Element of F st it = {x};
+registration
+   let F be non empty set;
+ cluster trivial non empty Subset of F;
 existence
 proof
    consider y being Element of F;
@@ -348,6 +342,21 @@ proof
    thus thesis;
 end;
 end;
+
+definition
+   let F be non empty set;
+   mode OnePoint of F is trivial non empty Subset of F;
+end;
+
+Def10:
+ for F being non trivial set, A being OnePoint of F
+  ex x being Element of F st A = {x}
+ proof let F be non trivial set, A be OnePoint of F;
+   consider x being set such that
+W:  A = {x} by Def4;
+   x in A by W,TARSKI:def 1;
+  hence thesis by W;
+ end;
 
 theorem Th12:
    for F being non trivial set holds
@@ -365,23 +374,6 @@ registration
    let A be OnePoint of F;
    cluster F\A -> non empty;
 coherence by Th12;
-end;
-
-registration
-   let F be non trivial set;
- cluster non empty OnePoint of F;
- existence
-  proof consider x being Element of F;
-      {x} is OnePoint of F by Def10;
-   hence thesis;
-  end;
-end;
-
-definition
-   let F be non trivial set;
-   let x be Element of F;
-   redefine func {x} -> OnePoint of F;
-coherence by Def10;
 end;
 
 begin :: Addenda
@@ -456,6 +448,10 @@ A2:  d1 <> d2 by Th14;
  thus thesis by Th14;
 end;
 
+theorem
+ for F being non trivial set, A being OnePoint of F
+  ex x being Element of F st A = {x} by Def10;
+
 begin :: Addenda
 
 :: from AMISTD_1, 2006.03.15, A.T.
@@ -464,7 +460,7 @@ registration let x, y be set;
  cluster x .--> y -> trivial;
  coherence
   proof
-      x .--> y = {[x,y]} by CQC_LANG:45;
+      x .--> y = {[x,y]} by FUNCT_4:87;
     hence thesis;
   end;
 end;

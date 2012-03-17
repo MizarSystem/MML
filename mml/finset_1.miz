@@ -1142,3 +1142,92 @@ definition let R be Relation;
  attr R is finite-yielding means
   for x st x in rng R holds x is finite;
 end;
+
+:: from CQC_THE1, 2007.03.15, A.T.
+
+reserve a for set;
+
+deffunc F(set) = $1`1;
+
+theorem
+ X is finite & X c= [:Y,Z:] implies
+ ex A,B being set st A is finite & A c= Y & B is finite & B c= Z &
+  X c= [:A,B:]
+  proof
+   deffunc G(set) = $1`2;
+   assume A1: X is finite & X c= [:Y,Z:];
+   consider f being Function such that
+    A2: dom f = X and A3: for a st a in X holds f.a = F(a) from FUNCT_1:sch 3;
+   consider g being Function such that
+    A4: dom g = X and A5: for a st a in X holds g.a = G(a) from FUNCT_1:sch 3;
+   take A = rng f, B = rng g;
+   thus A is finite by A1,A2,Th26;
+   thus A c= Y
+    proof
+     let a; assume a in A;
+     then consider x being set such that A6: x in
+ dom f & f.x = a by FUNCT_1:def 5;
+     consider y,z being set such that A7: y in Y & z in Z & x = [y,z]
+      by A1,A2,A6,ZFMISC_1:def 2;
+        f.x = x`1 by A2,A3,A6
+        .= y by A7,MCART_1:7;
+     hence thesis by A6,A7;
+    end;
+   thus B is finite by A1,A4,Th26;
+   thus B c= Z
+    proof
+     let a; assume a in B;
+     then consider x being set such that A8: x in
+ dom g & g.x = a by FUNCT_1:def 5;
+     consider y,z being set such that A9: y in Y & z in Z & x = [y,z]
+      by A1,A4,A8,ZFMISC_1:def 2;
+        g.x = x`2 by A4,A5,A8
+        .= z by A9,MCART_1:7;
+     hence thesis by A8,A9;
+    end;
+   thus X c= [:A,B:]
+    proof
+     let a; assume A10: a in X;
+     then consider x,y being set such that A11: x in Y & y in Z & a=[x,y]
+      by A1,ZFMISC_1:def 2;
+A12:  g.a = a`2 by A5,A10
+        .= y by A11,MCART_1:7;
+        f.a = a`1 by A3,A10
+        .= x by A11,MCART_1:7;
+     then x in A & y in B by A2,A4,A10,A12,FUNCT_1:def 5;
+     hence a in [:A,B:] by A11,ZFMISC_1:106;
+    end;
+  end;
+
+theorem
+Th14: X is finite & Z is finite & X c= [:Y,Z:] implies
+ ex A being set st A is finite & A c= Y & X c= [:A,Z:]
+  proof
+   assume A1: X is finite & Z is finite & X c= [:Y,Z:];
+   consider f being Function such that
+    A2: dom f = X and A3: for a st a in X holds f.a = F(a) from FUNCT_1:sch 3;
+   take A = rng f;
+   thus A is finite by A1,A2,Th26;
+   thus A c= Y
+    proof
+     let a; assume a in A;
+     then consider x being set such that A4: x in
+ dom f & f.x = a by FUNCT_1:def 5;
+     consider y,z being set such that A5: y in Y & z in Z & x = [y,z]
+      by A1,A2,A4,ZFMISC_1:def 2;
+        f.x = x`1 by A2,A3,A4
+        .= y by A5,MCART_1:7;
+     hence thesis by A4,A5;
+    end;
+   thus X c= [:A,Z:]
+    proof
+     let a; assume A6: a in X;
+     then consider x,y being set such that A7: x in Y & y in Z & a=[x,y]
+      by A1,ZFMISC_1:def 2;
+        f.a = a`1 by A3,A6
+        .= x by A7,MCART_1:7;
+     then x in A by A2,A6,FUNCT_1:def 5;
+     hence thesis by A7,ZFMISC_1:106;
+    end;
+  end;
+

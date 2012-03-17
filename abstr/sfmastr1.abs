@@ -12,16 +12,16 @@ environ
       SCMFSA_1, SQUARE_1, PRE_FF, ARYTM_1, SFMASTR1, NAT_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0,
       FINSET_1, CARD_1, NAT_1, NAT_D, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4,
-      FUNCT_7, CQC_SIM1, PRE_FF, STRUCT_0, AMI_1, AMI_3, SCM_1, AMI_5,
-      SCMFSA_1, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SCMFSA6B, SF_MASTR,
-      SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA8C, XXREAL_0;
- constructors DOMAIN_1, SETWISEO, XXREAL_0, NAT_1, MEMBERED, CQC_SIM1, PRE_FF,
+      FUNCT_7, PRE_FF, STRUCT_0, AMI_1, AMI_3, SCM_1, AMI_5, SCMFSA_1,
+      SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C,
+      SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA8C, XXREAL_0, SEQ_4;
+ constructors DOMAIN_1, SETWISEO, XXREAL_0, NAT_1, MEMBERED, SEQ_4, PRE_FF,
       SCM_1, AMI_5, SCMFSA_1, SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C,
       SCMFSA8A, SCMFSA8B, SCMFSA8C, NAT_D;
  registrations SUBSET_1, INT_1, FINSET_1, FUNCT_1, AMI_1, SCMFSA_2, SCMFSA_4,
       SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8C, CARD_3,
       RELSET_1, FRAENKEL, MEMBERED, ORDINAL1, SETFAM_1, XREAL_0, XXREAL_0,
-      SCMFSA_9, AMI_5;
+      SCMFSA_9, AMI_5, ARYTM_3, SEQ_4;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -31,7 +31,6 @@ definition
  let i be Instruction of SCM+FSA;
  attr i is good means
 :: SFMASTR1:def 1
-
  Macro i is good;
 end;
 
@@ -133,7 +132,7 @@ begin :: Composition of non parahalting macro instructions
       ::           Initialized I is halting
 
 theorem :: SFMASTR1:2
- (I +* Start-At insloc 0) | D = {};
+ (I +* Start-At insloc 0) | (Int-Locations \/ FinSeq-Locations) = {};
 
 theorem :: SFMASTR1:3
  I is_halting_on Initialize S & I is_closed_on Initialize S &
@@ -180,20 +179,22 @@ theorem :: SFMASTR1:9
   implies IExec(Ig ';' J, s).f = IExec(J, IExec(Ig, s)).f;
 
 theorem :: SFMASTR1:10
-    (Ig is parahalting or
+ (Ig is parahalting or
               Ig is_halting_on Initialize s & Ig is_closed_on Initialize s) &
  (J is parahalting or
               J is_halting_on IExec(Ig, s) & J is_closed_on IExec(Ig, s))
-  implies IExec(Ig ';' J, s) | D = IExec(J, IExec(Ig, s)) | D;
+  implies IExec(Ig ';' J, s) | (Int-Locations \/ FinSeq-Locations) =
+    IExec(J, IExec(Ig, s)) | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SFMASTR1:11
     Ig is parahalting
  or Ig is_closed_on Initialize s & Ig is_halting_on Initialize s
- implies (Initialize IExec(Ig, s)) | D = IExec(Ig, s) | D;
+ implies (Initialize IExec(Ig, s)) | (Int-Locations \/ FinSeq-Locations) =
+   IExec(Ig, s) | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SFMASTR1:12
  Ig is parahalting or
-          Ig is_halting_on Initialize s & Ig is_closed_on Initialize s
+       Ig is_halting_on Initialize s & Ig is_closed_on Initialize s
   implies IExec(Ig ';' j, s).a = Exec(j, IExec(Ig, s)).a;
 
 theorem :: SFMASTR1:13
@@ -204,7 +205,8 @@ theorem :: SFMASTR1:13
 theorem :: SFMASTR1:14
     Ig is parahalting or
     Ig is_halting_on Initialize s & Ig is_closed_on Initialize s
-  implies IExec(Ig ';' j, s) | D = Exec(j, IExec(Ig, s)) | D;
+  implies IExec(Ig ';' j, s) | (Int-Locations \/ FinSeq-Locations) =
+    Exec(j, IExec(Ig, s)) | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SFMASTR1:15
  J is parahalting or
@@ -222,7 +224,8 @@ theorem :: SFMASTR1:17
     J is parahalting or
        J is_halting_on Exec(i, Initialize s) &
        J is_closed_on Exec(i, Initialize s)
-  implies IExec(i ';' J, s) | D = IExec(J, Exec(i, Initialize s)) | D;
+  implies IExec(i ';' J, s) | (Int-Locations \/ FinSeq-Locations) =
+    IExec(J, Exec(i, Initialize s)) | (Int-Locations \/ FinSeq-Locations);
 
 begin :: Memory allocation
 
@@ -316,6 +319,7 @@ theorem :: SFMASTR1:23
 
 definition
  let N, result be Int-Location;
+
       ::  set next = 1-stRWNotIn {N, result};
       ::      local variable
       ::  set aux  = 1-stRWNotIn UsedIntLoc swap(result, next);
@@ -330,12 +334,15 @@ definition
  func Fib_macro (N, result) -> Macro-Instruction equals
 :: SFMASTR1:def 5
 
-   Nsave := N ';'
+   2-ndRWNotIn UsedIntLoc swap(result, 1-stRWNotIn {N, result}) := N ';'
    (SubFrom(result, result)) ';'
-   (next := intloc 0) ';'
-   (aux := Nsave) ';'
-   Times( aux, AddTo(result, next) ';' swap(result, next) ) ';'
-   (N := Nsave);
+   (1-stRWNotIn {N, result} := intloc 0) ';'
+   ((1-stRWNotIn UsedIntLoc swap(result, 1-stRWNotIn {N, result})) :=
+       (2-ndRWNotIn UsedIntLoc swap(result, 1-stRWNotIn {N, result}))) ';'
+   Times( 1-stRWNotIn UsedIntLoc swap(result, 1-stRWNotIn {N, result}),
+     AddTo(result, 1-stRWNotIn {N, result}) ';'
+   swap(result, 1-stRWNotIn {N, result}) ) ';'
+   (N := (2-ndRWNotIn UsedIntLoc swap(result, 1-stRWNotIn {N, result})));
 end;
 
 theorem :: SFMASTR1:24

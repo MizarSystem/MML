@@ -23,8 +23,8 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="REALSET1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
@@ -43,9 +43,6 @@
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCT_5"/>
-<ArticleID name="QC_LANG1"/>
-<ArticleID name="QC_LANG2"/>
-<ArticleID name="CQC_LANG"/>
 <ArticleID name="CAT_1"/>
 <ArticleID name="CAT_2"/>
 <ArticleID name="GRCAT_1"/>
@@ -302,7 +299,7 @@
 </Cluster>
 <Func kind="K" nr="91"/>
 </Typ>
-<Typ kind="M" nr="33">
+<Typ kind="M" nr="31">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -313,7 +310,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="18">
-<Func kind="K" nr="475">
+<Func kind="K" nr="425">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -325,7 +322,7 @@
 <Func kind="F" nr="4"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="476">
+<Func kind="K" nr="426">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -335,11 +332,11 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="18">
-<Func kind="K" nr="230">
+<Func kind="K" nr="237">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="475">
+<Func kind="K" nr="425">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -354,7 +351,7 @@
 <Not>
 <Pred kind="P" nr="1">
 <Func kind="K" nr="70">
-<Func kind="K" nr="475">
+<Func kind="K" nr="425">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -370,7 +367,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="18">
-<Func kind="K" nr="475">
+<Func kind="K" nr="425">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -381,7 +378,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="18">
-<Func kind="K" nr="475">
+<Func kind="K" nr="425">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -406,7 +403,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="478">
+<Func kind="K" nr="428">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>

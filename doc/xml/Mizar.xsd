@@ -47,6 +47,15 @@
       <xs:attribute name="aid" type="xs:string"/>
     </xs:complexType>
   </xs:element>
+  <xs:element name="IdentifyRegistrations">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Signature"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="IdentifyWithExp"/>
+      </xs:sequence>
+      <xs:attribute name="aid" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="Definientia">
     <xs:complexType>
       <xs:sequence>
@@ -150,71 +159,6 @@
       <xs:attribute name="value" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DefMeaning">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" maxOccurs="unbounded" ref="PartialDef"/>
-        <xs:choice minOccurs="0">
-          <xs:element ref="Formula"/>
-          <xs:element ref="Term"/>
-        </xs:choice>
-      </xs:sequence>
-      <xs:attribute name="kind" use="required">
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="e"/>
-            <xs:enumeration value="m"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="PartialDef">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:choice>
-          <xs:element ref="Formula"/>
-          <xs:element ref="Term"/>
-        </xs:choice>
-        <xs:element ref="Formula"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="Definiens">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" maxOccurs="unbounded" ref="Typ"/>
-        <xs:element ref="Essentials"/>
-        <xs:element minOccurs="0" ref="Formula"/>
-        <xs:element ref="DefMeaning"/>
-      </xs:sequence>
-      <xs:attribute name="constrkind" use="required">
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="M"/>
-            <xs:enumeration value="L"/>
-            <xs:enumeration value="V"/>
-            <xs:enumeration value="R"/>
-            <xs:enumeration value="K"/>
-            <xs:enumeration value="U"/>
-            <xs:enumeration value="G"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-      <xs:attribute name="constrnr" use="required" type="xs:integer"/>
-      <xs:attribute name="defnr" use="required" type="xs:integer"/>
-      <xs:attribute name="aid" use="required" type="xs:string"/>
-      <xs:attribute name="nr" type="xs:integer"/>
-      <xs:attribute name="relnr" type="xs:integer"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="Essentials">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" maxOccurs="unbounded" ref="Int"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="Requirement">
     <xs:complexType>
       <xs:attribute name="constrkind" use="required">
@@ -291,6 +235,7 @@
       <xs:attribute name="absnr" type="xs:integer"/>
       <xs:attribute name="aid" type="xs:string"/>
       <xs:attribute name="pid" type="xs:integer"/>
+      <xs:attribute name="vid" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="Is" substitutionGroup="Formula">
@@ -308,6 +253,7 @@
         <xs:element ref="Formula"/>
       </xs:sequence>
       <xs:attribute name="pid" type="xs:integer"/>
+      <xs:attribute name="vid" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="And" substitutionGroup="Formula">
@@ -385,6 +331,7 @@
   <xs:element name="Const" substitutionGroup="Term">
     <xs:complexType>
       <xs:attribute name="nr" use="required" type="xs:integer"/>
+      <xs:attribute name="vid" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="InfConst" substitutionGroup="Term">
@@ -461,6 +408,7 @@
       </xs:sequence>
       <xs:attributeGroup ref="Position"/>
       <xs:attribute name="nr" type="xs:integer"/>
+      <xs:attribute name="vid" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="ArgTypes">
@@ -515,6 +463,64 @@
       </xs:choice>
       <xs:attribute name="nr" type="xs:integer"/>
       <xs:attribute name="aid" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Identify">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="ErrorIdentify"/>
+        <xs:sequence>
+          <xs:element ref="ConstrDef"/>
+          <xs:element ref="ConstrDef"/>
+          <xs:element ref="EqArgs"/>
+        </xs:sequence>
+      </xs:choice>
+      <xs:attribute name="nr" type="xs:integer"/>
+      <xs:attribute name="aid" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EqArgs">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="Pair"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ErrorIdentify">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="IdentifyWithExp">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="ErrorIdentify"/>
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="Typ"/>
+          <xs:choice>
+            <xs:sequence>
+              <xs:element ref="Term"/>
+              <xs:element ref="Term"/>
+            </xs:sequence>
+            <xs:sequence>
+              <xs:element ref="Formula"/>
+              <xs:element ref="Formula"/>
+            </xs:sequence>
+          </xs:choice>
+        </xs:sequence>
+      </xs:choice>
+      <xs:attribute name="nr" type="xs:integer"/>
+      <xs:attribute name="aid" type="xs:string"/>
+      <xs:attribute name="constrkind">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="K"/>
+            <xs:enumeration value="U"/>
+            <xs:enumeration value="G"/>
+            <xs:enumeration value="V"/>
+            <xs:enumeration value="R"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="constrnr" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="Scheme">
@@ -762,9 +768,94 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="ConstrDef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="Typ"/>
+        <xs:element minOccurs="0" ref="Term"/>
+      </xs:sequence>
+      <xs:attribute name="constrkind" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="K"/>
+            <xs:enumeration value="U"/>
+            <xs:enumeration value="G"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="constrnr" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DefMeaning">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="PartialDef"/>
+        <xs:choice minOccurs="0">
+          <xs:element ref="Formula"/>
+          <xs:element ref="Term"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="kind" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="e"/>
+            <xs:enumeration value="m"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PartialDef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice>
+          <xs:element ref="Formula"/>
+          <xs:element ref="Term"/>
+        </xs:choice>
+        <xs:element ref="Formula"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Definiens">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="Typ"/>
+        <xs:element ref="Essentials"/>
+        <xs:element minOccurs="0" ref="Formula"/>
+        <xs:element ref="DefMeaning"/>
+      </xs:sequence>
+      <xs:attribute name="constrkind" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="M"/>
+            <xs:enumeration value="L"/>
+            <xs:enumeration value="V"/>
+            <xs:enumeration value="R"/>
+            <xs:enumeration value="K"/>
+            <xs:enumeration value="U"/>
+            <xs:enumeration value="G"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="constrnr" use="required" type="xs:integer"/>
+      <xs:attribute name="defnr" use="required" type="xs:integer"/>
+      <xs:attribute name="vid" type="xs:integer"/>
+      <xs:attribute name="aid" use="required" type="xs:string"/>
+      <xs:attribute name="nr" type="xs:integer"/>
+      <xs:attribute name="relnr" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Essentials">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="Int"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="Ref">
     <xs:complexType>
       <xs:attribute name="nr" use="required" type="xs:integer"/>
+      <xs:attribute name="vid" type="xs:integer"/>
       <xs:attribute name="articlenr" type="xs:integer"/>
       <xs:attribute name="kind">
         <xs:simpleType>
@@ -856,6 +947,7 @@
         <xs:group ref="AuxiliaryItem"/>
       </xs:choice>
       <xs:attribute name="aid" use="required" type="xs:string"/>
+      <xs:attribute name="mizfiles" type="xs:string"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="ThesisExpansions">
@@ -924,8 +1016,10 @@
   <xs:element name="Reconsider">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="Typ"/>
-        <xs:element maxOccurs="unbounded" ref="Term"/>
+        <xs:sequence maxOccurs="unbounded">
+          <xs:element ref="Typ"/>
+          <xs:element ref="Term"/>
+        </xs:sequence>
         <xs:element ref="Proposition"/>
         <xs:element ref="Justification"/>
       </xs:sequence>
@@ -949,6 +1043,7 @@
         <xs:element ref="Typ"/>
       </xs:sequence>
       <xs:attribute name="nr" type="xs:integer"/>
+      <xs:attribute name="vid" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="DefPred">
@@ -958,6 +1053,7 @@
         <xs:element ref="Formula"/>
       </xs:sequence>
       <xs:attribute name="nr" type="xs:integer"/>
+      <xs:attribute name="vid" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="Thesis">
@@ -1092,6 +1188,7 @@
         <xs:group ref="Reasoning"/>
       </xs:sequence>
       <xs:attribute name="nr" type="xs:integer"/>
+      <xs:attribute name="vid" type="xs:integer"/>
       <xs:attributeGroup ref="Position"/>
     </xs:complexType>
   </xs:element>
@@ -1102,6 +1199,7 @@
         <xs:element ref="BlockThesis"/>
       </xs:sequence>
       <xs:attribute name="nr" type="xs:integer"/>
+      <xs:attribute name="vid" type="xs:integer"/>
       <xs:attributeGroup ref="Position"/>
     </xs:complexType>
   </xs:element>
@@ -1117,6 +1215,7 @@
         <xs:element maxOccurs="unbounded" ref="IterStep"/>
       </xs:sequence>
       <xs:attribute name="nr" type="xs:integer"/>
+      <xs:attribute name="vid" type="xs:integer"/>
       <xs:attributeGroup ref="Position"/>
     </xs:complexType>
   </xs:element>
@@ -1221,6 +1320,7 @@
         <xs:element ref="Typ"/>
       </xs:sequence>
       <xs:attribute name="nr" use="required" type="xs:integer"/>
+      <xs:attribute name="vid" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="SchemePredDecl">
@@ -1229,6 +1329,7 @@
         <xs:element ref="ArgTypes"/>
       </xs:sequence>
       <xs:attribute name="nr" use="required" type="xs:integer"/>
+      <xs:attribute name="vid" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="SchemeBlock">
@@ -1244,6 +1345,7 @@
         <xs:element ref="EndPosition"/>
       </xs:sequence>
       <xs:attribute name="schemenr" use="required" type="xs:integer"/>
+      <xs:attribute name="vid" type="xs:integer"/>
       <xs:attributeGroup ref="Position"/>
     </xs:complexType>
   </xs:element>
@@ -1290,6 +1392,7 @@
       <xs:attribute name="nr" type="xs:integer"/>
       <xs:attribute name="line" type="xs:integer"/>
       <xs:attribute name="col" type="xs:integer"/>
+      <xs:attribute name="vid" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="DefinitionBlock">
@@ -1321,6 +1424,15 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="IdentifyRegistration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="IdentifyWithExp"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="CorrectnessCondition"/>
+        <xs:element minOccurs="0" ref="Correctness"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="RegistrationBlock">
     <xs:complexType>
       <xs:sequence>
@@ -1328,6 +1440,7 @@
           <xs:element ref="Let"/>
           <xs:group ref="AuxiliaryItem"/>
           <xs:element ref="Registration"/>
+          <xs:element ref="IdentifyRegistration"/>
           <xs:element ref="Canceled"/>
         </xs:choice>
         <xs:element ref="EndPosition"/>

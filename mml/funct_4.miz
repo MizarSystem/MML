@@ -8,13 +8,14 @@
 environ
 
  vocabularies FUNCT_1, TARSKI, RELAT_1, BOOLE, FUNCOP_1, PARTFUN1, FUNCT_2,
-      FUNCT_4;
+      FUNCT_4, CAT_4, CAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
       FUNCT_2, BINOP_1, PARTFUN1, FUNCOP_1;
- constructors PARTFUN1, FUNCOP_1, BINOP_1;
- registrations RELAT_1, FUNCT_1, RELSET_1, XBOOLE_0, FUNCOP_1, ZFMISC_1;
+ constructors PARTFUN1, FUNCOP_1, BINOP_1, FUNCT_3;
+ registrations RELAT_1, FUNCT_1, RELSET_1, XBOOLE_0, FUNCOP_1, ZFMISC_1,
+      SUBSET_1;
  requirements BOOLE, SUBSET;
- definitions TARSKI, FUNCT_2, PARTFUN1, XBOOLE_0, BINOP_1;
+ definitions TARSKI, FUNCT_2, PARTFUN1, XBOOLE_0, BINOP_1, FUNCOP_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, GRFUNC_1, PARTFUN1, FUNCOP_1, ZFMISC_1,
       RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, ENUMSET1;
  schemes FUNCT_1, PARTFUN1, XBOOLE_0;
@@ -48,9 +49,9 @@ theorem Th1:
    (for z st z in Z holds ex x,y st z = [x,y]) implies ex X,Y st Z c= [:X,Y:]
  proof assume
 A1:  for z st z in Z holds ex x,y st z = [x,y];
-   defpred P[set] means ex y st [$1,y] in Z;
+   defpred P[set] means ex y st [ $1,y] in Z;
    consider X such that
-A2:  x in X iff x in union union Z & P[x] from XBOOLE_0:sch 1;
+A2:  x in X iff x in union union Z & P[ x] from XBOOLE_0:sch 1;
    defpred P[set] means ex x st [x,$1] in Z;
    consider Y such that
 A3:  y in Y iff y in union union Z & P[y] from XBOOLE_0:sch 1;
@@ -195,8 +196,8 @@ definition let f,g;
    deffunc F(set) = g.$1;
    deffunc G(set) = f.$1;
    thus ex F being Function st dom F = dom f \/ dom g &
-   for x st x in dom f \/ dom g holds (P[x] implies F.x = F(x)) &
-   (not P[x] implies F.x = G(x)) from PARTFUN1:sch 1;
+   for x st x in dom f \/ dom g holds (P[ x] implies F.x = F(x)) &
+   (not P[ x] implies F.x = G(x)) from PARTFUN1:sch 1;
  end;
  uniqueness
   proof let h1,h2 be Function such that
@@ -587,15 +588,15 @@ definition let f;
    for y,z st [y,z] in dom f holds it.(z,y) = f.(y,z);
  existence
   proof
-   defpred P[set] means ex y st [$1,y] in dom f;
+   defpred P[set] means ex y st [ $1,y] in dom f;
    consider D1 being set such that
-A1:   x in D1 iff x in union union dom f & P[x] from XBOOLE_0:sch 1;
+A1:   x in D1 iff x in union union dom f & P[ x] from XBOOLE_0:sch 1;
    defpred P[set] means ex y st [y,$1] in dom f;
    consider D2 being set such that
 A2:   y in D2 iff y in union union dom f & P[y] from XBOOLE_0:sch 1;
    defpred P[set] means ex y,z st $1 = [z,y] & [y,z] in dom f;
    consider D being set such that
-A3:   x in D iff x in [:D2,D1:] & P[x] from XBOOLE_0:sch 1;
+A3:   x in D iff x in [:D2,D1:] & P[ x] from XBOOLE_0:sch 1;
    defpred P[set,set] means ex y,z st $1 = [z,y] & $2 = f.[y,z];
 A4:   for x,y1,y2 st x in D & P[x,y1] & P[x,y2] holds y1 = y2
      proof let x,y1,y2 such that x in D;
@@ -840,15 +841,15 @@ definition let f,g;
      holds it.([x,x'],[y,y']) = [f.(x,y),g.(x',y')];
  existence
   proof
-   defpred P[set] means ex y st [$1,y] in dom f;
+   defpred P[set] means ex y st [ $1,y] in dom f;
    consider D1 being set such that
-A1:   x in D1 iff x in union union dom f & P[x] from XBOOLE_0:sch 1;
+A1:   x in D1 iff x in union union dom f & P[ x] from XBOOLE_0:sch 1;
    defpred P[set] means ex x st [x,$1] in dom f;
    consider D2 being set such that
 A2:   y in D2 iff y in union union dom f & P[y] from XBOOLE_0:sch 1;
-   defpred P[set] means ex y st [$1,y] in dom g;
+   defpred P[set] means ex y st [ $1,y] in dom g;
    consider D1' being set such that
-A3:   x in D1' iff x in union union dom g & P[x] from XBOOLE_0:sch 1;
+A3:   x in D1' iff x in union union dom g & P[ x] from XBOOLE_0:sch 1;
    defpred P[set] means ex x st [x,$1] in dom g;
    consider D2' being set such that
 A4:   y in D2' iff y in union union dom g & P[y] from XBOOLE_0:sch 1;
@@ -1061,7 +1062,7 @@ theorem
 
 definition let x,y,a,b be set;
   func (x,y) --> (a,b) -> set equals
-   ({x} --> a) +* ({y} --> b);
+:Def4:  ({x} --> a) +* ({y} --> b);
   correctness;
 end;
 
@@ -1180,7 +1181,7 @@ A5: x in dom f \/ dom g;
 theorem Th70:
  for x,y being set holds {x} --> y = {[x,y]}
   proof let x,y be set;
-   thus {x} --> y = [:{x},{y}:] by FUNCOP_1:def 2
+   thus {x} --> y = [:{x},{y}:]
      .= {[x,y]} by ZFMISC_1:35;
   end;
 
@@ -1424,3 +1425,78 @@ A2: f|(A \/ B)|B = f|((A \/ B) /\ B) by RELAT_1:100
        dom (f|(A \/ B)) c= A \/ B by RELAT_1:87;
     hence f|(A \/ B) = f|A +* f|B by A1,A2,Th74;
    end;
+
+:: from CQC_LANG, 2007.03.13, A.T.
+
+:: from ALTCAT_1
+
+ reserve x,y,i,j,k for set;
+
+theorem Th42:
+ (i,j):->k = [i,j].-->k
+ proof
+A1: {[i,j]} = [:{i},{j}:] by ZFMISC_1:35;
+   dom([i,j].-->k) = {[i,j]} & rng([i,j].-->k) = {k} by FUNCOP_1:14,19;
+   then [i,j].-->k is Function of [:{i},{j}:],{k} by A1,FUNCT_2:def 1
+,RELSET_1:11;
+  hence thesis by FUNCT_2:def 5;
+ end;
+
+theorem
+ ((i,j):->k).(i,j) = k
+ proof
+  thus ((i,j):->k).(i,j) = ([i,j].-->k).[i,j] by Th42
+         .= k by FUNCOP_1:87;
+ end;
+
+:: from AMI_1, 2006.03.14, A.T.
+
+theorem
+ for a,b,c being set holds (a,a) --> (b,c) = a .--> c
+ proof let a,b,c be set;
+A1: dom(a .-->c) = {a} by FUNCOP_1:19
+        .= dom({a} -->b) by FUNCOP_1:19;
+  thus (a,a) --> (b,c) = (a .--> b) +* (a .-->c)
+     .= a .--> c by A1,Th20;
+ end;
+
+theorem
+ for x,y holds x .--> y = {[x,y]}
+  proof let x,y;
+   thus x .--> y = [:{x},{y}:]
+     .= {[x,y]} by ZFMISC_1:35;
+  end;
+
+:: from SCMPDS_9, 2006.03.26, A.T.
+
+theorem
+  for f being Function, a,b,c being set st a <> c holds
+    (f +* (a .-->b)).c = f.c
+  proof
+    let f be Function,
+        a,b,c be set such that
+A1: a <> c;
+    set g = a .-->b;
+    dom g = {a} by FUNCOP_1:19;
+    then not c in dom g by A1,TARSKI:def 1;
+    hence (f +* g).c = f.c by Th12;
+  end;
+
+theorem
+  for f being Function, a,b,c,d being set st a <> b holds
+   (f +* ((a,b)-->(c,d))) .a = c &
+   (f +* ((a,b)-->(c,d))) .b = d
+  proof
+    let f be Function,
+        a,b,c,d be set such that
+A1:   a <> b;
+    set g = (a,b)-->(c,d);
+A2: dom g = {a,b} by Th65;
+    then a in dom g by TARSKI:def 2;
+    hence (f +* g).a = g.a by Th14
+     .= c by A1,Th66;
+     b in dom g by A2,TARSKI:def 2;
+    hence (f +* g).b = g.b by Th14
+     .= d by A1,Th66;
+  end;
+

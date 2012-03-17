@@ -19,11 +19,11 @@ environ
  registrations RELSET_1, ALGSTR_1, GCD_1, STRUCT_0, IDEAL_1, PRE_TOPC,
       PARTFUN1, EQREL_1, GROUP_1, FINSET_1, FINSUB_1, ORDINAL1, QUOFIELD;
  requirements BOOLE, SUBSET;
- definitions TARSKI, XBOOLE_0, RELAT_1, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1,
-      VECTSP_2, IDEAL_1, ORDERS_1, RELAT_2, WELLORD1;
+ definitions TARSKI, XBOOLE_0, RELAT_1, RLVECT_1, GROUP_1, VECTSP_1,
+      VECTSP_2, IDEAL_1, ORDERS_1, RELAT_2, WELLORD1, STRUCT_0;
  theorems VECTSP_1, TARSKI, FUNCT_1, RLVECT_1, VECTSP_2, XBOOLE_0, FUNCT_2,
       BINOP_1, ZFMISC_1, GROUP_1, IDEAL_1, RELAT_1, EQREL_1, SETWISEO,
-      ORDERS_1, WELLORD2, RELAT_2;
+      ORDERS_1, WELLORD2, RELAT_2, STRUCT_0;
  schemes EQREL_1, BINOP_1;
 
 begin :: Preliminaries
@@ -454,10 +454,11 @@ begin :: Quotient Ring
 
 definition
   let R be Ring, I be Ideal of R;
+X: 1.R = 1_R by VECTSP_1:96;
   func QuotientRing(R,I) -> strict doubleLoopStr means
   :Def6:
   the carrier of it = Class EqRel(R,I) &
-  1.it = Class(EqRel(R,I),1_R) &
+  1.it = Class(EqRel(R,I),1.R) &
   0.it = Class(EqRel(R,I),0.R) &
 
   (for x, y being Element of it ex a, b being Element of R st
@@ -511,14 +512,14 @@ A12: for a,b being Element of A holds R[a,b,h.(a,b)] from BINOP_1:sch 3(A7);
     reconsider u = Class(EqRel(R,I),1_R) as Element of A by EQREL_1:def 5;
     reconsider z = Class(EqRel(R,I),0.R) as Element of A by EQREL_1:def 5;
     take G = doubleLoopStr(#A,g,h,u,z#);
-    thus thesis by A6,A12;
+    thus thesis by A6,A12,X;
   end;
   uniqueness
   proof
     set E = EqRel(R,I);
     let X, Y be strict doubleLoopStr such that
 A13: the carrier of X = Class E and
-A14: 1.X = Class(E,1_R) and
+A14: 1.X = Class(E,1.R) and
 A15: 0.X = Class(E,0.R) and
 A16: for x, y being Element of X ex a, b being Element of R st
     x = Class(E,a) & y = Class(E,b) &
@@ -527,7 +528,7 @@ A17: for x, y being Element of X ex a, b being Element of R st
     x = Class(E,a) & y = Class(E,b) &
     (the mult of X).(x,y) = Class(E,a*b) and
 A18: the carrier of Y = Class E and
-A19: 1.Y = Class(E,1_R) and
+A19: 1.Y = Class(E,1.R) and
 A20: 0.Y = Class(E,0.R) and
 A21: for x, y being Element of Y ex a, b being Element of R st
     x = Class(E,a) & y = Class(E,b) &
@@ -679,31 +680,24 @@ A8: (a-1_R)*b = a*b-1_R*b by VECTSP_1:45
 Lm3:
   now
     let R be Ring, I be Ideal of R;
-    thus R/I is unital
-    proof
-      1.(R/I) = Class(EqRel(R,I),1_R) by Def6;
-      then reconsider e = Class(EqRel(R,I),1_R) as Element of R/I;
-      take e;
-      thus thesis by Lm2;
+X: 1.R = 1_R by VECTSP_1:96;
+    thus R/I is well-unital
+    proof let x be Element of R/I;
+      1.(R/I) = Class(EqRel(R,I),1.R) by Def6;
+      hence thesis by Lm2,X;
     end;
   end;
 
 theorem Th15:
-  Class(EqRel(R,I),1_R) = 1_(R/I)
-  proof
-    1.(R/I) = Class(EqRel(R,I),1_R) by Def6;
-      then reconsider e = Class(EqRel(R,I),1_R) as Element of R/I;
-A1: R/I is unital by Lm3;
-    for h being Element of R/I holds h * e = h & e * h = h by Lm2;
-    hence thesis by A1,GROUP_1:def 5;
-  end;
+  Class(EqRel(R,I),1.R) = 1.(R/I) by Def6;
 
 registration
   let R be Ring, I be Ideal of R;
   cluster R/I -> Abelian add-associative right_zeroed right_complementable
-  associative left_unital right_unital distributive;
+  associative well-unital distributive;
   coherence
   proof
+X: 1.R = 1_R by VECTSP_1:96;
     set E = EqRel(R,I);
     set g = the add of R/I;
     hereby
@@ -800,9 +794,10 @@ A28:   ab*c - a*bc in I by A23,A24,A25,A26,A27,IDEAL_1:15;
       .= Class(E,a*bc) by A28,Th6
       .= x*(y*z) by A18,A22,Th14;
     end;
-A29: Class(E,1_R) = 1_(R/I) by Th15;
-    hence for x being Element of R/I holds 1_(R/I) * x = x by Lm2;
-    thus for x being Element of R/I holds x * 1_(R/I) = x by A29,Lm2;
+A29: Class(E,1.R) = 1.(R/I) by Th15;
+    hence for x being Element of R/I holds x*1.(R/I) = x
+      & 1.(R/I)*x = x by Lm2,X,A29;
+::    thus for x being Element of R/I holds x * 1.(R/I) = x by A29,Lm2,X;
     let x, y, z be Element of R/I;
     consider a being Element of R such that
 A30: x = Class(E,a) by Th11;
@@ -896,23 +891,24 @@ theorem Th16:
   I is proper iff R/I is non degenerated
   proof
     set E = EqRel(R,I);
+X: 1.R = 1_R by VECTSP_1:96;
 A1: 0.(R/I) = Class(E,0.R) by Def6;
-A2: 1_(R/I) = Class(E,1_R) by Th15;
-A3: 1_R-0.R = 1_R by RLVECT_1:26;
+A2: 1.(R/I) = Class(E,1.R) by Th15;
+A3: 1.R-0.R = 1.R by RLVECT_1:26;
     thus I is proper implies R/I is non degenerated
     proof
       assume that
 A4:   I is proper and
-A5:   0.(R/I) = 1_(R/I);
-      1_R-0.R in I by A5,A1,A2,Th6;
-      hence thesis by A4,A3,IDEAL_1:19;
+A5:   0.(R/I) = 1.(R/I);
+      1.R-0.R in I by A5,A1,A2,Th6;
+      hence thesis by A4,A3,IDEAL_1:19,X;
     end;
     assume
 A6: R/I is non degenerated;
     assume not I is proper;
-    then 1_R in I by IDEAL_1:19;
-    then Class(E,1_R) = Class(E,0.R) by A3,Th6;
-    hence thesis by A1,A2,A6,VECTSP_1:def 21;
+    then 1.R in I by IDEAL_1:19,X;
+    then Class(E,1.R) = Class(E,0.R) by A3,Th6;
+    hence thesis by A1,A2,A6,STRUCT_0:def 8;
   end;
 
 theorem Th17:
@@ -959,11 +955,12 @@ theorem
   proof
     let R be commutative Ring,
     I be Ideal of R;
+X: 1.R = 1_R by VECTSP_1:96;
     thus I is prime implies R/I is domRing
     proof
       assume I is prime;
       then I is quasi-prime proper by Def2;
-      hence thesis by Th17,Th16;
+      hence thesis by Th17,Th16,X;
     end;
     assume R/I is domRing;
     hence I is proper quasi-prime by Th16,Th17;
@@ -972,6 +969,7 @@ theorem
 theorem Th19:
   R is commutative & I is quasi-maximal implies R/I is Field-like
   proof
+X: 1.R = 1_R by VECTSP_1:96;
     set E = EqRel(R,I);
     assume that
 A1: R is commutative and
@@ -989,7 +987,7 @@ A4: x = Class(E,a) by Th11;
       hence thesis;
     end;
     then reconsider M as Subset of R;
-A5: a*1_R+0.R = a+0.R by VECTSP_1:def 13
+A5: a*1.R+0.R = a+0.R by VECTSP_1:def 13,X
     .= a by RLVECT_1:def 7;
     0.R in I by IDEAL_1:2;
     then
@@ -1058,24 +1056,25 @@ A22:   a in I;
     end;
     then M is non proper by A6,A21,A2,A17,A7,A13,Def3;
     then M = the carrier of R by IDEAL_1:def 5;
-    then 1_R in M;
+    then 1.R in M;
     then consider b, m being Element of R such that
-A23: 1_R = a*b+m and
+A23: 1.R = a*b+m and
 A24: m in I;
     reconsider y = Class(E,b) as Element of R/I by Th12;
     take y;
-A25: m = 1_R-a*b by A23,VECTSP_2:22;
-A26: Class(E,1_R) = 1_(R/I) by Th15;
+A25: m = 1.R-a*b by A23,VECTSP_2:22;
+A26: Class(E,1.R) = 1.(R/I) by Th15;
     thus x*y = Class(E,a*b) by A4,Th14
-    .= 1_(R/I) by A24,A25,A26,Th6;
+    .= 1.(R/I) by A24,A25,A26,Th6;
   end;
 
 theorem Th20:
   R/I is Field-like implies I is quasi-maximal
   proof
+X: 1.R = 1_R by VECTSP_1:96;
     set E = EqRel(R,I);
 A1: Class(E,0.R) = 0.(R/I) by Def6;
-A2: Class(E,1_R) = 1_(R/I) by Th15;
+A2: Class(E,1.R) = 1.(R/I) by Th15;
     assume
 A3: R/I is Field-like;
     given J being Ideal of R such that
@@ -1094,16 +1093,16 @@ A8: not a in I by TARSKI:def 3;
       hence contradiction by A8,RLVECT_1:26;
     end;
     then consider y being Element of R/I such that
-A9: x*y = 1_(R/I) by A3,VECTSP_1:def 20;
+A9: x*y = 1.(R/I) by A3,VECTSP_1:def 20;
     consider b being Element of R such that
 A10: y = Class(E,b) by Th11;
     x*y = Class(E,a*b) by A10,Th14;
     then
-A11: a*b-1_R in I by A2,A9,Th6;
+A11: a*b-1.R in I by A2,A9,Th6;
 A12: a*b in J by A7,IDEAL_1:def 3;
-    1_R = a*b-(a*b-1_R) by Th2;
-    then 1_R in J by A11,A4,A12,IDEAL_1:15;
-    hence thesis by A6,IDEAL_1:19;
+    1.R = a*b-(a*b-1.R) by Th2;
+    then 1.R in J by A11,A4,A12,IDEAL_1:15;
+    hence thesis by A6,IDEAL_1:19,X;
   end;
 
 theorem
@@ -1112,11 +1111,12 @@ theorem
   proof
     let R be commutative Ring,
     I be Ideal of R;
+X: 1.R = 1_R by VECTSP_1:96;
     thus I is maximal implies R/I is Skew-Field
     proof
       assume I is maximal;
       then I is quasi-maximal proper by Def4;
-      hence thesis by Th19,Th16;
+      hence thesis by Th19,Th16,X;
     end;
     assume R/I is Skew-Field;
     hence I is proper quasi-maximal by Th16,Th20;
@@ -1128,14 +1128,15 @@ registration
   coherence
   proof
     let I be Ideal of R;
+X: 1.R = 1_R by VECTSP_1:96;
     assume
 A1: I is proper quasi-maximal;
     then
 A2: R/I is Field-like non degenerated by Th16,Th19;
     for A being add-associative right_zeroed right_complementable
-    commutative associative left_unital
+    commutative associative well-unital
     distributive Field-like (non empty doubleLoopStr)
-    holds A is domRing-like;
+    holds A is domRing-like by X;
     then R/I is domRing-like by A2;
     hence I is proper quasi-prime by A1,Th17;
   end;
@@ -1148,6 +1149,7 @@ registration
   proof
     set S = {A where A is Ideal of R: A is proper};
     set P = RelIncl S;
+X: 1.R = 1_R by VECTSP_1:96;
 A1: P partially_orders S
     proof
       thus P is_reflexive_in S by WELLORD2:29;
@@ -1169,8 +1171,8 @@ A5:     Y is empty;
           then
 A6:       x = the carrier of R by IDEAL_1:def 5;
           x = {0.R} by IDEAL_1:47;
-          then 1_R = 0.R by A6,TARSKI:def 1;
-          hence contradiction by VECTSP_1:def 21;
+          then 1.R = 0.R by A6,TARSKI:def 1;
+          hence contradiction by STRUCT_0:def 8;
         end;
         hence x in S;
         thus thesis by A5;
@@ -1266,13 +1268,13 @@ A32:       a*p in Ia by A29,A31,IDEAL_1:def 3;
         end;
         now
           assume B is non proper;
-          then 1_R in B by A12,A23,IDEAL_1:19;
+          then 1.R in B by A12,A23,IDEAL_1:19,X;
           then consider Aa being set such that
-A33:       1_R in Aa and
+A33:       1.R in Aa and
 A34:       Aa in Y by TARSKI:def 4;
           Aa in S by A3,A34;
           then ex Ia being Ideal of R st Aa = Ia & Ia is proper;
-          hence contradiction by A33,IDEAL_1:19;
+          hence contradiction by A33,IDEAL_1:19,X;
         end;
         hence
 A35:     x in S by A28,A12,A13,A23;

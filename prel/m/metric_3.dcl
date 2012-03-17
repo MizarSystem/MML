@@ -43,13 +43,13 @@
 <Func kind="K" nr="42"/>
 </Typ>
 </ArgTypes>
-<Func kind="G" nr="3">
+<Func kind="G" nr="5">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="24" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="23" value="false"/>
+<Adjective nr="29"/>
 </Cluster>
 </FCluster>
 </Registrations>

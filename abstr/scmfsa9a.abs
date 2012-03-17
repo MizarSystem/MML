@@ -13,11 +13,11 @@ environ
       AMI_2, SCMFSA6C, SFMASTR1, PRE_FF, ABSVALUE, SCMFSA9A;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, NUMBERS, XCMPLX_0,
       FINSUB_1, FUNCOP_1, CARD_1, CARD_3, INT_1, NAT_1, NAT_D, ABIAN, RELAT_1,
-      FUNCT_1, FUNCT_2, FUNCT_4, CQC_SIM1, PRE_FF, STRUCT_0, AMI_1, AMI_3,
-      SCM_1, AMI_5, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SCMFSA6B, SF_MASTR,
+      FUNCT_1, FUNCT_2, FUNCT_4, SEQ_4, PRE_FF, STRUCT_0, AMI_1, AMI_3, SCM_1,
+      AMI_5, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SCMFSA6B, SF_MASTR,
       SCMFSA6C, SCMFSA_7, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
       INT_2, XXREAL_0;
- constructors XXREAL_0, NAT_1, MEMBERED, INT_2, CQC_SIM1, PRE_FF, ABIAN, SCM_1,
+ constructors XXREAL_0, NAT_1, MEMBERED, INT_2, SEQ_4, PRE_FF, ABIAN, SCM_1,
       AMI_5, SCMFSA_5, SCMFSA_7, SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA8A,
       SCMFSA8B, SCMFSA_9, SFMASTR1, NAT_D;
  registrations XREAL_0, FINSET_1, FUNCT_1, INT_1, ABIAN, FINSUB_1, AMI_1,
@@ -74,7 +74,6 @@ theorem :: SCMFSA9A:12  :: GotoUsedF:
  reserve s, s1, s2 for State of SCM+FSA,
          a for read-write Int-Location,
          b for Int-Location,
-
          I, J for Macro-Instruction,
          Ig for good Macro-Instruction,
          i, j, k, m, n for Element of NAT;
@@ -136,21 +135,25 @@ theorem :: SCMFSA9A:21    :: SCMFSA_9:25, corrected
    holds while=0(a,I) is_halting_on s & while=0(a,I) is_closed_on s;
 
 theorem :: SCMFSA9A:22  :: based on SCMFSA_9:10
- while=0(a, I) +* SAt c= s & s.a <> 0
+ while=0(a, I) +* (Start-At insloc 0) c= s & s.a <> 0
   implies LifeSpan s = 4 & for k being Element of NAT
-  holds (Computation s).k | D = s | D;
+  holds (Computation s).k | (Int-Locations \/ FinSeq-Locations) =
+    s | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA9A:23  :: based on SCMFSA_9:22
  I is_closed_on s & I is_halting_on s & s.a = 0
   implies
    (Computation (s +* (while=0(a,I) +* Start-At insloc 0))).
-    (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) | D
+    (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) |
+      (Int-Locations \/ FinSeq-Locations)
  = (Computation (s +* (I +* Start-At insloc 0))).
-    (LifeSpan (s +* (I +* Start-At insloc 0))) | D;
+    (LifeSpan (s +* (I +* Start-At insloc 0))) |
+     (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA9A:24  :: Step_eq0_0:
   (StepWhile=0(a, I, s).k).a <> 0
-   implies StepWhile=0(a, I, s).(k+1) | D = StepWhile=0(a, I, s).k | D;
+   implies StepWhile=0(a, I, s).(k+1) | (Int-Locations \/ FinSeq-Locations) =
+     StepWhile=0(a, I, s).k | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA9A:25  :: Step_eq0_1:
  ( I is_halting_on Initialize StepWhile=0(a, I, s).k &
@@ -158,8 +161,8 @@ theorem :: SCMFSA9A:25  :: Step_eq0_1:
   or I is parahalting) &
  (StepWhile=0(a, I, s).k).a = 0 &
  (StepWhile=0(a, I, s).k).intloc 0 = 1
-   implies StepWhile=0(a, I, s).(k+1) | D
-         = IExec(I, StepWhile=0(a, I, s).k) | D;
+   implies StepWhile=0(a, I, s).(k+1) | (Int-Locations \/ FinSeq-Locations)
+    = IExec(I, StepWhile=0(a, I, s).k) | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA9A:26  :: eGoodStep0:
     (ProperBodyWhile=0 a, Ig, s or Ig is parahalting) &
@@ -167,8 +170,11 @@ theorem :: SCMFSA9A:26  :: eGoodStep0:
   implies for k holds StepWhile=0(a, Ig, s).k.intloc 0 = 1;
 
 theorem :: SCMFSA9A:27  :: eSW12:
-    ProperBodyWhile=0 a, I, s1 & s1 | D = s2 | D implies
-   for k holds StepWhile=0(a, I, s1).k | D = StepWhile=0(a, I, s2).k | D;
+    ProperBodyWhile=0 a, I, s1 &
+      s1 | (Int-Locations \/ FinSeq-Locations) =
+      s2 | (Int-Locations \/ FinSeq-Locations) implies
+   for k holds StepWhile=0(a, I, s1).k | (Int-Locations \/ FinSeq-Locations) =
+     StepWhile=0(a, I, s2).k | (Int-Locations \/ FinSeq-Locations);
 
 definition
  let s be State of SCM+FSA,
@@ -185,20 +191,23 @@ definition
    (StepWhile=0(a, I, s).k).a <> 0 &
    (for i being Element of NAT st (StepWhile=0(a, I, s).i).a <> 0
    holds k <= i) &
-   (Computation (s +* (while=0(a, I) +* SAt))).
-                         (LifeSpan (s +* (while=0(a, I) +* SAt))) | D
-     = StepWhile=0(a, I, s).k | D;
+   (Computation (s +* (while=0(a, I) +* (Start-At insloc 0)))).
+      (LifeSpan (s +* (while=0(a, I) +* (Start-At insloc 0)))) |
+        (Int-Locations \/ FinSeq-Locations)
+     = StepWhile=0(a, I, s).k | (Int-Locations \/ FinSeq-Locations);
 end;
 
 theorem :: SCMFSA9A:28  :: IE_while_ne0:
-    s.intloc 0 = 1 & s.a <> 0 implies IExec(while=0(a, I), s) | D = s | D;
+  s.intloc 0 = 1 & s.a <> 0 implies
+    IExec(while=0(a, I), s) | (Int-Locations \/ FinSeq-Locations) =
+      s | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA9A:29  :: IE_while_eq0:
     (ProperBodyWhile=0 a, I, Initialize s or I is parahalting) &
   WithVariantWhile=0 a, I, Initialize s
-   implies IExec(while=0(a, I), s) | D
-       = StepWhile=0(a, I, Initialize s).ExitsAtWhile=0(a, I, Initialize s) | D
-;
+   implies IExec(while=0(a, I), s) | (Int-Locations \/ FinSeq-Locations)
+       = StepWhile=0(a, I, Initialize s).ExitsAtWhile=0(a, I, Initialize s) |
+         (Int-Locations \/ FinSeq-Locations);
 
 begin
 
@@ -240,21 +249,25 @@ theorem :: SCMFSA9A:34    :: SCMFSA_9:43, corrected
    holds while>0(a,I) is_halting_on s & while>0(a,I) is_closed_on s;
 
 theorem :: SCMFSA9A:35  :: based on SCMFSA_9:32
- while>0(a, I) +* SAt c= s & s.a <= 0
+ while>0(a, I) +* (Start-At insloc 0) c= s & s.a <= 0
   implies LifeSpan s = 4 & for k being Element of NAT
-  holds (Computation s).k | D = s | D;
+  holds (Computation s).k | (Int-Locations \/ FinSeq-Locations) =
+    s | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA9A:36  :: based on SCMFSA_9:36
  I is_closed_on s & I is_halting_on s & s.a > 0
   implies
    (Computation (s +* (while>0(a,I) +* Start-At insloc 0))).
-    (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) | D
+    (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) |
+      (Int-Locations \/ FinSeq-Locations)
  = (Computation (s +* (I +* Start-At insloc 0))).
-    (LifeSpan (s +* (I +* Start-At insloc 0))) | D;
+    (LifeSpan (s +* (I +* Start-At insloc 0))) |
+      (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA9A:37  :: Step_gt0_0:
   (StepWhile>0(a, I, s).k).a <= 0
-   implies StepWhile>0(a, I, s).(k+1) | D = StepWhile>0(a, I, s).k | D;
+   implies StepWhile>0(a, I, s).(k+1) | (Int-Locations \/ FinSeq-Locations) =
+     StepWhile>0(a, I, s).k | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA9A:38  :: Step_gt0_1:
  ( I is_halting_on Initialize StepWhile>0(a, I, s).k &
@@ -262,8 +275,9 @@ theorem :: SCMFSA9A:38  :: Step_gt0_1:
   or I is parahalting) &
  (StepWhile>0(a, I, s).k).a > 0 &
  (StepWhile>0(a, I, s).k).intloc 0 = 1
-   implies StepWhile>0(a, I, s).(k+1) | D
-         = IExec(I, StepWhile>0(a, I, s).k) | D;
+   implies StepWhile>0(a, I, s).(k+1) | (Int-Locations \/ FinSeq-Locations)
+         = IExec(I, StepWhile>0(a, I, s).k) |
+           (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA9A:39  :: GoodStep0:
  (ProperBodyWhile>0 a, Ig, s or Ig is parahalting) &
@@ -271,8 +285,11 @@ theorem :: SCMFSA9A:39  :: GoodStep0:
   implies for k holds StepWhile>0(a, Ig, s).k.intloc 0 = 1;
 
 theorem :: SCMFSA9A:40  :: SW12:
- ProperBodyWhile>0 a, I, s1 & s1 | D = s2 | D implies
-   for k holds StepWhile>0(a, I, s1).k | D = StepWhile>0(a, I, s2).k | D;
+ ProperBodyWhile>0 a, I, s1 &
+   s1 | (Int-Locations \/ FinSeq-Locations) =
+     s2 | (Int-Locations \/ FinSeq-Locations) implies
+   for k holds StepWhile>0(a, I, s1).k | (Int-Locations \/ FinSeq-Locations) =
+     StepWhile>0(a, I, s2).k | (Int-Locations \/ FinSeq-Locations);
 
 definition
  let s be State of SCM+FSA,
@@ -283,34 +300,38 @@ definition
  WithVariantWhile>0 a, I, s;
  func ExitsAtWhile>0(a, I, s) -> Element of NAT means
 :: SCMFSA9A:def 6
-
   ex k being Element of NAT st
    it = k &
    (StepWhile>0(a, I, s).k).a <= 0 &
    (for i being Element of NAT st (StepWhile>0(a, I, s).i).a <= 0
    holds k <= i) &
-   (Computation (s +* (while>0(a, I) +* SAt))).
-                         (LifeSpan (s +* (while>0(a, I) +* SAt))) | D
-     = StepWhile>0(a, I, s).k | D;
+   (Computation (s +* (while>0(a, I) +* (Start-At insloc 0)))).
+                (LifeSpan (s +* (while>0(a, I) +* (Start-At insloc 0)))) |
+                (Int-Locations \/ FinSeq-Locations)
+     = StepWhile>0(a, I, s).k | (Int-Locations \/ FinSeq-Locations);
 end;
 
 theorem :: SCMFSA9A:41  :: IE_while_le0:
-    s.intloc 0 = 1 & s.a <= 0 implies IExec(while>0(a, I), s) | D = s | D;
+  s.intloc 0 = 1 & s.a <= 0 implies
+    IExec(while>0(a, I), s) | (Int-Locations \/ FinSeq-Locations) =
+      s | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA9A:42  :: IE_while_gt0:
  (ProperBodyWhile>0 a, I, Initialize s or I is parahalting) &
   WithVariantWhile>0 a, I, Initialize s
-   implies IExec(while>0(a, I), s) | D
-       = StepWhile>0(a, I, Initialize s).ExitsAtWhile>0(a, I, Initialize s) | D
-;
+   implies IExec(while>0(a, I), s) | (Int-Locations \/ FinSeq-Locations)
+       = StepWhile>0(a, I, Initialize s).ExitsAtWhile>0(a, I, Initialize s) |
+         (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA9A:43
  StepWhile>0(a, I, s).k.a <= 0 implies
   for n being Element of NAT st k <= n
-   holds StepWhile>0(a, I, s).n | D = StepWhile>0(a, I, s).k | D;
+   holds StepWhile>0(a, I, s).n | (Int-Locations \/ FinSeq-Locations) =
+     StepWhile>0(a, I, s).k | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA9A:44
-    s1 | D = s2 | D & ProperBodyWhile>0 a, I, s1
+  s1 | (Int-Locations \/ FinSeq-Locations) =
+    s2 | (Int-Locations \/ FinSeq-Locations) & ProperBodyWhile>0 a, I, s1
   implies ProperBodyWhile>0 a, I, s2;
 
 theorem :: SCMFSA9A:45
@@ -319,13 +340,15 @@ theorem :: SCMFSA9A:45
   for i, j st i <> j & i <= ExitsAtWhile>0(a, Ig, s) &
                        j <= ExitsAtWhile>0(a, Ig, s)
      holds StepWhile>0(a, Ig, s).i <> StepWhile>0(a, Ig, s).j &
-           StepWhile>0(a, Ig, s).i | D <> StepWhile>0(a, Ig, s).j | D;
+           StepWhile>0(a, Ig, s).i | (Int-Locations \/ FinSeq-Locations) <>
+             StepWhile>0(a, Ig, s).j | (Int-Locations \/ FinSeq-Locations);
 
 definition
  let f be Function of product the Object-Kind of SCM+FSA, NAT;
  attr f is on_data_only means
 :: SCMFSA9A:def 7
- for s1, s2 st s1 | D = s2 | D holds f.s1 = f.s2;
+ for s1, s2 st s1 | (Int-Locations \/ FinSeq-Locations) =
+  s2 | (Int-Locations \/ FinSeq-Locations) holds f.s1 = f.s2;
 end;
 
 theorem :: SCMFSA9A:46
@@ -337,7 +360,8 @@ theorem :: SCMFSA9A:46
      or StepWhile>0(a, Ig, s).k.a <= 0;
 
 theorem :: SCMFSA9A:47
-    s1.intloc 0 = 1 & s1 | D = s2 | D &
+  s1.intloc 0 = 1 & s1 | (Int-Locations \/ FinSeq-Locations) =
+    s2 | (Int-Locations \/ FinSeq-Locations) &
  ProperBodyWhile>0 a, Ig, s1 & WithVariantWhile>0 a, Ig, s1
   implies WithVariantWhile>0 a, Ig, s2;
 
@@ -345,7 +369,6 @@ begin :: fusc using while>0, bottom-up
 
 definition
  let N, result be Int-Location;
-
     :: set next = 1-stRWNotIn {N, result};
     :: set aux  = 2-ndRWNotIn {N, result};
     :: set rem2 = 3-rdRWNotIn {N, result};
@@ -356,14 +379,14 @@ definition
 :: SCMFSA9A:def 8
 
    SubFrom(result, result) ';'
-   (next := intloc 0) ';'
-   (aux := N) ';'
-   while>0 ( aux,
-             rem2 := 2 ';'
-             Divide(aux, rem2) ';'
-             if=0 ( rem2,
-                    Macro AddTo(next, result),
-                    Macro AddTo(result, next)
+   ((1-stRWNotIn {N, result}) := intloc 0) ';'
+   ((2-ndRWNotIn {N, result}) := N) ';'
+   while>0 ( 2-ndRWNotIn {N, result},
+             (3-rdRWNotIn {N, result}) := 2 ';'
+             Divide(2-ndRWNotIn {N, result}, 3-rdRWNotIn {N, result}) ';'
+             if=0 ( 3-rdRWNotIn {N, result},
+                    Macro AddTo(1-stRWNotIn {N, result}, result),
+                    Macro AddTo(result, 1-stRWNotIn {N, result})
                   )
            );
 end;

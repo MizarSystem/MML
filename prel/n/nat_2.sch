@@ -20,6 +20,8 @@
 <ArticleID name="FINSEQ_4"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="ENUMSET1"/>
+<ArticleID name="DOMAIN_1"/>
 <ArticleID name="REALSET1"/>
 </Signature>
 <Scheme>
@@ -48,7 +50,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="78">
+<Func kind="K" nr="81">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="3"/>
@@ -57,7 +59,7 @@
 <And>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="97">
+<Func kind="K" nr="100">
 <Func kind="K" nr="50"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
@@ -95,13 +97,13 @@
 <Not>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="97">
+<Func kind="K" nr="100">
 <Func kind="K" nr="50"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="97">
+<Func kind="K" nr="100">
 <Func kind="K" nr="50"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>

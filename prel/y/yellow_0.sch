@@ -25,10 +25,10 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="G" nr="3">
+<Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="17"/>
+<Adjective nr="12" value="false"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 <Not>
@@ -56,7 +56,7 @@
 <And>
 <Not>
 <And>
-<Pred kind="R" nr="26">
+<Pred kind="R" nr="27">
 <Var nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -76,7 +76,7 @@
 <Var nr="3"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="26">
+<Pred kind="R" nr="27">
 <Var nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
