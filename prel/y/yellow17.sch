@@ -2,39 +2,38 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="RELAT_2"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="UNIALG_1"/>
-<ArticleID name="PBOOLE"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="PARTFUN1"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="CARD_3"/>
+<ArticleID name="PBOOLE"/>
+<ArticleID name="UNIALG_1"/>
+<ArticleID name="FUNCT_4"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
+<ArticleID name="PRALG_1"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WELLORD2"/>
 <ArticleID name="YELLOW_1"/>
 <ArticleID name="WAYBEL_3"/>
-<ArticleID name="FUNCT_4"/>
-<ArticleID name="FUNCT_5"/>
-<ArticleID name="PRALG_1"/>
 <ArticleID name="WAYBEL18"/>
 </Signature>
 <Scheme>
@@ -44,10 +43,10 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="13">
 <Cluster>
-<Adjective nr="75"/>
-<Adjective nr="82"/>
+<Adjective nr="76"/>
+<Adjective nr="79"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -57,7 +56,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="230">
+<Func kind="K" nr="217">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -70,7 +69,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="232">
+<Func kind="K" nr="219">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
@@ -92,7 +91,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="231">
+<Func kind="K" nr="218">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

@@ -10,7 +10,7 @@ environ
       FINSEQ_1, HALLMAR1, REALSET1, FUNCT_4, ZF_REFLE, NEWTON;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, XXREAL_0,
       REAL_1, NAT_1, REALSET1, FINSET_1, CARD_1, FINSEQ_1, FUNCT_2, FUNCT_7;
- constructors NAT_1, XREAL_0, REALSET1, REAL_1, FUNCT_7, XXREAL_0;
+ constructors XXREAL_0, XREAL_0, REAL_1, NAT_1, REALSET1, FUNCT_7;
  registrations FUNCT_1, RELAT_1, RELSET_1, SUBSET_1, NAT_1, XREAL_0, FINSET_1,
       CHAIN_1, FINSEQ_1, GOBOARD1, XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -417,19 +417,7 @@ A2:  x in A.i and
 A3:  y in A.i;
      (A.i\{x}) \/ (A.i\{y}) = A.i
      proof
-       thus (A.i\{x}) \/ (A.i\{y}) c= A.i
-       proof
-         let z be set;
-         assume
-A4:      z in (A.i\{x}) \/ (A.i\{y});
-         per cases by A4,XBOOLE_0:def 2;
-         suppose z in (A.i\{x});
-           hence thesis by XBOOLE_0:def 4;
-         end;
-         suppose z in (A.i\{y});
-           hence thesis by XBOOLE_0:def 4;
-         end;
-       end;
+       thus (A.i\{x}) \/ (A.i\{y}) c= A.i by XBOOLE_0:def 2;
        thus A.i c= (A.i\{x}) \/ (A.i\{y})
        proof
          let z be set;
@@ -469,7 +457,6 @@ definition let F be finite set;
      (i <> k implies it.k = A.k);
   existence
   proof
-A1: A.i \ {x} c= A.i by XBOOLE_1:36;
     A.i c= F
     proof
       per cases;
@@ -482,25 +469,25 @@ A1: A.i \ {x} c= A.i by XBOOLE_1:36;
         hence thesis by XBOOLE_1:2;
       end;
     end; then
-    reconsider EX = A.i \ {x} as Subset of F by A1,XBOOLE_1:1;
+    reconsider EX = A.i \ {x} as Subset of F by XBOOLE_1:1;
     set XX = A +* (i, EX);
     reconsider XX as FinSequence of bool F;
     take XX;
-A2: dom XX = dom A by FUNCT_7:32;
+A1: dom XX = dom A by FUNCT_7:32;
     for k being Nat st k in dom XX holds
      (i = k implies XX.k = A.k \ {x}) &
-     (i <> k implies XX.k = A.k) by A2,FUNCT_7:33,34;
+     (i <> k implies XX.k = A.k) by A1,FUNCT_7:33,34;
     hence thesis by FUNCT_7:32;
   end;
   uniqueness
   proof
     let f1, f2 be FinSequence of bool F;
     assume that
-A3: dom f1 = dom A &
+A2: dom f1 = dom A &
     for k being Nat st k in dom f1 holds
      (i = k implies f1.k = A.k \ {x}) &
      (i <> k implies f1.k = A.k) and
-A4: dom f2 = dom A &
+A3: dom f2 = dom A &
     for k being Nat st k in dom f2 holds
      (i = k implies f2.k = A.k \ {x}) &
      (i <> k implies f2.k = A.k);
@@ -509,20 +496,20 @@ A4: dom f2 = dom A &
     proof
       let z be Nat;
       assume
-A5:   z in dom f1;
+A4:   z in dom f1;
       per cases;
       suppose
-A6:     z = i; then
-        f1. z = A.i \ {x} by A3,A5 .= f2. z by A3,A4,A5,A6;
+A5:     z = i; then
+        f1. z = A.i \ {x} by A2,A4 .= f2. z by A2,A3,A4,A5;
         hence thesis;
       end;
       suppose
-A7:     z <> i; then
-        f1. z = A.z by A3,A5 .= f2. z by A3,A4,A5,A7;
+A6:     z <> i; then
+        f1. z = A.z by A2,A4 .= f2. z by A2,A3,A4,A6;
         hence thesis;
       end;
     end;
-    hence thesis by A3,A4,FINSEQ_1:17;
+    hence thesis by A2,A3,FINSEQ_1:17;
   end;
 end;
 
@@ -996,9 +983,8 @@ theorem Th20:
 A1:  i in dom A & x in A.i;
 A2:  dom f = dom A by Def2;
 A3:  for j being Nat st j in dom A & j <> i holds A.j = f.j by A2,Def2;
-A4:  A.i \ {x} c= A.i by XBOOLE_1:36;
      f.i = A.i \ {x} by A1,A2,Def2;
-     hence thesis by A2,A3,A4,Def5;
+     hence thesis by A2,A3,Def5;
   end;
 
 theorem Th21:
@@ -1328,7 +1314,6 @@ A10:    card J1 = card JJ1 - card {i} by A9,EULER_1:5
         union (Cut (A, i, x), JJ1) = union (A, JJ1 \ {i}) \/ (A.i \ {x})
           by A8,A9,Th14; then
 A11:    card J1 >= card (union (A, J1) \/ (A.i \ {x})) by A8,A10,SPPOL_1:6;
-        J1 c= JJ1 by XBOOLE_1:36; then
 A12:    J1 c= dom Cut (A, i, x) by A8,XBOOLE_1:1;
         {i} misses J1 by XBOOLE_1:79; then
         not i in J1 by ZFMISC_1:54;
@@ -1364,7 +1349,6 @@ A19:    card J2 = card JJ2 - card {i} by A18,EULER_1:5
         union (Cut (A, i, y), JJ2) = union (A, JJ2 \ {i}) \/ (A.i \ {y})
           by A17,A18,Th14; then
 A20:    card J2 >= card (union (A, J2) \/ (A.i \ {y})) by A17,A19,SPPOL_1:6;
-        J2 c= JJ2 by XBOOLE_1:36; then
 A21:    J2 c= dom Cut (A, i, y) by A17,XBOOLE_1:1;
         {i} misses J2 by XBOOLE_1:79; then
         not i in J2 by ZFMISC_1:54;

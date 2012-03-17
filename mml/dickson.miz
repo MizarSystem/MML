@@ -17,13 +17,13 @@ environ
       NUMBERS, NAT_1, CARD_1, NORMSP_1, CQC_SIM1, WAYBEL_4, RECDEF_1, SEQM_3,
       PSCOMP_1, BHSP_3, YELLOW_3, WAYBEL_1, PBOOLE, PRALG_1, CARD_3, YELLOW_1,
       CQC_LANG, WAYBEL_3, YELLOW_6, FUNCT_4, PRE_CIRC, XXREAL_0;
- constructors WELLFND1, NAT_1, CQC_SIM1, PRE_CIRC, WAYBEL_4, PSCOMP_1,
-      YELLOW_3, WAYBEL_1, ORDERS_3, WAYBEL_3, DOMAIN_1, BHSP_3, TOLER_1,
-      RECDEF_1, PRALG_1, BINOP_2, MONOID_0, XXREAL_0;
+ constructors WELLORD1, DOMAIN_1, NAT_1, BINOP_2, RECDEF_1, CQC_SIM1, PRE_CIRC,
+      BHSP_3, MONOID_0, PRALG_1, ORDERS_3, WAYBEL_1, YELLOW_3, WAYBEL_3,
+      WAYBEL_4, WELLFND1;
  registrations RELSET_1, FINSET_1, SUBSET_1, STRUCT_0, NAT_1, RELAT_1, CARD_5,
       SEQM_3, YELLOW_6, YELLOW_3, YELLOW_1, FUNCT_1, CARD_4, CQC_LANG,
       BORSUK_3, WAYBEL18, ORDERS_2, FILTER_1, MEMBERED, FUNCT_2, PRE_CIRC,
-      PARTFUN1, EQREL_1;
+      PARTFUN1, EQREL_1, ORDINAL1;
  requirements BOOLE, SUBSET, NUMERALS;
  definitions TARSKI, RELAT_2, ORDERS_2, ORDERS_1, CQC_LANG, EQREL_1;
  theorems WELLORD1, ORDERS_1, SUBSET_1, TARSKI, RELAT_1, RELAT_2, RELSET_1,
@@ -32,7 +32,7 @@ environ
       AXIOMS, YELLOW_3, WAYBEL_1, WAYBEL20, CARD_5, YELLOW_1, CARD_3, CQC_LANG,
       FUNCOP_1, WAYBEL_3, MCART_1, FUNCT_4, WELLFND1, WAYBEL_4, PBOOLE,
       PRALG_1, YELLOW_6, AFINSQ_1, BHSP_3, XBOOLE_0, XBOOLE_1, ORDINAL2,
-      PARTFUN1, PRE_CIRC, XXREAL_0;
+      PARTFUN1, PRE_CIRC, XXREAL_0, ORDINAL1;
  schemes PRE_CIRC, RECDEF_1, NAT_1, FUNCT_2, DOMAIN_1, FRAENKEL, FINSEQ_1,
       BINARITH, FUNCT_1, RELSET_1;
 
@@ -505,9 +505,7 @@ coherence proof
   A1: [x,y] in R\~;
           [x,y] in R \ R~ by A1; then not [x,y] in R~ by XBOOLE_0:def 4
 ;
-      then not [y,x] in R by RELAT_1:def 7; then not [y,x] in R\R~ by
-XBOOLE_0:def 4
-;
+      then not [y,x] in R by RELAT_1:def 7; then not [y,x] in R\R~;
       hence not [y,x] in R\~;
   end; then R \~ is_asymmetric_in field (R\~) by RELAT_2:def 5;
   hence R \~ is asymmetric by RELAT_2:def 13;
@@ -621,7 +619,7 @@ then A1: R is_asymmetric_in field R by RELAT_2:def 13;
             hence [a,b] in R\~ by A2,XBOOLE_0:def 4;
         end;
         assume [a,b] in R\~;
-        hence [a,b] in R by XBOOLE_0:def 4;
+        hence [a,b] in R;
     end;
     hence R = R\~ by RELAT_1:def 2;
 end;
@@ -635,7 +633,7 @@ A2: R is_transitive_in field R by A1,RELAT_2:def 16;
             x in field (R\~) & y in field (R\~) & z in field (R\~) and
     A3: [x,y] in R\~ and
     A4: [y,z] in R\~;
-    A5: [x,y] in R & [y,z] in R by A3,A4,XBOOLE_0:def 4;
+    A5: [x,y] in R & [y,z] in R by A3,A4;
     then A6: x in field R & y in field R & z in field R by RELAT_1:30;
     then A7: [x,z] in R by A2,A5,RELAT_2:def 8;
             not [x,y] in R~ by A3,XBOOLE_0:def 4;
@@ -656,7 +654,7 @@ A1: R is antisymmetric;
 A2: R is_antisymmetric_in field R by A1,RELAT_2:def 12;
 A3: R\~ is_asymmetric_in field (R\~) by RELAT_2:def 13;
     hereby assume A4: [a,b] in R\~;
-       hence [a,b] in R by XBOOLE_0:def 4;
+       hence [a,b] in R;
            now assume A5: a = b;
                a in field (R\~) & b in field (R\~) by A4,RELAT_1:30;
            hence contradiction by A3,A4,A5,RELAT_2:def 5;
@@ -691,9 +689,7 @@ A2: IR is_well_founded_in CR by A1,WELLFND1:def 2;
            A8: z in IR'-Seg(a) /\ Y;
            A9: z in IR'-Seg(a) & z in Y by A8,XBOOLE_0:def 3;
            then A10: z <> a & [z,a] in IR' by WELLORD1:def 1;
-               then [z,a] in IR \ IR~;
-               then [z,a] in IR by XBOOLE_0:def 4;
-               then z in IR-Seg(a) by A10,WELLORD1:def 1;
+               z in IR-Seg(a) by A10,WELLORD1:def 1;
                hence contradiction by A7,A9,XBOOLE_0:def 3;
            end; then IR'-Seg(a) /\ Y = {} by XBOOLE_0:def 1;
            hence IR'-Seg(a) misses Y by XBOOLE_0:def 7;
@@ -1227,7 +1223,7 @@ A17: for N being non empty Subset of R holds
                     A38: y <> a' & [y,a'] in IR';
                             y = b by A37,A38,TARSKI:def 2;
                         then [b,a'] in IR \ IR~ by A38;
-                        hence contradiction by A21,XBOOLE_0:def 4;
+                        hence contradiction by A21;
                     end;
                     hence a' is_minimal_wrt N', the InternalRel of (R\~)
                      by A36,WAYBEL_4:def 26;
@@ -1266,7 +1262,7 @@ XBOOLE_0:def 3;
                     A44: y <> b' & [y,b'] in IR';
                             y = a by A43,A44,TARSKI:def 2;
                         then [a,b'] in IR \ IR~ by A44;
-                        hence contradiction by A19,XBOOLE_0:def 4;
+                        hence contradiction by A19;
                     end;
                     hence b' is_minimal_wrt N', the InternalRel of (R\~)
                      by A42,WAYBEL_4:def 26;
@@ -1585,7 +1581,7 @@ A6: f mindex b in BI;
         thus x in NAT by A7;
     end;
     then reconsider BI as finite non empty Subset of NAT by A5,A6,TARSKI:def 3;
-    reconsider mB = max BI as Nat by ORDINAL2:def 21;
+    reconsider mB = max BI as Nat by ORDINAL1:def 13;
     set j = mB+1;
     reconsider fj = f.j as Element of R;
         fj in N by A2,FUNCT_1:12;
@@ -1889,7 +1885,7 @@ A4: R is reflexive by A1,Def3;
             A17: [w,c] in IR' by A13,WAYBEL_4:def 26;
                 reconsider w' = w as Element of R by A17,ZFMISC_1:106;
                     [w,c] in IR \ IR~ by A17;
-                then [w,c] in IR by XBOOLE_0:def 4;
+                then [w,c] in IR;
                 then w' <= c' by ORDERS_2:def 9;
             then w' <= a by A3,A13,ORDERS_2:26;
                 then w' in NN' by A15;
@@ -1973,8 +1969,6 @@ then A9: B c= N by TARSKI:def 3;
     A10: a in N;
         reconsider a'=a as Element of R\~;
             now assume A11: not ex b being Element of R st b in B & b <= a;
-                IR'-Seg(a) /\ N c= N by XBOOLE_1:17;
-        then A12: IR'-Seg(a) /\ N c= CR by XBOOLE_1:1;
             per cases;
             suppose IR'-Seg(a) /\ N = {};
                     then IR'-Seg(a) misses N by XBOOLE_0:def 7;
@@ -1982,43 +1976,43 @@ then A9: B c= N by TARSKI:def 3;
                then a in B;
                hence contradiction by A11;
             end;
-            suppose A13: IR'-Seg(a) /\ N <> {};
+            suppose A12: IR'-Seg(a) /\ N <> {};
                    R\~ is well_founded by A1,A2,Th34;
                then IR' is_well_founded_in CR by WELLFND1:def 2;
                then consider z being set such that
-            A14: z in IR'-Seg(a) /\ N and
-            A15: IR'-Seg(z) misses (IR'-Seg(a) /\ N) by A12,A13,WELLORD1:def 3;
-                    z in IR'-Seg(a) by A14,XBOOLE_0:def 3;
-            then A16: [z,a] in IR' by WELLORD1:def 1;
+            A13: z in IR'-Seg(a) /\ N and
+            A14: IR'-Seg(z) misses (IR'-Seg(a) /\ N) by A12,WELLORD1:def 3;
+                    z in IR'-Seg(a) by A13,XBOOLE_0:def 3;
+            then A15: [z,a] in IR' by WELLORD1:def 1;
             then z in dom IR' by RELAT_1:def 4;
                 then reconsider z as Element of R\~;
                 reconsider z' = z as Element of R;
-                    z is_minimal_wrt IR'-Seg(a') /\ N, IR' by A14,A15,Th7;
+                    z is_minimal_wrt IR'-Seg(a') /\ N, IR' by A13,A14,Th7;
                 then z is_minimal_wrt N, IR' by Th8;
-            then A17: z in B;
-                    [z,a] in IR \ IR~ by A16;
-                then [z,a] in IR by XBOOLE_0:def 4;
+            then A16: z in B;
+                    [z,a] in IR \ IR~ by A15;
+                then [z,a] in IR;
                 then z' <= a by ORDERS_2:def 9;
-                hence contradiction by A11,A17;
+                hence contradiction by A11,A16;
         end;
         end;
         hence ex b being Element of R st b in B & b <= a;
     end;
     let C be set such that
-A18: C is_Dickson-basis_of N, R;
-A19: C c= N by A18,Def9;
+A17: C is_Dickson-basis_of N, R;
+A18: C c= N by A17,Def9;
         now let b be set such that
-    A20: b in B;
-        b in N by A5,A20;
+    A19: b in B;
+        b in N by A5,A19;
         then reconsider b'=b as Element of R;
         consider c being Element of R such that
-    A21: c in C & c <= b' by A9,A18,A20,Def9;
+    A20: c in C & c <= b' by A9,A17,A19,Def9;
         consider b'' being Element of R\~ such that
-    A22: b'' = b & b'' is_minimal_wrt N, IR' by A20;
-    A23: [c,b] in IR by A21,ORDERS_2:def 9;
-    A24: IR is_antisymmetric_in CR by ORDERS_2:def 6;
-            [b,c] in IR by A19,A21,A22,A23,Th18;
-        hence b in C by A21,A23,A24,RELAT_2:def 4;
+    A21: b'' = b & b'' is_minimal_wrt N, IR' by A19;
+    A22: [c,b] in IR by A20,ORDERS_2:def 9;
+    A23: IR is_antisymmetric_in CR by ORDERS_2:def 6;
+            [b,c] in IR by A18,A20,A21,A22,Th18;
+        hence b in C by A20,A22,A23,RELAT_2:def 4;
     end;
     hence B c= C by TARSKI:def 3;
 end;
@@ -3820,12 +3814,11 @@ coherence proof
                 then [z,m] in NATOrd by XBOOLE_0:def 4;
                 then consider x,y being Element of NAT such that
             A10: [z,m] = [x,y] and
-            A11: x <= y;
-            A12: [x,y] in NATOrd by A11;
-            A13: z = x & m = y by A10,ZFMISC_1:33;
+             x <= y;
+            A11: z = x & m = y by A10,ZFMISC_1:33;
                 then y <= x by A6,A8;
                 then [y,x] in NATOrd;
-                hence contradiction by A9,A12,A13,Th45,RELAT_2:def 4;
+                hence contradiction by A9,A11,Th45,RELAT_2:def 4;
             end;
             hence IR'-Seg(m) misses N by XBOOLE_0:def 7;
         end;
@@ -3836,9 +3829,9 @@ coherence proof
   end;
   cluster OrderedNAT -> quasi_ordered;
 coherence proof
-A14: OrderedNAT is reflexive by Th44,ORDERS_2:def 4;
+A12: OrderedNAT is reflexive by Th44,ORDERS_2:def 4;
         OrderedNAT is transitive by Th47,ORDERS_2:def 5;
-    hence OrderedNAT is quasi_ordered by A14,Def3;
+    hence OrderedNAT is quasi_ordered by A12,Def3;
 end;
   cluster OrderedNAT -> antisymmetric;
 coherence by Th45,ORDERS_2:def 6;
@@ -3848,22 +3841,22 @@ coherence by Th47,ORDERS_2:def 5;
 coherence proof
    set ir = the InternalRel of OrderedNAT;
        now given f being sequence of OrderedNAT such that
-   A15: f is descending;
-   A16: dom f = NAT by FUNCT_2:def 1;
+   A13: f is descending;
+   A14: dom f = NAT by FUNCT_2:def 1;
        reconsider rf = rng f as non empty Subset of NAT;
        set m = min rf;
            m in rng f by CQC_SIM1:def 8; then consider d being set such that
-   A17: d in dom f & m = f.d by FUNCT_1:def 5;
-       reconsider d as Nat by A17;
-   A18: f.(d+1) <> f.d & [f.(d+1),f.d] in ir by A15,WELLFND1:def 7;
+   A15: d in dom f & m = f.d by FUNCT_1:def 5;
+       reconsider d as Nat by A15;
+   A16: f.(d+1) <> f.d & [f.(d+1),f.d] in ir by A13,WELLFND1:def 7;
         then consider x, y being Element of NAT such that
-   A19:  [f.(d+1),f.d] = [x,y] and
-   A20:  x <= y;
+   A17:  [f.(d+1),f.d] = [x,y] and
+   A18:  x <= y;
         reconsider fd1 = f.(d+1), fd = f.d as Nat;
-            f.(d+1) = x & f.d = y by A19,ZFMISC_1:33;
-   then A21:  fd1 < fd by A18,A20,REAL_1:def 5;
-            f.(d+1) in rf by A16,FUNCT_1:12;
-    hence contradiction by A17,A21,CQC_SIM1:def 8;
+            f.(d+1) = x & f.d = y by A17,ZFMISC_1:33;
+   then A19:  fd1 < fd by A16,A18,REAL_1:def 5;
+            f.(d+1) in rf by A14,FUNCT_1:12;
+    hence contradiction by A15,A19,CQC_SIM1:def 8;
    end;
  hence thesis by WELLFND1:15;
 end;

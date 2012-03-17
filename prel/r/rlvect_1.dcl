@@ -12,7 +12,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -26,7 +25,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="26"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -35,7 +34,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="30"/>
+<Adjective nr="27"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -44,7 +43,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="25" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -53,8 +52,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="29"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="26"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -63,12 +62,12 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="26"/>
+<Adjective nr="28"/>
 <Adjective nr="29"/>
+<Adjective nr="30"/>
 <Adjective nr="31"/>
-<Adjective nr="32"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -77,13 +76,13 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
+<Adjective nr="29"/>
 <Adjective nr="30"/>
 <Adjective nr="31"/>
 <Adjective nr="32"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -119,14 +118,14 @@
 <Adjective nr="5"/>
 <Adjective nr="8">
 <Func kind="K" nr="11">
-<Func kind="K" nr="89"/>
+<Func kind="K" nr="78"/>
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="11">
-<Func kind="K" nr="89"/>
+<Func kind="K" nr="78"/>
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -139,8 +138,8 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 </Registrations>

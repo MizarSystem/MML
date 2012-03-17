@@ -9,7 +9,6 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
@@ -23,7 +22,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 <Func kind="K" nr="10">
-<Func kind="K" nr="71"/>
+<Func kind="K" nr="60"/>
 </Func>
 </Typ>
 </ArgTypes>
@@ -33,9 +32,9 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
-<Adjective nr="20"/>
+<Adjective nr="15"/>
+<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </CCluster>
 </Registrations>

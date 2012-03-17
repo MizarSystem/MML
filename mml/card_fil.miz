@@ -13,8 +13,8 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCOP_1,
       BINOP_1, FUNCT_5, SETFAM_1, FINSET_1, ORDINAL1, RELSET_1, PARTFUN1,
       FUNCT_2, ORDINAL2, CARD_1, CARD_2, CARD_3, CARD_5;
- constructors XREAL_0, WELLORD2, BINOP_1, FUNCOP_1, CARD_2, CARD_5, ZFREFLE1,
-      XCMPLX_0, FUNCT_5, SETFAM_1, XXREAL_0, PARTFUN1;
+ constructors SETFAM_1, PARTFUN1, WELLORD2, BINOP_1, FUNCOP_1, XCMPLX_0,
+      XXREAL_0, XREAL_0, FUNCT_5, CARD_2, ZFREFLE1, CARD_5, ORDINAL2;
  registrations FUNCT_1, ORDINAL1, CARD_1, CARD_5, RELSET_1, FINSET_1, SUBSET_1,
       FUNCOP_1, ORDINAL2;
  requirements NUMERALS, SUBSET, BOOLE;
@@ -26,11 +26,6 @@ environ
  schemes WELLORD2, FUNCT_2, DOMAIN_1, FRAENKEL, TREES_2, BINOP_1;
 
 begin
-
-definition let X,Y be set;
-  redefine func X \ Y -> Subset of X;
-  coherence by XBOOLE_1:36;
-end;
 
 theorem Th1:
   for x being set for X being infinite set holds Card {x} <` Card X
@@ -1648,13 +1643,14 @@ proof
       hence contradiction by A10,FINSET_1:13;
    end;
    then consider X2 being set such that A12: X2 in S \ {X1} by XBOOLE_0:def 1;
-      not X2 in {X1} by A12,XBOOLE_0:def 4;
-   then A13: X2 in S & X2 <> X1 by A12,TARSKI:def 1;
+   A13:S qua set\{X1} is Subset of S;
+   not X2 in {X1} by A12,XBOOLE_0:def 4;
+   then A14: X2 in S & X2 <> X1 by A12,A13,TARSKI:def 1;
    then X1 misses X2 by A7,A11;
-   then A14: X1 /\ X2 = {} by XBOOLE_0:def 7;
-   reconsider X1,X2 as Subset of M by A11,A13;
-      X1 in F & X2 in F by A8,A11,A12;
-   then {} in F by A14,Def1;
+   then A15: X1 /\ X2 = {} by XBOOLE_0:def 7;
+   reconsider X1,X2 as Subset of M by A11,A14;
+   X1 in F & X2 in F by A8,A11,A12,A13;
+   then {} in F by A15,Def1;
    hence contradiction by Def1;
 end;
 
@@ -1715,23 +1711,23 @@ proof assume M is measurable;
 :: for each A in N, F takes either {h: h.A =0} or {h: h.A =1}
 :: take them as system {T(A):A in N} of cardinality N
    defpred P[set,set] means
-    f"{h where h is Function of N1,{{},one}: h in Y & h.$1 = $2} in F;
-   A14: for A being Element of N1 ex i being Element of {{},one} st P[A,i]
+    f"{h where h is Function of N1,{{},1}: h in Y & h.$1 = $2} in F;
+   A14: for A being Element of N1 ex i being Element of {{},1} st P[A,i]
    proof let A be Element of N1;
-      set Y0 = {h where h is Function of N1,{{},one}: h in Y & h.A = {}};
-      set Y1 = {h where h is Function of N1,{{},one}: h in Y & h.A = one};
+      set Y0 = {h where h is Function of N1,{{},1}: h in Y & h.A = {}};
+      set Y1 = {h where h is Function of N1,{{},1}: h in Y & h.A = 1};
       reconsider Inv0 = f"Y0 as Subset of M by A12,RELAT_1:167;
       reconsider Inv1 = f"Y1 as Subset of M by A12,RELAT_1:167;
-      A15: for g1 being Function of N1,{{},one} st g1 in Y
+      A15: for g1 being Function of N1,{{},1} st g1 in Y
       holds g1 in Y1 or g1 in Y0
-      proof let g1 be Function of N1,{{},one} such that A16:  g1 in Y;
+      proof let g1 be Function of N1,{{},1} such that A16:  g1 in Y;
          per cases;
          suppose g1 in Y0;
          hence thesis;
          end;
          suppose not g1 in Y0;
          then not g1.A = {} by A16;
-         then g1.A = one by TARSKI:def 2;
+         then g1.A = 1 by TARSKI:def 2;
          hence thesis by A16;
          end;
          end;
@@ -1740,19 +1736,19 @@ proof assume M is measurable;
          proof let X be set such that A17: X in Y \ Y0;
             A18: X in Y & not X in Y0 by A17,XBOOLE_0:def 4;
             then consider g1 being Function such that A19: g1=X
-            and A20: dom g1=N1 and A21: rng g1 c= {{},one} by A7,CARD_2:22
+            and A20: dom g1=N1 and A21: rng g1 c= {{},1} by A7,CARD_2:22
 ,FUNCT_2:def 2;
-            reconsider g2=g1 as Function of N1,{{},one}
+            reconsider g2=g1 as Function of N1,{{},1}
               by A20,A21,FUNCT_2:def 1,RELSET_1:11;
                g2 in Y1 by A15,A18,A19;
             hence thesis by A19;
          end;
          let X be set such that A22: X in Y1;
-         consider h being Function of N1,{{},one} such that A23: X=h and
-         A24: h in Y and A25: h.A = one by A22;
+         consider h being Function of N1,{{},1} such that A23: X=h and
+         A24: h in Y and A25: h.A = 1 by A22;
             not h in Y0
          proof assume h in Y0;
-            then consider h1 being Function of N1,{{},one} such that
+            then consider h1 being Function of N1,{{},1} such that
             A26: h1=h and h1 in Y and A27: h1.A = {};
             thus contradiction by A25,A26,A27;
          end;
@@ -1762,24 +1758,24 @@ proof assume M is measurable;
 by A12,RELAT_1:169;
       per cases by A2,Def7;
       suppose A29: Inv0 in F;
-      reconsider Z = {} as Element of { {},one} by TARSKI:def 2;
+      reconsider Z = {} as Element of { {},1} by TARSKI:def 2;
       take Z;
       thus thesis by A29;
       end;
       suppose A30: M \ Inv0 in F;
-      reconsider O=one as Element of {{},one} by TARSKI:def 2;
+      reconsider O=1 as Element of {{},1} by TARSKI:def 2;
       take O;
       thus thesis by A28,A30;
    end;
    end;
    A31: Y is infinite by A10,CARD_1:68;
 
-:: now prove that the meet of {T(A):A in N} contains just one function
+:: now prove that the meet of {T(A):A in N} contains just 1 function
 :: contradicting uniformity
-   consider g being Function of N1,{{},one} such that
+   consider g being Function of N1,{{},1} such that
    A32: for A being Element of N1 holds P[A,g.A] from FUNCT_2:sch 3(A14);
    deffunc T(Element of N1) =
-   f"{h where h is Function of N1,{{},one}: h in Y & h.$1 = g.$1};
+   f"{h where h is Function of N1,{{},1}: h in Y & h.$1 = g.$1};
       Card {T(A) where A is Element of N1 : A in
  N1} <=` Card N1 from TREES_2:sch 2;
    then Card {T(A) where A is Element of N1 : A in N1} <=` N1 by CARD_1:def 5;
@@ -1810,10 +1806,10 @@ by A12,RELAT_1:169;
             T(Z1) in {T(A) where A is Element of N1: A in N1};
          then X1 in T(Z1) by A39,SETFAM_1:def 1;
          then f1.X1 in
-         {h where h is Function of N1,{{},one}: h in Y & h.Z1 = g.Z1}
+         {h where h is Function of N1,{{},1}: h in Y & h.Z1 = g.Z1}
          by FUNCT_1:def 13;
          then consider h being Function of N1,{{}
-,one} such that A44: f.X1=h and
+,1} such that A44: f.X1=h and
             h in Y and A45: h.Z1 = g.Z1;
          thus h1.Z=g.Z by A40,A44,A45;
       end;

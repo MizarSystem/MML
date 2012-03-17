@@ -15,11 +15,11 @@ environ
       FUNCT_3, FUNCOP_1, RLVECT_1, GROUP_1, VECTSP_1, SETWISEO, SETWOP_2,
       FINSEQ_2, FINSEQOP, MATRIX_1, FINSUB_1, MATRIX_2, NAT_1, SQUARE_1,
       FVSUM_1, TREES_1, FUNCT_5, CAT_2;
- constructors ALGSTR_1, SETWISEO, SETWOP_2, FINSEQOP, MATRIX_2, NAT_1,
-      SQUARE_1, FVSUM_1, CAT_2, FINSOP_1, PARTFUN1, RELAT_2, XXREAL_0;
+ constructors RELAT_2, PARTFUN1, SETWISEO, SQUARE_1, NAT_1, FINSEQOP, FINSOP_1,
+      SETWOP_2, CAT_2, ALGSTR_1, MATRIX_2, FVSUM_1;
  registrations SUBSET_1, FUNCT_1, FINSUB_1, FINSET_1, RELSET_1, STRUCT_0,
       FVSUM_1, MATRIX_2, FUNCOP_1, XREAL_0, ARYTM_3, VECTSP_1, FUNCT_2,
-      PARTFUN1, XBOOLE_0, ORDINAL2, XXREAL_0;
+      PARTFUN1, XBOOLE_0, ORDINAL1, XXREAL_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
  definitions TARSKI, BINOP_1, FINSEQ_2;
  theorems FINSEQ_1, FINSEQ_2, TARSKI, FUNCT_2, NAT_1, BINOP_1, TREES_1,
@@ -1158,7 +1158,7 @@ theorem Th26:
  for f be Function of I,D for g being Function of J,D st
  F is commutative & F is associative & F has_a_unity holds
   for x being Element of I for y being Element of J holds
-   F $$([:{x},{y}:],G*(f,g))=F$$({x},G[:](f,F$$({y},g)))
+   F $$([:{.x.},{.y.}:],G*(f,g))=F$$({.x.},G[:](f,F$$({.y.},g)))
   proof
    let I, J be non empty set;
    let F,G be BinOp of D;
@@ -1170,7 +1170,7 @@ theorem Th26:
       now let x be Element of I;let y be Element of J;
     A3:[x,y] in [:I,J:] by ZFMISC_1:106;
     reconsider u=[x,y] as Element of [:I,J:] by ZFMISC_1:106;
-    A4: F $$([:{x},{y}:],G*(f,g))= F $$({u},G*(f,g)) by ZFMISC_1:35
+    A4: F $$([:{.x.},{.y.}:],G*(f,g))= F $$({.u.},G*(f,g)) by ZFMISC_1:35
         .= G*(f,g).[x,y] by A1,SETWISEO:26
         .=G.(f.x,g.y) by A2,A3,FINSEQOP:82;
     reconsider z=g.y as Element of D;
@@ -1189,10 +1189,11 @@ A5:    dom f=I by FUNCT_2:def 1;
     then rng<:f, dom f --> z:> c= dom G by A10,A11,XBOOLE_1:1;
     then x in dom (G * <:f, dom f --> z:>) by A6,RELAT_1:46;
     then A12:x in dom (G[:](f,z))by FUNCOP_1:def 4;
-       F$$({x},G[:](f,F$$({y},g)))=(G[:](f,F$$({y},g))).x by A1,SETWISEO:26
+       F$$({.x.},G[:](f,F$$({.y.},g)))=(G[:](f,F$$({.y.},g))).x
+                     by A1,SETWISEO:26
                             .=(G[:](f,g.y)).x by A1,SETWISEO:26
                             .= G.(f.x,g.y) by A12,FUNCOP_1:35;
-    hence F $$([:{x},{y}:],G*(f,g))=F$$({x},G[:](f,F$$({y},g))) by A4;
+    hence F $$([:{.x.},{.y.}:],G*(f,g))=F$$({.x.},G[:](f,F$$({.y.},g))) by A4;
    end;
   hence thesis;
   end;
@@ -1204,7 +1205,7 @@ theorem Th27:
  F is commutative & F is associative & F has_a_unity &
  F has_an_inverseOp & G is_distributive_wrt F holds
   for x being Element of I holds
-   F $$([:{x},Y:],G*(f,g))=F$$({x},G[:](f,F$$(Y,g)))
+   F $$([:{.x.},Y:],G*(f,g))=F$$({.x.},G[:](f,F$$(Y,g)))
   proof
    let I, J be non empty set;
    let F,G be BinOp of D;
@@ -1216,7 +1217,7 @@ theorem Th27:
             & F has_an_inverseOp & G is_distributive_wrt F;
       now let x be Element of I;
       defpred P[Element of Fin J] means
-       F$$([:{x},$1:],G*(f,g))=F$$({x},G[:](f,F$$($1,g)));
+       F$$([:{.x.},$1:],G*(f,g))=F$$({.x.},G[:](f,F$$($1,g)));
  A2: P[{}.J]
      proof
       reconsider T={}.[:I,J:] as Element of Fin [:I,J:];
@@ -1236,7 +1237,7 @@ A4:      dom f=I by FUNCT_2:def 1; set z=the_unity_wrt F;
       then rng<:f, dom f --> z:> c= dom G by A9,A10,XBOOLE_1:1;
       then x in dom (G*<:f, dom f --> z:>) by A5,RELAT_1:46;
       then A11:x in dom (G[:](f,z))by FUNCOP_1:def 4;
-         F$$({x},G[:](f,F$$({}.J,g)))=F$$({x},G[:](f,the_unity_wrt F))
+         F$$({.x.},G[:](f,F$$({}.J,g)))=F$$({.x.},G[:](f,the_unity_wrt F))
         by A1,SETWISEO:40
                             .=(G[:](f,the_unity_wrt F)).x by A1,SETWISEO:26
                             .= G.(f.x,the_unity_wrt F) by A11,FUNCOP_1:35
@@ -1244,29 +1245,30 @@ A4:      dom f=I by FUNCT_2:def 1; set z=the_unity_wrt F;
       hence thesis by A1,A3,SETWISEO:40;
      end;
     A12:for Y1 being Element of Fin J,y being Element of J
-         st P[Y1] holds P[Y1 \/ {y}]
+         st P[Y1] holds P[Y1 \/ {.y.}]
      proof
       let Y1 be Element of Fin J,y be Element of J;
-      assume A13: F$$([:{x},Y1:],G*(f,g))=F$$({x},G[:](f,F$$(Y1,g)));
-      reconsider s={y} as Element of Fin J;
+      assume A13: F$$([:{.x.},Y1:],G*(f,g))=F$$({.x.},G[:](f,F$$(Y1,g)));
+      reconsider s={.y.} as Element of Fin J;
       per cases;
        suppose y in Y1;
         then Y1 \/ {y} = Y1 by ZFMISC_1:46;
-        hence F$$([:{x},Y1 \/ {y}:],G*(f,g))=F$$({x},G[:](f,F$$(Y1 \/
-{y},g))) by A13;
+        hence F$$([:{.x.},Y1 \/ {.y.}:],G*(f,g))=F$$({.x.},G[:](f,F$$(Y1 \/
+{.y.},g))) by A13;
        end;
        suppose not y in Y1;
         then A14:Y1 misses {y} by ZFMISC_1:56;
          then A15:[:{x},Y1:] misses [:{x},s:] by ZFMISC_1:127;
-         thus F$$([:{x},Y1 \/ {y}:],G*(f,g))
-           =F$$([:{x},Y1:] \/ [:{x},s:],G*(f,g)) by ZFMISC_1:120
-          .=F.(F$$([:{x},Y1:],G*(f,g)),F$$([:{x},s:],G*(f,g)))
+         thus F$$([:{.x.},Y1 \/ {.y.}:],G*(f,g))
+           =F$$([:{.x.},Y1:] \/ [:{.x.},s:],G*(f,g)) by ZFMISC_1:120
+          .=F.(F$$([:{.x.},Y1:],G*(f,g)),F$$([:{.x.},s:],G*(f,g)))
             by A1,A15,SETWOP_2:6
-          .=F.(F$$({x},G[:](f,F$$(Y1,g))),F$$({x},G[:](f,F$$(s,g))))
+          .=F.(F$$({.x.},G[:](f,F$$(Y1,g))),F$$({.x.},G[:](f,F$$(s,g))))
              by A1,A13,Th26
-          .=F$$({x},F.:(G[:](f,F$$(Y1,g)),G[:](f,F$$(s,g)))) by A1,SETWOP_2:12
-          .=F$$({x},G[:](f,F.(F$$(Y1,g),F$$(s,g)))) by A1,FINSEQOP:37
-          .=F$$({x},G[:](f,F$$(Y1 \/ {y},g))) by A1,A14,SETWOP_2:6;
+          .=F$$({.x.},F.:(G[:](f,F$$(Y1,g)),G[:](f,F$$(s,g))))
+                    by A1,SETWOP_2:12
+          .=F$$({.x.},G[:](f,F.(F$$(Y1,g),F$$(s,g)))) by A1,FINSEQOP:37
+          .=F$$({.x.},G[:](f,F$$(Y1 \/ {.y.},g))) by A1,A14,SETWOP_2:6;
       end;
      end;
      thus for Y being Element of Fin J holds P[Y] from SETWISEO:sch 4(A2,A12);
@@ -1302,26 +1304,27 @@ A3: P[{}.I]
     hence thesis by A1,SETWISEO:40;
    end;
   A4:for X1 being Element of Fin I,x being Element of I st
-      P[X1] holds P[X1 \/ {x}]
+      P[X1] holds P[X1 \/ {.x.}]
    proof
     let X1 be Element of Fin I,x be Element of I;
     assume A5: F$$([:X1,Y:],G*(f,g))=F$$(X1,G[:](f,F$$(Y,g)));
-    reconsider s={x} as Element of Fin I;
+    reconsider s={.x.} as Element of Fin I;
       now per cases;
     case x in X1;
       then X1 \/ {x} = X1 by ZFMISC_1:46;
-      hence F$$([:X1 \/ {x},Y:],G*(f,g))=F$$(X1 \/ {x},G[:](f,F$$(Y,g))) by A5
+      hence F$$([:X1 \/ {.x.},Y:],G*(f,g))=F$$(X1 \/ {.x.},G[:](f,F$$(Y,g)))
+                 by A5
 ;
     end;
     case not x in X1;
       then A6:X1 misses {x} by ZFMISC_1:56;
        then A7:[:X1,Y:] misses [:s,Y:] by ZFMISC_1:127;
-       thus F$$([:X1 \/ {x},Y:],G*(f,g))
+       thus F$$([:X1 \/ {.x.},Y:],G*(f,g))
           =F$$([:X1,Y:] \/ [:s,Y:],G*(f,g))by ZFMISC_1:120
          .=F.(F $$([:X1,Y:],G*(f,g)),F $$([:s,Y:],G*(f,g))) by A1,A7,SETWOP_2:6
          .=F.(F$$(X1,G[:](f,F$$(Y,g))),F$$(s,G[:](f,F$$(Y,g))))
              by A1,A2,A5,Th27
-         .=F$$(X1 \/ {x},G[:](f,F$$(Y,g))) by A1,A6,SETWOP_2:6;
+         .=F$$(X1 \/ {.x.},G[:](f,F$$(Y,g))) by A1,A6,SETWOP_2:6;
      end;
      end;
    hence thesis;
@@ -1335,7 +1338,7 @@ theorem
  for f be Function of I,D for g being Function of J,D st
  F is commutative associative & F has_a_unity & G is commutative holds
   for x being Element of I for y being Element of J holds
-   F $$([:{x},{y}:],G*(f,g))=F$$({y},G[;](F$$({x},f),g))
+   F $$([:{.x.},{.y.}:],G*(f,g))=F$$({.y.},G[;](F$$({.x.},f),g))
   proof
    let I, J be non empty set;
    let F,G be BinOp of D;
@@ -1344,10 +1347,10 @@ theorem
    assume A1:  F is commutative associative & F has_a_unity
             & G is commutative;
     now let x be Element of I;let y be Element of J;
-  thus F $$ ([:{x},{y}:],G*(f,g))=F$$([:{y},{x}:],G*(g,f)) by A1,Th25
-                                .=F$$({y},G[:](g,F$$({x},f))) by A1,Th26
-                                .=F$$({y},G[;]
-(F$$({x},f),g)) by A1,FUNCOP_1:79;
+  thus F $$ ([:{.x.},{.y.}:],G*(f,g))=F$$([:{.y.},{.x.}:],G*(g,f)) by A1,Th25
+                                .=F$$({.y.},G[:](g,F$$({.x.},f))) by A1,Th26
+                                .=F$$({.y.},G[;]
+(F$$({.x.},f),g)) by A1,FUNCOP_1:79;
  end;
  hence thesis;
  end;
@@ -1385,7 +1388,7 @@ theorem Th31:
  F has_an_inverseOp holds
  for x being Element of I holds
  (for i being Element of I holds g.i=F$$(Y,(curry f).i)) implies
-   F$$([:{x},Y:],f)=F$$({x},g)
+   F$$([:{.x.},Y:],f)=F$$({.x.},g)
   proof
 let I, J be non empty set;
 let F be BinOp of D;
@@ -1461,10 +1464,10 @@ A16: for y st y in J holds ((curry f).x).y=(f*h).y
                .=((curry f).x).y by A17,A18;
   end;
  reconsider h as Function of J,[:I,J:] by A3,A12,FUNCT_2:4;
- thus F$$([:{x},Y:],f)=F$$(Y,f*h) by A1,A4,A6,SETWOP_2:8
+ thus F$$([:{.x.},Y:],f)=F$$(Y,f*h) by A1,A4,A6,SETWOP_2:8
                       .=F $$ (Y,(curry f).x) by A12,A16,FUNCT_1:9
                       .=g.x by A2
-                      .=F$$({x},g) by A1,SETWISEO:26;
+                      .=F$$({.x.},g) by A1,SETWISEO:26;
  end;
  hence thesis;
 end;
@@ -1497,24 +1500,24 @@ assume A1:(for i being Element of I holds g.i=F$$(Y,(curry f).i))&
     hence thesis by A1,SETWISEO:40;
    end;
   A3:for X1 being Element of Fin I,x being Element of I holds
-      P[X1] implies P[X1 \/ {x}]
+      P[X1] implies P[X1 \/ {.x.}]
    proof
     let X1 be Element of Fin I,x be Element of I;
     assume A4: F$$([:X1,Y:],f)=F$$(X1,g);
-    reconsider s={x} as Element of Fin I;
+    reconsider s={.x.} as Element of Fin I;
     per cases;
     suppose x in X1;
       then X1 \/ {x} = X1 by ZFMISC_1:46;
-      hence F$$([:X1 \/ {x},Y:],f)=F$$(X1 \/ {x},g) by A4;
+      hence F$$([:X1 \/ {.x.},Y:],f)=F$$(X1 \/ {.x.},g) by A4;
     end;
     suppose not x in X1;
       then A5:X1 misses {x} by ZFMISC_1:56;
        then A6:[:X1,Y:] misses [:s,Y:] by ZFMISC_1:127;
-       thus F$$([:X1 \/ {x},Y:],f)
+       thus F$$([:X1 \/ {.x.},Y:],f)
           =F$$([:X1,Y:] \/ [:s,Y:],f)by ZFMISC_1:120
          .=F.(F $$([:X1,Y:],f),F $$([:s,Y:],f)) by A1,A6,SETWOP_2:6
          .=F.(F$$(X1,g),F$$(s,g)) by A1,A4,Th31
-         .=F$$(X1 \/ {x},g) by A1,A5,SETWOP_2:6;
+         .=F$$(X1 \/ {.x.},g) by A1,A5,SETWOP_2:6;
      end;
    end;
       for X1 being Element of Fin I holds P[X1] from SETWISEO:sch 4(A2,A3);
@@ -1531,7 +1534,7 @@ Th33: for I, J being non empty set
  F has_an_inverseOp holds
  for y being Element of J holds
  (for j being Element of J holds g.j=F$$(X,(curry' f).j)) implies
-   F$$([:X,{y}:],f)=F$$({y},g)
+   F$$([:X,{.y.}:],f)=F$$({.y.},g)
   proof
 let I, J be non empty set;
 let F be BinOp of D;
@@ -1608,10 +1611,10 @@ A16: for x st x in I holds ((curry' f).y).x=(f*h).x
                .=((curry' f).y).x by A17,A18;
   end;
  reconsider h as Function of I,[:I,J:] by A3,A12,FUNCT_2:4;
- thus F$$([:X,{y}:],f)=F$$(X,f*h) by A1,A4,A6,SETWOP_2:8
+ thus F$$([:X,{.y.}:],f)=F$$(X,f*h) by A1,A4,A6,SETWOP_2:8
                       .=F $$ (X,(curry' f).y) by A12,A16,FUNCT_1:9
                       .=g.y by A2
-                      .=F$$({y},g) by A1,SETWISEO:26;
+                      .=F$$({.y.},g) by A1,SETWISEO:26;
  end;
  hence thesis;
 end;
@@ -1645,24 +1648,24 @@ assume A1:(for j being Element of J holds g.j=F$$(X,(curry' f).j)) &
     hence thesis by A1,SETWISEO:40;
    end;
   A3:for Y1 being Element of Fin J,y being Element of J holds
-       P[Y1] implies P[Y1 \/ {y}]
+       P[Y1] implies P[Y1 \/ {.y.}]
    proof
     let Y1 be Element of Fin J,y be Element of J;
     assume A4: F$$([:X,Y1:],f)=F$$(Y1,g);
-    reconsider s={y} as Element of Fin J;
+    reconsider s={.y.} as Element of Fin J;
     per cases;
     suppose y in Y1;
       then Y1 \/ {y} = Y1 by ZFMISC_1:46;
-      hence F$$([:X,Y1 \/ {y}:],f)=F$$(Y1 \/ {y},g) by A4;
+      hence F$$([:X,Y1 \/ {.y.}:],f)=F$$(Y1 \/ {.y.},g) by A4;
     end;
     suppose not y in Y1;
       then A5:Y1 misses {y} by ZFMISC_1:56;
        then A6:[:X,Y1:] misses [:X,s:] by ZFMISC_1:127;
-       thus F$$([:X,Y1 \/ {y}:],f)
+       thus F$$([:X,Y1 \/ {.y.}:],f)
           =F$$([:X,Y1:] \/ [:X,s:],f)by ZFMISC_1:120
          .=F.(F $$([:X,Y1:],f),F $$([:X,s:],f)) by A1,A6,SETWOP_2:6
          .=F.(F$$(Y1,g),F$$(s,g)) by A1,A4,Th33
-         .=F$$(Y1 \/ {y},g) by A1,A5,SETWOP_2:6;
+         .=F$$(Y1 \/ {.y.},g) by A1,A5,SETWOP_2:6;
      end;
    end;
     for Y1 being Element of Fin J holds P[Y1] from SETWISEO:sch 4(A2,A3);

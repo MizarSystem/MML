@@ -8,10 +8,9 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -22,13 +21,13 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="23"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="23"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -37,7 +36,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="23"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 <Not>
@@ -46,7 +45,7 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="21"/>
+<Adjective nr="18"/>
 </Cluster>
 </Typ>
 <And>
@@ -79,7 +78,7 @@
 </Pred>
 <Pred kind="R" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="80">
+<Func kind="K" nr="69">
 <Func kind="K" nr="56"/>
 <Var nr="3"/>
 <Var nr="4"/>
@@ -118,7 +117,7 @@
 </Pred>
 <Pred kind="R" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="80">
+<Func kind="K" nr="69">
 <Func kind="K" nr="56"/>
 <Var nr="3"/>
 <Var nr="4"/>

@@ -10,8 +10,9 @@ environ
       QC_LANG1, FUNCOP_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0,
       MCART_1, NAT_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCOP_1, FINSEQ_1;
- constructors MCART_1, NAT_1, ENUMSET1, FINSEQ_1, XREAL_0, FUNCOP_1, XXREAL_0;
- registrations RELSET_1, FINSEQ_1, SUBSET_1, ARYTM_3, ORDINAL2, XREAL_0;
+ constructors ENUMSET1, FUNCOP_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
+ registrations RELSET_1, FINSEQ_1, SUBSET_1, ARYTM_3, ORDINAL2, XREAL_0,
+  ORDINAL1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems ZFMISC_1, SUBSET_1, TARSKI, ENUMSET1, FINSEQ_1, MCART_1, NAT_1,
@@ -50,13 +51,8 @@ definition
 end;
 
 registration
- cluster QC-variables -> non empty;
-coherence
-  proof
-   reconsider X = {4, 5, 6} as non empty set by ENUMSET1:def 1;
-       [: X, NAT :] is non empty set;
-    hence thesis;
-  end;
+  cluster QC-variables -> non empty;
+  coherence;
 end;
 
 canceled;
@@ -142,7 +138,7 @@ existence
        k = P`1 by A1,MCART_1:7;
     hence thesis by A2,NAT_1:28;
   end;
-uniqueness by XCMPLX_1:2;
+uniqueness;
 end;
 
  reserve P for QC-pred_symbol;
@@ -495,7 +491,8 @@ definition let x be bound_QC-variable, p be Element of QC-WFF;
 coherence by Def9,Th21;
 end;
 
-        reserve F for Element of QC-WFF;
+ reserve F for Element of QC-WFF;
+
 scheme QCInd { Prop[Element of QC-WFF] }:
         for F being Element of QC-WFF holds Prop[F]
   provided
@@ -893,9 +890,7 @@ end;
 end;
 
 definition
-
         let F be Element of QC-WFF such that A1: F is atomic;
-
         func the_pred_symbol_of F -> QC-pred_symbol means
 :Def21: ex k being Nat, ll being (QC-variable_list of k),
                         P being QC-pred_symbol of k
@@ -1493,8 +1488,7 @@ A53: for x being set st x in QC-WFF holds Qfn[x, F.x]
                                  from FUNCT_1:sch 2 (A29, A35);
      rng F c= D()
   proof
-    let y be set; assume
-      y in rng F;
+    let y be set; assume y in rng F;
     then consider x being set such that
   A54: x in QC-WFF and
   A55: y = F.x by A52,FUNCT_1:def 5;
@@ -1581,7 +1575,7 @@ A64:            k < len @p;
   hence thesis by A59,A61,A62,A73;
 end;
 
-        reserve j,k for Nat;
+ reserve j,k for Nat;
 
 definition
         let ll be FinSequence of QC-variables;
@@ -1602,18 +1596,11 @@ coherence
         end;
 end;
 
-definition
-  let b be bound_QC-variable;
-redefine func { b } -> Subset of bound_QC-variables;
-coherence by SUBSET_1:63;
-end;
-
-        reserve k for Nat;
+ reserve k for Nat;
 
 definition let p be QC-formula;
  func still_not-bound_in p -> Subset of bound_QC-variables means
-
-           ex F being Function of QC-WFF, bool bound_QC-variables st
+     ex F being Function of QC-WFF, bool bound_QC-variables st
          it = F.p &
          for p being Element of QC-WFF holds
          F.VERUM = {} &
@@ -1646,8 +1633,7 @@ A1:     F.VERUM = Emp &
          (p is universal implies F.p = Q(p,F.the_scope_of p))
           from QCFuncEx;
  take F.p, F;
-thus
-            F.p = F.p;
+thus F.p = F.p;
 let p be Element of QC-WFF;
 thus F.VERUM = {} by A1;
 thus (p is atomic implies
@@ -1664,7 +1650,6 @@ thus (p is conjunctive implies F.p =
          (F.the_left_argument_of p) \/ (F.the_right_argument_of p)) by A1;
 assume p is universal;
 hence thesis by A1;
-
 end;
 
 uniqueness
@@ -1740,6 +1725,6 @@ end;
 
 definition let p be QC-formula;
   attr p is closed means
-      still_not-bound_in p = {};
+    still_not-bound_in p = {};
 end;
 

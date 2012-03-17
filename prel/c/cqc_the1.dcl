@@ -2,17 +2,16 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
-<ArticleID name="XBOOLE_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
+<ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -23,9 +22,9 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="168"/>
+<Func kind="K" nr="156"/>
 <Cluster>
-<Adjective nr="1" value="false"/>
+<Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

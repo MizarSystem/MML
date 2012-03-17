@@ -13,8 +13,8 @@ environ
       FUNCT_1, BINOP_1, MATRIX_1, RLVECT_1, NUMBERS, ORDINAL1, BINOP_2,
       VECTSP_1, RELSET_1, FUNCT_2, FINSEQ_1, STRUCT_0, GROUP_1, MATRIX_4,
       MATRIX_3, RVSUM_1, GOBOARD1, FINSEQ_2, FINSEQOP, FVSUM_1, EUCLID;
- constructors DOMAIN_1, FVSUM_1, SETWOP_2, BINOP_2, MATRIX_4, MATRIX_3,
-      GOBOARD1, SEQ_1, XXREAL_0, FUNCT_2;
+ constructors DOMAIN_1, XXREAL_0, BINOP_2, SEQ_1, SETWOP_2, FVSUM_1, GOBOARD1,
+      MATRIX_3, MATRIX_4;
  registrations STRUCT_0, INT_1, RELSET_1, VECTSP_1, NUMBERS, REAL_1, XREAL_0,
       FINSEQ_1, FINSEQ_2, XXREAL_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
@@ -28,7 +28,7 @@ begin :: Preliminaries
 
  reserve i,j for Nat;
 
-theorem AA226:
+theorem Th1:
   for r1,r2 being Real, fr1,fr2 being Element of F_Real st
     r1=fr1 & r2=fr2 holds r1+r2=fr1+fr2
 proof let r1,r2 be Real, fr1,fr2 be Element of F_Real;
@@ -38,7 +38,7 @@ A1:r1=fr1 & r2=fr2;
    hence r1+r2=fr1+fr2 by BINOP_2:def 9;
 end;
 
-theorem AA234d:
+theorem Th2:
   for r1,r2 being Real, fr1,fr2 being Element of F_Real st
     r1=fr1 & r2=fr2 holds r1*r2=fr1*fr2
 proof let r1,r2 be Real, fr1,fr2 be Element of F_Real;
@@ -48,16 +48,16 @@ proof let r1,r2 be Real, fr1,fr2 be Element of F_Real;
   hence r1*r2=fr1*fr2;
 end;
 
-theorem Th40:
+theorem Th3:
   for F being FinSequence of REAL holds
     F + -F = 0*(len F) & F - F = 0*(len F)
 proof let F be FinSequence of REAL;
   set n=len F;
   reconsider R=F as Element of n-tuples_on REAL by FINSEQ_2:110;
-A2: R + -R = (n|->(0 qua Real)) by RVSUM_1:40;
+A1: R + -R = (n|->(0 qua Real)) by RVSUM_1:40;
   hence F + -F = 0*(len F) by EUCLID:def 4;
   R - R = R + - R by RVSUM_1:52;
-  hence F - F = 0*(len F) by A2,EUCLID:def 4;
+  hence F - F = 0*(len F) by A1,EUCLID:def 4;
 end;
 
 theorem
@@ -171,7 +171,7 @@ proof let F1,F2,F3 be FinSequence of REAL;
   hence thesis;
 end;
 
-theorem Th63:
+theorem Th14:
   for F1,F2 being FinSequence of REAL st len F1=len F2 holds
     F1 = F1 + F2 - F2
 proof let F1,F2 be FinSequence of REAL;
@@ -195,7 +195,7 @@ end;
 
 begin :: Matrices of Real Elements
 
-theorem AA234:
+theorem Th16:
   for K being non empty HGrStr,
       p being FinSequence of K,
       a being Element of K holds
@@ -211,27 +211,27 @@ proof let K be non empty HGrStr,
   hence len (a*p)=len p;
 end;
 
-theorem AA234e:
+theorem Th17:
   for r being Real, fr being Element of F_Real,
       p being FinSequence of REAL, fp being FinSequence of F_Real
    st r=fr & p=fp holds r*p=fr*fp
 proof let r be Real, fr be Element of F_Real,
           p be FinSequence of REAL, fp be FinSequence of F_Real;
      assume A1: r=fr & p=fp;
-A2b: len (r*p)=len fp by A1,EUCLID_2:8;then
-A2:  len (r*p)=len (fr*fp) by AA234;
+A2: len (r*p)=len fp by A1,EUCLID_2:8;then
+A3:  len (r*p)=len (fr*fp) by Th16;
      for i st 1<=i & i<=len (r*p) holds (r*p).i=(fr*fp).i
      proof let i;
-       assume B1: 1<=i & i<=len (r*p);
-B9:    i in Seg len fp by B1,A2b,FINSEQ_1:3;then
+       assume A4: 1<=i & i<=len (r*p);
+A5:    i in Seg len fp by A4,A2,FINSEQ_1:3;then
        i in dom fp by FINSEQ_1:def 3;then
-B5:    fp.i in rng fp by FUNCT_1:def 5;
-       reconsider s=fp.i as Element of F_Real by B5;
-B8:    i in dom (fr*fp) by FINSEQ_1:def 3,A2,A2b,B9;
-       thus (r*p).i= r*(p.i) by RVSUM_1:66 .=fr*s by A1,AA234d
-              .= (fr*fp).i by FVSUM_1:62,B8;
+A6:    fp.i in rng fp by FUNCT_1:def 5;
+       reconsider s=fp.i as Element of F_Real by A6;
+A7:    i in dom (fr*fp) by FINSEQ_1:def 3,A3,A2,A5;
+       thus (r*p).i= r*(p.i) by RVSUM_1:66 .=fr*s by A1,Th2
+              .= (fr*fp).i by FVSUM_1:62,A7;
      end;
-     hence r*p=fr*fp by A2,FINSEQ_1:18;
+     hence r*p=fr*fp by A3,FINSEQ_1:18;
 end;
 
 theorem
@@ -243,29 +243,29 @@ proof let K be Field, a be Element of K, A be Matrix of K;
   hence Indices (a*A)= Indices A by FINSEQ_3:31;
 end;
 
-theorem AA235:
+theorem Th19:
   for K being Field, a being Element of K, M being Matrix of K st
     1<=i & i<=width M holds
       Col(a*M,i)=a*Col(M,i)
 proof let K be Field,a be Element of K,
           M be Matrix of K;
-    assume B1: 1<=i & i<=width M;
-B2: len (a*Col(M,i))=len (Col(M,i)) by AA234;
-B3: len (Col(M,i))=len M by MATRIX_1:def 9;
-B4: len (a*M)=len M by MATRIX_3:def 5;then
-B5: dom (a*Col(M,i))=Seg len (a*M) by FINSEQ_1:def 3,B2,B3;
-B10:Seg len (a*M)=dom (a*M) by FINSEQ_1:def 3;
-B6: dom M=dom (a*M) by B4,FINSEQ_3:31;
+    assume A1: 1<=i & i<=width M;
+A2: len (a*Col(M,i))=len (Col(M,i)) by Th16;
+A3: len (Col(M,i))=len M by MATRIX_1:def 9;
+A4: len (a*M)=len M by MATRIX_3:def 5;then
+A5: dom (a*Col(M,i))=Seg len (a*M) by FINSEQ_1:def 3,A2,A3;
+A6:Seg len (a*M)=dom (a*M) by FINSEQ_1:def 3;
+A7: dom M=dom (a*M) by A4,FINSEQ_3:31;
     for j st j in dom (a*M) holds (a*Col(M,i)).j = (a*M)*(j,i)
     proof let j;
-      assume C1: j in dom (a*M);
-      i in Seg width M by B1,FINSEQ_1:3;then
-      [j,i] in Indices M by B6,C1,ZFMISC_1:106;then
-C4:   (a*M)*(j,i)=a*(M*(j,i)) by MATRIX_3:def 5;
-      (Col(M,i)).j = M*(j,i) by MATRIX_1:def 9,B6,C1;
-      hence (a*Col(M,i)).j = (a*M)*(j,i) by C1,FVSUM_1:62,C4,B5,B10;
+      assume A8: j in dom (a*M);
+      i in Seg width M by A1,FINSEQ_1:3;then
+      [j,i] in Indices M by A7,A8,ZFMISC_1:106;then
+A9:   (a*M)*(j,i)=a*(M*(j,i)) by MATRIX_3:def 5;
+      (Col(M,i)).j = M*(j,i) by MATRIX_1:def 9,A7,A8;
+      hence (a*Col(M,i)).j = (a*M)*(j,i) by A8,FVSUM_1:62,A9,A5,A6;
     end;
-    hence Col(a*M,i)=a*Col(M,i) by MATRIX_1:def 9,B2,B3,B4;
+    hence Col(a*M,i)=a*Col(M,i) by MATRIX_1:def 9,A2,A3,A4;
 end;
 
 theorem
@@ -274,22 +274,22 @@ theorem
   Line(a*M,i)=a*Line(M,i)
 proof let K be Field, a be Element of K, M be Matrix of K;
     let i be Nat;
-    assume B1: 1<=i & i<=len M;
-B2: len (a*Line(M,i))=len (Line(M,i)) by AA234;
-B3: len (Line(M,i))=width M by MATRIX_1:def 8;
-B4: width (a*M)=width M by MATRIX_3:def 5;then
-B5: dom (a*Line(M,i))=Seg width (a*M) by FINSEQ_1:def 3,B2,B3;
-B6: Seg width M=Seg width (a*M) by MATRIX_3:def 5;
+    assume A1: 1<=i & i<=len M;
+A2: len (a*Line(M,i))=len (Line(M,i)) by Th16;
+A3: len (Line(M,i))=width M by MATRIX_1:def 8;
+A4: width (a*M)=width M by MATRIX_3:def 5;then
+A5: dom (a*Line(M,i))=Seg width (a*M) by FINSEQ_1:def 3,A2,A3;
+A6: Seg width M=Seg width (a*M) by MATRIX_3:def 5;
     for j st j in Seg width (a*M) holds (a*Line(M,i)).j = (a*M)*(i,j)
     proof let j;
-      assume C1: j in Seg width (a*M);
-      i in dom M by B1,FINSEQ_3:27;then
-      [i,j] in Indices M by B6,C1,ZFMISC_1:106;then
-C4:   (a*M)*(i,j)=a*(M*(i,j)) by MATRIX_3:def 5;
-      (Line(M,i)).j = M*(i,j) by MATRIX_1:def 8,B6,C1;
-      hence (a*Line(M,i)).j = (a*M)*(i,j) by C1,FVSUM_1:62,C4,B5;
+      assume A7: j in Seg width (a*M);
+      i in dom M by A1,FINSEQ_3:27;then
+      [i,j] in Indices M by A6,A7,ZFMISC_1:106;then
+A8:   (a*M)*(i,j)=a*(M*(i,j)) by MATRIX_3:def 5;
+      (Line(M,i)).j = M*(i,j) by MATRIX_1:def 8,A6,A7;
+      hence (a*Line(M,i)).j = (a*M)*(i,j) by A7,FVSUM_1:62,A8,A5;
     end;
-    hence Line(a*M,i)=a*Line(M,i) by MATRIX_1:def 8,B2,B3,B4;
+    hence Line(a*M,i)=a*Line(M,i) by MATRIX_1:def 8,A2,A3,A4;
 end;
 
 theorem
@@ -308,16 +308,16 @@ A2: for i,j st [i,j] in Indices M holds M*(i,j) = F(i,j) from MATRIX_1:sch 1;
         len M=len A & width M= width B by MATRIX_1:24;
         hence thesis by A2;
       end;
-      suppose A4:len A=0;
+      suppose A3:len A=0;
         then len B=0 by A1,MATRIX_1:def 4;
-        then A5:width B=0 by MATRIX_1:def 4;
-B2:     len M=0 by A4,MATRIX_1:26;
-        len M=len A & width M= width B by A4,A5,MATRIX_1:def 4,B2;
+        then A4:width B=0 by MATRIX_1:def 4;
+A5:     len M=0 by A3,MATRIX_1:26;
+        len M=len A & width M= width B by A3,A4,MATRIX_1:def 4,A5;
         hence thesis by A2;
       end;
     end;
 
-theorem AA236:
+theorem Th22:
   for K being Field,a being Element of K,A,B being Matrix of K
   st width A=len B & len A>0 & len B>0
   holds A*(a*B)=a*(A*B)
@@ -326,32 +326,32 @@ proof let K be Field,a be Element of K,A,B be Matrix of K;
  set C=a*B;
  set D=a*(A*B);
  A2: len D=len (A*B) by MATRIX_3:def 5;
- A2b: len C=len B by MATRIX_3:def 5;
- A3: len (A*B)=len A by MATRIX_3:def 4,A1;
+ A3: len C=len B by MATRIX_3:def 5;
+ A4: len (A*B)=len A by MATRIX_3:def 4,A1;
  A5: width (A*B)=width B by MATRIX_3:def 4,A1;
  A6: width B=width (a*B) by MATRIX_3:def 5;
- A20: width D=width B by MATRIX_3:def 5,A5
+ A7: width D=width B by MATRIX_3:def 5,A5
      .=width C by MATRIX_3:def 5;
  for i,j st [i,j] in Indices D holds
     D*(i,j)=Line(A,i) "*" Col(C,j)
  proof let i,j;
-     assume B1: [i,j] in Indices (a*(A*B));
-     j in Seg width B by B1,ZFMISC_1:106,A20,A6;then
-B8:  1<=j & j<=width B by FINSEQ_1:3;
+     assume A8: [i,j] in Indices (a*(A*B));
+     j in Seg width B by A8,ZFMISC_1:106,A7,A6;then
+A9:  1<=j & j<=width B by FINSEQ_1:3;
      dom (A*B)=dom (a*(A*B)) by A2,FINSEQ_3:31;then
-B11b:[i,j] in Indices (A*B) by MATRIX_3:def 5,B1;then
-B12: (a*(A*B))*(i,j)=a*((A*B)*(i,j)) by MATRIX_3:def 5;
+A10:[i,j] in Indices (A*B) by MATRIX_3:def 5,A8;then
+A11: (a*(A*B))*(i,j)=a*((A*B)*(i,j)) by MATRIX_3:def 5;
      reconsider xo=Col(B,j) as Element of (width A)-tuples_on the carrier of K
                                    by A1;
      (a*(A*B))*(i,j)=a*((Line(A,i)) "*" (Col(B,j)))
-       by B12,MATRIX_3:def 4,A1,B11b
+       by A11,MATRIX_3:def 4,A1,A10
                  .=a*(Sum(mlt(Line(A,i),Col(B,j)))) by FVSUM_1:def 10
                  .=Sum(a*mlt(Line(A,i),Col(B,j))) by FVSUM_1:92
                  .=Sum(mlt(Line(A,i),a*xo)) by FVSUM_1:83
-                 .=Sum(mlt(Line(A,i),Col(a*B,j))) by AA235,B8;
+                 .=Sum(mlt(Line(A,i),Col(a*B,j))) by Th19,A9;
   hence D*(i,j)=Line(A,i) "*" Col(C,j) by FVSUM_1:def 10;
  end;
- hence A*(a*B)=a*(A*B) by MATRIX_3:def 4,A2,A3,A1,A2b,A20;
+ hence A*(a*B)=a*(A*B) by MATRIX_3:def 4,A2,A4,A1,A3,A7;
 end;
 
 definition let A be Matrix of REAL;
@@ -372,12 +372,12 @@ theorem
 proof let D1,D2 be set, A be (Matrix of D1), B be Matrix of D2;
    assume A1: A=B;
    let i,j;
-   assume B1: [i,j] in Indices A;then
+   assume A2: [i,j] in Indices A;then
    consider p being FinSequence of D1 such that
-B2:p= A.i & A*(i,j)=p.j by MATRIX_1:def 6;
+A3:p= A.i & A*(i,j)=p.j by MATRIX_1:def 6;
    ex q being FinSequence of D2 st q= B.i & B*(i,j)=q.j
-     by MATRIX_1:def 6,B1,A1;
-   hence A*(i,j)=B*(i,j) by B2,A1;
+     by MATRIX_1:def 6,A2,A1;
+   hence A*(i,j)=B*(i,j) by A3,A1;
 end;
 
 theorem
@@ -394,7 +394,7 @@ definition let A,B be Matrix of REAL;
   coherence;
 end;
 
-theorem BB70:
+theorem Th25:
   for A,B being Matrix of REAL
     holds len (A+B) = len A & width (A+B)=width A &
   for i,j holds [i,j] in Indices A implies
@@ -404,10 +404,10 @@ proof let A,B be Matrix of REAL;
   let i,j;
   assume [i,j] in Indices A; then
   (A+B)*(i,j)=(MXR2MXF A)*(i,j) + (MXR2MXF B)*(i,j) by MATRIX_3:def 3;
-  hence (A+B)*(i,j) = A*(i,j) + B*(i,j) by AA226;
+  hence (A+B)*(i,j) = A*(i,j) + B*(i,j) by Th1;
 end;
 
-theorem BB80:
+theorem Th26:
   for A,B,C being Matrix of REAL st len A=len B & width A=width B
     & len C = len A & width C = width A &
    for i,j st [i,j] in Indices A holds
@@ -422,9 +422,9 @@ proof let A,B,C be Matrix of REAL;
   set B2=MXR2MXF B;
   for i,j st [i,j] in Indices A2 holds D*(i,j) = A2*(i,j) + B2*(i,j)
   proof let i,j;
-    assume B0: [i,j] in Indices A2;
-    D*(i,j)=A*(i,j)+B*(i,j) by B0,A1;
-    hence D*(i,j) = A2*(i,j) + B2*(i,j) by AA226;
+    assume A2: [i,j] in Indices A2;
+    D*(i,j)=A*(i,j)+B*(i,j) by A2,A1;
+    hence D*(i,j) = A2*(i,j) + B2*(i,j) by Th1;
   end;
  hence C=A+B by A1,MATRIX_3:def 3;
 end;
@@ -445,7 +445,7 @@ definition let A,B be Matrix of REAL;
 end;
 
 definition let a be real number, A be Matrix of REAL;
-  func a * A -> Matrix of REAL means :AA120:
+  func a * A -> Matrix of REAL means :Def7:
     for ea being Element of F_Real st ea=a holds
       it=MXF2MXR (ea*(MXR2MXF A));
 existence
@@ -460,75 +460,75 @@ uniqueness
 proof
   let C1,C2 be Matrix of REAL;
   assume
-A2: (for ea being Element of F_Real st ea=a
+A1: (for ea being Element of F_Real st ea=a
   holds C1=MXF2MXR (ea*(MXR2MXF A))) &
   (for ea being Element of F_Real st ea=a
     holds C2=MXF2MXR (ea*(MXR2MXF A)));
   reconsider aa=a as Element of F_Real by XREAL_0:def 1;
-  C2=MXF2MXR (aa*(MXR2MXF A)) by A2;
-  hence C1=C2 by A2;
+  C2=MXF2MXR (aa*(MXR2MXF A)) by A1;
+  hence C1=C2 by A1;
 end;
 end;
 
-theorem BB120:
+theorem Th27:
   for a being Real, A being Matrix of REAL holds
     len (a*A)=len A & width (a*A)=width A
 proof let a be Real, A be Matrix of REAL;
   reconsider ea=a as Element of F_Real;
-  thus len (a*A)=len(MXF2MXR (ea*(MXR2MXF A))) by AA120
+  thus len (a*A)=len(MXF2MXR (ea*(MXR2MXF A))) by Def7
           .=len A by MATRIX_3:def 5;
-  thus width (a*A)=width(MXF2MXR (ea*(MXR2MXF A))) by AA120
+  thus width (a*A)=width(MXF2MXR (ea*(MXR2MXF A))) by Def7
           .=width A by MATRIX_3:def 5;
 end;
 
-theorem BB120b:
+theorem Th28:
   for a being Real, A being Matrix of REAL holds
     Indices (a*A) = Indices A
 proof let a be Real, A be Matrix of REAL;
-  len A = len (a*A) & width (a*A)=width A by BB120;
+  len A = len (a*A) & width (a*A)=width A by Th27;
   hence Indices (a*A)=Indices A by MATRIX_4:55;
 end;
 
-theorem BB121:
+theorem Th29:
   for a being Real, A being (Matrix of REAL),
       i2,j2 being Nat st [i2,j2] in Indices A holds
     (a*A)*(i2,j2)=a*(A*(i2,j2))
 proof let a be Real,A be Matrix of REAL;
   let i2,j2 be Nat;
-  assume B1: [i2,j2] in Indices A;
+  assume A1: [i2,j2] in Indices A;
   reconsider ea=a as Element of F_Real;
   (MXF2MXR (ea*(MXR2MXF A)))*(i2,j2)
-    = ea*((MXR2MXF A)*(i2,j2)) by B1,MATRIX_3:def 5
-   .=a*(A*(i2,j2)) by AA234d;
-  hence (a*A)*(i2,j2)=a*(A*(i2,j2)) by AA120;
+    = ea*((MXR2MXF A)*(i2,j2)) by A1,MATRIX_3:def 5
+   .=a*(A*(i2,j2)) by Th2;
+  hence (a*A)*(i2,j2)=a*(A*(i2,j2)) by Def7;
 end;
 
-theorem CC121:
+theorem Th30:
   for a being Real, A being Matrix of REAL st len A>0 & width A>0
     holds (a*A)@=a*(A@)
 proof let a be Real, A be Matrix of REAL;
     assume A1: len A>0 & width A>0;
-A3: len (a*(A@)) = len (A@) by BB120;
-A3b:len (A@)= width A by MATRIX_2:12,A1;
-A3d:width A= width (a*A) by BB120;
-A4: for i,j holds [i,j] in Indices (a*(A@)) iff [j,i] in Indices (a*A)
+A2: len (a*(A@)) = len (A@) by Th27;
+A3:len (A@)= width A by MATRIX_2:12,A1;
+A4:width A= width (a*A) by Th27;
+A5: for i,j holds [i,j] in Indices (a*(A@)) iff [j,i] in Indices (a*A)
     proof let i,j;
-B2:   Indices (a*(A@))=Indices (A@) by BB120b;
-      Indices (a*A)=Indices A by BB120b;
+A6:   Indices (a*(A@))=Indices (A@) by Th28;
+      Indices (a*A)=Indices A by Th28;
       hence [i,j] in Indices (a*(A@)) iff [j,i] in Indices (a*A)
-        by B2,MATRIX_1:def 7;
+        by A6,MATRIX_1:def 7;
     end;
     for i,j st [j,i] in Indices (a*A) holds (a*(A@))*(i,j) = (a*A)*(j,i)
     proof let i,j;
       assume [j,i] in Indices (a*A);then
-B2:   [j,i] in Indices A by BB120b;
-      [i,j] in Indices (A@) by B2,MATRIX_1:def 7;then
-      (a*(A@))*(i,j) = a*((A@)*(i,j)) by BB121;then
-      (a*(A@))*(i,j) = a*(A*(j,i)) by B2,MATRIX_1:def 7
-                   .=(a*A)*(j,i) by BB121,B2;
+A7:   [j,i] in Indices A by Th28;
+      [i,j] in Indices (A@) by A7,MATRIX_1:def 7;then
+      (a*(A@))*(i,j) = a*((A@)*(i,j)) by Th29;then
+      (a*(A@))*(i,j) = a*(A*(j,i)) by A7,MATRIX_1:def 7
+                   .=(a*A)*(j,i) by Th29,A7;
       hence (a*(A@))*(i,j) = (a*A)*(j,i);
     end;
-    hence (a*A)@=a*(A@) by MATRIX_1:def 7,A3,A3b,A3d,A4;
+    hence (a*A)@=a*(A@) by MATRIX_1:def 7,A2,A3,A4,A5;
 end;
 
 theorem
@@ -539,62 +539,62 @@ theorem
     (a*A).i=a*q
 proof let a be Real,i be Nat,A be Matrix of REAL;
   assume A1: len A>0 & i in dom A;
-A5: len (a*A)=len A & width (a*A)=width A by BB120; then
-a5: dom (a*A) = dom A by FINSEQ_3:31;
+A2: len (a*A)=len A & width (a*A)=width A by Th27; then
+A3: dom (a*A) = dom A by FINSEQ_3:31;
   consider n being Nat such that
-A2: for x being set st x in rng A ex p being FinSequence of REAL
+A4: for x being set st x in rng A ex p being FinSequence of REAL
          st x = p & len p = n by MATRIX_1:9;
   A.i in rng A by A1,FUNCT_1:def 5;then
   consider p2 being FinSequence of REAL such that
-A3: A.i = p2 & len p2 = n by A2;
-  thus ex p being FinSequence of REAL st p=A.i by A3;
+A5: A.i = p2 & len p2 = n by A4;
+  thus ex p being FinSequence of REAL st p=A.i by A5;
     let q be FinSequence of REAL;
-    assume B1: q=A.i;
-B2: len (a*A)=len A & width (a*A) =width A &
+    assume A6: q=A.i;
+A7: len (a*A)=len A & width (a*A) =width A &
     for i2,j2 being Nat st [i2,j2] in Indices A holds
-      (a*A)*(i2,j2)=a*(A*(i2,j2)) by BB121,BB120;
+      (a*A)*(i2,j2)=a*(A*(i2,j2)) by Th29,Th27;
     consider s being FinSequence such that
-B3: s in rng (a*A) & len s = width (a*A) by MATRIX_1:def 4,B2,A1;
+A8: s in rng (a*A) & len s = width (a*A) by MATRIX_1:def 4,A7,A1;
     consider s3 being FinSequence such that
-B3b:s3 in rng A & len s3 = width A by MATRIX_1:def 4,A1;
+A9:s3 in rng A & len s3 = width A by MATRIX_1:def 4,A1;
     consider n2 being Nat such that
-B4: for x being set st x in rng (a*A) ex s2 being FinSequence
+A10: for x being set st x in rng (a*A) ex s2 being FinSequence
       st s2=x & len s2 = n2 by MATRIX_1:def 1;
     consider n3 being Nat such that
-B4b:for x being set st x in rng A ex s2 being FinSequence
+A11:for x being set st x in rng A ex s2 being FinSequence
       st s2=x & len s2 = n3 by MATRIX_1:def 1;
     consider s2 being FinSequence such that
-B30:s2=s & len s2 = n2 by B3,B4;
+A12:s2=s & len s2 = n2 by A8,A10;
     consider s4 being FinSequence such that
-B30b: s4=s3 & len s4 = n3 by B3b,B4b;
-    (a*A).i in rng (a*A) by A1,a5,FUNCT_1:def 5;then
+A13: s4=s3 & len s4 = n3 by A9,A11;
+    (a*A).i in rng (a*A) by A1,A3,FUNCT_1:def 5;then
     consider qq being FinSequence such that
-B6: qq=(a*A).i & len qq=n2 by B4;
+A14: qq=(a*A).i & len qq=n2 by A10;
     A.i in rng A by FUNCT_1:def 5,A1;then
     consider qq0 being FinSequence such that
-B8: qq0=A.i & len qq0=n3 by B4b;
-B5: len (a*q)=width A by B1,B8,B3b,B30b,EUCLID_2:8;
-B5b: width A=len qq by BB120,B3,B6,B30;
+A15: qq0=A.i & len qq0=n3 by A11;
+A16: len (a*q)=width A by A6,A15,A9,A13,EUCLID_2:8;
+A17: width A=len qq by Th27,A8,A14,A12;
    for j being Nat st 1<=j & j<=len (a*q) holds qq.j=(a*q).j
    proof let j be Nat;
     assume 1<=j & j<=len (a*q);then
-C17: j in Seg width A by B5,FINSEQ_1:3;
-C2:  [i,j] in Indices A by C17,A1,ZFMISC_1:106;
-     [i,j] in Indices (a*A) by A1,a5,A5,C17,ZFMISC_1:106;then
+A18: j in Seg width A by A16,FINSEQ_1:3;
+A19:  [i,j] in Indices A by A18,A1,ZFMISC_1:106;
+     [i,j] in Indices (a*A) by A1,A3,A2,A18,ZFMISC_1:106;then
      consider p being FinSequence of REAL such that
-C7a: p= (a*A).i & (a*A)*(i,j) =p.j by MATRIX_1:def 6;
+A20: p= (a*A).i & (a*A)*(i,j) =p.j by MATRIX_1:def 6;
      consider p2 being FinSequence of REAL such that
-C7:  p2= A.i & A*(i,j) =p2.j by MATRIX_1:def 6,C2;
-     qq.j=a*(q.j) by B1,C7,BB121,C2,B6,C7a;
+A21:  p2= A.i & A*(i,j) =p2.j by MATRIX_1:def 6,A19;
+     qq.j=a*(q.j) by A6,A21,Th29,A19,A14,A20;
     hence qq.j=(a*q).j by RVSUM_1:66;
    end;
-  hence (a*A).i=a*q by B5,B5b,B6,FINSEQ_1:18;
+  hence (a*A).i=a*q by A16,A17,A14,FINSEQ_1:18;
 end;
 
 theorem
   for A being Matrix of REAL holds 1*A=A
 proof let A be Matrix of REAL;
-  1*A = MXF2MXR ((1.F_Real)*(MXR2MXF A)) by VECTSP_1:20,AA120;
+  1*A = MXF2MXR ((1.F_Real)*(MXR2MXF A)) by VECTSP_1:20,Def7;
   hence 1*A=A by MATRIX_5:10;
 end;
 
@@ -606,7 +606,7 @@ A1: (1.F_Real)*(MXR2MXF A)= MXR2MXF A by MATRIX_5:10;
   (1.F_Real) + (1.F_Real) = (the add of F_Real).(1,1) by VECTSP_1:20
   .= 1+1 by BINOP_2:def 9
   .= 2; then
-  2*A = MXF2MXR (e2*(MXR2MXF A)) by AA120
+  2*A = MXF2MXR (e2*(MXR2MXF A)) by Def7
      .= MXF2MXR ((MXR2MXF A)+(MXR2MXF A)) by A1,MATRIX_5:13;
   hence A+A=2*A;
 end;
@@ -624,7 +624,7 @@ A2: (1.F_Real) + (1.F_Real) = addreal.(1,1) by VECTSP_1:20
       = addreal.(1+1,1) by A2,VECTSP_1:20
      .= rr + 1 by BINOP_2:def 9
      .= 3; then
-    3*A= MXF2MXR (e3*(MXR2MXF A)) by AA120
+    3*A= MXF2MXR (e3*(MXR2MXF A)) by Def7
       .=MXF2MXR ((1.F_Real)*(MXR2MXF A)
        + ((1.F_Real)+ (1.F_Real))*(MXR2MXF A)) by MATRIX_5:13
       .=MXF2MXR ((MXR2MXF A)
@@ -652,16 +652,16 @@ proof let A,B be Matrix of REAL;
   hence A--B=A+B by MATRIX_4:def 1;
 end;
 
-theorem AA36:
+theorem Th36:
   for n,m being Nat,A being Matrix of REAL
    st len A=n & width A=m & n>0
     holds A+ 0_Rmatrix(n,m)=A & 0_Rmatrix(n,m)+A=A
 proof let n,m be Nat,A be Matrix of REAL;
    assume A1: len A=n & width A=m & n>0;
-A6:len (0.(F_Real,n,m))=n & width (0.(F_Real,n,m))=m by MATRIX_1:24,A1;
+A2:len (0.(F_Real,n,m))=n & width (0.(F_Real,n,m))=m by MATRIX_1:24,A1;
 A3:MXR2MXF A is Matrix of n,m,F_Real by A1,MATRIX_1:20;
    reconsider D=MXR2MXF A as Matrix of n,m,F_Real by A1,MATRIX_1:20;
-   0_Rmatrix(n,m)+A=MXF2MXR (D+0.(F_Real,n,m)) by MATRIX_3:4,A1,A6
+   0_Rmatrix(n,m)+A=MXF2MXR (D+0.(F_Real,n,m)) by MATRIX_3:4,A1,A2
                   .=A by MATRIX_3:6;
    hence thesis by MATRIX_3:6,A3;
 end;
@@ -686,12 +686,12 @@ theorem
 proof let A,B be Matrix of REAL;
    assume A1: len A=len B & width A=width B & len A>0 &
      A + B = 0_Rmatrix(len A,width A);
-A3:len -MXR2MXF B=len MXR2MXF B &
+A2:len -MXR2MXF B=len MXR2MXF B &
      width -MXR2MXF B=width MXR2MXF B by MATRIX_3:def 2;
    MXR2MXF(0_Rmatrix(len A,width A))
      = (MXR2MXF A)+--(MXR2MXF B) by MATRIX_4:1,A1
     .= (MXR2MXF A)-(-(MXR2MXF B)) by MATRIX_4:def 1; then
-   MXR2MXF A = -MXR2MXF B by MATRIX_4:7,A1,A3;
+   MXR2MXF A = -MXR2MXF B by MATRIX_4:7,A1,A2;
    hence thesis by MATRIX_4:1,A1;
 end;
 
@@ -706,7 +706,7 @@ A1:len A=len B & width A=width B & len A>0 & B - A = B;
    hence thesis by MATRIX_4:6,A1;
 end;
 
-theorem BB224:
+theorem Th40:
   for a being Real,A,B being Matrix of REAL st
     width A=len B & len A>0 & len B>0 holds
      A*(a*B)=a*(A*B)
@@ -714,9 +714,9 @@ proof let a be Real,A,B be Matrix of REAL;
   assume A1: width A=len B & len A>0 & len B>0;
   reconsider ea=a as Element of F_Real;
   thus A*(a*B)=MXF2MXR((MXR2MXF A)*(MXR2MXF(MXF2MXR(ea*(MXR2MXF B)))))
-                                         by AA120
-      .=MXF2MXR(ea*(MXR2MXF (MXF2MXR((MXR2MXF A)*(MXR2MXF B))))) by AA236,A1
-      .=a*(A*B) by AA120;
+                                         by Def7
+      .=MXF2MXR(ea*(MXR2MXF (MXF2MXR((MXR2MXF A)*(MXR2MXF B))))) by Th22,A1
+      .=a*(A*B) by Def7;
 end;
 
 theorem
@@ -725,23 +725,23 @@ theorem
      (a*A)*B=a*(A*B)
 proof let a be Real,A,B be Matrix of REAL;
     assume A1: width A=len B & len A>0 & len B>0 & width B>0;
-A4: len (A@)=width A & width (A@)=len A by MATRIX_2:12,A1;
-A6: width (A*B)=width B by MATRIX_3:def 4,A1;
-A6b:len (A*B)=len A by MATRIX_3:def 4,A1;
-A7: width (a*A)=width A by BB120;then
-A8: len ((a*A)*B)=len (a*A) by MATRIX_3:def 4,A1;
-A8b:width ((a*A)*B)=width B by MATRIX_3:def 4,A1,A7;
-A9: len (a*A)=len A by BB120;
-A10:len (a*(A*B))=len (A*B) by BB120 .=len A by MATRIX_3:def 4,A1;
-A10b:width (a*(A*B))=width (A*B) by BB120 .=width B by MATRIX_3:def 4,A1;
+A2: len (A@)=width A & width (A@)=len A by MATRIX_2:12,A1;
+A3: width (A*B)=width B by MATRIX_3:def 4,A1;
+A4:len (A*B)=len A by MATRIX_3:def 4,A1;
+A5: width (a*A)=width A by Th27;then
+A6: len ((a*A)*B)=len (a*A) by MATRIX_3:def 4,A1;
+A7:width ((a*A)*B)=width B by MATRIX_3:def 4,A1,A5;
+A8: len (a*A)=len A by Th27;
+A9:len (a*(A*B))=len (A*B) by Th27 .=len A by MATRIX_3:def 4,A1;
+A10:width (a*(A*B))=width (A*B) by Th27 .=width B by MATRIX_3:def 4,A1;
     len (B@)=width B & width (B@)=len B by MATRIX_2:12,A1;then
-    (B@)*(a*(A@))=a*((B@)*(A@)) by BB224,A4,A1;then
+    (B@)*(a*(A@))=a*((B@)*(A@)) by Th40,A2,A1;then
     (B@)*(a*(A@))=a*((A*B)@) by MATRIX_3:24,A1;then
-    (B@)*(a*(A@))=(a*(A*B))@ by CC121,A1,A6,A6b;then
-    (B@)*((a*A)@)=(a*(A*B))@ by CC121,A1;then
-    ((a*A)*B)@=(a*(A*B))@ by MATRIX_3:24,A1,A7;then
-    (a*A)*B=(a*(A*B))@@ by MATRIX_2:15,A8,A9,A8b,A1;
-    hence thesis by MATRIX_2:15,A1,A10,A10b;
+    (B@)*(a*(A@))=(a*(A*B))@ by Th30,A1,A3,A4;then
+    (B@)*((a*A)@)=(a*(A*B))@ by Th30,A1;then
+    ((a*A)*B)@=(a*(A*B))@ by MATRIX_3:24,A1,A5;then
+    (a*A)*B=(a*(A*B))@@ by MATRIX_2:15,A6,A8,A7,A1;
+    hence thesis by MATRIX_2:15,A1,A9,A10;
 end;
 
 theorem
@@ -763,16 +763,16 @@ theorem
     len A=len B & width A=width B & len A>0 holds
       a*(A + B) = a*A + a*B
 proof let a be real number, A,B be Matrix of REAL;
-   assume A0: len A=len B & width A=width B & len A>0;
+   assume A1: len A=len B & width A=width B & len A>0;
    reconsider ea=a as Element of F_Real by XREAL_0:def 1;
-A3: a*(A + B) = MXF2MXR (ea*(MXR2MXF (A+B))) by AA120
-    .= MXF2MXR (ea*(MXR2MXF A)+ea*(MXR2MXF B)) by MATRIX_5:36,A0;
+A2: a*(A + B) = MXF2MXR (ea*(MXR2MXF (A+B))) by Def7
+    .= MXF2MXR (ea*(MXR2MXF A)+ea*(MXR2MXF B)) by MATRIX_5:36,A1;
    a*A + a*B = MXF2MXR ((MXR2MXF
-    (MXF2MXR (ea*(MXR2MXF A)))+(MXR2MXF (a*B)))) by AA120
+    (MXF2MXR (ea*(MXR2MXF A)))+(MXR2MXF (a*B)))) by Def7
     .= MXF2MXR (((ea*(MXR2MXF A))+(MXR2MXF
-    (MXF2MXR (ea*(MXR2MXF B)))))) by AA120
+    (MXF2MXR (ea*(MXR2MXF B)))))) by Def7
     .= MXF2MXR ((ea*(MXR2MXF A)+(ea*(MXR2MXF B))));
-   hence thesis by A3;
+   hence thesis by A2;
 end;
 
 theorem
@@ -781,14 +781,14 @@ theorem
 proof
   let A be Matrix of REAL;
   assume A1: len A>0;
-  0 * A = MXF2MXR ((0.F_Real)*(MXR2MXF A)) by AA120
+  0 * A = MXF2MXR ((0.F_Real)*(MXR2MXF A)) by Def7
       .= 0_Rmatrix(len A,width A) by MATRIX_5:40,A1;
   hence thesis;
 end;
 
 definition let x be FinSequence of REAL;
   assume A1:len x > 0;
-  func ColVec2Mx x -> Matrix of REAL means :AA6100:
+  func ColVec2Mx x -> Matrix of REAL means :Def9:
     len it=len x & width it=1 &
   for j st j in dom x holds it.j = <*x.j*>;
 existence
@@ -820,25 +820,25 @@ A7:  i in Seg len B by A5,FINSEQ_1:def 3;
      hence thesis by A6,A2,A7;
    end;then
    reconsider A=B as Matrix of len B,1,REAL by MATRIX_1:def 3;
-aa: width A = 1 by MATRIX_1:24,A2,A1;
+A8: width A = 1 by MATRIX_1:24,A2,A1;
    Seg len x = dom x by FINSEQ_1:def 3;
-   hence thesis by A2,aa;
+   hence thesis by A2,A8;
  end;
 uniqueness
  proof
  let A,B be Matrix of REAL;
   assume that
-A8: len A = len x & width A = 1 and
-A9: for k being Nat st k in dom x holds A.k =<*x.k*> and
-A10: len B = len x & width B = 1 and
-A11: for k being Nat st k in dom x holds B.k =<*x.k*>;
-b1:dom A = dom x & dom B = dom x by A10,A8,FINSEQ_3:31;
+A9: len A = len x & width A = 1 and
+A10: for k being Nat st k in dom x holds A.k =<*x.k*> and
+A11: len B = len x & width B = 1 and
+A12: for k being Nat st k in dom x holds B.k =<*x.k*>;
+A13:dom A = dom x & dom B = dom x by A11,A9,FINSEQ_3:31;
   now let k be Nat;
-    assume A12:k in dom x;
-    hence A.k=<*x.k*> by A9
-            .=B.k by A11,A12;
+    assume A14:k in dom x;
+    hence A.k=<*x.k*> by A10
+            .=B.k by A12,A14;
   end;
-  hence A=B by FINSEQ_1:17,b1;
+  hence A=B by FINSEQ_1:17,A13;
  end;
 end;
 
@@ -848,210 +848,210 @@ theorem
 proof let x be FinSequence of REAL,M be Matrix of REAL;
    assume A1: len x>0;
    thus M=ColVec2Mx x implies Col(M,1)=x & width M=1
-   proof assume B1: M=ColVec2Mx x;then
-B2:  len M=len x & width M=1 by A1,AA6100; then
-b2:  dom M = dom x by FINSEQ_3:31;
+   proof assume A2: M=ColVec2Mx x;then
+A3:  len M=len x & width M=1 by A1,Def9; then
+A4:  dom M = dom x by FINSEQ_3:31;
      for j st j in dom M holds x.j = M*(j,1)
      proof let j;
-       assume C1: j in dom M;then
-C3:    M.j=<*x.j*> by AA6100,A1,b2,B1;then
+       assume A5: j in dom M;then
+A6:    M.j=<*x.j*> by Def9,A1,A4,A2;then
        reconsider q=M.j as FinSequence of REAL;
-C4b:   q.1=x.j by FINSEQ_1:57,C3;
-       1 in Seg width M by B2,FINSEQ_1:3;then
-       [j,1] in Indices M by C1,ZFMISC_1:106;
-       hence x.j = M*(j,1) by MATRIX_1:def 6,C4b;
+A7:   q.1=x.j by FINSEQ_1:57,A6;
+       1 in Seg width M by A3,FINSEQ_1:3;then
+       [j,1] in Indices M by A5,ZFMISC_1:106;
+       hence x.j = M*(j,1) by MATRIX_1:def 6,A7;
      end;
-     hence thesis by MATRIX_1:def 9,B2;
+     hence thesis by MATRIX_1:def 9,A3;
    end;
-   assume B1: Col(M,1)=x & width M=1;
-B2:len x = len M & for j st j in dom M holds x.j = M*(j,1)
-      by MATRIX_1:def 9,B1; then
-f1:dom x = dom M by FINSEQ_3:31;
+   assume A8: Col(M,1)=x & width M=1;
+A9:len x = len M & for j st j in dom M holds x.j = M*(j,1)
+      by MATRIX_1:def 9,A8; then
+A10:dom x = dom M by FINSEQ_3:31;
    consider s being FinSequence such that
-B70:s in rng M & len s = 1 by A1,B2,B1,MATRIX_1:def 4;
+A11:s in rng M & len s = 1 by A1,A9,A8,MATRIX_1:def 4;
    consider n being Nat such that
-B71:for x being set st x in rng M ex s2 being FinSequence
+A12:for x being set st x in rng M ex s2 being FinSequence
      st s2=x & len s2 = n by MATRIX_1:def 1;
     consider s2 being FinSequence such that
-B72:s2=s & len s2 = n by B70,B71;
+A13:s2=s & len s2 = n by A11,A12;
     for j st j in dom x holds M.j =<*x.j*>
-    proof let j; assume F1:j in dom x; then
-C2:   x.j=M*(j,1) by f1,MATRIX_1:def 9,B1;
-      1 in Seg width M by B1,FINSEQ_1:3;then
-      [j,1] in Indices M by F1,f1,ZFMISC_1:106;then
+    proof let j; assume A14:j in dom x; then
+A15:   x.j=M*(j,1) by A10,MATRIX_1:def 9,A8;
+      1 in Seg width M by A8,FINSEQ_1:3;then
+      [j,1] in Indices M by A14,A10,ZFMISC_1:106;then
       consider p being FinSequence of REAL such that
-C65:  p= M.j & M*(j,1) =p.1 by MATRIX_1:def 6;
-      M.j in rng M by FUNCT_1:def 5,F1,f1;then
-      ex s3 being FinSequence st s3=M.j & len s3 = 1 by B71,B72,B70;
-      hence M.j =<*x.j*> by C2,C65,FINSEQ_1:57;
+A16:  p= M.j & M*(j,1) =p.1 by MATRIX_1:def 6;
+      M.j in rng M by FUNCT_1:def 5,A14,A10;then
+      ex s3 being FinSequence st s3=M.j & len s3 = 1 by A12,A13,A11;
+      hence M.j =<*x.j*> by A15,A16,FINSEQ_1:57;
     end;
-    hence M=ColVec2Mx x by AA6100,A1,B1,B2;
+    hence M=ColVec2Mx x by Def9,A1,A8,A9;
 end;
 
-theorem BB510:
+theorem Th46:
   for x1,x2 being FinSequence of REAL st
     len x1=len x2 & len x1>0
   holds ColVec2Mx (x1+x2)=ColVec2Mx (x1)+ColVec2Mx (x2)
 proof let x1,x2 be FinSequence of REAL;
     assume A1: len x1=len x2 & len x1>0;then
 A2: len (x1+x2)=len x1 by EUCLID_2:6;then
-A3: len ColVec2Mx (x1+x2)=len (x1+x2) by A1,AA6100;
-a1: dom x1=dom x2 by A1,FINSEQ_3:31;
-A3b:len ColVec2Mx x1=len x1 by A1,AA6100;
-A3d:len ColVec2Mx x2=len x2 by A1,AA6100;
-A8: dom (x1+x2)=dom x1 by A2,FINSEQ_3:31;
-A4: width ColVec2Mx (x1+x2)=1 by A1,A2,AA6100;
-A5: width ColVec2Mx x1=1 by A1,AA6100;
-A5b:width ColVec2Mx x2=1 by A1,AA6100;
-A6: Indices ColVec2Mx (x1+x2)=Indices ColVec2Mx x1
-      by A2,A3,A3b,A4,A5,MATRIX_4:55;
-A6b:Indices ColVec2Mx x2=Indices ColVec2Mx x1 by A1,A3b,A3d,A5,A5b,MATRIX_4:55;
-A31:dom ColVec2Mx x1=dom x1 by A3b,FINSEQ_3:31;
-A32:Seg width ColVec2Mx x1=Seg 1 by A1,AA6100;
+A3: len ColVec2Mx (x1+x2)=len (x1+x2) by A1,Def9;
+A4: dom x1=dom x2 by A1,FINSEQ_3:31;
+A5:len ColVec2Mx x1=len x1 by A1,Def9;
+A6:len ColVec2Mx x2=len x2 by A1,Def9;
+A7: dom (x1+x2)=dom x1 by A2,FINSEQ_3:31;
+A8: width ColVec2Mx (x1+x2)=1 by A1,A2,Def9;
+A9: width ColVec2Mx x1=1 by A1,Def9;
+A10:width ColVec2Mx x2=1 by A1,Def9;
+A11: Indices ColVec2Mx (x1+x2)=Indices ColVec2Mx x1
+      by A2,A3,A5,A8,A9,MATRIX_4:55;
+A12:Indices ColVec2Mx x2=Indices ColVec2Mx x1 by A1,A5,A6,A9,A10,MATRIX_4:55;
+A13:dom ColVec2Mx x1=dom x1 by A5,FINSEQ_3:31;
+A14:Seg width ColVec2Mx x1=Seg 1 by A1,Def9;
     for i,j st [i,j] in Indices ColVec2Mx x1 holds
     (ColVec2Mx (x1+x2))*(i,j) = (ColVec2Mx x1)*(i,j) + (ColVec2Mx x2)*(i,j)
     proof let i,j;
       thus [i,j] in Indices ColVec2Mx x1 implies
       (ColVec2Mx (x1+x2))*(i,j)
       = (ColVec2Mx x1)*(i,j) + (ColVec2Mx x2)*(i,j)
-      proof assume B0: [i,j] in Indices ColVec2Mx x1;then
-B50:    i in dom x1 & j in Seg 1 by A31,A32,ZFMISC_1:106;then
+      proof assume A15: [i,j] in Indices ColVec2Mx x1;then
+A16:    i in dom x1 & j in Seg 1 by A13,A14,ZFMISC_1:106;then
         1<=j & j<=1 by FINSEQ_1:3;then
-B51:    j=1 by XXREAL_0:1;
+A17:    j=1 by XXREAL_0:1;
         consider p being FinSequence of REAL such that
-B4:     p = (ColVec2Mx (x1+x2)).i & (ColVec2Mx (x1+x2))*(i,j) = p.j
-          by MATRIX_1:def 6,A6,B0;
-        (ColVec2Mx (x1+x2)).i=<* (x1+x2).i *> by AA6100,B50,A2,A1,A8;then
-B60:    p.j=(x1+x2).i by B4,FINSEQ_1:57,B51;
+A18:     p = (ColVec2Mx (x1+x2)).i & (ColVec2Mx (x1+x2))*(i,j) = p.j
+          by MATRIX_1:def 6,A11,A15;
+        (ColVec2Mx (x1+x2)).i=<* (x1+x2).i *> by Def9,A16,A2,A1,A7;then
+A19:    p.j=(x1+x2).i by A18,FINSEQ_1:57,A17;
         consider q1 being FinSequence of REAL such that
-B4b:    q1 = (ColVec2Mx x1).i & (ColVec2Mx x1)*(i,j)=q1.j
-          by MATRIX_1:def 6,B0;
-        (ColVec2Mx x1).i=<* x1.i *> by AA6100,B50,A1;then
-B61:    q1.j=x1.i by B4b,FINSEQ_1:57,B51;
+A20:    q1 = (ColVec2Mx x1).i & (ColVec2Mx x1)*(i,j)=q1.j
+          by MATRIX_1:def 6,A15;
+        (ColVec2Mx x1).i=<* x1.i *> by Def9,A16,A1;then
+A21:    q1.j=x1.i by A20,FINSEQ_1:57,A17;
         consider q2 being FinSequence of REAL such that
-B4d:    q2 = (ColVec2Mx x2).i & (ColVec2Mx x2)*(i,j)=q2.j
-          by MATRIX_1:def 6,B0,A6b;
-        (ColVec2Mx x2).i=<* x2.i *> by a1,AA6100,B50,A1;then
-        q2.j=x2.i by B4d,FINSEQ_1:57,B51;
-        hence thesis by B4,B4b,B4d,B60,B61,RVSUM_1:26,B50,A8;
+A22:    q2 = (ColVec2Mx x2).i & (ColVec2Mx x2)*(i,j)=q2.j
+          by MATRIX_1:def 6,A15,A12;
+        (ColVec2Mx x2).i=<* x2.i *> by A4,Def9,A16,A1;then
+        q2.j=x2.i by A22,FINSEQ_1:57,A17;
+        hence thesis by A18,A20,A22,A19,A21,RVSUM_1:26,A16,A7;
       end;
     end;
-    hence thesis by A1,A2,A3,A3b,A3d,A4,A5,A5b,BB80;
+    hence thesis by A1,A2,A3,A5,A6,A8,A9,A10,Th26;
 end;
 
-theorem BB511:
+theorem Th47:
   for a being Real,x being FinSequence of REAL st len x>0
     holds ColVec2Mx (a*x)=a*ColVec2Mx x
 proof let a be Real,x be FinSequence of REAL;
    assume A1: len x>0;
    reconsider ea=a as Element of F_Real;
-A2:len (a*ColVec2Mx x)=len ColVec2Mx x by BB120
-                     .=len x by AA6100,A1;
-A3:width (a*ColVec2Mx x)=width ColVec2Mx x by BB120
-                      .=1 by AA6100,A1;
-B2:len (a*x)=len x by EUCLID_2:8; then
-b2:dom (a*x)=dom x by FINSEQ_3:31;
+A2:len (a*ColVec2Mx x)=len ColVec2Mx x by Th27
+                     .=len x by Def9,A1;
+A3:width (a*ColVec2Mx x)=width ColVec2Mx x by Th27
+                      .=1 by Def9,A1;
+A4:len (a*x)=len x by EUCLID_2:8; then
+A5:dom (a*x)=dom x by FINSEQ_3:31;
    for j st j in dom (a*x) holds (a*ColVec2Mx x).j =<*(a*x).j*>
    proof let j;
-     assume B1: j in dom (a*x); then
-ZZ:  j in dom x by B2,FINSEQ_3:31;
-B11: len ColVec2Mx x=len x & width ColVec2Mx x=1 &
+     assume A6: j in dom (a*x); then
+A7:  j in dom x by A4,FINSEQ_3:31;
+A8: len ColVec2Mx x=len x & width ColVec2Mx x=1 &
      for j2 being Nat st j2 in dom x holds (ColVec2Mx x).j2 = <*x.j2*>
-       by AA6100,A1;
-B12: dom ColVec2Mx x=dom x by B11,FINSEQ_3:31;
-     1 in Seg width MXR2MXF ColVec2Mx x by B11,FINSEQ_1:3;then
-B10: [j,1] in Indices MXR2MXF ColVec2Mx x by ZZ,B12,ZFMISC_1:106;
-B32b:j in dom (a*ColVec2Mx x) by B1,A2,B2,FINSEQ_3:31;then
+       by Def9,A1;
+A9: dom ColVec2Mx x=dom x by A8,FINSEQ_3:31;
+     1 in Seg width MXR2MXF ColVec2Mx x by A8,FINSEQ_1:3;then
+A10: [j,1] in Indices MXR2MXF ColVec2Mx x by A7,A9,ZFMISC_1:106;
+A11:j in dom (a*ColVec2Mx x) by A6,A2,A4,FINSEQ_3:31;then
      (a*ColVec2Mx x).j in rng (a*ColVec2Mx x) by FUNCT_1:def 5;then
      reconsider q=(a*ColVec2Mx x).j as FinSequence of REAL
        by FINSEQ_1:def 11;
      consider s being FinSequence such that
-B70: s in rng (a*ColVec2Mx x) & len s = width (a*ColVec2Mx x)
+A12: s in rng (a*ColVec2Mx x) & len s = width (a*ColVec2Mx x)
        by MATRIX_1:def 4,A2,A1;
      consider n being Nat such that
-B71: for x2 being set st x2 in rng (a*ColVec2Mx x)
+A13: for x2 being set st x2 in rng (a*ColVec2Mx x)
      ex s2 being FinSequence st s2=x2 & len s2 = n by MATRIX_1:def 1;
-     q in rng (a*ColVec2Mx x) by B32b,FUNCT_1:def 5;then
+     q in rng (a*ColVec2Mx x) by A11,FUNCT_1:def 5;then
      consider s2 being FinSequence such that
-B72: s2=q & len s2 = n by B71;
+A14: s2=q & len s2 = n by A13;
      consider s3 being FinSequence such that
-B73: s3=s & len s3 = n by B71,B70;
-B3:  len q = width ColVec2Mx x by BB120,B72,B73,B70
-          .= 1 by AA6100,A1
+A15: s3=s & len s3 = n by A13,A12;
+A16:  len q = width ColVec2Mx x by Th27,A14,A15,A12
+          .= 1 by Def9,A1
           .= len (<*(a*x).j*>) by FINSEQ_1:57;
-     [j,1] in Indices (a*ColVec2Mx x) by B10,BB120b;then
+     [j,1] in Indices (a*ColVec2Mx x) by A10,Th28;then
      consider p being FinSequence of REAL such that
-B74: p = (a*ColVec2Mx x).j & (a*ColVec2Mx x)*(j,1) = p.1 by MATRIX_1:def 6;
+A17: p = (a*ColVec2Mx x).j & (a*ColVec2Mx x)*(j,1) = p.1 by MATRIX_1:def 6;
      consider p3 being FinSequence of REAL such that
-B90: p3 = (ColVec2Mx x).j & (ColVec2Mx x)*(j,1) = p3.1 by MATRIX_1:def 6,B10;
-B91a:(ColVec2Mx x).j=<*x.j*> by AA6100,B1,A1,b2;
-B92: q.1= a*((ColVec2Mx x)*(j,1)) by BB121,B10,B74
-       .= a*(x.j) by FINSEQ_1:57,B90,B91a
+A18: p3 = (ColVec2Mx x).j & (ColVec2Mx x)*(j,1) = p3.1 by MATRIX_1:def 6,A10;
+A19:(ColVec2Mx x).j=<*x.j*> by Def9,A6,A1,A5;
+A20: q.1= a*((ColVec2Mx x)*(j,1)) by Th29,A10,A17
+       .= a*(x.j) by FINSEQ_1:57,A18,A19
        .= (a*x).j by RVSUM_1:66
        .= (<*(a*x).j*>).1 by FINSEQ_1:57;
      for i st 1<=i & i<=len (<*(a*x).j*>) holds
        q.i= (<*(a*x).j*>).i
      proof let i;
-       assume C1: 1<=i & i<=len (<*(a*x).j*>);
+       assume A21: 1<=i & i<=len (<*(a*x).j*>);
        len (<*(a*x).j*>)=1 by FINSEQ_1:57;then
-       i=1 by C1,XXREAL_0:1;
-       hence q.i= (<*(a*x).j*>).i by B92;
+       i=1 by A21,XXREAL_0:1;
+       hence q.i= (<*(a*x).j*>).i by A20;
      end;
-     hence (a*ColVec2Mx x).j =<*(a*x).j*> by FINSEQ_1:18,B3;
+     hence (a*ColVec2Mx x).j =<*(a*x).j*> by FINSEQ_1:18,A16;
    end;
-   hence ColVec2Mx (a*x)=a*ColVec2Mx x by AA6100,A2,A3,A1,B2;
+   hence ColVec2Mx (a*x)=a*ColVec2Mx x by Def9,A2,A3,A1,A4;
 end;
 
 definition let x be FinSequence of REAL;
-  func LineVec2Mx x -> Matrix of REAL means :AA6110:
+  func LineVec2Mx x -> Matrix of REAL means :Def10:
     width it=len x & len it=1 &
   for j st j in dom x holds it*(1,j) =x.j;
 existence
 proof
     set B=<* x *>;
-B2: len B=1 & rng B={x} by FINSEQ_1:56;
-B2b:len B=1 & B.1=x by FINSEQ_1:57;
+A1: len B=1 & rng B={x} by FINSEQ_1:56;
+A2:len B=1 & B.1=x by FINSEQ_1:57;
     for y being set st y in rng B ex p being FinSequence of REAL
       st y = p & len p = len x
     proof let y be set;assume y in rng B;then
-      y=x by B2,TARSKI:def 1;
+      y=x by A1,TARSKI:def 1;
       hence thesis;
     end;then
     reconsider C=B as Matrix of REAL by MATRIX_1:9;
     for p being FinSequence of REAL
-      st p in rng C holds len p = len x by B2,TARSKI:def 1;then
-    C is Matrix of 1,len x,REAL by B2,MATRIX_1:def 3;then
-B6: width C=len x by MATRIX_1:20,B2b;
-B5: len C=1 by FINSEQ_1:57;
+      st p in rng C holds len p = len x by A1,TARSKI:def 1;then
+    C is Matrix of 1,len x,REAL by A1,MATRIX_1:def 3;then
+A3: width C=len x by MATRIX_1:20,A2;
+A4: len C=1 by FINSEQ_1:57;
     for j st j in dom x holds C*(1,j) = x.j
-    proof let j be Nat; assume C1: j in dom x;
-      dom C=Seg 1 by B2,FINSEQ_1:def 3;then
-C3:   1 in dom C by FINSEQ_1:3;
-      j in Seg len x by C1,FINSEQ_1:def 3; then
-      [1,j] in Indices C by C3,ZFMISC_1:def 2,B6;
-      hence C*(1,j) = x.j by MATRIX_1:def 6,B2b;
+    proof let j be Nat; assume A5: j in dom x;
+      dom C=Seg 1 by A1,FINSEQ_1:def 3;then
+A6:   1 in dom C by FINSEQ_1:3;
+      j in Seg len x by A5,FINSEQ_1:def 3; then
+      [1,j] in Indices C by A6,ZFMISC_1:def 2,A3;
+      hence C*(1,j) = x.j by MATRIX_1:def 6,A2;
     end;
-    hence thesis by B5,B6;
+    hence thesis by A4,A3;
 end;
 uniqueness
 proof
     let A,B be Matrix of REAL;
     assume that
-A8: width A=len x & len A = 1 and
-A9: for k being Nat st k in dom x holds A*(1,k) = x.k and
-A10:width B=len x & len B = 1 and
-A11:for k being Nat st k in dom x holds B*(1,k) = x.k;
-C5: dom A=Seg 1 by A8,FINSEQ_1:def 3;
+A7: width A=len x & len A = 1 and
+A8: for k being Nat st k in dom x holds A*(1,k) = x.k and
+A9:width B=len x & len B = 1 and
+A10:for k being Nat st k in dom x holds B*(1,k) = x.k;
+A11: dom A=Seg 1 by A7,FINSEQ_1:def 3;
     for i,j st [i,j] in Indices A holds A*(i,j) = B*(i,j)
     proof let i,j;assume [i,j] in Indices A;then
-D2:   i in Seg 1 & j in Seg len x by C5,A8,ZFMISC_1:106;then
-d2:   j in dom x by FINSEQ_1:def 3;
-      1<=i & i<=1 by D2,FINSEQ_1:3;then
-D3:   i=1 by XXREAL_0:1;then
-      A*(i,j)=x.j by A9,d2;
-      hence A*(i,j) = B*(i,j) by D3,A11,d2;
+A12:   i in Seg 1 & j in Seg len x by A11,A7,ZFMISC_1:106;then
+A13:   j in dom x by FINSEQ_1:def 3;
+      1<=i & i<=1 by A12,FINSEQ_1:3;then
+A14:   i=1 by XXREAL_0:1;then
+      A*(i,j)=x.j by A8,A13;
+      hence A*(i,j) = B*(i,j) by A14,A10,A13;
     end;
-    hence A=B by A8,A10,MATRIX_1:21;
+    hence A=B by A7,A9,MATRIX_1:21;
 end;
 end;
 
@@ -1060,110 +1060,110 @@ theorem
     holds M=LineVec2Mx x iff Line(M,1)=x & len M=1
 proof let x be FinSequence of REAL, M be Matrix of REAL;
    thus M=LineVec2Mx x implies Line(M,1)=x & len M=1
-   proof assume B1: M=LineVec2Mx x; then
-B2:  width M=len x & len M=1 by AA6110; then
-B3:  dom x = Seg width M by FINSEQ_1:def 3;
-     for j st j in dom x holds M*(1,j) = x.j by AA6110,B1;
-     hence thesis by MATRIX_1:def 8,B2,B3;
+   proof assume A1: M=LineVec2Mx x; then
+A2:  width M=len x & len M=1 by Def10; then
+A3:  dom x = Seg width M by FINSEQ_1:def 3;
+     for j st j in dom x holds M*(1,j) = x.j by Def10,A1;
+     hence thesis by MATRIX_1:def 8,A2,A3;
    end;
-   assume B1: Line(M,1)=x & len M=1;then
-S1:len x = width M & for j st j in Seg width M holds x.j = M*(1,j)
+   assume A4: Line(M,1)=x & len M=1;then
+A5:len x = width M & for j st j in Seg width M holds x.j = M*(1,j)
      by MATRIX_1:def 8; then
    Seg width M = dom x by FINSEQ_1:def 3;
-   hence M=LineVec2Mx x by AA6110,S1,B1;
+   hence M=LineVec2Mx x by Def10,A5,A4;
 end;
 
-theorem DD64:
+theorem Th49:
   for x being FinSequence of REAL st len x>0 holds
     (LineVec2Mx x)@ = ColVec2Mx x & (ColVec2Mx x)@=LineVec2Mx x
 proof let x be FinSequence of REAL;
     assume A1: len x>0;
-A2: width LineVec2Mx x=len x & len LineVec2Mx x=1 by AA6110;
-A3: len ColVec2Mx x=len x & width ColVec2Mx x=1 by AA6100,A1;
-A6: dom ColVec2Mx x=Seg len ColVec2Mx x by FINSEQ_1:def 3;
-A7: dom LineVec2Mx x=Seg len LineVec2Mx x by FINSEQ_1:def 3;
-A4: for i,j holds [i,j] in Indices ColVec2Mx x
+A2: width LineVec2Mx x=len x & len LineVec2Mx x=1 by Def10;
+A3: len ColVec2Mx x=len x & width ColVec2Mx x=1 by Def9,A1;
+A4: dom ColVec2Mx x=Seg len ColVec2Mx x by FINSEQ_1:def 3;
+A5: dom LineVec2Mx x=Seg len LineVec2Mx x by FINSEQ_1:def 3;
+A6: for i,j holds [i,j] in Indices ColVec2Mx x
       iff [j,i] in Indices LineVec2Mx x
     proof let i,j;
       [i,j] in Indices ColVec2Mx x iff i in dom ColVec2Mx x
          & j in Seg width ColVec2Mx x by ZFMISC_1:106;
-      hence thesis by A6,A7,A2,A3,ZFMISC_1:106;
+      hence thesis by A4,A5,A2,A3,ZFMISC_1:106;
     end;
-A8: for i,j st [j,i] in Indices LineVec2Mx x holds
+A7: for i,j st [j,i] in Indices LineVec2Mx x holds
       (ColVec2Mx x)*(i,j) = (LineVec2Mx x)*(j,i)
     proof let i,j;
-      assume B1: [j,i] in Indices LineVec2Mx x;
-      j in Seg 1 by A7,B1,ZFMISC_1:106,A2;then
+      assume A8: [j,i] in Indices LineVec2Mx x;
+      j in Seg 1 by A5,A8,ZFMISC_1:106,A2;then
       1<=j & j<=1 by FINSEQ_1:3;then
-B2:   j=1 by XXREAL_0:1;
-      i in Seg len x by B1,ZFMISC_1:106,A2; then
-B3:   i in dom x by FINSEQ_1:def 3;
-B3b:  [i,j] in Indices ColVec2Mx x by A4,B1;
-B4:   (ColVec2Mx x).i=<*x.i*> by AA6100,A1,B3;
+A9:   j=1 by XXREAL_0:1;
+      i in Seg len x by A8,ZFMISC_1:106,A2; then
+A10:   i in dom x by FINSEQ_1:def 3;
+A11:  [i,j] in Indices ColVec2Mx x by A6,A8;
+A12:   (ColVec2Mx x).i=<*x.i*> by Def9,A1,A10;
       consider p being FinSequence of REAL such that
-B5:   p = (ColVec2Mx x).i & (ColVec2Mx x)*(i,j) =p.j
-        by MATRIX_1:def 6,B3b;
-      thus (ColVec2Mx x)*(i,j) = x.i by B5,B4,B2,FINSEQ_1:57
-       .= (LineVec2Mx x)*(j,i) by B2,B3,AA6110;
+A13:   p = (ColVec2Mx x).i & (ColVec2Mx x)*(i,j) =p.j
+        by MATRIX_1:def 6,A11;
+      thus (ColVec2Mx x)*(i,j) = x.i by A13,A12,A9,FINSEQ_1:57
+       .= (LineVec2Mx x)*(j,i) by A9,A10,Def10;
     end;
-    hence (LineVec2Mx x)@ = ColVec2Mx x by MATRIX_1:def 7,A2,A3,A4;
-A4b:for i,j holds [i,j] in Indices LineVec2Mx x iff
-      [j,i] in Indices ColVec2Mx x by A4;
+    hence (LineVec2Mx x)@ = ColVec2Mx x by MATRIX_1:def 7,A2,A3,A6;
+A14:for i,j holds [i,j] in Indices LineVec2Mx x iff
+      [j,i] in Indices ColVec2Mx x by A6;
     for i,j st [j,i] in Indices ColVec2Mx x holds
       (LineVec2Mx x)*(i,j) = (ColVec2Mx x)*(j,i)
     proof let i,j;
       assume [j,i] in Indices ColVec2Mx x;then
-      [i,j] in Indices LineVec2Mx x by A4;
-      hence thesis by A8;
+      [i,j] in Indices LineVec2Mx x by A6;
+      hence thesis by A7;
     end;
-    hence thesis by MATRIX_1:def 7,A2,A3,A4b;
+    hence thesis by MATRIX_1:def 7,A2,A3,A14;
 end;
 
-theorem BB512:
+theorem Th50:
   for x1,x2 being FinSequence of REAL st
     len x1=len x2 & len x1>0
   holds LineVec2Mx (x1+x2)=LineVec2Mx (x1)+LineVec2Mx (x2)
 proof let x1,x2 be FinSequence of REAL;
     assume A1: len x1=len x2 & len x1>0;then
 A2: len (x1+x2)=len x1 by EUCLID_2:6;
-a1: dom x1 = dom x2 by A1,FINSEQ_3:31;
-A3: width LineVec2Mx (x1+x2)=len (x1+x2) by AA6110;
-A3b:width LineVec2Mx x1=len x1 by AA6110;
-A3d:width LineVec2Mx x2=len x2 by AA6110;
-A8: dom (x1+x2)=dom x1 by A2,FINSEQ_3:31;
-A4: len LineVec2Mx (x1+x2)=1 by AA6110;
-A5: len LineVec2Mx x1=1 by AA6110;
-A5b:len LineVec2Mx x2=1 by AA6110;
-A6: Indices LineVec2Mx (x1+x2)=Indices LineVec2Mx x1
-      by A3,A3b,A4,A5,MATRIX_4:55,A2;
-A6b:Indices LineVec2Mx x2=Indices LineVec2Mx x1
-      by A1,A3b,A3d,A5,A5b,MATRIX_4:55;
-A31:dom LineVec2Mx x1=Seg len LineVec2Mx x1 by FINSEQ_1:def 3
-                    .=Seg 1 by AA6110;
-A32:Seg width LineVec2Mx x1=Seg len x1 by AA6110 .= dom x1 by FINSEQ_1:def 3;
+A3: dom x1 = dom x2 by A1,FINSEQ_3:31;
+A4: width LineVec2Mx (x1+x2)=len (x1+x2) by Def10;
+A5:width LineVec2Mx x1=len x1 by Def10;
+A6:width LineVec2Mx x2=len x2 by Def10;
+A7: dom (x1+x2)=dom x1 by A2,FINSEQ_3:31;
+A8: len LineVec2Mx (x1+x2)=1 by Def10;
+A9: len LineVec2Mx x1=1 by Def10;
+A10:len LineVec2Mx x2=1 by Def10;
+A11: Indices LineVec2Mx (x1+x2)=Indices LineVec2Mx x1
+      by A4,A5,A8,A9,MATRIX_4:55,A2;
+A12:Indices LineVec2Mx x2=Indices LineVec2Mx x1
+      by A1,A5,A6,A9,A10,MATRIX_4:55;
+A13:dom LineVec2Mx x1=Seg len LineVec2Mx x1 by FINSEQ_1:def 3
+                    .=Seg 1 by Def10;
+A14:Seg width LineVec2Mx x1=Seg len x1 by Def10 .= dom x1 by FINSEQ_1:def 3;
     for i,j holds [i,j] in Indices LineVec2Mx x1 implies
     (LineVec2Mx (x1+x2))*(i,j)
       = (LineVec2Mx x1)*(i,j) + (LineVec2Mx x2)*(i,j)
     proof let i,j;
-      assume B0: [i,j] in Indices LineVec2Mx x1;then
-B50:  i in Seg 1 & j in dom x1 by A31,A32,ZFMISC_1:106;then
+      assume A15: [i,j] in Indices LineVec2Mx x1;then
+A16:  i in Seg 1 & j in dom x1 by A13,A14,ZFMISC_1:106;then
       1<=i & i<=1 by FINSEQ_1:3;then
-B51:  i=1 by XXREAL_0:1;
+A17:  i=1 by XXREAL_0:1;
       consider p being FinSequence of REAL such that
-B4:   p = (LineVec2Mx (x1+x2)).i & (LineVec2Mx (x1+x2))*(i,j) = p.j
-        by MATRIX_1:def 6,A6,B0;
-B60:  p.j=(x1+x2).j by B4,B51,AA6110,B50,A8;
+A18:   p = (LineVec2Mx (x1+x2)).i & (LineVec2Mx (x1+x2))*(i,j) = p.j
+        by MATRIX_1:def 6,A11,A15;
+A19:  p.j=(x1+x2).j by A18,A17,Def10,A16,A7;
       consider q1 being FinSequence of REAL such that
-B4b:  q1 = (LineVec2Mx x1).i & (LineVec2Mx x1)*(i,j) = q1.j
-        by MATRIX_1:def 6,B0;
-B61:  q1.j=x1.j by B4b,B51,AA6110,B50;
+A20:  q1 = (LineVec2Mx x1).i & (LineVec2Mx x1)*(i,j) = q1.j
+        by MATRIX_1:def 6,A15;
+A21:  q1.j=x1.j by A20,A17,Def10,A16;
       consider q2 being FinSequence of REAL such that
-B4d:  q2 = (LineVec2Mx x2).i & (LineVec2Mx x2)*(i,j) =q2.j
-        by MATRIX_1:def 6,B0,A6b;
-      q2.j=x2.j by B4d,B51,AA6110,a1,B50;
-      hence thesis by B4,B4b,B4d,B60,B61,RVSUM_1:26,B50,A8;
+A22:  q2 = (LineVec2Mx x2).i & (LineVec2Mx x2)*(i,j) =q2.j
+        by MATRIX_1:def 6,A15,A12;
+      q2.j=x2.j by A22,A17,Def10,A3,A16;
+      hence thesis by A18,A20,A22,A19,A21,RVSUM_1:26,A16,A7;
     end;
-    hence thesis by A1,A3,A4,A3b,A3d,A5,A5b,BB80,A2;
+    hence thesis by A1,A4,A8,A5,A6,A9,A10,Th26,A2;
 end;
 
 theorem
@@ -1171,37 +1171,37 @@ theorem
     LineVec2Mx (a*x)=a*LineVec2Mx x
 proof let a be Real, x be FinSequence of REAL;
     reconsider ea=a as Element of F_Real;
-A2: len (a*LineVec2Mx x)=len LineVec2Mx x by BB120
-                       .=1 by AA6110;
-A3: width (a*LineVec2Mx x)=width LineVec2Mx x by BB120
-                         .=len x by AA6110;
-bb: len (a*x)=len x by EUCLID_2:8; then
-B2: dom (a*x)=dom x by FINSEQ_3:31;
+A1: len (a*LineVec2Mx x)=len LineVec2Mx x by Th27
+                       .=1 by Def10;
+A2: width (a*LineVec2Mx x)=width LineVec2Mx x by Th27
+                         .=len x by Def10;
+A3: len (a*x)=len x by EUCLID_2:8; then
+A4: dom (a*x)=dom x by FINSEQ_3:31;
     for j st j in dom (a*x) holds (a*LineVec2Mx x)*(1,j) = (a*x).j
     proof let j;
-      assume B1: j in dom (a*x);
-B11:  width LineVec2Mx x=len x & len LineVec2Mx x=1 &
+      assume A5: j in dom (a*x);
+A6:  width LineVec2Mx x=len x & len LineVec2Mx x=1 &
       for j2 being Nat st j2 in dom x holds
-        (LineVec2Mx x)*(1,j2) = x.j2 by AA6110;
-      1 in Seg len LineVec2Mx x by B11,FINSEQ_1:3;then
-B10a: 1 in dom LineVec2Mx x by FINSEQ_1:def 3;
-      1 in Seg len (a*LineVec2Mx x) by A2,FINSEQ_1:3;then
+        (LineVec2Mx x)*(1,j2) = x.j2 by Def10;
+      1 in Seg len LineVec2Mx x by A6,FINSEQ_1:3;then
+A7: 1 in dom LineVec2Mx x by FINSEQ_1:def 3;
+      1 in Seg len (a*LineVec2Mx x) by A1,FINSEQ_1:3;then
       1 in dom (a*LineVec2Mx x) by FINSEQ_1:def 3;then
       (a*LineVec2Mx x).1 in rng (a*LineVec2Mx x) by FUNCT_1:def 5;then
       reconsider q=(a*LineVec2Mx x).1 as FinSequence of REAL
         by FINSEQ_1:def 11;
-B80:  Indices (a*LineVec2Mx x)=Indices LineVec2Mx x by BB120b;
-      j in Seg len x by FINSEQ_1:def 3,B1,bb; then
-B81:  [1,j] in Indices (a*LineVec2Mx x) by B11,ZFMISC_1:106,B10a,B80;then
+A8:  Indices (a*LineVec2Mx x)=Indices LineVec2Mx x by Th28;
+      j in Seg len x by FINSEQ_1:def 3,A5,A3; then
+A9:  [1,j] in Indices (a*LineVec2Mx x) by A6,ZFMISC_1:106,A7,A8;then
       consider p being FinSequence of REAL such that
-B74:  p = (a*LineVec2Mx x).1 & (a*LineVec2Mx x)*(1,j) =p.j
+A10:  p = (a*LineVec2Mx x).1 & (a*LineVec2Mx x)*(1,j) =p.j
         by MATRIX_1:def 6;
-      q.j = a*((LineVec2Mx x)*(1,j)) by BB121,B80,B81,B74
-         .= a*(x.j) by AA6110,B1,B2
+      q.j = a*((LineVec2Mx x)*(1,j)) by Th29,A8,A9,A10
+         .= a*(x.j) by Def10,A5,A4
          .= (a*x).j by RVSUM_1:66;
-      hence thesis by B74;
+      hence thesis by A10;
     end;
-    hence thesis by AA6110,A2,A3,bb;
+    hence thesis by Def10,A1,A2,A3;
 end;
 
 definition let M be Matrix of REAL; let x be FinSequence of REAL;
@@ -1214,7 +1214,7 @@ definition let M be Matrix of REAL; let x be FinSequence of REAL;
   coherence;
 end;
 
-theorem DD66:
+theorem Th52:
   for x being FinSequence of REAL, A being Matrix of REAL st
     len A>0 & width A>0 & (len A=len x or width (A@)=len x) holds
     (A@)*x = x*A
@@ -1222,65 +1222,65 @@ proof let x be FinSequence of REAL,A be Matrix of REAL;
     assume A1: len A>0 & width A>0 & (len A=len x or width (A@)=len x);
 A2: len A=width (A@) by MATRIX_2:12,A1;
 A3: len A=len x by A1,MATRIX_2:12;
-A5: width LineVec2Mx x=len x by AA6110;
-A4: width LineVec2Mx x=len A by A1,MATRIX_2:12,A5;
-A6: len LineVec2Mx x=1 by AA6110;
-A6b:width ColVec2Mx x=1 by AA6100,A1,A2;
-    len ColVec2Mx x=len x by AA6100,A1,A2;then
-A9: width ((A@)*(ColVec2Mx x))=width ColVec2Mx x by MATRIX_3:def 4,A2,A1;
-A10:len ((LineVec2Mx x)*A)=len LineVec2Mx x by MATRIX_3:def 4,A4;
-A10b:width ((LineVec2Mx x)*A)=width A by MATRIX_3:def 4,A4;
-A7: 1 in Seg width ((A@)*(ColVec2Mx x)) by A6b,FINSEQ_1:3,A9;
+A4: width LineVec2Mx x=len x by Def10;
+A5: width LineVec2Mx x=len A by A1,MATRIX_2:12,A4;
+A6: len LineVec2Mx x=1 by Def10;
+A7:width ColVec2Mx x=1 by Def9,A1,A2;
+    len ColVec2Mx x=len x by Def9,A1,A2;then
+A8: width ((A@)*(ColVec2Mx x))=width ColVec2Mx x by MATRIX_3:def 4,A2,A1;
+A9:len ((LineVec2Mx x)*A)=len LineVec2Mx x by MATRIX_3:def 4,A5;
+A10:width ((LineVec2Mx x)*A)=width A by MATRIX_3:def 4,A5;
+A11: 1 in Seg width ((A@)*(ColVec2Mx x)) by A7,FINSEQ_1:3,A8;
     Line((LineVec2Mx x)*A,1)
-      = Line((((LineVec2Mx x)*A)@)@,1) by MATRIX_2:15,A10,A6,A10b,A1
-     .= Line(((A@)*((LineVec2Mx x)@))@,1) by MATRIX_3:24,A1,A5,A3
-     .= Line(((A@)*(ColVec2Mx x))@,1) by DD64,A1,A3
-     .= Col((A@)*(ColVec2Mx x),1) by MATRIX_2:17,A7;
+      = Line((((LineVec2Mx x)*A)@)@,1) by MATRIX_2:15,A9,A6,A10,A1
+     .= Line(((A@)*((LineVec2Mx x)@))@,1) by MATRIX_3:24,A1,A4,A3
+     .= Line(((A@)*(ColVec2Mx x))@,1) by Th49,A1,A3
+     .= Col((A@)*(ColVec2Mx x),1) by MATRIX_2:17,A11;
     hence (A@)*x = x*A;
 end;
 
-theorem DD66b:
+theorem Th53:
   for x being FinSequence of REAL,A being Matrix of REAL
     st len A>0 & width A>0 & (width A=len x or len (A@)=len x) holds
       A*x = x*(A@)
 proof let x be FinSequence of REAL,A be Matrix of REAL;
   assume A1: len A>0 & width A>0 & (width A=len x or len (A@)=len x);then
   len (A@) = width A & width (A@)=len A by MATRIX_2:12;then
-  ((A@)@)*x=x*(A@) by A1,DD66;
+  ((A@)@)*x=x*(A@) by A1,Th52;
   hence A*x = x*(A@) by MATRIX_2:15,A1;
 end;
 
-theorem BB630:
+theorem Th54:
   for A,B being Matrix of REAL st len A=len B & width A=width B
   holds for i being Nat st 1<=i & i<=width A holds
     Col(A+B,i)=Col(A,i)+Col(B,i)
-proof let A,B be Matrix of REAL; 
+proof let A,B be Matrix of REAL;
     assume A1: len A=len B & width A=width B;
     let i be Nat;
     assume 1<=i & i<=width A;then
-B10:i in Seg width A by FINSEQ_1:3;
-B2: len Col(A,i)=len A by MATRIX_1:def 9;
-B3: len Col(B,i)=len B by MATRIX_1:def 9;
-B4: len (A+B)=len A by BB70;
-B5: len (Col(A,i)+Col(B,i))=len (Col(A,i)) by EUCLID_2:6,B2,B3,A1;
+A2:i in Seg width A by FINSEQ_1:3;
+A3: len Col(A,i)=len A by MATRIX_1:def 9;
+A4: len Col(B,i)=len B by MATRIX_1:def 9;
+A5: len (A+B)=len A by Th25;
+A6: len (Col(A,i)+Col(B,i))=len (Col(A,i)) by EUCLID_2:6,A3,A4,A1;
     Seg len (A+B)=dom (A+B) by FINSEQ_1:def 3;then
-B32:dom (Col(A,i)+Col(B,i))=dom (A+B) by FINSEQ_1:def 3,B5,B2,B4;
-B32b:dom A=dom B by FINSEQ_3:31,A1;
+A7:dom (Col(A,i)+Col(B,i))=dom (A+B) by FINSEQ_1:def 3,A6,A3,A5;
+A8:dom A=dom B by FINSEQ_3:31,A1;
     for j st j in dom (A+B) holds (Col(A,i)+Col(B,i)).j = (A+B)*(j,i)
     proof let j;
-      assume C1: j in dom (A+B);then
+      assume A9: j in dom (A+B);then
       j in Seg len (A+B) by FINSEQ_1:def 3;then
-C2:   j in dom A by B4,FINSEQ_1:def 3; then
-C3:   [j,i] in Indices A by B10,ZFMISC_1:106;
-C8:   Col(A,i).j=A*(j,i) by C2,MATRIX_1:def 9;
-      Col(B,i).j=B*(j,i) by C2,B32b,MATRIX_1:def 9;then
-      Col(A,i).j+Col(B,i).j=(A+B)*(j,i) by BB70,C3,C8;
-      hence thesis by RVSUM_1:26,B32,C1;
+A10:   j in dom A by A5,FINSEQ_1:def 3; then
+A11:   [j,i] in Indices A by A2,ZFMISC_1:106;
+A12:   Col(A,i).j=A*(j,i) by A10,MATRIX_1:def 9;
+      Col(B,i).j=B*(j,i) by A10,A8,MATRIX_1:def 9;then
+      Col(A,i).j+Col(B,i).j=(A+B)*(j,i) by Th25,A11,A12;
+      hence thesis by RVSUM_1:26,A7,A9;
     end;
-    hence thesis by MATRIX_1:def 9,B2,B4,B5;
+    hence thesis by MATRIX_1:def 9,A3,A5,A6;
 end;
 
-theorem BB632:
+theorem Th55:
   for A,B being Matrix of REAL st
     len A=len B & width A=width B holds
     for i being Nat st 1<=i & i<=len A holds
@@ -1289,37 +1289,37 @@ proof let A,B be Matrix of REAL;
      assume A1: len A=len B & width A=width B;
      let i be Nat;
      assume 1<=i & i<=len A;then
-B10b:i in dom A by FINSEQ_3:27;
-B2:  len Line(A,i)=width A by MATRIX_1:def 8;
-B3:  len Line(B,i)=width B by MATRIX_1:def 8;
-B4:  width (A+B)=width A by BB70;
-B5:  len (Line(A,i)+Line(B,i))=len Line(A,i) by EUCLID_2:6,B2,B3,A1;then
-B8:  dom (Line(A,i)+Line(B,i))=Seg width A by B2,FINSEQ_1:def 3;
+A2:i in dom A by FINSEQ_3:27;
+A3:  len Line(A,i)=width A by MATRIX_1:def 8;
+A4:  len Line(B,i)=width B by MATRIX_1:def 8;
+A5:  width (A+B)=width A by Th25;
+A6:  len (Line(A,i)+Line(B,i))=len Line(A,i) by EUCLID_2:6,A3,A4,A1;then
+A7:  dom (Line(A,i)+Line(B,i))=Seg width A by A3,FINSEQ_1:def 3;
      for j st j in Seg width (A+B) holds
        (Line(A,i)+Line(B,i)).j = (A+B)*(i,j)
      proof let j;
-       assume C1: j in Seg width (A+B);
-C2:    j in Seg width A by BB70,C1; then
-C3:    [i,j] in Indices A by B10b,ZFMISC_1:106;
-C8:    Line(A,i).j=A*(i,j) by C2,MATRIX_1:def 8;
-       Line(B,i).j=B*(i,j) by C2,A1,MATRIX_1:def 8;then
-       Line(A,i).j+Line(B,i).j=(A+B)*(i,j) by BB70,C3,C8;
-       hence thesis by RVSUM_1:26,C1,B8,B4;
+       assume A8: j in Seg width (A+B);
+A9:    j in Seg width A by Th25,A8; then
+A10:    [i,j] in Indices A by A2,ZFMISC_1:106;
+A11:    Line(A,i).j=A*(i,j) by A9,MATRIX_1:def 8;
+       Line(B,i).j=B*(i,j) by A9,A1,MATRIX_1:def 8;then
+       Line(A,i).j+Line(B,i).j=(A+B)*(i,j) by Th25,A10,A11;
+       hence thesis by RVSUM_1:26,A8,A7,A5;
      end;
-     hence thesis by MATRIX_1:def 8,B2,B4,B5;
+     hence thesis by MATRIX_1:def 8,A3,A5,A6;
 end;
 
-theorem BB634:
+theorem Th56:
   for a being Real, M being (Matrix of REAL), i being Nat st
     1<=i & i<=width M holds
       Col(a*M,i)=a*Col(M,i)
 proof let a be Real, M be Matrix of REAL;
   reconsider ea=a as Element of F_Real;
   let i be Nat;
-  assume B1: 1<=i & i<=width M;
-  Col(a*M,i)=Col(MXF2MXR (ea*(MXR2MXF M)),i) by AA120
-           .=ea*Col(MXR2MXF M,i) by AA235,B1;
-  hence Col(a*M,i)=a*Col(M,i) by AA234e;
+  assume A1: 1<=i & i<=width M;
+  Col(a*M,i)=Col(MXF2MXR (ea*(MXR2MXF M)),i) by Def7
+           .=ea*Col(MXR2MXF M,i) by Th19,A1;
+  hence Col(a*M,i)=a*Col(M,i) by Th17;
 end;
 
 theorem
@@ -1328,20 +1328,20 @@ theorem
       A*(x1+x2)=A*x1 + A*x2
 proof let x1,x2 be FinSequence of REAL, A be Matrix of REAL;
     assume A1:len x1=len x2 & width A=len x1 & len x1 >0 & len A>0;
-A20:len ColVec2Mx x1=len x1 by AA6100,A1;
-A22:len ColVec2Mx x2=len x2 by AA6100,A1;
-A23:width ColVec2Mx x1=1 by AA6100,A1;
-A24:width ColVec2Mx x2=1 by AA6100,A1;
-A2: len (A*(ColVec2Mx x1))=len A by MATRIX_3:def 4,A20,A1
-           .=len (A*(ColVec2Mx x2)) by MATRIX_3:def 4,A22,A1;
-A5: width (A*(ColVec2Mx x1))=width (ColVec2Mx (x1)) by MATRIX_3:def 4,A20,A1
-           .=width (ColVec2Mx x2) by AA6100,A1,A24
-           .=width(A*(ColVec2Mx x2)) by MATRIX_3:def 4,A1,A22;
-A6: 1<=1 & 1<=width(A*(ColVec2Mx x1)) by A23,MATRIX_3:def 4,A20,A1;
-    thus A*(x1+x2)=Col(A*(ColVec2Mx x1+ColVec2Mx x2),1) by BB510,A1
+A2:len ColVec2Mx x1=len x1 by Def9,A1;
+A3:len ColVec2Mx x2=len x2 by Def9,A1;
+A4:width ColVec2Mx x1=1 by Def9,A1;
+A5:width ColVec2Mx x2=1 by Def9,A1;
+A6: len (A*(ColVec2Mx x1))=len A by MATRIX_3:def 4,A2,A1
+           .=len (A*(ColVec2Mx x2)) by MATRIX_3:def 4,A3,A1;
+A7: width (A*(ColVec2Mx x1))=width (ColVec2Mx (x1)) by MATRIX_3:def 4,A2,A1
+           .=width (ColVec2Mx x2) by Def9,A1,A5
+           .=width(A*(ColVec2Mx x2)) by MATRIX_3:def 4,A1,A3;
+A8: 1<=1 & 1<=width(A*(ColVec2Mx x1)) by A4,MATRIX_3:def 4,A2,A1;
+    thus A*(x1+x2)=Col(A*(ColVec2Mx x1+ColVec2Mx x2),1) by Th46,A1
               .=Col(A*(ColVec2Mx x1)+A*(ColVec2Mx x2),1)
-                               by MATRIX_4:62,A1,A23,A24,A20,A22
-              .=A*x1 + A*x2 by A2,BB630,A6,A5;
+                               by MATRIX_4:62,A1,A4,A5,A2,A3
+              .=A*x1 + A*x2 by A6,Th54,A8,A7;
 end;
 
 theorem
@@ -1350,35 +1350,35 @@ theorem
       (x1+x2)*A=x1*A + x2*A
 proof let x1,x2 be FinSequence of REAL,A be Matrix of REAL;
     assume A1:len x1=len x2 & len A=len x1 & len x1 >0;
-A20:width LineVec2Mx x1=len x1 by AA6110;
-A22:width LineVec2Mx x2=len x2 by AA6110;
-A23:len LineVec2Mx x1=1 by AA6110;
-A24:len LineVec2Mx x2=1 by AA6110;
-A2: width ((LineVec2Mx x1)*A)=width A by MATRIX_3:def 4,A20,A1
-      .=width ((LineVec2Mx x2)*A) by MATRIX_3:def 4,A22,A1;
-A5: len ((LineVec2Mx x1)*A)=len LineVec2Mx x1 by MATRIX_3:def 4,A20,A1
-    .=len LineVec2Mx x2 by AA6110,A24
-    .=len((LineVec2Mx x2)*A) by MATRIX_3:def 4,A1,A22;
-A6: 1<=len((LineVec2Mx x1)*A) by A23,MATRIX_3:def 4,A20,A1;
-    thus (x1+x2)*A=Line((LineVec2Mx x1+LineVec2Mx(x2))*A,1) by BB512,A1
+A2:width LineVec2Mx x1=len x1 by Def10;
+A3:width LineVec2Mx x2=len x2 by Def10;
+A4:len LineVec2Mx x1=1 by Def10;
+A5:len LineVec2Mx x2=1 by Def10;
+A6: width ((LineVec2Mx x1)*A)=width A by MATRIX_3:def 4,A2,A1
+      .=width ((LineVec2Mx x2)*A) by MATRIX_3:def 4,A3,A1;
+A7: len ((LineVec2Mx x1)*A)=len LineVec2Mx x1 by MATRIX_3:def 4,A2,A1
+    .=len LineVec2Mx x2 by Def10,A5
+    .=len((LineVec2Mx x2)*A) by MATRIX_3:def 4,A1,A3;
+A8: 1<=len((LineVec2Mx x1)*A) by A4,MATRIX_3:def 4,A2,A1;
+    thus (x1+x2)*A=Line((LineVec2Mx x1+LineVec2Mx(x2))*A,1) by Th50,A1
               .=Line((LineVec2Mx x1)*A+(LineVec2Mx x2)*A,1)
-                               by MATRIX_4:63,A1,A23,A24,A20,A22
-              .=x1*A + x2*A by A2,BB632,A6,A5;
+                               by MATRIX_4:63,A1,A4,A5,A2,A3
+              .=x1*A + x2*A by A6,Th55,A8,A7;
 end;
 
-theorem DD100b:
+theorem Th59:
   for a being Real,x being FinSequence of REAL,
       A being Matrix of REAL
   st width A=len x & len x>0 & len A>0 holds
     A*(a*x)=a*(A*x)
 proof let a be Real,x be FinSequence of REAL,A be Matrix of REAL;
     assume A1: width A=len x & len x>0 & len A>0;
-A20:len ColVec2Mx x=len x by AA6100,A1;
-A23:width ColVec2Mx x=1 by AA6100,A1;
-A6: 1<=width(A*(ColVec2Mx x)) by A23,MATRIX_3:def 4,A20,A1;
-    thus A*(a*x)=Col(A*(a*ColVec2Mx x),1) by BB511,A1
-              .=Col(a*(A*(ColVec2Mx x)),1) by BB224,A1,A20
-              .=a*(A*x) by BB634,A6;
+A2:len ColVec2Mx x=len x by Def9,A1;
+A3:width ColVec2Mx x=1 by Def9,A1;
+A4: 1<=width(A*(ColVec2Mx x)) by A3,MATRIX_3:def 4,A2,A1;
+    thus A*(a*x)=Col(A*(a*ColVec2Mx x),1) by Th47,A1
+              .=Col(a*(A*(ColVec2Mx x)),1) by Th40,A1,A2
+              .=a*(A*x) by Th56,A4;
 end;
 
 theorem
@@ -1387,75 +1387,75 @@ theorem
       (a*x)*A=a*(x*A)
 proof let a be Real,x be FinSequence of REAL,A be Matrix of REAL;
     assume A1: len A=len x & len x>0 & width A>0;then
-A5: width (A@)=len x & len x>0 & len (A@)>0 by MATRIX_2:12;then
-A2: (A@)*(a*x)=a*((A@)*x) by DD100b;
-A3: (A@)*x=x*A by DD66,A1;
+A2: width (A@)=len x & len x>0 & len (A@)>0 by MATRIX_2:12;then
+A3: (A@)*(a*x)=a*((A@)*x) by Th59;
+A4: (A@)*x=x*A by Th52,A1;
     len (a*x)=len x by EUCLID_2:8;then
-    (a*x)*((A@)@)=(A@)*(a*x) by DD66b,A5;
-    hence (a*x)*A=a*(x*A) by A3,A2,MATRIX_2:15,A1;
+    (a*x)*((A@)@)=(A@)*(a*x) by Th53,A2;
+    hence (a*x)*A=a*(x*A) by A4,A3,MATRIX_2:15,A1;
 end;
 
-theorem DD102:
+theorem Th61:
   for x being FinSequence of REAL, A being Matrix of REAL st
     width A=len x & len x>0 & len A>0
       holds len (A*x) = len A
 proof let x be FinSequence of REAL, A be Matrix of REAL;
     assume A1: width A=len x & len x>0 & len A>0;
-A2: len ColVec2Mx x=len x by AA6100,A1;
+A2: len ColVec2Mx x=len x by Def9,A1;
     len (Col(A*(ColVec2Mx x),1))=len (A*(ColVec2Mx x)) by MATRIX_1:def 9
                               .=len A by MATRIX_3:def 4,A2,A1;
     hence len (A*x) = len A;
 end;
 
-theorem DD103:
+theorem Th62:
   for x being FinSequence of REAL, A being Matrix of REAL st
     len A=len x & len x>0 & width A>0 holds
       len (x*A) = width A
 proof let x be FinSequence of REAL, A be Matrix of REAL;
     assume A1: len A=len x & len x>0 & width A>0;
-A2: width LineVec2Mx x=len x by AA6110;
+A2: width LineVec2Mx x=len x by Def10;
     len Line((LineVec2Mx x)*A,1)=width ((LineVec2Mx x)*A)
                            by MATRIX_1:def 8
                                  .=width A by MATRIX_3:def 4,A2,A1;
     hence len (x*A) = width A;
 end;
 
-theorem DD100:
+theorem Th63:
   for x being FinSequence of REAL, A,B being Matrix of REAL st
     len A=len B & width A=width B & width A=len x & len A>0 & len x>0
   holds (A+B)*x=A*x + B*x
 proof let x be FinSequence of REAL,A,B be Matrix of REAL;
     assume
 A1: len A=len B & width A=width B & width A=len x & len A>0 & len x>0;
-A3: len ColVec2Mx x=len x by AA6100,A1;
-A5: len (A*(ColVec2Mx x))=len A by MATRIX_3:def 4,A1,A3
-     .=len (B*(ColVec2Mx x)) by A1,MATRIX_3:def 4,A3;
-A6: width (A*(ColVec2Mx x))= width (ColVec2Mx x) by MATRIX_3:def 4,A1,A3
-     .= width (B*(ColVec2Mx x)) by MATRIX_3:def 4,A1,A3;
-A7a:width (A*(ColVec2Mx x))=width (ColVec2Mx x) by MATRIX_3:def 4,A1,A3
-                        .=1 by AA6100,A1;
-    thus (A+B)*x = Col(A*(ColVec2Mx x)+B*(ColVec2Mx x),1) by MATRIX_4:63,A1,A3
-         .=A*x +B*x by BB630,A5,A6,A7a;
+A2: len ColVec2Mx x=len x by Def9,A1;
+A3: len (A*(ColVec2Mx x))=len A by MATRIX_3:def 4,A1,A2
+     .=len (B*(ColVec2Mx x)) by A1,MATRIX_3:def 4,A2;
+A4: width (A*(ColVec2Mx x))= width (ColVec2Mx x) by MATRIX_3:def 4,A1,A2
+     .= width (B*(ColVec2Mx x)) by MATRIX_3:def 4,A1,A2;
+A5:width (A*(ColVec2Mx x))=width (ColVec2Mx x) by MATRIX_3:def 4,A1,A2
+                        .=1 by Def9,A1;
+    thus (A+B)*x = Col(A*(ColVec2Mx x)+B*(ColVec2Mx x),1) by MATRIX_4:63,A1,A2
+         .=A*x +B*x by Th54,A3,A4,A5;
 end;
 
-theorem DD110:
+theorem Th64:
   for x being FinSequence of REAL, A,B being Matrix of REAL st
     len A=len B & width A=width B & len A=len x & width A>0 & len x>0
   holds x*(A+B)=x*A + x*B
 proof let x be FinSequence of REAL,A,B be Matrix of REAL;
     assume A1: len A=len B & width A=width B
       & len A=len x & width A>0 & len x>0;
-A3: width LineVec2Mx x=len x by AA6110;
-A3b:len LineVec2Mx x=1 by AA6110;
-A5: width ((LineVec2Mx x)*A)=width A by MATRIX_3:def 4,A1,A3
-       .=width ((LineVec2Mx x)*B) by MATRIX_3:def 4,A1,A3;
-A6: len ((LineVec2Mx x)*A)= len LineVec2Mx x by MATRIX_3:def 4,A1,A3
-         .= len ((LineVec2Mx x)*B) by MATRIX_3:def 4,A1,A3;
-A7a:len ((LineVec2Mx x)*A)=len LineVec2Mx x by MATRIX_3:def 4,A1,A3
-                        .=1 by AA6110;
+A2: width LineVec2Mx x=len x by Def10;
+A3:len LineVec2Mx x=1 by Def10;
+A4: width ((LineVec2Mx x)*A)=width A by MATRIX_3:def 4,A1,A2
+       .=width ((LineVec2Mx x)*B) by MATRIX_3:def 4,A1,A2;
+A5: len ((LineVec2Mx x)*A)= len LineVec2Mx x by MATRIX_3:def 4,A1,A2
+         .= len ((LineVec2Mx x)*B) by MATRIX_3:def 4,A1,A2;
+A6:len ((LineVec2Mx x)*A)=len LineVec2Mx x by MATRIX_3:def 4,A1,A2
+                        .=1 by Def10;
     thus x*(A+B)
-          =Line((LineVec2Mx x)*A+(LineVec2Mx x)*B,1) by MATRIX_4:62,A1,A3,A3b
-         .=x*A +x*B by BB632,A5,A6,A7a;
+          =Line((LineVec2Mx x)*A+(LineVec2Mx x)*B,1) by MATRIX_4:62,A1,A2,A3
+         .=x*A +x*B by Th55,A4,A5,A6;
 end;
 
 theorem
@@ -1466,13 +1466,13 @@ proof let n,m be Nat, x be FinSequence of REAL;
    assume A1: len x=m & n>0 & m>0;then
 A2:len 0_Rmatrix(n,m) = n & width 0_Rmatrix(n,m)=m
                            by MATRIX_1:24;then
-A4:len ((0_Rmatrix(n,m))*x)=len (0_Rmatrix(n,m)) by DD102,A1;
-   (0_Rmatrix(n,m))*x=(0_Rmatrix(n,m)+0_Rmatrix(n,m))*x by AA36,A1,A2
+A3:len ((0_Rmatrix(n,m))*x)=len (0_Rmatrix(n,m)) by Th61,A1;
+   (0_Rmatrix(n,m))*x=(0_Rmatrix(n,m)+0_Rmatrix(n,m))*x by Th36,A1,A2
                     .=(0_Rmatrix(n,m))*x +(0_Rmatrix(n,m))*x
-                                       by DD100,A2,A1;then
+                                       by Th63,A2,A1;then
    0*n =(0_Rmatrix(n,m))*x +(0_Rmatrix(n,m))*x
-                         - (0_Rmatrix(n,m))*x by Th40,A2,A4;
-   hence (0_Rmatrix(n,m))*x=0*n by Th63,A4;
+                         - (0_Rmatrix(n,m))*x by Th3,A2,A3;
+   hence (0_Rmatrix(n,m))*x=0*n by Th14,A3;
 end;
 
 theorem
@@ -1482,10 +1482,10 @@ theorem
 proof let n,m be Nat,x be FinSequence of REAL;
    assume A1: len x=n & n>0 & m>0;then
 A2:width (0_Rmatrix(n,m))=m & len (0_Rmatrix(n,m))=n by MATRIX_1:24;then
-A4:len (x*(0_Rmatrix(n,m)))=width (0_Rmatrix(n,m)) by DD103,A1;
-   x*(0_Rmatrix(n,m))=x*(0_Rmatrix(n,m)+0_Rmatrix(n,m)) by AA36,A1,A2
-     .=x*(0_Rmatrix(n,m)) +x*(0_Rmatrix(n,m)) by DD110,A2,A1;then
+A3:len (x*(0_Rmatrix(n,m)))=width (0_Rmatrix(n,m)) by Th62,A1;
+   x*(0_Rmatrix(n,m))=x*(0_Rmatrix(n,m)+0_Rmatrix(n,m)) by Th36,A1,A2
+     .=x*(0_Rmatrix(n,m)) +x*(0_Rmatrix(n,m)) by Th64,A2,A1;then
    0*m =x*(0_Rmatrix(n,m)) +x*(0_Rmatrix(n,m))
-                           - x*(0_Rmatrix(n,m)) by Th40,A2,A4;
-   hence x*(0_Rmatrix(n,m))=0*m by Th63,A4;
+                           - x*(0_Rmatrix(n,m)) by Th3,A2,A3;
+   hence x*(0_Rmatrix(n,m))=0*m by Th14,A3;
 end;

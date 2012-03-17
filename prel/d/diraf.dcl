@@ -10,7 +10,6 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -34,10 +33,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="62" value="false"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="59" value="false"/>
+<Adjective nr="61"/>
 <Adjective nr="64"/>
-<Adjective nr="67"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -46,27 +45,27 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="62" value="false"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="59" value="false"/>
+<Adjective nr="61"/>
 <Adjective nr="64"/>
-<Adjective nr="67"/>
-<Adjective nr="68"/>
+<Adjective nr="65"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="29" value="false"/>
+<Adjective nr="26" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="167">
+<Func kind="K" nr="154">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="64"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="61"/>
 </Cluster>
 </FCluster>
 </Registrations>

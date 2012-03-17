@@ -2,12 +2,12 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="RELAT_2"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="RELAT_2"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="PARTFUN1"/>
@@ -22,8 +22,8 @@
 <For>
 <Typ kind="M" nr="5">
 <Cluster>
-<Adjective nr="6"/>
-<Adjective nr="11"/>
+<Adjective nr="7"/>
+<Adjective nr="12"/>
 <Adjective nr="16">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
@@ -45,7 +45,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="14">
+<Func kind="K" nr="4">
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
@@ -85,7 +85,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="14">
+<Func kind="K" nr="4">
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>

@@ -7,15 +7,15 @@
 environ
 
  vocabularies ORDINAL1, FUNCT_1, BOOLE, SETFAM_1, TARSKI, RELAT_1, ORDINAL2,
- FUNCOP_1;
+      FUNCOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
       SETFAM_1, FUNCOP_1;
- constructors ORDINAL1, SETFAM_1, XBOOLE_0, FUNCOP_1;
+ constructors SETFAM_1, ORDINAL1, FUNCOP_1;
  registrations FUNCT_1, SUBSET_1, ORDINAL1, ZFMISC_1, XBOOLE_0, FUNCOP_1;
- requirements SUBSET, BOOLE;
+ requirements SUBSET, BOOLE, NUMERALS;
  definitions TARSKI, XBOOLE_0, ORDINAL1;
  theorems TARSKI, XBOOLE_0, ORDINAL1, SETFAM_1, ZFMISC_1, FUNCT_1, RELAT_1,
-      XBOOLE_1, FUNCOP_1;
+      XBOOLE_1, FUNCOP_1, SUBSET_1;
  schemes XBOOLE_0, FUNCT_1, ORDINAL1;
 
 begin
@@ -112,52 +112,20 @@ theorem
  Th7: dom L = succ A implies last L = L.A by Th2;
 
 definition let X;
- func On X -> set means
-:Def2:  x in it iff x in X & x is Ordinal;
-  existence
-  proof
-    defpred P[set] means $1 is Ordinal;
-    thus ex Y being set st
-      for x being set holds x in Y iff x in X & P[x] from XBOOLE_0:sch 1;
-  end;
-  uniqueness
-   proof
-    defpred P[set] means $1 in X & $1 is Ordinal;
-    let Y,Z such that
-A1:   x in Y iff P[x] and
-A2:   x in Z iff P[x];
-    thus Y = Z from XBOOLE_0:sch 2(A1,A2);
-   end;
-
- func Lim X -> set means
-:Def3: x in it iff x in X & ex A st x = A & A is_limit_ordinal;
-  existence
-  proof
-    defpred P[set] means ex A st $1 = A & A is_limit_ordinal;
-    thus ex Y being set st
-      for x being set holds x in Y iff x in X & P[x] from XBOOLE_0:sch 1;
-  end;
-  uniqueness
-   proof
-    defpred P[set] means $1 in X & ex A st $1 = A & A is_limit_ordinal;
-    let Y,Z such that
-A3:   x in Y iff P[x] and
-A4:   x in Z iff P[x];
-    thus Y = Z from XBOOLE_0:sch 2(A3,A4);
-   end;
+ canceled 2;
 end;
 
 canceled;
 
 theorem
       On X c= X
-   proof thus x in On X implies x in X by Def2; end;
+   proof thus x in On X implies x in X by ORDINAL1:def 10; end;
 
 theorem
  Th10: On A = A
   proof
      x in A iff x in A & x is Ordinal by ORDINAL1:23;
-   hence thesis by Def2;
+   hence thesis by ORDINAL1:def 10;
   end;
 
 theorem
@@ -165,72 +133,34 @@ theorem
   proof assume
 A1:  X c= Y;
    let x; assume x in On X;
-    then x in X & x is Ordinal by Def2; hence x in On Y by A1,Def2;
+    then x in X & x is Ordinal by ORDINAL1:def 10;
+   hence x in On Y by A1,ORDINAL1:def 10;
   end;
 
 canceled;
 
 theorem
       Lim X c= X
-   proof thus x in Lim X implies x in X by Def3; end;
+   proof thus x in Lim X implies x in X by ORDINAL1:def 11; end;
 
 theorem
       X c= Y implies Lim X c= Lim Y
   proof assume
 A1:  X c= Y;
    let x; assume x in Lim X;
-    then x in X & ex A st x = A & A is_limit_ordinal by Def3;
-    hence x in Lim Y by A1,Def3;
+    then x in X & ex A st x = A & A is_limit_ordinal by ORDINAL1:def 11;
+    hence x in Lim Y by A1,ORDINAL1:def 11;
   end;
 
 theorem
       Lim X c= On X
    proof let x; assume x in Lim X;
-   then x in X & ex A st x = A & A is_limit_ordinal by Def3;
-    hence x in On X by Def2;
+   then x in X & ex A st x = A & A is_limit_ordinal by ORDINAL1:def 11;
+    hence x in On X by ORDINAL1:def 10;
    end;
 
-theorem Th16:
-  for D ex A st D in A & A is_limit_ordinal
-  proof let D;
-   consider Field being set such that
-A1:  D in Field &
-    (for X,Y holds X in Field & Y c= X implies Y in Field) &
-    (for X holds X in Field implies bool X in Field) &
-    (for X holds X c= Field implies X,Field are_equipotent or X in Field)
-    by ZFMISC_1:136;
-        for X st X in On Field holds X is Ordinal & X c= On Field
-     proof let X; assume
-A2:    X in On Field;
-      hence X is Ordinal by Def2;
-      reconsider A = X as Ordinal by A2,Def2;
-      let y; assume
-A3:    y in X;
-       then y in A;
-      then reconsider B = y as Ordinal by ORDINAL1:23;
-           B c= A & A in Field by A2,A3,Def2,ORDINAL1:def 2;
-       then B in Field by A1;
-      hence thesis by Def2;
-     end;
-   then reconsider ON = On Field as Ordinal by ORDINAL1:31;
-   take ON;
-   thus D in ON by A1,Def2;
-        A in ON implies succ A in ON
-     proof assume A in ON;
-       then A in Field by Def2;
-then A4:    bool A in Field by A1;
-           succ A c= bool A
-        proof let x;
-         assume x in succ A;
-          then x in A or x = A by ORDINAL1:13;
-          then x c= A by ORDINAL1:def 2;
-         hence x in bool A;
-        end;
-       then succ A in Field by A1,A4;
-      hence thesis by Def2;
-     end;
-   hence thesis by ORDINAL1:41;
-  end;
+theorem
+  for D ex A st D in A & A is_limit_ordinal by ORDINAL1:51;
 
 theorem
  Th17: (for x st x in X holds x is Ordinal) implies meet X is Ordinal
@@ -262,36 +192,7 @@ A6:         Y in X;
   end;
 
 definition
- func one -> non empty Ordinal equals
-  succ {};
-  correctness;
-end;
-
-definition
- func omega -> set means
-:Def5: {} in it & it is_limit_ordinal & it is ordinal &
-      for A st {} in A & A is_limit_ordinal holds it c= A;
-  existence
-   proof
-     defpred P[Ordinal] means {} in $1 & $1 is_limit_ordinal;
-A1:   ex A st P[A] by Th16;
-        ex C st P[C] & for A st P[A] holds C c= A
-     from ORDINAL1:sch 1(A1);
-    hence thesis;
-   end;
-  uniqueness
-   proof let B,C be set such that
-A2:   {} in B & B is_limit_ordinal & B is ordinal &
-      for A st {} in A & A is_limit_ordinal holds B c= A and
-A3:   {} in C & C is_limit_ordinal & C is ordinal &
-      for A st {} in A & A is_limit_ordinal holds C c= A;
-    thus B c= C & C c= B by A2,A3;
-   end;
-end;
-
-registration
- cluster omega -> non empty ordinal;
-  coherence by Def5;
+ canceled 2;
 end;
 
 registration
@@ -299,7 +200,7 @@ registration
   existence
   proof
     take omega;
-    thus omega is being_limit_ordinal by Def5;
+    thus omega is being_limit_ordinal by ORDINAL1:def 12;
   end;
 end;
 
@@ -308,21 +209,21 @@ definition
  func inf X -> Ordinal equals
   meet On X;
   coherence
-   proof
-         x in On X implies x is Ordinal by Def2; hence thesis by Th17;
+   proof x in On X implies x is Ordinal by ORDINAL1:def 10;
+    hence thesis by Th17;
    end;
 
  func sup X -> Ordinal means
 :Def7:  On X c= it & for A st On X c= A holds it c= A;
   existence
    proof
-      x in On X implies x is Ordinal by Def2;
+      x in On X implies x is Ordinal by ORDINAL1:def 10;
     then reconsider A = union On X as Ordinal by ORDINAL1:35;
     defpred P[Ordinal] means On X c= $1;
          On X c= succ A
       proof let x; assume
 A1:     x in On X;
-       then reconsider B = x as Ordinal by Def2;
+       then reconsider B = x as Ordinal by ORDINAL1:def 10;
             B c= A by A1,ZFMISC_1:92;
        hence x in succ A by ORDINAL1:34;
       end;
@@ -342,14 +243,14 @@ canceled;
 
 theorem
       {} in omega & omega is_limit_ordinal &
-   for A st {} in A & A is_limit_ordinal holds omega c= A by Def5;
+   for A st {} in A & A is_limit_ordinal holds omega c= A by ORDINAL1:def 12;
 
 canceled 2;
 
 theorem
       A in X implies inf X c= A
   proof assume A in X;
-    then A in On X by Def2;
+    then A in On X by ORDINAL1:def 10;
     then meet On X c= A by SETFAM_1:4;
    hence thesis;
   end;
@@ -363,8 +264,8 @@ A2:  x in D;
         for Y st Y in On X holds x in Y
      proof let Y; assume
 A3:     Y in On X;
-      then reconsider A = Y as Ordinal by Def2;
-           A in X by A3,Def2;
+      then reconsider A = Y as Ordinal by ORDINAL1:def 10;
+           A in X by A3,ORDINAL1:def 10;
        then D c= A by A1;
       hence x in Y by A2;
      end;
@@ -376,7 +277,7 @@ theorem
       A in X & X c= Y implies inf Y c= inf X
    proof assume
          A in X;
-then A1:   On X <> {} by Def2;
+then A1:   On X <> {} by ORDINAL1:def 10;
     assume X c= Y;
      then On X c= On Y & inf X = meet On X & inf Y = meet On Y by Th11;
     hence thesis by A1,SETFAM_1:7;
@@ -390,15 +291,15 @@ theorem
 then A1:   ex A st P[A];
     consider A such that
 A2:   P[A] & for B st P[B] holds A c= B from ORDINAL1:sch 1(A1);
-A3:   A in On X by A2,Def2;
-A4:   On X <> {} by A2,Def2;
+A3:   A in On X by A2,ORDINAL1:def 10;
+A4:   On X <> {} by A2,ORDINAL1:def 10;
          now let x;
       thus x in A implies for Y st Y in On X holds x in Y
         proof assume
 A5:        x in A;
          let Y; assume A6: Y in On X;
-then A7:        Y in X & Y is Ordinal by Def2;
-         reconsider B = Y as Ordinal by A6,Def2;
+then A7:        Y in X & Y is Ordinal by ORDINAL1:def 10;
+         reconsider B = Y as Ordinal by A6,ORDINAL1:def 10;
               A c= B by A2,A7;
          hence x in Y by A5;
         end;
@@ -419,7 +320,7 @@ A1:  On A = A by Th10;
 
 theorem
  Th27: A in X implies A in sup X
-  proof assume A in X; then A in On X & On X c= sup X by Def2,Def7;
+  proof assume A in X; then A in On X & On X c= sup X by ORDINAL1:def 10,Def7;
    hence thesis;
   end;
 
@@ -430,8 +331,8 @@ A1:  for A st A in X holds A in D;
         On X c= D
      proof let x; assume
 A2:     x in On X;
-      then reconsider A = x as Ordinal by Def2;
-           A in X by A2,Def2;
+      then reconsider A = x as Ordinal by ORDINAL1:def 10;
+           A in X by A2,ORDINAL1:def 10;
       hence x in D by A1;
      end;
    hence thesis by Def7;
@@ -463,14 +364,15 @@ theorem
   proof
 A1:  On { A } c= succ A
      proof let x; assume x in On { A };
-       then x in { A } by Def2;
+       then x in { A } by ORDINAL1:def 10;
        then x = A by TARSKI:def 1;
       hence thesis by ORDINAL1:10;
      end;
         now let B such that
 A2:    On { A } c= B;
           A in { A } by TARSKI:def 1;
-      then A in On { A } by Def2; hence succ A c= B by A2,ORDINAL1:33;
+      then A in On { A } by ORDINAL1:def 10;
+     hence succ A c= B by A2,ORDINAL1:33;
     end;
    hence thesis by A1,Def7;
   end;
@@ -480,7 +382,7 @@ theorem
   proof let x; assume x in inf X;
 then A1:  x in meet On X;
     consider y being Element of On X;
-   reconsider y as Ordinal by A1,Def2,SETFAM_1:2;
+   reconsider y as Ordinal by A1,ORDINAL1:def 10,SETFAM_1:2;
         On X c= sup X by Def7;
     then y in sup X by A1,SETFAM_1:2,TARSKI:def 3;
     then y c= sup X & x in y by A1,ORDINAL1:def 2,SETFAM_1:2,def 1;
@@ -583,7 +485,8 @@ A2:      x in rng L;
 A3:      y in dom L & x = L.y by FUNCT_1:def 5;
        reconsider y as Ordinal by A3,ORDINAL1:23;
             L.y = F(y) by A1,A3;
-        then x in On rng L & On rng L c= sup rng L by A2,A3,Def2,Def7;
+        then x in On rng L & On rng L c= sup rng L
+         by A2,A3,ORDINAL1:def 10,Def7;
        hence x in A;
       end;
     then reconsider L as Ordinal-Sequence;
@@ -1113,7 +1016,8 @@ A9:      y <> {} & for B holds y <> succ B;
          then L.y = D(y,L|y) by A1,A4,A6,A9;
         hence x is Ordinal by A6;
        end;
-       then x in On rng L & On rng L c= sup rng L by A1,A2,A5,A6,A7,Def2,Def7;
+       then x in On rng L & On rng L c= sup rng L
+        by A1,A2,A5,A6,A7,ORDINAL1:def 10,Def7;
       hence x in A;
      end;
     then reconsider L as Ordinal-Sequence;
@@ -1583,10 +1487,20 @@ definition let A,B;
    end;
 end;
 
+registration let O be Ordinal;
+ cluster -> ordinal Element of O;
+ coherence
+   proof
+    let x be Element of O;
+        O is empty or O is non empty;
+    hence thesis by ORDINAL1:23,SUBSET_1:def 2;
+   end;
+end;
+
 definition let A,B;
  func exp(A,B) -> Ordinal means
 :Def20:  ex fi st it = last fi & dom fi = succ B &
-         fi.{} = one &
+         fi.{} = 1 &
          (for C st succ C in succ B holds fi.succ C = A*^(fi.C)) &
          for C st C in succ B & C <> {} & C is_limit_ordinal
                 holds fi.C = lim(fi|C);
@@ -1595,16 +1509,16 @@ definition let A,B;
    deffunc C(Ordinal,Ordinal) = A*^$2;
    deffunc D(Ordinal,Ordinal-Sequence) = lim $2;
      (ex F being Ordinal,fi st
-     F = last fi & dom fi = succ B & fi.{} = one &
+     F = last fi & dom fi = succ B & fi.{} = 1 &
      (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
       for C st C in succ B & C <> {} & C is_limit_ordinal
              holds fi.C = D(C,fi|C) ) &
    for A1,A2 st
-    (ex fi st A1 = last fi & dom fi = succ B & fi.{} = one &
+    (ex fi st A1 = last fi & dom fi = succ B & fi.{} = 1 &
       (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
        for C st C in succ B & C <> {} & C is_limit_ordinal
               holds fi.C = D(C,fi|C) ) &
-    (ex fi st A2 = last fi & dom fi = succ B & fi.{} = one &
+    (ex fi st A2 = last fi & dom fi = succ B & fi.{} = 1 &
       (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
        for C st C in succ B & C <> {} & C is_limit_ordinal
               holds fi.C = D(C,fi|C) )
@@ -1700,10 +1614,12 @@ A9:      x in A;
    hence thesis;
   end;
 
+HA: 1 = succ 0;
+
 theorem
-      A+^one = succ A
+      A+^1 = succ A
    proof
-    thus A+^one = succ(A+^{}) by Th45 .= succ A by Th44;
+    thus A+^1 = succ(A+^{}) by Th45,HA .= succ A by Th44;
    end;
 
 theorem
@@ -1896,9 +1812,9 @@ then A10:       x = {} & {} *^ {} = {} by Th52,TARSKI:def 1;
   end;
 
 theorem
- Th56: one*^A = A & A*^one = A
+ Th56: 1*^A = A & A*^1 = A
   proof
-   thus one*^A = {}*^A +^ A by Th53
+   thus 1*^A = {}*^A +^ A by Th53,HA
              .= {} +^ A by Th52 .= A by Th47;
      defpred P[Ordinal] means $1*^succ {} = $1;
 A1:for A st for B st B in A holds P[B] holds P[A]
@@ -1939,7 +1855,7 @@ A11:         y in dom fi & x = fi.y by FUNCT_1:def 5;
        end;
       hence thesis by A3,Th52;
      end;
-       for A holds P[A] from ORDINAL1:sch 2(A1); hence thesis;
+       for A holds P[A] from ORDINAL1:sch 2(A1); hence thesis by HA;
   end;
 
 theorem
@@ -2066,17 +1982,17 @@ A13:          D = x*^A by A10,A12;
   end;
 
 theorem
- Th60: exp(A,{}) = one
+ Th60: exp(A,{}) = 1
   proof
      deffunc F(Ordinal) = exp(A,$1);
      deffunc D(Ordinal,Ordinal-Sequence) = lim $2;
      deffunc C(Ordinal,Ordinal) = A*^$2;
 A1:  for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B &
-       fi.{} = one &
+       fi.{} = 1 &
        (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
        for C st C in succ B & C <> {} & C is_limit_ordinal
               holds fi.C = D(C,fi|C) by Def20;
-   thus F({}) = one from OSResult0(A1);
+   thus F({}) = 1 from OSResult0(A1);
   end;
 
 theorem
@@ -2086,7 +2002,7 @@ theorem
      deffunc D(Ordinal,Ordinal-Sequence) = lim $2;
      deffunc C(Ordinal,Ordinal) = A *^ $2;
 A1:  for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B &
-       fi.{} = one &
+       fi.{} = 1 &
        (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
        for C st C in succ B & C <> {} & C is_limit_ordinal
               holds fi.C = D(C,fi|C) by Def20;
@@ -2107,7 +2023,7 @@ A1:  B <> {} & B is_limit_ordinal;
 A2:  dom fi = B and
 A3:  for C st C in B holds fi.C = F(C);
 A4:  for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B &
-       fi.{} = one &
+       fi.{} = 1 &
        (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
        for C st C in succ B & C <> {} & C is_limit_ordinal
               holds fi.C = D(C,fi|C) by Def20;
@@ -2115,37 +2031,37 @@ A4:  for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B &
   end;
 
 theorem
-      exp(A,one) = A & exp(one,A) = one
+      exp(A,1) = A & exp(1,A) = 1
    proof
-    thus exp(A,one) = A*^exp(A,{}) by Th61
-                   .= A*^one by Th60 .= A by Th56;
-      defpred P[Ordinal] means exp(one,$1) = one;
+    thus exp(A,1) = A*^exp(A,{}) by Th61,HA
+                   .= A*^1 by Th60 .= A by Th56;
+      defpred P[Ordinal] means exp(1,$1) = 1;
 A1:   P[{}] by Th60;
 A2:   for A st P[A] holds P[succ A]
-      proof let A; assume exp(one,A) = one;
-       hence exp(one,succ A) = one*^one by Th61 .= one by Th56;
+      proof let A; assume exp(1,A) = 1;
+       hence exp(1,succ A) = 1*^1 by Th61 .= 1 by Th56;
       end;
 A3:   for A st A <> {} & A is_limit_ordinal &
        for B st B in A holds P[B] holds P[A]
       proof let A such that
 A4:      A <> {} & A is_limit_ordinal and
-A5:      for B st B in A holds exp(one,B) = one;
-       deffunc F(Ordinal) = exp(one,$1);
+A5:      for B st B in A holds exp(1,B) = 1;
+       deffunc F(Ordinal) = exp(1,$1);
        consider fi such that
 A6:      dom fi = A & for B st B in A holds fi.B = F(B) from OSLambda;
-A7:      exp(one,A) = lim fi by A4,A6,Th62;
-A8:      rng fi c= { one }
+A7:      exp(1,A) = lim fi by A4,A6,Th62;
+A8:      rng fi c= { 1 }
          proof let x; assume x in rng fi;
           then consider y such that
 A9:         y in dom fi & x = fi.y by FUNCT_1:def 5;
           reconsider y as Ordinal by A9,ORDINAL1:23;
-               x = exp(one,y) by A6,A9 .= one by A5,A6,A9;
-          hence x in { one } by TARSKI:def 1;
+               x = exp(1,y) by A6,A9 .= 1 by A5,A6,A9;
+          hence x in { 1 } by TARSKI:def 1;
          end;
             now
-         thus {} <> one;
+         thus {} <> 1;
          let B,C such that
-A10:        B in one & one in C;
+A10:        B in 1 & 1 in C;
          consider x being Element of A;
          reconsider x as Ordinal by A4,ORDINAL1:23;
          take D = x; thus D in dom fi by A4,A6;
@@ -2154,17 +2070,12 @@ A10:        B in one & one in C;
           then fi.E in rng fi by FUNCT_1:def 5; hence B in fi.E & fi.E in C
 by A8,A10,TARSKI:def 1;
         end;
-        then one is_limes_of fi by Def13;
-       hence exp(one,A) = one by A7,Def14;
+        then 1 is_limes_of fi by Def13;
+       hence exp(1,A) = 1 by A7,Def14;
       end;
          for A holds P[A] from OrdinalInd(A1,A2,A3);
     hence thesis;
    end;
-
-definition let A be set;
- attr A is natural means
-:Def21:  A in omega;
-end;
 
 canceled;
 
@@ -2180,7 +2091,7 @@ A3:     (for B holds A <> succ B) implies Th[A]
         proof assume A4: for D holds A <> succ D;
          take B = A, C = {};
          thus B is_limit_ordinal by A4,ORDINAL1:42;
-         thus C in omega by Def5;
+         thus C in omega by ORDINAL1:def 12;
          thus A = B +^ C by Th44;
         end;
            (ex B st A = succ B) implies Th[A]
@@ -2191,7 +2102,7 @@ A5:       A = succ B;
 A6:       C is_limit_ordinal & D is natural & B = C +^ D by A2;
          take C, E = succ D;
          thus C is_limit_ordinal by A6;
-              D in omega & omega is_limit_ordinal by A6,Def5,Def21;
+          D in omega & omega is_limit_ordinal by A6,ORDINAL1:def 12,def 13;
          hence E in omega by ORDINAL1:41;
          thus A = C +^ E by A5,A6,Th45;
         end;

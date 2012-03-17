@@ -8,17 +8,18 @@
 environ
 
  vocabularies ARYTM_3, QC_LANG1, BINOP_1, FUNCT_1, LATTICES, ARYTM, RELAT_1,
-      BOOLE, NAT_LAT, REALSET1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, REALSET1,
+      BOOLE, NAT_LAT, REALSET1, ORDINAL2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, ORDINAL1,
+      XREAL_0, REALSET1,
       STRUCT_0, NAT_1, LATTICES, BINOP_1, RELAT_1, FUNCT_1, XXREAL_0;
- constructors NAT_1, LATTICES, BINOP_1, NEWTON, PARTFUN1, MEMBERED, REALSET1,
-      XXREAL_0;
+ constructors PARTFUN1, BINOP_1, FINSET_1, XXREAL_0, XREAL_0, NAT_1, MEMBERED,
+      REALSET1, LATTICES, ORDINAL2;
  registrations FINSET_1, STRUCT_0, RELSET_1, LATTICES, NAT_1, MEMBERED,
-      ORDINAL2;
+      ARYTM_3, ORDINAL2, ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE;
+ definitions LATTICES, BINOP_1, REALSET1;
  theorems NEWTON, ZFMISC_1, LATTICES, FUNCT_1, FUNCT_2, XBOOLE_1, RELAT_1;
  schemes BINOP_1, BINOP_2, SUBSET_1;
- definitions LATTICES, BINOP_1, REALSET1;
 
 begin :: Auxiliary Theorems
 
@@ -289,7 +290,7 @@ theorem
  thus A1:hcflat.(q,lcmlat.(q,p))=hcflat.(q,s)
                               .=q"/\"s
                               .=q by Lm6;
- thus A2:hcflat.(lcmlat.(p,q),q)=hcflat.(p"\/"q,q) by LATTICES:def 1
+ thus A2:hcflat.(lcmlat.(p,q),q)=hcflat.(p"\/"q,q)
                               .=q"/\"(q"\/"p) by LATTICES:def 2
                               .=q by Lm6;
  thus hcflat.(q,lcmlat.(p,q))=q by A1,Th61;
@@ -301,7 +302,7 @@ theorem
   lcmlat.(q,hcflat.(p,q))=q & lcmlat.(hcflat.(q,p),q)=q
  proof
  set r=p"/\"q;
- thus A1:lcmlat.(q,hcflat.(q,p))=lcmlat.(q,q"/\"p) by LATTICES:def 2
+ thus A1:lcmlat.(q,hcflat.(q,p))=lcmlat.(q,q"/\"p)
                               .=(p"/\"q)"\/"q by LATTICES:def 1
                               .=q by Lm5;
  thus A2:lcmlat.(hcflat.(p,q),q)=lcmlat.(r,q)
@@ -380,6 +381,17 @@ definition
   func @k -> NatPlus equals
     k;
   coherence;
+end;
+
+registration
+  cluster -> natural Element of NATPLUS;
+coherence
+proof
+  let x be Element of NATPLUS;
+  reconsider x as Element of NAT;
+  x is natural;
+  hence thesis;
+end;
 end;
 
  reserve m,n for NatPlus;
@@ -651,26 +663,26 @@ A4:  dom lcmlat = [:NAT,NAT:] by FUNCT_2:def 1;
   end;
   hcflatplus = hcflat||NATPLUS
   proof
-   A9: dom hcflatplus = dom hcflat /\ [:NATPLUS,NATPLUS:]
+   A8: dom hcflatplus = dom hcflat /\ [:NATPLUS,NATPLUS:]
     proof
-     A10: dom hcflatplus = [:NATPLUS,NATPLUS:] by FUNCT_2:def 1;
-     A11: dom hcflat = [:NAT,NAT:] by FUNCT_2:def 1;
+     A9: dom hcflatplus = [:NATPLUS,NATPLUS:] by FUNCT_2:def 1;
+     A10: dom hcflat = [:NAT,NAT:] by FUNCT_2:def 1;
      [:NATPLUS,NATPLUS:] c= [:NAT,NAT:] by ZFMISC_1:119;
-     hence thesis by A10,A11,XBOOLE_1:28;
+     hence thesis by A9,A10,XBOOLE_1:28;
     end;
     for x being set st x in dom hcflatplus holds hcflatplus.x = hcflat.x
     proof let x be set;
     assume x in dom hcflatplus;
-    then A12: x in [:NATPLUS,NATPLUS:] by FUNCT_2:def 1;
-    then consider y1,y2 being set such that A13: [y1,y2]=x by ZFMISC_1:102;
-    y1 in NATPLUS & y2 in NATPLUS by A12,A13,ZFMISC_1:106;
+    then A11: x in [:NATPLUS,NATPLUS:] by FUNCT_2:def 1;
+    then consider y1,y2 being set such that A12: [y1,y2]=x by ZFMISC_1:102;
+    y1 in NATPLUS & y2 in NATPLUS by A11,A12,ZFMISC_1:106;
     then reconsider n=y1,k=y2 as Nat;
-    A14: hcflat.(n,k) = n hcf k by Def3;
-    reconsider n=y1,k=y2 as NatPlus by A12,A13,ZFMISC_1:106;
-    hcflatplus.(n,k)= hcflat.(n,k) by A14,Def12;
-    hence thesis by A13;
+    A13: hcflat.(n,k) = n hcf k by Def3;
+    reconsider n=y1,k=y2 as NatPlus by A11,A12,ZFMISC_1:106;
+    hcflatplus.(n,k)= hcflat.(n,k) by A13,Def12;
+    hence thesis by A12;
    end;
-   hence thesis by A9,FUNCT_1:68;
+   hence thesis by A8,FUNCT_1:68;
   end;
  hence thesis by A1,Def16;
 end;

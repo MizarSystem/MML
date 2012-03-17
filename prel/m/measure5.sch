@@ -4,12 +4,11 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
-<ArticleID name="ZFMISC_1"/>
-<ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="SUPINF_1"/>
@@ -17,25 +16,25 @@
 <Scheme>
 <ArgTypes/>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="40">
-<Func kind="K" nr="64"/>
+<Func kind="K" nr="10">
+<Func kind="K" nr="53"/>
 </Func>
 </Typ>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="40">
-<Func kind="K" nr="64"/>
+<Func kind="K" nr="10">
+<Func kind="K" nr="53"/>
 </Func>
 </Typ>
 <Not>
 <And>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="57"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <And>
 <Not>
@@ -67,9 +66,9 @@
 </And>
 </For>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="57"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <And>
 <Not>

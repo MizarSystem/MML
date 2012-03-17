@@ -6,15 +6,16 @@
 
 environ
 
- vocabularies ARYTM_3, INT_1, ARYTM_1, ABSVALUE, FILTER_0, INT_2, ARYTM;
- notations SUBSET_1, NUMBERS, XCMPLX_0, ORDINAL1, REAL_1, INT_1, NAT_1,
-      COMPLEX1, XXREAL_0;
- constructors REAL_1, NAT_1, RAT_1, COMPLEX1, XXREAL_0;
- registrations INT_1;
+ vocabularies ARYTM_3, INT_1, ARYTM_1, ABSVALUE, FILTER_0, INT_2, ARYTM,
+      ORDINAL2, XREAL_0;
+ notations SUBSET_1, NUMBERS, XCMPLX_0, ORDINAL1, ORDINAL2, REAL_1,
+      INT_1, NAT_1, COMPLEX1, XXREAL_0;
+ constructors XXREAL_0, REAL_1, NAT_1, INT_1, COMPLEX1, ORDINAL2;
+ registrations INT_1, ARYTM_3, NAT_1;
  requirements REAL, NUMERALS, SUBSET, ARITHM;
  theorems INT_1, REAL_1, ABSVALUE, NAT_1, XCMPLX_1, XREAL_1, COMPLEX1,
-      XXREAL_0;
- schemes REAL_1;
+      XXREAL_0, ORDINAL2, XCMPLX_0, ORDINAL1;
+ schemes REAL_1, NAT_1;
 
 begin
 
@@ -35,7 +36,7 @@ A3:   abs a = -a by ABSVALUE:def 1;
   end;
  end;
 
- reserve a,b,c,d,e,f,g,h,z for Nat;
+ reserve a,b,c,d,e,f,g,h,z for natural number;
 
 canceled 2;
 
@@ -45,7 +46,7 @@ theorem
      0 divides a implies a = 0
      proof
       assume 0 divides a;
-      then ex b st a = 0*b by NAT_1:def 3;
+      then ex b being Nat st a = 0*b by NAT_1:def 3;
       hence thesis;
      end;
     hence thesis;
@@ -70,8 +71,9 @@ theorem
      proof
       assume A3: (a lcm b) = 0;
 A4:   a divides a implies a divides a*b by NAT_1:56;
+A5:a*b is Nat by ORDINAL1:def 13;
       b divides b implies b divides b*a by NAT_1:56;
-      then 0 divides a*b by A3,A4,NAT_1:def 4;
+      then 0 divides a*b by A3,A4,A5,NAT_1:def 4;
       then a*b = 0 by Th3;
       hence thesis by XCMPLX_1:6;
      end;
@@ -93,48 +95,54 @@ theorem
 theorem
   a*b = (a lcm b)*(a hcf b)
    proof
-    A1: a<>0 & b<>0 implies a*b = (a lcm b)*(a hcf b)
+     A1:a*b is Nat by ORDINAL1:def 13;
+     A2: a<>0 & b<>0 implies a*b = (a lcm b)*(a hcf b)
      proof
-      assume A2: a<>0 & b<>0;
-A3:   a divides a implies a divides a*b by NAT_1:56;
+      assume A3: a<>0 & b<>0;
+A4:   a divides a implies a divides a*b by NAT_1:56;
          b divides b implies b divides b*a by NAT_1:56;
-      then (a lcm b) divides a*b by A3,NAT_1:def 4;
-      then consider c such that A4: a*b = (a lcm b)*c by NAT_1:def 3;
-      A5: a divides (a lcm b) & b divides (a lcm b) by NAT_1:def 4;
-      then consider d such that A6: (a lcm b) = a*d by NAT_1:def 3;
-      consider e such that A7: (a lcm b) = b*e by A5,NAT_1:def 3;
-      a*b = a*(c*d) by A4,A6;
-      then A8: b = c*d by A2,XCMPLX_1:5;
-      a*b = b*(c*e) by A4,A7;
-      then a = c*e by A2,XCMPLX_1:5;
-      then A9:c divides a & c divides b by A8,NAT_1:def 3;
-         f divides a & f divides b implies f divides c
+      then (a lcm b) divides a*b by A1,A4,NAT_1:def 4;
+      then consider c being Nat such that
+      A5: a*b = (a lcm b)*c by NAT_1:def 3;
+      A6: a divides (a lcm b) & b divides (a lcm b) by NAT_1:def 4;
+      then consider d being Nat such that
+      A7: (a lcm b) = a*d by NAT_1:def 3;
+      consider e being Nat such that A8: (a lcm b) = b*e by A6,NAT_1:def 3;
+      a*b = a*(c*d) by A5,A7;
+      then A9: b = c*d by A3,XCMPLX_1:5;
+      a*b = b*(c*e) by A5,A8;
+      then a = c*e by A3,XCMPLX_1:5;
+      then A10:c divides a & c divides b by A9,NAT_1:def 3;
+      for f being Nat holds
+      f divides a & f divides b implies f divides c
        proof
-        assume A10: f divides a & f divides b;
-        then consider g such that A11: a = f*g by NAT_1:def 3;
-        consider h such that A12: b = f*h by A10,NAT_1:def 3;
-        A13: b*g = g*h*f by A12;
-           a*h = g*h*f by A11;
-        then a divides g*h*f & b divides g*h*f by A13,NAT_1:def 3;
+         let f be Nat;
+        assume A11: f divides a & f divides b;
+        then consider g being Nat such that A12: a = f*g by NAT_1:def 3;
+        consider h being Nat such that A13: b = f*h by A11,NAT_1:def 3;
+        A14: b*g = g*h*f by A13;
+           a*h = g*h*f by A12;
+        then a divides g*h*f & b divides g*h*f by A14,NAT_1:def 3;
         then (a lcm b) divides g*h*f by NAT_1:def 4;
-        then consider z such that A14: g*h*f = (a lcm b)*z by NAT_1:def 3;
-        A15: c*(a lcm b) = (g*(h*f))*f by A4,A11,A12
-                     .= (a lcm b)*z*f by A14
+        then consider z being Nat such that A15: g*h*f = (a lcm b)*z
+        by NAT_1:def 3;
+        A16: c*(a lcm b) = (g*(h*f))*f by A5,A12,A13
+                     .= (a lcm b)*z*f by A15
                      .= (z*f)*(a lcm b);
-        (a lcm b) <> 0 by A2,Th4;
-        then c = f*z by A15,XCMPLX_1:5;
+        (a lcm b) <> 0 by A3,Th4;
+        then c = f*z by A16,XCMPLX_1:5;
         hence thesis by NAT_1:def 3;
        end;
-      hence thesis by A4,A9,NAT_1:def 5;
+      hence thesis by A5,A10,NAT_1:def 5;
      end;
      a = 0 or b = 0 implies a*b = (a lcm b)*(a hcf b)
      proof
-      assume A16: a = 0 or b = 0;
+      assume A17: a = 0 or b = 0;
       then a*b = 0*(a hcf b)
-      .= (a lcm b)*(a hcf b) by A16,Th4;
+      .= (a lcm b)*(a hcf b) by A17,Th4;
       hence thesis;
      end;
-    hence thesis by A1;
+    hence thesis by A2;
    end;
 
  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -142,7 +150,7 @@ A3:   a divides a implies a divides a*b by NAT_1:56;
  ::                              LCM,HCF                                 ::
  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
- reserve m,n for Nat;
+ reserve m,n for natural number;
  reserve a,b,c,d,a1,b1,a2,b2,k,l for Integer;
 
 canceled;
@@ -162,7 +170,7 @@ theorem
    end;
 
 theorem
-  Th9: not -1 is Nat by Th8;
+   not -1 is Nat by Th8;
 
 theorem
   Th10: 0 divides a iff a = 0
@@ -352,7 +360,7 @@ theorem
      (abs(a)) divides (abs(b)) implies a divides b
      proof
       assume (abs(a)) divides (abs(b));
-      then consider m such that A3: abs(b) = abs(a)*m by NAT_1:def 3;
+      then consider m being Nat such that A3: abs(b) = abs(a)*m by NAT_1:def 3;
       A4: a>=0 implies a divides b
        proof
         assume a>=0;
@@ -367,7 +375,7 @@ theorem
          proof
           assume b<0;
           then -b = a*m by A5,ABSVALUE:def 1;
-          then b = -(a*m) .= a*(-m);
+          then b = a*(-m);
           hence thesis by INT_1:def 9;
          end;
         hence thesis by A6;
@@ -386,7 +394,6 @@ theorem
          proof
           assume b<0;
           then -b = -(a*m) by A7,ABSVALUE:def 1;
-          then -(-b) = a*m;
           hence thesis by INT_1:def 9;
          end;
         hence thesis by A8;
@@ -419,16 +426,15 @@ theorem
   Th25: a divides (a lcm' b)
   proof
     abs(a) divides (abs(a) lcm abs(b)) by NAT_1:def 4;
-    then consider m such that A1: (abs(a) lcm abs(b)) = abs(a)*m by NAT_1:def 3
-;
+    then consider m being Nat such that
+A1: (abs(a) lcm abs(b)) = abs(a)*m by NAT_1:def 3;
 A2: a>=0 implies a divides (a lcm' b)
     proof
       assume A3: a>=0;
       reconsider c = (abs(a) lcm abs(b)) as Integer;
       reconsider a1 = m as Integer;
       c = a*a1 by A1,A3,ABSVALUE:def 1;
-      then a divides c by INT_1:def 9;
-      hence thesis;
+      hence thesis by INT_1:def 9;
      end;
      a<0 implies a divides (a lcm' b)
      proof
@@ -436,8 +442,7 @@ A2: a>=0 implies a divides (a lcm' b)
       reconsider c = abs(a) lcm abs(b) as Integer;
       reconsider b1 = m as Integer;
       c = (-a)*b1 by A1,A4,ABSVALUE:def 1 .= a*(-b1);
-      then a divides c by INT_1:def 9;
-      hence thesis;
+      hence thesis by INT_1:def 9;
     end;
     hence thesis by A2;
   end;
@@ -452,21 +457,19 @@ theorem
     then A2: (abs a) divides (abs c) by Th21;
     (abs b) divides (abs c) by A1,Th21;
     then (abs(a) lcm abs(b)) divides (abs(c)) by A2,NAT_1:def 4;
-    then consider m such that
+    then consider m being Nat such that
 A3: abs(c) = (abs(a) lcm abs(b))*m by NAT_1:def 3;
     A4: c>=0 implies (a lcm' b) divides c
      proof
       assume c>=0;
       then abs(c) = c by ABSVALUE:def 1;
-      then c = (a lcm' b)*m by A3;
-      hence thesis by INT_1:def 9;
+      hence thesis by A3,INT_1:def 9;
      end;
      c <0 implies (a lcm' b) divides c
      proof
       assume c <0;
       then abs(c) = -c by ABSVALUE:def 1;
-      then -c = (a lcm' b)*m by A3;
-      then c = -((a lcm' b)*m) .= (a lcm' b)*(-m);
+      then c = (a lcm' b)*(-m) by A3;
       hence thesis by INT_1:def 9;
      end;
     hence thesis by A4;
@@ -490,10 +493,10 @@ theorem
 canceled;
 
 theorem
-  Th31: (a gcd b) divides a
+  Th31: a gcd b divides a
    proof
     (abs(a) hcf abs(b)) divides (abs(a)) by NAT_1:def 5;
-    then consider m such that
+    then consider m being Nat such that
 A1: abs(a) = (abs(a) hcf abs(b))*m by NAT_1:def 3;
     A2: a>=0 implies (a gcd b) divides a
      proof
@@ -501,8 +504,7 @@ A1: abs(a) = (abs(a) hcf abs(b))*m by NAT_1:def 3;
       reconsider c = abs(a) hcf abs(b) as Integer;
       reconsider a1 = m as Integer;
          a = c*a1 by A1,A3,ABSVALUE:def 1;
-      then c divides a by INT_1:def 9;
-      hence thesis;
+      hence thesis by INT_1:def 9;
      end;
      a<0 implies (a gcd b) divides a
      proof
@@ -510,8 +512,7 @@ A1: abs(a) = (abs(a) hcf abs(b))*m by NAT_1:def 3;
       reconsider c = abs(a) hcf abs(b) as Integer;
       reconsider b1 = m as Integer;
       -(-a) = -(c*b1) by A1,A4,ABSVALUE:def 1 .= c*(-b1);
-      then c divides a by INT_1:def 9;
-      hence thesis;
+      hence thesis by INT_1:def 9;
      end;
     hence thesis by A2;
    end;
@@ -526,14 +527,13 @@ theorem
     then A2: (abs c) divides (abs a) by Th21;
     (abs c) divides (abs b) by A1,Th21;
     then (abs(c)) divides (abs(a) hcf abs(b)) by A2,NAT_1:def 5;
-    then consider m such that
+    then consider m being Nat such that
 A3: abs(a) hcf abs(b) = (abs c)*m by NAT_1:def 3;
     A4: c>=0 implies c divides (a gcd b)
      proof
       assume c>=0;
       then abs(c) = c by ABSVALUE:def 1;
-      then a gcd b = c*m by A3;
-      hence thesis by INT_1:def 9;
+      hence thesis by A3,INT_1:def 9;
      end;
      c <0 implies c divides (a gcd b)
      proof
@@ -625,7 +625,7 @@ b by A6,INT_1:def 9;
        a gcd b <>0 by A1,Th35;
     then 1 = (a1 gcd b1)*c by A8,XCMPLX_1:5;
     then a1 gcd b1 = 1 or a1 gcd b1 = -1 by INT_1:22;
-    then a1,b1 are_relative_prime by Def4,Th9;
+    then a1,b1 are_relative_prime by Def4,Th8;
     hence thesis by A2,A3;
    end;
 
@@ -694,40 +694,38 @@ a by Th31;
     then ((a*b gcd c) gcd a) divides c by A2,Th13;
     then ((a*b gcd c) gcd a) divides 1 by A1,A3,Th33;
     then (a*b gcd c) gcd a = 1 or (a*b gcd c) gcd a = -1 by Th17;
-    then a,(a*b gcd c) are_relative_prime by Def4,Th9;
+    then a,(a*b gcd c) are_relative_prime by Def4,Th8;
     then (a*b gcd c) divides b by A2,Th40;
     then (a*b gcd c) divides 1 by A1,A2,Th33;
     then a*b gcd c = 1 or a*b gcd c = -1 by Th17;
-    hence thesis by Def4,Th9;
+    hence thesis by Def4,Th8;
    end;
 
 ::***************************************************************************::
 ::                           PRIME NUMBERS                                   ::
 ::***************************************************************************::
 
- reserve p,p1,q,k,l for Nat;
+ reserve p,p1,q,k,l for natural number;
  reserve x for Real;
  reserve X for Subset of REAL;
 
-definition let p;
+definition let p be natural number;
   attr p is prime means :Def5: p>1 &
-  for n holds n divides p implies n = 1 or n = p;
+  for n being natural number holds n divides p implies n = 1 or n = p;
 end;
 
-definition let m,n;
+definition let m,n be natural number;
   pred m,n are_relative_prime means :Def6: m hcf n = 1;
   symmetry;
 end;
 
 canceled 2;
 
-theorem
+theorem Th44:
   2 is prime
    proof
-    thus 2>1 & for n holds n divides 2 implies n = 1 or n = 2
-     proof
-      thus 2>1;
-      let n;
+    thus 2>1;
+      let n be natural number;
       assume A1: n divides 2;
       then n<>0 by Th3;
       then n>0 by NAT_1:19;
@@ -738,12 +736,11 @@ theorem
       then A3: n+-1+1 = 1 or (n+-1)+1>=1+1 by XREAL_1:8;
       n<=2 by A1,NAT_1:54;
       hence thesis by A3,XXREAL_0:1;
-     end;
    end;
 
 canceled;
 
-theorem
+theorem Th46:
   not 4 is prime
   proof
     ex n st n divides 4 & n<>1 & n<>4
@@ -754,6 +751,17 @@ theorem
     end;
     hence thesis by Def5;
   end;
+
+registration
+  cluster prime (natural number);
+  existence by Th44;
+  cluster non zero non prime (natural number);
+  existence
+  proof
+    take 4;
+    thus thesis by Th46,XCMPLX_0:def 3;
+  end;
+end;
 
 theorem
   p is prime & q is prime implies p,q are_relative_prime or p = q
@@ -766,74 +774,26 @@ theorem
     hence thesis;
    end;
 
-scheme Ind1 { a() -> Nat,P[Nat] } : for k st k>=a() holds P[k] provided
-   A1: P[a()] and
-A2:  for k st k>=a() & P[k] holds P[k+1]
-proof
-    let k;
-    assume k>=a();
-    then k-a()>=a()-a() by XREAL_1:11;
-    then reconsider m = k-a() as Nat by INT_1:16;
-    defpred P1[Real] means ex m st P[m+a()] & m = $1;
-    consider X such that A3: x in X iff P1[x] from REAL_1:sch 1;
-       P[0+a()] by A1;
-    then A4: 0 in X by A3;
-    for x st x in X holds x+1 in X
-     proof
-      let x;
-      assume x in X;
-      then consider m such that A5: P[m+a()] & m = x by A3;
-      m+a()>=a() & P[m+a()] implies P[m+a()+1] by A2;
-      then A6: m+a()>=a() & P[m+a()] implies P[m+1+a()];
-      m>=0 by NAT_1:18;
-      then m+a()>=0+a() by XREAL_1:8;
-      hence thesis by A3,A5,A6;
-     end;
-    then m in X by A4,NAT_1:2;
-    then ex n st P[n+a()] & n = m by A3;
-    hence P[k];
-   end;
-
-scheme CompInd1 { a() -> Nat,P[Nat] } : for k st k>=a() holds P[k] provided
-   A1: for k st k>=a() & (for n st n>=a() & n<k holds P[n]) holds P[k]
-proof
-     defpred P1[Nat] means for n st (n>=a() & n<$1) holds P[n];
-    A2: P1[a()];
-    A3: for k st k>=a() holds P1[k] implies P1[k+1]
-     proof
-      let k;
-      assume k>=a();
-      assume A4: for n st n>=a() & n<k holds P[n];
-      let n;
-      assume A5: n>=a() & n<k+1;
-      then n<=k by NAT_1:38;
-      then n<k or n = k by REAL_1:def 5;
-      hence thesis by A1,A4,A5;
-     end;
-    let k;
-    A6: for k st k>=a() holds P1[k] from Ind1(A2,A3);
-    assume A7: k>=a();
-    then for n st (n>=a() & n<k) holds P[n] by A6;
-    hence P[k] by A1,A7;
-   end;
-
 theorem
-  l>=2 implies ex p st p is prime & p divides l
+  l>=2 implies ex p being Nat st p is prime & p divides l
    proof
     assume A1: l>=2;
-    defpred P[Nat] means ex p st p is prime & p divides $1;
-    A2: for k st k>=2 holds (for n st n>=2 holds n<k implies P[n])
+    defpred P[natural number] means ex p st p is prime & p divides $1;
+    A2: for k being Nat st k>=2 holds
+    (for n being Nat st n>=2 holds n<k implies P[n])
     implies P[k]
      proof
-      let k; assume A3: k>=2;
+      let k be Nat; assume A3: k>=2;
       then A4: k+1-1>1+1-1 by NAT_1:38;
-      assume A5: for n st n>=2 holds n<k implies (ex p st p is prime & p
- divides n);
-         not k is prime implies ex p st p is prime & p divides k
+      assume A5: for n being Nat st n>=2 holds n<k implies
+      ex p st p is prime & p divides n;
+      not k is prime implies ex p being Nat st p is prime & p divides k
        proof
         assume not k is prime;
-        then consider m such that A6: m divides k & m<>1 & m<>k by A4,Def5;
-           m>=2 & m<k
+        then consider m being natural number such that
+        A6: m divides k & m<>1 & m<>k by A4,Def5;
+        A7: m is Nat by ORDINAL1:def 13;
+        m>=2 & m<k
          proof
           thus m>=2
            proof
@@ -848,12 +808,19 @@ theorem
             then m<=k by A6,NAT_1:54;
             hence thesis by A6,REAL_1:def 5;
          end;
-        then consider p1 such that A7: p1 is prime & p1 divides m by A5;
+        then consider p1 such that
+        A8: p1 is prime & p1 divides m by A5,A7;
         take p1;
-        thus thesis by A6,A7,NAT_1:51;
+        p1 is Nat by ORDINAL1:def 13;
+        hence thesis by A6,A8,NAT_1:51;
        end;
       hence thesis;
      end;
-     for k st k>=2 holds P[k] from CompInd1 (A2);
-    hence thesis by A1;
+     A9: l is Nat by ORDINAL1:def 13;
+     for k being Nat st k>=2 holds P[k] from NAT_1:sch 10(A2);
+     then consider p such that
+     A10:p is prime & p divides l by A1,A9;
+     reconsider p as Nat by ORDINAL1:def 13;
+     take p;
+     thus thesis by A10;
    end;

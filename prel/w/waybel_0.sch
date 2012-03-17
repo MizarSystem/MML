@@ -34,7 +34,7 @@
 <And>
 <Not>
 <And>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="26">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Fraenkel>
@@ -75,7 +75,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="19">
+<Pred kind="R" nr="21">
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -116,7 +116,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="19">
+<Pred kind="R" nr="21">
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -137,7 +137,7 @@
 </For>
 </Not>
 <Not>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="26">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Fraenkel>

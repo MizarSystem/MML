@@ -11,16 +11,16 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="ORDERS_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ORDERS_2"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="FILTER_0"/>
 <ArticleID name="EQREL_1"/>
+<ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
-<ArticleID name="ORDERS_1"/>
-<ArticleID name="ORDERS_2"/>
 <ArticleID name="LATTICE3"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="YELLOW_0"/>
@@ -196,15 +196,15 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="49"/>
+<Adjective nr="16" value="false"/>
+<Adjective nr="20"/>
 <Adjective nr="53"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Pred kind="R" nr="33">
+<Pred kind="R" nr="21">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="151">
 <Func kind="F" nr="1"/>
@@ -249,11 +249,11 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="47"/>
-<Adjective nr="48"/>
-<Adjective nr="49"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
 <Adjective nr="51"/>
 <Adjective nr="52"/>
 <Adjective nr="53"/>
@@ -304,15 +304,15 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="49"/>
+<Adjective nr="16" value="false"/>
+<Adjective nr="20"/>
 <Adjective nr="53"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Pred kind="R" nr="33">
+<Pred kind="R" nr="21">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="150">
 <Func kind="F" nr="1"/>
@@ -357,11 +357,11 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="47"/>
-<Adjective nr="48"/>
-<Adjective nr="49"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
 <Adjective nr="51"/>
 <Adjective nr="52"/>
 <Adjective nr="53"/>
@@ -412,19 +412,19 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="13" value="false"/>
+<Adjective nr="16" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="13" value="false"/>
+<Adjective nr="16" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="13" value="false"/>
+<Adjective nr="16" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -474,7 +474,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="67">
+<Func kind="K" nr="69">
 <Func kind="U" nr="1">
 <Func kind="K" nr="169">
 <Func kind="F" nr="1"/>

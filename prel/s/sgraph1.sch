@@ -2,15 +2,14 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="ORDINAL1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
-<ArticleID name="TARSKI"/>
-<ArticleID name="ORDINAL1"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -33,7 +32,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="99">
+<Func kind="K" nr="86">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -47,10 +46,10 @@
 </For>
 <Pred kind="P" nr="1">
 <Func kind="G" nr="3">
-<Func kind="K" nr="1"/>
-<Func kind="K" nr="10">
-<Func kind="K" nr="98">
-<Func kind="K" nr="1"/>
+<Func kind="K" nr="22"/>
+<Func kind="K" nr="31">
+<Func kind="K" nr="85">
+<Func kind="K" nr="22"/>
 </Func>
 </Func>
 </Func>
@@ -68,7 +67,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="99">
+<Func kind="K" nr="86">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -90,21 +89,21 @@
 <Not>
 <Pred kind="P" nr="1">
 <Func kind="G" nr="3">
-<Func kind="K" nr="2">
+<Func kind="K" nr="23">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="30">
+<Func kind="K" nr="11">
 <Var nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="10">
-<Func kind="K" nr="98">
-<Func kind="K" nr="2">
+<Func kind="K" nr="31">
+<Func kind="K" nr="85">
+<Func kind="K" nr="23">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="30">
+<Func kind="K" nr="11">
 <Var nr="2"/>
 </Func>
 </Func>
@@ -133,7 +132,7 @@
 </Pred>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="98">
+<Func kind="K" nr="85">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -148,10 +147,10 @@
 </Pred>
 </Not>
 <For>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="6">
-<Func kind="K" nr="98">
+<Func kind="K" nr="27">
+<Func kind="K" nr="85">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -162,11 +161,11 @@
 <And>
 <Pred kind="R" nr="1">
 <Var nr="3"/>
-<Func kind="K" nr="2">
+<Func kind="K" nr="23">
 <Func kind="U" nr="3">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="30">
+<Func kind="K" nr="11">
 <Var nr="2"/>
 </Func>
 </Func>

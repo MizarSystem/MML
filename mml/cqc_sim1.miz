@@ -13,12 +13,12 @@ environ
       SETFAM_1, RELAT_1, RELSET_1, FUNCT_1, FUNCT_2, BINOP_1, PARTFUN1,
       XXREAL_0, FUNCOP_1, FINSEQ_1, FINSET_1, FINSUB_1, FRAENKEL, NAT_1,
       SETWISEO, QC_LANG1, QC_LANG2, QC_LANG3, CQC_LANG, FUNCT_4, RECDEF_1;
- constructors DOMAIN_1, SETFAM_1, FUNCOP_1, FRAENKEL, NAT_1, SETWISEO,
-      QC_LANG3, CQC_LANG, FUNCT_4, PARTFUN1, XREAL_0, MEMBERED, RELAT_2,
-      RECDEF_1, BINOP_1, XXREAL_0;
+ constructors SETFAM_1, RELAT_2, PARTFUN1, DOMAIN_1, BINOP_1, FUNCOP_1,
+      FUNCT_4, SETWISEO, FRAENKEL, XXREAL_0, NAT_1, MEMBERED, RECDEF_1,
+      QC_LANG3, CQC_LANG;
  registrations SUBSET_1, RELSET_1, CQC_LANG, QC_LANG1, FINSUB_1, FUNCOP_1,
       FINSEQ_1, ARYTM_3, MEMBERED, FUNCT_2, PARTFUN1, ORDINAL2, XREAL_0,
-      XXREAL_0;
+      XXREAL_0, ORDINAL1;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
  definitions TARSKI, XBOOLE_0, BINOP_1, FUNCOP_1, QC_LANG3;
  theorems ZFMISC_1, DOMAIN_1, FINSEQ_1, CQC_LANG, QC_LANG1, PARTFUN1, QC_LANG3,
@@ -118,15 +118,14 @@ A3:   z in dom(g +* ({x} --> y)) & z in A \ {x} & u = (g +* ({x} --> y)).z
     then u = g.z & z in dom g by A3,FUNCT_4:12,13;
     then u <> y by A1,A3,FUNCT_1:def 12;
 then A4:  not u in {y} by TARSKI:def 1;
-       A \ {x} c= A by XBOOLE_1:36;
-    then (g +* ({x} --> y)).:(A \ {x}) c= (g +* ({x} --> y)).:
+    (g +* ({x} --> y)).:(A \ {x}) c= (g +* ({x} --> y)).:
 A by RELAT_1:156;
     hence u in (g +* ({x} --> y)).:A \ {y} by A2,A4,XBOOLE_0:def 4;
   end;
  let u be set;
  assume
 A5: u in (g +* ({x} --> y)).:A \ {y};
-  then u in (g +* ({x} --> y)).:A by XBOOLE_0:def 4;
+  then u in (g +* ({x} --> y)).:A;
   then consider z being set such that
 A6: z in dom(g +* ({x} --> y)) & z in A & u = (g +* ({x} --> y)).z
     by FUNCT_1:def 12;
@@ -1563,14 +1562,6 @@ definition let p; let X be Subset of
    holds [q,k+1,K \/ {x}, f+*({x} --> x.k)] in X;
 end;
 
-definition let D be non empty set; let x be Element of D;
- redefine func {x} -> Element of Fin D;
- coherence
-  proof
-   thus {x} is Element of Fin D;
-  end;
-end;
-
 definition let p;
  func SepQuadruples p -> Subset of
        [:CQC-WFF,NAT,Fin bound_QC-variables,
@@ -1622,7 +1613,7 @@ MCART_1:84;
         bound_QC-variables,bound_QC-variables by FUNCT_2:def 1,RELSET_1:11;
        then reconsider ff = f+*({x} --> x.k) as Element of
          Funcs(bound_QC-variables,bound_QC-variables) by FUNCT_2:11;
-           [q,k+1,K \/ {x}, ff] in B by A1,MCART_1:84;
+           [q,k+1,K \/ {.x .}, ff] in B by A1,MCART_1:84;
         hence [q,k+1,K \/ {x},f+*({x} --> x.k)] in B;
       end;
      then A6: B in A;
@@ -1757,11 +1748,9 @@ A5: not ex r,l st k = l+QuantNbr r & [r '&' q,l,K,f] in SepQuadruples p and
 A6: not ex x,l,h st l+1 = k & h +*({x} --> x.l) = f &
      ([All(x,q),l,K,h] in SepQuadruples p or
       [All(x,q),l,K\{x},h] in SepQuadruples p);
-       SepQuadruples p \ {[q,k,K,f]} c= SepQuadruples p by XBOOLE_1:36;
-    then reconsider Y = SepQuadruples p \ {[q,k,K,f]} as
+    reconsider Y = SepQuadruples p \ {[q,k,K,f]} as
      Subset of [:CQC-WFF,NAT,Fin bound_QC-variables,
-                    Funcs(bound_QC-variables,bound_QC-variables):] by
-XBOOLE_1:1;
+                    Funcs(bound_QC-variables,bound_QC-variables):];
        Y is_Sep-closed_on p
      proof
 A7:    SepQuadruples(p) is_Sep-closed_on p by Def13;
@@ -1836,10 +1825,9 @@ provided
 proof
 A5: SepQuadruples p() is_Sep-closed_on p() by Def13;
   set Y = { [p,k,K,f] : P[p,k,K,f] };
-     SepQuadruples p() /\ Y c= SepQuadruples p() by XBOOLE_1:17;
-  then reconsider X = SepQuadruples p() /\ Y
+  reconsider X = SepQuadruples p() /\ Y
    as Subset of [:CQC-WFF,NAT,Fin bound_QC-variables,
-                  Funcs(bound_QC-variables,bound_QC-variables):] by XBOOLE_1:1;
+                  Funcs(bound_QC-variables,bound_QC-variables):];
      X is_Sep-closed_on p()
    proof
 A6:  [p(),index p(),{}.bound_QC-variables,id(bound_QC-variables)]
@@ -1892,7 +1880,7 @@ A19:   P[p,i,L,h];
       Element of Funcs(bound_QC-variables,bound_QC-variables) by FUNCT_2:11;
         All(x,q) = p & k = i & K = L & f = h by A18,MCART_1:33;
      then P[q,k+1,K \/ {x},g] by A4,A17,A19;
-then A20:   [q,k+1,K \/ {x},f+*({x} --> x.k)] in Y;
+then A20:   [q,k+1,K \/ {.x .},f+*({x} --> x.k)] in Y;
         [q,k+1,K \/ {x},f+*({x} --> x.k)] in SepQuadruples p() by A5,A17,Def12;
     hence [q,k+1,K \/ {x}, f+*({x} --> x.k)] in X by A20,XBOOLE_0:def 3;
    end;
@@ -1960,7 +1948,7 @@ proof
       end;
          now given x,l,h such that l+1 = k & h +*({x} --> x.l) = f and
   A8:    [All(x,q),l,K,h] in SepQuadruples VERUM or
-        [All(x,q),l,K\{x},h] in SepQuadruples VERUM;
+        [All(x,q),l,K\{.x .},h] in SepQuadruples VERUM;
            All(x,q) is_subformula_of VERUM by A8,Th36;
         then All(x,q) = VERUM by QC_LANG2:99;
        hence contradiction by QC_LANG1:51,def 20;
@@ -2011,7 +1999,7 @@ A1: P!l is atomic by QC_LANG1:def 17;
       end;
          now given x,i,h such that i+1 = k & h +*({x} --> x.i) = f and
   A9:    [All(x,q),i,K,h] in SepQuadruples(P!l) or
-        [All(x,q),i,K\{x},h] in SepQuadruples(P!l);
+        [All(x,q),i,K\{.x .},h] in SepQuadruples(P!l);
            All(x,q) is_subformula_of P!l by A9,Th36;
         then All(x,q) = P!l by QC_LANG2:100;
         then P!l is universal by QC_LANG1:def 20;
@@ -2080,7 +2068,7 @@ A4:    P[q '&' r, k, K,f];
   now let q,x,k,K,f such that [All(x,q),k,K,f] in SepQuadruples p;
    assume
 A6:  P[All(x,q),k,K,f];
-   thus P[q,k+1,K \/ {x},f+*({x} --> x.k)]
+   thus P[q,k+1,K \/ {.x .},f+*({x} --> x.k)]
    proof
     let i;
     assume x.i in (f+*({x} --> x.k)).:(K \/ {x});
@@ -2133,7 +2121,7 @@ A5:    P[q '&' r, k, K,f];
   now let q,x,k,K,f such that [All(x,q),k,K,f] in SepQuadruples p;
    assume
 A7:  P[All(x,q),k,K,f];
-   thus P[q,k+1,K \/ {x},f+*({x} --> x.k)]
+   thus P[q,k+1,K \/ {.x .},f+*({x} --> x.k)]
    proof
     let i;
 A8: (f+*({x} --> x.k)).:still_not-bound_in p
@@ -2313,7 +2301,7 @@ A28:     still_not-bound_in All(x, r) = still_not-bound_in r \ {x}
           by QC_LANG3:16;
 then A29:   not x.m in f.:(still_not-bound_in r \ {x}) by A27,Th43;
 A30:      UNIVERSAL(x,g).(m,f) = All(x.m,r'') by Def3;
-A31:     [r,m+1,K \/ {x}, f+*({x} --> x.m)] in SepQuadruples p by A27,Th34;
+A31:     [r,m+1,K \/ {.x .}, f+*({x} --> x.m)] in SepQuadruples p by A27,Th34;
        thus f.:(still_not-bound_in All(x, r))
         = fm.:(still_not-bound_in r \ {x}) by A28,Th3
        .= fm.:(still_not-bound_in r) \ {x.m} by A29,Th4

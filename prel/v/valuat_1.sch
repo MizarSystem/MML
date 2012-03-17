@@ -11,7 +11,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -34,27 +33,27 @@
 </Typ>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="111"/>
-<Func kind="K" nr="112"/>
+<Func kind="K" nr="100"/>
+<Func kind="K" nr="101"/>
 </Typ>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="111"/>
-<Func kind="K" nr="112"/>
+<Func kind="K" nr="100"/>
+<Func kind="K" nr="101"/>
 </Typ>
 <Typ kind="M" nr="11">
 <Cluster/>
-<Func kind="K" nr="112"/>
+<Func kind="K" nr="101"/>
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="199">
+<Func kind="K" nr="187">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="11">
 <Cluster/>
-<Func kind="K" nr="112"/>
+<Func kind="K" nr="101"/>
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="199">
+<Func kind="K" nr="187">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -63,9 +62,9 @@
 <For>
 <Typ kind="M" nr="11">
 <Cluster/>
-<Func kind="K" nr="112"/>
+<Func kind="K" nr="101"/>
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="199">
+<Func kind="K" nr="187">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -74,8 +73,8 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="111"/>
-<Func kind="K" nr="112"/>
+<Func kind="K" nr="100"/>
+<Func kind="K" nr="101"/>
 </Typ>
 <Not>
 <And>
@@ -87,14 +86,14 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="169">
-<Func kind="K" nr="112"/>
+<Func kind="K" nr="157">
+<Func kind="K" nr="101"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="169">
-<Func kind="K" nr="112"/>
+<Func kind="K" nr="157">
+<Func kind="K" nr="101"/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="4"/>
 <Var nr="2"/>
@@ -105,14 +104,14 @@
 </Not>
 </For>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="169">
-<Func kind="K" nr="112"/>
+<Func kind="K" nr="157">
+<Func kind="K" nr="101"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="169">
-<Func kind="K" nr="112"/>
+<Func kind="K" nr="157">
+<Func kind="K" nr="101"/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="5"/>
 <Func kind="F" nr="3"/>

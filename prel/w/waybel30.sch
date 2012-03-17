@@ -13,28 +13,27 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="ORDERS_1"/>
-<ArticleID name="ORDERS_2"/>
-<ArticleID name="RELAT_2"/>
-<ArticleID name="PARTFUN1"/>
-<ArticleID name="LATTICES"/>
-<ArticleID name="FUNCT_4"/>
-<ArticleID name="FILTER_0"/>
-<ArticleID name="EQREL_1"/>
-<ArticleID name="FILTER_1"/>
-<ArticleID name="LATTICE3"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="ORDERS_1"/>
+<ArticleID name="ORDERS_2"/>
+<ArticleID name="FUNCT_4"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
-<ArticleID name="FUNCT_5"/>
+<ArticleID name="LATTICES"/>
+<ArticleID name="EQREL_1"/>
+<ArticleID name="FILTER_0"/>
+<ArticleID name="FILTER_1"/>
+<ArticleID name="LATTICE3"/>
 <ArticleID name="YELLOW_3"/>
 <ArticleID name="WAYBEL_2"/>
 <ArticleID name="COMPTS_1"/>
@@ -47,12 +46,12 @@
 <Typ kind="G" nr="9">
 <Cluster>
 <Adjective nr="15"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="134"/>
+<Adjective nr="35"/>
+<Adjective nr="36"/>
+<Adjective nr="37"/>
+<Adjective nr="104"/>
+<Adjective nr="105"/>
+<Adjective nr="131"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

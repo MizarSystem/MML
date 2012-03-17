@@ -13,21 +13,21 @@ environ
       RLVECT_1, SEQ_1, SEQM_3, SGRAPH1, TREES_1, UPROOTS;
  notations TARSKI, XBOOLE_0, NUMBERS, SUBSET_1, XCMPLX_0, XXREAL_0, XREAL_0,
       DOMAIN_1, REAL_1, RELAT_1, PARTFUN1, FUNCT_1, FINSEQ_1, SEQ_1, CARD_1,
-      PBOOLE, CARD_FIL, FUNCT_2, GRAPH_5, ORDINAL1, ORDINAL2, POLYNOM1,
+      PBOOLE, FUNCT_2, GRAPH_5, ORDINAL1, POLYNOM1,
       UPROOTS, RELSET_1, FINSET_1, NAT_1, CQC_LANG, FUNCT_4, PRE_CIRC, SEQM_3,
       GLIB_000, GLIB_001, ABIAN, GLIB_002, GLIB_003;
- constructors GRAPH_5, DOMAIN_1, CARD_FIL, REAL_1, BINOP_2, CQC_LANG, PRE_CIRC,
-      UPROOTS, GLIB_002, GLIB_003, XXREAL_0, FUNCT_4;
+ constructors DOMAIN_1, FUNCT_4, XXREAL_0, REAL_1, BINOP_2, CQC_LANG,
+      PRE_CIRC, GRAPH_5, UPROOTS, GLIB_002, GLIB_003;
  registrations RELSET_1, FINSET_1, XREAL_0, INT_1, ABIAN, FINSEQ_1, NAT_1,
-      FUNCOP_1, CQC_LANG, JORDAN1D, MEMBERED, ORDINAL2, POLYNOM1, BAGORDER,
+      FUNCOP_1, CQC_LANG, JORDAN1D, MEMBERED, ORDINAL1, POLYNOM1, BAGORDER,
       RFINSEQ, GLIB_000, GLIB_001, GLIB_002, GLIB_003, XXREAL_0;
- definitions GLIB_000, GLIB_003;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
+ definitions GLIB_000, GLIB_003;
  theorems CARD_1, CARD_2, CQC_LANG, FINSEQ_1, FINSEQ_2, FINSEQ_3, FUNCOP_1,
       FUNCT_1, FUNCT_2, FUNCT_4, GLIB_000, GLIB_001, GLIB_003, GLIB_004,
       GRAPH_5, HEYTING3, INT_1, NAT_1, ORDINAL2, PBOOLE, PEPIN, POLYNOM1,
       REAL_1, RELAT_1, SEQ_1, SEQM_3, TARSKI, UPROOTS, XBOOLE_0, XBOOLE_1,
-      XREAL_0, ZFMISC_1, XREAL_1, XXREAL_0;
+      XREAL_0, ZFMISC_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes BINARITH, NAT_1, SUBSET_1, FINSEQ_1, FUNCT_1, RECDEF_1, GRAPH_5;
 
 begin ::Preliminary theorems
@@ -52,7 +52,7 @@ registration let x be set, y be natural number;
       end;
       suppose x <> {}; then
     A1: rng (x --> y) = {y} by FUNCOP_1:14;
-        y in NAT by ORDINAL2:def 21;
+        y in NAT by ORDINAL1:def 13;
         hence rng (x-->y) c= NAT by A1,ZFMISC_1:37;
       end;
     end;
@@ -2882,10 +2882,8 @@ A1: G has_valid_flow_from source,sink & source in V & not sink in V;
         end; then
     A7: V = the_Vertices_of G \ {sink} by TARSKI:2;
         set ESS = G.edgesDBetween({sink},{sink});
-        reconsider EIN = G.edgesInto({sink}) \ ESS as Subset of the_Edges_of G
-          by XBOOLE_1:1;
-        reconsider EOUT= G.edgesOutOf({sink})\ ESS as Subset of the_Edges_of G
-          by XBOOLE_1:1;
+        reconsider EIN = G.edgesInto({sink}) \ ESS as Subset of the_Edges_of G;
+        reconsider EOUT= G.edgesOutOf({sink})\ ESS as Subset of the_Edges_of G;
         set EESS = (the_ELabel_of G)|ESS;
         now let e be set;
             hereby assume e in G.edgesDBetween(V, the_Vertices_of G \ V); then
@@ -2905,6 +2903,8 @@ A1: G has_valid_flow_from source,sink & source in V & not sink in V;
             assume
         A10: e in EIN; then
         A11: e in G.edgesInto({sink}) & not e in ESS by XBOOLE_0:def 4;
+        G.edgesInto({sink}) qua set \ ESS is Subset of G.edgesInto({sink});
+        then
         A12: e in the_Edges_of G & (the_Target_of G).e in {sink}
               by A10,GLIB_000:def 28;
             now assume not (the_Source_of G).e in V; then
@@ -2978,6 +2978,8 @@ then
             assume
         A26: e in EOUT; then
         A27: e in G.edgesOutOf({sink}) & not e in ESS by XBOOLE_0:def 4;
+        G.edgesOutOf({sink}) qua set \ ESS is Subset of G.edgesOutOf({sink});
+        then
         A28: e in the_Edges_of G & (the_Source_of G).e in {sink}
               by GLIB_000:def 29,A26;
             now assume
@@ -3038,14 +3040,15 @@ A38: now let n be non empty Nat; assume
         now let V2 be Subset of VG; assume
         A40: card (VG\V2) = n+1 & source in V2 & not sink in V2;
             set x = choose ((VG \ V2) \ {sink});
+            A41: V2 qua set \ {x} is Subset of V2;
             sink is Vertex of G by A1,Def7; then
             sink in (VG \ V2) by A40,XBOOLE_0:def 4; then
             {sink} c= (VG \ V2) by ZFMISC_1:37; then
             card ((VG\V2)\{sink}) = n+1-card {sink} by A40,CARD_2:63
                                  .= n+1-1 by CARD_1:79
                                  .= n; then
-        A41: x in (VG)\V2 & not x in {sink} by CARD_1:78,XBOOLE_0:def 4; then
-        A42: x in VG & not x in V2 by XBOOLE_0:def 4;
+        A42: x in (VG)\V2 & not x in {sink} by CARD_1:78,XBOOLE_0:def 4; then
+        A43: x in VG & not x in V2 by XBOOLE_0:def 4;
             set V1 = V2 \/ {x};
             set EV1V1a = G.edgesDBetween(V1, VG \ V1);
             set EV1V1b = G.edgesDBetween(VG \ V1, V1);
@@ -3053,98 +3056,98 @@ A38: now let n be non empty Nat; assume
             set EXV2   = G.edgesDBetween({x},V2);
             set EXV1c  = G.edgesDBetween({x},VG\V1);
             set EV1Xd  = G.edgesDBetween(VG\V1,{x});
-            {x} c= VG by A41,ZFMISC_1:37; then
+            {x} c= VG by A42,ZFMISC_1:37; then
             reconsider V1 as Subset of VG by XBOOLE_1:8;
-        A43: VG \ V1 = (VG \ V2) \ {x} by XBOOLE_1:41;
-            {x} c= VG \ V2 by A41,ZFMISC_1:37; then
-        A44: card (VG \ V1) = card (VG \ V2) - card {x} by A43,CARD_2:63
+        A44: VG \ V1 = (VG \ V2) \ {x} by XBOOLE_1:41;
+            {x} c= VG \ V2 by A42,ZFMISC_1:37; then
+        A45: card (VG \ V1) = card (VG \ V2) - card {x} by A44,CARD_2:63
                           .= n + 1 - 1 by A40,CARD_1:79
                           .= n;
-        A45: source in V1 by A40,XBOOLE_0:def 2;
-        A46: x <> sink by A41,TARSKI:def 1; then
+        A46: source in V1 by A40,XBOOLE_0:def 2;
+        A47: x <> sink by A42,TARSKI:def 1; then
             not sink in {x} by TARSKI:def 1; then
             not sink in V1 by A40,XBOOLE_0:def 2; then
-        A47: G.flow(source,sink) = Sum (EL|EV1V1a) - Sum (EL|EV1V1b)
-              by A39,A44,A45;
+        A48: G.flow(source,sink) = Sum (EL|EV1V1a) - Sum (EL|EV1V1b)
+              by A39,A45,A46;
             now let e be set;
                 hereby assume e in G.edgesDBetween(V2, VG \ V2); then
                     e DSJoins V2, VG \ V2, G by GLIB_000:def 33; then
-                A48: e in the_Edges_of G & (the_Source_of G).e in V2 &
+                A49: e in the_Edges_of G & (the_Source_of G).e in V2 &
                     (the_Target_of G).e in VG \ V2 by GLIB_000:def 18; then
-                A49: (the_Source_of G).e in V1 by XBOOLE_0:def 2;
-                A50: now assume e in EXV1c; then
+                A50: (the_Source_of G).e in V1 by XBOOLE_0:def 2;
+                A51: now assume e in EXV1c; then
                         e DSJoins {x},VG \ V1,G by GLIB_000:def 33; then
                         (the_Source_of G).e in {x} by GLIB_000:def 18;
-                        hence contradiction by A48,A42,TARSKI:def 1;
+                        hence contradiction by A49,A43,TARSKI:def 1;
                     end;
                     now per cases;
                       suppose (the_Target_of G).e in {x}; then
-                        e DSJoins V2,{x},G by A48,GLIB_000:def 18; then
+                        e DSJoins V2,{x},G by A49,GLIB_000:def 18; then
                         e in EV2X by GLIB_000:def 33; then
                         e in EV1V1a \/ EV2X by XBOOLE_0:def 2;
-                        hence e in EV1V1a \/ EV2X \ EXV1c by A50,XBOOLE_0:def 4
+                        hence e in EV1V1a \/ EV2X \ EXV1c by A51,XBOOLE_0:def 4
 ;
                       end;
                       suppose not (the_Target_of G).e in {x}; then
                         (the_Target_of G).e in VG \ V1
-                          by A43,A48,XBOOLE_0:def 4; then
-                        e DSJoins V1, VG \ V1, G by A48,A49,GLIB_000:def 18;
+                          by A44,A49,XBOOLE_0:def 4; then
+                        e DSJoins V1, VG \ V1, G by A49,A50,GLIB_000:def 18;
 then
                         e in EV1V1a by GLIB_000:def 33; then
                         e in EV1V1a \/ EV2X by XBOOLE_0:def 2;
-                        hence e in EV1V1a \/ EV2X \ EXV1c by A50,XBOOLE_0:def 4
+                        hence e in EV1V1a \/ EV2X \ EXV1c by A51,XBOOLE_0:def 4
 ;
                       end;
                     end;
                     hence e in EV1V1a \/ EV2X \ EXV1c;
                 end;
                 assume
-            A51: e in EV1V1a \/ EV2X \ EXV1c; then
+            A52: e in EV1V1a \/ EV2X \ EXV1c; then
                 e in EV1V1a \/ EV2X & not e in EXV1c by XBOOLE_0:def 4; then
-            A52: not e DSJoins {x}, VG \ V1,G by GLIB_000:def 33;
-                now per cases by A51,XBOOLE_0:def 2;
+            A53: not e DSJoins {x}, VG \ V1,G by GLIB_000:def 33;
+            EV1V1a \/ EV2X qua set \ EXV1c is Subset of EV1V1a \/ EV2X;
+            then
+            A54: e in EV1V1a \/ EV2X by A52;
+                now per cases by A54,XBOOLE_0:def 2;
                   suppose e in EV1V1a; then
                     e DSJoins V1, VG\V1, G by GLIB_000:def 33; then
-                A53: e in the_Edges_of G & (the_Source_of G).e in V1 &
+                A55: e in the_Edges_of G & (the_Source_of G).e in V1 &
                     (the_Target_of G).e in VG \ V1 by GLIB_000:def 18; then
-                    not (the_Source_of G).e in {x} by A52,GLIB_000:def 18; then
-                    (the_Source_of G).e in V1 \ {x} by A53,XBOOLE_0:def 4; then
-                A54: (the_Source_of G).e in V2 \ {x} by XBOOLE_1:40;
+                    not (the_Source_of G).e in {x} by A53,GLIB_000:def 18; then
+                    (the_Source_of G).e in V1 \ {x} by A55,XBOOLE_0:def 4; then
+                A56: (the_Source_of G).e in V2 \ {x} by XBOOLE_1:40;
                     (the_Target_of G).e in VG &
-                      not (the_Target_of G).e in V1 by A53, XBOOLE_0:def 4;
+                      not (the_Target_of G).e in V1 by A55, XBOOLE_0:def 4;
 then
                     not (the_Target_of G).e in V2 by XBOOLE_0:def 2; then
-                    (the_Target_of G).e in VG \ V2 by A53,XBOOLE_0:def 4;
-                    hence e DSJoins V2, VG \ V2, G by A53,A54,GLIB_000:def 18;
+                    (the_Target_of G).e in VG \ V2 by A55,XBOOLE_0:def 4;
+                    hence e DSJoins V2, VG \ V2, G
+                    by A55,A56,A41,GLIB_000:def 18;
                   end;
                   suppose e in EV2X; then
                     e DSJoins V2, {x}, G by GLIB_000:def 33; then
-                A55: e in the_Edges_of G & (the_Source_of G).e in V2 &
+                A57: e in the_Edges_of G & (the_Source_of G).e in V2 &
                     (the_Target_of G).e in {x} by GLIB_000:def 18;
-                A56: (the_Target_of G).e in VG by A55, FUNCT_2:7;
-                    not (the_Target_of G).e in V2 by A42,A55,TARSKI:def 1; then
-                    (the_Target_of G).e in VG \ V2 by A56, XBOOLE_0:def 4;
-                    hence e DSJoins V2, VG \ V2, G by A55,GLIB_000:def 18;
+                A58: (the_Target_of G).e in VG by A57, FUNCT_2:7;
+                    not (the_Target_of G).e in V2 by A43,A57,TARSKI:def 1; then
+                    (the_Target_of G).e in VG \ V2 by A58, XBOOLE_0:def 4;
+                    hence e DSJoins V2, VG \ V2, G by A57,GLIB_000:def 18;
                   end;
                 end;
                 hence e in G.edgesDBetween(V2, VG \ V2) by GLIB_000:def 33;
             end; then
-        A57: G.edgesDBetween(V2, VG \ V2) = EV1V1a \/ EV2X \ EXV1c
+        A59: G.edgesDBetween(V2, VG \ V2) = EV1V1a \/ EV2X \ EXV1c
               by TARSKI:2;
             reconsider EA = EV1V1a \/ EV2X as Subset of the_Edges_of G;
-            reconsider E1 = EA \ EXV1c as Subset of the_Edges_of G
-              by XBOOLE_1:1;
-            reconsider EB = EA \ EV2X as Subset of the_Edges_of G
-              by XBOOLE_1:1;
+            reconsider E1 = EA \ EXV1c as Subset of the_Edges_of G;
+            reconsider EB = EA \ EV2X as Subset of the_Edges_of G;
             reconsider EC = EV1V1b \/ EXV2 as Subset of the_Edges_of G;
-            reconsider E2 = EC \ EV1Xd as Subset of the_Edges_of G
-              by XBOOLE_1:1;
-            reconsider ED = EC \ EXV2 as Subset of the_Edges_of G
-              by XBOOLE_1:1;
+            reconsider E2 = EC \ EV1Xd as Subset of the_Edges_of G;
+            reconsider ED = EC \ EXV2 as Subset of the_Edges_of G;
             now assume EV1V1a meets EV2X; then
-            A58: EV1V1a /\ EV2X <> {} by XBOOLE_0:def 7;
+            A60: EV1V1a /\ EV2X <> {} by XBOOLE_0:def 7;
                 set e = choose (EV1V1a /\ EV2X);
-                e in EV1V1a & e in EV2X by A58,XBOOLE_0:def 3; then
+                e in EV1V1a & e in EV2X by A60,XBOOLE_0:def 3; then
                 e DSJoins V1,VG\V1,G & e DSJoins V2,{x},G
                   by GLIB_000:def 33; then
                 (the_Target_of G).e in VG \ V1 &
@@ -3154,11 +3157,11 @@ then
                 hence contradiction;
             end; then
             EV1V1a \ EV2X = EV1V1a by XBOOLE_1:83; then
-        A59: EB = EV1V1a by XBOOLE_1:40;
+        A61: EB = EV1V1a by XBOOLE_1:40;
             now assume EV1V1b meets EXV2; then
-            A60: EV1V1b /\ EXV2 <> {} by XBOOLE_0:def 7;
+            A62: EV1V1b /\ EXV2 <> {} by XBOOLE_0:def 7;
                 set e = choose (EV1V1b /\ EXV2);
-                e in EV1V1b & e in EXV2 by A60,XBOOLE_0:def 3; then
+                e in EV1V1b & e in EXV2 by A62,XBOOLE_0:def 3; then
                 e DSJoins VG\V1,V1,G & e DSJoins {x},V2,G
                   by GLIB_000:def 33; then
                 (the_Source_of G).e in VG \ V1 &
@@ -3168,345 +3171,346 @@ then
                 hence contradiction;
             end; then
             EV1V1b \ EXV2 = EV1V1b by XBOOLE_1:83; then
-        A61: ED = EV1V1b by XBOOLE_1:40;
+        A63: ED = EV1V1b by XBOOLE_1:40;
             now let e be set; assume e in EXV1c; then
                 e DSJoins {x},VG \ V1, G by GLIB_000:def 33; then
-            A62: e in the_Edges_of G & (the_Source_of G).e in {x} &
+            A64: e in the_Edges_of G & (the_Source_of G).e in {x} &
                 (the_Target_of G).e in VG \ V1 by GLIB_000:def 18; then
                 (the_Source_of G).e in V1 by XBOOLE_0:def 2; then
-                e DSJoins V1,VG \ V1, G by A62, GLIB_000:def 18;
+                e DSJoins V1,VG \ V1, G by A64, GLIB_000:def 18;
                 hence e in EV1V1a by GLIB_000:def 33;
             end; then
             EXV1c c= EV1V1a by TARSKI:def 3; then
-        A63: EXV1c c= (EV1V1a \/ EV2X) by XBOOLE_1:10;
-        A64: dom (EL|EA) = EA & dom (EL|EB) = EB & dom (EL|EXV1c) = EXV1c &
+        A65: EXV1c c= (EV1V1a \/ EV2X) by XBOOLE_1:10;
+        A66: dom (EL|EA) = EA & dom (EL|EB) = EB & dom (EL|EXV1c) = EXV1c &
               dom (EL|EV2X)=EV2X & dom (EL|E1)=EA \ EXV1c by PBOOLE:def 3;then
-        A65: dom (EL|EXV1c +* EL|E1) = EXV1c \/ (EA \ EXV1c) by FUNCT_4:def 1
+        A67: dom (EL|EXV1c +* EL|E1) = EXV1c \/ (EA \ EXV1c) by FUNCT_4:def 1
                                    .= EXV1c \/ (EV1V1a \/ EV2X) by XBOOLE_1:39
-                                   .= EA by A63,XBOOLE_1:12;
+                                   .= EA by A65,XBOOLE_1:12;
             now let e be set; assume e in dom (EL|EA); then
-            A66: e in EA by PBOOLE:def 3;
+            A68: e in EA by PBOOLE:def 3;
                 now per cases;
                   suppose not e in EXV1c; then
-                A67: e in E1 by A66,XBOOLE_0:def 4;
-                    hence (EL|EXV1c +* EL|E1).e = (EL|E1).e by A64,FUNCT_4:14
-                                               .= EL.e by A67,FUNCT_1:72;
+                A69: e in E1 by A68,XBOOLE_0:def 4;
+                    hence (EL|EXV1c +* EL|E1).e = (EL|E1).e by A66,FUNCT_4:14
+                                               .= EL.e by A69,FUNCT_1:72;
                   end;
                   suppose
-                A68: e in EXV1c; then
+                A70: e in EXV1c; then
                     not e in E1 by XBOOLE_0:def 4;
-                    hence (EL|EXV1c +* EL|E1).e = (EL|EXV1c).e by A64,FUNCT_4:
+                    hence (EL|EXV1c +* EL|E1).e = (EL|EXV1c).e by A66,FUNCT_4:
 12
-                                               .= EL.e by A68, FUNCT_1:72;
+                                               .= EL.e by A70, FUNCT_1:72;
                   end;
                 end;
-                hence (EL|EA).e = (EL|EXV1c +* EL|E1).e by A66,FUNCT_1:72;
+                hence (EL|EA).e = (EL|EXV1c +* EL|E1).e by A68,FUNCT_1:72;
             end; then
-            EL|EA = EL|EXV1c +* EL|E1 by A64,A65,FUNCT_1:9; then
+            EL|EA = EL|EXV1c +* EL|E1 by A66,A67,FUNCT_1:9; then
             Sum (EL|EA) = Sum (EL|E1) + Sum (EL|EXV1c) by GLIB_004:3; then
-        A69: Sum (EL|E1) = Sum (EL|EA) - Sum (EL|EXV1c);
-        A70: dom (EL|EV2X +* EL|EB) = EV2X \/ EB by A64, FUNCT_4:def 1
+        A71: Sum (EL|E1) = Sum (EL|EA) - Sum (EL|EXV1c);
+        A72: dom (EL|EV2X +* EL|EB) = EV2X \/ EB by A66, FUNCT_4:def 1
                                   .= EV2X \/ (EV1V1a \/ EV2X) by XBOOLE_1:39
                                   .= EA by XBOOLE_1:6;
             now let e be set; assume e in dom (EL|EA); then
-            A71: e in EA by PBOOLE:def 3;
+            A73: e in EA by PBOOLE:def 3;
                 now per cases;
                   suppose not e in EV2X; then
-                A72: e in EB by A71,XBOOLE_0:def 4;
-                    hence (EL|EV2X +* EL|EB).e = (EL|EB).e by A64,FUNCT_4:14
-                                               .= EL.e by A72,FUNCT_1:72;
+                A74: e in EB by A73,XBOOLE_0:def 4;
+                    hence (EL|EV2X +* EL|EB).e = (EL|EB).e by A66,FUNCT_4:14
+                                               .= EL.e by A74,FUNCT_1:72;
                   end;
                   suppose
-                A73: e in EV2X; then
+                A75: e in EV2X; then
                     not e in EB by XBOOLE_0:def 4;
-                    hence (EL|EV2X +* EL|EB).e = (EL|EV2X).e by A64,FUNCT_4:12
-                                               .= EL.e by A73, FUNCT_1:72;
+                    hence (EL|EV2X +* EL|EB).e = (EL|EV2X).e by A66,FUNCT_4:12
+                                               .= EL.e by A75, FUNCT_1:72;
                   end;
                 end;
-                hence (EL|EA).e = (EL|EV2X +* EL|EB).e by A71,FUNCT_1:72;
+                hence (EL|EA).e = (EL|EV2X +* EL|EB).e by A73,FUNCT_1:72;
             end; then
-            EL|EA = EL|EV2X +* EL|EB by A64,A70,FUNCT_1:9; then
-        A74: Sum (EL|EA) = Sum (EL|EV2X) + Sum (EL|EV1V1a) by A59,GLIB_004:3;
+            EL|EA = EL|EV2X +* EL|EB by A66,A72,FUNCT_1:9; then
+        A76: Sum (EL|EA) = Sum (EL|EV2X) + Sum (EL|EV1V1a) by A61,GLIB_004:3;
             now let e be set; assume e in EV1Xd; then
                 e DSJoins VG\V1,{x}, G by GLIB_000:def 33; then
-            A75: e in the_Edges_of G & (the_Target_of G).e in {x} &
+            A77: e in the_Edges_of G & (the_Target_of G).e in {x} &
                 (the_Source_of G).e in VG \ V1 by GLIB_000:def 18; then
                 (the_Target_of G).e in V1 by XBOOLE_0:def 2; then
-                e DSJoins VG\V1,V1, G by A75, GLIB_000:def 18;
+                e DSJoins VG\V1,V1, G by A77, GLIB_000:def 18;
                 hence e in EV1V1b by GLIB_000:def 33;
             end; then
             EV1Xd c= EV1V1b by TARSKI:def 3; then
-        A76: EV1Xd c= (EV1V1b \/ EXV2) by XBOOLE_1:10;
+        A78: EV1Xd c= (EV1V1b \/ EXV2) by XBOOLE_1:10;
             now let e be set;
                 hereby assume e in G.edgesDBetween(VG \ V2, V2); then
                     e DSJoins VG\V2, V2, G by GLIB_000:def 33; then
-                A77: e in the_Edges_of G & (the_Target_of G).e in V2 &
+                A79: e in the_Edges_of G & (the_Target_of G).e in V2 &
                     (the_Source_of G).e in VG \ V2 by GLIB_000:def 18; then
-                A78: (the_Target_of G).e in V1 by XBOOLE_0:def 2;
-                A79: now assume e in EV1Xd; then
+                A80: (the_Target_of G).e in V1 by XBOOLE_0:def 2;
+                A81: now assume e in EV1Xd; then
                         e DSJoins VG \ V1,{x},G by GLIB_000:def 33; then
                         (the_Target_of G).e in {x} by GLIB_000:def 18;
-                        hence contradiction by A77,A42,TARSKI:def 1;
+                        hence contradiction by A79,A43,TARSKI:def 1;
                     end;
                     now per cases;
                       suppose (the_Source_of G).e in {x}; then
-                        e DSJoins {x},V2,G by A77,GLIB_000:def 18; then
+                        e DSJoins {x},V2,G by A79,GLIB_000:def 18; then
                         e in EXV2 by GLIB_000:def 33; then
                         e in EV1V1b \/ EXV2 by XBOOLE_0:def 2;
-                        hence e in EV1V1b \/ EXV2 \ EV1Xd by A79,XBOOLE_0:def 4
+                        hence e in EV1V1b \/ EXV2 \ EV1Xd by A81,XBOOLE_0:def 4
 ;
                       end;
                       suppose not (the_Source_of G).e in {x}; then
                         (the_Source_of G).e in VG \ V1
-                          by A43,A77,XBOOLE_0:def 4; then
-                        e DSJoins VG \ V1, V1, G by A77,A78,GLIB_000:def 18;
+                          by A44,A79,XBOOLE_0:def 4; then
+                        e DSJoins VG \ V1, V1, G by A79,A80,GLIB_000:def 18;
 then
                         e in EV1V1b by GLIB_000:def 33; then
                         e in EV1V1b \/ EXV2 by XBOOLE_0:def 2;
-                        hence e in EV1V1b \/ EXV2 \ EV1Xd by A79,XBOOLE_0:def 4
+                        hence e in EV1V1b \/ EXV2 \ EV1Xd by A81,XBOOLE_0:def 4
 ;
                       end;
                     end;
                     hence e in EV1V1b \/ EXV2 \ EV1Xd;
                 end;
                 assume
-            A80: e in EV1V1b \/ EXV2 \ EV1Xd; then
+            A82: e in EV1V1b \/ EXV2 \ EV1Xd; then
                 e in EV1V1b \/ EXV2 & not e in EV1Xd by XBOOLE_0:def 4; then
-            A81: not e DSJoins VG \ V1, {x}, G by GLIB_000:def 33;
-                now per cases by A80,XBOOLE_0:def 2;
+            A83: not e DSJoins VG \ V1, {x}, G by GLIB_000:def 33;
+            EV1V1b \/ EXV2 qua set \ EV1Xd is Subset of EV1V1b \/ EXV2; then
+            A84: e in EV1V1b \/ EXV2 by A82;
+                now per cases by A84,XBOOLE_0:def 2;
                   suppose e in EV1V1b; then
                     e DSJoins VG\V1, V1, G by GLIB_000:def 33; then
-                A82: e in the_Edges_of G & (the_Target_of G).e in V1 &
+                A85: e in the_Edges_of G & (the_Target_of G).e in V1 &
                     (the_Source_of G).e in VG \ V1 by GLIB_000:def 18; then
-                    not (the_Target_of G).e in {x} by A81,GLIB_000:def 18; then
-                    (the_Target_of G).e in V1 \ {x} by A82,XBOOLE_0:def 4; then
-                A83: (the_Target_of G).e in V2 \ {x} by XBOOLE_1:40;
+                    not (the_Target_of G).e in {x} by A83,GLIB_000:def 18; then
+                    (the_Target_of G).e in V1 \ {x} by A85,XBOOLE_0:def 4; then
+                A86: (the_Target_of G).e in V2 \ {x} by XBOOLE_1:40;
                     (the_Source_of G).e in VG &
-                      not (the_Source_of G).e in V1 by A82, XBOOLE_0:def 4;
+                      not (the_Source_of G).e in V1 by A85, XBOOLE_0:def 4;
 then
                     not (the_Source_of G).e in V2 by XBOOLE_0:def 2; then
-                    (the_Source_of G).e in VG \ V2 by A82,XBOOLE_0:def 4;
-                    hence e DSJoins VG \ V2, V2, G by A82,A83,GLIB_000:def 18;
+                    (the_Source_of G).e in VG \ V2 by A85,XBOOLE_0:def 4;
+                    hence e DSJoins VG \ V2, V2, G
+                    by A41,A85,A86,GLIB_000:def 18;
                   end;
                   suppose e in EXV2; then
                     e DSJoins {x},V2, G by GLIB_000:def 33; then
-                A84: e in the_Edges_of G & (the_Target_of G).e in V2 &
+                A87: e in the_Edges_of G & (the_Target_of G).e in V2 &
                     (the_Source_of G).e in {x} by GLIB_000:def 18;
-                A85: (the_Source_of G).e in VG by A84, FUNCT_2:7;
-                    not (the_Source_of G).e in V2 by A84,A42,TARSKI:def 1; then
-                    (the_Source_of G).e in VG \ V2 by A85, XBOOLE_0:def 4;
-                    hence e DSJoins VG \ V2, V2, G by A84,GLIB_000:def 18;
+                A88: (the_Source_of G).e in VG by A87, FUNCT_2:7;
+                    not (the_Source_of G).e in V2 by A87,A43,TARSKI:def 1; then
+                    (the_Source_of G).e in VG \ V2 by A88, XBOOLE_0:def 4;
+                    hence e DSJoins VG \ V2, V2, G by A87,GLIB_000:def 18;
                   end;
                 end;
                 hence e in G.edgesDBetween(VG\V2,V2) by GLIB_000:def 33;
             end; then
-        A86: G.edgesDBetween(VG \ V2, V2) = E2 by TARSKI:2;
-        A87: dom (EL|EC) = EC & dom (EL|ED) = ED & dom (EL|EV1Xd) = EV1Xd &
+        A89: G.edgesDBetween(VG \ V2, V2) = E2 by TARSKI:2;
+        A90: dom (EL|EC) = EC & dom (EL|ED) = ED & dom (EL|EV1Xd) = EV1Xd &
               dom (EL|EXV2)=EXV2 & dom (EL|E2)=EC\EV1Xd by PBOOLE:def 3;then
-        A88: dom (EL|EV1Xd +* EL|E2) = EV1Xd \/ (EC \ EV1Xd) by FUNCT_4:def 1
+        A91: dom (EL|EV1Xd +* EL|E2) = EV1Xd \/ (EC \ EV1Xd) by FUNCT_4:def 1
                                    .= EV1Xd \/ (EV1V1b \/ EXV2) by XBOOLE_1:39
-                                   .= EC by A76,XBOOLE_1:12;
+                                   .= EC by A78,XBOOLE_1:12;
             now let e be set; assume e in dom (EL|EC); then
-            A89: e in EC by PBOOLE:def 3;
+            A92: e in EC by PBOOLE:def 3;
                 now per cases;
                   suppose not e in EV1Xd; then
-                A90: e in E2 by A89,XBOOLE_0:def 4;
-                    hence (EL|EV1Xd +* EL|E2).e = (EL|E2).e by A87,FUNCT_4:14
-                                               .= EL.e by A90,FUNCT_1:72;
+                A93: e in E2 by A92,XBOOLE_0:def 4;
+                    hence (EL|EV1Xd +* EL|E2).e = (EL|E2).e by A90,FUNCT_4:14
+                                               .= EL.e by A93,FUNCT_1:72;
                   end;
                   suppose
-                A91: e in EV1Xd; then
+                A94: e in EV1Xd; then
                     not e in E2 by XBOOLE_0:def 4;
-                    hence (EL|EV1Xd +* EL|E2).e = (EL|EV1Xd).e by A87,FUNCT_4:
+                    hence (EL|EV1Xd +* EL|E2).e = (EL|EV1Xd).e by A90,FUNCT_4:
 12
-                                               .= EL.e by A91, FUNCT_1:72;
+                                               .= EL.e by A94, FUNCT_1:72;
                   end;
                 end;
-                hence (EL|EC).e = (EL|EV1Xd +* EL|E2).e by A89,FUNCT_1:72;
+                hence (EL|EC).e = (EL|EV1Xd +* EL|E2).e by A92,FUNCT_1:72;
             end; then
-            EL|EC = EL|EV1Xd +* EL|E2 by A87,A88,FUNCT_1:9; then
+            EL|EC = EL|EV1Xd +* EL|E2 by A90,A91,FUNCT_1:9; then
             Sum (EL|EC) = Sum (EL|E2) + Sum (EL|EV1Xd) by GLIB_004:3; then
-        A92: Sum (EL|E2) = Sum (EL|EC) - Sum (EL|EV1Xd);
-        A93: dom (EL|EXV2 +* EL|ED) = EXV2 \/ ED by A87, FUNCT_4:def 1
+        A95: Sum (EL|E2) = Sum (EL|EC) - Sum (EL|EV1Xd);
+        A96: dom (EL|EXV2 +* EL|ED) = EXV2 \/ ED by A90, FUNCT_4:def 1
                                   .= EXV2 \/ (EV1V1b \/ EXV2) by XBOOLE_1:39
                                   .= EC by XBOOLE_1:6;
             now let e be set; assume e in dom (EL|EC); then
-            A94: e in EC by PBOOLE:def 3;
+            A97: e in EC by PBOOLE:def 3;
                 now per cases;
                   suppose not e in EXV2; then
-                A95: e in ED by A94,XBOOLE_0:def 4;
-                    hence (EL|EXV2 +* EL|ED).e = (EL|ED).e by A87,FUNCT_4:14
-                                               .= EL.e by A95,FUNCT_1:72;
+                A98: e in ED by A97,XBOOLE_0:def 4;
+                    hence (EL|EXV2 +* EL|ED).e = (EL|ED).e by A90,FUNCT_4:14
+                                               .= EL.e by A98,FUNCT_1:72;
                   end;
                   suppose
-                A96: e in EXV2; then
+                A99: e in EXV2; then
                     not e in ED by XBOOLE_0:def 4;
-                    hence (EL|EXV2 +* EL|ED).e = (EL|EXV2).e by A87,FUNCT_4:12
-                                               .= EL.e by A96, FUNCT_1:72;
+                    hence (EL|EXV2 +* EL|ED).e = (EL|EXV2).e by A90,FUNCT_4:12
+                                               .= EL.e by A99, FUNCT_1:72;
                   end;
                 end;
-                hence (EL|EC).e = (EL|EXV2 +* EL|ED).e by A94,FUNCT_1:72;
+                hence (EL|EC).e = (EL|EXV2 +* EL|ED).e by A97,FUNCT_1:72;
             end; then
-            EL|EC = EL|EXV2 +* EL|ED by A87,A93,FUNCT_1:9; then
-        A97: Sum (EL|EC) = Sum (EL|EXV2) + Sum (EL|EV1V1b) by A61,GLIB_004:3;
+            EL|EC = EL|EXV2 +* EL|ED by A90,A96,FUNCT_1:9; then
+        A100: Sum (EL|EC) = Sum (EL|EXV2) + Sum (EL|EV1V1b) by A63,GLIB_004:3;
 
             set EXXe = G.edgesDBetween({x}, VG \ {x});
             set EXXf = G.edgesDBetween(VG \ {x}, {x});
-        A98: now let e be set;
+        now let e be set;
                 hereby assume e in EXXf \ EV2X; then
                     e in EXXf & not e in EV2X by XBOOLE_0:def 4; then
-                A99: e DSJoins VG \ {x}, {x}, G & not e DSJoins V2, {x}, G
+                A101: e DSJoins VG \ {x}, {x}, G & not e DSJoins V2, {x}, G
                       by GLIB_000:def 33; then
-                A100: e in the_Edges_of G & (the_Source_of G).e in VG \ {x} &
+                A102: e in the_Edges_of G & (the_Source_of G).e in VG \ {x} &
                     (the_Target_of G).e in {x} by GLIB_000:def 18; then
-                A101: not (the_Source_of G).e in V2 by A99,GLIB_000:def 18;
+                A103: not (the_Source_of G).e in V2 by A101,GLIB_000:def 18;
                     (the_Source_of G).e in VG & not (the_Source_of G).e in {x}
-                      by A100, XBOOLE_0:def 4; then
-                    not (the_Source_of G).e in V1 by A101,XBOOLE_0:def 2; then
-                    (the_Source_of G).e in VG \ V1 by A100, XBOOLE_0:def 4;
+                      by A102, XBOOLE_0:def 4; then
+                    not (the_Source_of G).e in V1 by A103,XBOOLE_0:def 2; then
+                    (the_Source_of G).e in VG \ V1 by A102, XBOOLE_0:def 4;
 then
-                    e DSJoins VG \ V1, {x}, G by A100,GLIB_000:def 18;
+                    e DSJoins VG \ V1, {x}, G by A102,GLIB_000:def 18;
                     hence e in EV1Xd by GLIB_000:def 33;
                 end;
                 assume e in EV1Xd; then
                 e DSJoins VG \ V1, {x}, G by GLIB_000:def 33; then
-            A102: e in the_Edges_of G & (the_Source_of G).e in VG \ V1 &
+            A104: e in the_Edges_of G & (the_Source_of G).e in VG \ V1 &
                   (the_Target_of G).e in {x} by GLIB_000:def 18; then
-            A103: (the_Source_of G).e in VG & not (the_Source_of G).e in V1
+            A105: (the_Source_of G).e in VG & not (the_Source_of G).e in V1
                   by XBOOLE_0:def 4; then
                 not (the_Source_of G).e in V2 by XBOOLE_0:def 2; then
                 not e DSJoins V2,{x},G by GLIB_000:def 18; then
-            A104: not e in EV2X by GLIB_000:def 33;
-                not (the_Source_of G).e in {x} by A103,XBOOLE_0:def 2; then
-                (the_Source_of G).e in VG \ {x} by A102,XBOOLE_0:def 4; then
-                e DSJoins VG \ {x}, {x}, G by A102,GLIB_000:def 18;  then
+            A106: not e in EV2X by GLIB_000:def 33;
+                not (the_Source_of G).e in {x} by A105,XBOOLE_0:def 2; then
+                (the_Source_of G).e in VG \ {x} by A104,XBOOLE_0:def 4; then
+                e DSJoins VG \ {x}, {x}, G by A104,GLIB_000:def 18;  then
                 e in EXXf by GLIB_000:def 33;
-                hence e in EXXf \ EV2X by A104, XBOOLE_0:def 4;
+                hence e in EXXf \ EV2X by A106, XBOOLE_0:def 4;
             end; then
-        A105: EXXf \ EV2X = EV1Xd by TARSKI:2;
-            reconsider EV1Xdb = EXXf \ EV2X as Subset of the_Edges_of G
-              by A98, TARSKI:2;
+        A107: EXXf \ EV2X = EV1Xd by TARSKI:2;
+            reconsider EV1Xdb = EXXf \ EV2X as Subset of the_Edges_of G;
             now let e be set; assume e in EV2X; then
                 e DSJoins V2,{x},G by GLIB_000:def 33; then
-            A106: e in the_Edges_of G & (the_Source_of G).e in V2 &
+            A108: e in the_Edges_of G & (the_Source_of G).e in V2 &
                   (the_Target_of G).e in {x} by GLIB_000:def 18;
-                not (the_Source_of G).e in {x} by A106,A42,TARSKI:def 1; then
-                (the_Source_of G).e in VG \ {x} by A106,XBOOLE_0:def 4; then
-                e DSJoins VG\{x}, {x}, G by A106,GLIB_000:def 18;
+                not (the_Source_of G).e in {x} by A108,A43,TARSKI:def 1; then
+                (the_Source_of G).e in VG \ {x} by A108,XBOOLE_0:def 4; then
+                e DSJoins VG\{x}, {x}, G by A108,GLIB_000:def 18;
                 hence e in EXXf by GLIB_000:def 33;
             end; then
-        A107: EV2X c= EXXf by TARSKI:def 3;
-        A108: dom (EL|EXXf) = EXXf & dom (EL|EV2X) = EV2X &
+        A109: EV2X c= EXXf by TARSKI:def 3;
+        A110: dom (EL|EXXf) = EXXf & dom (EL|EV2X) = EV2X &
               dom (EL|EV1Xdb) = EXXf \ EV2X by PBOOLE:def 3; then
-        A109: dom (EL|EV2X +* EL|(EXXf \ EV2X)) = EV2X \/ (EXXf \ EV2X)
+        A111: dom (EL|EV2X +* EL|(EXXf \ EV2X)) = EV2X \/ (EXXf \ EV2X)
                                                   by FUNCT_4:def 1
                                              .= EV2X \/ EXXf by XBOOLE_1:39
-                                             .= EXXf by A107,XBOOLE_1:12;
+                                             .= EXXf by A109,XBOOLE_1:12;
             now let e be set; assume
-            A110: e in dom (EL|EXXf); then
-            A111: e in EXXf by PBOOLE:def 3;
+            A112: e in dom (EL|EXXf); then
+            A113: e in EXXf by PBOOLE:def 3;
                 now per cases;
                   suppose
-                A112: e in EV2X; then
+                A114: e in EV2X; then
                     not e in EV1Xdb by XBOOLE_0:def 4;
-                    hence (EL|EV2X +* EL|EV1Xdb).e=(EL|EV2X).e by A108,FUNCT_4:
+                    hence (EL|EV2X +* EL|EV1Xdb).e=(EL|EV2X).e by A110,FUNCT_4:
 12
-                                                 .=EL.e by A112,FUNCT_1:72;
+                                                 .=EL.e by A114,FUNCT_1:72;
                   end;
                   suppose not e in EV2X; then
-                A113: e in EV1Xdb by A111,XBOOLE_0:def 4;
+                A115: e in EV1Xdb by A113,XBOOLE_0:def 4;
                     hence (EL|EV2X +* EL|EV1Xdb).e = (EL|EV1Xdb).e
-                                                     by A108,FUNCT_4:14
-                                                 .= EL.e by A113,FUNCT_1:72;
+                                                     by A110,FUNCT_4:14
+                                                 .= EL.e by A115,FUNCT_1:72;
                   end;
                 end;
                 hence (EL|EXXf).e = (EL|EV2X +* EL|EV1Xdb).e
-                  by A110,A108,FUNCT_1:72;
+                  by A112,A110,FUNCT_1:72;
             end; then
-            EL|EXXf = EL|EV2X +* EL|(EXXf \ EV2X) by A108,A109,FUNCT_1:9; then
-        A114: Sum (EL|EV2X) + Sum (EL|EV1Xd) = Sum (EL|EXXf)
-              by A105,GLIB_004:3;
-        A115: now let e be set;
+            EL|EXXf = EL|EV2X +* EL|(EXXf \ EV2X) by A110,A111,FUNCT_1:9; then
+        A116: Sum (EL|EV2X) + Sum (EL|EV1Xd) = Sum (EL|EXXf)
+              by A107,GLIB_004:3;
+        now let e be set;
                 hereby assume e in EXXe \ EXV2; then
                     e in EXXe & not e in EXV2 by XBOOLE_0:def 4; then
-                A116: e DSJoins {x},VG\{x}, G & not e DSJoins {x},V2,G
+                A117: e DSJoins {x},VG\{x}, G & not e DSJoins {x},V2,G
                       by GLIB_000:def 33; then
-                A117: e in the_Edges_of G & (the_Target_of G).e in VG \ {x} &
+                A118: e in the_Edges_of G & (the_Target_of G).e in VG \ {x} &
                     (the_Source_of G).e in {x} by GLIB_000:def 18; then
-                A118: not (the_Target_of G).e in V2 by A116,GLIB_000:def 18;
+                A119: not (the_Target_of G).e in V2 by A117,GLIB_000:def 18;
                     (the_Target_of G).e in VG & not (the_Target_of G).e in {x}
-                      by A117, XBOOLE_0:def 4; then
-                    not (the_Target_of G).e in V1 by A118,XBOOLE_0:def 2; then
-                    (the_Target_of G).e in VG \ V1 by A117, XBOOLE_0:def 4;
+                      by A118, XBOOLE_0:def 4; then
+                    not (the_Target_of G).e in V1 by A119,XBOOLE_0:def 2; then
+                    (the_Target_of G).e in VG \ V1 by A118, XBOOLE_0:def 4;
 then
-                    e DSJoins {x}, VG \ V1, G by A117,GLIB_000:def 18;
+                    e DSJoins {x}, VG \ V1, G by A118,GLIB_000:def 18;
                     hence e in EXV1c by GLIB_000:def 33;
                 end;
                 assume e in EXV1c; then
                 e DSJoins {x}, VG \ V1, G by GLIB_000:def 33; then
-            A119: e in the_Edges_of G & (the_Target_of G).e in VG \ V1 &
+            A120: e in the_Edges_of G & (the_Target_of G).e in VG \ V1 &
                 (the_Source_of G).e in {x} by GLIB_000:def 18; then
-            A120: (the_Target_of G).e in VG & not (the_Target_of G).e in V1
+            A121: (the_Target_of G).e in VG & not (the_Target_of G).e in V1
                   by XBOOLE_0:def 4; then
                 not (the_Target_of G).e in V2 by XBOOLE_0:def 2; then
                 not e DSJoins {x},V2,G by GLIB_000:def 18; then
-            A121: not e in EXV2 by GLIB_000:def 33;
-                not (the_Target_of G).e in {x} by A120,XBOOLE_0:def 2; then
-                (the_Target_of G).e in VG \ {x} by A119,XBOOLE_0:def 4; then
-                e DSJoins {x}, VG \ {x}, G by A119,GLIB_000:def 18;  then
+            A122: not e in EXV2 by GLIB_000:def 33;
+                not (the_Target_of G).e in {x} by A121,XBOOLE_0:def 2; then
+                (the_Target_of G).e in VG \ {x} by A120,XBOOLE_0:def 4; then
+                e DSJoins {x}, VG \ {x}, G by A120,GLIB_000:def 18;  then
                 e in EXXe by GLIB_000:def 33;
-                hence e in EXXe \ EXV2 by A121, XBOOLE_0:def 4;
+                hence e in EXXe \ EXV2 by A122, XBOOLE_0:def 4;
             end; then
-        A122: EXXe \ EXV2 = EXV1c by TARSKI:2;
-            reconsider EXV1cb = EXXe \ EXV2 as Subset of the_Edges_of G
-              by TARSKI:2,A115;
+        A123: EXXe \ EXV2 = EXV1c by TARSKI:2;
+            reconsider EXV1cb = EXXe \ EXV2 as Subset of the_Edges_of G;
             now let e be set; assume e in EXV2; then
                 e DSJoins {x},V2,G by GLIB_000:def 33; then
-            A123: e in the_Edges_of G & (the_Target_of G).e in V2 &
+            A124: e in the_Edges_of G & (the_Target_of G).e in V2 &
                   (the_Source_of G).e in {x} by GLIB_000:def 18;
-                not (the_Target_of G).e in {x} by A123,A42,TARSKI:def 1; then
-                (the_Target_of G).e in VG \ {x} by A123,XBOOLE_0:def 4; then
-                e DSJoins {x},VG\{x}, G by A123,GLIB_000:def 18;
+                not (the_Target_of G).e in {x} by A124,A43,TARSKI:def 1; then
+                (the_Target_of G).e in VG \ {x} by A124,XBOOLE_0:def 4; then
+                e DSJoins {x},VG\{x}, G by A124,GLIB_000:def 18;
                 hence e in EXXe by GLIB_000:def 33;
             end; then
-        A124: EXV2 c= EXXe by TARSKI:def 3;
-        A125: dom (EL|EXXe) = EXXe & dom (EL|EXV2) = EXV2 &
+        A125: EXV2 c= EXXe by TARSKI:def 3;
+        A126: dom (EL|EXXe) = EXXe & dom (EL|EXV2) = EXV2 &
               dom (EL|EXV1cb) = EXXe \ EXV2 by PBOOLE:def 3; then
-        A126: dom (EL|EXV2 +* EL|(EXXe \ EXV2)) = EXV2 \/ (EXXe \ EXV2)
+        A127: dom (EL|EXV2 +* EL|(EXXe \ EXV2)) = EXV2 \/ (EXXe \ EXV2)
                                                   by FUNCT_4:def 1
                                              .= EXV2 \/ EXXe by XBOOLE_1:39
-                                             .= EXXe by A124,XBOOLE_1:12;
+                                             .= EXXe by A125,XBOOLE_1:12;
             now let e be set; assume
-            A127: e in dom (EL|EXXe); then
-            A128: e in EXXe by PBOOLE:def 3;
+            A128: e in dom (EL|EXXe); then
+            A129: e in EXXe by PBOOLE:def 3;
                 now per cases;
                   suppose
-                A129: e in EXV2; then
+                A130: e in EXV2; then
                     not e in EXV1cb by XBOOLE_0:def 4;
-                    hence (EL|EXV2 +* EL|EXV1cb).e=(EL|EXV2).e by A125,FUNCT_4:
+                    hence (EL|EXV2 +* EL|EXV1cb).e=(EL|EXV2).e by A126,FUNCT_4:
 12
-                                                 .=EL.e by A129,FUNCT_1:72;
+                                                 .=EL.e by A130,FUNCT_1:72;
                   end;
                   suppose not e in EXV2; then
-                A130: e in EXV1cb by A128,XBOOLE_0:def 4;
+                A131: e in EXV1cb by A129,XBOOLE_0:def 4;
                     hence (EL|EXV2 +* EL|EXV1cb).e = (EL|EXV1cb).e
-                                                     by A125,FUNCT_4:14
-                                                  .= EL.e by A130,FUNCT_1:72;
+                                                     by A126,FUNCT_4:14
+                                                  .= EL.e by A131,FUNCT_1:72;
                   end;
                 end;
                 hence (EL|EXXe).e = (EL|EXV2 +* EL|EXV1cb).e
-                  by FUNCT_1:72,A127,A125;
+                  by FUNCT_1:72,A128,A126;
             end; then
-            EL|EXXe = EL|EXV2 +* EL|(EXXe \ EXV2) by A125,A126,FUNCT_1:9; then
-        A131: Sum (EL|EXV2) + Sum (EL|EXV1c) = Sum (EL|EXXe) by A122, GLIB_004:
+            EL|EXXe = EL|EXV2 +* EL|(EXXe \ EXV2) by A126,A127,FUNCT_1:9; then
+        A132: Sum (EL|EXV2) + Sum (EL|EXV1c) = Sum (EL|EXXe) by A123, GLIB_004:
 3;
-            reconsider x as Vertex of G by A41;
+            reconsider x as Vertex of G by A42;
             x.edgesIn() = G.edgesDBetween(VG,{x}) &
               x.edgesOut() = G.edgesDBetween({x},VG) by GLIB_000:42; then
-        A132: Sum (EL|G.edgesDBetween(VG,{x}))= Sum (EL|G.edgesDBetween({x},VG)
+        A133: Sum (EL|G.edgesDBetween(VG,{x}))= Sum (EL|G.edgesDBetween({x},VG)
 )
-              by A40,A42,A1,Def7,A46;
-        A133: now let e be set;
+              by A40,A43,A1,Def7,A47;
+        now let e be set;
                 hereby assume e in G.edgesDBetween(VG,{x}) \
                                    G.edgesDBetween({x},{x}); then
                     e in G.edgesDBetween(VG,{x}) &
@@ -3537,7 +3541,7 @@ then
         A138: G.edgesDBetween(VG,{x}) \ G.edgesDBetween({x},{x}) = EXXf
               by TARSKI:2;
             reconsider EXXfb = G.edgesDBetween(VG,{x})\G.edgesDBetween({x},{x})
-              as Subset of the_Edges_of G by A133,TARSKI:2;
+              as Subset of the_Edges_of G;
         A139: G.edgesDBetween({x},{x}) c= G.edgesDBetween(VG,{x}) by GLIB_000:
 41;
         A140: dom (EL|G.edgesDBetween(VG,{x})) = G.edgesDBetween(VG,{x}) &
@@ -3576,97 +3580,97 @@ then
             Sum (EL|EXXf) + Sum (EL|G.edgesDBetween({x},{x})) by A138,GLIB_004:
 3;
 
-        A146: now let e be set;
+       now let e be set;
                 hereby assume e in G.edgesDBetween({x},VG) \
                                    G.edgesDBetween({x},{x}); then
                     e in G.edgesDBetween({x},VG) &
                     not e in G.edgesDBetween({x},{x}) by XBOOLE_0:def 4; then
-                A147: e DSJoins {x},VG,G & not e DSJoins {x},{x},G
+                A146: e DSJoins {x},VG,G & not e DSJoins {x},{x},G
                       by GLIB_000:def 33; then
-                A148: e in the_Edges_of G & (the_Target_of G).e in VG &
+                A147: e in the_Edges_of G & (the_Target_of G).e in VG &
                     (the_Source_of G).e in {x} by GLIB_000:def 18; then
-                    not (the_Target_of G).e in {x} by A147,GLIB_000:def 18;
+                    not (the_Target_of G).e in {x} by A146,GLIB_000:def 18;
 then
-                    (the_Target_of G).e in VG\{x} by A148,XBOOLE_0:def 4; then
-                    e DSJoins {x},VG\{x},G by A148,GLIB_000:def 18;
+                    (the_Target_of G).e in VG\{x} by A147,XBOOLE_0:def 4; then
+                    e DSJoins {x},VG\{x},G by A147,GLIB_000:def 18;
                     hence e in EXXe by GLIB_000:def 33;
                 end;
                 assume e in EXXe; then
                 e DSJoins {x}, VG \{x}, G by GLIB_000:def 33; then
-            A149: e in the_Edges_of G & (the_Target_of G).e in VG \ {x} &
+            A148: e in the_Edges_of G & (the_Target_of G).e in VG \ {x} &
                 (the_Source_of G).e in {x} by GLIB_000:def 18;
                 (the_Target_of G).e in VG & not (the_Target_of G).e in {x}
-                  by A149, XBOOLE_0:def 4; then
+                  by A148, XBOOLE_0:def 4; then
                 not e DSJoins {x},{x},G by GLIB_000:def 18; then
-            A150: not e in G.edgesDBetween({x},{x}) by GLIB_000:def 33;
-                e DSJoins {x},VG,G by A149,GLIB_000:def 18; then
+            A149: not e in G.edgesDBetween({x},{x}) by GLIB_000:def 33;
+                e DSJoins {x},VG,G by A148,GLIB_000:def 18; then
                 e in G.edgesDBetween({x},VG) by GLIB_000:def 33;
                 hence e in G.edgesDBetween({x},VG) \ G.edgesDBetween({x},{x})
-                  by A150,XBOOLE_0:def 4;
+                  by A149,XBOOLE_0:def 4;
             end; then
-        A151: G.edgesDBetween({x},VG) \ G.edgesDBetween({x},{x}) = EXXe
+        A150: G.edgesDBetween({x},VG) \ G.edgesDBetween({x},{x}) = EXXe
               by TARSKI:2;
             reconsider EXXeb = G.edgesDBetween({x},VG)\G.edgesDBetween({x},{x})
-              as Subset of the_Edges_of G by A146,TARSKI:2;
-        A152: G.edgesDBetween({x},{x}) c= G.edgesDBetween({x},VG) by GLIB_000:
+              as Subset of the_Edges_of G;
+        A151: G.edgesDBetween({x},{x}) c= G.edgesDBetween({x},VG) by GLIB_000:
 41;
-        A153: dom (EL|G.edgesDBetween({x},VG)) = G.edgesDBetween({x},VG) &
+        A152: dom (EL|G.edgesDBetween({x},VG)) = G.edgesDBetween({x},VG) &
               dom (EL|EXXeb) = EXXeb by PBOOLE:def 3; then
-        A154: dom (EL|G.edgesDBetween({x},{x}) +* EL|EXXeb)
+        A153: dom (EL|G.edgesDBetween({x},{x}) +* EL|EXXeb)
               = G.edgesDBetween({x},{x}) \/ EXXeb by A140,FUNCT_4:def 1
              .= G.edgesDBetween({x},{x}) \/ G.edgesDBetween({x},VG)
                 by XBOOLE_1:39
-             .= G.edgesDBetween({x},VG) by A152,XBOOLE_1:12;
+             .= G.edgesDBetween({x},VG) by A151,XBOOLE_1:12;
             now let e be set; assume e in dom (EL|G.edgesDBetween({x},VG));then
-            A155: e in G.edgesDBetween({x},VG) by PBOOLE:def 3;
+            A154: e in G.edgesDBetween({x},VG) by PBOOLE:def 3;
                 now per cases;
                   suppose
-                A156: e in G.edgesDBetween({x},{x}); then
+                A155: e in G.edgesDBetween({x},{x}); then
                     not e in EXXeb by XBOOLE_0:def 4;
                     hence (EL|G.edgesDBetween({x},{x}) +* EL|EXXeb).e
-                      = (EL|G.edgesDBetween({x},{x})).e by A153,FUNCT_4:12
-                     .= EL.e by A156,FUNCT_1:72;
+                      = (EL|G.edgesDBetween({x},{x})).e by A152,FUNCT_4:12
+                     .= EL.e by A155,FUNCT_1:72;
                   end;
                   suppose not e in G.edgesDBetween({x},{x}); then
-                A157: e in EXXeb by A155,XBOOLE_0:def 4;
+                A156: e in EXXeb by A154,XBOOLE_0:def 4;
                     hence (EL|G.edgesDBetween({x},{x}) +* EL|EXXeb).e
-                      = (EL|EXXeb).e by A153,FUNCT_4:14
-                     .= EL.e by A157,FUNCT_1:72;
+                      = (EL|EXXeb).e by A152,FUNCT_4:14
+                     .= EL.e by A156,FUNCT_1:72;
                   end;
                 end;
                 hence (EL|G.edgesDBetween({x},VG)).e =
-                  (EL|G.edgesDBetween({x},{x}) +* EL|EXXeb).e by A155,FUNCT_1:
+                  (EL|G.edgesDBetween({x},{x}) +* EL|EXXeb).e by A154,FUNCT_1:
 72;
             end; then
             EL|G.edgesDBetween({x},VG) =
-              EL|G.edgesDBetween({x},{x}) +* EL|EXXeb by A153,A154,FUNCT_1:9;
+              EL|G.edgesDBetween({x},{x}) +* EL|EXXeb by A152,A153,FUNCT_1:9;
 then
             Sum (EL|G.edgesDBetween({x},VG)) =
               Sum (EL|EXXe) + Sum (EL|G.edgesDBetween({x},{x}))
-              by A151,GLIB_004:3; then
-        A158: Sum (EL|EXXf) = Sum (EL|EXXe) by A132,A145;
+              by A150,GLIB_004:3; then
+        A157: Sum (EL|EXXf) = Sum (EL|EXXe) by A133,A145;
             Sum (EL|E1) - Sum(EL|E2)
               = G.flow(source,sink) + Sum (EL|EV2X) + Sum (EL|EV1Xd)
-                - Sum (EL|EXV1c) - Sum (EL|EXV2) by A47,A69,A74,A92,A97
+                - Sum (EL|EXV1c) - Sum (EL|EXV2) by A48,A71,A76,A95,A100
              .= G.flow(source,sink) + Sum (EL|G.edgesDBetween(VG \{x},{x}))
-                - Sum (EL|EXV1c) - Sum (EL|EXV2) by A114
+                - Sum (EL|EXV1c) - Sum (EL|EXV2) by A116
              .= G.flow(source,sink) + Sum (EL|G.edgesDBetween(VG \{x},{x}))
-                - Sum (EL|G.edgesDBetween({x},VG\{x})) by A131
-             .= G.flow(source,sink) by A158;
+                - Sum (EL|G.edgesDBetween({x},VG\{x})) by A132
+             .= G.flow(source,sink) by A157;
             hence G.flow(source,sink) =
               Sum(EL | G.edgesDBetween(V2, VG \ V2)) -
-              Sum(EL | G.edgesDBetween(VG \ V2, V2)) by A57,A86;
+              Sum(EL | G.edgesDBetween(VG \ V2, V2)) by A59,A89;
         end;
         hence P[n+1];
     end;
-A159: for n being non empty Nat holds P[n] from BINARITH:sch 1(A37,A38);
+A158: for n being non empty Nat holds P[n] from BINARITH:sch 1(A37,A38);
     set n = card (VG \ V);
     now assume n = 0; then
-    A160: VG \ V = {} by CARD_2:59;
+    A159: VG \ V = {} by CARD_2:59;
         sink is Vertex of G by A1,Def7;
-        hence contradiction by A1,A160,XBOOLE_0:def 4;
+        hence contradiction by A1,A159,XBOOLE_0:def 4;
     end;
-    hence thesis by A1,A159;
+    hence thesis by A1,A158;
 end;
 
 theorem Th12: ::tFLOW02

@@ -10,9 +10,9 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="FINSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="REALSET1"/>
-<ArticleID name="FINSET_1"/>
 </Signature>
 <RCluster>
 <ArgTypes>
@@ -30,7 +30,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 </Cluster>
 </RCluster>
 <CCluster>
@@ -43,7 +43,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -53,7 +53,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="11"/>
+<Adjective nr="8"/>
 <Adjective nr="12"/>
 </Cluster>
 </CCluster>

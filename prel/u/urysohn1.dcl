@@ -10,50 +10,49 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="STRUCT_0"/>
-<ArticleID name="PRE_TOPC"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MEMBERED"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="PRE_TOPC"/>
 <ArticleID name="URYSOHN1"/>
 </Signature>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="76"/>
+<Func kind="K" nr="65"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="123">
+<Func kind="K" nr="110">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
+<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="124"/>
+<Func kind="K" nr="111"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
+<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="125"/>
+<Func kind="K" nr="112"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
+<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </FCluster>
 </Registrations>

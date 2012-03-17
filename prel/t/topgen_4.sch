@@ -12,14 +12,13 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="XCMPLX_0"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
@@ -29,14 +28,14 @@
 </Signature>
 <Scheme>
 <ArgTypes/>
-<Pred kind="V" nr="30">
+<Pred kind="V" nr="27">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="91"/>
+<Func kind="K" nr="80"/>
 </Typ>
-<Func kind="K" nr="174">
-<Func kind="K" nr="91"/>
+<Func kind="K" nr="164">
+<Func kind="K" nr="80"/>
 <Var nr="1"/>
 </Func>
 <Pred kind="P" nr="1">

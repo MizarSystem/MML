@@ -10,8 +10,7 @@ environ
       TARSKI, SETWISEO;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, RELAT_1, FUNCT_1, FINSUB_1,
       RELSET_1, FINSET_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1;
- constructors TARSKI, ENUMSET1, FINSUB_1, FINSET_1, BINOP_1, FUNCOP_1,
-      XBOOLE_0, PARTFUN1, RELAT_2;
+ constructors ENUMSET1, PARTFUN1, BINOP_1, FUNCOP_1, FINSET_1, FINSUB_1;
  registrations FINSET_1, FINSUB_1, RELSET_1, XBOOLE_0, ZFMISC_1, FUNCT_2;
  requirements BOOLE, SUBSET;
  definitions BINOP_1, TARSKI;
@@ -76,13 +75,13 @@ A2:       z in Y \ f"X and
 A3:       f.z = x by FUNCT_1:def 12;
             not z in f"X by A2,XBOOLE_0:def 4;
 then A4:      not x in X by A1,A3,FUNCT_1:def 13;
-            z in Y by A2,XBOOLE_0:def 4;
+            z in Y by A2;
          then f.z in f.:Y by A1,FUNCT_1:def 12;
         hence x in f.:Y \ X by A3,A4,XBOOLE_0:def 4;
        end;
       assume
 A5:    x in f.:Y \ X;
-       then x in f.:Y by XBOOLE_0:def 4;
+       then x in f.:Y;
        then consider z such that
 A6:    z in dom f and
 A7:    z in Y and
@@ -276,22 +275,30 @@ registration let X be non empty set;
   end;
 end;
 
+notation let X be non empty set, x be Element of X;
+ synonym {.x.} for {x};
+  let y be Element of X;
+ synonym {.x,y.} for {x,y};
+  let z be Element of X;
+ synonym {.x,y,z.} for {x,y,z};
+end;
+
 definition let X be non empty set, x be Element of X;
-  redefine func {x} -> Element of Fin X;
+  redefine func {.x.} -> Element of Fin X;
   coherence
   proof
     {x} is Subset of X by SUBSET_1:63;
     hence {x} is Element of Fin X by FINSUB_1:def 5;
   end;
   let y be Element of X;
-  func {x,y} -> Element of Fin X;
+  func {.x,y.} -> Element of Fin X;
   coherence
   proof
     {x,y} is Subset of X by SUBSET_1:56;
     hence {x,y} is Element of Fin X by FINSUB_1:def 5;
   end;
   let z be Element of X;
-  func {x,y,z} -> Element of Fin X;
+  func {.x,y,z.} -> Element of Fin X;
   coherence
   proof
     {x,y,z} is Subset of X by SUBSET_1:57;
@@ -326,8 +333,8 @@ A7:  A c= B and
 A8:  ex B' being Element of Fin X() st B' = A & P[B'];
       reconsider A' = A as Element of Fin X() by A7,Th16;
       reconsider x' = x as Element of X() by A6,Th14;
-     take A' \/ {x'};
-     thus A' \/ {x'} = A \/ {x};
+     take A' \/ {.x'.};
+     thus A' \/ {.x'.} = A \/ {x};
      not x' in A or A \/ {x'} = A by ZFMISC_1:46;
      hence P[A' \/ {x'}] by A2,A8;
     end;
@@ -338,7 +345,7 @@ A8:  ex B' being Element of Fin X() st B' = A & P[B'];
 scheme FinSubInd2{ X() -> non empty set, P[Element of Fin X()] } :
   for B being Element of Fin X() st B <> {} holds P[B]
  provided
-A1:  for x being Element of X() holds P[{x}] and
+A1:  for x being Element of X() holds P[{.x.}] and
 A2:  for B1,B2 being Element of Fin X() st B1 <> {} & B2 <> {}
       holds P[B1] & P[B2] implies P[B1 \/ B2]
 proof let B be Element of Fin X();
@@ -354,15 +361,15 @@ A8:  A <> {} implies ex B' being Element of Fin X() st B' = A & P[B'] and
      A \/ {x} <> {};
      reconsider A' = A as Element of Fin X() by A7,Th16;
      reconsider x' = x as Element of X() by A6,Th14;
-     take A' \/ {x'};
-     thus A' \/ {x'} =A \/ {x};
-A9:    P[{x'}] by A1;
+     take A' \/ {.x'.};
+     thus A' \/ {.x'.} =A \/ {x};
+A9:    P[{.x'.}] by A1;
       per cases;
        suppose A = {};
-        hence P[A' \/ {x'}] by A1;
+        hence P[A' \/ {.x'.}] by A1;
        end;
        suppose A <> {};
-        hence P[A' \/ {x'}] by A2,A8,A9;
+        hence P[A' \/ {.x'.}] by A2,A8,A9;
       end;
     end;
     X[B] from FINSET_1:sch 2(A3,A4,A5);
@@ -442,7 +449,7 @@ A11:      e' is_a_unity_wrt F;
           not ex x' being Element of X st E = {x'};
       hence G.{} = e by A10 .= e' by A5,A11,BINOP_1:def 8;
      end;
-    thus for x being Element of X holds G.{x} = f.x by A10;
+    thus for x being Element of X holds G.{.x.} = f.x by A10;
     thus for B' being Element of Fin X st B' c= {}.X & B' <> {}
       for x being Element of X st x in {}.X \ B'
          holds G.(B' \/ {x}) = F.(G.B', f.x);
@@ -466,9 +473,9 @@ A16:   not x in B;
          holds G.(B' \/ {x'}) = F.(G.B', f.x')
       proof
      defpred X[set,set] means
-      (for C being Element of Fin X st C <> {} & C c= B & $1 = C \/ {x}
+      (for C being Element of Fin X st C <> {} & C c= B & $1 = C \/ {.x.}
               holds $2 = F.(G.C, f.x)) &
-      ((not ex C being Element of Fin X st C <> {} & C c= B & $1 = C \/ {x})
+      ((not ex C being Element of Fin X st C <> {} & C c= B & $1 = C \/ {.x.})
                implies $2 = G.$1);
 A17:     now let B' be Element of Fin X;
          thus ex y being Element of Y st X[B',y]
@@ -487,8 +494,7 @@ A21:                 not x in C & not x in C1 by A16,A19,A20;
 by A21,ZFMISC_1:40;
 A23:                  B' \ {x} = C \ {x} & B' \{x} = C1 \ {x} by A19,A20,
 XBOOLE_1:40;
-                        C \ {x} c= C & C1 \{x} c= C1 by XBOOLE_1:36;
-                      then B' \ {x} = C & B' \ {x} = C1 by A22,A23,
+                      B' \ {x} = C & B' \ {x} = C1 by A22,A23,
 XBOOLE_0:def 10;
                     hence y = F.(G.C1, f.x);
                   end;
@@ -531,7 +537,7 @@ A28:        {x'} = C \/ {x};
             then x in C by TARSKI:def 1;
             hence contradiction by A16,A27;
           end;
-          hence J.{x'} = G.{x'} by A25 .= f.x' by A14;
+          hence J.{x'} = G.{.x'.} by A25 .= f.x' by A14;
         end;
        let B' be Element of Fin X such that
 A29:       B' c= B \/ {x} and
@@ -545,7 +551,7 @@ A33:         {x} = C \/ {x};
             then x in C by TARSKI:def 1;
            hence contradiction by A16,A32;
           end;
-          then A34:       J.{x} = G.{x} by A25;
+          then A34:       J.{x} = G.{.x.} by A25;
          let x' be Element of X; assume x' in (B \/ {x}) \ B';
 then A35:       x' in B \/ {x} & not x' in B' by XBOOLE_0:def 4;
           per cases;
@@ -556,29 +562,29 @@ then A38:         {x'} c= B by ZFMISC_1:37;
               per cases;
                suppose
 A39:           B' = {x};
-                hence J.(B' \/ {x'}) = F.(G.{x'}, f.x) by A25,A38
+                hence J.(B' \/ {.x'.}) = F.(G.{.x'.}, f.x) by A25,A38
                        .= F.(f.x', f.x) by A14
                        .= F.(f.x, f.x') by A2,BINOP_1:def 2
                        .= F.(J.B', f.x') by A14,A34,A39;
                end;
                suppose
 A40:              B' <> {x};
-                 set C = (B' \ {x}) \/ {x'};
+                 set C = (B' \ {.x.}) \/ {.x'.};
 A41:              B' \ {x} c= B by A29,XBOOLE_1:43;
 then A42:              C c= B by A37,Th8;
                     not B' c= {x} by A30,A40,ZFMISC_1:39;
 then A43:              B' \ {x} <> {} by XBOOLE_1:37;
-                    not x' in B' \ {x} by A35,XBOOLE_0:def 4;
+                    not x' in B' \ {x} by A35;
 then A44:             x' in B \(B' \ {x}) by A37,XBOOLE_0:def 4;
-                    B' \/ {x'} = B' \/ {x} \/ {x'} by A36,ZFMISC_1:46
+                    B' \/ {.x'.} = B' \/ {x} \/ {x'} by A36,ZFMISC_1:46
                     .= (B' \ {x}) \/ {x} \/ {x'} by XBOOLE_1:39
-                    .= C \/ {x} by XBOOLE_1:4;
-                hence J.(B' \/ {x'}) = F.(G.C, f.x) by A25,A42
-                         .= F.(F.(G.(B'\{x}), f.x'), f.x) by A15,A41,A43,A44
-                         .= F.(G.(B'\{x}),F.(f.x', f.x)) by A3,BINOP_1:def 3
+                    .= C \/ {.x.} by XBOOLE_1:4;
+                hence J.(B' \/ {.x'.}) = F.(G.C, f.x) by A25,A42
+                         .= F.(F.(G.(B'\{.x.}), f.x'), f.x) by A15,A41,A43,A44
+                         .= F.(G.(B'\{.x.}),F.(f.x', f.x)) by A3,BINOP_1:def 3
                          .= F.(G.(B'\{x}),F.(f.x, f.x')) by A2,BINOP_1:def 2
-                         .= F.(F.(G.(B'\{x}), f.x), f.x') by A3,BINOP_1:def 3
-                         .= F.(J.((B'\{x})\/{x}), f.x') by A25,A41,A43
+                         .= F.(F.(G.(B'\{.x.}), f.x), f.x') by A3,BINOP_1:def 3
+                         .= F.(J.((B'\{.x.})\/{.x.}), f.x') by A25,A41,A43
                          .= F.(J.(B' \/ {x}), f.x') by XBOOLE_1:39
                          .= F.(J.B', f.x') by A36,ZFMISC_1:46;
                end;
@@ -596,12 +602,12 @@ then A49:            x' in B \ B' by A35,XBOOLE_0:def 4;
                   not x in B' \/ {x'} by A45,A48,Th6;
                then not ex C being Element of Fin X st
                C <> {} & C c= B & B' \/ {x'} = C \/ {x} by Th6;
-               hence J.(B' \/ {x'}) = G.(B' \/ {x'}) by A25
+               hence J.(B' \/ {.x'.}) = G.(B' \/ {.x'.}) by A25
                            .= F.(G.B', f.x') by A15,A30,A46,A49
                            .= F.(J.B', f.x') by A25,A47;
               end;
               suppose x = x';
-               hence J.(B' \/ {x'}) = F.(G.B', f.x') by A25,A30,A46
+               hence J.(B' \/ {.x'.}) = F.(G.B', f.x') by A25,A30,A46
                       .= F.(J.B', f.x') by A25,A47;
              end;
           end;
@@ -714,8 +720,7 @@ A8: for B' being Element of Fin X st B' c= B & B' <> {}
 A9:     B' c= B & B' <> {};
        let x be Element of X such that
 A10:     x in B;
-           B' \ {x} c= B' by XBOOLE_1:36;
-then A11:     B' \ {x} c= B by A9,XBOOLE_1:1;
+A11:     B' \ {x} c= B by A9,XBOOLE_1:1;
          per cases;
          suppose x in B';
 then A12:        B' \/ {x} = B' by ZFMISC_1:46;
@@ -732,10 +737,11 @@ A15:         B' = {x};
             suppose B' <> {x};
               then not B' c= {x} by A13,XBOOLE_0:def 10;
               then B' \ {x} <> {} by XBOOLE_1:37;
-then A16:           G.(B' \ {x} \/ {x}) = F.(G.(B' \ {x}), f.x) by A8,A11,A14;
+then
+A16:          G.(B' \ {.x.} \/ {.x.}) = F.(G.(B' \ {.x.}), f.x) by A8,A11,A14;
              thus G.(B' \/ {x}) = G.(B' \ {x} \/ {x}) by XBOOLE_1:39
                    .= F.(G.(B' \ {x}), F.(f.x,f.x)) by A2,A16,BINOP_1:def 4
-                   .= F.(F.(G.(B' \ {x}),f.x), f.x) by A4,BINOP_1:def 3
+                   .= F.(F.(G.(B' \ {.x.}),f.x), f.x) by A4,BINOP_1:def 3
                    .= F.(G.B',f.x) by A12,A16,XBOOLE_1:39;
            end;
          end;
@@ -771,27 +777,27 @@ end;
 
 theorem Th26:
  F is commutative & F is associative
-  implies for b being Element of X holds F $$ ({b},f) = f.b
+  implies for b being Element of X holds F $$ ({.b.},f) = f.b
  proof assume
 A1: F is commutative & F is associative;
   let b be Element of X;
-      ex G being Function of Fin X, Y st F $$ ({b},f) = G.{b} &
+      ex G being Function of Fin X, Y st F $$ ({.b.},f) = G.{b} &
      (for e being Element of Y st e is_a_unity_wrt F holds G.{} = e) & (
 for x being Element of X holds G.{x} = f.x) &
      for B' being Element of Fin X st B' c= {b} & B' <> {}
       for x being Element of X st x in {b} \ B'
         holds G.(B' \/ {x}) = F.(G.B',f.x) by A1,Def3;
-  hence F $$ ({b},f) = f.b;
+  hence F $$ ({.b.},f) = f.b;
  end;
 
 theorem Th27:
  F is idempotent & F is commutative & F is associative
-  implies for a,b being Element of X holds F $$ ({a,b},f) = F.(f.a, f.b)
+  implies for a,b being Element of X holds F $$ ({.a,b.},f) = F.(f.a, f.b)
  proof assume
 A1:  F is idempotent & F is commutative & F is associative;
   let a,b be Element of X;
    consider G being Function of Fin X, Y such that
-A2:  F $$ ({a,b},f) = G.{a,b} and
+A2:  F $$ ({.a,b.},f) = G.{a,b} and
         for e being Element of Y st e is_a_unity_wrt F holds G.{} = e and
 A3:  for x being Element of X holds G.{x} = f.x and
 A4:  for B' being Element of Fin X st B' c= {a,b} & B' <> {}
@@ -799,21 +805,20 @@ A4:  for B' being Element of Fin X st B' c= {a,b} & B' <> {}
                                                                     by A1,Th25;
 A5: {a} c= {a,b} by ZFMISC_1:12;
 A6: b in {a,b} by TARSKI:def 2;
-  thus F $$ ({a,b},f) = G.({a} \/ {b}) by A2,ENUMSET1:41
-                     .= F.(G.{a}, f.b) by A4,A5,A6
+  thus F $$ ({.a,b.},f) = G.({.a.} \/ {.b.}) by A2,ENUMSET1:41
+                     .= F.(G.{.a.}, f.b) by A4,A5,A6
                      .= F.(f.a, f.b) by A3;
  end;
 
 theorem Th28:
  F is idempotent & F is commutative & F is associative
   implies for a,b,c being Element of X holds
-   F $$ ({a,b,c},f) = F.(F.(f.a, f.b), f.c)
+   F $$ ({.a,b,c.},f) = F.(F.(f.a, f.b), f.c)
  proof assume
 A1:  F is idempotent & F is commutative & F is associative;
   let a,b,c be Element of X;
-      { a,b,c } <> {} by ENUMSET1:def 1;
-   then consider G being Function of Fin X, Y such that
-A2:  F $$ ({a,b,c},f) = G.{a,b,c} and
+   consider G being Function of Fin X, Y such that
+A2:  F $$ ({.a,b,c.},f) = G.{a,b,c} and
         for e being Element of Y st e is_a_unity_wrt F holds G.{} = e and
 A3:  for x being Element of X holds G.{x} = f.x and
 A4:  for B' being Element of Fin X st B' c= {a,b,c} & B' <> {}
@@ -822,11 +827,11 @@ A4:  for B' being Element of Fin X st B' c= {a,b,c} & B' <> {}
 A5: {a} c= {a,b,c} by Th3;
 A6: b in {a,b,c} by ENUMSET1:def 1;
 A7: G.{a,b} = G.({a} \/ {b}) by ENUMSET1:41
-           .= F.(G.{a}, f.b) by A4,A5,A6
+           .= F.(G.{.a.}, f.b) by A4,A5,A6
            .= F.(f.a, f.b) by A3;
 A8: {a,b} c= {a,b,c} by Th4;
 A9: c in {a,b,c} by ENUMSET1:def 1;
-  thus F $$ ({a,b,c},f) = G.({a,b} \/ {c}) by A2,ENUMSET1:43
+  thus F $$ ({.a,b,c.},f) = G.({.a,b.} \/ {.c.}) by A2,ENUMSET1:43
                      .= F.(F.(f.a, f.b), f.c) by A4,A7,A8,A9;
  end;
 
@@ -834,14 +839,14 @@ A9: c in {a,b,c} by ENUMSET1:def 1;
 
 theorem Th29:
  F is idempotent & F is commutative & F is associative & B <> {} implies
-   for x being Element of X holds F $$(B \/ {x}, f) = F.(F $$(B,f),f.x)
+   for x being Element of X holds F $$(B \/ {.x.}, f) = F.(F $$(B,f),f.x)
   proof assume
 A1:  F is idempotent & F is commutative & F is associative;
    assume
 A2: B <> {};
    let x be Element of X;
    consider G being Function of Fin X, Y such that
-A3:  F $$ (B \/ {x},f) = G.(B \/ {x}) and
+A3:  F $$ (B \/ {.x.},f) = G.(B \/ {.x.}) and
         for e being Element of Y st e is_a_unity_wrt F holds G.{} = e and
 A4:  for x being Element of X holds G.{x} = f.x and
 A5:  for B' being Element of Fin X st B' c= B \/ {x} & B' <> {}
@@ -879,7 +884,7 @@ A17:     C <> {};
 A18: for C being Element of Fin X holds X[C] from FinSubInd3(A9,A10);
 A19: B c= B \/ {x} by XBOOLE_1:7;
     x in B \/ {x} by Th6;
-   hence F $$(B \/ {x}, f) = F.(G.B, f.x) by A2,A3,A5,A19
+   hence F $$(B \/ {.x.}, f) = F.(G.B, f.x) by A2,A3,A5,A19
                         .= F.(F $$(B,f),f.x) by A2,A6,A18;
   end;
 
@@ -896,23 +901,24 @@ A2:  B1 <> {};
      $1 <> {} implies F $$ (B1 \/ $1,f) = F.(F $$ (B1,f),F $$ ($1,f));
 A3: X[{}.X];
 A4: for B' being Element of Fin X, b being Element of X
-      holds X[B'] implies X[B' \/ {b}]
+      holds X[B'] implies X[B' \/ {.b.}]
     proof let B be (Element of Fin X), x be Element of X such that
 A5:   B <> {} implies F $$ (B1 \/ B,f) = F.(F $$ (B1,f),F $$ (B,f)) and
          B \/ {x} <> {};
        per cases;
        suppose
 A6:      B = {};
-        hence F $$ (B1 \/ (B \/ {x}),f) = F.(F $$ (B1,f), f.x) by A1,A2,Th29
-                       .= F.(F $$ (B1,f),F $$ (B \/ {x},f)) by A1,A6,Th26;
+        hence F $$ (B1 \/ (B \/ {.x.}),f) = F.(F $$ (B1,f), f.x) by A1,A2,Th29
+                       .= F.(F $$ (B1,f),F $$ (B \/ {.x.},f)) by A1,A6,Th26;
        end;
        suppose
 A7:      B <> {};
 then A8:     B1 \/ B <> {} by XBOOLE_1:15;
-        thus F $$ (B1 \/ (B \/ {x}),f) = F $$ (B1 \/ B \/ {x},f) by XBOOLE_1:4
+        thus F $$ (B1 \/ (B \/ {.x.}),f)
+                    = F $$ (B1 \/ B \/ {.x.},f) by XBOOLE_1:4
                    .= F.(F.(F $$ (B1,f),F $$ (B,f)), f.x) by A1,A5,A7,A8,Th29
                    .= F.(F $$ (B1,f),F.(F $$ (B,f), f.x)) by A1,BINOP_1:def 3
-                   .= F.(F $$ (B1,f),F $$ (B \/ {x},f)) by A1,A7,Th29;
+                   .= F.(F $$ (B1,f),F $$ (B \/ {.x.},f)) by A1,A7,Th29;
       end;
     end;
     for B2 being Element of Fin X holds X[B2] from FinSubInd3(A3,A4);
@@ -926,8 +932,8 @@ theorem
 A1:  F is commutative & F is associative & F is idempotent;
    let x be Element of X; assume
 A2:  x in B;
-   thus F.(f.x,F$$(B,f)) = F.(F$$({x},f), F$$(B,f)) by A1,Th26
-               .= F$$({x} \/ B, f) by A1,A2,Th30
+   thus F.(f.x,F$$(B,f)) = F.(F$$({.x.},f), F$$(B,f)) by A1,Th26
+               .= F$$({.x.} \/ B, f) by A1,A2,Th30
                .= F$$(B,f) by A2,ZFMISC_1:46;
   end;
 
@@ -958,11 +964,11 @@ A2:  F is commutative & F is associative & F is idempotent;
     defpred X[Element of Fin X] means
       (for b being Element of X st b in $1 holds f.b = a)
        implies F$$($1,f) = a;
-A3: for x being Element of X holds X[{x}]
+A3: for x being Element of X holds X[{.x.}]
     proof let x be Element of X such that
 A4:   for b being Element of X st b in {x} holds f.b = a;
 A5:   x in { x } by TARSKI:def 1;
-     thus F$$({x},f) = f.x by A2,Th26 .= a by A4,A5;
+     thus F$$({.x.},f) = f.x by A2,Th26 .= a by A4,A5;
     end;
 A6:  for B1,B2 being Element of Fin X st B1 <> {} & B2 <> {}
       holds X[B1] & X[B2] implies X[B1 \/ B2]
@@ -1022,7 +1028,7 @@ A3: f.:A = g.:B;
      holds F$$($1,f) = F$$(B,g);
 A4: X[{}.X];
 A5: for B' being Element of Fin X, b being Element of X
-      holds X[B'] implies X[B' \/ {b}]
+      holds X[B'] implies X[B' \/ {.b.}]
   proof let A be (Element of Fin X), x be Element of X such that
 A6:  A <> {} implies
     for B being Element of Fin X st f.:A = g.:B holds F$$(A,f) = F$$(B,g);
@@ -1037,12 +1043,12 @@ A10:     f.x in f.:A by A8,A9,FUNCT_2:43;
 A11:     g.:B = f.:A \/ f.:{x} by A7,RELAT_1:153
            .= f.:A \/ {f.x} by Th13
            .= f.:A by A10,ZFMISC_1:46;
-       thus F$$(A \/ {x},f) = F.(F$$(A,f), f.x) by A1,A8,Th29
-                   .= F.(F$$(A \/ {x'},f), f.x) by A8,ZFMISC_1:46
+       thus F$$(A \/ {.x.},f) = F.(F$$(A,f), f.x) by A1,A8,Th29
+                   .= F.(F$$(A \/ {.x'.},f), f.x) by A8,ZFMISC_1:46
                    .= F.(F.(F$$(A,f), f.x'), f.x) by A1,A8,Th29
                    .= F.(F$$(A,f), F.(f.x', f.x')) by A1,A9,BINOP_1:def 3
                    .= F.(F$$(A,f), f.x') by A1,BINOP_1:def 4
-                   .= F$$(A \/ {x'},f) by A1,A8,Th29
+                   .= F$$(A \/ {.x'.},f) by A1,A8,Th29
                    .= F$$(A,f) by A8,ZFMISC_1:46
                    .= F$$(B,g) by A6,A8,A11;
       end;
@@ -1051,15 +1057,14 @@ A12:     not f.x in f.:A;
         per cases;
         suppose A13: A = {};
 then A14:      g.:B = {f.x} by A7,Th13;
-         thus F$$(A \/ {x},f) = f.x by A1,A13,Th26
+         thus F$$(A \/ {.x.},f) = f.x by A1,A13,Th26
                       .= F$$(B,g) by A1,A14,Th34;
         end;
         suppose
 A15:       A <> {};
           B /\ g"{f.x} c= B by XBOOLE_1:17;
           then reconsider B2 = B /\ g"{f.x} as Element of Fin X by Th16;
-          B \ g"{f.x} c= B by XBOOLE_1:36;
-          then reconsider B1 = B \ g"{f.x} as Element of Fin X by Th16;
+          reconsider B1 = B \ g"{f.x} as Element of Fin X by Th16;
 A16:       B = B1 \/ B2 by XBOOLE_1:51;
 A17:       now assume B1 = {};
             then B c= g"{f.x} by XBOOLE_1:37;
@@ -1093,7 +1098,7 @@ A24:       for b being Element of X st b in B2 holds g.b = f.x
              then g.b in {f.x} by FUNCT_1:def 13;
             hence g.b = f.x by TARSKI:def 1;
            end;
-        thus F$$(A \/ {x},f) = F.(F$$(A,f), f.x) by A1,A15,Th29
+        thus F$$(A \/ {.x.},f) = F.(F$$(A,f), f.x) by A1,A15,Th29
                       .= F.(F$$(B1,g), f.x) by A6,A15,A23
                       .= F.(F$$(B1,g), F$$(B2,g)) by A1,A22,A24,Th33
                       .= F$$(B,g) by A1,A16,A17,A22,Th30;
@@ -1119,11 +1124,11 @@ A2: G is_distributive_wrt F;
 A3: B<> {};
   let f be Function of X,Y; let a be Element of Y;
    defpred X[Element of Fin X] means G.(a,F$$($1,f)) = F$$($1,G[;](a,f));
-A4: for x being Element of X holds X[{x}]
+A4: for x being Element of X holds X[{.x.}]
     proof let x be Element of X;
-     thus G.(a,F$$({x},f)) = G.(a,f.x) by A1,Th26
+     thus G.(a,F$$({.x.},f)) = G.(a,f.x) by A1,Th26
                   .= (G[;](a,f)).x by FUNCOP_1:66
-                  .= F$$({x},G[;](a,f)) by A1,Th26;
+                  .= F$$({.x.},G[;](a,f)) by A1,Th26;
     end;
 A5:  for B1,B2 being Element of Fin X st B1 <> {} & B2 <> {}
       holds X[B1] & X[B2] implies X[B1 \/ B2]
@@ -1156,11 +1161,11 @@ A2: G is_distributive_wrt F;
 A3: B<> {};
   let f be Function of X,Y; let a be Element of Y;
    defpred X[Element of Fin X] means G.(F$$($1,f),a) = F$$($1,G[:](f,a));
-A4: for x being Element of X holds X[{x}]
+A4: for x being Element of X holds X[{.x.}]
     proof let x be Element of X;
-     thus G.(F$$({x},f),a) = G.(f.x,a) by A1,Th26
+     thus G.(F$$({.x.},f),a) = G.(f.x,a) by A1,Th26
                   .= (G[:](f,a)).x by FUNCOP_1:60
-                  .= F$$({x},G[:](f,a)) by A1,Th26;
+                  .= F$$({.x.},G[:](f,a)) by A1,Th26;
     end;
 A5: for B1,B2 being Element of Fin X st B1 <> {} & B2 <> {}
       holds X[B1] & X[B2] implies X[B1 \/ B2]
@@ -1197,12 +1202,12 @@ A2: B <> {};
   let f be Function of X,Y; let g be Function of Y,A;
 A3: dom f = X by FUNCT_2:def 1;
     defpred X[Element of Fin X] means F$$(f.:$1,g) = F$$($1,g*f);
-A4: for x being Element of X holds X[{x}]
+A4: for x being Element of X holds X[{.x.}]
    proof let x be Element of X;
-    thus F$$(f.:{x},g) = F$$({f.x},g) by A3,FUNCT_1:117
+    thus F$$(f.:{.x.},g) = F$$({.f.x.},g) by A3,FUNCT_1:117
                   .= g.(f.x) by A1,Th26
                   .= (g*f).x by FUNCT_2:21
-                  .= F$$({x},g*f) by A1,Th26;
+                  .= F$$({.x.},g*f) by A1,Th26;
    end;
 A5: for B1,B2 being Element of Fin X st B1 <> {} & B2 <> {}
       holds X[B1] & X[B2] implies X[B1 \/ B2]
@@ -1244,23 +1249,23 @@ A3: for x,y being Element of Y holds g.(F.(x, y)) = G.(g.x, g.y);
       $1 <> {} implies g.(F$$($1,f)) = G$$($1,g*f);
 A4: X[{}.X];
 A5: for B' being Element of Fin X, b being Element of X
-      holds X[B'] implies X[B' \/ {b}]
+      holds X[B'] implies X[B' \/ {.b.}]
    proof let B be (Element of Fin X), x be Element of X;
     assume that
 A6:  B <> {} implies g.(F$$(B,f)) = G$$(B,g*f) and B \/ {x} <> {};
      per cases;
       suppose
 A7:     B = {};
-       hence g.(F$$(B \/ {x},f)) = g.(f.x) by A1,Th26
+       hence g.(F$$(B \/ {.x.},f)) = g.(f.x) by A1,Th26
                   .= (g*f).x by FUNCT_2:21
-                  .= G$$(B \/ {x},g*f) by A2,A7,Th26;
+                  .= G$$(B \/ {.x.},g*f) by A2,A7,Th26;
       end;
       suppose
 A8:     B <> {};
-       hence g.(F$$(B \/ {x},f)) = g.(F.(F$$(B,f), f.x)) by A1,Th29
+       hence g.(F$$(B \/ {.x.},f)) = g.(F.(F$$(B,f), f.x)) by A1,Th29
                   .= G.(g.(F$$(B,f)), g.(f.x)) by A3
                   .= G.(G$$(B,g*f), (g*f).x) by A6,A8,FUNCT_2:21
-                  .= G$$(B \/ {x},g*f) by A2,A8,Th29;
+                  .= G$$(B \/ {.x.},g*f) by A2,A8,Th29;
      end;
    end;
   thus for B being Element of Fin X holds X[B] from FinSubInd3(A4,A5);
@@ -1287,7 +1292,8 @@ A3:   the_unity_wrt F is_a_unity_wrt F & {} = {}.X by A2,Th22;
 
 theorem Th41:
  F is idempotent & F is commutative & F is associative & F has_a_unity
-  implies for x being Element of X holds F $$(B \/ {x}, f) = F.(F $$(B,f),f.x)
+  implies
+   for x being Element of X holds F $$(B \/ {.x.}, f) = F.(F $$(B,f),f.x)
   proof assume
 A1:  F is idempotent & F is commutative & F is associative;
    assume
@@ -1296,7 +1302,7 @@ A3: {} = {}.X;
    let x be Element of X;
    now assume
 A4:  B = {};
-     hence F $$(B \/ {x}, f) = f.x by A1,Th26
+     hence F $$(B \/ {.x.}, f) = f.x by A1,Th26
               .= F.(the_unity_wrt F, f.x) by A2,Th23
               .= F.(F $$(B,f),f.x) by A1,A2,A3,A4,Th40;
     end;
@@ -1498,30 +1504,30 @@ definition let X be non empty set, A be set;
 end;
 
 theorem
-  FinUnion({i},f) = f.i
+  FinUnion({.i.},f) = f.i
   proof
 A1: FinUnion A is idempotent & FinUnion A is commutative
     & FinUnion A is associative by Th49,Th50,Th51;
-   thus FinUnion({i},f) = FinUnion A $$({i},f)
+   thus FinUnion({.i.},f) = FinUnion A $$({.i.},f)
                         .= f.i by A1,Th26;
   end;
 
 theorem
-  FinUnion({i,j},f) = f.i \/ f.j
+  FinUnion({.i,j.},f) = f.i \/ f.j
   proof
 A1: FinUnion A is idempotent & FinUnion A is commutative
     & FinUnion A is associative by Th49,Th50,Th51;
-   thus FinUnion({i,j},f) = FinUnion A $$({i,j},f)
+   thus FinUnion({.i,j.},f) = FinUnion A $$({.i,j.},f)
                .= FinUnion A.(f.i, f.j) by A1,Th27
                .= f.i \/ f.j by Def4;
   end;
 
 theorem
-  FinUnion({i,j,k},f) = f.i \/ f.j \/ f.k
+  FinUnion({.i,j,k.},f) = f.i \/ f.j \/ f.k
   proof
 A1: FinUnion A is idempotent & FinUnion A is commutative
     & FinUnion A is associative by Th49,Th50,Th51;
-   thus FinUnion({i,j,k},f) = FinUnion A $$({i,j,k},f)
+   thus FinUnion({.i,j,k.},f) = FinUnion A $$({.i,j,k.},f)
                .= FinUnion A.(FinUnion A.(f.i, f.j), f.k) by A1,Th28
                .= FinUnion A.(f.i \/ f.j, f.k) by Def4
                .= f.i \/ f.j \/ f.k by Def4;
@@ -1540,12 +1546,12 @@ A1: FinUnion A is idempotent & FinUnion A is commutative
 
 theorem Th60:
   for B being Element of Fin X holds
-    FinUnion(B \/ {i}, f) = FinUnion(B,f) \/ f.i
+    FinUnion(B \/ {.i.}, f) = FinUnion(B,f) \/ f.i
   proof let B be Element of Fin X;
 A1: FinUnion A is idempotent & FinUnion A is commutative
     & FinUnion A is associative & FinUnion A has_a_unity by Th49,Th50,Th51,Th53
 ;
-   thus FinUnion(B \/ {i}, f) = FinUnion A $$(B \/ {i}, f)
+   thus FinUnion(B \/ {.i.}, f) = FinUnion A $$(B \/ {.i.}, f)
               .= FinUnion A.(FinUnion(B,f), f.i) by A1,Th41
               .= FinUnion(B,f) \/ f.i by Def4;
   end;
@@ -1559,10 +1565,10 @@ A1: X[{}.X]
       thus FinUnion({}.X,f) = union {} by Th59,ZFMISC_1:2
                   .= union (f.:{}.X) by RELAT_1:149;
      end;
-A2: for B being (Element of Fin X), i st X[B] holds X[B \/ {i}]
+A2: for B being (Element of Fin X), i st X[B] holds X[B \/ {.i.}]
     proof let B be (Element of Fin X), i;
      assume FinUnion(B,f) = union (f.:B);
-     hence FinUnion(B \/ {i}, f) = union(f.:B) \/ f.i by Th60
+     hence FinUnion(B \/ {.i.}, f) = union(f.:B) \/ f.i by Th60
                     .= union (f.:B) \/ union {f.i} by ZFMISC_1:31
                     .= union (f.:B \/ {f.i}) by ZFMISC_1:96
                     .= union (f.:B \/ f.:{i}) by Th13
@@ -1661,7 +1667,7 @@ A1:  now let x be set;
 A2:   x in A;
       then reconsider A' = A as non empty set;
       reconsider x' = x as Element of A' by A2;
-      {x'} in Fin A';
+      {.x'.} in Fin A';
      hence U(x) in Fin A;
     end;
    thus ex f being Function of A, Fin A st

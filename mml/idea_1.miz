@@ -15,10 +15,10 @@ environ
       MARGREL1, RELAT_1, FUNCT_1, FRAENKEL, FUNCOP_1, MATRIX_1, PARTFUN1,
       FUNCT_2, FUNCT_5, FUNCT_7, SERIES_1, CQC_LANG, FINSEQ_1, FINSEQ_2,
       FINSEQ_4, BINARITH, BINARI_3, WSIERP_1, XXREAL_0;
- constructors FUNCT_7, BINARI_2, SERIES_1, BINARITH, BINARI_3, FINSEQ_4,
-      WSIERP_1, FUNCT_5, PARTFUN1, NAT_1, MATRIX_1, XXREAL_0;
+ constructors PARTFUN1, XXREAL_0, NAT_1, FUNCT_5, CQC_LANG, FINSEQ_4, SERIES_1,
+      BINARITH, FUNCT_7, WSIERP_1, MATRIX_1, BINARI_3, ORDINAL2;
  registrations INT_1, FUNCT_1, RELSET_1, MARGREL1, FUNCT_7, NAT_1, XREAL_0,
-      FUNCT_2, ORDINAL2, FUNCOP_1, FRAENKEL, FINSEQ_1, XXREAL_0;
+      FUNCT_2, ORDINAL2, FUNCOP_1, FRAENKEL, FINSEQ_1, XXREAL_0, ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FINSEQ_2;
  theorems REAL_1, NAT_1, NAT_2, NEWTON, INT_1, INT_2, FINSEQ_1, FINSEQ_2,
@@ -726,11 +726,11 @@ proof
     hence thesis by A2,A3,Def8;
     end;
     suppose i <> 0;
-      then A6:(ChangeVal_1(i,n)) mod ((2 to_power n)+1)
+      then A5:(ChangeVal_1(i,n)) mod ((2 to_power n)+1)
                        = i mod ((2 to_power n)+1) by Def7;
          2 to_power n < (2 to_power n)+1 by XREAL_1:31;
       then i < (2 to_power n)+1 by A1,XXREAL_0:2;
-      then (ChangeVal_1(i,n)) mod ((2 to_power n)+1) = i by A6,NAT_1:76;
+      then (ChangeVal_1(i,n)) mod ((2 to_power n)+1) = i by A5,NAT_1:76;
     hence thesis by A2,A1,Def8;
 end;
 end;
@@ -3170,52 +3170,52 @@ theorem Th47:
             in rng(compose(IDEA_P_F(Key,n,r1),MESSAGES)) by A3,FUNCT_1:def 5;
       then reconsider M1 = compose(IDEA_P_F(Key,n,r1),MESSAGES).m
                       as FinSequence of NAT by A8,FINSEQ_1:def 11;
-    A1: m in MESSAGES by FINSEQ_1:def 11;
+    A9: m in MESSAGES by FINSEQ_1:def 11;
       defpred P[Nat] means
         for M being FinSequence of NAT st
           M = compose(IDEA_P_F(Key,n,$1),MESSAGES).m holds len M >= 4;
 
-      B2: P[0]
+      A10: P[0]
         proof
           let M be FinSequence of NAT;
-          assume A3: M = compose(IDEA_P_F(Key,n,0),MESSAGES).m;
+          assume A11: M = compose(IDEA_P_F(Key,n,0),MESSAGES).m;
              len IDEA_P_F(Key,n,0) = 0 by Def17;
           then IDEA_P_F(Key,n,0) = {} by FINSEQ_1:25;
-          then M = (id MESSAGES).m by A3,FUNCT_7:41
-                .= m by A1,FUNCT_1:35;
+          then M = (id MESSAGES).m by A11,FUNCT_7:41
+                .= m by A9,FUNCT_1:35;
           hence thesis by A2;
         end;
-      A5: for k being Nat st P[k] holds P[k + 1]
+      A12: for k being Nat st P[k] holds P[k + 1]
         proof
           let k be Nat;
-          assume A6: P[k];
+          assume A13: P[k];
           let M be FinSequence of NAT;
           assume M = compose(IDEA_P_F(Key,n,k+1),MESSAGES).m;
           then M = compose(IDEA_P_F(Key,n,k)^<* IDEA_P(Line(Key,(k+1)),n) *>,
                           MESSAGES).m by Th37;
-          then A9: M = (IDEA_P(Line(Key,(k+1)),n)*
+          then A14: M = (IDEA_P(Line(Key,(k+1)),n)*
                       compose(IDEA_P_F(Key,n,k),MESSAGES)).m by FUNCT_7:43;
-          A10: dom compose(IDEA_P_F(Key,n,k),MESSAGES) = MESSAGES &
+          A15: dom compose(IDEA_P_F(Key,n,k),MESSAGES) = MESSAGES &
                rng compose(IDEA_P_F(Key,n,k),MESSAGES) c= MESSAGES by Th44;
           then compose(IDEA_P_F(Key,n,k),MESSAGES).m
-                in rng(compose(IDEA_P_F(Key,n,k),MESSAGES)) by A1,FUNCT_1:def 5
+                in rng(compose(IDEA_P_F(Key,n,k),MESSAGES)) by A9,FUNCT_1:def 5
 ;
           then reconsider M1 = compose(IDEA_P_F(Key,n,k),MESSAGES).m
-                      as FinSequence of NAT by A10,FINSEQ_1:def 11;
-          A11:len M1 >= 4 by A6;
+                      as FinSequence of NAT by A15,FINSEQ_1:def 11;
+          A16:len M1 >= 4 by A13;
 
              dom (IDEA_P(Line(Key,(k+1)),n)*
                       compose(IDEA_P_F(Key,n,k),MESSAGES))=MESSAGES
             proof
                  rng compose(IDEA_P_F(Key,n,k),MESSAGES)
-                  c= dom IDEA_P(Line(Key,(k+1)),n) by A10,FUNCT_2:def 1;
-              hence thesis by A10,RELAT_1:46;
+                  c= dom IDEA_P(Line(Key,(k+1)),n) by A15,FUNCT_2:def 1;
+              hence thesis by A15,RELAT_1:46;
             end;
           then M = IDEA_P(Line(Key,(k+1)),n).
-                  (compose(IDEA_P_F(Key,n,k),MESSAGES).m) by A1,A9,FUNCT_1:22;
-          hence thesis by A11,Th43;
+                  (compose(IDEA_P_F(Key,n,k),MESSAGES).m) by A9,A14,FUNCT_1:22;
+          hence thesis by A16,Th43;
         end;
-       for k being Nat holds P[k] from NAT_1:sch 1(B2,A5);
+       for k being Nat holds P[k] from NAT_1:sch 1(A10,A12);
        then len M1 >= 4;
       hence thesis by A7,Th43;
   end;

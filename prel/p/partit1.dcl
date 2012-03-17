@@ -3,10 +3,10 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="XBOOLE_0"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
@@ -19,7 +19,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="58">
+<Func kind="K" nr="60">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

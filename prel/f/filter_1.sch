@@ -2,9 +2,9 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -42,7 +42,7 @@
 <Func kind="K" nr="22">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="104">
+<Func kind="K" nr="106">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -57,7 +57,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="105">
+<Func kind="K" nr="107">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
@@ -91,7 +91,7 @@
 <Func kind="K" nr="22">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="104">
+<Func kind="K" nr="106">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -102,7 +102,7 @@
 <Func kind="K" nr="22">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="104">
+<Func kind="K" nr="106">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -124,12 +124,12 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="105">
+<Func kind="K" nr="107">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="105">
+<Func kind="K" nr="107">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
@@ -164,7 +164,7 @@
 <Func kind="K" nr="22">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="104">
+<Func kind="K" nr="106">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -175,7 +175,7 @@
 <Func kind="K" nr="22">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="104">
+<Func kind="K" nr="106">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -186,7 +186,7 @@
 <Func kind="K" nr="22">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="104">
+<Func kind="K" nr="106">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -215,17 +215,17 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="105">
+<Func kind="K" nr="107">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="105">
+<Func kind="K" nr="107">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="105">
+<Func kind="K" nr="107">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="3"/>
@@ -271,7 +271,7 @@
 <Func kind="F" nr="2"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="73">
+<Func kind="K" nr="75">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
@@ -337,13 +337,13 @@
 <Func kind="F" nr="2"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="73">
+<Func kind="K" nr="75">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="73">
+<Func kind="K" nr="75">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
@@ -431,19 +431,19 @@
 <Func kind="F" nr="2"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="73">
+<Func kind="K" nr="75">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="4"/>
 </Func>
-<Func kind="K" nr="73">
+<Func kind="K" nr="75">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
 <Var nr="5"/>
 </Func>
-<Func kind="K" nr="73">
+<Func kind="K" nr="75">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="3"/>

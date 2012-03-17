@@ -2,14 +2,13 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -28,8 +27,8 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="R" nr="3">
-<Func kind="K" nr="58">
+<Pred kind="R" nr="8">
+<Func kind="K" nr="47">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -49,7 +48,7 @@
 </And>
 </Fraenkel>
 </Func>
-<Func kind="K" nr="58">
+<Func kind="K" nr="47">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>

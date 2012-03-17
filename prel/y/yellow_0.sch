@@ -56,7 +56,7 @@
 <And>
 <Not>
 <And>
-<Pred kind="R" nr="19">
+<Pred kind="R" nr="21">
 <Var nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -76,7 +76,7 @@
 <Var nr="3"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="19">
+<Pred kind="R" nr="21">
 <Var nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>

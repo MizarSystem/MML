@@ -12,7 +12,6 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -29,7 +28,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="37"/>
+<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -39,14 +38,14 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="37" value="false"/>
+<Adjective nr="34" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="37" value="false"/>
+<Adjective nr="34" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -69,7 +68,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="173">
+<Func kind="K" nr="161">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -89,7 +88,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="173">
+<Func kind="K" nr="161">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -109,15 +108,15 @@
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="37"/>
+<Adjective nr="18"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="37" value="false"/>
+<Adjective nr="34" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="13">
@@ -142,18 +141,18 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="158">
+<Func kind="K" nr="146">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="37"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="37" value="false"/>
+<Adjective nr="34" value="false"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>

@@ -8,13 +8,15 @@
 environ
 
  vocabularies BOOLE, ZFMISC_1, TARSKI, FUNCT_1, RELAT_1, ORDINAL1, HAHNBAN,
-      ARYTM;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, RELAT_1, FUNCT_1;
- constructors TARSKI, ENUMSET1, FUNCT_1, SUBSET_1, XBOOLE_0;
- registrations FUNCT_1, RELAT_1, ZFMISC_1, XBOOLE_0;
+      ARYTM, ORDINAL2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1,
+ ENUMSET1, SUBSET_1, RELAT_1, FUNCT_1;
+ constructors TARSKI, ENUMSET1, SUBSET_1, FUNCT_1;
+ registrations FUNCT_1, RELAT_1, ZFMISC_1, XBOOLE_0, SUBSET_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0, RELAT_1, FUNCT_1;
- theorems TARSKI, XBOOLE_0, FUNCT_1, ZFMISC_1, ENUMSET1, RELAT_1, XBOOLE_1;
+ theorems TARSKI, XBOOLE_0, FUNCT_1, ZFMISC_1, ENUMSET1, RELAT_1, XBOOLE_1,
+      SUBSET_1;
  schemes XBOOLE_0, FUNCT_1;
 
 begin
@@ -154,11 +156,7 @@ A1:  Y in X;
 
  registration let X;
   cluster succ X -> non empty;
-  coherence
-  proof
-         succ X = X \/ { X } & X in { X } by TARSKI:def 1;
-     hence thesis by XBOOLE_0:def 2;
-  end;
+  coherence;
  end;
 
 canceled 2;
@@ -167,8 +165,7 @@ theorem
  Th10: X in succ X
   proof
         X in { X } by TARSKI:def 1;
-    then X in X \/ { X } by XBOOLE_0:def 2;
-   hence X in succ X;
+   hence X in succ X by XBOOLE_0:def 2;
   end;
 
 canceled;
@@ -179,28 +176,24 @@ theorem
    assume that
 A1:   succ X = succ Y and
 A2:   X <> Y;
-        X in succ X by Th10;
-    then X in Y \/ { Y } by A1;
+    X in Y \/ { Y } by A1,Th10;
     then A3: X in Y or X in { Y } by XBOOLE_0:def 2;
-        Y in succ Y by Th10;
-    then Y in X \/ { X } by A1;
+    Y in X \/ { X } by A1, Th10;
     then Y in X or Y in { X } by XBOOLE_0:def 2;
    hence contradiction by A2,A3,TARSKI:def 1;
   end;
 
-theorem
+theorem Th13:
       x in succ X iff x in X or x = X
   proof
    thus x in succ X implies x in X or x = X
      proof assume x in succ X;
-       then x in X \/ { X };
        then x in X or x in { X } by XBOOLE_0:def 2;
       hence thesis by TARSKI:def 1;
      end;
    assume x in X or x = X;
     then x in X or x in { X } by TARSKI:def 1;
-    then x in X \/ { X } by XBOOLE_0:def 2;
-   hence thesis;
+   hence thesis by XBOOLE_0:def 2;
   end;
 
 theorem
@@ -295,7 +288,7 @@ A1:  x c< A;
 A3:  y in A \ x and
 A4:  not ex a st a in A \ x & a in y by TARSKI:7;
 A5:  y in A & not y in x by A3,XBOOLE_0:def 4;
-then A6:  y c= A by Def2;
+A6:  y c= A by Def2,A3;
         now let a;
      assume
 A7:   a in y;
@@ -348,7 +341,7 @@ A6:   z in y \ a & not ex c st c in y \ a & c in z by TARSKI:7;
 A7:   z in y & not z in a by A6,XBOOLE_0:def 4;
           y c= A by A2,A4,Def2;
       then z in a or z = a or a in z by A1,A7,Def3;
-     hence contradiction by A4,A7,Th3;
+     hence contradiction by A4,A6,XBOOLE_0:def 4,Th3;
     end;
     then a is epsilon-transitive by Def2;
    hence thesis by A3,Def4;
@@ -366,8 +359,8 @@ A2:  a in A & not a in B by TARSKI:def 3;
     then consider X such that
 A3:  X in A \ B & not ex a st a in A \ B & a in X by TARSKI:7;
 A4:  X in A & not X in B by A3,XBOOLE_0:def 4;
-then A5:  X c= A by Def2;
-A6:  X is Ordinal by A4,Th23;
+A5:  X c= A by Def2,A3;
+A6:  X is Ordinal by A3,Th23;
         now let b;
      assume
 A7:   b in X;
@@ -497,7 +490,7 @@ end;
    coherence by Th30;
  end;
 
-theorem
+theorem Th31:
       (for x st x in X holds x is Ordinal & x c= X) implies X is ordinal
    proof assume
 A1:   for x st x in X holds x is Ordinal & x c= X;
@@ -541,8 +534,7 @@ A1:     A in B;
 then A2:     A c= B by Def2;
            a in { A } implies a in B by A1,TARSKI:def 1;
        then { A } c= B by TARSKI:def 3;
-       then A \/ { A } c= B by A2,XBOOLE_1:8;
-      hence thesis;
+      hence thesis by A2,XBOOLE_1:8;
      end;
    assume
 A3:  succ A c= B;
@@ -554,9 +546,7 @@ theorem
  Th34: A in succ C iff A c= C
   proof
    thus A in succ C implies A c= C
-     proof assume
-           A in succ C;
-       then A in C \/ { C };
+     proof assume A in succ C;
        then A in C or A in { C } by XBOOLE_0:def 2;
       hence thesis by Def2,TARSKI:def 1;
      end;
@@ -598,7 +588,6 @@ A5:  C in X & for B st B in X holds C c= B by A4,Th32;
 A6:  P[B];
    assume
 A7:  not C c= B;
-    then B c= C & B <> C;
     then B c< C by XBOOLE_0:def 8;
     then A8:  B in C by Th21;
         C in succ A by A3,A5;
@@ -615,26 +604,25 @@ proof let A;
   defpred R[set] means ex B st $1 = B & P[B];
   consider Z such that
 A2: x in Z iff x in Y & R[x] from XBOOLE_0:sch 1;
-A3: Y \ Z c= Y by XBOOLE_1:36;
        now assume Y \ Z <> {};
     then consider C such that
-A4:   C in Y \ Z & for B st B in Y \ Z holds C c= B by A3,Th32;
-A5:   C in Y & not C in Z by A4,XBOOLE_0:def 4;
+A3:   C in Y \ Z & for B st B in Y \ Z holds C c= B by Th32;
+A4:   C in Y & not C in Z by A3,XBOOLE_0:def 4;
          now let B such that
-A6:    B in C;
-A7:    C c= Y by A5,Def2;
+A5:    B in C;
+A6:    C c= Y by A4,Def2;
            now assume not B in Z;
-        then B in Y \ Z by A6,A7,XBOOLE_0:def 4;
-then A8:     C c= B by A4;
-             C <> B by A6;
-         then C c< B by A8,XBOOLE_0:def 8;
-        hence contradiction by A6,Th21;
+        then B in Y \ Z by A5,A6,XBOOLE_0:def 4;
+then A7:     C c= B by A3;
+             C <> B by A5;
+         then C c< B by A7,XBOOLE_0:def 8;
+        hence contradiction by A5,Th21;
        end;
        then ex B' being Ordinal st B = B' & P[B'] by A2;
       hence P[B];
      end;
      then P[C] by A1;
-    hence contradiction by A2,A5;
+    hence contradiction by A2,A4;
    end;
  then not A in Y or A in Z by XBOOLE_0:def 4;
   then ex B st A = B & P[B] by A2,Th10;
@@ -787,8 +775,7 @@ A2:    C in z & z in A by A1,TARSKI:def 4;
 then A3:    { C } c= z by TARSKI:def 3;
 A4:    z is Ordinal by A2,Th23;
       then C c= z by A2,Def2;
-      then C \/ { C } c= z by A3,XBOOLE_1:8;
-      then succ C c= z;
+      then succ C c= z by A3,XBOOLE_1:8;
       then succ C = z or succ C c< z by XBOOLE_0:def 8;
       then A5:    succ C = z or succ C in z by A4,Th21;
           z c= A by A2,Def2;
@@ -922,10 +909,8 @@ A1:  X c= Y;
  definition let L,A;
  redefine func L|A -> T-Sequence of rng L;
    coherence
-    proof
-A1:    A c= dom L implies dom(L|A) = A by RELAT_1:91;
-          dom L c= A implies dom(L|A) = dom L by RELAT_1:97;
-      then L|A is T-Sequence & rng(L|A) c= rng L by A1,Def7,RELAT_1:99;
+    proof A c= dom L implies dom(L|A) = A by RELAT_1:91;
+      then L|A is T-Sequence & rng(L|A) c= rng L by Def7,RELAT_1:97,99;
      hence thesis by Def8;
     end;
  end;
@@ -1263,3 +1248,131 @@ end;
 ::   hence thesis by Def7;
 ::  end;
 ::end;
+
+begin :: Addenda
+
+:: moved from ORDINAL2, 2006.06.22, A.T.
+
+definition let X;
+ func On X -> set means
+:Def2':  x in it iff x in X & x is Ordinal;
+  existence
+  proof
+    defpred P[set] means $1 is Ordinal;
+    thus ex Y being set st
+      for x being set holds x in Y iff x in X & P[x] from XBOOLE_0:sch 1;
+  end;
+  uniqueness
+   proof
+    defpred P[set] means $1 in X & $1 is Ordinal;
+    let Y,Z such that
+A1:   x in Y iff P[x] and
+A2:   x in Z iff P[x];
+    thus Y = Z from XBOOLE_0:sch 2(A1,A2);
+   end;
+
+ func Lim X -> set means
+  x in it iff x in X & ex A st x = A & A is_limit_ordinal;
+  existence
+  proof
+    defpred P[set] means ex A st $1 = A & A is_limit_ordinal;
+    thus ex Y being set st
+      for x being set holds x in Y iff x in X & P[x] from XBOOLE_0:sch 1;
+  end;
+  uniqueness
+   proof
+    defpred P[set] means $1 in X & ex A st $1 = A & A is_limit_ordinal;
+    let Y,Z such that
+A3:   x in Y iff P[x] and
+A4:   x in Z iff P[x];
+    thus Y = Z from XBOOLE_0:sch 2(A3,A4);
+   end;
+end;
+
+theorem Th16:
+  for D ex A st D in A & A is_limit_ordinal
+  proof let D;
+   consider Field being set such that
+A1:  D in Field &
+    (for X,Y holds X in Field & Y c= X implies Y in Field) &
+    (for X holds X in Field implies bool X in Field) &
+    (for X holds X c= Field implies X,Field are_equipotent or X in Field)
+    by ZFMISC_1:136;
+        for X st X in On Field holds X is Ordinal & X c= On Field
+     proof let X; assume
+A2:    X in On Field;
+      hence X is Ordinal by Def2';
+      reconsider A = X as Ordinal by A2,Def2';
+      let y; assume
+A3:    y in X;
+       then y in A;
+      then reconsider B = y as Ordinal by Th23;
+           B c= A & A in Field by A2,A3,Def2,Def2';
+       then B in Field by A1;
+      hence thesis by Def2';
+     end;
+   then reconsider ON = On Field as Ordinal by Th31;
+   take ON;
+   thus D in ON by A1,Def2';
+        A in ON implies succ A in ON
+     proof assume A in ON;
+       then A in Field by Def2';
+then A4:    bool A in Field by A1;
+           succ A c= bool A
+        proof let x;
+         assume x in succ A;
+          then x in A or x = A by Th13;
+          then x c= A by Def2;
+         hence x in bool A;
+        end;
+       then succ A in Field by A1,A4;
+      hence thesis by Def2';
+     end;
+   hence thesis by Th41;
+  end;
+
+definition
+ func omega -> set means
+:Def5: {} in it & it is_limit_ordinal & it is ordinal &
+      for A st {} in A & A is_limit_ordinal holds it c= A;
+  existence
+   proof
+     defpred P[Ordinal] means {} in $1 & $1 is_limit_ordinal;
+A1:   ex A st P[A] by Th16;
+        ex C st P[C] & for A st P[A] holds C c= A
+     from OrdinalMin(A1);
+    hence thesis;
+   end;
+  uniqueness
+   proof let B,C be set such that
+A2:   {} in B & B is_limit_ordinal & B is ordinal &
+      for A st {} in A & A is_limit_ordinal holds B c= A and
+A3:   {} in C & C is_limit_ordinal & C is ordinal &
+      for A st {} in A & A is_limit_ordinal holds C c= A;
+    thus B c= C & C c= B by A2,A3;
+   end;
+end;
+
+registration
+ cluster omega -> non empty ordinal;
+  coherence by Def5;
+end;
+
+definition let A be set;
+ attr A is natural means
+  A in omega;
+end;
+
+:: from ARYTM_3, 2006.05.26
+
+registration
+ let A be Ordinal;
+ cluster -> ordinal Element of A;
+ coherence
+   proof
+    let x be Element of A;
+        A is empty or A is non empty;
+    hence thesis by Th23,SUBSET_1:def 2;
+   end;
+end;
+

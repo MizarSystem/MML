@@ -2,8 +2,8 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="RELAT_1"/>
 <ArticleID name="ZFMISC_1"/>
+<ArticleID name="RELAT_1"/>
 </Signature>
 <FCluster>
 <ArgTypes>
@@ -14,7 +14,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="12">
+<Func kind="K" nr="2">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

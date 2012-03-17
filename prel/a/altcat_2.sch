@@ -3,17 +3,17 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="1" value="false"/>
+<Adjective nr="7" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -38,8 +38,8 @@
 </Fraenkel>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
 </Cluster>
 </Typ>
 </Is>
@@ -48,13 +48,13 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="1" value="false"/>
+<Adjective nr="7" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -62,7 +62,7 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="22">
+<Func kind="K" nr="5">
 <Func kind="F" nr="2"/>
 </Func>
 <Fraenkel>
@@ -99,13 +99,13 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="1" value="false"/>
+<Adjective nr="7" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -117,7 +117,7 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="32">
+<Func kind="K" nr="15">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
 </Func>

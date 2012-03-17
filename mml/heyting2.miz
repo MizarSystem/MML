@@ -13,16 +13,16 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
       FUNCOP_1, BINOP_1, FINSET_1, FINSUB_1, FUNCT_2, FRAENKEL, PARTFUN1,
       LATTICES, STRUCT_0, SUBSTLAT, SETWISEO, HEYTING1, LATTICE2, FILTER_0;
- constructors SETWISEO, GRCAT_1, SUBSTLAT, LATTICE2, FILTER_0, HEYTING1,
-      FUNCOP_1;
+ constructors FUNCOP_1, SETWISEO, FRAENKEL, FINSEQ_1, FILTER_0, LATTICE2,
+      HEYTING1, SUBSTLAT;
  registrations RELSET_1, FINSUB_1, SETWISEO, SUBSTLAT, STRUCT_0, RFINSEQ,
       SUBSET_1, FUNCT_1, WELLFND1, FRAENKEL, FINSEQ_1;
  requirements SUBSET, BOOLE;
+ definitions TARSKI, FILTER_0, XBOOLE_0;
  theorems ZFMISC_1, TARSKI, FINSUB_1, FINSET_1, PARTFUN1, BINOP_1, LATTICES,
       LATTICE2, RELAT_1, FUNCT_1, GRFUNC_1, FUNCT_2, SUBSTLAT, SETWISEO,
       FUNCOP_1, FILTER_0, HEYTING1, RELSET_1, XBOOLE_0, XBOOLE_1;
  schemes FRAENKEL, BINOP_1, LATTICE3, PRE_CIRC, FUNCT_1, FUNCT_2, XBOOLE_0;
- definitions TARSKI, FILTER_0, XBOOLE_0;
 
 begin :: Preliminaries
 
@@ -157,7 +157,7 @@ A1: for u being set st u in {a} holds u is finite by TARSKI:def 1;
   then s = a & t = a by TARSKI:def 1;
   hence s = t;
  end;
- then { a } in { A where A is Element of Fin PFuncs (V,C) :
+ then {.a.} in { A where A is Element of Fin PFuncs (V,C) :
     ( for u being set st u in A holds u is finite ) &
       for s, t being Element of PFuncs (V, C) holds
        ( s in A & t in A & s c= t implies s = t ) } by A1;
@@ -905,15 +905,13 @@ A10:   dom IT = the carrier of SubstLatt (V, C) &
       proof
        let x be set; assume x in the carrier of SubstLatt (V, C);
 then A11:     IT.x = u \ x by A10;
-          u \ x c= u by XBOOLE_1:36;
-       then u \ x in SubstitutionSet (V,C) by A9,Lm4;
+       u \ x in SubstitutionSet (V,C) by A9,Lm4;
        hence thesis by A11;
       end;
      then reconsider IT as Function of the carrier of SubstLatt (V, C),
        Fin PFuncs (V, C) by A10,FUNCT_2:5;
         now let v be Element of SubstLatt (V, C);
-          u \ v c= u by XBOOLE_1:36;
-       then u \ v in SubstitutionSet (V,C) by A9,Lm4;
+       u \ v in SubstitutionSet (V,C) by A9,Lm4;
        then IT.v in SubstitutionSet (V,C) by A10;
       hence IT.v in the carrier of SubstLatt (V, C) by SUBSTLAT:def 4;
      end;
@@ -1029,19 +1027,19 @@ end;
 definition let V, C;
   func Atom(V, C) -> Function of PFuncs (V, C), the carrier of SubstLatt (V, C)
   means
-:Def8: for a being Element of PFuncs (V,C) holds it.a = mi { a };
+:Def8: for a being Element of PFuncs (V,C) holds it.a = mi {.a.};
  existence
   proof
 A1: the carrier of SubstLatt (V, C) = SubstitutionSet (V, C)
       by SUBSTLAT:def 4;
-    deffunc F(Element of PFuncs (V, C))= mi {$1};
+    deffunc F(Element of PFuncs (V, C))= mi {.$1.};
     consider f be Function of PFuncs (V, C), SubstitutionSet (V, C)
      such that
 A2:    for a be Element of PFuncs (V, C) holds f.a = F(a) from FUNCT_2:sch 4;
 A3: now let x be set;
      assume x in PFuncs (V, C);
       then reconsider a = x as Element of PFuncs (V, C);
-        f.a = mi { a } by A2;
+        f.a = mi {.a.} by A2;
      hence f.x in the carrier of SubstLatt (V, C) by A1;
     end;
        dom f = PFuncs (V, C) by FUNCT_2:def 1;
@@ -1053,9 +1051,9 @@ A3: now let x be set;
  correctness
   proof let IT1,IT2 be
     Function of PFuncs (V, C), the carrier of SubstLatt (V, C) such that
-A4: (for a holds IT1.a = mi { a }) & for a holds IT2.a = mi { a };
+A4: (for a holds IT1.a = mi {.a.}) & for a holds IT2.a = mi {.a.};
        now let a;
-         IT1.a = mi { a } & IT2.a = mi { a } by A4;
+         IT1.a = mi {.a.} & IT2.a = mi {.a.} by A4;
      hence IT1.a = IT2.a;
     end;
    hence thesis by FUNCT_2:113;
@@ -1078,13 +1076,13 @@ A2: for u being set st u in { a } holds u is finite by A1,TARSKI:def 1;
   then s = a & t = a by TARSKI:def 1;
   hence s = t;
  end;
- then { a } in { A where A is Element of Fin PFuncs (V,C) :
+ then {.a.} in { A where A is Element of Fin PFuncs (V,C) :
    ( for u being set st u in A holds u is finite ) &
       for s, t being Element of PFuncs (V, C) holds
        ( s in A & t in A & s c= t implies s = t ) } by A2;
  hence thesis by SUBSTLAT:def 1;
 end;
-    then {a} = mi {a} by SUBSTLAT:11
+    then {a} = mi {.a.} by SUBSTLAT:11
        .= Atom (V, C).a by Def8;
     hence thesis;
   end;
@@ -1211,7 +1209,7 @@ A1: for a be set st a in u ex b be set st b in v & b c= a;
 theorem Th25:
   (diff u).v [= u
    proof (diff u).v = u \ v by Def7;
-then (diff u).v c= u by XBOOLE_1:36;
+then (diff u).v c= u;
     then for a be set st a in (diff u).v ex b be set st b in u & b c= a;
     hence thesis by Lm8;
    end;
@@ -1476,7 +1474,7 @@ A7:  u "/\" v [= w;
       then M(V, C)[;](u, Atom(V, C)).a [= w by A6,A7,LATTICE2:46;
       then M(V, C).(u, Atom(V, C).a) [= w by FUNCOP_1:66;
 then A9:    u "/\" Atom(V, C).a [= w by LATTICES:def 2;
-      reconsider SA = {a} as Element of Fin PFuncs (V, C);
+      reconsider SA = {.a.} as Element of Fin PFuncs (V, C);
 A10:  a is finite by A8,Th2;
       then reconsider SS = {a} as Element of SubstitutionSet (V, C) by Th6;
       consider v be Element of SubstitutionSet (V, C) such that

@@ -4,15 +4,15 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
-<ArticleID name="TARSKI"/>
+<ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="FINSUB_1"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="LATTICE4"/>
 </Signature>
@@ -20,7 +20,7 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="13" value="false"/>
+<Adjective nr="17" value="false"/>
 <Adjective nr="27"/>
 </Cluster>
 </Typ>
@@ -37,7 +37,7 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="13" value="false"/>
+<Adjective nr="17" value="false"/>
 <Adjective nr="27"/>
 <Adjective nr="34"/>
 </Cluster>
@@ -46,7 +46,7 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
-<Func kind="K" nr="18">
+<Func kind="K" nr="22">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

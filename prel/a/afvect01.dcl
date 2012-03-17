@@ -10,7 +10,6 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -34,10 +33,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="62" value="false"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="59" value="false"/>
+<Adjective nr="61"/>
 <Adjective nr="64"/>
-<Adjective nr="67"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -64,8 +63,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="64"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="61"/>
 </Cluster>
 </FCluster>
 </Registrations>

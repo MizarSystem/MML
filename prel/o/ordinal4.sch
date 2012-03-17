@@ -3,17 +3,17 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="XBOOLE_0"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="CLASSES2"/>
 <ArticleID name="ORDINAL4"/>
 </Signature>
@@ -80,7 +80,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="11"/>
-<Adjective nr="14"/>
+<Adjective nr="18"/>
 </Cluster>
 </Typ>
 <For>
@@ -94,7 +94,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="19"/>
+<Func kind="K" nr="22"/>
 </Pred>
 </Not>
 <Pred kind="V" nr="10">
@@ -107,7 +107,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="11"/>
-<Adjective nr="14"/>
+<Adjective nr="18"/>
 </Cluster>
 </Typ>
 <Not>
@@ -132,7 +132,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="11">
+<Func kind="K" nr="15">
 <Var nr="3"/>
 <Var nr="4"/>
 </Func>
@@ -145,7 +145,7 @@
 </Not>
 </For>
 <Not>
-<Pred kind="R" nr="9">
+<Pred kind="R" nr="13">
 <Func kind="F" nr="1">
 <Var nr="2"/>
 </Func>
@@ -165,7 +165,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="13" value="false"/>
+<Adjective nr="14" value="false"/>
 <Adjective nr="23"/>
 </Cluster>
 </Typ>
@@ -187,7 +187,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="11">
+<Func kind="K" nr="15">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

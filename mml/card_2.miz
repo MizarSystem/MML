@@ -12,8 +12,8 @@ environ
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2,
       ORDINAL1, MCART_1, ORDINAL2, ORDINAL3, WELLORD2, REAL_1, NAT_1, FINSEQ_1,
       CARD_1, FINSET_1, FUNCOP_1, SUBSET_1, XXREAL_0;
- constructors DOMAIN_1, ORDINAL3, WELLORD2, REAL_1, NAT_1, FINSEQ_1, FUNCOP_1,
-      XREAL_0, XXREAL_0;
+ constructors ENUMSET1, WELLORD2, FUNCOP_1, ORDINAL3, XXREAL_0, XREAL_0,
+      REAL_1, NAT_1, FINSEQ_1;
  registrations SUBSET_1, ORDINAL1, CARD_1, FINSEQ_1, FINSET_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FUNCT_1, WELLORD2, XBOOLE_0;
@@ -535,12 +535,12 @@ A9:        x in dom f & y = f.x by FUNCT_1:def 5;
 A10:        x`1 in A & x`2 in B by A3,A9,MCART_1:10;
          consider x1, x2 being Ordinal such that
 A11:         x1 = x`1 & x2 = x`2 & f.x = x1*^B+^x2 by A3,A9;
-             y = x1*^B+^x2 & one*^B = B & x1+^one = succ x1
+             y = x1*^B+^x2 & 1*^B = B & x1+^1 = succ x1
            by A9,A11,ORDINAL2:48,56;
-then A12:        y in x1*^B+^one*^B & x1*^B+^one*^B = (succ x1)*^B & succ x1 c=
+then A12:        y in x1*^B+^1*^B & x1*^B+^1*^B = (succ x1)*^B & succ x1 c=
 A
            by A10,A11,ORDINAL1:33,ORDINAL2:49,ORDINAL3:54;
-          then x1*^B+^one*^B c= A*^B by ORDINAL2:58;
+          then x1*^B+^1*^B c= A*^B by ORDINAL2:58;
          hence thesis by A12;
         end;
       let y; assume
@@ -565,41 +565,22 @@ A16:     O1 = [C div^ B,C mod^ B]`1 &
  deffunc plus(set,set) = [:$1,{0}:] \/ [:$2,{1}:];
  deffunc plus(set,set,set,set) = [:$1,{$3}:] \/ [:$2,{$4}:];
 
- Lm4: 2 = {{},one}
-  proof
-       2 = succ (0+1)
-      .= succ one by ORDINAL2:def 4;
-   hence 2 = {{}} \/ {one} by ORDINAL1:def 1,ORDINAL3:18
-           .= {{},one} by ENUMSET1:41;
-  end;
+theorem
+  0 = Card {} & 1 = Card 1 & 2 = Card succ 1 by CARD_1:def 5;
 
 theorem
-  0 = Card {} & 1 = Card one & 2 = Card succ one
- proof
-  thus 0 = Card {} by CARD_1:47;
-  thus 1 = Card one by CARD_1:79,ORDINAL3:18;
-  thus 2 = Card {{},one} by Lm4,CARD_1:def 5
-      .= Card(one \/ {one}) by ENUMSET1:41,ORDINAL3:18
-      .= Card succ one by ORDINAL1:def 1;
- end;
-
-theorem
- Th20: 1 = one
-  proof
-    thus 1 = Card {{}} by CARD_1:79
-       .= one by CARD_1:50;
-  end;
+ 1 = 1;
 
 canceled;
 
 theorem
- Th22: 2 = {{},one} & 2 = succ one
-  proof
-A1:  2 = succ (0+1)
-      .= succ one by ORDINAL2:def 4;
-   thus 2 = {{},one} by Lm4;
-   thus thesis by A1;
-  end;
+ Th22: 2 = {{},1} & 2 = succ 1
+ proof
+       2 = succ 1;
+   hence 2 = {{}} \/ {1} by ORDINAL1:def 1,ORDINAL3:18
+           .= {{},1} by ENUMSET1:41;
+  thus thesis;
+ end;
 
 theorem
  Th23: X1,Y1 are_equipotent & X2,Y2 are_equipotent & x1 <> x2 & y1 <> y2
@@ -789,7 +770,7 @@ theorem
   proof K = Card K by CARD_1:def 5;
     then K*`1 = Card [:K,1:] & K = Card [:K,{{}}:] &
      Card [:K,{{}}:] = Card [:{{}},K:] by Lm2,Th13;
-   hence thesis by Th20,ORDINAL3:18;
+   hence thesis by ORDINAL3:18;
   end;
 
 canceled;
@@ -810,8 +791,8 @@ theorem
  Th36: 2*`K = K+`K
   proof
    thus 2*`K = Card [:2,K:]
-         .= Card([:{{}},K:] \/ [:{one},K:]) by Th22,ZFMISC_1:132
-         .= Card([:K,{{}}:] \/ [:K,{one}:]) by Th27
+         .= Card([:{{}},K:] \/ [:{1},K:]) by Th22,ZFMISC_1:132
+         .= Card([:K,{{}}:] \/ [:K,{1}:]) by Th27
          .= Card K +` Card K by Th28
          .= K +` Card K by CARD_1:def 5
          .= K +` K by CARD_1:def 5;
@@ -859,7 +840,7 @@ theorem
   proof
    thus exp(K,0) = Card Funcs({},K)
                 .= Card {{}} by FUNCT_5:64
-                 .= 1 by Th20,CARD_1:50;
+                 .= 1 by CARD_1:50;
   end;
 
 theorem
@@ -868,12 +849,12 @@ theorem
 theorem
   exp(K,1) = K & exp(1,K) = 1
   proof
-   thus exp(K,1) = Card Funcs(one,K) by Th20
+   thus exp(K,1) = Card Funcs(1,K)
                  .= Card K by FUNCT_5:65,ORDINAL3:18
                  .= K by CARD_1:def 5;
-   thus exp(1,K) = Card Funcs(K,one) by Th20
+   thus exp(1,K) = Card Funcs(K,1)
                  .= Card {K --> {}} by FUNCT_5:66,ORDINAL3:18
-                 .= 1 by Th20,CARD_1:50;
+                 .= 1 by CARD_1:50;
   end;
 
 theorem
@@ -929,9 +910,9 @@ A2:  Funcs(M,K),Card Funcs(M,K) are_equipotent & N,N are_equipotent
 theorem
   exp(2,Card X) = Card bool X
   proof
-A1:  Card Card X = Card X & Card 2 = Card {{},one} by Th22,CARD_1:def 5;
+A1:  Card Card X = Card X & Card 2 = Card {{},1} by Th22,CARD_1:def 5;
    thus exp(2,Card X) = Card Funcs(Card X,2)
-           .= Card Funcs(X,{{},one}) by A1,FUNCT_5:68
+           .= Card Funcs(X,{{},1}) by A1,FUNCT_5:68
            .= Card bool X by FUNCT_5:72;
   end;
 
@@ -1023,8 +1004,8 @@ A2:  for n st P[n] holds P[n+1]
 A3:    P[n];
       thus (n+1)*m = n*m+1*m
         .= n *^ m +^ m by A3,Th49
-        .= n *^ m +^ one *^ m by ORDINAL2:56
-        .= ( n +^ one) *^ m by ORDINAL3:54
+        .= n *^ m +^ 1 *^ m by ORDINAL2:56
+        .= ( n +^ 1) *^ m by ORDINAL3:54
         .= (succ n) *^ m by ORDINAL2:48
         .= (n+1) *^ m by CARD_1:52;
      end;
@@ -1379,7 +1360,7 @@ A2:   x in X by XBOOLE_0:def 1;
   assume z in {x,y};
    then A5: z = x or z = y by TARSKI:def 2;
    y in X \ {x} by A3,TARSKI:def 1;
-  hence thesis by A2,A5,XBOOLE_0:def 4;
+  hence thesis by A2,A5;
  end;
 
 :: from YELLOW_6, 2004.07.25
@@ -1409,17 +1390,16 @@ A4: for X,Y st X in Z & Y in Z holds X c= Y or Y c= X;
      end;
      suppose A6: n <> 0;
        set Y = Z \ {y};
-        A7: Y c= Z by XBOOLE_1:36;
         reconsider Y as finite set;
         {y} c= Z by A3,ZFMISC_1:37;
-        then A8: card Y = (n + 1) - card{y} by A2,Th63
+        then A7: card Y = (n + 1) - card{y} by A2,Th63
                        .= n + 1 - 1 by CARD_1:79
                        .= n;
-        for a,b being set st a in Y & b in Y holds a c= b or b c= a by A4,A7;
-        then A9: union Y in Y by A1,A6,A8,CARD_1:47;
-        then A10: union Y in Z by A7;
-        A11: y c= union Y or union Y c= y by A4,A7,A9;
-A12:     y in Z by A3;
+        for a,b being set st a in Y & b in Y holds a c= b or b c= a by A4;
+        then A8: union Y in Y by A1,A6,A7,CARD_1:47;
+        then A9: union Y in Z;
+        A10: y c= union Y or union Y c= y by A4,A8;
+A11:     y in Z by A3;
         Z = (Z \ {y}) \/ {y}
          proof
           thus Z c= (Z \ {y}) \/ {y}
@@ -1431,13 +1411,13 @@ A12:     y in Z by A3;
           let x;
            assume x in (Z \ {y}) \/ {y};
             then x in (Z \ {y}) or x in {y} by XBOOLE_0:def 2;
-            then (x in Z & not x in {y}) or x in {y} by XBOOLE_0:def 4;
+            then (x in Z & not x in {y}) or x in {y};
             then x in Z \/ {y} & {y} c= Z by A3,XBOOLE_0:def 2,ZFMISC_1:37;
           hence thesis by XBOOLE_1:12;
          end;
         then union Z = union Y \/ union {y} by ZFMISC_1:96
                     .= union Y \/ y by ZFMISC_1:31;
-      hence union Z in Z by A10,A11,A12,XBOOLE_1:12;
+      hence union Z in Z by A9,A10,A11,XBOOLE_1:12;
     end;
 end;
 
@@ -1460,7 +1440,7 @@ theorem
     by Lm7;
 
 definition let x1,x2,x3,x4,x5 be set;
-  pred x1, x2, x3, x4, x5 are_mutually_different means :Def1:
+  pred x1, x2, x3, x4, x5 are_mutually_different means :Def4:
   x1 <> x2 & x1 <> x3 & x1 <> x4 & x1 <> x5 & x2 <> x3 &
   x2 <> x4 & x2 <> x5 & x3 <> x4 & x3 <> x5 & x4 <> x5;
 end;
@@ -1471,7 +1451,7 @@ theorem
   proof
    assume x1,x2,x3,x4,x5 are_mutually_different;
    then x1 <> x2 & x1 <> x3 & x1 <> x4 & x1 <> x5 & x2 <> x3 &
-     x2 <> x4 & x2 <> x5 & x3 <> x4 & x3 <> x5 & x4 <> x5 by Def1;
+     x2 <> x4 & x2 <> x5 & x3 <> x4 & x3 <> x5 & x4 <> x5 by Def4;
    then card {x1,x2,x3,x4} = 4 & not x5 in {x1,x2,x3,x4} &
      {x1,x2,x3,x4} is finite & {x1,x2,x3,x4,x5} = {x1,x2,x3,x4} \/ {x5}
       by Th78,ENUMSET1:def 2,50;

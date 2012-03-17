@@ -15,16 +15,19 @@ environ
       DOMAIN_1, INT_1, BINOP_2, REALSET1, INT_2, NAT_1, RLVECT_1, GROUP_2,
       XXREAL_0, STRUCT_0, GROUP_1, GROUP_4, FUNCOP_1, FINSOP_1, SETWOP_2,
       FINSEQ_1;
- constructors WELLORD2, REAL_1, SETWISEO, DOMAIN_1, NAT_1, FUNCSDOM, GROUP_4,
-      FINSOP_1, MEMBERED, BINOP_2, INT_2, REALSET1, XXREAL_0;
+ constructors WELLORD2, DOMAIN_1, BINOP_1, SETWISEO, XXREAL_0, REAL_1, NAT_1,
+      BINOP_2, MEMBERED, FINSOP_1, REALSET1, INT_2, RLVECT_1, GROUP_4,
+      ORDINAL2;
  registrations SUBSET_1, INT_1, GROUP_1, GROUP_2, RELSET_1, STRUCT_0, FINSEQ_1,
-      XREAL_0, MEMBERED, ORDINAL2, NAT_1, BINOP_2, REALSET1, XXREAL_0;
+      XREAL_0, MEMBERED, ORDINAL2, NAT_1, BINOP_2, REALSET1, XXREAL_0,
+      ORDINAL1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions GROUP_1, FUNCT_1, TARSKI, BINOP_1, REALSET1, FINSOP_1, FINSEQ_2;
  theorems BINOP_1, INT_1, INT_2, NAT_1, REAL_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
       ZFMISC_1, FUNCT_2, FUNCOP_1, GROUP_1, GROUP_2, GROUP_4, TARSKI, FUNCT_1,
       CARD_1, WELLORD2, RLVECT_1, FINSOP_1, RELSET_1, ORDINAL2, XBOOLE_0,
-      XBOOLE_1, RELAT_1, BINOP_2, NUMBERS, SETWISEO, XREAL_1, XXREAL_0;
+      XBOOLE_1, RELAT_1, BINOP_2, NUMBERS, SETWISEO, XREAL_1, XXREAL_0,
+      ORDINAL1;
  schemes BINOP_1, NAT_1, FINSEQ_1, FINSEQ_2;
 
 begin
@@ -67,11 +70,11 @@ Lm1:
 canceled 9;
 
 theorem Th10:
- for n,s being natural number st n > 0 holds s in Segm (n) iff s < n
+  for n,s being natural number st n > 0 holds s in Segm (n) iff s < n
  proof
   let n,s be natural number;
   assume A1: n>0;
-A2: s is Nat by ORDINAL2:def 21;
+A2: s is Nat by ORDINAL1:def 13;
       s in { p : p<n } iff ex p st s=p & p<n;
   hence thesis by A1,A2,Def1;
  end;
@@ -79,10 +82,10 @@ A2: s is Nat by ORDINAL2:def 21;
 canceled;
 
 theorem
-    for n being natural number st n > 0 holds 0 in Segm (n) by Th10;
+  for n being natural number st n > 0 holds 0 in Segm (n) by Th10;
 
 theorem Th13:
- Segm (1) = {0}
+  Segm (1) = {0}
  proof
       now let x;
   thus x in Segm(1) implies x in { 0 }
@@ -107,11 +110,10 @@ end;
        :::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 definition
- redefine
- func addint means
+  redefine func addint means
   for i1,i2 being Element of INT holds
- it.(i1,i2) = addreal.(i1,i2);
- compatibility
+  it.(i1,i2) = addreal.(i1,i2);
+  compatibility
   proof let b be BinOp of INT;
    hereby assume
 A1:   b = addint;
@@ -138,7 +140,7 @@ A4:   i1 in REAL & i2 in REAL by NUMBERS:15;
 end;
 
 theorem Th14:
- addint.(j1,j2)=j1+j2
+  addint.(j1,j2)=j1+j2
   proof
     reconsider i1=j1, i2=j2 as Element of INT by INT_1:def 2;
     addint.(i1,i2)=j1+j2 by BINOP_2:def 20;
@@ -146,7 +148,7 @@ theorem Th14:
   end;
 
 theorem
- for i1 st i1 = 0 holds i1 is_a_unity_wrt addint by BINOP_2:4,SETWISEO:22;
+  for i1 st i1 = 0 holds i1 is_a_unity_wrt addint by BINOP_2:4,SETWISEO:22;
 
 definition let F be FinSequence of INT;
  func Sum(F) -> Integer equals
@@ -157,7 +159,7 @@ end;
 canceled 4;
 
 theorem Th20:
- Sum(I^<*i1*>) =Sum I +@i1
+  Sum(I^<*i1*>) =Sum I +@i1
  proof
   thus Sum(I^<*i1*>) = addint $$ (I^<*i1*>)
                  .= addint.(addint $$ I,i1) by FINSOP_1:5
@@ -167,10 +169,10 @@ theorem Th20:
    end;
 
 theorem
-     Sum <*i1*> = i1 by FINSOP_1:12;
+  Sum <*i1*> = i1 by FINSOP_1:12;
 
 theorem Th22:
- Sum (<*> INT) = 0 by BINOP_2:4,FINSOP_1:11;
+  Sum (<*> INT) = 0 by BINOP_2:4,FINSOP_1:11;
 
 Lm2: Product(((len(<*> INT)) |->a)|^(<*> INT))=a|^Sum(<*> INT)
  proof
@@ -207,7 +209,7 @@ end;
 canceled;
 
 theorem Th24:
- for I being FinSequence of INT holds Product(((len I)|->a)|^I) = a|^Sum I
+  for I being FinSequence of INT holds Product(((len I)|->a)|^I) = a|^Sum I
 proof
  defpred P[FinSequence of INT] means
    Product(((len $1) |->a)|^($1))=a|^Sum($1);
@@ -223,7 +225,7 @@ end;
     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 theorem Th25:
- b in gr {a} iff ex j1 st b=a|^j1
+  b in gr {a} iff ex j1 st b=a|^j1
 proof
  A1:b in gr {a} implies ex j1 st b=a|^j1
   proof
@@ -286,7 +288,7 @@ hence thesis by A1;
 end;
 
 theorem Th26:
- G is finite implies a is_not_of_order_0
+  G is finite implies a is_not_of_order_0
   proof
     assume A1:G is finite;
       ex n st n<> 0 & a|^n = 1.G
@@ -359,7 +361,7 @@ reconsider p=x,n=y as Nat by A11,A12;
 end;
 
 theorem Th27:
- G is finite implies ord a = ord gr {a}
+  G is finite implies ord a = ord gr {a}
  proof
   assume A1:G is finite;
   then A2:gr {a} is finite by GROUP_2:48;
@@ -696,7 +698,7 @@ hence thesis by A70,FINSEQ_1:78;
 end;
 
 theorem Th28:
- G is finite implies ord a divides ord G
+  G is finite implies ord a divides ord G
 proof
  assume A1: G is finite;
  then ord a = ord gr {a} by Th27;
@@ -704,7 +706,7 @@ proof
 end;
 
 theorem Th29:
- G is finite implies a|^ord G = 1.G
+  G is finite implies a|^ord G = 1.G
 proof
  assume G is finite;
  then ord a divides ord G by Th28;
@@ -716,7 +718,7 @@ proof
 end;
 
 theorem Th30:
- G is finite implies (a|^n)" = a|^(ord G - (n mod ord G))
+  G is finite implies (a|^n)" = a|^(ord G - (n mod ord G))
   proof
    assume A1: G is finite;
    set q = ord G;
@@ -740,7 +742,7 @@ theorem Th30:
   end;
 
 theorem Th31:
- for G being strict Group holds
+  for G being strict Group holds
   ord G > 1 implies ex a being Element of G st a <> 1.G
   proof let G be strict Group;
    assume that A1: ord G > 1 and
@@ -758,7 +760,7 @@ theorem Th31:
  end;
 
 theorem
-     for G being strict Group holds
+  for G being strict Group holds
   G is finite & ord G = p & p is prime implies
    for H being strict Subgroup of G holds H = (1).G or H = G
  proof let G be strict Group;
@@ -771,7 +773,7 @@ theorem
  end;
 
 theorem Th33:
- HGrStr(#INT,addint#) is associative Group-like
+  HGrStr(#INT,addint#) is associative Group-like
   proof
    set G = HGrStr (# INT, addint #);
    A1: for h,g be Element of G, A,B be Integer
@@ -848,8 +850,8 @@ definition let n be natural number such that A1:n > 0;
 end;
 
 theorem Th34:
- for n being natural number st n > 0 holds
- HGrStr(#Segm(n),addint(n)#) is associative Group-like
+  for n being natural number st n > 0 holds
+  HGrStr(#Segm(n),addint(n)#) is associative Group-like
   proof
    let n be natural number;
    assume A1:n>0;
@@ -935,7 +937,7 @@ coherence by A1,Th34;
 end;
 
 theorem Th35:
- 1.INT.Group = 0
+  1.INT.Group = 0
   proof
   A1: for h,g be Element of INT.Group, A,B be Integer
    st h = A & g = B
@@ -957,7 +959,7 @@ h
  end;
 
 theorem Th36:
- for n be natural number st n>0 holds 1.INT.Group(n) = 0
+  for n be natural number st n>0 holds 1.INT.Group(n) = 0
   proof
    let n be natural number;
    assume A1: n>0;
@@ -984,13 +986,13 @@ theorem Th36:
 hence thesis by GROUP_1:10;
 end;
 
-definition
- let h be Element of INT.Group;
- func @'h -> Integer equals  h;
+registration
+  cluster -> integer Element of INT.Group;
   coherence by INT_1:def 2;
 end;
 
 definition
+   canceled;
  let h be Integer;
  func @'h -> Element of INT.Group equals
       h;
@@ -998,34 +1000,33 @@ definition
 end;
 
 theorem Th37:
- for h being Element of INT.Group holds h" = -@'h
+  for h being Element of INT.Group holds h" = -h
   proof
    A1: for h,g be Element of INT.Group, A,B be Integer
      st h = A & g = B
    holds h * g = A + B by Th14;
   let h be Element of INT.Group;
-   reconsider g=-@'h as Element of INT.Group by INT_1:def 2;
-       h *g =@'h + -@'h by A1 .=1.INT.Group by Th35;
+   reconsider g=-h as Element of INT.Group by INT_1:def 2;
+       h *g =h + -h by A1 .=1.INT.Group by Th35;
    hence thesis by GROUP_1:20;
    end;
 
  reserve G1 for Subgroup of INT.Group,
          h for Element of INT.Group;
+
 Lm4: for h,g be Element of INT.Group, A,B be Integer
      st h = A & g = B
      holds h * g = A + B by Th14;
 
 theorem Th38:
- for h st h=1 holds for k holds h|^k = k
+  (@'1) |^ k = k
   proof
-  let h;
-  assume A1:h=1;
-  defpred P[Nat] means h|^$1=$1;
+  defpred P[Nat] means (@'1)|^$1=$1;
 A2: P[0] by Th35,GROUP_1:43;
  A3: for k st P[k] holds P[k+1]
   proof
-    let k; assume h|^k = k;
-    then h|^k * h = k + 1 by A1,Lm4;
+    let k; assume (@'1)|^k = k;
+    then (@'1)|^k * (@'1) = k + 1 by Lm4;
     hence thesis by GROUP_1:49;
   end;
      for k holds P[k] from NAT_1:sch 1(A2,A3);
@@ -1033,25 +1034,20 @@ A2: P[0] by Th35,GROUP_1:43;
   end;
 
 theorem Th39:
- for h,j1 st h=1 holds j1 = h |^ j1
+  j1 = (@'1) |^ j1
   proof
-   let h,j1;
-   assume A1:h=1;
    consider k such that A2:j1 = k or j1 = -k by INT_1:8;
-        now per cases by A2;
+   per cases by A2;
     suppose j1=k;
-        hence thesis by A1,Th38;
+      hence thesis by Th38;
     end;
     suppose A3: j1=-k;
-         reconsider k'=k as Integer;
-         reconsider k' as Element of INT.Group by INT_1:def 2
-;
-             h|^j1 = (h|^k)" by A3,GROUP_1:71
-         .= (k')" by A1,Th38 .= -@'k' by Th37 .= j1 by A3;
-         hence thesis;
-      end;
-      end;
-    hence thesis;
+      reconsider k'=k as Integer;
+      reconsider k' as Element of INT.Group by INT_1:def 2;
+      (@'1)|^j1 = ((@'1)|^k)" by A3,GROUP_1:71
+      .= (k')" by Th38 .= -@'k' by Th37 .= j1 by A3;
+      hence thesis;
+    end;
   end;
 
        :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -1059,12 +1055,10 @@ theorem Th39:
        :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 Lm5:
-ex a being Element of INT.Group
-  st the HGrStr of INT.Group = gr {a}
+ INT.Group = gr {@'1}
 proof
  reconsider h = 1 as Element of INT by INT_1:def 2;
  reconsider h as Element of INT.Group;
- take h;
      {h} c= the carrier of (Omega).INT.Group &
  (for G1 being strict Subgroup of INT.Group
   st {h} c= the carrier of G1 holds
@@ -1113,7 +1107,7 @@ registration
 end;
 
 theorem Th40:
- (1).G is cyclic
+  (1).G is cyclic
  proof
       1.G in {1.G} by TARSKI:def 1;
   then reconsider PG=1.G as Element of (1).G by GROUP_2:def 7;
@@ -1128,9 +1122,8 @@ A1:    {PG} = the carrier of (1).G by GROUP_2:def 7;
         proof
          let G1 be Subgroup of (1).G;
          assume A2:{PG} c= the carrier of G1;
-             the carrier of (Omega).(1).G =the carrier of (1).G by
-GROUP_2:def 8
-;
+         the carrier of (Omega).(1).G =the carrier of (1).G by
+GROUP_2:def 8;
          then the carrier of (Omega).
 (1).G c=the carrier of G1 by A2,GROUP_2:def 7;
          hence thesis by GROUP_2:66;
@@ -1141,8 +1134,14 @@ GROUP_2:def 8
   hence thesis by GROUP_2:def 8;
  end;
 
+registration
+  let G be Group;
+  cluster (1).G -> cyclic;
+  coherence by Th40;
+end;
+
 theorem Th41:
- G is cyclic Group iff ex a being Element of G st
+  G is cyclic Group iff ex a being Element of G st
   for b being Element of G ex j1 st b=a|^j1
  proof
    thus G is cyclic Group implies ex a being Element of G st
@@ -1179,9 +1178,9 @@ theorem Th41:
 end;
 
 theorem Th42:
- G is finite implies (G is cyclic Group iff
+  G is finite implies (G is cyclic Group iff
   ex a being Element of G st
-   for b being Element of G ex n st b=a|^n)
+  for b being Element of G ex n st b=a|^n)
  proof
   assume A1: G is finite;
   thus G is cyclic Group implies
@@ -1224,7 +1223,7 @@ theorem Th42:
  end;
 
 theorem Th43:
- for G being strict Group holds
+  for G being strict Group holds
   G is finite implies
    ( G is cyclic Group iff
       ex a being Element of G st ord a =ord G )
@@ -1252,7 +1251,7 @@ theorem Th43:
  end;
 
 theorem
-     for H being strict Subgroup of G holds
+  for H being strict Subgroup of G holds
   G is finite & G is cyclic Group implies
    H is cyclic Group
  proof let H be strict Subgroup of G;
@@ -1264,7 +1263,7 @@ theorem
   per cases by A5,REAL_1:def 5;
      suppose ord H =1;
           then H = (1).G by A4,GROUP_2:82;
-          hence thesis by Th40;
+          hence thesis;
      end;
      suppose ord H > 1;
           then consider h being Element of H such that
@@ -1325,7 +1324,7 @@ end;
 end;
 
 theorem
-     for G being strict Group holds
+  for G being strict Group holds
   G is finite & ord (G) = p & p is prime implies
    G is cyclic Group
  proof let G be strict Group;
@@ -1364,7 +1363,7 @@ hence thesis by A1,A2,Th43;
 end;
 
 theorem Th46:
- for n st n>0 ex g being Element of INT.Group(n) st
+  for n st n>0 ex g being Element of INT.Group(n) st
   for b being Element of INT.Group(n) ex j1 st b = g|^j1
   proof
    let n;
@@ -1381,7 +1380,7 @@ A3: for h,g be Element of INT.Group(n),
    then the carrier of INT.Group(n) = {1.INT.Group(n)} by A2,Th13,Th36
       .= the carrier of (1).INT.Group(n) by GROUP_2:def 7;
       then INT.Group(n) = (1).INT.Group(n) by GROUP_2:70;
-      then INT.Group(n) is cyclic Group by Th40;
+      then INT.Group(n) is cyclic Group;
       hence thesis by Th41;
 end;
 suppose n>1;
@@ -1437,7 +1436,7 @@ proof let G;
    hence thesis by A3;
   end;
   then consider e being Element of G,j2,j3 such that
-  A4:( a = e|^j2 & b = e|^j3);
+  A4: a = e|^j2 & b = e|^j3;
       a * b = e |^(j3 + j2) by A4,GROUP_1:63 .= b * a by A4,GROUP_1:63;
   hence thesis;
  end;
@@ -1445,77 +1444,35 @@ proof let G;
 end;
 end;
 
-canceled;
+theorem
+  INT.Group = gr {@'1} by Lm5;
 
 theorem Th48:
- INT.Group is cyclic
+  INT.Group is cyclic
 proof
- reconsider h = 1 as Element of INT by INT_1:def 2;
- reconsider h as Element of INT.Group;
- take h;
-     {h} c= the carrier of (Omega).INT.Group &
- ( for G1 being strict Subgroup of INT.Group st {h} c= the carrier of G1 holds
-    (Omega).INT.Group is Subgroup of G1 )
- proof
-  A1: {h} c= the carrier of (Omega).INT.Group
-  proof
-       {h} c= the carrier of INT.Group;
-   hence thesis by GROUP_2:def 8;
-  end;
-      for G1 st {h} c= the carrier of G1 holds (Omega).INT.Group is Subgroup of
-G1
-  proof
-   let G1;
-   assume A2:{h} c= the carrier of G1;
-       the carrier of (Omega).INT.Group c= the carrier of G1
-   proof
-        for x holds x in the carrier of (Omega).INT.Group implies x in
- the carrier of G1
-    proof
-     let x;
-     assume that A3: x in the carrier of (Omega).INT.Group and
-                 A4: not x in the carrier of G1;
-         x in (Omega).INT.Group by A3,RLVECT_1:def 1;
-     then x in INT.Group by GROUP_2:def 8;
-     then x in INT by RLVECT_1:def 1;
-     then reconsider x'=x as Integer by INT_1:def 2;
-         h in {h} by TARSKI:def 1;
-     then reconsider h''=h as Element of G1 by A2;
-     A5: (h'')|^x' in the carrier of G1;
-         (h'')|^x'=h|^x' by GROUP_4:4;
-     hence contradiction by A4,A5,Th39;
-    end;
-    hence the carrier of (Omega).
-INT.Group c= the carrier of G1 by TARSKI:def 3;
-    thus thesis;
-   end;
-   hence thesis by GROUP_2:66;
-  end;
-  hence thesis by A1;
- end;
- then (Omega).INT.Group = gr {h} by GROUP_4:def 5;
- hence thesis by GROUP_2:def 8;
+  take @'1;
+  thus thesis by Lm5;
 end;
 
-theorem
- for n st n > 0 holds INT.Group(n) is cyclic Group
+registration
+  cluster INT.Group -> cyclic;
+  coherence by Th48;
+end;
+
+theorem Th49:
+  n > 0 implies INT.Group(n) is cyclic
 proof
- let n;
  assume n > 0;
  then ex g being Element of INT.Group(n) st
  for b being Element of INT.Group(n) ex j1 st b = g|^j1 by Th46;
  hence thesis by Th41;
 end;
 
+theorem 
+  INT.Group is commutative;
+  
 theorem
-     INT.Group is commutative Group
-proof
-     INT.Group is cyclic Group by Th48;
- hence thesis;
-end;
-
-theorem
-      0 < m & m <= n implies Segm m c= Segm n
+  0 < m & m <= n implies Segm m c= Segm n
 proof assume
 A1: 0 < m & m <= n;
  let x;

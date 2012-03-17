@@ -12,8 +12,8 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, SQUARE_1, NAT_1, RLVECT_1,
       RELAT_1, SEQ_1, RCOMP_1, SIN_COS, XXREAL_0, HAHNBAN1, COMPTRIG, XREAL_0,
       ORDINAL1, NUMBERS, ARYTM_0, INT_1, XCMPLX_0, REAL_1, COMPLEX1, COMPLFLD;
- constructors REAL_1, SQUARE_1, SEQ_1, RFUNCT_2, COMSEQ_3, RCOMP_1, SIN_COS,
-      HAHNBAN1, COMPTRIG, ARYTM_0, ARYTM_3, FUNCT_4, BINOP_2;
+ constructors FUNCT_4, ARYTM_3, ARYTM_0, REAL_1, SQUARE_1, BINOP_2, SEQ_1,
+      RCOMP_1, RFUNCT_2, COMSEQ_3, SIN_COS, HAHNBAN1, COMPTRIG;
  registrations RELSET_1, SIN_COS, INT_1, COMPLEX1, XREAL_0, XCMPLX_0, MEMBERED,
       COMPLFLD, XXREAL_0;
  requirements BOOLE, SUBSET, REAL, NUMERALS, ARITHM;
@@ -127,10 +127,10 @@ A2: sin a = sin.a & sin b = sin.b by SIN_COS:def 21;
       a in REAL & b in REAL & dom sin = REAL by SIN_COS:def 20,XREAL_0:def 1;
 then A3: a in ].0,PI/2.[ /\ dom sin & b in ].0,PI/2.[ /\ dom sin
    by A1,XBOOLE_0:def 3;
-   hence a < b implies sin a < sin b by A1,A2,RFUNCT_2:def 2,SIN_COS2:2;
+   hence a < b implies sin a < sin b by A2,RFUNCT_2:def 2,SIN_COS2:2;
    assume A4: sin a < sin b; assume a >= b;
    then a > b by A4,REAL_1:def 5;
-   hence contradiction by A1,A2,A3,A4,RFUNCT_2:def 2,SIN_COS2:2;
+   hence contradiction by A2,A3,A4,RFUNCT_2:def 2,SIN_COS2:2;
 end;
 
 theorem Th8:
@@ -142,9 +142,9 @@ A2: sin a = sin.a & sin b = sin.b by SIN_COS:def 21;
       a in REAL & b in REAL & dom sin = REAL by SIN_COS:def 20,XREAL_0:def 1;
 then A3: a in ].PI/2,PI.[ /\ dom sin & b in ].PI/2,PI.[ /\ dom sin
    by A1,XBOOLE_0:def 3;
-   hence a < b implies sin a > sin b by A1,A2,RFUNCT_2:def 3,SIN_COS2:3;
+   hence a < b implies sin a > sin b by A2,RFUNCT_2:def 3,SIN_COS2:3;
    assume A4: sin a > sin b; assume a >= b; then a > b by A4,REAL_1:def 5;
-   hence contradiction by A1,A2,A3,A4,RFUNCT_2:def 3,SIN_COS2:3;
+   hence contradiction by A2,A3,A4,RFUNCT_2:def 3,SIN_COS2:3;
 end;
 
 theorem Th9:
@@ -286,7 +286,7 @@ for z being complex number st z <> 0
        (Arg z >= PI implies Arg -z = Arg z -PI)
 proof let z be complex number; assume A1: z <> 0;
 then A2: |.z.| <> 0 by COMPLEX1:131;
-A3: -z <> 0c by A1,XCMPLX_1:135;
+A3: -z <> 0c by A1;
    z = [* |.z.|*cos Arg z, |.z.|*sin Arg z *] by Th19;
    then
 A4: z = |.z.|*cos Arg z + (|.z.|*sin Arg z)*<i> by COMPLEX1:27;
@@ -767,7 +767,7 @@ end;
 
 theorem
    (a*x).|.y = x.|.((a*')*y)
-proof thus (a*x).|.y =x*a*(y*') .=x*((a*'*')*(y*')) by XCMPLX_1:4 .=x*
+proof thus (a*x).|.y =x*a*(y*') .=x*((a*'*')*(y*')) .=x*
 (((a*')*y)*') by COMPLEX1:121
          .= x.|.((a*')*y);
 end;
@@ -1300,7 +1300,7 @@ A2: 0 <= Arg(Rotate(b,-Arg a)) & Arg(Rotate(b,-Arg a)) < 2*PI &
    per cases;
    suppose Arg(b-0c)-Arg(a-0c) >= 0;
    then A5: angle(a,0c,b) = Arg(b-0c)-Arg(a-0c) by Def6
-       .= -Arg(a)+Arg(b) by A1,XCMPLX_0:def 8;
+       .= -Arg(a)+Arg(b) by A1;
        consider i being Integer such that
    A6: Arg(Rotate(b,-Arg a)) = 2*PI*i+(-Arg a + Arg(b)) by A3,Th68;
           0 <= angle(a,0c,b) & angle(a,0c,b) < 2*PI by Th84;
@@ -1327,7 +1327,7 @@ A2: 0 <= Arg(Rotate(b,-Arg a)) & Arg(Rotate(b,-Arg a)) < 2*PI &
      hence thesis by A12,Def6;
     end;
     suppose A13: Arg a <> 0;
-    A14: Arg(b-0c)-Arg(a-0c) = - Arg a by A10,Th20,XCMPLX_1:150;   0 < --Arg a
+    A14: Arg(b-0c)-Arg(a-0c) = - Arg a by A10,Th20;   0 < --Arg a
 by A13,Lm2;
         then 0 > - Arg a by XREAL_1:60; then angle(a,0c,b) = 2*PI+(-Arg a) by
 A14,Def6
@@ -1704,9 +1704,8 @@ then A10: angle(a+-b,0c,c+-b) = angle(A,0c,B) by A6,A7,Th92;
 A11: A = [* |.a+-b.|, 0 *] by Th69
       .= |.a+-b.|+0*<i> by COMPLEX1:27;
 then A12: Im A = 0 by COMPLEX1:28;
-      now assume a+-b = 0c; then a-b = 0c;
-     hence contradiction by A1,XCMPLX_1:15;
-   end; then |.a+-b.| > 0 by COMPLEX1:133;
+     a+-b <> 0c by A1,XCMPLX_1:15;
+     then |.a+-b.| > 0 by COMPLEX1:133;
 then A13: Re A > 0 by A11,COMPLEX1:28; then A14: Arg A = 0c by A12,Th34;
 then Arg(B-0c)-Arg(A-0c)>= 0 by Lm2;
 then A15: angle(a,b,c) = Arg B by A5,A10,A14,Def6;
@@ -1787,13 +1786,13 @@ then A15: angle(a,0c,b) = Arg(b)-Arg(a) by Def6;
      then Arg(-(a-b))-Arg(b) = 0;
      then Arg(a-b)+PI-Arg(b) = 0 by A10,A11,Th22,COMPLEX1:12,COMPTRIG:21;
      then Arg(a-b)+PI-PI-Arg(-b) = 0 by A16;
-then A17: Arg(a-b)-Arg(0c-b) = 0 by XCMPLX_1:150;
+then A17: Arg(a-b)-Arg(0c-b) = 0;
 then A18: angle(0c,b,a) = Arg(a-b)-Arg(0c-b) by Def6;
 then A19: angle(0c,b,a) = Arg(a-b)-Arg(-b) by XCMPLX_1:150;
         -Arg(b-a) = -PI by A12,A13,Th35;
      then Arg(-a)+-Arg(b-a) = 0 by A6;
      then Arg(-a)-Arg(b-a) = 0;
-     then Arg(0c-a)-Arg(b-a) = 0 by XCMPLX_1:150;
+     then Arg(0c-a)-Arg(b-a) = 0;
      then A20: angle(b,a,0c) = Arg(0c-a)-Arg(b-a) by Def6;
        A21: Arg -b = Arg b -PI by A3,Th20,Th22,COMPTRIG:21;
 A22:  Arg(a)-Arg(-a) = Arg(a)-(Arg(a)+PI) by A2,A5,Th22,COMPLEX1:12,COMPTRIG:21
@@ -1825,9 +1824,8 @@ then A9: angle(a+-b,0c,c+-b) = angle(A,0c,B) by A5,A6,Th92;
 A10: A = [* |.a+-b.|, 0 *] by Th69
         .= |.a+-b.|+0*<i> by COMPLEX1:27;
 then A11: Im A = 0 by COMPLEX1:28;
-      now assume a+-b = 0c; then a-b = 0c;
-     hence contradiction by A1,XCMPLX_1:15;
-   end; then |.a+-b.| > 0 by COMPLEX1:133;
+     a+-b <> 0c by A1,XCMPLX_1:15;
+     then |.a+-b.| > 0 by COMPLEX1:133;
 then A12: Re A > 0 by A10,COMPLEX1:28; then A13: Arg A = 0c by A11,Th34;
 then Arg(B-0c)-Arg(A-0c)>=0 by Lm2;
 then A14: angle(a,b,c) = Arg B by A4,A9,A13,Def6;

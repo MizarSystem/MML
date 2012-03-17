@@ -10,8 +10,7 @@ environ
       TARSKI, SETWISEO;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, RELAT_1, FUNCT_1, FINSUB_1,
       RELSET_1, FINSET_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1;
- constructors TARSKI, ENUMSET1, FINSUB_1, FINSET_1, BINOP_1, FUNCOP_1,
-      XBOOLE_0, PARTFUN1, RELAT_2;
+ constructors ENUMSET1, PARTFUN1, BINOP_1, FUNCOP_1, FINSET_1, FINSUB_1;
  registrations FINSET_1, FINSUB_1, RELSET_1, XBOOLE_0, ZFMISC_1, FUNCT_2;
  requirements BOOLE, SUBSET;
 
@@ -124,12 +123,20 @@ registration let X be non empty set;
   cluster non empty Element of Fin X;
 end;
 
-definition let X be non empty set, x be Element of X;
-  redefine func {x} -> Element of Fin X;
+notation let X be non empty set, x be Element of X;
+ synonym {.x.} for {x};
   let y be Element of X;
-  func {x,y} -> Element of Fin X;
+ synonym {.x,y.} for {x,y};
   let z be Element of X;
-  func {x,y,z} -> Element of Fin X;
+ synonym {.x,y,z.} for {x,y,z};
+end;
+
+definition let X be non empty set, x be Element of X;
+  redefine func {.x.} -> Element of Fin X;
+  let y be Element of X;
+  func {.x,y.} -> Element of Fin X;
+  let z be Element of X;
+  func {.x,y,z.} -> Element of Fin X;
 end;
 
 definition let X be set; let A,B be Element of Fin X;
@@ -152,7 +159,7 @@ scheme :: SETWISEO:sch 3
  FinSubInd2{ X() -> non empty set, P[Element of Fin X()] } :
   for B being Element of Fin X() st B <> {} holds P[B]
  provided
-  for x being Element of X() holds P[{x}] and
+  for x being Element of X() holds P[{.x.}] and
   for B1,B2 being Element of Fin X() st B1 <> {} & B2 <> {}
       holds P[B1] & P[B2] implies P[B1 \/ B2];
 
@@ -203,22 +210,22 @@ theorem :: SETWISEO:25
 
 theorem :: SETWISEO:26
  F is commutative & F is associative
-  implies for b being Element of X holds F $$ ({b},f) = f.b;
+  implies for b being Element of X holds F $$ ({.b.},f) = f.b;
 
 theorem :: SETWISEO:27
  F is idempotent & F is commutative & F is associative
-  implies for a,b being Element of X holds F $$ ({a,b},f) = F.(f.a, f.b);
+  implies for a,b being Element of X holds F $$ ({.a,b.},f) = F.(f.a, f.b);
 
 theorem :: SETWISEO:28
  F is idempotent & F is commutative & F is associative
   implies for a,b,c being Element of X holds
-   F $$ ({a,b,c},f) = F.(F.(f.a, f.b), f.c);
+   F $$ ({.a,b,c.},f) = F.(F.(f.a, f.b), f.c);
 
 :: If B is non empty
 
 theorem :: SETWISEO:29
  F is idempotent & F is commutative & F is associative & B <> {} implies
-   for x being Element of X holds F $$(B \/ {x}, f) = F.(F $$(B,f),f.x);
+   for x being Element of X holds F $$(B \/ {.x.}, f) = F.(F $$(B,f),f.x);
 
 theorem :: SETWISEO:30
   F is idempotent & F is commutative & F is associative implies
@@ -299,7 +306,8 @@ theorem :: SETWISEO:40
 
 theorem :: SETWISEO:41
  F is idempotent & F is commutative & F is associative & F has_a_unity
-  implies for x being Element of X holds F $$(B \/ {x}, f) = F.(F $$(B,f),f.x);
+  implies
+   for x being Element of X holds F $$(B \/ {.x.}, f) = F.(F $$(B,f),f.x);
 
 theorem :: SETWISEO:42
   F is idempotent & F is commutative & F is associative & F has_a_unity
@@ -378,20 +386,20 @@ definition let X be non empty set, A be set;
 end;
 
 theorem :: SETWISEO:56
-  FinUnion({i},f) = f.i;
+  FinUnion({.i.},f) = f.i;
 
 theorem :: SETWISEO:57
-  FinUnion({i,j},f) = f.i \/ f.j;
+  FinUnion({.i,j.},f) = f.i \/ f.j;
 
 theorem :: SETWISEO:58
-  FinUnion({i,j,k},f) = f.i \/ f.j \/ f.k;
+  FinUnion({.i,j,k.},f) = f.i \/ f.j \/ f.k;
 
 theorem :: SETWISEO:59
   FinUnion({}.X,f) = {};
 
 theorem :: SETWISEO:60
   for B being Element of Fin X holds
-    FinUnion(B \/ {i}, f) = FinUnion(B,f) \/ f.i;
+    FinUnion(B \/ {.i.}, f) = FinUnion(B,f) \/ f.i;
 
 theorem :: SETWISEO:61
   for B being Element of Fin X holds FinUnion(B,f) = union (f.:B);

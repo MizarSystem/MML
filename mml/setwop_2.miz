@@ -11,16 +11,16 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, RELAT_1, RELSET_1,
       FUNCT_1, FINSEQ_1, FINSUB_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1,
       SETWISEO, FINSEQ_2, FINSEQOP, FINSOP_1, XXREAL_0;
- constructors NAT_1, BINOP_1, WELLORD2, SETWISEO, FINSEQOP, FINSOP_1, XREAL_0,
-      PARTFUN1, XXREAL_0;
+ constructors PARTFUN1, WELLORD2, BINOP_1, SETWISEO, XXREAL_0, XREAL_0, NAT_1,
+      FINSEQOP, FINSOP_1;
  registrations SUBSET_1, FUNCT_1, RELSET_1, FINSEQ_2, FINSUB_1, FINSEQ_1,
-      ARYTM_3, FUNCT_2, XBOOLE_0, ORDINAL2, XREAL_0;
+      ARYTM_3, FUNCT_2, XBOOLE_0, ORDINAL2, XREAL_0, ORDINAL1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions BINOP_1, XBOOLE_0;
  theorems TARSKI, ENUMSET1, ZFMISC_1, NAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
       FINSEQ_1, FINSUB_1, BINOP_1, SETWISEO, FINSEQ_2, WELLORD2, CARD_1,
       FINSEQOP, RELAT_1, FUNCT_4, FINSOP_1, XBOOLE_0, XBOOLE_1, XREAL_1;
  schemes NAT_1, SETWISEO, FINSEQ_2;
- definitions BINOP_1, XBOOLE_0;
 
 begin
 
@@ -53,12 +53,12 @@ canceled 2;
 
 theorem Th3:
   F is commutative associative & c1 <> c2
-    implies F $$ ({c1,c2},f) = F.(f.c1, f.c2)
+    implies F $$ ({.c1,c2.},f) = F.(f.c1, f.c2)
  proof assume that
 A1:  F is commutative associative and
 A2:  c1 <> c2;
    consider g being Function of Fin C, D such that
-A3: F $$ ({c1,c2},f) = g.{c1,c2} and
+A3: F $$ ({.c1,c2.},f) = g.{c1,c2} and
        for e st e is_a_unity_wrt F holds g.{} = e and
 A4: for c holds g.{c} = f.c and
 A5: for B st B c= { c1,c2 } & B <> {}
@@ -68,14 +68,14 @@ A5: for B st B c= { c1,c2 } & B <> {}
     then {c1,c2} \ {c1} = {c2} by ZFMISC_1:70;
 then A6: {c1} c= {c1,c2} & {c1} <> {} & c2 in {c1,c2} & c2 in {c1,c2} \ {c1}
       by TARSKI:def 1,def 2,ZFMISC_1:12;
-  thus F $$ ({c1,c2},f) = g.({c1} \/ {c2}) by A3,ENUMSET1:41
+  thus F $$ ({.c1,c2.},f) = g.({.c1.} \/ {.c2.}) by A3,ENUMSET1:41
                        .= F.(g.{c1}, f.c2) by A5,A6
                        .= F.(f.c1, f.c2) by A4;
  end;
 
 theorem Th4:
   F is commutative associative & (B <> {} or F has_a_unity) & not c in B
-   implies F $$(B \/ {c}, f) = F.(F $$(B,f),f.c)
+   implies F $$(B \/ {.c.}, f) = F.(F $$(B,f),f.c)
  proof assume that
 A1:  F is commutative associative and
 A2:  B <> {} or F has_a_unity and
@@ -86,12 +86,12 @@ A4:   B = {};
     then B = {}.C;
     then F $$(B,f) = the_unity_wrt F by A1,A2,SETWISEO:40;
     hence F.(F $$(B,f),f.c) = f.c by A2,A4,SETWISEO:23
-                           .= F $$(B \/ {c}, f) by A1,A4,SETWISEO:26;
+                           .= F $$(B \/ {.c.}, f) by A1,A4,SETWISEO:26;
    end;
    suppose
 A5:   B <> {};
      consider g being Function of Fin C, D such that
-A6:  F $$ (B \/ {c},f) = g.(B \/ {c}) and
+A6:  F $$ (B \/ {.c.},f) = g.(B \/ {c}) and
         for e st e is_a_unity_wrt F holds g.{} = e and
 A7:  for c' holds g.{c'} = f.c' and
 A8:  for B' st B' c= B \/ {c} & B' <> {}
@@ -132,21 +132,21 @@ A21:      B' <> {};
 A22:  for B' holds X[B'] from SETWISEO:sch 2(A12,A13);
       c in B \/ {c} by SETWISEO:6;
    then B c= B \/ {c} & c in (B \/ {c}) \ B by A3,XBOOLE_0:def 4,XBOOLE_1:7;
-   hence F $$(B \/ {c}, f) = F.(g.B, f.c) by A5,A6,A8
+   hence F $$(B \/ {.c.}, f) = F.(g.B, f.c) by A5,A6,A8
                         .= F.(F $$(B,f),f.c) by A5,A9,A22;
  end;
  end;
 
 theorem
      F is commutative associative & c1 <> c2 & c1 <> c3 & c2 <> c3
-   implies F $$ ({c1,c2,c3},f) = F.(F.(f.c1, f.c2),f.c3)
+   implies F $$ ({.c1,c2,c3.},f) = F.(F.(f.c1, f.c2),f.c3)
  proof assume that
 A1:  F is commutative associative and
 A2:  c1 <> c2;
   assume c1 <> c3 & c2 <> c3;
 then A3:  not c3 in {c1,c2} & {c1,c2} <> {} by TARSKI:def 2;
-  thus F $$ ({c1,c2,c3},f) = F $$ ({c1,c2} \/ {c3},f) by ENUMSET1:43
-                          .= F.(F $$ ({c1,c2},f),f.c3) by A1,A3,Th4
+  thus F $$ ({.c1,c2,c3.},f) = F $$ ({.c1,c2.} \/ {.c3.},f) by ENUMSET1:43
+                          .= F.(F $$ ({.c1,c2.},f),f.c3) by A1,A3,Th4
                           .= F.(F.(f.c1, f.c2),f.c3) by A1,A2,Th3;
  end;
 
@@ -185,7 +185,7 @@ A7:   B1 <> {} & B2 <> {};
         F $$(B1 \/ $1,f) = F.(F $$(B1,f),F $$($1,f));
 A8:  X[{}.C];
 A9: for B' being Element of Fin C, b being Element of C
-      holds X[B'] & not b in B' implies X[B' \/ {b}]
+      holds X[B'] & not b in B' implies X[B' \/ {.b.}]
    proof let B,c such that
 A10:     B <> {} & B1 /\ B = {} implies
             F $$(B1 \/ B,f) = F.(F $$ (B1,f),F $$(B,f)) and
@@ -200,8 +200,9 @@ then A15:     not c in B1 by XBOOLE_0:def 3;
          now per cases;
        suppose
 A16:      B = {};
-        hence F $$ (B1 \/ (B \/ {c}),f) = F.(F $$ (B1,f), f.c) by A1,A7,A15,Th4
-                .= F.(F $$ (B1,f),F $$(B \/ {c},f)) by A1,A16,SETWISEO:26;
+        hence F $$ (B1 \/ (B \/ {.c.}),f)
+                 = F.(F $$ (B1,f), f.c) by A1,A7,A15,Th4
+                .= F.(F $$ (B1,f),F $$(B \/ {.c.},f)) by A1,A16,SETWISEO:26;
        end;
        suppose
 A17:      B <> {};
@@ -209,14 +210,15 @@ then A18:      B1 \/ B <> {} & not c in B1 \/ B by A11,A15,XBOOLE_0:def 2
 ,XBOOLE_1:15;
 A19:       B c= B \/ {c} & (B \/ {c}) /\ B1 = {} & B1 /\ B = B /\ B1
            by A13,XBOOLE_1:7;
-        thus F $$ (B1 \/ (B \/ {c}),f) = F $$ (B1 \/ B \/ {c},f) by XBOOLE_1:4
+        thus F $$ (B1 \/ (B \/ {.c.}),f)
+             = F $$ (B1 \/ B \/ {.c.},f) by XBOOLE_1:4
             .= F.(F.(F $$ (B1,f),F $$(B,f)), f.c)
               by A1,A12,A14,A17,A18,A19,Th4,XBOOLE_1:63
                    .= F.(F $$ (B1,f),F.(F $$(B,f), f.c)) by A1,BINOP_1:def 3
-                   .= F.(F $$(B1,f),F $$(B \/ {c},f)) by A1,A11,A17,Th4;
+                   .= F.(F $$(B1,f),F $$(B \/ {.c.},f)) by A1,A11,A17,Th4;
       end;
       end;
-     hence F $$ (B1 \/ (B \/ {c}),f) = F.(F $$ (B1,f),F $$ (B \/ {c},f));
+     hence F $$ (B1 \/ (B \/ {.c.}),f) = F.(F $$ (B1,f),F $$ (B \/ {.c.},f));
     end;
        for B2 holds X[B2] from SETWISEO:sch 2(A8,A9);
     hence F $$(B1 \/ B2, f) = F.(F $$(B1,f),F $$(B2,f)) by A3,A7;
@@ -246,13 +248,13 @@ A4:    dom s = {}.C' & rng s = B & s is one-to-one and g|({}.C') = f*s;
       hence F $$({}.C',g) = F $$(B,f) by A1,A3,SETWISEO:40;
     end;
 A5: for B' being Element of Fin C', b being Element of C'
-      holds X[B'] & not b in B' implies X[B' \/ {b}]
+      holds X[B'] & not b in B' implies X[B' \/ {.b.}]
    proof let A' be Element of Fin C',a be Element of C' such that
 A6:   A' <> {} or F has_a_unity implies
        for B st ex s st dom s = A' & rng s = B & s is one-to-one & g|A' = f*s
         holds F $$(A',g) = F $$(B,f) and
 A7:   not a in A';
-     set A = A' \/ {a};
+     set A = A' \/ {.a.};
      assume A' \/ {a} <> {} or F has_a_unity;
      let B;
      given s such that
@@ -267,7 +269,7 @@ then A11:    s.a in B by A8,FUNCT_1:def 5;
      then a in dom g /\ A by A10,XBOOLE_0:def 3;
      then a in dom(f*s) & g.a = (f*s).a by A9,FUNCT_1:71,RELAT_1:90;
 then A12:    g.a = f.c by FUNCT_1:22;
-     set B' = B \ {c};
+     set B' = B \ {.c.};
      set s' = s|A';
 A13:   now let y;
        thus y in rng s' implies y in B'
@@ -433,12 +435,12 @@ A2:  e = the_unity_wrt F;
    defpred X[Element of Fin C] means f.:($1) = {e} implies F$$($1,f) = e;
 A3:  X[{}.C] by RELAT_1:149;
 A4: for B' being Element of Fin C, b being Element of C
-      holds X[B'] & not b in B' implies X[B' \/ {b}]
+      holds X[B'] & not b in B' implies X[B' \/ {.b.}]
   proof let B',c such that
 A5:   f.:(B') = {e} implies F$$(B',f) = e and
 A6:   not c in B' and
 A7:   f.:(B' \/ {c}) = {e};
-         {c} c= C by FINSUB_1:def 5;
+         {.c.} c= C by FINSUB_1:def 5;
       then {c} c= B' \/ {c} & {c} c= dom f & {c} <> {}
          by FUNCT_2:def 1,XBOOLE_1:7;
       then f.:{c} c= {e} & f.:{c} <> {} & c in dom f
@@ -449,7 +451,7 @@ then A8:    f.c = e by ZFMISC_1:6;
         now per cases;
       suppose B' = {};
 then A9:     B' = {}.C;
-      thus F$$(B' \/ {c},f) = F.(F $$(B',f),f.c) by A1,A6,Th4
+      thus F$$(B' \/ {.c.},f) = F.(F $$(B',f),f.c) by A1,A6,Th4
                           .= F.(e ,f.c) by A1,A2,A9,SETWISEO:40;
       end;
       suppose
@@ -457,10 +459,10 @@ A10:     B' <> {};
          B' c= C by FINSUB_1:def 5;
       then B' c= B' \/ {c} & B' c= dom f by FUNCT_2:def 1,XBOOLE_1:7;
       then f.:B' c= {e} & f.:B' <> {} by A7,A10,RELAT_1:152,156;
-      hence F$$(B' \/ {c},f) = F.(e ,f.c) by A1,A5,A6,Th4,ZFMISC_1:39;
+      hence F$$(B' \/ {.c.},f) = F.(e ,f.c) by A1,A5,A6,Th4,ZFMISC_1:39;
      end;
      end;
-     hence F$$(B' \/ {c},f) = e by A1,A2,A8,SETWISEO:23;
+     hence F$$(B' \/ {.c.},f) = e by A1,A2,A8,SETWISEO:23;
     end;
      for B holds X[B] from SETWISEO:sch 2(A3,A4);
   hence thesis;
@@ -482,18 +484,18 @@ A5:   for d1,d2,d3,d4 holds F.(G.(d1,d2),G.(d3,d4))= G.(F.(d1,d3),F.(d2,d4));
        F$$({}.C,f) = e & F$$({}.C,f') = e by A1,A2,A3,SETWISEO:40;
 then A6: X[{}.C] by A1,A2,A3,A4,SETWISEO:40;
 A7: for B' being Element of Fin C, b being Element of C
-      holds X[B'] & not b in B' implies X[B' \/ {b}]
+      holds X[B'] & not b in B' implies X[B' \/ {.b.}]
    proof let B,c such that
 A8:   G.(F$$(B,f),F$$(B,f')) = F $$(B,G.:(f,f')) and
 A9:   not c in B;
      set s = F$$(B,f);
      set s' = F$$(B,f');
-        F$$(B \/ {c},f) = F.(s,f.c) & F$$(B \/ {c},f') = F.(s',f'.c)
+        F$$(B \/ {.c.},f) = F.(s,f.c) & F$$(B \/ {.c.},f') = F.(s',f'.c)
       by A1,A2,A9,Th4;
-    hence G.(F$$(B \/ {c},f),F$$(B \/ {c},f'))
+    hence G.(F$$(B \/ {.c.},f),F$$(B \/ {.c.},f'))
         = F.(G.(s,s'),G.(f.c,f'.c)) by A5
        .= F.(G.(s,s'),G.:(f,f').c) by FUNCOP_1:48
-       .= F $$(B \/ {c},G.:(f,f')) by A1,A2,A8,A9,Th4;
+       .= F $$(B \/ {.c.},G.:(f,f')) by A1,A2,A8,A9,Th4;
     end;
      for B holds X[B] from SETWISEO:sch 2(A6,A7);
   hence thesis;
@@ -554,15 +556,15 @@ A4:   G is_distributive_wrt F;
    then A5: X[{}.C];
 A6:
   for B' being Element of Fin C, b being Element of C
-      holds X[B'] & not b in B' implies X[B' \/ {b}]
+      holds X[B'] & not b in B' implies X[B' \/ {.b.}]
   proof let B',c such that
 A7:   G.(d,F$$(B',f)) = F $$(B',G[;](d,f)) and
 A8:   not c in B';
-     thus G.(d,F$$(B' \/ {c},f))
+     thus G.(d,F$$(B' \/ {.c.},f))
          = G.(d,F.(F$$(B',f),f.c)) by A1,A2,A8,Th4
         .= F.(G.(d,F$$(B',f)),G.(d,f.c)) by A4,BINOP_1:23
         .= F.(F $$(B',G[;](d,f)),(G[;](d,f)).c) by A7,FUNCOP_1:66
-        .= F $$(B' \/ {c},G[;](d,f)) by A1,A2,A8,Th4;
+        .= F $$(B' \/ {.c.},G[;](d,f)) by A1,A2,A8,Th4;
      end;
      for B holds X[B] from SETWISEO:sch 2(A5,A6);
   hence thesis;
@@ -583,15 +585,15 @@ then G.(F$$({}.C,f),d) = e by A1,A2,A3,SETWISEO:40
                       .= F $$({}.C,G[:](f,d)) by A1,A2,A3,SETWISEO:40;
     then A5:   X[{}.C];
 A6: for B' being (Element of Fin C), b being Element of C
-      holds X[B'] & not b in B' implies X[B' \/ {b}]
+      holds X[B'] & not b in B' implies X[B' \/ {.b.}]
   proof let B',c such that
 A7:   G.(F$$(B',f),d) = F $$(B',G[:](f,d)) and
 A8:   not c in B';
-     thus G.(F$$(B' \/ {c},f),d)
+     thus G.(F$$(B' \/ {.c.},f),d)
          = G.(F.(F$$(B',f),f.c),d) by A1,A2,A8,Th4
         .= F.(G.(F$$(B',f),d),G.(f.c,d)) by A4,BINOP_1:23
         .= F.(F $$(B',G[:](f,d)),(G[:](f,d)).c) by A7,FUNCOP_1:60
-        .= F $$(B' \/ {c},G[:](f,d)) by A1,A2,A8,Th4;
+        .= F $$(B' \/ {.c.},G[:](f,d)) by A1,A2,A8,Th4;
      end;
      for B holds X[B] from SETWISEO:sch 2(A5,A6);
   hence thesis;
@@ -637,14 +639,14 @@ A4: for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2);
                    .= H $$({}.C,h*f) by A2,SETWISEO:40;
    then A5:    X[{}.C];
 A6: for B' being (Element of Fin C), b being Element of C
-      holds X[B'] & not b in B' implies X[B' \/ {b}]
+      holds X[B'] & not b in B' implies X[B' \/ {.b.}]
   proof let B,c such that
 A7:   h.(F$$(B,f)) = H $$(B,h*f) and
 A8:   not c in B;
-     thus h.(F$$(B \/ {c},f)) = h.(F.(F$$(B,f),f.c)) by A1,A8,Th4
+     thus h.(F$$(B \/ {.c.},f)) = h.(F.(F$$(B,f),f.c)) by A1,A8,Th4
                             .= H.(H $$(B,h*f),h.(f.c)) by A4,A7
                             .= H.(H $$(B,h*f),(h*f).c) by FUNCT_2:21
-                            .= H $$(B \/ {c},h*f) by A2,A8,Th4;
+                            .= H $$(B \/ {.c.},h*f) by A2,A8,Th4;
     end;
       for B holds X[B] from SETWISEO:sch 2(A5,A6);
    hence thesis;

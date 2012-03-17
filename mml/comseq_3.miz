@@ -14,17 +14,18 @@ environ
       XREAL_0, XXREAL_0, REAL_1, FINSEQ_2, RVSUM_1, NEWTON, RELAT_1, FUNCT_1,
       FUNCT_2, FUNCOP_1, FUNCT_3, SEQ_1, SEQ_2, NAT_1, SEQM_3, SERIES_1,
       COMPLEX1, COMSEQ_1, COMSEQ_2, SQUARE_1, POWER;
- constructors SEQ_2, SEQM_3, SERIES_1, SQUARE_1, COMSEQ_1, COMSEQ_2, REAL_1,
-      NAT_1, PARTFUN1, COMPLEX1, ARYTM_0, FUNCOP_1, FUNCT_3, XXREAL_0, NEWTON,
-      RVSUM_1;
+ constructors PARTFUN1, FUNCT_3, FUNCOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
+      SEQ_2, SEQM_3, RVSUM_1, COMSEQ_1, NEWTON, COMSEQ_2, SERIES_1,
+      ORDINAL2;
  registrations XREAL_0, COMSEQ_2, SEQ_1, COMSEQ_1, RELSET_1, SEQM_3, NAT_1,
-      COMPLEX1, MEMBERED, ORDINAL2, XCMPLX_0, FUNCT_1, XXREAL_0, NEWTON;
+      COMPLEX1, MEMBERED, ORDINAL2, XCMPLX_0, FUNCT_1, XXREAL_0, NEWTON,
+      ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SEQ_2, COMSEQ_2, SERIES_1, SQUARE_1;
  theorems NAT_1, ABSVALUE, SEQ_1, SEQ_2, SERIES_1, SEQM_3, SEQ_4, POWER,
       COMPLEX1, COMSEQ_1, COMSEQ_2, SQUARE_1, FUNCT_2, XREAL_0, XCMPLX_0,
       XCMPLX_1, FUNCOP_1, RELSET_1, RELAT_1, XBOOLE_1, XREAL_1, ORDINAL2,
-      NEWTON, XXREAL_0;
+      NEWTON, XXREAL_0, ORDINAL1;
  schemes NAT_1, SEQ_1, COMSEQ_1, RECDEF_1;
 
 begin  :: Preliminaries
@@ -347,16 +348,16 @@ definition let z be complex number, n be natural number;
      .= 1r by COMPLEX1:def 7
      .= z GeoSeq.0 by Def1;
     then
-A:  P[0];
-B:  for n being Nat st P[n] holds P[n+1]
+A1:  P[0];
+A2:  for n being Nat st P[n] holds P[n+1]
      proof let n be Nat such that
-Z:     P[n];
+A3:     P[n];
       thus z|^(n+1) = z|^n*z by NEWTON:11
-        .= z GeoSeq.n*z by Z
+        .= z GeoSeq.n*z by A3
         .= z GeoSeq.(n+1) by Def1;
      end;
-    reconsider n as Element of NAT by ORDINAL2:def 21;
-    for n being Nat holds P[n] from NAT_1:sch 1(A,B);
+    reconsider n as Element of NAT by ORDINAL1:def 13;
+    for n being Nat holds P[n] from NAT_1:sch 1(A1,A2);
     then z|^n = z GeoSeq.n;
    hence thesis;
   end;
@@ -971,10 +972,7 @@ A7:for n for m st n <= m holds
      proof
 defpred P[Nat] means |.Partial_Sums(seq).(n+$1)- Partial_Sums(seq).n.|
            <= abs( Partial_Sums(|.seq.|).(n+$1)- Partial_Sums(|.seq.|).n );
-        Partial_Sums(seq).(n+0)- Partial_Sums(seq).n = 0 by XCMPLX_1:14;
-        then |.Partial_Sums(seq).(n+0)- Partial_Sums(seq).n.| = 0
-        by ABSVALUE:7;
-       then A9:P[0] by COMPLEX1:132;
+       A9:P[0];
        A10:now let k be Nat;
        assume
            A11: P[k];

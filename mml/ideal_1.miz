@@ -14,14 +14,14 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CQC_SIM1, FINSET_1, RELAT_1,
       FUNCT_1, FINSEQ_1, REALSET1, REALSET2, VECTSP_1, INT_3, NORMSP_1,
       NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, RELSET_1, RLVECT_1, PARTFUN1,
-      FUNCT_2, ALGSTR_1, PRE_TOPC, GR_CY_1, PRE_CIRC, MCART_1, DOMAIN_1,
-      FINSEQ_4, POLYNOM1, SETFAM_1, STRUCT_0, GROUP_1, BINOP_1, VECTSP_2,
+      FUNCT_2, ALGSTR_1, PRE_TOPC, GR_CY_1, PRE_CIRC, MCART_1, FINSEQ_4,
+      POLYNOM1, SETFAM_1, DOMAIN_1, STRUCT_0, GROUP_1, BINOP_1, VECTSP_2,
       FUNCT_7, GCD_1, BINOM;
- constructors INT_3, CQC_SIM1, PRE_CIRC, GROUP_2, BINOM, GCD_1, ALGSTR_2,
-      DOMAIN_1, POLYNOM1, BINOP_1, PRE_TOPC, SETFAM_1, XXREAL_0;
+ constructors SETFAM_1, DOMAIN_1, BINOP_1, XXREAL_0, CQC_SIM1, PRE_CIRC,
+      PRE_TOPC, ALGSTR_1, GCD_1, INT_3, POLYNOM1, BINOM;
  registrations INT_3, RELSET_1, FINSET_1, SUBSET_1, STRUCT_0, PRE_TOPC,
       FINSEQ_1, XBOOLE_0, POLYNOM1, INT_1, BINOM, VECTSP_1, XREAL_0, MEMBERED,
-      RELAT_1, FUNCT_2, PRE_CIRC, ORDINAL2, ALGSTR_1, GROUP_1, REALSET1,
+      RELAT_1, FUNCT_2, PRE_CIRC, ORDINAL1, ALGSTR_1, GROUP_1, REALSET1,
       XXREAL_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0, BINOP_1, REALSET1;
@@ -29,8 +29,8 @@ environ
       GCD_1, FUNCT_1, FUNCT_2, POLYNOM1, PRE_TOPC, RELAT_1, FINSET_1, PRE_CIRC,
       NAT_1, GR_CY_1, ALGSTR_1, REAL_1, MCART_1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
       SETFAM_1, INT_1, FUNCT_7, FINSEQ_4, FINSEQ_5, POLYNOM2, BINOM, XBOOLE_0,
-      XBOOLE_1, ORDINAL2, REALSET1, GROUP_1, XREAL_1, DOMAIN_1, XXREAL_0;
- schemes NAT_1, RECDEF_1, FUNCT_2, POLYNOM2, BINOM, FINSEQ_2, DOMAIN_1;
+      XBOOLE_1, ORDINAL1, REALSET1, GROUP_1, XREAL_1, DOMAIN_1, XXREAL_0;
+ schemes NAT_1, RECDEF_1, FUNCT_2, POLYNOM2, FINSEQ_2, DOMAIN_1;
 
 begin :: Preliminaries
 
@@ -471,7 +471,7 @@ A3: for n being Nat st 1 <= n holds P[n] implies P[n+1] proof
         a|^(n+1) = (a|^n)*(a|^1) by BINOM:11;
     hence thesis by A4,Def3;
     end;
-     for n being Nat st 1 <= n holds P[n] from BINOM:sch 1(A2,A3);
+     for n being Nat st 1 <= n holds P[n] from NAT_1:sch 9(A2,A3);
 hence thesis by A1;
 end;
 
@@ -2422,7 +2422,7 @@ proof let R be add-associative left_zeroed right_zeroed add-cancelable
    unital commutative associative distributive (non empty doubleLoopStr),
     a be Element of R;
 set A = {a};
-reconsider a as Element of A by TARSKI:def 1;
+reconsider a' = a as Element of A by TARSKI:def 1;
 set M = {Sum s where s is LinearCombination of A : not contradiction};
 set N = {a*r where r is Element of R : not contradiction};
 A1: for u being set holds u in M implies u in N
@@ -2472,7 +2472,7 @@ A1: for u being set holds u in M implies u in N
      A15: i in dom s;
          len s = 1 by FINSEQ_1:57; then i in {1} by A15,FINSEQ_1:4,def 3;
      then i = 1 by TARSKI:def 1;
-     then s/.i = a*r by FINSEQ_4:25 .= (r*a)*1.R by VECTSP_1:def 13;
+     then s/.i = a*r by FINSEQ_4:25 .= (r*a')*1.R by VECTSP_1:def 13;
      hence thesis;
      end; then reconsider s as LinearCombination of A by Def9;
        Sum s = a*r by BINOM:3;
@@ -2502,7 +2502,7 @@ proof let R be Abelian left_zeroed right_zeroed add-cancelable associative
          unital add-associative commutative
          distributive (non empty doubleLoopStr), a,b be Element of R;
 set A = {a,b};
-reconsider a,b as Element of A by TARSKI:def 2;
+reconsider a'=a, b'=b as Element of A by TARSKI:def 2;
 set M = {Sum s where s is LinearCombination of A : not contradiction};
 set N = {a*r + b*s where r,s is Element of R : not contradiction};
 A1: for u being set holds u in M implies u in N
@@ -2566,12 +2566,12 @@ that
      per cases by A16,TARSKI:def 2;
      suppose i = 1;
         then s/.i = s.1 by A15,FINSEQ_4:def 4 .= a*r by FINSEQ_1:61
-                 .= 1.R*a*r by VECTSP_1:def 19;
+                 .= 1.R*a'*r by VECTSP_1:def 19;
         hence thesis;
      end;
      suppose i = 2;
         then s/.i = s.2 by A15,FINSEQ_4:def 4 .= b*t by FINSEQ_1:61
-                 .= 1.R*b*t by VECTSP_1:def 19;
+                 .= 1.R*b'*t by VECTSP_1:def 19;
         hence thesis;
         end;
         end;
@@ -4651,6 +4651,7 @@ A6: f.i in K;
        k in K by CQC_SIM1:def 8; then consider e being Element of I' such that
 A8: f.e = k;   e in I'; then consider e' being Element of I such that
 A9: e'=e & e' <> 0.R;
+    reconsider e as Element of R;
    take e;
        now let x be set;
      hereby assume A10: x in I;
@@ -4894,7 +4895,7 @@ A6: for e being set st e in C holds P[e,f.e] from FUNCT_2:sch 1(A4);
    set Rf = rng f;
 A7: dom f = C by FUNCT_2:def 1;
    then reconsider Rf as non empty finite Subset of NAT by FINSET_1:26;
-   reconsider m = max Rf as Nat by ORDINAL2:def 21;
+   reconsider m = max Rf as Nat by ORDINAL1:def 13;
   take m; set D = rng (a | Segm(m+1));
 A8: C c= D proof let X be set; assume
    A9: X in C;

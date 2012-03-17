@@ -11,11 +11,12 @@ environ
       ORDINAL2, PBOOLE, REALSET1, RELAT_1, TOPGEN_1;
  notations TARSKI, XBOOLE_0, DOMAIN_1, SUBSET_1, PBOOLE, RELAT_1, CARD_1,
       CARD_2, FUNCT_1, RELSET_1, FINSEQ_1, FINSET_1, NAT_1, FUNCT_2, CQC_LANG,
-      CARD_FIL, FUNCT_4, ORDINAL2, PSCOMP_1, FINSEQ_4, NUMBERS, XXREAL_0;
- constructors DOMAIN_1, NAT_1, PBOOLE, CARD_2, CARD_FIL, FINSEQ_4,
-      PSCOMP_1, BINARITH, XXREAL_0, CQC_LANG, FUNCT_4, REALSET1;
+      FUNCT_4, ORDINAL1, ORDINAL2,
+      PSCOMP_1, FINSEQ_4, NUMBERS, XXREAL_0;
+ constructors DOMAIN_1, FUNCT_4, XXREAL_0, NAT_1, BINOP_2, CARD_2, CQC_LANG,
+      PBOOLE, SEQ_4, FINSEQ_4, ORDINAL2;
  registrations RELSET_1, FINSET_1, NAT_1, CARD_1, CQC_LANG, FINSEQ_1, FUNCT_1,
-      RELAT_1, FINSEQ_4, ORDINAL2, FINSEQ_5, REALSET1;
+      RELAT_1, FINSEQ_4, ORDINAL1, FINSEQ_5, REALSET1;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
  definitions CQC_LANG;
  theorems CARD_1, CARD_2, CQC_LANG, ENUMSET1, FINSEQ_1, FINSET_1, FUNCOP_1,
@@ -50,7 +51,7 @@ end;
 definition
   func _GraphSelectors -> non empty Subset of NAT equals  ::dGRAPHSEL
     {VertexSelector, EdgeSelector, SourceSelector, TargetSelector};
-  coherence by ENUMSET1:def 2;
+  coherence;
 end;
 
 definition let G be GraphStruct;
@@ -297,7 +298,7 @@ definition let G be _Graph;
       (the_Source_of G).e = (the_Target_of G).e;
 
   attr G is trivial means :Def21: ::dGTRIVIAL
-    Card the_Vertices_of G = one;
+    Card the_Vertices_of G = 1;
 
   attr G is non-multi means :Def22: ::dGNONMULTI
     for e1,e2,v1,v2 being set holds
@@ -357,7 +358,7 @@ A1: G is non-multi;
   proof
     let G be _Graph; assume
 A2: G is trivial & G is loopless; then
-    Card the_Vertices_of G = 1 by CARD_2:20,Def21; then
+    Card the_Vertices_of G = 1 by Def21; then
     consider v being set such that
 A3: the_Vertices_of G = {v} by CARD_2:60;
     now per cases;
@@ -379,7 +380,7 @@ A3: the_Vertices_of G = {v} by CARD_2:60;
   proof
     let G be _Graph; assume
 A5: G is trivial & G is non-Dmulti; then
-    Card the_Vertices_of G = 1 by CARD_2:20,Def21; then
+    Card the_Vertices_of G = 1 by Def21; then
     consider v being set such that
 A6: the_Vertices_of G = {v} by CARD_2:60;
     now assume
@@ -423,7 +424,7 @@ A1: the_Vertices_of G = {1} & the_Edges_of G = {} by Lm2;
     not ex e being set st e in the_Edges_of G &
      (the_Source_of G).e = (the_Target_of G).e by Lm2; then
 A2: G is loopless by Def20;
-    Card the_Vertices_of G = one by A1,CARD_1:50;
+    Card the_Vertices_of G = 1 by A1,CARD_1:50;
     hence G is trivial by Def21;
     for e1,e2,v1,v2 being set st e1 Joins v1,v2,G & e2 Joins v1,v2,G
       holds e1 = e2 by A1,Def15; then
@@ -442,7 +443,7 @@ A3: the_Vertices_of G = {1,2} & the_Edges_of G = {} by Lm2;
     not ex e being set st e in the_Edges_of G &
       (the_Source_of G).e = (the_Target_of G).e by Lm2; then
 A4: G is loopless by Def20;
-    Card the_Vertices_of G <> one by A3,CARD_2:20,CARD_2:76;
+    Card the_Vertices_of G <> 1 by A3,CARD_2:76;
     hence G is non trivial by Def21;
     for e1,e2,v1,v2 being set st e1 Joins v1,v2,G & e2 Joins v1,v2,G
       holds e1 = e2 by A3,Def15; then
@@ -462,7 +463,7 @@ registration let G be trivial _Graph;
   cluster the_Vertices_of G -> finite;
   coherence
   proof
-    Card the_Vertices_of G = 1 by Def21,CARD_2:20; then
+    Card the_Vertices_of G = 1 by Def21; then
     consider v being set such that
 A1: the_Vertices_of G = {v} by CARD_2:60;
     thus the_Vertices_of G is finite by A1;
@@ -502,7 +503,7 @@ registration let v be set, E be set, S,T be Function of E,{v};
   proof
     set G = createGraph({v},E,S,T);
     the_Vertices_of G = {v} by Lm2; then
-    Card the_Vertices_of G = one by CARD_1:50;
+    Card the_Vertices_of G = 1 by CARD_1:50;
     hence thesis by Def21;
   end;
 end;
@@ -800,11 +801,11 @@ registration let G be trivial _Graph;
   coherence
   proof
     let G2 be Subgraph of G;
-    Card the_Vertices_of G = 1 by CARD_2:20,Def21; then
+    Card the_Vertices_of G = 1 by Def21; then
     consider v being set such that
 A1: the_Vertices_of G = {v} by CARD_2:60;
     the_Vertices_of G2 = {v} by A1,ZFMISC_1:39; then
-    Card the_Vertices_of G2 = one by CARD_1:50;
+    Card the_Vertices_of G2 = 1 by CARD_1:50;
     hence G2 is trivial by Def21;
   end;
 end;
@@ -936,7 +937,7 @@ registration let G be _Graph, v be Element of the_Vertices_of G,
   proof
     let IT be inducedSubgraph of G,{v},E;
     the_Vertices_of IT = {v} by Def39; then
-    Card the_Vertices_of IT = one by CARD_1:50;
+    Card the_Vertices_of IT = 1 by CARD_1:50;
     hence IT is trivial by Def21;
   end;
 end;
@@ -1843,7 +1844,7 @@ proof
     now assume VG \ {v} = {}; then
         VG c= {v} by XBOOLE_1:37; then
         VG = {v} by ZFMISC_1:39; then
-        Card VG = one by CARD_1:50;
+        Card VG = 1 by CARD_1:50;
         hence contradiction by Def21;
     end;
     hence thesis;
@@ -1859,11 +1860,11 @@ proof
     A1: VG2 = {};
         VG2 misses {v1} by XBOOLE_1:79; then
     A2: Card (VG2 \/ {v1}) = Card VG2 +` Card {v1} by CARD_2:48
-                          .= 0 +` 1 by A1, CARD_1:78, CARD_1:50, CARD_2:20
+                          .= 0 +` 1 by A1, CARD_1:78, CARD_1:50
                           .= Card (0 +^ 1) by CARD_2:def 1
                           .= Card (0+1) by CARD_2:49
-                          .= one by CARD_1:66, CARD_2:20;
-        Card VG = one by A2,XBOOLE_1:45;
+                          .= 1 by CARD_1:66;
+        Card VG = 1 by A2,XBOOLE_1:45;
         hence contradiction by Def21;
     end; then
     reconsider VG2 as non empty set;
@@ -1879,7 +1880,7 @@ theorem Th25: ::tGTRIVIAL03
     ex v being Vertex of G st the_Vertices_of G = {v}
 proof
     let G be trivial _Graph;
-    Card (the_Vertices_of G) = 1 by Def21, CARD_2:20; then
+    Card (the_Vertices_of G) = 1 by Def21; then
     consider v being set such that
 A1: the_Vertices_of G = {v} by CARD_2:60;
     reconsider v as Vertex of G by TARSKI:def 1, A1;
@@ -1929,7 +1930,7 @@ end;
 
 theorem ::tGORDER02
   for G being finite _Graph holds
-    G.order() = 1 iff G is trivial by Def21,CARD_2:20;
+    G.order() = 1 iff G is trivial by Def21;
 
 theorem ::tGORDER03
   for G being finite _Graph holds
@@ -2330,7 +2331,7 @@ proof
     now assume V is empty; then
         VG c= {v} by XBOOLE_1:37; then
         VG = {v} by ZFMISC_1:39; then
-        Card VG = one by CARD_1:50;
+        Card VG = 1 by CARD_1:50;
         hence contradiction by Def21;
     end; then reconsider V as non empty Subset of VG;
     G2 is inducedSubgraph of G1,V;
@@ -3259,7 +3260,7 @@ A3: now assume G1 is loopless; then
     end;
     hence G1 is loopless implies G2 is loopless;
     hereby assume G1 is trivial; then
-        Card the_Vertices_of G2 = one by A2, Def21;
+        Card the_Vertices_of G2 = 1 by A2, Def21;
        hence G2 is trivial by Def21;
     end;
 A4: now assume

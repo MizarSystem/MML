@@ -11,44 +11,43 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="RLVECT_1"/>
 <ArticleID name="FUNCT_3"/>
+<ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_4"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
 <ArticleID name="CAT_1"/>
-<ArticleID name="BINOP_1"/>
 <ArticleID name="CAT_2"/>
-<ArticleID name="LATTICES"/>
-<ArticleID name="RELAT_2"/>
+<ArticleID name="RLVECT_1"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="FILTER_0"/>
-<ArticleID name="EQREL_1"/>
-<ArticleID name="FILTER_1"/>
-<ArticleID name="ORDERS_1"/>
-<ArticleID name="ORDERS_2"/>
-<ArticleID name="LATTICE3"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
-<ArticleID name="QUANTAL1"/>
-<ArticleID name="MULTOP_1"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
-<ArticleID name="ALTCAT_1"/>
+<ArticleID name="ORDERS_1"/>
+<ArticleID name="ORDERS_2"/>
+<ArticleID name="LATTICES"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="EQREL_1"/>
+<ArticleID name="FILTER_0"/>
+<ArticleID name="FILTER_1"/>
+<ArticleID name="LATTICE3"/>
+<ArticleID name="QUANTAL1"/>
 <ArticleID name="CAT_5"/>
+<ArticleID name="MULTOP_1"/>
+<ArticleID name="ALTCAT_1"/>
 <ArticleID name="ORDERS_3"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
@@ -59,10 +58,10 @@
 </Signature>
 <RCluster>
 <ArgTypes>
-<Typ kind="G" nr="9">
+<Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="96"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="89"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -79,7 +78,7 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="23">
+<Adjective nr="15">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -87,7 +86,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="88">
+<Adjective nr="60">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -95,19 +94,19 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="138"/>
-<Adjective nr="173">
+<Adjective nr="137"/>
+<Adjective nr="170">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="203">
+<Adjective nr="200">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="213">
+<Adjective nr="210">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="215">
+<Adjective nr="212">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

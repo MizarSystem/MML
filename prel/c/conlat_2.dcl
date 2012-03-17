@@ -15,17 +15,11 @@
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="LATTICE2"/>
-<ArticleID name="RELAT_2"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
-<ArticleID name="FUNCT_4"/>
-<ArticleID name="FILTER_0"/>
-<ArticleID name="EQREL_1"/>
-<ArticleID name="FILTER_1"/>
-<ArticleID name="LATTICE3"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -40,16 +34,21 @@
 <ArticleID name="YELLOW_2"/>
 <ArticleID name="WAYBEL_1"/>
 <ArticleID name="CONLAT_1"/>
+<ArticleID name="EQREL_1"/>
+<ArticleID name="FUNCT_4"/>
+<ArticleID name="FILTER_0"/>
+<ArticleID name="FILTER_1"/>
+<ArticleID name="LATTICE3"/>
 </Signature>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="127" value="false"/>
+<Adjective nr="115" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="273">
+<Func kind="K" nr="207">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -65,7 +64,7 @@
 <Adjective nr="30"/>
 <Adjective nr="31"/>
 <Adjective nr="32"/>
-<Adjective nr="59"/>
+<Adjective nr="130"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -74,7 +73,7 @@
 <Cluster>
 <Adjective nr="13" value="false"/>
 <Adjective nr="27"/>
-<Adjective nr="59"/>
+<Adjective nr="130"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -91,7 +90,7 @@
 <Adjective nr="25"/>
 <Adjective nr="26"/>
 <Adjective nr="27"/>
-<Adjective nr="59"/>
+<Adjective nr="130"/>
 </Cluster>
 </FCluster>
 </Registrations>

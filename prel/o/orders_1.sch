@@ -2,10 +2,10 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="TARSKI"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -127,7 +127,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="8">
+<Pred kind="R" nr="3">
 <Var nr="1"/>
 <Func kind="F" nr="1"/>
 </Pred>
@@ -319,7 +319,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="8">
+<Pred kind="R" nr="3">
 <Var nr="1"/>
 <Func kind="F" nr="1"/>
 </Pred>

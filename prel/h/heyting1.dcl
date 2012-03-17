@@ -11,14 +11,14 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="FINSUB_1"/>
-<ArticleID name="LATTICES"/>
-<ArticleID name="BINOP_1"/>
-<ArticleID name="NORMFORM"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="LATTICES"/>
 <ArticleID name="FILTER_0"/>
+<ArticleID name="BINOP_1"/>
+<ArticleID name="NORMFORM"/>
 </Signature>
 <RCluster>
 <ArgTypes>
@@ -28,7 +28,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="95">
+<Func kind="K" nr="113">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -42,23 +42,23 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="99">
+<Func kind="K" nr="117">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="20"/>
-<Adjective nr="21"/>
-<Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
-<Adjective nr="28"/>
+<Adjective nr="26" value="false"/>
 <Adjective nr="29"/>
 <Adjective nr="30"/>
-<Adjective nr="49"/>
+<Adjective nr="31"/>
+<Adjective nr="32"/>
+<Adjective nr="33"/>
+<Adjective nr="34"/>
+<Adjective nr="35"/>
+<Adjective nr="36"/>
+<Adjective nr="37"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
+<Adjective nr="46"/>
 </Cluster>
 </FCluster>
 </Registrations>

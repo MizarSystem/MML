@@ -3,8 +3,8 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="POLYEQ_2"/>
 </Signature>
 <FCluster>
@@ -56,32 +56,32 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="5"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="5"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="5"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="5"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="5"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="5"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -96,39 +96,39 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="2"/>
-<Adjective nr="3"/>
+<Adjective nr="5"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="5"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="5"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="5"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="5"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="5"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="5"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -143,7 +143,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="2"/>
-<Adjective nr="3"/>
+<Adjective nr="5"/>
 </Cluster>
 </FCluster>
 </Registrations>

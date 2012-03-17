@@ -9,13 +9,13 @@ environ
  vocabularies ORDINAL2, ARYTM, FUNCT_1, BOOLE, RELAT_1, FINSET_1, TARSKI,
       ORDINAL1, CARD_1, PARTFUN1, ARYTM_1, FINSEQ_1, MCART_1, MONOID_0,
       FUNCOP_1, FRAENKEL, FUNCT_4;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL2, XCMPLX_0, RELAT_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, RELAT_1,
       FUNCT_1, FRAENKEL, FUNCOP_1, WELLORD2, ORDINAL1, REAL_1, NAT_1, NUMBERS,
       PARTFUN1, FUNCT_4, MCART_1, FINSET_1, CARD_1, XXREAL_0;
- constructors NAT_1, WELLORD2, CARD_1, XREAL_0, DOMAIN_1, FUNCOP_1, FRAENKEL,
-      XXREAL_0, FUNCT_4;
+ constructors WELLORD2, FUNCOP_1, FUNCT_4, FRAENKEL, XXREAL_0, XREAL_0, NAT_1,
+      CARD_1;
  registrations FUNCT_1, RELAT_1, RELSET_1, CARD_1, SUBSET_1, NAT_1, XREAL_0,
-      ORDINAL2, FINSET_1, FUNCOP_1, XXREAL_0, XBOOLE_0;
+      ORDINAL2, FINSET_1, FUNCOP_1, XXREAL_0, XBOOLE_0, ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FINSET_1, FUNCT_1, WELLORD2, XBOOLE_0, RELAT_1, FRAENKEL;
  theorems TARSKI, AXIOMS, FUNCT_1, REAL_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
@@ -64,7 +64,7 @@ canceled 2;
 theorem
  Th3: a in Seg b iff 1 <= a & a <= b
   proof
-   A1: a is Nat by ORDINAL2:def 21;
+   A1: a is Nat by ORDINAL1:def 13;
          a in { m : 1 <= m & m <= b } iff
          ex m st a = m & ( 1 <= m & m <= b );
       hence thesis by A1;
@@ -117,7 +117,7 @@ theorem
   proof assume a <> 0;
    then consider b be Nat such that
 A1:  a = b + 1 by NAT_1:22;
-A2: a is Nat by ORDINAL2:def 21;
+A2: a is Nat by ORDINAL1:def 13;
        1 <= a & a <= a by A1,NAT_1:29;
     then a in { k : 1 <= k & k <= a } by A2;
    hence a in Seg a;
@@ -287,7 +287,7 @@ A14:     1+i = k by A12,NAT_1:28;
        then P[i,f.i] by A5;
        hence x in rng f by A4,A11,A14,A15,FUNCT_1:def 5;
      end;
-    thus thesis by ORDINAL2:def 21,A4;
+    thus thesis by ORDINAL1:def 13,A4;
    end;
    hence thesis;
   end;
@@ -503,7 +503,7 @@ end;
 theorem Th19:
    p|(Seg a) is FinSequence
 proof
-A1: a is Nat by ORDINAL2:def 21;
+A1: a is Nat by ORDINAL1:def 13;
  A2: dom(p|Seg a) = dom p /\ Seg a by RELAT_1:90
                 .=Seg len p /\ Seg a by Def3;
       len p <= a or a <= len p;
@@ -522,7 +522,7 @@ end;
 theorem Th21:
   a <= len p & q = p|(Seg a) implies len q = a & dom q = Seg a
 proof
-A1: a is Nat by ORDINAL2:def 21;
+A1: a is Nat by ORDINAL1:def 13;
    assume A2: a <= len p & q = p|(Seg a);
    then Seg a c= Seg len p by Th7;
    then Seg a c= dom p by Def3;
@@ -586,7 +586,7 @@ theorem
   for D being non empty set
   ex p being FinSequence of D st len p = a
 proof let D be non empty set;
-   reconsider a as Nat by ORDINAL2:def 21;
+   reconsider a as Nat by ORDINAL1:def 13;
    consider y being Element of D;
    set p = Seg a --> y;
 A1: dom p = Seg a by FUNCOP_1:19;
@@ -1644,7 +1644,7 @@ A30:                 y1 <= k & k < y by A12,A20,A29,Th3,XREAL_1:31;
           end;
          let z be set;
           assume A37: z in rng q \ {x};
-            then z in rng q by XBOOLE_0:def 4;
+            then z in rng q;
            then consider y1 such that A38: y1 in dom q and A39: z = q.y1
                                                         by FUNCT_1:def 5;
             A40: y1 in Seg(len q) by A38,Def3;
@@ -1943,7 +1943,7 @@ A4:  for k being natural number st P[k] holds P[k+1]
                    rng p = Y & for l,m,k1,k2 be natural number  st
                       ( 1 <= l & l < m & m <= len p &
                             k1=p.l & k2=p.m) holds k1 < k2 by A5;
-                reconsider k as Nat by ORDINAL2:def 21;
+                reconsider k as Nat by ORDINAL1:def 13;
                 consider q such that A14: q=p^<*k+1*>;
                 reconsider q as FinSequence of NAT by A14;
            A15:  {k+1} c= X by A7,A8,ZFMISC_1:37;
@@ -2165,10 +2165,9 @@ then A59:                                   len q in dom q by Def3;
          q' = p
            proof
               A60: ex m st X\{x} c= Seg m
-                     proof reconsider k as Nat by ORDINAL2:def 21;
+                     proof reconsider k as Nat by ORDINAL1:def 13;
                        take k;
-                       X\{x} c= X by XBOOLE_1:36;
-                       hence thesis by A30,XBOOLE_1:1;
+                       thus thesis by A30,XBOOLE_1:1;
                      end;
 
               A61: (p is FinSequence of NAT & rng p = X\{x} &
@@ -2379,8 +2378,7 @@ A1: rng g = D and
 A2: dom g in omega;
     reconsider n = dom g as Nat by A2;
     defpred R[set,set] means P[$2,$1];
-A3:   for x,y1,y2 st x in Seg n & R[x,y1] & R[x,y2] holds y1 = y2 by XCMPLX_1:2
-;
+A3:   for x,y1,y2 st x in Seg n & R[x,y1] & R[x,y2] holds y1 = y2;
 A4:   for x st x in Seg n ex y st R[x,y]
       proof let x;
        assume
@@ -2605,7 +2603,7 @@ theorem
   proof
     hereby
       let m be natural number;
-      reconsider n = m as Nat by ORDINAL2:def 21;
+      reconsider n = m as Nat by ORDINAL1:def 13;
      Seg n is finite & n is finite & Card n is finite & Seg n,n are_equipotent
      by Lm1;
     then Card card n = Card n & card Seg n = card n &
@@ -2708,7 +2706,7 @@ theorem
 theorem
  i <= len q implies len(q|i) = i
 proof
-A1:  i is Nat by ORDINAL2:def 21;
+A1:  i is Nat by ORDINAL1:def 13;
  assume i <= len q;
  then Seg i c= Seg(len q) by Th7;
  then Seg i c= dom q by Def3;
@@ -2876,17 +2874,17 @@ end;
 
 :: from SCM_1, 2006.03.13, A.T.
 
-Lm3:  1 in Seg 3 & 2 in Seg 3 & 3 in Seg 3;
-Lm4:  1 in Seg 4 & 2 in Seg 4 & 3 in Seg 4 & 4 in Seg 4;
-Lm5:  1 in Seg 5 & 2 in Seg 5 & 3 in Seg 5 & 4 in Seg 5 & 5 in Seg 5;
-Lm6:  1 in Seg 6 & 2 in Seg 6 & 3 in Seg 6 & 4 in Seg 6 &
+Lm7:  1 in Seg 3 & 2 in Seg 3 & 3 in Seg 3;
+Lm8:  1 in Seg 4 & 2 in Seg 4 & 3 in Seg 4 & 4 in Seg 4;
+Lm9:  1 in Seg 5 & 2 in Seg 5 & 3 in Seg 5 & 4 in Seg 5 & 5 in Seg 5;
+Lm10:  1 in Seg 6 & 2 in Seg 6 & 3 in Seg 6 & 4 in Seg 6 &
        5 in Seg 6 & 6 in Seg 6;
-Lm7:  1 in Seg 7 & 2 in Seg 7 & 3 in Seg 7 & 4 in Seg 7 &
+Lm11:  1 in Seg 7 & 2 in Seg 7 & 3 in Seg 7 & 4 in Seg 7 &
        5 in Seg 7 & 6 in Seg 7 & 7 in Seg 7;
-Lm8:  1 in Seg 8 & 2 in Seg 8 & 3 in Seg 8 & 4 in Seg 8 &
+Lm12:  1 in Seg 8 & 2 in Seg 8 & 3 in Seg 8 & 4 in Seg 8 &
        5 in Seg 8 & 6 in Seg 8 & 7 in Seg 8 & 8 in Seg 8;
 
-theorem Th8: for x1, x2, x3, x4 being set, p being FinSequence
+theorem Th87: for x1, x2, x3, x4 being set, p being FinSequence
  st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>
   holds len p = 4 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4
 proof
@@ -2899,30 +2897,30 @@ then A2: len p13 = 3 & p13.1 = x1 & p13.2 = x2 & p13.3 = x3 by Th62;
             .= 3 + 1 by A2,Th57
             .= 4;
       dom p13 = Seg 3 by A2,Def3;
- hence p.1 = x1 & p.2 = x2 & p.3 = x3 by A1,A2,Lm3,Def7;
+ hence p.1 = x1 & p.2 = x2 & p.3 = x3 by A1,A2,Lm7,Def7;
  thus p.4 = p.(len p13 + 1) by A2
          .= x4 by A1,Th59;
 end;
 
-theorem Th9: for x1, x2, x3, x4, x5 being set, p being FinSequence
+theorem Th88: for x1, x2, x3, x4, x5 being set, p being FinSequence
  st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>
   holds len p = 5 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5
 proof
 let x1, x2, x3, x4, x5 be set, p be FinSequence; assume
 A1: p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>;
   set p14 = <*x1*>^<*x2*>^<*x3*>^<*x4*>;
-A2: len p14 = 4 & p14.1 = x1 & p14.2 = x2 & p14.3 = x3 & p14.4 = x4 by Th8;
+A2: len p14 = 4 & p14.1 = x1 & p14.2 = x2 & p14.3 = x3 & p14.4 = x4 by Th87;
  thus len p = len p14 + len <*x5*> by A1,Th35
             .= 4 + 1 by A2,Th57
             .= 5;
       dom p14 = Seg 4 by A2,Def3;
  hence p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4
-                                          by A1,A2,Lm4,Def7;
+                                          by A1,A2,Lm8,Def7;
  thus p.5 = p.(len p14 + 1) by A2
          .= x5 by A1,Th59;
 end;
 
-theorem Th10: for x1, x2, x3, x4, x5, x6 being set, p being FinSequence
+theorem Th89: for x1, x2, x3, x4, x5, x6 being set, p being FinSequence
  st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>
   holds len p = 6 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 &
                     p.6 = x6
@@ -2931,18 +2929,18 @@ let x1, x2, x3, x4, x5, x6 be set, p be FinSequence; assume
 A1: p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>;
   set p15 = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>;
 A2: len p15 = 5 & p15.1 = x1 & p15.2 = x2 & p15.3 = x3 & p15.4 = x4 &
-                   p15.5 = x5 by Th9;
+                   p15.5 = x5 by Th88;
  thus len p = len p15 + len <*x6*> by A1,Th35
             .= 5 + 1 by A2,Th57
             .= 6;
       dom p15 = Seg 5 by A2,Def3;
  hence p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5
-                                          by A1,A2,Lm5,Def7;
+                                          by A1,A2,Lm9,Def7;
  thus p.6 = p.(len p15 + 1) by A2
          .= x6 by A1,Th59;
 end;
 
-theorem Th11: for x1, x2, x3, x4, x5, x6, x7 being set, p being FinSequence
+theorem Th90: for x1, x2, x3, x4, x5, x6, x7 being set, p being FinSequence
  st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>
   holds len p = 7 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 &
                     p.6 = x6 & p.7 = x7
@@ -2951,19 +2949,19 @@ let x1, x2, x3, x4, x5, x6, x7 be set, p be FinSequence; assume
 A1: p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>;
   set p16 = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>;
 A2: len p16 = 6 & p16.1 = x1 & p16.2 = x2 & p16.3 = x3 & p16.4 = x4 &
-                   p16.5 = x5 & p16.6 = x6 by Th10;
+                   p16.5 = x5 & p16.6 = x6 by Th89;
  thus len p = len p16 + len <*x7*> by A1,Th35
             .= 6 + 1 by A2,Th57
             .= 7;
       dom p16 = Seg 6 by A2,Def3;
  hence p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 & p.6 = x6
-                                            by A1,A2,Lm6,Def7;
+                                            by A1,A2,Lm10,Def7;
  thus p.7 = p.(len p16 + 1) by A2
          .= x7 by A1,Th59;
 end;
 
 
-theorem Th12: for x1,x2,x3,x4, x5, x6, x7, x8 being set, p being FinSequence
+theorem Th91: for x1,x2,x3,x4, x5, x6, x7, x8 being set, p being FinSequence
  st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>^<*x8*>
   holds len p = 8 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 &
                     p.6 = x6 & p.7 = x7 & p.8 = x8
@@ -2972,13 +2970,13 @@ let x1, x2, x3, x4, x5, x6, x7, x8 be set, p be FinSequence; assume
 A1: p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>^<*x8*>;
   set p17 = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>;
 A2: len p17 = 7 & p17.1 = x1 & p17.2 = x2 & p17.3 = x3 & p17.4 = x4 &
-                   p17.5 = x5 & p17.6 = x6 & p17.7 = x7 by Th11;
+                   p17.5 = x5 & p17.6 = x6 & p17.7 = x7 by Th90;
  thus len p = len p17 + len <*x8*> by A1,Th35
             .= 7 + 1 by A2,Th57
             .= 8;
       dom p17 = Seg 7 by A2,Def3;
  hence p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 & p.6 = x6 &
-       p.7 = x7 by A1,A2,Lm7,Def7;
+       p.7 = x7 by A1,A2,Lm11,Def7;
  thus p.8 = p.(len p17 + 1) by A2
          .= x8 by A1,Th59;
 end;
@@ -2992,20 +2990,20 @@ let x1, x2, x3, x4, x5, x6, x7, x8, x9 be set, p be FinSequence; assume
 A1: p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>^<*x8*>^<*x9*>;
   set p17 = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>^<*x8*>;
 A2: len p17 = 8 & p17.1 = x1 & p17.2 = x2 & p17.3 = x3 & p17.4 = x4 &
-                   p17.5 = x5 & p17.6 = x6 & p17.7 = x7 & p17.8 = x8 by Th12;
+                   p17.5 = x5 & p17.6 = x6 & p17.7 = x7 & p17.8 = x8 by Th91;
  thus len p = len p17 + len <*x9*> by A1,Th35
             .= 8 + 1 by A2,Th57
             .= 9;
       dom p17 = Seg 8 by A2,Def3;
  hence p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 & p.6 = x6 &
-       p.7 = x7 & p.8 = x8 by A1,A2,Lm8,Def7;
+       p.7 = x7 & p.8 = x8 by A1,A2,Lm12,Def7;
  thus p.9 = p.(len p17 + 1) by A2
          .= x9 by A1,Th59;
 end;
 
 :: from SCMFSA_7, 2006.03.14, A.T.
 
-theorem Th20:
+theorem Th93:
  for p being FinSequence holds
      p | Seg 0 = {}
  proof
@@ -3020,8 +3018,8 @@ theorem
      f | Seg 0 = g | Seg 0
  proof
    let f,g be FinSequence;
-   f | Seg 0 = {} by Th20;
-   hence thesis by Th20;
+   f | Seg 0 = {} by Th93;
+   hence thesis by Th93;
  end;
 
 theorem
@@ -3034,7 +3032,7 @@ theorem
 
 :: from AMISTD_2, 2006.03.26, A.T.
 
-Lm1:
+Lm13:
  for R being Relation st dom R <> {} holds R <> {} by RELAT_1:60;
 
 registration
@@ -3044,13 +3042,13 @@ registration
 coherence
   proof
     dom (f+*g) = dom f \/ dom g by FUNCT_4:def 1;
-    hence thesis by Lm1;
+    hence thesis by Lm13;
   end;
  cluster g +* f -> non empty;
 coherence
   proof
     dom (g+*f) = dom g \/ dom f by FUNCT_4:def 1;
-    hence thesis by Lm1;
+    hence thesis by Lm13;
   end;
 end;
 

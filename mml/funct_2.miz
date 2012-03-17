@@ -8,9 +8,9 @@ environ
 
  vocabularies RELAT_1, BOOLE, FUNCT_1, PARTFUN1, FUNCT_2, SGRAPH1, RELAT_2,
       CAT_4, FUNCT_3, MCART_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2,
-      FUNCT_1, RELSET_1, PARTFUN1, MCART_1;
- constructors TARSKI, PARTFUN1, RELAT_2, XBOOLE_0, MCART_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
+      RELSET_1, PARTFUN1, MCART_1;
+ constructors TARSKI, RELAT_2, PARTFUN1, MCART_1;
  registrations FUNCT_1, RELAT_1, RELSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1,
       PARTFUN1;
  requirements SUBSET, BOOLE;
@@ -396,7 +396,6 @@ theorem
  proof let f be Function of X,Y;
    assume
 A1:  y in rng f;
-   then y in Y;
    then dom f = X by Def1;
    hence thesis by A1,FUNCT_1:def 5;
  end;
@@ -442,9 +441,9 @@ A4:   Z = {};
     end;
   end;
   case
-A7: Z = {} & X <> {};
+A5: Z = {} & X <> {};
    Y = {} or Y <> {};
-   then f = {} or g = {} by A7,Def1;
+   then f = {} or g = {} by A5,Def1;
   hence thesis by RELAT_1:62;
   end;
  end;
@@ -477,23 +476,23 @@ A1:  Y <> {};
   thus rng f = Y implies
       for Z st Z <> {} for g,h being Function of Y,Z st g*f = h*f holds g = h
    proof assume
-A3:   rng f = Y;
+A2:   rng f = Y;
     let Z such that
-A4:   Z <> {};
+A3:   Z <> {};
     let g,h be Function of Y,Z;
-       dom g = Y & dom h = Y by A4,Def1;
-    hence thesis by A3,FUNCT_1:156;
+       dom g = Y & dom h = Y by A3,Def1;
+    hence thesis by A2,FUNCT_1:156;
    end;
   assume
-A5: for Z st Z <> {} for g,h being Function of Y,Z st g*f = h*f holds g = h;
+A4: for Z st Z <> {} for g,h being Function of Y,Z st g*f = h*f holds g = h;
      for g,h being Function st dom g = Y & dom h = Y & g*f = h*f holds g = h
    proof let g,h be Function; assume
-A6:   dom g = Y & dom h = Y;
+A5:   dom g = Y & dom h = Y;
     then rng g c= rng g \/ rng h & rng h c= rng g \/ rng h & rng g <> {}
      by A1,RELAT_1:65,XBOOLE_1:7;
     then g is Function of Y,rng g \/ rng h & h is Function of Y,rng g \/ rng h
-         & rng g \/ rng h <> {} by A6,Th4,XBOOLE_1:15;
-    hence thesis by A5;
+         & rng g \/ rng h <> {} by A5,Th4,XBOOLE_1:15;
+    hence thesis by A4;
    end;
   hence thesis by FUNCT_1:33;
  end;
@@ -782,8 +781,7 @@ theorem
   for f being Function of X,Y st Y = {} implies X = {} holds f"Y = X
  proof let f be Function of X,Y;
   assume Y <> {} or X = {};
-  then dom f = X & rng f c= Y by Def1;
-  then dom f = X & rng f /\ Y = rng f by XBOOLE_1:28;
+  then dom f = X & rng f /\ Y = rng f by Def1,XBOOLE_1:28;
   then dom f = X & f"Y = f"(rng f) by RELAT_1:168;
   hence f"Y = X by RELAT_1:169;
  end;
@@ -958,10 +956,10 @@ theorem Th73:
   for f,g being Relation of X,X st rng f = X & rng g = X holds rng(g*f) = X
  proof let f,g be Relation of X,X;
   assume that
-Z1: rng f = X and
-Z2: rng g = X;
-  thus rng(g*f) = f.:X by Z2,RELAT_1:160
-     .= X by Z1,RELSET_1:38;
+A1: rng f = X and
+A2: rng g = X;
+  thus rng(g*f) = f.:X by A2,RELAT_1:160
+     .= X by A1,RELSET_1:38;
  end;
 
 canceled;
@@ -1220,7 +1218,7 @@ A1: for x being Element of C() ex y being Element of D() st P[x,y];
 
 canceled 20;
 
-theorem
+theorem Th113:
   for f1,f2 being Function of X,Y st
     for x being Element of X holds f1.x = f2.x holds f1 = f2
  proof let f1,f2 be Function of X,Y;
@@ -1361,7 +1359,6 @@ theorem Th136:
 A1:   Y = {} implies X = {};
 A2: now assume
 A3:     Y = {};
-      then rng f c= {};
       then rng f = {} by XBOOLE_1:3;
       then dom f = {} by RELAT_1:65;
       then reconsider g = f as Function of X,Y by A1,A3,Th55;
@@ -1898,3 +1895,32 @@ A14:  dom pr2 f = dom f by MCART_1:def 13;
    hence IT = pr2 f by A16,MCART_1:def 13;
   end;
 end;
+
+definition
+  let A1 be set, B1 be non empty set,
+      A2 be set, B2 be non empty set,
+      f1 be Function of A1,B1,
+      f2 be Function of A2,B2;
+ redefine pred f1 = f2 means
+ A1 = A2 & for a being Element of A1 holds f1.a = f2.a;
+ compatibility
+  proof
+A1:  dom f1 = A1 & dom f2 = A2 by Def1;
+   hence f1 = f2 implies
+    A1 = A2 & for a being Element of A1 holds f1.a = f2.a;
+   assume that
+A2: A1 = A2 and
+A3: for a being Element of A1 holds f1.a = f2.a;
+        for a being set st a in A1 holds f1.a = f2.a by A3;
+   hence f1 = f2 by A1,A2,FUNCT_1:9;
+  end;
+end;
+
+definition
+  let A be set, B be non empty set,
+      f1,f2 be Function of A,B;
+ redefine pred f1 = f2 means
+ for a being Element of A holds f1.a = f2.a;
+ compatibility by Th113;
+end;
+

@@ -13,19 +13,19 @@ environ
       DOMAIN_1, NAT_1, BINOP_2, REALSET1, STRUCT_0, RELAT_1, FINSEQOP, FUNCT_1,
       FINSEQ_1, PARTFUN1, FUNCT_2, BINOP_1, FINSEQ_2, INT_1, FRAENKEL, GROUP_1,
       VECTSP_1, VECTSP_2, SETWISEO, FUNCOP_1, FUNCT_4, GR_CY_1;
- constructors DOMAIN_1, BINOP_1, PARTFUN1, SETWISEO, FINSEQOP, GR_CY_1,
-      VECTSP_2, MEMBERED, RELAT_2, BINOP_2, FRAENKEL, REALSET1, XXREAL_0;
+ constructors RELAT_2, PARTFUN1, DOMAIN_1, BINOP_1, SETWISEO, FRAENKEL,
+      XXREAL_0, BINOP_2, MEMBERED, FINSEQOP, REALSET1, VECTSP_2, GR_CY_1;
  registrations SUBSET_1, FUNCT_1, FINSEQ_1, INT_1, VECTSP_1, GROUP_1, RELSET_1,
       STRUCT_0, PARTFUN1, FUNCOP_1, MEMBERED, FUNCT_2, ORDINAL2, BINOP_2,
-      REALSET1;
+      REALSET1, ORDINAL1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, BINOP_1, SETWISEO, FINSEQOP, GROUP_1, STRUCT_0, VECTSP_2,
+      XBOOLE_0, REALSET1;
  theorems TARSKI, NAT_1, INT_1, FINSEQ_1, BINOP_1, GROUP_1, FINSEQOP, SETWISEO,
       VECTSP_1, MCART_1, ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_4, FUNCOP_1,
       PARTFUN1, GR_CY_1, GRFUNC_1, RELAT_1, STRUCT_0, RELSET_1, VECTSP_2,
       XBOOLE_1, XCMPLX_1, NUMBERS, BINOP_2, FRAENKEL, SUBSET_1;
  schemes FUNCT_2, BINOP_1, XBOOLE_0;
- definitions TARSKI, BINOP_1, SETWISEO, FINSEQOP, GROUP_1, STRUCT_0, VECTSP_2,
-      XBOOLE_0, REALSET1;
 
 begin :: Updating
 
@@ -72,18 +72,6 @@ registration
 A1: X is constituted-FinSeqs;
     let a be Element of carr(X);
     thus thesis by A1,Def2;
-   end;
-end;
-
-registration
- cluster constituted-FinSeqs -> constituted-Functions HGrStr;
-  coherence
-   proof
-     now let G be HGrStr; assume G is constituted-FinSeqs;
-      then G is constituted-FinSeqs 1-sorted;
-      hence G is constituted-Functions;
-     end;
-    hence thesis;
    end;
 end;
 
@@ -391,7 +379,7 @@ A2:  a*b = b & b*a = b;
    hence thesis;
   end;
 
- Lm2:
+ Lm1:
  G is commutative iff for a,b holds a*b = b*a
   proof
    thus G is commutative implies for a,b holds a*b = b*a
@@ -407,7 +395,7 @@ A2:  a*b = b*a;
    hence thesis by A2;
   end;
 
- Lm3:
+ Lm2:
  G is associative iff for a,b,c holds a*b*c = a*(b*c)
   proof
    thus G is associative implies for a,b,c holds a*b*c = a*(b*c)
@@ -576,8 +564,8 @@ A2:     G is invertible;
 A3:     e*x = e & y*e = e by A2,Th12;
 A4:     now let a; consider b,c such that
 A5:       e*b = a & c*e = a by A2,Th12;
-        thus y*a = a by A1,A3,A5,Lm3;
-        thus a*x = a by A1,A3,A5,Lm3;
+        thus y*a = a by A1,A3,A5,Lm2;
+        thus a*x = a by A1,A3,A5,Lm2;
        end;
 then A6:     y*x = x & y*x = y;
       hence G is unital by A4,Th6;
@@ -587,7 +575,7 @@ A7:    for a ex b st P[a,b]
         proof let a; consider b,c such that
 A8:       a*b = x & c*a = x by A2,Th12;
          take b;
-             c*(a*b) = c*a*b & x*b = b & c*x = c by A1,A4,A6,Lm3;
+             c*(a*b) = c*a*b & x*b = b & c*x = c by A1,A4,A6,Lm2;
          hence thesis by A8;
         end;
         ex f being Function of the carrier of G,the carrier of G
@@ -610,19 +598,19 @@ A10:  op(G) has_a_unity;
 A11:  u is_an_inverseOp_wrt op(G);
    let a,c;
    take l = (u.a)*c, r = c*(u.a);
-   thus op(G).(a,l) = a*l .= a*(u.a)*c by A1,Lm3
+   thus op(G).(a,l) = a*l .= a*(u.a)*c by A1,Lm2
          .= op(G).(a*(u.a),c)
          .= op(G).(op(G).(a,u.a),c)
          .= op(G).(the_unity_wrt op(G),c) by A11,FINSEQOP:def 1
          .= c by A10,SETWISEO:23;
-   thus op(G).(r,a) = r*a .= c*((u.a)*a) by A1,Lm3
+   thus op(G).(r,a) = r*a .= c*((u.a)*a) by A1,Lm2
          .= op(G).(c,(u.a)*a)
          .= op(G).(c,op(G).(u.a,a))
          .= op(G).(c,the_unity_wrt op(G)) by A11,FINSEQOP:def 1
          .= c by A10,SETWISEO:23;
   end;
 
-Lm4: G is invertible iff G is left-invertible right-invertible
+Lm3: G is invertible iff G is left-invertible right-invertible
  proof
   thus G is invertible implies G is left-invertible right-invertible
     proof assume op(G) is invertible;
@@ -632,7 +620,7 @@ Lm4: G is invertible iff G is left-invertible right-invertible
   hence op(G) is invertible by Th1;
  end;
 
-Lm5: G is cancelable iff G is left-cancelable right-cancelable
+Lm4: G is cancelable iff G is left-cancelable right-cancelable
  proof
   thus G is cancelable implies G is left-cancelable right-cancelable
     proof assume op(G) is cancelable;
@@ -642,7 +630,7 @@ Lm5: G is cancelable iff G is left-cancelable right-cancelable
   hence op(G) is cancelable by Th2;
  end;
 
-Lm6: G is associative invertible implies G is Group-like
+Lm5: G is associative invertible implies G is Group-like
   proof assume
 A1:  G is associative invertible;
     then G is unital by Th17;
@@ -655,7 +643,7 @@ A2:  for b holds a*b = b & b*a = b by Th6;
 A3:  op(G).(b,l) = a & op(G).(r,b) = a by Def5;
 A4:  b*l = a & r*b = a by A3;
    take l;
-       r = r*a by A2 .= a*l by A1,A4,Lm3 .= l by A2;
+       r = r*a by A2 .= a*l by A1,A4,Lm2 .= l by A2;
    hence thesis by A3;
   end;
 
@@ -670,18 +658,18 @@ registration
     hence thesis by Th17;
    end;
  cluster associative invertible -> Group-like (non empty HGrStr);
-  coherence by Lm6;
+  coherence by Lm5;
 end;
 
 registration
  cluster invertible -> left-invertible right-invertible (non empty HGrStr);
-  coherence by Lm4;
+  coherence by Lm3;
  cluster left-invertible right-invertible -> invertible (non empty HGrStr);
-  coherence by Lm4;
+  coherence by Lm3;
  cluster cancelable -> left-cancelable right-cancelable (non empty HGrStr);
-  coherence by Lm5;
+  coherence by Lm4;
  cluster left-cancelable right-cancelable -> cancelable (non empty HGrStr);
-  coherence by Lm5;
+  coherence by Lm4;
  cluster associative invertible -> unital cancelable (non empty HGrStr);
   coherence
    proof let G be non empty HGrStr;
@@ -752,7 +740,7 @@ A2:  for a being Element of M holds un(M)*a = a & a*un(M) = a;
    hence thesis by A1,BINOP_1:11;
   end;
 
-Lm7: for M being non empty multLoopStr st M is well-unital holds M is unital
+Lm6: for M being non empty multLoopStr st M is well-unital holds M is unital
   proof let M be non empty multLoopStr;
    assume un(M) is_a_unity_wrt the mult of M;
    hence op(M) has_a_unity by SETWISEO:def 2;
@@ -760,7 +748,7 @@ Lm7: for M being non empty multLoopStr st M is well-unital holds M is unital
 
 registration
  cluster well-unital -> unital (non empty multLoopStr);
-  coherence by Lm7;
+  coherence by Lm6;
 end;
 
 theorem Th19:
@@ -1313,9 +1301,9 @@ theorem Th34:
   proof assume A1: G is commutative;
        now let a,b be Element of H;  carr(H) c= carr(G) by Th25;
      then reconsider a' = a, b' = b as Element of G by TARSKI:def 3;
-     thus a*b = a'*b' by Th27 .= b'*a' by A1,Lm2 .= b*a by Th27;
+     thus a*b = a'*b' by Th27 .= b'*a' by A1,Lm1 .= b*a by Th27;
     end;
-   hence thesis by Lm2;
+   hence thesis by Lm1;
   end;
 
 theorem Th35:
@@ -1325,9 +1313,9 @@ theorem Th35:
      then reconsider a' = a, b' = b, c' = c, ab = a*b, bc = b*c as
        Element of G by TARSKI:def 3;
      thus a*b*c = ab*c' by Th27 .= a'*b'*c' by Th27
-       .= a'*(b'*c') by A1,Lm3 .= a'*bc by Th27 .= a*(b*c) by Th27;
+       .= a'*(b'*c') by A1,Lm2 .= a'*bc by Th27 .= a*(b*c) by Th27;
     end;
-   hence thesis by Lm3;
+   hence thesis by Lm2;
   end;
 
 theorem Th36:
@@ -1633,7 +1621,7 @@ A1:  for b being Element of N holds a*b = b & b*a = b by Th6;
        x+0 = a*a by A1 .= x+x by Th43;
 then A2:  a = 0;
        now let b be Element of N;
-         a*b = op(N).(a,b) & b*a = op(N).(b,a) by GROUP_1:def 1;
+         a*b = op(N).(a,b) & b*a = op(N).(b,a);
      hence op(N).(a,b) = b & op(N).(b,a) = b by A1;
     end;
     then a is_a_unity_wrt op(N) by BINOP_1:11;
@@ -1725,7 +1713,7 @@ then A4:   N is unital by Th6;
 then A5:   op(N) has_a_unity by Def10;
         now let b be Element of N;
       thus op(N).(a,b) = a*b .= b by A3;
-      thus op(N).(b,a) = b*a by GROUP_1:def 1 .= b by A3;
+      thus op(N).(b,a) = b*a .= b by A3;
      end;
 then A6:     a is_a_unity_wrt op(N) by BINOP_1:11;
 then A7:   the_unity_wrt op(N) = a by BINOP_1:def 8;
@@ -1758,7 +1746,7 @@ end;
 ::   well-unital commutative associative cancelable uniquely-decomposable;
 
 definition
- redefine func addnat equals:Def29:
+ redefine func addnat equals
    the mult of <NAT,+>;
  compatibility
  proof let b be BinOp of NAT;
@@ -1780,7 +1768,7 @@ end;
 canceled;
 
 theorem Th49:
- <NAT,+> = HGrStr(#NAT,addnat#) by Def27,Def29;
+ <NAT,+> = HGrStr(#NAT,addnat#) by Def27;
 
 theorem
   x is Element of <NAT,+,0> iff x is Nat
@@ -1810,7 +1798,7 @@ theorem
   addnat = addreal||NAT & addnat = addint||NAT
   proof
    carr(<NAT,+>) = NAT & op(<REAL,+>) = addreal & op(INT.Group) = addint &
-   op(<NAT,+>) = addnat by Def27,Def29,GR_CY_1:def 4;
+   op(<NAT,+>) = addnat by Def27,GR_CY_1:def 4;
    hence thesis by Th26;
   end;
 
@@ -1912,7 +1900,7 @@ then A4:   N is unital by Th6;
 then A5:   op(N) has_a_unity by Def10;
         now let b be Element of N;
       thus op(N).(a,b) = a*b .= b by A3;
-      thus op(N).(b,a) = b*a by GROUP_1:def 1 .= b by A3;
+      thus op(N).(b,a) = b*a .= b by A3;
      end;
 then A6:     a is_a_unity_wrt op(N) by BINOP_1:11;
 then A7:   the_unity_wrt op(N) = a by BINOP_1:def 8;
@@ -1943,7 +1931,7 @@ end;
 :: <NAT,*,1> is well-unital commutative associative uniquely-decomposable;
 
 definition
- redefine func multnat equals:Def33:
+ redefine func multnat equals
    the mult of <NAT,*>;
  compatibility
  proof let b be BinOp of NAT;
@@ -1962,7 +1950,7 @@ A1: the carrier of <NAT,*> = NAT by Def31;
 end;
 
 theorem Th61:
- <NAT,*> = HGrStr(#NAT,multnat#) by Def31,Def33;
+ <NAT,*> = HGrStr(#NAT,multnat#) by Def31;
 
 theorem
   for n1,n2 being Nat, m1,m2 being Element of <NAT,*>
@@ -1990,7 +1978,7 @@ theorem
   <NAT,*,1> = multLoopStr(#NAT,multnat,1#)
   proof set N = <NAT,*,1>;
        the HGrStr of N = <NAT,*> & the_unity_wrt op(N) = un(N) by Def22,Th19;
-   hence thesis by Def31,Def33,Th63;
+   hence thesis by Def31,Th63;
   end;
 
 theorem
@@ -2041,7 +2029,7 @@ A3:      now let b be Element of N;
          thus a*b*c = p^c by A2 .= a^b^c by A2 .= a^(b^c) by FINSEQ_1:45
                    .= a^q by A2 .= a*(b*c) by A2;
         end;
-       hence N is associative by Lm3;
+       hence N is associative by Lm2;
            now let a,b,c be Element of N;
              a*b = a^b & a*c = a^c & b*a = b^a & c*a = c^a by A2;
          hence a*b = a*c or b*a = c*a implies b = c by FINSEQ_1:46;
@@ -2246,7 +2234,7 @@ A5:     now let h be Element of G;
      end;
     then reconsider G as unital associative constituted-Functions strict
      (non empty HGrStr)
-      by A5,Lm3,Th6;
+      by A5,Lm2,Th6;
     take G; thus carr(G) = PFuncs(X,X);
     let g,h be Element of G;
     reconsider g' = g, h' = h as Element of D;
@@ -2365,7 +2353,7 @@ then A5:   x`1 in PFuncs(Y,Y) & x`2 in PFuncs(Y,Y) by MCART_1:10;
    hence op(GPFuncs Y) <= op(GPFuncs X) by A2,A3,GRFUNC_1:8;
   end;
 
-Lm8: x in Funcs(X,X) implies x is Function of X,X
+Lm7: x in Funcs(X,X) implies x is Function of X,X
  proof assume x in Funcs(X,X);
    then ex f being Function st x = f & dom f = X & rng f c= X by FUNCT_2:def 2
 ;
@@ -2383,7 +2371,7 @@ definition let X be set;
 GPFuncs X;
 A1:   for x,y being Element of F holds x [*] y in F
       proof let x,y be Element of F;
-       reconsider f = x, g = y as Function of X,X by Lm8;
+       reconsider f = x, g = y as Function of X,X by Lm7;
            x[*]y = f*g by Def37;
        hence thesis by FUNCT_2:12;
       end;
@@ -2412,7 +2400,7 @@ end;
 theorem
     x is Element of GFuncs X iff x is Function of X,X
   proof carr(GFuncs X) = Funcs(X,X) by Def40;
-   hence thesis by Lm8,FUNCT_2:12;
+   hence thesis by Lm7,FUNCT_2:12;
   end;
 
 theorem Th83:
@@ -2484,7 +2472,7 @@ A4:   carr(GFuncs X) = Funcs(X,X) by Def40;
 &
        f'[*]a = f"(*)f & i[*]b = (id X)(*)g & b[*]i = g(*)
        id X by Th79,FUNCT_2:23,FUNCT_2:88;
-      hence a[*]r = b & l[*]a = b by Lm3;
+      hence a[*]r = b & l[*]a = b by Lm2;
      end;
     then reconsider G as unital invertible strict (non empty SubStr of GFuncs X
 )

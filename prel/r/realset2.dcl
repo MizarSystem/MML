@@ -13,7 +13,6 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -32,12 +31,12 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="29" value="false"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="27"/>
+<Adjective nr="29"/>
 <Adjective nr="30"/>
-<Adjective nr="32"/>
-<Adjective nr="33"/>
-<Adjective nr="60"/>
-<Adjective nr="61"/>
+<Adjective nr="57"/>
+<Adjective nr="58"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -46,7 +45,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="62"/>
+<Adjective nr="59"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -55,8 +54,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="49"/>
-<Adjective nr="62" value="false"/>
+<Adjective nr="46"/>
+<Adjective nr="59" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -65,8 +64,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="49"/>
-<Adjective nr="63"/>
+<Adjective nr="46"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 </Registrations>

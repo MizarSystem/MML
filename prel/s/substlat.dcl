@@ -9,14 +9,14 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="FINSET_1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
 <ArticleID name="FINSUB_1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LATTICES"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="SUBSTLAT"/>
 </Signature>
 <RCluster>
@@ -50,7 +50,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="44">
+<Func kind="K" nr="46">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -58,7 +58,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="9"/>
+<Adjective nr="12"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -92,8 +92,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="19" value="false"/>
-<Adjective nr="22"/>
+<Adjective nr="20" value="false"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -110,8 +110,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="19" value="false"/>
-<Adjective nr="22"/>
+<Adjective nr="20" value="false"/>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
@@ -119,6 +118,7 @@
 <Adjective nr="27"/>
 <Adjective nr="28"/>
 <Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -135,8 +135,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="19" value="false"/>
-<Adjective nr="22"/>
+<Adjective nr="20" value="false"/>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
@@ -149,6 +148,7 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -169,7 +169,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="9"/>
+<Adjective nr="12"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -190,8 +190,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="9"/>
-<Adjective nr="37"/>
+<Adjective nr="12"/>
+<Adjective nr="17"/>
 </Cluster>
 </CCluster>
 </Registrations>

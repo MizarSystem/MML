@@ -5,10 +5,10 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="WELLORD1"/>
-<ArticleID name="RELAT_2"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="RELAT_2"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="TOLER_1"/>
@@ -20,8 +20,8 @@
 </Typ>
 <Typ kind="M" nr="4">
 <Cluster>
-<Adjective nr="9"/>
-<Adjective nr="11"/>
+<Adjective nr="10"/>
+<Adjective nr="12"/>
 <Adjective nr="18">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>

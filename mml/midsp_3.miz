@@ -7,20 +7,18 @@
 environ
 
  vocabularies FINSEQ_1, FUNCT_1, ARYTM_1, RELAT_1, BOOLE, FINSEQ_2, MIDSP_1,
-      BINOP_1, QC_LANG1, PRE_TOPC, ARYTM_3, PARTFUN1, MIDSP_2, VECTSP_1,
-      GROUP_4, RLVECT_1, MIDSP_3, FUNCT_4;
+      BINOP_1, QC_LANG1, PRE_TOPC, ARYTM_3, MIDSP_2, VECTSP_1, GROUP_4,
+      RLVECT_1, MIDSP_3, FUNCT_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, FUNCT_1, FUNCT_2, BINOP_1,
       BINARITH, STRUCT_0, PRE_TOPC, FINSEQ_1, FINSEQ_2, NAT_1, FUNCT_7,
-      RLVECT_1,
-      MIDSP_1, MIDSP_2, XXREAL_0;
- constructors BINOP_1, FINSEQ_2, NAT_1, MIDSP_2, XREAL_0, XXREAL_0,
-      FUNCT_4, FUNCT_7, CQC_LANG;
+      RLVECT_1, MIDSP_1, MIDSP_2, XXREAL_0;
+ constructors BINOP_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2, FUNCT_7, MIDSP_2;
  registrations FINSEQ_2, STRUCT_0, RELSET_1, NAT_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions MIDSP_1;
  theorems FINSEQ_1, FINSEQ_2, FUNCT_1, MIDSP_1, MIDSP_2, NAT_1, ZFMISC_1,
       REAL_1, STRUCT_0, FINSEQ_3, XREAL_1, FUNCT_7, XBOOLE_0, TARSKI;
  schemes FINSEQ_2, FUNCT_2;
- definitions MIDSP_1;
 
 begin
 
@@ -110,7 +108,7 @@ definition let D,n; let p be Element of n-tuples_on D; let i,d;
   end;
 end;
 
-Def1'1:
+Lm1:
  for p being Element of n-tuples_on D st i in Seg n
  holds p+*(i,d).i = d
   proof let p be Element of n-tuples_on D;
@@ -118,7 +116,7 @@ Def1'1:
    hence thesis by FUNCT_7:33;
   end;
 
-Def1'2:
+Lm2:
  for p being Element of n-tuples_on D
  for l st l in (dom p)\{i} holds (p+*(i,d)).l = p.l
  proof let p being Element of n-tuples_on D;
@@ -145,7 +143,7 @@ registration let n; let A be non empty set, m be BinOp of A,
  coherence by STRUCT_0:def 1;
 end;
 
-Lm1:
+Lm3:
 now let n; let M be MidSp;
  let R be Function of (n+2)-tuples_on the carrier of M, the carrier of M;
  set RA = ReperAlgebraStr (# the carrier of M, the MIDPOINT of M, R #);
@@ -156,7 +154,7 @@ A1: for a,b be Element of RA, a',b'  be Element of M st a=a' & b=b'
      holds a@b = a'@b';
    thus a@a = a'@a' .= a by MIDSP_1:def 4;
    thus a@b = b'@a' by A1 .= b@a;
-   thus (a@b)@(c@d) = (a'@b')@(c'@d') by A1
+   thus (a@b)@(c@d) = (a'@b')@(c'@d')
             .= (a'@c')@(b'@d') by MIDSP_1:def 4
             .= (a@c)@(b@d);
     consider x'  being Element of M such that
@@ -184,7 +182,7 @@ registration let n;
     consider R being
      Function of (n+2)-tuples_on the carrier of M, the carrier of M;
    take ReperAlgebraStr (# the carrier of M, the MIDPOINT of M, R #);
-   thus thesis by Lm1;
+   thus thesis by Lm3;
   end;
 end;
 
@@ -224,7 +222,7 @@ canceled;
 theorem
  i in Seg(n+1) implies (p+*(i,d)).i = d
                        & for l st l in (dom p)\{i} holds (p+*(i,d)).l = p.l
-                       by Def1'1,Def1'2;
+                       by Lm1,Lm2;
 
 definition let n;
  canceled;
@@ -281,7 +279,7 @@ Th12: for l being Nat of n st l=i holds (p+*(i,d)).l = d
       let l be Nat of n such that
       A1: l = i;
          l in Seg(n+1) by Th8;
-      hence thesis by A1,Def1'1;
+      hence thesis by A1,Lm1;
  end;
 
 definition let n,D; let p be Element of (n+1)-tuples_on D; let m;
@@ -374,7 +372,7 @@ reserve x,y for Tuple of (n+1),W;
 theorem
  i in Seg(n+1) implies (x+*(i,v)).i = v
                   & for l st l in (dom x)\{i} holds (x+*(i,v)).l = x.l
-                  by Def1'1,Def1'2;
+                  by Lm1,Lm2;
 
 theorem
 Th15: (for l being Nat of n st l=i holds (x+*(i,v)).l = v)
@@ -385,7 +383,7 @@ Th15: (for l being Nat of n st l=i holds (x+*(i,v)).l = v)
       let l be Nat of n such that
       A1: l = i;
          l in Seg(n+1) by Th8;
-      hence thesis by A1,Def1'1;
+      hence thesis by A1,Lm1;
     end;
    thus for l,i being Nat of n st l<>i holds (x+*(i,v)).l = x.l
      by FUNCT_7:34;
@@ -606,7 +604,7 @@ definition let n;
     reconsider R as Function of (n+2)-tuples_on D,D;
     reconsider RA = ReperAlgebraStr (# the carrier of M, the MIDPOINT of M, R
 #)
-     as MidSp-like (non empty ReperAlgebraStr over n+2) by Lm1;
+     as MidSp-like (non empty ReperAlgebraStr over n+2) by Lm3;
 A2:    for a,b being Point of RA, p,q being Tuple of (n+1),RA
      st for m holds a@(q.m) = b@(p.m)
      holds a@*'(b,q) = b@*'(a,p)
@@ -658,19 +656,19 @@ definition let n,RAS,W,x;
   end;
 end;
 
-Lm2: W.(a,p) = x implies Phi(x) = W.(a,*'(a,p))
+Lm4: W.(a,p) = x implies Phi(x) = W.(a,*'(a,p))
  proof
    assume
-Z:  W.(a,p) = x;
+A1:  W.(a,p) = x;
    thus Phi(x) = Phi(a,x) by Def15
-            .= W.(a,*'(a,p)) by Th17,Z;
+            .= W.(a,*'(a,p)) by Th17,A1;
  end;
 
-Lm3: (a,x).W = p implies Phi(x) = W.(a,*'(a,p))
+Lm5: (a,x).W = p implies Phi(x) = W.(a,*'(a,p))
  proof
    assume (a,x).W = p;
    then W.(a,p) = x by Th17;
-   hence thesis by Lm2;
+   hence thesis by Lm4;
  end;
 
 theorem
@@ -684,7 +682,7 @@ Th26: W.(a,p) = x & W.(a,b) = v & Phi(x) = v implies *'(a,p) = b
 theorem
 Th27: (a,x).W = p & (a,v).W = b & *'(a,p) = b implies Phi(x) = v
  proof
-   assume A1: (a,x).W = p & (a,v).W = b & *'(a,p) = b;
+   assume  (a,x).W = p & (a,v).W = b & *'(a,p) = b;
    then Phi(a,x) = v by MIDSP_2:39;
    hence thesis by Def15;
  end;
@@ -794,8 +792,8 @@ Th31: RAS is_semi_additive_in m iff for x holds
        then p = q by Th11;
        then *'(a,p) = a@*'(a,p') by A1,Def7;
        then A5: W.(a,*'(a,p')) = Double W.(a,*'(a,p)) by MIDSP_2:37;
-           Phi(x') = W.(a,*'(a,p')) by Lm3;
-       hence thesis by A5,Lm3;
+           Phi(x') = W.(a,*'(a,p')) by Lm5;
+       hence thesis by A5,Lm5;
      end;
    thus (for x holds Phi((x+*(m,Double(x.m)))) = Double Phi(x))
     implies RAS is_semi_additive_in m
@@ -831,8 +829,8 @@ Th31: RAS is_semi_additive_in m iff for x holds
            end;
           hence thesis by Th16;
         end;
-       then A12: Phi(x') = W.(a,*'(a,p')) by Lm2;
-           Phi(x) = W.(a,*'(a,p)) by Lm2;
+       then A12: Phi(x') = W.(a,*'(a,p')) by Lm4;
+           Phi(x) = W.(a,*'(a,p)) by Lm4;
        then W.(a,*'(a,p')) = Double W.(a,*'(a,p)) by A6,A12;
        hence thesis by A7,MIDSP_2:37;
      end;
@@ -852,7 +850,7 @@ Th32: RAS has_property_of_zero_in m & RAS is_additive_in m
    hence thesis;
  end;
 
-Lm4: RAS is_semi_additive_in m implies
+Lm6: RAS is_semi_additive_in m implies
      for a,p'm, p''m,p st a@(p''m) = (p.m)@(p'm) holds
          *'(a,(p+*(m,(p.m)@p'm))) = *'(a,p)@*'(a,(p+*(m,p'm)))
      iff W.(a,*'(a,(p+*(m,p''m)))) = W.(a,*'(a,p)) + W.(a,*'(a,(p+*(m,p'm))))
@@ -865,7 +863,7 @@ Lm4: RAS is_semi_additive_in m implies
     hence thesis by MIDSP_2:36;
   end;
 
-Lm5:      (for x,v holds Phi((x+*(m,(x.m)+v))) = Phi(x) + Phi((x+*(m,v))))
+Lm7:      (for x,v holds Phi((x+*(m,(x.m)+v))) = Phi(x) + Phi((x+*(m,v))))
  implies RAS is_semi_additive_in m
   proof
     assume A1: for x,v holds Phi((x+*(m,(x.m)+v))) = Phi(x) + Phi((x+*(m,v)));
@@ -918,7 +916,7 @@ A7:       W.(a,p''m) = W.(a,p.m) + W.(a,p'm) by A6,MIDSP_2:36
  by A2,Def8;
        then A8: W.(a,*'(a,(p+*(m,p''m))))
          = W.(a,*'(a,p)) + W.(a,*'(a,(p+*(m,p'm))))
- by A3,A6,Lm4;
+ by A3,A6,Lm6;
           (p+*(m,p''m)) = (a,(x+*(m,(x.m)+v))).W
         proof
           set pp = (p+*(m,p''m)), xx = (x+*(m,(x.m)+v)); set qq = (a,xx).W;
@@ -942,8 +940,8 @@ A7:       W.(a,p''m) = W.(a,p.m) + W.(a,p'm) by A6,MIDSP_2:36
           hence thesis by Th11;
         end;
        then A11: Phi((x+*(m,(x.m)+v))) = W.(a,*'(a,(p+*(m,p''m))))
- by Lm3;
-       A12: Phi(x) = W.(a,*'(a,p)) by Lm3;
+ by Lm5;
+       A12: Phi(x) = W.(a,*'(a,p)) by Lm5;
           (p+*(m,p'm)) = (a,(x+*(m,v))).W
         proof
           set pp = (p+*(m,p'm)), qq = (a,(x+*(m,v))).W;
@@ -965,14 +963,14 @@ A7:       W.(a,p''m) = W.(a,p.m) + W.(a,p'm) by A6,MIDSP_2:36
            end;
           hence thesis by Th11;
         end;
-       hence thesis by A8,A11,A12,Lm3;
+       hence thesis by A8,A11,A12,Lm5;
      end;
    thus (for x,v holds Phi((x+*(m,(x.m)+v))) = Phi(x) + Phi((x+*(m,v))))
     implies RAS is_additive_in m
      proof
        assume A15: for x,v holds Phi((x+*(m,(x.m)+v))) = Phi(x) + Phi
 ((x+*(m,v)));
-       then A16: RAS is_semi_additive_in m by Lm5;
+       then A16: RAS is_semi_additive_in m by Lm7;
           for a,pm,p'm,p st p.m = pm
               holds *'(a,(p+*(m,pm@p'm))) = *'(a,p)@*'(a,(p+*(m,p'm)))
         proof
@@ -1008,8 +1006,8 @@ A21:          W.(a,p''m) = W.(a,p.m) + W.(a,p'm) by A20,MIDSP_2:36
              hence thesis by Th11;
            end;
           then A24: Phi((x+*(m,(x.m)+v))) = W.(a,*'(a,(p+*(m,p''m))))
- by Lm3;
-          A25: Phi(x) = W.(a,*'(a,p)) by Lm2;
+ by Lm5;
+          A25: Phi(x) = W.(a,*'(a,p)) by Lm4;
              (p+*(m,p'm)) = (a,(x+*(m,v))).W
            proof
              set pp = (p+*(m,p'm)), qq = (a,(x+*(m,v))).W;
@@ -1033,11 +1031,11 @@ A21:          W.(a,p''m) = W.(a,p.m) + W.(a,p'm) by A20,MIDSP_2:36
              hence thesis by Th11;
            end;
            then Phi((x+*(m,v))) = W.(a,*'(a,(p+*(m,p'm))))
- by Lm3;
+ by Lm5;
            then W.(a,*'(a,(p+*(m,p''m)))) = W.(a,*'(a,p)) + W.(a,*'
 (a,(p+*(m,p'm))))
  by A15,A24,A25;
-          hence thesis by A16,A17,A20,Lm4;
+          hence thesis by A16,A17,A20,Lm6;
         end;
        hence thesis by Def8;
      end;

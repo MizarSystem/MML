@@ -11,20 +11,19 @@ environ
       NAT_1, INT_1, ABSVALUE, FILTER_0, NAT_LAT, FINSET_1, CARD_1, TARSKI,
       SQUARE_1, XCMPLX_0, SEQ_1, COMPLEX1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0,
-      XREAL_0, CARD_1, REAL_1, RELAT_1,
-      FUNCT_1, SEQ_1, FINSET_1, FINSEQ_1, FINSEQ_2,
-      FINSEQ_4, INT_1, INT_2, NAT_1, RVSUM_1, SQUARE_1, XXREAL_0;
- constructors FINSEQOP, NAT_1, RVSUM_1, FINSEQ_4, SEQ_1, BINOP_2, INT_2,
-      WELLORD2, SQUARE_1, XXREAL_0, SETWOP_2, FINSOP_1, PARTFUN1;
+      XREAL_0, CARD_1, REAL_1, RELAT_1, FUNCT_1, SEQ_1, FINSET_1, FINSEQ_1,
+      FINSEQ_2, FINSEQ_4, INT_1, INT_2, NAT_1, RVSUM_1, SQUARE_1, XXREAL_0;
+ constructors PARTFUN1, WELLORD2, SQUARE_1, NAT_1, BINOP_2, FINSEQOP, SEQ_1,
+      FINSEQ_4, FINSOP_1, SETWOP_2, RVSUM_1, INT_2, ORDINAL2;
  registrations RELSET_1, FINSEQ_2, INT_1, XREAL_0, NAT_1, MEMBERED, ORDINAL2,
-      FINSEQ_1, FINSET_1, RVSUM_1, XXREAL_0, FUNCT_1;
+      FINSEQ_1, FINSET_1, RVSUM_1, XXREAL_0, FUNCT_1, ORDINAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FINSEQ_1, SQUARE_1, FINSEQ_2, RVSUM_1;
  theorems TARSKI, REAL_1, NAT_1, RVSUM_1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
       FINSEQ_4, FUNCT_1, INT_1, XREAL_0, ORDINAL2, XBOOLE_0, XCMPLX_1, REAL_2,
       ABSVALUE, INT_2, FINSET_1, CQC_THE1, CARD_2, CARD_1, XBOOLE_1, XREAL_1,
-      XCMPLX_0, XXREAL_0, FUNCOP_1, RELAT_1, FINSOP_1;
- schemes NAT_1, FINSEQ_1, INT_2, SUBSET_1;
+      XCMPLX_0, XXREAL_0, FUNCOP_1, RELAT_1, FINSOP_1, ORDINAL1;
+ schemes NAT_1, FINSEQ_1, SUBSET_1;
 
 begin
 
@@ -206,7 +205,7 @@ Th11: z|^(s+1) = z|^s*z
   A2: for s st P[s] holds P[s+1] proof let s;
     assume z|^(s+1) = z|^s*z;
      reconsider z as Element of COMPLEX by XCMPLX_0:def 2;
-     A3: s+1 is Nat by ORDINAL2:def 21;
+     A3: s+1 is Nat by ORDINAL1:def 13;
           z|^(s+1+1) = Product((s+1+1) |-> z)
          .= Product(((s+1) |-> z) ^ <*z*>)
         by A3,FINSEQ_2:74 .= Product((s+1) |-> z)*z by RVSUM_1:126;
@@ -240,7 +239,7 @@ theorem
   (x*y)|^s = x|^s * y|^s
  proof
   reconsider x, y as Real by XREAL_0:def 1;
-A1: s is Nat by ORDINAL2:def 21;
+A1: s is Nat by ORDINAL1:def 13;
      x|^s*y|^s = Product(s |-> x)*y|^s
     .= (Product(s |-> x))*(Product(s |-> y)) .= Product(s |-> (x*y)) by A1,
 RVSUM_1:136;
@@ -251,7 +250,7 @@ theorem
   x|^(s+t) = x|^s * x|^t
  proof
   reconsider x as Real by XREAL_0:def 1;
-  reconsider s,t as Nat by ORDINAL2:def 21;
+  reconsider s,t as Nat by ORDINAL1:def 13;
      x|^s*x|^t = (Product(s |->x))*x|^t
    .= (Product(s |-> x))*(Product(t |-> x)) .= Product((s+t) |-> x) by RVSUM_1:
 134;
@@ -262,7 +261,7 @@ theorem
   (x|^s)|^t = x|^(s*t)
  proof
   reconsider x as Real by XREAL_0:def 1;
-  reconsider s,t as Nat by ORDINAL2:def 21;
+  reconsider s,t as Nat by ORDINAL1:def 13;
      x|^(s*t) = Product((s*t) |-> x) .= Product(t |-> Product(s |-> x))
     by RVSUM_1:135
   .= Product(t |-> x|^s);
@@ -287,13 +286,13 @@ Th15: 1|^s = 1
 theorem
   s >= 1 implies 0|^s = 0
  proof
-  A1: s is Nat by ORDINAL2:def 21;
+  A1: s is Nat by ORDINAL1:def 13;
   defpred P[Nat] means 0|^$1 = 0;
   A2: P[1] by Th10;
   A3: now let n; assume n>=1 & P[n];  0|^(n+1) = 0|^n * 0 by Th11 .= 0;
        hence P[n+1];
       end;
-     for n st n >=1 holds P[n] from INT_2:sch 1(A2,A3);
+     for n st n >=1 holds P[n] from NAT_1:sch 9(A2,A3);
   hence thesis by A1;
  end;
 
@@ -310,9 +309,9 @@ definition let n be natural number;
    then consider y be set such that
 A1: y in dom idseq n and
 A2: x = idseq n.y by FUNCT_1:def 5;
-A4: y in Seg n by A1,RELAT_1:71;
+A3: y in Seg n by A1,RELAT_1:71;
    reconsider y as Nat by A1;
-   (idseq n).y = y by A4,FUNCT_1:35;
+   (idseq n).y = y by A3,FUNCT_1:35;
    hence x in REAL by A2;
   end;
 end;
@@ -352,7 +351,7 @@ theorem Th21:
   for s holds (s+1)! = (s!) * (s+1)
 proof
   let s;
-  reconsider s as Nat by ORDINAL2:def 21;
+  reconsider s as Nat by ORDINAL1:def 13;
   set r1 = s+1;
   (s+1)! = (s!) * (s+1)
   proof
@@ -371,7 +370,7 @@ theorem Th22:
   A1: P[0] by FINSEQ_2:58,RVSUM_1:124;
   A2: now let s; assume P[s]; then reconsider k=s! as Nat;
         (s+1)! = (s+1) * k by Th21;
-    hence P[s+1] by ORDINAL2:def 21;
+    hence P[s+1] by ORDINAL1:def 13;
    end;
   thus for s holds P[s] from NAT_1:sch 2(A1,A2);
  end;
@@ -475,7 +474,7 @@ canceled;
 theorem
 Th29: s choose 0 = 1
  proof
-  reconsider m = s-0 as Nat by ORDINAL2:def 21;
+  reconsider m = s-0 as Nat by ORDINAL1:def 13;
   A1: s!<>0 by Th23;
      m = s;
   then (s choose 0) = (s!)/(1 * (s!)) by Def3,Th18
@@ -562,7 +561,7 @@ theorem Th33:
   for s st s >= 1 holds s choose 1 = s
 proof
     let s;
-A1: s is Nat by ORDINAL2:def 21;
+A1: s is Nat by ORDINAL1:def 13;
     defpred P[Nat] means $1 choose 1 = $1;
 A2: P[1] by Th31;
 A3: now let n; assume A4: n>=1 & P[n];
@@ -570,7 +569,7 @@ A3: now let n; assume A4: n>=1 & P[n];
                     .= n + n choose 0 by A4,Th32 .= n+1 by Th29;
       hence P[n+1];
     end;
-    for n st n >= 1 holds P[n] from INT_2:sch 1(A2,A3);
+    for n st n >= 1 holds P[n] from NAT_1:sch 9(A2,A3);
     hence thesis by A1;
 end;
 
@@ -583,7 +582,7 @@ proof
   hence thesis by A1,Th33;
 end;
 
-theorem
+theorem Th35:
   s choose r is Nat
  proof
    defpred P[natural number] means for r holds ($1 choose r) is Nat;
@@ -667,6 +666,18 @@ FINSEQ_1:59;
   thus for m holds P[m] from NAT_1:sch 1(A1,A2);
  end;
 
+registration
+  let k,n be natural number;
+  cluster n choose k -> natural;
+  coherence by Th35;
+end;
+
+definition
+  let k,n be natural number;
+  redefine func n choose k -> Nat;
+  coherence by ORDINAL1:def 13;
+end;
+
 definition let a,b be real number;
            let n be natural number;
   func (a,b) In_Power n -> FinSequence of REAL means
@@ -675,7 +686,7 @@ definition let a,b be real number;
    it.i = (n choose m)* a|^l * b|^m);
 existence
  proof
-  reconsider n as Nat by ORDINAL2:def 21;
+  reconsider n as Nat by ORDINAL1:def 13;
   defpred P[Nat,set] means
    for l,m be natural number st m = $1 - 1 & l = n-m holds
     $2 = (n choose m)* a|^l * b|^m;
@@ -973,7 +984,7 @@ FINSEQ_4:def 4
    end;
 A58:  for n holds P[n] from NAT_1:sch 1(A1,A2);
   let s;
-  s is Nat by ORDINAL2:def 21;
+  s is Nat by ORDINAL1:def 13;
   hence thesis by A58;
  end;
 
@@ -984,7 +995,7 @@ definition let n be natural number;
       it.i = n choose k);
 existence
  proof
-  reconsider n as Nat by ORDINAL2:def 21;
+  reconsider n as Nat by ORDINAL1:def 13;
  defpred P[natural number,set] means
  for s st s = $1-1 holds $2 = n choose s;
  A1: for l for r1,r2 being set

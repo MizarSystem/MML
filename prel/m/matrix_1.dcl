@@ -12,7 +12,6 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -34,9 +33,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
+<Adjective nr="18"/>
 <Adjective nr="21"/>
-<Adjective nr="24"/>
-<Adjective nr="59"/>
+<Adjective nr="56"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -47,16 +46,16 @@
 </ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="119">
+<Func kind="K" nr="108">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
+<Adjective nr="18"/>
 <Adjective nr="21"/>
-<Adjective nr="24"/>
-<Adjective nr="59"/>
+<Adjective nr="56"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -69,7 +68,7 @@
 </ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="119">
+<Func kind="K" nr="108">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -77,21 +76,21 @@
 <Adjective nr="1"/>
 <Adjective nr="3" value="false"/>
 <Adjective nr="4"/>
+<Adjective nr="18"/>
 <Adjective nr="21"/>
-<Adjective nr="24"/>
-<Adjective nr="59"/>
+<Adjective nr="56"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="25" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="93"/>
+<Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="12">
@@ -105,10 +104,10 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
+<Adjective nr="18"/>
 <Adjective nr="21"/>
-<Adjective nr="24"/>
-<Adjective nr="59"/>
-<Adjective nr="60">
+<Adjective nr="56"/>
+<Adjective nr="57">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -118,15 +117,15 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="25" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="93"/>
+<Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="163">
+<Func kind="K" nr="150">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

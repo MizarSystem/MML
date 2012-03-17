@@ -4,12 +4,12 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELSET_1"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
+<ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
@@ -23,8 +23,8 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="22">
-<Func kind="K" nr="22">
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -33,8 +33,8 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="22">
-<Func kind="K" nr="22">
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -43,7 +43,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="22">
+<Func kind="K" nr="10">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -67,7 +67,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="22">
+<Func kind="K" nr="10">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -81,7 +81,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="20">
+<Func kind="K" nr="34">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -99,7 +99,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="22">
+<Func kind="K" nr="10">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>

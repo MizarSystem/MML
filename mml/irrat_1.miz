@@ -14,10 +14,9 @@ environ
       INT_1, COMPLEX1, NAT_1, FUNCT_1, FUNCOP_1, SEQ_1, SEQ_2, POWER, SEQM_3,
       FINSEQ_1, RVSUM_1, SERIES_1, FINSEQ_2, RFINSEQ, FINSEQ_4, SIN_COS, RAT_1,
       SQUARE_1, LIMFUNC1, INT_2, PEPIN, NEWTON;
- constructors NAT_1, REAL_1, SEQ_2, PREPOWER, RVSUM_1, SERIES_1, RFINSEQ,
-      FINSEQ_4, SIN_COS, COMSEQ_3, LIMFUNC1, PEPIN, ARYTM_0, BINOP_2, FUNCOP_1,
-      XXREAL_0;
- registrations RELSET_1, XREAL_0, INT_1, NEWTON, MEMBERED, ORDINAL2, XXREAL_0;
+ constructors FUNCOP_1, ARYTM_0, REAL_1, NAT_1, RAT_1, BINOP_2, SEQ_2,
+      FINSEQ_4, RVSUM_1, LIMFUNC1, SERIES_1, COMSEQ_3, RFINSEQ, SIN_COS, PEPIN;
+ registrations RELSET_1, XREAL_0, INT_1, NEWTON, MEMBERED, ORDINAL1, XXREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions SEQ_2, SQUARE_1;
  theorems SEQ_1, REAL_2, POWER, NEWTON, NAT_1, SEQ_2, SEQ_4, ABSVALUE, SEQM_3,
@@ -411,41 +410,39 @@ theorem Th15:
 proof
  assume A1: n>0;
  A2: bseq(k).n=(n choose k)*(n.^.(-k)) by Def2;
-     (n choose k) is Nat by NEWTON:35;
- then A3: (n choose k)>=0;
      n.^.(-k)>0 by A1,POWER:39;
- hence A4: 0<=bseq(k).n by A2,A3,REAL_2:121;
+ hence A3: 0<=bseq(k).n by A2,REAL_2:121;
  defpred P[Nat] means bseq($1).n<=1/($1!);
- A5: P[0] by Th11,NEWTON:18;
- A6: now let k;
-  assume A7: P[k];
+ A4: P[0] by Th11,NEWTON:18;
+ A5: now let k;
+  assume A6: P[k];
   thus P[k+1]
   proof
    per cases;
-   suppose A8: k<n;
-    A9: bseq(k+1).n=(1/(k+1))*(bseq(k).n)*(aseq(k).n) by A1,Th7;
-    (1/(k+1))*(bseq(k).n)<=(1/(k+1))*(1/(k!)) by A7,XREAL_1:66;
-    then A10: (1/(k+1))*(bseq(k).n)<=1/((k+1)!) by Th12;
-        aseq(k).n>=0 by A8,Th14;
-    then A11: (1/(k+1))*(bseq(k).n)*(aseq(k).n)<=(1/((k+1)!))*(aseq(k).n)
-      by A10,XREAL_1:66;
-        aseq(k).n<=1 by A8,Th14;
+   suppose A7: k<n;
+    A8: bseq(k+1).n=(1/(k+1))*(bseq(k).n)*(aseq(k).n) by A1,Th7;
+    (1/(k+1))*(bseq(k).n)<=(1/(k+1))*(1/(k!)) by A6,XREAL_1:66;
+    then A9: (1/(k+1))*(bseq(k).n)<=1/((k+1)!) by Th12;
+        aseq(k).n>=0 by A7,Th14;
+    then A10: (1/(k+1))*(bseq(k).n)*(aseq(k).n)<=(1/((k+1)!))*(aseq(k).n)
+      by A9,XREAL_1:66;
+        aseq(k).n<=1 by A7,Th14;
     then 1/((k+1)!)*(aseq(k).n)<=1/((k+1)!) by REAL_2:147;
-    hence thesis by A9,A11,XXREAL_0:2;
+    hence thesis by A8,A10,XXREAL_0:2;
    end;
    suppose k>=n;
-    then A12: k+1>n by NAT_1:38;
+    then A11: k+1>n by NAT_1:38;
         bseq(k+1).n = (n choose (k+1))*(n.^.(-(k+1))) by Def2
-     .= 0*(n.^.(-(k+1))) by A12,NEWTON:def 3
+     .= 0*(n.^.(-(k+1))) by A11,NEWTON:def 3
      .= 0;
     hence thesis;
   end;
   end;
  end;
-     for k holds P[k] from NAT_1:sch 1(A5,A6);
- hence A13: bseq(k).n<=1/(k!);
+     for k holds P[k] from NAT_1:sch 1(A4,A5);
+ hence A12: bseq(k).n<=1/(k!);
  hence bseq(k).n<=eseq.k by Def5;
- hence 0<=cseq(n).k & cseq(n).k<=1/(k!) & cseq(n).k<=eseq.k by A4,A13,Th3;
+ hence 0<=cseq(n).k & cseq(n).k<=1/(k!) & cseq(n).k<=eseq.k by A3,A12,Th3;
 end;
 
 :: n>0 implies (1+(1/n)).^.n = Sum (\k:(n choose k)*(n.^.(-k)))
@@ -833,14 +830,14 @@ end;
 
 definition
  redefine func number_e equals
-  :Def6: Sum(eseq);
+   Sum(eseq);
  compatibility by Th23,Th31;
 end;
 
 definition
  redefine func number_e equals
    exp_R(1);
- compatibility by Def6,Th24;
+ compatibility by Th24;
 end;
 
 begin :: number_e is irrational
@@ -1070,7 +1067,7 @@ proof
  assume number_e is rational;
  then consider n such that A1: n>=2 & n!*number_e is integer by Th32;
 A2: n!*number_e = n!*((Partial_Sums(eseq).n)+Sum(eseq^\(n+1)))
-  by Def6,Th24,SERIES_1:18
+  by Th24,SERIES_1:18
   .= n!*(Partial_Sums(eseq).n)+n!*Sum(eseq^\(n+1));
  reconsider ne = n!*number_e as Integer by A1;
  reconsider ne1 = n!*Partial_Sums(eseq).n as Integer by Th38;

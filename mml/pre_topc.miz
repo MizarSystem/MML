@@ -8,15 +8,15 @@ environ
 
  vocabularies SETFAM_1, TARSKI, BOOLE, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL2,
       PRE_TOPC;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1,
-   RELSET_1, FUNCT_2, STRUCT_0;
- constructors STRUCT_0, FUNCT_2, MEMBERED, SETFAM_1, PARTFUN1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, RELSET_1,
+      FUNCT_2, STRUCT_0;
+ constructors SETFAM_1, PARTFUN1, FUNCT_2, MEMBERED, STRUCT_0;
  registrations STRUCT_0, RELSET_1, SUBSET_1, MEMBERED;
  requirements BOOLE, SUBSET;
- theorems TARSKI, SUBSET_1, ZFMISC_1, SETFAM_1, STRUCT_0, XBOOLE_0, XBOOLE_1,
-   FUNCT_2;
- schemes SUBSET_1;
  definitions TARSKI, STRUCT_0;
+ theorems TARSKI, SUBSET_1, ZFMISC_1, SETFAM_1, STRUCT_0, XBOOLE_0, XBOOLE_1,
+      FUNCT_2;
+ schemes SUBSET_1;
 
 begin
 
@@ -393,9 +393,21 @@ definition let T be TopStruct, P be Subset of T;
     reconsider top1 as Subset-Family of P;
     set Y = TopStruct(#P,top1#);
     A2:[#]Y c= [#]T;
-         for P being Subset of Y holds P in the topology of Y iff
+    for Z being Subset of Y holds Z in top1 iff
     ex Q being Subset of T st Q in the topology of T &
-    P = Q /\ [#]Y by A1;
+    Z = Q /\ [#]Y
+    proof
+      let Z be Subset of Y;
+      thus Z in top1 implies
+      ex Q being Subset of T st Q in the topology of T &
+      Z = Q /\ [#]Y
+      proof
+        assume Z in top1;
+        then Q[Z] by A1;
+        hence thesis;
+      end;
+      thus thesis by A1;
+    end;
     then reconsider Y as strict SubSpace of T by A2,Def9;
     take Y;
    thus thesis;
@@ -407,23 +419,18 @@ definition let T be TopStruct, P be Subset of T;
     A5:the topology of Z1 c= the topology of Z2
     proof
      let x be set;
-      assume A6:x in the topology of Z1;
-       then A7:ex Q being Subset of T st Q in
- the topology of T &
-            x = Q /\ [#]Z2 by A3,A4,Def9;
-              x c= [#]Z2 by A3,A4,A6;
-         then x is Subset of Z2;
-        hence thesis by A7,Def9;
+      assume x in the topology of Z1;
+       then ex Q being Subset of T st Q in
+       the topology of T & x = Q /\ [#]Z2 by A3,A4,Def9;
+        hence thesis by Def9;
       end;
       the topology of Z2 c= the topology of Z1
       proof
        let x be set;
-        assume A8:x in the topology of Z2;
-        then A9:ex Q being Subset of T st Q in the topology of T &
+        assume x in the topology of Z2;
+        then ex Q being Subset of T st Q in the topology of T &
            x = Q /\ [#]Z1 by A3,A4,Def9;
-        x c= [#]Z1 by A3,A4,A8;
-        then x is Subset of Z1;
-       hence thesis by A9,Def9;
+       hence thesis by Def9;
       end;
      hence Z1 = Z2 by A3,A4,A5,XBOOLE_0:def 10;
   end;
@@ -481,8 +488,7 @@ proof let S be TopSpace,
       end;
           now given Q being Subset of S such that
         A8:Q in the topology of S & R=Q/\[#]((S|P2)|P1');
-        reconsider R'=Q/\[#](S|P2) as Subset of S|P2
-            by XBOOLE_1:17;
+        reconsider R'=Q/\[#](S|P2) as Subset of S|P2;
         A9:R' in the topology of (S|P2) by A8,Def9;
            R'/\[#]((S|P2)|P1')=Q/\(P2/\P1) by A2,A3,XBOOLE_1:16
           .=R by A1,A3,A8,XBOOLE_1:28;
@@ -521,7 +527,7 @@ definition let S, T be TopStruct, f be Function of S,T;
     for P1 being Subset of T st P1 is closed holds f" P1 is closed;
 end;
 
-theorem 
+theorem
  for T1, T2, S1, S2 being TopStruct
    st the TopStruct of T1 = the TopStruct of T2 &
       the TopStruct of S1 = the TopStruct of S2
@@ -628,9 +634,7 @@ A5:  V1 is open by A3,Def5;
      A10:[#]X' \ B = [#]X' \ C by A8,XBOOLE_1:47
                 .= ([#]X') /\ C` by A1,SUBSET_1:32
                 .= ([#]T \ C) /\ ([#]X') by Th17;
-          ([#]T \ C) /\ ([#]X') c= [#]X' by XBOOLE_1:17;
-     then ([#]T \ C) /\ [#]X' is Subset of X';
-     then ([#]T \ C) /\ [#]X' in the topology of X' by A9,Def9;
+     ([#]T \ C) /\ [#]X' in the topology of X' by A9,Def9;
      then [#]X' \ B is open by A10,Def5;
     hence B is closed by Def6;
    end;
@@ -876,8 +880,7 @@ proof
            let D1 be Subset of T such that A4:D1 is closed;
             assume A5:A c= D1;
             A6:A1 c= D1 /\ [#]X' by A1,A5,XBOOLE_1:19;
-            D1 /\ [#]X' c= [#]X' by XBOOLE_1:17;
-            then reconsider D3 = D1 /\ [#]X' as Subset of X';
+            set D3 = D1 /\ [#]X';
             D3 is closed by A4,Th43;
             then p in D3 by A2,A6,Th45;
            hence p in D1 by XBOOLE_0:def 3;

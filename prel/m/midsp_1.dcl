@@ -12,7 +12,6 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -27,7 +26,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="37"/>
+<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -36,7 +35,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="25" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -45,25 +44,25 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="130"/>
+<Func kind="K" nr="117"/>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="37"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="38"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -78,7 +77,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="135">
+<Func kind="K" nr="122">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -91,12 +90,12 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="38"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="141">
+<Func kind="K" nr="128">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -107,17 +106,17 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="38"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="146">
+<Func kind="K" nr="133">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="29"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 </Registrations>

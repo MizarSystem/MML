@@ -10,18 +10,18 @@ environ
       YELLOW_1, CAT_1, FILTER_2, WELLORD1, YELLOW_0, FUNCT_1, SEQM_3, RELAT_1,
       ORDINAL2, MEASURE5, QUANTAL1, FINSET_1, BHSP_3, YELLOW11;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
- FUNCT_2,
-      ORDERS_1, STRUCT_0, ORDERS_2, LATTICE3, ORDERS_3, YELLOW_0, YELLOW_1,
-      YELLOW_2, WAYBEL_1, LATTICE5, FINSET_1, GROUP_1, WAYBEL_0, ORDINAL1;
- constructors LATTICE3, ORDERS_3, WAYBEL_1, ENUMSET1, REALSET2, XXREAL_0;
+      FUNCT_2, ORDERS_1, DOMAIN_1, STRUCT_0, ORDERS_2, LATTICE3, ORDERS_3,
+      YELLOW_0, YELLOW_1, YELLOW_2, WAYBEL_1, LATTICE5, FINSET_1, GROUP_1,
+      WAYBEL_0, ORDINAL1;
+ constructors DOMAIN_1, XXREAL_0, REALSET2, LATTICE3, ORDERS_3, WAYBEL_1;
  registrations STRUCT_0, LATTICE3, YELLOW_0, ORDERS_2, FINSET_1, YELLOW_1,
       RELSET_1, XBOOLE_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE;
+ definitions TARSKI, YELLOW_0, WAYBEL_1, FUNCT_1, WAYBEL_0, LATTICE3, XBOOLE_0;
  theorems WAYBEL_1, YELLOW_0, YELLOW_3, YELLOW_5, LATTICE3, STRUCT_0, TARSKI,
       FUNCT_2, WAYBEL_0, ZFMISC_1, FUNCT_1, ORDERS_2, YELLOW_1, ENUMSET1,
       CARD_1, GROUP_1, FINSET_1, CARD_5, ORDINAL1, XBOOLE_0, XBOOLE_1;
  schemes FUNCT_2, FINSET_1, XBOOLE_0;
- definitions TARSKI, YELLOW_0, WAYBEL_1, FUNCT_1, WAYBEL_0, LATTICE3, XBOOLE_0;
 
 begin
 
@@ -177,48 +177,45 @@ correctness
  proof
   set Z = {0, 3 \ 1, 2, 3 \ 2, 3};
   set N = InclPoset Z;
-A1: Z <> {} by ENUMSET1:def 3;
-A2:     N is with_suprema
+A1:     N is with_suprema
          proof
                now
            let x,y be set;
            assume x in Z & y in Z;
-then A3:     (x=0 or x=3\1 or x=2 or x=3\2 or x=3) &
+then A2:     (x=0 or x=3\1 or x=2 or x=3\2 or x=3) &
            (y=0 or y=3\1 or y=2 or y=3\2 or y=3) by ENUMSET1:def 3;
-A4:           (3\1) \/ 2 = {0,1,1,2} by Th3,CARD_5:1,ENUMSET1:45
+A3:           (3\1) \/ 2 = {0,1,1,2} by Th3,CARD_5:1,ENUMSET1:45
                     .= {1,1,0,2} by ENUMSET1:110
                     .= {1,0,2} by ENUMSET1:71
                     .= {0,1,2} by ENUMSET1:99;
-A5:           (3\1) \/ (3\2) = {1,2} by Th3,Th4,ZFMISC_1:14;
-                3\1 c= 3 by XBOOLE_1:36;
-then A6:           (3\1) \/ 3 = 3 by XBOOLE_1:12;
-A7:           2 \/ (3\2) = 2 \/ 3 & 2 c= 3 by CARD_1:56,XBOOLE_1:39;
-then A8:           2 \/ 3 = 3 by XBOOLE_1:12;
-                3\2 c= 3 by XBOOLE_1:36;
-           then (3\2) \/ 3 = 3 by XBOOLE_1:12;
-           hence x \/ y in Z by A3,A4,A5,A6,A7,A8,Th1,Th3,ENUMSET1:def 3;
+A4:           (3\1) \/ (3\2) = {1,2} by Th3,Th4,ZFMISC_1:14;
+A5:           (3\1) \/ 3 = 3 by XBOOLE_1:12;
+A6:           2 \/ (3\2) = 2 \/ 3 & 2 c= 3 by CARD_1:56,XBOOLE_1:39;
+then A7:           2 \/ 3 = 3 by XBOOLE_1:12;
+           (3\2) \/ 3 = 3 by XBOOLE_1:12;
+           hence x \/ y in Z by A2,A3,A4,A5,A6,A7,Th1,Th3,ENUMSET1:def 3;
           end;
-          hence thesis by A1,YELLOW_1:11;
+          hence thesis by YELLOW_1:11;
          end;
              N is with_infima
          proof
           let x,y be Element of N;
-A9:          Z = the carrier of N by YELLOW_1:1;
+A8:          Z = the carrier of N by YELLOW_1:1;
           thus ex z being Element of N st z <= x & z <= y &
           for z' being Element of N st z' <= x & z' <= y holds z' <= z
           proof
-           per cases by A1,A9,ENUMSET1:def 3;
+           per cases by A8,ENUMSET1:def 3;
            suppose
             x = 0 & y = 0;
            then reconsider z = x /\ y as Element of N;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
 
            end;
            suppose
@@ -226,60 +223,60 @@ A9:          Z = the carrier of N by YELLOW_1:1;
            then reconsider z = x /\ y as Element of N;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
 
            end;
            suppose  x = 0 & y = 2;
            then reconsider z = x /\ y as Element of N;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
 
            end;
            suppose  x = 0 & y = 3\2;
            then reconsider z = x /\ y as Element of N;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
 
            end;
            suppose  x = 0 & y = 3;
            then reconsider z = x /\ y as Element of N;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
 
            end;
            suppose  x = 3\1 & y = 0;
            then reconsider z = x /\ y as Element of N;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
 
            end;
            suppose
@@ -287,292 +284,292 @@ A9:          Z = the carrier of N by YELLOW_1:1;
            then reconsider z = x /\ y as Element of N;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
 
            end;
            suppose
-A10:        x = 3\1 & y = 2;
+A9:        x = 3\1 & y = 2;
                0 in Z by ENUMSET1:def 3;
            then reconsider z = 0 as Element of N by YELLOW_1:1;
            take z;
                 z c= x & z c= y by XBOOLE_1:2;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let z' be Element of N;
                 z' is Element of Z by YELLOW_1:1;
-then A11:     z'=0 or z'=3\1 or z'=2 or z'=3\2 or z'=3 by A1,ENUMSET1:def 3;
+then A10:     z'=0 or z'=3\1 or z'=2 or z'=3\2 or z'=3 by ENUMSET1:def 3;
            assume z' <= x & z' <= y;
-then A12:        z' c= 3\1 & z' c= 2 by A1,A10,YELLOW_1:3;
-A13:       now
+then A11:        z' c= 3\1 & z' c= 2 by A9,YELLOW_1:3;
+A12:       now
             assume z'= 3\1;
             then 2 in z' & not 2 in 2 by Th3,TARSKI:def 2;
-            hence contradiction by A12;
+            hence contradiction by A11;
            end;
-A14:        now
+A13:        now
             assume
                z'= 2;
             then 0 in z' & not 0 in 3\1 by Th3,CARD_5:1,TARSKI:def 2;
-            hence contradiction by A12;
+            hence contradiction by A11;
            end;
-A15:       now
+A14:       now
             assume z'= 3\2;
             then 2 in z' & not 2 in 2 by Th4,TARSKI:def 1;
-            hence contradiction by A12;
+            hence contradiction by A11;
            end;
                 now
             assume z'= 3;
             then 2 in z' & not 2 in 2 by Th1,ENUMSET1:def 1;
-            hence contradiction by A12;
+            hence contradiction by A11;
            end;
-           hence z' <= z by A1,A11,A13,A14,A15,YELLOW_1:3;
+           hence z' <= z by A10,A12,A13,A14;
            end;
            suppose x = 3\1 & y = 3\2;
            then reconsider z = x /\ y as Element of N by Th3,Th4,ZFMISC_1:19;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
            end;
            suppose
-A16:       x = 3\1 & y = 3;
+A15:       x = 3\1 & y = 3;
                 (3\1) /\ 3 = (3 /\ 3) \ 1 by XBOOLE_1:49
                     .= 3\1;
-           then reconsider z = x /\ y as Element of N by A16;
+           then reconsider z = x /\ y as Element of N by A15;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
            end;
            suppose  x = 2 & y = 0;
            then reconsider z = x /\ y as Element of N;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
            end;
            suppose
-A17:       x = 2 & y = 3\1;
+A16:       x = 2 & y = 3\1;
                0 in Z by ENUMSET1:def 3;
            then reconsider z = 0 as Element of N by YELLOW_1:1;
            take z;
                 z c= x & z c= y by XBOOLE_1:2;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let z' be Element of N;
                 z' is Element of Z by YELLOW_1:1;
-then A18:     z'=0 or z'=3\1 or z'=2 or z'=3\2 or z'=3 by A1,ENUMSET1:def 3;
+then A17:     z'=0 or z'=3\1 or z'=2 or z'=3\2 or z'=3 by ENUMSET1:def 3;
            assume z' <= x & z' <= y;
-then A19:        z' c= 3\1 & z' c= 2 by A1,A17,YELLOW_1:3;
-A20:       now
+then A18:        z' c= 3\1 & z' c= 2 by A16,YELLOW_1:3;
+A19:       now
             assume z'= 3\1;
             then 2 in z' & not 2 in 2 by Th3,TARSKI:def 2;
-            hence contradiction by A19;
+            hence contradiction by A18;
            end;
-A21:        now
+A20:        now
             assume
                z'= 2;
             then 0 in z' & not 0 in 3\1 by Th3,CARD_5:1,TARSKI:def 2;
-            hence contradiction by A19;
+            hence contradiction by A18;
            end;
-A22:       now
+A21:       now
             assume z'= 3\2;
             then 2 in z' & not 2 in 2 by Th4,TARSKI:def 1;
-            hence contradiction by A19;
+            hence contradiction by A18;
            end;
                 now
             assume z'= 3;
             then 2 in z' & not 2 in 2 by Th1,ENUMSET1:def 1;
-            hence contradiction by A19;
+            hence contradiction by A18;
            end;
-           hence z' <= z by A1,A18,A20,A21,A22,YELLOW_1:3;
+           hence z' <= z by A17,A19,A20,A21;
            end;
            suppose
            x = 2 & y = 2;
            then reconsider z = x /\ y as Element of N;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
            end;
            suppose
-A23:       x = 2 & y = 3\2;
+A22:       x = 2 & y = 3\2;
                 2 misses (3\2) by XBOOLE_1:79;
            then 2 /\ (3\2) = 0 by XBOOLE_0:def 7;
-           then x /\ y in Z by A23,ENUMSET1:def 3;
+           then x /\ y in Z by A22,ENUMSET1:def 3;
            then reconsider z = x /\ y as Element of N by YELLOW_1:1;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
            end;
            suppose
-A24:       x = 2 & y = 3;
+A23:       x = 2 & y = 3;
                 2 c= 3 by CARD_1:56;
-           then reconsider z = x /\ y as Element of N by A24,XBOOLE_1:28;
+           then reconsider z = x /\ y as Element of N by A23,XBOOLE_1:28;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
            end;
            suppose  x = 3\2 & y = 0;
            then reconsider z = x /\ y as Element of N;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
            end;
            suppose x = 3\2 & y = 3\1;
            then reconsider z = x /\ y as Element of N by Th3,Th4,ZFMISC_1:19;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
            end;
            suppose
-A25:       x = 3\2 & y = 2;
+A24:       x = 3\2 & y = 2;
                 2 misses (3\2) by XBOOLE_1:79;
            then 2 /\ (3\2) = 0 by XBOOLE_0:def 7;
-           then x /\ y in Z by A25,ENUMSET1:def 3;
+           then x /\ y in Z by A24,ENUMSET1:def 3;
            then reconsider z = x /\ y as Element of N by YELLOW_1:1;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
            end;
            suppose
            x = 3\2 & y = 3\2;
            then reconsider z = x /\ y as Element of N;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
 
            end;
            suppose
-A26:       x = 3\2 & y = 3;
+A25:       x = 3\2 & y = 3;
                 (3\2) /\ 3 = (3 /\ 3) \2 by XBOOLE_1:49
                     .= 3\2;
-           then reconsider z = x /\ y as Element of N by A26;
+           then reconsider z = x /\ y as Element of N by A25;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
 
            end;
            suppose  x = 3 & y = 0;
            then reconsider z = x /\ y as Element of N;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
            end;
            suppose
-A27:       x = 3 & y = 3\1;
+A26:       x = 3 & y = 3\1;
                 (3\1) /\ 3 = (3 /\ 3) \ 1 by XBOOLE_1:49
                     .= 3\1;
-           then reconsider z = x /\ y as Element of N by A27;
+           then reconsider z = x /\ y as Element of N by A26;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
            end;
            suppose
-A28:       x = 3 & y = 2;
+A27:       x = 3 & y = 2;
                 2 c= 3 by CARD_1:56;
-           then reconsider z = x /\ y as Element of N by A28,XBOOLE_1:28;
+           then reconsider z = x /\ y as Element of N by A27,XBOOLE_1:28;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
            end;
            suppose
-A29:       x = 3 & y = 3\2;
+A28:       x = 3 & y = 3\2;
                 (3\2) /\ 3 = (3 /\ 3) \2 by XBOOLE_1:49
                     .= 3\2;
-           then reconsider z = x /\ y as Element of N by A29;
+           then reconsider z = x /\ y as Element of N by A28;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
            end;
            suppose
            x = 3 & y = 3;
            then reconsider z = x /\ y as Element of N;
            take z;
                 z c= x & z c= y by XBOOLE_1:17;
-           hence z <= x & z <= y by A1,YELLOW_1:3;
+           hence z <= x & z <= y by YELLOW_1:3;
            let w be Element of N;
            assume w <= x & w <= y;
-           then w c= x & w c= y by A1,YELLOW_1:3;
+           then w c= x & w c= y by YELLOW_1:3;
            then w c= x /\ y by XBOOLE_1:19;
-           hence thesis by A1,YELLOW_1:3;
+           hence thesis by YELLOW_1:3;
           end;
           end;
          end;
-        hence thesis by A2;
+        hence thesis by A1;
        end;
 end;
 
@@ -590,96 +587,95 @@ correctness
  proof
   set Z = { 0, 1, 2 \ 1, 3 \ 2, 3 };
   set N = InclPoset Z;
-A1: Z <> {} by ENUMSET1:def 3;
-A2: N is with_suprema
+A1: N is with_suprema
  proof
   let x,y be Element of N;
-A3:  Z = the carrier of N by YELLOW_1:1;
+A2:  Z = the carrier of N by YELLOW_1:1;
    thus ex z being Element of N st x <= z & y <= z &
         for z' being Element of N st x <= z' & y <= z' holds z <= z'
     proof
-     per cases by A1,A3,ENUMSET1:def 3;
+     per cases by A2,ENUMSET1:def 3;
      suppose
        x=0 & y=0;
      then reconsider z = x \/ y as Element of N;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose  x=0 & y=1;
      then reconsider z = x \/ y as Element of N;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose  x=0 & y=2\1;
      then reconsider z = x \/ y as Element of N;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose  x=0 & y=3\2;
      then reconsider z = x \/ y as Element of N;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose  x=0 & y=3;
      then reconsider z = x \/ y as Element of N;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose  x=1 & y=0;
      then reconsider z = x \/ y as Element of N;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose
        x=1 & y=1;
      then reconsider z = x \/ y as Element of N;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose
-A4:   x=1 & y=2\1;
+A3:   x=1 & y=2\1;
          3 in Z by ENUMSET1:def 3;
      then reconsider z = 3 as Element of N by YELLOW_1:1;
      take z;
@@ -688,45 +684,45 @@ A4:   x=1 & y=2\1;
        thus x c= z
         proof
          let X be set;
-         assume X in x; then X=0 by A4,CARD_5:1,TARSKI:def 1;
+         assume X in x; then X=0 by A3,CARD_5:1,TARSKI:def 1;
          hence X in z by Th1,ENUMSET1:def 1;
         end;
         let X be set;
-        assume X in y; then X=1 by A4,Th2,TARSKI:def 1;
+        assume X in y; then X=1 by A3,Th2,TARSKI:def 1;
         hence X in z by Th1,ENUMSET1:def 1;
       end;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let z' be Element of N;
           z' is Element of Z by YELLOW_1:1;
-     then A5: z'=0 or z'=1 or z'=2\1 or z'=3\2 or z'=3 by A1,ENUMSET1:def 3;
+     then A4: z'=0 or z'=1 or z'=2\1 or z'=3\2 or z'=3 by ENUMSET1:def 3;
      assume x <= z' & y <= z';
-     then A6:  1 c= z' & 2\1 c= z' by A1,A4,YELLOW_1:3;
-A7:  now
-      assume A8: z'= 0;
+     then A5:  1 c= z' & 2\1 c= z' by A3,YELLOW_1:3;
+A6:  now
+      assume A7: z'= 0;
            0 in 1 by CARD_5:1,TARSKI:def 1;
-      hence contradiction by A6,A8;
+      hence contradiction by A5,A7;
      end;
-A9:  now
-      assume A10: z'= 1;
+A8:  now
+      assume A9: z'= 1;
            1 in 2\1 by Th2,TARSKI:def 1;
-      then 1 in z' by A6;
-      hence contradiction by A10;
+      then 1 in z' by A5;
+      hence contradiction by A9;
      end;
-A11: now
-      assume A12: z'= 2\1;
+A10: now
+      assume A11: z'= 2\1;
            0 in 1 by CARD_5:1,TARSKI:def 1;
-      hence contradiction by A6,A12,Th2,TARSKI:def 1;
+      hence contradiction by A5,A11,Th2,TARSKI:def 1;
      end;
           now
-      assume A13: z'= 3\2;
+      assume A12: z'= 3\2;
            0 in 1 by CARD_5:1,TARSKI:def 1;
-      hence contradiction by A6,A13,Th4,TARSKI:def 1;
+      hence contradiction by A5,A12,Th4,TARSKI:def 1;
      end;
-     hence z <= z' by A1,A5,A7,A9,A11,YELLOW_1:3;
+     hence z <= z' by A4,A6,A8,A10;
 
      end;
      suppose
-A14:   x=1 & y=3\2;
+A13:   x=1 & y=3\2;
          3 in Z by ENUMSET1:def 3;
      then reconsider z = 3 as Element of N by YELLOW_1:1;
      take z;
@@ -735,69 +731,69 @@ A14:   x=1 & y=3\2;
        thus x c= z
         proof
          let X be set;
-         assume X in x; then X=0 by A14,CARD_5:1,TARSKI:def 1;
+         assume X in x; then X=0 by A13,CARD_5:1,TARSKI:def 1;
          hence X in z by Th1,ENUMSET1:def 1;
         end;
-        thus thesis by A14,XBOOLE_1:36;
+        thus thesis by A13;
       end;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let z' be Element of N;
           z' is Element of Z by YELLOW_1:1;
-     then A15: z'=0 or z'=1 or z'=2\1 or z'=3\2 or z'=3 by A1,ENUMSET1:def 3;
+     then A14: z'=0 or z'=1 or z'=2\1 or z'=3\2 or z'=3 by ENUMSET1:def 3;
      assume x <= z' & y <= z';
-     then A16:  1 c= z' & 3\2 c= z' by A1,A14,YELLOW_1:3;
-A17:  now
-      assume A18: z'= 0;
+     then A15:  1 c= z' & 3\2 c= z' by A13,YELLOW_1:3;
+A16:  now
+      assume A17: z'= 0;
            0 in 1 by CARD_5:1,TARSKI:def 1;
-      hence contradiction by A16,A18;
+      hence contradiction by A15,A17;
      end;
-A19:  now
-      assume A20: z'= 1;
+A18:  now
+      assume A19: z'= 1;
            2 in 3\2 by Th4,TARSKI:def 1;
-      hence contradiction by A16,A20,CARD_5:1,TARSKI:def 1;
+      hence contradiction by A15,A19,CARD_5:1,TARSKI:def 1;
      end;
-A21: now
-      assume A22: z'= 2\1;
+A20: now
+      assume A21: z'= 2\1;
            0 in 1 by CARD_5:1,TARSKI:def 1;
-      hence contradiction by A16,A22,Th2,TARSKI:def 1;
+      hence contradiction by A15,A21,Th2,TARSKI:def 1;
      end;
           now
-      assume A23: z'= 3\2;
+      assume A22: z'= 3\2;
            0 in 1 by CARD_5:1,TARSKI:def 1;
-      hence contradiction by A16,A23,Th4,TARSKI:def 1;
+      hence contradiction by A15,A22,Th4,TARSKI:def 1;
      end;
-     hence z <= z' by A1,A15,A17,A19,A21,YELLOW_1:3;
+     hence z <= z' by A14,A16,A18,A20;
      end;
      suppose
-A24:   x=1 & y=3;
+A23:   x=1 & y=3;
           1 c= 3
       proof
        let X be set;assume X in 1; then X=0 by CARD_5:1,TARSKI:def 1;
        hence thesis by Th1,ENUMSET1:def 1;
       end;
-     then reconsider z = x \/ y as Element of N by A24,XBOOLE_1:12;
+     then reconsider z = x \/ y as Element of N by A23,XBOOLE_1:12;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose  x=2\1 & y=0;
      then reconsider z = x \/ y as Element of N;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose
-A25:   x=2\1 & y=1;
+A24:   x=2\1 & y=1;
          3 in Z by ENUMSET1:def 3;
      then reconsider z = 3 as Element of N by YELLOW_1:1;
      take z;
@@ -806,56 +802,56 @@ A25:   x=2\1 & y=1;
        thus x c= z
         proof
          let X be set;
-         assume X in x; then X=1 by A25,Th2,TARSKI:def 1;
+         assume X in x; then X=1 by A24,Th2,TARSKI:def 1;
          hence X in z by Th1,ENUMSET1:def 1;
         end;
         let X be set;
-        assume X in y; then X=0 by A25,CARD_5:1,TARSKI:def 1;
+        assume X in y; then X=0 by A24,CARD_5:1,TARSKI:def 1;
         hence X in z by Th1,ENUMSET1:def 1;
       end;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let z' be Element of N;
           z' is Element of Z by YELLOW_1:1;
-     then A26: z'=0 or z'=1 or z'=2\1 or z'=3\2 or z'=3 by A1,ENUMSET1:def 3;
+     then A25: z'=0 or z'=1 or z'=2\1 or z'=3\2 or z'=3 by ENUMSET1:def 3;
      assume x <= z' & y <= z';
-     then A27:  1 c= z' & 2\1 c= z' by A1,A25,YELLOW_1:3;
-A28:  now
-      assume A29: z'= 0;
+     then A26:  1 c= z' & 2\1 c= z' by A24,YELLOW_1:3;
+A27:  now
+      assume A28: z'= 0;
            0 in 1 by CARD_5:1,TARSKI:def 1;
-      hence contradiction by A27,A29;
+      hence contradiction by A26,A28;
      end;
-A30:  now
-      assume A31: z'= 1;
+A29:  now
+      assume A30: z'= 1;
            1 in 2\1 by Th2,TARSKI:def 1;
-      then 1 in z' by A27;
-      hence contradiction by A31;
+      then 1 in z' by A26;
+      hence contradiction by A30;
      end;
-A32: now
-      assume A33: z'= 2\1;
+A31: now
+      assume A32: z'= 2\1;
            0 in 1 by CARD_5:1,TARSKI:def 1;
-      hence contradiction by A27,A33,Th2,TARSKI:def 1;
+      hence contradiction by A26,A32,Th2,TARSKI:def 1;
      end;
           now
-      assume A34: z'= 3\2;
+      assume A33: z'= 3\2;
            0 in 1 by CARD_5:1,TARSKI:def 1;
-      hence contradiction by A27,A34,Th4,TARSKI:def 1;
+      hence contradiction by A26,A33,Th4,TARSKI:def 1;
      end;
-     hence z <= z' by A1,A26,A28,A30,A32,YELLOW_1:3;
+     hence z <= z' by A25,A27,A29,A31;
      end;
      suppose
        x=2\1 & y=2\1;
      then reconsider z = x \/ y as Element of N;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose
-A35:   x=2\1 & y=3\2;
+A34:   x=2\1 & y=3\2;
          3 in Z by ENUMSET1:def 3;
      then reconsider z = 3 as Element of N by YELLOW_1:1;
      take z;
@@ -864,261 +860,246 @@ A35:   x=2\1 & y=3\2;
        thus x c= z
         proof
          let X be set;
-         assume X in x; then X=1 by A35,Th2,TARSKI:def 1;
+         assume X in x; then X=1 by A34,Th2,TARSKI:def 1;
          hence X in z by Th1,ENUMSET1:def 1;
         end;
         let X be set;
-        assume X in y; then X=2 by A35,Th4,TARSKI:def 1;
+        assume X in y; then X=2 by A34,Th4,TARSKI:def 1;
         hence X in z by Th1,ENUMSET1:def 1;
       end;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let z' be Element of N;
           z' is Element of Z by YELLOW_1:1;
-     then A36: z'=0 or z'=1 or z'=2\1 or z'=3\2 or z'=3 by A1,ENUMSET1:def 3;
+     then A35: z'=0 or z'=1 or z'=2\1 or z'=3\2 or z'=3 by ENUMSET1:def 3;
      assume x <= z' & y <= z';
-     then A37:  2\1 c= z' & 3\2 c= z' by A1,A35,YELLOW_1:3;
-A38:  now
-      assume A39: z'= 0;
+     then A36:  2\1 c= z' & 3\2 c= z' by A34,YELLOW_1:3;
+A37:  now
+      assume A38: z'= 0;
            1 in 2\1 by Th2,TARSKI:def 1;
-      hence contradiction by A37,A39;
+      hence contradiction by A36,A38;
      end;
-A40:  now
-      assume A41: z'= 1;
+A39:  now
+      assume A40: z'= 1;
            1 in 2\1 by Th2,TARSKI:def 1;
-      then 1 in z' by A37;
-      hence contradiction by A41;
+      then 1 in z' by A36;
+      hence contradiction by A40;
      end;
-A42: now
-      assume A43: z'= 2\1;
+A41: now
+      assume A42: z'= 2\1;
            2 in 3\2 by Th4,TARSKI:def 1;
-      hence contradiction by A37,A43,Th2,TARSKI:def 1;
+      hence contradiction by A36,A42,Th2,TARSKI:def 1;
      end;
           now
-      assume A44: z'= 3\2;
+      assume A43: z'= 3\2;
            1 in 2\1 by Th2,TARSKI:def 1;
-      hence contradiction by A37,A44,Th4,TARSKI:def 1;
+      hence contradiction by A36,A43,Th4,TARSKI:def 1;
      end;
-     hence z <= z' by A1,A36,A38,A40,A42,YELLOW_1:3;
+     hence z <= z' by A35,A37,A39,A41;
      end;
      suppose
-A45:   x=2\1 & y=3;
+A44:   x=2\1 & y=3;
           2\1 c= 3
       proof
        let X be set;assume X in 2\1; then X=1 by Th2,TARSKI:def 1;
        hence thesis by Th1,ENUMSET1:def 1;
       end;
-     then reconsider z = x \/ y as Element of N by A45,XBOOLE_1:12;
+     then reconsider z = x \/ y as Element of N by A44,XBOOLE_1:12;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose  x=3\2 & y=0;
      then reconsider z = x \/ y as Element of N;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose
-A46:   x=3\2 & y=1;
+A45:   x=3\2 & y=1;
          3 in Z by ENUMSET1:def 3;
      then reconsider z = 3 as Element of N by YELLOW_1:1;
      take z;
           x c= z & y c= z
       proof
-       thus x c= z by A46,XBOOLE_1:36;
+       thus x c= z by A45;
        thus y c= z
         proof
          let X be set;
-         assume X in y; then X=0 by A46,CARD_5:1,TARSKI:def 1;
+         assume X in y; then X=0 by A45,CARD_5:1,TARSKI:def 1;
          hence X in z by Th1,ENUMSET1:def 1;
         end;
       end;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let z' be Element of N;
           z' is Element of Z by YELLOW_1:1;
-     then A47: z'=0 or z'=1 or z'=2\1 or z'=3\2 or z'=3 by A1,ENUMSET1:def 3;
+     then A46: z'=0 or z'=1 or z'=2\1 or z'=3\2 or z'=3 by ENUMSET1:def 3;
      assume x <= z' & y <= z';
-     then A48:  1 c= z' & 3\2 c= z' by A1,A46,YELLOW_1:3;
-A49:  now
-      assume A50: z'= 0;
+     then A47:  1 c= z' & 3\2 c= z' by A45,YELLOW_1:3;
+A48:  now
+      assume A49: z'= 0;
            0 in 1 by CARD_5:1,TARSKI:def 1;
-      hence contradiction by A48,A50;
+      hence contradiction by A47,A49;
      end;
-A51:  now
-      assume A52: z'= 1;
+A50:  now
+      assume A51: z'= 1;
            2 in 3\2 by Th4,TARSKI:def 1;
-      hence contradiction by A48,A52,CARD_5:1,TARSKI:def 1;
+      hence contradiction by A47,A51,CARD_5:1,TARSKI:def 1;
      end;
-A53: now
-      assume A54: z'= 2\1;
+A52: now
+      assume A53: z'= 2\1;
            0 in 1 by CARD_5:1,TARSKI:def 1;
-      hence contradiction by A48,A54,Th2,TARSKI:def 1;
+      hence contradiction by A47,A53,Th2,TARSKI:def 1;
      end;
           now
-      assume A55: z'= 3\2;
+      assume A54: z'= 3\2;
            0 in 1 by CARD_5:1,TARSKI:def 1;
-      hence contradiction by A48,A55,Th4,TARSKI:def 1;
+      hence contradiction by A47,A54,Th4,TARSKI:def 1;
      end;
-     hence z <= z' by A1,A47,A49,A51,A53,YELLOW_1:3;
+     hence z <= z' by A46,A48,A50,A52;
      end;
      suppose
-A56:   x=3\2 & y=2\1;
+A55:   x=3\2 & y=2\1;
          3 in Z by ENUMSET1:def 3;
      then reconsider z = 3 as Element of N by YELLOW_1:1;
      take z;
           x c= z & y c= z
       proof
-       thus x c= z
-        proof
-         let X be set;
-         assume X in x; then X=2 by A56,Th4,TARSKI:def 1;
-         hence X in z by Th1,ENUMSET1:def 1;
-        end;
+       thus x c= z by A55,Th4,TARSKI:def 1,Th1,ENUMSET1:def 1;
         let X be set;
-        assume X in y; then X=1 by A56,Th2,TARSKI:def 1;
+        assume X in y; then X=1 by A55,Th2,TARSKI:def 1;
         hence X in z by Th1,ENUMSET1:def 1;
       end;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let z' be Element of N;
-          z' is Element of Z by YELLOW_1:1;
-     then A57: z'=0 or z'=1 or z'=2\1 or z'=3\2 or z'=3 by A1,ENUMSET1:def 3;
+     z' is Element of Z by YELLOW_1:1;
+     then A56: z'=0 or z'=1 or z'=2\1 or z'=3\2 or z'=3 by ENUMSET1:def 3;
      assume x <= z' & y <= z';
-     then A58:  2\1 c= z' & 3\2 c= z' by A1,A56,YELLOW_1:3;
-A59:  now
-      assume A60: z'= 0;
+     then A57:  2\1 c= z' & 3\2 c= z' by A55,YELLOW_1:3;
+A58:  now
+      assume A59: z'= 0;
            1 in 2\1 by Th2,TARSKI:def 1;
-      hence contradiction by A58,A60;
+      hence contradiction by A57,A59;
      end;
-A61:  now
-      assume A62: z'= 1;
+A60:  now
+      assume A61: z'= 1;
            1 in 2\1 by Th2,TARSKI:def 1;
-      then 1 in z' by A58;
-      hence contradiction by A62;
+      then 1 in z' by A57;
+      hence contradiction by A61;
      end;
-A63: now
-      assume A64: z'= 2\1;
+A62: now
+      assume A63: z'= 2\1;
            2 in 3\2 by Th4,TARSKI:def 1;
-      hence contradiction by A58,A64,Th2,TARSKI:def 1;
+      hence contradiction by A57,A63,Th2,TARSKI:def 1;
      end;
           now
-      assume A65: z'= 3\2;
+      assume A64: z'= 3\2;
            1 in 2\1 by Th2,TARSKI:def 1;
-      hence contradiction by A58,A65,Th4,TARSKI:def 1;
+      hence contradiction by A57,A64,Th4,TARSKI:def 1;
      end;
-     hence z <= z' by A1,A57,A59,A61,A63,YELLOW_1:3;
+     hence z <= z' by A56,A58,A60,A62;
      end;
      suppose
        x=3\2 & y=3\2;
      then reconsider z = x \/ y as Element of N;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose
-A66:   x=3\2 & y=3;
-          3\2 c= 3
-      proof
-       let X be set;assume X in 3\2; then X=2 by Th4,TARSKI:def 1;
-       hence thesis by Th1,ENUMSET1:def 1;
-      end;
-     then reconsider z = x \/ y as Element of N by A66,XBOOLE_1:12;
+A65:   x=3\2 & y=3;
+     reconsider z = x \/ y as Element of N by A65,XBOOLE_1:12;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose  x=3 & y=0;
      then reconsider z = x \/ y as Element of N;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose
-A67:   x=3 & y=1;
+A66:   x=3 & y=1;
           1 c= 3
       proof
        let X be set;assume X in 1; then X=0 by CARD_5:1,TARSKI:def 1;
        hence thesis by Th1,ENUMSET1:def 1;
       end;
-     then reconsider z = x \/ y as Element of N by A67,XBOOLE_1:12;
+     then reconsider z = x \/ y as Element of N by A66,XBOOLE_1:12;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose
-A68:   x=3 & y=2\1;
+A67:   x=3 & y=2\1;
           2\1 c= 3
       proof
        let X be set;assume X in 2\1; then X=1 by Th2,TARSKI:def 1;
        hence thesis by Th1,ENUMSET1:def 1;
       end;
-     then reconsider z = x \/ y as Element of N by A68,XBOOLE_1:12;
+     then reconsider z = x \/ y as Element of N by A67,XBOOLE_1:12;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose
-A69:   x=3 & y=3\2;
-          3\2 c= 3
-      proof
-       let X be set;assume X in 3\2; then X=2 by Th4,TARSKI:def 1;
-       hence thesis by Th1,ENUMSET1:def 1;
-      end;
-     then reconsider z = x \/ y as Element of N by A69,XBOOLE_1:12;
+A68:   x=3 & y=3\2;
+     reconsider z = x \/ y as Element of N by A68,XBOOLE_1:12;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
      end;
      suppose
        x=3 & y=3;
      then reconsider z = x \/ y as Element of N;
      take z;
           x c= z & y c= z by XBOOLE_1:7;
-     hence x <= z & y <= z by A1,YELLOW_1:3;
+     hence x <= z & y <= z by YELLOW_1:3;
      let w be Element of N;
      assume x <= w & y <= w;
-     then x c= w & y c= w by A1,YELLOW_1:3;
+     then x c= w & y c= w by YELLOW_1:3;
      then x \/ y c= w by XBOOLE_1:8;
-     hence thesis by A1,YELLOW_1:3;
+     hence thesis by YELLOW_1:3;
     end;
     end;
  end;
@@ -1127,11 +1108,11 @@ A69:   x=3 & y=3\2;
            now
        let x,y be set;
        assume x in Z & y in Z;
-       then A70: (x=0 or x=1 or x=2\1 or x=3\2 or x=3) &
+       then A69: (x=0 or x=1 or x=2\1 or x=3\2 or x=3) &
        (y=0 or y=1 or y=2\1 or y=3\2 or y=3) by ENUMSET1:def 3;
                 1 misses (2\1) by XBOOLE_1:79;
-then A71:       1 /\ (2\1) = 0 by XBOOLE_0:def 7;
-A72:       1 /\ (3\2) = 0
+then A70:       1 /\ (2\1) = 0 by XBOOLE_0:def 7;
+A71:       1 /\ (3\2) = 0
         proof
               now let x be set;
           assume x in 1 /\ (3\2);
@@ -1142,8 +1123,8 @@ A72:       1 /\ (3\2) = 0
          hence thesis by XBOOLE_0:def 1;
         end;
             1 c= 3 by CARD_1:56;
-then A73:       1 /\ 3 = 1 by XBOOLE_1:28;
-A74:       (2\1) /\ (3\2) = 0
+then A72:       1 /\ 3 = 1 by XBOOLE_1:28;
+A73:       (2\1) /\ (3\2) = 0
         proof
               now let x be set;
           assume x in (2\1) /\ (3\2);
@@ -1160,14 +1141,13 @@ A74:       (2\1) /\ (3\2) = 0
          then x = 1 by Th2,TARSKI:def 1;
          hence thesis by Th1,ENUMSET1:def 1;
         end;
-       then A75:       (2\1) /\ 3 = 2\1 by XBOOLE_1:28;
-            (3\2) c= 3 by XBOOLE_1:36;
-        then (3\2) /\ 3 = 3\2 by XBOOLE_1:28;
-       hence x /\ y in Z by A70,A71,A72,A73,A74,A75,ENUMSET1:def 3;
+       then A74:       (2\1) /\ 3 = 2\1 by XBOOLE_1:28;
+        (3\2) /\ 3 = 3\2 by XBOOLE_1:28;
+       hence x /\ y in Z by A69,A70,A71,A72,A73,A74,ENUMSET1:def 3;
       end;
-      hence thesis by A1,YELLOW_1:12;
+      hence thesis by YELLOW_1:12;
      end;
- hence thesis by A2;
+ hence thesis by A1;
 end;
 end;
 
@@ -1254,26 +1234,23 @@ A11:     f.tj = f.t;
      hence contradiction by A4,A5,A11,WAYBEL_1:def 1;
     end;
     hence D<>E;
-A12: {0, 3 \ 1, 2, 3 \ 2, 3} is non empty by ENUMSET1:def 3;
          z c= td by XBOOLE_1:2;
-    then z <= td by A12,YELLOW_1:3;
+    then z <= td by YELLOW_1:3;
     then a <= b by A3,WAYBEL_0:66;
     then A <= B by YELLOW_0:60;
     hence A "/\" B = A by YELLOW_0:25;
          z c= dw by XBOOLE_1:2;
-    then z <= dw by A12,YELLOW_1:3;
+    then z <= dw by YELLOW_1:3;
     then a <= c by A3,WAYBEL_0:66;
     then A <= C by YELLOW_0:60;
     hence A "/\" C = A by YELLOW_0:25;
 
          dw c= t by CARD_1:56;
-    then dw <= t by A12,YELLOW_1:3;
+    then dw <= t by YELLOW_1:3;
     then c <= e by A3,WAYBEL_0:66;
     then C <= E by YELLOW_0:60;
     hence C"/\"E = C by YELLOW_0:25;
-
-         tj c= t by XBOOLE_1:36;
-    then tj <= t by A12,YELLOW_1:3;
+    tj <= t by YELLOW_1:3;
     then d <= e by A3,WAYBEL_0:66;
     then D <= E by YELLOW_0:60;
     hence D"/\"E = D by YELLOW_0:25;
@@ -1285,36 +1262,36 @@ A12: {0, 3 \ 1, 2, 3 \ 2, 3} is non empty by ENUMSET1:def 3;
       then inf{B,C} in the carrier of K by YELLOW_0:def 16;
       then B"/\"C in rng f by A6,YELLOW_0:40;
       then consider x being set such that
-A13:    x in dom f & B"/\"C = f.x by FUNCT_1:def 5;
-      reconsider x as Element of N_5 by A13;
-A14:      x = z or x = td or x = dw or x = tj or x = t by A1,ENUMSET1:def 3;
-A15:    now
+A12:    x in dom f & B"/\"C = f.x by FUNCT_1:def 5;
+      reconsider x as Element of N_5 by A12;
+A13:      x = z or x = td or x = dw or x = tj or x = t by A1,ENUMSET1:def 3;
+A14:    now
        assume B"/\"C = B;
        then B <= C by YELLOW_0:25;
        then b <= c by YELLOW_0:61;
        then td <= dw by A3,WAYBEL_0:66;
-       then A16:    td c= dw by A12,YELLOW_1:3;
+       then A15:    td c= dw by YELLOW_1:3;
             2 in td by Th4,TARSKI:def 1;
-       then 2 in 2 by A16;
+       then 2 in 2 by A15;
        hence contradiction;
       end;
-A17:    now
+A16:    now
        assume B"/\"C = C;
        then C <= B by YELLOW_0:25;
        then c <= b by YELLOW_0:61;
        then dw <= td by A3,WAYBEL_0:66;
-       then A18:    dw c= td by A12,YELLOW_1:3;
+       then A17:    dw c= td by YELLOW_1:3;
             0 in dw & 0 <> 2 by CARD_5:1,TARSKI:def 2;
-       hence contradiction by A18,Th4,TARSKI:def 1;
+       hence contradiction by A17,Th4,TARSKI:def 1;
       end;
-A19:    now
+A18:    now
        assume B"/\"C = D;
        then D <= C by YELLOW_0:23;
        then d <= c by YELLOW_0:61;
        then tj <= dw by A3,WAYBEL_0:66;
-       then A20:    tj c= dw by A12,YELLOW_1:3;
+       then A19:    tj c= dw by YELLOW_1:3;
             2 in tj by Th3,TARSKI:def 2;
-       then 2 in 2 by A20;
+       then 2 in 2 by A19;
        hence contradiction;
       end;
            now
@@ -1322,15 +1299,15 @@ A19:    now
        then E <= C by YELLOW_0:23;
        then e <= c by YELLOW_0:61;
        then t <= dw by A3,WAYBEL_0:66;
-       then A21:    t c= dw by A12,YELLOW_1:3;
+       then A20:    t c= dw by YELLOW_1:3;
             2 in t by Th1,ENUMSET1:def 1;
-       then 2 in 2 by A21;
+       then 2 in 2 by A20;
        hence contradiction;
       end;
-      hence thesis by A13,A14,A15,A17,A19;
+      hence thesis by A12,A13,A14,A16,A18;
      end;
 
-         td <= tj by A12,Lm1,YELLOW_1:3;
+         td <= tj by Lm1,YELLOW_1:3;
     then b <= d by A3,WAYBEL_0:66;
     then B <= D by YELLOW_0:60;
     hence B"/\"D = B by YELLOW_0:25;
@@ -1342,36 +1319,36 @@ A19:    now
       then inf{C,D} in the carrier of K by YELLOW_0:def 16;
       then C"/\"D in rng f by A6,YELLOW_0:40;
       then consider x being set such that
-A22:    x in dom f & C"/\"D = f.x by FUNCT_1:def 5;
-      reconsider x as Element of N_5 by A22;
-A23:      x = z or x = td or x = dw or x = tj or x = t by A1,ENUMSET1:def 3;
-A24:    now
+A21:    x in dom f & C"/\"D = f.x by FUNCT_1:def 5;
+      reconsider x as Element of N_5 by A21;
+A22:      x = z or x = td or x = dw or x = tj or x = t by A1,ENUMSET1:def 3;
+A23:    now
        assume C"/\"D = B;
        then B <= C by YELLOW_0:23;
        then b <= c by YELLOW_0:61;
        then td <= dw by A3,WAYBEL_0:66;
-       then A25:    td c= dw by A12,YELLOW_1:3;
+       then A24:    td c= dw by YELLOW_1:3;
             2 in td by Th4,TARSKI:def 1;
-       then 2 in 2 by A25;
+       then 2 in 2 by A24;
        hence contradiction;
       end;
-A26:    now
+A25:    now
        assume C"/\"D = C;
        then C <= D by YELLOW_0:25;
        then c <= d by YELLOW_0:61;
        then dw <= tj by A3,WAYBEL_0:66;
-       then A27:    dw c= tj by A12,YELLOW_1:3;
+       then A26:    dw c= tj by YELLOW_1:3;
             0 in dw & 0 <> 2 & 0 <> 1 by CARD_5:1,TARSKI:def 2;
-       hence contradiction by A27,Th3,TARSKI:def 2;
+       hence contradiction by A26,Th3,TARSKI:def 2;
       end;
-A28:    now
+A27:    now
        assume C"/\"D = D;
        then D <= C by YELLOW_0:23;
        then d <= c by YELLOW_0:61;
        then tj <= dw by A3,WAYBEL_0:66;
-       then A29:    tj c= dw by A12,YELLOW_1:3;
+       then A28:    tj c= dw by YELLOW_1:3;
             2 in tj by Th3,TARSKI:def 2;
-       then 2 in 2 by A29;
+       then 2 in 2 by A28;
        hence contradiction;
       end;
            now
@@ -1379,12 +1356,12 @@ A28:    now
        then E <= C by YELLOW_0:23;
        then e <= c by YELLOW_0:61;
        then t <= dw by A3,WAYBEL_0:66;
-       then A30:    t c= dw by A12,YELLOW_1:3;
+       then A29:    t c= dw by YELLOW_1:3;
             2 in t by Th1,ENUMSET1:def 1;
-       then 2 in 2 by A30;
+       then 2 in 2 by A29;
        hence contradiction;
       end;
-      hence thesis by A22,A23,A24,A26,A28;
+      hence thesis by A21,A22,A23,A25,A27;
      end;
 
     thus B"\/"C = E
@@ -1394,46 +1371,46 @@ A28:    now
       then sup{B,C} in the carrier of K by YELLOW_0:def 17;
       then B"\/"C in rng f by A6,YELLOW_0:41;
       then consider x being set such that
-A31:    x in dom f & B"\/"C = f.x by FUNCT_1:def 5;
-      reconsider x as Element of N_5 by A31;
-A32:      x = z or x = td or x = dw or x = tj or x = t by A1,ENUMSET1:def 3;
-A33:    now
+A30:    x in dom f & B"\/"C = f.x by FUNCT_1:def 5;
+      reconsider x as Element of N_5 by A30;
+A31:      x = z or x = td or x = dw or x = tj or x = t by A1,ENUMSET1:def 3;
+A32:    now
        assume B"\/"C = B;
        then B >= C by YELLOW_0:24;
        then b >= c by YELLOW_0:61;
        then td >= dw by A3,WAYBEL_0:66;
-       then A34:    dw c= td by A12,YELLOW_1:3;
+       then A33:    dw c= td by YELLOW_1:3;
             0 in dw & 0 <> 2 by CARD_5:1,TARSKI:def 2;
-       hence contradiction by A34,Th4,TARSKI:def 1;
+       hence contradiction by A33,Th4,TARSKI:def 1;
       end;
-A35:    now
+A34:    now
        assume B"\/"C = C;
        then C >= B by YELLOW_0:24;
        then c >= b by YELLOW_0:61;
        then dw >= td by A3,WAYBEL_0:66;
-       then A36:    td c= dw by A12,YELLOW_1:3;
+       then A35:    td c= dw by YELLOW_1:3;
             2 in td by Th4,TARSKI:def 1;
-       then 2 in 2 by A36;
+       then 2 in 2 by A35;
        hence contradiction;
       end;
-A37:    now
+A36:    now
        assume B"\/"C = D;
        then D >= C by YELLOW_0:22;
        then d >= c by YELLOW_0:61;
        then tj >= dw by A3,WAYBEL_0:66;
-       then A38:    dw c= tj by A12,YELLOW_1:3;
+       then A37:    dw c= tj by YELLOW_1:3;
             0 in dw & 0 <> 1 & 0 <>2 by CARD_5:1,TARSKI:def 2;
-       hence contradiction by A38,Th3,TARSKI:def 2;
+       hence contradiction by A37,Th3,TARSKI:def 2;
       end;
            now
        assume B"\/"C = A;
        then A >= C by YELLOW_0:22;
        then a >= c by YELLOW_0:61;
        then z >= dw by A3,WAYBEL_0:66;
-       then dw c= z by A12,YELLOW_1:3;
+       then dw c= z by YELLOW_1:3;
        hence contradiction by XBOOLE_1:3;
       end;
-      hence thesis by A31,A32,A33,A35,A37;
+      hence thesis by A30,A31,A32,A34,A36;
      end;
 
     thus C"\/"D = E
@@ -1443,45 +1420,45 @@ A37:    now
       then sup{C,D} in the carrier of K by YELLOW_0:def 17;
       then C"\/"D in rng f by A6,YELLOW_0:41;
       then consider x being set such that
-A39:    x in dom f & C"\/"D = f.x by FUNCT_1:def 5;
-      reconsider x as Element of N_5 by A39;
-A40:      x = z or x = td or x = dw or x = tj or x = t by A1,ENUMSET1:def 3;
-A41:    now
+A38:    x in dom f & C"\/"D = f.x by FUNCT_1:def 5;
+      reconsider x as Element of N_5 by A38;
+A39:      x = z or x = td or x = dw or x = tj or x = t by A1,ENUMSET1:def 3;
+A40:    now
        assume C"\/"D = B;
        then B >= C by YELLOW_0:22;
        then b >= c by YELLOW_0:61;
        then td >= dw by A3,WAYBEL_0:66;
-       then A42:    dw c= td by A12,YELLOW_1:3;
+       then A41:    dw c= td by YELLOW_1:3;
             0 in dw & 0 <> 2 by CARD_5:1,TARSKI:def 2;
-       hence contradiction by A42,Th4,TARSKI:def 1;
+       hence contradiction by A41,Th4,TARSKI:def 1;
       end;
-A43:    now
+A42:    now
        assume C"\/"D = C;
        then C >= D by YELLOW_0:24;
        then c >= d by YELLOW_0:61;
        then dw >= tj by A3,WAYBEL_0:66;
-       then A44:    tj c= dw by A12,YELLOW_1:3;
+       then A43:    tj c= dw by YELLOW_1:3;
             2 in tj & 2 <> 0 & 2 <> 1 by Th3,TARSKI:def 2;
-       hence contradiction by A44,CARD_5:1,TARSKI:def 2;
+       hence contradiction by A43,CARD_5:1,TARSKI:def 2;
       end;
-A45:    now
+A44:    now
        assume C"\/"D = D;
        then D >= C by YELLOW_0:22;
        then d >= c by YELLOW_0:61;
        then tj >= dw by A3,WAYBEL_0:66;
-       then A46:    dw c= tj by A12,YELLOW_1:3;
+       then A45:    dw c= tj by YELLOW_1:3;
             0 in dw & 0 <>1 & 0 <> 2 by CARD_5:1,TARSKI:def 2;
-       hence contradiction by A46,Th3,TARSKI:def 2;
+       hence contradiction by A45,Th3,TARSKI:def 2;
       end;
            now
        assume C"\/"D = A;
        then A >= C by YELLOW_0:22;
        then a >= c by YELLOW_0:61;
        then z >= dw by A3,WAYBEL_0:66;
-       then dw c= z by A12,YELLOW_1:3;
+       then dw c= z by YELLOW_1:3;
        hence contradiction by XBOOLE_1:3;
       end;
-      hence thesis by A39,A40,A41,A43,A45;
+      hence thesis by A38,A39,A40,A42,A44;
      end;
    end;
   thus (ex a,b,c,d,e being Element of L st
@@ -1492,319 +1469,312 @@ A45:    now
   st N_5,K are_isomorphic)
    proof
     given a,b,c,d,e being Element of L such that
-A47:  (a<>b & a<>c & a<>d & a<>e & b<>c & b<>d & b<>e & c <>d & c <>e & d<>e &
+A46:  (a<>b & a<>c & a<>d & a<>e & b<>c & b<>d & b<>e & c <>d & c <>e & d<>e &
       a"/\"b = a & a"/\"c = a & c"/\"e = c & d"/\"e = d &
      b"/\"c = a & b"/\"d = b & c"/\"d = a & b"\/"c = e & c"\/"d = e);
 
     set ck = {a,b,c,d,e};
-         now
-     let x be set;
-     assume x in ck;
-     then x=a or x=b or x=c or x=d or x=e by ENUMSET1:def 3;
-     hence x in the carrier of L;
-    end;
-    then reconsider ck as Subset of L by TARSKI:def 3;
+    reconsider ck as Subset of L;
     set K = subrelstr ck;
-A48: the carrier of K = ck by YELLOW_0:def 15;
-A49:    a in ck by ENUMSET1:def 3;
-A50:  K is meet-inheriting
+A47: the carrier of K = ck by YELLOW_0:def 15;
+A48:  K is meet-inheriting
      proof
       let x,y be Element of L;
       assume
-A51:      x in the carrier of K & y in the carrier of K & ex_inf_of {x,y},L;
-      per cases by A48,A51,ENUMSET1:def 3;
+A49:      x in the carrier of K & y in the carrier of K & ex_inf_of {x,y},L;
+      per cases by A47,A49,ENUMSET1:def 3;
       suppose x=a & y=a;
       then inf{x,y} = a"/\"a by YELLOW_0:40;
       then inf{x,y} = a by YELLOW_5:2;
-      hence thesis by A48,ENUMSET1:def 3;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose x=a & y=b;
       then inf{x,y} = a"/\"b by YELLOW_0:40;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose x=a & y=c;
       then inf{x,y} = a"/\"c by YELLOW_0:40;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose
-A52:    x=a & y=d;
-           a <= b & b <= d by A47,YELLOW_0:25;
+A50:    x=a & y=d;
+           a <= b & b <= d by A46,YELLOW_0:25;
       then a <= d by ORDERS_2:26;
       then a"/\"d = a by YELLOW_0:25;
-      then inf {x,y} = a by A52,YELLOW_0:40;
-      hence thesis by A48,ENUMSET1:def 3;
+      then inf {x,y} = a by A50,YELLOW_0:40;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose
-A53:    x=a & y=e;
-           a <= c & c <= e by A47,YELLOW_0:25;
+A51:    x=a & y=e;
+           a <= c & c <= e by A46,YELLOW_0:25;
       then a <= e by ORDERS_2:26;
       then a"/\"e = a by YELLOW_0:25;
-      then inf {x,y} = a by A53,YELLOW_0:40;
-      hence thesis by A48,ENUMSET1:def 3;
+      then inf {x,y} = a by A51,YELLOW_0:40;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose x=b & y=a;
       then inf{x,y} = a"/\"b by YELLOW_0:40;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose x=b & y=b;
       then inf{x,y} = b"/\"b by YELLOW_0:40;
       then inf{x,y} = b by YELLOW_5:2;
-      hence thesis by A48,ENUMSET1:def 3;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose x=b & y=c;
       then inf{x,y} = b"/\"c by YELLOW_0:40;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose x=b & y=d;
       then inf{x,y} = b"/\"d by YELLOW_0:40;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose
-A54:    x=b & y=e;
-           b <= d & d <= e by A47,YELLOW_0:25;
+A52:    x=b & y=e;
+           b <= d & d <= e by A46,YELLOW_0:25;
       then b <= e by ORDERS_2:26;
       then b"/\"e = b by YELLOW_0:25;
-      then inf {x,y} = b by A54,YELLOW_0:40;
-      hence thesis by A48,ENUMSET1:def 3;
+      then inf {x,y} = b by A52,YELLOW_0:40;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose x=c & y=a;
       then inf{x,y} = a"/\"c by YELLOW_0:40;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose x=c & y=b;
       then inf{x,y} = b"/\"c by YELLOW_0:40;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose x=c & y=c;
       then inf{x,y} = c"/\"c by YELLOW_0:40;
       then inf{x,y} = c by YELLOW_5:2;
-      hence thesis by A48,ENUMSET1:def 3;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose x=c & y=d;
       then inf{x,y} = c"/\"d by YELLOW_0:40;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose x=c & y=e;
       then inf{x,y} = c"/\"e by YELLOW_0:40;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose
-A55:    x=d & y=a;
-           a <= b & b <= d by A47,YELLOW_0:25;
+A53:    x=d & y=a;
+           a <= b & b <= d by A46,YELLOW_0:25;
       then a <= d by ORDERS_2:26;
       then a"/\"d = a by YELLOW_0:25;
-      then inf {x,y} = a by A55,YELLOW_0:40;
-      hence thesis by A48,ENUMSET1:def 3;
+      then inf {x,y} = a by A53,YELLOW_0:40;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose x=d & y=b;
       then inf{x,y} = b"/\"d by YELLOW_0:40;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose x=d & y=c;
       then inf{x,y} = c"/\"d by YELLOW_0:40;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose x=d & y=d;
       then inf{x,y} = d"/\"d by YELLOW_0:40;
       then inf{x,y} = d by YELLOW_5:2;
-      hence thesis by A48,ENUMSET1:def 3;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose x=d & y=e;
       then inf{x,y} = d"/\"e by YELLOW_0:40;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose
-A56:    x=e & y=a;
-           a <= c & c <= e by A47,YELLOW_0:25;
+A54:    x=e & y=a;
+           a <= c & c <= e by A46,YELLOW_0:25;
       then a <= e by ORDERS_2:26;
       then a"/\"e = a by YELLOW_0:25;
-      then inf {x,y} = a by A56,YELLOW_0:40;
-      hence thesis by A48,ENUMSET1:def 3;
+      then inf {x,y} = a by A54,YELLOW_0:40;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose
-A57:    x=e & y=b;
-           b <= d & d <= e by A47,YELLOW_0:25;
+A55:    x=e & y=b;
+           b <= d & d <= e by A46,YELLOW_0:25;
       then b <= e by ORDERS_2:26;
       then b"/\"e = b by YELLOW_0:25;
-      then inf {x,y} = b by A57,YELLOW_0:40;
-      hence thesis by A48,ENUMSET1:def 3;
+      then inf {x,y} = b by A55,YELLOW_0:40;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose x=e & y=c;
       then inf{x,y} = c"/\"e by YELLOW_0:40;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose x=e & y=d;
       then inf{x,y} = d"/\"e by YELLOW_0:40;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose x=e & y=e;
       then inf{x,y} = e"/\"e by YELLOW_0:40;
       then inf{x,y} = e by YELLOW_5:2;
-      hence thesis by A48,ENUMSET1:def 3;
+      hence thesis by A47,ENUMSET1:def 3;
      end;
      end;
          K is join-inheriting
      proof
       let x,y be Element of L;
       assume
-A58:      x in the carrier of K & y in the carrier of K & ex_sup_of {x,y},L;
-      per cases by A48,A58,ENUMSET1:def 3;
+A56:      x in the carrier of K & y in the carrier of K & ex_sup_of {x,y},L;
+      per cases by A47,A56,ENUMSET1:def 3;
       suppose x=a & y=a;
       then sup{x,y} = a"\/"a by YELLOW_0:41;
       then sup{x,y} = a by YELLOW_5:1;
-      hence thesis by A48,ENUMSET1:def 3;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose x=a & y=b;
-      then x"\/"y = b by A47,Th5;
+      then x"\/"y = b by A46,Th5;
       then sup{x,y} = b by YELLOW_0:41;
-      hence thesis by A48,ENUMSET1:def 3;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose x=a & y=c;
-      then x"\/"y = c by A47,Th5;
+      then x"\/"y = c by A46,Th5;
       then sup{x,y} = c by YELLOW_0:41;
-      hence thesis by A48,ENUMSET1:def 3;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose
-A59:    x=a & y=d;
-           a <= b & b <= d by A47,YELLOW_0:25;
+A57:    x=a & y=d;
+           a <= b & b <= d by A46,YELLOW_0:25;
       then a <= d by ORDERS_2:26;
       then a"/\"d = a by YELLOW_0:25;
       then a"\/"d = d by Th5;
-      then sup {x,y} = d by A59,YELLOW_0:41;
-      hence thesis by A48,ENUMSET1:def 3;
+      then sup {x,y} = d by A57,YELLOW_0:41;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose
-A60:    x=a & y=e;
-           a <= c & c <= e by A47,YELLOW_0:25;
+A58:    x=a & y=e;
+           a <= c & c <= e by A46,YELLOW_0:25;
       then a <= e by ORDERS_2:26;
       then a"/\"e = a by YELLOW_0:25;
       then a"\/"e = e by Th5;
-      then sup {x,y} = e by A60,YELLOW_0:41;
-      hence thesis by A48,ENUMSET1:def 3;
+      then sup {x,y} = e by A58,YELLOW_0:41;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose
-A61:    x=b & y=a;
-           a"\/"b = b by A47,Th5;
-      then sup{x,y} = b by A61,YELLOW_0:41;
-      hence thesis by A48,ENUMSET1:def 3;
+A59:    x=b & y=a;
+           a"\/"b = b by A46,Th5;
+      then sup{x,y} = b by A59,YELLOW_0:41;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose x=b & y=b;
       then sup{x,y} = b"\/"b by YELLOW_0:41;
       then sup{x,y} = b by YELLOW_5:1;
-      hence thesis by A48,ENUMSET1:def 3;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose x=b & y=c;
       then sup{x,y} = b"\/"c by YELLOW_0:41;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose
-A62:    x=b & y=d;
-           b"\/"d = d by A47,Th5;
-      then sup{x,y} = d by A62,YELLOW_0:41;
-      hence thesis by A48,ENUMSET1:def 3;
+A60:    x=b & y=d;
+           b"\/"d = d by A46,Th5;
+      then sup{x,y} = d by A60,YELLOW_0:41;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose
-A63:    x=b & y=e;
-           b <= d & d <= e by A47,YELLOW_0:25;
+A61:    x=b & y=e;
+           b <= d & d <= e by A46,YELLOW_0:25;
       then b <= e by ORDERS_2:26;
       then b"/\"e = b by YELLOW_0:25;
       then b"\/"e = e by Th5;
-      then sup {x,y} = e by A63,YELLOW_0:41;
-      hence thesis by A48,ENUMSET1:def 3;
+      then sup {x,y} = e by A61,YELLOW_0:41;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose
-A64:    x=c & y=a;
-           c"\/"a = c by A47,Th5;
-      then sup{x,y} = c by A64,YELLOW_0:41;
-      hence thesis by A48,ENUMSET1:def 3;
+A62:    x=c & y=a;
+           c"\/"a = c by A46,Th5;
+      then sup{x,y} = c by A62,YELLOW_0:41;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose x=c & y=b;
       then sup{x,y} = b"\/"c by YELLOW_0:41;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose x=c & y=c;
       then sup{x,y} = c"\/"c by YELLOW_0:41;
       then sup{x,y} = c by YELLOW_5:1;
-      hence thesis by A48,ENUMSET1:def 3;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose x=c & y=d;
       then sup{x,y} = c"\/"d by YELLOW_0:41;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose
-A65:    x=c & y=e;
-           c"\/"e = e by A47,Th5;
-      then sup{x,y} = e by A65,YELLOW_0:41;
-      hence thesis by A48,ENUMSET1:def 3;
+A63:    x=c & y=e;
+           c"\/"e = e by A46,Th5;
+      then sup{x,y} = e by A63,YELLOW_0:41;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose
-A66:    x=d & y=a;
-           a <= b & b <= d by A47,YELLOW_0:25;
+A64:    x=d & y=a;
+           a <= b & b <= d by A46,YELLOW_0:25;
       then a <= d by ORDERS_2:26;
       then a"/\"d = a by YELLOW_0:25;
       then a"\/"d = d by Th5;
-      then sup {x,y} = d by A66,YELLOW_0:41;
-      hence thesis by A48,ENUMSET1:def 3;
+      then sup {x,y} = d by A64,YELLOW_0:41;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose
-A67:    x=d & y=b;
-           b"\/"d = d by A47,Th5;
-      then sup{x,y} = d by A67,YELLOW_0:41;
-      hence thesis by A48,ENUMSET1:def 3;
+A65:    x=d & y=b;
+           b"\/"d = d by A46,Th5;
+      then sup{x,y} = d by A65,YELLOW_0:41;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose x=d & y=c;
       then sup{x,y} = c"\/"d by YELLOW_0:41;
-      hence thesis by A47,A48,ENUMSET1:def 3;
+      hence thesis by A46,A47,ENUMSET1:def 3;
       end;
       suppose x=d & y=d;
       then sup{x,y} = d"\/"d by YELLOW_0:41;
       then sup{x,y} = d by YELLOW_5:1;
-      hence thesis by A48,ENUMSET1:def 3;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose
-A68:    x=d & y=e;
-           d"\/"e = e by A47,Th5;
-      then sup{x,y} = e by A68,YELLOW_0:41;
-      hence thesis by A48,ENUMSET1:def 3;
+A66:    x=d & y=e;
+           d"\/"e = e by A46,Th5;
+      then sup{x,y} = e by A66,YELLOW_0:41;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose
-A69:    x=e & y=a;
-           a <= c & c <= e by A47,YELLOW_0:25;
+A67:    x=e & y=a;
+           a <= c & c <= e by A46,YELLOW_0:25;
       then a <= e by ORDERS_2:26;
       then a"/\"e = a by YELLOW_0:25;
       then a"\/"e = e by Th5;
-      then sup {x,y} = e by A69,YELLOW_0:41;
-      hence thesis by A48,ENUMSET1:def 3;
+      then sup {x,y} = e by A67,YELLOW_0:41;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose
-A70:    x=e & y=b;
-           b <= d & d <= e by A47,YELLOW_0:25;
+A68:    x=e & y=b;
+           b <= d & d <= e by A46,YELLOW_0:25;
       then b <= e by ORDERS_2:26;
       then b"/\"e = b by YELLOW_0:25;
       then b"\/"e = e by Th5;
-      then sup {x,y} = e by A70,YELLOW_0:41;
-      hence thesis by A48,ENUMSET1:def 3;
+      then sup {x,y} = e by A68,YELLOW_0:41;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose
-A71:    x=e & y=c;
-           c"\/"e = e by A47,Th5;
-      then sup{x,y} = e by A71,YELLOW_0:41;
-      hence thesis by A48,ENUMSET1:def 3;
+A69:    x=e & y=c;
+           c"\/"e = e by A46,Th5;
+      then sup{x,y} = e by A69,YELLOW_0:41;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose
-A72:    x=e & y=d;
-           d"\/"e = e by A47,Th5;
-      then sup{x,y} = e by A72,YELLOW_0:41;
-      hence thesis by A48,ENUMSET1:def 3;
+A70:    x=e & y=d;
+           d"\/"e = e by A46,Th5;
+      then sup{x,y} = e by A70,YELLOW_0:41;
+      hence thesis by A47,ENUMSET1:def 3;
       end;
       suppose x=e & y=e;
       then sup{x,y} = e"\/"e by YELLOW_0:41;
       then sup{x,y} = e by YELLOW_5:1;
-      hence thesis by A48,ENUMSET1:def 3;
+      hence thesis by A47,ENUMSET1:def 3;
      end;
      end;
     then reconsider K as non empty full Sublattice of L
-           by A48,A49,A50,STRUCT_0:def 1;
+           by A47,A48,STRUCT_0:def 1;
     take K;
     thus N_5,K are_isomorphic
      proof
@@ -1814,34 +1784,34 @@ A72:    x=e & y=d;
       reconsider td = 3\2 as Element of N_5 by A1,ENUMSET1:def 3;
       reconsider t = 3 as Element of N_5 by A1,ENUMSET1:def 3;
 
+A71: now
+       assume
+    A72: tj=dw;
+            2 in tj by Th3,TARSKI:def 2;
+       hence contradiction by A72;
+      end;
 A73: now
        assume
-    A74: tj=dw;
-            2 in tj by Th3,TARSKI:def 2;
+    A74: tj=td;
+            not 1 in td & 1 in tj by Th3,Th4,TARSKI:def 1,def 2;
        hence contradiction by A74;
       end;
-A75: now
+A75:  now
        assume
-    A76: tj=td;
-            not 1 in td & 1 in tj by Th3,Th4,TARSKI:def 1,def 2;
+    A76: tj=t;
+            not 0 in tj & 0 in t by Th1,Th3,ENUMSET1:def 1,TARSKI:def 2;
        hence contradiction by A76;
       end;
-A77:  now
+A77: now
        assume
-    A78: tj=t;
-            not 0 in tj & 0 in t by Th1,Th3,ENUMSET1:def 1,TARSKI:def 2;
+    A78: dw=td;    2 in td by Th4,TARSKI:def 1;
        hence contradiction by A78;
       end;
-A79: now
+A79:  now
        assume
-    A80: dw=td;    2 in td by Th4,TARSKI:def 1;
-       hence contradiction by A80;
-      end;
-A81:  now
-       assume
-    A82: td=t;
+    A80: td=t;
             not 1 in td & 1 in t by Th1,Th4,ENUMSET1:def 1,TARSKI:def 1;
-       hence contradiction by A82;
+       hence contradiction by A80;
       end;
       defpred P[set,set] means
       for X being Element of N_5 st X=$1 holds
@@ -1851,58 +1821,58 @@ A81:  now
       (X = tj implies $2 = d) &
       (X = t implies $2 = e));
 
-A83:   for x being set st x in cn ex y being set st y in ck & P[x,y]
+A81:   for x being set st x in cn ex y being set st y in ck & P[x,y]
        proof
         let x be set;
         assume
-A84:         x in cn;
-        per cases by A1,A84,ENUMSET1:def 3;
+A82:         x in cn;
+        per cases by A1,A82,ENUMSET1:def 3;
         suppose
-A85:      x = 0;
+A83:      x = 0;
         take y=a;
         thus y in ck by ENUMSET1:def 3;
         let X be Element of N_5;
-        thus thesis by A85,Th3,Th4;
+        thus thesis by A83,Th3,Th4;
         end;
         suppose
-A86:      x=3\1;
+A84:      x=3\1;
         take y=d;
         thus y in ck by ENUMSET1:def 3;
         let X be Element of N_5;
-        thus thesis by A73,A75,A77,A86,Th3;
+        thus thesis by A71,A73,A75,A84,Th3;
         end;
         suppose
-A87:      x = 2;
+A85:      x = 2;
         take y=c;
         thus y in ck by ENUMSET1:def 3;
         let X be Element of N_5;
-        thus thesis by A73,A79,A87;
+        thus thesis by A71,A77,A85;
         end;
         suppose
-A88:      x = 3 \ 2;
+A86:      x = 3 \ 2;
         take y=b;
         thus y in ck by ENUMSET1:def 3;
         let X be Element of N_5;
-        thus thesis by A75,A79,A81,A88,Th4;
+        thus thesis by A73,A77,A79,A86,Th4;
         end;
         suppose
-A89:      x = 3;
+A87:      x = 3;
         take y=e;
         thus y in ck by ENUMSET1:def 3;
         let X be Element of N_5;
-        thus thesis by A77,A81,A89;
+        thus thesis by A75,A79,A87;
        end;
        end;
       consider f being Function of cn,ck such that
-A90:    for x being set st x in cn holds P[x,f.x] from FUNCT_2:sch 1(A83);
-      reconsider f as Function of N_5,K by A48;
+A88:    for x being set st x in cn holds P[x,f.x] from FUNCT_2:sch 1(A81);
+      reconsider f as Function of N_5,K by A47;
       take f;
-A91:  f is one-to-one
+A89:  f is one-to-one
        proof
              now
          let x,y be Element of N_5;
          assume
-A92:      f.x = f.y;
+A90:      f.x = f.y;
          thus x=y
           proof
            per cases by A1,ENUMSET1:def 3;
@@ -1917,281 +1887,280 @@ A92:      f.x = f.y;
            suppose x = t & y = t;hence thesis;
            end;
            suppose x = z & y = tj;
-           then f.x=a & f.y=d by A90;
-           hence thesis by A47,A92;
+           then f.x=a & f.y=d by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = z & y = dw;
-           then f.x=a & f.y=c by A90;
-           hence thesis by A47,A92;
+           then f.x=a & f.y=c by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = z & y = td;
-           then f.x=a & f.y=b by A90;
-           hence thesis by A47,A92;
+           then f.x=a & f.y=b by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = z & y = t;
-           then f.x=a & f.y=e by A90;
-           hence thesis by A47,A92;
+           then f.x=a & f.y=e by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = tj & y = z;
-           then f.x=d & f.y=a by A90;
-           hence thesis by A47,A92;
+           then f.x=d & f.y=a by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = tj & y = dw;
-           then f.x=d & f.y=c by A90;
-           hence thesis by A47,A92;
+           then f.x=d & f.y=c by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = tj & y = td;
-           then f.x=d & f.y=b by A90;
-           hence thesis by A47,A92;
+           then f.x=d & f.y=b by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = tj & y = t;
-           then f.x=d & f.y=e by A90;
-           hence thesis by A47,A92;
+           then f.x=d & f.y=e by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = dw & y = z;
-           then f.x=c & f.y=a by A90;
-           hence thesis by A47,A92;
+           then f.x=c & f.y=a by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = dw & y = tj;
-           then f.x=c & f.y=d by A90;
-           hence thesis by A47,A92;
+           then f.x=c & f.y=d by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = dw & y = td;
-           then f.x=c & f.y=b by A90;
-           hence thesis by A47,A92;
+           then f.x=c & f.y=b by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = dw & y = t;
-           then f.x=c & f.y=e by A90;
-           hence thesis by A47,A92;
+           then f.x=c & f.y=e by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = td & y = z;
-           then f.x=b & f.y=a by A90;
-           hence thesis by A47,A92;
+           then f.x=b & f.y=a by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = td & y = tj;
-           then f.x=b & f.y=d by A90;
-           hence thesis by A47,A92;
+           then f.x=b & f.y=d by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = td & y = dw;
-           then f.x=b & f.y=c by A90;
-           hence thesis by A47,A92;
+           then f.x=b & f.y=c by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = td & y = t;
-           then f.x=b & f.y=e by A90;
-           hence thesis by A47,A92;
+           then f.x=b & f.y=e by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = t & y = z;
-           then f.x=e & f.y=a by A90;
-           hence thesis by A47,A92;
+           then f.x=e & f.y=a by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = t & y = tj;
-           then f.x=e & f.y=d by A90;
-           hence thesis by A47,A92;
+           then f.x=e & f.y=d by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = t & y = dw;
-           then f.x=e & f.y=c by A90;
-           hence thesis by A47,A92;
+           then f.x=e & f.y=c by A88;
+           hence thesis by A46,A90;
            end;
            suppose x = t & y = td;
-           then f.x=e & f.y=b by A90;
-           hence thesis by A47,A92;
+           then f.x=e & f.y=b by A88;
+           hence thesis by A46,A90;
           end;
           end;
         end;
         hence thesis by WAYBEL_1:def 1;
        end;
-A93: dom f = the carrier of N_5 by FUNCT_2:def 1;
-A94: rng f = ck
+A91: dom f = the carrier of N_5 by FUNCT_2:def 1;
+A92: rng f = ck
        proof
         thus rng f c= ck
          proof
           let y be set;
           assume y in rng f;
           then consider x being set such that
-A95:        x in dom f & y=f.x by FUNCT_1:def 5;
-          reconsider x as Element of N_5 by A95;
+A93:        x in dom f & y=f.x by FUNCT_1:def 5;
+          reconsider x as Element of N_5 by A93;
                (x = z or x = tj or x = dw or x = td or x = t) by A1,ENUMSET1:
 def 3
 ;
-          then y=a or y=d or y=c or y=b or y=e by A90,A95;
+          then y=a or y=d or y=c or y=b or y=e by A88,A93;
           hence thesis by ENUMSET1:def 3;
          end;
         thus ck c= rng f
          proof
           let y be set;
           assume
-A96:          y in ck;
-          per cases by A96,ENUMSET1:def 3;
+A94:          y in ck;
+          per cases by A94,ENUMSET1:def 3;
           suppose
-A97:        y=a;
-               z in dom f & a = f.z by A90,A93;
+A95:        y=a;
+               z in dom f & a = f.z by A88,A91;
+          hence y in rng f by A95,FUNCT_1:def 5;
+          end;
+          suppose
+A96:        y=b;
+               td in dom f & b=f.td by A88,A91;
+          hence y in rng f by A96,FUNCT_1:def 5;
+          end;
+          suppose
+A97:        y=c;
+               dw in dom f & c = f.dw by A88,A91;
           hence y in rng f by A97,FUNCT_1:def 5;
           end;
           suppose
-A98:        y=b;
-               td in dom f & b=f.td by A90,A93;
+A98:        y=d;
+               tj in dom f & d=f.tj by A88,A91;
           hence y in rng f by A98,FUNCT_1:def 5;
           end;
           suppose
-A99:        y=c;
-               dw in dom f & c = f.dw by A90,A93;
+A99:        y=e;
+               t in dom f & e=f.t by A88,A91;
           hence y in rng f by A99,FUNCT_1:def 5;
-          end;
-          suppose
-A100:        y=d;
-               tj in dom f & d=f.tj by A90,A93;
-          hence y in rng f by A100,FUNCT_1:def 5;
-          end;
-          suppose
-A101:        y=e;
-               t in dom f & e=f.t by A90,A93;
-          hence y in rng f by A101,FUNCT_1:def 5;
          end;
          end;
        end;
            for x,y being Element of N_5 holds x <= y iff f.x <= f.y
        proof
         let x,y be Element of N_5;
-A102:     {0, 3 \ 1, 2, 3 \ 2, 3} is non empty by ENUMSET1:def 3;
         thus x <= y implies f.x <= f.y
          proof
           assume
-A103:       x <= y;
+A100:       x <= y;
           per cases by A1,ENUMSET1:def 3;
           suppose x=z & y=z;hence thesis;
           end;
           suppose x=z & y=td;
-          then A104:       f.x = a & f.y = b by A90;
-          reconsider A=a,B=b as Element of K by A48,ENUMSET1:def 3;
+          then A101:       f.x = a & f.y = b by A88;
+          reconsider A=a,B=b as Element of K by A47,ENUMSET1:def 3;
                a <= b & A in the carrier of K & B in the carrier of K
-                                          by A47,YELLOW_0:25;
-          hence f.x <= f.y by A104,YELLOW_0:61;
+                                          by A46,YELLOW_0:25;
+          hence f.x <= f.y by A101,YELLOW_0:61;
           end;
           suppose x=z & y=dw;
-          then A105:       f.x = a & f.y = c by A90;
-          reconsider A=a,C=c as Element of K by A48,ENUMSET1:def 3;
+          then A102:       f.x = a & f.y = c by A88;
+          reconsider A=a,C=c as Element of K by A47,ENUMSET1:def 3;
                a <= c & A in the carrier of K & C in the carrier of K
-                                          by A47,YELLOW_0:25;
-          hence f.x <= f.y by A105,YELLOW_0:61;
+                                          by A46,YELLOW_0:25;
+          hence f.x <= f.y by A102,YELLOW_0:61;
           end;
           suppose x=z & y=tj;
-          then A106:       f.x = a & f.y = d by A90;
-          reconsider A=a,D=d as Element of K by A48,ENUMSET1:def 3;
-               a <= b & b <= d by A47,YELLOW_0:25;
+          then A103:       f.x = a & f.y = d by A88;
+          reconsider A=a,D=d as Element of K by A47,ENUMSET1:def 3;
+               a <= b & b <= d by A46,YELLOW_0:25;
           then a <= d & A in the carrier of K & D in the carrier of K
                                           by ORDERS_2:26;
-          hence f.x <= f.y by A106,YELLOW_0:61;
+          hence f.x <= f.y by A103,YELLOW_0:61;
           end;
           suppose x=z & y=t;
-          then A107:       f.x = a & f.y = e by A90;
-          reconsider A=a,E=e as Element of K by A48,ENUMSET1:def 3;
-               a <= c & c <= e by A47,YELLOW_0:25;
+          then A104:       f.x = a & f.y = e by A88;
+          reconsider A=a,E=e as Element of K by A47,ENUMSET1:def 3;
+               a <= c & c <= e by A46,YELLOW_0:25;
           then a <= e & A in the carrier of K & E in the carrier of K
                                           by ORDERS_2:26;
-          hence f.x <= f.y by A107,YELLOW_0:61;
+          hence f.x <= f.y by A104,YELLOW_0:61;
           end;
           suppose x=td & y=z;
-          then td c= z by A102,A103,YELLOW_1:3;
+          then td c= z by A100,YELLOW_1:3;
           hence thesis by Th4,XBOOLE_1:3;
           end;
           suppose x=td & y=td;hence thesis;
           end;
           suppose
-A108:        x=td & y=dw;
+A105:        x=td & y=dw;
                2 in td & not 2 in dw by Th4,TARSKI:def 1;
           then not td c= dw;
-          hence thesis by A102,A103,A108,YELLOW_1:3;
+          hence thesis by A100,A105,YELLOW_1:3;
           end;
           suppose x=td & y=z;
-          then td c= z by A102,A103,YELLOW_1:3;
+          then td c= z by A100,YELLOW_1:3;
           hence thesis by Th4,XBOOLE_1:3;
           end;
           suppose x=td & y=tj;
-          then A109:       f.x = b & f.y = d by A90;
-          reconsider D=d,B=b as Element of K by A48,ENUMSET1:def 3;
+          then A106:       f.x = b & f.y = d by A88;
+          reconsider D=d,B=b as Element of K by A47,ENUMSET1:def 3;
                b <= d & B in the carrier of K & D in the carrier of K
-                                          by A47,YELLOW_0:25;
-          hence f.x <= f.y by A109,YELLOW_0:61;
+                                          by A46,YELLOW_0:25;
+          hence f.x <= f.y by A106,YELLOW_0:61;
           end;
           suppose x=td & y=t;
-          then A110:       f.x = b & f.y = e by A90;
-          reconsider B=b,E=e as Element of K by A48,ENUMSET1:def 3;
-               b <= d & d <= e by A47,YELLOW_0:25;
+          then A107:       f.x = b & f.y = e by A88;
+          reconsider B=b,E=e as Element of K by A47,ENUMSET1:def 3;
+               b <= d & d <= e by A46,YELLOW_0:25;
           then b <= e & B in the carrier of K & E in the carrier of K
                                           by ORDERS_2:26;
-          hence f.x <= f.y by A110,YELLOW_0:61;
+          hence f.x <= f.y by A107,YELLOW_0:61;
           end;
           suppose x=dw & y=z;
-          then dw c= z by A102,A103,YELLOW_1:3;
+          then dw c= z by A100,YELLOW_1:3;
           hence thesis by XBOOLE_1:3;
           end;
           suppose
-A111:        x=dw & y=td;
+A108:        x=dw & y=td;
                0 in dw & not 0 in td by Th4,CARD_5:1,TARSKI:def 1,def 2;
           then not dw c= td;
-          hence thesis by A102,A103,A111,YELLOW_1:3;
+          hence thesis by A100,A108,YELLOW_1:3;
           end;
           suppose x=dw & y=dw;hence thesis;
           end;
           suppose
-A112:        x=dw & y=tj;
+A109:        x=dw & y=tj;
                0 in dw & not 0 in tj by Th3,CARD_5:1,TARSKI:def 2;
           then not dw c= tj;
-          hence thesis by A102,A103,A112,YELLOW_1:3;
+          hence thesis by A100,A109,YELLOW_1:3;
           end;
           suppose x=dw & y=t;
-          then A113:       f.x = c & f.y = e by A90;
-          reconsider C=c,E=e as Element of K by A48,ENUMSET1:def 3;
+          then A110:       f.x = c & f.y = e by A88;
+          reconsider C=c,E=e as Element of K by A47,ENUMSET1:def 3;
                c <= e & C in the carrier of K & E in the carrier of K
-                                          by A47,YELLOW_0:25;
-          hence f.x <= f.y by A113,YELLOW_0:61;
+                                          by A46,YELLOW_0:25;
+          hence f.x <= f.y by A110,YELLOW_0:61;
           end;
           suppose x=tj & y=z;
-          then tj c= z by A102,A103,YELLOW_1:3;
+          then tj c= z by A100,YELLOW_1:3;
           hence thesis by Th3,XBOOLE_1:3;
           end;
           suppose
-A114:        x=tj & y=td;
+A111:        x=tj & y=td;
                1 in tj & not 1 in td by Th3,Th4,TARSKI:def 1,def 2;
           then not tj c= td;
-          hence thesis by A102,A103,A114,YELLOW_1:3;
+          hence thesis by A100,A111,YELLOW_1:3;
           end;
           suppose
-A115:        x=tj & y=dw;
+A112:        x=tj & y=dw;
                2 in tj & not 2 in dw by Th3,TARSKI:def 2;
           then not tj c= dw;
-          hence thesis by A102,A103,A115,YELLOW_1:3;
+          hence thesis by A100,A112,YELLOW_1:3;
           end;
           suppose x=tj & y=tj;hence thesis;
           end;
           suppose x=tj & y=t;
-          then A116:       f.x = d & f.y = e by A90;
-          reconsider D=d,E=e as Element of K by A48,ENUMSET1:def 3;
+          then A113:       f.x = d & f.y = e by A88;
+          reconsider D=d,E=e as Element of K by A47,ENUMSET1:def 3;
                d <= e & D in the carrier of K & E in the carrier of K
-                                          by A47,YELLOW_0:25;
-          hence f.x <= f.y by A116,YELLOW_0:61;
+                                          by A46,YELLOW_0:25;
+          hence f.x <= f.y by A113,YELLOW_0:61;
           end;
           suppose x=t & y=z;
-          then t c= z by A102,A103,YELLOW_1:3;
+          then t c= z by A100,YELLOW_1:3;
           hence thesis by XBOOLE_1:3;
           end;
           suppose
-A117:        x=t & y=td;
+A114:        x=t & y=td;
                0 in t & not 0 in td by Th1,Th4,ENUMSET1:def 1,TARSKI:def 1;
           then not t c= td;
-          hence thesis by A102,A103,A117,YELLOW_1:3;
+          hence thesis by A100,A114,YELLOW_1:3;
           end;
           suppose
-A118:        x=t & y=dw;
+A115:        x=t & y=dw;
                2 in t & not 2 in dw by Th1,ENUMSET1:def 1;
           then not t c= dw;
-          hence thesis by A102,A103,A118,YELLOW_1:3;
+          hence thesis by A100,A115,YELLOW_1:3;
           end;
           suppose
-A119:        x=t & y=tj;
+A116:        x=t & y=tj;
                0 in t & not 0 in tj by Th1,Th3,ENUMSET1:def 1,TARSKI:def 2;
           then not t c= tj;
-          hence thesis by A102,A103,A119,YELLOW_1:3;
+          hence thesis by A100,A116,YELLOW_1:3;
           end;
           suppose x=t & y=t;hence thesis;
          end;
@@ -2199,147 +2168,133 @@ A119:        x=t & y=tj;
         thus f.x <= f.y implies x <= y
          proof
           assume
-A120:       f.x <= f.y;
-A121:          f.x in ck & f.y in ck by A93,A94,FUNCT_1:def 5;
-          per cases by A121,ENUMSET1:def 3;
+A117:       f.x <= f.y;
+A118:          f.x in ck & f.y in ck by A91,A92,FUNCT_1:def 5;
+          per cases by A118,ENUMSET1:def 3;
           suppose f.x = a & f.y = a;
-          hence x <= y by A91,WAYBEL_1:def 1;
+          hence x <= y by A89,WAYBEL_1:def 1;
           end;
-          suppose A122: f.x = a & f.y = b;
-               f.z = a & f.td = b by A90;
-          then z=x & td = y by A91,A122,WAYBEL_1:def 1;
+          suppose A119: f.x = a & f.y = b;
+               f.z = a & f.td = b by A88;
+          then z=x & td = y by A89,A119,WAYBEL_1:def 1;
           then x c= y by XBOOLE_1:2;
-          hence x <= y by A102,YELLOW_1:3;
+          hence x <= y by YELLOW_1:3;
           end;
-          suppose A123: f.x = a & f.y = c;
-               f.z = a & f.dw = c by A90;
-          then z=x & dw = y by A91,A123,WAYBEL_1:def 1;
+          suppose A120: f.x = a & f.y = c;
+               f.z = a & f.dw = c by A88;
+          then z=x & dw = y by A89,A120,WAYBEL_1:def 1;
           then x c= y by XBOOLE_1:2;
-          hence x <= y by A102,YELLOW_1:3;
+          hence x <= y by YELLOW_1:3;
           end;
-          suppose A124: f.x = a & f.y = d;
-               f.z = a & f.tj = d by A90;
-          then z=x & tj = y by A91,A124,WAYBEL_1:def 1;
+          suppose A121: f.x = a & f.y = d;
+               f.z = a & f.tj = d by A88;
+          then z=x & tj = y by A89,A121,WAYBEL_1:def 1;
           then x c= y by XBOOLE_1:2;
-          hence x <= y by A102,YELLOW_1:3;
+          hence x <= y by YELLOW_1:3;
           end;
-          suppose A125: f.x = a & f.y = e;
-               f.z = a & f.t = e by A90;
-          then z=x & t = y by A91,A125,WAYBEL_1:def 1;
+          suppose A122: f.x = a & f.y = e;
+               f.z = a & f.t = e by A88;
+          then z=x & t = y by A89,A122,WAYBEL_1:def 1;
           then x c= y by XBOOLE_1:2;
-          hence x <= y by A102,YELLOW_1:3;
+          hence x <= y by YELLOW_1:3;
           end;
           suppose f.x = b & f.y = a;
-          then b <= a by A120,YELLOW_0:60;
-          hence x <= y by A47,YELLOW_0:25;
+          then b <= a by A117,YELLOW_0:60;
+          hence x <= y by A46,YELLOW_0:25;
           end;
           suppose f.x = b & f.y = b;
-          hence x <= y by A91,WAYBEL_1:def 1;
+          hence x <= y by A89,WAYBEL_1:def 1;
           end;
           suppose f.x = b & f.y = c;
-          then b <= c by A120,YELLOW_0:60;
-          hence x <= y by A47,YELLOW_0:25;
+          then b <= c by A117,YELLOW_0:60;
+          hence x <= y by A46,YELLOW_0:25;
           end;
-          suppose A126: f.x = b & f.y = d;
-               f.td = b & f.tj = d by A90;
-          then x=td & y=tj & 1 c= 2 by A91,A126,CARD_1:56,WAYBEL_1:def 1;
+          suppose A123: f.x = b & f.y = d;
+               f.td = b & f.tj = d by A88;
+          then x=td & y=tj & 1 c= 2 by A89,A123,CARD_1:56,WAYBEL_1:def 1;
           then x c= y by XBOOLE_1:34;
-          hence x <= y by A102,YELLOW_1:3;
+          hence x <= y by YELLOW_1:3;
           end;
-          suppose A127: f.x = b & f.y = e;
-A128:      td c= t
-           proof
-            let X be set;
-            assume X in td;
-            then X = 2 by Th4,TARSKI:def 1;
-            hence thesis by Th1,ENUMSET1:def 1;
-           end;
-               f.td = b & f.t = e by A90;
-          then td=x & t = y by A91,A127,WAYBEL_1:def 1;
-          hence x <= y by A102,A128,YELLOW_1:3;
+          suppose A124: f.x = b & f.y = e;
+               f.td = b & f.t = e by A88;
+          then td=x & t = y by A89,A124,WAYBEL_1:def 1;
+          hence x <= y by YELLOW_1:3;
           end;
           suppose f.x = c & f.y = a;
-          then c <= a by A120,YELLOW_0:60;
-          hence x <= y by A47,YELLOW_0:25;
+          then c <= a by A117,YELLOW_0:60;
+          hence x <= y by A46,YELLOW_0:25;
           end;
           suppose f.x = c & f.y = b;
-          then c <= b by A120,YELLOW_0:60;
-          hence x <= y by A47,YELLOW_0:25;
+          then c <= b by A117,YELLOW_0:60;
+          hence x <= y by A46,YELLOW_0:25;
           end;
           suppose f.x = c & f.y = c;
-          hence x <= y by A91,WAYBEL_1:def 1;
+          hence x <= y by A89,WAYBEL_1:def 1;
           end;
           suppose f.x = c & f.y = d;
-          then c <= d by A120,YELLOW_0:60;
-          hence x <= y by A47,YELLOW_0:25;
+          then c <= d by A117,YELLOW_0:60;
+          hence x <= y by A46,YELLOW_0:25;
           end;
-          suppose A129: f.x = c & f.y = e;
-A130:      dw c= t
+          suppose A125: f.x = c & f.y = e;
+A126:      dw c= t
            proof
             let X be set;
             assume X in dw;
             then X=0 or X=1 by CARD_5:1,TARSKI:def 2;
             hence thesis by Th1,ENUMSET1:def 1;
            end;
-               f.dw = c & f.t = e by A90;
-          then dw=x & t = y by A91,A129,WAYBEL_1:def 1;
-          hence x <= y by A102,A130,YELLOW_1:3;
+               f.dw = c & f.t = e by A88;
+          then dw=x & t = y by A89,A125,WAYBEL_1:def 1;
+          hence x <= y by A126,YELLOW_1:3;
           end;
           suppose f.x = d & f.y = a;
-          then d <= a & a <= b by A47,A120,YELLOW_0:25,60;
+          then d <= a & a <= b by A46,A117,YELLOW_0:25,60;
           then d <= b by ORDERS_2:26;
-          hence x <= y by A47,YELLOW_0:25;
+          hence x <= y by A46,YELLOW_0:25;
           end;
           suppose f.x = d & f.y = b;
-          then d <= b by A120,YELLOW_0:60;
-          hence x <= y by A47,YELLOW_0:25;
+          then d <= b by A117,YELLOW_0:60;
+          hence x <= y by A46,YELLOW_0:25;
           end;
           suppose f.x = d & f.y = c;
-          then d <= c by A120,YELLOW_0:60;
-          hence x <= y by A47,YELLOW_0:25;
+          then d <= c by A117,YELLOW_0:60;
+          hence x <= y by A46,YELLOW_0:25;
           end;
           suppose f.x = d & f.y = d;
-          hence x <= y by A91,WAYBEL_1:def 1;
+          hence x <= y by A89,WAYBEL_1:def 1;
           end;
-          suppose A131: f.x = d & f.y = e;
-A132:      tj c= t
-           proof
-            let X be set;
-            assume X in tj;
-            then X=2 or X=1 by Th3,TARSKI:def 2;
-            hence thesis by Th1,ENUMSET1:def 1;
-           end;
-               f.tj = d & f.t = e by A90;
-          then tj=x & t = y by A91,A131,WAYBEL_1:def 1;
-          hence x <= y by A102,A132,YELLOW_1:3;
+          suppose A127: f.x = d & f.y = e;
+               f.tj = d & f.t = e by A88;
+          then tj=x & t = y by A89,A127,WAYBEL_1:def 1;
+          hence x <= y by YELLOW_1:3;
           end;
           suppose f.x = e & f.y = a;
-          then A133:        e <= a by A120,YELLOW_0:60;
-               a <= b & b <= d & d <= e by A47,YELLOW_0:25;
+          then A128:        e <= a by A117,YELLOW_0:60;
+               a <= b & b <= d & d <= e by A46,YELLOW_0:25;
           then a <= d & d <= e by ORDERS_2:26;
           then a <= e by ORDERS_2:26;
-          hence x <= y by A47,A133,ORDERS_2:25;
+          hence x <= y by A46,A128,ORDERS_2:25;
           end;
           suppose f.x = e & f.y = b;
-          then A134:        e <= b by A120,YELLOW_0:60;
-               b <= d & d <= e by A47,YELLOW_0:25;
+          then A129:        e <= b by A117,YELLOW_0:60;
+               b <= d & d <= e by A46,YELLOW_0:25;
           then b <= e by ORDERS_2:26;
-          hence x <= y by A47,A134,ORDERS_2:25;
+          hence x <= y by A46,A129,ORDERS_2:25;
           end;
           suppose f.x = e & f.y = c;
-          then e <= c by A120,YELLOW_0:60;
-          hence x <= y by A47,YELLOW_0:25;
+          then e <= c by A117,YELLOW_0:60;
+          hence x <= y by A46,YELLOW_0:25;
           end;
           suppose f.x = e & f.y = d;
-          then e <= d by A120,YELLOW_0:60;
-          hence x <= y by A47,YELLOW_0:25;
+          then e <= d by A117,YELLOW_0:60;
+          hence x <= y by A46,YELLOW_0:25;
           end;
           suppose f.x = e & f.y = e;
-          hence x <= y by A91,WAYBEL_1:def 1;
+          hence x <= y by A89,WAYBEL_1:def 1;
          end;
          end;
        end;
-      hence f is isomorphic by A48,A91,A94,WAYBEL_0:66;
+      hence f is isomorphic by A47,A89,A92,WAYBEL_0:66;
      end;
    end;
  end;
@@ -2425,26 +2380,25 @@ A6: ck = rng f by A3,WAYBEL_0:66;
      hence contradiction by A10,Th4,TARSKI:def 1;
     end;
     hence D<>E;
-A11: {0, 1, 2 \ 1 , 3 \ 2, 3} is non empty by ENUMSET1:def 3;
          z c= j by XBOOLE_1:2;
-    then z <= j by A11,YELLOW_1:3;
+    then z <= j by YELLOW_1:3;
     then a <= b by A3,WAYBEL_0:66;
     then A <= B by YELLOW_0:60;
     hence A "/\" B = A by YELLOW_0:25;
          z c= dj by XBOOLE_1:2;
-    then z <= dj by A11,YELLOW_1:3;
+    then z <= dj by YELLOW_1:3;
     then a <= c by A3,WAYBEL_0:66;
     then A <= C by YELLOW_0:60;
     hence A "/\" C = A by YELLOW_0:25;
 
          z c= td by XBOOLE_1:2;
-    then z <= td by A11,YELLOW_1:3;
+    then z <= td by YELLOW_1:3;
     then a <= d by A3,WAYBEL_0:66;
     then A <= D by YELLOW_0:60;
     hence A "/\" D = A by YELLOW_0:25;
 
          j c= t by CARD_1:56;
-    then j <= t by A11,YELLOW_1:3;
+    then j <= t by YELLOW_1:3;
     then b <= e by A3,WAYBEL_0:66;
     then B <= E by YELLOW_0:60;
     hence B "/\" E = B by YELLOW_0:25;
@@ -2455,18 +2409,11 @@ A11: {0, 1, 2 \ 1 , 3 \ 2, 3} is non empty by ENUMSET1:def 3;
       assume x in dj; then x=1 by Th2,TARSKI:def 1;
       hence thesis by Th1,ENUMSET1:def 1;
      end;
-    then dj <= t by A11,YELLOW_1:3;
+    then dj <= t by YELLOW_1:3;
     then c <= e by A3,WAYBEL_0:66;
     then C <= E by YELLOW_0:60;
     hence C"/\"E = C by YELLOW_0:25;
-
-         td c= t
-     proof
-      let x be set;
-      assume x in td; then x=2 by Th4,TARSKI:def 1;
-      hence thesis by Th1,ENUMSET1:def 1;
-     end;
-    then td <= t by A11,YELLOW_1:3;
+    td <= t by YELLOW_1:3;
     then d <= e by A3,WAYBEL_0:66;
     then D <= E by YELLOW_0:60;
     hence D"/\"E = D by YELLOW_0:25;
@@ -2478,46 +2425,46 @@ A11: {0, 1, 2 \ 1 , 3 \ 2, 3} is non empty by ENUMSET1:def 3;
       then inf{B,C} in the carrier of K by YELLOW_0:def 16;
       then B"/\"C in rng f by A6,YELLOW_0:40;
       then consider x being set such that
-A12:    x in dom f & B"/\"C = f.x by FUNCT_1:def 5;
-      reconsider x as Element of M_3 by A12;
-A13:      x = z or x = j or x = dj or x = td or x = t by A1,ENUMSET1:def 3;
-A14:    now
+A11:    x in dom f & B"/\"C = f.x by FUNCT_1:def 5;
+      reconsider x as Element of M_3 by A11;
+A12:      x = z or x = j or x = dj or x = td or x = t by A1,ENUMSET1:def 3;
+A13:    now
        assume B"/\"C = B;
        then B <= C by YELLOW_0:25;
        then b <= c by YELLOW_0:61;
        then j <= dj by A3,WAYBEL_0:66;
-       then A15:    j c= dj by A11,YELLOW_1:3;
+       then A14:    j c= dj by YELLOW_1:3;
             0 in j by CARD_5:1,TARSKI:def 1;
-       hence contradiction by A15,Th2,TARSKI:def 1;
+       hence contradiction by A14,Th2,TARSKI:def 1;
       end;
-A16:    now
+A15:    now
        assume B"/\"C = C;
        then C <= B by YELLOW_0:25;
        then c <= b by YELLOW_0:61;
        then dj <= j by A3,WAYBEL_0:66;
-       then A17:    dj c= j by A11,YELLOW_1:3;
+       then A16:    dj c= j by YELLOW_1:3;
             1 in dj & 0 <> 1 by Th2,TARSKI:def 1;
-       hence contradiction by A17,CARD_5:1,TARSKI:def 1;
+       hence contradiction by A16,CARD_5:1,TARSKI:def 1;
       end;
-A18:    now
+A17:    now
        assume B"/\"C = D;
        then D <= C by YELLOW_0:23;
        then d <= c by YELLOW_0:61;
        then td <= dj by A3,WAYBEL_0:66;
-       then A19:    td c= dj by A11,YELLOW_1:3;
+       then A18:    td c= dj by YELLOW_1:3;
             2 in td by Th4,TARSKI:def 1;
-       hence contradiction by A19,Th2,TARSKI:def 1;
+       hence contradiction by A18,Th2,TARSKI:def 1;
       end;
            now
        assume B"/\"C = E;
        then E <= C by YELLOW_0:23;
        then e <= c by YELLOW_0:61;
        then t <= dj by A3,WAYBEL_0:66;
-       then A20:    t c= dj by A11,YELLOW_1:3;
+       then A19:    t c= dj by YELLOW_1:3;
             2 in t by Th1,ENUMSET1:def 1;
-       hence contradiction by A20,Th2,TARSKI:def 1;
+       hence contradiction by A19,Th2,TARSKI:def 1;
       end;
-      hence thesis by A12,A13,A14,A16,A18;
+      hence thesis by A11,A12,A13,A15,A17;
      end;
 
     thus B"/\"D = A
@@ -2527,46 +2474,46 @@ A18:    now
       then inf{B,D} in the carrier of K by YELLOW_0:def 16;
       then B"/\"D in rng f by A6,YELLOW_0:40;
       then consider x being set such that
-A21:    x in dom f & B"/\"D = f.x by FUNCT_1:def 5;
-      reconsider x as Element of M_3 by A21;
-A22:      x = z or x = j or x = dj or x = td or x = t by A1,ENUMSET1:def 3;
-A23:    now
+A20:    x in dom f & B"/\"D = f.x by FUNCT_1:def 5;
+      reconsider x as Element of M_3 by A20;
+A21:      x = z or x = j or x = dj or x = td or x = t by A1,ENUMSET1:def 3;
+A22:    now
        assume B"/\"D = B;
        then B <= D by YELLOW_0:25;
        then b <= d by YELLOW_0:61;
        then j <= td by A3,WAYBEL_0:66;
-       then A24:    j c= td by A11,YELLOW_1:3;
+       then A23:    j c= td by YELLOW_1:3;
             0 in j by CARD_5:1,TARSKI:def 1;
-       hence contradiction by A24,Th4,TARSKI:def 1;
+       hence contradiction by A23,Th4,TARSKI:def 1;
       end;
-A25:    now
+A24:    now
        assume B"/\"D = C;
        then C <= B by YELLOW_0:23;
        then c <= b by YELLOW_0:61;
        then dj <= j by A3,WAYBEL_0:66;
-       then A26:    dj c= j by A11,YELLOW_1:3;
+       then A25:    dj c= j by YELLOW_1:3;
             1 in dj & 0 <> 1 by Th2,TARSKI:def 1;
-       hence contradiction by A26,CARD_5:1,TARSKI:def 1;
+       hence contradiction by A25,CARD_5:1,TARSKI:def 1;
       end;
-A27:    now
+A26:    now
        assume B"/\"D = D;
        then D <= B by YELLOW_0:23;
        then d <= b by YELLOW_0:61;
        then td <= j by A3,WAYBEL_0:66;
-       then A28:    td c= j by A11,YELLOW_1:3;
+       then A27:    td c= j by YELLOW_1:3;
             2 in td by Th4,TARSKI:def 1;
-       hence contradiction by A28,CARD_5:1,TARSKI:def 1;
+       hence contradiction by A27,CARD_5:1,TARSKI:def 1;
       end;
            now
        assume B"/\"D = E;
        then E <= B by YELLOW_0:23;
        then e <= b by YELLOW_0:61;
        then t <= j by A3,WAYBEL_0:66;
-       then A29:    t c= j by A11,YELLOW_1:3;
+       then A28:    t c= j by YELLOW_1:3;
             2 in t by Th1,ENUMSET1:def 1;
-       hence contradiction by A29,CARD_5:1,TARSKI:def 1;
+       hence contradiction by A28,CARD_5:1,TARSKI:def 1;
       end;
-      hence thesis by A21,A22,A23,A25,A27;
+      hence thesis by A20,A21,A22,A24,A26;
      end;
 
     thus C"/\"D = A
@@ -2576,46 +2523,46 @@ A27:    now
       then inf{C,D} in the carrier of K by YELLOW_0:def 16;
       then C"/\"D in rng f by A6,YELLOW_0:40;
       then consider x being set such that
-A30:    x in dom f & C"/\"D = f.x by FUNCT_1:def 5;
-      reconsider x as Element of M_3 by A30;
-A31:      x = z or x = j or x = dj or x = td or x = t by A1,ENUMSET1:def 3;
-A32:    now
+A29:    x in dom f & C"/\"D = f.x by FUNCT_1:def 5;
+      reconsider x as Element of M_3 by A29;
+A30:      x = z or x = j or x = dj or x = td or x = t by A1,ENUMSET1:def 3;
+A31:    now
        assume C"/\"D = B;
        then B <= C by YELLOW_0:23;
        then b <= c by YELLOW_0:61;
        then j <= dj by A3,WAYBEL_0:66;
-       then A33:    j c= dj by A11,YELLOW_1:3;
+       then A32:    j c= dj by YELLOW_1:3;
             0 in j by CARD_5:1,TARSKI:def 1;
-       hence contradiction by A33,Th2,TARSKI:def 1;
+       hence contradiction by A32,Th2,TARSKI:def 1;
       end;
-A34:    now
+A33:    now
        assume C"/\"D = C;
        then C <= D by YELLOW_0:25;
        then c <= d by YELLOW_0:61;
        then dj <= td by A3,WAYBEL_0:66;
-       then A35:    dj c= td by A11,YELLOW_1:3;
+       then A34:    dj c= td by YELLOW_1:3;
             1 in dj & 1 <> 2 by Th2,TARSKI:def 1;
-       hence contradiction by A35,Th4,TARSKI:def 1;
+       hence contradiction by A34,Th4,TARSKI:def 1;
       end;
-A36:    now
+A35:    now
        assume C"/\"D = D;
        then D <= C by YELLOW_0:23;
        then d <= c by YELLOW_0:61;
        then td <= dj by A3,WAYBEL_0:66;
-       then A37:    td c= dj by A11,YELLOW_1:3;
+       then A36:    td c= dj by YELLOW_1:3;
             2 in td by Th4,TARSKI:def 1;
-       hence contradiction by A37,Th2,TARSKI:def 1;
+       hence contradiction by A36,Th2,TARSKI:def 1;
       end;
            now
        assume C"/\"D = E;
        then E <= C by YELLOW_0:23;
        then e <= c by YELLOW_0:61;
        then t <= dj by A3,WAYBEL_0:66;
-       then A38:    t c= dj by A11,YELLOW_1:3;
+       then A37:    t c= dj by YELLOW_1:3;
             2 in t by Th1,ENUMSET1:def 1;
-       hence contradiction by A38,Th2,TARSKI:def 1;
+       hence contradiction by A37,Th2,TARSKI:def 1;
       end;
-      hence thesis by A30,A31,A32,A34,A36;
+      hence thesis by A29,A30,A31,A33,A35;
      end;
 
     thus B"\/"C = E
@@ -2625,45 +2572,45 @@ A36:    now
       then sup{B,C} in the carrier of K by YELLOW_0:def 17;
       then B"\/"C in rng f by A6,YELLOW_0:41;
       then consider x being set such that
-A39:    x in dom f & B"\/"C = f.x by FUNCT_1:def 5;
-      reconsider x as Element of M_3 by A39;
-A40:      x = z or x = j or x = dj or x = td or x = t by A1,ENUMSET1:def 3;
-A41:    now
+A38:    x in dom f & B"\/"C = f.x by FUNCT_1:def 5;
+      reconsider x as Element of M_3 by A38;
+A39:      x = z or x = j or x = dj or x = td or x = t by A1,ENUMSET1:def 3;
+A40:    now
        assume B"\/"C = B;
        then B >= C by YELLOW_0:24;
        then b >= c by YELLOW_0:61;
        then j >= dj by A3,WAYBEL_0:66;
-       then A42:    dj c= j by A11,YELLOW_1:3;
+       then A41:    dj c= j by YELLOW_1:3;
             1 in dj & 0 <> 1 by Th2,TARSKI:def 1;
-       hence contradiction by A42,CARD_5:1,TARSKI:def 1;
+       hence contradiction by A41,CARD_5:1,TARSKI:def 1;
       end;
-A43:    now
+A42:    now
        assume B"\/"C = C;
        then C >= B by YELLOW_0:24;
        then c >= b by YELLOW_0:61;
        then dj >= j by A3,WAYBEL_0:66;
-       then A44:    j c= dj by A11,YELLOW_1:3;
+       then A43:    j c= dj by YELLOW_1:3;
             0 in j by CARD_5:1,TARSKI:def 1;
-       hence contradiction by A44,Th2,TARSKI:def 1;
+       hence contradiction by A43,Th2,TARSKI:def 1;
       end;
-A45:    now
+A44:    now
        assume B"\/"C = D;
        then D >= C by YELLOW_0:22;
        then d >= c by YELLOW_0:61;
        then td >= dj by A3,WAYBEL_0:66;
-       then A46:    dj c= td by A11,YELLOW_1:3;
+       then A45:    dj c= td by YELLOW_1:3;
             1 in dj & 2 <> 1 by Th2,TARSKI:def 1;
-       hence contradiction by A46,Th4,TARSKI:def 1;
+       hence contradiction by A45,Th4,TARSKI:def 1;
       end;
            now
        assume B"\/"C = A;
        then A >= C by YELLOW_0:22;
        then a >= c by YELLOW_0:61;
        then z >= dj by A3,WAYBEL_0:66;
-       then dj c= z by A11,YELLOW_1:3;
+       then dj c= z by YELLOW_1:3;
        hence contradiction by Th2,XBOOLE_1:3;
       end;
-      hence thesis by A39,A40,A41,A43,A45;
+      hence thesis by A38,A39,A40,A42,A44;
      end;
 
     thus B"\/"D = E
@@ -2673,45 +2620,45 @@ A45:    now
       then sup{B,D} in the carrier of K by YELLOW_0:def 17;
       then B"\/"D in rng f by A6,YELLOW_0:41;
       then consider x being set such that
-A47:    x in dom f & B"\/"D = f.x by FUNCT_1:def 5;
-      reconsider x as Element of M_3 by A47;
-A48:      x = z or x = j or x = dj or x = td or x = t by A1,ENUMSET1:def 3;
-A49:    now
+A46:    x in dom f & B"\/"D = f.x by FUNCT_1:def 5;
+      reconsider x as Element of M_3 by A46;
+A47:      x = z or x = j or x = dj or x = td or x = t by A1,ENUMSET1:def 3;
+A48:    now
        assume B"\/"D = B;
        then B >= D by YELLOW_0:22;
        then b >= d by YELLOW_0:61;
        then j >= td by A3,WAYBEL_0:66;
-       then A50:    td c= j by A11,YELLOW_1:3;
+       then A49:    td c= j by YELLOW_1:3;
             2 in td & 2 <> 0 by Th4,TARSKI:def 1;
-       hence contradiction by A50,CARD_5:1,TARSKI:def 1;
+       hence contradiction by A49,CARD_5:1,TARSKI:def 1;
       end;
-A51:    now
+A50:    now
        assume B"\/"D = C;
        then C >= D by YELLOW_0:22;
        then c >= d by YELLOW_0:61;
        then dj >= td by A3,WAYBEL_0:66;
-       then A52:    td c= dj by A11,YELLOW_1:3;
+       then A51:    td c= dj by YELLOW_1:3;
             2 in td & 2 <> 1 by Th4,TARSKI:def 1;
-       hence contradiction by A52,Th2,TARSKI:def 1;
+       hence contradiction by A51,Th2,TARSKI:def 1;
       end;
-A53:    now
+A52:    now
        assume B"\/"D = D;
        then D >= B by YELLOW_0:22;
        then d >= b by YELLOW_0:61;
        then td >= j by A3,WAYBEL_0:66;
-       then A54:    j c= td by A11,YELLOW_1:3;
+       then A53:    j c= td by YELLOW_1:3;
             0 in j & 0 <> 2 by CARD_5:1,TARSKI:def 1;
-       hence contradiction by A54,Th4,TARSKI:def 1;
+       hence contradiction by A53,Th4,TARSKI:def 1;
       end;
            now
        assume B"\/"D = A;
        then A >= B by YELLOW_0:22;
        then a >= b by YELLOW_0:61;
        then z >= j by A3,WAYBEL_0:66;
-       then j c= z by A11,YELLOW_1:3;
+       then j c= z by YELLOW_1:3;
        hence contradiction by XBOOLE_1:3;
       end;
-      hence thesis by A47,A48,A49,A51,A53;
+      hence thesis by A46,A47,A48,A50,A52;
      end;
 
     thus C"\/"D = E
@@ -2721,46 +2668,46 @@ A53:    now
       then sup{C,D} in the carrier of K by YELLOW_0:def 17;
       then C"\/"D in rng f by A6,YELLOW_0:41;
       then consider x being set such that
-A55:    x in dom f & C"\/"D = f.x by FUNCT_1:def 5;
-      reconsider x as Element of M_3 by A55;
-A56:      x = z or x = j or x = dj or x = td or x = t by A1,ENUMSET1:def 3;
-A57:    now
+A54:    x in dom f & C"\/"D = f.x by FUNCT_1:def 5;
+      reconsider x as Element of M_3 by A54;
+A55:      x = z or x = j or x = dj or x = td or x = t by A1,ENUMSET1:def 3;
+A56:    now
        assume C"\/"D = B;
        then B >= C by YELLOW_0:22;
        then b >= c by YELLOW_0:61;
        then j >= dj by A3,WAYBEL_0:66;
-       then A58:    dj c= j by A11,YELLOW_1:3;
+       then A57:    dj c= j by YELLOW_1:3;
             1 in dj by Th2,TARSKI:def 1;
-       then 1 in 1 by A58;
+       then 1 in 1 by A57;
        hence contradiction;
       end;
-A59:    now
+A58:    now
        assume C"\/"D = C;
        then C >= D by YELLOW_0:24;
        then c >= d by YELLOW_0:61;
        then dj >= td by A3,WAYBEL_0:66;
-       then A60:    td c= dj by A11,YELLOW_1:3;
+       then A59:    td c= dj by YELLOW_1:3;
             2 in td & 2 <> 1 by Th4,TARSKI:def 1;
-       hence contradiction by A60,Th2,TARSKI:def 1;
+       hence contradiction by A59,Th2,TARSKI:def 1;
       end;
-A61:    now
+A60:    now
        assume C"\/"D = D;
        then D >= C by YELLOW_0:22;
        then d >= c by YELLOW_0:61;
        then td >= dj by A3,WAYBEL_0:66;
-       then A62:    dj c= td by A11,YELLOW_1:3;
+       then A61:    dj c= td by YELLOW_1:3;
             1 in dj & 1 <> 2 by Th2,TARSKI:def 1;
-       hence contradiction by A62,Th4,TARSKI:def 1;
+       hence contradiction by A61,Th4,TARSKI:def 1;
       end;
            now
        assume C"\/"D = A;
        then A >= C by YELLOW_0:22;
        then a >= c by YELLOW_0:61;
        then z >= dj by A3,WAYBEL_0:66;
-       then dj c= z by A11,YELLOW_1:3;
+       then dj c= z by YELLOW_1:3;
        hence contradiction by Th2,XBOOLE_1:3;
       end;
-      hence thesis by A55,A56,A57,A59,A61;
+      hence thesis by A54,A55,A56,A58,A60;
      end;
 
    end;
@@ -2773,141 +2720,134 @@ d = e)) implies
   M_3,K are_isomorphic
    proof
     given a,b,c,d,e being Element of L such that
-A63:  a<>b & a<>c & a<>d & a<>e & b<>c & b<>d & b<>e & c <>d & c <>e & d<>e &
+A62:  a<>b & a<>c & a<>d & a<>e & b<>c & b<>d & b<>e & c <>d & c <>e & d<>e &
     a"/\"b = a & a"/\"c = a & a"/\"d = a & b"/\"e = b & c"/\"e = c & d"/\"
 e = d &
     b"/\"c = a & b"/\"d = a & c"/\"d = a & b"\/"c = e & b"\/"d = e & c"\/"
 d = e;
 
     set ck = {a,b,c,d,e};
-         now
-     let x be set;
-     assume x in ck;
-     then x=a or x=b or x=c or x=d or x=e by ENUMSET1:def 3;
-     hence x in the carrier of L;
-    end;
-    then reconsider ck as Subset of L by TARSKI:def 3;
+    reconsider ck as Subset of L;
     set K = subrelstr ck;
-A64: the carrier of K = ck by YELLOW_0:def 15;
-A65:    a in ck by ENUMSET1:def 3;
-A66:  K is meet-inheriting
+A63: the carrier of K = ck by YELLOW_0:def 15;
+A64:  K is meet-inheriting
      proof
       let x,y be Element of L;
       assume
-A67:      x in the carrier of K & y in the carrier of K & ex_inf_of {x,y},L;
-      per cases by A64,A67,ENUMSET1:def 3;
+A65:      x in the carrier of K & y in the carrier of K & ex_inf_of {x,y},L;
+      per cases by A63,A65,ENUMSET1:def 3;
       suppose x=a & y=a;
       then inf{x,y} = a"/\"a by YELLOW_0:40;
       then inf{x,y} = a by YELLOW_5:2;
-      hence thesis by A64,ENUMSET1:def 3;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose x=a & y=b;
       then inf{x,y} = a"/\"b by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=a & y=c;
       then inf{x,y} = a"/\"c by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=a & y=d;
       then inf{x,y} = a"/\"d by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose
-A68:    x=a & y=e;
-           a <= c & c <= e by A63,YELLOW_0:25;
+A66:    x=a & y=e;
+           a <= c & c <= e by A62,YELLOW_0:25;
       then a <= e by ORDERS_2:26;
       then a"/\"e = a by YELLOW_0:25;
-      then inf {x,y} = a by A68,YELLOW_0:40;
-      hence thesis by A64,ENUMSET1:def 3;
+      then inf {x,y} = a by A66,YELLOW_0:40;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose x=b & y=a;
       then inf{x,y} = a"/\"b by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=b & y=b;
       then inf{x,y} = b"/\"b by YELLOW_0:40;
       then inf{x,y} = b by YELLOW_5:2;
-      hence thesis by A64,ENUMSET1:def 3;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose x=b & y=c;
       then inf{x,y} = b"/\"c by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=b & y=d;
       then inf{x,y} = b"/\"d by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=b & y=e;
       then inf{x,y} = b"/\"e by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=c & y=a;
       then inf{x,y} = a"/\"c by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=c & y=b;
       then inf{x,y} = b"/\"c by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=c & y=c;
       then inf{x,y} = c"/\"c by YELLOW_0:40;
       then inf{x,y} = c by YELLOW_5:2;
-      hence thesis by A64,ENUMSET1:def 3;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose x=c & y=d;
       then inf{x,y} = c"/\"d by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=c & y=e;
       then inf{x,y} = c"/\"e by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=d & y=a;
       then inf{x,y} = a"/\"d by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=d & y=b;
       then inf{x,y} = b"/\"d by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=d & y=c;
       then inf{x,y} = c"/\"d by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=d & y=d;
       then inf{x,y} = d"/\"d by YELLOW_0:40;
       then inf{x,y} = d by YELLOW_5:2;
-      hence thesis by A64,ENUMSET1:def 3;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose x=d & y=e;
       then inf{x,y} = d"/\"e by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose
-A69:    x=e & y=a;
-           a <= c & c <= e by A63,YELLOW_0:25;
+A67:    x=e & y=a;
+           a <= c & c <= e by A62,YELLOW_0:25;
       then a <= e by ORDERS_2:26;
       then a"/\"e = a by YELLOW_0:25;
-      then inf {x,y} = a by A69,YELLOW_0:40;
-      hence thesis by A64,ENUMSET1:def 3;
+      then inf {x,y} = a by A67,YELLOW_0:40;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose x=e & y=b;
       then inf{x,y} = b"/\"e by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=e & y=c;
       then inf{x,y} = c"/\"e by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=e & y=d;
       then inf{x,y} = d"/\"e by YELLOW_0:40;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=e & y=e;
       then inf{x,y} = e"/\"e by YELLOW_0:40;
       then inf{x,y} = e by YELLOW_5:2;
-      hence thesis by A64,ENUMSET1:def 3;
+      hence thesis by A63,ENUMSET1:def 3;
      end;
      end;
 
@@ -2915,146 +2855,146 @@ A69:    x=e & y=a;
      proof
       let x,y be Element of L;
       assume
-A70:      x in the carrier of K & y in the carrier of K & ex_sup_of {x,y},L;
-      per cases by A64,A70,ENUMSET1:def 3;
+A68:      x in the carrier of K & y in the carrier of K & ex_sup_of {x,y},L;
+      per cases by A63,A68,ENUMSET1:def 3;
       suppose x=a & y=a;
       then sup{x,y} = a"\/"a by YELLOW_0:41;
       then sup{x,y} = a by YELLOW_5:1;
-      hence thesis by A64,ENUMSET1:def 3;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose x=a & y=b;
-      then x"\/"y = b by A63,Th5;
+      then x"\/"y = b by A62,Th5;
       then sup{x,y} = b by YELLOW_0:41;
-      hence thesis by A64,ENUMSET1:def 3;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose x=a & y=c;
-      then x"\/"y = c by A63,Th5;
+      then x"\/"y = c by A62,Th5;
       then sup{x,y} = c by YELLOW_0:41;
-      hence thesis by A64,ENUMSET1:def 3;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose x=a & y=d;
-      then x"\/"y = d by A63,Th5;
+      then x"\/"y = d by A62,Th5;
       then sup{x,y} = d by YELLOW_0:41;
-      hence thesis by A64,ENUMSET1:def 3;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose
-A71:    x=a & y=e;
-           a <= c & c <= e by A63,YELLOW_0:25;
+A69:    x=a & y=e;
+           a <= c & c <= e by A62,YELLOW_0:25;
       then a <= e by ORDERS_2:26;
       then a"/\"e = a by YELLOW_0:25;
       then a"\/"e = e by Th5;
-      then sup {x,y} = e by A71,YELLOW_0:41;
-      hence thesis by A64,ENUMSET1:def 3;
+      then sup {x,y} = e by A69,YELLOW_0:41;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose
-A72:    x=b & y=a;
-           a"\/"b = b by A63,Th5;
-      then sup{x,y} = b by A72,YELLOW_0:41;
-      hence thesis by A64,ENUMSET1:def 3;
+A70:    x=b & y=a;
+           a"\/"b = b by A62,Th5;
+      then sup{x,y} = b by A70,YELLOW_0:41;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose x=b & y=b;
       then sup{x,y} = b"\/"b by YELLOW_0:41;
       then sup{x,y} = b by YELLOW_5:1;
-      hence thesis by A64,ENUMSET1:def 3;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose x=b & y=c;
       then sup{x,y} = b"\/"c by YELLOW_0:41;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=b & y=d;
       then sup{x,y} = b"\/"d by YELLOW_0:41;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose
-A73:    x=b & y=e;
-           b"\/"e = e by A63,Th5;
-      then sup{x,y} = e by A73,YELLOW_0:41;
-      hence thesis by A64,ENUMSET1:def 3;
+A71:    x=b & y=e;
+           b"\/"e = e by A62,Th5;
+      then sup{x,y} = e by A71,YELLOW_0:41;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose
-A74:    x=c & y=a;
-           c"\/"a = c by A63,Th5;
-      then sup{x,y} = c by A74,YELLOW_0:41;
-      hence thesis by A64,ENUMSET1:def 3;
+A72:    x=c & y=a;
+           c"\/"a = c by A62,Th5;
+      then sup{x,y} = c by A72,YELLOW_0:41;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose x=c & y=b;
       then sup{x,y} = b"\/"c by YELLOW_0:41;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=c & y=c;
       then sup{x,y} = c"\/"c by YELLOW_0:41;
       then sup{x,y} = c by YELLOW_5:1;
-      hence thesis by A64,ENUMSET1:def 3;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose x=c & y=d;
       then sup{x,y} = c"\/"d by YELLOW_0:41;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose
-A75:    x=c & y=e;
-           c"\/"e = e by A63,Th5;
-      then sup{x,y} = e by A75,YELLOW_0:41;
-      hence thesis by A64,ENUMSET1:def 3;
+A73:    x=c & y=e;
+           c"\/"e = e by A62,Th5;
+      then sup{x,y} = e by A73,YELLOW_0:41;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose x=d & y=a;
-      then x"\/"y = d by A63,Th5;
+      then x"\/"y = d by A62,Th5;
       then sup{x,y} = d by YELLOW_0:41;
-      hence thesis by A64,ENUMSET1:def 3;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose x=d & y=b;
       then sup{x,y} = b"\/"d by YELLOW_0:41;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=d & y=c;
       then sup{x,y} = c"\/"d by YELLOW_0:41;
-      hence thesis by A63,A64,ENUMSET1:def 3;
+      hence thesis by A62,A63,ENUMSET1:def 3;
       end;
       suppose x=d & y=d;
       then sup{x,y} = d"\/"d by YELLOW_0:41;
       then sup{x,y} = d by YELLOW_5:1;
-      hence thesis by A64,ENUMSET1:def 3;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose
-A76:    x=d & y=e;
-           d"\/"e = e by A63,Th5;
-      then sup{x,y} = e by A76,YELLOW_0:41;
-      hence thesis by A64,ENUMSET1:def 3;
+A74:    x=d & y=e;
+           d"\/"e = e by A62,Th5;
+      then sup{x,y} = e by A74,YELLOW_0:41;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose
-A77:    x=e & y=a;
-           a <= c & c <= e by A63,YELLOW_0:25;
+A75:    x=e & y=a;
+           a <= c & c <= e by A62,YELLOW_0:25;
       then a <= e by ORDERS_2:26;
       then a"/\"e = a by YELLOW_0:25;
       then a"\/"e = e by Th5;
-      then sup {x,y} = e by A77,YELLOW_0:41;
-      hence thesis by A64,ENUMSET1:def 3;
+      then sup {x,y} = e by A75,YELLOW_0:41;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose
-A78:    x=e & y=b;
-           b"\/"e = e by A63,Th5;
+A76:    x=e & y=b;
+           b"\/"e = e by A62,Th5;
+      then sup{x,y} = e by A76,YELLOW_0:41;
+      hence thesis by A63,ENUMSET1:def 3;
+      end;
+      suppose
+A77:    x=e & y=c;
+           c"\/"e = e by A62,Th5;
+      then sup{x,y} = e by A77,YELLOW_0:41;
+      hence thesis by A63,ENUMSET1:def 3;
+      end;
+      suppose
+A78:    x=e & y=d;
+           d"\/"e = e by A62,Th5;
       then sup{x,y} = e by A78,YELLOW_0:41;
-      hence thesis by A64,ENUMSET1:def 3;
-      end;
-      suppose
-A79:    x=e & y=c;
-           c"\/"e = e by A63,Th5;
-      then sup{x,y} = e by A79,YELLOW_0:41;
-      hence thesis by A64,ENUMSET1:def 3;
-      end;
-      suppose
-A80:    x=e & y=d;
-           d"\/"e = e by A63,Th5;
-      then sup{x,y} = e by A80,YELLOW_0:41;
-      hence thesis by A64,ENUMSET1:def 3;
+      hence thesis by A63,ENUMSET1:def 3;
       end;
       suppose x=e & y=e;
       then sup{x,y} = e"\/"e by YELLOW_0:41;
       then sup{x,y} = e by YELLOW_5:1;
-      hence thesis by A64,ENUMSET1:def 3;
+      hence thesis by A63,ENUMSET1:def 3;
      end;
      end;
     then reconsider K as non empty full Sublattice of L
-         by A64,A65,A66,STRUCT_0:def 1;
+         by A63,A64,STRUCT_0:def 1;
     take K;
     thus M_3,K are_isomorphic
      proof
@@ -3064,35 +3004,35 @@ A80:    x=e & y=d;
       reconsider td = 3\2 as Element of M_3 by A1,ENUMSET1:def 3;
       reconsider t = 3 as Element of M_3 by A1,ENUMSET1:def 3;
 
-A81:  now
+A79:  now
        assume
-    A82: j=dj;
+    A80: j=dj;
             1 in dj by Th2,TARSKI:def 1;
-       hence contradiction by A82;
+       hence contradiction by A80;
+      end;
+A81: now
+       assume
+    A82: j=td;
+            2 in td & 0 <> 2 by Th4,TARSKI:def 1;
+       hence contradiction by A82,CARD_5:1,TARSKI:def 1;
       end;
 A83: now
        assume
-    A84: j=td;
-            2 in td & 0 <> 2 by Th4,TARSKI:def 1;
-       hence contradiction by A84,CARD_5:1,TARSKI:def 1;
-      end;
-A85: now
-       assume
-    A86: dj=td;
+    A84: dj=td;
             2 in td & 1 <> 2 by Th4,TARSKI:def 1;
+       hence contradiction by A84,Th2,TARSKI:def 1;
+      end;
+A85:  now
+       assume
+    A86: dj=t;
+            2 in t & 1 <> 2 by Th1,ENUMSET1:def 1;
        hence contradiction by A86,Th2,TARSKI:def 1;
       end;
 A87:  now
        assume
-    A88: dj=t;
-            2 in t & 1 <> 2 by Th1,ENUMSET1:def 1;
-       hence contradiction by A88,Th2,TARSKI:def 1;
-      end;
-A89:  now
-       assume
-    A90: td=t;
+    A88: td=t;
             0 in t & 0 <> 2 by Th1,ENUMSET1:def 1;
-       hence contradiction by A90,Th4,TARSKI:def 1;
+       hence contradiction by A88,Th4,TARSKI:def 1;
       end;
 
       defpred P[set,set] means
@@ -3103,59 +3043,59 @@ A89:  now
       (X = td implies $2 = d) &
       (X = t implies $2 = e));
 
-A91:   for x being set st x in cn ex y being set st y in ck & P[x,y]
+A89:   for x being set st x in cn ex y being set st y in ck & P[x,y]
        proof
         let x be set;
         assume
-A92:         x in cn;
-        per cases by A1,A92,ENUMSET1:def 3;
+A90:         x in cn;
+        per cases by A1,A90,ENUMSET1:def 3;
         suppose
-A93:      x = 0;
+A91:      x = 0;
         take y=a;
         thus y in ck by ENUMSET1:def 3;
         let X be Element of M_3;
-        thus thesis by A93,Th2,Th4;
+        thus thesis by A91,Th2,Th4;
         end;
         suppose
-A94:      x=1;
+A92:      x=1;
         take y=b;
         thus y in ck by ENUMSET1:def 3;
         let X be Element of M_3;
-        thus thesis by A81,A83,A94;
+        thus thesis by A79,A81,A92;
         end;
         suppose
-A95:      x = 2\1;
+A93:      x = 2\1;
         take y=c;
         thus y in ck by ENUMSET1:def 3;
         let X be Element of M_3;
-        thus thesis by A81,A85,A87,A95,Th2;
+        thus thesis by A79,A83,A85,A93,Th2;
         end;
         suppose
-A96:      x = 3 \ 2;
+A94:      x = 3 \ 2;
         take y=d;
         thus y in ck by ENUMSET1:def 3;
         let X be Element of M_3;
-        thus thesis by A83,A85,A89,A96,Th4;
+        thus thesis by A81,A83,A87,A94,Th4;
         end;
         suppose
-A97:      x = 3;
+A95:      x = 3;
         take y=e;
         thus y in ck by ENUMSET1:def 3;
         let X be Element of M_3;
-        thus thesis by A87,A89,A97;
+        thus thesis by A85,A87,A95;
        end;
        end;
 
       consider f being Function of cn,ck such that
-A98:    for x being set st x in cn holds P[x,f.x] from FUNCT_2:sch 1(A91);
-      reconsider f as Function of M_3,K by A64;
+A96:    for x being set st x in cn holds P[x,f.x] from FUNCT_2:sch 1(A89);
+      reconsider f as Function of M_3,K by A63;
       take f;
-A99:  f is one-to-one
+A97:  f is one-to-one
        proof
              now
          let x,y be Element of M_3;
          assume
-A100:      f.x = f.y;
+A98:      f.x = f.y;
          thus x=y
           proof
            per cases by A1,ENUMSET1:def 3;
@@ -3170,134 +3110,134 @@ A100:      f.x = f.y;
            suppose x = t & y = t;hence thesis;
            end;
            suppose x = z & y = j;
-           then f.x=a & f.y=b by A98;
-           hence thesis by A63,A100;
+           then f.x=a & f.y=b by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = z & y = dj;
-           then f.x=a & f.y=c by A98;
-           hence thesis by A63,A100;
+           then f.x=a & f.y=c by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = z & y = td;
-           then f.x=a & f.y=d by A98;
-           hence thesis by A63,A100;
+           then f.x=a & f.y=d by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = z & y = t;
-           then f.x=a & f.y=e by A98;
-           hence thesis by A63,A100;
+           then f.x=a & f.y=e by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = j & y = z;
-           then f.x=b & f.y=a by A98;
-           hence thesis by A63,A100;
+           then f.x=b & f.y=a by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = j & y = dj;
-           then f.x=b & f.y=c by A98;
-           hence thesis by A63,A100;
+           then f.x=b & f.y=c by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = j & y = td;
-           then f.x=b & f.y=d by A98;
-           hence thesis by A63,A100;
+           then f.x=b & f.y=d by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = j & y = t;
-           then f.x=b & f.y=e by A98;
-           hence thesis by A63,A100;
+           then f.x=b & f.y=e by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = dj & y = z;
-           then f.x=c & f.y=a by A98;
-           hence thesis by A63,A100;
+           then f.x=c & f.y=a by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = dj & y = j;
-           then f.x=c & f.y=b by A98;
-           hence thesis by A63,A100;
+           then f.x=c & f.y=b by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = dj & y = td;
-           then f.x=c & f.y=d by A98;
-           hence thesis by A63,A100;
+           then f.x=c & f.y=d by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = dj & y = t;
-           then f.x=c & f.y=e by A98;
-           hence thesis by A63,A100;
+           then f.x=c & f.y=e by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = td & y = z;
-           then f.x=d & f.y=a by A98;
-           hence thesis by A63,A100;
+           then f.x=d & f.y=a by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = td & y = j;
-           then f.x=d & f.y=b by A98;
-           hence thesis by A63,A100;
+           then f.x=d & f.y=b by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = td & y = dj;
-           then f.x=d & f.y=c by A98;
-           hence thesis by A63,A100;
+           then f.x=d & f.y=c by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = td & y = t;
-           then f.x=d & f.y=e by A98;
-           hence thesis by A63,A100;
+           then f.x=d & f.y=e by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = t & y = z;
-           then f.x=e & f.y=a by A98;
-           hence thesis by A63,A100;
+           then f.x=e & f.y=a by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = t & y = j;
-           then f.x=e & f.y=b by A98;
-           hence thesis by A63,A100;
+           then f.x=e & f.y=b by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = t & y = dj;
-           then f.x=e & f.y=c by A98;
-           hence thesis by A63,A100;
+           then f.x=e & f.y=c by A96;
+           hence thesis by A62,A98;
            end;
            suppose x = t & y = td;
-           then f.x=e & f.y=d by A98;
-           hence thesis by A63,A100;
+           then f.x=e & f.y=d by A96;
+           hence thesis by A62,A98;
           end;
           end;
         end;
         hence thesis by WAYBEL_1:def 1;
        end;
-A101: dom f = the carrier of M_3 by FUNCT_2:def 1;
-A102: rng f = ck
+A99: dom f = the carrier of M_3 by FUNCT_2:def 1;
+A100: rng f = ck
        proof
         thus rng f c= ck
          proof
           let y be set;
           assume y in rng f;
           then consider x being set such that
-A103:        x in dom f & y=f.x by FUNCT_1:def 5;
-          reconsider x as Element of M_3 by A103;
+A101:        x in dom f & y=f.x by FUNCT_1:def 5;
+          reconsider x as Element of M_3 by A101;
                (x = z or x = j or x = dj or x = td or x = t) by A1,ENUMSET1:
 def 3;
-          then y=a or y=d or y=c or y=b or y=e by A98,A103;
+          then y=a or y=d or y=c or y=b or y=e by A96,A101;
           hence thesis by ENUMSET1:def 3;
          end;
         thus ck c= rng f
          proof
           let y be set;
           assume
-A104:          y in ck;
-          per cases by A104,ENUMSET1:def 3;
+A102:          y in ck;
+          per cases by A102,ENUMSET1:def 3;
           suppose
-A105:        y=a;
-               z in dom f & a = f.z by A98,A101;
+A103:        y=a;
+               z in dom f & a = f.z by A96,A99;
+          hence y in rng f by A103,FUNCT_1:def 5;
+          end;
+          suppose
+A104:        y=b;
+               j in dom f & b=f.j by A96,A99;
+          hence y in rng f by A104,FUNCT_1:def 5;
+          end;
+          suppose
+A105:        y=c;
+               dj in dom f & c = f.dj by A96,A99;
           hence y in rng f by A105,FUNCT_1:def 5;
           end;
           suppose
-A106:        y=b;
-               j in dom f & b=f.j by A98,A101;
+A106:        y=d;
+               td in dom f & d=f.td by A96,A99;
           hence y in rng f by A106,FUNCT_1:def 5;
           end;
           suppose
-A107:        y=c;
-               dj in dom f & c = f.dj by A98,A101;
+A107:        y=e;
+               t in dom f & e=f.t by A96,A99;
           hence y in rng f by A107,FUNCT_1:def 5;
-          end;
-          suppose
-A108:        y=d;
-               td in dom f & d=f.td by A98,A101;
-          hence y in rng f by A108,FUNCT_1:def 5;
-          end;
-          suppose
-A109:        y=e;
-               t in dom f & e=f.t by A98,A101;
-          hence y in rng f by A109,FUNCT_1:def 5;
          end;
          end;
        end;
@@ -3305,139 +3245,138 @@ A109:        y=e;
            for x,y being Element of M_3 holds x <= y iff f.x <= f.y
        proof
         let x,y be Element of M_3;
-A110:     {0, 1, 2\1, 3 \ 2, 3} is non empty by ENUMSET1:def 3;
         thus x <= y implies f.x <= f.y
          proof
           assume
-A111:       x <= y;
+A108:       x <= y;
           per cases by A1,ENUMSET1:def 3;
           suppose x=z & y=z;hence thesis;
           end;
           suppose x=z & y=j;
-          then A112:       f.x = a & f.y = b by A98;
-          reconsider A=a,B=b as Element of K by A64,ENUMSET1:def 3;
+          then A109:       f.x = a & f.y = b by A96;
+          reconsider A=a,B=b as Element of K by A63,ENUMSET1:def 3;
                a <= b & A in the carrier of K & B in the carrier of K
-                                          by A63,YELLOW_0:25;
-          hence f.x <= f.y by A112,YELLOW_0:61;
+                                          by A62,YELLOW_0:25;
+          hence f.x <= f.y by A109,YELLOW_0:61;
           end;
           suppose x=z & y=dj;
-          then A113:       f.x = a & f.y = c by A98;
-          reconsider A=a,C=c as Element of K by A64,ENUMSET1:def 3;
+          then A110:       f.x = a & f.y = c by A96;
+          reconsider A=a,C=c as Element of K by A63,ENUMSET1:def 3;
                a <= c & A in the carrier of K & C in the carrier of K
-                                          by A63,YELLOW_0:25;
-          hence f.x <= f.y by A113,YELLOW_0:61;
+                                          by A62,YELLOW_0:25;
+          hence f.x <= f.y by A110,YELLOW_0:61;
           end;
           suppose x=z & y=td;
-          then A114:       f.x = a & f.y = d by A98;
-          reconsider A=a,D=d as Element of K by A64,ENUMSET1:def 3;
+          then A111:       f.x = a & f.y = d by A96;
+          reconsider A=a,D=d as Element of K by A63,ENUMSET1:def 3;
                a <= d & A in the carrier of K & D in the carrier of K
-                                          by A63,YELLOW_0:25;
-          hence f.x <= f.y by A114,YELLOW_0:61;
+                                          by A62,YELLOW_0:25;
+          hence f.x <= f.y by A111,YELLOW_0:61;
           end;
           suppose x=z & y=t;
-          then A115:       f.x = a & f.y = e by A98;
-          reconsider A=a,E=e as Element of K by A64,ENUMSET1:def 3;
-               a <= c & c <= e by A63,YELLOW_0:25;
+          then A112:       f.x = a & f.y = e by A96;
+          reconsider A=a,E=e as Element of K by A63,ENUMSET1:def 3;
+               a <= c & c <= e by A62,YELLOW_0:25;
           then a <= e & A in the carrier of K & E in the carrier of K
                                           by ORDERS_2:26;
-          hence f.x <= f.y by A115,YELLOW_0:61;
+          hence f.x <= f.y by A112,YELLOW_0:61;
           end;
           suppose x=j & y=z;
-          then j c= z by A110,A111,YELLOW_1:3;
+          then j c= z by A108,YELLOW_1:3;
           hence thesis by XBOOLE_1:3;
           end;
           suppose x=j & y=j;hence thesis;
           end;
           suppose
-A116:        x=j & y=dj;
+A113:        x=j & y=dj;
                0 in j & not 0 in dj by Th2,CARD_5:1,TARSKI:def 1;
           then not j c= dj;
-          hence thesis by A110,A111,A116,YELLOW_1:3;
+          hence thesis by A108,A113,YELLOW_1:3;
           end;
           suppose
-A117:        x=j & y=td;
+A114:        x=j & y=td;
                0 in j & not 0 in td by Th4,CARD_5:1,TARSKI:def 1;
           then not j c= td;
-          hence thesis by A110,A111,A117,YELLOW_1:3;
+          hence thesis by A108,A114,YELLOW_1:3;
           end;
           suppose x=j & y=t;
-          then A118:       f.x = b & f.y = e by A98;
-          reconsider B=b,E=e as Element of K by A64,ENUMSET1:def 3;
+          then A115:       f.x = b & f.y = e by A96;
+          reconsider B=b,E=e as Element of K by A63,ENUMSET1:def 3;
                b <= e & B in the carrier of K & E in the carrier of K
-                                          by A63,YELLOW_0:25;
-          hence f.x <= f.y by A118,YELLOW_0:61;
+                                          by A62,YELLOW_0:25;
+          hence f.x <= f.y by A115,YELLOW_0:61;
           end;
           suppose x=dj & y=z;
-          then dj c= z by A110,A111,YELLOW_1:3;
+          then dj c= z by A108,YELLOW_1:3;
           hence thesis by Th2,XBOOLE_1:3;
           end;
           suppose
-A119:        x=dj & y=j;
+A116:        x=dj & y=j;
                1 in dj & not 1 in j by Th2,TARSKI:def 1;
           then not dj c= j;
-          hence thesis by A110,A111,A119,YELLOW_1:3;
+          hence thesis by A108,A116,YELLOW_1:3;
           end;
           suppose x=dj & y=dj;hence thesis;
           end;
           suppose
-A120:        x=dj & y=td;
+A117:        x=dj & y=td;
                1 in dj & not 1 in td by Th2,Th4,TARSKI:def 1;
           then not dj c= td;
-          hence thesis by A110,A111,A120,YELLOW_1:3;
+          hence thesis by A108,A117,YELLOW_1:3;
           end;
           suppose x=dj & y=t;
-          then A121:       f.x = c & f.y = e by A98;
-          reconsider C=c,E=e as Element of K by A64,ENUMSET1:def 3;
+          then A118:       f.x = c & f.y = e by A96;
+          reconsider C=c,E=e as Element of K by A63,ENUMSET1:def 3;
                c <= e & C in the carrier of K & E in the carrier of K
-                                          by A63,YELLOW_0:25;
-          hence f.x <= f.y by A121,YELLOW_0:61;
+                                          by A62,YELLOW_0:25;
+          hence f.x <= f.y by A118,YELLOW_0:61;
           end;
           suppose x=td & y=z;
-          then td c= z by A110,A111,YELLOW_1:3;
+          then td c= z by A108,YELLOW_1:3;
           hence thesis by Th4,XBOOLE_1:3;
           end;
           suppose
-A122:        x=td & y=j;
+A119:        x=td & y=j;
                2 in td & not 2 in j by Th4,CARD_5:1,TARSKI:def 1;
           then not td c= j;
-          hence thesis by A110,A111,A122,YELLOW_1:3;
+          hence thesis by A108,A119,YELLOW_1:3;
           end;
           suppose
-A123:        x=td & y=dj;
+A120:        x=td & y=dj;
                2 in td & not 2 in dj by Th2,Th4,TARSKI:def 1;
           then not td c= dj;
-          hence thesis by A110,A111,A123,YELLOW_1:3;
+          hence thesis by A108,A120,YELLOW_1:3;
           end;
           suppose x=td & y=td;hence thesis;
           end;
           suppose x=td & y=t;
-          then A124:       f.x = d & f.y = e by A98;
-          reconsider D=d,E=e as Element of K by A64,ENUMSET1:def 3;
+          then A121:       f.x = d & f.y = e by A96;
+          reconsider D=d,E=e as Element of K by A63,ENUMSET1:def 3;
                d <= e & D in the carrier of K & E in the carrier of K
-                                          by A63,YELLOW_0:25;
-          hence f.x <= f.y by A124,YELLOW_0:61;
+                                          by A62,YELLOW_0:25;
+          hence f.x <= f.y by A121,YELLOW_0:61;
           end;
           suppose x=t & y=z;
-          then t c= z by A110,A111,YELLOW_1:3;
+          then t c= z by A108,YELLOW_1:3;
           hence thesis by XBOOLE_1:3;
           end;
           suppose
-A125:        x=t & y=j;
+A122:        x=t & y=j;
                1 in t & not 1 in j by Th1,ENUMSET1:def 1;
           then not t c= j;
-          hence thesis by A110,A111,A125,YELLOW_1:3;
+          hence thesis by A108,A122,YELLOW_1:3;
           end;
           suppose
-A126:        x=t & y=dj;
+A123:        x=t & y=dj;
                2 in t & not 2 in dj by Th1,Th2,ENUMSET1:def 1,TARSKI:def 1;
           then not t c= dj;
-          hence thesis by A110,A111,A126,YELLOW_1:3;
+          hence thesis by A108,A123,YELLOW_1:3;
           end;
           suppose
-A127:        x=t & y=td;
+A124:        x=t & y=td;
                0 in t & not 0 in td by Th1,Th4,ENUMSET1:def 1,TARSKI:def 1;
           then not t c= td;
-          hence thesis by A110,A111,A127,YELLOW_1:3;
+          hence thesis by A108,A124,YELLOW_1:3;
           end;
           suppose x=t & y=t;hence thesis;
          end;
@@ -3445,130 +3384,125 @@ A127:        x=t & y=td;
         thus f.x <= f.y implies x <= y
          proof
           assume
-A128:       f.x <= f.y;
-A129:          f.x in ck & f.y in ck by A101,A102,FUNCT_1:def 5;
-A130:     dj c= t
+A125:       f.x <= f.y;
+A126:          f.x in ck & f.y in ck by A99,A100,FUNCT_1:def 5;
+A127:     dj c= t
            proof
             let X be set;assume X in dj; then X=1 by Th2,TARSKI:def 1;
             hence thesis by Th1,ENUMSET1:def 1;
            end;
-A131:     td c= t
-           proof
-            let X be set;assume X in td; then X=2 by Th4,TARSKI:def 1;
-            hence thesis by Th1,ENUMSET1:def 1;
-           end;
-          per cases by A129,ENUMSET1:def 3;
+          per cases by A126,ENUMSET1:def 3;
           suppose f.x = a & f.y = a;
-          hence x <= y by A99,WAYBEL_1:def 1;
+          hence x <= y by A97,WAYBEL_1:def 1;
           end;
-          suppose A132: f.x = a & f.y = b;
-               f.z = a & f.j = b by A98;
-          then z=x & j = y by A99,A132,WAYBEL_1:def 1;
+          suppose A128: f.x = a & f.y = b;
+               f.z = a & f.j = b by A96;
+          then z=x & j = y by A97,A128,WAYBEL_1:def 1;
           then x c= y by XBOOLE_1:2;
-          hence x <= y by A110,YELLOW_1:3;
+          hence x <= y by YELLOW_1:3;
           end;
-          suppose A133: f.x = a & f.y = c;
-               f.z = a & f.dj = c by A98;
-          then z=x & dj = y by A99,A133,WAYBEL_1:def 1;
+          suppose A129: f.x = a & f.y = c;
+               f.z = a & f.dj = c by A96;
+          then z=x & dj = y by A97,A129,WAYBEL_1:def 1;
           then x c= y by XBOOLE_1:2;
-          hence x <= y by A110,YELLOW_1:3;
+          hence x <= y by YELLOW_1:3;
           end;
-          suppose A134: f.x = a & f.y = d;
-               f.z = a & f.td = d by A98;
-          then z=x & td = y by A99,A134,WAYBEL_1:def 1;
+          suppose A130: f.x = a & f.y = d;
+               f.z = a & f.td = d by A96;
+          then z=x & td = y by A97,A130,WAYBEL_1:def 1;
           then x c= y by XBOOLE_1:2;
-          hence x <= y by A110,YELLOW_1:3;
+          hence x <= y by YELLOW_1:3;
           end;
-          suppose A135: f.x = a & f.y = e;
-               f.z = a & f.t = e by A98;
-          then z=x & t = y by A99,A135,WAYBEL_1:def 1;
+          suppose A131: f.x = a & f.y = e;
+               f.z = a & f.t = e by A96;
+          then z=x & t = y by A97,A131,WAYBEL_1:def 1;
           then x c= y by XBOOLE_1:2;
-          hence x <= y by A110,YELLOW_1:3;
+          hence x <= y by YELLOW_1:3;
           end;
           suppose f.x = b & f.y = a;
-          then b <= a by A128,YELLOW_0:60;
-          hence x <= y by A63,YELLOW_0:25;
+          then b <= a by A125,YELLOW_0:60;
+          hence x <= y by A62,YELLOW_0:25;
           end;
           suppose f.x = b & f.y = b;
-          hence x <= y by A99,WAYBEL_1:def 1;
+          hence x <= y by A97,WAYBEL_1:def 1;
           end;
           suppose f.x = b & f.y = c;
-          then b <= c by A128,YELLOW_0:60;
-          hence x <= y by A63,YELLOW_0:25;
+          then b <= c by A125,YELLOW_0:60;
+          hence x <= y by A62,YELLOW_0:25;
           end;
           suppose f.x = b & f.y = d;
-          then b <= d by A128,YELLOW_0:60;
-          hence x <= y by A63,YELLOW_0:25;
+          then b <= d by A125,YELLOW_0:60;
+          hence x <= y by A62,YELLOW_0:25;
           end;
-          suppose A136: f.x = b & f.y = e;
-               f.j = b & f.t = e by A98;
-          then j=x & t = y by A99,A136,WAYBEL_1:def 1;
+          suppose A132: f.x = b & f.y = e;
+               f.j = b & f.t = e by A96;
+          then j=x & t = y by A97,A132,WAYBEL_1:def 1;
           then x c= y by CARD_1:56;
-          hence x <= y by A110,YELLOW_1:3;
+          hence x <= y by YELLOW_1:3;
           end;
           suppose f.x = c & f.y = a;
-          then c <= a by A128,YELLOW_0:60;
-          hence x <= y by A63,YELLOW_0:25;
+          then c <= a by A125,YELLOW_0:60;
+          hence x <= y by A62,YELLOW_0:25;
           end;
           suppose f.x = c & f.y = b;
-          then c <= b by A128,YELLOW_0:60;
-          hence x <= y by A63,YELLOW_0:25;
+          then c <= b by A125,YELLOW_0:60;
+          hence x <= y by A62,YELLOW_0:25;
           end;
           suppose f.x = c & f.y = c;
-          hence x <= y by A99,WAYBEL_1:def 1;
+          hence x <= y by A97,WAYBEL_1:def 1;
           end;
           suppose f.x = c & f.y = d;
-          then c <= d by A128,YELLOW_0:60;
-          hence x <= y by A63,YELLOW_0:25;
+          then c <= d by A125,YELLOW_0:60;
+          hence x <= y by A62,YELLOW_0:25;
           end;
-          suppose A137: f.x = c & f.y = e;
-               f.dj = c & f.t = e by A98;
-          then dj = x & t = y by A99,A137,WAYBEL_1:def 1;
-          hence x <= y by A110,A130,YELLOW_1:3;
+          suppose A133: f.x = c & f.y = e;
+               f.dj = c & f.t = e by A96;
+          then dj = x & t = y by A97,A133,WAYBEL_1:def 1;
+          hence x <= y by A127,YELLOW_1:3;
           end;
           suppose f.x = d & f.y = a;
-          then d <= a & a <= b by A63,A128,YELLOW_0:25,60;
-          hence x <= y by A63,YELLOW_0:25;
+          then d <= a & a <= b by A62,A125,YELLOW_0:25,60;
+          hence x <= y by A62,YELLOW_0:25;
           end;
           suppose f.x = d & f.y = b;
-          then d <= b by A128,YELLOW_0:60;
-          hence x <= y by A63,YELLOW_0:25;
+          then d <= b by A125,YELLOW_0:60;
+          hence x <= y by A62,YELLOW_0:25;
           end;
           suppose f.x = d & f.y = c;
-          then d <= c by A128,YELLOW_0:60;
-          hence x <= y by A63,YELLOW_0:25;
+          then d <= c by A125,YELLOW_0:60;
+          hence x <= y by A62,YELLOW_0:25;
           end;
           suppose f.x = d & f.y = d;
-          hence x <= y by A99,WAYBEL_1:def 1;
+          hence x <= y by A97,WAYBEL_1:def 1;
           end;
-          suppose A138: f.x = d & f.y = e;
-               f.td = d & f.t = e by A98;
-          then td=x & t = y by A99,A138,WAYBEL_1:def 1;
-          hence x <= y by A110,A131,YELLOW_1:3;
+          suppose A134: f.x = d & f.y = e;
+               f.td = d & f.t = e by A96;
+          then td=x & t = y by A97,A134,WAYBEL_1:def 1;
+          hence x <= y by YELLOW_1:3;
           end;
           suppose f.x = e & f.y = a;
-          then e <= a & a <= b by A63,A128,YELLOW_0:25,60;
+          then e <= a & a <= b by A62,A125,YELLOW_0:25,60;
           then e <= b by ORDERS_2:26;
-          hence x <= y by A63,YELLOW_0:25;
+          hence x <= y by A62,YELLOW_0:25;
           end;
           suppose f.x = e & f.y = b;
-          then e <= b by A128,YELLOW_0:60;
-          hence x <= y by A63,YELLOW_0:25;
+          then e <= b by A125,YELLOW_0:60;
+          hence x <= y by A62,YELLOW_0:25;
           end;
           suppose f.x = e & f.y = c;
-          then e <= c by A128,YELLOW_0:60;
-          hence x <= y by A63,YELLOW_0:25;
+          then e <= c by A125,YELLOW_0:60;
+          hence x <= y by A62,YELLOW_0:25;
           end;
           suppose f.x = e & f.y = d;
-          then e <= d by A128,YELLOW_0:60;
-          hence x <= y by A63,YELLOW_0:25;
+          then e <= d by A125,YELLOW_0:60;
+          hence x <= y by A62,YELLOW_0:25;
           end;
           suppose f.x = e & f.y = e;
-          hence x <= y by A99,WAYBEL_1:def 1;
+          hence x <= y by A97,WAYBEL_1:def 1;
          end;
          end;
       end;
-      hence f is isomorphic by A64,A99,A102,WAYBEL_0:66;
+      hence f is isomorphic by A63,A97,A100,WAYBEL_0:66;
      end;
    end;
  end;

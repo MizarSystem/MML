@@ -4,11 +4,11 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
@@ -233,7 +233,7 @@
 <And>
 <Not>
 <And>
-<Pred kind="R" nr="19">
+<Pred kind="R" nr="21">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -253,7 +253,7 @@
 <Var nr="2"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="19">
+<Pred kind="R" nr="21">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -281,7 +281,7 @@
 <And>
 <Not>
 <And>
-<Pred kind="R" nr="19">
+<Pred kind="R" nr="21">
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -301,7 +301,7 @@
 <Var nr="2"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="19">
+<Pred kind="R" nr="21">
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="2"/>

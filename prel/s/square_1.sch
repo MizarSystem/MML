@@ -2,8 +2,8 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="XREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes/>
@@ -11,20 +11,20 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="1"/>
+<Adjective nr="4"/>
 </Cluster>
 </Typ>
 <Not>
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="1"/>
+<Adjective nr="4"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="1"/>
+<Adjective nr="4"/>
 </Cluster>
 </Typ>
 <Not>
@@ -57,13 +57,13 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="1"/>
+<Adjective nr="4"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="1"/>
+<Adjective nr="4"/>
 </Cluster>
 </Typ>
 <Not>

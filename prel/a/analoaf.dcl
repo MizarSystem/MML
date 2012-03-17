@@ -10,7 +10,6 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -33,7 +32,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="64"/>
+<Adjective nr="61"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -42,8 +41,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="64"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="61"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -52,10 +51,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="62" value="false"/>
-<Adjective nr="64"/>
-<Adjective nr="65"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="59" value="false"/>
+<Adjective nr="61"/>
+<Adjective nr="62"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -64,32 +63,32 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="62" value="false"/>
-<Adjective nr="64"/>
-<Adjective nr="65"/>
-<Adjective nr="66"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="59" value="false"/>
+<Adjective nr="61"/>
+<Adjective nr="62"/>
+<Adjective nr="63"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="29" value="false"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="29"/>
+<Adjective nr="30"/>
+<Adjective nr="31"/>
 <Adjective nr="32"/>
 <Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="165">
+<Func kind="K" nr="152">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="64"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="61"/>
 </Cluster>
 </FCluster>
 </Registrations>

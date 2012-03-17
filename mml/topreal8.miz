@@ -14,11 +14,11 @@ environ
       SETFAM_1, FUNCT_1, FINSEQ_5, FINSEQ_6, RFINSEQ, GRAPH_2, MATRIX_1,
       RELSET_1, FINSEQ_1, REALSET1, STRUCT_0, PRE_TOPC, EUCLID, TOPREAL1,
       GOBOARD1, GOBOARD5, FINSEQ_4, XXREAL_0;
- constructors REAL_1, GOBOARD1, GRAPH_2, FINSEQ_4, REALSET2, SPRECT_1,
-      BINARITH, RFINSEQ, GOBOARD9, MEMBERED, COMPLEX1, NAT_1, SETFAM_1,
-      XXREAL_0;
+ constructors SETFAM_1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, MEMBERED, COMPLEX1,
+      FINSEQ_4, RFINSEQ, BINARITH, FINSEQ_5, REALSET2, GOBOARD1, GOBOARD5,
+      GRAPH_2, SPRECT_1;
  registrations RELSET_1, FINSEQ_6, FINSEQ_5, GOBOARD9, INT_1, REVROT_1,
-      SPRECT_1, SPRECT_3, FINSEQ_1, SPPOL_2, MEMBERED, ORDINAL2, REALSET1,
+      SPRECT_1, SPRECT_3, FINSEQ_1, SPPOL_2, MEMBERED, ORDINAL1, REALSET1,
       XREAL_0, XXREAL_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions FINSEQ_6, GOBOARD1, GOBOARD5, TOPREAL1, TARSKI;
@@ -362,30 +362,30 @@ A44: 1 in dom g by FINSEQ_5:6;
 end;
 end;
 
-HAHA:
+Lm1:
  for p be FinSequence, m, n be Nat
   st 1<=m & m<=n+1 & n<=len p
  holds len (m, n)-cut p +m = n+1 &
  for i being Nat st i<len (m, n)-cut p holds ((m, n)-cut p).(i+1)=p.(m+i)
  proof let p be FinSequence, m, n be Nat such that
-Z: 1<=m & m<=n+1 & n<=len p;
-   m <= n+1 by Z;
+A1: 1<=m & m<=n+1 & n<=len p;
+   m <= n+1 by A1;
    then m = n+1 or m < n+1 by XXREAL_0:1;
    then
-B:  m = n+1 or m <= n by NAT_1:38;
-  per cases by B;
+A2:  m = n+1 or m <= n by NAT_1:38;
+  per cases by A2;
   suppose
-B: m = n+1;
+A3: m = n+1;
    then n < m by XREAL_1:31;
    then not(1<=m & m<=n & n<=len p);
    then (m, n)-cut p = {} by GRAPH_2:def 1;
    then
-X:  len (m, n)-cut p = 0 by CARD_1:47;
-  hence len (m, n)-cut p +m = n+1 by B;
-  thus thesis by X;
+A4:  len (m, n)-cut p = 0 by CARD_1:47;
+  hence len (m, n)-cut p +m = n+1 by A3;
+  thus thesis by A4;
   end;
   suppose m<=n;
-   hence thesis by Z,GRAPH_2:def 1;
+   hence thesis by A1,GRAPH_2:def 1;
   end;
  end;
 
@@ -415,7 +415,7 @@ A4: k <= len f;
 A5: 1 <= k+1 by NAT_1:29;
    set IT = (k+1, len f)-cut f;
 A6: k+1 <= len f + 1 by A4,XREAL_1:8;
-   then len f + 1 = len IT + (k+1) by A5,HAHA
+   then len f + 1 = len IT + (k+1) by A5,Lm1
        .= len IT + k+1;
    then len f = len IT + k;
    then A7: len IT = len f - k;
@@ -427,7 +427,7 @@ A8:    m in dom IT;
 A9:     m = 1+i by NAT_1:28;
          m <= len IT by A8,FINSEQ_3:27;
       then i < len IT by A9,NAT_1:38;
-     hence IT.m = f.(k+1+i) by A5,A6,A9,HAHA
+     hence IT.m = f.(k+1+i) by A5,A6,A9,Lm1
         .= f.(m+k) by A9;
     end;
   hence (k+1, len f)-cut f = f/^k by A4,A7,RFINSEQ:def 2;
@@ -443,22 +443,22 @@ A1: k <= len f;
   suppose
 A2: 0+1 > k;
    then
-X:  (1, k)-cut f = {} by GRAPH_2:def 1;
-Y:  f|0 = {};
+A3:  (1, k)-cut f = {} by GRAPH_2:def 1;
+A4:  f|0 = {};
     k <= 0 by A2, NAT_1:38;
     then k = 0;
-   hence thesis by X,Y;
+   hence thesis by A3,A4;
   end;
   suppose
-A2: 1 <= k;
-A3: len(f|k)+1 = k+1 by A1,FINSEQ_1:80;
+A5: 1 <= k;
+A6: len(f|k)+1 = k+1 by A1,FINSEQ_1:80;
       for i being Nat st i<len(f|k) holds (f|k).(i+1)= f.(1+i)
     proof let i be Nat;
      assume i<len(f|k);
-      then i+1 <= k by A3,NAT_1:38;
+      then i+1 <= k by A6,NAT_1:38;
      hence (f|k).(i+1)= f.(1+i) by FINSEQ_3:121;
     end;
-  hence (1, k)-cut f = f|k by A1,A2,A3,GRAPH_2:def 1;
+  hence (1, k)-cut f = f|k by A1,A5,A6,GRAPH_2:def 1;
   end;
  end;
 
@@ -780,31 +780,31 @@ A2: i+1 <= len h;
  hence (h/.i)`1 = (h/.(i+1))`1 or (h/.i)`2 = (h/.(i+1))`2 by A2;
  end;
  suppose
-A4: 1<=m & m<=n & n<=len f;
-A5: i-'1+m = i+m-'1 by A1,BINARITH:56;
-A6: 1+1 <= i+m by A1,A4,XREAL_1:9;
-   then A7: 1 <= i+m by XXREAL_0:2;
-A8: 1 <= i-'1+m by A5,A6,SPRECT_3:8;
-A9: i < len h by A2,NAT_1:38;
-       len h +m = n+1 by A4,GRAPH_2:def 1;
-    then i+m < n+1 by A9,XREAL_1:8;
+A3: 1<=m & m<=n & n<=len f;
+A4: i-'1+m = i+m-'1 by A1,BINARITH:56;
+A5: 1+1 <= i+m by A1,A3,XREAL_1:9;
+   then A6: 1 <= i+m by XXREAL_0:2;
+A7: 1 <= i-'1+m by A4,A5,SPRECT_3:8;
+A8: i < len h by A2,NAT_1:38;
+       len h +m = n+1 by A3,GRAPH_2:def 1;
+    then i+m < n+1 by A8,XREAL_1:8;
     then i+m <= n by NAT_1:38;
-    then A10: i+m <= len f by A4,XXREAL_0:2;
-    then A11: i-'1+m <= len f by A5,JORDAN3:7;
+    then A9: i+m <= len f by A3,XXREAL_0:2;
+    then A10: i-'1+m <= len f by A4,JORDAN3:7;
      i -' 1 <= i by JORDAN3:7;
-  then A12: i -' 1 < len h by A9,XXREAL_0:2;
+  then A11: i -' 1 < len h by A8,XXREAL_0:2;
        i-'1+1 = i by A1,BINARITH:53;
-    then A13: h/.i =h.(i -' 1+1) by A1,A9,FINSEQ_4:24
-      .= f.(i-'1+m) by A4,A12,GRAPH_2:def 1
-      .= f/.(i-'1+m) by A8,A11,FINSEQ_4:24;
+    then A12: h/.i =h.(i -' 1+1) by A1,A8,FINSEQ_4:24
+      .= f.(i-'1+m) by A3,A11,GRAPH_2:def 1
+      .= f/.(i-'1+m) by A7,A10,FINSEQ_4:24;
       1 <= i+1 by NAT_1:29;
-   then A14: h/.(i+1) =h.(i+1) by A2,FINSEQ_4:24
-      .= f.(i+m) by A4,A9,GRAPH_2:def 1
-      .= f/.(i+m) by A7,A10,FINSEQ_4:24;
+   then A13: h/.(i+1) =h.(i+1) by A2,FINSEQ_4:24
+      .= f.(i+m) by A3,A8,GRAPH_2:def 1
+      .= f/.(i+m) by A6,A9,FINSEQ_4:24;
      i-'1+m+1 = i+m-'1+1 by A1,BINARITH:56
-      .= i+m by A7,BINARITH:53;
+      .= i+m by A6,BINARITH:53;
  hence (h/.i)`1 = (h/.(i+1))`1 or (h/.i)`2 = (h/.(i+1))`2
-     by A8,A10,A13,A14,TOPREAL1:def 7;
+     by A7,A9,A12,A13,TOPREAL1:def 7;
 end;
 end;
 
@@ -823,7 +823,7 @@ A3: 1+1 <= len g by REALSET1:13;
       len g <= len g +1 by NAT_1:29;
    then A4: 2<=len g+1 by A3,XXREAL_0:2;
      len h +1+1 = len h +(1+1)
-      .= len g+1 by A4,HAHA;
+      .= len g+1 by A4,Lm1;
   then len h +1 = len g;
   then 1 <= len h by A3,XREAL_1:8;
   then A5: h/.1 = h.1 by FINSEQ_4:24
@@ -1149,7 +1149,7 @@ A33:     j+1 = i;
  hence contradiction;
 end;
 
-Lm1:
+Lm2:
  for f being non empty s.n.c. one-to-one unfolded FinSequence of TOP-REAL 2
  for g being non trivial s.n.c. one-to-one unfolded FinSequence of TOP-REAL 2
  for i,j st i < len f & 1 < i
@@ -1180,7 +1180,7 @@ A7:   1 in dom f by FINSEQ_5:6;
     hence contradiction by A2,A4,A7,A9,A10,PARTFUN2:17;
 end;
 
-Lm2:
+Lm3:
  for f being non empty s.n.c. one-to-one unfolded FinSequence of TOP-REAL 2
  for g being non trivial s.n.c. one-to-one unfolded FinSequence of TOP-REAL 2
  for i,j st j > len f & j+1 < len(f^'g)
@@ -1303,7 +1303,7 @@ A29:  j = len f + k by A24,NAT_1:28;
   then A31: LSeg(f^'g,i) /\ LSeg(f^'g,j) c= {f/.1,g/.1} by A1,A30,XBOOLE_1:27;
     now per cases by A5,A24,A27,A31,XXREAL_0:1,TARSKI:def 2;
   suppose 1 < i & x = f/.1;
-  hence contradiction by A25,A27,Lm1;
+  hence contradiction by A25,A27,Lm2;
  end;
  suppose that
 A32: j > len f + 0 and
@@ -1328,7 +1328,7 @@ A40: LSeg(f^'g,j) = LSeg(Rotate((f^'g),g/.1),j -' g/.1..(f^'g)+1)
     then A42: j -' len f+1 < len g by A32,BINARITH:56;
        0 < j -' len f by A32,SPRECT_3:5;
     then 0+1 < j -' len f+1 by XREAL_1:8;
- hence contradiction by A27,A33,A34,A37,A39,A40,A42,Lm1;
+ hence contradiction by A27,A33,A34,A37,A39,A40,A42,Lm2;
  end;
  suppose that
 A43: j = len f and
@@ -1348,7 +1348,7 @@ A44: x = g/.1;
 A47: j > len f and
 A48: x = f/.1 and
 A49: j+1 < len(f^'g);
- thus thesis by A2,A27,A47,A48,A49,Lm2;
+ thus thesis by A2,A27,A47,A48,A49,Lm3;
  end;
  suppose that
 A50: j = len f and

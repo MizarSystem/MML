@@ -14,10 +14,10 @@ environ
       XCMPLX_0, XXREAL_0, NAT_1, SEQ_2, SETFAM_1, FUNCT_1, RELSET_1, SUBSET_1,
       NUMBERS, SUPINF_1, PARTFUN1, FUNCT_2, PROB_1, PROB_3, MEASURE1, PSCOMP_1,
       SEQM_3, SERIES_1, RINFSUP1, ZFMISC_1, MEASURE6, PROB_2;
- constructors REAL_1, NAT_1, PARTFUN1, KURATO_2, RINFSUP1, SERIES_1, MEASURE3,
-      SUPINF_2, PROB_3, PARTFUN3, MEASURE6, SEQM_3;
+ constructors PARTFUN1, DOMAIN_1, REAL_1, NAT_1, SEQM_3, SERIES_1, MEASURE3,
+      MEASURE6, PARTFUN3, KURATO_2, RINFSUP1, PROB_3;
  registrations SUPINF_1, RELAT_1, SEQ_1, SUBSET_1, XREAL_0, RELSET_1, ARYTM_3,
-      PSCOMP_1, FUNCT_2, MEASURE3, MEASURE1, NUMBERS, XXREAL_0;
+      PSCOMP_1, FUNCT_2, MEASURE3, MEASURE1, NUMBERS, XXREAL_0, ORDINAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, SERIES_1, SUBSET_1;
  theorems FUNCT_1, FUNCT_2, SEQ_1, SEQ_2, XREAL_1, SUPINF_1, NAT_1, TARSKI,
@@ -1086,41 +1086,40 @@ A5:   A = B \/ C by A4;
       consider E being set such that
 A6:   E in Sigma & C c= E & P.E = 0 by Def4;
       A \ B = C \ B by A5,XBOOLE_1:40;then
-A7:   A \ B c= C by XBOOLE_1:36;then
-A8:   A \ B c= E by A6,XBOOLE_1:1;
-      A \ B c= Omega by A7,XBOOLE_1:1; then
-A9:   A \ B is thin of P by A6,A8,Def4;
+   A \ B c= C by XBOOLE_1:36;then
+A7:   A \ B c= E by A6,XBOOLE_1:1;
+A8:   A \ B is thin of P by A6,A7,Def4;
       B c= A by A5,XBOOLE_1:7;
-      hence thesis by A2,A4,A9;
+      hence thesis by A2,A4,A8;
     end; then
-    consider x being set such that A10: x in D by XBOOLE_0:def 1;
+    consider x being set such that A9: x in D by XBOOLE_0:def 1;
     D c= bool Omega
     proof let B be set;
       assume B in D;then
       B in Sigma by A2;
       hence thesis;
     end; then
-    reconsider D as non empty Subset-Family of Omega by A10;
+    reconsider D as non empty Subset-Family of Omega by A9;
     take D;
     thus thesis by A2;
   end;
   uniqueness
   proof let D1,D2 be non empty Subset-Family of Omega such that
-A11:for B being set holds B in D1 iff (B in Sigma & B c= A &
+A10:for B being set holds B in D1 iff (B in Sigma & B c= A &
       A \ B is thin of P) and
-A12:  for B being set holds B in D2 iff (B in Sigma & B c= A &
+A11:  for B being set holds B in D2 iff (B in Sigma & B c= A &
       A \ B is thin of P);
     for B being set holds B in D1 iff B in D2
     proof let B be set;
       thus B in D1 implies B in D2
       proof
         assume B in D1; then
-        B in Sigma & B c= A & A \ B is thin of P by A11;
-        hence thesis by A12;
+        B in Sigma & B c= A & A \ B is thin of P by A10;
+        hence thesis by A11;
       end;
       assume B in D2; then
-      B in Sigma & B c= A & A \ B is thin of P by A12;
-      hence thesis by A11;
+      B in Sigma & B c= A & A \ B is thin of P by A11;
+      hence thesis by A10;
     end;
     hence thesis by TARSKI:2;
   end;
@@ -1202,7 +1201,6 @@ theorem Th33:
 A1: for t being Element of NAT ex A being Element of bool Omega st P[t,A]
     proof let t be Element of NAT;
 A2:   F.t is Element of COM(Sigma,P);
-      F.t \ G.t c= F.t by XBOOLE_1:36; then
       reconsider A = F.t \ G.t as Element of bool Omega by A2,XBOOLE_1:1;
       take A;
       thus thesis;
@@ -1282,15 +1280,9 @@ A8:     Omega \ A = H \ C by A5,XBOOLE_1:41;
 A9:     ex W being thin of P st Omega \ A = Q \/ W
         proof
           set W = H /\ (G \ C);
-A10:      ex R being set st (R in Sigma & W c= R & P.R = 0)
-          proof
-            take G;
-A11:        W c= G \ C by XBOOLE_1:17;
-            G \ C c= G by XBOOLE_1:36;
-            hence thesis by A6,A11,XBOOLE_1:1;
-          end;
+A10:      ex R being set st (R in Sigma & W c= R & P.R = 0) by A6;
           W c= H by XBOOLE_1:17;then
-          reconsider W as Subset of Omega by A7,XBOOLE_1:1;
+          reconsider W as Subset of Omega by XBOOLE_1:1;
           reconsider W as thin of P by A10,Def4;
           take W;
           thus thesis by A6,A8,Lm1;
@@ -1306,95 +1298,95 @@ A11:        W c= G \ C by XBOOLE_1:17;
     proof
       let A1 be SetSequence of Omega;
       assume
-A12:  for n holds A1.n in D;
+A11:  for n holds A1.n in D;
       reconsider F = A1 as Function of NAT,bool Omega;
-A13:  Union A1 = union rng A1 by CARD_3:def 4;
-A14:  dom F = NAT by FUNCT_2:def 1;
-A15:  for n holds
+A12:  Union A1 = union rng A1 by CARD_3:def 4;
+A13:  dom F = NAT by FUNCT_2:def 1;
+A14:  for n holds
         ex B being set st B in Sigma & ex C being thin of P st F.n = B \/ C
       proof let n;
-        F.n in D by A12;
+        F.n in D by A11;
         hence thesis by A1;
       end;
       for n holds F.n in COM(Sigma,P)
       proof let n;
         ex B being set st (B in Sigma & ex C being thin of P st F.n = B \/ C)
-          by A15;
+          by A14;
         hence thesis by Def5;
       end; then
       for n being set st n in NAT holds F.n in COM(Sigma,P); then
-      reconsider F as Function of NAT,COM(Sigma,P) by A14,FUNCT_2:5;
+      reconsider F as Function of NAT,COM(Sigma,P) by A13,FUNCT_2:5;
       consider BSeq being SetSequence of Sigma such that
-A16:  for n holds BSeq.n in ProbPart(F.n) by Th32;
-A17:  for n being Element of NAT holds BSeq.n in Sigma & BSeq.n c= F.n &
+A15:  for n holds BSeq.n in ProbPart(F.n) by Th32;
+A16:  for n being Element of NAT holds BSeq.n in Sigma & BSeq.n c= F.n &
       F.n \ BSeq.n is thin of P
       proof
         let n be Element of NAT;
-        BSeq.n in ProbPart(F.n) by A16;
+        BSeq.n in ProbPart(F.n) by A15;
         hence thesis by Def7;
       end;
       consider CSeq being SetSequence of Omega such that
-A18:  for n holds CSeq.n = F.n \ BSeq.n by Th33;
+A17:  for n holds CSeq.n = F.n \ BSeq.n by Th33;
       for n holds CSeq.n is thin of P
       proof
         let n be Element of NAT;
-        F.n \ BSeq.n is thin of P by A17;
-        hence thesis by A18;
+        F.n \ BSeq.n is thin of P by A16;
+        hence thesis by A17;
       end; then
       consider DSeq being SetSequence of Sigma such that
-A19:  for n holds CSeq.n c= DSeq.n & P.(DSeq.n) = 0 by Th34;
+A18:  for n holds CSeq.n c= DSeq.n & P.(DSeq.n) = 0 by Th34;
       ex B being set st B in Sigma & ex C being thin of P st Union A1 = B \/ C
       proof
         set B = union rng BSeq;
-A20:    union rng BSeq c= union rng F
+A19:    union rng BSeq c= union rng F
         proof let x be set;
           assume x in union rng BSeq; then
           consider Z being set such that
-A21:      x in Z & Z in rng BSeq by TARSKI:def 4;
+A20:      x in Z & Z in rng BSeq by TARSKI:def 4;
           dom BSeq = NAT by FUNCT_2:def 1; then
           consider n being set such that
-A22:      n in NAT & Z = BSeq.n by A21,FUNCT_1:def 5;
-          reconsider n as Element of NAT by A22;
+A21:      n in NAT & Z = BSeq.n by A20,FUNCT_1:def 5;
+          reconsider n as Element of NAT by A21;
           set P = F.n;
-A23:      BSeq.n c= P by A17;
+A22:      BSeq.n c= P by A16;
           ex P being set st P in rng F & x in P
           proof
             take P;
-            thus thesis by A14,A21,A22,A23,FUNCT_1:def 5;
+            thus thesis by A13,A20,A21,A22,FUNCT_1:def 5;
           end;
           hence thesis by TARSKI:def 4;
         end;
-A24:    ex C being thin of P st Union A1 = B \/ C
+A23:    ex C being thin of P st Union A1 = B \/ C
         proof
           set C = Union A1 \ B;
-A25:      Union A1 = C \/ union rng F /\ union rng BSeq by A13,XBOOLE_1:51
-            .= B \/ C by A20,XBOOLE_1:28;
+A24:      Union A1 = C \/ union rng F /\ union rng BSeq by A12,XBOOLE_1:51
+            .= B \/ C by A19,XBOOLE_1:28;
           C is thin of P
           proof
-A26:        C c= union rng CSeq
+A25:        C c= union rng CSeq
             proof let x be set;
               assume x in C; then
-A27:          x in union rng F & not x in union rng BSeq
-                by A13,XBOOLE_0:def 4; then
+A26:          x in union rng F & not x in union rng BSeq
+                by A12,XBOOLE_0:def 4; then
               consider Z being set such that
-A28:          x in Z & Z in rng F by TARSKI:def 4;
+A27:          x in Z & Z in rng F by TARSKI:def 4;
               consider n being set such that
-A29:          n in NAT & Z = F.n by A14,A28,FUNCT_1:def 5;
-              reconsider n as Element of NAT by A29;
+A28:          n in NAT & Z = F.n by A13,A27,FUNCT_1:def 5;
+              reconsider n as Element of NAT by A28;
               not x in BSeq.n
               proof
                 assume
-A30:            x in BSeq.n;
+A29:            x in BSeq.n;
                 dom BSeq = NAT by FUNCT_2:def 1; then
                 BSeq.n in rng BSeq by FUNCT_1:def 5;
-                hence thesis by A27,A30,TARSKI:def 4;
+                hence thesis by A26,A29,TARSKI:def 4;
               end; then
-A31:          x in F.n \ BSeq.n by A28,A29,XBOOLE_0:def 4;
+A30:          x in F.n \ BSeq.n by A27,A28,XBOOLE_0:def 4;
               ex Z being set st x in Z & Z in rng CSeq
               proof
-A32:            dom CSeq = NAT by FUNCT_2:def 1;
+A31:            dom CSeq = NAT by FUNCT_2:def 1;
                 take CSeq.n;
-                thus thesis by A18,A31,A32,FUNCT_1:def 5;
+                thus thesis by A17,A30,A31,FUNCT_1:def 5;
               end;
               hence thesis by TARSKI:def 4;
             end;
@@ -1402,41 +1394,41 @@ A32:            dom CSeq = NAT by FUNCT_2:def 1;
             proof let x be set;
               assume x in union rng CSeq; then
               consider Z being set such that
-A33:          x in Z & Z in rng CSeq by TARSKI:def 4;
+A32:          x in Z & Z in rng CSeq by TARSKI:def 4;
               dom CSeq = NAT by FUNCT_2:def 1; then
               consider n being set such that
-A34:          n in NAT & Z = CSeq.n by A33,FUNCT_1:def 5;
-              reconsider n as Element of NAT by A34;
-A35:          x in CSeq.n & CSeq.n c= DSeq.n by A19,A33,A34;
-              n in dom DSeq by A34,FUNCT_2:def 1; then
+A33:          n in NAT & Z = CSeq.n by A32,FUNCT_1:def 5;
+              reconsider n as Element of NAT by A33;
+A34:          x in CSeq.n & CSeq.n c= DSeq.n by A18,A32,A33;
+              n in dom DSeq by A33,FUNCT_2:def 1; then
               DSeq.n in rng DSeq by FUNCT_1:def 5;
-              hence thesis by A35,TARSKI:def 4;
+              hence thesis by A34,TARSKI:def 4;
             end; then
-A36:        C c= union rng DSeq by A26,XBOOLE_1:1;
+A35:        C c= union rng DSeq by A25,XBOOLE_1:1;
             for A being set holds A in rng DSeq implies P.A = 0
             proof let A be set;
               assume
-A37:          A in rng DSeq;
-A38:          rng DSeq c= Sigma by Th1;
+A36:          A in rng DSeq;
+A37:          rng DSeq c= Sigma by Th1;
               dom DSeq = NAT by FUNCT_2:def 1; then
-A39:          ex n being set st
-              n in NAT & A = DSeq.n by A37,FUNCT_1:def 5;
-              reconsider A as Element of Sigma by A37,A38;
-              thus thesis by A19,A39;
+A38:          ex n being set st
+              n in NAT & A = DSeq.n by A36,FUNCT_1:def 5;
+              reconsider A as Element of Sigma by A36,A37;
+              thus thesis by A18,A38;
             end; then
-A40:         P.(union rng DSeq) = 0 by Th9;
+A39:         P.(union rng DSeq) = 0 by Th9;
             Union DSeq in Sigma by PROB_1:46; then
             union rng DSeq in Sigma by CARD_3:def 4;
-            hence thesis by A40,A36,Def4;
+            hence thesis by A39,A35,Def4;
           end; then
           consider C being thin of P such that
-A41:      Union A1 = B \/ C by A25;
+A40:      Union A1 = B \/ C by A24;
           take C;
-          thus thesis by A41;
+          thus thesis by A40;
         end;
         take B;
         Union BSeq in Sigma by PROB_1:46;
-        hence thesis by CARD_3:def 4,A24;
+        hence thesis by CARD_3:def 4,A23;
       end;
       hence thesis by A1;
     end;
@@ -2021,27 +2013,24 @@ A6:     D2 in Sigma & C2 c= D2 & P.D2 = 0 by Def4;
 A7:     A = A /\ (B2 \/ C2) by A2,A4,XBOOLE_1:28
           .= {} \/ C1 by XBOOLE_1:23;
         set O = B2 \/ D2;
-A8:     O in Sigma by A3,A6,PROB_1:41;
         A /\ B2 c= B2 & A /\ C2 c= C2 by XBOOLE_1:17; then
-A9:     A /\ B2 c= B2 & A /\ C2 c= D2 by A6,XBOOLE_1:1; then
-A10:    C1 c= O by XBOOLE_1:13;
-A11:    C1 is thin of P
+A8:     A /\ B2 c= B2 & A /\ C2 c= D2 by A6,XBOOLE_1:1;
+A9:    C1 is thin of P
         proof
-A12:      ex O being set st O in Sigma & C1 c= O & P.O = 0
+A10:      ex O being set st O in Sigma & C1 c= O & P.O = 0
           proof
             reconsider O1 = O as Element of Sigma by A3,A6,PROB_1:41;
-A13:         O1 is Event of Sigma by PROB_1:def 10;
+A11:         O1 is Event of Sigma by PROB_1:def 10;
             reconsider B2,D2 as Element of Sigma by A3,A6;
             B2 is Event of Sigma & D2 is Event of Sigma by PROB_1:def 10; then
-A14:        P.(B2 \/ D2) <= 0 + 0 by PROB_1:75,A5,A6;
+A12:        P.(B2 \/ D2) <= 0 + 0 by PROB_1:75,A5,A6;
             take O;
-            thus thesis by A9,A14,PROB_1:def 13,A13,XBOOLE_1:13;
+            thus thesis by A8,A12,PROB_1:def 13,A11,XBOOLE_1:13;
           end;
-          C1 c= Omega by A8,A10,XBOOLE_1:1;
-          hence thesis by A12,Def4;
+          thus thesis by A10,Def4;
         end;
         take {};
-        thus thesis by A7,A11,PROB_1:42;
+        thus thesis by A7,A9,PROB_1:42;
       end;
       hence thesis by Def5;
     end;
