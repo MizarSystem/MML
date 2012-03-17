@@ -6,13 +6,13 @@
 
 environ
 
- vocabulary BOOLE, TARSKI, MCART_1;
- notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1;
- constructors TARSKI, ENUMSET1, SUBSET_1, XBOOLE_0;
+ vocabulary BOOLE, TARSKI, MCART_1, FUNCT_1, FUNCT_3, RELAT_1;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1;
+ constructors TARSKI, ENUMSET1, SUBSET_1, XBOOLE_0, FUNCT_1;
  clusters XBOOLE_0, ZFMISC_1;
  requirements SUBSET, BOOLE;
- theorems TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, ORDINAL1, XBOOLE_1;
- schemes XBOOLE_0;
+ theorems TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, ORDINAL1, XBOOLE_1, FUNCT_1;
+ schemes XBOOLE_0, FUNCT_1;
 
 begin
 
@@ -1632,5 +1632,51 @@ end;
 definition let X1,X2,X3,X4,A1,A2,A3,A4;
   redefine func [:A1,A2,A3,A4:] -> Subset of [:X1,X2,X3,X4:];
   coherence by Th88;
+end;
+
+begin :: Addenda
+
+:: from DTCONSTR
+
+definition
+ let f be Function;
+ func pr1 f -> Function means
+  dom it = dom f & for x being set st x in dom f holds it.x = (f.x)`1;
+  existence
+  proof
+    deffunc F(set) = (f.$1)`1;
+     ex g being Function st dom g = dom f & for x being set st x in dom f holds
+      g.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness proof let p1, p2 be Function such that
+A1: dom p1 = dom f & for x being set st x in dom f holds p1.x = (f.x)`1
+   and
+A2: dom p2 = dom f & for x being set st x in dom f holds p2.x = (f.x)`1;
+      now let x be set; assume x in dom f;
+    then p1.x = (f.x)`1 & p2.x = (f.x)`1 by A1,A2;
+    hence p1.x = p2.x;
+   end;
+   hence thesis by A1,A2,FUNCT_1:9;
+  end;
+ func pr2 f -> Function means
+  dom it = dom f & for x being set st x in dom f holds it.x = (f.x)`2;
+  existence
+  proof
+    deffunc F(set) = (f.$1)`2;
+     ex g being Function st dom g = dom f & for x being set st x in dom f holds
+      g.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness proof let p1, p2 be Function such that
+A3: dom p1 = dom f & for x being set st x in dom f holds p1.x = (f.x)`2
+   and
+A4: dom p2 = dom f & for x being set st x in dom f holds p2.x = (f.x)`2;
+      now let x be set; assume x in dom f;
+    then p1.x = (f.x)`2 & p2.x = (f.x)`2 by A3,A4;
+    hence p1.x = p2.x;
+   end;
+   hence thesis by A3,A4,FUNCT_1:9;
+  end;
 end;
 

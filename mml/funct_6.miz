@@ -8,7 +8,7 @@ environ
 
  vocabulary FUNCT_1, FUNCT_2, CARD_3, FINSEQ_1, RELAT_1, FINSEQ_2, FUNCOP_1,
       PROB_1, TARSKI, FUNCT_5, BOOLE, PARTFUN1, SETFAM_1, FINSEQ_4, MCART_1,
-      FUNCT_6;
+      FUNCT_6, PRALG_2, PRALG_1;
  notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NAT_1, RELAT_1,
       FUNCT_1, MCART_1, FINSEQ_1, SETFAM_1, FUNCT_2, PARTFUN1, FUNCT_3,
       WELLORD2, FUNCOP_1, FINSEQ_2, FUNCT_4, FUNCT_5, PROB_1, CARD_3;
@@ -411,7 +411,7 @@ theorem
       by A1,Th16,Th17;
   end;
 
-theorem
+theorem Th19:
     [:X,Y:] <> {} & f in Funcs([:X,Y:],Z) implies
    curry f in Funcs(X,Funcs(Y,Z)) & curry' f in Funcs(Y,Funcs(X,Z))
   proof assume
@@ -2397,3 +2397,179 @@ A3: Funcs({} qua set, product f) = {{}} by FUNCT_5:64;
      by Th79,CARD_3:19,FUNCT_5:66;
    hence thesis by A1,A2,A3,CARD_1:48;
   end;
+
+begin :: Addenda
+
+:: from PRALG_2
+
+definition
+ let f be Function;
+ canceled 2;
+
+func commute f -> Function-yielding Function equals :Def5:
+ curry' uncurry f;
+ coherence
+  proof
+   set g = curry' uncurry f;
+      for x st x in dom g holds g.x is Function by FUNCT_5:40;
+   hence g is Function-yielding Function by FUNCOP_1:def 6;
+  end;
+end;
+
+theorem
+   for f be Function, x be set st x in dom (commute f) holds
+(commute f).x is Function;
+
+theorem Th4:
+for A,B,C be set, f be Function st A <> {} & B <> {} &
+f in Funcs(A,Funcs(B,C)) holds commute f in Funcs(B,Funcs(A,C))
+ proof
+  let A,B,C be set, f be Function;
+  assume A1: A <> {} & B <> {} & f in Funcs(A,Funcs(B,C));
+  then A2: [:A,B:] <> {} & [:B,A:] <> {} by ZFMISC_1:113;
+     uncurry f in Funcs([:A,B:],C) by A1,Th20;
+  then curry' uncurry f in Funcs(B,Funcs(A,C)) by A2,Th19;
+  hence thesis by Def5;
+ end;
+
+theorem
+for A,B,C be set, f be Function st A <> {} & B <> {} &
+f in Funcs(A,Funcs(B,C))
+for g,h be Function, x,y be set st x in A & y in B & f.x = g &
+(commute f).y = h holds
+h.x = g.y & dom h = A & dom g = B & rng h c= C & rng g c= C
+ proof
+  let A,B,C be set, f be Function;
+  assume A1: A <> {} & B <> {} & f in Funcs(A,Funcs(B,C));
+  let g,h be Function, x,y be set;
+  assume A2: x in A & y in B & f.x = g & (commute f).y = h;
+  A3: ex g be Function st g = f & dom g = A & rng g c= Funcs(B,C)
+                                            by A1,FUNCT_2:def 2;
+  A4: commute f in Funcs(B,Funcs(A,C)) by A1,Th4;
+
+  set cf = commute f;
+  A5: ex g be Function st g = cf & dom g = B & rng g c= Funcs(A,C)
+                                            by A4,FUNCT_2:def 2;
+       f.x in rng f by A2,A3,FUNCT_1:def 5;
+    then A6: ex t be Function st t = g & dom t = B & rng t c= C
+                                          by A2,A3,FUNCT_2:def 2;
+       cf.y in rng cf by A2,A5,FUNCT_1:def 5;
+    then A7: ex t be Function st t = h & dom t = A & rng t c= C
+                                          by A2,A5,FUNCT_2:def 2;
+    set uf = uncurry f;
+    A8: [x,y] in dom uf & uf.[x,y] = g.y by A2,A3,A6,FUNCT_5:45;
+       cf = curry' uf by Def5;
+    hence thesis by A2,A6,A7,A8,FUNCT_5:29;
+ end;
+
+theorem
+for A,B,C be set, f be Function st A <> {} & B <> {} &
+f in Funcs(A,Funcs(B,C)) holds commute commute f = f
+ proof
+  let A,B,C be set, f be Function;
+  assume A1: A <> {} & B <> {} & f in Funcs(A,Funcs(B,C));
+  then A2: ex g be Function st g = f & dom g = A & rng g c= Funcs(B,C)
+                                            by FUNCT_2:def 2;
+  A3: commute f in Funcs(B,Funcs(A,C)) by A1,Th4;
+
+  set cf = commute f;
+  A4: ex g be Function st g = cf & dom g = B & rng g c= Funcs(A,C)
+                                            by A3,FUNCT_2:def 2;
+     commute cf in Funcs(A,Funcs(B,C)) by A1,A3,Th4;
+  then A5: ex h be Function st h = commute cf & dom h = A &
+  rng h c= Funcs(B,C) by FUNCT_2:def 2;
+     for x st x in A holds f.x = (commute cf).x
+   proof
+    let x; assume A6: x in A;
+    then f.x in rng f by A2,FUNCT_1:def 5;
+    then consider g be Function such that A7: g = f.x & dom g = B &
+    rng g c= C by A2,FUNCT_2:def 2;
+    set ccf = commute cf,
+         uf = uncurry f,
+        ucf = uncurry cf;
+       ccf.x in rng ccf by A5,A6,FUNCT_1:def 5;
+    then consider h be Function such that A8: h = ccf.x & dom h = B &
+    rng h c= C by A5,FUNCT_2:def 2;
+    A9: cf = curry' uf by Def5;
+    A10: for y st y in B for h be Function st h = cf.y holds
+    x in dom h & h.x = g.y
+     proof
+      let y; assume A11: y in B;
+      let h be Function; assume A12: h = cf.y;
+         [x,y] in dom uf & uf.[x,y] = g.y by A2,A6,A7,A11,FUNCT_5:45;
+      hence thesis by A9,A12,FUNCT_5:29;
+     end;
+    A13: for y st y in B holds [y,x] in dom ucf & ucf.[y,x] = g.y
+     proof
+      let y; assume A14: y in B;
+      reconsider h = cf.y as Function;
+         x in dom h & h.x = g.y by A10,A14;
+      hence thesis by A4,A14,FUNCT_5:45;
+     end;
+A14: for y st y in B holds h.y = g.y
+     proof
+      let y; assume y in B;
+      then A15: [y,x] in dom ucf & ucf.[y,x] = g.y by A13;
+         ccf = curry' ucf by Def5;
+      hence thesis by A8,A15,FUNCT_5:29;
+     end;
+     dom h = B by A8;
+     then g = h by A7,FUNCT_1:9,A14;
+    hence thesis by A7,A8;
+   end;
+ hence thesis by A2,A5,FUNCT_1:9;
+ end;
+
+Lm1:
+dom f = {} implies commute f = {}
+ proof
+  assume dom f = {};
+  then f = {} by RELAT_1:64;
+  hence thesis by Def5,FUNCT_5:49,50;
+ end;
+
+theorem
+commute {} = {} by Lm1,RELAT_1:60;
+
+:: from EXTENS_1
+
+theorem
+for f be Function-yielding Function holds dom doms f = dom f
+  proof
+   let f be Function-yielding Function;
+   thus dom doms f c= dom f
+   proof
+    let i be set;
+       dom doms f = f"SubFuncs rng f by Def2;
+    hence i in dom doms f implies i in dom f by Th28;
+   end;
+   thus dom f c= dom doms f
+   proof
+    let i be set; assume
+A1:  i in dom f;
+A2: f.i is Function;
+       dom doms f = f"SubFuncs rng f by Def2;
+    hence i in dom doms f by A1,A2,Th28;
+   end;
+  end;
+
+theorem
+for f be Function-yielding Function holds dom rngs f = dom f
+  proof
+   let f be Function-yielding Function;
+   thus dom rngs f c= dom f
+   proof
+    let i be set;
+       dom rngs f = f"SubFuncs rng f by Def3;
+    hence i in dom rngs f implies i in dom f by Th28;
+   end;
+   thus dom f c= dom rngs f
+   proof
+    let i be set; assume
+A1:  i in dom f;
+A2: f.i is Function;
+       dom rngs f = f"SubFuncs rng f by Def3;
+    hence i in dom rngs f by A1,A2,Th28;
+   end;
+  end;
+

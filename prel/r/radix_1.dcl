@@ -35,5 +35,5 @@ WSIERP_1
 INT_1
 RADIX_1
 #
-fW1 ;;M3 K56 ;;;K296 A1 ;
+fW1 ;;M3 K56 ;;;K300 A1 ;
 !

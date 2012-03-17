@@ -11,15 +11,15 @@ environ
       FUNCT_3, ENS_1, WELLORD1, FUNCTOR0;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELSET_1, MCART_1,
       FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1, FUNCT_3, FUNCT_4, PBOOLE,
-      STRUCT_0, PRALG_1, MSUALG_1, MSUALG_3, ALTCAT_1, ALTCAT_2;
- constructors ALTCAT_2, MCART_1, FUNCT_3;
+      STRUCT_0, MSUALG_3, ALTCAT_1, ALTCAT_2;
+ constructors ALTCAT_2, MCART_1, FUNCT_3, PRALG_1, MSUALG_3;
  clusters RELAT_1, FUNCT_1, ALTCAT_1, ALTCAT_2, MSUALG_1, STRUCT_0, PRALG_1,
-      RELSET_1, SUBSET_1, FUNCT_2, FUNCOP_1;
+      RELSET_1, SUBSET_1, FUNCT_2, FUNCOP_1, PBOOLE;
  requirements SUBSET, BOOLE;
- definitions TARSKI, MSUALG_1, ALTCAT_2, MSUALG_3, FUNCT_1, FUNCT_2, XBOOLE_0;
+ definitions TARSKI, ALTCAT_2, MSUALG_3, FUNCT_1, FUNCT_2, XBOOLE_0, PBOOLE;
  theorems ALTCAT_2, FUNCT_4, FUNCOP_1, ZFMISC_1, ALTCAT_1, BINOP_1, FUNCT_2,
-      FUNCT_1, MSUALG_1, PBOOLE, FUNCT_3, RELAT_1, MCART_1, DOMAIN_1, MSUALG_3,
-      AUTALG_1, ISOCAT_1, STRUCT_0, RELSET_1, XBOOLE_0, XBOOLE_1, PARTFUN1;
+      FUNCT_1, PBOOLE, FUNCT_3, RELAT_1, MCART_1, DOMAIN_1, MSUALG_3, AUTALG_1,
+      ISOCAT_1, STRUCT_0, RELSET_1, XBOOLE_0, XBOOLE_1, PARTFUN1;
  schemes ALTCAT_2;
 
 begin :: Preliminaries
@@ -398,7 +398,7 @@ theorem Th13:
   holds (G**F)*f = (G*f)**(F*f)
 proof let F,G be Function-yielding Function, f be Function;
 A1: dom((G**F)*f) = f"dom(G**F) by RELAT_1:182
-        .= f"(dom G /\ dom F) by MSUALG_3:def 4
+        .= f"(dom G /\ dom F) by PBOOLE:def 24
         .= (f"dom F) /\ (f"dom G) by FUNCT_1:137
         .= (f"dom F) /\ dom(G*f) by RELAT_1:182
         .= dom(F*f) /\ dom(G*f) by RELAT_1:182;
@@ -407,11 +407,11 @@ A1: dom((G**F)*f) = f"dom(G**F) by RELAT_1:182
 A2: i in dom((G**F)*f);
 then A3:  i in dom f & f.i in dom(G**F) by FUNCT_1:21;
    thus ((G**F)*f).i = (G**F).(f.i) by A2,FUNCT_1:22
-        .= (G.(f.i))*(F.(f.i)) by A3,MSUALG_3:def 4
+        .= (G.(f.i))*(F.(f.i)) by A3,PBOOLE:def 24
         .= ((G*f).i)*(F.(f.i)) by A3,FUNCT_1:23
         .= ((G*f).i)*((F*f).i) by A3,FUNCT_1:23;
   end;
- hence (G**F)*f = (G*f)**(F*f) by A1,MSUALG_3:def 4;
+ hence (G**F)*f = (G*f)**(F*f) by A1,PBOOLE:def 24;
 end;
 
 definition let A,B,C be set, f be Function of [:A,B:],C;
@@ -693,7 +693,7 @@ then A8:     m in (B*f).i by A7,FUNCT_1:23;
            Xm.o' = F(o') from ALTCAT_2:sch 3(A4,A6);
       hence Xm.i is Function of A.i, (B*f).i by A8,FUNCOP_1:57;
      end;
-    hence Xm is ManySortedFunction of A,B*f by MSUALG_1:def 2;
+    hence Xm is ManySortedFunction of A,B*f by PBOOLE:def 18;
    end;
   hence thesis;
 end;
@@ -718,7 +718,7 @@ A1:   for ii being set st ii in I1 & (B*f).ii = {}
   reconsider G as ManySortedFunction of B*f,C*(g*f) by Def5;
   reconsider F as ManySortedFunction of A,B*f by Def5;
 A2: dom G = I1 & dom F = I1 by PBOOLE:def 3;
-A3: dom(G**F) = dom G /\ dom F by MSUALG_3:def 4
+A3: dom(G**F) = dom G /\ dom F by PBOOLE:def 24
     .= I1 by A2;
   reconsider GF = G**F as ManySortedSet of I1;
       GF is ManySortedFunction of A,C*(g*f)
@@ -726,12 +726,12 @@ A3: dom(G**F) = dom G /\ dom F by MSUALG_3:def 4
     assume
 A4:   ii in I1;
      then reconsider Fi = F.ii as Function of A.ii, (B*f).ii
-                                              by MSUALG_1:def 2;
+                                              by PBOOLE:def 18;
      reconsider Gi = G.ii as Function of (B*f).ii, (C*(g*f)).ii
-                                              by A4,MSUALG_1:def 2;
+                                              by A4,PBOOLE:def 18;
          (B*f).ii = {} implies A.ii = {} or (C*(g*f)).ii = {} by A1,A4;
      then Gi*Fi is Function of A.ii, (C*(g*f)).ii by FUNCT_2:19;
-    hence GF.ii is Function of A.ii, (C*(g*f)).ii by A3,A4,MSUALG_3:def 4;
+    hence GF.ii is Function of A.ii, (C*(g*f)).ii by A3,A4,PBOOLE:def 24;
    end;
  hence thesis by Def5;
 end;
@@ -921,7 +921,7 @@ then A9:  (B'*f').[o1,o2] = B'.(f'.[o1,o2]) by A5,FUNCT_1:23
                 .= <^F.o1,F.o2^> by ALTCAT_1:def 2;
         (the MorphMap of F).[o1,o2] is
       Function of (the Arrows of C1).[o1,o2], (B'*f').[o1,o2]
-           by A3,A5,MSUALG_1:def 2;
+           by A3,A5,PBOOLE:def 18;
     then (the MorphMap of F).(o1,o2) is Function of <^o1,o2^>, <^F.o1,F.o2^>
                              by A4,A9,BINOP_1:def 1;
    hence thesis by Def15;
@@ -986,7 +986,7 @@ A13:  (B'*f').[o1,o2] = B'.(f'.[o1,o2]) by A5,A7,FUNCT_1:23
                 .= <^F.o2,F.o1^> by ALTCAT_1:def 2;
         (the MorphMap of F).[o1,o2] is
       Function of (the Arrows of C1).[o1,o2], (B'*f').[o1,o2]
-           by A3,A5,MSUALG_1:def 2;
+           by A3,A5,PBOOLE:def 18;
     then (the MorphMap of F).(o1,o2) is Function of <^o1,o2^>, <^F.o2,F.o1^>
                              by A4,A13,BINOP_1:def 1;
    hence thesis by Def15;
@@ -1632,7 +1632,7 @@ A1:        (the Arrows of B).i = {} implies (the Arrows of B).i = {};
 A2:        i in [:the carrier of B,the carrier of B:];
           then A3:         MM.i is Function of (the Arrows of B).i, (the Arrows
 of B).i
-                           by MSUALG_1:def 2;
+                           by PBOOLE:def 18;
 A4:        the Arrows of B cc= the Arrows of A by ALTCAT_2:def 11;
               (B'*f').i = B'.(f'.i) by A2,FUNCT_2:21
                .= (the Arrows of A).i by A2,FUNCT_1:35;
@@ -1681,7 +1681,7 @@ A1:        i in [:the carrier of A,the carrier of A:];
           then (A'*f').i = A'.(f'.i) by FUNCT_2:21
                .= (the Arrows of A).i by A1,FUNCT_1:35;
          hence MM.i is Function of (the Arrows of A).i, (A'*f').i
-                          by A1,MSUALG_1:def 2;
+                          by A1,PBOOLE:def 18;
         end;
       end;
       case A2: [:the carrier of A,the carrier of A:] = {};
@@ -2280,7 +2280,7 @@ then A2: [o,o] in dom((the MorphMap of G)*the ObjectMap of F) by ZFMISC_1:106;
            /\ dom(the MorphMap of F) by A2,XBOOLE_0:def 3;
 then A3: [o,o] in dom(((the MorphMap of G)*the ObjectMap of F)**the MorphMap of
 F)
-                 by MSUALG_3:def 4;
+                 by PBOOLE:def 24;
 A4: ((the MorphMap of G)*the ObjectMap of F).[o,o]
        = (the MorphMap of G).((the ObjectMap of F).[o,o]) by A2,FUNCT_1:22
       .= (the MorphMap of G).((the ObjectMap of F).(o,o)) by BINOP_1:def 1
@@ -2295,7 +2295,7 @@ A5: (the MorphMap of F).[o,o] = (the MorphMap of F).(o,o) by BINOP_1:def 1
                                                      by Def37
       .= (((the MorphMap of G)*the ObjectMap of F)**the MorphMap of F).[o,o]
                                                      by BINOP_1:def 1
-      .= Morph-Map(G,F.o,F.o)*Morph-Map(F,o,o) by A3,A4,A5,MSUALG_3:def 4;
+      .= Morph-Map(G,F.o,F.o)*Morph-Map(F,o,o) by A3,A4,A5,PBOOLE:def 24;
 end;
 
 registration let C1,C2,C3 be with_units (non empty AltCatStr);
@@ -2320,7 +2320,7 @@ A3:  Morph-Map(F,o,o) = (the MorphMap of F).(o,o) by Def15
          (the Arrows of C2)*the ObjectMap of F by Def5;
     then Morph-Map(F,o,o) is Function of (the Arrows of C1).[o,o],
               ((the Arrows of C2)*the ObjectMap of F).[o,o]
-                             by A1,A3,MSUALG_1:def 2;
+                             by A1,A3,PBOOLE:def 18;
     then dom Morph-Map(F,o,o) = (the Arrows of C1).[o,o] by A2,FUNCT_2:def 1
           .= (the Arrows of C1).(o,o) by BINOP_1:def 1
           .= <^o,o^> by ALTCAT_1:def 2;
@@ -2448,7 +2448,7 @@ then A21:  h.((the ObjectMap of G).i) is one-to-one by A5,A8,MSUALG_3:def 2;
     set j = (the ObjectMap of G).i;
 A22:  h.j is Function of (the Arrows of A).j,
                        ((the Arrows of B)*the ObjectMap of F).j
-              by A2,A20,MSUALG_1:def 2;
+              by A2,A20,PBOOLE:def 18;
     consider o1,o2 being Element of A such that
 A23:  j = [o1,o2] by A2,A20,DOMAIN_1:9;
     reconsider o1,o2 as object of A;
@@ -2490,7 +2490,7 @@ A31: [p1,p2] in AA by ZFMISC_1:106;
 then A32: [p1,p2] in dom the ObjectMap of F by FUNCT_2:def 1;
 A33: h.[p1,p2] is Function of (the Arrows of A).[p1,p2],
                             ((the Arrows of B)*the ObjectMap of F).[p1,p2]
-                             by A31,MSUALG_1:def 2;
+                             by A31,PBOOLE:def 18;
        ((the Arrows of B)*the ObjectMap of F).[p1,p2]
             = (the Arrows of B).((the ObjectMap of F).[p1,p2])
                                by A32,FUNCT_1:23
@@ -2602,8 +2602,8 @@ then A16: Morph-Map(F,G.o,G.o) is one-to-one by A7,A15,MSUALG_3:def 2;
 then A17: ((the Arrows of B)*the ObjectMap of F).[G.o,G.o] <> {} by ALTCAT_2:
 def 6;
         Morph-Map(F,G.o,G.o) is Function of (the Arrows of A).[G.o,G.o],
-    ((the Arrows of B)*the ObjectMap of F).[G.o,G.o] by A3,A9,A15,MSUALG_1:def
-2;
+    ((the Arrows of B)*the ObjectMap of F).[G.o,G.o]
+       by A3,A9,A15,PBOOLE:def 18;
     then A18: dom Morph-Map(F,G.o,G.o)
          = (the Arrows of A).[G.o,G.o] by A17,FUNCT_2:def 1
         .= (the Arrows of A).(G.o,G.o) by BINOP_1:def 1
@@ -2617,7 +2617,7 @@ then A19: ((the Arrows of A)*the ObjectMap of G).[o,o] <> {} by ALTCAT_2:def 6;
         the MorphMap of G is ManySortedFunction of
       the Arrows of B,(the Arrows of A)*the ObjectMap of G by Def5;
     then Morph-Map(G,o,o) is Function of (the Arrows of B).[o,o],
-    ((the Arrows of A)*the ObjectMap of G).[o,o] by A10,A14,MSUALG_1:def 2;
+    ((the Arrows of A)*the ObjectMap of G).[o,o] by A10,A14,PBOOLE:def 18;
     then dom Morph-Map(G,o,o)
          = (the Arrows of B).[o,o] by A19,FUNCT_2:def 1
         .= (the Arrows of B).(o,o) by BINOP_1:def 1
@@ -2754,7 +2754,7 @@ then A15: ((the Arrows of A)*the ObjectMap of G).[o1,o2] <> {} by A2,A8,Def19;
         the MorphMap of G is ManySortedFunction of
       the Arrows of B,(the Arrows of A)*the ObjectMap of G by Def5;
     then Morph-Map(G,o1,o2) is Function of (the Arrows of B).[o1,o2],
-    ((the Arrows of A)*the ObjectMap of G).[o1,o2] by A10,A12,MSUALG_1:def 2;
+    ((the Arrows of A)*the ObjectMap of G).[o1,o2] by A10,A12,PBOOLE:def 18;
     then A16: dom Morph-Map(G,o1,o2)
          = (the Arrows of B).[o1,o2] by A15,FUNCT_2:def 1
         .= (the Arrows of B).(o1,o2) by BINOP_1:def 1
@@ -2820,7 +2820,7 @@ then A15: ((the Arrows of A)*the ObjectMap of G).[o1,o2] <> {} by A2,A8,Def20;
         the MorphMap of G is ManySortedFunction of
       the Arrows of B,(the Arrows of A)*the ObjectMap of G by Def5;
     then Morph-Map(G,o1,o2) is Function of (the Arrows of B).[o1,o2],
-    ((the Arrows of A)*the ObjectMap of G).[o1,o2] by A10,A12,MSUALG_1:def 2;
+    ((the Arrows of A)*the ObjectMap of G).[o1,o2] by A10,A12,PBOOLE:def 18;
     then A16: dom Morph-Map(G,o1,o2)
          = (the Arrows of B).[o1,o2] by A15,FUNCT_2:def 1
         .= (the Arrows of B).(o1,o2) by BINOP_1:def 1
@@ -2908,8 +2908,8 @@ then A27: Morph-Map(F,G.o1,G.o3) is one-to-one by A8,A23,MSUALG_3:def 2;
      .= (the Arrows of B).(F.(G.o1),F.(G.o3)) by BINOP_1:def 1
      .= <^F.(G.o1),F.(G.o3)^> by ALTCAT_1:def 2;
         Morph-Map(F,G.o1,G.o3) is Function of (the Arrows of A).[G.o1,G.o3],
-    ((the Arrows of B)*the ObjectMap of F).[G.o1,G.o3] by A4,A23,A24,MSUALG_1:
-def 2;
+    ((the Arrows of B)*the ObjectMap of F).[G.o1,G.o3]
+        by A4,A23,A24,PBOOLE:def 18;
     then A29: dom Morph-Map(F,G.o1,G.o3)
          = (the Arrows of A).[G.o1,G.o3] by A16,A28,FUNCT_2:def 1
         .= (the Arrows of A).(G.o1,G.o3) by BINOP_1:def 1
@@ -2923,7 +2923,7 @@ def 2;
         the MorphMap of G is ManySortedFunction of
       the Arrows of B,(the Arrows of A)*the ObjectMap of G by Def5;
     then Morph-Map(G,o1,o3) is Function of (the Arrows of B).[o1,o3],
-    ((the Arrows of A)*the ObjectMap of G).[o1,o3] by A22,A25,MSUALG_1:def 2;
+    ((the Arrows of A)*the ObjectMap of G).[o1,o3] by A22,A25,PBOOLE:def 18;
     then A31: dom Morph-Map(G,o1,o3)
          = (the Arrows of B).[o1,o3] by A15,A30,FUNCT_2:def 1
         .= (the Arrows of B).(o1,o3) by BINOP_1:def 1
@@ -3041,8 +3041,8 @@ then A27: Morph-Map(F,G.o3,G.o1) is one-to-one by A8,A23,MSUALG_3:def 2;
      .= (the Arrows of B).(F.(G.o1),F.(G.o3)) by BINOP_1:def 1
      .= <^F.(G.o1),F.(G.o3)^> by ALTCAT_1:def 2;
         Morph-Map(F,G.o3,G.o1) is Function of (the Arrows of A).[G.o3,G.o1],
-    ((the Arrows of B)*the ObjectMap of F).[G.o3,G.o1] by A4,A23,A24,MSUALG_1:
-def 2;
+    ((the Arrows of B)*the ObjectMap of F).[G.o3,G.o1]
+       by A4,A23,A24,PBOOLE:def 18;
     then A29: dom Morph-Map(F,G.o3,G.o1)
          = (the Arrows of A).[G.o3,G.o1] by A16,A28,FUNCT_2:def 1
         .= (the Arrows of A).(G.o3,G.o1) by BINOP_1:def 1
@@ -3056,7 +3056,7 @@ def 2;
         the MorphMap of G is ManySortedFunction of
       the Arrows of B,(the Arrows of A)*the ObjectMap of G by Def5;
     then Morph-Map(G,o1,o3) is Function of (the Arrows of B).[o1,o3],
-    ((the Arrows of A)*the ObjectMap of G).[o1,o3] by A22,A25,MSUALG_1:def 2;
+    ((the Arrows of A)*the ObjectMap of G).[o1,o3] by A22,A25,PBOOLE:def 18;
     then A31: dom Morph-Map(G,o1,o3)
          = (the Arrows of B).[o1,o3] by A15,A30,FUNCT_2:def 1
         .= (the Arrows of B).(o1,o3) by BINOP_1:def 1

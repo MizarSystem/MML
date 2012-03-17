@@ -12,5 +12,5 @@ SUPINF_1
 XREAL_0
 XCMPLX_0
 #
-­;M2 W5 ;K22 K62 ;;;;M2 A1 ;V22 ;V25 ;;
+­;M2 W6 ;K22 K62 ;;;;M2 A1 ;V23 ;V26 ;;
 !

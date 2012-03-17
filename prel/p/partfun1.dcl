@@ -8,10 +8,10 @@ RELSET_1
 RELAT_2
 PARTFUN1
 #
-«V1 ;V3 ;V4 ;V5 ;;;M1 ;
-«V1 ;V3 ;;M1 ;M1 ;;M4 A1 A2 ;
-«V1 ;V6 ;V8 ;V9 ;V13 ;V14 A1 A1 ;;M1 ;;M4 A1 A1 ;
-fW5 ;;M1 ;M1 ;;K44 A1 A2 ;
-fV1 ;V3 ;V6 ;V8 ;V9 ;V13 ;;M1 ;;K6 A1 ;
-­V1 ;V8 ;V13 ;;;M1 ;V1 ;V6 ;;
+«V1 ;V4 ;V5 ;V6 ;;;M1 ;
+«V1 ;V4 ;;M1 ;M1 ;;M4 A1 A2 ;
+«V1 ;V7 ;V9 ;V10 ;V14 ;V15 A1 A1 ;;M1 ;;M4 A1 A1 ;
+fW6 ;;M1 ;M1 ;;K44 A1 A2 ;
+fV1 ;V4 ;V7 ;V9 ;V10 ;V14 ;;M1 ;;K6 A1 ;
+­V1 ;V9 ;V14 ;;;M1 ;V1 ;V7 ;;
 !

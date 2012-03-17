@@ -9,7 +9,7 @@ RELSET_1
 M1 ;M1 ;;
 ªM5 F1 ;F2 ;;ªM1 ;M1 ;&ª&R2 K4 B2 B3 ;B1 ;ª&R2 B2 F1 ;;R2 B3 F2 ;;P1 B2 B3 ;;;ª&R2 B2 F1 ;;R2 B3 F2 ;;P1 B2 B3 ;ªR2 K4 B2 B3 ;B1 ;;;;
 #
-M1 W3 ;;M1 W3 ;;;
+M1 W4 ;;M1 W4 ;;;
 ªM5 F1 ;F2 ;;ªM2 F1 ;;M2 F2 ;;&ª&R2 K4 B2 B3 ;B1 ;ªP1 B2 B3 ;;ª&P1 B2 B3 ;ªR2 K4 B2 B3 ;B1 ;;;;
 #
 !

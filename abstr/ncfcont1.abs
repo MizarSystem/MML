@@ -1,0 +1,1177 @@
+:: Continuous Functions on Real and Complex Normed Linear Spaces
+::  by Noboru Endou
+:: 
+:: Received August 20, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, FCONT_1, SUBSET_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1,
+      ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, SEQ_1, SEQ_2, SEQM_3, COMPTS_1,
+      RCOMP_1, BOOLE, FINSEQ_4, SEQ_4, PARTFUN1, PARTFUN2, NORMSP_1, CLVECT_1,
+      COMPLEX1, COMSEQ_1, CFUNCT_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      PARTFUN2, FUNCT_2, PRE_TOPC, STRUCT_0, XREAL_0, ORDINAL1, NUMBERS,
+      REAL_1, NAT_1, FINSEQ_4, RLVECT_1, ABSVALUE, SEQ_1, SEQ_2, SEQM_3, SEQ_4,
+      VFUNCT_1, NORMSP_1, COMPLEX1, COMSEQ_1, CFUNCT_1, CFCONT_1, RCOMP_1,
+      COMSEQ_2, COMSEQ_3, VFUNCT_2, CLVECT_1, LOPBAN_3, NFCONT_1, CLOPBAN3;
+ constructors REAL_1, BINARITH, SEQ_2, SEQ_4, PREPOWER, PARTFUN1, PARTFUN2,
+      FINSEQ_4, RCOMP_1, VFUNCT_1, LOPBAN_3, NFCONT_1, COMPLEX1, CLOPBAN3,
+      COMSEQ_1, COMSEQ_2, COMSEQ_3, VFUNCT_2, CFCONT_1;
+ clusters RELSET_1, STRUCT_0, ORDINAL2, XREAL_0, MEMBERED, FUNCT_1, SEQM_3,
+      CLVECT_1, NAT_1;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Continuous Function on Normed Complex Linear Spaces
+
+ reserve n,m for Nat;
+ reserve r,s for Real;
+ reserve z for Complex;
+ reserve CNS,CNS1,CNS2 for ComplexNormSpace;
+ reserve RNS for RealNormSpace;
+
+definition
+  let CLS be ComplexLinearSpace;
+  let seq be sequence of CLS;
+  func - seq -> sequence of CLS means
+:: NCFCONT1:def 1
+  for n holds it.n = - seq.n;
+end;
+
+theorem :: NCFCONT1:1
+for seq1,seq2 be sequence of CNS holds seq1 - seq2 = seq1 +- seq2;
+
+theorem :: NCFCONT1:2
+for seq be sequence of CNS holds -seq=(-1r)*seq;
+
+definition
+  let CNS1,CNS2;
+  let f be PartFunc of CNS1,CNS2;
+  func ||.f.|| -> PartFunc of the carrier of CNS1,REAL means
+:: NCFCONT1:def 2
+  dom it = dom f & for c being Point of CNS1 st c in dom it holds
+    it.c = ||.f/.c.||;
+end;
+
+definition
+  let CNS,RNS;
+  let f be PartFunc of CNS,RNS;
+  func ||.f.|| -> PartFunc of the carrier of CNS,REAL means
+:: NCFCONT1:def 3
+  dom it = dom f & for c being Point of CNS st c in dom it holds
+   it.c = ||.f/.c.||;
+end;
+
+definition
+  let RNS,CNS;
+  let f be PartFunc of RNS,CNS;
+  func ||.f.|| -> PartFunc of the carrier of RNS,REAL means
+:: NCFCONT1:def 4
+  dom it = dom f & for c being Point of RNS st c in dom it holds
+   it.c = ||.f/.c.||;
+end;
+
+definition
+  let CNS;
+  let x0 be Point of CNS;
+  mode Neighbourhood of x0 -> Subset of CNS means
+:: NCFCONT1:def 5
+  ex g be Real st 0<g & {y where y is Point of CNS: ||.y-x0 .|| < g} c= it;
+end;
+
+theorem :: NCFCONT1:3
+for x0 be Point of CNS
+for g be Real st 0 < g holds
+ {y where y is Point of CNS: ||.y-x0 .|| < g} is Neighbourhood of x0;
+
+theorem :: NCFCONT1:4
+for x0 be Point of CNS
+for N being Neighbourhood of x0 holds x0 in N;
+
+definition let CNS;
+  let X be Subset of CNS;
+  attr X is compact means
+:: NCFCONT1:def 6
+  for s1 be sequence of CNS st rng s1 c= X
+   ex s2 be sequence of CNS st
+    s2 is_subsequence_of s1 & s2 is convergent & lim s2 in X;
+end;
+
+definition
+  let CNS;
+  let X be Subset of CNS;
+  attr X is closed means
+:: NCFCONT1:def 7
+  for s1 be sequence of CNS st
+   rng s1 c= X & s1 is convergent holds lim s1 in X;
+end;
+
+definition let CNS;
+  let X be Subset of CNS;
+  attr X is open means
+:: NCFCONT1:def 8
+X` is closed;
+end;
+
+definition let CNS1,CNS2;
+  let f be PartFunc of CNS1,CNS2;
+  let seq be sequence of CNS1;
+assume rng seq c= dom f;
+func f*seq -> sequence of CNS2 equals
+:: NCFCONT1:def 9
+  (f qua Function)*seq;
+end;
+
+definition let CNS, RNS;
+  let f be PartFunc of CNS,RNS;
+  let seq be sequence of CNS;
+  assume rng seq c= dom f;
+  func f*seq -> sequence of RNS equals
+:: NCFCONT1:def 10
+  (f qua Function)*seq;
+end;
+
+definition let CNS, RNS;
+  let f be PartFunc of RNS,CNS;
+  let seq be sequence of RNS;
+assume rng seq c= dom f;
+func f*seq -> sequence of CNS equals
+:: NCFCONT1:def 11
+  (f qua Function)*seq;
+end;
+
+definition
+  let CNS;
+  let f be PartFunc of the carrier of CNS,COMPLEX;
+  let seq be sequence of CNS;
+assume rng seq c= dom f;
+func f*seq -> Complex_Sequence equals
+:: NCFCONT1:def 12
+  (f qua Function)*seq;
+end;
+
+definition
+  let RNS;
+  let f be PartFunc of the carrier of RNS,COMPLEX;
+  let seq be sequence of RNS;
+assume rng seq c= dom f;
+func f*seq -> Complex_Sequence equals
+:: NCFCONT1:def 13
+  (f qua Function)*seq;
+end;
+
+definition
+  let CNS;
+  let f be PartFunc of the carrier of CNS,REAL;
+  let seq be sequence of CNS;
+assume rng seq c= dom f;
+func f*seq -> Real_Sequence equals
+:: NCFCONT1:def 14
+  (f qua Function)*seq;
+end;
+
+definition
+  let CNS1,CNS2;
+  let f be PartFunc of CNS1,CNS2;
+  let x0 be Point of CNS1;
+  pred f is_continuous_in x0 means
+:: NCFCONT1:def 15
+  x0 in dom f &
+  for seq be sequence of CNS1 st
+   rng seq c= dom f & seq is convergent & lim seq = x0 holds
+    f*seq is convergent & f/.x0 = lim (f*seq);
+end;
+
+definition
+  let CNS,RNS;
+  let f be PartFunc of CNS,RNS;
+  let x0 be Point of CNS;
+  pred f is_continuous_in x0 means
+:: NCFCONT1:def 16
+  x0 in dom f &
+  for seq be sequence of CNS st
+   rng seq c= dom f & seq is convergent & lim seq = x0 holds
+    f*seq is convergent & f/.x0 = lim (f*seq);
+end;
+
+definition
+  let RNS;
+  let CNS;
+  let f be PartFunc of RNS,CNS;
+  let x0 be Point of RNS;
+  pred f is_continuous_in x0 means
+:: NCFCONT1:def 17
+  x0 in dom f &
+  for seq be sequence of RNS st
+   rng seq c= dom f & seq is convergent & lim seq = x0 holds
+    f*seq is convergent & f/.x0 = lim (f*seq);
+end;
+
+definition
+  let CNS;
+  let f be PartFunc of the carrier of CNS,COMPLEX;
+  let x0 be Point of CNS;
+  pred f is_continuous_in x0 means
+:: NCFCONT1:def 18
+  x0 in dom f &
+  for seq be sequence of CNS st
+   rng seq c= dom f & seq is convergent & lim seq = x0 holds
+    f*seq is convergent & f/.x0 = lim (f*seq);
+end;
+
+definition
+  let CNS;
+  let f be PartFunc of the carrier of CNS,REAL;
+  let x0 be Point of CNS;
+  pred f is_continuous_in x0 means
+:: NCFCONT1:def 19
+  x0 in dom f &
+  for seq be sequence of CNS st
+   rng seq c= dom f & seq is convergent & lim seq = x0 holds
+    f*seq is convergent & f/.x0 = lim (f*seq);
+end;
+
+definition
+  let RNS;
+  let f be PartFunc of the carrier of RNS,COMPLEX;
+  let x0 be Point of RNS;
+  pred f is_continuous_in x0 means
+:: NCFCONT1:def 20
+  x0 in dom f &
+  for seq be sequence of RNS st
+   rng seq c= dom f & seq is convergent & lim seq = x0 holds
+    f*seq is convergent & f/.x0 = lim (f*seq);
+end;
+
+theorem :: NCFCONT1:5
+for seq be sequence of CNS1, h be PartFunc of CNS1,CNS2 st
+  rng seq c= dom h holds seq.n in dom h;
+
+theorem :: NCFCONT1:6
+for seq be sequence of CNS, h be PartFunc of CNS,RNS st
+  rng seq c= dom h holds seq.n in dom h;
+
+theorem :: NCFCONT1:7
+for seq be sequence of RNS, h be PartFunc of RNS,CNS st
+  rng seq c= dom h holds seq.n in dom h;
+
+theorem :: NCFCONT1:8
+for seq be sequence of CNS, x be set holds
+ x in rng seq iff ex n st x = seq.n;
+
+theorem :: NCFCONT1:9
+for seq,seq1 be sequence of CNS st seq1 is_subsequence_of seq holds
+ rng seq1 c= rng seq;
+
+theorem :: NCFCONT1:10
+for f be PartFunc of CNS1,CNS2, CSeq be sequence of CNS1 st
+ rng CSeq c= dom f
+  for n holds (f*CSeq).n=f/.(CSeq.n);
+
+theorem :: NCFCONT1:11
+for f be PartFunc of CNS,RNS, CSeq be sequence of CNS st
+ rng CSeq c= dom
+  f for n holds (f*CSeq).n=f/.(CSeq.n);
+
+theorem :: NCFCONT1:12
+for f be PartFunc of RNS,CNS, RSeq be sequence of RNS st
+ rng RSeq c= dom f
+  for n holds (f*RSeq).n=f/.(RSeq.n);
+
+theorem :: NCFCONT1:13
+for f be PartFunc of the carrier of CNS,COMPLEX
+ for CSeq be sequence of CNS st rng CSeq c= dom f
+  for n holds (f*CSeq).n=f/.(CSeq.n);
+
+theorem :: NCFCONT1:14
+for f be PartFunc of the carrier of CNS,REAL
+ for CSeq be sequence of CNS st rng CSeq c= dom f
+  for n holds (f*CSeq).n = f/.(CSeq.n);
+
+theorem :: NCFCONT1:15
+for f be PartFunc of the carrier of RNS,COMPLEX
+ for RSeq be sequence of RNS st rng RSeq c= dom f
+  for n holds (f*RSeq).n = f/.(RSeq.n);
+
+theorem :: NCFCONT1:16
+for h be PartFunc of CNS1,CNS2
+for CSeq be sequence of CNS1
+for Ns be increasing Seq_of_Nat st
+  rng CSeq c= dom h holds (h*CSeq)*Ns = h * (CSeq*Ns);
+
+theorem :: NCFCONT1:17
+for h be PartFunc of CNS,RNS
+for Cseq be sequence of CNS
+for Ns be increasing Seq_of_Nat st
+  rng Cseq c= dom h holds (h*Cseq)*Ns = h * (Cseq*Ns);
+
+theorem :: NCFCONT1:18
+for h be PartFunc of RNS,CNS
+for Rseq be sequence of RNS
+for Ns be increasing Seq_of_Nat st
+  rng Rseq c= dom h holds (h*Rseq)*Ns = h * (Rseq*Ns);
+
+theorem :: NCFCONT1:19
+for h be PartFunc of the carrier of CNS,COMPLEX, Cseq be sequence of CNS,
+ Ns be increasing Seq_of_Nat st
+  rng Cseq c= dom h holds (h*Cseq)*Ns = h * (Cseq*Ns);
+
+theorem :: NCFCONT1:20
+for h be PartFunc of the carrier of CNS,REAL, Cseq be sequence of CNS,
+ Ns be increasing Seq_of_Nat st
+  rng Cseq c= dom h holds (h*Cseq)*Ns = h * (Cseq*Ns);
+
+theorem :: NCFCONT1:21
+for h be PartFunc of the carrier of RNS,COMPLEX, Rseq be sequence of RNS,
+ Ns be increasing Seq_of_Nat st
+  rng Rseq c= dom h holds (h*Rseq)*Ns = h * (Rseq*Ns);
+
+theorem :: NCFCONT1:22
+for h be PartFunc of CNS1,CNS2
+for Cseq1,Cseq2  be sequence of CNS1 st
+ rng Cseq1 c= dom h & Cseq2 is_subsequence_of Cseq1 holds
+  h*Cseq2 is_subsequence_of h*Cseq1;
+
+theorem :: NCFCONT1:23
+for h be PartFunc of CNS,RNS
+for Cseq1,Cseq2  be sequence of CNS st
+ rng Cseq1 c= dom h & Cseq2 is_subsequence_of Cseq1 holds
+  h*Cseq2 is_subsequence_of h*Cseq1;
+
+theorem :: NCFCONT1:24
+for h be PartFunc of RNS,CNS
+for Rseq1,Rseq2 be sequence of RNS st
+ rng Rseq1 c= dom h & Rseq2 is_subsequence_of Rseq1 holds
+  h*Rseq2 is_subsequence_of h*Rseq1;
+
+theorem :: NCFCONT1:25
+for seq be Complex_Sequence, n be Nat, Nseq be increasing Seq_of_Nat holds
+(seq*Nseq).n=seq.(Nseq.n);
+
+theorem :: NCFCONT1:26
+for h be PartFunc of the carrier of CNS,COMPLEX
+for Cseq1,Cseq2 be sequence of CNS st
+ rng Cseq1 c= dom h & Cseq2 is_subsequence_of Cseq1 holds
+  h*Cseq2 is_subsequence_of h*Cseq1;
+
+theorem :: NCFCONT1:27
+for h be PartFunc of the carrier of CNS,REAL
+for Cseq1,Cseq2 be sequence of CNS st
+ rng Cseq1 c= dom h & Cseq2 is_subsequence_of Cseq1 holds
+  h*Cseq2 is_subsequence_of h*Cseq1;
+
+theorem :: NCFCONT1:28
+for h be PartFunc of the carrier of RNS,COMPLEX
+for Rseq1,Rseq2 be sequence of RNS st
+ rng Rseq1 c= dom h & Rseq2 is_subsequence_of Rseq1 holds
+  h*Rseq2 is_subsequence_of h*Rseq1;
+
+theorem :: NCFCONT1:29
+for f be PartFunc of CNS1,CNS2, x0 be Point of CNS1 holds
+f is_continuous_in x0 iff
+ x0 in dom f &
+ for r st 0<r ex s st 0<s & for x1 be Point of CNS1 st
+  x1 in dom f & ||. x1- x0 .|| <s holds ||. f/.x1-f/.x0 .||<r;
+
+theorem :: NCFCONT1:30
+for f be PartFunc of CNS,RNS, x0 be Point of CNS holds
+ f is_continuous_in x0 iff
+ x0 in dom f &
+ for r st 0<r ex s st 0<s & for x1 be Point of CNS st
+  x1 in dom f & ||. x1- x0 .|| <s holds ||. f/.x1-f/.x0 .||<r;
+
+theorem :: NCFCONT1:31
+for f be PartFunc of RNS,CNS, x0 be Point of RNS holds
+f is_continuous_in x0 iff
+ x0 in dom f &
+ for r st 0<r ex s st 0<s & for x1 be Point of RNS st
+  x1 in dom f & ||. x1- x0 .|| < s holds ||. f/.x1-f/.x0 .||<r;
+
+theorem :: NCFCONT1:32
+for f be PartFunc of the carrier of CNS,REAL, x0 be Point of CNS holds
+ (f is_continuous_in x0 iff x0 in dom f &
+  for r st 0<r ex s st 0<s &
+  for x1 be Point of CNS st x1 in dom f & ||. x1- x0 .|| <s holds
+   abs( f/.x1-f/.x0 )<r );
+
+theorem :: NCFCONT1:33
+for f be PartFunc of the carrier of CNS,COMPLEX, x0 be Point of CNS holds
+ (f is_continuous_in x0 iff x0 in dom f &
+  for r st 0 < r ex s st 0 < s &
+    for x1 be Point of CNS st x1 in dom f & ||. x1- x0 .|| <s holds
+     |. f/.x1-f/.x0 .|<r );
+
+theorem :: NCFCONT1:34
+for f be PartFunc of the carrier of RNS,COMPLEX, x0 be Point of RNS holds
+ (f is_continuous_in x0 iff x0 in dom f &
+  for r st 0<r ex s st 0<s &
+  for x1 be Point of RNS st x1 in dom f & ||. x1- x0 .|| <s holds
+   |. f/.x1-f/.x0 .|<r );
+
+theorem :: NCFCONT1:35
+for f be PartFunc of CNS1,CNS2 ,x0 be Point of CNS1 holds
+ f is_continuous_in x0 iff
+  x0 in dom f &
+  for N1 being Neighbourhood of f/.x0
+   ex N being Neighbourhood of x0 st
+    for x1 be Point of CNS1 st x1 in dom f & x1 in N holds f/.x1 in N1;
+
+theorem :: NCFCONT1:36
+for f be PartFunc of CNS,RNS,x0 be Point of CNS holds
+ f is_continuous_in x0 iff
+  x0 in dom f &
+  for N1 being Neighbourhood of f/.x0
+   ex N being Neighbourhood of x0 st
+    for x1 be Point of CNS st x1 in dom f & x1 in N holds f/.x1 in N1;
+
+theorem :: NCFCONT1:37
+for f be PartFunc of RNS,CNS, x0 be Point of RNS holds
+ f is_continuous_in x0 iff
+  x0 in dom f &
+  for N1 being Neighbourhood of f/.x0
+   ex N being Neighbourhood of x0 st
+    for x1 be Point of RNS st x1 in dom f & x1 in N holds f/.x1 in N1;
+
+theorem :: NCFCONT1:38
+for f be PartFunc of CNS1,CNS2, x0 be Point of CNS1 holds
+ f is_continuous_in x0 iff
+  x0 in dom f &
+  for N1 being Neighbourhood of f/.x0
+   ex N being Neighbourhood of x0 st f.:N c= N1;
+
+theorem :: NCFCONT1:39
+for f be PartFunc of CNS,RNS, x0 be Point of CNS holds
+ f is_continuous_in x0 iff
+  x0 in dom f &
+  for N1 being Neighbourhood of f/.x0
+   ex N being Neighbourhood of x0 st f.:N c= N1;
+
+theorem :: NCFCONT1:40
+for f be PartFunc of RNS,CNS, x0 be Point of RNS holds
+ f is_continuous_in x0 iff
+  x0 in dom f &
+  for N1 being Neighbourhood of f/.x0
+   ex N being Neighbourhood of x0 st f.:N c= N1;
+
+theorem :: NCFCONT1:41
+for f be PartFunc of CNS1,CNS2, x0 be Point of CNS1 st
+ x0 in dom f &
+ (ex N be Neighbourhood of x0 st dom f /\ N = {x0}) holds
+  f is_continuous_in x0;
+
+theorem :: NCFCONT1:42
+for f be PartFunc of CNS,RNS, x0 be Point of CNS st
+ x0 in dom f &
+ (ex N be Neighbourhood of x0 st dom f /\ N = {x0}) holds
+  f is_continuous_in x0;
+
+theorem :: NCFCONT1:43
+for f be PartFunc of RNS,CNS, x0 be Point of RNS st
+ x0 in dom f &
+ (ex N be Neighbourhood of x0 st dom f /\ N = {x0}) holds
+  f is_continuous_in x0;
+
+theorem :: NCFCONT1:44
+for h1,h2 be PartFunc of CNS1,CNS2, seq be sequence of CNS1 st
+ rng seq c= dom h1 /\ dom h2 holds
+  (h1+h2)*seq=h1*seq+h2*seq & (h1-h2)*seq=h1*seq-h2*seq;
+
+theorem :: NCFCONT1:45
+for h1,h2 be PartFunc of CNS,RNS, seq be sequence of CNS st
+ rng seq c= dom h1 /\ dom h2 holds
+  (h1+h2)*seq=h1*seq+h2*seq & (h1-h2)*seq=h1*seq-h2*seq;
+
+theorem :: NCFCONT1:46
+for h1,h2 be PartFunc of RNS,CNS, seq be sequence of RNS st
+ rng seq c= dom h1 /\ dom h2 holds
+  (h1+h2)*seq=h1*seq+h2*seq & (h1-h2)*seq=h1*seq-h2*seq;
+
+theorem :: NCFCONT1:47
+for h be PartFunc of CNS1,CNS2, seq be sequence of CNS1, z be Complex st
+ rng seq c= dom h holds (z(#)h)*seq = z*(h*seq);
+
+theorem :: NCFCONT1:48
+for h be PartFunc of CNS,RNS, seq be sequence of CNS, r be Real st
+ rng seq c= dom h holds (r(#)h)*seq = r*(h*seq);
+
+theorem :: NCFCONT1:49
+for h be PartFunc of RNS,CNS, seq be sequence of RNS, z be Complex st
+ rng seq c= dom h holds (z(#)h)*seq = z*(h*seq);
+
+theorem :: NCFCONT1:50
+for h be PartFunc of CNS1,CNS2, seq be sequence of CNS1 st
+ rng seq c= dom h holds
+  ||. h*seq .|| = ||.h.||*seq & -(h*seq) = (-h)*seq;
+
+theorem :: NCFCONT1:51
+for h be PartFunc of CNS,RNS, seq be sequence of CNS st rng seq c= dom h holds
+ ||. h*seq .|| = ||.h.||*seq & -(h*seq) = (-h)*seq;
+
+theorem :: NCFCONT1:52
+for h be PartFunc of RNS,CNS, seq be sequence of RNS st rng seq c= dom h holds
+ ||. h*seq .|| = ||.h.||*seq & -(h*seq) = (-h)*seq;
+
+theorem :: NCFCONT1:53
+for f1,f2 be PartFunc of CNS1,CNS2, x0 be Point of CNS1 st
+ f1 is_continuous_in x0 & f2 is_continuous_in x0 holds
+  f1+f2 is_continuous_in x0 &
+  f1-f2 is_continuous_in x0;
+
+theorem :: NCFCONT1:54
+for f1,f2 be PartFunc of CNS,RNS, x0 be Point of CNS st
+ f1 is_continuous_in x0 & f2 is_continuous_in x0 holds
+  f1+f2 is_continuous_in x0 &
+  f1-f2 is_continuous_in x0;
+
+theorem :: NCFCONT1:55
+for f1,f2 be PartFunc of RNS,CNS, x0 be Point of RNS st
+ f1 is_continuous_in x0 & f2 is_continuous_in x0 holds
+  f1+f2 is_continuous_in x0 &
+  f1-f2 is_continuous_in x0;
+
+theorem :: NCFCONT1:56
+for f be PartFunc of CNS1,CNS2, x0 be Point of CNS1, z be Complex st
+ f is_continuous_in x0 holds z(#)f is_continuous_in x0;
+
+theorem :: NCFCONT1:57
+for f be PartFunc of CNS,RNS, x0 be Point of CNS, r be Real st
+ f is_continuous_in x0 holds r(#)f is_continuous_in x0;
+
+theorem :: NCFCONT1:58
+for f be PartFunc of RNS,CNS, x0 be Point of RNS, z be Complex st
+ f is_continuous_in x0 holds z(#)f is_continuous_in x0;
+
+theorem :: NCFCONT1:59
+for f be PartFunc of CNS1,CNS2, x0 be Point of CNS1 st
+ f is_continuous_in x0 holds
+  ||. f .|| is_continuous_in x0 & -f is_continuous_in x0;
+
+theorem :: NCFCONT1:60
+for f be PartFunc of CNS,RNS, x0 be Point of CNS st
+ f is_continuous_in x0 holds
+  ||. f .|| is_continuous_in x0 & -f is_continuous_in x0;
+
+theorem :: NCFCONT1:61
+for f be PartFunc of RNS,CNS, x0 be Point of RNS st
+ f is_continuous_in x0 holds
+  ||. f .|| is_continuous_in x0 & -f is_continuous_in x0;
+
+definition
+let CNS1,CNS2 be ComplexNormSpace;
+let f be PartFunc of CNS1,CNS2;
+let X be set;
+ pred f is_continuous_on X means
+:: NCFCONT1:def 21
+ X c= dom f &
+ for x0 be Point of CNS1 st x0 in X holds f|X is_continuous_in x0;
+end;
+
+definition
+let CNS be ComplexNormSpace;
+let RNS be RealNormSpace;
+let f be PartFunc of CNS,RNS;
+let X be set;
+ pred f is_continuous_on X means
+:: NCFCONT1:def 22
+ X c= dom f &
+ for x0 be Point of CNS st x0 in X holds f|X is_continuous_in x0;
+end;
+
+definition
+let RNS be RealNormSpace;
+let CNS be ComplexNormSpace;
+let g be PartFunc of RNS,CNS;
+let X be set;
+ pred g is_continuous_on X means
+:: NCFCONT1:def 23
+ X c= dom g &
+ for x0 be Point of RNS st x0 in X holds g|X is_continuous_in x0;
+end;
+
+definition
+let CNS be ComplexNormSpace;
+let f be PartFunc of the carrier of CNS, COMPLEX;
+let X be set;
+ pred f is_continuous_on X means
+:: NCFCONT1:def 24
+ X c= dom f &
+ for x0 be Point of CNS st x0 in X holds f|X is_continuous_in x0;
+end;
+
+definition
+let CNS be ComplexNormSpace;
+let f be PartFunc of the carrier of CNS, REAL;
+let X be set;
+ pred f is_continuous_on X means
+:: NCFCONT1:def 25
+ X c= dom f &
+ for x0 be Point of CNS st x0 in X holds f|X is_continuous_in x0;
+end;
+
+definition
+let RNS be RealNormSpace;
+let f be PartFunc of the carrier of RNS, COMPLEX;
+let X be set;
+ pred f is_continuous_on X means
+:: NCFCONT1:def 26
+ X c= dom f &
+ for x0 be Point of RNS st x0 in X holds f|X is_continuous_in x0;
+end;
+
+ reserve X,X1 for set;
+
+theorem :: NCFCONT1:62
+for f be PartFunc of CNS1,CNS2 holds
+ f is_continuous_on X
+iff
+ X c= dom f &
+ for s1 be sequence of CNS1 st
+  rng s1 c= X & s1 is convergent & lim s1 in X holds
+   f*s1 is convergent & f/.(lim s1) = lim (f*s1);
+
+theorem :: NCFCONT1:63
+for f be PartFunc of CNS,RNS holds
+ f is_continuous_on X
+ iff
+ X c= dom f &
+ for s1 be sequence of CNS st
+  rng s1 c= X & s1 is convergent & lim s1 in X holds
+   f*s1 is convergent & f/.(lim s1) = lim (f*s1);
+
+theorem :: NCFCONT1:64
+for f be PartFunc of RNS,CNS holds
+ f is_continuous_on X
+ iff
+ X c= dom f &
+ for s1 be sequence of RNS st
+  rng s1 c= X & s1 is convergent & lim s1 in X holds
+   f*s1 is convergent & f/.(lim s1) = lim (f*s1);
+
+theorem :: NCFCONT1:65
+for f be PartFunc of CNS1,CNS2 holds
+ f is_continuous_on X iff
+  X c= dom f &
+  for x0 be Point of CNS1, r st x0 in X & 0<r
+   ex s st 0<s & for x1 be Point of CNS1 st
+    x1 in X & ||. x1- x0 .|| < s holds ||. f/.x1 - f/.x0 .|| < r;
+
+theorem :: NCFCONT1:66
+for f be PartFunc of CNS,RNS holds
+ f is_continuous_on X iff
+  X c= dom f &
+  for x0 be Point of CNS, r st x0 in X & 0<r
+   ex s st 0<s & for x1 be Point of CNS st
+    x1 in X & ||. x1- x0 .|| < s holds ||. f/.x1 - f/.x0 .|| < r;
+
+theorem :: NCFCONT1:67
+for f be PartFunc of RNS,CNS holds
+ f is_continuous_on X iff
+  X c= dom f &
+  for x0 be Point of RNS, r st x0 in X & 0<r
+   ex s st 0<s & for x1 be Point of RNS st x1 in X & ||. x1- x0 .|| < s holds
+    ||. f/.x1 - f/.x0 .|| < r;
+
+theorem :: NCFCONT1:68
+for f be PartFunc of the carrier of CNS, COMPLEX holds
+ ( f is_continuous_on X
+  iff
+   X c= dom f &
+   for x0 be Point of CNS, r st x0 in X & 0 < r
+    ex s st 0 < s & for x1 be Point of CNS st
+     x1 in X & ||. x1- x0 .|| < s holds |. f/.x1 - f/.x0 .| < r );
+
+theorem :: NCFCONT1:69
+for f be PartFunc of the carrier of CNS, REAL holds
+ ( f is_continuous_on X
+  iff
+   X c= dom f &
+   for x0 be Point of CNS, r st x0 in X & 0 < r
+    ex s st 0 < s & for x1 be Point of CNS st
+     x1 in X & ||. x1- x0 .|| < s holds abs( f/.x1 - f/.x0 ) < r );
+
+theorem :: NCFCONT1:70
+for f be PartFunc of the carrier of RNS, COMPLEX holds
+ ( f is_continuous_on X
+  iff
+   X c= dom f &
+   for x0 be Point of RNS, r st x0 in X & 0 < r
+    ex s st
+     0 < s & for x1 be Point of RNS st x1 in X & ||. x1- x0 .|| < s holds
+      |. f/.x1 - f/.x0 .| < r );
+
+theorem :: NCFCONT1:71
+for f be PartFunc of CNS1,CNS2 holds
+ f is_continuous_on X iff f|X is_continuous_on X;
+
+theorem :: NCFCONT1:72
+for f be PartFunc of CNS,RNS holds
+ f is_continuous_on X iff f|X is_continuous_on X;
+
+theorem :: NCFCONT1:73
+for f be PartFunc of RNS,CNS holds
+ f is_continuous_on X iff f|X is_continuous_on X;
+
+theorem :: NCFCONT1:74
+for f be PartFunc of the carrier of CNS,COMPLEX
+ holds
+   (f is_continuous_on X iff f|X is_continuous_on X);
+
+theorem :: NCFCONT1:75
+for f be PartFunc of the carrier of CNS,REAL holds
+   (f is_continuous_on X iff f|X is_continuous_on X);
+
+theorem :: NCFCONT1:76
+  for f be PartFunc of the carrier of RNS,COMPLEX holds
+   (f is_continuous_on X iff f|X is_continuous_on X);
+
+theorem :: NCFCONT1:77
+for f be PartFunc of CNS1,CNS2 st
+ f is_continuous_on X & X1 c= X holds f is_continuous_on X1;
+
+theorem :: NCFCONT1:78
+for f be PartFunc of CNS,RNS st
+ f is_continuous_on X & X1 c= X holds f is_continuous_on X1;
+
+theorem :: NCFCONT1:79
+for f be PartFunc of RNS,CNS st
+ f is_continuous_on X & X1 c= X holds f is_continuous_on X1;
+
+theorem :: NCFCONT1:80
+for f be PartFunc of CNS1,CNS2, x0 be Point of CNS1 st
+ x0 in dom f holds f is_continuous_on {x0};
+
+theorem :: NCFCONT1:81
+for f be PartFunc of CNS,RNS, x0 be Point of CNS st
+ x0 in dom f holds f is_continuous_on {x0};
+
+theorem :: NCFCONT1:82
+for f be PartFunc of RNS,CNS, x0 be Point of RNS st
+ x0 in dom f holds f is_continuous_on {x0};
+
+theorem :: NCFCONT1:83
+for f1,f2 be PartFunc of CNS1,CNS2 st
+ f1 is_continuous_on X & f2 is_continuous_on X holds
+  f1+f2 is_continuous_on X & f1-f2 is_continuous_on X;
+
+theorem :: NCFCONT1:84
+for f1,f2 be PartFunc of CNS,RNS st
+ f1 is_continuous_on X & f2 is_continuous_on X holds
+  f1+f2 is_continuous_on X & f1-f2 is_continuous_on X;
+
+theorem :: NCFCONT1:85
+for f1,f2 be PartFunc of RNS,CNS st
+ f1 is_continuous_on X & f2 is_continuous_on X holds
+  f1+f2 is_continuous_on X & f1-f2 is_continuous_on X;
+
+theorem :: NCFCONT1:86
+for f1,f2 be PartFunc of CNS1,CNS2 st
+ f1 is_continuous_on X & f2 is_continuous_on X1 holds
+  f1+f2 is_continuous_on X /\ X1 & f1-f2 is_continuous_on X /\ X1;
+
+theorem :: NCFCONT1:87
+for f1,f2 be PartFunc of CNS,RNS st
+ f1 is_continuous_on X & f2 is_continuous_on X1 holds
+  f1+f2 is_continuous_on X /\ X1 & f1-f2 is_continuous_on X /\ X1;
+
+theorem :: NCFCONT1:88
+for f1,f2 be PartFunc of RNS,CNS st
+ f1 is_continuous_on X & f2 is_continuous_on X1 holds
+  f1+f2 is_continuous_on X /\ X1 & f1-f2 is_continuous_on X /\ X1;
+
+theorem :: NCFCONT1:89
+for f be PartFunc of CNS1,CNS2 st
+ f is_continuous_on X holds z(#)f is_continuous_on X;
+
+theorem :: NCFCONT1:90
+for f be PartFunc of CNS,RNS st
+ f is_continuous_on X holds r(#)f is_continuous_on X;
+
+theorem :: NCFCONT1:91
+for f be PartFunc of RNS,CNS st
+ f is_continuous_on X holds z(#)f is_continuous_on X;
+
+theorem :: NCFCONT1:92
+for f be PartFunc of CNS1,CNS2 st f is_continuous_on X holds
+  ||.f.|| is_continuous_on X & -f is_continuous_on X;
+
+theorem :: NCFCONT1:93
+for f be PartFunc of CNS,RNS st f is_continuous_on X holds
+  ||.f.|| is_continuous_on X & -f is_continuous_on X;
+
+theorem :: NCFCONT1:94
+for f be PartFunc of RNS,CNS st f is_continuous_on X holds
+  ||.f.|| is_continuous_on X & -f is_continuous_on X;
+
+theorem :: NCFCONT1:95
+for f be PartFunc of CNS1,CNS2 st
+ f is total & (for x1,x2 be Point of CNS1 holds f/.(x1+x2) = f/.x1 + f/.x2) &
+ (ex x0 be Point of CNS1 st f is_continuous_in x0) holds
+  f is_continuous_on the carrier of CNS1;
+
+theorem :: NCFCONT1:96
+for f be PartFunc of CNS,RNS st
+ f is total & (for x1,x2 be Point of CNS holds f/.(x1+x2) = f/.x1 + f/.x2) &
+ (ex x0 be Point of CNS st f is_continuous_in x0) holds
+  f is_continuous_on the carrier of CNS;
+
+theorem :: NCFCONT1:97
+for f be PartFunc of RNS,CNS st
+ f is total & (for x1,x2 be Point of RNS holds f/.(x1+x2) = f/.x1 + f/.x2) &
+ (ex x0 be Point of RNS st f is_continuous_in x0) holds
+  f is_continuous_on the carrier of RNS;
+
+theorem :: NCFCONT1:98
+for f be PartFunc of CNS1,CNS2 st
+ dom f is compact & f is_continuous_on (dom f) holds (rng f) is compact;
+
+theorem :: NCFCONT1:99
+for f be PartFunc of CNS,RNS st
+ dom f is compact & f is_continuous_on (dom f) holds (rng f) is compact;
+
+theorem :: NCFCONT1:100
+for f be PartFunc of RNS,CNS st
+ dom f is compact & f is_continuous_on (dom f) holds (rng f) is compact;
+
+theorem :: NCFCONT1:101
+for f be PartFunc of the carrier of CNS,COMPLEX st
+  dom f is compact & f is_continuous_on (dom f) holds
+    (rng f) is compact;
+
+theorem :: NCFCONT1:102
+for f be PartFunc of the carrier of CNS,REAL st
+  dom f is compact & f is_continuous_on (dom f) holds
+    (rng f) is compact;
+
+theorem :: NCFCONT1:103
+for f be PartFunc of the carrier of RNS,COMPLEX st
+  dom f is compact & f is_continuous_on (dom f) holds
+    (rng f) is compact;
+
+theorem :: NCFCONT1:104
+for Y be Subset of CNS1, f be PartFunc of CNS1,CNS2 st
+ Y c= dom f & Y is compact & f is_continuous_on Y holds
+  (f.:Y) is compact;
+
+theorem :: NCFCONT1:105
+for Y be Subset of CNS, f be PartFunc of CNS,RNS st
+ Y c= dom f & Y is compact & f is_continuous_on Y holds
+  (f.:Y) is compact;
+
+theorem :: NCFCONT1:106
+for Y be Subset of RNS, f be PartFunc of RNS,CNS st
+ Y c= dom f & Y is compact & f is_continuous_on Y holds
+  (f.:Y) is compact;
+
+theorem :: NCFCONT1:107
+for f be PartFunc of the carrier of CNS,REAL st
+ dom f<>{} & (dom f) is compact & f is_continuous_on (dom f) holds
+  ex x1,x2 be Point of CNS st
+   x1 in dom f & x2 in dom f &
+   f/.x1 = upper_bound (rng f) &
+   f/.x2 = lower_bound (rng f);
+
+theorem :: NCFCONT1:108
+for f be PartFunc of CNS1,CNS2 st
+ dom f<>{} & (dom f) is compact & f is_continuous_on (dom f) holds
+  ex x1,x2 be Point of CNS1 st
+   x1 in dom f & x2 in dom f &
+   ||.f.||/.x1 = upper_bound (rng ||.f.||) &
+   ||.f.||/.x2 = lower_bound (rng ||.f.||);
+
+theorem :: NCFCONT1:109
+for f be PartFunc of CNS,RNS st
+ dom f<>{} & (dom f) is compact & f is_continuous_on (dom f) holds
+  ex x1,x2 be Point of CNS st
+   x1 in dom f & x2 in dom f &
+   ||.f.||/.x1 = upper_bound (rng ||.f.||) &
+   ||.f.||/.x2 = lower_bound (rng ||.f.||);
+
+theorem :: NCFCONT1:110
+for f be PartFunc of RNS,CNS st
+ dom f<>{} & (dom f) is compact & f is_continuous_on (dom f) holds
+  ex x1,x2 be Point of RNS st
+   x1 in dom f & x2 in dom f &
+   ||.f.||/.x1 = upper_bound (rng ||.f.||) &
+   ||.f.||/.x2 = lower_bound (rng ||.f.||);
+
+theorem :: NCFCONT1:111
+for f be PartFunc of CNS1,CNS2 holds
+ (||.f.||)|X = ||.(f|X).||;
+
+theorem :: NCFCONT1:112
+for f be PartFunc of CNS,RNS holds
+ (||.f.||)|X = ||.(f|X).||;
+
+theorem :: NCFCONT1:113
+for f be PartFunc of RNS,CNS holds
+ (||.f.||)|X = ||.(f|X).||;
+
+theorem :: NCFCONT1:114
+for f be PartFunc of CNS1,CNS2, Y be Subset of CNS1 st
+ Y<>{} & Y c= dom f & Y is compact & f is_continuous_on Y holds
+  ex x1,x2 be Point of CNS1 st x1 in Y & x2 in Y &
+   ||.f.||/.x1 = upper_bound (||.f.||.:Y) &
+   ||.f.||/.x2 = lower_bound (||.f.||.:Y);
+
+theorem :: NCFCONT1:115
+for f be PartFunc of CNS,RNS ,Y be Subset of CNS st
+ Y<>{} & Y c= dom f & Y is compact & f is_continuous_on Y holds
+  ex x1,x2 be Point of CNS st x1 in Y & x2 in Y &
+   ||.f.||/.x1 = upper_bound (||.f.||.:Y) &
+   ||.f.||/.x2 = lower_bound (||.f.||.:Y);
+
+theorem :: NCFCONT1:116
+for f be PartFunc of RNS,CNS ,Y be Subset of RNS st
+ Y<>{} & Y c= dom f & Y is compact & f is_continuous_on Y holds
+  ex x1,x2 be Point of RNS st x1 in Y & x2 in Y &
+   ||.f.||/.x1 = upper_bound (||.f.||.:Y) &
+   ||.f.||/.x2 = lower_bound (||.f.||.:Y);
+
+theorem :: NCFCONT1:117
+for f be PartFunc of the carrier of CNS,REAL, Y be Subset of CNS st
+ Y<>{} & Y c= dom f & Y is compact & f is_continuous_on Y holds
+  ex x1,x2 be Point of CNS st x1 in Y & x2 in Y &
+   f/.x1 = upper_bound (f.:Y) & f/.x2 = lower_bound (f.:Y);
+
+definition
+let CNS1,CNS2 be ComplexNormSpace;
+let X be set;
+let f be PartFunc of CNS1,CNS2;
+pred f is_Lipschitzian_on X means
+:: NCFCONT1:def 27
+  X c= dom f &
+  ex r st
+   0 < r &
+   for x1,x2 be Point of CNS1 st x1 in X & x2 in X holds
+    ||.f/.x1-f/.x2.||<=r*||.x1-x2.||;
+end;
+
+definition
+let CNS be ComplexNormSpace;
+let RNS be RealNormSpace;
+let X be set;
+let f be PartFunc of CNS,RNS;
+pred f is_Lipschitzian_on X means
+:: NCFCONT1:def 28
+  X c= dom f &
+  ex r st
+   0 < r &
+   for x1,x2 be Point of CNS st x1 in X & x2 in X holds
+    ||.f/.x1-f/.x2.||<=r*||.x1-x2.||;
+end;
+
+definition
+let RNS be RealNormSpace;
+let CNS be ComplexNormSpace;
+let X be set;
+let f be PartFunc of RNS,CNS;
+pred f is_Lipschitzian_on X means
+:: NCFCONT1:def 29
+  X c= dom f &
+  ex r st
+   0 < r &
+   for x1,x2 be Point of RNS st x1 in X & x2 in X holds
+    ||.f/.x1-f/.x2.||<=r*||.x1-x2.||;
+end;
+
+definition
+let CNS be ComplexNormSpace;
+let X be set;
+let f be PartFunc of the carrier of CNS,COMPLEX;
+pred f is_Lipschitzian_on X means
+:: NCFCONT1:def 30
+  X c= dom f &
+  ex r st
+   0<r &
+   for x1,x2 be Point of CNS st
+    x1 in X & x2 in X holds
+     |.(f/.x1-f/.x2).|<=r*||.x1-x2.||;
+end;
+
+definition
+let CNS be ComplexNormSpace;
+let X be set;
+let f be PartFunc of the carrier of CNS,REAL;
+pred f is_Lipschitzian_on X means
+:: NCFCONT1:def 31
+  X c= dom f &
+  ex r st
+   0<r &
+   for x1,x2 be Point of CNS st
+    x1 in X & x2 in X holds
+     abs(f/.x1-f/.x2)<=r*||.x1-x2.||;
+end;
+
+definition
+let RNS be RealNormSpace;
+let X be set;
+let f be PartFunc of the carrier of RNS,COMPLEX;
+pred f is_Lipschitzian_on X means
+:: NCFCONT1:def 32
+  X c= dom f &
+  ex r st
+   0<r &
+   for x1,x2 be Point of RNS st
+    x1 in X & x2 in X holds
+     |.(f/.x1-f/.x2).|<=r*||.x1-x2.||;
+end;
+
+theorem :: NCFCONT1:118
+for f be PartFunc of CNS1,CNS2 st
+ f is_Lipschitzian_on X & X1 c= X holds f is_Lipschitzian_on X1;
+
+theorem :: NCFCONT1:119
+for f be PartFunc of CNS,RNS st
+ f is_Lipschitzian_on X & X1 c= X holds f is_Lipschitzian_on X1;
+
+theorem :: NCFCONT1:120
+for f be PartFunc of RNS,CNS st
+ f is_Lipschitzian_on X & X1 c= X holds f is_Lipschitzian_on X1;
+
+theorem :: NCFCONT1:121
+for f1,f2 be PartFunc of CNS1,CNS2 st
+  f1 is_Lipschitzian_on X & f2 is_Lipschitzian_on X1 holds
+    f1+f2 is_Lipschitzian_on X /\ X1;
+
+theorem :: NCFCONT1:122
+for f1,f2 be PartFunc of CNS,RNS st
+  f1 is_Lipschitzian_on X & f2 is_Lipschitzian_on X1 holds
+    f1+f2 is_Lipschitzian_on X /\ X1;
+
+theorem :: NCFCONT1:123
+for f1,f2 be PartFunc of RNS,CNS st
+  f1 is_Lipschitzian_on X & f2 is_Lipschitzian_on X1 holds
+    f1+f2 is_Lipschitzian_on X /\ X1;
+
+theorem :: NCFCONT1:124
+for f1,f2 be PartFunc of CNS1,CNS2 st
+  f1 is_Lipschitzian_on X & f2 is_Lipschitzian_on X1 holds
+    f1-f2 is_Lipschitzian_on X /\ X1;
+
+theorem :: NCFCONT1:125
+for f1,f2 be PartFunc of CNS,RNS st
+  f1 is_Lipschitzian_on X & f2 is_Lipschitzian_on X1 holds
+    f1-f2 is_Lipschitzian_on X /\ X1;
+
+theorem :: NCFCONT1:126
+for f1,f2 be PartFunc of RNS,CNS st
+  f1 is_Lipschitzian_on X & f2 is_Lipschitzian_on X1 holds
+    f1-f2 is_Lipschitzian_on X /\ X1;
+
+theorem :: NCFCONT1:127
+for f be PartFunc of CNS1,CNS2 st f is_Lipschitzian_on X holds
+  z(#)f is_Lipschitzian_on X;
+
+theorem :: NCFCONT1:128
+for f be PartFunc of CNS,RNS st f is_Lipschitzian_on X holds
+  r(#)f is_Lipschitzian_on X;
+
+theorem :: NCFCONT1:129
+for f be PartFunc of RNS,CNS st f is_Lipschitzian_on X holds
+  z(#)f is_Lipschitzian_on X;
+
+theorem :: NCFCONT1:130
+for f be PartFunc of CNS1,CNS2 st f is_Lipschitzian_on X holds
+ -f is_Lipschitzian_on X & ||.f.|| is_Lipschitzian_on X;
+
+theorem :: NCFCONT1:131
+for f be PartFunc of CNS,RNS st f is_Lipschitzian_on X holds
+ -f is_Lipschitzian_on X & ||.f.|| is_Lipschitzian_on X;
+
+theorem :: NCFCONT1:132
+for f be PartFunc of RNS,CNS st f is_Lipschitzian_on X holds
+ -f is_Lipschitzian_on X & ||.f.|| is_Lipschitzian_on X;
+
+theorem :: NCFCONT1:133
+for X be set, f be PartFunc of CNS1,CNS2 st
+ X c= dom f & f is_constant_on X holds f is_Lipschitzian_on X;
+
+theorem :: NCFCONT1:134
+for X be set, f be PartFunc of CNS,RNS st
+ X c= dom f & f is_constant_on X holds f is_Lipschitzian_on X;
+
+theorem :: NCFCONT1:135
+for X be set, f be PartFunc of RNS,CNS st
+ X c= dom f & f is_constant_on X holds f is_Lipschitzian_on X;
+
+theorem :: NCFCONT1:136
+for Y be Subset of CNS holds id Y is_Lipschitzian_on Y;
+
+theorem :: NCFCONT1:137
+for f be PartFunc of CNS1,CNS2 st f is_Lipschitzian_on X holds
+  f is_continuous_on X;
+
+theorem :: NCFCONT1:138
+for f be PartFunc of CNS,RNS st f is_Lipschitzian_on X holds
+  f is_continuous_on X;
+
+theorem :: NCFCONT1:139
+for f be PartFunc of RNS,CNS st f is_Lipschitzian_on X holds
+  f is_continuous_on X;
+
+theorem :: NCFCONT1:140
+for f be PartFunc of the carrier of CNS,COMPLEX st
+ f is_Lipschitzian_on X holds f is_continuous_on X;
+
+theorem :: NCFCONT1:141
+for f be PartFunc of the carrier of CNS,REAL st
+ f is_Lipschitzian_on X holds f is_continuous_on X;
+
+theorem :: NCFCONT1:142
+for f be PartFunc of the carrier of RNS,COMPLEX st
+ f is_Lipschitzian_on X holds f is_continuous_on X;
+
+theorem :: NCFCONT1:143
+for f be PartFunc of CNS1,CNS2 st (ex r be Point of CNS2 st rng f = {r}) holds
+  f is_continuous_on (dom f);
+
+theorem :: NCFCONT1:144
+for f be PartFunc of CNS,RNS st (ex r be Point of RNS st rng f = {r}) holds
+  f is_continuous_on (dom f);
+
+theorem :: NCFCONT1:145
+for f be PartFunc of RNS,CNS st (ex r be Point of CNS st rng f = {r}) holds
+  f is_continuous_on (dom f);
+
+theorem :: NCFCONT1:146
+for f be PartFunc of CNS1,CNS2 st
+  X c= dom f & f is_constant_on X holds f is_continuous_on X;
+
+theorem :: NCFCONT1:147
+for f be PartFunc of CNS,RNS st
+  X c= dom f & f is_constant_on X holds f is_continuous_on X;
+
+theorem :: NCFCONT1:148
+for f be PartFunc of RNS,CNS st
+  X c= dom f & f is_constant_on X holds f is_continuous_on X;
+
+theorem :: NCFCONT1:149
+for f be PartFunc of CNS,CNS st
+ (for x0 be Point of CNS st x0 in dom f holds f/.x0 = x0) holds
+   f is_continuous_on dom f;
+
+theorem :: NCFCONT1:150
+for f be PartFunc of CNS,CNS st f = id dom f holds
+  f is_continuous_on dom f;
+
+theorem :: NCFCONT1:151
+for f be PartFunc of CNS,CNS, Y be Subset of CNS st
+ Y c= dom f & f|Y = id Y holds f is_continuous_on Y;
+
+theorem :: NCFCONT1:152
+for f be PartFunc of CNS,CNS, z be Complex, p be Point of CNS st
+ X c= dom f &
+ (for x0 be Point of CNS st x0 in X holds f/.x0 = z*x0+p) holds
+   f is_continuous_on X;
+
+theorem :: NCFCONT1:153
+for f be PartFunc of the carrier of CNS,REAL st
+  (for x0 be Point of CNS st x0 in dom f holds f/.x0 = ||. x0.|| ) holds
+    f is_continuous_on dom f;
+
+theorem :: NCFCONT1:154
+for f be PartFunc of the carrier of CNS,REAL st
+  X c= dom f &
+  (for x0 be Point of CNS st x0 in X holds f/.x0 = ||. x0.||) holds
+   f is_continuous_on X;

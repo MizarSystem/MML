@@ -15,6 +15,6 @@ PARTFUN1
 EQREL_1
 T_0TOPSP
 #
-«W19 ;V21 ;V27 ;;;G3 ;
-fW19 ;V21 ;;G3 W19 ;V21 ;;;K95 A1 ;
+«W21 ;V23 ;V29 ;;;G3 ;
+fW21 ;V23 ;;G3 W21 ;V23 ;;;K96 A1 ;
 !

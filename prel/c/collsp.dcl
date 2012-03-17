@@ -7,8 +7,8 @@ SETFAM_1
 STRUCT_0
 COLLSP
 #
-«V5 ;;;G3 ;
-«W4 ;V5 ;;;G3 ;
-«W4 ;V5 ;V6 ;V7 ;;;G3 ;
-«W4 ;V5 ;V6 ;V7 ;V8 ;;;G3 ;
+«V6 ;;;G3 ;
+«W5 ;V6 ;;;G3 ;
+«W5 ;V6 ;V7 ;V8 ;;;G3 ;
+«W5 ;V6 ;V7 ;V8 ;V9 ;;;G3 ;
 !

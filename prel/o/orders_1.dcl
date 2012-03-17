@@ -9,5 +9,5 @@ TARSKI
 FUNCT_2
 ORDERS_1
 #
-fW3 ;;M1 W3 ;;;K54 A1 ;
+fW4 ;;M1 W4 ;;;K54 A1 ;
 !

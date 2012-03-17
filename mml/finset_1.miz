@@ -7,7 +7,7 @@
 environ
 
  vocabulary FUNCT_1, RELAT_1, ORDINAL2, BOOLE, ORDINAL1, ORDINAL3, SETFAM_1,
-      TARSKI, MCART_1, FINSET_1, FUNCT_3;
+      TARSKI, MCART_1, FINSET_1, FUNCT_3, HAHNBAN, ZFMISC_1;
  notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, RELAT_1, FUNCT_1, MCART_1,
       SETFAM_1, ORDINAL1, ORDINAL2, ORDINAL3, SUBSET_1, DOMAIN_1, FUNCT_3;
  constructors ENUMSET1, MCART_1, ORDINAL3, SETFAM_1, XBOOLE_0, DOMAIN_1,
@@ -1069,5 +1069,104 @@ A1:    dom f is finite;
    end;
    pr1(dom f,rng f).:f = dom f by FUNCT_3:100;
   hence thesis by Th17;
+ end;
+
+:: from ALI2
+
+theorem
+for F being set st F is finite & F <> {} & F is c=-linear
+ ex m being set st m in F & for C being set st C in F holds m c= C
+ proof
+  defpred P[set] means $1 <> {} implies
+   ex m being set st m in $1 & for C being set st C in $1 holds m c= C;
+  let F be set such that
+  A1: F is finite and
+  A2: F <> {} and
+  A3: F is c=-linear;
+  A4: P[{}];
+  A5: now let x,B be set such that A6:x in F & B c= F & P[B];
+        now per cases;                         :: we have to prove P[BU{x}]
+     suppose A7:not ex y being set st y in B & y c=x;
+      assume B \/ {x} <> {};
+      take m = x;
+           x in {x} by TARSKI:def 1;
+      hence m in B \/ {x} by XBOOLE_0:def 2;
+      let C be set;
+      assume C in B \/ {x};
+      then A8: C in B or C in {x} by XBOOLE_0:def 2;
+      then C,x are_c=-comparable by A3,A6,ORDINAL1:def 9,TARSKI:def 1;
+      then C c= x or x c= C by XBOOLE_0:def 9;
+       hence m c= C by A7,A8,TARSKI:def 1;
+     end;
+     suppose ex y being set st y in B & y c=x;
+     then consider y being set such that A9: y in B & y c=x;
+      assume B \/ {x} <> {};
+       consider m being set such that A10:m in B and
+       A11: for C being set st C in B holds m c= C by A6,A9;
+           m c= y by A9,A11;
+       then A12:m c= x by A9,XBOOLE_1:1;
+        take m;
+      thus m in B \/ {x} by A10,XBOOLE_0:def 2;
+      let C be set;
+      assume C in B \/ {x};
+      then C in B or C in {x} by XBOOLE_0:def 2;
+      hence m c= C by A11,A12,TARSKI:def 1;
+    end;
+    end;
+   hence P[B \/ {x}];
+   end;
+       P[F] from Finite(A1,A4,A5);
+  hence thesis by A2;
+ end;
+
+:: from FIN_TOPO
+
+theorem
+  for F being set st
+    F is finite &
+    F <> {} & F is c=-linear
+      ex m being set st m in F &
+        for C being set st C in F holds C c= m
+proof
+  defpred P[set] means $1 <> {} implies
+   ex m being set st m in $1 & for C being set st C in $1 holds C c= m;
+  let F be set such that
+  A1: F is finite and
+  A2: F <> {} and
+  A3: F is c=-linear;
+  A4: P[{}];
+  A5: now let x,B be set such that A6:x in F & B c= F & P[B];
+       now per cases;
+     suppose A7:not ex y being set st y in B & x c= y;
+      assume B \/ {x} <> {};
+      take m = x;
+          x in {x} by TARSKI:def 1;
+      hence m in B \/ {x} by XBOOLE_0:def 2;
+      let C be set;
+      assume C in B \/ {x};
+      then A8: C in B or C in {x} by XBOOLE_0:def 2;
+      then C,x are_c=-comparable by A3,A6,ORDINAL1:def 9,TARSKI:def 1;
+      then C c= x or x c= C by XBOOLE_0:def 9;
+       hence C c= m by A7,A8,TARSKI:def 1;
+     end;
+     suppose ex y being set st y in B & x c= y;
+     then consider y being set such that A9: y in B & x c= y;
+      assume B \/ {x} <> {};
+       consider m being set such that A10:m in B and
+       A11: for C being set st C in B holds C c= m by A6,A9;
+          y c= m by A9,A11;
+       then A12:x c= m by A9,XBOOLE_1:1;
+        take m;
+      thus m in B \/ {x} by A10,XBOOLE_0:def 2;
+      let C be set;
+      assume C in B \/ {x};
+      then C in B or C in {x} by XBOOLE_0:def 2;
+      hence C c= m by A11,A12,TARSKI:def 1;
+    end;
+    end;
+   hence P[B \/ {x}];
+   end;
+      P[F] from Finite(A1,A4,A5);
+  hence thesis by A2;
  end;
 

@@ -6,5 +6,5 @@ FUNCT_1
 ORDINAL1
 FINSET_1
 #
-«W1 ;V2 ;V4 ;V10 ;V12 ;;M1 W1 ;;;M2 A1 ;
+«W1 ;V2 ;V5 ;V11 ;V13 ;;M1 W1 ;;;M2 A1 ;
 !

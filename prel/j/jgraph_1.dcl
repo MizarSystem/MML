@@ -25,5 +25,5 @@ METRIC_1
 EUCLID
 JGRAPH_1
 #
-fV25 ;;M1 W1 ;;;K186 A1 ;
+fV26 ;;M1 W1 ;;;K188 A1 ;
 !

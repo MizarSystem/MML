@@ -8,19 +8,22 @@ environ
 
  vocabulary ORDINAL1, CARD_1, FUNCT_1, RELAT_1, BOOLE, FUNCOP_1, FUNCT_2,
       TARSKI, MCART_1, PROB_1, RLVECT_1, CARD_2, ORDINAL2, FINSET_1, ARYTM_1,
-      CLASSES1, ZFMISC_1, WELLORD1, WELLORD2, RELAT_2, CARD_3, HAHNBAN;
+      CLASSES1, ZFMISC_1, WELLORD1, WELLORD2, RELAT_2, CARD_3, HAHNBAN,
+      FRAENKEL, AMI_1, ZF_REFLE;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REAL_1, ORDINAL2, NAT_1,
-      RELAT_1, RELAT_2, FUNCT_1, FUNCT_2, ORDINAL1, WELLORD1, MCART_1,
-      WELLORD2, CARD_1, FUNCOP_1, FUNCT_4, FINSET_1, PROB_1, CARD_2, CLASSES1;
+      RELAT_1, RELAT_2, FUNCT_1, FUNCT_2, FRAENKEL, SETFAM_1, ORDINAL1,
+      WELLORD1, MCART_1, WELLORD2, CARD_1, FUNCOP_1, FUNCT_4, FINSET_1, PROB_1,
+      CARD_2, CLASSES1;
  constructors REAL_1, NAT_1, RELAT_2, WELLORD1, MCART_1, WELLORD2, FUNCOP_1,
-      PROB_1, CARD_2, CLASSES1, MEMBERED, XBOOLE_0;
+      PROB_1, CARD_2, CLASSES1, MEMBERED, XBOOLE_0, FRAENKEL;
  clusters RELAT_1, FUNCT_1, FINSET_1, CARD_1, FUNCOP_1, ORDINAL1, MEMBERED,
-      ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+      ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2, SETFAM_1, RELSET_1;
  requirements NUMERALS, BOOLE, SUBSET;
- definitions TARSKI, FUNCT_1, RELAT_2, WELLORD1, WELLORD2, XBOOLE_0;
+ definitions TARSKI, FUNCT_1, RELAT_2, WELLORD1, WELLORD2, XBOOLE_0, FRAENKEL;
  theorems TARSKI, ZFMISC_1, FINSET_1, FUNCT_1, FUNCT_2, MCART_1, ORDINAL1,
       RELAT_1, RELAT_2, WELLORD1, WELLORD2, CARD_1, FUNCOP_1, FUNCT_4, FUNCT_5,
-      CARD_2, CLASSES1, GRFUNC_1, PROB_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+      CARD_2, CLASSES1, GRFUNC_1, PROB_1, XBOOLE_0, XBOOLE_1, XCMPLX_1,
+      RELSET_1, SETFAM_1;
  schemes NAT_1, FUNCT_1, PARTFUN1, ORDINAL1, FUNCT_5, RELAT_1, XBOOLE_0;
 
 begin
@@ -1659,3 +1662,48 @@ ORDINAL1:22;
     then Card order_type_of Q = Card union X & Card M = M by CARD_1:21,def 5;
    hence thesis by A55,CARD_1:27;
   end;
+
+begin :: Addenda
+
+:: from AMI_1
+
+registration let f be Function;
+ cluster product f -> functional;
+ coherence
+  proof
+    set d = product f;
+     let x be set; assume x in d;
+       then ex g being Function
+      st x = g & dom g= dom f & for x being set st x in dom f holds g.x in f.x
+         by Def5;
+      hence x is Function;
+  end;
+end;
+
+registration let A be set; let B be with_non-empty_elements set;
+ let f be Function of A,B;
+ cluster product f -> non empty;
+ coherence
+  proof
+       rng f c= B by RELSET_1:12;
+    then not {} in rng f by SETFAM_1:def 9;
+    hence thesis by Th37;
+  end;
+end;
+
+:: from PRVECT_1
+
+registration
+  let f be non-empty Function;
+  cluster product f -> functional non empty;
+   coherence
+    proof
+        product f is non empty set
+        proof
+           not {} in rng f by RELAT_1:def 9;
+        hence thesis by Th37;
+        end;
+     hence thesis;
+    end;
+ end;
+

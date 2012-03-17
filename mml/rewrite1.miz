@@ -7,19 +7,18 @@
 environ
 
  vocabulary FINSEQ_1, BOOLE, RELAT_1, FUNCT_1, FINSEQ_5, ARYTM_1, WELLORD1,
-      PBOOLE, RELAT_2, FUNCOP_1, BHSP_3, ISOCAT_1, EQREL_1, REWRITE1;
+      PBOOLE, RELAT_2, FUNCOP_1, BHSP_3, ISOCAT_1, EQREL_1, REWRITE1, MONOID_0;
  notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, NAT_1,
-      FUNCT_1, RELAT_1, RELAT_2, WELLORD1, EQREL_1, FUNCOP_1, FINSEQ_1, PBOOLE,
-      FINSEQ_5, LANG1;
- constructors NAT_1, WELLORD1, EQREL_1, FUNCOP_1, PBOOLE, FINSEQ_5, LANG1,
-      XREAL_0, MEMBERED, PARTFUN1, TOLER_1, RELAT_1, RELAT_2, RELSET_1;
+      FUNCT_1, RELAT_1, RELAT_2, WELLORD1, EQREL_1, FINSEQ_1, PBOOLE, FINSEQ_5;
+ constructors NAT_1, WELLORD1, EQREL_1, FUNCOP_1, PBOOLE, FINSEQ_5, XREAL_0,
+      MEMBERED, PARTFUN1, TOLER_1, RELAT_1, RELAT_2, RELSET_1;
  clusters SUBSET_1, RELAT_1, FINSEQ_1, XREAL_0, FUNCOP_1, ARYTM_3, MEMBERED,
       NUMBERS, ORDINAL2, EQREL_1, TOLER_1, PARTFUN1, RELSET_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, RELAT_1, RELAT_2, WELLORD1;
  theorems TARSKI, AXIOMS, ZFMISC_1, REAL_1, NAT_1, WELLORD1, RELAT_1, RELAT_2,
-      FUNCT_1, FUNCOP_1, PBOOLE, FINSEQ_1, TOLER_1, TREES_1, FINSEQ_5, LANG1,
-      EQREL_1, WELLORD2, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+      FUNCT_1, FUNCOP_1, PBOOLE, FINSEQ_1, TOLER_1, TREES_1, FINSEQ_5, EQREL_1,
+      WELLORD2, XBOOLE_0, XBOOLE_1, XCMPLX_1;
  schemes NAT_1, RELAT_1, EQREL_1, TREES_2;
 
 begin :: Forgetting concatenation and reduction sequence
@@ -511,7 +510,7 @@ theorem Th20:
 
 theorem Th21:
  for R being Relation, a,b being set holds
-   R reduces a,b iff a = b or [a,b] in R*
+   R reduces a,b iff a = b or [a,b] in R[*]
   proof let R be Relation, a,b be set;
    hereby assume
 A1:   R reduces a,b;
@@ -526,14 +525,14 @@ then A4:   len p >= 0+1 by NAT_1:38;
        then i in dom p & i+1 in dom p by Lm3,Lm4;
       hence [p.i,p.(i+1)] in R by Def2;
      end;
-    hence [a,b] in R* by A2,A3,A4,LANG1:def 13;
+    hence [a,b] in R[*] by A2,A3,A4,FINSEQ_1:def 16;
    end;
    assume
-A5:  (a = b or [a,b] in R*) & not R reduces a,b;
+A5:  (a = b or [a,b] in R[*]) & not R reduces a,b;
    then consider p being FinSequence such that
 A6:  len p >= 1 & p.1 = a & p.(len p) = b and
 A7:  for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R
-     by Th13,LANG1:def 13;
+     by Th13,FINSEQ_1:def 16;
        p is RedSequence of R
      proof 0+1 = 1; hence len p > 0 by A6,NAT_1:38;
       let i be Nat; assume i in dom p & i+1 in dom p;
@@ -545,11 +544,11 @@ A7:  for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R
 
 theorem Th22:
  for R being Relation, a,b being set holds
-   R reduces a,b iff R* reduces a,b
+   R reduces a,b iff R[*] reduces a,b
   proof let R be Relation, a,b be set;
-       R reduces a,b iff a = b or [a,b] in R* by Th21;
-   hence R reduces a,b implies R* reduces a,b by Th13,Th16;
-   given p being RedSequence of R* such that
+       R reduces a,b iff a = b or [a,b] in R[*] by Th21;
+   hence R reduces a,b implies R[*] reduces a,b by Th13,Th16;
+   given p being RedSequence of R[*] such that
 A1:  a = p.1 & b = p.len p;
    defpred P[Nat] means $1 in dom p implies R reduces a,p.$1;
 A2:  P[0] by Lm1;
@@ -564,7 +563,7 @@ A6:   i < len p by A5,Lm2;
      end;
      suppose A7: i > 0;
 then i in dom p by A6,Lm3;
-      then [p.i,p.(i+1)] in R* by A5,Def2;
+      then [p.i,p.(i+1)] in R[*] by A5,Def2;
       then R reduces a,p.i & R reduces p.i, p.(i+1) by A4,A6,A7,Lm3,Th21;
      hence R reduces a,p.(i+1) by Th17;
     end;
@@ -1843,40 +1842,40 @@ A31:     for i being Nat holds Z[i] from NAT_1:sch 1(A5,A30);
 
 theorem
     for R being Relation holds
-   R is confluent iff R* has_weak-Church-Rosser_property
+   R is confluent iff R[*] has_weak-Church-Rosser_property
   proof let R be Relation;
    hereby assume A1: R is confluent;
-    thus R* has_weak-Church-Rosser_property
-     proof let a,b,c be set; assume [a,b] in R* & [a,c] in R*;
+    thus R[*] has_weak-Church-Rosser_property
+     proof let a,b,c be set; assume [a,b] in R[*] & [a,c] in R[*];
        then R reduces a,b & R reduces a,c by Th21;
        then b,c are_divergent_wrt R by Def8;
        then b,c are_convergent_wrt R by A1,Def22;
       then consider d being set such that
 A2:     R reduces b,d & R reduces c,d by Def7;
-      take d; thus R* reduces b,d & R* reduces c,d by A2,Th22;
+      take d; thus R[*] reduces b,d & R[*] reduces c,d by A2,Th22;
      end;
    end;
    assume
-A3:  for a,b,c being set st [a,b] in R* & [a,c] in R*
-     holds b,c are_convergent_wrt R*;
+A3:  for a,b,c being set st [a,b] in R[*] & [a,c] in R[*]
+     holds b,c are_convergent_wrt R[*];
    let a,b be set; given c being set such that
 A4:  R reduces c,a & R reduces c,b;
-       ([c,a] in R* or c = a) & ([c,b] in R* or c = b) by A4,Th21;
-    then a,b are_convergent_wrt R* or R* reduces a,b or R* reduces b,a
+       ([c,a] in R[*] or c = a) & ([c,b] in R[*] or c = b) by A4,Th21;
+    then a,b are_convergent_wrt R[*] or R[*] reduces a,b or R[*] reduces b,a
      by A3,Th16,Th39;
-    then a,b are_convergent_wrt R* by Th37;
+    then a,b are_convergent_wrt R[*] by Th37;
    then consider d being set such that
-A5:  R* reduces a,d & R* reduces b,d by Def7;
+A5:  R[*] reduces a,d & R[*] reduces b,d by Def7;
    take d; thus thesis by A5,Th22;
   end;
 
 theorem
     for R being Relation holds
-   R is confluent iff R* is subcommutative
+   R is confluent iff R[*] is subcommutative
   proof let R be Relation;
    hereby assume A1: R is confluent;
-    thus R* is subcommutative
-     proof let a,b,c be set; assume [a,b] in R* & [a,c] in R*;
+    thus R[*] is subcommutative
+     proof let a,b,c be set; assume [a,b] in R[*] & [a,c] in R[*];
        then R reduces a,b & R reduces a,c by Th21;
        then b,c are_divergent_wrt R by Def8;
        then b,c are_convergent_wrt R by A1,Def22;
@@ -1886,15 +1885,15 @@ A2:     R reduces b,d & R reduces c,d by Def7;
      end;
    end;
    assume
-A3:  for a,b,c being set st [a,b] in R* & [a,c] in R*
-     holds b,c are_convergent<=1_wrt R*;
+A3:  for a,b,c being set st [a,b] in R[*] & [a,c] in R[*]
+     holds b,c are_convergent<=1_wrt R[*];
    let a,b be set; given c being set such that
 A4:  R reduces c,a & R reduces c,b;
-       ([c,a] in R* or c = a) & ([c,b] in R* or c = b) by A4,Th21;
-    then a,b are_convergent<=1_wrt R* by A3,Def9;
-    then a,b are_convergent_wrt R* by Th45;
+       ([c,a] in R[*] or c = a) & ([c,b] in R[*] or c = b) by A4,Th21;
+    then a,b are_convergent<=1_wrt R[*] by A3,Def9;
+    then a,b are_convergent_wrt R[*] by Th45;
    then consider d being set such that
-A5:  R* reduces a,d & R* reduces b,d by Def7;
+A5:  R[*] reduces a,d & R[*] reduces b,d by Def7;
    take d; thus thesis by A5,Th22;
   end;
 

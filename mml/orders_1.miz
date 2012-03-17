@@ -8,18 +8,19 @@ environ
 
  vocabulary FUNCT_1, BOOLE, TARSKI, RELAT_1, MCART_1, RELAT_2, WELLORD1,
       ORDERS_1, PARTFUN1, ORDINAL1, ZFMISC_1, WELLORD2, SETFAM_1, ORDERS_2,
-      HAHNBAN;
+      HAHNBAN, FINSET_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, MCART_1, ORDINAL1, WELLORD1, SETFAM_1,
-      WELLORD2;
+      WELLORD2, FINSET_1;
  constructors RELAT_2, MCART_1, WELLORD1, PARTFUN1, MEMBERED, XBOOLE_0,
-      FUNCT_2, ZFMISC_1, TARSKI, ORDINAL1, SETFAM_1, WELLORD2;
- clusters RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, PARTFUN1, XBOOLE_0, ORDINAL1;
+      FUNCT_2, ZFMISC_1, TARSKI, ORDINAL1, SETFAM_1, WELLORD2, FINSET_1;
+ clusters RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, PARTFUN1, XBOOLE_0, ORDINAL1,
+      FINSET_1;
  requirements BOOLE, SUBSET;
  definitions RELAT_2, TARSKI, WELLORD1, RELAT_1, ORDINAL1, XBOOLE_0;
  theorems FUNCT_1, FUNCT_2, MCART_1, RELAT_1, RELAT_2, RELSET_1, TARSKI,
       WELLORD1, WELLORD2, ZFMISC_1, XBOOLE_0, XBOOLE_1, PARTFUN1, ORDINAL1,
-      SETFAM_1;
+      SETFAM_1, FINSET_1;
  schemes FUNCT_1, XBOOLE_0, ORDINAL1, TARSKI, RELSET_1, RELAT_1;
 
 begin
@@ -2242,3 +2243,88 @@ theorem
 
 theorem
       R|_2 {} = {} by Lm14;
+
+begin :: Addenda
+
+:: from COMPTS_1
+
+theorem
+  Z is finite & Z c= rng f implies
+  ex Y st Y c= dom f & Y is finite & f.:Y = Z
+   proof
+    assume that A1: Z is finite and A2: Z c= rng f;
+    per cases;
+     suppose A3: Z = {};
+     take Y = {};
+     thus Y c= dom f & Y is finite by XBOOLE_1:2;
+     thus f.:Y = Z by A3,RELAT_1:149;
+     end;
+     suppose A4: Z <> {};
+     deffunc F(set) = f"{$1};
+    consider g being Function such that A5: dom g = Z and
+     A6: for x st x in Z holds g.x = F(x) from FUNCT_1:sch 3;
+    reconsider AA = rng g as non empty set by A4,A5,RELAT_1:65;
+    A7: for X being set st X in AA holds X <> {}
+        proof
+         let X be set; assume X in AA;
+         then consider x such that A8: x in dom g and A9: g.x=X by FUNCT_1:def
+5;
+              g.x = f"{x} by A5,A6,A8;
+         hence thesis by A2,A5,A8,A9,FUNCT_1:142;
+        end;
+    then A10: not {} in AA;
+    consider ff being Choice_Function of AA;
+    consider z being Element of AA;
+A11: z <> {} by A7;
+    consider y being Element of z;
+        y in z by A11;
+    then reconsider AA'=union AA as non empty set by TARSKI:def 4;
+    reconsider f'= ff as Function of AA,AA';
+    A12: dom f' = AA by FUNCT_2:def 1;
+    take Y = ff.:AA;
+    thus A13: Y c= dom f
+     proof
+      let x; assume x in Y;
+      then consider y such that y in dom ff and A14: y in AA and
+       A15: ff.y=x by FUNCT_1:def 12;
+          y in g.:Z by A5,A14,RELAT_1:146;
+      then consider z such that A16: z in dom g & z in Z and
+       A17: g.z=y by FUNCT_1:def 12;
+      A18: g.z = f"{z} by A6,A16;
+          x in g.z by A10,A14,A15,A17,Def1;
+      hence x in dom f by A18,FUNCT_1:def 13;
+     end;
+        AA = g.:Z by A5,RELAT_1:146;
+    then AA is finite by A1,FINSET_1:17;
+    hence Y is finite by FINSET_1:17;
+        x in f.:Y iff x in Z
+     proof
+      thus x in f.:Y implies x in Z
+       proof
+        assume x in f.:(Y);
+        then consider y such that y in dom f and A19: y in Y and
+         A20: f.y = x by FUNCT_1:def 12;
+        consider z such that A21: z in dom ff & z in AA and A22: ff.z=y
+         by A19,FUNCT_1:def 12;
+        consider a being set such that A23:a in dom g and A24: g.a=z
+         by A21,FUNCT_1:def 5;
+             g.a = f"{a} by A5,A6,A23;
+        then y in f"{a} by A10,A21,A22,A24,Def1;
+        then f.y in {a} by FUNCT_1:def 13;
+        hence thesis by A5,A20,A23,TARSKI:def 1;
+       end;
+      assume A25: x in Z;
+      set y=ff.(g.x);
+      A26: g.x in AA by A5,A25,FUNCT_1:def 5;
+      then ff.(g.x) in rng ff by A12,FUNCT_1:def 5;
+      then A27: y in Y by A12,RELAT_1:146;
+          g.x = f"{x} by A6,A25;
+      then y in f"{x} by A10,A26,Def1;
+      then f.y in {x} by FUNCT_1:def 13;
+      then y in dom f & y in Y & f.y = x by A13,A27,TARSKI:def 1;
+      hence thesis by FUNCT_1:def 12;
+     end;
+    hence f.:Y = Z by TARSKI:2;
+  end;
+  end;
+

@@ -6,7 +6,7 @@
 
 environ
 
- vocabulary BOOLE, TARSKI, SUBSET_1, SETFAM_1;
+ vocabulary BOOLE, TARSKI, SUBSET_1, SETFAM_1, AMI_1, CANTOR_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1;
  constructors TARSKI, SUBSET_1, XBOOLE_0;
  clusters SUBSET_1, XBOOLE_0, ZFMISC_1;
@@ -1159,4 +1159,143 @@ registration let X be set, F be empty Subset-Family of X;
    hence contradiction by Def8;
   end;
 end;
+
+:: from AMI_1
+
+definition let IT be set;
+ attr IT is with_non-empty_elements means
+:Def9: not {} in IT;
+end;
+
+registration
+ cluster non empty with_non-empty_elements set;
+ existence
+  proof
+   take {{{}}};
+   thus {{{}}} is non empty;
+   assume {} in {{{}}};
+   hence contradiction by TARSKI:def 1;
+  end;
+end;
+
+registration
+ let A be non empty set;
+  cluster { A } -> with_non-empty_elements;
+  coherence
+   proof
+       { A } is with_non-empty_elements
+    proof
+    assume {} in { A };
+    hence contradiction by TARSKI:def 1;
+    end;
+    hence thesis;
+   end;
+ let B be non empty set;
+  cluster { A, B } -> with_non-empty_elements;
+  coherence
+   proof
+       { A, B } is with_non-empty_elements
+    proof
+    assume {} in { A,B };
+    hence contradiction by TARSKI:def 2;
+    end;
+    hence thesis;
+   end;
+end;
+
+registration let A,B be with_non-empty_elements set;
+ cluster A \/ B -> with_non-empty_elements;
+ coherence
+  proof
+      A \/ B is with_non-empty_elements
+    proof
+        not {} in A & not {} in B by Def9;
+     hence not {} in A \/ B by XBOOLE_0:def 2;
+    end;
+   hence thesis;
+  end;
+end;
+
+:: from LATTICE4
+
+theorem
+    union Y c= Z & X in Y implies X c= Z
+ proof
+  assume that
+A1: union Y c= Z and
+A2: X in Y;
+  thus X c= Z
+   proof let x be set;
+    assume x in X;
+     then x in union Y by A2,TARSKI:def 4;
+    hence x in Z by A1;
+   end;
+ end;
+
+:: from LOPCLSET
+
+theorem
+ for A,B,X being set holds (X c= union (A \/ B) &
+    for Y being set st Y in B holds Y misses X )
+        implies X c= union A
+  proof
+    let A,B,X be set;
+     assume A1:X c= union (A \/ B);
+     assume for Y st Y in B holds Y misses X;
+     then union B misses X by ZFMISC_1:98;
+     then A2:union B /\ X = {} by XBOOLE_0:def 7;
+         X c= union (A \/ B) /\ X by A1,XBOOLE_1:19;
+    then X c= (union A \/ union B) /\ X by ZFMISC_1:96;
+    then A3: X c= (union A /\ X) \/ (union B /\ X) by XBOOLE_1:23;
+         union A /\ X c= union A by XBOOLE_1:17;
+    hence thesis by A2,A3,XBOOLE_1:1;
+  end;
+
+:: from CANTOR_1
+
+definition
+   let M be set; let B be Subset-Family of M;
+   func Intersect(B) -> Subset of M equals :Def3:
+    meet B if B <> {} otherwise
+    M;
+   coherence
+   proof
+         M c= M;hence thesis;
+    end;
+   consistency;
+end;
+
+theorem Th10:
+  for X being set for R being Subset-Family of X for x being
+    set st x in X holds x in Intersect R iff for Y being set st Y in R holds
+       x in Y
+    proof
+      let X be set, R be Subset-Family of X; let x be set;
+      assume A1: x in X;
+      hereby assume A2: x in Intersect R;
+      let Y be set; assume A3: Y in R;
+      then Intersect R = meet R by Def3;
+      hence x in Y by A2,A3,Def1;
+      end;
+      assume A4: for Y being set st Y in R holds x in Y;
+          now per cases;
+      case A5: R <> {}; then x in meet R by A4,Def1;
+      hence x in Intersect R by A5,Def3;
+      end;
+      case R = {}; hence thesis by A1,Def3;
+      end;
+      end;
+      hence thesis;
+      end;
+
+theorem
+  for X being set for H, J being Subset-Family of X st H c= J holds
+    Intersect J c= Intersect H
+    proof
+    let X be set; let H, J be Subset-Family of X such that A1: H c= J;
+    let x be set;
+    assume A2: x in Intersect J;
+     then for Y be set st Y in H holds x in Y by A1,Th10;
+     hence x in Intersect H by A2,Th10;
+    end;
 

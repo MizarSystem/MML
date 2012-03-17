@@ -12,22 +12,21 @@ environ
       PRALG_1, MSUALG_3, ZF_REFLE, AMI_1, MSUALG_1, CARD_3, MSUHOM_1, CQC_SIM1,
       WELLORD1, AUTALG_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, FUNCOP_1,
-      STRUCT_0, FINSEQ_1, BINOP_1, FRAENKEL, PBOOLE, VECTSP_1,
-      GROUP_1, GROUP_6, CARD_3, UNIALG_1, UNIALG_2, ALG_1, PRALG_1, MSUALG_1,
-      MSUALG_3, MSUHOM_1;
+      FUNCT_2, FUNCOP_1, STRUCT_0, FINSEQ_1, BINOP_1, FRAENKEL, PBOOLE,
+      VECTSP_1, GROUP_1, GROUP_6, CARD_3, PZFMISC1, UNIALG_1, UNIALG_2, ALG_1,
+      MSUALG_1, MSUALG_3, MSUHOM_1;
  constructors BINOP_1, FRAENKEL, GROUP_6, ALG_1, MSUALG_3, MSUHOM_1, MEMBERED,
-      XBOOLE_0, CARD_3;
+      XBOOLE_0, CARD_3, PRALG_1, PRE_CIRC, PZFMISC1;
  clusters FRAENKEL, FUNCT_1, GROUP_1, MSUALG_1, PBOOLE, PRALG_1, RELSET_1,
       STRUCT_0, SUBSET_1, MEMBERED, ZFMISC_1, FUNCT_2, PARTFUN1, XBOOLE_0,
       NUMBERS, ORDINAL2, FUNCOP_1;
  requirements BOOLE, SUBSET;
  definitions ALG_1, FRAENKEL, VECTSP_1, GROUP_1, GROUP_6, MSUALG_3, TARSKI,
-      XBOOLE_0;
+      XBOOLE_0, PZFMISC1;
  theorems ALG_1, BINOP_1, CARD_3, FUNCOP_1, FUNCT_1, FUNCT_2, GROUP_1, GROUP_6,
       MSUALG_1, MSUALG_3, MSUHOM_1, PBOOLE, TARSKI, ZFMISC_1, RELAT_1,
-      VECTSP_1, RELSET_1, XBOOLE_0, XBOOLE_1;
- schemes BINOP_1, FUNCT_1, MSUALG_1, XBOOLE_0;
+      VECTSP_1, RELSET_1, XBOOLE_0, XBOOLE_1, PZFMISC1;
+ schemes BINOP_1, FUNCT_1, XBOOLE_0;
 
 begin
 :: On the Group of Automorphisms of Universal Algebra
@@ -364,10 +363,7 @@ begin
 reserve I for set,
         A, B, C for ManySortedSet of I;
 
-definition let I, A, B;
-  pred A is_transformable_to B means
-:Def4: for i be set st i in I holds B.i = {} implies A.i = {};
-reflexivity;
+definition canceled;
 end;
 
 theorem
@@ -379,9 +375,8 @@ theorem
     proof
       let i be set;
       assume i in I;
-      then (B.i = {} implies A.i = {}) & (C.i = {} implies B.i = {}) by A1,
-Def4
-;
+      then (B.i = {} implies A.i = {}) & (C.i = {} implies B.i = {})
+           by A1,PZFMISC1:def 3;
       hence C.i = {} implies A.i = {};
     end;
   end;
@@ -404,25 +399,25 @@ for F, G, H be Function-yielding Function
     set f = (H ** G) ** F,
         g = H ** (G ** F);
        now
-A1:   dom f = (dom (H ** G)) /\ dom F by MSUALG_3:def 4
-           .= (dom H) /\ (dom G) /\ (dom F) by MSUALG_3:def 4;
+A1:   dom f = (dom (H ** G)) /\ dom F by PBOOLE:def 24
+           .= (dom H) /\ (dom G) /\ (dom F) by PBOOLE:def 24;
 then A2:   dom f = (dom H) /\ ((dom G) /\ dom F) by XBOOLE_1:16;
       hence
 A3:   dom f
-        = (dom H) /\ (dom (G ** F)) by MSUALG_3:def 4
-       .= dom g by MSUALG_3:def 4;
+        = (dom H) /\ (dom (G ** F)) by PBOOLE:def 24
+       .= dom g by PBOOLE:def 24;
       let x be set; assume
 A4:     x in dom f;
       then x in (dom H) /\ (dom G) by A1,XBOOLE_0:def 3;
-then A5:   x in dom (H ** G) by MSUALG_3:def 4;
+then A5:   x in dom (H ** G) by PBOOLE:def 24;
          x in (dom G) /\ (dom F) by A2,A4,XBOOLE_0:def 3;
-then A6:   x in dom (G ** F) by MSUALG_3:def 4;
+then A6:   x in dom (G ** F) by PBOOLE:def 24;
       thus f.x
-        = ((H**G).x) * (F.x) by A4,MSUALG_3:def 4
-       .= (H.x)*(G.x)*(F.x) by A5,MSUALG_3:def 4
+        = ((H**G).x) * (F.x) by A4,PBOOLE:def 24
+       .= (H.x)*(G.x)*(F.x) by A5,PBOOLE:def 24
        .= (H.x)*((G.x)*(F.x)) by RELAT_1:55
-       .= (H.x)*((G**F).x) by A6,MSUALG_3:def 4
-       .= g.x by A3,A4,MSUALG_3:def 4;
+       .= (H.x)*((G**F).x) by A6,PBOOLE:def 24
+       .= g.x by A3,A4,PBOOLE:def 24;
     end;
     hence thesis by FUNCT_1:9;
   end;
@@ -438,7 +433,7 @@ for A, B be non-empty ManySortedSet of I
        now
       let i be set;
       assume A2: i in I;
-      then reconsider g = F.i as Function of A.i, B.i by MSUALG_1:def 2;
+      then reconsider g = F.i as Function of A.i, B.i by PBOOLE:def 18;
          g is one-to-one by A1,A2,MSUALG_3:1;
       then g" is one-to-one by FUNCT_1:62;
       hence (F"".i) is one-to-one by A1,A2,MSUALG_3:def 5;
@@ -449,7 +444,7 @@ for A, B be non-empty ManySortedSet of I
       let i be set;
       assume A3: i in I;
 then A4:   A.i <> {} & B.i <> {} by PBOOLE:def 16;
-      reconsider g = F.i as Function of A.i, B.i by A3,MSUALG_1:def 2;
+      reconsider g = F.i as Function of A.i, B.i by A3,PBOOLE:def 18;
 A5:   g is one-to-one by A1,A3,MSUALG_3:1;
          A.i = dom g by A4,FUNCT_2:def 1
          .= rng (g") by A5,FUNCT_1:55;
@@ -468,8 +463,8 @@ theorem
        now
       let i be set;
       assume A2: i in I;
-      then reconsider f' = (F"").i as Function of B.i, A.i by MSUALG_1:def 2;
-      reconsider f = F.i as Function of A.i, B.i by A2,MSUALG_1:def 2;
+      then reconsider f' = (F"").i as Function of B.i, A.i by PBOOLE:def 18;
+      reconsider f = F.i as Function of A.i, B.i by A2,PBOOLE:def 18;
          F"" is "1-1" "onto" by A1,Th14;
 then A3:   (F"")"".i = f'" by A2,MSUALG_3:def 5;
          f is one-to-one by A1,A2,MSUALG_3:1;
@@ -489,11 +484,11 @@ A1:   F is "1-1" & G is "1-1";
         f be Function such that
 A2:   i in dom (G**F) and
 A3:   (G**F).i = f;
-       dom (G**F) = (dom G) /\ (dom F) by MSUALG_3:def 4;
+       dom (G**F) = (dom G) /\ (dom F) by PBOOLE:def 24;
     then i in dom G & i in dom F by A2,XBOOLE_0:def 3;
     then G.i is one-to-one & F.i is one-to-one by A1,MSUALG_3:def 2;
     then (G.i)*(F.i) is one-to-one by FUNCT_1:46;
-    hence f is one-to-one by A2,A3,MSUALG_3:def 4;
+    hence f is one-to-one by A2,A3,PBOOLE:def 24;
   end;
 
 theorem Th17:
@@ -511,8 +506,8 @@ for B, C be non-empty ManySortedSet of I
        now
       let i be set;
       assume A3: i in I;
-      then reconsider f = F.i as Function of A.i, B.i by MSUALG_1:def 2;
-      reconsider g = G.i as Function of B.i, C.i by A3,MSUALG_1:def 2;
+      then reconsider f = F.i as Function of A.i, B.i by PBOOLE:def 18;
+      reconsider g = G.i as Function of B.i, C.i by A3,PBOOLE:def 18;
 A4:   B.i <> {} by A3,PBOOLE:def 16;
 A5:   C.i <> {} by A3,PBOOLE:def 16;
          rng f = B.i & rng g = C.i by A1,A2,A3,MSUALG_3:def 3;
@@ -537,8 +532,8 @@ theorem
        now
       let i be set;
       assume A3: i in I;
-      then reconsider f = F.i as Function of A.i, B.i by MSUALG_1:def 2;
-      reconsider g = G.i as Function of B.i, C.i by A3,MSUALG_1:def 2;
+      then reconsider f = F.i as Function of A.i, B.i by PBOOLE:def 18;
+      reconsider g = G.i as Function of B.i, C.i by A3,PBOOLE:def 18;
 A4:   (F"").i = f" by A1,A3,MSUALG_3:def 5;
 A5:   (G"").i = g" by A2,A3,MSUALG_3:def 5;
 A6:   (G ** F) is "1-1" "onto" by A1,A2,Th16,Th17;
@@ -574,8 +569,8 @@ for A, B be non-empty ManySortedSet of I
        now
       let i be set;
       assume A2: i in I;
-      then reconsider f = F.i as Function of A.i, B.i by MSUALG_1:def 2;
-      reconsider g = G.i as Function of B.i, A.i by A2,MSUALG_1:def 2;
+      then reconsider f = F.i as Function of A.i, B.i by PBOOLE:def 18;
+      reconsider g = G.i as Function of B.i, A.i by A2,PBOOLE:def 18;
 A3:   (F"").i = f" by A1,A2,MSUALG_3:def 5;
          now
         thus A.i <> {} by A2,PBOOLE:def 16;
@@ -596,27 +591,7 @@ begin
 reserve S for non void non empty ManySortedSign,
         U1, U2 for non-empty MSAlgebra over S;
 
-definition let I, A, B;
-  deffunc _F(set) = Funcs(A.$1, B.$1);
-  func MSFuncs (A, B) -> ManySortedSet of I means
-:Def5: for i be set st i in I holds it.i = Funcs(A.i, B.i);
-existence proof
-  thus ex M being ManySortedSet of I st
-        for i be set st i in I holds M.i = _F(i) from MSUALG_1:sch 2;
-end;
-uniqueness
-  proof
-    let F1, F2 be ManySortedSet of I such that
-A1: for i be set st i in I holds F1.i = Funcs(A.i, B.i) and
-A2: for i be set st i in I holds F2.i = Funcs(A.i, B.i);
-       now
-      let i be set;
-      assume A3: i in I;
-      hence F1.i = Funcs(A.i, B.i) by A1
-                .= F2.i by A2,A3;
-    end;
-    hence thesis by PBOOLE:3;
-  end;
+definition canceled;
 end;
 
 canceled;
@@ -639,7 +614,7 @@ A5: for i be set st i in I holds g.i in Funcs(A.i, B.i)
     proof
       let i be set;
       assume A6: i in I;
-      then MSFuncs(A, B).i = Funcs(A.i, B.i) by Def5;
+      then MSFuncs(A, B).i = Funcs(A.i, B.i) by PBOOLE:def 22;
       hence thesis by A3,A4,A6;
     end;
 A7: for i be set st i in I holds ex F be Function st F = g.i & dom F = A.i &
@@ -656,11 +631,11 @@ A8: for i be set st i in I holds g.i is Function of A.i, B.i
       assume A9: i in I;
       then consider F be Function such that
 A10:     F = g.i & dom F = A.i & rng F c= B.i by A7;
-         B.i = {} implies A.i = {} by A1,A9,Def4;
+         B.i = {} implies A.i = {} by A1,A9,PZFMISC1:def 3;
       hence thesis by A10,FUNCT_2:def 1,RELSET_1:11;
     end;
        g is ManySortedSet of I by A4,PBOOLE:def 3;
-    hence thesis by A3,A8,MSUALG_1:def 2;
+    hence thesis by A3,A8,PBOOLE:def 18;
   end;
 
 theorem Th22:
@@ -676,10 +651,10 @@ A2: dom g = I & dom f = I by PBOOLE:def 3;
       let x be set;
       assume A3: x in dom f;
       then reconsider i = x as Element of I by PBOOLE:def 3;
-A4:   g.i is Function of A.i, B.i by A2,A3,MSUALG_1:def 2;
-         B.i = {} implies A.i = {} by A1,A2,A3,Def4;
+A4:   g.i is Function of A.i, B.i by A2,A3,PBOOLE:def 18;
+         B.i = {} implies A.i = {} by A1,A2,A3,PZFMISC1:def 3;
       then g.i in Funcs(A.i, B.i) by A4,FUNCT_2:11;
-      hence g.x in f.x by A2,A3,Def5;
+      hence g.x in f.x by A2,A3,PBOOLE:def 22;
     end;
     hence thesis by A2,CARD_3:18;
   end;
@@ -694,14 +669,14 @@ A2: for i be set st i in I holds Funcs(A.i, B.i) <> {}
     proof
       let i be set;
       assume i in I;
-      then B.i = {} implies A.i = {} by A1,Def4;
+      then B.i = {} implies A.i = {} by A1,PZFMISC1:def 3;
       hence thesis by FUNCT_2:11;
     end;
        for i be set st i in I holds MSFuncs(A, B).i <> {}
     proof
       let i be set;
       assume A3: i in I;
-      then MSFuncs(A, B).i = Funcs(A.i, B.i) by Def5;
+      then MSFuncs(A, B).i = Funcs(A.i, B.i) by PBOOLE:def 22;
       hence thesis by A2,A3;
     end;
     then for i be set st i in I holds MSFuncs(A, B).i is non empty;
@@ -715,7 +690,7 @@ definition let I, A, B;
 existence
   proof
        MSFuncs(A, B) is non-empty by A1,Th23;
-    then not ({} in rng MSFuncs(A, B)) by MSUALG_1:1;
+    then not ({} in rng MSFuncs(A, B)) by PBOOLE:149;
     then reconsider X = product MSFuncs(A, B) as non empty set by CARD_3:37;
     take X;
     let x be set;
@@ -732,9 +707,9 @@ coherence
     proof
       let i be set;
       assume A1: i in I;
-      then (id A).i is Function of A.i, A.i by MSUALG_1:def 2;
+      then (id A).i is Function of A.i, A.i by PBOOLE:def 18;
       then (id A).i in Funcs(A.i, A.i) by FUNCT_2:12;
-      hence thesis by A1,Def5;
+      hence thesis by A1,PBOOLE:def 22;
     end;
     hence MSFuncs(A, A) is non-empty by PBOOLE:def 16;
   end;
@@ -750,7 +725,7 @@ registration let I be set;
   cluster non empty MSFunctionSet of D, D;
 existence
   proof
-       not ({} in rng MSFuncs(D, D)) by MSUALG_1:1;
+       not ({} in rng MSFuncs(D, D)) by PBOOLE:149;
     then reconsider X = product MSFuncs(D, D) as non empty set by CARD_3:37;
        X is MSFunctionSet of D, D
     proof
@@ -1112,7 +1087,7 @@ A7: (MSSorts UA2).0 = ({0} --> the carrier of UA2).0 by MSUALG_1:def 14
                    .= the carrier of UA2 by A4,FUNCOP_1:13;
 A8: MSAlg UA2 = MSAlgebra (#MSSorts UA2, MSCharact UA2#) by MSUALG_1:def 16;
         MSAlg UA2 Over MSSign UA1 = MSAlg UA2 by A2,MSUHOM_1:9;
-    hence thesis by A3,A4,A5,A6,A7,A8,MSUALG_1:def 2;
+    hence thesis by A3,A4,A5,A6,A7,A8,PBOOLE:def 18;
   end;
 
 theorem Th39:

@@ -13,7 +13,7 @@ PRE_TOPC
 FUNCOP_1
 CANTOR_1
 #
-fV2 ;V3 ;V4 ;;M1 ;M1 W1 ;;;K80 A1 A2 ;
-fW1 ;;G3 W11 ;V13 ;;;U3 A1 ;
+fV2 ;V3 ;V5 ;;M1 ;M1 W1 ;;;K81 A1 A2 ;
+fW1 ;;G3 W13 ;V15 ;;;U3 A1 ;
 fW1 ;;M1 ;M6 A1 ;;K91 A1 A2 ;
 !

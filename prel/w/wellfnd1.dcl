@@ -34,10 +34,10 @@ WAYBEL_0
 FRAENKEL
 WELLFND1
 #
-«W1 ;V6 ;V7 ;V8 ;W17 ;V18 ;V29 ;;;M1 ;
-«W27 ;V79 ;;;G3 ;
-«V80 A1 ;;G3 ;;M3 K40 U1 A1 ;;;
-fW1 ;V78 ;;M1 ;M1 ;;K182 A1 A2 ;
-fW1 ;V6 ;V7 ;V8 ;V18 ;;M1 ;;K65 A1 ;
-fV64 A1 ;V80 A1 ;;G3 ;;K234 A1 ;
+«W1 ;V7 ;V8 ;V9 ;W18 ;V19 ;V31 ;;;M1 ;
+«W29 ;V81 ;;;G3 ;
+«V82 A1 ;;G3 ;;M3 K40 U1 A1 ;;;
+fW1 ;V80 ;;M1 ;M1 ;;K184 A1 A2 ;
+fW1 ;V7 ;V8 ;V9 ;V19 ;;M1 ;;K65 A1 ;
+fV66 A1 ;V82 A1 ;;G3 ;;K236 A1 ;
 !

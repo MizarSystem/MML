@@ -17,6 +17,6 @@ CLASSES2
 ORDINAL4
 ZF_REFLE
 #
-«W1 ;;M1 W1 ;V25 ;;;M3 A1 ;
-«V2 ;V3 ;V4 ;V10 ;V26 A1 ;;M1 W1 ;V25 ;;;M2 A1 ;
+«W1 ;;M1 W1 ;V27 ;;;M3 A1 ;
+«V2 ;V3 ;V5 ;V11 ;V28 A1 ;;M1 W1 ;V27 ;;;M2 A1 ;
 !

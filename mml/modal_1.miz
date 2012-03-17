@@ -2925,3 +2925,67 @@ A66: A1 = 'not' A & for g being Function of MP-WFF,D() st Pfn[g,card dom A1]
     hence thesis by A78,A79,A82,A84;
    end;
 end;
+
+begin :: Addenda
+
+:: from BINTREE1
+
+theorem
+ for T being Tree, t being Element of T holds
+  t in Leaves T iff not t^<*0*> in T
+proof
+ let T be Tree, t be Element of T;
+ hereby assume
+A1:   t in Leaves T;
+      t is_a_proper_prefix_of t^<*0*> by TREES_1:30;
+  hence not t^<*0*> in T by A1,TREES_1:def 8;
+ end;
+   assume
+A2:  not t^<*0*> in T & not t in Leaves T;
+   then consider q being FinSequence of NAT such that
+A3:  q in T & t is_a_proper_prefix_of q by TREES_1:def 8;
+       t is_a_prefix_of q by A3,XBOOLE_0:def 8;
+   then consider r being FinSequence such that
+A4:  q = t^r by TREES_1:8;
+   reconsider r as FinSequence of NAT by A4,FINSEQ_1:50;
+       len q = len t+len r by A4,FINSEQ_1:35; then len r <> 0 by A3,TREES_1:24
+;
+    then r <> {} by FINSEQ_1:25;
+   then consider p being FinSequence of NAT, x being Nat such that
+A5:  r = <*x*>^p by Th4;
+       q = t^<*x*>^p by A4,A5,FINSEQ_1:45;
+    then t^<*x*> in T & 0 <= x by A3,NAT_1:18,TREES_1:46;
+   hence contradiction by A2,TREES_1:def 5;
+end;
+
+theorem
+ for T being Tree, t being Element of T holds
+  t in Leaves T iff not ex n being Nat st t^<*n*> in T
+  proof let T be Tree, t be Element of T;
+   hereby assume A1: t in Leaves T;
+    given n being Nat such that
+A2:   t^<*n*> in T;
+        not t is_a_proper_prefix_of t^<*n*> & t is_a_prefix_of t^<*n*>
+      by A1,A2,TREES_1:8,def 8;
+     then t = t^<*n*> & t = t^{} by FINSEQ_1:47,XBOOLE_0:def 8;
+     then {} = <*n*> by FINSEQ_1:46;
+    hence contradiction;
+   end;
+   assume
+A3:  not (ex n being Nat st t^<*n*> in T) & not t in Leaves T;
+   then consider q being FinSequence of NAT such that
+A4:  q in T & t is_a_proper_prefix_of q by TREES_1:def 8;
+       t is_a_prefix_of q by A4,XBOOLE_0:def 8;
+   then consider r being FinSequence such that
+A5:  q = t^r by TREES_1:8;
+   reconsider r as FinSequence of NAT by A5,FINSEQ_1:50;
+       len q = len t+len r by A5,FINSEQ_1:35; then len r <> 0 by A4,TREES_1:24
+;
+    then r <> {} by FINSEQ_1:25;
+   then consider p being FinSequence of NAT, x being Nat such that
+A6:  r = <*x*>^p by Th4;
+       q = t^<*x*>^p by A5,A6,FINSEQ_1:45;
+    then t^<*x*> in T by A4,TREES_1:46;
+   hence contradiction by A3;
+  end;
+

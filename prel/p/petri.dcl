@@ -4,10 +4,11 @@ XBOOLE_0
 ZFMISC_1
 SUBSET_1
 RELSET_1
+FUNCT_1
 MCART_1
 PETRI
 #
-«V4 ;;;G1 ;
-«V6 ;;;G1 ;
-«V8 ;;;G1 ;
+«V7 ;;;G1 ;
+«V9 ;;;G1 ;
+«V11 ;;;G1 ;
 !

@@ -7,14 +7,14 @@
 environ
 
  vocabulary FUNCT_1, RELAT_1, BOOLE, BINOP_1, FUNCT_3, QC_LANG1, REALSET1,
-      REALSET2;
+      REALSET2, FINSET_1, CARD_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      BINOP_1, FUNCT_3;
- constructors BINOP_1, FUNCT_3, MEMBERED, XBOOLE_0;
- clusters FUNCT_1, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
- requirements SUBSET, BOOLE;
+      BINOP_1, FUNCT_3, FINSET_1, CARD_1, XREAL_0;
+ constructors BINOP_1, FUNCT_3, MEMBERED, XBOOLE_0, CARD_2, NAT_1, XREAL_0;
+ clusters FUNCT_1, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0, FINSET_1;
+ requirements SUBSET, BOOLE, NUMERALS, REAL;
  theorems TARSKI, FUNCT_1, FUNCT_2, FUNCT_3, ZFMISC_1, RELSET_1, XBOOLE_0,
-      XBOOLE_1, RELAT_1;
+      XBOOLE_1, RELAT_1, CARD_2, NAT_1, CARD_1;
 
 begin
 
@@ -123,6 +123,11 @@ registration
   end;
 end;
 
+registration let y be set;
+ cluster {y} -> trivial;
+ coherence by Def12;
+end;
+
 theorem Th32:
   for X being non empty set holds
    X is non trivial iff for x being set holds X\{x} is non empty set
@@ -130,7 +135,7 @@ proof let X be non empty set;
  hereby assume
 A1:  X is non trivial;
   let x be set;
-     X <> {x} by A1,Def12;
+     X <> {x} by A1;
   then consider y being set such that
 A2:  y in X and
 A3:  x <> y by ZFMISC_1:41;
@@ -362,5 +367,77 @@ definition
    let x be Element of F;
    redefine func {x} -> OnePoint of F;
 coherence by Def7;
+end;
+
+begin :: Addenda
+
+:: from SPPOL_1
+
+theorem
+      for A being finite set holds A is trivial iff card A < 2
+proof let A be finite set;
+  hereby assume A is trivial;
+then A1:  A is empty or ex x being set st A = {x} by Def12;
+   per cases;
+   suppose A is empty;
+    hence card A < 2 by CARD_1:78;
+   end;
+   suppose A is non empty;
+    then card A = 1 by A1,CARD_1:79;
+    hence card A < 2;
+  end;
+  end;
+  assume
+A2:  card A < 2;
+  per cases by A2,NAT_1:71;
+  suppose card A = 0;
+   hence A is empty or ex x being set st A = {x} by CARD_2:59;
+  end;
+  suppose card A = 1;
+   hence A is empty or ex x being set st A = {x} by CARD_2:60;
+end;
+end;
+
+theorem Th3:
+  for A being set holds A is non trivial iff
+   ex a1,a2 being set st a1 in A & a2 in A & a1 <> a2
+proof let A be set;
+ hereby assume
+A1:  A is non trivial;
+  then A is non empty by Def12;
+  then consider a1 being set such that
+A2:  a1 in A by XBOOLE_0:def 1;
+      A <> {a1} by A1;
+  then consider a2 being set such that
+A3:  a2 in A and
+A4:  a1 <> a2 by A2,ZFMISC_1:41;
+  take a1,a2;
+  thus a1 in A & a2 in A & a1 <> a2 by A2,A3,A4;
+ end;
+ given a1,a2 being set such that
+A5:  a1 in A & a2 in A and
+A6:  a1 <> a2;
+ thus A is non empty by A5;
+ given x being set such that
+A7:  A = {x};
+     {a1,a2} c= {x} by A5,A7,ZFMISC_1:38;
+ then a1 = x & a2 = x by ZFMISC_1:26;
+ hence contradiction by A6;
+end;
+
+theorem
+  for D being set, A being Subset of D
+   holds A is non trivial iff
+    ex d1,d2 being Element of D st d1 in A & d2 in A & d1 <> d2
+proof let D be set, A be Subset of D;
+ hereby assume A is non trivial;
+  then consider d1,d2 being set such that
+A1:  d1 in A & d2 in A and
+A2:  d1 <> d2 by Th3;
+  reconsider d1,d2 as Element of D by A1;
+  take d1,d2;
+  thus d1 in A & d2 in A & d1 <> d2 by A1,A2;
+ end;
+ thus thesis by Th3;
 end;
 

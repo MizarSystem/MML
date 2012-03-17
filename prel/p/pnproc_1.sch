@@ -16,7 +16,7 @@ FINSEQ_1
 FINSEQ_2
 PNPROC_1
 #
-M1 ;M4 K66 ;K70 ;;;
-ªM11 F1 ;;ªM1 ;ª&R2 B2 F1 ;;ªR1 K106 F1 ;B1 B2 ;F2 B2 ;;;;
+M1 ;M4 K68 ;K72 ;;;
+ªM11 F1 ;;ªM1 ;ª&R2 B2 F1 ;;ªR1 K109 F1 ;B1 B2 ;F2 B2 ;;;;
 #
 !

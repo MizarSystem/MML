@@ -11,316 +11,27 @@ environ
       PARTFUN1, REALSET1, MSUALG_1;
  notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, RELAT_1, FUNCT_1,
       FUNCT_2, FINSEQ_1, STRUCT_0, FUNCOP_1, PARTFUN1, FINSEQ_2, CARD_3,
-      PBOOLE, REALSET2, PRALG_1, UNIALG_1;
+      PBOOLE, REALSET2, UNIALG_1;
  constructors REALSET2, PRALG_1, MEMBERED, XBOOLE_0;
  clusters FUNCT_1, PBOOLE, UNIALG_1, TEX_2, PRALG_1, RELSET_1, STRUCT_0,
       FINSEQ_2, FUNCOP_1, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS,
       ORDINAL2;
  requirements BOOLE, SUBSET;
- definitions TARSKI, PRALG_1, FINSEQ_1, UNIALG_1, PBOOLE, STRUCT_0, XBOOLE_0,
-      FUNCOP_1;
+ definitions TARSKI, FINSEQ_1, FUNCT_1, PBOOLE, STRUCT_0, XBOOLE_0, FUNCOP_1,
+      UNIALG_1;
  theorems TARSKI, FUNCT_1, PARTFUN1, FINSEQ_1, FUNCOP_1, UNIALG_1, PBOOLE,
       FUNCT_2, CARD_3, FINSEQ_3, FINSEQ_2, REALSET2, RELAT_1, RELSET_1,
       STRUCT_0;
- schemes ZFREFLE1, FUNCT_1, FRAENKEL, FUNCT_2;
+ schemes FRAENKEL;
 
-begin :: Preliminaries
+begin
 
 reserve i,j for set,
         I for set;
 
-theorem Th1:
- not ex M being non-empty ManySortedSet of I st {} in rng M
- proof let M be non-empty ManySortedSet of I;
-  assume
-A1:  {} in rng M;
-      dom M = I by PBOOLE:def 3;
-   then ex i st i in I & M.i = {} by A1,FUNCT_1:def 5;
-  hence contradiction by PBOOLE:def 16;
- end;
+canceled 5;
 
-scheme MSSEx { I() -> set, P[set,set] }:
- ex f being ManySortedSet of I() st
-  for i st i in I() holds P[i,f.i]
-  provided A1: for i st i in I() ex j st P[i,j]
-proof
-   defpred Q[set,set] means P[$1,$2];
-   A2: for i st i in I() ex j st Q[i,j] by A1;
-   consider f being Function such that
-A3: dom f = I() and
-A4: for i st i in I() holds Q[i,f.i] from ZFREFLE1:sch 1(A2);
-   reconsider f as ManySortedSet of I() by A3,PBOOLE:def 3;
-  take f; thus thesis by A4;
- end;
-
-scheme MSSLambda { I() -> set, F(set) -> set }:
- ex f being ManySortedSet of I() st
-  for i st i in I() holds f.i = F(i)
-proof
-   deffunc G(set)=F($1);
-   consider f being Function such that
-A1:  dom f = I() and
-A2:  for i st i in I() holds f.i = G(i) from FUNCT_1:sch 3;
-   reconsider f as ManySortedSet of I() by A1,PBOOLE:def 3;
-  take f; thus thesis by A2;
- end;
-
-definition let I be set; let M be ManySortedSet of I;
- mode Component of M is Element of rng M;
-end;
-
-theorem Th2:
- for I being non empty set
- for M being ManySortedSet of I, A being Component of M
-  ex i st i in I & A = M.i
- proof let I be non empty set;
-  let M be ManySortedSet of I, A be Component of M;
-A1: dom M = I by PBOOLE:def 3;
-   then rng M <> {} by RELAT_1:65;
-  hence ex i st i in I & A = M.i by A1,FUNCT_1:def 5;
- end;
-
-theorem Th3:
- for M being ManySortedSet of I, i st i in I holds M.i is Component of M
- proof let M be ManySortedSet of I, i;
-A1: dom M = I by PBOOLE:def 3;
-  assume i in I;
-  hence thesis by A1,FUNCT_1:def 5;
- end;
-
-definition let I; let B be ManySortedSet of I;
- mode Element of B -> ManySortedSet of I means
-    for i st i in I holds it.i is Element of B.i;
- existence
-  proof
-    defpred Q[set,set] means $2 is Element of B.$1;
-A1: for i st i in I ex j st Q[i,j]
-proof let i such that i in I;
-      consider j being Element of B.i;
-      reconsider j as set;
-     take j; thus j is Element of B.i;
-    end;
-   thus ex f being ManySortedSet of I st
-     for i st i in I holds Q[i,f.i] from MSSEx(A1);
-  end;
-end;
-
-begin :: Many Sorted Functions
-
-definition let I;
- let A be ManySortedSet of I, B be ManySortedSet of I;
- mode ManySortedFunction of A,B -> ManySortedSet of I means
-:Def2: for i st i in I holds it.i is Function of A.i, B.i;
- correctness
-  proof
-    defpred P[set,set] means $2 is Function of A.$1,B.$1;
-A1: for i st i in I ex j st P[i,j]
-  proof let i such that i in I;
-      consider j being Function of A.i,B.i;
-      reconsider j as set;
-     take j; thus j is Function of A.i,B.i;
-    end;
-   consider f being ManySortedSet of I such that
-A2:  for i st i in I holds P[i,f.i] from MSSEx(A1);
-       f is Function-yielding
-     proof let i;
-      assume i in dom f;
-       then i in I by PBOOLE:def 3;
-      hence f.i is Function by A2;
-     end;
-    then reconsider f as ManySortedFunction of I;
-   take f;
-   let i;
-   assume i in I;
-   hence f.i is Function of A.i,B.i by A2;
-  end;
-end;
-
-registration let I;
- let A be ManySortedSet of I, B be ManySortedSet of I;
- cluster ->Function-yielding ManySortedFunction of A,B;
-  coherence
-   proof let f be ManySortedFunction of A,B;
-    let i;
-     assume i in dom f;
-      then i in I by PBOOLE:def 3;
-     hence f.i is Function by Def2;
-   end;
-end;
-
-definition let I be set; let M be ManySortedSet of I;
- func M# -> ManySortedSet of I* means
-:Def3: for i being Element of I* holds it.i = product(M*i);
- existence
-  proof
-    defpred P[set,set] means ex j being Element of I* st j = $1
-           & $2 = product(M*j);
-A1: for i st i in I* ex j st P[i,j]
-   proof let i; assume
-       i in I*;
-      then reconsider j = i as Element of I*;
-      reconsider e = product(M*j) as set;
-     take e,j;
-     thus j = i & e = product(M*j);
-    end;
-    consider f being ManySortedSet of I* such that
-A2:   for i st i in I* holds P[i,f.i]
-    from MSSEx(A1);
-   take f; let i be Element of I*;
-       ex j being Element of I* st j = i & f.i = product(M*j) by A2;
-   hence thesis;
-  end;
- uniqueness
-  proof let N1,N2 be ManySortedSet of I* such that
-A3: for i being Element of I* holds N1.i = product(M*i) and
-A4: for i being Element of I* holds N2.i = product(M*i);
-       now let i;
-     assume
-       i in I*;
-      then reconsider e = i as Element of I*;
-     thus N1.i = product(M*e) by A3 .= N2.i by A4;
-    end;
-   hence thesis by PBOOLE:3;
-  end;
-end;
-
-registration let I be set; let M be non-empty ManySortedSet of I;
- cluster M# -> non-empty;
- coherence
-  proof
-       M# is non-empty
-    proof let i;
-     assume
-       i in I*;
-      then reconsider f = i as Element of I*;
-         not {} in rng M by Th1;
-      then not {} in rng(M*f) by FUNCT_1:25;
-      then product(M*f) <> {} by CARD_3:37;
-     hence M#.i is non empty by Def3;
-    end;
-   hence thesis;
-  end;
-end;
-
-definition let I; let J be non empty set;
- let O be Function of I,J;
- let F be ManySortedSet of J;
- redefine func F*O -> ManySortedSet of I;
-  coherence
-   proof
-      rng O c= J & dom O = I & dom F = J
-       by FUNCT_2:def 1,PBOOLE:def 3,RELSET_1:12;
-    hence dom(F*O) = I by RELAT_1:46;
-   end;
-end;
-
-definition let I; let J be non empty set;
- let O be Function of I,J;
- let F be non-empty ManySortedSet of J;
- redefine func F*O -> non-empty ManySortedSet of I;
-  coherence
-  proof
-       F*O is non-empty
-     proof let i;
-      assume
-A1:     i in I;
-       then O.i in J by FUNCT_2:7;
-       then A2:      F.(O.i) is non empty by PBOOLE:def 16;
-          dom O = I by FUNCT_2:def 1;
-      hence (F*O).i is non empty by A1,A2,FUNCT_1:23;
-     end;
-   hence thesis;
-  end;
-end;
-
-definition let a be set;
- func *-->a -> Function of NAT,{a}* means
-:Def4: for n being Nat holds it.n = n |-> a;
-  existence
-   proof
-     defpred P[Element of NAT,set] means $2 = $1 |-> a;
-A1:  for x being Element of NAT ex y being Element of {a}* st P[x,y]
-   proof let n be Nat;
-         a is Element of {a} by TARSKI:def 1;
-      then n |-> a is FinSequence of {a} by FINSEQ_2:77;
-      then reconsider u = n |-> a as Element of {a}* by FINSEQ_1:def 11;
-     take u;
-     thus u = n |-> a;
-    end;
-      ex f being Function of NAT,{a}* st for x being Element of NAT
-         holds P[x,f.x]  from FUNCT_2:sch 3(A1);
-    hence thesis;
-   end;
-  uniqueness
-   proof let f1,f2 be Function of NAT,{a}* such that
-A2: for n being Nat holds f1.n = n |-> a and
-A3: for n being Nat holds f2.n = n |-> a;
-        now let k be Nat;
-      thus f1.k = k |-> a by A2
-        .= f2.k by A3;
-     end;
-    hence f1 = f2 by FUNCT_2:113;
-   end;
-end;
-
- reserve D for non empty set,
-         n for Nat;
-
-theorem Th4:
- for a,b being set holds ({a} --> b)*(n|->a) = n |-> b
- proof let a,b be set;
-A1: now let x be set;
-    hereby assume x in dom (n |-> b);
-      then A2:     x in Seg n by FINSEQ_2:68;
-     hence x in dom(n|->a) by FINSEQ_2:68;
-A3:    dom({a} --> b) = {a} by FUNCOP_1:19;
-         (n|->a).x = a by A2,FINSEQ_2:70;
-     hence (n|->a).x in dom({a} --> b) by A3,TARSKI:def 1;
-    end;
-    assume that
-A4:  x in dom(n|->a) and (n|->a).x in dom({a} --> b);
-        x in Seg n by A4,FINSEQ_2:68;
-    hence x in dom (n |-> b) by FINSEQ_2:68;
-   end;
-      now let x be set;
-    assume
-      x in dom (n |-> b);
-     then A5:   x in Seg n by FINSEQ_2:68;
-A6:   a in {a} by TARSKI:def 1;
-    thus (n |-> b).x = b by A5,FINSEQ_2:70
-     .= ({a} --> b).a by A6,FUNCOP_1:13
-     .= ({a} --> b).((n|->a).x) by A5,FINSEQ_2:70;
-   end;
-  hence ({a} --> b)*(n|->a) = n |-> b by A1,FUNCT_1:20;
- end;
-
-theorem Th5:
- for a being set
- for M being ManySortedSet of {a} st M = {a} --> D
-   holds (M#**-->a).n = Funcs(Seg n, D)
- proof let a be set;
-  let M be ManySortedSet of {a} such that
-A1: M = {a} --> D;
-   A2: dom(*-->a) = NAT by FUNCT_2:def 1;
-      a is Element of {a} by TARSKI:def 1;
-   then n |-> a is FinSequence of {a} by FINSEQ_2:77;
-   then A3: n |-> a in {a}* by FINSEQ_1:def 11;
-  thus (M#**-->a).n = M#.((*-->a).n) by A2,FUNCT_1:23
-     .= M#.(n|->a) by Def4
-     .= product(({a} --> D)*(n|->a)) by A1,A3,Def3
-     .= product(n |-> D) by Th4
-     .= product(Seg(n) --> D) by FINSEQ_2:def 2
-     .= Funcs(Seg n, D) by CARD_3:20;
- end;
-
-definition let I,i;
- redefine func I --> i -> Function of I,{i};
- coherence
-  proof
-       dom (I --> i) = I & rng (I --> i) c= {i} by FUNCOP_1:19;
-   hence I --> i is Function of I,{i} by FUNCT_2:def 1,RELSET_1:11;
-  end;
-end;
+definition canceled 4; end;
 
 begin :: Many Sorted Signatures
 
@@ -451,13 +162,13 @@ registration let S; let A be non-empty MSAlgebra over S;
  cluster -> non empty Component of the Sorts of A;
   coherence
    proof let C be Component of the Sorts of A;
-        ex i st i in the carrier of S & C = (the Sorts of A).i by Th2;
+        ex i st i in the carrier of S & C = (the Sorts of A).i by PBOOLE:150;
     hence thesis by PBOOLE:def 16;
    end;
  cluster -> non empty Component of (the Sorts of A)#;
   coherence
    proof let C be Component of (the Sorts of A)#;
-        ex i st i in (the carrier of S)* & C = (the Sorts of A)#.i by Th2;
+     ex i st i in (the carrier of S)* & C = (the Sorts of A)#.i by PBOOLE:150;
     hence thesis by PBOOLE:def 16;
    end;
 end;
@@ -499,7 +210,7 @@ definition let S be non void non empty ManySortedSign;
     A1: the OperSymbols of S <> {} by Def5;
        Result(o,A) = ((the Sorts of A) * the ResultSort of S).o &
     Args(o,A) = ((the Sorts of A)# * the Arity of S).o by Def9,Def10;
-   hence thesis by A1,Def2;
+   hence thesis by A1,PBOOLE:def 18;
   end;
 end;
 
@@ -509,6 +220,9 @@ theorem
   holds Den(o,A) is non empty by FUNCT_2:def 1,RELAT_1:60;
 
 begin :: On the one-sorted algebras
+
+ reserve D for non empty set,
+         n for Nat;
 
  Lm1:
  for h being homogeneous quasi_total non empty PartFunc of D*,D
@@ -586,10 +300,10 @@ A1: S is trivial;
   let A be MSAlgebra over S, c1,c2 be Component of the Sorts of A;
    consider i1 being set such that
 A2: i1 in the carrier of S and
-A3: c1 = (the Sorts of A).i1 by Th2;
+A3: c1 = (the Sorts of A).i1 by PBOOLE:150;
    consider i2 being set such that
 A4: i2 in the carrier of S and
-A5: c2 = (the Sorts of A).i2 by Th2;
+A5: c2 = (the Sorts of A).i2 by PBOOLE:150;
   thus c1 = c2 by A1,A2,A3,A4,A5,REALSET2:def 7;
  end;
 
@@ -715,7 +429,7 @@ A4:   i in OS;
      reconsider n = i as Nat by A1,A4;
      set D = the carrier of A;
      reconsider h = O.n as homogeneous quasi_total non empty PartFunc of D*,D
-                             by A2,A4,UNIALG_1:5,def 4,def 5,def 6;
+                             by A2,A4,UNIALG_1:5,def 4,def 5,FUNCT_1:def 15;
         dom({0}-->D) = {0} by FUNCOP_1:19;
      then reconsider M = {0}-->D as ManySortedSet of {0} by PBOOLE:def 3;
      A5:   n in dom(dom signature(A)-->0) by A1,A4,FUNCOP_1:19;
@@ -724,7 +438,7 @@ A7:   DO.i = ((MSSorts A)#*(*-->0)*signature A).n by A1,RELAT_1:55
          .= ((MSSorts A)#*(*-->0)).((signature A).n) by A1,A4,FUNCT_1:23
          .= (M#*(*-->0)).((signature A).n) by A1,Def14
          .= (M#*(*-->0)).arity h by A1,A4,UNIALG_1:def 11
-         .= Funcs(Seg arity h,D) by Th5
+         .= Funcs(Seg arity h,D) by PBOOLE:153
          .= dom(O.o) by Th8;
 A8:   RO.i = (MSSorts A).((dom signature(A)-->0).n) by A1,A5,FUNCT_1:23
          .= (MSSorts A).0 by A1,A4,FUNCOP_1:13
@@ -791,7 +505,7 @@ A2:    dom(the Arity of MS) = the OperSymbols of MS by FUNCT_2:def 1;
 A3: Args(i,A) = ((the Sorts of A)# * the Arity of MS).i by Def9
             .= (the Sorts of A)# .((the Arity of MS).i) by A1,A2,FUNCT_1:23
             .= (the Sorts of A)# .the_arity_of i by Def6
-            .= product((the Sorts of A)*the_arity_of i) by Def3;
+            .= product((the Sorts of A)*the_arity_of i) by PBOOLE:def 19;
    consider n being Nat such that
 A4:  dom the_arity_of i = Seg n by FINSEQ_1:def 2;
 A5: rng the_arity_of i c= the carrier of MS by FINSEQ_1:def 4;
@@ -819,7 +533,7 @@ A5: rng the_arity_of i c= the carrier of MS by FINSEQ_1:def 4;
 FUNCT_1:23;
           (the_arity_of i).u in rng the_arity_of i by A6,A8,A10,FUNCT_1:def 5;
        then (the Sorts of A).((the_arity_of i).u) is
-        Component of the Sorts of A by A5,Th3;
+        Component of the Sorts of A by A5,PBOOLE:151;
       hence j in the_sort_of A by A11,A12,Def17;
      end;
     then A13:   p is FinSequence of the_sort_of A by FINSEQ_1:def 4;
@@ -842,7 +556,7 @@ A18:  x in dom((the Sorts of A)*the_arity_of i);
     then A19:   g.x in the_sort_of A by A16;
        (the_arity_of i).x in rng the_arity_of i by A6,A18,FUNCT_1:def 5;
     then (the Sorts of A).((the_arity_of i).x) is
-     Component of the Sorts of A by A5,Th3;
+     Component of the Sorts of A by A5,PBOOLE:151;
     then g.x in (the Sorts of A).((the_arity_of i).x) by A19,Def17;
    hence g.x in ((the Sorts of A)*the_arity_of i).x by A6,A18,FUNCT_1:23;
   end;
@@ -890,12 +604,12 @@ A4:    dom(the ResultSort of MS) = the OperSymbols of MS by FUNCT_2:def 1;
 A5:    ((the Sorts of A)# * the Arity of MS).i = Args(i,A) by Def9;
          (the ResultSort of MS).i in the carrier of MS by A2,FUNCT_2:7;
       then A6:    (the Sorts of A).((the ResultSort of MS).i)
-       is Component of the Sorts of A by Th3;
+       is Component of the Sorts of A by PBOOLE:151;
 A7:    Args(i,A) c= (the_sort_of A)* by Th13;
          ((the Sorts of A)*the ResultSort of MS).i
             = (the Sorts of A).((the ResultSort of MS).i) by A2,A4,FUNCT_1:23
            .= the_sort_of A by A6,Def17;
-      then x is Function of Args(i,A),the_sort_of A by A2,A3,A5,Def2;
+      then x is Function of Args(i,A),the_sort_of A by A2,A3,A5,PBOOLE:def 18;
       then x is PartFunc of (the_sort_of A)*,the_sort_of A by A7,PARTFUN1:30;
      hence x in PFuncs((the_sort_of A)*,the_sort_of A) by PARTFUN1:119;
     end;
@@ -933,14 +647,14 @@ A7:    dom(the ResultSort of MS) = the OperSymbols of MS by FUNCT_2:def 1;
 A8:   ((the Sorts of A)# * the Arity of MS).o = Args(o,A) by Def9;
         (the ResultSort of MS).o in the carrier of MS by A2,A6,FUNCT_2:7;
      then A9:   (the Sorts of A).((the ResultSort of MS).o)
-       is Component of the Sorts of A by Th3;
+       is Component of the Sorts of A by PBOOLE:151;
     A10: ((the Sorts of A)*the ResultSort of MS).o
           = (the Sorts of A).((the ResultSort of MS).o) by A2,A6,A7,FUNCT_1:23
          .= the_sort_of A by A9,Def17;
           h = (the Charact of A).o by A3,Def18;
        then h is Function of
           ((the Sorts of A)# * the Arity of MS).o,
-          ((the Sorts of A) * the ResultSort of MS).o by A2,A6,Def2;
+          ((the Sorts of A) * the ResultSort of MS).o by A2,A6,PBOOLE:def 18;
 
        then A11:     dom h = ((the Sorts of A)# * the Arity of MS).o by A10,
 FUNCT_2:def 1
@@ -962,7 +676,7 @@ A17:    dom(the ResultSort of MS) = the OperSymbols of MS by FUNCT_2:def 1;
 A18:   ((the Sorts of A)# * the Arity of MS).o = Args(o,A) by Def9;
         (the ResultSort of MS).o in the carrier of MS by A13,A16,FUNCT_2:7;
      then A19:   (the Sorts of A).((the ResultSort of MS).o)
-       is Component of the Sorts of A by Th3;
+       is Component of the Sorts of A by PBOOLE:151;
     A20: ((the Sorts of A)*the ResultSort of MS).o
           = (the Sorts of A).((the ResultSort of MS).o) by A13,A16,A17,FUNCT_1:
 23
@@ -970,7 +684,7 @@ A18:   ((the Sorts of A)# * the Arity of MS).o = Args(o,A) by Def9;
           h = (the Charact of A).o by A14,Def18;
        then h is Function of
           ((the Sorts of A)# * the Arity of MS).o,
-          ((the Sorts of A) * the ResultSort of MS).o by A13,A16,Def2;
+          ((the Sorts of A) * the ResultSort of MS).o by A13,A16,PBOOLE:def 18;
 
        then A21:     dom h = ((the Sorts of A)# * the Arity of MS).o by A20,
 FUNCT_2:def 1

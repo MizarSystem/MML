@@ -10,9 +10,8 @@ environ
       ABSVALUE, SQUARE_1, FUNCT_3, ARYTM_3, NORMSP_1, METRIC_1, RELAT_1,
       SEQM_3, BHSP_1, ARYTM;
  notation XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      NAT_1, REAL_1, FUNCT_1, FUNCT_2, BINOP_1, STRUCT_0, RELAT_1, DOMAIN_1,
-      PRE_TOPC, ABSVALUE, RLVECT_1, RLSUB_1, SQUARE_1, NORMSP_1, QUIN_1,
-      COMPLEX1;
+      NAT_1, REAL_1, FUNCT_1, FUNCT_2, BINOP_1, STRUCT_0, DOMAIN_1, PRE_TOPC,
+      RLVECT_1, RLSUB_1, SQUARE_1, NORMSP_1, QUIN_1, COMPLEX1;
  constructors REAL_1, NAT_1, DOMAIN_1, ABSVALUE, RLSUB_1, SQUARE_1, NORMSP_1,
       COMPLEX1, QUIN_1, MEMBERED, XBOOLE_0;
  clusters SUBSET_1, STRUCT_0, XREAL_0, RELSET_1, SQUARE_1, MEMBERED, ZFMISC_1,
@@ -21,7 +20,7 @@ environ
  definitions RLVECT_1, NORMSP_1, STRUCT_0;
  theorems TARSKI, REAL_1, REAL_2, AXIOMS, SQUARE_1, ABSVALUE, RLVECT_1,
       RLSUB_1, QUIN_1, FUNCT_2, NORMSP_1, XREAL_0, COMPLEX1;
- schemes FUNCT_1, FUNCT_2;
+ schemes FUNCT_2;
 
 begin
 
@@ -795,44 +794,15 @@ reserve k, n, m for Nat;
 reserve f for Function;
 reserve d, s, t for set;
 
-scheme Ex_Seq_in_RUS { X() -> non empty UNITSTR, F(Nat) -> Point of X() } :
-       ex seq be sequence of X() st for n holds seq.n = F(n)
-proof
-       defpred P[set,set] means ex n st n =$1 & $2 = F(n);
-    A1: for d st d in NAT ex s st P[d,s]
-       proof
-            let d; assume d in NAT;
-            then reconsider n = d as Nat;
-            reconsider z = F(n) as set;
-            take z;
-            thus thesis;
-       end;
-    A2: for d , s , t st d in NAT & P[d,s] & P[d,t] holds s = t;
-       consider f such that
-    A3: dom f = NAT and
-    A4: for d st d in NAT holds P[d,f.d] from FUNCT_1:sch 2(A2,A1);
-          for d st d in NAT holds f.d is Point of X()
-       proof
-            let d; assume d in NAT;
-            then ex n st n = d & f.d = F(n) by A4;
-            hence f.d is Point of X();
-       end;
-       then reconsider f as sequence of X() by A3,NORMSP_1:17;
-       take seq = f;
-       let n;
-          P[n,seq.n] by A4;
-       hence seq.n = F(n);
-end;
-
 definition let X; let seq;
  canceled 4;
-
   func - seq -> sequence of X means
 :Def10: for n holds it.n = - seq.n;
 existence
 proof
   deffunc F(Nat) = -seq.$1;
-   ex seq be sequence of X st for n holds seq.n = F(n) from Ex_Seq_in_RUS;
+   ex seq be sequence of X st for n holds seq.n = F(n)
+     from FUNCT_2:sch 4;
   hence thesis;
 end;
 uniqueness
@@ -856,23 +826,23 @@ definition let X; let seq; let x;
 existence
 proof
   deffunc F(Nat) = seq.$1 + x;
-   ex seq be sequence of X st for n holds seq.n = F(n) from Ex_Seq_in_RUS;
+   ex seq be sequence of X st for n holds seq.n = F(n) from FUNCT_2:sch 4;
   hence thesis;
 end;
 uniqueness
 proof
-               let seq1, seq2;
-               assume that
-          A1:  ( for n holds seq1.n = seq.n + x ) and
-          A2:  ( for n holds seq2.n = seq.n + x );
-                  for n holds seq1.n = seq2.n
-               proof
-                    let n;
-                     seq1.n = seq.n + x by A1;
-                    hence thesis by A2;
-               end;
-              hence thesis by FUNCT_2:113;
-          end;
+   let seq1, seq2;
+   assume that
+A1:( for n holds seq1.n = seq.n + x ) and
+A2:( for n holds seq2.n = seq.n + x );
+   for n holds seq1.n = seq2.n
+   proof
+     let n;
+     seq1.n = seq.n + x by A1;
+     hence thesis by A2;
+   end;
+   hence thesis by FUNCT_2:113;
+end;
 end;
 
 canceled 4;
@@ -880,34 +850,33 @@ canceled 4;
 theorem
 Th55:  seq1 + seq2 = seq2 + seq1
 proof
-        now let n;
-     thus (seq1 + seq2).n = seq2.n + seq1.n by NORMSP_1:def 5
-                    .= (seq2 + seq1).n by NORMSP_1:def 5;
-     end;
-     hence thesis by FUNCT_2:113;
+  now let n;
+    thus (seq1 + seq2).n = seq2.n + seq1.n by NORMSP_1:def 5
+        .= (seq2 + seq1).n by NORMSP_1:def 5;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 
 definition let X, seq1, seq2;
- redefine func seq1 + seq2;
- commutativity by Th55;
+  redefine func seq1 + seq2;
+  commutativity by Th55;
 end;
 
 theorem
-     seq1 + (seq2 + seq3) = (seq1 + seq2) + seq3
+  seq1 + (seq2 + seq3) = (seq1 + seq2) + seq3
 proof
-        now let n;
-     thus
-        (seq1 + (seq2 + seq3)).n = seq1.n + (seq2 + seq3).n by NORMSP_1:def 5
+  now let n;
+  thus (seq1 + (seq2 + seq3)).n = seq1.n + (seq2 + seq3).n by NORMSP_1:def 5
   .= seq1.n + (seq2.n + seq3.n) by NORMSP_1:def 5
   .= (seq1.n + seq2.n) + seq3.n by RLVECT_1:def 6
   .= (seq1 + seq2).n + seq3.n by NORMSP_1:def 5
   .= ((seq1 + seq2) + seq3).n by NORMSP_1:def 5;
-     end;
-     hence thesis by FUNCT_2:113;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
-     seq1 is constant & seq2 is constant & seq = seq1 + seq2
+  seq1 is constant & seq2 is constant & seq = seq1 + seq2
     implies seq is constant
 proof
      assume that
@@ -928,7 +897,7 @@ A5:   for n holds seq2.n = y by A2,NORMSP_1:def 4;
 end;
 
 theorem
-     seq1 is constant & seq2 is constant & seq = seq1 - seq2
+  seq1 is constant & seq2 is constant & seq = seq1 - seq2
     implies seq is constant
 proof
      assume that
@@ -949,7 +918,7 @@ A5:   for n holds seq2.n = y by A2,NORMSP_1:def 4;
 end;
 
 theorem
-     seq1 is constant & seq = a * seq1
+  seq1 is constant & seq = a * seq1
     implies seq is constant
 proof
      assume that
@@ -970,87 +939,85 @@ canceled 8;
 theorem Th68:
   seq is constant iff for n holds seq.n = seq.(n + 1)
 proof
-     thus seq is constant implies for n holds seq.n=seq.(n + 1)
-     proof
-          assume
-             seq is constant;
-          then ex x st rng seq = {x} by NORMSP_1:27;
-          hence thesis by NORMSP_1:21;
-     end;
-     assume for n holds seq.n = seq.(n + 1);
-     then for n, k holds seq.n = seq.(n + k) by NORMSP_1:22;
-     then for n, m holds seq.n = seq.m by NORMSP_1:23;
-     hence ex x st for n holds seq.n = x by NORMSP_1:24;
+  thus seq is constant implies for n holds seq.n=seq.(n + 1)
+  proof
+    assume seq is constant;
+    then ex x st rng seq = {x} by NORMSP_1:27;
+    hence thesis by NORMSP_1:21;
+  end;
+  assume for n holds seq.n = seq.(n + 1);
+  then for n, k holds seq.n = seq.(n + k) by NORMSP_1:22;
+  then for n, m holds seq.n = seq.m by NORMSP_1:23;
+  hence ex x st for n holds seq.n = x by NORMSP_1:24;
 end;
 
 theorem Th69:
   seq is constant iff for n , k holds seq.n = seq.(n + k)
 proof
-     thus seq is constant implies for n , k holds seq.n = seq.(n + k)
-     proof
-          assume seq is constant;
-          then for n holds seq.n=seq.(n+1) by Th68;
-          hence thesis by NORMSP_1:22;
-     end;
-     assume for n, k holds seq.n = seq.(n + k);
-     then for n, m holds seq.n = seq.m by NORMSP_1:23;
-     hence ex x st for n holds seq.n = x by NORMSP_1:24;
+  thus seq is constant implies for n , k holds seq.n = seq.(n + k)
+  proof
+    assume seq is constant;
+    then for n holds seq.n=seq.(n+1) by Th68;
+    hence thesis by NORMSP_1:22;
+  end;
+  assume for n, k holds seq.n = seq.(n + k);
+  then for n, m holds seq.n = seq.m by NORMSP_1:23;
+  hence ex x st for n holds seq.n = x by NORMSP_1:24;
 end;
 
 theorem
-     seq is constant iff for n, m holds seq.n = seq.m
+  seq is constant iff for n, m holds seq.n = seq.m
 proof
-     thus seq is constant implies for n, m holds seq.n = seq.m
-     proof
-          assume seq is constant;
-          then for n, k holds seq.n = seq.(n + k) by Th69;
-          hence thesis by NORMSP_1:23;
-     end;
-     assume for n, m holds seq.n = seq.m;
-     hence ex x st for n holds seq.n = x by NORMSP_1:24;
+  thus seq is constant implies for n, m holds seq.n = seq.m
+  proof
+    assume seq is constant;
+    then for n, k holds seq.n = seq.(n + k) by Th69;
+    hence thesis by NORMSP_1:23;
+  end;
+  assume for n, m holds seq.n = seq.m;
+  hence ex x st for n holds seq.n = x by NORMSP_1:24;
 end;
 
 theorem
-     seq1 - seq2 = seq1 + -seq2
+  seq1 - seq2 = seq1 + -seq2
 proof
-        now let n;
-     thus
-        (seq1 - seq2).n = seq1.n - seq2.n by NORMSP_1:def 6
-                    .= seq1.n + -seq2.n by RLVECT_1:def 11
-                    .= seq1.n + (-seq2).n by Def10
-                    .= (seq1 + -seq2).n by NORMSP_1:def 5;
-     end;
-     hence thesis by FUNCT_2:113;
+  now let n;
+    thus (seq1 - seq2).n = seq1.n - seq2.n by NORMSP_1:def 6
+            .= seq1.n + -seq2.n by RLVECT_1:def 11
+            .= seq1.n + (-seq2).n by Def10
+            .= (seq1 + -seq2).n by NORMSP_1:def 5;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
-     seq = seq + 0.X
+  seq = seq + 0.X
 proof
-        now let n;
-     thus (seq + 0'(X)).n = seq.n + 0'(X) by Def12
+  now let n;
+    thus (seq + 0'(X)).n = seq.n + 0'(X) by Def12
                     .= seq.n by RLVECT_1:10;
-     end;
-     hence thesis by FUNCT_2:113;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
-     a * (seq1 + seq2) = a * seq1 + a * seq2
+  a * (seq1 + seq2) = a * seq1 + a * seq2
 proof
-        now let n;
+  now let n;
      thus (a * (seq1 + seq2)).n = a * (seq1 + seq2).n by NORMSP_1:def 8
                           .= a * (seq1.n + seq2.n) by NORMSP_1:def 5
                           .= a * seq1.n + a * seq2.n by RLVECT_1:def 9
                           .= (a * seq1).n + a * seq2.n by NORMSP_1:def 8
                           .= (a * seq1).n + (a * seq2).n by NORMSP_1:def 8
                           .= (a * seq1 + a * seq2).n by NORMSP_1:def 5;
-     end;
-     hence thesis by FUNCT_2:113;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
-     (a + b) * seq = a * seq + b * seq
+  (a + b) * seq = a * seq + b * seq
 proof
-        now let n;
+  now let n;
      thus ((a + b) * seq).n = (a + b) * seq.n by NORMSP_1:def 8
                       .= a * seq.n + b * seq.n by RLVECT_1:def 9
                       .= (a * seq).n + b * seq.n by NORMSP_1:def 8
@@ -1061,15 +1028,15 @@ proof
 end;
 
 theorem
-     (a * b) * seq = a * (b * seq)
+  (a * b) * seq = a * (b * seq)
 proof
-        now let n;
-     thus ((a * b) * seq).n = (a * b) * seq.n by NORMSP_1:def 8
+  now let n;
+    thus ((a * b) * seq).n = (a * b) * seq.n by NORMSP_1:def 8
                       .= a * (b * seq.n) by RLVECT_1:def 9
                       .= a * (b * seq).n by NORMSP_1:def 8
                       .= (a * (b * seq)).n by NORMSP_1:def 8;
-     end;
-     hence thesis by FUNCT_2:113;
+   end;
+   hence thesis by FUNCT_2:113;
 end;
 
 theorem
@@ -1083,14 +1050,14 @@ proof
 end;
 
 theorem
-     (-1) * seq = - seq
+  (-1) * seq = - seq
 proof
-        now let n;
-     thus ((-1) * seq).n = (-1) * seq.n by NORMSP_1:def 8
+  now let n;
+    thus ((-1) * seq).n = (-1) * seq.n by NORMSP_1:def 8
                    .= - seq.n by RLVECT_1:29
                    .= (-seq).n by Def10;
-     end;
-     hence thesis by FUNCT_2:113;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
@@ -1105,92 +1072,91 @@ proof
 end;
 
 theorem
-     seq1 - seq2 = - (seq2 - seq1)
+  seq1 - seq2 = - (seq2 - seq1)
 proof
-        now let n;
-     thus (seq1 - seq2).n = seq1.n - seq2.n by NORMSP_1:def 6
+  now let n;
+    thus (seq1 - seq2).n = seq1.n - seq2.n by NORMSP_1:def 6
                     .= -seq2.n + seq1.n by RLVECT_1:def 11
                     .= - (seq2.n - seq1.n) by RLVECT_1:47
                     .= - (seq2 - seq1).n by NORMSP_1:def 6
                     .= (- (seq2 - seq1)).n by Def10;
-     end;
-     hence thesis by FUNCT_2:113;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
-     seq = seq - 0.X
+  seq = seq - 0.X
 proof
-        now let n;
+  now let n;
      thus (seq - 0'(X)).n = seq.n - 0'(X) by NORMSP_1:def 7
                     .= seq.n by RLVECT_1:26;
-     end;
-     hence thesis by FUNCT_2:113;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
-     seq = - ( - seq )
+  seq = - ( - seq )
 proof
-        now let n;
-     thus (- ( - seq )).n = - (- seq).n by Def10
-                    .= - ( - seq.n) by Def10
-                    .= seq.n by RLVECT_1:30;
-     end;
-     hence thesis by FUNCT_2:113;
+  now let n;
+    thus (- ( - seq )).n = - (- seq).n by Def10
+                 .= - ( - seq.n) by Def10
+                 .= seq.n by RLVECT_1:30;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
-     seq1 - (seq2 + seq3) = (seq1 - seq2) - seq3
+  seq1 - (seq2 + seq3) = (seq1 - seq2) - seq3
 proof
-        now let n;
+  now let n;
      thus
         (seq1 - (seq2 + seq3)).n = seq1.n - (seq2 + seq3).n by NORMSP_1:def 6
                              .= seq1.n - (seq2.n + seq3.n) by NORMSP_1:def 5
                              .= (seq1.n - seq2.n) - seq3.n by RLVECT_1:41
                              .= (seq1 - seq2).n - seq3.n by NORMSP_1:def 6
                              .= ((seq1 - seq2) - seq3).n by NORMSP_1:def 6;
-     end;
-     hence thesis by FUNCT_2:113;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
-     (seq1 + seq2) - seq3 = seq1 + (seq2 - seq3)
+  (seq1 + seq2) - seq3 = seq1 + (seq2 - seq3)
 proof
-        now let n;
-     thus
+  now let n;
+    thus
         ((seq1 + seq2) - seq3).n = (seq1 + seq2).n - seq3.n by NORMSP_1:def 6
                              .= (seq1.n + seq2.n) - seq3.n by NORMSP_1:def 5
                              .= seq1.n + (seq2.n - seq3.n) by RLVECT_1:42
                              .= seq1.n + (seq2 - seq3).n by NORMSP_1:def 6
                              .= (seq1 + (seq2 - seq3)).n by NORMSP_1:def 5;
-     end;
-     hence thesis by FUNCT_2:113;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
-     seq1 - (seq2 - seq3) = (seq1 - seq2) + seq3
+  seq1 - (seq2 - seq3) = (seq1 - seq2) + seq3
 proof
-        now let n;
-     thus
+  now let n;
+    thus
         (seq1 - (seq2 - seq3)).n = seq1.n - (seq2 - seq3).n by NORMSP_1:def 6
                              .= seq1.n - (seq2.n - seq3.n) by NORMSP_1:def 6
                              .= (seq1.n - seq2.n) + seq3.n by RLVECT_1:43
                              .= (seq1 - seq2).n + seq3.n by NORMSP_1:def 6
                              .= ((seq1 - seq2) + seq3).n by NORMSP_1:def 5;
-     end;
-     hence thesis by FUNCT_2:113;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
-     a * (seq1 - seq2) = a * seq1 - a * seq2
+  a * (seq1 - seq2) = a * seq1 - a * seq2
 proof
-        now let n;
-     thus
-        (a * (seq1 - seq2)).n = a * (seq1 - seq2).n by NORMSP_1:def 8
+  now let n;
+    thus (a * (seq1 - seq2)).n = a * (seq1 - seq2).n by NORMSP_1:def 8
                           .= a * (seq1.n - seq2.n) by NORMSP_1:def 6
                           .= a * seq1.n - a * seq2.n by RLVECT_1:48
                           .= (a * seq1).n - a * seq2.n by NORMSP_1:def 8
                           .= (a * seq1).n - (a * seq2).n by NORMSP_1:def 8
                           .= (a * seq1 - a * seq2).n by NORMSP_1:def 6;
-     end;
-     hence thesis by FUNCT_2:113;
+  end;
+  hence thesis by FUNCT_2:113;
 end;

@@ -10,6 +10,6 @@ SUBSET_1
 NUMBERS
 #
 M1 ;;
-ªM1 V2 ;V4 ;;ª&R1 K10 B1 ;K56 ;;M4 K52 ;K56 ;;R1 K20 B1 B2 ;F1 B2 ;;;;
+ªM1 V2 ;V5 ;;ª&R1 K10 B1 ;K56 ;;M4 K52 ;K56 ;;R1 K20 B1 B2 ;F1 B2 ;;;;
 #
 !

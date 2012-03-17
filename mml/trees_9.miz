@@ -11,9 +11,9 @@ environ
       TREES_9;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
       NAT_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, FINSET_1, FINSEQ_2, FUNCT_6,
-      CARD_1, TREES_1, TREES_2, TREES_3, TREES_4, DTCONSTR;
- constructors WELLORD2, REAL_1, NAT_1, DTCONSTR, FINSOP_1, XREAL_0, MEMBERED,
-      XBOOLE_0;
+      CARD_1, TREES_1, TREES_2, TREES_3, TREES_4;
+ constructors WELLORD2, REAL_1, NAT_1, FINSOP_1, XREAL_0, MEMBERED, XBOOLE_0,
+      TREES_3, FUNCT_6, TREES_4;
  clusters FUNCT_1, FINSET_1, TREES_1, TREES_2, TREES_3, PRE_CIRC, FINSEQ_1,
       RELSET_1, XREAL_0, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS,
       ORDINAL2;
@@ -21,11 +21,23 @@ environ
  definitions TARSKI, XBOOLE_0, FUNCT_1, TREES_2, TREES_3;
  theorems TARSKI, AXIOMS, ZFMISC_1, REAL_1, NAT_1, WELLORD2, FUNCT_1, FUNCT_2,
       FINSEQ_1, FINSEQ_3, CARD_1, CARD_2, FUNCT_6, TREES_1, TREES_2, MODAL_1,
-      TREES_3, TREES_4, DTCONSTR, BINTREE1, RELSET_1, RELAT_1, XBOOLE_0,
-      XBOOLE_1, XCMPLX_1, FINSET_1;
+      TREES_3, TREES_4, RELSET_1, RELAT_1, XBOOLE_0, XBOOLE_1, XCMPLX_1,
+      FINSET_1;
  schemes NAT_1, FUNCT_1, FINSEQ_1, ZFREFLE1, WELLORD2;
 
 begin :: Root tree and successors of node in decorated tree
+
+definition
+ let D be non empty set;
+ let F be non empty DTree-set of D;
+ let Tset be non empty Subset of F;
+ redefine mode Element of Tset -> Element of F;
+ coherence proof
+  let x be Element of Tset;
+     x in Tset & Tset c= F;
+  hence x is Element of F;
+ end;
+end;
 
 registration
  cluster finite -> finite-order Tree;
@@ -185,7 +197,7 @@ theorem Th4:
    hereby assume t is root;
      then dom t = elementary_tree 0 by Def1;
      then not e^<*0*> in dom t by TARSKI:def 1,TREES_1:56;
-    hence {} in Leaves dom t by BINTREE1:3;
+    hence {} in Leaves dom t by MODAL_1:53;
    end;
    assume
 A2:  {} in Leaves dom t;
@@ -196,7 +208,7 @@ A3:   p in dom t & not p in elementary_tree 0;
     then consider q being FinSequence of NAT, n being Nat such that
 A4:   p = <*n*>^q by MODAL_1:4;
         <*n*> in dom t & e^<*n*> = <*n*> by A3,A4,FINSEQ_1:47,TREES_1:46;
-    hence contradiction by A2,BINTREE1:4;
+    hence contradiction by A2,MODAL_1:54;
    end;
    assume p in elementary_tree 0; then p = {} by TARSKI:def 1,TREES_1:56;
    hence thesis by TREES_1:47;
@@ -209,7 +221,7 @@ theorem Th5:
 A1:  not <*0*> in elementary_tree 0 by TARSKI:def 1,TREES_1:56;
    hereby assume t|p = elementary_tree 0;
      then not p^<*0*> in t by A1,TREES_1:def 9;
-    hence p in Leaves t by BINTREE1:3;
+    hence p in Leaves t by MODAL_1:53;
    end;
    assume
 A2:  p in Leaves t;
@@ -897,7 +909,7 @@ A1:  t is root & not t.{} in C;
 A2:  s = t|n & (not n in Leaves dom t or t.n in C) by Th18;
 A3:  dom t = {{}} by A1,Def1,TREES_1:56;
     then n = {} by TARSKI:def 1;
-    then e^<*0*> in dom t & e^<*0*> = <*0*> by A1,A2,BINTREE1:3,FINSEQ_1:47;
+    then e^<*0*> in dom t & e^<*0*> = <*0*> by A1,A2,MODAL_1:53,FINSEQ_1:47;
     then {} = <*0*> by A3,TARSKI:def 1;
    hence contradiction;
   end;
@@ -1164,7 +1176,7 @@ A3:  s = t|n & (not n in Leaves dom t or t.n in C) by Th25;
        t is root by A2;
 then A4:  dom t = {{}} by Def1,TREES_1:56;
     then n = {} by TARSKI:def 1;
-    then e^<*0*> in dom t & e^<*0*> = <*0*> by A2,A3,BINTREE1:3,FINSEQ_1:47;
+    then e^<*0*> in dom t & e^<*0*> = <*0*> by A2,A3,MODAL_1:53,FINSEQ_1:47;
     then {} = <*0*> by A4,TARSKI:def 1;
    hence contradiction;
   end;
@@ -1345,7 +1357,7 @@ A1:  t = x-tree p;
    let n be empty Element of dom t;
     A2: ex q being Element of dom t st q = n & succ(t,n) = t*(q succ)
      by Def6;
-       dom roots p = dom p by DTCONSTR:def 1;
+       dom roots p = dom p by TREES_3:def 18;
 then A3:  len roots p = len p by FINSEQ_3:31;
 A4:  len doms p = len p by TREES_3:40;
        now let x be set; assume x in dom doms p;
@@ -1375,7 +1387,7 @@ then A12:    succ(t,n).(i+1) = t.((n succ).(i+1)) by A2,FUNCT_1:22
          .= t.<*i*> by FINSEQ_1:47;
          i+1 in dom p by A10,Lm3;
       then ex T being DecoratedTree st T = p.(i+1) & (roots p).(i+1) = T.{}
-       by DTCONSTR:def 1;
+       by TREES_3:def 18;
       then (roots p).(i+1) = t.(<*i*>^{}) by A11,TREES_1:47,TREES_2:def 11;
      hence succ(t,n).(i+1) = (roots p).(i+1) by A12,FINSEQ_1:47;
     end;

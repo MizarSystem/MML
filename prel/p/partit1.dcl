@@ -12,6 +12,6 @@ PARTFUN1
 EQREL_1
 PARTIT1
 #
-fW1 ;;M1 ;;K67 A1 ;
+fW1 ;;M1 ;;K68 A1 ;
 ­;M1 W1 ;;;M8 A1 ;W1 ;;
 !

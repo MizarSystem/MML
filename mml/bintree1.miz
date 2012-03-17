@@ -19,7 +19,7 @@ environ
  definitions DTCONSTR;
  theorems TARSKI, NAT_1, MCART_1, ZFMISC_1, ENUMSET1, MODAL_1, RELSET_1,
       FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, LANG1, TREES_1, TREES_2,
-      TREES_3, TREES_4, DTCONSTR, XBOOLE_0, FINSET_1;
+      TREES_3, TREES_4, DTCONSTR, FINSET_1;
  schemes FUNCT_2, DTCONSTR, MULTOP_1;
 
 begin
@@ -57,64 +57,7 @@ definition let IT be Tree;
   holds succ t = { t^<*0*>, t^<*1*> };
 end;
 
-theorem Th3:
- for T being Tree, t being Element of T holds
-  t in Leaves T iff not t^<*0*> in T
-proof
- let T be Tree, t be Element of T;
- hereby assume
-A1:   t in Leaves T;
-      t is_a_proper_prefix_of t^<*0*> by TREES_1:30;
-  hence not t^<*0*> in T by A1,TREES_1:def 8;
- end;
-   assume
-A2:  not t^<*0*> in T & not t in Leaves T;
-   then consider q being FinSequence of NAT such that
-A3:  q in T & t is_a_proper_prefix_of q by TREES_1:def 8;
-       t is_a_prefix_of q by A3,XBOOLE_0:def 8;
-   then consider r being FinSequence such that
-A4:  q = t^r by TREES_1:8;
-   reconsider r as FinSequence of NAT by A4,FINSEQ_1:50;
-       len q = len t+len r by A4,FINSEQ_1:35; then len r <> 0 by A3,TREES_1:24
-;
-    then r <> {} by FINSEQ_1:25;
-   then consider p being FinSequence of NAT, x being Nat such that
-A5:  r = <*x*>^p by MODAL_1:4;
-       q = t^<*x*>^p by A4,A5,FINSEQ_1:45;
-    then t^<*x*> in T & 0 <= x by A3,NAT_1:18,TREES_1:46;
-   hence contradiction by A2,TREES_1:def 5;
-end;
-
-theorem Th4:
- for T being Tree, t being Element of T holds
-  t in Leaves T iff not ex n being Nat st t^<*n*> in T
-  proof let T be Tree, t be Element of T;
-   hereby assume A1: t in Leaves T;
-    given n being Nat such that
-A2:   t^<*n*> in T;
-        not t is_a_proper_prefix_of t^<*n*> & t is_a_prefix_of t^<*n*>
-      by A1,A2,TREES_1:8,def 8;
-     then t = t^<*n*> & t = t^{} by FINSEQ_1:47,XBOOLE_0:def 8;
-     then {} = <*n*> by FINSEQ_1:46;
-    hence contradiction;
-   end;
-   assume
-A3:  not (ex n being Nat st t^<*n*> in T) & not t in Leaves T;
-   then consider q being FinSequence of NAT such that
-A4:  q in T & t is_a_proper_prefix_of q by TREES_1:def 8;
-       t is_a_prefix_of q by A4,XBOOLE_0:def 8;
-   then consider r being FinSequence such that
-A5:  q = t^r by TREES_1:8;
-   reconsider r as FinSequence of NAT by A5,FINSEQ_1:50;
-       len q = len t+len r by A5,FINSEQ_1:35; then len r <> 0 by A4,TREES_1:24
-;
-    then r <> {} by FINSEQ_1:25;
-   then consider p being FinSequence of NAT, x being Nat such that
-A6:  r = <*x*>^p by MODAL_1:4;
-       q = t^<*x*>^p by A5,A6,FINSEQ_1:45;
-    then t^<*x*> in T by A4,TREES_1:46;
-   hence contradiction by A3;
-  end;
+canceled 2;
 
 theorem :: LeavesDef3:
     for T being Tree, t being Element of T holds
@@ -126,10 +69,10 @@ theorem :: LeavesDef3:
 5
 ;
     then not t^<*0*> in T;
-   hence t in Leaves T by Th3;
+   hence t in Leaves T by MODAL_1:53;
   end;
   assume t in Leaves T;
-then A1:  not t^<*0*> in T by Th3;
+then A1:  not t^<*0*> in T by MODAL_1:53;
   assume
 A2:  succ t <> {};
   consider x being Element of succ t;
@@ -215,7 +158,7 @@ FINSEQ_1:56;
 FINSEQ_1:56;
      end;
      end;
-     hence thesis by A1,Th3;
+     hence thesis by A1,MODAL_1:53;
    end;
    suppose
 A10:   t = <*1*>;
@@ -242,7 +185,7 @@ FINSEQ_1:56;
 FINSEQ_1:56;
      end;
      end;
-     hence thesis by A1,Th3;
+     hence thesis by A1,MODAL_1:53;
   end;
   end;
 
@@ -289,7 +232,7 @@ A2:   t^<*2*> in T;
 then A3:   t^<*0*> in T by TREES_1:def 5;
     per cases;
     suppose t in Leaves T;
-     hence contradiction by A3,Th3;
+     hence contradiction by A3,MODAL_1:53;
     end;
     suppose not t in Leaves T;
 then A4:    succ t = { t^<*0*>, t^<*1*> } by A1,Def2;
@@ -327,19 +270,19 @@ A1: t = <*0*>^p;
 A2:  t in Leaves RT;
    assume not p in Leaves T0;
    then consider n being Nat such that
-A3:  p^<*n*> in T0 by Th4;
+A3:  p^<*n*> in T0 by MODAL_1:54;
        <*0*>^(p^<*n*>) in RT by A3,TREES_3:72;
     then (<*0*>^p)^<*n*> in RT by FINSEQ_1:45;
-   hence contradiction by A1,A2,Th4;
+   hence contradiction by A1,A2,MODAL_1:54;
   end;
   assume
 A4: p in Leaves T0;
   assume not t in Leaves RT;
    then consider n being Nat such that
-A5: t^<*n*> in RT by Th4;
+A5: t^<*n*> in RT by MODAL_1:54;
       <*0*>^(p^<*n*>) in RT by A1,A5,FINSEQ_1:45;
    then p^<*n*> in T0 by TREES_3:72;
-  hence contradiction by A4,Th4;
+  hence contradiction by A4,MODAL_1:54;
  end;
  let p be Element of T1; assume
 A6: t = <*1*>^p;
@@ -347,19 +290,19 @@ A6: t = <*1*>^p;
 A7:  t in Leaves RT;
    assume not p in Leaves T1;
    then consider n being Nat such that
-A8:  p^<*n*> in T1 by Th4;
+A8:  p^<*n*> in T1 by MODAL_1:54;
        <*1*>^(p^<*n*>) in RT by A8,TREES_3:73;
     then (<*1*>^p)^<*n*> in RT by FINSEQ_1:45;
-   hence contradiction by A6,A7,Th4;
+   hence contradiction by A6,A7,MODAL_1:54;
   end;
   assume
 A9: p in Leaves T1;
   assume not t in Leaves RT;
    then consider n being Nat such that
-A10: t^<*n*> in RT by Th4;
+A10: t^<*n*> in RT by MODAL_1:54;
       <*1*>^(p^<*n*>) in RT by A6,A10,FINSEQ_1:45;
    then p^<*n*> in T1 by TREES_3:73;
-  hence contradiction by A9,Th4;
+  hence contradiction by A9,MODAL_1:54;
 end;
 
 theorem Th9:
@@ -722,7 +665,7 @@ proof
  consider G being strict non empty DTConstrStr such that
 A1: the carrier of G = S() and
 A2: for x being Symbol of G, p being FinSequence of the carrier of G
-           holds x ==> p iff Q[x, p] from DTCONSTR:sch 2;
+           holds x ==> p iff Q[x, p] from DTCONSTR:sch 1;
 A3: now let x, y, z be Symbol of G;
      reconsider yz = <*y,z*> as FinSequence of the carrier of G;
       yz.1 = y & yz.2 = z by FINSEQ_1:61;
@@ -775,15 +718,15 @@ A1: nt ==> roots ts;
 A2:  roots ts = <* rtl, rtr *> by A1,Def4;
 A3:  dom <*rtl, rtr*> = dom ts &
     for i being Nat st i in dom ts ex T being DecoratedTree
-        st T = ts.i & <*rtl, rtr*>.i = T.{} by A2,DTCONSTR:def 1;
+        st T = ts.i & <*rtl, rtr*>.i = T.{} by A2,TREES_3:def 18;
 A4: len <*rtl, rtr*> = 2 by FINSEQ_1:61;
  hence dom ts = {1, 2} by A3,FINSEQ_1:4,def 3;
  hence
 A5:  1 in dom ts & 2 in dom ts by TARSKI:def 2;
     then consider tl being DecoratedTree such that
-A6:  tl = ts.1 & <*rtl, rtr*>.1 = tl.{} by A2,DTCONSTR:def 1;
+A6:  tl = ts.1 & <*rtl, rtr*>.1 = tl.{} by A2,TREES_3:def 18;
     consider tr being DecoratedTree such that
-A7:  tr = ts.2 & <*rtl, rtr*>.2 = tr.{} by A2,A5,DTCONSTR:def 1;
+A7:  tr = ts.2 & <*rtl, rtr*>.2 = tr.{} by A2,A5,TREES_3:def 18;
      rng ts c= TS G & tl in rng ts & tr in rng ts
                               by A5,A6,A7,FINSEQ_1:def 4,FUNCT_1:def 5
 ;
@@ -835,7 +778,7 @@ A9:   tl = ts.1 & tr = ts.2 & nt-tree ts = nt-tree (tl, tr) &
   hence P[nt-tree ts] by A2,A5,A7,A8,A9;
  end;
     for t being DecoratedTree of the carrier of G()
-       st t in TS(G()) holds _P[t] from DTCONSTR:sch 8(A3, A4);
+       st t in TS(G()) holds _P[t] from DTCONSTR:sch 7(A3, A4);
  hence thesis;
 end;
 
@@ -863,7 +806,7 @@ A1: for t being Symbol of G() st t in Terminals G()
          holds f.(root-tree t) = _TermVal(t) and
 A2: for nt being Symbol of G(),
        ts being FinSequence of TS(G()) st nt ==> roots ts
-         holds f.(nt-tree ts) = BNTV(nt, roots ts, f * ts) from DTCONSTR:sch 9;
+         holds f.(nt-tree ts) = BNTV(nt, roots ts, f * ts) from DTCONSTR:sch 8;
  take f;
 A3: dom f = TS G() by FUNCT_2:def 1;
  thus for t be Terminal of G() holds f.(root-tree t) = TermVal(t) by A1;
@@ -893,7 +836,7 @@ then A9: i in Seg 2 by FINSEQ_1:61;
       hence ex T being DecoratedTree st T = ts.i & rts.i = T.{};
     end;
     end;
-then A10: rts = roots ts by A7,A8,DTCONSTR:def 1;
+then A10: rts = roots ts by A7,A8,TREES_3:def 18;
    reconsider x = <*xl, xr*> as FinSequence of D();
 A11: dom x = {1, 2} by FINSEQ_1:4,FINSEQ_3:29;
 A12: now let y be set;
@@ -1003,7 +946,7 @@ A12:     nt is NonTerminal of G() &
 then x.1 = xl & x.2 = xr by A10,FUNCT_1:23;
       hence f2().(nt-tree ts) = BNTV(nt, rts, x) by A2,A9,A10,A11,A12;
      end;
- thus thesis from DTCONSTR:sch 10(A3, A8);
+ thus thesis from DTCONSTR:sch 9(A3, A8);
 end;
 
 definition

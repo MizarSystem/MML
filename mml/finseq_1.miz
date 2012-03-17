@@ -7,7 +7,7 @@
 environ
 
  vocabulary ORDINAL2, ARYTM, FUNCT_1, BOOLE, RELAT_1, FINSET_1, TARSKI,
-      ORDINAL1, CARD_1, PARTFUN1, ARYTM_1, FINSEQ_1, MCART_1;
+      ORDINAL1, CARD_1, PARTFUN1, ARYTM_1, FINSEQ_1, MCART_1, MONOID_0;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL2, XCMPLX_0, XREAL_0,
       RELAT_1, FUNCT_1, WELLORD2, ORDINAL1, REAL_1, NAT_1, NUMBERS, PARTFUN1,
       MCART_1, FINSET_1, CARD_1;
@@ -16,16 +16,16 @@ environ
  clusters FUNCT_1, RELAT_1, RELSET_1, CARD_1, SUBSET_1, NAT_1, XREAL_0,
       MEMBERED, ZFMISC_1, XBOOLE_0, ORDINAL2, FINSET_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, FINSET_1, FUNCT_1, WELLORD2, XBOOLE_0;
+ definitions TARSKI, FINSET_1, FUNCT_1, WELLORD2, XBOOLE_0, RELAT_1;
  theorems TARSKI, AXIOMS, FUNCT_1, REAL_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
       PARTFUN1, WELLORD2, ORDINAL1, CARD_1, FINSET_1, ORDINAL2, XBOOLE_0,
       XBOOLE_1, XCMPLX_1, MCART_1, GRFUNC_1;
- schemes FUNCT_1, REAL_1, NAT_1, XBOOLE_0, FRAENKEL, WELLORD2;
+ schemes FUNCT_1, REAL_1, NAT_1, XBOOLE_0, FRAENKEL, WELLORD2, RELAT_1;
 
 begin
 
  reserve k,l,m,n,k1,k2 for Nat,
-         a,b,c for natural number,
+         a,b,c,i for natural number,
          x,y,z,y1,y2,X,Y for set,
          f,g for Function;
 
@@ -446,14 +446,12 @@ A1: dom f c= Seg k;
 A2: dom g = Seg k & for x st x in Seg k holds g.x = F(x) from FUNCT_1:sch 3;
   reconsider g as FinSequence by A2,Def2;
   take g;
-  let x; assume
-A3: x in f;
-  then consider y,z such that
-A4: [y,z] = x by RELAT_1:def 1;
-      y in dom f by A3,A4,RELAT_1:def 4;
-   then y in dom g & f.y = z by A1,A2,A3,A4,FUNCT_1:def 4;
+  let y,z be set; assume
+A3: [y,z] in f;
+   then y in dom f by RELAT_1:def 4;
+   then y in dom g & f.y = z by A1,A2,A3,FUNCT_1:def 4;
    then [y,g.y] in g & g.y = z by A2,FUNCT_1:8;
-  hence thesis by A4;
+  hence thesis;
 end;
 
 scheme SeqEx{A()->Nat,P[set,set]}:
@@ -2492,7 +2490,7 @@ proof let X;
    hence thesis by Lm4;
 end;
 
-begin :: Moved from FINSET_1, 1998
+begin :: from FINSET_1, 1998
 
 theorem :: FINSET_1:def 1
   D is finite iff ex p st D = rng p
@@ -2737,7 +2735,7 @@ theorem
 
 begin :: Addenda
 
-:: From FINSEQ_5
+:: from FINSEQ_5
 
 registration let x be set;
  cluster <*x*> -> non empty;
@@ -2825,5 +2823,69 @@ A1:  m is Nat by ORDINAL2:def 21;
  then Seg m c= dom p by Def3;
  then Seg m = dom(p|(Seg m)) by RELAT_1:91 .= dom(p|m) by Def1;
  hence m = len(p|m) by A1,Def3;
+end;
+
+:: from FSM_1
+
+theorem
+ i in Seg n implies i+m in Seg (n+m)
+proof assume i in Seg n;
+  then 1 <= i & i <= n & i <= i+m by Th3,NAT_1:29;
+  then 1 <= i+m & i+m <= n+m by AXIOMS:22,REAL_1:55;
+ hence thesis by Th3;
+end;
+
+theorem
+ i>0 & i+m in Seg (n+m) implies i in Seg n & i in Seg (n+m)
+proof assume
+A1: i > 0 & i+m in Seg (n+m);   1 = 0+1;
+then A2: 1 <= i by A1,NAT_1:38;
+A3: i+m <= n+m by A1,Th3; then i <= n by REAL_1:53;
+ hence i in Seg n by A2,Th3;
+      i <= i+m by NAT_1:29; then i <= n+m by A3,AXIOMS:22;
+ hence thesis by A2,Th3;
+end;
+
+:: from LANG1
+
+definition
+ let R be Relation;
+ func R[*] -> Relation means
+  for x,y being set holds [x,y] in it iff x in field R & y in field R &
+   ex p being FinSequence st len p >= 1 & p.1 = x & p.(len p) = y &
+    for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R;
+   existence
+    proof
+      defpred X[set,set] means
+       ex p being FinSequence st len p >= 1 & p.1 = $1 & p.(len p) = $2 &
+        for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R;
+     thus ex S being Relation st
+      for x,y being set holds
+       [x,y] in S iff x in field R & y in field R & X[x,y]
+
+       from RELAT_1:sch 1;
+    end;
+   uniqueness
+    proof let R1,R2 be Relation such that
+A1:   for x,y being set holds [x,y] in R1 iff x in field R & y in field R &
+      ex p being FinSequence st len p >= 1 & p.1 = x & p.(len p) = y &
+      for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R and
+A2:   for x,y being set holds [x,y] in R2 iff x in field R & y in field R &
+      ex p being FinSequence st len p >= 1 & p.1 = x & p.(len p) = y &
+      for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R;
+     let x,y be set;
+     thus [x,y] in R1 implies [x,y] in R2
+       proof assume [x,y] in R1;
+         then x in field R & y in field R & ex p being FinSequence st
+         len p >= 1 & p.1 = x & p.(len p) = y &
+         for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R by A1;
+        hence [x,y] in R2 by A2;
+       end;
+     assume [x,y] in R2;
+      then x in field R & y in field R & ex p being FinSequence st
+      len p >= 1 & p.1 = x & p.(len p) = y &
+      for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R by A2;
+     hence thesis by A1;
+    end;
 end;
 

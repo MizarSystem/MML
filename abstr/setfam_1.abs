@@ -6,7 +6,7 @@
 
 environ
 
- vocabulary BOOLE, TARSKI, SUBSET_1, SETFAM_1;
+ vocabulary BOOLE, TARSKI, SUBSET_1, SETFAM_1, AMI_1, CANTOR_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1;
  constructors TARSKI, SUBSET_1, XBOOLE_0;
  clusters SUBSET_1, XBOOLE_0, ZFMISC_1;
@@ -258,4 +258,58 @@ for X being set, F being Subset-Family of X st F = {X}
 registration let X be set, F be empty Subset-Family of X;
  cluster COMPLEMENT F -> empty;
 end;
+
+:: from AMI_1
+
+definition let IT be set;
+ attr IT is with_non-empty_elements means
+:: SETFAM_1:def 9
+ not {} in IT;
+end;
+
+registration
+ cluster non empty with_non-empty_elements set;
+end;
+
+registration
+ let A be non empty set;
+  cluster { A } -> with_non-empty_elements;
+ let B be non empty set;
+  cluster { A, B } -> with_non-empty_elements;
+end;
+
+registration let A,B be with_non-empty_elements set;
+ cluster A \/ B -> with_non-empty_elements;
+end;
+
+:: from LATTICE4
+
+theorem :: SETFAM_1:56
+    union Y c= Z & X in Y implies X c= Z;
+
+:: from LOPCLSET
+
+theorem :: SETFAM_1:57
+ for A,B,X being set holds (X c= union (A \/ B) &
+    for Y being set st Y in B holds Y misses X )
+        implies X c= union A;
+
+:: from CANTOR_1
+
+definition
+   let M be set; let B be Subset-Family of M;
+   func Intersect(B) -> Subset of M equals
+:: SETFAM_1:def 10
+    meet B if B <> {} otherwise
+    M;
+end;
+
+theorem :: SETFAM_1:58
+  for X being set for R being Subset-Family of X for x being
+    set st x in X holds x in Intersect R iff for Y being set st Y in R holds
+       x in Y;
+
+theorem :: SETFAM_1:59
+  for X being set for H, J being Subset-Family of X st H c= J holds
+    Intersect J c= Intersect H;
 

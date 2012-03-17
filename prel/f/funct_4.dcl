@@ -9,5 +9,5 @@ TARSKI
 FUNCT_2
 FUNCT_4
 #
-fV1 ;V3 ;;M1 ;M1 ;M1 ;M1 ;;K57 A1 A2 A3 A4 ;
+fV1 ;V4 ;;M1 ;M1 ;M1 ;M1 ;;K57 A1 A2 A3 A4 ;
 !

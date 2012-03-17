@@ -7,6 +7,6 @@ FUNCT_1
 RELSET_1
 MEMBERED
 #
-«V2 ;V4 ;V5 ;;M1 ;M1 ;;M4 A1 A2 ;
-fV1 ;V2 ;V4 ;V5 ;V6 ;V7 ;V8 ;V9 ;V10 ;;;K1 ;
+«V2 ;V5 ;V6 ;;M1 ;M1 ;;M4 A1 A2 ;
+fV1 ;V2 ;V5 ;V6 ;V7 ;V8 ;V9 ;V10 ;V11 ;;;K1 ;
 !

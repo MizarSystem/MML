@@ -7,22 +7,22 @@
 environ
 
  vocabulary RLVECT_1, RLSUB_1, FINSET_1, RLVECT_2, FINSEQ_1, FUNCT_1, ORDERS_1,
-      SEQ_1, RELAT_1, FINSEQ_4, BOOLE, FUNCT_2, ARYTM_1, TARSKI, CARD_1,
+      SEQ_1, RELAT_1, FINSEQ_4, BOOLE, FUNCT_2, ARYTM_1, TARSKI,
       ZFMISC_1, RLVECT_3, HAHNBAN;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FINSEQ_1, RELAT_1,
       ORDINAL1, FUNCT_1, FUNCT_2, ORDERS_1, STRUCT_0, RLVECT_1, FINSEQ_4,
-      FRAENKEL, FINSET_1, REAL_1, RLSUB_1, RLSUB_2, RLVECT_2, CARD_1, NAT_1;
+      FRAENKEL, FINSET_1, REAL_1, RLSUB_1, RLSUB_2, RLVECT_2, NAT_1;
  constructors NAT_1, REAL_1, RLSUB_2, RLVECT_2, FINSEQ_4, MEMBERED, PARTFUN1,
       XBOOLE_0, ORDERS_1;
  clusters SUBSET_1, FUNCT_1, RLVECT_1, RLSUB_1, FINSET_1, RLVECT_2, RELSET_1,
       STRUCT_0, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions XBOOLE_0, RLSUB_1, RLVECT_2, TARSKI;
- theorems CARD_1, CARD_2, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3,
-      FINSEQ_4, FINSET_1, RLSUB_1, RLSUB_2, RLVECT_1, RLVECT_2, TARSKI,
-      ZFMISC_1, RELAT_1, RELSET_1, ORDINAL1, XBOOLE_0, XBOOLE_1, XCMPLX_0,
-      XCMPLX_1, ORDERS_1;
- schemes FINSEQ_1, FUNCT_1, FUNCT_2, NAT_1, XBOOLE_0;
+ theorems CARD_2, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4,
+      FINSET_1, RLSUB_1, RLSUB_2, RLVECT_1, RLVECT_2, TARSKI, ZFMISC_1,
+      RELAT_1, RELSET_1, ORDINAL1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1,
+      ORDERS_1;
+ schemes FINSEQ_1, FUNCT_1, FUNCT_2, XBOOLE_0;
 
 begin
 
@@ -1141,75 +1141,6 @@ Lm7: not {} in M implies dom CF = M & rng CF c= union M
   hence dom CF = M & rng CF c= union M by FUNCT_2:def 1,RELSET_1:12;
  end;
 
-Lm8: now let n;
-  assume A1:
-   for Z being finite set holds
-   card Z = n & Z <> {} &
-             (for X,Y st X in Z & Y in Z holds X c= Y or Y c= X) implies
-              union Z in Z;
- let Z be finite set;
-  assume that A2: card Z = n + 1 and A3: Z <> {} and
-              A4: for X,Y st X in Z & Y in Z holds X c= Y or Y c= X;
-   consider y being Element of Z;
-
-        now per cases;
-     suppose n = 0;
-       then consider x such that A5: Z = {x} by A2,CARD_2:60;
-            y = x & union Z = x by A5,TARSKI:def 1,ZFMISC_1:31;
-      hence union Z in Z by A3;
-     end;
-     suppose A6: n <> 0;
-       set Y = Z \ {y};
-        A7: Y c= Z by XBOOLE_1:36;
-        reconsider Y as finite set;
-            {y} c= Z by A3,ZFMISC_1:37;
-        then A8: card Y = (n + 1) - card{y} by A2,CARD_2:63
-                       .= n + 1 - 1 by CARD_1:79
-                       .= n;
-            for a,b being set st a in Y & b in Y holds a c= b or b c= a by A4,
-A7
-;
-        then A9: union Y in Y by A1,A6,A8,CARD_1:47;
-        then A10: union Y in Z by A7;
-        A11: y c= union Y or union Y c= y by A4,A7,A9;
-A12:     y in Z by A3;
-            Z = (Z \ {y}) \/ {y}
-         proof
-          thus Z c= (Z \ {y}) \/ {y}
-           proof let x;
-             assume x in Z;
-              then x in Z \ {y} or x in {y} by XBOOLE_0:def 4;
-            hence thesis by XBOOLE_0:def 2;
-           end;
-          let x;
-           assume x in (Z \ {y}) \/ {y};
-            then x in (Z \ {y}) or x in {y} by XBOOLE_0:def 2;
-            then (x in Z & not x in {y}) or x in {y} by XBOOLE_0:def 4;
-            then x in Z \/ {y} & {y} c= Z by A3,XBOOLE_0:def 2,ZFMISC_1:37;
-          hence thesis by XBOOLE_1:12;
-         end;
-        then union Z = union Y \/ union {y} by ZFMISC_1:96
-                    .= union Y \/ y by ZFMISC_1:31;
-      hence union Z in Z by A10,A11,A12,XBOOLE_1:12;
-    end;
-    end;
- hence union Z in Z;
-end;
-
-Lm9:
- for Z being finite set holds
- Z <> {} &
-       (for X,Y st X in Z & Y in Z holds X c= Y or Y c= X) implies union Z in Z
- proof let Z be finite set;
-   A1: card Z = card Z;
-   defpred P[Nat] means for Z being finite set st card Z = $1 & Z <> {} &
-       (for X,Y st X in Z & Y in Z holds X c= Y or Y c= X) holds union Z in Z;
-   A2: P[0] by CARD_2:59;
-   A3: for k be Nat st P[k] holds P[k+1] by Lm8;
-        for n holds P[n] from NAT_1:sch 1(A2,A3);
-  hence thesis by A1;
- end;
-
 theorem Th27:
  A is linearly-independent implies
   ex B st A c= B & B is linearly-independent & Lin(B) = the RLSStruct of V
@@ -1285,7 +1216,7 @@ A16,TARSKI:def 4;
                end;
                    dom F is finite by A13,A20,FINSET_1:26;
                then S is finite by FINSET_1:26;
-               then union S in S by A21,A28,Lm9;
+               then union S in S by A21,A28,CARD_2:81;
                then union S in Z by A22;
                then consider B being Subset of V such that
                A29: B = union S and A c= B and
@@ -1515,7 +1446,7 @@ def 5
                end;
                    dom F is finite by A13,A20,FINSET_1:26;
                then S is finite by FINSET_1:26;
-               then union S in S by A21,A28,Lm9;
+               then union S in S by A21,A28,CARD_2:81;
                then union S in Z by A22;
                then consider B such that A29: B = union S and B c= A and
                                         A30: B is linearly-independent by A2,A4
@@ -1717,10 +1648,7 @@ theorem
 ::  Auxiliary theorems.
 ::
 
-theorem
-     Z <> {} & Z is finite &
-  (for X,Y st X in Z & Y in Z holds X c= Y or Y c= X) implies union Z in Z
-    by Lm9;
+canceled;
 
 theorem
      not {} in M implies dom CF = M & rng CF c= union M by Lm7;

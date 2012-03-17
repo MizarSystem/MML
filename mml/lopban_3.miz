@@ -11,9 +11,8 @@ environ
       CAT_1, PREPOWER, POWER, SERIES_1, BHSP_3, RSSPACE3, LOPBAN_1, LOPBAN_2,
       LOPBAN_3, SUPINF_2;
  notation TARSKI, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, PRE_TOPC,
-      DOMAIN_1, BINOP_1, XCMPLX_0, STRUCT_0, XREAL_0,
-      ORDINAL1, NUMBERS, REAL_1, NAT_1, COMPLEX1,
-      RLVECT_1, VECTSP_1, NORMSP_1, RSSPACE3, SEQ_1, SEQ_2, SEQM_3,
+      DOMAIN_1, BINOP_1, STRUCT_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1,
+      COMPLEX1, RLVECT_1, VECTSP_1, NORMSP_1, RSSPACE3, SEQ_1, SEQ_2, SEQM_3,
       SERIES_1, PREPOWER, POWER, LOPBAN_1, LOPBAN_2;
  constructors REAL_1, NAT_1, FUNCT_7, DOMAIN_1, SEQ_2, SERIES_1, SEQ_4,
       PREPOWER, RSSPACE3, LOPBAN_2, COMPLEX1, PARTFUN1;
@@ -24,7 +23,7 @@ environ
  theorems AXIOMS, ABSVALUE, REAL_1, RLVECT_1, VECTSP_1, BINOP_1, FUNCSDOM,
       RELAT_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, FUNCT_1, NAT_1, INT_1, SQUARE_1,
       FUNCT_2, NORMSP_1, SEQ_4, RSSPACE3, LOPBAN_1, PREPOWER, LOPBAN_2;
- schemes SEQ_1, FUNCT_1, NORMSP_1, RECDEF_1, NAT_1;
+ schemes SEQ_1, RECDEF_1, NAT_1, FUNCT_2;
 
 begin :: Basic Properties of Sequences of Norm Space
 
@@ -120,7 +119,7 @@ existence
   proof
   deffunc G(Nat) = 0.X;
     consider C being sequence of X such that
-A1:   for n be Nat holds C.n = G(n) from NORMSP_1:sch 1;
+A1:   for n be Nat holds C.n = G(n) from FUNCT_2:sch 4;
     take C;
     take 0.X;
     let p be Real such that
@@ -331,7 +330,7 @@ func seq ^\k -> sequence of X means :Def6:
 existence
  proof deffunc U(Nat) = seq.($1+k);
   thus ex f being sequence of X st
-   for n be Nat  holds f.n=U(n) from NORMSP_1:sch 1;
+   for n be Nat holds f.n=U(n) from FUNCT_2:sch 4;
  end;
 uniqueness
  proof
@@ -750,7 +749,7 @@ let X be RealNormSpace;
   proof
   deffunc z(Nat)=0.X;
     consider C being sequence of X such that
-A1:   for n be Nat holds C.n = z(n) from NORMSP_1:sch 1;
+A1:   for n be Nat holds C.n = z(n) from FUNCT_2:sch 4;
     take C;
     thus thesis by A1,Th18;
   end;
@@ -1043,7 +1042,7 @@ defpred X[Nat] means s^\$1 is summable;
   A4: s^\(n+1)=(s^\n)^\1 by Th10;
   deffunc U(Nat) = (s^\n).0;
   consider s1 be sequence of X such that
-A5: for k be Nat holds s1.k = U(k) from NORMSP_1:sch 1;
+A5: for k be Nat holds s1.k = U(k) from FUNCT_2:sch 4;
      s1 is constant by A5,Def5;
   then A6: s1 is convergent by Th17;
      Partial_Sums(s^\n^\1) = (Partial_Sums(s^\n)^\1) - s1 by A5,Th26;
@@ -1437,41 +1436,6 @@ end;
 
 begin :: Basic Properties of Sequence of Banach_Algebra
 
-scheme ExNCBASeq{RNS()->non empty Normed_AlgebraStr,
-   F(set) -> Point of RNS() } :
-       ex S be sequence of RNS() st
-       for n be Nat holds S.n = F(n)
-       proof
-       defpred P[set,set] means ex n be Nat st n =$1 & $2 = F(n);
-    A1: for d be set st d in NAT ex s be set  st P[d,s]
-       proof
-            let d be set; assume d in NAT;
-            then consider n be Nat such that
-        A2: n = d;
-            reconsider z = F(n) as set;
-            take z;
-            thus thesis by A2;
-       end;
-    A3: for d , s , t be set st d in NAT & P[d,s] & P[d,t] holds s = t;
-       consider f be Function such that
-    A4: dom f = NAT and
-    A5: for d be set st d in NAT holds
-        P[d,f.d] from FUNCT_1:sch 2(A3,A1);
-          for d be set st d in NAT holds f.d is Point of RNS()
-       proof
-            let d be set; assume d in NAT;
-            then ex n be Nat st n = d & f.d = F(n) by A5;
-            hence thesis;
-       end;
-       then reconsider f as sequence of RNS() by A4,NORMSP_1:17;
-       take S = f;
-          now let n be Nat;
-          P[n,S.n] by A5;
-       hence S.n = F(n);
-       end;
-   hence for n be Nat holds S.n = F(n);
-end;
-
 theorem Th43:
  for X be Banach_Algebra holds
      for x,y,z being Element of X
@@ -1617,7 +1581,7 @@ existence
   proof
   deffunc F(Nat) = a * S.$1;
    ex S being sequence of X st
-    for n be Nat holds S.n = F(n) from ExNCBASeq;
+    for n be Nat holds S.n = F(n) from FUNCT_2:sch 4;
   hence thesis;
 end;
 uniqueness
@@ -1645,7 +1609,7 @@ existence
   proof
   deffunc F(Nat) = S.$1 *a;
    ex S being sequence of X st
-    for n be Nat holds S.n = F(n) from ExNCBASeq;
+    for n be Nat holds S.n = F(n) from FUNCT_2:sch 4;
   hence thesis;
 end;
 uniqueness
@@ -1672,7 +1636,7 @@ existence
   proof
   deffunc F(Nat) = seq1.$1 * seq2.$1;
    ex S being sequence of X st
-    for n be Nat holds S.n = F(n) from ExNCBASeq;
+    for n be Nat holds S.n = F(n) from FUNCT_2:sch 4;
   hence thesis;
 end;
 uniqueness
@@ -2116,7 +2080,7 @@ then A29:   (1_ X-x*yn)
           <= ||. (seq^\1).n .|| + ||. x*(yn-y) .|| by NORMSP_1:def 2;
       A31:  ||. (seq^\1).n .|| + ||. x*(yn-y) .||
          =  ||. (seq^\1).||.n  + ||. x*(yn-y) .|| by NORMSP_1:def 10;
-         ||. x*(yn-y) .|| <=   ||. x .||*||. (yn-y).||  by Th43;
+         ||. x*(yn-y) .|| <= ||. x .||*||. (yn-y).||  by Th43;
         then ||. (seq^\1).||.n  + ||. x*(yn-y) .||
               <= ||. (seq^\1).||.n + ||. x .|| * ||. (yn-y).||
               by REAL_1:55;
@@ -2124,15 +2088,13 @@ then A29:   (1_ X-x*yn)
              <= ||. (seq^\1).||.n +  ||. x .|| * ||. (yn-y).||
              by A30,A31,AXIOMS:22;
       then ||. 1_ X -x*y.|| <= ||. (seq^\1).||.n
-             +  ||. x .|| * ||. (Partial_Sums(seq)-y).n.|| by A27,A29,NORMSP_1:
+         + ||. x .|| * ||. (Partial_Sums(seq)-y).n.|| by A27,A29,NORMSP_1:
 def 7;
       then ||. 1_ X -x*y.|| <= ||. (seq^\1).||.n
-             +  ||. x .|| * ||. Partial_Sums(seq)-y.||.n
-             by NORMSP_1:def 10;
+             + ||. x .|| * ||. Partial_Sums(seq)-y.||.n by NORMSP_1:def 10;
       then ||. 1_ X -x*y.|| <= ||. (seq^\1).||.n
                 + ( ||. x .|| (#) ||. Partial_Sums(seq)-y.||).n by SEQ_1:13;
-      hence ||. 1_ X -x*y.||
-                <=( ||. (seq^\1).||
+      hence ||. 1_ X -x*y.|| <=( ||. (seq^\1).||
                 +  ||. x .|| (#) ||. Partial_Sums(seq)-y.||).n  by SEQ_1:11;
   end;
   A32:   Partial_Sums(seq) is convergent by A2,Def2;
@@ -2160,5 +2122,5 @@ def 7;
   A40:  1_ X = x*y by A26,A37,A38,Lm6;
  hence x is invertible by A39,Def8;
  hence thesis by A39,A40,Def12;
-  end;
+end;
 

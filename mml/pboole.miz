@@ -6,42 +6,27 @@
 
 environ
 
- vocabulary FUNCT_1, MATRIX_1, RELAT_1, CARD_1, BOOLE, ZF_REFLE, AMI_1,
-      FUNCOP_1, CAT_4, LATTICES, CQC_LANG, PBOOLE;
- notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCOP_1, CQC_LANG,
-      CARD_1, AMI_1, MATRIX_1;
- constructors AMI_1, MATRIX_1, FUNCOP_1, MEMBERED, XBOOLE_0;
- clusters FUNCT_1, RELAT_1, FUNCOP_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ vocabulary FUNCT_1, MATRIX_1, RELAT_1, BOOLE, ZF_REFLE, AMI_1,
+      FUNCOP_1, CAT_4, LATTICES, CQC_LANG, PBOOLE, MSUALG_1, PRALG_1, CARD_3,
+      TDGROUP, FINSEQ_1, FINSEQ_2, FUNCT_2, PRALG_2, AUTALG_1, MSUALG_2,
+      MSUALG_3;
+ notation TARSKI, ZFMISC_1, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
+      FUNCT_2, FUNCOP_1, FINSEQ_1, FINSEQ_2, CARD_3, CQC_LANG, NAT_1, NUMBERS;
+ constructors FUNCOP_1, MEMBERED, XBOOLE_0, CQC_LANG, CARD_1, SETFAM_1,
+      FINSEQ_2, CARD_3;
+ clusters FUNCT_1, RELAT_1, FUNCOP_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0,
+      RELSET_1, ARYTM_3, ORDINAL2, FINSEQ_1;
  requirements BOOLE, SUBSET;
- definitions TARSKI, AMI_1, MATRIX_1, XBOOLE_0;
- theorems TARSKI, FUNCOP_1, FUNCT_1, CQC_LANG, UNIALG_1, RELAT_1, CARD_1,
-      CARD_4, MATRIX_1, XBOOLE_0, XBOOLE_1;
- schemes FUNCT_1, ZFREFLE1, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, FUNCT_1, SETFAM_1, FUNCOP_1;
+ theorems TARSKI, FUNCOP_1, FUNCT_1, CQC_LANG, RELAT_1, CARD_3, XBOOLE_0,
+      XBOOLE_1, FUNCT_2, RELSET_1, FINSEQ_1, FINSEQ_2;
+ schemes FUNCT_1, ZFREFLE1, XBOOLE_0, FUNCT_2;
 
 begin
 
-reserve i,e,u for set;
+reserve i,j,e,u for set;
 
-definition let f be Function;
- redefine attr f is empty-yielding means
-:Def1: for i st i in dom f holds f.i is empty;
- compatibility
-  proof
-   hereby assume
-A1:  f is empty-yielding;
-    let i;
-    assume i in dom f;
-     then f.i in rng f by FUNCT_1:def 5;
-     then Card(f.i) = 0 by A1,MATRIX_1:def 2;
-    hence f.i is empty by CARD_4:17;
-   end;
-   assume
-A2:   for i st i in dom f holds f.i is empty;
-   let s be set;
-   assume s in rng f;
-    then ex e being set st e in dom f & s = f.e by FUNCT_1:def 5;
-   hence Card s = 0 by A2,CARD_1:47;
-  end;
+definition canceled;
 end;
 
 registration
@@ -75,13 +60,13 @@ A2: f <> {};
      hereby let i;
       assume i in rng f;
        then ex e st e in dom f & f.e = i by FUNCT_1:def 5;
-       then i = {} by A1,Def1;
+       then i = {} by A1,FUNCT_1:def 14;
       hence i in { {} } by TARSKI:def 1;
      end;
      let i;
 A3:   dom f <> {} by A2,RELAT_1:64;
      consider e being Element of dom f;
-A4:    f.e is empty by A1,A3,Def1;
+A4:    f.e is empty by A1,A3,FUNCT_1:def 14;
      assume i in { {} };
       then i = {} by TARSKI:def 1;
      hence i in rng f by A3,A4,FUNCT_1:def 5;
@@ -1706,14 +1691,14 @@ definition let I be set;
  compatibility
   proof
       dom X = I by Def3;
-    hence thesis by Def1;
+    hence thesis by FUNCT_1:def 14;
   end;
  attr X is non-empty means
 :Def16: for i st i in I holds X.i is non empty;
  compatibility
   proof
       dom X = I by Def3;
-    hence thesis by UNIALG_1:def 6;
+    hence thesis by FUNCT_1:def 15;
   end;
 end;
 
@@ -1927,4 +1912,504 @@ A1: for x holds x in X iff x in Y & x in Z;
    end;
   hence thesis by Th147;
  end;
+
+begin :: Addenda
+
+:: from MSUALG_1
+
+scheme MSSEx { I() -> set, P[set,set] }:
+ ex f being ManySortedSet of I() st
+  for i st i in I() holds P[i,f.i]
+  provided A1: for i st i in I() ex j st P[i,j]
+proof
+   A2: for i st i in I() ex j st P[i,j] by A1;
+   consider f being Function such that
+A3: dom f = I() and
+A4: for i st i in I() holds P[i,f.i] from ZFREFLE1:sch 1(A2);
+   reconsider f as ManySortedSet of I() by A3,Def3;
+  take f; thus thesis by A4;
+ end;
+
+scheme MSSLambda { I() -> set, F(set) -> set }:
+ ex f being ManySortedSet of I() st
+  for i st i in I() holds f.i = F(i)
+proof
+   consider f being Function such that
+A1:  dom f = I() and
+A2:  for i st i in I() holds f.i = F(i) from FUNCT_1:sch 3;
+   reconsider f as ManySortedSet of I() by A1,Def3;
+  take f; thus thesis by A2;
+ end;
+
+:: from PRALG_1
+
+registration
+ let I be set;
+ cluster Function-yielding ManySortedSet of I;
+ existence
+   proof consider f being Function;
+     A1: dom (I --> f) = I by FUNCOP_1:19;
+     then reconsider F = I --> f as ManySortedSet of I by Def3;
+    take F; let x be set;
+     assume x in dom F;
+     hence thesis by A1,FUNCOP_1:13;
+   end;
+ end;
+
+definition
+ let I be set;
+mode ManySortedFunction of I is Function-yielding ManySortedSet of I;
+end;
+
+:: from MSUALG_1
+
+begin :: Preliminaries
+
+reserve i,j for set,
+        I for set;
+
+theorem Th1:
+ not ex M being non-empty ManySortedSet of I st {} in rng M
+ proof let M be non-empty ManySortedSet of I;
+  assume
+A1:  {} in rng M;
+      dom M = I by Def3;
+   then ex i st i in I & M.i = {} by A1,FUNCT_1:def 5;
+  hence contradiction by Def16;
+ end;
+
+definition let I be set; let M be ManySortedSet of I;
+ mode Component of M is Element of rng M;
+end;
+
+theorem
+ for I being non empty set
+ for M being ManySortedSet of I, A being Component of M
+  ex i st i in I & A = M.i
+ proof let I be non empty set;
+  let M be ManySortedSet of I, A be Component of M;
+A1: dom M = I by Def3;
+   then rng M <> {} by RELAT_1:65;
+  hence ex i st i in I & A = M.i by A1,FUNCT_1:def 5;
+ end;
+
+theorem
+ for M being ManySortedSet of I, i st i in I holds M.i is Component of M
+ proof let M be ManySortedSet of I, i;
+A1: dom M = I by Def3;
+  assume i in I;
+  hence thesis by A1,FUNCT_1:def 5;
+ end;
+
+definition let I; let B be ManySortedSet of I;
+ mode Element of B -> ManySortedSet of I means
+    for i st i in I holds it.i is Element of B.i;
+ existence
+  proof
+    defpred Q[set,set] means $2 is Element of B.$1;
+A1: for i st i in I ex j st Q[i,j]
+proof let i such that i in I;
+      consider j being Element of B.i;
+      reconsider j as set;
+     take j; thus j is Element of B.i;
+    end;
+   thus ex f being ManySortedSet of I st
+     for i st i in I holds Q[i,f.i] from MSSEx(A1);
+  end;
+end;
+
+begin :: Many Sorted Functions
+
+definition let I;
+ let A be ManySortedSet of I, B be ManySortedSet of I;
+ mode ManySortedFunction of A,B -> ManySortedSet of I means
+:Def2: for i st i in I holds it.i is Function of A.i, B.i;
+ correctness
+  proof
+    defpred P[set,set] means $2 is Function of A.$1,B.$1;
+A1: for i st i in I ex j st P[i,j]
+  proof let i such that i in I;
+      consider j being Function of A.i,B.i;
+      reconsider j as set;
+     take j; thus j is Function of A.i,B.i;
+    end;
+   consider f being ManySortedSet of I such that
+A2:  for i st i in I holds P[i,f.i] from MSSEx(A1);
+       f is Function-yielding
+     proof let i;
+      assume i in dom f;
+       then i in I by Def3;
+      hence f.i is Function by A2;
+     end;
+    then reconsider f as ManySortedFunction of I;
+   take f;
+   let i;
+   assume i in I;
+   hence f.i is Function of A.i,B.i by A2;
+  end;
+end;
+
+registration let I;
+ let A be ManySortedSet of I, B be ManySortedSet of I;
+ cluster ->Function-yielding ManySortedFunction of A,B;
+  coherence
+   proof let f be ManySortedFunction of A,B;
+    let i be set;
+     assume i in dom f;
+      then i in I by Def3;
+     hence f.i is Function by Def2;
+   end;
+end;
+
+definition let I be set; let M be ManySortedSet of I;
+ func M# -> ManySortedSet of I* means
+:Def19: for i being Element of I* holds it.i = product(M*i);
+ existence
+  proof
+    defpred P[set,set] means ex j being Element of I* st j = $1
+           & $2 = product(M*j);
+A1: for i st i in I* ex j st P[i,j]
+   proof let i; assume
+       i in I*;
+      then reconsider j = i as Element of I*;
+      reconsider e = product(M*j) as set;
+     take e,j;
+     thus j = i & e = product(M*j);
+    end;
+    consider f being ManySortedSet of I* such that
+A2:   for i st i in I* holds P[i,f.i] from MSSEx(A1);
+   take f; let i be Element of I*;
+       ex j being Element of I* st j = i & f.i = product(M*j) by A2;
+   hence thesis;
+  end;
+ uniqueness
+  proof let N1,N2 be ManySortedSet of I* such that
+A3: for i being Element of I* holds N1.i = product(M*i) and
+A4: for i being Element of I* holds N2.i = product(M*i);
+    now let i;
+     assume
+       i in I*;
+      then reconsider e = i as Element of I*;
+     thus N1.i = product(M*e) by A3 .= N2.i by A4;
+    end;
+   hence thesis by Th3;
+  end;
+end;
+
+registration let I be set; let M be non-empty ManySortedSet of I;
+ cluster M# -> non-empty;
+ coherence
+  proof
+       M# is non-empty
+    proof let i;
+     assume
+       i in I*;
+      then reconsider f = i as Element of I*;
+         not {} in rng M by Th1;
+      then not {} in rng(M*f) by FUNCT_1:25;
+      then product(M*f) <> {} by CARD_3:37;
+     hence M#.i is non empty by Def19;
+    end;
+   hence thesis;
+  end;
+end;
+
+definition let I; let J be non empty set;
+ let O be Function of I,J;
+ let F be ManySortedSet of J;
+ redefine func F*O -> ManySortedSet of I;
+  coherence
+   proof
+      rng O c= J & dom O = I & dom F = J
+       by FUNCT_2:def 1,Def3,RELSET_1:12;
+    hence dom(F*O) = I by RELAT_1:46;
+   end;
+end;
+
+definition let I; let J be non empty set;
+ let O be Function of I,J;
+ let F be non-empty ManySortedSet of J;
+ redefine func F*O -> non-empty ManySortedSet of I;
+  coherence
+  proof
+       F*O is non-empty
+     proof let i;
+      assume
+A1:     i in I;
+       then O.i in J by FUNCT_2:7;
+       then A2:      F.(O.i) is non empty by Def16;
+          dom O = I by FUNCT_2:def 1;
+      hence (F*O).i is non empty by A1,A2,FUNCT_1:23;
+     end;
+   hence thesis;
+  end;
+end;
+
+definition let a be set;
+ func *-->a -> Function of NAT,{a}* means
+:Def4: for n being Nat holds it.n = n |-> a;
+  existence
+   proof
+     defpred P[Element of NAT,set] means $2 = $1 |-> a;
+A1:  for x being Element of NAT ex y being Element of {a}* st P[x,y]
+   proof let n be Nat;
+         a is Element of {a} by TARSKI:def 1;
+      then n |-> a is FinSequence of {a} by FINSEQ_2:77;
+      then reconsider u = n |-> a as Element of {a}* by FINSEQ_1:def 11;
+     take u;
+     thus u = n |-> a;
+    end;
+      ex f being Function of NAT, {a}* st for x being Element of NAT
+         holds P[x,f.x]  from FUNCT_2:sch 3(A1);
+    hence thesis;
+   end;
+  uniqueness
+   proof let f1,f2 be Function of NAT,{a}* such that
+A2: for n being Nat holds f1.n = n |-> a and
+A3: for n being Nat holds f2.n = n |-> a;
+        now let k be Nat;
+      thus f1.k = k |-> a by A2
+        .= f2.k by A3;
+     end;
+    hence f1 = f2 by FUNCT_2:113;
+   end;
+end;
+
+ reserve D for non empty set,
+         n for Nat;
+
+theorem Th4:
+ for a,b being set holds ({a} --> b)*(n|->a) = n |-> b
+ proof let a,b be set;
+A1: now let x be set;
+    hereby assume x in dom (n |-> b);
+      then A2:     x in Seg n by FINSEQ_2:68;
+     hence x in dom(n|->a) by FINSEQ_2:68;
+A3:    dom({a} --> b) = {a} by FUNCOP_1:19;
+         (n|->a).x = a by A2,FINSEQ_2:70;
+     hence (n|->a).x in dom({a} --> b) by A3,TARSKI:def 1;
+    end;
+    assume that
+A4:  x in dom(n|->a) and (n|->a).x in dom({a} --> b);
+        x in Seg n by A4,FINSEQ_2:68;
+    hence x in dom (n |-> b) by FINSEQ_2:68;
+   end;
+      now let x be set;
+    assume
+      x in dom (n |-> b);
+     then A5:   x in Seg n by FINSEQ_2:68;
+A6:   a in {a} by TARSKI:def 1;
+    thus (n |-> b).x = b by A5,FINSEQ_2:70
+     .= ({a} --> b).a by A6,FUNCOP_1:13
+     .= ({a} --> b).((n|->a).x) by A5,FINSEQ_2:70;
+   end;
+  hence ({a} --> b)*(n|->a) = n |-> b by A1,FUNCT_1:20;
+ end;
+
+theorem
+ for a being set
+ for M being ManySortedSet of {a} st M = {a} --> D
+   holds (M#* *-->a).n = Funcs(Seg n, D)
+ proof let a be set;
+  let M be ManySortedSet of {a} such that
+A1: M = {a} --> D;
+   A2: dom(*-->a) = NAT by FUNCT_2:def 1;
+      a is Element of {a} by TARSKI:def 1;
+   then n |-> a is FinSequence of {a} by FINSEQ_2:77;
+   then A3: n |-> a in {a}* by FINSEQ_1:def 11;
+  thus (M#* *-->a).n = M#.((*-->a).n) by A2,FUNCT_1:23
+     .= M#.(n|->a) by Def4
+     .= product(({a} --> D)*(n|->a)) by A1,A3,Def19
+     .= product(n |-> D) by Th4
+     .= product(Seg(n) --> D) by FINSEQ_2:def 2
+     .= Funcs(Seg n, D) by CARD_3:20;
+ end;
+
+definition let I,i;
+ redefine func I --> i -> Function of I,{i};
+ coherence
+  proof
+       dom (I --> i) = I & rng (I --> i) c= {i} by FUNCOP_1:19;
+   hence I --> i is Function of I,{i} by FUNCT_2:def 1,RELSET_1:11;
+  end;
+end;
+
+:: from PRALG_2
+
+scheme LambdaDMS {D()->non empty set, F(set)->set}:
+ ex X be ManySortedSet of D() st
+  for d be Element of D() holds X.d = F(d)
+proof
+  consider f be Function such that
+A1: dom f = D() and
+A2: for d be Element of D() holds f.d = F(d) from FUNCT_1:sch 4;
+  f is ManySortedSet of D() by A1,Def3;
+ hence thesis by A2;
+end;
+
+:: from PRALG_1
+
+registration
+let J be non empty set,
+    B be non-empty ManySortedSet of J,
+    j be Element of J;
+ cluster B.j -> non empty;
+coherence by Def16;
+end;
+
+:: from PRALG_2
+
+reserve X,Y for ManySortedSet of I;
+
+definition
+ let I, X,Y;
+func [|X,Y|] -> ManySortedSet of I means
+ for i st i in I holds it.i = [:X.i,Y.i:];
+ existence
+  proof
+   deffunc F(set) = [:X.$1,Y.$1:];
+   consider f be Function such that A1: dom f = I &
+   for i st i in I holds f.i = F(i) from FUNCT_1:sch 3;
+   reconsider f as ManySortedSet of I by A1,Def3;
+   take f;
+   thus thesis by A1;
+  end;
+ uniqueness
+  proof
+   let f,g be ManySortedSet of I; assume that
+   A2: for i st i in I holds f.i = [:X.i,Y.i:] and
+   A3: for i st i in I holds g.i = [:X.i,Y.i:];
+      for x be set st x in I holds f.x = g.x
+    proof
+     let x be set; assume x in I;
+     then f.x = [:X.x,Y.x:] & g.x = [:X.x,Y.x:] by A2,A3;
+     hence thesis;
+    end;
+   hence thesis by Th3;
+  end;
+end;
+
+:: from AUTALG_1
+
+definition let I, X, Y;
+  deffunc F(set) = Funcs(X.$1, Y.$1);
+  func MSFuncs (X, Y) -> ManySortedSet of I means
+  for i be set st i in I holds it.i = Funcs(X.i, Y.i);
+existence proof
+  thus ex M being ManySortedSet of I st
+        for i be set st i in I holds M.i = F(i) from MSSLambda;
+end;
+uniqueness
+  proof
+    let F1, F2 be ManySortedSet of I such that
+A1: for i be set st i in I holds F1.i = Funcs(X.i, Y.i) and
+A2: for i be set st i in I holds F2.i = Funcs(X.i, Y.i);
+       now
+      let i be set;
+      assume A3: i in I;
+      hence F1.i = Funcs(X.i, Y.i) by A1
+                .= F2.i by A2,A3;
+    end;
+    hence thesis by Th3;
+  end;
+end;
+
+:: from MSUALG_2
+
+definition let I be set,
+               M be ManySortedSet of I;
+mode ManySortedSubset of M -> ManySortedSet of I means :Def1:
+ it c= M;
+  existence;
+end;
+
+registration let I be set,
+               M be non-empty ManySortedSet of I;
+cluster non-empty ManySortedSubset of M;
+ existence
+  proof
+   reconsider N= M as ManySortedSubset of M by Def1;
+   take N;
+   thus thesis;
+  end;
+end;
+
+:: from MSUALG_3
+
+definition
+ let F,G be Function-yielding Function;
+ func G**F -> Function-yielding Function means
+ dom it = (dom F) /\ (dom G) &
+ for i be set st i in dom it holds it.i = (G.i)*(F.i);
+ existence
+  proof
+   defpred P[set,set] means $2 = (G.$1)*(F.$1);
+   A1: for i be set st i in dom F /\ dom G ex u be set st P[i,u];
+   consider H being Function such that
+   A2: dom H = dom F /\ dom G & for i be set st i in dom F /\ dom G holds
+       P[i,H.i] from ZFREFLE1:sch 1(A1);
+      for x be set st x in dom H holds H.x is Function
+    proof
+     let x be set;
+     assume A3: x in dom H;
+     reconsider f = F.x as Function;
+     reconsider g = G.x as Function;
+        H.x = g*f by A2,A3;
+     hence thesis;
+    end;
+   then reconsider H as Function-yielding Function by FUNCOP_1:def 6;
+   take H;
+   thus thesis by A2;
+  end;
+ uniqueness
+  proof
+   let H1,H2 be Function-yielding Function;
+   assume that
+   A4: dom H1 = dom F /\ dom G & for i be set st i in dom H1
+         holds H1.i = (G.i)*(F.i) and
+   A5: dom H2 = dom F /\ dom G & for i be set st i in dom H2
+         holds H2.i = (G.i)*(F.i);
+      now
+    let i be set;
+    assume A6: i in dom F /\ dom G;
+    reconsider f = F.i as Function;
+    reconsider g = G.i as Function;
+       H1.i = g*f & H2.i = g*f by A4,A5,A6;
+    hence H1.i = H2.i;
+   end;
+   hence thesis by A4,A5,FUNCT_1:9;
+  end;
+end;
+
+definition let I be set,
+               A be ManySortedSet of I,
+               F be ManySortedFunction of I;
+func F.:.:A -> ManySortedSet of I means
+   for i be set st i in I holds it.i = (F.i).:(A.i);
+existence
+ proof
+  defpred P[set,set] means $2 = (F.$1).:(A.$1);
+  A1: for i be set st i in I ex u be set st P[i,u];
+  consider g being Function such that A2: dom g = I & for i be set st i in I
+    holds P[i,g.i] from ZFREFLE1:sch 1(A1);
+  reconsider g as ManySortedSet of I by A2,Def3;
+  take g;
+  thus thesis by A2;
+ end;
+uniqueness
+ proof
+  let B,B1 be ManySortedSet of I;
+  assume that
+   A3: for i be set st i in I holds B.i = (F.i).:(A.i) and
+   A4: for i be set st i in I holds B1.i = (F.i).:(A.i);
+      now
+    let i be set;
+    assume A5: i in I;
+    reconsider f = F.i as Function;
+       B.i = f.:(A.i) & B1.i = f.:(A.i) by A3,A4,A5;
+    hence B.i = B1.i;
+   end;
+  hence thesis by Th3;
+ end;
+end;
 

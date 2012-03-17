@@ -12,8 +12,8 @@ environ
       CFUNCT_1, PRE_TOPC, NORMSP_1, METRIC_1, SEQM_3;
  notation TARSKI, XBOOLE_0, SUBSET_1, PRE_TOPC, RELAT_1, DOMAIN_1, FUNCT_1,
       FUNCT_2, SEQ_1, BINOP_1, STRUCT_0, ZFMISC_1, NUMBERS, ARYTM_0, XCMPLX_0,
-      XREAL_0, REAL_1, ABSVALUE, SQUARE_1, COMPLEX1, COMSEQ_1, CFUNCT_1,
-      COMSEQ_2, COMSEQ_3, SERIES_1, NAT_1, RLVECT_1, NORMSP_1, CLVECT_1;
+      XREAL_0, REAL_1, SQUARE_1, COMPLEX1, COMSEQ_1, CFUNCT_1, COMSEQ_2,
+      COMSEQ_3, SERIES_1, NAT_1, RLVECT_1, NORMSP_1, CLVECT_1;
  constructors REAL_1, NAT_1, DOMAIN_1, SQUARE_1, SEQ_2, SERIES_1, PREPOWER,
       PARTFUN1, BINOP_1, MEMBERED, CLVECT_1, COMSEQ_1, COMPLEX1, FINSEQ_4,
       COMSEQ_3, COMSEQ_2, COMPLEX2, ARYTM_0, NORMSP_1, BINOP_2;
@@ -24,7 +24,7 @@ environ
  theorems XBOOLE_0, STRUCT_0, RELAT_1, SQUARE_1, TARSKI, ABSVALUE, ZFMISC_1,
       REAL_1, SEQ_1, SERIES_1, COMSEQ_3, FUNCT_1, FUNCT_2, RLVECT_1, BINOP_1,
       XCMPLX_0, COMSEQ_1, CLVECT_1, COMPLEX1, COMSEQ_2, AXIOMS, NORMSP_1;
- schemes NAT_1, BINOP_1, XBOOLE_0, BINOP_2, FUNCT_1, FUNCT_2, COMSEQ_1;
+ schemes NAT_1, BINOP_1, XBOOLE_0, BINOP_2, FUNCT_2, COMSEQ_1;
 
 begin
 
@@ -1611,42 +1611,13 @@ reserve k, n, m for Nat;
 reserve f for Function;
 reserve d, s, t for set;
 
-scheme Ex_Seq_in_CUS { X() -> non empty CUNITSTR, F(Nat) -> Point of X() } :
-ex seq be sequence of X() st for n holds seq.n = F(n)
-proof
-       defpred P[set,set] means ex n st n =$1 & $2 = F(n);
-    A1: for d st d in NAT ex s st P[d,s]
-       proof
-            let d; assume d in NAT;
-            then reconsider n = d as Nat;
-            reconsider z = F(n) as set;
-            take z;
-            thus thesis;
-       end;
-    A2: for d, s, t st d in NAT & P[d,s] & P[d,t] holds s = t;
-       consider f such that
-    A3: dom f = NAT and
-    A4: for d st d in NAT holds P[d,f.d] from FUNCT_1:sch 2(A2,A1);
-           for d st d in NAT holds f.d is Point of X()
-       proof
-            let d; assume d in NAT;
-            then ex n st n = d & f.d = F(n) by A4;
-            hence f.d is Point of X();
-       end;
-       then reconsider f as sequence of X() by A3,NORMSP_1:17;
-       take seq = f;
-       let n;
-           P[n,seq.n] by A4;
-       hence seq.n = F(n);
-end;
-
 definition let X; let seq;
  func - seq -> sequence of X means
 :Def17: for n holds it.n = - seq.n;
 existence
 proof
   deffunc F(Nat) = -seq.$1;
-    ex seq be sequence of X st for n holds seq.n = F(n) from Ex_Seq_in_CUS;
+    ex seq be sequence of X st for n holds seq.n = F(n) from FUNCT_2:sch 4;
   hence thesis;
 end;
 uniqueness
@@ -1668,7 +1639,7 @@ definition let X; let seq; let x;
 existence
 proof
   deffunc F(Nat) = seq.$1 + x;
-    ex seq be sequence of X st for n holds seq.n = F(n) from Ex_Seq_in_CUS;
+    ex seq be sequence of X st for n holds seq.n = F(n) from FUNCT_2:sch 4;
   hence thesis;
 end;
 uniqueness

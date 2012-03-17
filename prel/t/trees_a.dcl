@@ -14,5 +14,5 @@ CARD_1
 FINSEQ_1
 TREES_1
 #
-«W1 ;V22 ;;M1 W1 ;V21 ;;;M12 A1 ;
+«W1 ;V23 ;;M1 W1 ;V22 ;;;M12 A1 ;
 !

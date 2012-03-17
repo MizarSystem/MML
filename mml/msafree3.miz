@@ -14,10 +14,10 @@ environ
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
       RELSET_1, STRUCT_0, NUMBERS, XREAL_0, NAT_1, MCART_1, FINSET_1, CARD_3,
       FINSEQ_1, PROB_1, TREES_1, TREES_2, FUNCT_6, TREES_3, TREES_4, DTCONSTR,
-      LANG1, PBOOLE, TREES_9, MSUALG_1, MSUALG_2, PRALG_1, MSAFREE, PRE_CIRC,
-      MSUALG_3, EXTENS_1, EQUATION, MSATERM, MSUALG_6, CATALG_1;
+      LANG1, PBOOLE, TREES_9, MSUALG_1, MSUALG_2, MSAFREE, PRE_CIRC, MSUALG_3,
+      EXTENS_1, EQUATION, MSATERM, MSUALG_6, CATALG_1;
  constructors NAT_1, DOMAIN_1, MSAFREE1, TREES_9, PRE_CIRC, EXTENS_1, EQUATION,
-      FINSEQ_4, MSATERM, MSUALG_6, CATALG_1;
+      FINSEQ_4, MSATERM, MSUALG_6, CATALG_1, PRALG_1, MSUALG_3;
  clusters SUBSET_1, RELSET_1, FUNCT_1, STRUCT_0, PBOOLE, MSUALG_1, MSUALG_2,
       FINSEQ_1, TREES_9, PRALG_1, CARD_1, MSAFREE, CANTOR_1, TREES_3, MSUALG_6,
       MSUALG_9, MSATERM, TREES_2, INDEX_1, INSTALG1, CATALG_1, MEMBERED,
@@ -29,7 +29,7 @@ environ
       MSUALG_1, INSTALG1, TREES_4, PRE_CIRC, QC_LANG4, TREES_1, TREES_2,
       MSUALG_2, MSUALG_3, MSAFREE, MSATERM, EQUATION, MSUALG_6, XBOOLE_0,
       XBOOLE_1;
- schemes MSUALG_1, PRALG_2, MSATERM;
+ schemes PBOOLE, MSATERM;
 
 begin
 
@@ -86,7 +86,7 @@ then A5:   A.i c= dom (F.i) by A3,A4,FUNCT_6:31;
 A6:   F.i is one-to-one by A1,A3,A4,MSUALG_3:def 2;
       thus (F""(F.:.:A)).i
          = (F.i)"((F.:.:A).i) by A4,EQUATION:def 1
-        .= (F.i)"((F.i).:(A.i)) by A4,MSUALG_3:def 6
+        .= (F.i)"((F.i).:(A.i)) by A4,PBOOLE:def 25
         .= A.i by A5,A6,Th1;
     end;
    hence thesis by PBOOLE:3;
@@ -103,10 +103,10 @@ definition
   proof set I = the carrier of S, Y = X \/ (I --> {0});
    set R = Reverse Y;
        R""X is ManySortedSubset of FreeGen Y by EQUATION:9;
-then A1: R""X c= FreeGen Y by MSUALG_2:def 1;
-       FreeGen Y c= the Sorts of FreeMSA Y by MSUALG_2:def 1;
+then A1: R""X c= FreeGen Y by PBOOLE:def 23;
+       FreeGen Y c= the Sorts of FreeMSA Y by PBOOLE:def 23;
     then R""X c= the Sorts of FreeMSA Y by A1,PBOOLE:15;
-   then reconsider Z = R""X as MSSubset of FreeMSA Y by MSUALG_2:def 1;
+   then reconsider Z = R""X as MSSubset of FreeMSA Y by PBOOLE:def 23;
    take GenMSAlg Z, Z;
    thus thesis;
   end;
@@ -194,7 +194,7 @@ A1: x in X.s;
 A2: Free(S, X) = GenMSAlg A & A = (Reverse Y)""X by Def2;
        A is MSSubset of Free(S,X) & X c= Y by A2,MSUALG_2:def 18,PBOOLE:16;
     then A c= the Sorts of Free(S,X) & X.s c= Y.s
-     by MSUALG_2:def 1,PBOOLE:def 5;
+     by PBOOLE:def 23,PBOOLE:def 5;
     then root-tree [x,s] in A.s & A.s c= (the Sorts of Free(S,X)).s
      by A1,A2,Th4,PBOOLE:def 5;
    hence thesis;
@@ -296,7 +296,7 @@ theorem Th9:
      Free(S, X) = GenMSAlg A & A = (Reverse Y)""X by Def2;
      then the Sorts of Free(S, X) is MSSubset of FreeMSA Y
       by MSUALG_2:def 10;
-then A1:  the Sorts of Free(S, X) c= the Sorts of FreeMSA Y by MSUALG_2:def 1;
+then A1:  the Sorts of Free(S, X) c= the Sorts of FreeMSA Y by PBOOLE:def 23;
 A2:  S -Terms Y = TS DTConMSA Y by MSATERM:def 1
                .= union rng FreeSort Y by MSAFREE:12
                .= Union FreeSort Y by PROB_1:def 3;
@@ -353,7 +353,7 @@ Def3:
     deffunc F(set) = {a`1 where a is Element of rng t: a`2 = $1};
       ex f being ManySortedSet of the carrier of S st
        for i be set st i in the carrier of S holds f.i = F(i) from
-MSUALG_1:sch 2;
+PBOOLE:sch 4;
     hence thesis;
   end;
  uniqueness
@@ -683,7 +683,7 @@ Def6:
        the_sort_of t = $1 & variables_in t c= X};
     consider T being ManySortedSet of the carrier of S such that
 A1: for s being SortSymbol of S holds T.s = F(s)
-       from PRALG_2:sch 1;
+       from PBOOLE:sch 5;
        T c= the Sorts of FreeMSA Y
      proof let s be set; assume s in the carrier of S;
       then reconsider s' = s as SortSymbol of S;
@@ -694,7 +694,7 @@ A2:    T.s' = {t where t is Term of S,Y:
         x = t & the_sort_of t = s' & variables_in t c= X by A2;
       hence thesis by Th8;
      end;
-   then reconsider T as MSSubset of FreeMSA Y by MSUALG_2:def 1;
+   then reconsider T as MSSubset of FreeMSA Y by PBOOLE:def 23;
    take T; thus thesis by A1;
   end;
  correctness
@@ -888,7 +888,7 @@ then A2:   rng ((Den(o,A))|((T# * the Arity of S).o))
        c= (T * the ResultSort of S).o by MSUALG_2:def 6;
 A3:   (T# * the Arity of S).o = T#.((the Arity of S).o) by FUNCT_2:21
        .= T#.the_arity_of o by MSUALG_1:def 6
-       .= product (T*the_arity_of o) by MSUALG_1:def 3;
+       .= product (T*the_arity_of o) by PBOOLE:def 19;
 A4:   p is Element of Args(o, A) & dom Den(o,A) = Args(o, A)
        by FUNCT_2:def 1,INSTALG1:2;
 A5:   (T * the ResultSort of S).o = T.((the ResultSort of S).o) by FUNCT_2:21
@@ -909,7 +909,7 @@ A12:     y in dom T & p.x in T.y by A7,CARD_5:10;
        reconsider t = p.i as Term of S,X by A8,A11,MSATERM:22;
 A13:     the_sort_of t = (the_arity_of o).x by A8,A11,MSATERM:23;
 A14:     (T*the_arity_of o).x = T.((the_arity_of o).x) by A11,FUNCT_1:23;
-           T c= the Sorts of A by MSUALG_2:def 1;
+           T c= the Sorts of A by PBOOLE:def 23;
         then T.y c= (the Sorts of A).y by A9,A12,PBOOLE:def 5;
        hence p.x in (T*the_arity_of o).x by A9,A12,A13,A14,Th8;
       end;
@@ -933,11 +933,11 @@ A16: y in dom ((Den(o,A))|((T# * the Arity of S).o)) and
 A17: x = ((Den(o,A))|((T# * the Arity of S).o)).y by FUNCT_1:def 5;
 A18: (T# * the Arity of S).o = T#.((the Arity of S).o) by FUNCT_2:21
       .= T#.the_arity_of o by MSUALG_1:def 6
-      .= product (T*the_arity_of o) by MSUALG_1:def 3;
+      .= product (T*the_arity_of o) by PBOOLE:def 19;
 A19: (T * the ResultSort of S).o = T.((the ResultSort of S).o) by FUNCT_2:21
       .= T.the_result_sort_of o by MSUALG_1:def 7;
        the Sorts of A is MSSubset of A &
-    T c= the Sorts of A by MSUALG_2:def 1;
+    T c= the Sorts of A by PBOOLE:def 23;
     then (T# * the Arity of S).o c= ((the Sorts of A)# * the Arity of S).o
      by MSUALG_2:3;
 then A20: dom ((Den(o,A))|((T# * the Arity of S).o)) c= (T# * the Arity of S).o
@@ -1025,7 +1025,7 @@ theorem Th24:
    consider A being MSSubset of FreeMSA Y such that
 A1: Free(S, X) = GenMSAlg A & A = (Reverse Y)""X by Def2;
    reconsider TT = T as MSSubset of FreeMSA Y by A1,MSUALG_2:def 10;
-A2: S-Terms(X, Y) c= the Sorts of FreeMSA Y by MSUALG_2:def 1;
+A2: S-Terms(X, Y) c= the Sorts of FreeMSA Y by PBOOLE:def 23;
 A3: now let s1 be SortSymbol of S, v be Element of Y.s1;
      thus P[root-tree [v,s1]]
      proof
@@ -1080,13 +1080,13 @@ A1: Free(S, X) = GenMSAlg A & A = (Reverse Y)""X by Def2;
      Z is opers_closed & the Charact of B = Opers(FreeMSA Y, Z) by Th22;
    then reconsider B as MSSubAlgebra of FreeMSA Y by MSUALG_2:def 10;
        (Reverse Y)""X c= S-Terms(X, Y) by Th23;
-    then (Reverse Y)""X is MSSubset of B by MSUALG_2:def 1;
+    then (Reverse Y)""X is MSSubset of B by PBOOLE:def 23;
     then Free(S, X) is MSSubAlgebra of B by A1,MSUALG_2:def 18;
     then the Sorts of Free(S, X) is MSSubset of B by MSUALG_2:def 10;
-   hence the Sorts of Free(S, X) c= S-Terms(X, Y) by MSUALG_2:def 1;
+   hence the Sorts of Free(S, X) c= S-Terms(X, Y) by PBOOLE:def 23;
    let s be set; assume
 A2: s in the carrier of S;
-       S-Terms(X, Y) c= the Sorts of FreeMSA Y by MSUALG_2:def 1;
+       S-Terms(X, Y) c= the Sorts of FreeMSA Y by PBOOLE:def 23;
 then A3: (S-Terms(X, Y)).s c= (the Sorts of FreeMSA Y).s by A2,PBOOLE:def 5;
    let x; assume
 A4: x in S-Terms(X, Y).s;
@@ -1142,7 +1142,7 @@ A5:   (the Charact of B).o = Opers(FreeMSA Y, SB).o by MSUALG_2:def 10
         .= (Den(o, FreeMSA Y))|((SB# * the Arity of S).o) by A3,MSUALG_2:def 8;
          SA c= the Sorts of FreeMSA X & SB c= the Sorts of FreeMSA Y &
       the Sorts of FreeMSA X is MSSubset of FreeMSA X &
-      the Sorts of FreeMSA Y is MSSubset of FreeMSA Y by MSUALG_2:def 1;
+      the Sorts of FreeMSA Y is MSSubset of FreeMSA Y by PBOOLE:def 23;
 then A6:   (SA#*the Arity of S).o c= ((the Sorts of FreeMSA X)#*the Arity of S)
 .o &
       (SB#*the Arity of S).o c= ((the Sorts of FreeMSA Y)#*the Arity of S).o
@@ -1539,8 +1539,8 @@ theorem Th38:
    let B be MSSubAlgebra of A;
    reconsider SB = the Sorts of B as MSSubset of A by MSUALG_2:def 10;
    let o be OperSymbol of S;
-   reconsider SA = the Sorts of A as MSSubset of A by MSUALG_2:def 1;
-A1: SB c= SA by MSUALG_2:def 1;
+   reconsider SA = the Sorts of A as MSSubset of A by PBOOLE:def 23;
+A1: SB c= SA by PBOOLE:def 23;
        Args(o,A) = (SA# * the Arity of S).o &
     Args(o,B) = (SB# * the Arity of S).o by MSUALG_1:def 9;
    hence Args(o,B) c= Args(o,A) by A1,MSUALG_2:3;
@@ -1591,7 +1591,7 @@ theorem Th40:
 A1: Free(S, X) = GenMSAlg A & A = (Reverse Y)"" X by Def2;
    thus Free(S, X) is feasible by A1;
        A is ManySortedSubset of FreeGen Y by A1,EQUATION:9;
-    then A c= FreeGen Y by MSUALG_2:def 1;
+    then A c= FreeGen Y by PBOOLE:def 23;
    hence thesis by A1,EQUATION:30;
   end;
 

@@ -13,5 +13,5 @@ FINSET_1
 CARD_1
 FINSEQ_1
 #
-fV16 ;;M1 V1 ;V3 ;V19 ;;M1 ;;K14 A1 A2 ;
+fV17 ;;M1 V1 ;V4 ;V20 ;;M1 ;;K14 A1 A2 ;
 !

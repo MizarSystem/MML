@@ -7,5 +7,9 @@ SETFAM_1
 #
 «V1 ;;M1 ;;M4 A1 ;
 «W1 ;;M1 ;;M4 A1 ;
+«W1 ;V2 ;;;M1 ;
 fV1 ;;M1 ;M4 V1 ;A1 ;;K28 A1 A2 ;
+fW1 ;V2 ;;M1 W1 ;;;K1 A1 ;
+fW1 ;V2 ;;M1 W1 ;;M1 W1 ;;;K2 A1 A2 ;
+fV2 ;;M1 V2 ;;M1 V2 ;;;K6 A1 A2 ;
 !

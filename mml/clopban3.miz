@@ -11,11 +11,9 @@ environ
       CAT_1, PREPOWER, POWER, SERIES_1, BHSP_3, RSSPACE3, LOPBAN_3, SUPINF_2,
       CLVECT_1, CFUNCT_1, CLOPBAN1, CLOPBAN2, COMPLEX1;
  notation TARSKI, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, PRE_TOPC, DOMAIN_1,
-      BINOP_1, STRUCT_0, XCMPLX_0, XREAL_0, ORDINAL1, NUMBERS,
-      REAL_1, NAT_1, RLVECT_1, COMPLEX1,
-      VECTSP_1, ABSVALUE, NORMSP_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, PREPOWER,
-      POWER, CFUNCT_1, CLVECT_1, CSSPACE3, CLOPBAN1, CLOPBAN2,
-      LOPBAN_3;
+      BINOP_1, STRUCT_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1, RLVECT_1,
+      COMPLEX1, VECTSP_1, NORMSP_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, PREPOWER,
+      POWER, CFUNCT_1, CLVECT_1, CSSPACE3, CLOPBAN1, CLOPBAN2, LOPBAN_3;
  constructors REAL_1, NAT_1, FUNCT_7, DOMAIN_1, SEQ_2, SERIES_1, SEQ_4,
       PREPOWER, RSSPACE3, COMPLEX1, CSSPACE3, LOPBAN_3, CLVECT_2, CLOPBAN2,
       PRALG_1;
@@ -24,9 +22,9 @@ environ
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions SEQ_2, SERIES_1, CLVECT_1;
  theorems AXIOMS, ABSVALUE, REAL_1, RLVECT_1, VECTSP_1, BINOP_1, SEQ_1, SEQ_2,
-      SEQM_3, SERIES_1, NAT_1, INT_1, SQUARE_1, FUNCT_2, NORMSP_1, SEQ_4,
-      PREPOWER, CLVECT_1, CSSPACE3, LOPBAN_3, CLOPBAN1, CFUNCDOM, CLOPBAN2;
- schemes SEQ_1, FUNCT_1, RECDEF_1, NAT_1, CLVECT_1;
+      SEQM_3, SERIES_1, NAT_1, INT_1, SQUARE_1, FUNCT_2, SEQ_4, PREPOWER,
+      CLVECT_1, CSSPACE3, LOPBAN_3, CLOPBAN1, CFUNCDOM, CLOPBAN2;
+ schemes SEQ_1, RECDEF_1, NAT_1, FUNCT_2;
 
 begin :: Basic Properties of Sequences of Complex Normed Space
 
@@ -125,7 +123,7 @@ existence
    proof
    deffunc G(Nat) = 0.X;
    consider C being sequence of X such that
-A1: for n be Nat holds C.n = G(n) from CLVECT_1:sch 1;
+A1: for n be Nat holds C.n = G(n) from FUNCT_2:sch 4;
    take C;
    take 0.X;
    let p be Real such that
@@ -329,7 +327,7 @@ existence
 proof
    deffunc U(Nat) = seq.($1+k);
    thus ex f being sequence of X st
-   for n be Nat  holds f.n=U(n) from CLVECT_1:sch 1;
+   for n be Nat holds f.n=U(n) from FUNCT_2:sch 4;
 end;
 uniqueness
 proof
@@ -703,7 +701,7 @@ existence
   proof
   deffunc z(Nat)=0.X;
     consider C being sequence of X such that
-A1:   for n be Nat holds C.n = z(n) from CLVECT_1:sch 1;
+A1:   for n be Nat holds C.n = z(n) from FUNCT_2:sch 4;
     take C;
     thus thesis by A1,Th5200;
   end;
@@ -984,7 +982,7 @@ A3:  Partial_Sums(s^\n)^\1 is convergent by SEQ_4_33;
 A4:  s^\(n+1)=(s^\n)^\1 by SEQM_3_36;
      deffunc U(Nat) = (s^\n).0;
      consider s1 be sequence of X such that
-A5:   for k be Nat holds s1.k = U(k) from CLVECT_1:sch 1;
+A5:   for k be Nat holds s1.k = U(k) from FUNCT_2:sch 4;
      s1 is constant by A5,SEQM_3_def_6; then 
 A6:  s1 is convergent by SEQ_4_39;
      Partial_Sums(s^\n^\1) = (Partial_Sums(s^\n)^\1) - s1 
@@ -1353,41 +1351,6 @@ end;
 
 begin :: Basic Properties of Sequence of Complex_Banach_Algebra
 
-scheme ExNCBCASeq{CNS()->non empty Normed_Complex_AlgebraStr,
-                  F(set) -> Point of CNS() } :
-ex S be sequence of CNS() st for n be Nat holds S.n = F(n)
-proof
-   defpred P[set,set] means ex n be Nat st n =$1 & $2 = F(n);
-A1:for d be set st d in NAT ex s be set  st P[d,s]
-   proof
-     let d be set; assume d in NAT; then
-     consider n be Nat such that
-A2:  n = d;
-     reconsider z = F(n) as set;
-     take z;
-     thus thesis by A2;
-   end;
-A3:for d,s,t be set st d in NAT & P[d,s] & P[d,t] holds s = t;
-   consider f be Function such that
-A4: dom f = NAT and
-A5: for d be set st d in NAT holds
-      P[d,f.d] from FUNCT_1:sch 2(A3,A1);
-   for d be set st d in NAT holds f.d is Point of CNS()
-   proof
-     let d be set;
-     assume d in NAT; then 
-     ex n be Nat st n = d & f.d = F(n) by A5;
-     hence thesis;
-   end; then 
-   reconsider f as sequence of CNS() by A4,NORMSP_1:17;
-   take S = f;
-   now let n be Nat;
-     P[n,S.n] by A5;
-     hence S.n = F(n);
-   end;
-   hence for n be Nat holds S.n = F(n);
-end;
-
 theorem LM000:
 for X be Complex_Banach_Algebra holds
  for x,y,z being Element of X, a,b be Complex holds
@@ -1511,7 +1474,8 @@ func a * S -> sequence of X means
 existence
    proof
    deffunc F(Nat) = a * S.$1;
-   ex S being sequence of X st for n be Nat holds S.n = F(n) from ExNCBCASeq;
+   ex S being sequence of X st for n be Nat holds S.n = F(n)
+     from FUNCT_2:sch 4;
    hence thesis;
 end;
 uniqueness
@@ -1540,7 +1504,7 @@ existence
 proof
   deffunc F(Nat) = S.$1 *a;
   ex S being sequence of X st
-    for n be Nat holds S.n = F(n) from ExNCBCASeq;
+    for n be Nat holds S.n = F(n) from FUNCT_2:sch 4;
   hence thesis;
 end;
 uniqueness
@@ -1568,7 +1532,7 @@ existence
 proof
    deffunc F(Nat) = seq1.$1 * seq2.$1;
    ex S being sequence of X st
-    for n be Nat holds S.n = F(n) from ExNCBCASeq;
+    for n be Nat holds S.n = F(n) from FUNCT_2:sch 4;
    hence thesis;
 end;
 uniqueness

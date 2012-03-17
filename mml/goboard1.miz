@@ -9,22 +9,21 @@ environ
  vocabulary PRE_TOPC, EUCLID, FINSEQ_1, ABSVALUE, ARYTM_1, FINSEQ_4, FUNCT_1,
       RELAT_1, BOOLE, FINSET_1, CARD_1, FINSEQ_2, MATRIX_2, ORDINAL2, SEQM_3,
       MCART_1, TOPREAL1, MATRIX_1, TREES_1, INCSP_1, GOBOARD1;
- notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REAL_1, NUMBERS,
-      XCMPLX_0, XREAL_0,
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REAL_1, NUMBERS, XREAL_0,
       NAT_1, RELAT_1, FUNCT_1, CARD_1, FINSEQ_1, FINSET_1, SEQM_3, STRUCT_0,
-      PRE_TOPC, ABSVALUE, FINSEQ_2, FINSEQ_4, EUCLID, TOPREAL1, MATRIX_1,
-      MATRIX_2, COMPLEX1;
+      PRE_TOPC, FINSEQ_2, FINSEQ_4, EUCLID, TOPREAL1, MATRIX_1, MATRIX_2,
+      COMPLEX1;
  constructors REAL_1, NAT_1, SEQM_3, ABSVALUE, TOPREAL1, MATRIX_2, FINSEQ_4,
       INT_1, MEMBERED, PARTFUN1, XBOOLE_0, COMPLEX1;
  clusters FINSET_1, RELSET_1, STRUCT_0, EUCLID, XREAL_0, FINSEQ_1, INT_1,
       RELAT_1, TOPREAL1, MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2,
       COMPLEX1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, MATRIX_1, SEQM_3, XBOOLE_0;
+ definitions TARSKI, SEQM_3, XBOOLE_0;
  theorems AXIOMS, TARSKI, REAL_1, NAT_1, ZFMISC_1, FUNCT_1, FINSEQ_1, ABSVALUE,
       SQUARE_1, FINSEQ_2, CARD_2, FINSEQ_3, REAL_2, MATRIX_1, TOPREAL1,
-      MATRIX_2, TOPREAL3, FINSEQ_4, SEQM_3, PROB_1, RELAT_1, GROUP_5, INT_1,
-      CARD_1, PARTFUN2, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+      MATRIX_2, TOPREAL3, FINSEQ_4, SEQM_3, PROB_1, RELAT_1, INT_1, CARD_1,
+      PARTFUN2, XBOOLE_0, XBOOLE_1, XCMPLX_1, CARD_4;
  schemes NAT_1, WELLORD2, MATRIX_1, FINSEQ_1;
 
 begin
@@ -443,22 +442,7 @@ Del(f,n).k = f.(k+1)
   hence thesis by A1,A2,A3,A4,A5,FUNCT_1:22;
  end;
 
-theorem Th10:
-for D being set, f being FinSequence of D, n,m
-    st n in dom f & m in Seg n holds m in dom f & (f|n)/.m = f/.m
- proof let D be set, f be FinSequence of D, n,m; assume
-  A1: n in dom f & m in Seg n;
-  A2: dom f = Seg len f & f|n = f|Seg n by FINSEQ_1:def 3,FINSEQ_1:def 15;
-     n<=len f by A1,FINSEQ_3:27;
-  then A3: Seg n c= dom f by A2,FINSEQ_1:7;
-  hence
-   m in dom f by A1;
-A4: Seg n = dom f /\ Seg n by A3,XBOOLE_1:28
-   .= dom(f|n) by A2,FUNCT_1:68;
-  hence (f|n)/.m = (f|n).m by A1,FINSEQ_4:def 4
-      .= f.m by A1,A2,A4,FUNCT_1:68
-      .= f/.m by A1,A3,FINSEQ_4:def 4;
- end;
+canceled;
 
 definition let f be FinSequence of REAL, k be Nat;
  redefine func f.k -> Real;
@@ -874,12 +858,13 @@ A2:  M is empty-yielding;
      then A5: rng M <> {} by FINSEQ_1:27;
      then ex p being FinSequence st p=s & len p = n by A1;
      then reconsider s as FinSequence;
-        len s = 0 by A2,A5,MATRIX_1:def 2;
+        s = 0 by A2,A5,RELAT_1:184;
+       then len s = 0 by CARD_1:78;
     hence 0 = width M by A4,A5,MATRIX_1:def 4;
    end;
    assume
 A6: 0 = len M or 0 = width M;
-   let s be set; assume
+   now let s be set; assume
 A7: s in rng M;
     then M <> {} by FINSEQ_1:27;
    then len M <> 0 by FINSEQ_1:25;
@@ -889,7 +874,10 @@ A8:   p in rng M and
 A9:   len p = 0 by A6,MATRIX_1:def 4;
        ex q being FinSequence st q=p & len q = n by A1,A8;
     then ex q being FinSequence st q=s & len q = 0 by A1,A7,A9;
-   hence Card s = 0;
+    then Card s = 0;
+   hence s = {} by CARD_4:17;
+   end;
+   hence thesis by RELAT_1:184;
   end;
 end;
 
@@ -1103,7 +1091,7 @@ theorem
   A1: m in dom f & f/.1 in rng Col(G,1);
   then 1<=m by FINSEQ_3:27;
   then 1 in Seg m by FINSEQ_1:3;
-  hence thesis by A1,Th10;
+  hence thesis by A1,FINSEQ_4:86;
  end;
 
 theorem
@@ -1113,7 +1101,7 @@ theorem
   A1: m in dom f & f/.m in rng Col(G,width G);
   then 1<=m & m<=len f by FINSEQ_3:27;
   then len (f|m) = m & m in Seg m by FINSEQ_1:3,FINSEQ_1:80;
-  hence thesis by A1,Th10;
+  hence thesis by A1,FINSEQ_4:86;
  end;
 
 theorem Th24:
@@ -1638,15 +1626,15 @@ proof
   A4: dom g = Seg len g & dom f = Seg len f by FINSEQ_1:def 3;
   A5: len g = m by A2,FINSEQ_1:80;
   A6: now let n; assume A7: n in dom g;
-     then n in dom f & g/.n=f/.n by A3,A4,A5,Th10;
+     then n in dom f & g/.n=f/.n by A3,A4,A5,FINSEQ_4:86;
     then consider i,j such that
     A8: [i,j] in Indices M & f/.n=M*(i,j) by A1,Def11;
     take i,j;
-    thus [i,j] in Indices M & g/.n = M*(i,j) by A3,A4,A5,A7,A8,Th10;
+    thus [i,j] in Indices M & g/.n = M*(i,j) by A3,A4,A5,A7,A8,FINSEQ_4:86;
    end;
       now let n; assume n in dom g & n+1 in dom g;
     then A9: g/.n=f/.n & g/.(n+1)=f/.(n+1) & n in dom f & n+1 in dom f
-     by A3,A4,A5,Th10;
+     by A3,A4,A5,FINSEQ_4:86;
     let i1,i2,j1,j2 be Nat; assume
        [i1,i2] in Indices M & [j1,j2] in Indices M &
     g/.n=M*(i1,i2) & g/.(n+1)=M*(j1,j2);
@@ -1671,7 +1659,7 @@ for n st n in dom(f1^f2) ex i,j st [i,j] in Indices M & (f1^f2)/.n=M*(i,j)
     A5: [i,j] in Indices M & f1/.n=M*(i,j) by A1;
     take i,j;
     thus [i,j] in Indices M by A5;
-    thus (f1^f2)/.n=M*(i,j) by A4,A5,GROUP_5:95;
+    thus (f1^f2)/.n=M*(i,j) by A4,A5,FINSEQ_4:83;
    end;
    suppose ex m st m in dom f2 & n=len f1+m;
     then consider m such that
@@ -1680,7 +1668,7 @@ for n st n in dom(f1^f2) ex i,j st [i,j] in Indices M & (f1^f2)/.n=M*(i,j)
     A7: [i,j] in Indices M & f2/.m=M*(i,j) by A2,A6;
     take i,j;
     thus [i,j] in Indices M by A7;
-    thus (f1^f2)/.n=M*(i,j) by A6,A7,GROUP_5:96;
+    thus (f1^f2)/.n=M*(i,j) by A6,A7,FINSEQ_4:84;
  end;
  end;
 
@@ -1721,10 +1709,10 @@ for m,k,i,j st [m,k] in Indices M & [i,j] in Indices M & (f1^f2)/.n =M*
     by FINSEQ_1:def 3;
    per cases by A4,FINSEQ_1:38;
    suppose A7: n in dom f1;
-    then A8: f1/.n=M*(m,k) & 1<=n & n<=len f1 by A5,A6,FINSEQ_1:3,GROUP_5:95;
+    then A8: f1/.n=M*(m,k) & 1<=n & n<=len f1 by A5,A6,FINSEQ_1:3,FINSEQ_4:83;
         now per cases by A4,FINSEQ_1:38;
      suppose A9: n+1 in dom f1;
-      then f1/.(n+1)=M*(i,j) by A5,GROUP_5:95;
+      then f1/.(n+1)=M*(i,j) by A5,FINSEQ_4:83;
       hence thesis by A1,A5,A7,A8,A9;
      end;
      suppose ex m st m in dom f2 & n+1=len f1+m;
@@ -1736,9 +1724,9 @@ for m,k,i,j st [m,k] in Indices M & [i,j] in Indices M & (f1^f2)/.n =M*
       then len f1+(mm-1)<=len f1+0;
       then mm-1=0 by A11,REAL_1:53;
       then A12: mm=1 by XCMPLX_1:15;
-      then A13: M*(i,j)=f2/.1 by A5,A10,GROUP_5:96;
+      then A13: M*(i,j)=f2/.1 by A5,A10,FINSEQ_4:84;
       A14: n=len f1 by A10,A12,XCMPLX_1:2;
-      then M*(m,k)=f1/.len f1 by A5,A7,GROUP_5:95;
+      then M*(m,k)=f1/.len f1 by A5,A7,FINSEQ_4:83;
       hence thesis by A3,A5,A7,A10,A12,A13,A14;
      end;
      end;
@@ -1753,8 +1741,8 @@ for m,k,i,j st [m,k] in Indices M & [i,j] in Indices M & (f1^f2)/.n =M*
     then 1<=mm+1 & mm+1<=len f2 by NAT_1:29,REAL_1:53;
     then A16: mm+1 in dom f2 by FINSEQ_3:27;
     A17: M*(i,j)=(f1^f2)/.(len f1+(mm+1)) by A5,A15
-    .=f2/.(mm+1) by A16,GROUP_5:96;
-       M*(m,k)=f2/.mm by A5,A15,GROUP_5:96;
+    .=f2/.(mm+1) by A16,FINSEQ_4:84;
+       M*(m,k)=f2/.mm by A5,A15,FINSEQ_4:84;
     hence thesis by A2,A5,A15,A16,A17;
  end;
  end;
@@ -2594,10 +2582,10 @@ A7: dom G = Seg len G & dom D = Seg len D & dom f = Seg len f
   then A14: len t = m & dom t=Seg len t by FINSEQ_1:def 3,FINSEQ_1:80;
   then 1 in Seg m & len t in Seg m by A13,FINSEQ_1:3;
   hence t/.1 in rng Col(D,1) & t/.len t in rng Col(D,width D) & 1<=len t
-   by A1,A9,A11,A12,A14,Th10,FINSEQ_1:3;
+   by A1,A9,A11,A12,A14,FINSEQ_4:86,FINSEQ_1:3;
   A15: Indices D = [:dom D,Seg width D:] by MATRIX_1:def 5;
   A16: now let n; assume A17: n in dom t;
-    then A18: n in dom f & t/.n=f/.n & n<=m by A9,A14,Th10,FINSEQ_3:27;
+    then A18: n in dom f & t/.n=f/.n & n<=m by A9,A14,FINSEQ_4:86,FINSEQ_3:27;
     then consider i,j such that
     A19: [i,j] in Indices G & f/.n=G*(i,j) by A1,Def11;
     take i,j;
@@ -2613,12 +2601,12 @@ A7: dom G = Seg len G & dom D = Seg len D & dom f = Seg len f
     then j<=k by A1,A9,A18,A20,A21,Th50;
     then A22: j in Seg k by A21,FINSEQ_1:3;
     hence [i,j] in Indices D by A5,A7,A11,A15,A20,ZFMISC_1:106;
-    thus t/.n = G*(i,j) by A9,A14,A17,A19,Th10
+    thus t/.n = G*(i,j) by A9,A14,A17,A19,FINSEQ_4:86
     .= D*(i,j) by A2,A20,A22,Th36;
    end;
       now let n; assume n in dom t & n+1 in dom t;
     then A23: t/.n=f/.n & t/.(n+1)=f/.(n+1) &
-    n in dom f & n+1 in dom f by A9,A14,Th10;
+    n in dom f & n+1 in dom f by A9,A14,FINSEQ_4:86;
     let i1,i2,j1,j2 be Nat; assume
     A24: [i1,i2] in Indices D & [j1,j2] in Indices D & t/.n=D*(i1,i2) &
                t/.(n+1)=D*(j1,j2);
@@ -2717,7 +2705,7 @@ A20: now let i; assume i in Seg l;
         A24: n+1-i<=n+1-1 & n+1-l<=n+1-i by A23,REAL_1:92;
       then 1<=n+1-i by A6,AXIOMS:22;
       then w in Seg n by A24,FINSEQ_1:3;
-      hence thesis by A3,Th10;
+      hence thesis by A3,FINSEQ_4:86;
      end;
     defpred P[Nat,set] means for k st $1+k = n+1 holds $2 = f1/.k;
     A25: for i st i in Seg l ex p st P[i,p]
@@ -2750,12 +2738,12 @@ A20: now let i; assume i in Seg l;
     then A30:1 in Seg l & m in Seg n & len g in dom g & n in Seg n
      by A6,FINSEQ_1:3,FINSEQ_3:27;
     then g/.1 = f1/.n by A26
-     .= f/.n by A3,A30,Th10;
+     .= f/.n by A3,A30,FINSEQ_4:86;
     hence g/.1 in rng Col(G,1) by A1,A3,XBOOLE_0:def 3;
     reconsider ww = n+1-l as Nat;
        l + ww = n+1;
     then g/.len g= f1/.ww by A26,A27,A30
-    .= f/.m by A3,A30,Th10;
+    .= f/.m by A3,A30,FINSEQ_4:86;
     hence g/.len g in rng Col(G,width G) by A1,A5,XBOOLE_0:def 3;
     A31: now let i; assume A32: i in dom g;
       then reconsider ww=n+1-i as Nat by A20,A26,A29;
@@ -2801,7 +2789,7 @@ A39: for i st i in Seg l holds n-1 is Nat & f1/.(w+i)=f/.(w+i) &
       then A40: 0+1<=w+i & i+n<=l+n by REAL_1:55;
       then i+n-1<=m by REAL_1:86;
       then w+i in Seg m by A40,FINSEQ_1:3;
-      hence thesis by A5,Th10;
+      hence thesis by A5,FINSEQ_4:86;
      end;
     defpred P[Nat,set] means $2=f1/.(w+$1);
     A41: for i st i in Seg l ex p st P[i,p];
@@ -2825,11 +2813,11 @@ A43: dom g = Seg l by A42,FINSEQ_1:def 3;
     then A47:1 in Seg l & n in Seg m & len g in dom g & m in Seg m
      by A6,FINSEQ_1:3,FINSEQ_3:27;
     then g/.1 = f1/.(n-1+1) by A42
-     .= f/.n by A5,A47,Th10;
+     .= f/.n by A5,A47,FINSEQ_4:86;
     hence g/.1 in rng Col(G,1) by A1,A3,XBOOLE_0:def 3;
     reconsider ww = m+1-n as Nat by A42;
        g/.len g= f1/.(w+ww) by A42,A43,A47
-    .= f/.m by A5,A47,Th10;
+    .= f/.m by A5,A47,FINSEQ_4:86;
     hence g/.len g in rng Col(G,width G) by A1,A5,XBOOLE_0:def 3;
     A48: now let i; assume i in dom g;
 then A49:      i in Seg l & dom g=Seg l & g/.i=f1/.(w+i) by A42,A43;

@@ -9,8 +9,8 @@ environ
  vocabulary ARYTM, SEQ_1, ORDINAL2, SEQM_3, ARYTM_3, RELAT_1, ARYTM_1, SEQ_2,
       LATTICES, ABSVALUE, FUNCT_1, PROB_1, SEQ_4, MEMBERED;
  notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      REAL_1, RELAT_1, SEQ_1, SEQ_2, NAT_1, FUNCT_2, SEQM_3, ABSVALUE,
-      MEMBERED, COMPLEX1;
+      REAL_1, RELAT_1, SEQ_1, SEQ_2, NAT_1, FUNCT_2, SEQM_3, MEMBERED,
+      COMPLEX1;
  constructors REAL_1, SEQ_2, NAT_1, SEQM_3, ABSVALUE, PARTFUN1, XCMPLX_0,
       XREAL_0, MEMBERED, XBOOLE_0, COMPLEX1;
  clusters XREAL_0, RELSET_1, SEQ_1, SEQM_3, ARYTM_3, REAL_1, XBOOLE_0, NUMBERS,
@@ -25,7 +25,7 @@ environ
 begin
 
   reserve n,k,k1,m,m1,n1,n2,l for Nat;
-  reserve r,r1,r2,p,p1,g,g1,g2,s,s1,s2 for real number;
+  reserve r,r1,r2,p,p1,g,g1,g2,s,s1,s2,t for real number;
   reserve seq,seq1,seq2 for Real_Sequence;
   reserve Nseq for increasing Seq_of_Nat;
   reserve x for set;
@@ -1457,3 +1457,98 @@ theorem
    thus lim (seq(#)seq1)=(lim seq)*(lim seq1) by A2,A3,SEQ_2:29
                .=(seq.0)*(lim seq1) by A1,Th40;
   end;
+
+begin :: Addenda
+
+:: from PSCOMP1
+
+theorem Th8:
+ for X being non empty real-membered set
+ for t st for s st s in X holds s >= t holds lower_bound X >= t
+proof let X be non empty real-membered set;
+ set r = lower_bound X;
+  let t; assume
+ A1: for s st s in X holds s >= t;
+ then A2: X is bounded_below by Def2;
+     set s = t-r;
+  assume r < t;
+   then s > 0 by SQUARE_1:11;
+   then consider t' be real number such that
+A3: t' in X & t' < r+s by A2,Def5;
+  thus contradiction by A1,A3;
+end;
+
+theorem
+for X being non empty real-membered set
+ st (for s st s in X holds s >= r) &
+    for t st for s st s in X holds s >= t holds r >= t
+  holds r = lower_bound X
+proof let X be non empty real-membered set;
+ assume that
+A1: for s st s in X holds s >= r and
+A2: for t st for s st s in X holds s >= t holds r >= t;
+  A3: X is bounded_below by A1,Def2;
+     now let s be real number such that
+  A4: 0 < s;
+  assume for t be real number st t in X holds t >= r+s;
+      then r >= r+s by A2;
+   hence contradiction by A4,REAL_1:69;
+  end;
+ hence r = lower_bound X by A1,A3,Def5;
+end;
+
+theorem Th10:
+for X being non empty real-membered set, r
+ for t st for s st s in X holds s <= t holds upper_bound X <= t
+proof let X be non empty real-membered set, r;
+ set r = upper_bound X;
+  let t; assume
+ A1: for s st s in X holds s <= t;
+ then A2: X is bounded_above by Def1;
+     set s = r-t;
+  assume r > t;
+   then s > 0 by SQUARE_1:11; then consider t' be real number such that
+ A3: t' in X & r-s < t' by A2,Def4;
+  thus contradiction by A1,A3;
+end;
+
+theorem
+for X being non empty real-membered set, r
+ st (for s st s in X holds s <= r) &
+    for t st for s st s in X holds s <= t holds r <= t
+  holds r = upper_bound X
+proof let X be non empty real-membered set, r;
+ assume that
+A1: for s st s in X holds s <= r and
+A2: for t st for s st s in X holds s <= t holds r <= t;
+   A3: X is bounded_above by A1,Def1;
+     now let s be real number such that
+  A4: 0 < s;
+   assume
+         for t be real number st t in X holds r-s >= t;
+      then r <= r-s by A2; then r+s <= r by REAL_1:84;
+   hence contradiction by A4,REAL_1:69;
+  end;
+ hence r = upper_bound X by A1,A3,Def4;
+end;
+
+theorem
+ for X being non empty real-membered set, Y being real-membered set
+  st X c= Y & Y is bounded_below holds lower_bound Y <= lower_bound X
+proof let X be non empty real-membered set, Y be real-membered set; assume that
+A1: X c= Y and
+A2: Y is bounded_below;
+   t in X implies t >= lower_bound Y by A1,A2,Def5;
+ hence lower_bound Y <= lower_bound X by Th8;
+end;
+
+theorem
+ for X being non empty real-membered set, Y being real-membered set
+  st X c= Y & Y is bounded_above holds upper_bound X <= upper_bound Y
+proof let X be non empty real-membered set, Y be real-membered set; assume that
+A1: X c= Y and
+A2: Y is bounded_above;
+   t in X implies t <= upper_bound Y by A1,A2,Def4;
+ hence upper_bound X <= upper_bound Y by Th10;
+end;
+

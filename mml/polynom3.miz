@@ -31,9 +31,9 @@ environ
       SQUARE_1, CARD_1, FINSET_1, RLVECT_1, VECTSP_1, VECTSP_9, BINARITH,
       ALGSEQ_1, RELAT_2, ORDERS_1, FUNCT_1, FUNCT_2, FUNCT_7, FUNCOP_1,
       FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSEQ_5, RFINSEQ, BINOP_1,
-      CARD_3, TOPREAL1, TRIANG_1, GROUP_7, AMI_5, GOBOARD1, GOBOARD9, JORDAN3,
-      RVSUM_1, FVSUM_1, MATRLIN, YELLOW15, POLYNOM1, JORDAN8, MATRIX_2,
-      RELAT_1, XBOOLE_0, RLVECT_2, SCMFSA_7, XCMPLX_1, PARTFUN1;
+      CARD_3, TRIANG_1, GROUP_7, AMI_5, GOBOARD1, GOBOARD9, JORDAN3, RVSUM_1,
+      FVSUM_1, MATRLIN, YELLOW15, POLYNOM1, JORDAN8, MATRIX_2, RELAT_1,
+      XBOOLE_0, RLVECT_2, SCMFSA_7, XCMPLX_1, PARTFUN1;
  schemes FUNCT_2, FINSEQ_1, FINSEQ_2, NAT_1, POLYNOM2, RELSET_1, SETWISEO,
       BINARITH;
 
@@ -1187,11 +1187,11 @@ A7:  dom t1 = Seg len t1 by FINSEQ_1:def 3;
        reconsider Cf = Card f as FinSequence of NAT qua set;
        thus Card (f|i).j = Card ((f|i).j) by A5,A8,A9,A10,CARD_3:def 2
           .= Card ((f|i)/.j) by A5,A8,A9,A10,FINSEQ_4:def 4
-          .= Card (f/.j) by A5,A8,A9,A10,TOPREAL1:1
+          .= Card (f/.j) by A5,A8,A9,A10,FINSEQ_4:85
           .= Card (f.j) by A12,FINSEQ_4:def 4
           .= (Card f).j by A12,CARD_3:def 2
           .= Cf/.j by A2,A12,FINSEQ_4:def 4
-          .= (Cf|i)/.j by A5,A8,A11,TOPREAL1:1
+          .= (Cf|i)/.j by A5,A8,A11,FINSEQ_4:85
           .= (Card f)|i.j by A5,A8,A11,FINSEQ_4:def 4;
       end;
       suppose i > len f;
@@ -1245,7 +1245,7 @@ A7:  dom t1 = Seg len t1 by FINSEQ_1:def 3;
        reconsider p1 = p as FinSequence of REAL;
        A15: p|i = p1|i & p|j = p1|j by Th17;
        then A16: (p1|i)/.n = p/.n & (p1|j)/.n = p/.n
-                                                by A10,A11,A13,A14,TOPREAL1:1;
+                                                by A10,A11,A13,A14,FINSEQ_4:85;
        thus (p|i).n = (p1|i)/.n by A10,A13,A15,FINSEQ_4:def 4
           .= (p|j).n by A10,A11,A14,A15,A16,FINSEQ_4:def 4
           .= q.n by A7,A10,A12,FINSEQ_1:def 7;
@@ -1275,7 +1275,7 @@ A7:  dom t1 = Seg len t1 by FINSEQ_1:def 3;
          A27: Seg i = dom (p|i) by A22,FINSEQ_1:def 3;
          reconsider p1 = p as FinSequence of REAL;
          A28: p|i = p1|i by Th17;
-         then A29: (p1|i)/.n = p/.n by A25,A27,TOPREAL1:1;
+         then A29: (p1|i)/.n = p/.n by A25,A27,FINSEQ_4:85;
          A30: dom (p|i) c= dom p by FINSEQ_5:20;
          thus (p|i).n = (p1|i)/.n by A25,A27,A28,FINSEQ_4:def 4
             .= p.n by A25,A27,A29,A30,FINSEQ_4:def 4
@@ -1470,21 +1470,6 @@ proof
    thus thesis by A2,A3;
   end;
 
-  scheme ExDLoopStrSeq{ R() -> non empty LoopStr,
-                        F(set) -> Element of R() } :
-   ex S be sequence of R() st for n be Nat holds S.n = F(n)
-proof
-    set Y = the carrier of R();
-    deffunc G(set) = F($1);
-    A1: for x be set st x in NAT holds G(x) in Y;
-      ex f be Function of NAT,Y st for x be set st x in NAT holds f.x = G(x)
-     from FUNCT_2:sch 2(A1);
-    then consider f be Function of NAT,Y such that
-A2: for x be set st x in NAT holds f.x = F(x);
-    take f;
-    thus thesis by A2;
-   end;
-
   definition
    let L be non empty LoopStr;
    let p,q be sequence of L;
@@ -1494,7 +1479,7 @@ A2: for x be set st x in NAT holds f.x = F(x);
    proof
     deffunc F(Nat) = p.$1 + q.$1;
     consider r be sequence of L such that
-     A1: for n be Nat holds r.n = F(n) from ExDLoopStrSeq;
+A1: for n be Nat holds r.n = F(n) from FUNCT_2:sch 4;
     take r;
     thus thesis by A1;
    end;
@@ -1618,15 +1603,15 @@ A2: for x be set st x in NAT holds f.x = F(x);
    proof
     deffunc F(Nat) = -p.$1;
     consider r be sequence of L such that
-     A1: for n be Nat holds r.n = F(n) from ExDLoopStrSeq;
+A1: for n be Nat holds r.n = F(n) from FUNCT_2:sch 4;
     take r;
     thus thesis by A1;
    end;
    uniqueness
    proof
     let p1,p2 be sequence of L such that
-     A2: for n be Nat holds p1.n = -p.n and
-     A3: for n be Nat holds p2.n = -p.n;
+A2: for n be Nat holds p1.n = -p.n and
+A3: for n be Nat holds p2.n = -p.n;
         now let k be Nat;
      thus p1.k = -p.k by A2
               .= p2.k by A3;

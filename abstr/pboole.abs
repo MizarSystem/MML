@@ -6,23 +6,23 @@
 
 environ
 
- vocabulary FUNCT_1, MATRIX_1, RELAT_1, CARD_1, BOOLE, ZF_REFLE, AMI_1,
-      FUNCOP_1, CAT_4, LATTICES, CQC_LANG, PBOOLE;
- notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCOP_1, CQC_LANG,
-      CARD_1, AMI_1, MATRIX_1;
- constructors AMI_1, MATRIX_1, FUNCOP_1, MEMBERED, XBOOLE_0;
- clusters FUNCT_1, RELAT_1, FUNCOP_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ vocabulary FUNCT_1, MATRIX_1, RELAT_1, BOOLE, ZF_REFLE, AMI_1, FUNCOP_1,
+      CAT_4, LATTICES, CQC_LANG, PBOOLE, MSUALG_1, PRALG_1, CARD_3, TDGROUP,
+      FINSEQ_1, FINSEQ_2, FUNCT_2, PRALG_2, AUTALG_1, MSUALG_2, MSUALG_3;
+ notation TARSKI, ZFMISC_1, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
+      FUNCT_2, FUNCOP_1, FINSEQ_1, FINSEQ_2, CARD_3, CQC_LANG, NAT_1, NUMBERS;
+ constructors FUNCOP_1, MEMBERED, XBOOLE_0, CQC_LANG, CARD_1, SETFAM_1,
+      FINSEQ_2, CARD_3;
+ clusters FUNCT_1, RELAT_1, FUNCOP_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0,
+      RELSET_1, ARYTM_3, ORDINAL2, FINSEQ_1;
  requirements BOOLE, SUBSET;
 
 
 begin
 
-reserve i,e,u for set;
+reserve i,j,e,u for set;
 
-definition let f be Function;
- redefine attr f is empty-yielding means
-:: PBOOLE:def 1
- for i st i in dom f holds f.i is empty;
+definition canceled;
 end;
 
 registration
@@ -598,4 +598,183 @@ theorem :: PBOOLE:147
 
 theorem :: PBOOLE:148
      (for x holds x in X iff x in Y & x in Z) implies X = Y /\ Z;
+
+begin :: Addenda
+
+:: from MSUALG_1
+
+scheme :: PBOOLE:sch 3
+ MSSEx { I() -> set, P[set,set] }:
+ ex f being ManySortedSet of I() st
+  for i st i in I() holds P[i,f.i]
+  provided  for i st i in I() ex j st P[i,j];
+
+scheme :: PBOOLE:sch 4
+ MSSLambda { I() -> set, F(set) -> set }:
+ ex f being ManySortedSet of I() st
+  for i st i in I() holds f.i = F(i);
+
+:: from PRALG_1
+
+registration
+ let I be set;
+ cluster Function-yielding ManySortedSet of I;
+ end;
+
+definition
+ let I be set;
+mode ManySortedFunction of I is Function-yielding ManySortedSet of I;
+end;
+
+:: from MSUALG_1
+
+begin :: Preliminaries
+
+reserve i,j for set,
+        I for set;
+
+theorem :: PBOOLE:149
+ not ex M being non-empty ManySortedSet of I st {} in rng M;
+
+definition let I be set; let M be ManySortedSet of I;
+ mode Component of M is Element of rng M;
+end;
+
+theorem :: PBOOLE:150
+ for I being non empty set
+ for M being ManySortedSet of I, A being Component of M
+  ex i st i in I & A = M.i;
+
+theorem :: PBOOLE:151
+ for M being ManySortedSet of I, i st i in I holds M.i is Component of M;
+
+definition let I; let B be ManySortedSet of I;
+ mode Element of B -> ManySortedSet of I means
+:: PBOOLE:def 17
+    for i st i in I holds it.i is Element of B.i;
+end;
+
+begin :: Many Sorted Functions
+
+definition let I;
+ let A be ManySortedSet of I, B be ManySortedSet of I;
+ mode ManySortedFunction of A,B -> ManySortedSet of I means
+:: PBOOLE:def 18
+ for i st i in I holds it.i is Function of A.i, B.i;
+end;
+
+registration let I;
+ let A be ManySortedSet of I, B be ManySortedSet of I;
+ cluster ->Function-yielding ManySortedFunction of A,B;
+end;
+
+definition let I be set; let M be ManySortedSet of I;
+ func M# -> ManySortedSet of I* means
+:: PBOOLE:def 19
+ for i being Element of I* holds it.i = product(M*i);
+end;
+
+registration let I be set; let M be non-empty ManySortedSet of I;
+ cluster M# -> non-empty;
+end;
+
+definition let I; let J be non empty set;
+ let O be Function of I,J;
+ let F be ManySortedSet of J;
+ redefine func F*O -> ManySortedSet of I;
+end;
+
+definition let I; let J be non empty set;
+ let O be Function of I,J;
+ let F be non-empty ManySortedSet of J;
+ redefine func F*O -> non-empty ManySortedSet of I;
+end;
+
+definition let a be set;
+ func *-->a -> Function of NAT,{a}* means
+:: PBOOLE:def 20
+ for n being Nat holds it.n = n |-> a;
+end;
+
+ reserve D for non empty set,
+         n for Nat;
+
+theorem :: PBOOLE:152
+ for a,b being set holds ({a} --> b)*(n|->a) = n |-> b;
+
+theorem :: PBOOLE:153
+ for a being set
+ for M being ManySortedSet of {a} st M = {a} --> D
+   holds (M#* *-->a).n = Funcs(Seg n, D);
+
+definition let I,i;
+ redefine func I --> i -> Function of I,{i};
+end;
+
+:: from PRALG_2
+
+scheme :: PBOOLE:sch 5
+ LambdaDMS {D()->non empty set, F(set)->set}:
+ ex X be ManySortedSet of D() st
+  for d be Element of D() holds X.d = F(d);
+
+:: from PRALG_1
+
+registration
+let J be non empty set,
+    B be non-empty ManySortedSet of J,
+    j be Element of J;
+ cluster B.j -> non empty;
+end;
+
+:: from PRALG_2
+
+reserve X,Y for ManySortedSet of I;
+
+definition
+ let I, X,Y;
+func [|X,Y|] -> ManySortedSet of I means
+:: PBOOLE:def 21
+ for i st i in I holds it.i = [:X.i,Y.i:];
+end;
+
+:: from AUTALG_1
+
+definition let I, X, Y;
+  func MSFuncs (X, Y) -> ManySortedSet of I means
+:: PBOOLE:def 22
+  for i be set st i in I holds it.i = Funcs(X.i, Y.i);
+end;
+
+:: from MSUALG_2
+
+definition let I be set,
+               M be ManySortedSet of I;
+mode ManySortedSubset of M -> ManySortedSet of I means
+:: PBOOLE:def 23
+ it c= M;
+end;
+
+registration let I be set,
+               M be non-empty ManySortedSet of I;
+cluster non-empty ManySortedSubset of M;
+end;
+
+:: from MSUALG_3
+
+definition
+ let F,G be Function-yielding Function;
+ func G**F -> Function-yielding Function means
+:: PBOOLE:def 24
+ dom it = (dom F) /\ (dom G) &
+ for i be set st i in dom it holds it.i = (G.i)*(F.i);
+end;
+
+definition let I be set,
+               A be ManySortedSet of I,
+               F be ManySortedFunction of I;
+func F.:.:A -> ManySortedSet of I means
+:: PBOOLE:def 25
+   for i be set st i in I holds it.i = (F.i).:(A.i);
+end;
 

@@ -141,26 +141,6 @@ theorem
              .= N * H by GROUP_4:57;
   end;
 
-Lm1: for E being non empty set, p,q being FinSequence of E st
- k in dom p holds (p ^ q)/.k = p/.k
-  proof let E be non empty set, p,q be FinSequence of E;
-    assume A1:k in dom p;
-     then k in dom(p ^ q) by FINSEQ_3:24;
-   hence (p ^ q)/.k = (p ^ q).k by FINSEQ_4:def 4
-                   .= p.k by A1,FINSEQ_1:def 7
-                   .= p/.k by A1,FINSEQ_4:def 4;
-  end;
-
-Lm2: for E being non empty set, p,q being FinSequence of E st
- k in dom q holds (p ^ q)/.(len p + k) = q/.k
-  proof let E be non empty set, p,q be FinSequence of E;
-    assume A1: k in dom q;
-     then len p + k in dom(p ^ q) by FINSEQ_1:41;
-   hence (p ^ q)/.(len p + k) = (p ^ q).(len p + k) by FINSEQ_4:def 4
-                           .= q.k by A1,FINSEQ_1:def 7
-                           .= q/.k by A1,FINSEQ_4:def 4;
-  end;
-
 definition let G,F,a;
  func F |^ a -> FinSequence of the carrier of G means
   :Def1: len it = len F &
@@ -202,7 +182,8 @@ theorem Th12:
        then k in Seg len(F1 |^ a) by FINSEQ_1:def 3;
        then k in Seg len F1 by Def1;
        then A3: k in dom F1 by FINSEQ_1:def 3;
-       then A4: F1/.k = (F1 ^ F2)/.k & k in dom(F1 ^ F2) by Lm1,FINSEQ_3:24;
+       then A4: F1/.k = (F1 ^ F2)/.k & k in dom(F1 ^ F2)
+            by FINSEQ_4:83,FINSEQ_3:24;
      thus (F1 |^ a).k = (F1/.k) |^ a by A3,Def1
                      .= ((F1 ^ F2) |^ a).k by A4,Def1;
     end;
@@ -215,7 +196,7 @@ theorem Th12:
      hence ((F1 ^ F2) |^ a).(len(F1 |^ a) + k) =
            ((F1 ^ F2)/.(len(F1 |^ a) + k)) |^ a by Def1
         .= ((F1 ^ F2)/.(len F1 + k)) |^ a by Def1
-        .= (F2/.k) |^ a by A6,Lm2
+        .= (F2/.k) |^ a by A6,FINSEQ_4:84
         .= (F2 |^ a).k by A6,Def1;
     end;
    hence thesis by A1,A2,FINSEQ_3:43;
@@ -1973,14 +1954,3 @@ theorem
    end;
   hence thesis;
  end;
-
-begin :: Auxiliary theorems.
-
-reserve E for non empty set,
-        p, q for FinSequence of E;
-
-theorem
-    k in dom p implies (p ^ q)/.k = p/.k by Lm1;
-
-theorem
-    k in dom q implies (p ^ q)/.(len p + k) = q/.k by Lm2;

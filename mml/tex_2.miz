@@ -21,7 +21,7 @@ environ
  theorems TARSKI, SUBSET_1, ZFMISC_1, FUNCT_2, PRE_TOPC, TOPS_1, TOPS_2,
       PCOMPS_1, BORSUK_1, TSEP_1, TDLAT_3, REALSET1, TOPS_3, TEX_1, RELAT_1,
       STRUCT_0, RELSET_1, SETFAM_1, XBOOLE_0, XBOOLE_1, REALSET2;
- schemes WELLORD2;
+ schemes WELLORD2, FUNCT_2;
 
 begin
 :: 1. Proper Subsets of 1-sorted Structures.
@@ -37,7 +37,7 @@ A1:   X = {s} by REALSET1:def 4;
          s in X by A1,TARSKI:def 1;
     hence ex s being Element of X st X = {s} by A1;
    end;
-   thus thesis by REALSET1:def 4;
+   thus thesis;
   end;
 end;
 
@@ -47,12 +47,7 @@ registration
   proof
    set o = {0};
    take o;
-          now
-      reconsider d = 0 as Element of o by TARSKI:def 1;
-      take d;
-      thus o = {d};
-     end;
-   hence thesis by Def1;
+   thus thesis;
   end;
 end;
 
@@ -167,26 +162,13 @@ registration let S be non empty set;
  existence
   proof consider s being Element of S;
    take {s};
-          now
-        reconsider e = s as Element of {s} by TARSKI:def 1;
-      take e;
-      thus {s} = {e};
-     end;
-   hence thesis by Def1;
+   thus thesis;
   end;
 end;
 
 registration let y be set;
  cluster {y} -> trivial;
- coherence
-  proof
-          now
-        reconsider e = y as Element of {y} by TARSKI:def 1;
-      take e;
-      thus {y} = {e};
-     end;
-   hence thesis by Def1;
-  end;
+ coherence;
 end;
 
 theorem
@@ -2698,37 +2680,6 @@ end;
 begin
 :: 5. Continuous Mappings and Almost Discrete Spaces.
 
-scheme MapExChoiceF{X,Y()->non empty TopStruct,P[set,set]}:
- ex f being map of X(),Y() st
-  for x being Point of X() holds P[x,f.x]
- provided
-  A1: for x being Point of X() ex y being Point of Y() st P[x,y]
-proof
-   set A = [#]Y();
-     A2: A = the carrier of Y() by PRE_TOPC:12;
-    reconsider A as non empty Subset of Y();
-   set C = [#]X();
-     A3: C = the carrier of X() by PRE_TOPC:12;
-    reconsider C as non empty Subset of X();
-   defpred X[set,set] means $2 in A & P[$1,$2];
-   A4: for x being set st x in C ex a being set st a in A & X[x,a]
-         proof let x be set;
-          assume x in C;
-           then consider a being Point of Y() such that
-                    A5: P[x,a] by A1;
-          take a;
-          thus thesis by A2,A5;
-         end;
-   consider f being Function such that
-        A6: dom f = C and A7: rng f c= A and
-        A8: for x being set st x in C holds X[x,f.x]
-                                                from WELLORD2:sch 1(A4);
-   reconsider f as Function of C,A by A6,A7,FUNCT_2:def 1,RELSET_1:11;
-        reconsider f as map of X(),Y() by A2,A3;
-   take f;
-  thus for x be Point of X() holds P[x,f.x] by A3,A8;
- end;
-
 reserve X,Y for non empty TopSpace;
 
 theorem Th68:
@@ -2816,7 +2767,7 @@ theorem Th72:
    defpred X[set,set] means $1 in A implies $2 = $1;
    A1: for x being Point of X ex a being Point of X0 st X[x,a];
    consider r being map of X,X0 such that
-        A2: for x being Point of X holds X[x,r.x] from MapExChoiceF(A1);
+        A2: for x being Point of X holds X[x,r.x] from FUNCT_2:sch 3(A1);
    reconsider r as continuous map of X,X0 by Th68;
   take r;
   thus r is_a_retraction by A2,BORSUK_1:def 19;
@@ -2849,7 +2800,7 @@ theorem Th74:
           thus thesis by A5;
          end;
    consider r being map of X,X0 such that
-        A6: for x being Point of X holds X[x,r.x] from MapExChoiceF(A3);
+        A6: for x being Point of X holds X[x,r.x] from FUNCT_2:sch 3(A3);
          for F being Subset of X0 holds F is closed
     implies r" F is closed
      proof let F be Subset of X0;

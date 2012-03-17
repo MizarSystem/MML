@@ -6,14 +6,15 @@
 
 environ
 
- vocabulary ORDINAL2, ARYTM, ARYTM_1, ARYTM_3, ORDINAL1, NAT_1, XREAL_0;
- notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0,
-      XREAL_0, REAL_1;
- constructors REAL_1, XREAL_0, XCMPLX_0, XBOOLE_0;
+ vocabulary ORDINAL2, ARYTM, ARYTM_1, ARYTM_3, ORDINAL1, NAT_1, XREAL_0,
+      FUNCT_1, BOOLE;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, FUNCT_1, NUMBERS,
+      XCMPLX_0, XREAL_0, REAL_1;
+ constructors REAL_1, XREAL_0, XCMPLX_0, XBOOLE_0, FUNCT_1;
  clusters REAL_1, NUMBERS, ORDINAL2, XREAL_0, ARYTM_3, ZFMISC_1, XBOOLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions REAL_1;
- theorems AXIOMS, REAL_1, TARSKI, ORDINAL2, XCMPLX_1;
+ theorems AXIOMS, REAL_1, TARSKI, ORDINAL2, XCMPLX_1, XBOOLE_1;
  schemes REAL_1;
 
 begin
@@ -1197,4 +1198,45 @@ A5: ex t being Nat st l = n * t + (l mod n) & l mod n < n by A2,Def2;
   hence thesis;
   end;
  end;
+
+begin :: Addenda
+
+:: from ALGSEQ_1
+
+theorem Th70:
+ m<n+1 implies m<n or m=n
+ proof
+  assume m<n+1;
+  then m<=n by Th38;
+  hence thesis by REAL_1:def 5;
+ end;
+
+theorem
+  k<2 implies k=0 or k=1
+ proof
+  assume k<2;
+  then k<1+1;
+  then k<1 or k=1 by Th70;
+  hence thesis by Th39;
+ end;
+
+:: from DTCONSTR
+
+scheme MonoSetSeq { f() -> Function, A() -> set, H(set, set) -> set}:
+ for k, s being Nat holds f().k c= f().(k+s)
+provided
+A1: for n being Nat holds f().(n+1) = f().n \/ H(n, f().n)
+proof let k be Nat;
+set f = f();
+  defpred P[Nat] means f.k c= f.(k+$1);
+A2: P[0];
+A3: now let s be Nat; assume
+A4:    P[s];
+        f.(k+(s+1)) = f.((k+s)+1)
+                  .= f.(k+s) \/ H(k+s, f.(k+s)) by A1;
+       then f.(k+s) c= f.(k+(s+1)) by XBOOLE_1:7;
+      hence P[s+1] by A4,XBOOLE_1:1;
+     end;
+ thus for s being Nat holds P[s] from Ind(A2,A3);
+end;
 

@@ -7,11 +7,11 @@
 environ
 
  vocabulary VECTSP_1, FINSEQ_1, RLVECT_1, RELAT_1, BOOLE, FINSEQ_2, FUNCOP_1,
-      CARD_1, TREES_1, FUNCT_1, QC_LANG1, INCSP_1, GROUP_1, ARYTM_1, BINOP_1,
+      TREES_1, FUNCT_1, QC_LANG1, INCSP_1, GROUP_1, ARYTM_1, BINOP_1,
       MATRIX_1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, STRUCT_0,
-      RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, FUNCOP_1, FINSEQ_2, BINOP_1,
-      FINSEQOP, RLVECT_1, VECTSP_1, CARD_1;
+      FUNCT_1, FUNCT_2, FINSEQ_1, FUNCOP_1, FINSEQ_2, BINOP_1, FINSEQOP,
+      RLVECT_1, VECTSP_1;
  constructors BINOP_1, FINSEQOP, VECTSP_1, XREAL_0, XCMPLX_0, MEMBERED,
       XBOOLE_0;
  clusters FINSEQ_1, VECTSP_1, STRUCT_0, FINSEQ_2, RELSET_1, GROUP_1, ARYTM_3,
@@ -19,7 +19,7 @@ environ
  requirements NUMERALS, SUBSET, BOOLE;
  definitions TARSKI, RLVECT_1;
  theorems FINSEQ_1, FINSEQ_2, FINSEQ_3, TARSKI, FUNCOP_1, FUNCT_1, FUNCT_2,
-      ZFMISC_1, NAT_1, BINOP_1, REAL_1, RLVECT_1;
+      ZFMISC_1, NAT_1, BINOP_1, REAL_1, RLVECT_1, CARD_1, RELAT_1;
  schemes FINSEQ_1, FUNCT_2, BINOP_1, FINSEQ_2;
 
 begin
@@ -131,11 +131,6 @@ theorem  <*<*a1,a2*>,<*b1,b2*>*> is tabular
    hence thesis by Th4;
   end;
 
- definition let f be Relation;
-  attr f is empty-yielding means
-      for s being set st s in rng f holds Card s = 0;
- end;
-
  registration
   let D be set;
   cluster tabular FinSequence of D*;
@@ -157,8 +152,11 @@ A1:    rng <*<*d*>*>= {<*d*>} & <*d*> in D* by FINSEQ_1:55,def 11;
       then reconsider p = <*<*d*>*> as FinSequence of D* by FINSEQ_1:def 4;
       reconsider p as tabular FinSequence of D* by Th1;
       reconsider s = <*d*> as FinSequence;
-      take p,s; thus s in rng p by A1,TARSKI:def 1;
-      thus len s <> 0 by FINSEQ_1:56;
+      take p;
+      now take s; thus s in rng p by A1,TARSKI:def 1;
+     thus s <> {};
+     end;
+     hence thesis by RELAT_1:184;
     end;
  end;
 
@@ -213,7 +211,8 @@ theorem Th9:
    hence s is Matrix of D by A6,FINSEQ_1:def 4;
   end;
 
- definition let D,m,n;
+ definition canceled;
+  let D,m,n;
   mode Matrix of m,n,D -> Matrix of D means:
 Def3:
    len it = m & for p st p in rng it holds len p = n;

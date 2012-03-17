@@ -22,5 +22,5 @@ REALSET2
 ANALOAF
 SEMI_AF1
 #
-«W27 ;V59 ;;;G10 ;
+«W29 ;V61 ;;;G10 ;
 !

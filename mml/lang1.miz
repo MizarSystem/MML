@@ -6,7 +6,8 @@
 
 environ
 
- vocabulary RELAT_1, FINSEQ_1, TDGROUP, BOOLE, FUNCT_1, FINSET_1, LANG1;
+ vocabulary RELAT_1, FINSEQ_1, TDGROUP, BOOLE, FUNCT_1, FINSET_1, LANG1,
+      MONOID_0;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, DOMAIN_1,
       RELAT_1, STRUCT_0, RELSET_1, FUNCT_1, FINSEQ_1, FINSET_1, FUNCT_2,
       FINSEQ_2;
@@ -18,7 +19,7 @@ environ
  definitions XBOOLE_0, TARSKI, RELAT_1, STRUCT_0;
  theorems TARSKI, ZFMISC_1, AXIOMS, RELAT_1, FINSEQ_1, NAT_1, REAL_1, RELSET_1,
       TREES_2, FUNCT_2, FINSEQ_3, XBOOLE_0, XBOOLE_1, XCMPLX_1;
- schemes NAT_1, RELAT_1, FUNCT_2;
+ schemes NAT_1, FUNCT_2;
 
 begin
 :: Grammar structure is introduced as triple (S, I, R) where S is
@@ -910,46 +911,7 @@ A1:   dom (f*g) = dom p & rng (f*g) c= Y & dom p = Seg len p
    end;
 end;
 
-definition
- let R be Relation;
- func R* -> Relation means:
-Def13:
-  for x,y being set holds [x,y] in it iff x in field R & y in field R &
-   ex p being FinSequence st len p >= 1 & p.1 = x & p.(len p) = y &
-    for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R;
-   existence
-    proof
-      defpred X[set,set] means
-       ex p being FinSequence st len p >= 1 & p.1 = $1 & p.(len p) = $2 &
-        for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R;
-     thus ex S being Relation st
-      for x,y being set holds
-       [x,y] in S iff x in field R & y in field R & X[x,y]
-
-       from RELAT_1:sch 1;
-    end;
-   uniqueness
-    proof let R1,R2 be Relation such that
-A1:   for x,y being set holds [x,y] in R1 iff x in field R & y in field R &
-      ex p being FinSequence st len p >= 1 & p.1 = x & p.(len p) = y &
-      for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R and
-A2:   for x,y being set holds [x,y] in R2 iff x in field R & y in field R &
-      ex p being FinSequence st len p >= 1 & p.1 = x & p.(len p) = y &
-      for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R;
-     let x,y be set;
-     thus [x,y] in R1 implies [x,y] in R2
-       proof assume [x,y] in R1;
-         then x in field R & y in field R & ex p being FinSequence st
-         len p >= 1 & p.1 = x & p.(len p) = y &
-         for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R by A1;
-        hence [x,y] in R2 by A2;
-       end;
-     assume [x,y] in R2;
-      then x in field R & y in field R & ex p being FinSequence st
-      len p >= 1 & p.1 = x & p.(len p) = y &
-      for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R by A2;
-     hence thesis by A1;
-    end;
+definition canceled;
 end;
 
 definition
@@ -977,7 +939,7 @@ end;
 reserve R for Relation, x,y for set;
 
 theorem
-    R c= R*
+    R c= R[*]
   proof let x,y; assume
 A1:  [x,y] in R;
 then A2:  x in field R & y in field R by RELAT_1:30;
@@ -987,17 +949,17 @@ A4:    i >= 1 & i < 2;  1+1 = 2; then i <= 1 by A4,NAT_1:38;
       then i = 1 by A4,AXIOMS:21;
      hence [<*x,y*>.i,<*x,y*>.(i+1)] in R by A1,A3;
     end;
-   hence thesis by A2,A3,Def13;
+   hence thesis by A2,A3,FINSEQ_1:def 16;
   end;
 
 definition let X be non empty set, R be Relation of X;
- redefine func R* -> Relation of X;
+ redefine func R[*] -> Relation of X;
   coherence
    proof reconsider P = [:X,X:] as Relation of X by RELSET_1:def 1;
-        R* c= P
-      proof let x,y; assume [x,y] in R*;
+        R[*] c= P
+      proof let x,y; assume [x,y] in R[*];
         then x in field R & y in field R & field R c= X \/ X & X \/ X = X
-         by Def13,RELSET_1:19; hence thesis by ZFMISC_1:106;
+         by FINSEQ_1:def 16,RELSET_1:19; hence thesis by ZFMISC_1:106;
       end;
     hence thesis by RELSET_1:def 1;
    end;

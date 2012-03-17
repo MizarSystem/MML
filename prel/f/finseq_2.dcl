@@ -15,5 +15,5 @@ FINSEQ_1
 FINSEQ_2
 #
 «W1 ;;M1 ;;M9 A1 ;
-fW1 ;;M1 V15 ;;M1 W1 ;;;K91 A1 A2 ;
+fW1 ;;M1 V16 ;;M1 W1 ;;;K92 A1 A2 ;
 !

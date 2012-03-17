@@ -7,11 +7,13 @@ ZFMISC_1
 SUBSET_1
 RELSET_1
 FUNCT_2
+FINSET_1
 REALSET1
 #
-«W5 ;V9 ;;;M1 ;
-«W5 ;W9 ;;;M1 ;
-«W5 ;;M1 W9 ;;;M9 A1 ;
-fW5 ;;M1 W9 ;;M9 A1 ;;K20 A1 A2 ;
-­W9 ;;;M1 ;W5 ;;
+«W6 ;V11 ;;;M1 ;
+«W6 ;W11 ;;;M1 ;
+«W6 ;;M1 W11 ;;;M9 A1 ;
+fW6 ;V10 ;V11 ;;M1 ;;K1 A1 ;
+fW6 ;;M1 W11 ;;M9 A1 ;;K20 A1 A2 ;
+­W11 ;;;M1 ;W6 ;;
 !

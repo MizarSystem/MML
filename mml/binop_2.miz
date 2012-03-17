@@ -7,14 +7,18 @@
 environ
 
  vocabulary BINOP_2, VECTSP_1, BINOP_1, FUNCT_1, ARYTM_1, COMPLEX1, COMPLSP1,
-      INT_1, RAT_1, RELAT_1, ARYTM_3, RVSUM_1, GR_CY_1, INT_3, MONOID_0;
- notation XBOOLE_0, SUBSET_1, FUNCT_2, BINOP_1, XCMPLX_0, NUMBERS, RAT_1;
- constructors SUBSET_1, BINOP_1, NUMBERS, XCMPLX_0, XREAL_0, RAT_1, INT_1;
+      INT_1, RAT_1, RELAT_1, ARYTM_3, RVSUM_1, GR_CY_1, INT_3, MONOID_0,
+      SETWISEO;
+ notation XBOOLE_0, SUBSET_1, FUNCT_2, BINOP_1, SETWISEO, XCMPLX_0, NUMBERS,
+      RAT_1;
+ constructors SUBSET_1, BINOP_1, NUMBERS, XCMPLX_0, XREAL_0, RAT_1, INT_1,
+      SETWISEO;
  clusters NUMBERS, REAL_1, XREAL_0, XBOOLE_0, SQUARE_1, ORDINAL2, XCMPLX_0,
       INT_1, NAT_1, RAT_1, ARYTM_3;
- requirements BOOLE, SUBSET, ARITHM;
+ requirements BOOLE, SUBSET, ARITHM, NUMERALS;
  definitions BINOP_1;
- theorems BINOP_1, FUNCT_2, XCMPLX_0, XREAL_0, INT_1, ORDINAL2, RAT_1;
+ theorems BINOP_1, FUNCT_2, XCMPLX_0, XREAL_0, INT_1, ORDINAL2, RAT_1,
+      SETWISEO, NUMBERS;
  schemes BINOP_1, FUNCT_2;
 
 begin
@@ -404,3 +408,171 @@ registration
      .= multnat.(multnat.(n1,n2),n3) by Def24;
   end;
 end;
+
+Oz: 0 in NAT;
+then reconsider z = 0 as Element of COMPLEX by NUMBERS:20;
+
+Lm1: z is_a_unity_wrt addcomplex
+ proof
+  thus for c holds addcomplex.(z,c) = c
+   proof let c;
+    thus addcomplex.(z,c) = 0 + c by Def3 .= c;
+   end;
+  let c;
+  thus addcomplex.(c,z) = c + 0 by Def3 .= c;
+ end;
+
+Lm2: 0 is_a_unity_wrt addreal
+ proof
+  thus for r holds addreal.(0,r) = r
+   proof let r;
+    thus addreal.(0,r) = 0 + r by Def9 .= r;
+   end;
+  let r;
+  thus addreal.(r,0) = r + 0 by Def9 .= r;
+ end;
+
+reconsider z = 0 as Element of RAT by Oz, NUMBERS:18;
+
+Lm3: z is_a_unity_wrt addrat
+ proof
+  thus for w holds addrat.(z,w) = w
+   proof let w;
+    thus addrat.(z,w) = 0 + w by Def15 .= w;
+   end;
+  let w;
+  thus addrat.(w,z) = w + 0 by Def15 .= w;
+ end;
+
+reconsider z = 0 as Element of INT by Oz, NUMBERS:17;
+
+Lm4: z is_a_unity_wrt addint
+ proof
+  thus for i holds addint.(z,i) = i
+   proof let i;
+    thus addint.(z,i) = 0 + i by Def20 .= i;
+   end;
+  let i;
+  thus addint.(i,z) = i + 0 by Def20 .= i;
+ end;
+
+Lm5: 0 is_a_unity_wrt addnat
+ proof
+  thus for n holds addnat.(0,n) = n
+   proof let n;
+    thus addnat.(0,n) = 0 + n by Def23 .= n;
+   end;
+  let n;
+  thus addnat.(n,0) = n + 0 by Def23 .= n;
+ end;
+
+Jz: 1 in NAT;
+then reconsider z = 1 as Element of COMPLEX by NUMBERS:20;
+
+Lm6: z is_a_unity_wrt multcomplex
+ proof
+  thus for c holds multcomplex.(z,c) = c
+   proof let c;
+    thus multcomplex.(z,c) = 1 * c by Def5 .= c;
+   end;
+  let c;
+  thus multcomplex.(c,z) = c * 1 by Def5 .= c;
+ end;
+
+Lm7: 1 is_a_unity_wrt multreal
+ proof
+  thus for r holds multreal.(1,r) = r
+   proof let r;
+    thus multreal.(1,r) = 1 * r by Def11 .= r;
+   end;
+  let r;
+  thus multreal.(r,1) = r * 1 by Def11 .= r;
+ end;
+
+reconsider z = 1 as Element of RAT by Jz, NUMBERS:18;
+
+Lm8: z is_a_unity_wrt multrat
+ proof
+  thus for w holds multrat.(z,w) = w
+   proof let w;
+    thus multrat.(z,w) = 1 * w by Def17 .= w;
+   end;
+  let w;
+  thus multrat.(w,z) = w * 1 by Def17 .= w;
+ end;
+
+reconsider z = 1 as Element of INT by Jz, NUMBERS:17;
+
+Lm9: z is_a_unity_wrt multint
+ proof
+  thus for i holds multint.(z,i) = i
+   proof let i;
+    thus multint.(z,i) = 1 * i by Def22 .= i;
+   end;
+  let i;
+  thus multint.(i,z) = i * 1 by Def22 .= i;
+ end;
+
+Lm10: 1 is_a_unity_wrt multnat
+ proof
+  thus for n holds multnat.(1,n) = n
+   proof let n;
+    thus multnat.(1,n) = 1 * n by Def24 .= n;
+   end;
+  let n;
+  thus multnat.(n,1) = n * 1 by Def24 .= n;
+ end;
+
+registration
+ cluster addcomplex -> having_a_unity;
+ coherence by Lm1,SETWISEO:def 2;
+ cluster addreal -> having_a_unity;
+ coherence by Lm2,SETWISEO:def 2;
+ cluster addrat -> having_a_unity;
+ coherence by Lm3,SETWISEO:def 2;
+ cluster addint -> having_a_unity;
+ coherence by Lm4,SETWISEO:def 2;
+ cluster addnat -> having_a_unity;
+ coherence by Lm5,SETWISEO:def 2;
+ cluster multcomplex -> having_a_unity;
+ coherence by Lm6,SETWISEO:def 2;
+ cluster multreal -> having_a_unity;
+ coherence by Lm7,SETWISEO:def 2;
+ cluster multrat -> having_a_unity;
+ coherence by Lm8,SETWISEO:def 2;
+ cluster multint -> having_a_unity;
+ coherence by Lm9,SETWISEO:def 2;
+ cluster multnat -> having_a_unity;
+ coherence by Lm10,SETWISEO:def 2;
+end;
+
+theorem
+ the_unity_wrt addcomplex = 0 by Lm1,BINOP_1:def 8;
+
+theorem
+ the_unity_wrt addreal = 0 by Lm2,BINOP_1:def 8;
+
+theorem
+ the_unity_wrt addrat = 0 by Lm3,BINOP_1:def 8;
+
+theorem
+ the_unity_wrt addint = 0 by Lm4,BINOP_1:def 8;
+
+theorem
+ the_unity_wrt addnat = 0 by Lm5,BINOP_1:def 8;
+
+theorem
+ the_unity_wrt multcomplex = 1 by Lm6,BINOP_1:def 8;
+
+theorem
+ the_unity_wrt multreal = 1 by Lm7,BINOP_1:def 8;
+
+theorem
+ the_unity_wrt multrat = 1 by Lm8,BINOP_1:def 8;
+
+theorem
+ the_unity_wrt multint = 1 by Lm9,BINOP_1:def 8;
+
+theorem
+ the_unity_wrt multnat = 1 by Lm10,BINOP_1:def 8;
+

@@ -1,0 +1,1313 @@
+:: On the Fundamental Groups of Products of Topological Spaces
+::  by Artur Korni{\l}owicz
+:: 
+:: Received August 20, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, BORSUK_2, TOPALG_1, CARD_3, FINSEQ_1, WELLORD1, TOPALG_4,
+      ALGSTR_1, EQREL_1, WAYBEL20, FUNCT_1, MCART_1, FUNCT_3, RELAT_1,
+      BORSUK_1, ORDINAL2, BOOLE, SUBSET_1, RLVECT_2, BORSUK_6, SGRAPH1,
+      PARTFUN1, GRAPH_1, GROUP_6, ARYTM_3, ARYTM_1, REALSET1, VECTSP_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, EQREL_1, MCART_1, XCMPLX_0, XREAL_0,
+      RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCT_3, BINOP_1, FINSEQ_1, CARD_3,
+      REALSET2, DTCONSTR, JCT_MISC, STRUCT_0, VECTSP_1, PRALG_1, GROUP_1,
+      GROUP_6, GROUP_7, PRE_TOPC, TOPS_2, BORSUK_1, T_0TOPSP, BORSUK_2,
+      BORSUK_6, TOPALG_1;
+ constructors GROUP_7, TOPALG_1, DTCONSTR, MCART_1, JCT_MISC, PRALG_1, PRALG_2,
+      NAT_1, REAL_1, BORSUK_3, TOPALG_3, TOPS_2;
+ clusters STRUCT_0, BORSUK_1, BORSUK_2, GROUP_7, TOPALG_1, RELSET_1, ZFMISC_1,
+      XBOOLE_0, TOPS_1, TOPALG_3, FINSEQ_1, ARYTM_3, XREAL_0, VECTSP_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0, FUNCT_1, FUNCT_2, BORSUK_2, BORSUK_6, GROUP_6;
+ theorems BORSUK_1, BORSUK_2, FUNCT_2, TOPALG_3, MCART_1, FUNCT_1, ZFMISC_1,
+      JGRAPH_2, PRE_TOPC, TOPALG_1, GROUP_7, CARD_3, FINSEQ_1, FINSEQ_3,
+      PBOOLE, PRALG_1, TARSKI, BORSUK_6, BINOP_1, FUNCT_3, YELLOW12, GROUP_6;
+ schemes FUNCT_2;
+
+begin :: On the product of groups
+
+Lm1: 1 in {1,2} by TARSKI:def 2;
+Lm2: 2 in {1,2} by TARSKI:def 2;
+
+theorem T5ex:
+  for G, H being non empty HGrStr,
+      x being Element of product <*G,H*>
+   ex g being Element of G, h being Element of H st x = <*g,h*>
+proof
+  let G, H be non empty HGrStr,
+      x be Element of product <*G,H*>;
+  the carrier of product <*G,H*> = product Carrier <*G,H*> by GROUP_7:def 2;
+  then consider g being Function such that
+a1:  x = g and
+a2:  dom g = dom Carrier <*G,H*> and
+a3:  for y being set st y in dom Carrier <*G,H*> holds
+       g.y in Carrier <*G,H*>.y by CARD_3:def 5;
+a4: dom Carrier <*G,H*> = {1,2} by PBOOLE:def 3;
+   then reconsider g as FinSequence by a2,FINSEQ_1:4,def 2;
+a6: g.1 in Carrier <*G,H*>.1 by a3,a4,Lm1;
+  ex R being 1-sorted st R = <*G,H*>.1 & Carrier <*G,H*>.1 = the carrier of R
+    by Lm1,PRALG_1:def 13;
+  then reconsider g1 = g.1 as Element of G by a6,FINSEQ_1:61;
+b1: g.2 in Carrier <*G,H*>.2 by a3,a4,Lm2;
+  ex R being 1-sorted st R = <*G,H*>.2 & Carrier <*G,H*>.2 = the carrier of R
+    by Lm2,PRALG_1:def 13;
+  then reconsider h1 = g.2 as Element of H by b1,FINSEQ_1:61;
+  take g1, h1;
+  len g = 2 by a2,a4,FINSEQ_1:4,def 3;
+  hence x = <*g1,h1*> by a1,FINSEQ_1:61;
+end;
+
+definition
+  let G1, G2, H1, H2 be non empty HGrStr,
+      f be map of G1,H1,
+      g be map of G2,H2;
+  func Gr2Iso(f,g) -> map of product <*G1,G2*>, product <*H1,H2*> means :def2:
+   for x being Element of product <*G1,G2*>
+    ex x1 being Element of G1, x2 being Element of G2 st x = <*x1,x2*> &
+      it.x = <*f.x1,g.x2*>;
+existence
+proof
+  defpred P[set,set] means 
+    ex x1 being Element of G1, x2 being Element of G2 st $1 = <*x1,x2*> &
+      $2 = <*f.x1,g.x2*>;
+c1: for x being Element of product <*G1,G2*>
+     ex y being Element of product <*H1,H2*> st P[x,y]
+  proof
+    let x be Element of product <*G1,G2*>;
+    consider a being Element of G1, h being Element of G2 such that
+c2:   x = <*a,h*> by T5ex;
+    take <*f.a,g.h*>, a, h;
+    thus thesis by c2;
+  end;
+  ex h being map of product <*G1,G2*>, product <*H1,H2*> st
+   for x being Element of product <*G1,G2*> holds P[x,h.x]
+     from FUNCT_2:sch 3(c1);
+  hence thesis;
+end;
+uniqueness
+proof
+  let F, G be map of product <*G1,G2*>, product <*H1,H2*> such that
+a1: for x being Element of product <*G1,G2*>
+    ex x1 being Element of G1, x2 being Element of G2 st x = <*x1,x2*> &
+      F.x = <*f.x1,g.x2*> and
+a2: for x being Element of product <*G1,G2*>
+    ex x1 being Element of G1, x2 being Element of G2 st x = <*x1,x2*> &
+      G.x = <*f.x1,g.x2*>;
+  now
+    let x be Element of product <*G1,G2*>;
+    consider x1 being Element of G1, x2 being Element of G2 such that
+a3:   x = <*x1,x2*> and
+a4:   F.x = <*f.x1,g.x2*> by a1;
+    consider y1 being Element of G1, y2 being Element of G2 such that
+a5:   x = <*y1,y2*> and
+a6:   G.x = <*f.y1,g.y2*> by a2;
+    x1 = y1 & x2 = y2 by a3,a5,GROUP_7:2;
+    hence F.x = G.x by a4,a6;
+  end;
+  hence thesis by FUNCT_2:113;
+end;
+end;
+
+theorem
+  for G1, G2, H1, H2 being non empty HGrStr,
+      f being map of G1,H1, g being map of G2,H2,
+      x1 being Element of G1, x2 being Element of G2
+  holds Gr2Iso(f,g).<*x1,x2*> = <*f.x1,g.x2*>
+proof
+  let G1, G2, H1, H2 be non empty HGrStr,
+      f be map of G1,H1,
+      g be map of G2,H2,
+      x1 be Element of G1, x2 be Element of G2;
+  consider y1 being Element of G1, y2 being Element of G2 such that
+a1:  <*y1,y2*> = <*x1,x2*> and
+a2:  Gr2Iso(f,g).<*x1,x2*> = <*f.y1,g.y2*> by def2;
+  x1 = y1 & x2 = y2 by a1,GROUP_7:2;
+  hence Gr2Iso(f,g).<*x1,x2*> = <*f.x1,g.x2*> by a2;
+end;
+
+definition
+  let G1, G2, H1, H2 be Group,
+      f be Homomorphism of G1,H1,
+      g be Homomorphism of G2,H2;
+  redefine func Gr2Iso(f,g) ->
+           Homomorphism of product <*G1,G2*>, product <*H1,H2*>;
+coherence
+proof
+  set h = Gr2Iso(f,g);
+  let a, b be Element of product <*G1,G2*>;
+  consider a1 being Element of G1, a2 being Element of G2 such that
+a2: a = <*a1,a2*> and
+a3: h.a = <*f.a1,g.a2*> by def2;
+  consider b1 being Element of G1, b2 being Element of G2 such that
+a4: b = <*b1,b2*> and
+a5: h.b = <*f.b1,g.b2*> by def2;
+  consider r1 being Element of G1, r2 being Element of G2 such that
+a6: a*b = <*r1,r2*> and
+a7: h.(a*b) = <*f.r1,g.r2*> by def2;
+  G1 = <*G1,G2*>.1 & a.1 = a1 & b.1 = b1 by a2,a4,FINSEQ_1:61;
+  then a1*b1 = <*r1,r2*>.1 by a6,Lm1,GROUP_7:4;
+  then
+a9: f.r1 = f.(a1*b1) by FINSEQ_1:61
+     .= f.a1 * f.b1 by GROUP_6:def 7;
+  G2 = <*G1,G2*>.2 & a.2 = a2 & b.2 = b2 by a2,a4,FINSEQ_1:61;
+  then a2*b2 = <*r1,r2*>.2 by a6,Lm2,GROUP_7:4;
+  then g.r2 = g.(a2*b2) by FINSEQ_1:61
+     .= g.a2 * g.b2 by GROUP_6:def 7;
+  hence h.(a*b) = h.a * h.b by a3,a5,a7,a9,GROUP_7:32;
+end;
+end;
+
+theorem T5griso1:
+  for G1, G2, H1, H2 being non empty HGrStr,
+      f being map of G1,H1,
+      g being map of G2,H2 st f is one-to-one & g is one-to-one
+  holds Gr2Iso(f,g) is one-to-one
+proof
+  let G1, G2, H1, H2 be non empty HGrStr;
+  let f be map of G1,H1,
+      g be map of G2,H2 such that
+a1: f is one-to-one and
+a2: g is one-to-one;
+  set h = Gr2Iso(f,g);
+  let a, b be set;
+  assume a in dom h;
+  then consider a1 being Element of G1, a2 being Element of G2 such that
+a5: a = <*a1,a2*> and
+a6: h.a = <*f.a1,g.a2*> by def2;
+  assume b in dom h;
+  then consider b1 being Element of G1, b2 being Element of G2 such that
+a7: b = <*b1,b2*> and
+a8: h.b = <*f.b1,g.b2*> by def2;
+b1: dom f = the carrier of G1 & dom g = the carrier of G2 by FUNCT_2:def 1;
+  assume h.a = h.b;
+  then f.a1 = f.b1 & g.a2 = g.b2 by a6,a8,GROUP_7:2;
+  then a1 = b1 & a2 = b2 by a1,a2,b1,FUNCT_1:def 8;
+  hence a = b by a5,a7;
+end;
+
+theorem T5griso2:
+  for G1, G2, H1, H2 being non empty HGrStr,
+      f being map of G1,H1,
+      g being map of G2,H2 st f is onto & g is onto
+  holds Gr2Iso(f,g) is onto
+proof
+  let G1, G2, H1, H2 be non empty HGrStr;
+  let f be map of G1,H1,
+      g be map of G2,H2 such that
+a1: rng f = the carrier of H1 and
+a2: rng g = the carrier of H2;
+  set h = Gr2Iso(f,g);
+  thus rng h c= the carrier of product <*H1,H2*>;
+  let a be set;
+  assume a in the carrier of product <*H1,H2*>;
+  then consider x being Element of H1, y being Element of H2 such that
+b1:  a = <*x,y*> by T5ex;
+  consider a1 being set such that
+b2: a1 in dom f and
+b3: f.a1 = x by a1,FUNCT_1:def 5;
+  consider a2 being set such that
+b4: a2 in dom g and
+b5: g.a2 = y by a2,FUNCT_1:def 5;
+a4: dom h = the carrier of product <*G1,G2*> by FUNCT_2:def 1;
+  for g being Element of G1, h being Element of G2 holds
+   <*g,h*> in the carrier of product <*G1,G2*>;
+  then 
+b6: <*a1,a2*> in dom h by a4,b2,b4;
+  then consider k1 being Element of G1, k2 being Element of G2 such that
+b7: <*a1,a2*> = <*k1,k2*> and
+b8: h.<*a1,a2*> = <*f.k1,g.k2*> by def2;
+  a1 = k1 & a2 = k2 by b7,GROUP_7:2;
+  hence thesis by b1,b3,b5,b8,b6,FUNCT_1:def 5;
+end;
+
+theorem T5griso3:
+  for G1, G2, H1, H2 being Group,
+      f being Homomorphism of G1,H1,
+      g being Homomorphism of G2,H2 st f is_isomorphism & g is_isomorphism
+   holds Gr2Iso(f,g) is_isomorphism
+proof
+  let G1, G2, H1, H2 be Group,
+       h1 be Homomorphism of G1,H1,
+       h2 be Homomorphism of G2,H2 such that
+a1: h1 is_isomorphism and
+a2: h2 is_isomorphism;
+  set h = Gr2Iso(h1,h2);
+  h1 is one-to-one & h2 is one-to-one by a1,a2,GROUP_6:70;
+   then
+a3: h is one-to-one by T5griso1;
+  rng h1 = the carrier of H1 & rng h2 = the carrier of H2 by a1,a2,GROUP_6:70;
+  then h1 is onto & h2 is onto by FUNCT_2:def 3;
+  then h is onto by T5griso2;
+  then rng h = the carrier of product <*H1,H2*> by FUNCT_2:def 3;
+  hence thesis by a3,GROUP_6:70;
+end;
+
+theorem T5griso:
+  for G1, G2, H1, H2 being Group st G1,H1 are_isomorphic & G2,H2 are_isomorphic
+  holds product <*G1,G2*>, product <*H1,H2*> are_isomorphic
+proof
+  let G1, G2, H1, H2 be Group;
+  given h1 being Homomorphism of G1,H1 such that
+a1: h1 is_isomorphism;
+  given h2 being Homomorphism of G2,H2 such that
+a2: h2 is_isomorphism;
+  take h = Gr2Iso(h1,h2);
+  thus thesis by a1,a2,T5griso3;
+end;
+
+begin :: On the fundamental groups of products of topological spaces
+
+set I = the carrier of I[01];
+reconsider j0 = 0, j1 = 1 as Point of I[01] by BORSUK_1:def 17,def 18;
+
+reserve
+  S, T, Y for non empty TopSpace,
+  s, s1, s2, s3 for Point of S,
+  t, t1, t2, t3 for Point of T,
+  l1, l2 for Path of [s1,t1],[s2,t2],
+  H for Homotopy of l1,l2;
+
+theorem T01:
+  for f, g being Function st dom f = dom g holds pr1 <:f,g:> = f
+proof
+  let f, g be Function such that
+a0: dom f = dom g;
+a1: dom pr1 <:f,g:> = dom <:f,g:> by MCART_1:def 12;
+a3: dom <:f,g:> = dom f /\ dom g by FUNCT_3:def 8
+    .= dom f by a0;
+  for x being set st x in dom pr1 <:f,g:> holds pr1 <:f,g:>.x = f.x
+  proof
+    let x be set such that
+a2:   x in dom pr1 <:f,g:>;
+    thus pr1 <:f,g:>.x = (<:f,g:>.x)`1 by a1,a2,MCART_1:def 12
+      .= [f.x,g.x]`1 by a1,a2,FUNCT_3:def 8
+      .= f.x by MCART_1:def 1;
+  end;
+  hence pr1 <:f,g:> = f by a1,a3,FUNCT_1:9;
+end;
+
+theorem T02:
+  for f, g being Function st dom f = dom g holds pr2 <:f,g:> = g
+proof
+  let f, g be Function such that
+a0: dom f = dom g;
+a1: dom pr2 <:f,g:> = dom <:f,g:> by MCART_1:def 13;
+a3: dom <:f,g:> = dom f /\ dom g by FUNCT_3:def 8
+    .= dom g by a0;
+  for x being set st x in dom pr2 <:f,g:> holds pr2 <:f,g:>.x = g.x
+  proof
+    let x be set such that
+a2:   x in dom pr2 <:f,g:>;
+    thus pr2 <:f,g:>.x = (<:f,g:>.x)`2 by a1,a2,MCART_1:def 13
+      .= [f.x,g.x]`2 by a1,a2,FUNCT_3:def 8
+      .= g.x by MCART_1:def 2;
+  end;
+  hence pr2 <:f,g:> = g by a1,a3,FUNCT_1:9;
+end;
+
+definition
+  let S, T, Y;
+  let f be map of Y, S;
+  let g be map of Y, T;
+  redefine func <:f,g:> -> map of Y,[:S,T:];
+coherence
+proof
+  dom f = the carrier of Y & dom g = the carrier of Y by FUNCT_2:def 1;
+  then
+a1: dom <:f,g:> = the carrier of Y by FUNCT_3:70;
+  the carrier of [:S,T:] = [: the carrier of S, the carrier of T:]
+    by BORSUK_1:def 5;
+  hence thesis by a1;
+end;
+end;
+
+definition
+  let S, T, Y;
+  let f be map of Y, [:S,T:];
+  redefine func pr1 f -> map of Y,S;
+coherence
+proof
+a0: the carrier of [:S,T:] = [:the carrier of S,the carrier of T:]
+    by BORSUK_1:def 5;
+a1: dom pr1 f = dom f by MCART_1:def 12;
+a2: dom f = the carrier of Y by FUNCT_2:def 1;
+  rng pr1 f c= the carrier of S
+  proof
+    let y be set;
+    assume y in rng pr1 f;
+    then consider x being set such that
+a3:   x in dom pr1 f and
+a4:   (pr1 f).x = y by FUNCT_1:def 5;
+a6: (pr1 f).x = (f.x)`1 by a3,a1,MCART_1:def 12;
+    f.x in rng f by a1,a3,FUNCT_1:def 5;
+    hence y in the carrier of S by a0,a4,a6,MCART_1:10;
+  end;
+  hence thesis by a1,a2,FUNCT_2:4;
+end;
+  redefine func pr2 f -> map of Y,T;
+coherence
+proof
+a0: the carrier of [:S,T:] = [:the carrier of S,the carrier of T:]
+    by BORSUK_1:def 5;
+a1: dom pr2 f = dom f by MCART_1:def 13;
+a2: dom f = the carrier of Y by FUNCT_2:def 1;
+  rng pr2 f c= the carrier of T
+  proof
+    let y be set;
+    assume y in rng pr2 f;
+    then consider x being set such that
+a3:   x in dom pr2 f and
+a4:   (pr2 f).x = y by FUNCT_1:def 5;
+a6: (pr2 f).x = (f.x)`2 by a3,a1,MCART_1:def 13;
+    f.x in rng f by a1,a3,FUNCT_1:def 5;
+    hence y in the carrier of T by a0,a4,a6,MCART_1:10;
+  end;
+  hence thesis by a1,a2,FUNCT_2:4;
+end;
+end;
+
+theorem T5c1:
+  for f being continuous map of Y,[:S,T:] holds pr1 f is continuous
+proof
+  let f be continuous map of Y,[:S,T:];
+  set g = pr1 f;
+  for p being Point of Y, V being Subset of S
+    st g.p in V & V is open holds
+    ex W being Subset of Y st p in W & W is open & g.:W c= V
+  proof
+    let p be Point of Y,
+        V be Subset of S such that
+a1:   g.p in V and
+a2:   V is open;
+    the carrier of [:S,T:] = [:the carrier of S,the carrier of T:]
+      by BORSUK_1:def 5;
+    then consider s, t being set such that
+      s in the carrier of S and
+b2:   t in the carrier of T and
+b3:   f.p = [s,t] by ZFMISC_1:def 2;
+b4: [#]T = the carrier of T by PRE_TOPC:12;
+c3: dom f = the carrier of Y by FUNCT_2:def 1;
+    then g.p = (f.p)`1 by MCART_1:def 12
+        .= s by b3,MCART_1:def 1;
+    then
+a6: f.p in [:V,[#]T:] by a1,b2,b3,b4,ZFMISC_1:106;
+    [:V,[#]T:] is open by a2,BORSUK_1:46;
+    then consider W being Subset of Y such that
+a3:   p in W and
+a4:   W is open and
+a5:   f.:W c= [:V,[#]T:] by a6,JGRAPH_2:20;
+    take W;
+    thus p in W & W is open by a3,a4;
+    let y be set;
+    assume y in g.:W;
+    then consider x being Point of Y such that
+c1:   x in W and
+c2:   y = g.x by FUNCT_2:116;
+c4: g.x = (f.x)`1 by c3,MCART_1:def 12;
+    f.x in f.:W by c1,c3,FUNCT_1:def 12;
+    hence y in V by c2,c4,a5,MCART_1:10;
+  end;
+  hence thesis by JGRAPH_2:20;
+end;
+
+theorem T5c2:
+  for f being continuous map of Y,[:S,T:] holds pr2 f is continuous
+proof
+  let f be continuous map of Y,[:S,T:];
+  set g = pr2 f;
+  for p being Point of Y, V being Subset of T
+    st g.p in V & V is open holds
+    ex W being Subset of Y st p in W & W is open & g.:W c= V
+  proof
+    let p be Point of Y,
+        V be Subset of T such that
+a1:   g.p in V and
+a2:   V is open;
+    the carrier of [:S,T:] = [:the carrier of S,the carrier of T:]
+      by BORSUK_1:def 5;
+    then consider s, t being set such that
+b2:   s in the carrier of S and
+      t in the carrier of T and
+b3:   f.p = [s,t] by ZFMISC_1:def 2;
+b4: [#]S = the carrier of S by PRE_TOPC:12;
+c3: dom f = the carrier of Y by FUNCT_2:def 1;
+    then g.p = (f.p)`2 by MCART_1:def 13
+        .= t by b3,MCART_1:def 2;
+    then
+a6: f.p in [:[#]S,V:] by a1,b2,b3,b4,ZFMISC_1:106;
+    [:[#]S,V:] is open by a2,BORSUK_1:46;
+    then consider W being Subset of Y such that
+a3:   p in W and
+a4:   W is open and
+a5:   f.:W c= [:[#]S,V:] by a6,JGRAPH_2:20;
+    take W;
+    thus p in W & W is open by a3,a4;
+    let y be set;
+    assume y in g.:W;
+    then consider x being Point of Y such that
+c1:   x in W and
+c2:   y = g.x by FUNCT_2:116;
+c4: g.x = (f.x)`2 by c3,MCART_1:def 13;
+    f.x in f.:W by c1,c3,FUNCT_1:def 12;
+    hence y in V by c2,c4,a5,MCART_1:10;
+  end;
+  hence thesis by JGRAPH_2:20;
+end;
+
+theorem T5con1a:
+  [s1,t1],[s2,t2] are_connected implies s1,s2 are_connected
+proof
+  given L being map of I[01], [:S,T:] such that
+aa: L is continuous and
+b1: L.0 = [s1,t1] and
+b2: L.1 = [s2,t2];
+  take f = pr1 L;
+  thus f is continuous by aa,T5c1;
+a0: dom f = I by FUNCT_2:def 1;
+a4: dom f = dom L by MCART_1:def 12;
+  then j0 in dom L by a0;
+  hence f.0 = (L.0)`1 by MCART_1:def 12
+       .= s1 by b1,MCART_1:def 1;
+  j1 in dom L by a0,a4;
+  hence f.1 = (L.1)`1 by MCART_1:def 12
+     .= s2 by b2,MCART_1:def 1;
+end;
+
+theorem T5con2a:
+  [s1,t1],[s2,t2] are_connected implies t1,t2 are_connected
+proof
+  given L being map of I[01], [:S,T:] such that
+aa: L is continuous and
+b1: L.0 = [s1,t1] and
+b2: L.1 = [s2,t2];
+  take f = pr2 L;
+  thus f is continuous by aa,T5c2;
+a0: dom f = I by FUNCT_2:def 1;
+a4: dom f = dom L by MCART_1:def 13;
+  then j0 in dom L by a0;
+  hence f.0 = (L.0)`2 by MCART_1:def 13
+       .= t1 by b1,MCART_1:def 2;
+  j1 in dom L by a0,a4;
+  hence f.1 = (L.1)`2 by MCART_1:def 13
+     .= t2 by b2,MCART_1:def 2;
+end;
+
+theorem T5con1:
+  [s1,t1],[s2,t2] are_connected implies
+  for L being Path of [s1,t1],[s2,t2] holds pr1 L is Path of s1,s2
+proof
+  assume
+aa: [s1,t1], [s2,t2] are_connected;
+  let L be Path of [s1,t1],[s2,t2];
+  set f = pr1 L;
+a0: dom f = I by FUNCT_2:def 1;
+  L is continuous by aa,BORSUK_2:def 2;
+  then
+a1: f is continuous by T5c1;
+a4: dom f = dom L by MCART_1:def 12;
+  then j0 in dom L by a0;
+  then
+a2: f.0 = (L.0)`1 by MCART_1:def 12
+       .= [s1,t1]`1 by aa,BORSUK_2:def 2
+       .= s1 by MCART_1:def 1;
+  j1 in dom L by a0,a4;
+  then
+a3: f.1 = (L.1)`1 by MCART_1:def 12
+     .= [s2,t2]`1 by aa,BORSUK_2:def 2
+     .= s2 by MCART_1:def 1;
+  then s1,s2 are_connected by a1,a2,BORSUK_2:def 1;
+  hence thesis by a1,a2,a3,BORSUK_2:def 2;
+end;
+
+theorem T5con2:
+  [s1,t1],[s2,t2] are_connected implies
+  for L being Path of [s1,t1],[s2,t2] holds pr2 L is Path of t1,t2
+proof
+  assume
+aa:  [s1,t1], [s2,t2] are_connected;
+  let L be Path of [s1,t1],[s2,t2];
+  set f = pr2 L;
+a0: dom f = I by FUNCT_2:def 1;
+  L is continuous by aa,BORSUK_2:def 2;
+  then
+a1: f is continuous by T5c2;
+a4: dom f = dom L by MCART_1:def 13;
+  then j0 in dom L by a0;
+  then
+a2: f.0 = (L.0)`2 by MCART_1:def 13
+       .= [s1,t1]`2 by aa,BORSUK_2:def 2
+       .= t1 by MCART_1:def 2;
+  j1 in dom L by a0,a4;
+  then
+a3: f.1 = (L.1)`2 by MCART_1:def 13
+     .= [s2,t2]`2 by aa,BORSUK_2:def 2
+     .= t2 by MCART_1:def 2;
+  then t1,t2 are_connected by a1,a2,BORSUK_2:def 1;
+  hence thesis by a1,a2,a3,BORSUK_2:def 2;
+end;
+
+theorem T5con12a:
+  s1,s2 are_connected & t1,t2 are_connected implies
+  [s1,t1],[s2,t2] are_connected
+proof
+  given f being map of I[01], S such that
+c1:  f is continuous and
+c2:  f.0 = s1 and
+c3:  f.1 = s2;
+  given g being map of I[01], T such that
+c4:  g is continuous and
+c5:  g.0 = t1 and
+c6:  g.1 = t2;
+  take <:f,g:>;
+  thus <:f,g:> is continuous by c1,c4,YELLOW12:41;
+a3: dom f = I & dom g = I by FUNCT_2:def 1;
+  hence <:f,g:>.0 = [f.j0,g.j0] by FUNCT_3:69
+   .= [s1,t1] by c2,c5;
+  thus <:f,g:>.1 = [f.j1,g.j1] by a3,FUNCT_3:69
+   .= [s2,t2] by c3,c6;
+end;
+
+theorem T5con12:
+  s1,s2 are_connected & t1,t2 are_connected implies
+  for L1 being Path of s1,s2, L2 being Path of t1,t2 holds
+  <:L1,L2:> is Path of [s1,t1],[s2,t2]
+proof
+  assume that
+b1: s1,s2 are_connected and
+b2: t1,t2 are_connected;
+  let L1 be Path of s1,s2,
+      L2 be Path of t1,t2;
+  L1 is continuous & L2 is continuous by b1,b2,BORSUK_2:def 2;
+  then
+a1: <:L1,L2:> is continuous by YELLOW12:41;
+a3: dom L1 = I & dom L2 = I by FUNCT_2:def 1;
+  then
+a2: <:L1,L2:>.j0 = [L1.j0,L2.j0] by FUNCT_3:69
+   .= [s1,L2.j0] by b1,BORSUK_2:def 2
+   .= [s1,t1] by b2,BORSUK_2:def 2;
+a4: <:L1,L2:>.j1 = [L1.j1,L2.j1] by a3,FUNCT_3:69
+   .= [s2,L2.j1] by b1,BORSUK_2:def 2
+   .= [s2,t2] by b2,BORSUK_2:def 2;
+  then [s1,t1], [s2,t2] are_connected by a1,a2,BORSUK_2:def 1;
+  hence thesis by a1,a2,a4,BORSUK_2:def 2;
+end;
+
+definition
+  let S, T be non empty arcwise_connected TopSpace,
+      s1, s2 be Point of S,
+      t1, t2 be Point of T,
+      L1 be Path of s1,s2, L2 be Path of t1,t2;
+  redefine func <:L1,L2:> -> Path of [s1,t1],[s2,t2];
+coherence
+proof
+  s1,s2 are_connected & t1,t2 are_connected by BORSUK_2:def 3;
+  hence thesis by T5con12;
+end;
+end;
+
+definition
+  let S, T be non empty TopSpace,
+      s be Point of S, t be Point of T,
+      L1 be Loop of s, L2 be Loop of t;
+  redefine func <:L1,L2:> -> Loop of [s,t];
+coherence by T5con12;
+end;
+
+registration
+  let S, T be non empty arcwise_connected TopSpace;
+  cluster [:S,T:] -> arcwise_connected;
+coherence
+proof
+  let a, b be Point of [:S,T:];
+  consider a1 being Point of S, a2 being Point of T such that
+b1:  a = [a1,a2] by BORSUK_1:50;
+  consider b1 being Point of S, b2 being Point of T such that
+b2:  b = [b1,b2] by BORSUK_1:50;
+  a1,b1 are_connected & a2,b2 are_connected by BORSUK_2:def 3;
+  hence thesis by b1,b2,T5con12a;
+end;
+end;
+
+definition
+  let S, T be non empty arcwise_connected TopSpace,
+      s1, s2 be Point of S,
+      t1, t2 be Point of T,
+      L be Path of [s1,t1],[s2,t2];
+  redefine func pr1 L -> Path of s1,s2;
+coherence
+proof
+  [s1,t1],[s2,t2] are_connected by BORSUK_2:def 3;
+  hence thesis by T5con1;
+end;
+  redefine func pr2 L -> Path of t1,t2;
+coherence
+proof
+  [s1,t1],[s2,t2] are_connected by BORSUK_2:def 3;
+  hence thesis by T5con2;
+end;
+end;
+
+definition
+  let S, T be non empty TopSpace,
+      s be Point of S,
+      t be Point of T,
+      L be Loop of [s,t];
+  redefine func pr1 L -> Loop of s;
+coherence by T5con1;
+  redefine func pr2 L -> Loop of t;
+coherence by T5con2;
+end;
+
+LmHOM1:
+l1,l2 are_homotopic implies pr1 H is continuous &
+for a being Point of I[01] holds
+  pr1 H.(a,0) = pr1 l1.a & pr1 H.(a,1) = pr1 l2.a &
+for b being Point of I[01] holds pr1 H.(0,b) = s1 & pr1 H.(1,b) = s2
+proof
+  assume
+Z0: l1,l2 are_homotopic;
+  then H is continuous by BORSUK_6:def 13;
+  hence pr1 H is continuous by T5c1;
+  let a be Point of I[01];
+a1: dom H = the carrier of [:I[01],I[01]:] by FUNCT_2:def 1;
+a2: dom l1 = I by FUNCT_2:def 1;
+a3: dom l2 = I by FUNCT_2:def 1;
+  thus pr1 H.(a,0) = pr1 H. [a,j0] by BINOP_1:def 1
+    .= (H. [a,j0])`1 by a1,MCART_1:def 12
+    .= (H.(a,j0))`1 by BINOP_1:def 1
+    .= (l1.a)`1 by Z0,BORSUK_6:def 13
+    .= pr1 l1.a by a2,MCART_1:def 12;
+  thus pr1 H.(a,1) = pr1 H. [a,j1] by BINOP_1:def 1
+    .= (H. [a,j1])`1 by a1,MCART_1:def 12
+    .= (H.(a,j1))`1 by BINOP_1:def 1
+    .= (l2.a)`1 by Z0,BORSUK_6:def 13
+    .= pr1 l2.a by a3,MCART_1:def 12;
+  let b be Point of I[01];
+  thus pr1 H.(0,b) = pr1 H. [j0,b] by BINOP_1:def 1
+    .= (H. [j0,b])`1 by a1,MCART_1:def 12
+    .= (H.(j0,b))`1 by BINOP_1:def 1
+    .= [s1,t1]`1 by Z0,BORSUK_6:def 13
+    .= s1 by MCART_1:def 1;
+  thus pr1 H.(1,b) = pr1 H. [j1,b] by BINOP_1:def 1
+    .= (H. [j1,b])`1 by a1,MCART_1:def 12
+    .= (H.(j1,b))`1 by BINOP_1:def 1
+    .= [s2,t2]`1 by Z0,BORSUK_6:def 13
+    .= s2 by MCART_1:def 1;
+end;
+
+LmHOM2:
+l1,l2 are_homotopic implies pr2 H is continuous &
+for a being Point of I[01] holds
+  pr2 H.(a,0) = pr2 l1.a & pr2 H.(a,1) = pr2 l2.a &
+for b being Point of I[01] holds pr2 H.(0,b) = t1 & pr2 H.(1,b) = t2
+proof
+  assume
+Z0: l1,l2 are_homotopic;
+  then H is continuous by BORSUK_6:def 13;
+  hence pr2 H is continuous by T5c2;
+  let a be Point of I[01];
+a1: dom H = the carrier of [:I[01],I[01]:] by FUNCT_2:def 1;
+a2: dom l1 = I by FUNCT_2:def 1;
+a3: dom l2 = I by FUNCT_2:def 1;
+  thus pr2 H.(a,0) = pr2 H. [a,j0] by BINOP_1:def 1
+    .= (H. [a,j0])`2 by a1,MCART_1:def 13
+    .= (H.(a,j0))`2 by BINOP_1:def 1
+    .= (l1.a)`2 by Z0,BORSUK_6:def 13
+    .= pr2 l1.a by a2,MCART_1:def 13;
+  thus pr2 H.(a,1) = pr2 H. [a,j1] by BINOP_1:def 1
+    .= (H. [a,j1])`2 by a1,MCART_1:def 13
+    .= (H.(a,j1))`2 by BINOP_1:def 1
+    .= (l2.a)`2 by Z0,BORSUK_6:def 13
+    .= pr2 l2.a by a3,MCART_1:def 13;
+  let b be Point of I[01];
+  thus pr2 H.(0,b) = pr2 H. [j0,b] by BINOP_1:def 1
+    .= (H. [j0,b])`2 by a1,MCART_1:def 13
+    .= (H.(j0,b))`2 by BINOP_1:def 1
+    .= [s1,t1]`2 by Z0,BORSUK_6:def 13
+    .= t1 by MCART_1:def 2;
+  thus pr2 H.(1,b) = pr2 H. [j1,b] by BINOP_1:def 1
+    .= (H. [j1,b])`2 by a1,MCART_1:def 13
+    .= (H.(j1,b))`2 by BINOP_1:def 1
+    .= [s2,t2]`2 by Z0,BORSUK_6:def 13
+    .= t2 by MCART_1:def 2;
+end;
+
+theorem
+  for p, q being Path of s1,s2 st
+    p = pr1 l1 & q = pr1 l2 & l1,l2 are_homotopic holds
+   pr1 H is Homotopy of p,q
+proof
+  let p, q be Path of s1,s2 such that
+b1: p = pr1 l1 & q = pr1 l2 and
+a1: l1,l2 are_homotopic;
+  thus p,q are_homotopic
+  proof
+    take pr1 H;
+    thus thesis by a1,b1,LmHOM1;
+  end;
+  thus thesis by a1,b1,LmHOM1;
+end;
+  
+theorem
+  for p, q being Path of t1,t2 st
+    p = pr2 l1 & q = pr2 l2 & l1,l2 are_homotopic holds
+   pr2 H is Homotopy of p,q
+proof
+  let p, q be Path of t1,t2 such that
+b1: p = pr2 l1 & q = pr2 l2 and
+a1: l1,l2 are_homotopic;
+  thus p,q are_homotopic
+  proof
+    take pr2 H;
+    thus thesis by a1,b1,LmHOM2;
+  end;
+  thus thesis by a1,b1,LmHOM2;
+end;
+
+theorem T5are1:
+  for p, q being Path of s1,s2 st
+    p = pr1 l1 & q = pr1 l2 & l1,l2 are_homotopic holds
+   p,q are_homotopic
+proof
+  let p, q be Path of s1,s2 such that
+s1: p = pr1 l1 & q = pr1 l2 and
+a1: l1,l2 are_homotopic;
+  consider f being map of [:I[01],I[01]:], [:S,T:] such that
+a2: f is continuous &
+    for a being Point of I[01] holds f.(a,0) = l1.a & f.(a,1) = l2.a &
+    for b being Point of I[01] holds f.(0,b) = [s1,t1] & f.(1,b) = [s2,t2]
+      by a1,BORSUK_2:def 7;
+  take pr1 f;
+  f is Homotopy of l1,l2 by a1,a2,BORSUK_6:def 13;
+  hence thesis by a1,s1,LmHOM1;
+end;
+
+theorem T5are2:
+  for p, q being Path of t1,t2 st
+    p = pr2 l1 & q = pr2 l2 & l1,l2 are_homotopic holds
+   p,q are_homotopic
+proof
+  let p, q be Path of t1,t2 such that
+s1: p = pr2 l1 & q = pr2 l2 and
+a1: l1,l2 are_homotopic;
+  consider f being map of [:I[01],I[01]:], [:S,T:] such that
+a2: f is continuous &
+    for a being Point of I[01] holds f.(a,0) = l1.a & f.(a,1) = l2.a &
+    for b being Point of I[01] holds f.(0,b) = [s1,t1] & f.(1,b) = [s2,t2]
+      by a1,BORSUK_2:def 7;
+  take pr2 f;
+  f is Homotopy of l1,l2 by a1,a2,BORSUK_6:def 13;
+  hence thesis by a1,s1,LmHOM2;
+end;
+
+LmHOM12:
+for p, q being Path of s1,s2, x, y being Path of t1,t2,
+    f being Homotopy of p,q,
+    g being Homotopy of x,y st
+p = pr1 l1 & q = pr1 l2 & x = pr2 l1 & y = pr2 l2 &
+p,q are_homotopic & x,y are_homotopic holds
+<:f,g:> is continuous &
+for a being Point of I[01] holds <:f,g:>.(a,0) = l1.a & <:f,g:>.(a,1) = l2.a &
+for b being Point of I[01] holds <:f,g:>.(0,b) = [s1,t1] &
+<:f,g:>.(1,b) = [s2,t2]
+proof
+  let p, q be Path of s1,s2,
+      x, y be Path of t1,t2,
+      f be Homotopy of p,q,
+      g be Homotopy of x,y such that
+s1: p = pr1 l1 and
+s3: q = pr1 l2 and
+s2: x = pr2 l1 and
+s4: y = pr2 l2 and
+k1: p,q are_homotopic and
+k2: x,y are_homotopic;
+  set h = <:f,g:>;
+  f is continuous & g is continuous by k1,k2,BORSUK_6:def 13;
+  hence h is continuous by YELLOW12:41;
+  let a be Point of I[01];
+a3: dom f = the carrier of [:I[01],I[01]:] &
+   dom g = the carrier of [:I[01],I[01]:] by FUNCT_2:def 1;
+b1: dom l1 = I by FUNCT_2:def 1;
+b2: dom l2 = I by FUNCT_2:def 1;
+a0: the carrier of [:S,T:] = [:the carrier of S,the carrier of T:]
+    by BORSUK_1:def 5;
+  thus h.(a,0) = h. [a,j0] by BINOP_1:def 1
+    .= [f. [a,j0], g. [a,j0]] by a3,FUNCT_3:69
+    .= [f.(a,j0), g. [a,j0]] by BINOP_1:def 1
+    .= [f.(a,j0), g.(a,j0)] by BINOP_1:def 1
+    .= [pr1 l1.a, g.(a,j0)] by s1,k1,BORSUK_6:def 13
+    .= [pr1 l1.a, pr2 l1.a] by s2,k2,BORSUK_6:def 13
+    .= [(l1.a)`1, pr2 l1.a] by b1,MCART_1:def 12
+    .= [(l1.a)`1, (l1.a)`2] by b1,MCART_1:def 13
+    .= l1.a by a0,MCART_1:23;
+  thus h.(a,1) = h. [a,j1] by BINOP_1:def 1
+    .= [f. [a,j1], g. [a,j1]] by a3,FUNCT_3:69
+    .= [f.(a,j1), g. [a,j1]] by BINOP_1:def 1
+    .= [f.(a,j1), g.(a,j1)] by BINOP_1:def 1
+    .= [pr1 l2.a, g.(a,j1)] by s3,k1,BORSUK_6:def 13
+    .= [pr1 l2.a, pr2 l2.a] by s4,k2,BORSUK_6:def 13
+    .= [(l2.a)`1, pr2 l2.a] by b2,MCART_1:def 12
+    .= [(l2.a)`1, (l2.a)`2] by b2,MCART_1:def 13
+    .= l2.a by a0,MCART_1:23;
+  let b be Point of I[01];
+  thus h.(0,b) = h. [j0,b] by BINOP_1:def 1
+    .= [f. [j0,b], g. [j0,b]] by a3,FUNCT_3:69
+    .= [f.(j0,b), g. [j0,b]] by BINOP_1:def 1
+    .= [f.(j0,b), g.(j0,b)] by BINOP_1:def 1
+    .= [s1, g.(j0,b)] by k1,BORSUK_6:def 13
+    .= [s1,t1] by k2,BORSUK_6:def 13;
+  thus h.(1,b) = h. [j1,b] by BINOP_1:def 1
+    .= [f. [j1,b], g. [j1,b]] by a3,FUNCT_3:69
+    .= [f.(j1,b), g. [j1,b]] by BINOP_1:def 1
+    .= [f.(j1,b), g.(j1,b)] by BINOP_1:def 1
+    .= [s2, g.(j1,b)] by k1,BORSUK_6:def 13
+    .= [s2,t2] by k2,BORSUK_6:def 13;
+end;
+
+theorem
+  for p, q being Path of s1,s2, x, y being Path of t1,t2,
+      f being Homotopy of p,q,
+      g being Homotopy of x,y st
+   p = pr1 l1 & q = pr1 l2 & x = pr2 l1 & y = pr2 l2 &
+   p,q are_homotopic & x,y are_homotopic holds
+  <:f,g:> is Homotopy of l1,l2
+proof
+  let p, q be Path of s1,s2,
+      x, y be Path of t1,t2,
+      f be Homotopy of p,q,
+      g be Homotopy of x,y such that
+s1: p = pr1 l1 & q = pr1 l2 & x = pr2 l1 & y = pr2 l2 &
+    p,q are_homotopic & x,y are_homotopic;
+  thus l1,l2 are_homotopic
+  proof
+    take <:f,g:>;
+    thus thesis by s1,LmHOM12;
+  end;
+  thus thesis by s1,LmHOM12;
+end;
+
+theorem T512:
+  for p, q being Path of s1,s2, x, y being Path of t1, t2 st
+    p = pr1 l1 & q = pr1 l2 & x = pr2 l1 & y = pr2 l2 &
+    p,q are_homotopic & x,y are_homotopic holds
+  l1, l2 are_homotopic
+proof
+  let p, q be Path of s1,s2,
+      x, y be Path of t1, t2 such that
+s1: p = pr1 l1 and
+s3: q = pr1 l2 and
+s2: x = pr2 l1 and
+s4: y = pr2 l2 and
+a0: p,q are_homotopic and
+z1: x,y are_homotopic;
+  consider f being map of [:I[01],I[01]:], S such that
+a1: f is continuous &
+    for a being Point of I[01] holds f.(a,0) = pr1 l1.a & f.(a,1) = pr1 l2.a &
+    for b being Point of I[01] holds f.(0,b) = s1 & f.(1,b) = s2
+      by a0,s1,s3,BORSUK_2:def 7;
+  consider g being map of [:I[01],I[01]:], T such that
+a2: g is continuous &
+    for a being Point of I[01] holds g.(a,0) = pr2 l1.a & g.(a,1) = pr2 l2.a &
+    for b being Point of I[01] holds g.(0,b) = t1 & g.(1,b) = t2
+      by z1,s2,s4,BORSUK_2:def 7;
+  take <:f,g:>;
+  f is Homotopy of p,q & g is Homotopy of x,y
+    by a0,z1,a1,a2,s1,s2,s3,s4,BORSUK_6:def 13;
+  hence thesis by a0,z1,s1,s2,s3,s4,LmHOM12;
+end;
+
+theorem T5_1:
+  for l1 being Path of [s1,t1],[s2,t2],
+      l2 being Path of [s2,t2],[s3,t3],
+      p1 being Path of s1,s2,
+      p2 being Path of s2,s3 st
+   [s1,t1],[s2,t2] are_connected & [s2,t2],[s3,t3] are_connected &
+   p1 = pr1 l1 & p2 = pr1 l2 holds
+  pr1 (l1+l2) = p1 + p2
+proof
+  let l1 be Path of [s1,t1],[s2,t2],
+      l2 be Path of [s2,t2],[s3,t3],
+      p1 be Path of s1,s2,
+      p2 be Path of s2,s3 such that
+b1: [s1,t1],[s2,t2] are_connected and
+b2: [s2,t2],[s3,t3] are_connected and
+a1: p1 = pr1 l1 and
+a2: p2 = pr1 l2;
+a0: s1,s2 are_connected by b1,T5con1a;
+b0: s2,s3 are_connected by b2,T5con1a;
+  now
+    let x be Element of I[01];
+a4: dom (l1+l2) = I by FUNCT_2:def 1;
+a7: dom l1 = I by FUNCT_2:def 1;
+a8: dom l2 = I by FUNCT_2:def 1;
+    per cases;
+    suppose
+a3:   x <= 1/2;
+    then
+a6: 2*x is Point of I[01] by BORSUK_6:6;
+    thus (pr1 (l1+l2)).x = ((l1+l2).x)`1 by a4,MCART_1:def 12
+      .= (l1.(2*x))`1 by b1,b2,a3,BORSUK_2:def 5
+      .= p1.(2*x) by a1,a6,a7,MCART_1:def 12
+      .= (p1 + p2).x by a0,b0,a3,BORSUK_2:def 5;
+    end;
+    suppose
+a3:   x >= 1/2;
+    then
+a6: 2*x-1 is Point of I[01] by BORSUK_6:7;
+    thus (pr1 (l1+l2)).x = ((l1+l2).x)`1 by a4,MCART_1:def 12
+      .= (l2.(2*x-1))`1 by b1,b2,a3,BORSUK_2:def 5
+      .= p2.(2*x-1) by a2,a6,a8,MCART_1:def 12
+      .= (p1 + p2).x by a0,b0,a3,BORSUK_2:def 5;
+    end;
+  end;
+  hence pr1 (l1+l2) = p1 + p2 by FUNCT_2:113;
+end;
+
+theorem
+  for S, T being non empty arcwise_connected TopSpace,
+      s1, s2, s3 being Point of S,
+      t1, t2, t3 being Point of T,
+      l1 being Path of [s1,t1],[s2,t2],
+      l2 being Path of [s2,t2],[s3,t3] holds
+  pr1 (l1+l2) = (pr1 l1) + (pr1 l2)
+proof
+  let S, T be non empty arcwise_connected TopSpace,
+      s1, s2, s3 be Point of S,
+      t1, t2, t3 be Point of T,
+      l1 be Path of [s1,t1],[s2,t2],
+      l2 be Path of [s2,t2],[s3,t3];
+  [s1,t1],[s2,t2] are_connected & [s2,t2],[s3,t3] are_connected
+  by BORSUK_2:def 3;
+  hence thesis by T5_1;
+end;
+
+theorem T5_2:
+  for l1 being Path of [s1,t1],[s2,t2],
+      l2 being Path of [s2,t2],[s3,t3],
+      p1 being Path of t1,t2,
+      p2 being Path of t2,t3 st
+   [s1,t1],[s2,t2] are_connected & [s2,t2],[s3,t3] are_connected &
+   p1 = pr2 l1 & p2 = pr2 l2 holds
+  pr2 (l1+l2) = p1 + p2
+proof
+  let l1 be Path of [s1,t1],[s2,t2],
+      l2 be Path of [s2,t2],[s3,t3],
+      p1 be Path of t1,t2,
+      p2 be Path of t2,t3 such that
+b1: [s1,t1],[s2,t2] are_connected and
+b2: [s2,t2],[s3,t3] are_connected and
+a1: p1 = pr2 l1 and
+a2: p2 = pr2 l2;
+a0: t1,t2 are_connected by b1,T5con2a;
+b0: t2,t3 are_connected by b2,T5con2a;
+  now
+    let x be Element of I[01];
+a4: dom (l1+l2) = I by FUNCT_2:def 1;
+a7: dom l1 = I by FUNCT_2:def 1;
+a8: dom l2 = I by FUNCT_2:def 1;
+    per cases;
+    suppose
+a3:   x <= 1/2;
+    then
+a6: 2*x is Point of I[01] by BORSUK_6:6;
+    thus (pr2 (l1+l2)).x = ((l1+l2).x)`2 by a4,MCART_1:def 13
+      .= (l1.(2*x))`2 by b1,b2,a3,BORSUK_2:def 5
+      .= p1.(2*x) by a1,a6,a7,MCART_1:def 13
+      .= (p1 + p2).x by a0,b0,a3,BORSUK_2:def 5;
+    end;
+    suppose
+a3:   x >= 1/2;
+    then
+a6: 2*x-1 is Point of I[01] by BORSUK_6:7;
+    thus (pr2 (l1+l2)).x = ((l1+l2).x)`2 by a4,MCART_1:def 13
+      .= (l2.(2*x-1))`2 by b1,b2,a3,BORSUK_2:def 5
+      .= p2.(2*x-1) by a2,a6,a8,MCART_1:def 13
+      .= (p1 + p2).x by a0,b0,a3,BORSUK_2:def 5;
+    end;
+  end;
+  hence pr2 (l1+l2) = p1 + p2 by FUNCT_2:113;
+end;
+
+theorem
+  for S, T being non empty arcwise_connected TopSpace,
+      s1, s2, s3 being Point of S,
+      t1, t2, t3 being Point of T,
+      l1 being Path of [s1,t1],[s2,t2],
+      l2 being Path of [s2,t2],[s3,t3] holds
+  pr2 (l1+l2) = (pr2 l1) + (pr2 l2)
+proof
+  let S, T be non empty arcwise_connected TopSpace,
+      s1, s2, s3 be Point of S,
+      t1, t2, t3 be Point of T,
+      l1 be Path of [s1,t1],[s2,t2],
+      l2 be Path of [s2,t2],[s3,t3];
+  [s1,t1],[s2,t2] are_connected & [s2,t2],[s3,t3] are_connected
+  by BORSUK_2:def 3;
+  hence thesis by T5_2;
+end;
+
+definition
+  let S, T be non empty TopSpace,
+      s be Point of S,
+      t be Point of T;
+  set pS = pi_1([:S,T:],[s,t]);
+  set G = <*pi_1(S,s),pi_1(T,t)*>;
+  set pT = product G;
+  func FGPrIso(s,t) ->
+     map of pi_1([:S,T:],[s,t]), product <*pi_1(S,s),pi_1(T,t)*> means :def1:
+  for x being Point of pi_1([:S,T:],[s,t])
+   ex l being Loop of [s,t] st x = Class(EqRel([:S,T:],[s,t]),l) &
+   it.x = <*Class(EqRel(S,s),pr1 l),Class(EqRel(T,t),pr2 l)*>;
+existence
+proof
+  defpred P[set,set] means
+   ex l being Loop of [s,t] st
+   $1 = Class(EqRel([:S,T:],[s,t]),l) &
+   $2 = <*Class(EqRel(S,s),pr1 l),Class(EqRel(T,t),pr2 l)*>;
+A0: for x being Element of pS ex y being Element of pT st P[x,y]
+  proof
+    let x be Element of pS;
+    consider l being Loop of [s,t] such that
+A1:   x = Class(EqRel([:S,T:],[s,t]),l) by TOPALG_1:48;
+    set A = Class(EqRel(S,s),pr1 l);
+    set B = Class(EqRel(T,t),pr2 l);
+A2: the carrier of pT = product Carrier G by GROUP_7:def 2;
+A3: dom <*A,B*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+A4: dom Carrier G = {1,2} by PBOOLE:def 3;
+    now
+      let x be set such that
+A5:     x in dom Carrier G;
+A7:   ex R being 1-sorted st R = G.x & Carrier G.x = the carrier of R
+        by A4,A5,PRALG_1:def 13;
+A8:   G.1 = pi_1(S,s) & G.2 = pi_1(T,t) by FINSEQ_1:61;
+A9:   <*A,B*>.1 = A & <*A,B*>.2 = B by FINSEQ_1:61;
+      x = 1 or x = 2 by A4,A5,TARSKI:def 2;
+      hence <*A,B*>.x in Carrier G.x by A7,A8,A9,TOPALG_1:48;
+    end;
+    then reconsider y = <*A,B*> as Element of pT by A2,A3,A4,CARD_3:18;
+    take y, l;
+    thus thesis by A1;
+  end;
+  ex h being map of pS,pT st for x being Element of pS holds P[x,h.x]
+    from FUNCT_2:sch 3(A0);
+  hence thesis;
+end;
+uniqueness
+proof
+  let f, g be map of pS,pT such that
+a1: for x being Point of pi_1([:S,T:],[s,t])
+    ex l being Loop of [s,t] st x = Class(EqRel([:S,T:],[s,t]),l) &
+    f.x = <*Class(EqRel(S,s),pr1 l),Class(EqRel(T,t),pr2 l)*> and
+a2: for x being Point of pi_1([:S,T:],[s,t])
+    ex l being Loop of [s,t] st x = Class(EqRel([:S,T:],[s,t]),l) &
+    g.x = <*Class(EqRel(S,s),pr1 l),Class(EqRel(T,t),pr2 l)*>;
+    now
+      let x be Point of pS;
+      consider l1 being Loop of [s,t] such that
+a3:     x = Class(EqRel([:S,T:],[s,t]),l1) and
+a4:     f.x = <*Class(EqRel(S,s),pr1 l1),Class(EqRel(T,t),pr2 l1)*> by a1;
+      consider l2 being Loop of [s,t] such that
+a5:     x = Class(EqRel([:S,T:],[s,t]),l2) and
+a6:     g.x = <*Class(EqRel(S,s),pr1 l2),Class(EqRel(T,t),pr2 l2)*> by a2;
+a8:   l1,l2 are_homotopic by a3,a5,TOPALG_1:47;
+      then 
+a7:   pr1 l1,pr1 l2 are_homotopic by T5are1;
+      pr2 l1,pr2 l2 are_homotopic by a8,T5are2;
+      then Class(EqRel(T,t),pr2 l1) = Class(EqRel(T,t),pr2 l2) by TOPALG_1:47;
+      hence f.x = g.x by a4,a6,a7,TOPALG_1:47;
+    end;
+    hence thesis by FUNCT_2:113;
+  end;
+end;
+
+theorem Tdef1:
+  for x being Point of pi_1([:S,T:],[s,t]),
+      l being Loop of [s,t] st x = Class(EqRel([:S,T:],[s,t]),l) holds
+   FGPrIso(s,t).x = <*Class(EqRel(S,s),pr1 l),Class(EqRel(T,t),pr2 l)*>
+proof
+  let x be Point of pi_1([:S,T:],[s,t]),
+      l be Loop of [s,t];
+  consider l1 being Loop of [s,t] such that
+a1: x = Class(EqRel([:S,T:],[s,t]),l1) and
+a2: FGPrIso(s,t).x = <*Class(EqRel(S,s),pr1 l1),Class(EqRel(T,t),pr2 l1)*>
+    by def1;
+  assume x = Class(EqRel([:S,T:],[s,t]),l);
+  then
+a8: l,l1 are_homotopic by a1,TOPALG_1:47;
+  then 
+a7: pr1 l,pr1 l1 are_homotopic by T5are1;
+  pr2 l,pr2 l1 are_homotopic by a8,T5are2;
+  then Class(EqRel(T,t),pr2 l) = Class(EqRel(T,t),pr2 l1) by TOPALG_1:47;
+  hence thesis by a2,a7,TOPALG_1:47;
+end;
+
+theorem Tdef2:
+  for l being Loop of [s,t] holds
+   FGPrIso(s,t).Class(EqRel([:S,T:],[s,t]),l) =
+   <*Class(EqRel(S,s),pr1 l),Class(EqRel(T,t),pr2 l)*>
+proof
+  let l be Loop of [s,t];
+  Class(EqRel([:S,T:],[s,t]),l) is Point of pi_1([:S,T:],[s,t]) by TOPALG_1:48;
+  hence FGPrIso(s,t).Class(EqRel([:S,T:],[s,t]),l) =
+       <*Class(EqRel(S,s),pr1 l),Class(EqRel(T,t),pr2 l)*> by Tdef1;
+end;
+
+registration
+  let S, T be non empty TopSpace,
+      s be Point of S,
+      t be Point of T;
+  cluster FGPrIso(s,t) -> one-to-one onto;
+coherence
+proof
+  set pS = pi_1([:S,T:],[s,t]);
+  set G = <*pi_1(S,s),pi_1(T,t)*>;
+  set pT = product G;
+  set F = FGPrIso(s,t);
+  thus F is one-to-one
+  proof
+    let a, b be set;
+    assume a in dom F;
+    then consider la being Loop of [s,t] such that
+a1:   a = Class(EqRel([:S,T:],[s,t]),la) and
+a2:   F.a = <*Class(EqRel(S,s),pr1 la),Class(EqRel(T,t),pr2 la)*> by def1;
+    assume b in dom F;
+    then consider lb being Loop of [s,t] such that
+a3:   b = Class(EqRel([:S,T:],[s,t]),lb) and
+a4:   F.b = <*Class(EqRel(S,s),pr1 lb),Class(EqRel(T,t),pr2 lb)*> by def1;
+    assume F.a = F.b;
+    then Class(EqRel(S,s),pr1 la) = Class(EqRel(S,s),pr1 lb) &
+      Class(EqRel(T,t),pr2 la) = Class(EqRel(T,t),pr2 lb) by a2,a4,GROUP_7:2;
+    then pr1 la, pr1 lb are_homotopic & pr2 la, pr2 lb are_homotopic
+      by TOPALG_1:47;
+    then la,lb are_homotopic by T512;
+    hence a = b by a1,a3,TOPALG_1:47;
+  end;
+  thus rng F c= the carrier of pT;
+  let y be set;
+  assume
+a5: y in the carrier of pT;
+  the carrier of pT = product Carrier G by GROUP_7:def 2;
+  then consider g being Function such that
+a6: y = g and
+a7: dom g = dom Carrier G and
+a8: for z being set st z in dom Carrier G holds g.z in Carrier G.z
+     by a5,CARD_3:def 5;
+a9:  dom Carrier G = {1,2} by PBOOLE:def 3;
+   then reconsider g as FinSequence by a7,FINSEQ_1:4,def 2;
+a20: len g = 2 by a7,a9,FINSEQ_1:4,def 3;
+a10: ex R1 being 1-sorted st R1 = G.1 & Carrier G.1 = the carrier of R1
+     by Lm1,PRALG_1:def 13;
+a11: ex R2 being 1-sorted st R2 = G.2 & Carrier G.2 = the carrier of R2
+     by Lm2,PRALG_1:def 13;
+a14: G.1 = pi_1(S,s) by FINSEQ_1:61;
+a15: G.2 = pi_1(T,t) by FINSEQ_1:61;
+  g.1 in Carrier G.1 by a8,a9,Lm1;
+  then consider l1 being Loop of s such that
+a16:  g.1 = Class(EqRel(S,s),l1) by a10,a14,TOPALG_1:48;
+  g.2 in Carrier G.2 by a8,a9,Lm2;
+  then consider l2 being Loop of t such that
+a17:  g.2 = Class(EqRel(T,t),l2) by a11,a15,TOPALG_1:48;
+  set x = Class(EqRel([:S,T:],[s,t]),<:l1,l2:>);
+  dom F = the carrier of pS by FUNCT_2:def 1;
+  then
+a18: x in dom F by TOPALG_1:48;
+a19: dom l1 = I by FUNCT_2:def 1
+    .= dom l2 by FUNCT_2:def 1;
+  F.x = <*Class(EqRel(S,s),pr1 <:l1,l2:>),Class(EqRel(T,t),pr2 <:l1,l2:>)*>
+        by Tdef2
+     .= <*Class(EqRel(S,s),l1),Class(EqRel(T,t),pr2 <:l1,l2:>)*> by a19,T01
+     .= <*Class(EqRel(S,s),l1),Class(EqRel(T,t),l2)*> by a19,T02
+     .= y by a6,a16,a17,a20,FINSEQ_1:61;
+  hence thesis by a18,FUNCT_1:def 5;
+end;
+end;
+
+definition
+  let S, T be non empty TopSpace,
+      s be Point of S,
+      t be Point of T;
+  redefine func FGPrIso(s,t) ->
+      Homomorphism of pi_1([:S,T:],[s,t]), product <*pi_1(S,s),pi_1(T,t)*>;
+coherence
+proof
+  set F = FGPrIso(s,t);
+  let a, b be Element of pi_1([:S,T:],[s,t]);
+  consider la being Loop of [s,t] such that
+a1: a = Class(EqRel([:S,T:],[s,t]),la) and
+a2: F.a = <*Class(EqRel(S,s),pr1 la),Class(EqRel(T,t),pr2 la)*> by def1;
+  consider lb being Loop of [s,t] such that
+a3: b = Class(EqRel([:S,T:],[s,t]),lb) and
+a4: F.b = <*Class(EqRel(S,s),pr1 lb),Class(EqRel(T,t),pr2 lb)*> by def1;
+  consider lab being Loop of [s,t] such that
+a5: a*b = Class(EqRel([:S,T:],[s,t]),lab) and
+a6: F.(a*b) = <*Class(EqRel(S,s),pr1 lab),Class(EqRel(T,t),pr2 lab)*> by def1;
+  reconsider A1 = Class(EqRel(S,s),pr1 la), A2 = Class(EqRel(S,s),pr1 lb)
+   as Element of pi_1(S,s) by TOPALG_1:48;
+  reconsider B1 = Class(EqRel(T,t),pr2 la), B2 = Class(EqRel(T,t),pr2 lb)
+   as Element of pi_1(T,t) by TOPALG_1:48;
+  a*b = Class(EqRel([:S,T:],[s,t]),la+lb) by a1,a3,TOPALG_3:31;
+  then
+b3: lab,la+lb are_homotopic by a5,TOPALG_1:47;
+  then
+b1: pr1 lab, pr1(la+lb) are_homotopic by T5are1;
+b2: pr2 lab, pr2(la+lb) are_homotopic by b3,T5are2;
+a7: A1*A2 = Class(EqRel(S,s),pr1 la + pr1 lb) by TOPALG_3:31
+    .= Class(EqRel(S,s),pr1 (la+lb)) by T5_1
+    .= Class(EqRel(S,s),pr1 lab) by b1,TOPALG_1:47;
+    B1*B2 = Class(EqRel(T,t),pr2 la + pr2 lb) by TOPALG_3:31
+    .= Class(EqRel(T,t),pr2 (la+lb)) by T5_2
+    .= Class(EqRel(T,t),pr2 lab) by b2,TOPALG_1:47;
+  hence F.(a*b) = F.a * F.b by a2,a4,a6,a7,GROUP_7:32;
+end;
+end;
+
+theorem T5iso:
+  FGPrIso(s,t) is_isomorphism
+proof
+  thus rng FGPrIso(s,t) = the carrier of product <*pi_1(S,s),pi_1(T,t)*>
+    by FUNCT_2:def 3;
+  thus FGPrIso(s,t) is one-to-one;
+end;
+
+theorem T5iso2:
+  pi_1([:S,T:],[s,t]), product <*pi_1(S,s),pi_1(T,t)*> are_isomorphic
+proof
+  take FGPrIso(s,t);
+  thus thesis by T5iso;
+end;
+
+theorem
+  for f being Homomorphism of pi_1(S,s1),pi_1(S,s2),
+      g being Homomorphism of pi_1(T,t1),pi_1(T,t2) st
+   f is_isomorphism & g is_isomorphism holds
+  Gr2Iso(f,g) * FGPrIso(s1,t1) is_isomorphism
+proof
+  let f be Homomorphism of pi_1(S,s1),pi_1(S,s2),
+      g be Homomorphism of pi_1(T,t1),pi_1(T,t2) such that
+a1: f is_isomorphism and
+a2: g is_isomorphism;
+a3: FGPrIso(s1,t1) is_isomorphism by T5iso;
+  Gr2Iso(f,g) is_isomorphism by a1,a2,T5griso3;
+  hence Gr2Iso(f,g) * FGPrIso(s1,t1) is_isomorphism by a3,GROUP_6:74;
+end;
+
+theorem
+  for S, T being non empty arcwise_connected TopSpace,
+      s1, s2 being Point of S,
+      t1, t2 being Point of T holds
+  pi_1([:S,T:],[s1,t1]), product <*pi_1(S,s2),pi_1(T,t2)*> are_isomorphic
+proof
+  let S, T be non empty arcwise_connected TopSpace,
+      s1, s2 be Point of S,
+      t1, t2 be Point of T;
+  pi_1(S,s1),pi_1(S,s2) are_isomorphic & pi_1(T,t1),pi_1(T,t2) are_isomorphic
+    by TOPALG_3:35;
+  then
+a1: product <*pi_1(S,s1),pi_1(T,t1)*>, product <*pi_1(S,s2),pi_1(T,t2)*>
+    are_isomorphic by T5griso;
+  pi_1([:S,T:],[s1,t1]), product <*pi_1(S,s1),pi_1(T,t1)*> are_isomorphic
+    by T5iso2;
+  hence thesis by a1,GROUP_6:78;
+end;

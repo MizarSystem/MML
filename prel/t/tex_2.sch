@@ -11,10 +11,7 @@ SETFAM_1
 STRUCT_0
 PRE_TOPC
 #
-G3 W11 ;;M7 U1 F1 ;;;;
-ªM5 V4 ;V6 F2 ;U1 F1 ;;;F2 ;U1 F1 ;;;ªM2 K10 U1 F1 ;;;;ª&R2 B2 F2 ;;ªP1 B2 K32 B1 B2 ;;;M2 K10 U1 F1 ;;;;ª&R2 B1 F2 ;;M2 U1 F1 ;;;ªP1 B1 B2 ;;;
-#
-G3 W11 ;;G3 W11 ;;;
-ªM5 V4 ;V6 U1 F1 ;;U1 F2 ;;;U1 F1 ;;U1 F2 ;;;ªM2 U1 F1 ;;;P1 B2 K52 U1 F1 ;;U1 F2 ;;B1 B2 ;;M2 U1 F1 ;;;ªM2 U1 F2 ;;;ªP1 B1 B2 ;;
+G3 W13 ;;M7 U1 F1 ;;;;
+ªM5 V5 ;V7 F2 ;U1 F1 ;;;F2 ;U1 F1 ;;;ªM2 K10 U1 F1 ;;;;ª&R2 B2 F2 ;;ªP1 B2 K32 B1 B2 ;;;M2 K10 U1 F1 ;;;;ª&R2 B1 F2 ;;M2 U1 F1 ;;;ªP1 B1 B2 ;;;
 #
 !

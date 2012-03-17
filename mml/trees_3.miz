@@ -8,7 +8,7 @@ environ
 
  vocabulary FINSEQ_1, FUNCT_1, RELAT_1, FINSET_1, MCART_1, TREES_1, TREES_2,
       BOOLE, FUNCT_2, TARSKI, FINSEQ_2, FUNCOP_1, FUNCT_6, PARTFUN1, FUNCT_3,
-      ARYTM_1, SQUARE_1, TREES_3;
+      ARYTM_1, SQUARE_1, TREES_3, DTCONSTR;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
       NAT_1, RELAT_1, FUNCT_1, FINSEQ_1, FINSET_1, DOMAIN_1, SQUARE_1,
       FUNCOP_1, RELSET_1, FUNCT_2, FUNCT_3, FINSEQ_2, TREES_1, TREES_2,
@@ -23,7 +23,7 @@ environ
       FUNCT_1, FUNCT_2, FUNCT_3, FUNCOP_1, MODAL_1, FUNCT_6, FINSEQ_2,
       FINSEQ_3, ENUMSET1, TREES_1, TREES_2, REAL_1, RELAT_1, RELSET_1,
       XBOOLE_0, XBOOLE_1, XCMPLX_1;
- schemes NAT_1, CARD_3, XBOOLE_0;
+ schemes NAT_1, CARD_3, XBOOLE_0, FINSEQ_1;
 
 begin :: Finite sets
 
@@ -2356,4 +2356,53 @@ T2} &
     end;
    hence height tree(T1,T2) = m+1 by A1,Th82;
   end;
+
+begin :: Addenda
+
+:: from DTCONSTR
+
+registration
+ let D be non empty set, t be Element of FinTrees D;
+ cluster dom t -> finite;
+ coherence by Def8;
+end;
+
+definition
+ let p be FinSequence such that
+A1: p is DTree-yielding;
+ defpred P[Nat, set] means
+       ex T being DecoratedTree st T = p.$1 & $2 = T.{};
+ func roots p -> FinSequence means
+   dom it = dom p & for i being Nat st i in dom p
+   ex T being DecoratedTree st T = p.i & it.i = T.{};
+  existence proof
+A2: Seg len p = dom p by FINSEQ_1:def 3;
+A3: for k being Nat, y1, y2 being set st k in Seg len p & P[k,y1] & P[k,y2]
+          holds y1=y2;
+A4: for k being Nat st k in Seg len p ex x being set st P[k,x]
+  proof let k be Nat; assume k in Seg len p;
+     then p.k in rng p & rng p is constituted-DTrees
+         by A1,A2,FUNCT_1:def 5,Def11;
+     then reconsider T = p.k as DecoratedTree by Def5;
+    take T.{}, T;
+    thus thesis;
+   end;
+   consider q being FinSequence such that
+A5: dom q = Seg len p & for k being Nat st k in Seg len p holds P[k,q.k]
+                        from FINSEQ_1:sch 1(A3, A4);
+   take q;
+   thus dom q = dom p by A5,FINSEQ_1:def 3;
+   thus thesis by A2,A5;
+  end;
+  uniqueness proof
+   let x1, x2 be FinSequence such that
+A6:   (dom x1 = dom p & for i being Nat st i in dom p holds P[i,x1.i]) &
+     (dom x2 = dom p & for i being Nat st i in dom p holds P[i,x2.i]);
+      now let k be Nat; assume k in dom p;
+    then P[k,x1.k] & P[k,x2.k] by A6;
+    hence x1.k = x2.k;
+   end;
+   hence x1 = x2 by A6,FINSEQ_1:17;
+  end;
+end;
 

@@ -9,7 +9,7 @@ RELSET_1
 FUNCT_2
 FRAENKEL
 #
-«W1 ;V9 ;;;M1 ;
-fV9 ;;M1 ;M1 ;;K45 A1 A2 ;
-­;M1 V9 ;;;M2 A1 ;V2 ;V4 ;;
+«W1 ;V10 ;;;M1 ;
+fV10 ;;M1 ;M1 ;;K45 A1 A2 ;
+­;M1 V10 ;;;M2 A1 ;V2 ;V5 ;;
 !

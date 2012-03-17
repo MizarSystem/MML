@@ -9,6 +9,6 @@ RELSET_1
 FUNCT_2
 #
 M1 W1 ;;M1 ;M1 ;;
-ªM5 V4 ;V6 F1 ;F2 ;;F1 ;F2 ;;ªM2 F1 ;;R1 K52 F1 ;F2 ;B1 B2 ;F3 B2 ;;M2 F1 ;;R2 F3 B1 ;F2 ;;;
+ªM5 V5 ;V7 F1 ;F2 ;;F1 ;F2 ;;ªM2 F1 ;;R1 K52 F1 ;F2 ;B1 B2 ;F3 B2 ;;M2 F1 ;;R2 F3 B1 ;F2 ;;;
 #
 !

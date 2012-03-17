@@ -1,0 +1,296 @@
+:: On the Fundamental Groups of Products of Topological Spaces
+::  by Artur Korni{\l}owicz
+:: 
+:: Received August 20, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, BORSUK_2, TOPALG_1, CARD_3, FINSEQ_1, WELLORD1, TOPALG_4,
+      ALGSTR_1, EQREL_1, WAYBEL20, FUNCT_1, MCART_1, FUNCT_3, RELAT_1,
+      BORSUK_1, ORDINAL2, BOOLE, SUBSET_1, RLVECT_2, BORSUK_6, SGRAPH1,
+      PARTFUN1, GRAPH_1, GROUP_6, ARYTM_3, ARYTM_1, REALSET1, VECTSP_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, EQREL_1, MCART_1, XCMPLX_0, XREAL_0,
+      RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCT_3, BINOP_1, FINSEQ_1, CARD_3,
+      REALSET2, DTCONSTR, JCT_MISC, STRUCT_0, VECTSP_1, PRALG_1, GROUP_1,
+      GROUP_6, GROUP_7, PRE_TOPC, TOPS_2, BORSUK_1, T_0TOPSP, BORSUK_2,
+      BORSUK_6, TOPALG_1;
+ constructors GROUP_7, TOPALG_1, DTCONSTR, MCART_1, JCT_MISC, PRALG_1, PRALG_2,
+      NAT_1, REAL_1, BORSUK_3, TOPALG_3, TOPS_2;
+ clusters STRUCT_0, BORSUK_1, BORSUK_2, GROUP_7, TOPALG_1, RELSET_1, ZFMISC_1,
+      XBOOLE_0, TOPS_1, TOPALG_3, FINSEQ_1, ARYTM_3, XREAL_0, VECTSP_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+theorem :: TOPALG_4:1
+  for G, H being non empty HGrStr,
+      x being Element of product <*G,H*>
+   ex g being Element of G, h being Element of H st x = <*g,h*>;
+
+definition
+  let G1, G2, H1, H2 be non empty HGrStr,
+      f be map of G1,H1,
+      g be map of G2,H2;
+  func Gr2Iso(f,g) -> map of product <*G1,G2*>, product <*H1,H2*> means
+:: TOPALG_4:def 1
+   for x being Element of product <*G1,G2*>
+    ex x1 being Element of G1, x2 being Element of G2 st x = <*x1,x2*> &
+      it.x = <*f.x1,g.x2*>;
+end;
+
+theorem :: TOPALG_4:2
+  for G1, G2, H1, H2 being non empty HGrStr,
+      f being map of G1,H1, g being map of G2,H2,
+      x1 being Element of G1, x2 being Element of G2
+  holds Gr2Iso(f,g).<*x1,x2*> = <*f.x1,g.x2*>;
+
+definition
+  let G1, G2, H1, H2 be Group,
+      f be Homomorphism of G1,H1,
+      g be Homomorphism of G2,H2;
+  redefine func Gr2Iso(f,g) ->
+           Homomorphism of product <*G1,G2*>, product <*H1,H2*>;
+end;
+
+theorem :: TOPALG_4:3
+  for G1, G2, H1, H2 being non empty HGrStr,
+      f being map of G1,H1,
+      g being map of G2,H2 st f is one-to-one & g is one-to-one
+  holds Gr2Iso(f,g) is one-to-one;
+
+theorem :: TOPALG_4:4
+  for G1, G2, H1, H2 being non empty HGrStr,
+      f being map of G1,H1,
+      g being map of G2,H2 st f is onto & g is onto
+  holds Gr2Iso(f,g) is onto;
+
+theorem :: TOPALG_4:5
+  for G1, G2, H1, H2 being Group,
+      f being Homomorphism of G1,H1,
+      g being Homomorphism of G2,H2 st f is_isomorphism & g is_isomorphism
+   holds Gr2Iso(f,g) is_isomorphism;
+
+theorem :: TOPALG_4:6
+  for G1, G2, H1, H2 being Group st G1,H1 are_isomorphic & G2,H2 are_isomorphic
+  holds product <*G1,G2*>, product <*H1,H2*> are_isomorphic;
+
+begin
+
+reserve
+  S, T, Y for non empty TopSpace,
+  s, s1, s2, s3 for Point of S,
+  t, t1, t2, t3 for Point of T,
+  l1, l2 for Path of [s1,t1],[s2,t2],
+  H for Homotopy of l1,l2;
+
+theorem :: TOPALG_4:7
+  for f, g being Function st dom f = dom g holds pr1 <:f,g:> = f;
+
+theorem :: TOPALG_4:8
+  for f, g being Function st dom f = dom g holds pr2 <:f,g:> = g;
+
+definition
+  let S, T, Y;
+  let f be map of Y, S;
+  let g be map of Y, T;
+  redefine func <:f,g:> -> map of Y,[:S,T:];
+end;
+
+definition
+  let S, T, Y;
+  let f be map of Y, [:S,T:];
+  redefine func pr1 f -> map of Y,S;
+  redefine func pr2 f -> map of Y,T;
+end;
+
+theorem :: TOPALG_4:9
+  for f being continuous map of Y,[:S,T:] holds pr1 f is continuous;
+
+theorem :: TOPALG_4:10
+  for f being continuous map of Y,[:S,T:] holds pr2 f is continuous;
+
+theorem :: TOPALG_4:11
+  [s1,t1],[s2,t2] are_connected implies s1,s2 are_connected;
+
+theorem :: TOPALG_4:12
+  [s1,t1],[s2,t2] are_connected implies t1,t2 are_connected;
+
+theorem :: TOPALG_4:13
+  [s1,t1],[s2,t2] are_connected implies
+  for L being Path of [s1,t1],[s2,t2] holds pr1 L is Path of s1,s2;
+
+theorem :: TOPALG_4:14
+  [s1,t1],[s2,t2] are_connected implies
+  for L being Path of [s1,t1],[s2,t2] holds pr2 L is Path of t1,t2;
+
+theorem :: TOPALG_4:15
+  s1,s2 are_connected & t1,t2 are_connected implies
+  [s1,t1],[s2,t2] are_connected;
+
+theorem :: TOPALG_4:16
+  s1,s2 are_connected & t1,t2 are_connected implies
+  for L1 being Path of s1,s2, L2 being Path of t1,t2 holds
+  <:L1,L2:> is Path of [s1,t1],[s2,t2];
+
+definition
+  let S, T be non empty arcwise_connected TopSpace,
+      s1, s2 be Point of S,
+      t1, t2 be Point of T,
+      L1 be Path of s1,s2, L2 be Path of t1,t2;
+  redefine func <:L1,L2:> -> Path of [s1,t1],[s2,t2];
+end;
+
+definition
+  let S, T be non empty TopSpace,
+      s be Point of S, t be Point of T,
+      L1 be Loop of s, L2 be Loop of t;
+  redefine func <:L1,L2:> -> Loop of [s,t];
+end;
+
+registration
+  let S, T be non empty arcwise_connected TopSpace;
+  cluster [:S,T:] -> arcwise_connected;
+end;
+
+definition
+  let S, T be non empty arcwise_connected TopSpace,
+      s1, s2 be Point of S,
+      t1, t2 be Point of T,
+      L be Path of [s1,t1],[s2,t2];
+  redefine func pr1 L -> Path of s1,s2;
+  redefine func pr2 L -> Path of t1,t2;
+end;
+
+definition
+  let S, T be non empty TopSpace,
+      s be Point of S,
+      t be Point of T,
+      L be Loop of [s,t];
+  redefine func pr1 L -> Loop of s;
+  redefine func pr2 L -> Loop of t;
+end;
+
+theorem :: TOPALG_4:17
+  for p, q being Path of s1,s2 st
+    p = pr1 l1 & q = pr1 l2 & l1,l2 are_homotopic holds
+   pr1 H is Homotopy of p,q;
+
+theorem :: TOPALG_4:18
+  for p, q being Path of t1,t2 st
+    p = pr2 l1 & q = pr2 l2 & l1,l2 are_homotopic holds
+   pr2 H is Homotopy of p,q;
+
+theorem :: TOPALG_4:19
+  for p, q being Path of s1,s2 st
+    p = pr1 l1 & q = pr1 l2 & l1,l2 are_homotopic holds
+   p,q are_homotopic;
+
+theorem :: TOPALG_4:20
+  for p, q being Path of t1,t2 st
+    p = pr2 l1 & q = pr2 l2 & l1,l2 are_homotopic holds
+   p,q are_homotopic;
+
+theorem :: TOPALG_4:21
+  for p, q being Path of s1,s2, x, y being Path of t1,t2,
+      f being Homotopy of p,q,
+      g being Homotopy of x,y st
+   p = pr1 l1 & q = pr1 l2 & x = pr2 l1 & y = pr2 l2 &
+   p,q are_homotopic & x,y are_homotopic holds
+  <:f,g:> is Homotopy of l1,l2;
+
+theorem :: TOPALG_4:22
+  for p, q being Path of s1,s2, x, y being Path of t1, t2 st
+    p = pr1 l1 & q = pr1 l2 & x = pr2 l1 & y = pr2 l2 &
+    p,q are_homotopic & x,y are_homotopic holds
+  l1, l2 are_homotopic;
+
+theorem :: TOPALG_4:23
+  for l1 being Path of [s1,t1],[s2,t2],
+      l2 being Path of [s2,t2],[s3,t3],
+      p1 being Path of s1,s2,
+      p2 being Path of s2,s3 st
+   [s1,t1],[s2,t2] are_connected & [s2,t2],[s3,t3] are_connected &
+   p1 = pr1 l1 & p2 = pr1 l2 holds
+  pr1 (l1+l2) = p1 + p2;
+
+theorem :: TOPALG_4:24
+  for S, T being non empty arcwise_connected TopSpace,
+      s1, s2, s3 being Point of S,
+      t1, t2, t3 being Point of T,
+      l1 being Path of [s1,t1],[s2,t2],
+      l2 being Path of [s2,t2],[s3,t3] holds
+  pr1 (l1+l2) = (pr1 l1) + (pr1 l2);
+
+theorem :: TOPALG_4:25
+  for l1 being Path of [s1,t1],[s2,t2],
+      l2 being Path of [s2,t2],[s3,t3],
+      p1 being Path of t1,t2,
+      p2 being Path of t2,t3 st
+   [s1,t1],[s2,t2] are_connected & [s2,t2],[s3,t3] are_connected &
+   p1 = pr2 l1 & p2 = pr2 l2 holds
+  pr2 (l1+l2) = p1 + p2;
+
+theorem :: TOPALG_4:26
+  for S, T being non empty arcwise_connected TopSpace,
+      s1, s2, s3 being Point of S,
+      t1, t2, t3 being Point of T,
+      l1 being Path of [s1,t1],[s2,t2],
+      l2 being Path of [s2,t2],[s3,t3] holds
+  pr2 (l1+l2) = (pr2 l1) + (pr2 l2);
+
+definition
+  let S, T be non empty TopSpace,
+      s be Point of S,
+      t be Point of T;
+  func FGPrIso(s,t) ->
+     map of pi_1([:S,T:],[s,t]), product <*pi_1(S,s),pi_1(T,t)*> means
+:: TOPALG_4:def 2
+  for x being Point of pi_1([:S,T:],[s,t])
+   ex l being Loop of [s,t] st x = Class(EqRel([:S,T:],[s,t]),l) &
+   it.x = <*Class(EqRel(S,s),pr1 l),Class(EqRel(T,t),pr2 l)*>;
+end;
+
+theorem :: TOPALG_4:27
+  for x being Point of pi_1([:S,T:],[s,t]),
+      l being Loop of [s,t] st x = Class(EqRel([:S,T:],[s,t]),l) holds
+   FGPrIso(s,t).x = <*Class(EqRel(S,s),pr1 l),Class(EqRel(T,t),pr2 l)*>;
+
+theorem :: TOPALG_4:28
+  for l being Loop of [s,t] holds
+   FGPrIso(s,t).Class(EqRel([:S,T:],[s,t]),l) =
+   <*Class(EqRel(S,s),pr1 l),Class(EqRel(T,t),pr2 l)*>;
+
+registration
+  let S, T be non empty TopSpace,
+      s be Point of S,
+      t be Point of T;
+  cluster FGPrIso(s,t) -> one-to-one onto;
+end;
+
+definition
+  let S, T be non empty TopSpace,
+      s be Point of S,
+      t be Point of T;
+  redefine func FGPrIso(s,t) ->
+      Homomorphism of pi_1([:S,T:],[s,t]), product <*pi_1(S,s),pi_1(T,t)*>;
+end;
+
+theorem :: TOPALG_4:29
+  FGPrIso(s,t) is_isomorphism;
+
+theorem :: TOPALG_4:30
+  pi_1([:S,T:],[s,t]), product <*pi_1(S,s),pi_1(T,t)*> are_isomorphic;
+
+theorem :: TOPALG_4:31
+  for f being Homomorphism of pi_1(S,s1),pi_1(S,s2),
+      g being Homomorphism of pi_1(T,t1),pi_1(T,t2) st
+   f is_isomorphism & g is_isomorphism holds
+  Gr2Iso(f,g) * FGPrIso(s1,t1) is_isomorphism;
+
+theorem :: TOPALG_4:32
+  for S, T being non empty arcwise_connected TopSpace,
+      s1, s2 being Point of S,
+      t1, t2 being Point of T holds
+  pi_1([:S,T:],[s1,t1]), product <*pi_1(S,s2),pi_1(T,t2)*> are_isomorphic;

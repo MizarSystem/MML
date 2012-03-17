@@ -12,9 +12,9 @@ FINSET_1
 XREAL_0
 #
 M1 ;M1 ;M1 ;;
-ªM1 V2 ;V4 ;;ª&R1 K10 B1 ;F1 ;;M3 F2 ;;ª&R2 B2 F1 ;;ªR1 K20 B1 B2 ;F3 B2 ;;;;;
+ªM1 V2 ;V5 ;;ª&R1 K10 B1 ;F1 ;;M3 F2 ;;ª&R2 B2 F1 ;;ªR1 K20 B1 B2 ;F3 B2 ;;;;;
 #
-M1 W1 ;V16 ;;M3 K52 ;;;
+M1 W1 ;V17 ;;M3 K52 ;;;
 ªM3 F1 ;;ªM3 F1 ;;R12 F2 B1 ;F2 B2 ;;;
 #
 !

@@ -10,7 +10,7 @@ environ
       ORDINAL2, FUNCT_4, FUNCOP_1, TOPS_2, BORSUK_1, GRAPH_1, RCOMP_1, RELAT_2,
       ARYTM_3, ARYTM_1, TREAL_1, SEQ_1, TOPMETR, SEQM_3, SETFAM_1, TARSKI,
       TSP_1, METRIC_1, URYSOHN1, PCOMPS_1, EUCLID, MCART_1, CONNSP_2, TOPS_1,
-      BORSUK_2, ARYTM;
+      BORSUK_2, ARYTM, BORSUK_6;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, XCMPLX_0, XREAL_0,
       NAT_1, REAL_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0, PRE_TOPC,
       EUCLID, TOPS_2, MCART_1, RCOMP_1, PCOMPS_1, CARD_1, TOPS_1, COMPTS_1,
@@ -69,7 +69,7 @@ A2:     x = F(w) & w in X() & P[w];
   end;
 
 theorem
-     for f being map of T1,S, g being map of T2,S st
+  for f being map of T1,S, g being map of T2,S st
   T1 is SubSpace of T & T2 is SubSpace of T &
    ([#] T1) \/ ([#] T2) = [#] T &
     T1 is compact & T2 is compact & T is_T2 &
@@ -177,7 +177,7 @@ registration
   existence
   proof
    consider a be Point of T;
-       S --> a is continuous by BORSUK_1:36;
+   S --> a is continuous;
    hence thesis;
   end;
 end;
@@ -214,7 +214,7 @@ end;
 canceled;
 
 theorem
-      for S, T being non empty TopSpace,
+  for S, T being non empty TopSpace,
       f being map of S, T st f is_homeomorphism holds
    f" is open
 proof
@@ -241,27 +241,39 @@ registration
   end;
 end;
 
-definition let T be TopStruct; let a, b be Point of T;
- given f be map of I[01], T such that
-A1:  f is continuous & f.0 = a & f.1 = b;
- mode Path of a, b -> map of I[01], T means :Def1:
-   it is continuous & it.0 = a & it.1 = b;
- existence by A1;
-end;
-
 theorem Th4:
  for T be non empty TopSpace, a be Point of T
   ex f be map of I[01], T st f is continuous & f.0 = a & f.1 = a
 proof
  let T be non empty TopSpace, a be Point of T;
-  set IT = I[01] --> a;
-A1:  IT = (the carrier of I[01]) --> a by BORSUK_1:def 3;
-  reconsider IT as map of I[01], T;
-A2:  IT.0 = a & IT.1 = a by A1,BORSUK_1:def 17,def 18,FUNCOP_1:13;
-      IT is continuous by BORSUK_1:36;
-  then reconsider IT as Path of a, a by A2,Def1;
-      IT is continuous by BORSUK_1:36;
-  hence thesis by A2;
+ take IT = I[01] --> a;
+ thus IT is continuous;
+ IT = (the carrier of I[01]) --> a by BORSUK_1:def 3;
+ hence thesis by BORSUK_1:def 17,def 18,FUNCOP_1:13;
+end;
+
+definition
+  let T be TopStruct, a,b be Point of T;
+  pred a,b are_connected means :da:
+  ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b;
+end;
+
+definition
+  let T be non empty TopSpace, a,b be Point of T;
+  redefine pred a,b are_connected;
+reflexivity
+proof
+  let a be Point of T;
+  thus ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = a
+    by Th4;
+end;
+end;
+
+definition let T be TopStruct; let a, b be Point of T;
+assume A1: a, b are_connected;
+ mode Path of a, b -> map of I[01], T means :Def1:
+   it is continuous & it.0 = a & it.1 = b;
+ existence by A1,da;
 end;
 
 registration let T be non empty TopSpace; let a be Point of T;
@@ -270,19 +282,16 @@ registration let T be non empty TopSpace; let a be Point of T;
  proof
   set IT = I[01] --> a;
 A1:  IT = (the carrier of I[01]) --> a by BORSUK_1:def 3;
-  reconsider IT as map of I[01], T;
 A2:  IT.0 = a & IT.1 = a by A1,BORSUK_1:def 17,def 18,FUNCOP_1:13;
-      IT is continuous by BORSUK_1:36;
-  then reconsider IT as Path of a, a by A2,Def1;
-      IT is continuous by BORSUK_1:36;
+  a,a are_connected;
+  then IT is Path of a, a by A2,Def1;
   hence thesis;
  end;
 end;
 
 definition let T be TopStruct;
   attr T is arcwise_connected means :Def2:
-   for a, b being Point of T ex f being map of I[01], T st
-          f is continuous & f.0 = a & f.1 = b;
+   for a, b being Point of T holds a, b are_connected;
  correctness;
 end;
 
@@ -295,16 +304,15 @@ A1: the carrier of T = { 0[01] } by JORDAN1:1;
        0[01] in the carrier of I[01] & 0[01] in { 0[01] }
     by TARSKI:def 1;
   then reconsider nl = 0[01] as Point of T by JORDAN1:1;
-      for a, b being Point of T ex f being map of I[01], T st
-          f is continuous & f.0 = a & f.1 = b
+      for a, b being Point of T holds a,b are_connected
   proof
    let a, b be Point of T;
 A2: a = nl & b = nl by A1,TARSKI:def 1;
    reconsider f = I[01] --> nl as map of I[01], T;
-A3: f is continuous by BORSUK_1:36;
-       f = (the carrier of I[01]) --> nl by BORSUK_1:def 3;
-   then f.0 = a & f.1 = b by A2,BORSUK_1:def 17,def 18,FUNCOP_1:13;
-   hence thesis by A3;
+   take f;
+   thus f is continuous;
+   f = (the carrier of I[01]) --> nl by BORSUK_1:def 3;
+   hence f.0 = a & f.1 = b by A2,BORSUK_1:def 17,def 18,FUNCOP_1:13;
   end;
   then T is arcwise_connected by Def2;
   hence thesis;
@@ -317,8 +325,7 @@ definition let T be arcwise_connected TopStruct;
      it is continuous & it.0 = a & it.1 = b;
   compatibility
   proof
-     ex f be map of I[01], T st
-      f is continuous & f.0 = a & f.1 = b by Def2;
+   a,b are_connected by Def2;
    hence thesis by Def1;
   end;
 end;
@@ -342,15 +349,14 @@ theorem Th5:
  for GX being non empty TopSpace st
   GX is arcwise_connected holds GX is connected
 proof let GX be non empty TopSpace;
- assume A1: for x,y being Point of GX
-       ex h being map of I[01],GX st h is continuous
-                        & x=h.0 & y=h.1;
+ assume A1: for x,y being Point of GX holds x,y are_connected;
      for x, y being Point of GX ex GY st (GY is connected &
        ex f being map of GY,GX st f is continuous
                         & x in rng f & y in rng f )
  proof let x, y be Point of GX;
-      now consider h being map of I[01],GX such that
-     A2: h is continuous and A3: x=h.0 & y=h.1 by A1;
+      now x,y are_connected by A1;
+        then consider h being map of I[01],GX such that
+     A2: h is continuous and A3: x=h.0 & y=h.1 by da;
          [#] I[01] = the carrier of I[01] by PRE_TOPC:12;
      then 0 in dom h & 1 in dom h by Lm2,BORSUK_1:83,TOPS_2:51;
     then x in rng h & y in rng h by A3,FUNCT_1:def 5;
@@ -371,10 +377,9 @@ begin :: Basic operations on paths
 definition let T be non empty TopSpace;
   let a, b, c be Point of T;
   let P be Path of a, b,
-      Q be Path of b, c;
- given f, g be map of I[01], T such that
-A1:  f is continuous & f.0 = a & f.1 = b &
-    g is continuous & g.0 = b & g.1 = c;
+      Q be Path of b, c such that
+      A1: a,b are_connected and
+      K1: b,c are_connected;
   func P + Q -> Path of a, c means :Def4:
    for t being Point of I[01] holds
     ( t <= 1/2 implies it.t = P.(2*t) ) &
@@ -444,7 +449,7 @@ A16:E2 is Function of the carrier of Closed-Interval-TSpace (1/2, 1),
    reconsider gg = E2 as map of T2, T  by FUNCT_2:19,TOPMETR:27;
        1/2 in { r : 0 <= r & r <= 1 };
    then reconsider pol = 1/2 as Point of I[01] by BORSUK_1:83,RCOMP_1:def 1;
-     P is continuous & Q is continuous by A1,Def1;
+     P is continuous & Q is continuous by A1,K1,Def1;
 then A17:ff is continuous & gg is continuous by A14,A15,TOPMETR:27,TOPS_2:58;
 A18:[#] T1 = the carrier of T1 by PRE_TOPC:12
        .= [.0,1/2.] by TOPMETR:25;
@@ -473,7 +478,7 @@ then A23:  t' in dom e2 by A22;
    end;
 A24:ff.(1/2) = P.(2*(1/2)) by A8
            .= b by A1,Def1
-           .= Q.(2*(1/2)-1) by A1,Def1
+           .= Q.(2*(1/2)-1) by K1,Def1
            .= gg.pol by A21;
 A25:([#] T1) /\ ([#] T2) = {pol} by A18,A19,TOPMETR2:1;
        R^1 is_T2 by PCOMPS_1:38,TOPMETR:def 7;
@@ -483,10 +488,12 @@ A25:([#] T1) /\ ([#] T2) = {pol} by A18,A19,TOPMETR2:1;
 A26:   h = ff+*gg & h is continuous by A17,A20,A25,TOPMETR2:4;
        1 in { r : 1/2 <= r & r <= 1 };
    then 1 in dom E2 by A3,A6,RCOMP_1:def 1;
-   then f.1 = E2.1 by FUNCT_4:14
+   then
+w1: f.1 = E2.1 by FUNCT_4:14
       .= Q.(2*1-1) by A21
-      .= c by A1,Def1;
-   then reconsider f as Path of a, c by A11,A26,Def1;
+      .= c by K1,Def1;
+   then a,c are_connected by da,A11,A26;
+   then reconsider f as Path of a, c by A11,A26,w1,Def1;
     for t being Point of I[01] holds
      ( t <= 1/2 implies f.t = P.(2*t) ) &
      ( 1/2 <= t implies f.t = Q.(2*t-1) )
@@ -582,9 +589,8 @@ registration let T be non empty TopSpace;
   proof
   set IT = I[01] --> a;
 A1:  IT = (the carrier of I[01]) --> a by BORSUK_1:def 3;
-  reconsider IT as map of I[01], T;
 A2:  IT.0 = a & IT.1 = a by A1,BORSUK_1:def 17,def 18,FUNCOP_1:13;
-      IT is continuous by BORSUK_1:36;
+      a,a are_connected;
   then reconsider IT as Path of a, a by A2,Def1;
       for n1,n2 being set st n1 in dom IT & n2 in dom IT holds IT.n1=IT.n2
   proof
@@ -602,9 +608,9 @@ then A3: n1 in the carrier of I[01] & n2 in the carrier of I[01] by FUNCT_2:def
 end;
 
 theorem
-     for T being non empty TopSpace,
-     a being Point of T,
-     P being constant Path of a, a holds P = I[01] --> a
+  for T being non empty TopSpace,
+      a being Point of T,
+      P being constant Path of a, a holds P = I[01] --> a
 proof
  let T be non empty TopSpace,
      a be Point of T,
@@ -613,7 +619,7 @@ proof
 A1: IT = (the carrier of I[01]) --> a by BORSUK_1:def 3;
 A2: dom IT = the carrier of I[01] by FUNCT_2:def 1;
 A3: dom P = the carrier of I[01] by FUNCT_2:def 1;
-A4:ex f be map of I[01], T st f is continuous & f.0 = a & f.1 = a by Th4;
+A4: a,a are_connected;
      for x be set st x in the carrier of I[01] holds P.x = IT.x
  proof
   let x be set; assume A5: x in the carrier of I[01];
@@ -637,8 +643,7 @@ proof
      P be constant Path of a, a;
 A1: dom (P + P) = the carrier of I[01] by FUNCT_2:def 1;
 A2: the carrier of I[01] = dom P by FUNCT_2:def 1;
-A3:ex f be map of I[01], T st f is continuous & f.0 = a & f.1 = a by Th4;
-     for x be set st x in the carrier of I[01] holds P.x = (P+P).x
+for x be set st x in the carrier of I[01] holds P.x = (P+P).x
  proof
   let x be set; assume A4: x in the carrier of I[01];
   then reconsider p = x as Point of I[01];
@@ -652,7 +657,7 @@ A7:  2 * r >= 0 by A5,REAL_2:121;
   then 2 * r in { e where e is Real : 0 <= e & e <= 1 } by A7;
   then 2 * r in the carrier of I[01] by BORSUK_1:83,RCOMP_1:def 1;
   then P.(2*r) = P.p by A2,SEQM_3:def 5;
-  hence thesis by A3,A5,A6,Def4;
+  hence thesis by A5,A6,Def4;
   end;
   suppose A8: r >= 1/2;
   then r * 2 >= 1/2 * 2 by AXIOMS:25;
@@ -663,7 +668,7 @@ then A9:  2 * r - 1 >= 0 by REAL_1:84;
   then 2 * r - 1 in { e where e is Real : 0 <= e & e <= 1 } by A9;
   then 2 * r - 1 in the carrier of I[01] by BORSUK_1:83,RCOMP_1:def 1;
   then P.(2*r-1) = P.p by A2,SEQM_3:def 5;
-  hence thesis by A3,A5,A8,Def4;
+  hence thesis by A5,A8,Def4;
  end;
  end;
  hence thesis by A1,A2,FUNCT_1:9;
@@ -679,8 +684,7 @@ end;
 definition let T be non empty TopSpace;
   let a, b be Point of T;
   let P be Path of a, b;
-  given f be map of I[01], T such that
-A1:f is continuous & f.0 = a & f.1 = b;
+  assume A1: a,b are_connected;
   func - P -> Path of b, a means :Def5:
    for t being Point of I[01] holds it.t = P.(1-t);
   existence
@@ -720,8 +724,10 @@ then A7: f.1 = P.0 by A3,FUNCT_1:23
 A8: P is continuous by A1,Def1;
        e is continuous map of
      Closed-Interval-TSpace(0,1),Closed-Interval-TSpace(0,1) by TREAL_1:11;
-   then f is continuous by A8,TOPMETR:27,TOPS_2:58;
-   then reconsider f as Path of b, a by A6,A7,Def1;
+   then
+w1: f is continuous by A8,TOPMETR:27,TOPS_2:58;
+   then b, a are_connected by A6,A7,da;
+   then reconsider f as Path of b, a by A6,A7,w1,Def1;
    take f;
    thus thesis by A4;
   end;
@@ -771,7 +777,6 @@ proof
   let T be non empty TopSpace,
       a be Point of T,
       P be constant Path of a, a;
-A1: ex f be map of I[01], T st f is continuous & f.0 = a & f.1 = a by Th4;
 A2:  dom (-P) = the carrier of I[01] by FUNCT_2:def 1;
 A3:  dom P = the carrier of I[01] by FUNCT_2:def 1;
       for x be set st x in the carrier of I[01] holds P.x = (-P).x
@@ -779,7 +784,7 @@ A3:  dom P = the carrier of I[01] by FUNCT_2:def 1;
    let x be set; assume A4: x in the carrier of I[01];
      then reconsider x2 = x as Real by BORSUK_1:83;
      reconsider x3 = 1 - x2 as Point of I[01] by A4,Lm4;
-         (-P).x = P.x3 by A1,A4,Def5
+         (-P).x = P.x3 by A4,Def5
          .= P.x by A3,A4,SEQM_3:def 5;
    hence thesis;
   end;
@@ -1236,15 +1241,14 @@ end;
 
 theorem Th15:
   for T being non empty TopSpace, a, b being Point of T,
-      P being Path of a, b
-  st ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b
+      P being Path of a, b st a,b are_connected
   holds P, P are_homotopic
 proof
   let T be non empty TopSpace;
   let a, b be Point of T;
   let P be Path of a, b;
   assume
-A1: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b;
+A1: a,b are_connected;
   defpred Z[set, set] means $2 = P.($1`1);
 A2: for x be set st x in [:the carrier of I[01], the carrier of I[01]:]
        ex y be set st y in the carrier of T & Z[x,y]
@@ -1348,7 +1352,7 @@ definition let T be non empty arcwise_connected TopSpace;
   redefine pred P, Q are_homotopic;
   reflexivity
   proof
-   ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b by Def2;
+   a,b are_connected by Def2;
   hence thesis by Th15;
   end;
 end;

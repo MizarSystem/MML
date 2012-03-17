@@ -2390,3 +2390,75 @@ theorem
          <* x,y,z *> is one-to-one by A2,Th104;
     hence thesis by A1,Th109;
    end;
+
+begin :: Addenda
+
+:: from FSM_1
+
+theorem
+ for D being non empty set, df being FinSequence of D holds
+ df is non empty implies ex d being Element of D, df1 being FinSequence of D
+ st d = df.1 & df = <*d*>^df1
+proof
+ let D be non empty set, df be FinSequence of D;
+ assume df is non empty;
+ then len df <> 0 by FINSEQ_1:25;
+then A1: 1 <= len df by NAT_1:39; then 1 in dom df by Th27;
+  then reconsider d = df.1 as Element of D by FINSEQ_2:13;
+  take d;
+  reconsider lend1 = len df - 1 as Nat by A1,INT_1:18;
+  deffunc F(Nat) = df.($1+1);
+  consider dta being FinSequence such that
+A2: len dta = lend1 and
+A3: for j being Nat st j in Seg lend1 holds dta.j=F(j) from FINSEQ_1:sch 2;
+      now let j be Nat; assume
+        j in dom dta;
+then A4:  j in Seg len dta by FINSEQ_1:def 3;
+    then j + 1 in Seg (len dta + 1) by FINSEQ_1:81;
+    then j+1 in dom df by A2,FINSEQ_1:def 3;
+    then df.(j+1) in D by FINSEQ_2:13;
+   hence dta.j in D by A2,A3,A4;
+  end; then reconsider dta as FinSequence of D by FINSEQ_2:14;
+  take dta; thus d = df.1;
+      now thus len df = len df;
+   thus
+A5: len (<*d*>^dta) = len <*d*> + len dta by FINSEQ_1:35
+                   .= 1 + (len df - 1) by A2,FINSEQ_1:57
+                   .= len df;
+   let i be Nat; assume i in Seg len df;
+then A6:  1 <= i & i <= len df by FINSEQ_1:3;
+   per cases by A6,REAL_1:def 5;
+   suppose i = 1; hence df.i = (<*d*>^dta).i by FINSEQ_1:58;
+   end;
+   suppose
+A7:  i > 1; then consider j being Nat such that
+A8:  j = i-1 & 1 <= j by INT_1:78;
+     i - 1 <= lend1 by A6,REAL_1:49;
+then A9:  j in Seg lend1 by A8,FINSEQ_1:3;
+        len <*d*> = 1 by FINSEQ_1:57;
+    then (<*d*>^dta).i = dta.j by A5,A6,A7,A8,FINSEQ_1:37
+                 .= df.(j+1) by A3,A9 .= df.i by A8;
+   hence df.i = (<*d*>^dta).i;
+  end;
+  end;
+ hence thesis by FINSEQ_2:10;
+end;
+
+theorem
+ for df being FinSequence, d being set holds
+  i in dom df implies (<*d*>^df).(i+1) = df.i proof
+ let df be FinSequence, d be set;
+  assume
+A1: i in dom df;
+then A2: i in Seg len df by FINSEQ_1:def 3;
+     len (<*d*>^df) = len <*d*> + len df by FINSEQ_1:35
+               .= 1 + len df by FINSEQ_1:57;
+  then i+1 in Seg len (<*d*>^df) by A2,FINSEQ_1:81;
+then A3: i+1 in dom (<*d*>^df) by FINSEQ_1:def 3;
+A4: len <*d*> = 1 by FINSEQ_1:57;   1 <= i by A1,Th27;
+then A5: 1 < i+1 by NAT_1:38;
+     i+1 <= len (<*d*>^df) by A3,Th27;
+  hence (<*d*>^df).(i+1) = df.(i + 1 - len <*d*>) by A4,A5,FINSEQ_1:37
+                       .= df.i by A4;
+ end;
+

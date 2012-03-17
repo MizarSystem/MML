@@ -225,7 +225,7 @@ theorem Rosen:
   proof
     set f = id I[01];
     f.0 = 0[01] & f.1 = 1[01] by BORSUK_1:def 17,def 18, TMAP_1:91;
-    hence thesis by BORSUK_2:def 3;
+    hence thesis by BORSUK_2:def 4;
   end;
 
 theorem Wazne2:
@@ -1462,32 +1462,27 @@ a3: P.1 = b;
   P * L[01]((0,1)(#),(#)(0,1)) is continuous map of I[01], T &
   (P * L[01]((0,1)(#),(#)(0,1))).0 = b &
   (P * L[01]((0,1)(#),(#)(0,1))).1 = a by a1,a2,a3,Te1,Te2;
-  hence -P is continuous & (-P).0 = b & (-P).1 = a by BORSUK_2:def 1;
+  then b,a are_connected by BORSUK_2:def 1;
+  hence -P is continuous & (-P).0 = b & (-P).1 = a by BORSUK_2:def 2;
 end;
 
 definition
-  let T be TopStruct, a,b be Point of T;
-  pred a,b are_connected means :da:
-  ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b;
-end;
-
-definition
+  canceled;
   let T be non empty TopSpace, a,b be Point of T;
   redefine pred a,b are_connected;
 reflexivity
 proof
   let a be Point of T;
-  thus ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = a
-    by BORSUK_2:4;
+  thus a,a are_connected;
 end;
 symmetry
 proof
   let a,b be Point of T;
   assume
-a1:  ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b;
+a1:  a,b are_connected;
   consider P being Path of a,b;
   take -P;
-  P is continuous & P.0 = a & P.1 = b by a1,BORSUK_2:def 1;
+  P is continuous & P.0 = a & P.1 = b by a1,BORSUK_2:def 2;
   hence thesis by Te3;
 end;
 end;
@@ -1496,39 +1491,16 @@ theorem Ttr:
   a,b are_connected & b,c are_connected implies a,c are_connected
 proof
   assume that
-a1: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b and
-a2: ex f being map of I[01], T st f is continuous & f.0 = b & f.1 = c;
+a1: a,b are_connected and
+a2: b,c are_connected;
   consider P being Path of a,b, R being Path of b,c;
   take P+R;
   P is continuous & P.0 = a & P.1 = b &
-  R is continuous & R.0 = b & R.1 = c by a1,a2,BORSUK_2:def 1;
+  R is continuous & R.0 = b & R.1 = c by a1,a2,BORSUK_2:def 2;
   hence thesis by JORDAN20:27;
 end;
 
-theorem Taa:
-  for T being arcwise_connected TopStruct,
-      a, b being Point of T holds a,b are_connected
-proof
-  let T be arcwise_connected TopStruct,
-      a, b be Point of T;
-  thus ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b
-    by BORSUK_2:def 2;
-end;
-
-theorem
-  for A being Path of a,a holds A,A are_homotopic
-proof
-  ex f be map of I[01], T st f is continuous & f.0 = a & f.1 = a by BORSUK_2:4;
-  hence thesis by BORSUK_2:15;
-end;
-
-theorem
-  a,b are_connected implies
-  for A being Path of a,b holds A,A are_homotopic
-proof
-  assume ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b;
-  hence thesis by BORSUK_2:15;
-end;
+canceled 3;
 
 theorem Tmm:
   a,b are_connected implies for A being Path of a,b holds A = --A
@@ -1536,18 +1508,15 @@ proof
   assume
 a0: a,b are_connected;
   then
-a1: ex f be map of I[01], T st f is continuous & f.0 = a & f.1 = b by da;
-   b,a are_connected by a0;
-   then
-a2: ex f be map of I[01], T st f is continuous & f.0 = b & f.1 = a by da;
+a2: b,a are_connected;
   let A be Path of a,b;
   set I = the carrier of I[01];
   for x being Element of I holds A.x = (--A).x
   proof
     let x be Element of I;
     reconsider z = 1-x as Point of I[01] by JORDAN5B:4;
-    thus (--A).x = (-A).(1-x) by a2,BORSUK_2:def 5
-      .= A.(1-z) by a1,BORSUK_2:def 5
+    thus (--A).x = (-A).(1-x) by a2,BORSUK_2:def 6
+      .= A.(1-z) by a0,BORSUK_2:def 6
       .= A.x;
   end;
   hence A = --A by FUNCT_2:113;
@@ -1558,18 +1527,11 @@ theorem
   for A being Path of a,b holds A = --A
 proof
   let T be non empty arcwise_connected TopSpace, a, b be Point of T;
-  a,b are_connected by Taa;
+  a,b are_connected by BORSUK_2:def 3;
   hence thesis by Tmm;
 end;
 
-theorem
-  a, b are_connected implies for A being Path of a, b holds
-    A is continuous
-  proof
-    assume a, b are_connected; then
-    ex g being map of I[01], T st g is continuous & g.0 = a & g.1 = b by da;
-   hence thesis by BORSUK_2:def 1;
-  end;
+canceled;
 
 begin :: Reexamination of a Path Concept
 
@@ -1583,16 +1545,12 @@ definition let T be non empty arcwise_connected TopSpace;
     ( 1/2 <= t implies it.t = Q.(2*t-1) );
   compatibility
   proof
-    set PQ = P + Q;
-    consider f be map of I[01], T such that
-A1: f is continuous & f.0 = a & f.1 = b by BORSUK_2:def 2;
-    consider g be map of I[01], T such that
-A2: g is continuous & g.0 = b & g.1 = c by BORSUK_2:def 2;
     let X be Path of a, c;
-    X = P + Q iff
+    a,b are_connected & b,c are_connected by BORSUK_2:def 3;
+    then X = P + Q iff
     for t being Point of I[01] holds
     ( t <= 1/2 implies X.t = P.(2*t) ) &
-    ( 1/2 <= t implies X.t = Q.(2*t-1) ) by A1,A2,BORSUK_2:def 4;
+    ( 1/2 <= t implies X.t = Q.(2*t-1) ) by BORSUK_2:def 5;
     hence thesis;
   end;
 end;
@@ -1604,10 +1562,9 @@ definition let T be non empty arcwise_connected TopSpace;
    for t being Point of I[01] holds it.t = P.(1-t);
   compatibility
   proof
-A0: ex f being map of I[01], T st
-    f is continuous & f.0 = a & f.1 = b by BORSUK_2:def 2;
     let X be Path of b, a;
-    thus thesis by A0, BORSUK_2:def 5;
+    b,a are_connected by BORSUK_2:def 3;
+    hence thesis by BORSUK_2:def 6;
   end;
 end;
 
@@ -1623,17 +1580,15 @@ definition let T be non empty TopSpace,
   coherence
   proof
     set PF = P * f;
-    consider g being map of I[01], T such that
-A1: g is continuous & g.0 = a & g.1 = b by T1, da;
     0 in the carrier of I[01] by JORDAN5A:2; then
     0 in dom f by FUNCT_2:def 1; then
-A2: PF.0 = P.(f.0) by FUNCT_1:23 .= a by T1, A1, BORSUK_2:def 1;
+A2: PF.0 = P.(f.0) by FUNCT_1:23 .= a by T1, BORSUK_2:def 2;
     1 in the carrier of I[01] by JORDAN5A:2; then
     1 in dom f by FUNCT_2:def 1; then
-A3: PF.1 = P.(f.1) by FUNCT_1:23 .= b by T1, A1, BORSUK_2:def 1;
-    P is continuous by A1, BORSUK_2:def 1; then
+A3: PF.1 = P.(f.1) by FUNCT_1:23 .= b by T1, BORSUK_2:def 2;
+    P is continuous by T1, BORSUK_2:def 2; then
     PF is continuous by TOPS_2:58;
-    hence thesis by A3, A2, BORSUK_2:def 1;
+    hence thesis by A3, A2, T1, BORSUK_2:def 2;
   end;
 end;
 
@@ -1646,9 +1601,7 @@ theorem Bauhaus3:
     let P be Path of a, b,
         f be continuous map of I[01], I[01];
     assume
-S1: f.0 = 0 & f.1 = 1 & a,b are_connected; then
-RR: ex g being map of I[01], T st
-    g is continuous & g.0 = a & g.1 = b by da;
+S1: f.0 = 0 & f.1 = 1 & a,b are_connected;
     set Q = RePar (P,f);
 J0: 0 is Point of I[01] & 1 is Point of I[01] by JORDAN5A:2;
     set X = [:I[01], I[01]:];
@@ -1785,7 +1738,7 @@ H4: for t being Point of I[01] holds h. [1,t] = 1
 JJ: dom h = the carrier of [:I[01],I[01]:] by FUNCT_2:def 1
          .= [:the carrier of I[01],the carrier of I[01]:] by BORSUK_1:def 5;
     set H = P * h;
-    P is continuous by RR, BORSUK_2:def 1; then
+    P is continuous by S1, BORSUK_2:def 2; then
 T1: H is continuous by a4, TOPS_2:58;
 T2: for s being Point of I[01] holds H.(s,0) = Q.s & H.(s,1) = P.s
     proof
@@ -1817,13 +1770,13 @@ J2:   [1,t] in dom h by JJ, ZFMISC_1:106;
       thus H.(0,t) = H. [0,t] by BINOP_1:def 1
                   .= P. (h. [0,t]) by J1, FUNCT_1:23
                   .= P. 0 by H2
-                  .= a by RR, BORSUK_2:def 1;
+                  .= a by S1, BORSUK_2:def 2;
       thus H.(1,t) = H. [1,t] by BINOP_1:def 1
                   .= P. (h. [1,t]) by J2, FUNCT_1:23
                   .= P. 1 by H4
-                  .= b by RR, BORSUK_2:def 1;
+                  .= b by S1, BORSUK_2:def 2;
     end;
-    hence thesis by T1, T2, BORSUK_2:def 6;
+    hence thesis by T1, T2, BORSUK_2:def 7;
   end;
 
 theorem
@@ -1836,7 +1789,7 @@ theorem
     let T be non empty arcwise_connected TopSpace, a, b be Point of T,
         P be Path of a, b,
         f be continuous map of I[01], I[01];
-    a, b are_connected by Taa;
+    a, b are_connected by BORSUK_2:def 3;
     hence thesis by Bauhaus3;
   end;
 
@@ -1922,8 +1875,7 @@ HH: 0 is Point of I[01] & 1/2 is Point of I[01] & 1 is Point of I[01]
     T1 = Closed-Interval-TSpace (0,1/2) by JGRAPH_5:7; then
     reconsider f = L[01](0,1/2,0,1) as continuous map of T1, I[01]
       by Klucz, TOPMETR:27;
-    reconsider g = T2 --> 1[01] as continuous map of T2, I[01]
-      by BORSUK_1:36;
+    reconsider g = T2 --> 1[01] as continuous map of T2, I[01];
 XX: g = (the carrier of T2) --> 1 by BORSUK_1:def 3, def 18;
 B1: ([#] T1) \/ ([#] T2) = [.0,1/2.] \/ ([#] T2) by PRE_TOPC:def 10
                         .= [.0,1/2.] \/ [.1/2,1.] by PRE_TOPC:def 10
@@ -2078,8 +2030,7 @@ HH: 0 is Point of I[01] & 1/2 is Point of I[01] & 1 is Point of I[01]
     T2 = Closed-Interval-TSpace (1/2,1) by JGRAPH_5:7; then
     reconsider f = L[01](1/2,1,0,1) as continuous map of T2, I[01]
       by Klucz, TOPMETR:27;
-    reconsider g = T1 --> 0[01] as continuous map of T1, I[01]
-      by BORSUK_1:36;
+    reconsider g = T1 --> 0[01] as continuous map of T1, I[01];
 XX: g = (the carrier of T1) --> 0 by BORSUK_1:def 3, def 17;
 B1: ([#] T2) \/ ([#] T1) = [.0,1/2.] \/ ([#] T2) by PRE_TOPC:def 10
                         .= [.0,1/2.] \/ [.1/2,1.] by PRE_TOPC:def 10
@@ -2463,12 +2414,8 @@ theorem Bauhaus2:
         Q be constant Path of b, b;
     set f = RePar (P, 1RP), g = P + Q;
     assume
-RR: a, b are_connected; then
-    consider h being map of I[01], T such that
-Rr: h is continuous & h.0 = a & h.1 = b by da;
-    b, b are_connected; then
-R1: ex j being map of I[01], T st
-      j is continuous & j.0 = b & j.1 = b by da;
+RR: a, b are_connected;
+R1: b, b are_connected;
     for p being Element of I[01] holds f.p = g.p
     proof
       let p be Element of I[01];
@@ -2482,7 +2429,7 @@ A3:   f.p = (P * 1RP).p by Bauhaus1, RPDef, RR
       suppose
 S1:     p <= 1/2;
         f.p = P.(2*p) by A3, S1, 1RPDef
-           .= g.p by S1, R1, BORSUK_2:def 4, Rr;
+           .= g.p by S1, BORSUK_2:def 5, RR;
         hence thesis;
       end;
       suppose
@@ -2491,10 +2438,10 @@ S1:     p > 1/2; then
         2*p - 1 in the carrier of I[01]; then
 A5:     2*p - 1 in dom Q by FUNCT_2:def 1;
         f.p = P.1 by S1, 1RPDef, A3
-           .= b by BORSUK_2:def 1, Rr
-           .= Q.0 by BORSUK_2:def 1, R1
+           .= b by BORSUK_2:def 2, RR
+           .= Q.0 by BORSUK_2:def 2, R1
            .= Q.(2*p - 1) by A4, A5, SEQM_3:def 5
-           .= g.p by S1, BORSUK_2:def 4, R1, Rr;
+           .= g.p by S1, BORSUK_2:def 5, RR;
         hence thesis;
       end;
     end;
@@ -2509,10 +2456,8 @@ theorem Bauhaus22:
     let P be Path of a, b,
         Q be constant Path of a, a;
     assume
-a1:   a,b are_connected; then
-a2: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b by da;
-    a,a are_connected; then
-a3: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = a by da;
+a1:   a,b are_connected;
+a3: a,a are_connected;
     set f = RePar (P, 2RP), g = Q + P;
     for p being Element of I[01] holds f.p = g.p
     proof
@@ -2530,16 +2475,16 @@ S1:   p <= 1/2; then
       2*p in the carrier of I[01]; then
 AB:   2*p in dom Q by FUNCT_2:def 1;
       f.p = P.0 by A3, S1, 2RPDef
-         .= a by a2, BORSUK_2:def 1
-         .= Q.0 by a3, BORSUK_2:def 1
+         .= a by a1, BORSUK_2:def 2
+         .= Q.0 by a3, BORSUK_2:def 2
          .= Q.(2*p) by AB, A4, SEQM_3:def 5
-         .= g.p by a2, a3, S1, BORSUK_2:def 4;
+         .= g.p by a1, S1, BORSUK_2:def 5;
         hence thesis;
       end;
       suppose
 S1:     p > 1/2;
         f.p = P.(2*p - 1) by A3, 2RPDef, S1
-           .= g.p by a2, a3, S1, BORSUK_2:def 4;
+           .= g.p by a1, S1, BORSUK_2:def 5;
         hence thesis;
       end;
     end;
@@ -2560,13 +2505,8 @@ theorem ToolY:
 a1:   a,b are_connected and
 a2:   b,c are_connected and
 a3:   c,d are_connected;
-a4: a,c are_connected by a1,a2,Ttr; then
-ac: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = c by da;
-ab: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b by a1,da;
-bc: ex f being map of I[01], T st f is continuous & f.0 = b & f.1 = c by a2,da;
-    b,d are_connected by a2,a3,Ttr; then
-bd: ex f being map of I[01], T st f is continuous & f.0 = b & f.1 = d by da;
-cd: ex f being map of I[01], T st f is continuous & f.0 = c & f.1 = d by a3,da;
+a4: a,c are_connected by a1,a2,Ttr;
+k1: b,d are_connected by a2,a3,Ttr;
     set F = P + Q + R;
     set f = RePar (F, 3RP), g = P + (Q + R);
     for x being Point of I[01] holds f.x = g.x
@@ -2585,9 +2525,9 @@ B1:     x <= 1/2;
 B2:     y <= 1/2 by AXIOMS:22;
         reconsider z = 2 * y as Point of I[01];
         f.x = F.y by 3RPDef, XX, B1
-           .= (P + Q).z by ac, cd, B2, BORSUK_2:def 4
-           .= P.(2 * x) by ab, bc, B1, BORSUK_2:def 4
-           .= g.x by ab, bd, B1, BORSUK_2:def 4;
+           .= (P + Q).z by a4, a3, B2, BORSUK_2:def 5
+           .= P.(2 * x) by a1, a2, B1, BORSUK_2:def 5
+           .= g.x by a1, k1, B1, BORSUK_2:def 5;
         hence thesis;
       end;
       suppose
@@ -2603,11 +2543,11 @@ B3:     2 * y >= 2 * (1/4) by BB, AXIOMS:25;
         2 * x <= 2 * (3/4) by B1, AXIOMS:25; then
 B5:     2 * x - 1 <= 3/2 - 1 by REAL_1:49;
         f.x = F.y by 3RPDef, XX, B1
-           .= (P + Q).z by ac, cd, B2, BORSUK_2:def 4
-           .= Q.(2 * z - 1) by ab, bc, B3, BORSUK_2:def 4
+           .= (P + Q).z by a4, a3, B2, BORSUK_2:def 5
+           .= Q.(2 * z - 1) by a1, a2, B3, BORSUK_2:def 5
            .= Q.(2 * w)
-           .= (Q + R).w by bc, cd, B5, BORSUK_2:def 4
-           .= g.x by ab, bd, B1, BORSUK_2:def 4;
+           .= (Q + R).w by a2, a3, B5, BORSUK_2:def 5
+           .= g.x by a1, k1, B1, BORSUK_2:def 5;
         hence thesis;
       end;
       suppose
@@ -2618,9 +2558,9 @@ BH:     x > 1/2 by AXIOMS:22; then
 B5:     2 * x - 1 > 2 * (3/4) - 1 by REAL_1:92;
         reconsider w = 2 * x - 1 as Point of I[01] by BH, Ble2;
         f.x = F.y by 3RPDef, XX, B1
-           .= R.(2 * y - 1) by ac, cd, B5, BORSUK_2:def 4
-           .= (Q + R).w by bc, cd, B5, BORSUK_2:def 4
-           .= g.x by ab, bd, BH, BORSUK_2:def 4;
+           .= R.(2 * y - 1) by a3, a4, B5, BORSUK_2:def 5
+           .= (Q + R).w by a2, a3, B5, BORSUK_2:def 5
+           .= g.x by a1, k1, BH, BORSUK_2:def 5;
         hence thesis;
       end;
     end;
@@ -3229,7 +3169,8 @@ theorem
     let P be Path of a1, b1,
         Q be Path of b1, c1,
         R be Path of c1, d1;
-   a1,b1 are_connected & b1,c1 are_connected & c1,d1 are_connected by Taa;
+   a1,b1 are_connected & b1,c1 are_connected & c1,d1 are_connected
+   by BORSUK_2:def 3;
    hence thesis by Tx1;
 end;
 
@@ -3243,20 +3184,20 @@ theorem Tx2:
     let P1, P2 be Path of a, b,
         Q1, Q2 be Path of b, c;
      assume that
-a1:   ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b and
-a2:   ex f being map of I[01], T st f is continuous & f.0 = b & f.1 = c and
+a1:   a,b are_connected and
+a2:   b,c are_connected and
 B1:  P1,P2 are_homotopic and
 B2:  Q1,Q2 are_homotopic;
      consider f being map of [:I[01],I[01]:], T such that
 A1:  f is continuous &
      for s being Point of I[01] holds f.(s,0) = P1.s & f.(s,1) = P2.s &
      for t being Point of I[01] holds f.(0,t) = a    & f.(1,t) = b
-       by B1,BORSUK_2:def 6;
+       by B1,BORSUK_2:def 7;
      consider g being map of [:I[01],I[01]:], T such that
 A2:  g is continuous &
      for s being Point of I[01] holds g.(s,0) = Q1.s & g.(s,1) = Q2.s &
      for t being Point of I[01] holds g.(0,t) = b    & g.(1,t) = c
-       by B2,BORSUK_2:def 6;
+       by B2,BORSUK_2:def 7;
      reconsider R1 = L[01](0,1/2,0,1) as continuous map of
        Closed-Interval-TSpace(0,1/2), I[01]
          by Klucz, TOPMETR:27;
@@ -3384,7 +3325,7 @@ J5:      2 * s is Point of I[01] by S1, Ble1;
                 .= f. [R1.s,0] by KK, TMAP_1:91
                 .= f. (2*s,0) by J4, BINOP_1:def 1
                 .= P1.(2 * s) by A1, J5;
-         hence thesis by a1, a2, S1, BORSUK_2:def 4;
+         hence thesis by a1, a2, S1, BORSUK_2:def 5;
        end;
        suppose
 S1:      s >= 1/2; 
@@ -3408,7 +3349,7 @@ J5:      2 * s - 1 is Point of I[01] by S1, Ble2;
                 .= g. [R2.s,0] by KK, TMAP_1:91
                 .= g. (2*s-1,0) by J4, BINOP_1:def 1
                 .= Q1.(2 * s - 1) by A2, J5;
-         hence thesis by a1, a2, S1, BORSUK_2:def 4;
+         hence thesis by a1, a2, S1, BORSUK_2:def 5;
        end;
      end;
        h.(s,1) = (P2+Q2).s
@@ -3438,7 +3379,7 @@ J5:      2 * s is Point of I[01] by S1, Ble1;
                 .= f. [R1.s,1] by KK, TMAP_1:91
                 .= f. (2*s,1) by J4, BINOP_1:def 1
                 .= P2.(2 * s) by A1, J5;
-         hence thesis by a1, a2, S1, BORSUK_2:def 4;
+         hence thesis by a1, a2, S1, BORSUK_2:def 5;
        end;
        suppose
 S1:      s >= 1/2; 
@@ -3462,7 +3403,7 @@ J5:      2 * s - 1 is Point of I[01] by S1, Ble2;
                 .= g. [R2.s,1] by KK, TMAP_1:91
                 .= g. (2*s-1,1) by J4, BINOP_1:def 1
                 .= Q2.(2 * s - 1) by A2, J5;
-         hence thesis by a1, a2, S1, BORSUK_2:def 4;
+         hence thesis by a1, a2, S1, BORSUK_2:def 5;
        end;
      end;
      hence thesis by Y1;
@@ -3524,7 +3465,7 @@ theorem
   proof
     let P1, P2 be Path of a1, b1,
         Q1, Q2 be Path of b1, c1;
-   a1, b1 are_connected & b1, c1 are_connected by Taa;
+   a1, b1 are_connected & b1, c1 are_connected by BORSUK_2:def 3;
    hence thesis by Tx2;
 end;
 
@@ -3534,13 +3475,13 @@ theorem Tx3:
   proof
     let P, Q be Path of a, b;
     assume
-X1: ex f be map of I[01], T st f is continuous & f.0 = a & f.1 = b;
+X1: a,b are_connected;
     assume P, Q are_homotopic; then
     consider f being map of [:I[01],I[01]:], T such that
 A17: f is continuous &
     for s being Point of I[01] holds f.(s,0) = P.s & f.(s,1) = Q.s &
     for t being Point of I[01] holds f.(0,t) = a   & f.(1,t) = b
-      by BORSUK_2:def 6;
+      by BORSUK_2:def 7;
      reconsider fA = L[01]((0,1)(#),(#)(0,1)) as continuous map
        of I[01], I[01] by TOPMETR:27,TREAL_1:11;
   reconsider fB = L[01]((0,1)(#),(#)(0,1)) as continuous map of I[01], I[01]
@@ -3584,12 +3525,12 @@ A31:  ff.(s,0) = ff.([s,0]) by BINOP_1:def 1
             .= f.(F.([s,0])) by A30,FUNCT_1:23
             .= f.(1-s,0) by A26,BINOP_1:def 1
             .= P.(1-s) by A17, X3
-            .= (-P).s by X1, BORSUK_2:def 5;
+            .= (-P).s by X1, BORSUK_2:def 6;
       ff.(s,1) = ff.([s,1]) by BINOP_1:def 1
             .= f.(F.([s,1])) by A29,FUNCT_1:23
             .= f.(1-s,1) by A27,BINOP_1:def 1
             .= Q.(1-s) by X3, A17
-            .= (-Q).s by X1, BORSUK_2:def 5;
+            .= (-Q).s by X1, BORSUK_2:def 6;
     hence thesis by A31;
    end;
    for t being Point of I[01] holds ff.(0,t) = b & ff.(1,t) = a
@@ -3640,7 +3581,7 @@ theorem
       P, Q are_homotopic holds -P, -Q are_homotopic
   proof
     let P, Q be Path of a1, b1;
-    a1, b1 are_connected by Taa;
+    a1, b1 are_connected by BORSUK_2:def 3;
     hence thesis by Tx3;
   end;
 
@@ -3655,12 +3596,12 @@ A:  P, Q are_homotopic & Q, R are_homotopic; then
 A1:   f is continuous &
     for s being Point of I[01] holds f.(s,0) = P.s & f.(s,1) = Q.s &
     for t being Point of I[01] holds f.(0,t) = a   & f.(1,t) = b
-      by BORSUK_2:def 6;
+      by BORSUK_2:def 7;
     consider g being map of [:I[01],I[01]:], T such that
 A2:   g is continuous &
     for s being Point of I[01] holds g.(s,0) = Q.s & g.(s,1) = R.s &
     for t being Point of I[01] holds g.(0,t) = a   & g.(1,t) = b
-      by BORSUK_2:def 6, A;
+      by BORSUK_2:def 7, A;
     reconsider P1 = P[01](0, 1/2, (#)(0,1), (0,1)(#)) as
       continuous map of Closed-Interval-TSpace(0,1/2), I[01]
         by TREAL_1:15, TOPMETR:27;
@@ -3953,7 +3894,7 @@ R1:  P2.t is Point of I[01] by Ble2, S1;
            .= b by A2, R1;
      end;
    end;
-   hence thesis by T, T1, BORSUK_2:def 6;
+   hence thesis by T, T1, BORSUK_2:def 7;
 end;
 
 theorem Tx4:
@@ -3975,7 +3916,7 @@ theorem
   proof
     let P be Path of a1, b1,
         Q be constant Path of b1, b1;
-    a1,b1 are_connected by Taa;
+    a1,b1 are_connected by BORSUK_2:def 3;
     hence thesis by Tx4;
   end;
 
@@ -3998,7 +3939,7 @@ theorem
   proof
     let P be Path of a1, b1,
         Q be constant Path of a1, a1;
-     a1,b1 are_connected by Taa;
+     a1,b1 are_connected by BORSUK_2:def 3;
      hence thesis by Tx5;
   end;
 
@@ -4010,11 +3951,8 @@ theorem Tx6:
     let P be Path of a, b,
         Q be constant Path of a, a such that
 a0: a, b are_connected;        
-a1: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b by a0,da;
-    b, a are_connected by a0; then
-a3: ex f being map of I[01], T st f is continuous & f.0 = b & f.1 = a by da;
-    then
-c1: -P is continuous by BORSUK_2:def 1;
+a3: b, a are_connected by a0; then
+c1: -P is continuous by BORSUK_2:def 2;
     set S = [:I[01],I[01]:];
     set S1 = S|IAA;
     set S2 = S|IBB;
@@ -4023,10 +3961,8 @@ c1: -P is continuous by BORSUK_2:def 1;
       as continuous map of S, I[01] by YELLOW12:39;
     reconsider e2 = pr2(the carrier of I[01], the carrier of I[01]) 
       as continuous map of S, I[01] by YELLOW12:40;
-    a, a are_connected; then
-a2: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = a by da;
-    then
-    reconsider PP = P + -P as continuous Path of a,a by BORSUK_2:def 1;
+a2: a, a are_connected; then
+    reconsider PP = P + -P as continuous Path of a,a by BORSUK_2:def 2;
     set ff = PP * e1;
     reconsider f = ff|IAA as map of S1, T by JGRAPH_3:12;
     reconsider f as continuous map of S1, T by TOPMETR:10;
@@ -4045,7 +3981,7 @@ Y2:   e1.x = x`1 by Y3, FUNCT_3:def 5;
 Y1:   x in dom e1 by yy, FUNCT_2:def 1;
 jj:   x`1 <= 1/2 by Kasia, h1;
       f.x = ff.x by h1, FUNCT_1:72 .= (P + -P).(e1.x) by Y1, FUNCT_1:23
-         .= P.(2 * x`1) by y3, jj, a1, a3, BORSUK_2:def 4, Y2;
+         .= P.(2 * x`1) by y3, jj, a0, BORSUK_2:def 5, Y2;
       hence thesis;
     end;
     set gg = (-P) * e2;
@@ -4066,7 +4002,7 @@ y3:   x`1 in the carrier of I[01] & x`2 in the carrier of I[01]
 Y2:   e2.x = x`2 by Y3, FUNCT_3:def 6;
 Y1:   x in dom e2 by yy, FUNCT_2:def 1;
       g.x = gg.x by h1, FUNCT_1:72 .= (-P).(e2.x) by Y1, FUNCT_1:23
-         .= P.(1 - x`2) by y3, a1, BORSUK_2:def 5, Y2;
+         .= P.(1 - x`2) by y3, a0, BORSUK_2:def 6, Y2;
       hence thesis;
     end;
     set hh = PP * e1;
@@ -4087,7 +4023,7 @@ Y2:   e1.x = x`1 by Y3, FUNCT_3:def 5;
 Y1:   x in dom e1 by yy, FUNCT_2:def 1;
 mm:   x`1 >= 1/2 by Kasia2, h1; 
       h.x = hh.x by h1, FUNCT_1:72 .= (P + - P).(e1.x) by Y1, FUNCT_1:23
-         .= (-P).(2 * x`1 - 1) by mm, y3, a1, a3, BORSUK_2:def 4, Y2;
+         .= (-P).(2 * x`1 - 1) by mm, y3, a3, BORSUK_2:def 5, Y2;
       hence thesis;
     end;
     set S12 = S | (IAA \/ IBB);
@@ -4147,7 +4083,7 @@ RR:   2 * pp`1 - 1 is Point of I[01] by F1, Lynch;
       p in dom g by FUNCT_2:def 1; then
       fg.p = g.p by A2, FUNCT_4:14
           .= P.(1 - pp`2) by F3, GH
-          .= (-P).(2 * pp`1 - 1) by RR, a1, BORSUK_2:def 5, F1
+          .= (-P).(2 * pp`1 - 1) by RR, a0, BORSUK_2:def 6, F1
           .= h.p by PK;
       hence thesis;
     end; 
@@ -4176,7 +4112,7 @@ O4:       not [s,0] in dom g by FUNCT_2:def 1;
           H. [s,0] = fg. [s,0] by X1, O1, FUNCT_4:12
                   .= f. [s,0] by A2, FUNCT_4:12, O4
                   .= P.(2 * s) by O3, GG, O6
-                  .= (P+ -P).s by O0, a1, a3, BORSUK_2:def 4;
+                  .= (P+ -P).s by O0, a3, BORSUK_2:def 5;
           hence thesis by BINOP_1:def 1;
         end;
         suppose
@@ -4185,9 +4121,9 @@ O2:       [s,0] in the carrier of S3 by Kasia5x, JORDAN1:1; then
           [s,0] in dom h by FUNCT_2:def 1; then
           H. [s,0] = h. [s,0] by X1, FUNCT_4:14
                   .= (-P).(2 * s - 1) by O2, PK, O3
-                  .= b by a3, BORSUK_2:def 1, O0
-                  .= P.(2 * (1/2)) by a1, BORSUK_2:def 1
-                  .= (P+ -P).s by O0, a1, a3, BORSUK_2:def 4;
+                  .= b by a3, BORSUK_2:def 2, O0
+                  .= P.(2 * (1/2)) by a0, BORSUK_2:def 2
+                  .= (P+ -P).s by O0, a3, BORSUK_2:def 5;
           hence thesis by BINOP_1:def 1;
         end;
         suppose 
@@ -4197,7 +4133,7 @@ O2:       [s,0] in the carrier of S3 by JORDAN1:1; then
           [s,0] in dom h by FUNCT_2:def 1; then
           H. [s,0] = h. [s,0] by X1, FUNCT_4:14
                   .= (-P).(2 * s - 1) by O2, PK, O3
-                  .= (P+ -P).s by O0, a1, a3, BORSUK_2:def 4;
+                  .= (P+ -P).s by O0, a3, BORSUK_2:def 5;
           hence thesis by BINOP_1:def 1;
         end;
       end;
@@ -4217,8 +4153,8 @@ O4:       [s,1] in dom g by FUNCT_2:def 1;
           H. [s,1] = fg. [s,1] by X1, O1, FUNCT_4:12
                   .= g. [s,1] by A2, FUNCT_4:14, O4
                   .= P.(1 - 1) by GH, YY, O3
-                  .= a by a1, BORSUK_2:def 1
-                  .= Q.0 by a2, BORSUK_2:def 1
+                  .= a by a0, BORSUK_2:def 2
+                  .= Q.0 by a2, BORSUK_2:def 2
                   .= Q.s by FF, SEQM_3:def 5;
           hence thesis by BINOP_1:def 1;
         end;
@@ -4228,8 +4164,8 @@ O2:       [s,1] in the carrier of S3 by Kasia5x, JORDAN1:1; then
           [s,1] in dom h by FUNCT_2:def 1; then
           H. [s,1] = h. [s,1] by X1, FUNCT_4:14
                   .= (-P).(2 * s - 1) by O2, PK, O3
-                  .= a by a3, BORSUK_2:def 1, O0
-                  .= Q.0 by a2, BORSUK_2:def 1
+                  .= a by a3, BORSUK_2:def 2, O0
+                  .= Q.0 by a2, BORSUK_2:def 2
                   .= Q.s by SEQM_3:def 5, FF;
           hence thesis by BINOP_1:def 1;
         end;
@@ -4257,7 +4193,7 @@ hh:     H.(0,t) = H. [0,t] by BINOP_1:def 1
           not x in dom g by FUNCT_2:def 1; then
           fg. [0,t] = f. [0,t] by A2, FUNCT_4:12
                    .= P.(2 * x`1) by GG, hk
-                   .= a by hl, a1, BORSUK_2:def 1;
+                   .= a by hl, a0, BORSUK_2:def 2;
           hence thesis by hh;
         end;
         suppose
@@ -4266,7 +4202,7 @@ qi:       x in the carrier of S2 by JORDAN1:1, Kasia5; then
           x in dom g by FUNCT_2:def 1; then
           fg. [0,t] = g. [0,1] by qu, A2, FUNCT_4:14
                    .= P.(1 - x`2) by GH, qi, qu
-                   .= a by a1, BORSUK_2:def 1, hl, qu;
+                   .= a by a0, BORSUK_2:def 2, hl, qu;
           hence thesis by hh;
         end;       
       end;
@@ -4281,11 +4217,11 @@ hj:     [1,t] in dom h by FUNCT_2:def 1;
 hh:     H.(1,t) = H. [1,t] by BINOP_1:def 1
                .= h. [1,t] by X1, FUNCT_4:14, hj;
         h. [1,t] = (-P).(2 * x`1 - 1) by PK, PP
-                .= a by hl, a3, BORSUK_2:def 1;
+                .= a by hl, a3, BORSUK_2:def 2;
         hence thesis by hh;
       end;
     end; 
-    hence thesis by X1, X2, BORSUK_2:def 6;
+    hence thesis by X1, X2, BORSUK_2:def 7;
   end;
 
 theorem
@@ -4295,7 +4231,7 @@ theorem
   proof
     let P be Path of a1, b1,
         Q be constant Path of a1, a1;
-    a1, b1 are_connected by Taa;
+    a1, b1 are_connected by BORSUK_2:def 3;
     hence thesis by Tx6;
   end;
 
@@ -4306,12 +4242,9 @@ theorem Tx7:
   proof
     let P be Path of b, a,
         Q be constant Path of a, a such that
-a0: b, a are_connected;
-a1: ex f being map of I[01], T st f is continuous & f.0 = b & f.1 = a by a0,da;
-    then
-c0: P is continuous by BORSUK_2:def 1;
-    a, b are_connected by a0; then
-a3: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b by da;
+a1: b, a are_connected;
+c0: P is continuous by a1,BORSUK_2:def 2;
+a3: a, b are_connected by a1;
     set S = [:I[01],I[01]:];
     set S1 = S|IAA;
     set S2 = S|IBB;
@@ -4320,10 +4253,8 @@ a3: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b by da;
       as continuous map of S, I[01] by YELLOW12:39;
     reconsider e2 = pr2(the carrier of I[01], the carrier of I[01]) 
       as continuous map of S, I[01] by YELLOW12:40;
-    a, a are_connected; then
-a2: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = a by da;
-    then
-    reconsider PP = -P + P as continuous Path of a,a by BORSUK_2:def 1;
+a2: a, a are_connected; then
+    reconsider PP = -P + P as continuous Path of a,a by BORSUK_2:def 2;
     set ff = PP * e1;
     reconsider f = ff|IAA as map of S1, T by JGRAPH_3:12;
     reconsider f as continuous map of S1, T by TOPMETR:10;
@@ -4342,7 +4273,7 @@ Y2:   e1.x = x`1 by Y3, FUNCT_3:def 5;
 Y1:   x in dom e1 by yy, FUNCT_2:def 1;
 jj:   x`1 <= 1/2 by Kasia, h1;
       f.x = ff.x by h1, FUNCT_1:72 .= (-P + P).(e1.x) by Y1, FUNCT_1:23
-         .= (-P).(2 * x`1) by y3, jj, a1, a3, BORSUK_2:def 4, Y2;
+         .= (-P).(2 * x`1) by y3, jj, a3, BORSUK_2:def 5, Y2;
       hence thesis;
     end;
     set gg = P * e2;
@@ -4366,7 +4297,7 @@ Y1:   x in dom e2 by yy, FUNCT_2:def 1;
       g.x = gg.x by h1, FUNCT_1:72
          .= P.(x`2) by Y2, Y1, FUNCT_1:23
          .= P.(1 - (1 - x`2))
-         .= (-P).(1 - x`2) by hh, a1, BORSUK_2:def 5;
+         .= (-P).(1 - x`2) by hh, a1, BORSUK_2:def 6;
       hence thesis;
     end;
     set hh = PP * e1;
@@ -4387,7 +4318,7 @@ Y2:   e1.x = x`1 by Y3, FUNCT_3:def 5;
 Y1:   x in dom e1 by yy, FUNCT_2:def 1;
 mm:   x`1 >= 1/2 by Kasia2, h1; 
       h.x = hh.x by h1, FUNCT_1:72 .= (-P + P).(e1.x) by Y1, FUNCT_1:23
-         .= P.(2 * x`1 - 1) by mm, y3, a1, a3, BORSUK_2:def 4, Y2;
+         .= P.(2 * x`1 - 1) by mm, y3, a3, BORSUK_2:def 5, Y2;
       hence thesis;
     end;
     set S12 = S | (IAA \/ IBB);
@@ -4448,7 +4379,7 @@ QQ:   1 - pp`2 in the carrier of I[01] by JORDAN5B:4;
       p in dom g by FUNCT_2:def 1; then
       fg.p = g.p by A2, FUNCT_4:14
           .= (-P).(1 - pp`2) by F3, GH
-          .= P.(1 - (1 - pp`2)) by a1, QQ, BORSUK_2:def 5
+          .= P.(1 - (1 - pp`2)) by a1, QQ, BORSUK_2:def 6
           .= h.p by PK, F1;
       hence thesis;
     end; 
@@ -4477,7 +4408,7 @@ O4:       not [s,0] in dom g by FUNCT_2:def 1;
           H. [s,0] = fg. [s,0] by X1, O1, FUNCT_4:12
                   .= f. [s,0] by A2, FUNCT_4:12, O4
                   .= (-P).(2 * s) by O3, GG, O6
-                  .= (-P + P).s by O0, a1, a3, BORSUK_2:def 4;
+                  .= (-P + P).s by O0, a3, BORSUK_2:def 5;
           hence thesis by BINOP_1:def 1;
         end;
         suppose
@@ -4486,9 +4417,9 @@ O2:       [s,0] in the carrier of S3 by Kasia5x, JORDAN1:1; then
           [s,0] in dom h by FUNCT_2:def 1; then
           H. [s,0] = h. [s,0] by X1, FUNCT_4:14
                   .= P.(2 * s - 1) by O2, PK, O3
-                  .= b by O0, a1, BORSUK_2:def 1
-                  .= (-P).(2 * (1/2)) by a3, BORSUK_2:def 1
-                  .= (-P + P).s by O0, a1, a3, BORSUK_2:def 4;
+                  .= b by O0, a1, BORSUK_2:def 2
+                  .= (-P).(2 * (1/2)) by a3, BORSUK_2:def 2
+                  .= (-P + P).s by O0, a3, BORSUK_2:def 5;
           hence thesis by BINOP_1:def 1;
         end;
         suppose 
@@ -4498,7 +4429,7 @@ O2:       [s,0] in the carrier of S3 by JORDAN1:1; then
           [s,0] in dom h by FUNCT_2:def 1; then
           H. [s,0] = h. [s,0] by X1, FUNCT_4:14
                   .= P.(2 * s - 1) by O2, PK, O3
-                  .= (-P + P).s by O0, a1, a3, BORSUK_2:def 4;
+                  .= (-P + P).s by O0, a3, BORSUK_2:def 5;
           hence thesis by BINOP_1:def 1;
         end;
       end;
@@ -4518,8 +4449,8 @@ O4:       [s,1] in dom g by FUNCT_2:def 1;
           H. [s,1] = fg. [s,1] by X1, O1, FUNCT_4:12
                   .= g. [s,1] by A2, FUNCT_4:14, O4
                   .= (-P).(1 - 1) by GH, YY, O3
-                  .= a by a3, BORSUK_2:def 1
-                  .= Q.0 by a2, BORSUK_2:def 1
+                  .= a by a3, BORSUK_2:def 2
+                  .= Q.0 by a2, BORSUK_2:def 2
                   .= Q.s by FF, SEQM_3:def 5;
           hence thesis by BINOP_1:def 1;
         end;
@@ -4529,8 +4460,8 @@ O2:       [s,1] in the carrier of S3 by Kasia5x, JORDAN1:1; then
           [s,1] in dom h by FUNCT_2:def 1; then
           H. [s,1] = h. [s,1] by X1, FUNCT_4:14
                   .= P.(2 * s - 1) by O2, PK, O3
-                  .= a by O0, a1, BORSUK_2:def 1
-                  .= Q.0 by a2, BORSUK_2:def 1
+                  .= a by O0, a1, BORSUK_2:def 2
+                  .= Q.0 by a2, BORSUK_2:def 2
                   .= Q.s by SEQM_3:def 5, FF;
           hence thesis by BINOP_1:def 1;
         end;
@@ -4558,7 +4489,7 @@ hh:     H.(0,t) = H. [0,t] by BINOP_1:def 1
           not x in dom g by FUNCT_2:def 1; then
           fg. [0,t] = f. [0,t] by A2, FUNCT_4:12
                    .= (-P).(2 * x`1) by GG, hk
-                   .= a by hl, a3, BORSUK_2:def 1;
+                   .= a by hl, a3, BORSUK_2:def 2;
           hence thesis by hh;
         end;
         suppose
@@ -4567,7 +4498,7 @@ qi:       x in the carrier of S2 by JORDAN1:1, Kasia5; then
           x in dom g by FUNCT_2:def 1; then
           fg. [0,t] = g. [0,1] by qu, A2, FUNCT_4:14
                    .= (-P).(1 - x`2) by GH, qi, qu
-                   .= a by a3, BORSUK_2:def 1, hl, qu;
+                   .= a by a3, BORSUK_2:def 2, hl, qu;
           hence thesis by hh;
         end;       
       end;
@@ -4582,11 +4513,11 @@ hj:     [1,t] in dom h by FUNCT_2:def 1;
 hh:     H.(1,t) = H. [1,t] by BINOP_1:def 1
                .= h. [1,t] by X1, FUNCT_4:14, hj;
         h. [1,t] = P.(2 * x`1 - 1) by PK, PP
-                .= a by hl, a1, BORSUK_2:def 1;
+                .= a by hl, a1, BORSUK_2:def 2;
         hence thesis by hh;
       end;
     end; 
-    hence thesis by X1, X2, BORSUK_2:def 6;
+    hence thesis by X1, X2, BORSUK_2:def 7;
   end;
   
 theorem
@@ -4596,7 +4527,7 @@ theorem
   proof
     let P be Path of b1, a1,
         Q be constant Path of a1, a1;
-    b1, a1 are_connected by Taa;
+    b1, a1 are_connected by BORSUK_2:def 3;
     hence thesis by Tx7;
   end;
   
@@ -4604,10 +4535,8 @@ theorem
  for P, Q be constant Path of a, a holds P, Q are_homotopic
   proof
     let P, Q be constant Path of a, a;
-    a, a are_connected; then
-a1: ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = a by da;
     P = I[01] --> a & Q = I[01] --> a by BORSUK_2:6;
-    hence thesis by a1, BORSUK_2:15;
+    hence thesis by BORSUK_2:15;
   end;
 
 definition let T be non empty TopSpace;
@@ -4620,5 +4549,5 @@ definition let T be non empty TopSpace;
                                      it.(s,1) = Q.s &
     for t being Point of I[01] holds it.(0,t) = a &
                                      it.(1,t) = b;
-  existence by A1, BORSUK_2:def 6;
+  existence by A1, BORSUK_2:def 7;
 end;

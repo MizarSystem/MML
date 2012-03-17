@@ -5,7 +5,7 @@ ZFMISC_1
 SUBSET_1
 FUNCT_1
 #
-M1 W3 ;;M1 ;M1 ;;
-ªM1 V1 ;V4 ;;ª&R1 K1 B1 ;F1 ;;M2 F1 ;;&ª&P1 B2 ;ªR1 K28 B1 B2 ;F2 B2 ;;;ª&ªP1 B2 ;ªR1 K28 B1 B2 ;F3 B2 ;;;;;;
+M1 W4 ;;M1 ;M1 ;;
+ªM1 V1 ;V5 ;;ª&R1 K1 B1 ;F1 ;;M2 F1 ;;&ª&P1 B2 ;ªR1 K28 B1 B2 ;F2 B2 ;;;ª&ªP1 B2 ;ªR1 K28 B1 B2 ;F3 B2 ;;;;;;
 #
 !

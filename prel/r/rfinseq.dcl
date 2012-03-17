@@ -14,7 +14,7 @@ CARD_1
 FINSEQ_1
 RFINSEQ
 #
-«V1 ;V3 ;V16 ;V19 ;V21 ;;;M7 K52 ;;
-fV16 ;;M1 V1 ;V3 ;V16 ;;M1 ;;K10 A1 A2 ;
-fV1 ;V3 ;V16 ;;M1 V1 ;V3 ;;M1 V16 ;;;K7 A1 A2 ;
+«V1 ;V4 ;V17 ;V20 ;V22 ;;;M7 K52 ;;
+fV17 ;;M1 V1 ;V4 ;V17 ;;M1 ;;K10 A1 A2 ;
+fV1 ;V4 ;V17 ;;M1 V1 ;V4 ;;M1 V17 ;;;K7 A1 A2 ;
 !

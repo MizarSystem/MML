@@ -11,15 +11,15 @@ environ
       PROB_1, TARSKI, SETFAM_1, LATTICES, BINOP_1, MSUALG_2;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, RELAT_1, FUNCT_1,
       FUNCT_2, FINSEQ_1, SETFAM_1, FINSEQ_2, LATTICES, BINOP_1, PROB_1, CARD_3,
-      PBOOLE, PRALG_1, MSUALG_1;
+      PBOOLE, MSUALG_1;
  constructors LATTICES, BINOP_1, PRALG_1, MSUALG_1, PROB_1, MEMBERED, XBOOLE_0;
  clusters FUNCT_1, LATTICES, PBOOLE, PRALG_1, MSUALG_1, RELAT_1, RELSET_1,
       STRUCT_0, RLSUB_2, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
  requirements BOOLE, SUBSET;
  definitions TARSKI, PBOOLE, LATTICES, XBOOLE_0;
  theorems TARSKI, FUNCT_1, FINSEQ_1, PBOOLE, CARD_3, MSUALG_1, FUNCT_2,
-      PRALG_1, ZFMISC_1, SETFAM_1, BINOP_1, LATTICES, RELAT_1, STRUCT_0,
-      PROB_1, RELSET_1, XBOOLE_0, XBOOLE_1, PARTFUN1, FUNCOP_1;
+      ZFMISC_1, SETFAM_1, BINOP_1, LATTICES, RELAT_1, STRUCT_0, PROB_1,
+      RELSET_1, XBOOLE_0, XBOOLE_1, PARTFUN1, FUNCOP_1;
  schemes ZFREFLE1, BINOP_1, FUNCT_1, XBOOLE_0;
 
 begin
@@ -28,19 +28,6 @@ begin
 ::
 
 reserve x,y for set;
-
-scheme LambdaB {D()->non empty set, F(set)->set}:
-ex f be Function st dom f = D() & for d be Element of D() holds f.d = F(d)
-proof
-  deffunc G(set)=F($1);
-  consider f be Function such that
-  A1: dom f = D() & for d be set st d in D() holds f.d = G(d) from
-FUNCT_1:sch 3;
-  take f;
-  thus dom f = D() by A1;
-  let d be Element of D();
-  thus thesis by A1;
- end;
 
 registration
   let I be set, X be ManySortedSet of I, Y be non-empty ManySortedSet of I;
@@ -127,23 +114,7 @@ holds product ((X /\ Y)*i) = product(X * i) /\ product(Y * i)
   hence thesis by A2,A10,CARD_3:def 5;
  end;
 
-definition let I be set,
-               M be ManySortedSet of I;
-mode ManySortedSubset of M -> ManySortedSet of I means :Def1:
- it c= M;
-  existence;
-end;
-
-registration let I be set,
-               M be non-empty ManySortedSet of I;
-cluster non-empty ManySortedSubset of M;
- existence
-  proof
-   reconsider N= M as ManySortedSubset of M by Def1;
-   take N;
-   thus thesis;
-  end;
-end;
+definition canceled; end;
 
 begin
 ::
@@ -260,7 +231,7 @@ func Constants (U0) -> MSSubset of U0 means :Def5:
   proof
    deffunc G(SortSymbol of S) = Constants(U0,$1);
    consider f be Function such that A1:dom f = the carrier of S &
-   for d be SortSymbol of S holds f.d = G(d) from LambdaB;
+   for d be SortSymbol of S holds f.d = G(d) from FUNCT_1:sch 4;
    reconsider f as ManySortedSet of the carrier of S by A1,PBOOLE:def 3;
       f c= the Sorts of U0
     proof let s be set;
@@ -269,7 +240,7 @@ func Constants (U0) -> MSSubset of U0 means :Def5:
         f.s1 = Constants(U0,s1) by A1;
      hence thesis;
     end;
-   then reconsider f as MSSubset of U0 by Def1;
+   then reconsider f as MSSubset of U0 by PBOOLE:def 23;
    take f;
    thus thesis by A1;
   end;
@@ -311,7 +282,7 @@ cluster Constants(U0,s) -> non empty;
       Args(o,U0) = ((the Sorts of U0)# * the Arity of S).o by MSUALG_1:def 9
            .= (the Sorts of U0)# . ((the Arity of S).o) by A5,FUNCT_1:22
            .= (the Sorts of U0)# . (the_arity_of o) by MSUALG_1:def 6
-           .= product ((the Sorts of U0) * (the_arity_of o)) by MSUALG_1:def 3
+           .= product ((the Sorts of U0) * (the_arity_of o)) by PBOOLE:def 19
            .= product ((the Sorts of U0) * a) by A1,MSUALG_1:def 6
            .= {{}} by CARD_3:19,RELAT_1:62;
    then A6: {} in Args(o,U0) by TARSKI:def 1;
@@ -394,7 +365,7 @@ then A3: dom (B0# * the Arity of S) = dom (the Arity of S) &
      (B0# * the Arity of S).o = B0#.a & (B1# * the Arity of S).o = B1#.a
                                         by A2,A3,A4,FUNCT_1:22;
   then A5: (B0# * the Arity of S).o = product (B0 * a) &
-  (B1# * the Arity of S).o = product (B1 * a) by MSUALG_1:def 3;
+  (B1# * the Arity of S).o = product (B1 * a) by PBOOLE:def 19;
   A6:dom B0 = the carrier of S & dom B1 = the carrier of S by PBOOLE:def 3;
   A7: rng a c= the carrier of S by FINSEQ_1:def 4;
   then A8: dom (B0 * a) = dom a & dom (B1 * a) = dom a by A6,RELAT_1:46;
@@ -444,14 +415,14 @@ A4:  (A * the ResultSort of S).o = {};
    suppose (A * the ResultSort of S).o <> {};
     then A6:   A.((the ResultSort of S).o) <> {} by A2,A3,FUNCT_1:23;
 A7:  (the ResultSort of S).o in the carrier of S by A3,FUNCT_2:7;
-       A c= B by Def1;
+       A c= B by PBOOLE:def 23;
     then A.((the ResultSort of S).o)
       c= B.((the ResultSort of S).o) by A7,PBOOLE:def 5;
     then B.((the ResultSort of S).o) <> {} by A6,XBOOLE_1:3;
     then (B * the ResultSort of S).o <> {} by A2,A3,FUNCT_1:23;
     then A8:  Result(o,U0) <> {} by MSUALG_1:def 10;
-   reconsider B0 = B as MSSubset of U0 by Def1;
-   A9:A c= B0 by Def1;
+   reconsider B0 = B as MSSubset of U0 by PBOOLE:def 23;
+   A9:A c= B0 by PBOOLE:def 23;
    A10: dom Den(o,U0) = Args(o,U0) by A8,FUNCT_2:def 1
                     .= (B# * the Arity of S).o by MSUALG_1:def 9;
    A11: (A# * the Arity of S).o c= (B0# * the Arity of S).o by A9,Th3;
@@ -504,7 +475,7 @@ func Opers(U0,A) -> ManySortedFunction of
         o in dom f & f.o = o/.A by A3,A5;
      hence thesis;
     end;
-   then reconsider f as ManySortedFunction of B,C by MSUALG_1:def 2;
+   then reconsider f as ManySortedFunction of B,C by PBOOLE:def 18;
    take f;
    let o be OperSymbol of S;
    thus thesis by A1,A3;
@@ -612,7 +583,7 @@ mode MSSubAlgebra of U0 -> MSAlgebra over S means :Def10:
  existence
   proof
    take U1 = U0;
-   thus the Sorts of U1 is MSSubset of U0 by Def1;
+   thus the Sorts of U1 is MSSubset of U0 by PBOOLE:def 23;
    let B be MSSubset of U0;assume A1: B=the Sorts of U1;
    hence B is opers_closed by Th4;
    set f1 = the Charact of U1,
@@ -637,7 +608,7 @@ proof
   reconsider A = MSAlgebra (#the Sorts of U0,the Charact of U0#)
   as strict MSAlgebra over S;
      now
-     thus the Sorts of A is MSSubset of U0 by Def1;
+     thus the Sorts of A is MSSubset of U0 by PBOOLE:def 23;
      let B be MSSubset of U0;assume A1: B=the Sorts of A;
      hence B is opers_closed by Th4;
      set f1 = the Charact of A,
@@ -686,7 +657,7 @@ end;
 theorem
    U0 is MSSubAlgebra of U0
  proof
-   thus the Sorts of U0 is MSSubset of U0 by Def1;
+   thus the Sorts of U0 is MSSubset of U0 by PBOOLE:def 23;
    let B be MSSubset of U0;
    assume A1: B=the Sorts of U0;
    hence B is opers_closed by Th4;
@@ -710,15 +681,15 @@ U0 is MSSubAlgebra of U2
   then the Sorts of U0 is MSSubset of U1 &
   the Sorts of U1 is MSSubset of U2 by Def10;
   then A2: the Sorts of U1 c= the Sorts of U2 &
-  the Sorts of U0 c= the Sorts of U1 by Def1;
+  the Sorts of U0 c= the Sorts of U1 by PBOOLE:def 23;
   then the Sorts of U0 c= the Sorts of U2 by PBOOLE:15;
-  hence the Sorts of U0 is MSSubset of U2 by Def1;
+  hence the Sorts of U0 is MSSubset of U2 by PBOOLE:def 23;
   let B be MSSubset of U2;
   assume
   A3: B = the Sorts of U0;
   reconsider B0 = the Sorts of U0 as MSSubset of U1 by A1,Def10;
   reconsider B1 = the Sorts of U1 as MSSubset of U2 by A1,Def10;
-  reconsider B1'= B1 as MSSubset of U1 by Def1;
+  reconsider B1'= B1 as MSSubset of U1 by PBOOLE:def 23;
   A4: B0 is opers_closed & the Charact of U0 = Opers (U1,B0) &
   B1 is opers_closed & the Charact of U1 = Opers (U2,B1) by A1,Def10;
   A5: for o be OperSymbol of S holds B is_closed_on o
@@ -773,9 +744,8 @@ U1 = U2
   A1: U1 is strict MSSubAlgebra of U2 & U2 is strict MSSubAlgebra of U1;
   then the Sorts of U1 is MSSubset of U2 &
   the Sorts of U2 is MSSubset of U1 by Def10;
-  then the Sorts of U1 c= the Sorts of U2 & the Sorts of U2 c= the Sorts of
-U1
-                                                               by Def1;
+  then the Sorts of U1 c= the Sorts of U2 & the Sorts of U2 c= the Sorts of U1
+                                                   by PBOOLE:def 23;
   then A2: the Sorts of U1 = the Sorts of U2 by PBOOLE:def 13;
   reconsider B1 = the Sorts of U1 as MSSubset of U2 by A1,Def10;
   reconsider B2 = the Sorts of U2 as MSSubset of U1 by A1,Def10;
@@ -803,7 +773,7 @@ for U1,U2 be MSSubAlgebra of U0
 holds U1 is MSSubAlgebra of U2
  proof let U1, U2 be MSSubAlgebra of U0;
   assume A1:the Sorts of U1 c= the Sorts of U2;
-  hence the Sorts of U1 is MSSubset of U2 by Def1;
+  hence the Sorts of U1 is MSSubset of U2 by PBOOLE:def 23;
   let B be MSSubset of U2;
   assume A2: B = the Sorts of U1;
   reconsider B1 = the Sorts of U1, B2 = the Sorts of U2
@@ -923,13 +893,13 @@ A4:   (Constants(U0)).x = Constants(U0,s) by Def5;
            .= ((the Sorts of U0)# * the Arity of S).o by MSUALG_1:def 9
            .= (the Sorts of U0)# . ((the Arity of S).o) by A11,FUNCT_1:22
            .= (the Sorts of U0)# . (the_arity_of o) by MSUALG_1:def 6
-           .= product ((the Sorts of U0) * (the_arity_of o)) by MSUALG_1:def 3
+           .= product ((the Sorts of U0) * (the_arity_of o)) by PBOOLE:def 19
            .= product ((the Sorts of U0) * a) by A6,MSUALG_1:def 6
            .= {{}} by CARD_3:19,RELAT_1:62;
          (u1# * the Arity of S).o = u1# . ((the Arity of S).o) by A11,FUNCT_1:
 22
            .= u1# . (the_arity_of o) by MSUALG_1:def 6
-           .= product (u1 * (the_arity_of o)) by MSUALG_1:def 3
+           .= product (u1 * (the_arity_of o)) by PBOOLE:def 19
            .= product (u1 * a) by A6,MSUALG_1:def 6
            .= {{}} by CARD_3:19,RELAT_1:62;
       then (Den(o,U0))|((u1# * the Arity of S).o) =(Den(o,U0)) by A12,RELAT_1:
@@ -942,7 +912,7 @@ A4:   (Constants(U0)).x = Constants(U0,s) by Def5;
      end;
      end;
    end;
-  hence thesis by Def1;
+  hence thesis by PBOOLE:def 23;
  end;
 
 theorem
@@ -958,8 +928,8 @@ U0 be non-empty MSAlgebra over S, U1,U2 be non-empty MSSubAlgebra of U0 holds
        U0 be non-empty MSAlgebra over S, U1,U2 be non-empty MSSubAlgebra of U0;
      Constants(U0) is non-empty MSSubset of U1 &
   Constants(U0) is non-empty MSSubset of U2 by Th11;
-  then Constants(U0)c=the Sorts of U1 & Constants(U0)c=the Sorts of U2 by Def1
-;
+  then Constants(U0)c=the Sorts of U1 & Constants(U0)c=the Sorts of U2
+              by PBOOLE:def 23;
   then A1: (Constants(U0)) /\ (Constants(U0)) c= (the Sorts of U1) /\ (the
 Sorts of U2)
                                                              by PBOOLE:23;
@@ -1029,9 +999,9 @@ proof
      (Union (the Sorts of U0)) = union rng(the Sorts of U0) by PROB_1:def 3;
   then rng(the Sorts of U0) c= bool(Union (the Sorts of U0)) by ZFMISC_1:100;
   then A2: the Sorts of U0 in f by A1,FUNCT_2:def 2;
-  A3: the Sorts of U0 is MSSubset of U0 by Def1;
+  A3: the Sorts of U0 is MSSubset of U0 by PBOOLE:def 23;
      for B be MSSubset of U0 st B = the Sorts of U0
-  holds B is opers_closed & Constants(U0) c= B & A c= B by Def1,Th4;
+  holds B is opers_closed & Constants(U0) c= B & A c= B by PBOOLE:def 23,Th4;
   hence thesis by A2,A3,Def11;
 end;
 
@@ -1088,7 +1058,7 @@ cluster SubSort(U0) -> non empty;
       (Union (the Sorts of U0)) = union rng(the Sorts of U0) by PROB_1:def 3;
    then rng(the Sorts of U0) c= bool(Union (the Sorts of U0)) by ZFMISC_1:100;
    then A3: the Sorts of U0 in f by A2,FUNCT_2:def 2;
-   A4: the Sorts of U0 is MSSubset of U0 by Def1;
+   A4: the Sorts of U0 is MSSubset of U0 by PBOOLE:def 23;
       for B be MSSubset of U0 st B = the Sorts of U0
    holds B is opers_closed by Th4;
    then reconsider X as non empty set by A1,A3,A4;
@@ -1120,7 +1090,7 @@ B in SubSort(A) iff B is opers_closed & Constants(U0) c= B & A c= B
     assume x in union rng B;
     then consider Y be set such that A3: x in Y & Y in rng B by TARSKI:def 4;
     consider y be set such that A4: y in dom B & B.y = Y by A3,FUNCT_1:def 5;
-       B c= the Sorts of U0 by Def1;
+       B c= the Sorts of U0 by PBOOLE:def 23;
     then A5: B.y c= (the Sorts of U0).y by A2,A4,PBOOLE:def 5;
        (the Sorts of U0).y in rng(the Sorts of U0) by A2,A4,FUNCT_1:def 5;
     hence thesis by A3,A4,A5,TARSKI:def 4;
@@ -1148,7 +1118,7 @@ for B be MSSubset of U0 holds B in SubSort(U0) iff B is opers_closed
     assume x in union rng B;
     then consider Y be set such that A3: x in Y & Y in rng B by TARSKI:def 4;
     consider y be set such that A4: y in dom B & B.y = Y by A3,FUNCT_1:def 5;
-       B c= the Sorts of U0 by Def1;
+       B c= the Sorts of U0 by PBOOLE:def 23;
     then A5: B.y c= (the Sorts of U0).y by A2,A4,PBOOLE:def 5;
        (the Sorts of U0).y in rng(the Sorts of U0) by A2,A4,FUNCT_1:def 5;
     hence thesis by A3,A4,A5,TARSKI:def 4;
@@ -1190,7 +1160,7 @@ for x be set holds
      then (the Sorts of U0).s in rng (the Sorts of U0) by FUNCT_1:def 5;
      then A5: (the Sorts of U0).s c= union( rng (the Sorts of U0)) by ZFMISC_1:
 92;
-        B c= the Sorts of U0 by Def1;
+        B c= the Sorts of U0 by PBOOLE:def 23;
      then B.s c= (the Sorts of U0).s by PBOOLE:def 5;
      then x c= union( rng (the Sorts of U0)) by A4,A5,XBOOLE_1:1;
      hence thesis by A1,A2,A4;
@@ -1236,13 +1206,13 @@ cluster SubSort(A,s) -> non empty;
      then (the Sorts of U0).s in rng (the Sorts of U0) by FUNCT_1:def 5;
      then A5: (the Sorts of U0).s c= union( rng (the Sorts of U0)) by ZFMISC_1:
 92;
-        B c= the Sorts of U0 by Def1;
+        B c= the Sorts of U0 by PBOOLE:def 23;
      then B.s c= (the Sorts of U0).s by PBOOLE:def 5;
      then x c= union( rng (the Sorts of U0)) by A4,A5,XBOOLE_1:1;
      hence thesis by A1,A2,A4;
     end;
-   reconsider u0 = the Sorts of U0 as MSSubset of U0 by Def1;
-      A c= u0 & Constants(U0)c= u0 & u0 is opers_closed by Def1,Th4;
+   reconsider u0 = the Sorts of U0 as MSSubset of U0 by PBOOLE:def 23;
+      A c= u0 & Constants(U0)c= u0 & u0 is opers_closed by PBOOLE:def 23,Th4;
    then u0 in SubSort(A) by Th14;
    then (the Sorts of U0).s in X by A3;
    then reconsider X as non empty set;
@@ -1260,20 +1230,20 @@ for s be SortSymbol of S holds it.s = meet (SubSort(A,s));
   proof
    deffunc F(SortSymbol of S) = meet (SubSort(A,$1));
    consider f be Function such that A1: dom f = the carrier of S &
-   for s be SortSymbol of S holds f.s = F(s) from LambdaB;
+   for s be SortSymbol of S holds f.s = F(s) from FUNCT_1:sch 4;
    reconsider f as ManySortedSet of (the carrier of S) by A1,PBOOLE:def 3;
       f c= the Sorts of U0
     proof let x be set;
      assume x in the carrier of S;
      then reconsider s = x as SortSymbol of S;
      A2: f.s = meet (SubSort(A,s)) by A1;
-     reconsider u0 = the Sorts of U0 as MSSubset of U0 by Def1;
-        A c= u0 & Constants(U0)c= u0 & u0 is opers_closed by Def1,Th4;
+     reconsider u0 = the Sorts of U0 as MSSubset of U0 by PBOOLE:def 23;
+        A c= u0 & Constants(U0)c= u0 & u0 is opers_closed by PBOOLE:def 23,Th4;
      then u0 in SubSort(A) by Th14;
      then (the Sorts of U0).s in (SubSort(A,s)) by Def14;
      hence thesis by A2,SETFAM_1:4;
     end;
-   then reconsider f as MSSubset of U0 by Def1;
+   then reconsider f as MSSubset of U0 by PBOOLE:def 23;
    take f;
    thus thesis by A1;
   end;
@@ -1451,12 +1421,12 @@ B is opers_closed & the Charact of it = Opers(U0,B);
       the Sorts of U1 is MSSubset of U0 & the Sorts of U2 is MSSubset of U0
                                                                 by Def10;
    then the Sorts of U1 c=the Sorts of U0 & the Sorts of U2 c=the Sorts of U0
-                                                               by Def1;
+                                                          by PBOOLE:def 23;
    then (the Sorts of U1) /\ (the Sorts of U2)c=(the Sorts of U0)/\(the Sorts
 of U0)
                                                          by PBOOLE:23;
    then reconsider A = (the Sorts of U1) /\ (the Sorts of U2) as MSSubset of U0
-     by Def1;
+     by PBOOLE:def 23;
       A is opers_closed
     proof let o be OperSymbol of S;
      reconsider u1 = the Sorts of U1, u2 = the Sorts of U2
@@ -1476,14 +1446,14 @@ A3: dom (A# * the Arity of S) = the OperSymbols of S &
              by A2,FUNCT_1:22
       .= (A# qua ManySortedSet of (the carrier of S)*).(the_arity_of o)
              by MSUALG_1:def 6
-      .= product ((u1 /\ u2) * (the_arity_of o)) by MSUALG_1:def 3
+      .= product ((u1 /\ u2) * (the_arity_of o)) by PBOOLE:def 19
       .= product(u1 *(the_arity_of o)) /\ product(u2 *(the_arity_of o)) by Th2
       .= (u1 # qua ManySortedSet of (the carrier of S)*).(the_arity_of o) /\
          product(u2 *(the_arity_of o))
-           by MSUALG_1:def 3
+           by PBOOLE:def 19
       .= (u1 # qua ManySortedSet of (the carrier of S)*).(the_arity_of o) /\
          (u2 # qua ManySortedSet of (the carrier of S)*).(the_arity_of o)
-           by MSUALG_1:def 3
+           by PBOOLE:def 19
       .= (u1 # qua ManySortedSet of (the carrier of S)*).((the Arity of S).o)
 /\
          (u2 # qua ManySortedSet of (the carrier of S)*).(the_arity_of o)
@@ -1558,14 +1528,14 @@ func GenMSAlg(A) -> strict MSSubAlgebra of U0 means :Def18:
    take u1;
    A2: u1 = MSAlgebra (# a, Opers(U0,a)qua ManySortedFunction of
                 (a# * the Arity of S),(a * the ResultSort of S)#) by A1,Def16;
-   hence A is MSSubset of u1 by A1,Def1;
+   hence A is MSSubset of u1 by A1,PBOOLE:def 23;
    let U2 be MSSubAlgebra of U0;
    reconsider B = the Sorts of U2 as MSSubset of U0 by Def10;
    A3: B is opers_closed by Def10;
    assume A is MSSubset of U2;
-   then A4: A c= B by Def1;
+   then A4: A c= B by PBOOLE:def 23;
       Constants(U0) is MSSubset of U2 by Th11;
-   then Constants(U0) c= B by Def1;
+   then Constants(U0) c= B by PBOOLE:def 23;
    then A5: B in SubSort(A) by A3,A4,Th14;
       the Sorts of u1 c= the Sorts of U2
     proof let i be set;
@@ -1606,14 +1576,14 @@ registration let S be non void non empty ManySortedSign,
        now
    A2: u1 = MSAlgebra (# a, Opers(U0,a)qua ManySortedFunction of
                 (a# * the Arity of S),(a * the ResultSort of S)#) by A1,Def16;
-   hence A is MSSubset of u1 by A1,Def1;
+   hence A is MSSubset of u1 by A1,PBOOLE:def 23;
    let U2 be MSSubAlgebra of U0;
    reconsider B = the Sorts of U2 as MSSubset of U0 by Def10;
    A3: B is opers_closed by Def10;
    assume A is MSSubset of U2;
-   then A4: A c= B by Def1;
+   then A4: A c= B by PBOOLE:def 23;
       Constants(U0) is MSSubset of U2 by Th11;
-   then Constants(U0) c= B by Def1;
+   then Constants(U0) c= B by PBOOLE:def 23;
    then A5: B in SubSort(A) by A3,A4,Th14;
       the Sorts of u1 c= the Sorts of U2
     proof let i be set;
@@ -1639,9 +1609,9 @@ holds GenMSAlg(B) = U0
   assume A1: B = the Sorts of U0;
   set W = GenMSAlg(B);
      (the Sorts of W) is MSSubset of U0 by Def10;
-  then A2:the Sorts of W c= the Sorts of U0 by Def1;
+  then A2:the Sorts of W c= the Sorts of U0 by PBOOLE:def 23;
      the Sorts of U0 is MSSubset of W by A1,Def18;
-  then the Sorts of U0 c= the Sorts of W by Def1;
+  then the Sorts of U0 c= the Sorts of W by PBOOLE:def 23;
   then A3:the Sorts of U0 = the Sorts of W by A2,PBOOLE:def 13;
   reconsider B1 = the Sorts of W as MSSubset of U0 by Def10;
       B1 is opers_closed & the Charact of W = Opers(U0,B1) by Def10;
@@ -1657,11 +1627,11 @@ B be MSSubset of U0 st B = the Sorts of U1 holds GenMSAlg(B) = U1
            U1 be strict MSSubAlgebra of U0,
            B be MSSubset of U0;
   assume A1: B = the Sorts of U1;
-  then A2: B is MSSubset of U1 by Def1;
+  then A2: B is MSSubset of U1 by PBOOLE:def 23;
   set W = GenMSAlg(B);
   A3: W is strict MSSubAlgebra of U1 by A2,Def18;
      B is MSSubset of W by Def18;
-  then the Sorts of U1 c= the Sorts of W by A1,Def1;
+  then the Sorts of U1 c= the Sorts of W by A1,PBOOLE:def 23;
   then U1 is strict MSSubAlgebra of W by Th9;
   hence thesis by A3,Th8;
  end;
@@ -1680,7 +1650,7 @@ GenMSAlg(Constants(U0)) /\ U1 = GenMSAlg(Constants(U0))
      C is MSSubset of U1 by Th11;
   then G is strict MSSubAlgebra of U1 by Def18;
   then the Sorts of G is MSSubset of U1 by Def10;
-  then the Sorts of G c= the Sorts of U1 by Def1;
+  then the Sorts of G c= the Sorts of U1 by PBOOLE:def 23;
   then the Sorts of (G /\ U1) = the Sorts of G by A1,PBOOLE:25;
  hence thesis by Th10;
  end;
@@ -1697,9 +1667,9 @@ func U1 "\/" U2 -> strict MSSubAlgebra of U0 means :Def19:
         the Sorts of U1 is MSSubset of U0 &
     the Sorts of U2 is MSSubset of U0 by Def10;
     then the Sorts of U1 c=the Sorts of U0 &
-    the Sorts of U2 c=the Sorts of U0 by Def1;
+    the Sorts of U2 c=the Sorts of U0 by PBOOLE:def 23;
     then B c= the Sorts of U0 by PBOOLE:18;
-    then reconsider B as MSSubset of U0 by Def1;
+    then reconsider B as MSSubset of U0 by PBOOLE:def 23;
     take GenMSAlg(B);
     thus thesis;
    end;
@@ -1713,9 +1683,9 @@ func U1 "\/" U2 -> strict MSSubAlgebra of U0 means :Def19:
         the Sorts of U1 is MSSubset of U0 &
     the Sorts of U2 is MSSubset of U0 by Def10;
     then the Sorts of U1 c=the Sorts of U0 &
-    the Sorts of U2 c=the Sorts of U0 by Def1;
+    the Sorts of U2 c=the Sorts of U0 by PBOOLE:def 23;
     then B c= the Sorts of U0 by PBOOLE:18;
-    then reconsider B as MSSubset of U0 by Def1;
+    then reconsider B as MSSubset of U0 by PBOOLE:def 23;
        W1 = GenMSAlg(B) & W2 = GenMSAlg(B) by A1;
    hence thesis;
   end;
@@ -1731,21 +1701,21 @@ U1 be MSSubAlgebra of U0, A,B be MSSubset of U0 st B = A \/ the Sorts of U1
            A,B be MSSubset of U0;
   assume A1: B = A \/ the Sorts of U1;
      A is MSSubset of GenMSAlg(A) by Def18;
-  then A2:A c= the Sorts of GenMSAlg(A) by Def1;
+  then A2:A c= the Sorts of GenMSAlg(A) by PBOOLE:def 23;
   reconsider u1 = the Sorts of U1, a = the Sorts of GenMSAlg(A)
              as MSSubset of U0 by Def10;
-     a c= the Sorts of U0 & u1 c= the Sorts of U0 by Def1;
+     a c= the Sorts of U0 & u1 c= the Sorts of U0 by PBOOLE:def 23;
    then a \/ u1 c= the Sorts of U0 by PBOOLE:18;
-  then reconsider b=a \/ u1 as MSSubset of U0 by Def1;
+  then reconsider b=a \/ u1 as MSSubset of U0 by PBOOLE:def 23;
   A3: (GenMSAlg(A) "\/" U1) = GenMSAlg(b) by Def19;
   then a \/ u1 is MSSubset of (GenMSAlg(A)"\/"U1) by Def18;
-  then A4: a \/ u1 c=the Sorts of (GenMSAlg(A)"\/"U1) by Def1;
+  then A4: a \/ u1 c=the Sorts of (GenMSAlg(A)"\/"U1) by PBOOLE:def 23;
      A \/ u1 c= a \/ u1 by A2,PBOOLE:22;
   then B c=the Sorts of (GenMSAlg(A)"\/"U1) by A1,A4,PBOOLE:15;
-   then B is MSSubset of (GenMSAlg(A)"\/"U1) by Def1;
+   then B is MSSubset of (GenMSAlg(A)"\/"U1) by PBOOLE:def 23;
   then A5:GenMSAlg(B) is strict MSSubAlgebra of (GenMSAlg(A)"\/"U1) by Def18;
      B is MSSubset of GenMSAlg(B) & u1 c= B & A c= B by A1,Def18,PBOOLE:16;
-  then B c= the Sorts of GenMSAlg(B) & u1 c= B & A c= B by Def1;
+  then B c= the Sorts of GenMSAlg(B) & u1 c= B & A c= B by PBOOLE:def 23;
   then A6: u1 c= the Sorts of GenMSAlg(B) & A c= the Sorts of GenMSAlg(B)
                                                     by PBOOLE:15;
   then A7: A c= (the Sorts of GenMSAlg(A)) /\ (the Sorts of GenMSAlg(B))
@@ -1753,11 +1723,11 @@ U1 be MSSubAlgebra of U0, A,B be MSSubset of U0 st B = A \/ the Sorts of U1
   A8:the Sorts of (GenMSAlg(A) /\ GenMSAlg(B)) =
           (the Sorts of GenMSAlg(A)) /\
  (the Sorts of GenMSAlg(B)) by Def17;
-  then A is MSSubset of (GenMSAlg(A) /\ GenMSAlg(B)) by A7,Def1;
+  then A is MSSubset of (GenMSAlg(A) /\ GenMSAlg(B)) by A7,PBOOLE:def 23;
   then GenMSAlg(A) is MSSubAlgebra of (GenMSAlg(A) /\ GenMSAlg(B)) by Def18;
   then a is MSSubset of (GenMSAlg(A) /\ GenMSAlg(B)) by Def10;
   then A9:a c= (the Sorts of GenMSAlg(A)) /\ (the Sorts of GenMSAlg(B)) by A8,
-Def1;
+PBOOLE:def 23;
      (the Sorts of GenMSAlg(A)) /\ (the Sorts of GenMSAlg(B)) c= a
                                                            by PBOOLE:17;
   then a= (the Sorts of GenMSAlg(A)) /\ (the Sorts of GenMSAlg(B))
@@ -1765,7 +1735,7 @@ Def1;
 ;
   then a c= the Sorts of GenMSAlg(B) by PBOOLE:17;
   then b c= the Sorts of GenMSAlg(B) by A6,PBOOLE:18;
-   then b is MSSubset of GenMSAlg(B) by Def1;
+   then b is MSSubset of GenMSAlg(B) by PBOOLE:def 23;
   then GenMSAlg(b) is strict MSSubAlgebra of GenMSAlg(B) by Def18;
  hence thesis by A3,A5,Th8;
  end;
@@ -1780,7 +1750,7 @@ U1 be MSSubAlgebra of U0, B be MSSubset of U0 st B = the Sorts of U0
             B be MSSubset of U0;
   assume A1: B = the Sorts of U0;
      the Sorts of U1 is MSSubset of U0 by Def10;
-  then the Sorts of U1 c= B by A1,Def1;
+  then the Sorts of U1 c= B by A1,PBOOLE:def 23;
   then B \/ the Sorts of U1 = B by PBOOLE:24;
  hence thesis by Th25;
  end;
@@ -1794,9 +1764,9 @@ U1 "\/" U2 = U2 "\/" U1
            U1,U2 be MSSubAlgebra of U0;
   reconsider u1= the Sorts of U1, u2= the Sorts of U2
               as MSSubset of U0 by Def10;
-     u1 c= the Sorts of U0 & u2 c= the Sorts of U0 by Def1;
+     u1 c= the Sorts of U0 & u2 c= the Sorts of U0 by PBOOLE:def 23;
   then u1 \/ u2 c= the Sorts of U0 by PBOOLE:18;
-  then reconsider A = u1 \/ u2 as MSSubset of U0 by Def1;
+  then reconsider A = u1 \/ u2 as MSSubset of U0 by PBOOLE:def 23;
      U1 "\/" U2 = GenMSAlg(A) by Def19;
   hence thesis by Def19;
  end;
@@ -1811,12 +1781,12 @@ for S be non void non empty ManySortedSign,
            U1,U2 be strict MSSubAlgebra of U0;
   reconsider u1= the Sorts of U1 ,u2 =the Sorts of U2 as MSSubset of U0 by
 Def10;
-     u1 c= the Sorts of U0 & u2 c= the Sorts of U0 by Def1;
+     u1 c= the Sorts of U0 & u2 c= the Sorts of U0 by PBOOLE:def 23;
   then u1 \/ u2 c= the Sorts of U0 by PBOOLE:18;
-  then reconsider A= u1 \/ u2 as MSSubset of U0 by Def1;
+  then reconsider A= u1 \/ u2 as MSSubset of U0 by PBOOLE:def 23;
      U1"\/"U2 = GenMSAlg(A) by Def19;
   then A is MSSubset of U1"\/"U2 by Def18;
-  then A1:A c= the Sorts of (U1 "\/" U2) by Def1;
+  then A1:A c= the Sorts of (U1 "\/" U2) by PBOOLE:def 23;
      the Sorts of U1 c= A by PBOOLE:16;
   then A2: the Sorts of U1 c= the Sorts of (U1"\/"U2) by A1,PBOOLE:15;
   A3:the Sorts of (U1 /\(U1"\/"U2))=(the Sorts of U1)/\(the Sorts of(U1"\/"U2))
@@ -1840,9 +1810,9 @@ holds (U1 /\ U2)"\/"U2 = U2
            U1,U2 be strict MSSubAlgebra of U0;
   reconsider u12= the Sorts of (U1 /\ U2), u2 = the Sorts of U2
                                        as MSSubset of U0 by Def10;
-     u12 c= the Sorts of U0 & u2 c= the Sorts of U0 by Def1;
+     u12 c= the Sorts of U0 & u2 c= the Sorts of U0 by PBOOLE:def 23;
    then u12 \/ u2 c= the Sorts of U0 by PBOOLE:18;
-  then reconsider A=u12 \/ u2 as MSSubset of U0 by Def1;
+  then reconsider A=u12 \/ u2 as MSSubset of U0 by PBOOLE:def 23;
   A1:(U1 /\ U2)"\/"U2=GenMSAlg(A) by Def19;
      u12 = (the Sorts of U1) /\ (the Sorts of U2) by Def17;
   then u12 c= u2 by PBOOLE:17;
@@ -2006,9 +1976,9 @@ MSAlg_join(U0) is commutative
        the Sorts of U1 is MSSubset of U0 &
     the Sorts of U2 is MSSubset of U0 by Def10;
     then the Sorts of U1 c=the Sorts of U0 &
-    the Sorts of U2 c=the Sorts of U0 by Def1;
+    the Sorts of U2 c=the Sorts of U0 by PBOOLE:def 23;
     then B c= the Sorts of U0 by PBOOLE:18;
-    then reconsider B as MSSubset of U0 by Def1;
+    then reconsider B as MSSubset of U0 by PBOOLE:def 23;
        U1"\/" U2 = GenMSAlg(B) & U2"\/"U1 = GenMSAlg(B) by Def19;
    hence thesis by A1;
    end;
@@ -2030,16 +2000,16 @@ U3 by Def21;
     the Sorts of U3 is MSSubset of U0 by Def10;
     then A2:the Sorts of U1 c=the Sorts of U0 &
       the Sorts of U2 c=the Sorts of U0 &
-      the Sorts of U3 c=the Sorts of U0 by Def1;
+      the Sorts of U3 c=the Sorts of U0 by PBOOLE:def 23;
    then A3:(the Sorts of U2) \/ (the Sorts of U3) c= the Sorts of U0 by PBOOLE:
 18;
 A4:(the Sorts of U1) \/ (the Sorts of U2) c= the Sorts of U0 by A2,PBOOLE:18;
    reconsider C =(the Sorts of U2) \/ (the Sorts of U3)
-   as MSSubset of U0 by A3,Def1;
+   as MSSubset of U0 by A3,PBOOLE:def 23;
    reconsider D=(the Sorts of U1) \/ (the Sorts of U2)
-   as MSSubset of U0 by A4,Def1;
+   as MSSubset of U0 by A4,PBOOLE:def 23;
        B c= the Sorts of U0 by A2,A3,PBOOLE:18;
-    then reconsider B as MSSubset of U0 by Def1;
+    then reconsider B as MSSubset of U0 by PBOOLE:def 23;
     A5:U1"\/" (U2"\/"U3) = U1 "\/"(GenMSAlg(C)) by Def19
                     .=(GenMSAlg(C)) "\/" U1 by Th27
                  .= GenMSAlg(B) by Th25;
@@ -2208,7 +2178,7 @@ holds MSSubAlLattice(U0) is bounded
    end;
   thus L is upper-bounded
    proof
-    reconsider B = the Sorts of U0 as MSSubset of U0 by Def1;
+    reconsider B = the Sorts of U0 as MSSubset of U0 by PBOOLE:def 23;
     reconsider G = GenMSAlg(B) as Element of MSSub(U0) by Def20;
     reconsider G1 = G as Element of L by A1;
     take G1;
@@ -2280,7 +2250,7 @@ theorem
 U0 be strict non-empty MSAlgebra over S holds Top (MSSubAlLattice(U0)) = U0
  proof let S be non void non empty ManySortedSign,
        U0 be strict non-empty MSAlgebra over S;
-  reconsider B = the Sorts of U0 as MSSubset of U0 by Def1;
+  reconsider B = the Sorts of U0 as MSSubset of U0 by PBOOLE:def 23;
   thus Top (MSSubAlLattice(U0)) = GenMSAlg(B) by Th36
                             .= U0 by Th22;
  end;

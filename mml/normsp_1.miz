@@ -8,10 +8,9 @@ environ
 
  vocabulary RLVECT_1, BINOP_1, FUNCT_1, PRE_TOPC, RLSUB_1, ABSVALUE, ARYTM_1,
       ARYTM_3, RELAT_1, SEQM_3, SEQ_2, SEQ_1, ORDINAL2, NORMSP_1, ARYTM;
- notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS,
-      XCMPLX_0, XREAL_0,
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0,
       REAL_1, NAT_1, FUNCT_1, FUNCT_2, BINOP_1, RELAT_1, SEQ_1, SEQ_2, SEQM_3,
-      ABSVALUE, STRUCT_0, PRE_TOPC, RLVECT_1, RLSUB_1, COMPLEX1;
+      STRUCT_0, PRE_TOPC, RLVECT_1, RLSUB_1, COMPLEX1;
  constructors REAL_1, NAT_1, DOMAIN_1, SEQ_2, SEQM_3, ABSVALUE, RLSUB_1,
       MEMBERED, XBOOLE_0, COMPLEX1;
  clusters STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0,
@@ -21,7 +20,7 @@ environ
  theorems TARSKI, AXIOMS, REAL_1, NAT_1, FUNCT_1, SQUARE_1, SEQ_2, ABSVALUE,
       RLVECT_1, RLSUB_1, FUNCT_2, SEQM_3, STRUCT_0, RELSET_1, XREAL_0,
       XBOOLE_0, XCMPLX_0;
- schemes FUNCT_1, FUNCT_2, SEQ_1, NAT_1;
+ schemes FUNCT_2, SEQ_1, NAT_1;
 
 begin
 
@@ -340,7 +339,7 @@ reserve d, s, t for set;
 
 canceled;
 
-theorem Th17:
+theorem
  for RNS being non empty 1-sorted, x being Element of RNS
    holds f is sequence of RNS iff ( dom f = NAT &
     for d st d in NAT holds f.d is Element of RNS )
@@ -583,78 +582,14 @@ redefine func S.n -> Element of RNS;
 coherence by Lm7;
 end;
 
-scheme ExRNSSeq{RNS()->RealNormSpace, F(Nat) -> ( Point of RNS() ) } :
-       ex S be sequence of RNS() st for n holds S.n = F(n)
-proof
-       defpred P[set,set] means ex n st n =$1 & $2 = F(n);
-    A1: for d st d in NAT ex s st P[d,s]
-       proof
-            let d; assume d in NAT;
-            then consider n such that
-        A2: n = d;
-            reconsider z = F(n) as set;
-            take z;
-            thus thesis by A2;
-       end;
-    A3: for d , s , t st d in NAT & P[d,s] & P[d,t] holds s = t;
-       consider f such that
-    A4: dom f = NAT and
-    A5: for d st d in NAT holds P[d,f.d] from FUNCT_1:sch 2(A3,A1);
-          for d st d in NAT holds f.d is Point of RNS()
-       proof
-            let d; assume d in NAT;
-            then ex n st n = d & f.d = F(n) by A5;
-            hence thesis;
-       end;
-       then reconsider f as sequence of RNS() by A4,Th17;
-       take S = f;
-          now let n;
-          P[n,S.n] by A5;
-       hence S.n = F(n);
-       end;
-   hence for n holds S.n = F(n);
-end;
-
-scheme ExRLSSeq{RNS()->RealLinearSpace,
-                F(Nat) -> Element of RNS() } :
-       ex S be sequence of RNS() st for n holds S.n = F(n)
-proof
-       defpred P[set,set] means ex n st ( n =$1 & $2 = F(n));
-    A1: for d st d in NAT ex s st P[d,s]
-       proof
-            let d; assume d in NAT;
-            then consider n such that
-        A2: n = d;
-            reconsider z = F(n) as set;
-            take z;
-            thus thesis by A2;
-       end;
-    A3: for d , s , t st d in NAT & P[d,s] & P[d,t] holds s = t;
-       consider f such that
-    A4: dom f = NAT and
-    A5: for d st d in NAT holds P[d,f.d] from FUNCT_1:sch 2(A3,A1);
-          for d st d in NAT holds f.d is Element of RNS()
-       proof
-            let d; assume d in NAT;
-            then ex n st n = d & f.d = F(n) by A5;
-            hence thesis;
-       end;
-       then reconsider f as sequence of RNS() by A4,Th17;
-       take S = f;
-          now let n;
-          P[n,S.n] by A5;
-       hence S.n = F(n);
-       end;
-   hence for n holds S.n = F(n);
-end;
-
 definition let RNS be RealLinearSpace;
            let S1, S2 be sequence of RNS;
            func S1 + S2 -> sequence of RNS means
 :Def5:     for n holds it.n = S1.n + S2.n;
 existence proof
   deffunc F(Nat) = S1.$1 + S2.$1;
-  thus ex S being sequence of RNS st for n holds S.n = F(n) from ExRLSSeq;
+  thus ex S being sequence of RNS st for n holds S.n = F(n)
+    from FUNCT_2:sch 4;
 end;
 uniqueness
           proof
@@ -678,11 +613,12 @@ definition let RNS be RealLinearSpace;
 :Def6:    for n holds it.n = S1.n - S2.n;
 existence proof
   deffunc F(Nat) = S1.$1 - S2.$1;
-  thus ex S being sequence of RNS st for n holds S.n = F(n) from ExRLSSeq;
+  thus ex S being sequence of RNS st for n holds S.n = F(n)
+    from FUNCT_2:sch 4;
 end;
 uniqueness
           proof
-               let S , T be sequence of RNS;
+               let S, T be sequence of RNS;
                assume that
           A1:  ( for n holds S.n = S1.n - S2.n ) and
           A2:  ( for n holds T.n = S1.n - S2.n );
@@ -703,7 +639,8 @@ definition let RNS be RealLinearSpace;
 :Def7:     for n holds it.n = S.n - x;
 existence proof
   deffunc F(Nat) = S.$1 - x;
-  thus ex S being sequence of RNS st for n holds S.n = F(n) from ExRLSSeq;
+  thus ex S being sequence of RNS st for n holds S.n = F(n)
+    from FUNCT_2:sch 4;
 end;
 uniqueness
           proof
@@ -728,11 +665,12 @@ definition let RNS be RealLinearSpace;
 :Def8:     for n holds it.n = a * S.n;
 existence proof
   deffunc F(Nat) = a * S.$1;
-  thus ex S being sequence of RNS st for n holds S.n = F(n) from ExRLSSeq;
+  thus ex S being sequence of RNS st for n holds S.n = F(n)
+    from FUNCT_2:sch 4;
 end;
 uniqueness
           proof
-               let S1 , S2 be sequence of RNS;
+               let S1, S2 be sequence of RNS;
                assume that
           A1:  ( for n holds S1.n = a * S.n ) and
           A2:  ( for n holds S2.n = a * S.n );

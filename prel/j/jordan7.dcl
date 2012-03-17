@@ -27,5 +27,5 @@ VECTSP_1
 MATRIX_1
 GOBOARD1
 #
-­V73 ;;;M7 K52 ;;V5 ;;
+­V74 ;;;M7 K52 ;;V6 ;;
 !

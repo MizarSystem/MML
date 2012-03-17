@@ -27,10 +27,10 @@ begin :: Basic Facts
 
 reserve x, X, Y for set;
 
-scheme RelStrSubset{L() -> non empty RelStr, P[set]}:
+scheme RelStrSubset{L() -> non empty set, P[set]}:
   {x where x is Element of L(): P[x]} is Subset of L()
 proof
-      {x where x is Element of L(): P[x]} c= the carrier of L()
+  {x where x is Element of L(): P[x]} c= L()
   proof
     let x be set;
     assume x in {l where l is Element of L(): P[l]};
@@ -41,10 +41,9 @@ proof
 end;
 
 theorem
-      for L being non empty RelStr
+  for L being non empty RelStr
   for x being Element of L
-  for X being Subset of L
-   holds
+  for X being Subset of L holds
   X c= downarrow x iff X is_<=_than x
  proof let L be non empty RelStr, x be Element of L, X be Subset of L;
   hereby
@@ -325,53 +324,47 @@ A8:  z in X & x' <= z & y' <= z by A2,A6,A7,WAYBEL_0:def 1;
 
 begin :: Maps
 
-scheme LambdaMD{X, Y() -> non empty RelStr, F(set) -> Element of Y()}:
-  ex f being map of X(), Y() st for x being Element of X() holds f.x = F(x)
-proof deffunc f(set) = F($1);
-  consider f being Function of the carrier of X(),the carrier of Y() such that
-A1:  for s being Element of X() holds f.s = f(s)
-   from FUNCT_2:sch 4;
-  reconsider f as map of X(),Y();
-  take f;
-  thus thesis by A1;
- end;
+scheme LambdaMD{X, Y() -> non empty set, F(set) -> Element of Y()}:
+  ex f being Function of X(), Y() st 
+   for x being Element of X() holds f.x = F(x)
+proof
+  thus thesis from FUNCT_2:sch 4; 
+end;
 
-scheme KappaMD{X, Y() -> non empty RelStr, F(set) -> set}:
-  ex f being map of X(), Y() st for x being Element of X() holds f.x = F(x)
+scheme KappaMD{X, Y() -> non empty set, F(set) -> set}:
+  ex f being Function of X(), Y() st for x being Element of X() holds 
+   f.x = F(x)
 provided
 A1:  for x being Element of X() holds F(x) is Element of Y()
 proof
-  reconsider X = the carrier of X(),Y = the carrier of Y() as non empty set;
-  deffunc f(set) = F($1);
-A2: now let x be Element of X;
-       F(x) is Element of Y() by A1;
-     hence f(x) in Y;
+A2: now let x be Element of X();
+     F(x) is Element of Y() by A1;
+     hence F(x) in Y();
     end;
-  consider f being Function of X, Y such that
-A3: for x being Element of X holds f.x = f(x) from SUPINF_2:sch 1(A2);
-  reconsider f as map of X(),Y();
+  consider f being Function of X(), Y() such that
+A3: for x being Element of X() holds f.x = F(x) from SUPINF_2:sch 1(A2);
   take f;
   thus thesis by A3;
  end;
 
-scheme NonUniqExMD{X, Y() -> non empty RelStr, P[set,set]}:
-  ex f being map of X(), Y() st for x being Element of X() holds P[x, f.x]
+scheme NonUniqExMD{X, Y() -> non empty set, P[set,set]}:
+  ex f being Function of X(), Y() st 
+    for x being Element of X() holds P[x, f.x]
 provided
 A1:  for x being Element of X() ex y being Element of Y() st P[x, y]
 proof
-  defpred p[set,set] means P[$1,$2];
-A2: for x being set st x in the carrier of X()
-     ex y being set st y in the carrier of Y() & p[x,y]
+A2: for x being set st x in X()
+     ex y being set st y in Y() & P[x,y]
    proof let x be set;
-    assume x in the carrier of X();
+    assume x in X();
     then reconsider x as Element of X();
-        ex y being Element of Y() st p[x,y] by A1;
+    ex y being Element of Y() st P[x,y] by A1;
     hence thesis;
    end;
-  consider f being Function of the carrier of X(),the carrier of Y() such that
-A3:  for x being set st x in the carrier of X() holds p[x,f.x]
+  consider f being Function of X(),Y() such that
+A3:  for x being set st x in X() holds P[x,f.x]
    from FUNCT_2:sch 1(A2);
-  reconsider f as map of X(),Y();
+  reconsider f as Function of X(),Y();
   take f;
   thus thesis by A3;
  end;

@@ -15,10 +15,10 @@ CARD_1
 FINSEQ_1
 FINSEQ_4
 #
-M1 ;M1 W5 ;;M2 F2 ;;;
-ªM5 V3 ;V6 F1 ;F2 ;;F1 ;F2 ;;ªM1 ;ª&R2 B2 F1 ;;ªR1 K100 F1 ;F2 ;B1 B2 ;F3 B2 ;;;;
+M1 ;M1 W6 ;;M2 F2 ;;;
+ªM5 V4 ;V7 F1 ;F2 ;;F1 ;F2 ;;ªM1 ;ª&R2 B2 F1 ;;ªR1 K101 F1 ;F2 ;B1 B2 ;F3 B2 ;;;;
 #
-M1 ;M1 W5 ;;M2 F2 ;;;
-&ªM5 V3 ;V6 F1 ;F2 ;;F1 ;F2 ;;ªM1 ;ª&R2 B2 F1 ;;ªR1 K100 F1 ;F2 ;B1 B2 ;F3 B2 ;;;M5 V3 ;V6 F1 ;F2 ;;F1 ;F2 ;;M5 V3 ;V6 F1 ;F2 ;;F1 ;F2 ;;ª&M1 ;ª&R2 B3 F1 ;;ªR1 K100 F1 ;F2 ;B1 B3 ;F3 B3 ;;;M1 ;ª&R2 B3 F1 ;;ªR1 K100 F1 ;F2 ;B2 B3 ;F3 B3 ;;;ªR1 B1 B2 ;;;;
+M1 ;M1 W6 ;;M2 F2 ;;;
+&ªM5 V4 ;V7 F1 ;F2 ;;F1 ;F2 ;;ªM1 ;ª&R2 B2 F1 ;;ªR1 K101 F1 ;F2 ;B1 B2 ;F3 B2 ;;;M5 V4 ;V7 F1 ;F2 ;;F1 ;F2 ;;M5 V4 ;V7 F1 ;F2 ;;F1 ;F2 ;;ª&M1 ;ª&R2 B3 F1 ;;ªR1 K101 F1 ;F2 ;B1 B3 ;F3 B3 ;;;M1 ;ª&R2 B3 F1 ;;ªR1 K101 F1 ;F2 ;B2 B3 ;F3 B3 ;;;ªR1 B1 B2 ;;;;
 #
 !

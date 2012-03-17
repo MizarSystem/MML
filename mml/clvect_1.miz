@@ -11,8 +11,8 @@ environ
       CFUNCT_1, RLSUB_1, NORMSP_1, PRE_TOPC, SEQ_2;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0,
       XREAL_0, DOMAIN_1, REAL_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1,
-      NAT_1, ABSVALUE, STRUCT_0, PRE_TOPC, RLVECT_1, SQUARE_1, PARTFUN1, SEQ_1,
-      SEQ_2, COMPLEX1, CFUNCT_1, NORMSP_1;
+      NAT_1, STRUCT_0, PRE_TOPC, RLVECT_1, SQUARE_1, PARTFUN1, SEQ_1, SEQ_2,
+      COMPLEX1, CFUNCT_1, NORMSP_1;
  constructors DOMAIN_1, BINOP_1, REAL_1, NAT_1, MEMBERED, ABSVALUE, SQUARE_1,
       ARYTM_0, PARTFUN1, COMPLEX1, NORMSP_1, SEQ_2, BINOP_2;
  clusters RELSET_1, STRUCT_0, XREAL_0, SUBSET_1, NAT_1, MEMBERED, ORDINAL2,
@@ -21,8 +21,8 @@ environ
  definitions STRUCT_0, RLVECT_1, TARSKI, XBOOLE_0;
  theorems STRUCT_0, TARSKI, RLVECT_1, BINOP_1, COMPLEX1, XCMPLX_0, SQUARE_1,
       FINSEQ_1, NAT_1, FUNCT_1, XBOOLE_0, FUNCT_2, RELAT_1, XBOOLE_1, ZFMISC_1,
-      RELSET_1, REAL_1, ABSVALUE, NORMSP_1, SEQ_2, AXIOMS, XREAL_0;
- schemes BINOP_1, FUNCT_2, NAT_1, XBOOLE_0, FUNCT_1, SEQ_1;
+      RELSET_1, REAL_1, ABSVALUE, SEQ_2, AXIOMS, XREAL_0;
+ schemes BINOP_1, FUNCT_2, NAT_1, XBOOLE_0, SEQ_1;
 
 begin :: Complex Linear Space
 
@@ -2610,70 +2610,6 @@ reserve d, s, t for set;
 
 canceled;
 
-scheme ExCNSSeq{CNS()->ComplexNormSpace, F(Nat) -> ( Point of CNS() ) } :
- ex S be sequence of CNS() st for n holds S.n = F(n)
-       proof
-       defpred P[set,set] means ex n st n =$1 & $2 = F(n);
-    A1: for d st d in NAT ex s st P[d,s]
-       proof
-            let d; assume d in NAT;
-            then consider n such that
-        A2: n = d;
-            reconsider z = F(n) as set;
-            take z;
-            thus thesis by A2;
-       end;
-    A3: for d , s , t st d in NAT & P[d,s] & P[d,t] holds s = t;
-       consider f such that
-    A4: dom f = NAT and
-    A5: for d st d in NAT holds P[d,f.d] from FUNCT_1:sch 2(A3,A1);
-           for d st d in NAT holds f.d is Point of CNS()
-       proof
-            let d; assume d in NAT;
-            then ex n st n = d & f.d = F(n) by A5;
-            hence thesis;
-       end;
-       then reconsider f as sequence of CNS() by A4,NORMSP_1:17;
-       take S = f;
-           now let n;
-           P[n,S.n] by A5;
-       hence S.n = F(n);
-       end;
-   hence for n holds S.n = F(n);
-end;
-
-scheme ExCLSSeq{CNS()->ComplexLinearSpace, F(Nat) -> Element of CNS() }:
- ex S be sequence of CNS() st for n holds S.n = F(n)
-       proof
-       defpred P[set,set] means ex n st ( n =$1 & $2 = F(n));
-    A1: for d st d in NAT ex s st P[d,s]
-       proof
-            let d; assume d in NAT;
-            then consider n such that
-        A2: n = d;
-            reconsider z = F(n) as set;
-            take z;
-            thus thesis by A2;
-       end;
-    A3: for d , s , t st d in NAT & P[d,s] & P[d,t] holds s = t;
-       consider f such that
-    A4: dom f = NAT and
-    A5: for d st d in NAT holds P[d,f.d] from FUNCT_1:sch 2(A3,A1);
-           for d st d in NAT holds f.d is Element of CNS()
-       proof
-            let d; assume d in NAT;
-            then ex n st n = d & f.d = F(n) by A5;
-            hence thesis;
-       end;
-       then reconsider f as sequence of CNS() by A4,NORMSP_1:17;
-       take S = f;
-           now let n;
-           P[n,S.n] by A5;
-       hence S.n = F(n);
-       end;
-   hence for n holds S.n = F(n);
-end;
-
 definition
 let CNS be ComplexLinearSpace;
 let S1, S2 be sequence of CNS;
@@ -2681,7 +2617,8 @@ let S1, S2 be sequence of CNS;
 :Def11:     for n holds it.n = S1.n + S2.n;
 existence proof
   deffunc F(Nat) = S1.$1 + S2.$1;
-  thus ex S being sequence of CNS st for n holds S.n = F(n) from ExCLSSeq;
+  thus ex S being sequence of CNS st for n holds S.n = F(n)
+    from FUNCT_2:sch 4;
 end;
 uniqueness
           proof
@@ -2706,7 +2643,8 @@ let S1, S2 be sequence of CNS;
 :Def12:    for n holds it.n = S1.n - S2.n;
 existence proof
   deffunc F(Nat) = S1.$1 - S2.$1;
-  thus ex S being sequence of CNS st for n holds S.n = F(n) from ExCLSSeq;
+  thus ex S being sequence of CNS st for n holds S.n = F(n)
+    from FUNCT_2:sch 4;
 end;
 uniqueness
           proof
@@ -2732,11 +2670,12 @@ let x be Element of CNS;
 :Def13:     for n holds it.n = S.n - x;
 existence proof
   deffunc F(Nat) = S.$1 - x;
-  thus ex S being sequence of CNS st for n holds S.n = F(n) from ExCLSSeq;
+  thus ex S being sequence of CNS st for n holds S.n = F(n)
+    from FUNCT_2:sch 4;
 end;
 uniqueness
           proof
-               let S1 , S2 be sequence of CNS;
+               let S1, S2 be sequence of CNS;
                assume that
           A1:  ( for n holds S1.n = S.n - x ) and
           A2:  ( for n holds S2.n = S.n - x );
@@ -2758,11 +2697,12 @@ let z;
 :Def14:     for n holds it.n = z * S.n;
 existence proof
   deffunc F(Nat) = z * S.$1;
-  thus ex S being sequence of CNS st for n holds S.n = F(n) from ExCLSSeq;
+  thus ex S being sequence of CNS st for n holds S.n = F(n)
+    from FUNCT_2:sch 4;
 end;
 uniqueness
           proof
-               let S1 , S2 be sequence of CNS;
+               let S1, S2 be sequence of CNS;
                assume that
           A1:  ( for n holds S1.n = z * S.n ) and
           A2:  ( for n holds S2.n = z * S.n );

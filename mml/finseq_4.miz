@@ -7,14 +7,14 @@
 environ
 
  vocabulary FUNCT_1, FINSEQ_1, RELAT_1, FINSET_1, CARD_1, BOOLE, PARTFUN1,
-      ARYTM_1, INT_1, RLSUB_2, TARSKI, FINSEQ_4;
- notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
-      FINSEQ_1, RELAT_1, FUNCT_1, PARTFUN1, CARD_1, FUNCT_2, FINSET_1, INT_1,
-      NAT_1, FINSEQ_3;
+      ARYTM_1, INT_1, RLSUB_2, TARSKI, FINSEQ_4, ORDINAL2, ARYTM;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, ORDINAL2, RELAT_1,
+      NUMBERS, XCMPLX_0, XREAL_0, FINSEQ_1, FUNCT_1, PARTFUN1, CARD_1, FUNCT_2,
+      FINSET_1, INT_1, NAT_1, FINSEQ_3;
  constructors DOMAIN_1, WELLORD2, FUNCT_2, INT_1, NAT_1, FINSEQ_3, MEMBERED,
       XBOOLE_0;
  clusters FINSEQ_1, FUNCT_1, CARD_1, INT_1, FINSET_1, FINSEQ_3, RELSET_1,
-      MEMBERED, ZFMISC_1, XBOOLE_0;
+      MEMBERED, ZFMISC_1, XBOOLE_0, ARYTM_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions FUNCT_1, TARSKI, XBOOLE_0;
  theorems CARD_1, CARD_2, ENUMSET1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FUNCT_1,
@@ -28,6 +28,7 @@ reserve f for Function;
 reserve p,q for FinSequence;
 reserve A,B,C,x,x1,x2,y,z for set;
 reserve i,k,l,m,m1,m2,n for Nat;
+reserve a for natural number;
 
 definition let f,x;
  pred f is_one-to-one_at x means
@@ -461,7 +462,7 @@ theorem Th34:
       then consider y such that A5: y in dom q and A6: q.y = k by FUNCT_1:def 5
 ;
        A7: dom q = Seg(len q) by FINSEQ_1:def 3;
-      then reconsider y as Nat by A5;
+      reconsider y as Nat by A5;
        A8: q.1 = x..p by Def5;
           now assume not 1 < y;
          then 1 = y or y < 1 by REAL_1:def 5;
@@ -500,7 +501,7 @@ theorem Th37:
      A3: p.(x..p) = x & x..p in dom p by A1,Th29,Th30;
         now let z;
        assume that A4: z in dom p and A5: z <> x..p;
-        reconsider n = z as Nat by A4,FINSEQ_3:25;
+        reconsider n = z as Nat by A4;
             p.n <> x by A2,A4,A5;
       hence p.z <> x;
      end;
@@ -822,7 +823,7 @@ theorem
     assume y in rng(p |-- x);
      then consider z such that A2: z in dom(p |-- x) and A3: (p |-- x).z = y
                                                               by FUNCT_1:def 5;
-      reconsider z as Nat by A2,FINSEQ_3:25;
+      reconsider z as Nat by A2;
        A4: y = p.(z + x..p) by A1,A2,A3,Def7;
           z + x..p in dom p by A1,A2,Th58;
    hence thesis by A4,FUNCT_1:def 5;
@@ -838,7 +839,7 @@ theorem Th60:
        then consider z such that A3: z in dom(p |-- x) and A4: (p |-- x).z = x
                                                                 by FUNCT_1:def
 5;
-       reconsider z as Nat by A3,FINSEQ_3:25;
+       reconsider z as Nat by A3;
         A5: (p |-- x).z = p.(z + x..p) by A2,A3,Def7;
            z + x..p in dom p by A2,A3,Th58;
         then z + x..p = 0 + x..p by A1,A4,A5,Th36;
@@ -883,7 +884,7 @@ theorem Th61:
     consider y such that A4: y in dom(p |-- x) and A5: (p |-- x).y = x
                                                             by A3,FUNCT_1:def 5
 ;
-    reconsider y as Nat by A4,FINSEQ_3:25;
+    reconsider y as Nat by A4;
      A6: (p |-- x).y = p.(y + x..p) by A1,A4,Def7;
      A7: x..p in dom p & p.(x..p) = x by A1,Th29,Th30;
         1 <= x..p & x..p <= y + x..p by A1,Th31,NAT_1:37;
@@ -952,7 +953,7 @@ theorem
                                                                  by FUNCT_1:def
 5;
          A5: dom(p |-- x) = Seg(len(p |-- x)) by FINSEQ_1:def 3;
-        then reconsider z as Nat by A3;
+        reconsider z as Nat by A3;
          A6: y = p.(z + x..p) by A1,A3,A4,Def7;
             1 <= x..p & x..p <= z + x..p by A1,Th31,NAT_1:37;
          then A7: 1 <= z + x..p by AXIOMS:22;
@@ -1115,7 +1116,7 @@ theorem Th71:
                      A3: p - {x} = (p -| x) ^ (p |-- x);
     let x1,x2; set q = p - {x};
      assume that A4: x1 in dom p and A5: x2 in dom p and A6: p.x1 = p.x2;
-      reconsider k1 = x1, k2 = x2 as Nat by A4,A5,FINSEQ_3:25;
+      reconsider k1 = x1, k2 = x2 as Nat by A4,A5;
        A7: p just_once_values x by A1,A3,Th69;
 
           now per cases by AXIOMS:21;
@@ -1318,7 +1319,7 @@ then A2: P[0];
           dom q c= rng q
         proof let x;
           assume A8: x in dom q;
-           then reconsider n = x as Nat by A7;
+           then reconsider n = x as Nat;
              per cases;
              suppose A9: k + 1 in rng q;
                   now per cases;
@@ -1363,7 +1364,7 @@ then A2: P[0];
                 then q.(k + 1) in rng q by A7,FUNCT_1:def 5;
                 then consider x such that A23: x in dom r and
                 A24: r.x = q.(k + 1) by A18,A19,A21,FUNCT_1:def 5;
-               reconsider n = x as Nat by A18,A23;
+               reconsider n = x as Nat by A23;
 A25:           dom r c= dom q by FUNCT_1:76;
                 A26: r.x = q.x by A18,A23,FUNCT_1:72;
                    n <= k & k < k + 1 by A18,A23,FINSEQ_1:3,REAL_1:69;
@@ -1646,3 +1647,79 @@ theorem
       then Card B <=` Card A by A3,CARD_1:28;
     hence thesis by A1,CARD_1:14;
    end;
+
+begin :: Addenda
+:: from TOPREAL4
+
+theorem
+ for D being non empty set, f being FinSequence of D, p being Element of D
+  holds (f^<*p*>)/.(len f + 1) = p
+ proof let D be non empty set, f be FinSequence of D, p be Element of D;
+      len(f^<*p*>) = len f + len<*p*> by FINSEQ_1:35;
+   then 1 <= len f + 1 & len f + 1 <= len(f^<*p*>) by FINSEQ_1:56,NAT_1:29;
+   then len f + 1 in dom(f^<*p*>) by FINSEQ_3:27;
+  hence (f^<*p*>)/.(len f + 1) = (f^<*p*>).(len f + 1) by Def4
+                            .= p by FINSEQ_1:59;
+ end;
+
+:: from GROUP_5
+
+theorem
+ for E being non empty set, p,q being FinSequence of E st
+ k in dom p holds (p ^ q)/.k = p/.k
+  proof let E be non empty set, p,q be FinSequence of E;
+    assume A1:k in dom p;
+     then k in dom(p ^ q) by FINSEQ_3:24;
+   hence (p ^ q)/.k = (p ^ q).k by Def4
+                   .= p.k by A1,FINSEQ_1:def 7
+                   .= p/.k by A1,Def4;
+  end;
+
+theorem
+ for E being non empty set, p,q being FinSequence of E st
+ k in dom q holds (p ^ q)/.(len p + k) = q/.k
+  proof let E be non empty set, p,q be FinSequence of E;
+    assume A1: k in dom q;
+     then len p + k in dom(p ^ q) by FINSEQ_1:41;
+   hence (p ^ q)/.(len p + k) = (p ^ q).(len p + k) by Def4
+                           .= q.k by A1,FINSEQ_1:def 7
+                           .= q/.k by A1,Def4;
+  end;
+
+:: from TOPREAL1
+
+theorem
+ for D being set, p being FinSequence of D st
+   a in dom(p|m)
+  holds (p|m qua FinSequence of D)/.a = p/.a
+ proof let D be set, p being FinSequence of D;
+  assume
+A1: a in dom(p|m);
+then A2: a in dom(p|Seg m) by FINSEQ_1:def 15;
+   then a in dom p /\ (Seg m) by RELAT_1:90;
+then A3: a in dom p by XBOOLE_0:def 3;
+  thus (p|m)/.a = (p|m).a by A1,Def4
+   .= (p|Seg m).a by FINSEQ_1:def 15
+   .= p.a by A2,FUNCT_1:70
+   .= p/.a by A3,Def4;
+ end;
+
+:: from GOBOARD1
+
+theorem
+for D being set, f being FinSequence of D, n,m
+    st n in dom f & m in Seg n holds m in dom f & (f|n)/.m = f/.m
+ proof let D be set, f be FinSequence of D, n,m; assume
+  A1: n in dom f & m in Seg n;
+  A2: dom f = Seg len f & f|n = f|Seg n by FINSEQ_1:def 3,FINSEQ_1:def 15;
+     n<=len f by A1,FINSEQ_3:27;
+  then A3: Seg n c= dom f by A2,FINSEQ_1:7;
+  hence
+   m in dom f by A1;
+A4: Seg n = dom f /\ Seg n by A3,XBOOLE_1:28
+   .= dom(f|n) by A2,FUNCT_1:68;
+  hence (f|n)/.m = (f|n).m by A1,Def4
+      .= f.m by A1,A2,A4,FUNCT_1:68
+      .= f/.m by A1,A3,Def4;
+ end;
+

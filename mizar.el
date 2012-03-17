@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.93 $
+;; $Revision: 1.95 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -935,8 +935,9 @@ See `mizar-insert-skeleton' for more."
 	(concat 
 	 "for " (mizar-pp-types (cadr fla))
 	 (if st_occurs (concat "st " (mizar-pp-parsed-fla (fourth fla))) " ")
-	 (if (eq 'holds (car rest)) "holds " "")
-	 (mizar-pp-parsed-fla (cadr rest)))))
+	 (if (eq 'holds (car rest)) 
+	     (concat "holds " (mizar-pp-parsed-fla (cadr rest)))
+	   (mizar-pp-parsed-fla (car rest))))))
    
      (t (error "Unexpected formula: %s" (prin1-to-string fla)))
      ))))
@@ -5172,6 +5173,43 @@ move backward across N balanced expressions."
             (setq hs-special-modes-alist
 	                  (cons mizar-mode-hs-info hs-special-modes-alist))))
 ;(add-hook 'mizar-mode-hook 'mizar-menu)
+(defun mizar-set-pp-level (level)
+"Set the presentation level by calling `hs-hide-level' on top level."
+(interactive "n")
+(save-excursion
+  (goto-char (point-min))
+  (hs-hide-level level)))
+
+(define-key-after hs-minor-mode-menu [pres-global]
+  `(menu-item  "Global Proof Presentation Level" 
+	       (keymap "Global Proof Presentation Level" 
+		(0 menu-item "0" 
+		   ,(lambda () (interactive) (mizar-set-pp-level 1)))
+		(1 menu-item "1" 
+		   ,(lambda () (interactive) (mizar-set-pp-level 2)))
+		(2 menu-item "2" 
+		   ,(lambda () (interactive) (mizar-set-pp-level 3)))
+		(3 menu-item "3" 
+		   ,(lambda () (interactive) (mizar-set-pp-level 4)))
+		(4 menu-item "4" 
+		   ,(lambda () (interactive) (mizar-set-pp-level 5)))
+		(all menu-item "all" hs-show-all))))
+
+(define-key-after hs-minor-mode-menu [pres-current]
+  `(menu-item  "Current Proof Presentation Level" 
+	       (keymap "Global Proof Presentation Level" 
+		(0 menu-item "0" 
+		   ,(lambda () (interactive) (hs-hide-level 1)))
+		(1 menu-item "1" 
+		   ,(lambda () (interactive) (hs-hide-level 2)))
+		(2 menu-item "2" 
+		   ,(lambda () (interactive) (hs-hide-level 3)))
+		(3 menu-item "3" 
+		   ,(lambda () (interactive) (hs-hide-level 4)))
+		(4 menu-item "4" 
+		   ,(lambda () (interactive) (hs-hide-level 5)))
+		(all menu-item "all" 
+		     ,(lambda () (interactive) (hs-hide-level 100))))))
 (add-hook 'mizar-mode-hook 'hs-minor-mode)
 (add-hook 'mizar-mode-hook 'imenu-add-menubar-index)
 ;; adding this as a hook causes an error when opening
